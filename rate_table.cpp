@@ -167,13 +167,6 @@ void to_bytes(char* bytes, T value)
     memcpy(bytes, &t, sizeof(T));
 }
 
-template<typename T, typename U>
-inline
-T get_value_or(std::optional<T> const& o, U v)
-{
-    return o.value_or(v);
-}
-
 // Functions doing the same thing as istream::read() and ostream::write()
 // respectively, but taking void pointers and this allowing to avoid ugly casts
 // to char in the calling code. SOMEDAY !! Consider changing the type of
@@ -612,7 +605,7 @@ void writer::write_values
 
     auto const value_width = text_format::get_value_width(*num_decimals);
 
-    if(get_value_or(select_period, 0))
+    if(select_period.value_or(0))
         {
         auto const period = *select_period;
 
@@ -1230,7 +1223,7 @@ unsigned int table_impl::get_expected_number_of_values() const
 
         // In a further application of Postel's law, we consider non-specified
         // or 0 maximum select age as meaning "unlimited".
-        unsigned int effective_max_select = get_value_or(max_select_age_, 0);
+        unsigned int effective_max_select = max_select_age_.value_or(0);
         if(effective_max_select == 0)
             {
             effective_max_select = *max_age_;
@@ -1805,7 +1798,7 @@ void table_impl::validate()
             {
             case table_type::aggregate:
             case table_type::duration:
-                if(get_value_or(select_period_, 0))
+                if(select_period_.value_or(0))
                     {
                     alarum()
                         << "select period cannot be specified for a table "
@@ -1813,7 +1806,7 @@ void table_impl::validate()
                         << std::flush
                         ;
                     }
-                if(  get_value_or(max_select_age_, 0)
+                if(  max_select_age_.value_or(0)
                   && *max_select_age_ != *max_age_
                   )
                     {
@@ -1828,7 +1821,7 @@ void table_impl::validate()
                 break;
 
             case table_type::select:
-                if(!get_value_or(select_period_, 0))
+                if(!select_period_.value_or(0))
                     {
                     alarum()
                         << "select period must be specified "
@@ -1836,7 +1829,7 @@ void table_impl::validate()
                         << std::flush
                         ;
                     }
-                if(!get_value_or(max_select_age_, 0))
+                if(!max_select_age_.value_or(0))
                     {
                     alarum()
                         << "maximum select age must be specified "
@@ -2240,8 +2233,8 @@ std::uint32_t table_impl::compute_hash_value() const
     oss << std::setfill('0')
         << std::setw(3) << *min_age_
         << std::setw(3) << *max_age_
-        << std::setw(3) << get_value_or(select_period_, 0)
-        << std::setw(3) << get_value_or(max_select_age_, 0)
+        << std::setw(3) << select_period_.value_or(0)
+        << std::setw(3) << max_select_age_.value_or(0)
         ;
 
     oss << std::fixed << std::setprecision(*num_decimals_);
