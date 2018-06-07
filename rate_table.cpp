@@ -68,10 +68,10 @@
 // different from their in memory representation.
 static_assert(std::numeric_limits<double>::is_iec559);
 
+#if 201900L < __cplusplus
+    #error Use std::endian instead when it becomes available.
+#endif // 201900L < __cplusplus
 // Helper functions used to swap bytes on big endian platforms.
-//
-// BOOST !! Replace these functions with Boost.Endian library once a version
-// of Boost new enough to have it is used by lmi.
 namespace
 {
 
@@ -166,13 +166,11 @@ void to_bytes(char* bytes, T value)
     memcpy(bytes, &t, sizeof(T));
 }
 
-// BOOST !! Replace the use of this function with member value_or() present in
-// the later Boost.Optional versions.
 template<typename T, typename U>
 inline
 T get_value_or(std::optional<T> const& o, U v)
 {
-    return o ? *o : v;
+    return o.value_or(v);
 }
 
 // Functions doing the same thing as istream::read() and ostream::write()
