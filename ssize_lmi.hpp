@@ -74,7 +74,8 @@
 /// and all that kind of stuff, they're unsigned and so it's..."
 /// Sutter: "They're wrong."
 /// Question: "...it's gonna pollute, right?"
-/// Sutter: "We're sorry. As Scott would say, 'we were young'."
+/// Carruth: "We're sorry."
+/// Sutter: "As Scott would say, 'we were young'."
 
 namespace lmi
 {
