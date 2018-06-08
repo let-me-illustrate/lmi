@@ -24,6 +24,7 @@
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
 #include "mvc_controller.hpp"
+#include "ssize_lmi.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_new.hpp"
 #include "wx_utility.hpp"
@@ -56,8 +57,7 @@ name_and_title const default_columns_info[] =
     ,{ "EOYDeathBft_Current"    , "Curr EOY Death Benefit"      }
     };
 
-std::size_t const number_of_default_columns
-    = sizeof default_columns_info / sizeof(default_columns_info[0]);
+int const number_of_default_columns = lmi::ssize(default_columns_info);
 
 // Names and titles of the columns used when not using the built-in calculation
 // summary.
@@ -66,8 +66,7 @@ name_and_title const custom_columns_info[] =
     ,{ "NewCashLoan"            , "Annual Loan"                 }
     };
 
-std::size_t const number_of_custom_columns
-    = sizeof custom_columns_info / sizeof(custom_columns_info[0]);
+int const number_of_custom_columns = lmi::ssize(custom_columns_info);
 
 // Special name used when the column is not used at all. This is the same
 // string used in preferences_model.cpp, but we duplicate it here as we don't
@@ -76,7 +75,7 @@ char const* const empty_column_name = "[none]";
 
 // Total number of configurable summary columns. This, again, duplicates the
 // number [implicitly] used in preferences_model.cpp.
-std::size_t const total_number_of_columns = 12;
+int const total_number_of_columns = 12;
 
 // Base class for all the tests working with the preferences dialog. It
 // defines both a simpler interface for the derived classes to define the
@@ -153,7 +152,7 @@ class expect_preferences_dialog_base
             }
         }
 
-    wxComboBox* focus_column_combobox(unsigned int n)
+    wxComboBox* focus_column_combobox(int n)
         {
             wxWindow* const column_window = wx_test_focus_controller_child
                 (*dialog_
@@ -314,10 +313,10 @@ LMI_WX_TEST_CASE(calculation_summary)
                 std::vector<std::string> const&
                     summary_columns = effective_calculation_summary_columns();
 
-                for(unsigned int n = 0; n < number_of_custom_columns; ++n)
+                for(int n = 0; n < number_of_custom_columns; ++n)
                     {
                     wxString const& column = focus_column_combobox(n)->GetValue();
-                    if(n < summary_columns.size())
+                    if(n < lmi::ssize(summary_columns))
                         {
                         LMI_ASSERT_EQUAL(column, summary_columns[n]);
                         }
@@ -344,7 +343,7 @@ LMI_WX_TEST_CASE(calculation_summary)
             set_use_builtin_summary(false);
 
             wxUIActionSimulator ui;
-            for(unsigned int n = 0; n < total_number_of_columns; ++n)
+            for(int n = 0; n < total_number_of_columns; ++n)
                 {
                 focus_column_combobox(n);
                 ui.Select(n == 2 ? "NewCashLoan" : empty_column_name);
@@ -375,7 +374,7 @@ LMI_WX_TEST_CASE(calculation_summary)
                 );
 
             // And all the rest of the columns are (still) empty.
-            for(unsigned int n = 1; n < total_number_of_columns; ++n)
+            for(int n = 1; n < total_number_of_columns; ++n)
                 {
                 LMI_ASSERT_EQUAL
                     (focus_column_combobox(n)->GetValue()
@@ -410,7 +409,7 @@ LMI_WX_TEST_CASE(calculation_summary)
                 ,"NewCashLoan"
                 );
 
-            for(unsigned int n = 1; n < total_number_of_columns; ++n)
+            for(int n = 1; n < total_number_of_columns; ++n)
                 {
                 LMI_ASSERT_EQUAL
                     (focus_column_combobox(n)->GetValue()

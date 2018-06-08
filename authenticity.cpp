@@ -288,7 +288,7 @@ std::string md5_hex_string(std::vector<unsigned char> const& vuc)
         oss
             << std::setw(chars_per_formatted_hex_byte)
             << std::setfill('0')
-            << static_cast<unsigned int>(j)
+            << static_cast<int>(j)
             ;
         }
     return oss.str();

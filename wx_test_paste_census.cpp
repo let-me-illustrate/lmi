@@ -22,6 +22,7 @@
 #include "pchfile_wx.hpp"
 
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "data_directory.hpp"
 #include "mvc_controller.hpp"
 #include "wx_test_case.hpp"
@@ -124,7 +125,7 @@ void check_list_columns
 {
     std::set<std::string> remaining(expected.begin(), expected.end());
 
-    for(unsigned int n = 0; n < dvc->GetColumnCount(); ++n)
+    for(int n = 0; n < bourn_cast<int>(dvc->GetColumnCount()); ++n)
         {
         std::string const title = dvc->GetColumn(n)->GetTitle().ToStdString();
         LMI_ASSERT_WITH_MSG
@@ -146,12 +147,12 @@ void check_list_columns
 // Find the index of the column with the given title.
 //
 // Throws an exception if the column is not found.
-unsigned int find_model_column_by_title
+int find_model_column_by_title
     (wxDataViewCtrl* dvc
     ,std::string const& title
     )
 {
-    for(unsigned int n = 0; n < dvc->GetColumnCount(); ++n)
+    for(int n = 0; n < bourn_cast<int>(dvc->GetColumnCount()); ++n)
         {
         wxDataViewColumn const* column = dvc->GetColumn(n);
         if(column->GetTitle().ToStdString() == title)
@@ -331,7 +332,7 @@ LMI_WX_TEST_CASE(paste_census)
         );
 
     // Verify that the "Gender" column value is "Unisex" in every row now.
-    unsigned int const
+    int const
         gender_column = find_model_column_by_title(list_window, "Gender");
     LMI_ASSERT_EQUAL(list_model->GetCount(), number_of_rows);
     // Only the first two rows are affected, because only they belong
