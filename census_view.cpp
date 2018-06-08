@@ -736,7 +736,8 @@ renderer_type_converter const& renderer_type_converter::get_impl()
 class CensusViewDataViewModel : public wxDataViewIndexListModel
 {
   public:
-    static unsigned int const Col_CellNum = 0;
+    // Cell serial number: always shown in first column.
+    static int const Col_CellNum = 0;
 
     CensusViewDataViewModel(CensusView& view)
         :view_(view)
@@ -750,9 +751,9 @@ class CensusViewDataViewModel : public wxDataViewIndexListModel
 
     wxString GetColumnType(unsigned int col) const override;
 
-    std::string const& col_name(unsigned int col) const;
-    any_member<Input>& cell_at(unsigned int row, unsigned int col);
-    any_member<Input> const& cell_at(unsigned int row, unsigned int col) const;
+    std::string const& col_name(int col) const;
+    any_member<Input>& cell_at(int row, int col);
+    any_member<Input> const& cell_at(int row, int col) const;
 
   private:
     std::vector<std::string> const& all_headers() const;
@@ -803,6 +804,7 @@ bool CensusViewDataViewModel::SetValueByRow(wxVariant const& variant, unsigned i
 
 unsigned int CensusViewDataViewModel::GetColumnCount() const
 {
+    // "+ 1" for cell serial number in first column.
     return all_headers().size() + 1;
 }
 
@@ -821,18 +823,19 @@ wxString CensusViewDataViewModel::GetColumnType(unsigned int col) const
         }
 }
 
-std::string const& CensusViewDataViewModel::col_name(unsigned int col) const
+std::string const& CensusViewDataViewModel::col_name(int col) const
 {
     LMI_ASSERT(0 < col);
+    // "- 1" because first column is cell serial number.
     return all_headers()[col - 1];
 }
 
-inline any_member<Input>& CensusViewDataViewModel::cell_at(unsigned int row, unsigned int col)
+inline any_member<Input>& CensusViewDataViewModel::cell_at(int row, int col)
 {
     return view_.cell_parms()[row][col_name(col)];
 }
 
-inline any_member<Input> const& CensusViewDataViewModel::cell_at(unsigned int row, unsigned int col) const
+inline any_member<Input> const& CensusViewDataViewModel::cell_at(int row, int col) const
 {
     return view_.cell_parms()[row][col_name(col)];
 }
