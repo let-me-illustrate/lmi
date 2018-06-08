@@ -63,8 +63,7 @@
 #include <wx/xrc/xmlres.h>
 
 #include <algorithm>
-#include <cctype>
-#include <cstddef>                      // size_t
+#include <cctype>                       // isupper()
 #include <fstream>
 #include <istream>                      // ws
 #include <iterator>                     // insert_iterator
