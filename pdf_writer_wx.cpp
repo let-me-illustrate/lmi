@@ -60,7 +60,7 @@ wxPrintData make_print_data
 pdf_writer_wx::pdf_writer_wx
     (wxString const&    output_filename
     ,wxPrintOrientation orientation
-    ,std::array<int, 7> const* html_font_sizes
+    ,html_font_sizes const& font_sizes
     )
     :print_data_        {make_print_data(output_filename, orientation)}
     ,pdf_dc_            {print_data_}
@@ -86,33 +86,14 @@ pdf_writer_wx::pdf_writer_wx
     // Use a standard PDF Helvetica font (without embedding any custom fonts in
     // the generated file, the only other realistic choice is Times New Roman).
     pdf_dc_.SetFont
-        (wxFontInfo
-            (html_font_sizes
-                ? html_font_sizes->at(2)
-                : 8
-            )
+        (wxFontInfo(font_sizes.at(2))
             .Family(wxFONTFAMILY_SWISS)
             .FaceName("Helvetica")
         );
 
     // Create an HTML parser to allow easily adding HTML contents to the output.
     html_parser_.SetDC(&pdf_dc_);
-    if(html_font_sizes)
-        {
-        html_parser_.SetFonts
-            ("Helvetica"
-            ,"Courier"
-            ,html_font_sizes->data()
-            );
-        }
-    else
-        {
-        html_parser_.SetStandardFonts
-            (pdf_dc_.GetFont().GetPointSize()
-            ,"Helvetica"
-            ,"Courier"
-            );
-        }
+    html_parser_.SetFonts("Helvetica", "Courier", font_sizes.data());
 
     // Create the virtual file system object for loading images referenced from
     // HTML and interpret relative paths from the data directory.
