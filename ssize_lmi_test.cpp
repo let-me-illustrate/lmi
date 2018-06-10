@@ -32,7 +32,7 @@
 #include <string>
 #include <vector>
 
-int test_main(int, char*[])
+void test_various_containers()
 {
     char const c[2] = {'0'};
     BOOST_TEST_EQUAL(lmi::ssize(c), 2);
@@ -53,6 +53,11 @@ int test_main(int, char*[])
     char const* p = "ABCDEFGHIJK";
     BOOST_TEST_EQUAL(lmi::sstrlen(p), 11);
     BOOST_TEST_EQUAL(lmi::sstrlen(p), bourn_cast<int>(std::strlen(p)));
+}
+
+int test_main(int, char*[])
+{
+    test_various_containers();
 
     return 0;
 }
