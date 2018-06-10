@@ -90,7 +90,7 @@ class pdf_writer_wx
     int get_vert_margin() const;
     int get_page_width()  const;
     int get_total_width() const;
-    int get_page_height() const;
+    int get_total_height() const;
     int get_page_bottom() const;
 
   private:
