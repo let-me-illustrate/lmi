@@ -240,9 +240,9 @@ int pdf_writer_wx::get_total_width() const
     return total_page_size_.x;
 }
 
-int pdf_writer_wx::get_page_height() const
+int pdf_writer_wx::get_total_height() const
 {
-    return total_page_size_.y - 2 * vert_margin;
+    return total_page_size_.y;
 }
 
 int pdf_writer_wx::get_page_bottom() const
