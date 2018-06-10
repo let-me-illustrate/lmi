@@ -1,4 +1,4 @@
-// Improved std::size() that returns a signed integer: unit test.
+// Reformed std::size() returning a signed integer: unit test.
 //
 // Copyright (C) 2018 Gregory W. Chicares.
 //
