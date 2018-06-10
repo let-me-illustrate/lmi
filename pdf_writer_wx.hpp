@@ -41,12 +41,14 @@ namespace html { class text; }
 class pdf_writer_wx
 {
   public:
-    // Optional html_font_sizes array allows to override default font sizes for
-    // the standard HTML3 fonts (1..7).
+    using html_font_sizes = std::array<int, 7>;
+
+    // The font sizes array specifies the sizes, in points, of the standard
+    // HTML3 fonts (1..7).
     pdf_writer_wx
         (wxString const&           output_filename
         ,wxPrintOrientation        orientation
-        ,std::array<int, 7> const* html_font_sizes = nullptr
+        ,html_font_sizes const&    font_sizes
         );
 
     pdf_writer_wx(pdf_writer_wx const&) = delete;

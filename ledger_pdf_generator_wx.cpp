@@ -727,7 +727,13 @@ class pdf_illustration : protected html_interpolator
     // Render all pages to the specified PDF file.
     void render_all(fs::path const& output)
     {
-        pdf_writer_wx writer(output.string(), wxPORTRAIT, &html_font_sizes);
+        // Use non-default font sizes that are used to make the new
+        // illustrations more similar to the previously existing ones.
+        pdf_writer_wx writer
+            (output.string()
+            ,wxPORTRAIT
+            ,{8, 9, 10, 12, 14, 18, 20}
+            );
 
         html_cell_for_pdf_output::pdf_context_setter
             set_pdf_context(ledger_, writer, *this);
@@ -908,28 +914,12 @@ class pdf_illustration : protected html_interpolator
             );
     }
 
-    // This array stores the non-default font sizes that are used to make it
-    // simpler to replicate the existing illustrations.
-    static std::array<int, 7> const html_font_sizes;
-
     // Source of the data.
     Ledger const& ledger_;
 
     // All the pages of this illustration.
     std::vector<std::unique_ptr<page>> pages_;
 };
-
-std::array<int, 7> const pdf_illustration::html_font_sizes
-    {
-    { 8
-    , 9
-    ,10
-    ,12
-    ,14
-    ,18
-    ,20
-    }
-    };
 
 // Cover page used by several different illustration kinds.
 class cover_page : public page
