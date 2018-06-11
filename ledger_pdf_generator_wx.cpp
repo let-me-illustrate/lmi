@@ -669,25 +669,6 @@ class page
         ) = 0;
 
   protected:
-    // Helper method for rendering the contents of the given external template,
-    // which is expected to be found in the file with the provided name and
-    // ".mst" extension in the data directory.
-    //
-    // Return the height of the page contents.
-    int render_page_template
-        (std::string const& template_name
-        ,pdf_writer_wx& writer
-        ,html_interpolator const& interpolate_html
-        )
-    {
-        return writer.output_html
-            (writer.get_horz_margin()
-            ,writer.get_vert_margin()
-            ,writer.get_page_width()
-            ,interpolate_html.expand_template(template_name)
-            );
-    }
-
     // The associated illustration, which will be non-null by the time our
     // virtual methods such as pre_render() and render() are called.
     pdf_illustration const* illustration_ = nullptr;
@@ -931,10 +912,11 @@ class cover_page : public page
         ,html_interpolator const& interpolate_html
         ) override
     {
-        int const height_contents = render_page_template
-            ("cover"
-            ,writer
-            ,interpolate_html
+        int const height_contents = writer.output_html
+            (writer.get_horz_margin()
+            ,writer.get_vert_margin()
+            ,writer.get_page_width()
+            ,interpolate_html.expand_template("cover")
             );
 
         // There is no way to draw a border around the page contents in wxHTML
@@ -1229,7 +1211,12 @@ class standard_page : public numbered_page
     {
         numbered_page::render(ledger, writer, interpolate_html);
 
-        render_page_template(page_template_name_, writer, interpolate_html);
+        writer.output_html
+            (writer.get_horz_margin()
+            ,writer.get_vert_margin()
+            ,writer.get_page_width()
+            ,interpolate_html.expand_template(page_template_name_)
+            );
     }
 
   private:
