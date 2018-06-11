@@ -82,39 +82,6 @@
 /// Question: "...it's gonna pollute, right?"
 /// Carruth: "We're sorry."
 /// Sutter: "As Scott would say, 'we were young'."
-///
-/// Implementation notes.
-///
-/// An array-bound parameter can be deduced as a signed integer: the
-/// deduced value need not be unsigned. See C++17 (N4659) [17.8.2.1]
-/// (i.e., [temp.deduc.call]):
-///
-/// | template<class T, int N> void h(T const(&)[N]);
-/// | h({1,2,3}); // T deduced to int, N deduced to 3
-///
-/// However, the array bound is of type std::size_t [17.8.2.5]
-/// (i.e., [temp.deduct.type]):
-///
-/// | The type of N in the type T[N] is std::size_t.
-///
-/// Presumably deduction works as if:
-///
-///   // explicit type of 'n' is signed char
-///   // deduced value of 'n' is an ICE
-///   // initialization is an error if the conversion is narrowing
-///   //
-///   template<typename T, signed char n>
-///   constexpr signed char foo(T const(&)[n])
-///   {
-///       n = signed char({ICE_deduced_for_n});
-///   }
-///
-/// and the compiler should emit a diagnostic if an array with more
-/// than SCHAR_MAX elements is passed. Because the standard does not
-/// specify this precisely, it seems best to use type std::size_t for
-/// array-bound template parameters and convert their values to the
-/// desired return type using a facility such as bourn_cast or a
-/// braced-init-list that ensures value preservation.
 
 namespace lmi
 {
