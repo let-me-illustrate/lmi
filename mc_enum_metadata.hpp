@@ -36,8 +36,6 @@
 
 #include "config.hpp"
 
-#include <cstddef>                      // size_t
-
 /// Associate an mc_enum type with its metadata through its enum type.
 ///
 /// This class template is intended to be specialized for each type,
@@ -104,7 +102,7 @@ struct mc_enum_key
 /// 'n' could have been provided as a function rather than a constant,
 /// but a constant is preferable because it can be used in an ICE.
 
-template<typename T, std::size_t n, T const (&E)[n], char const*const (&C)[n]>
+template<typename T, auto n, T const (&E)[n], char const*const (&C)[n]>
 struct mc_enum_data
 {
     static_assert(0 != n);

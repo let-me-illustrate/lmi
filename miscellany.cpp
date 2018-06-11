@@ -30,6 +30,7 @@
 
 #include <algorithm>                    // equal(), max()
 #include <cmath>                        // ceil(), floor()
+#include <cstddef>                      // size_t
 #include <cstdio>                       // snprintf()
 #include <ctime>
 #include <fstream>

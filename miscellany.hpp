@@ -29,7 +29,6 @@
 #include <algorithm>
 #include <cctype>
 #include <climits>                      // UCHAR_MAX
-#include <cstddef>                      // size_t
 #include <cstdio>                       // EOF
 #include <iomanip>
 #include <ios>
@@ -181,7 +180,8 @@ std::string iso_8601_datestamp_terse();
 
 std::string iso_8601_datestamp_verbose();
 
-template<typename T, std::size_t n>
+// to be expunged soon: duplicates lmi::size()
+template<typename T, auto n>
 inline std::size_t lmi_array_size(T(&)[n])
 {
     return n;

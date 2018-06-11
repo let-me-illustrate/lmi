@@ -34,7 +34,6 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <cstddef>                      // size_t
 #include <cstdio>
 #include <cstring>                      // memcpy()
 #include <fstream>
@@ -43,7 +42,7 @@
 
 // TODO ?? Add tests for conditions and diagnostics that aren't tested yet.
 
-template<typename T, std::size_t n>
+template<typename T, auto n>
 std::string md5_str(T(&md5sum)[n])
 {
     LMI_ASSERT(n == md5len);

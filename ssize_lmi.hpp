@@ -93,10 +93,10 @@ constexpr ssize_t ssize(Container const& c)
     return bourn_cast<ssize_t>(c.size());
 }
 
-template<typename T, std::size_t n>
+template<typename T, auto n>
 constexpr ssize_t ssize(T const(&)[n])
 {
-    return bourn_cast<ssize_t>(n);
+    return {n};
 }
 
 inline ssize_t sstrlen(char const* s)
