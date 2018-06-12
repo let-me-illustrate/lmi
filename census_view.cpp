@@ -862,6 +862,7 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_MENU(XRCID("print_group_roster"        ),CensusView::UponRunCaseToGroupRoster   )
     EVT_MENU(XRCID("print_group_quote"         ),CensusView::UponRunCaseToGroupQuote    )
     EVT_MENU(XRCID("paste_census"              ),CensusView::UponPasteCensusIn          )
+    EVT_MENU(XRCID("paste_census_out"          ),CensusView::UponPasteCensusOut         )
     EVT_MENU(XRCID("add_cell"                  ),CensusView::UponAddCell                )
     EVT_MENU(XRCID("delete_cells"              ),CensusView::UponDeleteCells            )
     EVT_MENU(XRCID("column_width_varying"      ),CensusView::UponColumnWidthVarying     )
@@ -1354,8 +1355,7 @@ void CensusView::UponRightClick(wxDataViewEvent& e)
     global_settings const& g = global_settings::instance();
     if(contains(g.pyx(), "paste_out_to_spreadsheet"))
         {
-        wxCommandEvent temporary_okay_in_code_to_be_erased_soon;
-        UponPasteCensusOut(temporary_okay_in_code_to_be_erased_soon);
+        DoPasteCensusOut();
         }
 }
 
@@ -1778,6 +1778,15 @@ void CensusView::UponPasteCensusIn(wxCommandEvent&)
 
 /// Paste from the census manager into a "spreadsheet" (TSV) file.
 ///
+/// Simply calls DoPasteCensusOut(), q.v.
+
+void CensusView::UponPasteCensusOut(wxCommandEvent&)
+{
+    DoPasteCensusOut();
+}
+
+/// Paste from the census manager into a "spreadsheet" (TSV) file.
+///
 /// Include exactly those columns whose rows aren't all identical,
 /// considering as "rows" the individual cells--and also the case
 /// defaults, even though they aren't displayed in any row.
@@ -1800,7 +1809,7 @@ void CensusView::UponPasteCensusIn(wxCommandEvent&)
 /// spreadsheet program, and lmi's own UponPasteCensusIn() all ignore
 /// the extra '\t'.
 
-void CensusView::UponPasteCensusOut(wxCommandEvent&) const
+void CensusView::DoPasteCensusOut() const
 {
     configurable_settings const& c = configurable_settings::instance();
     std::string const& e = c.spreadsheet_file_extension();

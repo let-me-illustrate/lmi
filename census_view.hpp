@@ -73,7 +73,7 @@ class CensusView final
     void UponColumnWidthVarying     (wxCommandEvent&);
     void UponColumnWidthFixed       (wxCommandEvent&);
     void UponPasteCensusIn          (wxCommandEvent&);
-    void UponPasteCensusOut         (wxCommandEvent&) const;
+    void UponPasteCensusOut         (wxCommandEvent&);
     void UponRightClick             (wxDataViewEvent&);
     void UponPrintCase              (wxCommandEvent&);
     void UponPrintCaseToDisk        (wxCommandEvent&);
@@ -124,6 +124,8 @@ class CensusView final
     int selected_row();
 
     void update_class_names();
+
+    void DoPasteCensusOut() const;
 
     bool autosize_columns_;
 
