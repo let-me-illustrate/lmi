@@ -58,8 +58,6 @@ class CensusView final
 
     void update_visible_columns();
 
-    void paste_out_to_spreadsheet() const;
-
     CensusDocument& document() const;
 
     // ViewEx required implementation.
@@ -75,6 +73,7 @@ class CensusView final
     void UponColumnWidthVarying     (wxCommandEvent&);
     void UponColumnWidthFixed       (wxCommandEvent&);
     void UponPasteCensus            (wxCommandEvent&);
+    void UponPasteCensusOut         (wxCommandEvent&) const;
     void UponRightClick             (wxDataViewEvent&);
     void UponPrintCase              (wxCommandEvent&);
     void UponPrintCaseToDisk        (wxCommandEvent&);
