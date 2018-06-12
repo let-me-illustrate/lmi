@@ -187,7 +187,7 @@ std::vector<std::string> split_into_lines(std::string const& s)
         }
     // Assume that there is no newline at the end (or beginning) of
     // the string: i.e., that all newline delimiters are internal--
-    // hence "1u + ".
+    // hence "1 + ".
     LMI_ASSERT(lmi::ssize(lines) == 1 + count_newlines(s));
     return lines;
 }
