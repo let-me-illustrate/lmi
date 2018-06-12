@@ -981,6 +981,33 @@ Input* CensusView::class_parms_from_class_name(std::string const& class_name)
 /// would not all be identical--i.e. because at least one cell or one
 /// class default differs from the case default wrt that column.
 
+bool CensusView::column_value_varies_across_cells(std::string const& header) const
+{
+    bool const old =
+        (  column_value_varies_across_cells(header, class_parms())
+        || column_value_varies_across_cells(header, cell_parms ())
+        );
+    auto const z = case_parms()[0][header];
+    for(auto const& j : class_parms())
+        {
+        if(z != j[header])
+            {
+            LMI_ASSERT(true == old);
+            return true;
+            }
+        }
+    for(auto const& j : cell_parms())
+        {
+        if(z != j[header])
+            {
+            LMI_ASSERT(true == old);
+            return true;
+            }
+        }
+    LMI_ASSERT(false == old);
+    return false;
+}
+
 bool CensusView::column_value_varies_across_cells
     (std::string        const& header
     ,std::vector<Input> const& cells
@@ -1210,13 +1237,10 @@ void CensusView::update_visible_columns()
     // wrt some column, we respect that conscious decision.
     std::vector<std::string> const& all_headers(case_parms()[0].member_names());
     int column = 0;
-    for(auto const& i : all_headers)
+    for(auto const& header : all_headers)
         {
         ++column;
-        if
-            (  column_value_varies_across_cells(i, class_parms())
-            || column_value_varies_across_cells(i, cell_parms ())
-            )
+        if(column_value_varies_across_cells(header))
             {
             any_member<Input> const& representative_value = list_model_->cell_at(0, column);
 
@@ -1225,7 +1249,7 @@ void CensusView::update_visible_columns()
 
             list_window_->AppendColumn
                 (new(wx) wxDataViewColumn
-                    (insert_spaces_between_words(i)
+                    (insert_spaces_between_words(header)
                     ,renderer
                     ,column
                     ,width
@@ -1821,7 +1845,7 @@ void CensusView::DoPasteCensusOut() const
     std::vector<std::string> const& all_headers(case_parms()[0].member_names());
     for(auto const& header : all_headers)
         {
-        if(column_value_varies_across_cells(header, cell_parms()))
+        if(column_value_varies_across_cells(header))
             {
             if(header != "UseDOB" && header != "IssueAge")
                 {
