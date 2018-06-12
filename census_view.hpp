@@ -72,7 +72,7 @@ class CensusView final
     void UponEditCase               (wxCommandEvent&);
     void UponColumnWidthVarying     (wxCommandEvent&);
     void UponColumnWidthFixed       (wxCommandEvent&);
-    void UponPasteCensus            (wxCommandEvent&);
+    void UponPasteCensusIn          (wxCommandEvent&);
     void UponPasteCensusOut         (wxCommandEvent&) const;
     void UponRightClick             (wxDataViewEvent&);
     void UponPrintCase              (wxCommandEvent&);

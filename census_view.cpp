@@ -861,7 +861,7 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_MENU(XRCID("print_spreadsheet"         ),CensusView::UponRunCaseToSpreadsheet   )
     EVT_MENU(XRCID("print_group_roster"        ),CensusView::UponRunCaseToGroupRoster   )
     EVT_MENU(XRCID("print_group_quote"         ),CensusView::UponRunCaseToGroupQuote    )
-    EVT_MENU(XRCID("paste_census"              ),CensusView::UponPasteCensus            )
+    EVT_MENU(XRCID("paste_census"              ),CensusView::UponPasteCensusIn          )
     EVT_MENU(XRCID("add_cell"                  ),CensusView::UponAddCell                )
     EVT_MENU(XRCID("delete_cells"              ),CensusView::UponDeleteCells            )
     EVT_MENU(XRCID("column_width_varying"      ),CensusView::UponColumnWidthVarying     )
@@ -1604,7 +1604,7 @@ void CensusView::UponRunCaseToGroupQuote(wxCommandEvent&)
 /// file are assumed to represent user intention). In this case,
 /// pasted data is appended to the cells that were already present.
 
-void CensusView::UponPasteCensus(wxCommandEvent&)
+void CensusView::UponPasteCensusIn(wxCommandEvent&)
 {
     std::string const census_data = ClipboardEx::GetText();
 
@@ -1786,7 +1786,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 /// data from lmi, manipulating it in a spreadsheet, and then pasting
 /// it back into lmi.
 ///
-/// Never extract "UseDOB": it's always set by UponPasteCensus().
+/// Never extract "UseDOB": it's always set by UponPasteCensusIn().
 /// Never extract "IssueAge". If it's present, then "UseDOB" must also
 /// be, and "UseDOB" preserves information that "IssueAge" loses.
 ///
@@ -1797,7 +1797,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 /// expected; thus, they end in "'t\n". This makes the code slightly
 /// simpler by avoiding a "loop and a half". In practice, it doesn't
 /// make any difference: gnumeric, libreoffice calc, a popular msw
-/// spreadsheet program, and lmi's own UponPasteCensus() all ignore
+/// spreadsheet program, and lmi's own UponPasteCensusIn() all ignore
 /// the extra '\t'.
 
 void CensusView::UponPasteCensusOut(wxCommandEvent&) const
