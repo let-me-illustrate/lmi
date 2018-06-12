@@ -1789,6 +1789,16 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 /// Never extract "UseDOB": it's always set by UponPasteCensus().
 /// Never extract "IssueAge". If it's present, then "UseDOB" must also
 /// be, and "UseDOB" preserves information that "IssueAge" loses.
+///
+/// Implementation notes
+///
+/// Output lines use '\t' as a terminator following each field, rather
+/// than as a separator between each pair of fields as might have been
+/// expected; thus, they end in "'t\n". This makes the code slightly
+/// simpler by avoiding a "loop and a half". In practice, it doesn't
+/// make any difference: gnumeric, libreoffice calc, a popular msw
+/// spreadsheet program, and lmi's own UponPasteCensus() all ignore
+/// the extra '\t'.
 
 void CensusView::UponPasteCensusOut(wxCommandEvent&) const
 {
@@ -1813,7 +1823,6 @@ void CensusView::UponPasteCensusOut(wxCommandEvent&) const
 
     for(auto const& header : distinct_headers)
         {
-        // Assume that the trailing '\t' doesn't matter.
         os << header << '\t';
         }
     os << '\n';
@@ -1829,7 +1838,6 @@ void CensusView::UponPasteCensusOut(wxCommandEvent&) const
                 int z = JdnToYmd(jdn_t(value_cast<int>(s))).value();
                 s = value_cast<std::string>(z);
                 }
-            // Assume that the trailing '\t' doesn't matter.
             os << s << '\t';
             }
         os << '\n';
