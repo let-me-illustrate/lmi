@@ -1803,7 +1803,7 @@ void CensusView::DoPasteCensusOut() const
 {
     configurable_settings const& c = configurable_settings::instance();
     std::string const& e = c.spreadsheet_file_extension();
-    std::string const  f = fs::basename(base_filename()) + "_pasted_out";
+    std::string const  f = fs::basename(base_filename()) + ".pasted_out.cns";
     std::string file_name = unique_filepath(f, e).string();
     std::ofstream os(file_name.c_str(), ios_out_app_binary());
 
