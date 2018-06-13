@@ -112,11 +112,6 @@ class CensusView final
     Input* class_parms_from_class_name(std::string const&);
 
     bool column_value_varies_across_cells(std::string const& header) const;
-    // retained for the nonce, for testing only:
-    bool column_value_varies_across_cells
-        (std::string        const& header
-        ,std::vector<Input> const& cells
-        ) const;
 
     oenum_mvc_dv_rc edit_parameters
         (Input&             parameters

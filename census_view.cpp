@@ -983,43 +983,9 @@ Input* CensusView::class_parms_from_class_name(std::string const& class_name)
 
 bool CensusView::column_value_varies_across_cells(std::string const& header) const
 {
-    bool const old =
-        (  column_value_varies_across_cells(header, class_parms())
-        || column_value_varies_across_cells(header, cell_parms ())
-        );
     auto const z = case_parms()[0][header];
-    for(auto const& j : class_parms())
-        {
-        if(z != j[header])
-            {
-            LMI_ASSERT(true == old);
-            return true;
-            }
-        }
-    for(auto const& j : cell_parms())
-        {
-        if(z != j[header])
-            {
-            LMI_ASSERT(true == old);
-            return true;
-            }
-        }
-    LMI_ASSERT(false == old);
-    return false;
-}
-
-bool CensusView::column_value_varies_across_cells
-    (std::string        const& header
-    ,std::vector<Input> const& cells
-    ) const
-{
-    for(auto const& j : cells)
-        {
-        if(!(j[header] == case_parms()[0][header]))
-            {
-            return true;
-            }
-        }
+    for(auto const& j : class_parms()) {if(z != j[header]) return true;}
+    for(auto const& j : cell_parms() ) {if(z != j[header]) return true;}
     return false;
 }
 
