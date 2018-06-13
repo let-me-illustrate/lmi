@@ -1811,12 +1811,10 @@ void CensusView::DoPasteCensusOut() const
     std::vector<std::string> const& all_headers(case_parms()[0].member_names());
     for(auto const& header : all_headers)
         {
-        if(column_value_varies_across_cells(header))
+        bool const varies = column_value_varies_across_cells(header);
+        if(header != "UseDOB" && header != "IssueAge" && varies)
             {
-            if(header != "UseDOB" && header != "IssueAge")
-                {
-                distinct_headers.push_back(header);
-                }
+            distinct_headers.push_back(header);
             }
         }
 
