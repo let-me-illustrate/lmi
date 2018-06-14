@@ -371,9 +371,9 @@
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="paste_census">
-        <label>Pa_ste census\tCtrl-Shift-S</label>
-        <bitmap platform="win" stock_id="paste-case"/>
-        <help>Paste census data from clipboard</help>
+        <label>Pa_ste census in\tCtrl-Shift-S</label>
+        <bitmap platform="win" stock_id="paste-in"/>
+        <help>Paste census data in from clipboard</help>
     </object>
     <object class="wxMenuItem" name="add_cell">
         <label>_Add cell\tCtrl-+</label>

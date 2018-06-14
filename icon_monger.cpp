@@ -85,7 +85,8 @@ icon_monger::icon_monger()
     lmi_specific_icon_names_.insert("edit-cell"               );
     lmi_specific_icon_names_.insert("edit-class"              );
     lmi_specific_icon_names_.insert("fixed-width"             );
-    lmi_specific_icon_names_.insert("paste-case"              );
+    lmi_specific_icon_names_.insert("paste-in"                );
+    lmi_specific_icon_names_.insert("paste-out"               );
     lmi_specific_icon_names_.insert("preferences"             );
     lmi_specific_icon_names_.insert("print-case"              );
     lmi_specific_icon_names_.insert("print-case-pdf"          );

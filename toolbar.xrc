@@ -125,9 +125,9 @@
     </object>
     <object class="separator"/>
     <object class="tool" name="paste_census">
-        <tooltip>Paste census</tooltip>
-        <bitmap stock_id="paste-case"/>
-        <longhelp>Paste census data from clipboard</longhelp>
+        <tooltip>Paste census in</tooltip>
+        <bitmap stock_id="paste-in"/>
+        <longhelp>Paste census data in from clipboard</longhelp>
     </object>
     <object class="tool" name="add_cell">
         <tooltip>Add cell</tooltip>
