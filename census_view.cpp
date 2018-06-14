@@ -1793,12 +1793,6 @@ void CensusView::UponPasteCensusOut(wxCommandEvent&)
 
 void CensusView::DoPasteCensusOut() const
 {
-    configurable_settings const& c = configurable_settings::instance();
-    std::string const& e = c.spreadsheet_file_extension();
-    std::string const  f = fs::basename(base_filename()) + ".pasted_out.cns";
-    std::string file_name = unique_filepath(f, e).string();
-    std::ofstream os(file_name.c_str(), ios_out_app_binary());
-
     std::vector<std::string> distinct_headers;
     std::vector<std::string> const& all_headers(case_parms()[0].member_names());
     for(auto const& header : all_headers)
@@ -1814,6 +1808,12 @@ void CensusView::DoPasteCensusOut() const
         {
         alarum() << "All cells identical: nothing to paste out." << LMI_FLUSH;
         }
+
+    configurable_settings const& c = configurable_settings::instance();
+    std::string const& e = c.spreadsheet_file_extension();
+    std::string const  f = fs::basename(base_filename()) + ".pasted_out.cns";
+    std::string file_name = unique_filepath(f, e).string();
+    std::ofstream os(file_name.c_str(), ios_out_app_binary());
 
     for(auto const& header : distinct_headers)
         {
