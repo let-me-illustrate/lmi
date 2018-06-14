@@ -1810,6 +1810,11 @@ void CensusView::DoPasteCensusOut() const
             }
         }
 
+    if(distinct_headers.empty())
+        {
+        alarum() << "All cells identical: nothing to paste out." << LMI_FLUSH;
+        }
+
     for(auto const& header : distinct_headers)
         {
         os << header << '\t';
