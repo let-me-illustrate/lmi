@@ -32,7 +32,6 @@
 #include "default_view.hpp"
 #include "edit_mvc_docview_parameters.hpp"
 #include "facets.hpp"                   // tab_is_not_whitespace_locale()
-#include "global_settings.hpp"
 #include "illustration_view.hpp"
 #include "illustrator.hpp"
 #include "input.hpp"
@@ -1340,14 +1339,6 @@ void CensusView::UponRightClick(wxDataViewEvent& e)
     LMI_ASSERT(census_menu);
     list_window_->PopupMenu(census_menu);
     delete census_menu;
-
-    // For the nonce, this option is not discoverable. After testing,
-    // it is likely to be offered on the menu and toolbar.
-    global_settings const& g = global_settings::instance();
-    if(contains(g.pyx(), "paste_out_to_spreadsheet"))
-        {
-        DoPasteCensusOut();
-        }
 }
 
 void CensusView::UponUpdateAlwaysDisabled(wxUpdateUIEvent& e)
