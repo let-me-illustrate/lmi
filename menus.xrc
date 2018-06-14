@@ -375,6 +375,11 @@
         <bitmap platform="win" stock_id="paste-in"/>
         <help>Paste census data in from clipboard</help>
     </object>
+    <object class="wxMenuItem" name="paste_census_out">
+        <label>Pas_te census out\tCtrl-Shift-T</label>
+        <bitmap platform="win" stock_id="paste-out"/>
+        <help>Paste census data out to a spreadsheet file</help>
+    </object>
     <object class="wxMenuItem" name="add_cell">
         <label>_Add cell\tCtrl-+</label>
         <bitmap platform="win" stock_id="insert-rows"/>

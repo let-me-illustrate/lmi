@@ -129,6 +129,11 @@
         <bitmap stock_id="paste-in"/>
         <longhelp>Paste census data in from clipboard</longhelp>
     </object>
+    <object class="tool" name="paste_census_out">
+        <tooltip>Paste census out</tooltip>
+        <bitmap stock_id="paste-out"/>
+        <longhelp>Paste census data out to a spreadsheet file</longhelp>
+    </object>
     <object class="tool" name="add_cell">
         <tooltip>Add cell</tooltip>
         <bitmap stock_id="insert-rows"/>
