@@ -124,7 +124,7 @@
         <longhelp>Run and print all cells to a group premium quote</longhelp>
     </object>
     <object class="separator"/>
-    <object class="tool" name="paste_census">
+    <object class="tool" name="paste_census_in">
         <tooltip>Paste census in</tooltip>
         <bitmap stock_id="paste-in"/>
         <longhelp>Paste census data in from clipboard</longhelp>

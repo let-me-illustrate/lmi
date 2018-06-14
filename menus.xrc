@@ -370,7 +370,7 @@
         <help>Run and print all cells to a group premium quote</help>
     </object>
     <object class="separator"/>
-    <object class="wxMenuItem" name="paste_census">
+    <object class="wxMenuItem" name="paste_census_in">
         <label>Pa_ste census in\tCtrl-Shift-S</label>
         <bitmap platform="win" stock_id="paste-in"/>
         <help>Paste census data in from clipboard</help>
