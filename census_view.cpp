@@ -878,7 +878,7 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_UPDATE_UI(XRCID("print_group_roster"   ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("print_group_quote"    ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("paste_census_in"      ),CensusView::UponUpdateAlwaysEnabled    )
-    EVT_UPDATE_UI(XRCID("paste_census_out"     ),CensusView::UponUpdateAlwaysEnabled    )
+    EVT_UPDATE_UI(XRCID("paste_census_out"     ),CensusView::UponUpdateColumnValuesVary )
     EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateNonemptySelection)
     EVT_UPDATE_UI(XRCID("column_width_varying" ),CensusView::UponUpdateAlwaysEnabled    )
@@ -1361,6 +1361,56 @@ void CensusView::UponUpdateNonemptySelection(wxUpdateUIEvent& e)
 {
     wxDataViewItemArray selection;
     e.Enable(0 < list_window_->GetSelections(selection));
+}
+
+/// Conditionally enable pasting out.
+///
+/// Pasting out is forbidden if it would produce only whitespace; that
+/// is, if no "interesting" column varies across cells. All columns
+/// are interesting except:
+///  - the cell serial number that is always shown in the first column
+///    (that's just a GUI artifact, not an actual cell datum); and
+///  - the "UseDOB" and "IssueAge" columns that are filtered out by
+///    DoPasteCensusOut().
+/// This implementation ignores the first column, then enables the
+/// command unless "UseDOB" is the only other column; the rationale is
+/// clear only in the problem domain: "IssueAge" needn't be tested,
+/// because if "IssueAge" varies, then so must either "DateOfBirth"
+/// or "EffectiveDate".
+
+void CensusView::UponUpdateColumnValuesVary(wxUpdateUIEvent& e)
+{
+    static const std::string dob_header = insert_spaces_between_words("UseDOB");
+    int const n_cols = bourn_cast<int>(list_window_->GetColumnCount());
+    bool const disable =
+            1 == n_cols
+        || (2 == n_cols && dob_header == list_window_->GetColumn(1)->GetTitle())
+        ;
+    e.Enable(!disable);
+// Temporary testing scaffold...
+    std::vector<std::string> distinct_headers;
+    std::vector<std::string> const& all_headers(case_parms()[0].member_names());
+    for(auto const& header : all_headers)
+        {
+        bool const varies = column_value_varies_across_cells(header);
+        if(header != "UseDOB" && header != "IssueAge" && varies)
+            {
+            distinct_headers.push_back(header);
+            }
+        }
+    if(disable != distinct_headers.empty())
+        status()
+            << "Hey! "
+            << list_window_->GetColumnCount() - 1
+            << " != "
+            << distinct_headers.size()
+            << " "
+            << list_window_->GetColumn(0)->GetTitle()
+            << ", "
+            << list_window_->GetColumn(1)->GetTitle()
+            << std::flush
+            ;
+    else status() << " " << std::flush;
 }
 
 /// Update the dataview display.
