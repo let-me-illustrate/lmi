@@ -848,7 +848,8 @@ inline std::vector<std::string> const& CensusViewDataViewModel::all_headers() co
 IMPLEMENT_DYNAMIC_CLASS(CensusView, ViewEx)
 
 BEGIN_EVENT_TABLE(CensusView, ViewEx)
-    EVT_DATAVIEW_ITEM_CONTEXT_MENU(wxID_ANY     ,CensusView::UponRightClick             )
+    EVT_DATAVIEW_ITEM_CONTEXT_MENU (wxID_ANY    ,CensusView::UponRightClick             )
+    EVT_DATAVIEW_ITEM_VALUE_CHANGED(wxID_ANY    ,CensusView::UponValueChanged           )
     EVT_MENU(XRCID("edit_cell"                 ),CensusView::UponEditCell               )
     EVT_MENU(XRCID("edit_class"                ),CensusView::UponEditClass              )
     EVT_MENU(XRCID("edit_case"                 ),CensusView::UponEditCase               )
@@ -1339,6 +1340,14 @@ void CensusView::UponRightClick(wxDataViewEvent& e)
     LMI_ASSERT(census_menu);
     list_window_->PopupMenu(census_menu);
     delete census_menu;
+}
+
+void CensusView::UponValueChanged(wxDataViewEvent&)
+{
+    Timer timer;
+    Update();
+    double total_seconds = timer.stop().elapsed_seconds();
+    status() << Timer::elapsed_msec_str(total_seconds) << std::flush;
 }
 
 void CensusView::UponUpdateAlwaysDisabled(wxUpdateUIEvent& e)

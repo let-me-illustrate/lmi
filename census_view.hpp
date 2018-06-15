@@ -75,6 +75,7 @@ class CensusView final
     void UponPasteCensusIn          (wxCommandEvent&);
     void UponPasteCensusOut         (wxCommandEvent&);
     void UponRightClick             (wxDataViewEvent&);
+    void UponValueChanged           (wxDataViewEvent&);
     void UponPrintCase              (wxCommandEvent&);
     void UponPrintCaseToDisk        (wxCommandEvent&);
     void UponRunCell                (wxCommandEvent&);
