@@ -129,7 +129,11 @@ class RangeTypeRenderer
 
   public:
     bool HasEditorCtrl() const override { return true; }
-    wxWindow* CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value) override;
+    wxWindow* CreateEditorCtrl
+        (wxWindow*        parent
+        ,wxRect           labelRect
+        ,wxVariant const& value
+        ) override;
     bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value) override;
     bool Render(wxRect rect, wxDC* dc, int state) override;
     wxSize GetSize() const override;
@@ -137,7 +141,11 @@ class RangeTypeRenderer
     bool GetValue(wxVariant& value) const override;
 
   protected:
-    virtual wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data) = 0;
+    virtual wxWindow* DoCreateEditor
+        (wxWindow*                    parent
+        ,wxRect                const& rect
+        ,tn_range_variant_data const& data
+        ) = 0;
     virtual std::string DoGetValueFromEditor(wxWindow* editor) = 0;
 
     std::string value_;
@@ -149,11 +157,16 @@ RangeTypeRenderer::RangeTypeRenderer()
     :wxDataViewCustomRenderer
     (typeid(tn_range_variant_data).name()
     ,wxDATAVIEW_CELL_EDITABLE
-    ,wxDVR_DEFAULT_ALIGNMENT)
+    ,wxDVR_DEFAULT_ALIGNMENT
+    )
 {
 }
 
-wxWindow* RangeTypeRenderer::CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value)
+wxWindow* RangeTypeRenderer::CreateEditorCtrl
+    (wxWindow*        parent
+    ,wxRect           labelRect
+    ,wxVariant const& value
+    )
 {
     tn_range_variant_data const* data = dynamic_cast<tn_range_variant_data*>(value.GetData());
     LMI_ASSERT(data);
@@ -217,14 +230,19 @@ class IntSpinRenderer
     IntSpinRenderer() : RangeTypeRenderer() {}
 
   protected:
-    wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data) override;
+    wxWindow* DoCreateEditor
+        (wxWindow*                    parent
+        ,wxRect                const& rect
+        ,tn_range_variant_data const& data
+        ) override;
     std::string DoGetValueFromEditor(wxWindow* editor) override;
 };
 
 wxWindow* IntSpinRenderer::DoCreateEditor
-    (wxWindow* parent
-     ,wxRect const& rect
-     ,tn_range_variant_data const& data)
+    (wxWindow*                    parent
+    ,wxRect                const& rect
+    ,tn_range_variant_data const& data
+    )
 {
     return new(wx) wxSpinCtrl
         (parent
@@ -256,14 +274,19 @@ class DoubleRangeRenderer
     DoubleRangeRenderer() : RangeTypeRenderer() {}
 
   protected:
-    wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data) override;
+    wxWindow* DoCreateEditor
+        (wxWindow*                    parent
+        ,wxRect                const& rect
+        ,tn_range_variant_data const& data
+        ) override;
     std::string DoGetValueFromEditor(wxWindow* editor) override;
 };
 
 wxWindow* DoubleRangeRenderer::DoCreateEditor
-    (wxWindow* parent
-     ,wxRect const& rect
-     ,tn_range_variant_data const& data)
+    (wxWindow*                    parent
+    ,wxRect                const& rect
+    ,tn_range_variant_data const& data
+    )
 {
     wxFloatingPointValidator<double> val;
     val.SetRange(data.min, data.max);
@@ -303,14 +326,19 @@ class DateRenderer
     bool Render(wxRect rect, wxDC* dc, int state) override;
 
   protected:
-    wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data) override;
+    wxWindow* DoCreateEditor
+        (wxWindow*                    parent
+        ,wxRect                const& rect
+        ,tn_range_variant_data const& data
+        ) override;
     std::string DoGetValueFromEditor(wxWindow* editor) override;
 };
 
 wxWindow* DateRenderer::DoCreateEditor
-    (wxWindow* parent
-     ,wxRect const& rect
-     ,tn_range_variant_data const& data)
+    (wxWindow*                    parent
+    ,wxRect                const& rect
+    ,tn_range_variant_data const& data
+    )
 {
     // Always use default height for editor controls
     wxRect r(rect);
@@ -388,7 +416,11 @@ class DatumSequenceRenderer
     DatumSequenceRenderer(DatumSequenceRenderer const&) = delete;
     DatumSequenceRenderer& operator=(DatumSequenceRenderer const&) = delete;
     bool HasEditorCtrl() const override { return true; }
-    wxWindow* CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value) override;
+    wxWindow* CreateEditorCtrl
+        (wxWindow*        parent
+        ,wxRect           labelRect
+        ,wxVariant const& value
+        ) override;
     bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value) override;
     bool Render(wxRect rect, wxDC* dc, int state) override;
     wxSize GetSize() const override;
@@ -401,12 +433,20 @@ class DatumSequenceRenderer
 };
 
 DatumSequenceRenderer::DatumSequenceRenderer()
-    :wxDataViewCustomRenderer(typeid(input_sequence_variant_data).name(), wxDATAVIEW_CELL_EDITABLE, wxDVR_DEFAULT_ALIGNMENT)
+    :wxDataViewCustomRenderer
+        (typeid(input_sequence_variant_data).name()
+        ,wxDATAVIEW_CELL_EDITABLE
+        ,wxDVR_DEFAULT_ALIGNMENT
+        )
     ,input_(nullptr)
 {
 }
 
-wxWindow* DatumSequenceRenderer::CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value)
+wxWindow* DatumSequenceRenderer::CreateEditorCtrl
+    (wxWindow*        parent
+    ,wxRect           labelRect
+    ,wxVariant const& value
+    )
 {
     input_sequence_variant_data const* data = dynamic_cast<input_sequence_variant_data*>(value.GetData());
     LMI_ASSERT(data);
@@ -475,7 +515,11 @@ bool DatumSequenceRenderer::GetValue(wxVariant& value) const
 class renderer_type_converter
 {
   public:
-    virtual wxVariant to_variant(any_member<Input> const& x, Input const& row, std::string const& col) const = 0;
+    virtual wxVariant to_variant
+        (any_member<Input> const& x
+        ,Input             const& row
+        ,std::string       const& col
+        ) const = 0;
     virtual std::string from_variant(wxVariant const& x) const = 0;
     virtual char const* variant_type() const = 0;
     virtual wxDataViewRenderer* create_renderer(any_member<Input> const& exemplar) const = 0;
@@ -491,7 +535,11 @@ class renderer_type_converter
 
 class renderer_bool_converter : public renderer_type_converter
 {
-    wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const override
+    wxVariant to_variant
+        (any_member<Input> const& x
+        ,Input             const&
+        ,std::string       const&
+        ) const override
     {
         std::string const s(x.str());
         return
@@ -513,7 +561,11 @@ class renderer_bool_converter : public renderer_type_converter
 
     wxDataViewRenderer* create_renderer(any_member<Input> const&) const override
     {
-        return new(wx) wxDataViewToggleRenderer("bool", wxDATAVIEW_CELL_ACTIVATABLE, wxALIGN_CENTER);
+        return new(wx) wxDataViewToggleRenderer
+            ("bool"
+            ,wxDATAVIEW_CELL_ACTIVATABLE
+            ,wxALIGN_CENTER
+            );
     }
 };
 
@@ -521,7 +573,11 @@ class renderer_bool_converter : public renderer_type_converter
 
 class renderer_enum_converter : public renderer_type_converter
 {
-    wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const override
+    wxVariant to_variant
+        (any_member<Input> const& x
+        ,Input             const&
+        ,std::string       const&
+        ) const override
     {
         return wxString(x.str());
     }
@@ -552,7 +608,11 @@ class renderer_enum_converter : public renderer_type_converter
 class renderer_sequence_converter : public renderer_type_converter
 {
   public:
-    wxVariant to_variant(any_member<Input> const& x, Input const& row, std::string const& col) const override
+    wxVariant to_variant
+        (any_member<Input> const& x
+        ,Input             const& row
+        ,std::string       const& col
+        ) const override
     {
         return new(wx) input_sequence_variant_data(x.str(), &row, col);
     }
@@ -580,7 +640,11 @@ class renderer_sequence_converter : public renderer_type_converter
 class renderer_range_converter : public renderer_type_converter
 {
   public:
-    wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const override
+    wxVariant to_variant
+        (any_member<Input> const& x
+        ,Input             const&
+        ,std::string       const&
+        ) const override
     {
         tn_range_base const* as_range = member_cast<tn_range_base>(x);
         LMI_ASSERT(as_range);
@@ -632,7 +696,11 @@ class renderer_date_converter : public renderer_range_converter
 class renderer_fallback_converter : public renderer_type_converter
 {
   public:
-    wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const override
+    wxVariant to_variant
+        (any_member<Input> const& x
+        ,Input             const&
+        ,std::string       const&
+        ) const override
     {
         // Strings containing new line characters are currently not displayed
         // correctly by wxDataViewCtrl, so display the value on a single line
@@ -759,7 +827,11 @@ class CensusViewDataViewModel : public wxDataViewIndexListModel
     CensusView& view_;
 };
 
-void CensusViewDataViewModel::GetValueByRow(wxVariant& variant, unsigned int row, unsigned int col) const
+void CensusViewDataViewModel::GetValueByRow
+    (wxVariant&   variant
+    ,unsigned int row
+    ,unsigned int col
+    ) const
 {
     if(col == Col_CellNum)
         {
@@ -777,7 +849,11 @@ void CensusViewDataViewModel::GetValueByRow(wxVariant& variant, unsigned int row
         }
 }
 
-bool CensusViewDataViewModel::SetValueByRow(wxVariant const& variant, unsigned int row, unsigned int col)
+bool CensusViewDataViewModel::SetValueByRow
+    (wxVariant const& variant
+    ,unsigned int     row
+    ,unsigned int     col
+    )
 {
     LMI_ASSERT(col != Col_CellNum);
 
