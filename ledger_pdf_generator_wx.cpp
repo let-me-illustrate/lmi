@@ -597,7 +597,7 @@ TAG_HANDLER_BEGIN(scaled_image, "SCALED_IMAGE")
         // not present.
             {
             wxLogNull NoLog;
-            image.LoadFile(src);
+            image.LoadFile(AddDataDir(src.ToStdString()));
             }
 
         if (image.IsOk())
