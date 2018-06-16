@@ -478,7 +478,7 @@ class renderer_type_converter
     virtual wxVariant to_variant(any_member<Input> const& x, Input const& row, std::string const& col) const = 0;
     virtual std::string from_variant(wxVariant const& x) const = 0;
     virtual char const* variant_type() const = 0;
-    virtual wxDataViewRenderer* create_renderer(any_member<Input> const& representative_value) const = 0;
+    virtual wxDataViewRenderer* create_renderer(any_member<Input> const& exemplar) const = 0;
 
     static renderer_type_converter const& get(any_member<Input> const& value);
 
@@ -536,9 +536,9 @@ class renderer_enum_converter : public renderer_type_converter
         return "string";
     }
 
-    wxDataViewRenderer* create_renderer(any_member<Input> const& representative_value) const override
+    wxDataViewRenderer* create_renderer(any_member<Input> const& exemplar) const override
     {
-        mc_enum_base const* as_enum = member_cast<mc_enum_base>(representative_value);
+        mc_enum_base const* as_enum = member_cast<mc_enum_base>(exemplar);
 
         std::vector<std::string> const& all_strings = as_enum->all_strings();
         wxArrayString choices;
@@ -814,9 +814,8 @@ wxString CensusViewDataViewModel::GetColumnType(unsigned int col) const
         }
     else
         {
-        any_member<Input> const& representative_value = cell_at(0, col);
-        renderer_type_converter const& conv = renderer_type_converter::get(representative_value);
-
+        any_member<Input> const& exemplar = cell_at(0, col);
+        renderer_type_converter const& conv = renderer_type_converter::get(exemplar);
         return conv.variant_type();
         }
 }
@@ -854,7 +853,8 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_MENU(XRCID("edit_class"                ),CensusView::UponEditClass              )
     EVT_MENU(XRCID("edit_case"                 ),CensusView::UponEditCase               )
     EVT_MENU(XRCID("run_cell"                  ),CensusView::UponRunCell                )
-//  EVT_MENU(XRCID("run_class"                 ),CensusView::UponRunClass               )   // SOMEDAY !! This may be useful for large cases.
+// SOMEDAY !! This may be useful for large cases.
+//  EVT_MENU(XRCID("run_class"                 ),CensusView::UponRunClass               )
     EVT_MENU(XRCID("run_case"                  ),CensusView::UponRunCase                )
     EVT_MENU(XRCID("print_case"                ),CensusView::UponPrintCase              )
     EVT_MENU(XRCID("print_case_to_disk"        ),CensusView::UponPrintCaseToDisk        )
@@ -1209,11 +1209,10 @@ void CensusView::update_visible_columns()
         ++column;
         if(column_value_varies_across_cells(header))
             {
-            any_member<Input> const& representative_value = list_model_->cell_at(0, column);
-
-            wxDataViewRenderer* renderer = renderer_type_converter::get(representative_value).create_renderer(representative_value);
+            any_member<Input> const& exemplar = list_model_->cell_at(0, column);
+            renderer_type_converter const& conv = renderer_type_converter::get(exemplar);
+            wxDataViewRenderer* renderer = conv.create_renderer(exemplar);
             LMI_ASSERT(renderer);
-
             list_window_->AppendColumn
                 (new(wx) wxDataViewColumn
                     (insert_spaces_between_words(header)
@@ -1675,10 +1674,10 @@ void CensusView::UponPasteCensusIn(wxCommandEvent&)
         return;
         }
 
-    // Use a modifiable copy of case defaults as an exemplar for new
+    // Use a modifiable copy of case defaults as an archetype for new
     // cells to be created by pasting. Modifications are conditionally
     // written back to case defaults later.
-    Input exemplar(case_parms()[0]);
+    Input archetype(case_parms()[0]);
 
     // Force 'UseDOB' prn. Pasting it as a column never makes sense.
     if(contains(headers, "UseDOB"))
@@ -1696,11 +1695,11 @@ void CensusView::UponPasteCensusIn(wxCommandEvent&)
         }
     else if(dob_pasted)
         {
-        exemplar["UseDOB"] = "Yes";
+        archetype["UseDOB"] = "Yes";
         }
     else if(age_pasted)
         {
-        exemplar["UseDOB"] = "No";
+        archetype["UseDOB"] = "No";
         }
     else
         {
@@ -1717,7 +1716,7 @@ void CensusView::UponPasteCensusIn(wxCommandEvent&)
 
         iss_census >> std::ws;
 
-        Input current_cell(exemplar);
+        Input current_cell(archetype);
 
         std::istringstream iss_line(line);
         std::string token;
@@ -1789,9 +1788,9 @@ void CensusView::UponPasteCensusIn(wxCommandEvent&)
     if(!document().IsModified() && !document().GetDocumentSaved())
         {
         case_parms ().clear();
-        case_parms ().push_back(exemplar);
+        case_parms ().push_back(archetype);
         class_parms().clear();
-        class_parms().push_back(exemplar);
+        class_parms().push_back(archetype);
         cell_parms ().swap(cells);
         selection = 0;
         }
