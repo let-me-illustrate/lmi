@@ -65,24 +65,25 @@ class CensusView final
     char const* icon_xrc_resource   () const override;
     char const* menubar_xrc_resource() const override;
 
-    void UponAddCell                (wxCommandEvent&);
-    void UponDeleteCells            (wxCommandEvent&);
+    // Event handlers, in event-table order (reflecting GUI order)
+    void UponRightClick             (wxDataViewEvent&);
+    void UponValueChanged           (wxDataViewEvent&);
     void UponEditCell               (wxCommandEvent&);
     void UponEditClass              (wxCommandEvent&);
     void UponEditCase               (wxCommandEvent&);
-    void UponColumnWidthVarying     (wxCommandEvent&);
-    void UponColumnWidthFixed       (wxCommandEvent&);
-    void UponPasteCensusIn          (wxCommandEvent&);
-    void UponPasteCensusOut         (wxCommandEvent&);
-    void UponRightClick             (wxDataViewEvent&);
-    void UponValueChanged           (wxDataViewEvent&);
-    void UponPrintCase              (wxCommandEvent&);
-    void UponPrintCaseToDisk        (wxCommandEvent&);
     void UponRunCell                (wxCommandEvent&);
     void UponRunCase                (wxCommandEvent&);
+    void UponPrintCase              (wxCommandEvent&);
+    void UponPrintCaseToDisk        (wxCommandEvent&);
     void UponRunCaseToSpreadsheet   (wxCommandEvent&);
     void UponRunCaseToGroupRoster   (wxCommandEvent&);
     void UponRunCaseToGroupQuote    (wxCommandEvent&);
+    void UponPasteCensusIn          (wxCommandEvent&);
+    void UponPasteCensusOut         (wxCommandEvent&);
+    void UponAddCell                (wxCommandEvent&);
+    void UponDeleteCells            (wxCommandEvent&);
+    void UponColumnWidthVarying     (wxCommandEvent&);
+    void UponColumnWidthFixed       (wxCommandEvent&);
     void UponUpdateAlwaysDisabled   (wxUpdateUIEvent&);
     void UponUpdateAlwaysEnabled    (wxUpdateUIEvent&);
     void UponUpdateSingleSelection  (wxUpdateUIEvent&);
