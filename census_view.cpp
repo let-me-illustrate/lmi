@@ -131,7 +131,7 @@ class RangeTypeRenderer
     bool HasEditorCtrl() const override { return true; }
     wxWindow* CreateEditorCtrl
         (wxWindow*        parent
-        ,wxRect           labelRect
+        ,wxRect           label_rect
         ,wxVariant const& value
         ) override;
     bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value) override;
@@ -164,7 +164,7 @@ RangeTypeRenderer::RangeTypeRenderer()
 
 wxWindow* RangeTypeRenderer::CreateEditorCtrl
     (wxWindow*        parent
-    ,wxRect           labelRect
+    ,wxRect           label_rect
     ,wxVariant const& value
     )
 {
@@ -172,7 +172,7 @@ wxWindow* RangeTypeRenderer::CreateEditorCtrl
     LMI_ASSERT(data);
 
     // Always use default height for editor controls
-    wxRect rect(labelRect);
+    wxRect rect(label_rect);
     rect.height = -1;
 
     return DoCreateEditor(parent, rect, *data);
@@ -418,7 +418,7 @@ class DatumSequenceRenderer
     bool HasEditorCtrl() const override { return true; }
     wxWindow* CreateEditorCtrl
         (wxWindow*        parent
-        ,wxRect           labelRect
+        ,wxRect           label_rect
         ,wxVariant const& value
         ) override;
     bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value) override;
@@ -444,7 +444,7 @@ DatumSequenceRenderer::DatumSequenceRenderer()
 
 wxWindow* DatumSequenceRenderer::CreateEditorCtrl
     (wxWindow*        parent
-    ,wxRect           labelRect
+    ,wxRect           label_rect
     ,wxVariant const& value
     )
 {
@@ -458,7 +458,7 @@ wxWindow* DatumSequenceRenderer::CreateEditorCtrl
     ctrl->input(*data->input);
     ctrl->field_name(data->field);
 
-    ctrl->SetSize(labelRect);
+    ctrl->SetSize(label_rect);
 
     return ctrl;
 }

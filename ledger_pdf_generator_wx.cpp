@@ -596,7 +596,7 @@ TAG_HANDLER_BEGIN(scaled_image, "SCALED_IMAGE")
         // Disable error logging, we'll simply ignore the tag if the image is
         // not present.
             {
-            wxLogNull noLog;
+            wxLogNull NoLog;
             image.LoadFile(src);
             }
 

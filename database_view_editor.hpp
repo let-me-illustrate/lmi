@@ -103,7 +103,7 @@ class DatabaseTableAdapter
     static void ConvertValue(Coords const&, std::vector<int>&);
 
     bool IsVoid() const;
-    bool ConfirmOperation(int itemCount) const;
+    bool ConfirmOperation(int item_count) const;
     void ReshapeTableData
         (std::vector<int>& axis_lengths
         ,bool user_confirm = false

@@ -374,11 +374,11 @@ InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title
     rows_area_ = new(wx) wxScrolledWindow(this);
     top->Add(rows_area_, wxSizerFlags(1).Expand().DoubleBorder());
 
-    wxSize const sizerGap
+    wxSize const SizerGap
         (wxSizerFlags::GetDefaultBorder()
         ,wxSizerFlags::GetDefaultBorder()
         );
-    sizer_ = new(wx) wxFlexGridSizer(Col_Max, sizerGap);
+    sizer_ = new(wx) wxFlexGridSizer(Col_Max, SizerGap);
     rows_area_->SetSizer(sizer_);
 
     diagnostics_ = new(wx) wxStaticText
@@ -407,7 +407,7 @@ InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title
     // (as we assume they all have the same size) vertically.
     wxArrayInt const& row_heights = sizer_->GetRowHeights();
     LMI_ASSERT(!row_heights.empty());
-    rows_area_->SetScrollRate(0, row_heights[0] + sizerGap.y);
+    rows_area_->SetScrollRate(0, row_heights[0] + SizerGap.y);
 
     value_field_ctrl(0).SetFocus();
 }
@@ -663,8 +663,8 @@ void InputSequenceEditor::insert_row(int new_row)
         ,wxBU_AUTODRAW | wxBU_EXACTFIT | wxBORDER_NONE
         );
 #if defined __WXGTK__
-    wxBitmap removeBmp = wxArtProvider::GetBitmap("gtk-remove", wxART_BUTTON);
-    remove->SetBitmap(removeBmp);
+    wxBitmap RemoveBmp = wxArtProvider::GetBitmap("gtk-remove", wxART_BUTTON);
+    remove->SetBitmap(RemoveBmp);
 #endif // defined __WXGTK__
 
     remove->SetToolTip("Remove this row");
@@ -685,8 +685,8 @@ void InputSequenceEditor::insert_row(int new_row)
         ,wxBU_AUTODRAW | wxBU_EXACTFIT | wxBORDER_NONE
         );
 #if defined __WXGTK__
-    wxBitmap addBmp = wxArtProvider::GetBitmap("gtk-add", wxART_BUTTON);
-    add->SetBitmap(addBmp);
+    wxBitmap AddBmp = wxArtProvider::GetBitmap("gtk-add", wxART_BUTTON);
+    add->SetBitmap(AddBmp);
 #endif // defined __WXGTK__
 
     add->SetToolTip("Insert a new row after this one");
@@ -912,8 +912,8 @@ void InputSequenceEditor::really_do_layout()
     // sizer code correctly considers that if there is not enough space for
     // everything, it's better to reduce the size of the variable size items
     // rather than of the fixed size ones.
-    wxSize minRowsSize = sizer_->GetMinSize();
-    rows_area_->SetMinSize(minRowsSize);
+    wxSize MinRowsSize = sizer_->GetMinSize();
+    rows_area_->SetMinSize(MinRowsSize);
 
     // Now check if we're actually going to have a scrollbar or not by
     // comparing our ideal minimum size with the size we would actually have.
@@ -926,11 +926,11 @@ void InputSequenceEditor::really_do_layout()
         // allocating enough space for the scrollbar itself and also an extra
         // border between the controls and this scrollbar as things would look
         // too cramped otherwise.
-        minRowsSize.x
+        MinRowsSize.x
             += wxSizerFlags::GetDefaultBorder()
             +  wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y)
             ;
-        rows_area_->SetMinSize(minRowsSize);
+        rows_area_->SetMinSize(MinRowsSize);
         }
 
     sizer->Layout();

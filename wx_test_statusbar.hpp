@@ -35,10 +35,10 @@
 
 inline wxStatusBar& get_main_window_statusbar()
 {
-    wxWindow* const mainWin = wxTheApp->GetTopWindow();
-    LMI_ASSERT(mainWin);
+    wxWindow* const MainWin = wxTheApp->GetTopWindow();
+    LMI_ASSERT(MainWin);
 
-    wxFrame* const frame = wxDynamicCast(mainWin, wxFrame);
+    wxFrame* const frame = wxDynamicCast(MainWin, wxFrame);
     LMI_ASSERT(frame);
 
     wxStatusBar* const status = frame->GetStatusBar();

@@ -770,8 +770,8 @@ void SkeletonTest::OnAssertFailure
 
 void SkeletonTest::RunTheTests()
 {
-    wxWindow* const mainWin = GetTopWindow();
-    if(!mainWin)
+    wxWindow* const MainWin = GetTopWindow();
+    if(!MainWin)
         {
         wxLogError("Failed to find the application main window.");
         ExitMainLoop();
@@ -808,8 +808,8 @@ void SkeletonTest::RunTheTests()
     // special command line option is specified).
     for(;;)
         {
-        wxWindow* const activeWin = wxGetActiveWindow();
-        if(!activeWin || activeWin == mainWin)
+        wxWindow* const ActiveWin = wxGetActiveWindow();
+        if(!ActiveWin || ActiveWin == MainWin)
             break;
 
         // Try to close the dialog.
@@ -818,7 +818,7 @@ void SkeletonTest::RunTheTests()
         wxYield();
 
         // But stop trying if it didn't work.
-        if(wxGetActiveWindow() == activeWin)
+        if(wxGetActiveWindow() == ActiveWin)
             {
             wxLogError("Failed to close the currently opened window, "
                        "please ensure it doesn't appear on program startup.");
@@ -833,7 +833,7 @@ void SkeletonTest::RunTheTests()
     // happen, this is important for the test to really run unattended.
     wxTestingModalHook expect_no_dialogs;
 
-    mainWin->SetFocus();
+    MainWin->SetFocus();
 
     wxPuts("NOTE: starting the test suite");
     wxStopWatch sw;
