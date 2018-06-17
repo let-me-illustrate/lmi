@@ -86,7 +86,7 @@ choice_value const duration_mode_choice_values[] =
     {e_maturity,         "until maturity"},    // e_maturity must be last
   };
 
-int const duration_mode_choices = sizeof(duration_mode_choice_values) / sizeof(choice_value);
+int const duration_mode_choices = lmi::ssize(duration_mode_choice_values);
 
 DurationModeChoice::DurationModeChoice(wxWindow* parent)
 {

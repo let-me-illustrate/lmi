@@ -39,6 +39,7 @@
 #include "oecumenic_enumerations.hpp"   // oenum_format_style
 #include "path_utility.hpp"             // fs::path inserter
 #include "pdf_writer_wx.hpp"
+#include "ssize_lmi.hpp"
 #include "version.hpp"
 #include "wx_table_generator.hpp"
 #include "wx_utility.hpp"               // ConvertDateToWx()
@@ -258,7 +259,7 @@ column_definition const column_definitions[] =
     ,{"Total\n%s\nPremium"             ,   "$9,999,999,999.00"} // e_col_total_premium
     };
 
-static_assert(sizeof column_definitions / sizeof(column_definitions[0]) == e_col_max);
+static_assert(lmi::ssize(column_definitions) == e_col_max);
 
 class group_quote_pdf_generator_wx
     :public group_quote_pdf_generator
