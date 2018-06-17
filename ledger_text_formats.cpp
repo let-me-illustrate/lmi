@@ -503,7 +503,7 @@ void PrintCellTabDelimited
 
     os << '\n';
 
-    char const* cheaders[] =
+    std::vector<std::string> const sheaders
         {"PolicyYear"
         ,"AttainedAge"
         ,"DeathBenefitOption"
@@ -558,10 +558,6 @@ void PrintCellTabDelimited
         ,"ProducerCompensation"
         };
 
-    std::vector<std::string> const sheaders
-        (cheaders
-        ,cheaders + lmi_array_size(cheaders)
-        );
     for(auto const& i : sheaders)
         {
         os << i << '\t';
@@ -686,7 +682,7 @@ void PrintRosterHeaders(std::string const& file_name)
         os << "DatePrepared\t\t'" << calendar_date(2000, 1, 1).str() << "'\n\n";
         }
 
-    char const* cheaders[] =
+    std::vector<std::string> const sheaders
         {"Insured1"
         ,"ContractNumber"
         ,"DateOfBirth"
@@ -729,10 +725,6 @@ void PrintRosterHeaders(std::string const& file_name)
         ,"SpouseRiderAmount"
         };
 
-    std::vector<std::string> const sheaders
-        (cheaders
-        ,cheaders + lmi_array_size(cheaders)
-        );
     for(auto const& i : sheaders)
         {
         os << i << '\t';

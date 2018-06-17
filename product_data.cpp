@@ -29,7 +29,6 @@
 #include "contains.hpp"
 #include "data_directory.hpp"           // AddDataDir()
 #include "map_lookup.hpp"
-#include "miscellany.hpp"               // lmi_array_size()
 #include "my_proem.hpp"                 // ::write_proem()
 #include "xml_serialize.hpp"
 
@@ -372,13 +371,12 @@ void product_data::write_proem
 
 bool product_data::is_detritus(std::string const& s) const
 {
-    static std::string const a[] =
+    static std::vector<std::string> const v
         {"PresaleTrackingNumber"          // renamed to ImprimaturPresale
         ,"CompositeTrackingNumber"        // renamed to ImprimaturPresaleComposite
         ,"InforceTrackingNumber"          // renamed to ImprimaturInforce
         ,"InforceCompositeTrackingNumber" // renamed to ImprimaturInforceComposite
         };
-    static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return contains(v, s);
 }
 

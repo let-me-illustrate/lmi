@@ -30,7 +30,6 @@
 #include "database.hpp"
 #include "global_settings.hpp"
 #include "map_lookup.hpp"
-#include "miscellany.hpp"               // lmi_array_size()
 #include "oecumenic_enumerations.hpp"
 #include "value_cast.hpp"
 
@@ -100,7 +99,7 @@ std::string const& Input::xml_root_name() const
 
 bool Input::is_detritus(std::string const& s) const
 {
-    static std::string const a[] =
+    static std::vector<std::string> const v
         {"AgentFirstName"                   // Single name instead.
         ,"AgentLastName"                    // Single name instead.
         ,"AgentMiddleName"                  // Single name instead.
@@ -164,7 +163,6 @@ bool Input::is_detritus(std::string const& s) const
         ,"WithdrawalToDuration"             // Withdrawn.
         ,"YearsOfZeroDeaths"                // Withdrawn.
         };
-    static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return contains(v, s);
 }
 

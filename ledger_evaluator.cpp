@@ -35,7 +35,7 @@
 #include "ledger_variant.hpp"
 #include "map_lookup.hpp"
 #include "mc_enum_aux.hpp"              // mc_e_vector_to_string_vector()
-#include "miscellany.hpp"               // each_equal(), lmi_array_size()
+#include "miscellany.hpp"               // each_equal()
 #include "oecumenic_enumerations.hpp"
 #include "value_cast.hpp"
 #include "version.hpp"
@@ -91,7 +91,7 @@ typedef std::unordered_map<std::string, std::string> mask_map_t;
 
 bool unavailable(std::string const& s)
 {
-    static std::string const a[] =
+    static std::vector<std::string> const v
         {"DateOfBirthJdn"        // used by group quotes
         ,"EffDateJdn"            // used by group quotes
         ,"ListBillDateJdn"       // probably not needed
@@ -102,7 +102,6 @@ bool unavailable(std::string const& s)
         ,"InitMlyPolFee"         // used by PrintRosterTabDelimited()
         ,"InitTgtPremHiLoadRate" // used by PrintRosterTabDelimited(); not cents
         };
-    static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return contains(v, s);
 }
 
