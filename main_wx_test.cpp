@@ -23,6 +23,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "docmanager_ex.hpp"
 #include "force_linking.hpp"
 #include "handle_exceptions.hpp"        // stealth_exception
@@ -586,17 +587,15 @@ wxWindow* wx_test_focus_controller_child(MvcController& dialog, char const* name
             {
             // We found the notebook, now we can use it to make the page
             // containing the target window current.
-            for(size_t n = 0; n < book->GetPageCount(); ++n)
+            for(int n = 0; n < bourn_cast<int>(book->GetPageCount()); ++n)
                 {
                 if(book->GetPage(n) == maybe_page)
                     {
                     book->SetSelection(n);
                     wxYield();
-
                     break;
                     }
                 }
-
             break;
             }
 

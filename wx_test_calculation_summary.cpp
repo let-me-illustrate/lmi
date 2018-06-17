@@ -201,7 +201,7 @@ void check_calculation_summary_columns
     ill.close();
 
     // Find the start of the table after the separating line.
-    size_t pos = html.find("<hr>\n<table");
+    std::size_t pos = html.find("<hr>\n<table");
     LMI_ASSERT(pos != wxString::npos);
 
     pos = html.find("\n<td", pos);
@@ -215,12 +215,12 @@ void check_calculation_summary_columns
         {
         LMI_ASSERT_EQUAL(wxString(html, pos, 3), "<td");
 
-        pos = html.find(">", pos);                  // end of the <td> tag
+        pos = html.find(">", pos);                     // end of the <td> tag
         LMI_ASSERT(pos != wxString::npos);
 
-        ++pos;                                      // <td> tag contents
+        ++pos;                                         // <td> tag contents
 
-        size_t const next = html.find("\n", pos);   // the next line start
+        std::size_t const next = html.find("\n", pos); // the next line start
         LMI_ASSERT(next != wxString::npos);
 
         // Extract the column title from the rest of the line.

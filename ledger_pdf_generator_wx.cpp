@@ -776,7 +776,7 @@ class pdf_illustration : protected html_interpolator
     html_interpolator const& get_interpolator() const {return *this;}
 
     // Helper for abbreviating a string to at most the given length (in bytes).
-    static std::string abbreviate_if_necessary(std::string s, size_t len)
+    static std::string abbreviate_if_necessary(std::string s, std::size_t len)
     {
         if(len < s.length() && 3 < len)
             {
@@ -790,7 +790,7 @@ class pdf_illustration : protected html_interpolator
     // variables have the name based on the name of the original variable with
     // "Abbrev" and "len" appended to it and their value is at most "len" bytes
     // long.
-    void add_abbreviated_variable(std::string const& var, size_t len)
+    void add_abbreviated_variable(std::string const& var, std::size_t len)
     {
         add_variable
             (var + "Abbrev" + std::to_string(len)
@@ -852,7 +852,7 @@ class pdf_illustration : protected html_interpolator
             ,!invar.ContractNumber.empty()
             );
 
-        size_t const full_abbrev_length = 30;
+        std::size_t const full_abbrev_length = 30;
         add_abbreviated_variable("MasterContractNumber", full_abbrev_length);
         add_abbreviated_variable("MasterContractNumber", full_abbrev_length / 2);
         add_abbreviated_variable("ContractNumber", full_abbrev_length);

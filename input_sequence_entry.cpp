@@ -789,7 +789,7 @@ void InputSequenceEditor::set_tab_order()
         order.push_back(get_field_win(Col_Add, row));
         }
 
-    for(size_t i = 1; i < order.size(); ++i)
+    for(int i = 1; i < lmi::ssize(order); ++i)
         {
         order[i]->MoveAfterInTabOrder(order[i - 1]);
         }
