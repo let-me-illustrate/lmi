@@ -1471,30 +1471,6 @@ void CensusView::UponUpdateColumnValuesVary(wxUpdateUIEvent& e)
         || (2 == n_cols && dob_header == list_window_->GetColumn(1)->GetTitle())
         ;
     e.Enable(!disable);
-// Temporary testing scaffold...
-    std::vector<std::string> distinct_headers;
-    std::vector<std::string> const& all_headers(case_parms()[0].member_names());
-    for(auto const& header : all_headers)
-        {
-        bool const varies = column_value_varies_across_cells(header);
-        if(header != "UseDOB" && header != "IssueAge" && varies)
-            {
-            distinct_headers.push_back(header);
-            }
-        }
-    if(disable != distinct_headers.empty())
-        status()
-            << "Hey! "
-            << list_window_->GetColumnCount() - 1
-            << " != "
-            << distinct_headers.size()
-            << " "
-            << list_window_->GetColumn(0)->GetTitle()
-            << ", "
-            << list_window_->GetColumn(1)->GetTitle()
-            << std::flush
-            ;
-    else status() << " " << std::flush;
 }
 
 /// Update the dataview display.
