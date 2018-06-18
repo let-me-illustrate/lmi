@@ -164,7 +164,7 @@ constexpr inline To bourn_cast(From from, std::false_type, std::true_type)
 /// finite floating argument is too large to cast to the integral
 /// type. Because radix is asserted upstream to be two for all types,
 /// there is no need to use scalbn() in place of ldexp(); and as long
-/// as the widest integer has less than (sizeof int) digits, there is
+/// as the widest integer has less than sizeof(int) digits, there is
 /// no need here for scalbln().
 
 template<typename To, typename From>
