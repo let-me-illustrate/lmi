@@ -124,6 +124,22 @@ pdf_writer_wx::pdf_writer_wx
     html_parser_.SetFS(html_vfs_.get());
 }
 
+/// Start a new page in the output PDF document.
+///
+/// This is equivalent to wxDC::EndPage() followed by wxDC::StartPage(), but
+/// preferable to using these 2 functions directly, both because it's simpler
+/// and because it's too easy to forget to call EndPage() otherwise, especially
+/// as almost everything still works correctly even when it's not called --
+/// except that the clipping region is not reset for the new page, which can
+/// result in hard to diagnose problems.
+
+void pdf_writer_wx::next_page()
+{
+    LMI_ASSERT(!save_has_been_called_);
+    pdf_dc_.EndPage();
+    pdf_dc_.StartPage();
+}
+
 wxDC& pdf_writer_wx::dc()
 {
     LMI_ASSERT(!save_has_been_called_);
