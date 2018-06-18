@@ -36,6 +36,7 @@
 #include "illustrator.hpp"
 #include "input.hpp"
 #include "input_sequence_entry.hpp"
+#include "istream_to_string.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
 #include "miscellany.hpp"               // is_ok_for_cctype(), ios_out_app_binary()
@@ -1927,6 +1928,7 @@ void CensusView::UponPasteCensusOut(wxCommandEvent&)
 
 void CensusView::DoPasteCensusOut() const
 {
+    Timer timer;
     std::vector<std::string> distinct_headers;
     std::vector<std::string> const& all_headers(case_parms()[0].member_names());
     for(auto const& header : all_headers)
@@ -1947,13 +1949,13 @@ void CensusView::DoPasteCensusOut() const
     std::string const& e = c.spreadsheet_file_extension();
     std::string const  f = fs::basename(base_filename()) + ".pasted_out.cns";
     std::string file_name = unique_filepath(f, e).string();
-    std::ofstream os(file_name.c_str(), ios_out_app_binary());
+    std::ofstream ofs(file_name.c_str(), ios_out_app_binary());
 
     for(auto const& header : distinct_headers)
         {
-        os << header << '\t';
+        ofs << header << '\t';
         }
-    os << '\n';
+    ofs << '\n';
 
     for(auto const& cell : cell_parms())
         {
@@ -1966,13 +1968,20 @@ void CensusView::DoPasteCensusOut() const
                 int z = JdnToYmd(jdn_t(value_cast<int>(s))).value();
                 s = value_cast<std::string>(z);
                 }
-            os << s << '\t';
+            ofs << s << '\t';
             }
-        os << '\n';
+        ofs << '\n';
         }
 
-    if(!os)
+    if(!ofs)
         {
         alarum() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
         }
+
+    ofs.close();
+    std::ifstream ifs(file_name.c_str());
+    std::string s;
+    istream_to_string(ifs, s);
+    ClipboardEx::SetText(s);
+    status() << "Paste out: " << timer.stop().elapsed_msec_str() << std::flush;
 }
