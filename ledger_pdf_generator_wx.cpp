@@ -749,8 +749,8 @@ class pdf_illustration : protected html_interpolator
                 {
                 // Do start a new physical page before rendering all the
                 // subsequent pages (notice that a page is also free to call
-                // StartPage() from its render()).
-                writer.dc().StartPage();
+                // next_page() from its render()).
+                writer.next_page();
                 }
 
             i->render(ledger_, writer, *this);
@@ -1181,7 +1181,7 @@ class numbered_page : public page_with_footer
         // pages for this logical pages by overriding get_extra_pages_needed().
         LMI_ASSERT(0 < extra_pages_);
 
-        writer.dc().StartPage();
+        writer.next_page();
 
         ++this_page_number_;
         --extra_pages_;

@@ -76,6 +76,8 @@ class pdf_writer_wx
         ,oenum_render_or_only_measure output_mode = oe_render
         );
 
+    void next_page();
+
     wxDC& dc();
 
     // Page metrics: the page width and height are the size of the page region
