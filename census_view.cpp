@@ -1422,8 +1422,7 @@ void CensusView::UponValueChanged(wxDataViewEvent&)
 {
     Timer timer;
     Update();
-    double total_seconds = timer.stop().elapsed_seconds();
-    status() << Timer::elapsed_msec_str(total_seconds) << std::flush;
+    status() << "Update: " << timer.stop().elapsed_msec_str() << std::flush;
 }
 
 void CensusView::UponUpdateAlwaysDisabled(wxUpdateUIEvent& e)
@@ -1598,8 +1597,7 @@ void CensusView::UponAddCell(wxCommandEvent&)
     list_window_->Select(z);
     list_window_->EnsureVisible(z);
 
-    double total_seconds = timer.stop().elapsed_seconds();
-    status() << Timer::elapsed_msec_str(total_seconds) << std::flush;
+    status() << "Add: " << timer.stop().elapsed_msec_str() << std::flush;
 }
 
 void CensusView::UponDeleteCells(wxCommandEvent&)
@@ -1679,8 +1677,7 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
     Update();
     document().Modify(true);
 
-    double total_seconds = timer.stop().elapsed_seconds();
-    status() << Timer::elapsed_msec_str(total_seconds) << std::flush;
+    status() << "Delete: " << timer.stop().elapsed_msec_str() << std::flush;
 }
 
 /// Print tab-delimited details to file loadable in spreadsheet programs.
