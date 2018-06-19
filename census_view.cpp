@@ -938,8 +938,8 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_MENU(XRCID("print_spreadsheet"         ),CensusView::UponRunCaseToSpreadsheet   )
     EVT_MENU(XRCID("print_group_roster"        ),CensusView::UponRunCaseToGroupRoster   )
     EVT_MENU(XRCID("print_group_quote"         ),CensusView::UponRunCaseToGroupQuote    )
-    EVT_MENU(XRCID("paste_census_in"           ),CensusView::UponPasteCensusIn          )
-    EVT_MENU(XRCID("paste_census_out"          ),CensusView::UponPasteCensusOut         )
+    EVT_MENU(XRCID("copy_census"               ),CensusView::UponCopyCensus             )
+    EVT_MENU(XRCID("paste_census"              ),CensusView::UponPasteCensus            )
     EVT_MENU(XRCID("add_cell"                  ),CensusView::UponAddCell                )
     EVT_MENU(XRCID("delete_cells"              ),CensusView::UponDeleteCells            )
     EVT_MENU(XRCID("column_width_varying"      ),CensusView::UponColumnWidthVarying     )
@@ -955,8 +955,8 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("print_group_roster"   ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("print_group_quote"    ),CensusView::UponUpdateAlwaysEnabled    )
-    EVT_UPDATE_UI(XRCID("paste_census_in"      ),CensusView::UponUpdateAlwaysEnabled    )
-    EVT_UPDATE_UI(XRCID("paste_census_out"     ),CensusView::UponUpdateColumnValuesVary )
+    EVT_UPDATE_UI(XRCID("copy_census"          ),CensusView::UponUpdateColumnValuesVary )
+    EVT_UPDATE_UI(XRCID("paste_census"         ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateNonemptySelection)
     EVT_UPDATE_UI(XRCID("column_width_varying" ),CensusView::UponUpdateAlwaysEnabled    )
@@ -1447,15 +1447,15 @@ void CensusView::UponUpdateNonemptySelection(wxUpdateUIEvent& e)
     e.Enable(0 < list_window_->GetSelections(selection));
 }
 
-/// Conditionally enable pasting out.
+/// Conditionally enable copying.
 ///
-/// Pasting out is forbidden if it would produce only whitespace; that
-/// is, if no "interesting" column varies across cells. All columns
-/// are interesting except:
+/// Copying is forbidden if it would produce only whitespace; i.e.,
+/// if no "interesting" column varies across cells. All columns are
+/// interesting except:
 ///  - the cell serial number that is always shown in the first column
 ///    (that's just a GUI artifact, not an actual cell datum); and
 ///  - the "UseDOB" and "IssueAge" columns that are filtered out by
-///    DoPasteCensusOut().
+///    DoCopyCensus().
 /// This implementation ignores the first column, then enables the
 /// command unless "UseDOB" is the only other column; the rationale is
 /// clear only in the problem domain: "IssueAge" needn't be tested,
@@ -1694,7 +1694,7 @@ void CensusView::UponRunCaseToGroupQuote(wxCommandEvent&)
 /// file are assumed to represent user intention). In this case,
 /// pasted data is appended to the cells that were already present.
 
-void CensusView::UponPasteCensusIn(wxCommandEvent&)
+void CensusView::UponPasteCensus(wxCommandEvent&)
 {
     std::string const census_data = ClipboardEx::GetText();
 
@@ -1868,11 +1868,11 @@ void CensusView::UponPasteCensusIn(wxCommandEvent&)
 
 /// Paste from the census manager into a "spreadsheet" (TSV) file.
 ///
-/// Simply calls DoPasteCensusOut(), q.v.
+/// Simply calls DoCopyCensus(), q.v.
 
-void CensusView::UponPasteCensusOut(wxCommandEvent&)
+void CensusView::UponCopyCensus(wxCommandEvent&)
 {
-    DoPasteCensusOut();
+    DoCopyCensus();
 }
 
 /// Paste from the census manager into a "spreadsheet" (TSV) file.
@@ -1885,7 +1885,7 @@ void CensusView::UponPasteCensusOut(wxCommandEvent&)
 /// data from lmi, manipulating it in a spreadsheet, and then pasting
 /// it back into lmi.
 ///
-/// Never extract "UseDOB": it's always set by UponPasteCensusIn().
+/// Never extract "UseDOB": it's always set by UponPasteCensus().
 /// Never extract "IssueAge". If it's present, then "UseDOB" must also
 /// be, and "UseDOB" preserves information that "IssueAge" loses.
 ///
@@ -1896,10 +1896,10 @@ void CensusView::UponPasteCensusOut(wxCommandEvent&)
 /// expected; thus, they end in "'t\n". This makes the code slightly
 /// simpler by avoiding a "loop and a half". In practice, it doesn't
 /// make any difference: gnumeric, libreoffice calc, a popular msw
-/// spreadsheet program, and lmi's own UponPasteCensusIn() all ignore
+/// spreadsheet program, and lmi's own UponPasteCensus() all ignore
 /// the extra '\t'.
 
-void CensusView::DoPasteCensusOut() const
+void CensusView::DoCopyCensus() const
 {
     Timer timer;
     std::vector<std::string> distinct_headers;
@@ -1915,12 +1915,12 @@ void CensusView::DoPasteCensusOut() const
 
     if(distinct_headers.empty())
         {
-        alarum() << "All cells identical: nothing to paste out." << LMI_FLUSH;
+        alarum() << "All cells identical: nothing to copy." << LMI_FLUSH;
         }
 
     configurable_settings const& c = configurable_settings::instance();
     std::string const& e = c.spreadsheet_file_extension();
-    std::string const  f = fs::basename(base_filename()) + ".pasted_out.cns";
+    std::string const  f = fs::basename(base_filename()) + ".census.cns";
     std::string file_name = unique_filepath(f, e).string();
     std::ofstream ofs(file_name.c_str(), ios_out_app_binary());
 
@@ -1956,5 +1956,5 @@ void CensusView::DoPasteCensusOut() const
     std::string s;
     istream_to_string(ifs, s);
     ClipboardEx::SetText(s);
-    status() << "Paste out: " << timer.stop().elapsed_msec_str() << std::flush;
+    status() << "Copy: " << timer.stop().elapsed_msec_str() << std::flush;
 }

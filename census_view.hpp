@@ -78,8 +78,8 @@ class CensusView final
     void UponRunCaseToSpreadsheet   (wxCommandEvent&);
     void UponRunCaseToGroupRoster   (wxCommandEvent&);
     void UponRunCaseToGroupQuote    (wxCommandEvent&);
-    void UponPasteCensusIn          (wxCommandEvent&);
-    void UponPasteCensusOut         (wxCommandEvent&);
+    void UponCopyCensus             (wxCommandEvent&);
+    void UponPasteCensus            (wxCommandEvent&);
     void UponAddCell                (wxCommandEvent&);
     void UponDeleteCells            (wxCommandEvent&);
     void UponColumnWidthVarying     (wxCommandEvent&);
@@ -125,7 +125,7 @@ class CensusView final
 
     void update_class_names();
 
-    void DoPasteCensusOut() const;
+    void DoCopyCensus() const;
 
     bool autosize_columns_;
 

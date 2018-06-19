@@ -370,15 +370,15 @@
         <help>Run and print all cells to a group premium quote</help>
     </object>
     <object class="separator"/>
-    <object class="wxMenuItem" name="paste_census_in">
-        <label>Pa_ste census in\tCtrl-Shift-S</label>
-        <bitmap platform="win" stock_id="paste-in"/>
-        <help>Paste census data in from clipboard</help>
+    <object class="wxMenuItem" name="copy_census">
+        <label>_Copy census\tCtrl-Shift-C</label>
+        <bitmap platform="win" stock_id="copy-census"/>
+        <help>Copy census data to the clipboard</help>
     </object>
-    <object class="wxMenuItem" name="paste_census_out">
-        <label>Pas_te census out\tCtrl-Shift-T</label>
-        <bitmap platform="win" stock_id="paste-out"/>
-        <help>Paste census data out to a spreadsheet file</help>
+    <object class="wxMenuItem" name="paste_census">
+        <label>Pa_ste census\tCtrl-Shift-S</label>
+        <bitmap platform="win" stock_id="paste-census"/>
+        <help>Paste census data from the clipboard</help>
     </object>
     <object class="wxMenuItem" name="add_cell">
         <label>_Add cell\tCtrl-+</label>

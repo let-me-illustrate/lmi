@@ -33,6 +33,7 @@ sizes 24x24 and 16x16:
   close[-16].png                    from stock_close.png
   copy[-16].png                     from stock_copy.png
   copy-cell[-16].png                from stock_copy.png
+  copy-census[-16].png              from stock_paste.png
   default-cell[-16].png             from stock_new.png
   delete-row[-16].png               from stock_delete-row.png
   edit-case[-16].png                from stock_zoom.png
@@ -44,8 +45,7 @@ sizes 24x24 and 16x16:
   insert-rows[-16].png              from stock_insert-rows.png
   new[-16].png                      from stock_new.png
   open[-16].png                     from stock_open.png
-  paste-in[-16].png                 from stock_paste.png
-  paste-out[-16].png                from stock_paste.png
+  paste-census[-16].png             from stock_paste.png
   preferences[-16].png              from gnome-settings.png
   print-case[-16].png               from stock_print.png
   print-case-pdf[-16].png           from stock_print.png
