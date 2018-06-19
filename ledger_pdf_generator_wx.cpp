@@ -1166,14 +1166,7 @@ class numbered_page : public page_with_footer
         (Ledger const&              ledger
         ,pdf_writer_wx&             writer
         ,html_interpolator const&   interpolate_html
-        ) const
-    {
-        stifle_warning_for_unused_value(ledger);
-        stifle_warning_for_unused_value(writer);
-        stifle_warning_for_unused_value(interpolate_html);
-
-        return 0;
-    }
+        ) = 0;
 
     std::string get_page_number() const override
     {
@@ -1209,18 +1202,58 @@ class standard_page : public numbered_page
         ,html_interpolator const& interpolate_html
         ) override
     {
-        numbered_page::render(ledger, writer, interpolate_html);
+        // Page HTML must have been already set by get_extra_pages_needed().
+        LMI_ASSERT(!page_html_.empty());
 
-        writer.output_html
-            (writer.get_horz_margin()
-            ,writer.get_vert_margin()
-            ,writer.get_page_width()
-            ,interpolate_html.expand_template(page_template_name_)
-            );
+        int last_page_break = 0;
+        for(auto const& page_break : page_break_positions_)
+            {
+            if(last_page_break != 0)
+                {
+                next_page(writer);
+                }
+
+            numbered_page::render(ledger, writer, interpolate_html);
+
+            writer.output_html
+                (writer.get_horz_margin()
+                ,writer.get_vert_margin()
+                ,writer.get_page_width()
+                ,page_html_
+                ,last_page_break
+                ,page_break
+                );
+
+            last_page_break = page_break;
+            }
     }
 
   private:
+    int get_extra_pages_needed
+        (Ledger const&              /* ledger */
+        ,pdf_writer_wx&             writer
+        ,html_interpolator const&   interpolate_html
+        ) override
+    {
+        page_html_ = wxString::FromUTF8
+            (interpolate_html.expand_template(page_template_name_).as_html()
+            );
+
+        page_break_positions_ = writer.paginate_html
+            (writer.get_page_width()
+            ,get_footer_top() - writer.get_vert_margin()
+            ,page_html_
+            );
+
+        // The cast is safe, we're never going to have more than INT_MAX
+        // pages and if we, somehow, do, the caller checks that this function
+        // returns a positive value.
+        return static_cast<int>(page_break_positions_.size()) - 1;
+    }
+
     char const* const page_template_name_;
+    wxString          page_html_;
+    std::vector<int>  page_break_positions_;
 };
 
 // Helper classes used to show the numeric summary table. The approach used
@@ -1661,7 +1694,7 @@ class page_with_tabular_report
         (Ledger const&              ledger
         ,pdf_writer_wx&             writer
         ,html_interpolator const&   interpolate_html
-        ) const override
+        ) override
     {
         wx_table_generator table_gen{create_table_generator(ledger, writer)};
 

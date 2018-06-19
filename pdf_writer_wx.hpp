@@ -61,6 +61,22 @@ class pdf_writer_wx
     // Wherever possible, use the following high-level functions
     // instead of working at a lower level with the dc() accessor.
 
+    std::vector<int> paginate_html
+        (int                          page_width
+        ,int                          page_height
+        ,wxString const&              html_str
+        );
+
+    int output_html
+        (int                          x
+        ,int                          y
+        ,int                          width
+        ,wxString const&              html_str
+        ,int                          from
+        ,int                          to
+        ,oenum_render_or_only_measure output_mode = oe_render
+        );
+
     int output_html
         (int                          x
         ,int                          y
@@ -101,6 +117,8 @@ class pdf_writer_wx
     // must be declared after it in order to be destroyed before it.
     std::unique_ptr<wxFileSystem> html_vfs_;
     wxHtmlWinParser html_parser_;
+
+    html_font_sizes const html_font_sizes_;
 
     wxSize const total_page_size_;
 
