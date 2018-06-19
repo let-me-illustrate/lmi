@@ -37,10 +37,11 @@
 /// specified if desired, although there's no guarantee that it won't
 /// arise in practice. If none is specified, then we choose one with
 /// FLT_DIG decimal digits and an exponent a bit under FLT_MAX_10_EXP,
-/// using the minimum values of those macros in C99 5.2.4.2.2/8.
+/// using the minimum values of those macros in C99 5.2.4.2.2/9, i.e.,
+/// six digits and absolute value < 1e37 = 10e36.
 
 template<typename T>
-T implausible_value(T const& t = -9.99999e35)
+T implausible_value(T const& t = -9.99999e35f)
 {
     static_assert(::std::is_floating_point<T>::value);
 
@@ -121,10 +122,10 @@ inline bool is_infinite(T t)
 /// circumstances avoids this embarrassment while introducing an error
 /// that shouldn't matter.
 
-inline long double ldbl_eps_plus_one()
+inline double ldbl_eps_plus_one_times(double z)
 {
-    static long double const z = 1.0L + std::numeric_limits<long double>::epsilon();
-    return z;
+    static long double const y = 1.0L + std::numeric_limits<long double>::epsilon();
+    return static_cast<double>(y * z);
 }
 
 #endif // ieee754_hpp

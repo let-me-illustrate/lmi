@@ -33,6 +33,7 @@
 #include "input_sequence_aux.hpp"       // convert_vector()
 #include "miscellany.hpp"               // each_equal(), minmax
 #include "round_to.hpp"
+#include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 
 #include <algorithm>
@@ -304,10 +305,9 @@ std::string Input::RealizeExtraCompensationOnAssets()
     //   numeric-value: numeric-literal %%
     // then we might say "100%" here.
 
-    // TODO ?? Defect: currently entered in basis points.
-    if(10000.0 < highest)
+    if(1.0 < highest)
         {
-        return "Add-on compensation cannot exceed 10000 basis points.";
+        return "Add-on compensation cannot exceed 1 (meaning 100% of assets).";
         }
 
     return "";
@@ -680,7 +680,7 @@ std::string Input::RealizeGeneralAccountRate()
         general_account_max_rate.assign(general_account_max_rate.size(), 0.12);
         }
 
-    for(unsigned int j = 0; j < general_account_max_rate.size(); ++j)
+    for(int j = 0; j < lmi::ssize(general_account_max_rate); ++j)
         {
         if(general_account_max_rate[j] < GeneralAccountRateRealized_[j].value())
             {
@@ -704,7 +704,7 @@ std::string Input::RealizeGeneralAccountRate()
         {
         return "";
         }
-    for(unsigned int j = 0; j < general_account_max_rate.size(); ++j)
+    for(int j = 0; j < lmi::ssize(general_account_max_rate); ++j)
         {
         if(GeneralAccountRateRealized_[j].value() < guar_int)
             {
@@ -968,11 +968,11 @@ int Input::must_overwrite_specamt_with_obsolete_history
     bool history_differs = false;
     bool future_differs  = false;
 
-    unsigned int const years_of_history = InforceYear.value() + (0 != InforceMonth.value());
-    LMI_ASSERT(years_of_history <= u.size());
-    LMI_ASSERT(years_of_history <= v.size());
+    int const years_of_history = InforceYear.value() + (0 != InforceMonth.value());
+    LMI_ASSERT(years_of_history <= lmi::ssize(u));
+    LMI_ASSERT(years_of_history <= lmi::ssize(v));
 
-    for(unsigned int j = 0; j < years_of_history; ++j)
+    for(int j = 0; j < years_of_history; ++j)
         {
         if(u[j] != v[j])
             {

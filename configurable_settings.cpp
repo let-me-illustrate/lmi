@@ -31,7 +31,6 @@
 #include "map_lookup.hpp"
 #include "mc_enum.hpp"                  // all_strings<>()
 #include "mc_enum_type_enums.hpp"       // mcenum_report_column
-#include "miscellany.hpp"               // lmi_array_size()
 #include "path_utility.hpp"             // validate_directory(), validate_filepath()
 #include "platform_dependent.hpp"       // access()
 
@@ -251,7 +250,7 @@ void configurable_settings::handle_missing_version_attribute() const
 
 bool configurable_settings::is_detritus(std::string const& s) const
 {
-    static std::string const a[] =
+    static std::vector<std::string> const v
         {"custom_input_filename"             // Renamed to 'custom_input_0_filename'.
         ,"custom_output_filename"            // Renamed to 'custom_output_0_filename'.
         ,"xml_schema_filename"               // Withdrawn.
@@ -261,7 +260,6 @@ bool configurable_settings::is_detritus(std::string const& s) const
         ,"xslt_light_tab_delimited_filename" // Withdrawn.
         ,"xslt_tab_delimited_filename"       // Withdrawn.
         };
-    static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return contains(v, s);
 }
 

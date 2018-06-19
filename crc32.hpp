@@ -25,8 +25,8 @@
 #include "config.hpp"
 
 #include "so_attributes.hpp"
+#include "ssize_lmi.hpp"
 
-#include <cstring>                      // strlen()
 #include <string>
 #include <vector>
 
@@ -71,31 +71,31 @@ class LMI_SO CRC
 // (C++11 will make that easier).
 
 inline CRC& CRC::operator+=(                    bool    z)
-    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof z);}
 inline CRC& CRC::operator+=(                    char    z)
-    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof z);}
 inline CRC& CRC::operator+=(signed              char    z)
-    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof z);}
 inline CRC& CRC::operator+=(unsigned            char    z)
-    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof z);}
 inline CRC& CRC::operator+=(            short   int     z)
-    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof z);}
 inline CRC& CRC::operator+=(unsigned    short   int     z)
-    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof z);}
 inline CRC& CRC::operator+=(                    int     z)
-    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof z);}
 inline CRC& CRC::operator+=(unsigned            int     z)
-    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof z);}
 inline CRC& CRC::operator+=(            long    int     z)
-    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof z);}
 inline CRC& CRC::operator+=(unsigned    long    int     z)
-    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof z);}
 inline CRC& CRC::operator+=(                    float   z)
-    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof z);}
 inline CRC& CRC::operator+=(                    double  z)
-    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof z);}
 inline CRC& CRC::operator+=(            long    double  z)
-    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof z);}
 
 // Forward char const* and signed char const* to the unsigned char const* function.
 inline CRC& CRC::operator+=(                    char const* z)
@@ -110,7 +110,7 @@ inline CRC& CRC::operator+=(unsigned            char const* z)
     {
     // std::strlen() is defined only for char const* arguments, so the
     // cast is required.
-    return update(z, std::strlen(reinterpret_cast<char const*>(z)));
+    return update(z, lmi::sstrlen(reinterpret_cast<char const*>(z)));
     }
 
 template<typename T>

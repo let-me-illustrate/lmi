@@ -178,7 +178,7 @@ wx_table_generator::wx_table_generator(wx_table_generator const&) = default;
 
 wx_table_generator::~wx_table_generator() = default;
 
-/// Render the headers at the given position and update it.
+/// Render headers at the given position.
 
 void wx_table_generator::output_headers
     (int&                         pos_y
@@ -203,7 +203,7 @@ void wx_table_generator::output_headers
     wxDCFontChanger header_font_setter(dc_);
     if(use_bold_headers_)
         {
-        header_font_setter.Set(get_header_font());
+        header_font_setter.Set(header_font());
         // The distance from the font's descender line to its ascender
         // line must not exceed the distance between lines.
         LMI_ASSERT(dc().GetCharHeight() <= row_height());
@@ -217,9 +217,9 @@ void wx_table_generator::output_headers
     // number of lines.
     std::size_t const number_of_columns = all_columns().size();
     std::vector<std::string> headers_by_line(max_header_lines_ * number_of_columns);
-    for(std::size_t col = 0; col < number_of_columns; ++col)
+    for(std::size_t i = 0; i < number_of_columns; ++i)
         {
-        column_info const& ci = all_columns().at(col);
+        column_info const& ci = all_columns().at(i);
         if(ci.is_hidden())
             {
             continue;
@@ -230,22 +230,22 @@ void wx_table_generator::output_headers
         // Fill the elements from the bottom line to the top one, so that a
         // single line header is shown on the last line.
         std::size_t const first_line = max_header_lines_ - lines.size();
-        for(std::size_t line = 0; line < lines.size(); ++line)
+        for(std::size_t j = 0; j < lines.size(); ++j)
             {
             headers_by_line.at
-                ((first_line + line) * number_of_columns + col
-                ) = lines.at(line);
+                ((first_line + j) * number_of_columns + i
+                ) = lines.at(j);
             }
         }
 
     // And output all lines of all column headers.
     int y_top = pos_y;
     int x = 0;
-    for(std::size_t line = 0; line < max_header_lines_; ++line)
+    for(std::size_t i = 0; i < max_header_lines_; ++i)
         {
         std::vector<std::string> const nth_line
-            (headers_by_line.begin() +      line  * number_of_columns
-            ,headers_by_line.begin() + (1 + line) * number_of_columns
+            (headers_by_line.begin() +      i  * number_of_columns
+            ,headers_by_line.begin() + (1 + i) * number_of_columns
             );
         x = left_margin_;
         do_output_single_row(x, pos_y, nth_line);
@@ -262,8 +262,9 @@ void wx_table_generator::output_headers
     LMI_ASSERT(anticipated_pos_y == pos_y);
 }
 
-/// Render a super-header, i.e. a header spanning over several columns. The
-/// columns range is specified as a close/open interval, as usual in C++.
+/// Render a super-header, i.e. a header spanning over several columns.
+///
+/// The column range is specified as [begin, end), as is usual in C++.
 /// The header string may be multiline, just as with normal headers.
 
 void wx_table_generator::output_super_header
@@ -291,12 +292,11 @@ void wx_table_generator::output_super_header
     // by the width of all the extra (i.e. not counting the starting one)
     // columns in this span.
     auto rect = text_rect(begin_column, pos_y);
-    rect.width += do_get_cell_x(end_column) - do_get_cell_x(begin_column + 1);
+    rect.width += cell_pos_x(end_column) - cell_pos_x(begin_column + 1);
 
-    for(auto const& line : lines)
+    for(auto const& i : lines)
         {
-        dc_.DrawLabel(line, rect, wxALIGN_CENTER_HORIZONTAL);
-
+        dc_.DrawLabel(i, rect, wxALIGN_CENTER_HORIZONTAL);
         rect.y += row_height_;
         pos_y  += row_height_;
         }
@@ -304,8 +304,7 @@ void wx_table_generator::output_super_header
     LMI_ASSERT(anticipated_pos_y == pos_y);
 }
 
-/// Render a single highlighted (by shading its background) cell with the
-/// given string displayed in it (always centered).
+/// Shade the background of a single cell; center the given contents.
 
 void wx_table_generator::output_highlighted_cell
     (std::size_t        column
@@ -329,9 +328,10 @@ void wx_table_generator::output_highlighted_cell
     output_vert_separator(column, y);
 }
 
-/// Render a row with the given values at the given position and update it.
-/// The values here can be single-line only and there must be exactly the
-/// same number of them as the number of columns.
+/// Render a single row with the given values at the given position.
+///
+/// The cardinality of the 'values' argument must equal the total
+/// number of columns passed to enroll_column().
 
 void wx_table_generator::output_row
     (int&                           pos_y
@@ -347,9 +347,10 @@ void wx_table_generator::output_row
         }
 }
 
-/// Output a vertical separator line before the given column. Notice that
-/// the column index here may be equal to the number of columns in order to
-/// output a separator after the last column.
+/// Output a vertical separator line before the given column.
+///
+/// If the column index equals the number of columns, output a
+/// separator after the last column.
 
 void wx_table_generator::output_vert_separator
     (std::size_t before_column
@@ -358,15 +359,12 @@ void wx_table_generator::output_vert_separator
 {
     LMI_ASSERT(before_column <= all_columns().size());
 
-    do_output_vert_separator
-        (do_get_cell_x(before_column)
-        ,y
-        ,y + row_height_
-        );
+    do_output_vert_separator(cell_pos_x(before_column), y, y + row_height_);
 }
 
-/// Output a horizontal separator line across the specified columns,
-/// using the usual C++ close/open interval convention.
+/// Output a horizontal separator line across the specified columns.
+///
+/// The column range is specified as [begin, end), as is usual in C++.
 
 void wx_table_generator::output_horz_separator
     (std::size_t                  begin_column
@@ -386,37 +384,38 @@ void wx_table_generator::output_horz_separator
     LMI_ASSERT(begin_column < end_column);
     LMI_ASSERT(end_column <= all_columns().size());
 
-    int const x1 = do_get_cell_x(begin_column);
+    int const x1 = cell_pos_x(begin_column);
 
     int x2 = x1;
-    for(std::size_t col = begin_column; col < end_column; ++col)
+    for(std::size_t i = begin_column; i < end_column; ++i)
         {
-        x2 += all_columns().at(col).col_width();
+        x2 += all_columns().at(i).col_width();
         }
 
     do_output_horz_separator(x1, x2, y);
 }
 
-/// Return the height of a single table row.
+/// Height of a single table row.
 
 int wx_table_generator::row_height() const
 {
     return row_height_;
 }
 
-// Return the amount of vertical space taken by separator lines in the
-// table headers.
-int wx_table_generator::get_separator_line_height() const
+/// Amount of vertical space taken by a separator line in table headers.
+
+int wx_table_generator::separator_line_height() const
 {
     // This is completely arbitrary and chosen just because it seems to
     // look well.
     return row_height() / 2;
 }
 
-/// Return the rectangle adjusted for the text contents of the cell: it is
-/// more narrow than the full cell rectangle to leave margins around the
-/// text and its vertical position is adjusted so that it can be directly
-/// passed to wxDC::DrawLabel().
+/// Rectangle corresponding to a cell's text contents.
+///
+/// This is narrower than the full cell rectangle to leave a small
+/// margin. Its vertical position is adjusted so that it can be
+/// passed directly to wxDC::DrawLabel().
 
 wxRect wx_table_generator::text_rect(std::size_t column, int y) const
 {
@@ -457,7 +456,7 @@ void wx_table_generator::enroll_column(column_parameters const& z)
         wxDCFontChanger header_font_setter(dc_);
         if(use_bold_headers_)
             {
-            header_font_setter.Set(get_header_font());
+            header_font_setter.Set(header_font());
             }
 
         wxCoord w, h, lh;
@@ -709,15 +708,15 @@ void wx_table_generator::do_output_single_row
         }
 
     std::size_t const number_of_columns = all_columns().size();
-    for(std::size_t col = 0; col < number_of_columns; ++col)
+    for(std::size_t i = 0; i < number_of_columns; ++i)
         {
-        column_info const& ci = all_columns().at(col);
+        column_info const& ci = all_columns().at(i);
         if(ci.is_hidden())
             {
             continue;
             }
 
-        std::string const& s = values[col];
+        std::string const& s = values[i];
         if(!s.empty())
             {
             int x_text = pos_x;
@@ -756,14 +755,14 @@ void wx_table_generator::do_output_single_row
                 // Make sure that any failure in this chain of assumptions
                 // doesn't result in (undefined) negative clipping.
                 LMI_ASSERT(0 <= ci.col_width() - column_margin());
-                wxDCClipper clip
-                    (dc_
-                    ,wxRect
+                dc_.SetClippingRegion
+                    (wxRect
                         {wxPoint{pos_x, y_top}
                         ,wxSize{ci.col_width() - column_margin(), row_height_}
                         }
                     );
                 dc_.DrawText(s, x_text, y_text);
+                dc_.DestroyClippingRegion();
                 }
             else
                 {
@@ -793,32 +792,32 @@ void wx_table_generator::do_output_horz_separator(int x1, int x2, int y)
     dc_.DrawLine(x1, y, x2, y);
 }
 
-int wx_table_generator::do_get_cell_x(std::size_t column) const
+int wx_table_generator::cell_pos_x(std::size_t column) const
 {
     int x = left_margin_;
-    for(std::size_t col = 0; col < column; ++col)
+    for(std::size_t i = 0; i < column; ++i)
         {
-        x += all_columns().at(col).col_width();
+        x += all_columns().at(i).col_width();
         }
 
     return x;
 }
 
-/// Return the rectangle containing the cell area.
+/// Rectangle corresponding to a cell.
 
 wxRect wx_table_generator::cell_rect(std::size_t column, int y) const
 {
     return wxRect
-        (do_get_cell_x(column)
+        (cell_pos_x(column)
         ,y
         ,all_columns().at(column).col_width()
         ,row_height_
         );
 }
 
-/// Return the font used for the headers.
+/// Font used for headers.
 
-wxFont wx_table_generator::get_header_font() const
+wxFont wx_table_generator::header_font() const
 {
     return dc().GetFont().Bold();
 }

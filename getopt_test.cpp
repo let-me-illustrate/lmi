@@ -44,7 +44,7 @@
 #include "getopt.hpp"
 
 #include "assert_lmi.hpp"
-#include "miscellany.hpp"               // lmi_array_size()
+#include "ssize_lmi.hpp"
 #include "test_tools.hpp"
 
 #include <sstream>
@@ -204,14 +204,14 @@ int test_main(int, char*[])
     char arg1[] = {"--verbose"};
     char arg2[] = {"xyz"};
     char* test_argv[] = {arg0, arg1, arg2, nullptr};
-    int test_argc = -1 + static_cast<int>(lmi_array_size(test_argv));
+    int test_argc = -1 + lmi::ssize(test_argv);
     std::string s = getopt_test::test(test_argc, test_argv);
     BOOST_TEST_EQUAL(s, "option verbose\nnon-option ARGV-elements: xyz\n");
     }
 
     {
     char* test_argv[] = {nullptr};
-    int test_argc = -1 + static_cast<int>(lmi_array_size(test_argv));
+    int test_argc = -1 + lmi::ssize(test_argv);
     std::string s = getopt_test::test(test_argc, test_argv);
     BOOST_TEST_EQUAL(s, "");
     }
@@ -221,7 +221,7 @@ int test_main(int, char*[])
     char arg1[] = {"-o"};
     char arg2[] = {"-d1,2,3"};
     char* test_argv[] = {arg0, arg1, arg2, nullptr};
-    int test_argc = -1 + static_cast<int>(lmi_array_size(test_argv));
+    int test_argc = -1 + lmi::ssize(test_argv);
     std::string s = getopt_test::test(test_argc, test_argv);
     BOOST_TEST_EQUAL(s, "option o\noption d with value '1,2,3'\n");
     }

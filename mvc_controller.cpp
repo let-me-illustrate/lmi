@@ -50,7 +50,6 @@
 #include <wx/wupdlock.h>
 #include <wx/xrc/xmlres.h>
 
-#include <cstddef>                      // size_t
 #include <cstring>                      // strlen()
 
 namespace
@@ -59,7 +58,7 @@ namespace
 ///
 /// A page selection is maintained for each bookcontrol resource.
 
-std::map<std::string,std::size_t> last_selected_page;
+std::map<std::string,int> last_selected_page;
 
 /// Custom event to trigger a call to SetFocus(). This action requires
 /// a custom event because wxFocusEvent does not change focus--it only
@@ -323,7 +322,7 @@ void MvcController::ConditionallyEnableItems
         // also be disabled. Even so, the framework might force a
         // different radiobutton to be selected.
         bool radiobox_enabled = radiobox->IsEnabled();
-        for(std::size_t j = 0; j < datum->cardinality(); ++j)
+        for(int j = 0; j < datum->cardinality(); ++j)
             {
             radiobox->Enable(j, radiobox_enabled && datum->is_allowed(j));
             }
@@ -338,7 +337,7 @@ void MvcController::ConditionallyEnableItems
         // WX !! Append(wxArrayString const&) "may be much faster"
         // according to wx online help, but that seems untrue: its
         // implementation just uses a loop.
-        for(std::size_t j = 0; j < datum->cardinality(); ++j)
+        for(int j = 0; j < datum->cardinality(); ++j)
             {
             if(datum->is_allowed(j))
                 {

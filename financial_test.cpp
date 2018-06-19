@@ -24,6 +24,7 @@
 #include "financial.hpp"
 
 #include "materially_equal.hpp"
+#include "ssize_lmi.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -97,14 +98,13 @@ int test_main(int, char*[])
     // For any stream, NPV at the IRR rate should ideally be zero.
     std::vector<double> q{p};
     q.push_back(-b.back());
-    double r = npv(q.begin(), q.end(), results.back());
     // This NPV is -9.777068044058979E-12 in a gnumeric spreadsheet,
     // versus -9.86988e-014 with MinGW-w64 gcc-6.3.0; the 1e-13
     // tolerance is simply the materially_equal() default.
-    BOOST_TEST(std::fabs(r) <= 1e-13);
+    BOOST_TEST(std::fabs(npv(q.begin(), q.end(), results.back())) <= 1e-13);
 
     // Trivially, NPV at 0% interest is summation.
-    BOOST_TEST(materially_equal(-4950.0, npv(q.begin(), q.end(), 0.0)));
+    BOOST_TEST(materially_equal(-4950.0L, npv(q.begin(), q.end(), 0.0)));
 
     // Test const vectors.
     std::vector<double> const cp(p);
@@ -188,11 +188,11 @@ int test_main(int, char*[])
 
     // Test fv().
 
-    static long double const i = .05L;
-    static double const one_plus_i = 1.0L + i;
+    static double const i = .05;
+    static double const one_plus_i = 1.0 + i;
     std::vector<double> accum_p(p.size());
     accum_p[0] = p[0] * one_plus_i;
-    for(unsigned int j = 1; j < p.size(); ++j)
+    for(int j = 1; j < lmi::ssize(p); ++j)
         {
         accum_p[j] = (accum_p[j - 1] + p[j]) * one_plus_i;
         }

@@ -68,13 +68,9 @@ int test_main(int, char*[])
     BOOST_TEST(!materially_equal(-1.0, -1.0 + 1.0E9 * epsilon));
 
     BOOST_TEST(!materially_equal(1000000000.0, 1000000001.0));
-    BOOST_TEST(!materially_equal(1000000000L , 1000000001.0));
-    BOOST_TEST(!materially_equal(1000000000.0, 1000000001L ));
     BOOST_TEST(!materially_equal(1000000000L , 1000000001L ));
 
     BOOST_TEST( materially_equal(1000000000.0, 1000000001.0, 1.0E-9));
-    BOOST_TEST( materially_equal(1000000000L , 1000000001.0, 1.0E-9));
-    BOOST_TEST( materially_equal(1000000000.0, 1000000001L , 1.0E-9));
     BOOST_TEST( materially_equal(1000000000L , 1000000001L , 1.0E-9));
 
     long double bignum = std::numeric_limits<long double>::max();

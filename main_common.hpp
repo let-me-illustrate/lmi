@@ -24,8 +24,12 @@
 
 #include "config.hpp"
 
-// Included so that try_main() definitions can use EXIT_SUCCESS, EXIT_FAILURE.
-#include <cstdlib>
+#include <cstdint>
+#include <cstdlib>                      // EXIT_SUCCESS, EXIT_FAILURE
+
+static_assert(8 == CHAR_BIT);
+static_assert(4 == sizeof(std::int32_t)); // ensure that this exact type exists
+static_assert(4 <= sizeof(int));
 
 void initialize_application();
 int try_main(int argc, char* argv[]);

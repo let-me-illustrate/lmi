@@ -78,7 +78,7 @@ class census_benchmark
         wxString ms_text;
         LMI_ASSERT(status_text.EndsWith(" milliseconds", &ms_text));
 
-        long time_real;
+        long int time_real;
         LMI_ASSERT(ms_text.ToLong(&time_real));
 
         wxPrintf

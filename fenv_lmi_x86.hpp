@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include <bitset>
+#include <cstdint>
 #include <stdexcept>
 
 #if defined __BORLANDC__ || defined _MSC_VER
@@ -152,7 +153,7 @@ enum e_x87_rounding
 
 struct intel_control_word_parameters
 {
-    typedef unsigned short int integer_type;
+    typedef std::uint16_t integer_type;
     enum {nbits = 16};
     typedef e_x87_precision pc_type;
     typedef e_x87_rounding  rc_type;
@@ -220,7 +221,7 @@ class control_word
     typedef typename std::bitset<ControlWordType::nbits>::reference ref_type;
 
   public:
-    control_word(int w)
+    control_word(std::uint32_t w)
         {
         cw_ = ControlWordType::reserved_values | ControlWordType::settable & w;
         }
@@ -253,31 +254,27 @@ class control_word
     std::bitset<ControlWordType::nbits> const& bits() const {return cw_;}
 
   private:
-    ref_type im()     {return cw_[ControlWordType::im_bit];}
-    ref_type dm()     {return cw_[ControlWordType::dm_bit];}
-    ref_type zm()     {return cw_[ControlWordType::zm_bit];}
-    ref_type om()     {return cw_[ControlWordType::om_bit];}
-    ref_type um()     {return cw_[ControlWordType::um_bit];}
-    ref_type pm()     {return cw_[ControlWordType::pm_bit];}
+    ref_type im()     {return cw_[    ControlWordType::im_bit ];}
+    ref_type dm()     {return cw_[    ControlWordType::dm_bit ];}
+    ref_type zm()     {return cw_[    ControlWordType::zm_bit ];}
+    ref_type om()     {return cw_[    ControlWordType::om_bit ];}
+    ref_type um()     {return cw_[    ControlWordType::um_bit ];}
+    ref_type pm()     {return cw_[    ControlWordType::pm_bit ];}
     ref_type pc0()    {return cw_[0 + ControlWordType::pc_bit0];}
     ref_type pc1()    {return cw_[1 + ControlWordType::pc_bit0];}
     ref_type rc0()    {return cw_[0 + ControlWordType::rc_bit0];}
     ref_type rc1()    {return cw_[1 + ControlWordType::rc_bit0];}
 
-    // Not every implementation yet has operator[](std::size_t) const
-    //   http://www.comeaucomputing.com/iso/lwg-defects.html#11
-    // so test() is used where operator[] would suffice.
-
-    bool  im()  const {return cw_.test(ControlWordType::im_bit);}
-    bool  dm()  const {return cw_.test(ControlWordType::dm_bit);}
-    bool  zm()  const {return cw_.test(ControlWordType::zm_bit);}
-    bool  om()  const {return cw_.test(ControlWordType::om_bit);}
-    bool  um()  const {return cw_.test(ControlWordType::um_bit);}
-    bool  pm()  const {return cw_.test(ControlWordType::pm_bit);}
-    bool  pc0() const {return cw_.test(0 + ControlWordType::pc_bit0);}
-    bool  pc1() const {return cw_.test(1 + ControlWordType::pc_bit0);}
-    bool  rc0() const {return cw_.test(0 + ControlWordType::rc_bit0);}
-    bool  rc1() const {return cw_.test(1 + ControlWordType::rc_bit0);}
+    bool  im()  const {return cw_[    ControlWordType::im_bit ];}
+    bool  dm()  const {return cw_[    ControlWordType::dm_bit ];}
+    bool  zm()  const {return cw_[    ControlWordType::zm_bit ];}
+    bool  om()  const {return cw_[    ControlWordType::om_bit ];}
+    bool  um()  const {return cw_[    ControlWordType::um_bit ];}
+    bool  pm()  const {return cw_[    ControlWordType::pm_bit ];}
+    bool  pc0() const {return cw_[0 + ControlWordType::pc_bit0];}
+    bool  pc1() const {return cw_[1 + ControlWordType::pc_bit0];}
+    bool  rc0() const {return cw_[0 + ControlWordType::rc_bit0];}
+    bool  rc1() const {return cw_[1 + ControlWordType::rc_bit0];}
 
     std::bitset<ControlWordType::nbits> cw_;
 };
@@ -292,37 +289,37 @@ inline unsigned int intel_to_msvc(intel_control_word i)
     return msvc_control_word(i).cw();
 }
 
-inline unsigned int intel_to_msvc(unsigned short int i)
+inline unsigned int intel_to_msvc(std::uint16_t i)
 {
     return intel_to_msvc(intel_control_word(i));
 }
 
-inline unsigned short int msvc_to_intel(msvc_control_word m)
+inline std::uint16_t msvc_to_intel(msvc_control_word m)
 {
     return intel_control_word(m).cw();
 }
 
-inline unsigned short int msvc_to_intel(unsigned int m)
+inline std::uint16_t msvc_to_intel(unsigned int m)
 {
     return msvc_to_intel(msvc_control_word(m));
 }
 
 /// Default settings for x87 fpu.
 
-inline unsigned short int default_x87_control_word()
+inline std::uint16_t default_x87_control_word()
 {
     return 0x037f;
 }
 
 /// Fetch settings for x87 fpu.
 
-inline unsigned short int x87_control_word()
+inline std::uint16_t x87_control_word()
 {
-    unsigned short int volatile control_word = 0x0;
+    std::uint16_t volatile control_word = 0x0;
 #   if defined __GNUC__
     asm volatile("fstcw %0" : : "m" (control_word));
 #   elif defined __BORLANDC__
-    control_word = static_cast<unsigned short int>(_control87(0, 0));
+    control_word = static_cast<std::uint16_t>(_control87(0, 0));
 #   elif defined _MSC_VER
     // Test _MSC_VER last: some non-ms compilers or libraries define it.
     control_word = msvc_to_intel(_control87(0, 0));
@@ -334,10 +331,10 @@ inline unsigned short int x87_control_word()
 
 /// Change settings for x87 fpu.
 
-inline void x87_control_word(unsigned short int cw)
+inline void x87_control_word(std::uint16_t cw)
 {
 #   if defined __GNUC__
-    unsigned short int volatile control_word = cw;
+    std::uint16_t volatile control_word = cw;
     asm volatile("fldcw %0" : : "m" (control_word));
 #   elif defined __BORLANDC__
     _control87(cw, 0x0ffff);

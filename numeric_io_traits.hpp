@@ -137,7 +137,7 @@ struct numeric_conversion_traits
 struct Integral{};
 template<> struct numeric_conversion_traits<Integral>
 {
-    static int digits(long int) {return 1;}
+    template<typename T> static int digits(T) {return 1;}
     static std::string simplify(std::string const& s) {return s;}
 };
 

@@ -2030,14 +2030,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                             <border>2</border>
                                             <object class="wxTextCtrl" name="InputFundManagementFee">
                                                 <help>Investment management fee for custom fund</help>
-                                                <size>35,-1</size>
-                                            </object>
-                                        </object>
-                                        <object class="sizeritem">
-                                            <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM</flag>
-                                            <border>4</border>
-                                            <object class="wxStaticText">
-                                                <label>bp</label>
+                                                <size>50,-1</size>
                                             </object>
                                         </object>
                                     </object>

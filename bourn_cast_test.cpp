@@ -446,7 +446,7 @@ void test_m64_neighborhood()
         {
         std::cout
             << "test_m64_neighborhood() not run because"
-            << "\nunsigned long long is not a 64-bit type."
+            << "\nunsigned long long int is not a 64-bit type."
             << std::endl
             ;
         return;
@@ -463,7 +463,14 @@ void test_m64_neighborhood()
     // unsigned integer is UB.
 
     unsigned long long int const ull_max = ull_traits::max();
+#if defined __GNUC__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wfloat-conversion"
+#endif // defined __GNUC__
     float const f_ull_max = ull_max;
+#if defined __GNUC__
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__
     BOOST_TEST(f_ull_max == static_cast<float>(ull_max));
     // Suppressed because behavior is undefined:
     // BOOST_TEST(ull_max == static_cast<unsigned long long int>(f_ull_max));
@@ -495,8 +502,15 @@ void test_m64_neighborhood()
     // about half a trillion units.
 
     double const d_2_64 = nonstd::power(2.0, 64);
+#if defined __GNUC__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wfloat-conversion"
+#endif // defined __GNUC__
     double const d_interesting = 0.5 * (d_2_64 + std::nextafterf(d_2_64, 0));
     unsigned long long int const ull_interesting = d_interesting;
+#if defined __GNUC__
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__
     float const f_interesting = bourn_cast<float>(ull_interesting);
     BOOST_TEST_THROW
         (bourn_cast<unsigned long long int>(f_interesting)
@@ -823,16 +837,16 @@ int test_main(int, char*[])
         ,"Cannot cast negative to unsigned."
         );
 
-    // Still forbidden even if unsigned type is wider.
+    // Still forbidden even if unsigned type is wider than signed type.
     BOOST_TEST_THROW
-        (bourn_cast<unsigned long>(std::numeric_limits<signed char>::lowest())
+        (bourn_cast<unsigned long int>(std::numeric_limits<signed char>::lowest())
         ,std::runtime_error
         ,"Cannot cast negative to unsigned."
         );
 
     // Still forbidden even if value is only "slightly" negative.
     BOOST_TEST_THROW
-        (bourn_cast<unsigned long>(-1)
+        (bourn_cast<unsigned long int>(-1)
         ,std::runtime_error
         ,"Cannot cast negative to unsigned."
         );

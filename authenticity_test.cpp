@@ -34,16 +34,15 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <cstddef>                      // size_t
 #include <cstdio>
-#include <cstring>                      // memcpy()
+#include <cstring>                      // memcpy(), strlen()
 #include <fstream>
 #include <string>
 #include <vector>
 
 // TODO ?? Add tests for conditions and diagnostics that aren't tested yet.
 
-template<typename T, std::size_t n>
+template<typename T, auto n>
 std::string md5_str(T(&md5sum)[n])
 {
     LMI_ASSERT(n == md5len);
@@ -164,7 +163,7 @@ void PasskeyTest::InitializeDataFile() const
     os.close();
 
     unsigned char sum[md5len];
-    md5_buffer(rime, -1 + static_cast<int>(sizeof rime), sum);
+    md5_buffer(rime, std::strlen(rime), sum);
     BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(sum));
 }
 

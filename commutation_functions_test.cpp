@@ -25,7 +25,7 @@
 
 #include "et_vector.hpp"
 #include "math_functions.hpp"
-#include "miscellany.hpp"               // lmi_array_size()
+#include "ssize_lmi.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -145,7 +145,7 @@ void TestEckleyTable2()
         ,   813.15,    836.91,    860.33,    888.39,    930.30,   1000.00
         };
 
-    static double const COI[65] =
+    std::vector<double>coi
         {  0.00200,   0.00206,   0.00214,   0.00224,   0.00236,   0.00250,   0.00265,   0.00282,   0.00301,   0.00324
         ,  0.00350,   0.00382,   0.00419,   0.00460,   0.00504,   0.00550,   0.00596,   0.00645,   0.00697,   0.00756
         ,  0.00825,   0.00903,   0.00990,   0.01088,   0.01199,   0.01325,   0.01469,   0.01631,   0.01811,   0.02009
@@ -155,7 +155,6 @@ void TestEckleyTable2()
         ,  0.40000,   0.50000,   0.60000,   0.70000,   1.00000
         };
 
-    std::vector<double>coi (COI, COI + lmi_array_size(COI));
     std::vector<double>ic  (coi.size(), 0.10);
     std::vector<double>ig  (coi.size(), 0.04);
 
@@ -178,7 +177,7 @@ void TestEckleyTable2()
     {
     double tolerance = 0.0000005;
     double worst_discrepancy = 0.0;
-    for(unsigned int j = 0; j < coi.size(); ++j)
+    for(int j = 0; j < lmi::ssize(coi); ++j)
         {
         double d0 = std::fabs(nsp    [j] - Ax[j]);
         double d1 = std::fabs(annuity[j] - ax[j]);
@@ -213,7 +212,7 @@ void TestEckleyTable2()
     {
     double tolerance = 0.000005;
     double worst_discrepancy = 0.0;
-    for(unsigned int j = 0; j < coi.size(); ++j)
+    for(int j = 0; j < lmi::ssize(coi); ++j)
         {
         double d0 = std::fabs(premium[j] - Px[j] * .001);
         double d1 = std::fabs(reserve[j] - Vx[j] * .001);
@@ -277,14 +276,13 @@ void TestEckleyTables3and4()
         };
 
     // Eckley's final COI rate is superfluous.
-    static double const COI[30] =
+    std::vector<double>coi
         {  0.00200,   0.00206,   0.00214,   0.00224,   0.00236,   0.00250,   0.00265,   0.00282,   0.00301,   0.00324
         ,  0.00350,   0.00382,   0.00419,   0.00460,   0.00504,   0.00550,   0.00596,   0.00645,   0.00697,   0.00756
         ,  0.00825,   0.00903,   0.00990,   0.01088,   0.01199,   0.01325,   0.01469,   0.01631,   0.01811,   0.02009
         ,/*0.02225 */
         };
 
-    std::vector<double>coi (COI, COI + lmi_array_size(COI));
     std::vector<double>ic  (coi.size(), 0.10);
     std::vector<double>ig  (coi.size(), 0.04);
 
@@ -300,7 +298,7 @@ void TestEckleyTables3and4()
 
     double tolerance = 0.000005;
     double worst_discrepancy = 0.0;
-    for(unsigned int j = 0; j < coi.size(); ++j)
+    for(int j = 0; j < lmi::ssize(coi); ++j)
         {
         double d0 = std::fabs(premium[j] - Px[j] * .001);
         double d1 = std::fabs(reserve[j] - Vx[j] * .001);
@@ -368,14 +366,13 @@ void TestEckleyTable5()
         ,0.000066
         };
 
-    static double const COI[31] =
+    std::vector<double>coi
         {0.00018,  0.00007,  0.00007,  0.00006,  0.00006,  0.00006,  0.00006,  0.00005,  0.00005,  0.00005
         ,0.00005,  0.00005,  0.00006,  0.00007,  0.00008,  0.00009,  0.00010,  0.00010,  0.00011,  0.00011
         ,0.00011,  0.00011,  0.00011,  0.00011,  0.00010,  0.00010,  0.00010,  0.00010,  0.00010,  0.00010
         ,0.00010
         };
 
-    std::vector<double>coi (COI, COI + lmi_array_size(COI));
     std::vector<double>ic  (coi.size(), i_upper_12_over_12_from_i<double>()(0.10));
     std::vector<double>ig  (coi.size(), i_upper_12_over_12_from_i<double>()(0.04));
 
@@ -383,7 +380,7 @@ void TestEckleyTable5()
 
     double tolerance = 0.0000005;
     double worst_discrepancy = 0.0;
-    for(unsigned int j = 0; j < coi.size(); ++j)
+    for(int j = 0; j < lmi::ssize(coi); ++j)
         {
         double d0 = std::fabs(CF.aD()[j]        - Dx  [j]);
         double d1 = std::fabs(CF.kD()[j] / 12.0 - Dx12[j]);
@@ -457,7 +454,7 @@ void ULCommFnsTest()
 
 void Test_1954_1958_IET_3pct()
 {
-    static double const lx[100] =
+    std::vector<double> ell_ex
         {     1000000,       994890,       993477,       992583,       991839,       991214,       990679,       990213,       989797,       989411
         ,      989035,       988639,       988204,       987720,       987177,       986555,       985855,       985076,       984219,       983294
         ,      982311,       981280,       980210,       979122,       978025,       976920,       975797,       974655,       973485,       972278
@@ -520,7 +517,6 @@ void Test_1954_1958_IET_3pct()
         ,   3773.3235,    2896.4084,    2181.9813,    1608.8948,    1147.0221,     771.0449,     468.4483,     239.5823,      90.2163,      17.6305
         };
 
-    std::vector<double>   ell_ex(lx, lx + lmi_array_size(lx));
     std::vector<double> E_ell_ex(ell_ex);
     E_ell_ex.erase(E_ell_ex.begin());
     E_ell_ex.push_back(0.0);
@@ -533,7 +529,7 @@ void Test_1954_1958_IET_3pct()
 
     double tolerance = 0.01;
     double worst_discrepancy = 0.0;
-    for(unsigned int j = 0; j < q.size(); ++j)
+    for(int j = 0; j < lmi::ssize(q); ++j)
         {
         double d0 = std::fabs(Dx[0] * CF.D()[j] - Dx[j]);
         double d1 = std::fabs(Dx[0] * CF.N()[j] - Nx[j]);
@@ -653,7 +649,7 @@ void Test_1980_CSO_Male_ANB()
 
     double tolerance = 1.0e-13;
     double worst_discrepancy = 0.0;
-    for(unsigned int j = 0; j < q.size(); ++j)
+    for(int j = 0; j < lmi::ssize(q); ++j)
         {
         double d0 = std::fabs(reserve[j] - Vx[j]);
         worst_discrepancy = std::max(worst_discrepancy, d0);

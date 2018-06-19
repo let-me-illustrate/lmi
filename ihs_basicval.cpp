@@ -25,6 +25,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "calendar_date.hpp"
 #include "contains.hpp"
 #include "data_directory.hpp"
@@ -35,7 +36,7 @@
 #include "fund_data.hpp"
 #include "global_settings.hpp"
 #include "gpt_specamt.hpp"
-#include "ieee754.hpp"                  // ldbl_eps_plus_one()
+#include "ieee754.hpp"                  // ldbl_eps_plus_one_times()
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "input.hpp"
@@ -344,7 +345,7 @@ double BasicValues::InvestmentManagementFee() const
 
     if(yare_input_.OverrideFundManagementFee)
         {
-        return yare_input_.InputFundManagementFee / 10000.0L;
+        return yare_input_.InputFundManagementFee;
         }
 
     double z = 0.0;
@@ -918,7 +919,7 @@ double BasicValues::GetModalPremMaxNonMec
 {
     // TAXATION !! No table available if 7PP calculated from first principles.
     double temp = MortalityRates_->SevenPayRates()[0];
-    return round_max_premium()(temp * ldbl_eps_plus_one() * a_specamt / a_mode);
+    return round_max_premium()(ldbl_eps_plus_one_times(temp * a_specamt / a_mode));
 }
 
 /// Calculate premium using a target-premium ratio.
@@ -952,13 +953,13 @@ double BasicValues::GetModalPremTgtFromTable
     ) const
 {
     return round_max_premium()
-        (
-            (   TgtPremMonthlyPolFee * 12
-            +       a_specamt
-                *   ldbl_eps_plus_one()
-                *   MortalityRates_->TargetPremiumRates()[0]
+        (ldbl_eps_plus_one_times
+            (
+                ( TgtPremMonthlyPolFee * 12
+                + (a_specamt * MortalityRates_->TargetPremiumRates()[0])
+                )
+            /   a_mode
             )
-        /   a_mode
         );
 }
 
@@ -975,7 +976,7 @@ double BasicValues::GetModalPremCorridor
     ) const
 {
     double temp = GetCorridorFactor()[0];
-    return round_max_premium()((ldbl_eps_plus_one() * a_specamt / temp) / a_mode);
+    return round_max_premium()(ldbl_eps_plus_one_times((a_specamt / temp) / a_mode));
 }
 
 //============================================================================
@@ -1001,7 +1002,7 @@ double BasicValues::GetModalPremGLP
 // term rider, dumpin
 
     z /= a_mode;
-    return round_max_premium()(ldbl_eps_plus_one() * z);
+    return round_max_premium()(ldbl_eps_plus_one_times(z));
 }
 
 //============================================================================
@@ -1024,7 +1025,7 @@ double BasicValues::GetModalPremGSP
 // term rider, dumpin
 
     z /= a_mode;
-    return round_max_premium()(ldbl_eps_plus_one() * z);
+    return round_max_premium()(ldbl_eps_plus_one_times(z));
 }
 
 /// Calculate a monthly-deduction discount factor on the fly.
@@ -1536,7 +1537,7 @@ std::vector<double> const& BasicValues::GetBandedCoiRates
 std::vector<double> BasicValues::GetActuarialTable
     (std::string const& TableFile
     ,e_database_key     TableID
-    ,long int           TableNumber
+    ,int                TableNumber
     ) const
 {
     if(DB_CurrCoiTable == TableID && e_reenter_never != CoiInforceReentry)
@@ -1571,7 +1572,7 @@ std::vector<double> BasicValues::GetUnblendedTable
     return GetActuarialTable
         (TableFile
         ,TableID
-        ,static_cast<long int>(Database_->Query(TableID))
+        ,bourn_cast<int>(Database_->Query(TableID))
         );
 }
 
@@ -1587,7 +1588,7 @@ std::vector<double> BasicValues::GetUnblendedTable
     return GetActuarialTable
         (TableFile
         ,TableID
-        ,static_cast<long int>(Database_->Query(TableID, index))
+        ,bourn_cast<int>(Database_->Query(TableID, index))
         );
 }
 
@@ -1975,7 +1976,7 @@ std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
 
     std::vector<double> z = actuarial_table_rates
         (AddDataDir(ProductData_->datum("CurrSpouseRiderFilename"))
-        ,static_cast<long int>(Database_->Query(DB_SpouseRiderTable))
+        ,bourn_cast<int>(Database_->Query(DB_SpouseRiderTable))
         ,yare_input_.SpouseIssueAge
         ,EndtAge - yare_input_.SpouseIssueAge
         );
@@ -1992,7 +1993,7 @@ std::vector<double> BasicValues::GetGuaranteedSpouseRiderRates() const
 
     std::vector<double> z = actuarial_table_rates
         (AddDataDir(ProductData_->datum("GuarSpouseRiderFilename"))
-        ,static_cast<long int>(Database_->Query(DB_SpouseRiderGuarTable))
+        ,bourn_cast<int>(Database_->Query(DB_SpouseRiderGuarTable))
         ,yare_input_.SpouseIssueAge
         ,EndtAge - yare_input_.SpouseIssueAge
         );

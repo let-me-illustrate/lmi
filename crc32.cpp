@@ -23,6 +23,10 @@
 
 #include "crc32.hpp"
 
+#include "ssize_lmi.hpp"
+
+#include <cstdint>
+
 // This is a derived work based on Mark Adler's original 'makecrc.c',
 // extracted from gnu gzip
 //   gnu/gzip/gzip-1.2.4a.tar.gz
@@ -74,17 +78,17 @@ namespace
         static int const n = 256;
         static unsigned int crc_array[n];
 
-        unsigned long int c; // CRC shift register.
-        unsigned long int e; // Polynomial exclusive-or pattern.
-        unsigned int i;      // Counter for all possible eight bit values.
-        int k;               // Byte being shifted into crc apparatus.
+        std::uint32_t c; // CRC shift register.
+        std::uint32_t e; // Polynomial exclusive-or pattern.
+        int i;           // Counter for all possible eight bit values.
+        int k;           // Byte being shifted into crc apparatus.
 
         // Terms of polynomial defining this crc (except x^32).
         static int p[] = {0,1,2,4,5,7,8,10,11,12,16,22,23,26};
 
         // Make exclusive-or pattern from polynomial (0xedb88320).
         e = 0;
-        for(i = 0; i < sizeof p / sizeof(int); ++i)
+        for(i = 0; i < lmi::ssize(p); ++i)
             {
             e |= 1L << (31 - p[i]);
             }

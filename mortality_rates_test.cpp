@@ -26,6 +26,7 @@
 #include "assert_lmi.hpp"
 #include "materially_equal.hpp"
 #include "math_functions.hpp"
+#include "ssize_lmi.hpp"
 #include "test_tools.hpp"
 
 namespace
@@ -149,7 +150,7 @@ void mortality_rates_test::test_4095_4096ths()
 
 void mortality_rates_test::test_annual_to_monthly_conversion()
 {
-    for(unsigned int j = 0; j < annual_rates().size(); ++j)
+    for(int j = 0; j < lmi::ssize(annual_rates()); ++j)
         {
         BOOST_TEST
             (materially_equal

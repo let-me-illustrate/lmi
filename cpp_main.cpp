@@ -61,6 +61,7 @@
 #include "catch_exceptions.hpp"
 #include "getopt.hpp"
 #include "license.hpp"
+#include "main_common.hpp"
 
 #include <cstdlib>                      // free()
 #include <iostream>

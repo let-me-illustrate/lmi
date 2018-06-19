@@ -164,6 +164,7 @@ TESTS = \
     test_safely_dereference_as \
     test_sandbox \
     test_snprintf \
+    test_ssize_lmi \
     test_stratified_algorithms \
     test_stream_cast \
     test_system_command \
@@ -1073,6 +1074,11 @@ test_snprintf_SOURCES = \
   snprintf_test.cpp
 test_snprintf_CXXFLAGS = $(AM_CXXFLAGS)
 
+test_ssize_lmi_SOURCES = \
+  $(common_test_objects) \
+  ssize_lmi_test.cpp
+test_ssize_lmi_CXXFLAGS = $(AM_CXXFLAGS)
+
 test_stratified_algorithms_SOURCES = \
   $(common_test_objects) \
   stratified_algorithms_test.cpp
@@ -1326,6 +1332,7 @@ noinst_HEADERS = \
     single_choice_popup_menu.hpp \
     skeleton.hpp \
     so_attributes.hpp \
+    ssize_lmi.hpp \
     stl_extensions.hpp \
     stratified_algorithms.hpp \
     stratified_charges.hpp \

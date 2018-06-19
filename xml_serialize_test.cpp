@@ -23,7 +23,7 @@
 
 #include "xml_serialize.hpp"
 
-#include "miscellany.hpp"               // lmi_array_size(), stifle_warning_for_unused_variable()
+#include "miscellany.hpp"               // stifle_warning_for_unused_variable()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -38,16 +38,12 @@ std::string dom_string;
 
 int const number_of_elements = 20;
 
-// http://www.drpeppermuseum.com/Learn/10-2-4-Club.aspx
-
-int const dr_pepper[] = {10, 2, 4};
-
 // /[dsv]0/: constant values for /write.*/ functions.
 // /[dsv]1/: variables for /read.*/ functions.
 
 double           const d0(2.718281828459045235360);
 std::string      const s0("string with ampersand & embedded spaces");
-std::vector<int> const v0(dr_pepper, dr_pepper + lmi_array_size(dr_pepper));
+std::vector<int> const v0 {10, 2, 4}; // Be a pepper...
 
 double                 d1;
 std::string            s1;

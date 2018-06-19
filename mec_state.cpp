@@ -26,7 +26,7 @@
 
 #include "alert.hpp"
 #include "contains.hpp"
-#include "miscellany.hpp"               // htmlize(), lmi_array_size()
+#include "miscellany.hpp"               // htmlize()
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 
@@ -355,10 +355,9 @@ std::string const& mec_state::xml_root_name() const
 
 bool mec_state::is_detritus(std::string const& s) const
 {
-    static std::string const a[] =
+    static std::vector<std::string> const v
         {"Remove this string when adding the first removed entity."
         };
-    static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return contains(v, s);
 }
 

@@ -23,6 +23,8 @@
 
 #include "single_choice_popup_menu.hpp"
 
+#include "ssize_lmi.hpp"
+
 #include <wx/evtloop.h>
 #include <wx/toplevel.h>
 
@@ -37,7 +39,7 @@ SingleChoicePopupMenu::SingleChoicePopupMenu
         {
         menu_.SetTitle(title);
         }
-    for(unsigned int j = 0; j < choices.GetCount(); ++j)
+    for(int j = 0; j < lmi::ssize(choices); ++j)
         {
         wxString s = choices[j];
         if(wxNOT_FOUND == s.Find('&'))

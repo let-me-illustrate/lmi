@@ -26,9 +26,11 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "math_functions.hpp"           // outward_quotient()
+#include "ssize_lmi.hpp"
 
 #include <algorithm>                    // equal(), max()
 #include <cmath>                        // ceil(), floor()
+#include <cstddef>                      // size_t
 #include <cstdio>                       // snprintf()
 #include <ctime>
 #include <fstream>
@@ -156,7 +158,7 @@ int scale_power(int max_power, double min_value, double max_value)
 
 /// Return the number of newline characters in a string.
 
-std::size_t count_newlines(std::string const& s)
+int count_newlines(std::string const& s)
 {
     return std::count(s.begin(), s.end(), '\n');
 }
@@ -185,8 +187,8 @@ std::vector<std::string> split_into_lines(std::string const& s)
         }
     // Assume that there is no newline at the end (or beginning) of
     // the string: i.e., that all newline delimiters are internal--
-    // hence "1u + ".
-    LMI_ASSERT(lines.size() == 1u + count_newlines(s));
+    // hence "1 + ".
+    LMI_ASSERT(lmi::ssize(lines) == 1 + count_newlines(s));
     return lines;
 }
 

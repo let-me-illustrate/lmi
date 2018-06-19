@@ -32,7 +32,6 @@
 #include <wx/frame.h>
 #include <wx/utils.h>
 
-#include <cstddef>                      // size_t
 #include <ostream>
 
 LMI_FORCE_LINKING_IN_SITU(system_command_wx)

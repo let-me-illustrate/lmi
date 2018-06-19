@@ -56,7 +56,7 @@ class Irc7702A final
         ,std::vector<double> const&  a_NSPVec        // TODO ?? TAXATION !! Assume table passed, for now.
         ,round_to<double>    const&  a_RoundNonMecPrem
 // TAXATION !! Either use these arguments or eliminate them.
-//      ,unsigned int                a_IssueAge
+//      ,int                         a_IssueAge
 //      ,double                      a_Face
 //      ,mcenum_dbopt_7702           a_DBOpt
 //      ,std::vector<double> const&  a_q

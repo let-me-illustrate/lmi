@@ -65,11 +65,11 @@ class LMI_SO gpt_server final
     double seconds_for_output      () const;
 
   private:
-    mcenum_emission emission_;
-    gpt_state state_;
-    double seconds_for_input_;
-    double seconds_for_calculations_;
-    double seconds_for_output_;
+    mcenum_emission emission_        {mce_emit_nothing};
+    gpt_state state_                 {};
+    double seconds_for_input_        {0.0};
+    double seconds_for_calculations_ {0.0};
+    double seconds_for_output_       {0.0};
 };
 
 #endif // gpt_server_hpp

@@ -58,8 +58,6 @@ class CensusView final
 
     void update_visible_columns();
 
-    void paste_out_to_spreadsheet() const;
-
     CensusDocument& document() const;
 
     // ViewEx required implementation.
@@ -67,26 +65,30 @@ class CensusView final
     char const* icon_xrc_resource   () const override;
     char const* menubar_xrc_resource() const override;
 
-    void UponAddCell                (wxCommandEvent&);
-    void UponDeleteCells            (wxCommandEvent&);
+    // Event handlers, in event-table order (reflecting GUI order)
+    void UponRightClick             (wxDataViewEvent&);
+    void UponValueChanged           (wxDataViewEvent&);
     void UponEditCell               (wxCommandEvent&);
     void UponEditClass              (wxCommandEvent&);
     void UponEditCase               (wxCommandEvent&);
-    void UponColumnWidthVarying     (wxCommandEvent&);
-    void UponColumnWidthFixed       (wxCommandEvent&);
-    void UponPasteCensus            (wxCommandEvent&);
-    void UponRightClick             (wxDataViewEvent&);
-    void UponPrintCase              (wxCommandEvent&);
-    void UponPrintCaseToDisk        (wxCommandEvent&);
     void UponRunCell                (wxCommandEvent&);
     void UponRunCase                (wxCommandEvent&);
+    void UponPrintCase              (wxCommandEvent&);
+    void UponPrintCaseToDisk        (wxCommandEvent&);
     void UponRunCaseToSpreadsheet   (wxCommandEvent&);
     void UponRunCaseToGroupRoster   (wxCommandEvent&);
     void UponRunCaseToGroupQuote    (wxCommandEvent&);
+    void UponCopyCensus             (wxCommandEvent&);
+    void UponPasteCensus            (wxCommandEvent&);
+    void UponAddCell                (wxCommandEvent&);
+    void UponDeleteCells            (wxCommandEvent&);
+    void UponColumnWidthVarying     (wxCommandEvent&);
+    void UponColumnWidthFixed       (wxCommandEvent&);
     void UponUpdateAlwaysDisabled   (wxUpdateUIEvent&);
     void UponUpdateAlwaysEnabled    (wxUpdateUIEvent&);
     void UponUpdateSingleSelection  (wxUpdateUIEvent&);
     void UponUpdateNonemptySelection(wxUpdateUIEvent&);
+    void UponUpdateColumnValuesVary (wxUpdateUIEvent&);
 
     bool DoAllCells(mcenum_emission);
 
@@ -112,10 +114,7 @@ class CensusView final
     std::string class_name_from_cell_number(int) const;
     Input* class_parms_from_class_name(std::string const&);
 
-    bool column_value_varies_across_cells
-        (std::string        const& header
-        ,std::vector<Input> const& cells
-        ) const;
+    bool column_value_varies_across_cells(std::string const& header) const;
 
     oenum_mvc_dv_rc edit_parameters
         (Input&             parameters
@@ -125,6 +124,8 @@ class CensusView final
     int selected_row();
 
     void update_class_names();
+
+    void DoCopyCensus() const;
 
     bool autosize_columns_;
 

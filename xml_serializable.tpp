@@ -311,10 +311,9 @@ bool xml_serializable<T>::is_detritus(std::string const&) const
     return false;
     // Pastable specimen implementation for derived classes:
 #if 0
-    static std::string const a[] =
+    static std::vector<std::string> const v
         {"Remove this string when adding the first removed entity."
         };
-    static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return contains(v, s);
 #endif // 0
 }

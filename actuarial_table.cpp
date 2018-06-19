@@ -25,10 +25,12 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "deserialize_cast.hpp"
 #include "miscellany.hpp"
 #include "oecumenic_enumerations.hpp"   // methuselah
 #include "path_utility.hpp"             // fs::path inserter
+#include "ssize_lmi.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -41,6 +43,7 @@
 #include <ios>
 #include <istream>
 #include <limits>
+#include <type_traits>                  // endian
 
 namespace
 {
@@ -65,7 +68,7 @@ namespace
     /// in order to avoid warnings for unsigned types.
 
     template<typename T>
-    T read_datum(std::istream& is, T& t, std::int16_t nominal_length)
+    T read_datum(std::istream& is, T& t, std::uint16_t nominal_length)
     {
         LMI_ASSERT(sizeof(T) == nominal_length);
         T const invalid(static_cast<T>(-1));
@@ -88,6 +91,13 @@ actuarial_table::actuarial_table(std::string const& filename, int table_number)
     ,max_select_age_ (-1)
     ,table_offset_   (-1)
 {
+    // Binary tables in the SOA format are not portable; this code
+    // presumably works only on little-endian hardware.
+#if 201900L < __cplusplus
+    #error Use the proper C++20 value, which was unknown when this was written.
+    static_assert(std::endian::native == std::endian::little);
+#endif // 201900L < __cplusplus
+
     if(table_number_ <= 0)
         {
         alarum()
@@ -209,13 +219,6 @@ void actuarial_table::find_table()
             ;
         }
 
-    // TODO ?? Assert endianness too? SOA tables are not portable;
-    // probably they can easily be read only on x86 hardware.
-
-    static_assert(8 == CHAR_BIT);
-    static_assert(4 == sizeof(int));
-    static_assert(2 == sizeof(short int));
-
     // 27.4.3.2/2 requires that this be interpreted as invalid.
     // Reinitialize it here for robustness, even though the ctor
     // already initializes it in the same way.
@@ -278,7 +281,7 @@ void actuarial_table::find_table()
 /// The record types of interest here are coded as:
 ///   9999 end of table
 ///   2    4-byte integer:  Table number
-///   3    [unsigned] char: Table type: {A, D, S} --> {age, duration, select}
+///   3    1-byte char   :  Table type: {A, D, S} --> {age, duration, select}
 ///   12   2-byte integer:  Minimum age
 ///   13   2-byte integer:  Maximum age
 ///   14   2-byte integer:  Select period
@@ -326,14 +329,14 @@ void actuarial_table::parse_table()
                 LMI_ASSERT(z == table_number_);
                 }
                 break;
-            case 3: // [unsigned] char: Table type.
+            case 3: // char: Table type.
                 {
                 // Meaning: {A, D, S} --> {age, duration, select}.
                 // SOA apparently permits upper or lower case.
                 LMI_ASSERT(-1 == table_type_);
-                unsigned char z;
+                char z;
                 read_datum(data_ifs, z, nominal_length);
-                z = static_cast<unsigned char>(std::toupper(z));
+                z = bourn_cast<char>(std::toupper(z));
                 LMI_ASSERT('A' == z || 'D' == z || 'S' == z);
                 table_type_ = z;
                 }
@@ -452,7 +455,7 @@ void actuarial_table::read_values(std::istream& is, int nominal_length)
           +   1 + max_age_ - min_age_ - select_period_
           ;
         }
-    int deduced_length = number_of_values * sizeof(double);
+    int deduced_length = number_of_values * static_cast<int>(sizeof(double));
     LMI_ASSERT
         (   soa_table_length_max < deduced_length
         ||  nominal_length == deduced_length
@@ -555,7 +558,7 @@ std::vector<double> actuarial_table::specific_values
                 ;
             }
         }
-    LMI_ASSERT(v.size() == static_cast<unsigned int>(length));
+    LMI_ASSERT(lmi::ssize(v) == length);
     return v;
 }
 

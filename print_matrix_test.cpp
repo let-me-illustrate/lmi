@@ -23,7 +23,6 @@
 
 #include "print_matrix.hpp"
 
-#include "miscellany.hpp"               // lmi_array_size()
 #include "test_tools.hpp"
 
 namespace
@@ -55,16 +54,14 @@ int test_main(int, char*[])
 {
     {
     std::vector<double> q(sample_q());
-    int d[] = {10, 1, 1, 2, 5};
-    std::vector<int> dimensions(d, d + lmi_array_size(d));
+    std::vector<int> dimensions {10, 1, 1, 2, 5};
     print_matrix(std::cout, q, dimensions);
     std::cout << std::endl;
     }
 
     {
     std::vector<double> q(1, 2.718281828459045);
-    int d[] = {1, 1, 1, 1};
-    std::vector<int> dimensions(d, d + lmi_array_size(d));
+    std::vector<int> dimensions {1, 1, 1, 1};
     print_matrix(std::cout, q, dimensions);
     std::cout << std::endl;
     }

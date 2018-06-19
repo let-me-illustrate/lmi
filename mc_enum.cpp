@@ -45,13 +45,13 @@ void mc_enum_base::allow(int index, bool b)
 
 void mc_enum_base::allow_all(bool b)
 {
-    for(std::size_t j = 0; j < cardinality(); ++j)
+    for(int j = 0; j < cardinality(); ++j)
         {
         allow(j, b);
         }
 }
 
-std::size_t mc_enum_base::first_allowed_ordinal() const
+int mc_enum_base::first_allowed_ordinal() const
 {
     return std::find(allowed_.begin(), allowed_.end(), true) - allowed_.begin();
 }

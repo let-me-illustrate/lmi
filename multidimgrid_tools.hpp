@@ -428,7 +428,7 @@ class AutoResizingTreeCtrl
         ,wxWindowID
         ,wxPoint const& = wxDefaultPosition
         ,wxSize const& = wxDefaultSize
-        ,long style = wxTR_HAS_BUTTONS
+        ,long int style = wxTR_HAS_BUTTONS
         ,wxValidator const& = wxDefaultValidator
         );
 

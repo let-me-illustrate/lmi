@@ -26,20 +26,6 @@
 
 #include "so_attributes.hpp"
 
-#if defined LMI_POSIX
-#   include <sys/time.h>                // gettimeofday()
-    typedef double elapsed_t;
-#elif defined LMI_MSW
-    // Compilers for this platform use various types for its high-
-    // resolution timer, but they use the same platform API, so
-    // it's sufficient to use the same 64-bit integer type for all.
-#   include <cstdint>
-    typedef std::uint64_t elapsed_t;
-#else // Unknown platform.
-#   include <ctime>
-    typedef std::clock_t elapsed_t;
-#endif // Unknown platform.
-
 #include <iomanip>
 #include <ios>
 #include <ostream>
@@ -47,7 +33,7 @@
 #include <stdexcept>
 #include <string>
 
-void lmi_sleep(unsigned int seconds);
+void lmi_sleep(int seconds);
 
 /// Why another timer class?
 ///
@@ -67,8 +53,8 @@ class LMI_SO Timer
     Timer();
     ~Timer() = default;
 
-    Timer&      restart();
-    Timer&      stop();
+    Timer& restart();
+    Timer& stop();
 
     static std::string elapsed_msec_str(double seconds);
     std::string        elapsed_msec_str() const;
@@ -78,16 +64,16 @@ class LMI_SO Timer
     Timer(Timer const&) = delete;
     Timer& operator=(Timer const&) = delete;
 
-    elapsed_t   calibrate();
-    void        start();
+    double calibrate();
+    void   start();
 
-    elapsed_t   inspect() const;
+    double inspect() const;
 
-    elapsed_t   elapsed_time_;
-    elapsed_t   frequency_;
-    bool        is_running_;
-    elapsed_t   time_when_started_;
-    elapsed_t   time_when_stopped_;
+    double elapsed_time_;
+    double frequency_;
+    bool   is_running_;
+    double time_when_started_;
+    double time_when_stopped_;
 };
 
 /// Time an operation over an actively-adjusted number of repetitions.
@@ -164,7 +150,7 @@ AliquotTimer<F>::AliquotTimer(F f, double max_seconds)
     ,max_seconds_(max_seconds)
 {
     Timer timer;
-    if(max_seconds_ * static_cast<double>(timer.frequency_) < 1.0)
+    if(max_seconds_ * timer.frequency_ < 1.0)
         {
         std::ostringstream oss;
         oss
@@ -204,18 +190,16 @@ AliquotTimer<F>& AliquotTimer<F>::operator()()
         }
 
     Timer timer;
-    double const dbl_freq   = static_cast<double>(timer.frequency_);
+    double const dbl_freq   = timer.frequency_;
     double const limit      = max_seconds_ * dbl_freq;
-    double const start_time = static_cast<double>(timer.time_when_started_);
+    double const start_time = timer.time_when_started_;
     double const expiry_min = start_time + 0.01 * limit;
     double const expiry_max = start_time +        limit;
-    elapsed_t minimum = limit;
+    double       now        = start_time;
+    double       previous   = start_time;
+    double       minimum    = limit;
     int j = 0;
-    for
-        (elapsed_t now = start_time, previous = start_time
-        ;now < expiry_min || j < 100 && now < expiry_max
-        ;++j
-        )
+    for(; now < expiry_min || j < 100 && now < expiry_max; ++j)
         {
         f_();
         previous = now;

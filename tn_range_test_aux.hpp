@@ -57,7 +57,7 @@ typedef tn_range<int, percentage_trammel<int>> r_int_percentage;
 class RangeUDT
 {
   public:
-    RangeUDT(): f_(3.14) {}
+    RangeUDT(): f_(3.14f) {}
     RangeUDT(float f): f_(f) {}
 
     bool operator==(RangeUDT const&) const {return true;}

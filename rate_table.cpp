@@ -24,6 +24,7 @@
 #include "rate_table.hpp"
 
 #include "alert.hpp"
+#include "bourn_cast.hpp"
 #include "crc32.hpp"
 #include "miscellany.hpp"               // ios_in_binary(), ios_out_trunc_binary()
 #include "path_utility.hpp"
@@ -35,7 +36,6 @@
 
 #include <algorithm>                    // count()
 #include <climits>                      // ULLONG_MAX
-#include <cstdint>
 #include <cstdlib>                      // strtoull()
 #include <cstring>                      // strncmp()
 #include <iomanip>
@@ -69,10 +69,10 @@
 // different from their in memory representation.
 static_assert(std::numeric_limits<double>::is_iec559);
 
+#if 201900L < __cplusplus
+    #error Use std::endian instead when it becomes available.
+#endif // 201900L < __cplusplus
 // Helper functions used to swap bytes on big endian platforms.
-//
-// BOOST !! Replace these functions with Boost.Endian library once a version
-// of Boost new enough to have it is used by lmi.
 namespace
 {
 
@@ -167,27 +167,20 @@ void to_bytes(char* bytes, T value)
     memcpy(bytes, &t, sizeof(T));
 }
 
-// BOOST !! Replace the use of this function with member value_or() present in
-// the later Boost.Optional versions.
-template<typename T, typename U>
-inline
-T get_value_or(std::optional<T> const& o, U v)
-{
-    return o ? *o : v;
-}
-
 // Functions doing the same thing as istream::read() and ostream::write()
 // respectively, but taking void pointers and this allowing to avoid ugly casts
-// to char in the calling code.
+// to char in the calling code. SOMEDAY !! Consider changing the type of
+// 'length', which is always cast to something else before use.
+
 inline bool stream_write(std::ostream& os, void const* data, std::size_t length)
 {
-    os.write(static_cast<char const*>(data), length);
+    os.write(static_cast<char const*>(data), bourn_cast<std::streamsize>(length));
     return !os.fail();
 }
 
 inline bool stream_read(std::istream& is, void* data, std::size_t length)
 {
-    is.read(static_cast<char*>(data), length);
+    is.read(static_cast<char*>(data), bourn_cast<std::streamsize>(length));
     return is.gcount() == static_cast<std::streamsize>(length);
 }
 
@@ -225,7 +218,7 @@ void remove_nothrow(fs::path const& path)
 // field of the struct is filled with the parsed value.
 struct parse_result
 {
-    unsigned long long num = 0;
+    unsigned long long int num = 0;
     char const* end = nullptr;
 };
 
@@ -511,8 +504,7 @@ void writer::write(enum_soa_field field, std::optional<std::string> const& ostr)
 {
     if(ostr)
         {
-        std::string::size_type const length = ostr->size();
-        if(std::numeric_limits<std::uint16_t>::max() < length)
+        if(std::numeric_limits<std::uint16_t>::max() < ostr->size())
             {
             alarum()
                 << "the value of the field '"
@@ -522,6 +514,7 @@ void writer::write(enum_soa_field field, std::optional<std::string> const& ostr)
                 ;
             }
 
+        auto const length = bourn_cast<std::uint16_t>(ostr->size());
         do_write_record_header(soa_fields[field].record_type, length);
         stream_write(os_, ostr->c_str(), length);
         }
@@ -612,7 +605,7 @@ void writer::write_values
 
     auto const value_width = text_format::get_value_width(*num_decimals);
 
-    if(get_value_or(select_period, 0))
+    if(select_period.value_or(0))
         {
         auto const period = *select_period;
 
@@ -649,7 +642,8 @@ void writer::write_values
             }
 
         // And finish with the lines having just the ultimate values.
-        for(std::uint16_t age = *max_select_age + period + 1; age <= *max_age; ++age)
+        auto ult_beg = bourn_cast<std::uint16_t>(*max_select_age + period + 1);
+        for(std::uint16_t age = ult_beg; age <= *max_age; ++age)
             {
             os_ << std::setw(text_format::age_width) << age;
 
@@ -748,7 +742,7 @@ std::optional<field_and_value> parse_field_and_value
                     {
                     alarum()
                         << "value expected after '" << name << ":'"
-                        << location_info(line_num, pos_colon + 1)
+                        << location_info(line_num, bourn_cast<int>(pos_colon + 1))
                         << std::flush
                         ;
                     }
@@ -757,7 +751,7 @@ std::optional<field_and_value> parse_field_and_value
                     {
                     alarum()
                         << "space expected after '" << name << ":'"
-                        << location_info(line_num, pos_colon + 1)
+                        << location_info(line_num, bourn_cast<int>(pos_colon + 1))
                         << std::flush
                         ;
                     }
@@ -776,7 +770,7 @@ std::optional<field_and_value> parse_field_and_value
     // A valid field name can consist of a few words only, so check for this
     // to avoid giving warnings about colons appearing in the middle (or even
     // at the end of) a line.
-    if(3 < std::count(line.begin(), line.begin() + pos_colon, ' '))
+    if(3 < std::count(line.begin(), line.begin() + bourn_cast<int>(pos_colon), ' '))
         {
         return no_field;
         }
@@ -846,7 +840,7 @@ class table_impl final
     void name(std::string const& name) { name_ = name; }
     std::uint32_t number() const { return *number_; }
     std::string const& name() const { return *name_; }
-    unsigned long compute_hash_value() const;
+    std::uint32_t compute_hash_value() const;
 
   private:
     table_impl(table_impl const&) = delete;
@@ -910,10 +904,10 @@ class table_impl final
             );
 
     // Parse number checking that it is less than the given maximal value.
-    static unsigned long do_parse_number
+    static std::uint32_t do_parse_number
             (enum_soa_field     field
             ,int                line_num
-            ,unsigned long      max_num
+            ,std::uint32_t      max_num
             ,std::string const& value
             );
 
@@ -969,7 +963,7 @@ class table_impl final
     // values and the select period and max select age if specified.
     //
     // Throws if minimum or maximum ares are not defined or are invalid.
-    unsigned get_expected_number_of_values() const;
+    unsigned int get_expected_number_of_values() const;
 
     // Implementations of the public factory functions.
     void read_from_binary(std::istream& is, std::uint32_t offset);
@@ -1181,7 +1175,7 @@ void table_impl::read_number_before_values
     read_number(onum, field, ifs, length);
 }
 
-unsigned table_impl::get_expected_number_of_values() const
+unsigned int table_impl::get_expected_number_of_values() const
 {
     throw_if_missing_field(min_age_, e_field_min_age);
     throw_if_missing_field(max_age_, e_field_max_age);
@@ -1203,7 +1197,7 @@ unsigned table_impl::get_expected_number_of_values() const
     // Considering that max age is a 16 bit number and int, used for
     // computations, is at least 32 bits, there is no possibility of integer
     // overflow here.
-    unsigned num_values = *max_age_ - *min_age_ + 1;
+    unsigned int num_values = bourn_cast<unsigned int>(*max_age_ - *min_age_ + 1);
 
     // We are liberal in what we accept and use the default values for the
     // selection period and max select age because we don't need them, strictly
@@ -1229,20 +1223,20 @@ unsigned table_impl::get_expected_number_of_values() const
 
         // In a further application of Postel's law, we consider non-specified
         // or 0 maximum select age as meaning "unlimited".
-        unsigned effective_max_select = get_value_or(max_select_age_, 0);
+        unsigned int effective_max_select = max_select_age_.value_or(0);
         if(effective_max_select == 0)
             {
             effective_max_select = *max_age_;
             }
 
-        unsigned select_range = effective_max_select - *min_age_ + 1;
+        unsigned int select_range = effective_max_select - *min_age_ + 1;
 
         // Maximum possible select_range value is 2^16 and multiplying it by
-        // also 16 bit select_period_ still fits in a 32 bit unsigned value, so
-        // there is no risk of overflow here neither.
+        // also 16 bit select_period_ still fits in a 32 bit unsigned int
+        // value, so there is no risk of overflow here neither.
         select_range *= *select_period_;
 
-        if(std::numeric_limits<unsigned>::max() - num_values < select_range)
+        if(std::numeric_limits<unsigned int>::max() - num_values < select_range)
             {
             alarum()
                 << "too many values in the table with maximum age " << *max_age_
@@ -1268,7 +1262,7 @@ void table_impl::read_values(std::istream& ifs, std::uint16_t /* length */)
     // tables occurring in real-world. Because of this we don't trust the
     // length field from the file at all but deduce the number of values from
     // the previously specified age-related fields instead.
-    unsigned const num_values = get_expected_number_of_values();
+    unsigned int const num_values = get_expected_number_of_values();
 
     values_.resize(num_values);
     if(!stream_read(ifs, &values_[0], num_values * sizeof(double)))
@@ -1309,10 +1303,10 @@ std::string* table_impl::parse_string
     return &ostr.operator *();
 }
 
-unsigned long table_impl::do_parse_number
+std::uint32_t table_impl::do_parse_number
         (enum_soa_field     field
         ,int                line_num
-        ,unsigned long      max_num
+        ,std::uint32_t      max_num
         ,std::string const& value
         )
 {
@@ -1341,7 +1335,7 @@ unsigned long table_impl::do_parse_number
             ;
         }
 
-    return static_cast<unsigned long>(res.num);
+    return static_cast<std::uint32_t>(res.num);
 }
 
 template<typename T>
@@ -1406,8 +1400,8 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
         }
 
     std::istringstream iss(line);
-    unsigned actual;
-    for(unsigned expected = 1; iss >> actual; ++expected)
+    unsigned int actual;
+    for(unsigned int expected = 1; iss >> actual; ++expected)
         {
         if(actual != expected)
             {
@@ -1557,7 +1551,7 @@ double table_impl::parse_single_value
     if(0 == *num_decimals_)
         {
         current = res_int_part.end;
-        return res_int_part.num;
+        return bourn_cast<double>(res_int_part.num);
         }
 
     if(*res_int_part.end != '.')
@@ -1602,7 +1596,7 @@ void table_impl::skip_spaces
     ,int          line_num
     )
 {
-    if(std::strncmp(current, std::string(num_spaces, ' ').c_str(), num_spaces) != 0)
+    if(std::strncmp(current, std::string(bourn_cast<unsigned int>(num_spaces), ' ').c_str(), bourn_cast<unsigned int>(num_spaces)) != 0)
         {
         alarum()
             << "expected " << num_spaces << " spaces"
@@ -1638,7 +1632,7 @@ void table_impl::skip_spaces
 // where "s" is the max select age and "m" is the max age (min age here is 1).
 void table_impl::parse_values(std::istream& is, int& line_num)
 {
-    unsigned const num_values = get_expected_number_of_values();
+    unsigned int const num_values = get_expected_number_of_values();
     values_.reserve(num_values);
 
     if(!num_decimals_)
@@ -1773,7 +1767,7 @@ void table_impl::parse_values(std::istream& is, int& line_num)
                 {
                 // There is a jump in ages when switching from the 2D to 1D
                 // part of the select and ultimate table after the select age.
-                age += *select_period_;
+                age = bourn_cast<std::uint16_t>(age + *select_period_);
                 }
             }
         }
@@ -1804,7 +1798,7 @@ void table_impl::validate()
             {
             case table_type::aggregate:
             case table_type::duration:
-                if(get_value_or(select_period_, 0))
+                if(select_period_.value_or(0))
                     {
                     alarum()
                         << "select period cannot be specified for a table "
@@ -1812,7 +1806,7 @@ void table_impl::validate()
                         << std::flush
                         ;
                     }
-                if(  get_value_or(max_select_age_, 0)
+                if(  max_select_age_.value_or(0)
                   && *max_select_age_ != *max_age_
                   )
                     {
@@ -1827,7 +1821,7 @@ void table_impl::validate()
                 break;
 
             case table_type::select:
-                if(!get_value_or(select_period_, 0))
+                if(!select_period_.value_or(0))
                     {
                     alarum()
                         << "select period must be specified "
@@ -1835,7 +1829,7 @@ void table_impl::validate()
                         << std::flush
                         ;
                     }
-                if(!get_value_or(max_select_age_, 0))
+                if(!max_select_age_.value_or(0))
                     {
                     alarum()
                         << "maximum select age must be specified "
@@ -1852,7 +1846,9 @@ void table_impl::validate()
             }
 
         std::uint16_t putative_num_decimals = *num_decimals_;
-        std::uint16_t required_num_decimals = deduce_number_of_decimals(values_);
+        std::uint16_t required_num_decimals = bourn_cast<std::uint16_t>
+            (deduce_number_of_decimals(values_)
+            );
         // This condition is true only if the table is defective,
         // which should occur rarely enough that the cost of
         // recalculating the hash value both here and below
@@ -2228,7 +2224,7 @@ bool table_impl::is_equal(table_impl const& other) const
         ;
 }
 
-unsigned long table_impl::compute_hash_value() const
+std::uint32_t table_impl::compute_hash_value() const
 {
     // This is a bug-for-bug reimplementation of the hash value computation
     // algorithm used in the original SOA format which produces compatible
@@ -2237,16 +2233,16 @@ unsigned long table_impl::compute_hash_value() const
     oss << std::setfill('0')
         << std::setw(3) << *min_age_
         << std::setw(3) << *max_age_
-        << std::setw(3) << get_value_or(select_period_, 0)
-        << std::setw(3) << get_value_or(max_select_age_, 0)
+        << std::setw(3) << select_period_.value_or(0)
+        << std::setw(3) << max_select_age_.value_or(0)
         ;
 
     oss << std::fixed << std::setprecision(*num_decimals_);
-    unsigned const value_width = *num_decimals_ + 2;
+    unsigned int const value_width = bourn_cast<unsigned int>(*num_decimals_ + 2);
 
     for(auto const& v : values_)
         {
-        oss << std::setw(value_width) << v;
+        oss << std::setw(bourn_cast<int>(value_width)) << v;
         }
 
     std::string s = oss.str();
@@ -2322,7 +2318,7 @@ void table::name(std::string const& n)
 
 table::Number table::number() const
 {
-    return table::Number(impl_->number());
+    return table::Number(bourn_cast<int>(impl_->number()));
 }
 
 std::string const& table::name() const
@@ -2330,7 +2326,7 @@ std::string const& table::name() const
     return impl_->name();
 }
 
-unsigned long table::compute_hash_value() const
+std::uint32_t table::compute_hash_value() const
 {
     return impl_->compute_hash_value();
 }
@@ -2394,7 +2390,7 @@ class database_impl final
             ,std::uint32_t               offset
             ,std::shared_ptr<table_impl> table
             )
-            :number_(number.value())
+            :number_(bourn_cast<std::uint32_t>(number.value()))
             ,offset_(offset)
             ,table_ (table)
         {
@@ -2450,7 +2446,7 @@ class database_impl final
 
     // Map allowing efficient table lookup by its number. Its values are
     // indices into index_ vector.
-    typedef std::map<table::Number, unsigned> NumberToIndexMap;
+    typedef std::map<table::Number, unsigned int> NumberToIndexMap;
     NumberToIndexMap index_by_number_;
 
     // Path to the database, used only for the error messages.
@@ -2535,7 +2531,7 @@ void database_impl::remove_index_entry(table::Number number)
     // Remove the entry corresponding to this table from both the index and the
     // lookup map.
     auto const index_deleted = it->second;
-    index_.erase(index_.begin() + index_deleted);
+    index_.erase(index_.begin() + bourn_cast<int>(index_deleted));
     index_by_number_.erase(it);
 
     // But also update the remaining lookup map indices.
@@ -2574,7 +2570,7 @@ void database_impl::read_index(std::istream& index_is)
             offset = from_bytes<std::uint32_t>(&index_record[e_index_pos_offset]);
 
         // Check that the cast to int below is safe.
-        if(static_cast<unsigned>(std::numeric_limits<int>::max()) <= number)
+        if(static_cast<unsigned int>(std::numeric_limits<int>::max()) <= number)
             {
             alarum()
                 << "database index is corrupt: "
@@ -2601,7 +2597,7 @@ int database_impl::tables_count() const
 
 table database_impl::get_nth_table(int idx) const
 {
-    return do_get_table(index_.at(idx));
+    return do_get_table(index_.at(bourn_cast<unsigned int>(idx)));
 }
 
 std::shared_ptr<table_impl> database_impl::do_get_table_impl

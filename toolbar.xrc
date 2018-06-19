@@ -124,10 +124,15 @@
         <longhelp>Run and print all cells to a group premium quote</longhelp>
     </object>
     <object class="separator"/>
+    <object class="tool" name="copy_census">
+        <tooltip>Copy census</tooltip>
+        <bitmap stock_id="copy-census"/>
+        <longhelp>Copy census data to the clipboard</longhelp>
+    </object>
     <object class="tool" name="paste_census">
         <tooltip>Paste census</tooltip>
-        <bitmap stock_id="paste-case"/>
-        <longhelp>Paste census data from clipboard</longhelp>
+        <bitmap stock_id="paste-census"/>
+        <longhelp>Paste census data from the clipboard</longhelp>
     </object>
     <object class="tool" name="add_cell">
         <tooltip>Add cell</tooltip>

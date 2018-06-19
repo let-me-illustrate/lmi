@@ -45,9 +45,9 @@
 #include <math.h>                       // rint()
 #include <stdexcept>
 
-std::bitset<CHAR_BIT * sizeof(unsigned long int)> bits(unsigned long int i)
+std::bitset<CHAR_BIT * sizeof(std::uint32_t)> bits(std::uint32_t i)
 {
-    return std::bitset<CHAR_BIT * sizeof(unsigned long int)>(i);
+    return std::bitset<CHAR_BIT * sizeof(std::uint32_t)>(i);
 }
 
 #define BOOST_TEST_EQUAL_BITS(a,b)                    \
@@ -65,7 +65,7 @@ std::bitset<CHAR_BIT * sizeof(unsigned long int)> bits(unsigned long int i)
 int test_main(int, char*[])
 {
 #if defined LMI_X87
-    unsigned short int cw = 0x0000;
+    std::uint16_t cw = 0x0000;
 
     BOOST_TEST_EQUAL_BITS(0x037f, msvc_to_intel(0x0008001f));
 
@@ -88,14 +88,14 @@ int test_main(int, char*[])
 
     // ...but bit 12, the deprecated IC, remains settable.
     x87_control_word
-        (static_cast<unsigned short int>
+        (static_cast<std::uint16_t>
             (~intel_control_word_parameters::settable
             )
         );
 
     BOOST_TEST_EQUAL_BITS
         (intel_control_word_parameters::reserved_values
-        ,~0x01000 & x87_control_word()
+        ,~0x01000UL & x87_control_word()
         );
 
     // Make sure invalid PC values are forbidden. The implementation

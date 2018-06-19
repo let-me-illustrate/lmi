@@ -26,6 +26,7 @@
 #include "actuarial_table.hpp"
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "commutation_functions.hpp"
 #include "configurable_settings.hpp"
 #include "contains.hpp"
@@ -35,6 +36,7 @@
 #include "et_vector.hpp"
 #include "gpt_input.hpp"
 #include "gpt_xml_document.hpp"
+#include "ieee754.hpp"                  // ldbl_eps_plus_one_times()
 #include "ihs_irc7702a.hpp"
 #include "ihs_server7702.hpp"           // RunServer7702FromStruct()
 #include "materially_equal.hpp"         // material_difference()
@@ -46,6 +48,7 @@
 #include "premium_tax.hpp"
 #include "product_data.hpp"
 #include "round_to.hpp"
+#include "ssize_lmi.hpp"
 #include "stratified_algorithms.hpp"    // TieredGrossToNet()
 #include "stratified_charges.hpp"
 #include "timer.hpp"
@@ -56,7 +59,6 @@
 
 #include <algorithm>                    // min()
 #include <iostream>
-#include <limits>
 #include <string>
 #include <vector>
 
@@ -146,7 +148,7 @@ gpt_state test_one_days_gpt_transactions
         {
         TargetPremiumRates = actuarial_table_rates
             (AddDataDir(product_filenames.datum("TgtPremFilename"))
-            ,static_cast<long int>(database.Query(DB_TgtPremTable))
+            ,bourn_cast<int>(database.Query(DB_TgtPremTable))
             ,input.issue_age()
             ,input.years_to_maturity()
             );
@@ -158,7 +160,7 @@ gpt_state test_one_days_gpt_transactions
 
     std::vector<double> const CvatCorridorFactors = actuarial_table_rates
         (AddDataDir(product_filenames.datum("CvatCorridorFilename"))
-        ,static_cast<long int>(database.Query(DB_CorridorTable))
+        ,bourn_cast<int>(database.Query(DB_CorridorTable))
         ,input.issue_age()
         ,input.years_to_maturity()
         );
@@ -173,14 +175,14 @@ gpt_state test_one_days_gpt_transactions
 
     std::vector<double> const tabular_7Px = actuarial_table_rates
         (AddDataDir(product_filenames.datum("SevenPayFilename"))
-        ,static_cast<long int>(database.Query(DB_SevenPayTable))
+        ,bourn_cast<int>(database.Query(DB_SevenPayTable))
         ,input.issue_age()
         ,input.years_to_maturity()
         );
 
     std::vector<double> Mly7702qc = actuarial_table_rates
         (AddDataDir(product_filenames.datum("Irc7702QFilename"))
-        ,static_cast<long int>(database.Query(DB_Irc7702QTable))
+        ,bourn_cast<int>(database.Query(DB_Irc7702QTable))
         ,input.issue_age()
         ,input.years_to_maturity()
         );
@@ -271,11 +273,6 @@ gpt_state test_one_days_gpt_transactions
     z.UpdateBOY7702A(InforceYear);
     z.UpdateBOM7702A(InforceMonth);
 
-    // See the implementation of class BasicValues.
-    long double const epsilon_plus_one =
-        1.0L + std::numeric_limits<long double>::epsilon()
-        ;
-
     double AnnualTargetPrem = 1000000000.0; // No higher premium is anticipated.
     int const target_year =
           database.Query(DB_TgtPremFixedAtIssue)
@@ -292,18 +289,22 @@ gpt_state test_one_days_gpt_transactions
         // the target premium should be the same as for oe_modal_table
         // with a 7Px table and a DB_TgtPremMonthlyPolFee of zero.
         AnnualTargetPrem = round_max_premium
-            (   InforceTargetSpecifiedAmount
-            *   epsilon_plus_one
-            *   tabular_7Px[target_year]
+            (ldbl_eps_plus_one_times
+                ( InforceTargetSpecifiedAmount
+                * tabular_7Px[target_year]
+                )
             );
         }
     else if(oe_modal_table == target_premium_type)
         {
         AnnualTargetPrem = round_max_premium
-            (   database.Query(DB_TgtPremMonthlyPolFee)
-            +       InforceTargetSpecifiedAmount
-                *   epsilon_plus_one
-                *   TargetPremiumRates[target_year]
+            (ldbl_eps_plus_one_times
+                (   database.Query(DB_TgtPremMonthlyPolFee)
+                +
+                    ( InforceTargetSpecifiedAmount
+                    * TargetPremiumRates[target_year]
+                    )
+                )
             );
         }
     else
@@ -337,7 +338,7 @@ gpt_state test_one_days_gpt_transactions
     double const LoadTarget = target_sales_load[InforceYear] + target_premium_load[InforceYear] + dac_tax_load[InforceYear] + premium_tax_load;
     double const LoadExcess = excess_sales_load[InforceYear] + excess_premium_load[InforceYear] + dac_tax_load[InforceYear] + premium_tax_load;
 
-    LMI_ASSERT(static_cast<unsigned int>(InforceContractYear) < input.BenefitHistoryRealized().size());
+    LMI_ASSERT(InforceContractYear < lmi::ssize(input.BenefitHistoryRealized()));
     double const old_benefit_amount = input.BenefitHistoryRealized()[InforceContractYear];
 
     double const total_1035_amount = round_max_premium
@@ -510,11 +511,7 @@ gpt_state test_one_days_gpt_transactions
 }
 } // Unnamed namespace.
 
-gpt_server::gpt_server(mcenum_emission emission)
-    :emission_                 (emission)
-    ,seconds_for_input_        (0.0)
-    ,seconds_for_calculations_ (0.0)
-    ,seconds_for_output_       (0.0)
+gpt_server::gpt_server(mcenum_emission emission) : emission_(emission)
 {
 }
 

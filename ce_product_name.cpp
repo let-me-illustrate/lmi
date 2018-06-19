@@ -28,12 +28,14 @@
 #include "facets.hpp"
 #include "global_settings.hpp"
 #include "path_utility.hpp"             // fs::path inserter
+#include "ssize_lmi.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // find()
+#include <cstddef>                      // ptrdiff_t
 
 namespace
 {
@@ -120,9 +122,9 @@ bool ce_product_name::operator==(std::string const& s) const
     return s == str();
 }
 
-std::size_t ce_product_name::ordinal(std::string const& s)
+int ce_product_name::ordinal(std::string const& s)
 {
-    std::size_t v =
+    std::ptrdiff_t v =
             std::find
                 (product_names().begin()
                 ,product_names().end()
@@ -130,7 +132,7 @@ std::size_t ce_product_name::ordinal(std::string const& s)
                 )
         -   product_names().begin()
         ;
-    if(v == product_names().size())
+    if(v == lmi::ssize(product_names()))
         {
         alarum()
             << "Value '"
@@ -149,9 +151,9 @@ std::vector<std::string> const& ce_product_name::all_strings() const
     return product_names();
 }
 
-std::size_t ce_product_name::cardinality() const
+int ce_product_name::cardinality() const
 {
-    return product_names().size();
+    return lmi::ssize(product_names());
 }
 
 /// No product is ever proscribed.
@@ -159,7 +161,7 @@ std::size_t ce_product_name::cardinality() const
 void ce_product_name::enforce_proscription()
 {}
 
-std::size_t ce_product_name::ordinal() const
+int ce_product_name::ordinal() const
 {
     return ordinal(value_);
 }

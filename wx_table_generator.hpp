@@ -122,7 +122,7 @@ class wx_table_generator
         );
 
     int row_height() const;
-    int get_separator_line_height() const;
+    int separator_line_height() const;
 
     wxRect text_rect(std::size_t column, int y) const;
 
@@ -139,11 +139,11 @@ class wx_table_generator
     void do_output_vert_separator(int x , int y1, int y2);
     void do_output_horz_separator(int x1, int x2, int y );
 
-    int do_get_cell_x(std::size_t column) const;
+    int cell_pos_x(std::size_t column) const;
 
     wxRect cell_rect(std::size_t column, int y) const;
 
-    wxFont get_header_font() const;
+    wxFont header_font() const;
 
     // Const private accessors. Used in the implementation to
     // distinguish access from mutation.

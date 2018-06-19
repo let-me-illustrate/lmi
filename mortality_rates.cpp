@@ -26,6 +26,7 @@
 #include "actuarial_table.hpp"
 #include "alert.hpp"
 #include "basic_values.hpp"
+#include "bourn_cast.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "math_functions.hpp"           // assign_midpoint()
@@ -46,14 +47,14 @@ void MortalityRates::Init(BasicValues const& basic_values)
 
     MonthlyCurrentCoiRatesBand0_ = actuarial_table_rates
         (CurrentTableFile()
-        ,static_cast<long int>(basic_values.Database_->Query(DB_CurrCoiTable))
+        ,bourn_cast<int>(basic_values.Database_->Query(DB_CurrCoiTable))
         ,issue_age
         ,length
         );
 
     MonthlyGuaranteedCoiRates_ = actuarial_table_rates
         (GuaranteedTableFile()
-        ,static_cast<long int>(basic_values.Database_->Query(DB_GuarCoiTable))
+        ,bourn_cast<int>(basic_values.Database_->Query(DB_GuarCoiTable))
         ,issue_age
         ,length
         );
@@ -72,21 +73,21 @@ void MortalityRates::Init(BasicValues const& basic_values)
 
     CvatCorridorFactors_ = actuarial_table_rates
         (CurrentTableFile()
-        ,static_cast<long int>(basic_values.Database_->Query(DB_CorridorTable))
+        ,bourn_cast<int>(basic_values.Database_->Query(DB_CorridorTable))
         ,issue_age
         ,length
         );
 
     AdbRates_ = actuarial_table_rates
         (CurrentTableFile()
-        ,static_cast<long int>(basic_values.Database_->Query(DB_AdbTable))
+        ,bourn_cast<int>(basic_values.Database_->Query(DB_AdbTable))
         ,issue_age
         ,length
         );
 
     WpRates_ = actuarial_table_rates
         (CurrentTableFile()
-        ,static_cast<long int>(basic_values.Database_->Query(DB_WpTable))
+        ,bourn_cast<int>(basic_values.Database_->Query(DB_WpTable))
         ,issue_age
         ,length
         );

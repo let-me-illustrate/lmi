@@ -24,7 +24,6 @@
 #include "stratified_algorithms.hpp"
 
 #include "materially_equal.hpp"
-#include "miscellany.hpp"               // lmi_array_size()
 #include "test_tools.hpp"
 
 #include <cmath>                        // fabs()
@@ -33,10 +32,8 @@
 void banded_test()
 {
     double const m = std::numeric_limits<double>::max();
-    double x[] = {1000.0 , 5000.0 , m   };
-    double y[] = {   0.05,    0.02, 0.01};
-    std::vector<double> const limits(x, x + lmi_array_size(x));
-    std::vector<double> const rates (y, y + lmi_array_size(y));
+    std::vector<double> const limits {1000.0 , 5000.0 , m   };
+    std::vector<double> const rates  {   0.05,    0.02, 0.01};
 
     // At limits.
 
@@ -64,10 +61,8 @@ void banded_test()
 
     // With some brackets of measure zero.
 
-    double z_x[] = {0.0, 1000.0 , 1000.0, 1000.0, 5000.0 , m   };
-    double z_y[] = {9.9,    0.05,    8.8,    7.7,    0.02, 0.01};
-    std::vector<double> const z_limits(z_x, z_x + lmi_array_size(z_x));
-    std::vector<double> const z_rates (z_y, z_y + lmi_array_size(z_y));
+    std::vector<double> const z_limits {0.0, 1000.0 , 1000.0, 1000.0, 5000.0 , m   };
+    std::vector<double> const z_rates  {9.9,    0.05,    8.8,    7.7,    0.02, 0.01};
     BOOST_TEST(materially_equal( 30.0, banded_product<double>()( 1500.0, z_limits, z_rates)));
 
     // In the vicinity of extrema.
@@ -130,10 +125,8 @@ void banded_test()
 void tiered_test()
 {
     double const m = std::numeric_limits<double>::max();
-    double x[] = {1000.0 , 4000.0 , m   };
-    double y[] = {   0.05,    0.02, 0.01};
-    std::vector<double> const limits(x, x + lmi_array_size(x));
-    std::vector<double> const rates (y, y + lmi_array_size(y));
+    std::vector<double> const limits {1000.0 , 4000.0 , m   };
+    std::vector<double> const rates  {   0.05,    0.02, 0.01};
 
     // At limits.
 
@@ -171,10 +164,8 @@ void tiered_test()
 
     // With some brackets of measure zero.
 
-    double z_x[] = {0.0, 1000.0 , 0.0, 0.0, 4000.0 , m   };
-    double z_y[] = {9.9,    0.05, 8.8, 7.7,    0.02, 0.01};
-    std::vector<double> const z_limits(z_x, z_x + lmi_array_size(z_x));
-    std::vector<double> const z_rates (z_y, z_y + lmi_array_size(z_y));
+    std::vector<double> const z_limits {0.0, 1000.0 , 0.0, 0.0, 4000.0 , m   };
+    std::vector<double> const z_rates  {9.9,    0.05, 8.8, 7.7,    0.02, 0.01};
     BOOST_TEST(materially_equal(175.0, tiered_product<double>()( 9900.0,   100.0, z_limits, z_rates)));
 
     // In the vicinity of extrema.

@@ -402,7 +402,7 @@ class LMI_SO BasicValues
     std::vector<double> GetActuarialTable
         (std::string const& TableFile
         ,e_database_key     TableID
-        ,long int           TableNumber
+        ,int                TableNumber
         ) const;
 
     std::vector<double> GetUnblendedTable

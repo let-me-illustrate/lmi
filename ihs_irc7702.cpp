@@ -27,6 +27,7 @@
 #include "assert_lmi.hpp"
 #include "commutation_functions.hpp"
 #include "materially_equal.hpp"
+#include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 
 #include <algorithm>
@@ -495,10 +496,7 @@ void Irc7702::InitCorridor()
         );
 
     // GPT corridor
-    LMI_ASSERT
-        (   static_cast<unsigned int>(IssueAge)
-        <=  CompleteGptCorridor().size()
-        );
+    LMI_ASSERT(IssueAge <= lmi::ssize(CompleteGptCorridor()));
     GptCorridor.assign
         (CompleteGptCorridor().begin() + IssueAge
         ,CompleteGptCorridor().end()
@@ -516,19 +514,11 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // Present value of charges per policy
 
-    // We want to make some assertions as to the lengths of certain
-    // vectors, and we don't want to see "comparing signed to unsigned"
-    // warnings. We prefer to avoid unsigned variables in general
-    // (see e.g. Lakos on this subject), so we use a local unsigned
-    // copy of Length.
-
-    unsigned int u_length = static_cast<unsigned int>(Length);
-
     // ET !! std::vector<double> ann_chg_pol = AnnChgPol * comm_fns.aD();
     std::vector<double> ann_chg_pol(Length);
-    LMI_ASSERT(u_length == ann_chg_pol.size());
-    LMI_ASSERT(u_length == AnnChgPol.size());
-    LMI_ASSERT(u_length == comm_fns.aD().size());
+    LMI_ASSERT(Length == lmi::ssize(ann_chg_pol));
+    LMI_ASSERT(Length == lmi::ssize(AnnChgPol));
+    LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
     std::transform
         (AnnChgPol.begin()
         ,AnnChgPol.end()
@@ -539,9 +529,9 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // ET !! std::vector<double> mly_chg_pol = MlyChgPol * drop(comm_fns.kD(), -1);
     std::vector<double> mly_chg_pol(Length);
-    LMI_ASSERT(u_length == mly_chg_pol.size());
-    LMI_ASSERT(u_length == MlyChgPol.size());
-    LMI_ASSERT(u_length <= comm_fns.kD().size());
+    LMI_ASSERT(Length == lmi::ssize(mly_chg_pol));
+    LMI_ASSERT(Length == lmi::ssize(MlyChgPol));
+    LMI_ASSERT(Length <= lmi::ssize(comm_fns.kD()));
     std::transform
         (MlyChgPol.begin()
         ,MlyChgPol.end()
@@ -561,9 +551,9 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     // ET !! PvChgPol[a_EIOBasis] = ann_chg_pol + mly_chg_pol;
     std::vector<double>& chg_pol = PvChgPol[a_EIOBasis];
     chg_pol.resize(Length);
-    LMI_ASSERT(u_length == chg_pol.size());
-    LMI_ASSERT(u_length == ann_chg_pol.size());
-    LMI_ASSERT(u_length <= mly_chg_pol.size());
+    LMI_ASSERT(Length == lmi::ssize(chg_pol));
+    LMI_ASSERT(Length == lmi::ssize(ann_chg_pol));
+    LMI_ASSERT(Length <= lmi::ssize(mly_chg_pol));
     std::transform
         (ann_chg_pol.begin()
         ,ann_chg_pol.end()
@@ -586,9 +576,9 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     // ET !! PvChgSpecAmt[a_EIOBasis] = MlyChgSpecAmt * comm_fns.kD();
     std::vector<double>& chg_sa = PvChgSpecAmt[a_EIOBasis];
     chg_sa.resize(Length);
-    LMI_ASSERT(u_length == chg_sa.size());
-    LMI_ASSERT(u_length == MlyChgSpecAmt.size());
-    LMI_ASSERT(u_length == comm_fns.kD().size());
+    LMI_ASSERT(Length == lmi::ssize(chg_sa));
+    LMI_ASSERT(Length == lmi::ssize(MlyChgSpecAmt));
+    LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
     std::transform
         (MlyChgSpecAmt.begin()
         ,MlyChgSpecAmt.end()
@@ -604,9 +594,9 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     // ET !! PvChgADD[a_EIOBasis] = MlyChgADD * comm_fns.kD();
     std::vector<double>& chg_add = PvChgADD[a_EIOBasis];
     chg_add.resize(Length);
-    LMI_ASSERT(u_length == chg_add.size());
-    LMI_ASSERT(u_length == MlyChgADD.size());
-    LMI_ASSERT(u_length == comm_fns.kD().size());
+    LMI_ASSERT(Length == lmi::ssize(chg_add));
+    LMI_ASSERT(Length == lmi::ssize(MlyChgADD));
+    LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
     std::transform
         (MlyChgADD.begin()
         ,MlyChgADD.end()
@@ -620,7 +610,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // APL: chg_mort gets rotate plus scan rotate kC
     std::vector<double>& chg_mort = PvChgMort[a_EIOBasis];
-    LMI_ASSERT(u_length <= comm_fns.kC().size());
+    LMI_ASSERT(Length <= lmi::ssize(comm_fns.kC()));
     chg_mort = comm_fns.kC();
     chg_mort.resize(Length);
     std::reverse(chg_mort.begin(), chg_mort.end());
@@ -631,14 +621,14 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // ET !! PvNpfSglTgt[a_EIOBasis] = (1.0 - LoadTgt) * comm_fns.aD();
     std::vector<double>& npf_sgl_tgt = PvNpfSglTgt[a_EIOBasis];
-//  LMI_ASSERT(u_length == npf_sgl_tgt.size()); // TAXATION !! Expunge if truly unwanted.
+//  LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt)); // TAXATION !! Expunge if truly unwanted.
     npf_sgl_tgt = LoadTgt;
-    LMI_ASSERT(u_length == npf_sgl_tgt.size());
+    LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt));
     std::transform(npf_sgl_tgt.begin(), npf_sgl_tgt.end(), npf_sgl_tgt.begin()
         ,std::bind1st(std::minus<double>(), 1.0)
         );
-    LMI_ASSERT(u_length == npf_sgl_tgt.size());
-    LMI_ASSERT(u_length == comm_fns.aD().size());
+    LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt));
+    LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
     std::transform
         (npf_sgl_tgt.begin()
         ,npf_sgl_tgt.end()
@@ -647,9 +637,9 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
         ,std::multiplies<double>()
         );
     std::vector<double>& npf_lvl_tgt = PvNpfLvlTgt[a_EIOBasis];
-//  LMI_ASSERT(u_length == npf_lvl_tgt.size()); // TAXATION !! Expunge if truly unwanted.
+//  LMI_ASSERT(Length == lmi::ssize(npf_lvl_tgt)); // TAXATION !! Expunge if truly unwanted.
     npf_lvl_tgt = npf_sgl_tgt;
-    LMI_ASSERT(u_length == npf_lvl_tgt.size());
+    LMI_ASSERT(Length == lmi::ssize(npf_lvl_tgt));
     std::reverse(npf_lvl_tgt.begin(), npf_lvl_tgt.end());
     std::partial_sum(npf_lvl_tgt.begin(), npf_lvl_tgt.end(), npf_lvl_tgt.begin());
     std::reverse(npf_lvl_tgt.begin(), npf_lvl_tgt.end());
@@ -658,14 +648,14 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // ET !! PvNpfSglExc[a_EIOBasis] = (1.0 - LoadExc) * comm_fns.aD();
     std::vector<double>& npf_sgl_exc = PvNpfSglExc[a_EIOBasis];
-//  LMI_ASSERT(u_length == npf_sgl_exc.size()); // TAXATION !! Expunge if truly unwanted.
+//  LMI_ASSERT(Length == lmi::ssize(npf_sgl_exc)); // TAXATION !! Expunge if truly unwanted.
     npf_sgl_exc = LoadExc;
-    LMI_ASSERT(u_length == npf_sgl_exc.size());
+    LMI_ASSERT(Length == lmi::ssize(npf_sgl_exc));
     std::transform(npf_sgl_exc.begin(), npf_sgl_exc.end(), npf_sgl_exc.begin()
         ,std::bind1st(std::minus<double>(), 1.0)
         );
-    LMI_ASSERT(u_length == npf_sgl_tgt.size()); // TAXATION !! Shouldn't this be npf_sgl_exc?
-    LMI_ASSERT(u_length == comm_fns.aD().size());
+    LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt)); // TAXATION !! Shouldn't this be npf_sgl_exc?
+    LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
     std::transform
         (npf_sgl_exc.begin()
         ,npf_sgl_exc.end()
@@ -674,9 +664,9 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
         ,std::multiplies<double>()
         );
     std::vector<double>& npf_lvl_exc = PvNpfLvlExc[a_EIOBasis];
-//  LMI_ASSERT(u_length == npf_lvl_exc.size()); // TAXATION !! Expunge if truly unwanted.
+//  LMI_ASSERT(Length == lmi::ssize(npf_lvl_exc)); // TAXATION !! Expunge if truly unwanted.
     npf_lvl_exc = npf_sgl_exc;
-    LMI_ASSERT(u_length == npf_lvl_exc.size());
+    LMI_ASSERT(Length == lmi::ssize(npf_lvl_exc));
     std::reverse(npf_lvl_exc.begin(), npf_lvl_exc.end());
     std::partial_sum(npf_lvl_exc.begin(), npf_lvl_exc.end(), npf_lvl_exc.begin());
     std::reverse(npf_lvl_exc.begin(), npf_lvl_exc.end());
@@ -685,11 +675,11 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // ET !! PvLoadDiffSgl[a_EIOBasis] = npf_sgl_exc - npf_sgl_tgt;
     std::vector<double>& diff_sgl = PvLoadDiffSgl[a_EIOBasis];
-//  LMI_ASSERT(u_length == diff_sgl.size()); // TAXATION !! Expunge if truly unwanted.
+//  LMI_ASSERT(Length == lmi::ssize(diff_sgl)); // TAXATION !! Expunge if truly unwanted.
     diff_sgl.resize(Length);
-    LMI_ASSERT(u_length == diff_sgl.size());
-    LMI_ASSERT(u_length == npf_sgl_exc.size());
-    LMI_ASSERT(u_length == npf_sgl_tgt.size());
+    LMI_ASSERT(Length == lmi::ssize(diff_sgl));
+    LMI_ASSERT(Length == lmi::ssize(npf_sgl_exc));
+    LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt));
     std::transform
         (npf_sgl_exc.begin()
         ,npf_sgl_exc.end()
@@ -698,9 +688,9 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
         ,std::minus<double>()
         );
     std::vector<double>& diff_lvl = PvLoadDiffLvl[a_EIOBasis];
-//  LMI_ASSERT(u_length == diff_lvl.size()); // TAXATION !! Expunge if truly unwanted.
+//  LMI_ASSERT(Length == lmi::ssize(diff_lvl)); // TAXATION !! Expunge if truly unwanted.
     diff_lvl.resize(Length);
-    LMI_ASSERT(u_length == diff_lvl.size());
+    LMI_ASSERT(Length == lmi::ssize(diff_lvl));
     std::reverse(diff_lvl.begin(), diff_lvl.end());
     std::partial_sum(diff_lvl.begin(), diff_lvl.end(), diff_lvl.begin());
     std::reverse(diff_lvl.begin(), diff_lvl.end());
@@ -1027,21 +1017,6 @@ double Irc7702::premiums_paid() const
 #include <iomanip>
 #include <iostream>
 
-// SOA table 120: "1980 CSO 50% Male Age nearest"
-static double const Q[100] =
-{
- .00354,.00097,.00091,.00089,.00085,.00083,.00079,.00077,.00073,.00072,
- .00071,.00072,.00078,.00087,.00097,.00110,.00121,.00131,.00139,.00144,
- .00148,.00149,.00150,.00149,.00149,.00147,.00147,.00146,.00148,.00151,
- .00154,.00158,.00164,.00170,.00179,.00188,.00200,.00214,.00231,.00251,
- .00272,.00297,.00322,.00349,.00375,.00406,.00436,.00468,.00503,.00541,
- .00583,.00630,.00682,.00742,.00807,.00877,.00950,.01023,.01099,.01181,
- .01271,.01375,.01496,.01639,.01802,.01978,.02164,.02359,.02558,.02773,
- .03016,.03296,.03629,.04020,.04466,.04955,.05480,.06031,.06606,.07223,
- .07907,.08680,.09568,.10581,.11702,.12911,.14191,.15541,.16955,.18445,
- .20023,.21723,.23591,.25743,.28381,.32074,.37793,.47661,.65644,1.0000,
-};
-
 int main()
 {
 // TAXATION !! Update or remove these timings.
@@ -1049,7 +1024,22 @@ int main()
 // RW: about 37 msec
 // OS: about 93 msec; about 41 if we disable index checking
 //   in std::vector operator[]()
-    std::vector<double>q            (Q, Q + lmi_array_size(Q));
+
+// SOA table 120: "1980 CSO 50% Male Age nearest"
+    std::vector<double>q
+        {
+         .00354,.00097,.00091,.00089,.00085,.00083,.00079,.00077,.00073,.00072,
+         .00071,.00072,.00078,.00087,.00097,.00110,.00121,.00131,.00139,.00144,
+         .00148,.00149,.00150,.00149,.00149,.00147,.00147,.00146,.00148,.00151,
+         .00154,.00158,.00164,.00170,.00179,.00188,.00200,.00214,.00231,.00251,
+         .00272,.00297,.00322,.00349,.00375,.00406,.00436,.00468,.00503,.00541,
+         .00583,.00630,.00682,.00742,.00807,.00877,.00950,.01023,.01099,.01181,
+         .01271,.01375,.01496,.01639,.01802,.01978,.02164,.02359,.02558,.02773,
+         .03016,.03296,.03629,.04020,.04466,.04955,.05480,.06031,.06606,.07223,
+         .07907,.08680,.09568,.10581,.11702,.12911,.14191,.15541,.16955,.18445,
+         .20023,.21723,.23591,.25743,.28381,.32074,.37793,.47661,.65644,1.0000,
+        };
+
     std::vector<double>i            (100, 0.07);
     std::vector<double>LoadTgt      (100, 0.05);
     std::vector<double>MlyChgSpecAmt(100, 0.00);

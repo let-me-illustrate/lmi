@@ -28,7 +28,6 @@
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
 
-#include <cstddef>                      // size_t
 #include <stdexcept>
 
 namespace
@@ -75,7 +74,7 @@ std::vector<std::string> allowed_strings_emission()
     e_emission emission;
     constrain_values(emission);
     std::vector<std::string> z;
-    for(std::size_t j = 0; j < emission.cardinality(); ++j)
+    for(int j = 0; j < emission.cardinality(); ++j)
         {
         if(emission.is_allowed(j))
             {

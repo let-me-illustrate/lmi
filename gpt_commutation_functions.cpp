@@ -27,6 +27,7 @@
 #include "commutation_functions.hpp"
 #include "et_vector.hpp"
 #include "miscellany.hpp"               // minmax
+#include "ssize_lmi.hpp"
 
 #include <algorithm>                    // min_element()
 #include <numeric>                      // partial_sum()
@@ -102,20 +103,20 @@ gpt_commfns::gpt_commfns
     ,N_qab_waiver_ (length_)
 {
     LMI_ASSERT(0 < length_ && length_ < methuselah);
-    LMI_ASSERT(length_ == qc                          .size());
-    LMI_ASSERT(length_ == ic                          .size());
-    LMI_ASSERT(length_ == ig                          .size());
-    LMI_ASSERT(length_ == charges.prem_load_target    .size());
-    LMI_ASSERT(length_ == charges.prem_load_excess    .size());
-    LMI_ASSERT(length_ == charges.policy_fee_monthly  .size());
-    LMI_ASSERT(length_ == charges.policy_fee_annual   .size());
-    LMI_ASSERT(length_ == charges.specamt_load_monthly.size());
-    LMI_ASSERT(length_ == charges.qab_gio_rate        .size());
-    LMI_ASSERT(length_ == charges.qab_adb_rate        .size());
-    LMI_ASSERT(length_ == charges.qab_term_rate       .size());
-    LMI_ASSERT(length_ == charges.qab_spouse_rate     .size());
-    LMI_ASSERT(length_ == charges.qab_child_rate      .size());
-    LMI_ASSERT(length_ == charges.qab_waiver_rate     .size());
+    LMI_ASSERT(length_ == lmi::ssize(qc                          ));
+    LMI_ASSERT(length_ == lmi::ssize(ic                          ));
+    LMI_ASSERT(length_ == lmi::ssize(ig                          ));
+    LMI_ASSERT(length_ == lmi::ssize(charges.prem_load_target    ));
+    LMI_ASSERT(length_ == lmi::ssize(charges.prem_load_excess    ));
+    LMI_ASSERT(length_ == lmi::ssize(charges.policy_fee_monthly  ));
+    LMI_ASSERT(length_ == lmi::ssize(charges.policy_fee_annual   ));
+    LMI_ASSERT(length_ == lmi::ssize(charges.specamt_load_monthly));
+    LMI_ASSERT(length_ == lmi::ssize(charges.qab_gio_rate        ));
+    LMI_ASSERT(length_ == lmi::ssize(charges.qab_adb_rate        ));
+    LMI_ASSERT(length_ == lmi::ssize(charges.qab_term_rate       ));
+    LMI_ASSERT(length_ == lmi::ssize(charges.qab_spouse_rate     ));
+    LMI_ASSERT(length_ == lmi::ssize(charges.qab_child_rate      ));
+    LMI_ASSERT(length_ == lmi::ssize(charges.qab_waiver_rate     ));
 
     typedef minmax<double> mm;
     mm a(        qc                  ); LMI_ASSERT(0.0 <= a && a <= 1.0);
@@ -240,8 +241,8 @@ double gpt_cf_triad::calculate_premium
     ,gpt_scalar_parms const& args
     ) const
 {
-    LMI_ASSERT(0 <= args.duration);
-    LMI_ASSERT(static_cast<unsigned int>(args.duration) < length_);
+    LMI_ASSERT(0 <= args.duration        );
+    LMI_ASSERT(args.duration < length_   );
     LMI_ASSERT(0.0 <= args.target        );
     LMI_ASSERT(0.0 <= args.f3bft         );
     LMI_ASSERT(0.0 <= args.endt_bft      );

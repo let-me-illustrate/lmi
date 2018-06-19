@@ -35,9 +35,10 @@
 #include "ledger_variant.hpp"
 #include "ledger_xsl.hpp"               // xsl_filepath()
 #include "mc_enum_aux.hpp"              // mc_e_vector_to_string_vector()
-#include "miscellany.hpp"               // each_equal(), ios_out_trunc_binary(), lmi_array_size()
+#include "miscellany.hpp"               // each_equal(), ios_out_trunc_binary()
 #include "oecumenic_enumerations.hpp"
 #include "path_utility.hpp"             // fs::path inserter
+#include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 #include "version.hpp"
 #include "xml_lmi.hpp"
@@ -99,7 +100,7 @@ typedef std::map<std::string, std::string> title_map_t;
 
 bool unavailable(std::string const& s)
 {
-    static std::string const a[] =
+    static std::vector<std::string> const v
         {"DateOfBirthJdn"        // used by group quotes
         ,"EffDateJdn"            // used by group quotes
         ,"ListBillDateJdn"       // probably not needed
@@ -110,7 +111,6 @@ bool unavailable(std::string const& s)
         ,"InitMlyPolFee"         // used by PrintRosterTabDelimited()
         ,"InitTgtPremHiLoadRate" // used by PrintRosterTabDelimited(); not cents
         };
-    static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return contains(v, s);
 }
 
@@ -808,7 +808,7 @@ void Ledger::write(xml::element& x) const
         std::vector<std::string> const& v = j.second;
 // TODO ?? InforceLives shows an extra value past the end; should it
 // be truncated here?
-        for(unsigned int k = 0; k < v.size(); ++k)
+        for(int k = 0; k < lmi::ssize(v); ++k)
             {
             xml::element duration("duration");
             xml_lmi::set_attr(duration, "number", value_cast<std::string>(k).c_str());
@@ -892,12 +892,12 @@ void Ledger::write(xml::element& x) const
             }
         ofs << '\n';
 
-        for(unsigned int i = 0; i < static_cast<unsigned int>(GetMaxLength()); ++i)
+        for(int i = 0; i < GetMaxLength(); ++i)
             {
             for(auto const& j : stringvectors)
                 {
                 std::vector<std::string> const& v = j.second;
-                if(i < v.size())
+                if(i < lmi::ssize(v))
                     {
                     ofs << v[i] << '\t';
                     }

@@ -80,12 +80,13 @@ icon_monger::icon_monger()
 
     // Non-stock icons.
     lmi_specific_icon_names_.insert("copy-cell"               );
+    lmi_specific_icon_names_.insert("copy-census"             );
     lmi_specific_icon_names_.insert("default-cell"            );
     lmi_specific_icon_names_.insert("edit-case"               );
     lmi_specific_icon_names_.insert("edit-cell"               );
     lmi_specific_icon_names_.insert("edit-class"              );
     lmi_specific_icon_names_.insert("fixed-width"             );
-    lmi_specific_icon_names_.insert("paste-case"              );
+    lmi_specific_icon_names_.insert("paste-census"            );
     lmi_specific_icon_names_.insert("preferences"             );
     lmi_specific_icon_names_.insert("print-case"              );
     lmi_specific_icon_names_.insert("print-case-pdf"          );

@@ -162,7 +162,7 @@ struct i_upper_12_over_12_from_i
     static_assert(std::is_floating_point<T>::value);
     T operator()(T const& i) const
         {
-        return i_upper_n_over_n_from_i<double,12>()(i);
+        return i_upper_n_over_n_from_i<T,12>()(i);
         }
 };
 
@@ -188,7 +188,7 @@ struct i_from_i_upper_12_over_12
     static_assert(std::is_floating_point<T>::value);
     T operator()(T const& i) const
         {
-        return i_from_i_upper_n_over_n<double,12>()(i);
+        return i_from_i_upper_n_over_n<T,12>()(i);
         }
 };
 
@@ -225,7 +225,7 @@ struct d_upper_12_from_i
     static_assert(std::is_floating_point<T>::value);
     T operator()(T const& i) const
         {
-        return d_upper_n_from_i<double,12>()(i);
+        return d_upper_n_from_i<T,12>()(i);
         }
 };
 

@@ -26,7 +26,6 @@
 
 #include "mc_enum.hpp"
 
-#include <cstddef>                      // size_t
 #include <string>
 #include <vector>
 
@@ -63,13 +62,13 @@ class ce_product_name
     bool operator==(ce_product_name const&) const;
     bool operator==(std::string const&) const;
 
-    static std::size_t ordinal(std::string const&);
+    static int ordinal(std::string const&);
 
     // mc_enum_base required implementation.
     std::vector<std::string> const& all_strings() const override;
-    std::size_t cardinality() const override;
+    int cardinality() const override;
     void enforce_proscription() override;
-    std::size_t ordinal() const override;
+    int ordinal() const override;
     std::string str(int) const override;
 
     std::string str() const;

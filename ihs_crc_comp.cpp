@@ -142,8 +142,8 @@ bool const transition_matrix[6][6] =
 //   "f" + "_" + to-state
 
 std::string current_name;
-double max_abs_diff;
-double max_rel_err;
+long double max_abs_diff;
+long double max_rel_err;
 
 //============================================================================
 void show_error_context(std::string const& line1, std::string const& line2)
@@ -297,17 +297,17 @@ void f_3(std::string const& line1, std::string const& line2)
         return;
         }
 
-    double abs_diff = std::fabs(d1 - d2);
+    long double abs_diff = std::fabs(d1 - d2);
     max_abs_diff = std::max(max_abs_diff, abs_diff);
 
-    double rel_err =
+    long double rel_err =
         std::fabs(
                 (d1 - d2)
             /   ((0.0 == d1) ? d2 : d1)
             );
     max_rel_err = std::max(max_rel_err, rel_err);
 
-    if(rel_err < 1.0E-11)
+    if(rel_err < 1.0E-11L)
         {
         return;
         }
@@ -418,8 +418,8 @@ int try_main(int argc, char* argv[])
         }
 
     current_name = "";
-    max_abs_diff = 0.0;
-    max_rel_err  = 0.0;
+    max_abs_diff = 0.0L;
+    max_rel_err  = 0.0L;
 
     // TODO ?? Want different things that match no type.
     std::string line1 = "";

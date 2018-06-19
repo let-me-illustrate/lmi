@@ -26,6 +26,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "authenticity.hpp"
+#include "bourn_cast.hpp"
 #include "calendar_date.hpp"
 #include "comma_punct.hpp"
 #include "configurable_settings.hpp"    // effective_calculation_summary_columns()
@@ -502,7 +503,7 @@ void PrintCellTabDelimited
 
     os << '\n';
 
-    char const* cheaders[] =
+    std::vector<std::string> const sheaders
         {"PolicyYear"
         ,"AttainedAge"
         ,"DeathBenefitOption"
@@ -557,10 +558,6 @@ void PrintCellTabDelimited
         ,"ProducerCompensation"
         };
 
-    std::vector<std::string> const sheaders
-        (cheaders
-        ,cheaders + lmi_array_size(cheaders)
-        );
     for(auto const& i : sheaders)
         {
         os << i << '\t';
@@ -685,7 +682,7 @@ void PrintRosterHeaders(std::string const& file_name)
         os << "DatePrepared\t\t'" << calendar_date(2000, 1, 1).str() << "'\n\n";
         }
 
-    char const* cheaders[] =
+    std::vector<std::string> const sheaders
         {"Insured1"
         ,"ContractNumber"
         ,"DateOfBirth"
@@ -728,10 +725,6 @@ void PrintRosterHeaders(std::string const& file_name)
         ,"SpouseRiderAmount"
         };
 
-    std::vector<std::string> const sheaders
-        (cheaders
-        ,cheaders + lmi_array_size(cheaders)
-        );
     for(auto const& i : sheaders)
         {
         os << i << '\t';
@@ -1088,7 +1081,7 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
     // Illustration reg (7)(C)(2) "year in which coverage ceases".
     auto const brink = [age, max_length] (LedgerVariant const& basis)
         {
-        int const z = basis.LapseYear;
+        int const z = bourn_cast<int>(basis.LapseYear);
         std::string s =
               (z < max_length)
             ? "Lapses in year " + value_cast<std::string>(1 + z)

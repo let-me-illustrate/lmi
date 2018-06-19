@@ -25,23 +25,25 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "census_document.hpp"
 #include "configurable_settings.hpp"
 #include "contains.hpp"
 #include "default_view.hpp"
 #include "edit_mvc_docview_parameters.hpp"
 #include "facets.hpp"                   // tab_is_not_whitespace_locale()
-#include "global_settings.hpp"
 #include "illustration_view.hpp"
 #include "illustrator.hpp"
 #include "input.hpp"
 #include "input_sequence_entry.hpp"
+#include "istream_to_string.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
 #include "miscellany.hpp"               // is_ok_for_cctype(), ios_out_app_binary()
 #include "path_utility.hpp"             // unique_filepath()
 #include "rtti_lmi.hpp"                 // lmi::TypeInfo
 #include "safely_dereference_as.hpp"
+#include "ssize_lmi.hpp"
 #include "timer.hpp"
 #include "value_cast.hpp"
 #include "wx_new.hpp"
@@ -61,8 +63,7 @@
 #include <wx/xrc/xmlres.h>
 
 #include <algorithm>
-#include <cctype>
-#include <cstddef>                      // size_t
+#include <cctype>                       // isupper()
 #include <fstream>
 #include <istream>                      // ws
 #include <iterator>                     // insert_iterator
@@ -129,7 +130,11 @@ class RangeTypeRenderer
 
   public:
     bool HasEditorCtrl() const override { return true; }
-    wxWindow* CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value) override;
+    wxWindow* CreateEditorCtrl
+        (wxWindow*        parent
+        ,wxRect           label_rect
+        ,wxVariant const& value
+        ) override;
     bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value) override;
     bool Render(wxRect rect, wxDC* dc, int state) override;
     wxSize GetSize() const override;
@@ -137,7 +142,11 @@ class RangeTypeRenderer
     bool GetValue(wxVariant& value) const override;
 
   protected:
-    virtual wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data) = 0;
+    virtual wxWindow* DoCreateEditor
+        (wxWindow*                    parent
+        ,wxRect                const& rect
+        ,tn_range_variant_data const& data
+        ) = 0;
     virtual std::string DoGetValueFromEditor(wxWindow* editor) = 0;
 
     std::string value_;
@@ -149,17 +158,22 @@ RangeTypeRenderer::RangeTypeRenderer()
     :wxDataViewCustomRenderer
     (typeid(tn_range_variant_data).name()
     ,wxDATAVIEW_CELL_EDITABLE
-    ,wxDVR_DEFAULT_ALIGNMENT)
+    ,wxDVR_DEFAULT_ALIGNMENT
+    )
 {
 }
 
-wxWindow* RangeTypeRenderer::CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value)
+wxWindow* RangeTypeRenderer::CreateEditorCtrl
+    (wxWindow*        parent
+    ,wxRect           label_rect
+    ,wxVariant const& value
+    )
 {
     tn_range_variant_data const* data = dynamic_cast<tn_range_variant_data*>(value.GetData());
     LMI_ASSERT(data);
 
     // Always use default height for editor controls
-    wxRect rect(labelRect);
+    wxRect rect(label_rect);
     rect.height = -1;
 
     return DoCreateEditor(parent, rect, *data);
@@ -217,14 +231,19 @@ class IntSpinRenderer
     IntSpinRenderer() : RangeTypeRenderer() {}
 
   protected:
-    wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data) override;
+    wxWindow* DoCreateEditor
+        (wxWindow*                    parent
+        ,wxRect                const& rect
+        ,tn_range_variant_data const& data
+        ) override;
     std::string DoGetValueFromEditor(wxWindow* editor) override;
 };
 
 wxWindow* IntSpinRenderer::DoCreateEditor
-    (wxWindow* parent
-     ,wxRect const& rect
-     ,tn_range_variant_data const& data)
+    (wxWindow*                    parent
+    ,wxRect                const& rect
+    ,tn_range_variant_data const& data
+    )
 {
     return new(wx) wxSpinCtrl
         (parent
@@ -233,9 +252,10 @@ wxWindow* IntSpinRenderer::DoCreateEditor
         ,rect.GetTopLeft()
         ,rect.GetSize()
         ,wxSP_ARROW_KEYS | wxTE_PROCESS_ENTER
-        ,static_cast<long>(data.min)
-        ,static_cast<long>(data.max)
-        ,value_cast<long>(data.value));
+        ,bourn_cast<int>(data.min)
+        ,bourn_cast<int>(data.max)
+        ,value_cast<int>(data.value)
+        );
 }
 
 std::string IntSpinRenderer::DoGetValueFromEditor(wxWindow* editor)
@@ -255,14 +275,19 @@ class DoubleRangeRenderer
     DoubleRangeRenderer() : RangeTypeRenderer() {}
 
   protected:
-    wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data) override;
+    wxWindow* DoCreateEditor
+        (wxWindow*                    parent
+        ,wxRect                const& rect
+        ,tn_range_variant_data const& data
+        ) override;
     std::string DoGetValueFromEditor(wxWindow* editor) override;
 };
 
 wxWindow* DoubleRangeRenderer::DoCreateEditor
-    (wxWindow* parent
-     ,wxRect const& rect
-     ,tn_range_variant_data const& data)
+    (wxWindow*                    parent
+    ,wxRect                const& rect
+    ,tn_range_variant_data const& data
+    )
 {
     wxFloatingPointValidator<double> val;
     val.SetRange(data.min, data.max);
@@ -302,14 +327,19 @@ class DateRenderer
     bool Render(wxRect rect, wxDC* dc, int state) override;
 
   protected:
-    wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data) override;
+    wxWindow* DoCreateEditor
+        (wxWindow*                    parent
+        ,wxRect                const& rect
+        ,tn_range_variant_data const& data
+        ) override;
     std::string DoGetValueFromEditor(wxWindow* editor) override;
 };
 
 wxWindow* DateRenderer::DoCreateEditor
-    (wxWindow* parent
-     ,wxRect const& rect
-     ,tn_range_variant_data const& data)
+    (wxWindow*                    parent
+    ,wxRect                const& rect
+    ,tn_range_variant_data const& data
+    )
 {
     // Always use default height for editor controls
     wxRect r(rect);
@@ -387,7 +417,11 @@ class DatumSequenceRenderer
     DatumSequenceRenderer(DatumSequenceRenderer const&) = delete;
     DatumSequenceRenderer& operator=(DatumSequenceRenderer const&) = delete;
     bool HasEditorCtrl() const override { return true; }
-    wxWindow* CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value) override;
+    wxWindow* CreateEditorCtrl
+        (wxWindow*        parent
+        ,wxRect           label_rect
+        ,wxVariant const& value
+        ) override;
     bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value) override;
     bool Render(wxRect rect, wxDC* dc, int state) override;
     wxSize GetSize() const override;
@@ -400,12 +434,20 @@ class DatumSequenceRenderer
 };
 
 DatumSequenceRenderer::DatumSequenceRenderer()
-    :wxDataViewCustomRenderer(typeid(input_sequence_variant_data).name(), wxDATAVIEW_CELL_EDITABLE, wxDVR_DEFAULT_ALIGNMENT)
+    :wxDataViewCustomRenderer
+        (typeid(input_sequence_variant_data).name()
+        ,wxDATAVIEW_CELL_EDITABLE
+        ,wxDVR_DEFAULT_ALIGNMENT
+        )
     ,input_(nullptr)
 {
 }
 
-wxWindow* DatumSequenceRenderer::CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value)
+wxWindow* DatumSequenceRenderer::CreateEditorCtrl
+    (wxWindow*        parent
+    ,wxRect           label_rect
+    ,wxVariant const& value
+    )
 {
     input_sequence_variant_data const* data = dynamic_cast<input_sequence_variant_data*>(value.GetData());
     LMI_ASSERT(data);
@@ -417,7 +459,7 @@ wxWindow* DatumSequenceRenderer::CreateEditorCtrl(wxWindow* parent, wxRect label
     ctrl->input(*data->input);
     ctrl->field_name(data->field);
 
-    ctrl->SetSize(labelRect);
+    ctrl->SetSize(label_rect);
 
     return ctrl;
 }
@@ -474,10 +516,14 @@ bool DatumSequenceRenderer::GetValue(wxVariant& value) const
 class renderer_type_converter
 {
   public:
-    virtual wxVariant to_variant(any_member<Input> const& x, Input const& row, std::string const& col) const = 0;
+    virtual wxVariant to_variant
+        (any_member<Input> const& x
+        ,Input             const& row
+        ,std::string       const& col
+        ) const = 0;
     virtual std::string from_variant(wxVariant const& x) const = 0;
     virtual char const* variant_type() const = 0;
-    virtual wxDataViewRenderer* create_renderer(any_member<Input> const& representative_value) const = 0;
+    virtual wxDataViewRenderer* create_renderer(any_member<Input> const& exemplar) const = 0;
 
     static renderer_type_converter const& get(any_member<Input> const& value);
 
@@ -490,7 +536,11 @@ class renderer_type_converter
 
 class renderer_bool_converter : public renderer_type_converter
 {
-    wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const override
+    wxVariant to_variant
+        (any_member<Input> const& x
+        ,Input             const&
+        ,std::string       const&
+        ) const override
     {
         std::string const s(x.str());
         return
@@ -512,7 +562,11 @@ class renderer_bool_converter : public renderer_type_converter
 
     wxDataViewRenderer* create_renderer(any_member<Input> const&) const override
     {
-        return new(wx) wxDataViewToggleRenderer("bool", wxDATAVIEW_CELL_ACTIVATABLE, wxALIGN_CENTER);
+        return new(wx) wxDataViewToggleRenderer
+            ("bool"
+            ,wxDATAVIEW_CELL_ACTIVATABLE
+            ,wxALIGN_CENTER
+            );
     }
 };
 
@@ -520,7 +574,11 @@ class renderer_bool_converter : public renderer_type_converter
 
 class renderer_enum_converter : public renderer_type_converter
 {
-    wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const override
+    wxVariant to_variant
+        (any_member<Input> const& x
+        ,Input             const&
+        ,std::string       const&
+        ) const override
     {
         return wxString(x.str());
     }
@@ -535,9 +593,9 @@ class renderer_enum_converter : public renderer_type_converter
         return "string";
     }
 
-    wxDataViewRenderer* create_renderer(any_member<Input> const& representative_value) const override
+    wxDataViewRenderer* create_renderer(any_member<Input> const& exemplar) const override
     {
-        mc_enum_base const* as_enum = member_cast<mc_enum_base>(representative_value);
+        mc_enum_base const* as_enum = member_cast<mc_enum_base>(exemplar);
 
         std::vector<std::string> const& all_strings = as_enum->all_strings();
         wxArrayString choices;
@@ -551,7 +609,11 @@ class renderer_enum_converter : public renderer_type_converter
 class renderer_sequence_converter : public renderer_type_converter
 {
   public:
-    wxVariant to_variant(any_member<Input> const& x, Input const& row, std::string const& col) const override
+    wxVariant to_variant
+        (any_member<Input> const& x
+        ,Input             const& row
+        ,std::string       const& col
+        ) const override
     {
         return new(wx) input_sequence_variant_data(x.str(), &row, col);
     }
@@ -579,7 +641,11 @@ class renderer_sequence_converter : public renderer_type_converter
 class renderer_range_converter : public renderer_type_converter
 {
   public:
-    wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const override
+    wxVariant to_variant
+        (any_member<Input> const& x
+        ,Input             const&
+        ,std::string       const&
+        ) const override
     {
         tn_range_base const* as_range = member_cast<tn_range_base>(x);
         LMI_ASSERT(as_range);
@@ -631,7 +697,11 @@ class renderer_date_converter : public renderer_range_converter
 class renderer_fallback_converter : public renderer_type_converter
 {
   public:
-    wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const override
+    wxVariant to_variant
+        (any_member<Input> const& x
+        ,Input             const&
+        ,std::string       const&
+        ) const override
     {
         // Strings containing new line characters are currently not displayed
         // correctly by wxDataViewCtrl, so display the value on a single line
@@ -733,7 +803,8 @@ renderer_type_converter const& renderer_type_converter::get_impl()
 class CensusViewDataViewModel : public wxDataViewIndexListModel
 {
   public:
-    static unsigned int const Col_CellNum = 0;
+    // Cell serial number: always shown in first column.
+    static int const Col_CellNum = 0;
 
     CensusViewDataViewModel(CensusView& view)
         :view_(view)
@@ -747,9 +818,9 @@ class CensusViewDataViewModel : public wxDataViewIndexListModel
 
     wxString GetColumnType(unsigned int col) const override;
 
-    std::string const& col_name(unsigned col) const;
-    any_member<Input>& cell_at(unsigned row, unsigned col);
-    any_member<Input> const& cell_at(unsigned row, unsigned col) const;
+    std::string const& col_name(int col) const;
+    any_member<Input>& cell_at(int row, int col);
+    any_member<Input> const& cell_at(int row, int col) const;
 
   private:
     std::vector<std::string> const& all_headers() const;
@@ -757,11 +828,17 @@ class CensusViewDataViewModel : public wxDataViewIndexListModel
     CensusView& view_;
 };
 
-void CensusViewDataViewModel::GetValueByRow(wxVariant& variant, unsigned row, unsigned col) const
+void CensusViewDataViewModel::GetValueByRow
+    (wxVariant&   variant
+    ,unsigned int row
+    ,unsigned int col
+    ) const
 {
     if(col == Col_CellNum)
         {
-        variant = static_cast<long>(1 + row);
+        // WX !! wxVariant::operator=() is overloaded for numerous
+        // types, including 'long int' but excluding 'int'.
+        variant = static_cast<long int>(bourn_cast<int>(1 + row));
         }
     else
         {
@@ -773,7 +850,11 @@ void CensusViewDataViewModel::GetValueByRow(wxVariant& variant, unsigned row, un
         }
 }
 
-bool CensusViewDataViewModel::SetValueByRow(wxVariant const& variant, unsigned row, unsigned col)
+bool CensusViewDataViewModel::SetValueByRow
+    (wxVariant const& variant
+    ,unsigned int     row
+    ,unsigned int     col
+    )
 {
     LMI_ASSERT(col != Col_CellNum);
 
@@ -798,6 +879,7 @@ bool CensusViewDataViewModel::SetValueByRow(wxVariant const& variant, unsigned r
 
 unsigned int CensusViewDataViewModel::GetColumnCount() const
 {
+    // "+ 1" for cell serial number in first column.
     return all_headers().size() + 1;
 }
 
@@ -809,25 +891,25 @@ wxString CensusViewDataViewModel::GetColumnType(unsigned int col) const
         }
     else
         {
-        any_member<Input> const& representative_value = cell_at(0, col);
-        renderer_type_converter const& conv = renderer_type_converter::get(representative_value);
-
+        any_member<Input> const& exemplar = cell_at(0, col);
+        renderer_type_converter const& conv = renderer_type_converter::get(exemplar);
         return conv.variant_type();
         }
 }
 
-std::string const& CensusViewDataViewModel::col_name(unsigned col) const
+std::string const& CensusViewDataViewModel::col_name(int col) const
 {
     LMI_ASSERT(0 < col);
+    // "- 1" because first column is cell serial number.
     return all_headers()[col - 1];
 }
 
-inline any_member<Input>& CensusViewDataViewModel::cell_at(unsigned row, unsigned col)
+inline any_member<Input>& CensusViewDataViewModel::cell_at(int row, int col)
 {
     return view_.cell_parms()[row][col_name(col)];
 }
 
-inline any_member<Input> const& CensusViewDataViewModel::cell_at(unsigned row, unsigned col) const
+inline any_member<Input> const& CensusViewDataViewModel::cell_at(int row, int col) const
 {
     return view_.cell_parms()[row][col_name(col)];
 }
@@ -842,18 +924,21 @@ inline std::vector<std::string> const& CensusViewDataViewModel::all_headers() co
 IMPLEMENT_DYNAMIC_CLASS(CensusView, ViewEx)
 
 BEGIN_EVENT_TABLE(CensusView, ViewEx)
-    EVT_DATAVIEW_ITEM_CONTEXT_MENU(wxID_ANY     ,CensusView::UponRightClick             )
+    EVT_DATAVIEW_ITEM_CONTEXT_MENU (wxID_ANY    ,CensusView::UponRightClick             )
+    EVT_DATAVIEW_ITEM_VALUE_CHANGED(wxID_ANY    ,CensusView::UponValueChanged           )
     EVT_MENU(XRCID("edit_cell"                 ),CensusView::UponEditCell               )
     EVT_MENU(XRCID("edit_class"                ),CensusView::UponEditClass              )
     EVT_MENU(XRCID("edit_case"                 ),CensusView::UponEditCase               )
     EVT_MENU(XRCID("run_cell"                  ),CensusView::UponRunCell                )
-//  EVT_MENU(XRCID("run_class"                 ),CensusView::UponRunClass               )   // SOMEDAY !! This may be useful for large cases.
+// SOMEDAY !! This may be useful for large cases.
+//  EVT_MENU(XRCID("run_class"                 ),CensusView::UponRunClass               )
     EVT_MENU(XRCID("run_case"                  ),CensusView::UponRunCase                )
     EVT_MENU(XRCID("print_case"                ),CensusView::UponPrintCase              )
     EVT_MENU(XRCID("print_case_to_disk"        ),CensusView::UponPrintCaseToDisk        )
     EVT_MENU(XRCID("print_spreadsheet"         ),CensusView::UponRunCaseToSpreadsheet   )
     EVT_MENU(XRCID("print_group_roster"        ),CensusView::UponRunCaseToGroupRoster   )
     EVT_MENU(XRCID("print_group_quote"         ),CensusView::UponRunCaseToGroupQuote    )
+    EVT_MENU(XRCID("copy_census"               ),CensusView::UponCopyCensus             )
     EVT_MENU(XRCID("paste_census"              ),CensusView::UponPasteCensus            )
     EVT_MENU(XRCID("add_cell"                  ),CensusView::UponAddCell                )
     EVT_MENU(XRCID("delete_cells"              ),CensusView::UponDeleteCells            )
@@ -870,6 +955,7 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("print_group_roster"   ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("print_group_quote"    ),CensusView::UponUpdateAlwaysEnabled    )
+    EVT_UPDATE_UI(XRCID("copy_census"          ),CensusView::UponUpdateColumnValuesVary )
     EVT_UPDATE_UI(XRCID("paste_census"         ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateNonemptySelection)
@@ -973,18 +1059,11 @@ Input* CensusView::class_parms_from_class_name(std::string const& class_name)
 /// would not all be identical--i.e. because at least one cell or one
 /// class default differs from the case default wrt that column.
 
-bool CensusView::column_value_varies_across_cells
-    (std::string        const& header
-    ,std::vector<Input> const& cells
-    ) const
+bool CensusView::column_value_varies_across_cells(std::string const& header) const
 {
-    for(auto const& j : cells)
-        {
-        if(!(j[header] == case_parms()[0][header]))
-            {
-            return true;
-            }
-        }
+    auto const z = case_parms()[0][header];
+    for(auto const& j : class_parms()) {if(z != j[header]) return true;}
+    for(auto const& j : cell_parms() ) {if(z != j[header]) return true;}
     return false;
 }
 
@@ -1031,7 +1110,7 @@ oenum_mvc_dv_rc CensusView::edit_parameters
 int CensusView::selected_row()
 {
     int row = list_model_->GetRow(list_window_->GetSelection());
-    LMI_ASSERT(0 <= row && static_cast<unsigned int>(row) < list_model_->GetCount());
+    LMI_ASSERT(0 <= row && row < bourn_cast<int>(list_model_->GetCount()));
     return row;
 }
 
@@ -1201,23 +1280,19 @@ void CensusView::update_visible_columns()
     // still information--so if the user made them different from any cell
     // wrt some column, we respect that conscious decision.
     std::vector<std::string> const& all_headers(case_parms()[0].member_names());
-    unsigned int column = 0;
-    for(auto const& i : all_headers)
+    int column = 0;
+    for(auto const& header : all_headers)
         {
         ++column;
-        if
-            (  column_value_varies_across_cells(i, class_parms())
-            || column_value_varies_across_cells(i, cell_parms ())
-            )
+        if(column_value_varies_across_cells(header))
             {
-            any_member<Input> const& representative_value = list_model_->cell_at(0, column);
-
-            wxDataViewRenderer* renderer = renderer_type_converter::get(representative_value).create_renderer(representative_value);
+            any_member<Input> const& exemplar = list_model_->cell_at(0, column);
+            renderer_type_converter const& conv = renderer_type_converter::get(exemplar);
+            wxDataViewRenderer* renderer = conv.create_renderer(exemplar);
             LMI_ASSERT(renderer);
-
             list_window_->AppendColumn
                 (new(wx) wxDataViewColumn
-                    (insert_spaces_between_words(i)
+                    (insert_spaces_between_words(header)
                     ,renderer
                     ,column
                     ,width
@@ -1226,71 +1301,6 @@ void CensusView::update_visible_columns()
                     )
                 );
             }
-        }
-}
-
-/// Paste from the census manager into a "spreadsheet" (TSV) file.
-///
-/// Include exactly those columns whose rows aren't all identical,
-/// considering as "rows" the individual cells--and also the case
-/// defaults, even though they aren't displayed in any row.
-///
-/// Motivation: Some census changes are more easily made by exporting
-/// data from lmi, manipulating it in a spreadsheet, and then pasting
-/// it back into lmi.
-///
-/// Never extract "UseDOB": it's always set by UponPasteCensus().
-/// Never extract "IssueAge". If it's present, then "UseDOB" must also
-/// be, and "UseDOB" preserves information that "IssueAge" loses.
-
-void CensusView::paste_out_to_spreadsheet() const
-{
-    configurable_settings const& c = configurable_settings::instance();
-    std::string const& e = c.spreadsheet_file_extension();
-    std::string const  f = fs::basename(base_filename()) + "_pasted_out";
-    std::string file_name = unique_filepath(f, e).string();
-    std::ofstream os(file_name.c_str(), ios_out_app_binary());
-
-    std::vector<std::string> distinct_headers;
-    std::vector<std::string> const& all_headers(case_parms()[0].member_names());
-    for(auto const& header : all_headers)
-        {
-        if(column_value_varies_across_cells(header, cell_parms()))
-            {
-            if(header != "UseDOB" && header != "IssueAge")
-                {
-                distinct_headers.push_back(header);
-                }
-            }
-        }
-
-    for(auto const& header : distinct_headers)
-        {
-        // Assume that the trailing '\t' doesn't matter.
-        os << header << '\t';
-        }
-    os << '\n';
-
-    for(auto const& cell : cell_parms())
-        {
-        for(auto const& header : distinct_headers)
-            {
-            // Show calendar dates as YYYYMMDD rather than JDN.
-            std::string s = cell[header].str();
-            if(exact_cast<tnr_date>(cell[header]))
-                {
-                long int z = JdnToYmd(jdn_t(value_cast<long int>(s))).value();
-                s = value_cast<std::string>(z);
-                }
-            // Assume that the trailing '\t' doesn't matter.
-            os << s << '\t';
-            }
-        os << '\n';
-        }
-
-    if(!os)
-        {
-        alarum() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
         }
 }
 
@@ -1371,7 +1381,7 @@ void CensusView::UponColumnWidthVarying(wxCommandEvent&)
     autosize_columns_ = true;
 
     wxWindowUpdateLocker u(list_window_);
-    for(unsigned int j = 0; j < list_window_->GetColumnCount(); ++j)
+    for(int j = 0; j < bourn_cast<int>(list_window_->GetColumnCount()); ++j)
         {
         list_window_->GetColumn(j)->SetWidth(wxCOL_WIDTH_AUTOSIZE);
         }
@@ -1385,7 +1395,7 @@ void CensusView::UponColumnWidthFixed(wxCommandEvent&)
     autosize_columns_ = false;
 
     wxWindowUpdateLocker u(list_window_);
-    for(unsigned int j = 0; j < list_window_->GetColumnCount(); ++j)
+    for(int j = 0; j < bourn_cast<int>(list_window_->GetColumnCount()); ++j)
         {
         list_window_->GetColumn(j)->SetWidth(wxCOL_WIDTH_DEFAULT);
         }
@@ -1406,14 +1416,13 @@ void CensusView::UponRightClick(wxDataViewEvent& e)
     LMI_ASSERT(census_menu);
     list_window_->PopupMenu(census_menu);
     delete census_menu;
+}
 
-    // For the nonce, this option is not discoverable. After testing,
-    // it is likely to be offered on the menu and toolbar.
-    global_settings const& g = global_settings::instance();
-    if(contains(g.pyx(), "paste_out_to_spreadsheet"))
-        {
-        paste_out_to_spreadsheet();
-        }
+void CensusView::UponValueChanged(wxDataViewEvent&)
+{
+    Timer timer;
+    Update();
+    status() << "Update: " << timer.stop().elapsed_msec_str() << std::flush;
 }
 
 void CensusView::UponUpdateAlwaysDisabled(wxUpdateUIEvent& e)
@@ -1435,8 +1444,33 @@ void CensusView::UponUpdateSingleSelection(wxUpdateUIEvent& e)
 void CensusView::UponUpdateNonemptySelection(wxUpdateUIEvent& e)
 {
     wxDataViewItemArray selection;
-    unsigned int n_sel_items = list_window_->GetSelections(selection);
-    e.Enable(0 < n_sel_items);
+    e.Enable(0 < list_window_->GetSelections(selection));
+}
+
+/// Conditionally enable copying.
+///
+/// Copying is forbidden if it would produce only whitespace; i.e.,
+/// if no "interesting" column varies across cells. All columns are
+/// interesting except:
+///  - the cell serial number that is always shown in the first column
+///    (that's just a GUI artifact, not an actual cell datum); and
+///  - the "UseDOB" and "IssueAge" columns that are filtered out by
+///    DoCopyCensus().
+/// This implementation ignores the first column, then enables the
+/// command unless "UseDOB" is the only other column; the rationale is
+/// clear only in the problem domain: "IssueAge" needn't be tested,
+/// because if "IssueAge" varies, then so must either "DateOfBirth"
+/// or "EffectiveDate".
+
+void CensusView::UponUpdateColumnValuesVary(wxUpdateUIEvent& e)
+{
+    static const std::string dob_header = insert_spaces_between_words("UseDOB");
+    int const n_cols = bourn_cast<int>(list_window_->GetColumnCount());
+    bool const disable =
+            1 == n_cols
+        || (2 == n_cols && dob_header == list_window_->GetColumn(1)->GetTitle())
+        ;
+    e.Enable(!disable);
 }
 
 /// Update the dataview display.
@@ -1539,16 +1573,15 @@ void CensusView::UponAddCell(wxCommandEvent&)
     list_window_->Select(z);
     list_window_->EnsureVisible(z);
 
-    double total_seconds = timer.stop().elapsed_seconds();
-    status() << Timer::elapsed_msec_str(total_seconds) << std::flush;
+    status() << "Add: " << timer.stop().elapsed_msec_str() << std::flush;
 }
 
 void CensusView::UponDeleteCells(wxCommandEvent&)
 {
-    unsigned int n_items = list_model_->GetCount();
+    int n_items = bourn_cast<int>(list_model_->GetCount());
     wxDataViewItemArray selection;
-    unsigned int n_sel_items = list_window_->GetSelections(selection);
-    LMI_ASSERT(n_sel_items == selection.size());
+    int n_sel_items = bourn_cast<int>(list_window_->GetSelections(selection));
+    LMI_ASSERT(n_sel_items == lmi::ssize(selection));
     // This handler should have been disabled if no cell is selected.
     LMI_ASSERT(0 < n_sel_items);
 
@@ -1592,26 +1625,26 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         }
     std::sort(erasures.begin(), erasures.end());
 
-    LMI_ASSERT(cell_parms().size() == n_items);
+    LMI_ASSERT(lmi::ssize(cell_parms()) == n_items);
 
     for(int j = erasures.size() - 1; 0 <= j; --j)
         {
         cell_parms().erase(erasures[j] + cell_parms().begin());
         }
-    LMI_ASSERT(cell_parms().size() == n_items - n_sel_items);
+    LMI_ASSERT(lmi::ssize(cell_parms()) == n_items - n_sel_items);
 
     // Send notifications about changes to the wxDataViewCtrl model. Two things
     // changed: some rows were deleted and cell number of some rows shifted
     // accordingly.
     list_model_->RowsDeleted(erasures);
-    for(unsigned int j = erasures.front(); j < cell_parms().size(); ++j)
+    for(int j = erasures.front(); j < lmi::ssize(cell_parms()); ++j)
         {
         list_model_->RowValueChanged(j, CensusViewDataViewModel::Col_CellNum);
         }
 
-    unsigned int const newsel = std::min
-        (static_cast<std::size_t>(erasures.front())
-        ,cell_parms().size() - 1
+    int const newsel = std::min
+        (erasures.front()
+        ,lmi::ssize(cell_parms()) - 1
         );
     wxDataViewItem const& z = list_model_->GetItem(newsel);
     list_window_->Select(z);
@@ -1620,8 +1653,7 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
     Update();
     document().Modify(true);
 
-    double total_seconds = timer.stop().elapsed_seconds();
-    status() << Timer::elapsed_msec_str(total_seconds) << std::flush;
+    status() << "Delete: " << timer.stop().elapsed_msec_str() << std::flush;
 }
 
 /// Print tab-delimited details to file loadable in spreadsheet programs.
@@ -1692,10 +1724,10 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         return;
         }
 
-    // Use a modifiable copy of case defaults as an exemplar for new
+    // Use a modifiable copy of case defaults as an archetype for new
     // cells to be created by pasting. Modifications are conditionally
     // written back to case defaults later.
-    Input exemplar(case_parms()[0]);
+    Input archetype(case_parms()[0]);
 
     // Force 'UseDOB' prn. Pasting it as a column never makes sense.
     if(contains(headers, "UseDOB"))
@@ -1713,11 +1745,11 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         }
     else if(dob_pasted)
         {
-        exemplar["UseDOB"] = "Yes";
+        archetype["UseDOB"] = "Yes";
         }
     else if(age_pasted)
         {
-        exemplar["UseDOB"] = "No";
+        archetype["UseDOB"] = "No";
         }
     else
         {
@@ -1734,7 +1766,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 
         iss_census >> std::ws;
 
-        Input current_cell(exemplar);
+        Input current_cell(archetype);
 
         std::istringstream iss_line(line);
         std::string token;
@@ -1757,15 +1789,15 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
                 ;
             }
 
-        for(unsigned int j = 0; j < headers.size(); ++j)
+        for(int j = 0; j < lmi::ssize(headers); ++j)
             {
             if(exact_cast<tnr_date>(current_cell[headers[j]]))
                 {
-                static long int const jdn_min = calendar_date::gregorian_epoch_jdn;
-                static long int const jdn_max = calendar_date::last_yyyy_date_jdn;
-                static long int const ymd_min = JdnToYmd(jdn_t(jdn_min)).value();
-                static long int const ymd_max = JdnToYmd(jdn_t(jdn_max)).value();
-                long int z = value_cast<long int>(values[j]);
+                static int const jdn_min = calendar_date::gregorian_epoch_jdn;
+                static int const jdn_max = calendar_date::last_yyyy_date_jdn;
+                static int const ymd_min = JdnToYmd(jdn_t(jdn_min)).value();
+                static int const ymd_max = JdnToYmd(jdn_t(jdn_max)).value();
+                int z = value_cast<int>(values[j]);
                 if(jdn_min <= z && z <= jdn_max)
                     {
                     ; // Do nothing: JDN is the default expectation.
@@ -1806,9 +1838,9 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
     if(!document().IsModified() && !document().GetDocumentSaved())
         {
         case_parms ().clear();
-        case_parms ().push_back(exemplar);
+        case_parms ().push_back(archetype);
         class_parms().clear();
-        class_parms().push_back(exemplar);
+        class_parms().push_back(archetype);
         cell_parms ().swap(cells);
         selection = 0;
         }
@@ -1834,3 +1866,95 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
     LMI_ASSERT(!class_parms().empty());
 }
 
+/// Paste from the census manager into a "spreadsheet" (TSV) file.
+///
+/// Simply calls DoCopyCensus(), q.v.
+
+void CensusView::UponCopyCensus(wxCommandEvent&)
+{
+    DoCopyCensus();
+}
+
+/// Paste from the census manager into a "spreadsheet" (TSV) file.
+///
+/// Include exactly those columns whose rows aren't all identical,
+/// considering as "rows" the individual cells--and also the case
+/// defaults, even though they aren't displayed in any row.
+///
+/// Motivation: Some census changes are more easily made by exporting
+/// data from lmi, manipulating it in a spreadsheet, and then pasting
+/// it back into lmi.
+///
+/// Never extract "UseDOB": it's always set by UponPasteCensus().
+/// Never extract "IssueAge". If it's present, then "UseDOB" must also
+/// be, and "UseDOB" preserves information that "IssueAge" loses.
+///
+/// Implementation notes
+///
+/// Output lines use '\t' as a terminator following each field, rather
+/// than as a separator between each pair of fields as might have been
+/// expected; thus, they end in "'t\n". This makes the code slightly
+/// simpler by avoiding a "loop and a half". In practice, it doesn't
+/// make any difference: gnumeric, libreoffice calc, a popular msw
+/// spreadsheet program, and lmi's own UponPasteCensus() all ignore
+/// the extra '\t'.
+
+void CensusView::DoCopyCensus() const
+{
+    Timer timer;
+    std::vector<std::string> distinct_headers;
+    std::vector<std::string> const& all_headers(case_parms()[0].member_names());
+    for(auto const& header : all_headers)
+        {
+        bool const varies = column_value_varies_across_cells(header);
+        if(header != "UseDOB" && header != "IssueAge" && varies)
+            {
+            distinct_headers.push_back(header);
+            }
+        }
+
+    if(distinct_headers.empty())
+        {
+        alarum() << "All cells identical: nothing to copy." << LMI_FLUSH;
+        }
+
+    configurable_settings const& c = configurable_settings::instance();
+    std::string const& e = c.spreadsheet_file_extension();
+    std::string const  f = fs::basename(base_filename()) + ".census.cns";
+    std::string file_name = unique_filepath(f, e).string();
+    std::ofstream ofs(file_name.c_str(), ios_out_app_binary());
+
+    for(auto const& header : distinct_headers)
+        {
+        ofs << header << '\t';
+        }
+    ofs << '\n';
+
+    for(auto const& cell : cell_parms())
+        {
+        for(auto const& header : distinct_headers)
+            {
+            // Show calendar dates as YYYYMMDD rather than JDN.
+            std::string s = cell[header].str();
+            if(exact_cast<tnr_date>(cell[header]))
+                {
+                int z = JdnToYmd(jdn_t(value_cast<int>(s))).value();
+                s = value_cast<std::string>(z);
+                }
+            ofs << s << '\t';
+            }
+        ofs << '\n';
+        }
+
+    if(!ofs)
+        {
+        alarum() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
+        }
+
+    ofs.close();
+    std::ifstream ifs(file_name.c_str());
+    std::string s;
+    istream_to_string(ifs, s);
+    ClipboardEx::SetText(s);
+    status() << "Copy: " << timer.stop().elapsed_msec_str() << std::flush;
+}

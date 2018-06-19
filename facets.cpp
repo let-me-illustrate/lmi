@@ -63,6 +63,41 @@
 // This custom facet, therefore, passes std::ctype<char>'s constructor
 // a third argument that differs from the default, specifying instead
 // that the locale should not take responsibility for deletion.
+//
+// Implementation note--with this original line:
+//   rc[C] &= ~std::ctype_base::space;
+// gcc-7.3 warns:
+//   conversion to 'std::ctype_base::mask {aka short unsigned int}' from 'int'
+// which seems incorrect: according to C++17 (N4659),
+//   [category.ctype]
+// 'space' is of type 'mask', a bitmask type for which
+//   [bitmask.types]
+// operator~(bitmask) returns the bitmask type, and
+// operator&=() returns a reference to the bitmask type.
+//
+// But compare this defect report:
+//   http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2010/n3110.html
+// "Bitmask types need operator~ in order to clear a value from the bitmask
+// type, as show [sic] in 17.5.2.1.3 paragraph 4:
+// - To clear a value Y in an object X is to evaluate the expression X &= ~Y.
+// However the definition for fmtflags above does not have well-specified
+// behaviour if the underlying type is smaller than int, because ~int(f) is
+// likely to produce a value outside the range of fmtflags."
+//
+// The underlying problem is that 'short unsigned int' does not fulfill the
+// bitmask requirements, as unary operator ~ performs integral promotions.
+//
+// This would avoid the warning:
+//   rc[C] &= static_cast<std::ctype_base::mask>(~std::ctype_base::space);
+// but seems too violent. This does not avoid the warning:
+//   constexpr auto z = ~std::ctype_base::space;
+//   rc[C] &= z;
+// due to integral promotion. And braces are not allowed here:
+//   rc[C] &= {~std::ctype_base::space};
+// so this code (used in the implementation below):
+//   constexpr std::ctype_base::mask z = {~std::ctype_base::space};
+//   rc[C] &= z;
+// is the least awful thing that works.
 
 namespace
 {
@@ -79,7 +114,9 @@ namespace
             {
             static std::ctype_base::mask rc[table_size];
             std::copy(classic_table(), classic_table() + table_size, rc);
-            rc[C] &= ~std::ctype_base::space;
+            // See "Implementation note" above.
+            constexpr std::ctype_base::mask z = {~std::ctype_base::space};
+            rc[C] &= z;
             return rc;
             }
     };

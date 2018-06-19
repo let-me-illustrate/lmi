@@ -23,7 +23,11 @@
 
 #include "timer.hpp"
 
-#if defined LMI_MSW
+#include "bourn_cast.hpp"
+
+#if defined LMI_POSIX
+#   include <sys/time.h>                // gettimeofday()
+#elif defined LMI_MSW
     // TRICKY !! There being no standard way to ascertain whether
     // <windows.h> has been included, we resort to this hack:
 #   if defined STDCALL || defined WM_COMMAND
@@ -37,25 +41,29 @@
     // increase compile times for small programs, and because it requires
     // ms extensions and defines many macros.
 #   if !defined LMI_MS_HEADER_INCLUDED
-    // These declarations would be erroneous if the ms headers were
-    // included. It's necessary to guard against that explicitly,
-    // because those headers might be implicitly included by a pch
-    // mechanism.
-        extern "C" int __stdcall QueryPerformanceCounter(elapsed_t*);
-        extern "C" int __stdcall QueryPerformanceFrequency(elapsed_t*);
+#       include <cstdint>
+        typedef std::uint64_t msw_elapsed_t;
+        // These declarations would be erroneous if the ms headers were
+        // included. It's necessary to guard against that explicitly,
+        // because those headers might be implicitly included by a pch
+        // mechanism.
+        extern "C" int __stdcall QueryPerformanceCounter  (msw_elapsed_t*);
+        extern "C" int __stdcall QueryPerformanceFrequency(msw_elapsed_t*);
 #   endif // !defined LMI_MS_HEADER_INCLUDED
-#endif // defined LMI_MSW
+#else // Unknown platform.
+#   include <ctime>                     // clock()
+#endif // Unknown platform.
 
 /// Suspend execution for a given number of seconds.
 
 #if defined LMI_POSIX
 #   include <unistd.h>                  // sleep()
-void lmi_sleep(unsigned int seconds) {sleep(seconds);}
+void lmi_sleep(int seconds) {sleep(bourn_cast<unsigned int>(seconds));}
 #elif defined LMI_MSW
 #   if !defined LMI_MS_HEADER_INCLUDED
 extern "C" void __stdcall Sleep(unsigned int);
 #   endif // !defined LMI_MS_HEADER_INCLUDED
-void lmi_sleep(unsigned int seconds) {Sleep(1000 * seconds);}
+void lmi_sleep(int seconds) {Sleep(bourn_cast<unsigned int>(1000 * seconds));}
 #else // Unknown platform.
 #   error Unknown platform.
 #endif // Unknown platform.
@@ -128,8 +136,6 @@ std::string Timer::elapsed_msec_str() const
 ///  - Timer must have been stopped; throws if it is still running.
 ///  - frequency_ must be nonzero (guaranteed by ctor), so that
 ///    dividing by it is safe.
-///
-/// The static_casts are necessary in case elapsed_t is integral.
 
 double Timer::elapsed_seconds() const
 {
@@ -140,27 +146,27 @@ double Timer::elapsed_seconds() const
             );
         }
 
-    return static_cast<double>(elapsed_time_) / static_cast<double>(frequency_);
+    return elapsed_time_ / frequency_;
 }
 
 /// Ascertain timer frequency in ticks per second.
 
-elapsed_t Timer::calibrate()
+double Timer::calibrate()
 {
 #if defined LMI_POSIX
-    return 1000000;
+    return 1000000.0;
 #elif defined LMI_MSW
 #   if defined LMI_MS_HEADER_INCLUDED
     LARGE_INTEGER z;
     QueryPerformanceFrequency(&z);
-    return z.QuadPart;
+    return static_cast<double>(z.QuadPart);
 #   else  // !defined LMI_MS_HEADER_INCLUDED
-    elapsed_t z;
+    msw_elapsed_t z;
     QueryPerformanceFrequency(&z);
-    return z;
+    return static_cast<double>(z);
 #   endif // !defined LMI_MS_HEADER_INCLUDED
 #else // Unknown platform.
-    return CLOCKS_PER_SEC;
+    return static_cast<double>(CLOCKS_PER_SEC);
 #endif // Unknown platform.
 }
 
@@ -181,24 +187,24 @@ void Timer::start()
 
 /// Ticks elapsed since timer started.
 
-elapsed_t Timer::inspect() const
+double Timer::inspect() const
 {
 #if defined LMI_POSIX
     timeval x;
     gettimeofday(&x, nullptr);
-    return elapsed_t(1000000) * x.tv_sec + x.tv_usec;
+    return x.tv_usec + 1000000.0 * x.tv_sec;
 #elif defined LMI_MSW
 #   if defined LMI_MS_HEADER_INCLUDED
     LARGE_INTEGER z;
     QueryPerformanceCounter(&z);
-    return z.QuadPart;
+    return static_cast<double>(z.QuadPart);
 #   else  // !defined LMI_MS_HEADER_INCLUDED
-    elapsed_t z;
+    msw_elapsed_t z;
     QueryPerformanceCounter(&z);
-    return z;
+    return static_cast<double>(z);
 #   endif // !defined LMI_MS_HEADER_INCLUDED
 #else // Unknown platform.
-    return std::clock();
+    return static_cast<double>(std::clock());
 #endif // Unknown platform.
 }
 

@@ -30,6 +30,7 @@
 #include "dbnames.hpp"
 #include "math_functions.hpp"           // assign_midpoint()
 #include "miscellany.hpp"               // each_equal()
+#include "ssize_lmi.hpp"
 #include "yare_input.hpp"
 
 #include <algorithm>                    // max(), copy()
@@ -183,7 +184,7 @@ void convert_interest_rates
     ,double                     fee
     )
 {
-    unsigned int const length = annual_gross_rate.size();
+    int const length = lmi::ssize(annual_gross_rate);
     annual_net_rate .resize(length);
     monthly_net_rate.resize(length);
 
@@ -193,7 +194,7 @@ void convert_interest_rates
     double previous_annual_gross_rate = 0.0;
     double previous_spread            = 0.0;
     double previous_floor             = 0.0;
-    for(unsigned int j = 0; j < length; ++j)
+    for(int j = 0; j < length; ++j)
         {
         if
             (
@@ -334,10 +335,7 @@ void InterestRates::Initialize(BasicValues const& v)
         // TODO ?? At least for the antediluvian branch, the vector in
         // the input class has an inappropriate size. Truncating it
         // with std::transform() here is far too tricky.
-        LMI_ASSERT
-            (   ExtraSepAcctCharge_.size()
-            ==  static_cast<unsigned int>(v.Database_->length())
-            );
+        LMI_ASSERT(lmi::ssize(ExtraSepAcctCharge_) == v.Database_->length());
 // Not reliably true:
 //        LMI_ASSERT
 //            (   ExtraSepAcctCharge_.size()
@@ -412,7 +410,6 @@ void InterestRates::Initialize(BasicValues const& v)
     Initialize7702Rates();
 
     // Paranoid check.
-    unsigned int z = static_cast<unsigned int>(Length_);
     for(int i = mce_annual_rate; i < mc_n_rate_periods; ++i)
         {
         for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
@@ -420,19 +417,19 @@ void InterestRates::Initialize(BasicValues const& v)
             // The next line gets executed more than once with
             // identical semantics, but it's cheap, and writing it
             // to avoid that little problem would make it unclear.
-            LMI_ASSERT(z == GenAcctGrossRate_           [j]   .size());
-            LMI_ASSERT(z == GenAcctNetRate_          [i][j]   .size());
+            LMI_ASSERT(Length_ == lmi::ssize(GenAcctGrossRate_           [j]   ));
+            LMI_ASSERT(Length_ == lmi::ssize(GenAcctNetRate_          [i][j]   ));
             for(int k = mce_sep_full; k < mc_n_sep_bases; ++k)
                 {
-                LMI_ASSERT(z == SepAcctGrossRate_          [k].size());
-                LMI_ASSERT(z == SepAcctNetRate_      [i][j][k].size());
+                LMI_ASSERT(Length_ == lmi::ssize(SepAcctGrossRate_          [k]));
+                LMI_ASSERT(Length_ == lmi::ssize(SepAcctNetRate_      [i][j][k]));
                 }
-            LMI_ASSERT(z == RegLnCredRate_           [i][j]   .size());
-            LMI_ASSERT(z == RegLnDueRate_            [i][j]   .size());
-            LMI_ASSERT(z == PrfLnCredRate_           [i][j]   .size());
-            LMI_ASSERT(z == PrfLnDueRate_            [i][j]   .size());
-            LMI_ASSERT(z == HoneymoonValueRate_      [i][j]   .size());
-            LMI_ASSERT(z == PostHoneymoonGenAcctRate_[i][j]   .size());
+            LMI_ASSERT(Length_ == lmi::ssize(RegLnCredRate_           [i][j]   ));
+            LMI_ASSERT(Length_ == lmi::ssize(RegLnDueRate_            [i][j]   ));
+            LMI_ASSERT(Length_ == lmi::ssize(PrfLnCredRate_           [i][j]   ));
+            LMI_ASSERT(Length_ == lmi::ssize(PrfLnDueRate_            [i][j]   ));
+            LMI_ASSERT(Length_ == lmi::ssize(HoneymoonValueRate_      [i][j]   ));
+            LMI_ASSERT(Length_ == lmi::ssize(PostHoneymoonGenAcctRate_[i][j]   ));
             }
         }
 }

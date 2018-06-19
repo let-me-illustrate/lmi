@@ -596,7 +596,7 @@ TAG_HANDLER_BEGIN(scaled_image, "SCALED_IMAGE")
         // Disable error logging, we'll simply ignore the tag if the image is
         // not present.
             {
-            wxLogNull noLog;
+            wxLogNull NoLog;
             image.LoadFile(src);
             }
 
@@ -732,13 +732,13 @@ class pdf_illustration : protected html_interpolator
         html_cell_for_pdf_output::pdf_context_setter
             set_pdf_context(ledger_, writer, *this);
 
-        for(auto const& page : pages_)
+        for(auto const& i : pages_)
             {
-            page->pre_render(ledger_, writer, *this);
+            i->pre_render(ledger_, writer, *this);
             }
 
         bool first = true;
-        for(auto const& page : pages_)
+        for(auto const& i : pages_)
             {
             if(first)
                 {
@@ -753,7 +753,7 @@ class pdf_illustration : protected html_interpolator
                 writer.dc().StartPage();
                 }
 
-            page->render(ledger_, writer, *this);
+            i->render(ledger_, writer, *this);
             }
 
         writer.save();
@@ -776,7 +776,7 @@ class pdf_illustration : protected html_interpolator
     html_interpolator const& get_interpolator() const {return *this;}
 
     // Helper for abbreviating a string to at most the given length (in bytes).
-    static std::string abbreviate_if_necessary(std::string s, size_t len)
+    static std::string abbreviate_if_necessary(std::string s, std::size_t len)
     {
         if(len < s.length() && 3 < len)
             {
@@ -790,7 +790,7 @@ class pdf_illustration : protected html_interpolator
     // variables have the name based on the name of the original variable with
     // "Abbrev" and "len" appended to it and their value is at most "len" bytes
     // long.
-    void add_abbreviated_variable(std::string const& var, size_t len)
+    void add_abbreviated_variable(std::string const& var, std::size_t len)
     {
         add_variable
             (var + "Abbrev" + std::to_string(len)
@@ -852,7 +852,7 @@ class pdf_illustration : protected html_interpolator
             ,!invar.ContractNumber.empty()
             );
 
-        size_t const full_abbrev_length = 30;
+        std::size_t const full_abbrev_length = 30;
         add_abbreviated_variable("MasterContractNumber", full_abbrev_length);
         add_abbreviated_variable("MasterContractNumber", full_abbrev_length / 2);
         add_abbreviated_variable("ContractNumber", full_abbrev_length);
@@ -1354,7 +1354,7 @@ class numeric_summary_table_cell
             ,output_mode
             );
 
-        pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator
             (column_guar_account_value
             ,column_separator_guar_non_guar
@@ -1385,7 +1385,7 @@ class numeric_summary_table_cell
             ,output_mode
             );
 
-        pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator
             (column_mid_account_value
             ,column_separator_mid_curr
@@ -1402,7 +1402,7 @@ class numeric_summary_table_cell
 
         table_gen.output_headers(pos_y, output_mode);
 
-        pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator(0, column_max, pos_y, output_mode);
 
         // And now the table values themselves.
@@ -1445,26 +1445,27 @@ class numeric_summary_table_cell
                     break;
 
                 case oe_render:
-                    for(std::size_t col = 0; col < columns.size(); ++col)
+                    for(std::size_t j = 0; j < columns.size(); ++j)
                         {
-                        std::string const variable_name = columns[col].variable_name;
+                        std::string const variable_name = columns[j].variable_name;
 
-                        // According to regulations, we need to replace the
-                        // policy year in the last row with the age.
-                        if(col == column_policy_year)
+                        // The illustration reg calls for values at certain
+                        // durations, and then at one summary age, so change
+                        // beginning of last row from a duration to an age.
+                        if(j == column_policy_year)
                             {
                             if(is_last_row)
                                 {
                                 std::ostringstream oss;
                                 oss << "Age " << age_last;
-                                output_values[col] = oss.str();
+                                output_values[j] = oss.str();
                                 continue;
                                 }
                             }
 
                         // Special hack for the dummy columns whose value is always
                         // empty as it's used only as separator.
-                        output_values[col] = variable_name.empty()
+                        output_values[j] = variable_name.empty()
                             ? std::string{}
                             : interpolate_html.evaluate(variable_name, year - 1)
                             ;
@@ -1522,9 +1523,6 @@ class ill_reg_numeric_summary_page : public standard_page
 
 class ill_reg_numeric_summary_attachment : public ill_reg_numeric_summary_page
 {
-  public:
-    using ill_reg_numeric_summary_page::ill_reg_numeric_summary_page;
-
   private:
     std::string get_page_number() const override
     {
@@ -1570,14 +1568,14 @@ class page_with_tabular_report
 
             for(;;)
                 {
-                for(std::size_t col = 0; col < columns.size(); ++col)
+                for(std::size_t j = 0; j < columns.size(); ++j)
                     {
-                    std::string const variable_name = columns[col].variable_name;
+                    std::string const variable_name = columns[j].variable_name;
 
                     // Special hack for the dummy columns used in some reports,
                     // whose value is always empty as it's used only as
                     // separator.
-                    output_values[col] = variable_name.empty()
+                    output_values[j] = variable_name.empty()
                         ? std::string{}
                         : interpolate_html.evaluate(variable_name, year)
                         ;
@@ -1673,7 +1671,7 @@ class page_with_tabular_report
 
         table_gen.output_headers(pos_y, output_mode);
 
-        pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.separator_line_height();
         auto const ncols = get_table_columns().size();
         table_gen.output_horz_separator(0, ncols, pos_y, output_mode);
 
@@ -1777,7 +1775,7 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
             ,output_mode
             );
 
-        pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator
             (column_guar_account_value
             ,column_dummy_separator
@@ -2015,19 +2013,20 @@ class pdf_illustration_regular : public pdf_illustration
             ,state_abbrev == "IL" || state_abbrev == "TX"
             );
 
+        int const inforce_year = bourn_cast<int>(invar.InforceYear);
         add_variable
             ("UltimateInterestRate"
-            ,evaluate("AnnGAIntRate_Current", invar.InforceYear + 1)
+            ,evaluate("AnnGAIntRate_Current", inforce_year + 1)
             );
 
         add_variable
             ("InforceYearEq0"
-            ,invar.InforceYear == 0
+            ,inforce_year == 0
             );
 
         add_variable
             ("InforceYearLE4"
-            ,invar.InforceYear < 4
+            ,inforce_year < 4
             );
 
         auto const max_duration = invar.EndtAge - invar.Age;
@@ -2184,7 +2183,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
             ,output_mode
             );
 
-        pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator
             (column_guar0_cash_surr_value
             ,column_separator_guar_curr0
@@ -2227,7 +2226,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
                     ,output_mode
                     );
 
-                y += table_gen.get_separator_line_height();
+                y += table_gen.separator_line_height();
                 table_gen.output_horz_separator
                     (begin_column
                     ,end_column
@@ -2645,7 +2644,7 @@ class reg_d_individual_irr_base : public page_with_tabular_report
             ,output_mode
             );
 
-        pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator
             (column_zero_cash_surr_value
             ,column_zero_irr_surr_value
@@ -2794,7 +2793,7 @@ class reg_d_individual_curr : public page_with_tabular_report
             ,output_mode
             );
 
-        pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator
             (column_curr_investment_income
             ,column_max

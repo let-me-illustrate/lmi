@@ -33,7 +33,7 @@
 #include "global_settings.hpp"
 #include "input_sequence_aux.hpp"       // convert_vector(), convert_vector_type()
 #include "map_lookup.hpp"
-#include "miscellany.hpp"               // each_equal(), lmi_array_size()
+#include "miscellany.hpp"               // each_equal()
 
 #include <algorithm>                    // max()
 #include <exception>
@@ -621,12 +621,11 @@ std::string const& mec_input::xml_root_name() const
 
 bool mec_input::is_detritus(std::string const& s) const
 {
-    static std::string const a[] =
+    static std::vector<std::string> const v
         {"DeprecatedUseDOB"              // Renamed (without 'Deprecated'-).
         ,"EffectiveDateToday"            // Withdrawn.
         ,"InforceSevenPayPremium"        // Withdrawn.
         };
-    static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return contains(v, s);
 }
 

@@ -66,7 +66,7 @@ AutoResizingTreeCtrl::AutoResizingTreeCtrl
     ,wxWindowID id
     ,wxPoint const& pos
     ,wxSize const& size
-    ,long style
+    ,long int style
     ,wxValidator const& validator
     )
     :wxTreeCtrl(parent, id, pos, size, style, validator)

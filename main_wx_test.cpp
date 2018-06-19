@@ -23,6 +23,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "docmanager_ex.hpp"
 #include "force_linking.hpp"
 #include "handle_exceptions.hpp"        // stealth_exception
@@ -586,17 +587,15 @@ wxWindow* wx_test_focus_controller_child(MvcController& dialog, char const* name
             {
             // We found the notebook, now we can use it to make the page
             // containing the target window current.
-            for(size_t n = 0; n < book->GetPageCount(); ++n)
+            for(int n = 0; n < bourn_cast<int>(book->GetPageCount()); ++n)
                 {
                 if(book->GetPage(n) == maybe_page)
                     {
                     book->SetSelection(n);
                     wxYield();
-
                     break;
                     }
                 }
-
             break;
             }
 
@@ -770,8 +769,8 @@ void SkeletonTest::OnAssertFailure
 
 void SkeletonTest::RunTheTests()
 {
-    wxWindow* const mainWin = GetTopWindow();
-    if(!mainWin)
+    wxWindow* const MainWin = GetTopWindow();
+    if(!MainWin)
         {
         wxLogError("Failed to find the application main window.");
         ExitMainLoop();
@@ -808,8 +807,8 @@ void SkeletonTest::RunTheTests()
     // special command line option is specified).
     for(;;)
         {
-        wxWindow* const activeWin = wxGetActiveWindow();
-        if(!activeWin || activeWin == mainWin)
+        wxWindow* const ActiveWin = wxGetActiveWindow();
+        if(!ActiveWin || ActiveWin == MainWin)
             break;
 
         // Try to close the dialog.
@@ -818,7 +817,7 @@ void SkeletonTest::RunTheTests()
         wxYield();
 
         // But stop trying if it didn't work.
-        if(wxGetActiveWindow() == activeWin)
+        if(wxGetActiveWindow() == ActiveWin)
             {
             wxLogError("Failed to close the currently opened window, "
                        "please ensure it doesn't appear on program startup.");
@@ -833,7 +832,7 @@ void SkeletonTest::RunTheTests()
     // happen, this is important for the test to really run unattended.
     wxTestingModalHook expect_no_dialogs;
 
-    mainWin->SetFocus();
+    MainWin->SetFocus();
 
     wxPuts("NOTE: starting the test suite");
     wxStopWatch sw;

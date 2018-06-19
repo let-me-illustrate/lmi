@@ -27,7 +27,7 @@
 #include "miscellany.hpp"
 #include "test_tools.hpp"
 
-#include <cmath>
+#include <cmath>                        // log10()
 #include <functional>                   // bind()
 
 inline void do_nothing()
@@ -36,9 +36,9 @@ inline void do_nothing()
 void foo()
 {
     double volatile d;
-    for(unsigned int j = 0; j < 100; ++j)
+    for(int j = 0; j < 100; ++j)
         {
-        d = std::log10(1U + j * j);
+        d = std::log10(1 + j * j);
         stifle_warning_for_unused_value(d);
         }
 }
@@ -64,7 +64,7 @@ struct TimerTest
 void TimerTest::WaitTenMsec()
 {
     Timer timer;
-    double limit = 0.01 * static_cast<double>(timer.frequency_);
+    double limit = 0.01 * timer.frequency_;
     for(;timer.inspect() - timer.time_when_started_ <= limit;) {}
 }
 

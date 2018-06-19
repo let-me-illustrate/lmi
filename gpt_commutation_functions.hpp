@@ -151,7 +151,7 @@ class gpt_commfns
 
     double calculate_premium(oenum_glp_or_gsp, gpt_scalar_parms const&) const;
 
-    unsigned int const  length_;
+    int const           length_;
     std::vector<double> M_;
     double              D_endt_;
     std::vector<double> D_net_tgt_;
@@ -199,7 +199,7 @@ class gpt_cf_triad
         ) const;
 
   private:
-    unsigned int const length_;
+    int const   length_;
     gpt_commfns cf_glp_dbo_1;
     gpt_commfns cf_glp_dbo_2;
     gpt_commfns cf_gsp;
