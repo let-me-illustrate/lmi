@@ -2834,7 +2834,6 @@ class pdf_illustration_reg_d_individual : public pdf_illustration
         add<reg_d_individual_curr>();
         add<standard_page>("reg_d_indiv_notes1");
         add<standard_page>("reg_d_indiv_notes2");
-        add<standard_page>("reg_d_indiv_notes3");
         if(invar.SupplementalReport)
             {
             add<standard_supplemental_report>
