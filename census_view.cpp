@@ -1866,7 +1866,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
     LMI_ASSERT(!class_parms().empty());
 }
 
-/// Paste from the census manager into a "spreadsheet" (TSV) file.
+/// Copy from census manager to clipboard and TSV file.
 ///
 /// Simply calls DoCopyCensus(), q.v.
 
@@ -1875,7 +1875,7 @@ void CensusView::UponCopyCensus(wxCommandEvent&)
     DoCopyCensus();
 }
 
-/// Paste from the census manager into a "spreadsheet" (TSV) file.
+/// Copy from census manager to clipboard and TSV file.
 ///
 /// Include exactly those columns whose rows aren't all identical,
 /// considering as "rows" the individual cells--and also the case
