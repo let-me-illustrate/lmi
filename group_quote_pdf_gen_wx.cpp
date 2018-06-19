@@ -1000,16 +1000,6 @@ void group_quote_pdf_generator_wx::output_document_header
         tag::table[attr::width("100%")]
                   [attr::cellspacing("0")]
                   [attr::cellpadding("0")]
-            // This extra top empty row works around a bug in wxHTML
-            // table positioning code: it uses the provided ordinate
-            // coordinate as a base line of the first table line and
-            // not as its top, as it ought to, so without this line
-            // the rectangle drawn below wouldn't contain the header.
-            (tag::tr
-                (tag::td[attr::align("center")][attr::colspan("4")]
-                    (text::nbsp())
-                )
-            )
             (tag::tr
                 (tag::td[attr::align("center")][attr::colspan("4")]
                     (tag::font[attr::size("+1")]

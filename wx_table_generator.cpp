@@ -414,13 +414,12 @@ int wx_table_generator::separator_line_height() const
 /// Rectangle corresponding to a cell's text contents.
 ///
 /// This is narrower than the full cell rectangle to leave a small
-/// margin. Its vertical position is adjusted so that it can be
-/// passed directly to wxDC::DrawLabel().
+/// margin. Its vertical position is adjusted to center the text vertically.
 
 wxRect wx_table_generator::text_rect(std::size_t column, int y) const
 {
     wxRect z = cell_rect(column, y).Deflate(dc().GetCharWidth(), 0);
-    z.Offset(0, char_height_);
+    z.Offset(0, (row_height_ - char_height_)/2);
     return z;
 }
 
@@ -699,7 +698,7 @@ void wx_table_generator::do_output_single_row
 {
     int const y_top = pos_y;
 
-    int const y_text = pos_y + char_height_;
+    int const y_text = text_rect(0, pos_y).y;
     pos_y += row_height_;
 
     if(draw_separators_)
