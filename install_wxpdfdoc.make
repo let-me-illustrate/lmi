@@ -38,12 +38,12 @@ wxpdfdoc_dir  := /opt/lmi/wxpdfdoc-scratch
 # archive name because we don't want to use the bare commit SHA-1 as the file
 # name, so we need a separate "urlbase" variable.
 
-wxpdfdoc_commit             := 5ac28a73e74916cf44d0ce286976e21d948e9bd8
+wxpdfdoc_commit             := f66b42805a7262cdf07ab04a4e20b252b5d81ddb
 wxpdfdoc_archive            := wxpdfdoc-$(wxpdfdoc_commit).zip
 $(wxpdfdoc_archive)-urlbase := $(wxpdfdoc_commit).zip
 $(wxpdfdoc_archive)-root    := https://github.com/vadz/wxpdfdoc/archive
 $(wxpdfdoc_archive)-url     := $($(wxpdfdoc_archive)-root)/$($(wxpdfdoc_archive)-urlbase)
-$(wxpdfdoc_archive)-md5     := 8e3c4d6cd1df9c7f91426c8c4723cb6e
+$(wxpdfdoc_archive)-md5     := 150e34e93845de586d5c8ef3e4b4e6ff
 
 # Variables that normally should be left alone #################################
 
@@ -60,7 +60,7 @@ endif
 
 compiler         := gcc-$(shell $(mingw_bin_dir)$(host_type)-gcc -dumpversion)
 
-wxpdfdoc_version := 0.9.4
+wxpdfdoc_version := v0.9.6-28-gf66b428
 source_dir       := $(wxpdfdoc_dir)/wxPdfDoc-$(wxpdfdoc_version)
 
 wx_cc_flags      := -fno-omit-frame-pointer
@@ -115,8 +115,9 @@ WGETFLAGS :=
 wxpdfdoc: $(wxpdfdoc_archive)
 	cd $(source_dir) \
 	  && export PATH="$(mingw_bin_dir):${PATH}" \
+	  && autoreconf \
 	  && ./configure $(config_options) \
-	  && $(MAKE) install_pdfdoc_dll install_pdfdoc_dll_headers \
+	  && $(MAKE) install \
 
 .PHONY: clobber_exec_prefix_only
 clobber_exec_prefix_only:
