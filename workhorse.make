@@ -1516,3 +1516,7 @@ show_flags:
 	@printf 'wx_library_paths        = "%s"\n' "$(wx_library_paths)"
 	@printf 'wx_predefinitions       = "%s"\n' "$(wx_predefinitions)"
 
+.PHONY: show_disabled_g++_warnings
+show_disabled_g++_warnings:
+	$(CXX) $(ALL_CXXFLAGS) -Q --help=warning | $(GREP) '[[]disabled[]]'
+
