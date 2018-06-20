@@ -1509,9 +1509,31 @@ TAG_HANDLER_BEGIN(numeric_summary_table, "NUMERIC_SUMMARY_TABLE")
     }
 TAG_HANDLER_END(numeric_summary_table)
 
+// Custom handler for <p> tags preventing the page breaks inside them.
+TAG_HANDLER_BEGIN(unbreakable_paragraph, "P")
+    TAG_HANDLER_PROC(tag)
+    {
+        m_WParser->CloseContainer();
+        auto const container = m_WParser->OpenContainer();
+
+        // This is the reason for this handler existence: mark the container
+        // used for the paragraph contents as being unbreakable.
+        container->SetCanLiveOnPagebreak(false);
+
+        // This code reproduces what the standard "P" handler does.
+        // Unfortunately there is no way to just delegate to it from here.
+        container->SetIndent(m_WParser->GetCharHeight(), wxHTML_INDENT_TOP);
+        container->SetAlign(tag);
+
+        // Don't stop parsing, continue with the tag contents.
+        return false;
+    }
+TAG_HANDLER_END(unbreakable_paragraph)
+
 TAGS_MODULE_BEGIN(lmi_illustration)
     TAGS_MODULE_ADD(scaled_image)
     TAGS_MODULE_ADD(numeric_summary_table)
+    TAGS_MODULE_ADD(unbreakable_paragraph)
 TAGS_MODULE_END(lmi_illustration)
 
 // Numeric summary page is used on its own, as a regular page, but also as the
