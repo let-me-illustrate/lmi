@@ -20,7 +20,7 @@
 }}
 
 {{! No header on this page, but still use the logo. }}
-<scaled_image inv_factor="0.36" src="company_logo.png"></scaled_image>
+<img inv_factor="0.36" src="company_logo.png"></img>
 
 <p align="center"><font size="+1"><b>Explanatory Notes</b></font></p>
 

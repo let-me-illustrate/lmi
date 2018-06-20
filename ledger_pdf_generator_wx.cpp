@@ -504,10 +504,10 @@ class html_cell_for_pdf_output : public wxHtmlCell
 html_cell_for_pdf_output::pdf_context
 html_cell_for_pdf_output::pdf_context_for_html_output;
 
-// Define scaffolding for a custom HTML "scaled_image" tag which must be used
-// instead of the standard "a" in order to allow specifying the scaling factor
+// Define scaffolding for a custom HTML "img" tag which must be used
+// instead of the standard one in order to allow specifying the scaling factor
 // that we want to use for the image in the PDF. Unfortunately this can't be
-// achieved by simply using "width" and/or "height" attributes of the "a" tag
+// achieved by simply using "width" and/or "height" attributes of the "img" tag
 // because their values can only be integers which is not precise enough to
 // avoid (slightly but noticeably) distorting the image due to the aspect ratio
 // being not quite right.
@@ -554,14 +554,17 @@ class scaled_image_cell : public html_cell_for_pdf_output
     double const scale_factor_;
 };
 
-TAG_HANDLER_BEGIN(scaled_image, "SCALED_IMAGE")
+// Note that defining this handler replaces the standard <img> tag handler
+// defined in wxHTML itself, which also handles <map> and <area> tags, but as
+// we don't use either of those and all our images are scaled, this is fine.
+TAG_HANDLER_BEGIN(scaled_image, "IMG")
     TAG_HANDLER_PROC(tag)
     {
         wxString src;
         if (!tag.GetParamAsString("SRC", &src))
             {
             throw std::runtime_error
-                ("missing mandatory \"src\" attribute of \"scaled_image\" tag"
+                ("missing mandatory \"src\" attribute of \"img\" tag"
                 );
             }
 
@@ -583,7 +586,7 @@ TAG_HANDLER_BEGIN(scaled_image, "SCALED_IMAGE")
                 {
                 throw std::runtime_error
                     ( "invalid value for \"inv_factor\" attribute of "
-                      "\"scaled_image\" tag: \""
+                      "\"img\" tag: \""
                     + inv_factor_str.ToStdString()
                     + "\""
                     );

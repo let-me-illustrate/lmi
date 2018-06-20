@@ -20,7 +20,7 @@
 }}
 
 <!-- No header for this page, just the logo -->
-<scaled_image inv_factor="0.36" src="company_logo.png"></scaled_image>
+<img inv_factor="0.36" src="company_logo.png"></img>
 
 <p align="center">NARRATIVE SUMMARY (Continued)</p>
 
