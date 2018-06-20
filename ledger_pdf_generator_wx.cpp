@@ -1506,18 +1506,10 @@ TAG_HANDLER_BEGIN(numeric_summary_table, "NUMERIC_SUMMARY_TABLE")
     }
 TAG_HANDLER_END(numeric_summary_table)
 
-// In wxWidgets versions prior to 3.1.1, there is an extra semicolon at the end
-// of TAGS_MODULE_BEGIN() expansion resulting in a warning with -pedantic used
-// by lmi, so suppress this warning here (this could be removed once 3.1.1 is
-// required).
-wxGCC_WARNING_SUPPRESS(pedantic)
-
 TAGS_MODULE_BEGIN(lmi_illustration)
     TAGS_MODULE_ADD(scaled_image)
     TAGS_MODULE_ADD(numeric_summary_table)
 TAGS_MODULE_END(lmi_illustration)
-
-wxGCC_WARNING_RESTORE(pedantic)
 
 // Numeric summary page is used on its own, as a regular page, but also as the
 // base class for ill_reg_numeric_summary_attachment below, which is exactly
