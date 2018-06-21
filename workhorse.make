@@ -429,36 +429,75 @@ treat_warnings_as_errors := -pedantic-errors -Werror
 gcc_common_warnings := \
   $(treat_warnings_as_errors) \
   -Wall \
+  -Walloc-zero \
+  -Walloca \
   -Wcast-align \
   -Wconversion \
+  -Wdangling-else \
   -Wdeprecated-declarations \
   -Wdisabled-optimization \
+  -Wno-double-promotion \
+  -Wduplicated-branches \
+  -Wduplicated-cond \
   -Wextra \
+  -Wno-format-nonliteral \
+  -Wformat-security \
+  -Wformat-signedness \
+  -Wformat-y2k \
   -Wimport \
+  -Winit-self \
+  -Winvalid-pch \
+  -Wlogical-op \
+  -Wmissing-include-dirs \
   -Wmultichar \
   -Wpacked \
+  -Wparentheses \
   -Wpointer-arith \
   -Wredundant-decls \
+  -Wrestrict \
   -Wshadow \
   -Wsign-compare \
+  -Wstack-protector \
+  -Wtrampolines \
   -Wundef \
   -Wunreachable-code \
+  -Wunused-macros \
+  -Wvector-operation-performance \
   -Wwrite-strings \
 
 gcc_c_warnings := \
   $(c_standard) \
   $(gcc_common_warnings) \
+  -Wbad-function-cast \
+  -Wc++-compat \
+  -Wjump-misses-init \
   -Wmissing-prototypes \
+  -Wnested-externs \
+  -Wold-style-definition \
+  -Wstrict-prototypes \
+  -Wtraditional-conversion \
+  -Wunsuffixed-float-constants \
 
 gcc_cxx_warnings := \
   $(cxx_standard) \
   $(gcc_common_warnings) \
+  -Wc++11-compat \
+  -Wc++14-compat \
+  -Wc++1z-compat \
+  -Wconditionally-supported \
   -Wctor-dtor-privacy \
+  -Wdelete-non-virtual-dtor \
   -Wdeprecated \
+  -Wnoexcept \
+  -Wnoexcept-type \
   -Wnon-template-friend \
   -Woverloaded-virtual \
   -Wpmf-conversions \
+  -Wregister \
+  -Wreorder \
+  -Wstrict-null-sentinel \
   -Wsynth \
+  -Wno-useless-cast \
 
 # Too many warnings on correct code, e.g. exact comparison to zero:
 #  -Wfloat-equal \
@@ -488,16 +527,19 @@ endif
 # seems to contain a "maybe-uninitialized" variable--see:
 #   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00080.html
 
-operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
 operations_posix_windows.o: gcc_common_extra_warnings += -Wno-maybe-uninitialized
+operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-macros
+operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
 
-# The boost regex library is incompatible with '-Wshadow'.
+# The boost regex library is incompatible with many warnings.
 
 $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
+  -Wno-duplicated-branches \
   -Wno-implicit-fallthrough \
   -Wno-register \
   -Wno-shadow \
+  -Wno-unused-macros \
 
 boost_dependent_objects := \
   $(boost_regex_objects) \
