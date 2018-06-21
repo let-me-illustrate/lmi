@@ -35,7 +35,7 @@
 //   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00042.html
 //   https://sourceforge.net/p/mingw-w64/bugs/573/
 
-#include "lmi.hpp"                      // [to detect MinGW-w64]
+#include "version.hpp"                  // [to detect MinGW-w64]
 
 #if defined __MINGW64_VERSION_MAJOR
 
