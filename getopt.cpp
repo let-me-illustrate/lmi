@@ -267,7 +267,7 @@ GetOpt::print_expanding(char* v)
     if(x < 040)
       std::fprintf(stderr, "^%c", x + '@');
     else if(0177 < x)
-      std::fprintf(stderr, "\\%o", x);
+      std::fprintf(stderr, "\\%o", static_cast<unsigned int>(x));
     else
       std::fprintf(stderr, "%c", x);
 }
@@ -750,7 +750,7 @@ GetOpt::operator()()
                 list_option = nullptr;
 
                 std::fprintf(stderr, "%s: unrecognized option, character code 0%o\n",
-                         nargv[0], c);
+                         nargv[0], static_cast<unsigned int>(c));
               }
             else
               {
