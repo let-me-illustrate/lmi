@@ -440,7 +440,7 @@ gcc_common_warnings := \
   -Wduplicated-branches \
   -Wduplicated-cond \
   -Wextra \
-  -Wno-format-nonliteral \
+  -Wformat-nonliteral \
   -Wformat-security \
   -Wformat-signedness \
   -Wformat-y2k \

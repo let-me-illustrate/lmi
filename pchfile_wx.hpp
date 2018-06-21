@@ -36,6 +36,7 @@
 // be disabled for the code using wxWidgets as they occur in wxWidgets headers.
 #if defined __GNUC__
 #   pragma GCC diagnostic ignored "-Wcast-qual"
+#   pragma GCC diagnostic ignored "-Wformat-nonliteral"
 #   pragma GCC diagnostic ignored "-Wsign-conversion"
 #endif // defined __GNUC__
 
