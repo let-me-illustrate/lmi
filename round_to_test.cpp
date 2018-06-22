@@ -267,9 +267,9 @@ void test_various_float_types
     long double factor = detail::perform_pow(10.0L, -decimals);
     long double u = unrounded * factor;
     long double e = expected  * factor;
-    BOOST_TEST((test_one_case(static_cast<float      >(u), static_cast<float      >(e), decimals, style)));
-    BOOST_TEST((test_one_case(static_cast<double     >(u), static_cast<double     >(e), decimals, style)));
-    BOOST_TEST((test_one_case(static_cast<long double>(u), static_cast<long double>(e), decimals, style)));
+    BOOST_TEST((test_one_case(static_cast<float >(u), static_cast<float >(e), decimals, style)));
+    BOOST_TEST((test_one_case(static_cast<double>(u), static_cast<double>(e), decimals, style)));
+    BOOST_TEST((test_one_case(/* long double */  (u), /* long double */  (e), decimals, style)));
 }
 
 // Test rounding to various numbers of decimal places.

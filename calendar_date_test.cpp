@@ -142,7 +142,7 @@ void CalendarDateTest::TestAlgorithm199Bounds()
         {
         calendar_date c = calendar_date(jdn_t(j));
         if
-            (   j != YmdToJdn(ymd_t(JdnToYmd(jdn_t(j)))).value()
+            (   j != YmdToJdn(JdnToYmd(jdn_t(j))).value()
             ||  !(0 < c.month() && c.month() < 13)
             ||  !(0 < c.day()   && c.day()   < 32)
             )
