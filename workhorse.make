@@ -502,6 +502,9 @@ gcc_cxx_warnings := \
 # Too many warnings on correct code, e.g. exact comparison to zero:
 #  -Wfloat-equal \
 
+gcc_common_extra_warnings := \
+  -Wcast-qual \
+
 # WX !! The wx library triggers many diagnostics with the following
 # 'extra' flags. This makefile used to inhibit these flags for source
 # files that seemed to depend on wx according to a casual heuristic,
@@ -512,9 +515,6 @@ gcc_cxx_warnings := \
 
 wx_dependent_objects :=
 
-gcc_common_extra_warnings := \
-  -Wcast-qual \
-
 $(wx_dependent_objects): gcc_common_extra_warnings += \
   -Wno-cast-qual \
   -Wno-double-promotion \
@@ -522,17 +522,14 @@ $(wx_dependent_objects): gcc_common_extra_warnings += \
   -Wno-sign-conversion \
   -Wno-useless-cast \
 
+bourn_cast_test.o: gcc_common_extra_warnings += \
+  -Wno-double-promotion \
+
 currency_test.o: gcc_common_extra_warnings += \
   -Wno-useless-cast \
 
 md5.o: gcc_common_extra_warnings += \
   -Wno-useless-cast \
-
-ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
-  ifeq (3.4.5,$(gcc_version))
-    expression_template_0_test.o: gcc_common_extra_warnings += -Wno-unused-parameter
-  endif
-endif
 
 # Boost didn't remove an unused parameter in this file, which also
 # seems to contain a "maybe-uninitialized" variable--see:
@@ -572,6 +569,12 @@ ifeq (3.4.5,$(gcc_version))
   static_mutex.o:          gcc_cxx_warnings :=
 endif
 
+ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
+  ifeq (3.4.5,$(gcc_version))
+    expression_template_0_test.o: gcc_common_extra_warnings += -Wno-unused-parameter
+  endif
+endif
+
 # Boost normally makes '-Wundef' give spurious warnings:
 #   http://aspn.activestate.com/ASPN/Mail/Message/boost/1822550
 # but defining BOOST_STRICT_CONFIG:
@@ -582,8 +585,6 @@ endif
 
 # Too many warnings for wx and various boost libraries:
 #  -Wold-style-cast \
-
-bourn_cast_test.o: gcc_common_extra_warnings += -Wno-double-promotion
 
 # SOMEDAY !! Address some of these '-Wconversion' issues.
 
