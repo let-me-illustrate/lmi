@@ -216,6 +216,7 @@ struct numeric_converter<std::string, From>
         buffer[buffer_length] = '\0';
 #if defined __GNUC__
 #   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wdouble-promotion"
 #   pragma GCC diagnostic ignored "-Wformat-nonliteral"
 #endif // defined __GNUC__
         int actual_length = std::snprintf

@@ -182,11 +182,12 @@ bool test_one_case
         // TODO ?? Shouldn't one epsilon here be epsilon of
         // max-precision-real type, as shown in a comment?
         // But consider using std::nextafter instead of (1+epsilon).
+        RealType const unity = 1;
         tolerance =
-               (1.0 + std::numeric_limits<RealType>::epsilon())
-             * (1.0 + std::numeric_limits<RealType>::epsilon())
-//           * (1.0 + std::numeric_limits<max_prec_real>::epsilon())
-             - 1.0
+               (unity + std::numeric_limits<RealType>::epsilon())
+             * (unity + std::numeric_limits<RealType>::epsilon())
+//           * (unity + std::numeric_limits<max_prec_real>::epsilon())
+             - unity
              ;
         }
 #if defined LMI_COMO_WITH_MINGW

@@ -436,7 +436,7 @@ gcc_common_warnings := \
   -Wdangling-else \
   -Wdeprecated-declarations \
   -Wdisabled-optimization \
-  -Wno-double-promotion \
+  -Wdouble-promotion \
   -Wduplicated-branches \
   -Wduplicated-cond \
   -Wextra \
@@ -570,6 +570,8 @@ endif
 
 # Too many warnings for wx and various boost libraries:
 #  -Wold-style-cast \
+
+bourn_cast_test.o: gcc_common_extra_warnings += -Wno-double-promotion
 
 # SOMEDAY !! Address some of these '-Wconversion' issues.
 
