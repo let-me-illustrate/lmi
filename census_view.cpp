@@ -32,6 +32,7 @@
 #include "default_view.hpp"
 #include "edit_mvc_docview_parameters.hpp"
 #include "facets.hpp"                   // tab_is_not_whitespace_locale()
+#include "global_settings.hpp"
 #include "illustration_view.hpp"
 #include "illustrator.hpp"
 #include "input.hpp"
@@ -1846,6 +1847,16 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         cell_parms ().swap(cells);
         selection = 0;
         }
+    else if
+        (  contains(global_settings::instance().pyx(), "cut_census")
+        && cell_parms() == case_parms()
+        )
+        {
+        cell_parms().swap(cells);
+        for(auto& j : case_parms ()) {j["UseDOB"] = "Yes";}
+        for(auto& j : class_parms()) {j["UseDOB"] = "Yes";}
+        selection = 0;
+        }
     else
         {
         cell_parms().reserve(cell_parms().size() + cells.size());
@@ -1877,6 +1888,14 @@ void CensusView::UponCopyCensus(wxCommandEvent&)
     wxBusyCursor reverie;
 
     DoCopyCensus();
+
+    if(contains(global_settings::instance().pyx(), "cut_census"))
+        {
+        cell_parms() = case_parms();
+        list_model_->Reset(cell_parms().size());
+        Update();
+        list_window_->Select(list_model_->GetItem(0));
+        }
 }
 
 /// Copy from census manager to clipboard and TSV file.
