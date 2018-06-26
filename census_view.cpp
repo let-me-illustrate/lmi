@@ -1949,6 +1949,7 @@ void CensusView::DoCopyCensus() const
         }
     ofs << '\n';
 
+    int counter = 0;
     for(auto const& cell : cell_parms())
         {
         for(auto const& header : distinct_headers)
@@ -1963,6 +1964,7 @@ void CensusView::DoCopyCensus() const
             ofs << s << '\t';
             }
         ofs << '\n';
+        status() << "Copied cell number " << ++counter << '.' << std::flush;
         }
 
     if(!ofs)
