@@ -1825,7 +1825,6 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         cells.push_back(current_cell);
 
         status() << "Added cell number " << cells.size() << '.' << std::flush;
-        wxSafeYield();
         }
 
     if(0 == current_line)

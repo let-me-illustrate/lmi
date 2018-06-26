@@ -59,9 +59,14 @@ void status_alert(std::string const& s)
     if(wxTheApp && wxTheApp->GetTopWindow())
         {
         wxFrame* f = dynamic_cast<wxFrame*>(wxTheApp->GetTopWindow());
-        if(f && f->GetStatusBar())
+        if(f)
             {
-            f->SetStatusText(s);
+            wxStatusBar* b = f->GetStatusBar();
+            if(b)
+                {
+                f->SetStatusText(s);
+                f->GetStatusBar()->Update();
+                }
             }
         }
 }
