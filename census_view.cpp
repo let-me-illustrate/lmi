@@ -1697,8 +1697,6 @@ void CensusView::UponRunCaseToGroupQuote(wxCommandEvent&)
 
 void CensusView::UponPasteCensus(wxCommandEvent&)
 {
-    wxBusyCursor reverie;
-
     std::string const census_data = ClipboardEx::GetText();
 
     std::vector<std::string> headers;
@@ -1886,8 +1884,6 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 
 void CensusView::UponCopyCensus(wxCommandEvent&)
 {
-    wxBusyCursor reverie;
-
     DoCopyCensus();
 
     if(contains(global_settings::instance().pyx(), "cut_census"))
