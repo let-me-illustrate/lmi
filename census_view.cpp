@@ -1848,8 +1848,9 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         selection = 0;
         }
     else if
-        (  contains(global_settings::instance().pyx(), "cut_census")
-        && cell_parms() == case_parms()
+        (configurable_settings::instance().census_paste_palimpsestically()
+        ||    contains(global_settings::instance().pyx(), "cut_census")
+           && cell_parms() == case_parms()
         )
         {
         cell_parms().swap(cells);

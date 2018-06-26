@@ -51,6 +51,7 @@ class LMI_SO configurable_settings final
     void save() const;
 
     std::string const& calculation_summary_columns        () const;
+    bool               census_paste_palimpsestically      () const;
     std::string const& cgi_bin_log_filename               () const;
     std::string const& custom_input_0_filename            () const;
     std::string const& custom_input_1_filename            () const;
@@ -94,6 +95,7 @@ class LMI_SO configurable_settings final
         ) override;
 
     std::string calculation_summary_columns_;
+    bool        census_paste_palimpsestically_;
     std::string cgi_bin_log_filename_;
     std::string custom_input_0_filename_;
     std::string custom_input_1_filename_;

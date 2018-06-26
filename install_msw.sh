@@ -221,6 +221,7 @@ cat >/opt/lmi/data/configurable_settings.xml <<EOF
 <?xml version="1.0"?>
 <configurable_settings version="2">
   <calculation_summary_columns/>
+  <census_paste_palimpsestically>1</census_paste_palimpsestically>
   <cgi_bin_log_filename>cgi_bin.log</cgi_bin_log_filename>
   <custom_input_0_filename>custom.ini</custom_input_0_filename>
   <custom_input_1_filename>custom.inix</custom_input_1_filename>
