@@ -590,8 +590,9 @@ false // Silly workaround for now.
     IndividualPaymentStrategy.allow(mce_pmt_table       , !inhibit_prem_simple && !prem_solve || specamt_indeterminate);
     IndividualPaymentStrategy.enable(!inhibit_prem_simple && !prem_solve);
 
-//    InsuredPremiumTableNumber.enable(mce_pmt_table == IndividualPaymentStrategy); // // INPUT !! Obsolete scalar alternative control.
-// In the legacy system, that control, 'InsuredPremiumTableFactor',
+// In the legacy system,
+//   'InsuredPremiumTableNumber',
+//   'InsuredPremiumTableFactor',
 // and their 'Corporation'- congeners were enabled iff a
 // 'mce_pmt_table' strategy was selected in a scalar control--but
 // no such scalar control was ported. For payment strategy, lmi offers
@@ -726,10 +727,10 @@ false // Silly workaround for now.
         &&  (
                 mce_pmt_input_scalar == IndividualPaymentStrategy
             )
-// INPUT !! Obsolete scalar alternative control.
-//        &&  (
-//                mce_pmt_input_scalar == ErPmtStrategy
-//            )
+//      obsolete "Corporate" congener:
+//      &&  (
+//              mce_pmt_input_scalar == ErPmtStrategy
+//          )
         &&  (
                 mce_sa_input_scalar == SpecifiedAmountStrategyFromIssue
             ||  mce_sa_salary       == SpecifiedAmountStrategyFromIssue
