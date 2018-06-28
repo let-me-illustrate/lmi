@@ -88,10 +88,12 @@ void multiple_cell_document::assert_vector_sizes_are_sane() const
 /// version 0: [prior to the lmi epoch]
 /// version 1: 20120220T0158Z
 /// version 2: 20150316T0409Z
+///   [versions 3-8 never existed]
+/// version 9: 20180628T1936Z
 
 int multiple_cell_document::class_version() const
 {
-    return 2;
+    return 9;
 }
 
 /// Name of xml root element.

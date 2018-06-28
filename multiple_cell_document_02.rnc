@@ -38,5 +38,5 @@ start = element multiple_cell_document
     ,element particular_cells {cell_element +}
     }
 
-include "cell.rnc"
+include "cell_08.rnc"
 

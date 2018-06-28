@@ -28,5 +28,5 @@ start = element single_cell_document
     ,cell_element
     }
 
-include "cell.rnc"
+include "cell_08.rnc"
 

@@ -43,7 +43,7 @@
       <xs:attribute name="version" use="required">
         <xs:simpleType>
           <xs:restriction base="xs:token">
-            <xs:enumeration value="2"/>
+            <xs:enumeration value="9"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>

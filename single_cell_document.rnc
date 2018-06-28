@@ -22,7 +22,7 @@
 # Use file extension '.ill' for single-life xml documents.
 
 start = element single_cell_document
-    {attribute version {"2"}
+    {attribute version {"9"}
     ,attribute data_source {xsd:nonNegativeInteger}
 
     ,cell_element

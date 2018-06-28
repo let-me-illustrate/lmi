@@ -26,7 +26,7 @@
 # elements marked with an asterisk.
 
 cell_element = element cell
-    {attribute version {"8"}
+    {attribute version {"9"}
 
     ,## Accidental death benefit: elected or not.
      element AccidentalDeathBenefit           {yes_or_no}

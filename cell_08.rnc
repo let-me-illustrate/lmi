@@ -550,5 +550,5 @@ cell_element = element cell
      element ZipCode                          {text}
     }
 
-include "types.rnc"
+include "types_08.rnc"
 
