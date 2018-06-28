@@ -197,6 +197,8 @@ java -jar $jar_dir/trang.jar multiple_cell_document.rnc    multiple_cell_documen
 java -jar $jar_dir/trang.jar single_cell_document.rnc      single_cell_document.xsd
 java -jar $jar_dir/trang.jar multiple_cell_document_01.rnc multiple_cell_document_01.xsd
 java -jar $jar_dir/trang.jar single_cell_document_01.rnc   single_cell_document_01.xsd
+java -jar $jar_dir/trang.jar multiple_cell_document_02.rnc multiple_cell_document_02.xsd
+java -jar $jar_dir/trang.jar single_cell_document_02.rnc   single_cell_document_02.xsd
 sed -e 's/  *$//' -i ./*.xsd
 diff --unified=0 --from-file="$srcdir" ./*.xsd || echo "Dubious '*.xsd' in repository."
 
