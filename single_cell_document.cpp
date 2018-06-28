@@ -90,11 +90,12 @@ void single_cell_document::parse(xml_lmi::dom_parser const& parser)
         // attribute exists and has a nondefault value--but, because
         // "data_source" is a newer attribute than "version", there
         // should be no "data_source" without "version". However, some
-        // old vendor extracts failed to follow that rule, this file
+        // old vendor extracts failed to follow that rule; therefore,
+        // this file
         //   single_cell_document_01.xsd
         // has been copied to
         //   single_cell_document_00.xsd
-        // which is the correct schema for vendor files that have a
+        // which is the correct schema for vendor files that have an
         // "InforceDataSource" element but no "data_source" attribute.
         // No corresponding '.rnc' schema is needed because validation
         // uses only '.xsd' schemata.
