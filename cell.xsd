@@ -151,7 +151,7 @@
         <xs:element ref="IssueAge"/>
         <xs:element ref="LastCoiReentryDate"/>
         <xs:element ref="LastMaterialChangeDate"/>
-        <xs:element minOccurs="0" ref="ListBillDate"/>
+        <xs:element ref="ListBillDate"/>
         <xs:element minOccurs="0" ref="LoanAmount"/>
         <xs:element minOccurs="0" ref="LoanFromAge"/>
         <xs:element minOccurs="0" ref="LoanFromAlternative"/>
