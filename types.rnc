@@ -90,19 +90,6 @@ class =
     | "Rated"
     | "Ultra"
 
-## Death benefit option: 'A' = level; 'B' = increasing; 'ROP' = return of premium.
-dbopt =
-      "A"
-    | "B"
-    | "ROP"
-
-## Payment mode.
-mode =
-      "Annual"
-    | "Semiannual"
-    | "Quarterly"
-    | "Monthly"
-
 ## Basis for expense and general-account rates.
 gen_basis =
       "Current"
