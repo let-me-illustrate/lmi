@@ -98,6 +98,7 @@ mcenum_dbopt_7702 effective_dbopt_7702
         case mce_option1: return mce_option1_for_7702;
         case mce_option2: return mce_option2_for_7702;
         case mce_rop:     return rop_equivalent      ;
+        case mce_mdb:     return rop_equivalent      ; // DBO3 !! reconsider
         }
     throw "Unreachable--silences a compiler diagnostic.";
 }
