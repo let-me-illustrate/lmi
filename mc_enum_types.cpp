@@ -34,23 +34,23 @@
 // calculated bounds are checked at compile time.
 
 // These lines would engender diagnostics
-//   extern enum_option const option_enums[] = {mce_option_A, mce_option_B};
-//   extern char const*const option_strings[] = {"A", "B", "C", "X"};
+//   extern enum_tragic const tragic_enums[] = {mce_aeschylus, mce_euripides};
+//   extern char const*const tragic_strings[] = {"Aeschylus", "Euripides", "Sophocles", "X"};
 // at compile time when the template is explicitly instantiated.
 
-extern enum_option const option_enums[] =
-    {mce_option_A
-    ,mce_option_B
-    ,mce_option_C
+extern enum_tragic const tragic_enums[] =
+    {mce_aeschylus
+    ,mce_euripides
+    ,mce_sophocles
     };
-extern char const*const option_strings[] =
-    {"A"
-    ,"B"
-    ,"C"
+extern char const*const tragic_strings[] =
+    {"Aeschylus"
+    ,"Euripides"
+    ,"Sophocles"
     };
-template<> struct mc_enum_key<enum_option>
-  :public mc_enum_data<enum_option, 3, option_enums, option_strings> {};
-template class mc_enum<enum_option>;
+template<> struct mc_enum_key<enum_tragic>
+  :public mc_enum_data<enum_tragic, 3, tragic_enums, tragic_strings> {};
+template class mc_enum<enum_tragic>;
 
 extern mcenum_emission const emission_enums[] =
     {mce_emit_nothing
