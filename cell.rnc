@@ -271,7 +271,7 @@ cell_element = element cell
     ,## Policy-year-to-date payments subject to premium tax.
      element InforceYtdTaxablePremium         {nonnegative_double}
     ,## * Investment management fee of a custom fund.
-     element InputFundManagementFee           {nonnegative_double}
+     element InputFundManagementFee           {proportion_double}
     ,## Insured's full name.
      element InsuredName                      {text}
     ,## * Insured's tabular-premium multiplier. Default: '1'.

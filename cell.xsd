@@ -773,7 +773,7 @@ regard to term rider and corridor.</xs:documentation>
       <xs:documentation>Policy-year-to-date payments subject to premium tax.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="InputFundManagementFee" type="nonnegative_double">
+  <xs:element name="InputFundManagementFee" type="proportion_double">
     <xs:annotation>
       <xs:documentation>* Investment management fee of a custom fund.</xs:documentation>
     </xs:annotation>
