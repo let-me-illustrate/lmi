@@ -403,6 +403,7 @@ class LMI_SO Input final
     numeric_sequence         HoneymoonValueSpread            ;
     datum_string             FundAllocations                 ; // INPUT !! http://savannah.nongnu.org/support/?104481
     numeric_sequence         CashValueEnhancementRate        ;
+    datum_string             AdditionalReports               ;
     mce_suppl_illus_type     SupplementalIllustrationType    ;
     mce_yes_or_no            SplitDollarAccumulateInterest   ;
     numeric_sequence         SplitDollarLoanRate             ;

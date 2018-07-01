@@ -30,6 +30,8 @@ cell_element = element cell
 
     ,## Accidental death benefit: elected or not.
      element AccidentalDeathBenefit           {yes_or_no}
+    ,## * Selections from a list of stored reports. Default: empty string.
+     element AdditionalReports                {text}
     ,## Insured's address: number and street.
      element Address                          {text}
     ,## Agent's address: number and street.

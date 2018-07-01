@@ -205,6 +205,7 @@ Input::Input()
     ,HoneymoonValueSpread             ("0")
     ,FundAllocations                  ("0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0")
     ,CashValueEnhancementRate         ("0")
+//    ,AdditionalReports
 //    ,SupplementalIllustrationType
 //    ,SplitDollarAccumulateInterest
     ,SplitDollarLoanRate              ("0")
@@ -452,6 +453,7 @@ void Input::AscribeMembers()
     ascribe("FundAllocations"                       , &Input::FundAllocations                       );
     ascribe("CashValueEnhancementRate"              , &Input::CashValueEnhancementRate              );
 
+    ascribe("AdditionalReports"                     , &Input::AdditionalReports                     );
     ascribe("SupplementalIllustrationType"          , &Input::SupplementalIllustrationType          );
     ascribe("SplitDollarAccumulateInterest"         , &Input::SplitDollarAccumulateInterest         );
     ascribe("SplitDollarLoanRate"                   , &Input::SplitDollarLoanRate                   );
