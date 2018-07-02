@@ -562,7 +562,7 @@ void any_member_test::supplemental_test1()
     BOOST_TEST_EQUAL(999    , r0.i0);
     BOOST_TEST_EQUAL(888000 , r0.i1);
     BOOST_TEST_EQUAL(777.0  , r0.d0);
-    BOOST_TEST_EQUAL(8.125  , r0.q0);
+    BOOST_TEST_EQUAL(8.125f , r0.q0);
     BOOST_TEST_EQUAL("hello", r0.s0);
 
     T r1;

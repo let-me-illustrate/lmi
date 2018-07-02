@@ -78,14 +78,14 @@ class yare_input final
     double                            Internal1035ExchangeAmount      ;
     double                            Internal1035ExchangeTaxBasis    ;
     bool                              Internal1035ExchangeFromMec     ;
-//    int                               SolveTargetTime                 ;
-//    int                               SolveBeginTime                  ;
-//    int                               SolveEndTime                    ;
+//    int                               SolveTargetAge                  ;
+//    int                               SolveBeginAge                   ;
+//    int                               SolveEndAge                     ;
     mcenum_solve_type                 SolveType                       ;
     int                               SolveBeginYear                  ;
     int                               SolveEndYear                    ;
     mcenum_solve_target               SolveTarget                     ;
-    double                            SolveTargetCashSurrenderValue   ;
+    double                            SolveTargetValue                ;
     int                               SolveTargetYear                 ;
     mcenum_gen_basis                  SolveExpenseGeneralAccountBasis ;
     mcenum_sep_basis                  SolveSeparateAccountBasis       ;
@@ -145,7 +145,6 @@ class yare_input final
     bool                              IncludeInComposite              ;
     std::string                       Comments                        ;
     bool                              AmortizePremiumLoad             ;
-    int                               InforceDataSource               ;
     std::string                       ContractNumber                  ;
     std::string                       MasterContractNumber            ;
     calendar_date                     InforceAsOfDate                 ;

@@ -60,7 +60,7 @@ yare_input::yare_input(Input const& z)
     SolveBeginYear                   = z.SolveBeginYear                  .value();
     SolveEndYear                     = z.SolveEndYear                    .value();
     SolveTarget                      = z.SolveTarget                     .value();
-    SolveTargetCashSurrenderValue    = z.SolveTargetCashSurrenderValue   .value();
+    SolveTargetValue                 = z.SolveTargetValue                .value();
     SolveTargetYear                  = z.SolveTargetYear                 .value();
     SolveExpenseGeneralAccountBasis  = z.SolveExpenseGeneralAccountBasis .value();
     SolveSeparateAccountBasis        = z.SolveSeparateAccountBasis       .value();
@@ -104,7 +104,6 @@ yare_input::yare_input(Input const& z)
     IncludeInComposite               = z.IncludeInComposite              .value();
     Comments                         = z.Comments                        .value();
     AmortizePremiumLoad              = z.AmortizePremiumLoad             .value();
-    InforceDataSource                = z.InforceDataSource               .value();
     ContractNumber                   = z.ContractNumber                  .value();
     MasterContractNumber             = z.MasterContractNumber            .value();
     InforceAsOfDate                  = z.InforceAsOfDate                 .value();

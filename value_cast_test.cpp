@@ -166,7 +166,7 @@ int test_main(int, char*[])
     d = value_cast(i, d);
     BOOST_TEST_EQUAL(d, 2.0);
 
-    s = value_cast<std::string>(double(2.0 / 3.0));
+    s = value_cast<std::string>(2.0 / 3.0);
     BOOST_TEST_EQUAL(s, "0.666666666666667");
 
     d = value_cast<double>(s);

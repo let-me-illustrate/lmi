@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
-<multiple_cell_document version="2" data_source="1">
+<multiple_cell_document version="9" data_source="1">
   <case_default>
-    <cell version="8">
+    <cell version="9">
       <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
+      <AdditionalReports/>
       <Address/>
       <AgentAddress>*** REQUIRED FIELD MISSING ***</AgentAddress>
       <AgentCity>*** REQUIRED FIELD MISSING ***</AgentCity>
@@ -28,18 +29,18 @@
       <CorporationPaymentMode>annual</CorporationPaymentMode>
       <CorporationPremiumTableFactor>1</CorporationPremiumTableFactor>
       <CorporationState>CT</CorporationState>
-      <CorporationTaxBracket>0</CorporationTaxBracket>
+      <CorporationTaxBracket/>
       <CorporationZipCode/>
       <Country>US</Country>
       <CountryCoiMultiplier>1</CountryCoiMultiplier>
       <CreateSupplementalReport>No</CreateSupplementalReport>
       <CurrentCoiMultiplier>1</CurrentCoiMultiplier>
-      <DateOfBirth>2437604</DateOfBirth>
+      <DateOfBirth>2441865</DateOfBirth>
       <DeathBenefitOption>a</DeathBenefitOption>
       <DefinitionOfLifeInsurance>CVAT</DefinitionOfLifeInsurance>
-      <DefinitionOfMaterialChange>Earlier of increase or unnecessary premium</DefinitionOfMaterialChange>
+      <DefinitionOfMaterialChange>Unnecessary premium</DefinitionOfMaterialChange>
       <Dumpin>0</Dumpin>
-      <EffectiveDate>2454040</EffectiveDate>
+      <EffectiveDate>2458301</EffectiveDate>
       <EffectiveDateToday>No</EffectiveDateToday>
       <EmployeeClass/>
       <ExperienceRatingInitialKFactor>1</ExperienceRatingInitialKFactor>
@@ -51,7 +52,7 @@
       <ExtraCompensationOnPremium>0</ExtraCompensationOnPremium>
       <ExtraMonthlyCustodialFee>0</ExtraMonthlyCustodialFee>
       <FlatExtra>0</FlatExtra>
-      <FundAllocations>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </FundAllocations>
+      <FundAllocations>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</FundAllocations>
       <FundChoiceType>Choose funds</FundChoiceType>
       <Gender>Male</Gender>
       <GeneralAccountRate>0.06</GeneralAccountRate>
@@ -63,7 +64,7 @@
       <IndividualPaymentStrategy>PmtInputScalar</IndividualPaymentStrategy>
       <Inforce7702AAmountsPaidHistory>0</Inforce7702AAmountsPaidHistory>
       <InforceAnnualTargetPremium>0</InforceAnnualTargetPremium>
-      <InforceAsOfDate>2454040</InforceAsOfDate>
+      <InforceAsOfDate>2458301</InforceAsOfDate>
       <InforceAvBeforeLastMc>0</InforceAvBeforeLastMc>
       <InforceContractMonth>0</InforceContractMonth>
       <InforceContractYear>0</InforceContractYear>
@@ -74,7 +75,6 @@
       <InforceCumulativeNoLapsePremium>0</InforceCumulativeNoLapsePremium>
       <InforceCumulativeRopPayments>0</InforceCumulativeRopPayments>
       <InforceCumulativeSalesLoad>0</InforceCumulativeSalesLoad>
-      <InforceDataSource>1</InforceDataSource>
       <InforceDcv>0</InforceDcv>
       <InforceGeneralAccountValue>0</InforceGeneralAccountValue>
       <InforceGlp>0</InforceGlp>
@@ -105,8 +105,8 @@
       <Internal1035ExchangeFromMec>No</Internal1035ExchangeFromMec>
       <Internal1035ExchangeTaxBasis>0</Internal1035ExchangeTaxBasis>
       <IssueAge>45</IssueAge>
-      <LastCoiReentryDate>2454040</LastCoiReentryDate>
-      <LastMaterialChangeDate>2454040</LastMaterialChangeDate>
+      <LastCoiReentryDate>2458301</LastCoiReentryDate>
+      <LastMaterialChangeDate>2458301</LastMaterialChangeDate>
       <ListBillDate>2440588</ListBillDate>
       <LoanRate>0.06</LoanRate>
       <LoanRateType>Fixed loan rate</LoanRateType>
@@ -132,19 +132,19 @@
       <SalarySpecifiedAmountCap>100000</SalarySpecifiedAmountCap>
       <SalarySpecifiedAmountFactor>1</SalarySpecifiedAmountFactor>
       <SalarySpecifiedAmountOffset>50000</SalarySpecifiedAmountOffset>
-      <SeparateAccountRate>.08</SeparateAccountRate>
+      <SeparateAccountRate>0.08</SeparateAccountRate>
       <SeparateAccountRateType>Gross rate</SeparateAccountRateType>
       <Smoking>Nonsmoker</Smoking>
-      <SolveBeginTime>45</SolveBeginTime>
+      <SolveBeginAge>45</SolveBeginAge>
       <SolveBeginYear>0</SolveBeginYear>
-      <SolveEndTime>65</SolveEndTime>
+      <SolveEndAge>65</SolveEndAge>
       <SolveEndYear>20</SolveEndYear>
       <SolveExpenseGeneralAccountBasis>Current</SolveExpenseGeneralAccountBasis>
       <SolveFromWhich>Issue</SolveFromWhich>
       <SolveSeparateAccountBasis>Hypothetical</SolveSeparateAccountBasis>
       <SolveTarget>Endowment</SolveTarget>
-      <SolveTargetCashSurrenderValue>0</SolveTargetCashSurrenderValue>
-      <SolveTargetTime>100</SolveTargetTime>
+      <SolveTargetAge>100</SolveTargetAge>
+      <SolveTargetValue>0</SolveTargetValue>
       <SolveTargetYear>55</SolveTargetYear>
       <SolveTgtAtWhich>Maturity</SolveTgtAtWhich>
       <SolveToWhich>Retirement</SolveToWhich>
@@ -162,6 +162,7 @@
       <State>CT</State>
       <StateOfJurisdiction>CT</StateOfJurisdiction>
       <SubstandardTable>None</SubstandardTable>
+      <SupplementalAmount>0</SupplementalAmount>
       <SupplementalIllustrationType>None</SupplementalIllustrationType>
       <SupplementalReportColumn00>[none]</SupplementalReportColumn00>
       <SupplementalReportColumn01>[none]</SupplementalReportColumn01>
@@ -175,11 +176,10 @@
       <SupplementalReportColumn09>[none]</SupplementalReportColumn09>
       <SupplementalReportColumn10>[none]</SupplementalReportColumn10>
       <SupplementalReportColumn11>[none]</SupplementalReportColumn11>
-      <SupplementalSpecifiedAmount>0</SupplementalSpecifiedAmount>
       <SurviveToAge>99</SurviveToAge>
       <SurviveToType>Survive to age limit</SurviveToType>
-      <SurviveToYear>99</SurviveToYear>
-      <TaxBracket>0</TaxBracket>
+      <SurviveToYear>100</SurviveToYear>
+      <TaxBracket/>
       <TermAdjustmentMethod>Adjust base first</TermAdjustmentMethod>
       <TermRider>No</TermRider>
       <TermRiderAmount>0</TermRiderAmount>
@@ -188,7 +188,7 @@
       <TotalSpecifiedAmount>1000000</TotalSpecifiedAmount>
       <UnderwritingClass>Standard</UnderwritingClass>
       <UseAverageOfAllFunds>No</UseAverageOfAllFunds>
-      <UseCurrentDeclaredRate>No</UseCurrentDeclaredRate>
+      <UseCurrentDeclaredRate>Yes</UseCurrentDeclaredRate>
       <UseDOB>No</UseDOB>
       <UseExperienceRating>No</UseExperienceRating>
       <UsePartialMortality>No</UsePartialMortality>
@@ -199,8 +199,9 @@
     </cell>
   </case_default>
   <class_defaults>
-    <cell version="8">
+    <cell version="9">
       <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
+      <AdditionalReports/>
       <Address/>
       <AgentAddress>*** REQUIRED FIELD MISSING ***</AgentAddress>
       <AgentCity>*** REQUIRED FIELD MISSING ***</AgentCity>
@@ -226,18 +227,18 @@
       <CorporationPaymentMode>annual</CorporationPaymentMode>
       <CorporationPremiumTableFactor>1</CorporationPremiumTableFactor>
       <CorporationState>CT</CorporationState>
-      <CorporationTaxBracket>0</CorporationTaxBracket>
+      <CorporationTaxBracket/>
       <CorporationZipCode/>
       <Country>US</Country>
       <CountryCoiMultiplier>1</CountryCoiMultiplier>
       <CreateSupplementalReport>No</CreateSupplementalReport>
       <CurrentCoiMultiplier>1</CurrentCoiMultiplier>
-      <DateOfBirth>2437604</DateOfBirth>
+      <DateOfBirth>2441865</DateOfBirth>
       <DeathBenefitOption>a</DeathBenefitOption>
       <DefinitionOfLifeInsurance>CVAT</DefinitionOfLifeInsurance>
-      <DefinitionOfMaterialChange>Earlier of increase or unnecessary premium</DefinitionOfMaterialChange>
+      <DefinitionOfMaterialChange>Unnecessary premium</DefinitionOfMaterialChange>
       <Dumpin>0</Dumpin>
-      <EffectiveDate>2454040</EffectiveDate>
+      <EffectiveDate>2458301</EffectiveDate>
       <EffectiveDateToday>No</EffectiveDateToday>
       <EmployeeClass/>
       <ExperienceRatingInitialKFactor>1</ExperienceRatingInitialKFactor>
@@ -249,7 +250,7 @@
       <ExtraCompensationOnPremium>0</ExtraCompensationOnPremium>
       <ExtraMonthlyCustodialFee>0</ExtraMonthlyCustodialFee>
       <FlatExtra>0</FlatExtra>
-      <FundAllocations>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </FundAllocations>
+      <FundAllocations>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</FundAllocations>
       <FundChoiceType>Choose funds</FundChoiceType>
       <Gender>Male</Gender>
       <GeneralAccountRate>0.06</GeneralAccountRate>
@@ -261,7 +262,7 @@
       <IndividualPaymentStrategy>PmtInputScalar</IndividualPaymentStrategy>
       <Inforce7702AAmountsPaidHistory>0</Inforce7702AAmountsPaidHistory>
       <InforceAnnualTargetPremium>0</InforceAnnualTargetPremium>
-      <InforceAsOfDate>2454040</InforceAsOfDate>
+      <InforceAsOfDate>2458301</InforceAsOfDate>
       <InforceAvBeforeLastMc>0</InforceAvBeforeLastMc>
       <InforceContractMonth>0</InforceContractMonth>
       <InforceContractYear>0</InforceContractYear>
@@ -272,7 +273,6 @@
       <InforceCumulativeNoLapsePremium>0</InforceCumulativeNoLapsePremium>
       <InforceCumulativeRopPayments>0</InforceCumulativeRopPayments>
       <InforceCumulativeSalesLoad>0</InforceCumulativeSalesLoad>
-      <InforceDataSource>1</InforceDataSource>
       <InforceDcv>0</InforceDcv>
       <InforceGeneralAccountValue>0</InforceGeneralAccountValue>
       <InforceGlp>0</InforceGlp>
@@ -303,8 +303,8 @@
       <Internal1035ExchangeFromMec>No</Internal1035ExchangeFromMec>
       <Internal1035ExchangeTaxBasis>0</Internal1035ExchangeTaxBasis>
       <IssueAge>45</IssueAge>
-      <LastCoiReentryDate>2454040</LastCoiReentryDate>
-      <LastMaterialChangeDate>2454040</LastMaterialChangeDate>
+      <LastCoiReentryDate>2458301</LastCoiReentryDate>
+      <LastMaterialChangeDate>2458301</LastMaterialChangeDate>
       <ListBillDate>2440588</ListBillDate>
       <LoanRate>0.06</LoanRate>
       <LoanRateType>Fixed loan rate</LoanRateType>
@@ -330,19 +330,19 @@
       <SalarySpecifiedAmountCap>100000</SalarySpecifiedAmountCap>
       <SalarySpecifiedAmountFactor>1</SalarySpecifiedAmountFactor>
       <SalarySpecifiedAmountOffset>50000</SalarySpecifiedAmountOffset>
-      <SeparateAccountRate>.08</SeparateAccountRate>
+      <SeparateAccountRate>0.08</SeparateAccountRate>
       <SeparateAccountRateType>Gross rate</SeparateAccountRateType>
       <Smoking>Nonsmoker</Smoking>
-      <SolveBeginTime>45</SolveBeginTime>
+      <SolveBeginAge>45</SolveBeginAge>
       <SolveBeginYear>0</SolveBeginYear>
-      <SolveEndTime>65</SolveEndTime>
+      <SolveEndAge>65</SolveEndAge>
       <SolveEndYear>20</SolveEndYear>
       <SolveExpenseGeneralAccountBasis>Current</SolveExpenseGeneralAccountBasis>
       <SolveFromWhich>Issue</SolveFromWhich>
       <SolveSeparateAccountBasis>Hypothetical</SolveSeparateAccountBasis>
       <SolveTarget>Endowment</SolveTarget>
-      <SolveTargetCashSurrenderValue>0</SolveTargetCashSurrenderValue>
-      <SolveTargetTime>100</SolveTargetTime>
+      <SolveTargetAge>100</SolveTargetAge>
+      <SolveTargetValue>0</SolveTargetValue>
       <SolveTargetYear>55</SolveTargetYear>
       <SolveTgtAtWhich>Maturity</SolveTgtAtWhich>
       <SolveToWhich>Retirement</SolveToWhich>
@@ -360,6 +360,7 @@
       <State>CT</State>
       <StateOfJurisdiction>CT</StateOfJurisdiction>
       <SubstandardTable>None</SubstandardTable>
+      <SupplementalAmount>0</SupplementalAmount>
       <SupplementalIllustrationType>None</SupplementalIllustrationType>
       <SupplementalReportColumn00>[none]</SupplementalReportColumn00>
       <SupplementalReportColumn01>[none]</SupplementalReportColumn01>
@@ -373,11 +374,10 @@
       <SupplementalReportColumn09>[none]</SupplementalReportColumn09>
       <SupplementalReportColumn10>[none]</SupplementalReportColumn10>
       <SupplementalReportColumn11>[none]</SupplementalReportColumn11>
-      <SupplementalSpecifiedAmount>0</SupplementalSpecifiedAmount>
       <SurviveToAge>99</SurviveToAge>
       <SurviveToType>Survive to age limit</SurviveToType>
-      <SurviveToYear>99</SurviveToYear>
-      <TaxBracket>0</TaxBracket>
+      <SurviveToYear>100</SurviveToYear>
+      <TaxBracket/>
       <TermAdjustmentMethod>Adjust base first</TermAdjustmentMethod>
       <TermRider>No</TermRider>
       <TermRiderAmount>0</TermRiderAmount>
@@ -386,7 +386,7 @@
       <TotalSpecifiedAmount>1000000</TotalSpecifiedAmount>
       <UnderwritingClass>Standard</UnderwritingClass>
       <UseAverageOfAllFunds>No</UseAverageOfAllFunds>
-      <UseCurrentDeclaredRate>No</UseCurrentDeclaredRate>
+      <UseCurrentDeclaredRate>Yes</UseCurrentDeclaredRate>
       <UseDOB>No</UseDOB>
       <UseExperienceRating>No</UseExperienceRating>
       <UsePartialMortality>No</UsePartialMortality>
@@ -397,8 +397,9 @@
     </cell>
   </class_defaults>
   <particular_cells>
-    <cell version="8">
+    <cell version="9">
       <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
+      <AdditionalReports/>
       <Address/>
       <AgentAddress>*** REQUIRED FIELD MISSING ***</AgentAddress>
       <AgentCity>*** REQUIRED FIELD MISSING ***</AgentCity>
@@ -424,18 +425,18 @@
       <CorporationPaymentMode>annual</CorporationPaymentMode>
       <CorporationPremiumTableFactor>1</CorporationPremiumTableFactor>
       <CorporationState>CT</CorporationState>
-      <CorporationTaxBracket>0</CorporationTaxBracket>
+      <CorporationTaxBracket/>
       <CorporationZipCode/>
       <Country>US</Country>
       <CountryCoiMultiplier>1</CountryCoiMultiplier>
       <CreateSupplementalReport>No</CreateSupplementalReport>
       <CurrentCoiMultiplier>1</CurrentCoiMultiplier>
-      <DateOfBirth>2437604</DateOfBirth>
+      <DateOfBirth>2441865</DateOfBirth>
       <DeathBenefitOption>a</DeathBenefitOption>
       <DefinitionOfLifeInsurance>CVAT</DefinitionOfLifeInsurance>
-      <DefinitionOfMaterialChange>Earlier of increase or unnecessary premium</DefinitionOfMaterialChange>
+      <DefinitionOfMaterialChange>Unnecessary premium</DefinitionOfMaterialChange>
       <Dumpin>0</Dumpin>
-      <EffectiveDate>2454040</EffectiveDate>
+      <EffectiveDate>2458301</EffectiveDate>
       <EffectiveDateToday>No</EffectiveDateToday>
       <EmployeeClass/>
       <ExperienceRatingInitialKFactor>1</ExperienceRatingInitialKFactor>
@@ -447,7 +448,7 @@
       <ExtraCompensationOnPremium>0</ExtraCompensationOnPremium>
       <ExtraMonthlyCustodialFee>0</ExtraMonthlyCustodialFee>
       <FlatExtra>0</FlatExtra>
-      <FundAllocations>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </FundAllocations>
+      <FundAllocations>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</FundAllocations>
       <FundChoiceType>Choose funds</FundChoiceType>
       <Gender>Male</Gender>
       <GeneralAccountRate>0.06</GeneralAccountRate>
@@ -459,7 +460,7 @@
       <IndividualPaymentStrategy>PmtInputScalar</IndividualPaymentStrategy>
       <Inforce7702AAmountsPaidHistory>0</Inforce7702AAmountsPaidHistory>
       <InforceAnnualTargetPremium>0</InforceAnnualTargetPremium>
-      <InforceAsOfDate>2454040</InforceAsOfDate>
+      <InforceAsOfDate>2458301</InforceAsOfDate>
       <InforceAvBeforeLastMc>0</InforceAvBeforeLastMc>
       <InforceContractMonth>0</InforceContractMonth>
       <InforceContractYear>0</InforceContractYear>
@@ -470,7 +471,6 @@
       <InforceCumulativeNoLapsePremium>0</InforceCumulativeNoLapsePremium>
       <InforceCumulativeRopPayments>0</InforceCumulativeRopPayments>
       <InforceCumulativeSalesLoad>0</InforceCumulativeSalesLoad>
-      <InforceDataSource>1</InforceDataSource>
       <InforceDcv>0</InforceDcv>
       <InforceGeneralAccountValue>0</InforceGeneralAccountValue>
       <InforceGlp>0</InforceGlp>
@@ -501,8 +501,8 @@
       <Internal1035ExchangeFromMec>No</Internal1035ExchangeFromMec>
       <Internal1035ExchangeTaxBasis>0</Internal1035ExchangeTaxBasis>
       <IssueAge>45</IssueAge>
-      <LastCoiReentryDate>2454040</LastCoiReentryDate>
-      <LastMaterialChangeDate>2454040</LastMaterialChangeDate>
+      <LastCoiReentryDate>2458301</LastCoiReentryDate>
+      <LastMaterialChangeDate>2458301</LastMaterialChangeDate>
       <ListBillDate>2440588</ListBillDate>
       <LoanRate>0.06</LoanRate>
       <LoanRateType>Fixed loan rate</LoanRateType>
@@ -528,19 +528,19 @@
       <SalarySpecifiedAmountCap>100000</SalarySpecifiedAmountCap>
       <SalarySpecifiedAmountFactor>1</SalarySpecifiedAmountFactor>
       <SalarySpecifiedAmountOffset>50000</SalarySpecifiedAmountOffset>
-      <SeparateAccountRate>.08</SeparateAccountRate>
+      <SeparateAccountRate>0.08</SeparateAccountRate>
       <SeparateAccountRateType>Gross rate</SeparateAccountRateType>
       <Smoking>Nonsmoker</Smoking>
-      <SolveBeginTime>45</SolveBeginTime>
+      <SolveBeginAge>45</SolveBeginAge>
       <SolveBeginYear>0</SolveBeginYear>
-      <SolveEndTime>65</SolveEndTime>
+      <SolveEndAge>65</SolveEndAge>
       <SolveEndYear>20</SolveEndYear>
       <SolveExpenseGeneralAccountBasis>Current</SolveExpenseGeneralAccountBasis>
       <SolveFromWhich>Issue</SolveFromWhich>
       <SolveSeparateAccountBasis>Hypothetical</SolveSeparateAccountBasis>
       <SolveTarget>Endowment</SolveTarget>
-      <SolveTargetCashSurrenderValue>0</SolveTargetCashSurrenderValue>
-      <SolveTargetTime>100</SolveTargetTime>
+      <SolveTargetAge>100</SolveTargetAge>
+      <SolveTargetValue>0</SolveTargetValue>
       <SolveTargetYear>55</SolveTargetYear>
       <SolveTgtAtWhich>Maturity</SolveTgtAtWhich>
       <SolveToWhich>Retirement</SolveToWhich>
@@ -558,6 +558,7 @@
       <State>CT</State>
       <StateOfJurisdiction>CT</StateOfJurisdiction>
       <SubstandardTable>None</SubstandardTable>
+      <SupplementalAmount>0</SupplementalAmount>
       <SupplementalIllustrationType>None</SupplementalIllustrationType>
       <SupplementalReportColumn00>[none]</SupplementalReportColumn00>
       <SupplementalReportColumn01>[none]</SupplementalReportColumn01>
@@ -571,11 +572,10 @@
       <SupplementalReportColumn09>[none]</SupplementalReportColumn09>
       <SupplementalReportColumn10>[none]</SupplementalReportColumn10>
       <SupplementalReportColumn11>[none]</SupplementalReportColumn11>
-      <SupplementalSpecifiedAmount>0</SupplementalSpecifiedAmount>
       <SurviveToAge>99</SurviveToAge>
       <SurviveToType>Survive to age limit</SurviveToType>
-      <SurviveToYear>99</SurviveToYear>
-      <TaxBracket>0</TaxBracket>
+      <SurviveToYear>100</SurviveToYear>
+      <TaxBracket/>
       <TermAdjustmentMethod>Adjust base first</TermAdjustmentMethod>
       <TermRider>No</TermRider>
       <TermRiderAmount>0</TermRiderAmount>
@@ -584,7 +584,7 @@
       <TotalSpecifiedAmount>1000000</TotalSpecifiedAmount>
       <UnderwritingClass>Standard</UnderwritingClass>
       <UseAverageOfAllFunds>No</UseAverageOfAllFunds>
-      <UseCurrentDeclaredRate>No</UseCurrentDeclaredRate>
+      <UseCurrentDeclaredRate>Yes</UseCurrentDeclaredRate>
       <UseDOB>No</UseDOB>
       <UseExperienceRating>No</UseExperienceRating>
       <UsePartialMortality>No</UsePartialMortality>

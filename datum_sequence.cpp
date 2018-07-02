@@ -319,6 +319,7 @@ std::map<std::string,std::string> const dbo_sequence::allowed_keywords() const
         all_keywords["a"  ] = "A"  ;
         all_keywords["b"  ] = "B"  ;
         all_keywords["rop"] = "ROP";
+        all_keywords["mdb"] = "MDB";
         }
     std::map<std::string,std::string> permissible_keywords = all_keywords;
     return permissible_keywords;

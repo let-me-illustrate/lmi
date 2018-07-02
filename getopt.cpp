@@ -267,7 +267,7 @@ GetOpt::print_expanding(char* v)
     if(x < 040)
       std::fprintf(stderr, "^%c", x + '@');
     else if(0177 < x)
-      std::fprintf(stderr, "\\%o", x);
+      std::fprintf(stderr, "\\%o", static_cast<unsigned int>(x));
     else
       std::fprintf(stderr, "%c", x);
 }
@@ -730,7 +730,19 @@ GetOpt::operator()()
 
   {
     int c = *nextchar++;
+#if defined __GNUC__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wuseless-cast"
+#endif // defined __GNUC__
+    // i686-w64-mingw32-g++-7.3 flags this cast as "useless", but
+    // that seems to be a defect: the first argument is const, so
+    // the return value is also const. Perhaps the presence of C99's
+    // 'char* strchr(char const*, int);' prototype confuses g++, but
+    // it's still a defect.
     char* temp = const_cast<char*>(std::strchr(noptstring.c_str(), c));
+#if defined __GNUC__
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__
 
     // Increment 'optind' when we start to process its last character.
     if(*nextchar == 0)
@@ -750,7 +762,7 @@ GetOpt::operator()()
                 list_option = nullptr;
 
                 std::fprintf(stderr, "%s: unrecognized option, character code 0%o\n",
-                         nargv[0], c);
+                         nargv[0], static_cast<unsigned int>(c));
               }
             else
               {

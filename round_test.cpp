@@ -256,9 +256,9 @@ void test_various_float_types
     ,long double expected
     )
 {
-    BOOST_TEST((test_one_case(static_cast<float      >(unrounded), static_cast<float      >(expected))));
-    BOOST_TEST((test_one_case(static_cast<double     >(unrounded), static_cast<double     >(expected))));
-    BOOST_TEST((test_one_case(static_cast<long double>(unrounded), static_cast<long double>(expected))));
+    BOOST_TEST((test_one_case(static_cast<float >(unrounded), static_cast<float >(expected))));
+    BOOST_TEST((test_one_case(static_cast<double>(unrounded), static_cast<double>(expected))));
+    BOOST_TEST((test_one_case(/* long double */  (unrounded), /* long double */  (expected))));
 }
 
 // C99 7.12.9.6: round "to the nearest integer value in floating-point

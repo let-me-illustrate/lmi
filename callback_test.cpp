@@ -68,7 +68,14 @@ namespace application
 
     double concrete_adder(int x, float y, double z)
     {
+#if defined __GNUC__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wdouble-promotion"
+#endif // defined __GNUC__
         return x + z + y;
+#if defined __GNUC__
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__
     }
 
     void initialize_callback()

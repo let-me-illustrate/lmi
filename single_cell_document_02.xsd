@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
-  <xs:include schemaLocation="cell.xsd"/>
+  <xs:include schemaLocation="cell_08.xsd"/>
   <!--
     RELAX NG schema for '.ill' files (class single_cell_document).
 
@@ -31,7 +31,7 @@
           <xs:attribute name="version" use="required">
             <xs:simpleType>
               <xs:restriction base="xs:token">
-                <xs:enumeration value="9"/>
+                <xs:enumeration value="2"/>
               </xs:restriction>
             </xs:simpleType>
           </xs:attribute>

@@ -214,6 +214,11 @@ struct numeric_converter<std::string, From>
         // The borland rtl has a similar problem.
         char buffer[1 + buffer_length];
         buffer[buffer_length] = '\0';
+#if defined __GNUC__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wdouble-promotion"
+#   pragma GCC diagnostic ignored "-Wformat-nonliteral"
+#endif // defined __GNUC__
         int actual_length = std::snprintf
             (buffer
             ,buffer_length
@@ -221,6 +226,9 @@ struct numeric_converter<std::string, From>
             ,numeric_conversion_traits<From>::digits(from)
             ,from
             );
+#if defined __GNUC__
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__
         if(actual_length < 0)
             {
             std::ostringstream err;

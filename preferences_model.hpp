@@ -79,6 +79,7 @@ class LMI_SO PreferencesModel final
     mce_report_column       CalculationSummaryColumn09;
     mce_report_column       CalculationSummaryColumn10;
     mce_report_column       CalculationSummaryColumn11;
+    mce_yes_or_no           CensusPastePalimpsestically;
     datum_string            DefaultInputFilename;
     datum_string            PrintDirectory;
     tnr_nonnegative_integer SecondsToPauseBetweenPrintouts;

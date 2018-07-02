@@ -903,6 +903,10 @@ void AccountValue::TxOptionChange()
                     {
                     ChangeSpecAmtBy(std::max(0.0, CumPmts));
                     }
+                else if(mce_mdb == old_option) // DBO3 !! reconsider
+                    {
+                    alarum() << "MDB DBO not yet implemented." << LMI_FLUSH;
+                    }
                 else
                     {
                     alarum() << "Unknown death benefit option." << LMI_FLUSH;
@@ -935,6 +939,11 @@ void AccountValue::TxOptionChange()
                 {
                 // Do nothing.
                 }
+            break;
+        case mce_mdb: // DBO3 !! reconsider
+            {
+            alarum() << "MDB DBO not yet implemented." << LMI_FLUSH;
+            }
             break;
         }
 }
@@ -1603,6 +1612,11 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
             // SA + sum of premiums less withdrawals, but not < SA.
             DBIgnoringCorr = ActualSpecAmt + std::max(0.0, CumPmts);
             DB7702A        = ActualSpecAmt + std::max(0.0, CumPmts);
+            }
+            break;
+        case mce_mdb: // DBO3 !! reconsider
+            {
+            alarum() << "MDB DBO not yet implemented." << LMI_FLUSH;
             }
             break;
         }
@@ -2564,6 +2578,11 @@ void AccountValue::TxTakeWD()
                 {
                 // Do nothing.
                 }
+            }
+            break;
+        case mce_mdb: // DBO3 !! reconsider
+            {
+            alarum() << "MDB DBO not yet implemented." << LMI_FLUSH;
             }
             break;
         }

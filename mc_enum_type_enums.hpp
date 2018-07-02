@@ -27,10 +27,10 @@
 // Here write illustrative examples and anything that doesn't follow
 // the macro paradigm, such as enumerators with nonsuccessive values.
 
-enum enum_option
-    {mce_option_A
-    ,mce_option_B
-    ,mce_option_C
+enum enum_tragic
+    {mce_aeschylus
+    ,mce_euripides
+    ,mce_sophocles
     };
 
 /// Output target for illustration generation.

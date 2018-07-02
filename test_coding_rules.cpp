@@ -696,6 +696,7 @@ void check_defect_markers(file const& f)
             &&  "COMPILER "    != z[1]
             &&  "CYGWIN "      != z[1]
             &&  "DATABASE "    != z[1]
+            &&  "DBO3 "        != z[1]
             &&  "ET "          != z[1]
             &&  "EVGENIY "     != z[1]
             &&  "IHS "         != z[1]

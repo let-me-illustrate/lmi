@@ -682,6 +682,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     std::string dbo_name_option1 = mc_str(mce_option1);
     std::string dbo_name_option2 = mc_str(mce_option2);
     std::string dbo_name_rop     = mc_str(mce_rop    );
+    std::string dbo_name_mdb     = mc_str(mce_mdb    ); // DBO3 !! reconsider
 
     // The antediluvian branch has a null ProductData_ object.
     if(b->ProductData_)
@@ -695,6 +696,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         dbo_name_option1               = p.datum("DboNameLevel"                   );
         dbo_name_option2               = p.datum("DboNameIncreasing"              );
         dbo_name_rop                   = p.datum("DboNameReturnOfPremium"         );
+//      dbo_name_mdb                   = // DBO3 !! reconsider
         PolicyForm = p.datum(alt_form ? "PolicyFormAlternative" : "PolicyForm");
         PolicyMktgName                 = p.datum("PolicyMktgName"                 );
         PolicyLegalName                = p.datum("PolicyLegalName"                );
@@ -890,6 +892,7 @@ void LedgerInvariant::Init(BasicValues const* b)
          (mce_option1 == init_dbo) ? dbo_name_option1
         :(mce_option2 == init_dbo) ? dbo_name_option2
         :(mce_rop     == init_dbo) ? dbo_name_rop
+        :(mce_mdb     == init_dbo) ? dbo_name_mdb
         :throw std::logic_error("Unrecognized initial death benefit option.")
         ;
 
@@ -906,21 +909,12 @@ void LedgerInvariant::Init(BasicValues const* b)
         )[0];
 
     IsInforce = b->yare_input_.EffectiveDate != b->yare_input_.InforceAsOfDate;
+
     // This test is probably redundant because it is already performed
     // in class Input. But it's difficult to prove that it is actually
     // redundant and will always remain so, while repeating it here
     // costs little and gives a stronger guarantee that illustrations
     // that would violate this rule cannot be produced.
-// Fails:
-//   File | New | Illustration
-//   subtract one day from "Effective date"
-//   OK
-//   Illustration | Edit cell... [fails irrecoverably]
-// Therefore, these diagnostics are temporarily suppressed for input
-// files created by lmi--but not for extracts from vendor systems,
-// whose dates should not be altered by lmi users.
-if(1 != b->yare_input_.InforceDataSource)
-  {
     if(IsInforce && (0 == b->yare_input_.InforceYear && 0 == b->yare_input_.InforceMonth))
         {
         alarum()
@@ -928,7 +922,6 @@ if(1 != b->yare_input_.InforceDataSource)
             << LMI_FLUSH
             ;
         }
-  }
 
     SupplementalReport         = b->yare_input_.CreateSupplementalReport;
     SupplementalReportColumn00 = mc_str(b->yare_input_.SupplementalReportColumn00);

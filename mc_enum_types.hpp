@@ -31,7 +31,7 @@
 // the macro paradigm, such as enumerators with nonsuccessive values,
 // for parallelism with the corresponding TU.
 
-typedef mc_enum<enum_option    > e_option          ;
+typedef mc_enum<enum_tragic    > e_tragic          ;
 typedef mc_enum<mcenum_emission> e_emission        ;
 typedef mc_enum<rounding_style > mce_rounding_style;
 

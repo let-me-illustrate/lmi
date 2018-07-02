@@ -292,6 +292,14 @@
                 </object>
             </object>
         </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <border>4</border>
+            <object class="wxCheckBox" name="CensusPastePalimpsestically">
+                <label>Overwrite old cells when pasting a census</label>
+                <help>When pasting a census, replace old cells instead of appending to them</help>
+            </object>
+        </object>
     </object>
 </object>
 

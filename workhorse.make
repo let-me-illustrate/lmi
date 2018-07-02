@@ -431,40 +431,82 @@ treat_warnings_as_errors := -pedantic-errors -Werror
 gcc_common_warnings := \
   $(treat_warnings_as_errors) \
   -Wall \
+  -Walloc-zero \
+  -Walloca \
   -Wcast-align \
   -Wconversion \
+  -Wdangling-else \
   -Wdeprecated-declarations \
   -Wdisabled-optimization \
+  -Wdouble-promotion \
+  -Wduplicated-branches \
+  -Wduplicated-cond \
   -Wextra \
+  -Wformat-nonliteral \
+  -Wformat-security \
+  -Wformat-signedness \
+  -Wformat-y2k \
   -Wimport \
+  -Winit-self \
+  -Winvalid-pch \
+  -Wlogical-op \
+  -Wmissing-include-dirs \
   -Wmultichar \
   -Wpacked \
+  -Wparentheses \
   -Wpointer-arith \
   -Wredundant-decls \
+  -Wrestrict \
   -Wshadow \
   -Wsign-compare \
+  -Wstack-protector \
+  -Wtrampolines \
   -Wundef \
   -Wunreachable-code \
+  -Wunused-macros \
+  -Wvector-operation-performance \
   -Wwrite-strings \
 
 gcc_c_warnings := \
   $(c_standard) \
   $(gcc_common_warnings) \
+  -Wbad-function-cast \
+  -Wc++-compat \
+  -Wjump-misses-init \
   -Wmissing-prototypes \
+  -Wnested-externs \
+  -Wold-style-definition \
+  -Wstrict-prototypes \
+  -Wtraditional-conversion \
+  -Wunsuffixed-float-constants \
 
 gcc_cxx_warnings := \
   $(cxx_standard) \
   $(gcc_common_warnings) \
+  -Wc++11-compat \
+  -Wc++14-compat \
+  -Wc++1z-compat \
+  -Wconditionally-supported \
   -Wctor-dtor-privacy \
+  -Wdelete-non-virtual-dtor \
   -Wdeprecated \
+  -Wnoexcept \
+  -Wnoexcept-type \
   -Wnon-template-friend \
   -Woverloaded-virtual \
   -Wpmf-conversions \
   -Winvalid-pch \
+  -Wregister \
+  -Wreorder \
+  -Wstrict-null-sentinel \
   -Wsynth \
+  -Wuseless-cast \
 
 # Too many warnings on correct code, e.g. exact comparison to zero:
 #  -Wfloat-equal \
+
+gcc_common_extra_warnings := \
+  -Wcast-qual \
 
 # WX !! The wx library triggers many diagnostics with the following
 # 'extra' flags. This makefile used to inhibit these flags for source
@@ -476,31 +518,40 @@ gcc_cxx_warnings := \
 
 wx_dependent_objects :=
 
-gcc_common_extra_warnings := \
-  -Wcast-qual \
+$(wx_dependent_objects): gcc_common_extra_warnings += \
+  -Wno-cast-qual \
+  -Wno-double-promotion \
+  -Wno-format-nonliteral \
+  -Wno-sign-conversion \
+  -Wno-useless-cast \
 
-$(wx_dependent_objects): gcc_common_extra_warnings += -Wno-cast-qual
+bourn_cast_test.o: gcc_common_extra_warnings += \
+  -Wno-double-promotion \
 
-ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
-  ifeq (3.4.5,$(gcc_version))
-    expression_template_0_test.o: gcc_common_extra_warnings += -Wno-unused-parameter
-  endif
-endif
+currency_test.o: gcc_common_extra_warnings += \
+  -Wno-useless-cast \
+
+md5.o: gcc_common_extra_warnings += \
+  -Wno-useless-cast \
 
 # Boost didn't remove an unused parameter in this file, which also
 # seems to contain a "maybe-uninitialized" variable--see:
 #   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00080.html
 
-operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
 operations_posix_windows.o: gcc_common_extra_warnings += -Wno-maybe-uninitialized
+operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-macros
+operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
 
-# The boost regex library is incompatible with '-Wshadow'.
+# The boost regex library is incompatible with many warnings.
 
 $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
+  -Wno-duplicated-branches \
   -Wno-implicit-fallthrough \
   -Wno-register \
   -Wno-shadow \
+  -Wno-unused-macros \
+  -Wno-useless-cast \
 
 boost_dependent_objects := \
   $(boost_regex_objects) \
@@ -519,6 +570,12 @@ $(boost_dependent_objects): gcc_common_extra_warnings += -Wno-unused-local-typed
 ifeq (3.4.5,$(gcc_version))
   static_mutex.o: gcc_common_extra_warnings :=
   static_mutex.o:          gcc_cxx_warnings :=
+endif
+
+ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
+  ifeq (3.4.5,$(gcc_version))
+    expression_template_0_test.o: gcc_common_extra_warnings += -Wno-unused-parameter
+  endif
 endif
 
 # Boost normally makes '-Wundef' give spurious warnings:
@@ -1562,4 +1619,8 @@ show_flags:
 	@printf 'wx_libraries            = "%s"\n' "$(wx_libraries)"
 	@printf 'wx_library_paths        = "%s"\n' "$(wx_library_paths)"
 	@printf 'wx_predefinitions       = "%s"\n' "$(wx_predefinitions)"
+
+.PHONY: show_disabled_g++_warnings
+show_disabled_g++_warnings:
+	$(CXX) $(ALL_CXXFLAGS) -Q --help=warning | $(GREP) '[[]disabled[]]'
 

@@ -227,6 +227,11 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL( "Z ", numeric_io_cast<std::string>( "Z "));
     BOOST_TEST_EQUAL(" Z ", numeric_io_cast<std::string>(" Z "));
 
+#if defined __GNUC__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wuseless-cast"
+#endif // defined __GNUC__
+
     test_interconvertibility((         char)(   1), "1", __FILE__, __LINE__);
     test_interconvertibility((         char)('\1'), "1", __FILE__, __LINE__);
 
@@ -282,6 +287,10 @@ int test_main(int, char*[])
     test_interconvertibility((long double)(-2.5L), "-2.5", __FILE__, __LINE__);
     BOOST_TEST_EQUAL(numeric_io_cast<long double>("3.36210314311209350626e-4932"), std::numeric_limits<long double>::min());
 #endif // !defined LMI_MSVCRT
+
+#if defined __GNUC__
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__
 
     test_interconvertibility(std::string("  as  df  "), "  as  df  ", __FILE__, __LINE__);
     // The converse

@@ -61,10 +61,12 @@ single_cell_document::single_cell_document(std::string const& filename)
 /// version 0: [prior to the lmi epoch]
 /// version 1: 20130428T1828Z
 /// version 2: 20150316T0409Z
+///   [versions 3-8 never existed]
+/// version 9: 20180628T1936Z
 
 int single_cell_document::class_version() const
 {
-    return 2;
+    return 9;
 }
 
 /// Name of xml root element.
@@ -90,11 +92,12 @@ void single_cell_document::parse(xml_lmi::dom_parser const& parser)
         // attribute exists and has a nondefault value--but, because
         // "data_source" is a newer attribute than "version", there
         // should be no "data_source" without "version". However, some
-        // old vendor extracts failed to follow that rule, this file
+        // old vendor extracts failed to follow that rule; therefore,
+        // this file
         //   single_cell_document_01.xsd
         // has been copied to
         //   single_cell_document_00.xsd
-        // which is the correct schema for vendor files that have a
+        // which is the correct schema for vendor files that have an
         // "InforceDataSource" element but no "data_source" attribute.
         // No corresponding '.rnc' schema is needed because validation
         // uses only '.xsd' schemata.
@@ -123,41 +126,30 @@ void single_cell_document::parse(xml_lmi::dom_parser const& parser)
 /// which imposes an overhead of about twenty percent, is skipped for
 /// files produced by lmi itself, which are presumptively valid.
 ///
-/// Regrettably, as this is written in 2013-04, external files
-/// represent the data source in <cell> element <InforceDataSource>
-/// rather than in root attribute "data_source", so for now it is
-/// necessary to look for the lower-level element. Both represent the
-/// data source the same way: "0" is reserved, "1" means lmi, and
-/// each external system is assigned a higher integer.
+/// Values for root attribute "data_source":
+///   "0" is reserved;
+///   "1" means lmi; and
+///   each external system is assigned a higher integer.
+///
+/// If the "data_source" attribute is not present, then presume that
+/// the source is external iff a "file_version" attribute is present
+/// and a schema for that version exists.
 
 bool single_cell_document::data_source_is_external(xml::document const& d) const
 {
     xml::element const& root(d.get_root_node());
-
     int data_source = 0;
     if(xml_lmi::get_attr(root, "data_source", data_source))
         {
-        return 1 < data_source;
+        LMI_ASSERT(0 != data_source);
+        return 1 != data_source;
         }
-
-    // INPUT !! Remove "InforceDataSource" and the following code when
-    // external systems are updated to use the "data_source" attribute.
-
-    xml::const_nodes_view const i_nodes(root.elements("cell"));
-    LMI_ASSERT(1 == i_nodes.size());
-    for(auto const& i : i_nodes)
+    else
         {
-        for(auto const& j : i.elements("InforceDataSource"))
-            {
-            std::string s(xml_lmi::get_content(j));
-            if("0" != s && "1" != s)
-                {
-                return true;
-                }
-            }
+        int file_version = 0;
+        xml_lmi::get_attr(root, "version", file_version);
+        return 7 <= file_version;
         }
-
-    return false;
 }
 
 /// Coarsely validate file format with XSD schema.

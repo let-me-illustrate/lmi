@@ -32,6 +32,7 @@
 #include "default_view.hpp"
 #include "edit_mvc_docview_parameters.hpp"
 #include "facets.hpp"                   // tab_is_not_whitespace_locale()
+#include "global_settings.hpp"
 #include "illustration_view.hpp"
 #include "illustrator.hpp"
 #include "input.hpp"
@@ -59,7 +60,7 @@
 #include <wx/spinctrl.h>
 #include <wx/utils.h>                   // wxBusyCursor
 #include <wx/valnum.h>
-#include <wx/wupdlock.h>
+#include <wx/wupdlock.h>                // wxWindowUpdateLocker
 #include <wx/xrc/xmlres.h>
 
 #include <algorithm>
@@ -1824,7 +1825,6 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         cells.push_back(current_cell);
 
         status() << "Added cell number " << cells.size() << '.' << std::flush;
-        wxSafeYield();
         }
 
     if(0 == current_line)
@@ -1842,6 +1842,17 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         class_parms().clear();
         class_parms().push_back(archetype);
         cell_parms ().swap(cells);
+        selection = 0;
+        }
+    else if
+        (configurable_settings::instance().census_paste_palimpsestically()
+        ||    contains(global_settings::instance().pyx(), "cut_census")
+           && cell_parms() == case_parms()
+        )
+        {
+        cell_parms().swap(cells);
+        for(auto& j : case_parms ()) {j["UseDOB"] = "Yes";}
+        for(auto& j : class_parms()) {j["UseDOB"] = "Yes";}
         selection = 0;
         }
     else
@@ -1866,16 +1877,24 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
     LMI_ASSERT(!class_parms().empty());
 }
 
-/// Paste from the census manager into a "spreadsheet" (TSV) file.
+/// Copy from census manager to clipboard and TSV file.
 ///
 /// Simply calls DoCopyCensus(), q.v.
 
 void CensusView::UponCopyCensus(wxCommandEvent&)
 {
     DoCopyCensus();
+
+    if(contains(global_settings::instance().pyx(), "cut_census"))
+        {
+        cell_parms() = case_parms();
+        list_model_->Reset(cell_parms().size());
+        Update();
+        list_window_->Select(list_model_->GetItem(0));
+        }
 }
 
-/// Paste from the census manager into a "spreadsheet" (TSV) file.
+/// Copy from census manager to clipboard and TSV file.
 ///
 /// Include exactly those columns whose rows aren't all identical,
 /// considering as "rows" the individual cells--and also the case
@@ -1930,6 +1949,7 @@ void CensusView::DoCopyCensus() const
         }
     ofs << '\n';
 
+    int counter = 0;
     for(auto const& cell : cell_parms())
         {
         for(auto const& header : distinct_headers)
@@ -1944,6 +1964,7 @@ void CensusView::DoCopyCensus() const
             ofs << s << '\t';
             }
         ofs << '\n';
+        status() << "Copied cell number " << ++counter << '.' << std::flush;
         }
 
     if(!ofs)

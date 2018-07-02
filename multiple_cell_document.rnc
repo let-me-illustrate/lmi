@@ -30,7 +30,7 @@
 # all contracts in the group.
 
 start = element multiple_cell_document
-    {attribute version {"2"}
+    {attribute version {"9"}
     ,attribute data_source {xsd:nonNegativeInteger}
 
     ,element case_default     {cell_element  }

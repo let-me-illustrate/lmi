@@ -67,11 +67,13 @@
     {mce_option1 \
     ,mce_option2 \
     ,mce_rop \
+    ,mce_mdb \
     };
 #define dbopt_NAMES \
     {"A" \
     ,"B" \
     ,"ROP" \
+    ,"MDB" \
     };
 
 /// 7702 recognizes only the canonical death benefit options 1 and 2.

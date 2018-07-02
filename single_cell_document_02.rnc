@@ -22,11 +22,11 @@
 # Use file extension '.ill' for single-life xml documents.
 
 start = element single_cell_document
-    {attribute version {"9"}
+    {attribute version {"2"}
     ,attribute data_source {xsd:nonNegativeInteger}
 
     ,cell_element
     }
 
-include "cell.rnc"
+include "cell_08.rnc"
 

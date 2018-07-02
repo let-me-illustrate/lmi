@@ -210,19 +210,19 @@ void tn_range_test::test_floating_auxiliary_functions(char const* file, int line
 
         // Test direction of adjustment.
 
-        INVOKE_BOOST_TEST_RELATION(-1.07, <=, adjust_bound(T(-1.07),  std::numeric_limits<T>::max()), file, line);
-        INVOKE_BOOST_TEST_RELATION( 1.07, <=, adjust_bound(T( 1.07),  std::numeric_limits<T>::max()), file, line);
+        INVOKE_BOOST_TEST_RELATION(T(-1.07), <=, adjust_bound(T(-1.07),  std::numeric_limits<T>::max()), file, line);
+        INVOKE_BOOST_TEST_RELATION(T( 1.07), <=, adjust_bound(T( 1.07),  std::numeric_limits<T>::max()), file, line);
 
-        INVOKE_BOOST_TEST_RELATION(-1.07, >=, adjust_bound(T(-1.07), -std::numeric_limits<T>::max()), file, line);
-        INVOKE_BOOST_TEST_RELATION( 1.07, >=, adjust_bound(T( 1.07), -std::numeric_limits<T>::max()), file, line);
+        INVOKE_BOOST_TEST_RELATION(T(-1.07), >=, adjust_bound(T(-1.07), -std::numeric_limits<T>::max()), file, line);
+        INVOKE_BOOST_TEST_RELATION(T( 1.07), >=, adjust_bound(T( 1.07), -std::numeric_limits<T>::max()), file, line);
 
         // Test inequality of original and adjusted values.
 
-        INVOKE_BOOST_TEST_RELATION(-1.07, <,  adjust_bound(T(-1.07),  std::numeric_limits<T>::max()), file, line);
-        INVOKE_BOOST_TEST_RELATION( 1.07, <,  adjust_bound(T( 1.07),  std::numeric_limits<T>::max()), file, line);
+        INVOKE_BOOST_TEST_RELATION(T(-1.07), <,  adjust_bound(T(-1.07),  std::numeric_limits<T>::max()), file, line);
+        INVOKE_BOOST_TEST_RELATION(T( 1.07), <,  adjust_bound(T( 1.07),  std::numeric_limits<T>::max()), file, line);
 
-        INVOKE_BOOST_TEST_RELATION(-1.07, >,  adjust_bound(T(-1.07), -std::numeric_limits<T>::max()), file, line);
-        INVOKE_BOOST_TEST_RELATION( 1.07, >,  adjust_bound(T( 1.07), -std::numeric_limits<T>::max()), file, line);
+        INVOKE_BOOST_TEST_RELATION(T(-1.07), >,  adjust_bound(T(-1.07), -std::numeric_limits<T>::max()), file, line);
+        INVOKE_BOOST_TEST_RELATION(T( 1.07), >,  adjust_bound(T( 1.07), -std::numeric_limits<T>::max()), file, line);
         }
 
     bool volatile is_iec559 = std::numeric_limits<T>::is_iec559;

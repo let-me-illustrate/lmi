@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
-  <xs:include schemaLocation="types.xsd"/>
+  <xs:include schemaLocation="types_08.xsd"/>
   <!--
     RELAX NG schema for a single cell (class Input).
 
@@ -40,7 +40,6 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="AccidentalDeathBenefit"/>
-        <xs:element ref="AdditionalReports"/>
         <xs:element ref="Address"/>
         <xs:element ref="AgentAddress"/>
         <xs:element ref="AgentCity"/>
@@ -74,6 +73,8 @@
         <xs:element ref="CurrentCoiMultiplier"/>
         <xs:element ref="DateOfBirth"/>
         <xs:element ref="DeathBenefitOption"/>
+        <xs:element minOccurs="0" ref="DeathBenefitOptionFromIssue"/>
+        <xs:element minOccurs="0" ref="DeathBenefitOptionFromRetirement"/>
         <xs:element ref="DefinitionOfLifeInsurance"/>
         <xs:element ref="DefinitionOfMaterialChange"/>
         <xs:element ref="Dumpin"/>
@@ -98,7 +99,12 @@
         <xs:element ref="HoneymoonEndorsement"/>
         <xs:element ref="HoneymoonValueSpread"/>
         <xs:element ref="IncludeInComposite"/>
+        <xs:element minOccurs="0" ref="IndividualPaymentAmount"/>
+        <xs:element minOccurs="0" ref="IndividualPaymentMode"/>
         <xs:element ref="IndividualPaymentStrategy"/>
+        <xs:element minOccurs="0" ref="IndividualPaymentToAge"/>
+        <xs:element minOccurs="0" ref="IndividualPaymentToAlternative"/>
+        <xs:element minOccurs="0" ref="IndividualPaymentToDuration"/>
         <xs:element ref="Inforce7702AAmountsPaidHistory"/>
         <xs:element ref="InforceAnnualTargetPremium"/>
         <xs:element ref="InforceAsOfDate"/>
@@ -112,6 +118,7 @@
         <xs:element ref="InforceCumulativeNoLapsePremium"/>
         <xs:element ref="InforceCumulativeRopPayments"/>
         <xs:element ref="InforceCumulativeSalesLoad"/>
+        <xs:element ref="InforceDataSource"/>
         <xs:element ref="InforceDcv"/>
         <xs:element ref="InforceGeneralAccountValue"/>
         <xs:element ref="InforceGlp"/>
@@ -144,9 +151,16 @@
         <xs:element ref="IssueAge"/>
         <xs:element ref="LastCoiReentryDate"/>
         <xs:element ref="LastMaterialChangeDate"/>
-        <xs:element ref="ListBillDate"/>
+        <xs:element minOccurs="0" ref="ListBillDate"/>
+        <xs:element minOccurs="0" ref="LoanAmount"/>
+        <xs:element minOccurs="0" ref="LoanFromAge"/>
+        <xs:element minOccurs="0" ref="LoanFromAlternative"/>
+        <xs:element minOccurs="0" ref="LoanFromDuration"/>
         <xs:element ref="LoanRate"/>
         <xs:element ref="LoanRateType"/>
+        <xs:element minOccurs="0" ref="LoanToAge"/>
+        <xs:element minOccurs="0" ref="LoanToAlternative"/>
+        <xs:element minOccurs="0" ref="LoanToDuration"/>
         <xs:element ref="MaleProportion"/>
         <xs:element ref="MasterContractNumber"/>
         <xs:element ref="MaximumNaar"/>
@@ -172,21 +186,23 @@
         <xs:element ref="SeparateAccountRate"/>
         <xs:element ref="SeparateAccountRateType"/>
         <xs:element ref="Smoking"/>
-        <xs:element ref="SolveBeginAge"/>
+        <xs:element ref="SolveBeginTime"/>
         <xs:element ref="SolveBeginYear"/>
-        <xs:element ref="SolveEndAge"/>
+        <xs:element ref="SolveEndTime"/>
         <xs:element ref="SolveEndYear"/>
         <xs:element ref="SolveExpenseGeneralAccountBasis"/>
         <xs:element ref="SolveFromWhich"/>
         <xs:element ref="SolveSeparateAccountBasis"/>
         <xs:element ref="SolveTarget"/>
-        <xs:element ref="SolveTargetAge"/>
-        <xs:element ref="SolveTargetValue"/>
+        <xs:element ref="SolveTargetCashSurrenderValue"/>
+        <xs:element ref="SolveTargetTime"/>
         <xs:element ref="SolveTargetYear"/>
         <xs:element ref="SolveTgtAtWhich"/>
         <xs:element ref="SolveToWhich"/>
         <xs:element ref="SolveType"/>
         <xs:element ref="SpecifiedAmount"/>
+        <xs:element minOccurs="0" ref="SpecifiedAmountFromIssue"/>
+        <xs:element minOccurs="0" ref="SpecifiedAmountFromRetirement"/>
         <xs:element ref="SpecifiedAmountStrategyFromIssue"/>
         <xs:element ref="SplitDollarAccumulateInterest"/>
         <xs:element ref="SplitDollarLoanRate"/>
@@ -199,7 +215,6 @@
         <xs:element ref="State"/>
         <xs:element ref="StateOfJurisdiction"/>
         <xs:element ref="SubstandardTable"/>
-        <xs:element ref="SupplementalAmount"/>
         <xs:element ref="SupplementalIllustrationType"/>
         <xs:element ref="SupplementalReportColumn00"/>
         <xs:element ref="SupplementalReportColumn01"/>
@@ -213,6 +228,7 @@
         <xs:element ref="SupplementalReportColumn09"/>
         <xs:element ref="SupplementalReportColumn10"/>
         <xs:element ref="SupplementalReportColumn11"/>
+        <xs:element ref="SupplementalSpecifiedAmount"/>
         <xs:element ref="SurviveToAge"/>
         <xs:element ref="SurviveToType"/>
         <xs:element ref="SurviveToYear"/>
@@ -232,12 +248,19 @@
         <xs:element ref="WaiverOfPremiumBenefit"/>
         <xs:element ref="WithdrawToBasisThenLoan"/>
         <xs:element ref="Withdrawal"/>
+        <xs:element minOccurs="0" ref="WithdrawalAmount"/>
+        <xs:element minOccurs="0" ref="WithdrawalFromAge"/>
+        <xs:element minOccurs="0" ref="WithdrawalFromAlternative"/>
+        <xs:element minOccurs="0" ref="WithdrawalFromDuration"/>
+        <xs:element minOccurs="0" ref="WithdrawalToAge"/>
+        <xs:element minOccurs="0" ref="WithdrawalToAlternative"/>
+        <xs:element minOccurs="0" ref="WithdrawalToDuration"/>
         <xs:element ref="ZipCode"/>
       </xs:sequence>
       <xs:attribute name="version" use="required">
         <xs:simpleType>
           <xs:restriction base="xs:token">
-            <xs:enumeration value="9"/>
+            <xs:enumeration value="8"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
@@ -246,11 +269,6 @@
   <xs:element name="AccidentalDeathBenefit" type="yes_or_no">
     <xs:annotation>
       <xs:documentation>Accidental death benefit: elected or not.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="AdditionalReports" type="xs:string">
-    <xs:annotation>
-      <xs:documentation>* Selections from a list of stored reports. Default: empty string.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="Address" type="xs:string">
@@ -420,6 +438,16 @@ called a "number", is often not purely numeric.</xs:documentation>
       <xs:documentation>Death benefit option. Default: 'a'.</xs:documentation>
     </xs:annotation>
   </xs:element>
+  <xs:element name="DeathBenefitOptionFromIssue" type="dbopt">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="DeathBenefitOptionFromRetirement" type="dbopt">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="DefinitionOfLifeInsurance" type="defn_life_ins">
     <xs:annotation>
       <xs:documentation>7702 definitional test.</xs:documentation>
@@ -560,7 +588,32 @@ lives from a composite without deleting them from a census.
 Default: 'Yes'.</xs:documentation>
     </xs:annotation>
   </xs:element>
+  <xs:element name="IndividualPaymentAmount" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="IndividualPaymentMode" type="mode">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="IndividualPaymentStrategy" type="pmt_strategy">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="IndividualPaymentToAge" type="age_int">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="IndividualPaymentToAlternative" type="to_point">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="IndividualPaymentToDuration" type="duration_int">
     <xs:annotation>
       <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
@@ -646,6 +699,11 @@ or forced out.</xs:documentation>
   <xs:element name="InforceCumulativeSalesLoad" type="nonnegative_double">
     <xs:annotation>
       <xs:documentation>Inforce cumulative refundable sales load.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="InforceDataSource" type="xs:nonNegativeInteger">
+    <xs:annotation>
+      <xs:documentation>Vendor identifier for files from an external system.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforceDcv" type="nonnegative_double">
@@ -773,7 +831,7 @@ regard to term rider and corridor.</xs:documentation>
       <xs:documentation>Policy-year-to-date payments subject to premium tax.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="InputFundManagementFee" type="proportion_double">
+  <xs:element name="InputFundManagementFee" type="nonnegative_double">
     <xs:annotation>
       <xs:documentation>* Investment management fee of a custom fund.</xs:documentation>
     </xs:annotation>
@@ -830,6 +888,26 @@ date, for contracts that have never had a material change.</xs:documentation>
 Default: the value of 'InforceAsOfDate'.</xs:documentation>
     </xs:annotation>
   </xs:element>
+  <xs:element name="LoanAmount" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="LoanFromAge" type="age_int">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="LoanFromAlternative" type="from_point">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="LoanFromDuration" type="duration_int">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="LoanRate" type="proportion_double">
     <xs:annotation>
       <xs:documentation>Loan interest rate, if it is variable. Default: '0' otherwise.</xs:documentation>
@@ -838,6 +916,21 @@ Default: the value of 'InforceAsOfDate'.</xs:documentation>
   <xs:element name="LoanRateType" type="loan_rate_type">
     <xs:annotation>
       <xs:documentation>Loan rate: fixed or variable.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="LoanToAge" type="age_int">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="LoanToAlternative" type="to_point">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="LoanToDuration" type="duration_int">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="MaleProportion" type="proportion_double">
@@ -981,9 +1074,9 @@ intended to represent basic group term coverage. Default: '50000'.</xs:documenta
       <xs:documentation>Insured's smoking or tobacco use.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="SolveBeginAge" type="duration_int">
+  <xs:element name="SolveBeginTime" type="duration_int">
     <xs:annotation>
-      <xs:documentation>* Age at which a solve begins (inclusive).</xs:documentation>
+      <xs:documentation>* Age at which a solve begins  (inclusive).</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SolveBeginYear" type="duration_int">
@@ -991,7 +1084,7 @@ intended to represent basic group term coverage. Default: '50000'.</xs:documenta
       <xs:documentation>* Policy year in which a solve begins (inclusive).</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="SolveEndAge" type="duration_int">
+  <xs:element name="SolveEndTime" type="duration_int">
     <xs:annotation>
       <xs:documentation>* Age at which a solve ends (exclusive).</xs:documentation>
     </xs:annotation>
@@ -1023,14 +1116,14 @@ the basis of the hypothetical rate, half that rate, or zero.</xs:documentation>
       <xs:documentation>* Solve goal.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="SolveTargetAge" type="duration_int">
-    <xs:annotation>
-      <xs:documentation>* Age at which a solve target is to be achieved.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="SolveTargetValue" type="nonnegative_double">
+  <xs:element name="SolveTargetCashSurrenderValue" type="nonnegative_double">
     <xs:annotation>
       <xs:documentation>* Cash surrender value used as solve goal.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="SolveTargetTime" type="duration_int">
+    <xs:annotation>
+      <xs:documentation>* Age at which a solve target is to be achieved.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SolveTargetYear" type="duration_int">
@@ -1057,6 +1150,16 @@ the basis of the hypothetical rate, half that rate, or zero.</xs:documentation>
     <xs:annotation>
       <xs:documentation>Specified amount for each policy year since issue. Inforce
 extracts require only the current scalar value. Default: '0'.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="SpecifiedAmountFromIssue" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="SpecifiedAmountFromRetirement" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SpecifiedAmountStrategyFromIssue" type="sa_strategy">
@@ -1122,14 +1225,6 @@ everything else except premium tax.</xs:documentation>
       <xs:documentation>Substandard table rating.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="SupplementalAmount" type="specamt_sequence">
-    <xs:annotation>
-      <xs:documentation>Supplemental specified amount (e.g., individually-elected
-extra coverage on a group plan) for each policy year since
-issue. Inforce extracts require only the current scalar value.
-Default: '0'.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
   <xs:element name="SupplementalIllustrationType" type="suppl_illus_type">
     <xs:annotation>
       <xs:documentation>* Built-in supplemental illustration type.</xs:documentation>
@@ -1193,6 +1288,14 @@ Default: '0'.</xs:documentation>
   <xs:element name="SupplementalReportColumn11" type="report_column">
     <xs:annotation>
       <xs:documentation>* User-designed supplemental illustration: twelfth column.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="SupplementalSpecifiedAmount" type="specamt_sequence">
+    <xs:annotation>
+      <xs:documentation>Supplemental specified amount (e.g., individually-elected
+extra coverage on a group plan) for each policy year since
+issue. Inforce extracts require only the current scalar value.
+Default: '0'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SurviveToAge" type="age_int">
@@ -1292,6 +1395,41 @@ in a composite illustration.</xs:documentation>
   <xs:element name="Withdrawal" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>* Partial surrender. Default: '0'.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="WithdrawalAmount" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="WithdrawalFromAge" type="age_int">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="WithdrawalFromAlternative" type="from_point">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="WithdrawalFromDuration" type="duration_int">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="WithdrawalToAge" type="age_int">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="WithdrawalToAlternative" type="to_point">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="WithdrawalToDuration" type="duration_int">
+    <xs:annotation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="ZipCode" type="xs:string">

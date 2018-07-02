@@ -65,7 +65,7 @@
   </xs:simpleType>
   <xs:simpleType name="dbo_sequence">
     <xs:restriction base="xs:string">
-      <xs:pattern value=" *| *(a|b|rop|mdb)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *(; *(a|b|rop|mdb)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *)*;? *"/>
+      <xs:pattern value=" *| *(a|b|rop)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *(; *(a|b|rop)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *)*;? *"/>
     </xs:restriction>
   </xs:simpleType>
   <!-- Numeric-range types. -->
@@ -160,6 +160,27 @@ but none use both, so a single set of enumerators suffices.</xs:documentation>
       <xs:enumeration value="Standard"/>
       <xs:enumeration value="Rated"/>
       <xs:enumeration value="Ultra"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="dbopt">
+    <xs:annotation>
+      <xs:documentation>Death benefit option: 'A' = level; 'B' = increasing; 'ROP' = return of premium.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="A"/>
+      <xs:enumeration value="B"/>
+      <xs:enumeration value="ROP"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="mode">
+    <xs:annotation>
+      <xs:documentation>Payment mode.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Annual"/>
+      <xs:enumeration value="Semiannual"/>
+      <xs:enumeration value="Quarterly"/>
+      <xs:enumeration value="Monthly"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="gen_basis">

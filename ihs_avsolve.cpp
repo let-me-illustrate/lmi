@@ -205,8 +205,6 @@ double AccountValue::SolveTest(double a_CandidateValue)
     // counters and iterators--it's one past the end--but indexing
     // must decrement it.
     double value = VariantValues().CSVNet[SolveTargetDuration_ - 1];
-    // INPUT !! Rename: s/SolveTargetCashSurrenderValue/SolveTargetValue/
-    // because it's used for both target CSV and target NAAR.
     if(mce_solve_for_target_naar == SolveTarget_)
         {
         value =

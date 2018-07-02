@@ -36,7 +36,11 @@
 // be disabled for the code using wxWidgets as they occur in wxWidgets headers.
 #if defined __GNUC__
 #   pragma GCC diagnostic ignored "-Wcast-qual"
+//  only 'strvararg.h:1048:19':
+#   pragma GCC diagnostic ignored "-Wdouble-promotion"
+#   pragma GCC diagnostic ignored "-Wformat-nonliteral"
 #   pragma GCC diagnostic ignored "-Wsign-conversion"
+#   pragma GCC diagnostic ignored "-Wuseless-cast"
 #endif // defined __GNUC__
 
 #if defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH

@@ -111,6 +111,7 @@ void PreferencesModel::AscribeMembers()
     ascribe("CalculationSummaryColumn09"    , &PreferencesModel::CalculationSummaryColumn09    );
     ascribe("CalculationSummaryColumn10"    , &PreferencesModel::CalculationSummaryColumn10    );
     ascribe("CalculationSummaryColumn11"    , &PreferencesModel::CalculationSummaryColumn11    );
+    ascribe("CensusPastePalimpsestically"   , &PreferencesModel::CensusPastePalimpsestically   );
     ascribe("DefaultInputFilename"          , &PreferencesModel::DefaultInputFilename          );
     ascribe("PrintDirectory"                , &PreferencesModel::PrintDirectory                );
     ascribe("SecondsToPauseBetweenPrintouts", &PreferencesModel::SecondsToPauseBetweenPrintouts);
@@ -267,6 +268,7 @@ void PreferencesModel::Load()
             }
         }
 
+    CensusPastePalimpsestically    = z.census_paste_palimpsestically() ? "Yes" : "No";
     DefaultInputFilename           = native_path(z.default_input_filename());
     PrintDirectory                 = native_path(z.print_directory());
     SecondsToPauseBetweenPrintouts = z.seconds_to_pause_between_printouts();
@@ -297,6 +299,7 @@ void PreferencesModel::Save() const
     configurable_settings& z = configurable_settings::instance();
 
     z["calculation_summary_columns"       ] = string_of_column_names();
+    z["census_paste_palimpsestically"     ] = value_cast<std::string>("Yes" == CensusPastePalimpsestically);
     z["default_input_filename"            ] = generic_path(DefaultInputFilename    .value());
     z["print_directory"                   ] = generic_path(PrintDirectory          .value());
     z["seconds_to_pause_between_printouts"] = value_cast<std::string>(SecondsToPauseBetweenPrintouts.value());

@@ -139,6 +139,7 @@ std::string const& default_calculation_summary_columns()
 
 configurable_settings::configurable_settings()
     :calculation_summary_columns_        (default_calculation_summary_columns())
+    ,census_paste_palimpsestically_      (true                                 )
     ,cgi_bin_log_filename_               ("cgi_bin.log"                        )
     ,custom_input_0_filename_            ("custom.ini"                         )
     ,custom_input_1_filename_            ("custom.inix"                        )
@@ -197,6 +198,7 @@ configurable_settings& configurable_settings::instance()
 void configurable_settings::ascribe_members()
 {
     ascribe("calculation_summary_columns"        ,&configurable_settings::calculation_summary_columns_        );
+    ascribe("census_paste_palimpsestically"      ,&configurable_settings::census_paste_palimpsestically_      );
     ascribe("cgi_bin_log_filename"               ,&configurable_settings::cgi_bin_log_filename_               );
     ascribe("custom_input_0_filename"            ,&configurable_settings::custom_input_0_filename_            );
     ascribe("custom_input_1_filename"            ,&configurable_settings::custom_input_1_filename_            );
@@ -319,6 +321,13 @@ void configurable_settings::redintegrate_ex_post
 std::string const& configurable_settings::calculation_summary_columns() const
 {
     return calculation_summary_columns_;
+}
+
+/// When pasting a census, replace old contents instead of appending.
+
+bool configurable_settings::census_paste_palimpsestically() const
+{
+    return census_paste_palimpsestically_;
 }
 
 /// Name of log file used for cgicc's debugging facility.

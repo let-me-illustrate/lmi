@@ -305,7 +305,7 @@ double AccountValue::RunAllApplicableBases()
             ,yare_input_.SolveBeginYear
             ,yare_input_.SolveEndYear
             ,yare_input_.SolveTarget
-            ,yare_input_.SolveTargetCashSurrenderValue
+            ,yare_input_.SolveTargetValue
             ,yare_input_.SolveTargetYear
             ,yare_input_.SolveExpenseGeneralAccountBasis
             ,yare_input_.SolveSeparateAccountBasis

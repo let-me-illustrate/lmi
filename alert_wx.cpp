@@ -56,14 +56,13 @@ bool volatile ensure_setup = set_alert_functions
 
 void status_alert(std::string const& s)
 {
-    if(wxTheApp && wxTheApp->GetTopWindow())
-        {
-        wxFrame* f = dynamic_cast<wxFrame*>(wxTheApp->GetTopWindow());
-        if(f && f->GetStatusBar())
-            {
-            f->SetStatusText(s);
-            }
-        }
+    if(wxTheApp)
+        if(wxFrame* f = dynamic_cast<wxFrame*>(wxTheApp->GetTopWindow()))
+            if(wxStatusBar* b = f->GetStatusBar())
+                {
+                b->SetStatusText(s);
+                b->Update();
+                }
 }
 
 void warning_alert(std::string const& s)

@@ -412,7 +412,7 @@ void test_input_sequence_regex()
     X = "(\\-?[0-9.]+|maximum|target|sevenpay|glp|gsp|corridor|salary)";
     R = " *| *" + X + Y + "? *(; *" + X + Y + "? *)*;? *";
     std::cout << "specamt_sequence = xsd:string {pattern = \"" << R << "\"}" << std::endl;
-    X = "(a|b|rop)";
+    X = "(a|b|rop|mdb)";
     R = " *| *" + X + Y + "? *(; *" + X + Y + "? *)*;? *";
     std::cout << "dbo_sequence     = xsd:string {pattern = \"" << R << "\"}" << std::endl;
 }

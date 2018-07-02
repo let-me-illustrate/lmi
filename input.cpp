@@ -55,14 +55,14 @@ Input::Input()
 //    ,Internal1035ExchangeAmount       ("")
 //    ,Internal1035ExchangeTaxBasis     ("")
 //    ,Internal1035ExchangeFromMec      ("")
-//    ,SolveTargetTime                  ("95")
-//    ,SolveBeginTime                   ("")
-//    ,SolveEndTime                     ("95")
+//    ,SolveTargetAge                   ("95")
+//    ,SolveBeginAge                    ("")
+//    ,SolveEndAge                      ("95")
 //    ,SolveType                        ("")
 //    ,SolveBeginYear                   ("")
 //    ,SolveEndYear                     ("50")
 //    ,SolveTarget                      ("")
-//    ,SolveTargetCashSurrenderValue    ("")
+//    ,SolveTargetValue                 ("")
 //    ,SolveTargetYear                  ("50")
 //    ,SolveExpenseGeneralAccountBasis  ("")
 //    ,SolveSeparateAccountBasis        ("")
@@ -122,7 +122,6 @@ Input::Input()
     ,IncludeInComposite               ("Yes")
 //    ,Comments                         ("")
 //    ,AmortizePremiumLoad              ("")
-    ,InforceDataSource                ("1") // 0=error; 1=lmi; 2+=other
 //    ,ContractNumber                   ("")
 //    ,MasterContractNumber             ("")
 //    ,InforceAsOfDate                  ("")
@@ -190,7 +189,7 @@ Input::Input()
 //    ,TaxBracket                       ("")
     ,ProjectedSalary                  ("100000")
     ,SpecifiedAmount                  ("1000000")
-    ,SupplementalSpecifiedAmount      ("0")
+    ,SupplementalAmount               ("0")
     ,DeathBenefitOption               ("a")
     ,Payment                          ("20000")
     ,PaymentMode                      ("annual")
@@ -205,6 +204,7 @@ Input::Input()
     ,HoneymoonValueSpread             ("0")
     ,FundAllocations                  ("0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0")
     ,CashValueEnhancementRate         ("0")
+//    ,AdditionalReports
 //    ,SupplementalIllustrationType
 //    ,SplitDollarAccumulateInterest
     ,SplitDollarLoanRate              ("0")
@@ -279,208 +279,208 @@ int Input::effective_year     () const {return EffectiveDate.value().year();}
 
 void Input::AscribeMembers()
 {
-    ascribe("IssueAge"                              , &Input::IssueAge                              );
-    ascribe("RetirementAge"                         , &Input::RetirementAge                         );
-    ascribe("Gender"                                , &Input::Gender                                );
-    ascribe("Smoking"                               , &Input::Smoking                               );
-    ascribe("UnderwritingClass"                     , &Input::UnderwritingClass                     );
-    ascribe("WaiverOfPremiumBenefit"                , &Input::WaiverOfPremiumBenefit                );
-    ascribe("AccidentalDeathBenefit"                , &Input::AccidentalDeathBenefit                );
-    ascribe("TermRider"                             , &Input::TermRider                             );
-    ascribe("TermRiderAmount"                       , &Input::TermRiderAmount                       );
-    ascribe("TotalSpecifiedAmount"                  , &Input::TotalSpecifiedAmount                  );
-    ascribe("TermRiderProportion"                   , &Input::TermRiderProportion                   );
-    ascribe("TermRiderUseProportion"                , &Input::TermRiderUseProportion                );
-    ascribe("DateOfBirth"                           , &Input::DateOfBirth                           );
-    ascribe("SubstandardTable"                      , &Input::SubstandardTable                      );
-    ascribe("ProductName"                           , &Input::ProductName                           );
-    ascribe("Dumpin"                                , &Input::Dumpin                                );
-    ascribe("External1035ExchangeAmount"            , &Input::External1035ExchangeAmount            );
-    ascribe("External1035ExchangeTaxBasis"          , &Input::External1035ExchangeTaxBasis          );
-    ascribe("External1035ExchangeFromMec"           , &Input::External1035ExchangeFromMec           );
-    ascribe("Internal1035ExchangeAmount"            , &Input::Internal1035ExchangeAmount            );
-    ascribe("Internal1035ExchangeTaxBasis"          , &Input::Internal1035ExchangeTaxBasis          );
-    ascribe("Internal1035ExchangeFromMec"           , &Input::Internal1035ExchangeFromMec           );
-    ascribe("SolveTargetTime"                       , &Input::SolveTargetTime                       );
-    ascribe("SolveBeginTime"                        , &Input::SolveBeginTime                        );
-    ascribe("SolveEndTime"                          , &Input::SolveEndTime                          );
-    ascribe("SolveType"                             , &Input::SolveType                             );
-    ascribe("SolveBeginYear"                        , &Input::SolveBeginYear                        );
-    ascribe("SolveEndYear"                          , &Input::SolveEndYear                          );
-    ascribe("SolveTarget"                           , &Input::SolveTarget                           );
-    ascribe("SolveTargetCashSurrenderValue"         , &Input::SolveTargetCashSurrenderValue         );
-    ascribe("SolveTargetYear"                       , &Input::SolveTargetYear                       );
-    ascribe("SolveExpenseGeneralAccountBasis"       , &Input::SolveExpenseGeneralAccountBasis       );
-    ascribe("SolveSeparateAccountBasis"             , &Input::SolveSeparateAccountBasis             );
-    ascribe("UseCurrentDeclaredRate"                , &Input::UseCurrentDeclaredRate                );
-    ascribe("GeneralAccountRateType"                , &Input::GeneralAccountRateType                );
-    ascribe("SeparateAccountRateType"               , &Input::SeparateAccountRateType               );
-    ascribe("LoanRate"                              , &Input::LoanRate                              );
-    ascribe("LoanRateType"                          , &Input::LoanRateType                          );
-    ascribe("OverrideExperienceReserveRate"         , &Input::OverrideExperienceReserveRate         );
-    ascribe("ExperienceReserveRate"                 , &Input::ExperienceReserveRate                 );
-    ascribe("ExperienceRatingInitialKFactor"        , &Input::ExperienceRatingInitialKFactor        );
-    ascribe("WithdrawToBasisThenLoan"               , &Input::WithdrawToBasisThenLoan               );
-    ascribe("UseAverageOfAllFunds"                  , &Input::UseAverageOfAllFunds                  );
-    ascribe("OverrideFundManagementFee"             , &Input::OverrideFundManagementFee             );
-    ascribe("FundChoiceType"                        , &Input::FundChoiceType                        );
-    ascribe("InputFundManagementFee"                , &Input::InputFundManagementFee                );
-    ascribe("RunOrder"                              , &Input::RunOrder                              );
-    ascribe("NumberOfIdenticalLives"                , &Input::NumberOfIdenticalLives                );
-    ascribe("UseExperienceRating"                   , &Input::UseExperienceRating                   );
-    ascribe("UsePartialMortality"                   , &Input::UsePartialMortality                   );
-////    ascribe("PartialMortalityTable"                 , &Input::PartialMortalityTable                 ); // INPUT !! Not yet implemented.
-    ascribe("InsuredName"                           , &Input::InsuredName                           );
-    ascribe("Address"                               , &Input::Address                               );
-    ascribe("City"                                  , &Input::City                                  );
-    ascribe("State"                                 , &Input::State                                 );
-    ascribe("ZipCode"                               , &Input::ZipCode                               );
-    ascribe("EmployeeClass"                         , &Input::EmployeeClass                         );
-    ascribe("CorporationName"                       , &Input::CorporationName                       );
-    ascribe("CorporationAddress"                    , &Input::CorporationAddress                    );
-    ascribe("CorporationCity"                       , &Input::CorporationCity                       );
-    ascribe("CorporationState"                      , &Input::CorporationState                      );
-    ascribe("CorporationZipCode"                    , &Input::CorporationZipCode                    );
-    ascribe("AgentName"                             , &Input::AgentName                             );
-    ascribe("AgentAddress"                          , &Input::AgentAddress                          );
-    ascribe("AgentCity"                             , &Input::AgentCity                             );
-    ascribe("AgentState"                            , &Input::AgentState                            );
-    ascribe("AgentZipCode"                          , &Input::AgentZipCode                          );
-    ascribe("AgentPhone"                            , &Input::AgentPhone                            );
-    ascribe("AgentId"                               , &Input::AgentId                               );
-//    ascribe("InsuredPremiumTableNumber"             , &Input::InsuredPremiumTableNumber             ); // INPUT !! Not yet implemented.
-    ascribe("InsuredPremiumTableFactor"             , &Input::InsuredPremiumTableFactor             );
-//    ascribe("CorporationPremiumTableNumber"         , &Input::CorporationPremiumTableNumber         ); // INPUT !! Not yet implemented.
-    ascribe("CorporationPremiumTableFactor"         , &Input::CorporationPremiumTableFactor         );
-    ascribe("EffectiveDate"                         , &Input::EffectiveDate                         );
-    ascribe("DefinitionOfLifeInsurance"             , &Input::DefinitionOfLifeInsurance             );
-    ascribe("DefinitionOfMaterialChange"            , &Input::DefinitionOfMaterialChange            );
-    ascribe("AvoidMecMethod"                        , &Input::AvoidMecMethod                        );
-    ascribe("RetireesCanEnroll"                     , &Input::RetireesCanEnroll                     );
-    ascribe("GroupUnderwritingType"                 , &Input::GroupUnderwritingType                 );
-    ascribe("LastCoiReentryDate"                    , &Input::LastCoiReentryDate                    );
-    ascribe("ListBillDate"                          , &Input::ListBillDate                          );
-    ascribe("BlendGender"                           , &Input::BlendGender                           );
-    ascribe("BlendSmoking"                          , &Input::BlendSmoking                          );
-    ascribe("MaleProportion"                        , &Input::MaleProportion                        );
-    ascribe("NonsmokerProportion"                   , &Input::NonsmokerProportion                   );
-    ascribe("TermAdjustmentMethod"                  , &Input::TermAdjustmentMethod                  );
-    ascribe("IncludeInComposite"                    , &Input::IncludeInComposite                    );
-    ascribe("Comments"                              , &Input::Comments                              );
-    ascribe("AmortizePremiumLoad"                   , &Input::AmortizePremiumLoad                   );
-    ascribe("InforceDataSource"                     , &Input::InforceDataSource                     );
-    ascribe("ContractNumber"                        , &Input::ContractNumber                        );
-    ascribe("MasterContractNumber"                  , &Input::MasterContractNumber                  );
-    ascribe("InforceAsOfDate"                       , &Input::InforceAsOfDate                       );
-    ascribe("InforceYear"                           , &Input::InforceYear                           );
-    ascribe("InforceMonth"                          , &Input::InforceMonth                          );
-    ascribe("InforceAnnualTargetPremium"            , &Input::InforceAnnualTargetPremium            );
-    ascribe("InforceYtdGrossPremium"                , &Input::InforceYtdGrossPremium                );
-    ascribe("InforceGeneralAccountValue"            , &Input::InforceGeneralAccountValue            );
-    ascribe("InforceSeparateAccountValue"           , &Input::InforceSeparateAccountValue           );
-    ascribe("InforceRegularLoanValue"               , &Input::InforceRegularLoanValue               );
-    ascribe("InforcePreferredLoanValue"             , &Input::InforcePreferredLoanValue             );
-    ascribe("InforceRegularLoanBalance"             , &Input::InforceRegularLoanBalance             );
-    ascribe("InforcePreferredLoanBalance"           , &Input::InforcePreferredLoanBalance           );
-    ascribe("InforceNoLapseActive"                  , &Input::InforceNoLapseActive                  );
-    ascribe("InforceMonthlyNoLapsePremium"          , &Input::InforceMonthlyNoLapsePremium          );
-    ascribe("InforceCumulativeNoLapsePremium"       , &Input::InforceCumulativeNoLapsePremium       );
-    ascribe("InforceCumulativeNoLapsePayments"      , &Input::InforceCumulativeNoLapsePayments      );
-    ascribe("InforceCumulativeRopPayments"          , &Input::InforceCumulativeRopPayments          );
-    ascribe("InforceYtdTaxablePremium"              , &Input::InforceYtdTaxablePremium              );
-    ascribe("InforceCumulativeSalesLoad"            , &Input::InforceCumulativeSalesLoad            );
-    ascribe("InforceSpecAmtLoadBase"                , &Input::InforceSpecAmtLoadBase                );
-    ascribe("InforceHoneymoonValue"                 , &Input::InforceHoneymoonValue                 );
-    ascribe("InforceCorporationStake"               , &Input::InforceCorporationStake               );
-    ascribe("InforceNetExperienceReserve"           , &Input::InforceNetExperienceReserve           );
-    ascribe("InforceYtdNetCoiCharge"                , &Input::InforceYtdNetCoiCharge                );
-    ascribe("InforceTaxBasis"                       , &Input::InforceTaxBasis                       );
-    ascribe("InforceGlp"                            , &Input::InforceGlp                            );
-    ascribe("InforceCumulativeGlp"                  , &Input::InforceCumulativeGlp                  );
-    ascribe("InforceGsp"                            , &Input::InforceGsp                            );
-    ascribe("InforceCumulativeGptPremiumsPaid"      , &Input::InforceCumulativeGptPremiumsPaid      );
-    ascribe("InforceIsMec"                          , &Input::InforceIsMec                          );
-    ascribe("InforceSevenPayPremium"                , &Input::InforceSevenPayPremium                );
-    ascribe("LastMaterialChangeDate"                , &Input::LastMaterialChangeDate                );
-    ascribe("InforceContractYear"                   , &Input::InforceContractYear                   );
-    ascribe("InforceContractMonth"                  , &Input::InforceContractMonth                  );
-    ascribe("InforceAvBeforeLastMc"                 , &Input::InforceAvBeforeLastMc                 );
-    ascribe("InforceDcv"                            , &Input::InforceDcv                            );
-    ascribe("InforceLeastDeathBenefit"              , &Input::InforceLeastDeathBenefit              );
-    ascribe("Inforce7702AAmountsPaidHistory"        , &Input::Inforce7702AAmountsPaidHistory        );
-    ascribe("Country"                               , &Input::Country                               );
-    ascribe("OverrideCoiMultiplier"                 , &Input::OverrideCoiMultiplier                 );
-    ascribe("CountryCoiMultiplier"                  , &Input::CountryCoiMultiplier                  );
-    ascribe("SurviveToType"                         , &Input::SurviveToType                         );
-    ascribe("SurviveToYear"                         , &Input::SurviveToYear                         );
-    ascribe("SurviveToAge"                          , &Input::SurviveToAge                          );
-    ascribe("MaximumNaar"                           , &Input::MaximumNaar                           );
-    ascribe("ChildRider"                            , &Input::ChildRider                            );
-    ascribe("ChildRiderAmount"                      , &Input::ChildRiderAmount                      );
-    ascribe("SpouseRider"                           , &Input::SpouseRider                           );
-    ascribe("SpouseRiderAmount"                     , &Input::SpouseRiderAmount                     );
-    ascribe("SpouseIssueAge"                        , &Input::SpouseIssueAge                        );
-    ascribe("StateOfJurisdiction"                   , &Input::StateOfJurisdiction                   );
-    ascribe("PremiumTaxState"                       , &Input::PremiumTaxState                       );
-    ascribe("SalarySpecifiedAmountFactor"           , &Input::SalarySpecifiedAmountFactor           );
-    ascribe("SalarySpecifiedAmountCap"              , &Input::SalarySpecifiedAmountCap              );
-    ascribe("SalarySpecifiedAmountOffset"           , &Input::SalarySpecifiedAmountOffset           );
-    ascribe("HoneymoonEndorsement"                  , &Input::HoneymoonEndorsement                  );
-    ascribe("PostHoneymoonSpread"                   , &Input::PostHoneymoonSpread                   );
-    ascribe("ExtraMonthlyCustodialFee"              , &Input::ExtraMonthlyCustodialFee              );
-    ascribe("ExtraCompensationOnAssets"             , &Input::ExtraCompensationOnAssets             );
-    ascribe("ExtraCompensationOnPremium"            , &Input::ExtraCompensationOnPremium            );
-    ascribe("PartialMortalityMultiplier"            , &Input::PartialMortalityMultiplier            );
-    ascribe("CurrentCoiMultiplier"                  , &Input::CurrentCoiMultiplier                  );
-    ascribe("CorporationTaxBracket"                 , &Input::CorporationTaxBracket                 );
-    ascribe("TaxBracket"                            , &Input::TaxBracket                            );
-    ascribe("ProjectedSalary"                       , &Input::ProjectedSalary                       );
-    ascribe("SpecifiedAmount"                       , &Input::SpecifiedAmount                       );
-    ascribe("SupplementalSpecifiedAmount"           , &Input::SupplementalSpecifiedAmount           );
-    ascribe("DeathBenefitOption"                    , &Input::DeathBenefitOption                    );
-    ascribe("Payment"                               , &Input::Payment                               );
-    ascribe("PaymentMode"                           , &Input::PaymentMode                           );
-    ascribe("CorporationPayment"                    , &Input::CorporationPayment                    );
-    ascribe("CorporationPaymentMode"                , &Input::CorporationPaymentMode                );
-    ascribe("GeneralAccountRate"                    , &Input::GeneralAccountRate                    );
-    ascribe("SeparateAccountRate"                   , &Input::SeparateAccountRate                   );
-    ascribe("NewLoan"                               , &Input::NewLoan                               );
-    ascribe("Withdrawal"                            , &Input::Withdrawal                            );
-    ascribe("FlatExtra"                             , &Input::FlatExtra                             );
-//    ascribe("PolicyLevelFlatExtra"                  , &Input::PolicyLevelFlatExtra                  ); // INPUT !! Not yet implemented.
-    ascribe("HoneymoonValueSpread"                  , &Input::HoneymoonValueSpread                  );
-    ascribe("FundAllocations"                       , &Input::FundAllocations                       );
-    ascribe("CashValueEnhancementRate"              , &Input::CashValueEnhancementRate              );
+    ascribe("IssueAge"                        , &Input::IssueAge                        );
+    ascribe("RetirementAge"                   , &Input::RetirementAge                   );
+    ascribe("Gender"                          , &Input::Gender                          );
+    ascribe("Smoking"                         , &Input::Smoking                         );
+    ascribe("UnderwritingClass"               , &Input::UnderwritingClass               );
+    ascribe("WaiverOfPremiumBenefit"          , &Input::WaiverOfPremiumBenefit          );
+    ascribe("AccidentalDeathBenefit"          , &Input::AccidentalDeathBenefit          );
+    ascribe("TermRider"                       , &Input::TermRider                       );
+    ascribe("TermRiderAmount"                 , &Input::TermRiderAmount                 );
+    ascribe("TotalSpecifiedAmount"            , &Input::TotalSpecifiedAmount            );
+    ascribe("TermRiderProportion"             , &Input::TermRiderProportion             );
+    ascribe("TermRiderUseProportion"          , &Input::TermRiderUseProportion          );
+    ascribe("DateOfBirth"                     , &Input::DateOfBirth                     );
+    ascribe("SubstandardTable"                , &Input::SubstandardTable                );
+    ascribe("ProductName"                     , &Input::ProductName                     );
+    ascribe("Dumpin"                          , &Input::Dumpin                          );
+    ascribe("External1035ExchangeAmount"      , &Input::External1035ExchangeAmount      );
+    ascribe("External1035ExchangeTaxBasis"    , &Input::External1035ExchangeTaxBasis    );
+    ascribe("External1035ExchangeFromMec"     , &Input::External1035ExchangeFromMec     );
+    ascribe("Internal1035ExchangeAmount"      , &Input::Internal1035ExchangeAmount      );
+    ascribe("Internal1035ExchangeTaxBasis"    , &Input::Internal1035ExchangeTaxBasis    );
+    ascribe("Internal1035ExchangeFromMec"     , &Input::Internal1035ExchangeFromMec     );
+    ascribe("SolveTargetAge"                  , &Input::SolveTargetAge                  );
+    ascribe("SolveBeginAge"                   , &Input::SolveBeginAge                   );
+    ascribe("SolveEndAge"                     , &Input::SolveEndAge                     );
+    ascribe("SolveType"                       , &Input::SolveType                       );
+    ascribe("SolveBeginYear"                  , &Input::SolveBeginYear                  );
+    ascribe("SolveEndYear"                    , &Input::SolveEndYear                    );
+    ascribe("SolveTarget"                     , &Input::SolveTarget                     );
+    ascribe("SolveTargetValue"                , &Input::SolveTargetValue                );
+    ascribe("SolveTargetYear"                 , &Input::SolveTargetYear                 );
+    ascribe("SolveExpenseGeneralAccountBasis" , &Input::SolveExpenseGeneralAccountBasis );
+    ascribe("SolveSeparateAccountBasis"       , &Input::SolveSeparateAccountBasis       );
+    ascribe("UseCurrentDeclaredRate"          , &Input::UseCurrentDeclaredRate          );
+    ascribe("GeneralAccountRateType"          , &Input::GeneralAccountRateType          );
+    ascribe("SeparateAccountRateType"         , &Input::SeparateAccountRateType         );
+    ascribe("LoanRate"                        , &Input::LoanRate                        );
+    ascribe("LoanRateType"                    , &Input::LoanRateType                    );
+    ascribe("OverrideExperienceReserveRate"   , &Input::OverrideExperienceReserveRate   );
+    ascribe("ExperienceReserveRate"           , &Input::ExperienceReserveRate           );
+    ascribe("ExperienceRatingInitialKFactor"  , &Input::ExperienceRatingInitialKFactor  );
+    ascribe("WithdrawToBasisThenLoan"         , &Input::WithdrawToBasisThenLoan         );
+    ascribe("UseAverageOfAllFunds"            , &Input::UseAverageOfAllFunds            );
+    ascribe("OverrideFundManagementFee"       , &Input::OverrideFundManagementFee       );
+    ascribe("FundChoiceType"                  , &Input::FundChoiceType                  );
+    ascribe("InputFundManagementFee"          , &Input::InputFundManagementFee          );
+    ascribe("RunOrder"                        , &Input::RunOrder                        );
+    ascribe("NumberOfIdenticalLives"          , &Input::NumberOfIdenticalLives          );
+    ascribe("UseExperienceRating"             , &Input::UseExperienceRating             );
+    ascribe("UsePartialMortality"             , &Input::UsePartialMortality             );
+////    ascribe("PartialMortalityTable"           , &Input::PartialMortalityTable           ); // INPUT !! Not yet implemented.
+    ascribe("InsuredName"                     , &Input::InsuredName                     );
+    ascribe("Address"                         , &Input::Address                         );
+    ascribe("City"                            , &Input::City                            );
+    ascribe("State"                           , &Input::State                           );
+    ascribe("ZipCode"                         , &Input::ZipCode                         );
+    ascribe("EmployeeClass"                   , &Input::EmployeeClass                   );
+    ascribe("CorporationName"                 , &Input::CorporationName                 );
+    ascribe("CorporationAddress"              , &Input::CorporationAddress              );
+    ascribe("CorporationCity"                 , &Input::CorporationCity                 );
+    ascribe("CorporationState"                , &Input::CorporationState                );
+    ascribe("CorporationZipCode"              , &Input::CorporationZipCode              );
+    ascribe("AgentName"                       , &Input::AgentName                       );
+    ascribe("AgentAddress"                    , &Input::AgentAddress                    );
+    ascribe("AgentCity"                       , &Input::AgentCity                       );
+    ascribe("AgentState"                      , &Input::AgentState                      );
+    ascribe("AgentZipCode"                    , &Input::AgentZipCode                    );
+    ascribe("AgentPhone"                      , &Input::AgentPhone                      );
+    ascribe("AgentId"                         , &Input::AgentId                         );
+//    ascribe("InsuredPremiumTableNumber"       , &Input::InsuredPremiumTableNumber       ); // INPUT !! Not yet implemented.
+    ascribe("InsuredPremiumTableFactor"       , &Input::InsuredPremiumTableFactor       );
+//    ascribe("CorporationPremiumTableNumber"   , &Input::CorporationPremiumTableNumber   ); // INPUT !! Not yet implemented.
+    ascribe("CorporationPremiumTableFactor"   , &Input::CorporationPremiumTableFactor   );
+    ascribe("EffectiveDate"                   , &Input::EffectiveDate                   );
+    ascribe("DefinitionOfLifeInsurance"       , &Input::DefinitionOfLifeInsurance       );
+    ascribe("DefinitionOfMaterialChange"      , &Input::DefinitionOfMaterialChange      );
+    ascribe("AvoidMecMethod"                  , &Input::AvoidMecMethod                  );
+    ascribe("RetireesCanEnroll"               , &Input::RetireesCanEnroll               );
+    ascribe("GroupUnderwritingType"           , &Input::GroupUnderwritingType           );
+    ascribe("LastCoiReentryDate"              , &Input::LastCoiReentryDate              );
+    ascribe("ListBillDate"                    , &Input::ListBillDate                    );
+    ascribe("BlendGender"                     , &Input::BlendGender                     );
+    ascribe("BlendSmoking"                    , &Input::BlendSmoking                    );
+    ascribe("MaleProportion"                  , &Input::MaleProportion                  );
+    ascribe("NonsmokerProportion"             , &Input::NonsmokerProportion             );
+    ascribe("TermAdjustmentMethod"            , &Input::TermAdjustmentMethod            );
+    ascribe("IncludeInComposite"              , &Input::IncludeInComposite              );
+    ascribe("Comments"                        , &Input::Comments                        );
+    ascribe("AmortizePremiumLoad"             , &Input::AmortizePremiumLoad             );
+    ascribe("ContractNumber"                  , &Input::ContractNumber                  );
+    ascribe("MasterContractNumber"            , &Input::MasterContractNumber            );
+    ascribe("InforceAsOfDate"                 , &Input::InforceAsOfDate                 );
+    ascribe("InforceYear"                     , &Input::InforceYear                     );
+    ascribe("InforceMonth"                    , &Input::InforceMonth                    );
+    ascribe("InforceAnnualTargetPremium"      , &Input::InforceAnnualTargetPremium      );
+    ascribe("InforceYtdGrossPremium"          , &Input::InforceYtdGrossPremium          );
+    ascribe("InforceGeneralAccountValue"      , &Input::InforceGeneralAccountValue      );
+    ascribe("InforceSeparateAccountValue"     , &Input::InforceSeparateAccountValue     );
+    ascribe("InforceRegularLoanValue"         , &Input::InforceRegularLoanValue         );
+    ascribe("InforcePreferredLoanValue"       , &Input::InforcePreferredLoanValue       );
+    ascribe("InforceRegularLoanBalance"       , &Input::InforceRegularLoanBalance       );
+    ascribe("InforcePreferredLoanBalance"     , &Input::InforcePreferredLoanBalance     );
+    ascribe("InforceNoLapseActive"            , &Input::InforceNoLapseActive            );
+    ascribe("InforceMonthlyNoLapsePremium"    , &Input::InforceMonthlyNoLapsePremium    );
+    ascribe("InforceCumulativeNoLapsePremium" , &Input::InforceCumulativeNoLapsePremium );
+    ascribe("InforceCumulativeNoLapsePayments", &Input::InforceCumulativeNoLapsePayments);
+    ascribe("InforceCumulativeRopPayments"    , &Input::InforceCumulativeRopPayments    );
+    ascribe("InforceYtdTaxablePremium"        , &Input::InforceYtdTaxablePremium        );
+    ascribe("InforceCumulativeSalesLoad"      , &Input::InforceCumulativeSalesLoad      );
+    ascribe("InforceSpecAmtLoadBase"          , &Input::InforceSpecAmtLoadBase          );
+    ascribe("InforceHoneymoonValue"           , &Input::InforceHoneymoonValue           );
+    ascribe("InforceCorporationStake"         , &Input::InforceCorporationStake         );
+    ascribe("InforceNetExperienceReserve"     , &Input::InforceNetExperienceReserve     );
+    ascribe("InforceYtdNetCoiCharge"          , &Input::InforceYtdNetCoiCharge          );
+    ascribe("InforceTaxBasis"                 , &Input::InforceTaxBasis                 );
+    ascribe("InforceGlp"                      , &Input::InforceGlp                      );
+    ascribe("InforceCumulativeGlp"            , &Input::InforceCumulativeGlp            );
+    ascribe("InforceGsp"                      , &Input::InforceGsp                      );
+    ascribe("InforceCumulativeGptPremiumsPaid", &Input::InforceCumulativeGptPremiumsPaid);
+    ascribe("InforceIsMec"                    , &Input::InforceIsMec                    );
+    ascribe("InforceSevenPayPremium"          , &Input::InforceSevenPayPremium          );
+    ascribe("LastMaterialChangeDate"          , &Input::LastMaterialChangeDate          );
+    ascribe("InforceContractYear"             , &Input::InforceContractYear             );
+    ascribe("InforceContractMonth"            , &Input::InforceContractMonth            );
+    ascribe("InforceAvBeforeLastMc"           , &Input::InforceAvBeforeLastMc           );
+    ascribe("InforceDcv"                      , &Input::InforceDcv                      );
+    ascribe("InforceLeastDeathBenefit"        , &Input::InforceLeastDeathBenefit        );
+    ascribe("Inforce7702AAmountsPaidHistory"  , &Input::Inforce7702AAmountsPaidHistory  );
+    ascribe("Country"                         , &Input::Country                         );
+    ascribe("OverrideCoiMultiplier"           , &Input::OverrideCoiMultiplier           );
+    ascribe("CountryCoiMultiplier"            , &Input::CountryCoiMultiplier            );
+    ascribe("SurviveToType"                   , &Input::SurviveToType                   );
+    ascribe("SurviveToYear"                   , &Input::SurviveToYear                   );
+    ascribe("SurviveToAge"                    , &Input::SurviveToAge                    );
+    ascribe("MaximumNaar"                     , &Input::MaximumNaar                     );
+    ascribe("ChildRider"                      , &Input::ChildRider                      );
+    ascribe("ChildRiderAmount"                , &Input::ChildRiderAmount                );
+    ascribe("SpouseRider"                     , &Input::SpouseRider                     );
+    ascribe("SpouseRiderAmount"               , &Input::SpouseRiderAmount               );
+    ascribe("SpouseIssueAge"                  , &Input::SpouseIssueAge                  );
+    ascribe("StateOfJurisdiction"             , &Input::StateOfJurisdiction             );
+    ascribe("PremiumTaxState"                 , &Input::PremiumTaxState                 );
+    ascribe("SalarySpecifiedAmountFactor"     , &Input::SalarySpecifiedAmountFactor     );
+    ascribe("SalarySpecifiedAmountCap"        , &Input::SalarySpecifiedAmountCap        );
+    ascribe("SalarySpecifiedAmountOffset"     , &Input::SalarySpecifiedAmountOffset     );
+    ascribe("HoneymoonEndorsement"            , &Input::HoneymoonEndorsement            );
+    ascribe("PostHoneymoonSpread"             , &Input::PostHoneymoonSpread             );
+    ascribe("ExtraMonthlyCustodialFee"        , &Input::ExtraMonthlyCustodialFee        );
+    ascribe("ExtraCompensationOnAssets"       , &Input::ExtraCompensationOnAssets       );
+    ascribe("ExtraCompensationOnPremium"      , &Input::ExtraCompensationOnPremium      );
+    ascribe("PartialMortalityMultiplier"      , &Input::PartialMortalityMultiplier      );
+    ascribe("CurrentCoiMultiplier"            , &Input::CurrentCoiMultiplier            );
+    ascribe("CorporationTaxBracket"           , &Input::CorporationTaxBracket           );
+    ascribe("TaxBracket"                      , &Input::TaxBracket                      );
+    ascribe("ProjectedSalary"                 , &Input::ProjectedSalary                 );
+    ascribe("SpecifiedAmount"                 , &Input::SpecifiedAmount                 );
+    ascribe("SupplementalAmount"              , &Input::SupplementalAmount              );
+    ascribe("DeathBenefitOption"              , &Input::DeathBenefitOption              );
+    ascribe("Payment"                         , &Input::Payment                         );
+    ascribe("PaymentMode"                     , &Input::PaymentMode                     );
+    ascribe("CorporationPayment"              , &Input::CorporationPayment              );
+    ascribe("CorporationPaymentMode"          , &Input::CorporationPaymentMode          );
+    ascribe("GeneralAccountRate"              , &Input::GeneralAccountRate              );
+    ascribe("SeparateAccountRate"             , &Input::SeparateAccountRate             );
+    ascribe("NewLoan"                         , &Input::NewLoan                         );
+    ascribe("Withdrawal"                      , &Input::Withdrawal                      );
+    ascribe("FlatExtra"                       , &Input::FlatExtra                       );
+//    ascribe("PolicyLevelFlatExtra"            , &Input::PolicyLevelFlatExtra            ); // INPUT !! Not yet implemented.
+    ascribe("HoneymoonValueSpread"            , &Input::HoneymoonValueSpread            );
+    ascribe("FundAllocations"                 , &Input::FundAllocations                 );
+    ascribe("CashValueEnhancementRate"        , &Input::CashValueEnhancementRate        );
 
-    ascribe("SupplementalIllustrationType"          , &Input::SupplementalIllustrationType          );
-    ascribe("SplitDollarAccumulateInterest"         , &Input::SplitDollarAccumulateInterest         );
-    ascribe("SplitDollarLoanRate"                   , &Input::SplitDollarLoanRate                   );
-    ascribe("SplitDollarRolloutAge"                 , &Input::SplitDollarRolloutAge                 );
-    ascribe("SplitDollarRolloutAtWhich"             , &Input::SplitDollarRolloutAtWhich             );
-    ascribe("SplitDollarRolloutYear"                , &Input::SplitDollarRolloutYear                );
+    ascribe("AdditionalReports"               , &Input::AdditionalReports               );
+    ascribe("SupplementalIllustrationType"    , &Input::SupplementalIllustrationType    );
+    ascribe("SplitDollarAccumulateInterest"   , &Input::SplitDollarAccumulateInterest   );
+    ascribe("SplitDollarLoanRate"             , &Input::SplitDollarLoanRate             );
+    ascribe("SplitDollarRolloutAge"           , &Input::SplitDollarRolloutAge           );
+    ascribe("SplitDollarRolloutAtWhich"       , &Input::SplitDollarRolloutAtWhich       );
+    ascribe("SplitDollarRolloutYear"          , &Input::SplitDollarRolloutYear          );
 
-    ascribe("CreateSupplementalReport"              , &Input::CreateSupplementalReport              );
-    ascribe("SupplementalReportColumn00"            , &Input::SupplementalReportColumn00            );
-    ascribe("SupplementalReportColumn01"            , &Input::SupplementalReportColumn01            );
-    ascribe("SupplementalReportColumn02"            , &Input::SupplementalReportColumn02            );
-    ascribe("SupplementalReportColumn03"            , &Input::SupplementalReportColumn03            );
-    ascribe("SupplementalReportColumn04"            , &Input::SupplementalReportColumn04            );
-    ascribe("SupplementalReportColumn05"            , &Input::SupplementalReportColumn05            );
-    ascribe("SupplementalReportColumn06"            , &Input::SupplementalReportColumn06            );
-    ascribe("SupplementalReportColumn07"            , &Input::SupplementalReportColumn07            );
-    ascribe("SupplementalReportColumn08"            , &Input::SupplementalReportColumn08            );
-    ascribe("SupplementalReportColumn09"            , &Input::SupplementalReportColumn09            );
-    ascribe("SupplementalReportColumn10"            , &Input::SupplementalReportColumn10            );
-    ascribe("SupplementalReportColumn11"            , &Input::SupplementalReportColumn11            );
+    ascribe("CreateSupplementalReport"        , &Input::CreateSupplementalReport        );
+    ascribe("SupplementalReportColumn00"      , &Input::SupplementalReportColumn00      );
+    ascribe("SupplementalReportColumn01"      , &Input::SupplementalReportColumn01      );
+    ascribe("SupplementalReportColumn02"      , &Input::SupplementalReportColumn02      );
+    ascribe("SupplementalReportColumn03"      , &Input::SupplementalReportColumn03      );
+    ascribe("SupplementalReportColumn04"      , &Input::SupplementalReportColumn04      );
+    ascribe("SupplementalReportColumn05"      , &Input::SupplementalReportColumn05      );
+    ascribe("SupplementalReportColumn06"      , &Input::SupplementalReportColumn06      );
+    ascribe("SupplementalReportColumn07"      , &Input::SupplementalReportColumn07      );
+    ascribe("SupplementalReportColumn08"      , &Input::SupplementalReportColumn08      );
+    ascribe("SupplementalReportColumn09"      , &Input::SupplementalReportColumn09      );
+    ascribe("SupplementalReportColumn10"      , &Input::SupplementalReportColumn10      );
+    ascribe("SupplementalReportColumn11"      , &Input::SupplementalReportColumn11      );
 
-    ascribe("SolveTgtAtWhich"                       , &Input::SolveTgtAtWhich                       );
-    ascribe("SolveFromWhich"                        , &Input::SolveFromWhich                        );
-    ascribe("SolveToWhich"                          , &Input::SolveToWhich                          );
-    ascribe("UseDOB"                                , &Input::UseDOB                                );
-    ascribe("EffectiveDateToday"                    , &Input::EffectiveDateToday                    );
+    ascribe("SolveTgtAtWhich"                 , &Input::SolveTgtAtWhich                 );
+    ascribe("SolveFromWhich"                  , &Input::SolveFromWhich                  );
+    ascribe("SolveToWhich"                    , &Input::SolveToWhich                    );
+    ascribe("UseDOB"                          , &Input::UseDOB                          );
+    ascribe("EffectiveDateToday"              , &Input::EffectiveDateToday              );
 
-    ascribe("SpecifiedAmountStrategyFromIssue"      , &Input::SpecifiedAmountStrategyFromIssue      );
-    ascribe("IndividualPaymentStrategy"             , &Input::IndividualPaymentStrategy             );
+    ascribe("SpecifiedAmountStrategyFromIssue", &Input::SpecifiedAmountStrategyFromIssue);
+    ascribe("IndividualPaymentStrategy"       , &Input::IndividualPaymentStrategy       );
 }
 
 datum_base const* Input::DoBaseDatumPointer

@@ -881,7 +881,7 @@ namespace
         // Strings in the input class might be too wide; absent more
         // graceful handling, at least no attempt is made to cure that
         // problem with a negative number of spaces.
-        std::string spaces(std::max(0, (g_width - z) / 2), char(' '));
+        std::string spaces(std::max(0, (g_width - z) / 2), ' ');
         return spaces + s;
         }
 
@@ -1087,8 +1087,8 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
             ? "Lapses in year " + value_cast<std::string>(1 + z)
             : "Matures at age " + value_cast<std::string>(    z + age)
             ;
-        s = std::string(9, char(' ')) + s;
-        s.resize(12 + 12 + 12, char(' ')); // Spans three columns.
+        s = std::string(9, ' ') + s;
+        s.resize(12 + 12 + 12, ' '); // Spans three columns.
         return s;
         };
 
