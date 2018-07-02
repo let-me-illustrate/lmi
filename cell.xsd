@@ -112,7 +112,6 @@
         <xs:element ref="InforceCumulativeNoLapsePremium"/>
         <xs:element ref="InforceCumulativeRopPayments"/>
         <xs:element ref="InforceCumulativeSalesLoad"/>
-        <xs:element ref="InforceDataSource"/>
         <xs:element ref="InforceDcv"/>
         <xs:element ref="InforceGeneralAccountValue"/>
         <xs:element ref="InforceGlp"/>
@@ -647,11 +646,6 @@ or forced out.</xs:documentation>
   <xs:element name="InforceCumulativeSalesLoad" type="nonnegative_double">
     <xs:annotation>
       <xs:documentation>Inforce cumulative refundable sales load.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="InforceDataSource" type="xs:nonNegativeInteger">
-    <xs:annotation>
-      <xs:documentation>Vendor identifier for files from an external system.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforceDcv" type="nonnegative_double">

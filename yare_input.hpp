@@ -145,7 +145,6 @@ class yare_input final
     bool                              IncludeInComposite              ;
     std::string                       Comments                        ;
     bool                              AmortizePremiumLoad             ;
-    int                               InforceDataSource               ;
     std::string                       ContractNumber                  ;
     std::string                       MasterContractNumber            ;
     calendar_date                     InforceAsOfDate                 ;

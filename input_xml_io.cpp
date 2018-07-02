@@ -127,6 +127,7 @@ bool Input::is_detritus(std::string const& s) const
         ,"IndividualPaymentToAlternative"   // Withdrawn.
         ,"IndividualPaymentToDuration"      // Withdrawn.
         ,"InforceCumulativePayments"        // Renamed to 'InforceCumulativeNoLapsePayments'.
+        ,"InforceDataSource"                // Supplanted by 'data_source' attribute.
         ,"InforceDcvDeathBenefit"           // Misbegotten.
         ,"InforceExperienceReserve"         // Renamed before implementation.
         ,"InsuredPremiumTableNumber"        // Never implemented.

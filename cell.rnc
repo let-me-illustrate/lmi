@@ -214,8 +214,6 @@ cell_element = element cell
      element InforceCumulativeRopPayments     {nonnegative_double}
     ,## Inforce cumulative refundable sales load.
      element InforceCumulativeSalesLoad       {nonnegative_double}
-    ,## Vendor identifier for files from an external system.
-     element InforceDataSource                {xsd:nonNegativeInteger}
     ,## Inforce 7702A deemed cash value.
      element InforceDcv                       {nonnegative_double}
     ,## Inforce unloaned account value in the general account.

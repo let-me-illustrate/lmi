@@ -122,7 +122,6 @@ Input::Input()
     ,IncludeInComposite               ("Yes")
 //    ,Comments                         ("")
 //    ,AmortizePremiumLoad              ("")
-    ,InforceDataSource                ("1") // 0=error; 1=lmi; 2+=other
 //    ,ContractNumber                   ("")
 //    ,MasterContractNumber             ("")
 //    ,InforceAsOfDate                  ("")
@@ -369,7 +368,6 @@ void Input::AscribeMembers()
     ascribe("IncludeInComposite"              , &Input::IncludeInComposite              );
     ascribe("Comments"                        , &Input::Comments                        );
     ascribe("AmortizePremiumLoad"             , &Input::AmortizePremiumLoad             );
-    ascribe("InforceDataSource"               , &Input::InforceDataSource               );
     ascribe("ContractNumber"                  , &Input::ContractNumber                  );
     ascribe("MasterContractNumber"            , &Input::MasterContractNumber            );
     ascribe("InforceAsOfDate"                 , &Input::InforceAsOfDate                 );

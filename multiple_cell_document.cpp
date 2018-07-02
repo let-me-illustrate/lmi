@@ -385,45 +385,30 @@ void multiple_cell_document::parse_v0(xml_lmi::dom_parser const& parser)
 /// which imposes an overhead of about twenty percent, is skipped for
 /// files produced by lmi itself, which are presumptively valid.
 ///
-/// Regrettably, as this is written in 2013-04, external files
-/// represent the data source in <cell> element <InforceDataSource>
-/// rather than in root attribute "data_source", so for now it is
-/// necessary to look for the lower-level element. Both represent the
-/// data source the same way: "0" is reserved, "1" means lmi, and
-/// each external system is assigned a higher integer.
+/// Values for root attribute "data_source":
+///   "0" is reserved;
+///   "1" means lmi; and
+///   each external system is assigned a higher integer.
+///
+/// If the "data_source" attribute is not present, then presume that
+/// the source is external iff a "file_version" attribute is present
+/// and a schema for that version exists.
 
 bool multiple_cell_document::data_source_is_external(xml::document const& d) const
 {
     xml::element const& root(d.get_root_node());
-
     int data_source = 0;
     if(xml_lmi::get_attr(root, "data_source", data_source))
         {
-        return 1 < data_source;
+        LMI_ASSERT(0 != data_source);
+        return 1 != data_source;
         }
-
-    // INPUT !! Remove "InforceDataSource" and the following code when
-    // external systems are updated to use the "data_source" attribute.
-
-    // Tag names vary: {"case_default", "class_defaults", "particular_cells"}.
-    xml::const_nodes_view const i_nodes(root.elements());
-    LMI_ASSERT(3 == i_nodes.size());
-    for(auto const& i : i_nodes)
+    else
         {
-        for(auto const& j : i.elements("cell"))
-            {
-            for(auto const& k : j.elements("InforceDataSource"))
-                {
-                std::string s(xml_lmi::get_content(k));
-                if("0" != s && "1" != s)
-                    {
-                    return true;
-                    }
-                }
-            }
+        int file_version = 0;
+        xml_lmi::get_attr(root, "version", file_version);
+        return 7 <= file_version;
         }
-
-    return false;
 }
 
 /// Coarsely validate file format with XSD schema.
