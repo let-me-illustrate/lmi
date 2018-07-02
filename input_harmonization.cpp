@@ -1126,15 +1126,13 @@ void Input::set_inforce_durations_from_dates()
 // Therefore, these diagnostics are temporarily suppressed for input
 // files created by lmi--but not for extracts from vendor systems,
 // whose dates should not be altered by lmi users.
-if(1 != InforceDataSource.value())
-  {
     if(expected != InforceAsOfDate.value() && !contains(global_settings::instance().pyx(), "off_monthiversary"))
         {
-        alarum()
+        warning()
             << "Input inforce-as-of date, "
             << InforceAsOfDate.value().str()
             << ", should be an exact monthiversary date."
-            << "\nIt would be interpreted as "
+            << "\nIt will be interpreted as "
             << expected.str()
             << ", which is "
             << InforceYear
@@ -1146,6 +1144,8 @@ if(1 != InforceDataSource.value())
             << " effective date."
             << LMI_FLUSH
             ;
+        InforceAsOfDate = expected;
+        LastMaterialChangeDate = std::min(LastMaterialChangeDate, InforceAsOfDate);
         }
 
     if
@@ -1153,11 +1153,10 @@ if(1 != InforceDataSource.value())
         && (0 == InforceYear && 0 == InforceMonth)
         )
         {
-        alarum()
+        warning()
             << "Inforce illustrations not permitted during month of issue."
             << LMI_FLUSH
             ;
         }
-  }
 }
 
