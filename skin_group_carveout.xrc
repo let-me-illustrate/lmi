@@ -1300,7 +1300,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                         <object class="sizeritem">
                                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                             <border>4</border>
-                                            <object class="wxSpinCtrl" name="SolveBeginTime">
+                                            <object class="wxSpinCtrl" name="SolveBeginAge">
                                                 <help>Solve beginning age</help>
                                                 <size>50,-1</size>
                                                 <style>wxSP_ARROW_KEYS</style>
@@ -1380,7 +1380,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                         <object class="sizeritem">
                                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                             <border>4</border>
-                                            <object class="wxSpinCtrl" name="SolveEndTime">
+                                            <object class="wxSpinCtrl" name="SolveEndAge">
                                                 <help>Solve ending age</help>
                                                 <size>50,-1</size>
                                                 <style>wxSP_ARROW_KEYS</style>
@@ -1454,7 +1454,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                         <object class="sizeritem">
                                             <flag>wxGROW|wxTOP</flag>
                                             <border>4</border>
-                                            <object class="wxTextCtrl" name="SolveTargetCashSurrenderValue">
+                                            <object class="wxTextCtrl" name="SolveTargetValue">
                                                 <help>Target amount</help>
                                             </object>
                                         </object>
@@ -1521,7 +1521,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                         <object class="sizeritem">
                                                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                                             <border>4</border>
-                                                            <object class="wxSpinCtrl" name="SolveTargetTime">
+                                                            <object class="wxSpinCtrl" name="SolveTargetAge">
                                                                 <help>Attained age to achieve target surrender value</help>
                                                                 <size>50,-1</size>
                                                                 <style>wxSP_ARROW_KEYS</style>
@@ -1954,7 +1954,7 @@ here, but it looks weird if we don't make this look like its siblings.
                 <object class="sizeritem">
                     <flag>wxGROW|wxBOTTOM</flag>
                     <border>2</border>
-                    <object class="InputSequenceEntry" name="SupplementalSpecifiedAmount">
+                    <object class="InputSequenceEntry" name="SupplementalAmount">
                         <title>Supplemental amount</title>
                         <help>Supplemental amount, or corridor, glp, gsp, maximum, salary, sevenpay, target</help>
                     </object>

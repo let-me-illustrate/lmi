@@ -49,7 +49,7 @@ namespace
 {
     AccountValue*       That;
     // IHS !! Use a struct for these?
-    double              ThatSolveTargetCSV;
+    double              ThatSolveTargetValue;
     mcenum_solve_target ThatSolveTarget;
     int                 ThatSolveTgtYear;
     int                 ThatSolveBegYear;
@@ -131,7 +131,7 @@ double SolveTest()
             break;
         case mce_solve_for_target_csv:
             {
-            y = ThatSolveTargetCSV;
+            y = ThatSolveTargetValue;
             }
             break;
         case mce_solve_for_target_naar: // Fall through.
@@ -230,9 +230,9 @@ void AccountValue::SolveSetLoanThenWD
 double AccountValue::Solve()
 {
     That = this;
-    ThatSolveTargetCSV  = yare_input_.SolveTargetCashSurrenderValue;
-    ThatSolveTarget     = yare_input_.SolveTarget;
-    ThatSolveBasis      = yare_input_.SolveExpenseGeneralAccountBasis;
+    ThatSolveTargetValue = yare_input_.SolveTargetValue;
+    ThatSolveTarget      = yare_input_.SolveTarget;
+    ThatSolveBasis       = yare_input_.SolveExpenseGeneralAccountBasis;
     only_set_values = !Solving;
 
     // We mustn't solve for a target at a duration beyond the end.

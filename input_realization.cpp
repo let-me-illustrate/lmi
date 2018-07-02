@@ -533,9 +533,9 @@ std::string Input::RealizeSupplementalAmount()
         (*this
         ,SupplementalAmountRealized_
         ,SupplementalAmountStrategyRealized_
-        ,SupplementalSpecifiedAmount
-        ,SupplementalSpecifiedAmount.allowed_keywords()
-        ,SupplementalSpecifiedAmount.default_keyword()
+        ,SupplementalAmount
+        ,SupplementalAmount.allowed_keywords()
+        ,SupplementalAmount.default_keyword()
         );
 }
 

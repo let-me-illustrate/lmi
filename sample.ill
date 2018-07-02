@@ -135,16 +135,16 @@
     <SeparateAccountRate>0.08</SeparateAccountRate>
     <SeparateAccountRateType>Gross rate</SeparateAccountRateType>
     <Smoking>Nonsmoker</Smoking>
-    <SolveBeginTime>45</SolveBeginTime>
+    <SolveBeginAge>45</SolveBeginAge>
     <SolveBeginYear>0</SolveBeginYear>
-    <SolveEndTime>65</SolveEndTime>
+    <SolveEndAge>65</SolveEndAge>
     <SolveEndYear>20</SolveEndYear>
     <SolveExpenseGeneralAccountBasis>Current</SolveExpenseGeneralAccountBasis>
     <SolveFromWhich>Issue</SolveFromWhich>
     <SolveSeparateAccountBasis>Hypothetical</SolveSeparateAccountBasis>
     <SolveTarget>Endowment</SolveTarget>
-    <SolveTargetCashSurrenderValue>0</SolveTargetCashSurrenderValue>
-    <SolveTargetTime>100</SolveTargetTime>
+    <SolveTargetAge>100</SolveTargetAge>
+    <SolveTargetValue>0</SolveTargetValue>
     <SolveTargetYear>55</SolveTargetYear>
     <SolveTgtAtWhich>Maturity</SolveTgtAtWhich>
     <SolveToWhich>Retirement</SolveToWhich>
@@ -162,6 +162,7 @@
     <State>CT</State>
     <StateOfJurisdiction>CT</StateOfJurisdiction>
     <SubstandardTable>None</SubstandardTable>
+    <SupplementalAmount>0</SupplementalAmount>
     <SupplementalIllustrationType>None</SupplementalIllustrationType>
     <SupplementalReportColumn00>[none]</SupplementalReportColumn00>
     <SupplementalReportColumn01>[none]</SupplementalReportColumn01>
@@ -175,7 +176,6 @@
     <SupplementalReportColumn09>[none]</SupplementalReportColumn09>
     <SupplementalReportColumn10>[none]</SupplementalReportColumn10>
     <SupplementalReportColumn11>[none]</SupplementalReportColumn11>
-    <SupplementalSpecifiedAmount>0</SupplementalSpecifiedAmount>
     <SurviveToAge>99</SurviveToAge>
     <SurviveToType>Survive to age limit</SurviveToType>
     <SurviveToYear>100</SurviveToYear>

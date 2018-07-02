@@ -173,16 +173,16 @@
         <xs:element ref="SeparateAccountRate"/>
         <xs:element ref="SeparateAccountRateType"/>
         <xs:element ref="Smoking"/>
-        <xs:element ref="SolveBeginTime"/>
+        <xs:element ref="SolveBeginAge"/>
         <xs:element ref="SolveBeginYear"/>
-        <xs:element ref="SolveEndTime"/>
+        <xs:element ref="SolveEndAge"/>
         <xs:element ref="SolveEndYear"/>
         <xs:element ref="SolveExpenseGeneralAccountBasis"/>
         <xs:element ref="SolveFromWhich"/>
         <xs:element ref="SolveSeparateAccountBasis"/>
         <xs:element ref="SolveTarget"/>
-        <xs:element ref="SolveTargetCashSurrenderValue"/>
-        <xs:element ref="SolveTargetTime"/>
+        <xs:element ref="SolveTargetAge"/>
+        <xs:element ref="SolveTargetValue"/>
         <xs:element ref="SolveTargetYear"/>
         <xs:element ref="SolveTgtAtWhich"/>
         <xs:element ref="SolveToWhich"/>
@@ -200,6 +200,7 @@
         <xs:element ref="State"/>
         <xs:element ref="StateOfJurisdiction"/>
         <xs:element ref="SubstandardTable"/>
+        <xs:element ref="SupplementalAmount"/>
         <xs:element ref="SupplementalIllustrationType"/>
         <xs:element ref="SupplementalReportColumn00"/>
         <xs:element ref="SupplementalReportColumn01"/>
@@ -213,7 +214,6 @@
         <xs:element ref="SupplementalReportColumn09"/>
         <xs:element ref="SupplementalReportColumn10"/>
         <xs:element ref="SupplementalReportColumn11"/>
-        <xs:element ref="SupplementalSpecifiedAmount"/>
         <xs:element ref="SurviveToAge"/>
         <xs:element ref="SurviveToType"/>
         <xs:element ref="SurviveToYear"/>
@@ -987,9 +987,9 @@ intended to represent basic group term coverage. Default: '50000'.</xs:documenta
       <xs:documentation>Insured's smoking or tobacco use.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="SolveBeginTime" type="duration_int">
+  <xs:element name="SolveBeginAge" type="duration_int">
     <xs:annotation>
-      <xs:documentation>* Age at which a solve begins  (inclusive).</xs:documentation>
+      <xs:documentation>* Age at which a solve begins (inclusive).</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SolveBeginYear" type="duration_int">
@@ -997,7 +997,7 @@ intended to represent basic group term coverage. Default: '50000'.</xs:documenta
       <xs:documentation>* Policy year in which a solve begins (inclusive).</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="SolveEndTime" type="duration_int">
+  <xs:element name="SolveEndAge" type="duration_int">
     <xs:annotation>
       <xs:documentation>* Age at which a solve ends (exclusive).</xs:documentation>
     </xs:annotation>
@@ -1029,14 +1029,14 @@ the basis of the hypothetical rate, half that rate, or zero.</xs:documentation>
       <xs:documentation>* Solve goal.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="SolveTargetCashSurrenderValue" type="nonnegative_double">
-    <xs:annotation>
-      <xs:documentation>* Cash surrender value used as solve goal.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="SolveTargetTime" type="duration_int">
+  <xs:element name="SolveTargetAge" type="duration_int">
     <xs:annotation>
       <xs:documentation>* Age at which a solve target is to be achieved.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="SolveTargetValue" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>* Cash surrender value used as solve goal.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SolveTargetYear" type="duration_int">
@@ -1128,6 +1128,14 @@ everything else except premium tax.</xs:documentation>
       <xs:documentation>Substandard table rating.</xs:documentation>
     </xs:annotation>
   </xs:element>
+  <xs:element name="SupplementalAmount" type="specamt_sequence">
+    <xs:annotation>
+      <xs:documentation>Supplemental specified amount (e.g., individually-elected
+extra coverage on a group plan) for each policy year since
+issue. Inforce extracts require only the current scalar value.
+Default: '0'.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="SupplementalIllustrationType" type="suppl_illus_type">
     <xs:annotation>
       <xs:documentation>* Built-in supplemental illustration type.</xs:documentation>
@@ -1191,14 +1199,6 @@ everything else except premium tax.</xs:documentation>
   <xs:element name="SupplementalReportColumn11" type="report_column">
     <xs:annotation>
       <xs:documentation>* User-designed supplemental illustration: twelfth column.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="SupplementalSpecifiedAmount" type="specamt_sequence">
-    <xs:annotation>
-      <xs:documentation>Supplemental specified amount (e.g., individually-elected
-extra coverage on a group plan) for each policy year since
-issue. Inforce extracts require only the current scalar value.
-Default: '0'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SurviveToAge" type="age_int">

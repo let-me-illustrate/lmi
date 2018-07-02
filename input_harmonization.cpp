@@ -559,7 +559,7 @@ true // Silly workaround for now.
     SpecifiedAmount.enable(!inhibit_sequence);
 
     // Unaffected by solves: no solve offered for supplemental specamt.
-    SupplementalSpecifiedAmount.enable(allow_term && !term_is_a_rider);
+    SupplementalAmount.enable(allow_term && !term_is_a_rider);
 
     bool prem_solve = mce_solve_ee_prem == SolveType;
 
@@ -778,16 +778,14 @@ false // Silly workaround for now.
     SolveTargetYear.minimum_and_maximum(1 + SolveBeginYear.value(), years_to_maturity());
 #endif // 0
 
-    // INPUT !! Temporarily, existing -'Time' names are used where
-    // -'Age' names would be clearer.
-    SolveBeginTime .enable(actually_solving && mce_from_age == SolveFromWhich);
-    SolveEndTime   .enable(actually_solving && mce_to_age   == SolveToWhich);
-    SolveTargetTime.enable(actually_solving && mce_to_age   == SolveTgtAtWhich && mce_solve_for_non_mec != SolveTarget);
+    SolveBeginAge .enable(actually_solving && mce_from_age == SolveFromWhich);
+    SolveEndAge   .enable(actually_solving && mce_to_age   == SolveToWhich);
+    SolveTargetAge.enable(actually_solving && mce_to_age   == SolveTgtAtWhich && mce_solve_for_non_mec != SolveTarget);
 
 #if 0 // http://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
-    SolveBeginTime .minimum_and_maximum(issue_age()           , maturity_age());
-    SolveEndTime   .minimum_and_maximum(SolveBeginTime.value(), maturity_age());
-    SolveTargetTime.minimum_and_maximum(SolveBeginTime.value(), maturity_age());
+    SolveBeginAge .minimum_and_maximum(issue_age()          , maturity_age());
+    SolveEndAge   .minimum_and_maximum(SolveBeginAge.value(), maturity_age());
+    SolveTargetAge.minimum_and_maximum(SolveBeginAge.value(), maturity_age());
 #endif // 0
 
     SolveTarget.enable(actually_solving);
@@ -812,8 +810,7 @@ false // Silly workaround for now.
     SolveSeparateAccountBasis.allow(mce_sep_zero, actually_solving && allow_sep_acct);
     SolveSeparateAccountBasis.allow(mce_sep_half, actually_solving && allow_sep_acct && is_three_rate_nasd(GleanedLedgerType_));
 
-    // INPUT !! Rename: s/SolveTargetCashSurrenderValue/SolveTargetValue/
-    SolveTargetCashSurrenderValue.enable(actually_solving && (mce_solve_for_target_csv == SolveTarget || mce_solve_for_target_naar == SolveTarget));
+    SolveTargetValue.enable(actually_solving && (mce_solve_for_target_csv == SolveTarget || mce_solve_for_target_naar == SolveTarget));
 
     bool enable_reduce_to_avoid_mec =
             !(actually_solving && mce_solve_for_non_mec == SolveTarget)
@@ -973,7 +970,7 @@ void Input::set_solve_durations()
             break;
         case mce_to_age:
             {
-            SolveTargetYear = SolveTargetTime.value() - issue_age();
+            SolveTargetYear = SolveTargetAge.value() - issue_age();
             }
             break;
         case mce_to_retirement:
@@ -997,7 +994,7 @@ void Input::set_solve_durations()
             break;
         case mce_from_age:
             {
-            SolveBeginYear = SolveBeginTime.value() - issue_age();
+            SolveBeginYear = SolveBeginAge.value() - issue_age();
             }
             break;
         case mce_from_issue:
@@ -1021,7 +1018,7 @@ void Input::set_solve_durations()
             break;
         case mce_to_age:
             {
-            SolveEndYear = SolveEndTime.value() - issue_age();
+            SolveEndYear = SolveEndAge.value() - issue_age();
             }
             break;
         case mce_to_retirement:
@@ -1042,9 +1039,9 @@ void Input::set_solve_durations()
     SolveBeginYear  = std::max(0, std::min(years_to_maturity(), SolveBeginYear .value()));
     SolveEndYear    = std::max(0, std::min(years_to_maturity(), SolveEndYear   .value()));
 
-    SolveTargetTime = issue_age() + SolveTargetYear.value();
-    SolveBeginTime  = issue_age() + SolveBeginYear .value();
-    SolveEndTime    = issue_age() + SolveEndYear   .value();
+    SolveTargetAge = issue_age() + SolveTargetYear.value();
+    SolveBeginAge  = issue_age() + SolveBeginYear .value();
+    SolveEndAge    = issue_age() + SolveEndYear   .value();
 }
 
 /// Set inforce durations (full years and months) from calendar dates.

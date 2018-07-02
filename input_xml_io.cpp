@@ -150,6 +150,11 @@ bool Input::is_detritus(std::string const& s) const
         ,"PremiumHistory"                   // Renamed to 'Inforce7702AAmountsPaidHistory'.
         ,"SocialSecurityNumber"             // Withdrawn: would violate privacy.
         ,"SolveBasis"                       // Renamed to 'SolveExpenseGeneralAccountBasis'.
+        ,"SolveBeginTime"                   // Renamed to 'SolveBeginAge'.
+        ,"SolveEndTime"                     // Renamed to 'SolveEndAge'.
+        ,"SolveTargetCashSurrenderValue"    // Renamed to 'SolveTargetValue'.
+        ,"SolveTargetTime"                  // Renamed to 'SolveTargetAge'.
+        ,"SupplementalSpecifiedAmount"      // Renamed to 'SupplementalAmount'.
         ,"SpecamtHistory"                   // Merged into 'SpecifiedAmount'.
         ,"SpecifiedAmountFromIssue"         // Withdrawn.
         ,"SpecifiedAmountFromRetirement"    // Withdrawn.
@@ -348,6 +353,29 @@ void Input::redintegrate_ex_post
         return;
         }
 
+    if(file_version < 9)
+        {
+        // Version 9 renamed these elements. Because they are used
+        // soon hereafter, they must be renamed early--between
+        // redintegrate_ex_ante() and redintegrate_ex_post(),
+        // as it were.
+        LMI_ASSERT(contains(residuary_names, "SolveTargetAge"));
+        LMI_ASSERT(contains(residuary_names, "SolveBeginAge"));
+        LMI_ASSERT(contains(residuary_names, "SolveEndAge"));
+        if(contains(detritus_map, "SolveTargetTime"))
+            {
+            SolveTargetAge = map_lookup(detritus_map, "SolveTargetTime");
+            }
+        if(contains(detritus_map, "SolveBeginTime"))
+            {
+            SolveBeginAge  = map_lookup(detritus_map, "SolveBeginTime");
+            }
+        if(contains(detritus_map, "SolveEndTime"))
+            {
+            SolveEndAge    = map_lookup(detritus_map, "SolveEndTime");
+            }
+        }
+
     if(0 == file_version)
         {
         // An older version with no distinct 'file_version' didn't
@@ -397,8 +425,8 @@ void Input::redintegrate_ex_post
         // apparently in this version only.
         //
         // However, default values for
-        //   SolveTargetTime
-        //   SolveEndTime
+        //   SolveTargetTime [since renamed to SolveTargetAge]
+        //   SolveEndTime    [since renamed to SolveEndAge]
         // didn't work correctly with contemporary versions of the
         // program. Users had to change them in order to make solves
         // work correctly. For saved cases with unchanged defaults,
@@ -406,13 +434,13 @@ void Input::redintegrate_ex_post
         // duration produces a result consonant with the palpable
         // intention of the quondam defaults.
         //
-        SolveTargetYear = std::min(years_to_maturity(), SolveTargetTime.value());
-        SolveBeginYear  =                               SolveBeginTime .value() ;
-        SolveEndYear    = std::min(years_to_maturity(), SolveEndTime   .value());
+        SolveTargetYear = std::min(years_to_maturity(), SolveTargetAge.value());
+        SolveBeginYear  =                               SolveBeginAge .value() ;
+        SolveEndYear    = std::min(years_to_maturity(), SolveEndAge   .value());
 
-        SolveTargetTime = issue_age() + SolveTargetYear.value();
-        SolveBeginTime  = issue_age() + SolveBeginYear .value();
-        SolveEndTime    = issue_age() + SolveEndYear   .value();
+        SolveTargetAge = issue_age() + SolveTargetYear.value();
+        SolveBeginAge  = issue_age() + SolveBeginYear .value();
+        SolveEndAge    = issue_age() + SolveEndYear   .value();
         }
 
     if(file_version < 5)
@@ -649,6 +677,29 @@ void Input::redintegrate_ex_post
             (TermRiderAmount.value() + SpecifiedAmountRealized_[0].value()
             ,db.Query(DB_SpecAmtLoadLimit)
             );
+        }
+
+    if(file_version < 9)
+        {
+        // Version 9 renamed these elements.
+        // This one has existed since before the lmi epoch, but some
+        // old vendor extracts defectively failed to provide it.
+        LMI_ASSERT(contains(residuary_names, "SolveTargetValue"));
+        if(!contains(detritus_map, "SolveTargetCashSurrenderValue"))
+            {
+            LMI_ASSERT(file_version < 7);
+            }
+        else
+            {
+            SolveTargetValue = map_lookup(detritus_map, "SolveTargetCashSurrenderValue");
+            }
+        // This one has existed only since version 8.
+        LMI_ASSERT(contains(residuary_names, "SupplementalAmount"));
+        SupplementalAmount =
+            (file_version < 8)
+            ? ""
+            : map_lookup(detritus_map, "SupplementalSpecifiedAmount")
+            ;
         }
 }
 

@@ -1913,7 +1913,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
-                                    <object class="wxTextCtrl" name="SolveTargetCashSurrenderValue">
+                                    <object class="wxTextCtrl" name="SolveTargetValue">
                                         <help>Target amount</help>
                                         <size>10,-1</size>
                                     </object>
@@ -1975,8 +1975,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
-<!-- Really want something like "SolveFromAge"; this is a temporary kludge. -->
-                                                    <object class="wxSpinCtrl" name="SolveBeginTime">
+                                                    <object class="wxSpinCtrl" name="SolveBeginAge">
                                                         <help>Solve beginning age</help>
                                                         <size>20,-1</size>
                                                         <style>wxSP_ARROW_KEYS</style>
@@ -2037,8 +2036,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
-<!-- Really want something like "SolveToAge"; this is a temporary kludge. -->
-                                                    <object class="wxSpinCtrl" name="SolveEndTime">
+                                                    <object class="wxSpinCtrl" name="SolveEndAge">
                                                         <help>Solve ending age</help>
                                                         <size>20,-1</size>
                                                         <style>wxSP_ARROW_KEYS</style>
@@ -2099,8 +2097,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
-<!-- Really want something like "SolveAtAge"; this is a temporary kludge. -->
-                                                    <object class="wxSpinCtrl" name="SolveTargetTime">
+                                                    <object class="wxSpinCtrl" name="SolveTargetAge">
                                                         <help>Attained age to achieve target surrender value</help>
                                                         <size>20,-1</size>
                                                         <style>wxSP_ARROW_KEYS</style>
@@ -2270,7 +2267,7 @@ here, but it looks weird if we don't make this look like its siblings.
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
-                    <object class="InputSequenceEntry" name="SupplementalSpecifiedAmount">
+                    <object class="InputSequenceEntry" name="SupplementalAmount">
                         <title>Supplemental amount</title>
                         <help>Supplemental amount, or corridor, glp, gsp, maximum, salary, sevenpay, target</help>
                         <size>180,-1</size>

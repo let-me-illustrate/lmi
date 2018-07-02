@@ -55,14 +55,14 @@ Input::Input()
 //    ,Internal1035ExchangeAmount       ("")
 //    ,Internal1035ExchangeTaxBasis     ("")
 //    ,Internal1035ExchangeFromMec      ("")
-//    ,SolveTargetTime                  ("95")
-//    ,SolveBeginTime                   ("")
-//    ,SolveEndTime                     ("95")
+//    ,SolveTargetAge                   ("95")
+//    ,SolveBeginAge                    ("")
+//    ,SolveEndAge                      ("95")
 //    ,SolveType                        ("")
 //    ,SolveBeginYear                   ("")
 //    ,SolveEndYear                     ("50")
 //    ,SolveTarget                      ("")
-//    ,SolveTargetCashSurrenderValue    ("")
+//    ,SolveTargetValue                 ("")
 //    ,SolveTargetYear                  ("50")
 //    ,SolveExpenseGeneralAccountBasis  ("")
 //    ,SolveSeparateAccountBasis        ("")
@@ -190,7 +190,7 @@ Input::Input()
 //    ,TaxBracket                       ("")
     ,ProjectedSalary                  ("100000")
     ,SpecifiedAmount                  ("1000000")
-    ,SupplementalSpecifiedAmount      ("0")
+    ,SupplementalAmount               ("0")
     ,DeathBenefitOption               ("a")
     ,Payment                          ("20000")
     ,PaymentMode                      ("annual")
@@ -302,14 +302,14 @@ void Input::AscribeMembers()
     ascribe("Internal1035ExchangeAmount"      , &Input::Internal1035ExchangeAmount      );
     ascribe("Internal1035ExchangeTaxBasis"    , &Input::Internal1035ExchangeTaxBasis    );
     ascribe("Internal1035ExchangeFromMec"     , &Input::Internal1035ExchangeFromMec     );
-    ascribe("SolveTargetTime"                 , &Input::SolveTargetTime                 );
-    ascribe("SolveBeginTime"                  , &Input::SolveBeginTime                  );
-    ascribe("SolveEndTime"                    , &Input::SolveEndTime                    );
+    ascribe("SolveTargetAge"                  , &Input::SolveTargetAge                  );
+    ascribe("SolveBeginAge"                   , &Input::SolveBeginAge                   );
+    ascribe("SolveEndAge"                     , &Input::SolveEndAge                     );
     ascribe("SolveType"                       , &Input::SolveType                       );
     ascribe("SolveBeginYear"                  , &Input::SolveBeginYear                  );
     ascribe("SolveEndYear"                    , &Input::SolveEndYear                    );
     ascribe("SolveTarget"                     , &Input::SolveTarget                     );
-    ascribe("SolveTargetCashSurrenderValue"   , &Input::SolveTargetCashSurrenderValue   );
+    ascribe("SolveTargetValue"                , &Input::SolveTargetValue                );
     ascribe("SolveTargetYear"                 , &Input::SolveTargetYear                 );
     ascribe("SolveExpenseGeneralAccountBasis" , &Input::SolveExpenseGeneralAccountBasis );
     ascribe("SolveSeparateAccountBasis"       , &Input::SolveSeparateAccountBasis       );
@@ -437,7 +437,7 @@ void Input::AscribeMembers()
     ascribe("TaxBracket"                      , &Input::TaxBracket                      );
     ascribe("ProjectedSalary"                 , &Input::ProjectedSalary                 );
     ascribe("SpecifiedAmount"                 , &Input::SpecifiedAmount                 );
-    ascribe("SupplementalSpecifiedAmount"     , &Input::SupplementalSpecifiedAmount     );
+    ascribe("SupplementalAmount"              , &Input::SupplementalAmount              );
     ascribe("DeathBenefitOption"              , &Input::DeathBenefitOption              );
     ascribe("Payment"                         , &Input::Payment                         );
     ascribe("PaymentMode"                     , &Input::PaymentMode                     );

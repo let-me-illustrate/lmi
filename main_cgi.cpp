@@ -123,7 +123,7 @@ int try_main(int argc, char* argv[])
         "&SolveBeginYear=0"
         "&SolveEndYear=10"
         "&SolveTarget=Target CSV"
-        "&SolveTargetCashSurrenderValue=1000000"
+        "&SolveTargetValue=1000000"
         "&SolveTargetYear=20"
         "&SolveExpenseGeneralAccountBasis=Current"
         "&SpecifiedAmount=1000000"
@@ -500,7 +500,7 @@ void ShowOutput(cgicc::Cgicc const& data)
     input["SolveBeginYear"]                  = GetValue(data, "SolveBeginYear"                 );
     input["SolveEndYear"]                    = GetValue(data, "SolveEndYear"                   );
     input["SolveTarget"]                     = GetValue(data, "SolveTarget"                    );
-    input["SolveTargetCashSurrenderValue"]   = GetValue(data, "SolveTargetCashSurrenderValue"  );
+    input["SolveTargetValue"]                = GetValue(data, "SolveTargetValue"               );
     input["SolveTargetYear"]                 = GetValue(data, "SolveTargetYear"                );
     input["SolveExpenseGeneralAccountBasis"] = GetValue(data, "SolveExpenseGeneralAccountBasis");
     input["SpecifiedAmount"]                 = GetValue(data, "SpecifiedAmount"                );

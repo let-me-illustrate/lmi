@@ -252,14 +252,14 @@ class LMI_SO Input final
     tnr_nonnegative_double   Internal1035ExchangeAmount      ;
     tnr_unrestricted_double  Internal1035ExchangeTaxBasis    ;
     mce_yes_or_no            Internal1035ExchangeFromMec     ;
-    tnr_duration             SolveTargetTime                 ;
-    tnr_duration             SolveBeginTime                  ;
-    tnr_duration             SolveEndTime                    ;
+    tnr_duration             SolveTargetAge                  ;
+    tnr_duration             SolveBeginAge                   ;
+    tnr_duration             SolveEndAge                     ;
     mce_solve_type           SolveType                       ;
     tnr_duration             SolveBeginYear                  ;
     tnr_duration             SolveEndYear                    ;
     mce_solve_target         SolveTarget                     ;
-    tnr_nonnegative_double   SolveTargetCashSurrenderValue   ;
+    tnr_nonnegative_double   SolveTargetValue                ;
     tnr_duration             SolveTargetYear                 ;
     mce_gen_basis            SolveExpenseGeneralAccountBasis ;
     mce_sep_basis            SolveSeparateAccountBasis       ;
@@ -387,8 +387,7 @@ class LMI_SO Input final
     numeric_sequence         TaxBracket                      ;
     numeric_sequence         ProjectedSalary                 ;
     specamt_sequence         SpecifiedAmount                 ;
-    // INPUT !! For brevity, "SupplementalAmount" would seem better.
-    specamt_sequence         SupplementalSpecifiedAmount     ;
+    specamt_sequence         SupplementalAmount              ;
     dbo_sequence             DeathBenefitOption              ;
     payment_sequence         Payment                         ;
     mode_sequence            PaymentMode                     ;

@@ -369,12 +369,12 @@ cell_element = element cell
      element SeparateAccountRateType          {sep_acct_rate_type}
     ,## Insured's smoking or tobacco use.
      element Smoking                          {smoking}
-    ,## * Age at which a solve begins  (inclusive).
-     element SolveBeginTime                   {duration_int}
+    ,## * Age at which a solve begins (inclusive).
+     element SolveBeginAge                    {duration_int}
     ,## * Policy year in which a solve begins (inclusive).
      element SolveBeginYear                   {duration_int}
     ,## * Age at which a solve ends (exclusive).
-     element SolveEndTime                     {duration_int}
+     element SolveEndAge                      {duration_int}
     ,## * Policy year at which a solve ends (exclusive).
      element SolveEndYear                     {duration_int}
     ,## * Expense and general-account basis for a solve: lmi permits
@@ -387,10 +387,10 @@ cell_element = element cell
      element SolveSeparateAccountBasis        {sep_basis}
     ,## * Solve goal.
      element SolveTarget                      {solve_target}
-    ,## * Cash surrender value used as solve goal.
-     element SolveTargetCashSurrenderValue    {nonnegative_double}
     ,## * Age at which a solve target is to be achieved.
-     element SolveTargetTime                  {duration_int}
+     element SolveTargetAge                   {duration_int}
+    ,## * Cash surrender value used as solve goal.
+     element SolveTargetValue                 {nonnegative_double}
     ,## * Policy year in which a solve target is to be achieved.
      element SolveTargetYear                  {duration_int}
     ,## * Point at which a solve target is to be achieved.
@@ -429,6 +429,11 @@ cell_element = element cell
      element StateOfJurisdiction              {state}
     ,## Substandard table rating.
      element SubstandardTable                 {table_rating}
+    ,## Supplemental specified amount (e.g., individually-elected
+     ## extra coverage on a group plan) for each policy year since
+     ## issue. Inforce extracts require only the current scalar value.
+     ## Default: '0'.
+     element SupplementalAmount               {specamt_sequence}
     ,## * Built-in supplemental illustration type.
      element SupplementalIllustrationType     {suppl_illus_type}
     ,## * User-designed supplemental illustration: first column.
@@ -455,11 +460,6 @@ cell_element = element cell
      element SupplementalReportColumn10       {report_column}
     ,## * User-designed supplemental illustration: twelfth column.
      element SupplementalReportColumn11       {report_column}
-    ,## Supplemental specified amount (e.g., individually-elected
-     ## extra coverage on a group plan) for each policy year since
-     ## issue. Inforce extracts require only the current scalar value.
-     ## Default: '0'.
-     element SupplementalSpecifiedAmount      {specamt_sequence}
     ,## * Presumed age at death, for partial mortality. Default: '99'.
      element SurviveToAge                     {age_int}
     ,## * Presumed moment of death, for partial mortality.
