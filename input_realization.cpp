@@ -164,7 +164,7 @@ Input::permissible_specified_amount_strategy_keywords()
         {
         all_keywords["maximum" ] = "SAMaximum"       ;
         all_keywords["target"  ] = "SATarget"        ;
-        all_keywords["sevenpay"] = "SAMEP"           ;
+        all_keywords["sevenpay"] = "SA7PP"           ;
         all_keywords["glp"     ] = "SAGLP"           ;
         all_keywords["gsp"     ] = "SAGSP"           ;
         all_keywords["corridor"] = "SACorridor"      ;

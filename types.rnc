@@ -157,13 +157,12 @@ solve_target =
 
 ## Optional strategy to determine payment as a function of specified amount.
 ## 'PmtInputScalar' is the default even though it is obsolete.
-## 'PmtMEP' uses 7702A 7PP rate.
 ## 'Table' uses an external table (e.g., New York Table D for group insurance).
 pmt_strategy =
       "PmtInputScalar"
     | "PmtMinimum"
     | "PmtTarget"
-    | "PmtMEP"
+    | "Pmt7PP"
     | "PmtGLP"
     | "PmtGSP"
     | "PmtCorridor"
@@ -171,12 +170,11 @@ pmt_strategy =
 
 ## Optional strategy to determine specified amount as a function of premium.
 ## 'SAInputScalar' is the default even though it is obsolete.
-## 'SAMEP' uses 7702A 7PP rate.
 sa_strategy =
       "SAInputScalar"
     | "SAMaximum"
     | "SATarget"
-    | "SAMEP"
+    | "SA7PP"
     | "SAGLP"
     | "SAGSP"
     | "SACorridor"

@@ -252,14 +252,13 @@ but none use both, so a single set of enumerators suffices.</xs:documentation>
     <xs:annotation>
       <xs:documentation>Optional strategy to determine payment as a function of specified amount.
 'PmtInputScalar' is the default even though it is obsolete.
-'PmtMEP' uses 7702A 7PP rate.
 'Table' uses an external table (e.g., New York Table D for group insurance).</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:token">
       <xs:enumeration value="PmtInputScalar"/>
       <xs:enumeration value="PmtMinimum"/>
       <xs:enumeration value="PmtTarget"/>
-      <xs:enumeration value="PmtMEP"/>
+      <xs:enumeration value="Pmt7PP"/>
       <xs:enumeration value="PmtGLP"/>
       <xs:enumeration value="PmtGSP"/>
       <xs:enumeration value="PmtCorridor"/>
@@ -269,14 +268,13 @@ but none use both, so a single set of enumerators suffices.</xs:documentation>
   <xs:simpleType name="sa_strategy">
     <xs:annotation>
       <xs:documentation>Optional strategy to determine specified amount as a function of premium.
-'SAInputScalar' is the default even though it is obsolete.
-'SAMEP' uses 7702A 7PP rate.</xs:documentation>
+'SAInputScalar' is the default even though it is obsolete.</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:token">
       <xs:enumeration value="SAInputScalar"/>
       <xs:enumeration value="SAMaximum"/>
       <xs:enumeration value="SATarget"/>
-      <xs:enumeration value="SAMEP"/>
+      <xs:enumeration value="SA7PP"/>
       <xs:enumeration value="SAGLP"/>
       <xs:enumeration value="SAGSP"/>
       <xs:enumeration value="SACorridor"/>
