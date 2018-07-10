@@ -1113,26 +1113,13 @@ void Input::set_inforce_durations_from_dates()
         ,InforceMonth .value()
         ,true
         );
-    // After testing in production, either remove the "pyx" bypass, or
-    // redesign this. Replacing alarum() with warning() would cause
-    // multiple messageboxes, which is unavoidable if the diagnostic is
-    // to be given when GUI input enters an invalid state, and also
-    // whenever an illustration is about to be produced.
-// Fails:
-//   File | New | Illustration
-//   subtract one day from "Effective date"
-//   OK
-//   Illustration | Edit cell... [fails irrecoverably]
-// Therefore, these diagnostics are temporarily suppressed for input
-// files created by lmi--but not for extracts from vendor systems,
-// whose dates should not be altered by lmi users.
-    if(expected != InforceAsOfDate.value() && !contains(global_settings::instance().pyx(), "off_monthiversary"))
+    if(expected != InforceAsOfDate.value())
         {
         warning()
             << "Input inforce-as-of date, "
             << InforceAsOfDate.value().str()
-            << ", should be an exact monthiversary date."
-            << "\nIt will be interpreted as "
+            << ", is not an exact monthiversary date."
+            << "\nIt must change to "
             << expected.str()
             << ", which is "
             << InforceYear
