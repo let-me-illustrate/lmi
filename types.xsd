@@ -43,26 +43,37 @@
     although a simple scalar suffices when historical data don't vary by
     year.
   -->
+  <!-- General numeric value. -->
   <xs:simpleType name="numeric_sequence">
     <xs:restriction base="xs:string">
       <xs:pattern value=" *| *(\-?[0-9.]+)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *(; *(\-?[0-9.]+)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *)*;? *"/>
     </xs:restriction>
   </xs:simpleType>
+  <!-- Payment: keyword or numeric value. -->
   <xs:simpleType name="payment_sequence">
     <xs:restriction base="xs:string">
       <xs:pattern value=" *| *(\-?[0-9.]+|minimum|target|sevenpay|glp|gsp|corridor|table)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *(; *(\-?[0-9.]+|minimum|target|sevenpay|glp|gsp|corridor|table)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *)*;? *"/>
     </xs:restriction>
   </xs:simpleType>
+  <!-- Payment mode. -->
   <xs:simpleType name="mode_sequence">
     <xs:restriction base="xs:string">
       <xs:pattern value=" *| *(annual|semiannual|quarterly|monthly)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *(; *(annual|semiannual|quarterly|monthly)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *)*;? *"/>
     </xs:restriction>
   </xs:simpleType>
+  <!-- Specified amount: keyword or numeric value. -->
   <xs:simpleType name="specamt_sequence">
     <xs:restriction base="xs:string">
       <xs:pattern value=" *| *(\-?[0-9.]+|maximum|target|sevenpay|glp|gsp|corridor|salary)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *(; *(\-?[0-9.]+|maximum|target|sevenpay|glp|gsp|corridor|salary)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *)*;? *"/>
     </xs:restriction>
   </xs:simpleType>
+  <!--
+    Death benefit option:
+      'a'   (level)
+      'b'   (increasing)
+      'rop' (return of premium)
+      'mdb' (minimal death benefit)
+  -->
   <xs:simpleType name="dbo_sequence">
     <xs:restriction base="xs:string">
       <xs:pattern value=" *| *(a|b|rop|mdb)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *(; *(a|b|rop|mdb)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *)*;? *"/>
@@ -153,7 +164,7 @@ but none use both, so a single set of enumerators suffices.</xs:documentation>
   </xs:simpleType>
   <xs:simpleType name="class">
     <xs:annotation>
-      <xs:documentation>Underwriting class. Use "Rated" for contracts with table ratings.</xs:documentation>
+      <xs:documentation>Underwriting class. Use 'Rated' for contracts with table ratings.</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:token">
       <xs:enumeration value="Preferred"/>
@@ -690,7 +701,8 @@ proved unworkable (e.g., because of underwriting).</xs:documentation>
   <xs:simpleType name="defn_material_change">
     <xs:annotation>
       <xs:documentation>7702A definition of material change. For the nonce, use
-"Earlier of" with CVAT, and "adjustment event" with GPT.</xs:documentation>
+  'Earlier of increase or unnecessary premium' with CVAT, and
+  'GPT adjustment event' with GPT.</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:token">
       <xs:enumeration value="Unnecessary premium"/>
