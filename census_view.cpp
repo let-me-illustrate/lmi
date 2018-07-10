@@ -1844,13 +1844,13 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         cell_parms ().swap(cells);
         selection = 0;
         }
-    else if
-        (configurable_settings::instance().census_paste_palimpsestically()
-        ||    contains(global_settings::instance().pyx(), "cut_census")
-           && cell_parms() == case_parms()
-        )
+    else if(configurable_settings::instance().census_paste_palimpsestically())
         {
         cell_parms().swap(cells);
+        // Cells that were copied from lmi have DOB and not IssueAge,
+        // so pasting them back in sets UseDOB. Force UseDOB for case
+        // and class defaults to prevent showing a UseDOB column with
+        // each cell set to "Yes".
         for(auto& j : case_parms ()) {j["UseDOB"] = "Yes";}
         for(auto& j : class_parms()) {j["UseDOB"] = "Yes";}
         selection = 0;
@@ -1884,14 +1884,6 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 void CensusView::UponCopyCensus(wxCommandEvent&)
 {
     DoCopyCensus();
-
-    if(contains(global_settings::instance().pyx(), "cut_census"))
-        {
-        cell_parms() = case_parms();
-        list_model_->Reset(cell_parms().size());
-        Update();
-        list_window_->Select(list_model_->GetItem(0));
-        }
 }
 
 /// Copy from census manager to clipboard and TSV file.
