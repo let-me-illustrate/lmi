@@ -174,7 +174,7 @@ void single_cell_document::validate_with_xsd_schema
     xml::error_messages errors;
     if(!schema.validate(cell_sorter().apply(xml), errors))
         {
-        warning()
+        alarum()
             << "Validation with schema '"
             << xsd
             << "' failed.\n\n"
