@@ -124,6 +124,10 @@ void single_cell_document::parse(xml_lmi::dom_parser const& parser)
     //  returning "*begin()" from front() actually results in a
     //  dangling reference'.
     *elements.begin() >> input_data_;
+    if(data_source_is_external(parser.document()))
+        {
+        input_data_.Reconcile();
+        }
 }
 
 /// Ascertain whether input file comes from a system other than lmi.
