@@ -30,6 +30,13 @@
 #include <stdexcept>
 #include <vector>
 
+/// Demonstrate that alert streams can be used as arguments.
+
+void test_stream_arg(std::ostream& os, std::string const& s)
+{
+    os << s << std::flush;
+}
+
 int test_main(int, char*[])
 {
     safely_show_message("  This message should appear on stderr.");
@@ -77,6 +84,13 @@ int test_main(int, char*[])
 
     s = "Second simulated alarum.";
     BOOST_TEST_THROW(alarum() << s << std::flush, std::runtime_error, s);
+
+    // The CLI handler should gobble this message.
+    test_stream_arg(status(), "This should not be printed.");
+
+    test_stream_arg(warning(), "This message should appear on stdout.");
+
+    BOOST_TEST_THROW(test_stream_arg(alarum(), "X"), std::runtime_error, "X");
 
     return 0;
 }
