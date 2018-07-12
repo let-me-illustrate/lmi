@@ -46,11 +46,17 @@ template class xml_serializable<configurable_settings>;
 
 namespace
 {
-std::string const& configuration_filename()
+std::string const& default_calculation_summary_columns()
 {
-    static std::string s("configurable_settings.xml");
+    static std::string s
+        ("Outlay"
+        " AcctVal_Current"
+        " CSVNet_Current"
+        " EOYDeathBft_Current"
+        );
     return s;
 }
+} // Unnamed namespace.
 
 /// Store the complete configuration-file path at startup, in case
 /// it's non-complete--as is typical msw usage.
@@ -79,23 +85,25 @@ std::string const& configuration_filename()
 /// most appropriate. (A knowledgeable user could of course move it
 /// aside if it is desired to use the file on the read-only medium.)
 
-fs::path const& configuration_filepath()
+std::string const& configuration_filepath()
 {
-    static fs::path complete_path;
+    static std::string complete_path;
     if(!complete_path.empty())
         {
         return complete_path;
         }
 
-    std::string filename = "/etc/opt/lmi/" + configuration_filename();
+    static std::string const basename {"configurable_settings.xml"};
+
+    std::string filename = "/etc/opt/lmi/" + basename;
     if(0 != access(filename.c_str(), R_OK))
         {
-        filename = AddDataDir(configuration_filename());
+        filename = AddDataDir(basename);
         if(0 != access(filename.c_str(), R_OK))
             {
             alarum()
                 << "No readable file '"
-                << configuration_filename()
+                << basename
                 << "' exists."
                 << LMI_FLUSH
                 ;
@@ -114,21 +122,9 @@ fs::path const& configuration_filepath()
         }
 
     validate_filepath(filename, "Configurable-settings file");
-    complete_path = fs::system_complete(filename);
+    complete_path = fs::system_complete(filename).string();
     return complete_path;
 }
-
-std::string const& default_calculation_summary_columns()
-{
-    static std::string s
-        ("Outlay"
-        " AcctVal_Current"
-        " CSVNet_Current"
-        " EOYDeathBft_Current"
-        );
-    return s;
-}
-} // Unnamed namespace.
 
 configurable_settings::configurable_settings()
     :calculation_summary_columns_        (default_calculation_summary_columns())
