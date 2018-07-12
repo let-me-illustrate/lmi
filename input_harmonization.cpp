@@ -1091,6 +1091,18 @@ void Input::set_solve_durations()
 
 void Input::set_inforce_durations_from_dates(std::ostream& os)
 {
+    if(InforceAsOfDate.value() < EffectiveDate.value())
+        {
+        os
+            << "Input inforce-as-of date, "
+            << InforceAsOfDate.value().str()
+            << ", precedes the "
+            << EffectiveDate.value().str()
+            << " effective date."
+            << LMI_FLUSH
+            ;
+        }
+
     std::pair<int,int> ym0 = years_and_months_since
         (EffectiveDate  .value()
         ,InforceAsOfDate.value()
@@ -1098,6 +1110,20 @@ void Input::set_inforce_durations_from_dates(std::ostream& os)
         );
     InforceYear  = ym0.first;
     InforceMonth = ym0.second;
+
+    if(InforceAsOfDate.value() < LastMaterialChangeDate.value())
+        {
+        os
+            << "Input inforce-as-of date, "
+            << InforceAsOfDate.value().str()
+            << ", precedes the "
+            << LastMaterialChangeDate.value().str()
+            << " last material change date."
+            << LMI_FLUSH
+            ;
+        }
+    // Somewhat dubiously, force the issue.
+    LastMaterialChangeDate = std::min(LastMaterialChangeDate, InforceAsOfDate);
 
     std::pair<int,int> ym1 = years_and_months_since
         (LastMaterialChangeDate.value()
@@ -1119,7 +1145,7 @@ void Input::set_inforce_durations_from_dates(std::ostream& os)
             << "Input inforce-as-of date, "
             << InforceAsOfDate.value().str()
             << ", is not an exact monthiversary date."
-            << "\nIt must change to "
+            << "\nIt would be interpreted as "
             << expected.str()
             << ", which is "
             << InforceYear
@@ -1128,11 +1154,11 @@ void Input::set_inforce_durations_from_dates(std::ostream& os)
             << " full months"
             << "\nafter the "
             << EffectiveDate.value().str()
-            << " effective date."
+            << " effective date, but inforce values as of that date"
+            << " would be different."
             << LMI_FLUSH
             ;
         InforceAsOfDate = expected;
-        LastMaterialChangeDate = std::min(LastMaterialChangeDate, InforceAsOfDate);
         }
 
     if
