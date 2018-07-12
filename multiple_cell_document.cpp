@@ -175,6 +175,7 @@ void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
             j >> cell;
             if(data_source_is_external(parser.document()))
                 {
+                cell.validate_external_data();
                 cell.Reconcile();
                 }
             v.push_back(cell);

@@ -119,7 +119,7 @@ void Input::DoCustomizeInitialValues()
     InforceContractYear              = 0;
     InforceMonth                     = 0;
     InforceYear                      = 0;
-    set_inforce_durations_from_dates();
+    set_inforce_durations_from_dates(warning());
 
     if(mce_yes == UseCurrentDeclaredRate)
         {
@@ -906,7 +906,7 @@ void Input::DoTransmogrify()
         return;
         }
 
-    set_inforce_durations_from_dates();
+    set_inforce_durations_from_dates(warning());
 
     // USER !! This is the credited rate as of the database date,
     // regardless of the date of illustration, because the database
@@ -1089,7 +1089,7 @@ void Input::set_solve_durations()
 /// must be taken into account for inforce, but disregarded (or
 /// asserted to be zero) for new business).
 
-void Input::set_inforce_durations_from_dates()
+void Input::set_inforce_durations_from_dates(std::ostream& os)
 {
     std::pair<int,int> ym0 = years_and_months_since
         (EffectiveDate  .value()
@@ -1115,7 +1115,7 @@ void Input::set_inforce_durations_from_dates()
         );
     if(expected != InforceAsOfDate.value())
         {
-        warning()
+        os
             << "Input inforce-as-of date, "
             << InforceAsOfDate.value().str()
             << ", is not an exact monthiversary date."
@@ -1140,10 +1140,24 @@ void Input::set_inforce_durations_from_dates()
         && (0 == InforceYear && 0 == InforceMonth)
         )
         {
-        warning()
+        os
             << "Inforce illustrations not permitted during month of issue."
             << LMI_FLUSH
             ;
         }
 }
 
+/// Validate an input cell from an external source.
+///
+/// External input files are often defective. They're tested with an
+/// xml schema, but a schema can't find all the flaws; in particular,
+/// it can't test relationships among the values of various elements,
+/// so some crucial invariants are tested here.
+
+void Input::validate_external_data()
+{
+    global_settings::instance().ash_nazg()
+        ? set_inforce_durations_from_dates(warning())
+        : set_inforce_durations_from_dates(alarum())
+        ;
+}

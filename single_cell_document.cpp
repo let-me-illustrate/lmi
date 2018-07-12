@@ -126,6 +126,7 @@ void single_cell_document::parse(xml_lmi::dom_parser const& parser)
     *elements.begin() >> input_data_;
     if(data_source_is_external(parser.document()))
         {
+        input_data_.validate_external_data();
         input_data_.Reconcile();
         }
 }
