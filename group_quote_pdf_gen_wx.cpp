@@ -528,7 +528,8 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
         }
     else
         {
-        if(invar.GroupIndivSelection != individual_selection_)
+        // static_cast to avoid an msvc warning:
+        if(static_cast<bool>(invar.GroupIndivSelection) != individual_selection_)
             {
             alarum()
                 << "Group quotes cannot mix mandatory and voluntary on the same plan."
