@@ -261,7 +261,7 @@
     {"PmtInputScalar" \
     ,"PmtMinimum" \
     ,"PmtTarget" \
-    ,"PmtMEP" \
+    ,"Pmt7PP" \
     ,"PmtGLP" \
     ,"PmtGSP" \
     ,"PmtCorridor" \
@@ -284,7 +284,7 @@
     {"SAInputScalar" \
     ,"SAMaximum" \
     ,"SATarget" \
-    ,"SAMEP" \
+    ,"SA7PP" \
     ,"SAGLP" \
     ,"SAGSP" \
     ,"SACorridor" \

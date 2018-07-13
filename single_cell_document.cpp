@@ -116,8 +116,19 @@ void single_cell_document::parse(xml_lmi::dom_parser const& parser)
     xml::const_nodes_view const elements(root.elements());
     // An '.ill' document's root contains only one child element.
     LMI_ASSERT(1 == elements.size());
-    // "*elements.begin()" because there is no front():
+    // "*elements.begin()" because there is no front(). A 2017-01-26
+    // discussion off the mailing list explained why:
+    // 'The nodes returned by nodes_view::iterator are actually
+    //  temporary objects as the only "real" nodes we have are
+    //  xmlNodes in the tree maintained by libxml2 itself. So
+    //  returning "*begin()" from front() actually results in a
+    //  dangling reference'.
     *elements.begin() >> input_data_;
+    if(data_source_is_external(parser.document()))
+        {
+        input_data_.validate_external_data();
+        input_data_.Reconcile();
+        }
 }
 
 /// Ascertain whether input file comes from a system other than lmi.
@@ -163,7 +174,7 @@ void single_cell_document::validate_with_xsd_schema
     xml::error_messages errors;
     if(!schema.validate(cell_sorter().apply(xml), errors))
         {
-        warning()
+        alarum()
             << "Validation with schema '"
             << xsd
             << "' failed.\n\n"

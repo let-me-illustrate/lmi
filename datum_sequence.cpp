@@ -207,7 +207,7 @@ std::map<std::string,std::string> const payment_sequence::allowed_keywords() con
         {
         all_keywords["minimum" ] = "PmtMinimum" ;
         all_keywords["target"  ] = "PmtTarget"  ;
-        all_keywords["sevenpay"] = "PmtMEP"     ;
+        all_keywords["sevenpay"] = "Pmt7PP"     ;
         all_keywords["glp"     ] = "PmtGLP"     ;
         all_keywords["gsp"     ] = "PmtGSP"     ;
         all_keywords["corridor"] = "PmtCorridor";
@@ -281,7 +281,7 @@ std::map<std::string,std::string> const specamt_sequence::allowed_keywords() con
         {
         all_keywords["maximum" ] = "SAMaximum" ;
         all_keywords["target"  ] = "SATarget"  ;
-        all_keywords["sevenpay"] = "SAMEP"     ;
+        all_keywords["sevenpay"] = "SA7PP"     ;
         all_keywords["glp"     ] = "SAGLP"     ;
         all_keywords["gsp"     ] = "SAGSP"     ;
         all_keywords["corridor"] = "SACorridor";

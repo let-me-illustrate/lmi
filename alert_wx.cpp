@@ -53,6 +53,11 @@ bool volatile ensure_setup = set_alert_functions
 ///
 /// Otherwise, simply return. If the message were crucial, then it
 /// wouldn't have been relegated to the statusbar.
+///
+/// Explicitly call Update() to ensure that the message is shown right
+/// away. This is arguably unnecessary, but costs practically nothing;
+/// see:
+///   https://lists.nongnu.org/archive/html/lmi/2018-06/msg00034.html
 
 void status_alert(std::string const& s)
 {

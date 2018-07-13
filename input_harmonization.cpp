@@ -119,7 +119,7 @@ void Input::DoCustomizeInitialValues()
     InforceContractYear              = 0;
     InforceMonth                     = 0;
     InforceYear                      = 0;
-    set_inforce_durations_from_dates();
+    set_inforce_durations_from_dates(warning());
 
     if(mce_yes == UseCurrentDeclaredRate)
         {
@@ -906,7 +906,7 @@ void Input::DoTransmogrify()
         return;
         }
 
-    set_inforce_durations_from_dates();
+    set_inforce_durations_from_dates(warning());
 
     // USER !! This is the credited rate as of the database date,
     // regardless of the date of illustration, because the database
@@ -1089,8 +1089,20 @@ void Input::set_solve_durations()
 /// must be taken into account for inforce, but disregarded (or
 /// asserted to be zero) for new business).
 
-void Input::set_inforce_durations_from_dates()
+void Input::set_inforce_durations_from_dates(std::ostream& os)
 {
+    if(InforceAsOfDate.value() < EffectiveDate.value())
+        {
+        os
+            << "Input inforce-as-of date, "
+            << InforceAsOfDate.value().str()
+            << ", precedes the "
+            << EffectiveDate.value().str()
+            << " effective date."
+            << LMI_FLUSH
+            ;
+        }
+
     std::pair<int,int> ym0 = years_and_months_since
         (EffectiveDate  .value()
         ,InforceAsOfDate.value()
@@ -1098,6 +1110,20 @@ void Input::set_inforce_durations_from_dates()
         );
     InforceYear  = ym0.first;
     InforceMonth = ym0.second;
+
+    if(InforceAsOfDate.value() < LastMaterialChangeDate.value())
+        {
+        os
+            << "Input inforce-as-of date, "
+            << InforceAsOfDate.value().str()
+            << ", precedes the "
+            << LastMaterialChangeDate.value().str()
+            << " last material change date."
+            << LMI_FLUSH
+            ;
+        }
+    // Somewhat dubiously, force the issue.
+    LastMaterialChangeDate = std::min(LastMaterialChangeDate, InforceAsOfDate);
 
     std::pair<int,int> ym1 = years_and_months_since
         (LastMaterialChangeDate.value()
@@ -1113,26 +1139,13 @@ void Input::set_inforce_durations_from_dates()
         ,InforceMonth .value()
         ,true
         );
-    // After testing in production, either remove the "pyx" bypass, or
-    // redesign this. Replacing alarum() with warning() would cause
-    // multiple messageboxes, which is unavoidable if the diagnostic is
-    // to be given when GUI input enters an invalid state, and also
-    // whenever an illustration is about to be produced.
-// Fails:
-//   File | New | Illustration
-//   subtract one day from "Effective date"
-//   OK
-//   Illustration | Edit cell... [fails irrecoverably]
-// Therefore, these diagnostics are temporarily suppressed for input
-// files created by lmi--but not for extracts from vendor systems,
-// whose dates should not be altered by lmi users.
-    if(expected != InforceAsOfDate.value() && !contains(global_settings::instance().pyx(), "off_monthiversary"))
+    if(expected != InforceAsOfDate.value())
         {
-        warning()
+        os
             << "Input inforce-as-of date, "
             << InforceAsOfDate.value().str()
-            << ", should be an exact monthiversary date."
-            << "\nIt will be interpreted as "
+            << ", is not an exact monthiversary date."
+            << "\nIt would be interpreted as "
             << expected.str()
             << ", which is "
             << InforceYear
@@ -1141,11 +1154,11 @@ void Input::set_inforce_durations_from_dates()
             << " full months"
             << "\nafter the "
             << EffectiveDate.value().str()
-            << " effective date."
+            << " effective date, but inforce values as of that date"
+            << " would be different."
             << LMI_FLUSH
             ;
         InforceAsOfDate = expected;
-        LastMaterialChangeDate = std::min(LastMaterialChangeDate, InforceAsOfDate);
         }
 
     if
@@ -1153,10 +1166,24 @@ void Input::set_inforce_durations_from_dates()
         && (0 == InforceYear && 0 == InforceMonth)
         )
         {
-        warning()
+        os
             << "Inforce illustrations not permitted during month of issue."
             << LMI_FLUSH
             ;
         }
 }
 
+/// Validate an input cell from an external source.
+///
+/// External input files are often defective. They're tested with an
+/// xml schema, but a schema can't find all the flaws; in particular,
+/// it can't test relationships among the values of various elements,
+/// so some crucial invariants are tested here.
+
+void Input::validate_external_data()
+{
+    global_settings::instance().ash_nazg()
+        ? set_inforce_durations_from_dates(warning())
+        : set_inforce_durations_from_dates(alarum())
+        ;
+}

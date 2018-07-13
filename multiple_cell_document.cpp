@@ -175,6 +175,7 @@ void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
             j >> cell;
             if(data_source_is_external(parser.document()))
                 {
+                cell.validate_external_data();
                 cell.Reconcile();
                 }
             v.push_back(cell);
@@ -422,7 +423,7 @@ void multiple_cell_document::validate_with_xsd_schema
     xml::error_messages errors;
     if(!schema.validate(cell_sorter().apply(xml), errors))
         {
-        warning()
+        alarum()
             << "Validation with schema '"
             << xsd
             << "' failed.\n\n"

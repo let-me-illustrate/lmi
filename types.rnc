@@ -37,11 +37,25 @@
 # although a simple scalar suffices when historical data don't vary by
 # year.
 
+# General numeric value.
 numeric_sequence = xsd:string {pattern = " *| *(\-?[0-9.]+)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *(; *(\-?[0-9.]+)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *)*;? *"}
+
+# Payment: keyword or numeric value.
 payment_sequence = xsd:string {pattern = " *| *(\-?[0-9.]+|minimum|target|sevenpay|glp|gsp|corridor|table)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *(; *(\-?[0-9.]+|minimum|target|sevenpay|glp|gsp|corridor|table)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *)*;? *"}
+
+# Payment mode.
 mode_sequence    = xsd:string {pattern = " *| *(annual|semiannual|quarterly|monthly)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *(; *(annual|semiannual|quarterly|monthly)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *)*;? *"}
+
+# Specified amount: keyword or numeric value.
 specamt_sequence = xsd:string {pattern = " *| *(\-?[0-9.]+|maximum|target|sevenpay|glp|gsp|corridor|salary)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *(; *(\-?[0-9.]+|maximum|target|sevenpay|glp|gsp|corridor|salary)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *)*;? *"}
+
+# Death benefit option:
+#   'a'   (level)
+#   'b'   (increasing)
+#   'rop' (return of premium)
+#   'mdb' (minimal death benefit)
 dbo_sequence     = xsd:string {pattern = " *| *(a|b|rop|mdb)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *(; *(a|b|rop|mdb)(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)]))? *)*;? *"}
+
 # Numeric-range types.
 
 ## Floating-point number greater than or equal to zero.
@@ -83,7 +97,7 @@ smoking =
     | "Nonsmoker"
     | "Unismoke"
 
-## Underwriting class. Use "Rated" for contracts with table ratings.
+## Underwriting class. Use 'Rated' for contracts with table ratings.
 class =
       "Preferred"
     | "Standard"
@@ -143,13 +157,12 @@ solve_target =
 
 ## Optional strategy to determine payment as a function of specified amount.
 ## 'PmtInputScalar' is the default even though it is obsolete.
-## 'PmtMEP' uses 7702A 7PP rate.
 ## 'Table' uses an external table (e.g., New York Table D for group insurance).
 pmt_strategy =
       "PmtInputScalar"
     | "PmtMinimum"
     | "PmtTarget"
-    | "PmtMEP"
+    | "Pmt7PP"
     | "PmtGLP"
     | "PmtGSP"
     | "PmtCorridor"
@@ -157,12 +170,11 @@ pmt_strategy =
 
 ## Optional strategy to determine specified amount as a function of premium.
 ## 'SAInputScalar' is the default even though it is obsolete.
-## 'SAMEP' uses 7702A 7PP rate.
 sa_strategy =
       "SAInputScalar"
     | "SAMaximum"
     | "SATarget"
-    | "SAMEP"
+    | "SA7PP"
     | "SAGLP"
     | "SAGSP"
     | "SACorridor"
@@ -279,7 +291,8 @@ mec_avoid_method =
     | "Reduce premium"
 
 ## 7702A definition of material change. For the nonce, use
-## "Earlier of" with CVAT, and "adjustment event" with GPT.
+##   'Earlier of increase or unnecessary premium' with CVAT, and
+##   'GPT adjustment event' with GPT.
 defn_material_change =
       "Unnecessary premium"
     | "Benefit increase"

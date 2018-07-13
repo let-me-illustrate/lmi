@@ -40,6 +40,7 @@
 
 class product_database;
 
+#include <iosfwd>                       // ostream
 #include <map>
 #include <memory>                       // unique_ptr
 #include <string>
@@ -143,6 +144,8 @@ class LMI_SO Input final
 
     static Input consummate(Input const&);
 
+    void validate_external_data();
+
   private:
     void AscribeMembers();
 
@@ -178,7 +181,7 @@ class LMI_SO Input final
     void DoTransmogrify() override;
 
     void set_solve_durations();
-    void set_inforce_durations_from_dates();
+    void set_inforce_durations_from_dates(std::ostream& os);
 
     std::map<std::string,std::string> const permissible_specified_amount_strategy_keywords(); // Obsolete.
 

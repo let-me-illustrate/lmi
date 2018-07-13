@@ -112,6 +112,8 @@ class LMI_SO configurable_settings final
     std::string xsl_fo_command_;
 };
 
+std::string const& LMI_SO configuration_filepath();
+
 std::vector<std::string>        input_calculation_summary_columns();
 // This function must be visible to 'wx_test_calculation_summary.cpp'.
 std::vector<std::string> LMI_SO effective_calculation_summary_columns();

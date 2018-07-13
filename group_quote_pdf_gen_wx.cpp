@@ -522,14 +522,14 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
     // mandatory (unismoke) and voluntary (smoker-distinct) rates in
     // the same plancode, when they should have used distinct subplans
     // because they serve different market segments.
-    bool const individual_selection = invar.GroupIndivSelection != 0.0;
     if(0 == row_num_)
         {
-        individual_selection_ = individual_selection;
+        individual_selection_ = invar.GroupIndivSelection;
         }
     else
         {
-        if(individual_selection != individual_selection_)
+        // static_cast to avoid an msvc warning:
+        if(static_cast<bool>(invar.GroupIndivSelection) != individual_selection_)
             {
             alarum()
                 << "Group quotes cannot mix mandatory and voluntary on the same plan."
