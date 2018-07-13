@@ -22,6 +22,7 @@
 #include "pchfile_wx.hpp"
 
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "configurable_settings.hpp"
 #include "mvc_controller.hpp"
 #include "ssize_lmi.hpp"
@@ -31,13 +32,20 @@
 
 #include <wx/checkbox.h>
 #include <wx/combobox.h>
-#include <wx/ffile.h>
+#include <wx/crt.h>
+#include <wx/file.h>
+#include <wx/filename.h>
 #include <wx/html/htmlpars.h>
 #include <wx/html/htmlwin.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
-#include <cstddef>                      // size_t
+#include <cerrno>                       // errno
+#include <cstddef>                      // size_t, byte
+#include <cstdio>                       // remove()
+#include <cstring>                      // strerror()
+#include <memory>                       // unique_ptr
+#include <new>                          // nothrow
 
 namespace
 {
@@ -235,6 +243,249 @@ void check_calculation_summary_columns
     LMI_ASSERT_EQUAL(wxString(html, pos, 5), "</tr>");
 }
 
+/// Helper class preserving the contents of the given file by making a copy of
+/// it in a temporary file in its ctor and restoring this copy in its dtor.
+
+class file_contents_preserver
+{
+  public:
+    explicit file_contents_preserver(std::string const& path)
+    {
+        // This outer try block is used to give a better error message in case
+        // of failure by combining the top-level error from the catch clause
+        // below with the more detailed error message thrown as wxString object
+        // from inside it and also to delete the temporary file, as it won't be
+        // done by the dtor if the ctor throws.
+        try
+            {
+            temp_.path_ = wxFileName::CreateTempFileName
+                            ("lmi_wx_test"
+                            ,&temp_.file_
+                            );
+            if(temp_.path_.empty())
+                {
+                throw wxString{"failed to create temporary file"};
+                }
+
+            orig_.path_ = wxString::FromUTF8(path);
+            if(orig_.path_.empty())
+                {
+                // This can happen either because an empty path was passed in,
+                // which is just a programming error, or because conversion
+                // from UTF-8 failed, which shouldn't happen for any ASCII file
+                // names used by lmi, but still needs to be reported if it
+                // does.
+                if(path.empty())
+                    {
+                    throw wxString{"file path cannot be empty"};
+                    }
+                else
+                    {
+                    throw wxString::Format
+                            ("file path \"%s\" is not a valid UTF-8 string"
+                            ,wxString::From8BitData(path.c_str())
+                            );
+                    }
+                }
+
+            // Note that while temp_.file_ can (and probably should, precisely
+            // in order to prevent it from being modified) be kept opened
+            // during this entire object lifetime, we can't keep the original
+            // file opened, as this would prevent the code using this class
+            // from modifying it, so we need to open -- and close! -- it both
+            // here and in the dtor.
+            if(!orig_.file_.Open(orig_.path_))
+                {
+                throw wxString::Format
+                        ("failed to open file \"%s\" for reading (%s)"
+                        ,orig_.path_
+                        ,std::strerror(orig_.file_.GetLastError())
+                        );
+                }
+
+            if(auto const error = copy_contents(orig_, temp_); !error.empty())
+                {
+                throw error;
+                }
+
+            if(!orig_.file_.Close())
+                {
+                throw wxString::Format
+                        ("unexpectedly failed to close \"%s\" (%s)"
+                        ,orig_.path_
+                        ,std::strerror(orig_.file_.GetLastError())
+                        );
+                }
+
+            // Finally, rewind the temporary file, so that we could read from
+            // it in the dtor.
+            if(temp_.file_.Seek(0) == wxInvalidOffset)
+                {
+                throw wxString::Format
+                        ("failed to rewind temporary file \"%s\" (%s)"
+                        ,temp_.path_
+                        ,std::strerror(temp_.file_.GetLastError())
+                        );
+                }
+            }
+        catch(wxString error)
+            {
+            if(!temp_.path_.empty())
+                {
+                if(auto const error_rm = remove_temp_file(); !error_rm.empty())
+                    {
+                    error += wxString::Format(" (additionally, %s)", error_rm);
+                    }
+                }
+
+            throw std::runtime_error
+                    {wxString::Format
+                        ("Error preserving contents of the file \"%s\": %s."
+                        ,orig_.path_
+                        ,error
+                        ).ToStdString()
+                    };
+            }
+    }
+
+    ~file_contents_preserver()
+    {
+        try
+            {
+            if(!orig_.file_.Open(orig_.path_, wxFile::write))
+                {
+                throw wxString::Format
+                        ("failed to open file \"%s\" for writing (%s)"
+                        ,orig_.path_
+                        ,std::strerror(orig_.file_.GetLastError())
+                        );
+                }
+
+            if(auto const error = copy_contents(temp_, orig_); !error.empty())
+                {
+                throw error;
+                }
+
+            if(auto const error_rm = remove_temp_file(); !error_rm.empty())
+                {
+                // This doesn't merit throwing in any case, and see also the
+                // comment below.
+                wxPrintf("WARNING: %s\n", error_rm);
+                }
+            }
+        catch(wxString const& error)
+            {
+            // We don't want to throw from a dtor: even though it could be done
+            // safely when not unwinding, there would still be a problem of not
+            // being able to do it if the test had actually failed and so this
+            // dtor runs as part of stack unwinding. To keep things consistent,
+            // just log a message, as this is something we can do in any case.
+            wxPrintf
+                ("WARNING: error restoring contents of the file \"%s\": %s.\n"
+                 "Its contents was possibly modified, original contents "
+                 "preserved in \"%s\".\n"
+                ,orig_.path_
+                ,error
+                ,temp_.path_
+                );
+
+            // Do not close the temporary file here.
+            }
+    }
+
+    file_contents_preserver(file_contents_preserver const&) = delete;
+    file_contents_preserver& operator=(file_contents_preserver const&) = delete;
+
+  private:
+    // Simple struct containing a file together with its full path, which is
+    // useful for generating more informative error messages.
+    struct named_file
+    {
+        wxFile file_;
+        wxString path_;
+    };
+
+    wxString remove_temp_file() noexcept
+    {
+        temp_.file_.Close();
+        if(wxRemove(temp_.path_) != 0)
+            {
+            return wxString::Format
+                    ("temporary file \"%s\" couldn't be removed: %s"
+                     ,temp_.path_
+                     ,std::strerror(errno)
+                    );
+            }
+
+        return wxString{};
+    }
+
+    // Copies contents of one open file to another one, returns empty string on
+    // success or the error message on failure.
+    wxString copy_contents(named_file& src, named_file& dst) noexcept
+    {
+        auto const length = src.file_.Length();
+        if(length == wxInvalidOffset)
+            {
+            return wxString::Format
+                    ("failed to get the length of the file \"%s\" (%s)"
+                    ,src.path_
+                    ,std::strerror(src.file_.GetLastError())
+                    );
+            }
+
+        // Don't throw if allocation fails, this function is noexcept.
+        auto const buf = new(std::nothrow) std::byte[length];
+        if(!buf)
+            {
+            return wxString::Format
+                    ("failed to allocate %llu bytes of memory", length
+                    );
+            }
+
+        std::unique_ptr<std::byte[]> buf_ptr{buf}; // Ensure it is freed.
+
+        // Doing a single read and write is not the best way of copying huge
+        // files (we could run out of memory) and not the most generic way
+        // neither (it would fail for not seekable pipes), but still should be
+        // good enough for any files we need to work with here. And it's by far
+        // the simplest.
+        if(src.file_.Read(buf, bourn_cast<std::size_t>(length)) != length)
+            {
+            return wxString::Format
+                    ("failed to read %llu bytes from \"%s\" (%s)"
+                     ,length
+                     ,src.path_
+                     ,std::strerror(src.file_.GetLastError())
+                    );
+            }
+
+        if(dst.file_.Write(buf, bourn_cast<std::size_t>(length)) != length)
+            {
+            return wxString::Format
+                    ("failed to write %llu bytes to \"%s\" (%s)"
+                    ,length
+                    ,dst.path_
+                    ,std::strerror(dst.file_.GetLastError())
+                    );
+            }
+
+        if(!dst.file_.Flush())
+            {
+            return wxString::Format
+                    ("failed to flush file \"%s\" (%s)"
+                    ,dst.path_
+                    ,std::strerror(dst.file_.GetLastError())
+                    );
+            }
+
+        return wxString{};
+    }
+
+    named_file temp_;
+    named_file orig_;
+};
+
 } // Unnamed namespace.
 
 // Deferred ideas:
@@ -294,6 +545,12 @@ void check_calculation_summary_columns
 
 LMI_WX_TEST_CASE(calculation_summary)
 {
+    // This test modifies the program settings in the global configuration
+    // file. Ensure that these modifications are only temporary by making a
+    // copy of the original file and restoring it when the test ends, either
+    // successfully or due to an error.
+    file_contents_preserver config_preserver{configuration_filepath()};
+
     if(is_distribution_test())
         {
         // Not only is this the expected value in the GUI, but we also want to be
