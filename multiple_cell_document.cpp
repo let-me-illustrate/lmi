@@ -448,13 +448,14 @@ void multiple_cell_document::validate_with_xsd_schema
     xml::error_messages errors;
     if(!schema.validate(cell_sorter().apply(xml), errors))
         {
-        alarum()
+        warning()
             << "Validation with schema '"
             << xsd
             << "' failed.\n\n"
             << errors.print()
             << std::flush
             ;
+        alarum() << "Invalid input file." << LMI_FLUSH;
         }
 }
 
