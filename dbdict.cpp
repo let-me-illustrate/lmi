@@ -965,6 +965,13 @@ void DBDictionary::write_database_files()
 
     z.Add(database_entity(DB_LedgerType          , mce_individual_private_placement));
     z.WriteDB(AddDataDir("sample2ipp.database"));
+
+    // Certain group-quote columns are available only when these two
+    // entities are 'true':
+    z.Add(database_entity(DB_SplitMinPrem        , true));
+    z.Add(database_entity(DB_TermIsNotRider      , true));
+    z.Add(database_entity(DB_LedgerType          , mce_ill_reg));
+    z.WriteDB(AddDataDir("sample2quo.database"));
 }
 
 /// Initialize the built-in database for the antediluvian branch.

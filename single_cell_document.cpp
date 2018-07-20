@@ -142,13 +142,16 @@ void single_cell_document::parse(xml_lmi::dom_parser const& parser)
 ///   "1" means lmi; and
 ///   each external system is assigned a higher integer.
 ///
-/// If the "data_source" attribute is not present, then presume that
-/// the source is external iff a "file_version" attribute is present
-/// and a schema for that version exists.
+/// Regrettably, some older external files defectively represent the
+/// data source only in obsolete <cell> element <InforceDataSource>,
+/// rather than in root attribute "data_source", so if that attribute
+/// is missing, it is necessary to look for the lower-level element
+/// (which uses the same values to represent the data source).
 
 bool single_cell_document::data_source_is_external(xml::document const& d) const
 {
     xml::element const& root(d.get_root_node());
+
     int data_source = 0;
     if(xml_lmi::get_attr(root, "data_source", data_source))
         {
@@ -159,8 +162,24 @@ bool single_cell_document::data_source_is_external(xml::document const& d) const
         {
         int file_version = 0;
         xml_lmi::get_attr(root, "version", file_version);
-        return 7 <= file_version;
+        LMI_ASSERT(file_version <= 2);
         }
+
+    xml::const_nodes_view const i_nodes(root.elements("cell"));
+    LMI_ASSERT(1 == i_nodes.size());
+    for(auto const& i : i_nodes)
+        {
+        for(auto const& j : i.elements("InforceDataSource"))
+            {
+            std::string s(xml_lmi::get_content(j));
+            if("0" != s && "1" != s)
+                {
+                return true;
+                }
+            }
+        }
+
+    return false;
 }
 
 /// Coarsely validate file format with XSD schema.
@@ -174,13 +193,14 @@ void single_cell_document::validate_with_xsd_schema
     xml::error_messages errors;
     if(!schema.validate(cell_sorter().apply(xml), errors))
         {
-        alarum()
+        warning()
             << "Validation with schema '"
             << xsd
             << "' failed.\n\n"
             << errors.print()
             << std::flush
             ;
+        alarum() << "Invalid input file." << LMI_FLUSH;
         }
 }
 
