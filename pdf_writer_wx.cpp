@@ -304,9 +304,20 @@ int pdf_writer_wx::output_html
         ,output_mode
         );
 
-    // Should have fit on this page, otherwise this is not the right overload
-    // to use -- call paginate_html() and the generic overload above instead.
-    LMI_ASSERT(height <= get_total_height() - y);
+    switch(output_mode)
+        {
+        case oe_render:
+            // When rendering, all the text should have fit on this page,
+            // otherwise this is not the right overload to use -- call
+            // paginate_html() and the generic overload above instead.
+            LMI_ASSERT(height <= get_total_height() - y);
+            break;
+        case oe_only_measure:
+            // It's fine if the output doesn't fit when measuring it, as this
+            // could be used to decide whether another page is needed or not,
+            // so don't do anything here.
+            break;
+        }
 
     return height;
 }
