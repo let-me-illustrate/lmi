@@ -477,9 +477,6 @@ LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
                 {
                 // Greater of header width and 'widest_text' width.
                 width = std::max(w, dc().GetTextExtent(z.widest_text).x);
-                // PDF !! Reconsider whether margin should be added here,
-                // because compute_column_widths() may need to remove it.
-                width += 2 * column_margin();
                 }
                 break;
             case oe_elastic:
@@ -515,12 +512,24 @@ LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
 ///    quasi-global data structure mapping symbolic column names
 ///    to their corresponding headers and maximal widths)
 ///  - the header width
-///  - the bilateral margins that have already been added
+///  - PDF !! the bilateral margins added as a first step below
 /// The margins may be slightly reduced by this function to make
 /// everything fit when it otherwise wouldn't.
 
 void wx_table_generator::compute_column_widths()
 {
+    // PDF !! Unconditionally add bilateral margins even though they
+    // may conditionally be removed below. This is a questionable
+    // design decision; if it is later reversed, then remove the
+    // comment about it above the implementation.
+    for(auto& i : all_columns_)
+        {
+        if(!i.is_hidden() && !i.is_elastic())
+            {
+            i.col_width_ += 2 * column_margin();
+            }
+        }
+
     // Number of non-hidden columns.
     int number_of_columns = 0;
 
