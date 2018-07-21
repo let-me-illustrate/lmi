@@ -665,7 +665,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
     pdf_writer_wx pdf_writer
         (output_filename
         ,wxLANDSCAPE
-        ,{7, 8, 10, 12, 14, 17, 20} // Standard HTML font sizes.
+        ,{6, 7, 8, 9, 11, 13, 16} // Standard HTML font sizes for 8pt base.
         );
 
     int pos_y = 0;
