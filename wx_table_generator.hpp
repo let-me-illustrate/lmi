@@ -128,7 +128,6 @@ class wx_table_generator
 
   private:
     void enroll_column(column_parameters const&);
-    void compute_column_widths();
 
     void do_output_single_row
         (int&                            pos_x

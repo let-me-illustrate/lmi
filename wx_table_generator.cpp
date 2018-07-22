@@ -101,7 +101,7 @@ class table_column_info
     std::string   const col_header_;
 
   public:
-    // PDF !! Modified directly by compute_column_widths(), hence neither
+    // PDF !! Modified directly by set_column_widths(), hence neither
     // private nor const.
     //
     // Width in pixels. Because the wxPdfDC uses wxMM_POINTS, each
@@ -113,6 +113,12 @@ class table_column_info
     bool          const is_hidden_;
     bool          const is_elastic_;
 };
+
+void set_column_widths
+    (int                             total_width
+    ,int                           & column_margin
+    ,std::vector<table_column_info>& all_columns
+    );
 
 wx_table_generator::wx_table_generator
     (group_quote_style_tag                 // tag not referenced
@@ -136,7 +142,7 @@ wx_table_generator::wx_table_generator
         {
         enroll_column(i);
         }
-    compute_column_widths();
+    set_column_widths(total_width_, column_margin_, all_columns_);
 
     // Set a pen with zero width to make grid lines thin,
     // and round cap style so that they combine seamlessly.
@@ -166,7 +172,7 @@ wx_table_generator::wx_table_generator
         {
         enroll_column(i);
         }
-    compute_column_widths();
+    set_column_widths(total_width_, column_margin_, all_columns_);
 
     dc_.SetPen(illustration_rule_color);
 }
@@ -435,13 +441,13 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y) const
 /// that they don't appear in the output at all. This approach trades
 /// extra complexity here for a uniform data representation elsewhere.
 /// PDF !! Instead of retaining hidden columns, and explicitly skipping
-/// them here and repeatedly later (and in compute_column_widths()),
+/// them here and repeatedly later (and also in set_column_widths()),
 /// consider removing them from the vector.
 ///
 /// Postconditions:
 /// - An elastic column's width is initialized to zero. (If there's
-///   enough room to display it, compute_column_widths() resets its
-///   width appropriately.)
+///   enough room to display it, set_column_widths() resets its width
+///   appropriately.)
 /// - A hidden column's width is initialized to zero--necessarily,
 ///   because other member functions, e.g.:
 ///     output_horz_separator()
@@ -499,15 +505,6 @@ LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
         );
 }
 
-// class members used, mutably or immutably:
-//
-// const    total_width_    max table width (page width - page margins)
-// mutable  column_margin_  spacing on both left and right of column
-// mutable  all_columns_    std::vector<table_column_info>
-//   table_column_info::col_width_ is the only member changed
-//
-// column_margin_ and col_width_ are modified here and nowhere else
-
 /// Compute column widths.
 ///
 /// First, allocate adequate width to each inelastic column; then
@@ -522,17 +519,26 @@ LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
 /// The margins may be slightly reduced by this function to make
 /// everything fit when it otherwise wouldn't.
 
-void wx_table_generator::compute_column_widths()
+void set_column_widths
+    (int                             total_width
+    ,int                           & column_margin
+    ,std::vector<table_column_info>& all_columns
+    )
+//
+// const    total_width    max table width (page width - page margins)
+// mutable  column_margin  spacing on both left and right of column
+// mutable  all_columns    std::vector<table_column_info>
+//   table_column_info::col_width_ is the only member changed
 {
     // PDF !! Unconditionally add bilateral margins even though they
     // may conditionally be removed below. This is a questionable
     // design decision; if it is later reversed, then remove the
     // comment about it above the implementation.
-    for(auto& i : all_columns_)
+    for(auto& i : all_columns)
         {
         if(!i.is_hidden() && !i.is_elastic())
             {
-            i.col_width_ += 2 * column_margin();
+            i.col_width_ += 2 * column_margin;
             }
         }
 
@@ -545,7 +551,7 @@ void wx_table_generator::compute_column_widths()
     // Total width of all non-hidden inelastic columns.
     int total_inelastic_width = 0;
 
-    for(auto const& i : all_columns())
+    for(auto const& i : all_columns)
         {
         if(i.is_hidden())
             {
@@ -564,14 +570,14 @@ void wx_table_generator::compute_column_widths()
             }
         }
 
-    if(total_width_ < total_inelastic_width)
+    if(total_width < total_inelastic_width)
         {
         // The inelastic columns don't all fit with their original
         // one-em presumptive bilateral margins. Try to make them fit
         // by reducing the margins slightly.
         //
         // The number of pixels that would need to be removed is:
-        auto const overflow = total_inelastic_width - total_width_;
+        auto const overflow = total_inelastic_width - total_width;
 
         // Because inelastic columns take more than the available
         // horizontal space, there's no room to fit any elastic
@@ -590,9 +596,9 @@ void wx_table_generator::compute_column_widths()
 // Now determine whether reducing the margins will make the table fit.
 // If that works, then do it; else don't do it, and print a warning.
 //
-// column_margin_ is the padding on each side of every column, so
+// column_margin is the padding on each side of every column, so
 // the number of pixels between columns, as the table was originally
-// laid out, is two times column_margin_--which, as we just determined,
+// laid out, is two times column_margin--which, as we just determined,
 // was too generous, so we're going to try reducing it.
 // Then this conditional compares
 //   the number of pixels by which we must shrink each column, to
@@ -603,7 +609,7 @@ void wx_table_generator::compute_column_widths()
 // Is this as good as it can be, given that coordinates are integers?
 // Answer: Yes--the integers count points, not ems or characters, and
 // typographers wouldn't use any finer unit for this task.
-            if(overflow_per_column <= 2 * column_margin())
+            if(overflow_per_column <= 2 * column_margin)
                 {
                 // We are going to reduce the total width by more than
                 // necessary, in general, because of rounding up above, so
@@ -613,13 +619,13 @@ void wx_table_generator::compute_column_widths()
 // '9' is five PDF pixels wide; do we need, say, two pixels between columns?
 //
 // Suggestion: change the
-//   overflow_per_column <= column_margin_
+//   overflow_per_column <= column_margin
 // condition to something like:
-//    overflow_per_column <= column_margin_ - 4 // two pixels on each side
-//    overflow_per_column <= column_margin_ - 2 // one pixel on each side
+//    overflow_per_column <= column_margin - 4 // two pixels on each side
+//    overflow_per_column <= column_margin - 2 // one pixel on each side
                 auto underflow = overflow_per_column * number_of_columns - overflow;
 
-                for(auto& i : all_columns_)
+                for(auto& i : all_columns)
                     {
                     if(i.is_hidden())
                         {
@@ -635,19 +641,19 @@ void wx_table_generator::compute_column_widths()
                         }
                     }
 
-                column_margin_ -= (overflow_per_column + 1) / 2;
+                column_margin -= (overflow_per_column + 1) / 2;
 
                 // We condensed the columns enough to make them fit, so no need
                 // for the warning and we don't have any elastic columns, so
                 // we're done.
                 return;
                 }
-// If overflow_per_column is 1, then column_margin_ -= 1
+// If overflow_per_column is 1, then column_margin -= 1
 // "           "          "  2,   "        "           1
 // "           "          "  3,   "        "           2
 // "           "          "  4,   "        "           2
 // The 'underflow' logic shrinks columns by the exact number of pixels
-// to use up all the available width. But the column_margin_ reduction
+// to use up all the available width. But the column_margin reduction
 // isn't exact due to truncation: when the margin is added (on both sides),
 // is the total of all (margin+column+margin) widths lower than the maximum,
 // so that this is just a small aesthetic issue, or is it too wide, so that
@@ -660,18 +666,18 @@ void wx_table_generator::compute_column_widths()
 // offset by 0.5 pixels -- but, of course, if we rounded it down, it would be
 // offset by 0.5 pixels in the other direction. So maybe we should write
 //
-//     column_margin_ -= overflow_per_column / 2;
+//     column_margin -= overflow_per_column / 2;
 //
 // just because it's shorter and not necessarily worse (nor better).
             }
 
         warning()
             << "Not enough space for all " << number_of_columns << " columns."
-            << "\nPrintable width is " << total_width_ << " points."
-            << "\nData alone require " << total_inelastic_width - 2 * column_margin() * number_of_columns
+            << "\nPrintable width is " << total_width << " points."
+            << "\nData alone require " << total_inelastic_width - 2 * column_margin * number_of_columns
             << " points without any margins for legibility."
-            << "\nColumn margins of " << column_margin() << " points on both sides"
-            << " would take up " << 2 * column_margin() * number_of_columns << " additional points."
+            << "\nColumn margins of " << column_margin << " points on both sides"
+            << " would take up " << 2 * column_margin * number_of_columns << " additional points."
             << LMI_FLUSH
             ;
         return;
@@ -685,11 +691,11 @@ void wx_table_generator::compute_column_widths()
     if(number_of_elastic_columns)
         {
         int const width_of_each_elastic_column = outward_quotient
-            (total_width_ - total_inelastic_width
+            (total_width - total_inelastic_width
             ,number_of_elastic_columns
             );
 
-        for(auto& i : all_columns_)
+        for(auto& i : all_columns)
             {
             if(i.is_hidden())
                 {
