@@ -76,10 +76,10 @@
 //  - is_clipped(): A clipped column is truncated to fit its allotted
 //    space. Only elastic columns are clipped--vide supra.
 
-class wx_table_generator::column_info
+class table_column_info
 {
   public:
-    column_info
+    table_column_info
         (std::string      const& header
         ,int                     width
         ,oenum_h_align    const  alignment
@@ -219,7 +219,7 @@ void wx_table_generator::output_headers
     std::vector<std::string> headers_by_line(max_header_lines_ * number_of_columns);
     for(std::size_t i = 0; i < number_of_columns; ++i)
         {
-        column_info const& ci = all_columns().at(i);
+        table_column_info const& ci = all_columns().at(i);
         if(ci.is_hidden())
             {
             continue;
@@ -488,7 +488,7 @@ LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
         }
 
     all_columns_.push_back
-        (column_info
+        (table_column_info
             (z.header, width, z.alignment, z.visibility, z.elasticity)
         );
 }
@@ -497,8 +497,8 @@ LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
 //
 // const    total_width_    max table width (page width - page margins)
 // mutable  column_margin_  spacing on both left and right of column
-// mutable  all_columns_    std::vector<column_info>
-//   column_info::col_width_ is the only member changed
+// mutable  all_columns_    std::vector<table_column_info>
+//   table_column_info::col_width_ is the only member changed
 //
 // column_margin_ and col_width_ are modified here and nowhere else
 
@@ -719,7 +719,7 @@ void wx_table_generator::do_output_single_row
     std::size_t const number_of_columns = all_columns().size();
     for(std::size_t i = 0; i < number_of_columns; ++i)
         {
-        column_info const& ci = all_columns().at(i);
+        table_column_info const& ci = all_columns().at(i);
         if(ci.is_hidden())
             {
             continue;
@@ -841,7 +841,7 @@ int wx_table_generator::column_margin() const
     return column_margin_;
 }
 
-std::vector<wx_table_generator::column_info> const& wx_table_generator::all_columns() const
+std::vector<table_column_info> const& wx_table_generator::all_columns() const
 {
     return all_columns_;
 }

@@ -33,6 +33,8 @@
 #include <string>
 #include <vector>
 
+class table_column_info;
+
 /// Aggregate of per-column table-generator ctor arguments.
 
 struct column_parameters
@@ -67,8 +69,6 @@ wxColor const illustration_rule_color(0x00, 0x2f, 0x6c);
 
 class wx_table_generator
 {
-    class column_info;
-
   public:
     static int const rows_per_group = 5;
 
@@ -149,7 +149,7 @@ class wx_table_generator
     // distinguish access from mutation.
     wxDC const& dc() const;
     int column_margin() const;
-    std::vector<column_info> const& all_columns() const;
+    std::vector<table_column_info> const& all_columns() const;
 
     wxDC& dc_;
 
@@ -161,7 +161,7 @@ class wx_table_generator
     int row_height_;
     int column_margin_;
 
-    std::vector<column_info> all_columns_;
+    std::vector<table_column_info> all_columns_;
 
     // Maximal number of lines in any column header, initially 1 but can be
     // higher if multiline headers are used.
