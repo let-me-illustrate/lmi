@@ -435,6 +435,9 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y) const
 /// this class, even for "hidden" columns that are to be suppressed so
 /// that they don't appear in the output at all. This approach trades
 /// extra complexity here for a uniform data representation elsewhere.
+/// PDF !! Instead of retaining hidden columns, and explicitly skipping
+/// them here and repeatedly later (and in compute_column_widths()),
+/// consider removing them from the vector.
 ///
 /// Notice that column headers may be multiline strings.
 ///
@@ -541,8 +544,6 @@ void wx_table_generator::compute_column_widths()
 
     for(auto const& i : all_columns())
         {
-// Instead of retaining hidden columns, and explicitly skipping them
-// here and repeatedly later, why not just remove them from the vector?
         if(i.is_hidden())
             {
             continue;
