@@ -33,10 +33,6 @@
 // Default size of various characters for illustrations and group quotes:
 //   'M' 7pt; 'N' 6pt; '1' 4pt; '9' 4pt; ',' 2pt
 
-// Is this a struct only because we want its members to be publicly
-// accessible? But their values can also be changed by clients, and
-// isn't that undesirable?
-
 // Elasticity and clipping
 //
 // Most columns are inelastic: they have a fixed minimum width and
@@ -104,11 +100,12 @@ class table_column_info
   private:
     std::string   const col_header_;
 
-  public: // but dubiously so
+  public:
+    // PDF !! Modified directly by compute_column_widths(), hence neither
+    // private nor const.
+    //
     // Width in pixels. Because the wxPdfDC uses wxMM_POINTS, each
     // pixel is one point = 1/72 inch.
-    //
-    // Modified directly by wx_table_generator code, hence not const.
     int col_width_;
 
   private:
