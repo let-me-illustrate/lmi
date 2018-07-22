@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include "oecumenic_enumerations.hpp"
+#include "report_table.hpp"             // table_column_info
 
 #include <wx/dc.h>
 #include <wx/font.h>
@@ -32,8 +33,6 @@
 #include <cstddef>                      // size_t
 #include <string>
 #include <vector>
-
-class table_column_info;
 
 /// Aggregate of per-column table-generator ctor arguments.
 
