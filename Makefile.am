@@ -797,6 +797,7 @@ test_interpolate_string_SOURCES = \
   $(common_test_objects) \
   interpolate_string.cpp \
   interpolate_string_test.cpp
+test_interpolate_string_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_irc7702a_SOURCES = \
   $(common_test_objects) \
@@ -990,6 +991,7 @@ test_rate_table_SOURCES = \
   path_utility.cpp \
   rate_table.cpp \
   rate_table_test.cpp
+test_rate_table_CXXFLAGS = $(AM_CXXFLAGS)
 test_rate_table_LDADD = \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
