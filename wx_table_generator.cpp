@@ -431,6 +431,8 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y) const
 /// The total number of columns thus enrolled determines the cardinality
 /// of the 'values' argument in output_row() calls.
 ///
+/// Column headers may be multiline strings.
+///
 /// All data for every row and every potential column are passed into
 /// this class, even for "hidden" columns that are to be suppressed so
 /// that they don't appear in the output at all. This approach trades
@@ -439,20 +441,24 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y) const
 /// them here and repeatedly later (and in compute_column_widths()),
 /// consider removing them from the vector.
 ///
-/// Notice that column headers may be multiline strings.
+/// Postconditions:
+/// - An elastic column's width is initialized to zero. (If there's
+///   enough room to display it, compute_column_widths() resets its
+///   width appropriately.)
+/// - A hidden column's width is initialized to zero--necessarily,
+///   because other member functions, e.g.:
+///     output_horz_separator()
+///     cell_pos_x()
+///   calculate total width by accumulating the widths of all columns,
+///   whether hidden or not. PDF !! In those instances, hidden columns
+///   are skipped implicitly rather than explicitly; this is a further
+///   argument against trafficking in hidden columns.
 ///
 /// Design alternative: this could be written as a nonmember function,
 /// by passing the DC and the header font as arguments.
 
 void wx_table_generator::enroll_column(column_parameters const& z)
 {
-    // A hidden column's width must be initialized to zero, because
-    // other member functions calculate total width by accumulating
-    // the widths of all columns, whether hidden or not.
-    //
-    // An elastic column's width must be initialized to zero, because
-    // compute_column_widths() skips setting it when there's no room
-    // for any elastic column.
     int width = 0;
     if(oe_shown == z.visibility)
         {
