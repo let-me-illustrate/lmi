@@ -30,44 +30,44 @@
 #include <string>
 #include <vector>
 
-// Elasticity and clipping
-//
-// Most columns are inelastic: they have a fixed minimum width and
-// are not clipped lest crucial information (e.g., part of a number)
-// be lost. The archetypal elastic column is a personal name, whose
-// width is practically unlimited and might even exceed the total page
-// width; it is better to truncate one extremely long personal name
-// than to present an error message and produce no report at all.
-//
-// An ideal report generator might call GetTextExtent() on every row
-// of data to determine a column's ideal width, but this one favors
-// speed by setting a presumptive maximum width for each column.
-// Therefore, it treats a personal-name column as having no natural
-// width at all. Its minimum width might be set equal to its header
-// width, but such a refinement is needless in the problem domain. In
-// the most extreme case, all inelastic columns would fit, but there
-// would be not a single pixel available for elastic columns, which
-// would all in effect be dropped; again, in the problem domain, that
-// would actually be preferable to failing to produce any output.
-//
-// Therefore, elastic columns are clipped, and inelastic ones are not.
-// All other column properties are independent, and specified by
-// arguments, but clipping depends on the elasticity argument. It is
-// distinguished only because clipping is a distinct layout operation.
-//
-//  - is_hidden(): Data for every row of all potential columns are
-//    passed into this class; hidden columns are suppressed so that
-//    they don't appear in the output at all.
-//
-//  - is_elastic(): An elastic column has no innate fixed or preferred
-//    width. After all inelastic columns have claimed their required
-//    widths, any remaining width available is prorated among elastic
-//    columns, which therefore may be wider than their widest contents
-//    or narrower than their narrowest. As a consequence, elastic
-//    columns are clipped--vide supra.
-//
-//  - is_clipped(): A clipped column is truncated to fit its allotted
-//    space. Only elastic columns are clipped--vide supra.
+/// Elasticity and clipping
+///
+/// Most columns are inelastic: they have a fixed minimum width and
+/// are not clipped lest crucial information (e.g., part of a number)
+/// be lost. The archetypal elastic column is a personal name, whose
+/// width is practically unlimited and might even exceed the total page
+/// width; it is better to truncate one extremely long personal name
+/// than to present an error message and produce no report at all.
+///
+/// An ideal report generator might call GetTextExtent() on every row
+/// of data to determine a column's ideal width, but this one favors
+/// speed by setting a presumptive maximum width for each column.
+/// Therefore, it treats a personal-name column as having no natural
+/// width at all. Its minimum width might be set equal to its header
+/// width, but such a refinement is needless in the problem domain. In
+/// the most extreme case, all inelastic columns would fit, but there
+/// would be not a single pixel available for elastic columns, which
+/// would all in effect be dropped; again, in the problem domain, that
+/// would actually be preferable to failing to produce any output.
+///
+/// Therefore, elastic columns are clipped, and inelastic ones are not.
+/// All other column properties are independent, and specified by
+/// arguments, but clipping depends on the elasticity argument. It is
+/// distinguished only because clipping is a distinct layout operation.
+///
+///  - is_hidden(): Data for every row of all potential columns are
+///    passed into this class; hidden columns are suppressed so that
+///    they don't appear in the output at all.
+///
+///  - is_elastic(): An elastic column has no innate fixed or preferred
+///    width. After all inelastic columns have claimed their required
+///    widths, any remaining width available is prorated among elastic
+///    columns, which therefore may be wider than their widest contents
+///    or narrower than their narrowest. As a consequence, elastic
+///    columns are clipped--vide supra.
+///
+///  - is_clipped(): A clipped column is truncated to fit its allotted
+///    space. Only elastic columns are clipped--vide supra.
 
 class LMI_SO table_column_info
 {
