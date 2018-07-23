@@ -211,7 +211,7 @@ then
       done
 fi
 
-printf '2450449 2458849'                            >/opt/lmi/data/expiry
+printf '2450449 2472011'                            >/opt/lmi/data/expiry
 printf '0efd124fac6b15e6a9cd0b3dd718eea5  expiry\n' >/opt/lmi/data/validated.md5
 printf '8fa614e38dde6f7ab0f9fade87dfa2e3'           >/opt/lmi/data/passkey
 
