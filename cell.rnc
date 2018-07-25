@@ -284,6 +284,8 @@ cell_element = element cell
      element Internal1035ExchangeFromMec      {yes_or_no}
     ,## * Tax basis of 1035 exchange from the same insurer.
      element Internal1035ExchangeTaxBasis     {xsd:double}
+    ,## * Treat this life as inforce. Default: 'Yes'.
+     element IsInforce                        {yes_or_no}
     ,## Insurance age on effective date.
      element IssueAge                         {age_int}
     ,## Most recent group-underwriting date, for group contracts that
