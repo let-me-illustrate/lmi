@@ -322,5 +322,8 @@
     <ClCompile Include="ledger_pdf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="report_table.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

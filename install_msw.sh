@@ -211,9 +211,14 @@ then
       done
 fi
 
-printf '2450449 2458849'                            >/opt/lmi/data/expiry
-printf '0efd124fac6b15e6a9cd0b3dd718eea5  expiry\n' >/opt/lmi/data/validated.md5
-printf '8fa614e38dde6f7ab0f9fade87dfa2e3'           >/opt/lmi/data/passkey
+# To regenerate authentication files:
+# cd /opt/lmi/data
+# printf '2450449 2472011'             >expiry
+# printf '%s\n' "$(md5sum expiry)"     >validated.md5
+# [wine] /opt/lmi/bin/generate_passkey >passkey
+printf '2450449 2472011'                            >/opt/lmi/data/expiry
+printf '5fc68a795c9c60da1b32be989efc299a  expiry\n' >/opt/lmi/data/validated.md5
+printf '391daa5cbc54e118c4737446bcb84eea'           >/opt/lmi/data/passkey
 
 # Tailored to msw; for POSIX, s|C:|| and s|CMD /c|/bin/sh| (e.g.).
 

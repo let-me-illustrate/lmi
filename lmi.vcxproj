@@ -562,6 +562,7 @@
     <ClCompile Include="premium_tax.cpp" />
     <ClCompile Include="product_data.cpp" />
     <ClCompile Include="progress_meter.cpp" />
+    <ClCompile Include="report_table.cpp" />
     <ClCompile Include="rounding_rules.cpp" />
     <ClCompile Include="sigfpe.cpp" />
     <ClCompile Include="single_cell_document.cpp" />

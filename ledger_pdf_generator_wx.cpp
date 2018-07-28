@@ -504,10 +504,10 @@ class html_cell_for_pdf_output : public wxHtmlCell
 html_cell_for_pdf_output::pdf_context
 html_cell_for_pdf_output::pdf_context_for_html_output;
 
-// Define scaffolding for a custom HTML "scaled_image" tag which must be used
-// instead of the standard "a" in order to allow specifying the scaling factor
+// Define scaffolding for a custom HTML "img" tag which must be used
+// instead of the standard one in order to allow specifying the scaling factor
 // that we want to use for the image in the PDF. Unfortunately this can't be
-// achieved by simply using "width" and/or "height" attributes of the "a" tag
+// achieved by simply using "width" and/or "height" attributes of the "img" tag
 // because their values can only be integers which is not precise enough to
 // avoid (slightly but noticeably) distorting the image due to the aspect ratio
 // being not quite right.
@@ -554,14 +554,17 @@ class scaled_image_cell : public html_cell_for_pdf_output
     double const scale_factor_;
 };
 
-TAG_HANDLER_BEGIN(scaled_image, "SCALED_IMAGE")
+// Note that defining this handler replaces the standard <img> tag handler
+// defined in wxHTML itself, which also handles <map> and <area> tags, but as
+// we don't use either of those and all our images are scaled, this is fine.
+TAG_HANDLER_BEGIN(scaled_image, "IMG")
     TAG_HANDLER_PROC(tag)
     {
         wxString src;
         if (!tag.GetParamAsString("SRC", &src))
             {
             throw std::runtime_error
-                ("missing mandatory \"src\" attribute of \"scaled_image\" tag"
+                ("missing mandatory \"src\" attribute of \"img\" tag"
                 );
             }
 
@@ -583,7 +586,7 @@ TAG_HANDLER_BEGIN(scaled_image, "SCALED_IMAGE")
                 {
                 throw std::runtime_error
                     ( "invalid value for \"inv_factor\" attribute of "
-                      "\"scaled_image\" tag: \""
+                      "\"img\" tag: \""
                     + inv_factor_str.ToStdString()
                     + "\""
                     );
@@ -597,7 +600,7 @@ TAG_HANDLER_BEGIN(scaled_image, "SCALED_IMAGE")
         // not present.
             {
             wxLogNull NoLog;
-            image.LoadFile(src);
+            image.LoadFile(AddDataDir(src.ToStdString()));
             }
 
         if (image.IsOk())
@@ -669,25 +672,6 @@ class page
         ) = 0;
 
   protected:
-    // Helper method for rendering the contents of the given external template,
-    // which is expected to be found in the file with the provided name and
-    // ".mst" extension in the data directory.
-    //
-    // Return the height of the page contents.
-    int render_page_template
-        (std::string const& template_name
-        ,pdf_writer_wx& writer
-        ,html_interpolator const& interpolate_html
-        )
-    {
-        return writer.output_html
-            (writer.get_horz_margin()
-            ,writer.get_vert_margin()
-            ,writer.get_page_width()
-            ,interpolate_html.expand_template(template_name)
-            );
-    }
-
     // The associated illustration, which will be non-null by the time our
     // virtual methods such as pre_render() and render() are called.
     pdf_illustration const* illustration_ = nullptr;
@@ -727,7 +711,13 @@ class pdf_illustration : protected html_interpolator
     // Render all pages to the specified PDF file.
     void render_all(fs::path const& output)
     {
-        pdf_writer_wx writer(output.string(), wxPORTRAIT, &html_font_sizes);
+        // Use non-default font sizes that are used to make the new
+        // illustrations more similar to the previously existing ones.
+        pdf_writer_wx writer
+            (output.string()
+            ,wxPORTRAIT
+            ,{8, 9, 10, 12, 14, 18, 20}
+            );
 
         html_cell_for_pdf_output::pdf_context_setter
             set_pdf_context(ledger_, writer, *this);
@@ -749,8 +739,8 @@ class pdf_illustration : protected html_interpolator
                 {
                 // Do start a new physical page before rendering all the
                 // subsequent pages (notice that a page is also free to call
-                // StartPage() from its render()).
-                writer.dc().StartPage();
+                // next_page() from its render()).
+                writer.next_page();
                 }
 
             i->render(ledger_, writer, *this);
@@ -908,28 +898,12 @@ class pdf_illustration : protected html_interpolator
             );
     }
 
-    // This array stores the non-default font sizes that are used to make it
-    // simpler to replicate the existing illustrations.
-    static std::array<int, 7> const html_font_sizes;
-
     // Source of the data.
     Ledger const& ledger_;
 
     // All the pages of this illustration.
     std::vector<std::unique_ptr<page>> pages_;
 };
-
-std::array<int, 7> const pdf_illustration::html_font_sizes
-    {
-    { 8
-    , 9
-    ,10
-    ,12
-    ,14
-    ,18
-    ,20
-    }
-    };
 
 // Cover page used by several different illustration kinds.
 class cover_page : public page
@@ -941,10 +915,11 @@ class cover_page : public page
         ,html_interpolator const& interpolate_html
         ) override
     {
-        int const height_contents = render_page_template
-            ("cover"
-            ,writer
-            ,interpolate_html
+        int const height_contents = writer.output_html
+            (writer.get_horz_margin()
+            ,writer.get_vert_margin()
+            ,writer.get_page_width()
+            ,interpolate_html.expand_template("cover")
             );
 
         // There is no way to draw a border around the page contents in wxHTML
@@ -1181,7 +1156,7 @@ class numbered_page : public page_with_footer
         // pages for this logical pages by overriding get_extra_pages_needed().
         LMI_ASSERT(0 < extra_pages_);
 
-        writer.dc().StartPage();
+        writer.next_page();
 
         ++this_page_number_;
         --extra_pages_;
@@ -1194,14 +1169,7 @@ class numbered_page : public page_with_footer
         (Ledger const&              ledger
         ,pdf_writer_wx&             writer
         ,html_interpolator const&   interpolate_html
-        ) const
-    {
-        stifle_warning_for_unused_value(ledger);
-        stifle_warning_for_unused_value(writer);
-        stifle_warning_for_unused_value(interpolate_html);
-
-        return 0;
-    }
+        ) = 0;
 
     std::string get_page_number() const override
     {
@@ -1237,13 +1205,58 @@ class standard_page : public numbered_page
         ,html_interpolator const& interpolate_html
         ) override
     {
-        numbered_page::render(ledger, writer, interpolate_html);
+        // Page HTML must have been already set by get_extra_pages_needed().
+        LMI_ASSERT(!page_html_.empty());
 
-        render_page_template(page_template_name_, writer, interpolate_html);
+        int last_page_break = 0;
+        for(auto const& page_break : page_break_positions_)
+            {
+            if(last_page_break != 0)
+                {
+                next_page(writer);
+                }
+
+            numbered_page::render(ledger, writer, interpolate_html);
+
+            writer.output_html
+                (writer.get_horz_margin()
+                ,writer.get_vert_margin()
+                ,writer.get_page_width()
+                ,page_html_
+                ,last_page_break
+                ,page_break
+                );
+
+            last_page_break = page_break;
+            }
     }
 
   private:
+    int get_extra_pages_needed
+        (Ledger const&              /* ledger */
+        ,pdf_writer_wx&             writer
+        ,html_interpolator const&   interpolate_html
+        ) override
+    {
+        page_html_ = wxString::FromUTF8
+            (interpolate_html.expand_template(page_template_name_).as_html()
+            );
+
+        page_break_positions_ = writer.paginate_html
+            (writer.get_page_width()
+            ,get_footer_top() - writer.get_vert_margin()
+            ,page_html_
+            );
+
+        // The cast is safe, we're never going to have more than INT_MAX
+        // pages and if we, somehow, do, the caller checks that this function
+        // returns a positive value.
+        return static_cast<int>(page_break_positions_.size()) - 1;
+    }
+
     char const* const page_template_name_;
+    wxString          page_html_;
+    std::vector<int>  page_break_positions_;
 };
 
 // Helper classes used to show the numeric summary table. The approach used
@@ -1354,7 +1367,6 @@ class numeric_summary_table_cell
             ,output_mode
             );
 
-        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator
             (column_guar_account_value
             ,column_separator_guar_non_guar
@@ -1367,6 +1379,7 @@ class numeric_summary_table_cell
             ,pos_y
             ,output_mode
             );
+        pos_y += table_gen.separator_line_height();
 
         pos_y_copy = pos_y;
         table_gen.output_super_header
@@ -1385,7 +1398,6 @@ class numeric_summary_table_cell
             ,output_mode
             );
 
-        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator
             (column_mid_account_value
             ,column_separator_mid_curr
@@ -1399,11 +1411,12 @@ class numeric_summary_table_cell
             ,pos_y
             ,output_mode
             );
+        pos_y += table_gen.separator_line_height();
 
         table_gen.output_headers(pos_y, output_mode);
 
-        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator(0, column_max, pos_y, output_mode);
+        pos_y += table_gen.separator_line_height();
 
         // And now the table values themselves.
         auto const& columns = get_table_columns();
@@ -1496,18 +1509,32 @@ TAG_HANDLER_BEGIN(numeric_summary_table, "NUMERIC_SUMMARY_TABLE")
     }
 TAG_HANDLER_END(numeric_summary_table)
 
-// In wxWidgets versions prior to 3.1.1, there is an extra semicolon at the end
-// of TAGS_MODULE_BEGIN() expansion resulting in a warning with -pedantic used
-// by lmi, so suppress this warning here (this could be removed once 3.1.1 is
-// required).
-wxGCC_WARNING_SUPPRESS(pedantic)
+// Custom handler for <p> tags preventing the page breaks inside them.
+TAG_HANDLER_BEGIN(unbreakable_paragraph, "P")
+    TAG_HANDLER_PROC(tag)
+    {
+        m_WParser->CloseContainer();
+        auto const container = m_WParser->OpenContainer();
+
+        // This is the reason for this handler existence: mark the container
+        // used for the paragraph contents as being unbreakable.
+        container->SetCanLiveOnPagebreak(false);
+
+        // This code reproduces what the standard "P" handler does.
+        // Unfortunately there is no way to just delegate to it from here.
+        container->SetIndent(m_WParser->GetCharHeight(), wxHTML_INDENT_TOP);
+        container->SetAlign(tag);
+
+        // Don't stop parsing, continue with the tag contents.
+        return false;
+    }
+TAG_HANDLER_END(unbreakable_paragraph)
 
 TAGS_MODULE_BEGIN(lmi_illustration)
     TAGS_MODULE_ADD(scaled_image)
     TAGS_MODULE_ADD(numeric_summary_table)
+    TAGS_MODULE_ADD(unbreakable_paragraph)
 TAGS_MODULE_END(lmi_illustration)
-
-wxGCC_WARNING_RESTORE(pedantic)
 
 // Numeric summary page is used on its own, as a regular page, but also as the
 // base class for ill_reg_numeric_summary_attachment below, which is exactly
@@ -1671,9 +1698,9 @@ class page_with_tabular_report
 
         table_gen.output_headers(pos_y, output_mode);
 
-        pos_y += table_gen.separator_line_height();
         auto const ncols = get_table_columns().size();
         table_gen.output_horz_separator(0, ncols, pos_y, output_mode);
+        pos_y += table_gen.separator_line_height();
 
         return pos_y;
     }
@@ -1684,7 +1711,7 @@ class page_with_tabular_report
         (Ledger const&              ledger
         ,pdf_writer_wx&             writer
         ,html_interpolator const&   interpolate_html
-        ) const override
+        ) override
     {
         wx_table_generator table_gen{create_table_generator(ledger, writer)};
 
@@ -1775,7 +1802,6 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
             ,output_mode
             );
 
-        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator
             (column_guar_account_value
             ,column_dummy_separator
@@ -1788,6 +1814,7 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
             ,pos_y
             ,output_mode
             );
+        pos_y += table_gen.separator_line_height();
     }
 
     illustration_table_columns const& get_table_columns() const override
@@ -2183,7 +2210,6 @@ class page_with_basic_tabular_report : public page_with_tabular_report
             ,output_mode
             );
 
-        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator
             (column_guar0_cash_surr_value
             ,column_separator_guar_curr0
@@ -2196,6 +2222,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
             ,pos_y
             ,output_mode
             );
+        pos_y += table_gen.separator_line_height();
 
         // Output the second super header row which is composed of three
         // physical lines.
@@ -2226,13 +2253,13 @@ class page_with_basic_tabular_report : public page_with_tabular_report
                     ,output_mode
                     );
 
-                y += table_gen.separator_line_height();
                 table_gen.output_horz_separator
                     (begin_column
                     ,end_column
                     ,y
                     ,output_mode
                     );
+                y += table_gen.separator_line_height();
 
                 return y;
             };
@@ -2644,7 +2671,6 @@ class reg_d_individual_irr_base : public page_with_tabular_report
             ,output_mode
             );
 
-        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator
             (column_zero_cash_surr_value
             ,column_zero_irr_surr_value
@@ -2657,6 +2683,7 @@ class reg_d_individual_irr_base : public page_with_tabular_report
             ,pos_y
             ,output_mode
             );
+        pos_y += table_gen.separator_line_height();
     }
 };
 
@@ -2793,13 +2820,13 @@ class reg_d_individual_curr : public page_with_tabular_report
             ,output_mode
             );
 
-        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator
             (column_curr_investment_income
             ,column_max
             ,pos_y
             ,output_mode
             );
+        pos_y += table_gen.separator_line_height();
     }
 };
 
@@ -2824,7 +2851,6 @@ class pdf_illustration_reg_d_individual : public pdf_illustration
         add<reg_d_individual_curr>();
         add<standard_page>("reg_d_indiv_notes1");
         add<standard_page>("reg_d_indiv_notes2");
-        add<standard_page>("reg_d_indiv_notes3");
         if(invar.SupplementalReport)
             {
             add<standard_supplemental_report>

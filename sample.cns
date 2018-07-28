@@ -104,6 +104,7 @@
       <Internal1035ExchangeAmount>0</Internal1035ExchangeAmount>
       <Internal1035ExchangeFromMec>No</Internal1035ExchangeFromMec>
       <Internal1035ExchangeTaxBasis>0</Internal1035ExchangeTaxBasis>
+      <IsInforce>No</IsInforce>
       <IssueAge>45</IssueAge>
       <LastCoiReentryDate>2458301</LastCoiReentryDate>
       <LastMaterialChangeDate>2458301</LastMaterialChangeDate>
@@ -302,6 +303,7 @@
       <Internal1035ExchangeAmount>0</Internal1035ExchangeAmount>
       <Internal1035ExchangeFromMec>No</Internal1035ExchangeFromMec>
       <Internal1035ExchangeTaxBasis>0</Internal1035ExchangeTaxBasis>
+      <IsInforce>No</IsInforce>
       <IssueAge>45</IssueAge>
       <LastCoiReentryDate>2458301</LastCoiReentryDate>
       <LastMaterialChangeDate>2458301</LastMaterialChangeDate>
@@ -500,6 +502,7 @@
       <Internal1035ExchangeAmount>0</Internal1035ExchangeAmount>
       <Internal1035ExchangeFromMec>No</Internal1035ExchangeFromMec>
       <Internal1035ExchangeTaxBasis>0</Internal1035ExchangeTaxBasis>
+      <IsInforce>No</IsInforce>
       <IssueAge>45</IssueAge>
       <LastCoiReentryDate>2458301</LastCoiReentryDate>
       <LastMaterialChangeDate>2458301</LastMaterialChangeDate>

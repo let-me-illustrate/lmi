@@ -20,37 +20,167 @@
 }}
 
 {{! No header on this page, but still use the logo. }}
-<scaled_image inv_factor="0.36" src="company_logo.png"></scaled_image>
+<img inv_factor="0.36" src="company_logo.png"></img>
 
 <p align="center"><font size="+1"><b>Explanatory Notes</b></font></p>
 
 <font size="-1">
 
 <p>
-<font size="+1"><b><u>Separate Account</u></b></font>
+<font size="+1"><b><u>Important Tax Disclosures</u></b></font>
 </p>
 
 <p>
-{{HypotheticalRatesFootnote}}
-</p>
-
-<br></br>
-<br></br>
-
-<p>
-<font size="+1"><b><u>Withdrawals and Policy Loans</u></b></font>
-</p>
-
-<p>
-If applicable, withdrawals and policy loans will appear on a
-supplemental report at the end of the illustration. Withdrawals
-and policy loans are assumed to be taken at the beginning of the
-applicable policy year. The illustration and supplemental report
-reflect a fixed policy loan interest rate of {{InitAnnLoanDueRate}}.
+The definition of life insurance elected for this policy is
+{{#DefnLifeInsIsGPT}}
+    the guideline premium test. The guideline single premium
+    is ${{InitGSP}}
+    and the guideline level premium
+    is ${{InitGLP}}.
+{{/DefnLifeInsIsGPT}}
+{{^DefnLifeInsIsGPT}}
+    the cash value accumulation test.
+{{/DefnLifeInsIsGPT}}
 </p>
 
 <p>
-{{LoanAndWithdrawalFootnote}}
+The initial 7-pay premium limit is ${{InitSevenPayPrem}}.
+As illustrated, this policy
+{{#IsMec}}
+    fails
+{{/IsMec}}
+{{^IsMec}}
+    passes
+{{/IsMec}}
+the seven-pay test defined in Section 7702A
+of the Internal Revenue Code and therefore
+{{#IsMec}}
+    becomes a Modified Endowment Contract (MEC)
+    in policy year {{MecYearPlus1}}.
+{{/IsMec}}
+{{^IsMec}}
+    is not a Modified Endowment Contract (MEC). Subsequent changes
+    to the policy, including but not limited to increases
+    and decreases in premiums or benefits, may cause the policy
+    to be retested and may result in the policy becoming a MEC.
+{{/IsMec}}
 </p>
+
+<p>
+If a policy is a MEC, withdrawals and policy loans are taxed to
+the extent of any gain in the policy, and an additional penalty
+tax may apply to the taxable portion of the distribution.
+</p>
+
+<p>
+<b>
+The information provided in this illustration is not written or
+intended as tax or legal advice and may not be relied on for
+purposes of avoiding any federal tax penalties.
+{{InsCoShortName}}, its employees
+and representatives are not authorized to give tax or legal advice.
+Individuals are encouraged to seek advice from their own tax or
+legal counsel.
+</b>
+</p>
+
+{{^IsInforce}}
+
+<br>
+<br>
+<br>
+
+<p align="center">
+<font size="+2"><b>Certification Statements</b></font>
+</p>
+
+<p>
+<br>
+<br>
+POLICY OWNER / APPLICANT<br>
+
+I have received a copy of this illustration, and I understand
+that any non-guaranteed charges illustrated are subject
+to change and could be either higher or lower. Additionally,
+I have been informed by my agent that these values
+are not guaranteed.
+</p>
+
+<br>
+<br>
+<br>
+<br>
+
+<table cellspacing="0" cellpadding="0" valign="top">
+    <tr>
+        <td>
+            <u>{{Space64}}{{Space32}}</u>
+        </td>
+        <td>
+            {{Space32}}
+        </td>
+        <td>
+            <u>{{Space32}}</u>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            POLICY OWNER OR APPLICANT SIGNATURE
+        </td>
+        <td>
+            {{Space32}}
+        </td>
+        <td>
+            DATE
+        </td>
+    </tr>
+</table>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<p>
+AGENT / AUTHORIZED REPRESENTATIVE<br>
+
+I certify that this illustration has been presented
+to the applicant, and that I have explained that any
+non-guaranteed charges illustrated are subject to change. I have
+made no statements that are inconsistent with the illustration.
+</p>
+
+<br>
+<br>
+<br>
+<br>
+
+<table cellspacing="0" cellpadding="0" valign="top">
+    <tr>
+        <td>
+            <u>{{Space64}}{{Space32}}</u>
+        </td>
+        <td>
+            {{Space32}}
+        </td>
+        <td>
+            <u>{{Space32}}</u>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            AGENT OR AUTHORIZED REPRESENTATIVE
+        </td>
+        <td>
+            {{Space32}}
+        </td>
+        <td>
+            DATE
+        </td>
+    </tr>
+</table>
+
+{{/IsInforce}}
 
 </font>

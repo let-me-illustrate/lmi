@@ -316,6 +316,7 @@ lmi_common_objects := \
   mortality_rates_fetch.o \
   preferences_model.o \
   product_data.o \
+  report_table.o \
   rounding_rules.o \
   stratified_algorithms.o \
   stratified_charges.o \
@@ -460,6 +461,7 @@ unit_test_targets := \
   progress_meter_test \
   rate_table_test \
   regex_test \
+  report_table_test \
   round_test \
   round_to_test \
   rtti_lmi_test \
@@ -894,6 +896,11 @@ regex_test$(EXEEXT): \
   $(common_test_objects) \
   regex_test.o \
   timer.o \
+
+report_table_test$(EXEEXT): \
+  $(common_test_objects) \
+  report_table.o \
+  report_table_test.o \
 
 round_test$(EXEEXT): \
   $(common_test_objects) \

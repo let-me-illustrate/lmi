@@ -324,6 +324,7 @@ class LMI_SO Input final
     mce_yes_or_no            AmortizePremiumLoad             ;
     datum_string             ContractNumber                  ;
     datum_string             MasterContractNumber            ;
+    mce_yes_or_no            IsInforce                       ;
     tnr_date                 InforceAsOfDate                 ;
     tnr_duration             InforceYear                     ;
     tnr_month                InforceMonth                    ;

@@ -41,12 +41,14 @@ namespace html { class text; }
 class pdf_writer_wx
 {
   public:
-    // Optional html_font_sizes array allows to override default font sizes for
-    // the standard HTML3 fonts (1..7).
+    using html_font_sizes = std::array<int, 7>;
+
+    // The font sizes array specifies the sizes, in points, of the standard
+    // HTML3 fonts (1..7).
     pdf_writer_wx
         (wxString const&           output_filename
         ,wxPrintOrientation        orientation
-        ,std::array<int, 7> const* html_font_sizes = nullptr
+        ,html_font_sizes const&    font_sizes
         );
 
     pdf_writer_wx(pdf_writer_wx const&) = delete;
@@ -58,6 +60,22 @@ class pdf_writer_wx
 
     // Wherever possible, use the following high-level functions
     // instead of working at a lower level with the dc() accessor.
+
+    std::vector<int> paginate_html
+        (int                          page_width
+        ,int                          page_height
+        ,wxString const&              html_str
+        );
+
+    int output_html
+        (int                          x
+        ,int                          y
+        ,int                          width
+        ,wxString const&              html_str
+        ,int                          from
+        ,int                          to
+        ,oenum_render_or_only_measure output_mode = oe_render
+        );
 
     int output_html
         (int                          x
@@ -76,6 +94,8 @@ class pdf_writer_wx
         ,oenum_render_or_only_measure output_mode = oe_render
         );
 
+    void next_page();
+
     wxDC& dc();
 
     // Page metrics: the page width and height are the size of the page region
@@ -86,7 +106,7 @@ class pdf_writer_wx
     int get_vert_margin() const;
     int get_page_width()  const;
     int get_total_width() const;
-    int get_page_height() const;
+    int get_total_height() const;
     int get_page_bottom() const;
 
   private:
@@ -97,6 +117,8 @@ class pdf_writer_wx
     // must be declared after it in order to be destroyed before it.
     std::unique_ptr<wxFileSystem> html_vfs_;
     wxHtmlWinParser html_parser_;
+
+    html_font_sizes const html_font_sizes_;
 
     wxSize const total_page_size_;
 

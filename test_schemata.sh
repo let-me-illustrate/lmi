@@ -38,6 +38,17 @@ jar_dir=/opt/lmi/third_party/rng
 
 cp --preserve $srcdir/sample.cns $srcdir/sample.ill .
 
+# XSL template to sort cell subelements.
+
+cp --preserve $srcdir/sort_cell_subelements.xsl .
+
+echo "  Test cell-subelement sorting."
+
+xsltproc sort_cell_subelements.xsl sample.cns > sorted.cns
+xsltproc sort_cell_subelements.xsl sample.ill > sorted.ill
+diff --unified=0 sample.cns sorted.cns
+diff --unified=0 sample.ill sorted.ill
+
 # Primary schemata (RNC: RELAX NG, compact syntax).
 #
 # RNC is primary because it's far more readable than other formats.

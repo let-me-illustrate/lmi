@@ -158,6 +158,7 @@ TESTS = \
     test_progress_meter \
     test_rate_table \
     test_regex \
+    test_report_table \
     test_round \
     test_round_to \
     test_rtti_lmi \
@@ -451,6 +452,7 @@ liblmi_la_SOURCES = \
     mortality_rates_fetch.cpp \
     preferences_model.cpp \
     product_data.cpp \
+    report_table.cpp \
     rounding_rules.cpp \
     stratified_algorithms.cpp \
     stratified_charges.cpp \
@@ -825,6 +827,7 @@ test_interpolate_string_SOURCES = \
   $(common_test_objects) \
   interpolate_string.cpp \
   interpolate_string_test.cpp
+test_interpolate_string_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_irc7702a_SOURCES = \
   $(common_test_objects) \
@@ -1031,6 +1034,7 @@ test_rate_table_SOURCES = \
   path_utility.cpp \
   rate_table.cpp \
   rate_table_test.cpp
+test_rate_table_CXXFLAGS = $(AM_CXXFLAGS)
 test_rate_table_LDADD = \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
@@ -1042,6 +1046,12 @@ test_regex_SOURCES = \
 test_regex_CXXFLAGS = $(AM_CXXFLAGS)
 test_regex_LDADD = \
   $(BOOST_LIBS)
+
+test_report_table_SOURCES = \
+  $(common_test_objects) \
+  report_table.cpp \
+  report_table_test.cpp
+test_report_table_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_round_SOURCES = \
   $(common_test_objects) \
@@ -1320,6 +1330,7 @@ noinst_HEADERS = \
     product_data.hpp \
     product_editor.hpp \
     progress_meter.hpp \
+    report_table.hpp \
     round_to.hpp \
     rounding_document.hpp \
     rounding_rules.hpp \

@@ -124,6 +124,7 @@ Input::Input()
 //    ,AmortizePremiumLoad              ("")
 //    ,ContractNumber                   ("")
 //    ,MasterContractNumber             ("")
+//    ,IsInforce                        ("")
 //    ,InforceAsOfDate                  ("")
 //    ,InforceYear                      ("")
 //    ,InforceMonth                     ("")
@@ -370,6 +371,7 @@ void Input::AscribeMembers()
     ascribe("AmortizePremiumLoad"             , &Input::AmortizePremiumLoad             );
     ascribe("ContractNumber"                  , &Input::ContractNumber                  );
     ascribe("MasterContractNumber"            , &Input::MasterContractNumber            );
+    ascribe("IsInforce"                       , &Input::IsInforce                       );
     ascribe("InforceAsOfDate"                 , &Input::InforceAsOfDate                 );
     ascribe("InforceYear"                     , &Input::InforceYear                     );
     ascribe("InforceMonth"                    , &Input::InforceMonth                    );

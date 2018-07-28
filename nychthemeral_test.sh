@@ -47,6 +47,7 @@ build_clutter='
 /^make.*\[[0-9]*\]: Entering directory/d
 /^make.*\[[0-9]*\]: Leaving directory/d
 /^make.*\[[0-9]*\]: Nothing to be done for/d
+/^make.*\[[0-9]*\]: warning: -j1 forced in submake: resetting jobserver mode.$/d
 /^make.*\[[0-9]*\]: warning: -jN forced in submake: disabling jobserver mode.$/d
 /^make.*\[[0-9]*\]: .* is up to date\./d
 /^[^ ]*cpp  *-x /d
@@ -77,6 +78,7 @@ cli_cgi_clutter='
 '
 
 schemata_clutter='
+/^  Test cell-subelement sorting\.$/d
 /^  Test schemata\.\.\.$/d
 /^  Test RNC files with .jing.\.$/d
 /^  Test XSD files with .jing.\.$/d

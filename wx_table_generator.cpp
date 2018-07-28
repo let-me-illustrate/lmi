@@ -23,99 +23,13 @@
 
 #include "wx_table_generator.hpp"
 
-#include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "math_functions.hpp"           // outward_quotient()
 #include "miscellany.hpp"               // count_newlines(), split_into_lines()
 
 #include <algorithm>                    // max()
 
 // Default size of various characters for illustrations and group quotes:
 //   'M' 7pt; 'N' 6pt; '1' 4pt; '9' 4pt; ',' 2pt
-
-// Is this a struct only because we want its members to be publicly
-// accessible? But their values can also be changed by clients, and
-// isn't that undesirable?
-
-// Elasticity and clipping
-//
-// Most columns are inelastic: they have a fixed minimum width and
-// are not clipped lest crucial information (e.g., part of a number)
-// be lost. The archetypal elastic column is a personal name, whose
-// width is practically unlimited and might even exceed the total page
-// width; it is better to truncate one extremely long personal name
-// than to present an error message and produce no report at all.
-//
-// An ideal report generator might call GetTextExtent() on every row
-// of data to determine a column's ideal width, but this one favors
-// speed by setting a presumptive maximum width for each column.
-// Therefore, it treats a personal-name column as having no natural
-// width at all. Its minimum width might be set equal to its header
-// width, but such a refinement is needless in the problem domain. In
-// the most extreme case, all inelastic columns would fit, but there
-// would be not a single pixel available for elastic columns, which
-// would all in effect be dropped; again, in the problem domain, that
-// would actually be preferable to failing to produce any output.
-//
-// Therefore, elastic columns are clipped, and inelastic ones are not.
-// All other column properties are independent, and specified by
-// arguments, but clipping depends on the elasticity argument. It is
-// distinguished only because clipping is a distinct layout operation.
-//
-//  - is_hidden(): Data for every row of all potential columns are
-//    passed into this class; hidden columns are suppressed so that
-//    they don't appear in the output at all.
-//
-//  - is_elastic(): An elastic column has no innate fixed or preferred
-//    width. After all inelastic columns have claimed their required
-//    widths, any remaining width available is prorated among elastic
-//    columns, which therefore may be wider than their widest contents
-//    or narrower than their narrowest. As a consequence, elastic
-//    columns are clipped--vide supra.
-//
-//  - is_clipped(): A clipped column is truncated to fit its allotted
-//    space. Only elastic columns are clipped--vide supra.
-
-class wx_table_generator::column_info
-{
-  public:
-    column_info
-        (std::string      const& header
-        ,int                     width
-        ,oenum_h_align    const  alignment
-        ,oenum_visibility const  visibility
-        ,oenum_elasticity const  elasticity
-        )
-        :col_header_ (header)
-        ,col_width_  (width)
-        ,alignment_  (alignment)
-        ,is_hidden_  (oe_hidden  == visibility)
-        ,is_elastic_ (oe_elastic == elasticity)
-        {
-        }
-
-    std::string const& col_header() const {return col_header_;}
-    int                col_width()  const {return col_width_;}
-    oenum_h_align      alignment()  const {return alignment_;}
-    bool               is_hidden()  const {return is_hidden_;}
-    bool               is_elastic() const {return is_elastic_;}
-    bool               is_clipped() const {return is_elastic();}
-
-  private:
-    std::string   const col_header_;
-
-  public: // but dubiously so
-    // Width in pixels. Because the wxPdfDC uses wxMM_POINTS, each
-    // pixel is one point = 1/72 inch.
-    //
-    // Modified directly by wx_table_generator code, hence not const.
-    int col_width_;
-
-  private:
-    oenum_h_align const alignment_;
-    bool          const is_hidden_;
-    bool          const is_elastic_;
-};
 
 wx_table_generator::wx_table_generator
     (group_quote_style_tag                 // tag not referenced
@@ -139,7 +53,7 @@ wx_table_generator::wx_table_generator
         {
         enroll_column(i);
         }
-    compute_column_widths();
+    set_column_widths(total_width_, column_margin_, all_columns_);
 
     // Set a pen with zero width to make grid lines thin,
     // and round cap style so that they combine seamlessly.
@@ -169,7 +83,7 @@ wx_table_generator::wx_table_generator
         {
         enroll_column(i);
         }
-    compute_column_widths();
+    set_column_widths(total_width_, column_margin_, all_columns_);
 
     dc_.SetPen(illustration_rule_color);
 }
@@ -219,7 +133,7 @@ void wx_table_generator::output_headers
     std::vector<std::string> headers_by_line(max_header_lines_ * number_of_columns);
     for(std::size_t i = 0; i < number_of_columns; ++i)
         {
-        column_info const& ci = all_columns().at(i);
+        table_column_info const& ci = all_columns().at(i);
         if(ci.is_hidden())
             {
             continue;
@@ -414,13 +328,12 @@ int wx_table_generator::separator_line_height() const
 /// Rectangle corresponding to a cell's text contents.
 ///
 /// This is narrower than the full cell rectangle to leave a small
-/// margin. Its vertical position is adjusted so that it can be
-/// passed directly to wxDC::DrawLabel().
+/// margin. Its vertical position is adjusted to center the text vertically.
 
 wxRect wx_table_generator::text_rect(std::size_t column, int y) const
 {
     wxRect z = cell_rect(column, y).Deflate(dc().GetCharWidth(), 0);
-    z.Offset(0, char_height_);
+    z.Offset(0, (row_height_ - char_height_)/2);
     return z;
 }
 
@@ -431,25 +344,34 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y) const
 /// The total number of columns thus enrolled determines the cardinality
 /// of the 'values' argument in output_row() calls.
 ///
+/// Column headers may be multiline strings.
+///
 /// All data for every row and every potential column are passed into
 /// this class, even for "hidden" columns that are to be suppressed so
 /// that they don't appear in the output at all. This approach trades
 /// extra complexity here for a uniform data representation elsewhere.
+/// PDF !! Instead of retaining hidden columns, and explicitly skipping
+/// them here and repeatedly later (and also in set_column_widths()),
+/// consider removing them from the vector.
 ///
-/// Notice that column headers may be multiline strings.
+/// Postconditions:
+/// - An elastic column's width is initialized to zero. (If there's
+///   enough room to display it, set_column_widths() resets its width
+///   appropriately.)
+/// - A hidden column's width is initialized to zero--necessarily,
+///   because other member functions, e.g.:
+///     output_horz_separator()
+///     cell_pos_x()
+///   calculate total width by accumulating the widths of all columns,
+///   whether hidden or not. PDF !! In those instances, hidden columns
+///   are skipped implicitly rather than explicitly; this is a further
+///   argument against trafficking in hidden columns.
 ///
 /// Design alternative: this could be written as a nonmember function,
 /// by passing the DC and the header font as arguments.
 
 void wx_table_generator::enroll_column(column_parameters const& z)
 {
-    // A hidden column's width must be initialized to zero, because
-    // other member functions calculate total width by accumulating
-    // the widths of all columns, whether hidden or not.
-    //
-    // An elastic column's width must be initialized to zero, because
-    // compute_column_widths() skips setting it when there's no room
-    // for any elastic column.
     int width = 0;
     if(oe_shown == z.visibility)
         {
@@ -477,9 +399,6 @@ LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
                 {
                 // Greater of header width and 'widest_text' width.
                 width = std::max(w, dc().GetTextExtent(z.widest_text).x);
-                // PDF !! Reconsider whether margin should be added here,
-                // because compute_column_widths() may need to remove it.
-                width += 2 * column_margin();
                 }
                 break;
             case oe_elastic:
@@ -491,204 +410,9 @@ LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
         }
 
     all_columns_.push_back
-        (column_info
+        (table_column_info
             (z.header, width, z.alignment, z.visibility, z.elasticity)
         );
-}
-
-// class members used, mutably or immutably:
-//
-// const    total_width_    max table width (page width - page margins)
-// mutable  column_margin_  spacing on both left and right of column
-// mutable  all_columns_    std::vector<column_info>
-//   column_info::col_width_ is the only member changed
-//
-// column_margin_ and col_width_ are modified here and nowhere else
-
-/// Compute column widths.
-///
-/// First, allocate adequate width to each inelastic column; then
-/// distribute any excess width left over among elastic columns.
-///
-/// The width of each inelastic column reflects:
-///  - a mask like "999,999" (ideally, there would instead be a
-///    quasi-global data structure mapping symbolic column names
-///    to their corresponding headers and maximal widths)
-///  - the header width
-///  - the bilateral margins that have already been added
-/// The margins may be slightly reduced by this function to make
-/// everything fit when it otherwise wouldn't.
-
-void wx_table_generator::compute_column_widths()
-{
-    // Number of non-hidden columns.
-    int number_of_columns = 0;
-
-    // Number of non-hidden elastic columns.
-    int number_of_elastic_columns = 0;
-
-    // Total width of all non-hidden inelastic columns.
-    int total_inelastic_width = 0;
-
-    for(auto const& i : all_columns())
-        {
-// Instead of retaining hidden columns, and explicitly skipping them
-// here and repeatedly later, why not just remove them from the vector?
-        if(i.is_hidden())
-            {
-            continue;
-            }
-
-        ++number_of_columns;
-
-        if(i.is_elastic())
-            {
-            ++number_of_elastic_columns;
-            }
-        else
-            {
-            total_inelastic_width += i.col_width();
-            }
-        }
-
-    if(total_width_ < total_inelastic_width)
-        {
-        // The inelastic columns don't all fit with their original
-        // one-em presumptive bilateral margins. Try to make them fit
-        // by reducing the margins slightly.
-        //
-        // The number of pixels that would need to be removed is:
-        auto const overflow = total_inelastic_width - total_width_;
-
-        // Because inelastic columns take more than the available
-        // horizontal space, there's no room to fit any elastic
-        // columns, so the column-fitting problem is overconstrained.
-        // Therefore, don't even try reducing margins if there are any
-        // elastic columns.
-        if(!number_of_elastic_columns)
-            {
-// Also calculate the number of pixels by which it overflows for each column
-            // We need to round up in division here to be sure that all columns
-            // fit into the available width.
-            auto const overflow_per_column = outward_quotient
-                (overflow
-                ,number_of_columns
-                );
-// Now determine whether reducing the margins will make the table fit.
-// If that works, then do it; else don't do it, and print a warning.
-//
-// column_margin_ is the padding on each side of every column, so
-// the number of pixels between columns, as the table was originally
-// laid out, is two times column_margin_--which, as we just determined,
-// was too generous, so we're going to try reducing it.
-// Then this conditional compares
-//   the number of pixels by which we must shrink each column, to
-//   the number of pixels of padding between columns
-// Reducing the padding is a workable strategy if the desired reduction
-// is less than the padding.
-//
-// Is this as good as it can be, given that coordinates are integers?
-// Answer: Yes--the integers count points, not ems or characters, and
-// typographers wouldn't use any finer unit for this task.
-            if(overflow_per_column <= 2 * column_margin())
-                {
-                // We are going to reduce the total width by more than
-                // necessary, in general, because of rounding up above, so
-                // compensate for it by giving 1 extra pixel until we run out
-                // of these "underflow" pixels.
-// Defect: the number of pixels separating columns might now be zero.
-// '9' is five PDF pixels wide; do we need, say, two pixels between columns?
-//
-// Suggestion: change the
-//   overflow_per_column <= column_margin_
-// condition to something like:
-//    overflow_per_column <= column_margin_ - 4 // two pixels on each side
-//    overflow_per_column <= column_margin_ - 2 // one pixel on each side
-                auto underflow = overflow_per_column * number_of_columns - overflow;
-
-                for(auto& i : all_columns_)
-                    {
-                    if(i.is_hidden())
-                        {
-                        continue;
-                        }
-
-                    i.col_width_ -= overflow_per_column;
-
-                    if(0 < underflow)
-                        {
-                        ++i.col_width_;
-                        --underflow;
-                        }
-                    }
-
-                column_margin_ -= (overflow_per_column + 1) / 2;
-
-                // We condensed the columns enough to make them fit, so no need
-                // for the warning and we don't have any elastic columns, so
-                // we're done.
-                return;
-                }
-// If overflow_per_column is 1, then column_margin_ -= 1
-// "           "          "  2,   "        "           1
-// "           "          "  3,   "        "           2
-// "           "          "  4,   "        "           2
-// The 'underflow' logic shrinks columns by the exact number of pixels
-// to use up all the available width. But the column_margin_ reduction
-// isn't exact due to truncation: when the margin is added (on both sides),
-// is the total of all (margin+column+margin) widths lower than the maximum,
-// so that this is just a small aesthetic issue, or is it too wide, so that
-// not everything fits?
-//
-// Answer:
-// This is an issue of aligning the column text, not of fitting, because the
-// margin is used when positioning the text inside the column width. And the
-// width is correct, so the worst that can happen here is that the text is
-// offset by 0.5 pixels -- but, of course, if we rounded it down, it would be
-// offset by 0.5 pixels in the other direction. So maybe we should write
-//
-//     column_margin_ -= overflow_per_column / 2;
-//
-// just because it's shorter and not necessarily worse (nor better).
-            }
-
-        warning()
-            << "Not enough space for all " << number_of_columns << " columns."
-            << "\nPrintable width is " << total_width_ << " points."
-            << "\nData alone require " << total_inelastic_width - 2 * column_margin() * number_of_columns
-            << " points without any margins for legibility."
-            << "\nColumn margins of " << column_margin() << " points on both sides"
-            << " would take up " << 2 * column_margin() * number_of_columns << " additional points."
-            << LMI_FLUSH
-            ;
-        return;
-        }
-
-    // Lay out elastic columns in whatever space is left over after
-    // accounting for all inelastic columns. Clip to make them fit.
-    //
-    // If there's more than enough space for them, then expand them
-    // to consume all available space.
-    if(number_of_elastic_columns)
-        {
-        int const width_of_each_elastic_column = outward_quotient
-            (total_width_ - total_inelastic_width
-            ,number_of_elastic_columns
-            );
-
-        for(auto& i : all_columns_)
-            {
-            if(i.is_hidden())
-                {
-                continue;
-                }
-
-            if(i.is_elastic())
-                {
-                i.col_width_ = width_of_each_elastic_column;
-                }
-            }
-        }
 }
 
 void wx_table_generator::do_output_single_row
@@ -699,7 +423,7 @@ void wx_table_generator::do_output_single_row
 {
     int const y_top = pos_y;
 
-    int const y_text = pos_y + char_height_;
+    int const y_text = text_rect(0, pos_y).y;
     pos_y += row_height_;
 
     if(draw_separators_)
@@ -710,7 +434,7 @@ void wx_table_generator::do_output_single_row
     std::size_t const number_of_columns = all_columns().size();
     for(std::size_t i = 0; i < number_of_columns; ++i)
         {
-        column_info const& ci = all_columns().at(i);
+        table_column_info const& ci = all_columns().at(i);
         if(ci.is_hidden())
             {
             continue;
@@ -755,14 +479,14 @@ void wx_table_generator::do_output_single_row
                 // Make sure that any failure in this chain of assumptions
                 // doesn't result in (undefined) negative clipping.
                 LMI_ASSERT(0 <= ci.col_width() - column_margin());
-                dc_.SetClippingRegion
-                    (wxRect
+                wxDCClipper clip
+                    (dc_
+                    ,wxRect
                         {wxPoint{pos_x, y_top}
                         ,wxSize{ci.col_width() - column_margin(), row_height_}
                         }
                     );
                 dc_.DrawText(s, x_text, y_text);
-                dc_.DestroyClippingRegion();
                 }
             else
                 {
@@ -832,7 +556,7 @@ int wx_table_generator::column_margin() const
     return column_margin_;
 }
 
-std::vector<wx_table_generator::column_info> const& wx_table_generator::all_columns() const
+std::vector<table_column_info> const& wx_table_generator::all_columns() const
 {
     return all_columns_;
 }

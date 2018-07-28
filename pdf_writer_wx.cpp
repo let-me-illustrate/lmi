@@ -31,9 +31,9 @@
 
 #include <wx/filesys.h>
 #include <wx/html/htmlcell.h>
+#include <wx/html/htmprint.h>
 
 #include <exception>                    // uncaught_exceptions()
-#include <limits>
 
 namespace
 {
@@ -55,16 +55,26 @@ wxPrintData make_print_data
     return print_data;
 }
 
+// Ensure that we call SetFonts() with consistent parameters both on
+// wxHtmlWinParser and wxHtmlDCRenderer by using the same helper function to do
+// it for both of them.
+template <typename T>
+void DoSetFonts(T& html_object, pdf_writer_wx::html_font_sizes const& font_sizes)
+{
+    html_object.SetFonts("Helvetica", "Courier", font_sizes.data());
+}
+
 } // Unnamed namespace.
 
 pdf_writer_wx::pdf_writer_wx
     (wxString const&    output_filename
     ,wxPrintOrientation orientation
-    ,std::array<int, 7> const* html_font_sizes
+    ,html_font_sizes const& font_sizes
     )
     :print_data_        {make_print_data(output_filename, orientation)}
     ,pdf_dc_            {print_data_}
     ,html_parser_       {nullptr}
+    ,html_font_sizes_   {font_sizes}
     ,total_page_size_   {pdf_dc_.GetSize()}
 {
     // Ensure that the output is independent of the current display resolution:
@@ -86,33 +96,14 @@ pdf_writer_wx::pdf_writer_wx
     // Use a standard PDF Helvetica font (without embedding any custom fonts in
     // the generated file, the only other realistic choice is Times New Roman).
     pdf_dc_.SetFont
-        (wxFontInfo
-            (html_font_sizes
-                ? html_font_sizes->at(2)
-                : 8
-            )
+        (wxFontInfo(html_font_sizes_.at(2))
             .Family(wxFONTFAMILY_SWISS)
             .FaceName("Helvetica")
         );
 
     // Create an HTML parser to allow easily adding HTML contents to the output.
     html_parser_.SetDC(&pdf_dc_);
-    if(html_font_sizes)
-        {
-        html_parser_.SetFonts
-            ("Helvetica"
-            ,"Courier"
-            ,html_font_sizes->data()
-            );
-        }
-    else
-        {
-        html_parser_.SetStandardFonts
-            (pdf_dc_.GetFont().GetPointSize()
-            ,"Helvetica"
-            ,"Courier"
-            );
-        }
+    html_parser_.SetFonts("Helvetica", "Courier", font_sizes.data());
 
     // Create the virtual file system object for loading images referenced from
     // HTML and interpret relative paths from the data directory.
@@ -122,6 +113,22 @@ pdf_writer_wx::pdf_writer_wx
         ,true /* argument is a directory, not file path */
         );
     html_parser_.SetFS(html_vfs_.get());
+}
+
+/// Start a new page in the output PDF document.
+///
+/// This is equivalent to wxDC::EndPage() followed by wxDC::StartPage(), but
+/// preferable to using these 2 functions directly, both because it's simpler
+/// and because it's too easy to forget to call EndPage() otherwise, especially
+/// as almost everything still works correctly even when it's not called --
+/// except that the clipping region is not reset for the new page, which can
+/// result in hard to diagnose problems.
+
+void pdf_writer_wx::next_page()
+{
+    LMI_ASSERT(!save_has_been_called_);
+    pdf_dc_.EndPage();
+    pdf_dc_.StartPage();
 }
 
 wxDC& pdf_writer_wx::dc()
@@ -175,15 +182,64 @@ void pdf_writer_wx::output_image
     *pos_y += y;
 }
 
+/// Compute vertical page break positions needed when outputting the given HTML
+/// contents into pages of the given height.
+///
+/// If the entire contents fits on a single page, the returned vector has a
+/// single element equal to page_height. More generally, the size of the
+/// returned vector is the number of pages needed for output.
+///
+/// Note that page_height is passed as parameter here because it can be smaller
+/// than the value returned by our get_total_height() if headers or footers are
+/// used. And page_width is used for consistency, even if currently it's always
+/// the same as get_page_width().
+
+std::vector<int> pdf_writer_wx::paginate_html
+    (int                          page_width
+    ,int                          page_height
+    ,wxString const&              html_str
+    )
+{
+    wxHtmlDCRenderer renderer;
+    renderer.SetDC(&dc());
+    renderer.SetSize(page_width, page_height);
+    DoSetFonts(renderer, html_font_sizes_);
+
+    // Note that we parse HTML twice: here and then again in output_html(),
+    // which is inefficient. Unfortunately currently there is no way to share
+    // neither the parser, nor the result of calling Parse() between
+    // wxHtmlDCRenderer and output_html().
+    renderer.SetHtmlText(html_str);
+
+    std::vector<int> page_breaks;
+    for(int pos = 0;;)
+        {
+        pos = renderer.FindNextPageBreak(pos);
+        if(pos == wxNOT_FOUND)
+            break;
+        page_breaks.push_back(pos);
+        }
+
+    return page_breaks;
+}
+
 /// Render, or just pretend rendering in order to measure it, the given HTML
 /// contents at the specified position wrapping it at the given width.
+///
 /// Return the height of the output (using this width).
+///
+/// Note the difference between "x" and "y" parameters, which specify the
+/// position in the output DC, and "from" and "to" ones which contain the
+/// starting and ending coordinates in the virtual view of the entire HTML
+/// document: the HTML element at the position "from" will appear at "y".
 
 int pdf_writer_wx::output_html
     (int                          x
     ,int                          y
     ,int                          width
-    ,html::text&&                 html
+    ,wxString const&              html_str
+    ,int                          from
+    ,int                          to
     ,oenum_render_or_only_measure output_mode
     )
 {
@@ -193,7 +249,6 @@ int pdf_writer_wx::output_html
     // font which is changed by rendering the HTML contents.
     wxDCFontChanger preserve_font(pdf_dc_, wxFont());
 
-    auto const html_str = wxString::FromUTF8(std::move(html).as_html());
     std::unique_ptr<wxHtmlContainerCell> const cell
         (static_cast<wxHtmlContainerCell*>(html_parser_.Parse(html_str))
         );
@@ -204,15 +259,17 @@ int pdf_writer_wx::output_html
         {
         case oe_render:
             {
+            // Even though wxHtmlCell::Draw() omits drawing of the cells
+            // entirely outside of the visible vertical range, we still need to
+            // clip rendering to this range explicitly as a partially visible
+            // cell could extend beyond the "to" boundary if we didn't do it.
+            wxDCClipper clip(pdf_dc_, x, y, width, to - from);
+
             wxHtmlRenderingInfo rendering_info;
-            cell->Draw
-                (pdf_dc_
-                ,x
-                ,y
-                ,0
-                ,std::numeric_limits<int>::max()
-                ,rendering_info
-                );
+
+            // "Scroll" the cell upwards by "from" by subtracting it from the
+            // vertical position.
+            cell->Draw(pdf_dc_, x, y - from, y, y + to - from, rendering_info);
             }
             break;
         case oe_only_measure:
@@ -221,6 +278,48 @@ int pdf_writer_wx::output_html
         }
 
     return cell->GetHeight();
+}
+
+/// Convenient overload when rendering, or measuring, HTML text known to fit on
+/// a single page.
+///
+/// In this case "from" and "to" parameters are not needed and we can take
+/// html::text directly as it won't be used any more.
+
+int pdf_writer_wx::output_html
+    (int                          x
+    ,int                          y
+    ,int                          width
+    ,html::text&&                 html
+    ,oenum_render_or_only_measure output_mode
+    )
+{
+    int const height = output_html
+        (x
+        ,y
+        ,width
+        ,wxString::FromUTF8(std::move(html).as_html())
+        ,0
+        ,get_total_height()
+        ,output_mode
+        );
+
+    switch(output_mode)
+        {
+        case oe_render:
+            // When rendering, all the text should have fit on this page,
+            // otherwise this is not the right overload to use -- call
+            // paginate_html() and the generic overload above instead.
+            LMI_ASSERT(height <= get_total_height() - y);
+            break;
+        case oe_only_measure:
+            // It's fine if the output doesn't fit when measuring it, as this
+            // could be used to decide whether another page is needed or not,
+            // so don't do anything here.
+            break;
+        }
+
+    return height;
 }
 
 int pdf_writer_wx::get_horz_margin() const
@@ -243,9 +342,9 @@ int pdf_writer_wx::get_total_width() const
     return total_page_size_.x;
 }
 
-int pdf_writer_wx::get_page_height() const
+int pdf_writer_wx::get_total_height() const
 {
-    return total_page_size_.y - 2 * vert_margin;
+    return total_page_size_.y;
 }
 
 int pdf_writer_wx::get_page_bottom() const
