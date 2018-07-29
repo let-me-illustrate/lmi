@@ -333,11 +333,21 @@ void validate_run_cell_and_copy_output
         ,std::string const& insured_name
         )
 {
+    std::string const cell_trace_file
+        (corp_name + "." + insured_name + monthly_trace_suffix(1)
+        );
+    output_file_existence_checker output_cell_trace(cell_trace_file);
+
     wxUIActionSimulator ui;
 
     ui.Char(WXK_HOME);           // Select the first cell.
     ui.Char('r', wxMOD_CONTROL); // "Census|Run cell"
     wxYield();
+
+    LMI_ASSERT_WITH_MSG
+        (output_cell_trace.exists()
+        ,"file \"" << cell_trace_file << "\" after running the cell"
+        );
 
     std::string const ill_data_file
         (corp_name + "." + insured_name + serial_suffix(1) + tsv_ext()
