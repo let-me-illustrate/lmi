@@ -74,9 +74,7 @@ void report_table_test::test_group_quote()
         ,{"", 67, oe_center, oe_shown, oe_inelastic}
         };
 
-    int margin = default_margin;
-    set_column_widths(total_width, margin, v);
-    BOOST_TEST_EQUAL(margin, default_margin);
+    set_column_widths(total_width, default_margin, v);
 
     std::vector<int> const observed = widths(v);
     std::vector<int> const expected = {36, 129, 52, 62, 78, 81, 78, 81, 78, 81};
@@ -103,9 +101,7 @@ void report_table_test::test_illustration()
         ,{"", 53, oe_right, oe_shown, oe_inelastic}
         };
 
-    int margin = default_margin;
-    set_column_widths(total_width, margin, v);
-    BOOST_TEST_EQUAL(margin, default_margin);
+    set_column_widths(total_width, default_margin, v);
 
     std::vector<int> const observed = widths(v);
     std::vector<int> const expected = {38, 52, 67, 66, 45, 62, 62, 67};
@@ -131,9 +127,7 @@ void report_table_test::test_illustration()
         ,{"", 50, oe_right, oe_shown, oe_inelastic}
         };
 
-    int margin = default_margin;
-    set_column_widths(total_width, margin, v);
-    BOOST_TEST_EQUAL(margin, 1);
+    set_column_widths(total_width, default_margin, v);
 
     std::vector<int> const observed = widths(v);
     std::vector<int> const expected = {30, 28, 54, 36, 54, 54, 54, 54, 53, 53, 53, 53};
@@ -159,12 +153,9 @@ void report_table_test::test_illustration()
         ,{"", 50, oe_right, oe_shown, oe_inelastic}
         };
 
-    int margin = default_margin;
 std::cout << "[Expect a multiline..." << std::endl;
-    set_column_widths(total_width, margin, v);
+    set_column_widths(total_width, default_margin, v);
 std::cout << "...warning message.]" << std::endl;
-
-    BOOST_TEST_EQUAL(margin, default_margin);
 
     // Today, two times the default margin is added to each column,
     // even though the data cannot fit.
@@ -175,7 +166,7 @@ std::cout << "...warning message.]" << std::endl;
 
 #if 0 // Doesn't throw today, but might someday.
     BOOST_TEST_THROW
-        (set_column_widths(total_width, margin, v)
+        (set_column_widths(total_width, default_margin, v)
         ,std::runtime_error
         ,"3 iterations expected, but only 0 completed."
         );

@@ -113,7 +113,7 @@ class LMI_SO table_column_info
 
 void LMI_SO set_column_widths
     (int                             total_width
-    ,int                           & column_margin
+    ,int                             column_margin
     ,std::vector<table_column_info>& all_columns
     );
 

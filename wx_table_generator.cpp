@@ -45,7 +45,6 @@ wx_table_generator::wx_table_generator
     // Arbitrarily use 1.333 line spacing.
     ,row_height_       ((4 * char_height_ + 2) / 3)
     ,one_em_           (dc_.GetTextExtent("M").x)
-    ,column_margin_    (one_em_)
     ,max_header_lines_ (1)
     ,draw_separators_  (true)
     ,use_bold_headers_ (true)
@@ -54,7 +53,7 @@ wx_table_generator::wx_table_generator
         {
         enroll_column(i);
         }
-    set_column_widths(total_width_, column_margin_, all_columns_);
+    set_column_widths(total_width_, one_em_, all_columns_);
 
     // Set a pen with zero width to make grid lines thin,
     // and round cap style so that they combine seamlessly.
@@ -76,7 +75,6 @@ wx_table_generator::wx_table_generator
     ,char_height_      (dc_.GetCharHeight())
     ,row_height_       (char_height_)
     ,one_em_           (dc_.GetTextExtent("M").x)
-    ,column_margin_    (one_em_)
     ,max_header_lines_ (1)
     ,draw_separators_  (false)
     ,use_bold_headers_ (false)
@@ -85,7 +83,7 @@ wx_table_generator::wx_table_generator
         {
         enroll_column(i);
         }
-    set_column_widths(total_width_, column_margin_, all_columns_);
+    set_column_widths(total_width_, one_em_, all_columns_);
 
     dc_.SetPen(illustration_rule_color);
 }
@@ -542,11 +540,6 @@ wxFont wx_table_generator::header_font() const
 wxDC const& wx_table_generator::dc() const
 {
     return dc_;
-}
-
-int wx_table_generator::column_margin() const
-{
-    return column_margin_;
 }
 
 std::vector<table_column_info> const& wx_table_generator::all_columns() const
