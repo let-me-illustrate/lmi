@@ -449,12 +449,7 @@ void wx_table_generator::do_output_single_row
                 {
                 case oe_left:
                     {
-                    // PDF !! 'x_text += 0;' here would parallel the other
-                    // cases. The implicit assumption here is that alignment
-                    // is oe_left iff elasticity is oe_elastic; col_width()
-                    // has been augmented by twice the margin for oe_inelastic
-                    // columns only, and this adjustment compensates for that.
-                    x_text += column_margin();
+                    x_text += 0;
                     }
                     break;
                 case oe_center:
@@ -471,13 +466,9 @@ void wx_table_generator::do_output_single_row
 
             if(ci.is_clipped())
                 {
-                // It is assumed that the width of the "Participant" column
-                // on a group quote was initially zero, and then was expanded
-                // by some positive amount, and then incremented by one times
-                // the margin (not two times the margin as for other columns,
-                // because this column has only a left-hand unlateral margin).
-                // Make sure that any failure in this chain of assumptions
-                // doesn't result in (undefined) negative clipping.
+                // Write clipped text with bilateral column margins:
+                //  - aligned left, indented for a left margin; and
+                //  - clipped on the right to width minus margin.
                 LMI_ASSERT(0 <= ci.col_width() - column_margin());
                 wxDCClipper clip
                     (dc_
@@ -486,7 +477,7 @@ void wx_table_generator::do_output_single_row
                         ,wxSize{ci.col_width() - column_margin(), row_height_}
                         }
                     );
-                dc_.DrawText(s, x_text, y_text);
+                dc_.DrawText(s, x_text + column_margin(), y_text);
                 }
             else
                 {
