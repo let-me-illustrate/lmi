@@ -25,9 +25,9 @@
 #include "mvc_controller.hpp"
 #include "version.hpp"
 #include "wx_test_case.hpp"
+#include "wx_test_output.hpp"
 
 #include <wx/dialog.h>
-#include <wx/scopeguard.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
@@ -52,6 +52,8 @@ void do_test_create_open
     wxString const file = test.get_test_file_path_for(basename);
     LMI_ASSERT(!wxFileExists(file));
 
+    output_file_existence_checker output_file{file.ToStdString()};
+
     wxUIActionSimulator z;
     z.Char('n', wxMOD_CONTROL); // new file
     z.Char(key               ); // choose document type
@@ -72,8 +74,7 @@ void do_test_create_open
         );
     wxYield();
 
-    LMI_ASSERT(wxFileExists(file));
-    wxON_BLOCK_EXIT1(wxRemoveFile, file);
+    LMI_ASSERT(output_file.exists());
 
     z.Char('l', wxMOD_CONTROL); // close document
     wxYield();
