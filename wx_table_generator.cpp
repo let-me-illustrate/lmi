@@ -44,7 +44,8 @@ wx_table_generator::wx_table_generator
     ,char_height_      (dc_.GetCharHeight())
     // Arbitrarily use 1.333 line spacing.
     ,row_height_       ((4 * char_height_ + 2) / 3)
-    ,column_margin_    (dc_.GetTextExtent("M").x)
+    ,one_em_           (dc_.GetTextExtent("M").x)
+    ,column_margin_    (one_em_)
     ,max_header_lines_ (1)
     ,draw_separators_  (true)
     ,use_bold_headers_ (true)
@@ -74,7 +75,8 @@ wx_table_generator::wx_table_generator
     ,total_width_      (total_width)
     ,char_height_      (dc_.GetCharHeight())
     ,row_height_       (char_height_)
-    ,column_margin_    (dc_.GetTextExtent("M").x)
+    ,one_em_           (dc_.GetTextExtent("M").x)
+    ,column_margin_    (one_em_)
     ,max_header_lines_ (1)
     ,draw_separators_  (false)
     ,use_bold_headers_ (false)
@@ -467,17 +469,17 @@ void wx_table_generator::do_output_single_row
             if(ci.is_clipped())
                 {
                 // Write clipped text with bilateral column margins:
-                //  - aligned left, indented for a left margin; and
-                //  - clipped on the right to width minus margin.
-                LMI_ASSERT(0 <= ci.col_width() - column_margin());
+                //  - aligned left, indented 1em for a left margin; and
+                //  - clipped on the right to width minus a 1em margin.
+                LMI_ASSERT(0 <= ci.col_width() - one_em_);
                 wxDCClipper clip
                     (dc_
                     ,wxRect
                         {wxPoint{pos_x, y_top}
-                        ,wxSize{ci.col_width() - column_margin(), row_height_}
+                        ,wxSize{ci.col_width() - one_em_, row_height_}
                         }
                     );
-                dc_.DrawText(s, x_text + column_margin(), y_text);
+                dc_.DrawText(s, x_text + one_em_, y_text);
                 }
             else
                 {
