@@ -464,12 +464,11 @@ void wx_table_generator::do_output_single_row
                     break;
                 }
 
-            if(ci.is_clipped())
+            if(ci.is_clipped() && 0 <= ci.col_width() - one_em_)
                 {
                 // Write clipped text with bilateral column margins:
                 //  - aligned left, indented 1em for a left margin; and
                 //  - clipped on the right to width minus a 1em margin.
-                LMI_ASSERT(0 <= ci.col_width() - one_em_);
                 wxDCClipper clip
                     (dc_
                     ,wxRect
