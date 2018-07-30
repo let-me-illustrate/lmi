@@ -294,15 +294,17 @@ void check_calculation_summary_columns
 
 LMI_WX_TEST_CASE(calculation_summary)
 {
+    configurable_settings& c = configurable_settings::instance();
+    std::string const saved_builtin = c["use_builtin_calculation_summary"].str();
+    std::string const saved_columns = c["calculation_summary_columns"    ].str();
+
     if(is_distribution_test())
         {
         // Not only is this the expected value in the GUI, but we also want to be
         // sure that effective_calculation_summary_columns() returns the default
         // columns in the code below -- and this is only the case when we are using
         // the built-in calculation summary.
-        LMI_ASSERT
-            (configurable_settings::instance().use_builtin_calculation_summary()
-            );
+        LMI_ASSERT(c.use_builtin_calculation_summary());
 
         struct verify_builtin_calculation_summary : expect_preferences_dialog_base
         {
@@ -427,6 +429,10 @@ LMI_WX_TEST_CASE(calculation_summary)
         (number_of_custom_columns
         ,custom_columns_info
         );
+
+    c["use_builtin_calculation_summary"] = saved_builtin;
+    c["calculation_summary_columns"    ] = saved_columns;
+    c.save();
 
     ill.close();
 }
