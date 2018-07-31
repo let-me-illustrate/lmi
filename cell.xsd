@@ -808,7 +808,8 @@ subject to premium tax.</xs:documentation>
   </xs:element>
   <xs:element name="IsInforce" type="yes_or_no">
     <xs:annotation>
-      <xs:documentation>* Treat this life as inforce. Default: 'Yes'.</xs:documentation>
+      <xs:documentation>Treat this life as inforce: 'No' if the 'InforceAsOfDate' and
+'EffectiveDate' elements are identical; 'Yes' otherwise.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="IssueAge" type="age_int">

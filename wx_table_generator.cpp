@@ -44,7 +44,7 @@ wx_table_generator::wx_table_generator
     ,char_height_      (dc_.GetCharHeight())
     // Arbitrarily use 1.333 line spacing.
     ,row_height_       ((4 * char_height_ + 2) / 3)
-    ,column_margin_    (dc_.GetTextExtent("M").x)
+    ,one_em_           (dc_.GetTextExtent("M").x)
     ,max_header_lines_ (1)
     ,draw_separators_  (true)
     ,use_bold_headers_ (true)
@@ -53,7 +53,7 @@ wx_table_generator::wx_table_generator
         {
         enroll_column(i);
         }
-    set_column_widths(total_width_, column_margin_, all_columns_);
+    set_column_widths(total_width_, one_em_, all_columns_);
 
     // Set a pen with zero width to make grid lines thin,
     // and round cap style so that they combine seamlessly.
@@ -74,7 +74,7 @@ wx_table_generator::wx_table_generator
     ,total_width_      (total_width)
     ,char_height_      (dc_.GetCharHeight())
     ,row_height_       (char_height_)
-    ,column_margin_    (dc_.GetTextExtent("M").x)
+    ,one_em_           (dc_.GetTextExtent("M").x)
     ,max_header_lines_ (1)
     ,draw_separators_  (false)
     ,use_bold_headers_ (false)
@@ -83,7 +83,7 @@ wx_table_generator::wx_table_generator
         {
         enroll_column(i);
         }
-    set_column_widths(total_width_, column_margin_, all_columns_);
+    set_column_widths(total_width_, one_em_, all_columns_);
 
     dc_.SetPen(illustration_rule_color);
 }
@@ -449,12 +449,7 @@ void wx_table_generator::do_output_single_row
                 {
                 case oe_left:
                     {
-                    // PDF !! 'x_text += 0;' here would parallel the other
-                    // cases. The implicit assumption here is that alignment
-                    // is oe_left iff elasticity is oe_elastic; col_width()
-                    // has been augmented by twice the margin for oe_inelastic
-                    // columns only, and this adjustment compensates for that.
-                    x_text += column_margin();
+                    x_text += 0;
                     }
                     break;
                 case oe_center:
@@ -469,24 +464,19 @@ void wx_table_generator::do_output_single_row
                     break;
                 }
 
-            if(ci.is_clipped())
+            if(ci.is_clipped() && 0 <= ci.col_width() - one_em_)
                 {
-                // It is assumed that the width of the "Participant" column
-                // on a group quote was initially zero, and then was expanded
-                // by some positive amount, and then incremented by one times
-                // the margin (not two times the margin as for other columns,
-                // because this column has only a left-hand unlateral margin).
-                // Make sure that any failure in this chain of assumptions
-                // doesn't result in (undefined) negative clipping.
-                LMI_ASSERT(0 <= ci.col_width() - column_margin());
+                // Write clipped text with bilateral column margins:
+                //  - aligned left, indented 1em for a left margin; and
+                //  - clipped on the right to width minus a 1em margin.
                 wxDCClipper clip
                     (dc_
                     ,wxRect
                         {wxPoint{pos_x, y_top}
-                        ,wxSize{ci.col_width() - column_margin(), row_height_}
+                        ,wxSize{ci.col_width() - one_em_, row_height_}
                         }
                     );
-                dc_.DrawText(s, x_text, y_text);
+                dc_.DrawText(s, x_text + one_em_, y_text);
                 }
             else
                 {
@@ -549,11 +539,6 @@ wxFont wx_table_generator::header_font() const
 wxDC const& wx_table_generator::dc() const
 {
     return dc_;
-}
-
-int wx_table_generator::column_margin() const
-{
-    return column_margin_;
 }
 
 std::vector<table_column_info> const& wx_table_generator::all_columns() const

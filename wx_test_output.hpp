@@ -57,10 +57,20 @@ class output_file_existence_checker
         return fs::exists(path_);
         }
 
-  private:
+    std::string const& path() const
+        {
+        return path_.string();
+        }
+
+    // Objects of this class can't be copied, because of side effects of its
+    // dtor, but can be moved.
+    output_file_existence_checker(output_file_existence_checker&&) = default;
+    output_file_existence_checker& operator=(output_file_existence_checker&&) = default;
+
     output_file_existence_checker(output_file_existence_checker const&) = delete;
     output_file_existence_checker& operator=(output_file_existence_checker const&) = delete;
 
+  private:
     fs::path path_;
 };
 

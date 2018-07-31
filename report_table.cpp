@@ -42,13 +42,13 @@
 
 void set_column_widths
     (int                             total_width
-    ,int                           & column_margin
+    ,int                             column_margin
     ,std::vector<table_column_info>& all_columns
     )
 //
-// const    total_width    max table width (page width - page margins)
-// mutable  column_margin  spacing on both left and right of column
-// mutable  all_columns    std::vector<table_column_info>
+// total_width    max table width (page width - page margins)
+// column_margin  spacing on both left and right of column
+// all_columns    std::vector<table_column_info>
 //   table_column_info::col_width_ is the only member changed
 {
     // PDF !! Unconditionally add bilateral margins even though they

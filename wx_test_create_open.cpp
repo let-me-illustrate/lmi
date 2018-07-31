@@ -22,12 +22,13 @@
 #include "pchfile_wx.hpp"
 
 #include "assert_lmi.hpp"
+#include "configurable_settings.hpp"
 #include "mvc_controller.hpp"
 #include "version.hpp"
 #include "wx_test_case.hpp"
+#include "wx_test_output.hpp"
 
 #include <wx/dialog.h>
-#include <wx/scopeguard.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
@@ -52,6 +53,8 @@ void do_test_create_open
     wxString const file = test.get_test_file_path_for(basename);
     LMI_ASSERT(!wxFileExists(file));
 
+    output_file_existence_checker output_file{file.ToStdString()};
+
     wxUIActionSimulator z;
     z.Char('n', wxMOD_CONTROL); // new file
     z.Char(key               ); // choose document type
@@ -72,8 +75,7 @@ void do_test_create_open
         );
     wxYield();
 
-    LMI_ASSERT(wxFileExists(file));
-    wxON_BLOCK_EXIT1(wxRemoveFile, file);
+    LMI_ASSERT(output_file.exists());
 
     z.Char('l', wxMOD_CONTROL); // close document
     wxYield();
@@ -144,12 +146,48 @@ LMI_WX_TEST_CASE(create_open_strata)
 
 LMI_WX_TEST_CASE(create_open_mec)
 {
+    auto const& tsv_ext = configurable_settings::instance().spreadsheet_file_extension();
+    std::string const xml_ext = ".xml"; // define for consistency with tsv_ext
+
+    // The generic function only tests for testfile.mec existence and only
+    // removes it at the end, but saving a MEC document creates 2 other files
+    // with the extra suffixes that we deal with here. Notice that these files
+    // are created in the current directory and not in the directory normally
+    // used for the test files.
+    //
+    // Additionally, just creating, without saving, a MEC document currently
+    // creates 2 other files as a side-effect, so deal with them here as well.
+    auto const number_of_extra_files = 4;
+    output_file_existence_checker extra_output_files[number_of_extra_files] =
+        {output_file_existence_checker{"testfile.mec" + tsv_ext}
+        ,output_file_existence_checker{"testfile.mec" + xml_ext}
+        ,output_file_existence_checker{"unnamed.mec" + tsv_ext}
+        ,output_file_existence_checker{"unnamed.mec" + xml_ext}
+        };
+
     do_test_create_open(*this, 'm', "testfile.mec", true);
+
+    for(int n = 0; n < number_of_extra_files; ++n)
+        {
+        LMI_ASSERT_WITH_MSG
+            (extra_output_files[n].exists()
+            ,"file \"" << extra_output_files[n].path() << "\""
+            );
+        }
 }
 
 LMI_WX_TEST_CASE(create_open_gpt)
 {
+    // Similarly to MEC files above, creating and saving GPT documents creates
+    // extra files in the current directory, but here there are only 2 of them,
+    // so don't bother with using an array.
+    output_file_existence_checker output_unnamed_gpt_xml{"unnamed.gpt.xml"};
+    output_file_existence_checker output_testfile_gpt_xml{"testfile.gpt.xml"};
+
     do_test_create_open(*this, 'g', "testfile.gpt", true);
+
+    LMI_ASSERT(output_unnamed_gpt_xml.exists());
+    LMI_ASSERT(output_testfile_gpt_xml.exists());
 }
 
 LMI_WX_TEST_CASE(create_open_text)
