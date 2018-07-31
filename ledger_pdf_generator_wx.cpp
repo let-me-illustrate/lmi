@@ -1526,20 +1526,43 @@ TAG_HANDLER_END(numeric_summary_table)
 TAG_HANDLER_BEGIN(unbreakable_paragraph, "P")
     TAG_HANDLER_PROC(tag)
     {
-        m_WParser->CloseContainer();
-        auto const container = m_WParser->OpenContainer();
+        // Note: this code mimics what TAG_HANDLER_PROC()s for "div" and "p"
+        // tags in wxHTML itself do by copying their code because there is
+        // unfortunately no way to delegate to them currently.
+
+        // As usual, reuse the current container if it's empty.
+        auto container = m_WParser->GetContainer();
+        if (container->GetFirstChild())
+            {
+            // It isn't, we need to open a new one.
+            m_WParser->CloseContainer();
+            container = m_WParser->OpenContainer();
+            }
 
         // This is the reason for this handler existence: mark the container
         // used for the paragraph contents as being unbreakable.
         container->SetCanLiveOnPagebreak(false);
+
+        // Use a nested container so that nested tags that close and reopen a
+        // container again close this one, but still remain inside the outer
+        // "unbreakable" container.
+        container = m_WParser->OpenContainer();
 
         // This code reproduces what the standard "P" handler does.
         // Unfortunately there is no way to just delegate to it from here.
         container->SetIndent(m_WParser->GetCharHeight(), wxHTML_INDENT_TOP);
         container->SetAlign(tag);
 
-        // Don't stop parsing, continue with the tag contents.
-        return false;
+        ParseInner(tag);
+
+        // Close both the inner and the outer containers and reopen the
+        // new current one.
+        m_WParser->CloseContainer();
+        m_WParser->CloseContainer();
+        m_WParser->OpenContainer();
+
+        // Return true to indicate that we've parsed the entire tag contents.
+        return true;
     }
 TAG_HANDLER_END(unbreakable_paragraph)
 
