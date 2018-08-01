@@ -244,14 +244,16 @@ void wx_table_generator::output_highlighted_cell
 
 /// Render a single row with the given values at the given position.
 ///
-/// The cardinality of the 'values' argument must equal the total
-/// number of columns passed to enroll_column().
+/// Asserted precondition: the cardinality of the 'values' argument
+/// equals the total number of columns passed to enroll_column(),
+/// i.e., the cardinality of all_columns().
 
 void wx_table_generator::output_row
     (int&                           pos_y
     ,std::vector<std::string> const values
     )
 {
+    LMI_ASSERT(values.size() == all_columns().size());
     int x = left_margin_;
     do_output_single_row(x, pos_y, values);
 
