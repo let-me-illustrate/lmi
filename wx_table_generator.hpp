@@ -123,7 +123,10 @@ class wx_table_generator
     int row_height() const;
     int separator_line_height() const;
 
-    wxRect text_rect(std::size_t column, int y) const;
+    // Used only by group_quote_pdf_generator_wx::output_aggregate_values(),
+    // in a context where something like output_highlighted_cell() should
+    // probably be used instead. PDF !! revisit this later
+    wxRect external_text_rect(std::size_t column, int y) const;
 
   private:
     void enroll_column(column_parameters const&);
@@ -139,6 +142,7 @@ class wx_table_generator
 
     int cell_pos_x(std::size_t column) const;
 
+    wxRect text_rect(std::size_t column, int y) const;
     wxRect cell_rect(std::size_t column, int y) const;
 
     wxFont header_font() const;

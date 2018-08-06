@@ -328,6 +328,11 @@ int wx_table_generator::separator_line_height() const
     return row_height() / 2;
 }
 
+wxRect wx_table_generator::external_text_rect(std::size_t column, int y) const
+{
+    return text_rect(column, y);
+}
+
 /// Rectangle corresponding to a cell's text contents.
 ///
 /// This is narrower than the full cell rectangle to leave a small

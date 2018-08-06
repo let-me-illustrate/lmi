@@ -1038,9 +1038,9 @@ void group_quote_pdf_generator_wx::output_document_header
 }
 
 void group_quote_pdf_generator_wx::output_aggregate_values
-    (pdf_writer_wx& pdf_writer
+    (pdf_writer_wx     & pdf_writer
     ,wx_table_generator& table_gen
-    ,int* pos_y
+    ,int               * pos_y // PDF !! Use reference, not pointer.
     )
 {
     int& y = *pos_y;
@@ -1058,10 +1058,12 @@ void group_quote_pdf_generator_wx::output_aggregate_values
     auto& pdf_dc = pdf_writer.dc();
 
     // Render "Census" in bold.
+    // PDF !! Instead, consider using output_highlighted_cell(), with extra
+    // arguments to specify font, brush, and pen.
     wxDCFontChanger set_bold_font(pdf_dc, pdf_dc.GetFont().Bold());
     pdf_dc.DrawLabel
         ("Census"
-        ,table_gen.text_rect(e_col_name, y)
+        ,table_gen.external_text_rect(e_col_name, y)
         ,wxALIGN_LEFT
         );
 
@@ -1073,13 +1075,13 @@ void group_quote_pdf_generator_wx::output_aggregate_values
     LMI_ASSERT(0 < e_first_totalled_column);
     pdf_dc.DrawLabel
         ("Totals:"
-        ,table_gen.text_rect(e_first_totalled_column - 1, y)
+        ,table_gen.external_text_rect(e_first_totalled_column - 1, y)
         ,wxALIGN_RIGHT
         );
 
     pdf_dc.DrawLabel
         ("Average Cost per $1000:"
-        ,table_gen.text_rect(e_first_totalled_column - 1, y_next)
+        ,table_gen.external_text_rect(e_first_totalled_column - 1, y_next)
         ,wxALIGN_RIGHT
         );
 
