@@ -25,6 +25,7 @@
 
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"               // count_newlines(), split_into_lines()
+#include "ssize_lmi.hpp"
 
 #include <algorithm>                    // max()
 
@@ -338,9 +339,9 @@ wxRect wx_table_generator::external_text_rect(std::size_t column, int y) const
 /// This is narrower than the full cell rectangle to leave a small
 /// margin. Its vertical position is adjusted to center the text vertically.
 
-wxRect wx_table_generator::text_rect(std::size_t column, int y) const
+wxRect wx_table_generator::text_rect(int column, int y) const
 {
-    LMI_ASSERT(column <= all_columns().size());
+    LMI_ASSERT(column <= lmi::ssize(all_columns()));
     wxRect z = cell_rect(column, y).Deflate(dc().GetCharWidth(), 0);
     z.Offset(0, (row_height_ - char_height_)/2);
     return z;
@@ -515,11 +516,11 @@ void wx_table_generator::do_output_horz_separator(int x1, int x2, int y)
     dc_.DrawLine(x1, y, x2, y);
 }
 
-int wx_table_generator::cell_pos_x(std::size_t column) const
+int wx_table_generator::cell_pos_x(int column) const
 {
-    LMI_ASSERT(column <= all_columns().size());
+    LMI_ASSERT(column <= lmi::ssize(all_columns()));
     int x = left_margin_;
-    for(std::size_t i = 0; i < column; ++i)
+    for(int i = 0; i < column; ++i)
         {
         x += all_columns().at(i).col_width();
         }
@@ -529,9 +530,9 @@ int wx_table_generator::cell_pos_x(std::size_t column) const
 
 /// Rectangle corresponding to a cell.
 
-wxRect wx_table_generator::cell_rect(std::size_t column, int y) const
+wxRect wx_table_generator::cell_rect(int column, int y) const
 {
-    LMI_ASSERT(column < all_columns().size());
+    LMI_ASSERT(column < lmi::ssize(all_columns()));
     return wxRect
         (cell_pos_x(column)
         ,y

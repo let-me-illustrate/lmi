@@ -140,10 +140,10 @@ class wx_table_generator
     void do_output_vert_separator(int x , int y1, int y2);
     void do_output_horz_separator(int x1, int x2, int y );
 
-    int cell_pos_x(std::size_t column) const;
+    int cell_pos_x(int column) const;
 
-    wxRect text_rect(std::size_t column, int y) const;
-    wxRect cell_rect(std::size_t column, int y) const;
+    wxRect text_rect(int column, int y) const;
+    wxRect cell_rect(int column, int y) const;
 
     wxFont header_font() const;
 
