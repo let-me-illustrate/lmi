@@ -240,7 +240,7 @@ void wx_table_generator::output_highlighted_cell
 
     dc_.DrawLabel(value, text_rect(column, y), wxALIGN_CENTER_HORIZONTAL);
 
-    output_vert_separator(column, y);
+    do_output_vert_separator(cell_pos_x(column), y, y + row_height_);
 }
 
 /// Render a single row with the given values at the given position.
