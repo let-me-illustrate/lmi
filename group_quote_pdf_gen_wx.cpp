@@ -686,7 +686,6 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
 
     std::vector<column_parameters> vc;
     std::vector<int> indices;
-    int visible_column_count = 0;
     for(int i = 0; i < e_col_max; ++i)
         {
         column_definition const& cd = column_definitions[i];
@@ -737,17 +736,16 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
                 break;
             }
 
-        indices.push_back(visible_column_count);
+        indices.push_back(lmi::ssize(vc));
         cd.visibility_ = visibility;
         if(oe_shown == visibility)
             {
-            ++visible_column_count;
+            vc.push_back({header, cd.widest_text_, alignment, visibility, elasticity});
             }
-        vc.push_back({header, cd.widest_text_, alignment, visibility, elasticity});
         }
     // Add a one-past-the-end index equal to the last value, because
     // some member functions of class wx_table_generator expect it.
-    indices.push_back(visible_column_count);
+    indices.push_back(lmi::ssize(vc));
 
     wx_table_generator table_gen
         (group_quote_style_tag{}
@@ -792,7 +790,17 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
 
     for(auto const& i : rows_)
         {
-        table_gen.output_row(pos_y, i.output_values);
+        LMI_ASSERT(lmi::ssize(i.output_values) == lmi::ssize(column_definitions));
+        std::vector<std::string> visible_values;
+        for(int j = 0; j < e_col_max; ++j)
+            {
+            if(oe_shown == column_definitions[j].visibility_)
+                {
+                visible_values.push_back(i.output_values[j]);
+                }
+            }
+
+        table_gen.output_row(pos_y, visible_values);
 
         if(last_row_y <= pos_y)
             {
@@ -1101,6 +1109,11 @@ void group_quote_pdf_generator_wx::output_aggregate_values
 
     for(int i = e_first_totalled_column; i < e_col_max; ++i)
         {
+        if(oe_shown != column_definitions[i].visibility_)
+            {
+            continue;
+            }
+
         int const decimals =
             ((e_col_basic_face_amount           == i) ? 0
             :(e_col_basic_premium               == i) ? 2

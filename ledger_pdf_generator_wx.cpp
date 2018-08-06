@@ -38,6 +38,7 @@
 #include "miscellany.hpp"               // lmi_tolower(), page_count()
 #include "oecumenic_enumerations.hpp"
 #include "pdf_writer_wx.hpp"
+#include "ssize_lmi.hpp"
 #include "wx_table_generator.hpp"
 
 #include <wx/pdfdc.h>
@@ -362,26 +363,24 @@ class using_illustration_table
         std::vector<column_parameters> vc;
         std::vector<int> indices;
         int column = 0;
-        int visible_column_count = 0;
         for(auto const& i : get_table_columns())
             {
-            indices.push_back(visible_column_count);
+            indices.push_back(lmi::ssize(vc));
             if(!should_hide_column(ledger, column))
                 {
-                ++visible_column_count;
+                vc.push_back
+                    ({i.header
+                     ,i.widest_text
+                     ,oe_right
+                     ,should_hide_column(ledger, column) ? oe_hidden : oe_shown
+                     ,oe_inelastic
+                    });
                 }
-            vc.push_back
-                ({i.header
-                 ,i.widest_text
-                 ,oe_right
-                 ,should_hide_column(ledger, column) ? oe_hidden : oe_shown
-                 ,oe_inelastic
-                });
             ++column;
             }
         // Add a one-past-the-end index equal to the last value, because
         // some member functions of class wx_table_generator expect it.
-        indices.push_back(visible_column_count);
+        indices.push_back(lmi::ssize(vc));
 
         // Arguably, should_hide_column() should return an enumerator--see:
         //   https://lists.nongnu.org/archive/html/lmi/2018-05/msg00026.html
@@ -1505,7 +1504,17 @@ class numeric_summary_table_cell
                             ;
                         }
 
-                    table_gen.output_row(pos_y, output_values);
+                    std::vector<std::string> visible_values;
+                    // PDF !! Subsume this into foregoing for-loop.
+                    for(int j = 0; j < lmi::ssize(columns); ++j)
+                        {
+                        if(oe_shown == columns[j].visibility)
+                            {
+                            visible_values.push_back(output_values[j]);
+                            }
+                        }
+
+                    table_gen.output_row(pos_y, visible_values);
                     break;
                 }
             }
@@ -1635,7 +1644,17 @@ class page_with_tabular_report
                         ;
                     }
 
-                table_gen.output_row(pos_y, output_values);
+                std::vector<std::string> visible_values;
+                // PDF !! Subsume this into foregoing for-loop.
+                for(int j = 0; j < lmi::ssize(columns); ++j)
+                    {
+                    if(oe_shown == columns[j].visibility)
+                        {
+                        visible_values.push_back(output_values[j]);
+                        }
+                    }
+
+                table_gen.output_row(pos_y, visible_values);
 
                 ++year;
                 if(year == year_max)

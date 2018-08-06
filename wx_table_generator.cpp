@@ -188,12 +188,15 @@ void wx_table_generator::output_headers
 
 void wx_table_generator::output_super_header
         (std::string const&           header
-        ,std::size_t                  begin_column
-        ,std::size_t                  end_column
+        ,std::size_t                  a_begin_column
+        ,std::size_t                  a_end_column
         ,int&                         pos_y
         ,oenum_render_or_only_measure output_mode
         )
 {
+    int begin_column = indices_[a_begin_column];
+    int end_column   = indices_[a_end_column];
+
     std::vector<std::string> const lines(split_into_lines(header));
     int const anticipated_pos_y = pos_y + row_height() * lines.size();
 
@@ -226,12 +229,14 @@ void wx_table_generator::output_super_header
 /// Shade the background of a single cell; center the given contents.
 
 void wx_table_generator::output_highlighted_cell
-    (std::size_t        column
+    (std::size_t        a_column
     ,int                y
     ,std::string const& value
     )
 {
-    LMI_ASSERT(column < all_columns().size());
+    int column = indices_[a_column];
+
+    LMI_ASSERT(column < lmi::ssize(all_columns()));
     if(all_columns().at(column).is_hidden())
         {
         return;
@@ -275,11 +280,13 @@ void wx_table_generator::output_row
 /// separator after the last column.
 
 void wx_table_generator::output_vert_separator
-    (std::size_t before_column
+    (std::size_t a_before_column
     ,int         y
     )
 {
-    LMI_ASSERT(before_column <= all_columns().size());
+    int before_column = indices_[a_before_column];
+
+    LMI_ASSERT(before_column <= lmi::ssize(all_columns()));
 
     do_output_vert_separator(cell_pos_x(before_column), y, y + row_height_);
 }
@@ -289,12 +296,15 @@ void wx_table_generator::output_vert_separator
 /// The column range is specified as [begin, end), as is usual in C++.
 
 void wx_table_generator::output_horz_separator
-    (std::size_t                  begin_column
-    ,std::size_t                  end_column
+    (std::size_t                  a_begin_column
+    ,std::size_t                  a_end_column
     ,int                          y
     ,oenum_render_or_only_measure output_mode
     )
 {
+    int begin_column = indices_[a_begin_column];
+    int end_column   = indices_[a_end_column];
+
     switch(output_mode)
         {
         case oe_render:
@@ -304,12 +314,12 @@ void wx_table_generator::output_horz_separator
         }
 
     LMI_ASSERT(begin_column < end_column);
-    LMI_ASSERT(end_column <= all_columns().size());
+    LMI_ASSERT(end_column <= lmi::ssize(all_columns()));
 
     int const x1 = cell_pos_x(begin_column);
 
     int x2 = x1;
-    for(std::size_t i = begin_column; i < end_column; ++i)
+    for(int i = begin_column; i < end_column; ++i)
         {
         x2 += all_columns().at(i).col_width();
         }
@@ -333,8 +343,9 @@ int wx_table_generator::separator_line_height() const
     return row_height() / 2;
 }
 
-wxRect wx_table_generator::external_text_rect(std::size_t column, int y) const
+wxRect wx_table_generator::external_text_rect(std::size_t a_column, int y) const
 {
+    int column = indices_[a_column];
     return text_rect(column, y);
 }
 
