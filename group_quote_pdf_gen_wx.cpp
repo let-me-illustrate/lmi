@@ -36,7 +36,7 @@
 #include "math_functions.hpp"           // outward_quotient()
 #include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg()
 #include "miscellany.hpp"               // split_into_lines()
-#include "oecumenic_enumerations.hpp"   // oenum_format_style
+#include "oecumenic_enumerations.hpp"
 #include "path_utility.hpp"             // fs::path inserter
 #include "pdf_writer_wx.hpp"
 #include "ssize_lmi.hpp"
@@ -239,12 +239,14 @@ enum_group_quote_columns const e_first_totalled_column = e_col_basic_face_amount
 
 struct column_definition
 {
-    char const* header_;
-    char const* widest_text_; // PDF !! Empty string means variable width.
+    char const*              header_;
+    char const*              widest_text_; // PDF !! Empty string means variable width.
+    mutable oenum_visibility visibility_ {oe_shown};
 };
 
 // Headers of premium columns include dynamically-determined payment
 // mode, so they're actually format strings.
+// PDF !! This ought not to be a global variable.
 
 column_definition const column_definitions[] =
     {{"Part#"                          ,            "99999"   } // e_col_number
@@ -733,6 +735,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
                 break;
             }
 
+        cd.visibility_ = visibility;
         vc.push_back({header, cd.widest_text_, alignment, visibility, elasticity});
         }
 

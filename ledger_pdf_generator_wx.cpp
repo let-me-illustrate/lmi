@@ -36,6 +36,7 @@
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "miscellany.hpp"               // lmi_tolower(), page_count()
+#include "oecumenic_enumerations.hpp"
 #include "pdf_writer_wx.hpp"
 #include "wx_table_generator.hpp"
 
@@ -324,9 +325,10 @@ class using_illustration_table
     // Description of a single table column.
     struct illustration_table_column
     {
-        std::string const variable_name;
-        std::string const header;
-        std::string const widest_text;
+        std::string const        variable_name;
+        std::string const        header;
+        std::string const        widest_text;
+        mutable oenum_visibility visibility {oe_shown};
     };
 
     using illustration_table_columns = std::vector<illustration_table_column>;
@@ -1460,6 +1462,12 @@ class numeric_summary_table_cell
                 case oe_render:
                     for(std::size_t j = 0; j < columns.size(); ++j)
                         {
+                        columns[j].visibility =
+                            should_hide_column(ledger, j)
+                            ? oe_hidden
+                            : oe_shown
+                            ;
+
                         std::string const variable_name = columns[j].variable_name;
 
                         // The illustration reg calls for values at certain
@@ -1597,6 +1605,12 @@ class page_with_tabular_report
                 {
                 for(std::size_t j = 0; j < columns.size(); ++j)
                     {
+                    columns[j].visibility =
+                        should_hide_column(ledger, j)
+                        ? oe_hidden
+                        : oe_shown
+                        ;
+
                     std::string const variable_name = columns[j].variable_name;
 
                     // Special hack for the dummy columns used in some reports,
