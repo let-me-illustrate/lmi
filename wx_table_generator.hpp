@@ -74,6 +74,7 @@ class wx_table_generator
     wx_table_generator
         (group_quote_style_tag
         ,std::vector<column_parameters> const& vc
+        ,std::vector<int>               const& indices
         ,wxDC&                                 dc
         ,int                                   left_margin
         ,int                                   total_width
@@ -82,6 +83,7 @@ class wx_table_generator
     wx_table_generator
         (illustration_style_tag
         ,std::vector<column_parameters> const& vc
+        ,std::vector<int>               const& indices
         ,wxDC&                                 dc
         ,int                                   left_margin
         ,int                                   total_width
@@ -151,6 +153,8 @@ class wx_table_generator
     // distinguish access from mutation.
     wxDC const& dc() const;
     std::vector<table_column_info> const& all_columns() const;
+
+    std::vector<int> const indices_;
 
     wxDC& dc_;
 

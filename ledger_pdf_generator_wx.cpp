@@ -360,17 +360,29 @@ class using_illustration_table
         ) const
     {
         std::vector<column_parameters> vc;
+        std::vector<int> indices;
         int column = 0;
+        int visible_column_count = 0;
         for(auto const& i : get_table_columns())
             {
+            indices.push_back(visible_column_count);
+            if(!should_hide_column(ledger, column))
+                {
+                ++visible_column_count;
+                }
             vc.push_back
                 ({i.header
                  ,i.widest_text
                  ,oe_right
-                 ,should_hide_column(ledger, column++) ? oe_hidden : oe_shown
+                 ,should_hide_column(ledger, column) ? oe_hidden : oe_shown
                  ,oe_inelastic
                 });
+            ++column;
             }
+        // Add a one-past-the-end index equal to the last value, because
+        // some member functions of class wx_table_generator expect it.
+        indices.push_back(visible_column_count);
+
         // Arguably, should_hide_column() should return an enumerator--see:
         //   https://lists.nongnu.org/archive/html/lmi/2018-05/msg00026.html
 
@@ -384,6 +396,7 @@ class using_illustration_table
         return wx_table_generator
             (illustration_style_tag{}
             ,vc
+            ,indices
             ,writer.dc()
             ,writer.get_horz_margin()
             ,writer.get_page_width()

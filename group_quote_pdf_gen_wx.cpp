@@ -685,6 +685,8 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
     bool const has_addl_premium = totals_.total(e_col_additional_premium      ) != 0.0;
 
     std::vector<column_parameters> vc;
+    std::vector<int> indices;
+    int visible_column_count = 0;
     for(int i = 0; i < e_col_max; ++i)
         {
         column_definition const& cd = column_definitions[i];
@@ -735,13 +737,22 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
                 break;
             }
 
+        indices.push_back(visible_column_count);
         cd.visibility_ = visibility;
+        if(oe_shown == visibility)
+            {
+            ++visible_column_count;
+            }
         vc.push_back({header, cd.widest_text_, alignment, visibility, elasticity});
         }
+    // Add a one-past-the-end index equal to the last value, because
+    // some member functions of class wx_table_generator expect it.
+    indices.push_back(visible_column_count);
 
     wx_table_generator table_gen
         (group_quote_style_tag{}
         ,vc
+        ,indices
         ,pdf_writer.dc()
         ,pdf_writer.get_horz_margin()
         ,pdf_writer.get_page_width()
