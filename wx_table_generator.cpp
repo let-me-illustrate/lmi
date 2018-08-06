@@ -226,6 +226,7 @@ void wx_table_generator::output_highlighted_cell
     ,std::string const& value
     )
 {
+    LMI_ASSERT(column < all_columns().size());
     if(all_columns().at(column).is_hidden())
         {
         return;
@@ -334,6 +335,7 @@ int wx_table_generator::separator_line_height() const
 
 wxRect wx_table_generator::text_rect(std::size_t column, int y) const
 {
+    LMI_ASSERT(column <= all_columns().size());
     wxRect z = cell_rect(column, y).Deflate(dc().GetCharWidth(), 0);
     z.Offset(0, (row_height_ - char_height_)/2);
     return z;
@@ -510,6 +512,7 @@ void wx_table_generator::do_output_horz_separator(int x1, int x2, int y)
 
 int wx_table_generator::cell_pos_x(std::size_t column) const
 {
+    LMI_ASSERT(column <= all_columns().size());
     int x = left_margin_;
     for(std::size_t i = 0; i < column; ++i)
         {
@@ -523,6 +526,7 @@ int wx_table_generator::cell_pos_x(std::size_t column) const
 
 wxRect wx_table_generator::cell_rect(std::size_t column, int y) const
 {
+    LMI_ASSERT(column < all_columns().size());
     return wxRect
         (cell_pos_x(column)
         ,y
