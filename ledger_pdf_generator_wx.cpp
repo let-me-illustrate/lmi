@@ -1434,7 +1434,6 @@ class numeric_summary_table_cell
 
         // And now the table values themselves.
         auto const& columns = get_table_columns();
-        std::vector<std::string> output_values(columns.size());
 
         auto const& invar = ledger.GetLedgerInvariant();
         auto const& interpolate_html = pdf_context_for_html_output.interpolate_html();
@@ -1488,7 +1487,7 @@ class numeric_summary_table_cell
 
                         // Special hack for the dummy columns whose value is always
                         // empty as it's used only as separator.
-                        output_values[j] = variable_name.empty()
+                        std::string output_value = variable_name.empty()
                             ? std::string{}
                             : interpolate_html.evaluate(variable_name, year - 1)
                             ;
@@ -1502,13 +1501,13 @@ class numeric_summary_table_cell
                                 {
                                 std::ostringstream oss;
                                 oss << "Age " << age_last;
-                                output_values[j] = oss.str();
+                                output_value = oss.str();
                                 }
                             }
 
                         if(oe_shown == columns[j].visibility)
                             {
-                            visible_values.push_back(output_values[j]);
+                            visible_values.push_back(output_value);
                             }
                         }
 
@@ -1609,7 +1608,6 @@ class page_with_tabular_report
         auto const row_height = table_gen.row_height();
         auto const page_bottom = get_footer_top();
         auto const rows_per_group = wx_table_generator::rows_per_group;
-        std::vector<std::string> output_values(columns.size());
 
         // The table may need several pages, loop over them.
         int const year_max = ledger.GetMaxLength();
@@ -1638,14 +1636,14 @@ class page_with_tabular_report
                     // Special hack for the dummy columns used in some reports,
                     // whose value is always empty as it's used only as
                     // separator.
-                    output_values[j] = variable_name.empty()
+                    std::string output_value = variable_name.empty()
                         ? std::string{}
                         : interpolate_html.evaluate(variable_name, year)
                         ;
 
                     if(oe_shown == columns[j].visibility)
                         {
-                        visible_values.push_back(output_values[j]);
+                        visible_values.push_back(output_value);
                         }
                     }
 
