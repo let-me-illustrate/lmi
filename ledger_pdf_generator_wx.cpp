@@ -1468,11 +1468,15 @@ class numeric_summary_table_cell
             switch(output_mode)
                 {
                 case oe_only_measure:
+                    {
                     pos_y += table_gen.row_height();
+                    }
                     break;
 
                 case oe_render:
-                    for(std::size_t j = 0; j < columns.size(); ++j)
+                    {
+                    std::vector<std::string> visible_values;
+                    for(int j = 0; j < lmi::ssize(columns); ++j)
                         {
                         columns[j].visibility =
                             should_hide_column(ledger, j)
@@ -1501,12 +1505,7 @@ class numeric_summary_table_cell
                                 output_values[j] = oss.str();
                                 }
                             }
-                        }
 
-                    std::vector<std::string> visible_values;
-                    // PDF !! Subsume this into foregoing for-loop.
-                    for(int j = 0; j < lmi::ssize(columns); ++j)
-                        {
                         if(oe_shown == columns[j].visibility)
                             {
                             visible_values.push_back(output_values[j]);
@@ -1514,6 +1513,7 @@ class numeric_summary_table_cell
                         }
 
                     table_gen.output_row(pos_y, visible_values);
+                    }
                     break;
                 }
             }
@@ -1624,7 +1624,8 @@ class page_with_tabular_report
 
             for(;;)
                 {
-                for(std::size_t j = 0; j < columns.size(); ++j)
+                std::vector<std::string> visible_values;
+                for(int j = 0; j < lmi::ssize(columns); ++j)
                     {
                     columns[j].visibility =
                         should_hide_column(ledger, j)
@@ -1641,12 +1642,7 @@ class page_with_tabular_report
                         ? std::string{}
                         : interpolate_html.evaluate(variable_name, year)
                         ;
-                    }
 
-                std::vector<std::string> visible_values;
-                // PDF !! Subsume this into foregoing for-loop.
-                for(int j = 0; j < lmi::ssize(columns); ++j)
-                    {
                     if(oe_shown == columns[j].visibility)
                         {
                         visible_values.push_back(output_values[j]);
