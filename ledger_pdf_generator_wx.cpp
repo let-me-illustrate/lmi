@@ -1482,6 +1482,13 @@ class numeric_summary_table_cell
 
                         std::string const variable_name = columns[j].variable_name;
 
+                        // Special hack for the dummy columns whose value is always
+                        // empty as it's used only as separator.
+                        output_values[j] = variable_name.empty()
+                            ? std::string{}
+                            : interpolate_html.evaluate(variable_name, year - 1)
+                            ;
+
                         // The illustration reg calls for values at certain
                         // durations, and then at one summary age, so change
                         // beginning of last row from a duration to an age.
@@ -1492,16 +1499,8 @@ class numeric_summary_table_cell
                                 std::ostringstream oss;
                                 oss << "Age " << age_last;
                                 output_values[j] = oss.str();
-                                continue;
                                 }
                             }
-
-                        // Special hack for the dummy columns whose value is always
-                        // empty as it's used only as separator.
-                        output_values[j] = variable_name.empty()
-                            ? std::string{}
-                            : interpolate_html.evaluate(variable_name, year - 1)
-                            ;
                         }
 
                     std::vector<std::string> visible_values;
