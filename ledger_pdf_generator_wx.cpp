@@ -1477,29 +1477,29 @@ class numeric_summary_table_cell
                             : oe_shown
                             ;
 
-                        std::string output_value;
-                        if(is_last_row && column_policy_year == j)
-                            {
-                            // Other rows are for given durations, but the
-                            // last row is for a given age (typically 70).
-                            std::ostringstream oss;
-                            oss << "Age " << age_last;
-                            output_value = oss.str();
-                            }
-                        else if(columns[j].variable_name.empty())
-                            {
-                            ; // Separator column: use empty string.
-                            }
-                        else
-                            {
-                            output_value = interpolate_html.evaluate
-                                (columns[j].variable_name
-                                ,year - 1
-                                );
-                            }
-
                         if(oe_shown == columns[j].visibility)
                             {
+                            std::string output_value;
+                            if(is_last_row && column_policy_year == j)
+                                {
+                                // Other rows are for given durations, but the
+                                // last row is for a given age (typically 70).
+                                std::ostringstream oss;
+                                oss << "Age " << age_last;
+                                output_value = oss.str();
+                                }
+                            else if(columns[j].variable_name.empty())
+                                {
+                                ; // Separator column: use empty string.
+                                }
+                            else
+                                {
+                                output_value = interpolate_html.evaluate
+                                    (columns[j].variable_name
+                                    ,year - 1
+                                    );
+                                }
+
                             visible_values.push_back(output_value);
                             }
                         }
@@ -1624,21 +1624,21 @@ class page_with_tabular_report
                         : oe_shown
                         ;
 
-                    std::string output_value;
-                    if(columns[j].variable_name.empty())
-                        {
-                        ; // Separator column: use empty string.
-                        }
-                    else
-                        {
-                        output_value = interpolate_html.evaluate
-                            (columns[j].variable_name
-                            ,year
-                            );
-                        }
-
                     if(oe_shown == columns[j].visibility)
                         {
+                        std::string output_value;
+                        if(columns[j].variable_name.empty())
+                            {
+                            ; // Separator column: use empty string.
+                            }
+                        else
+                            {
+                            output_value = interpolate_html.evaluate
+                                (columns[j].variable_name
+                                ,year
+                                );
+                            }
+
                         visible_values.push_back(output_value);
                         }
                     }
