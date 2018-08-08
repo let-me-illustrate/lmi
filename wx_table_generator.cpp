@@ -398,6 +398,7 @@ wxRect wx_table_generator::text_rect(int column, int y) const
 void wx_table_generator::enroll_column(column_parameters const& z)
 {
     int width = 0;
+    LMI_ASSERT(oe_shown == z.visibility);
     if(oe_shown == z.visibility)
         {
         wxDCFontChanger header_font_setter(dc_);
