@@ -41,7 +41,6 @@ struct column_parameters
     std::string      const header;
     std::string      const widest_text;
     oenum_h_align    const alignment;
-    oenum_visibility const visibility;
     oenum_elasticity const elasticity;
 };
 

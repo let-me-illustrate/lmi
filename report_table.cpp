@@ -57,28 +57,23 @@ void set_column_widths
     // comment about it above the implementation.
     for(auto& i : all_columns)
         {
-        if(!i.is_hidden() && !i.is_elastic())
+        if(!i.is_elastic())
             {
             i.col_width_ += 2 * column_margin;
             }
         }
 
-    // Number of non-hidden columns.
+    // Number of columns.
     int number_of_columns = 0;
 
-    // Number of non-hidden elastic columns.
+    // Number of elastic columns.
     int number_of_elastic_columns = 0;
 
-    // Total width of all non-hidden inelastic columns.
+    // Total width of all inelastic columns.
     int total_inelastic_width = 0;
 
     for(auto const& i : all_columns)
         {
-        if(i.is_hidden())
-            {
-            continue;
-            }
-
         ++number_of_columns;
 
         if(i.is_elastic())
@@ -148,13 +143,7 @@ void set_column_widths
 
                 for(auto& i : all_columns)
                     {
-                    if(i.is_hidden())
-                        {
-                        continue;
-                        }
-
                     i.col_width_ -= overflow_per_column;
-
                     if(0 < underflow)
                         {
                         ++i.col_width_;
@@ -218,11 +207,6 @@ void set_column_widths
 
         for(auto& i : all_columns)
             {
-            if(i.is_hidden())
-                {
-                continue;
-                }
-
             if(i.is_elastic())
                 {
                 i.col_width_ = width_of_each_elastic_column;

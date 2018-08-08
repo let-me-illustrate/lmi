@@ -55,10 +55,6 @@
 /// arguments, but clipping depends on the elasticity argument. It is
 /// distinguished only because clipping is a distinct layout operation.
 ///
-///  - is_hidden(): Data for every row of all potential columns are
-///    passed into this class; hidden columns are suppressed so that
-///    they don't appear in the output at all.
-///
 ///  - is_elastic(): An elastic column has no innate fixed or preferred
 ///    width. After all inelastic columns have claimed their required
 ///    widths, any remaining width available is prorated among elastic
@@ -76,13 +72,11 @@ class LMI_SO table_column_info
         (std::string      const& header
         ,int                     width
         ,oenum_h_align    const  alignment
-        ,oenum_visibility const  visibility
         ,oenum_elasticity const  elasticity
         )
         :col_header_ (header)
         ,col_width_  (width)
         ,alignment_  (alignment)
-        ,is_hidden_  (oe_hidden  == visibility)
         ,is_elastic_ (oe_elastic == elasticity)
         {
         }
@@ -90,7 +84,6 @@ class LMI_SO table_column_info
     std::string const& col_header() const {return col_header_;}
     int                col_width()  const {return col_width_;}
     oenum_h_align      alignment()  const {return alignment_;}
-    bool               is_hidden()  const {return is_hidden_;}
     bool               is_elastic() const {return is_elastic_;}
     bool               is_clipped() const {return is_elastic();}
 
@@ -107,7 +100,6 @@ class LMI_SO table_column_info
 
   private:
     oenum_h_align const alignment_;
-    bool          const is_hidden_;
     bool          const is_elastic_;
 };
 

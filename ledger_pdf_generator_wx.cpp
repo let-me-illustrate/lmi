@@ -368,13 +368,7 @@ class using_illustration_table
             indices.push_back(lmi::ssize(vc));
             if(!should_hide_column(ledger, column))
                 {
-                vc.push_back
-                    ({i.header
-                     ,i.widest_text
-                     ,oe_right
-                     ,should_hide_column(ledger, column) ? oe_hidden : oe_shown
-                     ,oe_inelastic
-                    });
+                vc.push_back({i.header, i.widest_text, oe_right, oe_inelastic});
                 }
             ++column;
             }

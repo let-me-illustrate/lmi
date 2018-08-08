@@ -62,16 +62,16 @@ void report_table_test::test_group_quote()
     static int const default_margin = 7;
 
     std::vector<table_column_info> v =
-        {{"", 22, oe_center, oe_shown, oe_inelastic}
-        ,{"",  0, oe_left  , oe_shown, oe_elastic  }
-        ,{"", 38, oe_center, oe_shown, oe_inelastic}
-        ,{"", 48, oe_center, oe_shown, oe_inelastic}
-        ,{"", 64, oe_center, oe_shown, oe_inelastic}
-        ,{"", 67, oe_center, oe_shown, oe_inelastic}
-        ,{"", 64, oe_center, oe_shown, oe_inelastic}
-        ,{"", 67, oe_center, oe_shown, oe_inelastic}
-        ,{"", 64, oe_center, oe_shown, oe_inelastic}
-        ,{"", 67, oe_center, oe_shown, oe_inelastic}
+        {{"", 22, oe_center, oe_inelastic}
+        ,{"",  0, oe_left  , oe_elastic  }
+        ,{"", 38, oe_center, oe_inelastic}
+        ,{"", 48, oe_center, oe_inelastic}
+        ,{"", 64, oe_center, oe_inelastic}
+        ,{"", 67, oe_center, oe_inelastic}
+        ,{"", 64, oe_center, oe_inelastic}
+        ,{"", 67, oe_center, oe_inelastic}
+        ,{"", 64, oe_center, oe_inelastic}
+        ,{"", 67, oe_center, oe_inelastic}
         };
 
     set_column_widths(total_width, default_margin, v);
@@ -91,14 +91,14 @@ void report_table_test::test_illustration()
 
     {
     std::vector<table_column_info> v =
-        {{"", 24, oe_right, oe_shown, oe_inelastic}
-        ,{"", 38, oe_right, oe_shown, oe_inelastic}
-        ,{"", 53, oe_right, oe_shown, oe_inelastic}
-        ,{"", 52, oe_right, oe_shown, oe_inelastic}
-        ,{"", 31, oe_right, oe_shown, oe_inelastic}
-        ,{"", 48, oe_right, oe_shown, oe_inelastic}
-        ,{"", 48, oe_right, oe_shown, oe_inelastic}
-        ,{"", 53, oe_right, oe_shown, oe_inelastic}
+        {{"", 24, oe_right, oe_inelastic}
+        ,{"", 38, oe_right, oe_inelastic}
+        ,{"", 53, oe_right, oe_inelastic}
+        ,{"", 52, oe_right, oe_inelastic}
+        ,{"", 31, oe_right, oe_inelastic}
+        ,{"", 48, oe_right, oe_inelastic}
+        ,{"", 48, oe_right, oe_inelastic}
+        ,{"", 53, oe_right, oe_inelastic}
         };
 
     set_column_widths(total_width, default_margin, v);
@@ -113,18 +113,18 @@ void report_table_test::test_illustration()
 
     {
     std::vector<table_column_info> v =
-        {{"", 26, oe_right, oe_shown, oe_inelastic}
-        ,{"", 24, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 32, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
+        {{"", 26, oe_right, oe_inelastic}
+        ,{"", 24, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
+        ,{"", 32, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
         };
 
     set_column_widths(total_width, default_margin, v);
@@ -139,18 +139,18 @@ void report_table_test::test_illustration()
 
     {
     std::vector<table_column_info> v =
-        {{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
-        ,{"", 50, oe_right, oe_shown, oe_inelastic}
+        {{"", 50, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
+        ,{"", 50, oe_right, oe_inelastic}
         };
 
 std::cout << "[Expect a multiline..." << std::endl;

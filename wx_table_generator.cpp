@@ -138,16 +138,10 @@ void wx_table_generator::output_headers
     std::vector<std::string> headers_by_line(max_header_lines_ * number_of_columns);
     for(std::size_t i = 0; i < number_of_columns; ++i)
         {
-        table_column_info const& ci = all_columns().at(i);
-        if(ci.is_hidden())
-            {
-            continue;
-            }
-
-        std::vector<std::string> const lines(split_into_lines(ci.col_header()));
-
         // Fill the elements from the bottom line to the top one, so that a
         // single line header is shown on the last line.
+        table_column_info const& ci = all_columns().at(i);
+        std::vector<std::string> const lines(split_into_lines(ci.col_header()));
         std::size_t const first_line = max_header_lines_ - lines.size();
         for(std::size_t j = 0; j < lines.size(); ++j)
             {
@@ -235,12 +229,7 @@ void wx_table_generator::output_highlighted_cell
     )
 {
     int column = indices_[a_column];
-
     LMI_ASSERT(column < lmi::ssize(all_columns()));
-    if(all_columns().at(column).is_hidden())
-        {
-        return;
-        }
 
     {
     wxDCPenChanger set_transparent_pen(dc_, *wxTRANSPARENT_PEN);
@@ -371,26 +360,10 @@ wxRect wx_table_generator::text_rect(int column, int y) const
 ///
 /// Column headers may be multiline strings.
 ///
-/// All data for every row and every potential column are passed into
-/// this class, even for "hidden" columns that are to be suppressed so
-/// that they don't appear in the output at all. This approach trades
-/// extra complexity here for a uniform data representation elsewhere.
-/// PDF !! Instead of retaining hidden columns, and explicitly skipping
-/// them here and repeatedly later (and also in set_column_widths()),
-/// consider removing them from the vector.
-///
 /// Postconditions:
 /// - An elastic column's width is initialized to zero. (If there's
 ///   enough room to display it, set_column_widths() resets its width
 ///   appropriately.)
-/// - A hidden column's width is initialized to zero--necessarily,
-///   because other member functions, e.g.:
-///     output_horz_separator()
-///     cell_pos_x()
-///   calculate total width by accumulating the widths of all columns,
-///   whether hidden or not. PDF !! In those instances, hidden columns
-///   are skipped implicitly rather than explicitly; this is a further
-///   argument against trafficking in hidden columns.
 ///
 /// Design alternative: this could be written as a nonmember function,
 /// by passing the DC and the header font as arguments.
@@ -398,46 +371,43 @@ wxRect wx_table_generator::text_rect(int column, int y) const
 void wx_table_generator::enroll_column(column_parameters const& z)
 {
     int width = 0;
-    LMI_ASSERT(oe_shown == z.visibility);
-    if(oe_shown == z.visibility)
-        {
-        wxDCFontChanger header_font_setter(dc_);
-        if(use_bold_headers_)
-            {
-            header_font_setter.Set(header_font());
-            }
 
-        wxCoord w, h, lh;
-        dc().GetMultiLineTextExtent(z.header, &w, &h, &lh, &dc().GetFont());
-        LMI_ASSERT(0 != lh);
-        LMI_ASSERT(0 == h % lh);
+    wxDCFontChanger header_font_setter(dc_);
+    if(use_bold_headers_)
+        {
+        header_font_setter.Set(header_font());
+        }
+
+    wxCoord w, h, lh;
+    dc().GetMultiLineTextExtent(z.header, &w, &h, &lh, &dc().GetFont());
+    LMI_ASSERT(0 != lh);
+    LMI_ASSERT(0 == h % lh);
 // Temporarily assert that this does the same as the code it replaced:
 LMI_ASSERT(h / lh == int(1u + count_newlines(z.header)));
 // Check it again because of the unfortunate mixed-mode arithmetic:
 LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
-        // Store number of lines used by tallest unhidden header:
-        // output_headers() uses it to write all headers as a block.
-        max_header_lines_ = std::max(max_header_lines_, std::size_t(h / lh));
+    // Store number of lines used by tallest header:
+    // output_headers() uses it to write all headers as a block.
+    max_header_lines_ = std::max(max_header_lines_, std::size_t(h / lh));
 
-        switch(z.elasticity)
+    switch(z.elasticity)
+        {
+        case oe_inelastic:
             {
-            case oe_inelastic:
-                {
-                // Greater of header width and 'widest_text' width.
-                width = std::max(w, dc().GetTextExtent(z.widest_text).x);
-                }
-                break;
-            case oe_elastic:
-                {
-                ; // Do nothing: 'width' already initialized to zero.
-                }
-                break;
+            // Greater of header width and 'widest_text' width.
+            width = std::max(w, dc().GetTextExtent(z.widest_text).x);
             }
+            break;
+        case oe_elastic:
+            {
+            ; // Do nothing: 'width' already initialized to zero.
+            }
+            break;
         }
 
     all_columns_.push_back
         (table_column_info
-            (z.header, width, z.alignment, z.visibility, z.elasticity)
+            (z.header, width, z.alignment, z.elasticity)
         );
 }
 
@@ -461,11 +431,6 @@ void wx_table_generator::do_output_single_row
     for(std::size_t i = 0; i < number_of_columns; ++i)
         {
         table_column_info const& ci = all_columns().at(i);
-        if(ci.is_hidden())
-            {
-            continue;
-            }
-
         std::string const& s = values[i];
         if(!s.empty())
             {

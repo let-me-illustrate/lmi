@@ -740,7 +740,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
         cd.visibility_ = visibility;
         if(oe_shown == visibility)
             {
-            vc.push_back({header, cd.widest_text_, alignment, visibility, elasticity});
+            vc.push_back({header, cd.widest_text_, alignment, elasticity});
             }
         }
     // Add a one-past-the-end index equal to the last value, because
