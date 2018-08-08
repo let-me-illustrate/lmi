@@ -1477,26 +1477,25 @@ class numeric_summary_table_cell
                             : oe_shown
                             ;
 
-                        std::string const variable_name = columns[j].variable_name;
-
-                        // Special hack for the dummy columns whose value is always
-                        // empty as it's used only as separator.
-                        std::string output_value = variable_name.empty()
-                            ? std::string{}
-                            : interpolate_html.evaluate(variable_name, year - 1)
-                            ;
-
-                        // The illustration reg calls for values at certain
-                        // durations, and then at one summary age, so change
-                        // beginning of last row from a duration to an age.
-                        if(j == column_policy_year)
+                        std::string output_value;
+                        if(is_last_row && column_policy_year == j)
                             {
-                            if(is_last_row)
-                                {
-                                std::ostringstream oss;
-                                oss << "Age " << age_last;
-                                output_value = oss.str();
-                                }
+                            // Other rows are for given durations, but the
+                            // last row is for a given age (typically 70).
+                            std::ostringstream oss;
+                            oss << "Age " << age_last;
+                            output_value = oss.str();
+                            }
+                        else if(columns[j].variable_name.empty())
+                            {
+                            ; // Separator column: use empty string.
+                            }
+                        else
+                            {
+                            output_value = interpolate_html.evaluate
+                                (columns[j].variable_name
+                                ,year - 1
+                                );
                             }
 
                         if(oe_shown == columns[j].visibility)
@@ -1625,15 +1624,18 @@ class page_with_tabular_report
                         : oe_shown
                         ;
 
-                    std::string const variable_name = columns[j].variable_name;
-
-                    // Special hack for the dummy columns used in some reports,
-                    // whose value is always empty as it's used only as
-                    // separator.
-                    std::string output_value = variable_name.empty()
-                        ? std::string{}
-                        : interpolate_html.evaluate(variable_name, year)
-                        ;
+                    std::string output_value;
+                    if(columns[j].variable_name.empty())
+                        {
+                        ; // Separator column: use empty string.
+                        }
+                    else
+                        {
+                        output_value = interpolate_html.evaluate
+                            (columns[j].variable_name
+                            ,year
+                            );
+                        }
 
                     if(oe_shown == columns[j].visibility)
                         {
