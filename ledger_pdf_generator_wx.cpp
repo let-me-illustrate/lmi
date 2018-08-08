@@ -79,7 +79,7 @@ bool starts_with(std::string const& s, char const* prefix)
 
 // Helper enums identifying the possible {Guaranteed,Current}{Zero,}
 // combinations.
-enum class base
+enum class basis
     {guaranteed
     ,current
     };
@@ -90,14 +90,14 @@ enum class interest_rate
     };
 
 // And functions to retrieve their string representation.
-std::string base_suffix(base guar_or_curr)
+std::string basis_suffix(basis guar_or_curr)
 {
     switch(guar_or_curr)
         {
-        case base::guaranteed: return "Guaranteed";
-        case base::current:    return "Current"   ;
+        case basis::guaranteed: return "Guaranteed";
+        case basis::current:    return "Current"   ;
         }
-    throw "Unreachable--unknown base value";
+    throw "Unreachable--unknown basis value";
 }
 
 std::string ir_suffix(interest_rate zero_or_not)
@@ -2165,11 +2165,11 @@ class page_with_basic_tabular_report : public page_with_tabular_report
     // contain {{variables}} and also can be multiline but, if so, it must have
     // the same number of lines for all input arguments.
     //
-    // The base and interest_rate arguments can be used to construct the full
+    // The basis and interest_rate arguments can be used to construct the full
     // name of the variable appropriate for the current column pair, with the
-    // help of base_suffix() and ir_suffix() functions.
+    // help of basis_suffix() and ir_suffix() functions.
     virtual std::string get_two_column_header
-        (base          guar_or_curr
+        (basis         guar_or_curr
         ,interest_rate zero_or_not
         ) const = 0;
 
@@ -2266,7 +2266,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
         // the "Guaranteed" or "Current", "Zero" or not, column and returns the
         // vertical position below the header.
         auto const output_two_column_super_header = [=,&table_gen]
-            (base           guar_or_curr
+            (basis          guar_or_curr
             ,interest_rate  zero_or_not
             ,std::size_t    begin_column
             ) -> int
@@ -2300,25 +2300,25 @@ class page_with_basic_tabular_report : public page_with_tabular_report
             };
 
         output_two_column_super_header
-            (base::guaranteed
+            (basis::guaranteed
             ,interest_rate::zero
             ,column_guar0_cash_surr_value
             );
 
         output_two_column_super_header
-            (base::guaranteed
+            (basis::guaranteed
             ,interest_rate::non_zero
             ,column_guar_cash_surr_value
             );
 
         output_two_column_super_header
-            (base::current
+            (basis::current
             ,interest_rate::zero
             ,column_curr0_cash_surr_value
             );
 
         pos_y = output_two_column_super_header
-            (base::current
+            (basis::current
             ,interest_rate::non_zero
             ,column_curr_cash_surr_value
             );
@@ -2334,24 +2334,24 @@ class nasd_basic : public page_with_basic_tabular_report
     }
 
     std::string get_two_column_header
-        (base          guar_or_curr
+        (basis         guar_or_curr
         ,interest_rate zero_or_not
         ) const override
     {
         std::ostringstream oss;
         oss
             << "{{InitAnnSepAcctGrossInt_"
-            << base_suffix(guar_or_curr)
+            << basis_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
             << "}} "
             << "Assumed Sep Acct\n"
             << "Gross Rate* "
             << "({{InitAnnSepAcctNetInt_"
-            << base_suffix(guar_or_curr)
+            << basis_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
             << "}} net)\n"
             << "{{InitAnnGenAcctInt_"
-            << base_suffix(guar_or_curr)
+            << basis_suffix(guar_or_curr)
             << "}} GPA rate"
             ;
         return oss.str();
@@ -2571,19 +2571,19 @@ class reg_d_group_basic : public page_with_basic_tabular_report
     }
 
     std::string get_two_column_header
-        (base          guar_or_curr
+        (basis         guar_or_curr
         ,interest_rate zero_or_not
         ) const override
     {
         std::ostringstream oss;
         oss
             << "{{InitAnnSepAcctGrossInt_"
-            << base_suffix(guar_or_curr)
+            << basis_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
             << "}} "
             << "Hypothetical Gross\n"
             << "Return ({{InitAnnSepAcctNetInt_"
-            << base_suffix(guar_or_curr)
+            << basis_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
             << "}} net)"
             ;
@@ -2655,8 +2655,8 @@ class reg_d_individual_irr_base : public page_with_tabular_report
         ,column_max
         };
 
-    // Must be overridden to return the base being used.
-    virtual base get_base() const = 0;
+    // Must be overridden to return the basis being used.
+    virtual basis get_basis() const = 0;
 
     bool should_hide_column(Ledger const& ledger, int column) const override
     {
@@ -2674,7 +2674,7 @@ class reg_d_individual_irr_base : public page_with_tabular_report
         std::ostringstream header_zero;
         header_zero
             << "{{InitAnnSepAcctGrossInt_"
-            << base_suffix(get_base())
+            << basis_suffix(get_basis())
             << ir_suffix(interest_rate::zero)
             << "}} Hypothetical Rate of\n"
             << "Return*"
@@ -2692,7 +2692,7 @@ class reg_d_individual_irr_base : public page_with_tabular_report
         std::ostringstream header_nonzero;
         header_nonzero
             << "{{InitAnnSepAcctGrossInt_"
-            << base_suffix(get_base())
+            << basis_suffix(get_basis())
             << ir_suffix(interest_rate::non_zero)
             << "}} Hypothetical Rate of\n"
             << "Return*"
@@ -2725,9 +2725,9 @@ class reg_d_individual_irr_base : public page_with_tabular_report
 class reg_d_individual_guar_irr : public reg_d_individual_irr_base
 {
   private:
-    base get_base() const override
+    basis get_basis() const override
     {
-        return base::guaranteed;
+        return basis::guaranteed;
     }
 
     std::string get_fixed_page_contents_template_name() const override
@@ -2759,9 +2759,9 @@ class reg_d_individual_guar_irr : public reg_d_individual_irr_base
 class reg_d_individual_curr_irr : public reg_d_individual_irr_base
 {
   private:
-    base get_base() const override
+    basis get_basis() const override
     {
-        return base::current;
+        return basis::current;
     }
 
     std::string get_fixed_page_contents_template_name() const override
