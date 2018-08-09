@@ -29,6 +29,7 @@
 #include "data_directory.hpp"           // AddDataDir()
 #include "force_linking.hpp"
 #include "html.hpp"
+#include "icon_monger.hpp"              // load_image()
 #include "interpolate_string.hpp"
 #include "istream_to_string.hpp"
 #include "ledger.hpp"
@@ -43,8 +44,6 @@
 
 #include <wx/pdfdc.h>
 
-#include <wx/image.h>
-#include <wx/log.h>
 #include <wx/utils.h>                   // wxBusyCursor
 
 #include <wx/html/m_templ.h>
@@ -603,14 +602,7 @@ TAG_HANDLER_BEGIN(scaled_image, "IMG")
             scale_factor = 1.0 / inv_factor;
             }
 
-        wxImage image;
-        // Disable error logging, we'll simply ignore the tag if the image is
-        // not present.
-            {
-            wxLogNull NoLog;
-            image.LoadFile(AddDataDir(src.ToStdString()));
-            }
-
+        wxImage image(load_image(src.c_str()));
         if (image.IsOk())
             {
             m_WParser->GetContainer()->InsertCell
