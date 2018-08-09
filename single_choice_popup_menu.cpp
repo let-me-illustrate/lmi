@@ -55,7 +55,7 @@ int SingleChoicePopupMenu::Choose()
 {
     int const selection_index = parent_.GetPopupMenuSelectionFromUser(menu_);
 
-    if (wxEventLoopBase* const loop = wxEventLoopBase::GetActive())
+    if(wxEventLoopBase* const loop = wxEventLoopBase::GetActive())
         {
         // This function can often be used to get users choice before starting
         // some time-consuming operation. Ensure that the area previously

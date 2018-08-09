@@ -1338,7 +1338,7 @@ bool Skeleton::ProcessCommandLine()
         return false;
         }
 
-    if (!input_files.empty())
+    if(!input_files.empty())
         {
         // Can't open files until main window is initialized.
         CallAfter(&Skeleton::OpenCommandLineFiles, input_files);

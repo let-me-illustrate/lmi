@@ -244,7 +244,7 @@ void application_test::process_test_name(char const* name)
     // A test can be specified either as "test" to run it, or "-test" to avoid
     // running it, check which one have we got.
     test_run run;
-    if (name[0] == '-')
+    if(name[0] == '-')
         {
         run = run_no;
         ++name; // Skip the leading minus sign.
@@ -268,7 +268,7 @@ void application_test::process_test_name(char const* name)
             }
         }
 
-    if (!any_tests_matched)
+    if(!any_tests_matched)
         {
         warning()
             << "Test specification '"
@@ -309,7 +309,7 @@ bool application_test::process_command_line(int& argc, char* argv[])
         {
         char const* const arg = argv[n];
 
-        if (last_test_option)
+        if(last_test_option)
             {
             last_test_option = nullptr;
             process_test_name(arg);
@@ -339,13 +339,13 @@ bool application_test::process_command_line(int& argc, char* argv[])
             }
         else if(0 == std::strncmp(arg, opt_gui_test_path, opt_gui_test_path_length))
             {
-            if (arg[opt_gui_test_path_length]=='=')
+            if(arg[opt_gui_test_path_length]=='=')
                 {
                 test_files_path_ = arg + opt_gui_test_path_length + 1;
                 }
             else
                 {
-                if (n == argc - 1)
+                if(n == argc - 1)
                     {
                     warning()
                         << "Option '"
@@ -395,7 +395,7 @@ bool application_test::process_command_line(int& argc, char* argv[])
             }
         }
 
-    if (last_test_option)
+    if(last_test_option)
         {
         warning()
             << "Option '"
@@ -413,7 +413,7 @@ bool application_test::process_command_line(int& argc, char* argv[])
         test_files_path_ = "/opt/lmi/gui_test";
         }
 
-    if (!fs::exists(test_files_path_))
+    if(!fs::exists(test_files_path_))
         {
         warning()
             << "Test files path '"
@@ -442,7 +442,7 @@ TestsResults application_test::run()
 
     for(auto const& i : tests_)
         {
-        if ((run_all_ && i.run != run_no) || i.run == run_yes)
+        if((run_all_ && i.run != run_no) || i.run == run_yes)
             {
             std::string error;
             ++results.total;
@@ -475,7 +475,7 @@ TestsResults application_test::run()
                 error = "unknown exception";
                 }
 
-            if (!error.empty())
+            if(!error.empty())
                 {
                 ++results.failed;
 

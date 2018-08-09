@@ -58,7 +58,7 @@ void do_test_create_open
     wxUIActionSimulator z;
     z.Char('n', wxMOD_CONTROL); // new file
     z.Char(key               ); // choose document type
-    if (uses_dialog)
+    if(uses_dialog)
         {
         wxTEST_DIALOG
             (wxYield()
@@ -82,7 +82,7 @@ void do_test_create_open
 
     z.Char('o', wxMOD_CONTROL); // and open it again
 
-    if (uses_dialog)
+    if(uses_dialog)
         {
         wxTEST_DIALOG
             (wxYield()

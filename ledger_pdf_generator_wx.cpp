@@ -568,7 +568,7 @@ TAG_HANDLER_BEGIN(scaled_image, "IMG")
     TAG_HANDLER_PROC(tag)
     {
         wxString src;
-        if (!tag.GetParamAsString("SRC", &src))
+        if(!tag.GetParamAsString("SRC", &src))
             {
             throw std::runtime_error
                 ("missing mandatory \"src\" attribute of \"img\" tag"
@@ -586,10 +586,10 @@ TAG_HANDLER_BEGIN(scaled_image, "IMG")
         // could use separate "numerator" and "denominator" attributes. But for
         // now implement just the bare minimum of what we need.
         wxString inv_factor_str;
-        if (tag.GetParamAsString("INV_FACTOR", &inv_factor_str))
+        if(tag.GetParamAsString("INV_FACTOR", &inv_factor_str))
             {
             double inv_factor = 0.0;
-            if (!inv_factor_str.ToCDouble(&inv_factor) || inv_factor == 0.0)
+            if(!inv_factor_str.ToCDouble(&inv_factor) || inv_factor == 0.0)
                 {
                 throw std::runtime_error
                     ( "invalid value for \"inv_factor\" attribute of "
@@ -603,7 +603,7 @@ TAG_HANDLER_BEGIN(scaled_image, "IMG")
             }
 
         wxImage image(load_image(src.c_str()));
-        if (image.IsOk())
+        if(image.IsOk())
             {
             m_WParser->GetContainer()->InsertCell
                 (new scaled_image_cell(image, src, scale_factor)

@@ -94,15 +94,15 @@ LMI_WX_TEST_CASE(configurable_settings)
         || "skin_single_premium.xrc" == skin
         ,"unknown skin " << skin
         );
-    if ("skin_coli_boli.xrc" == skin)
+    if("skin_coli_boli.xrc" == skin)
         {
         LMI_ASSERT_EQUAL(default_input, "c:/fop-0.20.5/coli_boli_default.ill");
         }
-    if ("skin_group_carveout.xrc" == skin)
+    if("skin_group_carveout.xrc" == skin)
         {
         LMI_ASSERT_EQUAL(default_input, "c:/fop-0.20.5/group_carveout_default.ill");
         }
-    if ("skin_single_premium.xrc" == skin)
+    if("skin_single_premium.xrc" == skin)
         {
         LMI_ASSERT_EQUAL(default_input, "c:/fop-0.20.5/default.ill");
         }

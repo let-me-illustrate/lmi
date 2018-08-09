@@ -81,11 +81,11 @@ template <typename T> inline T identity_element(std::multiplies<T>)
 template <typename T, typename Integer, typename MonoidOperation>
 T power(T x, Integer n, MonoidOperation opr)
 {
-    if (n < 0)
+    if(n < 0)
         {
         throw std::logic_error("power() called with negative exponent.");
         }
-    if (n == 0)
+    if(n == 0)
         {
         return identity_element(opr);
         }
@@ -101,7 +101,7 @@ T power(T x, Integer n, MonoidOperation opr)
         while (n != 0)
             {
             x = opr(x, x);
-            if ((n & 1) != 0)
+            if((n & 1) != 0)
                 result = opr(result, x);
             n >>= 1;
             }
