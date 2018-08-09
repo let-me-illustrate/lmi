@@ -26,9 +26,9 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"            // jdn_t()
-#include "data_directory.hpp"           // AddDataDir()
 #include "force_linking.hpp"
 #include "html.hpp"
+#include "icon_monger.hpp"              // load_image()
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_text_formats.hpp"      // ledger_format()
@@ -37,16 +37,12 @@
 #include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg()
 #include "miscellany.hpp"               // split_into_lines()
 #include "oecumenic_enumerations.hpp"
-#include "path_utility.hpp"             // fs::path inserter
 #include "pdf_writer_wx.hpp"
 #include "ssize_lmi.hpp"
 #include "version.hpp"
 #include "wx_table_generator.hpp"
 #include "wx_utility.hpp"               // ConvertDateToWx()
 #include "wx_workarounds.hpp"           // wxDCTextColorChanger
-
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <wx/datetime.h>
 #include <wx/image.h>
@@ -174,51 +170,6 @@ std::vector<extra_summary_field> parse_extra_report_fields(std::string const& s)
         }
 
     return fields;
-}
-
-/// Load the image from the given file.
-///
-/// Look for the file in the current working directory, or, if that
-/// fails, in lmi's data directory. Warn if it's not found in either
-/// of those locations, or if it's found but cannot be loaded.
-///
-/// Diagnosed failures are presented merely as warnings so that quotes
-/// can be produced even with a generic system built from the free
-/// public source code only, with no (proprietary) images.
-
-wxImage load_image(char const* file)
-{
-    fs::path image_path(file);
-    if(!fs::exists(image_path))
-        {
-        image_path = AddDataDir(file);
-        }
-    if(!fs::exists(image_path))
-        {
-        warning()
-            << "Unable to find image '"
-            << image_path
-            << "'. Try reinstalling."
-            << "\nA blank image will be used instead."
-            << LMI_FLUSH
-            ;
-        return wxImage();
-        }
-
-    wxImage image(image_path.string().c_str(), wxBITMAP_TYPE_PNG);
-    if(!image.IsOk())
-        {
-        warning()
-            << "Unable to load image '"
-            << image_path
-            << "'. Try reinstalling."
-            << "\nA blank image will be used instead."
-            << LMI_FLUSH
-            ;
-        return wxImage();
-        }
-
-    return image;
 }
 
 enum enum_group_quote_columns
