@@ -27,6 +27,13 @@
 
 #include <numeric>                      // accumulate()
 
+namespace
+{
+int sum(std::vector<int> z)
+{
+    return std::accumulate(z.begin(), z.end(), 0);
+}
+
 std::vector<int> widths(std::vector<table_column_info> const& z)
 {
     std::vector<int> v;
@@ -36,11 +43,7 @@ std::vector<int> widths(std::vector<table_column_info> const& z)
         }
     return v;
 }
-
-int sum(std::vector<int> z)
-{
-    return std::accumulate(z.begin(), z.end(), 0);
-}
+} // Unnamed namespace.
 
 class report_table_test
 {
@@ -168,7 +171,7 @@ std::cout << "...warning message.]" << std::endl;
     BOOST_TEST_THROW
         (set_column_widths(total_width, default_margin, v)
         ,std::runtime_error
-        ,"3 iterations expected, but only 0 completed."
+        ,"Not enough space for all 12 columns."
         );
 #endif // 0
     }
