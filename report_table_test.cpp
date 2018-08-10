@@ -23,12 +23,50 @@
 
 #include "report_table.hpp"
 
+#include "assert_lmi.hpp"
+#include "ssize_lmi.hpp"
 #include "test_tools.hpp"
 
 #include <numeric>                      // accumulate()
+#include <vector>
+
+// This needs to be defined in the global namespace to make
+// std::vector<table_column_info> equality-comparable.
+
+bool operator==(table_column_info const& a, table_column_info const& b)
+{
+    return
+           a.col_header() == b.col_header()
+        && a.col_width()  == b.col_width()
+        && a.alignment()  == b.alignment()
+        && a.is_elastic() == b.is_elastic()
+        ;
+}
 
 namespace
 {
+/// Create a std::vector<table_column_info> from vectors of arguments.
+///
+/// set_column_widths() ignores all table_column_info members except
+///   int  col_width_   // read and written
+///   bool is_elastic() // read only
+/// Initializing all members explicitly makes unit tests verbose; this
+/// function lets them be written more compactly.
+
+std::vector<table_column_info> bloat
+    (std::vector<int>  const& w
+    ,std::vector<bool> const& e
+    )
+{
+    LMI_ASSERT(lmi::ssize(w) == lmi::ssize(e));
+    std::vector<table_column_info> v;
+    for(int i = 0; i < lmi::ssize(w) ; ++i)
+        {
+        v.push_back({"", w[i], oe_right, e[i] ? oe_elastic : oe_inelastic});
+        }
+    return v;
+}
+
 int sum(std::vector<int> z)
 {
     return std::accumulate(z.begin(), z.end(), 0);
@@ -50,14 +88,49 @@ class report_table_test
   public:
     static void test()
         {
+        test_bloat();
+        test_generally();
         test_group_quote();
         test_illustration();
         }
 
   private:
+    static void test_bloat();
+    static void test_generally();
     static void test_group_quote();
     static void test_illustration();
 };
+
+void report_table_test::test_bloat()
+{
+    std::vector<int>  w = {3, 1, 0, 0, 2};
+    std::vector<bool> e = {0, 1, 0, 1, 0};
+    std::vector<table_column_info> v =
+        {{"",  3, oe_right, oe_inelastic}
+        ,{"",  1, oe_right, oe_elastic  }
+        ,{"",  0, oe_right, oe_inelastic}
+        ,{"",  0, oe_right, oe_elastic  }
+        ,{"",  2, oe_right, oe_inelastic}
+        };
+    BOOST_TEST(bloat(w, e) == v);
+}
+
+void report_table_test::test_generally()
+{
+    std::vector<int>  w = {1, 2, 3};
+    std::vector<bool> e = {0, 0, 0};
+    std::vector<table_column_info> v = bloat(w, e);
+    set_column_widths(13, 1, v);
+    std::vector<int> const observed = widths(v);
+    std::vector<int> const expected = {3, 4, 5};
+    BOOST_TEST(observed == expected);
+}
+
+/// Test data for an actual group quote.
+///
+/// The data used here were intercepted while running an actual
+/// group quote. Therefore, they aren't written in a compact way
+/// or expanded by bloat().
 
 void report_table_test::test_group_quote()
 {
@@ -84,6 +157,12 @@ void report_table_test::test_group_quote()
     BOOST_TEST(total_width == sum(expected));
     BOOST_TEST(observed == expected);
 }
+
+/// Test data for actual illustrations.
+///
+/// The data used here were intercepted while running several actual
+/// illustrations. Therefore, they aren't written in a compact way
+/// or expanded by bloat().
 
 void report_table_test::test_illustration()
 {
