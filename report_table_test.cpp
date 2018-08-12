@@ -103,23 +103,32 @@ class report_table_test
 
 void report_table_test::test_bloat()
 {
-    std::vector<int>  w = {3, 1, 0, 0, 2};
-    std::vector<bool> e = {0, 1, 0, 1, 0};
-    std::vector<table_column_info> v =
+    std::vector<table_column_info> const v =
         {{"",  3, oe_right, oe_inelastic}
         ,{"",  1, oe_right, oe_elastic  }
         ,{"",  0, oe_right, oe_inelastic}
         ,{"",  0, oe_right, oe_elastic  }
         ,{"",  2, oe_right, oe_inelastic}
         };
-    BOOST_TEST(bloat(w, e) == v);
+
+    std::vector<int>  const w = {3, 1, 0, 0, 2};
+    std::vector<bool> const e = {0, 1, 0, 1, 0};
+    BOOST_TEST(v == bloat(w, e));
+
+    // Progressively terser equivalents.
+
+    std::vector<table_column_info> x = bloat({3, 1, 0, 0, 2}, {0, 1, 0, 1, 0});
+    BOOST_TEST(v == x);
+
+    auto const y = bloat({3, 1, 0, 0, 2}, {0, 1, 0, 1, 0});
+    BOOST_TEST(v == y);
+
+    BOOST_TEST(v == bloat({3, 1, 0, 0, 2}, {0, 1, 0, 1, 0}));
 }
 
 void report_table_test::test_generally()
 {
-    std::vector<int>  w = {1, 2, 3};
-    std::vector<bool> e = {0, 0, 0};
-    std::vector<table_column_info> v = bloat(w, e);
+    std::vector<table_column_info> v = bloat({1, 2, 3}, {0, 0, 0});
     set_column_widths(13, 1, v);
     std::vector<int> const observed = widths(v);
     std::vector<int> const expected = {3, 4, 5};
