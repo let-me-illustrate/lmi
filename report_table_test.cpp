@@ -130,9 +130,8 @@ void report_table_test::test_generally()
 {
     std::vector<table_column_info> v = bloat({1, 2, 3}, {0, 0, 0});
     set_column_widths(13, 1, v);
-    std::vector<int> const observed = widths(v);
     std::vector<int> const expected = {3, 4, 5};
-    BOOST_TEST(observed == expected);
+    BOOST_TEST(widths(v) == expected);
 }
 
 /// Test data for an actual group quote.
