@@ -142,6 +142,47 @@ void report_table_test::test_generally()
     set_column_widths(99, 1, v);
     BOOST_TEST(widths(v) == expected);
 
+    // Same columns, but inadequate page width.
+
+    // PDF !! Begin section subject to revision.
+
+    // Tests in this section are overconstrained in that they don't
+    // have enough room to print all inelastic columns with bilateral
+    // margins of at least one point.
+    //
+    // For now, what's tested is the actual behavior of current code
+    // in the absence of elastic columns, viz.:
+    // - for vector input column widths W[i], speculatively define
+    //     X[i] = W[i] + input margin (a positive scalar)
+    // - if sum(X) < available page width
+    //     then set W=X
+    // - if sum(W) < available page width < sum(X)
+    //     then apportion any available margin among columns in W
+    //     and issue no diagnostic even if some columns get no margin
+    // - else, i.e., if available page width < sum(W) < sum(X)
+    //     then set W=X
+    //     and issue a diagnostic
+
+    std::vector<int> actual;
+
+    v = bloat({1, 2, 3}, {0, 0, 0});
+    set_column_widths(11, 1, v);
+    actual = {3, 4, 4};
+    BOOST_TEST(widths(v) == actual);
+
+    v = bloat({1, 2, 3}, {0, 0, 0});
+    set_column_widths( 6, 1, v);
+    actual = {1, 2, 3};
+    BOOST_TEST(widths(v) == actual);
+
+    // Warning given here:
+    v = bloat({1, 2, 3}, {0, 0, 0});
+    set_column_widths( 5, 1, v);
+    actual = {3, 4, 5};
+    BOOST_TEST(widths(v) == actual);
+
+    // PDF !! End section subject to revision.
+
     // An elastic column occupies all available space not claimed by
     // inelastic columns...
     v = bloat({1, 2, 0, 3}, {0, 0, 1, 0});
