@@ -78,7 +78,7 @@ LMI_WX_TEST_CASE(default_update)
                 ,"UseDOB"
                 );
 
-            if (!dob_window->IsEnabled())
+            if(!dob_window->IsEnabled())
                 {
                 ToggleUseDOB(usedob_window);
                 }

@@ -1413,7 +1413,7 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
                 ;
             }
 
-        if (actual == *select_period_)
+        if(actual == *select_period_)
             {
             break;
             }
@@ -2044,7 +2044,7 @@ void table_impl::read_from_text(std::istream& is)
             }
 
         auto const fv = parse_field_and_value(line, line_num, number_);
-        if (fv)
+        if(fv)
             {
             // Just to avoid using "fv->" everywhere.
             auto const field = fv->field;

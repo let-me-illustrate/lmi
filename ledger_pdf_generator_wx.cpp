@@ -29,6 +29,7 @@
 #include "data_directory.hpp"           // AddDataDir()
 #include "force_linking.hpp"
 #include "html.hpp"
+#include "icon_monger.hpp"              // load_image()
 #include "interpolate_string.hpp"
 #include "istream_to_string.hpp"
 #include "ledger.hpp"
@@ -36,13 +37,13 @@
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "miscellany.hpp"               // lmi_tolower(), page_count()
+#include "oecumenic_enumerations.hpp"
 #include "pdf_writer_wx.hpp"
+#include "ssize_lmi.hpp"
 #include "wx_table_generator.hpp"
 
 #include <wx/pdfdc.h>
 
-#include <wx/image.h>
-#include <wx/log.h>
 #include <wx/utils.h>                   // wxBusyCursor
 
 #include <wx/html/m_templ.h>
@@ -77,7 +78,7 @@ bool starts_with(std::string const& s, char const* prefix)
 
 // Helper enums identifying the possible {Guaranteed,Current}{Zero,}
 // combinations.
-enum class base
+enum class basis
     {guaranteed
     ,current
     };
@@ -88,14 +89,14 @@ enum class interest_rate
     };
 
 // And functions to retrieve their string representation.
-std::string base_suffix(base guar_or_curr)
+std::string basis_suffix(basis guar_or_curr)
 {
     switch(guar_or_curr)
         {
-        case base::guaranteed: return "Guaranteed";
-        case base::current:    return "Current"   ;
+        case basis::guaranteed: return "Guaranteed";
+        case basis::current:    return "Current"   ;
         }
-    throw "Unreachable--unknown base value";
+    throw "Unreachable--unknown basis value";
 }
 
 std::string ir_suffix(interest_rate zero_or_not)
@@ -324,9 +325,10 @@ class using_illustration_table
     // Description of a single table column.
     struct illustration_table_column
     {
-        std::string const variable_name;
-        std::string const header;
-        std::string const widest_text;
+        std::string const        variable_name;
+        std::string const        header;
+        std::string const        widest_text;
+        mutable oenum_visibility visibility {oe_shown};
     };
 
     using illustration_table_columns = std::vector<illustration_table_column>;
@@ -358,17 +360,21 @@ class using_illustration_table
         ) const
     {
         std::vector<column_parameters> vc;
+        std::vector<int> indices;
         int column = 0;
         for(auto const& i : get_table_columns())
             {
-            vc.push_back
-                ({i.header
-                 ,i.widest_text
-                 ,oe_right
-                 ,should_hide_column(ledger, column++) ? oe_hidden : oe_shown
-                 ,oe_inelastic
-                });
+            indices.push_back(lmi::ssize(vc));
+            if(!should_hide_column(ledger, column))
+                {
+                vc.push_back({i.header, i.widest_text, oe_right, oe_inelastic});
+                }
+            ++column;
             }
+        // Add a one-past-the-end index equal to the last value, because
+        // some member functions of class wx_table_generator expect it.
+        indices.push_back(lmi::ssize(vc));
+
         // Arguably, should_hide_column() should return an enumerator--see:
         //   https://lists.nongnu.org/archive/html/lmi/2018-05/msg00026.html
 
@@ -382,6 +388,7 @@ class using_illustration_table
         return wx_table_generator
             (illustration_style_tag{}
             ,vc
+            ,indices
             ,writer.dc()
             ,writer.get_horz_margin()
             ,writer.get_page_width()
@@ -561,7 +568,7 @@ TAG_HANDLER_BEGIN(scaled_image, "IMG")
     TAG_HANDLER_PROC(tag)
     {
         wxString src;
-        if (!tag.GetParamAsString("SRC", &src))
+        if(!tag.GetParamAsString("SRC", &src))
             {
             throw std::runtime_error
                 ("missing mandatory \"src\" attribute of \"img\" tag"
@@ -579,10 +586,10 @@ TAG_HANDLER_BEGIN(scaled_image, "IMG")
         // could use separate "numerator" and "denominator" attributes. But for
         // now implement just the bare minimum of what we need.
         wxString inv_factor_str;
-        if (tag.GetParamAsString("INV_FACTOR", &inv_factor_str))
+        if(tag.GetParamAsString("INV_FACTOR", &inv_factor_str))
             {
             double inv_factor = 0.0;
-            if (!inv_factor_str.ToCDouble(&inv_factor) || inv_factor == 0.0)
+            if(!inv_factor_str.ToCDouble(&inv_factor) || inv_factor == 0.0)
                 {
                 throw std::runtime_error
                     ( "invalid value for \"inv_factor\" attribute of "
@@ -595,15 +602,8 @@ TAG_HANDLER_BEGIN(scaled_image, "IMG")
             scale_factor = 1.0 / inv_factor;
             }
 
-        wxImage image;
-        // Disable error logging, we'll simply ignore the tag if the image is
-        // not present.
-            {
-            wxLogNull NoLog;
-            image.LoadFile(AddDataDir(src.ToStdString()));
-            }
-
-        if (image.IsOk())
+        wxImage image(load_image(src.c_str()));
+        if(image.IsOk())
             {
             m_WParser->GetContainer()->InsertCell
                 (new scaled_image_cell(image, src, scale_factor)
@@ -1420,7 +1420,6 @@ class numeric_summary_table_cell
 
         // And now the table values themselves.
         auto const& columns = get_table_columns();
-        std::vector<std::string> output_values(columns.size());
 
         auto const& invar = ledger.GetLedgerInvariant();
         auto const& interpolate_html = pdf_context_for_html_output.interpolate_html();
@@ -1454,37 +1453,51 @@ class numeric_summary_table_cell
             switch(output_mode)
                 {
                 case oe_only_measure:
+                    {
                     pos_y += table_gen.row_height();
+                    }
                     break;
 
                 case oe_render:
-                    for(std::size_t j = 0; j < columns.size(); ++j)
+                    {
+                    std::vector<std::string> visible_values;
+                    for(int j = 0; j < lmi::ssize(columns); ++j)
                         {
-                        std::string const variable_name = columns[j].variable_name;
+                        columns[j].visibility =
+                            should_hide_column(ledger, j)
+                            ? oe_hidden
+                            : oe_shown
+                            ;
 
-                        // The illustration reg calls for values at certain
-                        // durations, and then at one summary age, so change
-                        // beginning of last row from a duration to an age.
-                        if(j == column_policy_year)
+                        if(oe_shown == columns[j].visibility)
                             {
-                            if(is_last_row)
+                            std::string output_value;
+                            if(is_last_row && column_policy_year == j)
                                 {
+                                // Other rows are for given durations, but the
+                                // last row is for a given age (typically 70).
                                 std::ostringstream oss;
                                 oss << "Age " << age_last;
-                                output_values[j] = oss.str();
-                                continue;
+                                output_value = oss.str();
                                 }
-                            }
+                            else if(columns[j].variable_name.empty())
+                                {
+                                ; // Separator column: use empty string.
+                                }
+                            else
+                                {
+                                output_value = interpolate_html.evaluate
+                                    (columns[j].variable_name
+                                    ,year - 1
+                                    );
+                                }
 
-                        // Special hack for the dummy columns whose value is always
-                        // empty as it's used only as separator.
-                        output_values[j] = variable_name.empty()
-                            ? std::string{}
-                            : interpolate_html.evaluate(variable_name, year - 1)
-                            ;
+                            visible_values.push_back(output_value);
+                            }
                         }
 
-                    table_gen.output_row(pos_y, output_values);
+                    table_gen.output_row(pos_y, visible_values);
+                    }
                     break;
                 }
             }
@@ -1580,7 +1593,6 @@ class page_with_tabular_report
         auto const row_height = table_gen.row_height();
         auto const page_bottom = get_footer_top();
         auto const rows_per_group = wx_table_generator::rows_per_group;
-        std::vector<std::string> output_values(columns.size());
 
         // The table may need several pages, loop over them.
         int const year_max = ledger.GetMaxLength();
@@ -1595,20 +1607,35 @@ class page_with_tabular_report
 
             for(;;)
                 {
-                for(std::size_t j = 0; j < columns.size(); ++j)
+                std::vector<std::string> visible_values;
+                for(int j = 0; j < lmi::ssize(columns); ++j)
                     {
-                    std::string const variable_name = columns[j].variable_name;
-
-                    // Special hack for the dummy columns used in some reports,
-                    // whose value is always empty as it's used only as
-                    // separator.
-                    output_values[j] = variable_name.empty()
-                        ? std::string{}
-                        : interpolate_html.evaluate(variable_name, year)
+                    columns[j].visibility =
+                        should_hide_column(ledger, j)
+                        ? oe_hidden
+                        : oe_shown
                         ;
+
+                    if(oe_shown == columns[j].visibility)
+                        {
+                        std::string output_value;
+                        if(columns[j].variable_name.empty())
+                            {
+                            ; // Separator column: use empty string.
+                            }
+                        else
+                            {
+                            output_value = interpolate_html.evaluate
+                                (columns[j].variable_name
+                                ,year
+                                );
+                            }
+
+                        visible_values.push_back(output_value);
+                        }
                     }
 
-                table_gen.output_row(pos_y, output_values);
+                table_gen.output_row(pos_y, visible_values);
 
                 ++year;
                 if(year == year_max)
@@ -2130,11 +2157,11 @@ class page_with_basic_tabular_report : public page_with_tabular_report
     // contain {{variables}} and also can be multiline but, if so, it must have
     // the same number of lines for all input arguments.
     //
-    // The base and interest_rate arguments can be used to construct the full
+    // The basis and interest_rate arguments can be used to construct the full
     // name of the variable appropriate for the current column pair, with the
-    // help of base_suffix() and ir_suffix() functions.
+    // help of basis_suffix() and ir_suffix() functions.
     virtual std::string get_two_column_header
-        (base          guar_or_curr
+        (basis         guar_or_curr
         ,interest_rate zero_or_not
         ) const = 0;
 
@@ -2231,7 +2258,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
         // the "Guaranteed" or "Current", "Zero" or not, column and returns the
         // vertical position below the header.
         auto const output_two_column_super_header = [=,&table_gen]
-            (base           guar_or_curr
+            (basis          guar_or_curr
             ,interest_rate  zero_or_not
             ,std::size_t    begin_column
             ) -> int
@@ -2265,25 +2292,25 @@ class page_with_basic_tabular_report : public page_with_tabular_report
             };
 
         output_two_column_super_header
-            (base::guaranteed
+            (basis::guaranteed
             ,interest_rate::zero
             ,column_guar0_cash_surr_value
             );
 
         output_two_column_super_header
-            (base::guaranteed
+            (basis::guaranteed
             ,interest_rate::non_zero
             ,column_guar_cash_surr_value
             );
 
         output_two_column_super_header
-            (base::current
+            (basis::current
             ,interest_rate::zero
             ,column_curr0_cash_surr_value
             );
 
         pos_y = output_two_column_super_header
-            (base::current
+            (basis::current
             ,interest_rate::non_zero
             ,column_curr_cash_surr_value
             );
@@ -2299,24 +2326,24 @@ class nasd_basic : public page_with_basic_tabular_report
     }
 
     std::string get_two_column_header
-        (base          guar_or_curr
+        (basis         guar_or_curr
         ,interest_rate zero_or_not
         ) const override
     {
         std::ostringstream oss;
         oss
             << "{{InitAnnSepAcctGrossInt_"
-            << base_suffix(guar_or_curr)
+            << basis_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
             << "}} "
             << "Assumed Sep Acct\n"
             << "Gross Rate* "
             << "({{InitAnnSepAcctNetInt_"
-            << base_suffix(guar_or_curr)
+            << basis_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
             << "}} net)\n"
             << "{{InitAnnGenAcctInt_"
-            << base_suffix(guar_or_curr)
+            << basis_suffix(guar_or_curr)
             << "}} GPA rate"
             ;
         return oss.str();
@@ -2536,19 +2563,19 @@ class reg_d_group_basic : public page_with_basic_tabular_report
     }
 
     std::string get_two_column_header
-        (base          guar_or_curr
+        (basis         guar_or_curr
         ,interest_rate zero_or_not
         ) const override
     {
         std::ostringstream oss;
         oss
             << "{{InitAnnSepAcctGrossInt_"
-            << base_suffix(guar_or_curr)
+            << basis_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
             << "}} "
             << "Hypothetical Gross\n"
             << "Return ({{InitAnnSepAcctNetInt_"
-            << base_suffix(guar_or_curr)
+            << basis_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
             << "}} net)"
             ;
@@ -2620,8 +2647,8 @@ class reg_d_individual_irr_base : public page_with_tabular_report
         ,column_max
         };
 
-    // Must be overridden to return the base being used.
-    virtual base get_base() const = 0;
+    // Must be overridden to return the basis being used.
+    virtual basis get_basis() const = 0;
 
     bool should_hide_column(Ledger const& ledger, int column) const override
     {
@@ -2639,7 +2666,7 @@ class reg_d_individual_irr_base : public page_with_tabular_report
         std::ostringstream header_zero;
         header_zero
             << "{{InitAnnSepAcctGrossInt_"
-            << base_suffix(get_base())
+            << basis_suffix(get_basis())
             << ir_suffix(interest_rate::zero)
             << "}} Hypothetical Rate of\n"
             << "Return*"
@@ -2657,7 +2684,7 @@ class reg_d_individual_irr_base : public page_with_tabular_report
         std::ostringstream header_nonzero;
         header_nonzero
             << "{{InitAnnSepAcctGrossInt_"
-            << base_suffix(get_base())
+            << basis_suffix(get_basis())
             << ir_suffix(interest_rate::non_zero)
             << "}} Hypothetical Rate of\n"
             << "Return*"
@@ -2690,9 +2717,9 @@ class reg_d_individual_irr_base : public page_with_tabular_report
 class reg_d_individual_guar_irr : public reg_d_individual_irr_base
 {
   private:
-    base get_base() const override
+    basis get_basis() const override
     {
-        return base::guaranteed;
+        return basis::guaranteed;
     }
 
     std::string get_fixed_page_contents_template_name() const override
@@ -2724,9 +2751,9 @@ class reg_d_individual_guar_irr : public reg_d_individual_irr_base
 class reg_d_individual_curr_irr : public reg_d_individual_irr_base
 {
   private:
-    base get_base() const override
+    basis get_basis() const override
     {
-        return base::current;
+        return basis::current;
     }
 
     std::string get_fixed_page_contents_template_name() const override

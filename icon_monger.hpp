@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include <wx/artprov.h>
+#include <wx/image.h>
 
 #include <map>
 #include <set>
@@ -53,6 +54,8 @@ class icon_monger
     std::map<wxArtID,std::string> icon_names_by_wx_id_;
     std::set<std::string>         lmi_specific_icon_names_;
 };
+
+wxImage load_image(char const* file);
 
 #endif // icon_monger_hpp
 

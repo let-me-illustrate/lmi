@@ -41,7 +41,6 @@ struct column_parameters
     std::string      const header;
     std::string      const widest_text;
     oenum_h_align    const alignment;
-    oenum_visibility const visibility;
     oenum_elasticity const elasticity;
 };
 
@@ -74,6 +73,7 @@ class wx_table_generator
     wx_table_generator
         (group_quote_style_tag
         ,std::vector<column_parameters> const& vc
+        ,std::vector<int>               const& indices
         ,wxDC&                                 dc
         ,int                                   left_margin
         ,int                                   total_width
@@ -82,6 +82,7 @@ class wx_table_generator
     wx_table_generator
         (illustration_style_tag
         ,std::vector<column_parameters> const& vc
+        ,std::vector<int>               const& indices
         ,wxDC&                                 dc
         ,int                                   left_margin
         ,int                                   total_width
@@ -98,24 +99,24 @@ class wx_table_generator
 
     void output_super_header
         (std::string const&           header
-        ,std::size_t                  begin_column
-        ,std::size_t                  end_column
+        ,std::size_t                  a_begin_column
+        ,std::size_t                  a_end_column
         ,int&                         pos_y
         ,oenum_render_or_only_measure output_mode = oe_render
         );
 
     void output_highlighted_cell
-        (std::size_t        column
+        (std::size_t        a_column
         ,int                y
         ,std::string const& value
         );
 
     void output_row(int& pos_y, std::vector<std::string> const values);
 
-    void output_vert_separator(std::size_t before_column, int y);
+    void output_vert_separator(std::size_t a_before_column, int y);
     void output_horz_separator
-        (std::size_t                  begin_column
-        ,std::size_t                  end_column
+        (std::size_t                  a_begin_column
+        ,std::size_t                  a_end_column
         ,int                          y
         ,oenum_render_or_only_measure output_mode = oe_render
         );
@@ -123,7 +124,10 @@ class wx_table_generator
     int row_height() const;
     int separator_line_height() const;
 
-    wxRect text_rect(std::size_t column, int y) const;
+    // Used only by group_quote_pdf_generator_wx::output_aggregate_values(),
+    // in a context where something like output_highlighted_cell() should
+    // probably be used instead. PDF !! revisit this later
+    wxRect external_text_rect(std::size_t a_column, int y) const;
 
   private:
     void enroll_column(column_parameters const&);
@@ -137,9 +141,10 @@ class wx_table_generator
     void do_output_vert_separator(int x , int y1, int y2);
     void do_output_horz_separator(int x1, int x2, int y );
 
-    int cell_pos_x(std::size_t column) const;
+    int cell_pos_x(int column) const;
 
-    wxRect cell_rect(std::size_t column, int y) const;
+    wxRect text_rect(int column, int y) const;
+    wxRect cell_rect(int column, int y) const;
 
     wxFont header_font() const;
 
@@ -147,6 +152,8 @@ class wx_table_generator
     // distinguish access from mutation.
     wxDC const& dc() const;
     std::vector<table_column_info> const& all_columns() const;
+
+    std::vector<int> const indices_;
 
     wxDC& dc_;
 

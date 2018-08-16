@@ -26,9 +26,9 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"            // jdn_t()
-#include "data_directory.hpp"           // AddDataDir()
 #include "force_linking.hpp"
 #include "html.hpp"
+#include "icon_monger.hpp"              // load_image()
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_text_formats.hpp"      // ledger_format()
@@ -36,17 +36,13 @@
 #include "math_functions.hpp"           // outward_quotient()
 #include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg()
 #include "miscellany.hpp"               // split_into_lines()
-#include "oecumenic_enumerations.hpp"   // oenum_format_style
-#include "path_utility.hpp"             // fs::path inserter
+#include "oecumenic_enumerations.hpp"
 #include "pdf_writer_wx.hpp"
 #include "ssize_lmi.hpp"
 #include "version.hpp"
 #include "wx_table_generator.hpp"
 #include "wx_utility.hpp"               // ConvertDateToWx()
 #include "wx_workarounds.hpp"           // wxDCTextColorChanger
-
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <wx/datetime.h>
 #include <wx/image.h>
@@ -176,51 +172,6 @@ std::vector<extra_summary_field> parse_extra_report_fields(std::string const& s)
     return fields;
 }
 
-/// Load the image from the given file.
-///
-/// Look for the file in the current working directory, or, if that
-/// fails, in lmi's data directory. Warn if it's not found in either
-/// of those locations, or if it's found but cannot be loaded.
-///
-/// Diagnosed failures are presented merely as warnings so that quotes
-/// can be produced even with a generic system built from the free
-/// public source code only, with no (proprietary) images.
-
-wxImage load_image(char const* file)
-{
-    fs::path image_path(file);
-    if(!fs::exists(image_path))
-        {
-        image_path = AddDataDir(file);
-        }
-    if(!fs::exists(image_path))
-        {
-        warning()
-            << "Unable to find image '"
-            << image_path
-            << "'. Try reinstalling."
-            << "\nA blank image will be used instead."
-            << LMI_FLUSH
-            ;
-        return wxImage();
-        }
-
-    wxImage image(image_path.string().c_str(), wxBITMAP_TYPE_PNG);
-    if(!image.IsOk())
-        {
-        warning()
-            << "Unable to load image '"
-            << image_path
-            << "'. Try reinstalling."
-            << "\nA blank image will be used instead."
-            << LMI_FLUSH
-            ;
-        return wxImage();
-        }
-
-    return image;
-}
-
 enum enum_group_quote_columns
     {e_col_number
     ,e_col_name
@@ -239,12 +190,14 @@ enum_group_quote_columns const e_first_totalled_column = e_col_basic_face_amount
 
 struct column_definition
 {
-    char const* header_;
-    char const* widest_text_; // PDF !! Empty string means variable width.
+    char const*              header_;
+    char const*              widest_text_; // PDF !! Empty string means variable width.
+    mutable oenum_visibility visibility_ {oe_shown};
 };
 
 // Headers of premium columns include dynamically-determined payment
 // mode, so they're actually format strings.
+// PDF !! This ought not to be a global variable.
 
 column_definition const column_definitions[] =
     {{"Part#"                          ,            "99999"   } // e_col_number
@@ -683,6 +636,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
     bool const has_addl_premium = totals_.total(e_col_additional_premium      ) != 0.0;
 
     std::vector<column_parameters> vc;
+    std::vector<int> indices;
     for(int i = 0; i < e_col_max; ++i)
         {
         column_definition const& cd = column_definitions[i];
@@ -733,12 +687,21 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
                 break;
             }
 
-        vc.push_back({header, cd.widest_text_, alignment, visibility, elasticity});
+        indices.push_back(lmi::ssize(vc));
+        cd.visibility_ = visibility;
+        if(oe_shown == visibility)
+            {
+            vc.push_back({header, cd.widest_text_, alignment, elasticity});
+            }
         }
+    // Add a one-past-the-end index equal to the last value, because
+    // some member functions of class wx_table_generator expect it.
+    indices.push_back(lmi::ssize(vc));
 
     wx_table_generator table_gen
         (group_quote_style_tag{}
         ,vc
+        ,indices
         ,pdf_writer.dc()
         ,pdf_writer.get_horz_margin()
         ,pdf_writer.get_page_width()
@@ -778,7 +741,17 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
 
     for(auto const& i : rows_)
         {
-        table_gen.output_row(pos_y, i.output_values);
+        LMI_ASSERT(lmi::ssize(i.output_values) == lmi::ssize(column_definitions));
+        std::vector<std::string> visible_values;
+        for(int j = 0; j < e_col_max; ++j)
+            {
+            if(oe_shown == column_definitions[j].visibility_)
+                {
+                visible_values.push_back(i.output_values[j]);
+                }
+            }
+
+        table_gen.output_row(pos_y, visible_values);
 
         if(last_row_y <= pos_y)
             {
@@ -1038,9 +1011,9 @@ void group_quote_pdf_generator_wx::output_document_header
 }
 
 void group_quote_pdf_generator_wx::output_aggregate_values
-    (pdf_writer_wx& pdf_writer
+    (pdf_writer_wx     & pdf_writer
     ,wx_table_generator& table_gen
-    ,int* pos_y
+    ,int               * pos_y // PDF !! Use reference, not pointer.
     )
 {
     int& y = *pos_y;
@@ -1058,10 +1031,12 @@ void group_quote_pdf_generator_wx::output_aggregate_values
     auto& pdf_dc = pdf_writer.dc();
 
     // Render "Census" in bold.
+    // PDF !! Instead, consider using output_highlighted_cell(), with extra
+    // arguments to specify font, brush, and pen.
     wxDCFontChanger set_bold_font(pdf_dc, pdf_dc.GetFont().Bold());
     pdf_dc.DrawLabel
         ("Census"
-        ,table_gen.text_rect(e_col_name, y)
+        ,table_gen.external_text_rect(e_col_name, y)
         ,wxALIGN_LEFT
         );
 
@@ -1073,18 +1048,23 @@ void group_quote_pdf_generator_wx::output_aggregate_values
     LMI_ASSERT(0 < e_first_totalled_column);
     pdf_dc.DrawLabel
         ("Totals:"
-        ,table_gen.text_rect(e_first_totalled_column - 1, y)
+        ,table_gen.external_text_rect(e_first_totalled_column - 1, y)
         ,wxALIGN_RIGHT
         );
 
     pdf_dc.DrawLabel
         ("Average Cost per $1000:"
-        ,table_gen.text_rect(e_first_totalled_column - 1, y_next)
+        ,table_gen.external_text_rect(e_first_totalled_column - 1, y_next)
         ,wxALIGN_RIGHT
         );
 
     for(int i = e_first_totalled_column; i < e_col_max; ++i)
         {
+        if(oe_shown != column_definitions[i].visibility_)
+            {
+            continue;
+            }
+
         int const decimals =
             ((e_col_basic_face_amount           == i) ? 0
             :(e_col_basic_premium               == i) ? 2
