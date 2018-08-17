@@ -49,6 +49,7 @@ std::vector<int> apportion(std::vector<int> const& votes, int total_seats)
     int const cardinality = lmi::ssize(votes);
     std::vector<int> seats(cardinality);
     int const total_votes = std::accumulate(votes.begin(), votes.end(), 0);
+    if(0 == total_votes) return seats; // Avert division by zero.
     std::priority_queue<std::pair<int,int>> queue;
     for(int j = 0; j < cardinality; ++j)
         {

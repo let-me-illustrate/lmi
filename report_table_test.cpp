@@ -118,6 +118,13 @@ void report_table_test::test_apportion()
 
     std::vector<int> const seats2 = {8, 8, 5, 2, 2, 1};
     BOOST_TEST(seats2 == apportion(votes1, 26));
+
+    // Test with zero total votes, to make sure that division by zero
+    // is averted.
+
+    std::vector<int> const votes3 = {0, 0, 0};
+    std::vector<int> const seats3 = {0, 0, 0};
+    BOOST_TEST(seats3 == apportion(votes3, 7));
 }
 
 void report_table_test::test_bloat()
