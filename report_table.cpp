@@ -45,6 +45,21 @@
 /// "A Geometric View of Some Apportionment Paradoxes", 65 Mathematics
 /// Magazine 1, 16 (1992).
 ///
+/// If two elements of the 'votes' argument have the same value, then
+/// any "residue" is arbitrarily apportioned to the earlier one first.
+/// (Without such a rule, the result is indeterminate.) The present
+/// implementation uses a priority queue, which is based on heapsort,
+/// which is not a stable (order-preserving) algorithm--so, where the
+/// priority of element j would naively be 'remainder' below ("giving
+/// preference to the greatest remainders"), it subtracts a penalty
+/// that increases with each successive element, yet is never so large
+/// as to cross equivalence classes: notionally,
+///   adjusted priority = remainder - double(j / cardinality)
+/// (where the fraction is strictly less than unity, so the integer
+/// part of the adjusted priority is still 'remainder'), although
+/// actually it multiplies that expression by 'cardinality' in order
+/// to avoid floating point.
+///
 /// Asserted postcondition: All seats are apportioned--i.e., the sum
 /// of the returned vector equals the 'total_seats' argument--unless
 /// the sum of the 'votes' argument is zero, in which case zero seats
@@ -61,7 +76,7 @@ std::vector<int> apportion(std::vector<int> const& votes, int total_seats)
         {
         seats[j]            = (votes[j] * total_seats) / total_votes;
         int const remainder = (votes[j] * total_seats) % total_votes;
-        queue.push({remainder, j});
+        queue.push({cardinality * remainder - j, j});
         }
     int const dealt_seats = std::accumulate(seats.begin(), seats.end(), 0);
     for(int j = 0; j < total_seats - dealt_seats; ++j)
