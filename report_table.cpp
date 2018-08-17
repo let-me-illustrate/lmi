@@ -24,6 +24,7 @@
 #include "report_table.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "math_functions.hpp"           // outward_quotient()
 #include "ssize_lmi.hpp"
 
@@ -43,6 +44,11 @@
 /// A fascinating geometric analysis is to be found in B.A. Bradberry,
 /// "A Geometric View of Some Apportionment Paradoxes", 65 Mathematics
 /// Magazine 1, 16 (1992).
+///
+/// Asserted postcondition: All seats are apportioned--i.e., the sum
+/// of the returned vector equals the 'total_seats' argument--unless
+/// the sum of the 'votes' argument is zero, in which case zero seats
+/// are allocated.
 
 std::vector<int> apportion(std::vector<int> const& votes, int total_seats)
 {
@@ -63,6 +69,7 @@ std::vector<int> apportion(std::vector<int> const& votes, int total_seats)
         ++seats[queue.top().second];
         queue.pop();
         }
+    LMI_ASSERT(std::accumulate(seats.begin(), seats.end(), 0) == total_seats);
     return seats;
 }
 
