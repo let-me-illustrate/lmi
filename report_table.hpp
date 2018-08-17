@@ -103,6 +103,8 @@ class LMI_SO table_column_info
     bool          const is_elastic_;
 };
 
+std::vector<int> LMI_SO apportion(std::vector<int> const& votes, int seats);
+
 void LMI_SO set_column_widths
     (int                             total_width
     ,int                             column_margin

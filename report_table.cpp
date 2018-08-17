@@ -25,6 +25,45 @@
 
 #include "alert.hpp"
 #include "math_functions.hpp"           // outward_quotient()
+#include "ssize_lmi.hpp"
+
+#include <numeric>                      // accumulate()
+#include <queue>
+#include <utility>                      // pair
+
+/// Apportion "seats" to "states" by their respective total "votes".
+///
+/// This algorithm is popularly associated with Alexander Hamilton,
+/// who wrote: "as there would commonly be left ... an unapportioned
+/// residue of the total number to be apportioned, it is of necessity
+/// that that residue should be distributed among the several States
+/// by some rule, and none more equal or defensible can be found than
+/// that of giving a preference to the greatest remainders".
+///
+/// A fascinating geometric analysis is to be found in B.A. Bradberry,
+/// "A Geometric View of Some Apportionment Paradoxes", 65 Mathematics
+/// Magazine 1, 16 (1992).
+
+std::vector<int> apportion(std::vector<int> const& votes, int total_seats)
+{
+    int const cardinality = lmi::ssize(votes);
+    std::vector<int> seats(cardinality);
+    int const total_votes = std::accumulate(votes.begin(), votes.end(), 0);
+    std::priority_queue<std::pair<int,int>> queue;
+    for(int j = 0; j < cardinality; ++j)
+        {
+        seats[j]            = (votes[j] * total_seats) / total_votes;
+        int const remainder = (votes[j] * total_seats) % total_votes;
+        queue.push({remainder, j});
+        }
+    int const dealt_seats = std::accumulate(seats.begin(), seats.end(), 0);
+    for(int j = 0; j < total_seats - dealt_seats; ++j)
+        {
+        ++seats[queue.top().second];
+        queue.pop();
+        }
+    return seats;
+}
 
 /// Compute column widths.
 ///

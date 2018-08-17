@@ -88,6 +88,7 @@ class report_table_test
   public:
     static void test()
         {
+        test_apportion();
         test_bloat();
         test_generally();
         test_group_quote();
@@ -95,11 +96,29 @@ class report_table_test
         }
 
   private:
+    static void test_apportion();
     static void test_bloat();
     static void test_generally();
     static void test_group_quote();
     static void test_illustration();
 };
+
+void report_table_test::test_apportion()
+{
+    // Test cases from:
+    //   https://en.wikipedia.org/wiki/Largest_remainder_method
+
+    std::vector<int> const votes0 = {47000, 16000, 15800, 12000, 6100, 3100};
+    std::vector<int> const seats0 = {5, 2, 1, 1, 1, 0};
+    BOOST_TEST(seats0 == apportion(votes0, 10));
+
+    std::vector<int> const votes1 = {1500, 1500, 900, 500, 500, 200};
+    std::vector<int> const seats1 = {7, 7, 4, 3, 3, 1};
+    BOOST_TEST(seats1 == apportion(votes1, 25));
+
+    std::vector<int> const seats2 = {8, 8, 5, 2, 2, 1};
+    BOOST_TEST(seats2 == apportion(votes1, 26));
+}
 
 void report_table_test::test_bloat()
 {
