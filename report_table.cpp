@@ -104,7 +104,7 @@ std::vector<int> apportion(std::vector<int> const& votes, int total_seats)
 
 void set_column_widths
     (int                             total_width
-    ,int                             column_margin
+    ,int const                       column_margin
     ,std::vector<table_column_info>& all_columns
     )
 //
@@ -212,8 +212,6 @@ void set_column_widths
                         --underflow;
                         }
                     }
-
-                column_margin -= (overflow_per_column + 1) / 2;
 
                 // We condensed the columns enough to make them fit, so no need
                 // for the warning and we don't have any elastic columns, so
