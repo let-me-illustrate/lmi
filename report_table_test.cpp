@@ -125,6 +125,16 @@ void report_table_test::test_apportion()
     std::vector<int> const votes3 = {0, 0, 0};
     std::vector<int> const seats3 = {0, 0, 0};
     BOOST_TEST(seats3 == apportion(votes3, 7));
+
+    // Test with vectors of one and zero elements.
+
+    std::vector<int> const votes4 = {1};
+    std::vector<int> const seats4 = {7};
+    BOOST_TEST(seats4 == apportion(votes4, 7));
+
+    std::vector<int> const votes5 = {};
+    std::vector<int> const seats5 = {};
+    BOOST_TEST(seats5 == apportion(votes5, 7));
 }
 
 void report_table_test::test_bloat()
