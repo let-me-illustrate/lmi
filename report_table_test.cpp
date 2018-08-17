@@ -175,13 +175,13 @@ void report_table_test::test_generally()
 
     // Width with default margins (12) = maximum available page width.
     v = bloat({1, 2, 3}, {0, 0, 0});
-    set_column_widths(12, 1, v);
+    set_column_widths(12, 2, v);
     expected = {3, 4, 5};
     BOOST_TEST(widths(v) == expected);
 
     // Same columns: same layout, even if page is much wider (99).
     v = bloat({1, 2, 3}, {0, 0, 0});
-    set_column_widths(99, 1, v);
+    set_column_widths(99, 2, v);
     BOOST_TEST(widths(v) == expected);
 
     // Same columns, but inadequate page width.
@@ -208,18 +208,18 @@ void report_table_test::test_generally()
     std::vector<int> actual;
 
     v = bloat({1, 2, 3}, {0, 0, 0});
-    set_column_widths(11, 1, v);
+    set_column_widths(11, 2, v);
     actual = {3, 4, 4};
     BOOST_TEST(widths(v) == actual);
 
     v = bloat({1, 2, 3}, {0, 0, 0});
-    set_column_widths( 6, 1, v);
+    set_column_widths( 6, 2, v);
     actual = {1, 2, 3};
     BOOST_TEST(widths(v) == actual);
 
     // Warning given here:
     v = bloat({1, 2, 3}, {0, 0, 0});
-    set_column_widths( 5, 1, v);
+    set_column_widths( 5, 2, v);
     actual = {3, 4, 5};
     BOOST_TEST(widths(v) == actual);
 
@@ -228,21 +228,21 @@ void report_table_test::test_generally()
     // An elastic column occupies all available space not claimed by
     // inelastic columns...
     v = bloat({1, 2, 0, 3}, {0, 0, 1, 0});
-    set_column_widths(99, 1, v);
+    set_column_widths(99, 2, v);
     expected = {3, 4, (99-12), 5};
     BOOST_TEST(widths(v) == expected);
     // ...though its width might happen to be zero (PDF !! but see
     //   https://lists.nongnu.org/archive/html/lmi/2018-07/msg00049.html
     // which questions whether zero should be allowed):
     v = bloat({1, 2, 0, 3}, {0, 0, 1, 0});
-    set_column_widths(12, 1, v);
+    set_column_widths(12, 2, v);
     expected = {3, 4, 0, 5};
     BOOST_TEST(widths(v) == expected);
 
     // Multiple elastic columns apportion all unclaimed space among
     // themselves.
     v = bloat({1, 2, 0, 3}, {1, 0, 1, 0});
-    set_column_widths(99, 1, v);
+    set_column_widths(99, 2, v);
     expected = {45, 4, 45, 5};
     BOOST_TEST(widths(v) == expected);
 }
@@ -256,7 +256,7 @@ void report_table_test::test_generally()
 void report_table_test::test_group_quote()
 {
     static int const total_width    = 756;
-    static int const default_margin = 7;
+    static int const default_margin = 14;
 
     std::vector<table_column_info> v =
         {{"", 22, oe_center, oe_inelastic}
@@ -288,7 +288,7 @@ void report_table_test::test_group_quote()
 void report_table_test::test_illustration()
 {
     static int const total_width    = 576;
-    static int const default_margin = 7;
+    static int const default_margin = 14;
 
     // Fits with default margin.
 

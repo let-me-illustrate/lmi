@@ -104,15 +104,20 @@ std::vector<int> apportion(std::vector<int> const& votes, int total_seats)
 
 void set_column_widths
     (int                             total_width
-    ,int const                       column_margin
+    ,int                             double_margin
     ,std::vector<table_column_info>& all_columns
     )
 //
 // total_width    max table width (page width - page margins)
+// double_margin  total left + right margin
 // column_margin  spacing on both left and right of column
 // all_columns    std::vector<table_column_info>
 //   table_column_info::col_width_ is the only member changed
 {
+    // Use this internally for historical reasons. Formerly, M
+    // was passed, and 2M was used; now, 2M is passed, and what's
+    // used here is 2M/2. This will soon be reimplemented.
+    int const column_margin = double_margin / 2;
     // PDF !! Unconditionally add bilateral margins even though they
     // may conditionally be removed below. This is a questionable
     // design decision; if it is later reversed, then remove the

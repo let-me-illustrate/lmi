@@ -107,7 +107,7 @@ std::vector<int> LMI_SO apportion(std::vector<int> const& votes, int seats);
 
 void LMI_SO set_column_widths
     (int                             total_width
-    ,int                             column_margin
+    ,int                             double_margin
     ,std::vector<table_column_info>& all_columns
     );
 
