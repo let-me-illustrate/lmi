@@ -753,7 +753,8 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
 
         table_gen.output_row(pos_y, visible_values);
 
-        if(last_row_y <= pos_y)
+        // If there is no space left for another row, start a new page.
+        if(last_row_y <= pos_y + table_gen.row_height())
             {
             output_page_number_and_version(pdf_writer, total_pages, current_page);
 
