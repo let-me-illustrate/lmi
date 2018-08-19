@@ -24,193 +24,158 @@
 #include "report_table.hpp"
 
 #include "alert.hpp"
-#include "math_functions.hpp"           // outward_quotient()
+#include "assert_lmi.hpp"
+#include "ssize_lmi.hpp"
+
+#include <algorithm>                    // min()
+#include <numeric>                      // accumulate()
+#include <queue>
+#include <utility>                      // pair
+
+/// Apportion "seats" to "states" by their respective total "votes".
+///
+/// This algorithm is popularly associated with Alexander Hamilton,
+/// who wrote: "as there would commonly be left ... an unapportioned
+/// residue of the total number to be apportioned, it is of necessity
+/// that that residue should be distributed among the several States
+/// by some rule, and none more equal or defensible can be found than
+/// that of giving a preference to the greatest remainders".
+///
+/// A fascinating geometric analysis is to be found in B.A. Bradberry,
+/// "A Geometric View of Some Apportionment Paradoxes", 65 Mathematics
+/// Magazine 1, 16 (1992).
+///
+/// If two elements of the 'votes' argument have the same value, then
+/// any "residue" is arbitrarily apportioned to the earlier one first.
+/// (Without such a rule, the result is indeterminate.) The present
+/// implementation uses a priority queue, which is based on heapsort,
+/// which is not a stable (order-preserving) algorithm--so, where the
+/// priority of element j would naively be 'remainder' below ("giving
+/// preference to the greatest remainders"), it subtracts a penalty
+/// that increases with each successive element, yet is never so large
+/// as to cross equivalence classes: notionally,
+///   adjusted priority = remainder - double(j / cardinality)
+/// (where the fraction is strictly less than unity, so the integer
+/// part of the adjusted priority is still 'remainder'), although
+/// actually it multiplies that expression by 'cardinality' in order
+/// to avoid floating point.
+///
+/// Asserted postcondition: All seats are apportioned--i.e., the sum
+/// of the returned vector equals the 'total_seats' argument--unless
+/// the sum of the 'votes' argument is zero, in which case zero seats
+/// are allocated.
+
+std::vector<int> apportion(std::vector<int> const& votes, int total_seats)
+{
+    int const cardinality = lmi::ssize(votes);
+    std::vector<int> seats(cardinality);
+    int const total_votes = std::accumulate(votes.begin(), votes.end(), 0);
+    if(0 == total_votes) return seats; // Avert division by zero.
+    std::priority_queue<std::pair<int,int>> queue;
+    for(int j = 0; j < cardinality; ++j)
+        {
+        seats[j]            = (votes[j] * total_seats) / total_votes;
+        int const remainder = (votes[j] * total_seats) % total_votes;
+        queue.push({cardinality * remainder - j, j});
+        }
+    int const dealt_seats = std::accumulate(seats.begin(), seats.end(), 0);
+    for(int j = 0; j < total_seats - dealt_seats; ++j)
+        {
+        ++seats[queue.top().second];
+        queue.pop();
+        }
+    LMI_ASSERT(std::accumulate(seats.begin(), seats.end(), 0) == total_seats);
+    return seats;
+}
 
 /// Compute column widths.
 ///
 /// First, allocate adequate width to each inelastic column; then
 /// distribute any excess width left over among elastic columns.
 ///
-/// The width of each inelastic column reflects:
-///  - a mask like "999,999" (ideally, there would instead be a
-///    quasi-global data structure mapping symbolic column names
-///    to their corresponding headers and maximal widths)
-///  - the header width
-///  - PDF !! the bilateral margins added as a first step below
-/// The margins may be slightly reduced by this function to make
-/// everything fit when it otherwise wouldn't.
+/// Notes on arguments:
+///   max_table_width: page width - page margins
+///   desired_margin: maximum margin for each inelastic column
+///   minimum_margin: minimum margin for every column
+///   all_columns: the width of each inelastic column reflects:
+///    - the header width, and
+///    - a mask like "999,999" (ideally, there would instead be a
+///      quasi-global data structure mapping symbolic column names
+///      to their corresponding headers and maximal widths)
 
 void set_column_widths
-    (int                             total_width
-    ,int                             column_margin
+    (int                             max_table_width
+    ,int                             desired_margin
     ,std::vector<table_column_info>& all_columns
     )
-//
-// total_width    max table width (page width - page margins)
-// column_margin  spacing on both left and right of column
-// all_columns    std::vector<table_column_info>
-//   table_column_info::col_width_ is the only member changed
 {
-    // PDF !! Unconditionally add bilateral margins even though they
-    // may conditionally be removed below. This is a questionable
-    // design decision; if it is later reversed, then remove the
-    // comment about it above the implementation.
-    for(auto& i : all_columns)
+    // Soon this will become an argument.
+    int minimum_margin = 1;
+
+    int const cardinality = lmi::ssize(all_columns);
+    int data_width = 0;
+    int n_columns_to_show = 0;
+    for(int j = 0, cum_min_width = 0; j < cardinality; ++j)
         {
-        if(!i.is_elastic())
+        cum_min_width += all_columns[j].col_width() + minimum_margin;
+        if(cum_min_width <= max_table_width)
             {
-            i.col_width_ += 2 * column_margin;
+            data_width += all_columns[j].col_width();
+            ++n_columns_to_show;
             }
+        else break;
         }
 
-    // Number of columns.
-    int number_of_columns = 0;
-
-    // Number of elastic columns.
-    int number_of_elastic_columns = 0;
-
-    // Total width of all inelastic columns.
-    int total_inelastic_width = 0;
-
-    for(auto const& i : all_columns)
+    if(0 == n_columns_to_show)
         {
-        ++number_of_columns;
-
-        if(i.is_elastic())
-            {
-            ++number_of_elastic_columns;
-            }
-        else
-            {
-            total_inelastic_width += i.col_width();
-            }
+        alarum() << "Not enough room for even the first column." << LMI_FLUSH;
         }
 
-    if(total_width < total_inelastic_width)
+    // These two are boolean, but vector<bool> isn't a Container.
+    std::vector<int> bool_inelastic(n_columns_to_show, false);
+    std::vector<int> bool_elastic  (n_columns_to_show, false);
+    for(int j = 0; j < n_columns_to_show; ++j)
         {
-        // The inelastic columns don't all fit with their original
-        // one-em presumptive bilateral margins. Try to make them fit
-        // by reducing the margins slightly.
-        //
-        // The number of pixels that would need to be removed is:
-        auto const overflow = total_inelastic_width - total_width;
+        if(all_columns[j].is_elastic()) {bool_elastic  [j] = true;}
+        else                            {bool_inelastic[j] = true;}
+        }
 
-        // Because inelastic columns take more than the available
-        // horizontal space, there's no room to fit any elastic
-        // columns, so the column-fitting problem is overconstrained.
-        // Therefore, don't even try reducing margins if there are any
-        // elastic columns.
-        if(!number_of_elastic_columns)
-            {
-// Also calculate the number of pixels by which it overflows for each column
-            // We need to round up in division here to be sure that all columns
-            // fit into the available width.
-            auto const overflow_per_column = outward_quotient
-                (overflow
-                ,number_of_columns
-                );
-// Now determine whether reducing the margins will make the table fit.
-// If that works, then do it; else don't do it, and print a warning.
-//
-// column_margin is the padding on each side of every column, so
-// the number of pixels between columns, as the table was originally
-// laid out, is two times column_margin--which, as we just determined,
-// was too generous, so we're going to try reducing it.
-// Then this conditional compares
-//   the number of pixels by which we must shrink each column, to
-//   the number of pixels of padding between columns
-// Reducing the padding is a workable strategy if the desired reduction
-// is less than the padding.
-//
-// Is this as good as it can be, given that coordinates are integers?
-// Answer: Yes--the integers count points, not ems or characters, and
-// typographers wouldn't use any finer unit for this task.
-            if(overflow_per_column <= 2 * column_margin)
-                {
-                // We are going to reduce the total width by more than
-                // necessary, in general, because of rounding up above, so
-                // compensate for it by giving 1 extra pixel until we run out
-                // of these "underflow" pixels.
-// Defect: the number of pixels separating columns might now be zero.
-// '9' is five PDF pixels wide; do we need, say, two pixels between columns?
-//
-// Suggestion: change the
-//   overflow_per_column <= column_margin
-// condition to something like:
-//    overflow_per_column <= column_margin - 4 // two pixels on each side
-//    overflow_per_column <= column_margin - 2 // one pixel on each side
-                auto underflow = overflow_per_column * number_of_columns - overflow;
+    int const residue = max_table_width - data_width;
+    LMI_ASSERT(0 <= residue);
 
-                for(auto& i : all_columns)
-                    {
-                    i.col_width_ -= overflow_per_column;
-                    if(0 < underflow)
-                        {
-                        ++i.col_width_;
-                        --underflow;
-                        }
-                    }
+    // Apportion any residue among inelastic columns, up to the number
+    // of such columns times the desired_margin argument.
+    int const n_inelastic = std::accumulate(bool_inelastic.begin(), bool_inelastic.end(), 0);
+    int const residue_inelastic = std::min(residue, n_inelastic * desired_margin);
+    LMI_ASSERT(0 <= residue_inelastic);
+    std::vector<int> const delta_inelastic = apportion(bool_inelastic, residue_inelastic);
+    // That part of the residue should always be fully consumed.
+    LMI_ASSERT(residue_inelastic ==  std::accumulate(delta_inelastic.begin(), delta_inelastic.end(), 0));
 
-                column_margin -= (overflow_per_column + 1) / 2;
+    // Apportion all remaining residue, if any, among elastic columns.
+    int const residue_elastic = residue - residue_inelastic;
+    LMI_ASSERT(0 <= residue_elastic);
+    std::vector<int> const delta_elastic   = apportion(bool_elastic, residue_elastic);
 
-                // We condensed the columns enough to make them fit, so no need
-                // for the warning and we don't have any elastic columns, so
-                // we're done.
-                return;
-                }
-// If overflow_per_column is 1, then column_margin -= 1
-// "           "          "  2,   "        "           1
-// "           "          "  3,   "        "           2
-// "           "          "  4,   "        "           2
-// The 'underflow' logic shrinks columns by the exact number of pixels
-// to use up all the available width. But the column_margin reduction
-// isn't exact due to truncation: when the margin is added (on both sides),
-// is the total of all (margin+column+margin) widths lower than the maximum,
-// so that this is just a small aesthetic issue, or is it too wide, so that
-// not everything fits?
-//
-// Answer:
-// This is an issue of aligning the column text, not of fitting, because the
-// margin is used when positioning the text inside the column width. And the
-// width is correct, so the worst that can happen here is that the text is
-// offset by 0.5 pixels -- but, of course, if we rounded it down, it would be
-// offset by 0.5 pixels in the other direction. So maybe we should write
-//
-//     column_margin -= overflow_per_column / 2;
-//
-// just because it's shorter and not necessarily worse (nor better).
-            }
+    std::vector<int> w(cardinality);
+    for(int j = 0; j < n_columns_to_show; ++j)
+        {
+        w[j] = all_columns[j].col_width() + delta_inelastic[j] + delta_elastic[j];
+        }
 
+    if(cardinality != n_columns_to_show)
+        {
         warning()
-            << "Not enough space for all " << number_of_columns << " columns."
-            << "\nPrintable width is " << total_width << " points."
-            << "\nData alone require " << total_inelastic_width - 2 * column_margin * number_of_columns
-            << " points without any margins for legibility."
-            << "\nColumn margins of " << column_margin << " points on both sides"
-            << " would take up " << 2 * column_margin * number_of_columns << " additional points."
-            << LMI_FLUSH
+            << "Printing only the first " << n_columns_to_show
+            << " columns: not enough room for all " << cardinality << "."
+            << std::flush
             ;
-        return;
         }
-
-    // Lay out elastic columns in whatever space is left over after
-    // accounting for all inelastic columns. Clip to make them fit.
-    //
-    // If there's more than enough space for them, then expand them
-    // to consume all available space.
-    if(number_of_elastic_columns)
+    // Soon the all_columns argument will be passed by const reference,
+    // and w will be returned by value; until then...
+    for(int j = 0; j < cardinality; ++j)
         {
-        int const width_of_each_elastic_column = outward_quotient
-            (total_width - total_inelastic_width
-            ,number_of_elastic_columns
-            );
-
-        for(auto& i : all_columns)
-            {
-            if(i.is_elastic())
-                {
-                i.col_width_ = width_of_each_elastic_column;
-                }
-            }
+        all_columns[j].col_width_ = w[j];
         }
+//  return w;
 }

@@ -56,7 +56,7 @@ wx_table_generator::wx_table_generator
         {
         enroll_column(i);
         }
-    set_column_widths(total_width_, one_em_, all_columns_);
+    set_column_widths(total_width_, 2 * one_em_, all_columns_);
 
     // Set a pen with zero width to make grid lines thin,
     // and round cap style so that they combine seamlessly.
@@ -88,7 +88,7 @@ wx_table_generator::wx_table_generator
         {
         enroll_column(i);
         }
-    set_column_widths(total_width_, one_em_, all_columns_);
+    set_column_widths(total_width_, 2 * one_em_, all_columns_);
 
     dc_.SetPen(illustration_rule_color);
 }
