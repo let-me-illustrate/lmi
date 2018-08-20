@@ -432,7 +432,7 @@ void wx_table_generator::do_output_single_row
         {
         table_column_info const& ci = all_columns().at(i);
         std::string const& s = values[i];
-        if(!s.empty())
+        if(!s.empty() && 0 != ci.col_width())
             {
             int x_text = pos_x;
 
