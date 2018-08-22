@@ -663,7 +663,17 @@ class pdf_illustration;
 class page
 {
   public:
-    page() = default;
+    // When a page is created, it must be associated with an illustration and
+    // provided the HTML interpolator object which can be used for obtaining
+    // the HTML text of the page contents from an external template.
+    page
+        (pdf_illustration const& illustration
+        ,html_interpolator const& interpolate_html
+        )
+        :illustration_{illustration}
+        ,interpolate_html_{interpolate_html}
+    {
+    }
 
     // Pages are not value-like objects, so prohibit copying them.
     page(page const&) = delete;
@@ -671,43 +681,21 @@ class page
 
     virtual ~page() = default;
 
-    // Associate the illustration object using this page with it.
-    //
-    // This object is not passed as a ctor argument because it would be
-    // redundant, instead it is associated with the page when it's added to an
-    // illustration. This function is supposed to be called only once and only by
-    // pdf_illustration this page is being added to.
-    void illustration(pdf_illustration const& illustration)
-    {
-        LMI_ASSERT(!illustration_);
-
-        illustration_ = &illustration;
-    }
-
     // Called before rendering any pages to prepare for doing this, e.g. by
     // computing the number of pages needed.
     //
     // This function must not draw anything on the wxDC, it is provided only for
     // measurement purposes.
-    virtual void pre_render
-        (Ledger            const& // ledger
-        ,pdf_writer_wx          & // writer
-        ,html_interpolator const& // interpolate_html
-        )
+    virtual void pre_render(Ledger const&, pdf_writer_wx&)
     {
     }
 
     // Render this page contents.
-    virtual void render
-        (Ledger            const& ledger
-        ,pdf_writer_wx          & writer
-        ,html_interpolator const& interpolate_html
-        ) = 0;
+    virtual void render(Ledger const& ledger, pdf_writer_wx& writer) = 0;
 
   protected:
-    // The associated illustration, which will be non-null by the time our
-    // virtual functions such as pre_render() and render() are called.
-    pdf_illustration const* illustration_ = nullptr;
+    pdf_illustration  const& illustration_;
+    html_interpolator const& interpolate_html_;
 };
 
 // Base class for the different kinds of illustrations.
@@ -731,13 +719,18 @@ class pdf_illustration : protected html_interpolator
     // Add a page.
     //
     // This is a template just in order to save on writing std::make_unique<>()
-    // in the code using it to make it slightly shorter.
+    // in the code using it and passing the illustration object and the
+    // interpolator to the page ctor to make its creation shorter.
     template<typename T, typename... Args>
     void add(Args&&... args)
     {
-        auto page = std::make_unique<T>(std::forward<Args>(args)...);
-        page->illustration(*this);
-        pages_.emplace_back(std::move(page));
+        pages_.emplace_back
+            (std::make_unique<T>
+                (*this
+                ,get_interpolator()
+                ,std::forward<Args>(args)...
+                )
+            );
     }
 
     // Render all pages to the specified PDF file.
@@ -756,7 +749,7 @@ class pdf_illustration : protected html_interpolator
 
         for(auto const& i : pages_)
             {
-            i->pre_render(ledger_, writer, *this);
+            i->pre_render(ledger_, writer);
             }
 
         bool first = true;
@@ -775,7 +768,7 @@ class pdf_illustration : protected html_interpolator
                 writer.next_page();
                 }
 
-            i->render(ledger_, writer, *this);
+            i->render(ledger_, writer);
             }
 
         writer.save();
@@ -944,17 +937,18 @@ class pdf_illustration : protected html_interpolator
 class cover_page : public page
 {
   public:
+    using page::page;
+
     void render
         (Ledger            const& // ledger
         ,pdf_writer_wx          & writer
-        ,html_interpolator const& interpolate_html
         ) override
     {
         int const height_contents = writer.output_html
             (writer.get_horz_margin()
             ,writer.get_vert_margin()
             ,writer.get_page_width()
-            ,interpolate_html.expand_template("cover")
+            ,interpolate_html_.expand_template("cover")
             );
 
         // There is no way to draw a border around the page contents in wxHTML
@@ -977,12 +971,13 @@ class cover_page : public page
 class page_with_footer : public page
 {
   public:
+    using page::page;
+
     // Override pre_render() to compute footer_top_ which is needed in the
     // derived classes' overridden get_extra_pages_needed().
     void pre_render
         (Ledger            const& // ledger
         ,pdf_writer_wx          & writer
-        ,html_interpolator const& interpolate_html
         ) override
     {
         auto const frame_horz_margin = writer.get_horz_margin();
@@ -1000,7 +995,7 @@ class page_with_footer : public page
             (frame_horz_margin
             ,0
             ,frame_width
-            ,get_footer_lower_html(interpolate_html)
+            ,get_footer_lower_html()
             ,oe_only_measure
             );
 
@@ -1011,7 +1006,7 @@ class page_with_footer : public page
                 (frame_horz_margin
                 ,0
                 ,frame_width
-                ,interpolate_html.expand_template(upper_template)
+                ,interpolate_html_.expand_template(upper_template)
                 ,oe_only_measure
                 );
 
@@ -1027,7 +1022,6 @@ class page_with_footer : public page
     void render
         (Ledger            const& // ledger
         ,pdf_writer_wx          & writer
-        ,html_interpolator const& interpolate_html
         ) override
     {
         auto const frame_horz_margin = writer.get_horz_margin();
@@ -1046,7 +1040,7 @@ class page_with_footer : public page
                 (frame_horz_margin
                 ,y
                 ,frame_width
-                ,interpolate_html.expand_template(upper_template)
+                ,interpolate_html_.expand_template(upper_template)
                 );
             }
 
@@ -1054,7 +1048,7 @@ class page_with_footer : public page
             (frame_horz_margin
             ,y
             ,frame_width
-            ,get_footer_lower_html(interpolate_html)
+            ,get_footer_lower_html()
             );
 
         pdf_dc.SetPen(illustration_rule_color);
@@ -1086,20 +1080,21 @@ class page_with_footer : public page
     // overridden to define a page-specific footer if necessary.
     virtual std::string get_upper_footer_template_name() const
     {
-        return illustration_->get_upper_footer_template_name();
+        return illustration_.get_upper_footer_template_name();
     }
 
     // This function uses get_page_number() and returns the HTML wrapping it
     // and other fixed information appearing in the lower part of the footer.
-    html::text get_footer_lower_html(html_interpolator const& interpolate_html) const
+    html::text get_footer_lower_html() const
     {
         auto const page_number_str = get_page_number();
 
-        auto const templ = illustration_->get_lower_footer_template_name();
+        auto const templ = illustration_.get_lower_footer_template_name();
 
         // Use our own interpolation function to handle the special
         // "page_number" variable that is replaced with the actual
         // (possibly dynamic) page number.
+        auto const& interpolate_html = interpolate_html_;
         return html::text::from_html
             (interpolate_string
                 (("{{>" + templ + "}}").c_str()
@@ -1136,7 +1131,11 @@ class numbered_page : public page_with_footer
         last_page_number_ = 0;
     }
 
-    numbered_page()
+    numbered_page
+        (pdf_illustration  const& illustration
+        ,html_interpolator const& interpolate_html
+        )
+        :page_with_footer{illustration, interpolate_html}
     {
         // This assert would fail if start_numbering() hadn't been called
         // before creating a numbered page, as it should be.
@@ -1146,18 +1145,13 @@ class numbered_page : public page_with_footer
     void pre_render
         (Ledger            const& ledger
         ,pdf_writer_wx          & writer
-        ,html_interpolator const& interpolate_html
         ) override
     {
-        page_with_footer::pre_render(ledger, writer, interpolate_html);
+        page_with_footer::pre_render(ledger, writer);
 
         this_page_number_ = ++last_page_number_;
 
-        extra_pages_ = get_extra_pages_needed
-            (ledger
-            ,writer
-            ,interpolate_html
-            );
+        extra_pages_ = get_extra_pages_needed(ledger, writer);
 
         LMI_ASSERT(0 <= extra_pages_);
 
@@ -1203,7 +1197,6 @@ class numbered_page : public page_with_footer
     virtual int get_extra_pages_needed
         (Ledger            const& ledger
         ,pdf_writer_wx          & writer
-        ,html_interpolator const& interpolate_html
         ) = 0;
 
     std::string get_page_number() const override
@@ -1227,15 +1220,19 @@ class standard_page : public numbered_page
     // Accept only string literals as template names, there should be no need
     // to use anything else.
     template<int N>
-    explicit standard_page(char const (&page_template_name)[N])
-        :page_template_name_ {page_template_name}
+    explicit standard_page
+        (pdf_illustration  const& illustration
+        ,html_interpolator const& interpolate_html
+        ,char const               (&page_template_name)[N]
+        )
+        :numbered_page       {illustration, interpolate_html}
+        ,page_template_name_ {page_template_name}
     {
     }
 
     void render
         (Ledger            const& ledger
         ,pdf_writer_wx          & writer
-        ,html_interpolator const& interpolate_html
         ) override
     {
         // Page HTML must have been already set by get_extra_pages_needed().
@@ -1249,7 +1246,7 @@ class standard_page : public numbered_page
                 next_page(writer);
                 }
 
-            numbered_page::render(ledger, writer, interpolate_html);
+            numbered_page::render(ledger, writer);
 
             writer.output_html
                 (writer.get_horz_margin()
@@ -1268,11 +1265,10 @@ class standard_page : public numbered_page
     int get_extra_pages_needed
         (Ledger            const& // ledger
         ,pdf_writer_wx          & writer
-        ,html_interpolator const& interpolate_html
         ) override
     {
         page_html_ = wxString::FromUTF8
-            (interpolate_html.expand_template(page_template_name_).as_html()
+            (interpolate_html_.expand_template(page_template_name_).as_html()
             );
 
         page_break_positions_ = writer.paginate_html
@@ -1589,14 +1585,24 @@ TAGS_MODULE_END(lmi_illustration)
 class ill_reg_numeric_summary_page : public standard_page
 {
   public:
-    ill_reg_numeric_summary_page()
-        :standard_page("ill_reg_numeric_summary")
+    ill_reg_numeric_summary_page
+        (pdf_illustration  const& illustration
+        ,html_interpolator const& interpolate_html
+        )
+        :standard_page
+            (illustration
+            ,interpolate_html
+            ,"ill_reg_numeric_summary"
+            )
     {
     }
 };
 
 class ill_reg_numeric_summary_attachment : public ill_reg_numeric_summary_page
 {
+  public:
+    using ill_reg_numeric_summary_page::ill_reg_numeric_summary_page;
+
   private:
     std::string get_page_number() const override
     {
@@ -1611,13 +1617,14 @@ class page_with_tabular_report
     ,protected using_illustration_table
 {
   public:
+    using numbered_page::numbered_page;
+
     void render
         (Ledger            const& ledger
         ,pdf_writer_wx          & writer
-        ,html_interpolator const& interpolate_html
         ) override
     {
-        numbered_page::render(ledger, writer, interpolate_html);
+        numbered_page::render(ledger, writer);
 
         wx_table_generator table_gen{create_table_generator(ledger, writer)};
 
@@ -1633,13 +1640,12 @@ class page_with_tabular_report
             int pos_y = render_or_measure_fixed_page_part
                 (table_gen
                 ,writer
-                ,interpolate_html
                 ,oe_render
                 );
 
             for(;;)
                 {
-                auto const v = visible_values(ledger, interpolate_html, year);
+                auto const v = visible_values(ledger, interpolate_html_, year);
                 table_gen.output_row(pos_y, v);
 
                 ++year;
@@ -1667,7 +1673,7 @@ class page_with_tabular_report
                     if(page_bottom - rows_in_next_group * row_height < pos_y)
                         {
                         next_page(writer);
-                        numbered_page::render(ledger, writer, interpolate_html);
+                        numbered_page::render(ledger, writer);
                         break;
                         }
                     }
@@ -1687,7 +1693,6 @@ class page_with_tabular_report
     // version does nothing.
     virtual void render_or_measure_extra_headers
         (wx_table_generator     &     // table_gen
-        ,html_interpolator const&     // interpolate_html
         ,int                    &     // pos_y
         ,oenum_render_or_only_measure // output_mode
         ) const
@@ -1701,7 +1706,6 @@ class page_with_tabular_report
     int render_or_measure_fixed_page_part
         (wx_table_generator     &     table_gen
         ,pdf_writer_wx          &     writer
-        ,html_interpolator const&     interpolate_html
         ,oenum_render_or_only_measure output_mode
         ) const
     {
@@ -1711,7 +1715,7 @@ class page_with_tabular_report
             (writer.get_horz_margin()
             ,pos_y
             ,writer.get_page_width()
-            ,interpolate_html.expand_template
+            ,interpolate_html_.expand_template
                 (get_fixed_page_contents_template_name()
                 )
             ,output_mode
@@ -1719,7 +1723,6 @@ class page_with_tabular_report
 
         render_or_measure_extra_headers
             (table_gen
-            ,interpolate_html
             ,pos_y
             ,output_mode
             );
@@ -1738,7 +1741,6 @@ class page_with_tabular_report
     int get_extra_pages_needed
         (Ledger            const& ledger
         ,pdf_writer_wx          & writer
-        ,html_interpolator const& interpolate_html
         ) override
     {
         wx_table_generator table_gen{create_table_generator(ledger, writer)};
@@ -1746,7 +1748,6 @@ class page_with_tabular_report
         int const pos_y = render_or_measure_fixed_page_part
             (table_gen
             ,writer
-            ,interpolate_html
             ,oe_only_measure
             );
 
@@ -1770,6 +1771,9 @@ class page_with_tabular_report
 
 class ill_reg_tabular_detail_page : public page_with_tabular_report
 {
+  public:
+    using page_with_tabular_report::page_with_tabular_report;
+
   private:
     // PDF !! This derived class and its siblings each contain an enum
     // like the following. Most of the enumerators are unused. They
@@ -1802,7 +1806,6 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
 
     void render_or_measure_extra_headers
         (wx_table_generator     &     table_gen
-        ,html_interpolator const&     // interpolate_html
         ,int                    &     pos_y
         ,oenum_render_or_only_measure output_mode
         ) const override
@@ -1867,6 +1870,9 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
 
 class ill_reg_tabular_detail2_page : public page_with_tabular_report
 {
+  public:
+    using page_with_tabular_report::page_with_tabular_report;
+
   private:
     enum
         {column_policy_year
@@ -1913,10 +1919,15 @@ class standard_supplemental_report : public page_with_tabular_report
 {
   public:
     explicit standard_supplemental_report
-        (html_interpolator const& interpolate_html
+        (pdf_illustration  const& illustration
+        ,html_interpolator const& interpolate_html
         ,std::string       const& page_template
         )
-        :columns_       {build_columns(interpolate_html)}
+        :page_with_tabular_report
+            (illustration
+            ,interpolate_html
+            )
+        ,columns_       {build_columns(interpolate_html)}
         ,page_template_ {page_template}
     {
     }
@@ -1966,8 +1977,15 @@ class standard_supplemental_report : public page_with_tabular_report
 class ill_reg_supplemental_report : public standard_supplemental_report
 {
   public:
-    explicit ill_reg_supplemental_report(html_interpolator const& interpolate_html)
-        :standard_supplemental_report(interpolate_html, "ill_reg_supp_report")
+    explicit ill_reg_supplemental_report
+        (pdf_illustration  const& illustration
+        ,html_interpolator const& interpolate_html
+        )
+        :standard_supplemental_report
+            (illustration
+            ,interpolate_html
+            ,"ill_reg_supp_report"
+            )
     {
     }
 
@@ -2124,7 +2142,7 @@ class pdf_illustration_naic : public pdf_illustration
         add<ill_reg_tabular_detail2_page>();
         if(invar.SupplementalReport)
             {
-            add<ill_reg_supplemental_report>(get_interpolator());
+            add<ill_reg_supplemental_report>();
             }
         if(!invar.IsInforce)
             {
@@ -2142,6 +2160,9 @@ class pdf_illustration_naic : public pdf_illustration
 // both FINRA and private group placement illustrations.
 class page_with_basic_tabular_report : public page_with_tabular_report
 {
+  public:
+    using page_with_tabular_report::page_with_tabular_report;
+
   private:
     // This function must be overridden to return the text of the super-header
     // used for all pairs of "cash surrender value" and "death benefit"
@@ -2205,7 +2226,6 @@ class page_with_basic_tabular_report : public page_with_tabular_report
 
     void render_or_measure_extra_headers
         (wx_table_generator&          table_gen
-        ,html_interpolator const&     interpolate_html
         ,int&                         pos_y
         ,oenum_render_or_only_measure output_mode
         ) const override
@@ -2249,6 +2269,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
         // This function outputs all lines of a single header, corresponding to
         // the "Guaranteed" or "Current", "Zero" or not, column and returns the
         // vertical position below the header.
+        auto const& interpolate_html = interpolate_html_;
         auto const output_two_column_super_header = [=,&table_gen]
             (basis          guar_or_curr
             ,interest_rate  zero_or_not
@@ -2311,6 +2332,9 @@ class page_with_basic_tabular_report : public page_with_tabular_report
 
 class finra_basic : public page_with_basic_tabular_report
 {
+  public:
+    using page_with_basic_tabular_report::page_with_basic_tabular_report;
+
   private:
     std::string get_fixed_page_contents_template_name() const override
     {
@@ -2344,6 +2368,9 @@ class finra_basic : public page_with_basic_tabular_report
 
 class finra_supplemental : public page_with_tabular_report
 {
+  public:
+    using page_with_tabular_report::page_with_tabular_report;
+
   private:
     enum
         {column_policy_year
@@ -2443,6 +2470,9 @@ class finra_supplemental : public page_with_tabular_report
 
 class finra_assumption_detail : public page_with_tabular_report
 {
+  public:
+    using page_with_tabular_report::page_with_tabular_report;
+
   private:
     enum
         {column_policy_year
@@ -2539,10 +2569,7 @@ class pdf_illustration_finra : public pdf_illustration
             }
         if(invar.SupplementalReport)
             {
-            add<standard_supplemental_report>
-                (get_interpolator()
-                ,"finra_supp_report"
-                );
+            add<standard_supplemental_report>("finra_supp_report");
             }
     }
 
@@ -2560,6 +2587,9 @@ class pdf_illustration_finra : public pdf_illustration
 // Basic illustration page of the private group placement illustration.
 class reg_d_group_basic : public page_with_basic_tabular_report
 {
+  public:
+    using page_with_basic_tabular_report::page_with_basic_tabular_report;
+
   private:
     std::string get_fixed_page_contents_template_name() const override
     {
@@ -2612,10 +2642,7 @@ class pdf_illustration_reg_d_group : public pdf_illustration
         add<standard_page>("reg_d_group_narr_summary2");
         if(invar.SupplementalReport)
             {
-            add<standard_supplemental_report>
-                (get_interpolator()
-                ,"reg_d_group_supp_report"
-                );
+            add<standard_supplemental_report>("reg_d_group_supp_report");
             }
     }
 
@@ -2635,6 +2662,9 @@ class pdf_illustration_reg_d_group : public pdf_illustration
 // parts.
 class reg_d_indiv_irr_base : public page_with_tabular_report
 {
+  public:
+    using page_with_tabular_report::page_with_tabular_report;
+
   private:
     enum
         {column_policy_year
@@ -2663,7 +2693,6 @@ class reg_d_indiv_irr_base : public page_with_tabular_report
 
     void render_or_measure_extra_headers
         (wx_table_generator&          table_gen
-        ,html_interpolator const&     interpolate_html
         ,int&                         pos_y
         ,oenum_render_or_only_measure output_mode
         ) const override
@@ -2679,7 +2708,7 @@ class reg_d_indiv_irr_base : public page_with_tabular_report
 
         auto pos_y_copy = pos_y;
         table_gen.output_super_header
-            (interpolate_html(header_zero.str()).as_html()
+            (interpolate_html_(header_zero.str()).as_html()
             ,column_zero_cash_surr_value
             ,column_zero_irr_surr_value
             ,pos_y_copy
@@ -2696,7 +2725,7 @@ class reg_d_indiv_irr_base : public page_with_tabular_report
             ;
 
         table_gen.output_super_header
-            (interpolate_html(header_nonzero.str()).as_html()
+            (interpolate_html_(header_nonzero.str()).as_html()
             ,column_nonzero_cash_surr_value
             ,column_nonzero_irr_surr_value
             ,pos_y
@@ -2721,6 +2750,9 @@ class reg_d_indiv_irr_base : public page_with_tabular_report
 
 class reg_d_indiv_guar_irr : public reg_d_indiv_irr_base
 {
+  public:
+    using reg_d_indiv_irr_base::reg_d_indiv_irr_base;
+
   private:
     basis get_basis() const override
     {
@@ -2755,6 +2787,9 @@ class reg_d_indiv_guar_irr : public reg_d_indiv_irr_base
 
 class reg_d_indiv_curr_irr : public reg_d_indiv_irr_base
 {
+  public:
+    using reg_d_indiv_irr_base::reg_d_indiv_irr_base;
+
   private:
     basis get_basis() const override
     {
@@ -2789,6 +2824,9 @@ class reg_d_indiv_curr_irr : public reg_d_indiv_irr_base
 
 class reg_d_indiv_curr : public page_with_tabular_report
 {
+  public:
+    using page_with_tabular_report::page_with_tabular_report;
+
   private:
     enum
         {column_policy_year
@@ -2837,13 +2875,12 @@ class reg_d_indiv_curr : public page_with_tabular_report
 
     void render_or_measure_extra_headers
         (wx_table_generator     &     table_gen
-        ,html_interpolator const&     interpolate_html
         ,int                    &     pos_y
         ,oenum_render_or_only_measure output_mode
         ) const override
     {
         table_gen.output_super_header
-            (interpolate_html
+            (interpolate_html_
                 ("{{InitAnnSepAcctGrossInt_Guaranteed}} Hypothetical Rate of Return*"
                 ).as_html()
             ,column_curr_investment_income
@@ -2886,10 +2923,7 @@ class pdf_illustration_reg_d_indiv : public pdf_illustration
         add<standard_page>("reg_d_indiv_notes2");
         if(invar.SupplementalReport)
             {
-            add<standard_supplemental_report>
-                (get_interpolator()
-                ,"reg_d_indiv_supp_report"
-                );
+            add<standard_supplemental_report>("reg_d_indiv_supp_report");
             }
     }
 
