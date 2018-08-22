@@ -513,14 +513,6 @@ int wx_table_generator::cell_pos_x(int column) const
 
 wxRect wx_table_generator::cell_rect(int column, int y) const
 {
-    LMI_ASSERT(column < lmi::ssize(all_columns()));
-    wxRect rect0
-        (cell_pos_x(column)
-        ,y
-        ,all_columns().at(column).col_width()
-        ,row_height_
-        );
-    LMI_ASSERT(cell_rect(column, 1 + column, y) == rect0);
     return cell_rect(column, 1 + column, y);
 }
 
