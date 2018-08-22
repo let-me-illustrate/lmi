@@ -1933,7 +1933,7 @@ class standard_supplemental_report : public page_with_tabular_report
     }
 
     // Helper function used by the ctor to initialize the const columns_ field.
-    illustration_table_columns build_columns
+    static illustration_table_columns build_columns
         (html_interpolator const& interpolate_html
         )
     {
