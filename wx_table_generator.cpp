@@ -23,7 +23,6 @@
 
 #include "wx_table_generator.hpp"
 
-#include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"               // count_newlines(), split_into_lines()
 #include "ssize_lmi.hpp"
@@ -209,25 +208,15 @@ void wx_table_generator::output_super_header
         }
 
     // We don't have a function for getting the rectangle of a span of columns,
-    // but we can reuse the existing text_rect() if we just increase its width
+    // but we can reuse the existing cell_rect() if we just increase its width
     // by the width of all the extra (i.e. not counting the starting one)
     // columns in this span.
-    auto rect = text_rect(begin_column, pos_y);
+    auto rect = cell_rect(begin_column, pos_y);
     rect.width += cell_pos_x(end_column) - cell_pos_x(begin_column + 1);
 
     for(auto const& i : lines)
         {
-//      LMI_ASSERT(dc().GetTextExtent(i).x <= rect.width);
-        if(rect.width < dc().GetTextExtent(i).x)
-            {
-            warning()
-                << "Super-header transgresses its rectangle:\n"
-                << "'" << i << "' super-header text\n"
-                << dc().GetTextExtent(i).x << " dc().GetTextExtent(i).x\n"
-                << rect.width << " rect.width\n"
-                << LMI_FLUSH
-                ;
-            }
+        LMI_ASSERT(dc().GetTextExtent(i).x <= rect.width);
         dc_.DrawLabel(i, rect, wxALIGN_CENTER_HORIZONTAL);
         rect.y += row_height_;
         pos_y  += row_height_;
