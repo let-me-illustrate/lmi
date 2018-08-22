@@ -62,9 +62,9 @@ double premium_tax::minimum_load_rate() const {return 0.0;}
 struct LoadsTest
 {
     LoadsTest(load_details const& details)
-        :details_ (details)
-        ,database_(details.length_)
-        ,loads_   ()
+        :details_ {details}
+        ,database_{details.length_}
+        ,loads_   {}
         {}
 
     void Allocate  () {loads_.Allocate(details_.length_);}

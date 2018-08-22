@@ -94,7 +94,7 @@ class table
   private:
     // Private ctor used only by database.
     explicit table(std::shared_ptr<table_impl> const& impl)
-        :impl_(impl)
+        :impl_{impl}
     {
     }
 

@@ -94,7 +94,7 @@ LMI_WX_TEST_CASE(input_validation)
     struct test_coi_multiplier_dialog : public wxExpectModalBase<MvcController>
     {
         explicit test_coi_multiplier_dialog(char const* value)
-            :value_(value)
+            :value_{value}
         {}
 
         test_coi_multiplier_dialog(test_coi_multiplier_dialog const&) = delete;

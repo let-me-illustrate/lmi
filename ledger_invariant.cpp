@@ -53,18 +53,18 @@
 
 //============================================================================
 LedgerInvariant::LedgerInvariant(int len)
-    :LedgerBase(len)
-    ,irr_initialized_(false)
-    ,FullyInitialized(false)
+    :LedgerBase{len}
+    ,irr_initialized_{false}
+    ,FullyInitialized{false}
 {
     Alloc(len);
 }
 
 //============================================================================
 LedgerInvariant::LedgerInvariant(LedgerInvariant const& obj)
-    :LedgerBase(obj)
-    ,irr_initialized_(false)
-    ,FullyInitialized(false)
+    :LedgerBase{obj}
+    ,irr_initialized_{false}
+    ,FullyInitialized{false}
 {
     Alloc(obj.GetLength());
     Copy(obj);

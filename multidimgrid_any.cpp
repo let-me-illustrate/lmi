@@ -137,7 +137,7 @@ inline MultiDimGridGrid::MultiDimGridGrid
     ,long int style
     ,std::string const& name
     )
-    :wxGrid(parent, id, pos, size, style, name)
+    :wxGrid{parent, id, pos, size, style, name}
 {
 }
 
@@ -214,7 +214,7 @@ class GridRefreshTableDataGuard
 };
 
 inline GridRefreshTableDataGuard::GridRefreshTableDataGuard(MultiDimGrid& grid)
-    :grid_(grid)
+    :grid_{grid}
 {
     ++grid_.table_data_refresh_counter_;
 }

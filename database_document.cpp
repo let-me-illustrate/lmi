@@ -29,7 +29,7 @@
 IMPLEMENT_DYNAMIC_CLASS(DatabaseDocument, ProductEditorDocument)
 
 DatabaseDocument::DatabaseDocument()
-    :ProductEditorDocument()
+    :ProductEditorDocument{}
 {
     db_.InitDB();
 }

@@ -119,10 +119,10 @@ AxisMaxBoundAdjuster<Integral>::AxisMaxBoundAdjuster
     ,Integral maximum_lower_bound
     ,Integral maximum_upper_bound
     )
-    :AxisMaxBoundAdjusterBase(grid)
-    ,axis_(axis)
-    ,maximum_lower_bound_(maximum_lower_bound)
-    ,maximum_upper_bound_(maximum_upper_bound)
+    :AxisMaxBoundAdjusterBase{grid}
+    ,axis_{axis}
+    ,maximum_lower_bound_{maximum_lower_bound}
+    ,maximum_upper_bound_{maximum_upper_bound}
 {
     if(maximum_upper_bound < maximum_lower_bound)
         {
@@ -279,7 +279,7 @@ AdjustableMaxBoundAxis<Integral>::AdjustableMaxBoundAxis
     ,Integral lower_bound
     ,Integral upper_bound
     )
-    :BaseClass(name)
+    :BaseClass{name}
 {
     GrandBaseClass::SetValues(min_value, max_value, 1);
     SetBounds(lower_bound, upper_bound);
@@ -289,7 +289,7 @@ template<typename Integral>
 AdjustableMaxBoundAxis<Integral>::AdjustableMaxBoundAxis
     (std::string const& name
     )
-    :BaseClass(name)
+    :BaseClass{name}
 {
     SetBounds(0, 0);
     GrandBaseClass::SetValues(0, 0, 1);

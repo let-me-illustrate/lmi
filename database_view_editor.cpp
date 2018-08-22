@@ -42,7 +42,7 @@ class DatabaseGenderAxis
 {
   public:
     DatabaseGenderAxis()
-        :MultiDimEnumAxis<mcenum_gender>("Gender", all_strings_gender())
+        :MultiDimEnumAxis<mcenum_gender>{"Gender", all_strings_gender()}
     {}
 };
 
@@ -51,7 +51,7 @@ class DatabaseClassAxis
 {
   public:
     DatabaseClassAxis()
-        :MultiDimEnumAxis<mcenum_class>("Class", all_strings_class())
+        :MultiDimEnumAxis<mcenum_class>{"Class", all_strings_class()}
     {}
 };
 
@@ -60,7 +60,7 @@ class DatabaseSmokingAxis
 {
   public:
     DatabaseSmokingAxis()
-        :MultiDimEnumAxis<mcenum_smoking>("Smoking", all_strings_smoking())
+        :MultiDimEnumAxis<mcenum_smoking>{"Smoking", all_strings_smoking()}
     {}
 };
 
@@ -69,7 +69,7 @@ class DatabaseIssueAgeAxis
 {
   public:
     DatabaseIssueAgeAxis()
-        :MultiDimIntAxis("Issue Age", 0, 99, 1)
+        :MultiDimIntAxis{"Issue Age", 0, 99, 1}
     {}
 };
 
@@ -78,7 +78,7 @@ class DatabaseUwBasisAxis
 {
   public:
     DatabaseUwBasisAxis()
-        :MultiDimEnumAxis<mcenum_uw_basis>("UW Basis", all_strings_uw_basis())
+        :MultiDimEnumAxis<mcenum_uw_basis>{"UW Basis", all_strings_uw_basis()}
     {}
 };
 
@@ -87,7 +87,7 @@ class DatabaseStateAxis
 {
   public:
     DatabaseStateAxis()
-        :MultiDimEnumAxis<mcenum_state>("State", all_strings_state())
+        :MultiDimEnumAxis<mcenum_state>{"State", all_strings_state()}
     {}
 };
 
@@ -99,13 +99,13 @@ class DatabaseDurationAxis
 
   public:
     DatabaseDurationAxis()
-        :BaseClass("Duration", 0, max_bound_duration, 1, max_bound_duration)
+        :BaseClass{"Duration", 0, max_bound_duration, 1, max_bound_duration}
     {}
 };
 
 DatabaseTableAdapter::DatabaseTableAdapter(database_entity* db_value)
-    :db_value_(db_value)
-    ,modified_(false)
+    :db_value_{db_value}
+    ,modified_{false}
 {
     indexes_.resize(eda_max);
 }

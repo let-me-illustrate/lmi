@@ -29,7 +29,7 @@
 
 template<typename E>
 MultiDimAxis<E>::MultiDimAxis(std::string const& name)
-    :MultiDimAxisAny(name)
+    :MultiDimAxisAny{name}
 {
 }
 
@@ -47,8 +47,8 @@ MultiDimEnumAxis<E>::MultiDimEnumAxis
     (std::string const& name
     ,std::vector<std::string> const& values
     )
-    :MultiDimAxis<E>(name)
-    ,values_(values)
+    :MultiDimAxis<E>{name}
+    ,values_{values}
 {
 }
 
@@ -82,14 +82,14 @@ MultiDimIntegralAxis<Integral>::MultiDimIntegralAxis
     ,Integral maxValue
     ,Integral step
     )
-    :MultiDimAxis<Integral>(name)
+    :MultiDimAxis<Integral>{name}
 {
     SetValues(minValue, maxValue, step);
 }
 
 template<typename Integral>
 MultiDimIntegralAxis<Integral>::MultiDimIntegralAxis(std::string const& name)
-    :MultiDimAxis<Integral>(name)
+    :MultiDimAxis<Integral>{name}
 {
     SetValues(0, 100, 1);
 }
@@ -207,7 +207,7 @@ template<typename AdjustControl, typename BaseAxisType>
 MultiDimAdjustableAxis<AdjustControl,BaseAxisType>::MultiDimAdjustableAxis
     (std::string const& name
     )
-    :BaseAxisType(name)
+    :BaseAxisType{name}
 {
 }
 

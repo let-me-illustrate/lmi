@@ -97,9 +97,9 @@ rounding_parameters::rounding_parameters
     ,rounding_style     style
     ,std::string const& gloss
     )
-    :decimals_ (decimals)
-    ,style_    (style   )
-    ,gloss_    (gloss   )
+    :decimals_ {decimals}
+    ,style_    {style   }
+    ,gloss_    {gloss   }
 {
 }
 
@@ -131,28 +131,28 @@ rounding_style rounding_parameters::raw_style() const
 /// Private default ctor for friend class and write_rounding_files().
 
 rounding_rules::rounding_rules()
-    :round_specamt_           (0, r_upward    , "")
-    ,round_death_benefit_     (2, r_to_nearest, "")
-    ,round_naar_              (2, r_to_nearest, "")
-    ,round_coi_rate_          (8, r_downward  , "")
-    ,round_coi_charge_        (2, r_to_nearest, "")
-    ,round_gross_premium_     (2, r_to_nearest, "")
-    ,round_net_premium_       (2, r_to_nearest, "")
-    ,round_interest_rate_     (0, r_not_at_all, "")
-    ,round_interest_credit_   (2, r_to_nearest, "")
-    ,round_withdrawal_        (2, r_to_nearest, "")
-    ,round_loan_              (2, r_to_nearest, "")
-    ,round_interest_rate_7702_(0, r_not_at_all, "")
-    ,round_corridor_factor_   (2, r_to_nearest, "")
-    ,round_nsp_rate_7702_     (6, r_downward  , "")
-    ,round_seven_pay_rate_    (6, r_downward  , "")
-    ,round_surrender_charge_  (2, r_to_nearest, "")
-    ,round_irr_               (4, r_downward  , "")
-    ,round_min_specamt_       (0, r_upward    , "")
-    ,round_max_specamt_       (0, r_downward  , "")
-    ,round_min_premium_       (2, r_upward    , "")
-    ,round_max_premium_       (2, r_downward  , "")
-    ,round_min_init_premium_  (2, r_upward    , "")
+    :round_specamt_           {0, r_upward    , ""}
+    ,round_death_benefit_     {2, r_to_nearest, ""}
+    ,round_naar_              {2, r_to_nearest, ""}
+    ,round_coi_rate_          {8, r_downward  , ""}
+    ,round_coi_charge_        {2, r_to_nearest, ""}
+    ,round_gross_premium_     {2, r_to_nearest, ""}
+    ,round_net_premium_       {2, r_to_nearest, ""}
+    ,round_interest_rate_     {0, r_not_at_all, ""}
+    ,round_interest_credit_   {2, r_to_nearest, ""}
+    ,round_withdrawal_        {2, r_to_nearest, ""}
+    ,round_loan_              {2, r_to_nearest, ""}
+    ,round_interest_rate_7702_{0, r_not_at_all, ""}
+    ,round_corridor_factor_   {2, r_to_nearest, ""}
+    ,round_nsp_rate_7702_     {6, r_downward  , ""}
+    ,round_seven_pay_rate_    {6, r_downward  , ""}
+    ,round_surrender_charge_  {2, r_to_nearest, ""}
+    ,round_irr_               {4, r_downward  , ""}
+    ,round_min_specamt_       {0, r_upward    , ""}
+    ,round_max_specamt_       {0, r_downward  , ""}
+    ,round_min_premium_       {2, r_upward    , ""}
+    ,round_max_premium_       {2, r_downward  , ""}
+    ,round_min_init_premium_  {2, r_upward    , ""}
 {
     ascribe_members();
 }

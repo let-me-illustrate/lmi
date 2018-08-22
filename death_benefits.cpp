@@ -30,7 +30,7 @@
 
 //============================================================================
 death_benefits::death_benefits(int length, yare_input const& yi)
-    :length_(length)
+    :length_{length}
 {
     // In the antediluvian branch, the vector in the input class
     // is padded to a greater length.

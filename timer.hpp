@@ -146,8 +146,8 @@ class AliquotTimer
 
 template<typename F>
 AliquotTimer<F>::AliquotTimer(F f, double max_seconds)
-    :f_          (f)
-    ,max_seconds_(max_seconds)
+    :f_          {f}
+    ,max_seconds_{max_seconds}
 {
     Timer timer;
     if(max_seconds_ * timer.frequency_ < 1.0)

@@ -97,13 +97,13 @@ std::string const& default_product_name()
 } // Unnamed namespace.
 
 ce_product_name::ce_product_name()
-    :mc_enum_base(product_names().size())
-    ,value_(default_product_name())
+    :mc_enum_base{lmi::ssize(product_names())}
+    ,value_{default_product_name()}
 {}
 
 ce_product_name::ce_product_name(std::string const& s)
-    :mc_enum_base(product_names().size())
-    ,value_(product_names()[ordinal(s)])
+    :mc_enum_base{lmi::ssize(product_names())}
+    ,value_{product_names()[ordinal(s)]}
 {}
 
 ce_product_name& ce_product_name::operator=(std::string const& s)

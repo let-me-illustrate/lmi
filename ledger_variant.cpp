@@ -37,20 +37,20 @@
 
 //============================================================================
 LedgerVariant::LedgerVariant(int len)
-    :LedgerBase      (len)
-    ,GenBasis_       (mce_gen_curr)
-    ,SepBasis_       (mce_sep_full)
-    ,FullyInitialized(false)
+    :LedgerBase      {len}
+    ,GenBasis_       {mce_gen_curr}
+    ,SepBasis_       {mce_sep_full}
+    ,FullyInitialized{false}
 {
     Alloc(len);
 }
 
 //============================================================================
 LedgerVariant::LedgerVariant(LedgerVariant const& obj)
-    :LedgerBase(obj)
-    ,GenBasis_       (mce_gen_curr)
-    ,SepBasis_       (mce_sep_full)
-    ,FullyInitialized(false)
+    :LedgerBase{obj}
+    ,GenBasis_       {mce_gen_curr}
+    ,SepBasis_       {mce_sep_full}
+    ,FullyInitialized{false}
 {
     Alloc(obj.GetLength());
     Copy(obj);
@@ -362,7 +362,7 @@ void LedgerVariant::Spew(std::ostream& os) const
 }
 
 ledger_map_holder::ledger_map_holder(ledger_map_t const& z)
-    :held_(z)
+    :held_{z}
 {
 }
 

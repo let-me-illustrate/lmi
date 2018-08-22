@@ -36,7 +36,7 @@ class output_file_existence_checker
 {
   public:
     output_file_existence_checker(fs::path const& path)
-        :path_(path)
+        :path_{path}
         {
         fs::remove(path_);
         }

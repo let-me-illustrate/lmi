@@ -46,7 +46,7 @@ PreviewFrameEx::PreviewFrameEx
     ,long int            style
     ,wxString     const& name
     )
-    :wxPreviewFrame(preview, parent, title, pos, size, style, name)
+    :wxPreviewFrame{preview, parent, title, pos, size, style, name}
 {
     // WX !! It would seem equivalent (and better) to default the
     // 'style' argument to

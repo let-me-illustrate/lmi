@@ -64,9 +64,9 @@ END_EVENT_TABLE()
 // was used in 'illustration_view.cpp' through revision 1.98 .
 
 DocManagerEx::DocManagerEx(long int flags, bool initialize)
-    :wxDocManager     (flags, initialize)
-    ,print_data_      (new(wx) wxPrintData)
-    ,page_setup_data_ (new(wx) wxPageSetupDialogData)
+    :wxDocManager     {flags, initialize}
+    ,print_data_      {new(wx) wxPrintData}
+    ,page_setup_data_ {new(wx) wxPageSetupDialogData}
 {
 }
 

@@ -33,7 +33,7 @@ SingleChoicePopupMenu::SingleChoicePopupMenu
     ,wxString const&      title
     ,wxTopLevelWindow&    parent
     )
-    :parent_(parent)
+    :parent_{parent}
 {
     if(!title.IsEmpty())
         {

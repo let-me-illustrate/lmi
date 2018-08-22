@@ -68,7 +68,7 @@ struct enter_comments_in_case_defaults_dialog
     :public wxExpectModalBase<MvcController>
 {
     enter_comments_in_case_defaults_dialog(std::string const& comments)
-        :comments_(comments)
+        :comments_{comments}
         {
         }
 
@@ -124,8 +124,8 @@ void init_test_census
         :public enter_comments_in_case_defaults_dialog
     {
         change_corp_in_case_defaults_dialog(std::string const& corp_name)
-            :enter_comments_in_case_defaults_dialog("idiosyncrasyZ")
-            ,corp_name_(corp_name)
+            :enter_comments_in_case_defaults_dialog{"idiosyncrasyZ"}
+            ,corp_name_{corp_name}
             {
             }
 
@@ -158,7 +158,7 @@ void init_test_census
         :public wxExpectModalBase<MvcController>
     {
         change_name_in_cell_dialog(std::string const& insured_name)
-            :insured_name_(insured_name)
+            :insured_name_{insured_name}
             {
             }
 

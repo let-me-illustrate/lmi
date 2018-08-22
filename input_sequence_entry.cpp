@@ -222,7 +222,7 @@ class InputSequenceEditor
     {
       public:
         explicit LayoutOnceGuard(InputSequenceEditor* editor)
-            :editor_(editor)
+            :editor_{editor}
         {
             ++editor_->layout_freeze_count_;
         }
@@ -1373,7 +1373,7 @@ class InputSequenceButton
 };
 
 InputSequenceButton::InputSequenceButton(wxWindow* parent, wxWindowID id)
-    :wxButton(parent, id, "...", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT)
+    :wxButton{parent, id, "...", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT}
 {
 }
 
@@ -1384,7 +1384,7 @@ InputSequenceEntry::InputSequenceEntry
     ,wxWindowID         id
     ,wxString const&    name
     )
-    :input_(nullptr)
+    :input_{nullptr}
 {
     Create(parent, id, name);
 }
@@ -1606,7 +1606,7 @@ void InputSequenceEntry::DoOpenEditor()
 IMPLEMENT_DYNAMIC_CLASS(InputSequenceEntryXmlHandler, wxXmlResourceHandler)
 
 InputSequenceEntryXmlHandler::InputSequenceEntryXmlHandler()
-    :wxXmlResourceHandler()
+    :wxXmlResourceHandler{}
 {
     AddWindowStyles();
 }

@@ -53,9 +53,9 @@ Server7702Output RunServer7702FromStruct(gpt_input a_Input)
 
 //============================================================================
 Server7702::Server7702(gpt_input& a_Input)
-    :Input(a_Input)
-    ,IsIssuedToday(false)
-    ,IsPossibleAdjustableEvent(false)
+    :Input{a_Input}
+    ,IsIssuedToday{false}
+    ,IsPossibleAdjustableEvent{false}
 {
 }
 

@@ -202,7 +202,7 @@ xml::element const& xml_lmi::dom_parser::root_node
 }
 
 xml_lmi::xml_document::xml_document(std::string const& root_node_name)
-    :document_(new xml_lmi::Document(xml::element(root_node_name.c_str())))
+    :document_{new xml_lmi::Document(xml::element(root_node_name.c_str()))}
 {
 }
 

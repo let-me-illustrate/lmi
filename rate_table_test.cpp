@@ -50,7 +50,7 @@ class std_out_redirector
 {
   public:
     std_out_redirector()
-        :orig_streambuf_(std::cout.rdbuf(stream_out_.rdbuf()))
+        :orig_streambuf_{std::cout.rdbuf(stream_out_.rdbuf())}
         {
         }
 
@@ -89,7 +89,7 @@ class test_file_eraser
 {
   public:
     explicit test_file_eraser(fs::path const& path)
-        :path_(path)
+        :path_{path}
         {
         }
 

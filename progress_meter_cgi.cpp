@@ -55,7 +55,7 @@ concrete_progress_meter::concrete_progress_meter
     ,std::string const&                title
     ,progress_meter::enum_display_mode display_mode
     )
-    :progress_meter(max_count, title, display_mode)
+    :progress_meter{max_count, title, display_mode}
 {
 }
 

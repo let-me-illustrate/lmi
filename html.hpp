@@ -168,7 +168,7 @@ class LMI_SO any_element
   public:
     // Ctor should only be used with literal strings as argument.
     explicit any_element(char const* name)
-        :name_(name)
+        :name_{name}
     {
     }
 

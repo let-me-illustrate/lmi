@@ -191,19 +191,19 @@ jdn_t YmdToJdn(ymd_t z)
 }
 
 calendar_date::calendar_date()
-    :jdn_(today().julian_day_number())
+    :jdn_{today().julian_day_number()}
 {
     cache_gregorian_elements();
 }
 
 calendar_date::calendar_date(jdn_t z)
-    :jdn_(z.value())
+    :jdn_{z.value()}
 {
     cache_gregorian_elements();
 }
 
 calendar_date::calendar_date(ymd_t z)
-    :jdn_(YmdToJdn(z).value())
+    :jdn_{YmdToJdn(z).value()}
 {
     cache_gregorian_elements();
 }
@@ -715,12 +715,12 @@ class birthdate_limit
         ,oenum_alb_or_anb alb_anb
         ,root_bias        bias
         )
-        :as_of_date_       (as_of_date)
-        ,limit_age_        (limit_age)
-        ,alb_anb_          (alb_anb)
-        ,bias_             (bias)
-        ,a_priori_minimum_ (calendar_date::gregorian_epoch_jdn)
-        ,a_priori_maximum_ (calendar_date::last_yyyy_date_jdn)
+        :as_of_date_       {as_of_date}
+        ,limit_age_        {limit_age}
+        ,alb_anb_          {alb_anb}
+        ,bias_             {bias}
+        ,a_priori_minimum_ {calendar_date::gregorian_epoch_jdn}
+        ,a_priori_maximum_ {calendar_date::last_yyyy_date_jdn}
         {
         if(bias_lower == bias_)
             {

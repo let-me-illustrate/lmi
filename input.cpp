@@ -33,205 +33,205 @@
 /// UDT defaults are presently appropriate.
 
 Input::Input()
-    :IssueAge                         ("45")
-    ,RetirementAge                    ("65")
-    ,Gender                           ("Male")
-    ,Smoking                          ("Nonsmoker")
-    ,UnderwritingClass                ("Standard")
-//    ,WaiverOfPremiumBenefit           ("")
-//    ,AccidentalDeathBenefit           ("")
-//    ,TermRider                        ("")
-//    ,TermRiderAmount                  ("")
-    ,TotalSpecifiedAmount             ("1000000")
-//    ,TermRiderProportion              ("")
-//    ,TermRiderUseProportion           ("")
-//    ,DateOfBirth                      ("")
-//    ,SubstandardTable                 ("")
-//    ,ProductName                      ("")
-//    ,Dumpin                           ("")
-//    ,External1035ExchangeAmount       ("")
-//    ,External1035ExchangeTaxBasis     ("")
-//    ,External1035ExchangeFromMec      ("")
-//    ,Internal1035ExchangeAmount       ("")
-//    ,Internal1035ExchangeTaxBasis     ("")
-//    ,Internal1035ExchangeFromMec      ("")
-//    ,SolveTargetAge                   ("95")
-//    ,SolveBeginAge                    ("")
-//    ,SolveEndAge                      ("95")
-//    ,SolveType                        ("")
-//    ,SolveBeginYear                   ("")
-//    ,SolveEndYear                     ("50")
-//    ,SolveTarget                      ("")
-//    ,SolveTargetValue                 ("")
-//    ,SolveTargetYear                  ("50")
-//    ,SolveExpenseGeneralAccountBasis  ("")
-//    ,SolveSeparateAccountBasis        ("")
-    ,UseCurrentDeclaredRate           ("Yes")
-//    ,GeneralAccountRateType           ("Credited rate")
-    ,SeparateAccountRateType          ("Gross rate")
-    ,LoanRate                         ("0.06")
-//    ,LoanRateType                     ("")
-    ,OverrideExperienceReserveRate    ("Yes")
-    ,ExperienceReserveRate            ("0.02")
-    ,ExperienceRatingInitialKFactor   ("1")
-//    ,WithdrawToBasisThenLoan          ("")
-//    ,UseAverageOfAllFunds             ("")
-//    ,OverrideFundManagementFee        ("")
-    ,FundChoiceType                   ("Choose funds")
-//    ,InputFundManagementFee           ("")
-//    ,RunOrder                         ("")
-    ,NumberOfIdenticalLives           ("1")
-//    ,UseExperienceRating              ("")
-//    ,UsePartialMortality              ("")
-//    ,PartialMortalityTable            ("")
-//    ,InsuredName                      ("")
-//    ,Address                          ("")
-//    ,City                             ("")
-    ,State                            ("CT")
-//    ,ZipCode                          ("")
-//    ,EmployeeClass                    ("")
-//    ,CorporationName                  ("")
-//    ,CorporationAddress               ("")
-//    ,CorporationCity                  ("")
-    ,CorporationState                 ("CT")
-//    ,CorporationZipCode               ("")
-    ,AgentName                        ("*** REQUIRED FIELD MISSING ***")
-    ,AgentAddress                     ("*** REQUIRED FIELD MISSING ***")
-    ,AgentCity                        ("*** REQUIRED FIELD MISSING ***")
-    ,AgentState                       ("CT")
-//    ,AgentZipCode                     ("")
-//    ,AgentPhone                       ("")
-    ,AgentId                          ("*** REQUIRED FIELD MISSING ***")
-//    ,InsuredPremiumTableNumber        ("")
-    ,InsuredPremiumTableFactor        ("1")
-//    ,CorporationPremiumTableNumber    ("")
-    ,CorporationPremiumTableFactor    ("1")
-//    ,EffectiveDate                    ("")
-//    ,DefinitionOfLifeInsurance        ("")
-//    ,DefinitionOfMaterialChange       ("")
-//    ,AvoidMecMethod                   ("")
-//    ,RetireesCanEnroll                ("")
-//    ,GroupUnderwritingType            ("")
-//    ,LastCoiReentryDate               ("")
-      ,ListBillDate                     ("2440588") // Assume no inforce so old
-//    ,BlendGender                      ("")
-//    ,BlendSmoking                     ("")
-    ,MaleProportion                   ("1")
-    ,NonsmokerProportion              ("1")
-    ,TermAdjustmentMethod             ("Adjust base first")
-    ,IncludeInComposite               ("Yes")
-//    ,Comments                         ("")
-//    ,AmortizePremiumLoad              ("")
-//    ,ContractNumber                   ("")
-//    ,MasterContractNumber             ("")
-//    ,IsInforce                        ("")
-//    ,InforceAsOfDate                  ("")
-//    ,InforceYear                      ("")
-//    ,InforceMonth                     ("")
-//    ,InforceAnnualTargetPremium       ("")
-//    ,InforceYtdGrossPremium           ("")
-//    ,InforceGeneralAccountValue       ("")
-//    ,InforceSeparateAccountValue      ("")
-//    ,InforceRegularLoanValue          ("")
-//    ,InforcePreferredLoanValue        ("")
-//    ,InforceRegularLoanBalance        ("")
-//    ,InforcePreferredLoanBalance      ("")
-//    ,InforceNoLapseActive             ("")
-//    ,InforceMonthlyNoLapsePremium     ("")
-//    ,InforceCumulativeNoLapsePremium  ("")
-//    ,InforceCumulativeNoLapsePayments ("")
-//    ,InforceCumulativeRopPayments     ("")
-//    ,InforceYtdTaxablePremium         ("")
-//    ,InforceCumulativeSalesLoad       ("")
-//    ,InforceSpecAmtLoadBase           ("")
-//    ,InforceHoneymoonValue            ("")
-//    ,InforceCorporationStake          ("")
-//    ,InforceNetExperienceReserve      ("")
-//    ,InforceYtdNetCoiCharge           ("")
-//    ,InforceTaxBasis                  ("")
-//    ,InforceGlp                       ("")
-//    ,InforceCumulativeGlp             ("")
-//    ,InforceGsp                       ("")
-//    ,InforceCumulativeGptPremiumsPaid ("")
-//    ,InforceIsMec                     ("")
-//    ,InforceSevenPayPremium           ("")
-//    ,LastMaterialChangeDate           ("")
-//    ,InforceContractYear              ("")
-//    ,InforceContractMonth             ("")
-//    ,InforceAvBeforeLastMc            ("")
-//    ,InforceDcv                       ("")
-//    ,InforceLeastDeathBenefit         ("")
-    ,Inforce7702AAmountsPaidHistory   ("0")
-    ,Country                          ("US")
-//    ,OverrideCoiMultiplier            ("")
-    ,CountryCoiMultiplier             ("1")
-    ,SurviveToType                    ("Survive to age limit")
-    ,SurviveToYear                    ("100")
-    ,SurviveToAge                     ("99")
-    ,MaximumNaar                      ("1000000000")
-//    ,ChildRider                       ("")
-//    ,ChildRiderAmount                 ("")
-//    ,SpouseRider                      ("")
-//    ,SpouseRiderAmount                ("")
-    ,SpouseIssueAge                   ("45")
-    ,StateOfJurisdiction              ("CT")
-    ,PremiumTaxState                  ("CT")
-    ,SalarySpecifiedAmountFactor      ("1")
-    ,SalarySpecifiedAmountCap         ("100000")
-    ,SalarySpecifiedAmountOffset      ("50000")
-//    ,HoneymoonEndorsement             ("")
-//    ,PostHoneymoonSpread              ("")
-    ,ExtraMonthlyCustodialFee         ("0")
-    ,ExtraCompensationOnAssets        ("0")
-    ,ExtraCompensationOnPremium       ("0")
-    ,PartialMortalityMultiplier       ("1")
-    ,CurrentCoiMultiplier             ("1")
-//    ,CorporationTaxBracket            ("")
-//    ,TaxBracket                       ("")
-    ,ProjectedSalary                  ("100000")
-    ,SpecifiedAmount                  ("1000000")
-    ,SupplementalAmount               ("0")
-    ,DeathBenefitOption               ("a")
-    ,Payment                          ("20000")
-    ,PaymentMode                      ("annual")
-    ,CorporationPayment               ("0")
-    ,CorporationPaymentMode           ("annual")
-//    ,GeneralAccountRate               ("") // See DoCustomizeInitialValues().
-    ,SeparateAccountRate              ("0.08")
-    ,NewLoan                          ("0")
-    ,Withdrawal                       ("0")
-    ,FlatExtra                        ("0")
-//    ,PolicyLevelFlatExtra             ("")
-    ,HoneymoonValueSpread             ("0")
-    ,FundAllocations                  ("0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0")
-    ,CashValueEnhancementRate         ("0")
+    :IssueAge                         {"45"}
+    ,RetirementAge                    {"65"}
+    ,Gender                           {"Male"}
+    ,Smoking                          {"Nonsmoker"}
+    ,UnderwritingClass                {"Standard"}
+//    ,WaiverOfPremiumBenefit           {""}
+//    ,AccidentalDeathBenefit           {""}
+//    ,TermRider                        {""}
+//    ,TermRiderAmount                  {""}
+    ,TotalSpecifiedAmount             {"1000000"}
+//    ,TermRiderProportion              {""}
+//    ,TermRiderUseProportion           {""}
+//    ,DateOfBirth                      {""}
+//    ,SubstandardTable                 {""}
+//    ,ProductName                      {""}
+//    ,Dumpin                           {""}
+//    ,External1035ExchangeAmount       {""}
+//    ,External1035ExchangeTaxBasis     {""}
+//    ,External1035ExchangeFromMec      {""}
+//    ,Internal1035ExchangeAmount       {""}
+//    ,Internal1035ExchangeTaxBasis     {""}
+//    ,Internal1035ExchangeFromMec      {""}
+//    ,SolveTargetAge                   {"95"}
+//    ,SolveBeginAge                    {""}
+//    ,SolveEndAge                      {"95"}
+//    ,SolveType                        {""}
+//    ,SolveBeginYear                   {""}
+//    ,SolveEndYear                     {"50"}
+//    ,SolveTarget                      {""}
+//    ,SolveTargetValue                 {""}
+//    ,SolveTargetYear                  {"50"}
+//    ,SolveExpenseGeneralAccountBasis  {""}
+//    ,SolveSeparateAccountBasis        {""}
+    ,UseCurrentDeclaredRate           {"Yes"}
+//    ,GeneralAccountRateType           {"Credited rate"}
+    ,SeparateAccountRateType          {"Gross rate"}
+    ,LoanRate                         {"0.06"}
+//    ,LoanRateType                     {""}
+    ,OverrideExperienceReserveRate    {"Yes"}
+    ,ExperienceReserveRate            {"0.02"}
+    ,ExperienceRatingInitialKFactor   {"1"}
+//    ,WithdrawToBasisThenLoan          {""}
+//    ,UseAverageOfAllFunds             {""}
+//    ,OverrideFundManagementFee        {""}
+    ,FundChoiceType                   {"Choose funds"}
+//    ,InputFundManagementFee           {""}
+//    ,RunOrder                         {""}
+    ,NumberOfIdenticalLives           {"1"}
+//    ,UseExperienceRating              {""}
+//    ,UsePartialMortality              {""}
+//    ,PartialMortalityTable            {""}
+//    ,InsuredName                      {""}
+//    ,Address                          {""}
+//    ,City                             {""}
+    ,State                            {"CT"}
+//    ,ZipCode                          {""}
+//    ,EmployeeClass                    {""}
+//    ,CorporationName                  {""}
+//    ,CorporationAddress               {""}
+//    ,CorporationCity                  {""}
+    ,CorporationState                 {"CT"}
+//    ,CorporationZipCode               {""}
+    ,AgentName                        {"*** REQUIRED FIELD MISSING ***"}
+    ,AgentAddress                     {"*** REQUIRED FIELD MISSING ***"}
+    ,AgentCity                        {"*** REQUIRED FIELD MISSING ***"}
+    ,AgentState                       {"CT"}
+//    ,AgentZipCode                     {""}
+//    ,AgentPhone                       {""}
+    ,AgentId                          {"*** REQUIRED FIELD MISSING ***"}
+//    ,InsuredPremiumTableNumber        {""}
+    ,InsuredPremiumTableFactor        {"1"}
+//    ,CorporationPremiumTableNumber    {""}
+    ,CorporationPremiumTableFactor    {"1"}
+//    ,EffectiveDate                    {""}
+//    ,DefinitionOfLifeInsurance        {""}
+//    ,DefinitionOfMaterialChange       {""}
+//    ,AvoidMecMethod                   {""}
+//    ,RetireesCanEnroll                {""}
+//    ,GroupUnderwritingType            {""}
+//    ,LastCoiReentryDate               {""}
+      ,ListBillDate                     {"2440588"} // Assume no inforce so old
+//    ,BlendGender                      {""}
+//    ,BlendSmoking                     {""}
+    ,MaleProportion                   {"1"}
+    ,NonsmokerProportion              {"1"}
+    ,TermAdjustmentMethod             {"Adjust base first"}
+    ,IncludeInComposite               {"Yes"}
+//    ,Comments                         {""}
+//    ,AmortizePremiumLoad              {""}
+//    ,ContractNumber                   {""}
+//    ,MasterContractNumber             {""}
+//    ,IsInforce                        {""}
+//    ,InforceAsOfDate                  {""}
+//    ,InforceYear                      {""}
+//    ,InforceMonth                     {""}
+//    ,InforceAnnualTargetPremium       {""}
+//    ,InforceYtdGrossPremium           {""}
+//    ,InforceGeneralAccountValue       {""}
+//    ,InforceSeparateAccountValue      {""}
+//    ,InforceRegularLoanValue          {""}
+//    ,InforcePreferredLoanValue        {""}
+//    ,InforceRegularLoanBalance        {""}
+//    ,InforcePreferredLoanBalance      {""}
+//    ,InforceNoLapseActive             {""}
+//    ,InforceMonthlyNoLapsePremium     {""}
+//    ,InforceCumulativeNoLapsePremium  {""}
+//    ,InforceCumulativeNoLapsePayments {""}
+//    ,InforceCumulativeRopPayments     {""}
+//    ,InforceYtdTaxablePremium         {""}
+//    ,InforceCumulativeSalesLoad       {""}
+//    ,InforceSpecAmtLoadBase           {""}
+//    ,InforceHoneymoonValue            {""}
+//    ,InforceCorporationStake          {""}
+//    ,InforceNetExperienceReserve      {""}
+//    ,InforceYtdNetCoiCharge           {""}
+//    ,InforceTaxBasis                  {""}
+//    ,InforceGlp                       {""}
+//    ,InforceCumulativeGlp             {""}
+//    ,InforceGsp                       {""}
+//    ,InforceCumulativeGptPremiumsPaid {""}
+//    ,InforceIsMec                     {""}
+//    ,InforceSevenPayPremium           {""}
+//    ,LastMaterialChangeDate           {""}
+//    ,InforceContractYear              {""}
+//    ,InforceContractMonth             {""}
+//    ,InforceAvBeforeLastMc            {""}
+//    ,InforceDcv                       {""}
+//    ,InforceLeastDeathBenefit         {""}
+    ,Inforce7702AAmountsPaidHistory   {"0"}
+    ,Country                          {"US"}
+//    ,OverrideCoiMultiplier            {""}
+    ,CountryCoiMultiplier             {"1"}
+    ,SurviveToType                    {"Survive to age limit"}
+    ,SurviveToYear                    {"100"}
+    ,SurviveToAge                     {"99"}
+    ,MaximumNaar                      {"1000000000"}
+//    ,ChildRider                       {""}
+//    ,ChildRiderAmount                 {""}
+//    ,SpouseRider                      {""}
+//    ,SpouseRiderAmount                {""}
+    ,SpouseIssueAge                   {"45"}
+    ,StateOfJurisdiction              {"CT"}
+    ,PremiumTaxState                  {"CT"}
+    ,SalarySpecifiedAmountFactor      {"1"}
+    ,SalarySpecifiedAmountCap         {"100000"}
+    ,SalarySpecifiedAmountOffset      {"50000"}
+//    ,HoneymoonEndorsement             {""}
+//    ,PostHoneymoonSpread              {""}
+    ,ExtraMonthlyCustodialFee         {"0"}
+    ,ExtraCompensationOnAssets        {"0"}
+    ,ExtraCompensationOnPremium       {"0"}
+    ,PartialMortalityMultiplier       {"1"}
+    ,CurrentCoiMultiplier             {"1"}
+//    ,CorporationTaxBracket            {""}
+//    ,TaxBracket                       {""}
+    ,ProjectedSalary                  {"100000"}
+    ,SpecifiedAmount                  {"1000000"}
+    ,SupplementalAmount               {"0"}
+    ,DeathBenefitOption               {"a"}
+    ,Payment                          {"20000"}
+    ,PaymentMode                      {"annual"}
+    ,CorporationPayment               {"0"}
+    ,CorporationPaymentMode           {"annual"}
+//    ,GeneralAccountRate               {""} // See DoCustomizeInitialValues().
+    ,SeparateAccountRate              {"0.08"}
+    ,NewLoan                          {"0"}
+    ,Withdrawal                       {"0"}
+    ,FlatExtra                        {"0"}
+//    ,PolicyLevelFlatExtra             {""}
+    ,HoneymoonValueSpread             {"0"}
+    ,FundAllocations                  {"0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"}
+    ,CashValueEnhancementRate         {"0"}
 //    ,AdditionalReports
 //    ,SupplementalIllustrationType
 //    ,SplitDollarAccumulateInterest
-    ,SplitDollarLoanRate              ("0")
+    ,SplitDollarLoanRate              {"0"}
 //    ,SplitDollarRolloutAge
 //    ,SplitDollarRolloutAtWhich
 //    ,SplitDollarRolloutYear
-//    ,CreateSupplementalReport         ("")
-//    ,SupplementalReportColumn00       ("")
-//    ,SupplementalReportColumn01       ("")
-//    ,SupplementalReportColumn02       ("")
-//    ,SupplementalReportColumn03       ("")
-//    ,SupplementalReportColumn04       ("")
-//    ,SupplementalReportColumn05       ("")
-//    ,SupplementalReportColumn06       ("")
-//    ,SupplementalReportColumn07       ("")
-//    ,SupplementalReportColumn08       ("")
-//    ,SupplementalReportColumn09       ("")
-//    ,SupplementalReportColumn10       ("")
-//    ,SupplementalReportColumn11       ("")
-    ,SolveTgtAtWhich                  ("Maturity")
-    ,SolveFromWhich                   ("Issue")
-    ,SolveToWhich                     ("Retirement")
-//    ,UseDOB                           ("")
-//    ,EffectiveDateToday               ("")
-//    ,SpecifiedAmountStrategyFromIssue ("")
-//    ,IndividualPaymentStrategy        ("")
+//    ,CreateSupplementalReport         {""}
+//    ,SupplementalReportColumn00       {""}
+//    ,SupplementalReportColumn01       {""}
+//    ,SupplementalReportColumn02       {""}
+//    ,SupplementalReportColumn03       {""}
+//    ,SupplementalReportColumn04       {""}
+//    ,SupplementalReportColumn05       {""}
+//    ,SupplementalReportColumn06       {""}
+//    ,SupplementalReportColumn07       {""}
+//    ,SupplementalReportColumn08       {""}
+//    ,SupplementalReportColumn09       {""}
+//    ,SupplementalReportColumn10       {""}
+//    ,SupplementalReportColumn11       {""}
+    ,SolveTgtAtWhich                  {"Maturity"}
+    ,SolveFromWhich                   {"Issue"}
+    ,SolveToWhich                     {"Retirement"}
+//    ,UseDOB                           {""}
+//    ,EffectiveDateToday               {""}
+//    ,SpecifiedAmountStrategyFromIssue {""}
+//    ,IndividualPaymentStrategy        {""}
 {
     AscribeMembers();
     DoAdaptExternalities(); // Initialize database, e.g.
@@ -239,9 +239,9 @@ Input::Input()
 }
 
 Input::Input(Input const& z)
-    :xml_serializable  <Input>()
-    ,MvcModel                 ()
-    ,MemberSymbolTable <Input>()
+    :xml_serializable  <Input>{}
+    ,MvcModel                 {}
+    ,MemberSymbolTable <Input>{}
 {
     AscribeMembers();
     MemberSymbolTable<Input>::assign(z);

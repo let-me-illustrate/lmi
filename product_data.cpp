@@ -91,8 +91,8 @@ glossed_string::glossed_string
     (std::string const& datum
     ,std::string const& gloss
     )
-    :datum_(datum)
-    ,gloss_(gloss)
+    :datum_{datum}
+    ,gloss_{gloss}
 {}
 
 glossed_string& glossed_string::operator=(std::string const& s)

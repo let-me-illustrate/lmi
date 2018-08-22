@@ -83,12 +83,12 @@ MvcController::MvcController
     ,MvcModel&      model
     ,MvcView const& view
     )
-    :model_                               (model)
-    ,view_                                (view)
-    ,last_focused_window_                 (parent)
-    ,unit_test_idle_processing_completed_ (false)
-    ,unit_test_refocus_event_pending_     (false)
-    ,unit_test_under_way_                 (false)
+    :model_                               {model}
+    ,view_                                {view}
+    ,last_focused_window_                 {parent}
+    ,unit_test_idle_processing_completed_ {false}
+    ,unit_test_refocus_event_pending_     {false}
+    ,unit_test_under_way_                 {false}
 {
     model_.TestInitialConsistency();
 

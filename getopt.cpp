@@ -114,32 +114,32 @@ int GetOpt::first_nonopt = 0;
 int GetOpt::last_nonopt = 0;
 
 GetOpt::GetOpt(int argc, char** argv, char const* optstring)
- :list_option (nullptr)
- ,list_option_first (0)
- ,optindvalue (EOF)
- ,opterr (true)
- ,nargc (argc)
- ,nargv (argv)
- ,noptstring (optstring)
- ,nlongopts (nullptr)
- ,nlongind (nullptr)
- ,nlong_only (0)
+ :list_option {nullptr}
+ ,list_option_first {0}
+ ,optindvalue {EOF}
+ ,opterr {true}
+ ,nargc {argc}
+ ,nargv {argv}
+ ,noptstring {optstring}
+ ,nlongopts {nullptr}
+ ,nlongind {nullptr}
+ ,nlong_only {0}
 {
     Initialize(noptstring);
 }
 
 GetOpt::GetOpt(int argc, char** argv, char const* optstring,
                 Option const* longopts, int* longind, int long_only)
- :list_option (nullptr)
- ,list_option_first (0)
- ,optindvalue (EOF)
- ,opterr (true)
- ,nargc (argc)
- ,nargv (argv)
- ,noptstring (optstring)
- ,nlongopts (longopts)
- ,nlongind (longind)
- ,nlong_only (long_only)
+ :list_option {nullptr}
+ ,list_option_first {0}
+ ,optindvalue {EOF}
+ ,opterr {true}
+ ,nargc {argc}
+ ,nargv {argv}
+ ,noptstring {optstring}
+ ,nlongopts {longopts}
+ ,nlongind {longind}
+ ,nlong_only {long_only}
 {
     // Automatically register any short-option alii for long options.
     for(Option const* i = nlongopts; nullptr != i->name; ++i)

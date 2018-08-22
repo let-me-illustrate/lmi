@@ -57,7 +57,7 @@ class SolveHelper
     AccountValue& av;
   public:
     SolveHelper(AccountValue& a_av)
-        :av(a_av)
+        :av{a_av}
         {
         }
     double operator()(double a_CandidateValue)

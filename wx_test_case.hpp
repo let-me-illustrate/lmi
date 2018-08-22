@@ -113,7 +113,7 @@ class wx_test_case_##name \
 { \
   public: \
     wx_test_case_##name() \
-        :wx_base_test_case(#name) \
+        :wx_base_test_case{#name} \
         { \
         } \
  \

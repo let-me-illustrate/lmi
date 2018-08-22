@@ -46,8 +46,8 @@ class LMI_SO ledger_evaluator
 
     // Objects of this class can only be created by Ledger::make_evaluator().
     ledger_evaluator(all_scalars&& scalars, all_vectors&& vectors)
-        :scalars_(scalars)
-        ,vectors_(vectors)
+        :scalars_{scalars}
+        ,vectors_{vectors}
     {
     }
 

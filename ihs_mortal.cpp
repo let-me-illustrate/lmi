@@ -33,7 +33,7 @@
 
 //============================================================================
 MortalityRates::MortalityRates(BasicValues const& basic_values)
-    :Length_(basic_values.GetLength())
+    :Length_{basic_values.GetLength()}
 {
     reserve_vectors();
     fetch_parameters(basic_values);

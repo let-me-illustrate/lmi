@@ -33,9 +33,9 @@
 IMPLEMENT_DYNAMIC_CLASS(RoundingDocument, ProductEditorDocument)
 
 RoundingDocument::RoundingDocument()
-    :ProductEditorDocument()
-    ,rounding_rules_()
-    ,values_()
+    :ProductEditorDocument{}
+    ,rounding_rules_{}
+    ,values_{}
 {
     values_["specamt"           ] = &rounding_rules_.round_specamt_           ;
     values_["death_benefit"     ] = &rounding_rules_.round_death_benefit_     ;

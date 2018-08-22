@@ -62,41 +62,41 @@ Irc7702A::Irc7702A
     ,std::vector<double> const&  a_NSPVec
     ,round_to<double>    const&  a_RoundNonMecPrem
     )
-    :state_               ()
-    ,DefnLifeIns          (a_DefnLifeIns)
-    ,DefnMaterialChange   (a_DefnMaterialChange)
-    ,UnnecPremIsMatChg    (false)
-    ,ElectiveIncrIsMatChg (true)
-    ,CorrHidesIncr        (false) // TAXATION !! DATABASE !! This should either be eliminated or moved to the database.
-    ,IsSurvivorship       (a_IsSurvivorship)
-    ,AvoidMec             (a_AvoidMec)
-    ,Use7PPTable          (a_Use7PPTable)
-    ,UseNSPTable          (a_UseNSPTable)
-    ,SevenPPRateVec       (a_SevenPPRateVec)
-    ,NSPVec               (a_NSPVec)
-    ,RoundNonMecPrem      (a_RoundNonMecPrem)
-    ,DBDefn               (e_specamt_7702A)
-    ,Ignore               (false)
-    ,IsMec                (false)
-    ,IsMatChg             (false)
-    ,SevenPP              (0.0)
-    ,CumSevenPP           (0.0)
-    ,CumPmts              (0.0)
-    ,LowestBft            (0.0)
-    ,UnnecPrem            (0.0)
-    ,UnnecPremPaid        (false)
-    ,TestPeriodLen        (months_per_year * usual_test_period_length)
-    ,TestPeriodDur        (0)
-    ,PolicyYear           (0)
-    ,PolicyMonth          (0)
-    ,AssumedBft           (0.0)
-    ,Saved7PPRate         (0.0)
-    ,SavedAVBeforeMatChg  (0.0)
-    ,SavedNecPrem         (0.0)
-    ,SavedNSP             (0.0)
-    ,SavedDCV             (0.0)
-    ,NetNecessaryPrem     (0.0)
-    ,GrossNecessaryPrem   (0.0)
+    :state_               {}
+    ,DefnLifeIns          {a_DefnLifeIns}
+    ,DefnMaterialChange   {a_DefnMaterialChange}
+    ,UnnecPremIsMatChg    {false}
+    ,ElectiveIncrIsMatChg {true}
+    ,CorrHidesIncr        {false} // TAXATION !! DATABASE !! This should either be eliminated or moved to the database.
+    ,IsSurvivorship       {a_IsSurvivorship}
+    ,AvoidMec             {a_AvoidMec}
+    ,Use7PPTable          {a_Use7PPTable}
+    ,UseNSPTable          {a_UseNSPTable}
+    ,SevenPPRateVec       {a_SevenPPRateVec}
+    ,NSPVec               {a_NSPVec}
+    ,RoundNonMecPrem      {a_RoundNonMecPrem}
+    ,DBDefn               {e_specamt_7702A}
+    ,Ignore               {false}
+    ,IsMec                {false}
+    ,IsMatChg             {false}
+    ,SevenPP              {0.0}
+    ,CumSevenPP           {0.0}
+    ,CumPmts              {0.0}
+    ,LowestBft            {0.0}
+    ,UnnecPrem            {0.0}
+    ,UnnecPremPaid        {false}
+    ,TestPeriodLen        {months_per_year * usual_test_period_length}
+    ,TestPeriodDur        {0}
+    ,PolicyYear           {0}
+    ,PolicyMonth          {0}
+    ,AssumedBft           {0.0}
+    ,Saved7PPRate         {0.0}
+    ,SavedAVBeforeMatChg  {0.0}
+    ,SavedNecPrem         {0.0}
+    ,SavedNSP             {0.0}
+    ,SavedDCV             {0.0}
+    ,NetNecessaryPrem     {0.0}
+    ,GrossNecessaryPrem   {0.0}
 {
     if(mce_cvat != DefnLifeIns && mce_gpt != DefnLifeIns)
         {

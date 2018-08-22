@@ -93,12 +93,12 @@ struct tn_range_variant_data
     :public wxVariantData
 {
     tn_range_variant_data(std::string const& a_value, double a_min, double a_max)
-        :value(a_value), min(a_min), max(a_max)
+        :value{a_value}, min{a_min}, max{a_max}
     {
     }
 
     tn_range_variant_data(tn_range_base const& r)
-        :value(r.str()), min(r.universal_minimum()), max(r.universal_maximum())
+        :value{r.str()}, min{r.universal_minimum()}, max{r.universal_maximum()}
     {
     }
 
@@ -383,7 +383,7 @@ struct input_sequence_variant_data
     :public wxVariantData
 {
     input_sequence_variant_data(std::string const& a_value, Input const* a_input, std::string const& a_field)
-        :value(a_value), input(a_input), field(a_field)
+        :value{a_value}, input{a_input}, field{a_field}
     {
     }
 
@@ -808,7 +808,7 @@ class CensusViewDataViewModel : public wxDataViewIndexListModel
     static int const Col_CellNum = 0;
 
     CensusViewDataViewModel(CensusView& view)
-        :view_(view)
+        :view_{view}
     {
     }
 
@@ -971,10 +971,10 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
 END_EVENT_TABLE()
 
 CensusView::CensusView()
-    :ViewEx                          ()
-    ,autosize_columns_               (false)
-    ,list_window_                    (nullptr)
-    ,list_model_                     (new(wx) CensusViewDataViewModel(*this))
+    :ViewEx                          {}
+    ,autosize_columns_               {false}
+    ,list_window_                    {nullptr}
+    ,list_model_                     {new(wx) CensusViewDataViewModel(*this)}
 {
 }
 

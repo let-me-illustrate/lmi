@@ -38,7 +38,7 @@ class sneaky_exception
 {
   public:
     explicit sneaky_exception(std::string const& what_arg)
-        :stealth_exception(what_arg)
+        :stealth_exception{what_arg}
     {}
 };
 

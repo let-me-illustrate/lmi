@@ -85,9 +85,9 @@ namespace
 } // Unnamed namespace.
 
 Transferor::Transferor(std::string& data, std::string const& name)
-    :wxValidator()
-    ,data_(data)
-    ,name_(name)
+    :wxValidator{}
+    ,data_{data}
+    ,name_{name}
 {
 }
 

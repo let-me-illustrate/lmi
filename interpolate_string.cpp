@@ -36,8 +36,8 @@ namespace
 struct section_info
 {
     section_info(std::string const& name, bool active)
-        :name_(name)
-        ,active_(active)
+        :name_{name}
+        ,active_{active}
     {
     }
 

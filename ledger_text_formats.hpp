@@ -61,9 +61,9 @@ std::vector<std::string> LMI_SO ledger_format
 struct ledger_metadata
 {
     ledger_metadata()
-        :decimals_ (0)
-        ,style_    (oe_format_normal)
-        ,legend_   ("")
+        :decimals_ {0}
+        ,style_    {oe_format_normal}
+        ,legend_   {""}
         {}
 
     ledger_metadata
@@ -71,9 +71,9 @@ struct ledger_metadata
         ,oenum_format_style style
         ,std::string        legend
         )
-        :decimals_ (decimals)
-        ,style_    (style)
-        ,legend_   (legend)
+        :decimals_ {decimals}
+        ,style_    {style}
+        ,legend_   {legend}
         {}
 
     int                decimals_;

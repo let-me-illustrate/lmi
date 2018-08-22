@@ -117,7 +117,7 @@ class html_interpolator
     // Ctor takes the object used to interpolate the variables not explicitly
     // defined using add_variable().
     explicit html_interpolator(ledger_evaluator&& evaluator)
-        :evaluator_(evaluator)
+        :evaluator_{evaluator}
     {
     }
 
@@ -527,9 +527,9 @@ class scaled_image_cell : public html_cell_for_pdf_output
         ,wxString const& src
         ,double scale_factor
         )
-        :image_(image)
-        ,src_(src)
-        ,scale_factor_(scale_factor)
+        :image_{image}
+        ,src_{src}
+        ,scale_factor_{scale_factor}
     {
         m_Width  = wxRound(image.GetWidth () / scale_factor);
         m_Height = wxRound(image.GetHeight() / scale_factor);
@@ -687,8 +687,8 @@ class pdf_illustration : protected html_interpolator
 {
   public:
     explicit pdf_illustration(Ledger const& ledger)
-        :html_interpolator(ledger.make_evaluator())
-        ,ledger_(ledger)
+        :html_interpolator{ledger.make_evaluator()}
+        ,ledger_{ledger}
     {
         init_variables();
     }
@@ -1195,7 +1195,7 @@ class standard_page : public numbered_page
     // to use anything else.
     template<int N>
     explicit standard_page(char const (&page_template_name)[N])
-        :page_template_name_(page_template_name)
+        :page_template_name_{page_template_name}
     {
     }
 
@@ -1556,7 +1556,7 @@ class ill_reg_numeric_summary_page : public standard_page
 {
   public:
     ill_reg_numeric_summary_page()
-        :standard_page("ill_reg_numeric_summary")
+        :standard_page{"ill_reg_numeric_summary"}
     {
     }
 };
@@ -1920,8 +1920,8 @@ class standard_supplemental_report : public page_with_tabular_report
         (html_interpolator const& interpolate_html
         ,std::string       const& page_template
         )
-        :columns_(build_columns(interpolate_html))
-        ,page_template_(page_template)
+        :columns_{build_columns(interpolate_html)}
+        ,page_template_{page_template}
     {
     }
 
@@ -1971,7 +1971,7 @@ class ill_reg_supplemental_report : public standard_supplemental_report
 {
   public:
     explicit ill_reg_supplemental_report(html_interpolator const& interpolate_html)
-        :standard_supplemental_report(interpolate_html, "ill_reg_supp_report")
+        :standard_supplemental_report{interpolate_html, "ill_reg_supp_report"}
     {
     }
 
@@ -1987,7 +1987,7 @@ class pdf_illustration_regular : public pdf_illustration
 {
   public:
     explicit pdf_illustration_regular(Ledger const& ledger)
-        :pdf_illustration(ledger)
+        :pdf_illustration{ledger}
     {
         auto const& invar = ledger.GetLedgerInvariant();
         auto const& policy_name = invar.PolicyLegalName;
@@ -2488,7 +2488,7 @@ class pdf_illustration_nasd : public pdf_illustration
 {
   public:
     explicit pdf_illustration_nasd(Ledger const& ledger)
-        :pdf_illustration(ledger)
+        :pdf_illustration{ledger}
     {
         auto const& invar = ledger.GetLedgerInvariant();
 
@@ -2588,7 +2588,7 @@ class pdf_illustration_reg_d_group : public pdf_illustration
 {
   public:
     explicit pdf_illustration_reg_d_group(Ledger const& ledger)
-        :pdf_illustration(ledger)
+        :pdf_illustration{ledger}
     {
         // Define variables specific to this illustration.
         auto const& invar = ledger.GetLedgerInvariant();
@@ -2862,7 +2862,7 @@ class pdf_illustration_reg_d_individual : public pdf_illustration
 {
   public:
     explicit pdf_illustration_reg_d_individual(Ledger const& ledger)
-        :pdf_illustration(ledger)
+        :pdf_illustration{ledger}
     {
         auto const& invar = ledger.GetLedgerInvariant();
 

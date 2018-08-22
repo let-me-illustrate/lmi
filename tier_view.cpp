@@ -78,8 +78,8 @@ class tier_tree_item_data
 };
 
 tier_tree_item_data::tier_tree_item_data(tier_entity_info const& entity_info)
-    :wxTreeItemData()
-    ,entity_info_(entity_info)
+    :wxTreeItemData{}
+    ,entity_info_{entity_info}
 {
 }
 
@@ -97,8 +97,8 @@ BEGIN_EVENT_TABLE(TierView, TreeGridViewBase)
 END_EVENT_TABLE()
 
 TierView::TierView()
-    :TreeGridViewBase()
-    ,table_adapter_(new TierTableAdapter())
+    :TreeGridViewBase{}
+    ,table_adapter_{new TierTableAdapter()}
 {
 }
 

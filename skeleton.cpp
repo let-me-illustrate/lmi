@@ -196,10 +196,10 @@ END_EVENT_TABLE()
 ///     the "AppName" (but not the "AppDisplayName").
 
 Skeleton::Skeleton()
-    :config_          (nullptr)
-    ,doc_manager_     (nullptr)
-    ,frame_           (nullptr)
-    ,timer_           (this)
+    :config_          {nullptr}
+    ,doc_manager_     {nullptr}
+    ,frame_           {nullptr}
+    ,timer_           {this}
 {
     SetAppName("lmi_wx");
 

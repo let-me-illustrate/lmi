@@ -41,10 +41,10 @@ FundInfo::FundInfo
     ,std::string const& LongName
     ,std::string const& gloss
     )
-    :ScalarIMF_(ScalarIMF)
-    ,ShortName_(ShortName)
-    ,LongName_ (LongName)
-    ,gloss_    (gloss)
+    :ScalarIMF_{ScalarIMF}
+    ,ShortName_{ShortName}
+    ,LongName_ {LongName}
+    ,gloss_    {gloss}
 {
 }
 

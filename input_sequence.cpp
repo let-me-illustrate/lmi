@@ -29,6 +29,7 @@
 #include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "input_sequence_parser.hpp"
+#include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 
 #include <algorithm>                    // fill()
@@ -75,8 +76,8 @@ InputSequence::InputSequence
     ,bool                            a_keywords_only
     ,std::string const&              a_default_keyword
     )
-    :years_to_maturity_ (a_years_to_maturity)
-    ,issue_age_         (a_issue_age)
+    :years_to_maturity_ {a_years_to_maturity}
+    ,issue_age_         {a_issue_age}
     ,seriatim_keywords_ (a_years_to_maturity, a_default_keyword)
     ,seriatim_numbers_  (a_years_to_maturity)
 {
@@ -138,8 +139,8 @@ InputSequence::InputSequence
 /// one might be, someday.
 
 InputSequence::InputSequence(std::vector<std::string> const& v)
-    :years_to_maturity_ (v.size())
-    ,seriatim_keywords_ (v)
+    :years_to_maturity_ {lmi::ssize(v)}
+    ,seriatim_keywords_ {v}
 {
     initialize_from_vector(v);
     assert_sane_and_ordered_partition(intervals_, years_to_maturity_);
@@ -161,8 +162,8 @@ InputSequence::InputSequence(std::vector<std::string> const& v)
 /// RLE representation would work correctly.
 
 InputSequence::InputSequence(std::vector<double> const& v)
-    :years_to_maturity_ (v.size())
-    ,seriatim_numbers_  (v)
+    :years_to_maturity_ {lmi::ssize(v)}
+    ,seriatim_numbers_  {v}
 {
     initialize_from_vector(v);
     assert_sane_and_ordered_partition(intervals_, years_to_maturity_);

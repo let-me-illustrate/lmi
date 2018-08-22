@@ -86,9 +86,9 @@ gpt_commfns::gpt_commfns
     ,mcenum_dbopt_7702   const  dbo
     ,gpt_vector_parms    const& charges
     )
-    :length_       (qc.size())
+    :length_       {lmi::ssize(qc)}
     ,M_            (length_)
-    ,D_endt_       (0.0)
+    ,D_endt_       {0.0}
     ,D_net_tgt_    (length_)
     ,D_net_exc_    (length_)
     ,N_net_tgt_    (length_)
@@ -204,10 +204,10 @@ gpt_cf_triad::gpt_cf_triad
     ,std::vector<double> const& gsp_ig
     ,gpt_vector_parms    const& charges
     )
-    :length_     (qc.size())
-    ,cf_glp_dbo_1(qc, glp_ic, glp_ig, mce_option1_for_7702, charges)
-    ,cf_glp_dbo_2(qc, glp_ic, glp_ig, mce_option2_for_7702, charges)
-    ,cf_gsp      (qc, gsp_ic, gsp_ig, mce_option1_for_7702, charges)
+    :length_     {lmi::ssize(qc)}
+    ,cf_glp_dbo_1{qc, glp_ic, glp_ig, mce_option1_for_7702, charges}
+    ,cf_glp_dbo_2{qc, glp_ic, glp_ig, mce_option2_for_7702, charges}
+    ,cf_gsp      {qc, gsp_ic, gsp_ig, mce_option1_for_7702, charges}
 {
 }
 

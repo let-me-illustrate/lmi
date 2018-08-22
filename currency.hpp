@@ -188,7 +188,7 @@ class currency
     /// expose it publicly.
 
     explicit currency(amount_type cents)
-        :cents_(cents)
+        :cents_{cents}
         {
         }
 

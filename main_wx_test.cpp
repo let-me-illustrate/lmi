@@ -116,7 +116,7 @@ class test_skipped_exception
 {
   public:
     test_skipped_exception(std::string const& what)
-        :stealth_exception(what)
+        :stealth_exception{what}
         {
         }
 };
@@ -127,10 +127,10 @@ class test_skipped_exception
 struct TestsResults
 {
     TestsResults()
-        :total(0)
-        ,passed(0)
-        ,skipped(0)
-        ,failed(0)
+        :total{0}
+        ,passed{0}
+        ,skipped{0}
+        ,failed{0}
     {
     }
 
@@ -203,8 +203,8 @@ class application_test final
     {
         // The pointer must be non-NULL but we don't take ownership of it.
         test_descriptor(wx_base_test_case* t)
-            :test(t)
-            ,run(run_default)
+            :test{t}
+            ,run{run_default}
         {
         }
 
@@ -520,7 +520,7 @@ void application_test::list_tests()
 } // Unnamed namespace.
 
 wx_base_test_case::wx_base_test_case(char const* name)
-    :name_(name)
+    :name_{name}
 {
     application_test::instance().add_test(this);
 }
@@ -615,7 +615,7 @@ class SkeletonTest : public Skeleton
 {
   public:
     SkeletonTest()
-        :is_running_tests_(false)
+        :is_running_tests_{false}
     {
     }
 
@@ -783,7 +783,7 @@ void SkeletonTest::RunTheTests()
     {
       public:
         explicit ensure_top_window_closed(wxApp* app)
-            :app_(app)
+            :app_{app}
         {
         }
 

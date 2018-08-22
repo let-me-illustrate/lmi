@@ -41,14 +41,14 @@ SequenceParser::SequenceParser
     ,std::vector<std::string> const& a_allowed_keywords
     ,bool                            a_keywords_only
     )
-    :input_stream_                  (input_expression)
-    ,years_to_maturity_             (a_years_to_maturity)
-    ,issue_age_                     (a_issue_age)
-    ,retirement_age_                (a_retirement_age)
-    ,inforce_duration_              (a_inforce_duration)
-    ,effective_year_                (a_effective_year)
-    ,allowed_keywords_              (a_allowed_keywords)
-    ,keywords_only_                 (a_keywords_only)
+    :input_stream_                  {input_expression}
+    ,years_to_maturity_             {a_years_to_maturity}
+    ,issue_age_                     {a_issue_age}
+    ,retirement_age_                {a_retirement_age}
+    ,inforce_duration_              {a_inforce_duration}
+    ,effective_year_                {a_effective_year}
+    ,allowed_keywords_              {a_allowed_keywords}
+    ,keywords_only_                 {a_keywords_only}
 {
     stifle_warning_for_unused_value(inforce_duration_);
     stifle_warning_for_unused_value(effective_year_);

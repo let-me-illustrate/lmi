@@ -90,9 +90,9 @@ stratified_entity::stratified_entity
     ,std::vector<double> const& values
     ,std::string const&         gloss
     )
-    :limits_(limits)
-    ,values_(values)
-    ,gloss_ (gloss)
+    :limits_{limits}
+    ,values_{values}
+    ,gloss_ {gloss}
 {
     assert_validity();
 }

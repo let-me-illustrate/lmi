@@ -34,9 +34,9 @@
 IMPLEMENT_DYNAMIC_CLASS(PolicyDocument, ProductEditorDocument)
 
 PolicyDocument::PolicyDocument()
-    :ProductEditorDocument()
-    ,product_data_()
-    ,values_()
+    :ProductEditorDocument{}
+    ,product_data_{}
+    ,values_{}
 {
     values_["DatabaseFilename"        ] = &product_data_.DatabaseFilename        .datum_;
     values_["FundFilename"            ] = &product_data_.FundFilename            .datum_;

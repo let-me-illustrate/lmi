@@ -34,12 +34,12 @@ END_EVENT_TABLE()
 
 AxisMaxBoundAdjusterBase::AxisMaxBoundAdjusterBase(MultiDimGrid& grid)
     :wxChoice
-        (&grid
+        {&grid
         ,wxID_ANY
         ,wxDefaultPosition
         ,wxDefaultSize
         ,wxArrayString()
-        )
+        }
 {
 }
 
@@ -69,7 +69,7 @@ AutoResizingTreeCtrl::AutoResizingTreeCtrl
     ,long int style
     ,wxValidator const& validator
     )
-    :wxTreeCtrl(parent, id, pos, size, style, validator)
+    :wxTreeCtrl{parent, id, pos, size, style, validator}
 {
 }
 
