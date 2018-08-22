@@ -216,6 +216,7 @@ void wx_table_generator::output_super_header
 
     for(auto const& i : lines)
         {
+        LMI_ASSERT(dc().GetTextExtent(i).x <= rect.width);
         dc_.DrawLabel(i, rect, wxALIGN_CENTER_HORIZONTAL);
         rect.y += row_height_;
         pos_y  += row_height_;
