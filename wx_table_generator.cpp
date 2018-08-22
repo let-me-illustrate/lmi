@@ -56,7 +56,9 @@ wx_table_generator::wx_table_generator
         {
         enroll_column(i);
         }
-    set_column_widths(total_width_, 2 * one_em_, all_columns_);
+    // Ideally this would be '&thinsp;' instead of '&puncsp;'.
+    int const one_puncsp = dc_.GetTextExtent(".").x;
+    set_column_widths(all_columns_, total_width_, 2 * one_em_, one_puncsp);
 
     // Set a pen with zero width to make grid lines thin,
     // and round cap style so that they combine seamlessly.
@@ -88,7 +90,9 @@ wx_table_generator::wx_table_generator
         {
         enroll_column(i);
         }
-    set_column_widths(total_width_, 2 * one_em_, all_columns_);
+    // Ideally this would be '&thinsp;' instead of '&puncsp;'.
+    int const one_puncsp = dc_.GetTextExtent(".").x;
+    set_column_widths(all_columns_, total_width_, 2 * one_em_, one_puncsp);
 
     dc_.SetPen(illustration_rule_color);
 }
