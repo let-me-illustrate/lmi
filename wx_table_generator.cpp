@@ -207,12 +207,7 @@ void wx_table_generator::output_super_header
             return;
         }
 
-    // We don't have a function for getting the rectangle of a span of columns,
-    // but we can reuse the existing cell_rect() if we just increase its width
-    // by the width of all the extra (i.e. not counting the starting one)
-    // columns in this span.
-    auto rect = cell_rect(begin_column, pos_y);
-    rect.width += cell_pos_x(end_column) - cell_pos_x(begin_column + 1);
+    auto rect = cell_rect(begin_column, end_column, pos_y);
 
     for(auto const& i : lines)
         {
@@ -519,12 +514,31 @@ int wx_table_generator::cell_pos_x(int column) const
 wxRect wx_table_generator::cell_rect(int column, int y) const
 {
     LMI_ASSERT(column < lmi::ssize(all_columns()));
-    return wxRect
+    wxRect rect0
         (cell_pos_x(column)
         ,y
         ,all_columns().at(column).col_width()
         ,row_height_
         );
+    LMI_ASSERT(cell_rect(column, 1 + column, y) == rect0);
+    return cell_rect(column, 1 + column, y);
+}
+
+/// Rectangle corresponding to a horizontal range of cells.
+
+wxRect wx_table_generator::cell_rect(int begin_column, int end_column, int y) const
+{
+    LMI_ASSERT(begin_column <= end_column);
+    LMI_ASSERT(end_column <= lmi::ssize(all_columns()));
+
+    int const x1 = cell_pos_x(begin_column);
+    int x2 = x1;
+    for(int i = begin_column; i < end_column; ++i)
+        {
+        x2 += all_columns().at(i).col_width();
+        }
+
+    return wxRect(x1, y, x2 - x1, row_height_);
 }
 
 /// Font used for headers.

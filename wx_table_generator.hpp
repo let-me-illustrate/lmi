@@ -145,6 +145,7 @@ class wx_table_generator
 
     wxRect text_rect(int column, int y) const;
     wxRect cell_rect(int column, int y) const;
+    wxRect cell_rect(int begin_column, int end_column, int y) const;
 
     wxFont header_font() const;
 
