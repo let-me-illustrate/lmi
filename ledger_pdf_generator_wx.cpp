@@ -1031,8 +1031,7 @@ class page_with_footer : public page
 
         auto y = footer_top_;
 
-        auto const& upper_template = get_upper_footer_template_name();
-        if(!upper_template.empty())
+        if(auto const& upper_template = get_upper_footer_template_name(); !upper_template.empty())
             {
             y += pdf_dc.GetCharHeight();
 
