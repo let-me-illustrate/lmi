@@ -58,7 +58,17 @@ wx_table_generator::wx_table_generator
         }
     // Ideally this would be '&thinsp;' instead of '&puncsp;'.
     int const one_puncsp = dc_.GetTextExtent(".").x;
-    set_column_widths(all_columns_, total_width_, 2 * one_em_, one_puncsp);
+    std::vector<int> const w = set_column_widths
+        (all_columns_
+        ,total_width_
+        ,2 * one_em_
+        ,one_puncsp
+        );
+    for(int j = 0; j < lmi::ssize(all_columns()); ++j)
+        {
+LMI_ASSERT(w[j] == all_columns_[j].col_width_);
+        all_columns_[j].col_width_ = w[j];
+        }
 
     // Set a pen with zero width to make grid lines thin,
     // and round cap style so that they combine seamlessly.
@@ -92,7 +102,17 @@ wx_table_generator::wx_table_generator
         }
     // Ideally this would be '&thinsp;' instead of '&puncsp;'.
     int const one_puncsp = dc_.GetTextExtent(".").x;
-    set_column_widths(all_columns_, total_width_, 2 * one_em_, one_puncsp);
+    std::vector<int> const w = set_column_widths
+        (all_columns_
+        ,total_width_
+        ,2 * one_em_
+        ,one_puncsp
+        );
+    for(int j = 0; j < lmi::ssize(all_columns()); ++j)
+        {
+LMI_ASSERT(w[j] == all_columns_[j].col_width_);
+        all_columns_[j].col_width_ = w[j];
+        }
 
     dc_.SetPen(illustration_rule_color);
 }

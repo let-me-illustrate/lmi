@@ -103,7 +103,7 @@ std::vector<int> apportion(std::vector<int> const& votes, int total_seats)
 ///   desired_margin: maximum margin for each inelastic column
 ///   minimum_margin: minimum margin for every column
 
-void set_column_widths
+std::vector<int> set_column_widths
     (std::vector<table_column_info>& all_columns
     ,int                             max_table_width
     ,int                             desired_margin
@@ -176,5 +176,5 @@ void set_column_widths
         {
         all_columns[j].col_width_ = w[j];
         }
-//  return w;
+    return w;
 }
