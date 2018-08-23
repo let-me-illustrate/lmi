@@ -31,6 +31,8 @@
 
 // Default size of various characters for illustrations and group quotes:
 //   'M' 7pt; 'N' 6pt; '1' 4pt; '9' 4pt; ',' 2pt
+// Widths are in pixels. Because the wxPdfDC uses wxMM_POINTS, each pixel
+// is one point = 1/72 inch.
 
 wx_table_generator::wx_table_generator
     (group_quote_style_tag                 // tag not referenced

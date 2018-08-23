@@ -93,9 +93,6 @@ class LMI_SO table_column_info
   public:
     // PDF !! Modified directly by set_column_widths(), hence neither
     // private nor const.
-    //
-    // Width in pixels. Because the wxPdfDC uses wxMM_POINTS, each
-    // pixel is one point = 1/72 inch.
     int col_width_;
 
   private:
