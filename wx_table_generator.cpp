@@ -345,7 +345,7 @@ wxRect wx_table_generator::external_text_rect(std::size_t a_column, int y) const
 
 wxRect wx_table_generator::text_rect(int column, int y) const
 {
-    LMI_ASSERT(column <= lmi::ssize(all_columns()));
+    LMI_ASSERT(column < lmi::ssize(all_columns()));
     wxRect z = cell_rect(column, y).Deflate(dc().GetCharWidth(), 0);
     z.Offset(0, (row_height_ - char_height_)/2);
     return z;
