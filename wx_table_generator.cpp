@@ -42,17 +42,17 @@ wx_table_generator::wx_table_generator
     ,int                                   left_margin
     ,int                                   total_width
     )
-    :indices_          (indices)
-    ,dc_               (dc)
-    ,left_margin_      (left_margin)
-    ,total_width_      (total_width)
-    ,char_height_      (dc_.GetCharHeight())
+    :indices_          {indices}
+    ,dc_               {dc}
+    ,left_margin_      {left_margin}
+    ,total_width_      {total_width}
+    ,char_height_      {dc_.GetCharHeight()}
     // Arbitrarily use 1.333 line spacing.
-    ,row_height_       ((4 * char_height_ + 2) / 3)
-    ,one_em_           (dc_.GetTextExtent("M").x)
-    ,max_header_lines_ (1)
-    ,draw_separators_  (true)
-    ,use_bold_headers_ (true)
+    ,row_height_       {(4 * char_height_ + 2) / 3}
+    ,one_em_           {dc_.GetTextExtent("M").x}
+    ,max_header_lines_ {1}
+    ,draw_separators_  {true}
+    ,use_bold_headers_ {true}
 {
     for(auto const& i : vc)
         {

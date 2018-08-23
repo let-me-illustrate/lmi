@@ -74,10 +74,10 @@ class LMI_SO table_column_info
         ,oenum_h_align    const  alignment
         ,oenum_elasticity const  elasticity
         )
-        :col_header_ (header)
-        ,col_width_  (width)
-        ,alignment_  (alignment)
-        ,is_elastic_ (oe_elastic == elasticity)
+        :col_header_ {header}
+        ,col_width_  {width}
+        ,alignment_  {alignment}
+        ,is_elastic_ {oe_elastic == elasticity}
         {
         }
 
