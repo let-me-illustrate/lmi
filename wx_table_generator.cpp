@@ -68,7 +68,12 @@ wx_table_generator::wx_table_generator
         );
     for(int j = 0; j < lmi::ssize(all_columns()); ++j)
         {
-        all_columns_[j].col_width_ = w[j];
+        all_columns_[j] = table_column_info
+            (all_columns_[j].col_header()
+            ,w           [j]
+            ,all_columns_[j].alignment()
+            ,all_columns_[j].is_elastic() ? oe_elastic : oe_inelastic
+            );
         }
 
     // Set a pen with zero width to make grid lines thin,
@@ -111,7 +116,12 @@ wx_table_generator::wx_table_generator
         );
     for(int j = 0; j < lmi::ssize(all_columns()); ++j)
         {
-        all_columns_[j].col_width_ = w[j];
+        all_columns_[j] = table_column_info
+            (all_columns_[j].col_header()
+            ,w           [j]
+            ,all_columns_[j].alignment()
+            ,all_columns_[j].is_elastic() ? oe_elastic : oe_inelastic
+            );
         }
 
     dc_.SetPen(illustration_rule_color);

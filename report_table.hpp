@@ -88,16 +88,10 @@ class LMI_SO table_column_info
     bool               is_clipped() const {return is_elastic();}
 
   private:
-    std::string   const col_header_;
-
-  public:
-    // PDF !! Modified directly by set_column_widths(), hence neither
-    // private nor const.
-    int col_width_;
-
-  private:
-    oenum_h_align const alignment_;
-    bool          const is_elastic_;
+    std::string   col_header_;
+    int           col_width_;
+    oenum_h_align alignment_;
+    bool          is_elastic_;
 };
 
 std::vector<int> LMI_SO apportion(std::vector<int> const& votes, int seats);
