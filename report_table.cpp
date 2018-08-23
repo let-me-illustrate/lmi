@@ -104,10 +104,10 @@ std::vector<int> apportion(std::vector<int> const& votes, int total_seats)
 ///   minimum_margin: minimum margin for every column
 
 std::vector<int> set_column_widths
-    (std::vector<table_column_info>& all_columns
-    ,int                             max_table_width
-    ,int                             desired_margin
-    ,int                             minimum_margin
+    (std::vector<table_column_info> const& all_columns
+    ,int                                   max_table_width
+    ,int                                   desired_margin
+    ,int                                   minimum_margin
     )
 {
     LMI_ASSERT(minimum_margin <= desired_margin);
@@ -170,11 +170,6 @@ std::vector<int> set_column_widths
             << std::flush
             ;
         }
-    // Soon the all_columns argument will be passed by const reference,
-    // and w will be returned by value; until then...
-    for(int j = 0; j < cardinality; ++j)
-        {
-        all_columns[j].col_width_ = w[j];
-        }
+
     return w;
 }

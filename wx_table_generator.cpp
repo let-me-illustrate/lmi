@@ -66,7 +66,6 @@ wx_table_generator::wx_table_generator
         );
     for(int j = 0; j < lmi::ssize(all_columns()); ++j)
         {
-LMI_ASSERT(w[j] == all_columns_[j].col_width_);
         all_columns_[j].col_width_ = w[j];
         }
 
@@ -110,7 +109,6 @@ wx_table_generator::wx_table_generator
         );
     for(int j = 0; j < lmi::ssize(all_columns()); ++j)
         {
-LMI_ASSERT(w[j] == all_columns_[j].col_width_);
         all_columns_[j].col_width_ = w[j];
         }
 

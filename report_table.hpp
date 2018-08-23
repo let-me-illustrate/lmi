@@ -106,10 +106,10 @@ class LMI_SO table_column_info
 std::vector<int> LMI_SO apportion(std::vector<int> const& votes, int seats);
 
 std::vector<int> LMI_SO set_column_widths
-    (std::vector<table_column_info>& all_columns
-    ,int                             max_table_width
-    ,int                             desired_margin
-    ,int                             minimum_margin
+    (std::vector<table_column_info> const& all_columns
+    ,int                                   max_table_width
+    ,int                                   desired_margin
+    ,int                                   minimum_margin
     );
 
 #endif // report_table_hpp
