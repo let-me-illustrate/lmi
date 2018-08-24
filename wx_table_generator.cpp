@@ -66,15 +66,18 @@ wx_table_generator::wx_table_generator
         ,2 * one_em_
         ,one_puncsp
         );
+
+    std::vector<table_column_info> resized_columns;
     for(int j = 0; j < lmi::ssize(all_columns()); ++j)
         {
-        all_columns_[j] = table_column_info
+        resized_columns.emplace_back
             (all_columns_[j].col_header()
             ,w           [j]
             ,all_columns_[j].alignment()
             ,all_columns_[j].is_elastic() ? oe_elastic : oe_inelastic
             );
         }
+    all_columns_.swap(resized_columns);
 
     // Set a pen with zero width to make grid lines thin,
     // and round cap style so that they combine seamlessly.
@@ -114,15 +117,18 @@ wx_table_generator::wx_table_generator
         ,2 * one_em_
         ,one_puncsp
         );
+
+    std::vector<table_column_info> resized_columns;
     for(int j = 0; j < lmi::ssize(all_columns()); ++j)
         {
-        all_columns_[j] = table_column_info
+        resized_columns.emplace_back
             (all_columns_[j].col_header()
             ,w           [j]
             ,all_columns_[j].alignment()
             ,all_columns_[j].is_elastic() ? oe_elastic : oe_inelastic
             );
         }
+    all_columns_.swap(resized_columns);
 
     dc_.SetPen(illustration_rule_color);
 }
@@ -435,10 +441,7 @@ LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
             break;
         }
 
-    all_columns_.push_back
-        (table_column_info
-            (z.header, width, z.alignment, z.elasticity)
-        );
+    all_columns_.emplace_back(z.header, width, z.alignment, z.elasticity);
 }
 
 void wx_table_generator::do_output_single_row
