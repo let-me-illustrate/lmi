@@ -1229,14 +1229,23 @@ class standard_page : public numbered_page
     {
     }
 
-    void render
+    void pre_render
         (Ledger            const& ledger
         ,pdf_writer_wx          & writer
         ) override
     {
-        // Page HTML must have been already set by get_extra_pages_needed().
-        LMI_ASSERT(!page_html_.empty());
+        // Before calling the base class version, parse the HTML to initialize
+        // page_body_cell_.
+        parse_page_html(writer);
 
+        numbered_page::pre_render(ledger, writer);
+    }
+
+    void render
+        (Ledger const& ledger
+        ,pdf_writer_wx& writer
+        ) override
+    {
         int last_page_break = 0;
         for(auto const& page_break : page_break_positions_)
             {
@@ -1251,7 +1260,7 @@ class standard_page : public numbered_page
                 (writer.get_horz_margin()
                 ,writer.get_vert_margin()
                 ,writer.get_page_width()
-                ,page_html_
+                ,*page_body_cell_
                 ,last_page_break
                 ,page_break
                 );
@@ -1261,19 +1270,36 @@ class standard_page : public numbered_page
     }
 
   private:
+    // Parse HTML page contents once and store the result in page_body_cell_
+    // member variable.
+    //
+    // Throws if parsing fails.
+    void parse_page_html(pdf_writer_wx& writer)
+    {
+        // We should be called once and only once.
+        LMI_ASSERT(!page_body_cell_);
+
+        page_body_cell_ = writer.parse_html
+                    (interpolate_html_.expand_template(page_template_name_)
+                    );
+
+        if(!page_body_cell_)
+            {
+            throw std::runtime_error
+                ("failed to parse template '" + std::string{page_template_name_} + "'"
+                );
+            }
+    }
+
     int get_extra_pages_needed
         (Ledger            const& // ledger
         ,pdf_writer_wx          & writer
         ) override
     {
-        page_html_ = wxString::FromUTF8
-            (interpolate_html_.expand_template(page_template_name_).as_html()
-            );
-
         page_break_positions_ = writer.paginate_html
             (writer.get_page_width()
             ,get_footer_top() - writer.get_vert_margin()
-            ,page_html_
+            ,*page_body_cell_
             );
 
         // The cast is safe, we're never going to have more than INT_MAX
@@ -1282,9 +1308,9 @@ class standard_page : public numbered_page
         return static_cast<int>(page_break_positions_.size()) - 1;
     }
 
-    char const* const page_template_name_;
-    wxString          page_html_;
-    std::vector<int>  page_break_positions_;
+    char const* const                    page_template_name_;
+    std::unique_ptr<wxHtmlContainerCell> page_body_cell_;
+    std::vector<int>                     page_break_positions_;
 };
 
 // Helper classes used to show the numeric summary table. The approach used

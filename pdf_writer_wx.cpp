@@ -197,7 +197,7 @@ void pdf_writer_wx::output_image
 std::vector<int> pdf_writer_wx::paginate_html
     (int                          page_width
     ,int                          page_height
-    ,wxString const&              html_str
+    ,wxHtmlContainerCell&         cell
     )
 {
     wxHtmlDCRenderer renderer;
@@ -205,11 +205,7 @@ std::vector<int> pdf_writer_wx::paginate_html
     renderer.SetSize(page_width, page_height);
     DoSetFonts(renderer, html_font_sizes_);
 
-    // Note that we parse HTML twice: here and then again in output_html(),
-    // which is inefficient. Unfortunately currently there is no way to share
-    // neither the parser, nor the result of calling Parse() between
-    // wxHtmlDCRenderer and output_html().
-    renderer.SetHtmlText(html_str);
+    renderer.SetHtmlCell(cell);
 
     std::vector<int> page_breaks;
     for(int pos = 0;;)
@@ -237,7 +233,7 @@ int pdf_writer_wx::output_html
     (int                          x
     ,int                          y
     ,int                          width
-    ,wxString const&              html_str
+    ,wxHtmlContainerCell&         cell
     ,int                          from
     ,int                          to
     ,oenum_render_or_only_measure output_mode
@@ -249,12 +245,7 @@ int pdf_writer_wx::output_html
     // font which is changed by rendering the HTML contents.
     wxDCFontChanger preserve_font(pdf_dc_, wxFont());
 
-    std::unique_ptr<wxHtmlContainerCell> const cell
-        (static_cast<wxHtmlContainerCell*>(html_parser_.Parse(html_str))
-        );
-    LMI_ASSERT(cell);
-
-    cell->Layout(width);
+    cell.Layout(width);
     switch(output_mode)
         {
         case oe_render:
@@ -269,7 +260,7 @@ int pdf_writer_wx::output_html
 
             // "Scroll" the cell upwards by "from" by subtracting it from the
             // vertical position.
-            cell->Draw(pdf_dc_, x, y - from, y, y + to - from, rendering_info);
+            cell.Draw(pdf_dc_, x, y - from, y, y + to - from, rendering_info);
             }
             break;
         case oe_only_measure:
@@ -277,7 +268,7 @@ int pdf_writer_wx::output_html
             break;
         }
 
-    return cell->GetHeight();
+    return cell.GetHeight();
 }
 
 /// Convenient overload when rendering, or measuring, HTML text known to fit on
@@ -294,11 +285,25 @@ int pdf_writer_wx::output_html
     ,oenum_render_or_only_measure output_mode
     )
 {
+    auto const cell{parse_html(std::move(html))};
+    LMI_ASSERT(cell);
+
+    return output_html(x, y, width, *cell, output_mode);
+}
+
+int pdf_writer_wx::output_html
+    (int                          x
+    ,int                          y
+    ,int                          width
+    ,wxHtmlContainerCell&         cell
+    ,oenum_render_or_only_measure output_mode
+    )
+{
     int const height = output_html
         (x
         ,y
         ,width
-        ,wxString::FromUTF8(std::move(html).as_html())
+        ,cell
         ,0
         ,get_total_height()
         ,output_mode
@@ -320,6 +325,19 @@ int pdf_writer_wx::output_html
         }
 
     return height;
+}
+
+std::unique_ptr<wxHtmlContainerCell> pdf_writer_wx::parse_html(html::text&& html)
+{
+    return std::unique_ptr<wxHtmlContainerCell>
+        (static_cast<wxHtmlContainerCell*>
+            (html_parser_.Parse
+                (wxString::FromUTF8
+                    (std::move(html).as_html()
+                    )
+                )
+            )
+        );
 }
 
 int pdf_writer_wx::get_horz_margin() const
