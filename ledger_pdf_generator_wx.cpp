@@ -435,6 +435,38 @@ class using_illustration_table
     }
 };
 
+// Custom handler for the HTML <header> tag not natively recognized by wxHTML.
+// It also allows to find the container cell corresponding to the header
+// contents later by assigning a unique ID to it.
+static char const* const header_cell_id = "_lmi_page_header_id";
+
+TAG_HANDLER_BEGIN(page_header, "HEADER")
+    TAG_HANDLER_PROC(tag)
+    {
+        auto container = m_WParser->GetContainer();
+
+        // Set a unique ID for this container to allow finding it later.
+        container->SetId(header_cell_id);
+
+        // Use a nested container so that nested tags that close and reopen a
+        // container again close this one, but still remain inside the outer
+        // "header" container which will be detached from the main page HTML in
+        // its entirety.
+        m_WParser->OpenContainer();
+
+        ParseInner(tag);
+
+        // Close both the inner and the outer containers and reopen the
+        // new current one.
+        m_WParser->CloseContainer();
+        m_WParser->CloseContainer();
+        m_WParser->OpenContainer();
+
+        // Return true to indicate that we've parsed the entire tag contents.
+        return true;
+    }
+TAG_HANDLER_END(page_header)
+
 // Base class for our custom HTML cells providing a way to pass them
 // information about the PDF document being generated and the ledger used to
 // generate it.
@@ -782,7 +814,7 @@ class pdf_illustration : protected html_interpolator
     // Notice that the upper footer template name can be overridden at the page
     // level, the functions here define the default for all illustration pages.
     //
-    // These functions are used by the pages deriving from page_with_footer.
+    // These functions are used by the pages deriving from page_with_marginals.
     virtual std::string get_upper_footer_template_name() const = 0;
     virtual std::string get_lower_footer_template_name() const = 0;
 
@@ -967,14 +999,15 @@ class cover_page : public page
     }
 };
 
-// Base class for all pages with a footer.
-class page_with_footer : public page
+// Base class for all pages with a footer and/or header, collectively called
+// "marginals".
+class page_with_marginals : public page
 {
   public:
     using page::page;
 
-    // Override pre_render() to compute footer_top_ which is needed in the
-    // derived classes' overridden get_extra_pages_needed().
+    // Override pre_render() to compute page_top_ and footer_top_ which are
+    // needed in the derived classes' overridden get_extra_pages_needed().
     void pre_render
         (Ledger            const& // ledger
         ,pdf_writer_wx          & writer
@@ -982,6 +1015,19 @@ class page_with_footer : public page
     {
         auto const frame_horz_margin = writer.get_horz_margin();
         auto const frame_width       = writer.get_page_width();
+
+        page_top_ = writer.get_vert_margin();
+
+        if(auto header_html = get_header_html(); header_html)
+            {
+            page_top_ += writer.output_html
+                (frame_horz_margin
+                ,0
+                ,frame_width
+                ,*header_html
+                ,oe_only_measure
+                );
+            }
 
         // We implicitly assume here that get_footer_lower_html() result
         // doesn't materially depend on the exact value of the page number as
@@ -1029,6 +1075,19 @@ class page_with_footer : public page
 
         auto& pdf_dc = writer.dc();
 
+        // Render the header, if any.
+        if(auto header_html = get_header_html(); header_html)
+            {
+            writer.output_html
+                (frame_horz_margin
+                ,writer.get_vert_margin()
+                ,frame_width
+                ,*header_html
+                );
+            }
+
+        // Render the footer, consisting of an optional upper and always
+        // present lower part.
         auto y = footer_top_;
 
         if(auto const& upper_template = get_upper_footer_template_name(); !upper_template.empty())
@@ -1070,10 +1129,30 @@ class page_with_footer : public page
         return footer_top_;
     }
 
+    int get_page_body_top() const
+    {
+        return page_top_;
+    }
+
+    int get_page_body_height() const
+    {
+        return get_footer_top() - get_page_body_top();
+    }
+
   private:
     // Function to be overridden in the base class which should actually return
     // the page number or equivalent string (e.g. "Appendix").
     virtual std::string get_page_number() const = 0;
+
+    // Return non-owning pointer to the cell representing the header contents.
+    // Returns null by default as most pages don't have a header or, at least,
+    // not a header which needs to be repeated on the continuation physical
+    // pages and so one that can't be treated as just being the beginning of
+    // the main page body.
+    virtual wxHtmlContainerCell* get_header_html() const
+    {
+        return nullptr;
+    }
 
     // This function forwards to the illustration by default, but can be
     // overridden to define a page-specific footer if necessary.
@@ -1113,15 +1192,16 @@ class page_with_footer : public page
             );
     }
 
+    int page_top_   = 0;
     int footer_top_ = 0;
 };
 
 // Base class for all pages showing the page number in the footer.
 //
-// In addition to actually providing page_with_footer with the correct string
-// to show in the footer, this class implicitly handles the page count by
-// incrementing it whenever a new object of this class is pre-rendered.
-class numbered_page : public page_with_footer
+// In addition to actually providing page_with_marginals with the correct
+// string to show in the footer, this class implicitly handles the page count
+// by incrementing it whenever a new object of this class is pre-rendered.
+class numbered_page : public page_with_marginals
 {
   public:
     // Must be called before creating the first numbered page.
@@ -1134,7 +1214,7 @@ class numbered_page : public page_with_footer
         (pdf_illustration  const& illustration
         ,html_interpolator const& interpolate_html
         )
-        :page_with_footer{illustration, interpolate_html}
+        :page_with_marginals{illustration, interpolate_html}
     {
         // This assert would fail if start_numbering() hadn't been called
         // before creating a numbered page, as it should be.
@@ -1146,7 +1226,7 @@ class numbered_page : public page_with_footer
         ,pdf_writer_wx          & writer
         ) override
     {
-        page_with_footer::pre_render(ledger, writer);
+        page_with_marginals::pre_render(ledger, writer);
 
         this_page_number_ = ++last_page_number_;
 
@@ -1235,7 +1315,7 @@ class standard_page : public numbered_page
         ) override
     {
         // Before calling the base class version, parse the HTML to initialize
-        // page_body_cell_.
+        // page_body_cell_ and header_cell_.
         parse_page_html(writer);
 
         numbered_page::pre_render(ledger, writer);
@@ -1258,7 +1338,7 @@ class standard_page : public numbered_page
 
             writer.output_html
                 (writer.get_horz_margin()
-                ,writer.get_vert_margin()
+                ,get_page_body_top()
                 ,writer.get_page_width()
                 ,*page_body_cell_
                 ,last_page_break
@@ -1271,7 +1351,7 @@ class standard_page : public numbered_page
 
   private:
     // Parse HTML page contents once and store the result in page_body_cell_
-    // member variable.
+    // and header_cell_ member variables.
     //
     // Throws if parsing fails.
     void parse_page_html(pdf_writer_wx& writer)
@@ -1289,6 +1369,40 @@ class standard_page : public numbered_page
                 ("failed to parse template '" + std::string{page_template_name_} + "'"
                 );
             }
+
+        // Check if the page has a header tag and extract it from it in this
+        // case. It is not an error if there is no header in this page.
+        for(auto cell = page_body_cell_->GetFirstChild(); cell; cell = cell->GetNext())
+            {
+            if(cell->GetId() == header_cell_id)
+                {
+                // Detach the cell from the tree to prevent it from being
+                // rendered as part of the page body.
+                page_body_cell_->Detach(cell);
+
+                // And attach it to another HTML document representing just
+                // the header contents.
+                //
+                // Note that we can't just use this cell on its own, we
+                // must let wxHtmlWinParser build the usual structure as
+                // wxHTML relies on having extra cells in its DOM, notably
+                // the wxHtmlFontCell setting the initial document font.
+                wxHtmlWinParser html_parser;
+                writer.initialize_html_parser(html_parser);
+                html_parser.InitParser(wxString{});
+                header_cell_.reset
+                    (static_cast<wxHtmlContainerCell*>(html_parser.GetProduct())
+                    );
+                header_cell_->InsertCell(cell);
+
+                break;
+                }
+            }
+    }
+
+    wxHtmlContainerCell* get_header_html() const override
+    {
+        return header_cell_.get();
     }
 
     int get_extra_pages_needed
@@ -1298,7 +1412,7 @@ class standard_page : public numbered_page
     {
         page_break_positions_ = writer.paginate_html
             (writer.get_page_width()
-            ,get_footer_top() - writer.get_vert_margin()
+            ,get_page_body_height()
             ,*page_body_cell_
             );
 
@@ -1310,6 +1424,7 @@ class standard_page : public numbered_page
 
     char const* const                    page_template_name_;
     std::unique_ptr<wxHtmlContainerCell> page_body_cell_;
+    std::unique_ptr<wxHtmlContainerCell> header_cell_;
     std::vector<int>                     page_break_positions_;
 };
 
@@ -1599,6 +1714,7 @@ TAG_HANDLER_BEGIN(unbreakable_paragraph, "P")
 TAG_HANDLER_END(unbreakable_paragraph)
 
 TAGS_MODULE_BEGIN(lmi_illustration)
+    TAGS_MODULE_ADD(page_header)
     TAGS_MODULE_ADD(scaled_image)
     TAGS_MODULE_ADD(numeric_summary_table)
     TAGS_MODULE_ADD(unbreakable_paragraph)
