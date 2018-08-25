@@ -101,10 +101,6 @@ pdf_writer_wx::pdf_writer_wx
             .FaceName("Helvetica")
         );
 
-    // Create an HTML parser to allow easily adding HTML contents to the output.
-    html_parser_.SetDC(&pdf_dc_);
-    html_parser_.SetFonts("Helvetica", "Courier", font_sizes.data());
-
     // Create the virtual file system object for loading images referenced from
     // HTML and interpret relative paths from the data directory.
     html_vfs_.reset(new wxFileSystem());
@@ -112,7 +108,9 @@ pdf_writer_wx::pdf_writer_wx
         (global_settings::instance().data_directory().string()
         ,true // argument is a directory, not file path
         );
-    html_parser_.SetFS(html_vfs_.get());
+
+    // Create an HTML parser to allow easily adding HTML contents to the output.
+    initialize_html_parser(html_parser_);
 }
 
 /// Start a new page in the output PDF document.
@@ -325,6 +323,14 @@ int pdf_writer_wx::output_html
         }
 
     return height;
+}
+
+void pdf_writer_wx::initialize_html_parser(wxHtmlWinParser& html_parser)
+{
+    html_parser.SetDC(&pdf_dc_);
+    DoSetFonts(html_parser, html_font_sizes_);
+
+    html_parser.SetFS(html_vfs_.get());
 }
 
 std::unique_ptr<wxHtmlContainerCell> pdf_writer_wx::parse_html(html::text&& html)
