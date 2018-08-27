@@ -189,7 +189,7 @@ make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
 
 ./install_wx.sh
 
-make $coefficiency --output-sync=recurse -f install_wxpdfdoc.make
+./install_wxpdfdoc.sh
 
 find /cache_for_lmi/downloads -type f | xargs md5sum
 
