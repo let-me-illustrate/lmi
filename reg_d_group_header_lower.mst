@@ -29,8 +29,8 @@
             {{CorpNameAbbrev60}}
         {{/Composite}}
         {{^Composite}}
-            {{Insured1Abbrev30}}
-        {{/Composite}},
+            {{Insured1Abbrev30}},
+        {{/Composite}}
         {{Gender}} {{Smoker}} rates, Age {{Age}}<br>
         {{#Composite}}
             Composite<br>
