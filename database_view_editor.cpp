@@ -104,8 +104,8 @@ class DatabaseDurationAxis
 };
 
 DatabaseTableAdapter::DatabaseTableAdapter(database_entity* db_value)
-    :db_value_(db_value)
-    ,modified_(false)
+    :db_value_ {db_value}
+    ,modified_ {false}
 {
     indexes_.resize(eda_max);
 }

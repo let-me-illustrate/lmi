@@ -125,7 +125,7 @@ class text
   private:
     // This move ctor is private and does not perform any escaping.
     explicit text(std::string&& html)
-        :html_{html}
+        :html_ {html}
     {
     }
 
@@ -138,7 +138,7 @@ class attribute
 {
   public:
     explicit attribute(char const* name)
-        :name_{name}
+        :name_ {name}
     {
     }
 
@@ -151,8 +151,8 @@ class attribute
 
   private:
     attribute(char const* name, std::string&& value)
-        :name_{name}
-        ,value_{std::move(value)}
+        :name_  {name}
+        ,value_ {std::move(value)}
     {
     }
 
@@ -168,7 +168,7 @@ class LMI_SO any_element
   public:
     // Ctor should only be used with literal strings as argument.
     explicit any_element(char const* name)
-        :name_(name)
+        :name_ {name}
     {
     }
 

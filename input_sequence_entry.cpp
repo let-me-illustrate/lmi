@@ -222,7 +222,7 @@ class InputSequenceEditor
     {
       public:
         explicit LayoutOnceGuard(InputSequenceEditor* editor)
-            :editor_(editor)
+            :editor_ {editor}
         {
             ++editor_->layout_freeze_count_;
         }
@@ -364,10 +364,10 @@ InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title
         ,wxDefaultSize
         ,wxDEFAULT_DIALOG_STYLE
         )
-    ,layout_freeze_count_(1)    // It will be thawed when sequence() is called.
-    ,input_        (input)
-    ,keywords_only_(false)
-    ,rows_count_   (0)
+    ,layout_freeze_count_ {1}    // It will be thawed when sequence() is called.
+    ,input_               {input}
+    ,keywords_only_       {false}
+    ,rows_count_          {0}
 {
     wxSizer* top = new(wx) wxBoxSizer(wxVERTICAL);
 
@@ -1384,7 +1384,7 @@ InputSequenceEntry::InputSequenceEntry
     ,wxWindowID         id
     ,wxString const&    name
     )
-    :input_(nullptr)
+    :input_ {nullptr}
 {
     Create(parent, id, name);
 }
@@ -1606,7 +1606,7 @@ void InputSequenceEntry::DoOpenEditor()
 IMPLEMENT_DYNAMIC_CLASS(InputSequenceEntryXmlHandler, wxXmlResourceHandler)
 
 InputSequenceEntryXmlHandler::InputSequenceEntryXmlHandler()
-    :wxXmlResourceHandler()
+    :wxXmlResourceHandler {}
 {
     AddWindowStyles();
 }

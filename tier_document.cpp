@@ -30,8 +30,8 @@
 IMPLEMENT_DYNAMIC_CLASS(TierDocument, ProductEditorDocument)
 
 TierDocument::TierDocument()
-    :ProductEditorDocument()
-    ,charges_()
+    :ProductEditorDocument {}
+    ,charges_              {}
 {
     initialize_charges();
 }

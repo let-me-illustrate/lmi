@@ -65,8 +65,8 @@ END_EVENT_TABLE()
 
 DocManagerEx::DocManagerEx(long int flags, bool initialize)
     :wxDocManager     (flags, initialize)
-    ,print_data_      (new(wx) wxPrintData)
-    ,page_setup_data_ (new(wx) wxPageSetupDialogData)
+    ,print_data_      {new(wx) wxPrintData}
+    ,page_setup_data_ {new(wx) wxPageSetupDialogData}
 {
 }
 

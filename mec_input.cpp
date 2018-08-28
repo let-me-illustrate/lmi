@@ -78,43 +78,43 @@ std::string realize_sequence_string
 /// UDT defaults are presently appropriate.
 
 mec_input::mec_input()
-    :Use7702ATables                   ("No")
-    ,IssueAge                         ("45")
-    ,Gender                           ("Male")
-    ,Smoking                          ("Nonsmoker")
-    ,UnderwritingClass                ("Standard")
-//    ,DateOfBirth                      ("")
-//    ,SubstandardTable                 ("")
-//    ,ProductName                      ("")
-//    ,External1035ExchangeAmount       ("")
-//    ,External1035ExchangeFromMec      ("")
-//    ,Internal1035ExchangeAmount       ("")
-//    ,Internal1035ExchangeFromMec      ("")
-//    ,EffectiveDate                    ("")
-//    ,DefinitionOfLifeInsurance        ("")
-    ,DefinitionOfMaterialChange       ("Unnecessary premium")
-//    ,GroupUnderwritingType            ("")
-//    ,Comments                         ("")
-//    ,InforceAsOfDate                  ("")
-//    ,InforceYear                      ("")
-//    ,InforceMonth                     ("")
-    ,InforceTargetSpecifiedAmount     ("1000000")
-//    ,InforceAccountValue              ("")
-//    ,InforceIsMec                     ("")
-//    ,LastMaterialChangeDate           ("")
-//    ,InforceContractYear              ("")
-//    ,InforceContractMonth             ("")
-//    ,InforceAvBeforeLastMc            ("")
-//    ,InforceDcv                       ("")
-    ,InforceLeastDeathBenefit         ("1000000")
-    ,PaymentHistory                   ("0")
-    ,BenefitHistory                   ("1000000")
-    ,StateOfJurisdiction              ("CT")
-    ,PremiumTaxState                  ("CT")
-    ,FlatExtra                        ("0")
-//    ,UseDOB                           ("")
-    ,Payment                          ("0")
-    ,BenefitAmount                    ("1000000")
+    :Use7702ATables                   {"No"}
+    ,IssueAge                         {"45"}
+    ,Gender                           {"Male"}
+    ,Smoking                          {"Nonsmoker"}
+    ,UnderwritingClass                {"Standard"}
+//    ,DateOfBirth                      {""}
+//    ,SubstandardTable                 {""}
+//    ,ProductName                      {""}
+//    ,External1035ExchangeAmount       {""}
+//    ,External1035ExchangeFromMec      {""}
+//    ,Internal1035ExchangeAmount       {""}
+//    ,Internal1035ExchangeFromMec      {""}
+//    ,EffectiveDate                    {""}
+//    ,DefinitionOfLifeInsurance        {""}
+    ,DefinitionOfMaterialChange       {"Unnecessary premium"}
+//    ,GroupUnderwritingType            {""}
+//    ,Comments                         {""}
+//    ,InforceAsOfDate                  {""}
+//    ,InforceYear                      {""}
+//    ,InforceMonth                     {""}
+    ,InforceTargetSpecifiedAmount     {"1000000"}
+//    ,InforceAccountValue              {""}
+//    ,InforceIsMec                     {""}
+//    ,LastMaterialChangeDate           {""}
+//    ,InforceContractYear              {""}
+//    ,InforceContractMonth             {""}
+//    ,InforceAvBeforeLastMc            {""}
+//    ,InforceDcv                       {""}
+    ,InforceLeastDeathBenefit         {"1000000"}
+    ,PaymentHistory                   {"0"}
+    ,BenefitHistory                   {"1000000"}
+    ,StateOfJurisdiction              {"CT"}
+    ,PremiumTaxState                  {"CT"}
+    ,FlatExtra                        {"0"}
+//    ,UseDOB                           {""}
+    ,Payment                          {"0"}
+    ,BenefitAmount                    {"1000000"}
 {
     AscribeMembers();
     DoAdaptExternalities(); // Initialize database, e.g.
@@ -122,9 +122,9 @@ mec_input::mec_input()
 }
 
 mec_input::mec_input(mec_input const& z)
-    :xml_serializable  <mec_input>()
-    ,MvcModel                     ()
-    ,MemberSymbolTable <mec_input>()
+    :xml_serializable  <mec_input> {}
+    ,MvcModel                      {}
+    ,MemberSymbolTable <mec_input> {}
 {
     AscribeMembers();
     MemberSymbolTable<mec_input>::assign(z);

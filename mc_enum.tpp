@@ -36,8 +36,8 @@
 
 template<typename T>
 mc_enum<T>::mc_enum()
-    :mc_enum_base(n())
-    ,value_(e()[0])
+    :mc_enum_base (n())
+    ,value_       {e()[0]}
 {
     typedef mc_enum_key<T> metadata;
     static_assert(0 < metadata::n_);
@@ -45,14 +45,14 @@ mc_enum<T>::mc_enum()
 
 template<typename T>
 mc_enum<T>::mc_enum(T t)
-    :mc_enum_base(n())
-    ,value_(t)
+    :mc_enum_base (n())
+    ,value_       {t}
 {}
 
 template<typename T>
 mc_enum<T>::mc_enum(std::string const& s)
-    :mc_enum_base(n())
-    ,value_(e()[ordinal(s)])
+    :mc_enum_base (n())
+    ,value_       {e()[ordinal(s)]}
 {}
 
 template<typename T>

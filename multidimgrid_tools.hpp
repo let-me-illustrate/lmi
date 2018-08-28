@@ -121,8 +121,8 @@ AxisMaxBoundAdjuster<Integral>::AxisMaxBoundAdjuster
     )
     :AxisMaxBoundAdjusterBase(grid)
     ,axis_(axis)
-    ,maximum_lower_bound_(maximum_lower_bound)
-    ,maximum_upper_bound_(maximum_upper_bound)
+    ,maximum_lower_bound_{maximum_lower_bound}
+    ,maximum_upper_bound_{maximum_upper_bound}
 {
     if(maximum_upper_bound < maximum_lower_bound)
         {

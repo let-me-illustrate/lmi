@@ -94,13 +94,13 @@ std::string const& default_skin_name()
 } // Unnamed namespace.
 
 ce_skin_name::ce_skin_name()
-    :mc_enum_base(skin_names().size())
-    ,value_(default_skin_name())
+    :mc_enum_base (lmi::ssize(skin_names()))
+    ,value_       {default_skin_name()}
 {}
 
 ce_skin_name::ce_skin_name(std::string const& s)
-    :mc_enum_base(skin_names().size())
-    ,value_(skin_names()[ordinal(s)])
+    :mc_enum_base (lmi::ssize(skin_names()))
+    ,value_       {skin_names()[ordinal(s)]}
 {}
 
 ce_skin_name& ce_skin_name::operator=(std::string const& s)

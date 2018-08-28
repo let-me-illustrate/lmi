@@ -48,7 +48,7 @@ MultiDimEnumAxis<E>::MultiDimEnumAxis
     ,std::vector<std::string> const& values
     )
     :MultiDimAxis<E>(name)
-    ,values_(values)
+    ,values_{values}
 {
 }
 

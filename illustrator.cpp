@@ -45,10 +45,10 @@
 #include <string>
 
 illustrator::illustrator(mcenum_emission emission)
-    :emission_                 (emission)
-    ,seconds_for_input_        (0.0)
-    ,seconds_for_calculations_ (0.0)
-    ,seconds_for_output_       (0.0)
+    :emission_                 {emission}
+    ,seconds_for_input_        {0.0}
+    ,seconds_for_calculations_ {0.0}
+    ,seconds_for_output_       {0.0}
 {
 }
 

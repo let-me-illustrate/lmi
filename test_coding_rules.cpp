@@ -132,11 +132,11 @@ class file final
 /// assign files to that phylum last, and only if they fit no other.
 
 file::file(std::string const& file_path)
-    :path_     (file_path)
-    ,full_name_(file_path)
-    ,leaf_name_(path_.leaf())
-    ,extension_(fs::extension(path_))
-    ,phylum_   (e_no_phylum)
+    :path_      {file_path}
+    ,full_name_ {file_path}
+    ,leaf_name_ {path_.leaf()}
+    ,extension_ {fs::extension(path_)}
+    ,phylum_    {e_no_phylum}
 {
     if(!fs::exists(path_))
         {

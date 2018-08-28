@@ -142,47 +142,47 @@ Irc7702::Irc7702
     ,double                     a_InforceGSP
     ,double                     a_InforceCumPremsPaid
     )
-    :Test7702           (a_Test7702)
-    ,IssueAge           (a_IssueAge)
-    ,EndtAge            (a_EndtAge)
-    ,Qc                 (a_Qc)
-    ,GLPic              (a_GLPic)
-    ,GSPic              (a_GSPic)
-    ,Ig                 (a_Ig)
-    ,IntDed             (a_IntDed)
-    ,PresentBftAmt      (a_PresentBftAmt)
-    ,PriorBftAmt        (a_PresentBftAmt)
-    ,PresentSpecAmt     (a_PresentSpecAmt)
-    ,PriorSpecAmt       (a_PresentSpecAmt)
-    ,LeastBftAmtEver    (a_LeastBftAmtEver)
-    ,PresentDBOpt       (a_PresentDBOpt)
-    ,PriorDBOpt         (a_PresentDBOpt)
-    ,AnnChgPol          (a_AnnChgPol)
-    ,MlyChgPol          (a_MlyChgPol)
-    ,MlyChgSpecAmt      (a_MlyChgSpecAmt)
-    ,SpecAmtLoadLimit   (a_SpecAmtLoadLimit)
-    ,MlyChgADD          (a_MlyChgADD)
-    ,ADDLimit           (a_ADDLimit)
-    ,LoadTgt            (a_LoadTgt)
-    ,LoadExc            (a_LoadExc)
-    ,TargetPremium      (a_TargetPremium)
-    ,round_min_premium  (a_round_min_premium)
-    ,round_max_premium  (a_round_max_premium)
-    ,round_min_specamt  (a_round_min_specamt)
-    ,round_max_specamt  (a_round_max_specamt)
-    ,InforceYear        (a_InforceYear)
-    ,InforceMonth       (a_InforceMonth)
-    ,InforceGLP         (a_InforceGLP)
-    ,InforceCumGLP      (a_InforceCumGLP)
-    ,InforceGSP         (a_InforceGSP)
-    ,InforceCumPremsPaid(a_InforceCumPremsPaid)
-    ,PresentGLP         (a_InforceGLP)
-    ,PriorGLP           (a_InforceGLP)
-    ,CumGLP             (a_InforceCumGLP)
-    ,PresentGSP         (a_InforceGSP)
-    ,PriorGSP           (a_InforceGSP)
-    ,GptLimit           (std::max(a_InforceCumGLP, a_InforceGSP))
-    ,CumPmts            (a_InforceCumPremsPaid)
+    :Test7702           {a_Test7702}
+    ,IssueAge           {a_IssueAge}
+    ,EndtAge            {a_EndtAge}
+    ,Qc                 {a_Qc}
+    ,GLPic              {a_GLPic}
+    ,GSPic              {a_GSPic}
+    ,Ig                 {a_Ig}
+    ,IntDed             {a_IntDed}
+    ,PresentBftAmt      {a_PresentBftAmt}
+    ,PriorBftAmt        {a_PresentBftAmt}
+    ,PresentSpecAmt     {a_PresentSpecAmt}
+    ,PriorSpecAmt       {a_PresentSpecAmt}
+    ,LeastBftAmtEver    {a_LeastBftAmtEver}
+    ,PresentDBOpt       {a_PresentDBOpt}
+    ,PriorDBOpt         {a_PresentDBOpt}
+    ,AnnChgPol          {a_AnnChgPol}
+    ,MlyChgPol          {a_MlyChgPol}
+    ,MlyChgSpecAmt      {a_MlyChgSpecAmt}
+    ,SpecAmtLoadLimit   {a_SpecAmtLoadLimit}
+    ,MlyChgADD          {a_MlyChgADD}
+    ,ADDLimit           {a_ADDLimit}
+    ,LoadTgt            {a_LoadTgt}
+    ,LoadExc            {a_LoadExc}
+    ,TargetPremium      {a_TargetPremium}
+    ,round_min_premium  {a_round_min_premium}
+    ,round_max_premium  {a_round_max_premium}
+    ,round_min_specamt  {a_round_min_specamt}
+    ,round_max_specamt  {a_round_max_specamt}
+    ,InforceYear        {a_InforceYear}
+    ,InforceMonth       {a_InforceMonth}
+    ,InforceGLP         {a_InforceGLP}
+    ,InforceCumGLP      {a_InforceCumGLP}
+    ,InforceGSP         {a_InforceGSP}
+    ,InforceCumPremsPaid{a_InforceCumPremsPaid}
+    ,PresentGLP         {a_InforceGLP}
+    ,PriorGLP           {a_InforceGLP}
+    ,CumGLP             {a_InforceCumGLP}
+    ,PresentGSP         {a_InforceGSP}
+    ,PriorGSP           {a_InforceGSP}
+    ,GptLimit           {std::max(a_InforceCumGLP, a_InforceGSP)}
+    ,CumPmts            {a_InforceCumPremsPaid}
 {
     LMI_ASSERT(a_PresentSpecAmt  <= a_PresentBftAmt );
     LMI_ASSERT(a_LeastBftAmtEver <= a_PresentSpecAmt);

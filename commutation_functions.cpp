@@ -46,8 +46,8 @@ OLCommFns::OLCommFns
     (std::vector<double> const& a_q
     ,std::vector<double> const& a_i
     )
-    :q(a_q)
-    ,i(a_i)
+    :q {a_q}
+    ,i {a_i}
 {
     Length = q.size();
     LMI_ASSERT(i.size() == q.size());
@@ -120,11 +120,11 @@ ULCommFns::ULCommFns
     ,mcenum_dbopt_7702          dbo
     ,mcenum_mode                mode
     )
-    :qc    (a_qc)
-    ,ic    (a_ic)
-    ,ig    (a_ig)
-    ,dbo_  (dbo)
-    ,mode_ (mode)
+    :qc    {a_qc}
+    ,ic    {a_ic}
+    ,ig    {a_ig}
+    ,dbo_  {dbo}
+    ,mode_ {mode}
 {
     Length = qc.size();
     LMI_ASSERT(ic.size() == qc.size());

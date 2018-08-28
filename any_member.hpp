@@ -141,8 +141,8 @@ class holder
 
 template<typename ClassType, typename ValueType>
 holder<ClassType,ValueType>::holder(ClassType* object, ValueType const& value)
-    :object_(object)
-    ,held_(value)
+    :object_ {object}
+    ,held_   {value}
 {}
 
 template<typename ClassType, typename ValueType>
@@ -273,15 +273,15 @@ class any_member final
 
 template<typename ClassType>
 any_member<ClassType>::any_member()
-    :object_ (nullptr)
-    ,content_(nullptr)
+    :object_  {nullptr}
+    ,content_ {nullptr}
 {}
 
 template<typename ClassType>
 any_member<ClassType>::any_member(any_member const& other)
-    :any_entity (other)
-    ,object_    (other.object_)
-    ,content_   (other.content_ ? other.content_->clone() : nullptr)
+    :any_entity {other}
+    ,object_    {other.object_}
+    ,content_   {other.content_ ? other.content_->clone() : nullptr}
 {}
 
 template<typename ClassType>
@@ -293,8 +293,8 @@ any_member<ClassType>::~any_member()
 template<typename ClassType>
 template<typename ValueType>
 any_member<ClassType>::any_member(ClassType* object, ValueType const& value)
-    :object_(object)
-    ,content_(new holder<ClassType,ValueType>(object, value))
+    :object_  {object}
+    ,content_ {new holder<ClassType,ValueType>(object, value)}
 {}
 
 template<typename ClassType>

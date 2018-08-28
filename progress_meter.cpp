@@ -70,11 +70,11 @@ progress_meter::progress_meter
     ,std::string const& title
     ,enum_display_mode  display_mode
     )
-    :count_         (0)
-    ,max_count_     (max_count)
-    ,title_         (title)
-    ,display_mode_  (display_mode)
-    ,was_cancelled_ (false)
+    :count_         {0}
+    ,max_count_     {max_count}
+    ,title_         {title}
+    ,display_mode_  {display_mode}
+    ,was_cancelled_ {false}
 {
 }
 

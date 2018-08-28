@@ -97,9 +97,9 @@ rounding_parameters::rounding_parameters
     ,rounding_style     style
     ,std::string const& gloss
     )
-    :decimals_ (decimals)
-    ,style_    (style   )
-    ,gloss_    (gloss   )
+    :decimals_ {decimals}
+    ,style_    {style   }
+    ,gloss_    {gloss   }
 {
 }
 

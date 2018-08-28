@@ -29,15 +29,15 @@
 #include <algorithm>
 
 modal_outlay::modal_outlay(yare_input const& yi)
-    :dumpin_               (yi.Dumpin)
-    ,external_1035_amount_ (yi.External1035ExchangeAmount)
-    ,internal_1035_amount_ (yi.Internal1035ExchangeAmount)
-    ,ee_modal_premiums_    (yi.Payment)
-    ,ee_premium_modes_     (yi.PaymentMode)
-    ,er_modal_premiums_    (yi.CorporationPayment)
-    ,er_premium_modes_     (yi.CorporationPaymentMode)
-    ,new_cash_loans_       (yi.NewLoan)
-    ,withdrawals_          (yi.Withdrawal)
+    :dumpin_               {yi.Dumpin}
+    ,external_1035_amount_ {yi.External1035ExchangeAmount}
+    ,internal_1035_amount_ {yi.Internal1035ExchangeAmount}
+    ,ee_modal_premiums_    {yi.Payment}
+    ,ee_premium_modes_     {yi.PaymentMode}
+    ,er_modal_premiums_    {yi.CorporationPayment}
+    ,er_premium_modes_     {yi.CorporationPaymentMode}
+    ,new_cash_loans_       {yi.NewLoan}
+    ,withdrawals_          {yi.Withdrawal}
 {
 }
 

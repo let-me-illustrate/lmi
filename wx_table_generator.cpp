@@ -94,16 +94,16 @@ wx_table_generator::wx_table_generator
     ,int                                   left_margin
     ,int                                   total_width
     )
-    :indices_          (indices)
-    ,dc_               (dc)
-    ,left_margin_      (left_margin)
-    ,total_width_      (total_width)
-    ,char_height_      (dc_.GetCharHeight())
-    ,row_height_       (char_height_)
-    ,one_em_           (dc_.GetTextExtent("M").x)
-    ,max_header_lines_ (1)
-    ,draw_separators_  (false)
-    ,use_bold_headers_ (false)
+    :indices_          {indices}
+    ,dc_               {dc}
+    ,left_margin_      {left_margin}
+    ,total_width_      {total_width}
+    ,char_height_      {dc_.GetCharHeight()}
+    ,row_height_       {char_height_}
+    ,one_em_           {dc_.GetTextExtent("M").x}
+    ,max_header_lines_ {1}
+    ,draw_separators_  {false}
+    ,use_bold_headers_ {false}
 {
     for(auto const& i : vc)
         {

@@ -306,11 +306,11 @@ class round_to
 
 template<typename RealType>
 round_to<RealType>::round_to(int decimals, rounding_style a_style)
-    :decimals_          (decimals)
-    ,style_             (a_style)
-    ,scale_fwd_         (detail::perform_pow(max_prec_real(10.0), decimals))
-    ,scale_back_        (max_prec_real(1.0) / scale_fwd_)
-    ,rounding_function_ (select_rounding_function(a_style))
+    :decimals_          {decimals}
+    ,style_             {a_style}
+    ,scale_fwd_         {detail::perform_pow(max_prec_real(10.0), decimals)}
+    ,scale_back_        {max_prec_real(1.0) / scale_fwd_}
+    ,rounding_function_ {select_rounding_function(a_style)}
 {
 /*
 // TODO ?? This might improve accuracy slightly, but would prevent
