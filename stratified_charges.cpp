@@ -90,9 +90,9 @@ stratified_entity::stratified_entity
     ,std::vector<double> const& values
     ,std::string const&         gloss
     )
-    :limits_(limits)
-    ,values_(values)
-    ,gloss_ (gloss)
+    :limits_ {limits}
+    ,values_ {values}
+    ,gloss_  {gloss}
 {
     assert_validity();
 }
@@ -175,8 +175,8 @@ stratified_charges::stratified_charges(std::string const& filename)
 }
 
 stratified_charges::stratified_charges(stratified_charges const& z)
-    :xml_serializable  <stratified_charges>()
-    ,MemberSymbolTable <stratified_charges>()
+    :xml_serializable  <stratified_charges> {}
+    ,MemberSymbolTable <stratified_charges> {}
 {
     ascribe_members();
     MemberSymbolTable<stratified_charges>::assign(z);

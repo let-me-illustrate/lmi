@@ -250,23 +250,23 @@ bool need_loan_rates(yare_input const& yi)
 } // Unnamed namespace.
 
 InterestRates::InterestRates(BasicValues const& v)
-    :Length_             (v.GetLength())
-    ,RoundIntRate_       (v.round_interest_rate())
-    ,Round7702Rate_      (v.round_interest_rate_7702())
+    :Length_             {v.GetLength()}
+    ,RoundIntRate_       {v.round_interest_rate()}
+    ,Round7702Rate_      {v.round_interest_rate_7702()}
     ,Zero_               (Length_)
-    ,NeedMidpointRates_  (v.IsSubjectToIllustrationReg())
-    ,GenAcctRateType_    (v.yare_input_.GeneralAccountRateType)
-    ,NeedSepAcctRates_   (v.Database_->Query(DB_AllowSepAcct))
-    ,SepAcctRateType_    (v.yare_input_.SeparateAccountRateType)
-    ,SepAcctSpreadMethod_(static_cast<mcenum_spread_method>(static_cast<int>(v.Database_->Query(DB_SepAcctSpreadMethod))))
-    ,AmortLoad_          (Zero_)
-    ,ExtraSepAcctCharge_ (Zero_)
-//    ,NeedLoanRates_      (need_loan_rates(v.yare_input_))
-    ,NeedLoanRates_      (true) // DEPRECATED
-    ,LoanRateType_       (v.yare_input_.LoanRateType)
-    ,NeedPrefLoanRates_  (v.Database_->Query(DB_AllowPrefLoan))
-    ,NeedHoneymoonRates_ (v.yare_input_.HoneymoonEndorsement)
-    ,SpreadFor7702_      (v.SpreadFor7702())
+    ,NeedMidpointRates_  {v.IsSubjectToIllustrationReg()}
+    ,GenAcctRateType_    {v.yare_input_.GeneralAccountRateType}
+    ,NeedSepAcctRates_   {0.0 != v.Database_->Query(DB_AllowSepAcct)}
+    ,SepAcctRateType_    {v.yare_input_.SeparateAccountRateType}
+    ,SepAcctSpreadMethod_{static_cast<mcenum_spread_method>(static_cast<int>(v.Database_->Query(DB_SepAcctSpreadMethod)))}
+    ,AmortLoad_          {Zero_}
+    ,ExtraSepAcctCharge_ {Zero_}
+//    ,NeedLoanRates_      {need_loan_rates(v.yare_input_)}
+    ,NeedLoanRates_      {true} // DEPRECATED
+    ,LoanRateType_       {v.yare_input_.LoanRateType}
+    ,NeedPrefLoanRates_  {0.0 != v.Database_->Query(DB_AllowPrefLoan)}
+    ,NeedHoneymoonRates_ {v.yare_input_.HoneymoonEndorsement}
+    ,SpreadFor7702_      {v.SpreadFor7702()}
 {
     Initialize(v);
 }

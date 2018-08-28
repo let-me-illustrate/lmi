@@ -98,22 +98,22 @@ struct load_details
         ,std::vector<double> const& TabularGuarSpecAmtLoad
         ,std::vector<double> const& TabularCurrSpecAmtLoad
         )
-        :length_                          (length)
-        ,AmortizePremLoad_                (AmortizePremLoad)
-        ,premium_tax_load_                (premium_tax_load)
-        ,maximum_premium_tax_load_rate_   (maximum_premium_tax_load_rate)
-        ,minimum_premium_tax_load_rate_   (minimum_premium_tax_load_rate)
-        ,premium_tax_rate_                (premium_tax_rate)
-        ,premium_tax_amortization_rate_   (premium_tax_amortization_rate)
-        ,premium_tax_amortization_period_ (premium_tax_amortization_period)
-        ,asset_charge_type_               (asset_charge_type)
-        ,NeedMidpointRates_               (NeedMidpointRates)
-        ,round_interest_rate_             (round_interest_rate)
-        ,VectorExtraCompLoad_             (VectorExtraCompLoad)
-        ,VectorExtraAssetComp_            (VectorExtraAssetComp)
-        ,VectorExtraPolFee_               (VectorExtraPolFee)
-        ,TabularGuarSpecAmtLoad_          (TabularGuarSpecAmtLoad)
-        ,TabularCurrSpecAmtLoad_          (TabularCurrSpecAmtLoad)
+        :length_                          {length}
+        ,AmortizePremLoad_                {AmortizePremLoad}
+        ,premium_tax_load_                {premium_tax_load}
+        ,maximum_premium_tax_load_rate_   {maximum_premium_tax_load_rate}
+        ,minimum_premium_tax_load_rate_   {minimum_premium_tax_load_rate}
+        ,premium_tax_rate_                {premium_tax_rate}
+        ,premium_tax_amortization_rate_   {premium_tax_amortization_rate}
+        ,premium_tax_amortization_period_ {premium_tax_amortization_period}
+        ,asset_charge_type_               {asset_charge_type}
+        ,NeedMidpointRates_               {NeedMidpointRates}
+        ,round_interest_rate_             {round_interest_rate}
+        ,VectorExtraCompLoad_             {VectorExtraCompLoad}
+        ,VectorExtraAssetComp_            {VectorExtraAssetComp}
+        ,VectorExtraPolFee_               {VectorExtraPolFee}
+        ,TabularGuarSpecAmtLoad_          {TabularGuarSpecAmtLoad}
+        ,TabularCurrSpecAmtLoad_          {TabularCurrSpecAmtLoad}
         {}
 
     int                        length_;

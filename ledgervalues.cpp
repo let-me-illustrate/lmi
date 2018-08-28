@@ -30,7 +30,7 @@
 #include "ledger.hpp"
 
 IllusVal::IllusVal(std::string const& filename)
-    :filename_ (filename)
+    :filename_ {filename}
 {
 }
 

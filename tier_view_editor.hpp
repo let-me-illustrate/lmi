@@ -105,8 +105,8 @@ inline bool tier_entity_adapter::is_void() const
 }
 
 inline tier_entity_adapter::tier_entity_adapter()
-    :limits_(nullptr)
-    ,values_(nullptr)
+    :limits_ {nullptr}
+    ,values_ {nullptr}
 {
 }
 
@@ -114,8 +114,8 @@ inline tier_entity_adapter::tier_entity_adapter
     (std::vector<double>& limits
     ,std::vector<double>& values
     )
-    :limits_(&limits)
-    ,values_(&values)
+    :limits_ (&limits)
+    ,values_ (&values)
 {
     if(limits.size() != values.size())
         {
@@ -248,8 +248,8 @@ class TierTableAdapter
 };
 
 inline TierTableAdapter::TierTableAdapter(tier_entity_adapter entity)
-    :entity_()
-    ,modified_(false)
+    :entity_   {}
+    ,modified_ {false}
 {
     SetTierEntity(entity);
 }

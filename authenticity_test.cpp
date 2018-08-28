@@ -87,9 +87,9 @@ class PasskeyTest
 /// copies can cause spurious error reports.
 
 PasskeyTest::PasskeyTest()
-    :BeginDate_(ymd_t(20010101))
-    ,EndDate_  (ymd_t(20010103))
-    ,Pwd_      (fs::current_path())
+    :BeginDate_ {ymd_t(20010101)}
+    ,EndDate_   {ymd_t(20010103)}
+    ,Pwd_       {fs::current_path()}
 {
     EnsureMd5sumBinaryIsFound();
     RemoveTestFiles(__FILE__, __LINE__);

@@ -86,8 +86,8 @@ class expect_preferences_dialog_base
 {
   public:
     expect_preferences_dialog_base()
-        :dialog_(nullptr)
-        ,use_checkbox_(nullptr)
+        :dialog_       {nullptr}
+        ,use_checkbox_ {nullptr}
         {
         }
 

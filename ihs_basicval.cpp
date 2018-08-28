@@ -63,14 +63,14 @@
 //============================================================================
 BasicValues::BasicValues(Input const& input)
     :yare_input_         (input)
-    ,DefnLifeIns_        (mce_cvat)
-    ,DefnMaterialChange_ (mce_unnecessary_premium)
-    ,Equiv7702DBO3       (mce_option1_for_7702)
-    ,MaxWDDed_           (mce_twelve_times_last)
-    ,MaxLoanDed_         (mce_twelve_times_last)
-    ,StateOfJurisdiction_(mce_s_CT)
-    ,StateOfDomicile_    (mce_s_CT)
-    ,PremiumTaxState_    (mce_s_CT)
+    ,DefnLifeIns_        {mce_cvat}
+    ,DefnMaterialChange_ {mce_unnecessary_premium}
+    ,Equiv7702DBO3       {mce_option1_for_7702}
+    ,MaxWDDed_           {mce_twelve_times_last}
+    ,MaxLoanDed_         {mce_twelve_times_last}
+    ,StateOfJurisdiction_{mce_s_CT}
+    ,StateOfDomicile_    {mce_s_CT}
+    ,PremiumTaxState_    {mce_s_CT}
 {
     Init();
 }
@@ -91,16 +91,16 @@ BasicValues::BasicValues
     ,double              a_TargetPremium
     // TODO ?? Need loan rate type here?
     )
-    :yare_input_         (Input())
-    ,DefnLifeIns_        (mce_cvat)
-    ,DefnMaterialChange_ (mce_unnecessary_premium)
-    ,Equiv7702DBO3       (a_DBOptFor7702)
-    ,MaxWDDed_           (mce_twelve_times_last)
-    ,MaxLoanDed_         (mce_twelve_times_last)
-    ,StateOfJurisdiction_(a_StateOfJurisdiction)
-    ,StateOfDomicile_    (a_StateOfJurisdiction)
-    ,PremiumTaxState_    (a_StateOfJurisdiction)
-    ,InitialTargetPremium(a_TargetPremium)
+    :yare_input_         (Input{})
+    ,DefnLifeIns_        {mce_cvat}
+    ,DefnMaterialChange_ {mce_unnecessary_premium}
+    ,Equiv7702DBO3       {a_DBOptFor7702}
+    ,MaxWDDed_           {mce_twelve_times_last}
+    ,MaxLoanDed_         {mce_twelve_times_last}
+    ,StateOfJurisdiction_{a_StateOfJurisdiction}
+    ,StateOfDomicile_    {a_StateOfJurisdiction}
+    ,PremiumTaxState_    {a_StateOfJurisdiction}
+    ,InitialTargetPremium{a_TargetPremium}
 {
     yare_input_.IssueAge                   = a_IssueAge           ;
     yare_input_.RetirementAge              = a_IssueAge           ;

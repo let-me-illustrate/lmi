@@ -30,7 +30,7 @@
 /// Throws if insane.
 
 datum_sequence::datum_sequence()
-    :keyword_values_are_blocked_(false)
+    :keyword_values_are_blocked_ {false}
 {
     assert_sanity();
 }
@@ -40,8 +40,8 @@ datum_sequence::datum_sequence()
 /// Throws if insane.
 
 datum_sequence::datum_sequence(std::string const& s)
-    :datum_string(s)
-    ,keyword_values_are_blocked_(false)
+    :datum_string                {s}
+    ,keyword_values_are_blocked_ {false}
 {
     assert_sanity();
 }

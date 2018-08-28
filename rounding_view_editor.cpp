@@ -154,8 +154,8 @@ BEGIN_EVENT_TABLE(RoundingButtons, wxPanel)
 END_EVENT_TABLE()
 
 RoundingButtons::RoundingButtons()
-    :wxPanel()
-    ,previous_value_(0, r_not_at_all)
+    :wxPanel         {}
+    ,previous_value_ (0, r_not_at_all)
 {
 }
 
@@ -167,8 +167,8 @@ RoundingButtons::RoundingButtons
     ,long int           style
     ,std::string const& name
     )
-    :wxPanel()
-    ,previous_value_(0, r_not_at_all)
+    :wxPanel         {}
+    ,previous_value_ (0, r_not_at_all)
 {
     Create(parent, id, pos, size, style, name);
 }
@@ -363,7 +363,7 @@ wxBitmapButton& RoundingButtons::button_downward() const
 IMPLEMENT_DYNAMIC_CLASS(RoundingButtonsXmlHandler, wxXmlResourceHandler)
 
 RoundingButtonsXmlHandler::RoundingButtonsXmlHandler()
-    :wxXmlResourceHandler()
+    :wxXmlResourceHandler {}
 {
     AddWindowStyles();
 }

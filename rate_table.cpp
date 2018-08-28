@@ -344,8 +344,8 @@ char const* table_type_as_string(table_type tt)
 struct location_info
 {
     explicit location_info(int line_num = 0, int position = 0)
-        :line_num_(line_num)
-        ,position_(position)
+        :line_num_ {line_num}
+        ,position_ {position}
         {
         }
 
@@ -2390,9 +2390,9 @@ class database_impl final
             ,std::uint32_t               offset
             ,std::shared_ptr<table_impl> table
             )
-            :number_(bourn_cast<std::uint32_t>(number.value()))
-            ,offset_(offset)
-            ,table_ (table)
+            :number_ {bourn_cast<std::uint32_t>(number.value())}
+            ,offset_ {offset}
+            ,table_  {table}
         {
         }
 
@@ -2465,7 +2465,7 @@ class database_impl final
 };
 
 database_impl::database_impl(fs::path const& path)
-    :path_(path)
+    :path_ {path}
 {
     if(path_.empty())
         {
@@ -2492,7 +2492,7 @@ database_impl::database_impl
     (std::istream&                 index_is
     ,std::shared_ptr<std::istream> data_is
     )
-    :data_is_(data_is)
+    :data_is_ {data_is}
 {
     read_index(index_is);
 }
@@ -2716,9 +2716,9 @@ void database_impl::save(fs::path const& path)
         // Try to set up things for saving a database to the given path, throws
         // on failure.
         explicit safe_database_output(fs::path const& path)
-            :path_    (path)
-            ,index_   (path, "index"   , ".ndx")
-            ,database_(path, "database", ".dat")
+            :path_     {path}
+            ,index_    {path, "index"   , ".ndx"}
+            ,database_ {path, "database", ".dat"}
             {
             }
 
@@ -2864,13 +2864,13 @@ void database_impl::save(fs::path const& path)
                 ,char     const* description
                 ,char     const* extension
                 )
-                :path_(fs::change_extension(path, extension))
+                :path_ {fs::change_extension(path, extension)}
                 ,temp_path_
-                    (fs::exists(path_)
+                    {fs::exists(path_)
                         ? unique_filepath(path_, extension + std::string(".tmp"))
                         : path_
-                    )
-                ,description_(description)
+                    }
+                ,description_ {description}
             {
             ofs_.open(temp_path_, ios_out_trunc_binary());
             if(!ofs_) alarum() << "Unable to open '" << temp_path_ << "'." << LMI_FLUSH;
@@ -2996,13 +2996,13 @@ bool database::exists(fs::path const& path)
 }
 
 database::database()
-    :impl_(new database_impl(fs::path()))
+    :impl_ {new database_impl(fs::path())}
 {
 }
 
 database::database(fs::path const& path)
 try
-    :impl_(new database_impl(path))
+    :impl_ {new database_impl(path)}
 {
 }
 catch(std::runtime_error const& e)
@@ -3020,7 +3020,7 @@ database::database
     ,std::shared_ptr<std::istream> data_is
     )
 try
-    :impl_(new database_impl(index_is, data_is))
+    :impl_ {new database_impl(index_is, data_is)}
 {
 }
 catch(std::runtime_error const& e)

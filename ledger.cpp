@@ -69,13 +69,13 @@ Ledger::Ledger
     ,bool               no_can_issue
     ,bool               is_composite
     )
-    :ledger_type_          (ledger_type)
-    ,nonillustrated_       (nonillustrated)
-    ,no_can_issue_         (no_can_issue)
-    ,is_composite_         (is_composite)
-    ,composite_lapse_year_ (0.0)
-    ,ledger_map_           (new ledger_map_holder)
-    ,ledger_invariant_     (new LedgerInvariant(length))
+    :ledger_type_          {ledger_type}
+    ,nonillustrated_       {nonillustrated}
+    ,no_can_issue_         {no_can_issue}
+    ,is_composite_         {is_composite}
+    ,composite_lapse_year_ {0.0}
+    ,ledger_map_           {new ledger_map_holder}
+    ,ledger_invariant_     {new LedgerInvariant(length)}
 {
     SetRunBases(length);
 }

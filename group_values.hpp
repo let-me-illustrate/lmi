@@ -49,9 +49,9 @@ class Ledger;
 struct census_run_result
 {
     census_run_result()
-        :completed_normally_       (true)
-        ,seconds_for_calculations_ (0.0)
-        ,seconds_for_output_       (0.0)
+        :completed_normally_       {true}
+        ,seconds_for_calculations_ {0.0}
+        ,seconds_for_output_       {0.0}
         {}
 
     bool completed_normally_;

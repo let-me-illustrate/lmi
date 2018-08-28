@@ -92,24 +92,24 @@ premium_tax::premium_tax
     ,product_database   const& db
     ,stratified_charges const& strata
     )
-    :tax_state_              (tax_state)
-    ,domicile_               (domicile)
-    ,amortize_premium_load_  (amortize_premium_load)
-    ,levy_rate_              (0.0)   // Reset below.
-    ,load_rate_              (0.0)   // Reset below.
-    ,tax_state_load_rate_    (0.0)   // Reset below.
-    ,domiciliary_load_rate_  (0.0)   // Reset below.
-    ,maximum_load_rate_      (0.0)   // Reset below.
-    ,minimum_load_rate_      (0.0)   // Reset below.
-    ,is_tiered_in_tax_state_ (false) // Reset below.
-    ,is_tiered_in_domicile_  (false) // Reset below.
-    ,is_retaliatory_         (false) // Reset below.
-    ,varies_by_state_        (false) // Reset below.
-    ,load_rate_is_levy_rate_ (false) // Reset below.
-    ,ytd_taxable_premium_    (0.0)
-    ,ytd_load_               (0.0)
-    ,ytd_load_in_tax_state_  (0.0)
-    ,ytd_load_in_domicile_   (0.0)
+    :tax_state_              {tax_state}
+    ,domicile_               {domicile}
+    ,amortize_premium_load_  {amortize_premium_load}
+    ,levy_rate_              {0.0}   // Reset below.
+    ,load_rate_              {0.0}   // Reset below.
+    ,tax_state_load_rate_    {0.0}   // Reset below.
+    ,domiciliary_load_rate_  {0.0}   // Reset below.
+    ,maximum_load_rate_      {0.0}   // Reset below.
+    ,minimum_load_rate_      {0.0}   // Reset below.
+    ,is_tiered_in_tax_state_ {false} // Reset below.
+    ,is_tiered_in_domicile_  {false} // Reset below.
+    ,is_retaliatory_         {false} // Reset below.
+    ,varies_by_state_        {false} // Reset below.
+    ,load_rate_is_levy_rate_ {false} // Reset below.
+    ,ytd_taxable_premium_    {0.0}
+    ,ytd_load_               {0.0}
+    ,ytd_load_in_tax_state_  {0.0}
+    ,ytd_load_in_domicile_   {0.0}
 {
     is_tiered_in_tax_state_ = strata.premium_tax_is_tiered(tax_state_);
     is_tiered_in_domicile_  = strata.premium_tax_is_tiered(domicile_ );
@@ -155,24 +155,24 @@ premium_tax::premium_tax
     (mcenum_state            tax_state
     ,product_database const& db
     )
-    :tax_state_              (tax_state)
-    ,domicile_               (mce_s_XX) // Doesn't matter.
-    ,amortize_premium_load_  (false)
-    ,levy_rate_              (0.0) // Reset below.
-    ,load_rate_              (0.0)
-    ,tax_state_load_rate_    (0.0)
-    ,domiciliary_load_rate_  (0.0)
-    ,maximum_load_rate_      (0.0)
-    ,minimum_load_rate_      (0.0)
-    ,is_tiered_in_tax_state_ (false)
-    ,is_tiered_in_domicile_  (false)
-    ,is_retaliatory_         (false)
-    ,varies_by_state_        (false)
-    ,load_rate_is_levy_rate_ (false)
-    ,ytd_taxable_premium_    (0.0)
-    ,ytd_load_               (0.0)
-    ,ytd_load_in_tax_state_  (0.0)
-    ,ytd_load_in_domicile_   (0.0)
+    :tax_state_              {tax_state}
+    ,domicile_               {mce_s_XX} // Doesn't matter.
+    ,amortize_premium_load_  {false}
+    ,levy_rate_              {0.0} // Reset below.
+    ,load_rate_              {0.0}
+    ,tax_state_load_rate_    {0.0}
+    ,domiciliary_load_rate_  {0.0}
+    ,maximum_load_rate_      {0.0}
+    ,minimum_load_rate_      {0.0}
+    ,is_tiered_in_tax_state_ {false}
+    ,is_tiered_in_domicile_  {false}
+    ,is_retaliatory_         {false}
+    ,varies_by_state_        {false}
+    ,load_rate_is_levy_rate_ {false}
+    ,ytd_taxable_premium_    {0.0}
+    ,ytd_load_               {0.0}
+    ,ytd_load_in_tax_state_  {0.0}
+    ,ytd_load_in_domicile_   {0.0}
 {
     database_index index = db.index().state(tax_state_);
     levy_rate_ = db.Query(DB_PremTaxRate, index);

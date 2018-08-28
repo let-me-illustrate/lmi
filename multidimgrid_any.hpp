@@ -217,7 +217,7 @@ class MultiDimAxisAny
 };
 
 inline MultiDimAxisAny::MultiDimAxisAny(std::string const& name)
-    :name_(name)
+    :name_ {name}
 {
 }
 

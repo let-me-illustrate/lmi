@@ -351,27 +351,27 @@ T trammel_base<T>::maximum_maximorum() const
 
 template<typename Number, typename Trammel>
 tn_range<Number,Trammel>::tn_range()
-    :minimum_ (trammel_.minimum_minimorum())
-    ,maximum_ (trammel_.maximum_maximorum())
-    ,value_   (trammel_.default_initializer())
+    :minimum_ {trammel_.minimum_minimorum()}
+    ,maximum_ {trammel_.maximum_maximorum()}
+    ,value_   {trammel_.default_initializer()}
 {
     trammel_.assert_sanity();
 }
 
 template<typename Number, typename Trammel>
 tn_range<Number,Trammel>::tn_range(Number n)
-    :minimum_ (trammel_.minimum_minimorum())
-    ,maximum_ (trammel_.maximum_maximorum())
-    ,value_   (curb(n))
+    :minimum_ {trammel_.minimum_minimorum()}
+    ,maximum_ {trammel_.maximum_maximorum()}
+    ,value_   {curb(n)}
 {
     trammel_.assert_sanity();
 }
 
 template<typename Number, typename Trammel>
 tn_range<Number,Trammel>::tn_range(std::string const& s)
-    :minimum_ (trammel_.minimum_minimorum())
-    ,maximum_ (trammel_.maximum_maximorum())
-    ,value_   (curb(value_cast<Number>(s)))
+    :minimum_ {trammel_.minimum_minimorum()}
+    ,maximum_ {trammel_.maximum_maximorum()}
+    ,value_   {curb(value_cast<Number>(s))}
 {
     trammel_.assert_sanity();
 }
