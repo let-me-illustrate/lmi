@@ -26,7 +26,7 @@
 #include "facets.hpp"
 
 datum_string::datum_string(std::string const& value)
-    :value_(value)
+    :value_ {value}
 {
 }
 

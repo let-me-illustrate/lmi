@@ -171,7 +171,7 @@ class simple_array0
 {
   public:
     simple_array0(int n, double d = 0.0)
-        :length_(n)
+        :length_ {n}
         {
         data_ = new double[length_];
         for(int j = 0; j < length_; ++j) data_[j] = d;

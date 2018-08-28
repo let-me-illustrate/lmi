@@ -86,21 +86,21 @@ showing {accesses, modifies current year, modifies future years}
 //============================================================================
 AccountValue::AccountValue(Input const& input)
     :BasicValues           (Input::consummate(input))
-    ,DebugFilename         ("anonymous.monthly_trace")
-    ,Debugging             (false)
-    ,Solving               (mce_solve_none != BasicValues::yare_input_.SolveType)
-    ,SolvingForGuarPremium (false)
-    ,ItLapsed              (false)
-    ,ledger_(new Ledger(BasicValues::GetLength(), BasicValues::ledger_type(), BasicValues::nonillustrated(), BasicValues::no_can_issue(), false))
-    ,ledger_invariant_     (new LedgerInvariant(BasicValues::GetLength()))
-    ,ledger_variant_       (new LedgerVariant  (BasicValues::GetLength()))
-    ,SolveGenBasis_        (mce_gen_curr)
-    ,SolveSepBasis_        (mce_sep_full)
-    ,RunBasis_             (mce_run_gen_curr_sep_full)
-    ,GenBasis_             (mce_gen_curr)
-    ,SepBasis_             (mce_sep_full)
-    ,OldDBOpt              (mce_option1)
-    ,YearsDBOpt            (mce_option1)
+    ,DebugFilename         {"anonymous.monthly_trace"}
+    ,Debugging             {false}
+    ,Solving               {mce_solve_none != BasicValues::yare_input_.SolveType}
+    ,SolvingForGuarPremium {false}
+    ,ItLapsed              {false}
+    ,ledger_{new Ledger(BasicValues::GetLength(), BasicValues::ledger_type(), BasicValues::nonillustrated(), BasicValues::no_can_issue(), false)}
+    ,ledger_invariant_     {new LedgerInvariant(BasicValues::GetLength())}
+    ,ledger_variant_       {new LedgerVariant  (BasicValues::GetLength())}
+    ,SolveGenBasis_        {mce_gen_curr}
+    ,SolveSepBasis_        {mce_sep_full}
+    ,RunBasis_             {mce_run_gen_curr_sep_full}
+    ,GenBasis_             {mce_gen_curr}
+    ,SepBasis_             {mce_sep_full}
+    ,OldDBOpt              {mce_option1}
+    ,YearsDBOpt            {mce_option1}
 {
     // Explicitly initialize antediluvian members. It's generally
     // better to do this in the initializer-list, but here they can

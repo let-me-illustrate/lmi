@@ -24,7 +24,7 @@
 #include "datum_boolean.hpp"
 
 datum_boolean::datum_boolean(bool value)
-    :value_(value)
+    :value_ {value}
 {
 }
 

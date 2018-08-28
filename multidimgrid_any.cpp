@@ -214,7 +214,7 @@ class GridRefreshTableDataGuard
 };
 
 inline GridRefreshTableDataGuard::GridRefreshTableDataGuard(MultiDimGrid& grid)
-    :grid_(grid)
+    :grid_ {grid}
 {
     ++grid_.table_data_refresh_counter_;
 }

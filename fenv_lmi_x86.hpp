@@ -228,7 +228,7 @@ class control_word
 
     template<typename X>
     control_word(control_word<X> x)
-        :cw_(ControlWordType::reserved_values)
+        :cw_ {ControlWordType::reserved_values}
         {
         im() = x.im();
         dm() = x.dm();

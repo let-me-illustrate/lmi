@@ -124,9 +124,9 @@ class S
 };
 
 S::S()
-    :i0(0)
-    ,i1(0)
-    ,d0(0.0)
+    :i0 {0}
+    ,i1 {0}
+    ,d0 {0.0}
 {
     ascribe("i0", &S::i0);
     ascribe("i1", &S::i1);
@@ -185,9 +185,9 @@ struct T : public Q, public MemberSymbolTable<T>
     std::string s0;
 
     T()
-        :i0(0)
-        ,i1(0)
-        ,d0(0.0)
+        :i0 {0}
+        ,i1 {0}
+        ,d0 {0.0}
         {
         ascribe_members();
         }

@@ -74,10 +74,10 @@ void lmi_sleep(int seconds) {Sleep(bourn_cast<unsigned int>(1000 * seconds));}
 /// cannot be determined.
 
 Timer::Timer()
-    :elapsed_time_      (0)
-    ,is_running_        (false)
-    ,time_when_started_ (0)
-    ,time_when_stopped_ (0)
+    :elapsed_time_      {0}
+    ,is_running_        {false}
+    ,time_when_started_ {0}
+    ,time_when_stopped_ {0}
 {
     frequency_ = calibrate();
     if(frequency_ <= 0)

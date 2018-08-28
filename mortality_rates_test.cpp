@@ -81,21 +81,21 @@ std::vector<double> monthly_rates()
 void MortalityRates::fetch_parameters(BasicValues const&) {throw "Error";}
 
 MortalityRates::MortalityRates()
-    :Length_               (0)
-    ,AllowAdb_             (false)
-    ,AllowChild_           (false)
-    ,AllowFlatExtras_      (false)
-    ,AllowSpouse_          (false)
-    ,AllowSubstdTable_     (false)
-    ,AllowTerm_            (false)
-    ,AllowWp_              (false)
-    ,CCoiIsAnnual_         (false)
-    ,GCoiIsAnnual_         (false)
-    ,IsTgtPremTabular_     (false)
-    ,MaxMonthlyCoiRate_    (1.0)
-    ,CountryCoiMultiplier_ (1.0)
-    ,IsPolicyRated_        (false)
-    ,SubstandardTable_     (mce_table_none)
+    :Length_               {0}
+    ,AllowAdb_             {false}
+    ,AllowChild_           {false}
+    ,AllowFlatExtras_      {false}
+    ,AllowSpouse_          {false}
+    ,AllowSubstdTable_     {false}
+    ,AllowTerm_            {false}
+    ,AllowWp_              {false}
+    ,CCoiIsAnnual_         {false}
+    ,GCoiIsAnnual_         {false}
+    ,IsTgtPremTabular_     {false}
+    ,MaxMonthlyCoiRate_    {1.0}
+    ,CountryCoiMultiplier_ {1.0}
+    ,IsPolicyRated_        {false}
+    ,SubstandardTable_     {mce_table_none}
     ,round_coi_rate_       (0, r_not_at_all)
 {
 }

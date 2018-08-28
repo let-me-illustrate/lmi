@@ -33,13 +33,13 @@
 
 //============================================================================
 mec_xml_document::mec_xml_document(mec_input const& z)
-    :input_data_(z)
+    :input_data_ {z}
 {
 }
 
 //============================================================================
 mec_xml_document::mec_xml_document(std::string const& filename)
-    :input_data_()
+    :input_data_ {}
 {
     xml_lmi::dom_parser parser(filename);
     parse(parser);

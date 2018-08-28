@@ -49,7 +49,7 @@ int const MaxPossibleElements = std::numeric_limits<int>::max();
 /// Default ctor.
 
 database_entity::database_entity()
-    :key_          (0)
+    :key_          {0}
     ,axis_lengths_ (e_number_of_axes, 1)
     ,data_values_  (1)
 {
@@ -65,8 +65,8 @@ database_entity::database_entity
     ,double const*      data
     ,std::string const& gloss
     )
-    :key_          (key)
-    ,gloss_        (gloss)
+    :key_          {key}
+    ,gloss_        {gloss}
 {
     axis_lengths_ .assign(dims, dims + ndims);
     data_values_  .assign(data, data + getndata());
@@ -79,10 +79,10 @@ database_entity::database_entity
     ,std::vector<double> const& data
     ,std::string const&         gloss
     )
-    :key_          (key)
-    ,axis_lengths_ (dims)
-    ,data_values_  (data)
-    ,gloss_        (gloss)
+    :key_          {key}
+    ,axis_lengths_ {dims}
+    ,data_values_  {data}
+    ,gloss_        {gloss}
 {
     assert_invariants();
 }
@@ -94,8 +94,8 @@ database_entity::database_entity
     ,double             datum
     ,std::string const& gloss
     )
-    :key_          (key)
-    ,gloss_        (gloss)
+    :key_          {key}
+    ,gloss_        {gloss}
 {
     axis_lengths_ .assign(ScalarDims, ScalarDims + e_number_of_axes);
     data_values_  .push_back(datum);

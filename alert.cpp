@@ -119,7 +119,7 @@ class alert_buf
 {
   protected:
     alert_buf()
-        :std::stringbuf()
+        :std::stringbuf {}
         {
         if(!all_function_pointers_have_been_set())
             {

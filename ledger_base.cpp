@@ -35,16 +35,16 @@
 
 //============================================================================
 LedgerBase::LedgerBase(int a_Length)
-    :scale_power_(0)
-    ,scale_unit_ ("")
+    :scale_power_ {0}
+    ,scale_unit_  {""}
 {
     Initialize(a_Length);
 }
 
 //============================================================================
 LedgerBase::LedgerBase(LedgerBase const& obj)
-    :scale_power_(obj.scale_power_)
-    ,scale_unit_ (obj.scale_unit_)
+    :scale_power_ {obj.scale_power_}
+    ,scale_unit_  {obj.scale_unit_}
 {
     Initialize(obj.GetLength());
     Copy(obj);
