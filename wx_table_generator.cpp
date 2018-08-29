@@ -31,6 +31,8 @@
 
 // Default size of various characters for illustrations and group quotes:
 //   'M' 7pt; 'N' 6pt; '1' 4pt; '9' 4pt; ',' 2pt
+// Widths are in pixels. Because the wxPdfDC uses wxMM_POINTS, each pixel
+// is one point = 1/72 inch.
 
 wx_table_generator::wx_table_generator
     (group_quote_style_tag                 // tag not referenced
@@ -40,23 +42,42 @@ wx_table_generator::wx_table_generator
     ,int                                   left_margin
     ,int                                   total_width
     )
-    :indices_          (indices)
-    ,dc_               (dc)
-    ,left_margin_      (left_margin)
-    ,total_width_      (total_width)
-    ,char_height_      (dc_.GetCharHeight())
+    :indices_          {indices}
+    ,dc_               {dc}
+    ,left_margin_      {left_margin}
+    ,total_width_      {total_width}
+    ,char_height_      {dc_.GetCharHeight()}
     // Arbitrarily use 1.333 line spacing.
-    ,row_height_       ((4 * char_height_ + 2) / 3)
-    ,one_em_           (dc_.GetTextExtent("M").x)
-    ,max_header_lines_ (1)
-    ,draw_separators_  (true)
-    ,use_bold_headers_ (true)
+    ,row_height_       {(4 * char_height_ + 2) / 3}
+    ,one_em_           {dc_.GetTextExtent("M").x}
+    ,max_header_lines_ {1}
+    ,draw_separators_  {true}
+    ,use_bold_headers_ {true}
 {
     for(auto const& i : vc)
         {
         enroll_column(i);
         }
-    set_column_widths(total_width_, 2 * one_em_, all_columns_);
+    // Ideally this would be '&thinsp;' instead of '&puncsp;'.
+    int const one_puncsp = dc_.GetTextExtent(".").x;
+    std::vector<int> const w = set_column_widths
+        (all_columns_
+        ,total_width_
+        ,2 * one_em_
+        ,one_puncsp
+        );
+
+    std::vector<table_column_info> resized_columns;
+    for(int j = 0; j < lmi::ssize(all_columns()); ++j)
+        {
+        resized_columns.emplace_back
+            (all_columns_[j].col_header()
+            ,w           [j]
+            ,all_columns_[j].alignment()
+            ,all_columns_[j].is_elastic() ? oe_elastic : oe_inelastic
+            );
+        }
+    all_columns_.swap(resized_columns);
 
     // Set a pen with zero width to make grid lines thin,
     // and round cap style so that they combine seamlessly.
@@ -88,7 +109,26 @@ wx_table_generator::wx_table_generator
         {
         enroll_column(i);
         }
-    set_column_widths(total_width_, 2 * one_em_, all_columns_);
+    // Ideally this would be '&thinsp;' instead of '&puncsp;'.
+    int const one_puncsp = dc_.GetTextExtent(".").x;
+    std::vector<int> const w = set_column_widths
+        (all_columns_
+        ,total_width_
+        ,2 * one_em_
+        ,one_puncsp
+        );
+
+    std::vector<table_column_info> resized_columns;
+    for(int j = 0; j < lmi::ssize(all_columns()); ++j)
+        {
+        resized_columns.emplace_back
+            (all_columns_[j].col_header()
+            ,w           [j]
+            ,all_columns_[j].alignment()
+            ,all_columns_[j].is_elastic() ? oe_elastic : oe_inelastic
+            );
+        }
+    all_columns_.swap(resized_columns);
 
     dc_.SetPen(illustration_rule_color);
 }
@@ -203,15 +243,11 @@ void wx_table_generator::output_super_header
             return;
         }
 
-    // We don't have a function for getting the rectangle of a span of columns,
-    // but we can reuse the existing text_rect() if we just increase its width
-    // by the width of all the extra (i.e. not counting the starting one)
-    // columns in this span.
-    auto rect = text_rect(begin_column, pos_y);
-    rect.width += cell_pos_x(end_column) - cell_pos_x(begin_column + 1);
+    auto rect = cell_rect(begin_column, end_column, pos_y);
 
     for(auto const& i : lines)
         {
+        LMI_ASSERT(dc().GetTextExtent(i).x <= rect.width);
         dc_.DrawLabel(i, rect, wxALIGN_CENTER_HORIZONTAL);
         rect.y += row_height_;
         pos_y  += row_height_;
@@ -345,7 +381,7 @@ wxRect wx_table_generator::external_text_rect(std::size_t a_column, int y) const
 
 wxRect wx_table_generator::text_rect(int column, int y) const
 {
-    LMI_ASSERT(column <= lmi::ssize(all_columns()));
+    LMI_ASSERT(column < lmi::ssize(all_columns()));
     wxRect z = cell_rect(column, y).Deflate(dc().GetCharWidth(), 0);
     z.Offset(0, (row_height_ - char_height_)/2);
     return z;
@@ -405,10 +441,7 @@ LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
             break;
         }
 
-    all_columns_.push_back
-        (table_column_info
-            (z.header, width, z.alignment, z.elasticity)
-        );
+    all_columns_.emplace_back(z.header, width, z.alignment, z.elasticity);
 }
 
 void wx_table_generator::do_output_single_row
@@ -432,7 +465,7 @@ void wx_table_generator::do_output_single_row
         {
         table_column_info const& ci = all_columns().at(i);
         std::string const& s = values[i];
-        if(!s.empty())
+        if(!s.empty() && 0 != ci.col_width())
             {
             int x_text = pos_x;
 
@@ -513,13 +546,24 @@ int wx_table_generator::cell_pos_x(int column) const
 
 wxRect wx_table_generator::cell_rect(int column, int y) const
 {
-    LMI_ASSERT(column < lmi::ssize(all_columns()));
-    return wxRect
-        (cell_pos_x(column)
-        ,y
-        ,all_columns().at(column).col_width()
-        ,row_height_
-        );
+    return cell_rect(column, 1 + column, y);
+}
+
+/// Rectangle corresponding to a horizontal range of cells.
+
+wxRect wx_table_generator::cell_rect(int begin_column, int end_column, int y) const
+{
+    LMI_ASSERT(begin_column <= end_column);
+    LMI_ASSERT(end_column <= lmi::ssize(all_columns()));
+
+    int const x1 = cell_pos_x(begin_column);
+    int x2 = x1;
+    for(int i = begin_column; i < end_column; ++i)
+        {
+        x2 += all_columns().at(i).col_width();
+        }
+
+    return wxRect(x1, y, x2 - x1, row_height_);
 }
 
 /// Font used for headers.

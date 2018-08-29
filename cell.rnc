@@ -289,10 +289,10 @@ cell_element = element cell
      element IsInforce                        {yes_or_no}
     ,## Insurance age on effective date.
      element IssueAge                         {age_int}
-    ,## Most recent group-underwriting date, for group contracts that
-     ## reenter a select and ultimate table of COI rates periodically
-     ## upon successful re-underwriting (for active lives only).
-     ## Default: effective date, for contracts with no reentry.
+    ,## For contracts that may reenter a select and ultimate table of
+     ## COI rates in various circumstances: the most recent such date.
+     ## Default: effective date, for contracts that have not yet
+     ## reentered, or that offer no reentry feature.
      element LastCoiReentryDate               {calendar_date_int}
     ,## Date of most recent 7702A material change. Default: effective
      ## date, for contracts that have never had a material change.

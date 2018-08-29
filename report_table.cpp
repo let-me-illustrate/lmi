@@ -94,24 +94,23 @@ std::vector<int> apportion(std::vector<int> const& votes, int total_seats)
 /// distribute any excess width left over among elastic columns.
 ///
 /// Notes on arguments:
-///   max_table_width: page width - page margins
-///   desired_margin: maximum margin for each inelastic column
-///   minimum_margin: minimum margin for every column
 ///   all_columns: the width of each inelastic column reflects:
 ///    - the header width, and
 ///    - a mask like "999,999" (ideally, there would instead be a
 ///      quasi-global data structure mapping symbolic column names
 ///      to their corresponding headers and maximal widths)
+///   max_table_width: page width - page margins
+///   desired_margin: maximum margin for each inelastic column
+///   minimum_margin: minimum margin for every column
 
-void set_column_widths
-    (int                             max_table_width
-    ,int                             desired_margin
-    ,std::vector<table_column_info>& all_columns
+std::vector<int> set_column_widths
+    (std::vector<table_column_info> const& all_columns
+    ,int                                   max_table_width
+    ,int                                   desired_margin
+    ,int                                   minimum_margin
     )
 {
-    // Soon this will become an argument.
-    int minimum_margin = 1;
-
+    LMI_ASSERT(minimum_margin <= desired_margin);
     int const cardinality = lmi::ssize(all_columns);
     int data_width = 0;
     int n_columns_to_show = 0;
@@ -171,11 +170,6 @@ void set_column_widths
             << std::flush
             ;
         }
-    // Soon the all_columns argument will be passed by const reference,
-    // and w will be returned by value; until then...
-    for(int j = 0; j < cardinality; ++j)
-        {
-        all_columns[j].col_width_ = w[j];
-        }
-//  return w;
+
+    return w;
 }

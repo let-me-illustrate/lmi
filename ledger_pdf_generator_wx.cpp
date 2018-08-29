@@ -1848,7 +1848,7 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
     {
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
-            ,{ "AttainedAge"                , "End of\nYear Age"            ,         "999" }
+            ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
             ,{ "AcctVal_Guaranteed"         , "Account\nValue"              , "999,999,999" }
             ,{ "CSVNet_Guaranteed"          , "Cash Surr\nValue"            , "999,999,999" }
@@ -1894,7 +1894,7 @@ class ill_reg_tabular_detail2_page : public page_with_tabular_report
     {
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
-            ,{ "AttainedAge"                , "End of\nYear Age"            ,         "999" }
+            ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
             ,{ "AnnGAIntRate_Current"       , "Illustrated\nCrediting Rate" ,      "99.99%" }
             ,{ "SpecAmt"                    , "Selected\nFace Amount"       , "999,999,999" }
             };
@@ -2027,13 +2027,13 @@ class pdf_illustration_regular : public pdf_illustration
         // Variable representing the premium payment frequency with the
         // appropriate indefinite article preceding it, e.g. "an annual"
         // or "a monthly".
-        auto const mode0 = invar.InitErMode;
+        std::string mode0 = invar.InitErMode;
         if(!mode0.empty())
             {
-            auto const mode0_first = lmi_tolower(mode0[0]);
+            mode0[0] = lmi_tolower(mode0[0]);
             add_variable
                 ("ErModeLCWithArticle"
-                ,(strchr("aeiou", mode0_first) ? "an" : "a") + mode0.substr(1)
+                ,(strchr("aeiou", mode0[0]) ? "an " : "a ") + mode0
                 );
             }
 
@@ -2187,7 +2187,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
     {
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
-            ,{ "AttainedAge"                , "End of\nYear Age"            ,         "999" }
+            ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
             ,{ "CSVNet_GuaranteedZero"      , "Cash Surr\nValue"            , "999,999,999" }
             ,{ "EOYDeathBft_GuaranteedZero" , "Death\nBenefit"              , "999,999,999" }
@@ -2377,19 +2377,26 @@ class nasd_supplemental : public page_with_tabular_report
         return "nasd_supp";
     }
 
+    // When invar.SplitMinPrem is true, this report has twelve columns
+    // rather than eleven, and it's not generally possible to fit all
+    // twelve. Ideally the net-premium column would be omitted in this
+    // case because it's just not useful. Instead, for now at least,
+    // the columns that are unique to this case are narrowed on the
+    // assumption that premiums won't reach $100M even for composites.
+
     illustration_table_columns const& get_table_columns() const override
     {
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
-            ,{ "AttainedAge"                , "End of\nYear Age"            ,         "999" }
-            ,{ "ErGrossPmt"                 , "ER Gross\nPayment"           , "999,999,999" }
-            ,{ "EeGrossPmt"                 , "EE Gross\nPayment"           , "999,999,999" }
+            ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
+            ,{ "ErGrossPmt"                 , "ER Gross\nPayment"           ,  "99,999,999" }
+            ,{ "EeGrossPmt"                 , "EE Gross\nPayment"           ,  "99,999,999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
             ,{ "PolicyFee_Current"          , "Admin\nCharge"               , "999,999,999" }
             ,{ "PremTaxLoad_Current"        , "Premium\nTax Load"           , "999,999,999" }
             ,{ "DacTaxLoad_Current"         , "DAC\nTax Load"               , "999,999,999" }
-            ,{ "ErModalMinimumPremium"      , "ER Modal\nMinimum\nPremium"  , "999,999,999" }
-            ,{ "EeModalMinimumPremium"      , "EE Modal\nMinimum\nPremium"  , "999,999,999" }
+            ,{ "ErModalMinimumPremium"      , "ER Modal\nMinimum\nPremium"  ,  "99,999,999" }
+            ,{ "EeModalMinimumPremium"      , "EE Modal\nMinimum\nPremium"  ,  "99,999,999" }
             ,{ "NetPmt_Current"             , "Net\nPremium"                , "999,999,999" }
             ,{ "COICharge_Current"          , "Cost of\nInsurance\nCharges" , "999,999,999" }
             ,{ "AcctVal_Current"            , "Current\nAccount\nValue"     , "999,999,999" }
@@ -2466,7 +2473,7 @@ class nasd_assumption_detail : public page_with_tabular_report
     {
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
-            ,{ "AttainedAge"                , "End of\nYear Age"            ,         "999" }
+            ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
             ,{ "AnnSAIntRate_Current"       , "Sep Acct Net\nInt Rate"      ,      "99.99%" }
             ,{ "AnnGAIntRate_Current"       , "Gen Acct\nCurrent Rate"      ,      "99.99%" }
             ,{ "CurrMandE"                  , "M&E"                         ,      "99.99%" }
@@ -2731,7 +2738,7 @@ class reg_d_individual_guar_irr : public reg_d_individual_irr_base
     {
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
-            ,{ "AttainedAge"                , "End of\nYear Age"            ,         "999" }
+            ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
             ,{ "CSVNet_GuaranteedZero"      , "Cash Surr\nValue"            , "999,999,999" }
             ,{ "EOYDeathBft_GuaranteedZero" , "Death\nBenefit"              , "999,999,999" }
@@ -2765,7 +2772,7 @@ class reg_d_individual_curr_irr : public reg_d_individual_irr_base
     {
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
-            ,{ "AttainedAge"                , "End of\nYear Age"            ,         "999" }
+            ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
             ,{ "CSVNet_CurrentZero"         , "Cash Surr\nValue"            , "999,999,999" }
             ,{ "EOYDeathBft_CurrentZero"    , "Death\nBenefit"              , "999,999,999" }
@@ -2809,7 +2816,7 @@ class reg_d_individual_curr : public page_with_tabular_report
     {
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
-            ,{ "AttainedAge"                , "End of\nYear Age"            ,         "999" }
+            ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
             ,{ "PremiumLoads"               , "Premium\nLoads"              , "999,999,999" }
             ,{ "AdminCharges"               , "Admin\nCharges"              , "999,999,999" }

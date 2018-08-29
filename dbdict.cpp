@@ -940,13 +940,22 @@ void DBDictionary::write_database_files()
     z.Add(database_entity(DB_WpIsQAB             , false));
     z.Add(database_entity(DB_ExpRatRiskCoiMult   , 0));
     z.Add(database_entity(DB_SurrChgSpecAmtMult  , 0.0));
-    z.Add(database_entity(DB_AllowSpouseRider    , false));
-    z.Add(database_entity(DB_AllowChildRider     , false));
+    z.Add(database_entity(DB_AllowSpouseRider    , true));
+    z.Add(database_entity(DB_AllowChildRider     , true));
 
-    // Spouse and child riders unavailable, so it doesn't matter
-    // what table is specified.
-    z.Add(database_entity(DB_SpouseRiderTable    , 0));
-    z.Add(database_entity(DB_ChildRiderTable     , 0));
+    z.Add(database_entity(DB_SpouseRiderMinAmt   , 10000));
+    z.Add(database_entity(DB_SpouseRiderMaxAmt   , 1000000));
+    z.Add(database_entity(DB_SpouseRiderMinIssAge, 20));
+    z.Add(database_entity(DB_SpouseRiderMaxIssAge, 65));
+
+    // Min and max deliberately identical for testing.
+    z.Add(database_entity(DB_ChildRiderMinAmt    , 25000));
+    z.Add(database_entity(DB_ChildRiderMaxAmt    , 25000));
+
+    // Spouse and child riders: arbitrarily use 1960 CSG.
+    z.Add(database_entity(DB_SpouseRiderGuarTable, 305));
+    z.Add(database_entity(DB_SpouseRiderTable    , 305));
+    z.Add(database_entity(DB_ChildRiderTable     , 305));
 
     z.Add(database_entity(DB_GenAcctIntBonus     , 0.0));
 

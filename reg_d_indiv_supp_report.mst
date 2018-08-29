@@ -29,4 +29,6 @@
 
 {{>dollar_units}}
 
+<br></br>
+
 {{! The supplemental report table itself is generated from C++ code }}

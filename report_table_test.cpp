@@ -71,16 +71,6 @@ int sum(std::vector<int> z)
 {
     return std::accumulate(z.begin(), z.end(), 0);
 }
-
-std::vector<int> widths(std::vector<table_column_info> const& z)
-{
-    std::vector<int> v;
-    for(auto const& j : z)
-        {
-        v.push_back(j.col_width());
-        }
-    return v;
-}
 } // Unnamed namespace.
 
 class report_table_test
@@ -185,17 +175,18 @@ void report_table_test::test_generally()
 {
     std::vector<table_column_info> v;
     std::vector<int> expected;
+    std::vector<int> observed;
 
     // Just enough room for all data with desired margins.
     v = bloat({1, 2, 3}, {0, 0, 0});
-    set_column_widths(12, 2, v);
+    observed = set_column_widths(v, 12, 2, 1);
     expected = {3, 4, 5};
-    BOOST_TEST(widths(v) == expected);
+    BOOST_TEST(observed == expected);
 
     // Same columns: same layout, even if page is much wider.
     v = bloat({1, 2, 3}, {0, 0, 0});
-    set_column_widths(99, 2, v);
-    BOOST_TEST(widths(v) == expected);
+    observed = set_column_widths(v, 99, 2, 1);
+    BOOST_TEST(observed == expected);
 
     // Same columns, but inadequate page width.
 
@@ -204,75 +195,81 @@ void report_table_test::test_generally()
     // of at least one point.
 
     v = bloat({1, 2, 3}, {0, 0, 0});
-    set_column_widths(11, 2, v);
+    observed = set_column_widths(v, 11, 2, 1);
     expected = {3, 4, 4};
-    BOOST_TEST(widths(v) == expected);
+    BOOST_TEST(observed == expected);
 
     // Just enough room for all data with minimum margins.
     v = bloat({1, 2, 3}, {0, 0, 0});
-    set_column_widths( 9, 2, v);
+    observed = set_column_widths(v,  9, 2, 1);
     expected = {2, 3, 4};
-    BOOST_TEST(widths(v) == expected);
+    BOOST_TEST(observed == expected);
 
     // Not enough room for all data with minimum margins.
     v = bloat({1, 2, 3}, {0, 0, 0});
     std::cout << "Expect a diagnostic (printing 2/3 columns):\n  ";
-    set_column_widths( 8, 2, v);
+    observed = set_column_widths(v,  8, 2, 1);
     expected = {3, 4, 0};
-    BOOST_TEST(widths(v) == expected);
+    BOOST_TEST(observed == expected);
 
     // Not enough room for all data, even with no margins at all.
     v = bloat({1, 2, 3}, {0, 0, 0});
     std::cout << "Expect a diagnostic (printing 2/3 columns):\n  ";
-    set_column_widths( 5, 2, v);
+    observed = set_column_widths(v,  5, 2, 1);
     expected = {2, 3, 0};
-    BOOST_TEST(widths(v) == expected);
+    BOOST_TEST(observed == expected);
 
     // Not enough room for even the first column.
     BOOST_TEST_THROW
-        (set_column_widths(1, 2, v)
+        (set_column_widths(v, 1, 2, 1)
         ,std::runtime_error
         ,"Not enough room for even the first column."
         );
 
+    // Minimum margin greater than one.
+    v = bloat({1, 2, 3}, {0, 0, 0});
+    observed = set_column_widths(v, 16, 5, 3);
+    expected = {5, 5, 6};
+    BOOST_TEST(observed == expected);
+
     // An elastic column occupies all available space not claimed by
     // inelastic columns...
     v = bloat({1, 2, 0, 3}, {0, 0, 1, 0});
-    set_column_widths(99, 2, v);
+    observed = set_column_widths(v, 99, 2, 1);
     expected = {3, 4, (99-12), 5};
-    BOOST_TEST(widths(v) == expected);
+    BOOST_TEST(observed == expected);
     // ...though its width might happen to be zero (PDF !! but see
     //   https://lists.nongnu.org/archive/html/lmi/2018-07/msg00049.html
     // which questions whether zero should be allowed):
     v = bloat({1, 2, 0, 3}, {0, 0, 1, 0});
-    set_column_widths(12, 2, v);
+    observed = set_column_widths(v, 12, 2, 1);
     expected = {3, 4, 0, 5};
-    BOOST_TEST(widths(v) == expected);
+    BOOST_TEST(observed == expected);
 
     // Multiple elastic columns apportion all unclaimed space among
     // themselves.
     v = bloat({0, 2, 0, 3}, {1, 0, 1, 0});
-    set_column_widths(99, 2, v);
+    observed = set_column_widths(v, 99, 2, 1);
     expected = {45, 4, 45, 5};
-    BOOST_TEST(widths(v) == expected);
+    BOOST_TEST(observed == expected);
 
     // Same, but with nonzero width specified for one elastic column.
     v = bloat({1, 2, 0, 3}, {1, 0, 1, 0});
-    set_column_widths(99, 2, v);
+    observed = set_column_widths(v, 99, 2, 1);
     expected = {46, 4, 44, 5};
-    BOOST_TEST(widths(v) == expected);
+    BOOST_TEST(observed == expected);
 
     // Elastic columns only.
     v = bloat({10, 20, 30}, {1, 1, 1});
-    set_column_widths(99, 2, v);
+    observed = set_column_widths(v, 99, 2, 1);
     expected = {23, 33, 43};
-    BOOST_TEST(widths(v) == expected);
+    BOOST_TEST(observed == expected);
 
     // Same columns, but all inelastic.
     v = bloat({10, 20, 30}, {0, 0, 0});
-    set_column_widths(99, 2, v);
+    observed = set_column_widths(v, 99, 2, 1);
     expected = {12, 22, 32};
-    BOOST_TEST(widths(v) == expected);
+    BOOST_TEST(observed == expected);
 }
 
 /// Test data for an actual group quote.
@@ -299,9 +296,8 @@ void report_table_test::test_group_quote()
         ,{"", 67, oe_center, oe_inelastic}
         };
 
-    set_column_widths(total_width, default_margin, v);
+    std::vector<int> const observed = set_column_widths(v, total_width, default_margin, 1);
 
-    std::vector<int> const observed = widths(v);
     std::vector<int> const expected = {36, 129, 52, 62, 78, 81, 78, 81, 78, 81};
     BOOST_TEST(total_width == sum(expected));
     BOOST_TEST(observed == expected);
@@ -332,9 +328,8 @@ void report_table_test::test_illustration()
         ,{"", 53, oe_right, oe_inelastic}
         };
 
-    set_column_widths(total_width, default_margin, v);
+    std::vector<int> const observed = set_column_widths(v, total_width, default_margin, 1);
 
-    std::vector<int> const observed = widths(v);
     std::vector<int> const expected = {38, 52, 67, 66, 45, 62, 62, 67};
     BOOST_TEST(sum(expected) < total_width);
     BOOST_TEST(observed == expected);
@@ -358,9 +353,8 @@ void report_table_test::test_illustration()
         ,{"", 50, oe_right, oe_inelastic}
         };
 
-    set_column_widths(total_width, default_margin, v);
+    std::vector<int> const observed = set_column_widths(v, total_width, default_margin, 1);
 
-    std::vector<int> const observed = widths(v);
     std::vector<int> const expected = {30, 28, 54, 36, 54, 54, 54, 54, 53, 53, 53, 53};
     BOOST_TEST(total_width == sum(expected));
     BOOST_TEST(observed == expected);
@@ -385,18 +379,17 @@ void report_table_test::test_illustration()
         };
 
     std::cout << "Expect a diagnostic (printing 11/12 columns):\n  ";
-    set_column_widths(total_width, default_margin, v);
+    std::vector<int> const observed = set_column_widths(v, total_width, default_margin, 1);
 
     // Today, two times the default margin is added to each column,
     // even though the data cannot fit.
-    std::vector<int> const observed = widths(v);
     std::vector<int> const expected = {53, 53, 53, 53, 52, 52, 52, 52, 52, 52, 52, 0};
     BOOST_TEST(total_width == sum(expected));
     BOOST_TEST(observed == expected);
 
 #if 0 // Doesn't throw today, but might someday.
     BOOST_TEST_THROW
-        (set_column_widths(total_width, default_margin, v)
+        (set_column_widths(v, total_width, default_margin, 1)
         ,std::runtime_error
         ,"Not enough space for all 12 columns."
         );

@@ -819,10 +819,10 @@ subject to premium tax.</xs:documentation>
   </xs:element>
   <xs:element name="LastCoiReentryDate" type="calendar_date_int">
     <xs:annotation>
-      <xs:documentation>Most recent group-underwriting date, for group contracts that
-reenter a select and ultimate table of COI rates periodically
-upon successful re-underwriting (for active lives only).
-Default: effective date, for contracts with no reentry.</xs:documentation>
+      <xs:documentation>For contracts that may reenter a select and ultimate table of
+COI rates in various circumstances: the most recent such date.
+Default: effective date, for contracts that have not yet
+reentered, or that offer no reentry feature.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="LastMaterialChangeDate" type="calendar_date_int">

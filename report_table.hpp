@@ -74,10 +74,10 @@ class LMI_SO table_column_info
         ,oenum_h_align    const  alignment
         ,oenum_elasticity const  elasticity
         )
-        :col_header_ (header)
-        ,col_width_  (width)
-        ,alignment_  (alignment)
-        ,is_elastic_ (oe_elastic == elasticity)
+        :col_header_ {header}
+        ,col_width_  {width}
+        ,alignment_  {alignment}
+        ,is_elastic_ {oe_elastic == elasticity}
         {
         }
 
@@ -89,26 +89,18 @@ class LMI_SO table_column_info
 
   private:
     std::string   const col_header_;
-
-  public:
-    // PDF !! Modified directly by set_column_widths(), hence neither
-    // private nor const.
-    //
-    // Width in pixels. Because the wxPdfDC uses wxMM_POINTS, each
-    // pixel is one point = 1/72 inch.
-    int col_width_;
-
-  private:
+    int           const col_width_;
     oenum_h_align const alignment_;
     bool          const is_elastic_;
 };
 
 std::vector<int> LMI_SO apportion(std::vector<int> const& votes, int seats);
 
-void LMI_SO set_column_widths
-    (int                             max_table_width
-    ,int                             desired_margin
-    ,std::vector<table_column_info>& all_columns
+std::vector<int> LMI_SO set_column_widths
+    (std::vector<table_column_info> const& all_columns
+    ,int                                   max_table_width
+    ,int                                   desired_margin
+    ,int                                   minimum_margin
     );
 
 #endif // report_table_hpp
