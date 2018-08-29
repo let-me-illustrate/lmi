@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+#include <climits>
 #include <cstdint>
 #include <cstdlib>                      // EXIT_SUCCESS, EXIT_FAILURE
 
