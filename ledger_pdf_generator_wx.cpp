@@ -1848,7 +1848,7 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
     {
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
-            ,{ "AttainedAge"                , "End of\nYear Age"            ,         "999" }
+            ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
             ,{ "AcctVal_Guaranteed"         , "Account\nValue"              , "999,999,999" }
             ,{ "CSVNet_Guaranteed"          , "Cash Surr\nValue"            , "999,999,999" }
@@ -1894,7 +1894,7 @@ class ill_reg_tabular_detail2_page : public page_with_tabular_report
     {
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
-            ,{ "AttainedAge"                , "End of\nYear Age"            ,         "999" }
+            ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
             ,{ "AnnGAIntRate_Current"       , "Illustrated\nCrediting Rate" ,      "99.99%" }
             ,{ "SpecAmt"                    , "Selected\nFace Amount"       , "999,999,999" }
             };
@@ -2187,7 +2187,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
     {
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
-            ,{ "AttainedAge"                , "End of\nYear Age"            ,         "999" }
+            ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
             ,{ "CSVNet_GuaranteedZero"      , "Cash Surr\nValue"            , "999,999,999" }
             ,{ "EOYDeathBft_GuaranteedZero" , "Death\nBenefit"              , "999,999,999" }
@@ -2381,7 +2381,7 @@ class nasd_supplemental : public page_with_tabular_report
     {
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
-            ,{ "AttainedAge"                , "End of\nYear Age"            ,         "999" }
+            ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
             ,{ "ErGrossPmt"                 , "ER Gross\nPayment"           , "999,999,999" }
             ,{ "EeGrossPmt"                 , "EE Gross\nPayment"           , "999,999,999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
@@ -2466,7 +2466,7 @@ class nasd_assumption_detail : public page_with_tabular_report
     {
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
-            ,{ "AttainedAge"                , "End of\nYear Age"            ,         "999" }
+            ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
             ,{ "AnnSAIntRate_Current"       , "Sep Acct Net\nInt Rate"      ,      "99.99%" }
             ,{ "AnnGAIntRate_Current"       , "Gen Acct\nCurrent Rate"      ,      "99.99%" }
             ,{ "CurrMandE"                  , "M&E"                         ,      "99.99%" }
@@ -2731,7 +2731,7 @@ class reg_d_individual_guar_irr : public reg_d_individual_irr_base
     {
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
-            ,{ "AttainedAge"                , "End of\nYear Age"            ,         "999" }
+            ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
             ,{ "CSVNet_GuaranteedZero"      , "Cash Surr\nValue"            , "999,999,999" }
             ,{ "EOYDeathBft_GuaranteedZero" , "Death\nBenefit"              , "999,999,999" }
@@ -2765,7 +2765,7 @@ class reg_d_individual_curr_irr : public reg_d_individual_irr_base
     {
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
-            ,{ "AttainedAge"                , "End of\nYear Age"            ,         "999" }
+            ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
             ,{ "CSVNet_CurrentZero"         , "Cash Surr\nValue"            , "999,999,999" }
             ,{ "EOYDeathBft_CurrentZero"    , "Death\nBenefit"              , "999,999,999" }
@@ -2809,7 +2809,7 @@ class reg_d_individual_curr : public page_with_tabular_report
     {
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
-            ,{ "AttainedAge"                , "End of\nYear Age"            ,         "999" }
+            ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
             ,{ "PremiumLoads"               , "Premium\nLoads"              , "999,999,999" }
             ,{ "AdminCharges"               , "Admin\nCharges"              , "999,999,999" }
