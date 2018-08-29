@@ -219,15 +219,17 @@ in the Tabular Detail.
 <p>
 As illustrated, this contract
 {{#IsMec}}
-  becomes
+    becomes
 {{/IsMec}}
 {{^IsMec}}
-  would not become
+    would not become
 {{/IsMec}}
 a Modified Endowment Contract (MEC)
-under the Internal Revenue Code
 {{#IsMec}}
-in year {{MecYearPlus1}}.
+    under the Internal Revenue Code in year {{MecYearPlus1}}.
+{{/IsMec}}
+{{^IsMec}}
+    under the Internal Revenue Code.
 {{/IsMec}}
 To the extent of gain in the contract, loans, distributions
 and withdrawals from a MEC are subject to income tax
