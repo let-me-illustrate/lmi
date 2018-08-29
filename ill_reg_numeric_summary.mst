@@ -51,32 +51,34 @@ keeping the center alignment of the last "p" tag above.
 </p>
 {{/Composite}}
 
-{{#LapseYear_Guaranteed_LT_MaxDuration}}
-<p>
-    Additional premium will be required
-    in year {{LapseYear_Guaranteed_Plus1}}
-    or contract will lapse based on guaranteed monthly charges
-    and interest rate.
-</p>
-{{/LapseYear_Guaranteed_LT_MaxDuration}}
+{{^Composite}}
+    {{#LapseYear_Guaranteed_LT_MaxDuration}}
+    <p>
+        Additional premium will be required
+        in year {{LapseYear_Guaranteed_Plus1}}
+        or contract will lapse based on guaranteed monthly charges
+        and interest rate.
+    </p>
+    {{/LapseYear_Guaranteed_LT_MaxDuration}}
 
-{{#LapseYear_Midpoint_LT_MaxDuration}}
-<p>
-    Additional premium will be required
-    in year {{LapseYear_Midpoint_Plus1}}
-    or contract will lapse based on midpoint monthly charges
-    and interest rate.
-</p>
-{{/LapseYear_Midpoint_LT_MaxDuration}}
+    {{#LapseYear_Midpoint_LT_MaxDuration}}
+    <p>
+        Additional premium will be required
+        in year {{LapseYear_Midpoint_Plus1}}
+        or contract will lapse based on midpoint monthly charges
+        and interest rate.
+    </p>
+    {{/LapseYear_Midpoint_LT_MaxDuration}}
 
-{{#LapseYear_Current_LT_MaxDuration}}
-<p>
-    Additional premium will be required
-    in year {{LapseYear_Current_Plus1}}
-    or contract will lapse based on current monthly charges
-    and interest rate.
-</p>
-{{/LapseYear_Current_LT_MaxDuration}}
+    {{#LapseYear_Current_LT_MaxDuration}}
+    <p>
+        Additional premium will be required
+        in year {{LapseYear_Current_Plus1}}
+        or contract will lapse based on current monthly charges
+        and interest rate.
+    </p>
+    {{/LapseYear_Current_LT_MaxDuration}}
+{{/Composite}}
 
 {{#IsMec}}
 <p>
