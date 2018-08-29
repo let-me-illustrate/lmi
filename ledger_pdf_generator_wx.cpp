@@ -2377,19 +2377,26 @@ class nasd_supplemental : public page_with_tabular_report
         return "nasd_supp";
     }
 
+    // When invar.SplitMinPrem is true, this report has twelve columns
+    // rather than eleven, and it's not generally possible to fit all
+    // twelve. Ideally the net-premium column would be omitted in this
+    // case because it's just not useful. Instead, for now at least,
+    // the columns that are unique to this case are narrowed on the
+    // assumption that premiums won't reach $100M even for composites.
+
     illustration_table_columns const& get_table_columns() const override
     {
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
             ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
-            ,{ "ErGrossPmt"                 , "ER Gross\nPayment"           , "999,999,999" }
-            ,{ "EeGrossPmt"                 , "EE Gross\nPayment"           , "999,999,999" }
+            ,{ "ErGrossPmt"                 , "ER Gross\nPayment"           ,  "99,999,999" }
+            ,{ "EeGrossPmt"                 , "EE Gross\nPayment"           ,  "99,999,999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
             ,{ "PolicyFee_Current"          , "Admin\nCharge"               , "999,999,999" }
             ,{ "PremTaxLoad_Current"        , "Premium\nTax Load"           , "999,999,999" }
             ,{ "DacTaxLoad_Current"         , "DAC\nTax Load"               , "999,999,999" }
-            ,{ "ErModalMinimumPremium"      , "ER Modal\nMinimum\nPremium"  , "999,999,999" }
-            ,{ "EeModalMinimumPremium"      , "EE Modal\nMinimum\nPremium"  , "999,999,999" }
+            ,{ "ErModalMinimumPremium"      , "ER Modal\nMinimum\nPremium"  ,  "99,999,999" }
+            ,{ "EeModalMinimumPremium"      , "EE Modal\nMinimum\nPremium"  ,  "99,999,999" }
             ,{ "NetPmt_Current"             , "Net\nPremium"                , "999,999,999" }
             ,{ "COICharge_Current"          , "Cost of\nInsurance\nCharges" , "999,999,999" }
             ,{ "AcctVal_Current"            , "Current\nAccount\nValue"     , "999,999,999" }
