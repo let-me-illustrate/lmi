@@ -2027,13 +2027,13 @@ class pdf_illustration_regular : public pdf_illustration
         // Variable representing the premium payment frequency with the
         // appropriate indefinite article preceding it, e.g. "an annual"
         // or "a monthly".
-        auto const mode0 = invar.InitErMode;
+        std::string mode0 = invar.InitErMode;
         if(!mode0.empty())
             {
-            auto const mode0_first = lmi_tolower(mode0[0]);
+            mode0[0] = lmi_tolower(mode0[0]);
             add_variable
                 ("ErModeLCWithArticle"
-                ,(strchr("aeiou", mode0_first) ? "an" : "a") + mode0.substr(1)
+                ,(strchr("aeiou", mode0[0]) ? "an " : "a ") + mode0
                 );
             }
 
