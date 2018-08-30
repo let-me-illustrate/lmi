@@ -33,6 +33,7 @@
 #include <wx/treectrl.h>
 
 #include <algorithm>
+#include <type_traits>
 
 /// Design notes for AxisMaxBoundAdjusterBase
 ///
@@ -87,6 +88,8 @@ template<typename Integral>
 class AxisMaxBoundAdjuster
     :public AxisMaxBoundAdjusterBase
 {
+    static_assert(std::is_integral<Integral>::value);
+
   public:
     AxisMaxBoundAdjuster
         (MultiDimAxisAny&
