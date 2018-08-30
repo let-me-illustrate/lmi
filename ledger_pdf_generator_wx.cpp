@@ -2515,9 +2515,14 @@ class pdf_illustration_nasd : public pdf_illustration
             add_variable("ContractNameCap", s);
             }
 
+        auto const& policy_name = invar.PolicyLegalName;
+        auto const& state_abbrev = invar.GetStatePostalAbbrev();
+
         add_variable
             ("UWTypeIsGuaranteedIssueInTexasWithFootnote"
-            ,invar.UWType == "Guaranteed issue"
+            ,    invar.UWType == "Guaranteed issue"
+              && policy_name == "Flexible Premium Variable Adjustable Life Insurance Policy"
+              && state_abbrev == "TX"
             );
 
         add_variable
@@ -2525,7 +2530,6 @@ class pdf_illustration_nasd : public pdf_illustration
             ,test_variable("HasTerm") || test_variable("HasSupplSpecAmt")
             );
 
-        auto const& state_abbrev = invar.GetStatePostalAbbrev();
         add_variable
             ("StateIsNewYork"
             ,state_abbrev == "NY"
