@@ -162,9 +162,9 @@ class calculation_summary_formatter final
 calculation_summary_formatter::calculation_summary_formatter
     (Ledger const& ledger_values
     )
-    :ledger_    (ledger_values)
-    ,invar_     (ledger_values.GetLedgerInvariant())
-    ,max_length_(ledger_values.GetMaxLength())
+    :ledger_     {ledger_values}
+    ,invar_      {ledger_values.GetLedgerInvariant()}
+    ,max_length_ {ledger_values.GetMaxLength()}
 {
     columns_ = effective_calculation_summary_columns();
     std::vector<std::string>::iterator p = std::find
@@ -896,8 +896,8 @@ FlatTextLedgerPrinter::FlatTextLedgerPrinter
     (Ledger const& ledger
     ,std::ostream& os
     )
-    :ledger_(ledger)
-    ,os_    (os)
+    :ledger_ {ledger}
+    ,os_     {os}
 {
 }
 

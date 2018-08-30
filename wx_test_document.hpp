@@ -56,7 +56,7 @@ class wx_test_document_base
 {
   public:
     wx_test_document_base()
-        :opened_(false)
+        :opened_ {false}
     {
     }
 

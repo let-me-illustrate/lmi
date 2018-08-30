@@ -85,14 +85,14 @@ class FindSpecAmt
         ,double             a_NetPmtFactorTgt
         ,double             a_NetPmtFactorExc
         )
-        :Values_         (a_Values)
-        ,Irc7702_        (a_IRC7702)
-        ,EIOBasis_       (a_EIOBasis)
-        ,Duration        (a_Duration)
-        ,Premium         (a_Premium)
-        ,NetPmtFactorTgt (a_NetPmtFactorTgt)
-        ,NetPmtFactorExc (a_NetPmtFactorExc)
-        ,SpecAmt         (0.0)
+        :Values_         {a_Values}
+        ,Irc7702_        {a_IRC7702}
+        ,EIOBasis_       {a_EIOBasis}
+        ,Duration        {a_Duration}
+        ,Premium         {a_Premium}
+        ,NetPmtFactorTgt {a_NetPmtFactorTgt}
+        ,NetPmtFactorExc {a_NetPmtFactorExc}
+        ,SpecAmt         {0.0}
         {
         }
     double operator()(double a_Trial)

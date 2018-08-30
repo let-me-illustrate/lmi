@@ -133,22 +133,22 @@ std::string const& configuration_filepath()
 }
 
 configurable_settings::configurable_settings()
-    :calculation_summary_columns_        (default_calculation_summary_columns())
-    ,census_paste_palimpsestically_      (true                                 )
-    ,cgi_bin_log_filename_               ("cgi_bin.log"                        )
-    ,custom_input_0_filename_            ("custom.ini"                         )
-    ,custom_input_1_filename_            ("custom.inix"                        )
-    ,custom_output_0_filename_           ("custom.out0"                        )
-    ,custom_output_1_filename_           ("custom.out1"                        )
-    ,default_input_filename_             ("/etc/opt/lmi/default.ill"           )
-    ,libraries_to_preload_               (""                                   )
-    ,offer_hobsons_choice_               (false                                )
-    ,print_directory_                    ("/var/opt/lmi/spool"                 )
-    ,seconds_to_pause_between_printouts_ (10                                   )
-    ,skin_filename_                      ("skin.xrc"                           )
-    ,spreadsheet_file_extension_         (".gnumeric"                          )
-    ,use_builtin_calculation_summary_    (false                                )
-    ,xsl_fo_command_                     ("fo"                                 )
+    :calculation_summary_columns_        {default_calculation_summary_columns()}
+    ,census_paste_palimpsestically_      {true                                 }
+    ,cgi_bin_log_filename_               {"cgi_bin.log"                        }
+    ,custom_input_0_filename_            {"custom.ini"                         }
+    ,custom_input_1_filename_            {"custom.inix"                        }
+    ,custom_output_0_filename_           {"custom.out0"                        }
+    ,custom_output_1_filename_           {"custom.out1"                        }
+    ,default_input_filename_             {"/etc/opt/lmi/default.ill"           }
+    ,libraries_to_preload_               {""                                   }
+    ,offer_hobsons_choice_               {false                                }
+    ,print_directory_                    {"/var/opt/lmi/spool"                 }
+    ,seconds_to_pause_between_printouts_ {10                                   }
+    ,skin_filename_                      {"skin.xrc"                           }
+    ,spreadsheet_file_extension_         {".gnumeric"                          }
+    ,use_builtin_calculation_summary_    {false                                }
+    ,xsl_fo_command_                     {"fo"                                 }
 {
     ascribe_members();
     load();

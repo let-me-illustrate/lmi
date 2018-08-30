@@ -53,8 +53,8 @@ ledger_emitter::ledger_emitter
     (fs::path const& case_filepath
     ,mcenum_emission emission
     )
-    :case_filepath_ (case_filepath)
-    ,emission_      (emission)
+    :case_filepath_ {case_filepath}
+    ,emission_      {emission}
 {
     LMI_ASSERT(!case_filepath_.empty());
 

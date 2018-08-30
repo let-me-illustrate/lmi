@@ -102,10 +102,10 @@ class irr_helper
         ,long double   x
         ,int           decimals
         )
-        :first_    (first)
-        ,last_     (last)
-        ,x_        (x)
-        ,decimals_ (decimals)
+        :first_    {first}
+        ,last_     {last}
+        ,x_        {x}
+        ,decimals_ {decimals}
         {}
 
     long double operator()(long double i)

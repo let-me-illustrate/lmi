@@ -38,7 +38,6 @@
 
 #include <algorithm>                    // max(), min()
 #include <cctype>                       // toupper()
-#include <climits>                      // CHAR_BIT
 #include <cstdint>
 #include <ios>
 #include <istream>
@@ -82,14 +81,14 @@ namespace
 } // Unnamed namespace.
 
 actuarial_table::actuarial_table(std::string const& filename, int table_number)
-    :filename_       (filename)
-    ,table_number_   (table_number)
-    ,table_type_     (-1)
-    ,min_age_        (-1)
-    ,max_age_        (-1)
-    ,select_period_  (-1)
-    ,max_select_age_ (-1)
-    ,table_offset_   (-1)
+    :filename_       {filename}
+    ,table_number_   {table_number}
+    ,table_type_     {-1}
+    ,min_age_        {-1}
+    ,max_age_        {-1}
+    ,select_period_  {-1}
+    ,max_select_age_ {-1}
+    ,table_offset_   {-1}
 {
     // Binary tables in the SOA format are not portable; this code
     // presumably works only on little-endian hardware.

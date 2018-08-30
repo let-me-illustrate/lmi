@@ -49,30 +49,30 @@ char const* GuaranteedTableFile() {return "/opt/lmi/data/qx_cso";}
 
 //============================================================================
 BasicValues::BasicValues(Input const& input)
-    :yare_input_              (input)
-    ,StateOfJurisdiction_     (mce_s_CT)
-    ,StateOfDomicile_         (mce_s_CT)
-    ,PremiumTaxState_         (mce_s_CT)
-    ,round_specamt_           (0, r_upward    )
-    ,round_death_benefit_     (2, r_to_nearest)
-    ,round_naar_              (2, r_to_nearest)
-    ,round_coi_rate_          (8, r_downward  )
-    ,round_coi_charge_        (2, r_to_nearest)
-    ,round_gross_premium_     (2, r_to_nearest)
-    ,round_net_premium_       (2, r_to_nearest)
-    ,round_interest_rate_     (0, r_not_at_all)
-    ,round_interest_credit_   (2, r_to_nearest)
-    ,round_withdrawal_        (2, r_to_nearest)
-    ,round_loan_              (2, r_to_nearest)
-    ,round_interest_rate_7702_(0, r_not_at_all)
-    ,round_corridor_factor_   (2, r_to_nearest)
-    ,round_surrender_charge_  (2, r_to_nearest)
-    ,round_irr_               (4, r_downward  )
-    ,round_min_specamt_       (0, r_upward    )
-    ,round_max_specamt_       (0, r_downward  )
-    ,round_min_premium_       (2, r_upward    )
-    ,round_max_premium_       (2, r_downward  )
-    ,round_min_init_premium_  (2, r_upward    )
+    :yare_input_              {input}
+    ,StateOfJurisdiction_     {mce_s_CT}
+    ,StateOfDomicile_         {mce_s_CT}
+    ,PremiumTaxState_         {mce_s_CT}
+    ,round_specamt_           {0, r_upward    }
+    ,round_death_benefit_     {2, r_to_nearest}
+    ,round_naar_              {2, r_to_nearest}
+    ,round_coi_rate_          {8, r_downward  }
+    ,round_coi_charge_        {2, r_to_nearest}
+    ,round_gross_premium_     {2, r_to_nearest}
+    ,round_net_premium_       {2, r_to_nearest}
+    ,round_interest_rate_     {0, r_not_at_all}
+    ,round_interest_credit_   {2, r_to_nearest}
+    ,round_withdrawal_        {2, r_to_nearest}
+    ,round_loan_              {2, r_to_nearest}
+    ,round_interest_rate_7702_{0, r_not_at_all}
+    ,round_corridor_factor_   {2, r_to_nearest}
+    ,round_surrender_charge_  {2, r_to_nearest}
+    ,round_irr_               {4, r_downward  }
+    ,round_min_specamt_       {0, r_upward    }
+    ,round_max_specamt_       {0, r_downward  }
+    ,round_min_premium_       {2, r_upward    }
+    ,round_max_premium_       {2, r_downward  }
+    ,round_min_init_premium_  {2, r_upward    }
 {
     Init();
 }

@@ -119,8 +119,8 @@ class database_tree_item_data
 };
 
 database_tree_item_data::database_tree_item_data(db_names const& names)
-    :db_names_(names)
-    ,axes_selected_(wxNOT_FOUND, wxNOT_FOUND)
+    :db_names_      {names}
+    ,axes_selected_ {wxNOT_FOUND, wxNOT_FOUND}
 {
 }
 
@@ -145,8 +145,8 @@ BEGIN_EVENT_TABLE(DatabaseView, TreeGridViewBase)
 END_EVENT_TABLE()
 
 DatabaseView::DatabaseView()
-    :TreeGridViewBase()
-    ,table_adapter_(new DatabaseTableAdapter())
+    :TreeGridViewBase {}
+    ,table_adapter_   {new DatabaseTableAdapter()}
 {
 }
 

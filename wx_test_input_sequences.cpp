@@ -88,7 +88,7 @@ LMI_WX_TEST_CASE(input_sequences)
     struct test_sequence_dialog : public wxExpectModalBase<MvcController>
     {
         explicit test_sequence_dialog(input_sequence_test_data const& test_data)
-            :test_data_(test_data)
+            :test_data_ {test_data}
         {}
 
         int OnInvoked(MvcController* dialog) const override

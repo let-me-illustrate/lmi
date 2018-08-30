@@ -96,8 +96,8 @@ class minmax
 {
   public:
     minmax()
-        :minimum_(std::numeric_limits<T>::max())
-        ,maximum_(std::numeric_limits<T>::min())
+        :minimum_ {std::numeric_limits<T>::max()}
+        ,maximum_ {std::numeric_limits<T>::min()}
         {
         }
 

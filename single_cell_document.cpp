@@ -41,14 +41,14 @@
 /// Copy constructor.
 
 single_cell_document::single_cell_document(Input const& z)
-    :input_data_(z)
+    :input_data_ {z}
 {
 }
 
 /// This ctor is used to read the default input file.
 
 single_cell_document::single_cell_document(std::string const& filename)
-    :input_data_()
+    :input_data_ {}
 {
     xml_lmi::dom_parser parser(filename);
     parse(parser);
