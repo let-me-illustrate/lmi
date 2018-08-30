@@ -880,10 +880,13 @@ class pdf_illustration : protected html_interpolator
             ,invar.UWClass == "Rated"
             );
 
+        // PDF !! Conditions of this ilk should become distinct entities in
+        // the product files.
         auto const& policy_name = invar.PolicyLegalName;
         add_variable
             ("GroupCarveout"
-            ,policy_name == "Group Flexible Premium Adjustable Life Insurance Certificate"
+            ,    policy_name == "Group Flexible Premium Adjustable Life Insurance Certificate"
+              || policy_name == "Group Flexible Premium Variable Adjustable Life Insurance Certificate"
             );
 
         auto const& state_abbrev = invar.GetStatePostalAbbrev();
