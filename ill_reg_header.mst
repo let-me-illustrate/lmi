@@ -93,7 +93,7 @@
                 {{InitAnnGenAcctInt_Current}}
             {{/InforceYearEq0}}
             {{^InforceYearEq0}}
-                {{UltimateInterestRate}}
+                {{PresentCreditingRate}}
             {{/InforceYearEq0}}
             <br>
 

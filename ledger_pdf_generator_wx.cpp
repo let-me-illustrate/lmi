@@ -2072,8 +2072,8 @@ class pdf_illustration_regular : public pdf_illustration
 
         int const inforce_year = bourn_cast<int>(invar.InforceYear);
         add_variable
-            ("UltimateInterestRate"
-            ,evaluate("AnnGAIntRate_Current", inforce_year + 1)
+            ("PresentCreditingRate"
+            ,evaluate("AnnGAIntRate_Current", inforce_year)
             );
 
         add_variable
