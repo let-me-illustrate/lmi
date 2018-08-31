@@ -2077,11 +2077,6 @@ class pdf_illustration_regular : public pdf_illustration
             );
 
         add_variable
-            ("InforceYearEq0"
-            ,inforce_year == 0
-            );
-
-        add_variable
             ("InforceYearLT5"
             ,inforce_year < 5
             );
