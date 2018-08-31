@@ -845,7 +845,9 @@ false // Silly workaround for now.
     weird_report_columns.push_back(mce_guaranteed_0_cash_surrender_value          );
 
     bool enable_weirdness =
-           0.0 < InforceGeneralAccountValue .value()
+           allow_gen_acct
+        && allow_sep_acct
+        && 0.0 < InforceGeneralAccountValue .value()
         && 0.0 < InforceSeparateAccountValue.value()
         ;
 
