@@ -2082,8 +2082,8 @@ class pdf_illustration_regular : public pdf_illustration
             );
 
         add_variable
-            ("InforceYearLE4"
-            ,inforce_year < 4
+            ("InforceYearLT5"
+            ,inforce_year < 5
             );
 
         auto const max_duration = invar.EndtAge - invar.Age;
