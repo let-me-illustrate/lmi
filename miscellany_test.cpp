@@ -156,7 +156,8 @@ void test_page_count()
 {
     // Original tests: vary only the number of data rows.
 
-    // Edge case (0 rows is not allowed).
+    // Edge cases.
+    BOOST_TEST_EQUAL(1, page_count( 0, 5, 28));
     BOOST_TEST_EQUAL(1, page_count( 1, 5, 28));
     // Just a trivial sanity test.
     BOOST_TEST_EQUAL(1, page_count(17, 5, 28));
@@ -171,9 +172,9 @@ void test_page_count()
 
     // Test preconditions.
 
-    // No data rows.
+    // Negative number of data rows.
     BOOST_TEST_THROW
-        (page_count(0, 1, 1)
+        (page_count(-1, 1, 1)
         ,std::runtime_error
         ,lmi_test::what_regex("^Assertion.*failed")
         );

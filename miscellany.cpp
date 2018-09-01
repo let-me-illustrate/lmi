@@ -295,7 +295,7 @@ std::string iso_8601_datestamp_terse()
 /// Compute the number of pages needed to display the given number of non-blank
 /// rows in groups of the specified size separated by blank rows.
 ///
-/// Preconditions: 0 < total_rows && 0 < rows_per_group <= rows_per_page
+/// Preconditions: 0 <= total_rows && 0 < rows_per_group <= rows_per_page
 
 int page_count
     (int total_rows
@@ -303,9 +303,13 @@ int page_count
     ,int rows_per_page
     )
 {
-    LMI_ASSERT(0 < total_rows);
-    LMI_ASSERT(0 < rows_per_group                 );
-    LMI_ASSERT(    rows_per_group <= rows_per_page);
+    LMI_ASSERT(0 <= total_rows);
+    LMI_ASSERT(0 <  rows_per_group                 );
+    LMI_ASSERT(     rows_per_group <= rows_per_page);
+
+    // If there are zero rows of data, then one empty page is wanted.
+    if(0 == total_rows)
+        return 1;
 
     // Each group actually takes rows_per_group+1 rows because of the
     // separator row between groups, hence the second +1, but there is no
