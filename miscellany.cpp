@@ -292,45 +292,74 @@ std::string iso_8601_datestamp_terse()
     return s;
 }
 
-/// Compute the number of pages needed to display the given number of non-blank
-/// rows in groups of the specified size separated by blank rows.
+/// Number of pages needed to display the given number of data
+/// rows in groups of the given size separated by blank lines.
 ///
-/// Preconditions: 0 <= total_rows && 0 < rows_per_group <= rows_per_page
+/// Nomenclature:
+///  - a 'line' is a printable zone of unit height;
+///  - a 'row' is a series of data to be shown side by side.
+/// With quinquennial spacing, the Morse alphabet is printed thus:
+///
+///   A   .-     line  0   row  0
+///   B   -...   line  1   row  1
+///   C   -.-.   line  2   row  2
+///   D   -..    line  3   row  3
+///   E   .      line  4   row  4
+///   [blank]    line  5
+///   F   ..-.   line  6   row  5
+///   G   --.    line  7   row  6
+///   ...
+///   Z   --..   line 30   row 25
+///
+/// with a page length of 50 lines. With a page length of 25 lines,
+/// the first page would end with
+///   T   -      line 22   row 19
+/// and the second page would be printed thus:
+///
+///   U   ..-    line  0   row 20
+///   V   ...-   line  1   row 21
+///   W   .--    line  2   row 22
+///   X   -..-   line  3   row 23
+///   Y   -.--   line  4   row 24
+///   [blank]    line  5
+///   Z   --..   line  6   row 25
+///
+/// Preconditions: 0 <= total_rows && 0 < rows_per_group <= lines_per_page
 
 int page_count
     (int total_rows
     ,int rows_per_group
-    ,int rows_per_page
+    ,int lines_per_page
     )
 {
     LMI_ASSERT(0 <= total_rows);
-    LMI_ASSERT(0 <  rows_per_group                 );
-    LMI_ASSERT(     rows_per_group <= rows_per_page);
+    LMI_ASSERT(0 <  rows_per_group                  );
+    LMI_ASSERT(     rows_per_group <= lines_per_page);
 
     // If there are zero rows of data, then one empty page is wanted.
     if(0 == total_rows)
         return 1;
 
-    // Each group actually takes rows_per_group+1 rows because of the
+    // Each group actually takes rows_per_group+1 lines because of the
     // separator row between groups, hence the second +1, but there is no
     // need for the separator after the last group, hence the first +1.
-    int const groups_per_page = (rows_per_page + 1) / (rows_per_group + 1);
+    int const groups_per_page = (lines_per_page + 1) / (rows_per_group + 1);
 
     // But we are actually interested in the number of rows we can fit per page
     // and not the number of groups.
-    int const used_per_page = groups_per_page * rows_per_group;
+    int const rows_per_page = groups_per_page * rows_per_group;
 
     // Finally determine how many pages are needed to show all the rows.
-    int number_of_pages = outward_quotient(total_rows, used_per_page);
+    int number_of_pages = outward_quotient(total_rows, rows_per_page);
 
     // The last page may not be needed if all the rows on it can fit into the
     // remaining space, too small for a full group, but perhaps sufficient for
-    // these rows, in the last by one page.
+    // these rows, in the last page but one.
     if(1 < number_of_pages)
         {
-        auto const rows_on_last_page = total_rows - (number_of_pages - 1) * used_per_page;
-        auto const free_rows = rows_per_page - groups_per_page * (rows_per_group + 1);
-        if(rows_on_last_page <= free_rows)
+        auto const rows_on_last_page = total_rows - (number_of_pages - 1) * rows_per_page;
+        auto const free_lines = lines_per_page - groups_per_page * (rows_per_group + 1);
+        if(rows_on_last_page <= free_lines)
             {
             --number_of_pages;
             }

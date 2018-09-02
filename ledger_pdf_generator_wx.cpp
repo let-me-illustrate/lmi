@@ -1775,11 +1775,11 @@ class page_with_tabular_report
             ,oe_only_measure
             );
 
-        int const rows_per_page = (get_footer_top() - pos_y) / table_gen.row_height();
+        int const lines_per_page = (get_footer_top() - pos_y) / table_gen.row_height();
 
         int const rows_per_group = wx_table_generator::rows_per_group;
 
-        if(rows_per_page < rows_per_group)
+        if(lines_per_page < rows_per_group)
             {
             // We can't afford to continue in this case as we can never output
             // the table as the template simply doesn't leave enough space for
@@ -1791,7 +1791,7 @@ class page_with_tabular_report
         return page_count
             (ledger.GetMaxLength()
             ,rows_per_group
-            ,rows_per_page
+            ,lines_per_page
             ) - 1;
     }
 };
