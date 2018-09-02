@@ -340,25 +340,23 @@ int page_count
     if(0 == total_rows)
         return 1;
 
-    // Each group actually takes rows_per_group+1 lines because of the
-    // separator row between groups, hence the second +1, but there is no
-    // need for the separator after the last group, hence the first +1.
-    int const groups_per_page = (lines_per_page + 1) / (rows_per_group + 1);
+    // "+ 1": blank-line separator after each group.
+    int const lines_per_group = rows_per_group + 1;
 
-    // But we are actually interested in the number of rows we can fit per page
-    // and not the number of groups.
-    int const rows_per_page = groups_per_page * rows_per_group;
+    // "+ 1": no blank-line separator after the last group.
+    int const groups_per_page = (lines_per_page + 1) / lines_per_group;
 
-    // Finally determine how many pages are needed to show all the rows.
+    int const rows_per_page = rows_per_group * groups_per_page;
+
     int number_of_pages = outward_quotient(total_rows, rows_per_page);
 
-    // The last page may not be needed if all the rows on it can fit into the
-    // remaining space, too small for a full group, but perhaps sufficient for
-    // these rows, in the last page but one.
+    // Avoid widowing a partial group on the last page, by moving it
+    // to the preceding page if there's room.
     if(1 < number_of_pages)
         {
         auto const rows_on_last_page = total_rows - (number_of_pages - 1) * rows_per_page;
-        auto const free_lines = lines_per_page - groups_per_page * (rows_per_group + 1);
+        auto const free_lines = lines_per_page - lines_per_group * groups_per_page;
+        LMI_ASSERT(free_lines < rows_per_group);
         if(rows_on_last_page <= free_lines)
             {
             --number_of_pages;
