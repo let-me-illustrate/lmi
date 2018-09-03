@@ -80,17 +80,19 @@ class report_table_test
         {
         test_apportion();
         test_bloat();
-        test_generally();
-        test_group_quote();
-        test_illustration();
+        test_column_widths_generally();
+        test_column_widths_for_group_quotes();
+        test_column_widths_for_illustrations();
+        test_paginator();
         }
 
   private:
     static void test_apportion();
     static void test_bloat();
-    static void test_generally();
-    static void test_group_quote();
-    static void test_illustration();
+    static void test_column_widths_generally();
+    static void test_column_widths_for_group_quotes();
+    static void test_column_widths_for_illustrations();
+    static void test_paginator();
 };
 
 void report_table_test::test_apportion()
@@ -171,7 +173,7 @@ void report_table_test::test_bloat()
     BOOST_TEST(v == bloat({3, 1, 0, 0, 2}, {0, 1, 0, 1, 0}));
 }
 
-void report_table_test::test_generally()
+void report_table_test::test_column_widths_generally()
 {
     std::vector<table_column_info> v;
     std::vector<int> expected;
@@ -278,7 +280,7 @@ void report_table_test::test_generally()
 /// group quote. Therefore, they aren't written in a compact way
 /// or expanded by bloat().
 
-void report_table_test::test_group_quote()
+void report_table_test::test_column_widths_for_group_quotes()
 {
     static int const total_width    = 756;
     static int const default_margin = 14;
@@ -309,7 +311,7 @@ void report_table_test::test_group_quote()
 /// illustrations. Therefore, they aren't written in a compact way
 /// or expanded by bloat().
 
-void report_table_test::test_illustration()
+void report_table_test::test_column_widths_for_illustrations()
 {
     static int const total_width    = 576;
     static int const default_margin = 14;
@@ -401,4 +403,99 @@ int test_main(int, char*[])
 {
     report_table_test::test();
     return EXIT_SUCCESS;
+}
+
+void report_table_test::test_paginator()
+{
+    // Original tests: vary only the number of data rows.
+
+    // Edge cases.
+    BOOST_TEST_EQUAL(1, page_count( 0, 5, 28));
+    BOOST_TEST_EQUAL(1, page_count( 1, 5, 28));
+    // Just a trivial sanity test.
+    BOOST_TEST_EQUAL(1, page_count(17, 5, 28));
+    // 4 full groups + incomplete last group.
+    BOOST_TEST_EQUAL(1, page_count(24, 5, 28));
+    // 5 full groups don't fit on one page.
+    BOOST_TEST_EQUAL(2, page_count(25, 5, 28));
+    // 4 + 4 groups + incomplete last one.
+    BOOST_TEST_EQUAL(2, page_count(44, 5, 28));
+    // 9 full groups don't fit on two pages.
+    BOOST_TEST_EQUAL(3, page_count(45, 5, 28));
+
+    // Test preconditions.
+
+    // Negative number of data rows.
+    BOOST_TEST_THROW
+        (page_count(-1, 1, 1)
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Assertion.*failed")
+        );
+
+    // Zero rows per group.
+    BOOST_TEST_THROW
+        (page_count(1, 0, 1)
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Assertion.*failed")
+        );
+
+    // Insufficient room to print even one group.
+    BOOST_TEST_THROW
+        (page_count(1, 7, 3)
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Assertion.*failed")
+        );
+
+    // A single row of data.
+    BOOST_TEST_EQUAL(1, page_count(1, 1, 1));
+    BOOST_TEST_EQUAL(1, page_count(1, 1, 3));
+    BOOST_TEST_EQUAL(1, page_count(1, 3, 3));
+    BOOST_TEST_EQUAL(1, page_count(1, 3, 7));
+
+    // One-row groups:
+
+    // Page length an odd number.
+    BOOST_TEST_EQUAL(1, page_count(1, 1, 5));
+    BOOST_TEST_EQUAL(1, page_count(3, 1, 5));
+    BOOST_TEST_EQUAL(2, page_count(4, 1, 5));
+    BOOST_TEST_EQUAL(2, page_count(6, 1, 5));
+    BOOST_TEST_EQUAL(3, page_count(7, 1, 5));
+
+    // Same, but next even length: same outcome.
+    BOOST_TEST_EQUAL(1, page_count(1, 1, 6));
+    BOOST_TEST_EQUAL(1, page_count(3, 1, 6));
+    BOOST_TEST_EQUAL(2, page_count(4, 1, 6));
+    BOOST_TEST_EQUAL(2, page_count(6, 1, 6));
+    BOOST_TEST_EQUAL(3, page_count(7, 1, 6));
+
+    // Two-row groups.
+
+    // Page length four.
+    BOOST_TEST_EQUAL(1, page_count(1, 2, 4));
+    BOOST_TEST_EQUAL(1, page_count(3, 2, 4));
+    BOOST_TEST_EQUAL(2, page_count(4, 2, 4));
+    BOOST_TEST_EQUAL(2, page_count(5, 2, 4));
+    BOOST_TEST_EQUAL(3, page_count(6, 2, 4));
+
+    // Page length five: no room for widow and orphan control.
+    BOOST_TEST_EQUAL(1, page_count(1, 2, 5));
+    BOOST_TEST_EQUAL(1, page_count(4, 2, 5));
+    BOOST_TEST_EQUAL(2, page_count(5, 2, 5));
+    BOOST_TEST_EQUAL(2, page_count(8, 2, 5));
+    BOOST_TEST_EQUAL(3, page_count(9, 2, 5));
+
+    // Same, but next even length: same outcome.
+    BOOST_TEST_EQUAL(1, page_count(1, 2, 6));
+    BOOST_TEST_EQUAL(1, page_count(4, 2, 6));
+    BOOST_TEST_EQUAL(2, page_count(5, 2, 6));
+    BOOST_TEST_EQUAL(2, page_count(8, 2, 6));
+    BOOST_TEST_EQUAL(3, page_count(9, 2, 6));
+
+    // Page length seven: one extra data row possible on last page.
+    BOOST_TEST_EQUAL(1, page_count(1, 2, 7));
+    BOOST_TEST_EQUAL(1, page_count(4, 2, 7));
+    BOOST_TEST_EQUAL(1, page_count(5, 2, 7));
+    BOOST_TEST_EQUAL(2, page_count(6, 2, 7));
+    BOOST_TEST_EQUAL(2, page_count(8, 2, 7));
+    BOOST_TEST_EQUAL(2, page_count(9, 2, 7));
 }

@@ -25,6 +25,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "math_functions.hpp"           // outward_quotient()
 #include "ssize_lmi.hpp"
 
 #include <algorithm>                    // min()
@@ -172,4 +173,78 @@ std::vector<int> set_column_widths
         }
 
     return w;
+}
+
+/// Number of pages needed to display the given number of data
+/// rows in groups of the given size separated by blank lines.
+///
+/// Nomenclature:
+///  - a 'line' is a printable zone of unit height;
+///  - a 'row' is a series of data to be shown side by side.
+/// With quinquennial spacing, the Morse alphabet is printed thus:
+///
+///   A   .-     line  0   row  0
+///   B   -...   line  1   row  1
+///   C   -.-.   line  2   row  2
+///   D   -..    line  3   row  3
+///   E   .      line  4   row  4
+///   [blank]    line  5
+///   F   ..-.   line  6   row  5
+///   G   --.    line  7   row  6
+///   ...
+///   Z   --..   line 30   row 25
+///
+/// with a page length of 50 lines. With a page length of 25 lines,
+/// the first page would end with
+///   T   -      line 22   row 19
+/// and the second page would be printed thus:
+///
+///   U   ..-    line  0   row 20
+///   V   ...-   line  1   row 21
+///   W   .--    line  2   row 22
+///   X   -..-   line  3   row 23
+///   Y   -.--   line  4   row 24
+///   [blank]    line  5
+///   Z   --..   line  6   row 25
+///
+/// Preconditions: 0 <= total_rows && 0 < rows_per_group <= lines_per_page
+
+int page_count
+    (int total_rows
+    ,int rows_per_group
+    ,int lines_per_page
+    )
+{
+    LMI_ASSERT(0 <= total_rows);
+    LMI_ASSERT(0 <  rows_per_group                  );
+    LMI_ASSERT(     rows_per_group <= lines_per_page);
+
+    // If there are zero rows of data, then one empty page is wanted.
+    if(0 == total_rows)
+        return 1;
+
+    // "+ 1": blank-line separator after each group.
+    int const lines_per_group = rows_per_group + 1;
+
+    // "+ 1": no blank-line separator after the last group.
+    int const groups_per_page = (lines_per_page + 1) / lines_per_group;
+
+    int const rows_per_page = rows_per_group * groups_per_page;
+
+    int number_of_pages = outward_quotient(total_rows, rows_per_page);
+
+    // Avoid widowing a partial group on the last page, by moving it
+    // to the preceding page if there's room.
+    if(1 < number_of_pages)
+        {
+        auto const rows_on_last_page = total_rows - (number_of_pages - 1) * rows_per_page;
+        auto const free_lines = lines_per_page - lines_per_group * groups_per_page;
+        LMI_ASSERT(free_lines < rows_per_group);
+        if(rows_on_last_page <= free_lines)
+            {
+            --number_of_pages;
+            }
+        }
+
+    return number_of_pages;
 }

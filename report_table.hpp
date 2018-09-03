@@ -103,4 +103,12 @@ std::vector<int> LMI_SO set_column_widths
     ,int                                   minimum_margin
     );
 
+class paginator; // Coming soon.
+
+int LMI_SO page_count
+    (int total_rows
+    ,int rows_per_group
+    ,int lines_per_page
+    );
+
 #endif // report_table_hpp

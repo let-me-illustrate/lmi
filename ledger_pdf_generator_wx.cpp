@@ -36,9 +36,10 @@
 #include "ledger_evaluator.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
-#include "miscellany.hpp"               // lmi_tolower(), page_count()
+#include "miscellany.hpp"               // lmi_tolower()
 #include "oecumenic_enumerations.hpp"
 #include "pdf_writer_wx.hpp"
+#include "report_table.hpp"             // page_count()
 #include "ssize_lmi.hpp"
 #include "wx_table_generator.hpp"
 
