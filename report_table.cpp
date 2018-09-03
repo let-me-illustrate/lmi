@@ -175,17 +175,17 @@ std::vector<int> set_column_widths
     return w;
 }
 
-/// Preconditions: 0 <= total_rows && 0 < rows_per_group <= lines_per_page
+/// Preconditions: 0 <= total_rows && 0 < rows_per_group <= max_lines_per_page
 
-paginator::paginator(int total_rows, int rows_per_group, int lines_per_page)
-    :total_rows_     {total_rows}
-    ,rows_per_group_ {rows_per_group}
-    ,lines_per_page_ {lines_per_page}
-    ,page_count_     {1}
+paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
+    :total_rows_         {total_rows}
+    ,rows_per_group_     {rows_per_group}
+    ,max_lines_per_page_ {max_lines_per_page}
+    ,page_count_         {1}
 {
     LMI_ASSERT(0 <= total_rows_);
-    LMI_ASSERT(0 <  rows_per_group_                   );
-    LMI_ASSERT(     rows_per_group_ <= lines_per_page_);
+    LMI_ASSERT(0 <  rows_per_group_                       );
+    LMI_ASSERT(     rows_per_group_ <= max_lines_per_page_);
 
     // If there are zero rows of data, then one empty page is wanted.
     if(0 == total_rows_)
@@ -198,7 +198,7 @@ paginator::paginator(int total_rows, int rows_per_group, int lines_per_page)
     int const lines_per_group = rows_per_group_ + 1;
 
     // "+ 1": no blank-line separator after the last group.
-    int const groups_per_page = (lines_per_page_ + 1) / lines_per_group;
+    int const groups_per_page = (max_lines_per_page_ + 1) / lines_per_group;
 
     int const rows_per_page = rows_per_group_ * groups_per_page;
 
@@ -209,7 +209,7 @@ paginator::paginator(int total_rows, int rows_per_group, int lines_per_page)
     if(1 < page_count_)
         {
         auto const rows_on_last_page = total_rows_ - (page_count_ - 1) * rows_per_page;
-        auto const free_lines = lines_per_page_ - lines_per_group * groups_per_page;
+        auto const free_lines = max_lines_per_page_ - lines_per_group * groups_per_page;
         LMI_ASSERT(free_lines < rows_per_group_);
         if(rows_on_last_page <= free_lines)
             {

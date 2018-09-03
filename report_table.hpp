@@ -137,14 +137,14 @@ std::vector<int> LMI_SO set_column_widths
 class LMI_SO paginator
 {
   public:
-    paginator(int total_rows, int rows_per_group, int lines_per_page);
+    paginator(int total_rows, int rows_per_group, int max_lines_per_page);
 
     int page_count() const;
 
   private:
     int const total_rows_;
     int const rows_per_group_;
-    int const lines_per_page_;
+    int const max_lines_per_page_;
 
     int page_count_;
 };
