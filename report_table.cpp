@@ -183,37 +183,39 @@ paginator::paginator(int total_rows, int rows_per_group, int lines_per_page)
     ,lines_per_page_ {lines_per_page}
     ,page_count_     {1}
 {
-    LMI_ASSERT(0 <= total_rows);
-    LMI_ASSERT(0 <  rows_per_group                  );
-    LMI_ASSERT(     rows_per_group <= lines_per_page);
+    LMI_ASSERT(0 <= total_rows_);
+    LMI_ASSERT(0 <  rows_per_group_                   );
+    LMI_ASSERT(     rows_per_group_ <= lines_per_page_);
 
     // If there are zero rows of data, then one empty page is wanted.
-    if(0 == total_rows)
+    if(0 == total_rows_)
+        {
+        page_count_ = 1;
         return;
+        }
 
     // "+ 1": blank-line separator after each group.
-    int const lines_per_group = rows_per_group + 1;
+    int const lines_per_group = rows_per_group_ + 1;
 
     // "+ 1": no blank-line separator after the last group.
-    int const groups_per_page = (lines_per_page + 1) / lines_per_group;
+    int const groups_per_page = (lines_per_page_ + 1) / lines_per_group;
 
-    int const rows_per_page = rows_per_group * groups_per_page;
+    int const rows_per_page = rows_per_group_ * groups_per_page;
 
-    int number_of_pages = outward_quotient(total_rows, rows_per_page);
+    page_count_ = outward_quotient(total_rows_, rows_per_page);
 
     // Avoid widowing a partial group on the last page, by moving it
     // to the preceding page if there's room.
-    if(1 < number_of_pages)
+    if(1 < page_count_)
         {
-        auto const rows_on_last_page = total_rows - (number_of_pages - 1) * rows_per_page;
-        auto const free_lines = lines_per_page - lines_per_group * groups_per_page;
-        LMI_ASSERT(free_lines < rows_per_group);
+        auto const rows_on_last_page = total_rows_ - (page_count_ - 1) * rows_per_page;
+        auto const free_lines = lines_per_page_ - lines_per_group * groups_per_page;
+        LMI_ASSERT(free_lines < rows_per_group_);
         if(rows_on_last_page <= free_lines)
             {
-            --number_of_pages;
+            --page_count_;
             }
         }
-    page_count_ = number_of_pages;
 }
 
 /// Number of pages required.
