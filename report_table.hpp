@@ -103,12 +103,50 @@ std::vector<int> LMI_SO set_column_widths
     ,int                                   minimum_margin
     );
 
-class paginator; // Coming soon.
+/// Display table rows in groups separated by blank lines.
+///
+/// Nomenclature:
+///  - a 'line' is a printable zone of unit height;
+///  - a 'row' is a series of data to be shown side by side.
+/// With quinquennial spacing, the Morse alphabet is printed thus:
+///
+///   A   .-     line  0   row  0
+///   B   -...   line  1   row  1
+///   C   -.-.   line  2   row  2
+///   D   -..    line  3   row  3
+///   E   .      line  4   row  4
+///   [blank]    line  5
+///   F   ..-.   line  6   row  5
+///   G   --.    line  7   row  6
+///   ...
+///   Z   --..   line 30   row 25
+///
+/// with a page length of 50 lines. With a page length of 25 lines,
+/// the first page would end with
+///   T   -      line 22   row 19
+/// and the second page would be printed thus:
+///
+///   U   ..-    line  0   row 20
+///   V   ...-   line  1   row 21
+///   W   .--    line  2   row 22
+///   X   -..-   line  3   row 23
+///   Y   -.--   line  4   row 24
+///   [blank]    line  5
+///   Z   --..   line  6   row 25
 
-int LMI_SO page_count
-    (int total_rows
-    ,int rows_per_group
-    ,int lines_per_page
-    );
+class LMI_SO paginator
+{
+  public:
+    paginator(int total_rows, int rows_per_group, int lines_per_page);
+
+    int page_count() const;
+
+  private:
+    int const total_rows_;
+    int const rows_per_group_;
+    int const lines_per_page_;
+
+    int page_count_;
+};
 
 #endif // report_table_hpp

@@ -39,7 +39,7 @@
 #include "miscellany.hpp"               // lmi_tolower()
 #include "oecumenic_enumerations.hpp"
 #include "pdf_writer_wx.hpp"
-#include "report_table.hpp"             // page_count()
+#include "report_table.hpp"             // paginator
 #include "ssize_lmi.hpp"
 #include "wx_table_generator.hpp"
 
@@ -1788,12 +1788,9 @@ class page_with_tabular_report
             throw std::runtime_error("no space left for tabular report");
             }
 
-        // We return the number of extra pages only, hence -1.
-        return page_count
-            (ledger.GetMaxLength()
-            ,rows_per_group
-            ,lines_per_page
-            ) - 1;
+        paginator z(ledger.GetMaxLength(), rows_per_group, lines_per_page);
+        // "- 1": return the number of *extra* pages.
+        return z.page_count() - 1;
     }
 };
 
