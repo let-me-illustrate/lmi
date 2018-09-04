@@ -1253,7 +1253,8 @@ unsigned int table_impl::get_expected_number_of_values() const
     return num_values;
 }
 
-void table_impl::read_values(std::istream& ifs, std::uint16_t /* length */)
+// The second argument (length) is unused, so why does it exist?
+void table_impl::read_values(std::istream& ifs, std::uint16_t)
 {
     throw_if_duplicate_record(!values_.empty(), e_field_values);
 

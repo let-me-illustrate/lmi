@@ -481,7 +481,7 @@ void MultiDimGrid::DoRefreshTableData()
             // columns could be very narrow for axes like age or state):
             grid().SetColMinimalWidth(i, WXGRID_DEFAULT_COL_WIDTH);
 
-            grid().AutoSizeColumn(i, false /*setAsMin*/);
+            grid().AutoSizeColumn(i, false); // false: setAsMin
         }
 
     grid().ForceRefresh();

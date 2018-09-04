@@ -163,7 +163,7 @@ class application_test final
     //
     // This function consumes all the exceptions thrown during its execution
     // and never throws itself.
-    TestsResults run() /* noexcept */;
+    TestsResults run(); // noexcept
 
     // Used by LMI_WX_TEST_CASE() macro to register the individual test cases.
     void add_test(wx_base_test_case* test);
@@ -795,7 +795,7 @@ void SkeletonTest::RunTheTests()
         wxWindow* const top = app_->GetTopWindow();
         if(top)
             {
-            top->Close(true /* force close */);
+            top->Close(true); // force close
             }
         }
 

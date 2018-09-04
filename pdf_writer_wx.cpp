@@ -110,7 +110,7 @@ pdf_writer_wx::pdf_writer_wx
     html_vfs_.reset(new wxFileSystem());
     html_vfs_->ChangePathTo
         (global_settings::instance().data_directory().string()
-        ,true /* argument is a directory, not file path */
+        ,true // argument is a directory, not file path
         );
     html_parser_.SetFS(html_vfs_.get());
 }

@@ -655,8 +655,8 @@ class page
     // This method must not draw anything on the wxDC, it is provided only for
     // measurement purposes.
     virtual void pre_render
-        (Ledger const& ledger
-        ,pdf_writer_wx& writer
+        (Ledger            const& ledger
+        ,pdf_writer_wx          & writer
         ,html_interpolator const& interpolate_html
         )
     {
@@ -914,8 +914,8 @@ class cover_page : public page
 {
   public:
     void render
-        (Ledger const& /* ledger */
-        ,pdf_writer_wx& writer
+        (Ledger            const& // ledger
+        ,pdf_writer_wx          & writer
         ,html_interpolator const& interpolate_html
         ) override
     {
@@ -949,8 +949,8 @@ class page_with_footer : public page
     // Override pre_render() to compute footer_top_ which is needed in the
     // derived classes' overridden get_extra_pages_needed().
     void pre_render
-        (Ledger const& /* ledger */
-        ,pdf_writer_wx& writer
+        (Ledger            const& // ledger
+        ,pdf_writer_wx          & writer
         ,html_interpolator const& interpolate_html
         ) override
     {
@@ -994,8 +994,8 @@ class page_with_footer : public page
     }
 
     void render
-        (Ledger const& /* ledger */
-        ,pdf_writer_wx& writer
+        (Ledger            const& // ledger
+        ,pdf_writer_wx          & writer
         ,html_interpolator const& interpolate_html
         ) override
     {
@@ -1113,8 +1113,8 @@ class numbered_page : public page_with_footer
     }
 
     void pre_render
-        (Ledger const& ledger
-        ,pdf_writer_wx& writer
+        (Ledger            const& ledger
+        ,pdf_writer_wx          & writer
         ,html_interpolator const& interpolate_html
         ) override
     {
@@ -1170,9 +1170,9 @@ class numbered_page : public page_with_footer
     // Derived classes may override this method if they may need more than one
     // physical page to show their contents.
     virtual int get_extra_pages_needed
-        (Ledger const&              ledger
-        ,pdf_writer_wx&             writer
-        ,html_interpolator const&   interpolate_html
+        (Ledger            const& ledger
+        ,pdf_writer_wx          & writer
+        ,html_interpolator const& interpolate_html
         ) = 0;
 
     std::string get_page_number() const override
@@ -1237,9 +1237,9 @@ class standard_page : public numbered_page
 
   private:
     int get_extra_pages_needed
-        (Ledger const&              /* ledger */
-        ,pdf_writer_wx&             writer
-        ,html_interpolator const&   interpolate_html
+        (Ledger            const& // ledger
+        ,pdf_writer_wx          & writer
+        ,html_interpolator const& interpolate_html
         ) override
     {
         page_html_ = wxString::FromUTF8
@@ -1762,9 +1762,9 @@ class page_with_tabular_report
     // Override the base class method as the table may overflow onto the next
     // page(s).
     int get_extra_pages_needed
-        (Ledger const&              ledger
-        ,pdf_writer_wx&             writer
-        ,html_interpolator const&   interpolate_html
+        (Ledger const&            ledger
+        ,pdf_writer_wx&           writer
+        ,html_interpolator const& interpolate_html
         ) override
     {
         wx_table_generator table_gen{create_table_generator(ledger, writer)};
