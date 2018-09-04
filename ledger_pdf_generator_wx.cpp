@@ -947,7 +947,7 @@ class page_with_footer : public page
 {
   public:
     // Override pre_render() to compute footer_top_ which is needed in the
-    // derived classes overridden get_extra_pages_needed().
+    // derived classes' overridden get_extra_pages_needed().
     void pre_render
         (Ledger const& /* ledger */
         ,pdf_writer_wx& writer
@@ -1157,7 +1157,7 @@ class numbered_page : public page_with_footer
     void next_page(pdf_writer_wx& writer)
     {
         // This method may only be called if we had reserved enough physical
-        // pages for this logical pages by overriding get_extra_pages_needed().
+        // pages for these logical pages by overriding get_extra_pages_needed().
         LMI_ASSERT(0 < extra_pages_);
 
         writer.next_page();
