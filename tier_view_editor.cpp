@@ -195,7 +195,7 @@ TierEditorGrid::TierEditorGrid
     )
 {
     // We use default MultiDimGrid constructor and Create() call here, because
-    // MultiDimGrid constructor/Create calls some of the methods TierEditorGrid
+    // MultiDimGrid constructor/Create calls some of the functions TierEditorGrid
     // overrides, so the object has to be fully constructed by the time
     // MultiDimGrid::Create() is called.
     Create(parent, table, id, pos, size);

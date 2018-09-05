@@ -52,7 +52,7 @@ class wx_base_test_case
     /// for them to not be available and this shouldn't result in the test
     /// errors.
     ///
-    /// Notice that this method needs to be public to be usable from helpers of
+    /// Notice that this function needs to be public to be usable from helpers of
     /// the tests and not just from the test code itself.
     ///
     /// The file doesn't need to exist, but must have the correct extension.
@@ -75,14 +75,14 @@ class wx_base_test_case
 
     /// Return true if running in distribution testing mode.
     ///
-    /// This method is used to partially skip execution of the tests that are
+    /// This function is used to partially skip execution of the tests that are
     /// specific to the binary program distribution. If the entire test should
     /// be skipped, prefer to use skip_if_not_distribution() instead.
     bool is_distribution_test() const;
 
     /// Skip the test if not running in distribution testing mode.
     ///
-    /// This method can be used to skip execution of a test entirely unless
+    /// This function can be used to skip execution of a test entirely unless
     /// --distribution command line option was specified.
     ///
     /// Throws test_skipped_exception if the distribution option was not given.

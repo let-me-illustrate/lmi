@@ -34,7 +34,7 @@
 /// Main idea is to avoid generating HTML using raw strings, which is error
 /// prone and difficult to read and maintain. One source of errors is
 /// forgetting to escape special characters, such as "<" or "&", and html::text
-/// class helps with this by providing from() method doing it automatically.
+/// class helps with this by providing from() function doing it automatically.
 ///
 /// Another one is forgetting to close a tag (or closing a wrong one) and while
 /// html::text is too low level to help with this, html::element can be used
@@ -107,7 +107,7 @@ class text
 
     /// Append another text fragment to this one.
     ///
-    /// This method allows chained invocation for appending more than one
+    /// This function allows chained invocation for appending more than one
     /// fragment at once.
 
     text& operator+=(text const& t)
@@ -190,7 +190,7 @@ class LMI_SO any_element
 /// Represents a normal HTML element which can have content inside it.
 ///
 /// This class uses the so called fluent API model in which calls to its
-/// different methods return the object itself and so can be chained together.
+/// different functions return the object itself and so can be chained together.
 /// For example (assuming an implicit "using namespace html"):
 ///
 ///     auto para_with_link =

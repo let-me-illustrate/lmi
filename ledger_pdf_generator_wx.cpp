@@ -143,7 +143,7 @@ class html_interpolator
         throw std::runtime_error("invalid lookup kind");
     }
 
-    // A method which can be used to interpolate an HTML string containing
+    // A function which can be used to interpolate an HTML string containing
     // references to the variables defined for this illustration. The general
     // syntax is the same as in the global interpolate_string() function, i.e.
     // variables are of the form "{{name}}" and section of the form
@@ -355,7 +355,7 @@ class using_illustration_table
 
     // Useful helper for creating the table generator using the columns defined
     // by the separate (and simpler to implement) get_table_columns() pure
-    // virtual method.
+    // virtual function.
     wx_table_generator create_table_generator
         (Ledger const& ledger
         ,pdf_writer_wx& writer
@@ -532,7 +532,7 @@ class scaled_image_cell : public html_cell_for_pdf_output
         m_Height = wxRound(image.GetHeight() / scale_factor);
     }
 
-    // Override the base class method to actually render the image.
+    // Override the base class function to actually render the image.
     void Draw
         (wxDC& dc
         ,int x
@@ -636,7 +636,7 @@ class page
     //
     // This object is not passed as a ctor argument because it would be
     // redundant, instead it is associated with the page when it's added to an
-    // illustration. This method is supposed to be called only once and only by
+    // illustration. This function is supposed to be called only once and only by
     // pdf_illustration this page is being added to.
     void illustration(pdf_illustration const& illustration)
     {
@@ -648,7 +648,7 @@ class page
     // Called before rendering any pages to prepare for doing this, e.g. by
     // computing the number of pages needed.
     //
-    // This method must not draw anything on the wxDC, it is provided only for
+    // This function must not draw anything on the wxDC, it is provided only for
     // measurement purposes.
     virtual void pre_render
         (Ledger            const& // ledger
@@ -667,13 +667,13 @@ class page
 
   protected:
     // The associated illustration, which will be non-null by the time our
-    // virtual methods such as pre_render() and render() are called.
+    // virtual functions such as pre_render() and render() are called.
     pdf_illustration const* illustration_ = nullptr;
 };
 
 // Base class for the different kinds of illustrations.
 //
-// This object contains pages, added to it using its add() method, as well as
+// This object contains pages, added to it using its add() function, as well as
 // illustration-global data registered as variables with html_interpolator and
 // so available for the pages when expanding the external templates defining
 // their contents.
@@ -743,15 +743,15 @@ class pdf_illustration : protected html_interpolator
         writer.save();
     }
 
-    // Methods to be implemented by the derived classes to indicate which
+    // Functions to be implemented by the derived classes to indicate which
     // templates should be used for the upper (above the separating line) and
     // the lower parts of the footer. The upper template name may be empty if
     // it is not used at all.
     //
     // Notice that the upper footer template name can be overridden at the page
-    // level, the methods here define the default for all illustration pages.
+    // level, the functions here define the default for all illustration pages.
     //
-    // These methods are used by the pages deriving from page_with_footer.
+    // These functions are used by the pages deriving from page_with_footer.
     virtual std::string get_upper_footer_template_name() const = 0;
     virtual std::string get_lower_footer_template_name() const = 0;
 
@@ -1030,7 +1030,7 @@ class page_with_footer : public page
 
   protected:
     // Helper for the derived pages to get the vertical position of the footer.
-    // Notice that it can only be used after calling our pre_render() method
+    // Notice that it can only be used after calling our pre_render() function
     // as this is where it is computed.
     int get_footer_top() const
     {
@@ -1040,18 +1040,18 @@ class page_with_footer : public page
     }
 
   private:
-    // Method to be overridden in the base class which should actually return
+    // Function to be overridden in the base class which should actually return
     // the page number or equivalent string (e.g. "Appendix").
     virtual std::string get_page_number() const = 0;
 
-    // This method forwards to the illustration by default, but can be
+    // This function forwards to the illustration by default, but can be
     // overridden to define a page-specific footer if necessary.
     virtual std::string get_upper_footer_template_name() const
     {
         return illustration_->get_upper_footer_template_name();
     }
 
-    // This method uses get_page_number() and returns the HTML wrapping it
+    // This function uses get_page_number() and returns the HTML wrapping it
     // and other fixed information appearing in the lower part of the footer.
     html::text get_footer_lower_html(html_interpolator const& interpolate_html) const
     {
@@ -1149,7 +1149,7 @@ class numbered_page : public page_with_footer
   protected:
     void next_page(pdf_writer_wx& writer)
     {
-        // This method may only be called if we had reserved enough physical
+        // This function may only be called if we had reserved enough physical
         // pages for these logical pages by overriding get_extra_pages_needed().
         LMI_ASSERT(0 < extra_pages_);
 
@@ -1160,7 +1160,7 @@ class numbered_page : public page_with_footer
     }
 
   private:
-    // Derived classes may override this method if they may need more than one
+    // Derived classes may override this function if they may need more than one
     // physical page to show their contents.
     virtual int get_extra_pages_needed
         (Ledger            const& ledger
@@ -1279,7 +1279,7 @@ class numeric_summary_table_cell
         m_Height = render_or_measure(0, oe_only_measure);
     }
 
-    // Override the base class method to actually render the table.
+    // Override the base class function to actually render the table.
     void Draw
         (wxDC               & dc
         ,int                  x
@@ -1751,7 +1751,7 @@ class page_with_tabular_report
         return pos_y;
     }
 
-    // Override the base class method as the table may overflow onto the next
+    // Override the base class function as the table may overflow onto the next
     // page(s).
     int get_extra_pages_needed
         (Ledger const&            ledger
@@ -1925,7 +1925,7 @@ class ill_reg_tabular_detail2_page : public page_with_tabular_report
 
 // Class for pages showing supplemental report after the fixed template
 // contents. It can be either used directly or further derived from, e.g. to
-// override some of its inherited virtual methods such as
+// override some of its inherited virtual functions such as
 // get_upper_footer_template_name() as done below.
 class standard_supplemental_report : public page_with_tabular_report
 {
@@ -2160,7 +2160,7 @@ class pdf_illustration_regular : public pdf_illustration
 class page_with_basic_tabular_report : public page_with_tabular_report
 {
   private:
-    // This method must be overridden to return the text of the super-header
+    // This function must be overridden to return the text of the super-header
     // used for all pairs of "cash surrender value" and "death benefit"
     // columns. The return value is subject to HTML interpolation and so may
     // contain {{variables}} and also can be multiline but, if so, it must have

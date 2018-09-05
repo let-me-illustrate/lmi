@@ -62,7 +62,7 @@ class std_out_redirector
     std_out_redirector(std_out_redirector const&) = delete;
     std_out_redirector& operator=(std_out_redirector const&) = delete;
 
-    // For convenience, this method returns everything output so far and clears
+    // For convenience, this function returns everything output so far and clears
     // the output, i.e. the next call to it will only return output appearing
     // after this call. The name is supposed to emphasize this.
     std::string take_output()
@@ -74,7 +74,7 @@ class std_out_redirector
 
   private:
     // The order of declarations here is important: stream_out_ must be
-    // initialzied before orig_streambuf_ whose initialization uses it.
+    // initialized before orig_streambuf_ whose initialization uses it.
 
     // The stream where cout is redirected during this object life-time.
     std::ostringstream stream_out_;

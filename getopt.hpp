@@ -195,7 +195,7 @@ class LMI_SO GetOpt
 
     void exchange(char** argv);
 
-    // Internal methods
+    // Internal functions
 
     void Initialize(std::string const& a_optstring);
     int List_Value(int i);

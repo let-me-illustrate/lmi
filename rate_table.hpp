@@ -84,7 +84,7 @@ class table
     Number number() const;
     std::string const& name() const;
 
-    // Method computing the hash value as used in the original SOA format.
+    // Function computing the hash value as used in the original SOA format.
     std::uint32_t compute_hash_value() const;
 
     // Comparison with another table: all fields are compared.
@@ -155,14 +155,14 @@ class database final
     // Add a new table, throws if a table with the same number already exists.
     //
     // Notice that the addition of the new tables only are taken into account
-    // when and if the database is saved using save() method. However
+    // when and if the database is saved using save() function. However
     // tables_count() return value is updated immediately and calling this
-    // method invalidates the previously valid indices.
+    // function invalidates the previously valid indices.
     void append_table(table const& table);
 
     // Add a new table, replacing the existing one with the same number, if any.
     //
-    // The notes for append_table() also apply to this method.
+    // The notes for append_table() also apply to this function.
     void add_or_replace_table(table const& table);
 
     // Delete a table with the given number.

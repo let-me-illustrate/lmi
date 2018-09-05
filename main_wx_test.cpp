@@ -620,7 +620,7 @@ class SkeletonTest : public Skeleton
     }
 
   protected:
-    // Override base class virtual method.
+    // Override base class virtual function.
     DocManagerEx* CreateDocManager() override;
 
     // wxApp overrides.
@@ -659,7 +659,7 @@ DocManagerEx* SkeletonTest::CreateDocManager()
       public:
         void FileHistoryLoad(wxConfigBase const&) override
             {
-            // We could call the base class method here, but it doesn't seem
+            // We could call the base class function here, but it doesn't seem
             // useful to do it and doing nothing here makes it more symmetric
             // with FileHistorySave().
             }

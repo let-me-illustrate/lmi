@@ -60,7 +60,7 @@
 ///   - applying adjustments made by the user through an adjustment control to
 ///     the  MultiDimTable. Triggered by MultiDimGrid::RefreshAxisAdjustment().
 /// Both MultiDimGrid::ApplyAxisAdjustment() and
-/// MultiDimGrid::RefreshAxisAdjustment() are two step methods.
+/// MultiDimGrid::RefreshAxisAdjustment() are two step functions.
 /// MultiDimGrid::ApplyAxisAdjustment():
 ///   - apply adjustment from adjustment window to its axis
 ///     MultiDimAxisAny::ApplyAdjustment()
@@ -83,7 +83,7 @@
 ///
 /// The default implementation of axis choice control is a drop down list of
 /// axis values. When a value is chosen the control should trigger
-/// MultiDimGrid::FixAxisValue() method to notify the grid about axis value
+/// MultiDimGrid::FixAxisValue() function to notify the grid about axis value
 /// change.
 
 #include "config.hpp"
@@ -149,12 +149,12 @@ class WXDLLIMPEXP_FWD_CORE wxGridBagSizer;
 /// manually otherwise).
 ///
 /// UpdateChoiceControl() updates the values in the choice control
-/// of this axis. This method is called when there are changes made to the axis
+/// of this axis. This function is called when there are changes made to the axis
 /// itself. When adjustable axis is changed the MultiDimGrid will call
-/// this method asking the axis to reflect the changes in the choice control.
+/// this function asking the axis to reflect the changes in the choice control.
 /// The default implementation does the refresh by simply clearing and
-/// repopulating the choice control. If CreateChoiceControl() method returns
-/// any other custom widget and the axis is adjustable then this method
+/// repopulating the choice control. If CreateChoiceControl() function returns
+/// any other custom widget and the axis is adjustable then this function
 /// should be manually overriden.
 ///
 /// CreateAdjustControl() creates a GUI element used to let user to restrain
@@ -163,27 +163,27 @@ class WXDLLIMPEXP_FWD_CORE wxGridBagSizer;
 /// A simple example: an integer axis with values in some range, the adjustment
 /// control then should be used to restrain shown upper and lower bounds, or
 /// maybe to change step size for the axis values shown to the user).
-/// The default version of the method returns NULL indicating that this axis
+/// The default version of the function returns NULL indicating that this axis
 /// (and its value range) is immutable.
 ///
 /// ApplyAdjustment() reads and applies an adjustment from adjustment window
-/// of this axis. This method is called when user changes axis value range
+/// of this axis. This function is called when user changes axis value range
 /// (via this axis adjustment window). It is a part of action-chain performed
 /// by MultiDimGrid upon a user action:
-///   - from adjustment control to axis object (this method)
+///   - from adjustment control to axis object (this function)
 ///   - from axis object to the data table object
 ///     (MultiDimTableAny::ApplyAxisAdjustment)
 ///   - some updates on grid internal widgets to refresh the shown data
-/// The method is responsible for updating the internal axis value range
-/// from the adjustment control. The method returns true if the update
+/// The function is responsible for updating the internal axis value range
+/// from the adjustment control. The function returns true if the update
 /// has taken place, false if no changes detected.
 ///
 /// RefreshAdjustment() refreshes the adjustment window of the axis. This
-/// method is called when the axis object is updated from inside the code and
+/// function is called when the axis object is updated from inside the code and
 /// the adjustment window needs to be synchronized with its axis current state.
 /// It is a part of chain of refreshes made by MultiDimGrid when
 /// the underlying data table is changed and axes need to be updated.
-/// This method returns true if the update has taken place, false if everything
+/// This function returns true if the update has taken place, false if everything
 /// was up-to-date.
 
 class MultiDimAxisAny
@@ -212,7 +212,7 @@ class MultiDimAxisAny
     MultiDimAxisAny(MultiDimAxisAny const&) = delete;
     MultiDimAxisAny& operator=(MultiDimAxisAny const&) = delete;
 
-    /// Name of the axis used throughout the MultiDimGrid methods
+    /// Name of the axis used throughout the MultiDimGrid functions
     std::string const name_;
 };
 
@@ -243,11 +243,11 @@ inline std::string const& MultiDimAxisAny::GetName() const
 /// GetAxesAny() returns the axes objects for that table. It could be called
 /// multiple times - once for every MultiDimGrid using this table as its data
 /// source. N-th axis returned represents nth dimension and holds value range
-/// for that dimension. This method redirects to pure virtual DoGetAxesAny().
+/// for that dimension. This function redirects to pure virtual DoGetAxesAny().
 ///
 /// ApplyAxisAdjustment() reads from the axis object and apply
-/// any adjustment to the data table. Method is a part of the update chain
-/// that happen when user changes axis value range at runtime. This method
+/// any adjustment to the data table. Function is a part of the update chain
+/// that happen when user changes axis value range at runtime. This function
 /// is responsible for reading new value range from the axis object and
 /// applying it to the data table value domain. Parameters:
 ///   - axis the axis object containing axis value range adjustments
@@ -256,7 +256,7 @@ inline std::string const& MultiDimAxisAny::GetName() const
 ///     was up-to-date
 ///
 /// RefreshAxisAdjustment() refreshes the axis object to reflect
-/// the data table domain value range. Method is a part of the adjustment
+/// the data table domain value range. Function is a part of the adjustment
 /// refresh chain called by MultiDimGrid to synchronize the structures
 /// with the underlying data table updated in some way. Parameters:
 ///   - axis   the axis object that should be synced with the table
@@ -309,7 +309,7 @@ class MultiDimTableAny
     std::any GetValueAny(Coords const& coords) const;
     void     SetValueAny(Coords const& coords, std::any const& value);
 
-    /// Value conversion methods to be overriden in derived classes.
+    /// Value conversion functions to be overriden in derived classes.
     virtual std::any    StringToValue(std::string const& value) const = 0;
     virtual std::string ValueToString(std::any const& value) const = 0;
 
@@ -405,9 +405,9 @@ inline void MultiDimTableAny::SetValueAny
 ///
 /// RefreshTableData(): Refresh the data shown in the wxGrid control
 /// of the widget.
-/// Call this method if you need to refresh the data shown to the user
+/// Call this function if you need to refresh the data shown to the user
 /// in the grid control.
-/// It redirects to DoRefreshTableData(). If one suspect to call this method
+/// It redirects to DoRefreshTableData(). If one suspect to call this function
 /// (directly or indirectly) multiple times as a part of chain of refreshes,
 /// it could be protected by GridRefreshTableDataGuard.
 /// See also GridRefreshTableDataGuard
@@ -515,7 +515,7 @@ class MultiDimGrid
         ,e_axis_y
         };
 
-    // Use these methods to access table_ and grid_ pointers. Note that these
+    // Use these functions to access table_ and grid_ pointers. Note that these
     // getters will throw if the underlying pointer is NULL.
     MultiDimTableAny& table() const;
     wxGrid& grid() const;
@@ -629,7 +629,7 @@ class MultiDimGrid
     MultiDimAxisAny&       GetAxis(unsigned int n);
     MultiDimAxisAny const& GetAxis(unsigned int n) const;
 
-    /// This is the actual method that performs the refresh.
+    /// This is the actual function that performs the refresh.
     void DoRefreshTableData();
 
     bool DoRefreshAxisVaries(unsigned int n);
@@ -639,7 +639,7 @@ class MultiDimGrid
     /// Autoselects two first non-disabled axis
     bool AutoselectGridAxis();
 
-    /// Helper for the AutoselectGridAxis() method
+    /// Helper for the AutoselectGridAxis() function
     std::pair<int,int> SuggestGridAxisSelection() const;
 
     bool DoApplyAxisAdjustment(unsigned int n);

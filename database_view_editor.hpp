@@ -115,7 +115,7 @@ class DatabaseTableAdapter
     /// Modification flag (dirty flag)
     bool modified_;
 
-    /// temporary buffer needed by DoGetValue() and DoSetValue() methods
+    /// temporary buffer needed by DoGetValue() and DoSetValue() functions
     mutable std::vector<int> indexes_;
 
     DECLARE_NO_COPY_CLASS(DatabaseTableAdapter)

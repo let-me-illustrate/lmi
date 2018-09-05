@@ -43,7 +43,7 @@ wxWindow* wx_test_focus_controller_child(MvcController& dialog, char const* name
 
 /// Helper base class for classes creating or opening documents.
 ///
-/// This class provides methods for closing the current document, optionally
+/// This class provides functions for closing the current document, optionally
 /// discarding the changes done to it.
 ///
 /// Unfortunately it is impossible to close the document automatically from
@@ -112,7 +112,7 @@ class wx_test_document_base
     }
 
   protected:
-    // This method should be called by the derived classes when the document
+    // This function should be called by the derived classes when the document
     // window is really opened.
     void set_opened() { opened_ = true; }
 
@@ -120,7 +120,7 @@ class wx_test_document_base
     wx_test_document_base(wx_test_document_base const&) = delete;
     wx_test_document_base& operator=(wx_test_document_base const&) = delete;
 
-    // Common part of different close() methods.
+    // Common part of different close() functions.
     void do_close()
     {
         // If we started closing the document, we should reset the flag: even
@@ -138,7 +138,7 @@ class wx_test_document_base
 /// Represents an existing illustration document.
 ///
 /// Instantiating an object of this class simulates opening the specified
-/// illustration. Its close() method must be called before destroying an object
+/// illustration. Its close() function must be called before destroying an object
 /// of this class to ensure that it doesn't stay open.
 
 class wx_test_existing_illustration

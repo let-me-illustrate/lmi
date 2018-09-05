@@ -124,7 +124,7 @@ void AutoResizingTreeCtrl::DoGetBestSizePrivate
     ,bool is_root
     )
 {
-    // This method recursivly expands all the nodes in the tree and calculates
+    // This function recursively expands all the nodes in the tree and calculates
     // widest bounding rectangle width. It then collapses back originally
     // collapsed nodes and returns.
     if(!is_root)

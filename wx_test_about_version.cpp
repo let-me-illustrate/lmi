@@ -209,7 +209,7 @@ LMI_WX_TEST_CASE(about_dialog_version)
                     // high vertical resolutions.
                     //
                     // The first test just checks that the return value of
-                    // LineXXX() methods makes sense: it should return false if
+                    // LineXXX() functions makes sense: it should return false if
                     // no scrolling is possible. The second test checks that
                     // scrolling down does actually work.
                     LMI_ASSERT_WITH_MSG

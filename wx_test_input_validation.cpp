@@ -56,7 +56,7 @@
 ///
 /// Errors are tested by catching the exceptions and examining their associated
 /// messages and not by checking for the message boxes displayed by the program
-/// because these message boxes are shown from OnExceptionInMainLoop() method
+/// because these message boxes are shown from OnExceptionInMainLoop() function
 /// of the application object which behaves differently in the test suite.
 
 namespace
