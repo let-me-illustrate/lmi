@@ -139,7 +139,7 @@ class LMI_SO paginator
   public:
     paginator(int total_rows, int rows_per_group, int max_lines_per_page);
 
-    int page_count() const;
+    int page_count() const {return page_count_;}
 
   private:
     int const total_rows_;

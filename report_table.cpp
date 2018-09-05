@@ -217,10 +217,3 @@ paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
             }
         }
 }
-
-/// Number of pages required.
-
-int paginator::page_count() const
-{
-    return page_count_;
-}
