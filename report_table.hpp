@@ -148,10 +148,10 @@ class LMI_SO paginator
     int const max_lines_per_page_;
 
     // Internals in dependency order.
-    int /* const */ lines_per_group_;
-    int /* const */ groups_per_page_;
-    int /* const */ rows_per_page_;
-    int page_count_;
+    int const lines_per_group_;
+    int const groups_per_page_;
+    int const rows_per_page_;
+    int       page_count_;
 };
 
 #endif // report_table_hpp

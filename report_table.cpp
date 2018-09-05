@@ -181,6 +181,11 @@ paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
     :total_rows_         {total_rows}
     ,rows_per_group_     {rows_per_group}
     ,max_lines_per_page_ {max_lines_per_page}
+    // "+ 1": blank-line separator after each group.
+    ,lines_per_group_    {rows_per_group_ + 1}
+    // "+ 1": no blank-line separator after the last group.
+    ,groups_per_page_    {(max_lines_per_page_ + 1) / lines_per_group_}
+    ,rows_per_page_      {rows_per_group_ * groups_per_page_}
     ,page_count_         {1}
 {
     LMI_ASSERT(0 <= total_rows_);
@@ -193,14 +198,6 @@ paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
         page_count_ = 1;
         return;
         }
-
-    // "+ 1": blank-line separator after each group.
-    lines_per_group_ = rows_per_group_ + 1;
-
-    // "+ 1": no blank-line separator after the last group.
-    groups_per_page_ = (max_lines_per_page_ + 1) / lines_per_group_;
-
-    rows_per_page_ = rows_per_group_ * groups_per_page_;
 
     page_count_ = outward_quotient(total_rows_, rows_per_page_);
 
