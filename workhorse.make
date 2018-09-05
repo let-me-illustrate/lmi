@@ -465,6 +465,17 @@ gcc_common_warnings := \
   -Wvector-operation-performance \
   -Wwrite-strings \
 
+# Consider these later.
+#
+# -Wdate-time: only for "bit-wise-identical reproducible compilations"
+
+postponed_gcc_common_warnings := \
+  -Wdate-time \
+  -Wmissing-declarations \
+  -Wnull-dereference \
+  -Wswitch-enum \
+  -Wunsafe-loop-optimizations \
+
 gcc_c_warnings := \
   $(c_standard) \
   $(gcc_common_warnings) \
@@ -498,6 +509,16 @@ gcc_cxx_warnings := \
   -Wstrict-null-sentinel \
   -Wsynth \
   -Wuseless-cast \
+
+# Consider these later.
+#
+# -Wsuggest*: use these only occasionally, like -Weffc++
+
+postponed_gcc_cxx_warnings := \
+  -Wnon-virtual-dtor \
+  -Wsign-promo \
+  -Wsuggest-final-methods \
+  -Wsuggest-final-types \
 
 # Too many warnings on correct code, e.g. exact comparison to zero:
 #  -Wfloat-equal \
