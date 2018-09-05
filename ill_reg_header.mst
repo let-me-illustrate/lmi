@@ -96,10 +96,10 @@
                 {{#InforceYearLT5}}
                     Ultimate Illustrated Crediting Rate:
                     {{#ModifiedSinglePremium0}}
-                        {{AnnGAIntRate_Current[11]}}
+                        {{AnnGAIntRate_Current[10]}}
                     {{/ModifiedSinglePremium0}}
                     {{^ModifiedSinglePremium0}}
-                        {{AnnGAIntRate_Current[6]}}
+                        {{AnnGAIntRate_Current[5]}}
                     {{/ModifiedSinglePremium0}}
                     <br>
                 {{/InforceYearLT5}}
