@@ -345,10 +345,11 @@ class using_illustration_table
     // However, that cannot be written here, once and only once,
     // because 'column_end_of_year_age' is an enumerator whose value
     // may differ in each derived class.
-    virtual bool should_hide_column(Ledger const& ledger, int column) const
+    virtual bool should_hide_column
+        (Ledger const& // ledger
+        ,int           // column
+        ) const
     {
-        stifle_warning_for_unused_value(ledger);
-        stifle_warning_for_unused_value(column);
         return false;
     }
 
@@ -482,10 +483,14 @@ class html_cell_for_pdf_output : public wxHtmlCell
     // Small helper to check that we're using the expected DC and, also, acting
     // as a sink for the never used parameters of Draw().
     void draw_check_precondition
-        (wxDC& dc
-        ,int view_y1
-        ,int view_y2
-        ,wxHtmlRenderingInfo& info
+        (wxDC               & dc
+        // There is no need to optimize drawing by restricting it to the
+        // currently shown positions, we always render the cell entirely.
+        ,int                  // view_y1
+        ,int                  // view_y2
+        // We don't care about rendering state as we don't support interactive
+        // selection anyhow.
+        ,wxHtmlRenderingInfo& // info
         )
     {
         // The DC passed to this function is supposed to be the same as the one
@@ -493,15 +498,6 @@ class html_cell_for_pdf_output : public wxHtmlCell
         // this is really so in order to avoid unexpectedly drawing the table
         // on something else.
         LMI_ASSERT(&dc == &pdf_context_for_html_output.writer().dc());
-
-        // There is no need to optimize drawing by restricting it to the
-        // currently shown positions, we always render the cell entirely.
-        stifle_warning_for_unused_value(view_y1);
-        stifle_warning_for_unused_value(view_y2);
-
-        // We don't care about rendering state as we don't support interactive
-        // selection anyhow.
-        stifle_warning_for_unused_value(info);
     }
 
     static pdf_context pdf_context_for_html_output;
@@ -655,14 +651,11 @@ class page
     // This method must not draw anything on the wxDC, it is provided only for
     // measurement purposes.
     virtual void pre_render
-        (Ledger            const& ledger
-        ,pdf_writer_wx          & writer
-        ,html_interpolator const& interpolate_html
+        (Ledger            const& // ledger
+        ,pdf_writer_wx          & // writer
+        ,html_interpolator const& // interpolate_html
         )
     {
-        stifle_warning_for_unused_value(ledger);
-        stifle_warning_for_unused_value(writer);
-        stifle_warning_for_unused_value(interpolate_html);
     }
 
     // Render this page contents.
@@ -1288,19 +1281,18 @@ class numeric_summary_table_cell
 
     // Override the base class method to actually render the table.
     void Draw
-        (wxDC& dc
-        ,int x
-        ,int y
-        ,int view_y1
-        ,int view_y2
+        (wxDC               & dc
+        ,int                  x
+        ,int                  y
+        ,int                  view_y1
+        ,int                  view_y2
         ,wxHtmlRenderingInfo& info
         ) override
     {
         draw_check_precondition(dc, view_y1, view_y2, info);
 
-        // We ignore the horizontal coordinate which is always 0 for this cell
-        // anyhow.
-        stifle_warning_for_unused_value(x);
+        // The horizontal coordinate is unused, but should always be zero.
+        LMI_ASSERT(0 == x);
 
         render_or_measure(y + m_PosY, oe_render);
     }
@@ -1515,8 +1507,9 @@ TAG_HANDLER_BEGIN(numeric_summary_table, "NUMERIC_SUMMARY_TABLE")
     TAG_HANDLER_PROC(tag)
     {
         // The tag argument would be useful if we defined any parameters for
-        // it, but currently we don't.
-        stifle_warning_for_unused_value(tag);
+        // it, but currently we don't--so cast its address to void to prevent
+        // the compiler from admonishing us.
+        (void)&(tag);
 
         m_WParser->GetContainer()->InsertCell(new numeric_summary_table_cell());
 
@@ -1708,16 +1701,12 @@ class page_with_tabular_report
     // pos_y and update it to account for the added lines. The base class
     // version does nothing.
     virtual void render_or_measure_extra_headers
-        (wx_table_generator&          table_gen
-        ,html_interpolator const&     interpolate_html
-        ,int&                         pos_y
-        ,oenum_render_or_only_measure output_mode
+        (wx_table_generator&          // table_gen
+        ,html_interpolator const&     // interpolate_html
+        ,int&                         // pos_y
+        ,oenum_render_or_only_measure // output_mode
         ) const
     {
-        stifle_warning_for_unused_value(table_gen);
-        stifle_warning_for_unused_value(interpolate_html);
-        stifle_warning_for_unused_value(pos_y);
-        stifle_warning_for_unused_value(output_mode);
     }
 
   private:
@@ -1828,13 +1817,11 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
 
     void render_or_measure_extra_headers
         (wx_table_generator&          table_gen
-        ,html_interpolator const&     interpolate_html
+        ,html_interpolator const&     // interpolate_html
         ,int&                         pos_y
         ,oenum_render_or_only_measure output_mode
         ) const override
     {
-        stifle_warning_for_unused_value(interpolate_html);
-
         // Make a copy because we want the real pos_y to be modified only once,
         // not twice, by both output_super_header() calls.
         auto pos_y_copy = pos_y;
