@@ -413,8 +413,6 @@ void AccountValue::DecrementAVProportionally(double decrement)
 
     double general_account_proportion  = 0.0;
     double separate_account_proportion = 0.0;
-    stifle_warning_for_unused_value(general_account_proportion );
-    stifle_warning_for_unused_value(separate_account_proportion);
     double general_account_nonnegative_assets  = std::max(0.0, AVGenAcct);
     double separate_account_nonnegative_assets = std::max(0.0, AVSepAcct);
     if
