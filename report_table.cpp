@@ -195,21 +195,21 @@ paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
         }
 
     // "+ 1": blank-line separator after each group.
-    int const lines_per_group = rows_per_group_ + 1;
+    lines_per_group_ = rows_per_group_ + 1;
 
     // "+ 1": no blank-line separator after the last group.
-    int const groups_per_page = (max_lines_per_page_ + 1) / lines_per_group;
+    groups_per_page_ = (max_lines_per_page_ + 1) / lines_per_group_;
 
-    int const rows_per_page = rows_per_group_ * groups_per_page;
+    rows_per_page_ = rows_per_group_ * groups_per_page_;
 
-    page_count_ = outward_quotient(total_rows_, rows_per_page);
+    page_count_ = outward_quotient(total_rows_, rows_per_page_);
 
     // Avoid widowing a partial group on the last page, by moving it
     // to the preceding page if there's room.
     if(1 < page_count_)
         {
-        auto const rows_on_last_page = total_rows_ - (page_count_ - 1) * rows_per_page;
-        auto const free_lines = max_lines_per_page_ - lines_per_group * groups_per_page;
+        auto const rows_on_last_page = total_rows_ - (page_count_ - 1) * rows_per_page_;
+        auto const free_lines = max_lines_per_page_ - lines_per_group_ * groups_per_page_;
         LMI_ASSERT(free_lines < rows_per_group_);
         if(rows_on_last_page <= free_lines)
             {
