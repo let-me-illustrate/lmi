@@ -440,11 +440,13 @@ void report_table_test::test_paginator()
         );
 
     // Negative number of rows per group.
+#if 0
     BOOST_TEST_THROW
         (paginator(1, -1, 1)
         ,std::runtime_error
         ,lmi_test::what_regex("^Assertion.*failed")
         );
+#endif // 0
 
     // Insufficient room to print even one group.
     BOOST_TEST_THROW
