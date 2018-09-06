@@ -175,12 +175,19 @@ std::vector<int> set_column_widths
     return w;
 }
 
-/// Preconditions: 0 <= total_rows && 0 < rows_per_group <= max_lines_per_page
+bool paginator::assert_preconditions() const
+{
+    LMI_ASSERT(0 <= total_rows_);
+    LMI_ASSERT(0 <  rows_per_group_                       );
+    LMI_ASSERT(     rows_per_group_ <= max_lines_per_page_);
+    return true;
+}
 
 paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
     :total_rows_         {total_rows}
     ,rows_per_group_     {rows_per_group}
     ,max_lines_per_page_ {max_lines_per_page}
+    ,ctor_args_are_sane_ {assert_preconditions()}
     // "+ 1": blank-line separator after each group.
     ,lines_per_group_    {rows_per_group_ + 1}
     // "+ 1": no blank-line separator after the last group.
@@ -188,9 +195,7 @@ paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
     ,rows_per_page_      {rows_per_group_ * groups_per_page_}
     ,page_count_         {1}
 {
-    LMI_ASSERT(0 <= total_rows_);
-    LMI_ASSERT(0 <  rows_per_group_                       );
-    LMI_ASSERT(     rows_per_group_ <= max_lines_per_page_);
+    // Preconditions: see assert_preconditions().
 
     // If there are zero rows of data, then one empty page is wanted.
     if(0 == total_rows_)

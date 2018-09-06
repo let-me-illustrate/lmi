@@ -142,10 +142,14 @@ class LMI_SO paginator
     int page_count() const {return page_count_;}
 
   private:
+    bool assert_preconditions() const;
+
     // Ctor arguments.
     int const total_rows_;
     int const rows_per_group_;
     int const max_lines_per_page_;
+
+    bool const ctor_args_are_sane_ {false};
 
     // Internals in dependency order.
     int const lines_per_group_;
