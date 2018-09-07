@@ -205,6 +205,7 @@ paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
     // If there are zero rows of data, then one empty page is wanted.
     if(0 == total_rows_)
         {
+        lines_on_last_page_ = 0;
         page_count_ = 1;
         return;
         }
@@ -212,6 +213,13 @@ paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
     page_count_ = outward_quotient(total_rows_, rows_per_page_);
 
     int const rows_on_last_page = total_rows_ - (page_count_ - 1) * rows_per_page_;
+    int const full_groups_on_last_page = rows_on_last_page / rows_per_group_;
+    int const extra_rows_on_last_page  = rows_on_last_page % rows_per_group_;
+    lines_on_last_page_ =
+          lines_per_group_ * full_groups_on_last_page
+        + extra_rows_on_last_page
+        - (0 == extra_rows_on_last_page)
+        ;
 
     // Avoid widowing a partial group on the last page, by moving it
     // to the preceding page (which becomes the last) if there's room.
@@ -222,6 +230,8 @@ paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
         if(rows_on_last_page <= free_lines)
             {
             --page_count_;
+            // "+ 1": separator before antiwidowed partial group.
+            lines_on_last_page_ = lines_on_full_page_ + 1 + rows_on_last_page;
             }
         }
 }
