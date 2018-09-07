@@ -193,6 +193,9 @@ paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
     // "+ 1": no blank-line separator after the last group.
     ,groups_per_page_    {(max_lines_per_page_ + 1) / lines_per_group_}
     ,rows_per_page_      {rows_per_group_ * groups_per_page_}
+    // "-1 +": no blank-line separator after the last group.
+    ,lines_on_full_page_ {-1 + lines_per_group_ * groups_per_page_}
+    ,lines_on_last_page_ {lines_on_full_page_}
     ,page_count_         {1}
 {
     LMI_ASSERT(0 <= total_rows);
@@ -211,7 +214,7 @@ paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
     int const rows_on_last_page = total_rows_ - (page_count_ - 1) * rows_per_page_;
 
     // Avoid widowing a partial group on the last page, by moving it
-    // to the preceding page if there's room.
+    // to the preceding page (which becomes the last) if there's room.
     if(1 < page_count_)
         {
         int const free_lines = max_lines_per_page_ - lines_per_group_ * groups_per_page_;

@@ -106,8 +106,19 @@ std::vector<int> LMI_SO set_column_widths
 /// Display table rows in groups separated by blank lines.
 ///
 /// Nomenclature:
-///  - a 'line' is a printable zone of unit height;
-///  - a 'row' is a series of data to be shown side by side.
+///  - A 'line' is a printable zone of unit height.
+///  - A 'row' is a series of data to be shown side by side.
+///  - A 'full' page has as many complete groups of rows as can fit,
+///    and nothing more. All pages except the last are always full;
+///    the last may also happen to be full.
+///  - The 'last' page is the one with the highest page number. It may
+///    have exactly as many rows as any 'full' page (if the cardinality
+///    of the data is congruent to zero (mod rows_per_group)); or
+///    fewer, as is naturally most common; or more, if a final partial
+///    group is displayed on the last page to avoid widowing.
+/// If a table prints on a single page, then the first is a 'last'
+/// page; it may or may not be full.
+///
 /// With quinquennial spacing, the Morse alphabet is printed thus:
 ///
 ///   A   .-     line  0   row  0
@@ -139,7 +150,9 @@ class LMI_SO paginator
   public:
     paginator(int total_rows, int rows_per_group, int max_lines_per_page);
 
-    int page_count() const {return page_count_;}
+    int lines_on_full_page() const {return lines_on_full_page_;}
+    int lines_on_last_page() const {return lines_on_last_page_;}
+    int page_count        () const {return page_count_        ;}
 
   private:
     // Ctor arguments.
@@ -151,6 +164,8 @@ class LMI_SO paginator
     int const lines_per_group_;
     int const groups_per_page_;
     int const rows_per_page_;
+    int const lines_on_full_page_;
+    int       lines_on_last_page_;
     int       page_count_;
 };
 
