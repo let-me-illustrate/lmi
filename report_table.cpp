@@ -179,7 +179,7 @@ std::vector<int> set_column_widths
 namespace
 {
 // An assertion to this effect is emulated in the ctor-initializer.
-std::runtime_error yikes("Rows per group must be positive.");
+std::logic_error yikes("Rows per group must be positive.");
 } // Unnamed namespace.
 
 /// Preconditions: 0 <= total_rows && 0 < rows_per_group <= max_lines_per_page

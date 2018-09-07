@@ -435,14 +435,14 @@ void report_table_test::test_paginator()
     // Zero rows per group.
     BOOST_TEST_THROW
         (paginator(1, 0, 1)
-        ,std::runtime_error
+        ,std::logic_error
         ,"Rows per group must be positive."
         );
 
     // Negative number of rows per group.
     BOOST_TEST_THROW
         (paginator(1, -1, 1)
-        ,std::runtime_error
+        ,std::logic_error
         ,"Rows per group must be positive."
         );
 
