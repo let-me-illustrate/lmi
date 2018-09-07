@@ -27,7 +27,9 @@
 #include "ssize_lmi.hpp"
 #include "test_tools.hpp"
 
+#include <iomanip>                      // setw()
 #include <numeric>                      // accumulate()
+#include <sstream>
 #include <vector>
 
 // This needs to be defined in the global namespace to make
@@ -399,6 +401,59 @@ void report_table_test::test_column_widths_for_illustrations()
     }
 }
 
+// "Fn" markers denote notional function whose code is inlined to keep
+// this demonstration simple, but which might be replaced by function
+// pointers or virtual functions.
+
+std::string paginate(int total_rows, int rows_per_group, int max_lines_per_page)
+{
+    paginator const p(total_rows, rows_per_group, max_lines_per_page);
+    std::ostringstream oss;
+    // F0: print a first-page-only title
+    oss
+        << "Paginated table: "
+        << total_rows         << " total_rows, "
+        << rows_per_group     << " rows_per_group, "
+        << max_lines_per_page << " max_lines_per_page, "
+        << p.page_count()     << " p.page_count()"
+        << '\n'
+        ;
+    int row = 0;
+    int line_count = 0;
+    for(int page = 0; page < p.page_count(); ++page)
+        {
+        int const max_lines =
+            ((p.page_count() - 1) == page)
+            ? p.lines_on_last_page()
+            : p.lines_on_full_page()
+            ;
+        // F1: begin a new page
+        oss << "Page " << page << ": using " << max_lines << " lines\n";
+        for(int line = 0; line < max_lines; ++line)
+            {
+            oss
+                << "  page "       << std::setw(3) << page
+                << "  line "       << std::setw(3) << line
+                << "  line_count " << std::setw(3) << line_count
+                ; // No newline yet.
+            if(rows_per_group != line % (1 + rows_per_group))
+                {
+                // F2: print a row of data
+                oss << "  row "    << std::setw(3) << row << '\n';
+                ++row;
+                }
+            else
+                {
+                // F3: print a separator line
+                oss << '\n';
+                }
+            ++ line_count;
+            }
+        }
+    LMI_ASSERT(total_rows == row);
+    return oss.str();
+}
+
 void report_table_test::test_paginator()
 {
     // Original tests: vary only the number of data rows.
@@ -499,6 +554,15 @@ void report_table_test::test_paginator()
     BOOST_TEST_EQUAL(2, paginator(6, 2, 7).page_count());
     BOOST_TEST_EQUAL(2, paginator(8, 2, 7).page_count());
     BOOST_TEST_EQUAL(2, paginator(9, 2, 7).page_count());
+
+    std::cout << "Last page: one full group" << std::endl;
+    std::cout << paginate(6, 2, 7) << std::endl;
+    std::cout << "Last page: one full and one partial group " << std::endl;
+    std::cout << paginate(7, 2, 7) << std::endl;
+    std::cout << "Last page: full" << std::endl;
+    std::cout << paginate(8, 2, 7) << std::endl;
+    std::cout << "Last page: full, plus an antiwidowed partial group" << std::endl;
+    std::cout << paginate(9, 2, 7) << std::endl;
 }
 
 int test_main(int, char*[])
