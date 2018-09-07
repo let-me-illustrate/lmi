@@ -212,8 +212,8 @@ paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
     // to the preceding page if there's room.
     if(1 < page_count_)
         {
-        auto const rows_on_last_page = total_rows_ - (page_count_ - 1) * rows_per_page_;
-        auto const free_lines = max_lines_per_page_ - lines_per_group_ * groups_per_page_;
+        int const rows_on_last_page = total_rows_ - (page_count_ - 1) * rows_per_page_;
+        int const free_lines = max_lines_per_page_ - lines_per_group_ * groups_per_page_;
         LMI_ASSERT(free_lines < rows_per_group_);
         if(rows_on_last_page <= free_lines)
             {
