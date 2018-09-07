@@ -208,11 +208,12 @@ paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
 
     page_count_ = outward_quotient(total_rows_, rows_per_page_);
 
+    int const rows_on_last_page = total_rows_ - (page_count_ - 1) * rows_per_page_;
+
     // Avoid widowing a partial group on the last page, by moving it
     // to the preceding page if there's room.
     if(1 < page_count_)
         {
-        int const rows_on_last_page = total_rows_ - (page_count_ - 1) * rows_per_page_;
         int const free_lines = max_lines_per_page_ - lines_per_group_ * groups_per_page_;
         LMI_ASSERT(free_lines < rows_per_group_);
         if(rows_on_last_page <= free_lines)
