@@ -399,12 +399,6 @@ void report_table_test::test_column_widths_for_illustrations()
     }
 }
 
-int test_main(int, char*[])
-{
-    report_table_test::test();
-    return EXIT_SUCCESS;
-}
-
 void report_table_test::test_paginator()
 {
     // Original tests: vary only the number of data rows.
@@ -505,4 +499,10 @@ void report_table_test::test_paginator()
     BOOST_TEST_EQUAL(2, paginator(6, 2, 7).page_count());
     BOOST_TEST_EQUAL(2, paginator(8, 2, 7).page_count());
     BOOST_TEST_EQUAL(2, paginator(9, 2, 7).page_count());
+}
+
+int test_main(int, char*[])
+{
+    report_table_test::test();
+    return EXIT_SUCCESS;
 }
