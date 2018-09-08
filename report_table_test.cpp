@@ -62,7 +62,7 @@ std::vector<table_column_info> bloat
 {
     LMI_ASSERT(lmi::ssize(w) == lmi::ssize(e));
     std::vector<table_column_info> v;
-    for(int i = 0; i < lmi::ssize(w) ; ++i)
+    for(int i = 0; i < lmi::ssize(w); ++i)
         {
         v.push_back({"", w[i], oe_right, e[i] ? oe_elastic : oe_inelastic});
         }
@@ -447,7 +447,7 @@ std::string paginate(int total_rows, int rows_per_group, int max_lines_per_page)
                 // F3: print a separator line
                 oss << '\n';
                 }
-            ++ line_count;
+            ++line_count;
             }
         }
     LMI_ASSERT(total_rows == row);
