@@ -401,7 +401,7 @@ void report_table_test::test_column_widths_for_illustrations()
     }
 }
 
-// "Fn" markers denote notional function whose code is inlined to keep
+// "Fn" markers denote notional functions whose code is inlined to keep
 // this demonstration simple, but which might be replaced by function
 // pointers or virtual functions.
 
