@@ -432,14 +432,14 @@ std::string paginate(int total_rows, int rows_per_group, int max_lines_per_page)
         for(int line = 0; line < max_lines; ++line)
             {
             oss
-                << "  page "       << std::setw(3) << page
-                << "  line "       << std::setw(3) << line
-                << "  line_count " << std::setw(3) << line_count
+                << "   page "       << std::setw(3) << page
+                << ",  line "       << std::setw(3) << line
+                << ",  line_count " << std::setw(3) << line_count
                 ; // No newline yet.
             if(rows_per_group != line % (1 + rows_per_group))
                 {
                 // F2: print a row of data
-                oss << "  row "    << std::setw(3) << row << '\n';
+                oss << ",  row "    << std::setw(3) << row << '\n';
                 ++row;
                 }
             else
