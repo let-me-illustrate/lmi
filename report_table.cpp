@@ -202,23 +202,18 @@ paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
     LMI_ASSERT(0 <  rows_per_group                      );
     LMI_ASSERT(     rows_per_group <= max_lines_per_page);
 
-    // If there are zero rows of data, then one empty page is wanted.
-    if(0 == total_rows_)
-        {
-        lines_on_last_page_ = 0;
-        page_count_ = 1;
-        return;
-        }
-
     page_count_ = outward_quotient(total_rows_, rows_per_page_);
 
-    int const rows_on_last_page = total_rows_ - (page_count_ - 1) * rows_per_page_;
+    int const pages_before_last = (0 == page_count_) ? 0 : page_count_ - 1;
+    int const rows_on_last_page = total_rows_ - rows_per_page_ * pages_before_last;
     int const full_groups_on_last_page = rows_on_last_page / rows_per_group_;
     int const extra_rows_on_last_page  = rows_on_last_page % rows_per_group_;
     lines_on_last_page_ =
           lines_per_group_ * full_groups_on_last_page
         + extra_rows_on_last_page
-        - (0 == extra_rows_on_last_page)
+        - (   0 != full_groups_on_last_page // (there is a separator
+          &&  0 == extra_rows_on_last_page  // and it is not wanted)
+          )
         ;
 
     // Avoid widowing a partial group on the last page, by moving it
@@ -233,5 +228,11 @@ paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
             // "+ 1": separator before antiwidowed partial group.
             lines_on_last_page_ = lines_on_full_page_ + 1 + rows_on_last_page;
             }
+        }
+
+    // If there are zero rows of data, then one empty page is wanted.
+    if(0 == total_rows_)
+        {
+        page_count_ = 1;
         }
 }
