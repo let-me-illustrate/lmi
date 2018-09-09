@@ -555,6 +555,12 @@ void report_table_test::test_paginator()
     BOOST_TEST_EQUAL(2, paginator(8, 2, 7).page_count());
     BOOST_TEST_EQUAL(2, paginator(9, 2, 7).page_count());
 
+    std::cout << "Zero rows" << std::endl;
+    std::cout << paginate(0, 2, 7) << std::endl;
+    std::cout << "Last page: zero full groups and one partial" << std::endl;
+    std::cout << paginate(1, 2, 7) << std::endl;
+    std::cout << "Last page: two full groups and one partial" << std::endl;
+    std::cout << paginate(5, 2, 7) << std::endl;
     std::cout << "Last page: one full group" << std::endl;
     std::cout << paginate(6, 2, 7) << std::endl;
     std::cout << "Last page: one full group and one partial" << std::endl;
