@@ -557,11 +557,11 @@ void report_table_test::test_paginator()
 
     std::cout << "Last page: one full group" << std::endl;
     std::cout << paginate(6, 2, 7) << std::endl;
-    std::cout << "Last page: one full and one partial group " << std::endl;
+    std::cout << "Last page: one full group and one partial" << std::endl;
     std::cout << paginate(7, 2, 7) << std::endl;
-    std::cout << "Last page: full" << std::endl;
+    std::cout << "Last page: full page" << std::endl;
     std::cout << paginate(8, 2, 7) << std::endl;
-    std::cout << "Last page: full, plus an antiwidowed partial group" << std::endl;
+    std::cout << "Last page: full page, plus an antiwidowed partial group" << std::endl;
     std::cout << paginate(9, 2, 7) << std::endl;
 }
 
