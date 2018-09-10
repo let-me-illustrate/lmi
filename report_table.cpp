@@ -195,8 +195,8 @@ paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
     ,rows_per_page_      {rows_per_group_ * groups_per_page_}
     // "-1 +": no blank-line separator after the last group.
     ,lines_on_full_page_ {-1 + lines_per_group_ * groups_per_page_}
-    ,lines_on_last_page_ {lines_on_full_page_}
-    ,page_count_         {1}
+    ,lines_on_last_page_ {}
+    ,page_count_         {}
 {
     LMI_ASSERT(0 <= total_rows);
     LMI_ASSERT(0 <  rows_per_group                      );
