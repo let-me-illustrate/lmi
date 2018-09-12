@@ -1417,9 +1417,6 @@ class numeric_summary_table_cell
         table_gen.output_horz_separator(0, column_max, pos_y, output_mode);
         pos_y += table_gen.separator_line_height();
 
-        // And now the table values themselves.
-        auto const& columns = get_table_columns();
-
         auto const& invar = ledger.GetLedgerInvariant();
         auto const& interpolate_html = pdf_context_for_html_output.interpolate_html();
 
@@ -1459,6 +1456,7 @@ class numeric_summary_table_cell
 
                 case oe_render:
                     {
+                    auto const& columns = get_table_columns();
                     std::vector<std::string> visible_values;
                     for(int j = 0; j < lmi::ssize(columns); ++j)
                         {
@@ -1610,8 +1608,6 @@ class page_with_tabular_report
 
         wx_table_generator table_gen{create_table_generator(ledger, writer)};
 
-        auto const& columns = get_table_columns();
-
         // Just some cached values used inside the loop below.
         auto const row_height = table_gen.row_height();
         auto const page_bottom = get_footer_top();
@@ -1630,6 +1626,7 @@ class page_with_tabular_report
 
             for(;;)
                 {
+                auto const& columns = get_table_columns();
                 std::vector<std::string> visible_values;
                 for(int j = 0; j < lmi::ssize(columns); ++j)
                     {
