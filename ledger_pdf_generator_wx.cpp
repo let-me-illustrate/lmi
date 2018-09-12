@@ -1418,7 +1418,6 @@ class numeric_summary_table_cell
         pos_y += table_gen.separator_line_height();
 
         auto const& invar = ledger.GetLedgerInvariant();
-        auto const& interpolate_html = pdf_context_for_html_output.interpolate_html();
 
         int const year_max = pdf_context_for_html_output.ledger().GetMaxLength();
         int const age_last = 70;
@@ -1456,6 +1455,7 @@ class numeric_summary_table_cell
 
                 case oe_render:
                     {
+                    auto const& interpolate_html = pdf_context_for_html_output.interpolate_html();
                     auto const& columns = get_table_columns();
                     std::vector<std::string> visible_values;
                     for(int j = 0; j < lmi::ssize(columns); ++j)
