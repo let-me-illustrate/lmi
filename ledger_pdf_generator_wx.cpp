@@ -1477,11 +1477,7 @@ class numeric_summary_table_cell
                         if(oe_shown == columns[j].visibility)
                             {
                             std::string output_value;
-                            if(is_last_row && column_policy_year == j)
-                                {
-                                output_value = summary_age_string;
-                                }
-                            else if(columns[j].variable_name.empty())
+                            if(columns[j].variable_name.empty())
                                 {
                                 ; // Separator column: use empty string.
                                 }
@@ -1499,10 +1495,6 @@ class numeric_summary_table_cell
 
                     if(is_last_row)
                         {
-                        // If this assertion always succeeds, then the code
-                        // that establishes this invariant above, and the
-                        // assertion, can be removed.
-                        LMI_ASSERT(summary_age_string == visible_values.at(column_policy_year));
                         visible_values.at(column_policy_year) = summary_age_string;
                         }
 
