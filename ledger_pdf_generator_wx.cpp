@@ -353,14 +353,14 @@ class using_illustration_table
         return false;
     }
 
-    std::vector<std::string> get_visible_values
+    std::vector<std::string> visible_values
         (Ledger            const& ledger
         ,html_interpolator const& interpolate_html
         ,int                      year
         )
     {
+        std::vector<std::string> v;
         auto const& columns = get_table_columns();
-        std::vector<std::string> visible_values;
         for(int j = 0; j < lmi::ssize(columns); ++j)
             {
             columns[j].visibility =
@@ -384,10 +384,10 @@ class using_illustration_table
                         );
                     }
 
-                visible_values.push_back(output_value);
+                v.push_back(output_value);
                 }
             }
-        return visible_values;
+        return v;
     }
 
     // Useful helper for creating the table generator using the columns defined
@@ -1501,13 +1501,13 @@ class numeric_summary_table_cell
                 case oe_render:
                     {
                     auto const& interpolate_html = pdf_context_for_html_output.interpolate_html();
-                    auto visible_values = get_visible_values(ledger, interpolate_html, year);
+                    auto v = visible_values(ledger, interpolate_html, year);
                     if(is_last_row)
                         {
-                        visible_values.at(column_policy_year) = summary_age_string;
+                        v.at(column_policy_year) = summary_age_string;
                         }
 
-                    table_gen.output_row(pos_y, visible_values);
+                    table_gen.output_row(pos_y, v);
                     }
                     break;
                 }
@@ -1640,8 +1640,8 @@ class page_with_tabular_report
 
             for(;;)
                 {
-                auto const visible_values = get_visible_values(ledger, interpolate_html, year);
-                table_gen.output_row(pos_y, visible_values);
+                auto const v = visible_values(ledger, interpolate_html, year);
+                table_gen.output_row(pos_y, v);
 
                 ++year;
                 if(year == year_max)
