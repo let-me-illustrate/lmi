@@ -353,6 +353,43 @@ class using_illustration_table
         return false;
     }
 
+    std::vector<std::string> get_visible_values
+        (Ledger            const& ledger
+        ,html_interpolator const& interpolate_html
+        ,int                      year
+        )
+    {
+        auto const& columns = get_table_columns();
+        std::vector<std::string> visible_values;
+        for(int j = 0; j < lmi::ssize(columns); ++j)
+            {
+            columns[j].visibility =
+                should_hide_column(ledger, j)
+                ? oe_hidden
+                : oe_shown
+                ;
+
+            if(oe_shown == columns[j].visibility)
+                {
+                std::string output_value;
+                if(columns[j].variable_name.empty())
+                    {
+                    ; // Separator column: use empty string.
+                    }
+                else
+                    {
+                    output_value = interpolate_html.evaluate
+                        (columns[j].variable_name
+                        ,year
+                        );
+                    }
+
+                visible_values.push_back(output_value);
+                }
+            }
+        return visible_values;
+    }
+
     // Useful helper for creating the table generator using the columns defined
     // by the separate (and simpler to implement) get_table_columns() pure
     // virtual function.
@@ -1464,35 +1501,7 @@ class numeric_summary_table_cell
                 case oe_render:
                     {
                     auto const& interpolate_html = pdf_context_for_html_output.interpolate_html();
-                    auto const& columns = get_table_columns();
-                    std::vector<std::string> visible_values;
-                    for(int j = 0; j < lmi::ssize(columns); ++j)
-                        {
-                        columns[j].visibility =
-                            should_hide_column(ledger, j)
-                            ? oe_hidden
-                            : oe_shown
-                            ;
-
-                        if(oe_shown == columns[j].visibility)
-                            {
-                            std::string output_value;
-                            if(columns[j].variable_name.empty())
-                                {
-                                ; // Separator column: use empty string.
-                                }
-                            else
-                                {
-                                output_value = interpolate_html.evaluate
-                                    (columns[j].variable_name
-                                    ,year
-                                    );
-                                }
-
-                            visible_values.push_back(output_value);
-                            }
-                        }
-
+                    auto visible_values = get_visible_values(ledger, interpolate_html, year);
                     if(is_last_row)
                         {
                         visible_values.at(column_policy_year) = summary_age_string;
@@ -1631,35 +1640,7 @@ class page_with_tabular_report
 
             for(;;)
                 {
-                auto const& columns = get_table_columns();
-                std::vector<std::string> visible_values;
-                for(int j = 0; j < lmi::ssize(columns); ++j)
-                    {
-                    columns[j].visibility =
-                        should_hide_column(ledger, j)
-                        ? oe_hidden
-                        : oe_shown
-                        ;
-
-                    if(oe_shown == columns[j].visibility)
-                        {
-                        std::string output_value;
-                        if(columns[j].variable_name.empty())
-                            {
-                            ; // Separator column: use empty string.
-                            }
-                        else
-                            {
-                            output_value = interpolate_html.evaluate
-                                (columns[j].variable_name
-                                ,year
-                                );
-                            }
-
-                        visible_values.push_back(output_value);
-                        }
-                    }
-
+                auto const visible_values = get_visible_values(ledger, interpolate_html, year);
                 table_gen.output_row(pos_y, visible_values);
 
                 ++year;
