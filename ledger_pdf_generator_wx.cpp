@@ -1497,6 +1497,15 @@ class numeric_summary_table_cell
                             }
                         }
 
+                    if(is_last_row)
+                        {
+                        // If this assertion always succeeds, then the code
+                        // that establishes this invariant above, and the
+                        // assertion, can be removed.
+                        LMI_ASSERT(summary_age_string == visible_values.at(column_policy_year));
+                        visible_values.at(column_policy_year) = summary_age_string;
+                        }
+
                     table_gen.output_row(pos_y, visible_values);
                     }
                     break;
