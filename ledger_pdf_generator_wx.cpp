@@ -1420,10 +1420,17 @@ class numeric_summary_table_cell
         auto const& invar = ledger.GetLedgerInvariant();
 
         int const year_max = pdf_context_for_html_output.ledger().GetMaxLength();
-        int const age_last = 70;
+
+        int const summary_age = 70;
+        // Other rows are for given durations, but the
+        // last row is for a given age (typically 70).
+        std::ostringstream oss;
+        oss << "Age " << summary_age;
+        std::string const summary_age_string = oss.str();
+
         std::array<int, 4> const summary_years =
             // "- 1": 70 (e.g.) is end-of-year age.
-            {{4, 9, 19, age_last - bourn_cast<int>(invar.Age) - 1}
+            {{4, 9, 19, summary_age - bourn_cast<int>(invar.Age) - 1}
             };
         for(auto const& year : summary_years)
             {
@@ -1472,11 +1479,7 @@ class numeric_summary_table_cell
                             std::string output_value;
                             if(is_last_row && column_policy_year == j)
                                 {
-                                // Other rows are for given durations, but the
-                                // last row is for a given age (typically 70).
-                                std::ostringstream oss;
-                                oss << "Age " << age_last;
-                                output_value = oss.str();
+                                output_value = summary_age_string;
                                 }
                             else if(columns[j].variable_name.empty())
                                 {
