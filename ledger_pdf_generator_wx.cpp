@@ -1422,14 +1422,15 @@ class numeric_summary_table_cell
         int const year_max = pdf_context_for_html_output.ledger().GetMaxLength();
         int const age_last = 70;
         std::array<int, 4> const summary_years =
-            {{5, 10, 20, age_last - bourn_cast<int>(invar.Age)}
+            // "- 1": 70 (e.g.) is end-of-year age.
+            {{4, 9, 19, age_last - bourn_cast<int>(invar.Age) - 1}
             };
         for(auto const& year : summary_years)
             {
             // Skip row if it doesn't exist. For instance, if the issue
             // age is 85 and the contract remains in force until age 100,
             // then there is no twentieth duration and no age-70 row.
-            if(!(0 < year && year <= year_max))
+            if(!(0 <= year && year < year_max))
                 {
                 continue;
                 }
@@ -1485,7 +1486,7 @@ class numeric_summary_table_cell
                                 {
                                 output_value = interpolate_html.evaluate
                                     (columns[j].variable_name
-                                    ,year - 1
+                                    ,year
                                     );
                                 }
 
