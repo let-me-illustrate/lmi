@@ -407,14 +407,14 @@ class paginate
     paginate() {}
 
     int init(int total_rows, int rows_per_group, int max_lines_per_page);
-    void format() const;
+    void print() const;
 
   private:
     virtual void prelude          () const = 0;
-    virtual void start_new_page   () const = 0;
+    virtual void open_page        () const = 0;
     virtual void print_a_data_row () const = 0;
     virtual void print_a_separator() const = 0;
-    virtual void end_page         () const = 0;
+    virtual void close_page       () const = 0;
     virtual void postlude         () const = 0;
 
     int total_rows        () const {return total_rows_        ;}
@@ -447,7 +447,7 @@ int paginate::init(int total_rows, int rows_per_group, int max_lines_per_page)
     return page_count_;
 }
 
-void paginate::format() const
+void paginate::print() const
 {
     prelude();
     int row = 0;
@@ -459,7 +459,7 @@ void paginate::format() const
             ? lines_on_last_page()
             : lines_on_full_page()
             ;
-        start_new_page();
+        open_page();
         for(int line = 0; line < max_lines; ++line)
             {
             if(rows_per_group() != line % (1 + rows_per_group()))
@@ -473,7 +473,7 @@ void paginate::format() const
                 }
             ++line_count;
             }
-        end_page();
+        close_page();
         }
     postlude();
     LMI_ASSERT(total_rows() == row);
@@ -490,10 +490,10 @@ class paginate_demo : public paginate
 
   private:
     void prelude          () const override;
-    void start_new_page   () const override;
+    void open_page        () const override;
     void print_a_data_row () const override;
     void print_a_separator() const override;
-    void end_page         () const override;
+    void close_page       () const override;
     void postlude         () const override;
 
     mutable std::ostringstream oss_ {};
@@ -512,7 +512,7 @@ int paginate_demo::test_p(int total_rows, int rows_per_group, int max_lines_per_
     demo_line_       = 0;
     demo_line_count_ = 0;
     demo_row_        = 0;
-    format();
+    print();
     return page_count;
 }
 
@@ -526,7 +526,7 @@ void paginate_demo::prelude() const
     oss_ << "Paginated table demonstration begins...\n";
 }
 
-void paginate_demo::start_new_page() const
+void paginate_demo::open_page() const
 {
     oss_ << "Page " << demo_page_ << '\n';
 }
@@ -557,7 +557,7 @@ void paginate_demo::print_a_separator() const
     ++demo_line_count_;
 }
 
-void paginate_demo::end_page() const
+void paginate_demo::close_page() const
 {
     demo_line_ = 0;
     ++demo_page_;
@@ -572,7 +572,7 @@ std::string test_paginate(int total_rows, int rows_per_group, int max_lines_per_
 {
     paginate_demo z;
     z.init(total_rows, rows_per_group, max_lines_per_page);
-    z.format();
+    z.print();
     return z.str();
 }
 
