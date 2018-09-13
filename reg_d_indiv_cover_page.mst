@@ -58,7 +58,7 @@ Prepared for:
 {{^Composite}}
     {{Insured1Abbrev140}}
 {{/Composite}}
-{{^Composite}}
+{{#Composite}}
     {{CorpNameAbbrev140}}
 {{/Composite}}
 

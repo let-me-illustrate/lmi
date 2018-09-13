@@ -26,14 +26,12 @@
     <tr>
         <td>
         {{#Composite}}
-            {{CorpNameAbbrev60}}
+            {{CorpNameAbbrev60}}<br>
+            Composite<br>
         {{/Composite}}
         {{^Composite}}
             {{Insured1Abbrev30}},
-        {{/Composite}}
-        {{Gender}} {{Smoker}} rates, Age {{Age}}<br>
-        {{#Composite}}
-            Composite<br>
+            {{Gender}} {{Smoker}} rates, Age {{Age}}<br>
         {{/Composite}}
         Contract: {{PolicyMktgName}}<br>
         Initial Premium: ${{InitPrem}}<br>
