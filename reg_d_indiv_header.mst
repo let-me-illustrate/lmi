@@ -83,6 +83,7 @@ and may not be used to project or predict investment results.
                     Initial Annual Flat Extra: {{AnnualFlatExtra[1]}} per 1,000<br>
                 {{/UWClassIsRated}}
             {{/Composite}}
+            {{>contract_numbers}}
         </td>
     </tr>
 </table>
