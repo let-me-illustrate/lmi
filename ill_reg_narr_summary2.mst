@@ -92,6 +92,7 @@ in the Tabular Detail.
     </p>
 {{/IsInforce}}
 
+<!-- There is no "attached census". -->
 {{#Composite}}
     <p>
     Please see the attached census, listing the face amounts,
@@ -216,6 +217,7 @@ in the Tabular Detail.
 
 <font size="-1">
 
+<!-- This is not appropriate for composites. -->
 <p>
 As illustrated, this contract
 {{#IsMec}}
