@@ -59,6 +59,7 @@ and may not be used to project or predict investment results.
             {{/Composite}}
             Selected Face Amount: ${{InitTotalSA}}<br>
             Initial Death Benefit Option: {{InitDBOpt}}<br>
+            {{>contract_numbers}}
         </td>
         <td width="40%">
             Policy: {{PolicyMktgName}}<br>
@@ -83,7 +84,6 @@ and may not be used to project or predict investment results.
                     Initial Annual Flat Extra: {{AnnualFlatExtra[1]}} per 1,000<br>
                 {{/UWClassIsRated}}
             {{/Composite}}
-            {{>contract_numbers}}
         </td>
     </tr>
 </table>
