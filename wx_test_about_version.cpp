@@ -26,13 +26,13 @@
 #include "version.hpp"
 #include "wx_test_case.hpp"
 
-#include <wx/crt.h>
 #include <wx/dialog.h>
 #include <wx/html/htmlwin.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
 #include <climits>                      // INT_MAX
+#include <iostream>
 #include <regex>
 
 /// Validate version string (timestamp) from "About" dialog title.
@@ -171,7 +171,12 @@ LMI_WX_TEST_CASE(about_dialog_version)
 
             // Extract the last word of the dialog title.
             wxString const last_word = d->GetTitle().AfterLast(' ');
-            wxPrintf("About dialog version string is \"%s\".\n", last_word);
+            std::cout
+                << "About dialog version string is '"
+                << last_word
+                << "'."
+                << std::endl
+                ;
             LMI_ASSERT_EQUAL(last_word, LMI_VERSION);
 
             // Find the wxHtmlWindow showing the license notices.

@@ -28,10 +28,10 @@
 #include "wx_test_case.hpp"
 #include "wx_test_date.hpp"
 
-#include <wx/crt.h>
-
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
+
+#include <iostream>
 
 /// Validate dates in the 'expiry' file.
 ///
@@ -76,11 +76,13 @@ LMI_WX_TEST_CASE(expiry_dates)
     is >> begin >> end;
     LMI_ASSERT_WITH_MSG(is, "Failed to read dates from \"expiry\" file");
 
-    wxPrintf
-        ("Expiry dates: begin=%s, end=%s\n"
-        ,dump_date(begin)
-        ,dump_date(end)
-        );
+    std::cout
+        << "Expiry dates: begin="
+        << dump_date(begin)
+        << ", end="
+        << dump_date(end)
+        << std::endl
+        ;
 
     LMI_ASSERT_WITH_MSG(is.eof(), "Unexpected extra data in \"expiry\" file");
 

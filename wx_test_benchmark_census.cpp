@@ -25,7 +25,6 @@
 #include "wx_test_case.hpp"
 #include "wx_test_statusbar.hpp"
 
-#include <wx/crt.h>
 #include <wx/dialog.h>
 #include <wx/frame.h>
 #include <wx/scopeguard.h>
@@ -35,6 +34,7 @@
 #include <boost/filesystem/operations.hpp>
 
 #include <cmath>                        // fabs()
+#include <iostream>
 
 namespace
 {
@@ -81,12 +81,15 @@ class census_benchmark
         long int time_real;
         LMI_ASSERT(ms_text.ToLong(&time_real));
 
-        wxPrintf
-            ("%s for %s: %ldms elapsed\n"
-            ,operation
-            ,name_
-            ,time_real
-            );
+        std::cout
+            << operation
+            << " for "
+            << name_
+            << ": "
+            << time_real
+            << "ms elapsed"
+            << std::endl
+            ;
         }
 
     void close_window()

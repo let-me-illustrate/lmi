@@ -33,7 +33,6 @@
 #include "wx_test_case.hpp"
 #include "wx_test_new.hpp"
 
-#include <wx/crt.h>
 #include <wx/docview.h>
 #include <wx/fileconf.h>
 #include <wx/frame.h>
@@ -451,19 +450,32 @@ TestsResults application_test::run()
 
             try
                 {
-                wxPrintf("%s: started\n", name);
+                std::cout << name << ": started" << std::endl;
                 wxStopWatch sw;
                 i.run_test();
                 // Check that no messages were unexpectedly logged during this
                 // test execution.
                 wxLog::FlushActive();
-                wxPrintf("time=%ldms (for %s)\n", sw.Time(), name);
-                wxPrintf("%s: ok\n", name);
+                std::cout
+                    << "time="
+                    << sw.Time()
+                    << "ms (for "
+                    << name
+                    << ")"
+                    << std::endl
+                    ;
+                std::cout << name << ": ok" << std::endl;
                 ++results.passed;
                 }
             catch(test_skipped_exception const& e)
                 {
-                wxPrintf("%s: skipped (%s)\n", name, e.what());
+                std::cout
+                    << name
+                    << ": skipped ("
+                    << e.what()
+                    << ")"
+                    << std::endl
+                    ;
                 ++results.skipped;
                 }
             catch(std::exception const& e)
@@ -485,7 +497,13 @@ TestsResults application_test::run()
                 wxString one_line_error(error);
                 one_line_error.Replace("\n", " ");
 
-                wxPrintf("%s: ERROR (%s)\n", name, one_line_error);
+                std::cout
+                    << name
+                    << ": ERROR ("
+                    << one_line_error
+                    << ")"
+                    << std::endl
+                    ;
                 }
             }
         }
@@ -834,7 +852,7 @@ void SkeletonTest::RunTheTests()
 
     MainWin->SetFocus();
 
-    wxPuts("NOTE: starting the test suite");
+    std::cout << "NOTE: starting the test suite" << std::endl;
     wxStopWatch sw;
 
     // Notice that it is safe to use simple variable assignment here instead of
@@ -844,41 +862,49 @@ void SkeletonTest::RunTheTests()
     TestsResults const results = application_test::instance().run();
     is_running_tests_ = false;
 
-    wxPrintf("time=%ldms (for all tests)\n", sw.Time());
+    std::cout << "time=" << sw.Time() << "ms (for all tests)" << std::endl;
 
     if(results.failed == 0)
         {
         if(results.passed == 0)
             {
-            wxPuts("WARNING: no tests have been executed.");
+            std::cout << "WARNING: no tests have been executed." << std::endl;
             }
         else
             {
-            wxPrintf
-                ("SUCCESS: %d test%s successfully completed.\n"
-                ,results.passed
-                ,results.passed == 1 ? "" : "s"
-                );
+            std::cout
+                << "SUCCESS: "
+                << results.passed
+                << " test"
+                << (results.passed == 1 ? "" : "s")
+                << " successfully completed."
+                << std::endl
+                ;
             }
         }
     else
         {
-        wxPrintf
-            ("FAILURE: %d out of %d test%s failed.\n"
-            ,results.failed
-            ,results.total
-            ,results.total == 1 ? "" : "s"
-            );
+        std::cout
+            << "FAILURE: "
+            << results.failed
+            << " out of "
+            << results.total
+            << " test"
+            << (results.total == 1 ? "" : "s")
+            << " failed."
+            << std::endl
+            ;
         }
 
     if(results.skipped)
         {
-        wxPrintf
-            ("NOTE: %s skipped\n"
-            ,results.skipped == 1
-                ? wxString("1 test was")
-                : wxString::Format("%d tests were", results.skipped)
-            );
+        std::cout
+            << "NOTE: "
+            << results.skipped
+            << (results.skipped == 1 ? " test was" : " tests were")
+            << " skipped"
+            << std::endl
+            ;
         }
 }
 
