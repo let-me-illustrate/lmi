@@ -482,14 +482,20 @@ class html_cell_for_pdf_output : public wxHtmlCell
     class pdf_context
     {
       public:
+        pdf_context()
+            :ledger_           (nullptr)
+            ,writer_           (nullptr)
+            ,interpolate_html_ (nullptr)
+            {}
+
         void set
-            (Ledger const* ledger
-            ,pdf_writer_wx* writer
+            (Ledger            const* ledger
+            ,pdf_writer_wx          * writer
             ,html_interpolator const* interpolate_html
             )
         {
-            ledger_ = ledger;
-            writer_ = writer;
+            ledger_           = ledger;
+            writer_           = writer;
             interpolate_html_ = interpolate_html;
         }
 
@@ -512,9 +518,9 @@ class html_cell_for_pdf_output : public wxHtmlCell
         }
 
       private:
-        Ledger const* ledger_ = nullptr;
-        pdf_writer_wx* writer_ = nullptr;
-        html_interpolator const* interpolate_html_ = nullptr;
+        Ledger            const* ledger_;
+        pdf_writer_wx          * writer_;
+        html_interpolator const* interpolate_html_;
     };
 
     // Small helper to check that we're using the expected DC and, also, acting
@@ -537,13 +543,10 @@ class html_cell_for_pdf_output : public wxHtmlCell
         LMI_ASSERT(&dc == &pdf_context_for_html_output.writer().dc());
     }
 
-    static pdf_context pdf_context_for_html_output;
+    static inline pdf_context pdf_context_for_html_output = {};
 
     friend pdf_context_setter;
 };
-
-html_cell_for_pdf_output::pdf_context
-html_cell_for_pdf_output::pdf_context_for_html_output;
 
 // Define scaffolding for a custom HTML "img" tag which must be used
 // instead of the standard one in order to allow specifying the scaling factor
@@ -1212,13 +1215,11 @@ class numbered_page : public page_with_footer
         return oss.str();
     }
 
-    static int last_page_number_;
-    int        this_page_number_     = 0;
-    int        extra_pages_          = 0;
+    // "-1" is invalid; use start_numbering() to change it.
+    static inline int last_page_number_ = {-1};
+    int               this_page_number_ = {0};
+    int               extra_pages_      = {0};
 };
-
-// Initial value is invalid, use start_numbering() to change it.
-int numbered_page::last_page_number_ = -1;
 
 // Simplest possible page which is entirely defined by its external template
 // whose name must be specified when constructing it.
