@@ -110,12 +110,12 @@ bool is_subject_to_ill_reg(mcenum_ledger_type z)
     return mce_ill_reg == z;
 }
 
-/// NASD illustrations may have three interest bases (e.g. 0, 6, 12%)
-/// instead of only two (e.g. 0, 12%). Three-rate NASD illustrations
+/// FINRA illustrations may have three interest bases (e.g. 0, 6, 12%)
+/// instead of only two (e.g. 0, 12%). Three-rate FINRA illustrations
 /// are not fully supported at the moment, so this function simply
 /// returns 'false'.
 
-bool is_three_rate_nasd(mcenum_ledger_type)
+bool is_three_rate_finra(mcenum_ledger_type)
 {
     return false;
 }
@@ -185,7 +185,7 @@ void set_cloven_bases_from_run_basis
 /// - a "separate" basis that governs separate-account rates:
 ///     {full, zero, half}  (here, {F, Z, H} for short)
 ///   where "full" is the undiminished hypothetical rate, and "half"
-///   is used only on NASD illustrations that show three rates instead
+///   is used only on FINRA illustrations that show three rates instead
 ///   of two.
 ///
 /// To avoid nested loops, it is convenient to represent combinations
@@ -196,8 +196,8 @@ void set_cloven_bases_from_run_basis
 ///   {CF, GF, MF, CZ, GZ, CH, GH} actually-used bases
 /// of which only these subsets are used:
 ///   {CF, GF, MF                } illustration reg
-///   {CF, GF,     CZ, GZ        } normal NASD
-///   {CF, GF,     CZ, GZ, CH, GH} three-rate NASD
+///   {CF, GF,     CZ, GZ        } normal FINRA
+///   {CF, GF,     CZ, GZ, CH, GH} three-rate FINRA
 
 void set_run_basis_from_cloven_bases
     (mcenum_run_basis&      r

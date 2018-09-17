@@ -55,7 +55,7 @@ mcenum_dbopt_7702 effective_dbopt_7702
 
 bool LMI_SO is_subject_to_ill_reg(mcenum_ledger_type);
 
-bool is_three_rate_nasd(mcenum_ledger_type);
+bool is_three_rate_finra(mcenum_ledger_type);
 
 /// Transform a plain enumerator to its string equivalent.
 ///

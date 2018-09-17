@@ -152,7 +152,7 @@
 
 #define ledger_type_VALUES \
     {mce_ill_reg \
-    ,mce_nasd \
+    ,mce_finra \
     ,mce_prospectus_obsolete \
     ,mce_group_private_placement \
     ,mce_offshore_private_placement_obsolete \
@@ -162,7 +162,7 @@
     };
 #define ledger_type_NAMES \
     {"illustration_reg" \
-    ,"nasd" \
+    ,"finra" \
     ,"obsolete ledger type 2--do not use" \
     ,"group_private_placement" \
     ,"obsolete ledger type 4--do not use" \

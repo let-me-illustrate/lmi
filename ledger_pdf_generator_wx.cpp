@@ -2139,7 +2139,7 @@ class pdf_illustration_naic : public pdf_illustration
 };
 
 // Common base class for basic illustration pages using the same columns in
-// both NASD and private group placement illustrations.
+// both FINRA and private group placement illustrations.
 class page_with_basic_tabular_report : public page_with_tabular_report
 {
   private:
@@ -2309,12 +2309,12 @@ class page_with_basic_tabular_report : public page_with_tabular_report
     }
 };
 
-class nasd_basic : public page_with_basic_tabular_report
+class finra_basic : public page_with_basic_tabular_report
 {
   private:
     std::string get_fixed_page_contents_template_name() const override
     {
-        return "nasd_basic";
+        return "finra_basic";
     }
 
     std::string get_two_column_header
@@ -2342,7 +2342,7 @@ class nasd_basic : public page_with_basic_tabular_report
     }
 };
 
-class nasd_supplemental : public page_with_tabular_report
+class finra_supplemental : public page_with_tabular_report
 {
   private:
     enum
@@ -2366,7 +2366,7 @@ class nasd_supplemental : public page_with_tabular_report
 
     std::string get_fixed_page_contents_template_name() const override
     {
-        return "nasd_supp";
+        return "finra_supp";
     }
 
     // When invar.SplitMinPrem is true, this report has twelve columns
@@ -2403,7 +2403,7 @@ class nasd_supplemental : public page_with_tabular_report
     {
         auto const& invar = ledger.GetLedgerInvariant();
 
-        // The supplemental page in NASD illustrations exists in two versions:
+        // The supplemental page in FINRA illustrations exists in two versions:
         // default one and one with split premiums. Hide columns that are not
         // needed for the current illustration.
         switch(column)
@@ -2441,7 +2441,7 @@ class nasd_supplemental : public page_with_tabular_report
     }
 };
 
-class nasd_assumption_detail : public page_with_tabular_report
+class finra_assumption_detail : public page_with_tabular_report
 {
   private:
     enum
@@ -2458,7 +2458,7 @@ class nasd_assumption_detail : public page_with_tabular_report
 
     std::string get_fixed_page_contents_template_name() const override
     {
-        return "nasd_assumption_detail";
+        return "finra_assumption_detail";
     }
 
     illustration_table_columns const& get_table_columns() const override
@@ -2482,12 +2482,12 @@ class nasd_assumption_detail : public page_with_tabular_report
     // all of its columns, including the "AttainedAge" one, are always shown.
 };
 
-/// Illustration subject to FINRA (formerly NASD) regulation.
+/// Illustration subject to FINRA regulation.
 
-class pdf_illustration_nasd : public pdf_illustration
+class pdf_illustration_finra : public pdf_illustration
 {
   public:
-    explicit pdf_illustration_nasd(Ledger const& ledger)
+    explicit pdf_illustration_finra(Ledger const& ledger)
         :pdf_illustration{ledger}
     {
         auto const& invar = ledger.GetLedgerInvariant();
@@ -2528,32 +2528,32 @@ class pdf_illustration_nasd : public pdf_illustration
         // Add all the pages.
         add<cover_page>();
         numbered_page::start_numbering();
-        add<nasd_basic>();
-        add<nasd_supplemental>();
-        add<standard_page>("nasd_column_headings");
-        add<standard_page>("nasd_notes1");
-        add<standard_page>("nasd_notes2");
+        add<finra_basic>();
+        add<finra_supplemental>();
+        add<standard_page>("finra_column_headings");
+        add<standard_page>("finra_notes1");
+        add<standard_page>("finra_notes2");
         if(!ledger.is_composite())
             {
-            add<nasd_assumption_detail>();
+            add<finra_assumption_detail>();
             }
         if(invar.SupplementalReport)
             {
             add<standard_supplemental_report>
                 (get_interpolator()
-                ,"nasd_supp_report"
+                ,"finra_supp_report"
                 );
             }
     }
 
     std::string get_upper_footer_template_name() const override
     {
-        return "nasd_footer_upper";
+        return "finra_footer_upper";
     }
 
     std::string get_lower_footer_template_name() const override
     {
-        return "nasd_footer_lower";
+        return "finra_footer_lower";
     }
 };
 
@@ -2933,8 +2933,8 @@ void ledger_pdf_generator_wx::write
         case mce_ill_reg:
             pdf_illustration_naic        (ledger).render_all(output);
             break;
-        case mce_nasd:
-            pdf_illustration_nasd        (ledger).render_all(output);
+        case mce_finra:
+            pdf_illustration_finra       (ledger).render_all(output);
             break;
         case mce_group_private_placement:
             pdf_illustration_reg_d_group (ledger).render_all(output);

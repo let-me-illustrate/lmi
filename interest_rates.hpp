@@ -61,20 +61,20 @@
 // The general account and the loan accounts distinguish current from
 // guaranteed rates; illustration-reg formats also require midpoint
 // rates for these accounts. The separate account is needed only for
-// NASD formats and generally doesn't have a guaranteed rate at all,
-// but NASD requires distinguishing current from guaranteed separate-
+// FINRA formats and generally doesn't have a guaranteed rate at all,
+// but FINRA requires distinguishing current from guaranteed separate-
 // account charges, which affect net interest rates. Therefore, all
 // accounts vary across the axis
 //   {current, [midpoint,] guaranteed}
 // where midpoint is used only for illustration-reg formats. For
 // simplicity, the present implementation uses the same three-element
 // axis for all formats, even though the midpoint basis is not used
-// for NASD formats; perhaps someday it will be useful, e.g. if NAIC
+// for FINRA formats; perhaps someday it will be useful, e.g. if NAIC
 // adopts an illustration reg for variable products or if some
 // company wants to create a hybrid illustration that satisfies both
 // sets of regulations.
 
-// For the separate account, NASD requires a zero percent rate in
+// For the separate account, FINRA requires a zero percent rate in
 // addition to the input interest rate. Some companies may wish to
 // show a third rate that is the average of those two: in this
 // implementation, separate-account rates vary across the axis

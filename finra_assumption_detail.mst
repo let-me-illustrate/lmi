@@ -19,78 +19,11 @@
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 }}
 
-{{>nasd_header}}
+{{>finra_header_upper}}
+<p align="center">Illustration Assumption Detail</p>
+{{>finra_header_lower}}
 
-<p align="center"><b>Column Definitions and Key Terms</b></p>
+<br></br>
+<br></br>
 
-<p>
-<b>Account Value</b>
-<br>
-{{AccountValueFootnote}}
-</p>
-
-<p>
-<b>Cash Surrender Value</b>
-<br>
-{{CashSurrValueFootnote}}
-</p>
-
-<p>
-<b>Death Benefit</b>
-<br>
-{{DeathBenefitFootnote}}
-</p>
-
-{{^Composite}}
-<p>
-<b>End of Year Age</b>
-<br>
-{{AttainedAgeFootnote}}
-</p>
-{{/Composite}}
-
-{{#GroupCarveout}}
-<p>
-<b>Gross Payment</b>
-<br>
-{{GrossPremiumFootnote}}
-</p>
-{{/GroupCarveout}}
-
-<p>
-<b>Gross Rate</b>
-<br>
-{{GrossRateFootnote}}
-</p>
-
-{{#GroupCarveout}}
-<p>
-<b>Minimum Premium</b>
-<br>
-{{InitialPremiumFootnote}}
-</p>
-{{/GroupCarveout}}
-
-<p>
-<b>Net Premium</b>
-<br>
-{{NetPremiumFootnote}}
-</p>
-
-<p>
-<b>Net Rate</b>
-<br>
-{{NetRateFootnote}}
-</p>
-
-<p>
-<b>Policy Year</b>
-<br>
-{{PolicyYearFootnote}}
-</p>
-
-<p>
-<b>Premium Outlay</b>
-<br>
-{{OutlayFootnote}}
-</p>
+{{! Illustration assumption detail table is created from C++ code }}
