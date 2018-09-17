@@ -1978,11 +1978,12 @@ class ill_reg_supplemental_report : public standard_supplemental_report
     }
 };
 
-// Regular illustration.
-class pdf_illustration_regular : public pdf_illustration
+/// Illustration subject to NAIC illustration reg.
+
+class pdf_illustration_naic : public pdf_illustration
 {
   public:
-    explicit pdf_illustration_regular(Ledger const& ledger)
+    explicit pdf_illustration_naic(Ledger const& ledger)
         :pdf_illustration{ledger}
     {
         auto const& invar = ledger.GetLedgerInvariant();
@@ -2481,7 +2482,8 @@ class nasd_assumption_detail : public page_with_tabular_report
     // all of its columns, including the "AttainedAge" one, are always shown.
 };
 
-// NASD illustration.
+/// Illustration subject to FINRA (formerly NASD) regulation.
+
 class pdf_illustration_nasd : public pdf_illustration
 {
   public:
@@ -2585,7 +2587,8 @@ class reg_d_group_basic : public page_with_basic_tabular_report
     }
 };
 
-// Private group placement illustration.
+/// Group private placement illustration subject to Reg D.
+
 class pdf_illustration_reg_d_group : public pdf_illustration
 {
   public:
@@ -2630,7 +2633,7 @@ class pdf_illustration_reg_d_group : public pdf_illustration
 // This page exists in two almost identical versions, one using guaranteed and
 // the other one using current values, use a base class to share the common
 // parts.
-class reg_d_individual_irr_base : public page_with_tabular_report
+class reg_d_indiv_irr_base : public page_with_tabular_report
 {
   private:
     enum
@@ -2716,7 +2719,7 @@ class reg_d_individual_irr_base : public page_with_tabular_report
     }
 };
 
-class reg_d_individual_guar_irr : public reg_d_individual_irr_base
+class reg_d_indiv_guar_irr : public reg_d_indiv_irr_base
 {
   private:
     basis get_basis() const override
@@ -2750,7 +2753,7 @@ class reg_d_individual_guar_irr : public reg_d_individual_irr_base
     }
 };
 
-class reg_d_individual_curr_irr : public reg_d_individual_irr_base
+class reg_d_indiv_curr_irr : public reg_d_indiv_irr_base
 {
   private:
     basis get_basis() const override
@@ -2784,7 +2787,7 @@ class reg_d_individual_curr_irr : public reg_d_individual_irr_base
     }
 };
 
-class reg_d_individual_curr : public page_with_tabular_report
+class reg_d_indiv_curr : public page_with_tabular_report
 {
   private:
     enum
@@ -2859,11 +2862,12 @@ class reg_d_individual_curr : public page_with_tabular_report
     }
 };
 
-// Private individual placement illustration.
-class pdf_illustration_reg_d_individual : public pdf_illustration
+/// Individual private placement illustration subject to Reg D.
+
+class pdf_illustration_reg_d_indiv : public pdf_illustration
 {
   public:
-    explicit pdf_illustration_reg_d_individual(Ledger const& ledger)
+    explicit pdf_illustration_reg_d_indiv(Ledger const& ledger)
         :pdf_illustration{ledger}
     {
         auto const& invar = ledger.GetLedgerInvariant();
@@ -2875,9 +2879,9 @@ class pdf_illustration_reg_d_individual : public pdf_illustration
         // Add all the pages.
         numbered_page::start_numbering();
         add<standard_page>("reg_d_indiv_cover_page");
-        add<reg_d_individual_guar_irr>();
-        add<reg_d_individual_curr_irr>();
-        add<reg_d_individual_curr>();
+        add<reg_d_indiv_guar_irr>();
+        add<reg_d_indiv_curr_irr>();
+        add<reg_d_indiv_curr>();
         add<standard_page>("reg_d_indiv_notes1");
         add<standard_page>("reg_d_indiv_notes2");
         if(invar.SupplementalReport)
@@ -2927,16 +2931,16 @@ void ledger_pdf_generator_wx::write
     switch(ledger.ledger_type())
         {
         case mce_ill_reg:
-            pdf_illustration_regular         (ledger).render_all(output);
+            pdf_illustration_naic        (ledger).render_all(output);
             break;
         case mce_nasd:
-            pdf_illustration_nasd            (ledger).render_all(output);
+            pdf_illustration_nasd        (ledger).render_all(output);
             break;
         case mce_group_private_placement:
-            pdf_illustration_reg_d_group     (ledger).render_all(output);
+            pdf_illustration_reg_d_group (ledger).render_all(output);
             break;
         case mce_individual_private_placement:
-            pdf_illustration_reg_d_individual(ledger).render_all(output);
+            pdf_illustration_reg_d_indiv (ledger).render_all(output);
             break;
         case mce_prospectus_obsolete:                 // fall through
         case mce_offshore_private_placement_obsolete: // fall through
