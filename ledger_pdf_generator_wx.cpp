@@ -658,8 +658,8 @@ class pdf_illustration;
 // Base class for all logical illustration pages.
 //
 // A single logical page may result in multiple physical pages of output, e.g.
-// if it contains a table not fitting on one page, but mostly these page
-// objects correspond to a single physical page of the resulting illustration.
+// if it contains a table not fitting on one page, although it may often
+// correspond to a single physical page of the resulting illustration.
 class page
 {
   public:
@@ -669,7 +669,6 @@ class page
     page(page const&) = delete;
     page& operator=(page const&) = delete;
 
-    // Make base class dtor virtual.
     virtual ~page() = default;
 
     // Associate the illustration object using this page with it.
@@ -727,7 +726,6 @@ class pdf_illustration : protected html_interpolator
         init_variables();
     }
 
-    // Make base class dtor virtual.
     virtual ~pdf_illustration() = default;
 
     // Add a page.
