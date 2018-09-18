@@ -29,7 +29,7 @@
 /// Represents a new illustration document.
 ///
 /// Instantiating an object of this class simulates creating a new illustration.
-/// Its close() method must be called before destroying an object of this class
+/// Its close() function must be called before destroying an object of this class
 /// to ensure that it doesn't stay open.
 
 class wx_test_new_illustration
@@ -68,7 +68,7 @@ class wx_test_new_illustration
 /// Represents a new census document.
 ///
 /// Instantiating an object of this class simulates creating a new census
-/// document. As with illustrations, close() method must be called before
+/// document. As with illustrations, close() function must be called before
 /// destroying it.
 
 class wx_test_new_census

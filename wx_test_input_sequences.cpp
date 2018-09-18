@@ -26,11 +26,11 @@
 #include "wx_test_case.hpp"
 #include "wx_test_new.hpp"
 
-#include <wx/crt.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
 #include <algorithm>                    // find()
+#include <iostream>
 
 /// Validate a variety of input sequences in the GUI input dialog.
 ///
@@ -106,11 +106,12 @@ LMI_WX_TEST_CASE(input_sequences)
                 std::vector<std::string> const& names = dummy_input.member_names();
                 if(std::find(names.begin(), names.end(), field_name) == names.end())
                     {
-                    wxPrintf
-                        ("WARNING: unknown field name \"%s\", \"test_cases\" "
-                         "array probably needs to be updated.\n"
-                        ,field_name
-                        );
+                    std::cout
+                        << "WARNING: unknown field name '"
+                        << field_name
+                        << "': 'test_cases' array probably needs to be updated."
+                        << std::endl
+                        ;
                     }
 
                 // However, it is not an error if the field used by

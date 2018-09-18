@@ -28,6 +28,7 @@
 #include "test_tools.hpp"
 
 #include <algorithm>                    // max()
+#include <climits>                      // INT_MIN
 #include <ios>
 #include <iostream>
 #include <ostream>
@@ -542,6 +543,16 @@ int test_main(int, char*[])
     round1 = round0;
     BOOST_TEST(2 == round1.decimals());
     BOOST_TEST(r_to_nearest == round1.style());
+
+    // Try to provoke division by zero in ctor-initializer.
+    //
+    // nonstd::power() negates a negative exponent, but negating
+    // INT_MIN constitutes UB, so use 1 + INT_MIN.
+    BOOST_TEST_THROW
+        (round_to<double>(1 + INT_MIN, r_to_nearest)
+        ,std::domain_error
+        ,"Invalid number of decimals."
+        );
 
     // The software default rounding style and the hardware rounding
     // mode may be either synchronized or not, so test both ways.

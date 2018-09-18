@@ -249,12 +249,12 @@ class InputSequenceEditor
     // out of scope.
     int layout_freeze_count_;
 
-    // This method may be called multiple times but if a LayoutOnceGuard
+    // This function may be called multiple times but if a LayoutOnceGuard
     // currently exists, it does nothing immediately and just requests a
     // layout at a later time.
     void redo_layout();
 
-    // This method is only called by LayoutOnceGuard or redo_layout() itself
+    // This function is only called by LayoutOnceGuard or redo_layout() itself
     // and really lays out the dialog.
     void really_do_layout();
 

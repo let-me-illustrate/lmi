@@ -152,100 +152,6 @@ void test_minmax()
     BOOST_TEST(!(zero <  m || m <  one));
 }
 
-void test_page_count()
-{
-    // Original tests: vary only the number of data rows.
-
-    // Edge case (0 rows is not allowed).
-    BOOST_TEST_EQUAL(1, page_count( 1, 5, 28));
-    // Just a trivial sanity test.
-    BOOST_TEST_EQUAL(1, page_count(17, 5, 28));
-    // 4 full groups + incomplete last group.
-    BOOST_TEST_EQUAL(1, page_count(24, 5, 28));
-    // 5 full groups don't fit on one page.
-    BOOST_TEST_EQUAL(2, page_count(25, 5, 28));
-    // 4 + 4 groups + incomplete last one.
-    BOOST_TEST_EQUAL(2, page_count(44, 5, 28));
-    // 9 full groups don't fit on two pages.
-    BOOST_TEST_EQUAL(3, page_count(45, 5, 28));
-
-    // Test preconditions.
-
-    // No data rows.
-    BOOST_TEST_THROW
-        (page_count(0, 1, 1)
-        ,std::runtime_error
-        ,lmi_test::what_regex("^Assertion.*failed")
-        );
-
-    // Zero rows per group.
-    BOOST_TEST_THROW
-        (page_count(1, 0, 1)
-        ,std::runtime_error
-        ,lmi_test::what_regex("^Assertion.*failed")
-        );
-
-    // Insufficient room to print even one group.
-    BOOST_TEST_THROW
-        (page_count(1, 7, 3)
-        ,std::runtime_error
-        ,lmi_test::what_regex("^Assertion.*failed")
-        );
-
-    // A single row of data.
-    BOOST_TEST_EQUAL(1, page_count(1, 1, 1));
-    BOOST_TEST_EQUAL(1, page_count(1, 1, 3));
-    BOOST_TEST_EQUAL(1, page_count(1, 3, 3));
-    BOOST_TEST_EQUAL(1, page_count(1, 3, 7));
-
-    // One-row groups:
-
-    // Page length an odd number.
-    BOOST_TEST_EQUAL(1, page_count(1, 1, 5));
-    BOOST_TEST_EQUAL(1, page_count(3, 1, 5));
-    BOOST_TEST_EQUAL(2, page_count(4, 1, 5));
-    BOOST_TEST_EQUAL(2, page_count(6, 1, 5));
-    BOOST_TEST_EQUAL(3, page_count(7, 1, 5));
-
-    // Same, but next even length: same outcome.
-    BOOST_TEST_EQUAL(1, page_count(1, 1, 6));
-    BOOST_TEST_EQUAL(1, page_count(3, 1, 6));
-    BOOST_TEST_EQUAL(2, page_count(4, 1, 6));
-    BOOST_TEST_EQUAL(2, page_count(6, 1, 6));
-    BOOST_TEST_EQUAL(3, page_count(7, 1, 6));
-
-    // Two-row groups.
-
-    // Page length four.
-    BOOST_TEST_EQUAL(1, page_count(1, 2, 4));
-    BOOST_TEST_EQUAL(1, page_count(3, 2, 4));
-    BOOST_TEST_EQUAL(2, page_count(4, 2, 4));
-    BOOST_TEST_EQUAL(2, page_count(5, 2, 4));
-    BOOST_TEST_EQUAL(3, page_count(6, 2, 4));
-
-    // Page length five: no room for widow and orphan control.
-    BOOST_TEST_EQUAL(1, page_count(1, 2, 5));
-    BOOST_TEST_EQUAL(1, page_count(4, 2, 5));
-    BOOST_TEST_EQUAL(2, page_count(5, 2, 5));
-    BOOST_TEST_EQUAL(2, page_count(8, 2, 5));
-    BOOST_TEST_EQUAL(3, page_count(9, 2, 5));
-
-    // Same, but next even length: same outcome.
-    BOOST_TEST_EQUAL(1, page_count(1, 2, 6));
-    BOOST_TEST_EQUAL(1, page_count(4, 2, 6));
-    BOOST_TEST_EQUAL(2, page_count(5, 2, 6));
-    BOOST_TEST_EQUAL(2, page_count(8, 2, 6));
-    BOOST_TEST_EQUAL(3, page_count(9, 2, 6));
-
-    // Page length seven: one extra data row possible on last page.
-    BOOST_TEST_EQUAL(1, page_count(1, 2, 7));
-    BOOST_TEST_EQUAL(1, page_count(4, 2, 7));
-    BOOST_TEST_EQUAL(1, page_count(5, 2, 7));
-    BOOST_TEST_EQUAL(2, page_count(6, 2, 7));
-    BOOST_TEST_EQUAL(2, page_count(8, 2, 7));
-    BOOST_TEST_EQUAL(2, page_count(9, 2, 7));
-}
-
 void test_prefix_and_suffix()
 {
     std::string s = "";
@@ -495,7 +401,6 @@ int test_main(int, char*[])
     test_each_equal();
     test_files_are_identical();
     test_minmax();
-    test_page_count();
     test_prefix_and_suffix();
     test_scale_power();
     test_trimming();

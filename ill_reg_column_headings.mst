@@ -29,10 +29,12 @@ Column Headings and Key Terms Used in This Illustration
 <p>
 <b>{{AvName}} Value:</b>
 The accumulation at interest of the net premiums paid,
-{{#SinglePremium}}
-less any withdrawals,
+{{^SinglePremium}}
+less any withdrawals, less any monthly charges deducted.
 {{/SinglePremium}}
+{{#SinglePremium}}
 less any monthly charges deducted.
+{{/SinglePremium}}
 </p>
 <p>
 <b>{{CsvName}} Value:</b>
@@ -184,7 +186,7 @@ minimum defined in your policy.
 </p>
 <!-- Single Premium Logic -->
 {{#SinglePremium}}
-{{#ModifiedSinglePremiumOrModifiedSinglePremium0}}
+{{^ModifiedSinglePremiumOrModifiedSinglePremium0}}
 <p>
 <b>Single Premium:</b>
 After the single premium is paid, additional payment

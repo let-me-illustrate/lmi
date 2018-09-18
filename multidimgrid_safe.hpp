@@ -42,10 +42,10 @@
 /// These classes are provided to allow the type-safe use/checks when the axis
 /// and table types are known at compile time.
 ///
-/// Almost every untyped virtual method is reimplemented in those classes to
-/// redirect the work to its Do* twin virtual method that takes correctly typed
+/// Almost every untyped virtual function is reimplemented in those classes to
+/// redirect the work to its Do* twin virtual function that takes correctly typed
 /// parameters.
-/// You should not use untyped method versions (such as MultiDimAxis::GetValue(),
+/// You should not use untyped function versions (such as MultiDimAxis::GetValue(),
 /// MultiDimTable::SetValue()) - use typed versions instead
 /// (MultiDimAxis::DoGetValue(), MultiDimTable::DoSetValue()).
 
@@ -56,8 +56,8 @@
 /// Use it as the base class for any specific custom axis with known value type.
 /// See also MultiDimEnumAxis MultiDimIntAxis
 ///
-/// GetValue(n): Redirect the method to the typed method DoGetValue()
-/// This method should not be used at all, use DoGetValue() instead
+/// GetValue(n): Redirect the function to the typed function DoGetValue()
+/// This function should not be used at all, use DoGetValue() instead
 
 template<typename E>
 class MultiDimAxis
@@ -181,12 +181,12 @@ struct ValueCastConversion
 /// Template parameters are:
 ///   - T                Type of the table values.
 ///   - Derived          Type of the deriving class.
-///   - ConversionPolicy A class providing two const member (or static) methods
+///   - ConversionPolicy A class providing two const member (or static) functions
 ///       ValueToString and StringToValue which will be used to convert between
 ///       std::string and T. The default is to use ValueCastConversion.
 ///
-/// DoGetValue and DoSetValue: These two methods has to be provided in
-/// the derived class. These methods are not virtual in MultiDimGridN.
+/// DoGetValue and DoSetValue: These two functions has to be provided in
+/// the derived class. These functions are not virtual in MultiDimGridN.
 ///
 /// Example of usage:
 /// class MyTable
@@ -216,12 +216,12 @@ class MultiDimTable
 
   protected:
     /// MultiDimTable contract:
-    /// The Derived class has to implement these two methods.
-    /// Note that these methods are not virtual.
+    /// The Derived class has to implement these two functions.
+    /// Note that these functions are not virtual.
     T    DoGetValue(Coords const&) const;
     void DoSetValue(Coords const&, T const&);
 
-    /// Helper methods for unwrapping/wrapping a value from/into std::any.
+    /// Helper functions for unwrapping/wrapping a value from/into std::any.
     template<typename A>
     static A UnwrapAny(std::any const&);
     template<typename A>
@@ -240,7 +240,7 @@ class MultiDimTable
 /// Adjustable Axis base class.
 ///
 /// Use this class as the base for you adjustable axis. This class defines
-/// type-safe methods to implement.
+/// type-safe functions to implement.
 ///
 /// This template uses BaseAxisType as its base class. The only constraint
 /// is that this base class has to have a constructor taking axis name as
@@ -250,9 +250,9 @@ class MultiDimTable
 ///   - AdjustControl type of the adjustment control you will use for the axis
 ///   - BaseAxisType base class to use for the axis
 ///
-/// CreateAdjustControl(grid, table): Redirects to type-safe method
+/// CreateAdjustControl(grid, table): Redirects to type-safe function
 /// DoCreateAdjustControl().
-/// Do not override this method, override DoCreateAdjustControl instead.
+/// Do not override this function, override DoCreateAdjustControl instead.
 
 template<typename AdjustControl, typename BaseAxisType = MultiDimAxisAny>
 class MultiDimAdjustableAxis
@@ -267,7 +267,7 @@ class MultiDimAdjustableAxis
     /// This ctor is protected because this class has to be derived from.
     MultiDimAdjustableAxis(std::string const& name);
 
-    /// Type-safe versions of the corresponding methods.
+    /// Type-safe versions of the corresponding functions.
     virtual AxisAdjustControl* DoCreateAdjustControl
         (MultiDimGrid& grid
         ,MultiDimTableAny& table

@@ -27,7 +27,9 @@
 #include "ssize_lmi.hpp"
 #include "test_tools.hpp"
 
+#include <iomanip>                      // setw()
 #include <numeric>                      // accumulate()
+#include <sstream>
 #include <vector>
 
 // This needs to be defined in the global namespace to make
@@ -60,7 +62,7 @@ std::vector<table_column_info> bloat
 {
     LMI_ASSERT(lmi::ssize(w) == lmi::ssize(e));
     std::vector<table_column_info> v;
-    for(int i = 0; i < lmi::ssize(w) ; ++i)
+    for(int i = 0; i < lmi::ssize(w); ++i)
         {
         v.push_back({"", w[i], oe_right, e[i] ? oe_elastic : oe_inelastic});
         }
@@ -80,17 +82,19 @@ class report_table_test
         {
         test_apportion();
         test_bloat();
-        test_generally();
-        test_group_quote();
-        test_illustration();
+        test_column_widths_generally();
+        test_column_widths_for_group_quotes();
+        test_column_widths_for_illustrations();
+        test_paginator();
         }
 
   private:
     static void test_apportion();
     static void test_bloat();
-    static void test_generally();
-    static void test_group_quote();
-    static void test_illustration();
+    static void test_column_widths_generally();
+    static void test_column_widths_for_group_quotes();
+    static void test_column_widths_for_illustrations();
+    static void test_paginator();
 };
 
 void report_table_test::test_apportion()
@@ -171,7 +175,7 @@ void report_table_test::test_bloat()
     BOOST_TEST(v == bloat({3, 1, 0, 0, 2}, {0, 1, 0, 1, 0}));
 }
 
-void report_table_test::test_generally()
+void report_table_test::test_column_widths_generally()
 {
     std::vector<table_column_info> v;
     std::vector<int> expected;
@@ -278,7 +282,7 @@ void report_table_test::test_generally()
 /// group quote. Therefore, they aren't written in a compact way
 /// or expanded by bloat().
 
-void report_table_test::test_group_quote()
+void report_table_test::test_column_widths_for_group_quotes()
 {
     static int const total_width    = 756;
     static int const default_margin = 14;
@@ -309,7 +313,7 @@ void report_table_test::test_group_quote()
 /// illustrations. Therefore, they aren't written in a compact way
 /// or expanded by bloat().
 
-void report_table_test::test_illustration()
+void report_table_test::test_column_widths_for_illustrations()
 {
     static int const total_width    = 576;
     static int const default_margin = 14;
@@ -395,6 +399,305 @@ void report_table_test::test_illustration()
         );
 #endif // 0
     }
+}
+
+class paginate
+{
+  public:
+    paginate() {}
+
+    int init(int total_rows, int rows_per_group, int max_lines_per_page);
+    void print() const;
+
+  private:
+    virtual void prelude          () const = 0;
+    virtual void open_page        () const = 0;
+    virtual void print_a_data_row () const = 0;
+    virtual void print_a_separator() const = 0;
+    virtual void close_page       () const = 0;
+    virtual void postlude         () const = 0;
+
+    int total_rows        () const {return total_rows_        ;}
+    int rows_per_group    () const {return rows_per_group_    ;}
+
+    int lines_on_full_page() const {return lines_on_full_page_;}
+    int lines_on_last_page() const {return lines_on_last_page_;}
+    int page_count        () const {return page_count_        ;}
+
+    // init() arguments.
+    int total_rows_         {};
+    int rows_per_group_     {};
+
+    // init() results.
+    int lines_on_full_page_ {};
+    int lines_on_last_page_ {};
+    int page_count_         {};
+};
+
+int paginate::init(int total_rows, int rows_per_group, int max_lines_per_page)
+{
+    total_rows_         = total_rows        ;
+    rows_per_group_     = rows_per_group    ;
+
+    paginator p(total_rows, rows_per_group, max_lines_per_page);
+    lines_on_full_page_ = p.lines_on_full_page();
+    lines_on_last_page_ = p.lines_on_last_page();
+    page_count_         = p.page_count();
+
+    return page_count_;
+}
+
+void paginate::print() const
+{
+    prelude();
+    int row = 0;
+    int line_count = 0;
+    for(int page = 0; page < page_count(); ++page)
+        {
+        int const max_lines =
+            ((page_count() - 1) == page)
+            ? lines_on_last_page()
+            : lines_on_full_page()
+            ;
+        open_page();
+        for(int line = 0; line < max_lines; ++line)
+            {
+            if(rows_per_group() != line % (1 + rows_per_group()))
+                {
+                print_a_data_row();
+                ++row;
+                }
+            else
+                {
+                print_a_separator();
+                }
+            ++line_count;
+            }
+        close_page();
+        }
+    postlude();
+    LMI_ASSERT(total_rows() == row);
+}
+
+class paginate_demo : public paginate
+{
+  public:
+    paginate_demo() {}
+
+    int test_p(int total_rows, int rows_per_group, int max_lines_per_page);
+
+    std::string str() const;
+
+  private:
+    void prelude          () const override;
+    void open_page        () const override;
+    void print_a_data_row () const override;
+    void print_a_separator() const override;
+    void close_page       () const override;
+    void postlude         () const override;
+
+    mutable std::ostringstream oss_ {};
+    mutable int demo_page_          {0};
+    mutable int demo_line_          {0};
+    mutable int demo_line_count_    {0};
+    mutable int demo_row_           {0};
+};
+
+int paginate_demo::test_p(int total_rows, int rows_per_group, int max_lines_per_page)
+{
+    int page_count = init(total_rows, rows_per_group, max_lines_per_page);
+    oss_.str("");
+    oss_.clear();
+    demo_page_       = 0;
+    demo_line_       = 0;
+    demo_line_count_ = 0;
+    demo_row_        = 0;
+    print();
+    return page_count;
+}
+
+std::string paginate_demo::str() const
+{
+    return oss_.str();
+}
+
+void paginate_demo::prelude() const
+{
+    oss_ << "Paginated table demonstration begins...\n";
+}
+
+void paginate_demo::open_page() const
+{
+    oss_ << "Page " << demo_page_ << '\n';
+}
+
+void paginate_demo::print_a_data_row() const
+{
+    oss_
+        << "   page "       << std::setw(3) << demo_page_
+        << ",  line "       << std::setw(3) << demo_line_
+        << ",  line_count " << std::setw(3) << demo_line_count_
+        << ",  row "        << std::setw(3) << demo_row_
+        << '\n'
+        ;
+    ++demo_line_;
+    ++demo_line_count_;
+    ++demo_row_;
+}
+
+void paginate_demo::print_a_separator() const
+{
+    oss_
+        << "   page "       << std::setw(3) << demo_page_
+        << ",  line "       << std::setw(3) << demo_line_
+        << ",  line_count " << std::setw(3) << demo_line_count_
+        << '\n'
+        ;
+    ++demo_line_;
+    ++demo_line_count_;
+}
+
+void paginate_demo::close_page() const
+{
+    demo_line_ = 0;
+    ++demo_page_;
+}
+
+void paginate_demo::postlude() const
+{
+    oss_ << "...paginated table demonstration ends.\n";
+}
+
+std::string test_paginate(int total_rows, int rows_per_group, int max_lines_per_page)
+{
+    paginate_demo z;
+    z.init(total_rows, rows_per_group, max_lines_per_page);
+    z.print();
+    return z.str();
+}
+
+void report_table_test::test_paginator()
+{
+    // Instead of testing class paginator directly, use
+    // paginate_demo::test_p(), which instantiates paginator
+    // and exercises other code as well before returning
+    // paginator's page count.
+    paginate_demo p;
+
+    // Original tests: vary only the number of data rows.
+
+    // Edge cases.
+    // Arguably zero rows should mean zero pages.
+    BOOST_TEST_EQUAL(1, p.test_p( 0, 5, 28));
+    BOOST_TEST_EQUAL(1, p.test_p( 1, 5, 28));
+    // Just a trivial sanity test_p.
+    BOOST_TEST_EQUAL(1, p.test_p(17, 5, 28));
+    // 4 full groups + incomplete last group.
+    BOOST_TEST_EQUAL(1, p.test_p(24, 5, 28));
+    // 5 full groups don't fit on one page.
+    BOOST_TEST_EQUAL(2, p.test_p(25, 5, 28));
+    // 4 + 4 groups + incomplete last one.
+    BOOST_TEST_EQUAL(2, p.test_p(44, 5, 28));
+    // 9 full groups don't fit on two pages.
+    BOOST_TEST_EQUAL(3, p.test_p(45, 5, 28));
+
+    // Test preconditions.
+
+    // Negative number of data rows.
+    BOOST_TEST_THROW
+        (p.test_p(-1, 1, 1)
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Assertion.*failed")
+        );
+
+    // Zero rows per group.
+    BOOST_TEST_THROW
+        (p.test_p(1, 0, 1)
+        ,std::logic_error
+        ,"Rows per group must be positive."
+        );
+
+    // Negative number of rows per group.
+    BOOST_TEST_THROW
+        (p.test_p(1, -1, 1)
+        ,std::logic_error
+        ,"Rows per group must be positive."
+        );
+
+    // Insufficient room to print even one group.
+    BOOST_TEST_THROW
+        (p.test_p(1, 7, 3)
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Assertion.*failed")
+        );
+
+    // A single row of data.
+    BOOST_TEST_EQUAL(1, p.test_p(1, 1, 1));
+    BOOST_TEST_EQUAL(1, p.test_p(1, 1, 3));
+    BOOST_TEST_EQUAL(1, p.test_p(1, 3, 3));
+    BOOST_TEST_EQUAL(1, p.test_p(1, 3, 7));
+
+    // One-row groups:
+
+    // Page length an odd number.
+    BOOST_TEST_EQUAL(1, p.test_p(1, 1, 5));
+    BOOST_TEST_EQUAL(1, p.test_p(3, 1, 5));
+    BOOST_TEST_EQUAL(2, p.test_p(4, 1, 5));
+    BOOST_TEST_EQUAL(2, p.test_p(6, 1, 5));
+    BOOST_TEST_EQUAL(3, p.test_p(7, 1, 5));
+
+    // Same, but next even length: same outcome.
+    BOOST_TEST_EQUAL(1, p.test_p(1, 1, 6));
+    BOOST_TEST_EQUAL(1, p.test_p(3, 1, 6));
+    BOOST_TEST_EQUAL(2, p.test_p(4, 1, 6));
+    BOOST_TEST_EQUAL(2, p.test_p(6, 1, 6));
+    BOOST_TEST_EQUAL(3, p.test_p(7, 1, 6));
+
+    // Two-row groups.
+
+    // Page length four.
+    BOOST_TEST_EQUAL(1, p.test_p(1, 2, 4));
+    BOOST_TEST_EQUAL(1, p.test_p(3, 2, 4));
+    BOOST_TEST_EQUAL(2, p.test_p(4, 2, 4));
+    BOOST_TEST_EQUAL(2, p.test_p(5, 2, 4));
+    BOOST_TEST_EQUAL(3, p.test_p(6, 2, 4));
+
+    // Page length five: no room for widow and orphan control.
+    BOOST_TEST_EQUAL(1, p.test_p(1, 2, 5));
+    BOOST_TEST_EQUAL(1, p.test_p(4, 2, 5));
+    BOOST_TEST_EQUAL(2, p.test_p(5, 2, 5));
+    BOOST_TEST_EQUAL(2, p.test_p(8, 2, 5));
+    BOOST_TEST_EQUAL(3, p.test_p(9, 2, 5));
+
+    // Same, but next even length: same outcome.
+    BOOST_TEST_EQUAL(1, p.test_p(1, 2, 6));
+    BOOST_TEST_EQUAL(1, p.test_p(4, 2, 6));
+    BOOST_TEST_EQUAL(2, p.test_p(5, 2, 6));
+    BOOST_TEST_EQUAL(2, p.test_p(8, 2, 6));
+    BOOST_TEST_EQUAL(3, p.test_p(9, 2, 6));
+
+    // Page length seven: one extra data row possible on last page.
+    BOOST_TEST_EQUAL(1, p.test_p(1, 2, 7));
+    BOOST_TEST_EQUAL(1, p.test_p(4, 2, 7));
+    BOOST_TEST_EQUAL(1, p.test_p(5, 2, 7));
+    BOOST_TEST_EQUAL(2, p.test_p(6, 2, 7));
+    BOOST_TEST_EQUAL(2, p.test_p(8, 2, 7));
+    BOOST_TEST_EQUAL(2, p.test_p(9, 2, 7));
+
+    std::cout << "Zero rows" << std::endl;
+    std::cout << test_paginate(0, 2, 7) << std::endl;
+    std::cout << "Last page: zero full groups and one partial" << std::endl;
+    std::cout << test_paginate(1, 2, 7) << std::endl;
+    std::cout << "Last page: two full groups and one partial" << std::endl;
+    std::cout << test_paginate(5, 2, 7) << std::endl;
+    std::cout << "Last page: one full group" << std::endl;
+    std::cout << test_paginate(6, 2, 7) << std::endl;
+    std::cout << "Last page: one full group and one partial" << std::endl;
+    std::cout << test_paginate(7, 2, 7) << std::endl;
+    std::cout << "Last page: full page" << std::endl;
+    std::cout << test_paginate(8, 2, 7) << std::endl;
+    std::cout << "Last page: full page, plus an antiwidowed partial group" << std::endl;
+    std::cout << test_paginate(9, 2, 7) << std::endl;
 }
 
 int test_main(int, char*[])

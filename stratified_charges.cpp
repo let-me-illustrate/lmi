@@ -385,13 +385,15 @@ double stratified_charges::tiered_investment_management_fee(double assets) const
     return tiered_rate<double>() (assets, z.limits(), z.values());
 }
 
-double stratified_charges::tiered_curr_sepacct_load(double assets, double /* premium */) const
+// The second argument (premium) is unused, so why does it exist?
+double stratified_charges::tiered_curr_sepacct_load(double assets, double) const
 {
     stratified_entity const& z = datum("CurrSepAcctLoadTieredByAssets");
     return tiered_rate<double>() (assets, z.limits(), z.values());
 }
 
-double stratified_charges::tiered_guar_sepacct_load(double assets, double /* premium */) const
+// The second argument (premium) is unused, so why does it exist?
+double stratified_charges::tiered_guar_sepacct_load(double assets, double) const
 {
     stratified_entity const& z = datum("GuarSepAcctLoadTieredByAssets");
     return tiered_rate<double>() (assets, z.limits(), z.values());

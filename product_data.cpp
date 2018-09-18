@@ -432,7 +432,7 @@ void product_data::redintegrate_ex_post
 /// XSL with wxPdfDoc, and may be removed when that task is complete.
 /// There is one for each supported ledger type:
 ///   sample2naic  mce_ill_reg
-///   sample2nasd  mce_nasd
+///   sample2finra mce_finra
 ///   sample2gpp   mce_group_private_placement
 ///   sample2ipp   mce_individual_private_placement
 /// and one for group premium quotes with every possible column:
@@ -578,8 +578,8 @@ void product_data::write_policy_files()
     z.DatabaseFilename           = glossed_string("sample2quo.database");
     z.save(AddDataDir("sample2quo.policy"));
 
-    z.DatabaseFilename           = glossed_string("sample2nasd.database");
-    z.save(AddDataDir("sample2nasd.policy"));
+    z.DatabaseFilename           = glossed_string("sample2finra.database");
+    z.save(AddDataDir("sample2finra.policy"));
 
     z.DatabaseFilename           = glossed_string("sample2gpp.database");
     z.save(AddDataDir("sample2gpp.policy"));

@@ -39,7 +39,7 @@
 #include <algorithm>
 #include <sstream>
 
-/// MultiDimAxisAny methods implementation
+/// MultiDimAxisAny functions implementation
 /// --------------------------------------
 
 wxWindow* MultiDimAxisAny::CreateAdjustControl
@@ -73,7 +73,7 @@ void MultiDimAxisAny::UpdateChoiceControl(MultiDimAxisAnyChoice& choice) const
     choice.PopulateChoiceList();
 }
 
-/// MultiDimTableAny methods implementation
+/// MultiDimTableAny functions implementation
 /// ---------------------------------------
 
 bool MultiDimTableAny::DoApplyAxisAdjustment
@@ -195,7 +195,7 @@ void MultiDimGridGrid::UponKeyDown(wxKeyEvent& event)
 ///
 /// This class prevents unneeded redrawing of the table to take place.
 /// Under the hood it counts the number of contexts calling Table::Update
-/// method. It calls for Table::DoUpdate only when that counter drops to zero,
+/// function. It calls for Table::DoUpdate only when that counter drops to zero,
 /// which means that we are exiting the outermost context which called for
 /// an update and it is the place to do it once for all the calls.
 
@@ -227,7 +227,7 @@ inline GridRefreshTableDataGuard::~GridRefreshTableDataGuard()
         }
 }
 
-/// MultiDimGrid methods implementation
+/// MultiDimGrid functions implementation
 /// -----------------------------------
 
 BEGIN_EVENT_TABLE(MultiDimGrid, wxPanel)
@@ -481,7 +481,7 @@ void MultiDimGrid::DoRefreshTableData()
             // columns could be very narrow for axes like age or state):
             grid().SetColMinimalWidth(i, WXGRID_DEFAULT_COL_WIDTH);
 
-            grid().AutoSizeColumn(i, false /*setAsMin*/);
+            grid().AutoSizeColumn(i, false); // false: setAsMin
         }
 
     grid().ForceRefresh();
@@ -502,7 +502,7 @@ bool MultiDimGrid::RefreshTableAxis()
             }
         }
 
-    // TODO ?? this method should check for changes in the table
+    // TODO ?? this function should check for changes in the table
     // data structure (number of axis, types of axis), and refresh accordingly
     if(AutoselectGridAxis())
         {
@@ -1339,7 +1339,7 @@ unsigned int MultiDimGrid::EnsureIndexIsPositive(int row_or_col) const
     return static_cast<unsigned int>(row_or_col);
 }
 
-/// MultiDimAxisAnyChoice methods implementation
+/// MultiDimAxisAnyChoice functions implementation
 /// --------------------------------------------
 BEGIN_EVENT_TABLE(MultiDimAxisAnyChoice, wxChoice)
     EVT_CHOICE(wxID_ANY, MultiDimAxisAnyChoice::UponSelectionChange)

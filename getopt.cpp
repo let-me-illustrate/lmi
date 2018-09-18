@@ -611,7 +611,7 @@ GetOpt::operator()()
             switch(pfound->has_arg)
              {
 
-              // See methods List_Value and List_No_Value
+              // See functions List_Value and List_No_Value
               case ALT_ARG:
               case LIST_ARG:
                 nextchar += std::strlen(nextchar);

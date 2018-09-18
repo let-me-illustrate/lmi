@@ -152,7 +152,7 @@ class Irc7702A final
     // although they physically happen to be so.
     // TODO ?? TAXATION !! IOW, 'friend' would be better?
     int     DebugGetTestDur         () const
-        {return TestPeriodDur - 1;  /* we already incremented it */}
+        {return TestPeriodDur - 1;} // "- 1": already incremented
     double  DebugGet7ppRate         () const
         {return SevenPPRateVec[PolicyYear];}
     double  DebugGetNsp             () const

@@ -33,6 +33,7 @@
 #include <wx/treectrl.h>
 
 #include <algorithm>
+#include <type_traits>
 
 /// Design notes for AxisMaxBoundAdjusterBase
 ///
@@ -79,7 +80,7 @@ class AxisMaxBoundAdjusterBase
 /// Once user selects a number (115 for example), this number becomes maximum
 /// for the axis values (the axis value domain becomes [-10, 115]).
 ///
-/// Two parameters used throughout the class methods:
+/// Two parameters used throughout the class functions:
 ///   - maximum_upper_bound - upper bound for the maximum axis value
 ///   - maximum_lower_bound - lower bound for the maximum axis value
 
@@ -87,6 +88,8 @@ template<typename Integral>
 class AxisMaxBoundAdjuster
     :public AxisMaxBoundAdjusterBase
 {
+    static_assert(std::is_integral<Integral>::value);
+
   public:
     AxisMaxBoundAdjuster
         (MultiDimAxisAny&

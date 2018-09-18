@@ -25,7 +25,6 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "math_functions.hpp"           // outward_quotient()
 #include "ssize_lmi.hpp"
 
 #include <algorithm>                    // equal(), max()
@@ -290,47 +289,4 @@ std::string iso_8601_datestamp_terse()
     std::size_t rc = std::strftime(s, len, "%Y%m%dT%H%M%SZ", t1);
     LMI_ASSERT(0 != rc);
     return s;
-}
-
-/// Compute the number of pages needed to display the given number of non-blank
-/// rows in groups of the specified size separated by blank rows.
-///
-/// Preconditions: 0 < total_rows && 0 < rows_per_group <= rows_per_page
-
-int page_count
-    (int total_rows
-    ,int rows_per_group
-    ,int rows_per_page
-    )
-{
-    LMI_ASSERT(0 < total_rows);
-    LMI_ASSERT(0 < rows_per_group                 );
-    LMI_ASSERT(    rows_per_group <= rows_per_page);
-
-    // Each group actually takes rows_per_group+1 rows because of the
-    // separator row between groups, hence the second +1, but there is no
-    // need for the separator after the last group, hence the first +1.
-    int const groups_per_page = (rows_per_page + 1) / (rows_per_group + 1);
-
-    // But we are actually interested in the number of rows we can fit per page
-    // and not the number of groups.
-    int const used_per_page = groups_per_page * rows_per_group;
-
-    // Finally determine how many pages are needed to show all the rows.
-    int number_of_pages = outward_quotient(total_rows, used_per_page);
-
-    // The last page may not be needed if all the rows on it can fit into the
-    // remaining space, too small for a full group, but perhaps sufficient for
-    // these rows, in the last by one page.
-    if(1 < number_of_pages)
-        {
-        auto const rows_on_last_page = total_rows - (number_of_pages - 1) * used_per_page;
-        auto const free_rows = rows_per_page - groups_per_page * (rows_per_group + 1);
-        if(rows_on_last_page <= free_rows)
-            {
-            --number_of_pages;
-            }
-        }
-
-    return number_of_pages;
 }

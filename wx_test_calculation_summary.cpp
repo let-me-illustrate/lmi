@@ -79,7 +79,7 @@ int const total_number_of_columns = 12;
 
 // Base class for all the tests working with the preferences dialog. It
 // defines both a simpler interface for the derived classes to define the
-// tests with the preferences dialog, and also provides a helper run() method
+// tests with the preferences dialog, and also provides a helper run() function
 // which shows the preferences dialog and performs these checks.
 class expect_preferences_dialog_base
     :public wxExpectModalBase<MvcController>
@@ -170,7 +170,7 @@ class expect_preferences_dialog_base
         }
 
     // These variables are only valid inside the overridden
-    // OnPreferencesInvoked() method.
+    // OnPreferencesInvoked() function.
     MvcController* dialog_;
     wxCheckBox* use_checkbox_;
 };

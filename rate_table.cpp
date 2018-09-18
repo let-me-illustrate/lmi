@@ -836,7 +836,7 @@ class table_impl final
 
     bool is_equal(table_impl const& other) const;
 
-    // Public class method implementations.
+    // Public class function implementations.
     void name(std::string const& name) { name_ = name; }
     std::uint32_t number() const { return *number_; }
     std::string const& name() const { return *name_; }
@@ -846,14 +846,14 @@ class table_impl final
     table_impl(table_impl const&) = delete;
     table_impl& operator=(table_impl const&) = delete;
 
-    // Helper methods for IO: all of them throw std::runtime_error on failure
+    // Helper functions for IO: all of them throw std::runtime_error on failure
     // and mention the field name in the error message.
     //
     // They also check that the optional value provided as the output parameter
     // for reading data into is not initialized yet as it's an error to have
     // duplicate fields in our format.
 
-    // read_xxx() methods for binary format.
+    // read_xxx() functions for binary format.
 
     static void read_string
             (std::optional<std::string>& ostr
@@ -888,13 +888,13 @@ class table_impl final
             ,std::uint16_t                 length
             );
 
-    // This one is different from the generic methods above as it's only used
+    // This one is different from the generic functions above as it's only used
     // for the specific values_ field and not any arbitrary vector.
     void read_values(std::istream& ifs, std::uint16_t length);
 
-    // parse_xxx() methods for text format.
+    // parse_xxx() functions for text format.
 
-    // This method returns the pointer to ostr string value to allow further
+    // This function returns the pointer to ostr string value to allow further
     // modifying it later in the caller.
     static std::string* parse_string
             (std::optional<std::string>& ostr
@@ -1253,7 +1253,8 @@ unsigned int table_impl::get_expected_number_of_values() const
     return num_values;
 }
 
-void table_impl::read_values(std::istream& ifs, std::uint16_t /* length */)
+// The second argument (length) is unused, so why does it exist?
+void table_impl::read_values(std::istream& ifs, std::uint16_t)
 {
     throw_if_duplicate_record(!values_.empty(), e_field_values);
 
@@ -2408,7 +2409,7 @@ class database_impl final
         mutable std::shared_ptr<table_impl> table_;
     };
 
-    // Add an entry to the index. This method should be always used instead of
+    // Add an entry to the index. This function should be always used instead of
     // updating index_ vector directly as it also takes care of updating
     // index_by_number_ map.
     //
@@ -2729,7 +2730,7 @@ void database_impl::save(fs::path const& path)
         std::ostream& index() { return index_.ofs_; }
         std::ostream& database() { return database_.ofs_; }
 
-        // The core of this class functionality is in this method: it tries to
+        // The core of this class functionality is in this function: it tries to
         // atomically rename the files to the real output path and throws,
         // without changing the (possibly) existing file at the given path, on
         // failure.

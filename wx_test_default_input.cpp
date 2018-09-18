@@ -28,8 +28,7 @@
 #include "wx_test_case.hpp"
 #include "wx_test_date.hpp"
 
-#include <wx/crt.h>
-
+#include <iostream>
 #include <sstream>
 
 /// Test selected parameters in the user-customizable default cell.
@@ -68,14 +67,16 @@ LMI_WX_TEST_CASE(default_input)
 
     calendar_date const first_of_next_month = get_first_next_month(today());
 
-    wxPrintf
-        ("EffectiveDate: %s; expected: %s\n"
-        ,dump_date(effective_date)
-        ,dump_date(first_of_next_month)
-        );
+    std::cout
+        << "EffectiveDate: "
+        << dump_date(effective_date)
+        << "; expected: "
+        << dump_date(first_of_next_month)
+        << std::endl
+        ;
     if(effective_date != first_of_next_month)
         {
-        wxPuts("WARNING: Effective date is different from the expected date.");
+        std::cout << "WARNING: Effective date != expected date." << std::endl;
         }
 
     std::string const general_account_rate = cell["GeneralAccountRate"].str();
@@ -83,10 +84,13 @@ LMI_WX_TEST_CASE(default_input)
 
     std::string const product_name = cell["ProductName"].str();
 
-    wxPrintf
-        ("ProductName=\"%s\"; GeneralAccountRate=\"%s\"\n"
-        ,product_name
-        ,general_account_rate
-        );
+    std::cout
+        << "ProductName='"
+        << product_name
+        << "'; GeneralAccountRate='"
+        << general_account_rate
+        << "'"
+        << std::endl
+        ;
 }
 

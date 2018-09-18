@@ -25,11 +25,13 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "math_functions.hpp"           // outward_quotient()
 #include "ssize_lmi.hpp"
 
 #include <algorithm>                    // min()
 #include <numeric>                      // accumulate()
 #include <queue>
+#include <stdexcept>
 #include <utility>                      // pair
 
 /// Apportion "seats" to "states" by their respective total "votes".
@@ -172,4 +174,65 @@ std::vector<int> set_column_widths
         }
 
     return w;
+}
+
+namespace
+{
+// An assertion to this effect is emulated in the ctor-initializer.
+std::logic_error yikes("Rows per group must be positive.");
+} // Unnamed namespace.
+
+/// Preconditions: 0 <= total_rows && 0 < rows_per_group <= max_lines_per_page
+
+paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
+    :total_rows_         {total_rows}
+    ,rows_per_group_     {0 < rows_per_group ? rows_per_group : throw yikes}
+    ,max_lines_per_page_ {max_lines_per_page}
+    // "+ 1": blank-line separator after each group.
+    ,lines_per_group_    {rows_per_group_ + 1}
+    // "+ 1": no blank-line separator after the last group.
+    ,groups_per_page_    {(max_lines_per_page_ + 1) / lines_per_group_}
+    ,rows_per_page_      {rows_per_group_ * groups_per_page_}
+    // "-1 +": no blank-line separator after the last group.
+    ,lines_on_full_page_ {-1 + lines_per_group_ * groups_per_page_}
+    ,lines_on_last_page_ {}
+    ,page_count_         {}
+{
+    LMI_ASSERT(0 <= total_rows);
+    LMI_ASSERT(0 <  rows_per_group                      );
+    LMI_ASSERT(     rows_per_group <= max_lines_per_page);
+
+    page_count_ = outward_quotient(total_rows_, rows_per_page_);
+
+    int const pages_before_last = (0 == page_count_) ? 0 : page_count_ - 1;
+    int const rows_on_last_page = total_rows_ - rows_per_page_ * pages_before_last;
+    int const full_groups_on_last_page = rows_on_last_page / rows_per_group_;
+    int const extra_rows_on_last_page  = rows_on_last_page % rows_per_group_;
+    lines_on_last_page_ =
+          lines_per_group_ * full_groups_on_last_page
+        + extra_rows_on_last_page
+        - (   0 != full_groups_on_last_page // (there is a separator
+          &&  0 == extra_rows_on_last_page  // and it is not wanted)
+          )
+        ;
+
+    // Avoid widowing a partial group on the last page, by moving it
+    // to the preceding page (which becomes the last) if there's room.
+    if(1 < page_count_)
+        {
+        int const free_lines = max_lines_per_page_ - lines_per_group_ * groups_per_page_;
+        LMI_ASSERT(free_lines < rows_per_group_);
+        if(rows_on_last_page <= free_lines)
+            {
+            --page_count_;
+            // "+ 1": separator before antiwidowed partial group.
+            lines_on_last_page_ = lines_on_full_page_ + 1 + rows_on_last_page;
+            }
+        }
+
+    // If there are zero rows of data, then one empty page is wanted.
+    if(0 == total_rows_)
+        {
+        page_count_ = 1;
+        }
 }

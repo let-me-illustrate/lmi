@@ -38,7 +38,6 @@
     {{/HasProducerCity}}
 </p>
 <p>
-    &nbsp;
 </p>
 <table width="100%" cellspacing="0" cellpadding="0" valign="top">
     <tr>
@@ -89,25 +88,20 @@
             Guaranteed Crediting Rate: {{InitAnnGenAcctInt_Guaranteed}}<br>
 
             Current Illustrated Crediting Rate:
-            {{#InforceYearEq0}}
-                {{InitAnnGenAcctInt_Current}}
-            {{/InforceYearEq0}}
-            {{^InforceYearEq0}}
-                {{UltimateInterestRate}}
-            {{/InforceYearEq0}}
+                {{PresentCreditingRate}}
             <br>
 
             {{#SinglePremium}}
-                {{#InforceYearLE4}}
+                {{#InforceYearLT5}}
                     Ultimate Illustrated Crediting Rate:
                     {{#ModifiedSinglePremium0}}
-                        {{AnnGAIntRate_Current[11]}}
+                        {{AnnGAIntRate_Current[10]}}
                     {{/ModifiedSinglePremium0}}
                     {{^ModifiedSinglePremium0}}
-                        {{AnnGAIntRate_Current[6]}}
+                        {{AnnGAIntRate_Current[5]}}
                     {{/ModifiedSinglePremium0}}
                     <br>
-                {{/InforceYearLE4}}
+                {{/InforceYearLT5}}
             {{/SinglePremium}}
 
             {{^Composite}}
@@ -119,12 +113,11 @@
                     {{UWType}}
                 {{/UWTypeIsMedical}}
                 <br>
+                Rate Classification: {{UWClass}}, {{Smoker}}, {{Gender}}<br>
+                {{#UWClassIsRated}}
+                &nbsp;&nbsp;&nbsp;Table Rating: {{SubstandardTable}}<br>
+                {{/UWClassIsRated}}
             {{/Composite}}
-
-            Rate Classification: {{UWClass}}, {{Smoker}}, {{Gender}}<br>
-            {{#UWClassIsRated}}
-            &nbsp;&nbsp;&nbsp;Table Rating: {{SubstandardTable}}<br>
-            {{/UWClassIsRated}}
         </td>
     </tr>
 </table>

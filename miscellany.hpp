@@ -199,12 +199,6 @@ inline unsigned char lmi_toupper(unsigned char c)
     return static_cast<unsigned char>(std::toupper(c));
 }
 
-int LMI_SO page_count
-    (int total_rows
-    ,int rows_per_group
-    ,int rows_per_page
-    );
-
 /// DWISOTT
 ///
 /// Perhaps this function template's only legitimate use is within a

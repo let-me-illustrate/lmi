@@ -117,7 +117,7 @@ LMI_WX_TEST_CASE(default_update)
             return "defaults dialog";
             }
 
-        // Helper method toggling the value of the "UseDOB" field which can be
+        // Helper function toggling the value of the "UseDOB" field which can be
         // represented by either a check box or a two element radio box
         // depending on the skin used.
         static void ToggleUseDOB(wxWindow* usedob_window)

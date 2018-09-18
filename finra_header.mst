@@ -19,11 +19,14 @@
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 }}
 
-{{>nasd_header_upper}}
-<p align="center">Illustration Assumption Detail</p>
-{{>nasd_header_lower}}
+{{!
+    The header is split in two parts, upper and lower one, only to allow
+    inserting the title between them, as a couple of pages do. But we still
+    provide this "full header" template for the pages that don't have any
+    title to make them simpler.
 
-<br></br>
-<br></br>
-
-{{! Illustration assumption detail table is created from C++ code }}
+    PDF !! The title that's inserted in between can be moved after the header,
+    which then won't need to be split in two parts.
+}}
+{{>finra_header_upper}}
+{{>finra_header_lower}}

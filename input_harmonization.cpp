@@ -31,7 +31,7 @@
 #include "dbnames.hpp"
 #include "global_settings.hpp"
 #include "input_sequence.hpp"
-#include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg(), is_three_rate_nasd()
+#include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg(), is_three_rate_finra()
 
 #include <algorithm>                    // min(), max()
 #include <utility>                      // pair
@@ -808,7 +808,7 @@ false // Silly workaround for now.
     SolveSeparateAccountBasis.enable(actually_solving && mce_solve_for_non_mec != SolveTarget);
     SolveSeparateAccountBasis.allow(mce_sep_full, actually_solving);
     SolveSeparateAccountBasis.allow(mce_sep_zero, actually_solving && allow_sep_acct);
-    SolveSeparateAccountBasis.allow(mce_sep_half, actually_solving && allow_sep_acct && is_three_rate_nasd(GleanedLedgerType_));
+    SolveSeparateAccountBasis.allow(mce_sep_half, actually_solving && allow_sep_acct && is_three_rate_finra(GleanedLedgerType_));
 
     SolveTargetValue.enable(actually_solving && (mce_solve_for_target_csv == SolveTarget || mce_solve_for_target_naar == SolveTarget));
 
@@ -845,7 +845,9 @@ false // Silly workaround for now.
     weird_report_columns.push_back(mce_guaranteed_0_cash_surrender_value          );
 
     bool enable_weirdness =
-           0.0 < InforceGeneralAccountValue .value()
+           allow_gen_acct
+        && allow_sep_acct
+        && 0.0 < InforceGeneralAccountValue .value()
         && 0.0 < InforceSeparateAccountValue.value()
         ;
 
