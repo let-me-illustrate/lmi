@@ -699,11 +699,11 @@ class page
     // provided the HTML interpolator object which can be used for obtaining
     // the HTML text of the page contents from an external template.
     page
-        (pdf_illustration const& illustration
+        (pdf_illustration  const& illustration
         ,html_interpolator const& interpolate_html
         )
-        :illustration_{illustration}
-        ,interpolate_html_{interpolate_html}
+        :illustration_     {illustration}
+        ,interpolate_html_ {interpolate_html}
     {
     }
 
