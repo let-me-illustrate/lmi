@@ -766,12 +766,12 @@ class pdf_illustration : protected html_interpolator
     }
 
     // Render all pages to the specified PDF file.
-    void render_all(fs::path const& output)
+    void render_all(fs::path const& pdf_out_file)
     {
         // Use non-default font sizes that are used to make the new
         // illustrations more similar to the previously existing ones.
         pdf_writer_wx writer
-            (output.string()
+            (pdf_out_file.string()
             ,wxPORTRAIT
             ,{8, 9, 10, 12, 14, 18, 20}
             );
@@ -3091,14 +3091,14 @@ class ledger_pdf_generator_wx : public ledger_pdf_generator
     ledger_pdf_generator_wx(ledger_pdf_generator_wx const&) = delete;
     ledger_pdf_generator_wx& operator=(ledger_pdf_generator_wx const&) = delete;
 
-    void write(Ledger const& ledger, fs::path const& output) override;
+    void write(Ledger const& ledger, fs::path const& pdf_out_file) override;
 
   private:
 };
 
 void ledger_pdf_generator_wx::write
     (Ledger   const& ledger
-    ,fs::path const& output
+    ,fs::path const& pdf_out_file
     )
 {
     wxBusyCursor reverie;
@@ -3106,16 +3106,16 @@ void ledger_pdf_generator_wx::write
     switch(ledger.ledger_type())
         {
         case mce_ill_reg:
-            pdf_illustration_naic        (ledger).render_all(output);
+            pdf_illustration_naic        (ledger).render_all(pdf_out_file);
             break;
         case mce_finra:
-            pdf_illustration_finra       (ledger).render_all(output);
+            pdf_illustration_finra       (ledger).render_all(pdf_out_file);
             break;
         case mce_group_private_placement:
-            pdf_illustration_reg_d_group (ledger).render_all(output);
+            pdf_illustration_reg_d_group (ledger).render_all(pdf_out_file);
             break;
         case mce_individual_private_placement:
-            pdf_illustration_reg_d_indiv (ledger).render_all(output);
+            pdf_illustration_reg_d_indiv (ledger).render_all(pdf_out_file);
             break;
         case mce_prospectus_obsolete:                 // fall through
         case mce_offshore_private_placement_obsolete: // fall through
