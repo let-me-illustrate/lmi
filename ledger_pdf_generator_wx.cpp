@@ -483,9 +483,9 @@ class html_cell_for_pdf_output : public wxHtmlCell
     {
       public:
         pdf_context()
-            :ledger_           (nullptr)
-            ,writer_           (nullptr)
-            ,interpolate_html_ (nullptr)
+            :ledger_           {nullptr}
+            ,writer_           {nullptr}
+            ,interpolate_html_ {nullptr}
             {}
 
         void set
@@ -1214,9 +1214,9 @@ class numbered_page : public page_with_footer
     }
 
     // "-1" is invalid; use start_numbering() to change it.
-    static inline int last_page_number_ = {-1};
-    int               this_page_number_ = {0};
-    int               extra_pages_      = {0};
+    static inline int last_page_number_ {-1};
+    int               this_page_number_ {0};
+    int               extra_pages_      {0};
 };
 
 // Simplest possible page which is entirely defined by its external template
