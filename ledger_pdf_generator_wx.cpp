@@ -692,13 +692,13 @@ class pdf_illustration;
 // A single logical page may result in multiple physical pages of output, e.g.
 // if it contains a table not fitting on one page, although it may often
 // correspond to a single physical page of the resulting illustration.
-class page
+class logical_page
 {
   public:
     // When a page is created, it must be associated with an illustration and
     // provided the HTML interpolator object which can be used for obtaining
     // the HTML text of the page contents from an external template.
-    page
+    logical_page
         (pdf_illustration  const& illustration
         ,html_interpolator const& interpolate_html
         )
@@ -708,10 +708,10 @@ class page
     }
 
     // Pages are not value-like objects, so prohibit copying them.
-    page(page const&) = delete;
-    page& operator=(page const&) = delete;
+    logical_page(logical_page const&) = delete;
+    logical_page& operator=(logical_page const&) = delete;
 
-    virtual ~page() = default;
+    virtual ~logical_page() = default;
 
     // Called before rendering any pages to prepare for doing this, e.g. by
     // computing the number of pages needed.
@@ -962,14 +962,14 @@ class pdf_illustration : protected html_interpolator
     Ledger const& ledger_;
 
     // All the pages of this illustration.
-    std::vector<std::unique_ptr<page>> pages_;
+    std::vector<std::unique_ptr<logical_page>> pages_;
 };
 
 // Cover page used by several different illustration kinds.
-class cover_page : public page
+class cover_page : public logical_page
 {
   public:
-    using page::page;
+    using logical_page::logical_page;
 
     void render
         (Ledger            const& // ledger
@@ -1001,10 +1001,10 @@ class cover_page : public page
 
 // Base class for all pages with a footer and/or header, collectively called
 // "marginals".
-class page_with_marginals : public page
+class page_with_marginals : public logical_page
 {
   public:
-    using page::page;
+    using logical_page::logical_page;
 
     // Override pre_render() to compute page_top_ and footer_top_ which are
     // needed in the derived classes' overridden get_extra_pages_needed().
