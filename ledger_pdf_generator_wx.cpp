@@ -126,7 +126,7 @@ class html_interpolator
     // interpolation functions, but usually shouldn't be called directly, just
     // use operator() below instead.
     std::string interpolation_func
-        (std::string const& s
+        (std::string      const& s
         ,interpolate_lookup_kind kind
         ) const
     {
@@ -394,8 +394,8 @@ class using_illustration_table
     // by the separate (and simpler to implement) get_table_columns() pure
     // virtual function.
     wx_table_generator create_table_generator
-        (Ledger const& ledger
-        ,pdf_writer_wx& writer
+        (Ledger        const& ledger
+        ,pdf_writer_wx      & writer
         ) const
     {
         std::vector<column_parameters> vc;
@@ -449,8 +449,8 @@ class html_cell_for_pdf_output : public wxHtmlCell
         // References passed to the ctor must have lifetime greater than that
         // of this object itself.
         explicit pdf_context_setter
-            (Ledger const& ledger
-            ,pdf_writer_wx& writer
+            (Ledger            const& ledger
+            ,pdf_writer_wx          & writer
             ,html_interpolator const& interpolate_html
             )
         {
@@ -560,9 +560,9 @@ class scaled_image_cell : public html_cell_for_pdf_output
 {
   public:
     scaled_image_cell
-        (wxImage const& image
+        (wxImage  const& image
         ,wxString const& src
-        ,double scale_factor
+        ,double          scale_factor
         )
         :image_        {image}
         ,src_          {src}
@@ -574,11 +574,11 @@ class scaled_image_cell : public html_cell_for_pdf_output
 
     // Override the base class function to actually render the image.
     void Draw
-        (wxDC& dc
-        ,int x
-        ,int y
-        ,int view_y1
-        ,int view_y2
+        (wxDC&                dc
+        ,int                  x
+        ,int                  y
+        ,int                  view_y1
+        ,int                  view_y2
         ,wxHtmlRenderingInfo& info
         ) override
     {
@@ -699,8 +699,8 @@ class page
 
     // Render this page contents.
     virtual void render
-        (Ledger const& ledger
-        ,pdf_writer_wx& writer
+        (Ledger            const& ledger
+        ,pdf_writer_wx          & writer
         ,html_interpolator const& interpolate_html
         ) = 0;
 
@@ -1233,8 +1233,8 @@ class standard_page : public numbered_page
     }
 
     void render
-        (Ledger const& ledger
-        ,pdf_writer_wx& writer
+        (Ledger            const& ledger
+        ,pdf_writer_wx          & writer
         ,html_interpolator const& interpolate_html
         ) override
     {
@@ -1612,8 +1612,8 @@ class page_with_tabular_report
 {
   public:
     void render
-        (Ledger const& ledger
-        ,pdf_writer_wx& writer
+        (Ledger            const& ledger
+        ,pdf_writer_wx          & writer
         ,html_interpolator const& interpolate_html
         ) override
     {
@@ -1686,9 +1686,9 @@ class page_with_tabular_report
     // pos_y and update it to account for the added lines. The base class
     // version does nothing.
     virtual void render_or_measure_extra_headers
-        (wx_table_generator&          // table_gen
+        (wx_table_generator     &     // table_gen
         ,html_interpolator const&     // interpolate_html
-        ,int&                         // pos_y
+        ,int                    &     // pos_y
         ,oenum_render_or_only_measure // output_mode
         ) const
     {
@@ -1699,8 +1699,8 @@ class page_with_tabular_report
     // (in any case) return the vertical coordinate of its bottom, where the
     // tabular report starts.
     int render_or_measure_fixed_page_part
-        (wx_table_generator&          table_gen
-        ,pdf_writer_wx&               writer
+        (wx_table_generator     &     table_gen
+        ,pdf_writer_wx          &     writer
         ,html_interpolator const&     interpolate_html
         ,oenum_render_or_only_measure output_mode
         ) const
@@ -1736,8 +1736,8 @@ class page_with_tabular_report
     // Override the base class function as the table may overflow onto the next
     // page(s).
     int get_extra_pages_needed
-        (Ledger const&            ledger
-        ,pdf_writer_wx&           writer
+        (Ledger            const& ledger
+        ,pdf_writer_wx          & writer
         ,html_interpolator const& interpolate_html
         ) override
     {
@@ -1801,9 +1801,9 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
     }
 
     void render_or_measure_extra_headers
-        (wx_table_generator&          table_gen
+        (wx_table_generator     &     table_gen
         ,html_interpolator const&     // interpolate_html
-        ,int&                         pos_y
+        ,int                    &     pos_y
         ,oenum_render_or_only_measure output_mode
         ) const override
     {
@@ -2836,9 +2836,9 @@ class reg_d_indiv_curr : public page_with_tabular_report
     }
 
     void render_or_measure_extra_headers
-        (wx_table_generator&          table_gen
+        (wx_table_generator     &     table_gen
         ,html_interpolator const&     interpolate_html
-        ,int&                         pos_y
+        ,int                    &     pos_y
         ,oenum_render_or_only_measure output_mode
         ) const override
     {
@@ -2922,7 +2922,7 @@ class ledger_pdf_generator_wx : public ledger_pdf_generator
 };
 
 void ledger_pdf_generator_wx::write
-    (Ledger const& ledger
+    (Ledger   const& ledger
     ,fs::path const& output
     )
 {
