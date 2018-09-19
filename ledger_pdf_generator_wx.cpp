@@ -975,8 +975,8 @@ class cover_page : public logical_page
     using logical_page::logical_page;
 
     void render
-        (Ledger            const& // ledger
-        ,pdf_writer_wx          & writer
+        (Ledger        const& // ledger
+        ,pdf_writer_wx      & writer
         ) override
     {
         int const height_contents = writer.output_html
@@ -1012,8 +1012,8 @@ class page_with_marginals : public logical_page
     // Override pre_render() to compute page_top_ and footer_top_ which are
     // needed in the derived classes' overridden get_extra_pages_needed().
     void pre_render
-        (Ledger            const& // ledger
-        ,pdf_writer_wx          & writer
+        (Ledger        const& // ledger
+        ,pdf_writer_wx      & writer
         ) override
     {
         auto const frame_horz_margin = writer.get_horz_margin();
@@ -1069,8 +1069,8 @@ class page_with_marginals : public logical_page
     }
 
     void render
-        (Ledger            const& // ledger
-        ,pdf_writer_wx          & writer
+        (Ledger        const& // ledger
+        ,pdf_writer_wx      & writer
         ) override
     {
         auto const frame_horz_margin = writer.get_horz_margin();
@@ -1225,8 +1225,8 @@ class numbered_page : public page_with_marginals
     }
 
     void pre_render
-        (Ledger            const& ledger
-        ,pdf_writer_wx          & writer
+        (Ledger        const& ledger
+        ,pdf_writer_wx      & writer
         ) override
     {
         page_with_marginals::pre_render(ledger, writer);
@@ -1277,8 +1277,8 @@ class numbered_page : public page_with_marginals
     // Derived classes may override this function if they may need more than one
     // physical page to show their contents.
     virtual int get_extra_pages_needed
-        (Ledger            const& ledger
-        ,pdf_writer_wx          & writer
+        (Ledger        const& ledger
+        ,pdf_writer_wx      & writer
         ) = 0;
 
     std::string get_page_number() const override
@@ -1313,8 +1313,8 @@ class standard_page : public numbered_page
     }
 
     void pre_render
-        (Ledger            const& ledger
-        ,pdf_writer_wx          & writer
+        (Ledger        const& ledger
+        ,pdf_writer_wx      & writer
         ) override
     {
         // Before calling the base class version, parse the HTML to initialize
@@ -1325,8 +1325,8 @@ class standard_page : public numbered_page
     }
 
     void render
-        (Ledger const& ledger
-        ,pdf_writer_wx& writer
+        (Ledger        const& ledger
+        ,pdf_writer_wx      & writer
         ) override
     {
         int last_page_break = 0;
@@ -1409,8 +1409,8 @@ class standard_page : public numbered_page
     }
 
     int get_extra_pages_needed
-        (Ledger            const& // ledger
-        ,pdf_writer_wx          & writer
+        (Ledger        const& // ledger
+        ,pdf_writer_wx      & writer
         ) override
     {
         page_break_positions_ = writer.paginate_html
@@ -1764,8 +1764,8 @@ class page_with_tabular_report
     using numbered_page::numbered_page;
 
     void render
-        (Ledger            const& ledger
-        ,pdf_writer_wx          & writer
+        (Ledger        const& ledger
+        ,pdf_writer_wx      & writer
         ) override
     {
         numbered_page::render(ledger, writer);
@@ -1848,8 +1848,8 @@ class page_with_tabular_report
     // (in any case) return the vertical coordinate of its bottom, where the
     // tabular report starts.
     int render_or_measure_fixed_page_part
-        (wx_table_generator     &     table_gen
-        ,pdf_writer_wx          &     writer
+        (wx_table_generator         & table_gen
+        ,pdf_writer_wx              & writer
         ,oenum_render_or_only_measure output_mode
         ) const
     {
@@ -1883,8 +1883,8 @@ class page_with_tabular_report
     // Override the base class function as the table may overflow onto the next
     // page(s).
     int get_extra_pages_needed
-        (Ledger            const& ledger
-        ,pdf_writer_wx          & writer
+        (Ledger        const& ledger
+        ,pdf_writer_wx      & writer
         ) override
     {
         wx_table_generator table_gen{create_table_generator(ledger, writer)};
