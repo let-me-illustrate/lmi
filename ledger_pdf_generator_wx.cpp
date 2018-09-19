@@ -1048,8 +1048,10 @@ class page_with_marginals : public logical_page
             ,oe_only_measure
             );
 
-        auto const& upper_template = get_upper_footer_template_name();
-        if(!upper_template.empty())
+        if
+            (auto const& upper_template = get_upper_footer_template_name()
+            ;!upper_template.empty()
+            )
             {
             footer_height += writer.output_html
                 (frame_horz_margin
@@ -1093,7 +1095,10 @@ class page_with_marginals : public logical_page
         // present lower part.
         auto y = footer_top_;
 
-        if(auto const& upper_template = get_upper_footer_template_name(); !upper_template.empty())
+        if
+            (auto const& upper_template = get_upper_footer_template_name()
+            ;!upper_template.empty()
+            )
             {
             y += pdf_dc.GetCharHeight();
 
