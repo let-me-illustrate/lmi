@@ -1848,9 +1848,9 @@ class page_with_tabular_report
     // pos_y and update it to account for the added lines. The base class
     // version does nothing.
     virtual void render_or_measure_extra_headers
-        (wx_table_generator     &     // table_gen
-        ,int                    &     // pos_y
-        ,oenum_render_or_only_measure // output_mode
+        (wx_table_generator           & // table_gen
+        ,int                          & // pos_y
+        ,oenum_render_or_only_measure   // output_mode
         ) const
     {
     }
@@ -1860,9 +1860,9 @@ class page_with_tabular_report
     // (in any case) return the vertical coordinate of its bottom, where the
     // tabular report starts.
     int render_or_measure_fixed_page_part
-        (wx_table_generator         & table_gen
-        ,pdf_writer_wx              & writer
-        ,oenum_render_or_only_measure output_mode
+        (wx_table_generator           & table_gen
+        ,pdf_writer_wx                & writer
+        ,oenum_render_or_only_measure   output_mode
         ) const
     {
         int pos_y = writer.get_vert_margin();
@@ -1961,9 +1961,9 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
     }
 
     void render_or_measure_extra_headers
-        (wx_table_generator     &     table_gen
-        ,int                    &     pos_y
-        ,oenum_render_or_only_measure output_mode
+        (wx_table_generator           & table_gen
+        ,int                          & pos_y
+        ,oenum_render_or_only_measure   output_mode
         ) const override
     {
         // Make a copy because we want the real pos_y to be modified only once,
@@ -2384,9 +2384,9 @@ class page_with_basic_tabular_report : public page_with_tabular_report
     }
 
     void render_or_measure_extra_headers
-        (wx_table_generator&          table_gen
-        ,int&                         pos_y
-        ,oenum_render_or_only_measure output_mode
+        (wx_table_generator           & table_gen
+        ,int                          & pos_y
+        ,oenum_render_or_only_measure   output_mode
         ) const override
     {
         // Output the first super header row.
@@ -2857,9 +2857,9 @@ class reg_d_indiv_irr_base : public page_with_tabular_report
     }
 
     void render_or_measure_extra_headers
-        (wx_table_generator&          table_gen
-        ,int&                         pos_y
-        ,oenum_render_or_only_measure output_mode
+        (wx_table_generator           & table_gen
+        ,int                          & pos_y
+        ,oenum_render_or_only_measure   output_mode
         ) const override
     {
         std::ostringstream header_zero;
@@ -3039,9 +3039,9 @@ class reg_d_indiv_curr : public page_with_tabular_report
     }
 
     void render_or_measure_extra_headers
-        (wx_table_generator     &     table_gen
-        ,int                    &     pos_y
-        ,oenum_render_or_only_measure output_mode
+        (wx_table_generator           & table_gen
+        ,int                          & pos_y
+        ,oenum_render_or_only_measure   output_mode
         ) const override
     {
         table_gen.output_super_header
