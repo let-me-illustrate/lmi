@@ -770,7 +770,7 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
     void render_all()
     {
         html_cell_for_pdf_output::pdf_context_setter
-            set_pdf_context(ledger_, get_writer(), *this);
+            set_pdf_context(ledger_, get_writer(), get_interpolator());
 
         for(auto const& i : pages_)
             {
