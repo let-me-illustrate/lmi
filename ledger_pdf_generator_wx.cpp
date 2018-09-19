@@ -739,7 +739,10 @@ class logical_page
 class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
 {
   public:
-    explicit pdf_illustration(Ledger const& ledger, fs::path const& pdf_out_file)
+    explicit pdf_illustration
+        (Ledger   const& ledger
+        ,fs::path const& pdf_out_file
+        )
         :html_interpolator {ledger.make_evaluator()}
         ,pdf_writer_wx     (pdf_out_file.string(), wxPORTRAIT, font_sizes_)
         ,ledger_           {ledger}
@@ -2138,7 +2141,10 @@ class ill_reg_supplemental_report : public standard_supplemental_report
 class pdf_illustration_naic : public pdf_illustration
 {
   public:
-    explicit pdf_illustration_naic(Ledger const& ledger, fs::path const& pdf_out_file)
+    explicit pdf_illustration_naic
+        (Ledger   const& ledger
+        ,fs::path const& pdf_out_file
+        )
         :pdf_illustration{ledger, pdf_out_file}
     {
         auto const& invar = ledger.GetLedgerInvariant();
@@ -2654,7 +2660,10 @@ class finra_assumption_detail : public page_with_tabular_report
 class pdf_illustration_finra : public pdf_illustration
 {
   public:
-    explicit pdf_illustration_finra(Ledger const& ledger, fs::path const& pdf_out_file)
+    explicit pdf_illustration_finra
+        (Ledger   const& ledger
+        ,fs::path const& pdf_out_file
+        )
         :pdf_illustration{ledger, pdf_out_file}
     {
         auto const& invar = ledger.GetLedgerInvariant();
@@ -2759,7 +2768,10 @@ class reg_d_group_basic : public page_with_basic_tabular_report
 class pdf_illustration_reg_d_group : public pdf_illustration
 {
   public:
-    explicit pdf_illustration_reg_d_group(Ledger const& ledger, fs::path const& pdf_out_file)
+    explicit pdf_illustration_reg_d_group
+        (Ledger   const& ledger
+        ,fs::path const& pdf_out_file
+        )
         :pdf_illustration{ledger, pdf_out_file}
     {
         // Define variables specific to this illustration.
@@ -3041,7 +3053,10 @@ class reg_d_indiv_curr : public page_with_tabular_report
 class pdf_illustration_reg_d_indiv : public pdf_illustration
 {
   public:
-    explicit pdf_illustration_reg_d_indiv(Ledger const& ledger, fs::path const& pdf_out_file)
+    explicit pdf_illustration_reg_d_indiv
+        (Ledger   const& ledger
+        ,fs::path const& pdf_out_file
+        )
         :pdf_illustration{ledger, pdf_out_file}
     {
         auto const& invar = ledger.GetLedgerInvariant();
