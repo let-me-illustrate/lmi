@@ -736,11 +736,18 @@ class logical_page
 // illustration-global data registered as variables with html_interpolator and
 // so available for the pages when expanding the external templates defining
 // their contents.
-class pdf_illustration : protected html_interpolator
+class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
 {
   public:
-    explicit pdf_illustration(Ledger const& ledger)
+    explicit pdf_illustration(Ledger const& ledger, fs::path const& pdf_out_file)
         :html_interpolator {ledger.make_evaluator()}
+        // Use non-default font sizes that are used to make the new
+        // illustrations more similar to the previously existing ones.
+        ,pdf_writer_wx
+            (pdf_out_file.string()
+            ,wxPORTRAIT
+            ,{8, 9, 10, 12, 14, 18, 20}
+            )
         ,ledger_           {ledger}
     {
         init_variables();
@@ -766,22 +773,14 @@ class pdf_illustration : protected html_interpolator
     }
 
     // Render all pages to the specified PDF file.
-    void render_all(fs::path const& pdf_out_file)
+    void render_all()
     {
-        // Use non-default font sizes that are used to make the new
-        // illustrations more similar to the previously existing ones.
-        pdf_writer_wx writer
-            (pdf_out_file.string()
-            ,wxPORTRAIT
-            ,{8, 9, 10, 12, 14, 18, 20}
-            );
-
         html_cell_for_pdf_output::pdf_context_setter
-            set_pdf_context(ledger_, writer, *this);
+            set_pdf_context(ledger_, get_writer(), *this);
 
         for(auto const& i : pages_)
             {
-            i->pre_render(ledger_, writer);
+            i->pre_render(ledger_, get_writer());
             }
 
         bool first = true;
@@ -797,13 +796,13 @@ class pdf_illustration : protected html_interpolator
                 // Do start a new physical page before rendering all the
                 // subsequent pages (notice that a page is also free to call
                 // next_page() from its render()).
-                writer.next_page();
+                get_writer().next_page();
                 }
 
-            i->render(ledger_, writer);
+            i->render(ledger_, get_writer());
             }
 
-        writer.save();
+        get_writer().save();
     }
 
     // Functions to be implemented by the derived classes to indicate which
@@ -819,8 +818,9 @@ class pdf_illustration : protected html_interpolator
     virtual std::string get_lower_footer_template_name() const = 0;
 
   protected:
-    // Explicitly retrieve the base class.
+    // Explicitly retrieve references to base classes.
     html_interpolator const& get_interpolator() const {return *this;}
+    pdf_writer_wx          & get_writer      ()       {return *this;}
 
     // Helper for abbreviating a string to at most the given length (in bytes).
     static std::string abbreviate_if_necessary(std::string s, std::size_t len)
@@ -2142,8 +2142,8 @@ class ill_reg_supplemental_report : public standard_supplemental_report
 class pdf_illustration_naic : public pdf_illustration
 {
   public:
-    explicit pdf_illustration_naic(Ledger const& ledger)
-        :pdf_illustration{ledger}
+    explicit pdf_illustration_naic(Ledger const& ledger, fs::path const& pdf_out_file)
+        :pdf_illustration{ledger, pdf_out_file}
     {
         auto const& invar = ledger.GetLedgerInvariant();
         auto const& policy_name = invar.PolicyLegalName;
@@ -2658,8 +2658,8 @@ class finra_assumption_detail : public page_with_tabular_report
 class pdf_illustration_finra : public pdf_illustration
 {
   public:
-    explicit pdf_illustration_finra(Ledger const& ledger)
-        :pdf_illustration{ledger}
+    explicit pdf_illustration_finra(Ledger const& ledger, fs::path const& pdf_out_file)
+        :pdf_illustration{ledger, pdf_out_file}
     {
         auto const& invar = ledger.GetLedgerInvariant();
 
@@ -2763,8 +2763,8 @@ class reg_d_group_basic : public page_with_basic_tabular_report
 class pdf_illustration_reg_d_group : public pdf_illustration
 {
   public:
-    explicit pdf_illustration_reg_d_group(Ledger const& ledger)
-        :pdf_illustration{ledger}
+    explicit pdf_illustration_reg_d_group(Ledger const& ledger, fs::path const& pdf_out_file)
+        :pdf_illustration{ledger, pdf_out_file}
     {
         // Define variables specific to this illustration.
         auto const& invar = ledger.GetLedgerInvariant();
@@ -3045,8 +3045,8 @@ class reg_d_indiv_curr : public page_with_tabular_report
 class pdf_illustration_reg_d_indiv : public pdf_illustration
 {
   public:
-    explicit pdf_illustration_reg_d_indiv(Ledger const& ledger)
-        :pdf_illustration{ledger}
+    explicit pdf_illustration_reg_d_indiv(Ledger const& ledger, fs::path const& pdf_out_file)
+        :pdf_illustration{ledger, pdf_out_file}
     {
         auto const& invar = ledger.GetLedgerInvariant();
 
@@ -3106,16 +3106,16 @@ void ledger_pdf_generator_wx::write
     switch(ledger.ledger_type())
         {
         case mce_ill_reg:
-            pdf_illustration_naic        (ledger).render_all(pdf_out_file);
+            pdf_illustration_naic        (ledger, pdf_out_file).render_all();
             break;
         case mce_finra:
-            pdf_illustration_finra       (ledger).render_all(pdf_out_file);
+            pdf_illustration_finra       (ledger, pdf_out_file).render_all();
             break;
         case mce_group_private_placement:
-            pdf_illustration_reg_d_group (ledger).render_all(pdf_out_file);
+            pdf_illustration_reg_d_group (ledger, pdf_out_file).render_all();
             break;
         case mce_individual_private_placement:
-            pdf_illustration_reg_d_indiv (ledger).render_all(pdf_out_file);
+            pdf_illustration_reg_d_indiv (ledger, pdf_out_file).render_all();
             break;
         case mce_prospectus_obsolete:                 // fall through
         case mce_offshore_private_placement_obsolete: // fall through
