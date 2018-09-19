@@ -741,13 +741,7 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
   public:
     explicit pdf_illustration(Ledger const& ledger, fs::path const& pdf_out_file)
         :html_interpolator {ledger.make_evaluator()}
-        // Use non-default font sizes that are used to make the new
-        // illustrations more similar to the previously existing ones.
-        ,pdf_writer_wx
-            (pdf_out_file.string()
-            ,wxPORTRAIT
-            ,{8, 9, 10, 12, 14, 18, 20}
-            )
+        ,pdf_writer_wx     (pdf_out_file.string(), wxPORTRAIT, font_sizes_)
         ,ledger_           {ledger}
     {
         init_variables();
@@ -958,8 +952,10 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
             );
     }
 
-    // Source of the data.
     Ledger const& ledger_;
+
+    // These font sizes differ from wxHTML defaults.
+    static inline html_font_sizes font_sizes_ {8, 9, 10, 12, 14, 18, 20};
 
     // All the pages of this illustration.
     std::vector<std::unique_ptr<logical_page>> pages_;
