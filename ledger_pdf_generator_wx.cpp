@@ -1021,7 +1021,11 @@ class page_with_marginals : public logical_page
 
         page_top_ = writer.get_vert_margin();
 
-        if(auto header_html = get_header_html(); header_html)
+        // Pre-render the header, if any.
+        if
+            (wxHtmlContainerCell* header_html = get_header_html()
+            ;nullptr != header_html
+            )
             {
             page_top_ += writer.output_html
                 (frame_horz_margin
@@ -1081,7 +1085,10 @@ class page_with_marginals : public logical_page
         auto& pdf_dc = writer.dc();
 
         // Render the header, if any.
-        if(auto header_html = get_header_html(); header_html)
+        if
+            (wxHtmlContainerCell* header_html = get_header_html()
+            ;nullptr != header_html
+            )
             {
             writer.output_html
                 (frame_horz_margin
