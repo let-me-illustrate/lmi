@@ -739,6 +739,8 @@ class logical_page
 // their contents.
 class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
 {
+    friend class page_with_tabular_report;
+
   public:
     explicit pdf_illustration
         (Ledger   const& ledger
@@ -1774,7 +1776,15 @@ class page_with_tabular_report
     ,protected using_illustration_table
 {
   public:
-    using numbered_page::numbered_page;
+    page_with_tabular_report
+        (pdf_illustration  const& illustration
+        ,html_interpolator const& interpolate_html
+        )
+        :numbered_page{illustration, interpolate_html}
+        ,ledger_ (const_cast<pdf_illustration&>(illustration_).ledger_)
+        ,writer_ (const_cast<pdf_illustration&>(illustration_).get_writer())
+    {
+    }
 
     /// Initialize a wx_table_generator.
     ///
@@ -1793,6 +1803,9 @@ class page_with_tabular_report
         ,pdf_writer_wx      & writer
         ) override
     {
+        // Assertions demonstrate identity of arguments and class members.
+        LMI_ASSERT(&ledger_ == &ledger);
+        LMI_ASSERT(&writer_ == &writer);
         table_gen_.reset(new wx_table_generator {create_table_generator(ledger, writer)});
         numbered_page::pre_render(ledger, writer);
     }
@@ -1938,7 +1951,9 @@ class page_with_tabular_report
         return z.page_count() - 1;
     }
 
-    std::unique_ptr<wx_table_generator> table_gen_;
+    Ledger                              const& ledger_;
+    pdf_writer_wx                            & writer_;
+    std::unique_ptr<wx_table_generator>        table_gen_;
 };
 
 class ill_reg_tabular_detail_page : public page_with_tabular_report
