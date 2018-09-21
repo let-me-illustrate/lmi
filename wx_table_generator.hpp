@@ -158,8 +158,8 @@ class wx_table_generator
 
     wxDC& dc_;
 
-    int left_margin_;
-    int total_width_;
+    int const left_margin_;
+    int const total_width_;
 
     // These values could be recomputed, but cache them for performance.
     int const char_height_;
@@ -175,10 +175,10 @@ class wx_table_generator
     // If false, separator lines are not drawn automatically (they can still be
     // drawn by calling output_horz_separator() or output_vert_separator()
     // explicitly).
-    bool draw_separators_;
+    bool const draw_separators_;
 
     // If true, headers are drawn in bold.
-    bool use_bold_headers_;
+    bool const use_bold_headers_;
 };
 
 #endif // wx_table_generator_hpp
