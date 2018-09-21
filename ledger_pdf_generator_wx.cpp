@@ -1774,6 +1774,7 @@ class ill_reg_numeric_summary_attachment : public ill_reg_numeric_summary_page
 class page_with_tabular_report
     :public numbered_page
     ,protected using_illustration_table
+    ,private paginator
 {
   public:
     page_with_tabular_report
@@ -1783,6 +1784,8 @@ class page_with_tabular_report
         :numbered_page{illustration, interpolate_html}
         ,ledger_ (const_cast<pdf_illustration&>(illustration_).ledger_)
         ,writer_ (const_cast<pdf_illustration&>(illustration_).get_writer())
+        ,year_             {0}
+        ,pos_y_            {}
     {
     }
 
@@ -1811,59 +1814,11 @@ class page_with_tabular_report
     }
 
     void render
-        (Ledger        const& ledger
-        ,pdf_writer_wx      & writer
+        (Ledger        const& // ledger
+        ,pdf_writer_wx      & // writer
         ) override
     {
-        numbered_page::render(ledger, writer);
-
-        // Just some cached values used inside the loop below.
-        auto const row_height = table_gen().row_height();
-        auto const page_bottom = get_footer_top();
-        auto const rows_per_group = wx_table_generator::rows_per_group;
-
-        // The table may need several pages, loop over them.
-        int const year_max = ledger.GetMaxLength();
-        for(int year = 0; year < year_max; )
-            {
-            int pos_y = render_or_measure_fixed_page_part(writer, oe_render);
-
-            for(;;)
-                {
-                auto const v = visible_values(ledger, interpolate_html_, year);
-                table_gen().output_row(pos_y, v);
-
-                ++year;
-                if(year == year_max)
-                    {
-                    // We will also leave the outer loop.
-                    break;
-                    }
-
-                if(year % rows_per_group == 0)
-                    {
-                    // We need a group break.
-                    pos_y += row_height;
-
-                    // And possibly a page break, which will be necessary if we
-                    // don't have enough space for another group because we
-                    // don't want to have page breaks in the middle of a group.
-                    auto rows_in_next_group = rows_per_group;
-                    if(year_max - year < rows_per_group)
-                        {
-                        // The next group is the last one and will be incomplete.
-                        rows_in_next_group = year_max - year;
-                        }
-
-                    if(page_bottom - rows_in_next_group * row_height < pos_y)
-                        {
-                        next_page(writer);
-                        numbered_page::render(ledger, writer);
-                        break;
-                        }
-                    }
-                }
-            }
+        paginator::print();
     }
 
   protected:
@@ -1946,14 +1901,48 @@ class page_with_tabular_report
             throw std::runtime_error("no space left for tabular report");
             }
 
-        prepaginator z(ledger.GetMaxLength(), rows_per_group, max_lines_per_page);
-        // "- 1": return the number of *extra* pages.
-        return z.page_count() - 1;
+        // "-1 +": return the number of *extra* pages.
+        return -1 + paginator::init
+            (ledger.GetMaxLength()
+            ,wx_table_generator::rows_per_group
+            ,max_lines_per_page
+            );
     }
+
+    void prelude          () override {}
+
+    void open_page        () override
+        {
+            // "if": next_page() has already been called once, which
+            // is perfect for logical pages that fit on one physical
+            // page. See:
+            //   https://lists.nongnu.org/archive/html/lmi/2018-09/msg00022.html
+            if(0 != year_) next_page(writer_);
+            numbered_page::render(ledger_, writer_);
+            pos_y_ = render_or_measure_fixed_page_part(writer_ ,oe_render);
+        }
+
+    void print_a_data_row () override
+        {
+            auto const v = visible_values(ledger_, interpolate_html_, year_);
+            table_gen().output_row(pos_y_, v);
+            ++year_;
+        }
+
+    void print_a_separator() override
+        {
+            pos_y_ += table_gen().row_height();
+        }
+
+    void close_page       () override {}
+
+    void postlude         () override {}
 
     Ledger                              const& ledger_;
     pdf_writer_wx                            & writer_;
     std::unique_ptr<wx_table_generator>        table_gen_;
+    int                                        year_;
+    int                                        pos_y_;
 };
 
 class ill_reg_tabular_detail_page : public page_with_tabular_report
