@@ -184,7 +184,7 @@ std::logic_error yikes("Rows per group must be positive.");
 
 /// Preconditions: 0 <= total_rows && 0 < rows_per_group <= max_lines_per_page
 
-paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
+prepaginator::prepaginator(int total_rows, int rows_per_group, int max_lines_per_page)
     :total_rows_         {total_rows}
     ,rows_per_group_     {0 < rows_per_group ? rows_per_group : throw yikes}
     ,max_lines_per_page_ {max_lines_per_page}
@@ -237,12 +237,12 @@ paginator::paginator(int total_rows, int rows_per_group, int max_lines_per_page)
         }
 }
 
-int paginate::init(int total_rows, int rows_per_group, int max_lines_per_page)
+int paginator::init(int total_rows, int rows_per_group, int max_lines_per_page)
 {
     total_rows_         = total_rows        ;
     rows_per_group_     = rows_per_group    ;
 
-    paginator p(total_rows, rows_per_group, max_lines_per_page);
+    prepaginator p(total_rows, rows_per_group, max_lines_per_page);
     lines_on_full_page_ = p.lines_on_full_page();
     lines_on_last_page_ = p.lines_on_last_page();
     page_count_         = p.page_count();
@@ -250,7 +250,7 @@ int paginate::init(int total_rows, int rows_per_group, int max_lines_per_page)
     return page_count_;
 }
 
-void paginate::print()
+void paginator::print()
 {
     prelude();
     int row = 0;

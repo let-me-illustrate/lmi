@@ -145,10 +145,10 @@ std::vector<int> LMI_SO set_column_widths
 ///   [blank]    line  5
 ///   Z   --..   line  6   row 25
 
-class LMI_SO paginator
+class LMI_SO prepaginator
 {
   public:
-    paginator(int total_rows, int rows_per_group, int max_lines_per_page);
+    prepaginator(int total_rows, int rows_per_group, int max_lines_per_page);
 
     int lines_on_full_page() const {return lines_on_full_page_;}
     int lines_on_last_page() const {return lines_on_last_page_;}
@@ -169,10 +169,10 @@ class LMI_SO paginator
     int       page_count_;
 };
 
-class LMI_SO paginate
+class LMI_SO paginator
 {
   public:
-    paginate() {}
+    paginator() {}
 
     int init(int total_rows, int rows_per_group, int max_lines_per_page);
     void print();

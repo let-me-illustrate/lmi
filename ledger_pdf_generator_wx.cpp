@@ -1919,7 +1919,7 @@ class page_with_tabular_report
             throw std::runtime_error("no space left for tabular report");
             }
 
-        paginator z(ledger.GetMaxLength(), rows_per_group, max_lines_per_page);
+        prepaginator z(ledger.GetMaxLength(), rows_per_group, max_lines_per_page);
         // "- 1": return the number of *extra* pages.
         return z.page_count() - 1;
     }

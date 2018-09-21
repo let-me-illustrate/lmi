@@ -401,7 +401,7 @@ void report_table_test::test_column_widths_for_illustrations()
     }
 }
 
-class paginate_demo : public paginate
+class paginate_demo : public paginator
 {
   public:
     paginate_demo() {}
@@ -500,10 +500,10 @@ std::string test_paginate(int total_rows, int rows_per_group, int max_lines_per_
 
 void report_table_test::test_paginator()
 {
-    // Instead of testing class paginator directly, use
-    // paginate_demo::test_p(), which instantiates paginator
-    // and exercises other code as well before returning
-    // paginator's page count.
+    // Instead of testing classes prepaginator or paginator directly,
+    // use paginate_demo::test_p(), which instantiates paginator (and
+    // hence prepaginator) and exercises other code as well before
+    // returning the page count.
     paginate_demo p;
 
     // Original tests: vary only the number of data rows.
