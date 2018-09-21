@@ -40,6 +40,7 @@
 #include "oecumenic_enumerations.hpp"
 #include "pdf_writer_wx.hpp"
 #include "report_table.hpp"             // paginator
+#include "safely_dereference_as.hpp"
 #include "ssize_lmi.hpp"
 #include "wx_table_generator.hpp"
 
@@ -1775,6 +1776,27 @@ class page_with_tabular_report
   public:
     using numbered_page::numbered_page;
 
+    /// Initialize a wx_table_generator.
+    ///
+    /// This cannot be done in the ctor, where the virtual function
+    /// get_table_columns() is still pure; yet it is wasteful to
+    /// recreate inside every member function that uses it; therefore,
+    /// create it OAOO, here--because this is apparently the first
+    /// function called after the derived-class ctors have run.
+    ///
+    /// Create the wx_table_generator before calling the base-class
+    /// implementation, which calls get_extra_pages_needed(), which
+    /// uses the object initialized here.
+
+    void pre_render
+        (Ledger        const& ledger
+        ,pdf_writer_wx      & writer
+        ) override
+    {
+        table_gen_.reset(new wx_table_generator {create_table_generator(ledger, writer)});
+        numbered_page::pre_render(ledger, writer);
+    }
+
     void render
         (Ledger        const& ledger
         ,pdf_writer_wx      & writer
@@ -1782,10 +1804,8 @@ class page_with_tabular_report
     {
         numbered_page::render(ledger, writer);
 
-        wx_table_generator table_gen{create_table_generator(ledger, writer)};
-
         // Just some cached values used inside the loop below.
-        auto const row_height = table_gen.row_height();
+        auto const row_height = table_gen().row_height();
         auto const page_bottom = get_footer_top();
         auto const rows_per_group = wx_table_generator::rows_per_group;
 
@@ -1793,16 +1813,12 @@ class page_with_tabular_report
         int const year_max = ledger.GetMaxLength();
         for(int year = 0; year < year_max; )
             {
-            int pos_y = render_or_measure_fixed_page_part
-                (table_gen
-                ,writer
-                ,oe_render
-                );
+            int pos_y = render_or_measure_fixed_page_part(writer, oe_render);
 
             for(;;)
                 {
                 auto const v = visible_values(ledger, interpolate_html_, year);
-                table_gen.output_row(pos_y, v);
+                table_gen().output_row(pos_y, v);
 
                 ++year;
                 if(year == year_max)
@@ -1856,12 +1872,16 @@ class page_with_tabular_report
     }
 
   private:
+    wx_table_generator& table_gen() const
+    {
+        return safely_dereference_as<wx_table_generator>(table_gen_.get());
+    }
+
     // Render (only if output_mode is oe_render) the fixed page part and
     // (in any case) return the vertical coordinate of its bottom, where the
     // tabular report starts.
     int render_or_measure_fixed_page_part
-        (wx_table_generator           & table_gen
-        ,pdf_writer_wx                & writer
+        (pdf_writer_wx                & writer
         ,oenum_render_or_only_measure   output_mode
         ) const
     {
@@ -1878,16 +1898,16 @@ class page_with_tabular_report
             );
 
         render_or_measure_extra_headers
-            (table_gen
+            (table_gen()
             ,pos_y
             ,output_mode
             );
 
-        table_gen.output_headers(pos_y, output_mode);
+        table_gen().output_headers(pos_y, output_mode);
 
         auto const ncols = get_table_columns().size();
-        table_gen.output_horz_separator(0, ncols, pos_y, output_mode);
-        pos_y += table_gen.separator_line_height();
+        table_gen().output_horz_separator(0, ncols, pos_y, output_mode);
+        pos_y += table_gen().separator_line_height();
 
         return pos_y;
     }
@@ -1899,15 +1919,9 @@ class page_with_tabular_report
         ,pdf_writer_wx      & writer
         ) override
     {
-        wx_table_generator table_gen{create_table_generator(ledger, writer)};
+        int const pos_y = render_or_measure_fixed_page_part(writer, oe_only_measure);
 
-        int const pos_y = render_or_measure_fixed_page_part
-            (table_gen
-            ,writer
-            ,oe_only_measure
-            );
-
-        int const max_lines_per_page = (get_footer_top() - pos_y) / table_gen.row_height();
+        int const max_lines_per_page = (get_footer_top() - pos_y) / table_gen().row_height();
 
         int const rows_per_group = wx_table_generator::rows_per_group;
 
@@ -1923,6 +1937,8 @@ class page_with_tabular_report
         // "- 1": return the number of *extra* pages.
         return z.page_count() - 1;
     }
+
+    std::unique_ptr<wx_table_generator> table_gen_;
 };
 
 class ill_reg_tabular_detail_page : public page_with_tabular_report
