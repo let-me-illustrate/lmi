@@ -1781,11 +1781,12 @@ class page_with_tabular_report
         (pdf_illustration  const& illustration
         ,html_interpolator const& interpolate_html
         )
-        :numbered_page{illustration, interpolate_html}
-        ,ledger_ (const_cast<pdf_illustration&>(illustration_).ledger_)
-        ,writer_ (const_cast<pdf_illustration&>(illustration_).get_writer())
-        ,year_             {0}
-        ,pos_y_            {}
+        :numbered_page {illustration, interpolate_html}
+        ,ledger_    {const_cast<pdf_illustration&>(illustration_).ledger_}
+        ,writer_    {const_cast<pdf_illustration&>(illustration_).get_writer()}
+        ,offset_    {bourn_cast<int>(ledger_.GetLedgerInvariant().InforceYear)}
+        ,year_      {0}
+        ,pos_y_     {}
     {
     }
 
@@ -1903,7 +1904,7 @@ class page_with_tabular_report
 
         // "-1 +": return the number of *extra* pages.
         return -1 + paginator::init
-            (ledger.GetMaxLength()
+            (ledger.GetMaxLength() - offset_
             ,wx_table_generator::rows_per_group
             ,max_lines_per_page
             );
@@ -1924,7 +1925,7 @@ class page_with_tabular_report
 
     void print_a_data_row () override
         {
-            auto const v = visible_values(ledger_, interpolate_html_, year_);
+            auto const v = visible_values(ledger_, interpolate_html_, year_ + offset_);
             table_gen().output_row(pos_y_, v);
             ++year_;
         }
@@ -1941,6 +1942,7 @@ class page_with_tabular_report
     Ledger                              const& ledger_;
     pdf_writer_wx                            & writer_;
     std::unique_ptr<wx_table_generator>        table_gen_;
+    int                                 const  offset_;
     int                                        year_;
     int                                        pos_y_;
 };
