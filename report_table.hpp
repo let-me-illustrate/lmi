@@ -169,4 +169,37 @@ class LMI_SO paginator
     int       page_count_;
 };
 
+class LMI_SO paginate
+{
+  public:
+    paginate() {}
+
+    int init(int total_rows, int rows_per_group, int max_lines_per_page);
+    void print();
+
+  private:
+    virtual void prelude          () = 0;
+    virtual void open_page        () = 0;
+    virtual void print_a_data_row () = 0;
+    virtual void print_a_separator() = 0;
+    virtual void close_page       () = 0;
+    virtual void postlude         () = 0;
+
+    int total_rows        () const {return total_rows_        ;}
+    int rows_per_group    () const {return rows_per_group_    ;}
+
+    int lines_on_full_page() const {return lines_on_full_page_;}
+    int lines_on_last_page() const {return lines_on_last_page_;}
+    int page_count        () const {return page_count_        ;}
+
+    // init() arguments.
+    int total_rows_         {};
+    int rows_per_group_     {};
+
+    // init() results.
+    int lines_on_full_page_ {};
+    int lines_on_last_page_ {};
+    int page_count_         {};
+};
+
 #endif // report_table_hpp
