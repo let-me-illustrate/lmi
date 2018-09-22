@@ -974,7 +974,9 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
 
     Ledger const& ledger_;
 
-    // These font sizes differ from wxHTML defaults.
+    // These font sizes are more suitable for illustrations than
+    // the builtin wxHTML defaults. See:
+    //   https://lists.nongnu.org/archive/html/lmi/2018-07/msg00033.html
     static inline html_font_sizes font_sizes_ {8, 9, 10, 12, 14, 18, 20};
 
     // All the pages of this illustration.
