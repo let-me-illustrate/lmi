@@ -723,12 +723,10 @@ class logical_page
     //
     // This function must not draw anything on the wxDC, it is provided only for
     // measurement purposes.
-    virtual void pre_render(Ledger const&, pdf_writer_wx&)
-    {
-    }
+    virtual void pre_render() {}
 
     // Render this page contents.
-    virtual void render(Ledger const& ledger, pdf_writer_wx& writer) = 0;
+    virtual void render() = 0;
 
   protected:
     pdf_illustration  const& illustration_;
@@ -790,7 +788,7 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
 
         for(auto const& i : pages_)
             {
-            i->pre_render(ledger_, get_writer());
+            i->pre_render();
             }
 
         bool first = true;
@@ -809,7 +807,7 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
                 get_writer().next_page();
                 }
 
-            i->render(ledger_, get_writer());
+            i->render();
             }
 
         get_writer().save();
@@ -983,29 +981,26 @@ class cover_page : public logical_page
   public:
     using logical_page::logical_page;
 
-    void render
-        (Ledger        const& // ledger
-        ,pdf_writer_wx      & writer
-        ) override
+    void render() override
     {
-        int const height_contents = writer.output_html
-            (writer.get_horz_margin()
-            ,writer.get_vert_margin()
-            ,writer.get_page_width()
+        int const height_contents = writer_.output_html
+            (writer_.get_horz_margin()
+            ,writer_.get_vert_margin()
+            ,writer_.get_page_width()
             ,interpolator_.expand_template("cover")
             );
 
         // There is no way to draw a border around the page contents in wxHTML
         // currently, so do it manually.
-        auto& pdf_dc = writer.dc();
+        auto& pdf_dc = writer_.dc();
 
         pdf_dc.SetPen(wxPen(illustration_rule_color, 2));
         pdf_dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
         pdf_dc.DrawRectangle
-            (writer.get_horz_margin()
-            ,writer.get_vert_margin()
-            ,writer.get_page_width()
+            (writer_.get_horz_margin()
+            ,writer_.get_vert_margin()
+            ,writer_.get_page_width()
             ,height_contents
             );
     }
@@ -1020,15 +1015,12 @@ class page_with_marginals : public logical_page
 
     // Override pre_render() to compute page_top_ and footer_top_ which are
     // needed in the derived classes' overridden get_extra_pages_needed().
-    void pre_render
-        (Ledger        const& // ledger
-        ,pdf_writer_wx      & writer
-        ) override
+    void pre_render() override
     {
-        auto const frame_horz_margin = writer.get_horz_margin();
-        auto const frame_width       = writer.get_page_width();
+        auto const frame_horz_margin = writer_.get_horz_margin();
+        auto const frame_width       = writer_.get_page_width();
 
-        page_top_ = writer.get_vert_margin();
+        page_top_ = writer_.get_vert_margin();
 
         // Pre-render the header, if any.
         if
@@ -1036,7 +1028,7 @@ class page_with_marginals : public logical_page
             ;nullptr != header_html
             )
             {
-            page_top_ += writer.output_html
+            page_top_ += writer_.output_html
                 (frame_horz_margin
                 ,0
                 ,frame_width
@@ -1053,7 +1045,7 @@ class page_with_marginals : public logical_page
         // a new line and this increasing the footer height, but in practice
         // this doesn't risk happening and taking into account this possibility
         // wouldn't be simple at all, so just ignore this possibility.
-        auto footer_height = writer.output_html
+        auto footer_height = writer_.output_html
             (frame_horz_margin
             ,0
             ,frame_width
@@ -1066,7 +1058,7 @@ class page_with_marginals : public logical_page
             ;!upper_template.empty()
             )
             {
-            footer_height += writer.output_html
+            footer_height += writer_.output_html
                 (frame_horz_margin
                 ,0
                 ,frame_width
@@ -1077,21 +1069,18 @@ class page_with_marginals : public logical_page
             // Leave a gap between the upper part of the footer and the main
             // page contents to separate them in absence of a separator line
             // which delimits the lower part.
-            footer_height += writer.dc().GetCharHeight();
+            footer_height += writer_.dc().GetCharHeight();
             }
 
-        footer_top_ = writer.get_page_bottom() - footer_height;
+        footer_top_ = writer_.get_page_bottom() - footer_height;
     }
 
-    void render
-        (Ledger        const& // ledger
-        ,pdf_writer_wx      & writer
-        ) override
+    void render() override
     {
-        auto const frame_horz_margin = writer.get_horz_margin();
-        auto const frame_width       = writer.get_page_width();
+        auto const frame_horz_margin = writer_.get_horz_margin();
+        auto const frame_width       = writer_.get_page_width();
 
-        auto& pdf_dc = writer.dc();
+        auto& pdf_dc = writer_.dc();
 
         // Render the header, if any.
         if
@@ -1099,9 +1088,9 @@ class page_with_marginals : public logical_page
             ;nullptr != header_html
             )
             {
-            writer.output_html
+            writer_.output_html
                 (frame_horz_margin
-                ,writer.get_vert_margin()
+                ,writer_.get_vert_margin()
                 ,frame_width
                 ,*header_html
                 );
@@ -1118,7 +1107,7 @@ class page_with_marginals : public logical_page
             {
             y += pdf_dc.GetCharHeight();
 
-            y += writer.output_html
+            y += writer_.output_html
                 (frame_horz_margin
                 ,y
                 ,frame_width
@@ -1126,7 +1115,7 @@ class page_with_marginals : public logical_page
                 );
             }
 
-        writer.output_html
+        writer_.output_html
             (frame_horz_margin
             ,y
             ,frame_width
@@ -1249,16 +1238,13 @@ class numbered_page : public page_with_marginals
         LMI_ASSERT(0 <= last_page_number_);
     }
 
-    void pre_render
-        (Ledger        const& ledger
-        ,pdf_writer_wx      & writer
-        ) override
+    void pre_render() override
     {
-        page_with_marginals::pre_render(ledger, writer);
+        page_with_marginals::pre_render();
 
         this_page_number_ = ++last_page_number_;
 
-        extra_pages_ = get_extra_pages_needed(ledger, writer);
+        extra_pages_ = get_extra_pages_needed();
 
         LMI_ASSERT(0 <= extra_pages_);
 
@@ -1286,13 +1272,13 @@ class numbered_page : public page_with_marginals
     }
 
   protected:
-    void next_page(pdf_writer_wx& writer)
+    void next_page()
     {
         // This function may only be called if we had reserved enough physical
         // pages for these logical pages by overriding get_extra_pages_needed().
         LMI_ASSERT(0 < extra_pages_);
 
-        writer.next_page();
+        writer_.next_page();
 
         ++this_page_number_;
         --extra_pages_;
@@ -1301,10 +1287,7 @@ class numbered_page : public page_with_marginals
   private:
     // Derived classes may override this function if they may need more than one
     // physical page to show their contents.
-    virtual int get_extra_pages_needed
-        (Ledger        const& ledger
-        ,pdf_writer_wx      & writer
-        ) = 0;
+    virtual int get_extra_pages_needed() = 0;
 
     std::string get_page_number() const override
     {
@@ -1339,37 +1322,31 @@ class standard_page : public numbered_page
     {
     }
 
-    void pre_render
-        (Ledger        const& ledger
-        ,pdf_writer_wx      & writer
-        ) override
+    void pre_render() override
     {
         // Before calling the base class version, parse the HTML to initialize
         // page_body_cell_ and header_cell_.
-        parse_page_html(writer);
+        parse_page_html(writer_);
 
-        numbered_page::pre_render(ledger, writer);
+        numbered_page::pre_render();
     }
 
-    void render
-        (Ledger        const& ledger
-        ,pdf_writer_wx      & writer
-        ) override
+    void render() override
     {
         int last_page_break = 0;
         for(auto const& page_break : page_break_positions_)
             {
             if(last_page_break != 0)
                 {
-                next_page(writer);
+                next_page();
                 }
 
-            numbered_page::render(ledger, writer);
+            numbered_page::render();
 
-            writer.output_html
-                (writer.get_horz_margin()
+            writer_.output_html
+                (writer_.get_horz_margin()
                 ,get_page_body_top()
-                ,writer.get_page_width()
+                ,writer_.get_page_width()
                 ,*page_body_cell_
                 ,last_page_break
                 ,page_break
@@ -1435,13 +1412,10 @@ class standard_page : public numbered_page
         return header_cell_.get();
     }
 
-    int get_extra_pages_needed
-        (Ledger        const& // ledger
-        ,pdf_writer_wx      & writer
-        ) override
+    int get_extra_pages_needed() override
     {
-        page_break_positions_ = writer.paginate_html
-            (writer.get_page_width()
+        page_break_positions_ = writer_.paginate_html
+            (writer_.get_page_width()
             ,get_page_body_height()
             ,*page_body_cell_
             );
@@ -1818,19 +1792,13 @@ class page_with_tabular_report
     /// implementation, which calls get_extra_pages_needed(), which
     /// uses the object initialized here.
 
-    void pre_render
-        (Ledger        const& ledger
-        ,pdf_writer_wx      & writer
-        ) override
+    void pre_render() override
     {
-        table_gen_.reset(new wx_table_generator {create_table_generator(ledger, writer)});
-        numbered_page::pre_render(ledger, writer);
+        table_gen_.reset(new wx_table_generator {create_table_generator(ledger_, writer_)});
+        numbered_page::pre_render();
     }
 
-    void render
-        (Ledger        const& // ledger
-        ,pdf_writer_wx      & // writer
-        ) override
+    void render() override
     {
         paginator::print();
     }
@@ -1863,16 +1831,15 @@ class page_with_tabular_report
     // (in any case) return the vertical coordinate of its bottom, where the
     // tabular report starts.
     int render_or_measure_fixed_page_part
-        (pdf_writer_wx                & writer
-        ,oenum_render_or_only_measure   output_mode
+        (oenum_render_or_only_measure output_mode
         ) const
     {
-        int pos_y = writer.get_vert_margin();
+        int pos_y = writer_.get_vert_margin();
 
-        pos_y += writer.output_html
-            (writer.get_horz_margin()
+        pos_y += writer_.output_html
+            (writer_.get_horz_margin()
             ,pos_y
-            ,writer.get_page_width()
+            ,writer_.get_page_width()
             ,interpolator_.expand_template(get_fixed_page_contents_template_name())
             ,output_mode
             );
@@ -1894,12 +1861,9 @@ class page_with_tabular_report
 
     // Override the base class function as the table may overflow onto the next
     // page(s).
-    int get_extra_pages_needed
-        (Ledger        const& ledger
-        ,pdf_writer_wx      & writer
-        ) override
+    int get_extra_pages_needed() override
     {
-        int const pos_y = render_or_measure_fixed_page_part(writer, oe_only_measure);
+        int const pos_y = render_or_measure_fixed_page_part(oe_only_measure);
 
         int const max_lines_per_page = (get_footer_top() - pos_y) / table_gen().row_height();
 
@@ -1915,7 +1879,7 @@ class page_with_tabular_report
 
         // "-1 +": return the number of *extra* pages.
         return -1 + paginator::init
-            (ledger.GetMaxLength() - offset_
+            (ledger_.GetMaxLength() - offset_
             ,wx_table_generator::rows_per_group
             ,max_lines_per_page
             );
@@ -1929,9 +1893,9 @@ class page_with_tabular_report
             // is perfect for logical pages that fit on one physical
             // page. See:
             //   https://lists.nongnu.org/archive/html/lmi/2018-09/msg00022.html
-            if(0 != year_) next_page(writer_);
-            numbered_page::render(ledger_, writer_);
-            pos_y_ = render_or_measure_fixed_page_part(writer_ ,oe_render);
+            if(0 != year_) next_page();
+            numbered_page::render();
+            pos_y_ = render_or_measure_fixed_page_part(oe_render);
         }
 
     void print_a_data_row () override
