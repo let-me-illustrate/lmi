@@ -145,10 +145,10 @@ std::vector<int> LMI_SO set_column_widths
 ///   [blank]    line  5
 ///   Z   --..   line  6   row 25
 
-class LMI_SO paginator
+class LMI_SO prepaginator
 {
   public:
-    paginator(int total_rows, int rows_per_group, int max_lines_per_page);
+    prepaginator(int total_rows, int rows_per_group, int max_lines_per_page);
 
     int lines_on_full_page() const {return lines_on_full_page_;}
     int lines_on_last_page() const {return lines_on_last_page_;}
@@ -167,6 +167,39 @@ class LMI_SO paginator
     int const lines_on_full_page_;
     int       lines_on_last_page_;
     int       page_count_;
+};
+
+class LMI_SO paginator
+{
+  public:
+    paginator() {}
+
+    int init(int total_rows, int rows_per_group, int max_lines_per_page);
+    void print();
+
+  private:
+    virtual void prelude          () = 0;
+    virtual void open_page        () = 0;
+    virtual void print_a_data_row () = 0;
+    virtual void print_a_separator() = 0;
+    virtual void close_page       () = 0;
+    virtual void postlude         () = 0;
+
+    int total_rows        () const {return total_rows_        ;}
+    int rows_per_group    () const {return rows_per_group_    ;}
+
+    int lines_on_full_page() const {return lines_on_full_page_;}
+    int lines_on_last_page() const {return lines_on_last_page_;}
+    int page_count        () const {return page_count_        ;}
+
+    // init() arguments.
+    int total_rows_         {};
+    int rows_per_group_     {};
+
+    // init() results.
+    int lines_on_full_page_ {};
+    int lines_on_last_page_ {};
+    int page_count_         {};
 };
 
 #endif // report_table_hpp

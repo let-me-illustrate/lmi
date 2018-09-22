@@ -64,16 +64,24 @@ class pdf_writer_wx
     std::vector<int> paginate_html
         (int                          page_width
         ,int                          page_height
-        ,wxString const&              html_str
+        ,wxHtmlContainerCell&         cell
         );
 
     int output_html
         (int                          x
         ,int                          y
         ,int                          width
-        ,wxString const&              html_str
+        ,wxHtmlContainerCell&         cell
         ,int                          from
         ,int                          to
+        ,oenum_render_or_only_measure output_mode = oe_render
+        );
+
+    int output_html
+        (int                          x
+        ,int                          y
+        ,int                          width
+        ,wxHtmlContainerCell&         cell
         ,oenum_render_or_only_measure output_mode = oe_render
         );
 
@@ -97,6 +105,12 @@ class pdf_writer_wx
     void next_page();
 
     wxDC& dc();
+
+    // Helper methods for working with HTML contents.
+
+    void initialize_html_parser(wxHtmlWinParser& html_parser);
+
+    std::unique_ptr<wxHtmlContainerCell> parse_html(html::text&& html);
 
     // Page metrics: the page width and height are the size of the page region
     // reserved for the normal contents, excluding horizontal and vertical
