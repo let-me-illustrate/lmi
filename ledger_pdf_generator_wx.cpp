@@ -701,9 +701,13 @@ class logical_page
     // the HTML text of the page contents from an external template.
     logical_page
         (pdf_illustration  const& illustration
+        ,Ledger            const& ledger
+        ,pdf_writer_wx          & writer
         ,html_interpolator const& interpolator
         )
         :illustration_ {illustration}
+        ,ledger_       {ledger}
+        ,writer_       {writer}
         ,interpolator_ {interpolator}
     {
     }
@@ -728,6 +732,8 @@ class logical_page
 
   protected:
     pdf_illustration  const& illustration_;
+    Ledger            const& ledger_;
+    pdf_writer_wx          & writer_;
     html_interpolator const& interpolator_;
 };
 
@@ -766,6 +772,8 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
         pages_.emplace_back
             (std::make_unique<T>
                 (*this
+                ,ledger_
+                ,get_writer()
                 ,get_interpolator()
                 ,std::forward<Args>(args)...
                 )
@@ -1232,9 +1240,11 @@ class numbered_page : public page_with_marginals
 
     numbered_page
         (pdf_illustration  const& illustration
+        ,Ledger            const& ledger
+        ,pdf_writer_wx          & writer
         ,html_interpolator const& interpolator
         )
-        :page_with_marginals{illustration, interpolator}
+        :page_with_marginals (illustration, ledger, writer, interpolator)
     {
         // This assert would fail if start_numbering() hadn't been called
         // before creating a numbered page, as it should be.
@@ -1321,10 +1331,12 @@ class standard_page : public numbered_page
     template<int N>
     explicit standard_page
         (pdf_illustration  const& illustration
+        ,Ledger            const& ledger
+        ,pdf_writer_wx          & writer
         ,html_interpolator const& interpolator
         ,char const               (&page_template_name)[N]
         )
-        :numbered_page       {illustration, interpolator}
+        :numbered_page       (illustration, ledger, writer, interpolator)
         ,page_template_name_ {page_template_name}
     {
     }
@@ -1748,9 +1760,17 @@ class ill_reg_numeric_summary_page : public standard_page
   public:
     ill_reg_numeric_summary_page
         (pdf_illustration  const& illustration
+        ,Ledger            const& ledger
+        ,pdf_writer_wx          & writer
         ,html_interpolator const& interpolator
         )
-        :standard_page(illustration, interpolator, "ill_reg_numeric_summary")
+        :standard_page
+            (illustration
+            ,ledger
+            ,writer
+            ,interpolator
+            ,"ill_reg_numeric_summary"
+            )
     {
     }
 };
@@ -1777,11 +1797,13 @@ class page_with_tabular_report
   public:
     page_with_tabular_report
         (pdf_illustration  const& illustration
+        ,Ledger            const& ledger
+        ,pdf_writer_wx          & writer
         ,html_interpolator const& interpolator
         )
-        :numbered_page (illustration, interpolator)
-        ,ledger_    {const_cast<pdf_illustration&>(illustration_).ledger_}
-        ,writer_    {const_cast<pdf_illustration&>(illustration_).get_writer()}
+        :numbered_page (illustration, ledger, writer, interpolator)
+        ,ledger_2   {const_cast<pdf_illustration&>(illustration_).ledger_}
+        ,writer_2   {const_cast<pdf_illustration&>(illustration_).get_writer()}
         ,offset_    {bourn_cast<int>(ledger_.GetLedgerInvariant().InforceYear)}
         ,year_      {0}
         ,pos_y_     {}
@@ -1806,8 +1828,11 @@ class page_with_tabular_report
         ) override
     {
         // Assertions demonstrate identity of arguments and class members.
+        // PDF !! Expunge '_2' class members.
         LMI_ASSERT(&ledger_ == &ledger);
         LMI_ASSERT(&writer_ == &writer);
+        LMI_ASSERT(&ledger_2 == &ledger);
+        LMI_ASSERT(&writer_2 == &writer);
         table_gen_.reset(new wx_table_generator {create_table_generator(ledger, writer)});
         numbered_page::pre_render(ledger, writer);
     }
@@ -1935,8 +1960,8 @@ class page_with_tabular_report
 
     void postlude         () override {}
 
-    Ledger                              const& ledger_;
-    pdf_writer_wx                            & writer_;
+    Ledger                              const& ledger_2;
+    pdf_writer_wx                            & writer_2;
     std::unique_ptr<wx_table_generator>        table_gen_;
     int                                 const  offset_;
     int                                        year_;
@@ -2094,10 +2119,12 @@ class standard_supplemental_report : public page_with_tabular_report
   public:
     explicit standard_supplemental_report
         (pdf_illustration  const& illustration
+        ,Ledger            const& ledger
+        ,pdf_writer_wx          & writer
         ,html_interpolator const& interpolator
         ,std::string       const& page_template
         )
-        :page_with_tabular_report(illustration, interpolator)
+        :page_with_tabular_report (illustration, ledger, writer, interpolator)
         ,columns_       {build_columns(interpolator)}
         ,page_template_ {page_template}
     {
@@ -2150,10 +2177,14 @@ class ill_reg_supplemental_report : public standard_supplemental_report
   public:
     explicit ill_reg_supplemental_report
         (pdf_illustration  const& illustration
+        ,Ledger            const& ledger
+        ,pdf_writer_wx          & writer
         ,html_interpolator const& interpolator
         )
         :standard_supplemental_report
             (illustration
+            ,ledger
+            ,writer
             ,interpolator
             ,"ill_reg_supp_report"
             )
