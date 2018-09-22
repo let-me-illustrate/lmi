@@ -745,8 +745,6 @@ class logical_page
 // their contents.
 class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
 {
-    friend class page_with_tabular_report;
-
   public:
     explicit pdf_illustration
         (Ledger   const& ledger
@@ -1802,8 +1800,6 @@ class page_with_tabular_report
         ,html_interpolator const& interpolator
         )
         :numbered_page (illustration, ledger, writer, interpolator)
-        ,ledger_2   {const_cast<pdf_illustration&>(illustration_).ledger_}
-        ,writer_2   {const_cast<pdf_illustration&>(illustration_).get_writer()}
         ,offset_    {bourn_cast<int>(ledger_.GetLedgerInvariant().InforceYear)}
         ,year_      {0}
         ,pos_y_     {}
@@ -1827,12 +1823,6 @@ class page_with_tabular_report
         ,pdf_writer_wx      & writer
         ) override
     {
-        // Assertions demonstrate identity of arguments and class members.
-        // PDF !! Expunge '_2' class members.
-        LMI_ASSERT(&ledger_ == &ledger);
-        LMI_ASSERT(&writer_ == &writer);
-        LMI_ASSERT(&ledger_2 == &ledger);
-        LMI_ASSERT(&writer_2 == &writer);
         table_gen_.reset(new wx_table_generator {create_table_generator(ledger, writer)});
         numbered_page::pre_render(ledger, writer);
     }
@@ -1960,8 +1950,6 @@ class page_with_tabular_report
 
     void postlude         () override {}
 
-    Ledger                              const& ledger_2;
-    pdf_writer_wx                            & writer_2;
     std::unique_ptr<wx_table_generator>        table_gen_;
     int                                 const  offset_;
     int                                        year_;
