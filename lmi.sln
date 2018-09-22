@@ -21,10 +21,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lmi_wx_test", "wx_test.vcxp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "product_files", "product_files.vcxproj", "{C5D87DF1-B576-53DB-AE3A-12A3F6E98647}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "soa2xml", "soa2xml.vcxproj", "{ECC6B1C8-21A8-57EC-AF27-99D9F587A56A}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "soa_stress_test", "soa_stress_test.vcxproj", "{529CBF3A-BCBC-52EE-B507-ED1C8A0456F6}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rate_table_test", "rate_table_test.vcxproj", "{3823E1F3-1BDF-4CDB-85D5-D288FBEBD569}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "group_quote_pdf_gen_test", "group_quote_pdf_gen_test.vcxproj", "{884D7A57-5DF6-4FD6-BDC5-F5FEAEA50CD5}"
@@ -85,18 +81,6 @@ Global
 		{C5D87DF1-B576-53DB-AE3A-12A3F6E98647}.Release|Win32.ActiveCfg = Release|Win32
 		{C5D87DF1-B576-53DB-AE3A-12A3F6E98647}.Release|Win32.Build.0 = Release|Win32
 		{C5D87DF1-B576-53DB-AE3A-12A3F6E98647}.Release|x64.ActiveCfg = Release|Win32
-		{ECC6B1C8-21A8-57EC-AF27-99D9F587A56A}.Debug|Win32.ActiveCfg = Debug|Win32
-		{ECC6B1C8-21A8-57EC-AF27-99D9F587A56A}.Debug|Win32.Build.0 = Debug|Win32
-		{ECC6B1C8-21A8-57EC-AF27-99D9F587A56A}.Debug|x64.ActiveCfg = Debug|Win32
-		{ECC6B1C8-21A8-57EC-AF27-99D9F587A56A}.Release|Win32.ActiveCfg = Release|Win32
-		{ECC6B1C8-21A8-57EC-AF27-99D9F587A56A}.Release|Win32.Build.0 = Release|Win32
-		{ECC6B1C8-21A8-57EC-AF27-99D9F587A56A}.Release|x64.ActiveCfg = Release|Win32
-		{529CBF3A-BCBC-52EE-B507-ED1C8A0456F6}.Debug|Win32.ActiveCfg = Debug|Win32
-		{529CBF3A-BCBC-52EE-B507-ED1C8A0456F6}.Debug|Win32.Build.0 = Debug|Win32
-		{529CBF3A-BCBC-52EE-B507-ED1C8A0456F6}.Debug|x64.ActiveCfg = Debug|Win32
-		{529CBF3A-BCBC-52EE-B507-ED1C8A0456F6}.Release|Win32.ActiveCfg = Release|Win32
-		{529CBF3A-BCBC-52EE-B507-ED1C8A0456F6}.Release|Win32.Build.0 = Release|Win32
-		{529CBF3A-BCBC-52EE-B507-ED1C8A0456F6}.Release|x64.ActiveCfg = Release|Win32
 		{3823E1F3-1BDF-4CDB-85D5-D288FBEBD569}.Debug|Win32.ActiveCfg = Debug|Win32
 		{3823E1F3-1BDF-4CDB-85D5-D288FBEBD569}.Debug|Win32.Build.0 = Debug|Win32
 		{3823E1F3-1BDF-4CDB-85D5-D288FBEBD569}.Debug|x64.ActiveCfg = Debug|Win32
