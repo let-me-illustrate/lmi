@@ -321,9 +321,20 @@ class html_interpolator
 // should_hide_column() to hide some of these columns dynamically and then can
 // use create_table_generator() to obtain the generator object that can be used
 // to render a table with the specified columns.
-class using_illustration_table
+class table_mixin
 {
   protected:
+    table_mixin
+        (Ledger            const& ledger
+        ,pdf_writer_wx          & writer
+        ,html_interpolator const& interpolator
+        )
+        :mixin_ledger_       {ledger}
+        ,mixin_writer_       {writer}
+        ,mixin_interpolator_ {interpolator}
+    {
+    }
+
     // Description of a single table column.
     struct illustration_table_column
     {
@@ -346,29 +357,18 @@ class using_illustration_table
     // However, that cannot be written here, once and only once,
     // because 'column_end_of_year_age' is an enumerator whose value
     // may differ in each derived class.
-    virtual bool should_hide_column
-        (Ledger const& // ledger
-        ,int           // column
-        ) const
+    virtual bool should_hide_column(int) const // argument: column index
     {
         return false;
     }
 
-    std::vector<std::string> visible_values
-        (Ledger            const& ledger
-        ,html_interpolator const& interpolator
-        ,int                      year
-        )
+    std::vector<std::string> visible_values(int year)
     {
         std::vector<std::string> v;
         auto const& columns = get_table_columns();
         for(int j = 0; j < lmi::ssize(columns); ++j)
             {
-            columns[j].visibility =
-                should_hide_column(ledger, j)
-                ? oe_hidden
-                : oe_shown
-                ;
+            columns[j].visibility = should_hide_column(j) ? oe_hidden : oe_shown;
 
             if(oe_shown == columns[j].visibility)
                 {
@@ -379,7 +379,7 @@ class using_illustration_table
                     }
                 else
                     {
-                    output_value = interpolator.evaluate
+                    output_value = mixin_interpolator_.evaluate
                         (columns[j].variable_name
                         ,year
                         );
@@ -394,10 +394,7 @@ class using_illustration_table
     // Useful helper for creating the table generator using the columns defined
     // by the separate (and simpler to implement) get_table_columns() pure
     // virtual function.
-    wx_table_generator create_table_generator
-        (Ledger        const& ledger
-        ,pdf_writer_wx      & writer
-        ) const
+    wx_table_generator create_table_generator() const
     {
         std::vector<column_parameters> vc;
         std::vector<int> indices;
@@ -405,7 +402,7 @@ class using_illustration_table
         for(auto const& i : get_table_columns())
             {
             indices.push_back(lmi::ssize(vc));
-            if(!should_hide_column(ledger, column))
+            if(!should_hide_column(column))
                 {
                 vc.push_back({i.header, i.widest_text, oe_right, oe_inelastic});
                 }
@@ -420,7 +417,7 @@ class using_illustration_table
 
         // Set the smaller font used for all tables before creating the table
         // generator which uses the DC font for its measurements.
-        auto& pdf_dc = writer.dc();
+        auto& pdf_dc = mixin_writer_.dc();
         auto font = pdf_dc.GetFont();
         font.SetPointSize(9);
         pdf_dc.SetFont(font);
@@ -429,11 +426,20 @@ class using_illustration_table
             (illustration_style_tag{}
             ,vc
             ,indices
-            ,writer.dc()
-            ,writer.get_horz_margin()
-            ,writer.get_page_width()
+            ,mixin_writer_.dc()
+            ,mixin_writer_.get_horz_margin()
+            ,mixin_writer_.get_page_width()
             );
     }
+
+    // Names of data members have a distinctive prefix to prevent
+    // collision with unprefixed names in other classes.
+
+    Ledger            const& mixin_ledger_;
+
+  private:
+    pdf_writer_wx          & mixin_writer_;
+    html_interpolator const& mixin_interpolator_;
 };
 
 // Custom handler for the HTML <header> tag not natively recognized by wxHTML.
@@ -1447,10 +1453,15 @@ class standard_page : public numbered_page
 // An HTML cell showing the contents of the numeric summary table.
 class numeric_summary_table_cell
     :public html_cell_for_pdf_output
-    ,private using_illustration_table
+    ,private table_mixin
 {
   public:
     numeric_summary_table_cell()
+        :table_mixin
+            (pdf_context_for_html_output.ledger()
+            ,pdf_context_for_html_output.writer()
+            ,pdf_context_for_html_output.interpolator()
+            )
     {
         m_Height = render_or_measure(0, oe_only_measure);
     }
@@ -1517,10 +1528,7 @@ class numeric_summary_table_cell
 
     int render_or_measure(int pos_y, oenum_render_or_only_measure output_mode)
     {
-        auto const& ledger = pdf_context_for_html_output.ledger();
-        auto& writer = pdf_context_for_html_output.writer();
-
-        wx_table_generator table_gen{create_table_generator(ledger, writer)};
+        wx_table_generator table_gen {create_table_generator()};
 
         // Output multiple rows of headers.
 
@@ -1593,9 +1601,9 @@ class numeric_summary_table_cell
         table_gen.output_horz_separator(0, column_max, pos_y, output_mode);
         pos_y += table_gen.separator_line_height();
 
-        auto const& invar = ledger.GetLedgerInvariant();
+        auto const& invar = mixin_ledger_.GetLedgerInvariant();
 
-        int const year_max = pdf_context_for_html_output.ledger().GetMaxLength();
+        int const year_max = mixin_ledger_.GetMaxLength();
 
         int const summary_age = 70;
         // Other rows are for given durations, but the
@@ -1624,7 +1632,7 @@ class numeric_summary_table_cell
 
             // For composite ledgers, "Age" doesn't make sense and so this row
             // should be just skipped for them.
-            if(is_last_row && ledger.is_composite())
+            if(is_last_row && mixin_ledger_.is_composite())
                 {
                 continue;
                 }
@@ -1639,8 +1647,7 @@ class numeric_summary_table_cell
 
                 case oe_render:
                     {
-                    auto const& z = pdf_context_for_html_output.interpolator();
-                    auto v = visible_values(ledger, z, year);
+                    auto v = visible_values(year);
                     if(is_last_row)
                         {
                         v.at(column_policy_year) = summary_age_string;
@@ -1763,7 +1770,7 @@ class ill_reg_numeric_summary_attachment : public ill_reg_numeric_summary_page
 // contract years after some fixed content.
 class page_with_tabular_report
     :public numbered_page
-    ,protected using_illustration_table
+    ,protected table_mixin
     ,private paginator
 {
   public:
@@ -1774,6 +1781,7 @@ class page_with_tabular_report
         ,html_interpolator const& interpolator
         )
         :numbered_page (illustration, ledger, writer, interpolator)
+        ,table_mixin   (              ledger, writer, interpolator)
         ,offset_    {bourn_cast<int>(ledger_.GetLedgerInvariant().InforceYear)}
         ,year_      {0}
         ,pos_y_     {}
@@ -1794,7 +1802,7 @@ class page_with_tabular_report
 
     void pre_render() override
     {
-        table_gen_.reset(new wx_table_generator {create_table_generator(ledger_, writer_)});
+        table_gen_.reset(new wx_table_generator {create_table_generator()});
         numbered_page::pre_render();
     }
 
@@ -1900,7 +1908,7 @@ class page_with_tabular_report
 
     void print_a_data_row () override
         {
-            auto const v = visible_values(ledger_, interpolator_, year_ + offset_);
+            auto const v = visible_values(year_ + offset_);
             table_gen().output_row(pos_y_, v);
             ++year_;
         }
@@ -2012,10 +2020,10 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
         return columns;
     }
 
-    bool should_hide_column(Ledger const& ledger, int column) const override
+    bool should_hide_column(int column) const override
     {
         // Don't show AttainedAge on a composite.
-        return ledger.is_composite() && column == column_end_of_year_age;
+        return ledger_.is_composite() && column == column_end_of_year_age;
     }
 };
 
@@ -2055,10 +2063,10 @@ class ill_reg_tabular_detail2_page : public page_with_tabular_report
         return columns;
     }
 
-    bool should_hide_column(Ledger const& ledger, int column) const override
+    bool should_hide_column(int column) const override
     {
         // Don't show AttainedAge on a composite.
-        return ledger.is_composite() && column == column_end_of_year_age;
+        return ledger_.is_composite() && column == column_end_of_year_age;
     }
 };
 
@@ -2375,10 +2383,10 @@ class page_with_basic_tabular_report : public page_with_tabular_report
         return columns;
     }
 
-    bool should_hide_column(Ledger const& ledger, int column) const override
+    bool should_hide_column(int column) const override
     {
         // Don't show AttainedAge on a composite.
-        return ledger.is_composite() && column == column_end_of_year_age;
+        return ledger_.is_composite() && column == column_end_of_year_age;
     }
 
     void render_or_measure_extra_headers
@@ -2585,9 +2593,9 @@ class finra_supplemental : public page_with_tabular_report
         return columns;
     }
 
-    bool should_hide_column(Ledger const& ledger, int column) const override
+    bool should_hide_column(int column) const override
     {
-        auto const& invar = ledger.GetLedgerInvariant();
+        auto const& invar = ledger_.GetLedgerInvariant();
 
         // The supplemental page in FINRA illustrations exists in two versions:
         // default one and one with split premiums. Hide columns that are not
@@ -2596,7 +2604,7 @@ class finra_supplemental : public page_with_tabular_report
             {
             case column_end_of_year_age:
                 // This column doesn't make sense for composite ledgers.
-                return ledger.is_composite();
+                return ledger_.is_composite();
 
             case column_admin_charge:
             case column_premium_tax_load:
@@ -2850,10 +2858,10 @@ class reg_d_indiv_irr_base : public page_with_tabular_report
     // Must be overridden to return the basis being used.
     virtual basis get_basis() const = 0;
 
-    bool should_hide_column(Ledger const& ledger, int column) const override
+    bool should_hide_column(int column) const override
     {
         // Don't show AttainedAge on a composite.
-        return ledger.is_composite() && column == column_end_of_year_age;
+        return ledger_.is_composite() && column == column_end_of_year_age;
     }
 
     void render_or_measure_extra_headers
@@ -3032,10 +3040,10 @@ class reg_d_indiv_curr : public page_with_tabular_report
         return columns;
     }
 
-    bool should_hide_column(Ledger const& ledger, int column) const override
+    bool should_hide_column(int column) const override
     {
         // Don't show AttainedAge on a composite.
-        return ledger.is_composite() && column == column_end_of_year_age;
+        return ledger_.is_composite() && column == column_end_of_year_age;
     }
 
     void render_or_measure_extra_headers
