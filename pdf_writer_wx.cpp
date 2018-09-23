@@ -335,6 +335,10 @@ void pdf_writer_wx::initialize_html_parser(wxHtmlWinParser& html_parser)
 
 std::unique_ptr<wxHtmlContainerCell> pdf_writer_wx::parse_html(html::text&& html)
 {
+    // We don't really want to change the font, but to preserve the current DC
+    // font which is changed by parsing the HTML contents.
+    wxDCFontChanger preserve_font(pdf_dc_, wxFont());
+
     return std::unique_ptr<wxHtmlContainerCell>
         (static_cast<wxHtmlContainerCell*>
             (html_parser_.Parse
