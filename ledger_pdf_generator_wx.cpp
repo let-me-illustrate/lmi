@@ -1395,6 +1395,10 @@ class standard_page : public numbered_page
                 // rendered as part of the page body.
                 page_body_cell_->Detach(cell);
 
+                // Initializing wxHtmlWinParser changes the font of the DC, so
+                // ensure that we preserve the original font.
+                wxDCFontChanger preserve_font(writer.dc(), wxFont());
+
                 // And attach it to another HTML document representing just
                 // the header contents.
                 //
