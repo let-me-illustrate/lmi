@@ -148,15 +148,19 @@ std::vector<int> LMI_SO set_column_widths
 class LMI_SO prepaginator
 {
   public:
-    prepaginator(int total_rows, int rows_per_group, int max_lines_per_page);
+    prepaginator
+        (int number_of_rows
+        ,int rows_per_group
+        ,int max_lines_per_page
+        );
 
     int lines_on_full_page() const {return lines_on_full_page_;}
     int lines_on_last_page() const {return lines_on_last_page_;}
-    int page_count        () const {return page_count_        ;}
+    int number_of_pages   () const {return number_of_pages_   ;}
 
   private:
     // Ctor arguments.
-    int const total_rows_;
+    int const number_of_rows_;
     int const rows_per_group_;
     int const max_lines_per_page_;
 
@@ -166,7 +170,7 @@ class LMI_SO prepaginator
     int const rows_per_page_;
     int const lines_on_full_page_;
     int       lines_on_last_page_;
-    int       page_count_;
+    int       number_of_pages_;
 };
 
 class LMI_SO paginator
@@ -174,7 +178,7 @@ class LMI_SO paginator
   public:
     paginator() {}
 
-    int init(int total_rows, int rows_per_group, int max_lines_per_page);
+    int init(int number_of_rows, int rows_per_group, int max_lines_per_page);
     void print();
 
   private:
@@ -185,21 +189,21 @@ class LMI_SO paginator
     virtual void close_page       () = 0;
     virtual void postlude         () = 0;
 
-    int total_rows        () const {return total_rows_        ;}
+    int number_of_rows    () const {return number_of_rows_    ;}
     int rows_per_group    () const {return rows_per_group_    ;}
 
     int lines_on_full_page() const {return lines_on_full_page_;}
     int lines_on_last_page() const {return lines_on_last_page_;}
-    int page_count        () const {return page_count_        ;}
+    int number_of_pages   () const {return number_of_pages_   ;}
 
     // init() arguments.
-    int total_rows_         {};
+    int number_of_rows_     {};
     int rows_per_group_     {};
 
     // init() results.
     int lines_on_full_page_ {};
     int lines_on_last_page_ {};
-    int page_count_         {};
+    int number_of_pages_    {};
 };
 
 #endif // report_table_hpp
