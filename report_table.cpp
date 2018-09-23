@@ -182,6 +182,12 @@ namespace
 std::logic_error yikes("Rows per group must be positive.");
 } // Unnamed namespace.
 
+/// Calculate pagination parameters.
+///
+/// Either of the final if-statements may be skipped. The first may be
+/// skipped if widow control is not wanted. The second may be skipped
+/// if zero rows of input should produce zero pages of output.
+///
 /// Asserted preconditions:
 ///   0 <= number_of_rows
 ///   0 < rows_per_group <= max_lines_per_page
@@ -226,7 +232,8 @@ prepaginator::prepaginator
     // to the preceding page (which becomes the last) if there's room.
     if(1 < number_of_pages_)
         {
-        int const free_lines = max_lines_per_page_ - lines_per_group_ * groups_per_page_;
+        // "+ 1": need separator before antiwidowed partial group.
+        int const free_lines = max_lines_per_page_ - (lines_on_full_page_ + 1);
         LMI_ASSERT(free_lines < rows_per_group_);
         if(rows_on_last_page <= free_lines)
             {
