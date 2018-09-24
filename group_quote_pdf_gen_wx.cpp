@@ -837,13 +837,13 @@ void group_quote_pdf_generator_wx::output_page_number_and_version
     pdf_dc.DrawLabel
         (wxString::Format("System version: %s", LMI_VERSION)
         ,footer_area
-        ,wxALIGN_LEFT | wxALIGN_BOTTOM
+        ,wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL
         );
 
     pdf_dc.DrawLabel
         (wxString::Format("Page %d of %d", current_page, total_pages)
         ,footer_area
-        ,wxALIGN_RIGHT | wxALIGN_BOTTOM
+        ,wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL
         );
 }
 
