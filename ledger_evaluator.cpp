@@ -163,15 +163,15 @@ ledger_evaluator Ledger::make_evaluator() const
     // they are defined only on a current basis--experience-rating
     // columns, e.g.
 
-    title_map["AVGenAcct_CurrentZero"           ] = "Curr Charges\n0% Account\nValue\nGen Acct";
-    title_map["AVGenAcct_GuaranteedZero"        ] = "Guar Charges\n0% Account\nValue\nGen Acct";
+    title_map["AVGenAcct_CurrentZero"           ] = "Curr\nCharges\n0% Account\nValue\nGen Acct";
+    title_map["AVGenAcct_GuaranteedZero"        ] = "Guar\nCharges\n0% Account\nValue\nGen Acct";
     title_map["AVRelOnDeath_Current"            ] = "Account\nValue\nReleased\non Death";
-    title_map["AVSepAcct_CurrentZero"           ] = "Curr Charges\n0% Account\nValue\nSep Acct";
-    title_map["AVSepAcct_GuaranteedZero"        ] = "Guar Charges\n0% Account\nValue\nSep Acct";
+    title_map["AVSepAcct_CurrentZero"           ] = "Curr\nCharges\n0% Account\nValue\nSep Acct";
+    title_map["AVSepAcct_GuaranteedZero"        ] = "Guar\nCharges\n0% Account\nValue\nSep Acct";
     title_map["AcctVal_Current"                 ] = "Curr\nAccount\nValue";
-    title_map["AcctVal_CurrentZero"             ] = "Curr Charges\n0% Account\nValue";
+    title_map["AcctVal_CurrentZero"             ] = "Curr\nCharges\n0% Account\nValue";
     title_map["AcctVal_Guaranteed"              ] = "Guar\nAccount\nValue";
-    title_map["AcctVal_GuaranteedZero"          ] = "Guar Charges\n0% Account\nValue";
+    title_map["AcctVal_GuaranteedZero"          ] = "Guar\nCharges\n0% Account\nValue";
     title_map["AddonCompOnAssets"               ] = "Additional\nComp on\nAssets";
     title_map["AddonCompOnPremium"              ] = "Additional\nComp on\nPremium";
     title_map["AddonMonthlyFee"                 ] = "Additional\nMonthly\nFee";
@@ -191,9 +191,9 @@ ledger_evaluator Ledger::make_evaluator() const
     title_map["COICharge_Current"               ] = "Curr COI\nCharge";
     title_map["COICharge_Guaranteed"            ] = "Guar COI\nCharge";
     title_map["CSVNet_Current"                  ] = "Curr Net\nCash\nSurr Value";
-    title_map["CSVNet_CurrentZero"              ] = "Curr Charges\n0% Net Cash\nSurr Value";
+    title_map["CSVNet_CurrentZero"              ] = "Curr\nCharges\n0% Net Cash\nSurr Value";
     title_map["CSVNet_Guaranteed"               ] = "Guar Net\nCash\nSurr Value";
-    title_map["CSVNet_GuaranteedZero"           ] = "Guar Charges\n0% Net Cash\nSurr Value";
+    title_map["CSVNet_GuaranteedZero"           ] = "Guar\nCharges\n0% Net Cash\nSurr Value";
     title_map["CV7702_Current"                  ] = "Curr 7702\nCash Value";
     title_map["CV7702_Guaranteed"               ] = "Guar 7702\nCash Value";
     title_map["ClaimsPaid_Current"              ] = "Curr\nClaims\nPaid";
