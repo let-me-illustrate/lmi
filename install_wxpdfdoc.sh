@@ -33,7 +33,7 @@ set -vxe
 
 remote_host_url=${remote_host_url:-"https://github.com/vadz/wxpdfdoc.git"}
 
-wxpdfdoc_commit_sha=${wxpdfdoc_commit_sha:-"f66b42805a7262cdf07ab04a4e20b252b5d81ddb"}
+wxpdfdoc_commit_sha=${wxpdfdoc_commit_sha:-"55366f01eed8549ca704f9d9825127868858aafb"}
 
 wxpdfdoc_skip_clean=${wxpdfdoc_skip_clean:-"0"}
 
