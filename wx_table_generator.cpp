@@ -174,16 +174,16 @@ void wx_table_generator::output_headers
     // Split headers in single lines and fill up the entire columns*lines 2D
     // matrix, using empty strings for the headers with less than the maximal
     // number of lines.
-    std::size_t const number_of_columns = all_columns().size();
+    int const number_of_columns = lmi::ssize(all_columns());
     std::vector<std::string> headers_by_line(max_header_lines_ * number_of_columns);
-    for(std::size_t i = 0; i < number_of_columns; ++i)
+    for(int i = 0; i < number_of_columns; ++i)
         {
         // Fill the elements from the bottom line to the top one, so that a
         // single line header is shown on the last line.
         table_column_info const& ci = all_columns().at(i);
         std::vector<std::string> const lines(split_into_lines(ci.col_header()));
-        std::size_t const first_line = max_header_lines_ - lines.size();
-        for(std::size_t j = 0; j < lines.size(); ++j)
+        int const first_line = max_header_lines_ - lmi::ssize(lines);
+        for(int j = 0; j < lmi::ssize(lines); ++j)
             {
             headers_by_line.at
                 ((first_line + j) * number_of_columns + i
@@ -194,7 +194,7 @@ void wx_table_generator::output_headers
     // And output all lines of all column headers.
     int y_top = pos_y;
     int x = 0;
-    for(std::size_t i = 0; i < max_header_lines_; ++i)
+    for(int i = 0; i < max_header_lines_; ++i)
         {
         std::vector<std::string> const nth_line
             (headers_by_line.begin() +      i  * number_of_columns
@@ -222,8 +222,8 @@ void wx_table_generator::output_headers
 
 void wx_table_generator::output_super_header
         (std::string const&           header
-        ,std::size_t                  a_begin_column
-        ,std::size_t                  a_end_column
+        ,int                          a_begin_column
+        ,int                          a_end_column
         ,int&                         pos_y
         ,oenum_render_or_only_measure output_mode
         )
@@ -259,7 +259,7 @@ void wx_table_generator::output_super_header
 /// Shade the background of a single cell; center the given contents.
 
 void wx_table_generator::output_highlighted_cell
-    (std::size_t        a_column
+    (int                a_column
     ,int                y
     ,std::string const& value
     )
@@ -304,10 +304,7 @@ void wx_table_generator::output_row
 /// If the column index equals the number of columns, output a
 /// separator after the last column.
 
-void wx_table_generator::output_vert_separator
-    (std::size_t a_before_column
-    ,int         y
-    )
+void wx_table_generator::output_vert_separator(int a_before_column, int y)
 {
     int before_column = indices_[a_before_column];
 
@@ -321,8 +318,8 @@ void wx_table_generator::output_vert_separator
 /// The column range is specified as [begin, end), as is usual in C++.
 
 void wx_table_generator::output_horz_separator
-    (std::size_t                  a_begin_column
-    ,std::size_t                  a_end_column
+    (int                          a_begin_column
+    ,int                          a_end_column
     ,int                          y
     ,oenum_render_or_only_measure output_mode
     )
@@ -368,7 +365,7 @@ int wx_table_generator::separator_line_height() const
     return row_height() / 2;
 }
 
-wxRect wx_table_generator::external_text_rect(std::size_t a_column, int y) const
+wxRect wx_table_generator::external_text_rect(int a_column, int y) const
 {
     int column = indices_[a_column];
     return text_rect(column, y);
@@ -418,13 +415,10 @@ void wx_table_generator::enroll_column(column_parameters const& z)
     dc().GetMultiLineTextExtent(z.header, &w, &h, &lh, &dc().GetFont());
     LMI_ASSERT(0 != lh);
     LMI_ASSERT(0 == h % lh);
-// Temporarily assert that this does the same as the code it replaced:
-LMI_ASSERT(h / lh == int(1u + count_newlines(z.header)));
-// Check it again because of the unfortunate mixed-mode arithmetic:
-LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
+    LMI_ASSERT(h / lh == int(1u + count_newlines(z.header)));
     // Store number of lines used by tallest header:
     // output_headers() uses it to write all headers as a block.
-    max_header_lines_ = std::max(max_header_lines_, std::size_t(h / lh));
+    max_header_lines_ = std::max(max_header_lines_, h / lh);
 
     switch(z.elasticity)
         {
@@ -460,8 +454,8 @@ void wx_table_generator::do_output_single_row
         do_output_vert_separator(pos_x, y_top, pos_y);
         }
 
-    std::size_t const number_of_columns = all_columns().size();
-    for(std::size_t i = 0; i < number_of_columns; ++i)
+    int const number_of_columns = lmi::ssize(all_columns());
+    for(int i = 0; i < number_of_columns; ++i)
         {
         table_column_info const& ci = all_columns().at(i);
         std::string const& s = values[i];

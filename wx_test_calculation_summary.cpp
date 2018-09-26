@@ -37,8 +37,6 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
-#include <cstddef>                      // size_t
-
 namespace
 {
 
@@ -176,7 +174,7 @@ class expect_preferences_dialog_base
 };
 
 void check_calculation_summary_columns
-    (std::size_t number_of_columns
+    (int number_of_columns
     ,name_and_title const columns_info[]
     )
 {
@@ -201,7 +199,7 @@ void check_calculation_summary_columns
     ill.close();
 
     // Find the start of the table after the separating line.
-    std::size_t pos = html.find("<hr>\n<table");
+    auto pos = html.find("<hr>\n<table");
     LMI_ASSERT(pos != wxString::npos);
 
     pos = html.find("\n<td", pos);
@@ -211,7 +209,7 @@ void check_calculation_summary_columns
 
     // We have found the place where the columns are described in the HTML,
     // iterate over all of them.
-    for(std::size_t n = 0; n < number_of_columns; ++n)
+    for(int n = 0; n < number_of_columns; ++n)
         {
         LMI_ASSERT_EQUAL(wxString(html, pos, 3), "<td");
 
@@ -220,7 +218,7 @@ void check_calculation_summary_columns
 
         ++pos;                                         // <td> tag contents
 
-        std::size_t const next = html.find("\n", pos); // the next line start
+        auto const next = html.find("\n", pos); // the next line start
         LMI_ASSERT(next != wxString::npos);
 
         // Extract the column title from the rest of the line.

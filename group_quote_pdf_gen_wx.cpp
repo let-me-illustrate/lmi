@@ -956,14 +956,14 @@ void group_quote_pdf_generator_wx::output_document_header
     fields.insert(fields.end(), f.begin(), f.end());
 
     text fields_html;
-    for(std::size_t i = 0; i < fields.size(); i += 2)
+    for(int i = 0; i < lmi::ssize(fields); i += 2)
         {
         auto row_html = name_value_as_html_table_data
             (fields[i].name, fields[i].value
             )
             ;
 
-        if(i + 1 < fields.size())
+        if(i + 1 < lmi::ssize(fields))
             {
             row_html += name_value_as_html_table_data
                     (fields[i + 1].name, fields[i + 1].value

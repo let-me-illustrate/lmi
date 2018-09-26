@@ -225,14 +225,19 @@ LMI_WX_TEST_CASE(paste_census)
         "Female\t19550625\tPresident\t700000, @65; 100000\n"
         ;
 
-    std::size_t const number_of_rows = std::count
-        (census_data
-        ,census_data + std::strlen(census_data)
-        ,'\n'
-        )
+    int const number_of_rows =
+        bourn_cast<int>
+            (
+            std::count
+                (census_data
+                ,census_data + std::strlen(census_data)
+                ,'\n'
+                )
+            )
         - 1 // Not counting the header.
         - 1 // Nor the empty line after it.
         ;
+    LMI_ASSERT(0 < number_of_rows);
 
     // Put the data to paste on clipboard.
     ClipboardEx::SetText(census_data);
@@ -249,7 +254,7 @@ LMI_WX_TEST_CASE(paste_census)
     // correctly.
     wxDataViewCtrl* const list_window = find_census_list_window();
     wxDataViewListModel* const list_model = get_census_list_model(list_window);
-    LMI_ASSERT_EQUAL(list_model->GetCount(), number_of_rows);
+    LMI_ASSERT_EQUAL(bourn_cast<int>(list_model->GetCount()), number_of_rows);
 
     check_list_columns
         (list_window
@@ -332,12 +337,11 @@ LMI_WX_TEST_CASE(paste_census)
         );
 
     // Verify that the "Gender" column value is "Unisex" in every row now.
-    int const
-        gender_column = find_model_column_by_title(list_window, "Gender");
-    LMI_ASSERT_EQUAL(list_model->GetCount(), number_of_rows);
+    int const gender_column = find_model_column_by_title(list_window, "Gender");
+    LMI_ASSERT_EQUAL(bourn_cast<int>(list_model->GetCount()), number_of_rows);
     // Only the first two rows are affected, because only they belong
     // to the first employee class.
-    for(std::size_t row = 0; row < 2; ++row)
+    for(int row = 0; row < 2; ++row)
         {
         wxVariant value;
         list_model->GetValueByRow(value, row, gender_column);
@@ -395,7 +399,7 @@ LMI_WX_TEST_CASE(paste_census)
 
     // Check that we still have the same cells but that now the underwriting
     // class column has disappeared as its value has been fixed.
-    LMI_ASSERT_EQUAL(list_model->GetCount(), number_of_rows);
+    LMI_ASSERT_EQUAL(bourn_cast<int>(list_model->GetCount()), number_of_rows);
 
     column_titles.erase("Underwriting Class");
     check_list_columns

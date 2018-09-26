@@ -22,6 +22,7 @@
 #include "pchfile_wx.hpp"
 
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "global_settings.hpp"
 #include "mvc_controller.hpp"
 #include "wx_test_case.hpp"
@@ -210,7 +211,7 @@ LMI_WX_TEST_CASE(input_validation)
             // between the expected and actual errors more concise.
             char const* const
                 error_prefix = "Input validation problems for '':\n";
-            std::size_t error_prefix_len = std::strlen(error_prefix);
+            int error_prefix_len = bourn_cast<int>(std::strlen(error_prefix));
 
             LMI_ASSERT_WITH_MSG
                 (error_message.substr(0, error_prefix_len) == error_prefix

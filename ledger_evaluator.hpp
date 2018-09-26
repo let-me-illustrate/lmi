@@ -26,7 +26,6 @@
 
 #include "so_attributes.hpp"
 
-#include <cstddef>                      // size_t
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -44,7 +43,7 @@ class LMI_SO ledger_evaluator
 
   public:
     std::string operator()(std::string const& scalar) const;
-    std::string operator()(std::string const& vector, std::size_t index) const;
+    std::string operator()(std::string const& vector, int index) const;
 
   private:
     // Constructible only by friends: see Ledger::make_evaluator().

@@ -25,10 +25,10 @@
 #include "config.hpp"
 
 #include "assert_lmi.hpp"
+#include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 
 #include <algorithm>
-#include <cstddef>                      // size_t
 #include <functional>
 #include <iterator>                     // back_inserter()
 #include <numeric>
@@ -74,7 +74,7 @@ void print_matrix
     ,std::vector<int> const& dimensions
     )
 {
-    std::vector<std::size_t> nonempty_dimensions;
+    std::vector<int> nonempty_dimensions;
     std::remove_copy
         (dimensions.begin()
         ,dimensions.end()
@@ -82,19 +82,19 @@ void print_matrix
         ,1
         );
 
-    std::vector<std::size_t> moduli(nonempty_dimensions.size());
+    std::vector<int> moduli(nonempty_dimensions.size());
     std::partial_sum
         (nonempty_dimensions.rbegin()
         ,nonempty_dimensions.rend()
         ,moduli.rbegin()
-        ,std::multiplies<std::size_t>()
+        ,std::multiplies<int>()
         );
-    LMI_ASSERT(1 == data.size() || moduli.front() == data.size());
+    LMI_ASSERT(1 == lmi::ssize(data) || moduli.front() == lmi::ssize(data));
 
-    for(std::size_t j = 0; j < data.size(); ++j)
+    for(int j = 0; j < lmi::ssize(data); ++j)
         {
         os << '\t' << value_cast<std::string>(data[j]);
-        for(std::size_t k = 0; k < moduli.size(); ++k)
+        for(int k = 0; k < lmi::ssize(moduli); ++k)
             {
             if(0 == (1 + j) % moduli[k])
                 {

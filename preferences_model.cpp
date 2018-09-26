@@ -26,12 +26,12 @@
 #include "alert.hpp"
 #include "configurable_settings.hpp"
 #include "miscellany.hpp"               // begins_with()
+#include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 
 #include <boost/filesystem/operations.hpp> // fs::system_complete()
 #include <boost/filesystem/path.hpp>
 
-#include <cstddef>                      // size_t
 #include <sstream>
 #include <vector>
 
@@ -251,14 +251,14 @@ void PreferencesModel::Load()
     configurable_settings const& z = configurable_settings::instance();
 
     std::vector<std::string> columns(input_calculation_summary_columns());
-    for(std::size_t i = 0; i < member_names().size(); ++i)
+    for(int i = 0; i < lmi::ssize(member_names()); ++i)
         {
         std::string const& name = member_names()[i];
         if(!is_calculation_summary_column_name(name))
             {
             continue;
             }
-        if(columns.size() <= i)
+        if(lmi::ssize(columns) <= i)
             {
             operator[](name) = empty_column_name;
             }

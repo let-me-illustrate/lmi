@@ -30,7 +30,6 @@
 #include <wx/dc.h>
 #include <wx/font.h>
 
-#include <cstddef>                      // size_t
 #include <string>
 #include <vector>
 
@@ -99,24 +98,20 @@ class wx_table_generator
 
     void output_super_header
         (std::string const&           header
-        ,std::size_t                  a_begin_column
-        ,std::size_t                  a_end_column
+        ,int                          a_begin_column
+        ,int                          a_end_column
         ,int&                         pos_y
         ,oenum_render_or_only_measure output_mode = oe_render
         );
 
-    void output_highlighted_cell
-        (std::size_t        a_column
-        ,int                y
-        ,std::string const& value
-        );
+    void output_highlighted_cell(int a_column, int y, std::string const& value);
 
     void output_row(int& pos_y, std::vector<std::string> const values);
 
-    void output_vert_separator(std::size_t a_before_column, int y);
+    void output_vert_separator(int a_before_column, int y);
     void output_horz_separator
-        (std::size_t                  a_begin_column
-        ,std::size_t                  a_end_column
+        (int                          a_begin_column
+        ,int                          a_end_column
         ,int                          y
         ,oenum_render_or_only_measure output_mode = oe_render
         );
@@ -127,7 +122,7 @@ class wx_table_generator
     // Used only by group_quote_pdf_generator_wx::output_aggregate_values(),
     // in a context where something like output_highlighted_cell() should
     // probably be used instead. PDF !! revisit this later
-    wxRect external_text_rect(std::size_t a_column, int y) const;
+    wxRect external_text_rect(int a_column, int y) const;
 
   private:
     void enroll_column(column_parameters const&);
@@ -170,7 +165,7 @@ class wx_table_generator
 
     // Maximal number of lines in any column header, initially 1 but can be
     // higher if multiline headers are used.
-    std::size_t max_header_lines_;
+    int max_header_lines_;
 
     // If false, separator lines are not drawn automatically (they can still be
     // drawn by calling output_horz_separator() or output_vert_separator()
