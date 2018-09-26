@@ -975,12 +975,17 @@ void DBDictionary::write_database_files()
     z.Add(database_entity(DB_LedgerType          , mce_individual_private_placement));
     z.WriteDB(AddDataDir("sample2ipp.database"));
 
+    // Exotica.
+    z.Add(database_entity(DB_LedgerType          , mce_finra));
     // Certain group-quote columns are available only when these two
     // entities are 'true':
     z.Add(database_entity(DB_SplitMinPrem        , true));
     z.Add(database_entity(DB_TermIsNotRider      , true));
-    z.Add(database_entity(DB_LedgerType          , mce_ill_reg));
-    z.WriteDB(AddDataDir("sample2quo.database"));
+    // This fixed loan rate varies by duration.
+    int dims_1111113[e_number_of_axes] = {1, 1, 1, 1, 1, 1, 3};
+    double loanrate[3] = {0.06, 0.05, 0.04};
+    z.Add(database_entity(DB_FixedLoanRate, e_number_of_axes, dims_1111113, loanrate));
+    z.WriteDB(AddDataDir("sample2xyz.database"));
 }
 
 /// Initialize the built-in database for the antediluvian branch.
