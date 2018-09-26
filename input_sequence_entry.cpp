@@ -183,6 +183,8 @@ bool DurationModeChoice::needs_number() const
 class InputSequenceEditor
     :public wxDialog
 {
+    friend class LayoutOnceGuard;
+
   public:
     InputSequenceEditor(wxWindow* parent, wxString const& title, Input const& input);
     InputSequenceEditor(InputSequenceEditor const&) = delete;
@@ -241,8 +243,6 @@ class InputSequenceEditor
       private:
         InputSequenceEditor* const editor_;
     };
-
-    friend class LayoutOnceGuard;
 
     // If this is positive, layout is frozen and needs to wait until it's
     // thawed which will happen when all currently existing LayoutOnceGuards go

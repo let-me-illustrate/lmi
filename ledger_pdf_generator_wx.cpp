@@ -479,6 +479,8 @@ TAG_HANDLER_END(page_header)
 // generate it.
 class html_cell_for_pdf_output : public wxHtmlCell
 {
+    friend class pdf_context_setter;
+
   public:
     // Before using this class a pdf_context_setter object needs to be
     // instantiated (and remain alive for as long as this class is used).
@@ -583,8 +585,6 @@ class html_cell_for_pdf_output : public wxHtmlCell
     }
 
     static inline pdf_context pdf_context_for_html_output = {};
-
-    friend pdf_context_setter;
 };
 
 // Define scaffolding for a custom HTML "img" tag which must be used

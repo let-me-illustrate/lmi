@@ -36,6 +36,8 @@
 
 class LMI_SO ledger_evaluator
 {
+    friend class Ledger;
+
   public:
     std::string operator()(std::string const& scalar) const;
     std::string operator()(std::string const& vector, std::size_t index) const;
@@ -53,8 +55,6 @@ class LMI_SO ledger_evaluator
 
     all_scalars const scalars_;
     all_vectors const vectors_;
-
-    friend class Ledger;
 };
 
 #endif // ledger_evaluator_hpp
