@@ -163,8 +163,8 @@ ledger_evaluator Ledger::make_evaluator() const
     // they are defined only on a current basis--experience-rating
     // columns, e.g.
 
-    title_map["AVGenAcct_CurrentZero"           ] = "Curr\nCharges\n0% Account\nValue\nGen Acct";
-    title_map["AVGenAcct_GuaranteedZero"        ] = "Guar\nCharges\n0% Account\nValue\nGen Acct";
+    title_map["AVGenAcct_CurrentZero"           ] = "Curr\nCharges\nAccount\nValue\nGen Acct";
+    title_map["AVGenAcct_GuaranteedZero"        ] = "Guar\nCharges\nAccount\nValue\nGen Acct";
     title_map["AVRelOnDeath_Current"            ] = "Account\nValue\nReleased\non Death";
     title_map["AVSepAcct_CurrentZero"           ] = "Curr\nCharges\n0% Account\nValue\nSep Acct";
     title_map["AVSepAcct_GuaranteedZero"        ] = "Guar\nCharges\n0% Account\nValue\nSep Acct";
