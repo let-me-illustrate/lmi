@@ -482,6 +482,7 @@ ledger_evaluator Ledger::make_evaluator() const
 // > Format as percentage with no decimal places (##0%)
     format_map["SalesLoadRefundRate0"              ] = f3;
     format_map["SalesLoadRefundRate1"              ] = f3;
+    format_map["GenAcctAllocation"                 ] = f3;
     format_map["GenAcctAllocationPercent"          ] = f3;
     format_map["GenAcctAllocationComplementPercent"] = f3;
 
@@ -515,7 +516,6 @@ ledger_evaluator Ledger::make_evaluator() const
     format_map["Dumpin"                            ] = f1;
     format_map["EndtAge"                           ] = f1;
     format_map["External1035Amount"                ] = f1;
-    format_map["GenAcctAllocation"                 ] = f1;
     format_map["GenderBlended"                     ] = f1;
     format_map["GenderDistinct"                    ] = f1;
     format_map["Has1035ExchCharge"                 ] = f1;
