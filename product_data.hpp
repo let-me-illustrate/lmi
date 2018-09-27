@@ -80,9 +80,9 @@ class LMI_SO product_data final
     :public xml_serializable  <product_data>
     ,public MemberSymbolTable <product_data>
 {
-    typedef deserialized<product_data>::value_type value_type;
-
     friend class PolicyDocument;
+
+    typedef deserialized<product_data>::value_type value_type;
 
   public:
     explicit product_data(std::string const& product_name);

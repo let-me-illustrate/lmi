@@ -24,7 +24,7 @@
 
 <table width="100%" cellspacing="0" cellpadding="0" valign="top">
     <tr>
-        <td>
+        <td width="60%">
         {{#Composite}}
             {{CorpNameAbbrev60}}<br>
             Composite<br>
@@ -57,10 +57,10 @@
         {{/Composite}}
         {{>contract_numbers}}
         </td>
-        <td>
+        <td width="40%">
             Assumed Premium Allocation:**<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;Separate Account: {{GenAcctAllocationComplementPercent}}<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;Guaranteed Principal Account (GPA): {{GenAcctAllocationPercent}}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;Separate Account: {{SepAcctAllocation}}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;Guaranteed Principal Account (GPA): {{GenAcctAllocation}}<br>
             Initial
                 {{#HasTermOrSupplSpecAmt}}
                     Total

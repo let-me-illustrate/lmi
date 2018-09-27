@@ -42,7 +42,6 @@
 #include <wx/utils.h>                   // wxSafeYield()
 #include <wx/window.h>
 
-#include <cstddef>                      // size_t
 #include <sstream>
 
 /// Return whatever plain text the clipboard contains, or an empty
@@ -217,7 +216,7 @@ void TestDateConversions()
 std::vector<std::string> EnumerateBookPageNames(wxBookCtrlBase const& book)
 {
     std::vector<std::string> z;
-    for(std::size_t j = 0; j < book.GetPageCount(); ++j)
+    for(int j = 0; j < bourn_cast<int>(book.GetPageCount()); ++j)
         {
         std::string name(book.GetPageText(j).ToStdString(wxConvUTF8));
         LMI_ASSERT(!contains(z, name));

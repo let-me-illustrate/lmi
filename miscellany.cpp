@@ -25,6 +25,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "ssize_lmi.hpp"
 
 #include <algorithm>                    // equal(), max()
@@ -159,7 +160,7 @@ int scale_power(int max_power, double min_value, double max_value)
 
 int count_newlines(std::string const& s)
 {
-    return std::count(s.begin(), s.end(), '\n');
+    return bourn_cast<int>(std::count(s.begin(), s.end(), '\n'));
 }
 
 /// Split an internally-newline-delimited string into lines.

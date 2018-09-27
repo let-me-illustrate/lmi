@@ -27,6 +27,7 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
+#include <cstddef>                      // size_t
 #include <cstdio>
 #include <fstream>
 #include <iterator>                     // istreambuf_iterator

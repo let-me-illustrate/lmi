@@ -27,10 +27,10 @@
 #include "materially_equal.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "round_to.hpp"
+#include "ssize_lmi.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <cstddef>                      // size_t
 #include <functional>                   // bind()
 
 namespace
@@ -108,51 +108,51 @@ void LoadsTest::Reinitialize()
 
 void LoadsTest::TestVectorLengths(char const* file, int line)
 {
-    std::size_t const z = details_.length_;
+    int const z = details_.length_;
 
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.refundable_sales_load_proportion         ().size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.premium_tax_load                         ().size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.amortized_premium_tax_load               ().size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.dac_tax_load                             ().size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load_excluding_premium_tax().size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load_excluding_premium_tax().size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load_maximum_premium_tax  ().size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load_maximum_premium_tax  ().size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load_minimum_premium_tax  ().size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load_minimum_premium_tax  ().size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.refundable_sales_load_proportion         ()), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.premium_tax_load                         ()), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.amortized_premium_tax_load               ()), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.dac_tax_load                             ()), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.target_premium_load_excluding_premium_tax()), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.excess_premium_load_excluding_premium_tax()), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.target_premium_load_maximum_premium_tax  ()), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.excess_premium_load_maximum_premium_tax  ()), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.target_premium_load_minimum_premium_tax  ()), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.excess_premium_load_minimum_premium_tax  ()), file, line);
 
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.monthly_policy_fee    (mce_gen_curr).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.annual_policy_fee     (mce_gen_curr).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.specified_amount_load (mce_gen_curr).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.separate_account_load (mce_gen_curr).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load   (mce_gen_curr).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load   (mce_gen_curr).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_sales_load     (mce_gen_curr).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_sales_load     (mce_gen_curr).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_total_load     (mce_gen_curr).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_total_load     (mce_gen_curr).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.monthly_policy_fee    (mce_gen_curr)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.annual_policy_fee     (mce_gen_curr)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.specified_amount_load (mce_gen_curr)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.separate_account_load (mce_gen_curr)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.target_premium_load   (mce_gen_curr)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.excess_premium_load   (mce_gen_curr)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.target_sales_load     (mce_gen_curr)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.excess_sales_load     (mce_gen_curr)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.target_total_load     (mce_gen_curr)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.excess_total_load     (mce_gen_curr)), file, line);
 
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.monthly_policy_fee    (mce_gen_guar).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.annual_policy_fee     (mce_gen_guar).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.specified_amount_load (mce_gen_guar).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.separate_account_load (mce_gen_guar).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load   (mce_gen_guar).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load   (mce_gen_guar).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_sales_load     (mce_gen_guar).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_sales_load     (mce_gen_guar).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_total_load     (mce_gen_guar).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_total_load     (mce_gen_guar).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.monthly_policy_fee    (mce_gen_guar)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.annual_policy_fee     (mce_gen_guar)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.specified_amount_load (mce_gen_guar)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.separate_account_load (mce_gen_guar)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.target_premium_load   (mce_gen_guar)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.excess_premium_load   (mce_gen_guar)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.target_sales_load     (mce_gen_guar)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.excess_sales_load     (mce_gen_guar)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.target_total_load     (mce_gen_guar)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.excess_total_load     (mce_gen_guar)), file, line);
 
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.monthly_policy_fee    (mce_gen_mdpt).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.annual_policy_fee     (mce_gen_mdpt).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.specified_amount_load (mce_gen_mdpt).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.separate_account_load (mce_gen_mdpt).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load   (mce_gen_mdpt).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load   (mce_gen_mdpt).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_sales_load     (mce_gen_mdpt).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_sales_load     (mce_gen_mdpt).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_total_load     (mce_gen_mdpt).size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_total_load     (mce_gen_mdpt).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.monthly_policy_fee    (mce_gen_mdpt)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.annual_policy_fee     (mce_gen_mdpt)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.specified_amount_load (mce_gen_mdpt)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.separate_account_load (mce_gen_mdpt)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.target_premium_load   (mce_gen_mdpt)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.excess_premium_load   (mce_gen_mdpt)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.target_sales_load     (mce_gen_mdpt)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.excess_sales_load     (mce_gen_mdpt)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.target_total_load     (mce_gen_mdpt)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, lmi::ssize(loads_.excess_total_load     (mce_gen_mdpt)), file, line);
 }
 
 void LoadsTest::TestCalculations(char const* file, int line)

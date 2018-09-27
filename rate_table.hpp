@@ -51,6 +51,8 @@ class database_impl;
 /// This class has value semantics.
 class table
 {
+    friend class database_impl;
+
   public:
     // table number: just an integer wrapped in a class for type-safety.
     class Number
@@ -99,8 +101,6 @@ class table
     }
 
     std::shared_ptr<table_impl> impl_;
-
-    friend database_impl;
 };
 
 /// A database in SOA binary format.

@@ -26,7 +26,6 @@
 
 #include "so_attributes.hpp"
 
-#include <cstddef>                      // size_t
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -36,25 +35,26 @@
 
 class LMI_SO ledger_evaluator
 {
+    friend class Ledger;
+
+    template<typename K, typename T> using umap = std::unordered_map<K,T>;
+    using scalar_map_t = umap<std::string,            std::string >;
+    using vector_map_t = umap<std::string,std::vector<std::string>>;
+
   public:
     std::string operator()(std::string const& scalar) const;
-    std::string operator()(std::string const& vector, std::size_t index) const;
+    std::string operator()(std::string const& vector, int index) const;
 
   private:
-    using all_scalars = std::unordered_map<std::string,            std::string >;
-    using all_vectors = std::unordered_map<std::string,std::vector<std::string>>;
-
-    // Objects of this class can only be created by Ledger::make_evaluator().
-    ledger_evaluator(all_scalars&& scalars, all_vectors&& vectors)
+    // Constructible only by friends: see Ledger::make_evaluator().
+    ledger_evaluator(scalar_map_t&& scalars, vector_map_t&& vectors)
         :scalars_ {scalars}
         ,vectors_ {vectors}
     {
     }
 
-    all_scalars const scalars_;
-    all_vectors const vectors_;
-
-    friend class Ledger;
+    scalar_map_t const scalars_;
+    vector_map_t const vectors_;
 };
 
 #endif // ledger_evaluator_hpp

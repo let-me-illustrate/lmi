@@ -51,7 +51,6 @@
 #include <wx/html/m_templ.h>
 
 #include <array>
-#include <cstddef>                      // size_t
 #include <cstdint>                      // SIZE_MAX
 #include <cstdlib>                      // strtoul()
 #include <exception>                    // uncaught_exceptions()
@@ -227,7 +226,7 @@ class html_interpolator
     }
 
     // Return a single value of a vector variable.
-    std::string evaluate(std::string const& name, std::size_t index) const
+    std::string evaluate(std::string const& name, int index) const
     {
         return evaluator_(name, index);
     }
@@ -282,7 +281,7 @@ class html_interpolator
             return html::text::from
                 (evaluator_
                     (s.substr(0, open_pos)
-                    ,static_cast<std::size_t>(index)
+                    ,bourn_cast<int>(index)
                     )
                 );
             }
@@ -479,6 +478,8 @@ TAG_HANDLER_END(page_header)
 // generate it.
 class html_cell_for_pdf_output : public wxHtmlCell
 {
+    friend class pdf_context_setter;
+
   public:
     // Before using this class a pdf_context_setter object needs to be
     // instantiated (and remain alive for as long as this class is used).
@@ -583,8 +584,6 @@ class html_cell_for_pdf_output : public wxHtmlCell
     }
 
     static inline pdf_context pdf_context_for_html_output = {};
-
-    friend pdf_context_setter;
 };
 
 // Define scaffolding for a custom HTML "img" tag which must be used
@@ -837,9 +836,10 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
     pdf_writer_wx          & get_writer      ()       {return *this;}
 
     // Helper for abbreviating a string to at most the given length (in bytes).
-    static std::string abbreviate_if_necessary(std::string s, std::size_t len)
+    static std::string abbreviate_if_necessary(std::string s, int len)
     {
-        if(len < s.length() && 3 < len)
+        LMI_ASSERT(3 < len && len < 1000); // Implausible otherwise.
+        if(len < lmi::ssize(s) && 3 < len)
             {
             s.replace(len - 3, std::string::npos, "...");
             }
@@ -851,7 +851,7 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
     // variables have the name based on the name of the original variable with
     // "Abbrev" and "len" appended to it and their value is at most "len" bytes
     // long.
-    void add_abbreviated_variable(std::string const& var, std::size_t len)
+    void add_abbreviated_variable(std::string const& var, int len)
     {
         add_variable
             (var + "Abbrev" + std::to_string(len)
@@ -913,7 +913,7 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
             ,!invar.ContractNumber.empty()
             );
 
-        std::size_t const full_abbrev_length = 30;
+        int const full_abbrev_length = 30;
         add_abbreviated_variable("MasterContractNumber", full_abbrev_length);
         add_abbreviated_variable("MasterContractNumber", full_abbrev_length / 2);
         add_abbreviated_variable("ContractNumber", full_abbrev_length);
@@ -1394,6 +1394,10 @@ class standard_page : public numbered_page
                 // Detach the cell from the tree to prevent it from being
                 // rendered as part of the page body.
                 page_body_cell_->Detach(cell);
+
+                // Initializing wxHtmlWinParser changes the font of the DC, so
+                // ensure that we preserve the original font.
+                wxDCFontChanger preserve_font(writer.dc(), wxFont());
 
                 // And attach it to another HTML document representing just
                 // the header contents.
@@ -2108,11 +2112,11 @@ class standard_supplemental_report : public page_with_tabular_report
         (html_interpolator const& interpolator
         )
     {
-        constexpr std::size_t max_columns = 12;
+        constexpr int max_columns = 12;
         std::string const empty_column_name("[none]");
 
         illustration_table_columns columns;
-        for(std::size_t i = 0; i < max_columns; ++i)
+        for(int i = 0; i < max_columns; ++i)
             {
             auto name = interpolator.evaluate("SupplementalReportColumnsNames", i);
             if(name != empty_column_name)
@@ -2440,12 +2444,12 @@ class page_with_basic_tabular_report : public page_with_tabular_report
         // declare a const reference to it?
         auto const& z = interpolator_;
         auto const output_two_column_super_header = [=,&table_gen]
-            (basis          guar_or_curr
-            ,interest_rate  zero_or_not
-            ,std::size_t    begin_column
+            (basis         guar_or_curr
+            ,interest_rate zero_or_not
+            ,int           begin_column
             ) -> int
             {
-                std::size_t end_column = begin_column + 2;
+                int end_column = begin_column + 2;
                 LMI_ASSERT(end_column <= column_max);
 
                 auto y = pos_y;
@@ -3029,8 +3033,8 @@ class reg_d_indiv_curr : public page_with_tabular_report
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
             ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
-            ,{ "PremiumLoads"               , "Premium\nLoads"              , "999,999,999" }
-            ,{ "AdminCharges"               , "Admin\nCharges"              , "999,999,999" }
+            ,{ "PremiumLoad"                , "Premium\nLoads"              , "999,999,999" }
+            ,{ "MiscCharges"                , "Admin\nCharges"              , "999,999,999" }
             ,{ "COICharge_Current"          , "Mortality\nCharges"          , "999,999,999" }
             ,{ "SepAcctCharges_Current"     , "Asset\nCharges"              , "999,999,999" }
             ,{ "GrossIntCredited_Current"   , "Investment\nIncome"          , "999,999,999" }

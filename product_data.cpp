@@ -435,8 +435,9 @@ void product_data::redintegrate_ex_post
 ///   sample2finra mce_finra
 ///   sample2gpp   mce_group_private_placement
 ///   sample2ipp   mce_individual_private_placement
-/// and one for group premium quotes with every possible column:
-///   sample2quo   mce_ill_reg
+/// and one for exotica:
+///   sample2xyz   mce_finra
+///
 /// "*Filename" members are names of actual lmi product files, or
 /// basenames of mortality-table databases, and their values must
 /// nominate actual files. Member 'InsCoDomicile' is used to
@@ -575,8 +576,8 @@ void product_data::write_policy_files()
 
     z.save(AddDataDir("sample2naic.policy"));
 
-    z.DatabaseFilename           = glossed_string("sample2quo.database");
-    z.save(AddDataDir("sample2quo.policy"));
+    z.DatabaseFilename           = glossed_string("sample2xyz.database");
+    z.save(AddDataDir("sample2xyz.policy"));
 
     z.DatabaseFilename           = glossed_string("sample2finra.database");
     z.save(AddDataDir("sample2finra.policy"));
