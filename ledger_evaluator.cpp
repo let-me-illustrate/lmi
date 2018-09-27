@@ -142,7 +142,7 @@ std::string ledger_evaluator::operator()(std::string const& scalar) const
 
 std::string ledger_evaluator::operator()
     (std::string const& vector
-    ,int index
+    ,int                index
     ) const
 {
     return map_lookup(vectors_, vector).at(index);
