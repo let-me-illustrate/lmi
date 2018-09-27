@@ -3033,8 +3033,8 @@ class reg_d_indiv_curr : public page_with_tabular_report
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
             ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
-            ,{ "PremiumLoads"               , "Premium\nLoads"              , "999,999,999" }
-            ,{ "AdminCharges"               , "Admin\nCharges"              , "999,999,999" }
+            ,{ "PremiumLoad"                , "Premium\nLoads"              , "999,999,999" }
+            ,{ "MiscCharges"                , "Admin\nCharges"              , "999,999,999" }
             ,{ "COICharge_Current"          , "Mortality\nCharges"          , "999,999,999" }
             ,{ "SepAcctCharges_Current"     , "Asset\nCharges"              , "999,999,999" }
             ,{ "GrossIntCredited_Current"   , "Investment\nIncome"          , "999,999,999" }
