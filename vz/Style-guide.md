@@ -185,7 +185,28 @@ get in the way unless they're grouped at the end.
 Also, use the same order for the definitions in the implementation file, as for
 the declarations.
 
-See f6390fe69a768246deba65e5bef18a9c2f462c14
+See f6390fe69a768246deba65e5bef18a9c2f462c14.
+
+### Use consistent names for constructor arguments, accessors and variables
+
+Use exactly the same name in all of these contexts, e.g.:
+
+```cpp
+class xyzzy
+{
+  public:
+    xyzzy(some_kind_of_thing const& thing)
+        :thing_ {thing}
+    {}
+
+    some_kind_of_thing const& thing() {return thing_;}
+
+  private:
+    some_kind_of_thing thing_;
+};
+```
+
+See ee96985b83067d9a6a9219f68fa6c0a6eabbb697.
 
 
 Miscellaneous
