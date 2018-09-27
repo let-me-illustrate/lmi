@@ -21,6 +21,7 @@
 
 #include "pchfile.hpp"
 
+#include "ledger.hpp"
 #include "ledger_evaluator.hpp"
 
 #include "alert.hpp"
@@ -30,7 +31,6 @@
 #include "contains.hpp"
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
-#include "ledger.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_text_formats.hpp"      // ledger_format()
 #include "ledger_variant.hpp"
