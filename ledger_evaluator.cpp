@@ -48,6 +48,7 @@
 
 #include <algorithm>                    // fill(), transform()
 #include <functional>                   // minus
+#include <map>
 #include <unordered_map>
 #include <utility>                      // move(), pair
 
@@ -871,8 +872,8 @@ ledger_evaluator Ledger::make_evaluator() const
 
     // Maps to hold the results of formatting numeric data.
 
-    std::unordered_map<std::string, std::string> stringscalars;
-    std::unordered_map<std::string, std::vector<std::string>> stringvectors;
+    std::unordered_map<std::string,std::string> stringscalars;
+    std::unordered_map<std::string,std::vector<std::string>> stringvectors;
 
     stringvectors["FundNames"] = ledger_invariant_->FundNames;
 
@@ -1007,7 +1008,16 @@ ledger_evaluator Ledger::make_evaluator() const
             );
         fs::ofstream ofs(filepath, ios_out_trunc_binary());
 
-        for(auto const& j : stringvectors)
+        // Copy 'stringvectors' to a (sorted) std::map in order to
+        // show columns alphabetically. Other, more complicated
+        // techniques are faster, but direct copying favors simplicity
+        // over speed--appropriately, as this facility is rarely used.
+        std::map<std::string,std::vector<std::string>> ordered_stringvectors
+            (stringvectors.begin()
+            ,stringvectors.end()
+            );
+
+        for(auto const& j : ordered_stringvectors)
             {
             ofs << j.first << '\t';
             }
@@ -1015,7 +1025,7 @@ ledger_evaluator Ledger::make_evaluator() const
 
         for(int i = 0; i < GetMaxLength(); ++i)
             {
-            for(auto const& j : stringvectors)
+            for(auto const& j : ordered_stringvectors)
                 {
                 std::vector<std::string> const& v = j.second;
                 if(i < lmi::ssize(v))
