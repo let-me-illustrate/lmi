@@ -853,6 +853,16 @@ ledger_evaluator Ledger::make_evaluator() const
         !each_equal(ledger_invariant_->RefundableSalesLoad, 0.0);
     double SalesLoadRefundRate0 = ledger_invariant_->RefundableSalesLoad[0];
     double SalesLoadRefundRate1 = ledger_invariant_->RefundableSalesLoad[1];
+    // At present, only the first two durations are used; that's
+    // correct only if all others are zero.
+    LMI_ASSERT
+        (
+        each_equal
+            (2 + ledger_invariant_->RefundableSalesLoad.begin()
+            ,    ledger_invariant_->RefundableSalesLoad.end()
+            ,0.0
+            )
+        );
 
     scalars["HasSalesLoadRefund"  ] = &HasSalesLoadRefund  ;
     scalars["SalesLoadRefundRate0"] = &SalesLoadRefundRate0;
