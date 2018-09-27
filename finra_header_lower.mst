@@ -59,8 +59,8 @@
         </td>
         <td width="40%">
             Assumed Premium Allocation:**<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;Separate Account: {{GenAcctAllocationComplementPercent}}<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;Guaranteed Principal Account (GPA): {{GenAcctAllocationPercent}}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;Separate Account: {{SepAcctAllocation}}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;Guaranteed Principal Account (GPA): {{GenAcctAllocation}}<br>
             Initial
                 {{#HasTermOrSupplSpecAmt}}
                     Total
