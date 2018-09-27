@@ -26,6 +26,7 @@
 #include "alert.hpp"
 #include "authenticity.hpp"
 #include "calendar_date.hpp"
+#include "configurable_settings.hpp"
 #include "contains.hpp"
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
@@ -35,10 +36,15 @@
 #include "ledger_variant.hpp"
 #include "map_lookup.hpp"
 #include "mc_enum_aux.hpp"              // mc_e_vector_to_string_vector()
-#include "miscellany.hpp"               // each_equal()
+#include "miscellany.hpp"               // each_equal(), ios_out_trunc_binary()
 #include "oecumenic_enumerations.hpp"
+#include "path_utility.hpp"             // fs::path inserter
+#include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 #include "version.hpp"
+
+#include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // fill(), transform()
 #include <functional>                   // minus
@@ -989,7 +995,45 @@ ledger_evaluator Ledger::make_evaluator() const
         stringvectors["SupplementalReportColumnsMasks" ] = std::move(SupplementalReportColumnsMasks );
         }
 
-    // PDF !! Is the old pyx="values_tsv" facility still wanted?
+    if(is_composite() && contains(global_settings::instance().pyx(), "values_tsv"))
+        {
+        throw_if_interdicted(*this);
+
+        configurable_settings const& z = configurable_settings::instance();
+        fs::path filepath
+            (   z.print_directory()
+            +   "/values"
+            +   z.spreadsheet_file_extension()
+            );
+        fs::ofstream ofs(filepath, ios_out_trunc_binary());
+
+        for(auto const& j : stringvectors)
+            {
+            ofs << j.first << '\t';
+            }
+        ofs << '\n';
+
+        for(int i = 0; i < GetMaxLength(); ++i)
+            {
+            for(auto const& j : stringvectors)
+                {
+                std::vector<std::string> const& v = j.second;
+                if(i < lmi::ssize(v))
+                    {
+                    ofs << v[i] << '\t';
+                    }
+                else
+                    {
+                    ofs << '\t';
+                    }
+                }
+            ofs << '\n';
+            }
+        if(!ofs)
+            {
+            alarum() << "Unable to write '" << filepath << "'." << LMI_FLUSH;
+            }
+        }
 
     return ledger_evaluator(std::move(stringscalars), std::move(stringvectors));
 }
