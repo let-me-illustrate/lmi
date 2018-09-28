@@ -2666,6 +2666,11 @@ class finra_assumption_detail : public page_with_tabular_report
 
     illustration_table_columns const& get_table_columns() const override
     {
+    // PDF !! InitAnnLoanDueRate: "Loan\nInt Rate" would be a better
+    // heading. "Assumed\nLoan Interest" suggests a dollar amount,
+    // but this column is actually an annual rate. Because VLR is not
+    // implemented, this is just the contractual fixed loan rate, for
+    // which the word "Assumed" is misleading.
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
             ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
