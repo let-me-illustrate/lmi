@@ -1023,12 +1023,10 @@ ledger_evaluator Ledger::make_evaluator() const
         // show columns alphabetically. Other, more complicated
         // techniques are faster, but direct copying favors simplicity
         // over speed--appropriately, as this facility is rarely used.
-        std::map<std::string,std::vector<std::string>> ordered_stringvectors
-            (stringvectors.begin()
-            ,stringvectors.end()
-            );
+        using map_t = std::map<std::string,std::vector<std::string>> const;
+        map_t sorted_stringvectors(stringvectors.begin(), stringvectors.end());
 
-        for(auto const& j : ordered_stringvectors)
+        for(auto const& j : sorted_stringvectors)
             {
             ofs << j.first << '\t';
             }
@@ -1036,7 +1034,7 @@ ledger_evaluator Ledger::make_evaluator() const
 
         for(int i = 0; i < GetMaxLength(); ++i)
             {
-            for(auto const& j : ordered_stringvectors)
+            for(auto const& j : sorted_stringvectors)
                 {
                 std::vector<std::string> const& v = j.second;
                 if(i < lmi::ssize(v))
