@@ -1208,16 +1208,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     HasTerm         = HasTerm         || a_Addend.HasTerm        ;
     HasSupplSpecAmt = HasSupplSpecAmt || a_Addend.HasSupplSpecAmt;
 
-// TODO ?? Can these be meaningful on a composite? If totals are desired,
-// then term should be treated the same way.
-//    ChildRiderAmount   = ChildRiderAmount   || a_Addend.ChildRiderAmount  ;
-//    SpouseRiderAmount  = SpouseRiderAmount  || a_Addend.SpouseRiderAmount ;
-
     HasChildRider      = HasChildRider      || a_Addend.HasChildRider     ;
     HasSpouseRider     = HasSpouseRider     || a_Addend.HasSpouseRider    ;
-
-// TODO ?? For some ages, we use min; for others, max; how about this one?
-//    SpouseIssueAge     =
 
     HasHoneymoon       = HasHoneymoon || a_Addend.HasHoneymoon ;
     PostHoneymoonSpread= a_Addend.PostHoneymoonSpread          ;
