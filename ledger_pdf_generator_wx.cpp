@@ -2666,7 +2666,7 @@ class finra_assumption_detail : public page_with_tabular_report
 
     illustration_table_columns const& get_table_columns() const override
     {
-    // PDF !! InitAnnLoanDueRate: "Loan\nInt Rate" would be a better
+    // PDF !! AnnLoanDueRate: "Loan\nInt Rate" would be a better
     // heading. "Assumed\nLoan Interest" suggests a dollar amount,
     // but this column is actually an annual rate. Because VLR is not
     // implemented, this is just the contractual fixed loan rate, for
@@ -2679,7 +2679,7 @@ class finra_assumption_detail : public page_with_tabular_report
             ,{ "CurrMandE"                  , "M&E"                         ,      "99.99%" }
             ,{ "EeMode"                     , "Indiv\nPmt Mode"             ,  "Semiannual" }
             ,{ "ErMode"                     , "Corp\nPmt Mode"              ,  "Semiannual" }
-            ,{ "InitAnnLoanDueRate"         , "Assumed\nLoan Interest"      ,      "99.99%" }
+            ,{ "AnnLoanDueRate"             , "Assumed\nLoan Interest"      ,      "99.99%" }
             };
 
         return columns;

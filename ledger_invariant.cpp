@@ -123,6 +123,7 @@ void LedgerInvariant::Alloc(int len)
     OtherVectors    ["AddonCompOnAssets"     ] = &AddonCompOnAssets      ;
     OtherVectors    ["AddonCompOnPremium"    ] = &AddonCompOnPremium     ;
     OtherVectors    ["CorridorFactor"        ] = &CorridorFactor         ;
+    OtherVectors    ["AnnLoanDueRate"        ] = &AnnLoanDueRate         ;
     OtherVectors    ["CurrMandE"             ] = &CurrMandE              ;
     OtherVectors    ["TotalIMF"              ] = &TotalIMF               ;
     OtherVectors    ["RefundableSalesLoad"   ] = &RefundableSalesLoad    ;
@@ -538,6 +539,11 @@ void LedgerInvariant::Init(BasicValues const* b)
     AddonCompOnAssets    = b->yare_input_.ExtraCompensationOnAssets ;
     AddonCompOnPremium   = b->yare_input_.ExtraCompensationOnPremium;
     CorridorFactor       = b->GetCorridorFactor();
+    AnnLoanDueRate       = b->InterestRates_->RegLnDueRate
+        (mce_gen_curr
+        ,mce_annual_rate
+        );
+    InitAnnLoanDueRate   = AnnLoanDueRate[0];
     CurrMandE            = b->InterestRates_->MAndERate(mce_gen_curr);
     TotalIMF             = b->InterestRates_->InvestmentManagementFee();
     RefundableSalesLoad  = b->Loads_->refundable_sales_load_proportion();
@@ -903,11 +909,6 @@ void LedgerInvariant::Init(BasicValues const* b)
     StatePostalAbbrev       = mc_str(b->GetStateOfJurisdiction());
     PremiumTaxState         = mc_str(b->GetPremiumTaxState());
 
-    InitAnnLoanDueRate      = b->InterestRates_->RegLnDueRate
-        (mce_gen_curr
-        ,mce_annual_rate
-        )[0];
-
     IsInforce = b->yare_input_.EffectiveDate != b->yare_input_.InforceAsOfDate;
 
     // This test is probably redundant because it is already performed
@@ -1179,6 +1180,18 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     PartMortTableMult             = a_Addend.PartMortTableMult;
     TotalIMF                      = a_Addend.TotalIMF;
     RefundableSalesLoad           = a_Addend.RefundableSalesLoad;
+
+    // PDF !! This is the logic used in the variant ledger class.
+    // It's not a very good idea, but until it can be replaced
+    // everywhere, at least it ensures that the composite value
+    // isn't zero. (In some other cases, zero might be a sensible
+    // answer--e.g., for ratios like 'CorridorFactor', where an
+    // average weighted by number of lives would be inaccurate,
+    // and any aggregate value could be misleading.)
+    for(int j = 0; j < a_Addend.Length; ++j)
+        {
+        AnnLoanDueRate[j] = a_Addend.AnnLoanDueRate[j];
+        }
 
     IsMec                         = a_Addend.IsMec        || IsMec;
     InforceIsMec                  = a_Addend.InforceIsMec || InforceIsMec;

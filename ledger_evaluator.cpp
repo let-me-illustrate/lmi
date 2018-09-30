@@ -46,7 +46,7 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <algorithm>                    // fill(), transform()
+#include <algorithm>                    // transform()
 #include <functional>                   // minus
 #include <map>
 #include <unordered_map>
@@ -186,6 +186,7 @@ ledger_evaluator Ledger::make_evaluator() const
     title_map["AnnGAIntRate_Guaranteed"         ] = "Guar Ann\nGen Acct\nInt Rate";
     title_map["AnnHoneymoonValueRate_Current"   ] = "Curr Ann\nHoneymoon\nValue Rate";
     title_map["AnnHoneymoonValueRate_Guaranteed"] = "Guar Ann\nHoneymoon\nValue Rate";
+    title_map["AnnLoanDueRate"                  ] = "Loan\nInt Rate";
     title_map["AnnPostHoneymoonRate_Current"    ] = "Curr Post\nHoneymoon\nRate";
     title_map["AnnPostHoneymoonRate_Guaranteed" ] = "Guar Post\nHoneymoon\nRate";
     title_map["AnnSAIntRate_Current"            ] = "Curr Ann\nSep Acct\nInt Rate";
@@ -322,6 +323,7 @@ ledger_evaluator Ledger::make_evaluator() const
     mask_map ["AnnGAIntRate_Guaranteed"         ] =      "99.99%";
     mask_map ["AnnHoneymoonValueRate_Current"   ] =      "99.99%";
     mask_map ["AnnHoneymoonValueRate_Guaranteed"] =      "99.99%";
+    mask_map ["AnnLoanDueRate"                  ] =      "99.99%";
     mask_map ["AnnPostHoneymoonRate_Current"    ] =      "99.99%";
     mask_map ["AnnPostHoneymoonRate_Guaranteed" ] =      "99.99%";
     mask_map ["AnnSAIntRate_Current"            ] =      "99.99%";
@@ -573,6 +575,7 @@ ledger_evaluator Ledger::make_evaluator() const
 // >
     format_map["AnnGAIntRate"                      ] = f4;
     format_map["AnnHoneymoonValueRate"             ] = f4;
+    format_map["AnnLoanDueRate"                    ] = f4;
     format_map["AnnPostHoneymoonRate"              ] = f4;
     format_map["AnnSAIntRate"                      ] = f4;
     format_map["CorpTaxBracket"                    ] = f4;
@@ -731,14 +734,6 @@ ledger_evaluator Ledger::make_evaluator() const
 // are several others--notably those affected by partial mortaility.
     vectors["AttainedAge"] = &AttainedAge;
     vectors["PolicyYear" ] = &PolicyYear ;
-
-    std::vector<double> InitAnnLoanDueRate(max_duration);
-    std::fill
-        (InitAnnLoanDueRate.begin()
-        ,InitAnnLoanDueRate.end()
-        ,ledger_invariant_->GetInitAnnLoanDueRate()
-        );
-    vectors["InitAnnLoanDueRate"] = &InitAnnLoanDueRate;
 
     vectors["InforceLives"] = &ledger_invariant_->InforceLives;
 

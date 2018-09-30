@@ -103,6 +103,7 @@ class LMI_SO LedgerInvariant
     std::vector<double> AddonCompOnAssets;
     std::vector<double> AddonCompOnPremium;
     std::vector<double> CorridorFactor;
+    std::vector<double> AnnLoanDueRate;
     // TODO ?? M&E varies by basis (cf. 'GuarMaxMandE' below), so it
     // belongs in the variant ledger.
     std::vector<double> CurrMandE;
