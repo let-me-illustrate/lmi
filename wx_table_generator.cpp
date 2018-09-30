@@ -23,6 +23,7 @@
 
 #include "wx_table_generator.hpp"
 
+#include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"               // count_newlines(), split_into_lines()
 #include "ssize_lmi.hpp"
@@ -247,7 +248,17 @@ void wx_table_generator::output_super_header
 
     for(auto const& i : lines)
         {
-        LMI_ASSERT(dc().GetTextExtent(i).x <= rect.width);
+        if(rect.width < dc().GetTextExtent(i).x)
+            {
+            alarum()
+                << "Superheader width ("
+                << dc().GetTextExtent(i).x
+                << ") exceeds available space ("
+                << rect.width
+                << "): text is '" << i << "'."
+                << LMI_FLUSH
+                ;
+            }
         dc_.DrawLabel(i, rect, wxALIGN_CENTER_HORIZONTAL);
         rect.y += row_height_;
         pos_y  += row_height_;
