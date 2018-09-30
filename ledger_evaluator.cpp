@@ -520,7 +520,6 @@ ledger_evaluator Ledger::make_evaluator() const
     format_map["HasADD"                            ] = f1;
     format_map["HasChildRider"                     ] = f1;
     format_map["HasHoneymoon"                      ] = f1;
-    format_map["HasSalesLoadRefund"                ] = f1;
     format_map["HasSpouseRider"                    ] = f1;
     format_map["HasSupplSpecAmt"                   ] = f1;
     format_map["HasTerm"                           ] = f1;
@@ -544,6 +543,7 @@ ledger_evaluator Ledger::make_evaluator() const
     format_map["NoLapseMinAge"                     ] = f1;
     format_map["NoLapseMinDur"                     ] = f1;
     format_map["RetAge"                            ] = f1;
+    format_map["SalesLoadRefundAvailable"          ] = f1;
     format_map["SmokerBlended"                     ] = f1;
     format_map["SmokerDistinct"                    ] = f1;
     format_map["SplitFundAllocation"               ] = f1;
@@ -849,7 +849,9 @@ ledger_evaluator Ledger::make_evaluator() const
     strings["PrepMonth"] = &PrepMonth;
     strings["PrepDay"  ] = &PrepDay;
 
-    double HasSalesLoadRefund =
+    // PDF !! Sales-load refunds are mentioned on 'mce_ill_reg' PDFs
+    // only. Other formats defectively ignore them.
+    double SalesLoadRefundAvailable =
         !each_equal(ledger_invariant_->RefundableSalesLoad, 0.0);
     double SalesLoadRefundRate0 = ledger_invariant_->RefundableSalesLoad[0];
     double SalesLoadRefundRate1 = ledger_invariant_->RefundableSalesLoad[1];
@@ -864,9 +866,9 @@ ledger_evaluator Ledger::make_evaluator() const
             )
         );
 
-    scalars["HasSalesLoadRefund"  ] = &HasSalesLoadRefund  ;
-    scalars["SalesLoadRefundRate0"] = &SalesLoadRefundRate0;
-    scalars["SalesLoadRefundRate1"] = &SalesLoadRefundRate1;
+    scalars["SalesLoadRefundAvailable"] = &SalesLoadRefundAvailable;
+    scalars["SalesLoadRefundRate0"    ] = &SalesLoadRefundRate0;
+    scalars["SalesLoadRefundRate1"    ] = &SalesLoadRefundRate1;
 
     double SepAcctAllocation = 1.0 - ledger_invariant_->GenAcctAllocation;
     scalars   ["SepAcctAllocation"] = &SepAcctAllocation;
