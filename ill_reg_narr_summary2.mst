@@ -28,7 +28,7 @@
 
 <font size="-1">
 
-{{#HasSalesLoadRefund}}
+{{#SalesLoadRefundAvailable}}
     <p>
     Sales Load Refund: We will refund a portion of the sales load
     to you, as part of your {{CsvName}}
@@ -40,7 +40,7 @@
     {{SalesLoadRefundRate1}}
     of the first contract year sales load collected.
     </p>
-{{/HasSalesLoadRefund}}
+{{/SalesLoadRefundAvailable}}
 
 {{#NoLapse}}
     <p>

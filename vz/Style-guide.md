@@ -155,6 +155,60 @@ I.e. `1.0` instead of just `1.`.
 Semantic Rules
 ==============
 
+Class Declarations
+------------------
+
+### Put `friend` declarations at the top
+
+Also use elaborated-type-specifiers in the friend declarations:
+
+```cpp
+class X {
+    friend class Y; // Do use class keyword.
+
+public:
+    ...
+};
+```
+
+See 1930b4b0cf494341e3a3b571085ecf29002a2488.
+
+### Declare mutators before accessors
+
+Declare non-const functions before const functions in each of public and
+private sections. Withing each subsection, put higher level functions before
+the lower level ones.
+
+Rationale: accessors are generally less interesting, and often trivial; they
+get in the way unless they're grouped at the end.
+
+Also, use the same order for the definitions in the implementation file, as for
+the declarations.
+
+See f6390fe69a768246deba65e5bef18a9c2f462c14.
+
+### Use consistent names for constructor arguments, accessors and variables
+
+Use exactly the same name in all of these contexts, e.g.:
+
+```cpp
+class xyzzy
+{
+  public:
+    xyzzy(some_kind_of_thing const& thing)
+        :thing_ {thing}
+    {}
+
+    some_kind_of_thing const& thing() {return thing_;}
+
+  private:
+    some_kind_of_thing thing_;
+};
+```
+
+See ee96985b83067d9a6a9219f68fa6c0a6eabbb697.
+
+
 Miscellaneous
 -------------
 

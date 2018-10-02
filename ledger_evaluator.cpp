@@ -46,7 +46,7 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <algorithm>                    // fill(), transform()
+#include <algorithm>                    // transform()
 #include <functional>                   // minus
 #include <map>
 #include <unordered_map>
@@ -152,16 +152,6 @@ ledger_evaluator Ledger::make_evaluator() const
 {
     title_map_t title_map;
 
-// Can't seem to get a literal &nbsp; into the output.
-
-// Original:   title_map["AttainedAge"                     ] = " &#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0; End of &#xA0;&#xA0;Year Age";
-// No good:    title_map["AttainedAge"                     ] = " &&#xA0;&&#xA0;&&#xA0;&&#xA0;&&#xA0;&&#xA0;&&#xA0;&&#xA0;&&#xA0;&&#xA0;&&#xA0;&&#xA0;&&#xA0; End of &&#xA0;&&#xA0;Year Age";
-// No good:    title_map["AttainedAge"                     ] = " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End of &nbsp;&nbsp;Year Age";
-// No good:    title_map["AttainedAge"                     ] = " &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; End of &amp;nbsp;&amp;nbsp;Year Age";
-// No good:    title_map["AttainedAge"                     ] = "<![CDATA[ &#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0; End of &#xA0;&#xA0;Year Age]]>";
-// No good:    title_map["AttainedAge"                     ] = " ááááááááááááá End of ááYear Age";
-// No good:    title_map["AttainedAge"                     ] = " &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; End of &#160;&#160;Year Age";
-
 //  Here are the columns to be listed in the user interface
 //  as well as their corresponding titles.
 
@@ -186,6 +176,7 @@ ledger_evaluator Ledger::make_evaluator() const
     title_map["AnnGAIntRate_Guaranteed"         ] = "Guar Ann\nGen Acct\nInt Rate";
     title_map["AnnHoneymoonValueRate_Current"   ] = "Curr Ann\nHoneymoon\nValue Rate";
     title_map["AnnHoneymoonValueRate_Guaranteed"] = "Guar Ann\nHoneymoon\nValue Rate";
+    title_map["AnnLoanDueRate"                  ] = "Loan\nInt Rate";
     title_map["AnnPostHoneymoonRate_Current"    ] = "Curr Post\nHoneymoon\nRate";
     title_map["AnnPostHoneymoonRate_Guaranteed" ] = "Guar Post\nHoneymoon\nRate";
     title_map["AnnSAIntRate_Current"            ] = "Curr Ann\nSep Acct\nInt Rate";
@@ -322,6 +313,7 @@ ledger_evaluator Ledger::make_evaluator() const
     mask_map ["AnnGAIntRate_Guaranteed"         ] =      "99.99%";
     mask_map ["AnnHoneymoonValueRate_Current"   ] =      "99.99%";
     mask_map ["AnnHoneymoonValueRate_Guaranteed"] =      "99.99%";
+    mask_map ["AnnLoanDueRate"                  ] =      "99.99%";
     mask_map ["AnnPostHoneymoonRate_Current"    ] =      "99.99%";
     mask_map ["AnnPostHoneymoonRate_Guaranteed" ] =      "99.99%";
     mask_map ["AnnSAIntRate_Current"            ] =      "99.99%";
@@ -520,7 +512,6 @@ ledger_evaluator Ledger::make_evaluator() const
     format_map["HasADD"                            ] = f1;
     format_map["HasChildRider"                     ] = f1;
     format_map["HasHoneymoon"                      ] = f1;
-    format_map["HasSalesLoadRefund"                ] = f1;
     format_map["HasSpouseRider"                    ] = f1;
     format_map["HasSupplSpecAmt"                   ] = f1;
     format_map["HasTerm"                           ] = f1;
@@ -544,6 +535,7 @@ ledger_evaluator Ledger::make_evaluator() const
     format_map["NoLapseMinAge"                     ] = f1;
     format_map["NoLapseMinDur"                     ] = f1;
     format_map["RetAge"                            ] = f1;
+    format_map["SalesLoadRefundAvailable"          ] = f1;
     format_map["SmokerBlended"                     ] = f1;
     format_map["SmokerDistinct"                    ] = f1;
     format_map["SplitFundAllocation"               ] = f1;
@@ -573,6 +565,7 @@ ledger_evaluator Ledger::make_evaluator() const
 // >
     format_map["AnnGAIntRate"                      ] = f4;
     format_map["AnnHoneymoonValueRate"             ] = f4;
+    format_map["AnnLoanDueRate"                    ] = f4;
     format_map["AnnPostHoneymoonRate"              ] = f4;
     format_map["AnnSAIntRate"                      ] = f4;
     format_map["CorpTaxBracket"                    ] = f4;
@@ -732,14 +725,6 @@ ledger_evaluator Ledger::make_evaluator() const
     vectors["AttainedAge"] = &AttainedAge;
     vectors["PolicyYear" ] = &PolicyYear ;
 
-    std::vector<double> InitAnnLoanDueRate(max_duration);
-    std::fill
-        (InitAnnLoanDueRate.begin()
-        ,InitAnnLoanDueRate.end()
-        ,ledger_invariant_->GetInitAnnLoanDueRate()
-        );
-    vectors["InitAnnLoanDueRate"] = &InitAnnLoanDueRate;
-
     vectors["InforceLives"] = &ledger_invariant_->InforceLives;
 
     vectors["FundNumbers"    ] = &ledger_invariant_->FundNumbers    ;
@@ -849,7 +834,9 @@ ledger_evaluator Ledger::make_evaluator() const
     strings["PrepMonth"] = &PrepMonth;
     strings["PrepDay"  ] = &PrepDay;
 
-    double HasSalesLoadRefund =
+    // PDF !! Sales-load refunds are mentioned on 'mce_ill_reg' PDFs
+    // only. Other formats defectively ignore them.
+    double SalesLoadRefundAvailable =
         !each_equal(ledger_invariant_->RefundableSalesLoad, 0.0);
     double SalesLoadRefundRate0 = ledger_invariant_->RefundableSalesLoad[0];
     double SalesLoadRefundRate1 = ledger_invariant_->RefundableSalesLoad[1];
@@ -864,9 +851,9 @@ ledger_evaluator Ledger::make_evaluator() const
             )
         );
 
-    scalars["HasSalesLoadRefund"  ] = &HasSalesLoadRefund  ;
-    scalars["SalesLoadRefundRate0"] = &SalesLoadRefundRate0;
-    scalars["SalesLoadRefundRate1"] = &SalesLoadRefundRate1;
+    scalars["SalesLoadRefundAvailable"] = &SalesLoadRefundAvailable;
+    scalars["SalesLoadRefundRate0"    ] = &SalesLoadRefundRate0;
+    scalars["SalesLoadRefundRate1"    ] = &SalesLoadRefundRate1;
 
     double SepAcctAllocation = 1.0 - ledger_invariant_->GenAcctAllocation;
     scalars   ["SepAcctAllocation"] = &SepAcctAllocation;
@@ -1023,12 +1010,10 @@ ledger_evaluator Ledger::make_evaluator() const
         // show columns alphabetically. Other, more complicated
         // techniques are faster, but direct copying favors simplicity
         // over speed--appropriately, as this facility is rarely used.
-        std::map<std::string,std::vector<std::string>> ordered_stringvectors
-            (stringvectors.begin()
-            ,stringvectors.end()
-            );
+        using map_t = std::map<std::string,std::vector<std::string>> const;
+        map_t sorted_stringvectors(stringvectors.begin(), stringvectors.end());
 
-        for(auto const& j : ordered_stringvectors)
+        for(auto const& j : sorted_stringvectors)
             {
             ofs << j.first << '\t';
             }
@@ -1036,7 +1021,7 @@ ledger_evaluator Ledger::make_evaluator() const
 
         for(int i = 0; i < GetMaxLength(); ++i)
             {
-            for(auto const& j : ordered_stringvectors)
+            for(auto const& j : sorted_stringvectors)
                 {
                 std::vector<std::string> const& v = j.second;
                 if(i < lmi::ssize(v))

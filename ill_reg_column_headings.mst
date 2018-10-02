@@ -71,9 +71,9 @@ Presumably the description of death benefit options should be moved into
 Option in which the death benefit is equal to the selected
 face amount of the contract on the date of death of the insured,
 or if greater the {{AvName}} Value
-{{#HasSalesLoadRefund}}
+{{#SalesLoadRefundAvailable}}
 plus the refund of sales loads (if applicable)
-{{/HasSalesLoadRefund}}
+{{/SalesLoadRefundAvailable}}
 on the insured's date of death multiplied by the minimum face
 amount percentage for the insured's attained age at death
 (minimum face amount). Please refer to the contract
@@ -88,9 +88,9 @@ face amount of the contract
 plus the {{AvName}} Value
 on the date of death of the insured, or if greater,
 the {{AvName}} Value
-{{#HasSalesLoadRefund}}
+{{#SalesLoadRefundAvailable}}
 plus the refund of sales loads (if applicable)
-{{/HasSalesLoadRefund}}
+{{/SalesLoadRefundAvailable}}
 on the insured's date of death multiplied
 by the death benefit factor for the insured's attained age
 at death (minimum face amount). Please refer to the contract
