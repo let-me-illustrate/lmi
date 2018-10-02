@@ -19,9 +19,11 @@
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 }}
 
-{{>finra_header}}
+<header>
+  {{>finra_header}}
 
-<p align="center"><b>Column Definitions and Key Terms</b></p>
+  <p align="center"><b>Column Definitions and Key Terms</b></p>
+</header>
 
 <p>
 <b>Account Value</b>

@@ -49,6 +49,7 @@
 #include <algorithm>                    // transform()
 #include <functional>                   // minus
 #include <map>
+#include <numeric>                      // iota()
 #include <unordered_map>
 #include <utility>                      // move(), pair
 
@@ -706,20 +707,12 @@ ledger_evaluator Ledger::make_evaluator() const
     double MaxDuration = ledger_invariant_->EndtAge - ledger_invariant_->Age;
     scalars["MaxDuration"] = &MaxDuration;
     int max_duration = static_cast<int>(MaxDuration);
-
-    std::vector<double> PolicyYear;
-    std::vector<double> AttainedAge;
-
-    PolicyYear .resize(max_duration);
-    AttainedAge.resize(max_duration);
-
     int issue_age = static_cast<int>(ledger_invariant_->Age);
-    for(int j = 0; j < max_duration; ++j)
-        {
-        PolicyYear[j]  = 1 + j;
-        AttainedAge[j] = 1 + j + issue_age;
-        }
 
+    std::vector<double> PolicyYear (max_duration);
+    std::vector<double> AttainedAge(max_duration);
+    std::iota(PolicyYear .begin(), PolicyYear .end(), 1);
+    std::iota(AttainedAge.begin(), AttainedAge.end(), 1 + issue_age);
 // TODO ?? An attained-age column is meaningless in a composite. So
 // are several others--notably those affected by partial mortaility.
     vectors["AttainedAge"] = &AttainedAge;
