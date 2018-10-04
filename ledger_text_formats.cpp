@@ -164,7 +164,7 @@ calculation_summary_formatter::calculation_summary_formatter
     )
     :ledger_     {ledger_values}
     ,invar_      {ledger_values.GetLedgerInvariant()}
-    ,max_length_ {ledger_values.GetMaxLength()}
+    ,max_length_ {ledger_values.greatest_lapse_dur()}
 {
     columns_ = effective_calculation_summary_columns();
     std::vector<std::string>::iterator p = std::find
@@ -456,7 +456,7 @@ void PrintCellTabDelimited
     LedgerVariant   const& Curr_ = ledger_values.GetCurrFull();
     LedgerVariant   const& Guar_ = ledger_values.GetGuarFull();
 
-    int const max_length = ledger_values.GetMaxLength();
+    int const max_length = ledger_values.greatest_lapse_dur();
 
     // TODO ?? This const_cast is safe, but it's still unclean.
     LedgerInvariant& unclean = const_cast<LedgerInvariant&>(Invar);
@@ -1011,7 +1011,7 @@ void FlatTextLedgerPrinter::PrintKeyTerms() const
 void FlatTextLedgerPrinter::PrintNumericalSummary() const
 {
     int const age = value_cast<int>(invar().Age);
-    int const max_length = ledger_.GetMaxLength();
+    int const max_length = ledger_.greatest_lapse_dur();
 
     os_ << center("Numerical summary") << endrow;
     os_ << endrow;
@@ -1135,7 +1135,7 @@ void FlatTextLedgerPrinter::PrintTabularDetailHeader() const
 void FlatTextLedgerPrinter::PrintTabularDetail() const
 {
     int const age = value_cast<int>(invar().Age);
-    int const max_length = ledger_.GetMaxLength();
+    int const max_length = ledger_.greatest_lapse_dur();
     for(int j = 0; j < max_length; ++j)
         {
         os_.setf(std::ios_base::fixed, std::ios_base::floatfield);

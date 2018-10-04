@@ -1618,7 +1618,7 @@ class numeric_summary_table_cell
 
         auto const& invar = mixin_ledger_.GetLedgerInvariant();
 
-        int const year_max = mixin_ledger_.GetMaxLength();
+        int const year_max = mixin_ledger_.greatest_lapse_dur();
 
         int const summary_age = 70;
         // Other rows are for given durations, but the
@@ -1902,7 +1902,7 @@ class page_with_tabular_report
 
         // "-1 +": return the number of *extra* pages.
         return -1 + paginator::init
-            (ledger_.GetMaxLength() - offset_
+            (ledger_.greatest_lapse_dur() - offset_
             ,wx_table_generator::rows_per_group
             ,max_lines_per_page
             );

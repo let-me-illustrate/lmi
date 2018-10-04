@@ -1315,7 +1315,7 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
     bool const zero_sepacct_interest_bases_undefined = !run_curr_sep_zero;
 
     // Terse aliases for invariants.
-    int const m = LedgerValues.GetMaxLength();
+    int const m = LedgerValues.greatest_lapse_dur();
     int const n = irr_precision_;
 
     LedgerVariant const& Curr_ = LedgerValues.GetCurrFull();

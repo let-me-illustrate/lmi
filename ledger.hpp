@@ -92,7 +92,7 @@ class LMI_SO Ledger
     LedgerVariant const&                 GetCurrHalf        () const;
     LedgerVariant const&                 GetGuarHalf        () const;
 
-    int                                  GetMaxLength       () const;
+    int                                  greatest_lapse_dur () const;
     std::vector<mcenum_run_basis> const& GetRunBases        () const;
 
     mcenum_ledger_type                   ledger_type        () const;

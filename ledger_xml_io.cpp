@@ -892,7 +892,7 @@ void Ledger::write(xml::element& x) const
             }
         ofs << '\n';
 
-        for(int i = 0; i < GetMaxLength(); ++i)
+        for(int i = 0; i < greatest_lapse_dur(); ++i)
             {
             for(auto const& j : stringvectors)
                 {

@@ -694,7 +694,7 @@ ledger_evaluator Ledger::make_evaluator() const
     vectors["IrrCsv_Current"        ] = &ledger_invariant_->IrrCsvCurrInput;
     vectors["IrrDb_Current"         ] = &ledger_invariant_->IrrDbCurrInput ;
 
-    double GreatestLapseDuration = GetMaxLength();
+    double GreatestLapseDuration = greatest_lapse_dur();
     scalars["GreatestLapseDuration"] = &GreatestLapseDuration;
 
     int max_duration = static_cast<int>(ledger_invariant_->EndtAge - ledger_invariant_->Age);
@@ -1031,7 +1031,7 @@ void ledger_evaluator::write_tsv
         }
     ofs << '\n';
 
-    for(int i = 0; i < ledger.GetMaxLength(); ++i)
+    for(int i = 0; i < ledger.greatest_lapse_dur(); ++i)
         {
         for(auto const& j : sorted_vectors)
             {

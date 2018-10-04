@@ -279,11 +279,10 @@ void Ledger::SetOneLedgerVariant
         }
 }
 
-//============================================================================
-int Ledger::GetMaxLength() const
+/// Number of rows on an illustration: duration when last basis lapses.
+
+int Ledger::greatest_lapse_dur() const
 {
-    // For all ledgers in the map, find the longest duration that must
-    // be printed (until the last one lapses).
     ledger_map_t const& l_map_rep = ledger_map_->held();
     double max_length = 0.0;
 
