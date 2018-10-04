@@ -1000,14 +1000,10 @@ std::string ledger_evaluator::operator()
 
 void ledger_evaluator::write_tsv
     (fs::path const& // pdf_out_file
-    ,Ledger   const& ledger
     ) const
 {
-    int const length = value_cast<int>(operator()("GreatestLapseDuration"));
-    LMI_ASSERT(ledger.is_composite() == ("1" == operator()("Composite")));
-    LMI_ASSERT(ledger.greatest_lapse_dur() == length);
     if
-        (  !ledger.is_composite()
+        (  !("1" == operator()("Composite"))
         || !contains(global_settings::instance().pyx(), "values_tsv")
         )
         {
@@ -1035,7 +1031,8 @@ void ledger_evaluator::write_tsv
         }
     ofs << '\n';
 
-    for(int i = 0; i < ledger.greatest_lapse_dur(); ++i)
+    int const length = value_cast<int>(operator()("GreatestLapseDuration"));
+    for(int i = 0; i < length; ++i)
         {
         for(auto const& j : sorted_vectors)
             {

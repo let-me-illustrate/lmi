@@ -790,7 +790,7 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
     // Render all pages to the specified PDF file.
     void render_all()
     {
-        evaluator().write_tsv(pdf_out_file_, ledger_);
+        evaluator().write_tsv(pdf_out_file_);
 
         // PDF !! Apparently this is some sort of quasi-global object?
         html_cell_for_pdf_output::pdf_context_setter the_pdf_context

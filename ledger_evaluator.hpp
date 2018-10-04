@@ -32,8 +32,6 @@
 #include <unordered_map>
 #include <vector>
 
-class Ledger;
-
 /// Class allowing to retrieve the string representation of any scalar or
 /// vector stored in a ledger.
 
@@ -49,7 +47,7 @@ class LMI_SO ledger_evaluator
     std::string operator()(std::string const& scalar) const;
     std::string operator()(std::string const& vector, int index) const;
 
-    void write_tsv(fs::path const&, Ledger const&) const;
+    void write_tsv(fs::path const&) const;
 
   private:
     // Constructible only by friends: see Ledger::make_evaluator().
