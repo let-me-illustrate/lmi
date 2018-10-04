@@ -170,17 +170,8 @@ void Ledger::SetRunBases(int length)
 
 void Ledger::ZeroInforceAfterLapse()
 {
-    ledger_map_t const& l_map_rep = ledger_map_->held();
-
-    double lapse_year = 0.0;
-    for(auto const& i : l_map_rep)
-        {
-        lapse_year = std::max(lapse_year, i.second.LapseYear);
-        }
-
-    auto original_length = ledger_invariant_->InforceLives.size();
-    using T = decltype(original_length);
-    T unlapsed_length = bourn_cast<T>(1 + lapse_year);
+    int original_length = lmi::ssize(ledger_invariant_->InforceLives);
+    int unlapsed_length = 1 + greatest_lapse_dur();
     if(unlapsed_length < original_length)
         {
         ledger_invariant_->InforceLives.resize(unlapsed_length);
@@ -285,13 +276,12 @@ void Ledger::SetOneLedgerVariant
 int Ledger::greatest_lapse_dur() const
 {
     ledger_map_t const& l_map_rep = ledger_map_->held();
-    double max_length = 0.0;
-
+    double lapse_dur = 0.0;
     for(auto const& i : l_map_rep)
         {
-        max_length = std::max(max_length, i.second.LapseYear);
+        lapse_dur = std::max(lapse_dur, i.second.LapseYear);
         }
-    return bourn_cast<int>(max_length);
+    return bourn_cast<int>(lapse_dur);
 }
 
 //============================================================================
