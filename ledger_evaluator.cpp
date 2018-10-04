@@ -138,6 +138,8 @@ bool format_exists
 
 ledger_evaluator Ledger::make_evaluator() const
 {
+    throw_if_interdicted(*this);
+
     title_map_t title_map;
 
 //  Here are the columns to be listed in the user interface
@@ -997,8 +999,6 @@ void ledger_evaluator::write_tsv
 {
     if(ledger.is_composite() && contains(global_settings::instance().pyx(), "values_tsv"))
         {
-        throw_if_interdicted(ledger);
-
         configurable_settings const& z = configurable_settings::instance();
         fs::path filepath
             (   z.print_directory()
