@@ -1003,6 +1003,9 @@ void ledger_evaluator::write_tsv
     ,Ledger   const& ledger
     ) const
 {
+    int const length = value_cast<int>(operator()("GreatestLapseDuration"));
+    LMI_ASSERT(ledger.is_composite() == ("1" == operator()("Composite")));
+    LMI_ASSERT(ledger.greatest_lapse_dur() == length);
     if
         (  !ledger.is_composite()
         || !contains(global_settings::instance().pyx(), "values_tsv")
