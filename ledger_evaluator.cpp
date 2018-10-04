@@ -196,6 +196,7 @@ ledger_evaluator Ledger::make_evaluator() const
     title_map["DacTaxRsv_Guaranteed"            ] = "Guar DAC\nTax\nReserve";
     title_map["DeathProceedsPaid_Current"       ] = "Curr Death\nProceeds\nPaid";
     title_map["DeathProceedsPaid_Guaranteed"    ] = "Guar Death\nProceeds\nPaid";
+    title_map["Duration"                        ] = "Duration";
     title_map["EOYDeathBft_Current"             ] = "Curr EOY\nDeath\nBenefit";
     title_map["EOYDeathBft_Guaranteed"          ] = "Guar EOY\nDeath\nBenefit";
     title_map["EeGrossPmt"                      ] = "EE Gross\nPayment";
@@ -333,6 +334,7 @@ ledger_evaluator Ledger::make_evaluator() const
     mask_map ["DacTaxRsv_Guaranteed"            ] = "999,999,999";
     mask_map ["DeathProceedsPaid_Current"       ] = "999,999,999";
     mask_map ["DeathProceedsPaid_Guaranteed"    ] = "999,999,999";
+    mask_map ["Duration"                        ] =         "999";
     mask_map ["EOYDeathBft_Current"             ] = "999,999,999";
     mask_map ["EOYDeathBft_Guaranteed"          ] = "999,999,999";
     mask_map ["EeGrossPmt"                      ] = "999,999,999";
@@ -697,13 +699,16 @@ ledger_evaluator Ledger::make_evaluator() const
     int max_duration = static_cast<int>(MaxDuration);
     int issue_age = static_cast<int>(ledger_invariant_->Age);
 
-    std::vector<double> PolicyYear (max_duration);
     std::vector<double> AttainedAge(max_duration);
-    std::iota(PolicyYear .begin(), PolicyYear .end(), 1);
+    std::vector<double> Duration   (max_duration);
+    std::vector<double> PolicyYear (max_duration);
     std::iota(AttainedAge.begin(), AttainedAge.end(), 1 + issue_age);
+    std::iota(Duration   .begin(), Duration   .end(), 0);
+    std::iota(PolicyYear .begin(), PolicyYear .end(), 1);
 // TODO ?? An attained-age column is meaningless in a composite. So
 // are several others--notably those affected by partial mortaility.
     vectors["AttainedAge"] = &AttainedAge;
+    vectors["Duration"   ] = &Duration   ;
     vectors["PolicyYear" ] = &PolicyYear ;
 
     vectors["InforceLives"] = &ledger_invariant_->InforceLives;
