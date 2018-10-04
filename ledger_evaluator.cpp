@@ -584,7 +584,6 @@ ledger_evaluator Ledger::make_evaluator() const
 // >
     format_map["AttainedAge"                       ] = f1;
     format_map["Duration"                          ] = f1;
-    format_map["LapseYears"                        ] = f1;
     format_map["PolicyYear"                        ] = f1;
 // >
 // F2: two decimals, commas
