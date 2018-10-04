@@ -502,6 +502,7 @@ ledger_evaluator Ledger::make_evaluator() const
     format_map["External1035Amount"                ] = f1;
     format_map["GenderBlended"                     ] = f1;
     format_map["GenderDistinct"                    ] = f1;
+    format_map["GreatestLapseDuration"             ] = f1;
     format_map["Has1035ExchCharge"                 ] = f1;
     format_map["HasADD"                            ] = f1;
     format_map["HasChildRider"                     ] = f1;
@@ -521,7 +522,6 @@ ledger_evaluator Ledger::make_evaluator() const
     format_map["IsMec"                             ] = f1;
     format_map["LapseMonth"                        ] = f1;
     format_map["LapseYear"                         ] = f1;
-    format_map["MaxDuration"                       ] = f1;
     format_map["MecMonth"                          ] = f1;
     format_map["MecYear"                           ] = f1;
     format_map["NoLapse"                           ] = f1;
@@ -694,11 +694,10 @@ ledger_evaluator Ledger::make_evaluator() const
     vectors["IrrCsv_Current"        ] = &ledger_invariant_->IrrCsvCurrInput;
     vectors["IrrDb_Current"         ] = &ledger_invariant_->IrrDbCurrInput ;
 
-// GetMaxLength() is max *composite* length.
-//    int max_length = GetMaxLength();
-    double MaxDuration = ledger_invariant_->EndtAge - ledger_invariant_->Age;
-    scalars["MaxDuration"] = &MaxDuration;
-    int max_duration = static_cast<int>(MaxDuration);
+    double GreatestLapseDuration = GetMaxLength();
+    scalars["GreatestLapseDuration"] = &GreatestLapseDuration;
+
+    int max_duration = static_cast<int>(ledger_invariant_->EndtAge - ledger_invariant_->Age);
     int issue_age = static_cast<int>(ledger_invariant_->Age);
 
     std::vector<double> AttainedAge(max_duration);

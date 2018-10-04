@@ -573,8 +573,6 @@ void Ledger::write(xml::element& x) const
     vectors["IrrCsv_Current"        ] = &ledger_invariant_->IrrCsvCurrInput;
     vectors["IrrDb_Current"         ] = &ledger_invariant_->IrrDbCurrInput ;
 
-// GetMaxLength() is max *composite* length.
-//    int max_length = GetMaxLength();
     double MaxDuration = ledger_invariant_->EndtAge - ledger_invariant_->Age;
     scalars["MaxDuration"] = &MaxDuration;
     int max_duration = static_cast<int>(MaxDuration);
