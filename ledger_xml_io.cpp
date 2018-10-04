@@ -175,6 +175,7 @@ void Ledger::write(xml::element& x) const
     title_map["AnnGAIntRate_Guaranteed"         ] = " _____________ Guar Ann Gen Acct Int Rate";
     title_map["AnnHoneymoonValueRate_Current"   ] = "Curr Ann Honeymoon Value Rate";
     title_map["AnnHoneymoonValueRate_Guaranteed"] = "Guar Ann Honeymoon Value Rate";
+    title_map["AnnLoanDueRate"                  ] = "Loan\nInt Rate";
     title_map["AnnPostHoneymoonRate_Current"    ] = "Curr Post Honeymoon Rate";
     title_map["AnnPostHoneymoonRate_Guaranteed" ] = "Guar Post Honeymoon Rate";
     title_map["AnnSAIntRate_Current"            ] = " _____________ Curr Ann Sep Acct Int Rate";
@@ -436,6 +437,7 @@ void Ledger::write(xml::element& x) const
 // >
     format_map["AnnGAIntRate"                      ] = f4;
     format_map["AnnHoneymoonValueRate"             ] = f4;
+    format_map["AnnLoanDueRate"                    ] = f4;
     format_map["AnnPostHoneymoonRate"              ] = f4;
     format_map["AnnSAIntRate"                      ] = f4;
     format_map["CorpTaxBracket"                    ] = f4;
