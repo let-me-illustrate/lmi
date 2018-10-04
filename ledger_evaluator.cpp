@@ -136,19 +136,6 @@ bool format_exists
 
 } // Unnamed namespace.
 
-std::string ledger_evaluator::operator()(std::string const& scalar) const
-{
-    return map_lookup(scalars_, scalar);
-}
-
-std::string ledger_evaluator::operator()
-    (std::string const& vector
-    ,int                index
-    ) const
-{
-    return map_lookup(vectors_, vector).at(index);
-}
-
 ledger_evaluator Ledger::make_evaluator() const
 {
     title_map_t title_map;
@@ -988,6 +975,19 @@ ledger_evaluator Ledger::make_evaluator() const
         }
 
     return ledger_evaluator(std::move(stringscalars), std::move(stringvectors));
+}
+
+std::string ledger_evaluator::operator()(std::string const& scalar) const
+{
+    return map_lookup(scalars_, scalar);
+}
+
+std::string ledger_evaluator::operator()
+    (std::string const& vector
+    ,int                index
+    ) const
+{
+    return map_lookup(vectors_, vector).at(index);
 }
 
 void ledger_evaluator::write_tsv
