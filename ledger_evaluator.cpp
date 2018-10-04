@@ -72,6 +72,8 @@ std::vector<std::string> const suffixes
     ,char_p_suffixes + n
     );
 
+// PDF !! Three maps, with similar but not necessarily identical
+// sets of keys, may not be the best imaginable data structure.
 typedef std::unordered_map<std::string, std::pair<int,oenum_format_style>> format_map_t;
 typedef std::unordered_map<std::string, std::string> title_map_t;
 typedef std::unordered_map<std::string, std::string> mask_map_t;
