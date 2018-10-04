@@ -289,6 +289,14 @@ int Ledger::GetMaxLength() const
 {
     if(is_composite_)
         {
+    ledger_map_t const& l_map_rep = ledger_map_->held();
+    double max_length = 0.0;
+
+    for(auto const& i : l_map_rep)
+        {
+        max_length = std::max(max_length, i.second.LapseYear);
+        }
+    LMI_ASSERT(max_length == composite_lapse_year_);
         // TODO ?? The rationale for this special case is not evident.
         // This variable is initialized to zero in the ctor. If it has
         // acquired a value that's actually meaningful, then it looks
