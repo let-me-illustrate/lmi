@@ -728,16 +728,16 @@ ledger_evaluator Ledger::make_evaluator() const
     // however, code changes are required, and this is as appropriate
     // a place as any to make them.
 
-    LedgerInvariant const& Invar = GetLedgerInvariant();
-    LedgerVariant   const& Curr_ = GetCurrFull();
-    LedgerVariant   const& Guar_ = GetGuarFull();
+    LedgerInvariant const& invar = GetLedgerInvariant();
+    LedgerVariant   const& curr  = GetCurrFull();
+    LedgerVariant   const& guar  = GetGuarFull();
 
     std::vector<double> PremiumLoad(max_duration);
     std::vector<double> MiscCharges(max_duration);
     for(int j = 0; j < max_duration; ++j)
         {
-        PremiumLoad[j] = Invar.GrossPmt[j] - Curr_.NetPmt[j];
-        MiscCharges[j] = Curr_.SpecAmtLoad[j] + Curr_.PolicyFee[j];
+        PremiumLoad[j] = invar.GrossPmt[j] - curr.NetPmt[j];
+        MiscCharges[j] = curr.SpecAmtLoad[j] + curr.PolicyFee[j];
         }
 
     vectors   ["PremiumLoad"] = &PremiumLoad;
@@ -752,12 +752,12 @@ ledger_evaluator Ledger::make_evaluator() const
 
     // ET !! Easier to write as
     //   std::vector<double> NetDeathBenefit =
-    //     Curr_.EOYDeathBft - Curr_.TotalLoanBalance;
-    std::vector<double> NetDeathBenefit(Curr_.EOYDeathBft);
+    //     curr.EOYDeathBft - curr.TotalLoanBalance;
+    std::vector<double> NetDeathBenefit(curr.EOYDeathBft);
     std::transform
         (NetDeathBenefit.begin()
         ,NetDeathBenefit.end()
-        ,Curr_.TotalLoanBalance.begin()
+        ,curr.TotalLoanBalance.begin()
         ,NetDeathBenefit.begin()
         ,std::minus<double>()
         );
@@ -766,8 +766,8 @@ ledger_evaluator Ledger::make_evaluator() const
     mask_map  ["NetDeathBenefit"] = "999,999,999";
     format_map["NetDeathBenefit"] = f1;
 
-    std::vector<double> SupplDeathBft_Current   (Curr_.TermPurchased);
-    std::vector<double> SupplDeathBft_Guaranteed(Guar_.TermPurchased);
+    std::vector<double> SupplDeathBft_Current   (curr.TermPurchased);
+    std::vector<double> SupplDeathBft_Guaranteed(guar.TermPurchased);
     vectors   ["SupplDeathBft_Current"   ] = &SupplDeathBft_Current;
     vectors   ["SupplDeathBft_Guaranteed"] = &SupplDeathBft_Guaranteed;
     title_map ["SupplDeathBft_Current"   ] = "Curr Suppl\nDeath\nBenefit";
@@ -777,7 +777,7 @@ ledger_evaluator Ledger::make_evaluator() const
     format_map["SupplDeathBft_Current"   ] = f1;
     format_map["SupplDeathBft_Guaranteed"] = f1;
 
-    std::vector<double> SupplSpecAmt(Invar.TermSpecAmt);
+    std::vector<double> SupplSpecAmt(invar.TermSpecAmt);
     vectors   ["SupplSpecAmt"            ] = &SupplSpecAmt;
     title_map ["SupplSpecAmt"            ] = "Suppl\nSpecified\nAmount";
     mask_map  ["SupplSpecAmt"            ] = "999,999,999";
