@@ -1003,48 +1003,53 @@ void ledger_evaluator::write_tsv
     ,Ledger   const& ledger
     ) const
 {
-    if(ledger.is_composite() && contains(global_settings::instance().pyx(), "values_tsv"))
+    if
+        (  !ledger.is_composite()
+        || !contains(global_settings::instance().pyx(), "values_tsv")
+        )
         {
-        configurable_settings const& z = configurable_settings::instance();
-        fs::path filepath
-            (   z.print_directory()
-            +   "/values"
-            +   z.spreadsheet_file_extension()
-            );
-        fs::ofstream ofs(filepath, ios_out_trunc_binary());
+        return;
+        }
 
-        // Copy 'vectors_' to a (sorted) std::map in order to
-        // show columns alphabetically. Other, more complicated
-        // techniques are faster, but direct copying favors simplicity
-        // over speed--appropriately, as this facility is rarely used.
-        using map_t = std::map<std::string,std::vector<std::string>> const;
-        map_t sorted_stringvectors(vectors_.begin(), vectors_.end());
+    configurable_settings const& z = configurable_settings::instance();
+    fs::path filepath
+        (   z.print_directory()
+        +   "/values"
+        +   z.spreadsheet_file_extension()
+        );
+    fs::ofstream ofs(filepath, ios_out_trunc_binary());
 
-        for(auto const& j : sorted_stringvectors)
+    // Copy 'vectors_' to a (sorted) std::map in order to show columns
+    // alphabetically. Other, more complicated techniques are faster,
+    // but direct copying favors simplicity over speed--appropriately,
+    // as this facility is rarely used.
+    using map_t = std::map<std::string,std::vector<std::string>> const;
+    map_t sorted_vectors(vectors_.begin(), vectors_.end());
+
+    for(auto const& j : sorted_vectors)
+        {
+        ofs << j.first << '\t';
+        }
+    ofs << '\n';
+
+    for(int i = 0; i < ledger.GetMaxLength(); ++i)
+        {
+        for(auto const& j : sorted_vectors)
             {
-            ofs << j.first << '\t';
+            std::vector<std::string> const& v = j.second;
+            if(i < lmi::ssize(v))
+                {
+                ofs << v[i] << '\t';
+                }
+            else
+                {
+                ofs << '\t';
+                }
             }
         ofs << '\n';
-
-        for(int i = 0; i < ledger.GetMaxLength(); ++i)
-            {
-            for(auto const& j : sorted_stringvectors)
-                {
-                std::vector<std::string> const& v = j.second;
-                if(i < lmi::ssize(v))
-                    {
-                    ofs << v[i] << '\t';
-                    }
-                else
-                    {
-                    ofs << '\t';
-                    }
-                }
-            ofs << '\n';
-            }
-        if(!ofs)
-            {
-            alarum() << "Unable to write '" << filepath << "'." << LMI_FLUSH;
-            }
+        }
+    if(!ofs)
+        {
+        alarum() << "Unable to write '" << filepath << "'." << LMI_FLUSH;
         }
 }
