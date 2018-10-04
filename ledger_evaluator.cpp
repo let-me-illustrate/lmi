@@ -143,6 +143,10 @@ ledger_evaluator Ledger::make_evaluator() const
 {
     throw_if_interdicted(*this);
 
+    LedgerInvariant const& invar = GetLedgerInvariant();
+    LedgerVariant   const& curr  = GetCurrFull();
+    LedgerVariant   const& guar  = GetGuarFull();
+
     title_map_t title_map;
 
 //  Here are the columns to be listed in the user interface
@@ -674,11 +678,11 @@ ledger_evaluator Ledger::make_evaluator() const
     // this stuff is invariant anyway, so that's a reasonable
     // place to put it.
     //
-    // First we make a copy of the invariant ledger:
+    // First we make a copy of the invariant ledger's maps:
 
-    double_vector_map   vectors = ledger_invariant_->AllVectors;
-    scalar_map          scalars = ledger_invariant_->AllScalars;
-    string_map          strings = ledger_invariant_->Strings;
+    double_vector_map   vectors = invar.AllVectors;
+    scalar_map          scalars = invar.AllScalars;
+    string_map          strings = invar.Strings;
 
     // Now we add the stuff that wasn't in the invariant
     // ledger's class's maps (indexable by name). Because we're
@@ -698,8 +702,8 @@ ledger_evaluator Ledger::make_evaluator() const
     double GreatestLapseDuration = greatest_lapse_dur();
     scalars["GreatestLapseDuration"] = &GreatestLapseDuration;
 
-    int max_duration = bourn_cast<int>(ledger_invariant_->EndtAge - ledger_invariant_->Age);
-    int issue_age = bourn_cast<int>(ledger_invariant_->Age);
+    int max_duration = bourn_cast<int>(invar.EndtAge - invar.Age);
+    int issue_age = bourn_cast<int>(invar.Age);
 
     std::vector<double> AttainedAge(max_duration);
     std::vector<double> Duration   (max_duration);
@@ -727,10 +731,6 @@ ledger_evaluator Ledger::make_evaluator() const
     // define and store their own derived-column definitions. For now,
     // however, code changes are required, and this is as appropriate
     // a place as any to make them.
-
-    LedgerInvariant const& invar = GetLedgerInvariant();
-    LedgerVariant   const& curr  = GetCurrFull();
-    LedgerVariant   const& guar  = GetGuarFull();
 
     std::vector<double> PremiumLoad(max_duration);
     std::vector<double> MiscCharges(max_duration);
@@ -789,8 +789,8 @@ ledger_evaluator Ledger::make_evaluator() const
     scalars["Composite"] = &Composite;
 
     double NoLapse =
-            0 != ledger_invariant_->NoLapseMinDur
-        ||  0 != ledger_invariant_->NoLapseMinAge
+            0 != invar.NoLapseMinDur
+        ||  0 != invar.NoLapseMinAge
         ;
     scalars["NoLapse"] = &NoLapse;
 
@@ -809,7 +809,7 @@ ledger_evaluator Ledger::make_evaluator() const
         //   - use EffDate as date prepared
         // in order to avoid gratuitous failures.
         LmiVersion = "Regression testing";
-        prep_date.julian_day_number(bourn_cast<int>(ledger_invariant_->EffDateJdn));
+        prep_date.julian_day_number(bourn_cast<int>(invar.EffDateJdn));
         }
 
     strings["LmiVersion"] = &LmiVersion;
@@ -825,16 +825,16 @@ ledger_evaluator Ledger::make_evaluator() const
     // PDF !! Sales-load refunds are mentioned on 'mce_ill_reg' PDFs
     // only. Other formats defectively ignore them.
     double SalesLoadRefundAvailable =
-        !each_equal(ledger_invariant_->RefundableSalesLoad, 0.0);
-    double SalesLoadRefundRate0 = ledger_invariant_->RefundableSalesLoad[0];
-    double SalesLoadRefundRate1 = ledger_invariant_->RefundableSalesLoad[1];
+        !each_equal(invar.RefundableSalesLoad, 0.0);
+    double SalesLoadRefundRate0 = invar.RefundableSalesLoad[0];
+    double SalesLoadRefundRate1 = invar.RefundableSalesLoad[1];
     // At present, only the first two durations are used; that's
     // correct only if all others are zero.
     LMI_ASSERT
         (
         each_equal
-            (2 + ledger_invariant_->RefundableSalesLoad.begin()
-            ,    ledger_invariant_->RefundableSalesLoad.end()
+            (2 + invar.RefundableSalesLoad.begin()
+            ,    invar.RefundableSalesLoad.end()
             ,0.0
             )
         );
@@ -843,16 +843,16 @@ ledger_evaluator Ledger::make_evaluator() const
     scalars["SalesLoadRefundRate0"    ] = &SalesLoadRefundRate0;
     scalars["SalesLoadRefundRate1"    ] = &SalesLoadRefundRate1;
 
-    double SepAcctAllocation = 1.0 - ledger_invariant_->GenAcctAllocation;
+    double SepAcctAllocation = 1.0 - invar.GenAcctAllocation;
     scalars   ["SepAcctAllocation"] = &SepAcctAllocation;
     format_map["SepAcctAllocation"] = f3;
 
-    std::string ScaleUnit = ledger_invariant_->ScaleUnit();
+    std::string ScaleUnit = invar.ScaleUnit();
     strings["ScaleUnit"] = &ScaleUnit;
 
     double InitTotalSA =
-            ledger_invariant_->InitBaseSpecAmt
-        +   ledger_invariant_->InitTermSpecAmt
+            invar.InitBaseSpecAmt
+        +   invar.InitTermSpecAmt
         ;
     scalars["InitTotalSA"] = &InitTotalSA;
 
@@ -861,7 +861,7 @@ ledger_evaluator Ledger::make_evaluator() const
     std::unordered_map<std::string,std::string> stringscalars;
     std::unordered_map<std::string,std::vector<std::string>> stringvectors;
 
-    stringvectors["FundNames"] = ledger_invariant_->FundNames;
+    stringvectors["FundNames"] = invar.FundNames;
 
     // Map the data, formatting it as necessary.
 
@@ -912,9 +912,9 @@ ledger_evaluator Ledger::make_evaluator() const
             }
         }
 
-    stringvectors["EeMode"] = mc_e_vector_to_string_vector(ledger_invariant_->EeMode);
-    stringvectors["ErMode"] = mc_e_vector_to_string_vector(ledger_invariant_->ErMode);
-    stringvectors["DBOpt"]  = mc_e_vector_to_string_vector(ledger_invariant_->DBOpt );
+    stringvectors["EeMode"] = mc_e_vector_to_string_vector(invar.EeMode);
+    stringvectors["ErMode"] = mc_e_vector_to_string_vector(invar.ErMode);
+    stringvectors["DBOpt"]  = mc_e_vector_to_string_vector(invar.DBOpt );
 
 // TODO ?? Here I copied some stuff from the ledger class files: the
 // parts that speak of odd members that aren't in those class's
@@ -946,21 +946,21 @@ ledger_evaluator Ledger::make_evaluator() const
 //    mcenum_sep_basis SepBasis_;
 //    bool             FullyInitialized;   // I.e. by Init(BasicValues const* b)
 
-    if(ledger_invariant_->SupplementalReport)
+    if(invar.SupplementalReport)
         {
         std::vector<std::string> SupplementalReportColumns;
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn00);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn01);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn02);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn03);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn04);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn05);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn06);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn07);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn08);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn09);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn10);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn11);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn00);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn01);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn02);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn03);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn04);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn05);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn06);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn07);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn08);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn09);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn10);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn11);
 
         // Eventually customize the report name.
         stringscalars["SupplementalReportTitle"] = "Supplemental Report";
