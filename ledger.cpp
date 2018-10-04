@@ -25,6 +25,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "crc32.hpp"
 #include "global_settings.hpp"
 #include "ledger_invariant.hpp"
@@ -179,7 +180,7 @@ void Ledger::ZeroInforceAfterLapse()
 
     auto original_length = ledger_invariant_->InforceLives.size();
     using T = decltype(original_length);
-    T unlapsed_length = static_cast<T>(1 + lapse_year);
+    T unlapsed_length = bourn_cast<T>(1 + lapse_year);
     if(unlapsed_length < original_length)
         {
         ledger_invariant_->InforceLives.resize(unlapsed_length);
@@ -290,7 +291,7 @@ int Ledger::greatest_lapse_dur() const
         {
         max_length = std::max(max_length, i.second.LapseYear);
         }
-    return static_cast<int>(max_length);
+    return bourn_cast<int>(max_length);
 }
 
 //============================================================================

@@ -26,6 +26,7 @@
 
 #include "alert.hpp"
 #include "authenticity.hpp"
+#include "bourn_cast.hpp"
 #include "calendar_date.hpp"
 #include "configurable_settings.hpp"
 #include "contains.hpp"
@@ -697,8 +698,8 @@ ledger_evaluator Ledger::make_evaluator() const
     double GreatestLapseDuration = greatest_lapse_dur();
     scalars["GreatestLapseDuration"] = &GreatestLapseDuration;
 
-    int max_duration = static_cast<int>(ledger_invariant_->EndtAge - ledger_invariant_->Age);
-    int issue_age = static_cast<int>(ledger_invariant_->Age);
+    int max_duration = bourn_cast<int>(ledger_invariant_->EndtAge - ledger_invariant_->Age);
+    int issue_age = bourn_cast<int>(ledger_invariant_->Age);
 
     std::vector<double> AttainedAge(max_duration);
     std::vector<double> Duration   (max_duration);
@@ -808,7 +809,7 @@ ledger_evaluator Ledger::make_evaluator() const
         //   - use EffDate as date prepared
         // in order to avoid gratuitous failures.
         LmiVersion = "Regression testing";
-        prep_date.julian_day_number(static_cast<int>(ledger_invariant_->EffDateJdn));
+        prep_date.julian_day_number(bourn_cast<int>(ledger_invariant_->EffDateJdn));
         }
 
     strings["LmiVersion"] = &LmiVersion;
