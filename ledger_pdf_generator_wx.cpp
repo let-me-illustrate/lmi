@@ -240,6 +240,11 @@ class html_interpolator
         return (*this)("{{>" + template_name + "}}");
     }
 
+    // PDF !! Retrofitting this accessor seems to suggest that
+    // encapsulating the accessed object here may have been
+    // premature.
+    ledger_evaluator const& evaluator() {return evaluator_;}
+
   private:
     // The expansion function used with interpolate_string().
     html::text expand_html(std::string const& s) const
@@ -756,6 +761,7 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
         :html_interpolator (ledger.make_evaluator())
         ,pdf_writer_wx     (pdf_out_file.string(), wxPORTRAIT, font_sizes_)
         ,ledger_           {ledger}
+        ,pdf_out_file_     {pdf_out_file}
     {
         init_variables();
     }
@@ -784,6 +790,8 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
     // Render all pages to the specified PDF file.
     void render_all()
     {
+        evaluator().write_tsv(pdf_out_file_, ledger_);
+
         // PDF !! Apparently this is some sort of quasi-global object?
         html_cell_for_pdf_output::pdf_context_setter the_pdf_context
             {ledger_
@@ -972,7 +980,8 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
             );
     }
 
-    Ledger const& ledger_;
+    Ledger   const& ledger_;
+    fs::path const& pdf_out_file_;
 
     // These font sizes are more suitable for illustrations than
     // the builtin wxHTML defaults. See:

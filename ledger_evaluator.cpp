@@ -987,9 +987,17 @@ ledger_evaluator Ledger::make_evaluator() const
         stringvectors["SupplementalReportColumnsMasks" ] = std::move(SupplementalReportColumnsMasks );
         }
 
-    if(is_composite() && contains(global_settings::instance().pyx(), "values_tsv"))
+    return ledger_evaluator(std::move(stringscalars), std::move(stringvectors));
+}
+
+void ledger_evaluator::write_tsv
+    (fs::path const& // pdf_out_file
+    ,Ledger   const& ledger
+    ) const
+{
+    if(ledger.is_composite() && contains(global_settings::instance().pyx(), "values_tsv"))
         {
-        throw_if_interdicted(*this);
+        throw_if_interdicted(ledger);
 
         configurable_settings const& z = configurable_settings::instance();
         fs::path filepath
@@ -999,12 +1007,12 @@ ledger_evaluator Ledger::make_evaluator() const
             );
         fs::ofstream ofs(filepath, ios_out_trunc_binary());
 
-        // Copy 'stringvectors' to a (sorted) std::map in order to
+        // Copy 'vectors_' to a (sorted) std::map in order to
         // show columns alphabetically. Other, more complicated
         // techniques are faster, but direct copying favors simplicity
         // over speed--appropriately, as this facility is rarely used.
         using map_t = std::map<std::string,std::vector<std::string>> const;
-        map_t sorted_stringvectors(stringvectors.begin(), stringvectors.end());
+        map_t sorted_stringvectors(vectors_.begin(), vectors_.end());
 
         for(auto const& j : sorted_stringvectors)
             {
@@ -1012,7 +1020,7 @@ ledger_evaluator Ledger::make_evaluator() const
             }
         ofs << '\n';
 
-        for(int i = 0; i < GetMaxLength(); ++i)
+        for(int i = 0; i < ledger.GetMaxLength(); ++i)
             {
             for(auto const& j : sorted_stringvectors)
                 {
@@ -1033,6 +1041,4 @@ ledger_evaluator Ledger::make_evaluator() const
             alarum() << "Unable to write '" << filepath << "'." << LMI_FLUSH;
             }
         }
-
-    return ledger_evaluator(std::move(stringscalars), std::move(stringvectors));
 }
