@@ -27,7 +27,7 @@
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
 #include "bourn_cast.hpp"
-#include "contains.hpp"                 // for CalculateIrrs()
+#include "contains.hpp"
 #include "crc32.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
@@ -197,6 +197,7 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["InforceAsOfDateJdn"    ] = &InforceAsOfDateJdn     ;
     OtherScalars    ["SplitFundAllocation"   ] = &SplitFundAllocation    ;
     OtherScalars    ["GenAcctAllocation"     ] = &GenAcctAllocation      ;
+    OtherScalars    ["WriteTsvFile"          ] = &WriteTsvFile           ;
     OtherScalars    ["SupplementalReport"    ] = &SupplementalReport     ;
 
     Strings["PolicyMktgName"                ] = &PolicyMktgName                ;
@@ -451,6 +452,7 @@ void LedgerInvariant::Init()
     NoLapseAlwaysActive = false;
     Has1035ExchCharge   = false;
 
+    WriteTsvFile        = false;
     SupplementalReport  = false;
 
     irr_precision_      = 0;
@@ -924,6 +926,8 @@ void LedgerInvariant::Init(BasicValues const* b)
             ;
         }
 
+    WriteTsvFile = contains(b->yare_input_.Comments, "idiosyncrasyY");
+
     SupplementalReport         = b->yare_input_.CreateSupplementalReport;
     SupplementalReportColumn00 = mc_str(b->yare_input_.SupplementalReportColumn00);
     SupplementalReportColumn01 = mc_str(b->yare_input_.SupplementalReportColumn01);
@@ -1240,6 +1244,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // wouldn't be equally spaced, so we'd need a more general irr
     // routine.
     IsInforce     = IsInforce     || a_Addend.IsInforce    ;
+
+    WriteTsvFile  = WriteTsvFile  || a_Addend.WriteTsvFile ;
 
     // TODO ?? This doesn't seem quite right, but what would be better?
     // We can't take the union of all columns selected for any life,

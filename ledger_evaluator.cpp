@@ -544,6 +544,7 @@ ledger_evaluator Ledger::make_evaluator() const
     format_map["UseExperienceRating"               ] = f1;
     format_map["GroupIndivSelection"               ] = f1;
     format_map["UsePartialMort"                    ] = f1;
+    format_map["WriteTsvFile"                      ] = f1;
 
 // > Vector Formatting
 // >
