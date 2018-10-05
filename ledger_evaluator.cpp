@@ -1005,37 +1005,15 @@ std::string ledger_evaluator::operator()
 /// alphabetically; 'scalars_', likewise. Other, more complicated
 /// techniques are faster, but direct copying favors simplicity over
 /// speed--appropriately, as this facility is rarely used.
-///
-/// For the nonce, 'scalars_' are shown two ways: 2 x N, and N x 2.
-/// Presumably only one way should be chosen for production; showing
-/// both ways informs that choice.
 
 void ledger_evaluator::write_tsv(fs::path const& pdf_out_file) const
 {
-    if("1" != operator()("WriteTsvFile"))
-        return;
+    if("1" != operator()("WriteTsvFile")) return;
 
     configurable_settings const& c = configurable_settings::instance();
     std::string const& z = c.spreadsheet_file_extension();
     fs::path filepath = unique_filepath(pdf_out_file, ".values" + z);
     fs::ofstream ofs(filepath, ios_out_trunc_binary());
-
-    using s_map_t = std::map<std::string,std::string> const;
-    s_map_t sorted_scalars(scalars_.begin(), scalars_.end());
-
-    for(auto const& j : sorted_scalars)
-        {
-        ofs << j.first << '\t';
-        }
-    ofs << '\n';
-
-    for(auto const& j : sorted_scalars)
-        {
-        ofs << j.second << '\t';
-        }
-    ofs << '\n';
-
-    ofs << '\n';
 
     using v_map_t = std::map<std::string,std::vector<std::string>> const;
     v_map_t sorted_vectors(vectors_.begin(), vectors_.end());
@@ -1065,6 +1043,9 @@ void ledger_evaluator::write_tsv(fs::path const& pdf_out_file) const
         }
 
     ofs << '\n';
+
+    using s_map_t = std::map<std::string,std::string> const;
+    s_map_t sorted_scalars(scalars_.begin(), scalars_.end());
 
     for(auto const& j : sorted_scalars)
         {
