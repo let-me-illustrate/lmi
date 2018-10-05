@@ -999,32 +999,46 @@ std::string ledger_evaluator::operator()
     return map_lookup(vectors_, vector).at(index);
 }
 
-void ledger_evaluator::write_tsv
-    (fs::path const& // pdf_out_file
-    ) const
-{
-    if
-        (  !("1" == operator()("Composite"))
-        || !contains(global_settings::instance().pyx(), "values_tsv")
-        )
-        {
-        return;
-        }
+/// Write values to a TSV file as a side effect of writing a PDF.
+///
+/// Copy 'vectors_' to a (sorted) std::map in order to show columns
+/// alphabetically; 'scalars_', likewise. Other, more complicated
+/// techniques are faster, but direct copying favors simplicity over
+/// speed--appropriately, as this facility is rarely used.
+///
+/// For the nonce, 'scalars_' are shown two ways: 2 x N, and N x 2.
+/// Presumably only one way should be chosen for production; showing
+/// both ways informs that choice.
 
-    configurable_settings const& z = configurable_settings::instance();
-    fs::path filepath
-        (   z.print_directory()
-        +   "/values"
-        +   z.spreadsheet_file_extension()
-        );
+void ledger_evaluator::write_tsv(fs::path const& pdf_out_file) const
+{
+    if("1" != operator()("WriteTsvFile"))
+        return;
+
+    configurable_settings const& c = configurable_settings::instance();
+    std::string const& z = c.spreadsheet_file_extension();
+    fs::path filepath = unique_filepath(pdf_out_file, ".values" + z);
     fs::ofstream ofs(filepath, ios_out_trunc_binary());
 
-    // Copy 'vectors_' to a (sorted) std::map in order to show columns
-    // alphabetically. Other, more complicated techniques are faster,
-    // but direct copying favors simplicity over speed--appropriately,
-    // as this facility is rarely used.
-    using map_t = std::map<std::string,std::vector<std::string>> const;
-    map_t sorted_vectors(vectors_.begin(), vectors_.end());
+    using s_map_t = std::map<std::string,std::string> const;
+    s_map_t sorted_scalars(scalars_.begin(), scalars_.end());
+
+    for(auto const& j : sorted_scalars)
+        {
+        ofs << j.first << '\t';
+        }
+    ofs << '\n';
+
+    for(auto const& j : sorted_scalars)
+        {
+        ofs << j.second << '\t';
+        }
+    ofs << '\n';
+
+    ofs << '\n';
+
+    using v_map_t = std::map<std::string,std::vector<std::string>> const;
+    v_map_t sorted_vectors(vectors_.begin(), vectors_.end());
 
     for(auto const& j : sorted_vectors)
         {
@@ -1049,6 +1063,14 @@ void ledger_evaluator::write_tsv
             }
         ofs << '\n';
         }
+
+    ofs << '\n';
+
+    for(auto const& j : sorted_scalars)
+        {
+        ofs << j.first << '\t' << j.second << '\n';
+        }
+
     if(!ofs)
         {
         alarum() << "Unable to write '" << filepath << "'." << LMI_FLUSH;
