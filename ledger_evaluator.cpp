@@ -986,17 +986,17 @@ ledger_evaluator Ledger::make_evaluator() const
     return ledger_evaluator(std::move(stringscalars), std::move(stringvectors));
 }
 
-std::string ledger_evaluator::operator()(std::string const& scalar) const
+std::string ledger_evaluator::value(std::string const& scalar_name) const
 {
-    return map_lookup(scalars_, scalar);
+    return map_lookup(scalars_, scalar_name);
 }
 
-std::string ledger_evaluator::operator()
-    (std::string const& vector
+std::string ledger_evaluator::value
+    (std::string const& vector_name
     ,int                index
     ) const
 {
-    return map_lookup(vectors_, vector).at(index);
+    return map_lookup(vectors_, vector_name).at(index);
 }
 
 /// Write values to a TSV file as a side effect of writing a PDF.
@@ -1008,7 +1008,7 @@ std::string ledger_evaluator::operator()
 
 void ledger_evaluator::write_tsv(fs::path const& pdf_out_file) const
 {
-    if("1" != operator()("WriteTsvFile")) return;
+    if("1" != value("WriteTsvFile")) return;
 
     configurable_settings const& c = configurable_settings::instance();
     std::string const& z = c.spreadsheet_file_extension();
@@ -1024,7 +1024,7 @@ void ledger_evaluator::write_tsv(fs::path const& pdf_out_file) const
         }
     ofs << '\n';
 
-    int const length = value_cast<int>(operator()("GreatestLapseDuration"));
+    int const length = value_cast<int>(value("GreatestLapseDuration"));
     for(int i = 0; i < length; ++i)
         {
         for(auto const& j : sorted_vectors)

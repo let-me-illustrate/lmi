@@ -222,13 +222,13 @@ class html_interpolator
     // Return the value of a single scalar variable.
     std::string evaluate(std::string const& name) const
     {
-        return evaluator_(name);
+        return evaluator_.value(name);
     }
 
     // Return a single value of a vector variable.
     std::string evaluate(std::string const& name, int index) const
     {
-        return evaluator_(name, index);
+        return evaluator_.value(name, index);
     }
 
     // Interpolate the contents of the given external template.
@@ -284,14 +284,14 @@ class html_interpolator
 
             // Cast below is valid because of the check for overflow above.
             return html::text::from
-                (evaluator_
+                (evaluator_.value
                     (s.substr(0, open_pos)
                     ,bourn_cast<int>(index)
                     )
                 );
             }
 
-        return html::text::from(evaluator_(s));
+        return html::text::from(evaluator_.value(s));
     }
 
     std::string load_partial_from_file(std::string const& file) const

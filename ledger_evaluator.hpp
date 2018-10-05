@@ -44,8 +44,8 @@ class LMI_SO ledger_evaluator
     using vector_map_t = umap<std::string,std::vector<std::string>>;
 
   public:
-    std::string operator()(std::string const& scalar) const;
-    std::string operator()(std::string const& vector, int index) const;
+    std::string value(std::string const& scalar_name) const;
+    std::string value(std::string const& vector_name, int index) const;
 
     void write_tsv(fs::path const&) const;
 
