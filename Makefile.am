@@ -826,13 +826,17 @@ test_istream_to_string_CXXFLAGS = $(AM_CXXFLAGS)
 test_ledger_SOURCES = \
   $(common_test_objects) \
   calendar_date.cpp \
+  configurable_settings.cpp \
   crc32.cpp \
+  data_directory.cpp \
   facets.cpp \
   global_settings.cpp \
   ledger.cpp \
   ledger_base.cpp \
+  ledger_evaluator.cpp \
   ledger_invariant.cpp \
   ledger_test.cpp \
+  ledger_text_formats.cpp \
   ledger_variant.cpp \
   mc_enum.cpp \
   mc_enum_types.cpp \
@@ -840,7 +844,8 @@ test_ledger_SOURCES = \
   miscellany.cpp \
   null_stream.cpp \
   path_utility.cpp \
-  timer.cpp
+  timer.cpp \
+  xml_lmi.cpp
 test_ledger_CXXFLAGS = $(AM_CXXFLAGS)
 test_ledger_LDADD = \
   $(BOOST_LIBS) \

@@ -737,13 +737,17 @@ ledger_test$(EXEEXT): \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
   calendar_date.o \
+  configurable_settings.o \
   crc32.o \
+  data_directory.o \
   facets.o \
   global_settings.o \
   ledger.o \
   ledger_base.o \
+  ledger_evaluator.o \
   ledger_invariant.o \
   ledger_test.o \
+  ledger_text_formats.o \
   ledger_variant.o \
   mc_enum.o \
   mc_enum_types.o \
@@ -752,6 +756,7 @@ ledger_test$(EXEEXT): \
   null_stream.o \
   path_utility.o \
   timer.o \
+  xml_lmi.o \
 
 loads_test$(EXEEXT): \
   $(common_test_objects) \

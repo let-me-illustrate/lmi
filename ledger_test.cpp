@@ -35,12 +35,12 @@ class ledger_test
     static void test()
         {
         test_default_initialization();
-        test1();
+        test_evaluator();
         }
 
   private:
     static void test_default_initialization();
-    static void test1();
+    static void test_evaluator();
 };
 
 void ledger_test::test_default_initialization()
@@ -60,8 +60,10 @@ void ledger_test::test_default_initialization()
     BOOST_TEST_EQUAL(100      , invar.EndtAge);
 }
 
-void ledger_test::test1()
+void ledger_test::test_evaluator()
 {
+    Ledger ledger(100, mce_finra, false, false, false);
+    ledger.make_evaluator();
 }
 
 int test_main(int, char*[])
