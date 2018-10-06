@@ -28,6 +28,7 @@
 
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "test_tools.hpp"
+#include "timer.hpp"
 
 #include <cstdio>                       // remove()
 
@@ -40,11 +41,13 @@ class ledger_test
         {
         test_default_initialization();
         test_evaluator();
+        test_speed();
         }
 
   private:
     static void test_default_initialization();
     static void test_evaluator();
+    static void test_speed();
 };
 
 void ledger_test::test_default_initialization()
@@ -70,6 +73,25 @@ void ledger_test::test_evaluator()
     ledger.ledger_invariant_->WriteTsvFile = true;
     ledger_evaluator z {ledger.make_evaluator()};
     z.write_tsv("tsv_eraseme");
+    BOOST_TEST(0 == std::remove("tsv_eraseme.values.tsv"));
+}
+
+void ledger_test::test_speed()
+{
+    Ledger ledger(100, mce_finra, false, false, false);
+    ledger.ledger_invariant_->WriteTsvFile = true;
+    ledger_evaluator z {ledger.make_evaluator()};
+
+    auto f0 = [       ]() {Ledger(100, mce_finra, false, false, false);};
+    auto f1 = [&ledger]() {ledger.make_evaluator();};
+    auto f2 = [&z     ]() {z.write_tsv("tsv_eraseme");};
+    std::cout
+        << "\nLedger speed tests:"
+        << "\n  construct        : " << TimeAnAliquot(f0)
+        << "\n  make_evaluator() : " << TimeAnAliquot(f1)
+        << "\n  write_tsv()      : " << TimeAnAliquot(f2)
+        << std::endl
+        ;
     BOOST_TEST(0 == std::remove("tsv_eraseme.values.tsv"));
 }
 
