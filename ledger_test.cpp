@@ -52,6 +52,12 @@ void ledger_test::test_default_initialization()
     BOOST_TEST_EQUAL(false    , ledger.no_can_issue());
     BOOST_TEST_EQUAL(false    , ledger.is_composite());
     BOOST_TEST_EQUAL(100      , ledger.greatest_lapse_dur());
+
+    LedgerInvariant const& invar = ledger.GetLedgerInvariant();
+
+    BOOST_TEST_EQUAL(100      , invar.GetLength());
+    BOOST_TEST_EQUAL(0        , invar.Age);
+    BOOST_TEST_EQUAL(100      , invar.EndtAge);
 }
 
 void ledger_test::test1()

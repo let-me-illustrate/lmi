@@ -430,7 +430,8 @@ void LedgerInvariant::Init()
     MecMonth            = 11;
 
     // TODO ?? Probably every member should be initialized.
-    Age                 = 100;
+    Age                 = 0;
+    EndtAge             = 100;
     NoLapseMinDur       = 100;
     NoLapseMinAge       = 100;
     NoLapseAlwaysActive = false;
