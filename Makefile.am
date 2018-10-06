@@ -341,10 +341,12 @@ liblmi_common_sources = \
     ledger_base.cpp \
     ledger_evaluator.cpp \
     ledger_invariant.cpp \
+    ledger_invariant_init.cpp \
     ledger_pdf.cpp \
     ledger_pdf_generator.cpp \
     ledger_text_formats.cpp \
     ledger_variant.cpp \
+    ledger_variant_init.cpp \
     ledger_xml_io.cpp \
     ledger_xsl.cpp \
     ledgervalues.cpp \

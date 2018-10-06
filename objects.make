@@ -225,10 +225,12 @@ common_common_objects := \
   ledger_base.o \
   ledger_evaluator.o \
   ledger_invariant.o \
+  ledger_invariant_init.o \
   ledger_pdf.o \
   ledger_pdf_generator.o \
   ledger_text_formats.o \
   ledger_variant.o \
+  ledger_variant_init.o \
   ledger_xml_io.o \
   ledger_xsl.o \
   ledgervalues.o \
