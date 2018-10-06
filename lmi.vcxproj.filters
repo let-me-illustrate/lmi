@@ -325,5 +325,11 @@
     <ClCompile Include="report_table.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ledger_invariant_init.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ledger_variant_init.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

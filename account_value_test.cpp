@@ -25,18 +25,30 @@
 
 #include "test_tools.hpp"
 
-struct AccountValueTest
+class account_value_test
 {
-    static void Test();
+  public:
+    static void test()
+        {
+        test0();
+        test1();
+        }
+
+  private:
+    static void test0();
+    static void test1();
 };
 
-void AccountValueTest::Test()
+void account_value_test::test0()
+{
+}
+
+void account_value_test::test1()
 {
 }
 
 int test_main(int, char*[])
 {
-    AccountValueTest::Test();
+    account_value_test::test();
     return EXIT_SUCCESS;
 }
-

@@ -92,7 +92,7 @@ class LMI_SO Ledger
     LedgerVariant const&                 GetCurrHalf        () const;
     LedgerVariant const&                 GetGuarHalf        () const;
 
-    int                                  GetMaxLength       () const;
+    int                                  greatest_lapse_dur () const;
     std::vector<mcenum_run_basis> const& GetRunBases        () const;
 
     mcenum_ledger_type                   ledger_type        () const;
@@ -132,14 +132,6 @@ class LMI_SO Ledger
     bool               nonillustrated_;
     bool               no_can_issue_  ;
     bool               is_composite_  ;
-
-    // TODO ?? This is either badly named or badly implemented. Every
-    // instance of this class, even an instance for a single cell, has
-    // this variable. It seems to be used only for composites. It
-    // seems to cache the latest lapse year on any basis, but only for
-    // composites, yet it is not evident why that is desirable for
-    // composites but not for all cells.
-    double composite_lapse_year_;
 
     std::shared_ptr<ledger_map_holder> ledger_map_;
     std::shared_ptr<LedgerInvariant>   ledger_invariant_;

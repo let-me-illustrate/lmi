@@ -206,6 +206,7 @@ class LMI_SO LedgerInvariant
     double          InforceAsOfDateJdn;
     double          SplitFundAllocation;
     double          GenAcctAllocation;
+    double          WriteTsvFile;
     double          SupplementalReport;
 
     // Essential strings describing the policy and company.

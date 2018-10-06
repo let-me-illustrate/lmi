@@ -222,13 +222,13 @@ class html_interpolator
     // Return the value of a single scalar variable.
     std::string evaluate(std::string const& name) const
     {
-        return evaluator_(name);
+        return evaluator_.value(name);
     }
 
     // Return a single value of a vector variable.
     std::string evaluate(std::string const& name, int index) const
     {
-        return evaluator_(name, index);
+        return evaluator_.value(name, index);
     }
 
     // Interpolate the contents of the given external template.
@@ -239,6 +239,11 @@ class html_interpolator
     {
         return (*this)("{{>" + template_name + "}}");
     }
+
+    // PDF !! Retrofitting this accessor seems to suggest that
+    // encapsulating the accessed object here may have been
+    // premature.
+    ledger_evaluator const& evaluator() {return evaluator_;}
 
   private:
     // The expansion function used with interpolate_string().
@@ -279,14 +284,14 @@ class html_interpolator
 
             // Cast below is valid because of the check for overflow above.
             return html::text::from
-                (evaluator_
+                (evaluator_.value
                     (s.substr(0, open_pos)
                     ,bourn_cast<int>(index)
                     )
                 );
             }
 
-        return html::text::from(evaluator_(s));
+        return html::text::from(evaluator_.value(s));
     }
 
     std::string load_partial_from_file(std::string const& file) const
@@ -756,6 +761,7 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
         :html_interpolator (ledger.make_evaluator())
         ,pdf_writer_wx     (pdf_out_file.string(), wxPORTRAIT, font_sizes_)
         ,ledger_           {ledger}
+        ,pdf_out_file_     {pdf_out_file}
     {
         init_variables();
     }
@@ -784,6 +790,8 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
     // Render all pages to the specified PDF file.
     void render_all()
     {
+        evaluator().write_tsv(pdf_out_file_);
+
         // PDF !! Apparently this is some sort of quasi-global object?
         html_cell_for_pdf_output::pdf_context_setter the_pdf_context
             {ledger_
@@ -972,7 +980,8 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
             );
     }
 
-    Ledger const& ledger_;
+    Ledger   const& ledger_;
+    fs::path const& pdf_out_file_;
 
     // These font sizes are more suitable for illustrations than
     // the builtin wxHTML defaults. See:
@@ -1609,7 +1618,7 @@ class numeric_summary_table_cell
 
         auto const& invar = mixin_ledger_.GetLedgerInvariant();
 
-        int const year_max = mixin_ledger_.GetMaxLength();
+        int const year_max = mixin_ledger_.greatest_lapse_dur();
 
         int const summary_age = 70;
         // Other rows are for given durations, but the
@@ -1893,7 +1902,7 @@ class page_with_tabular_report
 
         // "-1 +": return the number of *extra* pages.
         return -1 + paginator::init
-            (ledger_.GetMaxLength() - offset_
+            (ledger_.greatest_lapse_dur() - offset_
             ,wx_table_generator::rows_per_group
             ,max_lines_per_page
             );

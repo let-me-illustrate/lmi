@@ -1,3 +1,5 @@
+// Ledger data--unit test.
+//
 // Copyright (C) 2018 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
@@ -17,11 +19,43 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifndef version_hpp
-#define version_hpp
+#include "pchfile.hpp"
 
-#include "config.hpp"
+#include "ledger.hpp"
+#include "ledger_invariant.hpp"
+#include "ledger_variant.hpp"
 
-#define LMI_VERSION "20181004T1656Z"
+#include "test_tools.hpp"
 
-#endif // version_hpp
+//#define SUPPRESSED_FOR_LEDGER_TEST 1
+
+//class BasicValues;
+//void LedgerInvariant::Init(BasicValues const*) {}
+
+class ledger_test
+{
+  public:
+    static void test()
+        {
+        test0();
+        test1();
+        }
+
+  private:
+    static void test0();
+    static void test1();
+};
+
+void ledger_test::test0()
+{
+}
+
+void ledger_test::test1()
+{
+}
+
+int test_main(int, char*[])
+{
+    ledger_test::test();
+    return EXIT_SUCCESS;
+}

@@ -25,6 +25,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "crc32.hpp"
 #include "global_settings.hpp"
 #include "ledger_invariant.hpp"
@@ -73,7 +74,6 @@ Ledger::Ledger
     ,nonillustrated_       {nonillustrated}
     ,no_can_issue_         {no_can_issue}
     ,is_composite_         {is_composite}
-    ,composite_lapse_year_ {0.0}
     ,ledger_map_           {new ledger_map_holder}
     ,ledger_invariant_     {new LedgerInvariant(length)}
 {
@@ -170,17 +170,8 @@ void Ledger::SetRunBases(int length)
 
 void Ledger::ZeroInforceAfterLapse()
 {
-    ledger_map_t const& l_map_rep = ledger_map_->held();
-
-    double lapse_year = 0.0;
-    for(auto const& i : l_map_rep)
-        {
-        lapse_year = std::max(lapse_year, i.second.LapseYear);
-        }
-
-    auto original_length = ledger_invariant_->InforceLives.size();
-    using T = decltype(original_length);
-    T unlapsed_length = static_cast<T>(1 + lapse_year);
+    int original_length = lmi::ssize(ledger_invariant_->InforceLives);
+    int unlapsed_length = 1 + greatest_lapse_dur();
     if(unlapsed_length < original_length)
         {
         ledger_invariant_->InforceLives.resize(unlapsed_length);
@@ -234,10 +225,6 @@ Ledger& Ledger::PlusEq(Ledger const& a_Addend)
             ((*addend_i).second
             ,a_Addend.ledger_invariant_->GetInforceLives()
             );
-        composite_lapse_year_ = std::max
-            (composite_lapse_year_
-            ,(*addend_i).second.LapseYear
-            );
         (*this_i).second.LapseYear = std::max
             ((*this_i).second.LapseYear
             ,(*addend_i).second.LapseYear
@@ -284,31 +271,17 @@ void Ledger::SetOneLedgerVariant
         }
 }
 
-//============================================================================
-int Ledger::GetMaxLength() const
+/// Number of rows on an illustration: duration when last basis lapses.
+
+int Ledger::greatest_lapse_dur() const
 {
-    if(is_composite_)
-        {
-        // TODO ?? The rationale for this special case is not evident.
-        // This variable is initialized to zero in the ctor. If it has
-        // acquired a value that's actually meaningful, then it looks
-        // like the variables used in the general case would have, too,
-        // which would reduce this special case to mere caching, which
-        // seems like a premature optimization and a needless
-        // complication.
-        return static_cast<int>(composite_lapse_year_);
-        }
-
-    // For all ledgers in the map, find the longest duration that must
-    // be printed (until the last one lapses).
     ledger_map_t const& l_map_rep = ledger_map_->held();
-    double max_length = 0.0;
-
+    double lapse_dur = 0.0;
     for(auto const& i : l_map_rep)
         {
-        max_length = std::max(max_length, i.second.LapseYear);
+        lapse_dur = std::max(lapse_dur, i.second.LapseYear);
         }
-    return static_cast<int>(max_length);
+    return bourn_cast<int>(lapse_dur);
 }
 
 //============================================================================

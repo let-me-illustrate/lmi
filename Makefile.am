@@ -141,6 +141,7 @@ TESTS = \
     test_irc7702a \
     test_istream_to_string \
     test_ledger_pdf_generator_wx \
+    test_ledger \
     test_loads \
     test_map_lookup \
     test_materially_equal \
@@ -369,10 +370,12 @@ liblmi_common_sources = \
     ledger_base.cpp \
     ledger_evaluator.cpp \
     ledger_invariant.cpp \
+    ledger_invariant_init.cpp \
     ledger_pdf.cpp \
     ledger_pdf_generator.cpp \
     ledger_text_formats.cpp \
     ledger_variant.cpp \
+    ledger_variant_init.cpp \
     ledger_xml_io.cpp \
     ledger_xsl.cpp \
     ledgervalues.cpp \
@@ -860,6 +863,29 @@ test_ledger_pdf_generator_wx_LDADD = \
     $(BOOST_LIBS) \
     $(WXPDFDOC_LIBS) \
     $(WX_LIBS)
+
+test_ledger_SOURCES = \
+  $(common_test_objects) \
+  calendar_date.cpp \
+  crc32.cpp \
+  facets.cpp \
+  global_settings.cpp \
+  ledger.cpp \
+  ledger_base.cpp \
+  ledger_invariant.cpp \
+  ledger_test.cpp \
+  ledger_variant.cpp \
+  mc_enum.cpp \
+  mc_enum_types.cpp \
+  mc_enum_types_aux.cpp \
+  miscellany.cpp \
+  null_stream.cpp \
+  path_utility.cpp \
+  timer.cpp
+test_ledger_CXXFLAGS = $(AM_CXXFLAGS)
+test_ledger_LDADD = \
+  $(BOOST_LIBS) \
+  $(XMLWRAPP_LIBS)
 
 test_loads_SOURCES = \
   $(common_test_objects) \

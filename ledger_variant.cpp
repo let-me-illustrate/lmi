@@ -24,15 +24,9 @@
 #include "ledger_variant.hpp"
 
 #include "assert_lmi.hpp"
-#include "basic_values.hpp"
-#include "database.hpp"                 // Used only for initial loan rate.
-#include "dbnames.hpp"                  // Used only for initial loan rate.
-#include "interest_rates.hpp"
-#include "loads.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_str()
-#include "outlay.hpp"
 
-#include <algorithm>
+#include <algorithm>                    // max()
 #include <ostream>
 
 //============================================================================
@@ -184,97 +178,6 @@ void LedgerVariant::Init()
     LapseMonth              = 11;
 
     FullyInitialized        = false;
-}
-
-//============================================================================
-void LedgerVariant::Init
-    (BasicValues const& bv
-    ,mcenum_gen_basis   gen_basis
-    ,mcenum_sep_basis   sep_basis
-    )
-{
-    Init(); // Zero out (almost) everything to start.
-
-    GenBasis_ = gen_basis;
-    SepBasis_ = sep_basis;
-
-//  EOYDeathBft     =
-//  AcctVal         =
-//  CSVNet          =
-//  CV7702          =
-//  COICharge       =
-//  RiderCharges    =
-//  ExpenseCharges  =
-    MlySAIntRate               = bv.InterestRates_->SepAcctNetRate
-        (SepBasis_
-        ,GenBasis_
-        ,mce_monthly_rate
-        );
-    MlyGAIntRate               = bv.InterestRates_->GenAcctNetRate
-        (GenBasis_
-        ,mce_monthly_rate
-        );
-    MlyHoneymoonValueRate      = bv.InterestRates_->HoneymoonValueRate
-        (GenBasis_
-        ,mce_monthly_rate
-        );
-    MlyPostHoneymoonRate       = bv.InterestRates_->PostHoneymoonGenAcctRate
-        (GenBasis_
-        ,mce_monthly_rate
-        );
-    AnnSAIntRate               = bv.InterestRates_->SepAcctNetRate
-        (SepBasis_
-        ,GenBasis_
-        ,mce_annual_rate
-        );
-    AnnGAIntRate               = bv.InterestRates_->GenAcctNetRate
-        (GenBasis_
-        ,mce_annual_rate
-        );
-    AnnHoneymoonValueRate      = bv.InterestRates_->HoneymoonValueRate
-        (GenBasis_
-        ,mce_annual_rate
-        );
-    AnnPostHoneymoonRate       = bv.InterestRates_->PostHoneymoonGenAcctRate
-        (GenBasis_
-        ,mce_annual_rate
-        );
-
-//  PrefLoanBalance =
-//  TotalLoanBalance=
-//  AvgDeathBft     =
-//  SurrChg         =
-//  TermPurchased   =
-//  BaseDeathBft    =
-//  ProjectedCoiCharge =
-//  KFactor         =
-
-    InitAnnLoanCredRate = bv.InterestRates_->RegLnCredRate
-        (GenBasis_
-        ,mce_annual_rate
-        )[0];
-
-    InitAnnGenAcctInt = bv.InterestRates_->GenAcctNetRate
-        (GenBasis_
-        ,mce_annual_rate
-        )
-        [0]
-        ;
-
-    InitAnnSepAcctGrossInt = bv.InterestRates_->SepAcctGrossRate(SepBasis_)[0];
-
-    InitAnnSepAcctNetInt = bv.InterestRates_->SepAcctNetRate
-        (SepBasis_
-        ,GenBasis_
-        ,mce_annual_rate
-        )
-        [0]
-        ;
-
-    InitTgtPremHiLoadRate = bv.Loads_->target_premium_load_maximum_premium_tax()[bv.yare_input_.InforceYear];
-    InitMlyPolFee         = bv.Loads_->monthly_policy_fee(GenBasis_)            [bv.yare_input_.InforceYear];
-
-    FullyInitialized = true;
 }
 
 //============================================================================

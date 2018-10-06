@@ -513,10 +513,12 @@
     <ClCompile Include="ledger_base.cpp" />
     <ClCompile Include="ledger_evaluator.cpp" />
     <ClCompile Include="ledger_invariant.cpp" />
+    <ClCompile Include="ledger_invariant_init.cpp" />
     <ClCompile Include="ledger_pdf.cpp" />
     <ClCompile Include="ledger_pdf_generator.cpp" />
     <ClCompile Include="ledger_text_formats.cpp" />
     <ClCompile Include="ledger_variant.cpp" />
+    <ClCompile Include="ledger_variant_init.cpp" />
     <ClCompile Include="ledger_xml_io.cpp" />
     <ClCompile Include="ledger_xsl.cpp" />
     <ClCompile Include="ledgervalues.cpp" />

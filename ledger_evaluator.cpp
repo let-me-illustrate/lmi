@@ -26,6 +26,7 @@
 
 #include "alert.hpp"
 #include "authenticity.hpp"
+#include "bourn_cast.hpp"
 #include "calendar_date.hpp"
 #include "configurable_settings.hpp"
 #include "contains.hpp"
@@ -72,6 +73,8 @@ std::vector<std::string> const suffixes
     ,char_p_suffixes + n
     );
 
+// PDF !! Three maps, with similar but not necessarily identical
+// sets of keys, may not be the best imaginable data structure.
 typedef std::unordered_map<std::string, std::pair<int,oenum_format_style>> format_map_t;
 typedef std::unordered_map<std::string, std::string> title_map_t;
 typedef std::unordered_map<std::string, std::string> mask_map_t;
@@ -136,21 +139,14 @@ bool format_exists
 
 } // Unnamed namespace.
 
-std::string ledger_evaluator::operator()(std::string const& scalar) const
-{
-    return map_lookup(scalars_, scalar);
-}
-
-std::string ledger_evaluator::operator()
-    (std::string const& vector
-    ,int                index
-    ) const
-{
-    return map_lookup(vectors_, vector).at(index);
-}
-
 ledger_evaluator Ledger::make_evaluator() const
 {
+    throw_if_interdicted(*this);
+
+    LedgerInvariant const& invar = GetLedgerInvariant();
+    LedgerVariant   const& curr  = GetCurrFull();
+    LedgerVariant   const& guar  = GetGuarFull();
+
     title_map_t title_map;
 
 //  Here are the columns to be listed in the user interface
@@ -207,6 +203,7 @@ ledger_evaluator Ledger::make_evaluator() const
     title_map["DacTaxRsv_Guaranteed"            ] = "Guar DAC\nTax\nReserve";
     title_map["DeathProceedsPaid_Current"       ] = "Curr Death\nProceeds\nPaid";
     title_map["DeathProceedsPaid_Guaranteed"    ] = "Guar Death\nProceeds\nPaid";
+    title_map["Duration"                        ] = "Duration";
     title_map["EOYDeathBft_Current"             ] = "Curr EOY\nDeath\nBenefit";
     title_map["EOYDeathBft_Guaranteed"          ] = "Guar EOY\nDeath\nBenefit";
     title_map["EeGrossPmt"                      ] = "EE Gross\nPayment";
@@ -344,6 +341,7 @@ ledger_evaluator Ledger::make_evaluator() const
     mask_map ["DacTaxRsv_Guaranteed"            ] = "999,999,999";
     mask_map ["DeathProceedsPaid_Current"       ] = "999,999,999";
     mask_map ["DeathProceedsPaid_Guaranteed"    ] = "999,999,999";
+    mask_map ["Duration"                        ] =         "999";
     mask_map ["EOYDeathBft_Current"             ] = "999,999,999";
     mask_map ["EOYDeathBft_Guaranteed"          ] = "999,999,999";
     mask_map ["EeGrossPmt"                      ] = "999,999,999";
@@ -509,6 +507,7 @@ ledger_evaluator Ledger::make_evaluator() const
     format_map["External1035Amount"                ] = f1;
     format_map["GenderBlended"                     ] = f1;
     format_map["GenderDistinct"                    ] = f1;
+    format_map["GreatestLapseDuration"             ] = f1;
     format_map["Has1035ExchCharge"                 ] = f1;
     format_map["HasADD"                            ] = f1;
     format_map["HasChildRider"                     ] = f1;
@@ -528,7 +527,6 @@ ledger_evaluator Ledger::make_evaluator() const
     format_map["IsMec"                             ] = f1;
     format_map["LapseMonth"                        ] = f1;
     format_map["LapseYear"                         ] = f1;
-    format_map["MaxDuration"                       ] = f1;
     format_map["MecMonth"                          ] = f1;
     format_map["MecYear"                           ] = f1;
     format_map["NoLapse"                           ] = f1;
@@ -546,6 +544,7 @@ ledger_evaluator Ledger::make_evaluator() const
     format_map["UseExperienceRating"               ] = f1;
     format_map["GroupIndivSelection"               ] = f1;
     format_map["UsePartialMort"                    ] = f1;
+    format_map["WriteTsvFile"                      ] = f1;
 
 // > Vector Formatting
 // >
@@ -595,7 +594,6 @@ ledger_evaluator Ledger::make_evaluator() const
 // >
     format_map["AttainedAge"                       ] = f1;
     format_map["Duration"                          ] = f1;
-    format_map["LapseYears"                        ] = f1;
     format_map["PolicyYear"                        ] = f1;
 // >
 // F2: two decimals, commas
@@ -681,11 +679,11 @@ ledger_evaluator Ledger::make_evaluator() const
     // this stuff is invariant anyway, so that's a reasonable
     // place to put it.
     //
-    // First we make a copy of the invariant ledger:
+    // First we make a copy of the invariant ledger's maps:
 
-    double_vector_map   vectors = ledger_invariant_->AllVectors;
-    scalar_map          scalars = ledger_invariant_->AllScalars;
-    string_map          strings = ledger_invariant_->Strings;
+    double_vector_map   vectors = invar.AllVectors;
+    scalar_map          scalars = invar.AllScalars;
+    string_map          strings = invar.Strings;
 
     // Now we add the stuff that wasn't in the invariant
     // ledger's class's maps (indexable by name). Because we're
@@ -702,20 +700,22 @@ ledger_evaluator Ledger::make_evaluator() const
     vectors["IrrCsv_Current"        ] = &ledger_invariant_->IrrCsvCurrInput;
     vectors["IrrDb_Current"         ] = &ledger_invariant_->IrrDbCurrInput ;
 
-// GetMaxLength() is max *composite* length.
-//    int max_length = GetMaxLength();
-    double MaxDuration = ledger_invariant_->EndtAge - ledger_invariant_->Age;
-    scalars["MaxDuration"] = &MaxDuration;
-    int max_duration = static_cast<int>(MaxDuration);
-    int issue_age = static_cast<int>(ledger_invariant_->Age);
+    double GreatestLapseDuration = greatest_lapse_dur();
+    scalars["GreatestLapseDuration"] = &GreatestLapseDuration;
 
-    std::vector<double> PolicyYear (max_duration);
+    int max_duration = bourn_cast<int>(invar.EndtAge - invar.Age);
+    int issue_age = bourn_cast<int>(invar.Age);
+
     std::vector<double> AttainedAge(max_duration);
-    std::iota(PolicyYear .begin(), PolicyYear .end(), 1);
+    std::vector<double> Duration   (max_duration);
+    std::vector<double> PolicyYear (max_duration);
     std::iota(AttainedAge.begin(), AttainedAge.end(), 1 + issue_age);
+    std::iota(Duration   .begin(), Duration   .end(), 0);
+    std::iota(PolicyYear .begin(), PolicyYear .end(), 1);
 // TODO ?? An attained-age column is meaningless in a composite. So
 // are several others--notably those affected by partial mortaility.
     vectors["AttainedAge"] = &AttainedAge;
+    vectors["Duration"   ] = &Duration   ;
     vectors["PolicyYear" ] = &PolicyYear ;
 
     vectors["InforceLives"] = &ledger_invariant_->InforceLives;
@@ -733,16 +733,12 @@ ledger_evaluator Ledger::make_evaluator() const
     // however, code changes are required, and this is as appropriate
     // a place as any to make them.
 
-    LedgerInvariant const& Invar = GetLedgerInvariant();
-    LedgerVariant   const& Curr_ = GetCurrFull();
-    LedgerVariant   const& Guar_ = GetGuarFull();
-
     std::vector<double> PremiumLoad(max_duration);
     std::vector<double> MiscCharges(max_duration);
     for(int j = 0; j < max_duration; ++j)
         {
-        PremiumLoad[j] = Invar.GrossPmt[j] - Curr_.NetPmt[j];
-        MiscCharges[j] = Curr_.SpecAmtLoad[j] + Curr_.PolicyFee[j];
+        PremiumLoad[j] = invar.GrossPmt[j] - curr.NetPmt[j];
+        MiscCharges[j] = curr.SpecAmtLoad[j] + curr.PolicyFee[j];
         }
 
     vectors   ["PremiumLoad"] = &PremiumLoad;
@@ -757,12 +753,12 @@ ledger_evaluator Ledger::make_evaluator() const
 
     // ET !! Easier to write as
     //   std::vector<double> NetDeathBenefit =
-    //     Curr_.EOYDeathBft - Curr_.TotalLoanBalance;
-    std::vector<double> NetDeathBenefit(Curr_.EOYDeathBft);
+    //     curr.EOYDeathBft - curr.TotalLoanBalance;
+    std::vector<double> NetDeathBenefit(curr.EOYDeathBft);
     std::transform
         (NetDeathBenefit.begin()
         ,NetDeathBenefit.end()
-        ,Curr_.TotalLoanBalance.begin()
+        ,curr.TotalLoanBalance.begin()
         ,NetDeathBenefit.begin()
         ,std::minus<double>()
         );
@@ -771,8 +767,8 @@ ledger_evaluator Ledger::make_evaluator() const
     mask_map  ["NetDeathBenefit"] = "999,999,999";
     format_map["NetDeathBenefit"] = f1;
 
-    std::vector<double> SupplDeathBft_Current   (Curr_.TermPurchased);
-    std::vector<double> SupplDeathBft_Guaranteed(Guar_.TermPurchased);
+    std::vector<double> SupplDeathBft_Current   (curr.TermPurchased);
+    std::vector<double> SupplDeathBft_Guaranteed(guar.TermPurchased);
     vectors   ["SupplDeathBft_Current"   ] = &SupplDeathBft_Current;
     vectors   ["SupplDeathBft_Guaranteed"] = &SupplDeathBft_Guaranteed;
     title_map ["SupplDeathBft_Current"   ] = "Curr Suppl\nDeath\nBenefit";
@@ -782,7 +778,7 @@ ledger_evaluator Ledger::make_evaluator() const
     format_map["SupplDeathBft_Current"   ] = f1;
     format_map["SupplDeathBft_Guaranteed"] = f1;
 
-    std::vector<double> SupplSpecAmt(Invar.TermSpecAmt);
+    std::vector<double> SupplSpecAmt(invar.TermSpecAmt);
     vectors   ["SupplSpecAmt"            ] = &SupplSpecAmt;
     title_map ["SupplSpecAmt"            ] = "Suppl\nSpecified\nAmount";
     mask_map  ["SupplSpecAmt"            ] = "999,999,999";
@@ -794,8 +790,8 @@ ledger_evaluator Ledger::make_evaluator() const
     scalars["Composite"] = &Composite;
 
     double NoLapse =
-            0 != ledger_invariant_->NoLapseMinDur
-        ||  0 != ledger_invariant_->NoLapseMinAge
+            0 != invar.NoLapseMinDur
+        ||  0 != invar.NoLapseMinAge
         ;
     scalars["NoLapse"] = &NoLapse;
 
@@ -814,7 +810,7 @@ ledger_evaluator Ledger::make_evaluator() const
         //   - use EffDate as date prepared
         // in order to avoid gratuitous failures.
         LmiVersion = "Regression testing";
-        prep_date.julian_day_number(static_cast<int>(ledger_invariant_->EffDateJdn));
+        prep_date.julian_day_number(bourn_cast<int>(invar.EffDateJdn));
         }
 
     strings["LmiVersion"] = &LmiVersion;
@@ -830,16 +826,16 @@ ledger_evaluator Ledger::make_evaluator() const
     // PDF !! Sales-load refunds are mentioned on 'mce_ill_reg' PDFs
     // only. Other formats defectively ignore them.
     double SalesLoadRefundAvailable =
-        !each_equal(ledger_invariant_->RefundableSalesLoad, 0.0);
-    double SalesLoadRefundRate0 = ledger_invariant_->RefundableSalesLoad[0];
-    double SalesLoadRefundRate1 = ledger_invariant_->RefundableSalesLoad[1];
+        !each_equal(invar.RefundableSalesLoad, 0.0);
+    double SalesLoadRefundRate0 = invar.RefundableSalesLoad[0];
+    double SalesLoadRefundRate1 = invar.RefundableSalesLoad[1];
     // At present, only the first two durations are used; that's
     // correct only if all others are zero.
     LMI_ASSERT
         (
         each_equal
-            (2 + ledger_invariant_->RefundableSalesLoad.begin()
-            ,    ledger_invariant_->RefundableSalesLoad.end()
+            (2 + invar.RefundableSalesLoad.begin()
+            ,    invar.RefundableSalesLoad.end()
             ,0.0
             )
         );
@@ -848,16 +844,16 @@ ledger_evaluator Ledger::make_evaluator() const
     scalars["SalesLoadRefundRate0"    ] = &SalesLoadRefundRate0;
     scalars["SalesLoadRefundRate1"    ] = &SalesLoadRefundRate1;
 
-    double SepAcctAllocation = 1.0 - ledger_invariant_->GenAcctAllocation;
+    double SepAcctAllocation = 1.0 - invar.GenAcctAllocation;
     scalars   ["SepAcctAllocation"] = &SepAcctAllocation;
     format_map["SepAcctAllocation"] = f3;
 
-    std::string ScaleUnit = ledger_invariant_->ScaleUnit();
+    std::string ScaleUnit = invar.ScaleUnit();
     strings["ScaleUnit"] = &ScaleUnit;
 
     double InitTotalSA =
-            ledger_invariant_->InitBaseSpecAmt
-        +   ledger_invariant_->InitTermSpecAmt
+            invar.InitBaseSpecAmt
+        +   invar.InitTermSpecAmt
         ;
     scalars["InitTotalSA"] = &InitTotalSA;
 
@@ -866,7 +862,7 @@ ledger_evaluator Ledger::make_evaluator() const
     std::unordered_map<std::string,std::string> stringscalars;
     std::unordered_map<std::string,std::vector<std::string>> stringvectors;
 
-    stringvectors["FundNames"] = ledger_invariant_->FundNames;
+    stringvectors["FundNames"] = invar.FundNames;
 
     // Map the data, formatting it as necessary.
 
@@ -917,9 +913,9 @@ ledger_evaluator Ledger::make_evaluator() const
             }
         }
 
-    stringvectors["EeMode"] = mc_e_vector_to_string_vector(ledger_invariant_->EeMode);
-    stringvectors["ErMode"] = mc_e_vector_to_string_vector(ledger_invariant_->ErMode);
-    stringvectors["DBOpt"]  = mc_e_vector_to_string_vector(ledger_invariant_->DBOpt );
+    stringvectors["EeMode"] = mc_e_vector_to_string_vector(invar.EeMode);
+    stringvectors["ErMode"] = mc_e_vector_to_string_vector(invar.ErMode);
+    stringvectors["DBOpt"]  = mc_e_vector_to_string_vector(invar.DBOpt );
 
 // TODO ?? Here I copied some stuff from the ledger class files: the
 // parts that speak of odd members that aren't in those class's
@@ -951,21 +947,21 @@ ledger_evaluator Ledger::make_evaluator() const
 //    mcenum_sep_basis SepBasis_;
 //    bool             FullyInitialized;   // I.e. by Init(BasicValues const* b)
 
-    if(ledger_invariant_->SupplementalReport)
+    if(invar.SupplementalReport)
         {
         std::vector<std::string> SupplementalReportColumns;
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn00);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn01);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn02);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn03);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn04);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn05);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn06);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn07);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn08);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn09);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn10);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn11);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn00);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn01);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn02);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn03);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn04);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn05);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn06);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn07);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn08);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn09);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn10);
+        SupplementalReportColumns.push_back(invar.SupplementalReportColumn11);
 
         // Eventually customize the report name.
         stringscalars["SupplementalReportTitle"] = "Supplemental Report";
@@ -987,52 +983,77 @@ ledger_evaluator Ledger::make_evaluator() const
         stringvectors["SupplementalReportColumnsMasks" ] = std::move(SupplementalReportColumnsMasks );
         }
 
-    if(is_composite() && contains(global_settings::instance().pyx(), "values_tsv"))
+    return ledger_evaluator(std::move(stringscalars), std::move(stringvectors));
+}
+
+std::string ledger_evaluator::value(std::string const& scalar_name) const
+{
+    return map_lookup(scalars_, scalar_name);
+}
+
+std::string ledger_evaluator::value
+    (std::string const& vector_name
+    ,int                index
+    ) const
+{
+    return map_lookup(vectors_, vector_name).at(index);
+}
+
+/// Write values to a TSV file as a side effect of writing a PDF.
+///
+/// Copy 'vectors_' to a (sorted) std::map in order to show columns
+/// alphabetically; 'scalars_', likewise. Other, more complicated
+/// techniques are faster, but direct copying favors simplicity over
+/// speed--appropriately, as this facility is rarely used.
+
+void ledger_evaluator::write_tsv(fs::path const& pdf_out_file) const
+{
+    if("1" != value("WriteTsvFile")) return;
+
+    configurable_settings const& c = configurable_settings::instance();
+    std::string const& z = c.spreadsheet_file_extension();
+    fs::path filepath = unique_filepath(pdf_out_file, ".values" + z);
+    fs::ofstream ofs(filepath, ios_out_trunc_binary());
+
+    using v_map_t = std::map<std::string,std::vector<std::string>> const;
+    v_map_t sorted_vectors(vectors_.begin(), vectors_.end());
+
+    for(auto const& j : sorted_vectors)
         {
-        throw_if_interdicted(*this);
+        ofs << j.first << '\t';
+        }
+    ofs << '\n';
 
-        configurable_settings const& z = configurable_settings::instance();
-        fs::path filepath
-            (   z.print_directory()
-            +   "/values"
-            +   z.spreadsheet_file_extension()
-            );
-        fs::ofstream ofs(filepath, ios_out_trunc_binary());
-
-        // Copy 'stringvectors' to a (sorted) std::map in order to
-        // show columns alphabetically. Other, more complicated
-        // techniques are faster, but direct copying favors simplicity
-        // over speed--appropriately, as this facility is rarely used.
-        using map_t = std::map<std::string,std::vector<std::string>> const;
-        map_t sorted_stringvectors(stringvectors.begin(), stringvectors.end());
-
-        for(auto const& j : sorted_stringvectors)
+    int const length = value_cast<int>(value("GreatestLapseDuration"));
+    for(int i = 0; i < length; ++i)
+        {
+        for(auto const& j : sorted_vectors)
             {
-            ofs << j.first << '\t';
+            std::vector<std::string> const& v = j.second;
+            if(i < lmi::ssize(v))
+                {
+                ofs << v[i] << '\t';
+                }
+            else
+                {
+                ofs << '\t';
+                }
             }
         ofs << '\n';
-
-        for(int i = 0; i < GetMaxLength(); ++i)
-            {
-            for(auto const& j : sorted_stringvectors)
-                {
-                std::vector<std::string> const& v = j.second;
-                if(i < lmi::ssize(v))
-                    {
-                    ofs << v[i] << '\t';
-                    }
-                else
-                    {
-                    ofs << '\t';
-                    }
-                }
-            ofs << '\n';
-            }
-        if(!ofs)
-            {
-            alarum() << "Unable to write '" << filepath << "'." << LMI_FLUSH;
-            }
         }
 
-    return ledger_evaluator(std::move(stringscalars), std::move(stringvectors));
+    ofs << '\n';
+
+    using s_map_t = std::map<std::string,std::string> const;
+    s_map_t sorted_scalars(scalars_.begin(), scalars_.end());
+
+    for(auto const& j : sorted_scalars)
+        {
+        ofs << j.first << '\t' << j.second << '\n';
+        }
+
+    if(!ofs)
+        {
+        alarum() << "Unable to write '" << filepath << "'." << LMI_FLUSH;
+        }
 }
