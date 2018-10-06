@@ -27,27 +27,31 @@
 
 #include "test_tools.hpp"
 
-//#define SUPPRESSED_FOR_LEDGER_TEST 1
-
-//class BasicValues;
-//void LedgerInvariant::Init(BasicValues const*) {}
+void authenticate_system() {} // Do-nothing stub.
 
 class ledger_test
 {
   public:
     static void test()
         {
-        test0();
+        test_default_initialization();
         test1();
         }
 
   private:
-    static void test0();
+    static void test_default_initialization();
     static void test1();
 };
 
-void ledger_test::test0()
+void ledger_test::test_default_initialization()
 {
+    Ledger ledger(100, mce_finra, false, false, false);
+
+    BOOST_TEST_EQUAL(mce_finra, ledger.ledger_type());
+    BOOST_TEST_EQUAL(false    , ledger.nonillustrated());
+    BOOST_TEST_EQUAL(false    , ledger.no_can_issue());
+    BOOST_TEST_EQUAL(false    , ledger.is_composite());
+    BOOST_TEST_EQUAL(100      , ledger.greatest_lapse_dur());
 }
 
 void ledger_test::test1()
