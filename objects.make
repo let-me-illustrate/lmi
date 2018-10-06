@@ -439,6 +439,7 @@ unit_test_targets := \
   interpolate_string_test \
   irc7702a_test \
   istream_to_string_test \
+  ledger_test \
   loads_test \
   map_lookup_test \
   materially_equal_test \
@@ -729,6 +730,27 @@ irc7702a_test$(EXEEXT): \
 istream_to_string_test$(EXEEXT): \
   $(common_test_objects) \
   istream_to_string_test.o \
+  timer.o \
+
+ledger_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(common_test_objects) \
+  $(xmlwrapp_objects) \
+  calendar_date.o \
+  crc32.o \
+  facets.o \
+  global_settings.o \
+  ledger.o \
+  ledger_base.o \
+  ledger_invariant.o \
+  ledger_test.o \
+  ledger_variant.o \
+  mc_enum.o \
+  mc_enum_types.o \
+  mc_enum_types_aux.o \
+  miscellany.o \
+  null_stream.o \
+  path_utility.o \
   timer.o \
 
 loads_test$(EXEEXT): \
