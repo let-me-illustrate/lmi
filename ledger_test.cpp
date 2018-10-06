@@ -22,10 +22,14 @@
 #include "pchfile.hpp"
 
 #include "ledger.hpp"
+#include "ledger_evaluator.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 
+#include "path_utility.hpp"             // initialize_filesystem()
 #include "test_tools.hpp"
+
+#include <cstdio>                       // remove()
 
 void authenticate_system() {} // Do-nothing stub.
 
@@ -63,11 +67,18 @@ void ledger_test::test_default_initialization()
 void ledger_test::test_evaluator()
 {
     Ledger ledger(100, mce_finra, false, false, false);
-    ledger.make_evaluator();
+    ledger.ledger_invariant_->WriteTsvFile = true;
+    ledger_evaluator z {ledger.make_evaluator()};
+    z.write_tsv("tsv_eraseme");
+    BOOST_TEST(0 == std::remove("tsv_eraseme.values.tsv"));
 }
 
 int test_main(int, char*[])
 {
+    // Absolute paths require "native" name-checking policy for msw.
+    initialize_filesystem();
+
     ledger_test::test();
+
     return EXIT_SUCCESS;
 }
