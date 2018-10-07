@@ -139,7 +139,6 @@ bool format_exists
 
 title_map_t static_titles()
 {
-    static title_map_t title_map;
 //  Here are the columns to be listed in the user interface
 //  as well as their corresponding titles.
 
@@ -148,131 +147,133 @@ title_map_t static_titles()
     // they are defined only on a current basis--experience-rating
     // columns, e.g.
 
-    title_map["AVGenAcct_CurrentZero"           ] = "Curr\nCharges\nAccount\nValue\nGen Acct";
-    title_map["AVGenAcct_GuaranteedZero"        ] = "Guar\nCharges\nAccount\nValue\nGen Acct";
-    title_map["AVRelOnDeath_Current"            ] = "Account\nValue\nReleased\non Death";
-    title_map["AVSepAcct_CurrentZero"           ] = "Curr\nCharges\n0% Account\nValue\nSep Acct";
-    title_map["AVSepAcct_GuaranteedZero"        ] = "Guar\nCharges\n0% Account\nValue\nSep Acct";
-    title_map["AcctVal_Current"                 ] = "Curr\nAccount\nValue";
-    title_map["AcctVal_CurrentZero"             ] = "Curr\nCharges\n0% Account\nValue";
-    title_map["AcctVal_Guaranteed"              ] = "Guar\nAccount\nValue";
-    title_map["AcctVal_GuaranteedZero"          ] = "Guar\nCharges\n0% Account\nValue";
-    title_map["AddonCompOnAssets"               ] = "Additional\nComp on\nAssets";
-    title_map["AddonCompOnPremium"              ] = "Additional\nComp on\nPremium";
-    title_map["AddonMonthlyFee"                 ] = "Additional\nMonthly\nFee";
-    title_map["AnnGAIntRate_Current"            ] = "Curr Ann\nGen Acct\nInt Rate";
-    title_map["AnnGAIntRate_Guaranteed"         ] = "Guar Ann\nGen Acct\nInt Rate";
-    title_map["AnnHoneymoonValueRate_Current"   ] = "Curr Ann\nHoneymoon\nValue Rate";
-    title_map["AnnHoneymoonValueRate_Guaranteed"] = "Guar Ann\nHoneymoon\nValue Rate";
-    title_map["AnnLoanDueRate"                  ] = "Loan\nInt Rate";
-    title_map["AnnPostHoneymoonRate_Current"    ] = "Curr Post\nHoneymoon\nRate";
-    title_map["AnnPostHoneymoonRate_Guaranteed" ] = "Guar Post\nHoneymoon\nRate";
-    title_map["AnnSAIntRate_Current"            ] = "Curr Ann\nSep Acct\nInt Rate";
-    title_map["AnnSAIntRate_Guaranteed"         ] = "Guar Ann\nSep Acct\nInt Rate";
-    title_map["AttainedAge"                     ] = "End of\nYear\nAge";
-    title_map["AvgDeathBft_Current"             ] = "Curr Avg\nDeath\nBenefit";
-    title_map["AvgDeathBft_Guaranteed"          ] = "Guar Avg\nDeath\nBenefit";
-    title_map["BaseDeathBft_Current"            ] = "Curr Base\nDeath\nBenefit";
-    title_map["BaseDeathBft_Guaranteed"         ] = "Guar Base\nDeath\nBenefit";
-    title_map["COICharge_Current"               ] = "Curr COI\nCharge";
-    title_map["COICharge_Guaranteed"            ] = "Guar COI\nCharge";
-    title_map["CSVNet_Current"                  ] = "Curr Net\nCash\nSurr Value";
-    title_map["CSVNet_CurrentZero"              ] = "Curr\nCharges\n0% Net Cash\nSurr Value";
-    title_map["CSVNet_Guaranteed"               ] = "Guar Net\nCash\nSurr Value";
-    title_map["CSVNet_GuaranteedZero"           ] = "Guar\nCharges\n0% Net Cash\nSurr Value";
-    title_map["CV7702_Current"                  ] = "Curr 7702\nCash Value";
-    title_map["CV7702_Guaranteed"               ] = "Guar 7702\nCash Value";
-    title_map["ClaimsPaid_Current"              ] = "Curr\nClaims\nPaid";
-    title_map["ClaimsPaid_Guaranteed"           ] = "Guar\nClaims\nPaid";
-    title_map["CorpTaxBracket"                  ] = "Corp Tax\nBracket";
-    title_map["CorridorFactor"                  ] = "Corridor\nFactor";
-    title_map["CurrMandE"                       ] = "Mortality\nand\nExpense\nCharge";
-    title_map["DBOpt"                           ] = "Death\nBenefit\nOption";
-    title_map["DacTaxLoad_Current"              ] = "Curr DAC\nTax\nLoad";
-    title_map["DacTaxLoad_Guaranteed"           ] = "Guar DAC\nTax\nLoad";
-    title_map["DacTaxRsv_Current"               ] = "Curr DAC\nTax\nReserve";
-    title_map["DacTaxRsv_Guaranteed"            ] = "Guar DAC\nTax\nReserve";
-    title_map["DeathProceedsPaid_Current"       ] = "Curr Death\nProceeds\nPaid";
-    title_map["DeathProceedsPaid_Guaranteed"    ] = "Guar Death\nProceeds\nPaid";
-    title_map["Duration"                        ] = "Duration";
-    title_map["EOYDeathBft_Current"             ] = "Curr EOY\nDeath\nBenefit";
-    title_map["EOYDeathBft_Guaranteed"          ] = "Guar EOY\nDeath\nBenefit";
-    title_map["EeGrossPmt"                      ] = "EE Gross\nPayment";
-    title_map["EeModalMinimumPremium"           ] = "EE Modal\nMinimum\nPremium";
-    title_map["EeMode"                          ] = "EE\nPayment\nMode";
+    static title_map_t const title_map =
+    {{"AVGenAcct_CurrentZero"           , "Curr\nCharges\nAccount\nValue\nGen Acct"}
+    ,{"AVGenAcct_GuaranteedZero"        , "Guar\nCharges\nAccount\nValue\nGen Acct"}
+    ,{"AVRelOnDeath_Current"            , "Account\nValue\nReleased\non Death"}
+    ,{"AVSepAcct_CurrentZero"           , "Curr\nCharges\n0% Account\nValue\nSep Acct"}
+    ,{"AVSepAcct_GuaranteedZero"        , "Guar\nCharges\n0% Account\nValue\nSep Acct"}
+    ,{"AcctVal_Current"                 , "Curr\nAccount\nValue"}
+    ,{"AcctVal_CurrentZero"             , "Curr\nCharges\n0% Account\nValue"}
+    ,{"AcctVal_Guaranteed"              , "Guar\nAccount\nValue"}
+    ,{"AcctVal_GuaranteedZero"          , "Guar\nCharges\n0% Account\nValue"}
+    ,{"AddonCompOnAssets"               , "Additional\nComp on\nAssets"}
+    ,{"AddonCompOnPremium"              , "Additional\nComp on\nPremium"}
+    ,{"AddonMonthlyFee"                 , "Additional\nMonthly\nFee"}
+    ,{"AnnGAIntRate_Current"            , "Curr Ann\nGen Acct\nInt Rate"}
+    ,{"AnnGAIntRate_Guaranteed"         , "Guar Ann\nGen Acct\nInt Rate"}
+    ,{"AnnHoneymoonValueRate_Current"   , "Curr Ann\nHoneymoon\nValue Rate"}
+    ,{"AnnHoneymoonValueRate_Guaranteed", "Guar Ann\nHoneymoon\nValue Rate"}
+    ,{"AnnLoanDueRate"                  , "Loan\nInt Rate"}
+    ,{"AnnPostHoneymoonRate_Current"    , "Curr Post\nHoneymoon\nRate"}
+    ,{"AnnPostHoneymoonRate_Guaranteed" , "Guar Post\nHoneymoon\nRate"}
+    ,{"AnnSAIntRate_Current"            , "Curr Ann\nSep Acct\nInt Rate"}
+    ,{"AnnSAIntRate_Guaranteed"         , "Guar Ann\nSep Acct\nInt Rate"}
+    ,{"AttainedAge"                     , "End of\nYear\nAge"}
+    ,{"AvgDeathBft_Current"             , "Curr Avg\nDeath\nBenefit"}
+    ,{"AvgDeathBft_Guaranteed"          , "Guar Avg\nDeath\nBenefit"}
+    ,{"BaseDeathBft_Current"            , "Curr Base\nDeath\nBenefit"}
+    ,{"BaseDeathBft_Guaranteed"         , "Guar Base\nDeath\nBenefit"}
+    ,{"COICharge_Current"               , "Curr COI\nCharge"}
+    ,{"COICharge_Guaranteed"            , "Guar COI\nCharge"}
+    ,{"CSVNet_Current"                  , "Curr Net\nCash\nSurr Value"}
+    ,{"CSVNet_CurrentZero"              , "Curr\nCharges\n0% Net Cash\nSurr Value"}
+    ,{"CSVNet_Guaranteed"               , "Guar Net\nCash\nSurr Value"}
+    ,{"CSVNet_GuaranteedZero"           , "Guar\nCharges\n0% Net Cash\nSurr Value"}
+    ,{"CV7702_Current"                  , "Curr 7702\nCash Value"}
+    ,{"CV7702_Guaranteed"               , "Guar 7702\nCash Value"}
+    ,{"ClaimsPaid_Current"              , "Curr\nClaims\nPaid"}
+    ,{"ClaimsPaid_Guaranteed"           , "Guar\nClaims\nPaid"}
+    ,{"CorpTaxBracket"                  , "Corp Tax\nBracket"}
+    ,{"CorridorFactor"                  , "Corridor\nFactor"}
+    ,{"CurrMandE"                       , "Mortality\nand\nExpense\nCharge"}
+    ,{"DBOpt"                           , "Death\nBenefit\nOption"}
+    ,{"DacTaxLoad_Current"              , "Curr DAC\nTax\nLoad"}
+    ,{"DacTaxLoad_Guaranteed"           , "Guar DAC\nTax\nLoad"}
+    ,{"DacTaxRsv_Current"               , "Curr DAC\nTax\nReserve"}
+    ,{"DacTaxRsv_Guaranteed"            , "Guar DAC\nTax\nReserve"}
+    ,{"DeathProceedsPaid_Current"       , "Curr Death\nProceeds\nPaid"}
+    ,{"DeathProceedsPaid_Guaranteed"    , "Guar Death\nProceeds\nPaid"}
+    ,{"Duration"                        , "Duration"}
+    ,{"EOYDeathBft_Current"             , "Curr EOY\nDeath\nBenefit"}
+    ,{"EOYDeathBft_Guaranteed"          , "Guar EOY\nDeath\nBenefit"}
+    ,{"EeGrossPmt"                      , "EE Gross\nPayment"}
+    ,{"EeModalMinimumPremium"           , "EE Modal\nMinimum\nPremium"}
+    ,{"EeMode"                          , "EE\nPayment\nMode"}
 // TODO ?? This can't be a mode. I don't know how it differs from 'EeGrossPmt' above.
-    title_map["EePmt"                           ] = "EE\nPayment\nMode";
-    title_map["ErGrossPmt"                      ] = "ER Gross\nPayment";
-    title_map["ErModalMinimumPremium"           ] = "ER Modal\nMinimum\nPremium";
-    title_map["ErMode"                          ] = "ER\nPayment\nMode";
+    ,{"EePmt"                           , "EE\nPayment\nMode"}
+    ,{"ErGrossPmt"                      , "ER Gross\nPayment"}
+    ,{"ErModalMinimumPremium"           , "ER Modal\nMinimum\nPremium"}
+    ,{"ErMode"                          , "ER\nPayment\nMode"}
 // TODO ?? This can't be a mode. I don't know how it differs from 'ErGrossPmt' above.
-    title_map["ErPmt"                           ] = "ER\nPayment\nMode";
-    title_map["ExpenseCharges_Current"          ] = "Curr\nExpense\nCharge";
-    title_map["ExpenseCharges_Guaranteed"       ] = "Guar\nExpense\nCharge";
-    title_map["ExperienceReserve_Current"       ] = "Experience\nRating\nReserve";
-    title_map["GptForceout"                     ] = "Forceout";
-    title_map["GrossIntCredited_Current"        ] = "Curr Gross\nInt\nCredited";
-    title_map["GrossIntCredited_Guaranteed"     ] = "Guar Gross\nInt\nCredited";
-    title_map["GrossPmt"                        ] = "Premium\nOutlay";
-    title_map["HoneymoonValueSpread"            ] = "Honeymoon\nValue\nSpread";
-    title_map["IndvTaxBracket"                  ] = "EE Tax\nBracket";
-    title_map["InforceLives"                    ] = "BOY\nLives\nInforce";
-    title_map["IrrCsv_Current"                  ] = "Curr IRR\non CSV";
-    title_map["IrrCsv_Guaranteed"               ] = "Guar IRR\non CSV";
-    title_map["IrrDb_Current"                   ] = "Curr IRR\non DB";
-    title_map["IrrDb_Guaranteed"                ] = "Guar IRR\non DB";
-    title_map["KFactor_Current"                 ] = "Experience\nRating\nK Factor";
-    title_map["LoanIntAccrued_Current"          ] = "Curr Loan\nInt\nAccrued";
-    title_map["LoanIntAccrued_Guaranteed"       ] = "Guar Loan\nInt\nAccrued";
-    title_map["MlyGAIntRate_Current"            ] = "Curr Monthly\nGen Acct\nInt Rate";
-    title_map["MlyGAIntRate_Guaranteed"         ] = "Guar Monthly\nGen Acct\nInt Rate";
-    title_map["MlyHoneymoonValueRate_Current"   ] = "Curr Monthly\nHoneymoon\nValue Rate";
-    title_map["MlyHoneymoonValueRate_Guaranteed"] = "Guar Monthly\nHoneymoon\nValue Rate";
-    title_map["MlyPostHoneymoonRate_Current"    ] = "Curr Monthly\nPost\nHoneymoon\nRate";
-    title_map["MlyPostHoneymoonRate_Guaranteed" ] = "Guar Monthly\nPost\nHoneymoon\nRate";
-    title_map["MlySAIntRate_Current"            ] = "Curr Monthly\nSep Acct\nInt Rate";
-    title_map["MlySAIntRate_Guaranteed"         ] = "Guar Monthly\nSep Acct\nInt Rate";
-    title_map["ModalMinimumPremium"             ] = "Modal\nMinimum\nPremium";
-    title_map["AnnualFlatExtra"                 ] = "Annual\nFlat\nExtra";
-//    title_map["NaarForceout"                    ] = "Forced\nWithdrawal\ndue to\nNAAR Limit";
-    title_map["NetCOICharge_Current"            ] = "Experience\nRating\nNet COI\nCharge";
-    title_map["NetClaims_Current"               ] = "Curr Net\nClaims";
-    title_map["NetClaims_Guaranteed"            ] = "Guar Net\nClaims";
-    title_map["NetIntCredited_Current"          ] = "Curr Net\nInt\nCredited";
-    title_map["NetIntCredited_Guaranteed"       ] = "Guar Net\nInt\nCredited";
-    title_map["NetPmt_Current"                  ] = "Curr Net\nPayment";
-    title_map["NetPmt_Guaranteed"               ] = "Guar Net\nPayment";
-    title_map["NetWD"                           ] = "Withdrawal";
-    title_map["NewCashLoan"                     ] = "Annual\nLoan";
-    title_map["Outlay"                          ] = "Net Outlay";
-    title_map["PartMortTableMult"               ] = "Partial\nMortality\nMuliplier";
-    title_map["PolicyFee_Current"               ] = "Curr\nPolicy\nFee";
-    title_map["PolicyFee_Guaranteed"            ] = "Guar\nPolicy\nFee";
-    title_map["PolicyYear"                      ] = "Policy\nYear";
-    title_map["PrefLoanBalance_Current"         ] = "Curr\nPreferred\nLoan Bal";
-    title_map["PrefLoanBalance_Guaranteed"      ] = "Guar\nPreferred\nLoan Bal";
-    title_map["PremTaxLoad_Current"             ] = "Curr\nPremium\nTax Load";
-    title_map["PremTaxLoad_Guaranteed"          ] = "Guar\nPremium\nTax Load";
+    ,{"ErPmt"                           , "ER\nPayment\nMode"}
+    ,{"ExpenseCharges_Current"          , "Curr\nExpense\nCharge"}
+    ,{"ExpenseCharges_Guaranteed"       , "Guar\nExpense\nCharge"}
+    ,{"ExperienceReserve_Current"       , "Experience\nRating\nReserve"}
+    ,{"GptForceout"                     , "Forceout"}
+    ,{"GrossIntCredited_Current"        , "Curr Gross\nInt\nCredited"}
+    ,{"GrossIntCredited_Guaranteed"     , "Guar Gross\nInt\nCredited"}
+    ,{"GrossPmt"                        , "Premium\nOutlay"}
+    ,{"HoneymoonValueSpread"            , "Honeymoon\nValue\nSpread"}
+    ,{"IndvTaxBracket"                  , "EE Tax\nBracket"}
+    ,{"InforceLives"                    , "BOY\nLives\nInforce"}
+    ,{"IrrCsv_Current"                  , "Curr IRR\non CSV"}
+    ,{"IrrCsv_Guaranteed"               , "Guar IRR\non CSV"}
+    ,{"IrrDb_Current"                   , "Curr IRR\non DB"}
+    ,{"IrrDb_Guaranteed"                , "Guar IRR\non DB"}
+    ,{"KFactor_Current"                 , "Experience\nRating\nK Factor"}
+    ,{"LoanIntAccrued_Current"          , "Curr Loan\nInt\nAccrued"}
+    ,{"LoanIntAccrued_Guaranteed"       , "Guar Loan\nInt\nAccrued"}
+    ,{"MlyGAIntRate_Current"            , "Curr Monthly\nGen Acct\nInt Rate"}
+    ,{"MlyGAIntRate_Guaranteed"         , "Guar Monthly\nGen Acct\nInt Rate"}
+    ,{"MlyHoneymoonValueRate_Current"   , "Curr Monthly\nHoneymoon\nValue Rate"}
+    ,{"MlyHoneymoonValueRate_Guaranteed", "Guar Monthly\nHoneymoon\nValue Rate"}
+    ,{"MlyPostHoneymoonRate_Current"    , "Curr Monthly\nPost\nHoneymoon\nRate"}
+    ,{"MlyPostHoneymoonRate_Guaranteed" , "Guar Monthly\nPost\nHoneymoon\nRate"}
+    ,{"MlySAIntRate_Current"            , "Curr Monthly\nSep Acct\nInt Rate"}
+    ,{"MlySAIntRate_Guaranteed"         , "Guar Monthly\nSep Acct\nInt Rate"}
+    ,{"ModalMinimumPremium"             , "Modal\nMinimum\nPremium"}
+    ,{"AnnualFlatExtra"                 , "Annual\nFlat\nExtra"}
+//  ,{"NaarForceout"                    , "Forced\nWithdrawal\ndue to\nNAAR Limit"}
+    ,{"NetCOICharge_Current"            , "Experience\nRating\nNet COI\nCharge"}
+    ,{"NetClaims_Current"               , "Curr Net\nClaims"}
+    ,{"NetClaims_Guaranteed"            , "Guar Net\nClaims"}
+    ,{"NetIntCredited_Current"          , "Curr Net\nInt\nCredited"}
+    ,{"NetIntCredited_Guaranteed"       , "Guar Net\nInt\nCredited"}
+    ,{"NetPmt_Current"                  , "Curr Net\nPayment"}
+    ,{"NetPmt_Guaranteed"               , "Guar Net\nPayment"}
+    ,{"NetWD"                           , "Withdrawal"}
+    ,{"NewCashLoan"                     , "Annual\nLoan"}
+    ,{"Outlay"                          , "Net Outlay"}
+    ,{"PartMortTableMult"               , "Partial\nMortality\nMuliplier"}
+    ,{"PolicyFee_Current"               , "Curr\nPolicy\nFee"}
+    ,{"PolicyFee_Guaranteed"            , "Guar\nPolicy\nFee"}
+    ,{"PolicyYear"                      , "Policy\nYear"}
+    ,{"PrefLoanBalance_Current"         , "Curr\nPreferred\nLoan Bal"}
+    ,{"PrefLoanBalance_Guaranteed"      , "Guar\nPreferred\nLoan Bal"}
+    ,{"PremTaxLoad_Current"             , "Curr\nPremium\nTax Load"}
+    ,{"PremTaxLoad_Guaranteed"          , "Guar\nPremium\nTax Load"}
 // Excluded because it's unimplemented:
-//    title_map["ProducerCompensation"            ] = "Producer\nCompensation";
-    title_map["ProjectedCoiCharge_Current"      ] = "Experience\nRating\nProjected\nCOI Charge";
-    title_map["RefundableSalesLoad"             ] = "Refundable\nSales\nLoad";
-    title_map["RiderCharges_Current"            ] = "Curr Rider\nCharges";
-    title_map["Salary"                          ] = "Salary";
-    title_map["SepAcctCharges_Current"          ] = "Curr Sep\nAcct\nCharges";
-    title_map["SepAcctCharges_Guaranteed"       ] = "Guar Sep\nAcct\nCharges";
-    title_map["SpecAmt"                         ] = "Specified\nAmount";
-    title_map["SpecAmtLoad_Current"             ] = "Curr Spec\nAmt Load";
-    title_map["SpecAmtLoad_Guaranteed"          ] = "Guar Spec\nAmt Load";
-    title_map["SurrChg_Current"                 ] = "Curr Surr\nCharge";
-    title_map["SurrChg_Guaranteed"              ] = "Guar Surr\nCharge";
-    title_map["TermPurchased_Current"           ] = "Curr Term\nAmt\nPurchased";
-    title_map["TermPurchased_Guaranteed"        ] = "Guar Term\nAmt\nPurchased";
-    title_map["TermSpecAmt"                     ] = "Term\nSpecified\nAmount";
-    title_map["TgtPrem"                         ] = "Target\nPremium";
-    title_map["TotalIMF"                        ] = "Total\nInvestment\nMgt Fee";
-    title_map["TotalLoanBalance_Current"        ] = "Curr Total\nLoan\nBalance";
-    title_map["TotalLoanBalance_Guaranteed"     ] = "Guar Total\nLoan\nBalance";
+//  ,{"ProducerCompensation"            , "Producer\nCompensation"}
+    ,{"ProjectedCoiCharge_Current"      , "Experience\nRating\nProjected\nCOI Charge"}
+    ,{"RefundableSalesLoad"             , "Refundable\nSales\nLoad"}
+    ,{"RiderCharges_Current"            , "Curr Rider\nCharges"}
+    ,{"Salary"                          , "Salary"}
+    ,{"SepAcctCharges_Current"          , "Curr Sep\nAcct\nCharges"}
+    ,{"SepAcctCharges_Guaranteed"       , "Guar Sep\nAcct\nCharges"}
+    ,{"SpecAmt"                         , "Specified\nAmount"}
+    ,{"SpecAmtLoad_Current"             , "Curr Spec\nAmt Load"}
+    ,{"SpecAmtLoad_Guaranteed"          , "Guar Spec\nAmt Load"}
+    ,{"SurrChg_Current"                 , "Curr Surr\nCharge"}
+    ,{"SurrChg_Guaranteed"              , "Guar Surr\nCharge"}
+    ,{"TermPurchased_Current"           , "Curr Term\nAmt\nPurchased"}
+    ,{"TermPurchased_Guaranteed"        , "Guar Term\nAmt\nPurchased"}
+    ,{"TermSpecAmt"                     , "Term\nSpecified\nAmount"}
+    ,{"TgtPrem"                         , "Target\nPremium"}
+    ,{"TotalIMF"                        , "Total\nInvestment\nMgt Fee"}
+    ,{"TotalLoanBalance_Current"        , "Curr Total\nLoan\nBalance"}
+    ,{"TotalLoanBalance_Guaranteed"     , "Guar Total\nLoan\nBalance"}
+    };
 
     // TODO ?? Titles ought to be read from an external file that
     // permits flexible customization. Compliance might require that
@@ -289,141 +290,139 @@ title_map_t static_titles()
 
 mask_map_t static_masks()
 {
-    static mask_map_t mask_map;
-
-    mask_map ["AVGenAcct_CurrentZero"           ] = "999,999,999";
-    mask_map ["AVGenAcct_GuaranteedZero"        ] = "999,999,999";
-    mask_map ["AVRelOnDeath_Current"            ] = "999,999,999";
-    mask_map ["AVSepAcct_CurrentZero"           ] = "999,999,999";
-    mask_map ["AVSepAcct_GuaranteedZero"        ] = "999,999,999";
-    mask_map ["AcctVal_Current"                 ] = "999,999,999";
-    mask_map ["AcctVal_CurrentZero"             ] = "999,999,999";
-    mask_map ["AcctVal_Guaranteed"              ] = "999,999,999";
-    mask_map ["AcctVal_GuaranteedZero"          ] = "999,999,999";
-    mask_map ["AddonCompOnAssets"               ] = "999,999,999";
-    mask_map ["AddonCompOnPremium"              ] = "999,999,999";
-    mask_map ["AddonMonthlyFee"                 ] = "999,999,999";
-    mask_map ["AnnGAIntRate_Current"            ] =      "99.99%";
-    mask_map ["AnnGAIntRate_Guaranteed"         ] =      "99.99%";
-    mask_map ["AnnHoneymoonValueRate_Current"   ] =      "99.99%";
-    mask_map ["AnnHoneymoonValueRate_Guaranteed"] =      "99.99%";
-    mask_map ["AnnLoanDueRate"                  ] =      "99.99%";
-    mask_map ["AnnPostHoneymoonRate_Current"    ] =      "99.99%";
-    mask_map ["AnnPostHoneymoonRate_Guaranteed" ] =      "99.99%";
-    mask_map ["AnnSAIntRate_Current"            ] =      "99.99%";
-    mask_map ["AnnSAIntRate_Guaranteed"         ] =      "99.99%";
-    mask_map ["AttainedAge"                     ] =         "999";
-    mask_map ["AvgDeathBft_Current"             ] = "999,999,999";
-    mask_map ["AvgDeathBft_Guaranteed"          ] = "999,999,999";
-    mask_map ["BaseDeathBft_Current"            ] = "999,999,999";
-    mask_map ["BaseDeathBft_Guaranteed"         ] = "999,999,999";
-    mask_map ["COICharge_Current"               ] = "999,999,999";
-    mask_map ["COICharge_Guaranteed"            ] = "999,999,999";
-    mask_map ["CSVNet_Current"                  ] = "999,999,999";
-    mask_map ["CSVNet_CurrentZero"              ] = "999,999,999";
-    mask_map ["CSVNet_Guaranteed"               ] = "999,999,999";
-    mask_map ["CSVNet_GuaranteedZero"           ] = "999,999,999";
-    mask_map ["CV7702_Current"                  ] = "999,999,999";
-    mask_map ["CV7702_Guaranteed"               ] = "999,999,999";
-    mask_map ["ClaimsPaid_Current"              ] = "999,999,999";
-    mask_map ["ClaimsPaid_Guaranteed"           ] = "999,999,999";
-    mask_map ["CorpTaxBracket"                  ] =      "99.99%";
-    mask_map ["CorridorFactor"                  ] =       "9999%";
-    mask_map ["CurrMandE"                       ] =      "99.99%";
-    mask_map ["DBOpt"                           ] =         "ROP";
-    mask_map ["DacTaxLoad_Current"              ] = "999,999,999";
-    mask_map ["DacTaxLoad_Guaranteed"           ] = "999,999,999";
-    mask_map ["DacTaxRsv_Current"               ] = "999,999,999";
-    mask_map ["DacTaxRsv_Guaranteed"            ] = "999,999,999";
-    mask_map ["DeathProceedsPaid_Current"       ] = "999,999,999";
-    mask_map ["DeathProceedsPaid_Guaranteed"    ] = "999,999,999";
-    mask_map ["Duration"                        ] =         "999";
-    mask_map ["EOYDeathBft_Current"             ] = "999,999,999";
-    mask_map ["EOYDeathBft_Guaranteed"          ] = "999,999,999";
-    mask_map ["EeGrossPmt"                      ] = "999,999,999";
-    mask_map ["EeModalMinimumPremium"           ] = "999,999,999";
-    mask_map ["EeMode"                          ] =  "Semiannual";
+    static mask_map_t const mask_map =
+    {{"AVGenAcct_CurrentZero"           , "999,999,999"}
+    ,{"AVGenAcct_GuaranteedZero"        , "999,999,999"}
+    ,{"AVRelOnDeath_Current"            , "999,999,999"}
+    ,{"AVSepAcct_CurrentZero"           , "999,999,999"}
+    ,{"AVSepAcct_GuaranteedZero"        , "999,999,999"}
+    ,{"AcctVal_Current"                 , "999,999,999"}
+    ,{"AcctVal_CurrentZero"             , "999,999,999"}
+    ,{"AcctVal_Guaranteed"              , "999,999,999"}
+    ,{"AcctVal_GuaranteedZero"          , "999,999,999"}
+    ,{"AddonCompOnAssets"               , "999,999,999"}
+    ,{"AddonCompOnPremium"              , "999,999,999"}
+    ,{"AddonMonthlyFee"                 , "999,999,999"}
+    ,{"AnnGAIntRate_Current"            ,      "99.99%"}
+    ,{"AnnGAIntRate_Guaranteed"         ,      "99.99%"}
+    ,{"AnnHoneymoonValueRate_Current"   ,      "99.99%"}
+    ,{"AnnHoneymoonValueRate_Guaranteed",      "99.99%"}
+    ,{"AnnLoanDueRate"                  ,      "99.99%"}
+    ,{"AnnPostHoneymoonRate_Current"    ,      "99.99%"}
+    ,{"AnnPostHoneymoonRate_Guaranteed" ,      "99.99%"}
+    ,{"AnnSAIntRate_Current"            ,      "99.99%"}
+    ,{"AnnSAIntRate_Guaranteed"         ,      "99.99%"}
+    ,{"AttainedAge"                     ,         "999"}
+    ,{"AvgDeathBft_Current"             , "999,999,999"}
+    ,{"AvgDeathBft_Guaranteed"          , "999,999,999"}
+    ,{"BaseDeathBft_Current"            , "999,999,999"}
+    ,{"BaseDeathBft_Guaranteed"         , "999,999,999"}
+    ,{"COICharge_Current"               , "999,999,999"}
+    ,{"COICharge_Guaranteed"            , "999,999,999"}
+    ,{"CSVNet_Current"                  , "999,999,999"}
+    ,{"CSVNet_CurrentZero"              , "999,999,999"}
+    ,{"CSVNet_Guaranteed"               , "999,999,999"}
+    ,{"CSVNet_GuaranteedZero"           , "999,999,999"}
+    ,{"CV7702_Current"                  , "999,999,999"}
+    ,{"CV7702_Guaranteed"               , "999,999,999"}
+    ,{"ClaimsPaid_Current"              , "999,999,999"}
+    ,{"ClaimsPaid_Guaranteed"           , "999,999,999"}
+    ,{"CorpTaxBracket"                  ,      "99.99%"}
+    ,{"CorridorFactor"                  ,       "9999%"}
+    ,{"CurrMandE"                       ,      "99.99%"}
+    ,{"DBOpt"                           ,         "ROP"}
+    ,{"DacTaxLoad_Current"              , "999,999,999"}
+    ,{"DacTaxLoad_Guaranteed"           , "999,999,999"}
+    ,{"DacTaxRsv_Current"               , "999,999,999"}
+    ,{"DacTaxRsv_Guaranteed"            , "999,999,999"}
+    ,{"DeathProceedsPaid_Current"       , "999,999,999"}
+    ,{"DeathProceedsPaid_Guaranteed"    , "999,999,999"}
+    ,{"Duration"                        ,         "999"}
+    ,{"EOYDeathBft_Current"             , "999,999,999"}
+    ,{"EOYDeathBft_Guaranteed"          , "999,999,999"}
+    ,{"EeGrossPmt"                      , "999,999,999"}
+    ,{"EeModalMinimumPremium"           , "999,999,999"}
+    ,{"EeMode"                          ,  "Semiannual"}
 // This can't be a mode. I don't know how it differs from 'EeGrossPmt' above.
-    mask_map ["EePmt"                           ] = "999,999,999";
-    mask_map ["ErGrossPmt"                      ] = "999,999,999";
-    mask_map ["ErModalMinimumPremium"           ] = "999,999,999";
-    mask_map ["ErMode"                          ] =  "Semiannual";
+    ,{"EePmt"                           , "999,999,999"}
+    ,{"ErGrossPmt"                      , "999,999,999"}
+    ,{"ErModalMinimumPremium"           , "999,999,999"}
+    ,{"ErMode"                          ,  "Semiannual"}
 // This can't be a mode. I don't know how it differs from 'ErGrossPmt' above.
-    mask_map ["ErPmt"                           ] = "999,999,999";
-    mask_map ["ExpenseCharges_Current"          ] = "999,999,999";
-    mask_map ["ExpenseCharges_Guaranteed"       ] = "999,999,999";
-    mask_map ["ExperienceReserve_Current"       ] = "999,999,999";
-    mask_map ["GptForceout"                     ] = "999,999,999";
-    mask_map ["GrossIntCredited_Current"        ] = "999,999,999";
-    mask_map ["GrossIntCredited_Guaranteed"     ] = "999,999,999";
-    mask_map ["GrossPmt"                        ] = "999,999,999";
-    mask_map ["HoneymoonValueSpread"            ] =      "99.99%";
-    mask_map ["IndvTaxBracket"                  ] =      "99.99%";
-    mask_map ["InforceLives"                    ] = "999,999,999";
-    mask_map ["IrrCsv_Current"                  ] =  "100000.00%";
-    mask_map ["IrrCsv_Guaranteed"               ] =  "100000.00%";
-    mask_map ["IrrDb_Current"                   ] =  "100000.00%";
-    mask_map ["IrrDb_Guaranteed"                ] =  "100000.00%";
-    mask_map ["KFactor_Current"                 ] =    "9,999.99";
-    mask_map ["LoanIntAccrued_Current"          ] = "999,999,999";
-    mask_map ["LoanIntAccrued_Guaranteed"       ] = "999,999,999";
-    mask_map ["MlyGAIntRate_Current"            ] =      "99.99%";
-    mask_map ["MlyGAIntRate_Guaranteed"         ] =      "99.99%";
-    mask_map ["MlyHoneymoonValueRate_Current"   ] =      "99.99%";
-    mask_map ["MlyHoneymoonValueRate_Guaranteed"] =      "99.99%";
-    mask_map ["MlyPostHoneymoonRate_Current"    ] =      "99.99%";
-    mask_map ["MlyPostHoneymoonRate_Guaranteed" ] =      "99.99%";
-    mask_map ["MlySAIntRate_Current"            ] =      "99.99%";
-    mask_map ["MlySAIntRate_Guaranteed"         ] =      "99.99%";
-    mask_map ["ModalMinimumPremium"             ] = "999,999,999";
-    mask_map ["AnnualFlatExtra"                 ] = "999,999,999";
-//    mask_map ["NaarForceout"                    ] = "999,999,999";
-    mask_map ["NetCOICharge_Current"            ] = "999,999,999";
-    mask_map ["NetClaims_Current"               ] = "999,999,999";
-    mask_map ["NetClaims_Guaranteed"            ] = "999,999,999";
-    mask_map ["NetIntCredited_Current"          ] = "999,999,999";
-    mask_map ["NetIntCredited_Guaranteed"       ] = "999,999,999";
-    mask_map ["NetPmt_Current"                  ] = "999,999,999";
-    mask_map ["NetPmt_Guaranteed"               ] = "999,999,999";
-    mask_map ["NetWD"                           ] = "999,999,999";
-    mask_map ["NewCashLoan"                     ] = "999,999,999";
-    mask_map ["Outlay"                          ] = "999,999,999";
-    mask_map ["PartMortTableMult"               ] =   "9,999.99%";
-    mask_map ["PolicyFee_Current"               ] = "999,999,999";
-    mask_map ["PolicyFee_Guaranteed"            ] = "999,999,999";
-    mask_map ["PolicyYear"                      ] =         "999";
-    mask_map ["PrefLoanBalance_Current"         ] = "999,999,999";
-    mask_map ["PrefLoanBalance_Guaranteed"      ] = "999,999,999";
-    mask_map ["PremTaxLoad_Current"             ] = "999,999,999";
-    mask_map ["PremTaxLoad_Guaranteed"          ] = "999,999,999";
+    ,{"ErPmt"                           , "999,999,999"}
+    ,{"ExpenseCharges_Current"          , "999,999,999"}
+    ,{"ExpenseCharges_Guaranteed"       , "999,999,999"}
+    ,{"ExperienceReserve_Current"       , "999,999,999"}
+    ,{"GptForceout"                     , "999,999,999"}
+    ,{"GrossIntCredited_Current"        , "999,999,999"}
+    ,{"GrossIntCredited_Guaranteed"     , "999,999,999"}
+    ,{"GrossPmt"                        , "999,999,999"}
+    ,{"HoneymoonValueSpread"            ,      "99.99%"}
+    ,{"IndvTaxBracket"                  ,      "99.99%"}
+    ,{"InforceLives"                    , "999,999,999"}
+    ,{"IrrCsv_Current"                  ,  "100000.00%"}
+    ,{"IrrCsv_Guaranteed"               ,  "100000.00%"}
+    ,{"IrrDb_Current"                   ,  "100000.00%"}
+    ,{"IrrDb_Guaranteed"                ,  "100000.00%"}
+    ,{"KFactor_Current"                 ,    "9,999.99"}
+    ,{"LoanIntAccrued_Current"          , "999,999,999"}
+    ,{"LoanIntAccrued_Guaranteed"       , "999,999,999"}
+    ,{"MlyGAIntRate_Current"            ,      "99.99%"}
+    ,{"MlyGAIntRate_Guaranteed"         ,      "99.99%"}
+    ,{"MlyHoneymoonValueRate_Current"   ,      "99.99%"}
+    ,{"MlyHoneymoonValueRate_Guaranteed",      "99.99%"}
+    ,{"MlyPostHoneymoonRate_Current"    ,      "99.99%"}
+    ,{"MlyPostHoneymoonRate_Guaranteed" ,      "99.99%"}
+    ,{"MlySAIntRate_Current"            ,      "99.99%"}
+    ,{"MlySAIntRate_Guaranteed"         ,      "99.99%"}
+    ,{"ModalMinimumPremium"             , "999,999,999"}
+    ,{"AnnualFlatExtra"                 , "999,999,999"}
+//  ,{"NaarForceout"                    , "999,999,999"}
+    ,{"NetCOICharge_Current"            , "999,999,999"}
+    ,{"NetClaims_Current"               , "999,999,999"}
+    ,{"NetClaims_Guaranteed"            , "999,999,999"}
+    ,{"NetIntCredited_Current"          , "999,999,999"}
+    ,{"NetIntCredited_Guaranteed"       , "999,999,999"}
+    ,{"NetPmt_Current"                  , "999,999,999"}
+    ,{"NetPmt_Guaranteed"               , "999,999,999"}
+    ,{"NetWD"                           , "999,999,999"}
+    ,{"NewCashLoan"                     , "999,999,999"}
+    ,{"Outlay"                          , "999,999,999"}
+    ,{"PartMortTableMult"               ,   "9,999.99%"}
+    ,{"PolicyFee_Current"               , "999,999,999"}
+    ,{"PolicyFee_Guaranteed"            , "999,999,999"}
+    ,{"PolicyYear"                      ,         "999"}
+    ,{"PrefLoanBalance_Current"         , "999,999,999"}
+    ,{"PrefLoanBalance_Guaranteed"      , "999,999,999"}
+    ,{"PremTaxLoad_Current"             , "999,999,999"}
+    ,{"PremTaxLoad_Guaranteed"          , "999,999,999"}
 // Excluded because it's unimplemented:
-//    mask_map ["ProducerCompensation"            ] = "999,999,999";
-    mask_map ["ProjectedCoiCharge_Current"      ] = "999,999,999";
-    mask_map ["RefundableSalesLoad"             ] = "999,999,999";
-    mask_map ["RiderCharges_Current"            ] = "999,999,999";
-    mask_map ["Salary"                          ] = "999,999,999";
-    mask_map ["SepAcctCharges_Current"          ] = "999,999,999";
-    mask_map ["SepAcctCharges_Guaranteed"       ] = "999,999,999";
-    mask_map ["SpecAmt"                         ] = "999,999,999";
-    mask_map ["SpecAmtLoad_Current"             ] = "999,999,999";
-    mask_map ["SpecAmtLoad_Guaranteed"          ] = "999,999,999";
-    mask_map ["SurrChg_Current"                 ] = "999,999,999";
-    mask_map ["SurrChg_Guaranteed"              ] = "999,999,999";
-    mask_map ["TermPurchased_Current"           ] = "999,999,999";
-    mask_map ["TermPurchased_Guaranteed"        ] = "999,999,999";
-    mask_map ["TermSpecAmt"                     ] = "999,999,999";
-    mask_map ["TgtPrem"                         ] = "999,999,999";
-    mask_map ["TotalIMF"                        ] =      "99.99%";
-    mask_map ["TotalLoanBalance_Current"        ] = "999,999,999";
-    mask_map ["TotalLoanBalance_Guaranteed"     ] = "999,999,999";
+//  ,{"ProducerCompensation"            , "999,999,999"}
+    ,{"ProjectedCoiCharge_Current"      , "999,999,999"}
+    ,{"RefundableSalesLoad"             , "999,999,999"}
+    ,{"RiderCharges_Current"            , "999,999,999"}
+    ,{"Salary"                          , "999,999,999"}
+    ,{"SepAcctCharges_Current"          , "999,999,999"}
+    ,{"SepAcctCharges_Guaranteed"       , "999,999,999"}
+    ,{"SpecAmt"                         , "999,999,999"}
+    ,{"SpecAmtLoad_Current"             , "999,999,999"}
+    ,{"SpecAmtLoad_Guaranteed"          , "999,999,999"}
+    ,{"SurrChg_Current"                 , "999,999,999"}
+    ,{"SurrChg_Guaranteed"              , "999,999,999"}
+    ,{"TermPurchased_Current"           , "999,999,999"}
+    ,{"TermPurchased_Guaranteed"        , "999,999,999"}
+    ,{"TermSpecAmt"                     , "999,999,999"}
+    ,{"TgtPrem"                         , "999,999,999"}
+    ,{"TotalIMF"                        ,      "99.99%"}
+    ,{"TotalLoanBalance_Current"        , "999,999,999"}
+    ,{"TotalLoanBalance_Guaranteed"     , "999,999,999"}
+    };
 
     return mask_map;
 }
 
 format_map_t static_formats()
 {
-    static format_map_t format_map;
-
 // Here's my top-level analysis of the formatting specification.
 //
 // Formats
@@ -447,105 +446,106 @@ format_map_t static_formats()
     std::pair<int,oenum_format_style> f3(0, oe_format_percentage);
     std::pair<int,oenum_format_style> f4(2, oe_format_percentage);
 
+    static format_map_t const format_map =
 // > Special Formatting for Scalar Items
 // >
 // F4: scaled by 100, two decimals, with '%' at end:
 // > Format as percentage "0.00%"
 // >
-    format_map["GuarMaxMandE"                      ] = f4;
-    format_map["InitAnnGenAcctInt"                 ] = f4;
-    format_map["InitAnnLoanCredRate"               ] = f4;
-    format_map["InitAnnLoanDueRate"                ] = f4;
-    format_map["InitAnnSepAcctCurrGross0Rate"      ] = f4;
-    format_map["InitAnnSepAcctCurrGrossHalfRate"   ] = f4;
-    format_map["InitAnnSepAcctCurrNet0Rate"        ] = f4;
-    format_map["InitAnnSepAcctCurrNetHalfRate"     ] = f4;
-    format_map["InitAnnSepAcctGrossInt"            ] = f4;
-    format_map["InitAnnSepAcctGuarGross0Rate"      ] = f4;
-    format_map["InitAnnSepAcctGuarGrossHalfRate"   ] = f4;
-    format_map["InitAnnSepAcctGuarNet0Rate"        ] = f4;
-    format_map["InitAnnSepAcctGuarNetHalfRate"     ] = f4;
-    format_map["InitAnnSepAcctNetInt"              ] = f4;
-    format_map["PostHoneymoonSpread"               ] = f4;
-    format_map["Preferred"                         ] = f4;
-    format_map["PremTaxRate"                       ] = f4;
+    {{"GuarMaxMandE"                    , f4}
+    ,{"InitAnnGenAcctInt"               , f4}
+    ,{"InitAnnLoanCredRate"             , f4}
+    ,{"InitAnnLoanDueRate"              , f4}
+    ,{"InitAnnSepAcctCurrGross0Rate"    , f4}
+    ,{"InitAnnSepAcctCurrGrossHalfRate" , f4}
+    ,{"InitAnnSepAcctCurrNet0Rate"      , f4}
+    ,{"InitAnnSepAcctCurrNetHalfRate"   , f4}
+    ,{"InitAnnSepAcctGrossInt"          , f4}
+    ,{"InitAnnSepAcctGuarGross0Rate"    , f4}
+    ,{"InitAnnSepAcctGuarGrossHalfRate" , f4}
+    ,{"InitAnnSepAcctGuarNet0Rate"      , f4}
+    ,{"InitAnnSepAcctGuarNetHalfRate"   , f4}
+    ,{"InitAnnSepAcctNetInt"            , f4}
+    ,{"PostHoneymoonSpread"             , f4}
+    ,{"Preferred"                       , f4}
+    ,{"PremTaxRate"                     , f4}
 
 // F3: scaled by 100, zero decimals, with '%' at end:
 // > Format as percentage with no decimal places (##0%)
-    format_map["SalesLoadRefundRate0"              ] = f3;
-    format_map["SalesLoadRefundRate1"              ] = f3;
-    format_map["GenAcctAllocation"                 ] = f3;
+    ,{"SalesLoadRefundRate0"            , f3}
+    ,{"SalesLoadRefundRate1"            , f3}
+    ,{"GenAcctAllocation"               , f3}
 
 // >
 // F2: two decimals, commas
 // > Format as a number with thousand separators and two decimal places (#,###,###.00)
 // >
-    format_map["CurrentCoiMultiplier"              ] = f2;
-    format_map["EeListBillPremium"                 ] = f2;
-    format_map["ErListBillPremium"                 ] = f2;
-    format_map["GuarPrem"                          ] = f2;
-    format_map["InforceTaxBasis"                   ] = f2;
-    format_map["InforceUnloanedAV"                 ] = f2;
-    format_map["InitGLP"                           ] = f2;
-    format_map["InitGSP"                           ] = f2;
-    format_map["InitPrem"                          ] = f2;
-    format_map["InitSevenPayPrem"                  ] = f2;
-    format_map["InitTgtPrem"                       ] = f2;
-    format_map["InitMinPrem"                       ] = f2;
-    format_map["ListBillPremium"                   ] = f2;
-    format_map["ModalMinimumDumpin"                ] = f2;
+    ,{"CurrentCoiMultiplier"            , f2}
+    ,{"EeListBillPremium"               , f2}
+    ,{"ErListBillPremium"               , f2}
+    ,{"GuarPrem"                        , f2}
+    ,{"InforceTaxBasis"                 , f2}
+    ,{"InforceUnloanedAV"               , f2}
+    ,{"InitGLP"                         , f2}
+    ,{"InitGSP"                         , f2}
+    ,{"InitPrem"                        , f2}
+    ,{"InitSevenPayPrem"                , f2}
+    ,{"InitTgtPrem"                     , f2}
+    ,{"InitMinPrem"                     , f2}
+    ,{"ListBillPremium"                 , f2}
+    ,{"ModalMinimumDumpin"              , f2}
 // >
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,###)
 // >
-    format_map["Age"                               ] = f1;
-    format_map["AllowDbo3"                         ] = f1;
-    format_map["AvgFund"                           ] = f1;
-    format_map["ChildRiderAmount"                  ] = f1;
-    format_map["CustomFund"                        ] = f1;
-    format_map["Dumpin"                            ] = f1;
-    format_map["EndtAge"                           ] = f1;
-    format_map["External1035Amount"                ] = f1;
-    format_map["GenderBlended"                     ] = f1;
-    format_map["GenderDistinct"                    ] = f1;
-    format_map["GreatestLapseDuration"             ] = f1;
-    format_map["Has1035ExchCharge"                 ] = f1;
-    format_map["HasADD"                            ] = f1;
-    format_map["HasChildRider"                     ] = f1;
-    format_map["HasHoneymoon"                      ] = f1;
-    format_map["HasSpouseRider"                    ] = f1;
-    format_map["HasSupplSpecAmt"                   ] = f1;
-    format_map["HasTerm"                           ] = f1;
-    format_map["HasWP"                             ] = f1;
-    format_map["InforceIsMec"                      ] = f1;
-    format_map["InforceMonth"                      ] = f1;
-    format_map["InforceYear"                       ] = f1;
-    format_map["InitBaseSpecAmt"                   ] = f1;
-    format_map["InitTermSpecAmt"                   ] = f1;
-    format_map["InitTotalSA"                       ] = f1;
-    format_map["Internal1035Amount"                ] = f1;
-    format_map["IsInforce"                         ] = f1;
-    format_map["IsMec"                             ] = f1;
-    format_map["LapseMonth"                        ] = f1;
-    format_map["LapseYear"                         ] = f1;
-    format_map["MecMonth"                          ] = f1;
-    format_map["MecYear"                           ] = f1;
-    format_map["NoLapse"                           ] = f1;
-    format_map["NoLapseAlwaysActive"               ] = f1;
-    format_map["NoLapseMinAge"                     ] = f1;
-    format_map["NoLapseMinDur"                     ] = f1;
-    format_map["RetAge"                            ] = f1;
-    format_map["SalesLoadRefundAvailable"          ] = f1;
-    format_map["SmokerBlended"                     ] = f1;
-    format_map["SmokerDistinct"                    ] = f1;
-    format_map["SplitFundAllocation"               ] = f1;
-    format_map["SplitMinPrem"                      ] = f1;
-    format_map["SpouseIssueAge"                    ] = f1;
-    format_map["SupplementalReport"                ] = f1;
-    format_map["UseExperienceRating"               ] = f1;
-    format_map["GroupIndivSelection"               ] = f1;
-    format_map["UsePartialMort"                    ] = f1;
-    format_map["WriteTsvFile"                      ] = f1;
+    ,{"Age"                             , f1}
+    ,{"AllowDbo3"                       , f1}
+    ,{"AvgFund"                         , f1}
+    ,{"ChildRiderAmount"                , f1}
+    ,{"CustomFund"                      , f1}
+    ,{"Dumpin"                          , f1}
+    ,{"EndtAge"                         , f1}
+    ,{"External1035Amount"              , f1}
+    ,{"GenderBlended"                   , f1}
+    ,{"GenderDistinct"                  , f1}
+    ,{"GreatestLapseDuration"           , f1}
+    ,{"Has1035ExchCharge"               , f1}
+    ,{"HasADD"                          , f1}
+    ,{"HasChildRider"                   , f1}
+    ,{"HasHoneymoon"                    , f1}
+    ,{"HasSpouseRider"                  , f1}
+    ,{"HasSupplSpecAmt"                 , f1}
+    ,{"HasTerm"                         , f1}
+    ,{"HasWP"                           , f1}
+    ,{"InforceIsMec"                    , f1}
+    ,{"InforceMonth"                    , f1}
+    ,{"InforceYear"                     , f1}
+    ,{"InitBaseSpecAmt"                 , f1}
+    ,{"InitTermSpecAmt"                 , f1}
+    ,{"InitTotalSA"                     , f1}
+    ,{"Internal1035Amount"              , f1}
+    ,{"IsInforce"                       , f1}
+    ,{"IsMec"                           , f1}
+    ,{"LapseMonth"                      , f1}
+    ,{"LapseYear"                       , f1}
+    ,{"MecMonth"                        , f1}
+    ,{"MecYear"                         , f1}
+    ,{"NoLapse"                         , f1}
+    ,{"NoLapseAlwaysActive"             , f1}
+    ,{"NoLapseMinAge"                   , f1}
+    ,{"NoLapseMinDur"                   , f1}
+    ,{"RetAge"                          , f1}
+    ,{"SalesLoadRefundAvailable"        , f1}
+    ,{"SmokerBlended"                   , f1}
+    ,{"SmokerDistinct"                  , f1}
+    ,{"SplitFundAllocation"             , f1}
+    ,{"SplitMinPrem"                    , f1}
+    ,{"SpouseIssueAge"                  , f1}
+    ,{"SupplementalReport"              , f1}
+    ,{"UseExperienceRating"             , f1}
+    ,{"GroupIndivSelection"             , f1}
+    ,{"UsePartialMort"                  , f1}
+    ,{"WriteTsvFile"                    , f1}
 
 // > Vector Formatting
 // >
@@ -554,124 +554,125 @@ format_map_t static_formats()
 // F3: scaled by 100, zero decimals, with '%' at end:
 // > Format as percentage with no decimal places (##0%)
 // >
-    format_map["CorridorFactor"                    ] = f3;
-    format_map["FundAllocations"                   ] = f3;
-    format_map["MaleProportion"                    ] = f3;
-    format_map["NonsmokerProportion"               ] = f3;
-    format_map["PartMortTableMult"                 ] = f3;
+    ,{"CorridorFactor"                  , f3}
+    ,{"FundAllocations"                 , f3}
+    ,{"MaleProportion"                  , f3}
+    ,{"NonsmokerProportion"             , f3}
+    ,{"PartMortTableMult"               , f3}
 
 // >
 // F4: scaled by 100, two decimals, with '%' at end:
 // > Format as percentage with two decimal places (##0.00%)
 // >
-    format_map["AnnGAIntRate"                      ] = f4;
-    format_map["AnnHoneymoonValueRate"             ] = f4;
-    format_map["AnnLoanDueRate"                    ] = f4;
-    format_map["AnnPostHoneymoonRate"              ] = f4;
-    format_map["AnnSAIntRate"                      ] = f4;
-    format_map["CorpTaxBracket"                    ] = f4;
-    format_map["CurrMandE"                         ] = f4;
-    format_map["HoneymoonValueSpread"              ] = f4;
-    format_map["IndvTaxBracket"                    ] = f4;
-    format_map["InforceHMVector"                   ] = f4;
+    ,{"AnnGAIntRate"                    , f4}
+    ,{"AnnHoneymoonValueRate"           , f4}
+    ,{"AnnLoanDueRate"                  , f4}
+    ,{"AnnPostHoneymoonRate"            , f4}
+    ,{"AnnSAIntRate"                    , f4}
+    ,{"CorpTaxBracket"                  , f4}
+    ,{"CurrMandE"                       , f4}
+    ,{"HoneymoonValueSpread"            , f4}
+    ,{"IndvTaxBracket"                  , f4}
+    ,{"InforceHMVector"                 , f4}
 
-    format_map["IrrCsv_Current"                    ] = f4;
-    format_map["IrrCsv_CurrentZero"                ] = f4;
-    format_map["IrrCsv_Guaranteed"                 ] = f4;
-    format_map["IrrCsv_GuaranteedZero"             ] = f4;
-    format_map["IrrDb_Current"                     ] = f4;
-    format_map["IrrDb_CurrentZero"                 ] = f4;
-    format_map["IrrDb_Guaranteed"                  ] = f4;
-    format_map["IrrDb_GuaranteedZero"              ] = f4;
+    ,{"IrrCsv_Current"                  , f4}
+    ,{"IrrCsv_CurrentZero"              , f4}
+    ,{"IrrCsv_Guaranteed"               , f4}
+    ,{"IrrCsv_GuaranteedZero"           , f4}
+    ,{"IrrDb_Current"                   , f4}
+    ,{"IrrDb_CurrentZero"               , f4}
+    ,{"IrrDb_Guaranteed"                , f4}
+    ,{"IrrDb_GuaranteedZero"            , f4}
 
-    format_map["MlyGAIntRate"                      ] = f4;
-    format_map["MlyHoneymoonValueRate"             ] = f4;
-    format_map["MlyPostHoneymoonRate"              ] = f4;
-    format_map["MlySAIntRate"                      ] = f4;
-    format_map["TotalIMF"                          ] = f4;
+    ,{"MlyGAIntRate"                    , f4}
+    ,{"MlyHoneymoonValueRate"           , f4}
+    ,{"MlyPostHoneymoonRate"            , f4}
+    ,{"MlySAIntRate"                    , f4}
+    ,{"TotalIMF"                        , f4}
 // >
 // F0: zero decimals
 // > Format as a number no thousand separator or decimal point (##0%)
 // >
-    format_map["AttainedAge"                       ] = f1;
-    format_map["Duration"                          ] = f1;
-    format_map["PolicyYear"                        ] = f1;
+    ,{"AttainedAge"                     , f1}
+    ,{"Duration"                        , f1}
+    ,{"PolicyYear"                      , f1}
 // >
 // F2: two decimals, commas
 // > Format as a number with thousand separators and two decimal places (#,###,###.00)
 // >
-    format_map["AddonMonthlyFee"                   ] = f2;
+    ,{"AddonMonthlyFee"                 , f2}
 // TODO ?? The precision of 'InforceLives' and 'KFactor' is inadequate.
 // Is every other format OK?
-    format_map["InforceLives"                      ] = f2;
-    format_map["KFactor"                           ] = f2;
-    format_map["AnnualFlatExtra"                   ] = f2;
+    ,{"InforceLives"                    , f2}
+    ,{"KFactor"                         , f2}
+    ,{"AnnualFlatExtra"                 , f2}
 // >
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
 // >
-    format_map["AcctVal"                           ] = f1;
-    format_map["AccumulatedPremium"                ] = f1;
-    format_map["AddonCompOnAssets"                 ] = f1;
-    format_map["AddonCompOnPremium"                ] = f1;
-    format_map["AvgDeathBft"                       ] = f1;
-    format_map["AVGenAcct"                         ] = f1;
-    format_map["AVRelOnDeath"                      ] = f1;
-    format_map["AVSepAcct"                         ] = f1;
-    format_map["BaseDeathBft"                      ] = f1;
-    format_map["BOYAssets"                         ] = f1;
-    format_map["ClaimsPaid"                        ] = f1;
-    format_map["COICharge"                         ] = f1;
-    format_map["Composite"                         ] = f1;
-    format_map["CSVNet"                            ] = f1;
-    format_map["CV7702"                            ] = f1;
-    format_map["DacTaxLoad"                        ] = f1;
-    format_map["DacTaxRsv"                         ] = f1;
-    format_map["DeathProceedsPaid"                 ] = f1;
-    format_map["EeGrossPmt"                        ] = f1;
-    format_map["EeModalMinimumPremium"             ] = f1;
-//    format_map["EeMode"                            ] = f1; // Not numeric.
-    format_map["EePmt"                             ] = f1;
-    format_map["EOYDeathBft"                       ] = f1;
-    format_map["ErGrossPmt"                        ] = f1;
-    format_map["ErModalMinimumPremium"             ] = f1;
-//    format_map["ErMode"                            ] = f1; // Not numeric.
-    format_map["ErPmt"                             ] = f1;
-    format_map["ExpenseCharges"                    ] = f1;
-    format_map["ExperienceReserve"                 ] = f1;
-    format_map["FundNumbers"                       ] = f1;
-    format_map["GptForceout"                       ] = f1;
-    format_map["GrossIntCredited"                  ] = f1;
-    format_map["GrossPmt"                          ] = f1;
-    format_map["Loads"                             ] = f1;
-    format_map["LoanInt"                           ] = f1;
-    format_map["LoanIntAccrued"                    ] = f1;
-    format_map["ModalMinimumPremium"               ] = f1;
-    format_map["NaarForceout"                      ] = f1;
-    format_map["NetClaims"                         ] = f1;
-    format_map["NetCOICharge"                      ] = f1;
-    format_map["NetIntCredited"                    ] = f1;
-    format_map["NetPmt"                            ] = f1;
-    format_map["NetWD"                             ] = f1;
-    format_map["NewCashLoan"                       ] = f1;
-    format_map["Outlay"                            ] = f1;
-    format_map["PolicyFee"                         ] = f1;
-    format_map["PrefLoanBalance"                   ] = f1;
-    format_map["PremTaxLoad"                       ] = f1;
-    format_map["ProducerCompensation"              ] = f1;
-    format_map["ProjectedCoiCharge"                ] = f1;
-    format_map["RefundableSalesLoad"               ] = f1;
-    format_map["RiderCharges"                      ] = f1;
-    format_map["Salary"                            ] = f1;
-    format_map["SepAcctCharges"                    ] = f1;
-    format_map["SpecAmt"                           ] = f1;
-    format_map["SpecAmtLoad"                       ] = f1;
-    format_map["SpouseRiderAmount"                 ] = f1;
-    format_map["SurrChg"                           ] = f1;
-    format_map["TermPurchased"                     ] = f1;
-    format_map["TermSpecAmt"                       ] = f1;
-    format_map["TgtPrem"                           ] = f1;
-    format_map["TotalLoanBalance"                  ] = f1;
+    ,{"AcctVal"                         , f1}
+    ,{"AccumulatedPremium"              , f1}
+    ,{"AddonCompOnAssets"               , f1}
+    ,{"AddonCompOnPremium"              , f1}
+    ,{"AvgDeathBft"                     , f1}
+    ,{"AVGenAcct"                       , f1}
+    ,{"AVRelOnDeath"                    , f1}
+    ,{"AVSepAcct"                       , f1}
+    ,{"BaseDeathBft"                    , f1}
+    ,{"BOYAssets"                       , f1}
+    ,{"ClaimsPaid"                      , f1}
+    ,{"COICharge"                       , f1}
+    ,{"Composite"                       , f1}
+    ,{"CSVNet"                          , f1}
+    ,{"CV7702"                          , f1}
+    ,{"DacTaxLoad"                      , f1}
+    ,{"DacTaxRsv"                       , f1}
+    ,{"DeathProceedsPaid"               , f1}
+    ,{"EeGrossPmt"                      , f1}
+    ,{"EeModalMinimumPremium"           , f1}
+//  ,{"EeMode"                          , f1} // Not numeric.
+    ,{"EePmt"                           , f1}
+    ,{"EOYDeathBft"                     , f1}
+    ,{"ErGrossPmt"                      , f1}
+    ,{"ErModalMinimumPremium"           , f1}
+//  ,{"ErMode"                          , f1} // Not numeric.
+    ,{"ErPmt"                           , f1}
+    ,{"ExpenseCharges"                  , f1}
+    ,{"ExperienceReserve"               , f1}
+    ,{"FundNumbers"                     , f1}
+    ,{"GptForceout"                     , f1}
+    ,{"GrossIntCredited"                , f1}
+    ,{"GrossPmt"                        , f1}
+    ,{"Loads"                           , f1}
+    ,{"LoanInt"                         , f1}
+    ,{"LoanIntAccrued"                  , f1}
+    ,{"ModalMinimumPremium"             , f1}
+    ,{"NaarForceout"                    , f1}
+    ,{"NetClaims"                       , f1}
+    ,{"NetCOICharge"                    , f1}
+    ,{"NetIntCredited"                  , f1}
+    ,{"NetPmt"                          , f1}
+    ,{"NetWD"                           , f1}
+    ,{"NewCashLoan"                     , f1}
+    ,{"Outlay"                          , f1}
+    ,{"PolicyFee"                       , f1}
+    ,{"PrefLoanBalance"                 , f1}
+    ,{"PremTaxLoad"                     , f1}
+    ,{"ProducerCompensation"            , f1}
+    ,{"ProjectedCoiCharge"              , f1}
+    ,{"RefundableSalesLoad"             , f1}
+    ,{"RiderCharges"                    , f1}
+    ,{"Salary"                          , f1}
+    ,{"SepAcctCharges"                  , f1}
+    ,{"SpecAmt"                         , f1}
+    ,{"SpecAmtLoad"                     , f1}
+    ,{"SpouseRiderAmount"               , f1}
+    ,{"SurrChg"                         , f1}
+    ,{"TermPurchased"                   , f1}
+    ,{"TermSpecAmt"                     , f1}
+    ,{"TgtPrem"                         , f1}
+    ,{"TotalLoanBalance"                , f1}
+    };
 
     return format_map;
 }
