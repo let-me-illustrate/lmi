@@ -33,6 +33,7 @@
 #include "map_lookup.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_str()
 #include "miscellany.hpp"               // minmax, scale_power()
+#include "oecumenic_enumerations.hpp"   // methuselah
 
 #include <algorithm>
 #include <ostream>
@@ -78,6 +79,20 @@ Ledger::Ledger
     ,ledger_invariant_     {new LedgerInvariant(length)}
 {
     SetRunBases(length);
+
+    if(is_composite_)
+        {
+        // By default, issue age is initialized to zero, and maturity
+        // age to 100, to accord with the default 'length' of 100.
+        // Both are reset to actual values when those become known.
+        // For a composite, however, they're updated thus:
+        //   Age     = std::min(Age    , a_Addend.Age    );
+        //   EndtAge = std::max(EndtAge, a_Addend.EndtAge);
+        // as each addend is aggregated, so they must be initialized
+        // beforehand to values that would not otherwise make sense.
+        ledger_invariant_->Age     = methuselah;
+        ledger_invariant_->EndtAge = 0;
+        }
 }
 
 //============================================================================

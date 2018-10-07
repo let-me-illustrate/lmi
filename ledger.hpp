@@ -62,6 +62,8 @@ class ledger_map_holder;
 
 class LMI_SO Ledger
 {
+    friend class ledger_test;
+
   public:
     explicit Ledger
         (int                length
