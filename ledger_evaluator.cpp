@@ -137,18 +137,9 @@ bool format_exists
         }
 }
 
-} // Unnamed namespace.
-
-ledger_evaluator Ledger::make_evaluator() const
+title_map_t static_titles()
 {
-    throw_if_interdicted(*this);
-
-    LedgerInvariant const& invar = GetLedgerInvariant();
-    LedgerVariant   const& curr  = GetCurrFull();
-    LedgerVariant   const& guar  = GetGuarFull();
-
-    title_map_t title_map;
-
+    static title_map_t title_map;
 //  Here are the columns to be listed in the user interface
 //  as well as their corresponding titles.
 
@@ -293,7 +284,12 @@ ledger_evaluator Ledger::make_evaluator() const
     // written in 2006-07. DATABASE !! So consider adding them there
     // when the database is revamped.
 
-    mask_map_t mask_map;
+    return title_map;
+}
+
+mask_map_t static_masks()
+{
+    static mask_map_t mask_map;
 
     mask_map ["AVGenAcct_CurrentZero"           ] = "999,999,999";
     mask_map ["AVGenAcct_GuaranteedZero"        ] = "999,999,999";
@@ -421,6 +417,13 @@ ledger_evaluator Ledger::make_evaluator() const
     mask_map ["TotalLoanBalance_Current"        ] = "999,999,999";
     mask_map ["TotalLoanBalance_Guaranteed"     ] = "999,999,999";
 
+    return mask_map;
+}
+
+format_map_t static_formats()
+{
+    static format_map_t format_map;
+
 // Here's my top-level analysis of the formatting specification.
 //
 // Formats
@@ -443,8 +446,6 @@ ledger_evaluator Ledger::make_evaluator() const
     std::pair<int,oenum_format_style> f2(2, oe_format_normal);
     std::pair<int,oenum_format_style> f3(0, oe_format_percentage);
     std::pair<int,oenum_format_style> f4(2, oe_format_percentage);
-
-    format_map_t format_map;
 
 // > Special Formatting for Scalar Items
 // >
@@ -671,6 +672,29 @@ ledger_evaluator Ledger::make_evaluator() const
     format_map["TermSpecAmt"                       ] = f1;
     format_map["TgtPrem"                           ] = f1;
     format_map["TotalLoanBalance"                  ] = f1;
+
+    return format_map;
+}
+} // Unnamed namespace.
+
+ledger_evaluator Ledger::make_evaluator() const
+{
+    throw_if_interdicted(*this);
+
+    LedgerInvariant const& invar = GetLedgerInvariant();
+    LedgerVariant   const& curr  = GetCurrFull();
+    LedgerVariant   const& guar  = GetGuarFull();
+
+    title_map_t title_map {static_titles()};
+
+    mask_map_t mask_map {static_masks()};
+
+    std::pair<int,oenum_format_style> f1(0, oe_format_normal);
+    std::pair<int,oenum_format_style> f2(2, oe_format_normal);
+    std::pair<int,oenum_format_style> f3(0, oe_format_percentage);
+    std::pair<int,oenum_format_style> f4(2, oe_format_percentage);
+
+    format_map_t format_map {static_formats()};
 
     // This is a little tricky. We have some stuff that
     // isn't in the maps inside the ledger classes. We're going to
