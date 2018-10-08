@@ -555,7 +555,6 @@ void PrintCellTabDelimited
         ,"ExperienceReserve0Int"
         ,"ProjectedMortalityCharge0Int"
         ,"KFactor0Int"
-        ,"ProducerCompensation"
         };
 
     for(auto const& i : sheaders)
@@ -647,8 +646,6 @@ void PrintCellTabDelimited
             {
             alarum() << "Three-rate illustrations not supported." << LMI_FLUSH;
             }
-
-        os << Invar.value_str("ProducerCompensation"  ,j) << '\t';
 
         os << '\n';
         }

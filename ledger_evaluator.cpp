@@ -200,13 +200,9 @@ title_map_t static_titles()
     ,{"EeGrossPmt"                      , "EE Gross\nPayment"}
     ,{"EeModalMinimumPremium"           , "EE Modal\nMinimum\nPremium"}
     ,{"EeMode"                          , "EE\nPayment\nMode"}
-// TODO ?? This can't be a mode. I don't know how it differs from 'EeGrossPmt' above.
-    ,{"EePmt"                           , "EE\nPayment\nMode"}
     ,{"ErGrossPmt"                      , "ER Gross\nPayment"}
     ,{"ErModalMinimumPremium"           , "ER Modal\nMinimum\nPremium"}
     ,{"ErMode"                          , "ER\nPayment\nMode"}
-// TODO ?? This can't be a mode. I don't know how it differs from 'ErGrossPmt' above.
-    ,{"ErPmt"                           , "ER\nPayment\nMode"}
     ,{"ExpenseCharges_Current"          , "Curr\nExpense\nCharge"}
     ,{"ExpenseCharges_Guaranteed"       , "Guar\nExpense\nCharge"}
     ,{"ExperienceReserve_Current"       , "Experience\nRating\nReserve"}
@@ -253,8 +249,6 @@ title_map_t static_titles()
     ,{"PrefLoanBalance_Guaranteed"      , "Guar\nPreferred\nLoan Bal"}
     ,{"PremTaxLoad_Current"             , "Curr\nPremium\nTax Load"}
     ,{"PremTaxLoad_Guaranteed"          , "Guar\nPremium\nTax Load"}
-// Excluded because it's unimplemented:
-//  ,{"ProducerCompensation"            , "Producer\nCompensation"}
     ,{"ProjectedCoiCharge_Current"      , "Experience\nRating\nProjected\nCOI Charge"}
     ,{"RefundableSalesLoad"             , "Refundable\nSales\nLoad"}
     ,{"RiderCharges_Current"            , "Curr Rider\nCharges"}
@@ -343,13 +337,9 @@ mask_map_t static_masks()
     ,{"EeGrossPmt"                      , "999,999,999"}
     ,{"EeModalMinimumPremium"           , "999,999,999"}
     ,{"EeMode"                          ,  "Semiannual"}
-// This can't be a mode. I don't know how it differs from 'EeGrossPmt' above.
-    ,{"EePmt"                           , "999,999,999"}
     ,{"ErGrossPmt"                      , "999,999,999"}
     ,{"ErModalMinimumPremium"           , "999,999,999"}
     ,{"ErMode"                          ,  "Semiannual"}
-// This can't be a mode. I don't know how it differs from 'ErGrossPmt' above.
-    ,{"ErPmt"                           , "999,999,999"}
     ,{"ExpenseCharges_Current"          , "999,999,999"}
     ,{"ExpenseCharges_Guaranteed"       , "999,999,999"}
     ,{"ExperienceReserve_Current"       , "999,999,999"}
@@ -396,8 +386,6 @@ mask_map_t static_masks()
     ,{"PrefLoanBalance_Guaranteed"      , "999,999,999"}
     ,{"PremTaxLoad_Current"             , "999,999,999"}
     ,{"PremTaxLoad_Guaranteed"          , "999,999,999"}
-// Excluded because it's unimplemented:
-//  ,{"ProducerCompensation"            , "999,999,999"}
     ,{"ProjectedCoiCharge_Current"      , "999,999,999"}
     ,{"RefundableSalesLoad"             , "999,999,999"}
     ,{"RiderCharges_Current"            , "999,999,999"}
@@ -631,12 +619,10 @@ format_map_t static_formats()
     ,{"EeGrossPmt"                      , f1}
     ,{"EeModalMinimumPremium"           , f1}
 //  ,{"EeMode"                          , f1} // Not numeric.
-    ,{"EePmt"                           , f1}
     ,{"EOYDeathBft"                     , f1}
     ,{"ErGrossPmt"                      , f1}
     ,{"ErModalMinimumPremium"           , f1}
 //  ,{"ErMode"                          , f1} // Not numeric.
-    ,{"ErPmt"                           , f1}
     ,{"ExpenseCharges"                  , f1}
     ,{"ExperienceReserve"               , f1}
     ,{"FundNumbers"                     , f1}
@@ -658,7 +644,6 @@ format_map_t static_formats()
     ,{"PolicyFee"                       , f1}
     ,{"PrefLoanBalance"                 , f1}
     ,{"PremTaxLoad"                     , f1}
-    ,{"ProducerCompensation"            , f1}
     ,{"ProjectedCoiCharge"              , f1}
     ,{"RefundableSalesLoad"             , f1}
     ,{"RiderCharges"                    , f1}

@@ -1605,7 +1605,6 @@ void AccountValue::FinalizeYear()
 
 // SOMEDAY !! Not yet implemented.
 //        InvariantValues().NaarForceout[Year] = InvariantValues().ErGrossPmt[Year];
-//        InvariantValues().ProducerCompensation[Year] =
         }
 }
 
