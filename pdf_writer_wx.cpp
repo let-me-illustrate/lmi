@@ -64,6 +64,29 @@ void DoSetFonts(T& html_object, pdf_writer_wx::html_font_sizes const& font_sizes
     html_object.SetFonts("Helvetica", "Courier", font_sizes.data());
 }
 
+// Helper ensuring that the font of the specified DC is restored on scope exit.
+class dc_font_preserver
+{
+  public:
+    explicit dc_font_preserver(wxDC& dc)
+        :dc_   {dc}
+        ,font_ {dc.GetFont()}
+    {
+    }
+
+    ~dc_font_preserver()
+    {
+        dc_.SetFont(font_);
+    }
+
+    dc_font_preserver(dc_font_preserver const&) = delete;
+    dc_font_preserver& operator=(dc_font_preserver const&) = delete;
+
+  private:
+    wxDC&        dc_;
+    wxFont const font_;
+};
+
 } // Unnamed namespace.
 
 pdf_writer_wx::pdf_writer_wx
@@ -239,9 +262,8 @@ int pdf_writer_wx::output_html
 {
     LMI_ASSERT(!save_has_been_called_);
 
-    // We don't really want to change the font, but to preserve the current DC
-    // font which is changed by rendering the HTML contents.
-    wxDCFontChanger preserve_font(pdf_dc_, *wxNORMAL_FONT);
+    // Preserve the current font changed by rendering the HTML contents.
+    dc_font_preserver font_preserver(pdf_dc_);
 
     cell.Layout(width);
     switch(output_mode)
@@ -335,9 +357,8 @@ void pdf_writer_wx::initialize_html_parser(wxHtmlWinParser& html_parser)
 
 std::unique_ptr<wxHtmlContainerCell> pdf_writer_wx::parse_html(html::text&& html)
 {
-    // We don't really want to change the font, but to preserve the current DC
-    // font which is changed by parsing the HTML contents.
-    wxDCFontChanger preserve_font(pdf_dc_, *wxNORMAL_FONT);
+    // Preserve the current font changed by parsing the HTML contents.
+    dc_font_preserver font_preserver(pdf_dc_);
 
     return std::unique_ptr<wxHtmlContainerCell>
         (static_cast<wxHtmlContainerCell*>
@@ -361,7 +382,7 @@ pdf_writer_wx::make_html_from(wxHtmlCell* cell)
 {
     // Initializing wxHtmlWinParser changes the font of the DC, so
     // ensure that we preserve the original font.
-    wxDCFontChanger preserve_font(writer.dc(), *wxNORMAL_FONT);
+    dc_font_preserver font_preserver(pdf_dc_);
 
     wxHtmlWinParser html_parser;
     initialize_html_parser(html_parser);
