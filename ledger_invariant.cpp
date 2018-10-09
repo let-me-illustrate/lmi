@@ -78,8 +78,6 @@ void LedgerInvariant::Alloc(int len)
 {
     Length  = len;
 
-    BegYearVectors  ["EePmt"                 ] = &EePmt                  ;
-    BegYearVectors  ["ErPmt"                 ] = &ErPmt                  ;
     BegYearVectors  ["TgtPrem"               ] = &TgtPrem                ;
     BegYearVectors  ["GrossPmt"              ] = &GrossPmt               ;
     BegYearVectors  ["EeGrossPmt"            ] = &EeGrossPmt             ;
@@ -95,7 +93,6 @@ void LedgerInvariant::Alloc(int len)
 
     EndYearVectors  ["TermSpecAmt"           ] = &TermSpecAmt            ;
     EndYearVectors  ["SpecAmt"               ] = &SpecAmt                ;
-    EndYearVectors  ["ProducerCompensation"  ] = &ProducerCompensation   ;
 
     OtherVectors    ["IndvTaxBracket"        ] = &IndvTaxBracket         ;
     OtherVectors    ["CorpTaxBracket"        ] = &CorpTaxBracket         ;

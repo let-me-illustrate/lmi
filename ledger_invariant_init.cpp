@@ -50,11 +50,9 @@ void LedgerInvariant::Init(BasicValues const* b)
 
     irr_precision_ = b->round_irr().decimals();
 
-// TODO ?? These names are confusing. EePmt and ErPmt are *input* values.
-// If they're entered as $1000 for all years, then they have that value
-// every year, even after lapse. Variables whose names end in -'GrossPmt'
-// hold the results of transaction processing, e.g. $0 after lapse.
-// EePmt and ErPmt are used e.g. in premium-strategy calculations.
+// EePmt and ErPmt are *input* values, used only as a kludge, e.g. in
+// premium-strategy calculations. Use E[er]GrossPmt for illustrations:
+// they're *output* values that result from transaction processing.
 
     EePmt           = b->Outlay_->ee_modal_premiums();
     ErPmt           = b->Outlay_->er_modal_premiums();
@@ -87,7 +85,6 @@ void LedgerInvariant::Init(BasicValues const* b)
 //    ModalMinimumPremium   =
 //    EeModalMinimumPremium =
 //    ErModalMinimumPremium =
-//    ProducerCompensation  =
 
     HasSupplSpecAmt = false;
     if(b->yare_input_.TermRider)

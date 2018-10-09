@@ -30,6 +30,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <utility>                      // move()
 #include <vector>
 
 /// Class allowing to retrieve the string representation of any scalar or
@@ -52,8 +53,8 @@ class LMI_SO ledger_evaluator
   private:
     // Constructible only by friends: see Ledger::make_evaluator().
     ledger_evaluator(scalar_map_t&& scalars, vector_map_t&& vectors)
-        :scalars_ {scalars}
-        ,vectors_ {vectors}
+        :scalars_ {std::move(scalars)}
+        ,vectors_ {std::move(vectors)}
     {
     }
 

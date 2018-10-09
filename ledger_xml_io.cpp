@@ -210,13 +210,9 @@ void Ledger::write(xml::element& x) const
     title_map["EeGrossPmt"                      ] = " _____________ ______ EE Gross Payment";
     title_map["EeModalMinimumPremium"           ] = "EE Modal Minimum Premium";
     title_map["EeMode"                          ] = "EE Payment Mode";
-// TODO ?? This can't be a mode. I don't know how it differs from 'EeGrossPmt' above.
-    title_map["EePmt"                           ] = "EE Payment Mode";
     title_map["ErGrossPmt"                      ] = " _____________ ______ ER Gross Payment";
     title_map["ErModalMinimumPremium"           ] = "ER Modal Minimum Premium";
     title_map["ErMode"                          ] = "ER Payment Mode";
-// TODO ?? This can't be a mode. I don't know how it differs from 'ErGrossPmt' above.
-    title_map["ErPmt"                           ] = "ER Payment Mode";
     title_map["ExpenseCharges_Current"          ] = "Curr Expense Charge";
     title_map["ExpenseCharges_Guaranteed"       ] = "Guar Expense Charge";
     title_map["ExperienceReserve_Current"       ] = " _____________ Experience Rating Reserve";
@@ -263,8 +259,6 @@ void Ledger::write(xml::element& x) const
     title_map["PrefLoanBalance_Guaranteed"      ] = "Guar Preferred Loan Bal";
     title_map["PremTaxLoad_Current"             ] = "Curr Premium Tax Load";
     title_map["PremTaxLoad_Guaranteed"          ] = "Guar Premium Tax Load";
-// Excluded because it's unimplemented:
-//    title_map["ProducerCompensation"            ] = " _____________ Producer Compensation";
     title_map["ProjectedCoiCharge_Current"      ] = "Experience Rating Projected COI Charge";
     title_map["RefundableSalesLoad"             ] = " _____________ Refundable Sales Load";
     title_map["RiderCharges_Current"            ] = " _____________ _____________ Curr Rider Charges";
@@ -503,12 +497,10 @@ void Ledger::write(xml::element& x) const
     format_map["EeGrossPmt"                        ] = f1;
     format_map["EeModalMinimumPremium"             ] = f1;
 //    format_map["EeMode"                            ] = f1; // Not numeric.
-    format_map["EePmt"                             ] = f1;
     format_map["EOYDeathBft"                       ] = f1;
     format_map["ErGrossPmt"                        ] = f1;
     format_map["ErModalMinimumPremium"             ] = f1;
 //    format_map["ErMode"                            ] = f1; // Not numeric.
-    format_map["ErPmt"                             ] = f1;
     format_map["ExpenseCharges"                    ] = f1;
     format_map["ExperienceReserve"                 ] = f1;
     format_map["FundNumbers"                       ] = f1;
@@ -530,7 +522,6 @@ void Ledger::write(xml::element& x) const
     format_map["PolicyFee"                         ] = f1;
     format_map["PrefLoanBalance"                   ] = f1;
     format_map["PremTaxLoad"                       ] = f1;
-    format_map["ProducerCompensation"              ] = f1;
     format_map["ProjectedCoiCharge"                ] = f1;
     format_map["RefundableSalesLoad"               ] = f1;
     format_map["RiderCharges"                      ] = f1;

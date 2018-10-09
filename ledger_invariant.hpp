@@ -69,8 +69,6 @@ class LMI_SO LedgerInvariant
 // (e.g., outlay) could be calculated dynamically instead of stored.
 
     // BOY vectors.
-    std::vector<double> EePmt;
-    std::vector<double> ErPmt;
     std::vector<double> TgtPrem;    // Not currently used?
     std::vector<double> GrossPmt;   // TODO ?? Why "gross"?
     std::vector<double> EeGrossPmt;
@@ -87,10 +85,6 @@ class LMI_SO LedgerInvariant
     // EOY vectors.
     std::vector<double> TermSpecAmt;
     std::vector<double> SpecAmt;
-    // Compensation is treated as an EOY vector because it must
-    // reflect between-anniversary processing: premium may be
-    // limited, and assets are certain to vary during the year.
-    std::vector<double> ProducerCompensation;
 
     // Other vectors.
     std::vector<double> IndvTaxBracket;
@@ -111,6 +105,9 @@ class LMI_SO LedgerInvariant
     // any tiered component, but in that case it would vary by basis.
     std::vector<double> TotalIMF;
     std::vector<double> RefundableSalesLoad;
+    // These two are used only for a payment-strategy kludge:
+    std::vector<double> EePmt;
+    std::vector<double> ErPmt;
 
     // Special-case vectors (not <double>, or different length than others).
     std::vector<mce_mode> EeMode;
