@@ -463,7 +463,7 @@ TAG_HANDLER_BEGIN(page_header, "HEADER")
         // would be removed from the containing HTML document later and it
         // would use default font instead of the one set by pdf_writer_wx.
         auto container = m_WParser->GetContainer();
-        if (container->GetFirstChild())
+        if(container->GetFirstChild())
             {
             // It isn't, so we need to open a new one, which we will mark as
             // being the actual header cell.
@@ -1710,7 +1710,7 @@ TAG_HANDLER_BEGIN(unbreakable_paragraph, "P")
 
         // As usual, reuse the current container if it's empty.
         auto container = m_WParser->GetContainer();
-        if (container->GetFirstChild())
+        if(container->GetFirstChild())
             {
             // It isn't, we need to open a new one.
             m_WParser->CloseContainer();
