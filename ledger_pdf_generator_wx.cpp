@@ -454,17 +454,22 @@ static char const* const header_cell_id = "_lmi_page_header_id";
 TAG_HANDLER_BEGIN(page_header, "HEADER")
     TAG_HANDLER_PROC(tag)
     {
-        // Although the header typically occurs at the very beginning of the
+        // As usual, reuse the current container if empty. That's unlikely:
+        // although the header typically occurs at the very beginning of the
         // HTML template, it doesn't mean that the current container is empty,
         // quite on the contrary, it typically isn't because it contains the
         // cells setting the initial colors and font for the HTML body and we
         // must not make these cells part of the header cell as otherwise they
         // would be removed from the containing HTML document later and it
         // would use default font instead of the one set by pdf_writer_wx.
-        // So first, close the existing container and open a new one which we
-        // will mark as being the actual header cell.
-        m_WParser->CloseContainer();
-        auto const container = m_WParser->OpenContainer();
+        auto container = m_WParser->GetContainer();
+        if (container->GetFirstChild())
+            {
+            // It isn't, so we need to open a new one, which we will mark as
+            // being the actual header cell.
+            m_WParser->CloseContainer();
+            container = m_WParser->OpenContainer();
+            }
 
         // Set a unique ID for this container to allow finding it later.
         container->SetId(header_cell_id);
