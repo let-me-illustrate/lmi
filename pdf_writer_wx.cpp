@@ -350,6 +350,33 @@ std::unique_ptr<wxHtmlContainerCell> pdf_writer_wx::parse_html(html::text&& html
         );
 }
 
+/// Construct a self-contained HTML document from the given cell.
+///
+/// The function takes ownership of its argument and attaches it to the new,
+/// empty, HTML document using the same parameters (i.e. fonts) as all the
+/// other HTML created by output_html().
+
+std::unique_ptr<wxHtmlContainerCell>
+pdf_writer_wx::make_html_from(wxHtmlCell* cell)
+{
+    // Initializing wxHtmlWinParser changes the font of the DC, so
+    // ensure that we preserve the original font.
+    wxDCFontChanger preserve_font(writer.dc(), *wxNORMAL_FONT);
+
+    wxHtmlWinParser html_parser;
+    initialize_html_parser(html_parser);
+    html_parser.InitParser(wxString{});
+
+    auto document_cell = std::make_unique<wxHtmlContainerCell>
+        (static_cast<wxHtmlContainerCell*>(html_parser.GetProduct())
+        );
+
+    // Give ownership of the cell to the new document.
+    document_cell->InsertCell(cell);
+
+    return document_cell;
+}
+
 int pdf_writer_wx::get_horz_margin() const
 {
     return horz_margin;
