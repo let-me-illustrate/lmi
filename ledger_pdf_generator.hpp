@@ -50,7 +50,7 @@ class LMI_SO ledger_pdf_generator
 
     virtual ~ledger_pdf_generator() = default;
 
-    virtual void write(Ledger const& ledger, fs::path const& output) = 0;
+    virtual void write(Ledger const& ledger, fs::path const& output) const = 0;
 
   protected:
     ledger_pdf_generator() = default;

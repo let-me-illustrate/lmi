@@ -3151,15 +3151,13 @@ class ledger_pdf_generator_wx : public ledger_pdf_generator
     ledger_pdf_generator_wx(ledger_pdf_generator_wx const&) = delete;
     ledger_pdf_generator_wx& operator=(ledger_pdf_generator_wx const&) = delete;
 
-    void write(Ledger const& ledger, fs::path const& pdf_out_file) override;
-
-  private:
+    void write(Ledger const&, fs::path const&) const override;
 };
 
 void ledger_pdf_generator_wx::write
     (Ledger   const& ledger
     ,fs::path const& pdf_out_file
-    )
+    ) const
 {
     wxBusyCursor reverie;
 
