@@ -1404,24 +1404,14 @@ class standard_page : public numbered_page
                 // rendered as part of the page body.
                 page_body_cell_->Detach(cell);
 
-                // Initializing wxHtmlWinParser changes the font of the DC, so
-                // ensure that we preserve the original font.
-                wxDCFontChanger preserve_font(writer.dc(), *wxNORMAL_FONT);
-
-                // And attach it to another HTML document representing just
-                // the header contents.
+                // And convert it to self-containing HTML document representing
+                // just the header contents.
                 //
                 // Note that we can't just use this cell on its own, we
                 // must let wxHtmlWinParser build the usual structure as
                 // wxHTML relies on having extra cells in its DOM, notably
                 // the wxHtmlFontCell setting the initial document font.
-                wxHtmlWinParser html_parser;
-                writer.initialize_html_parser(html_parser);
-                html_parser.InitParser(wxString{});
-                header_cell_.reset
-                    (static_cast<wxHtmlContainerCell*>(html_parser.GetProduct())
-                    );
-                header_cell_->InsertCell(cell);
+                header_cell_ = writer.make_html_from(cell);
 
                 break;
                 }

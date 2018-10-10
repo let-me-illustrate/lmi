@@ -108,9 +108,9 @@ class pdf_writer_wx
 
     // Helper methods for working with HTML contents.
 
-    void initialize_html_parser(wxHtmlWinParser& html_parser);
-
     std::unique_ptr<wxHtmlContainerCell> parse_html(html::text&& html);
+
+    std::unique_ptr<wxHtmlContainerCell> make_html_from(wxHtmlCell* cell);
 
     // Page metrics: the page width and height are the size of the page region
     // reserved for the normal contents, excluding horizontal and vertical
@@ -124,6 +124,8 @@ class pdf_writer_wx
     int get_page_bottom() const;
 
   private:
+    void initialize_html_parser(wxHtmlWinParser& html_parser);
+
     wxPrintData print_data_;
     wxPdfDC pdf_dc_;
 
