@@ -28,9 +28,9 @@
 #include "global_settings.hpp" // PDF !! expunge
 #include "ledger.hpp"
 #include "ledger_invariant.hpp" // PDF !! expunge
-#include "ledger_pdf_generator.hpp"
 #include "ledger_xsl.hpp" // PDF !! expunge
 #include "path_utility.hpp"             // unique_filepath()
+#include "pdf_command.hpp"
 
 #include <iostream>                     // cerr // PDF !! expunge
 
@@ -93,8 +93,7 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
     // PDF !! Expunge this 'if' line (but not the statement it controls):
     if(0 == scaled_ledger.GetLedgerInvariant().ScalePower())
     scaled_ledger.AutoScale();
-    auto const pdf = ledger_pdf_generator::create();
-    pdf->write(scaled_ledger, pdf_out_file);
+    pdf_command(scaled_ledger, pdf_out_file);
 
     return pdf_out_file.string();
 }

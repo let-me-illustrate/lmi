@@ -1,4 +1,4 @@
-// Generate PDF files with ledger data.
+// Create a PDF file from a ledger.
 //
 // Copyright (C) 2017, 2018 Gregory W. Chicares.
 //
@@ -21,26 +21,25 @@
 
 #include "pchfile.hpp"
 
-#include "ledger_pdf_generator.hpp"
+#include "pdf_command.hpp"
 
 #include "callback.hpp"
 
 namespace
 {
-callback<ledger_pdf_generator::creator_type>
-    group_quote_pdf_generator_create_callback;
+    callback<pdf_command_fp_type> pdf_command_callback;
 } // Unnamed namespace.
 
-typedef ledger_pdf_generator::creator_type FunctionPointer;
+typedef pdf_command_fp_type FunctionPointer;
 template<> FunctionPointer callback<FunctionPointer>::function_pointer_ = nullptr;
 
-bool ledger_pdf_generator::set_creator(creator_type f)
+bool pdf_command_initialize(pdf_command_fp_type f)
 {
-    group_quote_pdf_generator_create_callback.initialize(f);
+    pdf_command_callback.initialize(f);
     return true;
 }
 
-std::shared_ptr<ledger_pdf_generator> ledger_pdf_generator::create()
+void pdf_command(Ledger const& ledger, fs::path const& pdf_out_file)
 {
-    return group_quote_pdf_generator_create_callback()();
+    pdf_command_callback()(ledger, pdf_out_file);
 }

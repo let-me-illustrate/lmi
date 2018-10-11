@@ -204,7 +204,6 @@ libskeleton_la_SOURCES = \
     illustration_document.cpp \
     illustration_view.cpp \
     input_sequence_entry.cpp \
-    ledger_pdf_generator_wx.cpp \
     main_common.cpp \
     mec_document.cpp \
     mec_view.cpp \
@@ -213,6 +212,7 @@ libskeleton_la_SOURCES = \
     multidimgrid_tools.cpp \
     mvc_controller.cpp \
     mvc_view.cpp \
+    pdf_command_wx.cpp \
     pdf_writer_wx.cpp \
     policy_document.cpp \
     policy_view.cpp \
@@ -372,7 +372,6 @@ liblmi_common_sources = \
     ledger_invariant.cpp \
     ledger_invariant_init.cpp \
     ledger_pdf.cpp \
-    ledger_pdf_generator.cpp \
     ledger_text_formats.cpp \
     ledger_variant.cpp \
     ledger_variant_init.cpp \
@@ -392,6 +391,7 @@ liblmi_common_sources = \
     null_stream.cpp \
     outlay.cpp \
     path_utility.cpp \
+    pdf_command.cpp \
     premium_tax.cpp \
     progress_meter.cpp \
     round_glibc.cpp \
@@ -1297,7 +1297,6 @@ noinst_HEADERS = \
     ledger_evaluator.hpp \
     ledger_invariant.hpp \
     ledger_pdf.hpp \
-    ledger_pdf_generator.hpp \
     ledger_text_formats.hpp \
     ledger_variant.hpp \
     ledger_xsl.hpp \
@@ -1350,6 +1349,7 @@ noinst_HEADERS = \
     outlay.hpp \
     path_utility.hpp \
     pchfile.hpp \
+    pdf_command.hpp \
     platform_dependent.hpp \
     policy_document.hpp \
     policy_view.hpp \

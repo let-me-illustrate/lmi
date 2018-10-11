@@ -234,7 +234,6 @@ common_common_objects := \
   ledger_invariant.o \
   ledger_invariant_init.o \
   ledger_pdf.o \
-  ledger_pdf_generator.o \
   ledger_text_formats.o \
   ledger_variant.o \
   ledger_variant_init.o \
@@ -254,6 +253,7 @@ common_common_objects := \
   null_stream.o \
   outlay.o \
   path_utility.o \
+  pdf_command.o \
   premium_tax.o \
   progress_meter.o \
   round_glibc.o \
@@ -342,7 +342,6 @@ skeleton_objects := \
   illustration_document.o \
   illustration_view.o \
   input_sequence_entry.o \
-  ledger_pdf_generator_wx.o \
   main_common.o \
   mec_document.o \
   mec_view.o \
@@ -351,6 +350,7 @@ skeleton_objects := \
   multidimgrid_tools.o \
   mvc_controller.o \
   mvc_view.o \
+  pdf_command_wx.o \
   pdf_writer_wx.o \
   policy_document.o \
   policy_view.o \
