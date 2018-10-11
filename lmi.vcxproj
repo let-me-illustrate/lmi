@@ -515,7 +515,6 @@
     <ClCompile Include="ledger_invariant.cpp" />
     <ClCompile Include="ledger_invariant_init.cpp" />
     <ClCompile Include="ledger_pdf.cpp" />
-    <ClCompile Include="ledger_pdf_generator.cpp" />
     <ClCompile Include="ledger_text_formats.cpp" />
     <ClCompile Include="ledger_variant.cpp" />
     <ClCompile Include="ledger_variant_init.cpp" />
@@ -560,6 +559,7 @@
     <ClCompile Include="null_stream.cpp" />
     <ClCompile Include="outlay.cpp" />
     <ClCompile Include="path_utility.cpp" />
+    <ClCompile Include="pdf_command.cpp" />
     <ClCompile Include="preferences_model.cpp" />
     <ClCompile Include="premium_tax.cpp" />
     <ClCompile Include="product_data.cpp" />

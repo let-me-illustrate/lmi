@@ -250,6 +250,9 @@
     <ClCompile Include="path_utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pdf_command.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="preferences_model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -314,9 +317,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ledger_evaluator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ledger_pdf_generator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ledger_pdf.cpp">
