@@ -1,4 +1,4 @@
-// Generate PDF files with ledger data using wxPdfDocument library.
+// Create a PDF file from a ledger--wx interface.
 //
 // Copyright (C) 2017, 2018 Gregory W. Chicares.
 //
@@ -56,14 +56,14 @@
 #include <exception>                    // uncaught_exceptions()
 #include <fstream>
 #include <map>
-#include <memory>                       // make_unique(), shared_ptr, unique_ptr
+#include <memory>                       // make_unique(), unique_ptr
 #include <sstream>
 #include <stdexcept>
 #include <string>
 #include <utility>                      // forward(), move()
 #include <vector>
 
-LMI_FORCE_LINKING_IN_SITU(ledger_pdf_generator_wx)
+LMI_FORCE_LINKING_IN_SITU(pdf_command_wx)
 
 namespace
 {
@@ -3138,26 +3138,14 @@ class pdf_illustration_reg_d_indiv : public pdf_illustration
         return "reg_d_indiv_footer_lower";
     }
 };
+} // Unnamed namespace.
 
-class ledger_pdf_generator_wx : public ledger_pdf_generator
+// Implementing this function in a GUI module lets wxPdfDoc be used.
+// Currently, no other interface writes PDF files.
+
+namespace
 {
-  public:
-    static std::shared_ptr<ledger_pdf_generator> do_create()
-        {
-        return std::make_shared<ledger_pdf_generator_wx>();
-        }
-
-    ledger_pdf_generator_wx() = default;
-    ledger_pdf_generator_wx(ledger_pdf_generator_wx const&) = delete;
-    ledger_pdf_generator_wx& operator=(ledger_pdf_generator_wx const&) = delete;
-
-    void write(Ledger const&, fs::path const&) const override;
-};
-
-void ledger_pdf_generator_wx::write
-    (Ledger   const& ledger
-    ,fs::path const& pdf_out_file
-    ) const
+void concrete_pdf_command(Ledger const& ledger, fs::path const& pdf_out_file)
 {
     wxBusyCursor reverie;
 
@@ -3183,8 +3171,5 @@ void ledger_pdf_generator_wx::write
         }
 }
 
-volatile bool ensure_setup = ledger_pdf_generator::set_creator
-    (ledger_pdf_generator_wx::do_create
-    );
-
+bool volatile ensure_setup = pdf_command_initialize(concrete_pdf_command);
 } // Unnamed namespace.

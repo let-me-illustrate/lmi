@@ -93,8 +93,7 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
     // PDF !! Expunge this 'if' line (but not the statement it controls):
     if(0 == scaled_ledger.GetLedgerInvariant().ScalePower())
     scaled_ledger.AutoScale();
-    auto const pdf = ledger_pdf_generator::create();
-    pdf->write(scaled_ledger, pdf_out_file);
+    pdf_command(scaled_ledger, pdf_out_file);
 
     return pdf_out_file.string();
 }

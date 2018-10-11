@@ -1,4 +1,4 @@
-// Generate PDF files with ledger data.
+// Create a PDF file from a ledger.
 //
 // Copyright (C) 2017, 2018 Gregory W. Chicares.
 //
@@ -28,36 +28,12 @@
 
 #include <boost/filesystem/path.hpp>
 
-#include <memory>                       // shared_ptr
-
 class Ledger;
 
-/// Abstract base class for generating PDFs with ledger data.
-///
-/// Although there is currently only a single concrete implementation of this
-/// abstract base class and no other implementations are planned, splitting the
-/// PDF generation functionality into an abstract base and the concrete derived
-/// class is still needed because the former is part of liblmi while the latter
-/// uses wxPdfDocument and other wx facilities and is only part of libskeleton.
+typedef void (*pdf_command_fp_type)(Ledger const&, fs::path const&);
 
-class LMI_SO ledger_pdf_generator
-{
-  public:
-    typedef std::shared_ptr<ledger_pdf_generator> (*creator_type)();
+bool LMI_SO pdf_command_initialize(pdf_command_fp_type);
 
-    static bool set_creator(creator_type);
-    static std::shared_ptr<ledger_pdf_generator> create();
-
-    virtual ~ledger_pdf_generator() = default;
-
-    virtual void write(Ledger const& ledger, fs::path const& output) const = 0;
-
-  protected:
-    ledger_pdf_generator() = default;
-
-  private:
-    ledger_pdf_generator(ledger_pdf_generator const&) = delete;
-    ledger_pdf_generator& operator=(ledger_pdf_generator const&) = delete;
-};
+void LMI_SO pdf_command(Ledger const&, fs::path const&);
 
 #endif // ledger_pdf_generator_hpp
