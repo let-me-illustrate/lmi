@@ -19,8 +19,8 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifndef ledger_pdf_generator_hpp
-#define ledger_pdf_generator_hpp
+#ifndef pdf_command_hpp
+#define pdf_command_hpp
 
 #include "config.hpp"
 
@@ -36,4 +36,4 @@ bool LMI_SO pdf_command_initialize(pdf_command_fp_type);
 
 void LMI_SO pdf_command(Ledger const&, fs::path const&);
 
-#endif // ledger_pdf_generator_hpp
+#endif // pdf_command_hpp

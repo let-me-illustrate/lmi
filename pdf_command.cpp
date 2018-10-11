@@ -21,7 +21,7 @@
 
 #include "pchfile.hpp"
 
-#include "ledger_pdf_generator.hpp"
+#include "pdf_command.hpp"
 
 #include "callback.hpp"
 

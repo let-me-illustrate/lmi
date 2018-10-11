@@ -21,7 +21,7 @@
 
 #include "pchfile_wx.hpp"
 
-#include "ledger_pdf_generator.hpp"
+#include "pdf_command.hpp"
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"

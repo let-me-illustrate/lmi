@@ -28,9 +28,9 @@
 #include "global_settings.hpp" // PDF !! expunge
 #include "ledger.hpp"
 #include "ledger_invariant.hpp" // PDF !! expunge
-#include "ledger_pdf_generator.hpp"
 #include "ledger_xsl.hpp" // PDF !! expunge
 #include "path_utility.hpp"             // unique_filepath()
+#include "pdf_command.hpp"
 
 #include <iostream>                     // cerr // PDF !! expunge
 
