@@ -101,10 +101,10 @@ void initialize_filesystem()
 /// or [0-9A-Za-z_] matches the result, '_' having replaced all
 /// other characters.
 ///
-/// Motivation: create a valid filename for apache fop, which, being
-/// written in 'java', has its own notion of portability that may
-/// clash with every platform it's implemented on. Thus, only pathless
-/// filenames should be operated upon: hypothetically, given
+/// Original motivation: create a valid filename for apache fop, which
+/// used the 'java' notion of portability that may clash with every
+/// platform it's implemented on. Thus, only pathless filenames should
+/// be operated upon: hypothetically, given
 ///   /Fyodor Dostoyevskiy/Crime and Punishment.text
 /// it would be all right to create
 ///   /Fyodor Dostoyevskiy/Crime_and_Punishment.pdf

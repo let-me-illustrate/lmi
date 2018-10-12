@@ -43,6 +43,9 @@
         own "skin" and "default" files. Each time this test is run,
         only one pair of the following lines exists at a time:
 
+PDF !! Here and passim, change 'fop' to something reasonable, e.g.:
+  <default_input_filename>c:/spool/coli_boli_default.ill</default_input_filename>
+
           <skin_filename>skin_coli_boli.xrc</skin_filename>
           <default_input_filename>c:/fop-0.20.5/coli_boli_default.ill</default_input_filename>
 

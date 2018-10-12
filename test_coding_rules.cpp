@@ -691,7 +691,6 @@ void check_defect_markers(file const& f)
         boost::smatch const& z(*i);
         bool const error_preceding =
                 true
-            &&  "APACHE "      != z[1]
             &&  "BOOST "       != z[1]
             &&  "COMPILER "    != z[1]
             &&  "CYGWIN "      != z[1]
