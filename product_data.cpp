@@ -428,8 +428,7 @@ void product_data::redintegrate_ex_post
 /// (rather than defaulted to empty strings), are intended to be
 /// plausible, if perhaps whimsical.
 ///
-/// The 'sample2*' products are designed to facilitate replacement of
-/// XSL with wxPdfDoc, and may be removed when that task is complete.
+/// The 'sample2*' products are designed to facilitate testing.
 /// There is one for each supported ledger type:
 ///   sample2naic  mce_ill_reg
 ///   sample2finra mce_finra
