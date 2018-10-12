@@ -240,7 +240,6 @@ cat >/opt/lmi/data/configurable_settings.xml <<EOF
   <skin_filename>skin.xrc</skin_filename>
   <spreadsheet_file_extension>.tsv</spreadsheet_file_extension>
   <use_builtin_calculation_summary>1</use_builtin_calculation_summary>
-  <xsl_fo_command>CMD /c C:/opt/lmi/third_party/fop-0.20.5/fop</xsl_fo_command>
 </configurable_settings>
 EOF
 

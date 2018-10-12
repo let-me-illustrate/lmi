@@ -142,7 +142,6 @@ configurable_settings::configurable_settings()
     ,skin_filename_                      {"skin.xrc"                           }
     ,spreadsheet_file_extension_         {".gnumeric"                          }
     ,use_builtin_calculation_summary_    {false                                }
-    ,xsl_fo_command_                     {"fo"                                 }
 {
     ascribe_members();
     load();
@@ -201,7 +200,6 @@ void configurable_settings::ascribe_members()
     ascribe("skin_filename"                      ,&configurable_settings::skin_filename_                      );
     ascribe("spreadsheet_file_extension"         ,&configurable_settings::spreadsheet_file_extension_         );
     ascribe("use_builtin_calculation_summary"    ,&configurable_settings::use_builtin_calculation_summary_    );
-    ascribe("xsl_fo_command"                     ,&configurable_settings::xsl_fo_command_                     );
 }
 
 void configurable_settings::load()
@@ -250,6 +248,7 @@ bool configurable_settings::is_detritus(std::string const& s) const
         ,"xslt_html_filename"                // Withdrawn.
         ,"xslt_light_tab_delimited_filename" // Withdrawn.
         ,"xslt_tab_delimited_filename"       // Withdrawn.
+        ,"xsl_fo_command"                    // Withdrawn.
         };
     return contains(v, s);
 }
@@ -381,7 +380,7 @@ bool configurable_settings::offer_hobsons_choice() const
     return offer_hobsons_choice_;
 }
 
-/// Directory to which xsl-fo input and output are written.
+/// Directory to which PDF files are written.
 
 std::string const& configurable_settings::print_directory() const
 {
@@ -417,16 +416,6 @@ std::string const& configurable_settings::spreadsheet_file_extension() const
 bool configurable_settings::use_builtin_calculation_summary() const
 {
     return use_builtin_calculation_summary_;
-}
-
-/// Command to execute xsl-fo processor. Making this an external
-/// command permits using a program with a free but not GPL-compatible
-/// license, such as apache fop, which cannot be linked with a GPL
-/// version 2 program.
-
-std::string const& configurable_settings::xsl_fo_command() const
-{
-    return xsl_fo_command_;
 }
 
 namespace
