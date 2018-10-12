@@ -24,15 +24,9 @@
 #include "ledger_pdf.hpp"
 
 #include "configurable_settings.hpp"
-#include "contains.hpp" // PDF !! expunge
-#include "global_settings.hpp" // PDF !! expunge
 #include "ledger.hpp"
-#include "ledger_invariant.hpp" // PDF !! expunge
-#include "ledger_xsl.hpp" // PDF !! expunge
 #include "path_utility.hpp"             // unique_filepath()
 #include "pdf_command.hpp"
-
-#include <iostream>                     // cerr // PDF !! expunge
 
 /// Write a scaled copy of the ledger to a PDF file.
 ///
@@ -49,39 +43,6 @@
 
 std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
 {
-    global_settings const& g = global_settings::instance();
-    bool const ash_nazg      = g.ash_nazg();
-    bool const pyx_only_new  = contains(g.pyx(), "only_new_pdf");
-    bool const pyx_only_old  = contains(g.pyx(), "only_old_pdf");
-    bool const do_the_old    = ash_nazg ? !pyx_only_new : true;
-    bool const skip_the_new  = ash_nazg ?  pyx_only_old : true;
-    // Without secret password, preserve old behavior exactly:
-    if(!ash_nazg) return write_ledger_as_pdf_via_xsl(ledger, filepath);
-    // PDF !! Expunge this conditional block and everything above it:
-    if(do_the_old)
-        {
-        std::string z;
-        try
-            {
-            // Execute both the new and the old code so that their results
-            // may be compared.
-            z = write_ledger_as_pdf_via_xsl(ledger, filepath);
-            }
-        // The developer-only password having been specified, show
-        // diagnostics only on the console, and don't let them escape
-        // (so that any error in the old code doesn't prevent the new
-        // code from running).
-        catch(std::exception const& e)
-            {
-            std::cerr << e.what() << std::endl;
-            }
-        catch(...)
-            {
-            throw;
-            }
-        if(skip_the_new) return z;
-        }
-
     throw_if_interdicted(ledger);
 
     fs::path print_dir(configurable_settings::instance().print_directory());
@@ -90,8 +51,6 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
     fs::path pdf_out_file = unique_filepath(print_dir / filepath, ".pdf");
 
     Ledger scaled_ledger(ledger);
-    // PDF !! Expunge this 'if' line (but not the statement it controls):
-    if(0 == scaled_ledger.GetLedgerInvariant().ScalePower())
     scaled_ledger.AutoScale();
     pdf_command(scaled_ledger, pdf_out_file);
 
