@@ -90,15 +90,15 @@ class dc_font_preserver
 } // Unnamed namespace.
 
 pdf_writer_wx::pdf_writer_wx
-    (wxString const&    output_filename
-    ,wxPrintOrientation orientation
-    ,html_font_sizes const& font_sizes
+    (wxString           const& output_filename
+    ,wxPrintOrientation        orientation
+    ,html_font_sizes    const& font_sizes
     )
-    :print_data_        {make_print_data(output_filename, orientation)}
-    ,pdf_dc_            {print_data_}
-    ,html_parser_       {nullptr}
-    ,html_font_sizes_   {font_sizes}
-    ,total_page_size_   {pdf_dc_.GetSize()}
+    :print_data_      {make_print_data(output_filename, orientation)}
+    ,pdf_dc_          {print_data_}
+    ,html_parser_     {nullptr}
+    ,html_font_sizes_ {font_sizes}
+    ,total_page_size_ {pdf_dc_.GetSize()}
 {
     // Ensure that the output is independent of the current display resolution:
     // it seems that this is only the case with the PDF map mode and wxDC mode

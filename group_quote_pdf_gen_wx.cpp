@@ -221,8 +221,8 @@ class group_quote_pdf_generator_wx
     static std::shared_ptr<group_quote_pdf_generator> do_create()
         {
         return std::shared_ptr<group_quote_pdf_generator>
-                (new group_quote_pdf_generator_wx()
-                );
+            (new group_quote_pdf_generator_wx()
+            );
         }
 
     void add_ledger(Ledger const& ledger) override;
@@ -243,34 +243,34 @@ class group_quote_pdf_generator_wx
     // updated with the space remaining on the last page on output.
     int compute_pages_for_table_rows
         (pdf_writer_wx& pdf_writer
-        ,int& remaining_space
-        ,int  header_height
-        ,int  row_height
-        ,int  last_row_y
+        ,int          & remaining_space
+        ,int            header_height
+        ,int            row_height
+        ,int            last_row_y
         );
 
     void output_page_number_and_version
         (pdf_writer_wx& pdf_writer
-        ,int      total_pages
-        ,int      current_page
+        ,int            total_pages
+        ,int            current_page
         );
     void output_image_header
         (pdf_writer_wx& pdf_writer
-        ,int&     pos_y
+        ,int          & pos_y
         );
     void output_document_header
-        (pdf_writer_wx&   pdf_writer
-        ,int&             pos_y
+        (pdf_writer_wx& pdf_writer
+        ,int          & pos_y
         );
     void output_aggregate_values
-        (pdf_writer_wx&      pdf_writer
+        (pdf_writer_wx     & pdf_writer
         ,wx_table_generator& table_gen
         ,int&                pos_y
         );
     void output_footer
-        (pdf_writer_wx&               pdf_writer
-        ,int&                         pos_y
-        ,oenum_render_or_only_measure output_mode
+        (pdf_writer_wx                & pdf_writer
+        ,int                          & pos_y
+        ,oenum_render_or_only_measure   output_mode
         );
 
     class totals_data; // Fwd decl for fill_global_report_data() argument.
@@ -353,7 +353,7 @@ void assert_nonblank(std::string const& value, std::string const& name)
 /// set of data used here should be reflected there.
 
 void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
-    (Ledger const& ledger
+    (Ledger      const& ledger
     ,totals_data const& totals
     )
 {
@@ -790,10 +790,10 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
 
 int group_quote_pdf_generator_wx::compute_pages_for_table_rows
     (pdf_writer_wx& pdf_writer
-    ,int& remaining_space
-    ,int header_height
-    ,int row_height
-    ,int last_row_y
+    ,int          & remaining_space
+    ,int            header_height
+    ,int            row_height
+    ,int            last_row_y
     )
 {
     int total_pages = 1;
@@ -821,8 +821,8 @@ int group_quote_pdf_generator_wx::compute_pages_for_table_rows
 
 void group_quote_pdf_generator_wx::output_page_number_and_version
     (pdf_writer_wx& pdf_writer
-    ,int total_pages
-    ,int current_page
+    ,int            total_pages
+    ,int            current_page
     )
 {
     wxRect const footer_area
@@ -849,7 +849,7 @@ void group_quote_pdf_generator_wx::output_page_number_and_version
 
 void group_quote_pdf_generator_wx::output_image_header
     (pdf_writer_wx& pdf_writer
-    ,int& pos_y
+    ,int          & pos_y
     )
 {
     wxImage banner_image(load_image("group_quote_banner.png"));
@@ -888,7 +888,7 @@ void group_quote_pdf_generator_wx::output_image_header
 
 void group_quote_pdf_generator_wx::output_document_header
     (pdf_writer_wx& pdf_writer
-    ,int& pos_y
+    ,int          & pos_y
     )
 {
     using namespace html;
@@ -1152,9 +1152,9 @@ void group_quote_pdf_generator_wx::output_aggregate_values
 }
 
 void group_quote_pdf_generator_wx::output_footer
-    (pdf_writer_wx&               pdf_writer
-    ,int&                         pos_y
-    ,oenum_render_or_only_measure output_mode
+    (pdf_writer_wx                & pdf_writer
+    ,int                          & pos_y
+    ,oenum_render_or_only_measure   output_mode
     )
 {
     wxImage logo_image(load_image("company_logo.png"));
