@@ -98,7 +98,7 @@ class pdf_writer_wx
         ,char const*                  image_name
         ,double                       scale
         ,int                          x
-        ,int*                         pos_y
+        ,int&                         pos_y
         ,oenum_render_or_only_measure output_mode = oe_render
         );
 

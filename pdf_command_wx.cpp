@@ -647,7 +647,7 @@ class scaled_image_cell : public html_cell_for_pdf_output
         x += m_PosX;
 
         int pos_y = y + m_PosY;
-        writer.output_image(image_, src_.utf8_str(), scale_factor_, x, &pos_y);
+        writer.output_image(image_, src_.utf8_str(), scale_factor_, x, pos_y);
     }
 
   private:

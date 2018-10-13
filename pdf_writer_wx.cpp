@@ -171,7 +171,7 @@ void pdf_writer_wx::output_image
     ,char const*                  image_name
     ,double                       scale
     ,int                          x
-    ,int*                         pos_y
+    ,int&                         pos_y
     ,oenum_render_or_only_measure output_mode
     )
 {
@@ -191,7 +191,7 @@ void pdf_writer_wx::output_image
             LMI_ASSERT(pdf_doc);
 
             pdf_doc->SetImageScale(scale);
-            pdf_doc->Image(image_name, image, x, *pos_y);
+            pdf_doc->Image(image_name, image, x, pos_y);
             pdf_doc->SetImageScale(1);
             }
             break;
@@ -200,7 +200,7 @@ void pdf_writer_wx::output_image
             break;
         }
 
-    *pos_y += y;
+    pos_y += y;
 }
 
 /// Compute vertical page break positions needed when outputting the given HTML

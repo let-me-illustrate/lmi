@@ -243,7 +243,7 @@ class group_quote_pdf_generator_wx
     // updated with the space remaining on the last page on output.
     int compute_pages_for_table_rows
         (pdf_writer_wx& pdf_writer
-        ,int* remaining_space
+        ,int& remaining_space
         ,int  header_height
         ,int  row_height
         ,int  last_row_y
@@ -256,20 +256,20 @@ class group_quote_pdf_generator_wx
         );
     void output_image_header
         (pdf_writer_wx& pdf_writer
-        ,int*     pos_y
+        ,int&     pos_y
         );
     void output_document_header
         (pdf_writer_wx&   pdf_writer
-        ,int*             pos_y
+        ,int&             pos_y
         );
     void output_aggregate_values
         (pdf_writer_wx&      pdf_writer
         ,wx_table_generator& table_gen
-        ,int*                pos_y
+        ,int&                pos_y
         );
     void output_footer
         (pdf_writer_wx&               pdf_writer
-        ,int*                         pos_y
+        ,int&                         pos_y
         ,oenum_render_or_only_measure output_mode
         );
 
@@ -624,10 +624,10 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
 
     int pos_y = 0;
 
-    output_image_header(pdf_writer, &pos_y);
+    output_image_header(pdf_writer, pos_y);
     pos_y += 2 * vert_skip;
 
-    output_document_header(pdf_writer, &pos_y);
+    output_document_header(pdf_writer, pos_y);
     pos_y += 2 * vert_skip;
 
     // Some of the table columns don't need to be shown if all the values in
@@ -707,14 +707,14 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
         ,pdf_writer.get_page_width()
         );
 
-    output_aggregate_values(pdf_writer, table_gen, &pos_y);
+    output_aggregate_values(pdf_writer, table_gen, pos_y);
 
     int const y_before_header = pos_y;
     table_gen.output_headers(pos_y);
     int const header_height = pos_y - y_before_header;
 
     int y_after_footer = pos_y;
-    output_footer(pdf_writer, &y_after_footer, oe_only_measure);
+    output_footer(pdf_writer, y_after_footer, oe_only_measure);
     int const footer_height = y_after_footer - pos_y;
 
     int const last_row_y = pdf_writer.get_page_bottom();
@@ -722,7 +722,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
 
     int total_pages = compute_pages_for_table_rows
         (pdf_writer
-        ,&remaining_space
+        ,remaining_space
         ,header_height
         ,table_gen.row_height()
         ,last_row_y
@@ -780,7 +780,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
         pos_y += 2 * vert_skip;
         }
 
-    output_footer(pdf_writer, &pos_y, oe_render);
+    output_footer(pdf_writer, pos_y, oe_render);
 
     LMI_ASSERT(current_page == total_pages);
     output_page_number_and_version(pdf_writer, total_pages, current_page);
@@ -790,7 +790,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
 
 int group_quote_pdf_generator_wx::compute_pages_for_table_rows
     (pdf_writer_wx& pdf_writer
-    ,int* remaining_space
+    ,int& remaining_space
     ,int header_height
     ,int row_height
     ,int last_row_y
@@ -798,7 +798,7 @@ int group_quote_pdf_generator_wx::compute_pages_for_table_rows
 {
     int total_pages = 1;
 
-    int const max_rows_on_first_page = (*remaining_space) / row_height;
+    int const max_rows_on_first_page = remaining_space / row_height;
     int remaining_rows = static_cast<int>(rows_.size());
     if(max_rows_on_first_page < remaining_rows)
         {
@@ -810,11 +810,11 @@ int group_quote_pdf_generator_wx::compute_pages_for_table_rows
         int const page_area_y = last_row_y - first_row_y;
         int const rows_per_page = page_area_y / row_height;
         total_pages += outward_quotient(remaining_rows, rows_per_page);
-        *remaining_space = page_area_y;
+        remaining_space = page_area_y;
         remaining_rows %= rows_per_page;
         }
 
-    *remaining_space -= remaining_rows * row_height;
+    remaining_space -= remaining_rows * row_height;
 
     return total_pages;
 }
@@ -849,7 +849,7 @@ void group_quote_pdf_generator_wx::output_page_number_and_version
 
 void group_quote_pdf_generator_wx::output_image_header
     (pdf_writer_wx& pdf_writer
-    ,int* pos_y
+    ,int& pos_y
     )
 {
     wxImage banner_image(load_image("group_quote_banner.png"));
@@ -861,7 +861,7 @@ void group_quote_pdf_generator_wx::output_image_header
     // Set the scale to fit the image to the document width.
     double const image_width = banner_image.GetWidth();
     double const scale = image_width / pdf_writer.get_total_width();
-    int const pos_top = *pos_y;
+    int const pos_top = pos_y;
     pdf_writer.output_image(banner_image, "banner", scale, 0, pos_y);
 
     auto& pdf_dc = pdf_writer.dc();
@@ -879,7 +879,7 @@ void group_quote_pdf_generator_wx::output_image_header
     pdf_dc.DrawLabel
         (image_text
         ,wxRect
-            (wxPoint(pdf_writer.get_horz_margin(), (pos_top + *pos_y) / 2)
+            (wxPoint(pdf_writer.get_horz_margin(), (pos_top + pos_y) / 2)
             ,pdf_dc.GetMultiLineTextExtent(image_text)
             )
         ,wxALIGN_CENTER_HORIZONTAL
@@ -888,7 +888,7 @@ void group_quote_pdf_generator_wx::output_image_header
 
 void group_quote_pdf_generator_wx::output_document_header
     (pdf_writer_wx& pdf_writer
-    ,int* pos_y
+    ,int& pos_y
     )
 {
     using namespace html;
@@ -927,7 +927,7 @@ void group_quote_pdf_generator_wx::output_document_header
 
     pdf_writer.output_html
         (pdf_writer.get_horz_margin()
-        ,*pos_y
+        ,pos_y
         ,pdf_writer.get_page_width() / 2
         ,title_html
         );
@@ -992,7 +992,7 @@ void group_quote_pdf_generator_wx::output_document_header
 
     int const summary_height = pdf_writer.output_html
         (pdf_writer.get_horz_margin() + pdf_writer.get_page_width() / 2
-        ,*pos_y
+        ,pos_y
         ,pdf_writer.get_page_width() / 2
         ,summary_html
         );
@@ -1003,30 +1003,28 @@ void group_quote_pdf_generator_wx::output_document_header
     pdf_dc.SetBrush(*wxTRANSPARENT_BRUSH);
     pdf_dc.DrawRectangle
         (pdf_writer.get_horz_margin() + pdf_writer.get_page_width() / 2
-        ,*pos_y
+        ,pos_y
         ,pdf_writer.get_page_width() / 2
         ,summary_height
         );
 
-    *pos_y += summary_height;
+    pos_y += summary_height;
 }
 
 void group_quote_pdf_generator_wx::output_aggregate_values
     (pdf_writer_wx     & pdf_writer
     ,wx_table_generator& table_gen
-    ,int               * pos_y // PDF !! Use reference, not pointer.
+    ,int               & pos_y
     )
 {
-    int& y = *pos_y;
+    table_gen.output_horz_separator(e_first_totalled_column, e_col_max, pos_y);
+    table_gen.output_vert_separator(e_first_totalled_column, pos_y);
+    table_gen.output_vert_separator(e_col_max, pos_y);
 
-    table_gen.output_horz_separator(e_first_totalled_column, e_col_max, y);
-    table_gen.output_vert_separator(e_first_totalled_column, y);
-    table_gen.output_vert_separator(e_col_max, y);
+    pos_y += table_gen.row_height();
+    int const y_next = pos_y + table_gen.row_height();
 
-    y += table_gen.row_height();
-    int const y_next = y + table_gen.row_height();
-
-    table_gen.output_vert_separator(e_col_number, y);
+    table_gen.output_vert_separator(e_col_number, pos_y);
     table_gen.output_vert_separator(e_col_number, y_next);
 
     auto& pdf_dc = pdf_writer.dc();
@@ -1037,7 +1035,7 @@ void group_quote_pdf_generator_wx::output_aggregate_values
     wxDCFontChanger set_bold_font(pdf_dc, pdf_dc.GetFont().Bold());
     pdf_dc.DrawLabel
         ("Census"
-        ,table_gen.external_text_rect(e_col_name, y)
+        ,table_gen.external_text_rect(e_col_name, pos_y)
         ,wxALIGN_LEFT
         );
 
@@ -1049,7 +1047,7 @@ void group_quote_pdf_generator_wx::output_aggregate_values
     LMI_ASSERT(0 < e_first_totalled_column);
     pdf_dc.DrawLabel
         ("Totals:"
-        ,table_gen.external_text_rect(e_first_totalled_column - 1, y)
+        ,table_gen.external_text_rect(e_first_totalled_column - 1, pos_y)
         ,wxALIGN_RIGHT
         );
 
@@ -1079,7 +1077,7 @@ void group_quote_pdf_generator_wx::output_aggregate_values
 
         table_gen.output_highlighted_cell
             (i
-            ,y
+            ,pos_y
             ,'$' + ledger_format(totals_.total(i), f)
             );
 
@@ -1144,18 +1142,18 @@ void group_quote_pdf_generator_wx::output_aggregate_values
         table_gen.output_highlighted_cell(i, y_next, average_text);
         }
 
-    table_gen.output_vert_separator(e_col_max, y);
-    table_gen.output_horz_separator(e_col_number, e_col_max, y);
+    table_gen.output_vert_separator(e_col_max, pos_y);
+    table_gen.output_horz_separator(e_col_number, e_col_max, pos_y);
 
     table_gen.output_vert_separator(e_col_max, y_next);
     table_gen.output_horz_separator(e_first_totalled_column, e_col_max, y_next);
 
-    y = y_next + table_gen.row_height();
+    pos_y = y_next + table_gen.row_height();
 }
 
 void group_quote_pdf_generator_wx::output_footer
     (pdf_writer_wx&               pdf_writer
-    ,int*                         pos_y
+    ,int&                         pos_y
     ,oenum_render_or_only_measure output_mode
     )
 {
@@ -1173,14 +1171,14 @@ void group_quote_pdf_generator_wx::output_footer
             ,output_mode
             );
 
-        *pos_y += vert_skip;
+        pos_y += vert_skip;
         }
 
     auto footer_html = html::tag::p(report_data_.footer_html_);
 
-    *pos_y += pdf_writer.output_html
+    pos_y += pdf_writer.output_html
         (pdf_writer.get_horz_margin()
-        ,*pos_y
+        ,pos_y
         ,pdf_writer.get_page_width()
         ,footer_html
         ,output_mode
