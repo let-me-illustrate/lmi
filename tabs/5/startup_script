@@ -3,8 +3,8 @@
 a='schroot --chroot=cross-lmi'
 
 b='cd /opt/lmi/bin'
-c='wine ./lmi_wx_shared --ash_nazg --data_path=/opt/lmi/data --pyx=only_new_pdf'
-d='wine ./wx_test --ash_nazg --data_path=/opt/lmi/data --pyx=only_new_pdf'
+c='wine ./lmi_wx_shared --ash_nazg --data_path=/opt/lmi/data'
+d='wine ./wx_test --ash_nazg --data_path=/opt/lmi/data'
 
 print -rs $b ; echo $b ; eval $b
 print -rs $c ; echo $c
