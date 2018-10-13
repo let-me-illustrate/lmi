@@ -181,12 +181,6 @@
     <ClCompile Include="ledger_variant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ledger_xml_io.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ledger_xsl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ledgervalues.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

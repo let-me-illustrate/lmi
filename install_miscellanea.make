@@ -44,7 +44,6 @@ third_party_source_dir  := $(destination)/src
 
 boost_archive    := boost_1_38_0.tar.bz2
 cgicc_archive    := cgicc-3.1.4.tar.bz2
-fop_archive      := fop-0.20.5-bin.tar.gz
 jing_archive     := jing-20091111.zip
 md5sum_msw_exe   := md5sum.exe
 sample_archive   := lmi-data-20050618T1440Z.tar.bz2
@@ -54,16 +53,14 @@ xmlwrapp_archive := xmlwrapp-0.9.0.tar.gz
 file_list := \
   $(boost_archive) \
   $(cgicc_archive) \
-  $(fop_archive) \
   $(jing_archive) \
   $(md5sum_msw_exe) \
   $(sample_archive) \
   $(trang_archive) \
   $(xmlwrapp_archive) \
 
-boost cgicc xmlwrapp: stem =               $(basename $(basename $($@_archive)))
-fop:                  stem = $(subst -bin,,$(basename $(basename $($@_archive))))
-jing trang:           stem =                          $(basename $($@_archive))
+boost cgicc xmlwrapp: stem = $(basename $(basename $($@_archive)))
+jing trang:           stem =            $(basename $($@_archive))
 md5sum_msw:           stem = $(md5sum_msw_exe)
 sample:               stem = data
 
@@ -71,7 +68,6 @@ sample:               stem = data
 
 $(boost_archive)-url    := $(sf_mirror)/boost/$(boost_archive)
 $(cgicc_archive)-url    := ftp://ftp.gnu.org/pub/gnu/cgicc/$(cgicc_archive)
-$(fop_archive)-url      := https://archive.apache.org/dist/xmlgraphics/fop/binaries/$(fop_archive)
 $(jing_archive)-url     := https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jing-trang/$(jing_archive)
 $(md5sum_msw_exe)-url   := http://etree.org/cgi-bin/counter.cgi/software/md5sum.exe#!md5!eb574b236133e60c989c6f472f07827b
 $(sample_archive)-url   := https://download.savannah.gnu.org/releases/lmi/$(sample_archive)
@@ -80,7 +76,6 @@ $(xmlwrapp_archive)-url := https://github.com/vslavik/xmlwrapp/releases/download
 
 $(boost_archive)-md5    := 5eca2116d39d61382b8f8235915cb267
 $(cgicc_archive)-md5    := 6cb5153fc9fa64b4e50c7962aa557bbe
-$(fop_archive)-md5      := d6b43e3eddf9378536ad8127bc057d41
 $(jing_archive)-md5     := 13eef193921409a1636377d1efbf9843
 $(md5sum_msw_exe)-md5   := eb574b236133e60c989c6f472f07827b
 $(sample_archive)-md5   := e7f07133abfc3b9c2252dfa3b61191bc
@@ -124,7 +119,7 @@ scratch_exists = \
 # Targets ######################################################################
 
 .PHONY: all
-all: boost cgicc fop jing md5sum_msw sample trang xmlwrapp
+all: boost cgicc jing md5sum_msw sample trang xmlwrapp
 
 # Patches were generated according to this advice:
 #
@@ -185,16 +180,6 @@ cgicc: $(file_list)
 	$(SORT) --key=2 --output=$(stem).X                $(stem).md5sums
 	$(SORT) --key=2 --output=$(stem).Y $(destination)/$(stem).md5sums
 	$(DIFF) --unified $(stem).X $(stem).Y && $(RM) $(destination)/$(stem).md5sums $(stem).X $(stem).Y
-
-# When the 'fop' tarball is extracted, this message:
-#   tar: A lone zero block at 20398
-# is expected, and harmless--see:
-#   http://issues.apache.org/bugzilla/show_bug.cgi?id=28776
-
-.PHONY: fop
-fop: $(file_list)
-	$(MKDIR) $(destination)/$(stem)
-	$(MV) scratch/$(stem)/* $(destination)/$(stem)
 
 .PHONY: jing
 jing: $(file_list)

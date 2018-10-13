@@ -65,7 +65,6 @@ class LMI_SO configurable_settings final
     std::string const& skin_filename                      () const;
     std::string const& spreadsheet_file_extension         () const;
     bool               use_builtin_calculation_summary    () const;
-    std::string const& xsl_fo_command                     () const;
 
   private:
     configurable_settings();
@@ -109,7 +108,6 @@ class LMI_SO configurable_settings final
     std::string skin_filename_;
     std::string spreadsheet_file_extension_;
     bool        use_builtin_calculation_summary_;
-    std::string xsl_fo_command_;
 };
 
 std::string const& LMI_SO configuration_filepath();

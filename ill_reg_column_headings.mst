@@ -66,7 +66,7 @@ in effect on the date of death, prior to adjustments
 for policy debt and monthly charges payable to the date of death.
 <!--
 Presumably the description of death benefit options should be moved into
-'ProductDescription' (as has already been done in other '.xsl' files).
+'ProductDescription' (as has already been done in other '.mst' files).
 -->
 </p>
 <p>

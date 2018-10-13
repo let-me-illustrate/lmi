@@ -181,11 +181,6 @@ cli_objects := \
 
 # Illustrations: files shared by the antediluvian and production branches.
 
-# PDF !! Expunge these two object files
-#  ledger_xml_io.o
-#  ledger_xsl.o
-# from the list below.
-
 common_common_objects := \
   $(boost_common_objects) \
   $(xmlwrapp_objects) \
@@ -237,8 +232,6 @@ common_common_objects := \
   ledger_text_formats.o \
   ledger_variant.o \
   ledger_variant_init.o \
-  ledger_xml_io.o \
-  ledger_xsl.o \
   ledgervalues.o \
   license.o \
   loads.o \

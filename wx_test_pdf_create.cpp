@@ -46,8 +46,8 @@ std::string get_current_document_name()
     return doc->GetUserReadableName().ToStdString();
 }
 
-// Return the suffix used for the FO files created by printing the census.
-std::string fo_suffix(int n)
+// Return the suffix used for files created by printing the census.
+std::string serial_suffix(int n)
 {
     return wxString::Format(".%09d", n).ToStdString();
 }
@@ -132,10 +132,10 @@ LMI_WX_TEST_CASE(pdf_census)
     std::string const name = get_current_document_name();
 
     output_pdf_existence_checker
-        composite_pdf(name + ".composite" + fo_suffix(0));
+        composite_pdf(name + ".composite" + serial_suffix(0));
 
     output_pdf_existence_checker
-        cell_pdf(name + fo_suffix(1));
+        cell_pdf(name + serial_suffix(1));
 
     // Print the census to PDF.
     wxUIActionSimulator ui;

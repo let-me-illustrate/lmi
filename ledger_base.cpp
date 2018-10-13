@@ -375,13 +375,6 @@ std::string const& LedgerBase::ScaleUnit() const
 }
 
 //============================================================================
-// PDF !! expunge
-int LedgerBase::ScalePower() const
-{
-    return scale_power_;
-}
-
-//============================================================================
 void LedgerBase::UpdateCRC(CRC& crc) const
 {
     for(auto const& i : AllVectors)

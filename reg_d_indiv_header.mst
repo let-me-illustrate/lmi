@@ -77,9 +77,7 @@ and may not be used to project or predict investment results.
                 {{#UWClassIsRated}}
                     Table Rating: {{SubstandardTable}}<br>
                     {{!
-                        Flats don't require "Rated" class; and does this value actually print anyway?
-                        These questions apply as well to the original:
-                        http://svn.savannah.nongnu.org/viewvc/lmi/trunk/individual_private_placement.xsl?annotate=696&root=lmi&pathrev=3585
+PDF !! Flats don't require "Rated" class; and does this value actually print anyway?
                     }}
                     Initial Annual Flat Extra: {{AnnualFlatExtra[1]}} per 1,000<br>
                 {{/UWClassIsRated}}

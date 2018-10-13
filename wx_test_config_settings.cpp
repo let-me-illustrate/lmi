@@ -36,13 +36,15 @@
 
      A. The file exists in '/etc/opt/lmi'
 
-     B. These lines always exist like this:
+     B. This element is empty in all distributions:
          <libraries_to_preload/>
-         <xsl_fo_command>CMD /c /fop-0.20.5/fop</xsl_fo_command>
 
      C. We package several distributions each month that have their
         own "skin" and "default" files. Each time this test is run,
         only one pair of the following lines exists at a time:
+
+PDF !! Here and passim, change 'fop' to something reasonable, e.g.:
+  <default_input_filename>c:/spool/coli_boli_default.ill</default_input_filename>
 
           <skin_filename>skin_coli_boli.xrc</skin_filename>
           <default_input_filename>c:/fop-0.20.5/coli_boli_default.ill</default_input_filename>
@@ -56,9 +58,6 @@
           but "default.ill" really is wanted here for historical reasons.]
 
           ['skin.xrc' deliberately omitted--not currently distributed.]
-
-    The only change is that the xsl_fo_command is checked to contain the volume,
-    i.e. is c:/fop-0.20.5/fop, and not just the path.
  */
 
 /// Validate configurable-settings file for binary distributions.
@@ -84,7 +83,6 @@ LMI_WX_TEST_CASE(configurable_settings)
 
     configurable_settings const& settings = configurable_settings::instance();
     LMI_ASSERT_EQUAL(settings.libraries_to_preload(), "");
-    LMI_ASSERT_EQUAL(settings.xsl_fo_command(), "CMD /c /fop-0.20.5/fop");
 
     std::string const& skin = settings.skin_filename();
     std::string const& default_input = settings.default_input_filename();
