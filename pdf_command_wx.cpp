@@ -950,7 +950,7 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
 
         add_variable
             ("HasScaleUnit"
-            ,!invar.ScaleUnit().empty()
+            ,!invar.scale_unit().empty()
             );
 
         add_variable

@@ -858,7 +858,7 @@ ledger_evaluator Ledger::make_evaluator() const
     scalars   ["SepAcctAllocation"] = &SepAcctAllocation;
     format_map["SepAcctAllocation"] = f3;
 
-    std::string ScaleUnit = invar.ScaleUnit();
+    std::string ScaleUnit = invar.scale_unit();
     strings["ScaleUnit"] = &ScaleUnit;
 
     double InitTotalSA =
