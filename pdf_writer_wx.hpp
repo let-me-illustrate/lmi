@@ -46,9 +46,9 @@ class pdf_writer_wx
     // The font sizes array specifies the sizes, in points, of the standard
     // HTML3 fonts (1..7).
     pdf_writer_wx
-        (wxString const&           output_filename
+        (wxString           const& output_filename
         ,wxPrintOrientation        orientation
-        ,html_font_sizes const&    font_sizes
+        ,html_font_sizes    const& font_sizes
         );
 
     pdf_writer_wx(pdf_writer_wx const&) = delete;
@@ -62,9 +62,9 @@ class pdf_writer_wx
     // instead of working at a lower level with the dc() accessor.
 
     std::vector<int> paginate_html
-        (int                          page_width
-        ,int                          page_height
-        ,wxHtmlContainerCell&         cell
+        (int                  page_width
+        ,int                  page_height
+        ,wxHtmlContainerCell& cell
         );
 
     int output_html
@@ -98,7 +98,7 @@ class pdf_writer_wx
         ,char const*                  image_name
         ,double                       scale
         ,int                          x
-        ,int*                         pos_y
+        ,int&                         pos_y
         ,oenum_render_or_only_measure output_mode = oe_render
         );
 
@@ -116,12 +116,12 @@ class pdf_writer_wx
     // reserved for the normal contents, excluding horizontal and vertical
     // margins. Total width and height include the margins.
 
-    int get_horz_margin() const;
-    int get_vert_margin() const;
-    int get_page_width()  const;
-    int get_total_width() const;
+    int get_horz_margin () const;
+    int get_vert_margin () const;
+    int get_page_width  () const;
+    int get_total_width () const;
     int get_total_height() const;
-    int get_page_bottom() const;
+    int get_page_bottom () const;
 
   private:
     void initialize_html_parser(wxHtmlWinParser& html_parser);

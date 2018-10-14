@@ -369,7 +369,7 @@ void LedgerBase::apply_scale_factor(int decimal_power)
 }
 
 //============================================================================
-std::string const& LedgerBase::ScaleUnit() const
+std::string const& LedgerBase::scale_unit() const
 {
     return scale_unit_;
 }

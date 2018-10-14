@@ -137,4 +137,4 @@ mkdir --parents /tmp/lmi/logs
 
 cd /opt/lmi/src/lmi
 
-"$PERFORM" /opt/lmi/bin/wx_test --ash_nazg --data_path=/opt/lmi/data --pyx=only_new_pdf 2>&1 | tee /tmp/lmi/logs/gui-test | sed -e "$gui_test_clutter"
+"$PERFORM" /opt/lmi/bin/wx_test --ash_nazg --data_path=/opt/lmi/data 2>&1 | tee /tmp/lmi/logs/gui-test | sed -e "$gui_test_clutter"

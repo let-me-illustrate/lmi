@@ -647,7 +647,7 @@ class scaled_image_cell : public html_cell_for_pdf_output
         x += m_PosX;
 
         int pos_y = y + m_PosY;
-        writer.output_image(image_, src_.utf8_str(), scale_factor_, x, &pos_y);
+        writer.output_image(image_, src_.utf8_str(), scale_factor_, x, pos_y);
     }
 
   private:
@@ -807,7 +807,6 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
     {
         evaluator().write_tsv(pdf_out_file_);
 
-        // PDF !! Apparently this is some sort of quasi-global object?
         html_cell_for_pdf_output::pdf_context_setter the_pdf_context
             {ledger_
             ,get_writer()
@@ -951,7 +950,7 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
 
         add_variable
             ("HasScaleUnit"
-            ,!invar.ScaleUnit().empty()
+            ,!invar.scale_unit().empty()
             );
 
         add_variable
