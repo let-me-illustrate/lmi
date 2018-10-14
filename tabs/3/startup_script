@@ -10,6 +10,7 @@ f="make \$coefficiency unit_tests 2>&1 | tee >(grep '\*\*\*') >(grep '????') >(g
 g='make $coefficiency all build_type=so_test USE_SO_ATTRIBUTES=1 2>&1 | tee ../log | sed -f diagnostics.sed | less -S'
 h='make $coefficiency cgi_tests cli_tests build_type=safestdlib 2>&1 | tee ../log | sed -f diagnostics.sed | less -S'
 i="make \$coefficiency unit_tests build_type=safestdlib 2>&1 | tee >(grep '\*\*\*') >(grep '????') >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >../log"
+j='./nychthemeral_test.sh 2>&1 | tee /tmp/lmi/logs/log | sed -f errors.sed'
 
 print -rs $b ; echo $b ; eval $b
 print -rs $c ; echo $c
@@ -19,6 +20,7 @@ print -rs $f ; echo $f
 print -rs $g ; echo $g
 print -rs $h ; echo $h
 print -rs $i ; echo $i
+print -rs $j ; echo $j
 
 unset a
 unset b
@@ -29,4 +31,5 @@ unset f
 unset g
 unset h
 unset i
+unset j
 
