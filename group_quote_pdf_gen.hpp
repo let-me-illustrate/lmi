@@ -26,7 +26,7 @@
 
 #include "so_attributes.hpp"
 
-#include <memory>                       // shared_ptr
+#include <memory>                       // unique_ptr
 #include <string>
 
 class Ledger;
@@ -42,10 +42,10 @@ class Ledger;
 class LMI_SO group_quote_pdf_generator
 {
   public:
-    typedef std::shared_ptr<group_quote_pdf_generator> (*creator_type)();
+    typedef std::unique_ptr<group_quote_pdf_generator> (*creator_type)();
 
     static bool set_creator(creator_type);
-    static std::shared_ptr<group_quote_pdf_generator> create();
+    static std::unique_ptr<group_quote_pdf_generator> create();
 
     virtual ~group_quote_pdf_generator() = default;
 

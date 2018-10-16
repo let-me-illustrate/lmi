@@ -24,14 +24,14 @@
 
 #include "config.hpp"
 
+#include "group_quote_pdf_gen.hpp"      // [required for unique_ptr<>]
 #include "mc_enum_type_enums.hpp"       // enum mcenum_emission
 #include "so_attributes.hpp"
 
 #include <boost/filesystem/path.hpp>
 
-#include <memory>                       // shared_ptr
+#include <memory>                       // unique_ptr
 
-class group_quote_pdf_generator;
 class Ledger;
 
 /// Emit a group of ledgers in various guises.
@@ -62,7 +62,7 @@ class LMI_SO ledger_emitter final
     fs::path case_filepath_group_quote_;
 
     // Used only if emission_ includes mce_emit_group_quote; empty otherwise.
-    std::shared_ptr<group_quote_pdf_generator> group_quote_pdf_gen_;
+    std::unique_ptr<group_quote_pdf_generator> group_quote_pdf_gen_;
 };
 
 double LMI_SO emit_ledger

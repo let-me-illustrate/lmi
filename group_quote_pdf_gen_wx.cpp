@@ -218,11 +218,13 @@ class group_quote_pdf_generator_wx
     :public group_quote_pdf_generator
 {
   public:
-    static std::shared_ptr<group_quote_pdf_generator> do_create()
+    // do_create() requires a public ctor; that's harmless because
+    // this is inside an unnamed namespace.
+    group_quote_pdf_generator_wx() = default;
+
+    static std::unique_ptr<group_quote_pdf_generator> do_create()
         {
-        return std::shared_ptr<group_quote_pdf_generator>
-            (new group_quote_pdf_generator_wx()
-            );
+        return std::make_unique<group_quote_pdf_generator_wx>();
         }
 
     void add_ledger(Ledger const& ledger) override;
@@ -232,9 +234,6 @@ class group_quote_pdf_generator_wx
     // This value is arbitrary and can be changed to conform to subjective
     // preferences.
     static int const vert_skip = 12;
-
-    // Ctor is private as it is only used by do_create().
-    group_quote_pdf_generator_wx() = default;
 
     // Compute the number of pages needed by the table rows in the output given
     // the space remaining on the first page, the heights of the header, one
