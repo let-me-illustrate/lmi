@@ -24,7 +24,6 @@
 
 #include "config.hpp"
 
-#include "group_quote_pdf_gen.hpp"      // [required for unique_ptr<>]
 #include "mc_enum_type_enums.hpp"       // enum mcenum_emission
 #include "so_attributes.hpp"
 
@@ -33,6 +32,7 @@
 #include <memory>                       // unique_ptr
 
 class Ledger;
+class group_quote_pdf_generator;
 
 /// Emit a group of ledgers in various guises.
 ///
@@ -43,7 +43,7 @@ class LMI_SO ledger_emitter final
 {
   public:
     ledger_emitter(fs::path const& case_filepath, mcenum_emission emission);
-    ~ledger_emitter() = default;
+    ~ledger_emitter();
 
     double initiate ();
     double emit_cell(fs::path const& cell_filepath, Ledger const& ledger);
