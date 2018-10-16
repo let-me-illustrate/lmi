@@ -526,7 +526,6 @@ void wx_table_generator::do_output_single_row
 
 void wx_table_generator::do_output_vert_separator(int x, int y1, int y2)
 {
-    // PDF !! add a possibility to have a thick border between the columns.
     dc_.DrawLine(x, y1, x, y2);
 }
 
