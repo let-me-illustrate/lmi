@@ -62,7 +62,7 @@ class LMI_SO ledger_emitter final
     fs::path case_filepath_group_quote_;
 
     // Used only if emission_ includes mce_emit_group_quote; empty otherwise.
-    std::shared_ptr<group_quote_pdf_generator> group_quote_gen_;
+    std::shared_ptr<group_quote_pdf_generator> group_quote_pdf_gen_;
 };
 
 double LMI_SO emit_ledger

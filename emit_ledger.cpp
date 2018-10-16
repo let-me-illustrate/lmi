@@ -85,7 +85,7 @@ double ledger_emitter::initiate()
         }
     if(emission_ & mce_emit_group_quote)
         {
-        group_quote_gen_ = group_quote_pdf_generator::create();
+        group_quote_pdf_gen_ = group_quote_pdf_generator::create();
         }
 
     return timer.stop().elapsed_seconds();
@@ -136,7 +136,7 @@ double ledger_emitter::emit_cell
         }
     if(emission_ & mce_emit_group_quote)
         {
-        group_quote_gen_->add_ledger(ledger);
+        group_quote_pdf_gen_->add_ledger(ledger);
         }
     if(emission_ & mce_emit_text_stream)
         {
@@ -175,7 +175,7 @@ double ledger_emitter::finish()
 
     if(emission_ & mce_emit_group_quote)
         {
-        group_quote_gen_->save(case_filepath_group_quote_.string());
+        group_quote_pdf_gen_->save(case_filepath_group_quote_.string());
         }
 
     return timer.stop().elapsed_seconds();
