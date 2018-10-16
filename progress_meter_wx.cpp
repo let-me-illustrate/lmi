@@ -150,15 +150,13 @@ void concrete_progress_meter::culminate_ui()
 {
 }
 
-std::shared_ptr<progress_meter> concrete_progress_meter_creator
+std::unique_ptr<progress_meter> concrete_progress_meter_creator
     (int                               max_count
     ,std::string const&                title
-    ,progress_meter::enum_display_mode display_mode
+    ,progress_meter::enum_display_mode mode
     )
 {
-    return std::shared_ptr<progress_meter>
-        (new concrete_progress_meter(max_count, title, display_mode)
-        );
+    return std::make_unique<concrete_progress_meter>(max_count, title, mode);
 }
 
 bool volatile ensure_setup = set_progress_meter_creator

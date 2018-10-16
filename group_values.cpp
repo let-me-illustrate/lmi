@@ -118,7 +118,7 @@ census_run_result run_census_in_series::operator()
 {
     Timer timer;
     census_run_result result;
-    std::shared_ptr<progress_meter> meter
+    std::unique_ptr<progress_meter> meter
         (create_progress_meter
             (lmi::ssize(cells)
             ,"Calculating all cells"
@@ -241,7 +241,7 @@ census_run_result run_census_in_parallel::operator()
 {
     Timer timer;
     census_run_result result;
-    std::shared_ptr<progress_meter> meter
+    std::unique_ptr<progress_meter> meter
         (create_progress_meter
             (lmi::ssize(cells)
             ,"Initializing all cells"
