@@ -1485,10 +1485,18 @@ class numeric_summary_table_cell
         m_Height = render_or_measure(0, oe_only_measure);
     }
 
-    // Override the base class function to actually render the table.
+    /// Override the base class function to actually render the table.
+    ///
+    /// PDF !! Ideally, the 'x' argument would be passed to
+    /// render_or_measure(), which in turn would pass it to
+    /// create_table_generator(), which would use it instead of
+    /// always using get_horz_margin(). This cannot be asserted:
+    ///   LMI_ASSERT(x == mixin_writer_.get_horz_margin());
+    /// because mixin_writer_ is private in this context.
+
     void Draw
         (wxDC               & dc
-        ,int                  x
+        ,int                  // x
         ,int                  y
         ,int                  view_y1
         ,int                  view_y2
@@ -1496,13 +1504,6 @@ class numeric_summary_table_cell
         ) override
     {
         draw_check_precondition(dc, view_y1, view_y2, info);
-
-        // The horizontal coordinate is unused, but should always be zero.
-        // PDF !! However, it isn't: this assertion fails when the
-        // automated GUI test is run.
-//      LMI_ASSERT(0 == x);
-        (void)&x; // PDF !! Temporary workaround pending investigation.
-
         render_or_measure(y + m_PosY, oe_render);
     }
 
