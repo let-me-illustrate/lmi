@@ -267,24 +267,25 @@ census_run_result run_census_in_parallel::operator()
             {
             { // Begin fenv_guard scope.
             fenv_guard fg;
-            std::shared_ptr<AccountValue> av(new AccountValue(ip));
-            cell_values.push_back(av);
+            std::shared_ptr<AccountValue> z(new AccountValue(ip));
+            cell_values.push_back(z);
+            AccountValue& av = *cell_values.back();
 
             std::string const name(cells[j]["InsuredName"].str());
             // Indexing: here, j is an index into cells, not cell_values.
-            av->SetDebugFilename
+            av.SetDebugFilename
                 (serial_file_path(file, name, j, "hastur").string()
                 );
 
-            if(contains(av->yare_input_.Comments, "idiosyncrasyZ"))
+            if(contains(av.yare_input_.Comments, "idiosyncrasyZ"))
                 {
-                av->Debugging = true;
-                av->DebugPrintInit();
+                av.Debugging = true;
+                av.DebugPrintInit();
                 }
 
             if
-                (   first_cell_inforce_year  != av->yare_input_.InforceYear
-                ||  first_cell_inforce_month != av->yare_input_.InforceMonth
+                (   first_cell_inforce_year  != av.yare_input_.InforceYear
+                ||  first_cell_inforce_month != av.yare_input_.InforceMonth
                 )
                 {
                 alarum()
@@ -294,7 +295,7 @@ census_run_result run_census_in_parallel::operator()
                     ;
                 }
 
-            if(mce_solve_none != av->yare_input_.SolveType)
+            if(mce_solve_none != av.yare_input_.SolveType)
                 {
                 alarum()
                     << "Running census by month: solves not permitted."
