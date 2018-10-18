@@ -268,13 +268,13 @@ census_run_result run_census_in_parallel::operator()
             { // Begin fenv_guard scope.
             fenv_guard fg;
             std::shared_ptr<AccountValue> av(new AccountValue(ip));
+            cell_values.push_back(av);
+
             std::string const name(cells[j]["InsuredName"].str());
             // Indexing: here, j is an index into cells, not cell_values.
             av->SetDebugFilename
                 (serial_file_path(file, name, j, "hastur").string()
                 );
-
-            cell_values.push_back(av);
 
             if(contains(av->yare_input_.Comments, "idiosyncrasyZ"))
                 {
