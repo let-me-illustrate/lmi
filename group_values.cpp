@@ -43,6 +43,7 @@
 
 #include <algorithm>                    // max()
 #include <iterator>                     // back_inserter()
+#include <memory>                       // make_shared()
 #include <string>
 
 namespace
@@ -267,7 +268,7 @@ census_run_result run_census_in_parallel::operator()
             {
             { // Begin fenv_guard scope.
             fenv_guard fg;
-            std::shared_ptr<AccountValue> z(new AccountValue(ip));
+            auto z {std::make_shared<AccountValue>(ip)};
             cell_values.push_back(z);
             AccountValue& av = *cell_values.back();
 
