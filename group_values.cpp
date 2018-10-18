@@ -43,8 +43,9 @@
 
 #include <algorithm>                    // max()
 #include <iterator>                     // back_inserter()
-#include <memory>                       // make_shared()
+#include <memory>                       // make_unique()
 #include <string>
+#include <utility>                      // move()
 
 namespace
 {
@@ -252,7 +253,7 @@ census_run_result run_census_in_parallel::operator()
 
     ledger_emitter emitter(file, emission);
 
-    std::vector<std::shared_ptr<AccountValue>> cell_values;
+    std::vector<std::unique_ptr<AccountValue>> cell_values;
     std::vector<mcenum_run_basis> const& RunBases = composite.GetRunBases();
 
     int const first_cell_inforce_year  = value_cast<int>((*cells.begin())["InforceYear"].str());
@@ -268,8 +269,8 @@ census_run_result run_census_in_parallel::operator()
             {
             { // Begin fenv_guard scope.
             fenv_guard fg;
-            auto z {std::make_shared<AccountValue>(ip)};
-            cell_values.push_back(z);
+            auto z {std::make_unique<AccountValue>(ip)};
+            cell_values.push_back(std::move(z));
             AccountValue& av = *cell_values.back();
 
             std::string const name(cells[j]["InsuredName"].str());
