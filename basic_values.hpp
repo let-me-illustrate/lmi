@@ -94,6 +94,7 @@ class LMI_SO BasicValues
         ,bool               a_AdbInForce
         ,double             a_TargetPremium
         );
+    BasicValues(BasicValues&&) = default;
     virtual ~BasicValues() = default;
 
     void Init();
