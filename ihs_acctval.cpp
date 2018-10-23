@@ -720,28 +720,28 @@ void AccountValue::SetInitialValues()
     Internal1035Amount = Outlay_->internal_1035_amount();
 
     ee_premium_allocation_method   = static_cast<oenum_allocation_method>
-        (static_cast<int>(Database_->Query(DB_EePremMethod))
+        (Database_->Query(DB_EePremMethod)
         );
     ee_premium_preferred_account   = static_cast<oenum_increment_account_preference>
-        (static_cast<int>(Database_->Query(DB_EePremAcct))
+        (Database_->Query(DB_EePremAcct)
         );
     er_premium_allocation_method   = static_cast<oenum_allocation_method>
-        (static_cast<int>(Database_->Query(DB_ErPremMethod))
+        (Database_->Query(DB_ErPremMethod)
         );
     er_premium_preferred_account   = static_cast<oenum_increment_account_preference>
-        (static_cast<int>(Database_->Query(DB_ErPremAcct))
+        (Database_->Query(DB_ErPremAcct)
         );
     deduction_method               = static_cast<oenum_increment_method>
-        (static_cast<int>(Database_->Query(DB_DeductionMethod))
+        (Database_->Query(DB_DeductionMethod)
         );
     deduction_preferred_account    = static_cast<oenum_increment_account_preference>
-        (static_cast<int>(Database_->Query(DB_DeductionAcct))
+        (Database_->Query(DB_DeductionAcct)
         );
     distribution_method            = static_cast<oenum_increment_method>
-        (static_cast<int>(Database_->Query(DB_DistributionMethod))
+        (Database_->Query(DB_DistributionMethod)
         );
     distribution_preferred_account = static_cast<oenum_increment_account_preference>
-        (static_cast<int>(Database_->Query(DB_DistributionAcct))
+        (Database_->Query(DB_DistributionAcct)
         );
 
     // If any account preference is the separate account, then a
