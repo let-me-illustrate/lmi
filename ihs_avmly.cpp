@@ -1571,7 +1571,7 @@ void AccountValue::TxSetBOMAV()
 
 //============================================================================
 // Set death benefit reflecting corridor and death benefit option.
-void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
+void AccountValue::TxSetDeathBft()
 {
     // TODO ?? TAXATION !! Should 7702 or 7702A processing be done here?
     // If so, then this code may be useful:
@@ -1628,28 +1628,11 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
 //        + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         ;
 
-    if
-        (   force_eoy_behavior
-        ||  contains(yare_input_.Comments, "idiosyncrasyV")
-        )
-        {
-        // The corridor death benefit ought always to reflect the
-        // honeymoon value. It always does if "idiosyncrasyV" is
-        // specified; otherwise, to match account values (but not
-        // death benefits) with an incorrect admin system, the
-        // honeymoon value is respected only if end-of-year behavior
-        // is forced--thus, year-end death benefit is correct, but
-        // the effect of the honeymoon value on corridor calculations
-        // (and hence mortality charges) is ignored for monthiversary
-        // processing. The idea is that in the event of death the
-        // faulty admin system's death-benefit calculation is ignored
-        // and the correct death benefit is calculated manually.
-        //
-        cash_value_for_corridor = std::max
-            (cash_value_for_corridor
-            ,HoneymoonValue
-            );
-        }
+    cash_value_for_corridor = std::max
+        (cash_value_for_corridor
+        ,HoneymoonValue
+        );
+
     DBReflectingCorr = std::max
         (DBIgnoringCorr
         ,YearsCorridorFactor * cash_value_for_corridor

@@ -729,7 +729,7 @@ void AccountValue::TxSetBOMAV()
 
 //============================================================================
 // Set death benefit reflecting corridor and option 2.
-void AccountValue::TxSetDeathBft(bool)
+void AccountValue::TxSetDeathBft()
 {
     // Total account value is unloaned plus loaned.
     double AV = AVUnloaned + AVRegLn + AVPrfLn;

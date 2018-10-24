@@ -1322,7 +1322,7 @@ void AccountValue::SetClaims()
         return;
         }
 
-    TxSetDeathBft(true);
+    TxSetDeathBft();
     TxSetTermAmt();
 
     YearsGrossClaims       = partial_mortality_q[Year] * DBReflectingCorr;
@@ -1363,7 +1363,7 @@ void AccountValue::SetProjectedCoiCharge()
         return;
         }
 
-    TxSetDeathBft(true);
+    TxSetDeathBft();
     TxSetTermAmt();
     double this_years_terminal_naar = material_difference
         (DBReflectingCorr + TermDB
@@ -1469,7 +1469,7 @@ void AccountValue::FinalizeYear()
     // end-of-year value (as of the end of the twelfth month) is
     // needed.
 
-    TxSetDeathBft(true);
+    TxSetDeathBft();
     TxSetTermAmt();
     // post values to LedgerVariant
     InvariantValues().TermSpecAmt   [Year] = TermSpecAmt;

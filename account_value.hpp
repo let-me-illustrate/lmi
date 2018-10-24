@@ -250,7 +250,7 @@ class LMI_SO AccountValue
     void TxSetBOMAV              ();
     void TxTestHoneymoonForExpiration();
     void TxSetTermAmt            ();
-    void TxSetDeathBft           (bool force_eoy_behavior = false);
+    void TxSetDeathBft           ();
     void TxSetCoiCharge          ();
     void TxSetRiderDed           ();
     void TxDoMlyDed              ();
