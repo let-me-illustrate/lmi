@@ -1593,8 +1593,6 @@ void AccountValue::TxSetBOMAV()
 
 void AccountValue::TxSetDeathBft()
 {
-    double AV = TotalAccountValue();
-
     switch(YearsDBOpt)
         {
         case mce_option1:
@@ -1606,7 +1604,7 @@ void AccountValue::TxSetDeathBft()
         case mce_option2:
             {
             // Negative AV doesn't decrease death benefit.
-            DBIgnoringCorr = ActualSpecAmt + std::max(0.0, AV);
+            DBIgnoringCorr = ActualSpecAmt + std::max(0.0, TotalAccountValue());
             DB7702A        = ActualSpecAmt;
             }
             break;
