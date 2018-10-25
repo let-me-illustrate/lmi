@@ -1569,6 +1569,10 @@ void AccountValue::TxSetBOMAV()
 
 /// Set death benefit reflecting corridor and death benefit option.
 ///
+/// Option 2 reflects the total account value: general as well as
+/// separate account, and loaned as well as unloaned. Notionally, it
+/// keeps NAAR level; therefore, it reflects AV rather than CSV.
+///
 /// TAXATION !! Revisit this--it affects 'DB7702A':
 /// TxSetDeathBft() needs to be called every time a new solve-spec amt
 /// is applied to determine the death benefit. But you don't really want to
@@ -1589,8 +1593,6 @@ void AccountValue::TxSetBOMAV()
 
 void AccountValue::TxSetDeathBft()
 {
-    // Total account value is unloaned plus loaned.
-    // TODO ?? Should we use CSV here?
     double AV = TotalAccountValue();
 
     switch(YearsDBOpt)
