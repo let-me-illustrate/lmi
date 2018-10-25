@@ -31,7 +31,6 @@
 #include "html.hpp"
 #include "icon_monger.hpp"              // load_image()
 #include "interpolate_string.hpp"
-#include "istream_to_string.hpp"
 #include "ledger.hpp"
 #include "ledger_evaluator.hpp"
 #include "ledger_invariant.hpp"
@@ -46,7 +45,11 @@
 
 #include <wx/pdfdc.h>
 
+#include <wx/lzmastream.h>
+#include <wx/mstream.h>
+#include <wx/sstream.h>
 #include <wx/utils.h>                   // wxBusyCursor
+#include <wx/wfstream.h>
 
 #include <wx/html/m_templ.h>
 
@@ -296,10 +299,12 @@ class html_interpolator
 
     std::string load_partial_from_file(std::string const& file) const
     {
-        constexpr auto template_extension = ".mst";
+        // Use an extension similar to the more or less standard .mst extension
+        // for the Mustache templates, but with "z" indicating compression.
+        constexpr auto template_extension = ".zst";
 
-        std::ifstream ifs(AddDataDir(file + template_extension));
-        if(!ifs)
+        auto const file_path = AddDataDir(file + template_extension);
+        if(0 != access(file_path.c_str(), R_OK))
             {
             alarum()
                 << "Template file \""
@@ -308,9 +313,24 @@ class html_interpolator
                 << std::flush
                 ;
             }
-        std::string partial;
-        istream_to_string(ifs, partial);
-        return partial;
+
+        // Read and decompress the .zst file contents.
+        wxFileInputStream file_in{file_path};
+        wxLZMAInputStream lzma_in{file_in};
+        wxStringOutputStream string_out;
+
+        // The entire input must be read without any errors.
+        if(lzma_in.Read(string_out).GetLastError() != wxSTREAM_EOF)
+            {
+            alarum()
+                << "Template file \""
+                << file << template_extension
+                << "\" is corrupted and couldn't be loaded."
+                << std::flush
+                ;
+            }
+
+        return string_out.GetString().ToStdString(wxConvUTF8);
     }
 
     // Object used for variables expansion.

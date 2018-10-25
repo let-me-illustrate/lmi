@@ -1051,7 +1051,27 @@ test_dir       := $(exec_prefix)/test
 touchstone_dir := $(exec_prefix)/touchstone
 
 data_files := \
-  $(wildcard $(addprefix $(srcdir)/,*.ico *.mst *.png *.xml *.xrc *.xsd *.xsl)) \
+  $(wildcard $(addprefix $(srcdir)/,*.ico *.png *.xml *.xrc *.xsd *.xsl)) \
+
+# Template files are handled specially as they're compressed when installing.
+mst_files := \
+  $(wildcard $(addprefix $(srcdir)/,*.mst)) \
+
+# Program used for compressing template files.
+XZ := /opt/lmi/local/bin/xz
+
+# Make function which is supposed to be called with the paths to .mst file and
+# the corresponding target .zst file. This is a helper of install_mst_file
+# below.
+#
+# Note that this must be a recusively-expanded variable as it is meant to be
+# used with $(call), as is done inside install_mst_file below.
+compress_mst_to_zst = \
+  [ ! -e $(2) -o $(1) -nt $(2) ] && $(XZ) -c $(1) > $(2);
+
+# This must also be a recursively-expanded variable as it is used with foreach.
+install_mst_file = \
+  $(call compress_mst_to_zst,$(mst_file),$(datadir)/$(notdir $(basename $(mst_file))).zst)
 
 help_files := \
   $(wildcard $(addprefix $(srcdir)/,*.html)) \
@@ -1070,6 +1090,7 @@ install: preinstall $(default_targets)
 	+@[ -d $(touchstone_dir) ] || $(MKDIR) --parents $(touchstone_dir)
 	@$(CP) --preserve --update $(default_targets) $(bindir)
 	@$(CP) --preserve --update $(data_files) $(datadir)
+	@$(foreach mst_file,$(mst_files),$(install_mst_file))
 	@$(CP) --preserve --update $(help_files) $(datadir)
 ifeq (,$(USE_SO_ATTRIBUTES))
 	@cd $(datadir); $(PERFORM) $(bindir)/product_files$(EXEEXT)
