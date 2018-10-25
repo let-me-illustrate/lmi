@@ -750,9 +750,8 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
                 }
             }
 
-        table_gen.output_row(pos_y, visible_values);
-
-        // If there is no space left for another row, start a new page.
+        // If there is no space left for this row on the current page, start a
+        // new one.
         if(last_row_y <= pos_y + table_gen.row_height())
             {
             output_page_number_and_version(pdf_writer, total_pages, current_page);
@@ -763,6 +762,8 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
             pos_y = pdf_writer.get_vert_margin();
             table_gen.output_headers(pos_y);
             }
+
+        table_gen.output_row(pos_y, visible_values);
         }
 
     if(footer_on_its_own_page)
