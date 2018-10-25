@@ -1568,28 +1568,24 @@ void AccountValue::TxSetBOMAV()
 }
 
 /// Set death benefit reflecting corridor and death benefit option.
-
-// TAXATION !! Revisit this--it affects 'DB7702A':
-// > TxSetDeathBft() needs to be called every time a new solve-spec amt
-// > is applied to determine the death benefit. But you don't really want to
-// > add the sales load (actually a percent of the sales load) to the AV
-// > each time. TxSetDeathBft() also gets called during the initial seven
-// > pay calc whether or not there is a 1035 exchange. Since it is called
-// > from within DoYear() and needs to be called from outside of DoYear(0)
-// > even a non-solve will end up double counting the refund of PPL's.
-
-    // TODO ?? TAXATION !! Should 7702 or 7702A processing be done here?
-    // If so, then this code may be useful:
-//    double prior_db_7702A = DB7702A;
-//    double prior_sa_7702A = ActualSpecAmt;
-
-    // TODO ?? TAXATION !! Should 7702 or 7702A processing be done here?
-    // If so, then this code may be useful:
-/*
-    // Try moving this here...
-    Irc7702A_->UpdateBft7702A(...);
-    LMI_ASSERT(0.0 <= Dcv);
-*/
+///
+/// TAXATION !! Revisit this--it affects 'DB7702A':
+/// TxSetDeathBft() needs to be called every time a new solve-spec amt
+/// is applied to determine the death benefit. But you don't really want to
+/// add the sales load (actually a percent of the sales load) to the AV
+/// each time. TxSetDeathBft() also gets called during the initial seven
+/// pay calc whether or not there is a 1035 exchange. Since it is called
+/// from within DoYear() and needs to be called from outside of DoYear(0)
+/// even a non-solve will end up double counting the refund of PPL's.
+///
+/// TODO ?? TAXATION !! Should 7702 or 7702A processing be done here?
+/// If so, then this code may be useful:
+///    double prior_db_7702A = DB7702A;
+///    double prior_sa_7702A = ActualSpecAmt;
+/// toward the beginning, and:
+///    Irc7702A_->UpdateBft7702A(...);
+///    LMI_ASSERT(0.0 <= Dcv);
+/// toward the end.
 
 void AccountValue::TxSetDeathBft()
 {
