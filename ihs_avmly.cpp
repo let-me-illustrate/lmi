@@ -1651,6 +1651,7 @@ void AccountValue::TxSetDeathBft()
         ,   (
                 YearsCorridorFactor
             *   (   Dcv
+                -   std::min(0.0, SurrChg())
                 +   GetRefundableSalesLoad()
 //                +   std::max(0.0, ExpRatReserve) // This would be added if it existed.
                 )
