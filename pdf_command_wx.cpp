@@ -296,13 +296,15 @@ class html_interpolator
 
     std::string load_partial_from_file(std::string const& file) const
     {
-        std::ifstream ifs(AddDataDir(file + ".mst"));
+        constexpr auto template_extension = ".mst";
+
+        std::ifstream ifs(AddDataDir(file + template_extension));
         if(!ifs)
             {
             alarum()
                 << "Template file \""
-                << file
-                << ".mst\" not found."
+                << file << template_extension
+                << "\" not found."
                 << std::flush
                 ;
             }
