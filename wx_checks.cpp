@@ -43,6 +43,10 @@
 #   error Enable wxUSE_PRINTING_ARCHITECTURE in wx setup.
 #endif // !wxUSE_PRINTING_ARCHITECTURE
 
+#if !wxUSE_LIBLZMA
+#   error Enable wxUSE_LIBLZMA in wx setup.
+#endif // !wxUSE_LIBLZMA
+
 // Ensure that certain inappropriate options aren't used.
 
 // License not obviously compatible with GPL.
