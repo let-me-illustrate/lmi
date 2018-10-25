@@ -812,6 +812,13 @@ int group_quote_pdf_generator_wx::compute_pages_for_table_rows
         total_pages += outward_quotient(remaining_rows, rows_per_page);
         remaining_space = page_area_y;
         remaining_rows %= rows_per_page;
+        if(!remaining_rows)
+            {
+            // If no rows remain, it actually means that the last page has the
+            // maximum amount of rows as we don't have an extra page with 0
+            // rows in this case.
+            remaining_rows = rows_per_page;
+            }
         }
 
     remaining_space -= remaining_rows * row_height;
