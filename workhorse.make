@@ -1158,6 +1158,7 @@ fardel_binaries := \
 
 fardel_files := \
   $(addprefix $(datadir)/,$(shared_data_files)) \
+  $(addprefix $(datadir)/,*.xst) \
   $(data_files) \
   $(help_files) \
   $(extra_fardel_files) \
