@@ -53,12 +53,11 @@
             {{/Composite}}
             Product: {{PolicyForm}}&nbsp;{{PolicyMktgName}}<br>
             {{#ModifiedSinglePremium}}
-                Modified Single Premium Adjustable Life Insurance Policy
+                Modified Single Premium Adjustable Life Insurance Policy<br>
             {{/ModifiedSinglePremium}}
             {{^ModifiedSinglePremium}}
-                {{PolicyLegalName}}
+                {{PolicyLegalName}}<br>
             {{/ModifiedSinglePremium}}
-            <br>
 
             {{^IsInforce}}
                 {{^SinglePremium}}
@@ -67,9 +66,8 @@
                 {{#SinglePremium}}
                     Single Premium:
                 {{/SinglePremium}}
-                &nbsp;${{InitPrem}}
+                &nbsp;${{InitPrem}}<br>
             {{/IsInforce}}
-            <br>
 
             {{^Composite}}
                 Initial Death Benefit Option: {{InitDBOpt}}<br>
@@ -88,31 +86,28 @@
             Guaranteed Crediting Rate: {{InitAnnGenAcctInt_Guaranteed}}<br>
 
             Current Illustrated Crediting Rate:
-                {{PresentCreditingRate}}
-            <br>
+                {{PresentCreditingRate}}<br>
 
             {{#SinglePremium}}
                 {{#InforceYearLT5}}
                     Ultimate Illustrated Crediting Rate:
                     {{#ModifiedSinglePremium0}}
-                        {{AnnGAIntRate_Current[10]}}
+                        {{AnnGAIntRate_Current[10]}}<br>
                     {{/ModifiedSinglePremium0}}
                     {{^ModifiedSinglePremium0}}
-                        {{AnnGAIntRate_Current[5]}}
+                        {{AnnGAIntRate_Current[5]}}<br>
                     {{/ModifiedSinglePremium0}}
-                    <br>
                 {{/InforceYearLT5}}
             {{/SinglePremium}}
 
             {{^Composite}}
                 Underwriting Type:
                 {{#UWTypeIsMedical}}
-                    Fully underwritten
+                    Fully underwritten<br>
                 {{/UWTypeIsMedical}}
                 {{^UWTypeIsMedical}}
-                    {{UWType}}
+                    {{UWType}}<br>
                 {{/UWTypeIsMedical}}
-                <br>
                 Rate Classification: {{UWClass}}, {{Smoker}}, {{Gender}}<br>
                 {{#UWClassIsRated}}
                 &nbsp;&nbsp;&nbsp;Table Rating: {{SubstandardTable}}<br>
