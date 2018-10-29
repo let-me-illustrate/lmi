@@ -296,18 +296,19 @@ class html_interpolator
 
     std::string load_partial_from_file(std::string const& file) const
     {
-        std::ifstream ifs(AddDataDir(file + ".mst"));
+        std::ifstream ifs(AddDataDir(file + ".xst"));
         if(!ifs)
             {
             alarum()
                 << "Template file \""
                 << file
-                << ".mst\" not found."
+                << ".xst\" not found."
                 << std::flush
                 ;
             }
         std::string partial;
         istream_to_string(ifs, partial);
+        for(auto& i : partial) i = static_cast<unsigned char>(i ^ 0xff);
         return partial;
     }
 

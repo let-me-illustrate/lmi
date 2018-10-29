@@ -1051,7 +1051,7 @@ test_dir       := $(exec_prefix)/test
 touchstone_dir := $(exec_prefix)/touchstone
 
 data_files := \
-  $(wildcard $(addprefix $(srcdir)/,*.ico *.mst *.png *.xml *.xrc *.xsd *.xsl)) \
+  $(wildcard $(addprefix $(srcdir)/,*.ico *.png *.xml *.xrc *.xsd *.xsl)) \
 
 help_files := \
   $(wildcard $(addprefix $(srcdir)/,*.html)) \
@@ -1071,6 +1071,7 @@ install: preinstall $(default_targets)
 	@$(CP) --preserve --update $(default_targets) $(bindir)
 	@$(CP) --preserve --update $(data_files) $(datadir)
 	@$(CP) --preserve --update $(help_files) $(datadir)
+	@datadir=$(datadir) srcdir=$(srcdir) $(srcdir)/mst_to_xst.sh
 ifeq (,$(USE_SO_ATTRIBUTES))
 	@cd $(datadir); $(PERFORM) $(bindir)/product_files$(EXEEXT)
 else
@@ -1182,11 +1183,9 @@ fardel_files := \
 extra_fardel_checksummed_files = \
   configurable_settings.xml \
 
-# PDF !! Add "*.mst" below, only when the MST implementation is released.
-
 fardel_checksummed_files = \
   $(extra_fardel_checksummed_files) \
-  *.dat *.database *.funds *.ndx *.policy *.rounding *.strata \
+  *.dat *.database *.funds *.ndx *.policy *.rounding *.strata *.xst \
   expiry \
   md5sum$(EXEEXT) \
 
