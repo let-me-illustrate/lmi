@@ -1188,6 +1188,13 @@ void AccountValue::set_list_bill_premium()
 /// The "cash value enhancement" components should be implemented as
 /// such, rather than as negative surrender charges.
 ///
+/// This ought to be called annually, OAOO, at the top level, and
+/// stored in the variant or invariant ledger depending on whether
+/// surrender charges are to vary by basis. All other direct calls
+/// to this function should be replaced by constant values looked up
+/// in a ledger, or perhaps in SurrChg_ if that vector is ever given
+/// any nonzero value.
+///
 /// SOMEDAY !! Table support and UL model reg formulas should be added.
 
 double AccountValue::SurrChg()
