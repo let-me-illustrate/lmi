@@ -661,6 +661,7 @@ void BasicValues::SetPermanentInvariants()
     LapseIgnoresSurrChg = Database_->Query(DB_LapseIgnoresSurrChg  );
     SurrChgOnIncr       = Database_->Query(DB_SurrChgOnIncr        );
     SurrChgOnDecr       = Database_->Query(DB_SurrChgOnDecr        );
+    LMI_ASSERT(!SurrChgOnIncr); // Surrchg change on increase not supported.
     LMI_ASSERT(!SurrChgOnDecr); // Surrchg change on decrease not supported.
 
     Database_->Query(FreeWDProportion, DB_FreeWdProportion);

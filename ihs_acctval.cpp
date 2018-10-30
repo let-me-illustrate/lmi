@@ -49,7 +49,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include <functional>                   // bind() et al.
 #include <iterator>                     // back_inserter()
 #include <limits>
 #include <numeric>
@@ -434,25 +433,6 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     OldDB = OldSA;
 
     SurrChg_.assign(BasicValues::GetLength(), 0.0);
-
-    if(0 == Year && 0 == Month)
-        {
-        AddSurrChgLayer(Year, InvariantValues().SpecAmt[Year]);
-        }
-    else
-        {
-        // SOMEDAY !! Inforce surrchg is imperfect, but that's not
-        // important enough to fix for the products now supported.
-        double prior_specamt = 0.0;
-        for(int j = 0; j <= Year; ++j)
-            {
-            AddSurrChgLayer
-                (j
-                ,std::max(0.0, yare_input_.SpecifiedAmount[j] - prior_specamt)
-                );
-            prior_specamt = yare_input_.SpecifiedAmount[j];
-            }
-        }
 
     // TAXATION !! Input::InforceAnnualTargetPremium should be used here.
     double annual_target_premium = GetModalTgtPrem
@@ -1204,65 +1184,6 @@ void AccountValue::set_list_bill_premium()
         InvariantValues().EeListBillPremium = z.first;
         InvariantValues().ErListBillPremium = z.second;
         InvariantValues().ListBillPremium = z.first + z.second;
-        }
-}
-
-//============================================================================
-void AccountValue::AddSurrChgLayer(int year, double delta_specamt)
-{
-    if(!SurrChgOnIncr || 0.0 == delta_specamt)
-        {
-        return;
-        }
-
-// TODO ?? It should be something like this:
-//    rate = delta_specamt * TempDatabase.Query(DB_SurrChgSpecAmtMult);
-// but for the moment we resort to this kludge:
-    double z = delta_specamt * MortalityRates_->TargetPremiumRates()[year];
-
-    std::vector<double> new_layer;
-    std::transform
-        (SurrChgRates_->SpecamtRateDurationalFactor().begin()
-        ,SurrChgRates_->SpecamtRateDurationalFactor().end() - year
-        ,std::inserter(new_layer, new_layer.begin())
-        ,std::bind
-            (round_surrender_charge()
-            ,std::bind(std::multiplies<double>(), std::placeholders::_1, z)
-            )
-        );
-
-    std::transform
-        (year + SurrChg_.begin()
-        ,       SurrChg_.end()
-        ,       new_layer.begin()
-        ,year + SurrChg_.begin()
-        ,std::plus<double>()
-        );
-}
-
-//============================================================================
-// Upon partial surrender, multiply current and future surrchg by
-//   1 - (partial surrchg / full surrchg)
-void AccountValue::ReduceSurrChg(int year, double partial_surrchg)
-{
-    if(!SurrChgOnIncr || 0.0 == partial_surrchg)
-        {
-        return;
-        }
-    // We don't assert the condition because this function might
-    // be called for a product that has no tabular surrender charge.
-    if(0.0 != SurrChg_[year])
-        {
-        double multiplier = 1.0 - partial_surrchg / SurrChg_[year];
-        std::transform
-            (year + SurrChg_.begin()
-            ,       SurrChg_.end()
-            ,year + SurrChg_.begin()
-            ,std::bind
-                (round_surrender_charge()
-                ,std::bind(std::multiplies<double>(), std::placeholders::_1, multiplier)
-                )
-            );
         }
 }
 

@@ -683,7 +683,6 @@ double AccountValue::minimum_specified_amount(bool issuing_now, bool term_rider)
 void AccountValue::ChangeSpecAmtBy(double delta)
 {
     double ProportionAppliedToTerm = 0.0;
-    double prior_specamt = ActualSpecAmt;
     // Adjust term here only if it's formally a rider.
     if(TermRiderActive && !TermIsNotRider)
         {
@@ -746,7 +745,6 @@ void AccountValue::ChangeSpecAmtBy(double delta)
         ,minimum_specified_amount(0 == Year && 0 == Month, TermRiderActive)
         );
     ActualSpecAmt = round_specamt()(ActualSpecAmt);
-    AddSurrChgLayer(Year, std::max(0.0, ActualSpecAmt - prior_specamt));
 
     // Carry the new specamt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); ++j)
@@ -2589,8 +2587,6 @@ void AccountValue::TxTakeWD()
 // bases, why do we change it for each basis?
 // TODO ?? Shouldn't this be moved to FinalizeMonth()?
     InvariantValues().NetWD[Year] = NetWD;
-
-    ReduceSurrChg(Year, partial_surrchg);
 }
 
 //============================================================================

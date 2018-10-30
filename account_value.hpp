@@ -283,8 +283,6 @@ class LMI_SO AccountValue
     void   ChangeSpecAmtBy         (double delta);
     void   ChangeSupplAmtBy        (double delta);
     void   ChangeSurrChgSpecAmtBy  (double delta);
-    void   AddSurrChgLayer         (int year, double delta_specamt);
-    void   ReduceSurrChg           (int year, double partial_surrchg);
     double SurrChg                 ();
 
     double MinInitDumpin() const;

@@ -188,8 +188,8 @@
 {DB_SurrChgSpecAmtMult,DB_Topic_SurrenderCharges,"SurrChgSpecAmtMult","Multiple of initial spec amt for formulaic surrender charges",}, \
 {DB_SurrChgSpecAmtSlope,DB_Topic_SurrenderCharges,"SurrChgSpecAmtSlope","Durational factor applied to multiple-of-specified-amount surrender charge",}, \
 {DB_SurrChgPremMult,DB_Topic_SurrenderCharges,"SurrChgPremMult","Multiple of paid premium for formulaic surrender charges [not yet implemented]",}, \
-{DB_SurrChgOnIncr,DB_Topic_SurrenderCharges,"SurrChgOnIncr","Specified-amount increases engender a new surrender layer: 0=no, 1=yes",}, \
-{DB_SurrChgOnDecr,DB_Topic_SurrenderCharges,"SurrChgOnDecr","Specified-amount decreases engender a new surrender layer: 0=no, 1=yes [not yet implemented]",}, \
+{DB_SurrChgOnIncr,DB_Topic_SurrenderCharges,"SurrChgOnIncr","Specified-amount increases engender a new surrender layer: 0=no, 1=yes [support withdrawn]",}, \
+{DB_SurrChgOnDecr,DB_Topic_SurrenderCharges,"SurrChgOnDecr","Specified-amount decreases engender a new surrender layer: 0=no, 1=yes [support withdrawn]",}, \
 {DB_Has1035ExchCharge,DB_Topic_SurrenderCharges,"Has1035ExchCharge","Surrender charge or market-value adjustment on 1035 exchange: 0=no, 1=yes",}, \
 {DB_SnflQTable,DB_Topic_SurrenderCharges,"SnflQTable","Nonforfeiture annual mortality rate (index in mortality table database) [not yet implemented]",}, \
 {DB_CoiSnflIsGuar,DB_Topic_SurrenderCharges,"CoiSnflIsGuar","Use guaranteed cost of insurance rates as nonforfeiture basis [not yet implemented]",}, \
