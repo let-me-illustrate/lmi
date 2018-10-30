@@ -1610,7 +1610,9 @@ void AccountValue::TxSetDeathBft()
             break;
         case mce_rop:
             {
-            // SA + sum of premiums less withdrawals, but not < SA.
+            // SA + sum of premiums less withdrawals, but not < SA;
+            // i.e., ignore 'CumPmts' if it is less than zero, as it
+            // easily can be, e.g., if WDs are not limited to basis.
             DBIgnoringCorr = ActualSpecAmt + std::max(0.0, CumPmts);
             DB7702A        = ActualSpecAmt + std::max(0.0, CumPmts);
             }

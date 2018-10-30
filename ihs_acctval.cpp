@@ -1278,7 +1278,6 @@ double AccountValue::SurrChg()
     // negative base amounts, which would result in surrender charge
     // components having an unexpected sign.
 
-//    LMI_ASSERT(0.0 <= CumPmts); // TODO ?? Fails on a few test cases: should it?
     LMI_ASSERT(0.0 <= InvariantValues().SpecAmt[0]);
 
     return
