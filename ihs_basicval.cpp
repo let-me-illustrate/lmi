@@ -50,7 +50,6 @@
 #include "product_data.hpp"
 #include "rounding_rules.hpp"
 #include "stratified_charges.hpp"
-#include "surrchg_rates.hpp"
 #include "value_cast.hpp"
 
 #include <algorithm>
@@ -218,8 +217,6 @@ void BasicValues::Init()
     // Interest rates require tiered data and 7702 spread.
     MortalityRates_.reset(new MortalityRates (*this));
     InterestRates_ .reset(new InterestRates  (*this));
-    // Surrender-charge rates will eventually require mortality rates.
-    SurrChgRates_  .reset(new SurrChgRates   (*Database_));
     DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
     // Outlay requires only input; it might someday use interest rates.
     Outlay_        .reset(new modal_outlay   (yare_input_));
@@ -310,8 +307,6 @@ void BasicValues::GPTServerInit()
     // Requires database.
     MortalityRates_.reset(new MortalityRates (*this)); // Used by certain target-premium calculations.
 //  InterestRates_ .reset(new InterestRates  (*this));
-    // Will require mortality rates eventually.
-//  SurrChgRates_  .reset(new SurrChgRates   (Database_));
 //  DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
     // Outlay requires only input; it might someday use interest rates.
 //  Outlay_        .reset(new modal_outlay   (yare_input_));

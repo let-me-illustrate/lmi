@@ -362,7 +362,6 @@ liblmi_common_sources = \
     round_glibc.cpp \
     sigfpe.cpp \
     single_cell_document.cpp \
-    surrchg_rates.cpp \
     system_command.cpp \
     timer.cpp \
     tn_range_types.cpp \
@@ -1328,7 +1327,6 @@ noinst_HEADERS = \
     stratified_charges.hpp \
     stratified_charges.xpp \
     stream_cast.hpp \
-    surrchg_rates.hpp \
     system_command.hpp \
     test_tools.hpp \
     text_doc.hpp \

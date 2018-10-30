@@ -245,7 +245,6 @@ common_common_objects := \
   round_glibc.o \
   sigfpe.o \
   single_cell_document.o \
-  surrchg_rates.o \
   system_command.o \
   timer.o \
   tn_range_types.o \
