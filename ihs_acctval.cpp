@@ -1202,9 +1202,7 @@ double AccountValue::SurrChg()
     LMI_ASSERT(0.0 <= InvariantValues().SpecAmt[0]);
 
     return
-            YearsSurrChgAVMult      * std::max(0.0, TotalAccountValue())
-        +   YearsSurrChgPremMult    * std::max(0.0, CumPmts)
-        +   SurrChg_[Year]
+            SurrChg_[Year]
         -   YearsCashValueEnhMult   * std::max(0.0, TotalAccountValue())
         -   yare_input_.CashValueEnhancementRate[Year] * std::max(0.0, TotalAccountValue())
         ;
@@ -1597,13 +1595,6 @@ void AccountValue::SetAnnualInvariants()
     YearsWpRate             = MortalityRates_->WpRates             ()         [Year];
     YearsSpouseRiderRate    = MortalityRates_->SpouseRiderRates    (GenBasis_)[Year];
     YearsChildRiderRate     = MortalityRates_->ChildRiderRates     ()         [Year];
-
-    YearsSurrChgPremMult    = SurrChgRates_->RatePerDollarOfPremium()         [Year];
-
-    YearsSurrChgAVMult =
-          SurrChgRates_->RatePerDollarOfAcctval()      [Year]
-        * SurrChgRates_->AcctvalRateDurationalFactor() [Year]
-        ;
 
     YearsTotLoadTgt         = Loads_->target_total_load     (GenBasis_)[Year];
     YearsTotLoadExc         = Loads_->excess_total_load     (GenBasis_)[Year];
