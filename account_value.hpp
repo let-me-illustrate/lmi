@@ -516,7 +516,6 @@ class LMI_SO AccountValue
     double       YearsSepAcctLoadRate;
     double       YearsSalesLoadRefundRate;
     double       YearsDacTaxLoadRate;
-    double       YearsCashValueEnhMult;
 
     double  MonthsPolicyFees;
     double  SpecAmtLoad;

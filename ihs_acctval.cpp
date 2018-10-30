@@ -1187,25 +1187,18 @@ void AccountValue::set_list_bill_premium()
         }
 }
 
-//============================================================================
-// Surrender charge. Only simple multiplicative parts are implemented.
-//
-// SOMEDAY !! Table support and UL model reg formulas should be added.
-//
+/// Surrender charge.
+///
+/// The "cash value enhancement" components should be implemented as
+/// such, rather than as negative surrender charges.
+///
+/// SOMEDAY !! Table support and UL model reg formulas should be added.
+
 double AccountValue::SurrChg()
 {
-    // We permit negative surrender-charge factors. But we don't
-    // allow those factors, regardless of sign, to be multiplied by
-    // negative base amounts, which would result in surrender charge
-    // components having an unexpected sign.
-
-    LMI_ASSERT(0.0 <= InvariantValues().SpecAmt[0]);
-
-    return
-            SurrChg_[Year]
-        -   YearsCashValueEnhMult   * std::max(0.0, TotalAccountValue())
-        -   yare_input_.CashValueEnhancementRate[Year] * std::max(0.0, TotalAccountValue())
-        ;
+    double const x = CashValueEnhMult[Year];
+    double const y = yare_input_.CashValueEnhancementRate[Year];
+    return SurrChg_[Year] - (x + y) * std::max(0.0, TotalAccountValue());
 }
 
 //============================================================================
@@ -1611,7 +1604,6 @@ void AccountValue::SetAnnualInvariants()
     YearsSepAcctLoadRate    = Loads_->separate_account_load (GenBasis_)[Year];
     YearsSalesLoadRefundRate= Loads_->refundable_sales_load_proportion()[Year];
     YearsDacTaxLoadRate     = Loads_->dac_tax_load                    ()[Year];
-    YearsCashValueEnhMult   = CashValueEnhMult[Year];
 }
 
 //============================================================================
