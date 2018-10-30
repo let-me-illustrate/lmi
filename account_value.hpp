@@ -496,6 +496,7 @@ class LMI_SO AccountValue
     double       YearsPrfLnIntCredRate;
     double       YearsRegLnIntDueRate;
     double       YearsPrfLnIntDueRate;
+
     double       YearsSurrChgPremMult;
     double       YearsSurrChgAVMult;
     double       YearsCoiRate0;
@@ -519,6 +520,7 @@ class LMI_SO AccountValue
     double       YearsSepAcctLoadRate;
     double       YearsSalesLoadRefundRate;
     double       YearsDacTaxLoadRate;
+    double       YearsCashValueEnhMult;
 
     double  MonthsPolicyFees;
     double  SpecAmtLoad;

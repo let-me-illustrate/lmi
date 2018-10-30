@@ -657,6 +657,7 @@ void BasicValues::SetPermanentInvariants()
     AllowSAIncr         = Database_->Query(DB_AllowSpecAmtIncr     );
     NoLapseAlwaysActive = Database_->Query(DB_NoLapseAlwaysActive  );
     WaiverChargeMethod  = static_cast<oenum_waiver_charge_method>(Database_->Query(DB_WpChargeMethod));
+    Database_->Query(CashValueEnhMult, DB_CashValueEnhMult);
     LapseIgnoresSurrChg = Database_->Query(DB_LapseIgnoresSurrChg  );
     SurrChgOnIncr       = Database_->Query(DB_SurrChgOnIncr        );
     SurrChgOnDecr       = Database_->Query(DB_SurrChgOnDecr        );

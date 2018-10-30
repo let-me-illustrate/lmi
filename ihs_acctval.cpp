@@ -1284,6 +1284,7 @@ double AccountValue::SurrChg()
             YearsSurrChgAVMult      * std::max(0.0, TotalAccountValue())
         +   YearsSurrChgPremMult    * std::max(0.0, CumPmts)
         +   SurrChg_[Year]
+        -   YearsCashValueEnhMult   * std::max(0.0, TotalAccountValue())
         -   yare_input_.CashValueEnhancementRate[Year] * std::max(0.0, TotalAccountValue())
         ;
 }
@@ -1698,6 +1699,7 @@ void AccountValue::SetAnnualInvariants()
     YearsSepAcctLoadRate    = Loads_->separate_account_load (GenBasis_)[Year];
     YearsSalesLoadRefundRate= Loads_->refundable_sales_load_proportion()[Year];
     YearsDacTaxLoadRate     = Loads_->dac_tax_load                    ()[Year];
+    YearsCashValueEnhMult   = CashValueEnhMult[Year];
 }
 
 //============================================================================
