@@ -310,11 +310,6 @@ enum e_database_key
 
     ,DB_Topic_SurrenderCharges
 
-        ,DB_SurrChgAcctValMult
-        ,DB_SurrChgAcctValSlope
-        ,DB_SurrChgSpecAmtMult
-        ,DB_SurrChgSpecAmtSlope
-        ,DB_SurrChgPremMult
         ,DB_SurrChgOnIncr
         ,DB_SurrChgOnDecr
         ,DB_Has1035ExchCharge

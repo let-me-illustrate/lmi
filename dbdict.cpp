@@ -248,11 +248,6 @@ void DBDictionary::ascribe_members()
     ascribe("PremTaxAmortIntRate" , &DBDictionary::PremTaxAmortIntRate );
     ascribe("PremTaxRate"         , &DBDictionary::PremTaxRate         );
     ascribe("PremTaxState"        , &DBDictionary::PremTaxState        );
-    ascribe("SurrChgAcctValMult"  , &DBDictionary::SurrChgAcctValMult  );
-    ascribe("SurrChgAcctValSlope" , &DBDictionary::SurrChgAcctValSlope );
-    ascribe("SurrChgSpecAmtMult"  , &DBDictionary::SurrChgSpecAmtMult  );
-    ascribe("SurrChgSpecAmtSlope" , &DBDictionary::SurrChgSpecAmtSlope );
-    ascribe("SurrChgPremMult"     , &DBDictionary::SurrChgPremMult     );
     ascribe("SurrChgOnIncr"       , &DBDictionary::SurrChgOnIncr       );
     ascribe("SurrChgOnDecr"       , &DBDictionary::SurrChgOnDecr       );
     ascribe("Has1035ExchCharge"   , &DBDictionary::Has1035ExchCharge   );
@@ -522,8 +517,6 @@ void DBDictionary::InitDB()
     Add(database_entity(DB_CurrCoiMultiplier   , 1.0));
     Add(database_entity(DB_GuarCoiMultiplier   , 1.0));
     Add(database_entity(DB_SubstdTableMult     , 1.0));
-    Add(database_entity(DB_SurrChgSpecAmtSlope , 1.0));
-    Add(database_entity(DB_SurrChgAcctValSlope , 1.0));
     Add(database_entity(DB_MaxWdGenAcctValMult , 1.0));
     Add(database_entity(DB_MaxWdSepAcctValMult , 1.0));
 
@@ -751,7 +744,6 @@ void DBDictionary::write_database_files()
     z.Add(database_entity(DB_SurrChgNlpMult      , 0.0));
     z.Add(database_entity(DB_SurrChgNlpMax       , 0.0));
     z.Add(database_entity(DB_SurrChgEaMax        , 0.0));
-    z.Add(database_entity(DB_SurrChgPremMult     , 0.0));
     z.Add(database_entity(DB_SurrChgAmort        , 0.0));
 
     int ptd[e_number_of_axes] = {1, 1, 1, 1, 1, e_max_dim_state, 1};
@@ -914,7 +906,6 @@ void DBDictionary::write_database_files()
     z.Add(database_entity(DB_MaxGenAcctRate      , 0.06));
     z.Add(database_entity(DB_MaxSepAcctRate      , 0.12));
     z.Add(database_entity(DB_MinVlrRate          , 0.04));
-    z.Add(database_entity(DB_SurrChgAcctValMult  , 0.0));
     z.Add(database_entity(DB_IntSpreadMode       , mce_spread_daily));
     z.Add(database_entity(DB_StateApproved       , true));
     z.Add(database_entity(DB_AllowStateXX        , true));
@@ -940,7 +931,6 @@ void DBDictionary::write_database_files()
     z.Add(database_entity(DB_ChildRiderIsQAB     , false));
     z.Add(database_entity(DB_WpIsQAB             , false));
     z.Add(database_entity(DB_ExpRatRiskCoiMult   , 0));
-    z.Add(database_entity(DB_SurrChgSpecAmtMult  , 0.0));
     z.Add(database_entity(DB_AllowSpouseRider    , true));
     z.Add(database_entity(DB_AllowChildRider     , true));
 
@@ -1064,12 +1054,6 @@ void DBDictionary::InitAntediluvian()
     Add(database_entity(DB_AllowFlatExtras, 1.0));
     Add(database_entity(DB_AllowChangeToDbo2, 1.0));
     Add(database_entity(DB_AllowDbo3, 1.0));
-
-    Add(database_entity(DB_SurrChgPremMult, 0.0));
-    Add(database_entity(DB_SurrChgAcctValMult, 0.0));
-    Add(database_entity(DB_SurrChgSpecAmtMult, 0.0));
-    Add(database_entity(DB_SurrChgAcctValSlope, 1.0));
-    Add(database_entity(DB_SurrChgSpecAmtSlope, 1.0));
 
     Add(database_entity(DB_LedgerType, mce_ill_reg));
 

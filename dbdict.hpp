@@ -232,11 +232,6 @@ class LMI_SO DBDictionary final
     database_entity PremTaxAmortIntRate ;
     database_entity PremTaxRate         ;
     database_entity PremTaxState        ;
-    database_entity SurrChgAcctValMult  ;
-    database_entity SurrChgAcctValSlope ;
-    database_entity SurrChgSpecAmtMult  ;
-    database_entity SurrChgSpecAmtSlope ;
-    database_entity SurrChgPremMult     ;
     database_entity SurrChgOnIncr       ;
     database_entity SurrChgOnDecr       ;
     database_entity Has1035ExchCharge   ;
