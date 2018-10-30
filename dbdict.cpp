@@ -390,6 +390,7 @@ void DBDictionary::ascribe_members()
     ascribe("NoLongerIssued"      , &DBDictionary::NoLongerIssued      );
     ascribe("AgeLastOrNearest"    , &DBDictionary::AgeLastOrNearest    );
     ascribe("MaturityAge"         , &DBDictionary::MaturityAge         );
+    ascribe("CashValueEnhMult"    , &DBDictionary::CashValueEnhMult    );
     ascribe("LapseIgnoresSurrChg" , &DBDictionary::LapseIgnoresSurrChg );
     ascribe("DefaultProcessOrder" , &DBDictionary::DefaultProcessOrder );
     ascribe("GroupProxyRateTable" , &DBDictionary::GroupProxyRateTable );

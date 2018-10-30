@@ -500,7 +500,9 @@ enum e_database_key
         ,DB_AgeLastOrNearest
         ,DB_MaturityAge
 
+        ,DB_CashValueEnhMult
         ,DB_LapseIgnoresSurrChg
+
         ,DB_DefaultProcessOrder
 
         ,DB_GroupProxyRateTable

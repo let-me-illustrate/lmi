@@ -374,6 +374,7 @@ class LMI_SO DBDictionary final
     database_entity NoLongerIssued      ;
     database_entity AgeLastOrNearest    ;
     database_entity MaturityAge         ;
+    database_entity CashValueEnhMult    ;
     database_entity LapseIgnoresSurrChg ;
     database_entity DefaultProcessOrder ;
     database_entity GroupProxyRateTable ;
