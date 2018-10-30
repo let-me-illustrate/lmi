@@ -1284,8 +1284,6 @@ double AccountValue::SurrChg()
             YearsSurrChgAVMult      * std::max(0.0, TotalAccountValue())
         +   YearsSurrChgPremMult    * std::max(0.0, CumPmts)
         +   SurrChg_[Year]
-// TODO ?? expunge this and its antecedents:
-//        +   YearsSurrChgSAMult      * InvariantValues().SpecAmt[0]
         -   yare_input_.CashValueEnhancementRate[Year] * std::max(0.0, TotalAccountValue())
         ;
 }
@@ -1680,21 +1678,11 @@ void AccountValue::SetAnnualInvariants()
 
     YearsSurrChgPremMult    = SurrChgRates_->RatePerDollarOfPremium()         [Year];
 
-/* TODO ?? expunge
-    YearsSurrChgAVMult      = SurrChgRates_->RatePerDollarOfAcctval()         [Year];
-    YearsSurrChgSAMult      = SurrChgRates_->RatePerDollarOfSpecamt()         [Year];
-*/
-
     YearsSurrChgAVMult =
           SurrChgRates_->RatePerDollarOfAcctval()      [Year]
         * SurrChgRates_->AcctvalRateDurationalFactor() [Year]
         ;
-/*
-    YearsSurrChgSAMult =
-          SurrChgRates_->RatePerDollarOfSpecamt()      [Year]
-        * SurrChgRates_->SpecamtRateDurationalFactor() [Year]
-        ;
-*/
+
     YearsTotLoadTgt         = Loads_->target_total_load     (GenBasis_)[Year];
     YearsTotLoadExc         = Loads_->excess_total_load     (GenBasis_)[Year];
     // TAXATION !! This '_lowest_premium_tax' approach needs to be

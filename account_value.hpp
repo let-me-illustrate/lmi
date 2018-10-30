@@ -498,7 +498,6 @@ class LMI_SO AccountValue
     double       YearsPrfLnIntDueRate;
     double       YearsSurrChgPremMult;
     double       YearsSurrChgAVMult;
-    double       YearsSurrChgSAMult;
     double       YearsCoiRate0;
     double       YearsCoiRate1;
     double       YearsCoiRate2;
