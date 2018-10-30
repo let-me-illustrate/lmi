@@ -976,6 +976,8 @@ void DBDictionary::write_database_files()
     int dims_1111113[e_number_of_axes] = {1, 1, 1, 1, 1, 1, 3};
     double loanrate[3] = {0.06, 0.05, 0.04};
     z.Add(database_entity(DB_FixedLoanRate, e_number_of_axes, dims_1111113, loanrate));
+    double cv_enh[3] = {0.10, 0.05, 0.00};
+    z.Add(database_entity(DB_CashValueEnhMult, e_number_of_axes, dims_1111113, cv_enh));
     z.WriteDB(AddDataDir("sample2xyz.database"));
 }
 
