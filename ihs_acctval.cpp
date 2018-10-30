@@ -1007,10 +1007,6 @@ void AccountValue::InitializeSpecAmt()
         InvariantValues().InitMinPrem        = MinInitPrem();
         }
 
-    SurrChgSpecAmt = InvariantValues().SpecAmt[0];
-    LMI_ASSERT(0.0 <= SurrChgSpecAmt);
-    // TODO ?? SurrChgSpecAmt is not used yet.
-
     // TODO ?? Perform specamt strategy here?
 }
 

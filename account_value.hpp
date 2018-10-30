@@ -282,7 +282,6 @@ class LMI_SO AccountValue
     double minimum_specified_amount(bool issuing_now, bool term_rider) const;
     void   ChangeSpecAmtBy         (double delta);
     void   ChangeSupplAmtBy        (double delta);
-    void   ChangeSurrChgSpecAmtBy  (double delta);
     double SurrChg                 ();
 
     double MinInitDumpin() const;
@@ -554,11 +553,6 @@ class LMI_SO AccountValue
     double      deathbft; // Antediluvian.
     bool        haswp;    // Antediluvian.
     bool        hasadb;   // Antediluvian.
-
-    // The spec amt used as the basis for surrender charges is not
-    // always the current spec amt, but rather the original spec amt
-    // adjusted for withdrawals only.
-    double  SurrChgSpecAmt;
 
     double  ActualLoan;
     double  RequestedLoan;

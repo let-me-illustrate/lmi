@@ -794,27 +794,6 @@ void AccountValue::ChangeSupplAmtBy(double delta)
 }
 
 //============================================================================
-// The spec amt used as the basis for surrender charges is not
-// always the current spec amt, but rather the original spec amt
-// adjusted for withdrawals only. This function simply decreases
-// this special spec amt by the same amount as the normal spec amt
-// decreases, and only in the event of a withdrawal, which is
-// constrained to be nonnegative by constraining the additive
-// adjustment to be nonpositive. Other approaches are possible.
-void AccountValue::ChangeSurrChgSpecAmtBy(double delta)
-{
-    LMI_ASSERT(delta <= 0.0);
-    SurrChgSpecAmt += delta;
-    SurrChgSpecAmt = std::max(0.0, SurrChgSpecAmt);
-    // TODO ?? 'SurrChgSpecAmt' isn't used yet.
-
-    // SOMEDAY !! Recalculation of GDB premium is not yet implemented.
-    // It is fairly common to let withdrawals affect it. If this is
-    // the best place to do that, then perhaps this function should
-    // be renamed, since it wouldn't merely change 'SurrChgSpecAmt'.
-}
-
-//============================================================================
 void AccountValue::InitializeMonth()
 {
     GptForceout       = 0.0;
@@ -2488,7 +2467,6 @@ void AccountValue::TxTakeWD()
     Dcv -= GrossWD;
     Dcv = std::max(0.0, Dcv);
 
-    double original_specamt = ActualSpecAmt;
     switch(YearsDBOpt)
         {
         // If DBOpt 1, SA = std::min(SA, DB - WD); if opt 2, no change.
@@ -2514,10 +2492,6 @@ void AccountValue::TxTakeWD()
                 //      min AV after WD: debt +
                 //          months remaining to end of modal term *
                 //          most recent mly deds
-                if(original_specamt != ActualSpecAmt)
-                    {
-                    ChangeSurrChgSpecAmtBy(-GrossWD);
-                    }
                 }
             else
                 {
@@ -2530,10 +2504,6 @@ void AccountValue::TxTakeWD()
             if(WDCanDecrSADBO2)
                 {
                 ChangeSpecAmtBy(-GrossWD);
-                if(original_specamt != ActualSpecAmt)
-                    {
-                    ChangeSurrChgSpecAmtBy(-GrossWD);
-                    }
                 }
             else
                 {
@@ -2546,10 +2516,6 @@ void AccountValue::TxTakeWD()
             if(WDCanDecrSADBO3)
                 {
                 ChangeSpecAmtBy(-GrossWD);
-                if(original_specamt != ActualSpecAmt)
-                    {
-                    ChangeSurrChgSpecAmtBy(-GrossWD);
-                    }
                 }
             else
                 {
