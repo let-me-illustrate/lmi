@@ -1546,6 +1546,13 @@ void AccountValue::TxSetBOMAV()
 
 /// Set death benefit reflecting corridor and death benefit option.
 ///
+/// These variables are updated here:
+///   DBIgnoringCorr
+///   DBReflectingCorr
+///   DB7702A
+///   DcvDeathBft
+/// so this function is called before any of them is needed.
+///
 /// Option 2 reflects the total account value: general as well as
 /// separate account, and loaned as well as unloaned. Notionally, it
 /// keeps NAAR level; therefore, it reflects AV rather than CSV.
