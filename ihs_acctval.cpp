@@ -1196,11 +1196,27 @@ void AccountValue::set_list_bill_premium()
 ///
 /// SOMEDAY !! Table support and UL model reg formulas should be added.
 
-double AccountValue::SurrChg()
+double AccountValue::SurrChg() const
 {
-    double const x = CashValueEnhMult[Year];
-    double const y = yare_input_.CashValueEnhancementRate[Year];
-    return SurrChg_[Year] - (x + y) * std::max(0.0, TotalAccountValue());
+    LMI_ASSERT(0.0 <= SurrChg_[Year]);
+    // For the nonce, CSVBoost() is netted against surrender charge.
+    // This class's implementation should be revised to distinguish
+    // these additive and subtractive components of CSV.
+    return SurrChg_[Year] - CSVBoost();
+}
+
+/// Cash value augmentation--like a negative surrender charge.
+///
+/// Probably the input field should be expunged.
+
+double AccountValue::CSVBoost() const
+{
+    double const z =
+          CashValueEnhMult[Year]
+        + yare_input_.CashValueEnhancementRate[Year]
+        ;
+    LMI_ASSERT(0.0 <= z);
+    return z * std::max(0.0, TotalAccountValue());
 }
 
 //============================================================================

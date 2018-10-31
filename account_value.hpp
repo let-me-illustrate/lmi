@@ -282,7 +282,9 @@ class LMI_SO AccountValue
     double minimum_specified_amount(bool issuing_now, bool term_rider) const;
     void   ChangeSpecAmtBy         (double delta);
     void   ChangeSupplAmtBy        (double delta);
-    double SurrChg                 ();
+
+    double SurrChg                 () const;
+    double CSVBoost                () const;
 
     double MinInitDumpin() const;
     double MinInitPrem() const;
@@ -611,7 +613,7 @@ class LMI_SO AccountValue
     std::vector<double> OverridingLoan;
     std::vector<double> OverridingWD;
 
-    std::vector<double> SurrChg_;
+    std::vector<double> SurrChg_; // Of uncertain utility.
 };
 
 //============================================================================
