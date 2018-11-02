@@ -1616,6 +1616,7 @@ void AccountValue::TxSetDeathBft()
             }
             break;
         }
+    LMI_ASSERT(0.0 <= DBIgnoringCorr);
 
     // Surrender charges are generally ignored here, but any negative
     // surrender charge must be subtracted, increasing the account value.
@@ -1633,9 +1634,10 @@ void AccountValue::TxSetDeathBft()
 
     DBReflectingCorr = std::max
         (DBIgnoringCorr
-        ,YearsCorridorFactor * cash_value_for_corridor
+        ,YearsCorridorFactor * std::max(0.0, cash_value_for_corridor)
         );
     DBReflectingCorr = round_death_benefit()(DBReflectingCorr);
+    LMI_ASSERT(0.0 <= DBReflectingCorr);
     // This overrides the value assigned above. There's more than one
     // way to interpret 7702A "death benefit"; this is just one.
     // TAXATION !! Use DB_Irc7702BftIsSpecAmt
