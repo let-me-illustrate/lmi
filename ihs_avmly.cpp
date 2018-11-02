@@ -875,9 +875,14 @@ void AccountValue::TxOptionChange()
                     {
                     ChangeSpecAmtBy(std::max(0.0, CumPmts));
                     }
-                else if(mce_mdb == old_option) // DBO3 !! reconsider
+                else if(mce_mdb == old_option)
                     {
-                    alarum() << "MDB DBO not yet implemented." << LMI_FLUSH;
+                    // Do nothing. An argument could be made for this
+                    // alternative:
+                    //   TxSetDeathBft(); // update DBReflectingCorr
+                    //   ChangeSpecAmtBy(std::max(0.0, DBReflectingCorr));
+                    // but that takes more work and is not clearly
+                    // preferable.
                     }
                 else
                     {
@@ -912,9 +917,10 @@ void AccountValue::TxOptionChange()
                 // Do nothing.
                 }
             break;
-        case mce_mdb: // DBO3 !! reconsider
+        case mce_mdb:
             {
-            alarum() << "MDB DBO not yet implemented." << LMI_FLUSH;
+            // Change spec amt by its additive inverse, making it 0.
+            ChangeSpecAmtBy(-(ActualSpecAmt + TermSpecAmt));
             }
             break;
         }
@@ -1610,9 +1616,13 @@ void AccountValue::TxSetDeathBft()
             DB7702A        = ActualSpecAmt + std::max(0.0, CumPmts);
             }
             break;
-        case mce_mdb: // DBO3 !! reconsider
+        case mce_mdb:
             {
-            alarum() << "MDB DBO not yet implemented." << LMI_FLUSH;
+            // Specamt is a floor under DB (and therefore zero here)
+            // because this option defines the DB as the minimum
+            // required by the corridor (but not less than zero).
+            DBIgnoringCorr = 0.0;
+            DB7702A        = 0.0;
             }
             break;
         }
@@ -2541,9 +2551,11 @@ void AccountValue::TxTakeWD()
                 }
             }
             break;
-        case mce_mdb: // DBO3 !! reconsider
+        case mce_mdb:
             {
-            alarum() << "MDB DBO not yet implemented." << LMI_FLUSH;
+            // Do nothing. Every other DBO conditionally decreases the
+            // specamt, but the mce_mdb specamt is zero by definition
+            // and cannot be decreased.
             }
             break;
         }
