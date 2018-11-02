@@ -388,9 +388,10 @@ pdf_writer_wx::make_html_from(wxHtmlCell* cell)
     initialize_html_parser(html_parser);
     html_parser.InitParser(wxString{});
 
-    auto document_cell = std::make_unique<wxHtmlContainerCell>
-        (static_cast<wxHtmlContainerCell*>(html_parser.GetProduct())
-        );
+    // Take ownership of the DOM containing just the initial colors and font.
+    std::unique_ptr<wxHtmlContainerCell> document_cell
+        {static_cast<wxHtmlContainerCell*>(html_parser.GetProduct())
+        };
 
     // Give ownership of the cell to the new document.
     document_cell->InsertCell(cell);
