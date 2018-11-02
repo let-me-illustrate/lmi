@@ -693,6 +693,7 @@ void check_defect_markers(file const& f)
                 true
             &&  "BOOST "       != z[1]
             &&  "COMPILER "    != z[1]
+            &&  "CURRENCY "    != z[1]
             &&  "CYGWIN "      != z[1]
             &&  "DATABASE "    != z[1]
             &&  "DBO3 "        != z[1]

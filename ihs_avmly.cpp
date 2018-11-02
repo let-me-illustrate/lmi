@@ -1466,6 +1466,15 @@ double AccountValue::GetPremLoad
 double AccountValue::GetRefundableSalesLoad() const
 {
     return CumulativeSalesLoad * YearsSalesLoadRefundRate;
+#if 0
+    // CURRENCY !! Assertions such as these are desirable, but adding
+    // them now would cause regression artifacts.
+    LMI_ASSERT(0.0 <= CumulativeSalesLoad);
+    LMI_ASSERT(0.0 <= YearsSalesLoadRefundRate);
+    double const z = CumulativeSalesLoad * YearsSalesLoadRefundRate;
+    LMI_ASSERT(0.0 <= z);
+    return z;
+#endif // 0
 }
 
 //============================================================================
