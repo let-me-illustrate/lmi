@@ -359,7 +359,7 @@ liblmi_common_sources = \
     pdf_command.cpp \
     premium_tax.cpp \
     progress_meter.cpp \
-    round_glibc.cpp \
+    round_glibc.c \
     sigfpe.cpp \
     single_cell_document.cpp \
     system_command.cpp \
@@ -1037,7 +1037,7 @@ test_report_table_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_round_SOURCES = \
   $(common_test_objects) \
-  round_glibc.cpp \
+  round_glibc.c \
   round_test.cpp
 test_round_CXXFLAGS = $(AM_CXXFLAGS)
 
