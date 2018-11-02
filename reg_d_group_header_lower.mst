@@ -47,7 +47,7 @@
         {{#HasWP}}
             Waiver of Monthly Charges Rider elected.<br>
         {{/HasWP}}
-        {{>contract_numbers}}
+        {{>contract_numbers}}<br>
         </td>
         <td width="40%">
         Assumed Gross Rate: {{InitAnnSepAcctGrossInt_Current}}
