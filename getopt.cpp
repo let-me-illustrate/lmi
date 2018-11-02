@@ -730,7 +730,7 @@ GetOpt::operator()()
 
   {
     int c = *nextchar++;
-#if defined __GNUC__
+#if defined __GNUC__ && !defined __clang__
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wuseless-cast"
 #endif // defined __GNUC__
@@ -740,7 +740,7 @@ GetOpt::operator()()
     // 'char* strchr(char const*, int);' prototype confuses g++, but
     // it's still a defect.
     char* temp = const_cast<char*>(std::strchr(noptstring.c_str(), c));
-#if defined __GNUC__
+#if defined __GNUC__ && !defined __clang__
 #   pragma GCC diagnostic pop
 #endif // defined __GNUC__
 
