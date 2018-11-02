@@ -115,7 +115,7 @@ namespace
             static std::ctype_base::mask rc[table_size];
             std::copy(classic_table(), classic_table() + table_size, rc);
             // See "Implementation note" above.
-            constexpr std::ctype_base::mask z = {~std::ctype_base::space};
+            constexpr std::ctype_base::mask z = ~std::ctype_base::space;
             rc[C] &= z;
             return rc;
             }
