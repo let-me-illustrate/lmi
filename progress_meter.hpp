@@ -195,7 +195,7 @@
 #include "so_attributes.hpp"
 
 #include <iosfwd>
-#include <memory>                       // shared_ptr
+#include <memory>                       // unique_ptr
 #include <string>
 
 std::ostringstream& LMI_SO progress_meter_unit_test_stream();
@@ -209,6 +209,8 @@ class LMI_SO progress_meter
         ,e_unit_test_mode
         };
 
+    virtual ~progress_meter();
+
     void dawdle(int seconds);
     bool reflect_progress();
     void culminate();
@@ -219,8 +221,6 @@ class LMI_SO progress_meter
         ,std::string const& title
         ,enum_display_mode
         );
-
-    virtual ~progress_meter();
 
     int count() const;
     int max_count() const;
@@ -249,13 +249,13 @@ class LMI_SO progress_meter
     bool              was_cancelled_;
 };
 
-std::shared_ptr<progress_meter> LMI_SO create_progress_meter
+std::unique_ptr<progress_meter> LMI_SO create_progress_meter
     (int                               max_count
     ,std::string const&                title = std::string()
     ,progress_meter::enum_display_mode       = progress_meter::e_normal_display
     );
 
-typedef std::shared_ptr<progress_meter> (*progress_meter_creator_type)
+typedef std::unique_ptr<progress_meter> (*progress_meter_creator_type)
     (int                               max_count
     ,std::string const&                title
     ,progress_meter::enum_display_mode

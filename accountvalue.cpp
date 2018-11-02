@@ -490,19 +490,19 @@ void AccountValue::PerformSpecAmtStrategy()
         }
 }
 
-//============================================================================
-// Change death benefit option.
-// Assumes surrender charge is not affected by this transaction.
-// Assumes target premium rate is not affected by this transaction.
-// Assumes change to option 2 mustn't decrease spec amt below minimum.
+/// Change death benefit option.
+
 void AccountValue::TxOptionChange()
 {
-    // Illustrations allow option changes only on anniversary, but
-    // not on zeroth anniversary.
+    // Illustrations allow option changes only on anniversary,
+    // but not on the zeroth anniversary.
     if(0 != Month || 0 == Year)
         {
         return;
         }
+
+    // It's OK to index by [Year - 1] because of the early return
+    // above in the 0 == Year case.
 
     // Nothing to do if no option change requested.
     if(DeathBfts_->dbopt()[Year - 1] == YearsDBOpt)
@@ -548,15 +548,17 @@ void AccountValue::TxOptionChange()
         }
 }
 
-//============================================================================
-// Specified amount change: increase or decrease.
-// Ignores multiple layers of coverage: not correct for sel & ult COI rates.
-// Assumes target premium rate is not affected by increases or decreases.
+/// Process an owner-initiated specified-amount increase or decrease.
+///
+/// Ignores multiple layers of coverage: not correct for select and
+/// ultimate COI rates if select period restarts on increase.
+///
+/// Specamt changes are assumed not to affect the target-premium rate.
+
 void AccountValue::TxSpecAmtChange()
 {
-// Make sure this is the right place to do this.
-    // Illustrations allow increases and decreases only on anniversary
-    //   but not on zeroth anniversary.
+    // Illustrations allow increases and decreases only on anniversary,
+    // but not on the zeroth anniversary.
     if(0 != Month || 0 == Year)
         {
         return;
@@ -719,17 +721,17 @@ void AccountValue::TxLoanRepay()
     InvariantValues().NewCashLoan[Year] = RequestedLoan;
 }
 
-//============================================================================
-// Set account value before monthly deductions.
-// IHS !! This function seems bogus here; the lmi implementation does much more.
+/// Set account value before monthly deductions.
+
 void AccountValue::TxSetBOMAV()
 {
+    // IHS !! Seems bogus: the lmi implementation does much more.
     AVUnloaned -= YearsMonthlyPolicyFee;
 }
 
-//============================================================================
-// Set death benefit reflecting corridor and option 2.
-void AccountValue::TxSetDeathBft(bool)
+/// Set death benefit reflecting corridor and death benefit option.
+
+void AccountValue::TxSetDeathBft()
 {
     // Total account value is unloaned plus loaned.
     double AV = AVUnloaned + AVRegLn + AVPrfLn;
@@ -762,8 +764,8 @@ void AccountValue::TxSetDeathBft(bool)
     // SOMEDAY !! Accumulate average death benefit for profit testing here.
 }
 
-//============================================================================
-// Set cost of insurance charge.
+/// Calculate mortality charge.
+
 void AccountValue::TxSetCoiCharge()
 {
     TxSetDeathBft();
@@ -774,8 +776,8 @@ void AccountValue::TxSetCoiCharge()
     CoiCharge = round_coi_charge()(NAAR * YearsCoiRate0);
 }
 
-//============================================================================
-// Calculate rider charges.
+/// Calculate rider charges.
+
 void AccountValue::TxSetRiderDed()
 {
     WpCharge = 0.0;
@@ -794,8 +796,8 @@ void AccountValue::TxSetRiderDed()
         }
 }
 
-//============================================================================
-// Subtract monthly deduction from unloaned account value.
+/// Subtract monthly deductions from unloaned account value.
+
 void AccountValue::TxDoMlyDed()
 {
     AVUnloaned -=             CoiCharge + AdbCharge + WpCharge;
@@ -803,8 +805,8 @@ void AccountValue::TxDoMlyDed()
     mlydedtonextmodalpmtdate = MlyDed * MonthsToNextModalPmtDate();
 }
 
-//============================================================================
-// Credit interest on loaned and unloaned account value separately.
+/// Credit interest on account value.
+
 void AccountValue::TxCreditInt()
 {
     // Accrue interest on unloaned and loaned account value separately,
@@ -819,8 +821,8 @@ void AccountValue::TxCreditInt()
     LMI_ASSERT(0.0 <= AVRegLn + AVPrfLn);
 }
 
-//============================================================================
-// Accrue loan interest.
+/// Accrue loan interest, and calculate interest credit on loaned AV.
+
 void AccountValue::TxLoanInt()
 {
     // Nothing to do if there's no loan outstanding.
@@ -844,11 +846,13 @@ void AccountValue::TxLoanInt()
     PrfLnBal += PrfLnIntAccrued;
 }
 
-//============================================================================
-// IHS !! Min AV after WD not implemented here, though max WD calculation
-// may take care of it. It is implemented in lmi.
+/// Take a withdrawal.
+
 void AccountValue::TxTakeWD()
 {
+// IHS !! Min AV after WD not implemented here, though max WD calculation
+// may take care of it. It is implemented in lmi.
+
     // Illustrations allow withdrawals only on anniversary.
     if(0 != Month)
         {
@@ -893,9 +897,9 @@ void AccountValue::TxTakeWD()
         {
         case mce_option1:
             {
-            // IHS !! Spec amt reduced for option 1 even if in corridor?
+            // Spec amt reduced for option 1 even if in corridor?
             //   --taken care of by max WD formula
-            // IHS !! If WD causes spec amt < min spec amt, do we:
+            // If WD causes spec amt < min spec amt, do we:
             //   set spec amt = min spec amt?
             //   reduce the WD?
             //   lapse the policy?
@@ -932,8 +936,8 @@ void AccountValue::TxTakeWD()
 // IHS !!    TaxBasis -= wd; // Withdrawals are subtracted from basis in lmi.
 }
 
-//============================================================================
-// Take a new loan
+/// Take a new cash loan, limiting it to respect the maximum loan.
+
 void AccountValue::TxTakeLoan()
 {
     // Illustrations allow loans only on anniversary.
@@ -980,11 +984,11 @@ void AccountValue::TxTakeLoan()
     InvariantValues().NewCashLoan[Year] = RequestedLoan;
 }
 
-//============================================================================
-// Test for lapse.
+/// Test for lapse.
+
 void AccountValue::TxTestLapse()
 {
-// Perform no-lapse test.
+    // Perform no-lapse test.
 
     // If we're doing a solve, don't let it lapse--otherwise lapse would
     // introduce a discontinuity in the function for which we seek a root.

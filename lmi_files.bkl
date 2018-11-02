@@ -62,7 +62,6 @@
     rounding_rules.cpp
     sigfpe.cpp
     single_cell_document.cpp
-    surrchg_rates.cpp
     system_command.cpp
     timer.cpp
     xml_lmi.cpp

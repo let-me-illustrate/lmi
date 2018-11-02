@@ -274,9 +274,6 @@
     <ClCompile Include="stratified_charges.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="surrchg_rates.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="system_command.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

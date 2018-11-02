@@ -66,11 +66,12 @@
 #include "rtti_lmi.hpp"
 #include "value_cast.hpp"
 
-#include <algorithm>                    // lower_bound(), swap()
+#include <algorithm>                    // lower_bound()
 #include <map>
 #include <sstream>
 #include <stdexcept>
 #include <type_traits>
+#include <utility>                      // swap()
 #include <vector>
 
 // Definition of class placeholder.

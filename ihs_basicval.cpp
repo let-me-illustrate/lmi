@@ -50,7 +50,6 @@
 #include "product_data.hpp"
 #include "rounding_rules.hpp"
 #include "stratified_charges.hpp"
-#include "surrchg_rates.hpp"
 #include "value_cast.hpp"
 
 #include <algorithm>
@@ -170,12 +169,7 @@ void BasicValues::Init()
     EndtAge = static_cast<int>(Database_->Query(DB_MaturityAge));
     Length = EndtAge - IssueAge;
 
-    ledger_type_ =
-        static_cast<mcenum_ledger_type>
-            (static_cast<int>
-                (Database_->Query(DB_LedgerType))
-            )
-        ;
+    ledger_type_ = static_cast<mcenum_ledger_type>(Database_->Query(DB_LedgerType));
     nonillustrated_       = static_cast<bool>(Database_->Query(DB_Nonillustrated));
     bool no_longer_issued = static_cast<bool>(Database_->Query(DB_NoLongerIssued));
     bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;
@@ -223,8 +217,6 @@ void BasicValues::Init()
     // Interest rates require tiered data and 7702 spread.
     MortalityRates_.reset(new MortalityRates (*this));
     InterestRates_ .reset(new InterestRates  (*this));
-    // Surrender-charge rates will eventually require mortality rates.
-    SurrChgRates_  .reset(new SurrChgRates   (*Database_));
     DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
     // Outlay requires only input; it might someday use interest rates.
     Outlay_        .reset(new modal_outlay   (yare_input_));
@@ -276,12 +268,7 @@ void BasicValues::GPTServerInit()
     yare_input_.DeathBenefitOption        .assign(Length, yare_input_.DeathBenefitOption[0]);
     yare_input_.FlatExtra                 .resize(Length);
 
-    ledger_type_ =
-        static_cast<mcenum_ledger_type>
-            (static_cast<int>
-                (Database_->Query(DB_LedgerType))
-            )
-        ;
+    ledger_type_ = static_cast<mcenum_ledger_type>(Database_->Query(DB_LedgerType));
     nonillustrated_       = static_cast<bool>(Database_->Query(DB_Nonillustrated));
     bool no_longer_issued = static_cast<bool>(Database_->Query(DB_NoLongerIssued));
     bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;
@@ -320,8 +307,6 @@ void BasicValues::GPTServerInit()
     // Requires database.
     MortalityRates_.reset(new MortalityRates (*this)); // Used by certain target-premium calculations.
 //  InterestRates_ .reset(new InterestRates  (*this));
-    // Will require mortality rates eventually.
-//  SurrChgRates_  .reset(new SurrChgRates   (Database_));
 //  DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
     // Outlay requires only input; it might someday use interest rates.
 //  Outlay_        .reset(new modal_outlay   (yare_input_));
@@ -634,8 +619,8 @@ void BasicValues::SetPermanentInvariants()
     TermForcedConvAge   = static_cast<int>(Database_->Query(DB_TermForcedConvAge));
     TermForcedConvDur   = static_cast<int>(Database_->Query(DB_TermForcedConvDur));
     ExpPerKLimit        = Database_->Query(DB_ExpSpecAmtLimit      );
-    MinPremType         = static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_MinPremType)));
-    TgtPremType         = static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_TgtPremType)));
+    MinPremType         = static_cast<oenum_modal_prem_type>(Database_->Query(DB_MinPremType));
+    TgtPremType         = static_cast<oenum_modal_prem_type>(Database_->Query(DB_TgtPremType));
     TgtPremFixedAtIssue = Database_->Query(DB_TgtPremFixedAtIssue  );
     TgtPremMonthlyPolFee= Database_->Query(DB_TgtPremMonthlyPolFee );
     // Assertion: see comments on GetModalPremTgtFromTable().
@@ -647,12 +632,12 @@ void BasicValues::SetPermanentInvariants()
     CurrCoiTable1Limit  = Database_->Query(DB_CurrCoiTable1Limit   );
     LMI_ASSERT(0.0                <= CurrCoiTable0Limit);
     LMI_ASSERT(CurrCoiTable0Limit <= CurrCoiTable1Limit);
-    CoiInforceReentry   = static_cast<e_actuarial_table_method>(static_cast<int>(Database_->Query(DB_CoiInforceReentry)));
-    MaxWDDed_           = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxWdDed)));
+    CoiInforceReentry   = static_cast<e_actuarial_table_method>(Database_->Query(DB_CoiInforceReentry));
+    MaxWDDed_           = static_cast<mcenum_anticipated_deduction>(Database_->Query(DB_MaxWdDed));
     MaxWdGenAcctValMult = Database_->Query(DB_MaxWdGenAcctValMult  );
     MaxWdSepAcctValMult = Database_->Query(DB_MaxWdSepAcctValMult  );
     AllowPrefLoan       = static_cast<bool>(Database_->Query(DB_AllowPrefLoan));
-    MaxLoanDed_         = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxLoanDed)));
+    MaxLoanDed_         = static_cast<mcenum_anticipated_deduction>(Database_->Query(DB_MaxLoanDed));
     MaxLoanAVMult       = Database_->Query(DB_MaxLoanAcctValMult   );
     FirstPrefLoanYear   = static_cast<int>(Database_->Query(DB_FirstPrefLoanYear));
     NoLapseMinDur       = static_cast<int>(Database_->Query(DB_NoLapseMinDur));
@@ -666,10 +651,12 @@ void BasicValues::SetPermanentInvariants()
     AllowChangeToDBO2   = Database_->Query(DB_AllowChangeToDbo2    );
     AllowSAIncr         = Database_->Query(DB_AllowSpecAmtIncr     );
     NoLapseAlwaysActive = Database_->Query(DB_NoLapseAlwaysActive  );
-    WaiverChargeMethod  = static_cast<oenum_waiver_charge_method>(static_cast<int>(Database_->Query(DB_WpChargeMethod)));
+    WaiverChargeMethod  = static_cast<oenum_waiver_charge_method>(Database_->Query(DB_WpChargeMethod));
+    Database_->Query(CashValueEnhMult, DB_CashValueEnhMult);
     LapseIgnoresSurrChg = Database_->Query(DB_LapseIgnoresSurrChg  );
     SurrChgOnIncr       = Database_->Query(DB_SurrChgOnIncr        );
     SurrChgOnDecr       = Database_->Query(DB_SurrChgOnDecr        );
+    LMI_ASSERT(!SurrChgOnIncr); // Surrchg change on increase not supported.
     LMI_ASSERT(!SurrChgOnDecr); // Surrchg change on decrease not supported.
 
     Database_->Query(FreeWDProportion, DB_FreeWdProportion);
@@ -766,10 +753,10 @@ void BasicValues::SetPermanentInvariants()
     // definitions, and 'DefinitionOfMaterialChange' will be removed.
     if(!global_settings::instance().ash_nazg())
         {
-        mcenum_defn_material_change const z = static_cast<mcenum_defn_material_change>(static_cast<int>(Database_->Query(DB_CvatMatChangeDefn)));
+        mcenum_defn_material_change const z = static_cast<mcenum_defn_material_change>(Database_->Query(DB_CvatMatChangeDefn));
         DefnMaterialChange_ = (mce_gpt == DefnLifeIns_) ? mce_adjustment_event : z;
         }
-    Equiv7702DBO3       = static_cast<mcenum_dbopt_7702>(static_cast<int>(Database_->Query(DB_Equiv7702Dbo3)));
+    Equiv7702DBO3       = static_cast<mcenum_dbopt_7702>(Database_->Query(DB_Equiv7702Dbo3));
     TermIsDbFor7702     = 1.0 == Database_->Query(DB_TermIsQABOrDb7702 );
     TermIsDbFor7702A    = 1.0 == Database_->Query(DB_TermIsQABOrDb7702A);
     MaxNAAR             = yare_input_.MaximumNaar;

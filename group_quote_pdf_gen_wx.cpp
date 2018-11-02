@@ -218,11 +218,13 @@ class group_quote_pdf_generator_wx
     :public group_quote_pdf_generator
 {
   public:
-    static std::shared_ptr<group_quote_pdf_generator> do_create()
+    // do_create() requires a public ctor; that's harmless because
+    // this is inside an unnamed namespace.
+    group_quote_pdf_generator_wx() = default;
+
+    static std::unique_ptr<group_quote_pdf_generator> do_create()
         {
-        return std::shared_ptr<group_quote_pdf_generator>
-            (new group_quote_pdf_generator_wx()
-            );
+        return std::make_unique<group_quote_pdf_generator_wx>();
         }
 
     void add_ledger(Ledger const& ledger) override;
@@ -232,9 +234,6 @@ class group_quote_pdf_generator_wx
     // This value is arbitrary and can be changed to conform to subjective
     // preferences.
     static int const vert_skip = 12;
-
-    // Ctor is private as it is only used by do_create().
-    group_quote_pdf_generator_wx() = default;
 
     // Compute the number of pages needed by the table rows in the output given
     // the space remaining on the first page, the heights of the header, one
@@ -751,9 +750,8 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
                 }
             }
 
-        table_gen.output_row(pos_y, visible_values);
-
-        // If there is no space left for another row, start a new page.
+        // If there is no space left for this row on the current page, start a
+        // new one.
         if(last_row_y <= pos_y + table_gen.row_height())
             {
             output_page_number_and_version(pdf_writer, total_pages, current_page);
@@ -764,6 +762,8 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
             pos_y = pdf_writer.get_vert_margin();
             table_gen.output_headers(pos_y);
             }
+
+        table_gen.output_row(pos_y, visible_values);
         }
 
     if(footer_on_its_own_page)
@@ -812,6 +812,13 @@ int group_quote_pdf_generator_wx::compute_pages_for_table_rows
         total_pages += outward_quotient(remaining_rows, rows_per_page);
         remaining_space = page_area_y;
         remaining_rows %= rows_per_page;
+        if(!remaining_rows)
+            {
+            // If no rows remain, it actually means that the last page has the
+            // maximum amount of rows as we don't have an extra page with 0
+            // rows in this case.
+            remaining_rows = rows_per_page;
+            }
         }
 
     remaining_space -= remaining_rows * row_height;

@@ -34,7 +34,6 @@
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "premium_tax.hpp"
-#include "surrchg_rates.hpp"
 
 #include <algorithm>                    // max()
 #include <cmath>                        // pow()
@@ -104,12 +103,7 @@ void BasicValues::Init()
     EndtAge = static_cast<int>(Database_->Query(DB_MaturityAge));
     Length = EndtAge - IssueAge;
 
-    ledger_type_ =
-        static_cast<mcenum_ledger_type>
-            (static_cast<int>
-                (Database_->Query(DB_LedgerType))
-            )
-        ;
+    ledger_type_ = static_cast<mcenum_ledger_type>(Database_->Query(DB_LedgerType));
     nonillustrated_       = static_cast<bool>(Database_->Query(DB_Nonillustrated));
     bool no_longer_issued = static_cast<bool>(Database_->Query(DB_NoLongerIssued));
     bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;
@@ -122,7 +116,6 @@ void BasicValues::Init()
     // Multilife contracts will need a vector of mortality-rate objects.
     MortalityRates_.reset(new MortalityRates (*this));
     InterestRates_ .reset(new InterestRates  (*this));
-    SurrChgRates_  .reset(new SurrChgRates   (*Database_));
     DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
     Outlay_        .reset(new modal_outlay   (yare_input_));
     PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, *Database_));

@@ -29,10 +29,10 @@
 
 #include <boost/filesystem/path.hpp>
 
-#include <memory>                       // shared_ptr
+#include <memory>                       // unique_ptr
 
-class group_quote_pdf_generator;
 class Ledger;
+class group_quote_pdf_generator;
 
 /// Emit a group of ledgers in various guises.
 ///
@@ -43,7 +43,7 @@ class LMI_SO ledger_emitter final
 {
   public:
     ledger_emitter(fs::path const& case_filepath, mcenum_emission emission);
-    ~ledger_emitter() = default;
+    ~ledger_emitter();
 
     double initiate ();
     double emit_cell(fs::path const& cell_filepath, Ledger const& ledger);
@@ -62,7 +62,7 @@ class LMI_SO ledger_emitter final
     fs::path case_filepath_group_quote_;
 
     // Used only if emission_ includes mce_emit_group_quote; empty otherwise.
-    std::shared_ptr<group_quote_pdf_generator> group_quote_gen_;
+    std::unique_ptr<group_quote_pdf_generator> group_quote_pdf_gen_;
 };
 
 double LMI_SO emit_ledger

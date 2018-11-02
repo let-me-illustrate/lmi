@@ -683,7 +683,6 @@ double AccountValue::minimum_specified_amount(bool issuing_now, bool term_rider)
 void AccountValue::ChangeSpecAmtBy(double delta)
 {
     double ProportionAppliedToTerm = 0.0;
-    double prior_specamt = ActualSpecAmt;
     // Adjust term here only if it's formally a rider.
     if(TermRiderActive && !TermIsNotRider)
         {
@@ -746,7 +745,6 @@ void AccountValue::ChangeSpecAmtBy(double delta)
         ,minimum_specified_amount(0 == Year && 0 == Month, TermRiderActive)
         );
     ActualSpecAmt = round_specamt()(ActualSpecAmt);
-    AddSurrChgLayer(Year, std::max(0.0, ActualSpecAmt - prior_specamt));
 
     // Carry the new specamt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); ++j)
@@ -796,27 +794,6 @@ void AccountValue::ChangeSupplAmtBy(double delta)
 }
 
 //============================================================================
-// The spec amt used as the basis for surrender charges is not
-// always the current spec amt, but rather the original spec amt
-// adjusted for withdrawals only. This function simply decreases
-// this special spec amt by the same amount as the normal spec amt
-// decreases, and only in the event of a withdrawal, which is
-// constrained to be nonnegative by constraining the additive
-// adjustment to be nonpositive. Other approaches are possible.
-void AccountValue::ChangeSurrChgSpecAmtBy(double delta)
-{
-    LMI_ASSERT(delta <= 0.0);
-    SurrChgSpecAmt += delta;
-    SurrChgSpecAmt = std::max(0.0, SurrChgSpecAmt);
-    // TODO ?? 'SurrChgSpecAmt' isn't used yet.
-
-    // SOMEDAY !! Recalculation of GDB premium is not yet implemented.
-    // It is fairly common to let withdrawals affect it. If this is
-    // the best place to do that, then perhaps this function should
-    // be renamed, since it wouldn't merely change 'SurrChgSpecAmt'.
-}
-
-//============================================================================
 void AccountValue::InitializeMonth()
 {
     GptForceout       = 0.0;
@@ -841,11 +818,8 @@ void AccountValue::InitializeMonth()
     Irc7702A_->UpdateBOM7702A(Month);
 }
 
-//============================================================================
-// Death benefit option change.
-// Assume surrender charge is not affected by this transaction.
-// Assume target premium rate is not affected by this transaction.
-// Assume change to option 2 mustn't decrease spec amt below minimum.
+/// Change death benefit option.
+
 void AccountValue::TxOptionChange()
 {
     // Illustrations allow option changes only on anniversary,
@@ -855,8 +829,8 @@ void AccountValue::TxOptionChange()
         return;
         }
 
-    // It's OK to index by [Year - 1] because above we return early
-    // if 0 == Year.
+    // It's OK to index by [Year - 1] because of the early return
+    // above in the 0 == Year case.
     mcenum_dbopt const old_option = DeathBfts_->dbopt()[Year - 1];
 
     // Nothing to do if no option change requested.
@@ -946,12 +920,13 @@ void AccountValue::TxOptionChange()
         }
 }
 
-//============================================================================
-// Specified amount change: increase or decrease.
-// Ignores multiple layers of coverage: not correct for select and
-// ultimate COI rates if select period restarts on increase.
-// Assumes target premium rate is not affected by increases or decreases.
-// TODO ?? Is this the right place to change target premium?
+/// Process an owner-initiated specified-amount increase or decrease.
+///
+/// Ignores multiple layers of coverage: not correct for select and
+/// ultimate COI rates if select period restarts on increase.
+///
+/// Specamt changes are assumed not to affect the target-premium rate.
+
 void AccountValue::TxSpecAmtChange()
 {
     // Illustrations allow increases and decreases only on anniversary,
@@ -1524,8 +1499,8 @@ void AccountValue::TxLoanRepay()
     // TODO ?? Consider changing loan_ullage_[Year] here.
 }
 
-//============================================================================
-// Set account value before monthly deductions.
+/// Set account value before monthly deductions.
+
 void AccountValue::TxSetBOMAV()
 {
     // Subtract monthly policy fee and per K charge from account value.
@@ -1569,27 +1544,39 @@ void AccountValue::TxSetBOMAV()
     Dcv = std::max(0.0, Dcv);
 }
 
-//============================================================================
-// Set death benefit reflecting corridor and death benefit option.
-void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
+/// Set death benefit reflecting corridor and death benefit option.
+///
+/// These variables are updated here:
+///   DBIgnoringCorr
+///   DBReflectingCorr
+///   DB7702A
+///   DcvDeathBft
+/// so this function is called before any of them is needed.
+///
+/// Option 2 reflects the total account value: general as well as
+/// separate account, and loaned as well as unloaned. Notionally, it
+/// keeps NAAR level; therefore, it reflects AV rather than CSV.
+///
+/// TAXATION !! Revisit this--it affects 'DB7702A':
+/// TxSetDeathBft() needs to be called every time a new solve-spec amt
+/// is applied to determine the death benefit. But you don't really want to
+/// add the sales load (actually a percent of the sales load) to the AV
+/// each time. TxSetDeathBft() also gets called during the initial seven
+/// pay calc whether or not there is a 1035 exchange. Since it is called
+/// from within DoYear() and needs to be called from outside of DoYear(0)
+/// even a non-solve will end up double counting the refund of PPL's.
+///
+/// TODO ?? TAXATION !! Should 7702 or 7702A processing be done here?
+/// If so, then this code may be useful:
+///    double prior_db_7702A = DB7702A;
+///    double prior_sa_7702A = ActualSpecAmt;
+/// toward the beginning, and:
+///    Irc7702A_->UpdateBft7702A(...);
+///    LMI_ASSERT(0.0 <= Dcv);
+/// toward the end.
+
+void AccountValue::TxSetDeathBft()
 {
-    // TODO ?? TAXATION !! Should 7702 or 7702A processing be done here?
-    // If so, then this code may be useful:
-//    double prior_db_7702A = DB7702A;
-//    double prior_sa_7702A = ActualSpecAmt;
-
-    // Total account value is unloaned plus loaned.
-    // TODO ?? Should we use CSV here?
-    double AV = TotalAccountValue();
-// TAXATION !! Revisit this--it affects 'DB7702A':
-// > TxSetDeathBft() needs to be called every time a new solve-spec amt
-// > is applied to determine the death benefit. But you don't really want to
-// > add the sales load (actually a percent of the sales load) to the AV
-// > each time. TxSetDeathBft() also gets called during the initial seven
-// > pay calc whether or not there is a 1035 exchange. Since it is called
-// > from within DoYear() and needs to be called from outside of DoYear(0)
-// > even a non-solve will end up double counting the refund of PPL's.
-
     switch(YearsDBOpt)
         {
         case mce_option1:
@@ -1601,13 +1588,15 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
         case mce_option2:
             {
             // Negative AV doesn't decrease death benefit.
-            DBIgnoringCorr = ActualSpecAmt + std::max(0.0, AV);
+            DBIgnoringCorr = ActualSpecAmt + std::max(0.0, TotalAccountValue());
             DB7702A        = ActualSpecAmt;
             }
             break;
         case mce_rop:
             {
-            // SA + sum of premiums less withdrawals, but not < SA.
+            // SA + sum of premiums less withdrawals, but not < SA;
+            // i.e., ignore 'CumPmts' if it is less than zero, as it
+            // easily can be, e.g., if WDs are not limited to basis.
             DBIgnoringCorr = ActualSpecAmt + std::max(0.0, CumPmts);
             DB7702A        = ActualSpecAmt + std::max(0.0, CumPmts);
             }
@@ -1628,28 +1617,11 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
 //        + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         ;
 
-    if
-        (   force_eoy_behavior
-        ||  contains(yare_input_.Comments, "idiosyncrasyV")
-        )
-        {
-        // The corridor death benefit ought always to reflect the
-        // honeymoon value. It always does if "idiosyncrasyV" is
-        // specified; otherwise, to match account values (but not
-        // death benefits) with an incorrect admin system, the
-        // honeymoon value is respected only if end-of-year behavior
-        // is forced--thus, year-end death benefit is correct, but
-        // the effect of the honeymoon value on corridor calculations
-        // (and hence mortality charges) is ignored for monthiversary
-        // processing. The idea is that in the event of death the
-        // faulty admin system's death-benefit calculation is ignored
-        // and the correct death benefit is calculated manually.
-        //
-        cash_value_for_corridor = std::max
-            (cash_value_for_corridor
-            ,HoneymoonValue
-            );
-        }
+    cash_value_for_corridor = std::max
+        (cash_value_for_corridor
+        ,HoneymoonValue
+        );
+
     DBReflectingCorr = std::max
         (DBIgnoringCorr
         ,YearsCorridorFactor * cash_value_for_corridor
@@ -1665,18 +1637,12 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
         ,   (
                 YearsCorridorFactor
             *   (   Dcv
+                -   std::min(0.0, SurrChg())
                 +   GetRefundableSalesLoad()
 //                +   std::max(0.0, ExpRatReserve) // This would be added if it existed.
                 )
             )
         );
-    // TODO ?? TAXATION !! Should 7702 or 7702A processing be done here?
-    // If so, then this code may be useful:
-/*
-    // Try moving this here...
-    Irc7702A_->UpdateBft7702A(...);
-    LMI_ASSERT(0.0 <= Dcv);
-*/
 
     // SOMEDAY !! Accumulate average death benefit for profit testing here.
 }
@@ -1746,8 +1712,8 @@ void AccountValue::EndTermRider(bool convert)
         }
 }
 
-//============================================================================
-// Calculate mortality charge.
+/// Calculate mortality charge.
+
 void AccountValue::TxSetCoiCharge()
 {
     // Net amount at risk is the death benefit discounted one month
@@ -1813,8 +1779,8 @@ void AccountValue::TxSetCoiCharge()
     DcvCoiCharge = DcvNaar * (YearsDcvCoiRate + CoiRetentionRate);
 }
 
-//============================================================================
-// Calculate rider charges.
+/// Calculate rider charges.
+
 void AccountValue::TxSetRiderDed()
 {
     AdbCharge = 0.0;
@@ -1890,12 +1856,10 @@ void AccountValue::TxSetRiderDed()
         }
 }
 
-//============================================================================
-// Subtract monthly deductions from unloaned account value.
+/// Subtract monthly deductions from unloaned account value.
+
 void AccountValue::TxDoMlyDed()
 {
-    // Subtract mortality and rider deductions from unloaned account value.
-    // Policy fee was already subtracted in NAAR calculation.
     if(TermRiderActive && TermCanLapse && (AVGenAcct + AVSepAcct - CoiCharge) < TermCharge)
         {
         EndTermRider(false);
@@ -2209,7 +2173,7 @@ void AccountValue::TxCreditInt()
     YearsTotalGrossIntCredited += z + notional_sep_acct_charge;
 }
 
-/// Accrue loan interest and calculate interest credit on loaned account value.
+/// Accrue loan interest, and calculate interest credit on loaned AV.
 
 void AccountValue::TxLoanInt()
 {
@@ -2315,7 +2279,8 @@ void AccountValue::SetMaxWD()
     MaxWD = std::max(0.0, MaxWD);
 }
 
-//============================================================================
+/// Take a withdrawal.
+
 void AccountValue::TxTakeWD()
 {
     // Illustrations allow withdrawals only on anniversary.
@@ -2509,7 +2474,6 @@ void AccountValue::TxTakeWD()
     Dcv -= GrossWD;
     Dcv = std::max(0.0, Dcv);
 
-    double original_specamt = ActualSpecAmt;
     switch(YearsDBOpt)
         {
         // If DBOpt 1, SA = std::min(SA, DB - WD); if opt 2, no change.
@@ -2535,10 +2499,6 @@ void AccountValue::TxTakeWD()
                 //      min AV after WD: debt +
                 //          months remaining to end of modal term *
                 //          most recent mly deds
-                if(original_specamt != ActualSpecAmt)
-                    {
-                    ChangeSurrChgSpecAmtBy(-GrossWD);
-                    }
                 }
             else
                 {
@@ -2551,10 +2511,6 @@ void AccountValue::TxTakeWD()
             if(WDCanDecrSADBO2)
                 {
                 ChangeSpecAmtBy(-GrossWD);
-                if(original_specamt != ActualSpecAmt)
-                    {
-                    ChangeSurrChgSpecAmtBy(-GrossWD);
-                    }
                 }
             else
                 {
@@ -2567,10 +2523,6 @@ void AccountValue::TxTakeWD()
             if(WDCanDecrSADBO3)
                 {
                 ChangeSpecAmtBy(-GrossWD);
-                if(original_specamt != ActualSpecAmt)
-                    {
-                    ChangeSurrChgSpecAmtBy(-GrossWD);
-                    }
                 }
             else
                 {
@@ -2608,8 +2560,6 @@ void AccountValue::TxTakeWD()
 // bases, why do we change it for each basis?
 // TODO ?? Shouldn't this be moved to FinalizeMonth()?
     InvariantValues().NetWD[Year] = NetWD;
-
-    ReduceSurrChg(Year, partial_surrchg);
 }
 
 //============================================================================
@@ -2674,8 +2624,8 @@ void AccountValue::SetMaxLoan()
     // TODO ?? Yet I do not think we want to ratify something that looks broken!
 }
 
-//============================================================================
-// Take a new cash loan, limiting it to respect the maximum loan.
+/// Take a new cash loan, limiting it to respect the maximum loan.
+
 void AccountValue::TxTakeLoan()
 {
     // Illustrations allow loans only on anniversary.
@@ -2772,8 +2722,8 @@ void AccountValue::TxCapitalizeLoan()
     AVPrfLn = PrfLnBal;
 }
 
-//============================================================================
-// Test for lapse.
+/// Test for lapse.
+
 void AccountValue::TxTestLapse()
 {
     // The refundable load cannot prevent a lapse that would otherwise

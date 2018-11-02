@@ -118,7 +118,7 @@ census_run_result run_census_in_series::operator()
 {
     Timer timer;
     census_run_result result;
-    std::shared_ptr<progress_meter> meter
+    std::unique_ptr<progress_meter> meter
         (create_progress_meter
             (lmi::ssize(cells)
             ,"Calculating all cells"
@@ -241,7 +241,7 @@ census_run_result run_census_in_parallel::operator()
 {
     Timer timer;
     census_run_result result;
-    std::shared_ptr<progress_meter> meter
+    std::unique_ptr<progress_meter> meter
         (create_progress_meter
             (lmi::ssize(cells)
             ,"Initializing all cells"
@@ -251,7 +251,7 @@ census_run_result run_census_in_parallel::operator()
 
     ledger_emitter emitter(file, emission);
 
-    std::vector<std::shared_ptr<AccountValue>> cell_values;
+    std::vector<AccountValue> cell_values;
     std::vector<mcenum_run_basis> const& RunBases = composite.GetRunBases();
 
     int const first_cell_inforce_year  = value_cast<int>((*cells.begin())["InforceYear"].str());
@@ -267,24 +267,24 @@ census_run_result run_census_in_parallel::operator()
             {
             { // Begin fenv_guard scope.
             fenv_guard fg;
-            std::shared_ptr<AccountValue> av(new AccountValue(ip));
+            cell_values.emplace_back(ip);
+            AccountValue& av = cell_values.back();
+
             std::string const name(cells[j]["InsuredName"].str());
             // Indexing: here, j is an index into cells, not cell_values.
-            av->SetDebugFilename
+            av.SetDebugFilename
                 (serial_file_path(file, name, j, "hastur").string()
                 );
 
-            cell_values.push_back(av);
-
-            if(contains(av->yare_input_.Comments, "idiosyncrasyZ"))
+            if(contains(av.yare_input_.Comments, "idiosyncrasyZ"))
                 {
-                av->Debugging = true;
-                av->DebugPrintInit();
+                av.Debugging = true;
+                av.DebugPrintInit();
                 }
 
             if
-                (   first_cell_inforce_year  != av->yare_input_.InforceYear
-                ||  first_cell_inforce_month != av->yare_input_.InforceMonth
+                (   first_cell_inforce_year  != av.yare_input_.InforceYear
+                ||  first_cell_inforce_month != av.yare_input_.InforceMonth
                 )
                 {
                 alarum()
@@ -294,7 +294,7 @@ census_run_result run_census_in_parallel::operator()
                     ;
                 }
 
-            if(mce_solve_none != av->yare_input_.SolveType)
+            if(mce_solve_none != av.yare_input_.SolveType)
                 {
                 alarum()
                     << "Running census by month: solves not permitted."
@@ -346,8 +346,8 @@ census_run_result run_census_in_parallel::operator()
         int MaxYr = 0;
         for(auto& i : cell_values)
             {
-            i->InitializeLife(run_basis);
-            MaxYr = std::max(MaxYr, i->GetLength());
+            i.InitializeLife(run_basis);
+            MaxYr = std::max(MaxYr, i.GetLength());
             }
 
         meter = create_progress_meter
@@ -359,15 +359,15 @@ census_run_result run_census_in_parallel::operator()
         // Variables to support tiering and experience rating.
 
         double const case_ibnr_months =
-            cell_values[0]->ibnr_as_months_of_mortality_charges()
+            cell_values.front().ibnr_as_months_of_mortality_charges()
             ;
         double const case_experience_rating_amortization_years =
-            cell_values[0]->experience_rating_amortization_years()
+            cell_values.front().experience_rating_amortization_years()
             ;
 
         double case_accum_net_mortchgs = 0.0;
         double case_accum_net_claims   = 0.0;
-        double case_k_factor = cell_values[0]->yare_input_.ExperienceRatingInitialKFactor;
+        double case_k_factor = cell_values.front().yare_input_.ExperienceRatingInitialKFactor;
 
         // Experience rating as implemented here uses either a special
         // scalar input rate, or the separate-account rate. Those
@@ -377,16 +377,16 @@ census_run_result run_census_in_parallel::operator()
 
         std::vector<double> experience_reserve_rate;
         std::copy
-            (cell_values[0]->yare_input_.SeparateAccountRate.begin()
-            ,cell_values[0]->yare_input_.SeparateAccountRate.end()
+            (cell_values.front().yare_input_.SeparateAccountRate.begin()
+            ,cell_values.front().yare_input_.SeparateAccountRate.end()
             ,std::back_inserter(experience_reserve_rate)
             );
         experience_reserve_rate.resize(MaxYr, experience_reserve_rate.back());
-        if(cell_values[0]->yare_input_.OverrideExperienceReserveRate)
+        if(cell_values.front().yare_input_.OverrideExperienceReserveRate)
             {
             experience_reserve_rate.assign
                 (experience_reserve_rate.size()
-                ,cell_values[0]->yare_input_.ExperienceReserveRate
+                ,cell_values.front().yare_input_.ExperienceReserveRate
                 );
             }
 
@@ -401,13 +401,13 @@ census_run_result run_census_in_parallel::operator()
                 {
                 // A cell must be initialized at the beginning of any
                 // partial inforce year in which it's illustrated.
-                if(i->PrecedesInforceDuration(year, 11))
+                if(i.PrecedesInforceDuration(year, 11))
                     {
                     continue;
                     }
-                i->Year = year;
-                i->CoordinateCounters();
-                i->InitializeYear();
+                i.Year = year;
+                i.CoordinateCounters();
+                i.InitializeYear();
                 }
 
             // Process one month at a time for all cells.
@@ -426,24 +426,24 @@ census_run_result run_census_in_parallel::operator()
                 // Process transactions through monthly deduction.
                 for(auto& i : cell_values)
                     {
-                    if(i->PrecedesInforceDuration(year, month))
+                    if(i.PrecedesInforceDuration(year, month))
                         {
                         continue;
                         }
-                    i->Month = month;
-                    i->CoordinateCounters();
-                    i->IncrementBOM(year, month, case_k_factor);
-                    assets += i->GetSepAcctAssetsInforce();
+                    i.Month = month;
+                    i.CoordinateCounters();
+                    i.IncrementBOM(year, month, case_k_factor);
+                    assets += i.GetSepAcctAssetsInforce();
                     }
 
                 // Process transactions from int credit through end of month.
                 for(auto& i : cell_values)
                     {
-                    if(i->PrecedesInforceDuration(year, month))
+                    if(i.PrecedesInforceDuration(year, month))
                         {
                         continue;
                         }
-                    i->IncrementEOM(year, month, assets, i->CumPmts);
+                    i.IncrementEOM(year, month, assets, i.CumPmts);
                     }
                 }
 
@@ -464,17 +464,17 @@ census_run_result run_census_in_parallel::operator()
             double projected_net_mortchgs = 0.0;
             for(auto& i : cell_values)
                 {
-                if(i->PrecedesInforceDuration(year, 11))
+                if(i.PrecedesInforceDuration(year, 11))
                     {
                     continue;
                     }
-                i->SetClaims();
-                i->SetProjectedCoiCharge();
-                eoy_inforce_lives      += i->InforceLivesEoy();
-                i->IncrementEOY(year);
-                years_net_claims       += i->GetCurtateNetClaimsInforce();
-                years_net_mortchgs     += i->GetCurtateNetCoiChargeInforce();
-                projected_net_mortchgs += i->GetProjectedCoiChargeInforce();
+                i.SetClaims();
+                i.SetProjectedCoiCharge();
+                eoy_inforce_lives      += i.InforceLivesEoy();
+                i.IncrementEOY(year);
+                years_net_claims       += i.GetCurtateNetClaimsInforce();
+                years_net_mortchgs     += i.GetCurtateNetCoiChargeInforce();
+                projected_net_mortchgs += i.GetProjectedCoiChargeInforce();
                 }
 
             // Calculate next year's k factor. Do this only for
@@ -508,7 +508,7 @@ census_run_result run_census_in_parallel::operator()
 
             if(first_cell_inforce_year == year)
                 {
-                case_accum_net_mortchgs += cell_values[0]->yare_input_.InforceNetExperienceReserve;
+                case_accum_net_mortchgs += cell_values.front().yare_input_.InforceNetExperienceReserve;
                 }
 
             // Apportion experience-rating reserve uniformly across
@@ -521,14 +521,14 @@ census_run_result run_census_in_parallel::operator()
             // equal the original total reserve.
 
             if
-                (   cell_values[0]->yare_input_.UseExperienceRating
+                (   cell_values.front().yare_input_.UseExperienceRating
                 &&  mce_gen_curr == expense_and_general_account_basis
                 &&  0.0 != eoy_inforce_lives
                 )
                 {
                 if(first_cell_inforce_year == year)
                     {
-                    years_net_mortchgs += cell_values[0]->yare_input_.InforceYtdNetCoiCharge;
+                    years_net_mortchgs += cell_values.front().yare_input_.InforceYtdNetCoiCharge;
                     }
                 double case_ibnr =
                         years_net_mortchgs
@@ -562,12 +562,12 @@ census_run_result run_census_in_parallel::operator()
                 double case_net_mortality_reserve_checksum = 0.0;
                 for(auto& i : cell_values)
                     {
-                    if(i->PrecedesInforceDuration(year, 11))
+                    if(i.PrecedesInforceDuration(year, 11))
                         {
                         continue;
                         }
                     case_net_mortality_reserve_checksum +=
-                        i->ApportionNetMortalityReserve
+                        i.ApportionNetMortalityReserve
                             (   case_net_mortality_reserve
                             /   eoy_inforce_lives
                             );
@@ -601,7 +601,7 @@ census_run_result run_census_in_parallel::operator()
 
         for(auto& i : cell_values)
             {
-            i->FinalizeLife(run_basis);
+            i.FinalizeLife(run_basis);
             }
 
         } // End fenv_guard scope.
@@ -615,8 +615,8 @@ census_run_result run_census_in_parallel::operator()
     for(auto& i : cell_values)
         {
         fenv_guard fg;
-        i->FinalizeLifeAllBases();
-        composite.PlusEq(*i->ledger_from_av());
+        i.FinalizeLifeAllBases();
+        composite.PlusEq(*i.ledger_from_av());
         if(!meter->reflect_progress())
             {
             result.completed_normally_ = false;
@@ -639,7 +639,7 @@ census_run_result run_census_in_parallel::operator()
         std::string const name(cells[j]["InsuredName"].str());
         result.seconds_for_output_ += emitter.emit_cell
             (serial_file_path(file, name, j, "hastur")
-            ,*i->ledger_from_av()
+            ,*i.ledger_from_av()
             );
         meter->dawdle(intermission_between_printouts(emission));
         if(!meter->reflect_progress())

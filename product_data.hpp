@@ -187,6 +187,7 @@ class LMI_SO product_data final
     glossed_string DboNameLevel;
     glossed_string DboNameIncreasing;
     glossed_string DboNameReturnOfPremium;
+    glossed_string DboNameMinDeathBenefit;
 
     // TODO ?? Most of the following are missing from the GUI.
 

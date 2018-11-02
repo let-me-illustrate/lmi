@@ -212,6 +212,7 @@ void product_data::ascribe_members()
     ascribe("DboNameLevel"                  , &product_data::DboNameLevel                  );
     ascribe("DboNameIncreasing"             , &product_data::DboNameIncreasing             );
     ascribe("DboNameReturnOfPremium"        , &product_data::DboNameReturnOfPremium        );
+    ascribe("DboNameMinDeathBenefit"        , &product_data::DboNameMinDeathBenefit        );
     ascribe("AccountValueFootnote"          , &product_data::AccountValueFootnote          );
     ascribe("AttainedAgeFootnote"           , &product_data::AttainedAgeFootnote           );
     ascribe("CashSurrValueFootnote"         , &product_data::CashSurrValueFootnote         );
@@ -508,6 +509,7 @@ void product_data::write_policy_files()
     z.DboNameLevel               = glossed_string("A");
     z.DboNameIncreasing          = glossed_string("B");
     z.DboNameReturnOfPremium     = glossed_string("ROP");
+    z.DboNameMinDeathBenefit     = glossed_string("MDB");
     z.MarketingNameFootnote      = glossed_string("Policy form UL32768-NY is marketed as 'UL Supreme'.");
 
     z.ADDTerseName               = glossed_string("Accident");

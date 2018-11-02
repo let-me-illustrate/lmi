@@ -56,7 +56,6 @@ class Irc7702;
 class Irc7702A;
 class Loads;
 class MortalityRates;
-class SurrChgRates;
 class death_benefits;
 class modal_outlay;
 class premium_tax;
@@ -94,6 +93,7 @@ class LMI_SO BasicValues
         ,bool               a_AdbInForce
         ,double             a_TargetPremium
         );
+    BasicValues(BasicValues&&) = default;
     virtual ~BasicValues() = default;
 
     void Init();
@@ -119,7 +119,6 @@ class LMI_SO BasicValues
     std::shared_ptr<stratified_charges> StratifiedCharges_;
     std::shared_ptr<MortalityRates>     MortalityRates_;
     std::shared_ptr<InterestRates>      InterestRates_;
-    std::shared_ptr<SurrChgRates>       SurrChgRates_;
     std::shared_ptr<death_benefits>     DeathBfts_;
     std::shared_ptr<modal_outlay>       Outlay_;
     std::shared_ptr<premium_tax>        PremiumTax_;
@@ -329,6 +328,7 @@ class LMI_SO BasicValues
     int                          NoLapseMinDur;
     int                          NoLapseMinAge;
     oenum_waiver_charge_method   WaiverChargeMethod;
+    std::vector<double>          CashValueEnhMult;
     bool                         LapseIgnoresSurrChg;
     bool                         SurrChgOnIncr;
     bool                         SurrChgOnDecr;

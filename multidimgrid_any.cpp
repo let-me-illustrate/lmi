@@ -38,6 +38,7 @@
 
 #include <algorithm>
 #include <sstream>
+#include <utility>                      // swap()
 
 /// MultiDimAxisAny functions implementation
 /// --------------------------------------

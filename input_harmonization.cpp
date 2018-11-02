@@ -97,9 +97,7 @@ void Input::DoAdaptExternalities()
 
     GleanedLedgerType_ =
         static_cast<mcenum_ledger_type>
-            (static_cast<int>
-                (database_->Query(DB_LedgerType)
-                )
+            (database_->Query(DB_LedgerType)
             );
 }
 
@@ -278,9 +276,7 @@ void Input::DoHarmonize()
 
     oenum_alb_or_anb const alb_anb =
         static_cast<oenum_alb_or_anb>
-            (static_cast<int>
-                (database_->Query(DB_AgeLastOrNearest)
-                )
+            (database_->Query(DB_AgeLastOrNearest)
             );
     DateOfBirth.minimum_and_maximum
         (minimum_birthdate(IssueAge.maximum(), EffectiveDate.value(), alb_anb)
@@ -920,9 +916,7 @@ void Input::DoTransmogrify()
 
     oenum_alb_or_anb const alb_anb =
         static_cast<oenum_alb_or_anb>
-            (static_cast<int>
-                (database_->Query(DB_AgeLastOrNearest)
-                )
+            (database_->Query(DB_AgeLastOrNearest)
             );
 
     int apparent_age = attained_age

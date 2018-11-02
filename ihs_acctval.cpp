@@ -45,11 +45,9 @@
 #include "premium_tax.hpp"
 #include "ssize_lmi.hpp"
 #include "stratified_algorithms.hpp"
-#include "surrchg_rates.hpp"
 
 #include <algorithm>
 #include <cmath>
-#include <functional>                   // bind() et al.
 #include <iterator>                     // back_inserter()
 #include <limits>
 #include <numeric>
@@ -435,25 +433,6 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
 
     SurrChg_.assign(BasicValues::GetLength(), 0.0);
 
-    if(0 == Year && 0 == Month)
-        {
-        AddSurrChgLayer(Year, InvariantValues().SpecAmt[Year]);
-        }
-    else
-        {
-        // SOMEDAY !! Inforce surrchg is imperfect, but that's not
-        // important enough to fix for the products now supported.
-        double prior_specamt = 0.0;
-        for(int j = 0; j <= Year; ++j)
-            {
-            AddSurrChgLayer
-                (j
-                ,std::max(0.0, yare_input_.SpecifiedAmount[j] - prior_specamt)
-                );
-            prior_specamt = yare_input_.SpecifiedAmount[j];
-            }
-        }
-
     // TAXATION !! Input::InforceAnnualTargetPremium should be used here.
     double annual_target_premium = GetModalTgtPrem
         (0
@@ -720,28 +699,28 @@ void AccountValue::SetInitialValues()
     Internal1035Amount = Outlay_->internal_1035_amount();
 
     ee_premium_allocation_method   = static_cast<oenum_allocation_method>
-        (static_cast<int>(Database_->Query(DB_EePremMethod))
+        (Database_->Query(DB_EePremMethod)
         );
     ee_premium_preferred_account   = static_cast<oenum_increment_account_preference>
-        (static_cast<int>(Database_->Query(DB_EePremAcct))
+        (Database_->Query(DB_EePremAcct)
         );
     er_premium_allocation_method   = static_cast<oenum_allocation_method>
-        (static_cast<int>(Database_->Query(DB_ErPremMethod))
+        (Database_->Query(DB_ErPremMethod)
         );
     er_premium_preferred_account   = static_cast<oenum_increment_account_preference>
-        (static_cast<int>(Database_->Query(DB_ErPremAcct))
+        (Database_->Query(DB_ErPremAcct)
         );
     deduction_method               = static_cast<oenum_increment_method>
-        (static_cast<int>(Database_->Query(DB_DeductionMethod))
+        (Database_->Query(DB_DeductionMethod)
         );
     deduction_preferred_account    = static_cast<oenum_increment_account_preference>
-        (static_cast<int>(Database_->Query(DB_DeductionAcct))
+        (Database_->Query(DB_DeductionAcct)
         );
     distribution_method            = static_cast<oenum_increment_method>
-        (static_cast<int>(Database_->Query(DB_DistributionMethod))
+        (Database_->Query(DB_DistributionMethod)
         );
     distribution_preferred_account = static_cast<oenum_increment_account_preference>
-        (static_cast<int>(Database_->Query(DB_DistributionAcct))
+        (Database_->Query(DB_DistributionAcct)
         );
 
     // If any account preference is the separate account, then a
@@ -1027,10 +1006,6 @@ void AccountValue::InitializeSpecAmt()
         InvariantValues().InitMinPrem        = MinInitPrem();
         }
 
-    SurrChgSpecAmt = InvariantValues().SpecAmt[0];
-    LMI_ASSERT(0.0 <= SurrChgSpecAmt);
-    // TODO ?? SurrChgSpecAmt is not used yet.
-
     // TODO ?? Perform specamt strategy here?
 }
 
@@ -1207,88 +1182,41 @@ void AccountValue::set_list_bill_premium()
         }
 }
 
-//============================================================================
-void AccountValue::AddSurrChgLayer(int year, double delta_specamt)
+/// Surrender charge.
+///
+/// The "cash value enhancement" components should be implemented as
+/// such, rather than as negative surrender charges.
+///
+/// This ought to be called annually, OAOO, at the top level, and
+/// stored in the variant or invariant ledger depending on whether
+/// surrender charges are to vary by basis. All other direct calls
+/// to this function should be replaced by constant values looked up
+/// in a ledger, or perhaps in SurrChg_ if that vector is ever given
+/// any nonzero value.
+///
+/// SOMEDAY !! Table support and UL model reg formulas should be added.
+
+double AccountValue::SurrChg() const
 {
-    if(!SurrChgOnIncr || 0.0 == delta_specamt)
-        {
-        return;
-        }
-
-// TODO ?? It should be something like this:
-//    rate = delta_specamt * TempDatabase.Query(DB_SurrChgSpecAmtMult);
-// but for the moment we resort to this kludge:
-    double z = delta_specamt * MortalityRates_->TargetPremiumRates()[year];
-
-    std::vector<double> new_layer;
-    std::transform
-        (SurrChgRates_->SpecamtRateDurationalFactor().begin()
-        ,SurrChgRates_->SpecamtRateDurationalFactor().end() - year
-        ,std::inserter(new_layer, new_layer.begin())
-        ,std::bind
-            (round_surrender_charge()
-            ,std::bind(std::multiplies<double>(), std::placeholders::_1, z)
-            )
-        );
-
-    std::transform
-        (year + SurrChg_.begin()
-        ,       SurrChg_.end()
-        ,       new_layer.begin()
-        ,year + SurrChg_.begin()
-        ,std::plus<double>()
-        );
+    LMI_ASSERT(0.0 <= SurrChg_[Year]);
+    // For the nonce, CSVBoost() is netted against surrender charge.
+    // This class's implementation should be revised to distinguish
+    // these additive and subtractive components of CSV.
+    return SurrChg_[Year] - CSVBoost();
 }
 
-//============================================================================
-// Upon partial surrender, multiply current and future surrchg by
-//   1 - (partial surrchg / full surrchg)
-void AccountValue::ReduceSurrChg(int year, double partial_surrchg)
+/// Cash value augmentation--like a negative surrender charge.
+///
+/// Probably the input field should be expunged.
+
+double AccountValue::CSVBoost() const
 {
-    if(!SurrChgOnIncr || 0.0 == partial_surrchg)
-        {
-        return;
-        }
-    // We don't assert the condition because this function might
-    // be called for a product that has no tabular surrender charge.
-    if(0.0 != SurrChg_[year])
-        {
-        double multiplier = 1.0 - partial_surrchg / SurrChg_[year];
-        std::transform
-            (year + SurrChg_.begin()
-            ,       SurrChg_.end()
-            ,year + SurrChg_.begin()
-            ,std::bind
-                (round_surrender_charge()
-                ,std::bind(std::multiplies<double>(), std::placeholders::_1, multiplier)
-                )
-            );
-        }
-}
-
-//============================================================================
-// Surrender charge. Only simple multiplicative parts are implemented.
-//
-// SOMEDAY !! Table support and UL model reg formulas should be added.
-//
-double AccountValue::SurrChg()
-{
-    // We permit negative surrender-charge factors. But we don't
-    // allow those factors, regardless of sign, to be multiplied by
-    // negative base amounts, which would result in surrender charge
-    // components having an unexpected sign.
-
-//    LMI_ASSERT(0.0 <= CumPmts); // TODO ?? Fails on a few test cases: should it?
-    LMI_ASSERT(0.0 <= InvariantValues().SpecAmt[0]);
-
-    return
-            YearsSurrChgAVMult      * std::max(0.0, TotalAccountValue())
-        +   YearsSurrChgPremMult    * std::max(0.0, CumPmts)
-        +   SurrChg_[Year]
-// TODO ?? expunge this and its antecedents:
-//        +   YearsSurrChgSAMult      * InvariantValues().SpecAmt[0]
-        -   yare_input_.CashValueEnhancementRate[Year] * std::max(0.0, TotalAccountValue())
+    double const z =
+          CashValueEnhMult[Year]
+        + yare_input_.CashValueEnhancementRate[Year]
         ;
+    LMI_ASSERT(0.0 <= z);
+    return z * std::max(0.0, TotalAccountValue());
 }
 
 //============================================================================
@@ -1322,7 +1250,7 @@ void AccountValue::SetClaims()
         return;
         }
 
-    TxSetDeathBft(true);
+    TxSetDeathBft();
     TxSetTermAmt();
 
     YearsGrossClaims       = partial_mortality_q[Year] * DBReflectingCorr;
@@ -1363,7 +1291,7 @@ void AccountValue::SetProjectedCoiCharge()
         return;
         }
 
-    TxSetDeathBft(true);
+    TxSetDeathBft();
     TxSetTermAmt();
     double this_years_terminal_naar = material_difference
         (DBReflectingCorr + TermDB
@@ -1469,7 +1397,7 @@ void AccountValue::FinalizeYear()
     // end-of-year value (as of the end of the twelfth month) is
     // needed.
 
-    TxSetDeathBft(true);
+    TxSetDeathBft();
     TxSetTermAmt();
     // post values to LedgerVariant
     InvariantValues().TermSpecAmt   [Year] = TermSpecAmt;
@@ -1679,23 +1607,6 @@ void AccountValue::SetAnnualInvariants()
     YearsSpouseRiderRate    = MortalityRates_->SpouseRiderRates    (GenBasis_)[Year];
     YearsChildRiderRate     = MortalityRates_->ChildRiderRates     ()         [Year];
 
-    YearsSurrChgPremMult    = SurrChgRates_->RatePerDollarOfPremium()         [Year];
-
-/* TODO ?? expunge
-    YearsSurrChgAVMult      = SurrChgRates_->RatePerDollarOfAcctval()         [Year];
-    YearsSurrChgSAMult      = SurrChgRates_->RatePerDollarOfSpecamt()         [Year];
-*/
-
-    YearsSurrChgAVMult =
-          SurrChgRates_->RatePerDollarOfAcctval()      [Year]
-        * SurrChgRates_->AcctvalRateDurationalFactor() [Year]
-        ;
-/*
-    YearsSurrChgSAMult =
-          SurrChgRates_->RatePerDollarOfSpecamt()      [Year]
-        * SurrChgRates_->SpecamtRateDurationalFactor() [Year]
-        ;
-*/
     YearsTotLoadTgt         = Loads_->target_total_load     (GenBasis_)[Year];
     YearsTotLoadExc         = Loads_->excess_total_load     (GenBasis_)[Year];
     // TAXATION !! This '_lowest_premium_tax' approach needs to be

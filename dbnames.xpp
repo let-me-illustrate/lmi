@@ -183,13 +183,8 @@
 {DB_PremTaxRate,DB_Topic_DacAndPremiumTax,"PremTaxRate","Scalar premium tax rate paid by insurance company--distinct from premium load due to premium tax",}, \
 {DB_PremTaxState,DB_Topic_DacAndPremiumTax,"PremTaxState","[Obsolete--retained only for backward compatibility] State that formerly determined premium tax rate: 0=insured state, 1=corporation state",}, \
 {DB_Topic_SurrenderCharges,DB_FIRST,"Surrender charges","Surrender-charge rates and parameters",}, \
-{DB_SurrChgAcctValMult,DB_Topic_SurrenderCharges,"SurrChgAcctValMult","Multiple of account value for formulaic surrender charges",}, \
-{DB_SurrChgAcctValSlope,DB_Topic_SurrenderCharges,"SurrChgAcctValSlope","Durational factor applied to multiple-of-account-value surrender charge",}, \
-{DB_SurrChgSpecAmtMult,DB_Topic_SurrenderCharges,"SurrChgSpecAmtMult","Multiple of initial spec amt for formulaic surrender charges",}, \
-{DB_SurrChgSpecAmtSlope,DB_Topic_SurrenderCharges,"SurrChgSpecAmtSlope","Durational factor applied to multiple-of-specified-amount surrender charge",}, \
-{DB_SurrChgPremMult,DB_Topic_SurrenderCharges,"SurrChgPremMult","Multiple of paid premium for formulaic surrender charges [not yet implemented]",}, \
-{DB_SurrChgOnIncr,DB_Topic_SurrenderCharges,"SurrChgOnIncr","Specified-amount increases engender a new surrender layer: 0=no, 1=yes",}, \
-{DB_SurrChgOnDecr,DB_Topic_SurrenderCharges,"SurrChgOnDecr","Specified-amount decreases engender a new surrender layer: 0=no, 1=yes [not yet implemented]",}, \
+{DB_SurrChgOnIncr,DB_Topic_SurrenderCharges,"SurrChgOnIncr","Specified-amount increases engender a new surrender layer: 0=no, 1=yes [support withdrawn]",}, \
+{DB_SurrChgOnDecr,DB_Topic_SurrenderCharges,"SurrChgOnDecr","Specified-amount decreases engender a new surrender layer: 0=no, 1=yes [support withdrawn]",}, \
 {DB_Has1035ExchCharge,DB_Topic_SurrenderCharges,"Has1035ExchCharge","Surrender charge or market-value adjustment on 1035 exchange: 0=no, 1=yes",}, \
 {DB_SnflQTable,DB_Topic_SurrenderCharges,"SnflQTable","Nonforfeiture annual mortality rate (index in mortality table database) [not yet implemented]",}, \
 {DB_CoiSnflIsGuar,DB_Topic_SurrenderCharges,"CoiSnflIsGuar","Use guaranteed cost of insurance rates as nonforfeiture basis [not yet implemented]",}, \
@@ -335,6 +330,7 @@
 {DB_NoLongerIssued,DB_Topic_Miscellanea,"NoLongerIssued","Forbid new-business illustrations: 0=no, 1=yes",}, \
 {DB_AgeLastOrNearest,DB_Topic_Miscellanea,"AgeLastOrNearest","Age calculated as of last or nearest birthday: 0=ALB, 1=ANB (ties --> older), 2=ANB (ties --> younger)",}, \
 {DB_MaturityAge,DB_Topic_Miscellanea,"MaturityAge","Normal maturity age",}, \
+{DB_CashValueEnhMult,DB_Topic_Miscellanea,"CashValueEnhMult","Cash value enhancement multiple: e.g. 0.03 to make cash value three percent higher than account value",}, \
 {DB_LapseIgnoresSurrChg,DB_Topic_Miscellanea,"LapseIgnoresSurrChg","Ignore tabular surrender charge for lapse processing",}, \
 {DB_DefaultProcessOrder,DB_Topic_Miscellanea,"DefaultProcessOrder","Default processing order: 0=life by life, 1=month by month [not yet implemented]",}, \
 {DB_GroupProxyRateTable,DB_Topic_Miscellanea,"GroupProxyRateTable","Group-term proxy rate (index in mortality table database)",}, \

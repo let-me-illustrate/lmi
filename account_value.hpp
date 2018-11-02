@@ -56,6 +56,7 @@ class LMI_SO AccountValue
     enum {months_per_year = 12};
 
     explicit AccountValue(Input const& input);
+    AccountValue(AccountValue&&) = default;
     ~AccountValue() override = default;
 
     double RunAV                ();
@@ -249,7 +250,7 @@ class LMI_SO AccountValue
     void TxSetBOMAV              ();
     void TxTestHoneymoonForExpiration();
     void TxSetTermAmt            ();
-    void TxSetDeathBft           (bool force_eoy_behavior = false);
+    void TxSetDeathBft           ();
     void TxSetCoiCharge          ();
     void TxSetRiderDed           ();
     void TxDoMlyDed              ();
@@ -281,10 +282,9 @@ class LMI_SO AccountValue
     double minimum_specified_amount(bool issuing_now, bool term_rider) const;
     void   ChangeSpecAmtBy         (double delta);
     void   ChangeSupplAmtBy        (double delta);
-    void   ChangeSurrChgSpecAmtBy  (double delta);
-    void   AddSurrChgLayer         (int year, double delta_specamt);
-    void   ReduceSurrChg           (int year, double partial_surrchg);
-    double SurrChg                 ();
+
+    double SurrChg                 () const;
+    double CSVBoost                () const;
 
     double MinInitDumpin() const;
     double MinInitPrem() const;
@@ -495,9 +495,7 @@ class LMI_SO AccountValue
     double       YearsPrfLnIntCredRate;
     double       YearsRegLnIntDueRate;
     double       YearsPrfLnIntDueRate;
-    double       YearsSurrChgPremMult;
-    double       YearsSurrChgAVMult;
-    double       YearsSurrChgSAMult;
+
     double       YearsCoiRate0;
     double       YearsCoiRate1;
     double       YearsCoiRate2;
@@ -558,11 +556,6 @@ class LMI_SO AccountValue
     bool        haswp;    // Antediluvian.
     bool        hasadb;   // Antediluvian.
 
-    // The spec amt used as the basis for surrender charges is not
-    // always the current spec amt, but rather the original spec amt
-    // adjusted for withdrawals only.
-    double  SurrChgSpecAmt;
-
     double  ActualLoan;
     double  RequestedLoan;
     double  RequestedWD;
@@ -620,7 +613,7 @@ class LMI_SO AccountValue
     std::vector<double> OverridingLoan;
     std::vector<double> OverridingWD;
 
-    std::vector<double> SurrChg_;
+    std::vector<double> SurrChg_; // Of uncertain utility.
 };
 
 //============================================================================

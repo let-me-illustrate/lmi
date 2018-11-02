@@ -269,7 +269,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     std::string dbo_name_option1 = mc_str(mce_option1);
     std::string dbo_name_option2 = mc_str(mce_option2);
     std::string dbo_name_rop     = mc_str(mce_rop    );
-    std::string dbo_name_mdb     = mc_str(mce_mdb    ); // DBO3 !! reconsider
+    std::string dbo_name_mdb     = mc_str(mce_mdb    );
 
     // The antediluvian branch has a null ProductData_ object.
     if(b->ProductData_)
@@ -283,7 +283,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         dbo_name_option1               = p.datum("DboNameLevel"                   );
         dbo_name_option2               = p.datum("DboNameIncreasing"              );
         dbo_name_rop                   = p.datum("DboNameReturnOfPremium"         );
-//      dbo_name_mdb                   = // DBO3 !! reconsider
+        dbo_name_mdb                   = p.datum("DboNameMinDeathBenefit"         );
         PolicyForm = p.datum(alt_form ? "PolicyFormAlternative" : "PolicyForm");
         PolicyMktgName                 = p.datum("PolicyMktgName"                 );
         PolicyLegalName                = p.datum("PolicyLegalName"                );
@@ -441,7 +441,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     //
     oenum_smoking_or_tobacco smoke_or_tobacco =
         static_cast<oenum_smoking_or_tobacco>
-            (static_cast<int>(b->Database_->Query(DB_SmokeOrTobacco))
+            (b->Database_->Query(DB_SmokeOrTobacco)
             );
     if(oe_tobacco_nontobacco == smoke_or_tobacco)
         {

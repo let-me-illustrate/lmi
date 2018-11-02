@@ -568,7 +568,6 @@
     <ClCompile Include="single_cell_document.cpp" />
     <ClCompile Include="stratified_algorithms.cpp" />
     <ClCompile Include="stratified_charges.cpp" />
-    <ClCompile Include="surrchg_rates.cpp" />
     <ClCompile Include="system_command.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="tn_range_types.cpp" />
