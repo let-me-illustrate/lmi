@@ -43,11 +43,13 @@ class product_file_test
         // Location of product files.
         global_settings::instance().set_data_directory("/opt/lmi/data");
         get_filenames();
+        test_copying();
         assay_speed();
         }
 
   private:
     static void get_filenames();
+    static void test_copying();
     static void assay_speed();
     static void read_database_file()   ;
     static void read_fund_file()       ;
@@ -76,6 +78,18 @@ void product_file_test::get_filenames()
     fund_filename_       = AddDataDir(p.datum("FundFilename"    ));
     rounding_filename_   = AddDataDir(p.datum("RoundingFilename"));
     stratified_filename_ = AddDataDir(p.datum("TierFilename"    ));
+}
+
+void product_file_test::test_copying()
+{
+    product_data p(policy_filename_);
+
+    // Test copy ctor.
+    product_data q(p);
+    BOOST_TEST(database_filename_   == AddDataDir(q.datum("DatabaseFilename")));
+    BOOST_TEST(fund_filename_       == AddDataDir(q.datum("FundFilename"    )));
+    BOOST_TEST(rounding_filename_   == AddDataDir(q.datum("RoundingFilename")));
+    BOOST_TEST(stratified_filename_ == AddDataDir(q.datum("TierFilename"    )));
 }
 
 void product_file_test::read_database_file()

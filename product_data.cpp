@@ -148,6 +148,14 @@ product_data::product_data(std::string const& product_name)
     load(AddDataDir(path.string()));
 }
 
+product_data::product_data(product_data const& z)
+    :xml_serializable  <product_data> {}
+    ,MemberSymbolTable <product_data> {}
+{
+    ascribe_members();
+    MemberSymbolTable<product_data>::assign(z);
+}
+
 /// Destructor.
 ///
 /// Although it is explicitly defaulted, this destructor cannot be
