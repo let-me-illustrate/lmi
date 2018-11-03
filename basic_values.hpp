@@ -28,6 +28,7 @@
 #include "dbnames.hpp"                  // e_database_key
 #include "mc_enum_type_enums.hpp"
 #include "oecumenic_enumerations.hpp"
+#include "product_data.hpp"
 #include "round_to.hpp"
 #include "so_attributes.hpp"
 #include "yare_input.hpp"
@@ -59,7 +60,6 @@ class MortalityRates;
 class death_benefits;
 class modal_outlay;
 class premium_tax;
-class product_data;
 class product_database;
 class rounding_rules;
 class stratified_charges;
@@ -112,7 +112,7 @@ class LMI_SO BasicValues
     double                InvestmentManagementFee()    const;
 
     yare_input                          yare_input_;
-    std::shared_ptr<product_data>       ProductData_;
+    product_data     const              product_;
     std::shared_ptr<product_database>   Database_;
     std::shared_ptr<FundData>           FundData_;
     std::shared_ptr<rounding_rules>     RoundingRules_;
@@ -125,6 +125,8 @@ class LMI_SO BasicValues
     std::shared_ptr<Loads>              Loads_;
     std::shared_ptr<Irc7702>            Irc7702_;
     std::shared_ptr<Irc7702A>           Irc7702A_;
+
+    product_data     const& product() const {return product_;}
 
     double GetAnnualTgtPrem(int a_year, double a_specamt) const;
 

@@ -106,10 +106,17 @@ bool mec_state::is_detritus(std::string const&) const
     return false;
 }
 
+product_data::product_data()
+{}
+
 product_data::product_data(std::string const&)
 {}
 
 product_data::~product_data() = default;
+
+product_data::product_data(product_data const&)
+    :MemberSymbolTable <product_data> {}
+{}
 
 int product_data::class_version() const
 {

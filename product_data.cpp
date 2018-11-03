@@ -118,7 +118,8 @@ std::string const& glossed_string::gloss() const
 
 /// Private default ctor.
 ///
-/// Used only by friend class PolicyDocument and 'my_prod.cpp'.
+/// Used only by friends: class PolicyDocument, 'my_prod.cpp',
+/// and 'basicvalues.cpp'.
 
 product_data::product_data()
 {

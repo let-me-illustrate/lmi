@@ -47,7 +47,6 @@
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "premium_tax.hpp"
-#include "product_data.hpp"
 #include "rounding_rules.hpp"
 #include "stratified_charges.hpp"
 #include "value_cast.hpp"
@@ -62,6 +61,7 @@
 //============================================================================
 BasicValues::BasicValues(Input const& input)
     :yare_input_         (input)
+    ,product_            (yare_input_.ProductName)
     ,DefnLifeIns_        {mce_cvat}
     ,DefnMaterialChange_ {mce_unnecessary_premium}
     ,Equiv7702DBO3       {mce_option1_for_7702}
@@ -91,6 +91,7 @@ BasicValues::BasicValues
     // TODO ?? Need loan rate type here?
     )
     :yare_input_         (Input{})
+    ,product_            (a_ProductName)
     ,DefnLifeIns_        {mce_cvat}
     ,DefnMaterialChange_ {mce_unnecessary_premium}
     ,Equiv7702DBO3       {a_DBOptFor7702}
@@ -135,12 +136,11 @@ BasicValues::BasicValues
 //============================================================================
 void BasicValues::Init()
 {
-    ProductData_.reset(new product_data(yare_input_.ProductName));
     Database_.reset(new product_database(yare_input_));
 
     SetPermanentInvariants();
 
-    StateOfDomicile_ = mc_state_from_string(ProductData_->datum("InsCoDomicile"));
+    StateOfDomicile_ = mc_state_from_string(product().datum("InsCoDomicile"));
     StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
     PremiumTaxState_     = yare_input_.PremiumTaxState    ;
 
@@ -198,13 +198,13 @@ void BasicValues::Init()
             << LMI_FLUSH
             ;
         }
-    FundData_.reset(new FundData(AddDataDir(ProductData_->datum("FundFilename"))));
+    FundData_.reset(new FundData(AddDataDir(product().datum("FundFilename"))));
     RoundingRules_.reset
-        (new rounding_rules(AddDataDir(ProductData_->datum("RoundingFilename")))
+        (new rounding_rules(AddDataDir(product().datum("RoundingFilename")))
         );
     SetRoundingFunctors();
     StratifiedCharges_.reset
-        (new stratified_charges(AddDataDir(ProductData_->datum("TierFilename")))
+        (new stratified_charges(AddDataDir(product().datum("TierFilename")))
         );
     SpreadFor7702_.assign
         (Length
@@ -242,7 +242,6 @@ void BasicValues::Init()
 // TODO ??  Not for general use--use for GPT server only, for now. TAXATION !! refactor later
 void BasicValues::GPTServerInit()
 {
-    ProductData_.reset(new product_data(yare_input_.ProductName));
     Database_.reset(new product_database(yare_input_));
 
     SetPermanentInvariants();
@@ -253,7 +252,7 @@ void BasicValues::GPTServerInit()
     LMI_ASSERT(RetAge <= 100);
     LMI_ASSERT(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
 
-    StateOfDomicile_ = mc_state_from_string(ProductData_->datum("InsCoDomicile"));
+    StateOfDomicile_ = mc_state_from_string(product().datum("InsCoDomicile"));
     StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
     PremiumTaxState_     = yare_input_.PremiumTaxState    ;
 
@@ -290,14 +289,14 @@ void BasicValues::GPTServerInit()
             );
         }
 //  FundData_       = new FundData
-//      (AddDataDir(ProductData_->datum("FundFilename"))
+//      (AddDataDir(product().datum("FundFilename"))
 //      );
     RoundingRules_.reset
-        (new rounding_rules(AddDataDir(ProductData_->datum("RoundingFilename")))
+        (new rounding_rules(AddDataDir(product().datum("RoundingFilename")))
         );
     SetRoundingFunctors();
     StratifiedCharges_.reset
-        (new stratified_charges(AddDataDir(ProductData_->datum("TierFilename")))
+        (new stratified_charges(AddDataDir(product().datum("TierFilename")))
         );
     SpreadFor7702_.assign
         (Length
@@ -597,7 +596,7 @@ double BasicValues::GetAnnualTgtPrem(int a_year, double a_specamt) const
 /// Establish up front some values that cannot later change.
 ///
 /// Values set here depend on Database_, and thus on yare_input_ and
-/// on ProductData_, but not on any other shared_ptr members--so they
+/// on product_, but not on any other shared_ptr members--so they
 /// can reliably be used in initializing those other members.
 
 void BasicValues::SetPermanentInvariants()
@@ -1860,7 +1859,7 @@ std::vector<double> const& BasicValues::GetMlyDcvqc() const
 std::vector<double> BasicValues::GetCvatCorridorFactors() const
 {
     return GetTable
-        (ProductData_->datum("CvatCorridorFilename")
+        (product().datum("CvatCorridorFilename")
         ,DB_CorridorTable
         );
 }
@@ -1868,7 +1867,7 @@ std::vector<double> BasicValues::GetCvatCorridorFactors() const
 std::vector<double> BasicValues::GetIrc7702NspRates() const
 {
     return GetTable
-        (ProductData_->datum("Irc7702NspFilename")
+        (product().datum("Irc7702NspFilename")
         ,DB_CorridorTable
         );
 }
@@ -1878,7 +1877,7 @@ std::vector<double> BasicValues::GetIrc7702NspRates() const
 std::vector<double> BasicValues::GetCurrCOIRates0() const
 {
     return GetTable
-        (ProductData_->datum("CurrCOIFilename")
+        (product().datum("CurrCOIFilename")
         ,DB_CurrCoiTable
         ,true
         ,CanBlend
@@ -1889,7 +1888,7 @@ std::vector<double> BasicValues::GetCurrCOIRates0() const
 std::vector<double> BasicValues::GetCurrCOIRates1() const
 {
     return GetTable
-        (ProductData_->datum("CurrCOIFilename")
+        (product().datum("CurrCOIFilename")
         ,DB_CurrCoiTable1
         ,CurrCoiTable0Limit < std::numeric_limits<double>::max()
         ,CanBlend
@@ -1900,7 +1899,7 @@ std::vector<double> BasicValues::GetCurrCOIRates1() const
 std::vector<double> BasicValues::GetCurrCOIRates2() const
 {
     return GetTable
-        (ProductData_->datum("CurrCOIFilename")
+        (product().datum("CurrCOIFilename")
         ,DB_CurrCoiTable2
         ,CurrCoiTable1Limit < std::numeric_limits<double>::max()
         ,CanBlend
@@ -1911,7 +1910,7 @@ std::vector<double> BasicValues::GetCurrCOIRates2() const
 std::vector<double> BasicValues::GetGuarCOIRates() const
 {
     return GetTable
-        (ProductData_->datum("GuarCOIFilename")
+        (product().datum("GuarCOIFilename")
         ,DB_GuarCoiTable
         );
 }
@@ -1919,7 +1918,7 @@ std::vector<double> BasicValues::GetGuarCOIRates() const
 std::vector<double> BasicValues::GetSmokerBlendedGuarCOIRates() const
 {
     return GetTable
-        (ProductData_->datum("GuarCOIFilename")
+        (product().datum("GuarCOIFilename")
         ,DB_GuarCoiTable
         ,true
         ,CanBlend
@@ -1930,7 +1929,7 @@ std::vector<double> BasicValues::GetSmokerBlendedGuarCOIRates() const
 std::vector<double> BasicValues::GetWpRates() const
 {
     return GetTable
-        (ProductData_->datum("WPFilename")
+        (product().datum("WPFilename")
         ,DB_WpTable
         ,Database_->Query(DB_AllowWp)
         );
@@ -1939,7 +1938,7 @@ std::vector<double> BasicValues::GetWpRates() const
 std::vector<double> BasicValues::GetAdbRates() const
 {
     return GetTable
-        (ProductData_->datum("ADDFilename")
+        (product().datum("ADDFilename")
         ,DB_AdbTable
         ,Database_->Query(DB_AllowAdb)
         );
@@ -1948,7 +1947,7 @@ std::vector<double> BasicValues::GetAdbRates() const
 std::vector<double> BasicValues::GetChildRiderRates() const
 {
     return GetTable
-        (ProductData_->datum("ChildRiderFilename")
+        (product().datum("ChildRiderFilename")
         ,DB_ChildRiderTable
         ,Database_->Query(DB_AllowChildRider)
         );
@@ -1962,7 +1961,7 @@ std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
         }
 
     std::vector<double> z = actuarial_table_rates
-        (AddDataDir(ProductData_->datum("CurrSpouseRiderFilename"))
+        (AddDataDir(product().datum("CurrSpouseRiderFilename"))
         ,bourn_cast<int>(Database_->Query(DB_SpouseRiderTable))
         ,yare_input_.SpouseIssueAge
         ,EndtAge - yare_input_.SpouseIssueAge
@@ -1979,7 +1978,7 @@ std::vector<double> BasicValues::GetGuaranteedSpouseRiderRates() const
         }
 
     std::vector<double> z = actuarial_table_rates
-        (AddDataDir(ProductData_->datum("GuarSpouseRiderFilename"))
+        (AddDataDir(product().datum("GuarSpouseRiderFilename"))
         ,bourn_cast<int>(Database_->Query(DB_SpouseRiderGuarTable))
         ,yare_input_.SpouseIssueAge
         ,EndtAge - yare_input_.SpouseIssueAge
@@ -1991,7 +1990,7 @@ std::vector<double> BasicValues::GetGuaranteedSpouseRiderRates() const
 std::vector<double> BasicValues::GetCurrentTermRates() const
 {
     return GetTable
-        (ProductData_->datum("CurrTermFilename")
+        (product().datum("CurrTermFilename")
         ,DB_TermTable
         ,Database_->Query(DB_AllowTerm)
         ,CanBlend
@@ -2002,7 +2001,7 @@ std::vector<double> BasicValues::GetCurrentTermRates() const
 std::vector<double> BasicValues::GetGuaranteedTermRates() const
 {
     return GetTable
-        (ProductData_->datum("GuarTermFilename")
+        (product().datum("GuarTermFilename")
         ,DB_GuarTermTable
         ,Database_->Query(DB_AllowTerm)
         ,CanBlend
@@ -2013,7 +2012,7 @@ std::vector<double> BasicValues::GetGuaranteedTermRates() const
 std::vector<double> BasicValues::GetGroupProxyRates() const
 {
     return GetTable
-        (ProductData_->datum("GroupProxyFilename")
+        (product().datum("GroupProxyFilename")
         ,DB_GroupProxyRateTable
         );
 }
@@ -2021,7 +2020,7 @@ std::vector<double> BasicValues::GetGroupProxyRates() const
 std::vector<double> BasicValues::GetSevenPayRates() const
 {
     return GetTable
-        (ProductData_->datum("SevenPayFilename")
+        (product().datum("SevenPayFilename")
         ,DB_SevenPayTable
     // TAXATION !! No table available if 7PP calculated from first principles.
 //        ,1 == Database_->Query(DB_SevenPayWhence)
@@ -2031,7 +2030,7 @@ std::vector<double> BasicValues::GetSevenPayRates() const
 std::vector<double> BasicValues::GetTgtPremRates() const
 {
     return GetTable
-        (ProductData_->datum("TgtPremFilename")
+        (product().datum("TgtPremFilename")
         ,DB_TgtPremTable
 // Use this line instead:
 //      ,oe_modal_table == TgtPremType
@@ -2051,7 +2050,7 @@ std::vector<double> BasicValues::GetTgtPremRates() const
 std::vector<double> BasicValues::GetIrc7702QRates() const
 {
     return GetTable
-        (ProductData_->datum("Irc7702QFilename")
+        (product().datum("Irc7702QFilename")
         ,DB_Irc7702QTable
         );
 }
@@ -2059,7 +2058,7 @@ std::vector<double> BasicValues::GetIrc7702QRates() const
 std::vector<double> BasicValues::GetPartialMortalityRates() const
 {
     return GetTable
-        (ProductData_->datum("PartialMortalityFilename")
+        (product().datum("PartialMortalityFilename")
         ,DB_PartialMortTable
         ,true
         ,CannotBlend
@@ -2075,7 +2074,7 @@ std::vector<double> BasicValues::GetSubstdTblMultTable() const
         }
 
     return GetTable
-        (ProductData_->datum("SubstdTblMultFilename")
+        (product().datum("SubstdTblMultFilename")
         ,DB_SubstdTableMultTable
         );
 }
@@ -2083,7 +2082,7 @@ std::vector<double> BasicValues::GetSubstdTblMultTable() const
 std::vector<double> BasicValues::GetCurrSpecAmtLoadTable() const
 {
     return GetTable
-        (ProductData_->datum("CurrSpecAmtLoadFilename")
+        (product().datum("CurrSpecAmtLoadFilename")
         ,DB_CurrSpecAmtLoadTable
         ,0 != Database_->Query(DB_CurrSpecAmtLoadTable)
         );
@@ -2092,7 +2091,7 @@ std::vector<double> BasicValues::GetCurrSpecAmtLoadTable() const
 std::vector<double> BasicValues::GetGuarSpecAmtLoadTable() const
 {
     return GetTable
-        (ProductData_->datum("GuarSpecAmtLoadFilename")
+        (product().datum("GuarSpecAmtLoadFilename")
         ,DB_GuarSpecAmtLoadTable
         ,0 != Database_->Query(DB_GuarSpecAmtLoadTable)
         );

@@ -80,6 +80,7 @@ class LMI_SO product_data final
     :public xml_serializable  <product_data>
     ,public MemberSymbolTable <product_data>
 {
+    friend class BasicValues; // For antediluvian fork only.
     friend class PolicyDocument;
     friend class product_file_test;
 

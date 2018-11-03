@@ -32,6 +32,7 @@
 #include "death_benefits.hpp"
 #include "fund_data.hpp"
 #include "interest_rates.hpp"
+#include "lmi.hpp"                      // is_antediluvian_fork()
 #include "loads.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_str()
 #include "miscellany.hpp"               // each_equal()
@@ -145,9 +146,9 @@ void LedgerInvariant::Init(BasicValues const* b)
     FundAllocs            .resize(0);
     FundAllocations       .resize(0);
 
-    // The antediluvian branch has a null FundData_ object.
+    // The antediluvian branch doesn't meaningfully initialize class FundData.
     int number_of_funds(0);
-    if(b->FundData_)
+    if(!is_antediluvian_fork())
         {
         number_of_funds = b->FundData_->GetNumberOfFunds();
         }
@@ -271,10 +272,10 @@ void LedgerInvariant::Init(BasicValues const* b)
     std::string dbo_name_rop     = mc_str(mce_rop    );
     std::string dbo_name_mdb     = mc_str(mce_mdb    );
 
-    // The antediluvian branch has a null ProductData_ object.
-    if(b->ProductData_)
+    // The antediluvian branch doesn't meaningfully initialize class product_data.
+    if(!is_antediluvian_fork())
         {
-        product_data const& p = *b->ProductData_;
+        product_data const& p = b->product();
         // Accommodate one alternative policy-form name.
         // DATABASE !! It would be much better, of course, to let all
         // strings in class product_data vary across the same axes as
