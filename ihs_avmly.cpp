@@ -1210,7 +1210,7 @@ void AccountValue::TxAscertainDesiredPayment()
             ;
         }
 
-    if(0 == Year && ee_pay_this_month && 1 == Database_->Query(DB_MinInitPremType))
+    if(0 == Year && ee_pay_this_month && 1 == database().Query(DB_MinInitPremType))
         {
         double z = ModalMinInitPremShortfall();
         // Illustration-reg guaranteed premium ignores GPT limit.
@@ -1975,11 +1975,11 @@ void AccountValue::TxTakeSepAcctLoad()
             (GenBasis_
             ,AssetsPostBom
             ,CumPmtsPostBom
-            ,Database_->Query(DB_DynSepAcctLoadLimit)
+            ,database().Query(DB_DynSepAcctLoadLimit)
             );
 
         double tiered_comp = 0.0;
-        if(oe_asset_charge_load == Database_->Query(DB_AssetChargeType))
+        if(oe_asset_charge_load == database().Query(DB_AssetChargeType))
             {
             tiered_comp = StratifiedCharges_->tiered_asset_based_compensation(AssetsPostBom);
             }
@@ -2059,7 +2059,7 @@ void AccountValue::ApplyDynamicMandE(double assets)
             ;
         }
     double asset_comp_rate =
-        (oe_asset_charge_spread == Database_->Query(DB_AssetChargeType))
+        (oe_asset_charge_spread == database().Query(DB_AssetChargeType))
             ? StratifiedCharges_->tiered_asset_based_compensation(assets)
             : 0.0
             ;

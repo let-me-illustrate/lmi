@@ -101,12 +101,12 @@ void BasicValues::Init()
         );
 
     // The database class constrains maturity age to be scalar.
-    EndtAge = static_cast<int>(Database_->Query(DB_MaturityAge));
+    EndtAge = static_cast<int>(database().Query(DB_MaturityAge));
     Length = EndtAge - IssueAge;
 
-    ledger_type_ = static_cast<mcenum_ledger_type>(Database_->Query(DB_LedgerType));
-    nonillustrated_       = static_cast<bool>(Database_->Query(DB_Nonillustrated));
-    bool no_longer_issued = static_cast<bool>(Database_->Query(DB_NoLongerIssued));
+    ledger_type_ = static_cast<mcenum_ledger_type>(database().Query(DB_LedgerType));
+    nonillustrated_       = static_cast<bool>(database().Query(DB_Nonillustrated));
+    bool no_longer_issued = static_cast<bool>(database().Query(DB_NoLongerIssued));
     bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;
     no_can_issue_         = no_longer_issued && is_new_business;
     IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(ledger_type());
@@ -119,13 +119,13 @@ void BasicValues::Init()
     InterestRates_ .reset(new InterestRates  (*this));
     DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
     Outlay_        .reset(new modal_outlay   (yare_input_));
-    PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, *Database_));
-    Loads_         .reset(new Loads(*Database_, IsSubjectToIllustrationReg()));
+    PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, database()));
+    Loads_         .reset(new Loads(database(), IsSubjectToIllustrationReg()));
 
-    MinSpecAmt = Database_->Query(DB_MinSpecAmt);
-    MinWD      = Database_->Query(DB_MinWd     );
-    WDFee      = Database_->Query(DB_WdFee     );
-    WDFeeRate  = Database_->Query(DB_WdFeeRate );
+    MinSpecAmt = database().Query(DB_MinSpecAmt);
+    MinWD      = database().Query(DB_MinWd     );
+    WDFee      = database().Query(DB_WdFee     );
+    WDFeeRate  = database().Query(DB_WdFeeRate );
 
 // The antediluvian branch leaves FundData_, StratifiedCharges_, and
 // ProductData initialized to null pointers.

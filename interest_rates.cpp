@@ -256,15 +256,15 @@ InterestRates::InterestRates(BasicValues const& v)
     ,Zero_               (Length_)
     ,NeedMidpointRates_  {v.IsSubjectToIllustrationReg()}
     ,GenAcctRateType_    {v.yare_input_.GeneralAccountRateType}
-    ,NeedSepAcctRates_   {0.0 != v.Database_->Query(DB_AllowSepAcct)}
+    ,NeedSepAcctRates_   {0.0 != v.database().Query(DB_AllowSepAcct)}
     ,SepAcctRateType_    {v.yare_input_.SeparateAccountRateType}
-    ,SepAcctSpreadMethod_{static_cast<mcenum_spread_method>(static_cast<int>(v.Database_->Query(DB_SepAcctSpreadMethod)))}
+    ,SepAcctSpreadMethod_{static_cast<mcenum_spread_method>(static_cast<int>(v.database().Query(DB_SepAcctSpreadMethod)))}
     ,AmortLoad_          {Zero_}
     ,ExtraSepAcctCharge_ {Zero_}
 //    ,NeedLoanRates_      {need_loan_rates(v.yare_input_)}
     ,NeedLoanRates_      {true} // DEPRECATED
     ,LoanRateType_       {v.yare_input_.LoanRateType}
-    ,NeedPrefLoanRates_  {0.0 != v.Database_->Query(DB_AllowPrefLoan)}
+    ,NeedPrefLoanRates_  {0.0 != v.database().Query(DB_AllowPrefLoan)}
     ,NeedHoneymoonRates_ {v.yare_input_.HoneymoonEndorsement}
     ,SpreadFor7702_      {v.SpreadFor7702()}
 {
@@ -275,7 +275,7 @@ void InterestRates::Initialize(BasicValues const& v)
 {
     // Retrieve general-account data from class BasicValues.
 
-    v.Database_->Query(GenAcctGrossRate_[mce_gen_guar], DB_GuarInt);
+    v.database().Query(GenAcctGrossRate_[mce_gen_guar], DB_GuarInt);
 
     std::copy
         (v.yare_input_.GeneralAccountRate.begin()
@@ -293,13 +293,13 @@ void InterestRates::Initialize(BasicValues const& v)
     // almost certainly quoted as an APR. It is assumed that the
     // interest bonus is not guaranteed.
     std::vector<double> general_account_interest_bonus;
-    v.Database_->Query(general_account_interest_bonus, DB_GenAcctIntBonus);
+    v.database().Query(general_account_interest_bonus, DB_GenAcctIntBonus);
     // ET !! GenAcctGrossRate_ += general_account_interest_bonus;
     // ...and this might be further simplified by implementing e.g.
     //   std::vector<double> product_database::QueryVector(int k) const;
     // and replacing 'general_account_interest_bonus' with a
     // temporary:
-    //   GenAcctGrossRate_ += v.Database_->QueryVector(DB_GenAcctIntBonus);
+    //   GenAcctGrossRate_ += v.database().QueryVector(DB_GenAcctIntBonus);
     std::transform
         (GenAcctGrossRate_[mce_gen_curr].begin()
         ,GenAcctGrossRate_[mce_gen_curr].end()
@@ -308,7 +308,7 @@ void InterestRates::Initialize(BasicValues const& v)
         ,std::plus<double>()
         );
 
-    v.Database_->Query(GenAcctSpread_, DB_CurrIntSpread);
+    v.database().Query(GenAcctSpread_, DB_CurrIntSpread);
 
     // Retrieve separate-account data from class BasicValues.
 
@@ -321,21 +321,21 @@ void InterestRates::Initialize(BasicValues const& v)
     // the input class has an inappropriate size.
     SepAcctGrossRate_[mce_sep_full].resize(Length_);
 
-    v.Database_->Query(MAndERate_[mce_gen_guar], DB_GuarMandE          );
-    v.Database_->Query(MAndERate_[mce_gen_curr], DB_CurrMandE          );
+    v.database().Query(MAndERate_[mce_gen_guar], DB_GuarMandE          );
+    v.database().Query(MAndERate_[mce_gen_curr], DB_CurrMandE          );
 
-    v.Database_->Query(Stabilizer_,              DB_StableValFundCharge);
+    v.database().Query(Stabilizer_,              DB_StableValFundCharge);
 
     // Deduct miscellaneous fund charges and input extra asset comp in
     // the same way as M&E, iff database entity DB_AssetChargeType has
     // the value 'oe_asset_charge_spread'; otherwise, reflect them
     // elsewhere as an account-value load.
-    if(oe_asset_charge_spread == v.Database_->Query(DB_AssetChargeType))
+    if(oe_asset_charge_spread == v.database().Query(DB_AssetChargeType))
         {
         // TODO ?? At least for the antediluvian branch, the vector in
         // the input class has an inappropriate size. Truncating it
         // with std::transform() here is far too tricky.
-        LMI_ASSERT(lmi::ssize(ExtraSepAcctCharge_) == v.Database_->length());
+        LMI_ASSERT(lmi::ssize(ExtraSepAcctCharge_) == v.database().length());
 // Not reliably true:
 //        LMI_ASSERT
 //            (   ExtraSepAcctCharge_.size()
@@ -354,7 +354,7 @@ void InterestRates::Initialize(BasicValues const& v)
 
     if(v.yare_input_.AmortizePremiumLoad)
         {
-        v.Database_->Query(AmortLoad_, DB_LoadAmortFundCharge);
+        v.database().Query(AmortLoad_, DB_LoadAmortFundCharge);
         }
 
     // TODO ?? This was once initialized with 'DB_MgmtFeeFundCharge',
@@ -371,7 +371,7 @@ void InterestRates::Initialize(BasicValues const& v)
         {
         case mce_fixed_loan_rate:
             {
-            v.Database_->Query(PublishedLoanRate_, DB_FixedLoanRate);
+            v.database().Query(PublishedLoanRate_, DB_FixedLoanRate);
             }
             break;
         case mce_variable_loan_rate:
@@ -385,12 +385,12 @@ void InterestRates::Initialize(BasicValues const& v)
             }
         }
 
-    v.Database_->Query(PrefLoanRateDecr_, DB_PrefLoanRateDecr);
+    v.database().Query(PrefLoanRateDecr_, DB_PrefLoanRateDecr);
 
-    v.Database_->Query(RegLoanSpread_[mce_gen_guar], DB_GuarRegLoanSpread);
-    v.Database_->Query(RegLoanSpread_[mce_gen_curr], DB_CurrRegLoanSpread);
-    v.Database_->Query(PrfLoanSpread_[mce_gen_guar], DB_GuarPrefLoanSpread);
-    v.Database_->Query(PrfLoanSpread_[mce_gen_curr], DB_CurrPrefLoanSpread);
+    v.database().Query(RegLoanSpread_[mce_gen_guar], DB_GuarRegLoanSpread);
+    v.database().Query(RegLoanSpread_[mce_gen_curr], DB_CurrRegLoanSpread);
+    v.database().Query(PrfLoanSpread_[mce_gen_guar], DB_GuarPrefLoanSpread);
+    v.database().Query(PrfLoanSpread_[mce_gen_curr], DB_CurrPrefLoanSpread);
 
     if(NeedHoneymoonRates_)
         {

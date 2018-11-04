@@ -126,7 +126,8 @@ class LMI_SO BasicValues
     std::shared_ptr<Irc7702>            Irc7702_;
     std::shared_ptr<Irc7702A>           Irc7702A_;
 
-    product_data     const& product() const {return product_;}
+    product_data     const& product () const {return product_;}
+    product_database const& database() const {return *Database_;}
 
     double GetAnnualTgtPrem(int a_year, double a_specamt) const;
 
