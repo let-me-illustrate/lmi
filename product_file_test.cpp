@@ -22,6 +22,7 @@
 #include "pchfile.hpp"
 
 #include "data_directory.hpp"           // AddDataDir()
+#include "database.hpp"
 #include "dbdict.hpp"
 #include "fund_data.hpp"
 #include "global_settings.hpp"
@@ -34,6 +35,7 @@
 #include "timer.hpp"
 
 #include <string>
+#include <utility>                      // move()
 
 class product_file_test
 {
@@ -43,11 +45,13 @@ class product_file_test
         // Location of product files.
         global_settings::instance().set_data_directory("/opt/lmi/data");
         get_filenames();
+        test_copying();
         assay_speed();
         }
 
   private:
     static void get_filenames();
+    static void test_copying();
     static void assay_speed();
     static void read_database_file()   ;
     static void read_fund_file()       ;
@@ -76,6 +80,36 @@ void product_file_test::get_filenames()
     fund_filename_       = AddDataDir(p.datum("FundFilename"    ));
     rounding_filename_   = AddDataDir(p.datum("RoundingFilename"));
     stratified_filename_ = AddDataDir(p.datum("TierFilename"    ));
+}
+
+void product_file_test::test_copying()
+{
+    product_data p(policy_filename_);
+
+    // Test product_data copy ctor.
+    product_data q(p);
+    BOOST_TEST(database_filename_   == AddDataDir(q.datum("DatabaseFilename")));
+    BOOST_TEST(fund_filename_       == AddDataDir(q.datum("FundFilename"    )));
+    BOOST_TEST(rounding_filename_   == AddDataDir(q.datum("RoundingFilename")));
+    BOOST_TEST(stratified_filename_ == AddDataDir(q.datum("TierFilename"    )));
+
+    // Test product_database move ctor.
+    product_database d
+        ("sample"
+        ,mce_female
+        ,mce_standard
+        ,mce_nonsmoker
+        ,45
+        ,mce_nonmedical
+        ,mce_s_CT
+        );
+    BOOST_TEST(mce_s_CT == d.index().index_vector()[5]);
+    BOOST_TEST(      55 == d.length());
+    BOOST_TEST(      99 == d.Query(DB_MaxIncrAge));
+    product_database e(std::move(d));
+    BOOST_TEST(mce_s_CT == e.index().index_vector()[5]);
+    BOOST_TEST(      55 == e.length());
+    BOOST_TEST(      99 == e.Query(DB_MaxIncrAge));
 }
 
 void product_file_test::read_database_file()

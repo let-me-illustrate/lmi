@@ -80,7 +80,9 @@ class LMI_SO product_data final
     :public xml_serializable  <product_data>
     ,public MemberSymbolTable <product_data>
 {
+    friend class BasicValues; // For antediluvian fork only.
     friend class PolicyDocument;
+    friend class product_file_test;
 
     typedef deserialized<product_data>::value_type value_type;
 
@@ -96,7 +98,7 @@ class LMI_SO product_data final
 
   private:
     product_data();
-    product_data(product_data const&) = delete;
+    product_data(product_data const&);
     product_data& operator=(product_data const&) = delete;
 
     void ascribe_members();

@@ -118,7 +118,8 @@ std::string const& glossed_string::gloss() const
 
 /// Private default ctor.
 ///
-/// Used only by friend class PolicyDocument and 'my_prod.cpp'.
+/// Used only by friends: class PolicyDocument, 'my_prod.cpp',
+/// and 'basicvalues.cpp'.
 
 product_data::product_data()
 {
@@ -146,6 +147,14 @@ product_data::product_data(std::string const& product_name)
     LMI_ASSERT(product_name == fs::basename(path));
     path = fs::change_extension(path, ".policy");
     load(AddDataDir(path.string()));
+}
+
+product_data::product_data(product_data const& z)
+    :xml_serializable  <product_data> {}
+    ,MemberSymbolTable <product_data> {}
+{
+    ascribe_members();
+    MemberSymbolTable<product_data>::assign(z);
 }
 
 /// Destructor.
