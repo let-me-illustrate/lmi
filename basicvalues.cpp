@@ -103,7 +103,12 @@ void BasicValues::Init()
     EndtAge = static_cast<int>(Database_->Query(DB_MaturityAge));
     Length = EndtAge - IssueAge;
 
-    ledger_type_ = static_cast<mcenum_ledger_type>(Database_->Query(DB_LedgerType));
+    ledger_type_ =
+        static_cast<mcenum_ledger_type>
+            (static_cast<int>
+                (Database_->Query(DB_LedgerType))
+            )
+        ;
     nonillustrated_       = static_cast<bool>(Database_->Query(DB_Nonillustrated));
     bool no_longer_issued = static_cast<bool>(Database_->Query(DB_NoLongerIssued));
     bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;

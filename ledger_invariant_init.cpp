@@ -441,7 +441,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     //
     oenum_smoking_or_tobacco smoke_or_tobacco =
         static_cast<oenum_smoking_or_tobacco>
-            (b->Database_->Query(DB_SmokeOrTobacco)
+            (static_cast<int>(b->Database_->Query(DB_SmokeOrTobacco))
             );
     if(oe_tobacco_nontobacco == smoke_or_tobacco)
         {
