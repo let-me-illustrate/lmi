@@ -64,10 +64,11 @@ class LMI_SO product_database final
     int length() const;
     database_index index() const;
 
-    double Query(e_database_key) const;
-    double Query(e_database_key, database_index const&) const;
-    void Query(std::vector<double>&, e_database_key) const;
     void Query(std::vector<double>&, e_database_key, database_index const&) const;
+    void Query(std::vector<double>&, e_database_key) const;
+
+    double Query(e_database_key, database_index const&) const;
+    double Query(e_database_key) const;
 
     bool are_equivalent(e_database_key, e_database_key) const;
     bool varies_by_state(e_database_key) const;

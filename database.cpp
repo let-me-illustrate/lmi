@@ -91,13 +91,31 @@ database_index product_database::index() const
     return index_;
 }
 
-/// Query database, using default index; return a scalar.
-///
-/// Throw if the database entity is not scalar.
+/// Query database; write result into vector argument.
 
-double product_database::Query(e_database_key k) const
+void product_database::Query(std::vector<double>& dst, e_database_key k, database_index const& i) const
 {
-    return Query(k, index_);
+    int const local_length = maturity_age_ - i.index_vector()[e_axis_issue_age];
+    LMI_ASSERT(0 < local_length && local_length <= methuselah);
+    database_entity const& v = entity_from_key(k);
+    double const*const z = v[i];
+    if(1 == v.extent())
+        {
+        dst.assign(local_length, *z);
+        }
+    else
+        {
+        dst.reserve(local_length);
+        dst.assign(z, z + std::min(local_length, v.extent()));
+        dst.resize(local_length, dst.back());
+        }
+}
+
+/// Query database, using default index; write result into vector argument.
+
+void product_database::Query(std::vector<double>& dst, e_database_key k) const
+{
+    return Query(dst, k, index_);
 }
 
 /// Query database; return a scalar.
@@ -119,31 +137,13 @@ double product_database::Query(e_database_key k, database_index const& i) const
     return *v[i];
 }
 
-/// Query database, using default index; write result into vector argument.
+/// Query database, using default index; return a scalar.
+///
+/// Throw if the database entity is not scalar.
 
-void product_database::Query(std::vector<double>& dst, e_database_key k) const
+double product_database::Query(e_database_key k) const
 {
-    return Query(dst, k, index_);
-}
-
-/// Query database; write result into vector argument.
-
-void product_database::Query(std::vector<double>& dst, e_database_key k, database_index const& i) const
-{
-    int const local_length = maturity_age_ - i.index_vector()[e_axis_issue_age];
-    LMI_ASSERT(0 < local_length && local_length <= methuselah);
-    database_entity const& v = entity_from_key(k);
-    double const*const z = v[i];
-    if(1 == v.extent())
-        {
-        dst.assign(local_length, *z);
-        }
-    else
-        {
-        dst.reserve(local_length);
-        dst.assign(z, z + std::min(local_length, v.extent()));
-        dst.resize(local_length, dst.back());
-        }
+    return Query(k, index_);
 }
 
 /// Ascertain whether two database entities are equivalent.
