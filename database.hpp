@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+#include "bourn_cast.hpp"
 #include "dbindex.hpp"
 #include "dbnames.hpp"                  // e_database_key
 #include "mc_enum_type_enums.hpp"
@@ -31,6 +32,7 @@
 
 #include <memory>                       // shared_ptr
 #include <string>
+#include <type_traits>                  // is_integral_v, underlying_type_t
 #include <vector>
 
 class database_entity;
@@ -74,6 +76,9 @@ class LMI_SO product_database final
     double Query(e_database_key, database_index const&) const;
     double Query(e_database_key) const;
 
+    template<typename T>
+    void query_into(T&, e_database_key) const;
+
     bool are_equivalent(e_database_key, e_database_key) const;
     bool varies_by_state(e_database_key) const;
 
@@ -91,6 +96,28 @@ class LMI_SO product_database final
 
     std::shared_ptr<DBDictionary> db_;
 };
+
+/// Query database, using default index; write result into scalar argument.
+///
+/// Casts result to type T, preserving value by using bourn_cast.
+///
+/// Throw if the database entity is not scalar, or if casting fails
+/// (because T is neither enumerative nor arithmetic, or because the
+/// result cannot be represented exactly in type T).
+
+template<typename T>
+void product_database::query_into(T& dst, e_database_key k) const
+{
+    double d = Query(k, index_);
+    if constexpr(std::is_enum_v<T>)
+        {
+        dst = static_cast<T>(bourn_cast<std::underlying_type_t<T>>(d));
+        }
+    else
+        {
+        dst = bourn_cast<T>(d);
+        }
+}
 
 #endif // database_hpp
 

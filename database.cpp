@@ -76,8 +76,8 @@ product_database::product_database(yare_input const& input)
 ///
 /// Almost all database queries use the default index, so caching this
 /// value improves performance. For a query with an overridden index
-/// that modifies issue age, the cached value is incorrect, so Query()
-/// never relies on it.
+/// that modifies issue age, this cached value is incorrect, so member
+/// functions that use a different index don't rely on it.
 
 int product_database::length() const
 {
@@ -128,11 +128,6 @@ void product_database::Query(std::vector<double>& dst, e_database_key k) const
 ///
 /// Return a double because it is convertible to the most common
 /// arithmetic types.
-///
-/// An idea like this:
-///   template<typename T, typename DBValue>
-///   void Query(T&, e_database_key) const;
-/// might prove useful someday.
 
 double product_database::Query(e_database_key k, database_index const& i) const
 {
