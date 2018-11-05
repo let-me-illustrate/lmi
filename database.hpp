@@ -64,7 +64,11 @@ class LMI_SO product_database final
     int length() const;
     database_index index() const;
 
-    void Query(std::vector<double>&, e_database_key, database_index const&) const;
+    void Query
+        (std::vector<double>&
+        ,e_database_key
+        ,database_index const&
+        ) const;
     void Query(std::vector<double>&, e_database_key) const;
 
     double Query(e_database_key, database_index const&) const;

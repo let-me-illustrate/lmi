@@ -93,7 +93,11 @@ database_index product_database::index() const
 
 /// Query database; write result into vector argument.
 
-void product_database::Query(std::vector<double>& dst, e_database_key k, database_index const& i) const
+void product_database::Query
+    (std::vector<double>&  dst
+    ,e_database_key        k
+    ,database_index const& i
+    ) const
 {
     int const local_length = maturity_age_ - i.index_vector()[e_axis_issue_age];
     LMI_ASSERT(0 < local_length && local_length <= methuselah);
@@ -154,7 +158,10 @@ double product_database::Query(e_database_key k) const
 ///  - DB_PremTaxLoad (what the insurer charges the customer)
 /// may be equivalent when premium tax is passed through as a load.
 
-bool product_database::are_equivalent(e_database_key k0, e_database_key k1) const
+bool product_database::are_equivalent
+    (e_database_key k0
+    ,e_database_key k1
+    ) const
 {
     database_entity const& e0 = entity_from_key(k0);
     database_entity const& e1 = entity_from_key(k1);
