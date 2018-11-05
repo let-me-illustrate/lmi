@@ -58,6 +58,7 @@ class LMI_SO product_database final
     // Special ctor implemented only in a unit-test TU.
     explicit product_database(int length);
     product_database(product_database &&) = default;
+    product_database(product_database const&) = default;
     ~product_database() = default;
 
     int length() const;
@@ -72,7 +73,6 @@ class LMI_SO product_database final
     bool varies_by_state(e_database_key) const;
 
   private:
-    product_database(product_database const&) = delete;
     product_database& operator=(product_database const&) = delete;
 
     void initialize(std::string const& product_name);
