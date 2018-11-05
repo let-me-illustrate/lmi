@@ -29,7 +29,6 @@
 #include "calendar_date.hpp"
 #include "contains.hpp"
 #include "data_directory.hpp"
-#include "database.hpp"
 #include "death_benefits.hpp"
 #include "et_vector.hpp"
 #include "financial.hpp"                // list_bill_premium()
@@ -62,6 +61,7 @@
 BasicValues::BasicValues(Input const& input)
     :yare_input_         (input)
     ,product_            (yare_input_.ProductName)
+    ,database_           (yare_input_)
     ,DefnLifeIns_        {mce_cvat}
     ,DefnMaterialChange_ {mce_unnecessary_premium}
     ,Equiv7702DBO3       {mce_option1_for_7702}
@@ -92,6 +92,15 @@ BasicValues::BasicValues
     )
     :yare_input_         (Input{})
     ,product_            (a_ProductName)
+    ,database_
+        (a_ProductName
+        ,a_Gender
+        ,a_UnderwritingClass
+        ,a_Smoker
+        ,a_IssueAge
+        ,a_UnderwritingBasis
+        ,a_StateOfJurisdiction
+        )
     ,DefnLifeIns_        {mce_cvat}
     ,DefnMaterialChange_ {mce_unnecessary_premium}
     ,Equiv7702DBO3       {a_DBOptFor7702}
@@ -136,8 +145,6 @@ BasicValues::BasicValues
 //============================================================================
 void BasicValues::Init()
 {
-    Database_.reset(new product_database(yare_input_));
-
     SetPermanentInvariants();
 
     StateOfDomicile_ = mc_state_from_string(product().datum("InsCoDomicile"));
@@ -242,8 +249,6 @@ void BasicValues::Init()
 // TODO ??  Not for general use--use for GPT server only, for now. TAXATION !! refactor later
 void BasicValues::GPTServerInit()
 {
-    Database_.reset(new product_database(yare_input_));
-
     SetPermanentInvariants();
 
     IssueAge = yare_input_.IssueAge;
@@ -595,7 +600,7 @@ double BasicValues::GetAnnualTgtPrem(int a_year, double a_specamt) const
 
 /// Establish up front some values that cannot later change.
 ///
-/// Values set here depend on Database_, and thus on yare_input_ and
+/// Values set here depend on database_, and thus on yare_input_ and
 /// on product_, but not on any other shared_ptr members--so they
 /// can reliably be used in initializing those other members.
 

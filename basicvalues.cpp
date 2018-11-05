@@ -25,8 +25,6 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "database.hpp"
-#include "dbnames.hpp"
 #include "death_benefits.hpp"
 #include "input.hpp"
 #include "interest_rates.hpp"
@@ -50,6 +48,15 @@ char const* GuaranteedTableFile() {return "/opt/lmi/data/qx_cso";}
 BasicValues::BasicValues(Input const& input)
     :yare_input_              {input}
     ,product_                 {}
+    ,database_
+        ("filename--empty for antediluvian fork"
+        ,yare_input_.Gender
+        ,yare_input_.UnderwritingClass
+        ,yare_input_.Smoking
+        ,yare_input_.IssueAge
+        ,yare_input_.GroupUnderwritingType
+        ,yare_input_.StateOfJurisdiction
+        )
     ,StateOfJurisdiction_     {mce_s_CT}
     ,StateOfDomicile_         {mce_s_CT}
     ,PremiumTaxState_         {mce_s_CT}
@@ -88,17 +95,6 @@ void BasicValues::Init()
 
     StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
     PremiumTaxState_     = yare_input_.PremiumTaxState    ;
-    Database_.reset
-        (new product_database
-            ("empty for now" // filename
-            ,yare_input_.Gender
-            ,yare_input_.UnderwritingClass
-            ,yare_input_.Smoking
-            ,yare_input_.IssueAge
-            ,yare_input_.GroupUnderwritingType
-            ,yare_input_.StateOfJurisdiction
-            )
-        );
 
     // The database class constrains maturity age to be scalar.
     EndtAge = static_cast<int>(database().Query(DB_MaturityAge));
