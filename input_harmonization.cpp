@@ -271,8 +271,7 @@ void Input::DoHarmonize()
             )
         );
 
-    oenum_alb_or_anb alb_anb;
-    database_->query_into(alb_anb, DB_AgeLastOrNearest);
+    auto const alb_anb = database_->query<oenum_alb_or_anb>(DB_AgeLastOrNearest);
 
     DateOfBirth.minimum_and_maximum
         (minimum_birthdate(IssueAge.maximum(), EffectiveDate.value(), alb_anb)
@@ -910,8 +909,7 @@ void Input::DoTransmogrify()
         GeneralAccountRate = current_credited_rate(*database_);
         }
 
-    oenum_alb_or_anb alb_anb;
-    database_->query_into(alb_anb, DB_AgeLastOrNearest);
+    auto const alb_anb = database_->query<oenum_alb_or_anb>(DB_AgeLastOrNearest);
 
     int apparent_age = attained_age
         (DateOfBirth.value()

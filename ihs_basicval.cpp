@@ -757,8 +757,7 @@ void BasicValues::SetPermanentInvariants()
     // definitions, and 'DefinitionOfMaterialChange' will be removed.
     if(!global_settings::instance().ash_nazg())
         {
-        mcenum_defn_material_change z;
-        database().query_into(z, DB_CvatMatChangeDefn);
+        auto const z = database().query<mcenum_defn_material_change>(DB_CvatMatChangeDefn);
         DefnMaterialChange_ = (mce_gpt == DefnLifeIns_) ? mce_adjustment_event : z;
         }
     database().query_into(Equiv7702DBO3, DB_Equiv7702Dbo3);

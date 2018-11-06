@@ -440,8 +440,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     // database if class product_data is rewritten to encompass
     // variation across axes (as class DBDictionary does).
     //
-    oenum_smoking_or_tobacco smoke_or_tobacco;
-    b->database().query_into(smoke_or_tobacco, DB_SmokeOrTobacco);
+    auto const smoke_or_tobacco = b->database().query<oenum_smoking_or_tobacco>(DB_SmokeOrTobacco);
     if(oe_tobacco_nontobacco == smoke_or_tobacco)
         {
         switch(b->yare_input_.Smoking)
