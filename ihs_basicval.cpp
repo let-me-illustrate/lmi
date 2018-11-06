@@ -176,7 +176,7 @@ void BasicValues::Init()
     EndtAge = static_cast<int>(database().Query(DB_MaturityAge));
     Length = EndtAge - IssueAge;
 
-    ledger_type_ = static_cast<mcenum_ledger_type>(database().Query(DB_LedgerType));
+    database().query_into(ledger_type_, DB_LedgerType);
     nonillustrated_       = static_cast<bool>(database().Query(DB_Nonillustrated));
     bool no_longer_issued = static_cast<bool>(database().Query(DB_NoLongerIssued));
     bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;
@@ -272,7 +272,7 @@ void BasicValues::GPTServerInit()
     yare_input_.DeathBenefitOption        .assign(Length, yare_input_.DeathBenefitOption[0]);
     yare_input_.FlatExtra                 .resize(Length);
 
-    ledger_type_ = static_cast<mcenum_ledger_type>(database().Query(DB_LedgerType));
+    database().query_into(ledger_type_, DB_LedgerType);
     nonillustrated_       = static_cast<bool>(database().Query(DB_Nonillustrated));
     bool no_longer_issued = static_cast<bool>(database().Query(DB_NoLongerIssued));
     bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;
@@ -623,8 +623,8 @@ void BasicValues::SetPermanentInvariants()
     TermForcedConvAge   = static_cast<int>(database().Query(DB_TermForcedConvAge));
     TermForcedConvDur   = static_cast<int>(database().Query(DB_TermForcedConvDur));
     ExpPerKLimit        = database().Query(DB_ExpSpecAmtLimit      );
-    MinPremType         = static_cast<oenum_modal_prem_type>(database().Query(DB_MinPremType));
-    TgtPremType         = static_cast<oenum_modal_prem_type>(database().Query(DB_TgtPremType));
+    database().query_into(MinPremType, DB_MinPremType);
+    database().query_into(TgtPremType, DB_TgtPremType);
     TgtPremFixedAtIssue = database().Query(DB_TgtPremFixedAtIssue  );
     TgtPremMonthlyPolFee= database().Query(DB_TgtPremMonthlyPolFee );
     // Assertion: see comments on GetModalPremTgtFromTable().
@@ -636,12 +636,12 @@ void BasicValues::SetPermanentInvariants()
     CurrCoiTable1Limit  = database().Query(DB_CurrCoiTable1Limit   );
     LMI_ASSERT(0.0                <= CurrCoiTable0Limit);
     LMI_ASSERT(CurrCoiTable0Limit <= CurrCoiTable1Limit);
-    CoiInforceReentry   = static_cast<e_actuarial_table_method>(database().Query(DB_CoiInforceReentry));
-    MaxWDDed_           = static_cast<mcenum_anticipated_deduction>(database().Query(DB_MaxWdDed));
+    database().query_into(CoiInforceReentry, DB_CoiInforceReentry);
+    database().query_into(MaxWDDed_        , DB_MaxWdDed);
     MaxWdGenAcctValMult = database().Query(DB_MaxWdGenAcctValMult  );
     MaxWdSepAcctValMult = database().Query(DB_MaxWdSepAcctValMult  );
     AllowPrefLoan       = static_cast<bool>(database().Query(DB_AllowPrefLoan));
-    MaxLoanDed_         = static_cast<mcenum_anticipated_deduction>(database().Query(DB_MaxLoanDed));
+    database().query_into(MaxLoanDed_, DB_MaxLoanDed);
     MaxLoanAVMult       = database().Query(DB_MaxLoanAcctValMult   );
     FirstPrefLoanYear   = static_cast<int>(database().Query(DB_FirstPrefLoanYear));
     NoLapseMinDur       = static_cast<int>(database().Query(DB_NoLapseMinDur));
@@ -655,7 +655,7 @@ void BasicValues::SetPermanentInvariants()
     AllowChangeToDBO2   = database().Query(DB_AllowChangeToDbo2    );
     AllowSAIncr         = database().Query(DB_AllowSpecAmtIncr     );
     NoLapseAlwaysActive = database().Query(DB_NoLapseAlwaysActive  );
-    WaiverChargeMethod  = static_cast<oenum_waiver_charge_method>(database().Query(DB_WpChargeMethod));
+    database().query_into(WaiverChargeMethod, DB_WpChargeMethod);
     database().Query(CashValueEnhMult, DB_CashValueEnhMult);
     LapseIgnoresSurrChg = database().Query(DB_LapseIgnoresSurrChg  );
     SurrChgOnIncr       = database().Query(DB_SurrChgOnIncr        );
@@ -757,10 +757,11 @@ void BasicValues::SetPermanentInvariants()
     // definitions, and 'DefinitionOfMaterialChange' will be removed.
     if(!global_settings::instance().ash_nazg())
         {
-        mcenum_defn_material_change const z = static_cast<mcenum_defn_material_change>(database().Query(DB_CvatMatChangeDefn));
+        mcenum_defn_material_change z;
+        database().query_into(z, DB_CvatMatChangeDefn);
         DefnMaterialChange_ = (mce_gpt == DefnLifeIns_) ? mce_adjustment_event : z;
         }
-    Equiv7702DBO3       = static_cast<mcenum_dbopt_7702>(database().Query(DB_Equiv7702Dbo3));
+    database().query_into(Equiv7702DBO3, DB_Equiv7702Dbo3);
     TermIsDbFor7702     = 1.0 == database().Query(DB_TermIsQABOrDb7702 );
     TermIsDbFor7702A    = 1.0 == database().Query(DB_TermIsQABOrDb7702A);
     MaxNAAR             = yare_input_.MaximumNaar;

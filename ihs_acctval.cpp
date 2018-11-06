@@ -698,30 +698,14 @@ void AccountValue::SetInitialValues()
     External1035Amount = Outlay_->external_1035_amount();
     Internal1035Amount = Outlay_->internal_1035_amount();
 
-    ee_premium_allocation_method   = static_cast<oenum_allocation_method>
-        (database().Query(DB_EePremMethod)
-        );
-    ee_premium_preferred_account   = static_cast<oenum_increment_account_preference>
-        (database().Query(DB_EePremAcct)
-        );
-    er_premium_allocation_method   = static_cast<oenum_allocation_method>
-        (database().Query(DB_ErPremMethod)
-        );
-    er_premium_preferred_account   = static_cast<oenum_increment_account_preference>
-        (database().Query(DB_ErPremAcct)
-        );
-    deduction_method               = static_cast<oenum_increment_method>
-        (database().Query(DB_DeductionMethod)
-        );
-    deduction_preferred_account    = static_cast<oenum_increment_account_preference>
-        (database().Query(DB_DeductionAcct)
-        );
-    distribution_method            = static_cast<oenum_increment_method>
-        (database().Query(DB_DistributionMethod)
-        );
-    distribution_preferred_account = static_cast<oenum_increment_account_preference>
-        (database().Query(DB_DistributionAcct)
-        );
+    database().query_into(ee_premium_allocation_method  , DB_EePremMethod);
+    database().query_into(ee_premium_preferred_account  , DB_EePremAcct);
+    database().query_into(er_premium_allocation_method  , DB_ErPremMethod);
+    database().query_into(er_premium_preferred_account  , DB_ErPremAcct);
+    database().query_into(deduction_method              , DB_DeductionMethod);
+    database().query_into(deduction_preferred_account   , DB_DeductionAcct);
+    database().query_into(distribution_method           , DB_DistributionMethod);
+    database().query_into(distribution_preferred_account, DB_DistributionAcct);
 
     // If any account preference is the separate account, then a
     // separate account must be available.
