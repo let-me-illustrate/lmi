@@ -36,6 +36,7 @@
 #include "dbnames.hpp"
 #include "global_settings.hpp"
 #include "miscellany.hpp"
+#include "oecumenic_enumerations.hpp"
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -155,6 +156,8 @@ void input_test::test_product_database()
     // This value corresponds to no enumerator, but C++ allows that.
     db.query_into(a, DB_MaturityAge);
     BOOST_TEST_EQUAL(100, a);
+    auto const b {db.query<oenum_alb_or_anb>(DB_MaturityAge)};
+    BOOST_TEST_EQUAL(100, b);
 
     // This value is not integral, so bourn_cast rejects it.
     BOOST_TEST_THROW
@@ -166,15 +169,17 @@ void input_test::test_product_database()
     auto f0 = [&db]     {db.initialize("sample");};
     auto f1 = [&db, &v] {db.Query(v, DB_MaturityAge);};
     auto f2 = [&db]     {db.Query(DB_MaturityAge);};
-    auto f3 = [&db, &a] {db.query_into(a, DB_AgeLastOrNearest);};
-    auto f4 = [&db]     {db.entity_from_key(DB_MaturityAge);};
+    auto f3 = [&db]     {db.query<oenum_alb_or_anb>(DB_AgeLastOrNearest);};
+    auto f4 = [&db, &a] {db.query_into(a, DB_AgeLastOrNearest);};
+    auto f5 = [&db]     {db.entity_from_key(DB_MaturityAge);};
     std::cout
         << "\n  Database speed tests..."
         << "\n  initialize()      : " << TimeAnAliquot(f0)
         << "\n  Query(vector)     : " << TimeAnAliquot(f1)
         << "\n  Query(scalar)     : " << TimeAnAliquot(f2)
-        << "\n  query_into(scalar): " << TimeAnAliquot(f3)
-        << "\n  entity_from_key() : " << TimeAnAliquot(f4)
+        << "\n  query<T>(scalar)  : " << TimeAnAliquot(f3)
+        << "\n  query_into(scalar): " << TimeAnAliquot(f4)
+        << "\n  entity_from_key() : " << TimeAnAliquot(f5)
         << '\n'
         ;
 

@@ -77,6 +77,9 @@ class LMI_SO product_database final
     double Query(e_database_key) const;
 
     template<typename T>
+    T query(e_database_key) const;
+
+    template<typename T>
     void query_into(T&, e_database_key) const;
 
     bool are_equivalent(e_database_key, e_database_key) const;
@@ -97,9 +100,31 @@ class LMI_SO product_database final
     std::shared_ptr<DBDictionary> db_;
 };
 
+/// Query database, using default index; return a scalar.
+///
+/// Cast result to type T, preserving value by using bourn_cast.
+///
+/// Throw if the database entity is not scalar, or if casting fails
+/// (because T is neither enumerative nor arithmetic, or because the
+/// result cannot be represented exactly in type T).
+
+template<typename T>
+T product_database::query(e_database_key k) const
+{
+    double d = Query(k, index_);
+    if constexpr(std::is_enum_v<T>)
+        {
+        return static_cast<T>(bourn_cast<std::underlying_type_t<T>>(d));
+        }
+    else
+        {
+        return bourn_cast<T>(d);
+        }
+}
+
 /// Query database, using default index; write result into scalar argument.
 ///
-/// Casts result to type T, preserving value by using bourn_cast.
+/// Cast result to type T, preserving value by using bourn_cast.
 ///
 /// Throw if the database entity is not scalar, or if casting fails
 /// (because T is neither enumerative nor arithmetic, or because the
@@ -108,15 +133,7 @@ class LMI_SO product_database final
 template<typename T>
 void product_database::query_into(T& dst, e_database_key k) const
 {
-    double d = Query(k, index_);
-    if constexpr(std::is_enum_v<T>)
-        {
-        dst = static_cast<T>(bourn_cast<std::underlying_type_t<T>>(d));
-        }
-    else
-        {
-        dst = bourn_cast<T>(d);
-        }
+    dst = query<T>(k);
 }
 
 #endif // database_hpp
