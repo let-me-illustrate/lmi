@@ -115,26 +115,26 @@ void Loads::Allocate(int length)
 
 void Loads::Initialize(product_database const& database)
 {
-    database.Query(refundable_sales_load_proportion_   , DB_LoadRfdProportion );
-    database.Query(dac_tax_load_                       , DB_DacTaxPremLoad    );
+    database.query_into(DB_LoadRfdProportion , refundable_sales_load_proportion_   );
+    database.query_into(DB_DacTaxPremLoad    , dac_tax_load_                       );
 
-    database.Query(monthly_policy_fee_   [mce_gen_guar], DB_GuarMonthlyPolFee );
-    database.Query(annual_policy_fee_    [mce_gen_guar], DB_GuarAnnualPolFee  );
-    database.Query(specified_amount_load_[mce_gen_guar], DB_GuarSpecAmtLoad   );
-    database.Query(separate_account_load_[mce_gen_guar], DB_GuarAcctValLoad   );
-    database.Query(target_premium_load_  [mce_gen_guar], DB_GuarPremLoadTgt   );
-    database.Query(excess_premium_load_  [mce_gen_guar], DB_GuarPremLoadExc   );
-    database.Query(target_sales_load_    [mce_gen_guar], DB_GuarPremLoadTgtRfd);
-    database.Query(excess_sales_load_    [mce_gen_guar], DB_GuarPremLoadExcRfd);
+    database.query_into(DB_GuarMonthlyPolFee , monthly_policy_fee_   [mce_gen_guar]);
+    database.query_into(DB_GuarAnnualPolFee  , annual_policy_fee_    [mce_gen_guar]);
+    database.query_into(DB_GuarSpecAmtLoad   , specified_amount_load_[mce_gen_guar]);
+    database.query_into(DB_GuarAcctValLoad   , separate_account_load_[mce_gen_guar]);
+    database.query_into(DB_GuarPremLoadTgt   , target_premium_load_  [mce_gen_guar]);
+    database.query_into(DB_GuarPremLoadExc   , excess_premium_load_  [mce_gen_guar]);
+    database.query_into(DB_GuarPremLoadTgtRfd, target_sales_load_    [mce_gen_guar]);
+    database.query_into(DB_GuarPremLoadExcRfd, excess_sales_load_    [mce_gen_guar]);
 
-    database.Query(monthly_policy_fee_   [mce_gen_curr], DB_CurrMonthlyPolFee );
-    database.Query(annual_policy_fee_    [mce_gen_curr], DB_CurrAnnualPolFee  );
-    database.Query(specified_amount_load_[mce_gen_curr], DB_CurrSpecAmtLoad   );
-    database.Query(separate_account_load_[mce_gen_curr], DB_CurrAcctValLoad   );
-    database.Query(target_premium_load_  [mce_gen_curr], DB_CurrPremLoadTgt   );
-    database.Query(excess_premium_load_  [mce_gen_curr], DB_CurrPremLoadExc   );
-    database.Query(target_sales_load_    [mce_gen_curr], DB_CurrPremLoadTgtRfd);
-    database.Query(excess_sales_load_    [mce_gen_curr], DB_CurrPremLoadExcRfd);
+    database.query_into(DB_CurrMonthlyPolFee , monthly_policy_fee_   [mce_gen_curr]);
+    database.query_into(DB_CurrAnnualPolFee  , annual_policy_fee_    [mce_gen_curr]);
+    database.query_into(DB_CurrSpecAmtLoad   , specified_amount_load_[mce_gen_curr]);
+    database.query_into(DB_CurrAcctValLoad   , separate_account_load_[mce_gen_curr]);
+    database.query_into(DB_CurrPremLoadTgt   , target_premium_load_  [mce_gen_curr]);
+    database.query_into(DB_CurrPremLoadExc   , excess_premium_load_  [mce_gen_curr]);
+    database.query_into(DB_CurrPremLoadTgtRfd, target_sales_load_    [mce_gen_curr]);
+    database.query_into(DB_CurrPremLoadExcRfd, excess_sales_load_    [mce_gen_curr]);
 }
 
 /// Transform raw input and database data into directly-useful rates.
@@ -342,15 +342,15 @@ Loads::Loads(product_database const& database, bool NeedMidpointRates)
     excess_premium_load_  .resize(mc_n_gen_bases);
     specified_amount_load_.resize(mc_n_gen_bases);
 
-    database.Query(monthly_policy_fee_   [mce_gen_guar], DB_GuarMonthlyPolFee);
-    database.Query(target_premium_load_  [mce_gen_guar], DB_GuarPremLoadTgt  );
-    database.Query(excess_premium_load_  [mce_gen_guar], DB_GuarPremLoadExc  );
-    database.Query(specified_amount_load_[mce_gen_guar], DB_GuarSpecAmtLoad  );
+    database.query_into(DB_GuarMonthlyPolFee, monthly_policy_fee_   [mce_gen_guar]);
+    database.query_into(DB_GuarPremLoadTgt  , target_premium_load_  [mce_gen_guar]);
+    database.query_into(DB_GuarPremLoadExc  , excess_premium_load_  [mce_gen_guar]);
+    database.query_into(DB_GuarSpecAmtLoad  , specified_amount_load_[mce_gen_guar]);
 
-    database.Query(monthly_policy_fee_   [mce_gen_curr], DB_CurrMonthlyPolFee);
-    database.Query(target_premium_load_  [mce_gen_curr], DB_CurrPremLoadTgt  );
-    database.Query(excess_premium_load_  [mce_gen_curr], DB_CurrPremLoadExc  );
-    database.Query(specified_amount_load_[mce_gen_curr], DB_CurrSpecAmtLoad  );
+    database.query_into(DB_CurrMonthlyPolFee, monthly_policy_fee_   [mce_gen_curr]);
+    database.query_into(DB_CurrPremLoadTgt  , target_premium_load_  [mce_gen_curr]);
+    database.query_into(DB_CurrPremLoadExc  , excess_premium_load_  [mce_gen_curr]);
+    database.query_into(DB_CurrSpecAmtLoad  , specified_amount_load_[mce_gen_curr]);
 
     // This ctor ignores tabular specified-amount loads.
 

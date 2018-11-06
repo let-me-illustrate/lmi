@@ -93,9 +93,9 @@ database_index product_database::index() const
 
 /// Query database; write result into vector argument.
 
-void product_database::Query
-    (std::vector<double>&  dst
-    ,e_database_key        k
+void product_database::query_into
+    (e_database_key        k
+    ,std::vector<double>&  dst
     ,database_index const& i
     ) const
 {
@@ -117,9 +117,9 @@ void product_database::Query
 
 /// Query database, using default index; write result into vector argument.
 
-void product_database::Query(std::vector<double>& dst, e_database_key k) const
+void product_database::query_into(e_database_key k, std::vector<double>& dst) const
 {
-    return Query(dst, k, index_);
+    return query_into(k, dst, index_);
 }
 
 /// Query database; return a scalar.

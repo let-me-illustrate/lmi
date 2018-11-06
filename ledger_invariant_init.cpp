@@ -131,7 +131,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     RefundableSalesLoad  = b->Loads_->refundable_sales_load_proportion();
 
     std::vector<double> coimult;
-    b->database().Query(coimult, DB_CurrCoiMultiplier);
+    b->database().query_into(DB_CurrCoiMultiplier, coimult);
     CurrentCoiMultiplier =
           coimult                            [b->yare_input_.InforceYear]
         * b->yare_input_.CurrentCoiMultiplier[b->yare_input_.InforceYear]

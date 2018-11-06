@@ -275,7 +275,7 @@ void InterestRates::Initialize(BasicValues const& v)
 {
     // Retrieve general-account data from class BasicValues.
 
-    v.database().Query(GenAcctGrossRate_[mce_gen_guar], DB_GuarInt);
+    v.database().query_into(DB_GuarInt, GenAcctGrossRate_[mce_gen_guar]);
 
     std::copy
         (v.yare_input_.GeneralAccountRate.begin()
@@ -293,7 +293,7 @@ void InterestRates::Initialize(BasicValues const& v)
     // almost certainly quoted as an APR. It is assumed that the
     // interest bonus is not guaranteed.
     std::vector<double> general_account_interest_bonus;
-    v.database().Query(general_account_interest_bonus, DB_GenAcctIntBonus);
+    v.database().query_into(DB_GenAcctIntBonus, general_account_interest_bonus);
     // ET !! GenAcctGrossRate_ += general_account_interest_bonus;
     // ...and this might be further simplified by implementing e.g.
     //   std::vector<double> product_database::QueryVector(int k) const;
@@ -308,7 +308,7 @@ void InterestRates::Initialize(BasicValues const& v)
         ,std::plus<double>()
         );
 
-    v.database().Query(GenAcctSpread_, DB_CurrIntSpread);
+    v.database().query_into(DB_CurrIntSpread, GenAcctSpread_);
 
     // Retrieve separate-account data from class BasicValues.
 
@@ -321,10 +321,10 @@ void InterestRates::Initialize(BasicValues const& v)
     // the input class has an inappropriate size.
     SepAcctGrossRate_[mce_sep_full].resize(Length_);
 
-    v.database().Query(MAndERate_[mce_gen_guar], DB_GuarMandE          );
-    v.database().Query(MAndERate_[mce_gen_curr], DB_CurrMandE          );
+    v.database().query_into(DB_GuarMandE          , MAndERate_[mce_gen_guar]);
+    v.database().query_into(DB_CurrMandE          , MAndERate_[mce_gen_curr]);
 
-    v.database().Query(Stabilizer_,              DB_StableValFundCharge);
+    v.database().query_into(DB_StableValFundCharge, Stabilizer_             );
 
     // Deduct miscellaneous fund charges and input extra asset comp in
     // the same way as M&E, iff database entity DB_AssetChargeType has
@@ -354,7 +354,7 @@ void InterestRates::Initialize(BasicValues const& v)
 
     if(v.yare_input_.AmortizePremiumLoad)
         {
-        v.database().Query(AmortLoad_, DB_LoadAmortFundCharge);
+        v.database().query_into(DB_LoadAmortFundCharge, AmortLoad_);
         }
 
     // TODO ?? This was once initialized with 'DB_MgmtFeeFundCharge',
@@ -371,7 +371,7 @@ void InterestRates::Initialize(BasicValues const& v)
         {
         case mce_fixed_loan_rate:
             {
-            v.database().Query(PublishedLoanRate_, DB_FixedLoanRate);
+            v.database().query_into(DB_FixedLoanRate, PublishedLoanRate_);
             }
             break;
         case mce_variable_loan_rate:
@@ -385,12 +385,12 @@ void InterestRates::Initialize(BasicValues const& v)
             }
         }
 
-    v.database().Query(PrefLoanRateDecr_, DB_PrefLoanRateDecr);
+    v.database().query_into(DB_PrefLoanRateDecr  , PrefLoanRateDecr_           );
 
-    v.database().Query(RegLoanSpread_[mce_gen_guar], DB_GuarRegLoanSpread);
-    v.database().Query(RegLoanSpread_[mce_gen_curr], DB_CurrRegLoanSpread);
-    v.database().Query(PrfLoanSpread_[mce_gen_guar], DB_GuarPrefLoanSpread);
-    v.database().Query(PrfLoanSpread_[mce_gen_curr], DB_CurrPrefLoanSpread);
+    v.database().query_into(DB_GuarRegLoanSpread , RegLoanSpread_[mce_gen_guar]);
+    v.database().query_into(DB_CurrRegLoanSpread , RegLoanSpread_[mce_gen_curr]);
+    v.database().query_into(DB_GuarPrefLoanSpread, PrfLoanSpread_[mce_gen_guar]);
+    v.database().query_into(DB_CurrPrefLoanSpread, PrfLoanSpread_[mce_gen_curr]);
 
     if(NeedHoneymoonRates_)
         {

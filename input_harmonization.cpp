@@ -44,7 +44,7 @@ namespace
     std::string current_credited_rate(product_database const& database)
         {
         std::vector<double> z;
-        database.Query(z, DB_MaxGenAcctRate);
+        database.query_into(DB_MaxGenAcctRate, z);
         return canonicalized_input_sequence(z);
         }
 } // Unnamed namespace.

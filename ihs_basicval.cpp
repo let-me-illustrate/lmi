@@ -456,7 +456,7 @@ void BasicValues::Init7702()
     // GPT calculations in the 7702 class.
 
     std::vector<double> guar_int;
-    database().Query(guar_int, DB_GuarInt);
+    database().query_into(DB_GuarInt, guar_int);
 // TAXATION !! Rework this. The intention is to make the 7702 interest
 // rate no less, at any duration, than the guaranteed loan rate--here,
 // the fixed rate charged on loans, minus the guaranteed loan spread
@@ -467,9 +467,9 @@ void BasicValues::Init7702()
         case mce_fixed_loan_rate:
             {
             std::vector<double> gross_loan_rate;
-            database().Query(gross_loan_rate, DB_FixedLoanRate);
+            database().query_into(DB_FixedLoanRate    , gross_loan_rate);
             std::vector<double> guar_loan_spread;
-            database().Query(guar_loan_spread, DB_GuarRegLoanSpread);
+            database().query_into(DB_GuarRegLoanSpread, guar_loan_spread);
             // ET !! std::vector<double> guar_loan_rate = gross_loan_rate - guar_loan_spread;
             std::vector<double> guar_loan_rate(Length);
             std::transform
@@ -519,7 +519,7 @@ void BasicValues::Init7702()
             )
         );
 
-    database().Query(Mly7702ig, DB_NaarDiscount);
+    database().query_into(DB_NaarDiscount, Mly7702ig);
 
     // TODO ?? We should avoid reading the rate file again; but
     // the GPT server doesn't initialize a MortalityRates object
@@ -655,17 +655,17 @@ void BasicValues::SetPermanentInvariants()
     AllowChangeToDBO2   = database().Query(DB_AllowChangeToDbo2    );
     AllowSAIncr         = database().Query(DB_AllowSpecAmtIncr     );
     NoLapseAlwaysActive = database().Query(DB_NoLapseAlwaysActive  );
-    database().query_into(DB_WpChargeMethod, WaiverChargeMethod);
-    database().Query(CashValueEnhMult, DB_CashValueEnhMult);
+    database().query_into(DB_WpChargeMethod  , WaiverChargeMethod);
+    database().query_into(DB_CashValueEnhMult, CashValueEnhMult  );
     LapseIgnoresSurrChg = database().Query(DB_LapseIgnoresSurrChg  );
     SurrChgOnIncr       = database().Query(DB_SurrChgOnIncr        );
     SurrChgOnDecr       = database().Query(DB_SurrChgOnDecr        );
     LMI_ASSERT(!SurrChgOnIncr); // Surrchg change on increase not supported.
     LMI_ASSERT(!SurrChgOnDecr); // Surrchg change on decrease not supported.
 
-    database().Query(FreeWDProportion, DB_FreeWdProportion);
+    database().query_into(DB_FreeWdProportion, FreeWDProportion);
 
-    database().Query(DBDiscountRate, DB_NaarDiscount);
+    database().query_into(DB_NaarDiscount, DBDiscountRate);
     LMI_ASSERT(!contains(DBDiscountRate, -1.0));
 // This would be more natural:
 //    assign(DBDiscountRate, 1.0 / (1.0 + DBDiscountRate));
@@ -674,9 +674,9 @@ void BasicValues::SetPermanentInvariants()
     assign(DBDiscountRate, 1.0 / DBDiscountRate);
 
     CalculateComp       = database().Query(DB_CalculateComp        );
-    database().Query(AssetComp , DB_AssetComp);
-    database().Query(CompTarget, DB_CompTarget);
-    database().Query(CompExcess, DB_CompExcess);
+    database().query_into(DB_AssetComp , AssetComp );
+    database().query_into(DB_CompTarget, CompTarget);
+    database().query_into(DB_CompExcess, CompExcess);
 
     MandEIsDynamic      = database().Query(DB_DynamicMandE         );
     SepAcctLoadIsDynamic= database().Query(DB_DynamicSepAcctLoad   );
@@ -765,7 +765,7 @@ void BasicValues::SetPermanentInvariants()
     TermIsDbFor7702A    = 1.0 == database().Query(DB_TermIsQABOrDb7702A);
     MaxNAAR             = yare_input_.MaximumNaar;
 
-    database().Query(MinPremIntSpread_, DB_MinPremIntSpread);
+    database().query_into(DB_MinPremIntSpread, MinPremIntSpread_);
 }
 
 namespace

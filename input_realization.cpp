@@ -665,7 +665,7 @@ std::string Input::RealizeGeneralAccountRate()
 
     double guar_int = database_->Query(DB_GuarInt);
     std::vector<double> general_account_max_rate;
-    database_->Query(general_account_max_rate, DB_MaxGenAcctRate);
+    database_->query_into(DB_MaxGenAcctRate, general_account_max_rate);
 
     if(global_settings::instance().ash_nazg())
         {
