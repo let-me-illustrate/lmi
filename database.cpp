@@ -206,7 +206,7 @@ void product_database::initialize(std::string const& product_name)
         LMI_ASSERT(!filename.empty());
         db_ = DBDictionary::read_via_cache(AddDataDir(filename));
         }
-    maturity_age_ = static_cast<int>(Query(DB_MaturityAge));
+    maturity_age_ = query<int>(DB_MaturityAge);
     length_ = maturity_age_ - index_.index_vector()[e_axis_issue_age];
     LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }

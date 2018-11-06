@@ -47,14 +47,14 @@ void MortalityRates::Init(BasicValues const& basic_values)
 
     MonthlyCurrentCoiRatesBand0_ = actuarial_table_rates
         (CurrentTableFile()
-        ,bourn_cast<int>(basic_values.database().Query(DB_CurrCoiTable))
+        ,basic_values.database().query<int>(DB_CurrCoiTable)
         ,issue_age
         ,length
         );
 
     MonthlyGuaranteedCoiRates_ = actuarial_table_rates
         (GuaranteedTableFile()
-        ,bourn_cast<int>(basic_values.database().Query(DB_GuarCoiTable))
+        ,basic_values.database().query<int>(DB_GuarCoiTable)
         ,issue_age
         ,length
         );
@@ -73,21 +73,21 @@ void MortalityRates::Init(BasicValues const& basic_values)
 
     CvatCorridorFactors_ = actuarial_table_rates
         (CurrentTableFile()
-        ,bourn_cast<int>(basic_values.database().Query(DB_CorridorTable))
+        ,basic_values.database().query<int>(DB_CorridorTable)
         ,issue_age
         ,length
         );
 
     AdbRates_ = actuarial_table_rates
         (CurrentTableFile()
-        ,bourn_cast<int>(basic_values.database().Query(DB_AdbTable))
+        ,basic_values.database().query<int>(DB_AdbTable)
         ,issue_age
         ,length
         );
 
     WpRates_ = actuarial_table_rates
         (CurrentTableFile()
-        ,bourn_cast<int>(basic_values.database().Query(DB_WpTable))
+        ,basic_values.database().query<int>(DB_WpTable)
         ,issue_age
         ,length
         );

@@ -93,7 +93,7 @@ void Input::DoAdaptExternalities()
             )
         );
 
-    GleanedMaturityAge_ = static_cast<int>(database_->Query(DB_MaturityAge));
+    GleanedMaturityAge_ = database_->query<int>(DB_MaturityAge);
 
     database_->query_into(DB_LedgerType, GleanedLedgerType_);
 }
@@ -258,8 +258,8 @@ void Input::DoHarmonize()
 //    attained_age   [x, omega - 1]
 //    duration       [0, omega-x-1]
     IssueAge.minimum_and_maximum
-        (static_cast<int>(database_->Query(DB_MinIssAge))
-        ,static_cast<int>(database_->Query(DB_MaxIssAge))
+        (database_->query<int>(DB_MinIssAge)
+        ,database_->query<int>(DB_MaxIssAge)
         );
 //    RetirementAge.minimum_and_maximum(...
 #endif // 0
@@ -370,8 +370,8 @@ void Input::DoHarmonize()
         ,InforceYear  .value()
         ,true
         );
-    calendar_date reset_min(jdn_t(static_cast<int>(database_->Query(DB_CoiResetMinDate))));
-    calendar_date reset_max(jdn_t(static_cast<int>(database_->Query(DB_CoiResetMaxDate))));
+    calendar_date reset_min(jdn_t(database_->query<int>(DB_CoiResetMinDate)));
+    calendar_date reset_max(jdn_t(database_->query<int>(DB_CoiResetMaxDate)));
     reset_min = std::min(reset_min, most_recent_anniversary);
     reset_max = std::min(reset_max, most_recent_anniversary);
     if(!global_settings::instance().regression_testing())
@@ -485,8 +485,8 @@ void Input::DoHarmonize()
     // 'SpouseIssueAge' is useful only if the spouse rider is elected,
     // so it makes more sense to constrain its value this way.
     SpouseIssueAge   .minimum_and_maximum
-        (static_cast<int>(database_->Query(DB_SpouseRiderMinIssAge))
-        ,static_cast<int>(database_->Query(DB_SpouseRiderMaxIssAge))
+        (database_->query<int>(DB_SpouseRiderMinIssAge)
+        ,database_->query<int>(DB_SpouseRiderMaxIssAge)
         );
 
     bool allow_honeymoon = database_->Query(DB_AllowHoneymoon);

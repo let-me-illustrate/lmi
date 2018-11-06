@@ -26,7 +26,6 @@
 #include "actuarial_table.hpp"
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "bourn_cast.hpp"
 #include "commutation_functions.hpp"
 #include "configurable_settings.hpp"
 #include "contains.hpp"
@@ -142,13 +141,13 @@ gpt_state test_one_days_gpt_transactions
     round_to<double> const round_max_premium(2, r_downward);
 
     oenum_modal_prem_type const target_premium_type =
-        static_cast<oenum_modal_prem_type>(static_cast<int>(database.Query(DB_TgtPremType)));
+        database.query<oenum_modal_prem_type>(DB_TgtPremType);
     std::vector<double> TargetPremiumRates(input.years_to_maturity());
     if(oe_modal_table == target_premium_type)
         {
         TargetPremiumRates = actuarial_table_rates
             (AddDataDir(product_filenames.datum("TgtPremFilename"))
-            ,bourn_cast<int>(database.Query(DB_TgtPremTable))
+            ,database.query<int>(DB_TgtPremTable)
             ,input.issue_age()
             ,input.years_to_maturity()
             );
@@ -160,7 +159,7 @@ gpt_state test_one_days_gpt_transactions
 
     std::vector<double> const CvatCorridorFactors = actuarial_table_rates
         (AddDataDir(product_filenames.datum("CvatCorridorFilename"))
-        ,bourn_cast<int>(database.Query(DB_CorridorTable))
+        ,database.query<int>(DB_CorridorTable)
         ,input.issue_age()
         ,input.years_to_maturity()
         );
@@ -175,14 +174,14 @@ gpt_state test_one_days_gpt_transactions
 
     std::vector<double> const tabular_7Px = actuarial_table_rates
         (AddDataDir(product_filenames.datum("SevenPayFilename"))
-        ,bourn_cast<int>(database.Query(DB_SevenPayTable))
+        ,database.query<int>(DB_SevenPayTable)
         ,input.issue_age()
         ,input.years_to_maturity()
         );
 
     std::vector<double> Mly7702qc = actuarial_table_rates
         (AddDataDir(product_filenames.datum("Irc7702QFilename"))
-        ,bourn_cast<int>(database.Query(DB_Irc7702QTable))
+        ,database.query<int>(DB_Irc7702QTable)
         ,input.issue_age()
         ,input.years_to_maturity()
         );

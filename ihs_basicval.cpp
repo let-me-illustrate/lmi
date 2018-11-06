@@ -173,12 +173,12 @@ void BasicValues::Init()
     LMI_ASSERT(RetAge <= 100);
     LMI_ASSERT(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
 
-    EndtAge = static_cast<int>(database().Query(DB_MaturityAge));
+    EndtAge = database().query<int>(DB_MaturityAge);
     Length = EndtAge - IssueAge;
 
     database().query_into(DB_LedgerType, ledger_type_);
-    nonillustrated_       = static_cast<bool>(database().Query(DB_Nonillustrated));
-    bool no_longer_issued = static_cast<bool>(database().Query(DB_NoLongerIssued));
+    nonillustrated_       = database().query<bool>(DB_Nonillustrated);
+    bool no_longer_issued = database().query<bool>(DB_NoLongerIssued);
     bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;
     no_can_issue_         = no_longer_issued && is_new_business;
     IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(ledger_type());
@@ -261,7 +261,7 @@ void BasicValues::GPTServerInit()
     StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
     PremiumTaxState_     = yare_input_.PremiumTaxState    ;
 
-    EndtAge = static_cast<int>(database().Query(DB_MaturityAge));
+    EndtAge = database().query<int>(DB_MaturityAge);
     Length = EndtAge - IssueAge;
 
     yare_input_.ExtraMonthlyCustodialFee  .resize(Length);
@@ -273,8 +273,8 @@ void BasicValues::GPTServerInit()
     yare_input_.FlatExtra                 .resize(Length);
 
     database().query_into(DB_LedgerType, ledger_type_);
-    nonillustrated_       = static_cast<bool>(database().Query(DB_Nonillustrated));
-    bool no_longer_issued = static_cast<bool>(database().Query(DB_NoLongerIssued));
+    nonillustrated_       = database().query<bool>(DB_Nonillustrated);
+    bool no_longer_issued = database().query<bool>(DB_NoLongerIssued);
     bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;
     no_can_issue_         = no_longer_issued && is_new_business;
     IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(ledger_type());
@@ -617,11 +617,11 @@ void BasicValues::SetPermanentInvariants()
     WDCanDecrSADBO1     = database().Query(DB_WdCanDecrSpecAmtDbo1 );
     WDCanDecrSADBO2     = database().Query(DB_WdCanDecrSpecAmtDbo2 );
     WDCanDecrSADBO3     = database().Query(DB_WdCanDecrSpecAmtDbo3 );
-    MaxIncrAge          = static_cast<int>(database().Query(DB_MaxIncrAge));
+    MaxIncrAge          = database().query<int>(DB_MaxIncrAge);
     WaivePmTxInt1035    = database().Query(DB_WaivePremTaxInt1035  );
     TermIsNotRider      = database().Query(DB_TermIsNotRider       );
-    TermForcedConvAge   = static_cast<int>(database().Query(DB_TermForcedConvAge));
-    TermForcedConvDur   = static_cast<int>(database().Query(DB_TermForcedConvDur));
+    TermForcedConvAge   = database().query<int>(DB_TermForcedConvAge);
+    TermForcedConvDur   = database().query<int>(DB_TermForcedConvDur);
     ExpPerKLimit        = database().Query(DB_ExpSpecAmtLimit      );
     database().query_into(DB_MinPremType, MinPremType);
     database().query_into(DB_TgtPremType, TgtPremType);
@@ -640,12 +640,12 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_MaxWdDed         , MaxWDDed_        );
     MaxWdGenAcctValMult = database().Query(DB_MaxWdGenAcctValMult  );
     MaxWdSepAcctValMult = database().Query(DB_MaxWdSepAcctValMult  );
-    AllowPrefLoan       = static_cast<bool>(database().Query(DB_AllowPrefLoan));
+    AllowPrefLoan       = database().query<bool>(DB_AllowPrefLoan);
     database().query_into(DB_MaxLoanDed       ,MaxLoanDed_);
     MaxLoanAVMult       = database().Query(DB_MaxLoanAcctValMult   );
-    FirstPrefLoanYear   = static_cast<int>(database().Query(DB_FirstPrefLoanYear));
-    NoLapseMinDur       = static_cast<int>(database().Query(DB_NoLapseMinDur));
-    NoLapseMinAge       = static_cast<int>(database().Query(DB_NoLapseMinAge));
+    FirstPrefLoanYear   = database().query<int>(DB_FirstPrefLoanYear);
+    NoLapseMinDur       = database().query<int>(DB_NoLapseMinDur);
+    NoLapseMinAge       = database().query<int>(DB_NoLapseMinAge);
     AdbLimit            = database().Query(DB_AdbLimit             );
     WpLimit             = database().Query(DB_WpLimit              );
     SpecAmtLoadLimit    = database().Query(DB_SpecAmtLoadLimit     );
@@ -1967,7 +1967,7 @@ std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
 
     std::vector<double> z = actuarial_table_rates
         (AddDataDir(product().datum("CurrSpouseRiderFilename"))
-        ,bourn_cast<int>(database().Query(DB_SpouseRiderTable))
+        ,database().query<int>(DB_SpouseRiderTable)
         ,yare_input_.SpouseIssueAge
         ,EndtAge - yare_input_.SpouseIssueAge
         );
@@ -1984,7 +1984,7 @@ std::vector<double> BasicValues::GetGuaranteedSpouseRiderRates() const
 
     std::vector<double> z = actuarial_table_rates
         (AddDataDir(product().datum("GuarSpouseRiderFilename"))
-        ,bourn_cast<int>(database().Query(DB_SpouseRiderGuarTable))
+        ,database().query<int>(DB_SpouseRiderGuarTable)
         ,yare_input_.SpouseIssueAge
         ,EndtAge - yare_input_.SpouseIssueAge
         );

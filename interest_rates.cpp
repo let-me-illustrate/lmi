@@ -258,7 +258,7 @@ InterestRates::InterestRates(BasicValues const& v)
     ,GenAcctRateType_    {v.yare_input_.GeneralAccountRateType}
     ,NeedSepAcctRates_   {0.0 != v.database().Query(DB_AllowSepAcct)}
     ,SepAcctRateType_    {v.yare_input_.SeparateAccountRateType}
-    ,SepAcctSpreadMethod_{static_cast<mcenum_spread_method>(static_cast<int>(v.database().Query(DB_SepAcctSpreadMethod)))}
+    ,SepAcctSpreadMethod_{v.database().query<mcenum_spread_method>(DB_SepAcctSpreadMethod)}
     ,AmortLoad_          {Zero_}
     ,ExtraSepAcctCharge_ {Zero_}
 //    ,NeedLoanRates_      {need_loan_rates(v.yare_input_)}
