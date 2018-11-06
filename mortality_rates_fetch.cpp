@@ -62,9 +62,9 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     max_coi_rate = 1.0 / max_coi_rate;
     MaxMonthlyCoiRate_ = max_coi_rate;
 
-    basic_values.database().Query(GCoiMultiplier_, DB_GuarCoiMultiplier);
-    basic_values.database().Query(CCoiMultiplier_, DB_CurrCoiMultiplier);
-    basic_values.database().Query(SubstdTblMult_ , DB_SubstdTableMult  );
+    basic_values.database().query_into(DB_GuarCoiMultiplier, GCoiMultiplier_);
+    basic_values.database().query_into(DB_CurrCoiMultiplier, CCoiMultiplier_);
+    basic_values.database().query_into(DB_SubstdTableMult  , SubstdTblMult_ );
 
     CountryCoiMultiplier_ = basic_values.yare_input_.CountryCoiMultiplier;
     IsPolicyRated_        = is_policy_rated(basic_values.yare_input_);

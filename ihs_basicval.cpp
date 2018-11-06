@@ -176,7 +176,7 @@ void BasicValues::Init()
     EndtAge = static_cast<int>(database().Query(DB_MaturityAge));
     Length = EndtAge - IssueAge;
 
-    database().query_into(ledger_type_, DB_LedgerType);
+    database().query_into(DB_LedgerType, ledger_type_);
     nonillustrated_       = static_cast<bool>(database().Query(DB_Nonillustrated));
     bool no_longer_issued = static_cast<bool>(database().Query(DB_NoLongerIssued));
     bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;
@@ -272,7 +272,7 @@ void BasicValues::GPTServerInit()
     yare_input_.DeathBenefitOption        .assign(Length, yare_input_.DeathBenefitOption[0]);
     yare_input_.FlatExtra                 .resize(Length);
 
-    database().query_into(ledger_type_, DB_LedgerType);
+    database().query_into(DB_LedgerType, ledger_type_);
     nonillustrated_       = static_cast<bool>(database().Query(DB_Nonillustrated));
     bool no_longer_issued = static_cast<bool>(database().Query(DB_NoLongerIssued));
     bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;
@@ -456,7 +456,7 @@ void BasicValues::Init7702()
     // GPT calculations in the 7702 class.
 
     std::vector<double> guar_int;
-    database().Query(guar_int, DB_GuarInt);
+    database().query_into(DB_GuarInt, guar_int);
 // TAXATION !! Rework this. The intention is to make the 7702 interest
 // rate no less, at any duration, than the guaranteed loan rate--here,
 // the fixed rate charged on loans, minus the guaranteed loan spread
@@ -467,9 +467,9 @@ void BasicValues::Init7702()
         case mce_fixed_loan_rate:
             {
             std::vector<double> gross_loan_rate;
-            database().Query(gross_loan_rate, DB_FixedLoanRate);
+            database().query_into(DB_FixedLoanRate    , gross_loan_rate);
             std::vector<double> guar_loan_spread;
-            database().Query(guar_loan_spread, DB_GuarRegLoanSpread);
+            database().query_into(DB_GuarRegLoanSpread, guar_loan_spread);
             // ET !! std::vector<double> guar_loan_rate = gross_loan_rate - guar_loan_spread;
             std::vector<double> guar_loan_rate(Length);
             std::transform
@@ -519,7 +519,7 @@ void BasicValues::Init7702()
             )
         );
 
-    database().Query(Mly7702ig, DB_NaarDiscount);
+    database().query_into(DB_NaarDiscount, Mly7702ig);
 
     // TODO ?? We should avoid reading the rate file again; but
     // the GPT server doesn't initialize a MortalityRates object
@@ -623,8 +623,8 @@ void BasicValues::SetPermanentInvariants()
     TermForcedConvAge   = static_cast<int>(database().Query(DB_TermForcedConvAge));
     TermForcedConvDur   = static_cast<int>(database().Query(DB_TermForcedConvDur));
     ExpPerKLimit        = database().Query(DB_ExpSpecAmtLimit      );
-    database().query_into(MinPremType, DB_MinPremType);
-    database().query_into(TgtPremType, DB_TgtPremType);
+    database().query_into(DB_MinPremType, MinPremType);
+    database().query_into(DB_TgtPremType, TgtPremType);
     TgtPremFixedAtIssue = database().Query(DB_TgtPremFixedAtIssue  );
     TgtPremMonthlyPolFee= database().Query(DB_TgtPremMonthlyPolFee );
     // Assertion: see comments on GetModalPremTgtFromTable().
@@ -636,12 +636,12 @@ void BasicValues::SetPermanentInvariants()
     CurrCoiTable1Limit  = database().Query(DB_CurrCoiTable1Limit   );
     LMI_ASSERT(0.0                <= CurrCoiTable0Limit);
     LMI_ASSERT(CurrCoiTable0Limit <= CurrCoiTable1Limit);
-    database().query_into(CoiInforceReentry, DB_CoiInforceReentry);
-    database().query_into(MaxWDDed_        , DB_MaxWdDed);
+    database().query_into(DB_CoiInforceReentry, CoiInforceReentry);
+    database().query_into(DB_MaxWdDed         , MaxWDDed_        );
     MaxWdGenAcctValMult = database().Query(DB_MaxWdGenAcctValMult  );
     MaxWdSepAcctValMult = database().Query(DB_MaxWdSepAcctValMult  );
     AllowPrefLoan       = static_cast<bool>(database().Query(DB_AllowPrefLoan));
-    database().query_into(MaxLoanDed_, DB_MaxLoanDed);
+    database().query_into(DB_MaxLoanDed       ,MaxLoanDed_);
     MaxLoanAVMult       = database().Query(DB_MaxLoanAcctValMult   );
     FirstPrefLoanYear   = static_cast<int>(database().Query(DB_FirstPrefLoanYear));
     NoLapseMinDur       = static_cast<int>(database().Query(DB_NoLapseMinDur));
@@ -655,17 +655,17 @@ void BasicValues::SetPermanentInvariants()
     AllowChangeToDBO2   = database().Query(DB_AllowChangeToDbo2    );
     AllowSAIncr         = database().Query(DB_AllowSpecAmtIncr     );
     NoLapseAlwaysActive = database().Query(DB_NoLapseAlwaysActive  );
-    database().query_into(WaiverChargeMethod, DB_WpChargeMethod);
-    database().Query(CashValueEnhMult, DB_CashValueEnhMult);
+    database().query_into(DB_WpChargeMethod  , WaiverChargeMethod);
+    database().query_into(DB_CashValueEnhMult, CashValueEnhMult  );
     LapseIgnoresSurrChg = database().Query(DB_LapseIgnoresSurrChg  );
     SurrChgOnIncr       = database().Query(DB_SurrChgOnIncr        );
     SurrChgOnDecr       = database().Query(DB_SurrChgOnDecr        );
     LMI_ASSERT(!SurrChgOnIncr); // Surrchg change on increase not supported.
     LMI_ASSERT(!SurrChgOnDecr); // Surrchg change on decrease not supported.
 
-    database().Query(FreeWDProportion, DB_FreeWdProportion);
+    database().query_into(DB_FreeWdProportion, FreeWDProportion);
 
-    database().Query(DBDiscountRate, DB_NaarDiscount);
+    database().query_into(DB_NaarDiscount, DBDiscountRate);
     LMI_ASSERT(!contains(DBDiscountRate, -1.0));
 // This would be more natural:
 //    assign(DBDiscountRate, 1.0 / (1.0 + DBDiscountRate));
@@ -674,9 +674,9 @@ void BasicValues::SetPermanentInvariants()
     assign(DBDiscountRate, 1.0 / DBDiscountRate);
 
     CalculateComp       = database().Query(DB_CalculateComp        );
-    database().Query(AssetComp , DB_AssetComp);
-    database().Query(CompTarget, DB_CompTarget);
-    database().Query(CompExcess, DB_CompExcess);
+    database().query_into(DB_AssetComp , AssetComp );
+    database().query_into(DB_CompTarget, CompTarget);
+    database().query_into(DB_CompExcess, CompExcess);
 
     MandEIsDynamic      = database().Query(DB_DynamicMandE         );
     SepAcctLoadIsDynamic= database().Query(DB_DynamicSepAcctLoad   );
@@ -757,16 +757,15 @@ void BasicValues::SetPermanentInvariants()
     // definitions, and 'DefinitionOfMaterialChange' will be removed.
     if(!global_settings::instance().ash_nazg())
         {
-        mcenum_defn_material_change z;
-        database().query_into(z, DB_CvatMatChangeDefn);
+        auto const z = database().query<mcenum_defn_material_change>(DB_CvatMatChangeDefn);
         DefnMaterialChange_ = (mce_gpt == DefnLifeIns_) ? mce_adjustment_event : z;
         }
-    database().query_into(Equiv7702DBO3, DB_Equiv7702Dbo3);
+    database().query_into(DB_Equiv7702Dbo3, Equiv7702DBO3);
     TermIsDbFor7702     = 1.0 == database().Query(DB_TermIsQABOrDb7702 );
     TermIsDbFor7702A    = 1.0 == database().Query(DB_TermIsQABOrDb7702A);
     MaxNAAR             = yare_input_.MaximumNaar;
 
-    database().Query(MinPremIntSpread_, DB_MinPremIntSpread);
+    database().query_into(DB_MinPremIntSpread, MinPremIntSpread_);
 }
 
 namespace

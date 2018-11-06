@@ -36,6 +36,7 @@
 #include "dbnames.hpp"
 #include "global_settings.hpp"
 #include "miscellany.hpp"
+#include "oecumenic_enumerations.hpp"
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -114,7 +115,7 @@ void input_test::test_product_database()
         ,dims_stat
         ,stat
         );
-    db.Query(v, DB_StatVxQ);
+    db.query_into(DB_StatVxQ, v);
     w.assign(stat, stat + 10);
     w.insert(w.end(), db.length() - w.size(), w.back());
     BOOST_TEST(v == w);
@@ -139,7 +140,7 @@ void input_test::test_product_database()
         ,dims_tax
         ,tax
         );
-    db.Query(v, DB_TaxVxQ);
+    db.query_into(DB_TaxVxQ, v);
     w.assign(tax, tax + db.length());
     BOOST_TEST(v == w);
 
@@ -150,18 +151,35 @@ void input_test::test_product_database()
         ,"Assertion '1 == v.extent()' failed."
         );
 
-    // Use bind<R> where compilation errors would occur without <R>.
-    // The "recommended" solution forces the "right" overload by
-    // writing an explicit pointer to member:
-    //   http://lists.boost.org/boost-users/2007/06/28832.php
-    // but if that becomes necessary, then bind should be abandoned:
-    // writing individual functions by hand is simpler and clearer.
+    oenum_alb_or_anb a;
+
+    // This value corresponds to no enumerator, but C++ allows that.
+    db.query_into(DB_MaturityAge, a);
+    BOOST_TEST_EQUAL(100, a);
+    auto const b {db.query<oenum_alb_or_anb>(DB_MaturityAge)};
+    BOOST_TEST_EQUAL(100, b);
+
+    // This value is not integral, so bourn_cast rejects it.
+    BOOST_TEST_THROW
+        (db.query_into(DB_NaarDiscount, a)
+        ,std::runtime_error
+        ,"Cast would not preserve value."
+        );
+
+    auto f0 = [&db]     {db.initialize("sample");};
+    auto f1 = [&db, &v] {db.query_into(DB_MaturityAge, v);};
+    auto f2 = [&db]     {db.Query(DB_MaturityAge);};
+    auto f3 = [&db]     {db.query<oenum_alb_or_anb>(DB_AgeLastOrNearest);};
+    auto f4 = [&db, &a] {db.query_into(DB_AgeLastOrNearest, a);};
+    auto f5 = [&db]     {db.entity_from_key(DB_MaturityAge);};
     std::cout
         << "\n  Database speed tests..."
-        << "\n  initialize()      : " << TimeAnAliquot(std::bind(&product_database::initialize,      &db, "sample"         ))
-        << "\n  Query(vector)     : " << TimeAnAliquot(std::bind((void (product_database::*)(std::vector<double>&, e_database_key) const)&product_database::Query,           &db, v, DB_MaturityAge))
-        << "\n  Query(scalar)     : " << TimeAnAliquot(std::bind((double (product_database::*)(e_database_key) const)&product_database::Query,           &db,    DB_MaturityAge))
-        << "\n  entity_from_key() : " << TimeAnAliquot(std::bind(&product_database::entity_from_key, &db,    DB_MaturityAge))
+        << "\n  initialize()      : " << TimeAnAliquot(f0)
+        << "\n  query_into(vector): " << TimeAnAliquot(f1)
+        << "\n  Query(scalar)     : " << TimeAnAliquot(f2)
+        << "\n  query<T>(scalar)  : " << TimeAnAliquot(f3)
+        << "\n  query_into(scalar): " << TimeAnAliquot(f4)
+        << "\n  entity_from_key() : " << TimeAnAliquot(f5)
         << '\n'
         ;
 
@@ -190,11 +208,11 @@ void input_test::test_product_database()
         ,dims_snflq
         ,tax
         );
-    db.Query(v, DB_SnflQ);
+    db.query_into(DB_SnflQ, v);
     BOOST_TEST_EQUAL(55, db.length());
     BOOST_TEST_EQUAL(55, v.size());
     database_index index = db.index().issue_age(29);
-    db.Query(v, DB_SnflQ, index);
+    db.query_into(DB_SnflQ, v, index);
     BOOST_TEST_EQUAL(55, db.length());
     BOOST_TEST_EQUAL(71, v.size());
 
@@ -211,7 +229,7 @@ void input_test::test_product_database()
         );
 
     index.issue_age(99);
-    db.Query(v, DB_SnflQ, index);
+    db.query_into(DB_SnflQ, v, index);
     BOOST_TEST_EQUAL( 1, v.size());
 
     // Force the product to mature at 98.
@@ -219,17 +237,17 @@ void input_test::test_product_database()
     index.issue_age(98);
     db.Query(DB_MaturityAge, index); // Accepted because maturity age is scalar.
     BOOST_TEST_THROW
-        (db.Query(v, DB_SnflQ, index)
+        (db.query_into(DB_SnflQ, v, index)
         ,std::runtime_error
         ,"Assertion '0 < local_length && local_length <= methuselah' failed."
         );
 
     index.issue_age(97);
-    db.Query(v, DB_SnflQ, index);
+    db.query_into(DB_SnflQ, v, index);
     BOOST_TEST_EQUAL( 1, v.size());
 
     index.issue_age(0);
-    db.Query(v, DB_SnflQ, index);
+    db.query_into(DB_SnflQ, v, index);
     BOOST_TEST_EQUAL(98, v.size());
 }
 

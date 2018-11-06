@@ -409,7 +409,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
         ;
 
     std::vector<double> declared_rate;
-    database.Query(declared_rate, DB_MaxGenAcctRate);
+    database.query_into(DB_MaxGenAcctRate, declared_rate);
     z["GeneralAccountRate"] = adjust_interest_rates
         (first_year_general_account_rate
         ,renewal_year_general_account_rate

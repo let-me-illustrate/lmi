@@ -175,7 +175,7 @@ mec_state test_one_days_7702A_transactions
     assign(Mly7702qc, apply_binary(coi_rate_from_q<double>(), Mly7702qc, max_coi_rate));
 
     std::vector<double> guar_int;
-    database.Query(guar_int, DB_GuarInt);
+    database.query_into(DB_GuarInt, guar_int);
 
     std::vector<double> const spread
         (input.years_to_maturity()
@@ -193,7 +193,7 @@ mec_state test_one_days_7702A_transactions
         );
 
     std::vector<double> Mly7702ig;
-    database.Query(Mly7702ig, DB_NaarDiscount);
+    database.query_into(DB_NaarDiscount, Mly7702ig);
     LMI_ASSERT(!contains(Mly7702ig, -1.0));
     std::vector<double> DBDiscountRate(input.years_to_maturity());
     assign(DBDiscountRate, 1.0 / (1.0 + Mly7702ig));
@@ -312,11 +312,11 @@ mec_state test_one_days_7702A_transactions
     std::vector<double> excess_premium_load;
     std::vector<double> dac_tax_load       ;
 
-    database.Query(target_sales_load  , DB_CurrPremLoadTgtRfd);
-    database.Query(excess_sales_load  , DB_CurrPremLoadExcRfd);
-    database.Query(target_premium_load, DB_CurrPremLoadTgt);
-    database.Query(excess_premium_load, DB_CurrPremLoadExc);
-    database.Query(dac_tax_load       , DB_DacTaxPremLoad);
+    database.query_into(DB_CurrPremLoadTgtRfd, target_sales_load  );
+    database.query_into(DB_CurrPremLoadExcRfd, excess_sales_load  );
+    database.query_into(DB_CurrPremLoadTgt   , target_premium_load);
+    database.query_into(DB_CurrPremLoadExc   , excess_premium_load);
+    database.query_into(DB_DacTaxPremLoad    , dac_tax_load       );
 
     double const LoadTarget = target_sales_load[InforceYear] + target_premium_load[InforceYear] + dac_tax_load[InforceYear] + premium_tax_load;
     double const LoadExcess = excess_sales_load[InforceYear] + excess_premium_load[InforceYear] + dac_tax_load[InforceYear] + premium_tax_load;

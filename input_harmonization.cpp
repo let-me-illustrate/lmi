@@ -44,7 +44,7 @@ namespace
     std::string current_credited_rate(product_database const& database)
         {
         std::vector<double> z;
-        database.Query(z, DB_MaxGenAcctRate);
+        database.query_into(DB_MaxGenAcctRate, z);
         return canonicalized_input_sequence(z);
         }
 } // Unnamed namespace.
@@ -95,7 +95,7 @@ void Input::DoAdaptExternalities()
 
     GleanedMaturityAge_ = static_cast<int>(database_->Query(DB_MaturityAge));
 
-    database_->query_into(GleanedLedgerType_, DB_LedgerType);
+    database_->query_into(DB_LedgerType, GleanedLedgerType_);
 }
 
 void Input::DoCustomizeInitialValues()
@@ -271,8 +271,7 @@ void Input::DoHarmonize()
             )
         );
 
-    oenum_alb_or_anb alb_anb;
-    database_->query_into(alb_anb, DB_AgeLastOrNearest);
+    auto const alb_anb = database_->query<oenum_alb_or_anb>(DB_AgeLastOrNearest);
 
     DateOfBirth.minimum_and_maximum
         (minimum_birthdate(IssueAge.maximum(), EffectiveDate.value(), alb_anb)
@@ -910,8 +909,7 @@ void Input::DoTransmogrify()
         GeneralAccountRate = current_credited_rate(*database_);
         }
 
-    oenum_alb_or_anb alb_anb;
-    database_->query_into(alb_anb, DB_AgeLastOrNearest);
+    auto const alb_anb = database_->query<oenum_alb_or_anb>(DB_AgeLastOrNearest);
 
     int apparent_age = attained_age
         (DateOfBirth.value()
