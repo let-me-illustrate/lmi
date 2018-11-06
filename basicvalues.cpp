@@ -97,11 +97,11 @@ void BasicValues::Init()
     PremiumTaxState_     = yare_input_.PremiumTaxState    ;
 
     // The database class constrains maturity age to be scalar.
-    database().query_into<int>(DB_MaturityAge, EndtAge);
+    database().query_into(DB_MaturityAge   , EndtAge);
     Length = EndtAge - IssueAge;
 
-    database().query_into(DB_LedgerType, ledger_type_);
-    database().query_into<bool>(DB_Nonillustrated, nonillustrated_);
+    database().query_into(DB_LedgerType    , ledger_type_);
+    database().query_into(DB_Nonillustrated, nonillustrated_);
     bool no_longer_issued = database().query<bool>(DB_NoLongerIssued);
     bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;
     no_can_issue_         = no_longer_issued && is_new_business;

@@ -274,7 +274,7 @@ void gpt_input::DoAdaptExternalities()
             )
         );
 
-    database_->query_into<int>(DB_MaturityAge, GleanedMaturityAge_);
+    database_->query_into(DB_MaturityAge, GleanedMaturityAge_);
 }
 
 datum_base const* gpt_input::DoBaseDatumPointer

@@ -93,9 +93,9 @@ void Input::DoAdaptExternalities()
             )
         );
 
-    database_->query_into<int>(DB_MaturityAge, GleanedMaturityAge_);
+    database_->query_into(DB_MaturityAge, GleanedMaturityAge_);
 
-    database_->query_into(DB_LedgerType, GleanedLedgerType_);
+    database_->query_into(DB_LedgerType , GleanedLedgerType_ );
 }
 
 void Input::DoCustomizeInitialValues()
