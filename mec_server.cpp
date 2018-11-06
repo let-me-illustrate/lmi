@@ -123,8 +123,7 @@ mec_state test_one_days_7702A_transactions
     round_to<double> const RoundNonMecPrem(2, r_downward);
     round_to<double> const round_max_premium(2, r_downward);
 
-    oenum_modal_prem_type const target_premium_type =
-        database.query<oenum_modal_prem_type>(DB_TgtPremType);
+    auto const target_premium_type = database.query<oenum_modal_prem_type>(DB_TgtPremType);
     std::vector<double> TargetPremiumRates(input.years_to_maturity());
     if(oe_modal_table == target_premium_type)
         {

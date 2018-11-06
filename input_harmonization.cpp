@@ -93,7 +93,7 @@ void Input::DoAdaptExternalities()
             )
         );
 
-    GleanedMaturityAge_ = database_->query<int>(DB_MaturityAge);
+    database_->query_into<int>(DB_MaturityAge, GleanedMaturityAge_);
 
     database_->query_into(DB_LedgerType, GleanedLedgerType_);
 }

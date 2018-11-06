@@ -274,7 +274,7 @@ void gpt_input::DoAdaptExternalities()
             )
         );
 
-    GleanedMaturityAge_ = database_->query<int>(DB_MaturityAge);
+    database_->query_into<int>(DB_MaturityAge, GleanedMaturityAge_);
 }
 
 datum_base const* gpt_input::DoBaseDatumPointer
@@ -409,7 +409,7 @@ void gpt_input::DoHarmonize()
         ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), alb_anb)
         );
 
-    int max_age = database_->query<int>(DB_MaturityAge);
+    int const max_age = database_->query<int>(DB_MaturityAge);
     InforceAsOfDate.minimum_and_maximum
         (EffectiveDate.value()
         ,add_years_and_months

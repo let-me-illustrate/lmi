@@ -173,11 +173,11 @@ void BasicValues::Init()
     LMI_ASSERT(RetAge <= 100);
     LMI_ASSERT(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
 
-    EndtAge = database().query<int>(DB_MaturityAge);
+    database().query_into<int>(DB_MaturityAge, EndtAge);
     Length = EndtAge - IssueAge;
 
     database().query_into(DB_LedgerType, ledger_type_);
-    nonillustrated_       = database().query<bool>(DB_Nonillustrated);
+    database().query_into<bool>(DB_Nonillustrated, nonillustrated_);
     bool no_longer_issued = database().query<bool>(DB_NoLongerIssued);
     bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;
     no_can_issue_         = no_longer_issued && is_new_business;
@@ -261,7 +261,7 @@ void BasicValues::GPTServerInit()
     StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
     PremiumTaxState_     = yare_input_.PremiumTaxState    ;
 
-    EndtAge = database().query<int>(DB_MaturityAge);
+    database().query_into<int>(DB_MaturityAge, EndtAge);
     Length = EndtAge - IssueAge;
 
     yare_input_.ExtraMonthlyCustodialFee  .resize(Length);
@@ -273,7 +273,7 @@ void BasicValues::GPTServerInit()
     yare_input_.FlatExtra                 .resize(Length);
 
     database().query_into(DB_LedgerType, ledger_type_);
-    nonillustrated_       = database().query<bool>(DB_Nonillustrated);
+    database().query_into<bool>(DB_Nonillustrated, nonillustrated_);
     bool no_longer_issued = database().query<bool>(DB_NoLongerIssued);
     bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;
     no_can_issue_         = no_longer_issued && is_new_business;
@@ -617,11 +617,11 @@ void BasicValues::SetPermanentInvariants()
     WDCanDecrSADBO1     = database().Query(DB_WdCanDecrSpecAmtDbo1 );
     WDCanDecrSADBO2     = database().Query(DB_WdCanDecrSpecAmtDbo2 );
     WDCanDecrSADBO3     = database().Query(DB_WdCanDecrSpecAmtDbo3 );
-    MaxIncrAge          = database().query<int>(DB_MaxIncrAge);
+    database().query_into<int>(DB_MaxIncrAge, MaxIncrAge);
     WaivePmTxInt1035    = database().Query(DB_WaivePremTaxInt1035  );
     TermIsNotRider      = database().Query(DB_TermIsNotRider       );
-    TermForcedConvAge   = database().query<int>(DB_TermForcedConvAge);
-    TermForcedConvDur   = database().query<int>(DB_TermForcedConvDur);
+    database().query_into<int>(DB_TermForcedConvAge, TermForcedConvAge);
+    database().query_into<int>(DB_TermForcedConvDur, TermForcedConvDur);
     ExpPerKLimit        = database().Query(DB_ExpSpecAmtLimit      );
     database().query_into(DB_MinPremType, MinPremType);
     database().query_into(DB_TgtPremType, TgtPremType);
@@ -640,12 +640,12 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_MaxWdDed         , MaxWDDed_        );
     MaxWdGenAcctValMult = database().Query(DB_MaxWdGenAcctValMult  );
     MaxWdSepAcctValMult = database().Query(DB_MaxWdSepAcctValMult  );
-    AllowPrefLoan       = database().query<bool>(DB_AllowPrefLoan);
+    database().query_into<bool>(DB_AllowPrefLoan, AllowPrefLoan);
     database().query_into(DB_MaxLoanDed       ,MaxLoanDed_);
     MaxLoanAVMult       = database().Query(DB_MaxLoanAcctValMult   );
-    FirstPrefLoanYear   = database().query<int>(DB_FirstPrefLoanYear);
-    NoLapseMinDur       = database().query<int>(DB_NoLapseMinDur);
-    NoLapseMinAge       = database().query<int>(DB_NoLapseMinAge);
+    database().query_into<int>(DB_FirstPrefLoanYear, FirstPrefLoanYear);
+    database().query_into<int>(DB_NoLapseMinDur    , NoLapseMinDur);
+    database().query_into<int>(DB_NoLapseMinAge    , NoLapseMinAge);
     AdbLimit            = database().Query(DB_AdbLimit             );
     WpLimit             = database().Query(DB_WpLimit              );
     SpecAmtLoadLimit    = database().Query(DB_SpecAmtLoadLimit     );
