@@ -150,18 +150,16 @@ void input_test::test_product_database()
         ,"Assertion '1 == v.extent()' failed."
         );
 
-    // Use bind<R> where compilation errors would occur without <R>.
-    // The "recommended" solution forces the "right" overload by
-    // writing an explicit pointer to member:
-    //   http://lists.boost.org/boost-users/2007/06/28832.php
-    // but if that becomes necessary, then bind should be abandoned:
-    // writing individual functions by hand is simpler and clearer.
+    auto f0 = [&db]     {db.initialize("sample");};
+    auto f1 = [&db, &v] {db.Query(v, DB_MaturityAge);};
+    auto f2 = [&db]     {db.Query(DB_MaturityAge);};
+    auto f3 = [&db]     {db.entity_from_key(DB_MaturityAge);};
     std::cout
         << "\n  Database speed tests..."
-        << "\n  initialize()      : " << TimeAnAliquot(std::bind(&product_database::initialize,      &db, "sample"         ))
-        << "\n  Query(vector)     : " << TimeAnAliquot(std::bind((void (product_database::*)(std::vector<double>&, e_database_key) const)&product_database::Query,           &db, v, DB_MaturityAge))
-        << "\n  Query(scalar)     : " << TimeAnAliquot(std::bind((double (product_database::*)(e_database_key) const)&product_database::Query,           &db,    DB_MaturityAge))
-        << "\n  entity_from_key() : " << TimeAnAliquot(std::bind(&product_database::entity_from_key, &db,    DB_MaturityAge))
+        << "\n  initialize()      : " << TimeAnAliquot(f0)
+        << "\n  Query(vector)     : " << TimeAnAliquot(f1)
+        << "\n  Query(scalar)     : " << TimeAnAliquot(f2)
+        << "\n  entity_from_key() : " << TimeAnAliquot(f3)
         << '\n'
         ;
 
