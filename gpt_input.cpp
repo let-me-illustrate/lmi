@@ -402,10 +402,9 @@ void gpt_input::DoHarmonize()
             )
         );
 
-    oenum_alb_or_anb const alb_anb =
-        static_cast<oenum_alb_or_anb>
-            (database_->Query(DB_AgeLastOrNearest)
-            );
+    oenum_alb_or_anb alb_anb;
+    database_->query_into(alb_anb, DB_AgeLastOrNearest);
+
     DateOfBirth.minimum_and_maximum
         (minimum_birthdate(IssueAge.maximum(), EffectiveDate.value(), alb_anb)
         ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), alb_anb)
@@ -546,10 +545,8 @@ void gpt_input::DoTransmogrify()
     InforceContractYear  = ym1.first;
     InforceContractMonth = ym1.second;
 
-    oenum_alb_or_anb const alb_anb =
-        static_cast<oenum_alb_or_anb>
-            (database_->Query(DB_AgeLastOrNearest)
-            );
+    oenum_alb_or_anb alb_anb;
+    database_->query_into(alb_anb, DB_AgeLastOrNearest);
 
     int apparent_age = attained_age
         (DateOfBirth.value()

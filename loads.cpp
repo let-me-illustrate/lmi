@@ -39,7 +39,7 @@
 Loads::Loads(BasicValues& V)
 {
     int length = V.GetLength();
-    LMI_ASSERT(length == V.Database_->length());
+    LMI_ASSERT(length == V.database().length());
     LMI_ASSERT(!V.yare_input_.AmortizePremiumLoad); // Amortization is untested.
     load_details details
         (length
@@ -48,9 +48,9 @@ Loads::Loads(BasicValues& V)
         ,V.PremiumTax_->maximum_load_rate()
         ,V.PremiumTax_->minimum_load_rate()
         ,V.PremiumTax_->levy_rate()
-        ,V.Database_->Query(DB_PremTaxAmortIntRate)
-        ,V.Database_->Query(DB_PremTaxAmortPeriod)
-        ,V.Database_->Query(DB_AssetChargeType)
+        ,V.database().Query(DB_PremTaxAmortIntRate)
+        ,V.database().Query(DB_PremTaxAmortPeriod)
+        ,V.database().Query(DB_AssetChargeType)
         ,V.IsSubjectToIllustrationReg()
         ,V.round_interest_rate()
         ,V.yare_input_.ExtraCompensationOnPremium
@@ -60,7 +60,7 @@ Loads::Loads(BasicValues& V)
         ,V.GetCurrSpecAmtLoadTable()
         );
     Allocate(length);
-    Initialize(*V.Database_);
+    Initialize(V.database());
     Calculate(details);
 }
 

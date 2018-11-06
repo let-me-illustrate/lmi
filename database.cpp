@@ -76,8 +76,8 @@ product_database::product_database(yare_input const& input)
 ///
 /// Almost all database queries use the default index, so caching this
 /// value improves performance. For a query with an overridden index
-/// that modifies issue age, the cached value is incorrect, so Query()
-/// never relies on it.
+/// that modifies issue age, this cached value is incorrect, so member
+/// functions that use a different index don't rely on it.
 
 int product_database::length() const
 {
@@ -91,44 +91,13 @@ database_index product_database::index() const
     return index_;
 }
 
-/// Query database, using default index; return a scalar.
-///
-/// Throw if the database entity is not scalar.
-
-double product_database::Query(e_database_key k) const
-{
-    return Query(k, index_);
-}
-
-/// Query database; return a scalar.
-///
-/// Throw if the database entity is not scalar.
-///
-/// Return a double because it is convertible to the most common
-/// arithmetic types.
-///
-/// An idea like this:
-///   template<typename T, typename DBValue>
-///   void Query(T&, e_database_key) const;
-/// might prove useful someday.
-
-double product_database::Query(e_database_key k, database_index const& i) const
-{
-    database_entity const& v = entity_from_key(k);
-    LMI_ASSERT(1 == v.extent());
-    return *v[i];
-}
-
-/// Query database, using default index; write result into vector argument.
-
-void product_database::Query(std::vector<double>& dst, e_database_key k) const
-{
-    return Query(dst, k, index_);
-}
-
 /// Query database; write result into vector argument.
 
-void product_database::Query(std::vector<double>& dst, e_database_key k, database_index const& i) const
+void product_database::Query
+    (std::vector<double>&  dst
+    ,e_database_key        k
+    ,database_index const& i
+    ) const
 {
     int const local_length = maturity_age_ - i.index_vector()[e_axis_issue_age];
     LMI_ASSERT(0 < local_length && local_length <= methuselah);
@@ -146,6 +115,36 @@ void product_database::Query(std::vector<double>& dst, e_database_key k, databas
         }
 }
 
+/// Query database, using default index; write result into vector argument.
+
+void product_database::Query(std::vector<double>& dst, e_database_key k) const
+{
+    return Query(dst, k, index_);
+}
+
+/// Query database; return a scalar.
+///
+/// Throw if the database entity is not scalar.
+///
+/// Return a double because it is convertible to the most common
+/// arithmetic types.
+
+double product_database::Query(e_database_key k, database_index const& i) const
+{
+    database_entity const& v = entity_from_key(k);
+    LMI_ASSERT(1 == v.extent());
+    return *v[i];
+}
+
+/// Query database, using default index; return a scalar.
+///
+/// Throw if the database entity is not scalar.
+
+double product_database::Query(e_database_key k) const
+{
+    return Query(k, index_);
+}
+
 /// Ascertain whether two database entities are equivalent.
 ///
 /// Equivalence here means that the dimensions and data are identical.
@@ -154,7 +153,10 @@ void product_database::Query(std::vector<double>& dst, e_database_key k, databas
 ///  - DB_PremTaxLoad (what the insurer charges the customer)
 /// may be equivalent when premium tax is passed through as a load.
 
-bool product_database::are_equivalent(e_database_key k0, e_database_key k1) const
+bool product_database::are_equivalent
+    (e_database_key k0
+    ,e_database_key k1
+    ) const
 {
     database_entity const& e0 = entity_from_key(k0);
     database_entity const& e1 = entity_from_key(k1);

@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include "actuarial_table.hpp"          // e_actuarial_table_method
+#include "database.hpp"
 #include "dbnames.hpp"                  // e_database_key
 #include "mc_enum_type_enums.hpp"
 #include "oecumenic_enumerations.hpp"
@@ -60,7 +61,6 @@ class MortalityRates;
 class death_benefits;
 class modal_outlay;
 class premium_tax;
-class product_database;
 class rounding_rules;
 class stratified_charges;
 
@@ -113,7 +113,7 @@ class LMI_SO BasicValues
 
     yare_input                          yare_input_;
     product_data     const              product_;
-    std::shared_ptr<product_database>   Database_;
+    product_database const              database_;
     std::shared_ptr<FundData>           FundData_;
     std::shared_ptr<rounding_rules>     RoundingRules_;
     std::shared_ptr<stratified_charges> StratifiedCharges_;
@@ -126,7 +126,8 @@ class LMI_SO BasicValues
     std::shared_ptr<Irc7702>            Irc7702_;
     std::shared_ptr<Irc7702A>           Irc7702A_;
 
-    product_data     const& product() const {return product_;}
+    product_data     const& product () const {return product_;}
+    product_database const& database() const {return database_;}
 
     double GetAnnualTgtPrem(int a_year, double a_specamt) const;
 

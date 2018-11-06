@@ -588,7 +588,7 @@ void AccountValue::SetInitialValues()
     SepAcctPaymentAllocation = premium_allocation_to_sepacct(yare_input_);
     GenAcctPaymentAllocation = 1.0 - SepAcctPaymentAllocation;
 
-    if(!Database_->Query(DB_AllowGenAcct) && 0.0 != GenAcctPaymentAllocation)
+    if(!database().Query(DB_AllowGenAcct) && 0.0 != GenAcctPaymentAllocation)
         {
         alarum()
             << "No general account is allowed for this product, but "
@@ -598,7 +598,7 @@ void AccountValue::SetInitialValues()
             ;
         }
 
-    if(!Database_->Query(DB_AllowSepAcct) && 0.0 != SepAcctPaymentAllocation)
+    if(!database().Query(DB_AllowSepAcct) && 0.0 != SepAcctPaymentAllocation)
         {
         alarum()
             << "No separate account is allowed for this product, but "
@@ -641,10 +641,10 @@ void AccountValue::SetInitialValues()
         NoLapseActive           = false;
         }
 
-    SplitMinPrem                = Database_->Query(DB_SplitMinPrem);
-    UnsplitSplitMinPrem         = Database_->Query(DB_UnsplitSplitMinPrem);
+    SplitMinPrem                = database().Query(DB_SplitMinPrem);
+    UnsplitSplitMinPrem         = database().Query(DB_UnsplitSplitMinPrem);
 
-    TermCanLapse                = Database_->Query(DB_TermCanLapse);
+    TermCanLapse                = database().Query(DB_TermCanLapse);
     TermRiderActive             = true;
     TermDB                      = 0.0;
 
@@ -690,38 +690,22 @@ void AccountValue::SetInitialValues()
     MlyDed                      = 0.0;
     CumulativeSalesLoad         = yare_input_.InforceCumulativeSalesLoad;
 
-    CoiRetentionRate                  = Database_->Query(DB_ExpRatCoiRetention);
-    ExperienceRatingAmortizationYears = Database_->Query(DB_ExpRatAmortPeriod);
-    IbnrAsMonthsOfMortalityCharges    = Database_->Query(DB_ExpRatIbnrMult);
+    CoiRetentionRate                  = database().Query(DB_ExpRatCoiRetention);
+    ExperienceRatingAmortizationYears = database().Query(DB_ExpRatAmortPeriod);
+    IbnrAsMonthsOfMortalityCharges    = database().Query(DB_ExpRatIbnrMult);
 
     Dumpin             = Outlay_->dumpin();
     External1035Amount = Outlay_->external_1035_amount();
     Internal1035Amount = Outlay_->internal_1035_amount();
 
-    ee_premium_allocation_method   = static_cast<oenum_allocation_method>
-        (Database_->Query(DB_EePremMethod)
-        );
-    ee_premium_preferred_account   = static_cast<oenum_increment_account_preference>
-        (Database_->Query(DB_EePremAcct)
-        );
-    er_premium_allocation_method   = static_cast<oenum_allocation_method>
-        (Database_->Query(DB_ErPremMethod)
-        );
-    er_premium_preferred_account   = static_cast<oenum_increment_account_preference>
-        (Database_->Query(DB_ErPremAcct)
-        );
-    deduction_method               = static_cast<oenum_increment_method>
-        (Database_->Query(DB_DeductionMethod)
-        );
-    deduction_preferred_account    = static_cast<oenum_increment_account_preference>
-        (Database_->Query(DB_DeductionAcct)
-        );
-    distribution_method            = static_cast<oenum_increment_method>
-        (Database_->Query(DB_DistributionMethod)
-        );
-    distribution_preferred_account = static_cast<oenum_increment_account_preference>
-        (Database_->Query(DB_DistributionAcct)
-        );
+    database().query_into(ee_premium_allocation_method  , DB_EePremMethod);
+    database().query_into(ee_premium_preferred_account  , DB_EePremAcct);
+    database().query_into(er_premium_allocation_method  , DB_ErPremMethod);
+    database().query_into(er_premium_preferred_account  , DB_ErPremAcct);
+    database().query_into(deduction_method              , DB_DeductionMethod);
+    database().query_into(deduction_preferred_account   , DB_DeductionAcct);
+    database().query_into(distribution_method           , DB_DistributionMethod);
+    database().query_into(distribution_preferred_account, DB_DistributionAcct);
 
     // If any account preference is the separate account, then a
     // separate account must be available.
@@ -732,7 +716,7 @@ void AccountValue::SetInitialValues()
         ||   oe_prefer_separate_account == distribution_preferred_account
         )
         {
-        LMI_ASSERT(Database_->Query(DB_AllowSepAcct));
+        LMI_ASSERT(database().Query(DB_AllowSepAcct));
         }
     // If any account preference for premium is the general account,
     // then payment into the separate account must be permitted; but
@@ -743,7 +727,7 @@ void AccountValue::SetInitialValues()
         ||   oe_prefer_separate_account == er_premium_preferred_account
         )
         {
-        LMI_ASSERT(Database_->Query(DB_AllowSepAcct));
+        LMI_ASSERT(database().Query(DB_AllowSepAcct));
         }
 }
 
@@ -1028,7 +1012,7 @@ double AccountValue::MinInitDumpin() const
 {
     if
         (  0 == Year
-        && 1 == Database_->Query(DB_MinInitPremType)
+        && 1 == database().Query(DB_MinInitPremType)
         && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
         )
         {
@@ -1045,7 +1029,7 @@ double AccountValue::MinInitPrem() const
 {
     if
         (  0 == Year
-        && 1 == Database_->Query(DB_MinInitPremType)
+        && 1 == database().Query(DB_MinInitPremType)
         && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
         )
         {
@@ -1090,7 +1074,7 @@ double AccountValue::ModalMinInitPremShortfall() const
 {
     if
         (  0 == Year
-        && 1 == Database_->Query(DB_MinInitPremType)
+        && 1 == database().Query(DB_MinInitPremType)
         && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
         )
         {

@@ -92,7 +92,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         {
         TermSpecAmt     .assign(Length, b->yare_input_.TermRiderAmount);
         }
-    else if(b->Database_->Query(DB_TermIsNotRider))
+    else if(b->database().Query(DB_TermIsNotRider))
         {
         TermSpecAmt      = b->DeathBfts_->supplamt();
         if(!each_equal(TermSpecAmt, 0.0))
@@ -131,7 +131,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     RefundableSalesLoad  = b->Loads_->refundable_sales_load_proportion();
 
     std::vector<double> coimult;
-    b->Database_->Query(coimult, DB_CurrCoiMultiplier);
+    b->database().Query(coimult, DB_CurrCoiMultiplier);
     CurrentCoiMultiplier =
           coimult                            [b->yare_input_.InforceYear]
         * b->yare_input_.CurrentCoiMultiplier[b->yare_input_.InforceYear]
@@ -204,10 +204,10 @@ void LedgerInvariant::Init(BasicValues const* b)
             )
         ;
 
-    NoLapseAlwaysActive     = b->Database_->Query(DB_NoLapseAlwaysActive);
-    NoLapseMinDur           = b->Database_->Query(DB_NoLapseMinDur);
-    NoLapseMinAge           = b->Database_->Query(DB_NoLapseMinAge);
-    Has1035ExchCharge       = b->Database_->Query(DB_Has1035ExchCharge);
+    NoLapseAlwaysActive     = b->database().Query(DB_NoLapseAlwaysActive);
+    NoLapseMinDur           = b->database().Query(DB_NoLapseMinDur);
+    NoLapseMinAge           = b->database().Query(DB_NoLapseMinAge);
+    Has1035ExchCharge       = b->database().Query(DB_Has1035ExchCharge);
 
     // SOMEDAY !! Things indexed with '[0]' should probably use inforce year instead.
     InitBaseSpecAmt         = b->DeathBfts_->specamt()[0];
@@ -248,7 +248,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     Age                     = b->yare_input_.IssueAge;
     RetAge                  = b->yare_input_.RetirementAge;
     EndtAge                 = b->yare_input_.IssueAge + b->GetLength();
-    GroupIndivSelection     = b->Database_->Query(DB_GroupIndivSelection);
+    GroupIndivSelection     = b->database().Query(DB_GroupIndivSelection);
     UseExperienceRating     = b->yare_input_.UseExperienceRating;
     UsePartialMort          = b->yare_input_.UsePartialMortality;
     AvgFund                 = b->yare_input_.UseAverageOfAllFunds;
@@ -263,8 +263,8 @@ void LedgerInvariant::Init(BasicValues const* b)
 
     HasHoneymoon            = b->yare_input_.HoneymoonEndorsement;
     PostHoneymoonSpread     = b->yare_input_.PostHoneymoonSpread;
-    SplitMinPrem            = b->Database_->Query(DB_SplitMinPrem);
-    AllowDbo3               = b->Database_->Query(DB_AllowDbo3);
+    SplitMinPrem            = b->database().Query(DB_SplitMinPrem);
+    AllowDbo3               = b->database().Query(DB_AllowDbo3);
 
     // These are reassigned below based on product data if available.
     std::string dbo_name_option1 = mc_str(mce_option1);
@@ -280,7 +280,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         // DATABASE !! It would be much better, of course, to let all
         // strings in class product_data vary across the same axes as
         // database_entity objects.
-        bool alt_form = b->Database_->Query(DB_UsePolicyFormAlt);
+        bool alt_form = b->database().Query(DB_UsePolicyFormAlt);
         dbo_name_option1               = p.datum("DboNameLevel"                   );
         dbo_name_option2               = p.datum("DboNameIncreasing"              );
         dbo_name_rop                   = p.datum("DboNameReturnOfPremium"         );
@@ -440,10 +440,8 @@ void LedgerInvariant::Init(BasicValues const* b)
     // database if class product_data is rewritten to encompass
     // variation across axes (as class DBDictionary does).
     //
-    oenum_smoking_or_tobacco smoke_or_tobacco =
-        static_cast<oenum_smoking_or_tobacco>
-            (b->Database_->Query(DB_SmokeOrTobacco)
-            );
+    oenum_smoking_or_tobacco smoke_or_tobacco;
+    b->database().query_into(smoke_or_tobacco, DB_SmokeOrTobacco);
     if(oe_tobacco_nontobacco == smoke_or_tobacco)
         {
         switch(b->yare_input_.Smoking)
