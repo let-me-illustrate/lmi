@@ -159,6 +159,12 @@ void input_test::test_product_database()
     auto const b {db.query<oenum_alb_or_anb>(DB_MaturityAge)};
     BOOST_TEST_EQUAL(100, b);
 
+    // Redundant template argument is okay.
+    db.query_into<oenum_alb_or_anb>(DB_MaturityAge, a);
+    // Fails to compile with wrong template argument:
+//  db.query_into<float>(DB_MaturityAge, a);
+//  db.query_into<bool >(DB_MaturityAge, a);
+
     // This value is not integral, so bourn_cast rejects it.
     BOOST_TEST_THROW
         (db.query_into(DB_NaarDiscount, a)
