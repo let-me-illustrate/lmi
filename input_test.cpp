@@ -150,16 +150,31 @@ void input_test::test_product_database()
         ,"Assertion '1 == v.extent()' failed."
         );
 
+    oenum_alb_or_anb a;
+
+    // This value corresponds to no enumerator, but C++ allows that.
+    db.query_into(a, DB_MaturityAge);
+    BOOST_TEST_EQUAL(100, a);
+
+    // This value is not integral, so bourn_cast rejects it.
+    BOOST_TEST_THROW
+        (db.query_into(a, DB_NaarDiscount)
+        ,std::runtime_error
+        ,"Cast would not preserve value."
+        );
+
     auto f0 = [&db]     {db.initialize("sample");};
     auto f1 = [&db, &v] {db.Query(v, DB_MaturityAge);};
     auto f2 = [&db]     {db.Query(DB_MaturityAge);};
-    auto f3 = [&db]     {db.entity_from_key(DB_MaturityAge);};
+    auto f3 = [&db, &a] {db.query_into(a, DB_AgeLastOrNearest);};
+    auto f4 = [&db]     {db.entity_from_key(DB_MaturityAge);};
     std::cout
         << "\n  Database speed tests..."
         << "\n  initialize()      : " << TimeAnAliquot(f0)
         << "\n  Query(vector)     : " << TimeAnAliquot(f1)
         << "\n  Query(scalar)     : " << TimeAnAliquot(f2)
-        << "\n  entity_from_key() : " << TimeAnAliquot(f3)
+        << "\n  query_into(scalar): " << TimeAnAliquot(f3)
+        << "\n  entity_from_key() : " << TimeAnAliquot(f4)
         << '\n'
         ;
 
