@@ -80,7 +80,7 @@ class LMI_SO product_database final
     T query(e_database_key) const;
 
     template<typename T>
-    void query_into(T&, e_database_key) const;
+    void query_into(e_database_key, T&) const;
 
     bool are_equivalent(e_database_key, e_database_key) const;
     bool varies_by_state(e_database_key) const;
@@ -131,7 +131,7 @@ T product_database::query(e_database_key k) const
 /// result cannot be represented exactly in type T).
 
 template<typename T>
-void product_database::query_into(T& dst, e_database_key k) const
+void product_database::query_into(e_database_key k, T& dst) const
 {
     dst = query<T>(k);
 }

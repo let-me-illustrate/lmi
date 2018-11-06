@@ -154,14 +154,14 @@ void input_test::test_product_database()
     oenum_alb_or_anb a;
 
     // This value corresponds to no enumerator, but C++ allows that.
-    db.query_into(a, DB_MaturityAge);
+    db.query_into(DB_MaturityAge, a);
     BOOST_TEST_EQUAL(100, a);
     auto const b {db.query<oenum_alb_or_anb>(DB_MaturityAge)};
     BOOST_TEST_EQUAL(100, b);
 
     // This value is not integral, so bourn_cast rejects it.
     BOOST_TEST_THROW
-        (db.query_into(a, DB_NaarDiscount)
+        (db.query_into(DB_NaarDiscount, a)
         ,std::runtime_error
         ,"Cast would not preserve value."
         );
@@ -170,7 +170,7 @@ void input_test::test_product_database()
     auto f1 = [&db, &v] {db.Query(v, DB_MaturityAge);};
     auto f2 = [&db]     {db.Query(DB_MaturityAge);};
     auto f3 = [&db]     {db.query<oenum_alb_or_anb>(DB_AgeLastOrNearest);};
-    auto f4 = [&db, &a] {db.query_into(a, DB_AgeLastOrNearest);};
+    auto f4 = [&db, &a] {db.query_into(DB_AgeLastOrNearest, a);};
     auto f5 = [&db]     {db.entity_from_key(DB_MaturityAge);};
     std::cout
         << "\n  Database speed tests..."

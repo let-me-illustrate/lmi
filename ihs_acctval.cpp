@@ -698,14 +698,14 @@ void AccountValue::SetInitialValues()
     External1035Amount = Outlay_->external_1035_amount();
     Internal1035Amount = Outlay_->internal_1035_amount();
 
-    database().query_into(ee_premium_allocation_method  , DB_EePremMethod);
-    database().query_into(ee_premium_preferred_account  , DB_EePremAcct);
-    database().query_into(er_premium_allocation_method  , DB_ErPremMethod);
-    database().query_into(er_premium_preferred_account  , DB_ErPremAcct);
-    database().query_into(deduction_method              , DB_DeductionMethod);
-    database().query_into(deduction_preferred_account   , DB_DeductionAcct);
-    database().query_into(distribution_method           , DB_DistributionMethod);
-    database().query_into(distribution_preferred_account, DB_DistributionAcct);
+    database().query_into(DB_EePremMethod      , ee_premium_allocation_method  );
+    database().query_into(DB_EePremAcct        , ee_premium_preferred_account  );
+    database().query_into(DB_ErPremMethod      , er_premium_allocation_method  );
+    database().query_into(DB_ErPremAcct        , er_premium_preferred_account  );
+    database().query_into(DB_DeductionMethod   , deduction_method              );
+    database().query_into(DB_DeductionAcct     , deduction_preferred_account   );
+    database().query_into(DB_DistributionMethod, distribution_method           );
+    database().query_into(DB_DistributionAcct  , distribution_preferred_account);
 
     // If any account preference is the separate account, then a
     // separate account must be available.

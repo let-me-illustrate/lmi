@@ -95,7 +95,7 @@ void Input::DoAdaptExternalities()
 
     GleanedMaturityAge_ = static_cast<int>(database_->Query(DB_MaturityAge));
 
-    database_->query_into(GleanedLedgerType_, DB_LedgerType);
+    database_->query_into(DB_LedgerType, GleanedLedgerType_);
 }
 
 void Input::DoCustomizeInitialValues()
