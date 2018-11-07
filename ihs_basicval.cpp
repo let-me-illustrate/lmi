@@ -617,14 +617,14 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_WdCanDecrSpecAmtDbo1 , WDCanDecrSADBO1);
     database().query_into(DB_WdCanDecrSpecAmtDbo2 , WDCanDecrSADBO2);
     database().query_into(DB_WdCanDecrSpecAmtDbo3 , WDCanDecrSADBO3);
-    database().query_into(DB_MaxIncrAge       , MaxIncrAge);
+    database().query_into(DB_MaxIncrAge           , MaxIncrAge);
     database().query_into(DB_WaivePremTaxInt1035  , WaivePmTxInt1035);
     database().query_into(DB_TermIsNotRider       , TermIsNotRider);
-    database().query_into(DB_TermForcedConvAge, TermForcedConvAge);
-    database().query_into(DB_TermForcedConvDur, TermForcedConvDur);
+    database().query_into(DB_TermForcedConvAge    , TermForcedConvAge);
+    database().query_into(DB_TermForcedConvDur    , TermForcedConvDur);
     database().query_into(DB_ExpSpecAmtLimit      , ExpPerKLimit);
-    database().query_into(DB_MinPremType, MinPremType);
-    database().query_into(DB_TgtPremType, TgtPremType);
+    database().query_into(DB_MinPremType          , MinPremType);
+    database().query_into(DB_TgtPremType          , TgtPremType);
     database().query_into(DB_TgtPremFixedAtIssue  , TgtPremFixedAtIssue);
     database().query_into(DB_TgtPremMonthlyPolFee , TgtPremMonthlyPolFee);
     // Assertion: see comments on GetModalPremTgtFromTable().
@@ -636,16 +636,16 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_CurrCoiTable1Limit   , CurrCoiTable1Limit);
     LMI_ASSERT(0.0                <= CurrCoiTable0Limit);
     LMI_ASSERT(CurrCoiTable0Limit <= CurrCoiTable1Limit);
-    database().query_into(DB_CoiInforceReentry, CoiInforceReentry);
-    database().query_into(DB_MaxWdDed         , MaxWDDed_        );
+    database().query_into(DB_CoiInforceReentry    , CoiInforceReentry);
+    database().query_into(DB_MaxWdDed             , MaxWDDed_);
     database().query_into(DB_MaxWdGenAcctValMult  , MaxWdGenAcctValMult);
     database().query_into(DB_MaxWdSepAcctValMult  , MaxWdSepAcctValMult);
-    database().query_into(DB_AllowPrefLoan    , AllowPrefLoan);
-    database().query_into(DB_MaxLoanDed       , MaxLoanDed_);
+    database().query_into(DB_AllowPrefLoan        , AllowPrefLoan);
+    database().query_into(DB_MaxLoanDed           , MaxLoanDed_);
     database().query_into(DB_MaxLoanAcctValMult   , MaxLoanAVMult);
-    database().query_into(DB_FirstPrefLoanYear, FirstPrefLoanYear);
-    database().query_into(DB_NoLapseMinDur    , NoLapseMinDur);
-    database().query_into(DB_NoLapseMinAge    , NoLapseMinAge);
+    database().query_into(DB_FirstPrefLoanYear    , FirstPrefLoanYear);
+    database().query_into(DB_NoLapseMinDur        , NoLapseMinDur);
+    database().query_into(DB_NoLapseMinAge        , NoLapseMinAge);
     database().query_into(DB_AdbLimit             , AdbLimit);
     database().query_into(DB_WpLimit              , WpLimit);
     database().query_into(DB_SpecAmtLoadLimit     , SpecAmtLoadLimit);
@@ -655,17 +655,17 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_AllowChangeToDbo2    , AllowChangeToDBO2);
     database().query_into(DB_AllowSpecAmtIncr     , AllowSAIncr);
     database().query_into(DB_NoLapseAlwaysActive  , NoLapseAlwaysActive);
-    database().query_into(DB_WpChargeMethod  , WaiverChargeMethod);
-    database().query_into(DB_CashValueEnhMult, CashValueEnhMult  );
+    database().query_into(DB_WpChargeMethod       , WaiverChargeMethod);
+    database().query_into(DB_CashValueEnhMult     , CashValueEnhMult);
     database().query_into(DB_LapseIgnoresSurrChg  , LapseIgnoresSurrChg);
     database().query_into(DB_SurrChgOnIncr        , SurrChgOnIncr);
     database().query_into(DB_SurrChgOnDecr        , SurrChgOnDecr);
     LMI_ASSERT(!SurrChgOnIncr); // Surrchg change on increase not supported.
     LMI_ASSERT(!SurrChgOnDecr); // Surrchg change on decrease not supported.
 
-    database().query_into(DB_FreeWdProportion, FreeWDProportion);
+    database().query_into(DB_FreeWdProportion     , FreeWDProportion);
 
-    database().query_into(DB_NaarDiscount, DBDiscountRate);
+    database().query_into(DB_NaarDiscount         , DBDiscountRate);
     LMI_ASSERT(!contains(DBDiscountRate, -1.0));
 // This would be more natural:
 //    assign(DBDiscountRate, 1.0 / (1.0 + DBDiscountRate));
@@ -674,9 +674,9 @@ void BasicValues::SetPermanentInvariants()
     assign(DBDiscountRate, 1.0 / DBDiscountRate);
 
     database().query_into(DB_CalculateComp        , CalculateComp);
-    database().query_into(DB_AssetComp , AssetComp );
-    database().query_into(DB_CompTarget, CompTarget);
-    database().query_into(DB_CompExcess, CompExcess);
+    database().query_into(DB_AssetComp            , AssetComp);
+    database().query_into(DB_CompTarget           , CompTarget);
+    database().query_into(DB_CompExcess           , CompExcess);
 
     database().query_into(DB_DynamicMandE         , MandEIsDynamic);
     database().query_into(DB_DynamicSepAcctLoad   , SepAcctLoadIsDynamic);
