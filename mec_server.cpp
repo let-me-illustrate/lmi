@@ -256,7 +256,7 @@ mec_state test_one_days_7702A_transactions
 
     double AnnualTargetPrem = 1000000000.0; // No higher premium is anticipated.
     int const target_year =
-          database.Query(DB_TgtPremFixedAtIssue)
+          database.query<bool>(DB_TgtPremFixedAtIssue)
         ? 0
         : input.inforce_year()
         ;

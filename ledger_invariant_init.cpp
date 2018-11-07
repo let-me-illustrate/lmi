@@ -280,7 +280,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         // DATABASE !! It would be much better, of course, to let all
         // strings in class product_data vary across the same axes as
         // database_entity objects.
-        bool alt_form = b->database().Query(DB_UsePolicyFormAlt);
+        bool alt_form = b->database().query<bool>(DB_UsePolicyFormAlt);
         dbo_name_option1               = p.datum("DboNameLevel"                   );
         dbo_name_option2               = p.datum("DboNameIncreasing"              );
         dbo_name_rop                   = p.datum("DboNameReturnOfPremium"         );

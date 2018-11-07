@@ -152,7 +152,7 @@ void BasicValues::Init()
     PremiumTaxState_     = yare_input_.PremiumTaxState    ;
 
     if
-        (   !database().Query(DB_StateApproved)
+        (   !database().query<bool>(DB_StateApproved)
         &&  !global_settings::instance().ash_nazg()
         &&  !global_settings::instance().regression_testing()
         )
@@ -530,7 +530,7 @@ void BasicValues::Init7702()
         local_mly_charge_add = GetAdbRates();
         }
 
-    double local_adb_limit = database().Query(DB_AdbIsQAB) ? AdbLimit : 0.0;
+    double local_adb_limit = database().query<bool>(DB_AdbIsQAB) ? AdbLimit : 0.0;
 
     Irc7702_.reset
         (new Irc7702
