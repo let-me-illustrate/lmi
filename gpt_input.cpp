@@ -337,8 +337,8 @@ void gpt_input::DoHarmonize()
 {
     bool anything_goes    = global_settings::instance().ash_nazg();
 
-    DefinitionOfLifeInsurance.allow(mce_gpt , database_->Query(DB_AllowGpt ));
-    DefinitionOfLifeInsurance.allow(mce_cvat, database_->Query(DB_AllowCvat));
+    DefinitionOfLifeInsurance.allow(mce_gpt , database_->query<bool>(DB_AllowGpt ));
+    DefinitionOfLifeInsurance.allow(mce_cvat, database_->query<bool>(DB_AllowCvat));
     DefinitionOfLifeInsurance.allow(mce_noncompliant, false);
 
     DefinitionOfMaterialChange.enable(mce_noncompliant != DefinitionOfLifeInsurance);
@@ -370,11 +370,11 @@ void gpt_input::DoHarmonize()
             ;
         }
 
-    GroupUnderwritingType.allow(mce_medical         , database_->Query(DB_AllowFullUw   ));
-    GroupUnderwritingType.allow(mce_paramedical     , database_->Query(DB_AllowParamedUw));
-    GroupUnderwritingType.allow(mce_nonmedical      , database_->Query(DB_AllowNonmedUw ));
-    GroupUnderwritingType.allow(mce_simplified_issue, database_->Query(DB_AllowSimpUw   ));
-    GroupUnderwritingType.allow(mce_guaranteed_issue, database_->Query(DB_AllowGuarUw   ));
+    GroupUnderwritingType.allow(mce_medical         , database_->query<bool>(DB_AllowFullUw   ));
+    GroupUnderwritingType.allow(mce_paramedical     , database_->query<bool>(DB_AllowParamedUw));
+    GroupUnderwritingType.allow(mce_nonmedical      , database_->query<bool>(DB_AllowNonmedUw ));
+    GroupUnderwritingType.allow(mce_simplified_issue, database_->query<bool>(DB_AllowSimpUw   ));
+    GroupUnderwritingType.allow(mce_guaranteed_issue, database_->query<bool>(DB_AllowGuarUw   ));
 
     IssueAge        .enable(mce_no  == UseDOB);
     DateOfBirth     .enable(mce_yes == UseDOB);
@@ -467,9 +467,9 @@ void gpt_input::DoHarmonize()
     PaymentHistory              .enable(non_mec);
     BenefitHistory              .enable(non_mec);
 
-    UnderwritingClass.allow(mce_ultrapreferred, database_->Query(DB_AllowUltraPrefClass));
-    UnderwritingClass.allow(mce_preferred     , database_->Query(DB_AllowPreferredClass));
-    UnderwritingClass.allow(mce_rated, database_->Query(DB_AllowSubstdTable));
+    UnderwritingClass.allow(mce_ultrapreferred, database_->query<bool>(DB_AllowUltraPrefClass));
+    UnderwritingClass.allow(mce_preferred     , database_->query<bool>(DB_AllowPreferredClass));
+    UnderwritingClass.allow(mce_rated         , database_->query<bool>(DB_AllowSubstdTable));
 
     OldSubstandardTable.enable(mce_rated == UnderwritingClass);
     OldSubstandardTable.allow(mce_table_a, mce_rated == UnderwritingClass);
@@ -495,14 +495,14 @@ void gpt_input::DoHarmonize()
     NewSubstandardTable.allow(mce_table_l, mce_rated == UnderwritingClass);
     NewSubstandardTable.allow(mce_table_p, mce_rated == UnderwritingClass);
 
-    OldFlatExtra.enable(database_->Query(DB_AllowFlatExtras));
-    NewFlatExtra.enable(database_->Query(DB_AllowFlatExtras));
+    OldFlatExtra.enable(database_->query<bool>(DB_AllowFlatExtras));
+    NewFlatExtra.enable(database_->query<bool>(DB_AllowFlatExtras));
 
     bool blend_mortality_by_gender  = false;
     bool blend_mortality_by_smoking = false;
 
-    bool allow_gender_distinct = database_->Query(DB_AllowSexDistinct);
-    bool allow_unisex          = database_->Query(DB_AllowUnisex);
+    bool allow_gender_distinct = database_->query<bool>(DB_AllowSexDistinct);
+    bool allow_unisex          = database_->query<bool>(DB_AllowUnisex);
 
     OldGender.allow(mce_female, !blend_mortality_by_gender && allow_gender_distinct);
     OldGender.allow(mce_male  , !blend_mortality_by_gender && allow_gender_distinct);
@@ -512,8 +512,8 @@ void gpt_input::DoHarmonize()
     NewGender.allow(mce_male  , !blend_mortality_by_gender && allow_gender_distinct);
     NewGender.allow(mce_unisex,  blend_mortality_by_gender || allow_unisex);
 
-    bool allow_smoker_distinct = database_->Query(DB_AllowSmokeDistinct);
-    bool allow_unismoke        = database_->Query(DB_AllowUnismoke);
+    bool allow_smoker_distinct = database_->query<bool>(DB_AllowSmokeDistinct);
+    bool allow_unismoke        = database_->query<bool>(DB_AllowUnismoke);
 
     OldSmoking.allow(mce_smoker,    !blend_mortality_by_smoking && allow_smoker_distinct);
     OldSmoking.allow(mce_nonsmoker, !blend_mortality_by_smoking && allow_smoker_distinct);
@@ -617,7 +617,7 @@ std::string gpt_input::RealizeOldFlatExtra()
         return s;
         }
 
-    if(database_->Query(DB_AllowFlatExtras))
+    if(database_->query<bool>(DB_AllowFlatExtras))
         {
         return "";
         }
@@ -644,7 +644,7 @@ std::string gpt_input::RealizeNewFlatExtra()
         return s;
         }
 
-    if(database_->Query(DB_AllowFlatExtras))
+    if(database_->query<bool>(DB_AllowFlatExtras))
         {
         return "";
         }

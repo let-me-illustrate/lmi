@@ -327,7 +327,7 @@ void BasicValues::GPTServerInit()
 // with code in AccountValue::SetInitialValues().
 double BasicValues::InvestmentManagementFee() const
 {
-    if(!database().Query(DB_AllowSepAcct))
+    if(!database().query<bool>(DB_AllowSepAcct))
         {
         return 0.0;
         }
@@ -688,7 +688,7 @@ void BasicValues::SetPermanentInvariants()
     // rating, so we assert those preconditions and write simple code
     // for 'unusual' COI banding that ignores those features.
     LMI_ASSERT(!(UseUnusualCOIBanding && yare_input_.UseExperienceRating));
-    LMI_ASSERT(!(UseUnusualCOIBanding && database().Query(DB_AllowTerm)));
+    LMI_ASSERT(!(UseUnusualCOIBanding && database().query<bool>(DB_AllowTerm)));
 
     // Flat extras can be used even with guaranteed issue, e.g., for
     // aviation, occupation, avocation, or foreign travel. Admin
@@ -722,7 +722,7 @@ void BasicValues::SetPermanentInvariants()
     // feature, but either way no end user has ever objected to it.
     if
         (   mce_table_none != yare_input_.SubstandardTable
-        &&  !(database().Query(DB_AllowSubstdTable) && mce_rated == yare_input_.UnderwritingClass)
+        &&  !(database().query<bool>(DB_AllowSubstdTable) && mce_rated == yare_input_.UnderwritingClass)
         )
         {
         alarum() << "Substandard table ratings not permitted." << LMI_FLUSH;
@@ -1936,7 +1936,7 @@ std::vector<double> BasicValues::GetWpRates() const
     return GetTable
         (product().datum("WPFilename")
         ,DB_WpTable
-        ,database().Query(DB_AllowWp)
+        ,database().query<bool>(DB_AllowWp)
         );
 }
 
@@ -1945,7 +1945,7 @@ std::vector<double> BasicValues::GetAdbRates() const
     return GetTable
         (product().datum("ADDFilename")
         ,DB_AdbTable
-        ,database().Query(DB_AllowAdb)
+        ,database().query<bool>(DB_AllowAdb)
         );
 }
 
@@ -1954,13 +1954,13 @@ std::vector<double> BasicValues::GetChildRiderRates() const
     return GetTable
         (product().datum("ChildRiderFilename")
         ,DB_ChildRiderTable
-        ,database().Query(DB_AllowChildRider)
+        ,database().query<bool>(DB_AllowChildRider)
         );
 }
 
 std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
 {
-    if(!database().Query(DB_AllowSpouseRider))
+    if(!database().query<bool>(DB_AllowSpouseRider))
         {
         return std::vector<double>(GetLength());
         }
@@ -1977,7 +1977,7 @@ std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
 
 std::vector<double> BasicValues::GetGuaranteedSpouseRiderRates() const
 {
-    if(!database().Query(DB_AllowSpouseRider))
+    if(!database().query<bool>(DB_AllowSpouseRider))
         {
         return std::vector<double>(GetLength());
         }
@@ -1997,7 +1997,7 @@ std::vector<double> BasicValues::GetCurrentTermRates() const
     return GetTable
         (product().datum("CurrTermFilename")
         ,DB_TermTable
-        ,database().Query(DB_AllowTerm)
+        ,database().query<bool>(DB_AllowTerm)
         ,CanBlend
         ,CanBlend
         );
@@ -2008,7 +2008,7 @@ std::vector<double> BasicValues::GetGuaranteedTermRates() const
     return GetTable
         (product().datum("GuarTermFilename")
         ,DB_GuarTermTable
-        ,database().Query(DB_AllowTerm)
+        ,database().query<bool>(DB_AllowTerm)
         ,CanBlend
         ,CanBlend
         );

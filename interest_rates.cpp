@@ -256,7 +256,7 @@ InterestRates::InterestRates(BasicValues const& v)
     ,Zero_               (Length_)
     ,NeedMidpointRates_  {v.IsSubjectToIllustrationReg()}
     ,GenAcctRateType_    {v.yare_input_.GeneralAccountRateType}
-    ,NeedSepAcctRates_   {0.0 != v.database().Query(DB_AllowSepAcct)}
+    ,NeedSepAcctRates_   {0.0 != v.database().query<bool>(DB_AllowSepAcct)}
     ,SepAcctRateType_    {v.yare_input_.SeparateAccountRateType}
     ,SepAcctSpreadMethod_{v.database().query<mcenum_spread_method>(DB_SepAcctSpreadMethod)}
     ,AmortLoad_          {Zero_}
@@ -264,7 +264,7 @@ InterestRates::InterestRates(BasicValues const& v)
 //    ,NeedLoanRates_      {need_loan_rates(v.yare_input_)}
     ,NeedLoanRates_      {true} // DEPRECATED
     ,LoanRateType_       {v.yare_input_.LoanRateType}
-    ,NeedPrefLoanRates_  {0.0 != v.database().Query(DB_AllowPrefLoan)}
+    ,NeedPrefLoanRates_  {0.0 != v.database().query<bool>(DB_AllowPrefLoan)}
     ,NeedHoneymoonRates_ {v.yare_input_.HoneymoonEndorsement}
     ,SpreadFor7702_      {v.SpreadFor7702()}
 {

@@ -555,7 +555,7 @@ std::string Input::RealizeDeathBenefitOption()
         }
 
     if
-        (   !database_->Query(DB_AllowChangeToDbo2)
+        (   !database_->query<bool>(DB_AllowChangeToDbo2)
         &&  !std::is_sorted
                 (DeathBenefitOptionRealized_.begin()
                 ,DeathBenefitOptionRealized_.end()
@@ -573,7 +573,7 @@ std::string Input::RealizeDeathBenefitOption()
         }
 
     if
-        (   !database_->Query(DB_AllowDbo3)
+        (   !database_->query<bool>(DB_AllowDbo3)
         &&  contains(DeathBenefitOptionRealized_, mce_dbopt("ROP"))
         )
         {
@@ -658,7 +658,7 @@ std::string Input::RealizeGeneralAccountRate()
         }
 
     // If the field is disabled, then its old contents aren't invalid.
-    if(!database_->Query(DB_AllowGenAcct))
+    if(!database_->query<bool>(DB_AllowGenAcct))
         {
         return "";
         }
@@ -740,7 +740,7 @@ std::string Input::RealizeSeparateAccountRate()
         }
 
     // If the field is disabled, then its old contents aren't invalid.
-    if(!database_->Query(DB_AllowSepAcct))
+    if(!database_->query<bool>(DB_AllowSepAcct))
         {
         return "";
         }
@@ -806,7 +806,7 @@ std::string Input::RealizeNewLoan()
         return s;
         }
 
-    if(database_->Query(DB_AllowLoan))
+    if(database_->query<bool>(DB_AllowLoan))
         {
         return "";
         }
@@ -832,7 +832,7 @@ std::string Input::RealizeWithdrawal()
         return s;
         }
 
-    if(!database_->Query(DB_AllowWd))
+    if(!database_->query<bool>(DB_AllowWd))
         {
         if(!each_equal(WithdrawalRealized_, 0.0))
             {
@@ -877,7 +877,7 @@ std::string Input::RealizeFlatExtra()
         return s;
         }
 
-    if(database_->Query(DB_AllowFlatExtras))
+    if(database_->query<bool>(DB_AllowFlatExtras))
         {
         return "";
         }
