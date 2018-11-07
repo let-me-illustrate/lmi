@@ -153,17 +153,19 @@ void input_test::test_product_database()
 
     oenum_alb_or_anb a;
 
+    // Test query<enumerative type> with non-enumerative entities.
+
     // This value corresponds to no enumerator, but C++ allows that.
-    db.query_into(DB_MaturityAge, a);
-    BOOST_TEST_EQUAL(100, a);
-    auto const b {db.query<oenum_alb_or_anb>(DB_MaturityAge)};
-    BOOST_TEST_EQUAL(100, b);
+    db.query_into(DB_ChildRiderMinAmt, a);
+    BOOST_TEST_EQUAL(25000, a);
+    auto const b {db.query<oenum_alb_or_anb>(DB_ChildRiderMinAmt)};
+    BOOST_TEST_EQUAL(25000, b);
 
     // Redundant template argument is okay.
-    db.query_into<oenum_alb_or_anb>(DB_MaturityAge, a);
+    db.query_into<oenum_alb_or_anb>(DB_ChildRiderMinAmt, a);
     // Fails to compile with wrong template argument:
-//  db.query_into<float>(DB_MaturityAge, a);
-//  db.query_into<bool >(DB_MaturityAge, a);
+//  db.query_into<float>(DB_ChildRiderMinAmt, a);
+//  db.query_into<bool >(DB_ChildRiderMinAmt, a);
 
     // This value is not integral, so bourn_cast rejects it.
     BOOST_TEST_THROW
