@@ -44,15 +44,15 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     // Some of these data members seem useless for now, but they will
     // become useful when mortality-table access is moved hither from
     // class BasicValues.
-    AllowAdb_          = basic_values.database().Query(DB_AllowAdb         );
-    AllowChild_        = basic_values.database().Query(DB_AllowChildRider  );
-    AllowFlatExtras_   = basic_values.database().Query(DB_AllowFlatExtras  );
-    AllowSpouse_       = basic_values.database().Query(DB_AllowSpouseRider );
-    AllowSubstdTable_  = basic_values.database().Query(DB_AllowSubstdTable );
-    AllowTerm_         = basic_values.database().Query(DB_AllowTerm        );
-    AllowWp_           = basic_values.database().Query(DB_AllowWp          );
-    CCoiIsAnnual_      = basic_values.database().Query(DB_CurrCoiIsAnnual  );
-    GCoiIsAnnual_      = basic_values.database().Query(DB_GuarCoiIsAnnual  );
+    basic_values.database().query_into(DB_AllowAdb         , AllowAdb_);
+    basic_values.database().query_into(DB_AllowChildRider  , AllowChild_);
+    basic_values.database().query_into(DB_AllowFlatExtras  , AllowFlatExtras_);
+    basic_values.database().query_into(DB_AllowSpouseRider , AllowSpouse_);
+    basic_values.database().query_into(DB_AllowSubstdTable , AllowSubstdTable_);
+    basic_values.database().query_into(DB_AllowTerm        , AllowTerm_);
+    basic_values.database().query_into(DB_AllowWp          , AllowWp_);
+    basic_values.database().query_into(DB_CurrCoiIsAnnual  , CCoiIsAnnual_);
+    basic_values.database().query_into(DB_GuarCoiIsAnnual  , GCoiIsAnnual_);
     IsTgtPremTabular_ =
         oe_modal_table == basic_values.database().Query(DB_TgtPremType)
         ;

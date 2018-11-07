@@ -204,10 +204,10 @@ void LedgerInvariant::Init(BasicValues const* b)
             )
         ;
 
-    NoLapseAlwaysActive     = b->database().Query(DB_NoLapseAlwaysActive);
-    NoLapseMinDur           = b->database().Query(DB_NoLapseMinDur);
-    NoLapseMinAge           = b->database().Query(DB_NoLapseMinAge);
-    Has1035ExchCharge       = b->database().Query(DB_Has1035ExchCharge);
+    b->database().query_into(DB_NoLapseAlwaysActive, NoLapseAlwaysActive);
+    b->database().query_into(DB_NoLapseMinDur      , NoLapseMinDur);
+    b->database().query_into(DB_NoLapseMinAge      , NoLapseMinAge);
+    b->database().query_into(DB_Has1035ExchCharge  , Has1035ExchCharge);
 
     // SOMEDAY !! Things indexed with '[0]' should probably use inforce year instead.
     InitBaseSpecAmt         = b->DeathBfts_->specamt()[0];
@@ -248,7 +248,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     Age                     = b->yare_input_.IssueAge;
     RetAge                  = b->yare_input_.RetirementAge;
     EndtAge                 = b->yare_input_.IssueAge + b->GetLength();
-    GroupIndivSelection     = b->database().Query(DB_GroupIndivSelection);
+    b->database().query_into(DB_GroupIndivSelection, GroupIndivSelection);
     UseExperienceRating     = b->yare_input_.UseExperienceRating;
     UsePartialMort          = b->yare_input_.UsePartialMortality;
     AvgFund                 = b->yare_input_.UseAverageOfAllFunds;
@@ -263,8 +263,8 @@ void LedgerInvariant::Init(BasicValues const* b)
 
     HasHoneymoon            = b->yare_input_.HoneymoonEndorsement;
     PostHoneymoonSpread     = b->yare_input_.PostHoneymoonSpread;
-    SplitMinPrem            = b->database().Query(DB_SplitMinPrem);
-    AllowDbo3               = b->database().Query(DB_AllowDbo3);
+    b->database().query_into(DB_SplitMinPrem       , SplitMinPrem);
+    b->database().query_into(DB_AllowDbo3          , AllowDbo3);
 
     // These are reassigned below based on product data if available.
     std::string dbo_name_option1 = mc_str(mce_option1);

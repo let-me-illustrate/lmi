@@ -606,60 +606,60 @@ double BasicValues::GetAnnualTgtPrem(int a_year, double a_specamt) const
 
 void BasicValues::SetPermanentInvariants()
 {
-    MinIssSpecAmt       = database().Query(DB_MinIssSpecAmt        );
-    MinIssBaseSpecAmt   = database().Query(DB_MinIssBaseSpecAmt    );
-    MinRenlSpecAmt      = database().Query(DB_MinRenlSpecAmt       );
-    MinRenlBaseSpecAmt  = database().Query(DB_MinRenlBaseSpecAmt   );
-    NoLapseOpt1Only     = database().Query(DB_NoLapseDbo1Only      );
-    NoLapseUnratedOnly  = database().Query(DB_NoLapseUnratedOnly   );
-    OptChgCanIncrSA     = database().Query(DB_DboChgCanIncrSpecAmt );
-    OptChgCanDecrSA     = database().Query(DB_DboChgCanDecrSpecAmt );
-    WDCanDecrSADBO1     = database().Query(DB_WdCanDecrSpecAmtDbo1 );
-    WDCanDecrSADBO2     = database().Query(DB_WdCanDecrSpecAmtDbo2 );
-    WDCanDecrSADBO3     = database().Query(DB_WdCanDecrSpecAmtDbo3 );
+    database().query_into(DB_MinIssSpecAmt        , MinIssSpecAmt);
+    database().query_into(DB_MinIssBaseSpecAmt    , MinIssBaseSpecAmt);
+    database().query_into(DB_MinRenlSpecAmt       , MinRenlSpecAmt);
+    database().query_into(DB_MinRenlBaseSpecAmt   , MinRenlBaseSpecAmt);
+    database().query_into(DB_NoLapseDbo1Only      , NoLapseOpt1Only);
+    database().query_into(DB_NoLapseUnratedOnly   , NoLapseUnratedOnly);
+    database().query_into(DB_DboChgCanIncrSpecAmt , OptChgCanIncrSA);
+    database().query_into(DB_DboChgCanDecrSpecAmt , OptChgCanDecrSA);
+    database().query_into(DB_WdCanDecrSpecAmtDbo1 , WDCanDecrSADBO1);
+    database().query_into(DB_WdCanDecrSpecAmtDbo2 , WDCanDecrSADBO2);
+    database().query_into(DB_WdCanDecrSpecAmtDbo3 , WDCanDecrSADBO3);
     database().query_into(DB_MaxIncrAge       , MaxIncrAge);
-    WaivePmTxInt1035    = database().Query(DB_WaivePremTaxInt1035  );
-    TermIsNotRider      = database().Query(DB_TermIsNotRider       );
+    database().query_into(DB_WaivePremTaxInt1035  , WaivePmTxInt1035);
+    database().query_into(DB_TermIsNotRider       , TermIsNotRider);
     database().query_into(DB_TermForcedConvAge, TermForcedConvAge);
     database().query_into(DB_TermForcedConvDur, TermForcedConvDur);
-    ExpPerKLimit        = database().Query(DB_ExpSpecAmtLimit      );
+    database().query_into(DB_ExpSpecAmtLimit      , ExpPerKLimit);
     database().query_into(DB_MinPremType, MinPremType);
     database().query_into(DB_TgtPremType, TgtPremType);
-    TgtPremFixedAtIssue = database().Query(DB_TgtPremFixedAtIssue  );
-    TgtPremMonthlyPolFee= database().Query(DB_TgtPremMonthlyPolFee );
+    database().query_into(DB_TgtPremFixedAtIssue  , TgtPremFixedAtIssue);
+    database().query_into(DB_TgtPremMonthlyPolFee , TgtPremMonthlyPolFee);
     // Assertion: see comments on GetModalPremTgtFromTable().
     LMI_ASSERT
         (  0.0 == TgtPremMonthlyPolFee
         || (oe_modal_table == TgtPremType && oe_modal_table != MinPremType)
         );
-    CurrCoiTable0Limit  = database().Query(DB_CurrCoiTable0Limit   );
-    CurrCoiTable1Limit  = database().Query(DB_CurrCoiTable1Limit   );
+    database().query_into(DB_CurrCoiTable0Limit   , CurrCoiTable0Limit);
+    database().query_into(DB_CurrCoiTable1Limit   , CurrCoiTable1Limit);
     LMI_ASSERT(0.0                <= CurrCoiTable0Limit);
     LMI_ASSERT(CurrCoiTable0Limit <= CurrCoiTable1Limit);
     database().query_into(DB_CoiInforceReentry, CoiInforceReentry);
     database().query_into(DB_MaxWdDed         , MaxWDDed_        );
-    MaxWdGenAcctValMult = database().Query(DB_MaxWdGenAcctValMult  );
-    MaxWdSepAcctValMult = database().Query(DB_MaxWdSepAcctValMult  );
+    database().query_into(DB_MaxWdGenAcctValMult  , MaxWdGenAcctValMult);
+    database().query_into(DB_MaxWdSepAcctValMult  , MaxWdSepAcctValMult);
     database().query_into(DB_AllowPrefLoan    , AllowPrefLoan);
     database().query_into(DB_MaxLoanDed       , MaxLoanDed_);
-    MaxLoanAVMult       = database().Query(DB_MaxLoanAcctValMult   );
+    database().query_into(DB_MaxLoanAcctValMult   , MaxLoanAVMult);
     database().query_into(DB_FirstPrefLoanYear, FirstPrefLoanYear);
     database().query_into(DB_NoLapseMinDur    , NoLapseMinDur);
     database().query_into(DB_NoLapseMinAge    , NoLapseMinAge);
-    AdbLimit            = database().Query(DB_AdbLimit             );
-    WpLimit             = database().Query(DB_WpLimit              );
-    SpecAmtLoadLimit    = database().Query(DB_SpecAmtLoadLimit     );
-    MinWD               = database().Query(DB_MinWd                );
-    WDFee               = database().Query(DB_WdFee                );
-    WDFeeRate           = database().Query(DB_WdFeeRate            );
-    AllowChangeToDBO2   = database().Query(DB_AllowChangeToDbo2    );
-    AllowSAIncr         = database().Query(DB_AllowSpecAmtIncr     );
-    NoLapseAlwaysActive = database().Query(DB_NoLapseAlwaysActive  );
+    database().query_into(DB_AdbLimit             , AdbLimit);
+    database().query_into(DB_WpLimit              , WpLimit);
+    database().query_into(DB_SpecAmtLoadLimit     , SpecAmtLoadLimit);
+    database().query_into(DB_MinWd                , MinWD);
+    database().query_into(DB_WdFee                , WDFee);
+    database().query_into(DB_WdFeeRate            , WDFeeRate);
+    database().query_into(DB_AllowChangeToDbo2    , AllowChangeToDBO2);
+    database().query_into(DB_AllowSpecAmtIncr     , AllowSAIncr);
+    database().query_into(DB_NoLapseAlwaysActive  , NoLapseAlwaysActive);
     database().query_into(DB_WpChargeMethod  , WaiverChargeMethod);
     database().query_into(DB_CashValueEnhMult, CashValueEnhMult  );
-    LapseIgnoresSurrChg = database().Query(DB_LapseIgnoresSurrChg  );
-    SurrChgOnIncr       = database().Query(DB_SurrChgOnIncr        );
-    SurrChgOnDecr       = database().Query(DB_SurrChgOnDecr        );
+    database().query_into(DB_LapseIgnoresSurrChg  , LapseIgnoresSurrChg);
+    database().query_into(DB_SurrChgOnIncr        , SurrChgOnIncr);
+    database().query_into(DB_SurrChgOnDecr        , SurrChgOnDecr);
     LMI_ASSERT(!SurrChgOnIncr); // Surrchg change on increase not supported.
     LMI_ASSERT(!SurrChgOnDecr); // Surrchg change on decrease not supported.
 
@@ -673,15 +673,15 @@ void BasicValues::SetPermanentInvariants()
     assign(DBDiscountRate, 1.0 + DBDiscountRate);
     assign(DBDiscountRate, 1.0 / DBDiscountRate);
 
-    CalculateComp       = database().Query(DB_CalculateComp        );
+    database().query_into(DB_CalculateComp        , CalculateComp);
     database().query_into(DB_AssetComp , AssetComp );
     database().query_into(DB_CompTarget, CompTarget);
     database().query_into(DB_CompExcess, CompExcess);
 
-    MandEIsDynamic      = database().Query(DB_DynamicMandE         );
-    SepAcctLoadIsDynamic= database().Query(DB_DynamicSepAcctLoad   );
+    database().query_into(DB_DynamicMandE         , MandEIsDynamic);
+    database().query_into(DB_DynamicSepAcctLoad   , SepAcctLoadIsDynamic);
 
-    UseUnusualCOIBanding= database().Query(DB_UnusualCoiBanding    );
+    database().query_into(DB_UnusualCoiBanding    , UseUnusualCOIBanding);
 
     // 'Unusual' COI banding accommodates a particular idiosyncratic
     // product which has no term rider and doesn't permit experience

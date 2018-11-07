@@ -641,10 +641,10 @@ void AccountValue::SetInitialValues()
         NoLapseActive           = false;
         }
 
-    SplitMinPrem                = database().Query(DB_SplitMinPrem);
-    UnsplitSplitMinPrem         = database().Query(DB_UnsplitSplitMinPrem);
+    database().query_into(DB_SplitMinPrem       , SplitMinPrem);
+    database().query_into(DB_UnsplitSplitMinPrem, UnsplitSplitMinPrem);
 
-    TermCanLapse                = database().Query(DB_TermCanLapse);
+    database().query_into(DB_TermCanLapse       , TermCanLapse);
     TermRiderActive             = true;
     TermDB                      = 0.0;
 
@@ -690,9 +690,9 @@ void AccountValue::SetInitialValues()
     MlyDed                      = 0.0;
     CumulativeSalesLoad         = yare_input_.InforceCumulativeSalesLoad;
 
-    CoiRetentionRate                  = database().Query(DB_ExpRatCoiRetention);
-    ExperienceRatingAmortizationYears = database().Query(DB_ExpRatAmortPeriod);
-    IbnrAsMonthsOfMortalityCharges    = database().Query(DB_ExpRatIbnrMult);
+    database().query_into(DB_ExpRatCoiRetention, CoiRetentionRate);
+    database().query_into(DB_ExpRatAmortPeriod , ExperienceRatingAmortizationYears);
+    database().query_into(DB_ExpRatIbnrMult    , IbnrAsMonthsOfMortalityCharges);
 
     Dumpin             = Outlay_->dumpin();
     External1035Amount = Outlay_->external_1035_amount();

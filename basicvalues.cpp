@@ -118,10 +118,10 @@ void BasicValues::Init()
     PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, database()));
     Loads_         .reset(new Loads(database(), IsSubjectToIllustrationReg()));
 
-    MinSpecAmt = database().Query(DB_MinSpecAmt);
-    MinWD      = database().Query(DB_MinWd     );
-    WDFee      = database().Query(DB_WdFee     );
-    WDFeeRate  = database().Query(DB_WdFeeRate );
+    database().query_into(DB_MinSpecAmt, MinSpecAmt);
+    database().query_into(DB_MinWd     , MinWD     );
+    database().query_into(DB_WdFee     , WDFee     );
+    database().query_into(DB_WdFeeRate , WDFeeRate );
 
 // The antediluvian branch leaves FundData_, StratifiedCharges_, and
 // ProductData initialized to null pointers.
