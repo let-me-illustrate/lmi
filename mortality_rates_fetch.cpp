@@ -54,7 +54,7 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     basic_values.database().query_into(DB_CurrCoiIsAnnual  , CCoiIsAnnual_);
     basic_values.database().query_into(DB_GuarCoiIsAnnual  , GCoiIsAnnual_);
     IsTgtPremTabular_ =
-        oe_modal_table == basic_values.database().Query(DB_TgtPremType)
+        oe_modal_table == basic_values.database().query<oenum_modal_prem_type>(DB_TgtPremType)
         ;
 
     double max_coi_rate = basic_values.database().Query(DB_MaxMonthlyCoiRate);

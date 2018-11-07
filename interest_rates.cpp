@@ -330,7 +330,7 @@ void InterestRates::Initialize(BasicValues const& v)
     // the same way as M&E, iff database entity DB_AssetChargeType has
     // the value 'oe_asset_charge_spread'; otherwise, reflect them
     // elsewhere as an account-value load.
-    if(oe_asset_charge_spread == v.database().Query(DB_AssetChargeType))
+    if(oe_asset_charge_spread == v.database().query<oenum_asset_charge_type>(DB_AssetChargeType))
         {
         // TODO ?? At least for the antediluvian branch, the vector in
         // the input class has an inappropriate size. Truncating it

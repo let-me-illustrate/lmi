@@ -1979,7 +1979,7 @@ void AccountValue::TxTakeSepAcctLoad()
             );
 
         double tiered_comp = 0.0;
-        if(oe_asset_charge_load == database().Query(DB_AssetChargeType))
+        if(oe_asset_charge_load == database().query<oenum_asset_charge_type>(DB_AssetChargeType))
             {
             tiered_comp = StratifiedCharges_->tiered_asset_based_compensation(AssetsPostBom);
             }
@@ -2059,7 +2059,7 @@ void AccountValue::ApplyDynamicMandE(double assets)
             ;
         }
     double asset_comp_rate =
-        (oe_asset_charge_spread == database().Query(DB_AssetChargeType))
+        (oe_asset_charge_spread == database().query<oenum_asset_charge_type>(DB_AssetChargeType))
             ? StratifiedCharges_->tiered_asset_based_compensation(assets)
             : 0.0
             ;

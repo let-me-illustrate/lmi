@@ -32,6 +32,7 @@
 #include "et_vector.hpp"
 #include "math_functions.hpp"           // assign_midpoint()
 #include "mc_enum_types_aux.hpp"        // mc_n_ enumerators
+#include "oecumenic_enumerations.hpp"
 #include "premium_tax.hpp"
 
 /// Ctor for production branch.
@@ -50,7 +51,7 @@ Loads::Loads(BasicValues& V)
         ,V.PremiumTax_->levy_rate()
         ,V.database().Query(DB_PremTaxAmortIntRate)
         ,V.database().Query(DB_PremTaxAmortPeriod)
-        ,V.database().Query(DB_AssetChargeType)
+        ,V.database().query<oenum_asset_charge_type>(DB_AssetChargeType)
         ,V.IsSubjectToIllustrationReg()
         ,V.round_interest_rate()
         ,V.yare_input_.ExtraCompensationOnPremium

@@ -378,7 +378,7 @@ void Input::DoHarmonize()
         {
         LastCoiReentryDate.minimum_and_maximum(reset_min, reset_max);
         }
-    LastCoiReentryDate.enable(e_reenter_upon_rate_reset == database_->Query(DB_CoiInforceReentry));
+    LastCoiReentryDate.enable(e_reenter_upon_rate_reset == database_->query<e_actuarial_table_method>(DB_CoiInforceReentry));
 
     BlendGender.enable(database_->query<bool>(DB_AllowMortBlendSex));
     bool blend_mortality_by_gender = mce_yes == BlendGender;
