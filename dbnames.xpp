@@ -126,10 +126,10 @@
 {DB_GenAcctIntBonus,DB_Topic_Interest,"GenAcctIntBonus","Interest bonus added to the general account rate",}, \
 {DB_BonusInt,DB_Topic_Interest,"BonusInt","Bonus interest [not yet implemented]",}, \
 {DB_IntFloor,DB_Topic_Interest,"IntFloor","[not used]",}, \
-{DB_AllowGenAcct,DB_Topic_Interest,"AllowGenAcct","Allow investment in general account",}, \
-{DB_AllowSepAcct,DB_Topic_Interest,"AllowSepAcct","Allow investment in separate account",}, \
-{DB_AllowGenAcctEarnRate,DB_Topic_Interest,"AllowGenAcctEarnRate","Allow entry of general-account earned rate",}, \
-{DB_AllowSepAcctNetRate,DB_Topic_Interest,"AllowSepAcctNetRate","Allow entry of separate-account net rate",}, \
+{DB_AllowGenAcct,DB_Topic_Interest,"AllowGenAcct","Allow investment in general account: 0=no, 1=yes",}, \
+{DB_AllowSepAcct,DB_Topic_Interest,"AllowSepAcct","Allow investment in separate account: 0=no, 1=yes",}, \
+{DB_AllowGenAcctEarnRate,DB_Topic_Interest,"AllowGenAcctEarnRate","Allow entry of general-account earned rate: 0=no, 1=yes",}, \
+{DB_AllowSepAcctNetRate,DB_Topic_Interest,"AllowSepAcctNetRate","Allow entry of separate-account net rate: 0=no, 1=yes",}, \
 {DB_MaxGenAcctRate,DB_Topic_Interest,"MaxGenAcctRate","Maximum general account interest rate",}, \
 {DB_MaxSepAcctRate,DB_Topic_Interest,"MaxSepAcctRate","Maximum separate account interest rate",}, \
 {DB_SepAcctSpreadMethod,DB_Topic_Interest,"SepAcctSpreadMethod","Separate-account spread and fee subtraction: 0=annual (effective), 1=daily (nominal)",}, \
@@ -206,13 +206,13 @@
 {DB_MinRenlBaseSpecAmt,DB_Topic_DeathBenefits,"MinRenlBaseSpecAmt","Minimum specified amount after issue for base policy only, ignoring any term rider",}, \
 {DB_MaxIssSpecAmt,DB_Topic_DeathBenefits,"MaxIssSpecAmt","Maximum specified amount allowed at issue [not yet implemented]",}, \
 {DB_MaxRenlSpecAmt,DB_Topic_DeathBenefits,"MaxRenlSpecAmt","Maximum specified amount after issue [not yet implemented]",}, \
-{DB_AllowDbo1,DB_Topic_DeathBenefits,"AllowDbo1","Allow level death benefit option",}, \
-{DB_AllowDbo2,DB_Topic_DeathBenefits,"AllowDbo2","Allow increasing death benefit option",}, \
-{DB_AllowDbo3,DB_Topic_DeathBenefits,"AllowDbo3","Allow return of premium death benefit option",}, \
+{DB_AllowDbo1,DB_Topic_DeathBenefits,"AllowDbo1","Allow level death benefit option: 0=no, 1=yes",}, \
+{DB_AllowDbo2,DB_Topic_DeathBenefits,"AllowDbo2","Allow increasing death benefit option: 0=no, 1=yes",}, \
+{DB_AllowDbo3,DB_Topic_DeathBenefits,"AllowDbo3","Allow return of premium death benefit option: 0=no, 1=yes",}, \
 {DB_AllowChangeToDbo2,DB_Topic_DeathBenefits,"AllowChangeToDbo2","Allow change to increasing death benefit option: 0=no, 1=yes",}, \
 {DB_DboChgCanIncrSpecAmt,DB_Topic_DeathBenefits,"DboChgCanIncrSpecAmt","Option changes can increase specified amount to preserve net amount at risk",}, \
 {DB_DboChgCanDecrSpecAmt,DB_Topic_DeathBenefits,"DboChgCanDecrSpecAmt","Option changes can decrease specified amount to preserve net amount at risk",}, \
-{DB_AllowExtEndt,DB_Topic_DeathBenefits,"AllowExtEndt","Allow coverage beyond normal maturity ('extended endowment') [not yet implemented]",}, \
+{DB_AllowExtEndt,DB_Topic_DeathBenefits,"AllowExtEndt","Allow coverage beyond normal maturity ('extended endowment'): 0=no, 1=yes [not yet implemented]",}, \
 {DB_Topic_Riders,DB_FIRST,"Riders","Riders and other additional benefits",}, \
 {DB_AllowTerm,DB_Topic_Riders,"AllowTerm","Allow term: 0=no, 1=yes",}, \
 {DB_GuarTermTable,DB_Topic_Riders,"GuarTermTable","Term guaranteed mortality charge table (index in mortality table database)",}, \
