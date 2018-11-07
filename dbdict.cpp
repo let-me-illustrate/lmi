@@ -951,7 +951,7 @@ void DBDictionary::write_database_files()
     z.Add(database_entity(DB_GenAcctIntBonus     , 0.0));
 
     // Allow experience rating.
-    z.Add(database_entity(DB_AllowExpRating      , 1.0));
+    z.Add(database_entity(DB_AllowExpRating      , true));
     z.Add(database_entity(DB_ExpRatIbnrMult      , 6.0));
     z.Add(database_entity(DB_ExpRatAmortPeriod   , 4.0));
 
@@ -1007,7 +1007,7 @@ void DBDictionary::InitAntediluvian()
     Add(database_entity(DB_GuarPrefLoanSpread, 0.0));
     Add(database_entity(DB_CurrPrefLoanSpread, 0.0));
 
-    Add(database_entity(DB_AllowPreferredClass, 1.0));
+    Add(database_entity(DB_AllowPreferredClass, true));
 
     // premium loads
 
@@ -1047,15 +1047,15 @@ void DBDictionary::InitAntediluvian()
     Add(database_entity(DB_AgeLastOrNearest, oe_age_nearest_birthday_ties_older));
     Add(database_entity(DB_MinSpecAmt, 10000.0));
 
-    Add(database_entity(DB_AllowGenAcct, 1.0));
+    Add(database_entity(DB_AllowGenAcct, true));
     Add(database_entity(DB_MaxGenAcctRate, 0.12));
     Add(database_entity(DB_MaxSepAcctRate, 0.12));
 
-    Add(database_entity(DB_AllowLoan, 1.0));
-    Add(database_entity(DB_AllowWd, 1.0));
-    Add(database_entity(DB_AllowFlatExtras, 1.0));
-    Add(database_entity(DB_AllowChangeToDbo2, 1.0));
-    Add(database_entity(DB_AllowDbo3, 1.0));
+    Add(database_entity(DB_AllowLoan, true));
+    Add(database_entity(DB_AllowWd, true));
+    Add(database_entity(DB_AllowFlatExtras, true));
+    Add(database_entity(DB_AllowChangeToDbo2, true));
+    Add(database_entity(DB_AllowDbo3, true));
 
     Add(database_entity(DB_LedgerType, mce_ill_reg));
 
@@ -1066,10 +1066,10 @@ void DBDictionary::InitAntediluvian()
     Add(database_entity(DB_Has1035ExchCharge, 0.0));
     Add(database_entity(DB_SmokeOrTobacco, 0.0));
     Add(database_entity(DB_DacTaxFundCharge, 0.0));
-    Add(database_entity(DB_AllowWp, 0.0));
-    Add(database_entity(DB_AllowAdb, 0.0));
-    Add(database_entity(DB_AllowSpouseRider, 0.0));
-    Add(database_entity(DB_AllowChildRider, 0.0));
+    Add(database_entity(DB_AllowWp, false));
+    Add(database_entity(DB_AllowAdb, false));
+    Add(database_entity(DB_AllowSpouseRider, false));
+    Add(database_entity(DB_AllowChildRider, false));
 
     Add(database_entity(DB_ExpRatAmortPeriod, 4.0));
 }
