@@ -433,7 +433,7 @@ double BasicValues::InvestmentManagementFee() const
 void BasicValues::Init7702()
 {
     Mly7702qc = GetIrc7702QRates();
-    double max_coi_rate = database().Query(DB_MaxMonthlyCoiRate);
+    double max_coi_rate = database().query<double>(DB_MaxMonthlyCoiRate);
     LMI_ASSERT(0.0 != max_coi_rate);
     max_coi_rate = 1.0 / max_coi_rate;
     assign(Mly7702qc, apply_binary(coi_rate_from_q<double>(), Mly7702qc, max_coi_rate));

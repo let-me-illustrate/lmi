@@ -380,7 +380,7 @@ std::string Input::RealizeCurrentCoiMultiplier()
         return s;
         }
 
-    double const z = database_->Query(DB_MinInputCoiMult);
+    double const z = database_->query<double>(DB_MinInputCoiMult);
     double lowest = std::min_element
         (CurrentCoiMultiplierRealized_.begin()
         ,CurrentCoiMultiplierRealized_.end()
@@ -663,7 +663,7 @@ std::string Input::RealizeGeneralAccountRate()
         return "";
         }
 
-    double guar_int = database_->Query(DB_GuarInt);
+    double guar_int = database_->query<double>(DB_GuarInt);
     std::vector<double> general_account_max_rate;
     database_->query_into(DB_MaxGenAcctRate, general_account_max_rate);
 
@@ -750,7 +750,7 @@ std::string Input::RealizeSeparateAccountRate()
     // making this field's range depend on gross versus net. The -100%
     // minimum for an eventual tn_range type will be low enough.
 
-    double max_sep_acct_rate = database_->Query(DB_MaxSepAcctRate);
+    double max_sep_acct_rate = database_->query<double>(DB_MaxSepAcctRate);
     if(global_settings::instance().ash_nazg())
         {
         // We have some regression-test files with rates higher even
@@ -841,7 +841,7 @@ std::string Input::RealizeWithdrawal()
         }
     else
         {
-        double lowest_allowed_withdrawal = database_->Query(DB_MinWd);
+        double lowest_allowed_withdrawal = database_->query<double>(DB_MinWd);
         for(auto const& i : WithdrawalRealized_)
             {
             if(0.0 < i.value() && i.value() < lowest_allowed_withdrawal)

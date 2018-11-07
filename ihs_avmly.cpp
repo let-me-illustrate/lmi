@@ -1975,7 +1975,7 @@ void AccountValue::TxTakeSepAcctLoad()
             (GenBasis_
             ,AssetsPostBom
             ,CumPmtsPostBom
-            ,database().Query(DB_DynSepAcctLoadLimit)
+            ,database().query<double>(DB_DynSepAcctLoadLimit)
             );
 
         double tiered_comp = 0.0;

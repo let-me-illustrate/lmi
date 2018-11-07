@@ -467,16 +467,16 @@ void Input::DoHarmonize()
     // rider is elected, it could never be set back to zero manually
     // when unelected--so it's forced to zero when unelected.
     ChildRiderAmount .minimum_and_maximum
-        ((mce_yes == ChildRider) ? database_->Query(DB_ChildRiderMinAmt) : 0.0
-        ,(mce_yes == ChildRider) ? database_->Query(DB_ChildRiderMaxAmt) : 0.0
+        ((mce_yes == ChildRider) ? database_->query<double>(DB_ChildRiderMinAmt) : 0.0
+        ,(mce_yes == ChildRider) ? database_->query<double>(DB_ChildRiderMaxAmt) : 0.0
         );
     bool allow_spouse_rider = database_->query<bool>(DB_AllowSpouseRider);
     SpouseRider      .enable(        allow_spouse_rider);
     SpouseRider      .allow(mce_yes, allow_spouse_rider);
     SpouseRiderAmount.enable(mce_yes == SpouseRider);
     SpouseRiderAmount.minimum_and_maximum
-        ((mce_yes == SpouseRider) ? database_->Query(DB_SpouseRiderMinAmt) : 0.0
-        ,(mce_yes == SpouseRider) ? database_->Query(DB_SpouseRiderMaxAmt) : 0.0
+        ((mce_yes == SpouseRider) ? database_->query<double>(DB_SpouseRiderMinAmt) : 0.0
+        ,(mce_yes == SpouseRider) ? database_->query<double>(DB_SpouseRiderMaxAmt) : 0.0
         );
     SpouseIssueAge   .enable(mce_yes == SpouseRider);
     // If 'SpouseIssueAge' were always enabled, then it might make

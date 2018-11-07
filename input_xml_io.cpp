@@ -676,7 +676,7 @@ void Input::redintegrate_ex_post
         RealizeSpecifiedAmount();
         InforceSpecAmtLoadBase = std::min
             (TermRiderAmount.value() + SpecifiedAmountRealized_[0].value()
-            ,db.Query(DB_SpecAmtLoadLimit)
+            ,db.query<double>(DB_SpecAmtLoadLimit)
             );
         }
 
