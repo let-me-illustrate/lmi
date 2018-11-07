@@ -199,6 +199,7 @@ class LMI_SO LedgerInvariant
     double          Has1035ExchCharge;
     double          EffDateJdn;
     double          DateOfBirthJdn;
+    double          LastCoiReentryDateJdn;
     double          ListBillDateJdn;
     double          InforceAsOfDateJdn;
     double          SplitFundAllocation;
@@ -385,6 +386,7 @@ class LMI_SO LedgerInvariant
     // JDNs are used in UpdateCRC() and Spew().
     std::string     EffDate;
     std::string     DateOfBirth;
+    std::string     LastCoiReentryDate;
     std::string     ListBillDate;
     std::string     InforceAsOfDate;
 

@@ -174,6 +174,7 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["Has1035ExchCharge"     ] = &Has1035ExchCharge      ;
     OtherScalars    ["EffDateJdn"            ] = &EffDateJdn             ;
     OtherScalars    ["DateOfBirthJdn"        ] = &DateOfBirthJdn         ;
+    OtherScalars    ["LastCoiReentryDateJdn" ] = &LastCoiReentryDateJdn  ;
     OtherScalars    ["ListBillDateJdn"       ] = &ListBillDateJdn        ;
     OtherScalars    ["InforceAsOfDateJdn"    ] = &InforceAsOfDateJdn     ;
     OtherScalars    ["SplitFundAllocation"   ] = &SplitFundAllocation    ;
@@ -392,6 +393,7 @@ void LedgerInvariant::Copy(LedgerInvariant const& obj)
     // Scalars of type not compatible with double.
     EffDate                = obj.EffDate               ;
     DateOfBirth            = obj.DateOfBirth           ;
+    LastCoiReentryDate     = obj.LastCoiReentryDate    ;
     ListBillDate           = obj.ListBillDate          ;
     InforceAsOfDate        = obj.InforceAsOfDate       ;
     InitErMode             = obj.InitErMode            ;
@@ -502,6 +504,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     EffDateJdn                    = a_Addend.EffDateJdn;
     DateOfBirth                   = a_Addend.DateOfBirth;
     DateOfBirthJdn                = a_Addend.DateOfBirthJdn;
+    LastCoiReentryDate            = a_Addend.LastCoiReentryDate;
+    LastCoiReentryDateJdn         = a_Addend.LastCoiReentryDateJdn;
     ListBillDate                  = a_Addend.ListBillDate;
     ListBillDateJdn               = a_Addend.ListBillDateJdn;
     InforceAsOfDate               = a_Addend.InforceAsOfDate;

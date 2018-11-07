@@ -462,14 +462,16 @@ void LedgerInvariant::Init(BasicValues const* b)
     UWClass                 = mc_str(b->yare_input_.UnderwritingClass);
     SubstandardTable        = mc_str(b->yare_input_.SubstandardTable);
 
-    EffDate                 = calendar_date(b->yare_input_.EffectiveDate  ).str();
-    EffDateJdn              = calendar_date(b->yare_input_.EffectiveDate  ).julian_day_number();
-    DateOfBirth             = calendar_date(b->yare_input_.DateOfBirth    ).str();
-    DateOfBirthJdn          = calendar_date(b->yare_input_.DateOfBirth    ).julian_day_number();
-    ListBillDate            = calendar_date(b->yare_input_.ListBillDate   ).str();
-    ListBillDateJdn         = calendar_date(b->yare_input_.ListBillDate   ).julian_day_number();
-    InforceAsOfDate         = calendar_date(b->yare_input_.InforceAsOfDate).str();
-    InforceAsOfDateJdn      = calendar_date(b->yare_input_.InforceAsOfDate).julian_day_number();
+    EffDate                 = calendar_date(b->yare_input_.EffectiveDate     ).str();
+    EffDateJdn              = calendar_date(b->yare_input_.EffectiveDate     ).julian_day_number();
+    DateOfBirth             = calendar_date(b->yare_input_.DateOfBirth       ).str();
+    DateOfBirthJdn          = calendar_date(b->yare_input_.DateOfBirth       ).julian_day_number();
+    LastCoiReentryDate      = calendar_date(b->yare_input_.LastCoiReentryDate).str();
+    LastCoiReentryDateJdn   = calendar_date(b->yare_input_.LastCoiReentryDate).julian_day_number();
+    ListBillDate            = calendar_date(b->yare_input_.ListBillDate      ).str();
+    ListBillDateJdn         = calendar_date(b->yare_input_.ListBillDate      ).julian_day_number();
+    InforceAsOfDate         = calendar_date(b->yare_input_.InforceAsOfDate   ).str();
+    InforceAsOfDateJdn      = calendar_date(b->yare_input_.InforceAsOfDate   ).julian_day_number();
     InitErMode              = mc_str(b->Outlay_->er_premium_modes()[0]);
 
     mcenum_dbopt const init_dbo = b->DeathBfts_->dbopt()[0];

@@ -105,6 +105,7 @@ bool unavailable(std::string const& s)
     static std::vector<std::string> const v
         {"DateOfBirthJdn"        // used by group quotes
         ,"EffDateJdn"            // used by group quotes
+        ,"LastCoiReentryDateJdn" // probably not needed
         ,"ListBillDateJdn"       // probably not needed
         ,"InforceAsOfDateJdn"    // probably not needed
         ,"InitDacTaxRate"        // used by PrintRosterTabDelimited(); not cents
