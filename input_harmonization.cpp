@@ -319,8 +319,8 @@ void Input::DoHarmonize()
     InforceContractMonth.enable(false);
 
     bool no_lapse_offered =
-           0 != database_->Query(DB_NoLapseMinDur)
-        || 0 != database_->Query(DB_NoLapseMinAge)
+           0 != database_->query<int>(DB_NoLapseMinDur)
+        || 0 != database_->query<int>(DB_NoLapseMinAge)
         ;
     InforceNoLapseActive            .enable(no_lapse_offered);
     InforceMonthlyNoLapsePremium    .enable(no_lapse_offered && mce_yes == InforceNoLapseActive);
@@ -415,8 +415,8 @@ void Input::DoHarmonize()
     bool allow_term =
            database_->query<bool>(DB_AllowTerm)
         && (database_->query<bool>(DB_AllowRatedTerm) || !contract_is_rated)
-        && database_->Query(DB_TermMinIssAge) <= IssueAge.value()
-        &&                                       IssueAge.value() <= database_->Query(DB_TermMaxIssAge)
+        && database_->query<int>(DB_TermMinIssAge) <= IssueAge.value()
+        &&                                            IssueAge.value() <= database_->query<int>(DB_TermMaxIssAge)
         ;
     bool term_is_a_rider = !database_->query<bool>(DB_TermIsNotRider);
     bool allow_term_rider = allow_term && term_is_a_rider;
@@ -443,16 +443,16 @@ void Input::DoHarmonize()
     bool allow_wp =
            database_->query<bool>(DB_AllowWp)
         && (database_->query<bool>(DB_AllowRatedWp) || !contract_is_rated)
-        && database_->Query(DB_WpMinIssAge) <= IssueAge.value()
-        &&                                     IssueAge.value() <= database_->Query(DB_WpMaxIssAge)
+        && database_->query<int>(DB_WpMinIssAge) <= IssueAge.value()
+        &&                                          IssueAge.value() <= database_->query<int>(DB_WpMaxIssAge)
         ;
     WaiverOfPremiumBenefit.enable(        allow_wp);
     WaiverOfPremiumBenefit.allow(mce_yes, allow_wp);
     bool allow_adb =
            database_->query<bool>(DB_AllowAdb)
         && (database_->query<bool>(DB_AllowRatedAdb) || !contract_is_rated)
-        && database_->Query(DB_AdbMinIssAge) <= IssueAge.value()
-        &&                                      IssueAge.value() <= database_->Query(DB_AdbMaxIssAge)
+        && database_->query<int>(DB_AdbMinIssAge) <= IssueAge.value()
+        &&                                           IssueAge.value() <= database_->query<int>(DB_AdbMaxIssAge)
         ;
     AccidentalDeathBenefit.enable(        allow_adb);
     AccidentalDeathBenefit.allow(mce_yes, allow_adb);

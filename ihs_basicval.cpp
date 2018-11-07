@@ -183,24 +183,24 @@ void BasicValues::Init()
     no_can_issue_         = no_longer_issued && is_new_business;
     IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(ledger_type());
 
-    if(IssueAge < database().Query(DB_MinIssAge))
+    if(IssueAge < database().query<int>(DB_MinIssAge))
         {
         alarum()
             << "Issue age "
             << IssueAge
             << " less than minimum "
-            << database().Query(DB_MinIssAge)
+            << database().query<int>(DB_MinIssAge)
             << '.'
             << LMI_FLUSH
             ;
         }
-    if(database().Query(DB_MaxIssAge) < IssueAge)
+    if(database().query<int>(DB_MaxIssAge) < IssueAge)
         {
         alarum()
             << "Issue age "
             << IssueAge
             << " greater than maximum "
-            << database().Query(DB_MaxIssAge)
+            << database().query<int>(DB_MaxIssAge)
             << '.'
             << LMI_FLUSH
             ;
@@ -279,14 +279,14 @@ void BasicValues::GPTServerInit()
     no_can_issue_         = no_longer_issued && is_new_business;
     IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(ledger_type());
 
-    if(IssueAge < database().Query(DB_MinIssAge))
+    if(IssueAge < database().query<int>(DB_MinIssAge))
         {
         throw x_product_rule_violated
             (
             std::string("Issue age less than minimum")
             );
         }
-    if(database().Query(DB_MaxIssAge) < IssueAge)
+    if(database().query<int>(DB_MaxIssAge) < IssueAge)
         {
         throw x_product_rule_violated
             (
@@ -1563,7 +1563,7 @@ std::vector<double> BasicValues::GetUnblendedTable
     return GetActuarialTable
         (TableFile
         ,TableID
-        ,bourn_cast<int>(database().Query(TableID))
+        ,bourn_cast<int>(database().query<int>(TableID))
         );
 }
 
@@ -2073,7 +2073,7 @@ std::vector<double> BasicValues::GetPartialMortalityRates() const
 
 std::vector<double> BasicValues::GetSubstdTblMultTable() const
 {
-    if(0 == database().Query(DB_SubstdTableMultTable))
+    if(0 == database().query<int>(DB_SubstdTableMultTable))
         {
         return std::vector<double>(GetLength(), 1.0);
         }
@@ -2089,7 +2089,7 @@ std::vector<double> BasicValues::GetCurrSpecAmtLoadTable() const
     return GetTable
         (product().datum("CurrSpecAmtLoadFilename")
         ,DB_CurrSpecAmtLoadTable
-        ,0 != database().Query(DB_CurrSpecAmtLoadTable)
+        ,0 != database().query<int>(DB_CurrSpecAmtLoadTable)
         );
 }
 
@@ -2098,7 +2098,7 @@ std::vector<double> BasicValues::GetGuarSpecAmtLoadTable() const
     return GetTable
         (product().datum("GuarSpecAmtLoadFilename")
         ,DB_GuarSpecAmtLoadTable
-        ,0 != database().Query(DB_GuarSpecAmtLoadTable)
+        ,0 != database().query<int>(DB_GuarSpecAmtLoadTable)
         );
 }
 

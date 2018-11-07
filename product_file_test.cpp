@@ -105,11 +105,11 @@ void product_file_test::test_copying()
         );
     BOOST_TEST(mce_s_CT == d.index().index_vector()[5]);
     BOOST_TEST(      55 == d.length());
-    BOOST_TEST(      99 == d.Query(DB_MaxIncrAge));
+    BOOST_TEST(      99 == d.query<int>(DB_MaxIncrAge));
     product_database e(std::move(d));
     BOOST_TEST(mce_s_CT == e.index().index_vector()[5]);
     BOOST_TEST(      55 == e.length());
-    BOOST_TEST(      99 == e.Query(DB_MaxIncrAge));
+    BOOST_TEST(      99 == e.query<int>(DB_MaxIncrAge));
 
     // Test product_database copy ctor.
     product_database f
@@ -124,10 +124,10 @@ void product_file_test::test_copying()
     product_database g(f);
     BOOST_TEST(mce_s_CT == f.index().index_vector()[5]);
     BOOST_TEST(      41 == f.length());
-    BOOST_TEST(      99 == f.Query(DB_MaxIncrAge));
+    BOOST_TEST(      99 == f.query<int>(DB_MaxIncrAge));
     BOOST_TEST(mce_s_CT == g.index().index_vector()[5]);
     BOOST_TEST(      41 == g.length());
-    BOOST_TEST(      99 == g.Query(DB_MaxIncrAge));
+    BOOST_TEST(      99 == g.query<int>(DB_MaxIncrAge));
 }
 
 void product_file_test::read_database_file()
