@@ -610,7 +610,7 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_MinIssBaseSpecAmt    , MinIssBaseSpecAmt);
     database().query_into(DB_MinRenlSpecAmt       , MinRenlSpecAmt);
     database().query_into(DB_MinRenlBaseSpecAmt   , MinRenlBaseSpecAmt);
-    database().query_into(DB_NoLapseDbo1Only      , NoLapseOpt1Only);
+    database().query_into(DB_NoLapseDboLvlOnly    , NoLapseDboLvlOnly);
     database().query_into(DB_NoLapseUnratedOnly   , NoLapseUnratedOnly);
     database().query_into(DB_DboChgCanIncrSpecAmt , OptChgCanIncrSA);
     database().query_into(DB_DboChgCanDecrSpecAmt , OptChgCanDecrSA);

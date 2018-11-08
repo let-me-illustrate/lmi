@@ -452,7 +452,7 @@ enum e_database_key
         ,DB_NoLapseMinDur
         ,DB_NoLapseMinAge
         ,DB_NoLapseUnratedOnly
-        ,DB_NoLapseDbo1Only
+        ,DB_NoLapseDboLvlOnly
         ,DB_NoLapseAlwaysActive
 
         ,DB_AllowHoneymoon

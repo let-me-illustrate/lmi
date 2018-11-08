@@ -632,7 +632,7 @@ void AccountValue::SetInitialValues()
     loan_ullage_       .assign(BasicValues::GetLength(), 0.0);
     withdrawal_ullage_ .assign(BasicValues::GetLength(), 0.0);
     NoLapseActive               = true;
-    if(NoLapseOpt1Only && mce_option1 != DeathBfts_->dbopt()[0])
+    if(NoLapseDboLvlOnly && mce_option1 != DeathBfts_->dbopt()[0])
         {
         NoLapseActive           = false;
         }

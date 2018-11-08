@@ -341,7 +341,7 @@ class LMI_SO DBDictionary final
     database_entity NoLapseMinDur       ;
     database_entity NoLapseMinAge       ;
     database_entity NoLapseUnratedOnly  ;
-    database_entity NoLapseDbo1Only     ;
+    database_entity NoLapseDboLvlOnly   ;
     database_entity NoLapseAlwaysActive ;
     database_entity AllowHoneymoon      ;
     database_entity DeductionMethod     ;

@@ -357,7 +357,7 @@ void DBDictionary::ascribe_members()
     ascribe("NoLapseMinDur"       , &DBDictionary::NoLapseMinDur       );
     ascribe("NoLapseMinAge"       , &DBDictionary::NoLapseMinAge       );
     ascribe("NoLapseUnratedOnly"  , &DBDictionary::NoLapseUnratedOnly  );
-    ascribe("NoLapseDbo1Only"     , &DBDictionary::NoLapseDbo1Only     );
+    ascribe("NoLapseDboLvlOnly"   , &DBDictionary::NoLapseDboLvlOnly   );
     ascribe("NoLapseAlwaysActive" , &DBDictionary::NoLapseAlwaysActive );
     ascribe("AllowHoneymoon"      , &DBDictionary::AllowHoneymoon      );
     ascribe("DeductionMethod"     , &DBDictionary::DeductionMethod     );
@@ -780,7 +780,7 @@ void DBDictionary::write_database_files()
     z.Add(database_entity(DB_NoLapseMinDur       , 0.0));
     z.Add(database_entity(DB_NoLapseMinAge       , 0.0));
     z.Add(database_entity(DB_NoLapseUnratedOnly  , false));
-    z.Add(database_entity(DB_NoLapseDbo1Only     , false));
+    z.Add(database_entity(DB_NoLapseDboLvlOnly   , false));
     z.Add(database_entity(DB_LoadRfdProportion   , 0.0));
 
     // uw_class, smoker

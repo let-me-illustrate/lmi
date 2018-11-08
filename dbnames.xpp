@@ -298,7 +298,7 @@
 {DB_NoLapseMinDur,DB_Topic_SecondaryGuarantees,"NoLapseMinDur","Minimum number of years no-lapse guarantee remains in effect if premium requirement satisfied",}, \
 {DB_NoLapseMinAge,DB_Topic_SecondaryGuarantees,"NoLapseMinAge","Minimum age to which no-lapse guarantee remains in effect if premium requirement satisfied",}, \
 {DB_NoLapseUnratedOnly,DB_Topic_SecondaryGuarantees,"NoLapseUnratedOnly","No-lapse guarantee available only to unrated lives: 0=no, 1=yes",}, \
-{DB_NoLapseDbo1Only,DB_Topic_SecondaryGuarantees,"NoLapseDbo1Only","No-lapse guarantee available only with level death benefit option: 0=no, 1=yes",}, \
+{DB_NoLapseDboLvlOnly,DB_Topic_SecondaryGuarantees,"NoLapseDboLvlOnly","No-lapse guarantee available only with level death benefit option: 0=no, 1=yes",}, \
 {DB_NoLapseAlwaysActive,DB_Topic_SecondaryGuarantees,"NoLapseAlwaysActive","No-lapse guarantee requirements are always met by contract or issue rules: 0=no, 1=yes",}, \
 {DB_AllowHoneymoon,DB_Topic_SecondaryGuarantees,"AllowHoneymoon","Honeymoon allowed: 0=no, 1=yes",}, \
 {DB_Topic_Allocations,DB_FIRST,"Allocations","Allocations between general and separate account",}, \

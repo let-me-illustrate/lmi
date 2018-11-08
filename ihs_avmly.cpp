@@ -849,7 +849,7 @@ void AccountValue::TxOptionChange()
         return;
         }
 
-    if(NoLapseActive &&  mce_option1 != YearsDBOpt &&  NoLapseOpt1Only)
+    if(NoLapseActive && mce_option1 != YearsDBOpt && NoLapseDboLvlOnly)
         {
         NoLapseActive = false;
         }

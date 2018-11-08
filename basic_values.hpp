@@ -299,7 +299,7 @@ class LMI_SO BasicValues
     double                       MinIssBaseSpecAmt;
     double                       MinRenlSpecAmt;
     double                       MinRenlBaseSpecAmt;
-    bool                         NoLapseOpt1Only;
+    bool                         NoLapseDboLvlOnly;
     bool                         NoLapseUnratedOnly;
     bool                         OptChgCanIncrSA;
     bool                         OptChgCanDecrSA;
