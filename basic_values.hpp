@@ -291,7 +291,7 @@ class LMI_SO BasicValues
     double                       MaxSurvivalDur;
     mcenum_defn_life_ins         DefnLifeIns_;
     mcenum_defn_material_change  DefnMaterialChange_;
-    mcenum_dbopt_7702            Equiv7702DBO3;
+    mcenum_dbopt_7702            Effective7702DboRop;
     double                       MaxNAAR;
     int                          EndtAge;
     double                       MinSpecAmt; // Antediluvian.

@@ -135,7 +135,7 @@ class LMI_SO DBDictionary final
     database_entity Irc7702BftIsSpecAmt ;
     database_entity Initial7702BftIsDb  ;
     database_entity Irc7702Endowment    ;
-    database_entity Equiv7702Dbo3       ;
+    database_entity Effective7702DboRop ;
     database_entity TermIsQABOrDb7702   ;
     database_entity TermIsQABOrDb7702A  ;
     database_entity GioIsQAB            ;

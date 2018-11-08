@@ -80,7 +80,7 @@
 {DB_Irc7702BftIsSpecAmt,DB_Topic_7702And7702A,"Irc7702BftIsSpecAmt","7702(f)(3) 'death benefit' is specamt rather than DB: 0=no, 1=yes",}, \
 {DB_Initial7702BftIsDb,DB_Topic_7702And7702A,"Initial7702BftIsDb","For DBO 2, riskily reflect 1035 and initial payment in initial 7702(f)(3) 'death benefit': 0=no, 1=yes",}, \
 {DB_Irc7702Endowment,DB_Topic_7702And7702A,"Irc7702Endowment","7702(e)(1)(D) endowment amount for 7702 and 7702A calculations: 0=specamt, 1=none",}, \
-{DB_Equiv7702Dbo3,DB_Topic_7702And7702A,"Equiv7702Dbo3","For 7702, treat return of premium death benefit option same as: 0=level 1=increasing",}, \
+{DB_Effective7702DboRop,DB_Topic_7702And7702A,"Effective7702DboRop","For 7702, treat return of premium death benefit option same as: 0=level 1=increasing",}, \
 {DB_TermIsQABOrDb7702,DB_Topic_7702And7702A,"TermIsQABOrDb7702","Treat term rider as QAB or death benefit for 7702: 0=neither, 1=DB, 2=QAB",}, \
 {DB_TermIsQABOrDb7702A,DB_Topic_7702And7702A,"TermIsQABOrDb7702A","Treat term rider as QAB or death benefit for 7702A: 0=neither, 1=DB, 2=QAB",}, \
 {DB_GioIsQAB,DB_Topic_7702And7702A,"GioIsQAB","Treat guaranteed insurability option as a QAB for 7702 and 7702A: 0=no, 1=yes [not yet implemented]",}, \

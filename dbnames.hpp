@@ -171,7 +171,7 @@ enum e_database_key
         ,DB_Irc7702BftIsSpecAmt
         ,DB_Initial7702BftIsDb
         ,DB_Irc7702Endowment
-        ,DB_Equiv7702Dbo3
+        ,DB_Effective7702DboRop
 
         ,DB_TermIsQABOrDb7702
         ,DB_TermIsQABOrDb7702A

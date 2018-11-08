@@ -1060,8 +1060,8 @@ void AccountValue::TxTestGPT()
     // If there is an adjustable event, then DB (not specamt) is used
     // in calculating the adjustment.
     //
-    mcenum_dbopt_7702 const new_dbopt(effective_dbopt_7702(YearsDBOpt, Equiv7702DBO3));
-    mcenum_dbopt_7702 const old_dbopt(effective_dbopt_7702(OldDBOpt  , Equiv7702DBO3));
+    mcenum_dbopt_7702 const new_dbopt(effective_dbopt_7702(YearsDBOpt, Effective7702DboRop));
+    mcenum_dbopt_7702 const old_dbopt(effective_dbopt_7702(OldDBOpt  , Effective7702DboRop));
     // TAXATION !! This may require revision if DB is treated as the 7702 benefit.
     // TAXATION !! This assumes the term rider can be treated as death benefit;
     // use 'TermIsDbFor7702'.

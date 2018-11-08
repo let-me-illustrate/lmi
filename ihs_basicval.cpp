@@ -64,7 +64,7 @@ BasicValues::BasicValues(Input const& input)
     ,database_           (yare_input_)
     ,DefnLifeIns_        {mce_cvat}
     ,DefnMaterialChange_ {mce_unnecessary_premium}
-    ,Equiv7702DBO3       {mce_option1_for_7702}
+    ,Effective7702DboRop {mce_option1_for_7702}
     ,MaxWDDed_           {mce_twelve_times_last}
     ,MaxLoanDed_         {mce_twelve_times_last}
     ,StateOfJurisdiction_{mce_s_CT}
@@ -103,7 +103,7 @@ BasicValues::BasicValues
         )
     ,DefnLifeIns_        {mce_cvat}
     ,DefnMaterialChange_ {mce_unnecessary_premium}
-    ,Equiv7702DBO3       {a_DBOptFor7702}
+    ,Effective7702DboRop {a_DBOptFor7702}
     ,MaxWDDed_           {mce_twelve_times_last}
     ,MaxLoanDed_         {mce_twelve_times_last}
     ,StateOfJurisdiction_{a_StateOfJurisdiction}
@@ -545,7 +545,7 @@ void BasicValues::Init7702()
             ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
             ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
             ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
-            ,effective_dbopt_7702(yare_input_.DeathBenefitOption[0], Equiv7702DBO3)
+            ,effective_dbopt_7702(yare_input_.DeathBenefitOption[0], Effective7702DboRop)
             ,Loads_->annual_policy_fee    (mce_gen_curr)
             ,Loads_->monthly_policy_fee   (mce_gen_curr)
             ,Loads_->specified_amount_load(mce_gen_curr)
@@ -760,7 +760,7 @@ void BasicValues::SetPermanentInvariants()
         auto const z = database().query<mcenum_defn_material_change>(DB_CvatMatChangeDefn);
         DefnMaterialChange_ = (mce_gpt == DefnLifeIns_) ? mce_adjustment_event : z;
         }
-    database().query_into(DB_Equiv7702Dbo3, Equiv7702DBO3);
+    database().query_into(DB_Effective7702DboRop, Effective7702DboRop);
     TermIsDbFor7702     = 1.0 == database().Query(DB_TermIsQABOrDb7702 );
     TermIsDbFor7702A    = 1.0 == database().Query(DB_TermIsQABOrDb7702A);
     MaxNAAR             = yare_input_.MaximumNaar;
@@ -985,7 +985,7 @@ double BasicValues::GetModalPremGLP
         ,a_bft_amt
         ,a_specamt
         ,Irc7702_->GetLeastBftAmtEver()
-        ,effective_dbopt_7702(DeathBfts_->dbopt()[0], Equiv7702DBO3)
+        ,effective_dbopt_7702(DeathBfts_->dbopt()[0], Effective7702DboRop)
         );
 
 // TODO ?? TAXATION !! PROBLEMS HERE
@@ -1428,7 +1428,7 @@ double BasicValues::GetModalSpecAmtMinNonMec(double annualized_pmt) const
 //============================================================================
 double BasicValues::GetModalSpecAmtGLP(double annualized_pmt) const
 {
-    mcenum_dbopt_7702 const z = effective_dbopt_7702(DeathBfts_->dbopt()[0], Equiv7702DBO3);
+    mcenum_dbopt_7702 const z = effective_dbopt_7702(DeathBfts_->dbopt()[0], Effective7702DboRop);
     return gpt_specamt::CalculateGLPSpecAmt(*this, 0, annualized_pmt, z);
 }
 

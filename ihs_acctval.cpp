@@ -448,7 +448,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     Irc7702_->Initialize7702
         (sa
         ,sa
-        ,effective_dbopt_7702(InvariantValues().DBOpt[0].value(), Equiv7702DBO3)
+        ,effective_dbopt_7702(InvariantValues().DBOpt[0].value(), Effective7702DboRop)
         ,annual_target_premium
         );
 

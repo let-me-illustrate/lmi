@@ -151,7 +151,7 @@ void DBDictionary::ascribe_members()
     ascribe("Irc7702BftIsSpecAmt" , &DBDictionary::Irc7702BftIsSpecAmt );
     ascribe("Initial7702BftIsDb"  , &DBDictionary::Initial7702BftIsDb  );
     ascribe("Irc7702Endowment"    , &DBDictionary::Irc7702Endowment    );
-    ascribe("Equiv7702Dbo3"       , &DBDictionary::Equiv7702Dbo3       );
+    ascribe("Effective7702DboRop" , &DBDictionary::Effective7702DboRop );
     ascribe("TermIsQABOrDb7702"   , &DBDictionary::TermIsQABOrDb7702   );
     ascribe("TermIsQABOrDb7702A"  , &DBDictionary::TermIsQABOrDb7702A  );
     ascribe("GioIsQAB"            , &DBDictionary::GioIsQAB            );
@@ -924,7 +924,7 @@ void DBDictionary::write_database_files()
     z.Add(database_entity(DB_Irc7702BftIsSpecAmt , 0));
     z.Add(database_entity(DB_Initial7702BftIsDb  , false));
     z.Add(database_entity(DB_Irc7702Endowment    , 0));
-    z.Add(database_entity(DB_Equiv7702Dbo3       , 0));
+    z.Add(database_entity(DB_Effective7702DboRop , 0));
     z.Add(database_entity(DB_TermIsQABOrDb7702   , 1));
     z.Add(database_entity(DB_TermIsQABOrDb7702A  , 1));
     z.Add(database_entity(DB_GioIsQAB            , false));
