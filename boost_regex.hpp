@@ -33,10 +33,16 @@
 #   endif // 7 <= __GNUC__
 #   pragma GCC diagnostic ignored "-Wshadow"
 #endif // defined __GNUC__
+#if defined _MSC_VER
+#   pragma warning(push, 1)
+#endif
 #include <boost/regex.hpp>
 #if defined __GNUC__
 #   pragma GCC diagnostic pop
 #endif // defined __GNUC__
+#if defined _MSC_VER
+#   pragma warning(pop)
+#endif
 
 #endif // boost_regex_hpp
 
