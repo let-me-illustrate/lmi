@@ -488,7 +488,6 @@ format_map_t static_formats()
 // > Format as a number with thousand separators and no decimal places (#,###,###)
 // >
     ,{"Age"                             , f1}
-    ,{"AllowDbo3"                       , f1}
     ,{"AvgFund"                         , f1}
     ,{"ChildRiderAmount"                , f1}
     ,{"CustomFund"                      , f1}

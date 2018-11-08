@@ -264,7 +264,6 @@ void LedgerInvariant::Init(BasicValues const* b)
     HasHoneymoon            = b->yare_input_.HoneymoonEndorsement;
     PostHoneymoonSpread     = b->yare_input_.PostHoneymoonSpread;
     b->database().query_into(DB_SplitMinPrem       , SplitMinPrem);
-    b->database().query_into(DB_AllowDbo3          , AllowDbo3);
 
     // These are reassigned below based on product data if available.
     std::string dbo_name_option1 = mc_str(mce_option1);
