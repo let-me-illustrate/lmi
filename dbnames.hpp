@@ -338,9 +338,10 @@ enum e_database_key
         ,DB_MaxIssSpecAmt
         ,DB_MaxRenlSpecAmt
 
-        ,DB_AllowDbo1
-        ,DB_AllowDbo2
-        ,DB_AllowDbo3
+        ,DB_AllowDboLvl
+        ,DB_AllowDboInc
+        ,DB_AllowDboRop
+        ,DB_AllowDboMdb
         ,DB_AllowChangeToDbo2
         ,DB_DboChgCanIncrSpecAmt
         ,DB_DboChgCanDecrSpecAmt

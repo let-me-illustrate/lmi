@@ -206,9 +206,10 @@
 {DB_MinRenlBaseSpecAmt,DB_Topic_DeathBenefits,"MinRenlBaseSpecAmt","Minimum specified amount after issue for base policy only, ignoring any term rider",}, \
 {DB_MaxIssSpecAmt,DB_Topic_DeathBenefits,"MaxIssSpecAmt","Maximum specified amount allowed at issue [not yet implemented]",}, \
 {DB_MaxRenlSpecAmt,DB_Topic_DeathBenefits,"MaxRenlSpecAmt","Maximum specified amount after issue [not yet implemented]",}, \
-{DB_AllowDbo1,DB_Topic_DeathBenefits,"AllowDbo1","Allow level death benefit option: 0=no, 1=yes",}, \
-{DB_AllowDbo2,DB_Topic_DeathBenefits,"AllowDbo2","Allow increasing death benefit option: 0=no, 1=yes",}, \
-{DB_AllowDbo3,DB_Topic_DeathBenefits,"AllowDbo3","Allow return of premium death benefit option: 0=no, 1=yes",}, \
+{DB_AllowDboLvl,DB_Topic_DeathBenefits,"AllowDboLvl","Allow level death-benefit option: 0=no, 1=yes",}, \
+{DB_AllowDboInc,DB_Topic_DeathBenefits,"AllowDboInc","Allow increasing death-benefit option: 0=no, 1=yes",}, \
+{DB_AllowDboRop,DB_Topic_DeathBenefits,"AllowDboRop","Allow return-of-premium death-benefit option: 0=no, 1=yes",}, \
+{DB_AllowDboMdb,DB_Topic_DeathBenefits,"AllowDboMdb","Allow minimum-death-benefit death-benefit option: 0=no, 1=yes",}, \
 {DB_AllowChangeToDbo2,DB_Topic_DeathBenefits,"AllowChangeToDbo2","Allow change to increasing death benefit option: 0=no, 1=yes [obsolescent]",}, \
 {DB_DboChgCanIncrSpecAmt,DB_Topic_DeathBenefits,"DboChgCanIncrSpecAmt","Option changes can increase specified amount to preserve net amount at risk [obsolescent]",}, \
 {DB_DboChgCanDecrSpecAmt,DB_Topic_DeathBenefits,"DboChgCanDecrSpecAmt","Option changes can decrease specified amount to preserve net amount at risk [obsolescent]",}, \

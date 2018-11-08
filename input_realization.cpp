@@ -573,7 +573,7 @@ std::string Input::RealizeDeathBenefitOption()
         }
 
     if
-        (   !database_->query<bool>(DB_AllowDbo3)
+        (   !database_->query<bool>(DB_AllowDboRop)
         &&  contains(DeathBenefitOptionRealized_, mce_dbopt("ROP"))
         )
         {

@@ -270,9 +270,10 @@ void DBDictionary::ascribe_members()
     ascribe("MinRenlBaseSpecAmt"  , &DBDictionary::MinRenlBaseSpecAmt  );
     ascribe("MaxIssSpecAmt"       , &DBDictionary::MaxIssSpecAmt       );
     ascribe("MaxRenlSpecAmt"      , &DBDictionary::MaxRenlSpecAmt      );
-    ascribe("AllowDbo1"           , &DBDictionary::AllowDbo1           );
-    ascribe("AllowDbo2"           , &DBDictionary::AllowDbo2           );
-    ascribe("AllowDbo3"           , &DBDictionary::AllowDbo3           );
+    ascribe("AllowDboLvl"         , &DBDictionary::AllowDboLvl         );
+    ascribe("AllowDboInc"         , &DBDictionary::AllowDboInc         );
+    ascribe("AllowDboRop"         , &DBDictionary::AllowDboRop         );
+    ascribe("AllowDboMdb"         , &DBDictionary::AllowDboMdb         );
     ascribe("AllowChangeToDbo2"   , &DBDictionary::AllowChangeToDbo2   );
     ascribe("DboChgCanIncrSpecAmt", &DBDictionary::DboChgCanIncrSpecAmt);
     ascribe("DboChgCanDecrSpecAmt", &DBDictionary::DboChgCanDecrSpecAmt);
@@ -732,9 +733,10 @@ void DBDictionary::write_database_files()
     double T7702q[9] = {35, 41, 107,}; // Female, male, unisex.
     z.Add(database_entity(DB_Irc7702QTable, e_number_of_axes, dims311, T7702q));
 
-    z.Add(database_entity(DB_AllowDbo1           , true));
-    z.Add(database_entity(DB_AllowDbo2           , true));
-    z.Add(database_entity(DB_AllowDbo3           , true));
+    z.Add(database_entity(DB_AllowDboLvl         , true));
+    z.Add(database_entity(DB_AllowDboInc         , true));
+    z.Add(database_entity(DB_AllowDboRop         , true));
+    z.Add(database_entity(DB_AllowDboMdb         , true));
     z.Add(database_entity(DB_DboChgCanIncrSpecAmt, true));
     z.Add(database_entity(DB_DboChgCanDecrSpecAmt, true));
     z.Add(database_entity(DB_SnflQTable          , 0.0));
@@ -1055,7 +1057,7 @@ void DBDictionary::InitAntediluvian()
     Add(database_entity(DB_AllowWd               , true));
     Add(database_entity(DB_AllowFlatExtras       , true));
     Add(database_entity(DB_AllowChangeToDbo2     , true));
-    Add(database_entity(DB_AllowDbo3             , true));
+    Add(database_entity(DB_AllowDboRop           , true));
 
     Add(database_entity(DB_LedgerType            , mce_ill_reg));
 

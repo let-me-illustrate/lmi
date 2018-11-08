@@ -327,7 +327,7 @@ void Input::DoHarmonize()
     InforceCumulativeNoLapsePremium .enable(no_lapse_offered && mce_yes == InforceNoLapseActive);
     InforceCumulativeNoLapsePayments.enable(no_lapse_offered && mce_yes == InforceNoLapseActive);
 
-    InforceCumulativeRopPayments.enable(database_->query<bool>(DB_AllowDbo3));
+    InforceCumulativeRopPayments.enable(database_->query<bool>(DB_AllowDboRop));
 
     // It would be possible to enable 'InforceCumulativeSalesLoad' iff
     // 'DB_LoadRfdProportion' is nonzero in the inforce year. However,

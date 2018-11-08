@@ -254,9 +254,10 @@ class LMI_SO DBDictionary final
     database_entity MinRenlBaseSpecAmt  ;
     database_entity MaxIssSpecAmt       ;
     database_entity MaxRenlSpecAmt      ;
-    database_entity AllowDbo1           ;
-    database_entity AllowDbo2           ;
-    database_entity AllowDbo3           ;
+    database_entity AllowDboLvl         ;
+    database_entity AllowDboInc         ;
+    database_entity AllowDboRop         ;
+    database_entity AllowDboMdb         ;
     database_entity AllowChangeToDbo2   ;
     database_entity DboChgCanIncrSpecAmt;
     database_entity DboChgCanDecrSpecAmt;
