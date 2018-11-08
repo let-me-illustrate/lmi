@@ -2509,7 +2509,7 @@ void AccountValue::TxTakeWD()
             // I'm confused by
             //   specamt (after withdrawal) = min[specamt(before withdrawal);'face'(m)-W]
             // Do you really want 'face' here rather than specamt? --Yes
-            if(WDCanDecrSADBO1)
+            if(WdDecrSpecAmtDboLvl)
                 {
                 ChangeSpecAmtBy(-GrossWD);
                 // Min AV after WD not directly implemented.
@@ -2529,7 +2529,7 @@ void AccountValue::TxTakeWD()
             break;
         case mce_option2:
             {
-            if(WDCanDecrSADBO2)
+            if(WdDecrSpecAmtDboInc)
                 {
                 ChangeSpecAmtBy(-GrossWD);
                 }
@@ -2541,7 +2541,7 @@ void AccountValue::TxTakeWD()
             break;
         case mce_rop:
             {
-            if(WDCanDecrSADBO3)
+            if(WdDecrSpecAmtDboRop)
                 {
                 ChangeSpecAmtBy(-GrossWD);
                 }

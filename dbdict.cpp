@@ -324,9 +324,9 @@ void DBDictionary::ascribe_members()
     ascribe("MaxWdGenAcctValMult" , &DBDictionary::MaxWdGenAcctValMult );
     ascribe("MaxWdSepAcctValMult" , &DBDictionary::MaxWdSepAcctValMult );
     ascribe("MaxWdDed"            , &DBDictionary::MaxWdDed            );
-    ascribe("WdCanDecrSpecAmtDbo1", &DBDictionary::WdCanDecrSpecAmtDbo1);
-    ascribe("WdCanDecrSpecAmtDbo2", &DBDictionary::WdCanDecrSpecAmtDbo2);
-    ascribe("WdCanDecrSpecAmtDbo3", &DBDictionary::WdCanDecrSpecAmtDbo3);
+    ascribe("WdDecrSpecAmtDboLvl" , &DBDictionary::WdDecrSpecAmtDboLvl );
+    ascribe("WdDecrSpecAmtDboInc" , &DBDictionary::WdDecrSpecAmtDboInc );
+    ascribe("WdDecrSpecAmtDboRop" , &DBDictionary::WdDecrSpecAmtDboRop );
     ascribe("FirstWdMonth"        , &DBDictionary::FirstWdMonth        );
     ascribe("AllowLoan"           , &DBDictionary::AllowLoan           );
     ascribe("AllowPrefLoan"       , &DBDictionary::AllowPrefLoan       );
@@ -611,9 +611,9 @@ void DBDictionary::write_database_files()
     z.Add(database_entity(DB_MinWd               , 100.0));
     z.Add(database_entity(DB_WdFee               , 25.0));
     z.Add(database_entity(DB_WdFeeRate           , 0.02));
-    z.Add(database_entity(DB_WdCanDecrSpecAmtDbo1, true));
-    z.Add(database_entity(DB_WdCanDecrSpecAmtDbo2, true));
-    z.Add(database_entity(DB_WdCanDecrSpecAmtDbo3, true));
+    z.Add(database_entity(DB_WdDecrSpecAmtDboLvl , true));
+    z.Add(database_entity(DB_WdDecrSpecAmtDboInc , true));
+    z.Add(database_entity(DB_WdDecrSpecAmtDboRop , true));
     z.Add(database_entity(DB_FirstLoanMonth      , 0.0));
     z.Add(database_entity(DB_AllowPrefLoan       , false));
     z.Add(database_entity(DB_AllowFixedLoan      , true));

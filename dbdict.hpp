@@ -308,9 +308,9 @@ class LMI_SO DBDictionary final
     database_entity MaxWdGenAcctValMult ;
     database_entity MaxWdSepAcctValMult ;
     database_entity MaxWdDed            ;
-    database_entity WdCanDecrSpecAmtDbo1;
-    database_entity WdCanDecrSpecAmtDbo2;
-    database_entity WdCanDecrSpecAmtDbo3;
+    database_entity WdDecrSpecAmtDboLvl ;
+    database_entity WdDecrSpecAmtDboInc ;
+    database_entity WdDecrSpecAmtDboRop ;
     database_entity FirstWdMonth        ;
     database_entity AllowLoan           ;
     database_entity AllowPrefLoan       ;

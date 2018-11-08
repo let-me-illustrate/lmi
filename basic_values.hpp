@@ -303,9 +303,9 @@ class LMI_SO BasicValues
     bool                         NoLapseUnratedOnly;
     bool                         OptChgCanIncrSA;
     bool                         OptChgCanDecrSA;
-    bool                         WDCanDecrSADBO1;
-    bool                         WDCanDecrSADBO2;
-    bool                         WDCanDecrSADBO3;
+    bool                         WdDecrSpecAmtDboLvl;
+    bool                         WdDecrSpecAmtDboInc;
+    bool                         WdDecrSpecAmtDboRop;
     int                          MaxIncrAge;
     bool                         WaivePmTxInt1035;
     bool                         TermIsNotRider;

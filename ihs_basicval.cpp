@@ -614,9 +614,9 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_NoLapseUnratedOnly   , NoLapseUnratedOnly);
     database().query_into(DB_DboChgCanIncrSpecAmt , OptChgCanIncrSA);
     database().query_into(DB_DboChgCanDecrSpecAmt , OptChgCanDecrSA);
-    database().query_into(DB_WdCanDecrSpecAmtDbo1 , WDCanDecrSADBO1);
-    database().query_into(DB_WdCanDecrSpecAmtDbo2 , WDCanDecrSADBO2);
-    database().query_into(DB_WdCanDecrSpecAmtDbo3 , WDCanDecrSADBO3);
+    database().query_into(DB_WdDecrSpecAmtDboLvl  , WdDecrSpecAmtDboLvl);
+    database().query_into(DB_WdDecrSpecAmtDboInc  , WdDecrSpecAmtDboInc);
+    database().query_into(DB_WdDecrSpecAmtDboRop  , WdDecrSpecAmtDboRop);
     database().query_into(DB_MaxIncrAge           , MaxIncrAge);
     database().query_into(DB_WaivePremTaxInt1035  , WaivePmTxInt1035);
     database().query_into(DB_TermIsNotRider       , TermIsNotRider);

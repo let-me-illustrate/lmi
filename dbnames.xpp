@@ -262,9 +262,9 @@
 {DB_MaxWdGenAcctValMult,DB_Topic_Withdrawals,"MaxWdGenAcctValMult","Maximum withdrawal as proportion of general-account value, e.g. 1=100%",}, \
 {DB_MaxWdSepAcctValMult,DB_Topic_Withdrawals,"MaxWdSepAcctValMult","Maximum withdrawal as proportion of separate-account value, e.g. 1=100%",}, \
 {DB_MaxWdDed,DB_Topic_Withdrawals,"MaxWdDed","Monthiversary deductions reflected in maximum withdrawal: 0=12 times most recent, 1=to next anniversary, 2=to next modal premium due date, 3=18 times most recent",}, \
-{DB_WdCanDecrSpecAmtDbo1,DB_Topic_Withdrawals,"WdCanDecrSpecAmtDbo1","Withdrawals decrease specified amount for level death benefit option",}, \
-{DB_WdCanDecrSpecAmtDbo2,DB_Topic_Withdrawals,"WdCanDecrSpecAmtDbo2","Withdrawals decrease specified amount for increasing death benefit option",}, \
-{DB_WdCanDecrSpecAmtDbo3,DB_Topic_Withdrawals,"WdCanDecrSpecAmtDbo3","Withdrawals decrease specified amount for return of premium death benefit option",}, \
+{DB_WdDecrSpecAmtDboLvl,DB_Topic_Withdrawals,"WdDecrSpecAmtDboLvl","Withdrawals decrease specified amount for level death benefit option",}, \
+{DB_WdDecrSpecAmtDboInc,DB_Topic_Withdrawals,"WdDecrSpecAmtDboInc","Withdrawals decrease specified amount for increasing death benefit option",}, \
+{DB_WdDecrSpecAmtDboRop,DB_Topic_Withdrawals,"WdDecrSpecAmtDboRop","Withdrawals decrease specified amount for return of premium death benefit option",}, \
 {DB_FirstWdMonth,DB_Topic_Withdrawals,"FirstWdMonth","Number of months withdrawals not allowed [not supported yet]",}, \
 {DB_Topic_Loans,DB_FIRST,"Loans","Loan rates, spreads, options, and restrictions",}, \
 {DB_AllowLoan,DB_Topic_Loans,"AllowLoan","Allow loans: 0=no, 1=yes",}, \

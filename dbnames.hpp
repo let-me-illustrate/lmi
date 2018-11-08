@@ -405,9 +405,9 @@ enum e_database_key
         ,DB_MaxWdSepAcctValMult
         ,DB_MaxWdDed
 
-        ,DB_WdCanDecrSpecAmtDbo1
-        ,DB_WdCanDecrSpecAmtDbo2
-        ,DB_WdCanDecrSpecAmtDbo3
+        ,DB_WdDecrSpecAmtDboLvl
+        ,DB_WdDecrSpecAmtDboInc
+        ,DB_WdDecrSpecAmtDboRop
 
         ,DB_FirstWdMonth
 
