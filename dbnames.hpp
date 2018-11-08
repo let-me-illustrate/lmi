@@ -169,7 +169,7 @@ enum e_database_key
         ,DB_CvatMatChangeDefn
         ,DB_GptMatChangeDefn
         ,DB_Irc7702BftIsSpecAmt
-        ,DB_Initial7702BftIsDb
+        ,DB_RiskyInitial7702Db
         ,DB_Irc7702Endowment
         ,DB_Effective7702DboRop
 

@@ -149,7 +149,7 @@ void DBDictionary::ascribe_members()
     ascribe("CvatMatChangeDefn"   , &DBDictionary::CvatMatChangeDefn   );
     ascribe("GptMatChangeDefn"    , &DBDictionary::GptMatChangeDefn    );
     ascribe("Irc7702BftIsSpecAmt" , &DBDictionary::Irc7702BftIsSpecAmt );
-    ascribe("Initial7702BftIsDb"  , &DBDictionary::Initial7702BftIsDb  );
+    ascribe("RiskyInitial7702Db"  , &DBDictionary::RiskyInitial7702Db  );
     ascribe("Irc7702Endowment"    , &DBDictionary::Irc7702Endowment    );
     ascribe("Effective7702DboRop" , &DBDictionary::Effective7702DboRop );
     ascribe("TermIsQABOrDb7702"   , &DBDictionary::TermIsQABOrDb7702   );
@@ -922,7 +922,7 @@ void DBDictionary::write_database_files()
     z.Add(database_entity(DB_CvatMatChangeDefn   , mce_earlier_of_increase_or_unnecessary_premium));
     z.Add(database_entity(DB_GptMatChangeDefn    , 0));
     z.Add(database_entity(DB_Irc7702BftIsSpecAmt , 0));
-    z.Add(database_entity(DB_Initial7702BftIsDb  , false));
+    z.Add(database_entity(DB_RiskyInitial7702Db  , false));
     z.Add(database_entity(DB_Irc7702Endowment    , 0));
     z.Add(database_entity(DB_Effective7702DboRop , 0));
     z.Add(database_entity(DB_TermIsQABOrDb7702   , 1));
