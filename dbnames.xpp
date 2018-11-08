@@ -209,9 +209,9 @@
 {DB_AllowDbo1,DB_Topic_DeathBenefits,"AllowDbo1","Allow level death benefit option: 0=no, 1=yes",}, \
 {DB_AllowDbo2,DB_Topic_DeathBenefits,"AllowDbo2","Allow increasing death benefit option: 0=no, 1=yes",}, \
 {DB_AllowDbo3,DB_Topic_DeathBenefits,"AllowDbo3","Allow return of premium death benefit option: 0=no, 1=yes",}, \
-{DB_AllowChangeToDbo2,DB_Topic_DeathBenefits,"AllowChangeToDbo2","Allow change to increasing death benefit option: 0=no, 1=yes",}, \
-{DB_DboChgCanIncrSpecAmt,DB_Topic_DeathBenefits,"DboChgCanIncrSpecAmt","Option changes can increase specified amount to preserve net amount at risk",}, \
-{DB_DboChgCanDecrSpecAmt,DB_Topic_DeathBenefits,"DboChgCanDecrSpecAmt","Option changes can decrease specified amount to preserve net amount at risk",}, \
+{DB_AllowChangeToDbo2,DB_Topic_DeathBenefits,"AllowChangeToDbo2","Allow change to increasing death benefit option: 0=no, 1=yes [obsolescent]",}, \
+{DB_DboChgCanIncrSpecAmt,DB_Topic_DeathBenefits,"DboChgCanIncrSpecAmt","Option changes can increase specified amount to preserve net amount at risk [obsolescent]",}, \
+{DB_DboChgCanDecrSpecAmt,DB_Topic_DeathBenefits,"DboChgCanDecrSpecAmt","Option changes can decrease specified amount to preserve net amount at risk [obsolescent]",}, \
 {DB_AllowExtEndt,DB_Topic_DeathBenefits,"AllowExtEndt","Allow coverage beyond normal maturity ('extended endowment'): 0=no, 1=yes [not yet implemented]",}, \
 {DB_Topic_Riders,DB_FIRST,"Riders","Riders and other additional benefits",}, \
 {DB_AllowTerm,DB_Topic_Riders,"AllowTerm","Allow term: 0=no, 1=yes",}, \
