@@ -210,6 +210,14 @@
 {DB_AllowDboInc,DB_Topic_DeathBenefits,"AllowDboInc","Allow increasing death-benefit option: 0=no, 1=yes",}, \
 {DB_AllowDboRop,DB_Topic_DeathBenefits,"AllowDboRop","Allow return-of-premium death-benefit option: 0=no, 1=yes",}, \
 {DB_AllowDboMdb,DB_Topic_DeathBenefits,"AllowDboMdb","Allow minimum-death-benefit death-benefit option: 0=no, 1=yes",}, \
+{DB_DboLvlChangeToWhat,DB_Topic_DeathBenefits,"DboLvlChangeToWhat","DBO change from level: new DBOs allowed [bitfield--not yet implemented]",}, \
+{DB_DboLvlChangeMethod,DB_Topic_DeathBenefits,"DboLvlChangeMethod","DBO change from level: preserves NAAR or specamt [bitfield--not yet implemented]",}, \
+{DB_DboIncChangeToWhat,DB_Topic_DeathBenefits,"DboIncChangeToWhat","DBO change from level: new DBOs allowed [bitfield--not yet implemented]",}, \
+{DB_DboIncChangeMethod,DB_Topic_DeathBenefits,"DboIncChangeMethod","DBO change from level: preserves NAAR or specamt [bitfield--not yet implemented]",}, \
+{DB_DboRopChangeToWhat,DB_Topic_DeathBenefits,"DboRopChangeToWhat","DBO change from level: new DBOs allowed [bitfield--not yet implemented]",}, \
+{DB_DboRopChangeMethod,DB_Topic_DeathBenefits,"DboRopChangeMethod","DBO change from level: preserves NAAR or specamt [bitfield--not yet implemented]",}, \
+{DB_DboMdbChangeToWhat,DB_Topic_DeathBenefits,"DboMdbChangeToWhat","DBO change from level: new DBOs allowed [bitfield--not yet implemented]",}, \
+{DB_DboMdbChangeMethod,DB_Topic_DeathBenefits,"DboMdbChangeMethod","DBO change from level: preserves NAAR or specamt [bitfield--not yet implemented]",}, \
 {DB_AllowChangeToDbo2,DB_Topic_DeathBenefits,"AllowChangeToDbo2","Allow change to increasing death benefit option: 0=no, 1=yes [obsolescent]",}, \
 {DB_DboChgCanIncrSpecAmt,DB_Topic_DeathBenefits,"DboChgCanIncrSpecAmt","Option changes can increase specified amount to preserve net amount at risk [obsolescent]",}, \
 {DB_DboChgCanDecrSpecAmt,DB_Topic_DeathBenefits,"DboChgCanDecrSpecAmt","Option changes can decrease specified amount to preserve net amount at risk [obsolescent]",}, \

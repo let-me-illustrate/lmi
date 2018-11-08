@@ -342,6 +342,16 @@ enum e_database_key
         ,DB_AllowDboInc
         ,DB_AllowDboRop
         ,DB_AllowDboMdb
+
+        ,DB_DboLvlChangeToWhat
+        ,DB_DboLvlChangeMethod
+        ,DB_DboIncChangeToWhat
+        ,DB_DboIncChangeMethod
+        ,DB_DboRopChangeToWhat
+        ,DB_DboRopChangeMethod
+        ,DB_DboMdbChangeToWhat
+        ,DB_DboMdbChangeMethod
+
         ,DB_AllowChangeToDbo2
         ,DB_DboChgCanIncrSpecAmt
         ,DB_DboChgCanDecrSpecAmt

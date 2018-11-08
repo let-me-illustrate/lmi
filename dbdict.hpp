@@ -258,6 +258,14 @@ class LMI_SO DBDictionary final
     database_entity AllowDboInc         ;
     database_entity AllowDboRop         ;
     database_entity AllowDboMdb         ;
+    database_entity DboLvlChangeToWhat  ;
+    database_entity DboLvlChangeMethod  ;
+    database_entity DboIncChangeToWhat  ;
+    database_entity DboIncChangeMethod  ;
+    database_entity DboRopChangeToWhat  ;
+    database_entity DboRopChangeMethod  ;
+    database_entity DboMdbChangeToWhat  ;
+    database_entity DboMdbChangeMethod  ;
     database_entity AllowChangeToDbo2   ;
     database_entity DboChgCanIncrSpecAmt;
     database_entity DboChgCanDecrSpecAmt;
