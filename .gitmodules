@@ -1,6 +1,6 @@
 [submodule "3rdparty/wxWidgets"]
 	path = 3rdparty/wxWidgets
-	url = https://github.com/wxWidgets/wxWidgets.git
+	url = https://github.com/vadz/wxWidgets.git
 [submodule "3rdparty/wxpdfdoc"]
 	path = 3rdparty/wxpdfdoc
 	url = https://github.com/vadz/wxpdfdoc.git
