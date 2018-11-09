@@ -34,12 +34,6 @@ enum oenum_alb_or_anb
     ,oe_age_nearest_birthday_ties_older
     };
 
-enum oenum_h_align
-    {oe_left
-    ,oe_center
-    ,oe_right
-    };
-
 enum oenum_allocation_method
     {oe_input_allocation
     ,oe_override_allocation
@@ -63,6 +57,12 @@ enum oenum_format_style
 enum oenum_glp_or_gsp
     {oe_glp
     ,oe_gsp
+    };
+
+enum oenum_h_align
+    {oe_left
+    ,oe_center
+    ,oe_right
     };
 
 enum oenum_increment_account_preference
