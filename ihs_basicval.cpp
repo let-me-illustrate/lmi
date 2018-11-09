@@ -761,8 +761,8 @@ void BasicValues::SetPermanentInvariants()
         DefnMaterialChange_ = (mce_gpt == DefnLifeIns_) ? mce_adjustment_event : z;
         }
     database().query_into(DB_Effective7702DboRop, Effective7702DboRop);
-    TermIsDbFor7702     = 1.0 == database().Query(DB_TermIsQABOrDb7702 );
-    TermIsDbFor7702A    = 1.0 == database().Query(DB_TermIsQABOrDb7702A);
+    TermIsDbFor7702     = oe_7702_term_is_db == database().query<oenum_7702_term>(DB_TermIsQABOrDb7702 );
+    TermIsDbFor7702A    = oe_7702_term_is_db == database().query<oenum_7702_term>(DB_TermIsQABOrDb7702A);
     MaxNAAR             = yare_input_.MaximumNaar;
 
     database().query_into(DB_MinPremIntSpread, MinPremIntSpread_);

@@ -941,8 +941,8 @@ void DBDictionary::write_database_files()
     z.Add(database_entity(DB_RiskyInitial7702Db  , false));
     z.Add(database_entity(DB_Irc7702Endowment    , 0));
     z.Add(database_entity(DB_Effective7702DboRop , 0));
-    z.Add(database_entity(DB_TermIsQABOrDb7702   , 1));
-    z.Add(database_entity(DB_TermIsQABOrDb7702A  , 1));
+    z.Add(database_entity(DB_TermIsQABOrDb7702   , oe_7702_term_is_db));
+    z.Add(database_entity(DB_TermIsQABOrDb7702A  , oe_7702_term_is_db));
     z.Add(database_entity(DB_GioIsQAB            , false));
     z.Add(database_entity(DB_AdbIsQAB            , false));
     z.Add(database_entity(DB_SpouseRiderIsQAB    , false));

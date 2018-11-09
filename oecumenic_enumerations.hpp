@@ -115,6 +115,12 @@ enum oenum_smoking_or_tobacco
     ,oe_tobacco_nontobacco
     };
 
+enum oenum_7702_term
+    {oe_7702_term_is_ignored
+    ,oe_7702_term_is_db
+    ,oe_7702_term_is_qab
+    };
+
 enum oenum_visibility
     {oe_shown
     ,oe_hidden
