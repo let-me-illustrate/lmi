@@ -2028,7 +2028,11 @@ std::vector<double> BasicValues::GetSevenPayRates() const
         (product().datum("SevenPayFilename")
         ,DB_SevenPayTable
     // TAXATION !! No table available if 7PP calculated from first principles.
-//        ,1 == database().Query(DB_SevenPayWhence)
+//        ,1 == database().query<bool>(DB_SevenPayWhence)
+// TAXATION !! DATABASE !! Rename 'SevenPayWhence' to 'SevenPayIsTabular',
+// e.g.: the only possibilities are
+//   0=first principles, 1=table
+// so it's naturally boolean.
         );
 }
 
