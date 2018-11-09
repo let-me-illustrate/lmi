@@ -1210,7 +1210,7 @@ void AccountValue::TxAscertainDesiredPayment()
             ;
         }
 
-    if(0 == Year && ee_pay_this_month && 1 == database().Query(DB_MinInitPremType))
+    if(0 == Year && ee_pay_this_month && 1 == database().query<int>(DB_MinInitPremType))
         {
         double z = ModalMinInitPremShortfall();
         // Illustration-reg guaranteed premium ignores GPT limit.

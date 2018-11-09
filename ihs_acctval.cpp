@@ -1012,7 +1012,7 @@ double AccountValue::MinInitDumpin() const
 {
     if
         (  0 == Year
-        && 1 == database().Query(DB_MinInitPremType)
+        && 1 == database().query<int>(DB_MinInitPremType)
         && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
         )
         {
@@ -1029,7 +1029,7 @@ double AccountValue::MinInitPrem() const
 {
     if
         (  0 == Year
-        && 1 == database().Query(DB_MinInitPremType)
+        && 1 == database().query<int>(DB_MinInitPremType)
         && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
         )
         {
@@ -1074,7 +1074,7 @@ double AccountValue::ModalMinInitPremShortfall() const
 {
     if
         (  0 == Year
-        && 1 == database().Query(DB_MinInitPremType)
+        && 1 == database().query<int>(DB_MinInitPremType)
         && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
         )
         {
