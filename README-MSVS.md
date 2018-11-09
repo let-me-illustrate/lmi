@@ -4,17 +4,28 @@ README file for building lmi with MSVS
 0. Requirements
 ---------------
 
-Only MSVS 2017 has support for C++17, previous versions do _not_ work.
-
-Make sure to clone the repository with submodules, i.e.
+- Libraries in the submodules, i.e. clone the repository using
 
     $ git clone --recurse-submodules -b tt https://github.com/vadz/lmi.git
+
+- Compiler: MSVS 2017, which supports C++17, previous versions do _not_ work.
+
+- Bakefile 0.x from https://github.com/vadz/xmlwrapp/ is required to generate
+  the project files for xmlwrapp.
+
+- libxml2 currently must be installed system-wide, i.e. its headers and
+  libraries must be found by MSVS.
 
 
 1. Building
 -----------
 
-Just building the entire solution should work.
+Start by doing
+
+    $ cd 3rdparty/xmlwrapp
+    $ bkl -t vs2017 platform/Win32/xmlwrapp.bkl
+
+Then open `lmi.sln` solution and build it.
 
 
 2. Running

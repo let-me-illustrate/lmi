@@ -54,6 +54,7 @@
   <ImportGroup Label="PropertySheets">
     <Import Project="3rdparty\wxWidgets\wxwidgets.props" />
     <Import Project="wxpdfdoc.props" />
+    <Import Project="xmlwrapp.props" />
     <Import Project="3rdparty\boost\boost.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'" Label="PropertySheets">
@@ -107,7 +108,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>wxcode_msw31u_pdfdoc.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;xmlwrapp.lib;libxml2.lib;xsltwrapp.lib;libexslt.lib;libxslt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wxcode_msw31u_pdfdoc.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>Release\ledger_pdf_generator_wx_test.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>Release\ledger_pdf_generator_wx_test.pdb</ProgramDatabaseFile>
@@ -143,7 +144,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>wxcode_msw31ud_pdfdoc.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;xmlwrappd.lib;libxml2.lib;xsltwrappd.lib;libexslt.lib;libxslt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wxcode_msw31ud_pdfdoc.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>Debug\ledger_pdf_generator_wx_test.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>

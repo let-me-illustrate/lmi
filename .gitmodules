@@ -4,3 +4,6 @@
 [submodule "3rdparty/wxpdfdoc"]
 	path = 3rdparty/wxpdfdoc
 	url = https://github.com/vadz/wxpdfdoc.git
+[submodule "3rdparty/xmlwrapp"]
+	path = 3rdparty/xmlwrapp
+	url = https://github.com/vadz/xmlwrapp.git
