@@ -129,7 +129,7 @@ void product_database::query_into(e_database_key k, std::vector<double>& dst) co
 /// Return a double because it is convertible to the most common
 /// arithmetic types.
 
-double product_database::Query(e_database_key k, database_index const& i) const
+double product_database::query(e_database_key k, database_index const& i) const
 {
     database_entity const& v = entity_from_key(k);
     LMI_ASSERT(1 == v.extent());

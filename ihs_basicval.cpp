@@ -1579,7 +1579,7 @@ std::vector<double> BasicValues::GetUnblendedTable
     return GetActuarialTable
         (TableFile
         ,TableID
-        ,bourn_cast<int>(database().Query(TableID, index))
+        ,bourn_cast<int>(database().query(TableID, index))
         );
 }
 

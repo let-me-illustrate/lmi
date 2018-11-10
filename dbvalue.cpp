@@ -117,7 +117,7 @@ database_entity::database_entity
 ///       ,stat
 ///       );
 ///   BOOST_TEST_THROW
-///       (db.Query(DB_MaturityAge)
+///       (db.query(DB_MaturityAge)
 ///       ,std::runtime_error
 ///       ,"Assertion '1 == v.extent()' failed."
 ///       );
@@ -243,7 +243,7 @@ void database_entity::reshape(std::vector<int> const& new_dims)
 /// Two indexing operators are provided. This one's argument includes
 /// the number of durations--which, as far as the product editor is
 /// concerned, is much like the other axes. However, for illustration
-/// production, product_database::Query() handles the last (duration)
+/// production, product_database::query() handles the last (duration)
 /// axis, replicating the last value as needed to extend to maturity.
 
 double& database_entity::operator[](std::vector<int> const& index)

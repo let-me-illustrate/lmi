@@ -51,8 +51,7 @@ std::vector<double> BasicValues::GetGuarSpecAmtLoadTable() const {return dummy_v
 product_database::product_database(int length) :length_(length) {}
 int product_database::length() const {return length_;}
 void product_database::query_into(e_database_key, std::vector<double>& v) const {v.resize(length_);}
-double product_database::Query(e_database_key) const {return 0.0;}
-double product_database::Query(e_database_key, database_index const&) const {return 0.0;}
+double product_database::query(e_database_key, database_index const&) const {return 0.0;}
 
 #include "premium_tax.hpp"
 double premium_tax::levy_rate        () const {return 0.0;}

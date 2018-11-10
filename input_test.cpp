@@ -243,7 +243,7 @@ void input_test::test_product_database()
     // Force the product to mature at 98.
     db.maturity_age_ = 98;
     index.issue_age(98);
-    db.Query(DB_MaturityAge, index); // Accepted because maturity age is scalar.
+    db.query(DB_MaturityAge, index); // Accepted because maturity age is scalar.
     BOOST_TEST_THROW
         (db.query_into(DB_SnflQ, v, index)
         ,std::runtime_error

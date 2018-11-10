@@ -125,11 +125,11 @@ premium_tax::premium_tax
     if(!amortize_premium_load_)
         {
         database_index index0 = db.index().state(tax_state_);
-        tax_state_levy_rate    = db.Query(DB_PremTaxRate, index0);
-        tax_state_load_rate_   = db.Query(DB_PremTaxLoad, index0);
+        tax_state_levy_rate    = db.query(DB_PremTaxRate, index0);
+        tax_state_load_rate_   = db.query(DB_PremTaxLoad, index0);
         database_index index1 = db.index().state(domicile_);
-        domiciliary_levy_rate  = db.Query(DB_PremTaxRate, index1);
-        domiciliary_load_rate_ = db.Query(DB_PremTaxLoad, index1);
+        domiciliary_levy_rate  = db.query(DB_PremTaxRate, index1);
+        domiciliary_load_rate_ = db.query(DB_PremTaxLoad, index1);
         }
 
     if(is_retaliatory_)
@@ -175,7 +175,7 @@ premium_tax::premium_tax
     ,ytd_load_in_domicile_   {0.0}
 {
     database_index index = db.index().state(tax_state_);
-    levy_rate_ = db.Query(DB_PremTaxRate, index);
+    levy_rate_ = db.query(DB_PremTaxRate, index);
 }
 
 /// Test consistency of premium-tax loads.
