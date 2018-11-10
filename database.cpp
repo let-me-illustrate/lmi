@@ -136,15 +136,6 @@ double product_database::Query(e_database_key k, database_index const& i) const
     return *v[i];
 }
 
-/// Query database, using default index; return a scalar.
-///
-/// Throw if the database entity is not scalar.
-
-double product_database::Query(e_database_key k) const
-{
-    return Query(k, index_);
-}
-
 /// Ascertain whether two database entities are equivalent.
 ///
 /// Equivalence here means that the dimensions and data are identical.

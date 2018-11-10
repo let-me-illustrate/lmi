@@ -74,7 +74,6 @@ class LMI_SO product_database final
     void query_into(e_database_key, std::vector<double>&) const;
 
     double Query(e_database_key, database_index const&) const;
-    double Query(e_database_key) const;
 
     template<typename T>
     T query(e_database_key) const;
