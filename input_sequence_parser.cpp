@@ -50,6 +50,9 @@ SequenceParser::SequenceParser
     ,allowed_keywords_              {a_allowed_keywords}
     ,keywords_only_                 {a_keywords_only}
 {
+    // Suppress clang '-Wunused-private-field' warnings:
+    stifle_warning_for_unused_value(inforce_duration_);
+    stifle_warning_for_unused_value(effective_year_);
     sequence();
     diagnostic_messages_ = diagnostics_.str();
 }
