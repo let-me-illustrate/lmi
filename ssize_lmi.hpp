@@ -36,6 +36,12 @@
 ///   numeric_limits<std::make_signed_t<std::size_t>>::max()
 /// . Throws, or fails to compile, if violated.
 ///
+/// Type lmi::ssize_t is simply 'int'. An earlier version had used
+///   using ssize_t = std::make_signed_t<std::size_t>;
+/// but that is 'long int' for LP64:
+///   https://lists.nongnu.org/archive/html/lmi/2018-11/msg00006.html
+/// whereas 'int' is preferred as explained below.
+///
 /// Motivation: to avoid error-prone mixing of signed and unsigned.
 ///
 ///   https://github.com/ericniebler/stl2/issues/182
@@ -85,7 +91,7 @@
 
 namespace lmi
 {
-using ssize_t = std::make_signed_t<std::size_t>;
+using ssize_t = int;
 
 template<typename Container>
 constexpr ssize_t ssize(Container const& c)
