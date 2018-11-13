@@ -610,7 +610,6 @@ test_calendar_date_SOURCES = \
   $(common_test_objects) \
   calendar_date.cpp \
   calendar_date_test.cpp \
-  facets.cpp \
   null_stream.cpp \
   timer.cpp
 test_calendar_date_CXXFLAGS = $(AM_CXXFLAGS)
@@ -691,7 +690,6 @@ test_file_command_CXXFLAGS = $(AM_CXXFLAGS)
 test_financial_SOURCES = \
   $(common_test_objects) \
   calendar_date.cpp \
-  facets.cpp \
   financial.cpp \
   financial_test.cpp \
   null_stream.cpp \
@@ -897,7 +895,6 @@ test_mortality_rates_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_name_value_pairs_SOURCES = \
   $(common_test_objects) \
-  facets.cpp \
   miscellany.cpp \
   name_value_pairs.cpp \
   name_value_pairs_test.cpp
@@ -960,7 +957,6 @@ test_premium_tax_LDADD = \
 
 test_print_matrix_SOURCES = \
   $(common_test_objects) \
-  facets.cpp \
   miscellany.cpp \
   print_matrix_test.cpp
 test_print_matrix_CXXFLAGS = $(AM_CXXFLAGS)
@@ -1129,7 +1125,6 @@ test_wx_new_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_xml_serialize_SOURCES = \
   $(common_test_objects) \
-  facets.cpp \
   miscellany.cpp \
   timer.cpp \
   xml_lmi.cpp \
@@ -1140,7 +1135,6 @@ test_xml_serialize_LDADD = \
 
 test_zero_SOURCES = \
   $(common_test_objects) \
-  facets.cpp \
   null_stream.cpp \
   zero_test.cpp
 test_zero_CXXFLAGS = $(AM_CXXFLAGS)

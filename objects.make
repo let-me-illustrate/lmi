@@ -545,7 +545,6 @@ calendar_date_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
   calendar_date_test.o \
-  facets.o \
   null_stream.o \
   timer.o \
 
@@ -614,7 +613,6 @@ file_command_test$(EXEEXT): \
 financial_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
-  facets.o \
   financial.o \
   financial_test.o \
   null_stream.o \
@@ -797,7 +795,6 @@ mortality_rates_test$(EXEEXT): \
 name_value_pairs_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
-  facets.o \
   miscellany.o \
   name_value_pairs.o \
   name_value_pairs_test.o \
@@ -851,7 +848,6 @@ premium_tax_test$(EXEEXT): \
 
 print_matrix_test$(EXEEXT): \
   $(common_test_objects) \
-  facets.o \
   miscellany.o \
   print_matrix_test.o \
 
@@ -995,7 +991,6 @@ wx_new_test$(EXEEXT): \
 xml_serialize_test$(EXEEXT): \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
-  facets.o \
   miscellany.o \
   timer.o \
   xml_lmi.o \
@@ -1003,7 +998,6 @@ xml_serialize_test$(EXEEXT): \
 
 zero_test$(EXEEXT): \
   $(common_test_objects) \
-  facets.o \
   null_stream.o \
   zero_test.o \
 
