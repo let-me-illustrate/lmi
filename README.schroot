@@ -158,6 +158,12 @@ export LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
 # sourced by schroot, which strives to set as few environment
 # variables as possible.
 
+# This ought to be unnecessary because $LANG contains the string
+# "UTF-8"--see:
+#   https://lists.nongnu.org/archive/html/lmi/2018-03/msg00049.html
+# but it seems to be necessary nevertheless.
+export LESSCHARSET=utf-8
+
 # bindkey "\e[3~" delete-char      # Del
 # bindkey '\e[H' beginning-of-line # Home
 # bindkey '\e[F' end-of-line       # End
