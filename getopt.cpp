@@ -733,7 +733,7 @@ GetOpt::operator()()
 #if defined __GNUC__ && !defined __clang__
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wuseless-cast"
-#endif // defined __GNUC__
+#endif // defined __GNUC__ && !defined __clang__
     // i686-w64-mingw32-g++-7.3 flags this cast as "useless", but
     // that seems to be a defect: the first argument is const, so
     // the return value is also const. Perhaps the presence of C99's
@@ -742,7 +742,7 @@ GetOpt::operator()()
     char* temp = const_cast<char*>(std::strchr(noptstring.c_str(), c));
 #if defined __GNUC__ && !defined __clang__
 #   pragma GCC diagnostic pop
-#endif // defined __GNUC__
+#endif // defined __GNUC__ && !defined __clang__
 
     // Increment 'optind' when we start to process its last character.
     if(*nextchar == 0)
