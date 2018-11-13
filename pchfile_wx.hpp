@@ -41,7 +41,7 @@
 #   pragma GCC diagnostic ignored "-Wformat-nonliteral"
 #   pragma GCC diagnostic ignored "-Wsign-conversion"
 #   pragma GCC diagnostic ignored "-Wuseless-cast"
-#endif // defined __GNUC__
+#endif // defined __GNUC__ && !defined __clang__
 
 #if defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
 
