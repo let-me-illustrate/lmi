@@ -62,7 +62,7 @@
 ///
 /// and the compiler should emit a diagnostic if an array with more
 /// than SCHAR_MAX elements is passed. Because the standard does not
-/// specify this precisely, it seems best to use type std::size_t for
+/// specify this precisely, it seems best to use a deduced type for
 /// array-bound template parameters and convert their values to the
 /// desired return type using a facility such as bourn_cast or a
 /// braced-init-list that ensures value preservation.
@@ -92,7 +92,8 @@
 /// might specify std::size_t for the non-type parameter, especially
 /// in light of the [temp.deduct.type] quote above, but it seems even
 /// better to use auto, again as in f0g(), and to specify the return
-/// type of lmi::ssize() as the signed analogue of std::size_t.
+/// type of lmi::ssize() as lmi::ssize_t (which is the signed analogue
+/// of std::size_t for 32-bit architectures, but not for LP64, e.g.).
 
 namespace experimental
 {

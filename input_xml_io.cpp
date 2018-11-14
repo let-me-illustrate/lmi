@@ -518,7 +518,7 @@ void Input::redintegrate_ex_post
                     ;
                 }
 
-            switch(static_cast<int>(db.Query(DB_PremTaxState)))
+            switch(db.query<int>(DB_PremTaxState))
                 {
                 case oe_ee_state:
                     {
@@ -676,7 +676,7 @@ void Input::redintegrate_ex_post
         RealizeSpecifiedAmount();
         InforceSpecAmtLoadBase = std::min
             (TermRiderAmount.value() + SpecifiedAmountRealized_[0].value()
-            ,db.Query(DB_SpecAmtLoadLimit)
+            ,db.query<double>(DB_SpecAmtLoadLimit)
             );
         }
 

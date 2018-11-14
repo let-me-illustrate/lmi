@@ -849,7 +849,7 @@ void AccountValue::TxOptionChange()
         return;
         }
 
-    if(NoLapseActive &&  mce_option1 != YearsDBOpt &&  NoLapseOpt1Only)
+    if(NoLapseActive && mce_option1 != YearsDBOpt && NoLapseDboLvlOnly)
         {
         NoLapseActive = false;
         }
@@ -1060,8 +1060,8 @@ void AccountValue::TxTestGPT()
     // If there is an adjustable event, then DB (not specamt) is used
     // in calculating the adjustment.
     //
-    mcenum_dbopt_7702 const new_dbopt(effective_dbopt_7702(YearsDBOpt, Equiv7702DBO3));
-    mcenum_dbopt_7702 const old_dbopt(effective_dbopt_7702(OldDBOpt  , Equiv7702DBO3));
+    mcenum_dbopt_7702 const new_dbopt(effective_dbopt_7702(YearsDBOpt, Effective7702DboRop));
+    mcenum_dbopt_7702 const old_dbopt(effective_dbopt_7702(OldDBOpt  , Effective7702DboRop));
     // TAXATION !! This may require revision if DB is treated as the 7702 benefit.
     // TAXATION !! This assumes the term rider can be treated as death benefit;
     // use 'TermIsDbFor7702'.
@@ -1210,7 +1210,7 @@ void AccountValue::TxAscertainDesiredPayment()
             ;
         }
 
-    if(0 == Year && ee_pay_this_month && 1 == database().Query(DB_MinInitPremType))
+    if(0 == Year && ee_pay_this_month && 1 == database().query<int>(DB_MinInitPremType))
         {
         double z = ModalMinInitPremShortfall();
         // Illustration-reg guaranteed premium ignores GPT limit.
@@ -1975,11 +1975,11 @@ void AccountValue::TxTakeSepAcctLoad()
             (GenBasis_
             ,AssetsPostBom
             ,CumPmtsPostBom
-            ,database().Query(DB_DynSepAcctLoadLimit)
+            ,database().query<double>(DB_DynSepAcctLoadLimit)
             );
 
         double tiered_comp = 0.0;
-        if(oe_asset_charge_load == database().Query(DB_AssetChargeType))
+        if(oe_asset_charge_load == database().query<oenum_asset_charge_type>(DB_AssetChargeType))
             {
             tiered_comp = StratifiedCharges_->tiered_asset_based_compensation(AssetsPostBom);
             }
@@ -2059,7 +2059,7 @@ void AccountValue::ApplyDynamicMandE(double assets)
             ;
         }
     double asset_comp_rate =
-        (oe_asset_charge_spread == database().Query(DB_AssetChargeType))
+        (oe_asset_charge_spread == database().query<oenum_asset_charge_type>(DB_AssetChargeType))
             ? StratifiedCharges_->tiered_asset_based_compensation(assets)
             : 0.0
             ;
@@ -2509,7 +2509,7 @@ void AccountValue::TxTakeWD()
             // I'm confused by
             //   specamt (after withdrawal) = min[specamt(before withdrawal);'face'(m)-W]
             // Do you really want 'face' here rather than specamt? --Yes
-            if(WDCanDecrSADBO1)
+            if(WdDecrSpecAmtDboLvl)
                 {
                 ChangeSpecAmtBy(-GrossWD);
                 // Min AV after WD not directly implemented.
@@ -2529,7 +2529,7 @@ void AccountValue::TxTakeWD()
             break;
         case mce_option2:
             {
-            if(WDCanDecrSADBO2)
+            if(WdDecrSpecAmtDboInc)
                 {
                 ChangeSpecAmtBy(-GrossWD);
                 }
@@ -2541,7 +2541,7 @@ void AccountValue::TxTakeWD()
             break;
         case mce_rop:
             {
-            if(WDCanDecrSADBO3)
+            if(WdDecrSpecAmtDboRop)
                 {
                 ChangeSpecAmtBy(-GrossWD);
                 }

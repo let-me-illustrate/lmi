@@ -703,6 +703,7 @@ void PrintRosterHeaders(std::string const& file_name)
         ,"ErMode"
         ,"CorpName"
         ,"EffDate"
+        ,"LastCoiReentryDate"
         ,"InforceAsOfDate"
         ,"PremiumTaxState"
         ,"StateOfJurisdiction"
@@ -787,6 +788,7 @@ void PrintRosterTabDelimited
         << Invar.ErMode                           [d] << '\t'
         << Invar.value_str("CorpName"               ) << '\t'
         << "'" << Invar.EffDate                       << "'\t"
+        << "'" << Invar.LastCoiReentryDate            << "'\t"
         << "'" << Invar.InforceAsOfDate               << "'\t"
         << Invar.value_str("PremiumTaxState"        ) << '\t'
         << Invar.value_str("StatePostalAbbrev"      ) << '\t'

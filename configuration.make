@@ -33,15 +33,11 @@ endif
 
 ifeq (MINGW,$(findstring MINGW,$(uname)))
   platform-makefile := msw_msys.make
-else
-  ifeq (CYGWIN,$(findstring CYGWIN,$(uname)))
-    platform-makefile := msw_cygwin.make
-  else
-    ifeq (,$(uname))
-      uname := msw_generic
-      platform-makefile := msw_generic.make
-    endif
-  endif
+else ifeq (CYGWIN,$(findstring CYGWIN,$(uname)))
+  platform-makefile := msw_cygwin.make
+else ifeq (,$(uname))
+  uname := msw_generic
+  platform-makefile := msw_generic.make
 endif
 
 include $(srcdir)/$(platform-makefile)

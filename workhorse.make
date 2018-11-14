@@ -688,13 +688,11 @@ test_targets := unit_tests cgi_tests cli_tests
 ifeq (gprof,$(findstring gprof,$(build_type)))
   optimization_flag := -O0 -fno-omit-frame-pointer
   gprof_flag := -pg
+else ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
+  optimization_flag := -O0 -fno-omit-frame-pointer
+  libstdcxx_warning_macros := $(every_libstdcxx_warning_macro)
 else
-  ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
-    optimization_flag := -O0 -fno-omit-frame-pointer
-    libstdcxx_warning_macros := $(every_libstdcxx_warning_macro)
-  else
-    optimization_flag := -O2 -fno-omit-frame-pointer
-  endif
+  optimization_flag := -O2 -fno-omit-frame-pointer
 endif
 
 # An overriding version of 'my_prod.cpp', which is used to create a

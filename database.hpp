@@ -73,8 +73,7 @@ class LMI_SO product_database final
         ) const;
     void query_into(e_database_key, std::vector<double>&) const;
 
-    double Query(e_database_key, database_index const&) const;
-    double Query(e_database_key) const;
+    double query(e_database_key, database_index const&) const;
 
     template<typename T>
     T query(e_database_key) const;
@@ -111,7 +110,7 @@ class LMI_SO product_database final
 template<typename T>
 T product_database::query(e_database_key k) const
 {
-    double d = Query(k, index_);
+    double d = query(k, index_);
     if constexpr(std::is_enum_v<T>)
         {
         return static_cast<T>(bourn_cast<std::underlying_type_t<T>>(d));

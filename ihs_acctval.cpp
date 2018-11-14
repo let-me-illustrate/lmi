@@ -448,7 +448,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     Irc7702_->Initialize7702
         (sa
         ,sa
-        ,effective_dbopt_7702(InvariantValues().DBOpt[0].value(), Equiv7702DBO3)
+        ,effective_dbopt_7702(InvariantValues().DBOpt[0].value(), Effective7702DboRop)
         ,annual_target_premium
         );
 
@@ -588,7 +588,7 @@ void AccountValue::SetInitialValues()
     SepAcctPaymentAllocation = premium_allocation_to_sepacct(yare_input_);
     GenAcctPaymentAllocation = 1.0 - SepAcctPaymentAllocation;
 
-    if(!database().Query(DB_AllowGenAcct) && 0.0 != GenAcctPaymentAllocation)
+    if(!database().query<bool>(DB_AllowGenAcct) && 0.0 != GenAcctPaymentAllocation)
         {
         alarum()
             << "No general account is allowed for this product, but "
@@ -598,7 +598,7 @@ void AccountValue::SetInitialValues()
             ;
         }
 
-    if(!database().Query(DB_AllowSepAcct) && 0.0 != SepAcctPaymentAllocation)
+    if(!database().query<bool>(DB_AllowSepAcct) && 0.0 != SepAcctPaymentAllocation)
         {
         alarum()
             << "No separate account is allowed for this product, but "
@@ -632,7 +632,7 @@ void AccountValue::SetInitialValues()
     loan_ullage_       .assign(BasicValues::GetLength(), 0.0);
     withdrawal_ullage_ .assign(BasicValues::GetLength(), 0.0);
     NoLapseActive               = true;
-    if(NoLapseOpt1Only && mce_option1 != DeathBfts_->dbopt()[0])
+    if(NoLapseDboLvlOnly && mce_option1 != DeathBfts_->dbopt()[0])
         {
         NoLapseActive           = false;
         }
@@ -641,10 +641,10 @@ void AccountValue::SetInitialValues()
         NoLapseActive           = false;
         }
 
-    SplitMinPrem                = database().Query(DB_SplitMinPrem);
-    UnsplitSplitMinPrem         = database().Query(DB_UnsplitSplitMinPrem);
+    database().query_into(DB_SplitMinPrem       , SplitMinPrem);
+    database().query_into(DB_UnsplitSplitMinPrem, UnsplitSplitMinPrem);
 
-    TermCanLapse                = database().Query(DB_TermCanLapse);
+    database().query_into(DB_TermCanLapse       , TermCanLapse);
     TermRiderActive             = true;
     TermDB                      = 0.0;
 
@@ -690,9 +690,9 @@ void AccountValue::SetInitialValues()
     MlyDed                      = 0.0;
     CumulativeSalesLoad         = yare_input_.InforceCumulativeSalesLoad;
 
-    CoiRetentionRate                  = database().Query(DB_ExpRatCoiRetention);
-    ExperienceRatingAmortizationYears = database().Query(DB_ExpRatAmortPeriod);
-    IbnrAsMonthsOfMortalityCharges    = database().Query(DB_ExpRatIbnrMult);
+    database().query_into(DB_ExpRatCoiRetention, CoiRetentionRate);
+    database().query_into(DB_ExpRatAmortPeriod , ExperienceRatingAmortizationYears);
+    database().query_into(DB_ExpRatIbnrMult    , IbnrAsMonthsOfMortalityCharges);
 
     Dumpin             = Outlay_->dumpin();
     External1035Amount = Outlay_->external_1035_amount();
@@ -716,7 +716,7 @@ void AccountValue::SetInitialValues()
         ||   oe_prefer_separate_account == distribution_preferred_account
         )
         {
-        LMI_ASSERT(database().Query(DB_AllowSepAcct));
+        LMI_ASSERT(database().query<bool>(DB_AllowSepAcct));
         }
     // If any account preference for premium is the general account,
     // then payment into the separate account must be permitted; but
@@ -727,7 +727,7 @@ void AccountValue::SetInitialValues()
         ||   oe_prefer_separate_account == er_premium_preferred_account
         )
         {
-        LMI_ASSERT(database().Query(DB_AllowSepAcct));
+        LMI_ASSERT(database().query<bool>(DB_AllowSepAcct));
         }
 }
 
@@ -1012,7 +1012,7 @@ double AccountValue::MinInitDumpin() const
 {
     if
         (  0 == Year
-        && 1 == database().Query(DB_MinInitPremType)
+        && 1 == database().query<int>(DB_MinInitPremType)
         && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
         )
         {
@@ -1029,7 +1029,7 @@ double AccountValue::MinInitPrem() const
 {
     if
         (  0 == Year
-        && 1 == database().Query(DB_MinInitPremType)
+        && 1 == database().query<int>(DB_MinInitPremType)
         && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
         )
         {
@@ -1074,7 +1074,7 @@ double AccountValue::ModalMinInitPremShortfall() const
 {
     if
         (  0 == Year
-        && 1 == database().Query(DB_MinInitPremType)
+        && 1 == database().query<int>(DB_MinInitPremType)
         && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
         )
         {

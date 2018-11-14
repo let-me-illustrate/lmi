@@ -291,7 +291,7 @@ class LMI_SO BasicValues
     double                       MaxSurvivalDur;
     mcenum_defn_life_ins         DefnLifeIns_;
     mcenum_defn_material_change  DefnMaterialChange_;
-    mcenum_dbopt_7702            Equiv7702DBO3;
+    mcenum_dbopt_7702            Effective7702DboRop;
     double                       MaxNAAR;
     int                          EndtAge;
     double                       MinSpecAmt; // Antediluvian.
@@ -299,13 +299,13 @@ class LMI_SO BasicValues
     double                       MinIssBaseSpecAmt;
     double                       MinRenlSpecAmt;
     double                       MinRenlBaseSpecAmt;
-    bool                         NoLapseOpt1Only;
+    bool                         NoLapseDboLvlOnly;
     bool                         NoLapseUnratedOnly;
     bool                         OptChgCanIncrSA;
     bool                         OptChgCanDecrSA;
-    bool                         WDCanDecrSADBO1;
-    bool                         WDCanDecrSADBO2;
-    bool                         WDCanDecrSADBO3;
+    bool                         WdDecrSpecAmtDboLvl;
+    bool                         WdDecrSpecAmtDboInc;
+    bool                         WdDecrSpecAmtDboRop;
     int                          MaxIncrAge;
     bool                         WaivePmTxInt1035;
     bool                         TermIsNotRider;

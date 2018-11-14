@@ -169,9 +169,9 @@ enum e_database_key
         ,DB_CvatMatChangeDefn
         ,DB_GptMatChangeDefn
         ,DB_Irc7702BftIsSpecAmt
-        ,DB_Initial7702BftIsDb
+        ,DB_RiskyInitial7702Db
         ,DB_Irc7702Endowment
-        ,DB_Equiv7702Dbo3
+        ,DB_Effective7702DboRop
 
         ,DB_TermIsQABOrDb7702
         ,DB_TermIsQABOrDb7702A
@@ -338,9 +338,20 @@ enum e_database_key
         ,DB_MaxIssSpecAmt
         ,DB_MaxRenlSpecAmt
 
-        ,DB_AllowDbo1
-        ,DB_AllowDbo2
-        ,DB_AllowDbo3
+        ,DB_AllowDboLvl
+        ,DB_AllowDboInc
+        ,DB_AllowDboRop
+        ,DB_AllowDboMdb
+
+        ,DB_DboLvlChangeToWhat
+        ,DB_DboLvlChangeMethod
+        ,DB_DboIncChangeToWhat
+        ,DB_DboIncChangeMethod
+        ,DB_DboRopChangeToWhat
+        ,DB_DboRopChangeMethod
+        ,DB_DboMdbChangeToWhat
+        ,DB_DboMdbChangeMethod
+
         ,DB_AllowChangeToDbo2
         ,DB_DboChgCanIncrSpecAmt
         ,DB_DboChgCanDecrSpecAmt
@@ -404,9 +415,9 @@ enum e_database_key
         ,DB_MaxWdSepAcctValMult
         ,DB_MaxWdDed
 
-        ,DB_WdCanDecrSpecAmtDbo1
-        ,DB_WdCanDecrSpecAmtDbo2
-        ,DB_WdCanDecrSpecAmtDbo3
+        ,DB_WdDecrSpecAmtDboLvl
+        ,DB_WdDecrSpecAmtDboInc
+        ,DB_WdDecrSpecAmtDboRop
 
         ,DB_FirstWdMonth
 
@@ -451,7 +462,7 @@ enum e_database_key
         ,DB_NoLapseMinDur
         ,DB_NoLapseMinAge
         ,DB_NoLapseUnratedOnly
-        ,DB_NoLapseDbo1Only
+        ,DB_NoLapseDboLvlOnly
         ,DB_NoLapseAlwaysActive
 
         ,DB_AllowHoneymoon

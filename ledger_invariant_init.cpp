@@ -92,7 +92,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         {
         TermSpecAmt     .assign(Length, b->yare_input_.TermRiderAmount);
         }
-    else if(b->database().Query(DB_TermIsNotRider))
+    else if(b->database().query<bool>(DB_TermIsNotRider))
         {
         TermSpecAmt      = b->DeathBfts_->supplamt();
         if(!each_equal(TermSpecAmt, 0.0))
@@ -204,10 +204,10 @@ void LedgerInvariant::Init(BasicValues const* b)
             )
         ;
 
-    NoLapseAlwaysActive     = b->database().Query(DB_NoLapseAlwaysActive);
-    NoLapseMinDur           = b->database().Query(DB_NoLapseMinDur);
-    NoLapseMinAge           = b->database().Query(DB_NoLapseMinAge);
-    Has1035ExchCharge       = b->database().Query(DB_Has1035ExchCharge);
+    b->database().query_into(DB_NoLapseAlwaysActive, NoLapseAlwaysActive);
+    b->database().query_into(DB_NoLapseMinDur      , NoLapseMinDur);
+    b->database().query_into(DB_NoLapseMinAge      , NoLapseMinAge);
+    b->database().query_into(DB_Has1035ExchCharge  , Has1035ExchCharge);
 
     // SOMEDAY !! Things indexed with '[0]' should probably use inforce year instead.
     InitBaseSpecAmt         = b->DeathBfts_->specamt()[0];
@@ -248,7 +248,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     Age                     = b->yare_input_.IssueAge;
     RetAge                  = b->yare_input_.RetirementAge;
     EndtAge                 = b->yare_input_.IssueAge + b->GetLength();
-    GroupIndivSelection     = b->database().Query(DB_GroupIndivSelection);
+    b->database().query_into(DB_GroupIndivSelection, GroupIndivSelection);
     UseExperienceRating     = b->yare_input_.UseExperienceRating;
     UsePartialMort          = b->yare_input_.UsePartialMortality;
     AvgFund                 = b->yare_input_.UseAverageOfAllFunds;
@@ -263,8 +263,7 @@ void LedgerInvariant::Init(BasicValues const* b)
 
     HasHoneymoon            = b->yare_input_.HoneymoonEndorsement;
     PostHoneymoonSpread     = b->yare_input_.PostHoneymoonSpread;
-    SplitMinPrem            = b->database().Query(DB_SplitMinPrem);
-    AllowDbo3               = b->database().Query(DB_AllowDbo3);
+    b->database().query_into(DB_SplitMinPrem       , SplitMinPrem);
 
     // These are reassigned below based on product data if available.
     std::string dbo_name_option1 = mc_str(mce_option1);
@@ -280,7 +279,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         // DATABASE !! It would be much better, of course, to let all
         // strings in class product_data vary across the same axes as
         // database_entity objects.
-        bool alt_form = b->database().Query(DB_UsePolicyFormAlt);
+        bool alt_form = b->database().query<bool>(DB_UsePolicyFormAlt);
         dbo_name_option1               = p.datum("DboNameLevel"                   );
         dbo_name_option2               = p.datum("DboNameIncreasing"              );
         dbo_name_rop                   = p.datum("DboNameReturnOfPremium"         );
@@ -462,14 +461,16 @@ void LedgerInvariant::Init(BasicValues const* b)
     UWClass                 = mc_str(b->yare_input_.UnderwritingClass);
     SubstandardTable        = mc_str(b->yare_input_.SubstandardTable);
 
-    EffDate                 = calendar_date(b->yare_input_.EffectiveDate  ).str();
-    EffDateJdn              = calendar_date(b->yare_input_.EffectiveDate  ).julian_day_number();
-    DateOfBirth             = calendar_date(b->yare_input_.DateOfBirth    ).str();
-    DateOfBirthJdn          = calendar_date(b->yare_input_.DateOfBirth    ).julian_day_number();
-    ListBillDate            = calendar_date(b->yare_input_.ListBillDate   ).str();
-    ListBillDateJdn         = calendar_date(b->yare_input_.ListBillDate   ).julian_day_number();
-    InforceAsOfDate         = calendar_date(b->yare_input_.InforceAsOfDate).str();
-    InforceAsOfDateJdn      = calendar_date(b->yare_input_.InforceAsOfDate).julian_day_number();
+    EffDate                 = calendar_date(b->yare_input_.EffectiveDate     ).str();
+    EffDateJdn              = calendar_date(b->yare_input_.EffectiveDate     ).julian_day_number();
+    DateOfBirth             = calendar_date(b->yare_input_.DateOfBirth       ).str();
+    DateOfBirthJdn          = calendar_date(b->yare_input_.DateOfBirth       ).julian_day_number();
+    LastCoiReentryDate      = calendar_date(b->yare_input_.LastCoiReentryDate).str();
+    LastCoiReentryDateJdn   = calendar_date(b->yare_input_.LastCoiReentryDate).julian_day_number();
+    ListBillDate            = calendar_date(b->yare_input_.ListBillDate      ).str();
+    ListBillDateJdn         = calendar_date(b->yare_input_.ListBillDate      ).julian_day_number();
+    InforceAsOfDate         = calendar_date(b->yare_input_.InforceAsOfDate   ).str();
+    InforceAsOfDateJdn      = calendar_date(b->yare_input_.InforceAsOfDate   ).julian_day_number();
     InitErMode              = mc_str(b->Outlay_->er_premium_modes()[0]);
 
     mcenum_dbopt const init_dbo = b->DeathBfts_->dbopt()[0];

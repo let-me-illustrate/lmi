@@ -112,7 +112,7 @@ std::vector<int> const& LMI_SO maximum_database_dimensions();
 /*
 Some data are scalar by nature--for example, DB_MaturityAge.
 Someday we might add a flag here to express that constraint; until then,
-it's enforced passim by using a scalar-only Query() function.
+it's enforced passim by using a scalar-only query() function.
 
 Database items might include:
     attained age as an optional alternative to issue age

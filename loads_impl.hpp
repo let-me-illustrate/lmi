@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+#include "oecumenic_enumerations.hpp"
 #include "round_to.hpp"
 
 #include <vector>
@@ -89,7 +90,7 @@ struct load_details
         ,double                     premium_tax_rate
         ,double                     premium_tax_amortization_rate
         ,double                     premium_tax_amortization_period
-        ,double                     asset_charge_type
+        ,oenum_asset_charge_type    asset_charge_type
         ,bool                       NeedMidpointRates
         ,round_to<double>    const& round_interest_rate
         ,std::vector<double> const& VectorExtraCompLoad
@@ -124,7 +125,7 @@ struct load_details
     double                     premium_tax_rate_;
     double                     premium_tax_amortization_rate_;
     double                     premium_tax_amortization_period_;
-    double                     asset_charge_type_;
+    oenum_asset_charge_type    asset_charge_type_;
     bool                       NeedMidpointRates_;
     round_to<double>    const& round_interest_rate_;
     std::vector<double> const& VectorExtraCompLoad_;

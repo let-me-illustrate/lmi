@@ -34,12 +34,6 @@ enum oenum_alb_or_anb
     ,oe_age_nearest_birthday_ties_older
     };
 
-enum oenum_h_align
-    {oe_left
-    ,oe_center
-    ,oe_right
-    };
-
 enum oenum_allocation_method
     {oe_input_allocation
     ,oe_override_allocation
@@ -63,6 +57,12 @@ enum oenum_format_style
 enum oenum_glp_or_gsp
     {oe_glp
     ,oe_gsp
+    };
+
+enum oenum_h_align
+    {oe_left
+    ,oe_center
+    ,oe_right
     };
 
 enum oenum_increment_account_preference
@@ -113,6 +113,12 @@ enum oenum_render_or_only_measure
 enum oenum_smoking_or_tobacco
     {oe_smoker_nonsmoker
     ,oe_tobacco_nontobacco
+    };
+
+enum oenum_7702_term
+    {oe_7702_term_is_ignored
+    ,oe_7702_term_is_db
+    ,oe_7702_term_is_qab
     };
 
 enum oenum_visibility

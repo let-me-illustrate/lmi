@@ -129,20 +129,11 @@ void product_database::query_into(e_database_key k, std::vector<double>& dst) co
 /// Return a double because it is convertible to the most common
 /// arithmetic types.
 
-double product_database::Query(e_database_key k, database_index const& i) const
+double product_database::query(e_database_key k, database_index const& i) const
 {
     database_entity const& v = entity_from_key(k);
     LMI_ASSERT(1 == v.extent());
     return *v[i];
-}
-
-/// Query database, using default index; return a scalar.
-///
-/// Throw if the database entity is not scalar.
-
-double product_database::Query(e_database_key k) const
-{
-    return Query(k, index_);
 }
 
 /// Ascertain whether two database entities are equivalent.
@@ -206,7 +197,7 @@ void product_database::initialize(std::string const& product_name)
         LMI_ASSERT(!filename.empty());
         db_ = DBDictionary::read_via_cache(AddDataDir(filename));
         }
-    maturity_age_ = static_cast<int>(Query(DB_MaturityAge));
+    query_into(DB_MaturityAge, maturity_age_);
     length_ = maturity_age_ - index_.index_vector()[e_axis_issue_age];
     LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }

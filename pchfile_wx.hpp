@@ -34,14 +34,14 @@
 // Even if precompiled headers are not really being used, use this header to
 // disable some warnings which are enabled for the rest of lmi code but have to
 // be disabled for the code using wxWidgets as they occur in wxWidgets headers.
-#if defined __GNUC__
+#if defined __GNUC__ && !defined __clang__
 #   pragma GCC diagnostic ignored "-Wcast-qual"
 //  only 'strvararg.h:1048:19':
 #   pragma GCC diagnostic ignored "-Wdouble-promotion"
 #   pragma GCC diagnostic ignored "-Wformat-nonliteral"
 #   pragma GCC diagnostic ignored "-Wsign-conversion"
 #   pragma GCC diagnostic ignored "-Wuseless-cast"
-#endif // defined __GNUC__
+#endif // defined __GNUC__ && !defined __clang__
 
 #if defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
 

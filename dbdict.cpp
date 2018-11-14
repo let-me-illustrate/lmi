@@ -149,9 +149,9 @@ void DBDictionary::ascribe_members()
     ascribe("CvatMatChangeDefn"   , &DBDictionary::CvatMatChangeDefn   );
     ascribe("GptMatChangeDefn"    , &DBDictionary::GptMatChangeDefn    );
     ascribe("Irc7702BftIsSpecAmt" , &DBDictionary::Irc7702BftIsSpecAmt );
-    ascribe("Initial7702BftIsDb"  , &DBDictionary::Initial7702BftIsDb  );
+    ascribe("RiskyInitial7702Db"  , &DBDictionary::RiskyInitial7702Db  );
     ascribe("Irc7702Endowment"    , &DBDictionary::Irc7702Endowment    );
-    ascribe("Equiv7702Dbo3"       , &DBDictionary::Equiv7702Dbo3       );
+    ascribe("Effective7702DboRop" , &DBDictionary::Effective7702DboRop );
     ascribe("TermIsQABOrDb7702"   , &DBDictionary::TermIsQABOrDb7702   );
     ascribe("TermIsQABOrDb7702A"  , &DBDictionary::TermIsQABOrDb7702A  );
     ascribe("GioIsQAB"            , &DBDictionary::GioIsQAB            );
@@ -270,9 +270,18 @@ void DBDictionary::ascribe_members()
     ascribe("MinRenlBaseSpecAmt"  , &DBDictionary::MinRenlBaseSpecAmt  );
     ascribe("MaxIssSpecAmt"       , &DBDictionary::MaxIssSpecAmt       );
     ascribe("MaxRenlSpecAmt"      , &DBDictionary::MaxRenlSpecAmt      );
-    ascribe("AllowDbo1"           , &DBDictionary::AllowDbo1           );
-    ascribe("AllowDbo2"           , &DBDictionary::AllowDbo2           );
-    ascribe("AllowDbo3"           , &DBDictionary::AllowDbo3           );
+    ascribe("AllowDboLvl"         , &DBDictionary::AllowDboLvl         );
+    ascribe("AllowDboInc"         , &DBDictionary::AllowDboInc         );
+    ascribe("AllowDboRop"         , &DBDictionary::AllowDboRop         );
+    ascribe("AllowDboMdb"         , &DBDictionary::AllowDboMdb         );
+    ascribe("DboLvlChangeToWhat"  , &DBDictionary::DboLvlChangeToWhat  );
+    ascribe("DboLvlChangeMethod"  , &DBDictionary::DboLvlChangeMethod  );
+    ascribe("DboIncChangeToWhat"  , &DBDictionary::DboIncChangeToWhat  );
+    ascribe("DboIncChangeMethod"  , &DBDictionary::DboIncChangeMethod  );
+    ascribe("DboRopChangeToWhat"  , &DBDictionary::DboRopChangeToWhat  );
+    ascribe("DboRopChangeMethod"  , &DBDictionary::DboRopChangeMethod  );
+    ascribe("DboMdbChangeToWhat"  , &DBDictionary::DboMdbChangeToWhat  );
+    ascribe("DboMdbChangeMethod"  , &DBDictionary::DboMdbChangeMethod  );
     ascribe("AllowChangeToDbo2"   , &DBDictionary::AllowChangeToDbo2   );
     ascribe("DboChgCanIncrSpecAmt", &DBDictionary::DboChgCanIncrSpecAmt);
     ascribe("DboChgCanDecrSpecAmt", &DBDictionary::DboChgCanDecrSpecAmt);
@@ -323,9 +332,9 @@ void DBDictionary::ascribe_members()
     ascribe("MaxWdGenAcctValMult" , &DBDictionary::MaxWdGenAcctValMult );
     ascribe("MaxWdSepAcctValMult" , &DBDictionary::MaxWdSepAcctValMult );
     ascribe("MaxWdDed"            , &DBDictionary::MaxWdDed            );
-    ascribe("WdCanDecrSpecAmtDbo1", &DBDictionary::WdCanDecrSpecAmtDbo1);
-    ascribe("WdCanDecrSpecAmtDbo2", &DBDictionary::WdCanDecrSpecAmtDbo2);
-    ascribe("WdCanDecrSpecAmtDbo3", &DBDictionary::WdCanDecrSpecAmtDbo3);
+    ascribe("WdDecrSpecAmtDboLvl" , &DBDictionary::WdDecrSpecAmtDboLvl );
+    ascribe("WdDecrSpecAmtDboInc" , &DBDictionary::WdDecrSpecAmtDboInc );
+    ascribe("WdDecrSpecAmtDboRop" , &DBDictionary::WdDecrSpecAmtDboRop );
     ascribe("FirstWdMonth"        , &DBDictionary::FirstWdMonth        );
     ascribe("AllowLoan"           , &DBDictionary::AllowLoan           );
     ascribe("AllowPrefLoan"       , &DBDictionary::AllowPrefLoan       );
@@ -356,7 +365,7 @@ void DBDictionary::ascribe_members()
     ascribe("NoLapseMinDur"       , &DBDictionary::NoLapseMinDur       );
     ascribe("NoLapseMinAge"       , &DBDictionary::NoLapseMinAge       );
     ascribe("NoLapseUnratedOnly"  , &DBDictionary::NoLapseUnratedOnly  );
-    ascribe("NoLapseDbo1Only"     , &DBDictionary::NoLapseDbo1Only     );
+    ascribe("NoLapseDboLvlOnly"   , &DBDictionary::NoLapseDboLvlOnly   );
     ascribe("NoLapseAlwaysActive" , &DBDictionary::NoLapseAlwaysActive );
     ascribe("AllowHoneymoon"      , &DBDictionary::AllowHoneymoon      );
     ascribe("DeductionMethod"     , &DBDictionary::DeductionMethod     );
@@ -513,12 +522,12 @@ void DBDictionary::InitDB()
         }
 
     // It would be dangerous to set these to zero.
-    Add(database_entity(DB_MinInputCoiMult     , 1.0));
-    Add(database_entity(DB_CurrCoiMultiplier   , 1.0));
-    Add(database_entity(DB_GuarCoiMultiplier   , 1.0));
-    Add(database_entity(DB_SubstdTableMult     , 1.0));
-    Add(database_entity(DB_MaxWdGenAcctValMult , 1.0));
-    Add(database_entity(DB_MaxWdSepAcctValMult , 1.0));
+    Add(database_entity(DB_MinInputCoiMult       , 1.0));
+    Add(database_entity(DB_CurrCoiMultiplier     , 1.0));
+    Add(database_entity(DB_GuarCoiMultiplier     , 1.0));
+    Add(database_entity(DB_SubstdTableMult       , 1.0));
+    Add(database_entity(DB_MaxWdGenAcctValMult   , 1.0));
+    Add(database_entity(DB_MaxWdSepAcctValMult   , 1.0));
 
     // This is determined by law and regulation, and should be the
     // same for all life-insurance products.
@@ -533,13 +542,13 @@ void DBDictionary::InitDB()
         );
 
     // These are the same as class date_trammel's nominal limits.
-    Add(database_entity(DB_CoiResetMinDate     , gregorian_epoch().julian_day_number()));
-    Add(database_entity(DB_CoiResetMaxDate     , last_yyyy_date ().julian_day_number()));
+    Add(database_entity(DB_CoiResetMinDate       , gregorian_epoch().julian_day_number()));
+    Add(database_entity(DB_CoiResetMaxDate       , last_yyyy_date ().julian_day_number()));
 
     // Usually the maximum is a reciprocal, e.g., 1/11 or 1/12; for
     // greatest precision, store the reciprocal of that reciprocal,
     // e.g., 11 or 12.
-    Add(database_entity(DB_MaxMonthlyCoiRate   , 12.0));
+    Add(database_entity(DB_MaxMonthlyCoiRate     , 12.0));
 
     // This must not be zero in TX, which specifically requires a
     // "guaranteed" rate of not more than fifteen percent--see:
@@ -554,27 +563,27 @@ void DBDictionary::InitDB()
     max_vlr[mce_s_TX] = 0.15;
     Add(database_entity(DB_MaxVlrRate, max_vlr_dimensions, max_vlr));
 
-    Add(database_entity(DB_FirstPrefLoanYear   , 100));
+    Add(database_entity(DB_FirstPrefLoanYear     , 100));
 
-    Add(database_entity(DB_GuarIntSpread       , dbl_inf));
+    Add(database_entity(DB_GuarIntSpread         , dbl_inf));
 
-    Add(database_entity(DB_CurrCoiTable0Limit  , dbl_inf));
-    Add(database_entity(DB_CurrCoiTable1       , 999));
-    Add(database_entity(DB_CurrCoiTable1Limit  , dbl_inf));
-    Add(database_entity(DB_CurrCoiTable2       , 999));
+    Add(database_entity(DB_CurrCoiTable0Limit    , dbl_inf));
+    Add(database_entity(DB_CurrCoiTable1         , 999));
+    Add(database_entity(DB_CurrCoiTable1Limit    , dbl_inf));
+    Add(database_entity(DB_CurrCoiTable2         , 999));
 
-    Add(database_entity(DB_SpecAmtLoadLimit    , dbl_inf));
-    Add(database_entity(DB_DynSepAcctLoadLimit , dbl_inf));
-    Add(database_entity(DB_PremTaxRetalLimit   , dbl_inf));
-    Add(database_entity(DB_WpLimit             , dbl_inf));
-    Add(database_entity(DB_AdbLimit            , dbl_inf));
-    Add(database_entity(DB_ExpSpecAmtLimit     , dbl_inf));
+    Add(database_entity(DB_SpecAmtLoadLimit      , dbl_inf));
+    Add(database_entity(DB_DynSepAcctLoadLimit   , dbl_inf));
+    Add(database_entity(DB_PremTaxRetalLimit     , dbl_inf));
+    Add(database_entity(DB_WpLimit               , dbl_inf));
+    Add(database_entity(DB_AdbLimit              , dbl_inf));
+    Add(database_entity(DB_ExpSpecAmtLimit       , dbl_inf));
 
     // These are the same as the nominal limits of the associated
     // members of class Input.
-    Add(database_entity(DB_SpouseRiderMaxAmt   , bignum));
-    Add(database_entity(DB_SpouseRiderMaxIssAge, 99));
-    Add(database_entity(DB_ChildRiderMaxAmt    , bignum));
+    Add(database_entity(DB_SpouseRiderMaxAmt     , bignum));
+    Add(database_entity(DB_SpouseRiderMaxIssAge  , 99));
+    Add(database_entity(DB_ChildRiderMaxAmt      , bignum));
 }
 
 void DBDictionary::write_database_files()
@@ -610,9 +619,9 @@ void DBDictionary::write_database_files()
     z.Add(database_entity(DB_MinWd               , 100.0));
     z.Add(database_entity(DB_WdFee               , 25.0));
     z.Add(database_entity(DB_WdFeeRate           , 0.02));
-    z.Add(database_entity(DB_WdCanDecrSpecAmtDbo1, true));
-    z.Add(database_entity(DB_WdCanDecrSpecAmtDbo2, true));
-    z.Add(database_entity(DB_WdCanDecrSpecAmtDbo3, true));
+    z.Add(database_entity(DB_WdDecrSpecAmtDboLvl , true));
+    z.Add(database_entity(DB_WdDecrSpecAmtDboInc , true));
+    z.Add(database_entity(DB_WdDecrSpecAmtDboRop , true));
     z.Add(database_entity(DB_FirstLoanMonth      , 0.0));
     z.Add(database_entity(DB_AllowPrefLoan       , false));
     z.Add(database_entity(DB_AllowFixedLoan      , true));
@@ -732,9 +741,18 @@ void DBDictionary::write_database_files()
     double T7702q[9] = {35, 41, 107,}; // Female, male, unisex.
     z.Add(database_entity(DB_Irc7702QTable, e_number_of_axes, dims311, T7702q));
 
-    z.Add(database_entity(DB_AllowDbo1           , true));
-    z.Add(database_entity(DB_AllowDbo2           , true));
-    z.Add(database_entity(DB_AllowDbo3           , true));
+    z.Add(database_entity(DB_AllowDboLvl         , true));
+    z.Add(database_entity(DB_AllowDboInc         , true));
+    z.Add(database_entity(DB_AllowDboRop         , true));
+    z.Add(database_entity(DB_AllowDboMdb         , true));
+    z.Add(database_entity(DB_DboLvlChangeToWhat  , 0b1111));
+    z.Add(database_entity(DB_DboLvlChangeMethod  , 0b1111));
+    z.Add(database_entity(DB_DboIncChangeToWhat  , 0b1111));
+    z.Add(database_entity(DB_DboIncChangeMethod  , 0b1111));
+    z.Add(database_entity(DB_DboRopChangeToWhat  , 0b1111));
+    z.Add(database_entity(DB_DboRopChangeMethod  , 0b1111));
+    z.Add(database_entity(DB_DboMdbChangeToWhat  , 0b1111));
+    z.Add(database_entity(DB_DboMdbChangeMethod  , 0b1111));
     z.Add(database_entity(DB_DboChgCanIncrSpecAmt, true));
     z.Add(database_entity(DB_DboChgCanDecrSpecAmt, true));
     z.Add(database_entity(DB_SnflQTable          , 0.0));
@@ -778,7 +796,7 @@ void DBDictionary::write_database_files()
     z.Add(database_entity(DB_NoLapseMinDur       , 0.0));
     z.Add(database_entity(DB_NoLapseMinAge       , 0.0));
     z.Add(database_entity(DB_NoLapseUnratedOnly  , false));
-    z.Add(database_entity(DB_NoLapseDbo1Only     , false));
+    z.Add(database_entity(DB_NoLapseDboLvlOnly   , false));
     z.Add(database_entity(DB_LoadRfdProportion   , 0.0));
 
     // uw_class, smoker
@@ -920,11 +938,11 @@ void DBDictionary::write_database_files()
     z.Add(database_entity(DB_CvatMatChangeDefn   , mce_earlier_of_increase_or_unnecessary_premium));
     z.Add(database_entity(DB_GptMatChangeDefn    , 0));
     z.Add(database_entity(DB_Irc7702BftIsSpecAmt , 0));
-    z.Add(database_entity(DB_Initial7702BftIsDb  , false));
+    z.Add(database_entity(DB_RiskyInitial7702Db  , false));
     z.Add(database_entity(DB_Irc7702Endowment    , 0));
-    z.Add(database_entity(DB_Equiv7702Dbo3       , 0));
-    z.Add(database_entity(DB_TermIsQABOrDb7702   , 1));
-    z.Add(database_entity(DB_TermIsQABOrDb7702A  , 1));
+    z.Add(database_entity(DB_Effective7702DboRop , 0));
+    z.Add(database_entity(DB_TermIsQABOrDb7702   , oe_7702_term_is_db));
+    z.Add(database_entity(DB_TermIsQABOrDb7702A  , oe_7702_term_is_db));
     z.Add(database_entity(DB_GioIsQAB            , false));
     z.Add(database_entity(DB_AdbIsQAB            , false));
     z.Add(database_entity(DB_SpouseRiderIsQAB    , false));
@@ -951,7 +969,7 @@ void DBDictionary::write_database_files()
     z.Add(database_entity(DB_GenAcctIntBonus     , 0.0));
 
     // Allow experience rating.
-    z.Add(database_entity(DB_AllowExpRating      , 1.0));
+    z.Add(database_entity(DB_AllowExpRating      , true));
     z.Add(database_entity(DB_ExpRatIbnrMult      , 6.0));
     z.Add(database_entity(DB_ExpRatAmortPeriod   , 4.0));
 
@@ -995,34 +1013,34 @@ void DBDictionary::InitAntediluvian()
 
     // These are the same as class date_trammel's nominal limits.
     // They mustn't be zero.
-    Add(database_entity(DB_CoiResetMinDate     , gregorian_epoch().julian_day_number()));
-    Add(database_entity(DB_CoiResetMaxDate     , last_yyyy_date ().julian_day_number()));
+    Add(database_entity(DB_CoiResetMinDate       , gregorian_epoch().julian_day_number()));
+    Add(database_entity(DB_CoiResetMaxDate       , last_yyyy_date ().julian_day_number()));
 
-    Add(database_entity(DB_GuarInt, 0.03));
+    Add(database_entity(DB_GuarInt               , 0.03));
 
-    Add(database_entity(DB_FixedLoanRate, 0.06));
+    Add(database_entity(DB_FixedLoanRate         , 0.06));
 
-    Add(database_entity(DB_GuarRegLoanSpread, 0.0));
-    Add(database_entity(DB_CurrRegLoanSpread, 0.0));
-    Add(database_entity(DB_GuarPrefLoanSpread, 0.0));
-    Add(database_entity(DB_CurrPrefLoanSpread, 0.0));
+    Add(database_entity(DB_GuarRegLoanSpread     , 0.0));
+    Add(database_entity(DB_CurrRegLoanSpread     , 0.0));
+    Add(database_entity(DB_GuarPrefLoanSpread    , 0.0));
+    Add(database_entity(DB_CurrPrefLoanSpread    , 0.0));
 
-    Add(database_entity(DB_AllowPreferredClass, 1.0));
+    Add(database_entity(DB_AllowPreferredClass   , true));
 
     // premium loads
 
-    Add(database_entity(DB_GuarMonthlyPolFee, 12.00));
-    Add(database_entity(DB_GuarSpecAmtLoad, 0.0));
-    Add(database_entity(DB_GuarPremLoadTgt, 0.025));
-    Add(database_entity(DB_GuarPremLoadExc, 0.025));
-    Add(database_entity(DB_CurrMonthlyPolFee, 5.00));
-    Add(database_entity(DB_CurrSpecAmtLoad, 0.0));
-    Add(database_entity(DB_CurrPremLoadTgt, 0.025));
-    Add(database_entity(DB_CurrPremLoadExc, 0.025));
+    Add(database_entity(DB_GuarMonthlyPolFee     , 12.00));
+    Add(database_entity(DB_GuarSpecAmtLoad       , 0.0));
+    Add(database_entity(DB_GuarPremLoadTgt       , 0.025));
+    Add(database_entity(DB_GuarPremLoadExc       , 0.025));
+    Add(database_entity(DB_CurrMonthlyPolFee     , 5.00));
+    Add(database_entity(DB_CurrSpecAmtLoad       , 0.0));
+    Add(database_entity(DB_CurrPremLoadTgt       , 0.025));
+    Add(database_entity(DB_CurrPremLoadExc       , 0.025));
 
-    Add(database_entity(DB_MinWd, 100.0));
-    Add(database_entity(DB_WdFee, 5.0));
-    Add(database_entity(DB_WdFeeRate, 0.01));
+    Add(database_entity(DB_MinWd                 , 100.0));
+    Add(database_entity(DB_WdFee                 , 5.0));
+    Add(database_entity(DB_WdFeeRate             , 0.01));
 
     int guar_coi_dims[e_number_of_axes] = {1, 1, 3, 1, 1, 1, 1};
     // smoker, nonsmoker, unismoke
@@ -1040,38 +1058,38 @@ void DBDictionary::InitAntediluvian()
         };
     Add(database_entity(DB_CurrCoiTable, e_number_of_axes, curr_coi_dims, curr_coi_tables));
 
-    Add(database_entity(DB_CorridorTable, 7));
-    Add(database_entity(DB_WpTable, 8));
-    Add(database_entity(DB_AdbTable, 9));
-    Add(database_entity(DB_MaturityAge, 100));
-    Add(database_entity(DB_AgeLastOrNearest, oe_age_nearest_birthday_ties_older));
-    Add(database_entity(DB_MinSpecAmt, 10000.0));
+    Add(database_entity(DB_CorridorTable         , 7));
+    Add(database_entity(DB_WpTable               , 8));
+    Add(database_entity(DB_AdbTable              , 9));
+    Add(database_entity(DB_MaturityAge           , 100));
+    Add(database_entity(DB_AgeLastOrNearest      , oe_age_nearest_birthday_ties_older));
+    Add(database_entity(DB_MinSpecAmt            , 10000.0));
 
-    Add(database_entity(DB_AllowGenAcct, 1.0));
-    Add(database_entity(DB_MaxGenAcctRate, 0.12));
-    Add(database_entity(DB_MaxSepAcctRate, 0.12));
+    Add(database_entity(DB_AllowGenAcct          , true));
+    Add(database_entity(DB_MaxGenAcctRate        , 0.12));
+    Add(database_entity(DB_MaxSepAcctRate        , 0.12));
 
-    Add(database_entity(DB_AllowLoan, 1.0));
-    Add(database_entity(DB_AllowWd, 1.0));
-    Add(database_entity(DB_AllowFlatExtras, 1.0));
-    Add(database_entity(DB_AllowChangeToDbo2, 1.0));
-    Add(database_entity(DB_AllowDbo3, 1.0));
+    Add(database_entity(DB_AllowLoan             , true));
+    Add(database_entity(DB_AllowWd               , true));
+    Add(database_entity(DB_AllowFlatExtras       , true));
+    Add(database_entity(DB_AllowChangeToDbo2     , true));
+    Add(database_entity(DB_AllowDboRop           , true));
 
-    Add(database_entity(DB_LedgerType, mce_ill_reg));
+    Add(database_entity(DB_LedgerType            , mce_ill_reg));
 
-    Add(database_entity(DB_NoLapseAlwaysActive, 0.0));
-    Add(database_entity(DB_NoLapseMinDur, 0.0));
-    Add(database_entity(DB_NoLapseMinAge, 0.0));
+    Add(database_entity(DB_NoLapseAlwaysActive   , 0.0));
+    Add(database_entity(DB_NoLapseMinDur         , 0.0));
+    Add(database_entity(DB_NoLapseMinAge         , 0.0));
 
-    Add(database_entity(DB_Has1035ExchCharge, 0.0));
-    Add(database_entity(DB_SmokeOrTobacco, 0.0));
-    Add(database_entity(DB_DacTaxFundCharge, 0.0));
-    Add(database_entity(DB_AllowWp, 0.0));
-    Add(database_entity(DB_AllowAdb, 0.0));
-    Add(database_entity(DB_AllowSpouseRider, 0.0));
-    Add(database_entity(DB_AllowChildRider, 0.0));
+    Add(database_entity(DB_Has1035ExchCharge     , 0.0));
+    Add(database_entity(DB_SmokeOrTobacco        , 0.0));
+    Add(database_entity(DB_DacTaxFundCharge      , 0.0));
+    Add(database_entity(DB_AllowWp               , false));
+    Add(database_entity(DB_AllowAdb              , false));
+    Add(database_entity(DB_AllowSpouseRider      , false));
+    Add(database_entity(DB_AllowChildRider       , false));
 
-    Add(database_entity(DB_ExpRatAmortPeriod, 4.0));
+    Add(database_entity(DB_ExpRatAmortPeriod     , 4.0));
 }
 
 /// Print databases to file in an alternative text format.

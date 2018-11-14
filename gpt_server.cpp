@@ -26,7 +26,6 @@
 #include "actuarial_table.hpp"
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "bourn_cast.hpp"
 #include "commutation_functions.hpp"
 #include "configurable_settings.hpp"
 #include "contains.hpp"
@@ -141,14 +140,13 @@ gpt_state test_one_days_gpt_transactions
     round_to<double> const RoundNonMecPrem(2, r_downward);
     round_to<double> const round_max_premium(2, r_downward);
 
-    oenum_modal_prem_type const target_premium_type =
-        static_cast<oenum_modal_prem_type>(static_cast<int>(database.Query(DB_TgtPremType)));
+    auto const target_premium_type = database.query<oenum_modal_prem_type>(DB_TgtPremType);
     std::vector<double> TargetPremiumRates(input.years_to_maturity());
     if(oe_modal_table == target_premium_type)
         {
         TargetPremiumRates = actuarial_table_rates
             (AddDataDir(product_filenames.datum("TgtPremFilename"))
-            ,bourn_cast<int>(database.Query(DB_TgtPremTable))
+            ,database.query<int>(DB_TgtPremTable)
             ,input.issue_age()
             ,input.years_to_maturity()
             );
@@ -160,7 +158,7 @@ gpt_state test_one_days_gpt_transactions
 
     std::vector<double> const CvatCorridorFactors = actuarial_table_rates
         (AddDataDir(product_filenames.datum("CvatCorridorFilename"))
-        ,bourn_cast<int>(database.Query(DB_CorridorTable))
+        ,database.query<int>(DB_CorridorTable)
         ,input.issue_age()
         ,input.years_to_maturity()
         );
@@ -175,18 +173,18 @@ gpt_state test_one_days_gpt_transactions
 
     std::vector<double> const tabular_7Px = actuarial_table_rates
         (AddDataDir(product_filenames.datum("SevenPayFilename"))
-        ,bourn_cast<int>(database.Query(DB_SevenPayTable))
+        ,database.query<int>(DB_SevenPayTable)
         ,input.issue_age()
         ,input.years_to_maturity()
         );
 
     std::vector<double> Mly7702qc = actuarial_table_rates
         (AddDataDir(product_filenames.datum("Irc7702QFilename"))
-        ,bourn_cast<int>(database.Query(DB_Irc7702QTable))
+        ,database.query<int>(DB_Irc7702QTable)
         ,input.issue_age()
         ,input.years_to_maturity()
         );
-    double max_coi_rate = database.Query(DB_MaxMonthlyCoiRate);
+    double max_coi_rate = database.query<double>(DB_MaxMonthlyCoiRate);
     LMI_ASSERT(0.0 != max_coi_rate);
     max_coi_rate = 1.0 / max_coi_rate;
     assign(Mly7702qc, apply_binary(coi_rate_from_q<double>(), Mly7702qc, max_coi_rate));
@@ -275,7 +273,7 @@ gpt_state test_one_days_gpt_transactions
 
     double AnnualTargetPrem = 1000000000.0; // No higher premium is anticipated.
     int const target_year =
-          database.Query(DB_TgtPremFixedAtIssue)
+          database.query<bool>(DB_TgtPremFixedAtIssue)
         ? 0
         : input.inforce_year()
         ;
@@ -299,7 +297,7 @@ gpt_state test_one_days_gpt_transactions
         {
         AnnualTargetPrem = round_max_premium
             (ldbl_eps_plus_one_times
-                (   database.Query(DB_TgtPremMonthlyPolFee)
+                (   database.query<double>(DB_TgtPremMonthlyPolFee)
                 +
                     ( InforceTargetSpecifiedAmount
                     * TargetPremiumRates[target_year]

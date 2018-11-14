@@ -93,9 +93,9 @@ void Input::DoAdaptExternalities()
             )
         );
 
-    GleanedMaturityAge_ = static_cast<int>(database_->Query(DB_MaturityAge));
+    database_->query_into(DB_MaturityAge, GleanedMaturityAge_);
 
-    database_->query_into(DB_LedgerType, GleanedLedgerType_);
+    database_->query_into(DB_LedgerType , GleanedLedgerType_ );
 }
 
 void Input::DoCustomizeInitialValues()
@@ -127,19 +127,19 @@ void Input::DoHarmonize()
     bool anything_goes    = global_settings::instance().ash_nazg();
     bool home_office_only = global_settings::instance().mellon();
 
-    bool allow_sep_acct = database_->Query(DB_AllowSepAcct);
-    bool allow_gen_acct = database_->Query(DB_AllowGenAcct);
+    bool allow_sep_acct = database_->query<bool>(DB_AllowSepAcct);
+    bool allow_gen_acct = database_->query<bool>(DB_AllowGenAcct);
 
     bool sepacct_only = allow_sep_acct && !allow_gen_acct;
     bool genacct_only = allow_gen_acct && !allow_sep_acct;
 
-    bool wd_allowed = database_->Query(DB_AllowWd);
-    bool loan_allowed = database_->Query(DB_AllowLoan);
-    bool pref_loan_allowed = loan_allowed && database_->Query(DB_AllowPrefLoan);
+    bool wd_allowed   = database_->query<bool>(DB_AllowWd);
+    bool loan_allowed = database_->query<bool>(DB_AllowLoan);
+    bool pref_loan_allowed = loan_allowed && database_->query<bool>(DB_AllowPrefLoan);
 
-    DefinitionOfLifeInsurance.allow(mce_gpt, database_->Query(DB_AllowGpt));
-    DefinitionOfLifeInsurance.allow(mce_cvat, database_->Query(DB_AllowCvat));
-    DefinitionOfLifeInsurance.allow(mce_noncompliant, database_->Query(DB_AllowNo7702));
+    DefinitionOfLifeInsurance.allow(mce_gpt         , database_->query<bool>(DB_AllowGpt));
+    DefinitionOfLifeInsurance.allow(mce_cvat        , database_->query<bool>(DB_AllowCvat));
+    DefinitionOfLifeInsurance.allow(mce_noncompliant, database_->query<bool>(DB_AllowNo7702));
 
     DefinitionOfMaterialChange.enable(anything_goes);
     // INPUT !! TAXATION !! This old code will be useful when
@@ -178,17 +178,17 @@ void Input::DoHarmonize()
 
     MaximumNaar.enable(anything_goes);
 
-    AmortizePremiumLoad.enable(database_->Query(DB_AllowAmortPremLoad));
-    ExtraCompensationOnAssets .enable(database_->Query(DB_AllowExtraAssetComp));
-    ExtraCompensationOnPremium.enable(database_->Query(DB_AllowExtraPremComp));
+    AmortizePremiumLoad       .enable(database_->query<bool>(DB_AllowAmortPremLoad));
+    ExtraCompensationOnAssets .enable(database_->query<bool>(DB_AllowExtraAssetComp));
+    ExtraCompensationOnPremium.enable(database_->query<bool>(DB_AllowExtraPremComp));
 
-    RetireesCanEnroll.enable(database_->Query(DB_AllowRetirees));
+    RetireesCanEnroll.enable(database_->query<bool>(DB_AllowRetirees));
 
-    GroupUnderwritingType.allow(mce_medical         , database_->Query(DB_AllowFullUw   ));
-    GroupUnderwritingType.allow(mce_paramedical     , database_->Query(DB_AllowParamedUw));
-    GroupUnderwritingType.allow(mce_nonmedical      , database_->Query(DB_AllowNonmedUw ));
-    GroupUnderwritingType.allow(mce_simplified_issue, database_->Query(DB_AllowSimpUw   ));
-    GroupUnderwritingType.allow(mce_guaranteed_issue, database_->Query(DB_AllowGuarUw   ));
+    GroupUnderwritingType.allow(mce_medical         , database_->query<bool>(DB_AllowFullUw   ));
+    GroupUnderwritingType.allow(mce_paramedical     , database_->query<bool>(DB_AllowParamedUw));
+    GroupUnderwritingType.allow(mce_nonmedical      , database_->query<bool>(DB_AllowNonmedUw ));
+    GroupUnderwritingType.allow(mce_simplified_issue, database_->query<bool>(DB_AllowSimpUw   ));
+    GroupUnderwritingType.allow(mce_guaranteed_issue, database_->query<bool>(DB_AllowGuarUw   ));
 
     bool part_mort_used = mce_yes == UsePartialMortality;
 
@@ -207,7 +207,7 @@ void Input::DoHarmonize()
     SurviveToAge              .enable(part_mort_used && mce_survive_to_age  == SurviveToType);
 
     bool enable_experience_rating =
-            database_->Query(DB_AllowExpRating)
+            database_->query<bool>(DB_AllowExpRating)
         &&  part_mort_used
         &&  mce_month_by_month == RunOrder
         ;
@@ -258,8 +258,8 @@ void Input::DoHarmonize()
 //    attained_age   [x, omega - 1]
 //    duration       [0, omega-x-1]
     IssueAge.minimum_and_maximum
-        (static_cast<int>(database_->Query(DB_MinIssAge))
-        ,static_cast<int>(database_->Query(DB_MaxIssAge))
+        (database_->query<int>(DB_MinIssAge)
+        ,database_->query<int>(DB_MaxIssAge)
         );
 //    RetirementAge.minimum_and_maximum(...
 #endif // 0
@@ -319,15 +319,15 @@ void Input::DoHarmonize()
     InforceContractMonth.enable(false);
 
     bool no_lapse_offered =
-           0 != database_->Query(DB_NoLapseMinDur)
-        || 0 != database_->Query(DB_NoLapseMinAge)
+           0 != database_->query<int>(DB_NoLapseMinDur)
+        || 0 != database_->query<int>(DB_NoLapseMinAge)
         ;
     InforceNoLapseActive            .enable(no_lapse_offered);
     InforceMonthlyNoLapsePremium    .enable(no_lapse_offered && mce_yes == InforceNoLapseActive);
     InforceCumulativeNoLapsePremium .enable(no_lapse_offered && mce_yes == InforceNoLapseActive);
     InforceCumulativeNoLapsePayments.enable(no_lapse_offered && mce_yes == InforceNoLapseActive);
 
-    InforceCumulativeRopPayments.enable(database_->Query(DB_AllowDbo3));
+    InforceCumulativeRopPayments.enable(database_->query<bool>(DB_AllowDboRop));
 
     // It would be possible to enable 'InforceCumulativeSalesLoad' iff
     // 'DB_LoadRfdProportion' is nonzero in the inforce year. However,
@@ -338,9 +338,9 @@ void Input::DoHarmonize()
     // more complicated: it would require inspecting not only the
     // database, but also a rate table.
 
-    UnderwritingClass.allow(mce_ultrapreferred, database_->Query(DB_AllowUltraPrefClass));
-    UnderwritingClass.allow(mce_preferred     , database_->Query(DB_AllowPreferredClass));
-    UnderwritingClass.allow(mce_rated         , database_->Query(DB_AllowSubstdTable   ));
+    UnderwritingClass.allow(mce_ultrapreferred, database_->query<bool>(DB_AllowUltraPrefClass));
+    UnderwritingClass.allow(mce_preferred     , database_->query<bool>(DB_AllowPreferredClass));
+    UnderwritingClass.allow(mce_rated         , database_->query<bool>(DB_AllowSubstdTable   ));
     SubstandardTable.enable(mce_rated == UnderwritingClass);
     SubstandardTable.allow(mce_table_a, mce_rated == UnderwritingClass);
     SubstandardTable.allow(mce_table_b, mce_rated == UnderwritingClass);
@@ -363,41 +363,41 @@ void Input::DoHarmonize()
         (   allow_custom_coi_multiplier
         &&  mce_yes == OverrideCoiMultiplier
         );
-    FlatExtra.enable(database_->Query(DB_AllowFlatExtras));
+    FlatExtra.enable(database_->query<bool>(DB_AllowFlatExtras));
 
     calendar_date const most_recent_anniversary = add_years
         (EffectiveDate.value()
         ,InforceYear  .value()
         ,true
         );
-    calendar_date reset_min(jdn_t(static_cast<int>(database_->Query(DB_CoiResetMinDate))));
-    calendar_date reset_max(jdn_t(static_cast<int>(database_->Query(DB_CoiResetMaxDate))));
+    calendar_date reset_min(jdn_t(database_->query<int>(DB_CoiResetMinDate)));
+    calendar_date reset_max(jdn_t(database_->query<int>(DB_CoiResetMaxDate)));
     reset_min = std::min(reset_min, most_recent_anniversary);
     reset_max = std::min(reset_max, most_recent_anniversary);
     if(!global_settings::instance().regression_testing())
         {
         LastCoiReentryDate.minimum_and_maximum(reset_min, reset_max);
         }
-    LastCoiReentryDate.enable(e_reenter_upon_rate_reset == database_->Query(DB_CoiInforceReentry));
+    LastCoiReentryDate.enable(e_reenter_upon_rate_reset == database_->query<e_actuarial_table_method>(DB_CoiInforceReentry));
 
-    BlendGender.enable(database_->Query(DB_AllowMortBlendSex));
+    BlendGender.enable(database_->query<bool>(DB_AllowMortBlendSex));
     bool blend_mortality_by_gender = mce_yes == BlendGender;
 
-    BlendSmoking.enable(database_->Query(DB_AllowMortBlendSmoke));
+    BlendSmoking.enable(database_->query<bool>(DB_AllowMortBlendSmoke));
     bool blend_mortality_by_smoking = mce_yes == BlendSmoking;
 
     MaleProportion     .enable(blend_mortality_by_gender);
     NonsmokerProportion.enable(blend_mortality_by_smoking);
 
-    bool allow_gender_distinct = database_->Query(DB_AllowSexDistinct);
-    bool allow_unisex          = database_->Query(DB_AllowUnisex);
+    bool allow_gender_distinct = database_->query<bool>(DB_AllowSexDistinct);
+    bool allow_unisex          = database_->query<bool>(DB_AllowUnisex);
 
     Gender.allow(mce_female, !blend_mortality_by_gender && allow_gender_distinct);
     Gender.allow(mce_male  , !blend_mortality_by_gender && allow_gender_distinct);
     Gender.allow(mce_unisex,  blend_mortality_by_gender || allow_unisex);
 
-    bool allow_smoker_distinct = database_->Query(DB_AllowSmokeDistinct);
-    bool allow_unismoke        = database_->Query(DB_AllowUnismoke);
+    bool allow_smoker_distinct = database_->query<bool>(DB_AllowSmokeDistinct);
+    bool allow_unismoke        = database_->query<bool>(DB_AllowUnismoke);
 
     Smoking.allow(mce_smoker,    !blend_mortality_by_smoking && allow_smoker_distinct);
     Smoking.allow(mce_nonsmoker, !blend_mortality_by_smoking && allow_smoker_distinct);
@@ -413,12 +413,12 @@ void Input::DoHarmonize()
     bool contract_is_rated(mce_rated == UnderwritingClass);
 
     bool allow_term =
-           database_->Query(DB_AllowTerm)
-        && (database_->Query(DB_AllowRatedTerm) || !contract_is_rated)
-        && database_->Query(DB_TermMinIssAge) <= IssueAge.value()
-        &&                                       IssueAge.value() <= database_->Query(DB_TermMaxIssAge)
+           database_->query<bool>(DB_AllowTerm)
+        && (database_->query<bool>(DB_AllowRatedTerm) || !contract_is_rated)
+        && database_->query<int>(DB_TermMinIssAge) <= IssueAge.value()
+        &&                                            IssueAge.value() <= database_->query<int>(DB_TermMaxIssAge)
         ;
-    bool term_is_a_rider = !database_->Query(DB_TermIsNotRider);
+    bool term_is_a_rider = !database_->query<bool>(DB_TermIsNotRider);
     bool allow_term_rider = allow_term && term_is_a_rider;
     TermRider.enable(        allow_term_rider);
     TermRider.allow(mce_yes, allow_term_rider);
@@ -441,23 +441,23 @@ void Input::DoHarmonize()
     TermAdjustmentMethod.allow(mce_adjust_both, enable_term);
 
     bool allow_wp =
-           database_->Query(DB_AllowWp)
-        && (database_->Query(DB_AllowRatedWp) || !contract_is_rated)
-        && database_->Query(DB_WpMinIssAge) <= IssueAge.value()
-        &&                                     IssueAge.value() <= database_->Query(DB_WpMaxIssAge)
+           database_->query<bool>(DB_AllowWp)
+        && (database_->query<bool>(DB_AllowRatedWp) || !contract_is_rated)
+        && database_->query<int>(DB_WpMinIssAge) <= IssueAge.value()
+        &&                                          IssueAge.value() <= database_->query<int>(DB_WpMaxIssAge)
         ;
     WaiverOfPremiumBenefit.enable(        allow_wp);
     WaiverOfPremiumBenefit.allow(mce_yes, allow_wp);
     bool allow_adb =
-           database_->Query(DB_AllowAdb)
-        && (database_->Query(DB_AllowRatedAdb) || !contract_is_rated)
-        && database_->Query(DB_AdbMinIssAge) <= IssueAge.value()
-        &&                                      IssueAge.value() <= database_->Query(DB_AdbMaxIssAge)
+           database_->query<bool>(DB_AllowAdb)
+        && (database_->query<bool>(DB_AllowRatedAdb) || !contract_is_rated)
+        && database_->query<int>(DB_AdbMinIssAge) <= IssueAge.value()
+        &&                                           IssueAge.value() <= database_->query<int>(DB_AdbMaxIssAge)
         ;
     AccidentalDeathBenefit.enable(        allow_adb);
     AccidentalDeathBenefit.allow(mce_yes, allow_adb);
 
-    bool allow_child_rider = database_->Query(DB_AllowChildRider);
+    bool allow_child_rider = database_->query<bool>(DB_AllowChildRider);
     ChildRider       .enable(        allow_child_rider);
     ChildRider       .allow(mce_yes, allow_child_rider);
     ChildRiderAmount .enable(mce_yes == ChildRider);
@@ -467,16 +467,16 @@ void Input::DoHarmonize()
     // rider is elected, it could never be set back to zero manually
     // when unelected--so it's forced to zero when unelected.
     ChildRiderAmount .minimum_and_maximum
-        ((mce_yes == ChildRider) ? database_->Query(DB_ChildRiderMinAmt) : 0.0
-        ,(mce_yes == ChildRider) ? database_->Query(DB_ChildRiderMaxAmt) : 0.0
+        ((mce_yes == ChildRider) ? database_->query<double>(DB_ChildRiderMinAmt) : 0.0
+        ,(mce_yes == ChildRider) ? database_->query<double>(DB_ChildRiderMaxAmt) : 0.0
         );
-    bool allow_spouse_rider = database_->Query(DB_AllowSpouseRider);
+    bool allow_spouse_rider = database_->query<bool>(DB_AllowSpouseRider);
     SpouseRider      .enable(        allow_spouse_rider);
     SpouseRider      .allow(mce_yes, allow_spouse_rider);
     SpouseRiderAmount.enable(mce_yes == SpouseRider);
     SpouseRiderAmount.minimum_and_maximum
-        ((mce_yes == SpouseRider) ? database_->Query(DB_SpouseRiderMinAmt) : 0.0
-        ,(mce_yes == SpouseRider) ? database_->Query(DB_SpouseRiderMaxAmt) : 0.0
+        ((mce_yes == SpouseRider) ? database_->query<double>(DB_SpouseRiderMinAmt) : 0.0
+        ,(mce_yes == SpouseRider) ? database_->query<double>(DB_SpouseRiderMaxAmt) : 0.0
         );
     SpouseIssueAge   .enable(mce_yes == SpouseRider);
     // If 'SpouseIssueAge' were always enabled, then it might make
@@ -485,11 +485,11 @@ void Input::DoHarmonize()
     // 'SpouseIssueAge' is useful only if the spouse rider is elected,
     // so it makes more sense to constrain its value this way.
     SpouseIssueAge   .minimum_and_maximum
-        (static_cast<int>(database_->Query(DB_SpouseRiderMinIssAge))
-        ,static_cast<int>(database_->Query(DB_SpouseRiderMaxIssAge))
+        (database_->query<int>(DB_SpouseRiderMinIssAge)
+        ,database_->query<int>(DB_SpouseRiderMaxIssAge)
         );
 
-    bool allow_honeymoon = database_->Query(DB_AllowHoneymoon);
+    bool allow_honeymoon = database_->query<bool>(DB_AllowHoneymoon);
     HoneymoonEndorsement .enable(        allow_honeymoon);
     HoneymoonEndorsement .allow(mce_yes, allow_honeymoon);
     PostHoneymoonSpread  .enable(mce_yes == HoneymoonEndorsement);
@@ -608,10 +608,10 @@ false // Silly workaround for now.
     CorporationPayment.enable(mce_solve_er_prem != SolveType);
 
     GeneralAccountRateType .allow(mce_credited_rate , true);
-    GeneralAccountRateType .allow(mce_earned_rate, mce_no == UseCurrentDeclaredRate && (anything_goes || database_->Query(DB_AllowGenAcctEarnRate)));
+    GeneralAccountRateType .allow(mce_earned_rate, mce_no == UseCurrentDeclaredRate && (anything_goes || database_->query<bool>(DB_AllowGenAcctEarnRate)));
 
     SeparateAccountRateType.allow(mce_gross_rate, true);
-    SeparateAccountRateType.allow(mce_net_rate  , anything_goes || database_->Query(DB_AllowSepAcctNetRate));
+    SeparateAccountRateType.allow(mce_net_rate  , anything_goes || database_->query<bool>(DB_AllowSepAcctNetRate));
 
     bool curr_int_rate_solve = false; // May be useful someday.
     UseCurrentDeclaredRate .enable(!curr_int_rate_solve && allow_gen_acct);
@@ -632,7 +632,7 @@ false // Silly workaround for now.
     //   http://apps.leg.wa.gov/rcw/default.aspx?cite=48.23.085
     bool allow_vlr =
         (   loan_allowed
-        &&  (   database_->Query(DB_AllowVlr)
+        &&  (   database_->query<bool>(DB_AllowVlr)
             ||  anything_goes
             )
         );
@@ -642,7 +642,7 @@ false // Silly workaround for now.
     UseAverageOfAllFunds.enable(!genacct_only);
     bool enable_custom_fund =
             !genacct_only
-        &&  (   database_->Query(DB_AllowImfOverride)
+        &&  (   database_->query<bool>(DB_AllowImfOverride)
             ||  home_office_only
             )
         ;

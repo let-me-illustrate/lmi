@@ -105,6 +105,7 @@ bool unavailable(std::string const& s)
     static std::vector<std::string> const v
         {"DateOfBirthJdn"        // used by group quotes
         ,"EffDateJdn"            // used by group quotes
+        ,"LastCoiReentryDateJdn" // probably not needed
         ,"ListBillDateJdn"       // probably not needed
         ,"InforceAsOfDateJdn"    // probably not needed
         ,"InitDacTaxRate"        // used by PrintRosterTabDelimited(); not cents
@@ -487,7 +488,6 @@ format_map_t static_formats()
 // > Format as a number with thousand separators and no decimal places (#,###,###)
 // >
     ,{"Age"                             , f1}
-    ,{"AllowDbo3"                       , f1}
     ,{"AvgFund"                         , f1}
     ,{"ChildRiderAmount"                , f1}
     ,{"CustomFund"                      , f1}

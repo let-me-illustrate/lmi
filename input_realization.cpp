@@ -380,7 +380,7 @@ std::string Input::RealizeCurrentCoiMultiplier()
         return s;
         }
 
-    double const z = database_->Query(DB_MinInputCoiMult);
+    double const z = database_->query<double>(DB_MinInputCoiMult);
     double lowest = std::min_element
         (CurrentCoiMultiplierRealized_.begin()
         ,CurrentCoiMultiplierRealized_.end()
@@ -555,7 +555,7 @@ std::string Input::RealizeDeathBenefitOption()
         }
 
     if
-        (   !database_->Query(DB_AllowChangeToDbo2)
+        (   !database_->query<bool>(DB_AllowChangeToDbo2)
         &&  !std::is_sorted
                 (DeathBenefitOptionRealized_.begin()
                 ,DeathBenefitOptionRealized_.end()
@@ -573,7 +573,7 @@ std::string Input::RealizeDeathBenefitOption()
         }
 
     if
-        (   !database_->Query(DB_AllowDbo3)
+        (   !database_->query<bool>(DB_AllowDboRop)
         &&  contains(DeathBenefitOptionRealized_, mce_dbopt("ROP"))
         )
         {
@@ -658,12 +658,12 @@ std::string Input::RealizeGeneralAccountRate()
         }
 
     // If the field is disabled, then its old contents aren't invalid.
-    if(!database_->Query(DB_AllowGenAcct))
+    if(!database_->query<bool>(DB_AllowGenAcct))
         {
         return "";
         }
 
-    double guar_int = database_->Query(DB_GuarInt);
+    double guar_int = database_->query<double>(DB_GuarInt);
     std::vector<double> general_account_max_rate;
     database_->query_into(DB_MaxGenAcctRate, general_account_max_rate);
 
@@ -740,7 +740,7 @@ std::string Input::RealizeSeparateAccountRate()
         }
 
     // If the field is disabled, then its old contents aren't invalid.
-    if(!database_->Query(DB_AllowSepAcct))
+    if(!database_->query<bool>(DB_AllowSepAcct))
         {
         return "";
         }
@@ -750,7 +750,7 @@ std::string Input::RealizeSeparateAccountRate()
     // making this field's range depend on gross versus net. The -100%
     // minimum for an eventual tn_range type will be low enough.
 
-    double max_sep_acct_rate = database_->Query(DB_MaxSepAcctRate);
+    double max_sep_acct_rate = database_->query<double>(DB_MaxSepAcctRate);
     if(global_settings::instance().ash_nazg())
         {
         // We have some regression-test files with rates higher even
@@ -806,7 +806,7 @@ std::string Input::RealizeNewLoan()
         return s;
         }
 
-    if(database_->Query(DB_AllowLoan))
+    if(database_->query<bool>(DB_AllowLoan))
         {
         return "";
         }
@@ -832,7 +832,7 @@ std::string Input::RealizeWithdrawal()
         return s;
         }
 
-    if(!database_->Query(DB_AllowWd))
+    if(!database_->query<bool>(DB_AllowWd))
         {
         if(!each_equal(WithdrawalRealized_, 0.0))
             {
@@ -841,7 +841,7 @@ std::string Input::RealizeWithdrawal()
         }
     else
         {
-        double lowest_allowed_withdrawal = database_->Query(DB_MinWd);
+        double lowest_allowed_withdrawal = database_->query<double>(DB_MinWd);
         for(auto const& i : WithdrawalRealized_)
             {
             if(0.0 < i.value() && i.value() < lowest_allowed_withdrawal)
@@ -877,7 +877,7 @@ std::string Input::RealizeFlatExtra()
         return s;
         }
 
-    if(database_->Query(DB_AllowFlatExtras))
+    if(database_->query<bool>(DB_AllowFlatExtras))
         {
         return "";
         }

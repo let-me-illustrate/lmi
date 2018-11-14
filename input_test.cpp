@@ -146,18 +146,26 @@ void input_test::test_product_database()
 
     // Scalar access is forbidden when entity varies by duration.
     BOOST_TEST_THROW
-        (db.Query(DB_StatVxQ)
+        (db.query<double>(DB_StatVxQ)
         ,std::runtime_error
         ,"Assertion '1 == v.extent()' failed."
         );
 
     oenum_alb_or_anb a;
 
+    // Test query<enumerative type> with non-enumerative entities.
+
     // This value corresponds to no enumerator, but C++ allows that.
-    db.query_into(DB_MaturityAge, a);
-    BOOST_TEST_EQUAL(100, a);
-    auto const b {db.query<oenum_alb_or_anb>(DB_MaturityAge)};
-    BOOST_TEST_EQUAL(100, b);
+    db.query_into(DB_ChildRiderMinAmt, a);
+    BOOST_TEST_EQUAL(25000, a);
+    auto const b {db.query<oenum_alb_or_anb>(DB_ChildRiderMinAmt)};
+    BOOST_TEST_EQUAL(25000, b);
+
+    // Redundant template argument is okay.
+    db.query_into<oenum_alb_or_anb>(DB_ChildRiderMinAmt, a);
+    // Fails to compile with wrong template argument:
+//  db.query_into<float>(DB_ChildRiderMinAmt, a);
+//  db.query_into<bool >(DB_ChildRiderMinAmt, a);
 
     // This value is not integral, so bourn_cast rejects it.
     BOOST_TEST_THROW
@@ -168,18 +176,18 @@ void input_test::test_product_database()
 
     auto f0 = [&db]     {db.initialize("sample");};
     auto f1 = [&db, &v] {db.query_into(DB_MaturityAge, v);};
-    auto f2 = [&db]     {db.Query(DB_MaturityAge);};
+    auto f2 = [&db]     {db.query<int>(DB_MaturityAge);};
     auto f3 = [&db]     {db.query<oenum_alb_or_anb>(DB_AgeLastOrNearest);};
     auto f4 = [&db, &a] {db.query_into(DB_AgeLastOrNearest, a);};
     auto f5 = [&db]     {db.entity_from_key(DB_MaturityAge);};
     std::cout
         << "\n  Database speed tests..."
-        << "\n  initialize()      : " << TimeAnAliquot(f0)
-        << "\n  query_into(vector): " << TimeAnAliquot(f1)
-        << "\n  Query(scalar)     : " << TimeAnAliquot(f2)
-        << "\n  query<T>(scalar)  : " << TimeAnAliquot(f3)
-        << "\n  query_into(scalar): " << TimeAnAliquot(f4)
-        << "\n  entity_from_key() : " << TimeAnAliquot(f5)
+        << "\n  initialize()        : " << TimeAnAliquot(f0)
+        << "\n  query_into (vector) : " << TimeAnAliquot(f1)
+        << "\n  query<int> (scalar) : " << TimeAnAliquot(f2)
+        << "\n  query<enum>(scalar) : " << TimeAnAliquot(f3)
+        << "\n  query_into (scalar) : " << TimeAnAliquot(f4)
+        << "\n  entity_from_key()   : " << TimeAnAliquot(f5)
         << '\n'
         ;
 
@@ -193,7 +201,7 @@ void input_test::test_product_database()
         ,stat
         );
     BOOST_TEST_THROW
-        (db.Query(DB_MaturityAge)
+        (db.query<int>(DB_MaturityAge)
         ,std::runtime_error
         ,"Assertion '1 == v.extent()' failed."
         );
@@ -235,7 +243,7 @@ void input_test::test_product_database()
     // Force the product to mature at 98.
     db.maturity_age_ = 98;
     index.issue_age(98);
-    db.Query(DB_MaturityAge, index); // Accepted because maturity age is scalar.
+    db.query(DB_MaturityAge, index); // Accepted because maturity age is scalar.
     BOOST_TEST_THROW
         (db.query_into(DB_SnflQ, v, index)
         ,std::runtime_error

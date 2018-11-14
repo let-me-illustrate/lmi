@@ -24,7 +24,10 @@
 
 #include "config.hpp"
 
-#if defined __GNUC__
+#if defined __clang__
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#elif defined __GNUC__
 #   pragma GCC diagnostic push
 #   if 7 <= __GNUC__
 #       pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
@@ -37,7 +40,9 @@
 #   pragma warning(push, 1)
 #endif
 #include <boost/regex.hpp>
-#if defined __GNUC__
+#if defined __clang__
+#   pragma clang diagnostic pop
+#elif defined __GNUC__
 #   pragma GCC diagnostic pop
 #endif // defined __GNUC__
 #if defined _MSC_VER

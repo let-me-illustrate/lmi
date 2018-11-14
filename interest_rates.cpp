@@ -256,15 +256,15 @@ InterestRates::InterestRates(BasicValues const& v)
     ,Zero_               (Length_)
     ,NeedMidpointRates_  {v.IsSubjectToIllustrationReg()}
     ,GenAcctRateType_    {v.yare_input_.GeneralAccountRateType}
-    ,NeedSepAcctRates_   {0.0 != v.database().Query(DB_AllowSepAcct)}
+    ,NeedSepAcctRates_   {v.database().query<bool>(DB_AllowSepAcct)}
     ,SepAcctRateType_    {v.yare_input_.SeparateAccountRateType}
-    ,SepAcctSpreadMethod_{static_cast<mcenum_spread_method>(static_cast<int>(v.database().Query(DB_SepAcctSpreadMethod)))}
+    ,SepAcctSpreadMethod_{v.database().query<mcenum_spread_method>(DB_SepAcctSpreadMethod)}
     ,AmortLoad_          {Zero_}
     ,ExtraSepAcctCharge_ {Zero_}
 //    ,NeedLoanRates_      {need_loan_rates(v.yare_input_)}
     ,NeedLoanRates_      {true} // DEPRECATED
     ,LoanRateType_       {v.yare_input_.LoanRateType}
-    ,NeedPrefLoanRates_  {0.0 != v.database().Query(DB_AllowPrefLoan)}
+    ,NeedPrefLoanRates_  {v.database().query<bool>(DB_AllowPrefLoan)}
     ,NeedHoneymoonRates_ {v.yare_input_.HoneymoonEndorsement}
     ,SpreadFor7702_      {v.SpreadFor7702()}
 {
@@ -330,7 +330,7 @@ void InterestRates::Initialize(BasicValues const& v)
     // the same way as M&E, iff database entity DB_AssetChargeType has
     // the value 'oe_asset_charge_spread'; otherwise, reflect them
     // elsewhere as an account-value load.
-    if(oe_asset_charge_spread == v.database().Query(DB_AssetChargeType))
+    if(oe_asset_charge_spread == v.database().query<oenum_asset_charge_type>(DB_AssetChargeType))
         {
         // TODO ?? At least for the antediluvian branch, the vector in
         // the input class has an inappropriate size. Truncating it

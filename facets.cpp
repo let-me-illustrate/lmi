@@ -87,17 +87,9 @@
 // The underlying problem is that 'short unsigned int' does not fulfill the
 // bitmask requirements, as unary operator ~ performs integral promotions.
 //
-// This would avoid the warning:
+// This:
 //   rc[C] &= static_cast<std::ctype_base::mask>(~std::ctype_base::space);
-// but seems too violent. This does not avoid the warning:
-//   constexpr auto z = ~std::ctype_base::space;
-//   rc[C] &= z;
-// due to integral promotion. And braces are not allowed here:
-//   rc[C] &= {~std::ctype_base::space};
-// so this code (used in the implementation below):
-//   constexpr std::ctype_base::mask z = {~std::ctype_base::space};
-//   rc[C] &= z;
-// is the least awful thing that works.
+// is the least awful workaround that avoids the warning.
 
 namespace
 {
@@ -115,8 +107,7 @@ namespace
             static std::ctype_base::mask rc[table_size];
             std::copy(classic_table(), classic_table() + table_size, rc);
             // See "Implementation note" above.
-            constexpr std::ctype_base::mask z = {~std::ctype_base::space};
-            rc[C] &= z;
+            rc[C] &= static_cast<std::ctype_base::mask>(~std::ctype_base::space);
             return rc;
             }
     };

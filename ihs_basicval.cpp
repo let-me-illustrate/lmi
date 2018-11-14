@@ -64,7 +64,7 @@ BasicValues::BasicValues(Input const& input)
     ,database_           (yare_input_)
     ,DefnLifeIns_        {mce_cvat}
     ,DefnMaterialChange_ {mce_unnecessary_premium}
-    ,Equiv7702DBO3       {mce_option1_for_7702}
+    ,Effective7702DboRop {mce_option1_for_7702}
     ,MaxWDDed_           {mce_twelve_times_last}
     ,MaxLoanDed_         {mce_twelve_times_last}
     ,StateOfJurisdiction_{mce_s_CT}
@@ -103,7 +103,7 @@ BasicValues::BasicValues
         )
     ,DefnLifeIns_        {mce_cvat}
     ,DefnMaterialChange_ {mce_unnecessary_premium}
-    ,Equiv7702DBO3       {a_DBOptFor7702}
+    ,Effective7702DboRop {a_DBOptFor7702}
     ,MaxWDDed_           {mce_twelve_times_last}
     ,MaxLoanDed_         {mce_twelve_times_last}
     ,StateOfJurisdiction_{a_StateOfJurisdiction}
@@ -152,7 +152,7 @@ void BasicValues::Init()
     PremiumTaxState_     = yare_input_.PremiumTaxState    ;
 
     if
-        (   !database().Query(DB_StateApproved)
+        (   !database().query<bool>(DB_StateApproved)
         &&  !global_settings::instance().ash_nazg()
         &&  !global_settings::instance().regression_testing()
         )
@@ -173,34 +173,34 @@ void BasicValues::Init()
     LMI_ASSERT(RetAge <= 100);
     LMI_ASSERT(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
 
-    EndtAge = static_cast<int>(database().Query(DB_MaturityAge));
+    database().query_into(DB_MaturityAge   , EndtAge);
     Length = EndtAge - IssueAge;
 
-    database().query_into(DB_LedgerType, ledger_type_);
-    nonillustrated_       = static_cast<bool>(database().Query(DB_Nonillustrated));
-    bool no_longer_issued = static_cast<bool>(database().Query(DB_NoLongerIssued));
+    database().query_into(DB_LedgerType    , ledger_type_);
+    database().query_into(DB_Nonillustrated, nonillustrated_);
+    bool no_longer_issued = database().query<bool>(DB_NoLongerIssued);
     bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;
     no_can_issue_         = no_longer_issued && is_new_business;
     IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(ledger_type());
 
-    if(IssueAge < database().Query(DB_MinIssAge))
+    if(IssueAge < database().query<int>(DB_MinIssAge))
         {
         alarum()
             << "Issue age "
             << IssueAge
             << " less than minimum "
-            << database().Query(DB_MinIssAge)
+            << database().query<int>(DB_MinIssAge)
             << '.'
             << LMI_FLUSH
             ;
         }
-    if(database().Query(DB_MaxIssAge) < IssueAge)
+    if(database().query<int>(DB_MaxIssAge) < IssueAge)
         {
         alarum()
             << "Issue age "
             << IssueAge
             << " greater than maximum "
-            << database().Query(DB_MaxIssAge)
+            << database().query<int>(DB_MaxIssAge)
             << '.'
             << LMI_FLUSH
             ;
@@ -261,7 +261,7 @@ void BasicValues::GPTServerInit()
     StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
     PremiumTaxState_     = yare_input_.PremiumTaxState    ;
 
-    EndtAge = static_cast<int>(database().Query(DB_MaturityAge));
+    database().query_into(DB_MaturityAge   , EndtAge);
     Length = EndtAge - IssueAge;
 
     yare_input_.ExtraMonthlyCustodialFee  .resize(Length);
@@ -272,21 +272,21 @@ void BasicValues::GPTServerInit()
     yare_input_.DeathBenefitOption        .assign(Length, yare_input_.DeathBenefitOption[0]);
     yare_input_.FlatExtra                 .resize(Length);
 
-    database().query_into(DB_LedgerType, ledger_type_);
-    nonillustrated_       = static_cast<bool>(database().Query(DB_Nonillustrated));
-    bool no_longer_issued = static_cast<bool>(database().Query(DB_NoLongerIssued));
+    database().query_into(DB_LedgerType    , ledger_type_);
+    database().query_into(DB_Nonillustrated, nonillustrated_);
+    bool no_longer_issued = database().query<bool>(DB_NoLongerIssued);
     bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;
     no_can_issue_         = no_longer_issued && is_new_business;
     IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(ledger_type());
 
-    if(IssueAge < database().Query(DB_MinIssAge))
+    if(IssueAge < database().query<int>(DB_MinIssAge))
         {
         throw x_product_rule_violated
             (
             std::string("Issue age less than minimum")
             );
         }
-    if(database().Query(DB_MaxIssAge) < IssueAge)
+    if(database().query<int>(DB_MaxIssAge) < IssueAge)
         {
         throw x_product_rule_violated
             (
@@ -327,7 +327,7 @@ void BasicValues::GPTServerInit()
 // with code in AccountValue::SetInitialValues().
 double BasicValues::InvestmentManagementFee() const
 {
-    if(!database().Query(DB_AllowSepAcct))
+    if(!database().query<bool>(DB_AllowSepAcct))
         {
         return 0.0;
         }
@@ -433,7 +433,7 @@ double BasicValues::InvestmentManagementFee() const
 void BasicValues::Init7702()
 {
     Mly7702qc = GetIrc7702QRates();
-    double max_coi_rate = database().Query(DB_MaxMonthlyCoiRate);
+    double max_coi_rate = database().query<double>(DB_MaxMonthlyCoiRate);
     LMI_ASSERT(0.0 != max_coi_rate);
     max_coi_rate = 1.0 / max_coi_rate;
     assign(Mly7702qc, apply_binary(coi_rate_from_q<double>(), Mly7702qc, max_coi_rate));
@@ -530,7 +530,7 @@ void BasicValues::Init7702()
         local_mly_charge_add = GetAdbRates();
         }
 
-    double local_adb_limit = database().Query(DB_AdbIsQAB) ? AdbLimit : 0.0;
+    double local_adb_limit = database().query<bool>(DB_AdbIsQAB) ? AdbLimit : 0.0;
 
     Irc7702_.reset
         (new Irc7702
@@ -545,7 +545,7 @@ void BasicValues::Init7702()
             ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
             ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
             ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
-            ,effective_dbopt_7702(yare_input_.DeathBenefitOption[0], Equiv7702DBO3)
+            ,effective_dbopt_7702(yare_input_.DeathBenefitOption[0], Effective7702DboRop)
             ,Loads_->annual_policy_fee    (mce_gen_curr)
             ,Loads_->monthly_policy_fee   (mce_gen_curr)
             ,Loads_->specified_amount_load(mce_gen_curr)
@@ -606,66 +606,66 @@ double BasicValues::GetAnnualTgtPrem(int a_year, double a_specamt) const
 
 void BasicValues::SetPermanentInvariants()
 {
-    MinIssSpecAmt       = database().Query(DB_MinIssSpecAmt        );
-    MinIssBaseSpecAmt   = database().Query(DB_MinIssBaseSpecAmt    );
-    MinRenlSpecAmt      = database().Query(DB_MinRenlSpecAmt       );
-    MinRenlBaseSpecAmt  = database().Query(DB_MinRenlBaseSpecAmt   );
-    NoLapseOpt1Only     = database().Query(DB_NoLapseDbo1Only      );
-    NoLapseUnratedOnly  = database().Query(DB_NoLapseUnratedOnly   );
-    OptChgCanIncrSA     = database().Query(DB_DboChgCanIncrSpecAmt );
-    OptChgCanDecrSA     = database().Query(DB_DboChgCanDecrSpecAmt );
-    WDCanDecrSADBO1     = database().Query(DB_WdCanDecrSpecAmtDbo1 );
-    WDCanDecrSADBO2     = database().Query(DB_WdCanDecrSpecAmtDbo2 );
-    WDCanDecrSADBO3     = database().Query(DB_WdCanDecrSpecAmtDbo3 );
-    MaxIncrAge          = static_cast<int>(database().Query(DB_MaxIncrAge));
-    WaivePmTxInt1035    = database().Query(DB_WaivePremTaxInt1035  );
-    TermIsNotRider      = database().Query(DB_TermIsNotRider       );
-    TermForcedConvAge   = static_cast<int>(database().Query(DB_TermForcedConvAge));
-    TermForcedConvDur   = static_cast<int>(database().Query(DB_TermForcedConvDur));
-    ExpPerKLimit        = database().Query(DB_ExpSpecAmtLimit      );
-    database().query_into(DB_MinPremType, MinPremType);
-    database().query_into(DB_TgtPremType, TgtPremType);
-    TgtPremFixedAtIssue = database().Query(DB_TgtPremFixedAtIssue  );
-    TgtPremMonthlyPolFee= database().Query(DB_TgtPremMonthlyPolFee );
+    database().query_into(DB_MinIssSpecAmt        , MinIssSpecAmt);
+    database().query_into(DB_MinIssBaseSpecAmt    , MinIssBaseSpecAmt);
+    database().query_into(DB_MinRenlSpecAmt       , MinRenlSpecAmt);
+    database().query_into(DB_MinRenlBaseSpecAmt   , MinRenlBaseSpecAmt);
+    database().query_into(DB_NoLapseDboLvlOnly    , NoLapseDboLvlOnly);
+    database().query_into(DB_NoLapseUnratedOnly   , NoLapseUnratedOnly);
+    database().query_into(DB_DboChgCanIncrSpecAmt , OptChgCanIncrSA);
+    database().query_into(DB_DboChgCanDecrSpecAmt , OptChgCanDecrSA);
+    database().query_into(DB_WdDecrSpecAmtDboLvl  , WdDecrSpecAmtDboLvl);
+    database().query_into(DB_WdDecrSpecAmtDboInc  , WdDecrSpecAmtDboInc);
+    database().query_into(DB_WdDecrSpecAmtDboRop  , WdDecrSpecAmtDboRop);
+    database().query_into(DB_MaxIncrAge           , MaxIncrAge);
+    database().query_into(DB_WaivePremTaxInt1035  , WaivePmTxInt1035);
+    database().query_into(DB_TermIsNotRider       , TermIsNotRider);
+    database().query_into(DB_TermForcedConvAge    , TermForcedConvAge);
+    database().query_into(DB_TermForcedConvDur    , TermForcedConvDur);
+    database().query_into(DB_ExpSpecAmtLimit      , ExpPerKLimit);
+    database().query_into(DB_MinPremType          , MinPremType);
+    database().query_into(DB_TgtPremType          , TgtPremType);
+    database().query_into(DB_TgtPremFixedAtIssue  , TgtPremFixedAtIssue);
+    database().query_into(DB_TgtPremMonthlyPolFee , TgtPremMonthlyPolFee);
     // Assertion: see comments on GetModalPremTgtFromTable().
     LMI_ASSERT
         (  0.0 == TgtPremMonthlyPolFee
         || (oe_modal_table == TgtPremType && oe_modal_table != MinPremType)
         );
-    CurrCoiTable0Limit  = database().Query(DB_CurrCoiTable0Limit   );
-    CurrCoiTable1Limit  = database().Query(DB_CurrCoiTable1Limit   );
+    database().query_into(DB_CurrCoiTable0Limit   , CurrCoiTable0Limit);
+    database().query_into(DB_CurrCoiTable1Limit   , CurrCoiTable1Limit);
     LMI_ASSERT(0.0                <= CurrCoiTable0Limit);
     LMI_ASSERT(CurrCoiTable0Limit <= CurrCoiTable1Limit);
-    database().query_into(DB_CoiInforceReentry, CoiInforceReentry);
-    database().query_into(DB_MaxWdDed         , MaxWDDed_        );
-    MaxWdGenAcctValMult = database().Query(DB_MaxWdGenAcctValMult  );
-    MaxWdSepAcctValMult = database().Query(DB_MaxWdSepAcctValMult  );
-    AllowPrefLoan       = static_cast<bool>(database().Query(DB_AllowPrefLoan));
-    database().query_into(DB_MaxLoanDed       ,MaxLoanDed_);
-    MaxLoanAVMult       = database().Query(DB_MaxLoanAcctValMult   );
-    FirstPrefLoanYear   = static_cast<int>(database().Query(DB_FirstPrefLoanYear));
-    NoLapseMinDur       = static_cast<int>(database().Query(DB_NoLapseMinDur));
-    NoLapseMinAge       = static_cast<int>(database().Query(DB_NoLapseMinAge));
-    AdbLimit            = database().Query(DB_AdbLimit             );
-    WpLimit             = database().Query(DB_WpLimit              );
-    SpecAmtLoadLimit    = database().Query(DB_SpecAmtLoadLimit     );
-    MinWD               = database().Query(DB_MinWd                );
-    WDFee               = database().Query(DB_WdFee                );
-    WDFeeRate           = database().Query(DB_WdFeeRate            );
-    AllowChangeToDBO2   = database().Query(DB_AllowChangeToDbo2    );
-    AllowSAIncr         = database().Query(DB_AllowSpecAmtIncr     );
-    NoLapseAlwaysActive = database().Query(DB_NoLapseAlwaysActive  );
-    database().query_into(DB_WpChargeMethod  , WaiverChargeMethod);
-    database().query_into(DB_CashValueEnhMult, CashValueEnhMult  );
-    LapseIgnoresSurrChg = database().Query(DB_LapseIgnoresSurrChg  );
-    SurrChgOnIncr       = database().Query(DB_SurrChgOnIncr        );
-    SurrChgOnDecr       = database().Query(DB_SurrChgOnDecr        );
+    database().query_into(DB_CoiInforceReentry    , CoiInforceReentry);
+    database().query_into(DB_MaxWdDed             , MaxWDDed_);
+    database().query_into(DB_MaxWdGenAcctValMult  , MaxWdGenAcctValMult);
+    database().query_into(DB_MaxWdSepAcctValMult  , MaxWdSepAcctValMult);
+    database().query_into(DB_AllowPrefLoan        , AllowPrefLoan);
+    database().query_into(DB_MaxLoanDed           , MaxLoanDed_);
+    database().query_into(DB_MaxLoanAcctValMult   , MaxLoanAVMult);
+    database().query_into(DB_FirstPrefLoanYear    , FirstPrefLoanYear);
+    database().query_into(DB_NoLapseMinDur        , NoLapseMinDur);
+    database().query_into(DB_NoLapseMinAge        , NoLapseMinAge);
+    database().query_into(DB_AdbLimit             , AdbLimit);
+    database().query_into(DB_WpLimit              , WpLimit);
+    database().query_into(DB_SpecAmtLoadLimit     , SpecAmtLoadLimit);
+    database().query_into(DB_MinWd                , MinWD);
+    database().query_into(DB_WdFee                , WDFee);
+    database().query_into(DB_WdFeeRate            , WDFeeRate);
+    database().query_into(DB_AllowChangeToDbo2    , AllowChangeToDBO2);
+    database().query_into(DB_AllowSpecAmtIncr     , AllowSAIncr);
+    database().query_into(DB_NoLapseAlwaysActive  , NoLapseAlwaysActive);
+    database().query_into(DB_WpChargeMethod       , WaiverChargeMethod);
+    database().query_into(DB_CashValueEnhMult     , CashValueEnhMult);
+    database().query_into(DB_LapseIgnoresSurrChg  , LapseIgnoresSurrChg);
+    database().query_into(DB_SurrChgOnIncr        , SurrChgOnIncr);
+    database().query_into(DB_SurrChgOnDecr        , SurrChgOnDecr);
     LMI_ASSERT(!SurrChgOnIncr); // Surrchg change on increase not supported.
     LMI_ASSERT(!SurrChgOnDecr); // Surrchg change on decrease not supported.
 
-    database().query_into(DB_FreeWdProportion, FreeWDProportion);
+    database().query_into(DB_FreeWdProportion     , FreeWDProportion);
 
-    database().query_into(DB_NaarDiscount, DBDiscountRate);
+    database().query_into(DB_NaarDiscount         , DBDiscountRate);
     LMI_ASSERT(!contains(DBDiscountRate, -1.0));
 // This would be more natural:
 //    assign(DBDiscountRate, 1.0 / (1.0 + DBDiscountRate));
@@ -673,22 +673,22 @@ void BasicValues::SetPermanentInvariants()
     assign(DBDiscountRate, 1.0 + DBDiscountRate);
     assign(DBDiscountRate, 1.0 / DBDiscountRate);
 
-    CalculateComp       = database().Query(DB_CalculateComp        );
-    database().query_into(DB_AssetComp , AssetComp );
-    database().query_into(DB_CompTarget, CompTarget);
-    database().query_into(DB_CompExcess, CompExcess);
+    database().query_into(DB_CalculateComp        , CalculateComp);
+    database().query_into(DB_AssetComp            , AssetComp);
+    database().query_into(DB_CompTarget           , CompTarget);
+    database().query_into(DB_CompExcess           , CompExcess);
 
-    MandEIsDynamic      = database().Query(DB_DynamicMandE         );
-    SepAcctLoadIsDynamic= database().Query(DB_DynamicSepAcctLoad   );
+    database().query_into(DB_DynamicMandE         , MandEIsDynamic);
+    database().query_into(DB_DynamicSepAcctLoad   , SepAcctLoadIsDynamic);
 
-    UseUnusualCOIBanding= database().Query(DB_UnusualCoiBanding    );
+    database().query_into(DB_UnusualCoiBanding    , UseUnusualCOIBanding);
 
     // 'Unusual' COI banding accommodates a particular idiosyncratic
     // product which has no term rider and doesn't permit experience
     // rating, so we assert those preconditions and write simple code
     // for 'unusual' COI banding that ignores those features.
     LMI_ASSERT(!(UseUnusualCOIBanding && yare_input_.UseExperienceRating));
-    LMI_ASSERT(!(UseUnusualCOIBanding && database().Query(DB_AllowTerm)));
+    LMI_ASSERT(!(UseUnusualCOIBanding && database().query<bool>(DB_AllowTerm)));
 
     // Flat extras can be used even with guaranteed issue, e.g., for
     // aviation, occupation, avocation, or foreign travel. Admin
@@ -722,7 +722,7 @@ void BasicValues::SetPermanentInvariants()
     // feature, but either way no end user has ever objected to it.
     if
         (   mce_table_none != yare_input_.SubstandardTable
-        &&  !(database().Query(DB_AllowSubstdTable) && mce_rated == yare_input_.UnderwritingClass)
+        &&  !(database().query<bool>(DB_AllowSubstdTable) && mce_rated == yare_input_.UnderwritingClass)
         )
         {
         alarum() << "Substandard table ratings not permitted." << LMI_FLUSH;
@@ -760,9 +760,9 @@ void BasicValues::SetPermanentInvariants()
         auto const z = database().query<mcenum_defn_material_change>(DB_CvatMatChangeDefn);
         DefnMaterialChange_ = (mce_gpt == DefnLifeIns_) ? mce_adjustment_event : z;
         }
-    database().query_into(DB_Equiv7702Dbo3, Equiv7702DBO3);
-    TermIsDbFor7702     = 1.0 == database().Query(DB_TermIsQABOrDb7702 );
-    TermIsDbFor7702A    = 1.0 == database().Query(DB_TermIsQABOrDb7702A);
+    database().query_into(DB_Effective7702DboRop, Effective7702DboRop);
+    TermIsDbFor7702     = oe_7702_term_is_db == database().query<oenum_7702_term>(DB_TermIsQABOrDb7702 );
+    TermIsDbFor7702A    = oe_7702_term_is_db == database().query<oenum_7702_term>(DB_TermIsQABOrDb7702A);
     MaxNAAR             = yare_input_.MaximumNaar;
 
     database().query_into(DB_MinPremIntSpread, MinPremIntSpread_);
@@ -985,7 +985,7 @@ double BasicValues::GetModalPremGLP
         ,a_bft_amt
         ,a_specamt
         ,Irc7702_->GetLeastBftAmtEver()
-        ,effective_dbopt_7702(DeathBfts_->dbopt()[0], Equiv7702DBO3)
+        ,effective_dbopt_7702(DeathBfts_->dbopt()[0], Effective7702DboRop)
         );
 
 // TODO ?? TAXATION !! PROBLEMS HERE
@@ -1428,7 +1428,7 @@ double BasicValues::GetModalSpecAmtMinNonMec(double annualized_pmt) const
 //============================================================================
 double BasicValues::GetModalSpecAmtGLP(double annualized_pmt) const
 {
-    mcenum_dbopt_7702 const z = effective_dbopt_7702(DeathBfts_->dbopt()[0], Equiv7702DBO3);
+    mcenum_dbopt_7702 const z = effective_dbopt_7702(DeathBfts_->dbopt()[0], Effective7702DboRop);
     return gpt_specamt::CalculateGLPSpecAmt(*this, 0, annualized_pmt, z);
 }
 
@@ -1563,7 +1563,7 @@ std::vector<double> BasicValues::GetUnblendedTable
     return GetActuarialTable
         (TableFile
         ,TableID
-        ,bourn_cast<int>(database().Query(TableID))
+        ,bourn_cast<int>(database().query<int>(TableID))
         );
 }
 
@@ -1579,7 +1579,7 @@ std::vector<double> BasicValues::GetUnblendedTable
     return GetActuarialTable
         (TableFile
         ,TableID
-        ,bourn_cast<int>(database().Query(TableID, index))
+        ,bourn_cast<int>(database().query(TableID, index))
         );
 }
 
@@ -1936,7 +1936,7 @@ std::vector<double> BasicValues::GetWpRates() const
     return GetTable
         (product().datum("WPFilename")
         ,DB_WpTable
-        ,database().Query(DB_AllowWp)
+        ,database().query<bool>(DB_AllowWp)
         );
 }
 
@@ -1945,7 +1945,7 @@ std::vector<double> BasicValues::GetAdbRates() const
     return GetTable
         (product().datum("ADDFilename")
         ,DB_AdbTable
-        ,database().Query(DB_AllowAdb)
+        ,database().query<bool>(DB_AllowAdb)
         );
 }
 
@@ -1954,20 +1954,20 @@ std::vector<double> BasicValues::GetChildRiderRates() const
     return GetTable
         (product().datum("ChildRiderFilename")
         ,DB_ChildRiderTable
-        ,database().Query(DB_AllowChildRider)
+        ,database().query<bool>(DB_AllowChildRider)
         );
 }
 
 std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
 {
-    if(!database().Query(DB_AllowSpouseRider))
+    if(!database().query<bool>(DB_AllowSpouseRider))
         {
         return std::vector<double>(GetLength());
         }
 
     std::vector<double> z = actuarial_table_rates
         (AddDataDir(product().datum("CurrSpouseRiderFilename"))
-        ,bourn_cast<int>(database().Query(DB_SpouseRiderTable))
+        ,database().query<int>(DB_SpouseRiderTable)
         ,yare_input_.SpouseIssueAge
         ,EndtAge - yare_input_.SpouseIssueAge
         );
@@ -1977,14 +1977,14 @@ std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
 
 std::vector<double> BasicValues::GetGuaranteedSpouseRiderRates() const
 {
-    if(!database().Query(DB_AllowSpouseRider))
+    if(!database().query<bool>(DB_AllowSpouseRider))
         {
         return std::vector<double>(GetLength());
         }
 
     std::vector<double> z = actuarial_table_rates
         (AddDataDir(product().datum("GuarSpouseRiderFilename"))
-        ,bourn_cast<int>(database().Query(DB_SpouseRiderGuarTable))
+        ,database().query<int>(DB_SpouseRiderGuarTable)
         ,yare_input_.SpouseIssueAge
         ,EndtAge - yare_input_.SpouseIssueAge
         );
@@ -1997,7 +1997,7 @@ std::vector<double> BasicValues::GetCurrentTermRates() const
     return GetTable
         (product().datum("CurrTermFilename")
         ,DB_TermTable
-        ,database().Query(DB_AllowTerm)
+        ,database().query<bool>(DB_AllowTerm)
         ,CanBlend
         ,CanBlend
         );
@@ -2008,7 +2008,7 @@ std::vector<double> BasicValues::GetGuaranteedTermRates() const
     return GetTable
         (product().datum("GuarTermFilename")
         ,DB_GuarTermTable
-        ,database().Query(DB_AllowTerm)
+        ,database().query<bool>(DB_AllowTerm)
         ,CanBlend
         ,CanBlend
         );
@@ -2028,7 +2028,11 @@ std::vector<double> BasicValues::GetSevenPayRates() const
         (product().datum("SevenPayFilename")
         ,DB_SevenPayTable
     // TAXATION !! No table available if 7PP calculated from first principles.
-//        ,1 == database().Query(DB_SevenPayWhence)
+//        ,1 == database().query<bool>(DB_SevenPayWhence)
+// TAXATION !! DATABASE !! Rename 'SevenPayWhence' to 'SevenPayIsTabular',
+// e.g.: the only possibilities are
+//   0=first principles, 1=table
+// so it's naturally boolean.
         );
 }
 
@@ -2073,7 +2077,7 @@ std::vector<double> BasicValues::GetPartialMortalityRates() const
 
 std::vector<double> BasicValues::GetSubstdTblMultTable() const
 {
-    if(0 == database().Query(DB_SubstdTableMultTable))
+    if(0 == database().query<int>(DB_SubstdTableMultTable))
         {
         return std::vector<double>(GetLength(), 1.0);
         }
@@ -2089,7 +2093,7 @@ std::vector<double> BasicValues::GetCurrSpecAmtLoadTable() const
     return GetTable
         (product().datum("CurrSpecAmtLoadFilename")
         ,DB_CurrSpecAmtLoadTable
-        ,0 != database().Query(DB_CurrSpecAmtLoadTable)
+        ,0 != database().query<int>(DB_CurrSpecAmtLoadTable)
         );
 }
 
@@ -2098,7 +2102,7 @@ std::vector<double> BasicValues::GetGuarSpecAmtLoadTable() const
     return GetTable
         (product().datum("GuarSpecAmtLoadFilename")
         ,DB_GuarSpecAmtLoadTable
-        ,0 != database().Query(DB_GuarSpecAmtLoadTable)
+        ,0 != database().query<int>(DB_GuarSpecAmtLoadTable)
         );
 }
 
