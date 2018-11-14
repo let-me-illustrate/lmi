@@ -359,10 +359,15 @@ physical_closure_files := \
 
 tutelary_flag :=
 
-# Warning options for gcc.
+# Dialect and warning options for gcc.
 
-c_standard   := -std=c99
-cxx_standard := -std=c++98
+# The default '-fno-rounding-math' means something like
+#   #pragma STDC FENV ACCESS OFF
+# which causes harm while bringing no countervailing benefit--see:
+#   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
+
+c_standard   := -frounding-math -std=c99
+cxx_standard := -frounding-math -std=c++17
 
 # Specify $(gcc_version_specific_warnings) last, in order to override
 # other options.
@@ -371,6 +376,7 @@ ifeq (3.4.4,$(gcc_version))
   # Suppress spurious gcc-3.4.4 warnings:
   #   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=22207
   gcc_version_specific_warnings := -Wno-uninitialized
+  cxx_standard := -std=c++98
 else ifeq (3.4.5,$(gcc_version))
   # Suppress spurious gcc-3.4.5 warnings:
   #   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=22207
@@ -400,28 +406,14 @@ else ifneq (,$(filter $(gcc_version), 6.3.0))
     -Wno-conversion \
     -Wno-parentheses \
 
-  cxx_standard := -std=c++17
-
-# The default '-fno-rounding-math' means something like
-  #   #pragma STDC FENV ACCESS OFF
-  # which causes harm while bringing no countervailing benefit--see:
-  #   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
-  c_standard   += -frounding-math
-  cxx_standard += -frounding-math
+  cxx_standard := -frounding-math -std=c++17
 else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
   # Rationale:
   # -Wno-parentheses [its diagnostics are beyond pedantic]
   gcc_version_specific_warnings := \
     -Wno-parentheses \
 
-  cxx_standard := -std=c++17
-
-# The default '-fno-rounding-math' means something like
-  #   #pragma STDC FENV ACCESS OFF
-  # which causes harm while bringing no countervailing benefit--see:
-  #   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
-  c_standard   += -frounding-math
-  cxx_standard += -frounding-math
+  cxx_standard := -frounding-math -std=c++17
 endif
 
 treat_warnings_as_errors := -pedantic-errors -Werror
