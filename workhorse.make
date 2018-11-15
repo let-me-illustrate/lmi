@@ -604,6 +604,7 @@ endif
 # SOMEDAY !! Address some of these '-Wconversion' issues.
 
 wno_conv_objects := \
+  $(xmlwrapp_objects) \
   CgiUtils.o \
   currency_test.o \
   round_glibc.o \
