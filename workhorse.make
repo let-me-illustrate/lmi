@@ -607,6 +607,7 @@ wno_conv_objects := \
   $(xmlwrapp_objects) \
   CgiUtils.o \
   currency_test.o \
+  rate_table.o \
   round_glibc.o \
 
 $(wno_conv_objects): gcc_common_extra_warnings += -Wno-conversion -Wfloat-conversion
