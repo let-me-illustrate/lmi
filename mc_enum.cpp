@@ -23,6 +23,8 @@
 
 #include "mc_enum.hpp"
 
+#include "bourn_cast.hpp"
+
 #include <algorithm>                    // find()
 
 mc_enum_base::mc_enum_base(int cardinality_of_the_enumeration)
@@ -53,7 +55,10 @@ void mc_enum_base::allow_all(bool b)
 
 int mc_enum_base::first_allowed_ordinal() const
 {
-    return std::find(allowed_.begin(), allowed_.end(), true) - allowed_.begin();
+    return bourn_cast<int>
+        ( std::find(allowed_.begin(), allowed_.end(), true)
+        - allowed_.begin()
+        );
 }
 
 bool mc_enum_base::is_allowed(int index) const
