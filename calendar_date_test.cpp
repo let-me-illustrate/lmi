@@ -1077,7 +1077,7 @@ void CalendarDateTest::TestIo()
 // bodies of these speed-test functions. For now, writing to a quasi-
 // global volatile variable is intended to serve that function, though
 // it's difficult to be sure it's correctly used in each case, and
-// calling julian_day_number() or size() just to get a value to write
+// calling julian_day_number() or empty() just to get a value to write
 // to that volatile variable is an ugly artifice.
 
 namespace
@@ -1091,7 +1091,7 @@ void mete()
     calendar_date u(2525, 12, 31);
     t = u;
     ++t;
-    scupper = t.str().size();
+    scupper = t.str().empty();
     t = add_years_and_months(t, 1, 1, true);
     scupper = attained_age(u, t, oe_age_last_birthday);
     u = minimum_birthdate(45, t, oe_age_last_birthday);
@@ -1132,7 +1132,7 @@ void mete_get_y_m_d()
 void mete_format()
 {
     static const calendar_date t(7510, 12, 31);
-    scupper = t.str().size();
+    scupper = t.str().empty();
 }
 
 void mete_attained_age()
