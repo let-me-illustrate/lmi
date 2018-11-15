@@ -24,6 +24,7 @@
 #include "ce_product_name.hpp"
 
 #include "alert.hpp"
+#include "bourn_cast.hpp"
 #include "contains.hpp"
 #include "facets.hpp"
 #include "global_settings.hpp"
@@ -35,7 +36,6 @@
 #include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // find()
-#include <cstddef>                      // ptrdiff_t
 
 namespace
 {
@@ -124,14 +124,14 @@ bool ce_product_name::operator==(std::string const& s) const
 
 int ce_product_name::ordinal(std::string const& s)
 {
-    std::ptrdiff_t v =
-            std::find
-                (product_names().begin()
-                ,product_names().end()
-                ,s
-                )
-        -   product_names().begin()
-        ;
+    auto v = bourn_cast<int>
+        ( std::find
+            (product_names().begin()
+            ,product_names().end()
+            ,s
+            )
+        - product_names().begin()
+        );
     if(v == lmi::ssize(product_names()))
         {
         alarum()

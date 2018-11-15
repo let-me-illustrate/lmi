@@ -23,11 +23,11 @@
 #include "mc_enum_metadata.hpp"
 
 #include "alert.hpp"
+#include "bourn_cast.hpp"
 #include "facets.hpp"
 #include "rtti_lmi.hpp"
 
 #include <algorithm>                    // find()
-#include <cstddef>                      // ptrdiff_t
 #include <typeinfo>
 
 /// The header that defines class mc_enum is by design unaware of its
@@ -108,7 +108,7 @@ bool mc_enum<T>::operator!=(std::string const& s) const
 template<typename T>
 int mc_enum<T>::ordinal(std::string const& s)
 {
-    std::ptrdiff_t v = std::find(c(), c() + n(), s) - c();
+    auto v = bourn_cast<int>(std::find(c(), c() + n(), s) - c());
     if(v == n())
         {
         alarum()
@@ -153,7 +153,7 @@ void mc_enum<T>::enforce_proscription()
 template<typename T>
 int mc_enum<T>::ordinal() const
 {
-    std::ptrdiff_t i = std::find(e(), e() + n(), value_) - e();
+    auto i = bourn_cast<int>(std::find(e(), e() + n(), value_) - e());
     if(i == n())
         {
         alarum()
@@ -238,10 +238,13 @@ std::istream& mc_enum<T>::read(std::istream& is)
     is >> s;
     is.imbue(old_locale);
 
-    std::ptrdiff_t v = std::find(c(), c() + n(), s) - c();
+    auto v = bourn_cast<int>(std::find(c(), c() + n(), s) - c());
     if(n() == v)
         {
-        v = std::find(c(), c() + n(), provide_for_backward_compatibility(s)) - c();
+        v = bourn_cast<int>
+            ( std::find(c(), c() + n(), provide_for_backward_compatibility(s))
+            - c()
+            );
         }
     if(n() == v)
         {
