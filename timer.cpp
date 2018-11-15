@@ -192,7 +192,10 @@ double Timer::inspect() const
 #if defined LMI_POSIX
     timeval x;
     gettimeofday(&x, nullptr);
-    return x.tv_usec + 1000000.0 * x.tv_sec;
+    return
+                      bourn_cast<double>(x.tv_usec)
+        + 1000000.0 * bourn_cast<double>(x.tv_sec)
+        ;
 #elif defined LMI_MSW
 #   if defined LMI_MS_HEADER_INCLUDED
     LARGE_INTEGER z;
