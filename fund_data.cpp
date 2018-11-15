@@ -28,6 +28,7 @@
 #include "data_directory.hpp"
 #include "my_proem.hpp"                 // ::write_proem()
 #include "platform_dependent.hpp"       // access()
+#include "ssize_lmi.hpp"
 #include "xml_lmi.hpp"
 #include "xml_serialize.hpp"
 
@@ -79,6 +80,11 @@ template<> struct xml_io<FundInfo>
 FundData::FundData(std::string const& a_Filename)
 {
     Read(a_Filename);
+}
+
+int FundData::GetNumberOfFunds() const
+{
+    return lmi::ssize(FundInfo_);
 }
 
 namespace

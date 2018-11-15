@@ -21,6 +21,7 @@
 
 #include "pchfile.hpp"
 
+#include "fund_data.hpp"
 #include "gpt_server.hpp"
 #include "lmi.hpp"                      // is_antediluvian_fork()
 #include "mec_server.hpp"
@@ -40,6 +41,13 @@ void authenticate_system()
 bool is_antediluvian_fork()
 {
     return true;
+}
+
+// Stubs alphabetized in ASCII order.
+
+int FundData::GetNumberOfFunds() const
+{
+    return 0;
 }
 
 gpt_server::gpt_server(mcenum_emission)
@@ -197,4 +205,3 @@ double stratified_charges::tiered_premium_tax(mcenum_state, double, double) cons
 {
     return 0.0;
 }
-

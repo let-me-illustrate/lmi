@@ -107,10 +107,5 @@ inline FundInfo const& FundData::GetFundInfo(int j) const
     return FundInfo_[j];
 }
 
-inline int FundData::GetNumberOfFunds() const
-{
-    return FundInfo_.size();
-}
-
 #endif // fund_data_hpp
 
