@@ -90,7 +90,7 @@ namespace
         e = 0;
         for(i = 0; i < lmi::ssize(p); ++i)
             {
-            e |= 1L << (31 - p[i]);
+            e |= std::uint32_t(1) << (31 - p[i]);
             }
 
         for(i = 1; i < 256; ++i)
