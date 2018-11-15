@@ -393,30 +393,27 @@ else ifneq (,$(filter $(gcc_version), 4.9.1 4.9.2))
   #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
   gcc_version_specific_warnings := \
     -Wno-conversion \
-    -Wno-parentheses \
     -Wno-unused-local-typedefs \
     -Wno-unused-variable \
 
   cxx_standard := -std=c++11
 else ifneq (,$(filter $(gcc_version), 6.3.0))
-  # See:
-  #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00028.html
-  #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
   gcc_version_specific_warnings := \
     -Wno-conversion \
-    -Wno-parentheses \
 
   cxx_standard := -frounding-math -std=c++17
 else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
-  # Rationale:
-  # -Wno-parentheses [its diagnostics are beyond pedantic]
   gcc_version_specific_warnings := \
-    -Wno-parentheses \
 
   cxx_standard := -frounding-math -std=c++17
 endif
 
 treat_warnings_as_errors := -pedantic-errors -Werror
+
+# Write '-Wno' options at the end.
+#
+# Rationale for specific warning options:
+# -Wno-parentheses [its diagnostics are beyond pedantic]
 
 gcc_common_warnings := \
   $(treat_warnings_as_errors) \
@@ -443,7 +440,6 @@ gcc_common_warnings := \
   -Wmissing-include-dirs \
   -Wmultichar \
   -Wpacked \
-  -Wparentheses \
   -Wpointer-arith \
   -Wredundant-decls \
   -Wrestrict \
@@ -456,6 +452,7 @@ gcc_common_warnings := \
   -Wunused-macros \
   -Wvector-operation-performance \
   -Wwrite-strings \
+  -Wno-parentheses \
 
 # Consider these later.
 #
