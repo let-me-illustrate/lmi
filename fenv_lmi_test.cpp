@@ -50,17 +50,20 @@ std::bitset<CHAR_BIT * sizeof(std::uint32_t)> bits(std::uint32_t i)
     return std::bitset<CHAR_BIT * sizeof(std::uint32_t)>(i);
 }
 
-#define BOOST_TEST_EQUAL_BITS(a,b)                    \
-    if((a) == (b))                                    \
-        lmi_test::record_success();                   \
-    else                                              \
-        {                                             \
-        lmi_test::record_error();                     \
-        lmi_test::error_stream() << "Unequal:";       \
-        lmi_test::error_stream() << bits(a);          \
-        lmi_test::error_stream() << bits(b);          \
-        lmi_test::error_stream() << BOOST_TEST_FLUSH; \
-        }                                             \
+#if defined LMI_X87
+#   define BOOST_TEST_EQUAL_BITS(a,b)                     \
+        if((a) == (b))                                    \
+            lmi_test::record_success();                   \
+        else                                              \
+            {                                             \
+            lmi_test::record_error();                     \
+            lmi_test::error_stream() << "Unequal:";       \
+            lmi_test::error_stream() << bits(a);          \
+            lmi_test::error_stream() << bits(b);          \
+            lmi_test::error_stream() << BOOST_TEST_FLUSH; \
+            }                                             \
+
+#endif // defined LMI_X87
 
 int test_main(int, char*[])
 {
