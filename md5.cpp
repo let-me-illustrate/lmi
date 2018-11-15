@@ -42,6 +42,8 @@
 
 #include "pchfile.hpp"
 
+#include "bourn_cast.hpp"
+
 // Suppress this because we wouldn't have glibc's 'config.h'.
 //#if defined HAVE_CONFIG_H
 //# include <config.h>
@@ -269,15 +271,16 @@ md5_buffer (char const* buffer, std::size_t len, void* resblock)
  *      struct md5_ctx *ctx;
  */
 void
-md5_process_bytes (void const* buffer, std::size_t len, struct md5_ctx* ctx)
+md5_process_bytes (void const* buffer, std::size_t a_len, struct md5_ctx* ctx)
 {
+  md5_uint32 len = bourn_cast<md5_uint32>(a_len);
   /* When we already have some bits in our internal buffer concatenate
    * both inputs first.
    */
   if (ctx->buflen != 0)
     {
-      std::size_t left_over = ctx->buflen;
-      std::size_t add = 128 - left_over > len ? len : 128 - left_over;
+      md5_uint32 left_over = ctx->buflen;
+      md5_uint32 add = 128 - left_over > len ? len : 128 - left_over;
 
       std::memcpy (&ctx->buffer[left_over], buffer, add);
       ctx->buflen += add;
@@ -333,8 +336,9 @@ md5_process_bytes (void const* buffer, std::size_t len, struct md5_ctx* ctx)
  *      struct md5_ctx *ctx;
  */
 void
-md5_process_block (void const* buffer, std::size_t len, struct md5_ctx* ctx)
+md5_process_block (void const* buffer, std::size_t a_len, struct md5_ctx* ctx)
 {
+  md5_uint32 len = bourn_cast<md5_uint32>(a_len);
   md5_uint32 correct_words[16];
 /* GWC: Conform to C++98.
  * const md5_uint32 *words = buffer;
