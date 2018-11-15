@@ -549,7 +549,12 @@ operations_posix_windows.o: gcc_common_extra_warnings += -Wno-maybe-uninitialize
 operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-macros
 operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
 
-# The boost regex library is incompatible with many warnings.
+# Some boost-1.33.1 libraries are incompatible with many warnings.
+
+$(boost_filesystem_objects): gcc_common_extra_warnings += \
+  -Wno-deprecated-declarations \
+  -Wno-unused-macros \
+  -Wno-useless-cast \
 
 $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
