@@ -168,7 +168,7 @@ void mortality_rates_test::test_guaranteed_rates
     )
 {
     MortalityRates z;
-    z.Length_            = annual_rates().size();
+    z.Length_            = lmi::ssize(annual_rates());
 
     z.GCoiMultiplier_    = std::vector<double>(z.Length_, mult);
     z.MaxMonthlyCoiRate_ = max;

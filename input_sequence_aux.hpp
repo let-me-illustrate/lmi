@@ -33,6 +33,7 @@
 #include "input_sequence.hpp"
 #include "mc_enum.hpp"
 #include "so_attributes.hpp"
+#include "ssize_lmi.hpp"
 #include "tn_range.hpp"
 
 #include <map>
@@ -54,7 +55,7 @@ namespace detail
         ,std::vector<double> const& src
         )
     {
-        int len = src.size();
+        int len = lmi::ssize(src);
         dst.resize(len);
         for(int j = 0; j < len; ++j)
             {
@@ -70,7 +71,7 @@ namespace detail
         ,std::string              const& default_keyword
         )
     {
-        int len = src.size();
+        int len = lmi::ssize(src);
         dst.resize(len);
         for(int j = 0; j < len; ++j)
             {

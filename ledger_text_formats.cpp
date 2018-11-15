@@ -38,6 +38,7 @@
 #include "map_lookup.hpp"
 #include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg()
 #include "miscellany.hpp"
+#include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 
 #include <algorithm>                    // find()
@@ -876,7 +877,7 @@ namespace
     int const g_width = 128;
     std::string center(std::string const& s)
         {
-        int const z = s.length();
+        int const z = lmi::ssize(s);
         // Strings in the input class might be too wide; absent more
         // graceful handling, at least no attempt is made to cure that
         // problem with a negative number of spaces.

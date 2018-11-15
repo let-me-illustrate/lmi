@@ -25,6 +25,7 @@
 
 #include "assert_lmi.hpp"
 #include "et_vector.hpp"                // [VECTORIZE]
+#include "ssize_lmi.hpp"
 
 #include <algorithm>                    // rotate_copy() [VECTORIZE]
 #include <cmath>                        // pow()
@@ -49,8 +50,8 @@ OLCommFns::OLCommFns
     :q {a_q}
     ,i {a_i}
 {
-    Length = q.size();
-    LMI_ASSERT(i.size() == q.size());
+    Length = lmi::ssize(q);
+    LMI_ASSERT(lmi::ssize(i) == lmi::ssize(q));
 
 #if defined VECTORIZE
     ed.resize(Length);
@@ -126,9 +127,9 @@ ULCommFns::ULCommFns
     ,dbo_  {dbo}
     ,mode_ {mode}
 {
-    Length = qc.size();
-    LMI_ASSERT(ic.size() == qc.size());
-    LMI_ASSERT(ig.size() == qc.size());
+    Length = lmi::ssize(qc);
+    LMI_ASSERT(lmi::ssize(ic) == lmi::ssize(qc));
+    LMI_ASSERT(lmi::ssize(ig) == lmi::ssize(qc));
 
     ad.resize(1 + Length);
     kd.resize(    Length);

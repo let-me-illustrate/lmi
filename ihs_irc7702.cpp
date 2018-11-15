@@ -385,7 +385,7 @@ double Irc7702::Forceout()
 //============================================================================
 void Irc7702::Init()
 {
-    Length = Qc.size();
+    Length = lmi::ssize(Qc);
     // TODO ?? Assumes that endowment age is always 100--should pass as arg instead.
     // TAXATION !! Is the comment above correct? Maturity age is passed as an argument.
     LMI_ASSERT(Length == EndtAge - IssueAge);
@@ -950,7 +950,7 @@ void Irc7702::InitSevenPayPrem()
         // 7PP = MO / (N0-N7) (limit 7 to maturity year)
         // TAXATION !! add flat extras to 7PP?
         double denom = CFFourPctMin->N()[j];
-        if((7 + j) < q.size())
+        if((7 + j) < lmi::ssize(q))
             {
             denom -= CFFourPctMin->N()[7 + j];
             }
