@@ -366,7 +366,7 @@
                                             <border>4</border>
                                             <object class="wxCheckBox" name="BlendSmoking">
                                                 <help>Blend mortality by smoking</help>
-                                                <label>Tobacco</label>
+                                                <label>Nontobacco</label>
                                             </object>
                                         </object>
                                         <object class="sizeritem">

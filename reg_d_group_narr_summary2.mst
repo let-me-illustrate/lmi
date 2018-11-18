@@ -85,12 +85,12 @@ or sending money.
     {{MortalityBlendFootnote}}
     Custom blend assumptions:
     {{#SmokerBlended}}
-        tobacco = {{SmokerPct}};
+        nontobacco = {{NonsmokerProportion}};
     {{/SmokerBlended}}
     {{^SmokerBlended}}
         no blending by tobacco use;
     {{/SmokerBlended}}
-    male = {{MalePct}}.
+    male = {{MaleProportion}}.
     </p>
 {{/GenderBlended}}
 {{^GenderBlended}}
@@ -98,9 +98,9 @@ or sending money.
         <p>
         {{MortalityBlendFootnote}}
         Custom blend assumptions:
-        tobacco = {{SmokerPct}};
+        nontobacco = {{NonsmokerProportion}};
         {{#GenderBlended}}
-            male = {{MalePct}}.
+            male = {{MaleProportion}}.
         {{/GenderBlended}}
         {{^GenderBlended}}
             no blending by gender.
