@@ -1204,11 +1204,15 @@ std::string ledger_format
     ,std::pair<int,oenum_format_style> f
     )
 {
-    std::stringstream interpreter;
-    std::locale loc;
-    std::locale new_loc(loc, new comma_punct);
-    interpreter.imbue(new_loc);
-    interpreter.setf(std::ios_base::fixed, std::ios_base::floatfield);
+    static std::stringstream interpreter{[]() {
+        std::stringstream ss;
+        std::locale loc;
+        std::locale new_loc(loc, new comma_punct);
+        ss.imbue(new_loc);
+        ss.setf(std::ios_base::fixed, std::ios_base::floatfield);
+        return ss;
+    } ()};
+    interpreter.clear();
     interpreter.precision(f.first);
     std::string s;
     if(f.second)
