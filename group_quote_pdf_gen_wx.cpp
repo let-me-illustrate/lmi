@@ -560,7 +560,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_additional_premium:
                 {
-                double const z = invar.EeModalMinimumPremium.at(year) + invar.ModalMinimumDumpin;
+                double const z = invar.EeModalMinimumPremium.at(year);
                 rd.output_values[i] = '$' + ledger_format(z, f2);
                 if(is_composite)
                     {
@@ -580,7 +580,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_total_premium:
                 {
-                double const z = invar.ModalMinimumPremium.at(year) + invar.ModalMinimumDumpin;
+                double const z = invar.ModalMinimumPremium.at(year);
                 rd.output_values[i] = '$' + ledger_format(z, f2);
                 if(is_composite)
                     {

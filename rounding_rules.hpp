@@ -151,7 +151,6 @@ class LMI_SO rounding_rules final
     rounding_parameters round_max_specamt_       ;
     rounding_parameters round_min_premium_       ;
     rounding_parameters round_max_premium_       ;
-    rounding_parameters round_min_init_premium_  ;
 };
 
 void LMI_SO load(rounding_rules      &, fs::path const&);

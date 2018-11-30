@@ -219,11 +219,9 @@ void LedgerInvariant::Init(BasicValues const* b)
 //  GuarPrem                = 0;
 //  InitSevenPayPrem        =
 //  InitTgtPrem             =
-//  InitMinPrem             =
 //  ListBillPremium         =
 //  EeListBillPremium       =
 //  ErListBillPremium       =
-//  ModalMinimumDumpin      =
 
     MaleProportion          = b->yare_input_.MaleProportion;
     NonsmokerProportion     = b->yare_input_.NonsmokerProportion;

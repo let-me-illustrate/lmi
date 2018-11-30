@@ -286,10 +286,6 @@ class LMI_SO AccountValue
     double SurrChg                 () const;
     double CSVBoost                () const;
 
-    double MinInitDumpin() const;
-    double MinInitPrem() const;
-    double ModalMinInitPremShortfall() const;
-
     void   set_list_bill_year_and_month();
     void   set_list_bill_premium();
 
@@ -360,8 +356,6 @@ class LMI_SO AccountValue
     double External1035Amount;
     double Internal1035Amount;
     double Dumpin;
-
-    double InitAnnPlannedPrem_;
 
     double MlyNoLapsePrem;
     double CumNoLapsePrem;

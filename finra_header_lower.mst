@@ -34,9 +34,6 @@
             {{Gender}} {{Smoker}} rates, Age {{Age}}<br>
         {{/Composite}}
         {{ContractNameCap}}: {{PolicyMktgName}}<br>
-        {{#GroupCarveout}}
-            Minimum Initial Premium: ${{InitMinPrem}}<br>
-        {{/GroupCarveout}}
         First Year Premium: ${{InitPrem}}<br>
         {{^Composite}}
             {{#UWTypeIsMedical}}

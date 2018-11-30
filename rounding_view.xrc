@@ -316,18 +316,6 @@
                                         <size>-1,-1</size>
                                     </object>
                                 </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-                                    <object class="wxStaticText">
-                                        <label>Minimum initial premium</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT</flag>
-                                    <object class="RoundingButtons" name="min_init_premium">
-                                        <size>-1,-1</size>
-                                    </object>
-                                </object>
                             </object>
                         </object>
                     </object>

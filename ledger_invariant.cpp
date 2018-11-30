@@ -119,11 +119,9 @@ void LedgerInvariant::Alloc(int len)
     ScalableScalars ["InitGSP"               ] = &InitGSP                ;
     ScalableScalars ["InitGLP"               ] = &InitGLP                ;
     ScalableScalars ["InitTgtPrem"           ] = &InitTgtPrem            ;
-    ScalableScalars ["InitMinPrem"           ] = &InitMinPrem            ;
     ScalableScalars ["ListBillPremium"       ] = &ListBillPremium        ;
     ScalableScalars ["EeListBillPremium"     ] = &EeListBillPremium      ;
     ScalableScalars ["ErListBillPremium"     ] = &ErListBillPremium      ;
-    ScalableScalars ["ModalMinimumDumpin"    ] = &ModalMinimumDumpin     ;
     ScalableScalars ["Dumpin"                ] = &Dumpin                 ;
     ScalableScalars ["External1035Amount"    ] = &External1035Amount     ;
     ScalableScalars ["Internal1035Amount"    ] = &Internal1035Amount     ;

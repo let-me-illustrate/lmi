@@ -480,9 +480,7 @@ format_map_t static_formats()
     ,{"InitPrem"                        , f2}
     ,{"InitSevenPayPrem"                , f2}
     ,{"InitTgtPrem"                     , f2}
-    ,{"InitMinPrem"                     , f2}
     ,{"ListBillPremium"                 , f2}
-    ,{"ModalMinimumDumpin"              , f2}
 // >
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,###)

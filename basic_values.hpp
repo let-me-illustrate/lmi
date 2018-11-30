@@ -190,7 +190,6 @@ class LMI_SO BasicValues
     round_to<double> const& round_max_specamt       () const {return round_max_specamt_       ;}
     round_to<double> const& round_min_premium       () const {return round_min_premium_       ;}
     round_to<double> const& round_max_premium       () const {return round_max_premium_       ;}
-    round_to<double> const& round_min_init_premium  () const {return round_min_init_premium_  ;}
 
   protected:
     double GetModalMinPrem
@@ -461,7 +460,6 @@ class LMI_SO BasicValues
     round_to<double> round_max_specamt_       ;
     round_to<double> round_min_premium_       ;
     round_to<double> round_max_premium_       ;
-    round_to<double> round_min_init_premium_  ;
 };
 
 inline int BasicValues::GetLength() const

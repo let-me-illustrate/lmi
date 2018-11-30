@@ -1194,36 +1194,6 @@ void AccountValue::TxAscertainDesiredPayment()
     LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
     LMI_ASSERT(GrossPmts[Month] < 1.0e100);
 
-    // On the issue date (which is always a modal payment date), store
-    // annualized planned premium, including dumpin and 1035 proceeds,
-    // and reflecting the payment strategies just applied (and premium
-    // solves, on the final iteration). Of course, any planned premium
-    // might be reduced to the guideline or non-MEC limit.
-    if(0 == Year && 0 == Month)
-        {
-        InitAnnPlannedPrem_ =
-              Dumpin
-            + External1035Amount
-            + Internal1035Amount
-            + ee_mode * eepmt
-            + er_mode * erpmt
-            ;
-        }
-
-    if(0 == Year && ee_pay_this_month && 1 == database().query<int>(DB_MinInitPremType))
-        {
-        double z = ModalMinInitPremShortfall();
-        // Illustration-reg guaranteed premium ignores GPT limit.
-        if(!SolvingForGuarPremium)
-            {
-            Irc7702_->ProcessGptPmt(Year, z);
-            }
-        EeGrossPmts[Month] += z;
-        GrossPmts  [Month] += z;
-        }
-
-    LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
-
     if(0 == Year && 0 == Month)
         {
         // Illustration-reg guaranteed premium ignores GPT limit.

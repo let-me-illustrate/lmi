@@ -152,7 +152,6 @@ rounding_rules::rounding_rules()
     ,round_max_specamt_       (0, r_downward  , "")
     ,round_min_premium_       (2, r_upward    , "")
     ,round_max_premium_       (2, r_downward  , "")
-    ,round_min_init_premium_  (2, r_upward    , "")
 {
     ascribe_members();
 }
@@ -189,7 +188,6 @@ rounding_rules::rounding_rules(std::string const& filename)
     LMI_ASSERT(r_not_at_all == round_max_specamt_       .style() || r_downward == round_max_specamt_       .style());
     LMI_ASSERT(r_not_at_all == round_min_premium_       .style() || r_upward   == round_min_premium_       .style());
     LMI_ASSERT(r_not_at_all == round_max_premium_       .style() || r_downward == round_max_premium_       .style());
-    LMI_ASSERT(r_not_at_all == round_min_init_premium_  .style() || r_upward   == round_min_init_premium_  .style());
 }
 
 /// Member datum nominated by the given name.
@@ -224,7 +222,6 @@ void rounding_rules::ascribe_members()
     ascribe("RoundMaxSpecamt"  , &rounding_rules::round_max_specamt_       );
     ascribe("RoundMinPrem"     , &rounding_rules::round_min_premium_       );
     ascribe("RoundMaxPrem"     , &rounding_rules::round_max_premium_       );
-    ascribe("RoundMinInitPrem" , &rounding_rules::round_min_init_premium_  );
 }
 
 /// Backward-compatibility serial number of this class's xml version.
