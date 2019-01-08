@@ -118,14 +118,14 @@ cd ../tables; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check
   # 'X' and 'Y' years):
 
 cd /opt/lmi/proprietary/data/
-for z in *; do sed -i $z -e'/Copyright/s/201X/201Y/'; done
+for z in *; do sed -i $z -e'/Copyright/s/201X/201X, 201Y/'; done
 
   # and compare to the regenerated set in /opt/lmi/data
 
   # Use the same command to update rate tables similarly:
 
 cd /opt/lmi/proprietary/tables
-for z in *; do sed -i $z -e'/Copyright/s/2016/2017/'; done
+for z in *; do sed -i $z -e'/Copyright/s/201X/201Y/'; done
 
   # and regenerate the binary database.
 
