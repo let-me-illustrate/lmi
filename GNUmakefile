@@ -364,6 +364,8 @@ check_concinnity: source_clean custom_tools
 # Be sure to update these hardcoded dates. This target might be made
 # either in the last days of the old year or the first days of the
 # new, so they can't be derived dynamically from the current date.
+#
+# For rate tables etc., see 'gwc/develop2'.
 
 old_year := 2018
 new_year := 2019
