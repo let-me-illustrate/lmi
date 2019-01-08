@@ -368,7 +368,7 @@ check_concinnity: source_clean custom_tools
 old_year := 2018
 new_year := 2019
 
-backup_directory := saved_$(old_year)
+backup_directory := ../saved_$(old_year)
 
 unutterable := Copyright
 
