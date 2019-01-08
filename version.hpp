@@ -1,4 +1,4 @@
-// Copyright (C) 2018, 2019 Gregory W. Chicares.
+// Copyright (C) 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -22,6 +22,6 @@
 
 #include "config.hpp"
 
-#define LMI_VERSION "20181210T1608Z"
+#define LMI_VERSION "20190108T1815Z"
 
 #endif // version_hpp
