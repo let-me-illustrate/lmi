@@ -1,6 +1,6 @@
 // Numeric stinted cast, across whose bourn no value is returned.
 //
-// Copyright (C) 2017, 2018 Gregory W. Chicares.
+// Copyright (C) 2017, 2018, 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
