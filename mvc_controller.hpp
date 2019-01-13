@@ -30,6 +30,7 @@
 
 #include <map>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 class MvcModel;
@@ -374,6 +375,9 @@ namespace model_view_controller{} // doxygen workaround.
 ///
 /// view_: Reference to View.
 ///
+/// itemboxes_cache_: Cached items of wxItemContainer instances,
+/// identified by their names, in the View.
+///
 /// last_focused_window_: Points to the last window, other than a
 /// 'Cancel' pushbutton, that had gained focus without losing it
 /// immediately due to UponRefocusInvalidControl(). This is the one
@@ -462,6 +466,8 @@ class MvcController final
 
     MvcModel& model_;
     MvcView const& view_;
+
+    std::unordered_map<std::string, std::vector<wxString>> itemboxes_cache_;
 
     wxWindow* last_focused_window_;
 
