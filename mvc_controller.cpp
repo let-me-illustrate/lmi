@@ -331,19 +331,28 @@ void MvcController::ConditionallyEnableItems
         }
     else if(itembox)
         {
-        // WX !! wxWindowUpdateLocker doesn't seem to help much.
-        wxWindowUpdateLocker u(&control);
-        itembox->Clear();
-        // WX !! Append(wxArrayString const&) "may be much faster"
-        // according to wx online help, but that seems untrue: its
-        // implementation just uses a loop.
+        auto& cached_items = itemboxes_cache_[name];
+
+        std::vector<wxString> items;
+        items.reserve(datum->cardinality());
+
         for(int j = 0; j < datum->cardinality(); ++j)
             {
             if(datum->is_allowed(j))
                 {
-                itembox->Append(datum->str(j));
+                items.push_back(datum->str(j));
                 }
             }
+
+        wxWindowUpdateLocker u(&control);
+
+        if(items != cached_items)
+            {
+            std::swap(cached_items, items);
+
+            itembox->Set(cached_items);
+            }
+
         itembox->SetStringSelection(datum->str(datum->ordinal()));
         }
     else
