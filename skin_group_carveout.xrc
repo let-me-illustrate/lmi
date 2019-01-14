@@ -2010,7 +2010,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxALIGN_LEFT|wxALIGN_TOP|wxLEFT|wxBOTTOM</flag>
                                     <border>4</border>
                                     <object class="wxRadioBox" name="FundChoiceType">
-                                        <help>Fund allocation</help>
+                                        <help>Fund allocation: for 100% general account, pick "Choose funds"; for 100% separate account, pick "Average fund"</help>
                                         <style>wxRA_SPECIFY_COLS</style>
                                         <content>
                                             <item>Average fund</item>
