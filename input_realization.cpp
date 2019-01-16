@@ -582,7 +582,19 @@ std::string Input::RealizeDeathBenefitOption()
             );
         }
 
-    // DBO3 !! Need rules for MDB as well.
+    if
+        (   !database_->query<bool>(DB_AllowDboMdb)
+        &&  contains(DeathBenefitOptionRealized_, mce_dbopt("MDB"))
+        // DBO3 !! For testing convenience--remove later.
+        &&  !global_settings::instance().ash_nazg()
+        )
+        {
+        return
+            ("Policy form forbids MDB death benefit option."
+            );
+        }
+
+    // DBO3 !! Need rules for changes to and from MDB as well.
     return "";
 }
 
