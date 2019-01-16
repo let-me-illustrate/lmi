@@ -24,6 +24,114 @@
 #include "stream_cast.hpp"
 
 #include "test_tools.hpp"
+#include "timer.hpp"
+
+/// A minimalistic clone of stream_cast<>().
+
+template<typename To, typename From>
+To cast_1(From from, To = To())
+{
+    std::stringstream interpreter;
+    interpreter.imbue(blank_is_not_whitespace_locale());
+
+    To result = To();
+    if
+        (  !(interpreter << from)
+        || !(interpreter >> result)
+        || !(interpreter >> std::ws).eof()
+        )
+        {
+        throw std::runtime_error("Oops!");
+        }
+    return result;
+}
+
+/// Like cast_1<>(), but with static 'interpreter'.
+
+template<typename To, typename From>
+To cast_2(From from, To = To())
+{
+    static std::stringstream interpreter;
+    interpreter.imbue(blank_is_not_whitespace_locale());
+    interpreter.str(std::string{});
+    interpreter.clear();
+
+    To result = To();
+    if
+        (  !(interpreter << from)
+        || !(interpreter >> result)
+        || !(interpreter >> std::ws).eof()
+        )
+        {
+        throw std::runtime_error("Oops!");
+        }
+    return result;
+}
+
+std::stringstream& imbued()
+{
+    static std::stringstream interpreter;
+    interpreter.imbue(blank_is_not_whitespace_locale());
+    return interpreter;
+}
+
+/// Like cast_2<>(), but with statically imbued static 'interpreter'.
+
+template<typename To, typename From>
+To cast_3(From from, To = To())
+{
+    std::stringstream& interpreter {imbued()};
+    interpreter.str(std::string{});
+    interpreter.clear();
+    To result = To();
+    if
+        (  !(interpreter << from)
+        || !(interpreter >> result)
+        || !(interpreter >> std::ws).eof()
+        )
+        {
+        throw std::runtime_error("Oops!");
+        }
+    return result;
+}
+
+/// Like cast_3<>(), but without calling str().
+
+template<typename To, typename From>
+To cast_4(From from, To = To())
+{
+    std::stringstream& interpreter {imbued()};
+    interpreter.clear();
+    To result = To();
+    if
+        (  !(interpreter << from)
+        || !(interpreter >> result)
+        || !(interpreter >> std::ws).eof()
+        )
+        {
+        throw std::runtime_error("Oops!");
+        }
+    return result;
+}
+
+void assay_speed()
+{
+    static double const e {2.718281828459045};
+    auto f0 = [] {stream_cast<std::string>(e);};
+    auto f1 = [] {cast_1     <std::string>(e);};
+    auto f2 = [] {cast_2     <std::string>(e);};
+    auto f3 = [] {cast_3     <std::string>(e);};
+    auto f4 = [] {cast_4     <std::string>(e);};
+    std::cout
+        << "\n  Speed tests..."
+        << "\n  stream_cast     : " << TimeAnAliquot(f0)
+        << "\n  minimalistic    : " << TimeAnAliquot(f1)
+        << "\n  static stream   : " << TimeAnAliquot(f2)
+        << "\n  static facet too: " << TimeAnAliquot(f3)
+        << "\n  without str()   : " << TimeAnAliquot(f4)
+        << std::endl
+        ;
+}
 
 int test_main(int, char*[])
 {
@@ -97,6 +205,8 @@ int test_main(int, char*[])
         ,std::runtime_error
         ,"Cannot convert (char const*)(0) to std::string."
         );
+
+    assay_speed();
 
     return 0;
 }

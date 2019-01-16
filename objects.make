@@ -949,6 +949,7 @@ stream_cast_test$(EXEEXT): \
   $(common_test_objects) \
   facets.o \
   stream_cast_test.o \
+  timer.o \
 
 system_command_test$(EXEEXT): \
   $(common_test_objects) \
