@@ -35,7 +35,10 @@
 //   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00042.html
 //   https://sourceforge.net/p/mingw-w64/bugs/573/
 
-#include "version.hpp"                  // [to detect MinGW-w64]
+// Normally 'config.hpp' would be used to detect MinGW-w64. However,
+// that header is to be included only by header files, so instead
+// include any other lmi header--'version.hpp' is merely the simplest.
+#include "version.hpp"
 
 #if defined __MINGW64_VERSION_MAJOR
 
