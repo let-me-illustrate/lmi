@@ -117,8 +117,6 @@ To stream_cast(From from, To = To())
         {
         err << "Output failed ";
         }
-#if !defined LMI_COMO_WITH_MINGW
-    // COMPILER !! This appears to be a defect in libcomo.
     else if(!(interpreter >> std::ws))
         {
         err << "Trailing whitespace remains ";
@@ -127,18 +125,12 @@ To stream_cast(From from, To = To())
         {
         err << "Unconverted data remains ";
         }
-#endif // !defined LMI_COMO_WITH_MINGW
     else
         {
         ; // Nothing left to do.
         }
 
-#if !defined LMI_COMO_WITH_MINGW
     if(!interpreter || !interpreter.eof())
-#else  // defined LMI_COMO_WITH_MINGW
-    // COMPILER !! This appears to be a defect in libcomo.
-    if(!interpreter)
-#endif // defined LMI_COMO_WITH_MINGW
         {
         err
             << "converting '"
