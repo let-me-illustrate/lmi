@@ -117,11 +117,11 @@ To cast_4(From from, To = To())
 void assay_speed()
 {
     static double const e {2.718281828459045};
-    auto f0 = [] {stream_cast<std::string>(e);};
-    auto f1 = [] {cast_1     <std::string>(e);};
-    auto f2 = [] {cast_2     <std::string>(e);};
-    auto f3 = [] {cast_3     <std::string>(e);};
-    auto f4 = [] {cast_4     <std::string>(e);};
+    auto f0 = [] {for(int n = 0; n < 1000; ++n) stream_cast<std::string>(e);};
+    auto f1 = [] {for(int n = 0; n < 1000; ++n) cast_1     <std::string>(e);};
+    auto f2 = [] {for(int n = 0; n < 1000; ++n) cast_2     <std::string>(e);};
+    auto f3 = [] {for(int n = 0; n < 1000; ++n) cast_3     <std::string>(e);};
+    auto f4 = [] {for(int n = 0; n < 1000; ++n) cast_4     <std::string>(e);};
     std::cout
         << "\n  Speed tests..."
         << "\n  stream_cast     : " << TimeAnAliquot(f0)
