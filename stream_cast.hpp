@@ -103,11 +103,16 @@ To stream_cast(From from, To = To())
         );
     static_assert(!std::is_pointer<To>::value);
 
-    std::stringstream interpreter;
-    std::ostringstream err;
     To result = To();
-
-    interpreter.imbue(blank_is_not_whitespace_locale());
+    std::ostringstream err;
+    static std::stringstream interpreter = []
+        {
+        std::stringstream ss {};
+        ss.imbue(blank_is_not_whitespace_locale());
+        return ss;
+        } ();
+    interpreter.str(std::string{});
+    interpreter.clear();
 
     if(!(interpreter << from))
         {
