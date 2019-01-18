@@ -26,80 +26,12 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-/// A minimalistic clone of stream_cast<>().
+/// A streamlined clone of stream_cast<>() with simpler diagnostics.
 
 template<typename To, typename From>
-To cast_1(From from, To = To())
+To streamlined(From from, To = To())
 {
-    std::stringstream interpreter;
-    interpreter.imbue(blank_is_not_whitespace_locale());
-
     To result = To();
-    if
-        (  !(interpreter << from)
-        || !(interpreter >> result)
-        || !(interpreter >> std::ws).eof()
-        )
-        {
-        throw std::runtime_error("Oops!");
-        }
-    return result;
-}
-
-/// Like cast_1<>(), but with static 'interpreter'.
-
-template<typename To, typename From>
-To cast_2(From from, To = To())
-{
-    static std::stringstream interpreter;
-    interpreter.imbue(blank_is_not_whitespace_locale());
-    interpreter.str(std::string{});
-    interpreter.clear();
-
-    To result = To();
-    if
-        (  !(interpreter << from)
-        || !(interpreter >> result)
-        || !(interpreter >> std::ws).eof()
-        )
-        {
-        throw std::runtime_error("Oops!");
-        }
-    return result;
-}
-
-std::stringstream imbued()
-{
-    std::stringstream interpreter;
-    interpreter.imbue(blank_is_not_whitespace_locale());
-    return interpreter;
-}
-
-/// Like cast_2<>(), but with statically imbued static 'interpreter'.
-
-template<typename To, typename From>
-To cast_3(From from, To = To())
-{
-    static std::stringstream interpreter {imbued()};
-    interpreter.str(std::string{});
-    interpreter.clear();
-    To result = To();
-    if
-        (  !(interpreter << from)
-        || !(interpreter >> result)
-        || !(interpreter >> std::ws).eof()
-        )
-        {
-        throw std::runtime_error("Oops!");
-        }
-    return result;
-}
-
-/// Like cast_3<>(), but with a lambda instead of an auxiliary function.
-
-template<typename To, typename From>
-To cast_4(From from, To = To())
-{
     static std::stringstream interpreter = []
         {
         std::stringstream ss {};
@@ -108,7 +40,7 @@ To cast_4(From from, To = To())
         } ();
     interpreter.str(std::string{});
     interpreter.clear();
-    To result = To();
+
     if
         (  !(interpreter << from)
         || !(interpreter >> result)
@@ -117,6 +49,7 @@ To cast_4(From from, To = To())
         {
         throw std::runtime_error("Oops!");
         }
+
     return result;
 }
 
@@ -124,17 +57,11 @@ void assay_speed()
 {
     static double const e {2.718281828459045};
     auto f0 = [] {for(int n = 0; n < 1000; ++n) stream_cast<std::string>(e);};
-    auto f1 = [] {for(int n = 0; n < 1000; ++n) cast_1     <std::string>(e);};
-    auto f2 = [] {for(int n = 0; n < 1000; ++n) cast_2     <std::string>(e);};
-    auto f3 = [] {for(int n = 0; n < 1000; ++n) cast_3     <std::string>(e);};
-    auto f4 = [] {for(int n = 0; n < 1000; ++n) cast_4     <std::string>(e);};
+    auto f1 = [] {for(int n = 0; n < 1000; ++n) streamlined<std::string>(e);};
     std::cout
         << "\n  Speed tests..."
-        << "\n  stream_cast     : " << TimeAnAliquot(f0)
-        << "\n  minimalistic    : " << TimeAnAliquot(f1)
-        << "\n  static stream   : " << TimeAnAliquot(f2)
-        << "\n  static facet too: " << TimeAnAliquot(f3)
-        << "\n  same, but IIFE  : " << TimeAnAliquot(f4)
+        << "\n  stream_cast: " << TimeAnAliquot(f0)
+        << "\n  streamlined: " << TimeAnAliquot(f1)
         << std::endl
         ;
 }
