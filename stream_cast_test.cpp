@@ -68,9 +68,9 @@ To cast_2(From from, To = To())
     return result;
 }
 
-std::stringstream& imbued()
+std::stringstream imbued()
 {
-    static std::stringstream interpreter;
+    std::stringstream interpreter;
     interpreter.imbue(blank_is_not_whitespace_locale());
     return interpreter;
 }
@@ -80,7 +80,7 @@ std::stringstream& imbued()
 template<typename To, typename From>
 To cast_3(From from, To = To())
 {
-    std::stringstream& interpreter {imbued()};
+    static std::stringstream interpreter {imbued()};
     interpreter.str(std::string{});
     interpreter.clear();
     To result = To();
@@ -100,7 +100,7 @@ To cast_3(From from, To = To())
 template<typename To, typename From>
 To cast_4(From from, To = To())
 {
-    std::stringstream& interpreter {imbued()};
+    static std::stringstream interpreter {imbued()};
     interpreter.clear();
     To result = To();
     if
