@@ -95,6 +95,31 @@ To cast_3(From from, To = To())
     return result;
 }
 
+/// Like cast_3<>(), but with a lambda instead of an auxiliary function.
+
+template<typename To, typename From>
+To cast_4(From from, To = To())
+{
+    static std::stringstream interpreter = []
+        {
+        std::stringstream ss {};
+        ss.imbue(blank_is_not_whitespace_locale());
+        return ss;
+        } ();
+    interpreter.str(std::string{});
+    interpreter.clear();
+    To result = To();
+    if
+        (  !(interpreter << from)
+        || !(interpreter >> result)
+        || !(interpreter >> std::ws).eof()
+        )
+        {
+        throw std::runtime_error("Oops!");
+        }
+    return result;
+}
+
 void assay_speed()
 {
     static double const e {2.718281828459045};
@@ -102,12 +127,14 @@ void assay_speed()
     auto f1 = [] {for(int n = 0; n < 1000; ++n) cast_1     <std::string>(e);};
     auto f2 = [] {for(int n = 0; n < 1000; ++n) cast_2     <std::string>(e);};
     auto f3 = [] {for(int n = 0; n < 1000; ++n) cast_3     <std::string>(e);};
+    auto f4 = [] {for(int n = 0; n < 1000; ++n) cast_4     <std::string>(e);};
     std::cout
         << "\n  Speed tests..."
         << "\n  stream_cast     : " << TimeAnAliquot(f0)
         << "\n  minimalistic    : " << TimeAnAliquot(f1)
         << "\n  static stream   : " << TimeAnAliquot(f2)
         << "\n  static facet too: " << TimeAnAliquot(f3)
+        << "\n  same, but IIFE  : " << TimeAnAliquot(f4)
         << std::endl
         ;
 }
