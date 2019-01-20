@@ -1,6 +1,6 @@
 // Ledger evaluator returning values of all ledger fields.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -480,9 +480,7 @@ format_map_t static_formats()
     ,{"InitPrem"                        , f2}
     ,{"InitSevenPayPrem"                , f2}
     ,{"InitTgtPrem"                     , f2}
-    ,{"InitMinPrem"                     , f2}
     ,{"ListBillPremium"                 , f2}
-    ,{"ModalMinimumDumpin"              , f2}
 // >
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,###)

@@ -1,6 +1,6 @@
 # Top-level lmi makefile.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -364,11 +364,13 @@ check_concinnity: source_clean custom_tools
 # Be sure to update these hardcoded dates. This target might be made
 # either in the last days of the old year or the first days of the
 # new, so they can't be derived dynamically from the current date.
+#
+# For rate tables etc., see 'gwc/develop2'.
 
-old_year := 2017
-new_year := 2018
+old_year := 2018
+new_year := 2019
 
-backup_directory := saved_$(old_year)
+backup_directory := ../saved_$(old_year)
 
 unutterable := Copyright
 
@@ -395,7 +397,7 @@ happy_new_year: source_clean
 	[ -z '$(wildcard *.?pp)' ] || $(GREP) '$(old_year)' *.?pp \
 	  | $(SED) \
 	    -e '/$(old_year)[, ]*$(new_year)/d' \
-	    -e'/http:\/\/lists.nongnu.org\/archive\/html\/lmi\/$(old_year)/d' \
+	    -e'/https*:\/\/lists.nongnu.org\/archive\/html\/lmi\/$(old_year)/d' \
 	    -e'/\(VERSION\|version\).*$(old_year)[0-9]\{4\}T[0-9]\{4\}Z/d' \
 	  || true
 	$(GREP) --directories=skip $(unutterable) * \

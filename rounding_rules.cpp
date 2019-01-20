@@ -1,6 +1,6 @@
 // Rounding rules.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -152,7 +152,6 @@ rounding_rules::rounding_rules()
     ,round_max_specamt_       (0, r_downward  , "")
     ,round_min_premium_       (2, r_upward    , "")
     ,round_max_premium_       (2, r_downward  , "")
-    ,round_min_init_premium_  (2, r_upward    , "")
 {
     ascribe_members();
 }
@@ -189,7 +188,6 @@ rounding_rules::rounding_rules(std::string const& filename)
     LMI_ASSERT(r_not_at_all == round_max_specamt_       .style() || r_downward == round_max_specamt_       .style());
     LMI_ASSERT(r_not_at_all == round_min_premium_       .style() || r_upward   == round_min_premium_       .style());
     LMI_ASSERT(r_not_at_all == round_max_premium_       .style() || r_downward == round_max_premium_       .style());
-    LMI_ASSERT(r_not_at_all == round_min_init_premium_  .style() || r_upward   == round_min_init_premium_  .style());
 }
 
 /// Member datum nominated by the given name.
@@ -224,7 +222,6 @@ void rounding_rules::ascribe_members()
     ascribe("RoundMaxSpecamt"  , &rounding_rules::round_max_specamt_       );
     ascribe("RoundMinPrem"     , &rounding_rules::round_min_premium_       );
     ascribe("RoundMaxPrem"     , &rounding_rules::round_max_premium_       );
-    ascribe("RoundMinInitPrem" , &rounding_rules::round_min_init_premium_  );
 }
 
 /// Backward-compatibility serial number of this class's xml version.

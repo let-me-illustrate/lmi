@@ -1,6 +1,6 @@
 // Mortality rates--unit test.
 //
-// Copyright (C) 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+// Copyright (C) 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -168,7 +168,7 @@ void mortality_rates_test::test_guaranteed_rates
     )
 {
     MortalityRates z;
-    z.Length_            = annual_rates().size();
+    z.Length_            = lmi::ssize(annual_rates());
 
     z.GCoiMultiplier_    = std::vector<double>(z.Length_, mult);
     z.MaxMonthlyCoiRate_ = max;

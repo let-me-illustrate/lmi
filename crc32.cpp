@@ -1,6 +1,6 @@
 // 32-bit cyclic redundancy check.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -90,7 +90,7 @@ namespace
         e = 0;
         for(i = 0; i < lmi::ssize(p); ++i)
             {
-            e |= 1L << (31 - p[i]);
+            e |= std::uint32_t(1) << (31 - p[i]);
             }
 
         for(i = 1; i < 256; ++i)

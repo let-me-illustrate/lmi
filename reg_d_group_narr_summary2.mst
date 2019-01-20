@@ -1,5 +1,5 @@
 {{!
-    Copyright (C) 2017, 2018 Gregory W. Chicares.
+    Copyright (C) 2017, 2018, 2019 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -85,12 +85,12 @@ or sending money.
     {{MortalityBlendFootnote}}
     Custom blend assumptions:
     {{#SmokerBlended}}
-        tobacco = {{SmokerPct}};
+        nontobacco = {{NonsmokerProportion}};
     {{/SmokerBlended}}
     {{^SmokerBlended}}
         no blending by tobacco use;
     {{/SmokerBlended}}
-    male = {{MalePct}}.
+    male = {{MaleProportion}}.
     </p>
 {{/GenderBlended}}
 {{^GenderBlended}}
@@ -98,9 +98,9 @@ or sending money.
         <p>
         {{MortalityBlendFootnote}}
         Custom blend assumptions:
-        tobacco = {{SmokerPct}};
+        nontobacco = {{NonsmokerProportion}};
         {{#GenderBlended}}
-            male = {{MalePct}}.
+            male = {{MaleProportion}}.
         {{/GenderBlended}}
         {{^GenderBlended}}
             no blending by gender.

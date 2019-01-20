@@ -1,6 +1,6 @@
 // Document class for Rounding rules.
 //
-// Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+// Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -58,7 +58,6 @@ RoundingDocument::RoundingDocument()
     values_["max_specamt"       ] = &rounding_rules_.round_max_specamt_       ;
     values_["min_premium"       ] = &rounding_rules_.round_min_premium_       ;
     values_["max_premium"       ] = &rounding_rules_.round_max_premium_       ;
-    values_["min_init_premium"  ] = &rounding_rules_.round_min_init_premium_  ;
 }
 
 void RoundingDocument::ReadDocument(std::string const& filename)

@@ -1,6 +1,6 @@
 // Ledger formatting as text.
 //
-// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -38,6 +38,7 @@
 #include "map_lookup.hpp"
 #include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg()
 #include "miscellany.hpp"
+#include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 
 #include <algorithm>                    // find()
@@ -692,7 +693,6 @@ void PrintRosterHeaders(std::string const& file_name)
         ,"SupplSpecAmt"
         ,"InitialTargetPremium"
         ,"ModalMinimumPremium"
-        ,"ModalMinimumDumpin"
         ,"EeModalMinimumPremium"
         ,"ErModalMinimumPremium"
         ,"ListBillPremium"
@@ -777,7 +777,6 @@ void PrintRosterTabDelimited
         << Invar.value_str("TermSpecAmt"          ,d) << '\t'
         << Invar.value_str("InitTgtPrem"            ) << '\t'
         << Invar.value_str("ModalMinimumPremium"  ,d) << '\t'
-        << Invar.value_str("ModalMinimumDumpin"     ) << '\t'
         << Invar.value_str("EeModalMinimumPremium",d) << '\t'
         << Invar.value_str("ErModalMinimumPremium",d) << '\t'
         << Invar.value_str("ListBillPremium"        ) << '\t'
@@ -876,7 +875,7 @@ namespace
     int const g_width = 128;
     std::string center(std::string const& s)
         {
-        int const z = s.length();
+        int const z = lmi::ssize(s);
         // Strings in the input class might be too wide; absent more
         // graceful handling, at least no attempt is made to cure that
         // problem with a negative number of spaces.
@@ -1203,11 +1202,18 @@ std::string ledger_format
     ,std::pair<int,oenum_format_style> f
     )
 {
-    std::stringstream interpreter;
-    std::locale loc;
-    std::locale new_loc(loc, new comma_punct);
-    interpreter.imbue(new_loc);
-    interpreter.setf(std::ios_base::fixed, std::ios_base::floatfield);
+    static std::stringstream interpreter = []
+        {
+        std::stringstream ss {};
+        std::locale loc;
+        std::locale new_loc(loc, new comma_punct);
+        ss.imbue(new_loc);
+        ss.setf(std::ios_base::fixed, std::ios_base::floatfield);
+        return ss;
+        } ();
+    interpreter.str(std::string{});
+    interpreter.clear();
+
     interpreter.precision(f.first);
     std::string s;
     if(f.second)

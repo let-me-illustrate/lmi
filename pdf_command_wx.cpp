@@ -1,6 +1,6 @@
 // Create a PDF file from a ledger--wx interface.
 //
-// Copyright (C) 2017, 2018 Gregory W. Chicares.
+// Copyright (C) 2017, 2018, 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -1752,9 +1752,6 @@ TAGS_MODULE_BEGIN(lmi_illustration)
     TAGS_MODULE_ADD(unbreakable_paragraph)
 TAGS_MODULE_END(lmi_illustration)
 
-// Numeric summary page is used on its own, as a regular page, but also as the
-// base class for ill_reg_numeric_summary_attachment below, which is exactly
-// the same page, but appearing as an attachment at the end of the document.
 class ill_reg_numeric_summary_page : public standard_page
 {
   public:
@@ -1772,18 +1769,6 @@ class ill_reg_numeric_summary_page : public standard_page
             ,"ill_reg_numeric_summary"
             )
     {
-    }
-};
-
-class ill_reg_numeric_summary_attachment : public ill_reg_numeric_summary_page
-{
-  public:
-    using ill_reg_numeric_summary_page::ill_reg_numeric_summary_page;
-
-  private:
-    std::string get_page_number() const override
-    {
-        return "Attachment";
     }
 };
 
@@ -2330,9 +2315,13 @@ class pdf_illustration_naic : public pdf_illustration
             {
             add<ill_reg_supplemental_report>();
             }
+        // Add this again, even though it was already added above.
+        // Notionally, the purchaser detaches this duplicate paper
+        // page and mails it physically to the insurer. Someday a
+        // more modern alternative might be chosen.
         if(!invar.IsInforce)
             {
-            add<ill_reg_numeric_summary_attachment>();
+            add<ill_reg_numeric_summary_page>();
             }
     }
 

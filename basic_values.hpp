@@ -1,6 +1,6 @@
 // Rates and unprojected values.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -190,7 +190,6 @@ class LMI_SO BasicValues
     round_to<double> const& round_max_specamt       () const {return round_max_specamt_       ;}
     round_to<double> const& round_min_premium       () const {return round_min_premium_       ;}
     round_to<double> const& round_max_premium       () const {return round_max_premium_       ;}
-    round_to<double> const& round_min_init_premium  () const {return round_min_init_premium_  ;}
 
   protected:
     double GetModalMinPrem
@@ -461,7 +460,6 @@ class LMI_SO BasicValues
     round_to<double> round_max_specamt_       ;
     round_to<double> round_min_premium_       ;
     round_to<double> round_max_premium_       ;
-    round_to<double> round_min_init_premium_  ;
 };
 
 inline int BasicValues::GetLength() const

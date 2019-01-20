@@ -1,6 +1,6 @@
 // Internal Revenue Code section 7702 guideline premium--unit test.
 //
-// Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+// Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -40,7 +40,7 @@ namespace
 
 std::vector<double> a_to_m(std::vector<double> const& q_a)
 {
-    std::vector<double> q_m(q_a.size());
+    std::vector<double> q_m(lmi::ssize(q_a));
     assign(q_m, apply_binary(coi_rate_from_q<double>(), q_a, 1.0 / 11.0));
     return q_m;
 }
@@ -246,7 +246,7 @@ void gpt_test::initialize(int issue_age)
     static double const i_m_4 = i_upper_12_over_12_from_i<double>()(0.04);
     static double const i_m_6 = i_upper_12_over_12_from_i<double>()(0.06);
     q_m = sample_q(issue_age);
-    int const length = q_m.size();
+    int const length = lmi::ssize(q_m);
     glp_ic               .assign(length,     i_m_4);
     glp_ig               .assign(length,     i_m_4);
     gsp_ic               .assign(length,     i_m_6);
@@ -347,7 +347,7 @@ void gpt_test::test_invariants()
     parms = s_parms(); // Reset.
 
     // Duration greater than omega minus one.
-    parms.duration = q_m.size();
+    parms.duration = lmi::ssize(q_m);
     BOOST_TEST_THROW
         (z.calculate_premium(oe_gsp, mce_option1_for_7702, parms)
         ,std::runtime_error
@@ -420,7 +420,7 @@ Irc7702& gpt_test::instantiate_old(int issue_age)
 #if defined LMI_COMO_WITH_MINGW
     throw "Code that uses this obsolescent class segfaults with como.";
 #else // !defined LMI_COMO_WITH_MINGW
-    int const length = q_m.size();
+    int const length = lmi::ssize(q_m);
     std::vector<double> const zero(length, 0.0);
     // The old class recognizes only one QAB: ADB. So that all QABs
     // can be exercised with the new class, use a linear combination
@@ -501,7 +501,7 @@ void gpt_test::compare_premiums(int issue_age, double target)
     z_old.Initialize7702(f3bft, endt_bft, mce_option1_for_7702, target);
 #endif // !defined LMI_COMO_WITH_MINGW
 
-    int const omega = sample_q(0).size();
+    int const omega = lmi::ssize(sample_q(0));
     LMI_ASSERT(lmi::ssize(qab_waiver_rate) == omega - issue_age);
     for(int duration = 0; duration < omega - issue_age; ++duration)
         {
@@ -546,7 +546,7 @@ void gpt_test::compare_premiums(int issue_age, double target)
 
 void gpt_test::test_premium_calculations()
 {
-    int const omega = sample_q(0).size();
+    int const omega = lmi::ssize(sample_q(0));
 
     for(int issue_age = 0; issue_age < omega; ++issue_age)
         {

@@ -1,6 +1,6 @@
 // A value-Constrained Enumeration for skin names.
 //
-// Copyright (C) 2016, 2017, 2018 Gregory W. Chicares.
+// Copyright (C) 2016, 2017, 2018, 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -24,6 +24,7 @@
 #include "ce_skin_name.hpp"
 
 #include "alert.hpp"
+#include "bourn_cast.hpp"
 #include "contains.hpp"
 #include "facets.hpp"
 #include "global_settings.hpp"
@@ -36,7 +37,6 @@
 #include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // find()
-#include <cstddef>                      // ptrdiff_t
 
 namespace
 {
@@ -121,14 +121,14 @@ bool ce_skin_name::operator==(std::string const& s) const
 
 int ce_skin_name::ordinal(std::string const& s)
 {
-    std::ptrdiff_t v =
-            std::find
-                (skin_names().begin()
-                ,skin_names().end()
-                ,s
-                )
-        -   skin_names().begin()
-        ;
+    auto v = bourn_cast<int>
+        ( std::find
+            (skin_names().begin()
+            ,skin_names().end()
+            ,s
+            )
+        - skin_names().begin()
+        );
     if(v == lmi::ssize(skin_names()))
         {
         alarum()

@@ -5,7 +5,7 @@
 <!--
     Let me illustrate...: wxWindows xml input-notebook resources.
 
-    Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+    Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -366,7 +366,7 @@
                                             <border>4</border>
                                             <object class="wxCheckBox" name="BlendSmoking">
                                                 <help>Blend mortality by smoking</help>
-                                                <label>Tobacco</label>
+                                                <label>Nontobacco</label>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
@@ -2583,7 +2583,7 @@ the other is perforce ignored.
                 <label>Funds</label>
                 <object class="sizeritem">
                     <object class="wxRadioBox" name="FundChoiceType">
-                        <help>Fund allocation</help>
+                        <help>Fund allocation: for 100% general account, pick "Choose funds"; for 100% separate account, pick "Average fund"</help>
                         <style>wxRA_SPECIFY_COLS</style>
                         <content>
                             <item>Average fund</item>

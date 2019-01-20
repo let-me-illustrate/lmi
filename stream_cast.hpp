@@ -1,6 +1,6 @@
 // Convert between types as extractors and inserters do.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -103,11 +103,16 @@ To stream_cast(From from, To = To())
         );
     static_assert(!std::is_pointer<To>::value);
 
-    std::stringstream interpreter;
-    std::ostringstream err;
     To result = To();
-
-    interpreter.imbue(blank_is_not_whitespace_locale());
+    std::ostringstream err;
+    static std::stringstream interpreter = []
+        {
+        std::stringstream ss {};
+        ss.imbue(blank_is_not_whitespace_locale());
+        return ss;
+        } ();
+    interpreter.str(std::string{});
+    interpreter.clear();
 
     if(!(interpreter << from))
         {
@@ -117,8 +122,6 @@ To stream_cast(From from, To = To())
         {
         err << "Output failed ";
         }
-#if !defined LMI_COMO_WITH_MINGW
-    // COMPILER !! This appears to be a defect in libcomo.
     else if(!(interpreter >> std::ws))
         {
         err << "Trailing whitespace remains ";
@@ -127,18 +130,12 @@ To stream_cast(From from, To = To())
         {
         err << "Unconverted data remains ";
         }
-#endif // !defined LMI_COMO_WITH_MINGW
     else
         {
         ; // Nothing left to do.
         }
 
-#if !defined LMI_COMO_WITH_MINGW
     if(!interpreter || !interpreter.eof())
-#else  // defined LMI_COMO_WITH_MINGW
-    // COMPILER !! This appears to be a defect in libcomo.
-    if(!interpreter)
-#endif // defined LMI_COMO_WITH_MINGW
         {
         err
             << "converting '"

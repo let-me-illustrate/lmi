@@ -1,6 +1,6 @@
 // Fund names and investment-management fees.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -28,6 +28,7 @@
 #include "data_directory.hpp"
 #include "my_proem.hpp"                 // ::write_proem()
 #include "platform_dependent.hpp"       // access()
+#include "ssize_lmi.hpp"
 #include "xml_lmi.hpp"
 #include "xml_serialize.hpp"
 
@@ -79,6 +80,11 @@ template<> struct xml_io<FundInfo>
 FundData::FundData(std::string const& a_Filename)
 {
     Read(a_Filename);
+}
+
+int FundData::GetNumberOfFunds() const
+{
+    return lmi::ssize(FundInfo_);
 }
 
 namespace

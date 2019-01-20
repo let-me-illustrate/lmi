@@ -1,7 +1,7 @@
 # Master automake makefile, run automake to generate Makefile.am from it (this
 # is also done by autogen.sh script)
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Vadim Zeitlin.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Vadim Zeitlin.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -1116,7 +1116,8 @@ test_stratified_algorithms_CXXFLAGS = $(AM_CXXFLAGS)
 test_stream_cast_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
-  stream_cast_test.cpp
+  stream_cast_test.cpp \
+  timer.cpp
 test_stream_cast_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_system_command_SOURCES = \

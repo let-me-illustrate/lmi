@@ -1,6 +1,6 @@
 // Realize sequence-string input as vectors.
 //
-// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -582,7 +582,19 @@ std::string Input::RealizeDeathBenefitOption()
             );
         }
 
-    // DBO3 !! Need rules for MDB as well.
+    if
+        (   !database_->query<bool>(DB_AllowDboMdb)
+        &&  contains(DeathBenefitOptionRealized_, mce_dbopt("MDB"))
+        // DBO3 !! For testing convenience--remove later.
+        &&  !global_settings::instance().ash_nazg()
+        )
+        {
+        return
+            ("Policy form forbids MDB death benefit option."
+            );
+        }
+
+    // DBO3 !! Need rules for changes to and from MDB as well.
     return "";
 }
 

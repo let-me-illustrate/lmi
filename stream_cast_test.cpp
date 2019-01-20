@@ -1,6 +1,6 @@
 // Convert between types as extractors and inserters do--unit test.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -24,6 +24,47 @@
 #include "stream_cast.hpp"
 
 #include "test_tools.hpp"
+#include "timer.hpp"
+
+/// A streamlined clone of stream_cast<>() with simpler diagnostics.
+
+template<typename To, typename From>
+To streamlined(From from, To = To())
+{
+    To result = To();
+    static std::stringstream interpreter = []
+        {
+        std::stringstream ss {};
+        ss.imbue(blank_is_not_whitespace_locale());
+        return ss;
+        } ();
+    interpreter.str(std::string{});
+    interpreter.clear();
+
+    if
+        (  !(interpreter << from)
+        || !(interpreter >> result)
+        || !(interpreter >> std::ws).eof()
+        )
+        {
+        throw std::runtime_error("Oops!");
+        }
+
+    return result;
+}
+
+void assay_speed()
+{
+    static double const e {2.718281828459045};
+    auto f0 = [] {for(int n = 0; n < 1000; ++n) stream_cast<std::string>(e);};
+    auto f1 = [] {for(int n = 0; n < 1000; ++n) streamlined<std::string>(e);};
+    std::cout
+        << "\n  Speed tests..."
+        << "\n  stream_cast: " << TimeAnAliquot(f0)
+        << "\n  streamlined: " << TimeAnAliquot(f1)
+        << std::endl
+        ;
+}
 
 int test_main(int, char*[])
 {
@@ -97,6 +138,8 @@ int test_main(int, char*[])
         ,std::runtime_error
         ,"Cannot convert (char const*)(0) to std::string."
         );
+
+    assay_speed();
 
     return 0;
 }

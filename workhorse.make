@@ -1,6 +1,6 @@
 # Main lmi makefile, invoked by 'GNUmakefile'.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -361,10 +361,15 @@ physical_closure_files := \
 
 tutelary_flag :=
 
-# Warning options for gcc.
+# Dialect and warning options for gcc.
 
-c_standard   := -std=c99
-cxx_standard := -std=c++98
+# The default '-fno-rounding-math' means something like
+#   #pragma STDC FENV ACCESS OFF
+# which causes harm while bringing no countervailing benefit--see:
+#   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
+
+c_standard   := -frounding-math -std=c99
+cxx_standard := -frounding-math -std=c++17
 
 # Specify $(gcc_version_specific_warnings) last, in order to override
 # other options.
@@ -373,6 +378,7 @@ ifeq (3.4.4,$(gcc_version))
   # Suppress spurious gcc-3.4.4 warnings:
   #   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=22207
   gcc_version_specific_warnings := -Wno-uninitialized
+  cxx_standard := -std=c++98
 else ifeq (3.4.5,$(gcc_version))
   # Suppress spurious gcc-3.4.5 warnings:
   #   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=22207
@@ -389,44 +395,27 @@ else ifneq (,$(filter $(gcc_version), 4.9.1 4.9.2))
   #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
   gcc_version_specific_warnings := \
     -Wno-conversion \
-    -Wno-parentheses \
     -Wno-unused-local-typedefs \
     -Wno-unused-variable \
 
   cxx_standard := -std=c++11
 else ifneq (,$(filter $(gcc_version), 6.3.0))
-  # See:
-  #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00028.html
-  #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
   gcc_version_specific_warnings := \
     -Wno-conversion \
-    -Wno-parentheses \
 
-  cxx_standard := -std=c++17
-
-# The default '-fno-rounding-math' means something like
-  #   #pragma STDC FENV ACCESS OFF
-  # which causes harm while bringing no countervailing benefit--see:
-  #   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
-  c_standard   += -frounding-math
-  cxx_standard += -frounding-math
+  cxx_standard := -frounding-math -std=c++17
 else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
-  # Rationale:
-  # -Wno-parentheses [its diagnostics are beyond pedantic]
   gcc_version_specific_warnings := \
-    -Wno-parentheses \
 
-  cxx_standard := -std=c++17
-
-# The default '-fno-rounding-math' means something like
-  #   #pragma STDC FENV ACCESS OFF
-  # which causes harm while bringing no countervailing benefit--see:
-  #   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
-  c_standard   += -frounding-math
-  cxx_standard += -frounding-math
+  cxx_standard := -frounding-math -std=c++17
 endif
 
 treat_warnings_as_errors := -pedantic-errors -Werror
+
+# Write '-Wno' options at the end.
+#
+# Rationale for specific warning options:
+# -Wno-parentheses [its diagnostics are beyond pedantic]
 
 gcc_common_warnings := \
   $(treat_warnings_as_errors) \
@@ -453,7 +442,6 @@ gcc_common_warnings := \
   -Wmissing-include-dirs \
   -Wmultichar \
   -Wpacked \
-  -Wparentheses \
   -Wpointer-arith \
   -Wredundant-decls \
   -Wrestrict \
@@ -466,6 +454,7 @@ gcc_common_warnings := \
   -Wunused-macros \
   -Wvector-operation-performance \
   -Wwrite-strings \
+  -Wno-parentheses \
 
 # Consider these later.
 #
@@ -563,7 +552,12 @@ operations_posix_windows.o: gcc_common_extra_warnings += -Wno-maybe-uninitialize
 operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-macros
 operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
 
-# The boost regex library is incompatible with many warnings.
+# Some boost-1.33.1 libraries are incompatible with many warnings.
+
+$(boost_filesystem_objects): gcc_common_extra_warnings += \
+  -Wno-deprecated-declarations \
+  -Wno-unused-macros \
+  -Wno-useless-cast \
 
 $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
@@ -613,8 +607,10 @@ endif
 # SOMEDAY !! Address some of these '-Wconversion' issues.
 
 wno_conv_objects := \
+  $(xmlwrapp_objects) \
   CgiUtils.o \
   currency_test.o \
+  rate_table.o \
   round_glibc.o \
 
 $(wno_conv_objects): gcc_common_extra_warnings += -Wno-conversion -Wfloat-conversion

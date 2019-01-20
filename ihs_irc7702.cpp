@@ -1,6 +1,6 @@
 // Internal Revenue Code section 7702 (definition of life insurance).
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -385,7 +385,7 @@ double Irc7702::Forceout()
 //============================================================================
 void Irc7702::Init()
 {
-    Length = Qc.size();
+    Length = lmi::ssize(Qc);
     // TODO ?? Assumes that endowment age is always 100--should pass as arg instead.
     // TAXATION !! Is the comment above correct? Maturity age is passed as an argument.
     LMI_ASSERT(Length == EndtAge - IssueAge);
@@ -950,7 +950,7 @@ void Irc7702::InitSevenPayPrem()
         // 7PP = MO / (N0-N7) (limit 7 to maturity year)
         // TAXATION !! add flat extras to 7PP?
         double denom = CFFourPctMin->N()[j];
-        if((7 + j) < q.size())
+        if((7 + j) < lmi::ssize(q))
             {
             denom -= CFFourPctMin->N()[7 + j];
             }
