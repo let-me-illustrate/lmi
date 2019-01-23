@@ -52,4 +52,3 @@ inline T deserialize_cast(char const* z)
 }
 
 #endif // deserialize_cast_hpp
-

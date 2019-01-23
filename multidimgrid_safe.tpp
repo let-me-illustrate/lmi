@@ -279,4 +279,3 @@ std::any MultiDimTable<T, D, C>::WrapAny(A const& a)
 {
     return std::any(a);
 }
-

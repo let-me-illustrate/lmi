@@ -176,4 +176,3 @@ performs no encryption.
 */
 
 #endif // dbvalue_hpp
-

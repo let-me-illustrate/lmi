@@ -131,4 +131,3 @@ class LMI_SO mec_state final
 };
 
 #endif // mec_state_hpp
-

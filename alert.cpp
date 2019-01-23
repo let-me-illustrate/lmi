@@ -281,4 +281,3 @@ void test_catastrophe_report()
 {
     report_catastrophe("Test catastrophe report.");
 }
-

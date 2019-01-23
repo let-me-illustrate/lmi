@@ -196,4 +196,3 @@ PATH=$HOME/msw/i686-w64-mingw32/bin:$PATH ~/src/lmi/configure \
   LDFLAGS=-L$HOME/msw/i686-w64-mingw32/lib \
   CXXFLAGS='-Wno-unused-local-typedefs -Wno-unused-variable' 2>&1 |less
 make $coefficiency install 2>&1 |less
-

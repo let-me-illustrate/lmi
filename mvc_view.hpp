@@ -57,4 +57,3 @@ class MvcView
 };
 
 #endif // mvc_view_hpp
-

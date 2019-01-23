@@ -55,4 +55,3 @@
 #if wxUSE_GIF
 #   error Disable wxUSE_GIF in wx setup.
 #endif // wxUSE_GIF
-

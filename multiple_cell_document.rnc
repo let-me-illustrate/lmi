@@ -39,4 +39,3 @@ start = element multiple_cell_document
     }
 
 include "cell.rnc"
-

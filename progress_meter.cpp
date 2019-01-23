@@ -146,4 +146,3 @@ bool progress_meter::are_postconditions_met() const
 {
     return was_cancelled_ || max_count_ == count_;
 }
-

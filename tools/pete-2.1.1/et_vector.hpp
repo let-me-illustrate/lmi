@@ -56,4 +56,3 @@ inline void evaluate(std::vector<T>& t, Op const& op, U const& u)
 }
 
 #endif // et_vector_hpp
-

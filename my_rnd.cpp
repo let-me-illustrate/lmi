@@ -54,4 +54,3 @@ void rounding_rules::write_proprietary_rounding_files()
     another.save(AddDataDir("another.rounding"));
 #endif // 0
 }
-

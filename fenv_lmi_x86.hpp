@@ -349,4 +349,3 @@ inline void x87_control_word(std::uint16_t cw)
 #endif // defined LMI_X87
 
 #endif // fenv_lmi_x86_hpp
-

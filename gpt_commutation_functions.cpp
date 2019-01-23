@@ -265,4 +265,3 @@ double gpt_cf_triad::calculate_premium
     LMI_ASSERT(0.0 <= z);
     return z;
 }
-

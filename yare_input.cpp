@@ -244,4 +244,3 @@ double premium_allocation_to_sepacct(yare_input const& yi)
         }
     return z;
 }
-

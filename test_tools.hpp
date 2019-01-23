@@ -338,4 +338,3 @@ namespace lmi_test
         throw lmi_test::test::test_tools_exception() \
 
 #endif // test_tools_hpp
-

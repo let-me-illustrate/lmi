@@ -67,4 +67,3 @@ LMI_WX_NEW_SO void  operator delete  (void*, wx_allocator);
 LMI_WX_NEW_SO void  operator delete[](void*, wx_allocator);
 
 #endif // wx_new_hpp
-

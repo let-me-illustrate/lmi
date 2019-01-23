@@ -97,4 +97,3 @@ bool mec_document::DoSaveDocument(wxString const& filename)
     status() << "Saved '" << filename << "'." << std::flush;
     return true;
 }
-

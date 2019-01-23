@@ -216,4 +216,3 @@ stratified_entity const& LMI_SO StatutoryDEPremTax();
 stratified_entity const& LMI_SO StatutorySDPremTax();
 
 #endif // stratified_charges_hpp
-

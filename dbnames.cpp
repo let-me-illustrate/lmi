@@ -113,4 +113,3 @@ std::string db_name_from_key(int key)
     LMI_ASSERT(0 <= key && key < DB_LAST);
     return static_get_db_names()[key].ShortName;
 }
-

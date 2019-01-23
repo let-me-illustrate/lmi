@@ -63,4 +63,3 @@ for z in "$@"
     | sed -e "s/^/local_options += /" \
     >> local_options.make
   done
-

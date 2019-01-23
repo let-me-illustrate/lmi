@@ -133,4 +133,3 @@ inline void report_exception()
 }
 
 #endif // handle_exceptions_hpp
-

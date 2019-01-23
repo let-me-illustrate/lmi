@@ -66,4 +66,3 @@ class PreviewFrameEx
 };
 
 #endif // previewframe_ex_hpp
-

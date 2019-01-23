@@ -122,4 +122,3 @@ class ViewEx
 };
 
 #endif // view_ex_hpp
-

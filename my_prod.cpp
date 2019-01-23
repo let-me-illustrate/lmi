@@ -106,4 +106,3 @@ void product_data::write_proprietary_policy_files()
 //  z.DatabaseFilename        = glossed_string("another.database");
 //  ...
 }
-

@@ -52,4 +52,3 @@ class SingleChoicePopupMenu
 };
 
 #endif // single_choice_popup_menu_hpp
-

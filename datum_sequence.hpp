@@ -260,4 +260,3 @@ template<> inline std::string value_cast<std::string,dbo_sequence>
 }
 
 #endif // datum_sequence_hpp
-

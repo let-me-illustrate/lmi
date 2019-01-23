@@ -134,4 +134,3 @@
 #endif // !defined LMI_USE_SO_ATTRIBUTES
 
 #endif // so_attributes_hpp
-

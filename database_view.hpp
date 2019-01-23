@@ -69,4 +69,3 @@ class DatabaseView final
 };
 
 #endif // database_view_hpp
-

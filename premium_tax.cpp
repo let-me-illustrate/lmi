@@ -522,4 +522,3 @@ bool premium_tax::is_tiered() const
 {
     return is_tiered_in_tax_state_ || is_tiered_in_domicile_;
 }
-

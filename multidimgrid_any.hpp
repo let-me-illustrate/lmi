@@ -788,4 +788,3 @@ inline MultiDimGrid& MultiDimAxisAnyChoice::GetGrid()
 }
 
 #endif // multidimgrid_any_hpp
-

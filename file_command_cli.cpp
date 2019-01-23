@@ -40,4 +40,3 @@ void concrete_file_command
 
 bool volatile ensure_setup = file_command_initialize(concrete_file_command);
 } // Unnamed namespace.
-

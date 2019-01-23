@@ -43,3 +43,4 @@
 {e_tiered_de_premium_tax,e_topic_tiered_premium_tax,"Delaware","Delaware premium tax, tiered by calendar-year total-case premium (NOT YET IMPLEMENTED). Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
 {e_tiered_sd_premium_tax,e_topic_tiered_premium_tax,"South Dakota","South Dakota premium tax, tiered by policy-year individual-contract premium. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
 
+// C++11 DR 787 would allow this file to end in backslash-newline.

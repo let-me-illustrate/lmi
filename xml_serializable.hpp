@@ -124,4 +124,3 @@ inline xml::element& operator<<(xml::element& x, xml_serializable<T> const& z)
 }
 
 #endif // xml_serializable_hpp
-

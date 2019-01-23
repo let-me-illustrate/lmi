@@ -185,4 +185,3 @@ class ledger_map_holder
 };
 
 #endif // ledger_variant_hpp
-

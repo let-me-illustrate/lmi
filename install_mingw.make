@@ -129,4 +129,3 @@ WGETFLAGS :=
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
 	$(BSDTAR) --extract $(BSDTARFLAGS) --directory=scratch --file=$(cache_dir)/$@ \
 	  || c:/Program\ Files/7-Zip/7z x `cygpath -w $(cache_dir)/$@` -oscratch
-

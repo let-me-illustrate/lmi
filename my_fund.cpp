@@ -56,4 +56,3 @@ void FundData::write_proprietary_funds_files()
     }
 #endif // 0
 }
-

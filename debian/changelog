@@ -3,4 +3,3 @@ lmi (0.0.20051021-1) unstable; urgency=low
   * Initial Debian release
 
  -- Vadim Zeitlin <vadim@wxwindows.org>  Wed,  2 Nov 2005 01:56:47 +0100
-

@@ -43,4 +43,3 @@ std::vector<std::string> mc_e_vector_to_string_vector
 }
 
 #endif // mc_enum_aux_hpp
-

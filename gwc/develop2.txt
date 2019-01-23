@@ -132,4 +132,3 @@ for z in *; do sed -i $z -e'/Copyright/s/201X/201Y/'; done
   # Files in the test/ subdirectory (except test/ChangeLog treated
   # above) need not be updated: they aren't distributed and need no
   # current copyright notice.
-

@@ -69,4 +69,3 @@ void istream_to_string
 }
 
 #endif // istream_to_string_hpp
-

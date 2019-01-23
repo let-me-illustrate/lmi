@@ -421,4 +421,3 @@ void LedgerBase::Spew(std::ostream& os) const
             ;
         }
 }
-

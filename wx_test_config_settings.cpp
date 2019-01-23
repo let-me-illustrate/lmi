@@ -105,4 +105,3 @@ LMI_WX_TEST_CASE(configurable_settings)
         LMI_ASSERT_EQUAL(default_input, "c:/fop-0.20.5/default.ill");
         }
 }
-

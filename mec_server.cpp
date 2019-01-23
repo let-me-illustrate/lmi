@@ -569,4 +569,3 @@ double mec_server::seconds_for_output() const
 {
     return seconds_for_output_;
 }
-

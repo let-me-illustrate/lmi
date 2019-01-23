@@ -117,4 +117,3 @@ std::vector<std::string>        input_calculation_summary_columns();
 std::vector<std::string> LMI_SO effective_calculation_summary_columns();
 
 #endif // configurable_settings_hpp
-

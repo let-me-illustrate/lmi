@@ -335,4 +335,3 @@ std::vector<double> const& MortalityRates::MonthlyTermCoiRates
         }
     throw "Unreachable--silences a compiler diagnostic.";
 }
-

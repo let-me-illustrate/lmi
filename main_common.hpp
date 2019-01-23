@@ -36,4 +36,3 @@ void initialize_application();
 int try_main(int argc, char* argv[]);
 
 #endif // main_common_hpp
-

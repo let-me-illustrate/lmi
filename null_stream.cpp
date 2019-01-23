@@ -75,4 +75,3 @@ std::ostream& null_stream()
     z.setstate(std::ios::badbit);
     return z;
 }
-

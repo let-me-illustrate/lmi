@@ -359,4 +359,3 @@ class Irc7702 final
 // disk for a large number of years.
 
 #endif // ihs_irc7702_hpp
-

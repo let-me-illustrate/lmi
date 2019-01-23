@@ -408,4 +408,3 @@ bool gpt_state::is_detritus(std::string const& s) const
         };
     return contains(v, s);
 }
-

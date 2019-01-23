@@ -69,4 +69,3 @@ inline std::vector<double> const& death_benefits::supplamt() const
 }
 
 #endif // death_benefits_hpp
-

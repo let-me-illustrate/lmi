@@ -78,4 +78,3 @@ class DocManagerEx
 };
 
 #endif // docmanager_ex_hpp
-

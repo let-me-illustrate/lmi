@@ -50,4 +50,3 @@ class datum_boolean
 bool operator==(datum_boolean const&, datum_boolean const&);
 
 #endif // datum_boolean_hpp
-

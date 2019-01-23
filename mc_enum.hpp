@@ -170,4 +170,3 @@ std::vector<std::string> const& all_strings()
 }
 
 #endif // mc_enum_hpp
-

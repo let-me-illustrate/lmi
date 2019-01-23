@@ -210,4 +210,3 @@ Respect $(EXEEXT).
 
   Makefile
 Rebuild PETE by default: robust, and fast enough.
-

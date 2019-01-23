@@ -37,4 +37,3 @@ char const* MvcView::ResourceFileName() const
 {
     return DoResourceFileName();
 }
-

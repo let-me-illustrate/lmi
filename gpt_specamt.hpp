@@ -77,4 +77,3 @@ class gpt_specamt
 };
 
 #endif // gpt_specamt_hpp
-

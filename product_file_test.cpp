@@ -176,4 +176,3 @@ int test_main(int, char*[])
     product_file_test::test();
     return EXIT_SUCCESS;
 }
-

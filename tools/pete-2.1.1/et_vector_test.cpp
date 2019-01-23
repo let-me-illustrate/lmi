@@ -69,4 +69,3 @@ int main()
     assign(v0, apply_binary(std::plus<double>(), 10000.0, v0));
     show_vector(v0);
 }
-

@@ -2104,4 +2104,3 @@ std::vector<double> BasicValues::GetGuarSpecAmtLoadTable() const
         ,0 != database().query<int>(DB_GuarSpecAmtLoadTable)
         );
 }
-

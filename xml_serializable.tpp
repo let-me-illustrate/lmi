@@ -409,4 +409,3 @@ template<typename T>
 void xml_serializable<T>::redintegrate_ad_terminum()
 {
 }
-

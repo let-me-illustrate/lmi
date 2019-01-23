@@ -165,4 +165,3 @@ inline DatabaseEditorGrid::DatabaseEditorGrid
 }
 
 #endif // database_view_editor_hpp
-

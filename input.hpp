@@ -575,4 +575,3 @@ template<> struct reconstitutor<datum_base,Input>
 };
 
 #endif // input_hpp
-

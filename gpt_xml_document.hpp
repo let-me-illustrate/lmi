@@ -63,4 +63,3 @@ inline gpt_input const& gpt_xml_document::input_data() const
 }
 
 #endif // gpt_xml_document_hpp
-

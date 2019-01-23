@@ -35,4 +35,3 @@ AAAAAAAA ICON "lmi.ico"
 // would be bad for reasons explained above.
 //
 #include <wx/msw/wx.rc>
-

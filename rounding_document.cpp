@@ -90,4 +90,3 @@ RoundingView& RoundingDocument::PredominantView() const
 {
     return ::PredominantView<RoundingView>(*this);
 }
-

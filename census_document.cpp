@@ -98,4 +98,3 @@ bool CensusDocument::DoSaveDocument(wxString const& filename)
     status() << "Saved '" << filename << "'." << std::flush;
     return true;
 }
-

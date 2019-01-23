@@ -105,4 +105,3 @@ void print_matrix
 }
 
 #endif // print_matrix_hpp
-

@@ -54,4 +54,3 @@ void stratified_charges::write_proprietary_strata_files()
 
     // Another policy form....
 }
-

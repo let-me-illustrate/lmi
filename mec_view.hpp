@@ -103,4 +103,3 @@ class mec_view final
 };
 
 #endif // mec_view_hpp
-

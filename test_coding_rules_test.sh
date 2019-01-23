@@ -442,4 +442,3 @@ diff --unified=0 eraseme_expected eraseme_observed && rm --force \
   an_expungible_file.bak \
   an_unexpected_file \
   another.unexpected.file \
-

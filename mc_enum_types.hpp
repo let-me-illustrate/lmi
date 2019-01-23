@@ -76,4 +76,3 @@ typedef mc_enum<mcenum_report_column        > mce_report_column        ;
 typedef mc_enum<mcenum_suppl_illus_type     > mce_suppl_illus_type     ;
 
 #endif // mc_enum_types_hpp
-

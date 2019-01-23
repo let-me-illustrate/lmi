@@ -359,4 +359,3 @@ inline int GetOpt::first_char()
 }
 
 #endif // getopt_hpp
-

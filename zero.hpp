@@ -523,4 +523,3 @@ double brent_zero
 }
 
 #endif // zero_hpp
-

@@ -75,4 +75,3 @@ class IllustrationDocument
 };
 
 #endif // illustration_document_hpp
-

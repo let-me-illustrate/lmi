@@ -85,4 +85,3 @@ class ce_product_name
 bool operator==(std::string const&, ce_product_name const&);
 
 #endif // ce_product_name_hpp
-

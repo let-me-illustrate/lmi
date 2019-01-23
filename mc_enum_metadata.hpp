@@ -113,4 +113,3 @@ struct mc_enum_data
 };
 
 #endif // mc_enum_metadata_hpp
-

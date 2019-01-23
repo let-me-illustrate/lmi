@@ -459,4 +459,3 @@ int try_main(int argc, char* argv[])
     process_command_line(argc, argv);
     return EXIT_SUCCESS;
 }
-

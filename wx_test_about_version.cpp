@@ -260,4 +260,3 @@ LMI_WX_TEST_CASE(about_dialog_version)
         ,expect_about_dialog()
         );
 }
-

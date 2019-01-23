@@ -58,4 +58,3 @@ inline std::ostream& operator<<(std::ostream& os, datum_base const& z)
 }
 
 #endif // datum_base_hpp
-

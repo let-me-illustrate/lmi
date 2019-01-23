@@ -44,4 +44,3 @@
 #endif // defined __GNUC__
 
 #endif // boost_regex_hpp
-

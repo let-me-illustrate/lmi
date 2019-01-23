@@ -211,4 +211,3 @@ std::string ViewEx::base_filename() const
     fs::path path(t);
     return path.has_leaf() ? path.leaf() : std::string("Hastur");
 }
-

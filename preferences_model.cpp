@@ -306,4 +306,3 @@ void PreferencesModel::Save() const
     z["skin_filename"                     ] = SkinFileName            .value();
     z["use_builtin_calculation_summary"   ] = value_cast<std::string>("Yes" == UseBuiltinCalculationSummary);
 }
-

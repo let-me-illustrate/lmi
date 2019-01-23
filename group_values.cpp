@@ -739,4 +739,3 @@ std::shared_ptr<Ledger const> run_census::composite() const
     LMI_ASSERT(composite_.get());
     return composite_;
 }
-

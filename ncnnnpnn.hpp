@@ -87,4 +87,3 @@ inline std::string ncnnnpnn(long double value)
 }
 
 #endif // ncnnnpnn_hpp
-

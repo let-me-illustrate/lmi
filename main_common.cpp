@@ -93,4 +93,3 @@ void initialize_application()
         report_exception();
         }
 }
-

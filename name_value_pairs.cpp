@@ -88,4 +88,3 @@ std::map<std::string, std::string> const& name_value_pairs::map() const
 {
     return map_;
 }
-

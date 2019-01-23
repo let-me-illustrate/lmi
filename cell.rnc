@@ -508,4 +508,3 @@ cell_element = element cell
     }
 
 include "types.rnc"
-

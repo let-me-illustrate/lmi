@@ -197,4 +197,3 @@ std::vector<double> actuarial_table_rates_elaborated
     );
 
 #endif // actuarial_table_hpp
-

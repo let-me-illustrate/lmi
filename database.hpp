@@ -136,4 +136,3 @@ void product_database::query_into(e_database_key k, T& dst) const
 }
 
 #endif // database_hpp
-

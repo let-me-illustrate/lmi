@@ -295,4 +295,3 @@ wxDocTemplate* DocManagerEx::SelectDocumentType
 
     return theTemplate;
 }
-

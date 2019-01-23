@@ -321,4 +321,3 @@ bool operator!=(std::string const& s, tn_range<Number,Trammel> const& z)
 }
 
 #endif // tn_range_hpp
-

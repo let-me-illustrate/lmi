@@ -1197,4 +1197,3 @@ bool volatile ensure_setup = group_quote_pdf_generator_wx::set_creator
     );
 
 } // Unnamed namespace.
-

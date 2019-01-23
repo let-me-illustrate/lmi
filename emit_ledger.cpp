@@ -204,4 +204,3 @@ double emit_ledger
     ledger_emitter emitter  (cell_filepath, emission);
     return emitter.emit_cell(cell_filepath, ledger);
 }
-

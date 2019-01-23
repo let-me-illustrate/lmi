@@ -170,4 +170,3 @@ LMI_WX_TEST_CASE(input_sequences)
 
     ill.close_discard_changes();
 }
-

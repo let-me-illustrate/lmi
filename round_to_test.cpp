@@ -565,4 +565,3 @@ int test_main(int, char*[])
     rc = rc + test_all_modes(false);
     return rc;
 }
-

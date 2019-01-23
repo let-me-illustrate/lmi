@@ -123,4 +123,3 @@ class LMI_SO ULCommFns final
 };
 
 #endif // commutation_functions_hpp
-

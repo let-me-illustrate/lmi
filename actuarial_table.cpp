@@ -591,4 +591,3 @@ std::vector<double> actuarial_table_rates_elaborated
         ,reset_duration
         );
 }
-

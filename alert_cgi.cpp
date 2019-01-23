@@ -76,4 +76,3 @@ void safe_message_alert(char const* message)
     //     [2005-02-10T17:23:09Z from Greg Chicares]
     std::fflush(stderr);
 }
-

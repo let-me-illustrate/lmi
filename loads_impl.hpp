@@ -136,4 +136,3 @@ struct load_details
 };
 
 #endif // loads_impl_hpp
-

@@ -1738,4 +1738,3 @@ void AccountValue::CoordinateCounters()
 */
         }
 }
-

@@ -49,4 +49,3 @@ class DatabaseDocument
 };
 
 #endif // database_document_hpp
-

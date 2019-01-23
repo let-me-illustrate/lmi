@@ -69,4 +69,3 @@ bool LMI_SO system_command_initialize(system_command_fp_type);
 void LMI_SO system_command(std::string const& command_line);
 
 #endif // system_command_hpp
-

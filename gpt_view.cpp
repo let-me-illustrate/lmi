@@ -193,4 +193,3 @@ void gpt_view::Run()
     html_content_ = server.state().format_as_html(input_data()["Comments"].str());
     html_window_->SetPage(html_content_);
 }
-

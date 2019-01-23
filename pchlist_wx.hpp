@@ -44,4 +44,3 @@
 #endif // defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
 
 #endif // pchlist_wx_hpp
-

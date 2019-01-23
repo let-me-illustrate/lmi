@@ -194,4 +194,3 @@ ULCommFns::ULCommFns
     std::partial_sum(ad.rbegin(), ad.rend(), an.rbegin());
     std::partial_sum(kc.rbegin(), kc.rend(), km.rbegin());
 }
-

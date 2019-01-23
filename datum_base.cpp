@@ -32,4 +32,3 @@ bool datum_base::is_enabled() const
 {
     return enabled_;
 }
-

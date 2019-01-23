@@ -38,4 +38,3 @@ std::string AddDataDir(std::string const& a_filename)
     path = global_settings::instance().data_directory() / path;
     return path.string();
 }
-

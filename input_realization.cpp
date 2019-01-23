@@ -1135,4 +1135,3 @@ void Input::make_term_rider_consistent(bool aggressively)
             ;
         }
 }
-

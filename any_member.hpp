@@ -692,4 +692,3 @@ std::map<std::string,std::string> member_state
 }
 
 #endif // any_member_hpp
-

@@ -565,4 +565,3 @@ int test_main(int, char*[])
     input_test::test();
     return EXIT_SUCCESS;
 }
-

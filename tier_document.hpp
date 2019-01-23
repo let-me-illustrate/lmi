@@ -50,4 +50,3 @@ class TierDocument
 };
 
 #endif // tier_document_hpp
-

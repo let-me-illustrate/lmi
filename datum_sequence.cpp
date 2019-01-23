@@ -329,4 +329,3 @@ bool operator==(dbo_sequence const& lhs, dbo_sequence const& rhs)
 {
     return lhs.equals(rhs);
 }
-

@@ -893,4 +893,3 @@ bool MvcController::Validate()
         }
     return diagnosis.empty();
 }
-

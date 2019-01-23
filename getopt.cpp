@@ -941,4 +941,3 @@ GetOpt::usage(int status)
 {
     usage(EXIT_SUCCESS == status ? std::cout : std::cerr);
 }
-

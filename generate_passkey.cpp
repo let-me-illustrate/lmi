@@ -57,4 +57,3 @@ int try_main(int, char*[])
     std::cout << md5_hex_string(v) << std::flush;
     return EXIT_SUCCESS;
 }
-

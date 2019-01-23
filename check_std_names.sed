@@ -370,4 +370,3 @@
 /[^:A-Za-z_]memset[^A-Za-z_]/p
 /[^:A-Za-z_]strerror[^A-Za-z_]/p
 /[^:A-Za-z_]vwprintf[^A-Za-z_]/p
-

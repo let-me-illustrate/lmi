@@ -666,4 +666,3 @@ stratified_entity const& StatutorySDPremTax()
     static stratified_entity const z(limits, values, "SD 10-44-2(2), 58-6-70");
     return z;
 }
-

@@ -75,4 +75,3 @@ class ce_skin_name
 };
 
 #endif // ce_skin_name_hpp
-

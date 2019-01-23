@@ -213,4 +213,3 @@ inline std::vector<double> const& MortalityRates::CvatNspRates() const
 }
 
 #endif // mortality_rates_hpp
-

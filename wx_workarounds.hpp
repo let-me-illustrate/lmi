@@ -34,4 +34,3 @@ typedef wxDCTextColourChanger wxDCTextColorChanger;
 #define SetOwnForegroundColor SetOwnForegroundColour
 
 #endif // wx_workarounds_hpp
-

@@ -414,4 +414,3 @@ void custom_io_1_write(Ledger const& ledger_values, std::string const& filename)
         alarum() << "Error writing output file." << LMI_FLUSH;
         }
 }
-

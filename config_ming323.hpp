@@ -35,4 +35,3 @@
 #endif // Not MinGW gcc-3.2.3+ .
 
 #endif // config_ming323_hpp
-

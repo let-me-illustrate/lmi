@@ -90,4 +90,3 @@ class LMI_SO run_census final
 };
 
 #endif // group_values_hpp
-

@@ -319,4 +319,3 @@ constexpr inline To bourn_cast(From from)
 }
 
 #endif // bourn_cast_hpp
-

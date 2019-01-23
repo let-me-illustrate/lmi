@@ -394,4 +394,3 @@ long double roundl(long double x)
 }
 
 #endif // defined __MINGW64_VERSION_MAJOR
-

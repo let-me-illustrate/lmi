@@ -60,4 +60,3 @@
     namespace std {using ::FILE;}
 
 #endif // config_como_mingw_hpp
-

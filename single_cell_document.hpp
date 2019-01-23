@@ -74,4 +74,3 @@ inline Input const& single_cell_document::input_data() const
 }
 
 #endif // single_cell_document_hpp
-

@@ -143,4 +143,3 @@ inline std::vector<Input> const& multiple_cell_document::cell_parms() const
 }
 
 #endif // multiple_cell_document_hpp
-

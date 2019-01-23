@@ -63,4 +63,3 @@ but not in instantiations:
   std::pair<T,U>                   // no space after comma
 or in specializations:
   template<> struct foo<T,U>       // no space after comma
-

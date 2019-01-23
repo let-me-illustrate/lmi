@@ -106,4 +106,3 @@ class LMI_SO global_settings final
 };
 
 #endif // global_settings_hpp
-

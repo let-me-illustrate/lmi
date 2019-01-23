@@ -90,4 +90,3 @@ void fpe_handler_test()
 // FPU invalid operation.
     d2 = d0 / d0;
 }
-

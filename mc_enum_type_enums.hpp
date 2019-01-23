@@ -141,4 +141,3 @@ MC_DEFINE_ENUMS(suppl_illus_type)
 #undef MC_DEFINE_ENUMS
 
 #endif // mc_enum_type_enums_hpp
-

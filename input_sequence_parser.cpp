@@ -696,4 +696,3 @@ std::string abridge_diagnostics(char const* what)
     LMI_ASSERT(!s.empty());
     return s;
 }
-

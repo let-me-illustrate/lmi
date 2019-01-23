@@ -49,4 +49,3 @@ int fenv_guard::instance_count()
 }
 
 int fenv_guard::instance_count_ = 0;
-

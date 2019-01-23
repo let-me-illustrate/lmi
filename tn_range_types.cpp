@@ -51,4 +51,3 @@ template class tn_range<calendar_date, date_trammel           <calendar_date>>;
 template class trammel_base<calendar_date>;
 template class trammel_base<double       >;
 template class trammel_base<int          >;
-

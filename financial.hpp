@@ -263,4 +263,3 @@ double list_bill_premium
     );
 
 #endif // financial_hpp
-

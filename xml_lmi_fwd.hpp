@@ -56,4 +56,3 @@ namespace xml_lmi
 } // namespace xml_lmi
 
 #endif // xml_lmi_fwd_hpp
-

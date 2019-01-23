@@ -67,4 +67,3 @@ class TierView final
 };
 
 #endif // tier_view_hpp
-

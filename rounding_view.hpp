@@ -80,4 +80,3 @@ inline char const* RoundingView::resource_file_name()
 }
 
 #endif // rounding_view_hpp
-

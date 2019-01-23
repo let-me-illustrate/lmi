@@ -869,4 +869,3 @@ void LedgerInvariant::Spew(std::ostream& os) const
     SpewVector(os, std::string("FundAllocs")       ,FundAllocs      );
     SpewVector(os, std::string("FundAllocations")  ,FundAllocations );
 }
-

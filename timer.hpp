@@ -263,4 +263,3 @@ AliquotTimer<F> TimeAnAliquot(F f, double max_seconds = 1.0)
 }
 
 #endif // timer_hpp
-

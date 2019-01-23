@@ -259,4 +259,3 @@ void LMI_SO test_catastrophe_report();
     << std::flush
 
 #endif // alert_hpp
-

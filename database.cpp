@@ -213,4 +213,3 @@ database_entity const& product_database::entity_from_key(e_database_key k) const
 {
     return db().datum(db_name_from_key(k));
 }
-

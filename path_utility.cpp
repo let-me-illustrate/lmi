@@ -398,4 +398,3 @@ void validate_filepath
             ;
         }
 }
-

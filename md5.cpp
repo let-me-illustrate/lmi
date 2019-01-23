@@ -501,4 +501,3 @@ md5_process_block (void const* buffer, std::size_t a_len, struct md5_ctx* ctx)
   ctx->C = C;
   ctx->D = D;
 }
-

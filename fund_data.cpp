@@ -143,4 +143,3 @@ void FundData::write_funds_files()
         );
     foo.Write(AddDataDir("sample.funds"));
 }
-

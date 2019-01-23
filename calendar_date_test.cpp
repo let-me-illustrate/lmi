@@ -1162,4 +1162,3 @@ void CalendarDateTest::TestSpeed()
         << "  DOB limit    : " << TimeAnAliquot(mete_dob_limit   ) << '\n'
         ;
 }
-

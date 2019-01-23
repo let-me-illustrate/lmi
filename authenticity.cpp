@@ -293,4 +293,3 @@ std::string md5_hex_string(std::vector<unsigned char> const& vuc)
         }
     return oss.str();
 }
-

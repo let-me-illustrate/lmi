@@ -338,4 +338,3 @@ double AccountValue::PerformErPmtStrategy() const
         ,yare_input_.CorporationPaymentStrategy
         );
 }
-

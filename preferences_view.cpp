@@ -37,4 +37,3 @@ char const* PreferencesView::DoResourceFileName() const
 {
     return "preferences_view.xrc";
 }
-

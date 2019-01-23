@@ -297,4 +297,3 @@ wxImage load_image(char const* file)
 
     return image;
 }
-

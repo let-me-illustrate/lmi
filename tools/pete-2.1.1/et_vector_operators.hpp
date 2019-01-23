@@ -3237,4 +3237,3 @@ std::vector<T1>& operator>>=(std::vector<T1>& lhs,const RHS& rhs)
 }
 
 #endif // et_vector_operators_hpp
-

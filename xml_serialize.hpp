@@ -170,4 +170,3 @@ void from_xml(xml::element const& e, T& t)
 } // namespace xml_serialize
 
 #endif // xml_serialize_hpp
-

@@ -242,4 +242,3 @@ calendar_date const& LMI_SO last_yyyy_date();
 calendar_date        LMI_SO today();
 
 #endif // calendar_date_hpp
-

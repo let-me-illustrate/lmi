@@ -146,4 +146,3 @@ std::vector<double> const& premium_tax_rates_for_life_insurance();
 std::vector<double> const& premium_tax_rates_for_annuities();
 
 #endif // premium_tax_hpp
-

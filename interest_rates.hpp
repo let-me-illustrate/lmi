@@ -401,4 +401,3 @@ inline std::vector<double> const& InterestRates::MlyGspRate() const
 }
 
 #endif // interest_rates_hpp
-

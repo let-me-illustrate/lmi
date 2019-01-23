@@ -129,4 +129,3 @@ inline void modal_outlay::set_internal_1035_amount(double z)
 }
 
 #endif // outlay_hpp
-

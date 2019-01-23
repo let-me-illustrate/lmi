@@ -48,4 +48,3 @@ class DefaultView
 };
 
 #endif // default_view_hpp
-

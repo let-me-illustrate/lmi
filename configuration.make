@@ -56,4 +56,3 @@ $(srcdir)/$(platform-makefile):: ;
 
 GNU_CPP := $(CPP)
 GNU_CXX := $(CXX)
-

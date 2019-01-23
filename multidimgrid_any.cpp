@@ -1413,4 +1413,3 @@ void MultiDimAxisAnyChoice::SelectionChanged()
 
     GetGrid().FixAxisValue(axis_.GetName(), axis_.GetValue(sel));
 }
-

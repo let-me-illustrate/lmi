@@ -111,4 +111,3 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
         ,std::multiplies<double>()
         );
 }
-

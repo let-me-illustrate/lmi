@@ -69,4 +69,3 @@ inline PolicyDocument::values_type const& PolicyDocument::values() const
 }
 
 #endif // policy_document_hpp
-

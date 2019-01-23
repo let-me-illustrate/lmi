@@ -132,4 +132,3 @@ enum oenum_waiver_charge_method
     };
 
 #endif // oecumenic_enumerations_hpp
-

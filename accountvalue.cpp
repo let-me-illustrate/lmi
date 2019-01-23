@@ -1064,4 +1064,3 @@ void   AccountValue::SetClaims()
     {return;}
 void   AccountValue::SetProjectedCoiCharge()
     {return;}
-

@@ -186,4 +186,3 @@ namespace lmi_test
 } // namespace lmi_test
 
 #endif // catch_exceptions_hpp
-

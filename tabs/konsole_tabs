@@ -55,4 +55,3 @@ title: Commit ;; profile: Shell ;; command: schroot --chroot=lmi-buster --direct
 title: Build  ;; profile: Shell ;; command: schroot --chroot=lmi-buster --directory=/opt/lmi/src/lmi/tabs/3
 title: Edit   ;; profile: Shell ;; command: schroot --chroot=lmi-buster --directory=/opt/lmi/src/lmi/tabs/4
 title: Run    ;; profile: Shell ;; command: schroot --chroot=lmi-buster --directory=/opt/lmi/src/lmi/tabs/5
-

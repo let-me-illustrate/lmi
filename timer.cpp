@@ -212,4 +212,3 @@ double Timer::inspect() const
 }
 
 #undef LMI_MS_HEADER_INCLUDED
-

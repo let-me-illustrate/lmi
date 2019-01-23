@@ -239,4 +239,3 @@ std::string canonicalized_input_sequence(std::vector<T> const& z)
 }
 
 #endif // input_sequence_hpp
-

@@ -53,4 +53,3 @@ bool operator==(datum_boolean const& lhs, datum_boolean const& rhs)
 {
     return lhs.value() == rhs.value();
 }
-

@@ -751,4 +751,3 @@ std::vector<double> gpt_input::BenefitHistoryRealized() const
 {
     return convert_vector_type<double>(BenefitHistoryRealized_);
 }
-

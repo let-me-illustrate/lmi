@@ -56,4 +56,3 @@ clean:
 
 maintainer-clean: clean
 	rm -f et_vector_operators.hpp
-

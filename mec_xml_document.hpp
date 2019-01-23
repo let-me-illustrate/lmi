@@ -63,4 +63,3 @@ inline mec_input const& mec_xml_document::input_data() const
 }
 
 #endif // mec_xml_document_hpp
-

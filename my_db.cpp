@@ -53,4 +53,3 @@ void DBDictionary::write_proprietary_database_files()
   }
   // Another policy form....
 }
-

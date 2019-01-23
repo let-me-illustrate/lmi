@@ -135,4 +135,3 @@ std::string const& license_notices_as_text()
     static std::string s(notices_text);
     return s;
 }
-

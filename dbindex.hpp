@@ -108,4 +108,3 @@ class database_index
 };
 
 #endif // dbindex_hpp
-

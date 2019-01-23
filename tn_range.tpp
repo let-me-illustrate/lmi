@@ -749,4 +749,3 @@ std::type_info const& tn_range<Number,Trammel>::value_type() const
 {
     return typeid(Number);
 }
-

@@ -33,4 +33,3 @@ start = element single_cell_document
     }
 
 include "cell_07.rnc"
-
