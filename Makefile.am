@@ -1401,4 +1401,3 @@ noinst_HEADERS = \
     xml_serialize.hpp \
     yare_input.hpp \
     zero.hpp
-

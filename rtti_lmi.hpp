@@ -143,4 +143,3 @@ inline std::ostream& operator<<(std::ostream& os, TypeInfo const& z)
 } // namespace lmi
 
 #endif // rtti_lmi_hpp
-

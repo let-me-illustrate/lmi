@@ -157,4 +157,3 @@ void LMI_SO load(rounding_rules      &, fs::path const&);
 void LMI_SO save(rounding_rules const&, fs::path const&);
 
 #endif // rounding_rules_hpp
-

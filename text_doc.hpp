@@ -56,4 +56,3 @@ class TextEditDocument
 };
 
 #endif // text_doc_hpp
-

@@ -128,4 +128,3 @@ void AboutDialog::UponReadLicense(wxCommandEvent&)
     dialog.Center();
     dialog.ShowModal();
 }
-

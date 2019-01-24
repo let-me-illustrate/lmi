@@ -68,4 +68,3 @@ class AboutDialog
 };
 
 #endif // about_dialog_hpp
-

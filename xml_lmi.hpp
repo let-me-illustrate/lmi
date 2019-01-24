@@ -115,4 +115,3 @@ namespace xml_lmi
 std::ostream& operator<<(std::ostream&, xml_lmi::xml_document const&);
 
 #endif // xml_lmi_hpp
-

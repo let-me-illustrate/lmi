@@ -90,4 +90,3 @@ then (for printing only) you need 'java'. You can install a version
 that's been tested with lmi by running this file:
   http://download.java.net/jdk/jre-1_5_0-windows-i586.exe
 [http because that site doesn't support https as of 2017-08-28]
-

@@ -113,4 +113,3 @@ void PolicyDocument::WriteDocument(std::string const& filename)
         }
     save(product_data_, filename);
 }
-

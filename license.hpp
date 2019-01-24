@@ -42,4 +42,3 @@ std::string const& LMI_SO license_notices_as_html();
 std::string const& LMI_SO license_notices_as_text();
 
 #endif // license_hpp
-

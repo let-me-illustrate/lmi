@@ -55,4 +55,3 @@ class IllusVal final
 };
 
 #endif // ledgervalues_hpp
-

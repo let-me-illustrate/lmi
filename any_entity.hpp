@@ -64,4 +64,3 @@ inline std::ostream& operator<<(std::ostream& os, any_entity const& z)
 }
 
 #endif // any_entity_hpp
-

@@ -236,4 +236,3 @@ void mc_enum_test::test_product_name()
         ,"Value 'invalid product' invalid for type 'ce_product_name'."
         );
 }
-

@@ -94,4 +94,3 @@ case "$(readlink -f .git/hooks)" in
     exit 4
     ;;
 esac
-

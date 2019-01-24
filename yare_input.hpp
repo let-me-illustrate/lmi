@@ -260,4 +260,3 @@ bool is_policy_rated(yare_input const&);
 double premium_allocation_to_sepacct(yare_input const&);
 
 #endif // yare_input_hpp
-

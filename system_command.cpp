@@ -43,4 +43,3 @@ void system_command(std::string const& command_line)
 {
     system_command_callback()(command_line);
 }
-

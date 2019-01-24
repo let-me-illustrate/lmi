@@ -117,4 +117,3 @@ class date_trammel
 };
 
 #endif // tn_range_type_trammels_hpp
-

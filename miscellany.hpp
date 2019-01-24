@@ -224,4 +224,3 @@ inline void stifle_warning_for_unused_value(T const& t)
 }
 
 #endif // miscellany_hpp
-

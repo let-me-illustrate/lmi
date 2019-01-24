@@ -332,4 +332,3 @@ std::string ValidateAndConvertFilename(wxString const& w)
         }
     return s;
 }
-

@@ -273,4 +273,3 @@ ledger_map_t const& ledger_map_holder::held() const
 {
     return held_;
 }
-

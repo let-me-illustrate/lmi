@@ -684,4 +684,3 @@ void assert_sane_and_ordered_partition
         }
 }
 } // Unnamed namespace.
-

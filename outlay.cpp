@@ -66,4 +66,3 @@ void modal_outlay::set_withdrawals(double z, int from_year, int to_year)
 {
     std::fill_n(withdrawals_.begin() + from_year, to_year - from_year, z);
 }
-

@@ -289,4 +289,3 @@ class MultiDimAdjustableAxis
 };
 
 #endif // multidimgrid_safe_hpp
-

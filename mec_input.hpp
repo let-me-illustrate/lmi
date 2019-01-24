@@ -217,4 +217,3 @@ template<> struct reconstitutor<datum_base,mec_input>
 };
 
 #endif // mec_input_hpp
-

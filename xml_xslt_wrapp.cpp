@@ -43,4 +43,3 @@
 #include "libxslt/stylesheet.cxx"
 
 #undef HAVE_BOOST_POOL_SINGLETON_POOL_HPP
-

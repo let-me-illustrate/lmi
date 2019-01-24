@@ -504,4 +504,3 @@ archive: source_clean
 	$(TAR) --create --directory=.. --file=$(archive_name).tar $(archive_name)
 	$(RM) --force --recursive ../$(archive_name)
 	$(BZIP2) --verbose --verbose $(archive_name).tar
-

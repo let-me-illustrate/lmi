@@ -842,4 +842,3 @@ calendar_date today()
         ,       t1->tm_mday
         );
 }
-

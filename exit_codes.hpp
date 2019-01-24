@@ -94,4 +94,3 @@ namespace lmi_test
 } // namespace lmi_test
 
 #endif // exit_codes_hpp
-

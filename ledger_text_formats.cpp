@@ -1248,4 +1248,3 @@ std::vector<std::string> ledger_format
         }
     return sv;
 }
-

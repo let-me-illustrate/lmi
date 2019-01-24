@@ -31,4 +31,3 @@ typedef mc_enum<enum_holiday> e_holiday;
 typedef mc_enum<enum_island > e_island ;
 
 #endif // mc_enum_test_aux_hpp
-

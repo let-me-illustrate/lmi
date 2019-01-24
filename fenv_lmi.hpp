@@ -103,4 +103,3 @@ bool LMI_SO fenv_is_valid();
 bool LMI_SO fenv_validate(enum_fenv_indulgence = e_fenv_indulge_nothing);
 
 #endif // fenv_lmi_hpp
-

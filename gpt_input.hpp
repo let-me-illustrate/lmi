@@ -250,4 +250,3 @@ template<> struct reconstitutor<datum_base,gpt_input>
 };
 
 #endif // gpt_input_hpp
-

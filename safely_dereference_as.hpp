@@ -96,4 +96,3 @@ T& safely_dereference_as(U* u)
 }
 
 #endif // safely_dereference_as_hpp
-

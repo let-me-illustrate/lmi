@@ -171,4 +171,3 @@ LMI_WX_TEST_CASE(benchmark_census)
             );
         }
 }
-

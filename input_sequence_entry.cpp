@@ -1635,4 +1635,3 @@ bool InputSequenceEntryXmlHandler::CanHandle(wxXmlNode* node)
 {
     return IsOfClass(node, "InputSequenceEntry");
 }
-

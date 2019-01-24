@@ -37,4 +37,3 @@ class x_product_rule_violated
 };
 
 #endif // ihs_x_type_hpp
-

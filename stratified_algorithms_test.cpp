@@ -573,4 +573,3 @@ int test_main(int, char*[])
     progressively_reduce_test();
     return 0;
 }
-

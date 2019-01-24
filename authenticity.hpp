@@ -84,4 +84,3 @@ std::string md5_hex_string(std::vector<unsigned char> const&);
 inline char const* md5sum_file() {return "validated.md5";}
 
 #endif // authenticity_hpp
-

@@ -103,4 +103,3 @@ class name_value_pairs final
 };
 
 #endif // name_value_pairs_hpp
-

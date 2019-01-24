@@ -58,4 +58,3 @@ bool operator==(datum_string const& lhs, datum_string const& rhs)
 {
     return lhs.value() == rhs.value();
 }
-

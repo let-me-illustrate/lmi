@@ -527,4 +527,3 @@ cell_element = element cell
     }
 
 include "types_07.rnc"
-

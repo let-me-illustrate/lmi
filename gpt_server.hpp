@@ -73,4 +73,3 @@ class LMI_SO gpt_server final
 };
 
 #endif // gpt_server_hpp
-

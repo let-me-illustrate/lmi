@@ -80,4 +80,3 @@ inline T material_difference(T t, T u, long double tolerance = 1.0E-13L)
 }
 
 #endif // materially_equal_hpp
-

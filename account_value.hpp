@@ -659,4 +659,3 @@ inline double AccountValue::ibnr_as_months_of_mortality_charges() const
 }
 
 #endif // account_value_hpp
-

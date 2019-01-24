@@ -43,4 +43,3 @@ typedef tn_range<double       , corridor_factor_trammel<double       >> tnr_corr
 typedef tn_range<calendar_date, date_trammel           <calendar_date>> tnr_date;
 
 #endif // tn_range_types_hpp
-

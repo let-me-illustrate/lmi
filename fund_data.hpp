@@ -108,4 +108,3 @@ inline FundInfo const& FundData::GetFundInfo(int j) const
 }
 
 #endif // fund_data_hpp
-

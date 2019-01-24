@@ -292,4 +292,3 @@ Comparisons
 ### Write comparison operations in number line order
 
 I.e. always use `<` or `<=` instead of `>` or `>=`.
-

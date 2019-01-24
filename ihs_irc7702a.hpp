@@ -279,4 +279,3 @@ class Irc7702A final
 };
 
 #endif // ihs_irc7702a_hpp
-

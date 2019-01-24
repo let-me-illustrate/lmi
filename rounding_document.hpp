@@ -69,4 +69,3 @@ inline RoundingDocument::values_type const& RoundingDocument::values() const
 }
 
 #endif // rounding_document_hpp
-

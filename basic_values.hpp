@@ -518,4 +518,3 @@ char const* CurrentTableFile();
 char const* GuaranteedTableFile();
 
 #endif // basic_values_hpp
-

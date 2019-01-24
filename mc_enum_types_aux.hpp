@@ -84,4 +84,3 @@ void set_run_basis_from_cloven_bases
     );
 
 #endif // mc_enum_types_aux_hpp
-

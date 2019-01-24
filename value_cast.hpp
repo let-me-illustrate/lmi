@@ -240,4 +240,3 @@ To value_cast(From const& from, To)
 }
 
 #endif // value_cast_hpp
-

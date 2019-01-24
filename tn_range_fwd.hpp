@@ -31,4 +31,3 @@ template<typename T>
 class trammel_base;
 
 #endif // tn_range_fwd_hpp
-

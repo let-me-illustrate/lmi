@@ -214,4 +214,3 @@ sed -e 's/  *$//' -i ./*.xsd
 diff --unified=0 --from-file="$srcdir" ./*.xsd || echo "Dubious '*.xsd' in repository."
 
 echo "  Done."
-

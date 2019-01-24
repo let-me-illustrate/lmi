@@ -231,4 +231,3 @@ int test_main(int, char*[])
     progress_meter_test::test();
     return EXIT_SUCCESS;
 }
-

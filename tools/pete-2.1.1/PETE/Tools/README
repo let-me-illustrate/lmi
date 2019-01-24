@@ -41,4 +41,3 @@ operators, you should add the operators to PeteOps.in, use
 'make newpeteops' to build PeteOps.cpp, and then re-build
 MakeOperators.
 
-

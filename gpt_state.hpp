@@ -144,4 +144,3 @@ class LMI_SO gpt_state final
 };
 
 #endif // gpt_state_hpp
-

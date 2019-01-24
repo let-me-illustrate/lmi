@@ -633,4 +633,3 @@ int test_main(int, char*[])
     gpt_test::test();
     return EXIT_SUCCESS;
 }
-

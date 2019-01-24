@@ -31,4 +31,3 @@
 bool LMI_SO is_antediluvian_fork();
 
 #endif // lmi_hpp
-

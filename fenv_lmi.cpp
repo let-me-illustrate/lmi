@@ -251,4 +251,3 @@ bool fenv_validate(enum_fenv_indulgence indulgence)
 
     return okay;
 }
-

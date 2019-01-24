@@ -46,4 +46,3 @@ void file_command::operator()
 {
     file_command_callback()(file, action);
 }
-

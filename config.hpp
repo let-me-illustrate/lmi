@@ -223,4 +223,3 @@ namespace fs = boost::filesystem;
 #endif // Not using autoconf.
 
 #endif // config_hpp
-

@@ -84,4 +84,3 @@ class InputSequenceEntryXmlHandler
 };
 
 #endif // input_sequence_entry_hpp
-

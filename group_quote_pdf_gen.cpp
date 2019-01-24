@@ -44,4 +44,3 @@ std::unique_ptr<group_quote_pdf_generator> group_quote_pdf_generator::create()
 {
     return group_quote_pdf_generator_create_callback()();
 }
-

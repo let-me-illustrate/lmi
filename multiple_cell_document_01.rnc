@@ -42,4 +42,3 @@ start = element multiple_cell_document
     }
 
 include "cell_07.rnc"
-

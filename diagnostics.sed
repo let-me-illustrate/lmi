@@ -68,4 +68,3 @@
 /^< [a-z0-9].d0/d
   # Delete multiple blank lines.
 /./,/^$/!d
-

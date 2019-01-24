@@ -484,4 +484,3 @@ std::vector<std::string> effective_calculation_summary_columns()
         ,z.use_builtin_calculation_summary()
         );
 }
-

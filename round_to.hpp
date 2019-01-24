@@ -419,4 +419,3 @@ round_to<RealType>::select_rounding_function(rounding_style const a_style) const
 }
 
 #endif // round_to_hpp
-

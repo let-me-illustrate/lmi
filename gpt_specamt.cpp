@@ -168,4 +168,3 @@ double gpt_specamt::CalculateSpecAmt
 
     return fsa.Get();
 }
-

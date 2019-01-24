@@ -117,4 +117,3 @@ class RoundingButtonsXmlHandler
 };
 
 #endif // rounding_view_editor_hpp
-

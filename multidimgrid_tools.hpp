@@ -448,4 +448,3 @@ class AutoResizingTreeCtrl
 };
 
 #endif // multidimgrid_tools_hpp
-

@@ -167,4 +167,3 @@ void safe_message_alert(char const* message)
     ::MessageBoxA(handle, message, "Error", MB_OK | MB_ICONSTOP | MB_TASKMODAL);
 #endif // defined LMI_MSW
 }
-

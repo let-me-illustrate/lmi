@@ -226,4 +226,3 @@ Loads::excess_premium_load_minimum_premium_tax() const
 }
 
 #endif // loads_hpp
-

@@ -347,4 +347,3 @@ void assign_midpoint
 }
 
 #endif // math_functions_hpp
-

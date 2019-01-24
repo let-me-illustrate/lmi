@@ -30,4 +30,3 @@
 // driver, in order to prove that explicit instantiation works.
 
 template class tn_range<int, percentage_trammel<int>>;
-

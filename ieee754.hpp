@@ -129,4 +129,3 @@ inline double ldbl_eps_plus_one_times(double z)
 }
 
 #endif // ieee754_hpp
-

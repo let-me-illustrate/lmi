@@ -128,4 +128,3 @@ CRC& operator+=
 }
 
 #endif // crc32_hpp
-

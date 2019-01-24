@@ -243,4 +243,3 @@ clobber_exec_prefix_only:
 	-$(RM) --force --recursive $(exec_prefix)/lib/cmake
 	-$(RM) --force --recursive $(exec_prefix)/lib/pkgconfig
 	-$(RM) --force --recursive $(xml_dir)
-

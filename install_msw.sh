@@ -275,4 +275,3 @@ elapsed=$(date -u -d @"$seconds" +'%H:%M:%S')
 echo "Elapsed: $elapsed"
 
 echo Finished building lmi. >/dev/tty
-

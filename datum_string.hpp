@@ -69,4 +69,3 @@ inline std::string value_cast<std::string,datum_string>
 }
 
 #endif // datum_string_hpp
-

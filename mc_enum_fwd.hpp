@@ -28,4 +28,3 @@ template<typename T>
 class mc_enum;
 
 #endif // mc_enum_fwd_hpp
-

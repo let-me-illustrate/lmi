@@ -70,4 +70,3 @@ void PreviewFrameEx::UponCloseWindow(wxCloseEvent& event)
     TopWindow().Show(true);
     event.Skip();
 }
-

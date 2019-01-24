@@ -139,4 +139,3 @@ class CensusView final
 };
 
 #endif // census_view_hpp
-

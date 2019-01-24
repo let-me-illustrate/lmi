@@ -32,4 +32,3 @@ std::locale const& LMI_SO blank_is_not_whitespace_locale();
 std::locale const& LMI_SO   tab_is_not_whitespace_locale();
 
 #endif // facets_hpp
-

@@ -39839,4 +39839,3 @@ entry here. The entire svn history was imported into git, so
 even old cvs history that had been imported into svn. This change
 log is retained because it contains some commentary outside of
 svn commit messages, which could not readily be imported into git.
-

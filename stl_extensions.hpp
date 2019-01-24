@@ -117,4 +117,3 @@ inline T power(T x, Integer n)
 } // namespace nonstd
 
 #endif // stl_extensions_hpp
-

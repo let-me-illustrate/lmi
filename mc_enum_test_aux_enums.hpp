@@ -36,4 +36,3 @@ enum enum_island
     };
 
 #endif // mc_enum_test_aux_enums_hpp
-

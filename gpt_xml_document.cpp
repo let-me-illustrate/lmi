@@ -78,4 +78,3 @@ void gpt_xml_document::write(std::ostream& os) const
     root << input_data_;
     os << document;
 }
-

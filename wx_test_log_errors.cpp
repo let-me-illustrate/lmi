@@ -44,4 +44,3 @@ LMI_WX_TEST_CASE(log_error)
             Describe("warning about being unable to determine file format")
         );
 }
-

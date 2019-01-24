@@ -62,4 +62,3 @@ stratified_entity& TierDocument::get_stratified_entity(e_stratified index)
 {
     return charges_.raw_entity(index);
 }
-

@@ -60,4 +60,3 @@ char const* TextEditView::menubar_xrc_resource() const
 {
     return "text_view_menu";
 }
-

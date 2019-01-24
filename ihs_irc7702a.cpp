@@ -1378,4 +1378,3 @@ double Irc7702A::SAIncreaseToAvoidMec(bool a_TriggeredByUnnecPrem)
  * unit 7pp: rounding?
  * NSP
  */
-

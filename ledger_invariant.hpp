@@ -445,4 +445,3 @@ inline std::string const& LedgerInvariant::GetStatePostalAbbrev() const
 }
 
 #endif // ledger_invariant_hpp
-

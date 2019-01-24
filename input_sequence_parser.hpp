@@ -121,4 +121,3 @@ class SequenceParser final
 };
 
 #endif // input_sequence_parser_hpp
-

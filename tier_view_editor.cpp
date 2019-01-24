@@ -301,4 +301,3 @@ double TierEditorGrid::StringToDouble(std::string const& text)
 {
     return value_cast<double>(text);
 }
-

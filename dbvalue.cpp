@@ -495,4 +495,3 @@ std::vector<int> const& maximum_database_dimensions()
     static std::vector<int> const z(d, d + e_number_of_axes);
     return z;
 }
-

@@ -144,4 +144,3 @@ class Skeleton
 };
 
 #endif // skeleton_hpp
-

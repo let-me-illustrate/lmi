@@ -476,4 +476,3 @@ class MvcController final
 };
 
 #endif // mvc_controller_hpp
-

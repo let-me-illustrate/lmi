@@ -1117,4 +1117,3 @@ product_files$(EXEEXT): \
   my_rnd.o \
   my_tier.o \
   liblmi$(SHREXT) \
-

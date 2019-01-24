@@ -649,4 +649,3 @@ int test_main(int, char*[])
     tn_range_test::test();
     return 0;
 }
-

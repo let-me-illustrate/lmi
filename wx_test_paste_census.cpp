@@ -424,4 +424,3 @@ LMI_WX_TEST_CASE(paste_census)
 
     census.close();
 }
-

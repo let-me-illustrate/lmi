@@ -72,4 +72,3 @@ double LMI_SO emit_ledger
     );
 
 #endif // emit_ledger_hpp
-

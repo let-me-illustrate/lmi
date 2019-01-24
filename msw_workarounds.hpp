@@ -67,4 +67,3 @@ class MswDllPreloader final
 #endif // defined LMI_MSW
 
 #endif // msw_workarounds_hpp
-

@@ -93,4 +93,3 @@ LMI_WX_TEST_CASE(default_input)
         << std::endl
         ;
 }
-

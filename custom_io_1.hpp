@@ -47,4 +47,3 @@ bool LMI_SO custom_io_1_read (Input&       , std::string const& filename);
 void LMI_SO custom_io_1_write(Ledger const&, std::string const& filename);
 
 #endif // custom_io_1_hpp
-

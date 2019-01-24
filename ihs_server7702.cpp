@@ -421,4 +421,3 @@ void Server7702::SetDoleBentsenValuesBC()
         ,Input.OldSpecAmt  .value()
         );
 }
-

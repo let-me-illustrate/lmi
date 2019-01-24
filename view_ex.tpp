@@ -97,4 +97,3 @@ ViewWindowType& PredominantViewWindow
         }
     return *view_window_pointer;
 }
-

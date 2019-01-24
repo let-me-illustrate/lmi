@@ -106,4 +106,3 @@ template<> struct reconstitutor<datum_base,PreferencesModel>
 };
 
 #endif // preferences_model_hpp
-

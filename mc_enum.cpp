@@ -65,4 +65,3 @@ bool mc_enum_base::is_allowed(int index) const
 {
     return allowed_.at(index);
 }
-

@@ -31,4 +31,3 @@
 std::string LMI_SO AddDataDir(std::string const& filename);
 
 #endif // data_directory_hpp
-

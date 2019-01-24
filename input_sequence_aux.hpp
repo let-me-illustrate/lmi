@@ -130,4 +130,3 @@ std::vector<Number> convert_vector_type
 }
 
 #endif // input_sequence_aux_hpp
-

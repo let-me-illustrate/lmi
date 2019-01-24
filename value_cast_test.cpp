@@ -894,4 +894,3 @@ int boost_tests()
 
     return 0;
 }
-

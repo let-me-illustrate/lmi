@@ -32,4 +32,3 @@ std::streambuf& LMI_SO null_streambuf();
 std::ostream&   LMI_SO null_stream();
 
 #endif // null_stream_hpp
-

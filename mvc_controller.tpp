@@ -104,4 +104,3 @@ T& MvcController::WindowFromXrcName(std::string const& name) const
 {
     return WindowFromXrcName<T>(name.c_str());
 }
-

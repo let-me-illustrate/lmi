@@ -174,4 +174,3 @@ void MvcModel::Transmogrify()
         }
     DoTransmogrify();
 }
-

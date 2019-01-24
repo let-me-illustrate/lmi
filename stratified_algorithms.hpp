@@ -530,4 +530,3 @@ T progressively_reduce(T& a, T& b, T const& delta)
 }
 
 #endif // stratified_algorithms_hpp
-

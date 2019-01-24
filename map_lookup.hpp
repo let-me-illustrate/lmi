@@ -56,4 +56,3 @@ typename map_t::mapped_type const& map_lookup
 }
 
 #endif // map_lookup_hpp
-

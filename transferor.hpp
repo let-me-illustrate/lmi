@@ -139,4 +139,3 @@ class Transferor
 };
 
 #endif // transferor_hpp
-

@@ -58,4 +58,3 @@ class icon_monger
 wxImage load_image(char const* file);
 
 #endif // icon_monger_hpp
-

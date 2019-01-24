@@ -34,4 +34,3 @@ void write_proem
     );
 
 #endif // my_proem_hpp
-

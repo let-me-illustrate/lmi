@@ -218,4 +218,3 @@ int test_main(int, char*[])
     mortality_rates_test::test();
     return EXIT_SUCCESS;
 }
-

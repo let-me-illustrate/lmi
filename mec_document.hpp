@@ -60,4 +60,3 @@ class mec_document
 };
 
 #endif // mec_document_hpp
-

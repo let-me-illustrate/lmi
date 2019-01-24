@@ -215,4 +215,3 @@ void set_run_basis_from_cloven_bases
     else if(g == mce_gen_guar && s == mce_sep_half) r = mce_run_gen_guar_sep_half;
     else {alarum() << "Cannot set run basis." << LMI_FLUSH;}
 }
-

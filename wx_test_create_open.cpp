@@ -194,4 +194,3 @@ LMI_WX_TEST_CASE(create_open_text)
 {
     do_test_create_open(*this, 'x', "testfile.txt", false);
 }
-

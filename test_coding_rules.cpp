@@ -1240,4 +1240,3 @@ int try_main(int argc, char* argv[])
     z.print_summary();
     return error_flag ? EXIT_FAILURE : EXIT_SUCCESS;
 }
-

@@ -25,4 +25,3 @@
 #include "config.hpp"
 
 #endif // wx_checks_hpp
-

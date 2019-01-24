@@ -122,4 +122,3 @@ MAKEDEPEND_NON_GCC_COMMAND = \
 
 -include *.d
 *.d:: ;
-

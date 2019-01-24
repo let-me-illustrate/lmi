@@ -163,4 +163,3 @@ bool volatile ensure_setup = set_progress_meter_creator
     (concrete_progress_meter_creator
     );
 } // Unnamed namespace.
-

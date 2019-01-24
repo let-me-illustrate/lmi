@@ -85,4 +85,3 @@ void death_benefits::set_supplamt(double z, int from_year, int to_year)
         supplamt_[j] = z;
         }
 }
-

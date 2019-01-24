@@ -711,4 +711,3 @@ void Input::redintegrate_ad_terminum()
         EffectiveDate = calendar_date();
         }
 }
-

@@ -73,4 +73,3 @@ inline std::ostream& operator<<(std::ostream& os, fs::path const& z)
 } // namespace boost
 
 #endif // path_utility_hpp
-

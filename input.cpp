@@ -614,4 +614,3 @@ Input Input::consummate(Input const& original)
 
     return z;
 }
-

@@ -654,4 +654,3 @@ void any_member_test::como_433_test()
     BOOST_TEST_EQUAL(&(s.i), &(s.*&R::i)); // Succeeds.
     BOOST_TEST_EQUAL(&(s.d), &(s.*&R::d)); // Fails with original como.
 }
-

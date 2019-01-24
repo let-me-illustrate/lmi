@@ -383,3 +383,4 @@
 {DB_PrimaryHurdle,DB_Topic_OtherAssumptions,"PrimaryHurdle","Hurdle rate [not yet implemented]",}, \
 {DB_SecondaryHurdle,DB_Topic_OtherAssumptions,"SecondaryHurdle","Secondary hurdle rate (TSA XL, Part I, page 61) [not yet implemented]",}, \
 
+// C++11 DR 787 would allow this file to end in backslash-newline.

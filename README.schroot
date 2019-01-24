@@ -499,4 +499,3 @@ exit
 # to the GTK bookmarks file, which may be one of the following:
 #   vim ~/.gtk-bookmarks
 #   vim ~/.config/gtk-3.0/bookmarks
-

@@ -206,4 +206,3 @@ class gpt_cf_triad
 };
 
 #endif // gpt_commutation_functions_hpp
-

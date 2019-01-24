@@ -123,4 +123,3 @@ class TreeGridViewBase
 };
 
 #endif // product_editor_hpp
-

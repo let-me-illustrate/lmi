@@ -326,4 +326,3 @@ void test_census_consensus
         assert_okay_to_run_group_quote(case_default, all_cells);
         }
 }
-

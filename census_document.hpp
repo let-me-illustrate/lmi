@@ -57,4 +57,3 @@ class CensusDocument
 };
 
 #endif // census_document_hpp
-

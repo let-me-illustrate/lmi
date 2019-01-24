@@ -90,4 +90,3 @@ class range_udt_trammel
 typedef tn_range<RangeUDT, range_udt_trammel<RangeUDT>> r_range_udt;
 
 #endif // tn_range_test_aux_hpp
-

@@ -96,4 +96,3 @@ LMI_WX_TEST_CASE(expiry_dates)
         LMI_ASSERT_DATES_EQUAL(end, first_after_next_month);
         }
 }
-

@@ -50,4 +50,3 @@ class comma_punct
 };
 
 #endif // comma_punct_hpp
-

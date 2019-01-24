@@ -115,4 +115,3 @@ targets are "make check", "make dist" or "make dist-bzip2" (and "make
 distcheck" to check that it works), "make uninstall", "make clean" and "make
 maintainer-clean" (don't use the latter if you don't have autotools installed
 as you won't be able to regenerate the makefile after it).
-

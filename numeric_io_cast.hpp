@@ -301,4 +301,3 @@ struct numeric_converter<std::string, char const*>
 };
 
 #endif // numeric_io_cast_hpp
-

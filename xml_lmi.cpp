@@ -407,4 +407,3 @@ std::ostream& operator<<(std::ostream& os, xml_lmi::xml_document const& d)
     os << d.document();
     return os;
 }
-

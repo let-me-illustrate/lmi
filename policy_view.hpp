@@ -81,4 +81,3 @@ inline char const* PolicyView::resource_file_name()
 }
 
 #endif // policy_view_hpp
-

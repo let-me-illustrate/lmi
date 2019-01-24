@@ -61,4 +61,3 @@ class LMI_SO group_quote_pdf_generator
 };
 
 #endif // group_quote_pdf_gen_hpp
-

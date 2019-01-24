@@ -126,4 +126,3 @@ XMLLINT := /opt/lmi/local/bin/xmllint
 
 include $(srcdir)/msw_common.make
 $(srcdir)/msw_common.make:: ;
-

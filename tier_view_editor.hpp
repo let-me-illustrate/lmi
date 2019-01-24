@@ -375,4 +375,3 @@ class TierEditorGrid
 };
 
 #endif // tier_view_editor_hpp
-

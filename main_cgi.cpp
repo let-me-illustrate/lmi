@@ -678,4 +678,3 @@ void ShowCensusOutput
             }
         }
 }
-

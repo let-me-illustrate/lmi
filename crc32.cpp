@@ -161,4 +161,3 @@ CRC& CRC::operator+=(std::string const& z)
         }
     return *this;
 }
-

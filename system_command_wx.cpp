@@ -125,4 +125,3 @@ void concrete_system_command(std::string const& command_line)
 
 bool volatile ensure_setup = system_command_initialize(concrete_system_command);
 } // Unnamed namespace.
-

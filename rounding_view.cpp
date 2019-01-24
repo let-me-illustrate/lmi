@@ -102,4 +102,3 @@ void RoundingView::DiscardEdits()
         i.second->DiscardEdits();
         }
 }
-

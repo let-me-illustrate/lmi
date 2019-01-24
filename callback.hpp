@@ -138,4 +138,3 @@ void callback<FunctionPointer>::initialize(FunctionPointer concrete_pointer)
 }
 
 #endif // callback_hpp
-

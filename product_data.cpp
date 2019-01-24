@@ -693,4 +693,3 @@ void save(product_data const& z, fs::path const& path)
 {
     z.xml_serializable<product_data>::save(path);
 }
-

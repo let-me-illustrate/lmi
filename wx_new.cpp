@@ -42,4 +42,3 @@ void operator delete[](void* pointer, wx_allocator)
 {
     operator delete(pointer);
 }
-

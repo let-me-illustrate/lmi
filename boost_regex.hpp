@@ -50,4 +50,3 @@
 #endif
 
 #endif // boost_regex_hpp
-

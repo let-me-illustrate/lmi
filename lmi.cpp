@@ -27,4 +27,3 @@ bool is_antediluvian_fork()
 {
     return false;
 }
-

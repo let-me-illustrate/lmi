@@ -84,4 +84,3 @@ int test_main(int, char*[])
     RttiLmiTest::TestTypeInfo();
     return 0;
 }
-

@@ -49,4 +49,3 @@ class PreferencesView
 };
 
 #endif // preferences_view_hpp
-

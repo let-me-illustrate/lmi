@@ -213,4 +213,3 @@ void TierView::UponTreeSelectionChange(wxTreeEvent& event)
         grid_ctrl.RefreshTableFull();
         }
 }
-

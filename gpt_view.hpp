@@ -103,4 +103,3 @@ class gpt_view final
 };
 
 #endif // gpt_view_hpp
-

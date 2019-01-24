@@ -248,4 +248,3 @@ template<typename T> void SpewVector
 }
 
 #endif // ledger_base_hpp
-

@@ -60,4 +60,3 @@ int try_main(int argc, char* argv[])
     std::cout << "Elapsed time: " << timer.stop().elapsed_msec_str() << '\n';
     return return_value;
 }
-

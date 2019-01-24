@@ -375,4 +375,3 @@ template<> struct numeric_conversion_traits<long double>
 };
 
 #endif // numeric_io_traits_hpp
-

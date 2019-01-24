@@ -58,4 +58,3 @@ void DatabaseDocument::WriteDocument(std::string const& filename)
 {
     db_.WriteDB(filename);
 }
-

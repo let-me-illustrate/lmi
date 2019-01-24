@@ -292,4 +292,3 @@ void save(rounding_rules const& z, fs::path const& path)
 {
     z.xml_serializable<rounding_rules>::save(path);
 }
-

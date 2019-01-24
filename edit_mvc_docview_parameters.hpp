@@ -68,4 +68,3 @@ oenum_mvc_dv_rc edit_mvc_docview_parameters
 }
 
 #endif // edit_mvc_docview_parameters_hpp
-

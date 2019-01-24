@@ -60,4 +60,3 @@ class gpt_document
 };
 
 #endif // gpt_document_hpp
-

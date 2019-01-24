@@ -317,4 +317,3 @@ void LMI_SO load(product_data      &, fs::path const&);
 void LMI_SO save(product_data const&, fs::path const&);
 
 #endif // product_data_hpp
-

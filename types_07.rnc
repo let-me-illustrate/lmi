@@ -375,4 +375,3 @@ report_column =
     | "AcctVal_GuaranteedZero"
     | "CSVNet_CurrentZero"
     | "CSVNet_GuaranteedZero"
-

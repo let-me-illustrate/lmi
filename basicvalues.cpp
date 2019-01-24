@@ -310,4 +310,3 @@ std::vector<double> BasicValues::GetGuarSpecAmtLoadTable() const
 {
     return std::vector<double>(GetLength());
 }
-

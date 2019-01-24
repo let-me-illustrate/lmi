@@ -178,4 +178,3 @@ wxWindow* TreeGridViewBase::CreateChildWindow()
 
     return main_panel;
 }
-

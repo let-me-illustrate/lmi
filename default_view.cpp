@@ -39,4 +39,3 @@ char const* DefaultView::DoResourceFileName() const
 {
     return configurable_settings::instance().skin_filename().c_str();
 }
-

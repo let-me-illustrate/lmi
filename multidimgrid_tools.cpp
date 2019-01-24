@@ -161,4 +161,3 @@ void AutoResizingTreeCtrl::DoGetBestSizePrivate
             }
         }
 }
-

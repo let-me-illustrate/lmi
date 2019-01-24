@@ -103,4 +103,3 @@
 #undef LMI_GNUC_STRICT_ANSI
 
 #endif // platform_dependent_hpp
-

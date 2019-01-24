@@ -43,4 +43,3 @@ extern char const*const island_strings[] = {"Easter", "Pago Pago", "Ni_ihau"};
 template<> struct mc_enum_key<enum_island>
   :public mc_enum_data<enum_island, 3, island_enums, island_strings> {};
 template class mc_enum<enum_island>;
-

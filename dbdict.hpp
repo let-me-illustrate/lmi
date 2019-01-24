@@ -427,4 +427,3 @@ class LMI_SO DBDictionary final
 void LMI_SO print_databases();
 
 #endif // dbdict_hpp
-

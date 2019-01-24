@@ -449,4 +449,3 @@ double AccountValue::Solve
     (this->*solve_set_fn)(solution.first);
     return solution.first;
 }
-

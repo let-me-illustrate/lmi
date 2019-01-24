@@ -141,4 +141,3 @@ wxTopLevelWindow& TopWindow();
 std::string ValidateAndConvertFilename(wxString const&);
 
 #endif // wx_utility_hpp
-

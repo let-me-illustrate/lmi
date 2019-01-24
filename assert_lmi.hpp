@@ -90,4 +90,3 @@
         )
 
 #endif // assert_lmi_hpp
-

@@ -522,4 +522,3 @@ void AccountValue::DebugPrint()
     DebugStream << '\n';
     DebugRecord.assign(eLast, "EMPTY");
 }
-

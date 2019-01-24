@@ -149,4 +149,3 @@ LMI_WX_TEST_CASE(pdf_census)
     LMI_ASSERT(composite_pdf.exists());
     LMI_ASSERT(cell_pdf.exists());
 }
-

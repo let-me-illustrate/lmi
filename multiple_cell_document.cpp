@@ -533,4 +533,3 @@ void multiple_cell_document::write(std::ostream& os) const
 
     os << document;
 }
-

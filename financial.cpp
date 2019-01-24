@@ -88,4 +88,3 @@ double list_bill_premium
     std::generate(v.begin(), v.end(), [&i, v12] {return std::pow(v12, i++);});
     return std::inner_product(p0.begin(), p0.end(), v.begin(), 0.0);
 }
-

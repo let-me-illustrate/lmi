@@ -78,4 +78,3 @@ void LMI_SO test_census_consensus
     );
 
 #endif // illustrator_hpp
-

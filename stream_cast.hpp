@@ -196,4 +196,3 @@ inline std::string stream_cast<std::string>
 }
 
 #endif // stream_cast_hpp
-

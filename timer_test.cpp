@@ -135,4 +135,3 @@ int test_main(int, char*[])
     TimerTest::TestAliquotTimer();
     return EXIT_SUCCESS;
 }
-

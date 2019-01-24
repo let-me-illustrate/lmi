@@ -54,4 +54,3 @@ std::map<std::string, bool> my_taboos()
     z["sibboleth" ] = true;
     return z;
 }
-

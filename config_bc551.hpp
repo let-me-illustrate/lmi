@@ -107,4 +107,3 @@
 // this approach.
 
 #endif // config_bc551_hpp
-

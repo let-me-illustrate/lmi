@@ -264,4 +264,3 @@ typedef std::unique_ptr<progress_meter> (*progress_meter_creator_type)
 bool LMI_SO set_progress_meter_creator(progress_meter_creator_type);
 
 #endif // progress_meter_hpp
-

@@ -44,4 +44,3 @@ void write_proem
     document.add_comment("Copyright (C) " + y + " Gregory W. Chicares.");
     document.add_comment("http://savannah.nongnu.org/projects/lmi");
 }
-

@@ -674,4 +674,3 @@ std::vector<double> mec_input::BenefitHistoryRealized() const
 {
     return convert_vector_type<double>(BenefitHistoryRealized_);
 }
-

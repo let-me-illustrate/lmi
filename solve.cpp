@@ -347,4 +347,3 @@ double AccountValue::Solve()
     SolveFn(actual_solution);
     return actual_solution;
 }
-

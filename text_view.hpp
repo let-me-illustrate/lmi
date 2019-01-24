@@ -70,4 +70,3 @@ class TextEditView final
 };
 
 #endif // text_view_hpp
-

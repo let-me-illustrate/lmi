@@ -159,4 +159,3 @@ class LMI_SO MvcModel
 };
 
 #endif // mvc_model_hpp
-

@@ -32,4 +32,3 @@ void LMI_SO floating_point_error_handler(int);
 void LMI_SO fpe_handler_test();
 
 #endif // sigfpe_hpp
-

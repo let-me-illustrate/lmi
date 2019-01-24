@@ -209,4 +209,3 @@ cp --preserve /archive/lmi/src/products/src/* /lmi/src/products/src
   # contents: any '.dat' or '.ndx' file missing or differing from
   # 'lmi-data*' in lmi's ftp area
 cp --preserve /archive/lmi/data/* /opt/lmi/data
-

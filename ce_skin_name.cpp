@@ -197,4 +197,3 @@ std::ostream& ce_skin_name::write(std::ostream& os) const
 {
     return os << str();
 }
-

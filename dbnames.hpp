@@ -582,4 +582,3 @@ int         LMI_SO db_key_from_name(std::string const&);
 std::string LMI_SO db_name_from_key(int);
 
 #endif // dbnames_hpp
-

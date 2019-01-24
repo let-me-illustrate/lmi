@@ -53,4 +53,3 @@ class LMI_SO fenv_guard final
 };
 
 #endif // fenv_guard_hpp
-

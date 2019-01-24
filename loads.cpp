@@ -367,4 +367,3 @@ Loads::Loads(product_database const& database, bool NeedMidpointRates)
     dac_tax_load_                           .resize(database.length());
     target_premium_load_maximum_premium_tax_.resize(database.length());
 }
-

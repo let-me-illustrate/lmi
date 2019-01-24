@@ -66,4 +66,3 @@ platform_xmlwrapp_libraries :=
 # 'install' target might copy cgi-bin binaries thither.
 #
 #cgi_bin_dir := $(system_root)/unspecified/cgi-bin
-

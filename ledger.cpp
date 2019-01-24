@@ -557,4 +557,3 @@ void throw_if_interdicted(Ledger const& z)
         alarum() << s << LMI_FLUSH;
         }
 }
-

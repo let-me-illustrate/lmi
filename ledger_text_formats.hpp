@@ -82,4 +82,3 @@ struct ledger_metadata
 };
 
 #endif // ledger_text_formats_hpp
-
