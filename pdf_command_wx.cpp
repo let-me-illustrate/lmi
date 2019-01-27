@@ -2645,6 +2645,105 @@ class finra_supplemental : public page_with_tabular_report
     }
 };
 
+class finra_split_fund_report : public page_with_tabular_report
+{
+  public:
+    using page_with_tabular_report::page_with_tabular_report;
+
+  private:
+    enum
+        {column_policy_year
+        ,column_end_of_year_age
+        ,column_er_gross_payment
+        ,column_ee_gross_payment
+        ,column_premium_outlay
+        ,column_guar0_cash_surr_value
+        ,column_curr0_cash_surr_value
+        ,column_guar0_account_value
+        ,column_curr0_account_value
+        ,column_guar0_av_sep
+        ,column_curr0_av_sep
+        ,column_guar0_av_gen
+        ,column_curr0_av_gen
+        ,column_max
+        };
+
+    std::string get_fixed_page_contents_template_name() const override
+    {
+        // Note that we reuse the template for another report because we only
+        // need our template to define the standard header, as this one already
+        // does, and all the rest, i.e. the report itself, is generated
+        // dynamically by this class.
+        return "finra_supp";
+    }
+
+    illustration_table_columns const& get_table_columns() const override
+    {
+        static illustration_table_columns const columns =
+            {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
+            ,{ "AttainedAge"                , "End of\nYear\nAge"           ,         "999" }
+            ,{ "ErGrossPmt"                 , "ER Gross\nPayment"           ,  "99,999,999" }
+            ,{ "EeGrossPmt"                 , "EE Gross\nPayment"           ,  "99,999,999" }
+            ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
+            ,{ "CSVNet_GuaranteedZero"      , "Cash Surr\nValue"            , "999,999,999" }
+            ,{ "CSVNet_Current"             , "Cash Surr\nValue"            , "999,999,999" }
+            ,{ "AcctVal_GuaranteedZero"     , "Guar\nCharges\n"
+                                              "0% Account\nValue"           , "999,999,999" }
+            ,{ "AcctVal_CurrentZero"        , "Curr\nCharges\n"
+                                              "0% Account\nValue"           , "999,999,999" }
+            ,{ "AVSepAcct_GuaranteedZero"   , "Guar\nCharges\n"
+                                              "0% Account\nValue\n"
+                                              "Sep Acct"                    , "999,999,999" }
+            ,{ "AVSepAcct_CurrentZero"      , "Curr\nCharges\n"
+                                              "0% Account\nValue\n"
+                                              "Sep Acct"                    , "999,999,999" }
+            ,{ "AVGenAcct_GuaranteedZero"   , "Guar\nCharges\n"
+                                              "0% Account\nValue\n"
+                                              "Gen Acct"                    , "999,999,999" }
+            ,{ "AVGenAcct_CurrentZero"      , "Curr\nCharges\n"
+                                              "0% Account\nValue\n"
+                                              "Gen Acct"                    , "999,999,999" }
+            };
+
+        return columns;
+    }
+
+    bool should_hide_column(int column) const override
+    {
+        auto const& invar = ledger_.GetLedgerInvariant();
+
+        // This report shows either ER and EE gross payment columns in split
+        // premiums case or a single premium outlay column otherwise.
+        switch(column)
+            {
+            case column_er_gross_payment:
+            case column_ee_gross_payment:
+                // These columns only appear in split premiums case.
+                return !invar.SplitMinPrem;
+
+            case column_premium_outlay:
+                // While this one replaces them in non-split premiums case.
+                return invar.SplitMinPrem;
+
+            case column_policy_year:
+            case column_end_of_year_age:
+            case column_guar0_cash_surr_value:
+            case column_curr0_cash_surr_value:
+            case column_guar0_account_value:
+            case column_curr0_account_value:
+            case column_guar0_av_sep:
+            case column_curr0_av_sep:
+            case column_guar0_av_gen:
+            case column_curr0_av_gen:
+            case column_max:
+                // These columns are common to both cases and never hidden.
+                break;
+            }
+
+        return false;
+    }
+};
+
 class finra_assumption_detail : public page_with_tabular_report
 {
   public:
@@ -2745,6 +2844,10 @@ class pdf_illustration_finra : public pdf_illustration
         numbered_page::start_numbering();
         add<finra_basic>();
         add<finra_supplemental>();
+        if(!ledger.is_composite() && invar.SplitFundAllocation)
+            {
+            add<finra_split_fund_report>();
+            }
         add<standard_page>("finra_column_headings");
         add<standard_page>("finra_notes1");
         add<standard_page>("finra_notes2");
