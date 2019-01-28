@@ -89,11 +89,13 @@ database_entity value_cast<database_entity>(std::string const&)
 DBDictionary::DBDictionary()
 {
     ascribe_members();
+    InitDB();
 }
 
 DBDictionary::DBDictionary(std::string const& filename)
 {
     ascribe_members();
+    InitDB();
     Init(filename);
 }
 
