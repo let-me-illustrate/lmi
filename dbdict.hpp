@@ -34,7 +34,7 @@
 
 /// Cached product database.
 
-class LMI_SO DBDictionary final
+class LMI_SO DBDictionary
     :public xml_serializable  <DBDictionary>
     ,public MemberSymbolTable <DBDictionary>
     ,public cache_file_reads  <DBDictionary>
