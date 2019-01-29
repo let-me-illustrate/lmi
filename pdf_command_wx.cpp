@@ -2844,7 +2844,7 @@ class pdf_illustration_finra : public pdf_illustration
         numbered_page::start_numbering();
         add<finra_basic>();
         add<finra_supplemental>();
-        if(!ledger.is_composite() && invar.SplitFundAllocation)
+        if(invar.SplitFundAllocation)
             {
             add<finra_split_fund_report>();
             }
