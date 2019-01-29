@@ -2657,14 +2657,14 @@ class finra_split_fund_report : public page_with_tabular_report
         ,column_er_gross_payment
         ,column_ee_gross_payment
         ,column_premium_outlay
-        ,column_guar0_cash_surr_value
-        ,column_curr0_cash_surr_value
-        ,column_guar0_account_value
-        ,column_curr0_account_value
-        ,column_guar0_av_sep
-        ,column_curr0_av_sep
         ,column_guar0_av_gen
+        ,column_guar0_av_sep
+        ,column_guar0_account_value
+        ,column_guar0_cash_surr_value
         ,column_curr0_av_gen
+        ,column_curr0_av_sep
+        ,column_curr0_account_value
+        ,column_curr0_cash_surr_value
         ,column_max
         };
 
@@ -2685,24 +2685,24 @@ class finra_split_fund_report : public page_with_tabular_report
             ,{ "ErGrossPmt"                 , "ER Gross\nPayment"           ,  "99,999,999" }
             ,{ "EeGrossPmt"                 , "EE Gross\nPayment"           ,  "99,999,999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
-            ,{ "CSVNet_GuaranteedZero"      , "Cash Surr\nValue"            , "999,999,999" }
-            ,{ "CSVNet_Current"             , "Cash Surr\nValue"            , "999,999,999" }
-            ,{ "AcctVal_GuaranteedZero"     , "Guar\nCharges\n"
-                                              "0% Account\nValue"           , "999,999,999" }
-            ,{ "AcctVal_CurrentZero"        , "Curr\nCharges\n"
-                                              "0% Account\nValue"           , "999,999,999" }
-            ,{ "AVSepAcct_GuaranteedZero"   , "Guar\nCharges\n"
-                                              "0% Account\nValue\n"
-                                              "Sep Acct"                    , "999,999,999" }
-            ,{ "AVSepAcct_CurrentZero"      , "Curr\nCharges\n"
-                                              "0% Account\nValue\n"
-                                              "Sep Acct"                    , "999,999,999" }
             ,{ "AVGenAcct_GuaranteedZero"   , "Guar\nCharges\n"
                                               "0% Account\nValue\n"
                                               "Gen Acct"                    , "999,999,999" }
+            ,{ "AVSepAcct_GuaranteedZero"   , "Guar\nCharges\n"
+                                              "0% Account\nValue\n"
+                                              "Sep Acct"                    , "999,999,999" }
+            ,{ "AcctVal_GuaranteedZero"     , "Guar\nCharges\n"
+                                              "0% Account\nValue"           , "999,999,999" }
+            ,{ "CSVNet_GuaranteedZero"      , "Cash Surr\nValue"            , "999,999,999" }
             ,{ "AVGenAcct_CurrentZero"      , "Curr\nCharges\n"
                                               "0% Account\nValue\n"
                                               "Gen Acct"                    , "999,999,999" }
+            ,{ "AVSepAcct_CurrentZero"      , "Curr\nCharges\n"
+                                              "0% Account\nValue\n"
+                                              "Sep Acct"                    , "999,999,999" }
+            ,{ "AcctVal_CurrentZero"        , "Curr\nCharges\n"
+                                              "0% Account\nValue"           , "999,999,999" }
+            ,{ "CSVNet_Current"             , "Cash Surr\nValue"            , "999,999,999" }
             };
 
         return columns;
