@@ -607,14 +607,6 @@
     ,mce_current_net_interest_credited \
     ,mce_current_sep_acct_charges \
     ,mce_current_policy_fee \
-    ,mce_current_0_account_value_general_account \
-    ,mce_guaranteed_0_account_value_general_account \
-    ,mce_current_0_account_value_separate_account \
-    ,mce_guaranteed_0_account_value_separate_account \
-    ,mce_current_0_account_value \
-    ,mce_guaranteed_0_account_value \
-    ,mce_current_0_cash_surrender_value \
-    ,mce_guaranteed_0_cash_surrender_value \
     };
 #define report_column_NAMES \
     {"[none]" \
@@ -672,14 +664,6 @@
     ,"NetIntCredited_Current" \
     ,"SepAcctCharges_Current" \
     ,"PolicyFee_Current" \
-    ,"AVGenAcct_CurrentZero" \
-    ,"AVGenAcct_GuaranteedZero" \
-    ,"AVSepAcct_CurrentZero" \
-    ,"AVSepAcct_GuaranteedZero" \
-    ,"AcctVal_CurrentZero" \
-    ,"AcctVal_GuaranteedZero" \
-    ,"CSVNet_CurrentZero" \
-    ,"CSVNet_GuaranteedZero" \
     };
 #if 0
 // TODO ?? Nicer-looking names--implement later.
@@ -739,14 +723,6 @@
     ,"Current Interest Credited Net of Separate Account Charges" \
     ,"Current Separate Account Asset Charges" \
     ,"Current Policy Fee" \
-    ,"Curr Charges Account Value General Account" \
-    ,"Guar Charges Account Value General Account" \
-    ,"Curr Charges 0% Account Value Separate Account" \
-    ,"Guar Charges 0% Account Value Separate Account" \
-    ,"Curr Charges 0% Account Value" \
-    ,"Guar Charges 0% Account Value" \
-    ,"Curr Charges 0% Net Cash Surrender Value" \
-    ,"Guar Charges 0% Net Cash Surrender Value" \
     };
 #endif // 0
 

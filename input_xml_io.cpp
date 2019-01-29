@@ -181,6 +181,9 @@ void Input::redintegrate_ex_ante
 {
     if(class_version() == file_version)
         {
+        // INPUT !! Next time the class version is updated,
+        // remove this 'goto' and its label.
+        goto jumper;
         return;
         }
 
@@ -339,6 +342,23 @@ void Input::redintegrate_ex_ante
         if("InputFundManagementFee" == name)
             {
             value = value_cast<std::string>(value_cast<double>(value) / 10000.0);
+            }
+        }
+
+    if(file_version < 10)
+        {
+  jumper:
+        // Prior to 2019-01-30, weird "Zero" columns were available
+        // for some supplemental reports. The manual report that used
+        // them having been automated, they've been withdrawn. For
+        // backward compatibility, they're silently ignored wherever
+        // they occurred in old input files.
+        if
+            (  contains(name, "SupplementalReportColumn")
+            && contains(value, "Zero")
+            )
+            {
+            value = "[none]";
             }
         }
 }

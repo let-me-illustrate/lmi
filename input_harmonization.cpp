@@ -822,41 +822,6 @@ false // Silly workaround for now.
     SupplementalReportColumn09.enable(create_supplemental_report);
     SupplementalReportColumn10.enable(create_supplemental_report);
     SupplementalReportColumn11.enable(create_supplemental_report);
-
-    // TODO ?? EGREGIOUS_DEFECT: instead, don't offer these columns at all. See:
-    //   http://lists.nongnu.org/archive/html/lmi/2009-09/msg00012.html
-    std::vector<mcenum_report_column> weird_report_columns;
-    weird_report_columns.push_back(mce_current_0_account_value_general_account    );
-    weird_report_columns.push_back(mce_guaranteed_0_account_value_general_account );
-    weird_report_columns.push_back(mce_current_0_account_value_separate_account   );
-    weird_report_columns.push_back(mce_guaranteed_0_account_value_separate_account);
-    weird_report_columns.push_back(mce_current_0_account_value                    );
-    weird_report_columns.push_back(mce_guaranteed_0_account_value                 );
-    weird_report_columns.push_back(mce_current_0_cash_surrender_value             );
-    weird_report_columns.push_back(mce_guaranteed_0_cash_surrender_value          );
-
-    bool enable_weirdness =
-           allow_gen_acct
-        && allow_sep_acct
-        && 0.0 < InforceGeneralAccountValue .value()
-        && 0.0 < InforceSeparateAccountValue.value()
-        ;
-
-    for(auto const& i : weird_report_columns)
-        {
-        SupplementalReportColumn00.allow(i, enable_weirdness);
-        SupplementalReportColumn01.allow(i, enable_weirdness);
-        SupplementalReportColumn02.allow(i, enable_weirdness);
-        SupplementalReportColumn03.allow(i, enable_weirdness);
-        SupplementalReportColumn04.allow(i, enable_weirdness);
-        SupplementalReportColumn05.allow(i, enable_weirdness);
-        SupplementalReportColumn06.allow(i, enable_weirdness);
-        SupplementalReportColumn07.allow(i, enable_weirdness);
-        SupplementalReportColumn08.allow(i, enable_weirdness);
-        SupplementalReportColumn09.allow(i, enable_weirdness);
-        SupplementalReportColumn10.allow(i, enable_weirdness);
-        SupplementalReportColumn11.allow(i, enable_weirdness);
-        }
 }
 
 /// Change values as required for consistency.
