@@ -2844,16 +2844,16 @@ class pdf_illustration_finra : public pdf_illustration
         numbered_page::start_numbering();
         add<finra_basic>();
         add<finra_supplemental>();
-        if(invar.SplitFundAllocation)
-            {
-            add<finra_split_fund_report>();
-            }
         add<standard_page>("finra_column_headings");
         add<standard_page>("finra_notes1");
         add<standard_page>("finra_notes2");
         if(!ledger.is_composite())
             {
             add<finra_assumption_detail>();
+            }
+        if(invar.SplitFundAllocation)
+            {
+            add<finra_split_fund_report>();
             }
         if(invar.SupplementalReport)
             {
