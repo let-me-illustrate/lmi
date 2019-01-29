@@ -2686,23 +2686,31 @@ class finra_split_fund_report : public page_with_tabular_report
             ,{ "EeGrossPmt"                 , "EE Gross\nPayment"           ,  "99,999,999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
             ,{ "AVGenAcct_GuaranteedZero"   , "Guar\nCharges\n"
-                                              "0% Account\nValue\n"
+                                              "Acct Value\n"
                                               "Gen Acct"                    , "999,999,999" }
             ,{ "AVSepAcct_GuaranteedZero"   , "Guar\nCharges\n"
-                                              "0% Account\nValue\n"
+                                              "0% Rate\n"
+                                              "Acct Value\n"
                                               "Sep Acct"                    , "999,999,999" }
             ,{ "AcctVal_GuaranteedZero"     , "Guar\nCharges\n"
-                                              "0% Account\nValue"           , "999,999,999" }
-            ,{ "CSVNet_GuaranteedZero"      , "Cash Surr\nValue"            , "999,999,999" }
+                                              "0% Rate\n"
+                                              "Acct Value"                  , "999,999,999" }
+            ,{ "CSVNet_GuaranteedZero"      , "Guar\nCharges\n"
+                                              "0% Rate\n"
+                                              "Cash Surr\nValue"            , "999,999,999" }
             ,{ "AVGenAcct_CurrentZero"      , "Curr\nCharges\n"
-                                              "0% Account\nValue\n"
+                                              "Acct Value\n"
                                               "Gen Acct"                    , "999,999,999" }
             ,{ "AVSepAcct_CurrentZero"      , "Curr\nCharges\n"
-                                              "0% Account\nValue\n"
+                                              "0% Rate\n"
+                                              "Acct Value\n"
                                               "Sep Acct"                    , "999,999,999" }
             ,{ "AcctVal_CurrentZero"        , "Curr\nCharges\n"
-                                              "0% Account\nValue"           , "999,999,999" }
-            ,{ "CSVNet_Current"             , "Cash Surr\nValue"            , "999,999,999" }
+                                              "0% Rate\n"
+                                              "Acct Value"                  , "999,999,999" }
+            ,{ "CSVNet_Current"             , "Curr\nCharges\n"
+                                              "0% Rate\n"
+                                              "Cash Surr\nValue"            , "999,999,999" }
             };
 
         return columns;
