@@ -123,17 +123,6 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
         m["NetIntCredited_Current"     ] = ledger_metadata(0, oe_format_normal    , "Curr Net Int Credited"                 ); // "Current Interest Credited Net of Separate Account Charges"
         m["SepAcctCharges_Current"     ] = ledger_metadata(0, oe_format_normal    , "Curr Sep Acct Charges"                 ); // "Current Separate Account Asset Charges"
         m["PolicyFee_Current"          ] = ledger_metadata(0, oe_format_normal    , "Curr Policy Fee"                       ); // "Current Policy Fee"
-// '*_CurrentZero' and '*_GuaranteedZero' columns deliberately suppressed--see:
-//   http://lists.nongnu.org/archive/html/lmi/2009-09/msg00012.html
-// TODO ?? EGREGIOUS_DEFECT: instead, don't offer these columns at all.
-//      m["AVGenAcct_CurrentZero"      ] = ledger_metadata(0, oe_format_normal    , "Curr Charges Account Value Gen Acct"   ); // "Curr Charges Account Value General Account"
-//      m["AVGenAcct_GuaranteedZero"   ] = ledger_metadata(0, oe_format_normal    , "Guar Charges Account Value Gen Acct"   ); // "Guar Charges Account Value General Account"
-//      m["AVSepAcct_CurrentZero"      ] = ledger_metadata(0, oe_format_normal    , "Curr Charges 0% Account Value Sep Acct"); // "Curr Charges 0% Account Value Separate Account"
-//      m["AVSepAcct_GuaranteedZero"   ] = ledger_metadata(0, oe_format_normal    , "Guar Charges 0% Account Value Sep Acct"); // "Guar Charges 0% Account Value Separate Account"
-//      m["AcctVal_CurrentZero"        ] = ledger_metadata(0, oe_format_normal    , "Curr Charges 0% Account Value"         ); // "Curr Charges 0% Account Value"
-//      m["AcctVal_GuaranteedZero"     ] = ledger_metadata(0, oe_format_normal    , "Guar Charges 0% Account Value"         ); // "Guar Charges 0% Account Value"
-//      m["CSVNet_CurrentZero"         ] = ledger_metadata(0, oe_format_normal    , "Curr Charges 0% Net Cash Surr Value"   ); // "Curr Charges 0% Net Cash Surrender Value"
-//      m["CSVNet_GuaranteedZero"      ] = ledger_metadata(0, oe_format_normal    , "Guar Charges 0% Net Cash Surr Value"   ); // "Guar Charges 0% Net Cash Surrender Value"
         }
 
     return m;

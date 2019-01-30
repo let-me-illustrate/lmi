@@ -242,13 +242,6 @@ void check_calculation_summary_columns
 // To test backward compatibility, modify 'configurable_settings'
 // directly, adding a field that was formerly removed, and setting
 // the version number to a version that offered that field.
-//
-// Columns whose names end with "Zero" are available iff inforce
-// general and separate account value are both nonzero. This could be
-// tested here; however, it would be a vastly better use of limited
-// time to generate the special report that uses them automatically
-// rather than manually, and then to expunge those columns from
-// 'mc_enum_types.?pp'.
 
 /// Test calculation summary.
 ///
