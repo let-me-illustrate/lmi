@@ -2724,6 +2724,10 @@ class finra_split_fund_report : public page_with_tabular_report
         // premiums case or a single premium outlay column otherwise.
         switch(column)
             {
+            case column_end_of_year_age:
+                // This column doesn't make sense for composite ledgers.
+                return ledger_.is_composite();
+
             case column_er_gross_payment:
             case column_ee_gross_payment:
                 // These columns only appear in split premiums case.
@@ -2734,7 +2738,6 @@ class finra_split_fund_report : public page_with_tabular_report
                 return invar.SplitMinPrem;
 
             case column_policy_year:
-            case column_end_of_year_age:
             case column_guar0_cash_surr_value:
             case column_curr0_cash_surr_value:
             case column_guar0_account_value:
