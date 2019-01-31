@@ -358,6 +358,7 @@ void DBDictionary::ascribe_members()
     ascribe("MinPremIntSpread"    , &DBDictionary::MinPremIntSpread    );
     ascribe("SplitMinPrem"        , &DBDictionary::SplitMinPrem        );
     ascribe("UnsplitSplitMinPrem" , &DBDictionary::UnsplitSplitMinPrem );
+    ascribe("ErNotionallyPaysTerm", &DBDictionary::ErNotionallyPaysTerm);
     ascribe("TgtPremType"         , &DBDictionary::TgtPremType         );
     ascribe("TgtPremTable"        , &DBDictionary::TgtPremTable        );
     ascribe("TgtPremFixedAtIssue" , &DBDictionary::TgtPremFixedAtIssue );
@@ -965,6 +966,8 @@ void DBDictionary::write_database_files()
     // entities are 'true':
     z.Add({DB_SplitMinPrem        , true});
     z.Add({DB_TermIsNotRider      , true});
+    // Certain illustration columns are controlled by this:
+    z.Add({DB_ErNotionallyPaysTerm, true});
     // This fixed loan rate varies by duration.
     int dims_1111113[e_number_of_axes] = {1, 1, 1, 1, 1, 1, 3};
     double loanrate[3] = {0.06, 0.05, 0.04};

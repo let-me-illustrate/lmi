@@ -2730,12 +2730,14 @@ class finra_split_fund_report : public page_with_tabular_report
 
             case column_er_gross_payment:
             case column_ee_gross_payment:
-                // These columns only appear in split premiums case.
-                return !invar.SplitMinPrem;
+                // These columns appear only in this case (which,
+                // weirdly, differs from the SplitMinPrem case
+                // that governs elsewhere)...
+                return !invar.ErNotionallyPaysTerm;
 
             case column_premium_outlay:
-                // While this one replaces them in non-split premiums case.
-                return invar.SplitMinPrem;
+                // ...while this one replaces them otherwise.
+                return invar.ErNotionallyPaysTerm;
 
             case column_policy_year:
             case column_guar0_cash_surr_value:

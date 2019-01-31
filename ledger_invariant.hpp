@@ -188,6 +188,7 @@ class LMI_SO LedgerInvariant
     double          HasHoneymoon;
     double          PostHoneymoonSpread;
     double          SplitMinPrem;
+    double          ErNotionallyPaysTerm;
     double          IsInforce;
     double          CurrentCoiMultiplier;
     double          NoLapseAlwaysActive;

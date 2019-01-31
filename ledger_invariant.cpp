@@ -162,6 +162,7 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["HasHoneymoon"          ] = &HasHoneymoon           ;
     OtherScalars    ["PostHoneymoonSpread"   ] = &PostHoneymoonSpread    ;
     OtherScalars    ["SplitMinPrem"          ] = &SplitMinPrem           ;
+    OtherScalars    ["ErNotionallyPaysTerm"  ] = &ErNotionallyPaysTerm   ;
     OtherScalars    ["InitAnnLoanDueRate"    ] = &InitAnnLoanDueRate     ;
     OtherScalars    ["IsInforce"             ] = &IsInforce              ;
     OtherScalars    ["CurrentCoiMultiplier"  ] = &CurrentCoiMultiplier   ;
@@ -727,6 +728,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     HasHoneymoon       = HasHoneymoon || a_Addend.HasHoneymoon ;
     PostHoneymoonSpread= a_Addend.PostHoneymoonSpread          ;
     SplitMinPrem       = SplitMinPrem || a_Addend.SplitMinPrem ;
+
+    ErNotionallyPaysTerm = ErNotionallyPaysTerm || a_Addend.ErNotionallyPaysTerm;
 
     NoLapseMinDur      = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
     NoLapseMinAge      = std::min(a_Addend.NoLapseMinAge, NoLapseMinAge);
