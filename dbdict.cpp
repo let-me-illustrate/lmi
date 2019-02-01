@@ -559,6 +559,10 @@ void DBDictionary::InitDB()
     max_vlr[mce_s_TX] = 0.15;
     Add({DB_MaxVlrRate, max_vlr_dimensions, max_vlr});
 
+    // These aren't always right, but zero is never right.
+    Add({DB_LicDacTaxRate         , 0.077});
+    Add({DB_LicFitRate            , 0.35});
+
     Add({DB_FirstPrefLoanYear     , 100});
 
     Add({DB_GuarIntSpread         , dbl_inf});
@@ -580,6 +584,11 @@ void DBDictionary::InitDB()
     Add({DB_SpouseRiderMaxAmt     , bignum});
     Add({DB_SpouseRiderMaxIssAge  , 99});
     Add({DB_ChildRiderMaxAmt      , bignum});
+
+    // These are plausible defaults that often evaluate to zero, but
+    // are initialized here with appropriate enumerators to make the
+    // implicit types clear.
+    Add({DB_Effective7702DboRop , mce_option1_for_7702});
 }
 
 void DBDictionary::write_database_files()
@@ -631,7 +640,7 @@ void DBDictionary::write_database_files()
     z.Add({DB_CurrRegLoanSpread   , 0.02});
     z.Add({DB_GuarInt             , 0.03});
     z.Add({DB_NaarDiscount        , 0.00246627});
-    z.Add({DB_GuarIntSpread       , 0.03});
+    z.Add({DB_GuarIntSpread       , 0.03}); // DATABASE !! Dubious: unused.
     z.Add({DB_GuarMandE           , 0.009});
     z.Add({DB_CurrIntSpread       , 0.01});
     z.Add({DB_CurrMandE           , 0.009});
@@ -658,8 +667,6 @@ void DBDictionary::write_database_files()
     z.Add({DB_CurrCoiTable, e_number_of_axes, dims313, TgCOI});
     z.Add({DB_GuarCoiTable, e_number_of_axes, dims313, TgCOI});
 
-    z.Add({DB_CoiNyMinTable       , 0.0});
-
     double coimult[9] =
         {
         0.40, 0.30, 0.35, // female: sm ns us
@@ -669,9 +676,8 @@ void DBDictionary::write_database_files()
     z.Add({DB_CurrCoiMultiplier, e_number_of_axes, dims313, coimult});
 
     z.Add({DB_UseNyCoiFloor       , 0.0});
-    z.Add({DB_GuarCoiCeiling      , 0.0});
-    z.Add({DB_CoiGuarIsMin        , 0.0});
-    z.Add({DB_CoiSnflIsGuar       , 0.0});
+    z.Add({DB_GuarCoiCeiling      , false});
+    z.Add({DB_CoiGuarIsMin        , false});
     z.Add({DB_CurrCoiIsAnnual     , true});
     z.Add({DB_GuarCoiIsAnnual     , true});
     z.Add({DB_MdptCoiIsAnnual     , true});
@@ -751,14 +757,6 @@ void DBDictionary::write_database_files()
     z.Add({DB_DboMdbChangeMethod  , 0b1111});
     z.Add({DB_DboChgCanIncrSpecAmt, true});
     z.Add({DB_DboChgCanDecrSpecAmt, true});
-    z.Add({DB_SnflQTable          , 0.0});
-    z.Add({DB_SurrChgByFormula    , 0.0});
-    z.Add({DB_SurrChgPeriod       , 0.0});
-    z.Add({DB_SurrChgZeroDur      , 0.0});
-    z.Add({DB_SurrChgNlpMult      , 0.0});
-    z.Add({DB_SurrChgNlpMax       , 0.0});
-    z.Add({DB_SurrChgEaMax        , 0.0});
-    z.Add({DB_SurrChgAmort        , 0.0});
 
     int ptd[e_number_of_axes] = {1, 1, 1, 1, 1, e_max_dim_state, 1};
     std::vector<int> premium_tax_dimensions(ptd, ptd + e_number_of_axes);
@@ -802,59 +800,22 @@ void DBDictionary::write_database_files()
     z.Add({DB_TermForcedConvAge   , 70});
     z.Add({DB_TermForcedConvDur   , 10});
     z.Add({DB_MaxTermProportion   , 0.0});
-    z.Add({DB_TermCoiRate         , 0.0});
-    z.Add({DB_TermPremRate        , 0.0});
     z.Add({DB_WpTable             , 8});
     z.Add({DB_AllowWp             , true});
     z.Add({DB_WpMinIssAge         , 18});
     z.Add({DB_WpMaxIssAge         , 64});
-    z.Add({DB_WpCoiRate           , 0.0});
-    z.Add({DB_WpPremRate          , 0.0});
     // SOA qx_ins table 708 is 70-75 US ADB experience.
     z.Add({DB_AdbTable            , 708});
     z.Add({DB_AllowAdb            , true});
     z.Add({DB_AdbMinIssAge        , 15});
     z.Add({DB_AdbMaxIssAge        , 70});
     z.Add({DB_AdbLimit            , 1000000.0});
-    z.Add({DB_AdbCoiRate          , 0.0});
-    z.Add({DB_AdbPremRate         , 0.0});
-    z.Add({DB_WeightClass         , 0.0});
-    z.Add({DB_WeightGender        , 0.0});
-    z.Add({DB_WeightSmoking       , 0.0});
-    z.Add({DB_WeightAge           , 0.0});
-    z.Add({DB_WeightSpecAmt       , 0.0});
-    z.Add({DB_WeightState         , 0.0});
-    z.Add({DB_FullExpPol          , 0.0});
-    z.Add({DB_FullExpPrem         , 0.0});
-    z.Add({DB_FullExpDumpin       , 0.0});
-    z.Add({DB_FullExpSpecAmt      , 0.0});
-    z.Add({DB_VarExpPol           , 0.0});
-    z.Add({DB_VarExpPrem          , 0.0});
-    z.Add({DB_VarExpDumpin        , 0.0});
-    z.Add({DB_VarExpSpecAmt       , 0.0});
-    z.Add({DB_MedicalProportion   , 0.0});
-    z.Add({DB_UwTestCost          , 0.0});
-    z.Add({DB_VxBasicQTable       , 0.0});
-    z.Add({DB_VxDeficQTable       , 0.0});
-    z.Add({DB_VxTaxQTable         , 0.0});
-    z.Add({DB_StatVxInt           , 0.0});
-    z.Add({DB_TaxVxInt            , 0.0});
-    z.Add({DB_StatVxQ             , 0.0});
-    z.Add({DB_TaxVxQ              , 0.0});
-    z.Add({DB_DeficVxQ            , 0.0});
-    z.Add({DB_SnflQ               , 0.0});
     z.Add({DB_CalculateComp       , false});
     z.Add({DB_CompTarget          , 0.0});
     z.Add({DB_CompExcess          , 0.0});
     z.Add({DB_CompChargeback      , 0.0});
-    z.Add({DB_LapseRate           , 0.0});
-    z.Add({DB_ReqSurpNaar         , 0.0});
-    z.Add({DB_ReqSurpVx           , 0.0});
-    z.Add({DB_LicFitRate          , 0.0});
-    z.Add({DB_LicDacTaxRate       , 0.0});
-    z.Add({DB_GdbVxMethod         , 0.0});
-    z.Add({DB_PrimaryHurdle       , 0.0});
-    z.Add({DB_SecondaryHurdle     , 0.0});
+    z.Add({DB_LicFitRate          , 0.0}); // DATABASE !! Expunge.
+    z.Add({DB_LicDacTaxRate       , 0.0}); // DATABASE !! Expunge.
     z.Add({DB_LedgerType          , mce_ill_reg});
     z.Add({DB_AllowExpRating      , false});
 
@@ -910,20 +871,11 @@ void DBDictionary::write_database_files()
     z.Add({DB_EnforceNaarLimit    , true});
     z.Add({DB_DynamicSepAcctLoad  , false});
     z.Add({DB_SpecAmtLoadLimit    , 10000000.0});
-    z.Add({DB_RatingsAffect7702   , false});
     z.Add({DB_CvatMatChangeDefn   , mce_earlier_of_increase_or_unnecessary_premium});
     z.Add({DB_GptMatChangeDefn    , 0});
     z.Add({DB_Irc7702BftIsSpecAmt , 0});
-    z.Add({DB_RiskyInitial7702Db  , false});
-    z.Add({DB_Irc7702Endowment    , 0});
-    z.Add({DB_Effective7702DboRop , 0});
     z.Add({DB_TermIsQABOrDb7702   , oe_7702_term_is_db});
     z.Add({DB_TermIsQABOrDb7702A  , oe_7702_term_is_db});
-    z.Add({DB_GioIsQAB            , false});
-    z.Add({DB_AdbIsQAB            , false});
-    z.Add({DB_SpouseRiderIsQAB    , false});
-    z.Add({DB_ChildRiderIsQAB     , false});
-    z.Add({DB_WpIsQAB             , false});
     z.Add({DB_ExpRatRiskCoiMult   , 0});
     z.Add({DB_AllowSpouseRider    , true});
     z.Add({DB_AllowChildRider     , true});
