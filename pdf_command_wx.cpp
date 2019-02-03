@@ -2224,11 +2224,6 @@ class pdf_illustration_naic : public pdf_illustration
             }
 
         add_variable
-            ("HasProducerCity"
-            ,invar.ProducerCity != "0"
-            );
-
-        add_variable
             ("HasInterestDisclaimer"
             ,!invar.InterestDisclaimer.empty()
             );

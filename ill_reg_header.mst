@@ -33,9 +33,7 @@
     <br>{{InsCoName}}
     <br>Presented by: {{ProducerName}}
     <br>{{ProducerStreet}}
-    {{#HasProducerCity}}
-        <br>{{ProducerCity}}
-    {{/HasProducerCity}}
+    <br>{{ProducerCity}}
 </p>
 <p>
 </p>
