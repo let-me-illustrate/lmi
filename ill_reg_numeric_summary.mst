@@ -52,32 +52,32 @@ keeping the center alignment of the last "p" tag above.
 {{/Composite}}
 
 {{^Composite}}
-    {{#LapseYear_Guaranteed_LT_MaxDuration}}
+    {{#LapseYear_Guar_LT_MaxDur}}
     <p>
         Additional premium will be required
-        in year {{LapseYear_Guaranteed_Plus1}}
+        in year {{LapseYear_Guar_Plus1}}
         or contract will lapse based on guaranteed monthly charges
         and interest rate.
     </p>
-    {{/LapseYear_Guaranteed_LT_MaxDuration}}
+    {{/LapseYear_Guar_LT_MaxDur}}
 
-    {{#LapseYear_Midpoint_LT_MaxDuration}}
+    {{#LapseYear_Mdpt_LT_MaxDur}}
     <p>
         Additional premium will be required
-        in year {{LapseYear_Midpoint_Plus1}}
+        in year {{LapseYear_Mdpt_Plus1}}
         or contract will lapse based on midpoint monthly charges
         and interest rate.
     </p>
-    {{/LapseYear_Midpoint_LT_MaxDuration}}
+    {{/LapseYear_Mdpt_LT_MaxDur}}
 
-    {{#LapseYear_Current_LT_MaxDuration}}
+    {{#LapseYear_Curr_LT_MaxDur}}
     <p>
         Additional premium will be required
-        in year {{LapseYear_Current_Plus1}}
+        in year {{LapseYear_Curr_Plus1}}
         or contract will lapse based on current monthly charges
         and interest rate.
     </p>
-    {{/LapseYear_Current_LT_MaxDuration}}
+    {{/LapseYear_Curr_LT_MaxDur}}
 {{/Composite}}
 
 {{#IsMec}}

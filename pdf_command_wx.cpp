@@ -2265,38 +2265,38 @@ class pdf_illustration_naic : public pdf_illustration
             );
 
         auto const max_duration = invar.EndtAge - invar.Age;
-        auto const lapse_year_guaruanteed = ledger.GetGuarFull().LapseYear;
-        auto const lapse_year_midpoint = ledger.GetMdptFull().LapseYear;
-        auto const lapse_year_current = ledger.GetCurrFull().LapseYear;
+        auto const lapse_year_guar = ledger.GetGuarFull().LapseYear;
+        auto const lapse_year_mdpt = ledger.GetMdptFull().LapseYear;
+        auto const lapse_year_curr = ledger.GetCurrFull().LapseYear;
 
         add_variable
-            ("LapseYear_Guaranteed_LT_MaxDuration"
-            ,lapse_year_guaruanteed < max_duration
+            ("LapseYear_Guar_LT_MaxDur"
+            ,lapse_year_guar < max_duration
             );
 
         add_variable
-            ("LapseYear_Guaranteed_Plus1"
-            ,bourn_cast<int>(lapse_year_guaruanteed) + 1
+            ("LapseYear_Guar_Plus1"
+            ,bourn_cast<int>(lapse_year_guar) + 1
             );
 
         add_variable
-            ("LapseYear_Midpoint_LT_MaxDuration"
-            ,lapse_year_midpoint < max_duration
+            ("LapseYear_Mdpt_LT_MaxDur"
+            ,lapse_year_mdpt < max_duration
             );
 
         add_variable
-            ("LapseYear_Midpoint_Plus1"
-            ,bourn_cast<int>(lapse_year_midpoint) + 1
+            ("LapseYear_Mdpt_Plus1"
+            ,bourn_cast<int>(lapse_year_mdpt) + 1
             );
 
         add_variable
-            ("LapseYear_Current_LT_MaxDuration"
-            ,lapse_year_current < max_duration
+            ("LapseYear_Curr_LT_MaxDur"
+            ,lapse_year_curr < max_duration
             );
 
         add_variable
-            ("LapseYear_Current_Plus1"
-            ,bourn_cast<int>(lapse_year_current) + 1
+            ("LapseYear_Curr_Plus1"
+            ,bourn_cast<int>(lapse_year_curr) + 1
             );
 
         // Add all the pages.
