@@ -459,7 +459,7 @@ void PrintCellTabDelimited
     os << "ContractNumber\t\t"    << Invar.value_str("ContractNumber" ) << '\n';
     os << "ProducerName\t\t"      << Invar.value_str("ProducerName"   ) << '\n';
     os << "ProducerStreet\t\t"    << Invar.value_str("ProducerStreet" ) << '\n';
-    os << "ProducerCity\t\t"      << Invar.value_str("ProducerCity"   ) << '\n';
+    os << "ProducerCityEtc\t\t"   << Invar.value_str("ProducerCityEtc") << '\n';
     os << "CorpName\t\t"          << Invar.value_str("CorpName"       ) << '\n';
     os << "Insured1\t\t"          << Invar.value_str("Insured1"       ) << '\n';
     os << "Gender\t\t"            << Invar.value_str("Gender"         ) << '\n';
@@ -916,7 +916,7 @@ void FlatTextLedgerPrinter::PrintHeader() const
     os_ << center("Prepared on " + iso_8601_datestamp_terse() + " by") << endrow;
     os_ << center(invar().ProducerName) << endrow;
     os_ << center(invar().ProducerStreet) << endrow;
-    os_ << center(invar().ProducerCity) << endrow;
+    os_ << center(invar().ProducerCityEtc) << endrow;
     if(ledger_.is_composite())
         {
         os_ << "Composite" << endrow;

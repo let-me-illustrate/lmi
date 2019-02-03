@@ -411,18 +411,22 @@ void LedgerInvariant::Init(BasicValues const* b)
     ProductName             = b->yare_input_.ProductName;
     ProducerName            = b->yare_input_.AgentName;
 
-    std::string agent_city     = b->yare_input_.AgentCity;
-    std::string agent_state    = mc_str(b->yare_input_.AgentState);
-    std::string agent_zip_code = b->yare_input_.AgentZipCode;
-    std::string agent_city_etc(agent_city + ", " + agent_state);
+    std::string const agent_city     = b->yare_input_.AgentCity;
+    std::string const agent_state    = mc_str(b->yare_input_.AgentState);
+    std::string const agent_zip_code = b->yare_input_.AgentZipCode;
+    // This is a two-letter USPS abbreviation, so it's never empty.
+    std::string agent_city_etc(agent_state);
+    if(!agent_city.empty())
+        {
+        agent_city_etc = agent_city + ", " + agent_state;
+        }
     if(!agent_zip_code.empty())
         {
-        agent_city_etc += " ";
+        agent_city_etc += " " + agent_zip_code;
         }
-    agent_city_etc += agent_zip_code;
 
     ProducerStreet          = b->yare_input_.AgentAddress;
-    ProducerCity            = agent_city_etc;
+    ProducerCityEtc         = agent_city_etc;
     CorpName                = b->yare_input_.CorporationName;
 
     MasterContractNumber    = b->yare_input_.MasterContractNumber;

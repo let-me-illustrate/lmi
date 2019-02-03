@@ -306,7 +306,7 @@ void LedgerInvariant::Alloc(int len)
     Strings["ProductName"                   ] = &ProductName                   ;
     Strings["ProducerName"                  ] = &ProducerName                  ;
     Strings["ProducerStreet"                ] = &ProducerStreet                ;
-    Strings["ProducerCity"                  ] = &ProducerCity                  ;
+    Strings["ProducerCityEtc"               ] = &ProducerCityEtc               ;
     Strings["CorpName"                      ] = &CorpName                      ;
     Strings["MasterContractNumber"          ] = &MasterContractNumber          ;
     Strings["ContractNumber"                ] = &ContractNumber                ;
@@ -524,7 +524,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     ProductName                   = a_Addend.ProductName;
     ProducerName                  = a_Addend.ProducerName;
     ProducerStreet                = a_Addend.ProducerStreet;
-    ProducerCity                  = a_Addend.ProducerCity;
+    ProducerCityEtc               = a_Addend.ProducerCityEtc;
     // This would necessarily vary by life:
 //  ContractNumber                = "";
 
