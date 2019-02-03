@@ -985,7 +985,7 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
 
         auto const& state_abbrev = invar.GetStatePostalAbbrev();
         add_variable
-            ("StateIsCarolina"
+            ("StateIsNorthOrSouthCarolina"
             ,state_abbrev == "NC" || state_abbrev == "SC"
             );
 

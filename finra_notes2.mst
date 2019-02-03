@@ -36,13 +36,13 @@ This illustration assumes death of the insured at
 age {{EndtAge}}.
 </p>
 
-{{#StateIsCarolina}}
+{{#StateIsNorthOrSouthCarolina}}
     <p>
     In the states of North Carolina and South Carolina, Guaranteed Issue
     Underwriting is referred to as "Limited Underwriting" and Simplified Issue
     Underwriting is referred to as "Simplified Underwriting".
     </p>
-{{/StateIsCarolina}}
+{{/StateIsNorthOrSouthCarolina}}
 
 {{#StateIsMaryland}}
     <p>
