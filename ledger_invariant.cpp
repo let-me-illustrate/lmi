@@ -656,7 +656,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     StatePostalAbbrev             = a_Addend.StatePostalAbbrev;
     PremiumTaxState               = a_Addend.PremiumTaxState;
-    InitAnnLoanDueRate            = a_Addend.InitAnnLoanDueRate;
     GroupIndivSelection           = GroupIndivSelection   || a_Addend.GroupIndivSelection;
     UseExperienceRating           = a_Addend.UseExperienceRating;
     UsePartialMort                = a_Addend.UsePartialMort;
@@ -730,6 +729,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     SplitMinPrem       = SplitMinPrem || a_Addend.SplitMinPrem ;
 
     ErNotionallyPaysTerm = ErNotionallyPaysTerm || a_Addend.ErNotionallyPaysTerm;
+
+    InitAnnLoanDueRate = a_Addend.InitAnnLoanDueRate;
 
     NoLapseMinDur      = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
     NoLapseMinAge      = std::min(a_Addend.NoLapseMinAge, NoLapseMinAge);

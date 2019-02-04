@@ -188,6 +188,7 @@ class LMI_SO LedgerInvariant
     double          PostHoneymoonSpread;
     double          SplitMinPrem;
     double          ErNotionallyPaysTerm;
+    double          InitAnnLoanDueRate;
     double          IsInforce;
     double          CurrentCoiMultiplier;
     double          NoLapseAlwaysActive;
@@ -403,9 +404,6 @@ class LMI_SO LedgerInvariant
 
     std::string     StatePostalAbbrev; // SOMEDAY !! Rename to 'StateOfJurisdiction'.
     std::string     PremiumTaxState;
-
-    // Nonscalable scalars.
-    double          InitAnnLoanDueRate;
 
     // Special cases.
     int  Length;
