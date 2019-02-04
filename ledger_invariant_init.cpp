@@ -41,7 +41,7 @@
 #include "product_data.hpp"
 #include "ssize_lmi.hpp"
 
-#include <algorithm>                    // max()
+#include <algorithm>                    // max(), max_element()
 #include <stdexcept>
 
 void LedgerInvariant::Init(BasicValues const* b)
@@ -125,7 +125,11 @@ void LedgerInvariant::Init(BasicValues const* b)
         (mce_gen_curr
         ,mce_annual_rate
         );
-    InitAnnLoanDueRate   = AnnLoanDueRate[0];
+    LMI_ASSERT(!AnnLoanDueRate.empty()); // Ensure std::max_element() works.
+    MaxAnnLoanDueRate    = *std::max_element
+        (AnnLoanDueRate.begin()
+        ,AnnLoanDueRate.end()
+        );
     CurrMandE            = b->InterestRates_->MAndERate(mce_gen_curr);
     TotalIMF             = b->InterestRates_->InvestmentManagementFee();
     RefundableSalesLoad  = b->Loads_->refundable_sales_load_proportion();

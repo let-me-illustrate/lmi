@@ -64,8 +64,14 @@
 This illustration assumes death of the insured at age {{EndtAge}}.
 </p>
 
+{{!
+    PDF !! 'MaxAnnLoanDueRate': loan rate actually can vary by year,
+    so text should say that the fixed loan rate is "guaranteed never
+    to exceed" this value.
+}}
+
 <p>
-The loan interest rate is fixed at {{InitAnnLoanDueRate}} per year.
+The loan interest rate is fixed at {{MaxAnnLoanDueRate}} per year.
 </p>
 
 <p>

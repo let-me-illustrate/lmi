@@ -444,7 +444,6 @@ format_map_t static_formats()
     {{"GuarMaxMandE"                    , f4}
     ,{"InitAnnGenAcctInt"               , f4}
     ,{"InitAnnLoanCredRate"             , f4}
-    ,{"InitAnnLoanDueRate"              , f4}
     ,{"InitAnnSepAcctCurrGross0Rate"    , f4}
     ,{"InitAnnSepAcctCurrGrossHalfRate" , f4}
     ,{"InitAnnSepAcctCurrNet0Rate"      , f4}
@@ -455,6 +454,7 @@ format_map_t static_formats()
     ,{"InitAnnSepAcctGuarNet0Rate"      , f4}
     ,{"InitAnnSepAcctGuarNetHalfRate"   , f4}
     ,{"InitAnnSepAcctNetInt"            , f4}
+    ,{"MaxAnnLoanDueRate"               , f4}
     ,{"PostHoneymoonSpread"             , f4}
     ,{"Preferred"                       , f4}
     ,{"PremTaxRate"                     , f4}

@@ -188,7 +188,7 @@ class LMI_SO LedgerInvariant
     double          PostHoneymoonSpread;
     double          SplitMinPrem;
     double          ErNotionallyPaysTerm;
-    double          InitAnnLoanDueRate;
+    double          MaxAnnLoanDueRate;
     double          IsInforce;
     double          CurrentCoiMultiplier;
     double          NoLapseAlwaysActive;
