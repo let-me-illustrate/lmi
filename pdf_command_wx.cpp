@@ -975,7 +975,8 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
             );
 
         // PDF !! Conditions of this ilk should become distinct entities in
-        // the product files.
+        // the product files--or in this case, eliminated altogether: this
+        // condition is used only in one place, in a really silly way.
         auto const& policy_name = invar.PolicyLegalName;
         add_variable
             ("GroupCarveout"
