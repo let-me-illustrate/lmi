@@ -361,6 +361,8 @@ class LMI_SO LedgerInvariant
     std::string     AvoidMec;
     std::string     PartMortTableName;
 
+    std::string     StatePostalAbbrev; // SOMEDAY !! Rename to 'StateOfJurisdiction'.
+    std::string     PremiumTaxState;
     std::string     CountryIso3166Abbrev;
     std::string     Comments;
 
@@ -402,9 +404,6 @@ class LMI_SO LedgerInvariant
     void Copy(LedgerInvariant const&);
     void Destroy();
     void Init();
-
-    std::string     StatePostalAbbrev; // SOMEDAY !! Rename to 'StateOfJurisdiction'.
-    std::string     PremiumTaxState;
 
     // Special cases.
     int  Length;
