@@ -983,15 +983,15 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
               || policy_name == "Group Flexible Premium Variable Adjustable Life Insurance Certificate"
             );
 
-        auto const& state_abbrev = invar.StatePostalAbbrev;
+        auto const& state_of_jurisdiction = invar.StateOfJurisdiction;
         add_variable
             ("StateIsNorthOrSouthCarolina"
-            ,state_abbrev == "NC" || state_abbrev == "SC"
+            ,state_of_jurisdiction == "NC" || state_of_jurisdiction == "SC"
             );
 
         add_variable
             ("StateIsMaryland"
-            ,state_abbrev == "MD"
+            ,state_of_jurisdiction == "MD"
             );
     }
 
@@ -2177,7 +2177,7 @@ class pdf_illustration_naic : public pdf_illustration
     {
         auto const& invar = ledger.GetLedgerInvariant();
         auto const& policy_name = invar.PolicyLegalName;
-        auto const& state_abbrev = invar.StatePostalAbbrev;
+        auto const& state_of_jurisdiction = invar.StateOfJurisdiction;
 
         // Define variables specific to this illustration which doesn't use the
         // standard 60/30 lengths for whatever reason.
@@ -2186,7 +2186,7 @@ class pdf_illustration_naic : public pdf_illustration
 
         add_variable
             ("ModifiedSinglePremium"
-            ,starts_with(policy_name, "Single") && state_abbrev == "MA"
+            ,starts_with(policy_name, "Single") && state_of_jurisdiction == "MA"
             );
 
         add_variable
@@ -2235,17 +2235,17 @@ class pdf_illustration_naic : public pdf_illustration
 
         add_variable
             ("StateIsIllinois"
-            ,state_abbrev == "IL"
+            ,state_of_jurisdiction == "IL"
             );
 
         add_variable
             ("StateIsTexas"
-            ,state_abbrev == "TX"
+            ,state_of_jurisdiction == "TX"
             );
 
         add_variable
             ("StateIsIllinoisOrTexas"
-            ,state_abbrev == "IL" || state_abbrev == "TX"
+            ,state_of_jurisdiction == "IL" || state_of_jurisdiction == "TX"
             );
 
         int const inforce_year = bourn_cast<int>(invar.InforceYear);
@@ -2828,13 +2828,13 @@ class pdf_illustration_finra : public pdf_illustration
             }
 
         auto const& policy_name = invar.PolicyLegalName;
-        auto const& state_abbrev = invar.StatePostalAbbrev;
+        auto const& state_of_jurisdiction = invar.StateOfJurisdiction;
 
         add_variable
             ("UWTypeIsGuaranteedIssueInTexasWithFootnote"
             ,    invar.UWType == "Guaranteed issue"
               && policy_name == "Flexible Premium Variable Adjustable Life Insurance Policy"
-              && state_abbrev == "TX"
+              && state_of_jurisdiction == "TX"
             );
 
         add_variable
@@ -2844,7 +2844,7 @@ class pdf_illustration_finra : public pdf_illustration
 
         add_variable
             ("StateIsNewYork"
-            ,state_abbrev == "NY"
+            ,state_of_jurisdiction == "NY"
             );
 
         // Add all the pages.

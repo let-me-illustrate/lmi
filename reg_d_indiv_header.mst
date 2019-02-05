@@ -55,7 +55,7 @@ and may not be used to project or predict investment results.
             {{^Composite}}
                 Prepared for: {{Insured1Abbrev30}}<br>
                 Age: {{Age}}<br>
-                Issue State: {{StatePostalAbbrev}}<br>
+                Issue State: {{StateOfJurisdiction}}<br>
             {{/Composite}}
             Selected Face Amount: ${{InitTotalSA}}<br>
             Initial Death Benefit Option: {{InitDBOpt}}<br>

@@ -209,7 +209,7 @@ std::string calculation_summary_formatter::top_note
             << invar_.Gender << ", " << invar_.Smoker
             << std::setprecision(0)
             << ", age " << invar_.Age
-            << ", " << invar_.StatePostalAbbrev << " jurisdiction"
+            << ", " << invar_.StateOfJurisdiction << " jurisdiction"
             << line_break
             ;
         if(invar_.IsMec)
@@ -779,7 +779,7 @@ void PrintRosterTabDelimited
         << "'" << Invar.LastCoiReentryDate            << "'\t"
         << "'" << Invar.InforceAsOfDate               << "'\t"
         << Invar.value_str("PremiumTaxState"        ) << '\t'
-        << Invar.value_str("StatePostalAbbrev"      ) << '\t'
+        << Invar.value_str("StateOfJurisdiction"    ) << '\t'
         << Curr_.value_str("AnnGAIntRate"         ,d) << '\t'
         << Curr_.value_str("InitMlyPolFee"          ) << '\t'
         << Invar.value_str("InitDacTaxRate"         ) << '\t'

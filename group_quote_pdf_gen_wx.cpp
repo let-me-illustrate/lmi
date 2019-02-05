@@ -412,7 +412,7 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     product_          = invar.PolicyMktgName;
     short_product_    = invar.GroupQuoteShortProductName;
     premium_mode_     = invar.InitErMode;
-    contract_state_   = invar.StatePostalAbbrev;
+    contract_state_   = invar.StateOfJurisdiction;
     jdn_t eff_date    = jdn_t(static_cast<int>(invar.EffDateJdn));
     effective_date_   = ConvertDateToWx(eff_date).FormatDate().ToStdString();
     // Deliberately begin the footer with <br> tags, to separate it

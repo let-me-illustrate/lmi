@@ -151,8 +151,7 @@ age {{EndtAge}}.
 {{/SmokerBlended}}
 
 <p>
-The state of issue is
-{{StatePostalAbbrev}}.
+The state of issue is {{StateOfJurisdiction}}.
 </p>
 
 {{#IsInforce}}

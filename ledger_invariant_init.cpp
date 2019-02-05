@@ -499,7 +499,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     DefnMaterialChange      = mc_str(b->yare_input_.DefinitionOfMaterialChange);
     AvoidMec                = mc_str(b->yare_input_.AvoidMecMethod);
     PartMortTableName       = "1983 GAM"; // TODO ?? Hardcoded.
-    StatePostalAbbrev       = mc_str(b->GetStateOfJurisdiction());
+    StateOfJurisdiction     = mc_str(b->GetStateOfJurisdiction());
     PremiumTaxState         = mc_str(b->GetPremiumTaxState());
 
     IsInforce = b->yare_input_.EffectiveDate != b->yare_input_.InforceAsOfDate;

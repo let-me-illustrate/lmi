@@ -75,7 +75,7 @@ The loan interest rate is fixed at {{MaxAnnCurrLoanDueRate}} per year.
 </p>
 
 <p>
-The state of issue is {{StatePostalAbbrev}}.
+The state of issue is {{StateOfJurisdiction}}.
 </p>
 
 <p>

@@ -321,7 +321,7 @@ void LedgerInvariant::Alloc(int len)
     Strings["DefnMaterialChange"            ] = &DefnMaterialChange            ;
     Strings["AvoidMec"                      ] = &AvoidMec                      ;
     Strings["PartMortTableName"             ] = &PartMortTableName             ;
-    Strings["StatePostalAbbrev"             ] = &StatePostalAbbrev             ;
+    Strings["StateOfJurisdiction"           ] = &StateOfJurisdiction           ;
     Strings["PremiumTaxState"               ] = &PremiumTaxState               ;
     Strings["CountryIso3166Abbrev"          ] = &CountryIso3166Abbrev          ;
     Strings["Comments"                      ] = &Comments                      ;
@@ -655,7 +655,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     Comments                      = a_Addend.Comments;
 
-    StatePostalAbbrev             = a_Addend.StatePostalAbbrev;
+    StateOfJurisdiction           = a_Addend.StateOfJurisdiction;
     PremiumTaxState               = a_Addend.PremiumTaxState;
     GroupIndivSelection           = GroupIndivSelection   || a_Addend.GroupIndivSelection;
     UseExperienceRating           = a_Addend.UseExperienceRating;
