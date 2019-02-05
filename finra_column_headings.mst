@@ -51,13 +51,13 @@
 </p>
 {{/Composite}}
 
-{{#GroupCarveout}}
+{{#SplitMinPrem}}
 <p>
 <b>Gross Payment</b>
 <br>
 {{GrossPremiumFootnote}}
 </p>
-{{/GroupCarveout}}
+{{/SplitMinPrem}}
 
 <p>
 <b>Gross Rate</b>
@@ -65,13 +65,13 @@
 {{GrossRateFootnote}}
 </p>
 
-{{#GroupCarveout}}
+{{#SplitMinPrem}}
 <p>
 <b>Minimum Premium</b>
 <br>
 {{InitialPremiumFootnote}}
 </p>
-{{/GroupCarveout}}
+{{/SplitMinPrem}}
 
 <p>
 <b>Net Premium</b>
