@@ -37,19 +37,21 @@ although probably "certificate" is desired instead of "contract".
 If it is actually considered useful to have two distinct strings
 that differ only in their capitalization, then both should reside
 in the '.policy' file.
+
+Even more surprisingly, 'AllowExperienceRating' has the same effect.
 }}
 
 <p>
 {{^SinglePremium}}
     {{PolicyMktgName}} is a
-    {{#GroupExperienceRating}}group{{/GroupExperienceRating}}
+    {{#AllowExperienceRating}}group{{/AllowExperienceRating}}
     {{#GroupCarveout}}group{{/GroupCarveout}}
     flexible premium adjustable life insurance contract.
-    {{#GroupExperienceRating}}
+    {{#AllowExperienceRating}}
     It is a no-load policy and is intended for large case sales.
     It is primarily marketed to financial institutions
     to fund certain corporate liabilities.
-    {{/GroupExperienceRating}}
+    {{/AllowExperienceRating}}
     It features accumulating account values, adjustable benefits,
     and flexible premiums.
 {{/SinglePremium}}

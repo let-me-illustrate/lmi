@@ -2206,11 +2206,6 @@ class pdf_illustration_naic : public pdf_illustration
             ,starts_with(policy_name, "Single") || starts_with(policy_name, "Modified")
             );
 
-        add_variable
-            ("GroupExperienceRating"
-            ,policy_name == "Group Flexible Premium Adjustable Life Insurance Policy"
-            );
-
         // Variable representing the premium payment frequency with the
         // appropriate indefinite article preceding it, e.g. "an annual"
         // or "a monthly".

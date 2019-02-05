@@ -142,6 +142,7 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["RetAge"                ] = &RetAge                 ;
     OtherScalars    ["EndtAge"               ] = &EndtAge                ;
     OtherScalars    ["GroupIndivSelection"   ] = &GroupIndivSelection    ;
+    OtherScalars    ["AllowExperienceRating" ] = &AllowExperienceRating  ;
     OtherScalars    ["UseExperienceRating"   ] = &UseExperienceRating    ;
     OtherScalars    ["UsePartialMort"        ] = &UsePartialMort         ;
     OtherScalars    ["AvgFund"               ] = &AvgFund                ;
@@ -658,7 +659,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     StateOfJurisdiction           = a_Addend.StateOfJurisdiction;
     PremiumTaxState               = a_Addend.PremiumTaxState;
     GroupIndivSelection           = GroupIndivSelection   || a_Addend.GroupIndivSelection;
-    UseExperienceRating           = a_Addend.UseExperienceRating;
+    AllowExperienceRating         = AllowExperienceRating || a_Addend.AllowExperienceRating;
+    UseExperienceRating           = UseExperienceRating   || a_Addend.UseExperienceRating;
     UsePartialMort                = a_Addend.UsePartialMort;
     PartMortTableName             = a_Addend.PartMortTableName;
     GuarMaxMandE                  = std::max(GuarMaxMandE   , a_Addend.GuarMaxMandE   );

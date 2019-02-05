@@ -166,6 +166,7 @@ class LMI_SO LedgerInvariant
     double          RetAge;
     double          EndtAge;
     double          GroupIndivSelection;
+    double          AllowExperienceRating;
     double          UseExperienceRating;
     double          UsePartialMort;
     double          AvgFund;

@@ -83,7 +83,11 @@ amount percentage for the insured's attained age at death
 for a detailed schedule of death benefit factors.
 </p>
 <!-- Group Experience Rating Logic -->
-{{^GroupExperienceRating}}
+{{!
+  PDF !! Availability of DBO2 is unlikely to be correlated with experience rating.
+  DBO3 !! Such text should be controlled by product-database DBO entities.
+}}
+{{^AllowExperienceRating}}
 <p>
 <b>Death Benefit Option 2:</b>
 Option in which the death benefit is equal to the selected
@@ -98,9 +102,9 @@ on the insured's date of death multiplied
 by the death benefit factor for the insured's attained age
 at death (minimum face amount). Please refer to the contract
 for a detailed schedule of death benefit factors.
-{{/GroupExperienceRating}}
+{{/AllowExperienceRating}}
 <!-- Group Experience Rating Logic -->
-{{#GroupExperienceRating}}
+{{#AllowExperienceRating}}
 </p>
 <p>
 <b>Experience Rating Risk Charge:</b>
@@ -110,16 +114,16 @@ assessed during the certificate year. It may be assessed against
 the account value once per certificate anniversary date
 and upon surrender of the group policy.
 </p>
-{{/GroupExperienceRating}}
+{{/AllowExperienceRating}}
 <!-- Group Experience Rating Logic -->
-{{^GroupExperienceRating}}
+{{^AllowExperienceRating}}
 {{#Has1035ExchCharge}}
 <p>
 <b>Exchange Charge:</b>
 {{ExchangeChargeFootnote1}}
 </p>
 {{/Has1035ExchCharge}}
-{{/GroupExperienceRating}}
+{{/AllowExperienceRating}}
 
 <!-- Single Premium Logic -->
 {{^SinglePremium}}

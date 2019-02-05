@@ -126,7 +126,7 @@ in the Tabular Detail.
     </p>
 {{/StateIsMaryland}}
 
-{{#GroupExperienceRating}}
+{{#AllowExperienceRating}}
     <p>
     We may assess a Market Value Adjustment upon a surrender
     of the certificate when the surrender proceeds are intended
@@ -155,7 +155,7 @@ in the Tabular Detail.
     in the current, non-guaranteed values. Actual charges
     and credits will be based on the actual experience of the group.
     </p>
-{{/GroupExperienceRating}}
+{{/AllowExperienceRating}}
 
 {{#Has1035ExchCharge}}
     <p>

@@ -530,6 +530,7 @@ format_map_t static_formats()
     ,{"ErNotionallyPaysTerm"            , f1}
     ,{"SpouseIssueAge"                  , f1}
     ,{"SupplementalReport"              , f1}
+    ,{"AllowExperienceRating"           , f1}
     ,{"UseExperienceRating"             , f1}
     ,{"GroupIndivSelection"             , f1}
     ,{"UsePartialMort"                  , f1}
