@@ -57,7 +57,6 @@ class LMI_SO LedgerInvariant
     bool                         IsFullyInitialized()    const;
     int                          GetLength()             const override;
     std::vector<double> const&   GetInforceLives()       const;
-    std::string const&           GetStatePostalAbbrev()  const;
 
     void CalculateIrrs(Ledger const&);
 
@@ -430,11 +429,6 @@ inline int LedgerInvariant::GetLength() const
 inline std::vector<double> const& LedgerInvariant::GetInforceLives() const
 {
     return InforceLives;
-}
-
-inline std::string const& LedgerInvariant::GetStatePostalAbbrev() const
-{
-    return StatePostalAbbrev;
 }
 
 #endif // ledger_invariant_hpp

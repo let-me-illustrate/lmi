@@ -209,7 +209,7 @@ std::string calculation_summary_formatter::top_note
             << invar_.Gender << ", " << invar_.Smoker
             << std::setprecision(0)
             << ", age " << invar_.Age
-            << ", " << invar_.GetStatePostalAbbrev() << " jurisdiction"
+            << ", " << invar_.StatePostalAbbrev << " jurisdiction"
             << line_break
             ;
         if(invar_.IsMec)

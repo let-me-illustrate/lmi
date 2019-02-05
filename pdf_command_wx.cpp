@@ -983,7 +983,7 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
               || policy_name == "Group Flexible Premium Variable Adjustable Life Insurance Certificate"
             );
 
-        auto const& state_abbrev = invar.GetStatePostalAbbrev();
+        auto const& state_abbrev = invar.StatePostalAbbrev;
         add_variable
             ("StateIsNorthOrSouthCarolina"
             ,state_abbrev == "NC" || state_abbrev == "SC"
@@ -2177,7 +2177,7 @@ class pdf_illustration_naic : public pdf_illustration
     {
         auto const& invar = ledger.GetLedgerInvariant();
         auto const& policy_name = invar.PolicyLegalName;
-        auto const& state_abbrev = invar.GetStatePostalAbbrev();
+        auto const& state_abbrev = invar.StatePostalAbbrev;
 
         // Define variables specific to this illustration which doesn't use the
         // standard 60/30 lengths for whatever reason.
@@ -2828,7 +2828,7 @@ class pdf_illustration_finra : public pdf_illustration
             }
 
         auto const& policy_name = invar.PolicyLegalName;
-        auto const& state_abbrev = invar.GetStatePostalAbbrev();
+        auto const& state_abbrev = invar.StatePostalAbbrev;
 
         add_variable
             ("UWTypeIsGuaranteedIssueInTexasWithFootnote"
