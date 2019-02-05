@@ -173,6 +173,9 @@ class InterestRates
         ,double&          AnnualSepAcctSVRate
         );
 
+    std::vector<double> const& RegLoanSpread
+        (mcenum_gen_basis
+        ) const;
     std::vector<double> const& RegLnCredRate
         (mcenum_gen_basis
         ,mcenum_rate_period
@@ -340,6 +343,13 @@ inline std::vector<double> const& InterestRates::MAndERate
     ) const
 {
     return MAndERate_[gen_basis];
+}
+
+inline std::vector<double> const& InterestRates::RegLoanSpread
+    (mcenum_gen_basis gen_basis
+    ) const
+{
+    return RegLoanSpread_[gen_basis];
 }
 
 inline std::vector<double> const& InterestRates::RegLnCredRate

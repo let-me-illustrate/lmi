@@ -454,7 +454,8 @@ format_map_t static_formats()
     ,{"InitAnnSepAcctGuarNet0Rate"      , f4}
     ,{"InitAnnSepAcctGuarNetHalfRate"   , f4}
     ,{"InitAnnSepAcctNetInt"            , f4}
-    ,{"MaxAnnLoanDueRate"               , f4}
+    ,{"MaxAnnGuarLoanSpread"            , f4}
+    ,{"MaxAnnCurrLoanDueRate"           , f4}
     ,{"PostHoneymoonSpread"             , f4}
     ,{"Preferred"                       , f4}
     ,{"PremTaxRate"                     , f4}

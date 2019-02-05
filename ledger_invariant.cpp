@@ -163,7 +163,8 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["PostHoneymoonSpread"   ] = &PostHoneymoonSpread    ;
     OtherScalars    ["SplitMinPrem"          ] = &SplitMinPrem           ;
     OtherScalars    ["ErNotionallyPaysTerm"  ] = &ErNotionallyPaysTerm   ;
-    OtherScalars    ["MaxAnnLoanDueRate"     ] = &MaxAnnLoanDueRate      ;
+    OtherScalars    ["MaxAnnGuarLoanSpread"  ] = &MaxAnnGuarLoanSpread   ;
+    OtherScalars    ["MaxAnnCurrLoanDueRate" ] = &MaxAnnCurrLoanDueRate  ;
     OtherScalars    ["IsInforce"             ] = &IsInforce              ;
     OtherScalars    ["CurrentCoiMultiplier"  ] = &CurrentCoiMultiplier   ;
     OtherScalars    ["NoLapseAlwaysActive"   ] = &NoLapseAlwaysActive    ;
@@ -730,7 +731,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     ErNotionallyPaysTerm = ErNotionallyPaysTerm || a_Addend.ErNotionallyPaysTerm;
 
-    MaxAnnLoanDueRate  = std::max(a_Addend.MaxAnnLoanDueRate, MaxAnnLoanDueRate);
+    MaxAnnGuarLoanSpread   = std::max(a_Addend.MaxAnnGuarLoanSpread , MaxAnnGuarLoanSpread );
+    MaxAnnCurrLoanDueRate  = std::max(a_Addend.MaxAnnCurrLoanDueRate, MaxAnnCurrLoanDueRate);
 
     NoLapseMinDur      = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
     NoLapseMinAge      = std::min(a_Addend.NoLapseMinAge, NoLapseMinAge);

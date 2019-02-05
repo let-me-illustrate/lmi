@@ -121,15 +121,21 @@ void LedgerInvariant::Init(BasicValues const* b)
     AddonCompOnAssets    = b->yare_input_.ExtraCompensationOnAssets ;
     AddonCompOnPremium   = b->yare_input_.ExtraCompensationOnPremium;
     CorridorFactor       = b->GetCorridorFactor();
+
+    std::vector<double> z= b->InterestRates_->RegLoanSpread(mce_gen_guar);
+    LMI_ASSERT(!z.empty()); // Ensure *(std::max_element()) works.
+    MaxAnnGuarLoanSpread = *std::max_element(z.begin(), z.end());
+
     AnnLoanDueRate       = b->InterestRates_->RegLnDueRate
         (mce_gen_curr
         ,mce_annual_rate
         );
-    LMI_ASSERT(!AnnLoanDueRate.empty()); // Ensure std::max_element() works.
-    MaxAnnLoanDueRate    = *std::max_element
+    LMI_ASSERT(!AnnLoanDueRate.empty()); // Ensure *(std::max_element()) works.
+    MaxAnnCurrLoanDueRate = *std::max_element
         (AnnLoanDueRate.begin()
         ,AnnLoanDueRate.end()
         );
+
     CurrMandE            = b->InterestRates_->MAndERate(mce_gen_curr);
     TotalIMF             = b->InterestRates_->InvestmentManagementFee();
     RefundableSalesLoad  = b->Loads_->refundable_sales_load_proportion();

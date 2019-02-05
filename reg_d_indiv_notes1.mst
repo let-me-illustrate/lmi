@@ -158,7 +158,7 @@ money manager (if any).
 </p>
 
 {{!
-    PDF !! 'MaxAnnLoanDueRate': loan rate actually can vary by year,
+    PDF !! 'MaxAnnCurrLoanDueRate': loan rate actually can vary by year,
     so text should say that the fixed loan rate is "guaranteed never
     to exceed" this value.
 }}
@@ -168,7 +168,7 @@ If applicable, withdrawals and policy loans will appear on a
 supplemental report at the end of the illustration. Withdrawals
 and policy loans are assumed to be taken at the beginning of the
 applicable policy year. The illustration and supplemental report
-reflect a fixed policy loan interest rate of {{MaxAnnLoanDueRate}}.
+reflect a fixed policy loan interest rate of {{MaxAnnCurrLoanDueRate}}.
 </p>
 
 <p>

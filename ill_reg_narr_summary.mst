@@ -110,13 +110,7 @@ overhead expenses is the fully allocated expense method.
 <p>
 Loaned amounts of the {{AvName}}
 Value will be credited a rate equal to the loan interest rate less
-a spread, guaranteed not to exceed
-{{#GroupCarveout}}
-1.25%.
-{{/GroupCarveout}}
-{{^GroupCarveout}}
-3.00%.
-{{/GroupCarveout}}
+a spread, guaranteed not to exceed {{MaxAnnGuarLoanSpread}}.
 </p>
 
 {{#HasTerm}}
