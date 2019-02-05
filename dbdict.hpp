@@ -118,6 +118,7 @@ class LMI_SO DBDictionary
     database_entity AllowStateXX        ;
     database_entity AllowForeign        ;
     database_entity GroupIndivSelection ;
+    database_entity TxCallsGuarUwSubstd ;
     database_entity Allowable           ;
     database_entity AllowCvat           ;
     database_entity AllowGpt            ;

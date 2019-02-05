@@ -40,12 +40,12 @@
               Fully underwritten,
             {{/UWTypeIsMedical}}
             {{^UWTypeIsMedical}}
-                {{#UWTypeIsGuaranteedIssueInTexasWithFootnote}}
+                {{#CallGuarUwSubstd}}
                     Substandard ***,
-                {{/UWTypeIsGuaranteedIssueInTexasWithFootnote}}
-                {{^UWTypeIsGuaranteedIssueInTexasWithFootnote}}
+                {{/CallGuarUwSubstd}}
+                {{^CallGuarUwSubstd}}
                     {{UWType}},
-                {{/UWTypeIsGuaranteedIssueInTexasWithFootnote}}
+                {{/CallGuarUwSubstd}}
             {{/UWTypeIsMedical}}
             {{UWClass}}, Initial Death Benefit Option: {{InitDBOpt}}<br>
             {{#UWClassIsRated}}

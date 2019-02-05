@@ -176,12 +176,12 @@ The state of issue is {{StateOfJurisdiction}}.
     </p>
 {{/HasComplianceTrackingNumber}}
 
-{{#UWTypeIsGuaranteedIssueInTexasWithFootnote}}
+{{#CallGuarUwSubstd}}
     <p>
     *** This policy is classified as substandard guaranteed issue
     per the requirements of the Texas Insurance Department.
     </p>
-{{/UWTypeIsGuaranteedIssueInTexasWithFootnote}}
+{{/CallGuarUwSubstd}}
 
 <p align="center"><b>GUARANTEED PRINCIPAL ACCOUNT</b></p>
 

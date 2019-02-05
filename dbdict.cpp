@@ -136,6 +136,7 @@ void DBDictionary::ascribe_members()
     ascribe("AllowStateXX"        , &DBDictionary::AllowStateXX        );
     ascribe("AllowForeign"        , &DBDictionary::AllowForeign        );
     ascribe("GroupIndivSelection" , &DBDictionary::GroupIndivSelection );
+    ascribe("TxCallsGuarUwSubstd" , &DBDictionary::TxCallsGuarUwSubstd );
     ascribe("Allowable"           , &DBDictionary::Allowable           );
     ascribe("AllowCvat"           , &DBDictionary::AllowCvat           );
     ascribe("AllowGpt"            , &DBDictionary::AllowGpt            );
@@ -920,6 +921,7 @@ void DBDictionary::write_database_files()
     z.Add({DB_TermIsNotRider      , true});
     // Certain illustration columns are controlled by this:
     z.Add({DB_ErNotionallyPaysTerm, true});
+    z.Add({DB_TxCallsGuarUwSubstd , true});
     // This fixed loan rate varies by duration.
     int dims_1111113[e_number_of_axes] = {1, 1, 1, 1, 1, 1, 3};
     double loanrate[3] = {0.06, 0.05, 0.04};

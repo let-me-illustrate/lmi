@@ -142,6 +142,7 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["RetAge"                ] = &RetAge                 ;
     OtherScalars    ["EndtAge"               ] = &EndtAge                ;
     OtherScalars    ["GroupIndivSelection"   ] = &GroupIndivSelection    ;
+    OtherScalars    ["TxCallsGuarUwSubstd"   ] = &TxCallsGuarUwSubstd    ;
     OtherScalars    ["AllowExperienceRating" ] = &AllowExperienceRating  ;
     OtherScalars    ["UseExperienceRating"   ] = &UseExperienceRating    ;
     OtherScalars    ["UsePartialMort"        ] = &UsePartialMort         ;
@@ -659,6 +660,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     StateOfJurisdiction           = a_Addend.StateOfJurisdiction;
     PremiumTaxState               = a_Addend.PremiumTaxState;
     GroupIndivSelection           = GroupIndivSelection   || a_Addend.GroupIndivSelection;
+    TxCallsGuarUwSubstd           = TxCallsGuarUwSubstd   || a_Addend.TxCallsGuarUwSubstd;
     AllowExperienceRating         = AllowExperienceRating || a_Addend.AllowExperienceRating;
     UseExperienceRating           = UseExperienceRating   || a_Addend.UseExperienceRating;
     UsePartialMort                = a_Addend.UsePartialMort;

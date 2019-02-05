@@ -149,6 +149,8 @@ enum e_database_key
 
         ,DB_GroupIndivSelection
 
+        ,DB_TxCallsGuarUwSubstd
+
         ,DB_Allowable
 
     ,DB_Topic_7702And7702A

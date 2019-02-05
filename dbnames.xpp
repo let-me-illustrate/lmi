@@ -62,6 +62,7 @@
 {DB_AllowStateXX,DB_Topic_Underwriting,"AllowStateXX","Allow state 'XX': 0=no, 1=yes [not yet implemented]",}, \
 {DB_AllowForeign,DB_Topic_Underwriting,"AllowForeign","Allow foreign-country multiplier for cost of insurance charges: 0=no, 1=yes [not yet implemented]",}, \
 {DB_GroupIndivSelection,DB_Topic_Underwriting,"GroupIndivSelection","For group insurance, allow individual selection of specified amount: 0=no, 1=yes",}, \
+{DB_TxCallsGuarUwSubstd,DB_Topic_Underwriting,"TxCallsGuarUwSubstd","Guaranteed issue must be called substandard in Texas: 0=no, 1=yes",}, \
 {DB_Allowable,DB_Topic_Underwriting,"Allowable","A catchall category for rules not otherwise expressible",}, \
 {DB_Topic_7702And7702A,DB_FIRST,"7702 and 7702A","Internal Revenue Code sections 7702 and 7702A",}, \
 {DB_AllowCvat,DB_Topic_7702And7702A,"AllowCvat","Allow cash value accumulation test: 0=no, 1=yes",}, \

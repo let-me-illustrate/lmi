@@ -2825,13 +2825,12 @@ class pdf_illustration_finra : public pdf_illustration
             add_variable("ContractNameCap", s);
             }
 
-        auto const& policy_name = invar.PolicyLegalName;
         auto const& state_of_jurisdiction = invar.StateOfJurisdiction;
 
         add_variable
-            ("UWTypeIsGuaranteedIssueInTexasWithFootnote"
-            ,    invar.UWType == "Guaranteed issue"
-              && policy_name == "Flexible Premium Variable Adjustable Life Insurance Policy"
+            ("CallGuarUwSubstd"
+            ,    invar.TxCallsGuarUwSubstd
+              && invar.UWType == "Guaranteed issue"
               && state_of_jurisdiction == "TX"
             );
 
