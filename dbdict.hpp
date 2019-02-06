@@ -57,6 +57,9 @@ class LMI_SO DBDictionary
 
     void InitAntediluvian();
 
+  protected:
+    void Add(database_entity const&);
+
   private:
     DBDictionary(DBDictionary const&) = delete;
     DBDictionary& operator=(DBDictionary const&) = delete;
@@ -68,7 +71,6 @@ class LMI_SO DBDictionary
     database_entity& datum(std::string const&);
 
     void WriteDB(std::string const& filename) const;
-    void Add(database_entity const&);
     void InitDB();
 
     // A temporary expedient.
