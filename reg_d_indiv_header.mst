@@ -48,7 +48,7 @@ and may not be used to project or predict investment results.
 <table width="100%" cellspacing="0" cellpadding="0" valign="top">
     <tr>
         <td width="60%">
-            Date Prepared: {{date_prepared}}<br>
+            Date Prepared: {{DatePrepared}}<br>
             {{#Composite}}
                 Composite of individuals<br>
             {{/Composite}}

@@ -111,7 +111,7 @@
     <tr>
         <td align="center">
             <font size="+2">
-                {{date_prepared}}
+                {{DatePrepared}}
             </font>
         </td>
     </tr>

@@ -21,7 +21,7 @@
 
 {{!
     PDF !! This is almost the same as 'reg_d_group_footer_lower.mst',
-    which is better because it includes 'date_prepared'. It appears
+    which is better because it includes 'DatePrepared'. It appears
     that one universal MST file could serve this purpose for all
     illustration formats.
 }}

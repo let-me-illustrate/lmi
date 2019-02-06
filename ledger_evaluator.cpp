@@ -827,13 +827,14 @@ ledger_evaluator Ledger::make_evaluator() const
 
     strings["LmiVersion"] = &LmiVersion;
 
-    std::string PrepYear  = value_cast<std::string>(prep_date.year());
-    std::string PrepMonth = month_name(prep_date.month());
-    std::string PrepDay   = value_cast<std::string>(prep_date.day());
-
-    strings["PrepYear" ] = &PrepYear;
-    strings["PrepMonth"] = &PrepMonth;
-    strings["PrepDay"  ] = &PrepDay;
+    std::string DatePrepared =
+          month_name(prep_date.month())
+        + " "
+        + value_cast<std::string>(prep_date.day())
+        + ", "
+        + value_cast<std::string>(prep_date.year())
+        ;
+    strings["DatePrepared" ] = &DatePrepared;
 
     // PDF !! Sales-load refunds are mentioned on 'mce_ill_reg' PDFs
     // only. Other formats defectively ignore them.
@@ -945,9 +946,6 @@ ledger_evaluator Ledger::make_evaluator() const
 //    std::vector<int>            FundAllocs;  [not handled yet]
 //
 //    std::vector<double> InforceLives;
-//
-//    // Special-case strings.
-//    std::string     EffDate; [furnished as PrepYear, PrepMonth, PrepDay]
 //
 // Variant
 //

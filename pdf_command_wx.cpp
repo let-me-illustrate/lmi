@@ -891,15 +891,6 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
         // single illustration type should be defined in the corresponding
         // derived pdf_illustration_xxx class instead.
 
-        add_variable
-            ("date_prepared"
-            , html::text::from(evaluate("PrepMonth"))
-            + html::text::nbsp()
-            + html::text::from(evaluate("PrepDay"))
-            + html::text::from(", ")
-            + html::text::from(evaluate("PrepYear"))
-            );
-
         auto indent = html::text::nbsp();
         add_variable("Space1", indent);
 
