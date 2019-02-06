@@ -561,8 +561,6 @@ void DBDictionary::InitDB()
     Add({DB_MaxVlrRate, max_vlr_dimensions, max_vlr});
 
     // These aren't always right, but zero is never right.
-    Add({DB_LicDacTaxRate         , 0.077});
-    Add({DB_LicFitRate            , 0.35});
 
     Add({DB_FirstPrefLoanYear     , 100});
 
@@ -814,8 +812,6 @@ void DBDictionary::write_database_files()
     z.Add({DB_CompTarget          , 0.0});
     z.Add({DB_CompExcess          , 0.0});
     z.Add({DB_CompChargeback      , 0.0});
-    z.Add({DB_LicFitRate          , 0.0}); // DATABASE !! Expunge.
-    z.Add({DB_LicDacTaxRate       , 0.0}); // DATABASE !! Expunge.
     z.Add({DB_LedgerType          , mce_ill_reg});
     z.Add({DB_AllowExpRating      , false});
 
