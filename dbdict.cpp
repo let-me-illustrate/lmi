@@ -641,7 +641,6 @@ void DBDictionary::write_database_files()
     z.Add({DB_CurrRegLoanSpread   , 0.02});
     z.Add({DB_GuarInt             , 0.03});
     z.Add({DB_NaarDiscount        , 0.00246627});
-    z.Add({DB_GuarIntSpread       , 0.03}); // DATABASE !! Dubious: unused.
     z.Add({DB_GuarMandE           , 0.009});
     z.Add({DB_CurrIntSpread       , 0.01});
     z.Add({DB_CurrMandE           , 0.009});
