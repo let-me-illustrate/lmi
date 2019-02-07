@@ -75,9 +75,6 @@ class LMI_SO DBDictionary
   private:   // DATABASE !! End temporary expedient.
     void InitDB();
 
-    // A temporary expedient.
-    void Nyarlathotep();
-
     // xml_serializable required implementation.
     int                class_version() const override;
     std::string const& xml_root_name() const override;
