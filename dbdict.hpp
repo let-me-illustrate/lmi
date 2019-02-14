@@ -70,9 +70,7 @@ class LMI_SO DBDictionary
 
     database_entity& datum(std::string const&);
 
-  protected: // DATABASE !! A temporary expedient only:
     void WriteDB(std::string const& filename) const;
-  private:   // DATABASE !! End temporary expedient.
     void InitDB();
 
     // xml_serializable required implementation.
