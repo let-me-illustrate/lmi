@@ -104,6 +104,7 @@ class LMI_SO database_entity final
     int                 key_;
     std::vector<int>    axis_lengths_;
     std::vector<double> data_values_;
+    // Glosses are deprecated.
     std::string         gloss_;
 };
 

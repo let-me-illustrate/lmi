@@ -818,14 +818,9 @@ void DBDictionary::write_database_files()
     // 1960 CSG (which does not distinguish gender).
     z.Add({DB_GroupProxyRateTable , 305});
 
-    double T83Gam[3] = {825, 826, 826,};
-    z.Add
-        ({DB_PartialMortTable
-         ,e_number_of_axes
-         ,dims311
-         ,T83Gam
-         ,"1983 GAM, using male rates for unisex because no unisex table was published."
-        });
+    // 1983 GAM; unisex=male because no unisex table was published.
+    double T83Gam[3] = {825, 826, 826,}; // f, m, u
+    z.Add({DB_PartialMortTable, e_number_of_axes, dims311, T83Gam});
 
     z.Add({DB_AllowWd             , true});
     z.Add({DB_AllowLoan           , true});
