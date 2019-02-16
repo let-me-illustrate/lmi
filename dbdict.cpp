@@ -808,10 +808,6 @@ void DBDictionary::write_database_files()
     z.Add({DB_AdbMinIssAge        , 15});
     z.Add({DB_AdbMaxIssAge        , 70});
     z.Add({DB_AdbLimit            , 1000000.0});
-    z.Add({DB_CalculateComp       , false});
-    z.Add({DB_CompTarget          , 0.0});
-    z.Add({DB_CompExcess          , 0.0});
-    z.Add({DB_CompChargeback      , 0.0});
     z.Add({DB_LedgerType          , mce_ill_reg});
     z.Add({DB_AllowExpRating      , false});
 

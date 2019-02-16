@@ -321,10 +321,10 @@
 {DB_ErPremAcct,DB_Topic_Allocations,"ErPremAcct","Preferred account for employer premiums if input overridden: 0=general account, 1=separate account",}, \
 {DB_Topic_Compensation,DB_FIRST,"Compensation","Commissions, asset-based compensation, and chargebacks",}, \
 {DB_CalculateComp,DB_Topic_Compensation,"CalculateComp","Calculate compensation [not implemented]",}, \
-{DB_CompTarget,DB_Topic_Compensation,"CompTarget","Producer-only compensation on premium up to target",}, \
-{DB_CompExcess,DB_Topic_Compensation,"CompExcess","Producer-only compensation on premium in excess of target",}, \
-{DB_CompChargeback,DB_Topic_Compensation,"CompChargeback","Compensation chargeback for early termination",}, \
-{DB_AssetComp,DB_Topic_Compensation,"AssetComp","Producer-only compensation on separate-account assets--not tiered by assets",}, \
+{DB_CompTarget,DB_Topic_Compensation,"CompTarget","Producer-only compensation on premium up to target [not yet implemented]",}, \
+{DB_CompExcess,DB_Topic_Compensation,"CompExcess","Producer-only compensation on premium in excess of target [not yet implemented]",}, \
+{DB_CompChargeback,DB_Topic_Compensation,"CompChargeback","Compensation chargeback for early termination [not yet implemented]",}, \
+{DB_AssetComp,DB_Topic_Compensation,"AssetComp","Producer-only compensation on separate-account assets--not tiered by assets [not yet implemented]",}, \
 {DB_AllowExtraAssetComp,DB_Topic_Compensation,"AllowExtraAssetComp","Allow input extra asset-based compensation: 0=no, 1=yes",}, \
 {DB_AllowExtraPremComp,DB_Topic_Compensation,"AllowExtraPremComp","Allow input extra premium-based compensation: 0=no, 1=yes",}, \
 {DB_Topic_ExperienceRating,DB_FIRST,"Experience rating","Experience-rating parameters",}, \
