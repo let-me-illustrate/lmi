@@ -578,6 +578,9 @@ void DBDictionary::InitDB()
     Add({DB_AdbLimit              , dbl_inf});
     Add({DB_ExpSpecAmtLimit       , dbl_inf});
 
+    Add({DB_MaxIssSpecAmt         , dbl_inf});
+    Add({DB_MaxRenlSpecAmt        , dbl_inf});
+
     // These are the same as the nominal limits of the associated
     // members of class Input.
     Add({DB_SpouseRiderMaxAmt     , bignum});
@@ -692,10 +695,8 @@ void DBDictionary::write_database_files()
     z.Add({DB_MaxIssAge           , 70});
     z.Add({DB_MinIssSpecAmt       , 50000.0});
     z.Add({DB_MinIssBaseSpecAmt   , 50000.0});
-    z.Add({DB_MaxIssSpecAmt       , 10000000.0});
     z.Add({DB_MinRenlSpecAmt      , 50000.0});
     z.Add({DB_MinRenlBaseSpecAmt  , 50000.0});
-    z.Add({DB_MaxRenlSpecAmt      , 10000000.0});
     z.Add({DB_MinSpecAmtIncr      , 0.0});
     z.Add({DB_MaxIncrAge          , 99});
     z.Add({DB_MinPmt              , 0.0});
