@@ -45,7 +45,6 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <limits>
 #include <vector>
 
 template class xml_serializable<DBDictionary>;
@@ -517,7 +516,6 @@ void DBDictionary::Add(database_entity const& e)
 void DBDictionary::InitDB()
 {
     static double const dbl_inf = infinity<double>();
-    static double const bignum = std::numeric_limits<double>::max();
 
     for(auto const& i : member_names())
         {
@@ -577,15 +575,14 @@ void DBDictionary::InitDB()
     Add({DB_WpLimit               , dbl_inf});
     Add({DB_AdbLimit              , dbl_inf});
     Add({DB_ExpSpecAmtLimit       , dbl_inf});
+    Add({DB_SpouseRiderMaxAmt     , dbl_inf});
+    Add({DB_ChildRiderMaxAmt      , dbl_inf});
 
     Add({DB_MaxIssSpecAmt         , dbl_inf});
     Add({DB_MaxRenlSpecAmt        , dbl_inf});
 
-    // These are the same as the nominal limits of the associated
-    // members of class Input.
-    Add({DB_SpouseRiderMaxAmt     , bignum});
+    // This is the same as class age_trammel's nominal upper limit.
     Add({DB_SpouseRiderMaxIssAge  , 99});
-    Add({DB_ChildRiderMaxAmt      , bignum});
 
     // These are plausible defaults that often evaluate to zero, but
     // are initialized here with appropriate enumerators to make the
