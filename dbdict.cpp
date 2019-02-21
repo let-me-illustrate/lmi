@@ -522,13 +522,62 @@ void DBDictionary::InitDB()
         Add({db_key_from_name(i), 0.0});
         }
 
-    // It would be dangerous to set these to zero.
+    // Most enumerative types have a plausible-default enumerator that
+    // happens to equal zero. They're explicitly initialized here with
+    // appropriate enumerators, to make the implicit types clear.
+    //
+    // Some, like DB_IntSpreadMode, have no enumerator equal to zero,
+    // and must be initialized explicitly with some actual enumerator.
+    Add({DB_SmokeOrTobacco        , oe_smoker_nonsmoker});
+    Add({DB_CvatMatChangeDefn     , mce_unnecessary_premium});
+    Add({DB_Effective7702DboRop   , mce_option1_for_7702});
+    Add({DB_SepAcctSpreadMethod   , mce_spread_is_effective_annual});
+    Add({DB_IntSpreadMode         , mce_spread_daily});
+    Add({DB_AssetChargeType       , oe_asset_charge_spread});
+    Add({DB_PremTaxState          , oe_ee_state});
+    Add({DB_WpChargeMethod        , oe_waiver_times_deductions});
+    Add({DB_MaxWdDed              , mce_twelve_times_last});
+    Add({DB_MinPremType           , oe_monthly_deduction});
+    Add({DB_TgtPremType           , oe_monthly_deduction});
+    Add({DB_DeductionMethod       , oe_proportional});
+    Add({DB_DeductionAcct         , oe_prefer_general_account});
+    Add({DB_DistributionMethod    , oe_proportional});
+    Add({DB_DistributionAcct      , oe_prefer_general_account});
+    Add({DB_EePremMethod          , oe_input_allocation});
+    Add({DB_EePremAcct            , oe_prefer_general_account});
+    Add({DB_ErPremMethod          , oe_input_allocation});
+    Add({DB_ErPremAcct            , oe_prefer_general_account});
+    Add({DB_LedgerType            , mce_ill_reg});
+    Add({DB_AgeLastOrNearest      , oe_age_last_birthday});
+
+    // It would be dangerous to set these multipliers to zero.
+    Add({DB_GuarCoiMultiplier     , 1.0});
     Add({DB_MinInputCoiMult       , 1.0});
     Add({DB_CurrCoiMultiplier     , 1.0});
-    Add({DB_GuarCoiMultiplier     , 1.0});
     Add({DB_SubstdTableMult       , 1.0});
     Add({DB_MaxWdGenAcctValMult   , 1.0});
     Add({DB_MaxWdSepAcctValMult   , 1.0});
+
+    // These aren't always right, but zero is never right.
+
+    Add({DB_CurrCoiTable0Limit    , dbl_inf});
+    Add({DB_CurrCoiTable1         , 999});
+    Add({DB_CurrCoiTable1Limit    , dbl_inf});
+    Add({DB_CurrCoiTable2         , 999});
+
+    // Usually the maximum is a reciprocal, e.g., 1/11 or 1/12; for
+    // greatest precision, store the reciprocal of that reciprocal,
+    // e.g., 11 or 12.
+    Add({DB_MaxMonthlyCoiRate     , 12.0});
+
+    // These are the same as class date_trammel's nominal limits.
+    Add({DB_CoiResetMinDate       , calendar_date::gregorian_epoch_jdn});
+    Add({DB_CoiResetMaxDate       , calendar_date::last_yyyy_date_jdn });
+
+    Add({DB_GuarIntSpread         , dbl_inf});
+    Add({DB_SpecAmtLoadLimit      , dbl_inf});
+    Add({DB_DynSepAcctLoadLimit   , dbl_inf});
+    Add({DB_PremTaxRetalLimit     , dbl_inf});
 
     // This is determined by law and regulation, and should be the
     // same for all life-insurance products.
@@ -536,14 +585,13 @@ void DBDictionary::InitDB()
     std::vector<int> premium_tax_dimensions(ptd, ptd + e_number_of_axes);
     Add({DB_PremTaxRate, premium_tax_dimensions, premium_tax_rates_for_life_insurance()});
 
-    // These are the same as class date_trammel's nominal limits.
-    Add({DB_CoiResetMinDate       , calendar_date::gregorian_epoch_jdn});
-    Add({DB_CoiResetMaxDate       , calendar_date::last_yyyy_date_jdn });
-
-    // Usually the maximum is a reciprocal, e.g., 1/11 or 1/12; for
-    // greatest precision, store the reciprocal of that reciprocal,
-    // e.g., 11 or 12.
-    Add({DB_MaxMonthlyCoiRate     , 12.0});
+    Add({DB_MaxIssSpecAmt         , dbl_inf});
+    Add({DB_MaxRenlSpecAmt        , dbl_inf});
+    Add({DB_WpLimit               , dbl_inf});
+    Add({DB_AdbLimit              , dbl_inf});
+    Add({DB_SpouseRiderMaxAmt     , dbl_inf});
+    Add({DB_SpouseRiderMaxIssAge  , 99});   // age_trammel's nominal upper limit
+    Add({DB_ChildRiderMaxAmt      , dbl_inf});
 
     // This must not be zero in TX, which specifically requires a
     // "guaranteed" rate of not more than fifteen percent--see:
@@ -558,36 +606,8 @@ void DBDictionary::InitDB()
     max_vlr[mce_s_TX] = 0.15;
     Add({DB_MaxVlrRate, max_vlr_dimensions, max_vlr});
 
-    // These aren't always right, but zero is never right.
-
     Add({DB_FirstPrefLoanYear     , 100});
-
-    Add({DB_GuarIntSpread         , dbl_inf});
-
-    Add({DB_CurrCoiTable0Limit    , dbl_inf});
-    Add({DB_CurrCoiTable1         , 999});
-    Add({DB_CurrCoiTable1Limit    , dbl_inf});
-    Add({DB_CurrCoiTable2         , 999});
-
-    Add({DB_SpecAmtLoadLimit      , dbl_inf});
-    Add({DB_DynSepAcctLoadLimit   , dbl_inf});
-    Add({DB_PremTaxRetalLimit     , dbl_inf});
-    Add({DB_WpLimit               , dbl_inf});
-    Add({DB_AdbLimit              , dbl_inf});
     Add({DB_ExpSpecAmtLimit       , dbl_inf});
-    Add({DB_SpouseRiderMaxAmt     , dbl_inf});
-    Add({DB_ChildRiderMaxAmt      , dbl_inf});
-
-    Add({DB_MaxIssSpecAmt         , dbl_inf});
-    Add({DB_MaxRenlSpecAmt        , dbl_inf});
-
-    // This is the same as class age_trammel's nominal upper limit.
-    Add({DB_SpouseRiderMaxIssAge  , 99});
-
-    // These are plausible defaults that often evaluate to zero, but
-    // are initialized here with appropriate enumerators to make the
-    // implicit types clear.
-    Add({DB_Effective7702DboRop , mce_option1_for_7702});
 }
 
 void DBDictionary::write_database_files()
@@ -595,131 +615,46 @@ void DBDictionary::write_database_files()
     DBDictionary z;
 
     z.InitDB();
-    z.Add({DB_GuarMonthlyPolFee   , 8.00});
-    z.Add({DB_GuarSpecAmtLoad     , 0.0});
-    z.Add({DB_GuarAnnualPolFee    , 0.0});
-    z.Add({DB_GuarFundAdminChg    , 0.0});
-    z.Add({DB_GuarPremLoadTgt     , 0.07});
-    z.Add({DB_GuarPremLoadExc     , 0.04});
-    z.Add({DB_GuarPremLoadTgtRfd  , 0.00});
-    z.Add({DB_GuarPremLoadExcRfd  , 0.00});
-    z.Add({DB_GuarAcctValLoad     , 0.0});
-    z.Add({DB_CurrMonthlyPolFee   , 5.00});
-    z.Add({DB_CurrSpecAmtLoad     , 0.0});
-    z.Add({DB_CurrAnnualPolFee    , 0.0});
-    z.Add({DB_CurrFundAdminChg    , 0.0});
-    z.Add({DB_CurrPremLoadTgt     , 0.05});
-    z.Add({DB_CurrPremLoadExc     , 0.02});
-    z.Add({DB_CurrPremLoadTgtRfd  , 0.00});
-    z.Add({DB_CurrPremLoadExcRfd  , 0.00});
-    z.Add({DB_CurrAcctValLoad     , 0.0});
-    z.Add({DB_DacTaxPremLoad      , 0.01});
-    z.Add({DB_FundCharge          , 0.0});
-    z.Add({DB_PremTaxFundCharge   , 0.0});
-    z.Add({DB_DacTaxFundCharge    , 0.0});
-    z.Add({DB_WaivePremTaxInt1035 , true});
-    z.Add({DB_FirstWdMonth        , 0.0});
-    z.Add({DB_MaxWdDed            , mce_to_next_anniversary});
-    z.Add({DB_MinWd               , 100.0});
-    z.Add({DB_WdFee               , 25.0});
-    z.Add({DB_WdFeeRate           , 0.02});
-    z.Add({DB_WdDecrSpecAmtDboLvl , true});
-    z.Add({DB_WdDecrSpecAmtDboInc , true});
-    z.Add({DB_WdDecrSpecAmtDboRop , true});
-    z.Add({DB_FirstLoanMonth      , 0.0});
-    z.Add({DB_AllowPrefLoan       , false});
-    z.Add({DB_AllowFixedLoan      , true});
-    z.Add({DB_FixedLoanRate       , 0.06});
-    z.Add({DB_AllowVlr            , true});
-    z.Add({DB_MaxLoanAcctValMult  , 1.0});
-    z.Add({DB_MaxLoanDed          , mce_to_next_anniversary});
-    z.Add({DB_GuarPrefLoanSpread  , 0.0});
-    z.Add({DB_GuarRegLoanSpread   , 0.04});
-    z.Add({DB_CurrPrefLoanSpread  , 0.0});
-    z.Add({DB_CurrRegLoanSpread   , 0.02});
-    z.Add({DB_GuarInt             , 0.03});
-    z.Add({DB_NaarDiscount        , 0.00246627});
-    z.Add({DB_GuarMandE           , 0.009});
-    z.Add({DB_CurrIntSpread       , 0.01});
-    z.Add({DB_CurrMandE           , 0.009});
-    z.Add({DB_BonusInt            , 0.0});
-    z.Add({DB_IntFloor            , 0.0});
-    z.Add({DB_SepAcctSpreadMethod , mce_spread_is_effective_annual});
-    z.Add({DB_DynamicMandE        , false});
 
-    // gender, smoker
-    int dims313[e_number_of_axes] = {3, 1, 3, 1, 1, 1, 1};
-
-    // US 1980 CSO age last; unisex = table D.
-    // Male uses table E, which is correct, as opposed to table F,
-    // which contains a numerical error but was adopted by NAIC.
-    double TgCOI[9] =
-        {
-         39,  37,  35, // female: sm ns us
-         45,  57,  41, // male:   sm ns us
-        111, 109, 107, // unisex: sm ns us
-        };
-
-    // For now at least, just use (a multiple of) guaranteed COI rates
-    // as current.
-    z.Add({DB_CurrCoiTable, e_number_of_axes, dims313, TgCOI});
-    z.Add({DB_GuarCoiTable, e_number_of_axes, dims313, TgCOI});
-
-    double coimult[9] =
-        {
-        0.40, 0.30, 0.35, // female: sm ns us
-        0.60, 0.50, 0.55, // male:   sm ns us
-        0.50, 0.40, 0.45, // unisex: sm ns us
-        };
-    z.Add({DB_CurrCoiMultiplier, e_number_of_axes, dims313, coimult});
-
-    z.Add({DB_UseNyCoiFloor       , 0.0});
-    z.Add({DB_GuarCoiCeiling      , false});
-    z.Add({DB_CoiGuarIsMin        , false});
-    z.Add({DB_CurrCoiIsAnnual     , true});
-    z.Add({DB_GuarCoiIsAnnual     , true});
-    z.Add({DB_MdptCoiIsAnnual     , true});
-    z.Add({DB_AgeLastOrNearest    , oe_age_last_birthday});
-    z.Add({DB_AllowRetirees       , true});
-    z.Add({DB_MinSpecAmt          , 100000.0});
-    // Forbid substandard table ratings with simplified or guaranteed issue.
-    int dim_uw_basis[e_number_of_axes] = {1, 1, 1, 1, 5, 1, 1};
-    //                              med  para nonmed   SI     GI
-    double allow_substd_table[] = {true, true, true, false, false};
-    z.Add({DB_AllowSubstdTable, e_number_of_axes, dim_uw_basis, allow_substd_table});
-    z.Add({DB_AllowFlatExtras     , true});
     z.Add({DB_MinIssAge           , 15});
     z.Add({DB_MaxIssAge           , 70});
-    z.Add({DB_MinIssSpecAmt       , 50000.0});
-    z.Add({DB_MinIssBaseSpecAmt   , 50000.0});
-    z.Add({DB_MinRenlSpecAmt      , 50000.0});
-    z.Add({DB_MinRenlBaseSpecAmt  , 50000.0});
-    z.Add({DB_MinSpecAmtIncr      , 0.0});
     z.Add({DB_MaxIncrAge          , 99});
-    z.Add({DB_MinPmt              , 0.0});
-    z.Add({DB_SmokeOrTobacco      , oe_tobacco_nontobacco});
-    z.Add({DB_AllowUnisex         , true});
-    z.Add({DB_AllowSexDistinct    , true});
-    z.Add({DB_AllowUnismoke       , true});
-    z.Add({DB_AllowSmokeDistinct  , true});
     z.Add({DB_AllowFullUw         , true});
     z.Add({DB_AllowParamedUw      , true});
     z.Add({DB_AllowNonmedUw       , true});
     z.Add({DB_AllowSimpUw         , true});
     z.Add({DB_AllowGuarUw         , true});
-    z.Add({DB_AllowMortBlendSex   , true});
-    z.Add({DB_AllowMortBlendSmoke , true});
+    z.Add({DB_SmokeOrTobacco      , oe_tobacco_nontobacco});
+    z.Add({DB_AllowPreferredClass , true});
+    z.Add({DB_AllowUltraPrefClass , false});
+
+    // Forbid substandard table ratings with simplified or guaranteed issue.
+    int uw_dims[e_number_of_axes] = {1, 1, 1, 1, 5, 1, 1};
+    //                              med  para nonmed   SI     GI
+    double allow_substd_table[] = {true, true, true, false, false};
+    z.Add({DB_AllowSubstdTable, e_number_of_axes, uw_dims, allow_substd_table});
+
+    z.Add({DB_AllowFlatExtras     , true});
     z.Add({DB_AllowRatedWp        , false});
     z.Add({DB_AllowRatedAdb       , false});
     z.Add({DB_AllowRatedTerm      , true});
+    z.Add({DB_AllowRetirees       , true});
+    z.Add({DB_AllowUnisex         , true});
+    z.Add({DB_AllowSexDistinct    , true});
+    z.Add({DB_AllowUnismoke       , true});
+    z.Add({DB_AllowSmokeDistinct  , true});
+    z.Add({DB_StateApproved       , true});
+    z.Add({DB_AllowStateXX        , true});
+    z.Add({DB_AllowForeign        , true});
+    z.Add({DB_GroupIndivSelection , false});
     z.Add({DB_Allowable           , true});
-    z.Add({DB_AllowPreferredClass , true});
     z.Add({DB_AllowCvat           , true});
     z.Add({DB_AllowGpt            , true});
-
+    z.Add({DB_AllowNo7702         , false});
     z.Add({DB_CorridorWhence      , 1});
     z.Add({DB_Irc7702NspWhence    , 2});
     z.Add({DB_SevenPayWhence      , 1});
+
     // This is just a sample product, so make do with plausible
     // all-male seven-pay premiums, and use GPT corridor factors for
     // CVAT. 'Irc7702NspWhence' specifies that NSP is calculated as
@@ -739,6 +674,115 @@ void DBDictionary::write_database_files()
     double T7702q[9] = {35, 41, 107,}; // Female, male, unisex.
     z.Add({DB_Irc7702QTable, e_number_of_axes, dims311, T7702q});
 
+    z.Add({DB_CvatMatChangeDefn   , mce_earlier_of_increase_or_unnecessary_premium});
+    z.Add({DB_GptMatChangeDefn    , 0});
+    z.Add({DB_Irc7702BftIsSpecAmt , 0});
+    z.Add({DB_TermIsQABOrDb7702   , oe_7702_term_is_db});
+    z.Add({DB_TermIsQABOrDb7702A  , oe_7702_term_is_db});
+
+    // US 1980 CSO age last; unisex = table D.
+    // Male uses table E, which is correct, as opposed to table F,
+    // which contains a numerical error but was adopted by NAIC.
+    int dims313[e_number_of_axes] = {3, 1, 3, 1, 1, 1, 1}; // gender, smoker
+    double TgCOI[9] =
+        {
+         39,  37,  35, // female: sm ns us
+         45,  57,  41, // male:   sm ns us
+        111, 109, 107, // unisex: sm ns us
+        };
+    z.Add({DB_GuarCoiTable, e_number_of_axes, dims313, TgCOI});
+
+    z.Add({DB_GuarCoiIsAnnual     , true});
+
+    // For now at least, just use (a multiple of) guaranteed COI rates
+    // as current.
+    z.Add({DB_CurrCoiTable, e_number_of_axes, dims313, TgCOI});
+
+    z.Add({DB_CurrCoiIsAnnual     , true});
+
+    double coimult[9] =
+        {
+        0.40, 0.30, 0.35, // female: sm ns us
+        0.60, 0.50, 0.55, // male:   sm ns us
+        0.50, 0.40, 0.45, // unisex: sm ns us
+        };
+    z.Add({DB_CurrCoiMultiplier, e_number_of_axes, dims313, coimult});
+
+    z.Add({DB_MdptCoiIsAnnual     , true});
+    z.Add({DB_UseNyCoiFloor       , 0.0});
+    z.Add({DB_GuarCoiCeiling      , false});
+    z.Add({DB_CoiGuarIsMin        , false});
+    z.Add({DB_AllowMortBlendSex   , true});
+    z.Add({DB_AllowMortBlendSmoke , true});
+    z.Add({DB_GuarInt             , 0.03});
+    z.Add({DB_NaarDiscount        , 0.00246627});
+    z.Add({DB_GuarMandE           , 0.009});
+    z.Add({DB_CurrIntSpread       , 0.01});
+    z.Add({DB_CurrMandE           , 0.009});
+    z.Add({DB_GenAcctIntBonus     , 0.0});
+    z.Add({DB_BonusInt            , 0.0});
+    z.Add({DB_IntFloor            , 0.0});
+    z.Add({DB_AllowGenAcct        , true});
+    z.Add({DB_AllowSepAcct        , true});
+    z.Add({DB_AllowGenAcctEarnRate, true});
+    z.Add({DB_AllowSepAcctNetRate , true});
+    z.Add({DB_MaxGenAcctRate      , 0.06});
+    z.Add({DB_MaxSepAcctRate      , 0.12});
+    z.Add({DB_SepAcctSpreadMethod , mce_spread_is_effective_annual});
+    z.Add({DB_IntSpreadMode       , mce_spread_daily});
+    z.Add({DB_DynamicMandE        , false});
+    z.Add({DB_AllowAmortPremLoad  , false});
+    z.Add({DB_LoadAmortFundCharge , 0.0030});
+    z.Add({DB_AllowImfOverride    , false});
+    z.Add({DB_AssetChargeType     , oe_asset_charge_spread});
+    z.Add({DB_StableValFundCharge , 0.0});
+    z.Add({DB_GuarFundAdminChg    , 0.0});
+    z.Add({DB_CurrFundAdminChg    , 0.0});
+    z.Add({DB_FundCharge          , 0.0});
+    z.Add({DB_GuarMonthlyPolFee   , 8.00});
+    z.Add({DB_GuarAnnualPolFee    , 0.0});
+    z.Add({DB_GuarPremLoadTgt     , 0.07});
+    z.Add({DB_GuarPremLoadExc     , 0.04});
+    z.Add({DB_GuarPremLoadTgtRfd  , 0.00});
+    z.Add({DB_GuarPremLoadExcRfd  , 0.00});
+    z.Add({DB_GuarSpecAmtLoad     , 0.0});
+    z.Add({DB_GuarAcctValLoad     , 0.0});
+    z.Add({DB_CurrMonthlyPolFee   , 5.00});
+    z.Add({DB_CurrAnnualPolFee    , 0.0});
+    z.Add({DB_CurrPremLoadTgt     , 0.05});
+    z.Add({DB_CurrPremLoadExc     , 0.02});
+    z.Add({DB_CurrPremLoadTgtRfd  , 0.00});
+    z.Add({DB_CurrPremLoadExcRfd  , 0.00});
+    z.Add({DB_CurrSpecAmtLoad     , 0.0});
+    z.Add({DB_CurrAcctValLoad     , 0.0});
+    z.Add({DB_TgtPremMonthlyPolFee, 0.0});
+    z.Add({DB_LoadRfdProportion   , 0.0});
+    z.Add({DB_SpecAmtLoadLimit    , 10000000.0});
+    z.Add({DB_DynamicSepAcctLoad  , false});
+    z.Add({DB_DacTaxFundCharge    , 0.0});
+    z.Add({DB_DacTaxPremLoad      , 0.01});
+    z.Add({DB_PremTaxFundCharge   , 0.0});
+
+    // Pass through premium tax.
+    int ptd[e_number_of_axes] = {1, 1, 1, 1, 1, e_max_dim_state, 1};
+    std::vector<int> premium_tax_dimensions(ptd, ptd + e_number_of_axes);
+    z.Add({DB_PremTaxLoad, premium_tax_dimensions, premium_tax_rates_for_life_insurance()});
+
+    z.Add({DB_WaivePremTaxInt1035 , true});
+    z.Add({DB_PremTaxAmortPeriod  , 0});
+    z.Add({DB_PremTaxAmortIntRate , 0.0});
+
+    z.Add({DB_PremTaxRate, premium_tax_dimensions, premium_tax_rates_for_life_insurance()});
+
+    z.Add({DB_PremTaxState        , oe_ee_state});
+    z.Add({DB_AllowSpecAmtIncr    , true});
+    z.Add({DB_MinSpecAmtIncr      , 0.0});
+    z.Add({DB_EnforceNaarLimit    , true});
+    z.Add({DB_MinSpecAmt          , 100000.0});
+    z.Add({DB_MinIssSpecAmt       , 50000.0});
+    z.Add({DB_MinIssBaseSpecAmt   , 50000.0});
+    z.Add({DB_MinRenlSpecAmt      , 50000.0});
+    z.Add({DB_MinRenlBaseSpecAmt  , 50000.0});
     z.Add({DB_AllowDboLvl         , true});
     z.Add({DB_AllowDboInc         , true});
     z.Add({DB_AllowDboRop         , true});
@@ -751,35 +795,13 @@ void DBDictionary::write_database_files()
     z.Add({DB_DboRopChangeMethod  , 0b1111});
     z.Add({DB_DboMdbChangeToWhat  , 0b1111});
     z.Add({DB_DboMdbChangeMethod  , 0b1111});
+    z.Add({DB_AllowChangeToDbo2   , true});
     z.Add({DB_DboChgCanIncrSpecAmt, true});
     z.Add({DB_DboChgCanDecrSpecAmt, true});
-
-    int ptd[e_number_of_axes] = {1, 1, 1, 1, 1, e_max_dim_state, 1};
-    std::vector<int> premium_tax_dimensions(ptd, ptd + e_number_of_axes);
-    z.Add({DB_PremTaxRate, premium_tax_dimensions, premium_tax_rates_for_life_insurance()});
-
-    // Use alternative policy form name in states beginning with "K".
-    std::vector<double> alt_form(e_max_dim_state);
-    alt_form[mce_s_KS] = true;
-    alt_form[mce_s_KY] = true;
-    z.Add({DB_UsePolicyFormAlt, premium_tax_dimensions, alt_form});
-
-    z.Add({DB_PremTaxState        , oe_ee_state});
-    z.Add({DB_MaturityAge         , 100});
     z.Add({DB_AllowExtEndt        , true});
-    z.Add({DB_MinPremType         , oe_monthly_deduction});
-    z.Add({DB_TgtPremType         , oe_modal_nonmec});
-    z.Add({DB_TgtPremFixedAtIssue , false});
-    z.Add({DB_TgtPremIgnoreSubstd , true});
-    z.Add({DB_NoLapseMinDur       , 0.0});
-    z.Add({DB_NoLapseMinAge       , 0.0});
-    z.Add({DB_NoLapseUnratedOnly  , false});
-    z.Add({DB_NoLapseDboLvlOnly   , false});
-    z.Add({DB_LoadRfdProportion   , 0.0});
+    z.Add({DB_AllowTerm           , true});
 
-    // uw_class, smoker
-    int dims143[e_number_of_axes] = {1, 4, 3, 1, 1, 1, 1};
-
+    int dims143[e_number_of_axes] = {1, 4, 3, 1, 1, 1, 1}; // uw_class, smoker
     double TtCOI[12] =
         {
         3, 2, 1, // pref:  sm ns us
@@ -787,104 +809,92 @@ void DBDictionary::write_database_files()
         6, 5, 4, // rated: sm ns us [same as std]
         0, 0, 0, // ultra: sm ns us [zero: error message--no ultrapref class]
         };
-
-    z.Add({DB_TermTable    , e_number_of_axes, dims143, TtCOI});
     z.Add({DB_GuarTermTable, e_number_of_axes, dims143, TtCOI});
-    z.Add({DB_AllowTerm           , true});
+    z.Add({DB_TermTable    , e_number_of_axes, dims143, TtCOI});
+
     z.Add({DB_TermMinIssAge       , 15});
     z.Add({DB_TermMaxIssAge       , 65});
     z.Add({DB_TermForcedConvAge   , 70});
     z.Add({DB_TermForcedConvDur   , 10});
     z.Add({DB_MaxTermProportion   , 0.0});
-    z.Add({DB_WpTable             , 8});
     z.Add({DB_AllowWp             , true});
+    z.Add({DB_WpTable             , 8});
     z.Add({DB_WpMinIssAge         , 18});
     z.Add({DB_WpMaxIssAge         , 64});
-    // SOA qx_ins table 708 is 70-75 US ADB experience.
-    z.Add({DB_AdbTable            , 708});
     z.Add({DB_AllowAdb            , true});
+    z.Add({DB_AdbTable            , 708});   // 70-75 US ADB experience
     z.Add({DB_AdbMinIssAge        , 15});
     z.Add({DB_AdbMaxIssAge        , 70});
     z.Add({DB_AdbLimit            , 1000000.0});
-    z.Add({DB_LedgerType          , mce_ill_reg});
+    z.Add({DB_AllowSpouseRider    , true});
+    z.Add({DB_SpouseRiderMinAmt   , 10000});
+    z.Add({DB_SpouseRiderMaxAmt   , 1000000});
+    z.Add({DB_SpouseRiderMinIssAge, 20});
+    z.Add({DB_SpouseRiderMaxIssAge, 65});
+    z.Add({DB_SpouseRiderGuarTable, 305});   // arbitrarily use 1960 CSG
+    z.Add({DB_SpouseRiderTable    , 305});   // arbitrarily use 1960 CSG
+    z.Add({DB_AllowChildRider     , true});
+    z.Add({DB_ChildRiderMinAmt    , 25000}); // for testing, min==max
+    z.Add({DB_ChildRiderMaxAmt    , 25000}); // for testing, min==max
+    z.Add({DB_ChildRiderTable     , 305});   // arbitrarily use 1960 CSG
+    z.Add({DB_AllowWd             , true});
+    z.Add({DB_WdFee               , 25.0});
+    z.Add({DB_WdFeeRate           , 0.02});
+    z.Add({DB_MinWd               , 100.0});
+    z.Add({DB_MaxWdDed            , mce_to_next_anniversary});
+    z.Add({DB_WdDecrSpecAmtDboLvl , true});
+    z.Add({DB_WdDecrSpecAmtDboInc , true});
+    z.Add({DB_WdDecrSpecAmtDboRop , true});
+    z.Add({DB_FirstWdMonth        , 0.0});
+    z.Add({DB_AllowLoan           , true});
+    z.Add({DB_AllowPrefLoan       , false});
+    z.Add({DB_AllowFixedLoan      , true});
+    z.Add({DB_AllowVlr            , true});
+    z.Add({DB_FixedLoanRate       , 0.06});
+    z.Add({DB_MinVlrRate          , 0.04});
+    z.Add({DB_MaxLoanAcctValMult  , 1.0});
+    z.Add({DB_MaxLoanDed          , mce_to_next_anniversary});
+    z.Add({DB_GuarPrefLoanSpread  , 0.0});
+    z.Add({DB_GuarRegLoanSpread   , 0.04});
+    z.Add({DB_CurrPrefLoanSpread  , 0.0});
+    z.Add({DB_CurrRegLoanSpread   , 0.02});
+    z.Add({DB_FirstLoanMonth      , 0.0});
+    z.Add({DB_MinPremType         , oe_monthly_deduction});
+    z.Add({DB_TgtPremType         , oe_modal_nonmec});
+    z.Add({DB_TgtPremTable        , 10});    // use seven-pay as target
+    z.Add({DB_TgtPremFixedAtIssue , false});
+    z.Add({DB_TgtPremIgnoreSubstd , true});
+    z.Add({DB_MinPmt              , 0.0});
+    z.Add({DB_NoLapseMinDur       , 0.0});
+    z.Add({DB_NoLapseMinAge       , 0.0});
+    z.Add({DB_NoLapseUnratedOnly  , false});
+    z.Add({DB_NoLapseDboLvlOnly   , false});
+    z.Add({DB_NoLapseAlwaysActive , false});
+    z.Add({DB_AllowHoneymoon      , true});
+    z.Add({DB_AllowExtraAssetComp , true});
+    z.Add({DB_AllowExtraPremComp  , true});
     z.Add({DB_AllowExpRating      , false});
-
-    // 1960 CSG (which does not distinguish gender).
-    z.Add({DB_GroupProxyRateTable , 305});
+    z.Add({DB_AllowExpRating      , true});
+    z.Add({DB_ExpRatStdDevMult    , 0.0});
+    z.Add({DB_ExpRatIbnrMult      , 0.0});
+    z.Add({DB_ExpRatIbnrMult      , 6.0});
+    z.Add({DB_ExpRatCoiRetention  , 0.0});
+    z.Add({DB_ExpRatRiskCoiMult   , 0});
+    z.Add({DB_ExpRatAmortPeriod   , 4.0});
+    z.Add({DB_LedgerType          , mce_ill_reg});
+    z.Add({DB_AgeLastOrNearest    , oe_age_last_birthday});
+    z.Add({DB_MaturityAge         , 100});
+    z.Add({DB_GroupProxyRateTable , 305});   // 1960 CSG (gender-indistinct)
 
     // 1983 GAM; unisex=male because no unisex table was published.
     double T83Gam[3] = {825, 826, 826,}; // f, m, u
     z.Add({DB_PartialMortTable, e_number_of_axes, dims311, T83Gam});
 
-    z.Add({DB_AllowWd             , true});
-    z.Add({DB_AllowLoan           , true});
-    z.Add({DB_AllowChangeToDbo2   , true});
-    z.Add({DB_AllowSpecAmtIncr    , true});
-    z.Add({DB_NoLapseAlwaysActive , false});
-    z.Add({DB_ExpRatStdDevMult    , 0.0});
-    z.Add({DB_ExpRatIbnrMult      , 0.0});
-    z.Add({DB_ExpRatCoiRetention  , 0.0});
-    z.Add({DB_StableValFundCharge , 0.0});
-    z.Add({DB_LoadAmortFundCharge , 0.0030});
-    z.Add({DB_AllowAmortPremLoad  , false});
-    z.Add({DB_PremTaxAmortPeriod  , 0});
-    z.Add({DB_PremTaxAmortIntRate , 0.0});
-    // Pass through premium tax.
-    z.Add({DB_PremTaxLoad, premium_tax_dimensions, premium_tax_rates_for_life_insurance()});
-    z.Add({DB_AllowHoneymoon      , true});
-    // Set target equal to seven-pay premium.
-    z.Add({DB_TgtPremTable        , 10});
-    z.Add({DB_TgtPremMonthlyPolFee, 0.0});
-    z.Add({DB_AllowExtraAssetComp , true});
-    z.Add({DB_AllowExtraPremComp  , true});
-    z.Add({DB_AssetChargeType     , oe_asset_charge_spread});
-    z.Add({DB_AllowUltraPrefClass , false});
-    z.Add({DB_AllowGenAcct        , true});
-    z.Add({DB_AllowSepAcct        , true});
-    z.Add({DB_AllowGenAcctEarnRate, true});
-    z.Add({DB_AllowSepAcctNetRate , true});
-    z.Add({DB_MaxGenAcctRate      , 0.06});
-    z.Add({DB_MaxSepAcctRate      , 0.12});
-    z.Add({DB_MinVlrRate          , 0.04});
-    z.Add({DB_IntSpreadMode       , mce_spread_daily});
-    z.Add({DB_StateApproved       , true});
-    z.Add({DB_AllowStateXX        , true});
-    z.Add({DB_AllowForeign        , true});
-    z.Add({DB_GroupIndivSelection , false});
-    z.Add({DB_AllowImfOverride    , false});
-    z.Add({DB_AllowNo7702         , false});
-    z.Add({DB_EnforceNaarLimit    , true});
-    z.Add({DB_DynamicSepAcctLoad  , false});
-    z.Add({DB_SpecAmtLoadLimit    , 10000000.0});
-    z.Add({DB_CvatMatChangeDefn   , mce_earlier_of_increase_or_unnecessary_premium});
-    z.Add({DB_GptMatChangeDefn    , 0});
-    z.Add({DB_Irc7702BftIsSpecAmt , 0});
-    z.Add({DB_TermIsQABOrDb7702   , oe_7702_term_is_db});
-    z.Add({DB_TermIsQABOrDb7702A  , oe_7702_term_is_db});
-    z.Add({DB_ExpRatRiskCoiMult   , 0});
-    z.Add({DB_AllowSpouseRider    , true});
-    z.Add({DB_AllowChildRider     , true});
-
-    z.Add({DB_SpouseRiderMinAmt   , 10000});
-    z.Add({DB_SpouseRiderMaxAmt   , 1000000});
-    z.Add({DB_SpouseRiderMinIssAge, 20});
-    z.Add({DB_SpouseRiderMaxIssAge, 65});
-
-    // Min and max deliberately identical for testing.
-    z.Add({DB_ChildRiderMinAmt    , 25000});
-    z.Add({DB_ChildRiderMaxAmt    , 25000});
-
-    // Spouse and child riders: arbitrarily use 1960 CSG.
-    z.Add({DB_SpouseRiderGuarTable, 305});
-    z.Add({DB_SpouseRiderTable    , 305});
-    z.Add({DB_ChildRiderTable     , 305});
-
-    z.Add({DB_GenAcctIntBonus     , 0.0});
-
-    // Allow experience rating.
-    z.Add({DB_AllowExpRating      , true});
-    z.Add({DB_ExpRatIbnrMult      , 6.0});
-    z.Add({DB_ExpRatAmortPeriod   , 4.0});
+    // Use alternative policy form name in states beginning with "K".
+    std::vector<double> alt_form(e_max_dim_state);
+    alt_form[mce_s_KS] = true;
+    alt_form[mce_s_KY] = true;
+    z.Add({DB_UsePolicyFormAlt, premium_tax_dimensions, alt_form});
 
     z.WriteDB(AddDataDir("sample.database"));
 
@@ -927,36 +937,10 @@ void DBDictionary::InitAntediluvian()
         Add({db_key_from_name(i), 0.0});
         }
 
-    // These are the same as class date_trammel's nominal limits.
-    // They mustn't be zero.
-    Add({DB_CoiResetMinDate       , calendar_date::gregorian_epoch_jdn});
-    Add({DB_CoiResetMaxDate       , calendar_date::last_yyyy_date_jdn });
-
-    Add({DB_GuarInt               , 0.03});
-
-    Add({DB_FixedLoanRate         , 0.06});
-
-    Add({DB_GuarRegLoanSpread     , 0.0});
-    Add({DB_CurrRegLoanSpread     , 0.0});
-    Add({DB_GuarPrefLoanSpread    , 0.0});
-    Add({DB_CurrPrefLoanSpread    , 0.0});
-
+    Add({DB_SmokeOrTobacco        , oe_smoker_nonsmoker});
     Add({DB_AllowPreferredClass   , true});
-
-    // premium loads
-
-    Add({DB_GuarMonthlyPolFee     , 12.00});
-    Add({DB_GuarSpecAmtLoad       , 0.0});
-    Add({DB_GuarPremLoadTgt       , 0.025});
-    Add({DB_GuarPremLoadExc       , 0.025});
-    Add({DB_CurrMonthlyPolFee     , 5.00});
-    Add({DB_CurrSpecAmtLoad       , 0.0});
-    Add({DB_CurrPremLoadTgt       , 0.025});
-    Add({DB_CurrPremLoadExc       , 0.025});
-
-    Add({DB_MinWd                 , 100.0});
-    Add({DB_WdFee                 , 5.0});
-    Add({DB_WdFeeRate             , 0.01});
+    Add({DB_AllowFlatExtras       , true});
+    Add({DB_CorridorTable         , 7});
 
     int guar_coi_dims[e_number_of_axes] = {1, 1, 3, 1, 1, 1, 1};
     // smoker, nonsmoker, unismoke
@@ -974,38 +958,51 @@ void DBDictionary::InitAntediluvian()
         };
     Add({DB_CurrCoiTable, e_number_of_axes, curr_coi_dims, curr_coi_tables});
 
-    Add({DB_CorridorTable         , 7});
-    Add({DB_WpTable               , 8});
-    Add({DB_AdbTable              , 9});
-    Add({DB_MaturityAge           , 100});
-    Add({DB_AgeLastOrNearest      , oe_age_nearest_birthday_ties_older});
-    Add({DB_MinSpecAmt            , 10000.0});
+    // These are the same as class date_trammel's nominal limits.
+    // They mustn't be zero.
+    Add({DB_CoiResetMinDate       , calendar_date::gregorian_epoch_jdn});
+    Add({DB_CoiResetMaxDate       , calendar_date::last_yyyy_date_jdn });
 
+    Add({DB_GuarInt               , 0.03});
     Add({DB_AllowGenAcct          , true});
     Add({DB_MaxGenAcctRate        , 0.12});
     Add({DB_MaxSepAcctRate        , 0.12});
-
-    Add({DB_AllowLoan             , true});
-    Add({DB_AllowWd               , true});
-    Add({DB_AllowFlatExtras       , true});
-    Add({DB_AllowChangeToDbo2     , true});
-    Add({DB_AllowDboRop           , true});
-
-    Add({DB_LedgerType            , mce_ill_reg});
-
-    Add({DB_NoLapseAlwaysActive   , 0.0});
-    Add({DB_NoLapseMinDur         , 0.0});
-    Add({DB_NoLapseMinAge         , 0.0});
-
-    Add({DB_Has1035ExchCharge     , 0.0});
-    Add({DB_SmokeOrTobacco        , 0.0});
+    Add({DB_GuarMonthlyPolFee     , 12.00});
+    Add({DB_GuarPremLoadTgt       , 0.025});
+    Add({DB_GuarPremLoadExc       , 0.025});
+    Add({DB_GuarSpecAmtLoad       , 0.0});
+    Add({DB_CurrMonthlyPolFee     , 5.00});
+    Add({DB_CurrPremLoadTgt       , 0.025});
+    Add({DB_CurrPremLoadExc       , 0.025});
+    Add({DB_CurrSpecAmtLoad       , 0.0});
     Add({DB_DacTaxFundCharge      , 0.0});
+    Add({DB_Has1035ExchCharge     , 0.0});
+    Add({DB_MinSpecAmt            , 10000.0});
+    Add({DB_AllowDboRop           , true});
+    Add({DB_AllowChangeToDbo2     , true});
     Add({DB_AllowWp               , false});
+    Add({DB_WpTable               , 8});
     Add({DB_AllowAdb              , false});
+    Add({DB_AdbTable              , 9});
     Add({DB_AllowSpouseRider      , false});
     Add({DB_AllowChildRider       , false});
-
+    Add({DB_AllowWd               , true});
+    Add({DB_WdFee                 , 5.0});
+    Add({DB_WdFeeRate             , 0.01});
+    Add({DB_MinWd                 , 100.0});
+    Add({DB_AllowLoan             , true});
+    Add({DB_FixedLoanRate         , 0.06});
+    Add({DB_GuarPrefLoanSpread    , 0.0});
+    Add({DB_GuarRegLoanSpread     , 0.0});
+    Add({DB_CurrPrefLoanSpread    , 0.0});
+    Add({DB_CurrRegLoanSpread     , 0.0});
+    Add({DB_NoLapseMinDur         , 0.0});
+    Add({DB_NoLapseMinAge         , 0.0});
+    Add({DB_NoLapseAlwaysActive   , 0.0});
     Add({DB_ExpRatAmortPeriod     , 4.0});
+    Add({DB_LedgerType            , mce_ill_reg});
+    Add({DB_AgeLastOrNearest      , oe_age_nearest_birthday_ties_older});
+    Add({DB_MaturityAge           , 100});
 }
 
 /// Print databases to file in an alternative text format.
