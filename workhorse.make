@@ -694,22 +694,27 @@ endif
 # produces a diagnostic such as
 #   warning: NULL pointer checks disabled:
 #   39933 basic blocks and 167330 registers
-# Adding '-fno-delete-null-pointer-checks' to $(CPPFLAGS) might
-# suffice to suppress the diagnostic, but this file actually doesn't
-# need any optimization at all.
-#
-# The same problem was observed with 'my_db.cpp'. For good measure,
-# all similarly-coded 'my_*.cpp' files are treated the same way.
+# which was historically prevented by specifying '-O0'. In 2019-02,
+# however, with gcc-7.3 and much larger 'my_*.cpp' files, building
+# with '-O0' causes a stack overflow at run time with 32-bit msw,
+# which can be prevented by specifying any optimization option except
+# '-O0'. It appears that the stack overflow is due to the enormity of
+# 'my_db.cpp' in particular. The '-fno-var-tracking-assignments' flag
+# avoids a different issue in 'my_prod.cpp', which contains a very
+# large number of lengthy strings. For simplicity, the same options
+# are used for all 'my_*.cpp' files.
 
-my_unoptimizable_files := my_db.o my_fund.o my_prod.o my_rnd.o my_tier.o
+product_file_sources := my_db.o my_fund.o my_prod.o my_rnd.o my_tier.o
 
-$(my_unoptimizable_files): optimization_flag := -O0 -fno-omit-frame-pointer
+product_file_flags := -Os -fno-var-tracking-assignments -fno-omit-frame-pointer
+
+$(product_file_sources): optimization_flag += $(product_file_flags)
 
 # Blocking optimization in default $(CXXFLAGS) isn't enough, because
 # it is too easily overridden by specifying $(CXXFLAGS) on the command
 # line. This flag overrides such overrides:
 
-$(my_unoptimizable_files): tutelary_flag += -O0 -fno-omit-frame-pointer
+$(product_file_sources): tutelary_flag += $(product_file_flags)
 
 ################################################################################
 
