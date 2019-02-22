@@ -4,16 +4,16 @@ a='schroot --chroot=cross-lmi'
 
 b='cd /opt/lmi/bin'
 c='wine ./lmi_wx_shared --ash_nazg --data_path=/opt/lmi/data'
-d='wine ./wx_test --ash_nazg --data_path=/opt/lmi/data'
+#d='wine ./wx_test --ash_nazg --data_path=/opt/lmi/data'
 e='/opt/lmi/src/lmi/gui_test.sh'
 
 print -rs $b ; echo $b ; eval $b
 print -rs $c ; echo $c
-print -rs $d ; echo $d
+#print -rs $d ; echo $d
 print -rs $e ; echo $e
 
 unset a
 unset b
 unset c
-unset d
+#unset d
 unset e
