@@ -181,6 +181,7 @@ HISTSIZE=1000
 SAVEHIST=1000
 HISTFILE=~/.history
 setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
 
 autoload -U compinit
 compinit -u
