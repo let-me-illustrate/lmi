@@ -98,6 +98,7 @@ glossed_string::glossed_string
 glossed_string& glossed_string::operator=(std::string const& s)
 {
     datum_ = s;
+    gloss_ = "";
     return *this;
 }
 
