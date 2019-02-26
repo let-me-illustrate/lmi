@@ -558,13 +558,6 @@ void DBDictionary::InitDB()
     Add({DB_MaxWdGenAcctValMult   , 1.0});
     Add({DB_MaxWdSepAcctValMult   , 1.0});
 
-    // These aren't always right, but zero is never right.
-
-    Add({DB_CurrCoiTable0Limit    , dbl_inf});
-    Add({DB_CurrCoiTable1         , 999});
-    Add({DB_CurrCoiTable1Limit    , dbl_inf});
-    Add({DB_CurrCoiTable2         , 999});
-
     // Usually the maximum is a reciprocal, e.g., 1/11 or 1/12; for
     // greatest precision, store the reciprocal of that reciprocal,
     // e.g., 11 or 12.
@@ -574,6 +567,8 @@ void DBDictionary::InitDB()
     Add({DB_CoiResetMinDate       , calendar_date::gregorian_epoch_jdn});
     Add({DB_CoiResetMaxDate       , calendar_date::last_yyyy_date_jdn });
 
+    Add({DB_CurrCoiTable0Limit    , dbl_inf});
+    Add({DB_CurrCoiTable1Limit    , dbl_inf});
     Add({DB_GuarIntSpread         , dbl_inf});
     Add({DB_SpecAmtLoadLimit      , dbl_inf});
     Add({DB_DynSepAcctLoadLimit   , dbl_inf});
