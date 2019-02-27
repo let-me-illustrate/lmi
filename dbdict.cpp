@@ -608,6 +608,7 @@ void DBDictionary::InitDB()
 class sample : public DBDictionary {public: sample();};
 
 class sample2finra : public sample {public: sample2finra();};
+class sample2prosp : public sample {public: sample2prosp();};
 class sample2gpp   : public sample {public: sample2gpp  ();};
 class sample2ipp   : public sample {public: sample2ipp  ();};
 class sample2xyz   : public sample {public: sample2xyz  ();};
@@ -900,6 +901,11 @@ sample2finra::sample2finra()
     Add({DB_LedgerType          , mce_finra});
 }
 
+sample2prosp::sample2prosp()
+{
+    Add({DB_LedgerType          , mce_prospectus_abeyed});
+}
+
 sample2gpp::sample2gpp()
 {
     Add({DB_LedgerType          , mce_group_private_placement});
@@ -933,6 +939,7 @@ void DBDictionary::write_database_files()
 {
     sample      ().WriteDB(AddDataDir("sample.database"));
     sample2finra().WriteDB(AddDataDir("sample2finra.database"));
+    sample2prosp().WriteDB(AddDataDir("sample2prosp.database"));
     sample2gpp  ().WriteDB(AddDataDir("sample2gpp.database"));
     sample2ipp  ().WriteDB(AddDataDir("sample2ipp.database"));
     sample2xyz  ().WriteDB(AddDataDir("sample2xyz.database"));

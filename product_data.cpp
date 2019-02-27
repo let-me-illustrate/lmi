@@ -443,6 +443,7 @@ void product_data::redintegrate_ex_post
 /// There is one for each supported ledger type:
 ///   sample2naic  mce_ill_reg
 ///   sample2finra mce_finra
+///   sample2prosp mce_prospectus_abeyed ['emit_test_data' only]
 ///   sample2gpp   mce_group_private_placement
 ///   sample2ipp   mce_individual_private_placement
 /// and one for exotica:
@@ -592,6 +593,9 @@ void product_data::write_policy_files()
 
     z.DatabaseFilename           = glossed_string("sample2finra.database");
     z.save(AddDataDir("sample2finra.policy"));
+
+    z.DatabaseFilename           = glossed_string("sample2prosp.database");
+    z.save(AddDataDir("sample2prosp.policy"));
 
     z.DatabaseFilename           = glossed_string("sample2gpp.database");
     z.save(AddDataDir("sample2gpp.policy"));
