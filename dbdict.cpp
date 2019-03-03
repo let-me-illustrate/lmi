@@ -91,6 +91,12 @@ DBDictionary::DBDictionary()
     InitDB();
 }
 
+/// Construct from a '.database' file.
+///
+/// Call InitDB() unconditionally before Init(), even though that may
+/// seem unnecessary, in case the file read by Init() lacks any member
+/// entity (because it's an older version or has been edited, e.g.).
+
 DBDictionary::DBDictionary(std::string const& filename)
 {
     ascribe_members();
