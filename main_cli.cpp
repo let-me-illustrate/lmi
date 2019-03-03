@@ -166,16 +166,16 @@ void process_command_line(int argc, char* argv[])
         {"mellon"       ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
         {"mello"        ,NO_ARG   ,0 ,077 ,0 ,"fraud"},
         {"prospicience" ,REQD_ARG ,0 ,003 ,0 ,"validation date"},
-        {"pyx"          ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
-        {"help"         ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
-        {"license"      ,NO_ARG   ,0 ,'l' ,0 ,"display license and exit"},
         {"accept"       ,NO_ARG   ,0 ,'a' ,0 ,"accept license (-l to display)"},
-        {"selftest"     ,NO_ARG   ,0 ,'s' ,0 ,"perform self test and exit"},
-        {"profile"      ,NO_ARG   ,0 ,'o' ,0 ,"set up for profiling and exit"},
+        {"data_path"    ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
         {"emit"         ,REQD_ARG ,0 ,'e' ,0 ,"choose what output to emit"},
         {"file"         ,REQD_ARG ,0 ,'f' ,0 ,"input file to run"},
-        {"data_path"    ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
-        {"print_db"     ,NO_ARG   ,0 ,'p' ,0 ,"print product databases and exit"},
+        {"help"         ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
+        {"license"      ,NO_ARG   ,0 ,'l' ,0 ,"display license and exit"},
+        {"profile"      ,NO_ARG   ,0 ,'o' ,0 ,"set up for profiling and exit"},
+        {"print_db"     ,NO_ARG   ,0 ,'p' ,0 ,"print products and exit"},
+        {"selftest"     ,NO_ARG   ,0 ,'s' ,0 ,"perform self test and exit"},
+        {"pyx"          ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
         {0              ,NO_ARG   ,0 ,0   ,0 ,""}
       };
 

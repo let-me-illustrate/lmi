@@ -1198,11 +1198,11 @@ bool Skeleton::ProcessCommandLine()
         {"mellon"       ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
         {"mello"        ,NO_ARG   ,0 ,077 ,0 ,"fraud"},
         {"prospicience" ,REQD_ARG ,0 ,003 ,0 ,"validation date"},
-        {"help"         ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
-        {"pyx"          ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
-        {"file"         ,REQD_ARG ,0 ,'f' ,0 ,"input file to run"},
         {"data_path"    ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
-        {"print_db"     ,NO_ARG   ,0 ,'p' ,0 ,"print product databases"},
+        {"file"         ,REQD_ARG ,0 ,'f' ,0 ,"input file to run"},
+        {"help"         ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
+        {"print_db"     ,NO_ARG   ,0 ,'p' ,0 ,"print products and exit"},
+        {"pyx"          ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
         {0              ,NO_ARG   ,0 ,0   ,0 ,""}
       };
 
