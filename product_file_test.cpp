@@ -130,9 +130,14 @@ void product_file_test::test_copying()
     BOOST_TEST(      99 == g.query<int>(DB_MaxIncrAge));
 }
 
+// This implementation:
+//   auto d = DBDictionary::read_via_cache(database_filename_);
+// would cause assay_speed() to report a much faster run time,
+// yet such a timing would have little significance.
+
 void product_file_test::read_database_file()
 {
-    DBDictionary().Init(database_filename_);
+    DBDictionary d(database_filename_);
 }
 
 void product_file_test::read_fund_file()

@@ -41,7 +41,6 @@ class LMI_SO DBDictionary
 {
     friend class DatabaseDocument;
     friend class input_test;        // For test_product_database().
-    friend class product_file_test; // For read_database_file().
     friend class premium_tax_test;  // For test_rates().
 
   public:
