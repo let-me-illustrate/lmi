@@ -162,9 +162,10 @@ void process_command_line(int argc, char* argv[])
     static Option long_options[] =
       {
         {"ash_nazg"     ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
-        {"ash_naz"      ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
+        {"ash_naz"      ,NO_ARG   ,0 ,077 ,0 ,"fraud"},
         {"mellon"       ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
-        {"mello"        ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
+        {"mello"        ,NO_ARG   ,0 ,077 ,0 ,"fraud"},
+        {"prospicience" ,REQD_ARG ,0 ,003 ,0 ,"validation date"},
         {"pyx"          ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
         {"help"         ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
         {"license"      ,NO_ARG   ,0 ,'l' ,0 ,"display license and exit"},
@@ -175,7 +176,6 @@ void process_command_line(int argc, char* argv[])
         {"file"         ,REQD_ARG ,0 ,'f' ,0 ,"input file to run"},
         {"data_path"    ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
         {"print_db"     ,NO_ARG   ,0 ,'p' ,0 ,"print product databases and exit"},
-        {"prospicience" ,REQD_ARG ,0 ,004 ,0 ,"validation date"},
         {0              ,NO_ARG   ,0 ,0   ,0 ,""}
       };
 
@@ -233,7 +233,7 @@ void process_command_line(int argc, char* argv[])
                 }
                 break;
 
-            case 004:
+            case 003:
                 {
                 std::istringstream iss(getopt_long.optarg);
                 int ymd_as_int;
