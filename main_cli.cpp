@@ -23,6 +23,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "calendar_date.hpp"
 #include "contains.hpp"
 #include "dbdict.hpp"                   // print_databases()
 #include "getopt.hpp"
@@ -160,21 +161,22 @@ void process_command_line(int argc, char* argv[])
     // TRICKY !! Some long options are aliased to unlikely octal values.
     static Option long_options[] =
       {
-        {"ash_nazg"  ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
-        {"ash_naz"   ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
-        {"mellon"    ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
-        {"mello"     ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
-        {"pyx"       ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
-        {"help"      ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
-        {"license"   ,NO_ARG   ,0 ,'l' ,0 ,"display license and exit"},
-        {"accept"    ,NO_ARG   ,0 ,'a' ,0 ,"accept license (-l to display)"},
-        {"selftest"  ,NO_ARG   ,0 ,'s' ,0 ,"perform self test and exit"},
-        {"profile"   ,NO_ARG   ,0 ,'o' ,0 ,"set up for profiling and exit"},
-        {"emit"      ,REQD_ARG ,0 ,'e' ,0 ,"choose what output to emit"},
-        {"file"      ,REQD_ARG ,0 ,'f' ,0 ,"input file to run"},
-        {"data_path" ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
-        {"print_db"  ,NO_ARG   ,0 ,'p' ,0 ,"print product databases and exit"},
-        {0           ,NO_ARG   ,0 ,0   ,0 ,""}
+        {"ash_nazg"     ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
+        {"ash_naz"      ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
+        {"mellon"       ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
+        {"mello"        ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
+        {"pyx"          ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
+        {"help"         ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
+        {"license"      ,NO_ARG   ,0 ,'l' ,0 ,"display license and exit"},
+        {"accept"       ,NO_ARG   ,0 ,'a' ,0 ,"accept license (-l to display)"},
+        {"selftest"     ,NO_ARG   ,0 ,'s' ,0 ,"perform self test and exit"},
+        {"profile"      ,NO_ARG   ,0 ,'o' ,0 ,"set up for profiling and exit"},
+        {"emit"         ,REQD_ARG ,0 ,'e' ,0 ,"choose what output to emit"},
+        {"file"         ,REQD_ARG ,0 ,'f' ,0 ,"input file to run"},
+        {"data_path"    ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
+        {"print_db"     ,NO_ARG   ,0 ,'p' ,0 ,"print product databases and exit"},
+        {"prospicience" ,REQD_ARG ,0 ,004 ,0 ,"validation date"},
+        {0              ,NO_ARG   ,0 ,0   ,0 ,""}
       };
 
     bool license_accepted    = false;
@@ -228,6 +230,28 @@ void process_command_line(int argc, char* argv[])
             case 002:
                 {
                 global_settings::instance().set_mellon(true);
+                }
+                break;
+
+            case 004:
+                {
+                std::istringstream iss(getopt_long.optarg);
+                int ymd_as_int;
+                iss >> ymd_as_int;
+                if(!iss || !iss.eof())
+                    {
+                    warning() << "Invalid prospicience option value '"
+                              << getopt_long.optarg
+                              << "' (must be in YYYYMMDD format)."
+                              << std::flush
+                              ;
+                    }
+                else
+                    {
+                    global_settings::instance().set_prospicience_date
+                        (calendar_date(ymd_t(ymd_as_int))
+                        );
+                    }
                 }
                 break;
 
