@@ -175,6 +175,7 @@ void process_command_line(int argc, char* argv[])
         {"profile"      ,NO_ARG   ,0 ,'o' ,0 ,"set up for profiling and exit"},
         {"print_db"     ,NO_ARG   ,0 ,'p' ,0 ,"print products and exit"},
         {"selftest"     ,NO_ARG   ,0 ,'s' ,0 ,"perform self test and exit"},
+        {"test_db"      ,NO_ARG   ,0 ,'t' ,0 ,"test products and exit"},
         {"pyx"          ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
         {0              ,NO_ARG   ,0 ,0   ,0 ,""}
       };
@@ -383,6 +384,12 @@ void process_command_line(int argc, char* argv[])
             case 's':
                 {
                 run_selftest = true;
+                }
+                break;
+
+            case 't':
+                {
+                print_all_databases = true;
                 }
                 break;
 

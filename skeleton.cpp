@@ -1202,6 +1202,7 @@ bool Skeleton::ProcessCommandLine()
         {"file"         ,REQD_ARG ,0 ,'f' ,0 ,"input file to run"},
         {"help"         ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
         {"print_db"     ,NO_ARG   ,0 ,'p' ,0 ,"print products and exit"},
+        {"test_db"      ,NO_ARG   ,0 ,'t' ,0 ,"test products and exit"},
         {"pyx"          ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
         {0              ,NO_ARG   ,0 ,0   ,0 ,""}
       };
@@ -1281,6 +1282,12 @@ bool Skeleton::ProcessCommandLine()
                 break;
 
             case 'p':
+                {
+                print_databases();
+                }
+                break;
+
+            case 't':
                 {
                 print_databases();
                 }
