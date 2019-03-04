@@ -1207,8 +1207,6 @@ bool Skeleton::ProcessCommandLine()
         {0              ,NO_ARG   ,0 ,0   ,0 ,""}
       };
 
-    bool show_help = false;
-
     std::vector<std::string> input_files;
 
     int option_index = 0;
@@ -1277,19 +1275,24 @@ bool Skeleton::ProcessCommandLine()
 
             case 'h':
                 {
-                show_help = true;
+                std::ostringstream oss;
+                getopt_long.usage(oss);
+                wxMessageBox(oss.str(), "Command-line options");
+                return false;
                 }
                 break;
 
             case 'p':
                 {
                 print_databases();
+                return false;
                 }
                 break;
 
             case 't':
                 {
                 print_databases();
+                return false;
                 }
                 break;
 
@@ -1335,14 +1338,6 @@ bool Skeleton::ProcessCommandLine()
             warning() << "  '" << argv[c++] << "'\n";
             }
         warning() << std::flush;
-        }
-
-    if(show_help)
-        {
-        std::ostringstream oss;
-        getopt_long.usage(oss);
-        wxMessageBox(oss.str(), "Command-line options");
-        return false;
         }
 
     if(!input_files.empty())

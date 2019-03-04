@@ -181,11 +181,6 @@ void process_command_line(int argc, char* argv[])
       };
 
     bool license_accepted    = false;
-    bool show_license        = false;
-    bool show_help           = false;
-    bool run_selftest        = false;
-    bool run_profile         = false;
-    bool print_all_databases = false;
 
     mcenum_emission emission(mce_emit_nothing);
 
@@ -282,12 +277,6 @@ void process_command_line(int argc, char* argv[])
                 }
                 break;
 
-            case 'b':
-                {
-                std::printf("option b\n");
-                }
-                break;
-
             case 'd':
                 {
                 global_settings::instance().set_data_directory
@@ -359,37 +348,48 @@ void process_command_line(int argc, char* argv[])
 
             case 'h':
                 {
-                show_help = true;
+                getopt_long.usage();
+                std::cout << "Suboptions for '--emit':\n";
+                for(auto const& i : allowed_strings_emission())
+                    {
+                    std::cout << "  " << i << '\n';
+                    }
+                return;
                 }
                 break;
 
             case 'l':
                 {
-                show_license = true;
+                std::cerr << license_as_text() << "\n\n";
+                return;
                 }
                 break;
 
             case 'o':
                 {
-                run_profile = true;
+                profile();
+                return;
                 }
                 break;
 
             case 'p':
                 {
-                print_all_databases = true;
+                print_databases();
+                return;
                 }
                 break;
 
             case 's':
                 {
-                run_selftest = true;
+                self_test();
+                return;
                 }
                 break;
 
             case 't':
                 {
-                print_all_databases = true;
+                print_databases();
+                return;
                 }
                 break;
 
@@ -428,41 +428,6 @@ void process_command_line(int argc, char* argv[])
     if(!license_accepted)
         {
         std::cerr << license_notices_as_text() << "\n\n";
-        }
-
-    if(show_license)
-        {
-        std::cerr << license_as_text() << "\n\n";
-        return;
-        }
-
-    if(show_help)
-        {
-        getopt_long.usage();
-        std::cout << "Suboptions for '--emit':\n";
-        for(auto const& i : allowed_strings_emission())
-            {
-            std::cout << "  " << i << '\n';
-            }
-        return;
-        }
-
-    if(run_selftest)
-        {
-        self_test();
-        return;
-        }
-
-    if(run_profile)
-        {
-        profile();
-        return;
-        }
-
-    if(print_all_databases)
-        {
-        print_databases();
-        return;
         }
 
     std::for_each
