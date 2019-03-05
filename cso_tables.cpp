@@ -25,6 +25,14 @@
 
 /// Just a placeholder for the nonce.
 
-void cso_tables()
+std::vector<double> const& cso_table
+    (oenum_cso_era    // cso_era
+    ,oenum_autopisty  // autopisty
+    ,oenum_alb_or_anb // alb_or_anb
+    ,mce_gender       // gender
+    ,mce_smoking      // smoking
+    )
 {
+    static std::vector<double> placeholder {1.0};
+    return placeholder;
 }

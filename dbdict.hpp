@@ -91,6 +91,11 @@ class LMI_SO DBDictionary
         ,std::string const&     file_leaf_name
         ) const override;
 
+    // To make sure these members match e_database_key enumerators:
+    //   <dbdict.hpp sed -e '/database_entity [A-Z]/!d;s/    database_entity //;s/ *;$//' >eraseme0
+    //   <dbnames.hpp sed -e '/        ,DB_/!d;s/        ,DB_//' >eraseme1
+    // and compare the resulting temporary files.
+
     database_entity MinIssAge           ;
     database_entity MaxIssAge           ;
     database_entity MaxIncrAge          ;
@@ -142,6 +147,8 @@ class LMI_SO DBDictionary
     database_entity SpouseRiderIsQAB    ;
     database_entity ChildRiderIsQAB     ;
     database_entity WpIsQAB             ;
+    database_entity CsoEra              ;
+    database_entity CsoMisprint         ;
     database_entity GuarCoiTable        ;
     database_entity GuarCoiIsAnnual     ;
     database_entity GuarCoiMultiplier   ;

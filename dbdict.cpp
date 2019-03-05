@@ -167,6 +167,8 @@ void DBDictionary::ascribe_members()
     ascribe("SpouseRiderIsQAB"    , &DBDictionary::SpouseRiderIsQAB    );
     ascribe("ChildRiderIsQAB"     , &DBDictionary::ChildRiderIsQAB     );
     ascribe("WpIsQAB"             , &DBDictionary::WpIsQAB             );
+    ascribe("CsoEra"              , &DBDictionary::CsoEra              );
+    ascribe("CsoMisprint"         , &DBDictionary::CsoMisprint         );
     ascribe("GuarCoiTable"        , &DBDictionary::GuarCoiTable        );
     ascribe("GuarCoiIsAnnual"     , &DBDictionary::GuarCoiIsAnnual     );
     ascribe("GuarCoiMultiplier"   , &DBDictionary::GuarCoiMultiplier   );
@@ -537,6 +539,8 @@ void DBDictionary::InitDB()
     Add({DB_SmokeOrTobacco        , oe_smoker_nonsmoker});
     Add({DB_CvatMatChangeDefn     , mce_unnecessary_premium});
     Add({DB_Effective7702DboRop   , mce_option1_for_7702});
+    Add({DB_CsoEra                , oe_2017cso});
+    Add({DB_CsoMisprint           , oe_orthodox});
     Add({DB_SepAcctSpreadMethod   , mce_spread_is_effective_annual});
     Add({DB_IntSpreadMode         , mce_spread_daily});
     Add({DB_AssetChargeType       , oe_asset_charge_spread});
@@ -668,6 +672,7 @@ sample::sample()
     Add({DB_Irc7702NspTable     , 0});
     Add({DB_SevenPayTable       , 10});
 
+    Add({DB_CsoEra              , oe_1980cso});
     // Following IRS Notice 88-128, use only the male and female
     // tables with no smoker distinction, and a unisex table where
     // required by state law.
