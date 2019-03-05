@@ -393,6 +393,7 @@ libantediluvian_la_LIBADD = \
 liblmi_la_SOURCES = \
     authenticity.cpp \
     commutation_functions.cpp \
+    cso_tables.cpp \
     financial.cpp \
     fund_data.cpp \
     gpt_input.cpp \
@@ -423,6 +424,7 @@ liblmi_la_SOURCES = \
     rounding_rules.cpp \
     stratified_algorithms.cpp \
     stratified_charges.cpp \
+    verify_products.cpp \
     $(liblmi_common_sources)
 liblmi_la_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 liblmi_la_CFLAGS = $(AM_CFLAGS)
@@ -1171,6 +1173,7 @@ noinst_HEADERS = \
     configurable_settings.hpp \
     contains.hpp \
     crc32.hpp \
+    cso_tables.hpp \
     currency.hpp \
     custom_io_0.hpp \
     custom_io_1.hpp \
@@ -1338,6 +1341,7 @@ noinst_HEADERS = \
     tn_range_types.hpp \
     transferor.hpp \
     value_cast.hpp \
+    verify_products.hpp \
     version.hpp \
     view_ex.hpp \
     view_ex.tpp \

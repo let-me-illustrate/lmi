@@ -46,6 +46,7 @@
 #include "so_attributes.hpp"
 #include "timer.hpp"
 #include "value_cast.hpp"
+#include "verify_products.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
@@ -388,7 +389,7 @@ void process_command_line(int argc, char* argv[])
 
             case 't':
                 {
-                print_databases();
+                verify_products();
                 return;
                 }
                 break;

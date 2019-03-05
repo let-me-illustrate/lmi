@@ -277,6 +277,7 @@ lmi_common_objects := \
   $(common_common_objects) \
   authenticity.o \
   commutation_functions.o \
+  cso_tables.o \
   financial.o \
   fund_data.o \
   gpt_input.o \
@@ -307,6 +308,7 @@ lmi_common_objects := \
   rounding_rules.o \
   stratified_algorithms.o \
   stratified_charges.o \
+  verify_products.o \
 
 skeleton_objects := \
   $(duplicated_objects) \

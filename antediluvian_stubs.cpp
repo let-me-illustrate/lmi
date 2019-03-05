@@ -27,6 +27,7 @@
 #include "mec_server.hpp"
 #include "product_data.hpp"
 #include "stratified_charges.hpp"
+#include "verify_products.hpp"
 #include "xml_lmi.hpp"
 #include "xml_serializable.tpp"
 
@@ -34,6 +35,8 @@ namespace
 {
     std::string const empty_string = std::string();
 } // Unnamed namespace.
+
+// Free-function stubs alphabetized in ASCII order.
 
 void authenticate_system()
 {}
@@ -43,7 +46,10 @@ bool is_antediluvian_fork()
     return true;
 }
 
-// Stubs alphabetized in ASCII order.
+void verify_products()
+{}
+
+// Member-function stubs alphabetized in ASCII order.
 
 int FundData::GetNumberOfFunds() const
 {

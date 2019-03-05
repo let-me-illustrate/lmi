@@ -78,6 +78,7 @@
 #include "text_view.hpp"
 #include "tier_document.hpp"
 #include "tier_view.hpp"
+#include "verify_products.hpp"
 #include "wx_new.hpp"
 #include "wx_utility.hpp"               // class ClipboardEx
 
@@ -1291,7 +1292,7 @@ bool Skeleton::ProcessCommandLine()
 
             case 't':
                 {
-                print_databases();
+                verify_products();
                 return false;
                 }
                 break;
