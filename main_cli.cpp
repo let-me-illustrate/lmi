@@ -23,6 +23,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "calendar_date.hpp"
 #include "contains.hpp"
 #include "dbdict.hpp"                   // print_databases()
 #include "getopt.hpp"
@@ -45,6 +46,7 @@
 #include "so_attributes.hpp"
 #include "timer.hpp"
 #include "value_cast.hpp"
+#include "verify_products.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
@@ -160,29 +162,26 @@ void process_command_line(int argc, char* argv[])
     // TRICKY !! Some long options are aliased to unlikely octal values.
     static Option long_options[] =
       {
-        {"ash_nazg"  ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
-        {"ash_naz"   ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
-        {"mellon"    ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
-        {"mello"     ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
-        {"pyx"       ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
-        {"help"      ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
-        {"license"   ,NO_ARG   ,0 ,'l' ,0 ,"display license and exit"},
-        {"accept"    ,NO_ARG   ,0 ,'a' ,0 ,"accept license (-l to display)"},
-        {"selftest"  ,NO_ARG   ,0 ,'s' ,0 ,"perform self test and exit"},
-        {"profile"   ,NO_ARG   ,0 ,'o' ,0 ,"set up for profiling and exit"},
-        {"emit"      ,REQD_ARG ,0 ,'e' ,0 ,"choose what output to emit"},
-        {"file"      ,REQD_ARG ,0 ,'f' ,0 ,"input file to run"},
-        {"data_path" ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
-        {"print_db"  ,NO_ARG   ,0 ,'p' ,0 ,"print product databases and exit"},
-        {0           ,NO_ARG   ,0 ,0   ,0 ,""}
+        {"ash_nazg"     ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
+        {"ash_naz"      ,NO_ARG   ,0 ,077 ,0 ,"fraud"},
+        {"mellon"       ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
+        {"mello"        ,NO_ARG   ,0 ,077 ,0 ,"fraud"},
+        {"prospicience" ,REQD_ARG ,0 ,003 ,0 ,"validation date"},
+        {"accept"       ,NO_ARG   ,0 ,'a' ,0 ,"accept license (-l to display)"},
+        {"data_path"    ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
+        {"emit"         ,REQD_ARG ,0 ,'e' ,0 ,"choose what output to emit"},
+        {"file"         ,REQD_ARG ,0 ,'f' ,0 ,"input file to run"},
+        {"help"         ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
+        {"license"      ,NO_ARG   ,0 ,'l' ,0 ,"display license and exit"},
+        {"profile"      ,NO_ARG   ,0 ,'o' ,0 ,"set up for profiling and exit"},
+        {"print_db"     ,NO_ARG   ,0 ,'p' ,0 ,"print products and exit"},
+        {"selftest"     ,NO_ARG   ,0 ,'s' ,0 ,"perform self test and exit"},
+        {"test_db"      ,NO_ARG   ,0 ,'t' ,0 ,"test products and exit"},
+        {"pyx"          ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
+        {0              ,NO_ARG   ,0 ,0   ,0 ,""}
       };
 
     bool license_accepted    = false;
-    bool show_license        = false;
-    bool show_help           = false;
-    bool run_selftest        = false;
-    bool run_profile         = false;
-    bool print_all_databases = false;
 
     mcenum_emission emission(mce_emit_nothing);
 
@@ -231,6 +230,28 @@ void process_command_line(int argc, char* argv[])
                 }
                 break;
 
+            case 003:
+                {
+                std::istringstream iss(getopt_long.optarg);
+                int ymd_as_int;
+                iss >> ymd_as_int;
+                if(!iss || !iss.eof())
+                    {
+                    warning() << "Invalid prospicience option value '"
+                              << getopt_long.optarg
+                              << "' (must be in YYYYMMDD format)."
+                              << std::flush
+                              ;
+                    }
+                else
+                    {
+                    global_settings::instance().set_prospicience_date
+                        (calendar_date(ymd_t(ymd_as_int))
+                        );
+                    }
+                }
+                break;
+
             case '0':
             case '1':
             case '2':
@@ -254,12 +275,6 @@ void process_command_line(int argc, char* argv[])
             case 'a':
                 {
                 license_accepted = true;
-                }
-                break;
-
-            case 'b':
-                {
-                std::printf("option b\n");
                 }
                 break;
 
@@ -334,31 +349,48 @@ void process_command_line(int argc, char* argv[])
 
             case 'h':
                 {
-                show_help = true;
+                getopt_long.usage();
+                std::cout << "Suboptions for '--emit':\n";
+                for(auto const& i : allowed_strings_emission())
+                    {
+                    std::cout << "  " << i << '\n';
+                    }
+                return;
                 }
                 break;
 
             case 'l':
                 {
-                show_license = true;
+                std::cerr << license_as_text() << "\n\n";
+                return;
                 }
                 break;
 
             case 'o':
                 {
-                run_profile = true;
+                profile();
+                return;
                 }
                 break;
 
             case 'p':
                 {
-                print_all_databases = true;
+                print_databases();
+                return;
                 }
                 break;
 
             case 's':
                 {
-                run_selftest = true;
+                self_test();
+                return;
+                }
+                break;
+
+            case 't':
+                {
+                verify_products();
+                return;
                 }
                 break;
 
@@ -397,41 +429,6 @@ void process_command_line(int argc, char* argv[])
     if(!license_accepted)
         {
         std::cerr << license_notices_as_text() << "\n\n";
-        }
-
-    if(show_license)
-        {
-        std::cerr << license_as_text() << "\n\n";
-        return;
-        }
-
-    if(show_help)
-        {
-        getopt_long.usage();
-        std::cout << "Suboptions for '--emit':\n";
-        for(auto const& i : allowed_strings_emission())
-            {
-            std::cout << "  " << i << '\n';
-            }
-        return;
-        }
-
-    if(run_selftest)
-        {
-        self_test();
-        return;
-        }
-
-    if(run_profile)
-        {
-        profile();
-        return;
-        }
-
-    if(print_all_databases)
-        {
-        print_databases();
-        return;
         }
 
     std::for_each

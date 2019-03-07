@@ -891,15 +891,6 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
         // single illustration type should be defined in the corresponding
         // derived pdf_illustration_xxx class instead.
 
-        add_variable
-            ("date_prepared"
-            , html::text::from(evaluate("PrepMonth"))
-            + html::text::nbsp()
-            + html::text::from(evaluate("PrepDay"))
-            + html::text::from(", ")
-            + html::text::from(evaluate("PrepYear"))
-            );
-
         auto indent = html::text::nbsp();
         add_variable("Space1", indent);
 
@@ -942,6 +933,8 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
         add_abbreviated_variable("ContractNumber", full_abbrev_length);
         add_abbreviated_variable("ContractNumber", full_abbrev_length / 2);
 
+        // Check for anything but whitespace--see:
+        //   https://lists.nongnu.org/archive/html/lmi/2019-02/msg00001.html
         add_variable
             ("HasComplianceTrackingNumber"
             ,expand_template("imprimatur")
@@ -975,7 +968,8 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
             );
 
         // PDF !! Conditions of this ilk should become distinct entities in
-        // the product files.
+        // the product files--or in this case, eliminated altogether: this
+        // condition is used only in one place, in a really silly way.
         auto const& policy_name = invar.PolicyLegalName;
         add_variable
             ("GroupCarveout"
@@ -983,15 +977,15 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
               || policy_name == "Group Flexible Premium Variable Adjustable Life Insurance Certificate"
             );
 
-        auto const& state_abbrev = invar.GetStatePostalAbbrev();
+        auto const& state_of_jurisdiction = invar.StateOfJurisdiction;
         add_variable
-            ("StateIsCarolina"
-            ,state_abbrev == "NC" || state_abbrev == "SC"
+            ("StateIsNorthOrSouthCarolina"
+            ,state_of_jurisdiction == "NC" || state_of_jurisdiction == "SC"
             );
 
         add_variable
             ("StateIsMaryland"
-            ,state_abbrev == "MD"
+            ,state_of_jurisdiction == "MD"
             );
     }
 
@@ -2177,7 +2171,7 @@ class pdf_illustration_naic : public pdf_illustration
     {
         auto const& invar = ledger.GetLedgerInvariant();
         auto const& policy_name = invar.PolicyLegalName;
-        auto const& state_abbrev = invar.GetStatePostalAbbrev();
+        auto const& state_of_jurisdiction = invar.StateOfJurisdiction;
 
         // Define variables specific to this illustration which doesn't use the
         // standard 60/30 lengths for whatever reason.
@@ -2186,7 +2180,7 @@ class pdf_illustration_naic : public pdf_illustration
 
         add_variable
             ("ModifiedSinglePremium"
-            ,starts_with(policy_name, "Single") && state_abbrev == "MA"
+            ,starts_with(policy_name, "Single") && state_of_jurisdiction == "MA"
             );
 
         add_variable
@@ -2205,11 +2199,6 @@ class pdf_illustration_naic : public pdf_illustration
             ,starts_with(policy_name, "Single") || starts_with(policy_name, "Modified")
             );
 
-        add_variable
-            ("GroupExperienceRating"
-            ,policy_name == "Group Flexible Premium Adjustable Life Insurance Policy"
-            );
-
         // Variable representing the premium payment frequency with the
         // appropriate indefinite article preceding it, e.g. "an annual"
         // or "a monthly".
@@ -2224,11 +2213,6 @@ class pdf_illustration_naic : public pdf_illustration
             }
 
         add_variable
-            ("HasProducerCity"
-            ,invar.ProducerCity != "0"
-            );
-
-        add_variable
             ("HasInterestDisclaimer"
             ,!invar.InterestDisclaimer.empty()
             );
@@ -2240,17 +2224,17 @@ class pdf_illustration_naic : public pdf_illustration
 
         add_variable
             ("StateIsIllinois"
-            ,state_abbrev == "IL"
+            ,state_of_jurisdiction == "IL"
             );
 
         add_variable
             ("StateIsTexas"
-            ,state_abbrev == "TX"
+            ,state_of_jurisdiction == "TX"
             );
 
         add_variable
             ("StateIsIllinoisOrTexas"
-            ,state_abbrev == "IL" || state_abbrev == "TX"
+            ,state_of_jurisdiction == "IL" || state_of_jurisdiction == "TX"
             );
 
         int const inforce_year = bourn_cast<int>(invar.InforceYear);
@@ -2265,38 +2249,38 @@ class pdf_illustration_naic : public pdf_illustration
             );
 
         auto const max_duration = invar.EndtAge - invar.Age;
-        auto const lapse_year_guaruanteed = ledger.GetGuarFull().LapseYear;
-        auto const lapse_year_midpoint = ledger.GetMdptFull().LapseYear;
-        auto const lapse_year_current = ledger.GetCurrFull().LapseYear;
+        auto const lapse_year_guar = ledger.GetGuarFull().LapseYear;
+        auto const lapse_year_mdpt = ledger.GetMdptFull().LapseYear;
+        auto const lapse_year_curr = ledger.GetCurrFull().LapseYear;
 
         add_variable
-            ("LapseYear_Guaranteed_LT_MaxDuration"
-            ,lapse_year_guaruanteed < max_duration
+            ("LapseYear_Guar_LT_MaxDur"
+            ,lapse_year_guar < max_duration
             );
 
         add_variable
-            ("LapseYear_Guaranteed_Plus1"
-            ,bourn_cast<int>(lapse_year_guaruanteed) + 1
+            ("LapseYear_Guar_Plus1"
+            ,bourn_cast<int>(lapse_year_guar) + 1
             );
 
         add_variable
-            ("LapseYear_Midpoint_LT_MaxDuration"
-            ,lapse_year_midpoint < max_duration
+            ("LapseYear_Mdpt_LT_MaxDur"
+            ,lapse_year_mdpt < max_duration
             );
 
         add_variable
-            ("LapseYear_Midpoint_Plus1"
-            ,bourn_cast<int>(lapse_year_midpoint) + 1
+            ("LapseYear_Mdpt_Plus1"
+            ,bourn_cast<int>(lapse_year_mdpt) + 1
             );
 
         add_variable
-            ("LapseYear_Current_LT_MaxDuration"
-            ,lapse_year_current < max_duration
+            ("LapseYear_Curr_LT_MaxDur"
+            ,lapse_year_curr < max_duration
             );
 
         add_variable
-            ("LapseYear_Current_Plus1"
-            ,bourn_cast<int>(lapse_year_current) + 1
+            ("LapseYear_Curr_Plus1"
+            ,bourn_cast<int>(lapse_year_curr) + 1
             );
 
         // Add all the pages.
@@ -2724,17 +2708,22 @@ class finra_split_fund_report : public page_with_tabular_report
         // premiums case or a single premium outlay column otherwise.
         switch(column)
             {
+            case column_end_of_year_age:
+                // This column doesn't make sense for composite ledgers.
+                return ledger_.is_composite();
+
             case column_er_gross_payment:
             case column_ee_gross_payment:
-                // These columns only appear in split premiums case.
-                return !invar.SplitMinPrem;
+                // These columns appear only in this case (which,
+                // weirdly, differs from the SplitMinPrem case
+                // that governs elsewhere)...
+                return !invar.ErNotionallyPaysTerm;
 
             case column_premium_outlay:
-                // While this one replaces them in non-split premiums case.
-                return invar.SplitMinPrem;
+                // ...while this one replaces them otherwise.
+                return invar.ErNotionallyPaysTerm;
 
             case column_policy_year:
-            case column_end_of_year_age:
             case column_guar0_cash_surr_value:
             case column_curr0_cash_surr_value:
             case column_guar0_account_value:
@@ -2827,14 +2816,13 @@ class pdf_illustration_finra : public pdf_illustration
             add_variable("ContractNameCap", s);
             }
 
-        auto const& policy_name = invar.PolicyLegalName;
-        auto const& state_abbrev = invar.GetStatePostalAbbrev();
+        auto const& state_of_jurisdiction = invar.StateOfJurisdiction;
 
         add_variable
-            ("UWTypeIsGuaranteedIssueInTexasWithFootnote"
-            ,    invar.UWType == "Guaranteed issue"
-              && policy_name == "Flexible Premium Variable Adjustable Life Insurance Policy"
-              && state_abbrev == "TX"
+            ("CallGuarUwSubstd"
+            ,    invar.TxCallsGuarUwSubstd
+              && invar.UWType == "Guaranteed issue"
+              && state_of_jurisdiction == "TX"
             );
 
         add_variable
@@ -2844,7 +2832,7 @@ class pdf_illustration_finra : public pdf_illustration
 
         add_variable
             ("StateIsNewYork"
-            ,state_abbrev == "NY"
+            ,state_of_jurisdiction == "NY"
             );
 
         // Add all the pages.
@@ -3255,6 +3243,7 @@ void concrete_pdf_command(Ledger const& ledger, fs::path const& pdf_out_file)
         case mce_ill_reg:
             pdf_illustration_naic        (ledger, pdf_out_file).render_all();
             break;
+        case mce_prospectus_abeyed: // fall through
         case mce_finra:
             pdf_illustration_finra       (ledger, pdf_out_file).render_all();
             break;
@@ -3264,7 +3253,6 @@ void concrete_pdf_command(Ledger const& ledger, fs::path const& pdf_out_file)
         case mce_individual_private_placement:
             pdf_illustration_reg_d_indiv (ledger, pdf_out_file).render_all();
             break;
-        case mce_prospectus_obsolete:                 // fall through
         case mce_offshore_private_placement_obsolete: // fall through
         case mce_ill_reg_private_placement_obsolete:  // fall through
         case mce_variable_annuity_obsolete:

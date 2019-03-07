@@ -149,6 +149,8 @@ enum e_database_key
 
         ,DB_GroupIndivSelection
 
+        ,DB_TxCallsGuarUwSubstd
+
         ,DB_Allowable
 
     ,DB_Topic_7702And7702A
@@ -183,6 +185,8 @@ enum e_database_key
 
     ,DB_Topic_MortalityCharges
 
+        ,DB_CsoEra
+        ,DB_CsoMisprint
         ,DB_GuarCoiTable
         ,DB_GuarCoiIsAnnual
         ,DB_GuarCoiMultiplier
@@ -450,6 +454,7 @@ enum e_database_key
         ,DB_MinPremIntSpread
         ,DB_SplitMinPrem
         ,DB_UnsplitSplitMinPrem
+        ,DB_ErNotionallyPaysTerm
         ,DB_TgtPremType
         ,DB_TgtPremTable
         ,DB_TgtPremFixedAtIssue

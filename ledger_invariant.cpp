@@ -142,6 +142,8 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["RetAge"                ] = &RetAge                 ;
     OtherScalars    ["EndtAge"               ] = &EndtAge                ;
     OtherScalars    ["GroupIndivSelection"   ] = &GroupIndivSelection    ;
+    OtherScalars    ["TxCallsGuarUwSubstd"   ] = &TxCallsGuarUwSubstd    ;
+    OtherScalars    ["AllowExperienceRating" ] = &AllowExperienceRating  ;
     OtherScalars    ["UseExperienceRating"   ] = &UseExperienceRating    ;
     OtherScalars    ["UsePartialMort"        ] = &UsePartialMort         ;
     OtherScalars    ["AvgFund"               ] = &AvgFund                ;
@@ -162,7 +164,9 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["HasHoneymoon"          ] = &HasHoneymoon           ;
     OtherScalars    ["PostHoneymoonSpread"   ] = &PostHoneymoonSpread    ;
     OtherScalars    ["SplitMinPrem"          ] = &SplitMinPrem           ;
-    OtherScalars    ["InitAnnLoanDueRate"    ] = &InitAnnLoanDueRate     ;
+    OtherScalars    ["ErNotionallyPaysTerm"  ] = &ErNotionallyPaysTerm   ;
+    OtherScalars    ["MaxAnnGuarLoanSpread"  ] = &MaxAnnGuarLoanSpread   ;
+    OtherScalars    ["MaxAnnCurrLoanDueRate" ] = &MaxAnnCurrLoanDueRate  ;
     OtherScalars    ["IsInforce"             ] = &IsInforce              ;
     OtherScalars    ["CurrentCoiMultiplier"  ] = &CurrentCoiMultiplier   ;
     OtherScalars    ["NoLapseAlwaysActive"   ] = &NoLapseAlwaysActive    ;
@@ -305,7 +309,7 @@ void LedgerInvariant::Alloc(int len)
     Strings["ProductName"                   ] = &ProductName                   ;
     Strings["ProducerName"                  ] = &ProducerName                  ;
     Strings["ProducerStreet"                ] = &ProducerStreet                ;
-    Strings["ProducerCity"                  ] = &ProducerCity                  ;
+    Strings["ProducerCityEtc"               ] = &ProducerCityEtc               ;
     Strings["CorpName"                      ] = &CorpName                      ;
     Strings["MasterContractNumber"          ] = &MasterContractNumber          ;
     Strings["ContractNumber"                ] = &ContractNumber                ;
@@ -319,7 +323,7 @@ void LedgerInvariant::Alloc(int len)
     Strings["DefnMaterialChange"            ] = &DefnMaterialChange            ;
     Strings["AvoidMec"                      ] = &AvoidMec                      ;
     Strings["PartMortTableName"             ] = &PartMortTableName             ;
-    Strings["StatePostalAbbrev"             ] = &StatePostalAbbrev             ;
+    Strings["StateOfJurisdiction"           ] = &StateOfJurisdiction           ;
     Strings["PremiumTaxState"               ] = &PremiumTaxState               ;
     Strings["CountryIso3166Abbrev"          ] = &CountryIso3166Abbrev          ;
     Strings["Comments"                      ] = &Comments                      ;
@@ -523,7 +527,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     ProductName                   = a_Addend.ProductName;
     ProducerName                  = a_Addend.ProducerName;
     ProducerStreet                = a_Addend.ProducerStreet;
-    ProducerCity                  = a_Addend.ProducerCity;
+    ProducerCityEtc               = a_Addend.ProducerCityEtc;
     // This would necessarily vary by life:
 //  ContractNumber                = "";
 
@@ -653,11 +657,12 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     Comments                      = a_Addend.Comments;
 
-    StatePostalAbbrev             = a_Addend.StatePostalAbbrev;
+    StateOfJurisdiction           = a_Addend.StateOfJurisdiction;
     PremiumTaxState               = a_Addend.PremiumTaxState;
-    InitAnnLoanDueRate            = a_Addend.InitAnnLoanDueRate;
     GroupIndivSelection           = GroupIndivSelection   || a_Addend.GroupIndivSelection;
-    UseExperienceRating           = a_Addend.UseExperienceRating;
+    TxCallsGuarUwSubstd           = TxCallsGuarUwSubstd   || a_Addend.TxCallsGuarUwSubstd;
+    AllowExperienceRating         = AllowExperienceRating || a_Addend.AllowExperienceRating;
+    UseExperienceRating           = UseExperienceRating   || a_Addend.UseExperienceRating;
     UsePartialMort                = a_Addend.UsePartialMort;
     PartMortTableName             = a_Addend.PartMortTableName;
     GuarMaxMandE                  = std::max(GuarMaxMandE   , a_Addend.GuarMaxMandE   );
@@ -727,6 +732,11 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     HasHoneymoon       = HasHoneymoon || a_Addend.HasHoneymoon ;
     PostHoneymoonSpread= a_Addend.PostHoneymoonSpread          ;
     SplitMinPrem       = SplitMinPrem || a_Addend.SplitMinPrem ;
+
+    ErNotionallyPaysTerm = ErNotionallyPaysTerm || a_Addend.ErNotionallyPaysTerm;
+
+    MaxAnnGuarLoanSpread   = std::max(a_Addend.MaxAnnGuarLoanSpread , MaxAnnGuarLoanSpread );
+    MaxAnnCurrLoanDueRate  = std::max(a_Addend.MaxAnnCurrLoanDueRate, MaxAnnCurrLoanDueRate);
 
     NoLapseMinDur      = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
     NoLapseMinAge      = std::min(a_Addend.NoLapseMinAge, NoLapseMinAge);

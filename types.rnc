@@ -366,14 +366,6 @@ report_column =
     | "NetIntCredited_Current"
     | "SepAcctCharges_Current"
     | "PolicyFee_Current"
-    | "AVGenAcct_CurrentZero"
-    | "AVGenAcct_GuaranteedZero"
-    | "AVSepAcct_CurrentZero"
-    | "AVSepAcct_GuaranteedZero"
-    | "AcctVal_CurrentZero"
-    | "AcctVal_GuaranteedZero"
-    | "CSVNet_CurrentZero"
-    | "CSVNet_GuaranteedZero"
 
 ## Built-in supplemental illustration.
 suppl_illus_type =

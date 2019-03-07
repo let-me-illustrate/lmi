@@ -62,6 +62,7 @@
 {DB_AllowStateXX,DB_Topic_Underwriting,"AllowStateXX","Allow state 'XX': 0=no, 1=yes [not yet implemented]",}, \
 {DB_AllowForeign,DB_Topic_Underwriting,"AllowForeign","Allow foreign-country multiplier for cost of insurance charges: 0=no, 1=yes [not yet implemented]",}, \
 {DB_GroupIndivSelection,DB_Topic_Underwriting,"GroupIndivSelection","For group insurance, allow individual selection of specified amount: 0=no, 1=yes",}, \
+{DB_TxCallsGuarUwSubstd,DB_Topic_Underwriting,"TxCallsGuarUwSubstd","Guaranteed issue must be called substandard in Texas: 0=no, 1=yes",}, \
 {DB_Allowable,DB_Topic_Underwriting,"Allowable","A catchall category for rules not otherwise expressible",}, \
 {DB_Topic_7702And7702A,DB_FIRST,"7702 and 7702A","Internal Revenue Code sections 7702 and 7702A",}, \
 {DB_AllowCvat,DB_Topic_7702And7702A,"AllowCvat","Allow cash value accumulation test: 0=no, 1=yes",}, \
@@ -89,6 +90,8 @@
 {DB_ChildRiderIsQAB,DB_Topic_7702And7702A,"ChildRiderIsQAB","Treat child term rider as a QAB for 7702 and 7702A: 0=no, 1=yes [not yet implemented]",}, \
 {DB_WpIsQAB,DB_Topic_7702And7702A,"WpIsQAB","Treat waiver benefit as a QAB for 7702 and 7702A: 0=no, 1=yes [not yet implemented]",}, \
 {DB_Topic_MortalityCharges,DB_FIRST,"Mortality charges","Mortality rates, limits, conversions, and reentry",}, \
+{DB_CsoEra,DB_Topic_MortalityCharges,"CsoEra","CSO era: 1980, 2001, or 2017",}, \
+{DB_CsoMisprint,DB_Topic_MortalityCharges,"CsoMisprint","For 1980 CSO ANB MNS, use table F with misprinted value at age 71: 0=no, 1=yes",}, \
 {DB_GuarCoiTable,DB_Topic_MortalityCharges,"GuarCoiTable","Guaranteed mortality charge table (index in mortality table database)",}, \
 {DB_GuarCoiIsAnnual,DB_Topic_MortalityCharges,"GuarCoiIsAnnual","Guaranteed cost of insurance table rates are: 0=monthly, 1=annual",}, \
 {DB_GuarCoiMultiplier,DB_Topic_MortalityCharges,"GuarCoiMultiplier","Multiplier applied to guaranteed cost of insurance charges",}, \
@@ -296,6 +299,7 @@
 {DB_MinPremIntSpread,DB_Topic_Premiums,"MinPremIntSpread","Interest spread from general-account rate used to capitalize monthly deductions for minimum premium calculation",}, \
 {DB_SplitMinPrem,DB_Topic_Premiums,"SplitMinPrem","Split monthly-deductions minimum premium by payor: 0=no, 1=yes",}, \
 {DB_UnsplitSplitMinPrem,DB_Topic_Premiums,"UnsplitSplitMinPrem","Payment strategies recombine split minimum premium: 0=no, 1=yes",}, \
+{DB_ErNotionallyPaysTerm ,DB_Topic_Premiums ,"ErNotionallyPaysTerm" ,"Employer notionally pays 'term' cost as a marketing concept, but reality may differ : 0=no, 1=yes",}, \
 {DB_TgtPremType,DB_Topic_Premiums,"TgtPremType","Target premium: 0=based on monthly deductions, 1=7702A seven-pay premium, 2=read from table",}, \
 {DB_TgtPremTable,DB_Topic_Premiums,"TgtPremTable","Annual target premium rates per $1 (index in mortality table database)",}, \
 {DB_TgtPremFixedAtIssue,DB_Topic_Premiums,"TgtPremFixedAtIssue","Target premium set forever at issue: 0=no, 1=yes",}, \
@@ -319,10 +323,10 @@
 {DB_ErPremAcct,DB_Topic_Allocations,"ErPremAcct","Preferred account for employer premiums if input overridden: 0=general account, 1=separate account",}, \
 {DB_Topic_Compensation,DB_FIRST,"Compensation","Commissions, asset-based compensation, and chargebacks",}, \
 {DB_CalculateComp,DB_Topic_Compensation,"CalculateComp","Calculate compensation [not implemented]",}, \
-{DB_CompTarget,DB_Topic_Compensation,"CompTarget","Producer-only compensation on premium up to target",}, \
-{DB_CompExcess,DB_Topic_Compensation,"CompExcess","Producer-only compensation on premium in excess of target",}, \
-{DB_CompChargeback,DB_Topic_Compensation,"CompChargeback","Compensation chargeback for early termination",}, \
-{DB_AssetComp,DB_Topic_Compensation,"AssetComp","Producer-only compensation on separate-account assets--not tiered by assets",}, \
+{DB_CompTarget,DB_Topic_Compensation,"CompTarget","Producer-only compensation on premium up to target [not yet implemented]",}, \
+{DB_CompExcess,DB_Topic_Compensation,"CompExcess","Producer-only compensation on premium in excess of target [not yet implemented]",}, \
+{DB_CompChargeback,DB_Topic_Compensation,"CompChargeback","Compensation chargeback for early termination [not yet implemented]",}, \
+{DB_AssetComp,DB_Topic_Compensation,"AssetComp","Producer-only compensation on separate-account assets--not tiered by assets [not yet implemented]",}, \
 {DB_AllowExtraAssetComp,DB_Topic_Compensation,"AllowExtraAssetComp","Allow input extra asset-based compensation: 0=no, 1=yes",}, \
 {DB_AllowExtraPremComp,DB_Topic_Compensation,"AllowExtraPremComp","Allow input extra premium-based compensation: 0=no, 1=yes",}, \
 {DB_Topic_ExperienceRating,DB_FIRST,"Experience rating","Experience-rating parameters",}, \

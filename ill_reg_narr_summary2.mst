@@ -64,12 +64,18 @@
 This illustration assumes death of the insured at age {{EndtAge}}.
 </p>
 
+{{!
+    PDF !! 'MaxAnnCurrLoanDueRate': loan rate actually can vary by year,
+    so text should say that the fixed loan rate is "guaranteed never
+    to exceed" this value.
+}}
+
 <p>
-The loan interest rate is fixed at {{InitAnnLoanDueRate}} per year.
+The loan interest rate is fixed at {{MaxAnnCurrLoanDueRate}} per year.
 </p>
 
 <p>
-The state of issue is {{StatePostalAbbrev}}.
+The state of issue is {{StateOfJurisdiction}}.
 </p>
 
 <p>
@@ -102,14 +108,14 @@ in the Tabular Detail.
     </p>
 {{/Composite}}
 
-{{#StateIsCarolina}}
+{{#StateIsNorthOrSouthCarolina}}
     <p>
     In the states of North Carolina and South Carolina,
     Guaranteed Issue Underwriting is referred
     to as "Limited Underwriting" and Simplified
     Issue Underwriting is referred to as "Simplified Underwriting".
     </p>
-{{/StateIsCarolina}}
+{{/StateIsNorthOrSouthCarolina}}
 
 {{#StateIsMaryland}}
     <p>
@@ -120,7 +126,7 @@ in the Tabular Detail.
     </p>
 {{/StateIsMaryland}}
 
-{{#GroupExperienceRating}}
+{{#AllowExperienceRating}}
     <p>
     We may assess a Market Value Adjustment upon a surrender
     of the certificate when the surrender proceeds are intended
@@ -149,7 +155,7 @@ in the Tabular Detail.
     in the current, non-guaranteed values. Actual charges
     and credits will be based on the actual experience of the group.
     </p>
-{{/GroupExperienceRating}}
+{{/AllowExperienceRating}}
 
 {{#Has1035ExchCharge}}
     <p>

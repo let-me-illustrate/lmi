@@ -109,9 +109,11 @@ WGET    := wget
 # Programs for which FHS doesn't specify a location.
 
 # Instead of requiring installation of the build system's own libxml2:
-#   XMLLINT := xmllint
+    XMLLINT := xmllint
 # use the one that lmi builds:
-XMLLINT := /opt/lmi/local/bin/xmllint
+#   XMLLINT := $(PERFORM) /opt/lmi/local/bin/xmllint
+# but don't do that until 'wine' is fixed--see:
+#   https://lists.nongnu.org/archive/html/lmi/2019-01/msg00034.html
 
 ################################################################################
 

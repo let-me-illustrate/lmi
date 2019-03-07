@@ -57,8 +57,6 @@ class LMI_SO LedgerInvariant
     bool                         IsFullyInitialized()    const;
     int                          GetLength()             const override;
     std::vector<double> const&   GetInforceLives()       const;
-    double                       GetInitAnnLoanDueRate() const;
-    std::string const&           GetStatePostalAbbrev()  const;
 
     void CalculateIrrs(Ledger const&);
 
@@ -168,6 +166,8 @@ class LMI_SO LedgerInvariant
     double          RetAge;
     double          EndtAge;
     double          GroupIndivSelection;
+    double          TxCallsGuarUwSubstd;
+    double          AllowExperienceRating;
     double          UseExperienceRating;
     double          UsePartialMort;
     double          AvgFund;
@@ -188,6 +188,9 @@ class LMI_SO LedgerInvariant
     double          HasHoneymoon;
     double          PostHoneymoonSpread;
     double          SplitMinPrem;
+    double          ErNotionallyPaysTerm;
+    double          MaxAnnGuarLoanSpread;
+    double          MaxAnnCurrLoanDueRate;
     double          IsInforce;
     double          CurrentCoiMultiplier;
     double          NoLapseAlwaysActive;
@@ -344,7 +347,7 @@ class LMI_SO LedgerInvariant
     std::string     ProductName;
     std::string     ProducerName;
     std::string     ProducerStreet;
-    std::string     ProducerCity;
+    std::string     ProducerCityEtc;
     std::string     CorpName;
     std::string     MasterContractNumber;
     std::string     ContractNumber;
@@ -359,6 +362,8 @@ class LMI_SO LedgerInvariant
     std::string     AvoidMec;
     std::string     PartMortTableName;
 
+    std::string     StateOfJurisdiction;
+    std::string     PremiumTaxState;
     std::string     CountryIso3166Abbrev;
     std::string     Comments;
 
@@ -401,12 +406,6 @@ class LMI_SO LedgerInvariant
     void Destroy();
     void Init();
 
-    std::string     StatePostalAbbrev; // SOMEDAY !! Rename to 'StateOfJurisdiction'.
-    std::string     PremiumTaxState;
-
-    // Nonscalable scalars.
-    double          InitAnnLoanDueRate;
-
     // Special cases.
     int  Length;
     int  irr_precision_;
@@ -432,16 +431,6 @@ inline int LedgerInvariant::GetLength() const
 inline std::vector<double> const& LedgerInvariant::GetInforceLives() const
 {
     return InforceLives;
-}
-
-inline double LedgerInvariant::GetInitAnnLoanDueRate() const
-{
-    return InitAnnLoanDueRate;
-}
-
-inline std::string const& LedgerInvariant::GetStatePostalAbbrev() const
-{
-    return StatePostalAbbrev;
 }
 
 #endif // ledger_invariant_hpp

@@ -48,14 +48,14 @@ and may not be used to project or predict investment results.
 <table width="100%" cellspacing="0" cellpadding="0" valign="top">
     <tr>
         <td width="60%">
-            Date Prepared: {{date_prepared}}<br>
+            Date Prepared: {{DatePrepared}}<br>
             {{#Composite}}
                 Composite of individuals<br>
             {{/Composite}}
             {{^Composite}}
                 Prepared for: {{Insured1Abbrev30}}<br>
                 Age: {{Age}}<br>
-                Issue State: {{StatePostalAbbrev}}<br>
+                Issue State: {{StateOfJurisdiction}}<br>
             {{/Composite}}
             Selected Face Amount: ${{InitTotalSA}}<br>
             Initial Death Benefit Option: {{InitDBOpt}}<br>

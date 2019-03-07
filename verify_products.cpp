@@ -1,3 +1,5 @@
+// Verify product files.
+//
 // Copyright (C) 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
@@ -17,11 +19,12 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifndef version_hpp
-#define version_hpp
+#include "pchfile.hpp"
 
-#include "config.hpp"
+#include "verify_products.hpp"
 
-#define LMI_VERSION "20190201T1954Z"
+/// Verify all products.
 
-#endif // version_hpp
+void verify_products()
+{
+}

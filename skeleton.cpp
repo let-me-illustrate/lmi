@@ -78,6 +78,7 @@
 #include "text_view.hpp"
 #include "tier_document.hpp"
 #include "tier_view.hpp"
+#include "verify_products.hpp"
 #include "wx_new.hpp"
 #include "wx_utility.hpp"               // class ClipboardEx
 
@@ -1195,19 +1196,18 @@ bool Skeleton::ProcessCommandLine()
     static Option long_options[] =
       {
         {"ash_nazg"     ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
-        {"ash_naz"      ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
-        {"help"         ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
+        {"ash_naz"      ,NO_ARG   ,0 ,077 ,0 ,"fraud"},
         {"mellon"       ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
-        {"mello"        ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
-        {"pyx"          ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
-        {"file"         ,REQD_ARG ,0 ,'f' ,0 ,"input file to run"},
+        {"mello"        ,NO_ARG   ,0 ,077 ,0 ,"fraud"},
+        {"prospicience" ,REQD_ARG ,0 ,003 ,0 ,"validation date"},
         {"data_path"    ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
-        {"print_db"     ,NO_ARG   ,0 ,'p' ,0 ,"print product databases"},
-        {"prospicience" ,REQD_ARG ,0 ,004 ,0 ,"validation date"},
+        {"file"         ,REQD_ARG ,0 ,'f' ,0 ,"input file to run"},
+        {"help"         ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
+        {"print_db"     ,NO_ARG   ,0 ,'p' ,0 ,"print products and exit"},
+        {"test_db"      ,NO_ARG   ,0 ,'t' ,0 ,"test products and exit"},
+        {"pyx"          ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
         {0              ,NO_ARG   ,0 ,0   ,0 ,""}
       };
-
-    bool show_help        = false;
 
     std::vector<std::string> input_files;
 
@@ -1238,7 +1238,7 @@ bool Skeleton::ProcessCommandLine()
                 }
                 break;
 
-            case 004:
+            case 003:
                 {
                 std::istringstream iss(getopt_long.optarg);
                 int ymd_as_int;
@@ -1277,13 +1277,24 @@ bool Skeleton::ProcessCommandLine()
 
             case 'h':
                 {
-                show_help = true;
+                std::ostringstream oss;
+                getopt_long.usage(oss);
+                wxMessageBox(oss.str(), "Command-line options");
+                return false;
                 }
                 break;
 
             case 'p':
                 {
                 print_databases();
+                return false;
+                }
+                break;
+
+            case 't':
+                {
+                verify_products();
+                return false;
                 }
                 break;
 
@@ -1329,14 +1340,6 @@ bool Skeleton::ProcessCommandLine()
             warning() << "  '" << argv[c++] << "'\n";
             }
         warning() << std::flush;
-        }
-
-    if(show_help)
-        {
-        std::ostringstream oss;
-        getopt_long.usage(oss);
-        wxMessageBox(oss.str(), "Command-line options");
-        return false;
         }
 
     if(!input_files.empty())

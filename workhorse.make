@@ -694,25 +694,43 @@ endif
 # An overriding version of 'my_prod.cpp', which is used to create a
 # nondistributable binary, contains so many large strings that, after
 # consuming more than one CPU minute and 1 MiB of RAM, MinGW gcc-3.4.5
-# produces a diagnostic such as
+# produced a diagnostic such as
 #   warning: NULL pointer checks disabled:
 #   39933 basic blocks and 167330 registers
-# Adding '-fno-delete-null-pointer-checks' to $(CPPFLAGS) might
-# suffice to suppress the diagnostic, but this file actually doesn't
-# need any optimization at all.
+# which was historically prevented by specifying '-O0'. In 2019-02,
+# however, using gcc-7.3, with many more products in 'my_*.cpp' files,
+# building with '-O0' caused a stack overflow at run time with 32-bit
+# msw, which can be prevented by specifying any optimization option
+# except '-O0'. That stack overflow seemed to be caused by adding
+# twenty-one 2017 CSO products to 'my_db.cpp' in particular; however,
+# after the same new products were added to 'my_prod.cpp' and that
+# file was compiled with '-O0', the stack overflow occurred no matter
+# what flags 'my_db.cpp' was compiled with--presumably because all
+# linked objects share the same stack and it's their total size that
+# matters.
 #
-# The same problem was observed with 'my_db.cpp'. For good measure,
-# all similarly-coded 'my_*.cpp' files are treated the same way.
+# The '-fno-var-tracking-assignments' flag avoids a specific compiler
+# diagnostic in 'my_prod.cpp', which contains a very large number of
+# lengthy strings. That flag is specified explicitly here to ensure
+# that it's still used even if the '-O' flag is someday changed, even
+# though gcc currently documents that any optimization flag other than
+# '-O0' implies it.
 
-my_unoptimizable_files := my_db.o my_fund.o my_prod.o my_rnd.o my_tier.o
+# For simplicity and robustness, the same options are used for all
+# 'my_*.cpp' files.
 
-$(my_unoptimizable_files): optimization_flag := -O0 -fno-omit-frame-pointer
+product_file_sources := my_db.o my_fund.o my_prod.o my_rnd.o my_tier.o
 
-# Blocking optimization in default $(CXXFLAGS) isn't enough, because
-# it is too easily overridden by specifying $(CXXFLAGS) on the command
-# line. This flag overrides such overrides:
+product_file_flags := -Os -fno-var-tracking-assignments -fno-omit-frame-pointer
 
-$(my_unoptimizable_files): tutelary_flag += -O0 -fno-omit-frame-pointer
+$(product_file_sources): optimization_flag += $(product_file_flags)
+
+# $(optimization_flag) is part of the default $(CXXFLAGS), but a
+# target-specific assignment there isn't enough, because it is too
+# easily overridden by specifying $(CXXFLAGS) on the command line.
+# This flag overrides any such override:
+
+$(product_file_sources): tutelary_flag += $(product_file_flags)
 
 ################################################################################
 

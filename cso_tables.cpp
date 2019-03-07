@@ -1,3 +1,5 @@
+// 1980, 2001, and 2017 CSO tables.
+//
 // Copyright (C) 2019 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
@@ -17,11 +19,20 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifndef version_hpp
-#define version_hpp
+#include "pchfile.hpp"
 
-#include "config.hpp"
+#include "cso_tables.hpp"
 
-#define LMI_VERSION "20190201T1954Z"
+/// Just a placeholder for the nonce.
 
-#endif // version_hpp
+std::vector<double> const& cso_table
+    (oenum_cso_era    // cso_era
+    ,oenum_autopisty  // autopisty
+    ,oenum_alb_or_anb // alb_or_anb
+    ,mce_gender       // gender
+    ,mce_smoking      // smoking
+    )
+{
+    static std::vector<double> placeholder {1.0};
+    return placeholder;
+}

@@ -78,6 +78,11 @@ Account values, cash surrender values, and death benefits
 are illustrated as of the end of the year.
 </p>
 
+{{!
+PDF !! The 'MecYearIs0' logic below is poor and should be reworked--see:
+    https://lists.nongnu.org/archive/html/lmi/2019-02/msg00000.html
+}}
+
 <p>
 PLEASE READ THE FOLLOWING IMPORTANT TAX DISCLOSURE
 <br>

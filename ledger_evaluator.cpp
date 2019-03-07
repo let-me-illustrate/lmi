@@ -444,7 +444,6 @@ format_map_t static_formats()
     {{"GuarMaxMandE"                    , f4}
     ,{"InitAnnGenAcctInt"               , f4}
     ,{"InitAnnLoanCredRate"             , f4}
-    ,{"InitAnnLoanDueRate"              , f4}
     ,{"InitAnnSepAcctCurrGross0Rate"    , f4}
     ,{"InitAnnSepAcctCurrGrossHalfRate" , f4}
     ,{"InitAnnSepAcctCurrNet0Rate"      , f4}
@@ -455,6 +454,8 @@ format_map_t static_formats()
     ,{"InitAnnSepAcctGuarNet0Rate"      , f4}
     ,{"InitAnnSepAcctGuarNetHalfRate"   , f4}
     ,{"InitAnnSepAcctNetInt"            , f4}
+    ,{"MaxAnnGuarLoanSpread"            , f4}
+    ,{"MaxAnnCurrLoanDueRate"           , f4}
     ,{"PostHoneymoonSpread"             , f4}
     ,{"Preferred"                       , f4}
     ,{"PremTaxRate"                     , f4}
@@ -526,10 +527,13 @@ format_map_t static_formats()
     ,{"SmokerDistinct"                  , f1}
     ,{"SplitFundAllocation"             , f1}
     ,{"SplitMinPrem"                    , f1}
+    ,{"ErNotionallyPaysTerm"            , f1}
     ,{"SpouseIssueAge"                  , f1}
     ,{"SupplementalReport"              , f1}
+    ,{"AllowExperienceRating"           , f1}
     ,{"UseExperienceRating"             , f1}
     ,{"GroupIndivSelection"             , f1}
+    ,{"TxCallsGuarUwSubstd"             , f1}
     ,{"UsePartialMort"                  , f1}
     ,{"WriteTsvFile"                    , f1}
 
@@ -823,13 +827,14 @@ ledger_evaluator Ledger::make_evaluator() const
 
     strings["LmiVersion"] = &LmiVersion;
 
-    std::string PrepYear  = value_cast<std::string>(prep_date.year());
-    std::string PrepMonth = month_name(prep_date.month());
-    std::string PrepDay   = value_cast<std::string>(prep_date.day());
-
-    strings["PrepYear" ] = &PrepYear;
-    strings["PrepMonth"] = &PrepMonth;
-    strings["PrepDay"  ] = &PrepDay;
+    std::string DatePrepared =
+          month_name(prep_date.month())
+        + " "
+        + value_cast<std::string>(prep_date.day())
+        + ", "
+        + value_cast<std::string>(prep_date.year())
+        ;
+    strings["DatePrepared" ] = &DatePrepared;
 
     // PDF !! Sales-load refunds are mentioned on 'mce_ill_reg' PDFs
     // only. Other formats defectively ignore them.
@@ -941,9 +946,6 @@ ledger_evaluator Ledger::make_evaluator() const
 //    std::vector<int>            FundAllocs;  [not handled yet]
 //
 //    std::vector<double> InforceLives;
-//
-//    // Special-case strings.
-//    std::string     EffDate; [furnished as PrepYear, PrepMonth, PrepDay]
 //
 // Variant
 //

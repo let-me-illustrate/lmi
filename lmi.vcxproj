@@ -243,6 +243,7 @@
     <ClCompile Include="commutation_functions.cpp" />
     <ClCompile Include="configurable_settings.cpp" />
     <ClCompile Include="crc32.cpp" />
+    <ClCompile Include="cso_tables.cpp" />
     <ClCompile Include="custom_io_0.cpp" />
     <ClCompile Include="custom_io_1.cpp" />
     <ClCompile Include="data_directory.cpp" />
@@ -351,6 +352,7 @@
     <ClCompile Include="system_command.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="tn_range_types.cpp" />
+    <ClCompile Include="verify_products.cpp" />
     <ClCompile Include="xml_lmi.cpp" />
     <ClCompile Include="yare_input.cpp" />
   </ItemGroup>

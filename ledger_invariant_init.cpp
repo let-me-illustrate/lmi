@@ -41,7 +41,7 @@
 #include "product_data.hpp"
 #include "ssize_lmi.hpp"
 
-#include <algorithm>                    // max()
+#include <algorithm>                    // max(), max_element()
 #include <stdexcept>
 
 void LedgerInvariant::Init(BasicValues const* b)
@@ -121,11 +121,21 @@ void LedgerInvariant::Init(BasicValues const* b)
     AddonCompOnAssets    = b->yare_input_.ExtraCompensationOnAssets ;
     AddonCompOnPremium   = b->yare_input_.ExtraCompensationOnPremium;
     CorridorFactor       = b->GetCorridorFactor();
+
+    std::vector<double> z= b->InterestRates_->RegLoanSpread(mce_gen_guar);
+    LMI_ASSERT(!z.empty()); // Ensure *(std::max_element()) works.
+    MaxAnnGuarLoanSpread = *std::max_element(z.begin(), z.end());
+
     AnnLoanDueRate       = b->InterestRates_->RegLnDueRate
         (mce_gen_curr
         ,mce_annual_rate
         );
-    InitAnnLoanDueRate   = AnnLoanDueRate[0];
+    LMI_ASSERT(!AnnLoanDueRate.empty()); // Ensure *(std::max_element()) works.
+    MaxAnnCurrLoanDueRate = *std::max_element
+        (AnnLoanDueRate.begin()
+        ,AnnLoanDueRate.end()
+        );
+
     CurrMandE            = b->InterestRates_->MAndERate(mce_gen_curr);
     TotalIMF             = b->InterestRates_->InvestmentManagementFee();
     RefundableSalesLoad  = b->Loads_->refundable_sales_load_proportion();
@@ -247,6 +257,8 @@ void LedgerInvariant::Init(BasicValues const* b)
     RetAge                  = b->yare_input_.RetirementAge;
     EndtAge                 = b->yare_input_.IssueAge + b->GetLength();
     b->database().query_into(DB_GroupIndivSelection, GroupIndivSelection);
+    b->database().query_into(DB_TxCallsGuarUwSubstd, TxCallsGuarUwSubstd);
+    AllowExperienceRating   = b->database().query<bool>(DB_AllowExpRating);
     UseExperienceRating     = b->yare_input_.UseExperienceRating;
     UsePartialMort          = b->yare_input_.UsePartialMortality;
     AvgFund                 = b->yare_input_.UseAverageOfAllFunds;
@@ -261,7 +273,8 @@ void LedgerInvariant::Init(BasicValues const* b)
 
     HasHoneymoon            = b->yare_input_.HoneymoonEndorsement;
     PostHoneymoonSpread     = b->yare_input_.PostHoneymoonSpread;
-    b->database().query_into(DB_SplitMinPrem       , SplitMinPrem);
+    b->database().query_into(DB_SplitMinPrem        , SplitMinPrem);
+    b->database().query_into(DB_ErNotionallyPaysTerm, ErNotionallyPaysTerm);
 
     // These are reassigned below based on product data if available.
     std::string dbo_name_option1 = mc_str(mce_option1);
@@ -410,18 +423,22 @@ void LedgerInvariant::Init(BasicValues const* b)
     ProductName             = b->yare_input_.ProductName;
     ProducerName            = b->yare_input_.AgentName;
 
-    std::string agent_city     = b->yare_input_.AgentCity;
-    std::string agent_state    = mc_str(b->yare_input_.AgentState);
-    std::string agent_zip_code = b->yare_input_.AgentZipCode;
-    std::string agent_city_etc(agent_city + ", " + agent_state);
+    std::string const agent_city     = b->yare_input_.AgentCity;
+    std::string const agent_state    = mc_str(b->yare_input_.AgentState);
+    std::string const agent_zip_code = b->yare_input_.AgentZipCode;
+    // This is a two-letter USPS abbreviation, so it's never empty.
+    std::string agent_city_etc(agent_state);
+    if(!agent_city.empty())
+        {
+        agent_city_etc = agent_city + ", " + agent_state;
+        }
     if(!agent_zip_code.empty())
         {
-        agent_city_etc += " ";
+        agent_city_etc += " " + agent_zip_code;
         }
-    agent_city_etc += agent_zip_code;
 
     ProducerStreet          = b->yare_input_.AgentAddress;
-    ProducerCity            = agent_city_etc;
+    ProducerCityEtc         = agent_city_etc;
     CorpName                = b->yare_input_.CorporationName;
 
     MasterContractNumber    = b->yare_input_.MasterContractNumber;
@@ -484,7 +501,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     DefnMaterialChange      = mc_str(b->yare_input_.DefinitionOfMaterialChange);
     AvoidMec                = mc_str(b->yare_input_.AvoidMecMethod);
     PartMortTableName       = "1983 GAM"; // TODO ?? Hardcoded.
-    StatePostalAbbrev       = mc_str(b->GetStateOfJurisdiction());
+    StateOfJurisdiction     = mc_str(b->GetStateOfJurisdiction());
     PremiumTaxState         = mc_str(b->GetPremiumTaxState());
 
     IsInforce = b->yare_input_.EffectiveDate != b->yare_input_.InforceAsOfDate;

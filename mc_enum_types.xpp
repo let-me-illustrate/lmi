@@ -153,7 +153,7 @@
 #define ledger_type_VALUES \
     {mce_ill_reg \
     ,mce_finra \
-    ,mce_prospectus_obsolete \
+    ,mce_prospectus_abeyed \
     ,mce_group_private_placement \
     ,mce_offshore_private_placement_obsolete \
     ,mce_ill_reg_private_placement_obsolete \
@@ -163,7 +163,7 @@
 #define ledger_type_NAMES \
     {"illustration_reg" \
     ,"finra" \
-    ,"obsolete ledger type 2--do not use" \
+    ,"prospectus" \
     ,"group_private_placement" \
     ,"obsolete ledger type 4--do not use" \
     ,"obsolete ledger type 5--do not use" \

@@ -123,17 +123,6 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
         m["NetIntCredited_Current"     ] = ledger_metadata(0, oe_format_normal    , "Curr Net Int Credited"                 ); // "Current Interest Credited Net of Separate Account Charges"
         m["SepAcctCharges_Current"     ] = ledger_metadata(0, oe_format_normal    , "Curr Sep Acct Charges"                 ); // "Current Separate Account Asset Charges"
         m["PolicyFee_Current"          ] = ledger_metadata(0, oe_format_normal    , "Curr Policy Fee"                       ); // "Current Policy Fee"
-// '*_CurrentZero' and '*_GuaranteedZero' columns deliberately suppressed--see:
-//   http://lists.nongnu.org/archive/html/lmi/2009-09/msg00012.html
-// TODO ?? EGREGIOUS_DEFECT: instead, don't offer these columns at all.
-//      m["AVGenAcct_CurrentZero"      ] = ledger_metadata(0, oe_format_normal    , "Curr Charges Account Value Gen Acct"   ); // "Curr Charges Account Value General Account"
-//      m["AVGenAcct_GuaranteedZero"   ] = ledger_metadata(0, oe_format_normal    , "Guar Charges Account Value Gen Acct"   ); // "Guar Charges Account Value General Account"
-//      m["AVSepAcct_CurrentZero"      ] = ledger_metadata(0, oe_format_normal    , "Curr Charges 0% Account Value Sep Acct"); // "Curr Charges 0% Account Value Separate Account"
-//      m["AVSepAcct_GuaranteedZero"   ] = ledger_metadata(0, oe_format_normal    , "Guar Charges 0% Account Value Sep Acct"); // "Guar Charges 0% Account Value Separate Account"
-//      m["AcctVal_CurrentZero"        ] = ledger_metadata(0, oe_format_normal    , "Curr Charges 0% Account Value"         ); // "Curr Charges 0% Account Value"
-//      m["AcctVal_GuaranteedZero"     ] = ledger_metadata(0, oe_format_normal    , "Guar Charges 0% Account Value"         ); // "Guar Charges 0% Account Value"
-//      m["CSVNet_CurrentZero"         ] = ledger_metadata(0, oe_format_normal    , "Curr Charges 0% Net Cash Surr Value"   ); // "Curr Charges 0% Net Cash Surrender Value"
-//      m["CSVNet_GuaranteedZero"      ] = ledger_metadata(0, oe_format_normal    , "Guar Charges 0% Net Cash Surr Value"   ); // "Guar Charges 0% Net Cash Surrender Value"
         }
 
     return m;
@@ -220,7 +209,7 @@ std::string calculation_summary_formatter::top_note
             << invar_.Gender << ", " << invar_.Smoker
             << std::setprecision(0)
             << ", age " << invar_.Age
-            << ", " << invar_.GetStatePostalAbbrev() << " jurisdiction"
+            << ", " << invar_.StateOfJurisdiction << " jurisdiction"
             << line_break
             ;
         if(invar_.IsMec)
@@ -470,7 +459,7 @@ void PrintCellTabDelimited
     os << "ContractNumber\t\t"    << Invar.value_str("ContractNumber" ) << '\n';
     os << "ProducerName\t\t"      << Invar.value_str("ProducerName"   ) << '\n';
     os << "ProducerStreet\t\t"    << Invar.value_str("ProducerStreet" ) << '\n';
-    os << "ProducerCity\t\t"      << Invar.value_str("ProducerCity"   ) << '\n';
+    os << "ProducerCityEtc\t\t"   << Invar.value_str("ProducerCityEtc") << '\n';
     os << "CorpName\t\t"          << Invar.value_str("CorpName"       ) << '\n';
     os << "Insured1\t\t"          << Invar.value_str("Insured1"       ) << '\n';
     os << "Gender\t\t"            << Invar.value_str("Gender"         ) << '\n';
@@ -790,7 +779,7 @@ void PrintRosterTabDelimited
         << "'" << Invar.LastCoiReentryDate            << "'\t"
         << "'" << Invar.InforceAsOfDate               << "'\t"
         << Invar.value_str("PremiumTaxState"        ) << '\t'
-        << Invar.value_str("StatePostalAbbrev"      ) << '\t'
+        << Invar.value_str("StateOfJurisdiction"    ) << '\t'
         << Curr_.value_str("AnnGAIntRate"         ,d) << '\t'
         << Curr_.value_str("InitMlyPolFee"          ) << '\t'
         << Invar.value_str("InitDacTaxRate"         ) << '\t'
@@ -927,7 +916,7 @@ void FlatTextLedgerPrinter::PrintHeader() const
     os_ << center("Prepared on " + iso_8601_datestamp_terse() + " by") << endrow;
     os_ << center(invar().ProducerName) << endrow;
     os_ << center(invar().ProducerStreet) << endrow;
-    os_ << center(invar().ProducerCity) << endrow;
+    os_ << center(invar().ProducerCityEtc) << endrow;
     if(ledger_.is_composite())
         {
         os_ << "Composite" << endrow;

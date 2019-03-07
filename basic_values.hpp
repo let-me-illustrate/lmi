@@ -348,11 +348,6 @@ class LMI_SO BasicValues
     bool                    NoLapseAlwaysActive;
     std::vector<double>     DBDiscountRate;
 
-    bool                    CalculateComp;
-    std::vector<double>     AssetComp;
-    std::vector<double>     CompTarget;
-    std::vector<double>     CompExcess;
-
     bool                    UseUnusualCOIBanding;
 
     // TODO ?? These two data members make the code clearer and

@@ -787,14 +787,6 @@ proved unworkable (e.g., because of underwriting).</xs:documentation>
       <xs:enumeration value="NetIntCredited_Current"/>
       <xs:enumeration value="SepAcctCharges_Current"/>
       <xs:enumeration value="PolicyFee_Current"/>
-      <xs:enumeration value="AVGenAcct_CurrentZero"/>
-      <xs:enumeration value="AVGenAcct_GuaranteedZero"/>
-      <xs:enumeration value="AVSepAcct_CurrentZero"/>
-      <xs:enumeration value="AVSepAcct_GuaranteedZero"/>
-      <xs:enumeration value="AcctVal_CurrentZero"/>
-      <xs:enumeration value="AcctVal_GuaranteedZero"/>
-      <xs:enumeration value="CSVNet_CurrentZero"/>
-      <xs:enumeration value="CSVNet_GuaranteedZero"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="suppl_illus_type">

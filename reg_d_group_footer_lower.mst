@@ -27,7 +27,7 @@
     </tr>
     <tr>
         <td>{{InsCoName}}</td>
-        <td align="center">Date Prepared: {{date_prepared}}</td>
+        <td align="center">Date Prepared: {{DatePrepared}}</td>
         <td align="right">Policy Form: {{PolicyForm}}</td>
     </tr>
     <tr>

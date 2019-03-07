@@ -41,7 +41,6 @@ class LMI_SO DBDictionary
 {
     friend class DatabaseDocument;
     friend class input_test;        // For test_product_database().
-    friend class product_file_test; // For read_database_file().
     friend class premium_tax_test;  // For test_rates().
 
   public:
@@ -57,6 +56,9 @@ class LMI_SO DBDictionary
 
     void InitAntediluvian();
 
+  protected:
+    void Add(database_entity const&);
+
   private:
     DBDictionary(DBDictionary const&) = delete;
     DBDictionary& operator=(DBDictionary const&) = delete;
@@ -68,11 +70,7 @@ class LMI_SO DBDictionary
     database_entity& datum(std::string const&);
 
     void WriteDB(std::string const& filename) const;
-    void Add(database_entity const&);
     void InitDB();
-
-    // A temporary expedient.
-    void Nyarlathotep();
 
     // xml_serializable required implementation.
     int                class_version() const override;
@@ -92,6 +90,11 @@ class LMI_SO DBDictionary
         (xml_lmi::xml_document& document
         ,std::string const&     file_leaf_name
         ) const override;
+
+    // To make sure these members match e_database_key enumerators:
+    //   <dbdict.hpp sed -e '/database_entity [A-Z]/!d;s/    database_entity //;s/ *;$//' >eraseme0
+    //   <dbnames.hpp sed -e '/        ,DB_/!d;s/        ,DB_//' >eraseme1
+    // and compare the resulting temporary files.
 
     database_entity MinIssAge           ;
     database_entity MaxIssAge           ;
@@ -118,6 +121,7 @@ class LMI_SO DBDictionary
     database_entity AllowStateXX        ;
     database_entity AllowForeign        ;
     database_entity GroupIndivSelection ;
+    database_entity TxCallsGuarUwSubstd ;
     database_entity Allowable           ;
     database_entity AllowCvat           ;
     database_entity AllowGpt            ;
@@ -143,6 +147,8 @@ class LMI_SO DBDictionary
     database_entity SpouseRiderIsQAB    ;
     database_entity ChildRiderIsQAB     ;
     database_entity WpIsQAB             ;
+    database_entity CsoEra              ;
+    database_entity CsoMisprint         ;
     database_entity GuarCoiTable        ;
     database_entity GuarCoiIsAnnual     ;
     database_entity GuarCoiMultiplier   ;
@@ -340,6 +346,7 @@ class LMI_SO DBDictionary
     database_entity MinPremIntSpread    ;
     database_entity SplitMinPrem        ;
     database_entity UnsplitSplitMinPrem ;
+    database_entity ErNotionallyPaysTerm;
     database_entity TgtPremType         ;
     database_entity TgtPremTable        ;
     database_entity TgtPremFixedAtIssue ;

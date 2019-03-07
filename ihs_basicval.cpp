@@ -673,11 +673,6 @@ void BasicValues::SetPermanentInvariants()
     assign(DBDiscountRate, 1.0 + DBDiscountRate);
     assign(DBDiscountRate, 1.0 / DBDiscountRate);
 
-    database().query_into(DB_CalculateComp        , CalculateComp);
-    database().query_into(DB_AssetComp            , AssetComp);
-    database().query_into(DB_CompTarget           , CompTarget);
-    database().query_into(DB_CompExcess           , CompExcess);
-
     database().query_into(DB_DynamicMandE         , MandEIsDynamic);
     database().query_into(DB_DynamicSepAcctLoad   , SepAcctLoadIsDynamic);
 

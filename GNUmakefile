@@ -345,7 +345,7 @@ check_concinnity: source_clean custom_tools
 	@$(ECHO) "  Problems detected by xmllint:"
 	@for z in $(xml_files); \
 	  do \
-	    $(PERFORM) $(XMLLINT) --encode ASCII $$z \
+	    $(XMLLINT) --encode ASCII $$z \
 	    | $(TR) --delete '\r' \
 	    | $(DIFF) \
 	      --ignore-blank-lines \

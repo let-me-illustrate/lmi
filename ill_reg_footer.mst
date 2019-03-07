@@ -26,7 +26,7 @@
         <td colspan="3">&nbsp;</td>
     </tr>
     <tr>
-        <td>Date Prepared: {{date_prepared}}</td>
+        <td>Date Prepared: {{DatePrepared}}</td>
         <td align="center">{{page_number}}</td>
         <td align="right">{{InsCoName}}</td>
     </tr>

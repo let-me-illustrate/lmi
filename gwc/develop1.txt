@@ -184,8 +184,7 @@ make $coefficiency --output-sync=recurse -f install_wxpdfdoc.make >../log 2>&1
 
   # Shift differing system-test files among directories:
 cd /opt/lmi/touchstone
-d="/opt/lmi/touchstone-old/touchstone-$(date -u +'%Y%m%dT%H%MZ')" && mkdir -p $d \
-&& for z in *; do cmp --quiet $z ../test/$z || ( mv $z $d/$z; mv ../test/$z ./$z; ) ; done
+d="/opt/lmi/touchstone-old/touchstone-$(date -u +'%Y%m%dT%H%MZ')" && mkdir -p $d && for z in *; do cmp --quiet $z ../test/$z || ( mv $z $d/$z; mv ../test/$z ./$z; ) ; done
 
   # Validate xrc files
 
