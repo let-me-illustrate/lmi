@@ -23,6 +23,11 @@
 
 #include "cso_tables.hpp"
 
+#include "assert_lmi.hpp"
+#include "miscellany.hpp"               // each_equal()
+
+#include <algorithm>                    // count()
+
 enum
     {cso_n_alb_or_anb =   2
     ,cso_n_gender     =   3
@@ -911,16 +916,59 @@ static double const q2017[cso_n_alb_or_anb][cso_n_gender][cso_n_smoking][cso_ome
   },
 };
 
-/// Just a placeholder for the nonce.
+/// Return a single CSO ultimate table.
+///
+/// Only the 1980, 2001, and 2017 eras are supported.
+///
+/// CSO tables are either ANB or ALB; they disregard other nuances of
+/// type oenum_alb_or_anb.
+///
+/// The youngest age at which a smoker-nonsmoker distinction is made
+/// is a scalar constant that varies by era. Smoker-distinct tables
+/// are padded with zeros so that all tables start at age zero.
+///
+/// 'omega' is of course one higher than a table's highest age.
+///
+/// Asserted postconditions:
+///  - Initial values for smoker-distinct tables, which constitute
+///    padding, all equal zero.
+///  - No other value equals zero.
+///  - The value at duration omega-1 equals unity.
 
-std::vector<double> const& cso_table
-    (oenum_cso_era    // cso_era
-    ,oenum_autopisty  // autopisty
-    ,oenum_alb_or_anb // alb_or_anb
-    ,mce_gender       // gender
-    ,mce_smoking      // smoking
+std::vector<double> cso_table
+    (oenum_cso_era    cso_era
+    ,oenum_autopisty//autopisty
+    ,oenum_alb_or_anb alb_or_anb
+    ,mcenum_gender    gender
+    ,mcenum_smoking   smoking
     )
 {
-    static std::vector<double> placeholder {1.0};
-    return placeholder;
+    bool const is_anb = alb_or_anb != oe_age_last_birthday;
+    double const* p
+        ((oe_1980cso == cso_era) ? q1980[is_anb][gender][smoking]
+        :(oe_2001cso == cso_era) ? q2001[is_anb][gender][smoking]
+        :(oe_2017cso == cso_era) ? q2017[is_anb][gender][smoking]
+        :                          throw "invalid cso era"
+        );
+    int const sns_age =
+        ((mce_unismoke == smoking) ? 0
+        :(oe_1980cso == cso_era) ? cso_sns_age_1980
+        :(oe_2001cso == cso_era) ? cso_sns_age_2001
+        :(oe_2017cso == cso_era) ? cso_sns_age_2017
+        :                          throw "invalid cso sns age"
+        );
+    int const omega =
+        ((oe_1980cso == cso_era) ? cso_omega_1980
+        :(oe_2001cso == cso_era) ? cso_omega_2001
+        :(oe_2017cso == cso_era) ? cso_omega_2017
+        :                          throw "invalid cso omega"
+        );
+    if(mce_unismoke != smoking)
+        {
+        LMI_ASSERT(each_equal(p, p + sns_age, 0.0));
+        }
+    std::vector<double> v(p + sns_age, p + omega);
+    LMI_ASSERT(0 == std::count(v.begin(), v.end(), 0.0));
+    LMI_ASSERT(1.0 == v.back());
+    return v;
 }

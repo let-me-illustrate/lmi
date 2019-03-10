@@ -24,19 +24,18 @@
 
 #include "config.hpp"
 
-#include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "so_attributes.hpp"
 
 #include <vector>
 
-std::vector<double> const& LMI_SO cso_table
+std::vector<double> LMI_SO cso_table
     (oenum_cso_era
     ,oenum_autopisty
     ,oenum_alb_or_anb
-    ,mce_gender
-    ,mce_smoking
+    ,mcenum_gender
+    ,mcenum_smoking
     );
 
 #endif // cso_tables_hpp
