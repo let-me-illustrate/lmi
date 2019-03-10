@@ -681,7 +681,7 @@ sample::sample()
     // Male uses table E, which is correct, as opposed to table F,
     // which contains a numerical error but was adopted by NAIC.
     int dims311[e_number_of_axes] = {3, 1, 1, 1, 1, 1, 1}; // gender
-    double T7702q[9] = {35, 41, 107,}; // Female, male, unisex.
+    double T7702q[3] = {35, 41, 107,}; // Female, male, unisex.
     Add({DB_Irc7702QTable, e_number_of_axes, dims311, T7702q});
 
     Add({DB_CvatMatChangeDefn   , mce_earlier_of_increase_or_unnecessary_premium});
