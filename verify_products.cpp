@@ -41,15 +41,15 @@
 namespace
 {
 void verify_one_cell
-    (std::string const& z // product
-    ,std::string const& g // gender
-    ,std::string const& s // smoking
+    (std::string const& product_name
+    ,std::string const& gender
+    ,std::string const& smoking
     )
 {
     Input input;
-    input["ProductName"] = z;
-    input["Gender"     ] = g;
-    input["Smoking"    ] = s;
+    input["ProductName"] = product_name;
+    input["Gender"     ] = gender;
+    input["Smoking"    ] = smoking;
     yare_input       const yi(input);
     product_database const db(yi);
     auto const era = db.query<oenum_cso_era   >(DB_CsoEra);
@@ -61,10 +61,10 @@ void verify_one_cell
         (era
         ,oe_orthodox
         ,a_b
-        ,mce_gender (g).value()
-        ,mce_smoking(s).value()
+        ,mce_gender (gender).value()
+        ,mce_smoking(smoking).value()
         );
-    product_data const p(z);
+    product_data const p(product_name);
     std::string const f = AddDataDir(p.datum("Irc7702QFilename"));
     actuarial_table const a(f, t);
     std::vector<double> const v1 = a.values
@@ -73,12 +73,21 @@ void verify_one_cell
         );
     if(v0 == v1)
         {
-        std::cout << "okay: table " << t << ' ' << g << ' ' << s << std::endl;
+        std::cout
+            << "okay: table " << t
+            << ' ' << gender
+            << ' ' << smoking
+            << std::endl
+            ;
         }
     else
         {
-        std::cout << "PROBLEM: " << z << ' ' << g << ' ' << s << std::endl;
-        std::cout << lmi::ssize(v0) << ' ' << lmi::ssize(v1) << '\n';
+        std::cout
+            << "PROBLEM: " << product_name
+            << ' ' << gender
+            << ' ' << smoking
+            << std::endl
+            ;
         std::cout
             << "\n  CSO era: " << era
             << "\n  ALB or ANB: " << a_b
@@ -87,6 +96,8 @@ void verify_one_cell
             << "\n  min age: " << a.min_age()
             << "\n  max age: " << a.max_age()
             << "\n  length: " << a.max_age() - a.min_age()
+            << "\n  cso length: " << lmi::ssize(v0)
+            << "\n  table length: " << lmi::ssize(v1)
             << "\n  v0.front(): " << v0.front()
             << "\n  v1.front(): " << v1.front()
             << "\n  v0.back (): " << v0.back ()
