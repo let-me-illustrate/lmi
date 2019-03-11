@@ -501,6 +501,7 @@ actuarial_table_test$(EXEEXT): \
   $(xmlwrapp_objects) \
   actuarial_table.o \
   actuarial_table_test.o \
+  cso_tables.o \
   timer.o \
   xml_lmi.o \
 

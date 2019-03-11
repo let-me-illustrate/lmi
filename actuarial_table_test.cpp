@@ -24,7 +24,9 @@
 #include "actuarial_table.hpp"
 
 #include "assert_lmi.hpp"
+#include "cso_tables.hpp"
 #include "miscellany.hpp"
+#include "oecumenic_enumerations.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -211,6 +213,25 @@ void assert_table_nondegeneracy(actuarial_table const& t)
     std::vector<double> rates = t.values(min_age, length);
     LMI_ASSERT(rates.at(       0) != rates.at(       1));
     LMI_ASSERT(rates.at(length-2) != rates.at(length-1));
+}
+
+void test_80cso_erratum
+    (int              table_number
+    ,oenum_autopisty  autopisty
+    ,oenum_alb_or_anb alb_or_anb
+    )
+{
+    std::vector<double> v0 = cso_table
+        (oe_1980cso
+        ,autopisty
+        ,alb_or_anb
+        ,mce_male
+        ,mce_nonsmoker
+        );
+    actuarial_table const a(qx_cso, table_number);
+    // No smoker-nonsmoker distinction below age 15.
+    std::vector<double> v1 = a.values(15, 85);
+    BOOST_TEST(v0 == v1);
 }
 } // Unnamed namespace.
 
@@ -605,6 +626,16 @@ void test_exotic_lookup_methods_with_attained_age_table()
         );
 }
 
+void test_1980cso_errata()
+{
+    test_80cso_erratum(43, oe_heterodox, oe_age_last_birthday);
+    test_80cso_erratum(57, oe_orthodox , oe_age_last_birthday);
+    test_80cso_erratum(44, oe_heterodox, oe_age_nearest_birthday_ties_younger);
+    test_80cso_erratum(58, oe_orthodox , oe_age_nearest_birthday_ties_younger);
+    test_80cso_erratum(44, oe_heterodox, oe_age_nearest_birthday_ties_older);
+    test_80cso_erratum(58, oe_orthodox , oe_age_nearest_birthday_ties_older);
+}
+
 int test_main(int, char*[])
 {
     test_precondition_failures();
@@ -613,6 +644,7 @@ int test_main(int, char*[])
     test_e_reenter_at_inforce_duration();
     test_e_reenter_upon_rate_reset();
     test_exotic_lookup_methods_with_attained_age_table();
+    test_1980cso_errata();
 
     assay_speed();
 

@@ -937,7 +937,7 @@ static double const q2017[cso_n_alb_or_anb][cso_n_gender][cso_n_smoking][cso_ome
 
 std::vector<double> cso_table
     (oenum_cso_era    cso_era
-    ,oenum_autopisty//autopisty
+    ,oenum_autopisty  autopisty
     ,oenum_alb_or_anb alb_or_anb
     ,mcenum_gender    gender
     ,mcenum_smoking   smoking
@@ -963,11 +963,38 @@ std::vector<double> cso_table
         :(oe_2017cso == cso_era) ? cso_omega_2017
         :                          throw "invalid cso omega"
         );
+
     if(mce_unismoke != smoking)
         {
         LMI_ASSERT(each_equal(p, p + sns_age, 0.0));
         }
+
     std::vector<double> v(p + sns_age, p + omega);
+
+    if
+        (oe_heterodox    == autopisty
+        && oe_1980cso    == cso_era
+        && mce_nonsmoker == smoking
+        && mce_male      == gender
+        )
+        {
+        // Intrude the errors of 1980 CSO Table F (which was
+        // ratified by NAIC) into Table E (which is correct and
+        // was also ratified by NAIC).
+        if(is_anb)
+            {
+            LMI_ASSERT(0.03831 == v[56]);
+            v[56] =    0.03891;
+            }
+        else
+            {
+            LMI_ASSERT(0.03644 == v[55]);
+            v[55] =    0.03673;
+            LMI_ASSERT(0.04039 == v[56]);
+            v[56] =    0.04070;
+            }
+        }
+
     LMI_ASSERT(0 == std::count(v.begin(), v.end(), 0.0));
     LMI_ASSERT(1.0 == v.back());
     return v;

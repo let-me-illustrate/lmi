@@ -554,6 +554,7 @@ test_actuarial_table_SOURCES = \
   $(common_test_objects) \
   actuarial_table.cpp \
   actuarial_table_test.cpp \
+  cso_tables.cpp \
   timer.cpp \
   xml_lmi.cpp
 test_actuarial_table_CXXFLAGS = $(AM_CXXFLAGS)
