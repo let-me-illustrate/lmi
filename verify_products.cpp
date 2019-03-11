@@ -48,32 +48,32 @@ void verify_one_cell
 {
     Input input;
     input["ProductName"] = z;
-    input["Gender"] = g;
-    input["Smoking"] = s;
-    yare_input yi(input);
-    product_database db(yi);
-    oenum_cso_era const era = db.query<oenum_cso_era>(DB_CsoEra);
-    oenum_alb_or_anb const a_b = db.query<oenum_alb_or_anb>(DB_AgeLastOrNearest);
-    int const t = db.query<int>(DB_Irc7702QTable);
+    input["Gender"     ] = g;
+    input["Smoking"    ] = s;
+    yare_input       const yi(input);
+    product_database const db(yi);
+    auto const era = db.query<oenum_cso_era   >(DB_CsoEra);
+    auto const a_b = db.query<oenum_alb_or_anb>(DB_AgeLastOrNearest);
+    auto const t   = db.query<int             >(DB_Irc7702QTable);
     if(0 == t)
         return;
-    std::vector<double> v0 = cso_table
+    std::vector<double> const v0 = cso_table
         (era
         ,oe_orthodox
         ,a_b
         ,mce_gender (g).value()
         ,mce_smoking(s).value()
         );
-    product_data p(z);
+    product_data const p(z);
     std::string const f = AddDataDir(p.datum("Irc7702QFilename"));
-    actuarial_table a(f, t);
-    std::vector<double> v1 = a.values
+    actuarial_table const a(f, t);
+    std::vector<double> const v1 = a.values
         (a.min_age()
         ,1 + a.max_age() - a.min_age()
         );
     if(v0 == v1)
         {
-        std::cout << "validated: table " << t << ' ' << g << ' ' << s << std::endl;
+        std::cout << "okay: table " << t << ' ' << g << ' ' << s << std::endl;
         }
     else
         {
