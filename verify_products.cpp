@@ -95,7 +95,6 @@ void verify_one_cell
             << "\n  table number: " << t
             << "\n  min age: " << a.min_age()
             << "\n  max age: " << a.max_age()
-            << "\n  length: " << a.max_age() - a.min_age()
             << "\n  cso length: " << lmi::ssize(v0)
             << "\n  table length: " << lmi::ssize(v1)
             << "\n  v0.front(): " << v0.front()
