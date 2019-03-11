@@ -38,6 +38,65 @@
 #include <string>
 #include <vector>
 
+namespace
+{
+void verify_one_cell
+    (std::string const& z // product
+    ,std::string const& g // gender
+    ,std::string const& s // smoking
+    )
+{
+    Input input;
+    input["ProductName"] = z;
+    input["Gender"] = g;
+    input["Smoking"] = s;
+    yare_input yi(input);
+    product_database db(yi);
+    oenum_cso_era const era = db.query<oenum_cso_era>(DB_CsoEra);
+    oenum_alb_or_anb const a_b = db.query<oenum_alb_or_anb>(DB_AgeLastOrNearest);
+    int const t = db.query<int>(DB_Irc7702QTable);
+    if(0 == t)
+        return;
+    std::vector<double> v0 = cso_table
+        (era
+        ,oe_orthodox
+        ,a_b
+        ,mce_gender (g).value()
+        ,mce_smoking(s).value()
+        );
+    product_data p(z);
+    std::string const f = AddDataDir(p.datum("Irc7702QFilename"));
+    actuarial_table a(f, t);
+    std::vector<double> v1 = a.values
+        (a.min_age()
+        ,1 + a.max_age() - a.min_age()
+        );
+    if(v0 == v1)
+        {
+        std::cout << "validated: table " << t << ' ' << g << ' ' << s << std::endl;
+        }
+    else
+        {
+        std::cout << "PROBLEM: " << z << ' ' << g << ' ' << s << std::endl;
+        std::cout << lmi::ssize(v0) << ' ' << lmi::ssize(v1) << '\n';
+        std::cout
+            << "\n  CSO era: " << era
+            << "\n  ALB or ANB: " << a_b
+            << "\n  table file: " << f
+            << "\n  table number: " << t
+            << "\n  min age: " << a.min_age()
+            << "\n  max age: " << a.max_age()
+            << "\n  length: " << a.max_age() - a.min_age()
+            << "\n  v0.front(): " << v0.front()
+            << "\n  v1.front(): " << v1.front()
+            << "\n  v0.back (): " << v0.back ()
+            << "\n  v1.back (): " << v1.back ()
+            << std::endl
+            ;
+        }
+}
+} // Unnamed namespace.
+
 /// Verify all products.
 
 void verify_products()
@@ -46,58 +105,11 @@ void verify_products()
     for(auto const& z : products)
         {
         std::cout << "Testing product " << z << '\n';
-        Input input;
-        input["ProductName"] = z;
         for(auto const& g : all_strings<mcenum_gender>())
             {
-            input["Gender"] = g;
             for(auto const& s : all_strings<mcenum_smoking>())
                 {
-                input["Smoking"] = s;
-                yare_input yi(input);
-                product_database db(yi);
-                oenum_cso_era const era = db.query<oenum_cso_era>(DB_CsoEra);
-                oenum_alb_or_anb const a_b = db.query<oenum_alb_or_anb>(DB_AgeLastOrNearest);
-                int const t = db.query<int>(DB_Irc7702QTable);
-                if(0 == t)
-                    continue;
-                std::vector<double> v0 = cso_table
-                    (era
-                    ,oe_orthodox
-                    ,a_b
-                    ,mce_gender (g).value()
-                    ,mce_smoking(s).value()
-                    );
-                product_data p(z);
-                std::string const f = AddDataDir(p.datum("Irc7702QFilename"));
-                actuarial_table a(f, t);
-                std::vector<double> v1 = a.values
-                    (a.min_age()
-                    ,1 + a.max_age() - a.min_age()
-                    );
-                if(v0 == v1)
-                    {
-                    std::cout << "validated: table " << t << ' ' << g << ' ' << s << std::endl;
-                    }
-                else
-                    {
-                    std::cout << "PROBLEM: " << z << ' ' << g << ' ' << s << std::endl;
-                    std::cout << lmi::ssize(v0) << ' ' << lmi::ssize(v1) << '\n';
-                    std::cout
-                        << "\n  CSO era: " << era
-                        << "\n  ALB or ANB: " << a_b
-                        << "\n  table file: " << f
-                        << "\n  table number: " << t
-                        << "\n  min age: " << a.min_age()
-                        << "\n  max age: " << a.max_age()
-                        << "\n  length: " << a.max_age() - a.min_age()
-                        << "\n  v0.front(): " << v0.front()
-                        << "\n  v1.front(): " << v1.front()
-                        << "\n  v0.back (): " << v0.back ()
-                        << "\n  v1.back (): " << v1.back ()
-                        << std::endl
-                        ;
-                    }
+                verify_one_cell(z, g, s);
                 }
             }
         }
