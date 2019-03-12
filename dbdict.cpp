@@ -660,14 +660,14 @@ sample::sample()
     Add({DB_AllowCvat           , true});
     Add({DB_AllowGpt            , true});
     Add({DB_AllowNo7702         , false});
-    Add({DB_CorridorWhence      , 1});
-    Add({DB_Irc7702NspWhence    , 2});
-    Add({DB_SevenPayWhence      , 1});
+    Add({DB_CorridorWhence      , oe_7702_corr_from_table});
+    Add({DB_Irc7702NspWhence    , oe_7702_nsp_reciprocal_cvat_corridor});
+    Add({DB_SevenPayWhence      , oe_7702_7pp_from_table});
 
     // This is just a sample product, so make do with plausible
     // all-male seven-pay premiums, and use GPT corridor factors for
     // CVAT. 'Irc7702NspWhence' specifies that NSP is calculated as
-    // the reciprocal of corridor, so no NSP table is needed.
+    // the reciprocal of CVAT corridor, so no NSP table is needed.
     Add({DB_CorridorTable       , 7});
     Add({DB_Irc7702NspTable     , 0});
     Add({DB_SevenPayTable       , 10});

@@ -44,6 +44,7 @@
 #include "math_functions.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_str()
 #include "mortality_rates.hpp"
+#include "oecumenic_enumerations.hpp"
 #include "outlay.hpp"
 #include "premium_tax.hpp"
 #include "rounding_rules.hpp"
@@ -2022,11 +2023,7 @@ std::vector<double> BasicValues::GetSevenPayRates() const
         (product().datum("SevenPayFilename")
         ,DB_SevenPayTable
     // TAXATION !! No table available if 7PP calculated from first principles.
-//        ,1 == database().query<bool>(DB_SevenPayWhence)
-// TAXATION !! DATABASE !! Rename 'SevenPayWhence' to 'SevenPayIsTabular',
-// e.g.: the only possibilities are
-//   0=first principles, 1=table
-// so it's naturally boolean.
+//        ,oe_7702_prem_from_table == database().query<bool>(DB_SevenPayWhence)
         );
 }
 
