@@ -52,11 +52,20 @@ void verify_one_cell
     input["Smoking"    ] = smoking;
     yare_input       const yi(input);
     product_database const db(yi);
-    auto const era = db.query<oenum_cso_era   >(DB_CsoEra);
-    auto const a_b = db.query<oenum_alb_or_anb>(DB_AgeLastOrNearest);
-    auto const t   = db.query<int             >(DB_Irc7702QTable);
-    if(0 == t)
+    auto const era    = db.query<oenum_cso_era   >(DB_CsoEra);
+    auto const a_b    = db.query<oenum_alb_or_anb>(DB_AgeLastOrNearest);
+    auto const t      = db.query<int             >(DB_Irc7702QTable);
+    auto const axis_g = db.query<bool            >(DB_Irc7702QAxisGender);
+    auto const axis_s = db.query<bool            >(DB_Irc7702QAxisSmoking);
+    if
+        (  0 == t
+        || (!axis_g && "Unisex"   != gender)
+        || (!axis_s && "Unismoke" != smoking)
+        )
+        {
         return;
+        }
+
     std::vector<double> const v0 = cso_table
         (era
         ,oe_orthodox

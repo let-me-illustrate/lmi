@@ -133,6 +133,8 @@ class LMI_SO DBDictionary
     database_entity Irc7702NspTable     ;
     database_entity SevenPayTable       ;
     database_entity Irc7702QTable       ;
+    database_entity Irc7702QAxisGender  ;
+    database_entity Irc7702QAxisSmoking ;
     database_entity RatingsAffect7702   ;
     database_entity CvatMatChangeDefn   ;
     database_entity GptMatChangeDefn    ;

@@ -154,6 +154,8 @@ void DBDictionary::ascribe_members()
     ascribe("Irc7702NspTable"     , &DBDictionary::Irc7702NspTable     );
     ascribe("SevenPayTable"       , &DBDictionary::SevenPayTable       );
     ascribe("Irc7702QTable"       , &DBDictionary::Irc7702QTable       );
+    ascribe("Irc7702QAxisGender"  , &DBDictionary::Irc7702QAxisGender  );
+    ascribe("Irc7702QAxisSmoking" , &DBDictionary::Irc7702QAxisSmoking );
     ascribe("RatingsAffect7702"   , &DBDictionary::RatingsAffect7702   );
     ascribe("CvatMatChangeDefn"   , &DBDictionary::CvatMatChangeDefn   );
     ascribe("GptMatChangeDefn"    , &DBDictionary::GptMatChangeDefn    );
@@ -687,6 +689,8 @@ sample::sample()
     int dims311[e_number_of_axes] = {3, 1, 1, 1, 1, 1, 1}; // gender
     double T7702q[3] = {35, 41, 107,}; // Female, male, unisex.
     Add({DB_Irc7702QTable, e_number_of_axes, dims311, T7702q});
+    Add({DB_Irc7702QAxisGender  , true});
+    Add({DB_Irc7702QAxisSmoking , false});
 
     Add({DB_CvatMatChangeDefn   , mce_earlier_of_increase_or_unnecessary_premium});
     Add({DB_GptMatChangeDefn    , 0});
