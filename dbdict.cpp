@@ -24,6 +24,7 @@
 #include "dbdict.hpp"
 #include "xml_serializable.tpp"
 
+#include "actuarial_table.hpp"          // e_reenter_never
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"            // gregorian_epoch(), last_yyyy_date()
@@ -539,8 +540,11 @@ void DBDictionary::InitDB()
     Add({DB_SmokeOrTobacco      , oe_smoker_nonsmoker});
     Add({DB_CvatMatChangeDefn   , mce_unnecessary_premium});
     Add({DB_Effective7702DboRop , mce_option1_for_7702});
+    Add({DB_TermIsQABOrDb7702   , oe_7702_term_is_db});
+    Add({DB_TermIsQABOrDb7702A  , oe_7702_term_is_db});
     Add({DB_CsoEra              , oe_2017cso});
     Add({DB_CsoMisprint         , oe_orthodox});
+    Add({DB_CoiInforceReentry   , e_reenter_never});
     Add({DB_SepAcctSpreadMethod , mce_spread_is_effective_annual});
     Add({DB_IntSpreadMode       , mce_spread_daily});
     Add({DB_AssetChargeType     , oe_asset_charge_spread});
@@ -687,8 +691,6 @@ sample::sample()
     Add({DB_CvatMatChangeDefn   , mce_earlier_of_increase_or_unnecessary_premium});
     Add({DB_GptMatChangeDefn    , 0});
     Add({DB_Irc7702BftIsSpecAmt , 0});
-    Add({DB_TermIsQABOrDb7702   , oe_7702_term_is_db});
-    Add({DB_TermIsQABOrDb7702A  , oe_7702_term_is_db});
 
     // US 1980 CSO age last; unisex = table D.
     // Male uses table E, which is correct, as opposed to table F,
