@@ -207,7 +207,7 @@ int test_main(int, char*[])
         ,0.02                   // minimum_premium_tax_load_rate_
         ,999.999                // premium_tax_rate_                [unused]
         ,999.999                // premium_tax_amortization_rate_   [unused]
-        ,999.999                // premium_tax_amortization_period_ [unused]
+        ,999                    // premium_tax_amortization_period_ [unused]
         ,oe_asset_charge_load   // asset_charge_type_
         ,true                   // NeedMidpointRates_
         ,round_interest_rate    // round_interest_rate_

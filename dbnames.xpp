@@ -181,7 +181,7 @@
 {DB_PremTaxTierGroup,DB_Topic_DacAndPremiumTax,"PremTaxTierGroup","Apply tiered premium tax to all contracts in a group aggregated together: 0=no, 1=yes [not supported yet]",}, \
 {DB_PremTaxTierPeriod,DB_Topic_DacAndPremiumTax,"PremTaxTierPeriod","Apply tiered premium tax to premiums aggregated by: 0=policy year, 1=calendar year [not supported yet]",}, \
 {DB_PremTaxTierNonDecr,DB_Topic_DacAndPremiumTax,"PremTaxTierNonDecr","Tiered premium tax effective rate constrained not to decrease from one year to the next: 0=no, 1=yes [not supported yet]",}, \
-{DB_PremTaxAmortPeriod,DB_Topic_DacAndPremiumTax,"PremTaxAmortPeriod","Premium tax amortization period in years",}, \
+{DB_PremTaxAmortPeriod,DB_Topic_DacAndPremiumTax,"PremTaxAmortPeriod","Premium tax amortization period in integral years",}, \
 {DB_PremTaxAmortIntRate,DB_Topic_DacAndPremiumTax,"PremTaxAmortIntRate","Premium tax amortization annual effective interest rate",}, \
 {DB_PremTaxRate,DB_Topic_DacAndPremiumTax,"PremTaxRate","Scalar premium tax rate paid by insurance company--distinct from premium load due to premium tax",}, \
 {DB_PremTaxState,DB_Topic_DacAndPremiumTax,"PremTaxState","[Obsolete--retained only for backward compatibility] State that formerly determined premium tax rate: 0=insured state, 1=corporation state",}, \
