@@ -536,53 +536,53 @@ void DBDictionary::InitDB()
     //
     // Some, like DB_IntSpreadMode, have no enumerator equal to zero,
     // and must be initialized explicitly with some actual enumerator.
-    Add({DB_SmokeOrTobacco        , oe_smoker_nonsmoker});
-    Add({DB_CvatMatChangeDefn     , mce_unnecessary_premium});
-    Add({DB_Effective7702DboRop   , mce_option1_for_7702});
-    Add({DB_CsoEra                , oe_2017cso});
-    Add({DB_CsoMisprint           , oe_orthodox});
-    Add({DB_SepAcctSpreadMethod   , mce_spread_is_effective_annual});
-    Add({DB_IntSpreadMode         , mce_spread_daily});
-    Add({DB_AssetChargeType       , oe_asset_charge_spread});
-    Add({DB_PremTaxState          , oe_ee_state});
-    Add({DB_WpChargeMethod        , oe_waiver_times_deductions});
-    Add({DB_MaxWdDed              , mce_twelve_times_last});
-    Add({DB_MinPremType           , oe_monthly_deduction});
-    Add({DB_TgtPremType           , oe_monthly_deduction});
-    Add({DB_DeductionMethod       , oe_proportional});
-    Add({DB_DeductionAcct         , oe_prefer_general_account});
-    Add({DB_DistributionMethod    , oe_proportional});
-    Add({DB_DistributionAcct      , oe_prefer_general_account});
-    Add({DB_EePremMethod          , oe_input_allocation});
-    Add({DB_EePremAcct            , oe_prefer_general_account});
-    Add({DB_ErPremMethod          , oe_input_allocation});
-    Add({DB_ErPremAcct            , oe_prefer_general_account});
-    Add({DB_LedgerType            , mce_ill_reg});
-    Add({DB_AgeLastOrNearest      , oe_age_last_birthday});
+    Add({DB_SmokeOrTobacco      , oe_smoker_nonsmoker});
+    Add({DB_CvatMatChangeDefn   , mce_unnecessary_premium});
+    Add({DB_Effective7702DboRop , mce_option1_for_7702});
+    Add({DB_CsoEra              , oe_2017cso});
+    Add({DB_CsoMisprint         , oe_orthodox});
+    Add({DB_SepAcctSpreadMethod , mce_spread_is_effective_annual});
+    Add({DB_IntSpreadMode       , mce_spread_daily});
+    Add({DB_AssetChargeType     , oe_asset_charge_spread});
+    Add({DB_PremTaxState        , oe_ee_state});
+    Add({DB_WpChargeMethod      , oe_waiver_times_deductions});
+    Add({DB_MaxWdDed            , mce_twelve_times_last});
+    Add({DB_MinPremType         , oe_monthly_deduction});
+    Add({DB_TgtPremType         , oe_monthly_deduction});
+    Add({DB_DeductionMethod     , oe_proportional});
+    Add({DB_DeductionAcct       , oe_prefer_general_account});
+    Add({DB_DistributionMethod  , oe_proportional});
+    Add({DB_DistributionAcct    , oe_prefer_general_account});
+    Add({DB_EePremMethod        , oe_input_allocation});
+    Add({DB_EePremAcct          , oe_prefer_general_account});
+    Add({DB_ErPremMethod        , oe_input_allocation});
+    Add({DB_ErPremAcct          , oe_prefer_general_account});
+    Add({DB_LedgerType          , mce_ill_reg});
+    Add({DB_AgeLastOrNearest    , oe_age_last_birthday});
 
     // It would be dangerous to set these multipliers to zero.
-    Add({DB_GuarCoiMultiplier     , 1.0});
-    Add({DB_MinInputCoiMult       , 1.0});
-    Add({DB_CurrCoiMultiplier     , 1.0});
-    Add({DB_SubstdTableMult       , 1.0});
-    Add({DB_MaxWdGenAcctValMult   , 1.0});
-    Add({DB_MaxWdSepAcctValMult   , 1.0});
+    Add({DB_GuarCoiMultiplier   , 1.0});
+    Add({DB_MinInputCoiMult     , 1.0});
+    Add({DB_CurrCoiMultiplier   , 1.0});
+    Add({DB_SubstdTableMult     , 1.0});
+    Add({DB_MaxWdGenAcctValMult , 1.0});
+    Add({DB_MaxWdSepAcctValMult , 1.0});
 
     // Usually the maximum is a reciprocal, e.g., 1/11 or 1/12; for
     // greatest precision, store the reciprocal of that reciprocal,
     // e.g., 11 or 12.
-    Add({DB_MaxMonthlyCoiRate     , 12.0});
+    Add({DB_MaxMonthlyCoiRate   , 12.0});
 
     // These are the same as class date_trammel's nominal limits.
-    Add({DB_CoiResetMinDate       , calendar_date::gregorian_epoch_jdn});
-    Add({DB_CoiResetMaxDate       , calendar_date::last_yyyy_date_jdn });
+    Add({DB_CoiResetMinDate     , calendar_date::gregorian_epoch_jdn});
+    Add({DB_CoiResetMaxDate     , calendar_date::last_yyyy_date_jdn });
 
-    Add({DB_CurrCoiTable0Limit    , dbl_inf});
-    Add({DB_CurrCoiTable1Limit    , dbl_inf});
-    Add({DB_GuarIntSpread         , dbl_inf});
-    Add({DB_SpecAmtLoadLimit      , dbl_inf});
-    Add({DB_DynSepAcctLoadLimit   , dbl_inf});
-    Add({DB_PremTaxRetalLimit     , dbl_inf});
+    Add({DB_CurrCoiTable0Limit  , dbl_inf});
+    Add({DB_CurrCoiTable1Limit  , dbl_inf});
+    Add({DB_GuarIntSpread       , dbl_inf});
+    Add({DB_SpecAmtLoadLimit    , dbl_inf});
+    Add({DB_DynSepAcctLoadLimit , dbl_inf});
+    Add({DB_PremTaxRetalLimit   , dbl_inf});
 
     // This is determined by law and regulation, and should be the
     // same for all life-insurance products.
@@ -590,13 +590,13 @@ void DBDictionary::InitDB()
     std::vector<int> premium_tax_dimensions(ptd, ptd + e_number_of_axes);
     Add({DB_PremTaxRate, premium_tax_dimensions, premium_tax_rates_for_life_insurance()});
 
-    Add({DB_MaxIssSpecAmt         , dbl_inf});
-    Add({DB_MaxRenlSpecAmt        , dbl_inf});
-    Add({DB_WpLimit               , dbl_inf});
-    Add({DB_AdbLimit              , dbl_inf});
-    Add({DB_SpouseRiderMaxAmt     , dbl_inf});
+    Add({DB_MaxIssSpecAmt       , dbl_inf});
+    Add({DB_MaxRenlSpecAmt      , dbl_inf});
+    Add({DB_WpLimit             , dbl_inf});
+    Add({DB_AdbLimit            , dbl_inf});
+    Add({DB_SpouseRiderMaxAmt   , dbl_inf});
     Add({DB_SpouseRiderMaxIssAge  , 99});   // age_trammel's nominal upper limit
-    Add({DB_ChildRiderMaxAmt      , dbl_inf});
+    Add({DB_ChildRiderMaxAmt    , dbl_inf});
 
     // This must not be zero in TX, which specifically requires a
     // "guaranteed" rate of not more than fifteen percent--see:
@@ -611,8 +611,8 @@ void DBDictionary::InitDB()
     max_vlr[mce_s_TX] = 0.15;
     Add({DB_MaxVlrRate, max_vlr_dimensions, max_vlr});
 
-    Add({DB_FirstPrefLoanYear     , 100});
-    Add({DB_ExpSpecAmtLimit       , dbl_inf});
+    Add({DB_FirstPrefLoanYear   , 100});
+    Add({DB_ExpSpecAmtLimit     , dbl_inf});
 }
 
 class sample : public DBDictionary {public: sample();};
@@ -968,10 +968,10 @@ void DBDictionary::InitAntediluvian()
         Add({db_key_from_name(i), 0.0});
         }
 
-    Add({DB_SmokeOrTobacco        , oe_smoker_nonsmoker});
-    Add({DB_AllowPreferredClass   , true});
-    Add({DB_AllowFlatExtras       , true});
-    Add({DB_CorridorTable         , 7});
+    Add({DB_SmokeOrTobacco      , oe_smoker_nonsmoker});
+    Add({DB_AllowPreferredClass , true});
+    Add({DB_AllowFlatExtras     , true});
+    Add({DB_CorridorTable       , 7});
 
     int guar_coi_dims[e_number_of_axes] = {1, 1, 3, 1, 1, 1, 1};
     // smoker, nonsmoker, unismoke
@@ -991,49 +991,49 @@ void DBDictionary::InitAntediluvian()
 
     // These are the same as class date_trammel's nominal limits.
     // They mustn't be zero.
-    Add({DB_CoiResetMinDate       , calendar_date::gregorian_epoch_jdn});
-    Add({DB_CoiResetMaxDate       , calendar_date::last_yyyy_date_jdn });
+    Add({DB_CoiResetMinDate     , calendar_date::gregorian_epoch_jdn});
+    Add({DB_CoiResetMaxDate     , calendar_date::last_yyyy_date_jdn });
 
-    Add({DB_GuarInt               , 0.03});
-    Add({DB_AllowGenAcct          , true});
-    Add({DB_MaxGenAcctRate        , 0.12});
-    Add({DB_MaxSepAcctRate        , 0.12});
-    Add({DB_GuarMonthlyPolFee     , 12.00});
-    Add({DB_GuarPremLoadTgt       , 0.025});
-    Add({DB_GuarPremLoadExc       , 0.025});
-    Add({DB_GuarSpecAmtLoad       , 0.0});
-    Add({DB_CurrMonthlyPolFee     , 5.00});
-    Add({DB_CurrPremLoadTgt       , 0.025});
-    Add({DB_CurrPremLoadExc       , 0.025});
-    Add({DB_CurrSpecAmtLoad       , 0.0});
-    Add({DB_DacTaxFundCharge      , 0.0});
-    Add({DB_Has1035ExchCharge     , 0.0});
-    Add({DB_MinSpecAmt            , 10000.0});
-    Add({DB_AllowDboRop           , true});
-    Add({DB_AllowChangeToDbo2     , true});
-    Add({DB_AllowWp               , false});
-    Add({DB_WpTable               , 8});
-    Add({DB_AllowAdb              , false});
-    Add({DB_AdbTable              , 9});
-    Add({DB_AllowSpouseRider      , false});
-    Add({DB_AllowChildRider       , false});
-    Add({DB_AllowWd               , true});
-    Add({DB_WdFee                 , 5.0});
-    Add({DB_WdFeeRate             , 0.01});
-    Add({DB_MinWd                 , 100.0});
-    Add({DB_AllowLoan             , true});
-    Add({DB_FixedLoanRate         , 0.06});
-    Add({DB_GuarPrefLoanSpread    , 0.0});
-    Add({DB_GuarRegLoanSpread     , 0.0});
-    Add({DB_CurrPrefLoanSpread    , 0.0});
-    Add({DB_CurrRegLoanSpread     , 0.0});
-    Add({DB_NoLapseMinDur         , 0.0});
-    Add({DB_NoLapseMinAge         , 0.0});
-    Add({DB_NoLapseAlwaysActive   , 0.0});
-    Add({DB_ExpRatAmortPeriod     , 4.0});
-    Add({DB_LedgerType            , mce_ill_reg});
-    Add({DB_AgeLastOrNearest      , oe_age_nearest_birthday_ties_older});
-    Add({DB_MaturityAge           , 100});
+    Add({DB_GuarInt             , 0.03});
+    Add({DB_AllowGenAcct        , true});
+    Add({DB_MaxGenAcctRate      , 0.12});
+    Add({DB_MaxSepAcctRate      , 0.12});
+    Add({DB_GuarMonthlyPolFee   , 12.00});
+    Add({DB_GuarPremLoadTgt     , 0.025});
+    Add({DB_GuarPremLoadExc     , 0.025});
+    Add({DB_GuarSpecAmtLoad     , 0.0});
+    Add({DB_CurrMonthlyPolFee   , 5.00});
+    Add({DB_CurrPremLoadTgt     , 0.025});
+    Add({DB_CurrPremLoadExc     , 0.025});
+    Add({DB_CurrSpecAmtLoad     , 0.0});
+    Add({DB_DacTaxFundCharge    , 0.0});
+    Add({DB_Has1035ExchCharge   , 0.0});
+    Add({DB_MinSpecAmt          , 10000.0});
+    Add({DB_AllowDboRop         , true});
+    Add({DB_AllowChangeToDbo2   , true});
+    Add({DB_AllowWp             , false});
+    Add({DB_WpTable             , 8});
+    Add({DB_AllowAdb            , false});
+    Add({DB_AdbTable            , 9});
+    Add({DB_AllowSpouseRider    , false});
+    Add({DB_AllowChildRider     , false});
+    Add({DB_AllowWd             , true});
+    Add({DB_WdFee               , 5.0});
+    Add({DB_WdFeeRate           , 0.01});
+    Add({DB_MinWd               , 100.0});
+    Add({DB_AllowLoan           , true});
+    Add({DB_FixedLoanRate       , 0.06});
+    Add({DB_GuarPrefLoanSpread  , 0.0});
+    Add({DB_GuarRegLoanSpread   , 0.0});
+    Add({DB_CurrPrefLoanSpread  , 0.0});
+    Add({DB_CurrRegLoanSpread   , 0.0});
+    Add({DB_NoLapseMinDur       , 0.0});
+    Add({DB_NoLapseMinAge       , 0.0});
+    Add({DB_NoLapseAlwaysActive , 0.0});
+    Add({DB_ExpRatAmortPeriod   , 4.0});
+    Add({DB_LedgerType          , mce_ill_reg});
+    Add({DB_AgeLastOrNearest    , oe_age_nearest_birthday_ties_older});
+    Add({DB_MaturityAge         , 100});
 }
 
 /// Print databases to file in an alternative text format.
