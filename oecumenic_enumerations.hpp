@@ -28,6 +28,28 @@
 
 enum {methuselah = 969};
 
+enum oenum_7702_7pp_whence
+    {oe_7702_7pp_first_principles
+    ,oe_7702_7pp_from_table
+    };
+
+enum oenum_7702_corr_whence
+    {oe_7702_corr_first_principles
+    ,oe_7702_corr_from_table
+    };
+
+enum oenum_7702_nsp_whence
+    {oe_7702_nsp_first_principles
+    ,oe_7702_nsp_from_table
+    ,oe_7702_nsp_reciprocal_cvat_corridor
+    };
+
+enum oenum_7702_term
+    {oe_7702_term_is_ignored
+    ,oe_7702_term_is_db
+    ,oe_7702_term_is_qab
+    };
+
 enum oenum_alb_or_anb
     {oe_age_last_birthday
     ,oe_age_nearest_birthday_ties_younger
@@ -124,28 +146,6 @@ enum oenum_render_or_only_measure
 enum oenum_smoking_or_tobacco
     {oe_smoker_nonsmoker
     ,oe_tobacco_nontobacco
-    };
-
-enum oenum_7702_corr_whence
-    {oe_7702_corr_first_principles
-    ,oe_7702_corr_from_table
-    };
-
-enum oenum_7702_nsp_whence
-    {oe_7702_nsp_first_principles
-    ,oe_7702_nsp_from_table
-    ,oe_7702_nsp_reciprocal_cvat_corridor
-    };
-
-enum oenum_7702_7pp_whence
-    {oe_7702_7pp_first_principles
-    ,oe_7702_7pp_from_table
-    };
-
-enum oenum_7702_term
-    {oe_7702_term_is_ignored
-    ,oe_7702_term_is_db
-    ,oe_7702_term_is_qab
     };
 
 enum oenum_visibility
