@@ -837,8 +837,8 @@ sample::sample()
     Add({DB_AdbMaxIssAge        , 70});
     Add({DB_AdbLimit            , 1000000.0});
     Add({DB_AllowSpouseRider    , true});
-    Add({DB_SpouseRiderMinAmt   , 10000});
-    Add({DB_SpouseRiderMaxAmt   , 1000000});
+    Add({DB_SpouseRiderMinAmt   , 10000.0});
+    Add({DB_SpouseRiderMaxAmt   , 1000000.0});
     Add({DB_SpouseRiderMinIssAge, 20});
     Add({DB_SpouseRiderMaxIssAge, 65});
     Add({DB_SpouseRiderGuarTable, 305});   // arbitrarily use 1960 CSG
