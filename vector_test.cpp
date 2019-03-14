@@ -59,7 +59,6 @@
 //
 //   template<typename T>
 //   struct plus
-//       :binary_function<T,T,T>
 //   {
 //       T operator()(T const& t0, T const& t1) const {return t0 + t1;}
 //   }

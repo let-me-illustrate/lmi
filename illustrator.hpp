@@ -29,7 +29,6 @@
 
 #include <boost/filesystem/path.hpp>
 
-#include <functional>
 #include <memory>                       // shared_ptr
 #include <vector>
 
@@ -41,7 +40,6 @@ class Ledger;
 /// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO illustrator final
-    :public std::unary_function<fs::path const&, bool>
 {
   public:
     explicit illustrator(mcenum_emission);

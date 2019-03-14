@@ -28,7 +28,6 @@
 #include "stl_extensions.hpp"           // nonstd::power()
 
 #include <cmath>
-#include <functional>
 #include <limits>
 #include <stdexcept>
 #include <type_traits>
@@ -251,7 +250,6 @@ RealType erroneous_rounding_function(RealType)
 
 template<typename RealType>
 class round_to
-    :public std::unary_function<RealType,RealType>
 {
     static_assert(std::is_floating_point<RealType>::value);
 

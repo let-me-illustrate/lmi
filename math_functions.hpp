@@ -29,7 +29,7 @@
 
 #include <algorithm>                    // max(), min()
 #include <cmath>                        // expm1(), log1p()
-#include <functional>
+#include <functional>                   // unary_function, binary_function
 #include <limits>
 #include <stdexcept>
 #include <type_traits>
@@ -38,8 +38,9 @@
 // TODO ?? Write functions here for other refactorable uses of
 // std::pow() throughout lmi, to facilitate reuse and unit testing.
 
-// Many of these are Adaptable Unary or Binary Functions because that
-// was good C++98 practice.
+// Some of these derive from std::unary_function or std::binary_function
+// because that's still required by std::binder1st() or std::binder2nd(),
+// or by PETE.
 
 template<typename T>
 struct greater_of
@@ -168,7 +169,6 @@ struct i_upper_12_over_12_from_i
 
 template<typename T, int n>
 struct i_from_i_upper_n_over_n
-    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value);
     static_assert(0 < n);
@@ -183,7 +183,6 @@ struct i_from_i_upper_n_over_n
 
 template<typename T>
 struct i_from_i_upper_12_over_12
-    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value);
     T operator()(T const& i) const
@@ -194,7 +193,6 @@ struct i_from_i_upper_12_over_12
 
 template<typename T, int n>
 struct d_upper_n_from_i
-    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value);
     static_assert(0 < n);
@@ -220,7 +218,6 @@ struct d_upper_n_from_i
 
 template<typename T>
 struct d_upper_12_from_i
-    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value);
     T operator()(T const& i) const

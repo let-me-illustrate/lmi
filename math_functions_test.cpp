@@ -31,7 +31,6 @@
 
 #include <algorithm>                    // min()
 #include <cmath>                        // isnan(), pow()
-#include <functional>
 #include <iomanip>
 #include <limits>
 #include <type_traits>
@@ -47,7 +46,6 @@ namespace
 
 template<typename T>
 struct i_upper_12_over_12_from_i_naive
-    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value);
     T operator()(T const& i) const
@@ -59,7 +57,6 @@ struct i_upper_12_over_12_from_i_naive
 
 template<typename T>
 struct i_from_i_upper_12_over_12_naive
-    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value);
     T operator()(T const& i) const
@@ -71,7 +68,6 @@ struct i_from_i_upper_12_over_12_naive
 
 template<typename T>
 struct d_upper_12_from_i_naive
-    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value);
     T operator()(T const& i) const
@@ -102,7 +98,6 @@ struct net_i_from_gross_naive
 
 template<typename T>
 struct coi_rate_from_q_naive
-    :public std::binary_function<T,T,T>
 {
     static_assert(std::is_floating_point<T>::value);
     T operator()(T const& q, T const& max_coi) const

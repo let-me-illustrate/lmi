@@ -71,7 +71,6 @@ namespace
 {
 template<typename T>
 struct greater_of
-    :public std::binary_function<T,T,T>
 {
     T operator()(T const& x, T const& y) const
         {
