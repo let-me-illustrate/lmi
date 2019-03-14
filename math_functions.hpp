@@ -29,7 +29,6 @@
 
 #include <algorithm>                    // max(), min()
 #include <cmath>                        // expm1(), log1p()
-#include <functional>                   // unary_function, binary_function
 #include <limits>
 #include <stdexcept>
 #include <type_traits>
@@ -38,14 +37,16 @@
 // TODO ?? Write functions here for other refactorable uses of
 // std::pow() throughout lmi, to facilitate reuse and unit testing.
 
-// Some of these derive from std::unary_function or std::binary_function
-// because that's still required by std::binder1st() or std::binder2nd(),
-// or by PETE.
+// Some of these provide the typedefs that std::unary_function or
+// std::binary_function would have provided, because they're still
+// required for std::binder1st() or std::binder2nd(), or for PETE.
 
 template<typename T>
 struct greater_of
-    :public std::binary_function<T,T,T>
 {
+    using first_argument_type  = T;
+    using second_argument_type = T;
+    using result_type          = T;
     T operator()(T const& x, T const& y) const
         {
         return std::max(x, y);
@@ -54,8 +55,10 @@ struct greater_of
 
 template<typename T>
 struct lesser_of
-    :public std::binary_function<T,T,T>
 {
+    using first_argument_type  = T;
+    using second_argument_type = T;
+    using result_type          = T;
     T operator()(T const& x, T const& y) const
         {
         return std::min(x, y);
@@ -79,8 +82,10 @@ struct lesser_of
 
 template<typename T>
 struct mean
-    :public std::binary_function<T, T, T>
 {
+    using first_argument_type  = T;
+    using second_argument_type = T;
+    using result_type          = T;
     static_assert(std::is_floating_point<T>::value);
     T operator()(T const& x, T const& y) const
         {return 0.5 * x + 0.5 * y;}
@@ -118,11 +123,10 @@ inline T outward_quotient(T numerator, T denominator)
 // this is judged not to be worthwhile.
 //
 // Typically, the period 'n' is a constant known at compile time, so
-// it is makes sense for it to be a non-type template parameter. That,
-// however, makes derivation from std::binary_function nonsensical:
-// what is important is not the type of 'n', but its value. But 'n'
-// equals twelve in the most common case, for which functors derived
-// from std::unary_function are provided.
+// it is makes sense for it to be a non-type template parameter. To
+// support some old <functional> code, specializations for the most
+// common case, where 'n' equals twelve, are provided with the
+// typedefs that std::unary_function formerly provided.
 //
 // General preconditions: 0 < 'n'; -1.0 <= 'i'; T is floating point.
 //
@@ -158,8 +162,9 @@ struct i_upper_n_over_n_from_i
 
 template<typename T>
 struct i_upper_12_over_12_from_i
-    :public std::unary_function<T,T>
 {
+    using argument_type = T;
+    using result_type   = T;
     static_assert(std::is_floating_point<T>::value);
     T operator()(T const& i) const
         {
@@ -284,8 +289,10 @@ struct net_i_from_gross
 
 template<typename T>
 struct coi_rate_from_q
-    :public std::binary_function<T,T,T>
 {
+    using first_argument_type  = T;
+    using second_argument_type = T;
+    using result_type          = T;
     static_assert(std::is_floating_point<T>::value);
     T operator()(T const& q, T const& max_coi) const
         {
