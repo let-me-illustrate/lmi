@@ -631,6 +631,7 @@ test_commutation_functions_SOURCES = \
   $(common_test_objects) \
   commutation_functions.cpp \
   commutation_functions_test.cpp \
+  cso_table.cpp \
   timer.cpp
 test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -720,6 +721,7 @@ test_global_settings_LDADD = \
 test_gpt_SOURCES = \
   $(common_test_objects) \
   commutation_functions.cpp \
+  cso_table.cpp \
   gpt_commutation_functions.cpp \
   gpt_test.cpp \
   ihs_irc7702.cpp \
@@ -960,6 +962,7 @@ test_premium_tax_LDADD = \
 
 test_print_matrix_SOURCES = \
   $(common_test_objects) \
+  cso_table.cpp \
   miscellany.cpp \
   print_matrix_test.cpp
 test_print_matrix_CXXFLAGS = $(AM_CXXFLAGS)

@@ -563,6 +563,7 @@ commutation_functions_test$(EXEEXT): \
   $(common_test_objects) \
   commutation_functions.o \
   commutation_functions_test.o \
+  cso_table.o \
   timer.o \
 
 configurable_settings_test$(EXEEXT): \
@@ -639,6 +640,7 @@ global_settings_test$(EXEEXT): \
 gpt_test$(EXEEXT): \
   $(common_test_objects) \
   commutation_functions.o \
+  cso_table.o \
   gpt_commutation_functions.o \
   gpt_test.o \
   ihs_irc7702.o \
@@ -851,6 +853,7 @@ premium_tax_test$(EXEEXT): \
 
 print_matrix_test$(EXEEXT): \
   $(common_test_objects) \
+  cso_table.o \
   miscellany.o \
   print_matrix_test.o \
 
