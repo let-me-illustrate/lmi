@@ -272,7 +272,7 @@ struct net_i_from_gross
 ///   http://lists.nongnu.org/archive/html/lmi/2009-09/msg00001.html
 ///
 /// The value of 'q' might exceed unity, for example if guaranteed COI
-/// rates for simplified issue are 120% of 1980 CSO, so that case is
+/// rates for simplified issue are 125% of 1980 CSO, so that case is
 /// accommodated. A value of zero might arise from a partial-mortality
 /// multiplier that equals zero for some or all durations, and that
 /// case arises often enough to merit a special optimization.
