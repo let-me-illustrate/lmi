@@ -393,7 +393,7 @@ libantediluvian_la_LIBADD = \
 liblmi_la_SOURCES = \
     authenticity.cpp \
     commutation_functions.cpp \
-    cso_tables.cpp \
+    cso_table.cpp \
     financial.cpp \
     fund_data.cpp \
     gpt_input.cpp \
@@ -554,7 +554,7 @@ test_actuarial_table_SOURCES = \
   $(common_test_objects) \
   actuarial_table.cpp \
   actuarial_table_test.cpp \
-  cso_tables.cpp \
+  cso_table.cpp \
   timer.cpp \
   xml_lmi.cpp
 test_actuarial_table_CXXFLAGS = $(AM_CXXFLAGS)
@@ -1174,7 +1174,7 @@ noinst_HEADERS = \
     configurable_settings.hpp \
     contains.hpp \
     crc32.hpp \
-    cso_tables.hpp \
+    cso_table.hpp \
     currency.hpp \
     custom_io_0.hpp \
     custom_io_1.hpp \

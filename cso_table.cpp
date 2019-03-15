@@ -21,7 +21,7 @@
 
 #include "pchfile.hpp"
 
-#include "cso_tables.hpp"
+#include "cso_table.hpp"
 
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"               // each_equal()

@@ -277,7 +277,7 @@ lmi_common_objects := \
   $(common_common_objects) \
   authenticity.o \
   commutation_functions.o \
-  cso_tables.o \
+  cso_table.o \
   financial.o \
   fund_data.o \
   gpt_input.o \
@@ -501,7 +501,7 @@ actuarial_table_test$(EXEEXT): \
   $(xmlwrapp_objects) \
   actuarial_table.o \
   actuarial_table_test.o \
-  cso_tables.o \
+  cso_table.o \
   timer.o \
   xml_lmi.o \
 

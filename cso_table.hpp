@@ -19,8 +19,8 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifndef cso_tables_hpp
-#define cso_tables_hpp
+#ifndef cso_table_hpp
+#define cso_table_hpp
 
 #include "config.hpp"
 
@@ -38,4 +38,4 @@ std::vector<double> LMI_SO cso_table
     ,mcenum_smoking
     );
 
-#endif // cso_tables_hpp
+#endif // cso_table_hpp

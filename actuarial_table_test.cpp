@@ -24,7 +24,7 @@
 #include "actuarial_table.hpp"
 
 #include "assert_lmi.hpp"
-#include "cso_tables.hpp"
+#include "cso_table.hpp"
 #include "miscellany.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "test_tools.hpp"

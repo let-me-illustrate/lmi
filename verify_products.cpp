@@ -25,7 +25,7 @@
 
 #include "actuarial_table.hpp"
 #include "ce_product_name.hpp"
-#include "cso_tables.hpp"
+#include "cso_table.hpp"
 #include "data_directory.hpp"           // AddDataDir()
 #include "database.hpp"
 #include "input.hpp"
