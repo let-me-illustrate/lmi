@@ -147,6 +147,7 @@ else ifeq (4.9.2,$(gnu_cpp_version))
 else ifeq (6.3.0,$(gnu_cpp_version))
 else ifeq (7.2.0,$(gnu_cpp_version))
 else ifeq (7.3.0,$(gnu_cpp_version))
+else ifeq (8.1.0,$(gnu_cpp_version))
 else ifeq (8.2.0,$(gnu_cpp_version))
 else
   $(warning Untested $(GNU_CPP) version '$(gnu_cpp_version)')
@@ -159,6 +160,7 @@ else ifeq (4.9.2,$(gnu_cxx_version))
 else ifeq (6.3.0,$(gnu_cxx_version))
 else ifeq (7.2.0,$(gnu_cxx_version))
 else ifeq (7.3.0,$(gnu_cxx_version))
+else ifeq (8.1.0,$(gnu_cxx_version))
 else ifeq (8.2.0,$(gnu_cxx_version))
 else
   $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
@@ -408,7 +410,7 @@ else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
   gcc_version_specific_warnings := \
 
   cxx_standard := -frounding-math -std=c++17
-else ifneq (,$(filter $(gcc_version), 8.2.0))
+else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0))
   gcc_version_specific_warnings := \
     -Wno-cast-function-type \
 
@@ -510,13 +512,13 @@ gcc_cxx_warnings := \
 # to $(gcc_version_specific_warnings), which is incorporated into
 # both $(CFLAGS) and $(CXXFLAGS), elicits error messages such as
 #   command line option '-Wno-noexcept' is valid for C++/ObjC++ but not for C
-# with gcc-8.2, although it worked fine with earlier versions.
+# with gcc-8.x, although it worked fine with earlier versions.
 # Although $(gcc_version_specific_warnings) could be split by
 # language, it is objectionable to complicate this makefile merely
 # in order to work around a gcc regression--so, instead, these two
 # options are temporarily removed from the list above.
 
-temporarily_suppressed_for_gcc_8_2_0 := \
+temporarily_suppressed_for_gcc_8_x := \
   -Wnoexcept \
   -Wuseless-cast \
 
