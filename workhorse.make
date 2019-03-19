@@ -147,6 +147,7 @@ else ifeq (4.9.2,$(gnu_cpp_version))
 else ifeq (6.3.0,$(gnu_cpp_version))
 else ifeq (7.2.0,$(gnu_cpp_version))
 else ifeq (7.3.0,$(gnu_cpp_version))
+else ifeq (8.2.0,$(gnu_cpp_version))
 else
   $(warning Untested $(GNU_CPP) version '$(gnu_cpp_version)')
 endif
@@ -158,6 +159,7 @@ else ifeq (4.9.2,$(gnu_cxx_version))
 else ifeq (6.3.0,$(gnu_cxx_version))
 else ifeq (7.2.0,$(gnu_cxx_version))
 else ifeq (7.3.0,$(gnu_cxx_version))
+else ifeq (8.2.0,$(gnu_cxx_version))
 else
   $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
 endif
@@ -406,6 +408,11 @@ else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
   gcc_version_specific_warnings := \
 
   cxx_standard := -frounding-math -std=c++17
+else ifneq (,$(filter $(gcc_version), 8.2.0))
+  gcc_version_specific_warnings := \
+    -Wno-cast-function-type \
+
+  cxx_standard := -frounding-math -std=c++17
 endif
 
 treat_warnings_as_errors := -pedantic-errors -Werror
@@ -488,7 +495,6 @@ gcc_cxx_warnings := \
   -Wctor-dtor-privacy \
   -Wdelete-non-virtual-dtor \
   -Wdeprecated \
-  -Wnoexcept \
   -Wnoexcept-type \
   -Wnon-template-friend \
   -Woverloaded-virtual \
@@ -497,6 +503,21 @@ gcc_cxx_warnings := \
   -Wreorder \
   -Wstrict-null-sentinel \
   -Wsynth \
+
+# Overriding C++-only warnings by adding '-Wno-' variants such as
+#   -Wno-noexcept
+#   -Wno-useless-cast
+# to $(gcc_version_specific_warnings), which is incorporated into
+# both $(CFLAGS) and $(CXXFLAGS), elicits error messages such as
+#   command line option '-Wno-noexcept' is valid for C++/ObjC++ but not for C
+# with gcc-8.2, although it worked fine with earlier versions.
+# Although $(gcc_version_specific_warnings) could be split by
+# language, it is objectionable to complicate this makefile merely
+# in order to work around a gcc regression--so, instead, these two
+# options are temporarily removed from the list above.
+
+temporarily_suppressed_for_gcc_8_2_0 := \
+  -Wnoexcept \
   -Wuseless-cast \
 
 # Consider these later.
