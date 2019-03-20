@@ -412,7 +412,6 @@ else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
   cxx_standard := -frounding-math -std=c++17
 else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0))
   gcc_version_specific_warnings := \
-    -Wno-cast-function-type \
 
   cxx_standard := -frounding-math -std=c++17
 endif
@@ -548,6 +547,7 @@ gcc_common_extra_warnings := \
 wx_dependent_objects :=
 
 $(wx_dependent_objects): gcc_common_extra_warnings += \
+  -Wno-cast-function-type \
   -Wno-cast-qual \
   -Wno-double-promotion \
   -Wno-format-nonliteral \
