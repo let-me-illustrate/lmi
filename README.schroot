@@ -38,17 +38,17 @@ debootstrap --arch=amd64 --make-tarball=/var/cache/buster_bootstrap.tar buster /
 # Unpack the OS tarball into the particular chroot being created.
 # (If the preceding apt-get and debootstrap steps have already been
 # completed once, then skip them and start here.)
-mkdir -p /srv/chroot/lmi-buster
+mkdir -p /srv/chroot/lmi-buster2
 debootstrap --arch=amd64 --unpack-tarball=/var/cache/buster_bootstrap.tar \
- buster /srv/chroot/lmi-buster >lmi-buster-debootstrap-log 2>&1
+ buster /srv/chroot/lmi-buster2 >lmi-buster2-debootstrap-log 2>&1
 
 # This command should produce no output:
-grep --invert-match '^I:' lmi-buster-debootstrap-log
+grep --invert-match '^I:' lmi-buster2-debootstrap-log
 
-cat >/etc/schroot/chroot.d/lmi-buster.conf <<\EOF
-[lmi-buster]
+cat >/etc/schroot/chroot.d/lmi-buster2.conf <<\EOF
+[lmi-buster2]
 description=debian buster cross build
-directory=/srv/chroot/lmi-buster
+directory=/srv/chroot/lmi-buster2
 users=greg
 groups=greg
 root-groups=root
@@ -61,8 +61,10 @@ exit
 # This command--to start a root shell in the chroot--can be run as a
 # normal user. It will prompt for the root password.
 
-schroot --chroot=lmi-buster --user=root --directory=/
+schroot --chroot=lmi-buster2 --user=root --directory=/
 # enter password
+#
+# Expect a warning that bash will be used because zsh isn't yet installed.
 
 # Add i386 before installing wine, so that wine can run 32-bit .exe's .
 
@@ -82,6 +84,13 @@ chmod a+x /usr/sbin/policy-rc.d
 dpkg-divert --divert /usr/bin/ischroot.debianutils --rename /usr/bin/ischroot
 ln -s /bin/true /usr/bin/ischroot
 
+# For now at least, ignore this warning:
+#   dpkg-divert: warning: diverting file '/usr/bin/ischroot' from an Essential
+#   package with rename is dangerous, use --no-rename
+# because the debian.org wiki cited above still recommends this diversion
+# as of 2019-03, and the underlying defect is still unresolved:
+#   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=685034
+
 # This being a "plain" schroot, mount essential directories:
 mount -t devpts -o rw,nosuid,noexec,relatime,mode=600 devpts /dev/pts
 mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
@@ -92,28 +101,28 @@ mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 #   umount ./dev/pts
 #   umount ./proc
 # ...or outside chroot:
-#   umount /srv/chroot/lmi-buster/dev/pts/
-#   umount /srv/chroot/lmi-buster/proc/
+#   umount /srv/chroot/lmi-buster2/dev/pts/
+#   umount /srv/chroot/lmi-buster2/proc/
 # Then, and only then:
-#   rm -rf /srv/chroot/lmi-buster/
-#   rm /etc/schroot/chroot.d/lmi-buster.conf
+#   rm -rf /srv/chroot/lmi-buster2/
+#   rm /etc/schroot/chroot.d/lmi-buster2.conf
 
 apt-get update
 apt-get --assume-yes install wget g++-mingw-w64 automake libtool make \
  pkg-config git cvs zsh bzip2 unzip sudo wine default-jre jing trang \
  g++-multilib libxml2-utils libxslt1-dev vim-gtk vim-doc shellcheck \
  xsltproc \
- >lmi-buster-apt-get-log 2>&1
+ >lmi-buster2-apt-get-log 2>&1
 
 # This command should produce little output:
-<lmi-buster-apt-get-log sed -e'0,/^Preconfiguring/d' \
+<lmi-buster2-apt-get-log sed -e'0,/^Preconfiguring/d' \
  -e'/^Fetched\|^Preparing\|^Unpacking\|^Configuring\|^Selecting/d' \
  -e'/^Setting up\|^Processing\|^Adding\|^update-alternatives\|^[Dd]one./d' \
  -e'/^(Reading database\|^Linking\|^Moving old\|^Regenerating/d' \
  -e'/^Creating config\|^Updating certificates\|^Running hooks/d'
 #
 # Don't worry about messages like the following--see:
-#   http://lists.nongnu.org/archive/html/lmi/2016-09/msg00025.html
+#   https://lists.nongnu.org/archive/html/lmi/2016-09/msg00025.html
 #
 #   update-rc.d: warning: start and stop actions are no longer supported; falling back to defaults
 #   invoke-rc.d: policy-rc.d denied execution of start.
@@ -191,7 +200,7 @@ alias asdf='. ./startup_script'
 EOF
 
 # Repair /usr/share/libtool/.../ltmain.sh as indicated here:
-#   http://lists.gnu.org/archive/html/libtool-patches/2011-06/msg00001.html
+#   https://lists.gnu.org/archive/html/libtool-patches/2011-06/msg00001.html
 # Do this as root because root owns the file.
 
 cat >/home/greg/ltmain.sh.patch <<\EOF
@@ -330,28 +339,34 @@ exit
 # conserves bandwidth. Directory cache_for_lmi/ in a native msw
 # installation also contains cygwin files, which are not wanted in a
 # chroot. For convenience, add a bare repository of proprietary files
-# to this directory (after making sure it's up to date):
-#   cp --dereference --preserve --recursive /WHEREVER/blessed /srv/cache_for_lmi
-#   cp -a /srv/cache_for_lmi/* /srv/chroot/lmi-buster/cache_for_lmi/
-# Also copy any desired msw software into the chroot now--but if it
-# requires running an "install" program, postpone that until wine has
-# been installed, below.
+# to this directory (after making sure it's up to date), e.g.:
+#   rm -rf /srv/cache_for_lmi/blessed/proprietary
+#   cp --dereference --preserve --recursive \
+#     /srv/chroot/some-prior-chrootopt/lmi/blessed/ /srv/cache_for_lmi
+# to update the host, and then:
+#   cp --dereference --preserve --recursive \
+#     /srv/cache_for_lmi/* /srv/chroot/lmi-buster2/cache_for_lmi/
+#
+# Also copy any desired msw software into the chroot now, e.g.:
+#   cp -a /srv/chroot/some-prior-chroot/opt/xyzzy /srv/chroot/lmi-buster2/opt/xyzzy
+# unless it requires running an "install" program, which must be postponed
+# until wine has been installed, below.
 
 # Configure ssh, iff this chroot needs write access to savannah.
 # The easiest way is to copy existing credentials, e.g.:
-#   cp -a ~/.ssh/ /srv/chroot/lmi-buster/home/greg
+#   cp -a ~/.ssh/ /srv/chroot/lmi-buster2/home/greg
 # Make sure the .ssh/config file contains:
 #   Protocol 2
 #   HashKnownHosts no
 # See the discussion of hashing (inter alia) here:
-#   http://lists.nongnu.org/archive/html/lmi/2018-01/msg00003.html
+#   https://lists.nongnu.org/archive/html/lmi/2018-01/msg00003.html
 
 # Enter the chroot as a normal user
 
-schroot --chroot=lmi-buster
+schroot --chroot=lmi-buster2
 
 # Configure git. See:
-#   http://lists.nongnu.org/archive/html/lmi/2016-03/msg00006.html
+#   https://lists.nongnu.org/archive/html/lmi/2016-03/msg00006.html
 # Use your own name and email address.
 git config --global user.name "Gregory W. Chicares"
 git config --global user.email gchicares@sbcglobal.net
@@ -362,8 +377,15 @@ git config --global log.date iso8601-strict-local
 git config --global log.follow true
 
 # Initialize wine. See:
-#   http://lists.nongnu.org/archive/html/lmi/2016-10/msg00002.html
+#   https://lists.nongnu.org/archive/html/lmi/2016-10/msg00002.html
 WINEDLLOVERRIDES=mscoree=d wine wineboot
+#
+# Don't worry about this:
+#   0009:err:file:init_redirects cannot open L"C:\\windows" (c000000f)
+# or a dozen or so lines of ':err:ole:' diagnostics mentioning
+# "IPSFactory" and "MarshalInterface", or this:
+#   0014:err:ole:get_local_server_stream Failed: 80004002
+#   Could not load wine-gecko. HTML rendering will be disabled.
 
 # Configure wine:
 
@@ -380,7 +402,7 @@ wine regedit
 #
 # Later, to fix any application that gets the wrong X tab order:
 # winecfg
-#   "Applications": "add"; then
+#   "Applications": "add" (probably from drive Z:); then
 #   "Graphics": "Emulate virtual desktop"
 #     specify appropriate size: e.g., 1900x1120 for a 1920x1200 monitor
 #     (the other options don't seem to matter)
@@ -390,7 +412,7 @@ wine regedit
 # builds use the same directories and can share the same
 # architecture-independent 'configurable_settings.xml'--much like the
 # "identity mount" technique used with cygwin. See:
-#   http://lists.nongnu.org/archive/html/lmi/2017-05/msg00018.html
+#   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00018.html
 
 mkdir -p ~/.wine/drive_c/users/greg/opt/
 pushd ~/.wine/drive_c/users/greg/opt/
@@ -466,7 +488,8 @@ cp -a /opt/lmi/proprietary/test/* /opt/lmi/touchstone/
 # Remove object files previously built without proprietary source:
 rm /opt/lmi/src/build/lmi/Linux/gcc/ship/my*
 
-# Regenerate the binary database:
+# Regenerate the binary database (expect the 'rm' command here to fail
+# the first time, because there are no old files to remove):
 cd /opt/lmi/data
 rm proprietary.dat proprietary.ndx
 wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
@@ -496,7 +519,7 @@ exit
 # A minimalist cross-building chroot wouldn't normally contain its own
 # file manager--one in the host is enough. To set a bookmark into the
 # chroot, add a line such as:
-#   file:///srv/chroot/lmi-buster/opt/lmi/src/lmi
+#   file:///srv/chroot/lmi-buster2/opt/lmi/src/lmi
 # to the GTK bookmarks file, which may be one of the following:
 #   vim ~/.gtk-bookmarks
 #   vim ~/.config/gtk-3.0/bookmarks
