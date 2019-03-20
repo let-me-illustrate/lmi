@@ -39,6 +39,7 @@
 //  only 'strvararg.h:1048:19':
 #   pragma GCC diagnostic ignored "-Wdouble-promotion"
 #   pragma GCC diagnostic ignored "-Wformat-nonliteral"
+#   pragma GCC diagnostic ignored "-Wnoexcept"
 #   pragma GCC diagnostic ignored "-Wsign-conversion"
 #   pragma GCC diagnostic ignored "-Wuseless-cast"
 #endif // defined __GNUC__ && !defined __clang__

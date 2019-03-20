@@ -497,6 +497,7 @@ gcc_cxx_warnings := \
   -Wctor-dtor-privacy \
   -Wdelete-non-virtual-dtor \
   -Wdeprecated \
+  -Wnoexcept \
   -Wnoexcept-type \
   -Wnon-template-friend \
   -Woverloaded-virtual \
@@ -507,7 +508,6 @@ gcc_cxx_warnings := \
   -Wsynth \
 
 # Overriding C++-only warnings by adding '-Wno-' variants such as
-#   -Wno-noexcept
 #   -Wno-useless-cast
 # to $(gcc_version_specific_warnings), which is incorporated into
 # both $(CFLAGS) and $(CXXFLAGS), elicits error messages such as
@@ -519,7 +519,6 @@ gcc_cxx_warnings := \
 # options are temporarily removed from the list above.
 
 temporarily_suppressed_for_gcc_8_x := \
-  -Wnoexcept \
   -Wuseless-cast \
 
 # Consider these later.
@@ -552,6 +551,7 @@ $(wx_dependent_objects): gcc_common_extra_warnings += \
   -Wno-cast-qual \
   -Wno-double-promotion \
   -Wno-format-nonliteral \
+  -Wno-noexcept \
   -Wno-sign-conversion \
   -Wno-useless-cast \
 
