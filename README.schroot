@@ -145,59 +145,6 @@ mkdir -p /cache_for_lmi
 chown greg:greg /cache_for_lmi
 
 chsh -s /bin/zsh greg
-touch /home/greg/.zshrc
-chown greg:greg /home/greg/.zshrc
-
-cat >/home/greg/.zshrc <<\EOF
-export WINEPATH='Z:\\opt\\lmi\\local\\bin;Z:\\opt\\lmi\\local\\lib'
-export LMI_HOST=i686-w64-mingw32
-export PATH="/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH"
-# At a regular user prompt, outside the chroot, do this:
-#   $ echo $DISPLAY
-# and replace :0.0 below with the string it returns:
-export DISPLAY=":0.0"
-
-export coefficiency='--jobs=32'
-
-# export TZ=UCT
-export LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
-# It is generally preferable to do this:
-# update-locale LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
-# but neither the chroot's nor the host's /etc/default/locale is
-# sourced by schroot, which strives to set as few environment
-# variables as possible.
-
-# This ought to be unnecessary because $LANG contains the string
-# "UTF-8"--see:
-#   https://lists.nongnu.org/archive/html/lmi/2018-03/msg00049.html
-# but it seems to be necessary nevertheless.
-export LESSCHARSET=utf-8
-
-# bindkey "\e[3~" delete-char      # Del
-# bindkey '\e[H' beginning-of-line # Home
-# bindkey '\e[F' end-of-line       # End
-bindkey "^[[1;5D" backward-word  # Ctrl-left
-bindkey "^[[1;5C" forward-word   # Ctrl-right
-bindkey '\e[1;3D' backward-word  # Alt-left
-bindkey '\e[1;3C' forward-word   # Alt-right
-# By default, zsh unfortunately binds ^S for this purpose;
-# use ^T instead, leaving ^S for flow control.
-bindkey '^T' history-incremental-search-forward
-
-prompt='%d[%?]%(!.#.$)'
-
-HISTSIZE=1000
-SAVEHIST=1000
-HISTFILE=~/.history
-setopt HIST_IGNORE_DUPS
-setopt HIST_IGNORE_SPACE
-
-autoload -U compinit
-compinit -u
-
-# This alias is explained in 'tabs/konsole_tabs'.
-alias asdf='. ./startup_script'
-EOF
 
 # Repair /usr/share/libtool/.../ltmain.sh as indicated here:
 #   https://lists.gnu.org/archive/html/libtool-patches/2011-06/msg00001.html
@@ -220,102 +167,41 @@ EOF
 patch --dry-run --strip=0 </home/greg/ltmain.sh.patch \
  && patch --strip=0 </home/greg/ltmain.sh.patch
 
-# Configure vim.
+# Configure zsh, for root as well as the user configured above.
+
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/gwc/.zshrc'
+mv .zshrc ~
+cp -a ~/.zshrc /home/greg/.zshrc
+chown greg:greg /home/greg/.zshrc
+
+# Configure vim. Rather than trying to split its contents between
+# '~/.vimrc' and '/etc/vim/vimrc.local', just copy it everywhither.
+
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/gwc/.vimrc'
+mv .vimrc ~
+cp -a ~/.vimrc /etc/vim/vimrc.local
+cp -a ~/.vimrc /home/greg/.vimrc
+chown greg:greg /home/greg/.vimrc
 
 # Without this, 'zg' gives an error message; with it, vim creates a
 # spellfile the first time 'zg' is used, if none already exists.
 mkdir ~/.vim
-# It's a much better idea to copy a mature spellfile hither:
-# ~/.vim/spell/en.utf-8.add
+mkdir /home/greg/.vim
+chown greg:greg /home/greg/.vim
+# It's a much better idea to copy a mature spellfile hither,
+mkdir ~/.vim/spell
+cp --dereference --preserve \
+  /cache_for_lmi/.vim/spell/en.utf-8.add \
+  ~/.vim/spell/en.utf-8.add
+mkdir /home/greg/.vim/spell
+chown greg:greg /home/greg/.vim/spell
+cp --dereference --preserve \
+  /cache_for_lmi/.vim/spell/en.utf-8.add \
+  /home/greg/.vim/spell/en.utf-8.add
+chown greg:greg /home/greg/.vim/spell/en.utf-8.add
 # and then (imperatively) run this command:
-# :mkspell! ~/.vim/spell/en.utf-8.add
-
-cat >~/.vimrc <<\EOF
-" This shouldn't be necessary, but it is: $LANG is 'en_US.UTF-8',
-" yet vim uses Latin-1 nevertheless.
-set encoding=utf-8
-
-set background=dark
-highlight clear SpellBad
-highlight SpellBad   cterm=underline ctermbg=240 ctermfg=226
-highlight clear SpellCap
-highlight SpellCap   cterm=underline ctermbg=240 ctermfg=252
-highlight clear SpellLocal
-highlight SpellLocal cterm=underline ctermbg=240 ctermfg=154
-highlight clear SpellRare
-highlight SpellRare  cterm=underline ctermbg=240 ctermfg=208
-
-highlight TabLineFill                            ctermfg=16
-highlight TabLine                    ctermbg=237 ctermfg=124
-highlight TabLineSel                 ctermbg=239 ctermfg=202
-
-" From tpope's 'sensible.vim':
-set tabpagemax=50
-
-" Show invisibles: 'eol' and 'tab' are meant to be unobtrusive,
-" while 'nbsp' and 'trail' are meant to stand out; 'extends' and
-" 'precedes' normally wouldn't be seen because of 'set wrap'.
-set list
-" On second thought, 'eol' should probably be left alone.
-" set listchars=nbsp:◙,eol:☜,tab:☞☞,extends:»,precedes:«,trail:▒
-set listchars=nbsp:◙,tab:☞☞,extends:»,precedes:«,trail:▒
-highlight clear NonText
-highlight NonText    ctermfg=gray " eol, extends, precedes
-highlight clear SpecialKey
-highlight SpecialKey ctermfg=red  " nbsp, tab, trail
-
-let g:netrw_liststyle=3
-map <Tab> <C-W>w
-
-" Prevent gvim cursor from blinking
-:set guicursor+=a:blinkon0
-EOF
-
-cat >/etc/vim/vimrc.local <<\EOF
-set shortmess=Il
-
-noremap <S-Up> <C-Y>
-noremap <S-Down> <C-E>
-
-" Counterpart to J
-nnoremap K i<Enter><Esc>
-
-" Tab key means ASCII HT (in insert mode)
-inoremap <Tab> <C-V><Tab>
-
-set shiftwidth=4
-set expandtab
-
-" Not very helpful--use 'scrolloff' instead
-" set cursorline
-
-" Always show at least one line above or below the cursor
-set scrolloff=1
-
-set cindent
-set cinoptions=t0\ g0\ {s\ (0\ U1 comments^=:///
-
-au BufReadPost,BufNewFile *.tpp set ft=cpp
-au BufReadPost,BufNewFile *.xpp set ft=cpp
-" au BufReadPost,BufNewFile *.?pp set ft=cpp
-
-" mustache--"ignored" is preferable to default:
-"   https://lists.gnu.org/archive/html/lmi/2017-10/msg00016.html
-" for a plugin, see:
-"   https://lists.gnu.org/archive/html/lmi/2017-10/msg00017.html
-au BufReadPost,BufNewFile *.mst set ft=ignored
-
-syntax on
-set hlsearch
-
-set spell spelllang=en_us
-
-set wildmode=longest,longest,list:longest,full
-
-set history=1000
-
-set virtualedit=all
-EOF
+vim -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
+# which will be repeated below in the user chroot.
 
 # Enable stable and security upgrades:
 
@@ -342,7 +228,7 @@ exit
 # to this directory (after making sure it's up to date), e.g.:
 #   rm -rf /srv/cache_for_lmi/blessed/proprietary
 #   cp --dereference --preserve --recursive \
-#     /srv/chroot/some-prior-chrootopt/lmi/blessed/ /srv/cache_for_lmi
+#     /srv/chroot/some-prior-chroot/opt/lmi/blessed/ /srv/cache_for_lmi
 # to update the host, and then:
 #   cp --dereference --preserve --recursive \
 #     /srv/cache_for_lmi/* /srv/chroot/lmi-buster2/cache_for_lmi/
@@ -364,6 +250,9 @@ exit
 # Enter the chroot as a normal user
 
 schroot --chroot=lmi-buster2
+
+# Rebuild vim spellfile (as was done above for root)
+vim -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
 
 # Configure git. See:
 #   https://lists.nongnu.org/archive/html/lmi/2016-03/msg00006.html
