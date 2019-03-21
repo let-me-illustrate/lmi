@@ -505,19 +505,6 @@ gcc_cxx_warnings := \
   -Wreorder \
   -Wstrict-null-sentinel \
   -Wsynth \
-
-# Overriding C++-only warnings by adding '-Wno-' variants such as
-#   -Wno-useless-cast
-# to $(gcc_version_specific_warnings), which is incorporated into
-# both $(CFLAGS) and $(CXXFLAGS), elicits error messages such as
-#   command line option '-Wno-noexcept' is valid for C++/ObjC++ but not for C
-# with gcc-8.x, although it worked fine with earlier versions.
-# Although $(gcc_version_specific_warnings) could be split by
-# language, it is objectionable to complicate this makefile merely
-# in order to work around a gcc regression--so, instead, these two
-# options are temporarily removed from the list above.
-
-temporarily_suppressed_for_gcc_8_x := \
   -Wuseless-cast \
 
 # Consider these later.
@@ -577,7 +564,6 @@ operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
 $(boost_filesystem_objects): gcc_common_extra_warnings += \
   -Wno-deprecated-declarations \
   -Wno-unused-macros \
-  -Wno-useless-cast \
 
 $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
