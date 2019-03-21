@@ -527,6 +527,7 @@ bool DatumSequenceRenderer::GetValue(wxVariant& value) const
 class renderer_type_converter
 {
   public:
+    virtual ~renderer_type_converter() = default;
     virtual wxVariant to_variant
         (any_member<Input> const& x
         ,Input             const& row

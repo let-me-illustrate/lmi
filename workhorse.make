@@ -498,6 +498,7 @@ gcc_cxx_warnings := \
   -Wnoexcept \
   -Wnoexcept-type \
   -Wnon-template-friend \
+  -Wnon-virtual-dtor \
   -Woverloaded-virtual \
   -Wpmf-conversions \
   -Wregister \
@@ -515,7 +516,6 @@ gcc_cxx_warnings := \
 #   members; but expect many false positives.
 
 postponed_gcc_cxx_warnings := \
-  -Wnon-virtual-dtor \
   -Wsign-promo \
 
 # Too many warnings on correct code, e.g. exact comparison to zero:
