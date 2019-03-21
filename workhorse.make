@@ -462,16 +462,15 @@ gcc_common_warnings := \
   -Wwrite-strings \
   -Wno-parentheses \
 
-# Consider these later.
+# Consider these later. Exceptions:
 #
 # -Wdate-time: only for "bit-wise-identical reproducible compilations"
+# -Wunsafe-loop-optimizations: incompatible with ranged for-loops
 
 postponed_gcc_common_warnings := \
-  -Wdate-time \
   -Wmissing-declarations \
   -Wnull-dereference \
   -Wswitch-enum \
-  -Wunsafe-loop-optimizations \
 
 gcc_c_warnings := \
   $(c_standard) \
@@ -507,15 +506,17 @@ gcc_cxx_warnings := \
   -Wsynth \
   -Wuseless-cast \
 
-# Consider these later.
+# Consider these later. Exceptions:
 #
-# -Wsuggest*: use these only occasionally, like -Weffc++
+# -Wsuggest-final-methods, and
+# -Wsuggest-final-types: use these only occasionally, like -Weffc++;
+#   work with '-Wsuggest-final-types' first, because making a class
+#   final may resolve '-Wsuggest-final-methods' suggestions for its
+#   members; but expect many false positives.
 
 postponed_gcc_cxx_warnings := \
   -Wnon-virtual-dtor \
   -Wsign-promo \
-  -Wsuggest-final-methods \
-  -Wsuggest-final-types \
 
 # Too many warnings on correct code, e.g. exact comparison to zero:
 #  -Wfloat-equal \
