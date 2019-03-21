@@ -629,7 +629,7 @@ wxWindow* wx_test_focus_controller_child(MvcController& dialog, char const* name
 }
 
 // Application to drive the tests
-class SkeletonTest : public Skeleton
+class SkeletonTest final : public Skeleton
 {
   public:
     SkeletonTest()

@@ -39,7 +39,7 @@
 
 #include <wx/prntbase.h>
 
-class PreviewFrameEx
+class PreviewFrameEx final
     :public wxPreviewFrame
 {
   public:

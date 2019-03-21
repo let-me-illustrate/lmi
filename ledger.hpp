@@ -60,7 +60,7 @@ class LedgerInvariant;
 class LedgerVariant;
 class ledger_map_holder;
 
-class LMI_SO Ledger
+class LMI_SO Ledger final
 {
     friend class ledger_test;
 

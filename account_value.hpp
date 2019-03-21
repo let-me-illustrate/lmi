@@ -45,7 +45,7 @@ class Ledger;
 class LedgerInvariant;
 class LedgerVariant;
 
-class LMI_SO AccountValue
+class LMI_SO AccountValue final
     :protected BasicValues
 {
     friend class SolveHelper;
