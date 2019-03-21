@@ -806,7 +806,7 @@ void InputSequenceEditor::remove_row(int row)
         int index = row * Col_Max;
         wxWindow* win = sizer_->GetItem(index)->GetWindow();
         sizer_->Detach(index);
-        win->Destroy();
+        win && win->Destroy();
         }
 
     redo_layout();

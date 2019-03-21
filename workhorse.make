@@ -447,6 +447,7 @@ gcc_common_warnings := \
   -Wlogical-op \
   -Wmissing-include-dirs \
   -Wmultichar \
+  -Wnull-dereference \
   -Wpacked \
   -Wpointer-arith \
   -Wredundant-decls \
@@ -471,7 +472,6 @@ gcc_common_warnings := \
 
 postponed_gcc_common_warnings := \
   -Wmissing-declarations \
-  -Wnull-dereference \
   -Wswitch-enum \
 
 gcc_c_warnings := \
@@ -615,10 +615,13 @@ endif
 # Too many warnings for wx and various boost libraries:
 #  -Wold-style-cast \
 
+# See:
+#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00018.html
+$(xmlwrapp_objects): gcc_common_extra_warnings += -Wno-null-dereference
+
 # SOMEDAY !! Address some of these '-Wconversion' issues.
 
 wno_conv_objects := \
-  $(xmlwrapp_objects) \
   CgiUtils.o \
   currency_test.o \
   rate_table.o \
@@ -632,7 +635,6 @@ wno_sign_conv_objects := \
   $(boost_filesystem_objects) \
   $(boost_regex_objects) \
   $(wx_dependent_objects) \
-  $(xmlwrapp_objects) \
   CgiEnvironment.o \
   CgiUtils.o \
   crc32.o \

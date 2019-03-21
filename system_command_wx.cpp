@@ -77,22 +77,23 @@ void assemble_console_lines
 /// for the wxEXEC_NODISABLE rationale. This is potentially dangerous,
 /// and could be inhibited (by an extra argument) if ever needed.
 
-void concrete_system_command(std::string const& command_line)
+void concrete_system_command(std::string const& cmd_line)
 {
     Timer timer;
     wxBusyCursor reverie;
 
-    bool const b =
-                                  wxTheApp
-        && dynamic_cast<wxFrame*>(wxTheApp->GetTopWindow())
-        && dynamic_cast<wxFrame*>(wxTheApp->GetTopWindow())->GetStatusBar()
+    wxFrame const* f =
+                                 wxTheApp
+        ? dynamic_cast<wxFrame*>(wxTheApp->GetTopWindow())
+        : nullptr;
         ;
+    bool const b = f && f->GetStatusBar();
     std::ostream& statusbar_if_available = b ? status() : null_stream();
 
     statusbar_if_available << "Running..." << std::flush;
     wxArrayString output;
     wxArrayString errors;
-    long int exit_code = wxExecute(command_line, output, errors, wxEXEC_NODISABLE);
+    long int exit_code = wxExecute(cmd_line, output, errors, wxEXEC_NODISABLE);
     statusbar_if_available << timer.stop().elapsed_msec_str() << std::flush;
 
     if(0L == exit_code)
@@ -103,7 +104,7 @@ void concrete_system_command(std::string const& command_line)
         {
         alarum()
             << "Command '"
-            << command_line
+            << cmd_line
             << "' not recognized."
             << std::flush
             ;
@@ -114,7 +115,7 @@ void concrete_system_command(std::string const& command_line)
             << "Exit code "
             << exit_code
             << " from command '"
-            << command_line
+            << cmd_line
             << "'.\n"
             ;
         assemble_console_lines(alarum(), output, "Output:");
