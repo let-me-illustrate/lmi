@@ -462,10 +462,12 @@ gcc_common_warnings := \
   -Wwrite-strings \
   -Wno-parentheses \
 
-# Consider these later. Exceptions:
+# Warnings that are not generally useful.
 #
 # -Wdate-time: only for "bit-wise-identical reproducible compilations"
 # -Wunsafe-loop-optimizations: incompatible with ranged for-loops
+
+# Consider these later:
 
 postponed_gcc_common_warnings := \
   -Wmissing-declarations \
@@ -507,19 +509,21 @@ gcc_cxx_warnings := \
   -Wsynth \
   -Wuseless-cast \
 
-# Consider these later. Exceptions:
+# Warnings that are not generally useful.
 #
+# -Wsign-promo: too many false positives--see:
+#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00016.html
 # -Wsuggest-final-methods, and
 # -Wsuggest-final-types: use these only occasionally, like -Weffc++;
 #   work with '-Wsuggest-final-types' first, because making a class
 #   final may resolve '-Wsuggest-final-methods' suggestions for its
-#   members; but expect many false positives.
+#   members; but expect many false positives
+# -Wfloat-equal: too many warnings on correct code, e.g.,
+#   exact comparison to zero
+
+# Consider these later:
 
 postponed_gcc_cxx_warnings := \
-  -Wsign-promo \
-
-# Too many warnings on correct code, e.g. exact comparison to zero:
-#  -Wfloat-equal \
 
 gcc_common_extra_warnings := \
   -Wcast-qual \
