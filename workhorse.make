@@ -466,12 +466,13 @@ gcc_common_warnings := \
 # Warnings that are not generally useful.
 #
 # -Wdate-time: only for "bit-wise-identical reproducible compilations"
+# -Wmissing-declarations: for C++, this flags valid functions that
+#   arguably belong in an unnamed namespace
 # -Wunsafe-loop-optimizations: incompatible with ranged for-loops
 
 # Consider these later:
 
 postponed_gcc_common_warnings := \
-  -Wmissing-declarations \
   -Wswitch-enum \
 
 gcc_c_warnings := \
