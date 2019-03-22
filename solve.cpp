@@ -117,6 +117,8 @@ double SolveTest()
                     y = ConstThat->InvariantValues().SpecAmt[ThatSolveTgtYear - 1];
                     }
                     break;
+                case mce_rop: // fall through
+                case mce_mdb: // fall through
                 default:
                     {
                     alarum()
@@ -301,6 +303,8 @@ double AccountValue::Solve()
             SolveFn    = SolveWD;
             }
             break;
+        case mce_solve_none:    // fall through
+        case mce_solve_er_prem: // fall through
         default:
             {
             alarum()

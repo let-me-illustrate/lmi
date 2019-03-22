@@ -455,6 +455,7 @@ gcc_common_warnings := \
   -Wshadow \
   -Wsign-compare \
   -Wstack-protector \
+  -Wswitch-enum \
   -Wtrampolines \
   -Wundef \
   -Wunreachable-code \
@@ -471,9 +472,7 @@ gcc_common_warnings := \
 # -Wunsafe-loop-optimizations: incompatible with ranged for-loops
 
 # Consider these later:
-
 postponed_gcc_common_warnings := \
-  -Wswitch-enum \
 
 gcc_c_warnings := \
   $(c_standard) \
@@ -523,7 +522,6 @@ gcc_cxx_warnings := \
 #   exact comparison to zero
 
 # Consider these later:
-
 postponed_gcc_cxx_warnings := \
 
 gcc_common_extra_warnings := \
@@ -577,6 +575,7 @@ $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-implicit-fallthrough \
   -Wno-register \
   -Wno-shadow \
+  -Wno-switch-enum \
   -Wno-unused-macros \
   -Wno-useless-cast \
 
@@ -586,7 +585,9 @@ boost_dependent_objects := \
   regex_test.o \
   test_coding_rules.o \
 
-$(boost_dependent_objects): gcc_common_extra_warnings += -Wno-unused-local-typedefs
+$(boost_dependent_objects): gcc_common_extra_warnings += \
+  -Wno-switch-enum \
+  -Wno-unused-local-typedefs
 
 # The boost regex library improperly defines "NOMINMAX":
 #   http://lists.boost.org/Archives/boost/2006/03/102189.php
@@ -618,7 +619,10 @@ endif
 
 # See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00018.html
-$(xmlwrapp_objects): gcc_common_extra_warnings += -Wno-null-dereference
+# et seqq.:
+$(xmlwrapp_objects): gcc_common_extra_warnings += \
+  -Wno-null-dereference \
+  -Wno-switch-enum \
 
 # SOMEDAY !! Address some of these '-Wconversion' issues.
 
