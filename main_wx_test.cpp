@@ -591,11 +591,8 @@ wxWindow* wx_test_focus_controller_child(MvcController& dialog, char const* name
     // until we reach it.
     for(wxWindow* maybe_page = w;;)
         {
-        wxWindow* const maybe_book =
-            (maybe_page && maybe_page->GetParent())
-            ? maybe_page->GetParent()
-            : nullptr
-            ;
+        LMI_ASSERT(maybe_page);
+        wxWindow* const maybe_book = maybe_page->GetParent();
 
         // As we know that w is a descendant of the dialog, this check ensures
         // that the loop terminates as sooner or later we must reach the dialog
