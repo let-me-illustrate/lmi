@@ -803,6 +803,11 @@ void InputSequenceEditor::remove_row(int row)
     // remove all controls from the row
     for(int i = 0; i < Col_Max; ++i)
         {
+        // Note that the index here is constant and always refers to
+        // the first window in the given row: as the indices of the
+        // subsequent elements adjust, by decreasing by one, when we
+        // delete this index, repeatedly deleting Col_Max elements at
+        // this position results in deleting the entire row contents.
         int index = row * Col_Max;
         wxWindow* win = sizer_->GetItem(index)->GetWindow();
         LMI_ASSERT(win);
