@@ -51,7 +51,7 @@
 #include <wx/html/m_templ.h>
 
 #include <array>
-#include <cstdint>                      // SIZE_MAX
+#include <cstdint>                      // ULONG_MAX
 #include <cstdlib>                      // strtoul()
 #include <exception>                    // uncaught_exceptions()
 #include <fstream>
@@ -272,10 +272,10 @@ class html_interpolator
             auto const index = std::strtoul(s.c_str() + open_pos + 1, &stop, 10);
 
             // Conversion must have stopped at the closing bracket character
-            // and also check for overflow (notice that index == SIZE_MAX
+            // and also check for overflow (notice that index == ULONG_MAX
             // doesn't, in theory, need to indicate overflow, but in practice
             // we're never going to have valid indices close to this number).
-            if(stop != s.c_str() + s.length() - 1 || SIZE_MAX <= index)
+            if(stop != s.c_str() + s.length() - 1 || ULONG_MAX == index)
                 {
                 throw std::runtime_error
                     ("Index of vector variable '" + s + "' is not a valid number"
