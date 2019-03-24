@@ -321,8 +321,8 @@ void f_3(std::string const& line1, std::string const& line2)
         << rel_err
         << "  " << d1
         << " vs. " << d2
-        << std::setprecision(original_precision)
         << '\n';
+    std::cout.precision(original_precision);
 }
 
 //============================================================================
@@ -481,8 +481,8 @@ int try_main(int argc, char* argv[])
         << "Summary:"
         << " max abs diff: " << max_abs_diff
         << " max rel err:  " << max_rel_err
-        << std::setprecision(original_precision)
         << '\n';
+    std::cout.precision(original_precision);
 
     is1.close();
     is2.close();
