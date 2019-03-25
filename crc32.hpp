@@ -25,7 +25,7 @@
 #include "config.hpp"
 
 #include "so_attributes.hpp"
-#include "ssize_lmi.hpp"
+#include "ssize_lmi.hpp"                // sstrlen()
 
 #include <string>
 #include <vector>

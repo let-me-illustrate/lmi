@@ -26,9 +26,7 @@
 
 #include "bourn_cast.hpp"
 
-#include <cstddef>                      // size_t
 #include <cstring>                      // strlen()
-#include <type_traits>                  // make_signed_t
 
 /// Reformed std::size() [C++17 27.8/2-3] returning a signed integer.
 ///

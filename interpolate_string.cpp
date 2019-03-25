@@ -25,6 +25,7 @@
 
 #include "alert.hpp"
 
+#include <cstring>                      // strlen()
 #include <stack>
 #include <stdexcept>
 #include <vector>
@@ -275,7 +276,7 @@ std::string interpolate_string
     // interpolated variables tend to be longer than the variables names
     // themselves, but it's difficult to estimate the resulting string length
     // any better than this.
-    out.reserve(strlen(s));
+    out.reserve(std::strlen(s));
 
     // The stack contains all the sections that we're currently in.
     std::stack<section_info, std::vector<section_info>> sections;

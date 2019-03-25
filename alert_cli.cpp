@@ -41,7 +41,7 @@ bool continue_anyway()
 {
     int c;
   ask:
-    c = getchar();
+    c = std::getchar();
     if('y' == c || 'Y' == c)
         {
         std::cout << std::endl;

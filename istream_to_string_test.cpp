@@ -107,7 +107,7 @@ std::string mete_3()
         if(0 != bytes_read)
         s.append(buffer, bytes_read);
         }
-    fclose(fp);
+    std::fclose(fp);
     return s;
 }
 

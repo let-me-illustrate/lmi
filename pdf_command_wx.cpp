@@ -53,6 +53,7 @@
 #include <array>
 #include <cstdint>                      // ULONG_MAX
 #include <cstdlib>                      // strtoul()
+#include <cstring>                      // strchr(), strlen()
 #include <exception>                    // uncaught_exceptions()
 #include <fstream>
 #include <map>
@@ -74,7 +75,7 @@ namespace
 inline
 bool starts_with(std::string const& s, char const* prefix)
 {
-    return s.compare(0, strlen(prefix), prefix) == 0;
+    return s.compare(0, std::strlen(prefix), prefix) == 0;
 }
 
 // Helper enums identifying the possible {Guaranteed,Current}{Zero,}
@@ -2210,7 +2211,7 @@ class pdf_illustration_naic : public pdf_illustration
             mode0[0] = lmi_tolower(mode0[0]);
             add_variable
                 ("ErModeLCWithArticle"
-                ,(strchr("aeiou", mode0[0]) ? "an " : "a ") + mode0
+                ,(std::strchr("aeiou", mode0[0]) ? "an " : "a ") + mode0
                 );
             }
 
