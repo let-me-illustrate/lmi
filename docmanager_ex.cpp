@@ -36,6 +36,7 @@
 
 #include "docmanager_ex.hpp"
 
+#include "bourn_cast.hpp"
 #include "previewframe_ex.hpp"
 #include "single_choice_popup_menu.hpp"
 #include "wx_new.hpp"
@@ -244,7 +245,7 @@ wxDocTemplate* DocManagerEx::SelectDocumentType
         // Yes, this will be slow, but template lists
         // are typically short.
         int j;
-        n = strings.Count();
+        n = bourn_cast<int>(strings.Count());
         for(i = 0; i < n; ++i)
         {
             for(j = 0; j < noTemplates; ++j)

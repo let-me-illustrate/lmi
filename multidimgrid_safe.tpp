@@ -22,6 +22,8 @@
 #include "multidimgrid_safe.hpp"
 
 #include "alert.hpp"
+#include "bourn_cast.hpp"
+#include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 
 /// MultiDimAxis<E>
@@ -55,7 +57,7 @@ MultiDimEnumAxis<E>::MultiDimEnumAxis
 template<typename E>
 unsigned int MultiDimEnumAxis<E>::GetCardinality() const
 {
-    return values_.size();
+    return bourn_cast<unsigned int>(lmi::ssize(values_));
 }
 
 template<typename E>

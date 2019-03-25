@@ -29,6 +29,8 @@
 #include "multidimgrid_tools.hpp"
 
 #include "alert.hpp"
+#include "bourn_cast.hpp"
+#include "ssize_lmi.hpp"
 
 #include <wx/version.h>                 // Mark this file as wx dependent.
 
@@ -142,7 +144,7 @@ inline std::vector<double> const& tier_entity_adapter::values() const
 
 inline unsigned int tier_entity_adapter::get_bands_count() const
 {
-    return is_void() ? 0 : limits().size();
+    return is_void() ? 0 : bourn_cast<unsigned int>(lmi::ssize(limits()));
 }
 
 /// Axis representing number of bands in the stratified_entity

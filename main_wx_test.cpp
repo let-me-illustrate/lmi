@@ -30,6 +30,7 @@
 #include "main_common.hpp"              // initialize_application()
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "skeleton.hpp"
+#include "ssize_lmi.hpp"                // sstrlen()
 #include "wx_test_case.hpp"
 #include "wx_test_new.hpp"
 
@@ -302,7 +303,7 @@ bool application_test::process_command_line(int& argc, char* argv[])
     char const* last_test_option = nullptr;
 
     char const* opt_gui_test_path = "--gui_test_path";
-    int const opt_gui_test_path_length = strlen(opt_gui_test_path);
+    int const opt_gui_test_path_length = lmi::sstrlen(opt_gui_test_path);
 
     for(int n = 1; n < argc; )
         {

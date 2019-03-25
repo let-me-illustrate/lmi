@@ -24,6 +24,7 @@
 #include "multidimgrid_any.hpp"
 
 #include "alert.hpp"
+#include "bourn_cast.hpp"
 #include "wx_new.hpp"
 #include "wx_workarounds.hpp"           // wx[GS]et.*groundColor()
 
@@ -909,7 +910,7 @@ int MultiDimGrid::GetGridAxisSelection(enum_axis_x_or_y x_or_y)
         return wxNOT_FOUND;
         }
 
-    return wxPtrToUInt(choice.GetClientData(oldSel));
+    return bourn_cast<int>(wxPtrToUInt(choice.GetClientData(oldSel)));
 }
 
 void MultiDimGrid::DoSetGridAxisSelection(enum_axis_x_or_y x_or_y, int axis)
@@ -927,7 +928,7 @@ void MultiDimGrid::DoSetGridAxisSelection(enum_axis_x_or_y x_or_y, int axis)
         {
         for(unsigned int i = 1; i < choice.GetCount(); ++i)
             {
-            int cdata = wxPtrToUInt(choice.GetClientData(i));
+            int cdata = bourn_cast<int>(wxPtrToUInt(choice.GetClientData(i)));
             if(cdata == axis)
                 {
                 choice.SetSelection(i);
@@ -1252,7 +1253,7 @@ void MultiDimGrid::UponAxisVariesToggle(wxCommandEvent& event)
         alarum() << "Event received from unexpected control." << LMI_FLUSH;
         }
 
-    std::size_t index = it - axis_varies_checkboxes_.begin();
+    unsigned int index = bourn_cast<unsigned int>(it - axis_varies_checkboxes_.begin());
     bool varies = axis_varies_checkboxes_[index]->GetValue();
     if(varies != table().VariesByDimension(index))
         {

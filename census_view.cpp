@@ -889,10 +889,11 @@ bool CensusViewDataViewModel::SetValueByRow
     return true;
 }
 
+// Avoid using unsigned types in an interface.
 unsigned int CensusViewDataViewModel::GetColumnCount() const
 {
     // "+ 1" for cell serial number in first column.
-    return all_headers().size() + 1;
+    return bourn_cast<unsigned int>(lmi::ssize(all_headers()) + 1);
 }
 
 wxString CensusViewDataViewModel::GetColumnType(unsigned int col) const
@@ -1093,7 +1094,7 @@ wxWindow* CensusView::CreateChildWindow()
 
     // Show headers.
     document().Modify(false);
-    list_model_->Reset(cell_parms().size());
+    list_model_->Reset(lmi::ssize(cell_parms()));
     Update();
 
     list_window_->Select(list_model_->GetItem(0));
@@ -1639,7 +1640,7 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
 
     LMI_ASSERT(lmi::ssize(cell_parms()) == n_items);
 
-    for(int j = erasures.size() - 1; 0 <= j; --j)
+    for(int j = lmi::ssize(erasures) - 1; 0 <= j; --j)
         {
         cell_parms().erase(erasures[j] + cell_parms().begin());
         }
@@ -1844,7 +1845,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         return;
         }
 
-    auto selection = cell_parms().size();
+    auto selection = lmi::ssize(cell_parms());
 
     if(!document().IsModified() && !document().GetDocumentSaved())
         {
@@ -1874,7 +1875,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         }
 
     document().Modify(true);
-    list_model_->Reset(cell_parms().size());
+    list_model_->Reset(lmi::ssize(cell_parms()));
     Update();
     // Reset() leaves the listview unreachable from the keyboard
     // because no row is selected--so select the first added row

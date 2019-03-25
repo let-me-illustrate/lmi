@@ -1862,7 +1862,7 @@ class page_with_tabular_report
 
         table_gen().output_headers(pos_y, output_mode);
 
-        auto const ncols = get_table_columns().size();
+        auto const ncols = lmi::ssize(get_table_columns());
         table_gen().output_horz_separator(0, ncols, pos_y, output_mode);
         pos_y += table_gen().separator_line_height();
 
