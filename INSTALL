@@ -83,10 +83,4 @@ Installation proceeds silently for about an hour. When you see
 
 You should see lmi's GUI. Try "File | New | Illustration", then press
 "OK"; you should see values. Then try "File | Print preview". You
-should see an illustration in your 'pdf' viewer. But if you see
-  'java' is not recognized as an internal or external command,
-  operable program or batch file
-then (for printing only) you need 'java'. You can install a version
-that's been tested with lmi by running this file:
-  http://download.java.net/jdk/jre-1_5_0-windows-i586.exe
-[http because that site doesn't support https as of 2017-08-28]
+should see an illustration in your 'pdf' viewer.
