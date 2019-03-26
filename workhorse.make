@@ -170,7 +170,7 @@ endif
 
 # wx settings.
 
-wx_dir := /opt/lmi/local/bin
+wx_dir := $(localbindir)
 
 wx_config_script := wx-config
 
@@ -281,8 +281,7 @@ wx_config_check:
 # For msw at least, these libraries are somewhat arbitrarily placed in
 #   /opt/lmi/third_party/
 # while properly autotoolized libraries are installed in
-#   /opt/lmi/local/
-# ; see:
+# $(locallibdir) and $(localbindir); see:
 #   http://lists.gnu.org/archive/html/lmi/2006-10/msg00046.html
 # for some discussion.
 
@@ -294,8 +293,8 @@ all_include_directories := \
   $(wx_include_paths) \
   /opt/lmi/third_party/include \
   /opt/lmi/third_party/src \
-  /opt/lmi/local/include \
-  /opt/lmi/local/include/libxml2 \
+  $(localincludedir) \
+  $(localincludedir)/libxml2 \
 
 all_source_directories := \
   $(srcdir) \
@@ -863,9 +862,7 @@ REQUIRED_ARFLAGS = \
 # specified in $(LIBS). Thus, a distinct variable is necessary for
 # path overrides, so distinct variables are necessary.
 
-# Two subdirectories of /opt/lmi/local/
-#   /opt/lmi/local/lib
-#   /opt/lmi/local/bin
+# Architecture-specific directories $(locallibdir) and $(localbindir)
 # are placed on the link path in order to accommodate msw dlls, for
 # which no canonical location is clearly specified by FHS, because
 # they're both binaries and libraries in a sense. These two
@@ -881,8 +878,8 @@ REQUIRED_ARFLAGS = \
 all_library_directories := \
   . \
   $(overriding_library_directories) \
-  /opt/lmi/local/lib \
-  /opt/lmi/local/bin \
+  $(locallibdir) \
+  $(localbindir) \
 
 EXTRA_LDFLAGS :=
 
@@ -1044,7 +1041,7 @@ help_files := \
 .PHONY: preinstall
 preinstall:
 	@[ -z "$(compiler_runtime_files)" ] \
-	  || $(CP) --preserve --update $(compiler_runtime_files) /opt/lmi/local/bin
+	  || $(CP) --preserve --update $(compiler_runtime_files) $(localbindir)
 
 .PHONY: install
 install: preinstall $(default_targets)
@@ -1136,8 +1133,8 @@ fardel_binaries := \
   $(bindir)/skeleton$(SHREXT) \
   $(bindir)/wx_new$(SHREXT) \
   $(bindir)/wx_test$(EXEEXT) \
-  $(wildcard $(prefix)/local/bin/*$(SHREXT)) \
-  $(wildcard $(prefix)/local/lib/*$(SHREXT)) \
+  $(wildcard $(localbindir)/*$(SHREXT)) \
+  $(wildcard $(locallibdir)/*$(SHREXT)) \
   $(wildcard $(bindir)/product_files$(EXEEXT)) \
   $(extra_fardel_binaries) \
 

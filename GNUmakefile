@@ -355,7 +355,7 @@ TEST_CODING_RULES := $(build_directory)/test_coding_rules$(EXEEXT)
 .PHONY: custom_tools
 custom_tools:
 	@$(MAKE) --file=$(this_makefile) --directory=$(srcdir) test_coding_rules$(EXEEXT)
-	@$(CP) --preserve --update $(TEST_CODING_RULES) /opt/lmi/local/bin
+	@$(CP) --preserve --update $(TEST_CODING_RULES) $(localbindir)
 
 ################################################################################
 
