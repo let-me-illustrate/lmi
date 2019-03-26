@@ -79,7 +79,49 @@ MAKEFLAGS := \
 
 # Directories.
 
-srcdir := $(CURDIR)
+# SOMEDAY !! Follow the GNU Coding Standards
+#   https://www.gnu.org/prep/standards/html_node/Directory-Variables.html
+# more closely, changing the value of $(datadir), and perhaps using
+# some other standard directories that are commented out for now.
+
+prefix         := /opt/lmi
+# parent directory for machine-specific binaries
+exec_prefix    := $(prefix)
+# binaries that users can run
+bindir         := $(exec_prefix)/bin
+# binaries that administrators can run
+#sbindir        := $(exec_prefix)/sbin
+# binaries run by programs
+#libexecdir     := $(exec_prefix)/libexec
+# parent directory for read-only architecture-independent data files
+datarootdir    := $(prefix)/share
+# idiosyncratic read-only architecture-independent data files
+# GNU standard default:
+# datadir        := $(datarootdir)
+# nonstandard value used for now:
+datadir        := $(exec_prefix)/data
+# read-only data files that pertain to a single machine
+#sysconfdir     := $(prefix)/etc
+# architecture-independent data files which the programs modify while they run
+#sharedstatedir := $(prefix)/com
+# data files which the programs modify while they run
+#localstatedir  := $(prefix)/var
+# data files which the programs modify while they run, persisting until reboot
+#runstatedir    := $(localstatedir)/run
+# headers
+#includedir     := $(prefix)/include
+docdir         := $(datarootdir)/doc/lmi
+htmldir        := $(docdir)
+#libdir         := $(exec_prefix)/lib
+# source files (GNU Coding Standards don't suggest any default value)
+srcdir         := $(CURDIR)
+
+# These directories are outside the scope of the GNU Coding Standards.
+# Therefore, their names may contain '_' for distinction and clarity.
+localbindir    := $(exec_prefix)/local/bin
+locallibdir    := $(exec_prefix)/local/lib
+test_dir       := $(exec_prefix)/test
+touchstone_dir := $(exec_prefix)/touchstone
 
 ################################################################################
 
@@ -148,8 +190,20 @@ MAKETARGET = \
     --directory=$@ \
     --file=$(srcdir)/workhorse.make \
     --no-print-directory \
-    $(local_options) $(MAKEOVERRIDES) \
+    $(local_options) \
+    $(MAKEOVERRIDES) \
+                          prefix='$(prefix)' \
+                     exec_prefix='$(exec_prefix)' \
+                          bindir='$(bindir)' \
+                     datarootdir='$(datarootdir)' \
+                         datadir='$(datadir)' \
+                          docdir='$(docdir)' \
+                         htmldir='$(htmldir)' \
                           srcdir='$(srcdir)' \
+                     localbindir='$(localbindir)' \
+                     locallibdir='$(locallibdir)' \
+                        test_dir='$(test_dir)' \
+                  touchstone_dir='$(touchstone_dir)' \
                          toolset='$(toolset)' \
                       build_type='$(build_type)' \
                platform-makefile='$(platform-makefile)' \
