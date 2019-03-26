@@ -286,13 +286,6 @@ wx_config_check:
 #   http://lists.gnu.org/archive/html/lmi/2006-10/msg00046.html
 # for some discussion.
 
-# A default installation places gnome xml-library headers here:
-#  libxml2:  /usr/local/include/libxml2/libxml
-#  libxslt:  /usr/local/include/libxslt
-# Both those libraries provide '*-config' scripts that don't respect
-# an overriding $(prefix): they apparently hardcode the paths above,
-# so there's no point in calling them.
-
 all_include_directories := \
   $(srcdir) \
   $(srcdir)/tools/pete-2.1.1 \
