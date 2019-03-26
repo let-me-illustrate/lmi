@@ -36,10 +36,14 @@ set -e
 # provides no convenient alternative):
 setopt PIPE_FAIL
 
-if [ "$LMI_HOST" = "i686-w64-mingw32" ]
-then
-    PERFORM=wine
-fi
+case "$LMI_HOST" in
+    ("i686-w64-mingw32" | "x86_64-w64-mingw32")
+        PERFORM=wine
+        ;;
+    (*)
+        PERFORM=
+        ;;
+esac
 
 coefficiency=${coefficiency:-"--jobs=$(nproc)"}
 

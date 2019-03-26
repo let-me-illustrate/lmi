@@ -29,6 +29,8 @@ platform-makefile := posix_fhs.make
 
 ifeq (i686-w64-mingw32,$(findstring i686-w64-mingw32,$(LMI_HOST)))
   platform-makefile := msw_generic.make
+else ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_HOST)))
+  platform-makefile := msw_generic.make
 endif
 
 ifeq (MINGW,$(findstring MINGW,$(uname)))
