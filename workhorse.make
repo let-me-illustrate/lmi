@@ -405,6 +405,12 @@ else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
 else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0))
   gcc_version_specific_warnings := \
 
+  ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_HOST)))
+# See:
+#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00026.html
+    tutelary_flag := -fomit-frame-pointer
+  endif
+
   cxx_standard := -frounding-math -std=c++17
 endif
 
