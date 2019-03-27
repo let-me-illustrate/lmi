@@ -609,10 +609,11 @@ endif
 # Too many warnings for wx and various boost libraries:
 #  -Wold-style-cast \
 
-# See:
+# XMLWRAPP !! Remove these workarounds after updating xmlwrapp. See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00018.html
 # et seqq.:
 $(xmlwrapp_objects): gcc_common_extra_warnings += \
+  -Wno-conversion \
   -Wno-null-dereference \
   -Wno-switch-enum \
 
@@ -620,6 +621,7 @@ $(xmlwrapp_objects): gcc_common_extra_warnings += \
 
 wno_conv_objects := \
   CgiUtils.o \
+  FormEntry.o \
   currency_test.o \
   rate_table.o \
   round_glibc.o \
