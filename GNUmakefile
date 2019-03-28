@@ -99,7 +99,7 @@ datarootdir     := $(prefix)/share
 # GNU standard default:
 # datadir         := $(datarootdir)
 # nonstandard value used for now:
-datadir         := $(exec_prefix)/data
+datadir         := $(prefix)/data
 # read-only data files that pertain to a single machine
 #sysconfdir      := $(prefix)/etc
 # architecture-independent data files which the programs modify while they run
