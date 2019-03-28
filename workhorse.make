@@ -821,6 +821,11 @@ ifneq (,$(USE_SO_ATTRIBUTES))
   actually_used_lmi_so_attributes = -DLMI_USE_SO_ATTRIBUTES $(lmi_so_attributes)
 endif
 
+# wx sets _FILE_OFFSET_BITS to 64; this definition is explicitly
+# repeated below to make assurance doubly sure--see:
+#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00039.html
+# et seq.
+#
 # The BOOST_STATIC_ASSERT definition seems to belong in CPPFLAGS with
 # the other macro definitions. However, writing it there elicits:
 #   warning: ISO C99 requires whitespace after the macro name
@@ -836,6 +841,7 @@ REQUIRED_CPPFLAGS = \
   $(platform_defines) \
   $(libstdcxx_warning_macros) \
   $(wx_predefinitions) \
+  -D_FILE_OFFSET_BITS=64 \
   -DBOOST_NO_AUTO_PTR \
   -DBOOST_STRICT_CONFIG \
   -DBOOST_STATIC_ASSERT_HPP \
