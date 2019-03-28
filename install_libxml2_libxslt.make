@@ -61,7 +61,7 @@ mingw_bin_dir :=
 build_type    := x86_64-unknown-linux-gnu
 host_type     := i686-w64-mingw32
 
-uname := $(shell uname -s 2>/dev/null)
+uname := $(shell uname 2>/dev/null)
 ifeq (CYGWIN,$(findstring CYGWIN,$(uname)))
   mingw_bin_dir := $(mingw_dir)/bin/
   build_type    := i686-pc-cygwin

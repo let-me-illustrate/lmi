@@ -23,7 +23,7 @@
 
 # Include platform-specific makefile.
 
-uname := $(shell uname -s 2>/dev/null)
+uname := $(shell uname 2>/dev/null)
 
 platform-makefile := posix_fhs.make
 

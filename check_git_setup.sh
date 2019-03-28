@@ -34,7 +34,7 @@ printf '"%s" is git toplevel directory\n' "$toplevel"
 #'core.filemode' is "false". See:
 #   https://lists.nongnu.org/archive/html/lmi/2017-11/msg00018.html
 
-case $(uname -s) in
+case $(uname) in
   (CYGWIN*)
     printf 'cygwin detected\n'
     printf 'forcing correct permissions '
