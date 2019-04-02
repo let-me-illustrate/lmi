@@ -94,8 +94,7 @@ LMI_WX_TEST_CASE(pdf_illustration)
     };
 
     // Create a new billion-dollar illustration.
-    // Double parentheses circumvent the most vexing parse.
-    wx_test_new_illustration ill((billion_dollar_illustration()));
+    wx_test_new_illustration ill {billion_dollar_illustration()};
 
     // Ensure that the output file doesn't exist in the first place.
     output_pdf_existence_checker output_pdf(get_current_document_name());

@@ -152,7 +152,7 @@ bool operator==(wxDateTime const& wx_date, calendar_date const& lmi_date)
 
 void TestDateConversions()
 {
-    calendar_date const z((jdn_t(calendar_date::min_verified_jdn)));
+    calendar_date const z {jdn_t(calendar_date::min_verified_jdn)};
     int const low  = z               .julian_day_number();
     int const high = last_yyyy_date().julian_day_number();
     status()
@@ -165,8 +165,7 @@ void TestDateConversions()
         ;
     for(int j = low; j <= high; ++j)
         {
-        // Double parentheses circumvent the most vexing parse.
-        calendar_date const lmi_date0((jdn_t(j)));
+        calendar_date const lmi_date0 {jdn_t(j)};
         calendar_date const lmi_date1 =
             ConvertDateFromWx
                 (ConvertDateToWx
