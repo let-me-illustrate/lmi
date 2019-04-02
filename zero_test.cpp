@@ -110,16 +110,8 @@ struct e_former_rounding_problem
 int test_main(int, char*[])
 {
     // Test use with function.
-    //
-    // This would be more natural:
-    //  root_type r = decimal_root(0.5, 5.0, bias_none, 9, e_function);
-    // but borland compilers reject it:
-    //  Could not find a match for
-    //  'decimal_root<FunctionalType>(double,double,root_bias,int,double (*)(double))'
-    // even though 14.8.2.4/9 says T(*)(T) is deducible.
 
-    double(*f)(double) = e_function;
-    root_type r = decimal_root(0.5, 5.0, bias_none, 9, f);
+    root_type r = decimal_root(0.5, 5.0, bias_none, 9, e_function);
     BOOST_TEST(root_is_valid == r.second);
 
     // Test use with function object.
