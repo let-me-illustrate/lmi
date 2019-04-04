@@ -1039,7 +1039,7 @@ void enforce_taboos(file const& f)
     taboo(f, R"(\(c\) *[0-9])");
     // Former addresses of the Free Software Foundation.
     taboo(f, "Cambridge");
-    taboo(f, "Temple");
+    taboo(f, "Temple P");
     // Patented.
     taboo(f, R"(\.gif)", boost::regex::icase);
     // Obsolete email address.
