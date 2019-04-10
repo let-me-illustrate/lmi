@@ -579,11 +579,15 @@ $(boost_regex_objects): gcc_common_extra_warnings += \
 
 boost_dependent_objects := \
   $(boost_regex_objects) \
-  expression_template_0_test.o \
   regex_test.o \
   test_coding_rules.o \
 
 $(boost_dependent_objects): gcc_common_extra_warnings += \
+  -Wno-switch-enum \
+  -Wno-unused-local-typedefs
+
+expression_template_0_test.o: gcc_common_extra_warnings += \
+  -Wno-conversion \
   -Wno-switch-enum \
   -Wno-unused-local-typedefs
 
