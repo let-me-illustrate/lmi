@@ -236,6 +236,11 @@ printf '2450449 2472011'                            >/opt/lmi/data/expiry
 printf '5fc68a795c9c60da1b32be989efc299a  expiry\n' >/opt/lmi/data/validated.md5
 printf '391daa5cbc54e118c4737446bcb84eea'           >/opt/lmi/data/passkey
 
+# Surrogates for proprietary graphics:
+for z in company_logo.png group_quote_banner.png ; \
+  do cp --archive /opt/lmi/src/lmi/gwc/$z /opt/lmi/data/ ;
+done
+
 # Tailored to msw; for POSIX, s|C:|| and s|CMD /c|/bin/sh| (e.g.).
 
 cat >/opt/lmi/data/configurable_settings.xml <<EOF
