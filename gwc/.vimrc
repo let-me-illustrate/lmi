@@ -55,6 +55,10 @@ set history=1000
 set virtualedit=all
 
 set background=dark
+
+" Make comments less prominent
+highlight Comment                                ctermfg=39
+
 highlight clear SpellBad
 highlight SpellBad   cterm=underline ctermbg=240 ctermfg=226
 highlight clear SpellCap
