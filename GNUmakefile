@@ -208,7 +208,6 @@ MAKETARGET = \
                   touchstone_dir='$(touchstone_dir)' \
                          toolset='$(toolset)' \
                       build_type='$(build_type)' \
-               platform-makefile='$(platform-makefile)' \
                USE_SO_ATTRIBUTES='$(USE_SO_ATTRIBUTES)' \
                     yyyymmddhhmm='$(yyyymmddhhmm)' \
   $(MAKECMDGOALS)

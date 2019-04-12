@@ -26,19 +26,19 @@
 lmi_build_type := $(shell /usr/share/libtool/build-aux/config.guess)
 
 ifeq (msys,$(findstring msys,$(lmi_build_type)))
-  platform-makefile := msw_msys.make
+  platform_makefile := msw_msys.make
 else ifeq (cygwin,$(findstring cygwin,$(lmi_build_type)))
-  platform-makefile := msw_cygwin.make
+  platform_makefile := msw_cygwin.make
 else
   ifeq (mingw32,$(findstring mingw32,$(LMI_HOST)))
-    platform-makefile := msw_generic.make
+    platform_makefile := msw_generic.make
   else
-    platform-makefile := posix_fhs.make
+    platform_makefile := posix_fhs.make
   endif
 endif
 
-include $(srcdir)/$(platform-makefile)
-$(srcdir)/$(platform-makefile):: ;
+include $(srcdir)/$(platform_makefile)
+$(srcdir)/$(platform_makefile):: ;
 
 ################################################################################
 
