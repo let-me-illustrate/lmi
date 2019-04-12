@@ -58,13 +58,12 @@ xml_dir       := /opt/lmi/xml-scratch
 # Variables that normally should be left alone #################################
 
 mingw_bin_dir :=
-build_type    := x86_64-unknown-linux-gnu
 host_type     := i686-w64-mingw32
 
-uname := $(shell uname 2>/dev/null)
-ifeq (CYGWIN,$(findstring CYGWIN,$(uname)))
+lmi_build_type := $(shell /usr/share/libtool/build-aux/config.guess)
+
+ifeq (cygwin,$(findstring cygwin,$(lmi_build_type)))
   mingw_bin_dir := $(mingw_dir)/bin/
-  build_type    := i686-pc-cygwin
   host_type     := i686-w64-mingw32
 endif
 
@@ -77,7 +76,7 @@ xz_cflags := \
 $(xz_version)_options := \
   --prefix=$(prefix) \
   --exec-prefix=$(exec_prefix) \
-  --build=$(build_type) \
+  --build=$(shell $(xml_dir)/$(xz_version)/build-aux/config.guess) \
   --host=$(host_type) \
   --disable-dependency-tracking \
   CFLAGS="-g -O2 $(xz_cflags)" \
@@ -115,10 +114,6 @@ xmlsoft_common_cflags := \
   -Wno-unused-variable \
 
 xmlsoft_common_options := \
-  --prefix=$(prefix) \
-  --exec-prefix=$(exec_prefix) \
-  --build=$(build_type) \
-  --host=$(host_type) \
   --disable-dependency-tracking \
   --disable-static \
   --enable-shared \
@@ -129,6 +124,10 @@ xmlsoft_common_options := \
   CFLAGS="-g -O2 $(xmlsoft_common_cflags)" \
 
 $(libxml2_version)_options := \
+  --prefix=$(prefix) \
+  --exec-prefix=$(exec_prefix) \
+  --build=$(shell $(xml_dir)/$(libxml2_version)/config.guess) \
+  --host=$(host_type) \
   $(xmlsoft_common_options) \
   --with-lzma=$(prefix) \
   --with-schemas \
@@ -144,6 +143,10 @@ $(libxml2_version)_options := \
 # libxslt option were named '--with-libxml-exec-prefix'.
 
 $(libxslt_version)_options := \
+  --prefix=$(prefix) \
+  --exec-prefix=$(exec_prefix) \
+  --build=$(shell $(xml_dir)/$(libxslt_version)/config.guess) \
+  --host=$(host_type) \
   $(xmlsoft_common_options) \
   --with-libxml-prefix=$(exec_prefix) \
   --without-crypto \

@@ -36,8 +36,9 @@ set -e
 # provides no convenient alternative):
 setopt PIPE_FAIL
 
-case "$LMI_HOST" in
-    ("i686-w64-mingw32" | "x86_64-w64-mingw32")
+lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+case "$lmi_build_type" in
+    (*-*-linux*)
         PERFORM=wine
         ;;
     (*)

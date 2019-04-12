@@ -35,8 +35,8 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 # for instance because it can automatically enforce Paul's advice
 # "it's best to invoke make with the -r option".
 #
-# One of several architecture-specific files is included, based on the
-# result of 'uname'. Separate files encapsulate variations better.
+# One of several architecture-specific files is included, based on a
+# 'config.guess' probe. Separate files encapsulate variations better.
 #
 # The ':' command Paul gives for his do-nothing rule seems no longer
 # to be necessary.

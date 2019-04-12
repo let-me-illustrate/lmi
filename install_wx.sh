@@ -80,8 +80,8 @@ git submodule update "$coefficiency" --recursive --init
 build_type=$("$proxy_wx_dir"/config.guess)
 host_type=i686-w64-mingw32
 
-case $(uname) in
-    CYGWIN*)
+case "$build_type" in
+    (*-*-cygwin*)
         mingw_bin_dir=$mingw_dir/bin/
         ;;
 esac

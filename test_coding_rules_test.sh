@@ -361,8 +361,9 @@ touch another.unexpected.file
 
 # Compare observed to expected. Note that directory '.' is ignored.
 
-case "$LMI_HOST" in
-    ("i686-w64-mingw32" | "x86_64-w64-mingw32")
+lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+case "$lmi_build_type" in
+    (*-*-linux*)
         PERFORM=wine
         ;;
     (*)

@@ -43,14 +43,16 @@ then
     export coefficiency='--jobs=4'
 fi
 
+lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+
 export platform
-case $(uname) in
-    CYGWIN*)
-        platform=CYGWIN
+case "$lmi_build_type" in
+    (*-*-cygwin*)
+        platform=Cygwin
         ;;
 esac
 
-if [ "CYGWIN" = "$platform" ]
+if [ "Cygwin" = "$platform" ]
 then
     mount
 
@@ -139,7 +141,7 @@ cd /opt/lmi/src/lmi || print "Cannot cd"
 
 ./check_git_setup.sh
 
-if [ "CYGWIN" = "$platform" ]
+if [ "Cygwin" = "$platform" ]
 then
     # A "Replacing former [...] mount:" message probably means that this
     # mount was set by an earlier lmi installation; that can be ignored.
@@ -172,7 +174,7 @@ find /cache_for_lmi/downloads -type f | xargs md5sum
 
 rm --force --recursive scratch
 
-if [ "CYGWIN" = "$platform" ]
+if [ "Cygwin" = "$platform" ]
 then
     # For Cygwin, install and use this msw-native compiler.
     rm --force --recursive /MinGW_
@@ -201,7 +203,7 @@ make $coefficiency --output-sync=recurse PATH=$minimal_path show_flags
 make $coefficiency --output-sync=recurse PATH=$minimal_path clean
 make $coefficiency --output-sync=recurse PATH=$minimal_path install
 
-if [ "CYGWIN" = "$platform" ]
+if [ "Cygwin" = "$platform" ]
 then
     # No lmi binary should depend on any Cygwin library.
 
@@ -249,7 +251,7 @@ EOF
 # therefore, symlink the directories lmi uses as described in
 # 'README.schroot'.
 
-if [ "CYGWIN" != "$platform" ]
+if [ "Cygwin" != "$platform" ]
 then
     sed -i /opt/lmi/data/configurable_settings.xml -e's/C://g'
 fi

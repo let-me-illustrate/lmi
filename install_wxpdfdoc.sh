@@ -77,8 +77,8 @@ git checkout "$wxpdfdoc_commit_sha"
 build_type=$("$proxy_wxpdfdoc_dir"/admin/build-aux/config.guess)
 host_type=i686-w64-mingw32
 
-case $(uname) in
-    CYGWIN*)
+case "$build_type" in
+    (*-*-cygwin*)
         mingw_bin_dir=$mingw_dir/bin/
         ;;
 esac

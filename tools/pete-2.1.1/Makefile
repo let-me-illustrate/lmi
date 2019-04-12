@@ -21,10 +21,10 @@
 
 ################################################################################
 
-uname := $(shell uname -s 2>/dev/null)
+lmi_build_type := $(shell /usr/share/libtool/build-aux/config.guess)
 
 EXEEXT :=
-ifeq (CYGWIN,$(findstring CYGWIN,$(uname)))
+ifeq (cygwin,$(findstring cygwin,$(lmi_build_type)))
   EXEEXT := .exe
 endif
 
