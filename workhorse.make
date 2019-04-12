@@ -1120,7 +1120,8 @@ archive_shared_data_files:
 #  - extra_fardel_checksummed_files
 
 fardel_name := lmi-$(yyyymmddhhmm)
-fardel_dir  := $(prefix)/$(fardel_name)
+fardel_root := $(prefix)/fardels
+fardel_dir  := $(fardel_root)/$(fardel_name)
 
 # The obvious y2038 problem is ignored because any breakage it causes
 # will be, well, obvious.
@@ -1190,7 +1191,7 @@ fardel_checksummed_files = \
 fardel: install
 	+@[ -d $(fardel_dir) ] || $(MKDIR) --parents $(fardel_dir)
 	@$(MAKE) --file=$(this_makefile) --directory=$(fardel_dir) wrap_fardel
-	@$(ECHO) "Created '$(fardel_name)' archive in '$(prefix)'."
+	@$(ECHO) "Created '$(fardel_name)' archive in '$(fardel_root)'."
 
 # A native 'md5sum$(EXEEXT)' must be provided because lmi uses it for
 # run-time authentication.
@@ -1209,8 +1210,8 @@ wrap_fardel:
 	@$(TAR) \
 	  --bzip2 \
 	  --create \
-	  --directory=$(prefix) \
-	  --file=$(prefix)/$(fardel_name).tar.bz2 \
+	  --directory=$(fardel_root) \
+	  --file=$(fardel_root)/$(fardel_name).tar.bz2 \
 	  $(fardel_name)
 
 ################################################################################
