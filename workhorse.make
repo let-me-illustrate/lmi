@@ -1109,15 +1109,26 @@ archive_shared_data_files:
 
 # End-user package for msw. No such thing is needed for posix.
 #
-# Eventually a source archive will be included automatically.
+# Planned improvements:
+#  - include a source archive automatically
+#  - copy 'configurable_settings.xml' from a configurable location
+#  - optionally build a tarball containing no subdirectory
+#  - optionally remove the dependency on 'install'
+#      (or keep it from running 'product_files' imperatively)
+#  - separate $(shared_data_files) out of $(fardel_files) below,
+#      making it independently overridable
+#  - consider making $(fardel_dir) local to 'fardel:', because
+#      it probably can't be overridden
 
-# To create a customized package, override:
+# To create a customized package, override one or more of:
 #  - fardel_name
-#  - fardel_dir
-#  - fardel_date_script
 #  - extra_fardel_binaries
 #  - extra_fardel_files
 #  - extra_fardel_checksummed_files
+# thus:
+#   make fardel_name=ThisWayIsGood fardel
+# and not thus:
+#   fardel_name=DoNotDoThisForItWillNotWork make fardel
 
 fardel_name := lmi-$(yyyymmddhhmm)
 fardel_root := $(prefix)/fardels
