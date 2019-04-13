@@ -1067,6 +1067,7 @@ void enforce_taboos(file const& f)
     if
         (   !f.is_of_phylum(e_log)
         &&  !f.is_of_phylum(e_make)
+        &&  !f.is_of_phylum(e_script)
         &&  !f.is_of_phylum(e_synopsis)
         )
         {
