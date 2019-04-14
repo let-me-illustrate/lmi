@@ -48,23 +48,23 @@ $(xz_version).tar.gz: host_path := projects/lzmautils/files
 
 mingw_dir     := /MinGW_
 
+host_type     := $(if $(LMI_HOST),$(LMI_HOST),i686-w64-mingw32)
+
 prefix        := /opt/lmi/local
 exec_prefix   := $(prefix)
 
 cache_dir     := /cache_for_lmi/downloads
 
-build_dir     := /opt/lmi/xml-ad_hoc
+build_dir     := $(prefix)/../xml-ad_hoc
 
 # Variables that normally should be left alone #################################
 
 mingw_bin_dir :=
-host_type     := i686-w64-mingw32
 
 lmi_build_type := $(shell /usr/share/libtool/build-aux/config.guess)
 
 ifeq (cygwin,$(findstring cygwin,$(lmi_build_type)))
   mingw_bin_dir := $(mingw_dir)/bin/
-  host_type     := i686-w64-mingw32
 endif
 
 xz_cflags := \

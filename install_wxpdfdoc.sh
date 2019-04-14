@@ -41,6 +41,8 @@ coefficiency=${coefficiency:-"--jobs=4"}
 
 MAKE=${MAKE:-"make $coefficiency"}
 
+host_type=${LMI_HOST:-"i686-w64-mingw32"}
+
 # Variables that normally should be left alone #################################
 
 mingw_dir=/MinGW_
@@ -75,7 +77,6 @@ fi
 git checkout "$wxpdfdoc_commit_sha"
 
 build_type=$("$proxy_wxpdfdoc_dir"/admin/build-aux/config.guess)
-host_type=i686-w64-mingw32
 
 case "$build_type" in
     (*-*-cygwin*)

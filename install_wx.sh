@@ -41,6 +41,8 @@ coefficiency=${coefficiency:-"--jobs=4"}
 
 MAKE=${MAKE:-"make $coefficiency"}
 
+host_type=${LMI_HOST:-"i686-w64-mingw32"}
+
 # Variables that normally should be left alone #################################
 
 mingw_dir=/MinGW_
@@ -78,7 +80,6 @@ git checkout "$wx_commit_sha"
 git submodule update "$coefficiency" --recursive --init
 
 build_type=$("$proxy_wx_dir"/config.guess)
-host_type=i686-w64-mingw32
 
 case "$build_type" in
     (*-*-cygwin*)
@@ -89,7 +90,7 @@ esac
 # Construct a vendor string for this build using the compiler name and version
 # and the unique commit SHA-1.
 gcc_version=$(${mingw_bin_dir}${host_type}-gcc -dumpversion|tr -d '\r')
-vendor=gcc-$gcc_version-$wx_commit_sha
+vendor=${host_type}-$gcc_version-$wx_commit_sha
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
