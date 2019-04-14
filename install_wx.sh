@@ -134,7 +134,7 @@ config_options="
 
 [ -n "$mingw_bin_dir" ] && export PATH="$mingw_bin_dir:${PATH}"
 
-build_dir="$prefix"/../wx-scratch/lmi-gcc-$gcc_version
+build_dir="$prefix"/../wx-ad_hoc/lmi-gcc-$gcc_version
 
 if [ "$wx_skip_clean" != 1 ]
 then

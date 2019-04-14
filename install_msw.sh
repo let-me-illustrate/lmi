@@ -172,8 +172,6 @@ mount
 md5sum "$0"
 find /cache_for_lmi/downloads -type f | xargs md5sum
 
-rm --force --recursive scratch
-
 if [ "Cygwin" = "$platform" ]
 then
     # For Cygwin, install and use this msw-native compiler.

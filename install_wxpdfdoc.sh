@@ -103,7 +103,7 @@ config_options="
 cd "$proxy_wxpdfdoc_dir"
 autoreconf --verbose
 
-build_dir="$prefix"/../wxpdfdoc-scratch/wxpdfdoc-$wxpdfdoc_commit_sha
+build_dir="$prefix"/../wxpdfdoc-ad_hoc/wxpdfdoc-$wxpdfdoc_commit_sha
 
 if [ "$wxpdfdoc_skip_clean" != 1 ]
 then

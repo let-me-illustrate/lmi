@@ -46,6 +46,8 @@ prefix    := /MinGW_
 
 cache_dir := /cache_for_lmi/downloads
 
+ad_hoc_dir := $(prefix)/ad_hoc
+
 # In the past, it seemed necessary to specify a mirror, e.g.:
 #  mirror := http://easynews.dl.sourceforge.net/sourceforge/mingw
 # but as of about 2006-12 sf.net seems to select one automatically
@@ -94,8 +96,8 @@ prefix_exists = \
   "\nversion in order to preserve it; if not, then remove it." \
   "\n"
 
-scratch_exists = \
-  "\nError: Scratch directory 'scratch' already exists." \
+ad_hoc_dir_exists = \
+  "\nError: Nonce directory '$(ad_hoc_dir)' already exists." \
   "\nProbably it is left over from a previous failure." \
   "\nJust remove it unless you're sure you want whatever files" \
   "\nit might contain." \
@@ -105,19 +107,19 @@ scratch_exists = \
 
 .PHONY: all
 all: $(file_list)
-	$(CP) --archive scratch/mingw32 $(prefix)
-	$(RM) --force --recursive scratch
+	$(CP) --archive $(ad_hoc_dir)/mingw32 $(prefix)
+	$(RM) --force --recursive $(ad_hoc_dir)
 
 $(file_list): initial_setup
 
 .PHONY: initial_setup
 initial_setup:
-	type "$(WGET)" >/dev/null || { printf '%b' $(wget_missing)   && false; }
-	[ ! -e $(prefix) ]        || { printf '%b' $(prefix_exists)  && false; }
-	[ ! -e scratch   ]        || { printf '%b' $(scratch_exists) && false; }
+	type "$(WGET)" >/dev/null || { printf '%b' $(wget_missing)      && false; }
+	[ ! -e $(prefix)     ]    || { printf '%b' $(prefix_exists)     && false; }
+	[ ! -e $(ad_hoc_dir) ]    || { printf '%b' $(ad_hoc_dir_exists) && false; }
 	$(MKDIR) --parents $(prefix)
 	$(RM) --force --recursive $(prefix)
-	$(MKDIR) --parents scratch
+	$(MKDIR) --parents $(ad_hoc_dir)
 
 BSDTARFLAGS := --keep-old-files
 
@@ -129,5 +131,5 @@ WGETFLAGS :=
 %.7z:
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $(mirror)/$@
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
-	$(BSDTAR) --extract $(BSDTARFLAGS) --directory=scratch --file=$(cache_dir)/$@ \
-	  || c:/Program\ Files/7-Zip/7z x `cygpath -w $(cache_dir)/$@` -oscratch
+	$(BSDTAR) --extract $(BSDTARFLAGS) --directory=$(ad_hoc_dir) --file=$(cache_dir)/$@ \
+	  || c:/Program\ Files/7-Zip/7z x `cygpath -w $(cache_dir)/$@` -o$(ad_hoc_dir)
