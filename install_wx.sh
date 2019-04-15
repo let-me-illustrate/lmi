@@ -87,8 +87,7 @@ case "$build_type" in
         ;;
 esac
 
-# Construct a vendor string for this build using the compiler name and version
-# and the unique commit SHA-1.
+# Distinguish wx dll by host type, compiler version, and wx SHA1.
 gcc_version=$(${mingw_bin_dir}${host_type}-gcc -dumpversion|tr -d '\r')
 vendor=${host_type}-$gcc_version-$wx_commit_sha
 
