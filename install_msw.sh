@@ -45,7 +45,6 @@ fi
 
 lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
 
-export platform
 case "$lmi_build_type" in
     (*-*-cygwin*)
         platform=Cygwin
@@ -108,7 +107,6 @@ then
     # Cf.:
     #   https://lists.nongnu.org/archive/html/lmi/2016-01/msg00092.html
     CYGCHECK=$(cygpath --mixed /usr/bin/cygcheck)
-    export CYGCHECK
     cmd /c "$CYGCHECK" -s -v -r | tr --delete '\r'
 
     # 'core.fileMode' rationale:
