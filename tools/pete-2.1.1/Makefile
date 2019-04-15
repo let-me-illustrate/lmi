@@ -52,7 +52,10 @@ et_vector_operators.hpp: et_vector.in
 
 clean:
 	rm -f et_vector_test$(EXEEXT)
-	rm -f $(wildcard *~ *.bak *eraseme*)
+
+distclean:
+	rm -f et_vector_test$(EXEEXT)
+	rm -f PETE/Tools/MakeOperators$(EXEEXT)
 
 maintainer-clean: clean
 	rm -f et_vector_operators.hpp

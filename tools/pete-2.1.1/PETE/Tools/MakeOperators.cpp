@@ -23,6 +23,7 @@
 #include "Tools/Header.h"
 #include "Tools/OperatorDescriptor.h"
 #include "Tools/Parser.h"
+#include "Tools/Join.h"
 #include "Tools/PrintOperators.h"
 #include "Tools/PrintFunctions.h"
 #include "Tools/PrintList.h"
