@@ -124,20 +124,24 @@ java -version
 mkdir --parents /opt/lmi/src
 cd /opt/lmi/src || print "Cannot cd"
 
-# Preserve any preexisting source directory, moving it aside so that
-# 'git clone' will install a pristine working copy.
+# Set 'inhibit_git_clone=1' to test uncommitted changes.
+if [ "$inhibit_git_clone" != 1 ]
+then
+    # Preserve any preexisting source directory, moving it aside so
+    # that 'git clone' will install a pristine working copy.
 
-cp --archive lmi lmi-moved-"$stamp0"
-rm -rf /opt/lmi/src/lmi
+    cp --archive lmi lmi-moved-"$stamp0"
+    rm -rf /opt/lmi/src/lmi
 
-# Use git's own protocol wherever possible. In case that's blocked
-# by a corporate firewall, fall back on https. In case a firewall
-# inexplicably blocks the gnu.org domain, try Vadim's github clone
-# as a last resort.
+    # Use git's own protocol wherever possible. In case that's blocked
+    # by a corporate firewall, fall back on https. In case a firewall
+    # inexplicably blocks the gnu.org domain, try Vadim's github clone
+    # as a last resort.
 
-git clone git://git.savannah.nongnu.org/lmi.git \
-  || git clone https://git.savannah.nongnu.org/r/lmi.git \
-  || git clone https://github.com/vadz/lmi.git
+    git clone git://git.savannah.nongnu.org/lmi.git \
+      || git clone https://git.savannah.nongnu.org/r/lmi.git \
+      || git clone https://github.com/vadz/lmi.git
+fi
 
 cd /opt/lmi/src/lmi || print "Cannot cd"
 
@@ -282,9 +286,12 @@ fi
 # to be discarded, and any differences in the '.git' subdirectory,
 # which are presumably important to keep.
 
-if [ -d /opt/lmi/src/lmi-moved-"$stamp0" ]
+if [ "$inhibit_git_clone" != 1 ]
 then
-cd /opt/lmi/src && mv lmi lmi-new-"$stamp0" && mv lmi-moved-"$stamp0" lmi
+    if [ -d /opt/lmi/src/lmi-moved-"$stamp0" ]
+    then
+    cd /opt/lmi/src && mv lmi lmi-new-"$stamp0" && mv lmi-moved-"$stamp0" lmi
+    fi
 fi
 
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
