@@ -345,6 +345,12 @@ distclean mostlyclean maintainer-clean: clean
 clobber: source_clean
 	-$(RM) --force --recursive $(srcdir)/../build
 
+.PHONY: raze
+raze: clobber
+	-$(RM) --force --recursive $(prefix)/*ad_hoc*
+	-$(RM) --force --recursive $(prefix)/local
+	-$(RM) --force --recursive $(prefix)/third_party
+
 ################################################################################
 
 # Custom tools built from source.
