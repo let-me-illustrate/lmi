@@ -121,6 +121,12 @@ fi
 
 java -version
 
+if [ "/opt/lmi/src/lmi" = "$PWD" ]
+then
+    inhibit_git_clone=1
+    print "Running in lmi srcdir, so inhibiting git clone."
+fi
+
 mkdir --parents /opt/lmi/src
 cd /opt/lmi/src || print "Cannot cd"
 
