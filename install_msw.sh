@@ -124,11 +124,11 @@ java -version
 if [ "/opt/lmi/src/lmi" = "$PWD" ]
 then
     inhibit_git_clone=1
-    print "Running in lmi srcdir, so inhibiting git clone."
+    printf 'Running in lmi srcdir, so inhibiting git clone.\n'
 fi
 
 mkdir --parents /opt/lmi/src
-cd /opt/lmi/src || print "Cannot cd"
+cd /opt/lmi/src || printf 'Cannot cd\n'
 
 # Set 'inhibit_git_clone=1' to test uncommitted changes.
 if [ "$inhibit_git_clone" != 1 ]
@@ -149,7 +149,7 @@ then
       || git clone https://github.com/vadz/lmi.git
 fi
 
-cd /opt/lmi/src/lmi || print "Cannot cd"
+cd /opt/lmi/src/lmi || printf 'Cannot cd\n'
 
 ./check_git_setup.sh
 

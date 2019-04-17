@@ -24,7 +24,7 @@
 # Navigate to the directory where this script resides, and make sure
 # it's a git "toplevel" directory.
 
-cd $(dirname $(readlink -f "$0")) || print "Cannot cd"
+cd $(dirname $(readlink -f "$0")) || printf 'Cannot cd\n'
 toplevel=$(git rev-parse --show-toplevel)
 printf '"%s" is current directory\n' "$PWD"
 printf '"%s" is git toplevel directory\n' "$toplevel"
