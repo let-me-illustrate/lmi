@@ -76,7 +76,7 @@ xz_cflags := \
 $(xz_version)_options := \
   --prefix=$(prefix) \
   --exec-prefix=$(exec_prefix) \
-  --build=$(shell $(build_dir)/$(xz_version)/build-aux/config.guess) \
+  --build=`$(build_dir)/$(xz_version)/build-aux/config.guess` \
   --host=$(host_type) \
   --disable-dependency-tracking \
   CFLAGS="-g -O2 $(xz_cflags)" \
@@ -126,7 +126,7 @@ xmlsoft_common_options := \
 $(libxml2_version)_options := \
   --prefix=$(prefix) \
   --exec-prefix=$(exec_prefix) \
-  --build=$(shell $(build_dir)/$(libxml2_version)/config.guess) \
+  --build=`$(build_dir)/$(libxml2_version)/config.guess` \
   --host=$(host_type) \
   $(xmlsoft_common_options) \
   --with-lzma=$(prefix) \
@@ -145,7 +145,7 @@ $(libxml2_version)_options := \
 $(libxslt_version)_options := \
   --prefix=$(prefix) \
   --exec-prefix=$(exec_prefix) \
-  --build=$(shell $(build_dir)/$(libxslt_version)/config.guess) \
+  --build=`$(build_dir)/$(libxslt_version)/config.guess` \
   --host=$(host_type) \
   $(xmlsoft_common_options) \
   --with-libxml-prefix=$(exec_prefix) \
