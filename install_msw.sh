@@ -35,8 +35,9 @@ stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
 
 # This should work with a rather minimal path.
-minimal_path="/usr/bin:/bin:/usr/sbin:/sbin"
-export PATH=$minimal_path
+
+minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
+export PATH="$minimal_path"
 
 # '--jobs=4': big benefit for multicore, no penalty for single core
 #   (but don't force it to 4 if it's already set).

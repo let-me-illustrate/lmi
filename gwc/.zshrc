@@ -2,7 +2,13 @@
 
 export WINEPATH='Z:\\opt\\lmi\\local\\bin;Z:\\opt\\lmi\\local\\lib'
 export LMI_HOST=i686-w64-mingw32
+
+# Minimal system path.
+export MINIMAL_PATH="/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="$MINIMAL_PATH"
+# For the nonce, still do this:
 export PATH="/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH"
+
 # At a regular user prompt, outside the chroot, do this:
 #   $ echo $DISPLAY
 # and replace :0.0 below with the string it returns:
