@@ -17,7 +17,7 @@ export DISPLAY=":0.0"
 export coefficiency='--jobs=32'
 
 # export TZ=UCT
-export LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
+export LANG=en_US.UTF-8 LC_ALL=C.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
 # It is generally preferable to do this:
 # update-locale LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
 # but neither the chroot's nor the host's /etc/default/locale is
