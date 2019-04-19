@@ -1,6 +1,6 @@
 # Personal configuration for cross-building in a chroot.
 
-export WINEPATH='Z:\\opt\\lmi\\local\\bin;Z:\\opt\\lmi\\local\\lib'
+export WINEPATH='Z:\\opt\\lmi\\local\\bin;Z:\\opt\\lmi\\local\\lib;Z:\\opt\\lmi\\third_party\\bin'
 export LMI_HOST=i686-w64-mingw32
 
 # Minimal system path.

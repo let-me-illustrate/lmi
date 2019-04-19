@@ -196,6 +196,12 @@ jing: $(file_list)
 #
 # It is placed in lmi's 'third_party/bin/' subdirectory--imperatively
 # not in lmi's 'local/bin/' subdirectory, which is added to $PATH.
+# For cygwin builds, the expressly downloaded 'md5sum.exe' is kept off
+# $PATH to prevent it from shadowing cygwin's own version. However,
+# for cross builds, it cannot shadow the native 'md5sum', yet some
+# cross-built unit tests require an msw binary, so add its directory
+# to $WINEPATH to make those tests work (incidentally, 'wine' doesn't
+# find it if it's simply symlinked).
 #
 # Should the given URL ever become invalid, see:
 #   http://www.openoffice.org/dev_docs/using_md5sums.html#links

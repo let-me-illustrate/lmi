@@ -204,20 +204,6 @@ make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
 
 ./install_wxpdfdoc.sh
 
-# For cygwin builds, the expressly downloaded 'md5sum.exe' is kept off
-# $PATH to prevent it from shadowing cygwin's own version. However,
-# for cross builds, it cannot shadow the native 'md5sum', yet some
-# cross-built unit tests require an msw binary, so copy it to a
-# directory that's on $WINEPATH to make those tests work. It doesn't
-# matter that this directory is also on $PATH. The file is tiny, so a
-# copy isn't too wasteful, and 'wine' doesn't find it if it's simply
-# symlinked.
-
-if [ "Cygwin" != "$platform" ]
-then
-    cp --archive /opt/lmi/third_party/bin/md5sum.exe /opt/lmi/local/bin
-fi
-
 find /cache_for_lmi/downloads -type f | xargs md5sum
 
 export PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$minimal_path
