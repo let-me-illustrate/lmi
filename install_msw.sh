@@ -251,7 +251,11 @@ for z in company_logo.png group_quote_banner.png ; \
   do cp --archive /opt/lmi/src/lmi/gwc/$z /opt/lmi/data/ ;
 done
 
+# Configurable settings.
+#
 # Tailored to msw; for POSIX, s|C:|| and s|CMD /c|/bin/sh| (e.g.).
+
+mkdir --parents /opt/lmi/print
 
 cat >/opt/lmi/data/configurable_settings.xml <<EOF
 <?xml version="1.0"?>
@@ -266,7 +270,7 @@ cat >/opt/lmi/data/configurable_settings.xml <<EOF
   <default_input_filename>C:/etc/opt/lmi/default.ill</default_input_filename>
   <libraries_to_preload/>
   <offer_hobsons_choice>0</offer_hobsons_choice>
-  <print_directory>C:/opt/lmi/bin</print_directory>
+  <print_directory>C:/opt/lmi/print</print_directory>
   <seconds_to_pause_between_printouts>10</seconds_to_pause_between_printouts>
   <skin_filename>skin.xrc</skin_filename>
   <spreadsheet_file_extension>.tsv</spreadsheet_file_extension>
