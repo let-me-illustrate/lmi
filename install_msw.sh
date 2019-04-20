@@ -190,13 +190,12 @@ then
     # For Cygwin, install and use this msw-native compiler.
     rm --force --recursive /MinGW_
     make $coefficiency --output-sync=recurse -f install_mingw.make
-else
-    # For real *nix, set LMI_HOST to specify a cross compiler.
-    export LMI_HOST=i686-w64-mingw32
 fi
 
 make $coefficiency --output-sync=recurse -f install_miscellanea.make clobber
 make $coefficiency --output-sync=recurse -f install_miscellanea.make
+
+export LMI_HOST=i686-w64-mingw32
 
 make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
 
