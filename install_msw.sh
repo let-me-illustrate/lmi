@@ -199,32 +199,28 @@ make $coefficiency --output-sync=recurse -f install_miscellanea.make
 export LMI_HOST
 for LMI_HOST in i686-w64-mingw32;
 do
+    make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
 
-make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
+    ./install_wx.sh
+    ./install_wxpdfdoc.sh
 
-./install_wx.sh
+    find /cache_for_lmi/downloads -type f | xargs md5sum
 
-./install_wxpdfdoc.sh
+    export PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$minimal_path
 
-find /cache_for_lmi/downloads -type f | xargs md5sum
+    make $coefficiency --output-sync=recurse wx_config_check
+    make $coefficiency --output-sync=recurse show_flags
+    make $coefficiency --output-sync=recurse clean
+    make $coefficiency --output-sync=recurse install
 
-export PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$minimal_path
-
-make $coefficiency --output-sync=recurse wx_config_check
-make $coefficiency --output-sync=recurse show_flags
-make $coefficiency --output-sync=recurse clean
-make $coefficiency --output-sync=recurse install
-
-if [ "Cygwin" = "$platform" ]
-then
-    # No lmi binary should depend on any Cygwin library.
-
-    for z in /opt/lmi/bin/*; \
-      do cmd /c "$CYGCHECK $z" 2>&1 | grep --silent cygwin \
-        && printf '\ncygcheck %s\n' "$z" && cmd /c "$CYGCHECK $z"; \
-      done
-fi
-
+    if [ "Cygwin" = "$platform" ]
+    then
+        # No lmi binary should depend on any Cygwin library.
+        for z in /opt/lmi/bin/*; \
+          do cmd /c "$CYGCHECK $z" 2>&1 | grep --silent cygwin \
+            && printf '\ncygcheck %s\n' "$z" && cmd /c "$CYGCHECK $z"; \
+          done
+    fi
 done
 
 # To regenerate authentication files:
