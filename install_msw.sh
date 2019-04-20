@@ -195,7 +195,10 @@ fi
 make $coefficiency --output-sync=recurse -f install_miscellanea.make clobber
 make $coefficiency --output-sync=recurse -f install_miscellanea.make
 
-export LMI_HOST=i686-w64-mingw32
+# This for-loop can iterate over as many architectures as desired.
+export LMI_HOST
+for LMI_HOST in i686-w64-mingw32;
+do
 
 make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
 
@@ -221,6 +224,8 @@ then
         && printf '\ncygcheck %s\n' "$z" && cmd /c "$CYGCHECK $z"; \
       done
 fi
+
+done
 
 # To regenerate authentication files:
 # cd /opt/lmi/data
