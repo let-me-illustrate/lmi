@@ -197,7 +197,7 @@ make $coefficiency --output-sync=recurse -f install_miscellanea.make
 
 # This for-loop can iterate over as many architectures as desired.
 export LMI_HOST
-for LMI_HOST in i686-w64-mingw32;
+for LMI_HOST in i686-w64-mingw32 ;
 do
     make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
 
@@ -216,9 +216,9 @@ do
     if [ "Cygwin" = "$platform" ]
     then
         # No lmi binary should depend on any Cygwin library.
-        for z in /opt/lmi/bin/*; \
+        for z in /opt/lmi/bin/* ;
           do cmd /c "$CYGCHECK $z" 2>&1 | grep --silent cygwin \
-            && printf '\ncygcheck %s\n' "$z" && cmd /c "$CYGCHECK $z"; \
+            && printf '\ncygcheck %s\n' "$z" && cmd /c "$CYGCHECK $z" ;
           done
     fi
 done
@@ -233,7 +233,7 @@ printf '5fc68a795c9c60da1b32be989efc299a  expiry\n' >/opt/lmi/data/validated.md5
 printf '391daa5cbc54e118c4737446bcb84eea'           >/opt/lmi/data/passkey
 
 # Surrogates for proprietary graphics:
-for z in company_logo.png group_quote_banner.png ; \
+for z in company_logo.png group_quote_banner.png ;
   do cp --archive /opt/lmi/src/lmi/gwc/$z /opt/lmi/data/ ;
 done
 
