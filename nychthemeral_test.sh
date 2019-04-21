@@ -102,6 +102,38 @@ schemata_clutter='
 /^  Done\.$/d
 '
 
+nychthemeral_clutter='
+/^# install; check physical closure/d
+/^# cgi and cli tests/d
+/^Test common gateway interface:/d
+/^Test command line interface:/d
+/^Test sample.cns:/d
+/^Test sample.ill:/d
+/^# system test/d
+/^System test:/d
+/^All [1-9][0-9]* files match./d
+/^# unit tests/d
+/^[1-9][0-9]* tests succeeded/d
+/^# build with shared-object attributes/d
+/^# cgi and cli tests in libstdc++ debug mode/d
+/^Test common gateway interface:/d
+/^Test command line interface:/d
+/^Test sample.cns:/d
+/^Test sample.ill:/d
+/^# unit tests in libstdc++ debug mode/d
+/^[1-9][0-9]* tests succeeded/d
+/^# test concinnity/d
+/^  Problems detected by xmllint:/d
+/^  Miscellaneous problems:/d
+/^  *[1-9][0-9]* source files/d
+/^  *[1-9][0-9]* source lines/d
+/^  *[1-9][0-9]* marked defects/d
+/^# xrc tests/d
+/^# schema tests/d
+/^# test all valid emission types/d
+/^$/d
+'
+
 # Directory for test logs.
 log_dir=/tmp/lmi/logs
 mkdir --parents "$log_dir"
@@ -176,4 +208,4 @@ for z in /tmp/lmi/tmp/*(N); do rm "$z"; done
 # no such actions must be performed manually while it is running.
 # Therefore, it is deliberately excluded from this script.
 printf '\nDo not forget to run wx_test.\n'
-} 2>&1 | tee "$log_dir"/nychthemeral_test | sed -f errors.sed
+} 2>&1 | tee "$log_dir"/nychthemeral_test | sed -e "$nychthemeral_clutter"

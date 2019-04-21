@@ -10,7 +10,7 @@ f="make \$coefficiency unit_tests 2>&1 | tee >(grep '\*\*\*') >(grep '????') >(g
 g='make $coefficiency all build_type=so_test USE_SO_ATTRIBUTES=1 2>&1 | tee ../log | sed -f diagnostics.sed | less -S'
 h='make $coefficiency cgi_tests cli_tests build_type=safestdlib 2>&1 | tee ../log | sed -f diagnostics.sed | less -S'
 i="make \$coefficiency unit_tests build_type=safestdlib 2>&1 | tee >(grep '\*\*\*') >(grep '????') >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >../log"
-j='./nychthemeral_test.sh 2>&1 | tee /tmp/lmi/logs/log | sed -f errors.sed'
+j='./nychthemeral_test.sh'
 k='make $coefficiency install check_physical_closure 2>&1 | less -S'
 l='make $coefficiency unit_tests unit_test_targets=regex_test.exe 2>&1 | less -S'
 
