@@ -121,15 +121,15 @@ printf 'Production system built--ready to start GUI test in another session.\n' 
 
 printf '\n# cgi and cli tests\n\n'
 make "$coefficiency" --output-sync=recurse cgi_tests cli_tests 2>&1 \
-  | tee "$log_dir"/cgi-cli | sed -e "$build_clutter" -e "$cli_cgi_clutter"
+  | tee "$log_dir"/cgi_cli | sed -e "$build_clutter" -e "$cli_cgi_clutter"
 
 printf '\n# system test\n\n'
 make "$coefficiency" system_test 2>&1 \
-  | tee "$log_dir"/system-test | sed -e "$build_clutter" -e "$install_clutter"
+  | tee "$log_dir"/system_test | sed -e "$build_clutter" -e "$install_clutter"
 
 printf '\n# unit tests\n\n'
 make "$coefficiency" unit_tests 2>&1 \
-  | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit-tests
+  | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests
 
 printf '\n# build with shared-object attributes\n\n'
 make "$coefficiency" all build_type=so_test USE_SO_ATTRIBUTES=1 2>&1 \
@@ -137,11 +137,11 @@ make "$coefficiency" all build_type=so_test USE_SO_ATTRIBUTES=1 2>&1 \
 
 printf '\n# cgi and cli tests in libstdc++ debug mode\n\n'
 make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=safestdlib 2>&1 \
-  | tee "$log_dir"/cgi-cli-safestdlib | sed -e "$build_clutter" -e "$cli_cgi_clutter"
+  | tee "$log_dir"/cgi_cli_safestdlib | sed -e "$build_clutter" -e "$cli_cgi_clutter"
 
 printf '\n# unit tests in libstdc++ debug mode\n\n'
 make "$coefficiency" unit_tests build_type=safestdlib 2>&1 \
-  | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit-tests-safestdlib
+  | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests_safestdlib
 
 printf '\n# xrc tests\n\n'
 java -jar /opt/lmi/third_party/rng/jing.jar -c xrc.rnc ./*.xrc 2>&1 \
