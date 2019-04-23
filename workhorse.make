@@ -177,15 +177,13 @@ wx_dir := $(localbindir)
 wx_config_script := wx-config
 
 # The conventional autotools usage...
-ifeq (gcc,$(toolchain))
-  wx_config_cxxflags := $(shell $(wx_config_script) --cxxflags)
-  wx_config_libs     := $(shell $(wx_config_script) --libs)
-  wx_config_basename := $(shell $(wx_config_script) --basename)
-  wx_config_version  := $(shell $(wx_config_script) --version)
-  # [variables used to construct the names of wxCode libraries]
-  wxcode_basename := $(shell echo $(wx_config_basename) | sed 's/^wx/wxcode/')
-  wxcode_version  := $(shell echo $(wx_config_version) | sed 's/\.[0-9]*$$//')
-endif
+wx_config_cxxflags := $(shell $(wx_config_script) --cxxflags)
+wx_config_libs     := $(shell $(wx_config_script) --libs)
+wx_config_basename := $(shell $(wx_config_script) --basename)
+wx_config_version  := $(shell $(wx_config_script) --version)
+# [variables used to construct the names of wxCode libraries]
+wxcode_basename := $(shell echo $(wx_config_basename) | sed 's/^wx/wxcode/')
+wxcode_version  := $(shell echo $(wx_config_version) | sed 's/\.[0-9]*$$//')
 # ...combines options that we prefer to keep separate.
 
 wx_include_paths := \
