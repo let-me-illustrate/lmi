@@ -173,8 +173,7 @@ $(srcdir)/local_options.make:: ;
 
 build_type ?= ship
 toolset ?= gcc
-build_dir := \
-  $(srcdir)/../build/$(notdir $(srcdir))/$(uname)/$(toolset)/$(build_type)
+build_dir := $(exec_prefix)/$(toolset)/build/$(build_type)
 
 gpl_files := \
   COPYING \
@@ -336,13 +335,21 @@ source_clean:
 .PHONY: distclean mostlyclean maintainer-clean
 distclean mostlyclean maintainer-clean: clean
 
+# This precondition permits writing progressively severer 'clean'
+# targets more clearly. To use an alternative like
+#   rm -rf $(build_dir)/../..
+# would be to invite disaster.
+ifneq ($(build_dir),$(exec_prefix)/$(toolset)/build/$(build_type))
+  $(error Assertion failure: build directory misconfigured)
+endif
+
 .PHONY: clean
 clean: source_clean
-	-$(RM) --force --recursive $(build_dir)
+	-$(RM) --force --recursive $(exec_prefix)/$(toolset)/build/$(build_type)
 
 .PHONY: clobber
 clobber: source_clean
-	-$(RM) --force --recursive $(srcdir)/../build
+	-$(RM) --force --recursive $(exec_prefix)/$(toolset)/build
 
 .PHONY: raze
 raze: clobber
