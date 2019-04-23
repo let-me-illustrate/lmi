@@ -315,9 +315,6 @@ endef
 
 # Clean.
 
-# Almost all targets are built in a build directory, so the 'clean'
-# target is run there: see 'workhorse.make'.
-#
 # This makefile has rules to build a few files in the source
 # directory, viz.
 #   quoted_gpl
