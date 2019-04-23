@@ -173,7 +173,7 @@ $(srcdir)/local_options.make:: ;
 
 build_type ?= ship
 toolset ?= gcc
-build_directory := \
+build_dir := \
   $(srcdir)/../build/$(notdir $(srcdir))/$(uname)/$(toolset)/$(build_type)
 
 gpl_files := \
@@ -212,12 +212,12 @@ MAKETARGET = \
                     yyyymmddhhmm='$(yyyymmddhhmm)' \
   $(MAKECMDGOALS)
 
-.PHONY: $(build_directory)
-$(build_directory): $(gpl_files)
+.PHONY: $(build_dir)
+$(build_dir): $(gpl_files)
 	+@[ -d $@ ] || $(MKDIR) --parents $@
 	+@$(MAKETARGET)
 
-% :: $(build_directory) ; @:
+% :: $(build_dir) ; @:
 
 ################################################################################
 
@@ -333,7 +333,7 @@ source_clean:
 
 .PHONY: clean
 clean: source_clean
-	-$(RM) --force --recursive $(build_directory)
+	-$(RM) --force --recursive $(build_dir)
 
 .PHONY: distclean mostlyclean maintainer-clean
 distclean mostlyclean maintainer-clean: clean
@@ -352,7 +352,7 @@ raze: clobber
 
 # Custom tools built from source.
 
-TEST_CODING_RULES := $(build_directory)/test_coding_rules$(EXEEXT)
+TEST_CODING_RULES := $(build_dir)/test_coding_rules$(EXEEXT)
 
 .PHONY: custom_tools
 custom_tools:
@@ -363,7 +363,7 @@ custom_tools:
 
 # Check conformity to certain formatting rules; count lines and defects.
 #
-# The tests in $(build_directory) identify object ('.o') files with no
+# The tests in $(build_dir) identify object ('.o') files with no
 # corresponding autodependency ('.d') file, and zero-byte '.d' files.
 # Either of these suggests a build failure that may render dependency
 # files invalid; 'make clean' should provide symptomatic relief.
@@ -395,8 +395,8 @@ check_concinnity: source_clean custom_tools
 	@[ -f md5sums ] \
 	  && <md5sums $(SED) -e'/\.test$$\|\.test0$$\|\.test1$$\|\.tsv$$\|\.xml$$/d' \
 	  | $(MD5SUM) --check --quiet || true
-	@for z in $(build_directory)/*.d; do [ -s $$z ]         || echo $$z; done;
-	@for z in $(build_directory)/*.o; do [ -f $${z%%.o}.d ] || echo $$z; done;
+	@for z in $(build_dir)/*.d; do [ -s $$z ]         || echo $$z; done;
+	@for z in $(build_dir)/*.o; do [ -f $${z%%.o}.d ] || echo $$z; done;
 	@$(LS) --classify ./* \
 	  | $(SED) -e'/\*$$/!d' -e'/^\.\//!d' -e'/.sh\*$$/d' -e'/.sed\*$$/d' \
 	  | $(SED) -e's/^/Improperly executable: /'
