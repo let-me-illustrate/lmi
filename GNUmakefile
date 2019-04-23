@@ -172,8 +172,8 @@ $(srcdir)/local_options.make:: ;
 # the make command line. Of course, other build types may be defined.
 
 build_type ?= ship
-toolset ?= gcc
-build_dir := $(exec_prefix)/$(toolset)/build/$(build_type)
+toolchain ?= gcc
+build_dir := $(exec_prefix)/$(toolchain)/build/$(build_type)
 
 gpl_files := \
   COPYING \
@@ -205,7 +205,7 @@ MAKETARGET = \
                  localincludedir='$(localincludedir)' \
                         test_dir='$(test_dir)' \
                   touchstone_dir='$(touchstone_dir)' \
-                         toolset='$(toolset)' \
+                       toolchain='$(toolchain)' \
                       build_type='$(build_type)' \
                USE_SO_ATTRIBUTES='$(USE_SO_ATTRIBUTES)' \
                     yyyymmddhhmm='$(yyyymmddhhmm)' \
@@ -339,17 +339,17 @@ distclean mostlyclean maintainer-clean: clean
 # targets more clearly. To use an alternative like
 #   rm -rf $(build_dir)/../..
 # would be to invite disaster.
-ifneq ($(build_dir),$(exec_prefix)/$(toolset)/build/$(build_type))
+ifneq ($(build_dir),$(exec_prefix)/$(toolchain)/build/$(build_type))
   $(error Assertion failure: build directory misconfigured)
 endif
 
 .PHONY: clean
 clean: source_clean
-	-$(RM) --force --recursive $(exec_prefix)/$(toolset)/build/$(build_type)
+	-$(RM) --force --recursive $(exec_prefix)/$(toolchain)/build/$(build_type)
 
 .PHONY: clobber
 clobber: source_clean
-	-$(RM) --force --recursive $(exec_prefix)/$(toolset)/build
+	-$(RM) --force --recursive $(exec_prefix)/$(toolchain)/build
 
 .PHONY: raze
 raze: clobber

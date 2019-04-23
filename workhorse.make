@@ -131,11 +131,11 @@ effective_default_target: $(default_targets)
 # $(subst): workaround for debian, whose MinGW-w64 identifies its
 # version 7.x.0 as "7.x-win32".
 
-ifeq (gcc,$(toolset))
+ifeq (gcc,$(toolchain))
   gcc_version   := $(subst -win32,.0,$(shell $(CXX)     -dumpversion))
 endif
 
-# These are defined even for toolsets other than gcc.
+# These are defined even for toolchains other than gcc.
 
 gnu_cpp_version := $(subst -win32,.0,$(shell $(GNU_CPP) -dumpversion))
 gnu_cxx_version := $(subst -win32,.0,$(shell $(GNU_CXX) -dumpversion))
@@ -177,7 +177,7 @@ wx_dir := $(localbindir)
 wx_config_script := wx-config
 
 # The conventional autotools usage...
-ifeq (gcc,$(toolset))
+ifeq (gcc,$(toolchain))
   wx_config_cxxflags := $(shell $(wx_config_script) --cxxflags)
   wx_config_libs     := $(shell $(wx_config_script) --libs)
   wx_config_basename := $(shell $(wx_config_script) --basename)
@@ -680,7 +680,7 @@ CXX_WARNINGS = \
 # speed penalty that can be overcome by increasing parallelism. There
 # seems to be no need for them with gcc-4.x, which uses less RAM.
 
-ifeq (gcc,$(toolset))
+ifeq (gcc,$(toolchain))
   ifeq (3.4.5,$(gcc_version))
     ggc_flags := --param ggc-min-expand=25 --param ggc-min-heapsize=32768
   endif
@@ -977,7 +977,7 @@ ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 # ELF symbol visibility, a feature for which significant benefits are
 # claimed:
 #   http://www.nedprod.com/programs/gccvisibility.html
-# And dll attributes would still be necessary for other toolsets,
+# And dll attributes would still be necessary for other toolchains,
 # which therefore aren't fully supported yet.
 #
 # However, 'libwx_new.a' continues to use classic dll attributes,
