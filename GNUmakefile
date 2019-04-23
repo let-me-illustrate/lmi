@@ -313,7 +313,7 @@ endef
 
 ################################################################################
 
-# Clean.
+# Clean and its kindred.
 
 # This makefile has rules to build a few files in the source
 # directory, viz.
@@ -331,12 +331,14 @@ expungible_files := $(wildcard *~ *.bak *eraseme*)
 source_clean:
 	@-$(RM) --force $(expungible_files)
 
-.PHONY: clean
-clean: source_clean
-	-$(RM) --force --recursive $(build_dir)
+# Simple aliases.
 
 .PHONY: distclean mostlyclean maintainer-clean
 distclean mostlyclean maintainer-clean: clean
+
+.PHONY: clean
+clean: source_clean
+	-$(RM) --force --recursive $(build_dir)
 
 .PHONY: clobber
 clobber: source_clean
