@@ -34,6 +34,11 @@ set -vx
 stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
 
+# This should work with a rather minimal path.
+
+minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
+export PATH="$minimal_path"
+
 # '--jobs=4': big benefit for multicore, no penalty for single core
 #   (but don't force it to 4 if it's already set).
 # '--output-sync=recurse' is also used, passim, to facilitate log
@@ -43,14 +48,15 @@ then
     export coefficiency='--jobs=4'
 fi
 
-export platform
-case $(uname) in
-    CYGWIN*)
-        platform=CYGWIN
+lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+
+case "$lmi_build_type" in
+    (*-*-cygwin*)
+        platform=Cygwin
         ;;
 esac
 
-if [ "CYGWIN" = "$platform" ]
+if [ "Cygwin" = "$platform" ]
 then
     mount
 
@@ -106,7 +112,6 @@ then
     # Cf.:
     #   https://lists.nongnu.org/archive/html/lmi/2016-01/msg00092.html
     CYGCHECK=$(cygpath --mixed /usr/bin/cygcheck)
-    export CYGCHECK
     cmd /c "$CYGCHECK" -s -v -r | tr --delete '\r'
 
     # 'core.fileMode' rationale:
@@ -117,29 +122,39 @@ fi
 
 java -version
 
+if [ "/opt/lmi/src/lmi" = "$PWD" ]
+then
+    inhibit_git_clone=1
+    printf 'Running in lmi srcdir, so inhibiting git clone.\n'
+fi
+
 mkdir --parents /opt/lmi/src
-cd /opt/lmi/src || print "Cannot cd"
+cd /opt/lmi/src || printf 'Cannot cd\n'
 
-# Preserve any preexisting source directory, moving it aside so that
-# 'git clone' will install a pristine working copy.
+# Set 'inhibit_git_clone=1' to test uncommitted changes.
+if [ "$inhibit_git_clone" != 1 ]
+then
+    # Preserve any preexisting source directory, moving it aside so
+    # that 'git clone' will install a pristine working copy.
 
-cp --archive lmi lmi-moved-"$stamp0"
-rm -rf /opt/lmi/src/lmi
+    cp --archive lmi lmi-moved-"$stamp0"
+    rm -rf /opt/lmi/src/lmi
 
-# Use git's own protocol wherever possible. In case that's blocked
-# by a corporate firewall, fall back on https. In case a firewall
-# inexplicably blocks the gnu.org domain, try Vadim's github clone
-# as a last resort.
+    # Use git's own protocol wherever possible. In case that's blocked
+    # by a corporate firewall, fall back on https. In case a firewall
+    # inexplicably blocks the gnu.org domain, try Vadim's github clone
+    # as a last resort.
 
-git clone git://git.savannah.nongnu.org/lmi.git \
-  || git clone https://git.savannah.nongnu.org/r/lmi.git \
-  || git clone https://github.com/vadz/lmi.git
+    git clone git://git.savannah.nongnu.org/lmi.git \
+      || git clone https://git.savannah.nongnu.org/r/lmi.git \
+      || git clone https://github.com/vadz/lmi.git
+fi
 
-cd /opt/lmi/src/lmi || print "Cannot cd"
+cd /opt/lmi/src/lmi || printf 'Cannot cd\n'
 
 ./check_git_setup.sh
 
-if [ "CYGWIN" = "$platform" ]
+if [ "Cygwin" = "$platform" ]
 then
     # A "Replacing former [...] mount:" message probably means that this
     # mount was set by an earlier lmi installation; that can be ignored.
@@ -148,9 +163,9 @@ then
 
     restore_MinGW_mount=$(mount --mount-entries | grep '/MinGW_ ')
     [ -z "$restore_MinGW_mount" ] \
-      || printf '%s\n' "$restore_MinGW_mount" | grep --silent 'C:/opt/lmi/MinGW-7_3_0' \
+      || printf '%s\n' "$restore_MinGW_mount" | grep --silent 'C:/opt/lmi/MinGW-8_1_0' \
       || printf 'Replacing former MinGW_ mount:\n %s\n' "$restore_MinGW_mount" >/dev/tty
-    mount --force "C:/opt/lmi/MinGW-7_3_0" "/MinGW_"
+    mount --force "C:/opt/lmi/MinGW-8_1_0" "/MinGW_"
 
     restore_cache_mount=$(mount --mount-entries | grep '/cache_for_lmi ')
     [ -z "$restore_cache_mount" ] \
@@ -170,46 +185,43 @@ mount
 md5sum "$0"
 find /cache_for_lmi/downloads -type f | xargs md5sum
 
-rm --force --recursive scratch
-
-if [ "CYGWIN" = "$platform" ]
+if [ "Cygwin" = "$platform" ]
 then
     # For Cygwin, install and use this msw-native compiler.
     rm --force --recursive /MinGW_
     make $coefficiency --output-sync=recurse -f install_mingw.make
-else
-    # For real *nix, set LMI_HOST to specify a cross compiler.
-    export LMI_HOST=i686-w64-mingw32
 fi
 
 make $coefficiency --output-sync=recurse -f install_miscellanea.make clobber
 make $coefficiency --output-sync=recurse -f install_miscellanea.make
 
-make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
+# This for-loop can iterate over as many architectures as desired.
+export LMI_HOST
+for LMI_HOST in i686-w64-mingw32 ;
+do
+    make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
 
-./install_wx.sh
+    ./install_wx.sh
+    ./install_wxpdfdoc.sh
 
-./install_wxpdfdoc.sh
+    find /cache_for_lmi/downloads -type f | xargs md5sum
 
-find /cache_for_lmi/downloads -type f | xargs md5sum
+    export PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$minimal_path
 
-export         PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH
-export minimal_path=/opt/lmi/local/bin:/opt/lmi/local/lib:/usr/bin:/bin:/usr/sbin:/sbin
+    make $coefficiency --output-sync=recurse wx_config_check
+    make $coefficiency --output-sync=recurse show_flags
+    make $coefficiency --output-sync=recurse clean
+    make $coefficiency --output-sync=recurse install
 
-make $coefficiency --output-sync=recurse PATH=$minimal_path wx_config_check
-make $coefficiency --output-sync=recurse PATH=$minimal_path show_flags
-make $coefficiency --output-sync=recurse PATH=$minimal_path clean
-make $coefficiency --output-sync=recurse PATH=$minimal_path install
-
-if [ "CYGWIN" = "$platform" ]
-then
-    # No lmi binary should depend on any Cygwin library.
-
-    for z in /opt/lmi/bin/*; \
-      do cmd /c "$CYGCHECK $z" 2>&1 | grep --silent cygwin \
-        && printf '\ncygcheck %s\n' "$z" && cmd /c "$CYGCHECK $z"; \
-      done
-fi
+    if [ "Cygwin" = "$platform" ]
+    then
+        # No lmi binary should depend on any Cygwin library.
+        for z in /opt/lmi/bin/* ;
+          do cmd /c "$CYGCHECK $z" 2>&1 | grep --silent cygwin \
+            && printf '\ncygcheck %s\n' "$z" && cmd /c "$CYGCHECK $z" ;
+          done
+    fi
+done
 
 # To regenerate authentication files:
 # cd /opt/lmi/data
@@ -220,7 +232,16 @@ printf '2450449 2472011'                            >/opt/lmi/data/expiry
 printf '5fc68a795c9c60da1b32be989efc299a  expiry\n' >/opt/lmi/data/validated.md5
 printf '391daa5cbc54e118c4737446bcb84eea'           >/opt/lmi/data/passkey
 
+# Surrogates for proprietary graphics:
+for z in company_logo.png group_quote_banner.png ;
+  do cp --archive /opt/lmi/src/lmi/gwc/$z /opt/lmi/data/ ;
+done
+
+# Configurable settings.
+#
 # Tailored to msw; for POSIX, s|C:|| and s|CMD /c|/bin/sh| (e.g.).
+
+mkdir --parents /opt/lmi/print
 
 cat >/opt/lmi/data/configurable_settings.xml <<EOF
 <?xml version="1.0"?>
@@ -235,7 +256,7 @@ cat >/opt/lmi/data/configurable_settings.xml <<EOF
   <default_input_filename>C:/etc/opt/lmi/default.ill</default_input_filename>
   <libraries_to_preload/>
   <offer_hobsons_choice>0</offer_hobsons_choice>
-  <print_directory>C:/opt/lmi/bin</print_directory>
+  <print_directory>C:/opt/lmi/print</print_directory>
   <seconds_to_pause_between_printouts>10</seconds_to_pause_between_printouts>
   <skin_filename>skin.xrc</skin_filename>
   <spreadsheet_file_extension>.tsv</spreadsheet_file_extension>
@@ -249,7 +270,7 @@ EOF
 # therefore, symlink the directories lmi uses as described in
 # 'README.schroot'.
 
-if [ "CYGWIN" != "$platform" ]
+if [ "Cygwin" != "$platform" ]
 then
     sed -i /opt/lmi/data/configurable_settings.xml -e's/C://g'
 fi
@@ -262,9 +283,12 @@ fi
 # to be discarded, and any differences in the '.git' subdirectory,
 # which are presumably important to keep.
 
-if [ -d /opt/lmi/src/lmi-moved-"$stamp0" ]
+if [ "$inhibit_git_clone" != 1 ]
 then
-cd /opt/lmi/src && mv lmi lmi-new-"$stamp0" && mv lmi-moved-"$stamp0" lmi
+    if [ -d /opt/lmi/src/lmi-moved-"$stamp0" ]
+    then
+    cd /opt/lmi/src && mv lmi lmi-new-"$stamp0" && mv lmi-moved-"$stamp0" lmi
+    fi
 fi
 
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')

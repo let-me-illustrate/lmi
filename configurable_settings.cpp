@@ -143,7 +143,7 @@ configurable_settings::configurable_settings()
     ,default_input_filename_             {"/etc/opt/lmi/default.ill"           }
     ,libraries_to_preload_               {""                                   }
     ,offer_hobsons_choice_               {false                                }
-    ,print_directory_                    {"/var/opt/lmi/spool"                 }
+    ,print_directory_                    {"/opt/lmi/print"                     }
     ,seconds_to_pause_between_printouts_ {10                                   }
     ,skin_filename_                      {"skin.xrc"                           }
     ,spreadsheet_file_extension_         {".gnumeric"                          }

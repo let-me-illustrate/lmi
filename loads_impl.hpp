@@ -89,7 +89,7 @@ struct load_details
         ,double                     minimum_premium_tax_load_rate
         ,double                     premium_tax_rate
         ,double                     premium_tax_amortization_rate
-        ,double                     premium_tax_amortization_period
+        ,int                        premium_tax_amortization_period
         ,oenum_asset_charge_type    asset_charge_type
         ,bool                       NeedMidpointRates
         ,round_to<double>    const& round_interest_rate
@@ -124,7 +124,7 @@ struct load_details
     double                     minimum_premium_tax_load_rate_;
     double                     premium_tax_rate_;
     double                     premium_tax_amortization_rate_;
-    double                     premium_tax_amortization_period_;
+    int                        premium_tax_amortization_period_;
     oenum_asset_charge_type    asset_charge_type_;
     bool                       NeedMidpointRates_;
     round_to<double>    const& round_interest_rate_;

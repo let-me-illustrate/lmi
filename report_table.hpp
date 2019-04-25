@@ -181,6 +181,9 @@ class LMI_SO paginator
     int init(int number_of_rows, int rows_per_group, int max_lines_per_page);
     void print();
 
+  protected:
+    ~paginator() = default;
+
   private:
     virtual void prelude          () = 0;
     virtual void open_page        () = 0;

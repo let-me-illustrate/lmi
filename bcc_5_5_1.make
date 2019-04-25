@@ -19,7 +19,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-toolset      := bcc
+toolchain    := bcc
 
 srcdir       := $(CURDIR)
 
@@ -239,7 +239,7 @@ bcc_5_5_1.make:: ;
 	  --file=$(srcdir)/GNUmakefile \
 	  --jobs=1 \
 	                             srcdir='$(srcdir)' \
-	                            toolset='$(toolset)' \
+	                          toolchain='$(toolchain)' \
 	                        gcc_version='$(gcc_version)' \
 	                         C_WARNINGS='$(C_WARNINGS)' \
 	                       CXX_WARNINGS='$(CXX_WARNINGS)' \

@@ -28,7 +28,7 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 # rather than release its own; lmi uses i686 builds with native
 # threads and SJLJ exceptions.
 
-version   := MinGW-7_3_0
+version   := MinGW-8_1_0
 
 file_list  = $($(version))
 
@@ -46,6 +46,8 @@ prefix    := /MinGW_
 
 cache_dir := /cache_for_lmi/downloads
 
+ad_hoc_dir := $(prefix)/ad_hoc
+
 # In the past, it seemed necessary to specify a mirror, e.g.:
 #  mirror := http://easynews.dl.sourceforge.net/sourceforge/mingw
 # but as of about 2006-12 sf.net seems to select one automatically
@@ -58,6 +60,7 @@ mirror    := http://downloads.sourceforge.net/mingw-w64
 MinGW-6_3_0 := i686-6.3.0-release-win32-sjlj-rt_v5-rev2.7z
 MinGW-7_2_0 := i686-7.2.0-release-win32-sjlj-rt_v5-rev0.7z
 MinGW-7_3_0 := i686-7.3.0-release-win32-sjlj-rt_v5-rev0.7z
+MinGW-8_1_0 := i686-8.1.0-release-win32-sjlj-rt_v6-rev0.7z
 
 # Archive md5sums ##############################################################
 
@@ -65,6 +68,7 @@ MinGW-7_3_0 := i686-7.3.0-release-win32-sjlj-rt_v5-rev0.7z
 $(MinGW-6_3_0)-md5 := 6e15de993400279c24b40b1f978e9380
 $(MinGW-7_2_0)-md5 := f34ff6eca4aa7a645f60c977b107c5d2
 $(MinGW-7_3_0)-md5 := 37d964d08ce48dc170cc95a84679cc4f
+$(MinGW-8_1_0)-md5 := 28ec1e65ab85a9e1043998516045ab62
 
 # Utilities ####################################################################
 
@@ -92,8 +96,8 @@ prefix_exists = \
   "\nversion in order to preserve it; if not, then remove it." \
   "\n"
 
-scratch_exists = \
-  "\nError: Scratch directory 'scratch' already exists." \
+ad_hoc_dir_exists = \
+  "\nError: Nonce directory '$(ad_hoc_dir)' already exists." \
   "\nProbably it is left over from a previous failure." \
   "\nJust remove it unless you're sure you want whatever files" \
   "\nit might contain." \
@@ -103,19 +107,19 @@ scratch_exists = \
 
 .PHONY: all
 all: $(file_list)
-	$(CP) --archive scratch/mingw32 $(prefix)
-	$(RM) --force --recursive scratch
+	$(CP) --archive $(ad_hoc_dir)/mingw32 $(prefix)
+	$(RM) --force --recursive $(ad_hoc_dir)
 
 $(file_list): initial_setup
 
 .PHONY: initial_setup
 initial_setup:
-	type "$(WGET)" >/dev/null || { printf '%b' $(wget_missing)   && false; }
-	[ ! -e $(prefix) ]        || { printf '%b' $(prefix_exists)  && false; }
-	[ ! -e scratch   ]        || { printf '%b' $(scratch_exists) && false; }
+	type "$(WGET)" >/dev/null || { printf '%b' $(wget_missing)      && false; }
+	[ ! -e $(prefix)     ]    || { printf '%b' $(prefix_exists)     && false; }
+	[ ! -e $(ad_hoc_dir) ]    || { printf '%b' $(ad_hoc_dir_exists) && false; }
 	$(MKDIR) --parents $(prefix)
 	$(RM) --force --recursive $(prefix)
-	$(MKDIR) --parents scratch
+	$(MKDIR) --parents $(ad_hoc_dir)
 
 BSDTARFLAGS := --keep-old-files
 
@@ -127,5 +131,5 @@ WGETFLAGS :=
 %.7z:
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $(mirror)/$@
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
-	$(BSDTAR) --extract $(BSDTARFLAGS) --directory=scratch --file=$(cache_dir)/$@ \
-	  || c:/Program\ Files/7-Zip/7z x `cygpath -w $(cache_dir)/$@` -oscratch
+	$(BSDTAR) --extract $(BSDTARFLAGS) --directory=$(ad_hoc_dir) --file=$(cache_dir)/$@ \
+	  || c:/Program\ Files/7-Zip/7z x `cygpath -w $(cache_dir)/$@` -o$(ad_hoc_dir)

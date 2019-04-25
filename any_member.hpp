@@ -108,7 +108,7 @@ inline placeholder::~placeholder() = default;
 // Definition of class holder.
 
 template<typename ClassType, typename ValueType>
-class holder
+class holder final
     :public placeholder
 {
     // Friendship is extended to class any_member only to support its

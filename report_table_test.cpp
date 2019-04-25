@@ -405,6 +405,7 @@ class pagination_demo : public paginator
 {
   public:
     pagination_demo() {}
+    virtual ~pagination_demo() = default;
 
     int test(int number_of_rows, int rows_per_group, int max_lines_per_page);
 

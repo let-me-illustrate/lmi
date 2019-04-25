@@ -118,7 +118,7 @@ WGET    := wget
 # Instead of requiring installation of the build system's own libxml2:
 #   XMLLINT := xmllint
 # use the one that lmi builds:
-XMLLINT := /opt/lmi/local/bin/xmllint
+XMLLINT := $(localbindir)/xmllint
 
 ################################################################################
 

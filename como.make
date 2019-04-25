@@ -33,7 +33,7 @@
 # Cf.:
 # http://www-d0.fnal.gov/KAI/doc/UserGuide/faq.html#multiple_template_instance
 
-toolset      := como
+toolchain    := como
 
 srcdir       := $(CURDIR)
 
@@ -222,7 +222,7 @@ CXX := \
 	  --jobs=1 \
 	                        gcc_version='$(gcc_version)' \
 	                             srcdir='$(srcdir)' \
-	                            toolset='$(toolset)' \
+	                          toolchain='$(toolchain)' \
 	                         C_WARNINGS='$(C_WARNINGS)' \
 	                       CXX_WARNINGS='$(CXX_WARNINGS)' \
 	                   C_EXTRA_WARNINGS='$(C_EXTRA_WARNINGS)' \

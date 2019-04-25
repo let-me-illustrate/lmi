@@ -48,24 +48,23 @@ $(xz_version).tar.gz: host_path := projects/lzmautils/files
 
 mingw_dir     := /MinGW_
 
+host_type     := $(if $(LMI_HOST),$(LMI_HOST),i686-w64-mingw32)
+
 prefix        := /opt/lmi/local
 exec_prefix   := $(prefix)
 
 cache_dir     := /cache_for_lmi/downloads
 
-xml_dir       := /opt/lmi/xml-scratch
+build_dir     := $(prefix)/../xml-ad_hoc
 
 # Variables that normally should be left alone #################################
 
 mingw_bin_dir :=
-build_type    := x86_64-unknown-linux-gnu
-host_type     := i686-w64-mingw32
 
-uname := $(shell uname -s 2>/dev/null)
-ifeq (CYGWIN,$(findstring CYGWIN,$(uname)))
+lmi_build_type := $(shell /usr/share/libtool/build-aux/config.guess)
+
+ifeq (cygwin,$(findstring cygwin,$(lmi_build_type)))
   mingw_bin_dir := $(mingw_dir)/bin/
-  build_type    := i686-pc-cygwin
-  host_type     := i686-w64-mingw32
 endif
 
 xz_cflags := \
@@ -77,7 +76,7 @@ xz_cflags := \
 $(xz_version)_options := \
   --prefix=$(prefix) \
   --exec-prefix=$(exec_prefix) \
-  --build=$(build_type) \
+  --build=`$(build_dir)/$(xz_version)/build-aux/config.guess` \
   --host=$(host_type) \
   --disable-dependency-tracking \
   CFLAGS="-g -O2 $(xz_cflags)" \
@@ -115,10 +114,6 @@ xmlsoft_common_cflags := \
   -Wno-unused-variable \
 
 xmlsoft_common_options := \
-  --prefix=$(prefix) \
-  --exec-prefix=$(exec_prefix) \
-  --build=$(build_type) \
-  --host=$(host_type) \
   --disable-dependency-tracking \
   --disable-static \
   --enable-shared \
@@ -129,6 +124,10 @@ xmlsoft_common_options := \
   CFLAGS="-g -O2 $(xmlsoft_common_cflags)" \
 
 $(libxml2_version)_options := \
+  --prefix=$(prefix) \
+  --exec-prefix=$(exec_prefix) \
+  --build=`$(build_dir)/$(libxml2_version)/config.guess` \
+  --host=$(host_type) \
   $(xmlsoft_common_options) \
   --with-lzma=$(prefix) \
   --with-schemas \
@@ -144,6 +143,10 @@ $(libxml2_version)_options := \
 # libxslt option were named '--with-libxml-exec-prefix'.
 
 $(libxslt_version)_options := \
+  --prefix=$(prefix) \
+  --exec-prefix=$(exec_prefix) \
+  --build=`$(build_dir)/$(libxslt_version)/config.guess` \
+  --host=$(host_type) \
   $(xmlsoft_common_options) \
   --with-libxml-prefix=$(exec_prefix) \
   --without-crypto \
@@ -177,7 +180,7 @@ initial_setup:
 	$(MKDIR) --parents $(prefix)
 	$(MKDIR) --parents $(exec_prefix)
 	$(MKDIR) --parents $(cache_dir)
-	$(MKDIR) --parents $(xml_dir)
+	$(MKDIR) --parents $(build_dir)
 
 # $(WGETFLAGS) and $(wget_whence) must be recursively expanded because
 # $(host) and $(host_path) have target-specific values.
@@ -198,7 +201,7 @@ TARFLAGS := --keep-old-files
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $(wget_whence)/$@
 	cd $(cache_dir)/$(dir $@) && \
 	  $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
-	$(TAR) --extract $(TARFLAGS) --directory=$(xml_dir) --file=$(cache_dir)/$@
+	$(TAR) --extract $(TARFLAGS) --directory=$(build_dir) --file=$(cache_dir)/$@
 
 # Someday it may be necessary to add a line like this to the recipe:
 #   export lt_cv_to_tool_file_cmd=func_convert_file_cygwin_to_w32
@@ -207,8 +210,8 @@ TARFLAGS := --keep-old-files
 
 .PHONY: $(libraries)
 $(libraries):
-	-[ -e $@-lmi.patch ] && $(PATCH) --directory=$(xml_dir) --strip=1 <$@-lmi.patch
-	cd $(xml_dir)/$@ \
+	-[ -e $@-lmi.patch ] && $(PATCH) --directory=$(build_dir) --strip=1 <$@-lmi.patch
+	cd $(build_dir)/$@ \
 	  && export PATH="$(mingw_bin_dir):${PATH}" \
 	  && PKG_CONFIG_PATH="$(prefix)/lib/pkgconfig" \
 	    $($@_overrides) ./configure $($@_options) \
@@ -242,4 +245,4 @@ clobber_exec_prefix_only:
 	-$(RM) --force --recursive $(exec_prefix)/lib/*xslt*
 	-$(RM) --force --recursive $(exec_prefix)/lib/cmake
 	-$(RM) --force --recursive $(exec_prefix)/lib/pkgconfig
-	-$(RM) --force --recursive $(xml_dir)
+	-$(RM) --force --recursive $(build_dir)

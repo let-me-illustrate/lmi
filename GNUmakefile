@@ -35,8 +35,8 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 # for instance because it can automatically enforce Paul's advice
 # "it's best to invoke make with the -r option".
 #
-# One of several architecture-specific files is included, based on the
-# result of 'uname'. Separate files encapsulate variations better.
+# One of several architecture-specific files is included, based on a
+# 'config.guess' probe. Separate files encapsulate variations better.
 #
 # The ':' command Paul gives for his do-nothing rule seems no longer
 # to be necessary.
@@ -79,7 +79,50 @@ MAKEFLAGS := \
 
 # Directories.
 
-srcdir := $(CURDIR)
+# SOMEDAY !! Follow the GNU Coding Standards
+#   https://www.gnu.org/prep/standards/html_node/Directory-Variables.html
+# more closely, changing the value of $(datadir), and perhaps using
+# some other standard directories that are commented out for now.
+
+prefix          := /opt/lmi
+# parent directory for machine-specific binaries
+exec_prefix     := $(prefix)
+# binaries that users can run
+bindir          := $(exec_prefix)/bin
+# binaries that administrators can run
+#sbindir         := $(exec_prefix)/sbin
+# binaries run by programs
+#libexecdir      := $(exec_prefix)/libexec
+# parent directory for read-only architecture-independent data files
+datarootdir     := $(prefix)/share
+# idiosyncratic read-only architecture-independent data files
+# GNU standard default:
+# datadir         := $(datarootdir)
+# nonstandard value used for now:
+datadir         := $(prefix)/data
+# read-only data files that pertain to a single machine
+#sysconfdir      := $(prefix)/etc
+# architecture-independent data files which the programs modify while they run
+#sharedstatedir  := $(prefix)/com
+# data files which the programs modify while they run
+#localstatedir   := $(prefix)/var
+# data files which the programs modify while they run, persisting until reboot
+#runstatedir     := $(localstatedir)/run
+# headers
+#includedir      := $(prefix)/include
+docdir          := $(datarootdir)/doc/lmi
+htmldir         := $(docdir)
+#libdir          := $(exec_prefix)/lib
+# source files (GNU Coding Standards don't suggest any default value)
+srcdir          := $(CURDIR)
+
+# These directories are outside the scope of the GNU Coding Standards.
+# Therefore, their names may contain '_' for distinction and clarity.
+localbindir     := $(exec_prefix)/local/bin
+locallibdir     := $(exec_prefix)/local/lib
+localincludedir := $(exec_prefix)/local/include
+test_dir        := $(exec_prefix)/test
+touchstone_dir  := $(exec_prefix)/touchstone
 
 ################################################################################
 
@@ -129,9 +172,8 @@ $(srcdir)/local_options.make:: ;
 # the make command line. Of course, other build types may be defined.
 
 build_type ?= ship
-toolset ?= gcc
-build_directory := \
-  $(srcdir)/../build/$(notdir $(srcdir))/$(uname)/$(toolset)/$(build_type)
+toolchain ?= gcc
+build_dir := $(exec_prefix)/$(toolchain)/build/$(build_type)
 
 gpl_files := \
   COPYING \
@@ -148,21 +190,33 @@ MAKETARGET = \
     --directory=$@ \
     --file=$(srcdir)/workhorse.make \
     --no-print-directory \
-    $(local_options) $(MAKEOVERRIDES) \
+    $(local_options) \
+    $(MAKEOVERRIDES) \
+                          prefix='$(prefix)' \
+                     exec_prefix='$(exec_prefix)' \
+                          bindir='$(bindir)' \
+                     datarootdir='$(datarootdir)' \
+                         datadir='$(datadir)' \
+                          docdir='$(docdir)' \
+                         htmldir='$(htmldir)' \
                           srcdir='$(srcdir)' \
-                         toolset='$(toolset)' \
+                     localbindir='$(localbindir)' \
+                     locallibdir='$(locallibdir)' \
+                 localincludedir='$(localincludedir)' \
+                        test_dir='$(test_dir)' \
+                  touchstone_dir='$(touchstone_dir)' \
+                       toolchain='$(toolchain)' \
                       build_type='$(build_type)' \
-               platform-makefile='$(platform-makefile)' \
                USE_SO_ATTRIBUTES='$(USE_SO_ATTRIBUTES)' \
                     yyyymmddhhmm='$(yyyymmddhhmm)' \
   $(MAKECMDGOALS)
 
-.PHONY: $(build_directory)
-$(build_directory): $(gpl_files)
+.PHONY: $(build_dir)
+$(build_dir): $(gpl_files)
 	+@[ -d $@ ] || $(MKDIR) --parents $@
 	+@$(MAKETARGET)
 
-% :: $(build_directory) ; @:
+% :: $(build_dir) ; @:
 
 ################################################################################
 
@@ -258,11 +312,8 @@ endef
 
 ################################################################################
 
-# Clean.
+# Clean and its kindred.
 
-# Almost all targets are built in a build directory, so the 'clean'
-# target is run there: see 'workhorse.make'.
-#
 # This makefile has rules to build a few files in the source
 # directory, viz.
 #   quoted_gpl
@@ -279,33 +330,49 @@ expungible_files := $(wildcard *~ *.bak *eraseme*)
 source_clean:
 	@-$(RM) --force $(expungible_files)
 
-.PHONY: clean
-clean: source_clean
-	-$(RM) --force --recursive $(build_directory)
+# Simple aliases.
 
 .PHONY: distclean mostlyclean maintainer-clean
 distclean mostlyclean maintainer-clean: clean
 
+# This precondition permits writing progressively severer 'clean'
+# targets more clearly. To use an alternative like
+#   rm -rf $(build_dir)/../..
+# would be to invite disaster.
+ifneq ($(build_dir),$(exec_prefix)/$(toolchain)/build/$(build_type))
+  $(error Assertion failure: build directory misconfigured)
+endif
+
+.PHONY: clean
+clean: source_clean
+	-$(RM) --force --recursive $(exec_prefix)/$(toolchain)/build/$(build_type)
+
 .PHONY: clobber
 clobber: source_clean
-	-$(RM) --force --recursive $(srcdir)/../build
+	-$(RM) --force --recursive $(exec_prefix)/$(toolchain)/build
+
+.PHONY: raze
+raze: clobber
+	-$(RM) --force --recursive $(prefix)/*ad_hoc*
+	-$(RM) --force --recursive $(prefix)/local
+	-$(RM) --force --recursive $(prefix)/third_party
 
 ################################################################################
 
 # Custom tools built from source.
 
-TEST_CODING_RULES := $(build_directory)/test_coding_rules$(EXEEXT)
+TEST_CODING_RULES := $(build_dir)/test_coding_rules$(EXEEXT)
 
 .PHONY: custom_tools
 custom_tools:
 	@$(MAKE) --file=$(this_makefile) --directory=$(srcdir) test_coding_rules$(EXEEXT)
-	@$(CP) --preserve --update $(TEST_CODING_RULES) /opt/lmi/local/bin
+	@$(CP) --preserve --update $(TEST_CODING_RULES) $(localbindir)
 
 ################################################################################
 
 # Check conformity to certain formatting rules; count lines and defects.
 #
-# The tests in $(build_directory) identify object ('.o') files with no
+# The tests in $(build_dir) identify object ('.o') files with no
 # corresponding autodependency ('.d') file, and zero-byte '.d' files.
 # Either of these suggests a build failure that may render dependency
 # files invalid; 'make clean' should provide symptomatic relief.
@@ -337,8 +404,8 @@ check_concinnity: source_clean custom_tools
 	@[ -f md5sums ] \
 	  && <md5sums $(SED) -e'/\.test$$\|\.test0$$\|\.test1$$\|\.tsv$$\|\.xml$$/d' \
 	  | $(MD5SUM) --check --quiet || true
-	@for z in $(build_directory)/*.d; do [ -s $$z ]         || echo $$z; done;
-	@for z in $(build_directory)/*.o; do [ -f $${z%%.o}.d ] || echo $$z; done;
+	@for z in $(build_dir)/*.d; do [ -s $$z ]         || echo $$z; done;
+	@for z in $(build_dir)/*.o; do [ -f $${z%%.o}.d ] || echo $$z; done;
 	@$(LS) --classify ./* \
 	  | $(SED) -e'/\*$$/!d' -e'/^\.\//!d' -e'/.sh\*$$/d' -e'/.sed\*$$/d' \
 	  | $(SED) -e's/^/Improperly executable: /'

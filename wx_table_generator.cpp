@@ -233,7 +233,7 @@ void wx_table_generator::output_super_header
     int end_column   = indices_[a_end_column];
 
     std::vector<std::string> const lines(split_into_lines(header));
-    int const anticipated_pos_y = pos_y + row_height() * lines.size();
+    int const anticipated_pos_y = pos_y + row_height() * lmi::ssize(lines);
 
     switch(output_mode)
         {

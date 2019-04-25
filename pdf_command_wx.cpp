@@ -51,8 +51,9 @@
 #include <wx/html/m_templ.h>
 
 #include <array>
-#include <cstdint>                      // SIZE_MAX
+#include <cstdint>                      // ULONG_MAX
 #include <cstdlib>                      // strtoul()
+#include <cstring>                      // strchr(), strlen()
 #include <exception>                    // uncaught_exceptions()
 #include <fstream>
 #include <map>
@@ -74,7 +75,7 @@ namespace
 inline
 bool starts_with(std::string const& s, char const* prefix)
 {
-    return s.compare(0, strlen(prefix), prefix) == 0;
+    return s.compare(0, std::strlen(prefix), prefix) == 0;
 }
 
 // Helper enums identifying the possible {Guaranteed,Current}{Zero,}
@@ -272,10 +273,10 @@ class html_interpolator
             auto const index = std::strtoul(s.c_str() + open_pos + 1, &stop, 10);
 
             // Conversion must have stopped at the closing bracket character
-            // and also check for overflow (notice that index == SIZE_MAX
+            // and also check for overflow (notice that index == ULONG_MAX
             // doesn't, in theory, need to indicate overflow, but in practice
             // we're never going to have valid indices close to this number).
-            if(stop != s.c_str() + s.length() - 1 || SIZE_MAX <= index)
+            if(stop != s.c_str() + s.length() - 1 || ULONG_MAX == index)
                 {
                 throw std::runtime_error
                     ("Index of vector variable '" + s + "' is not a valid number"
@@ -339,6 +340,8 @@ class table_mixin
         ,mixin_interpolator_ {interpolator}
     {
     }
+
+    ~table_mixin() = default;
 
     // Description of a single table column.
     struct illustration_table_column
@@ -1001,8 +1004,9 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
     std::vector<std::unique_ptr<logical_page>> pages_;
 };
 
-// Cover page used by several different illustration kinds.
-class cover_page : public logical_page
+// Cover page for finra only. PDF !! At the appropriate time, expunge
+// this class altogether, and use class cover_page instead.
+class unnumbered_cover_page : public logical_page
 {
   public:
     using logical_page::logical_page;
@@ -1311,8 +1315,6 @@ class numbered_page : public page_with_marginals
     }
 
   private:
-    // Derived classes may override this function if they may need more than one
-    // physical page to show their contents.
     virtual int get_extra_pages_needed() = 0;
 
     std::string get_page_number() const override
@@ -1326,6 +1328,56 @@ class numbered_page : public page_with_marginals
     static inline int last_page_number_ {-1};
     int               this_page_number_ {0};
     int               extra_pages_      {0};
+};
+
+/// Generic cover page for most ledger types.
+///
+/// See discussion here:
+///   https://lists.nongnu.org/archive/html/lmi/2019-04/msg00024.html
+
+class cover_page : public numbered_page
+{
+  public:
+    using numbered_page::numbered_page;
+
+    void render() override
+    {
+        // Call base-class implementation to render the footer.
+        numbered_page::render();
+        int const height_contents = writer_.output_html
+            (writer_.get_horz_margin()
+            ,writer_.get_vert_margin()
+            ,writer_.get_page_width()
+            ,interpolator_.expand_template("cover")
+            );
+
+        // There is no way to draw a border around the page contents in wxHTML
+        // currently, so do it manually.
+        auto& pdf_dc = writer_.dc();
+
+        pdf_dc.SetPen(wxPen(illustration_rule_color, 2));
+        pdf_dc.SetBrush(*wxTRANSPARENT_BRUSH);
+
+        pdf_dc.DrawRectangle
+            (writer_.get_horz_margin()
+            ,writer_.get_vert_margin()
+            ,writer_.get_page_width()
+            ,height_contents
+            );
+    }
+
+  private:
+    int get_extra_pages_needed() override
+    {
+        return 0;
+    }
+
+    // Only the lower part of the footer is wanted here.
+    std::string get_upper_footer_template_name() const override
+    {
+        return std::string {};
+    }
+
 };
 
 // Simplest possible page which is entirely defined by its external template
@@ -1860,7 +1912,7 @@ class page_with_tabular_report
 
         table_gen().output_headers(pos_y, output_mode);
 
-        auto const ncols = get_table_columns().size();
+        auto const ncols = lmi::ssize(get_table_columns());
         table_gen().output_horz_separator(0, ncols, pos_y, output_mode);
         pos_y += table_gen().separator_line_height();
 
@@ -2208,7 +2260,7 @@ class pdf_illustration_naic : public pdf_illustration
             mode0[0] = lmi_tolower(mode0[0]);
             add_variable
                 ("ErModeLCWithArticle"
-                ,(strchr("aeiou", mode0[0]) ? "an " : "a ") + mode0
+                ,(std::strchr("aeiou", mode0[0]) ? "an " : "a ") + mode0
                 );
             }
 
@@ -2284,8 +2336,8 @@ class pdf_illustration_naic : public pdf_illustration
             );
 
         // Add all the pages.
-        add<cover_page>();
         numbered_page::start_numbering();
+        add<cover_page>();
         add<standard_page>("ill_reg_narr_summary");
         add<standard_page>("ill_reg_narr_summary2");
         add<standard_page>("ill_reg_column_headings");
@@ -2836,7 +2888,7 @@ class pdf_illustration_finra : public pdf_illustration
             );
 
         // Add all the pages.
-        add<cover_page>();
+        add<unnumbered_cover_page>();
         numbered_page::start_numbering();
         add<finra_basic>();
         add<finra_supplemental>();
@@ -2921,8 +2973,8 @@ class pdf_illustration_reg_d_group : public pdf_illustration
             );
 
         // Add all the pages.
-        add<cover_page>();
         numbered_page::start_numbering();
+        add<cover_page>();
         add<reg_d_group_basic>();
         add<standard_page>("reg_d_group_column_headings");
         add<standard_page>("reg_d_group_narr_summary");

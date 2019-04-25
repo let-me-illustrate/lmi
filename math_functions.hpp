@@ -29,7 +29,6 @@
 
 #include <algorithm>                    // max(), min()
 #include <cmath>                        // expm1(), log1p()
-#include <functional>
 #include <limits>
 #include <stdexcept>
 #include <type_traits>
@@ -38,13 +37,16 @@
 // TODO ?? Write functions here for other refactorable uses of
 // std::pow() throughout lmi, to facilitate reuse and unit testing.
 
-// Many of these are Adaptable Unary or Binary Functions because that
-// was good C++98 practice.
+// Some of these provide the typedefs that std::unary_function or
+// std::binary_function would have provided, because they're still
+// required for std::binder1st() or std::binder2nd(), or for PETE.
 
 template<typename T>
 struct greater_of
-    :public std::binary_function<T,T,T>
 {
+    using first_argument_type  = T;
+    using second_argument_type = T;
+    using result_type          = T;
     T operator()(T const& x, T const& y) const
         {
         return std::max(x, y);
@@ -53,8 +55,10 @@ struct greater_of
 
 template<typename T>
 struct lesser_of
-    :public std::binary_function<T,T,T>
 {
+    using first_argument_type  = T;
+    using second_argument_type = T;
+    using result_type          = T;
     T operator()(T const& x, T const& y) const
         {
         return std::min(x, y);
@@ -78,8 +82,10 @@ struct lesser_of
 
 template<typename T>
 struct mean
-    :public std::binary_function<T, T, T>
 {
+    using first_argument_type  = T;
+    using second_argument_type = T;
+    using result_type          = T;
     static_assert(std::is_floating_point<T>::value);
     T operator()(T const& x, T const& y) const
         {return 0.5 * x + 0.5 * y;}
@@ -117,11 +123,10 @@ inline T outward_quotient(T numerator, T denominator)
 // this is judged not to be worthwhile.
 //
 // Typically, the period 'n' is a constant known at compile time, so
-// it is makes sense for it to be a non-type template parameter. That,
-// however, makes derivation from std::binary_function nonsensical:
-// what is important is not the type of 'n', but its value. But 'n'
-// equals twelve in the most common case, for which functors derived
-// from std::unary_function are provided.
+// it is makes sense for it to be a non-type template parameter. To
+// support some old <functional> code, specializations for the most
+// common case, where 'n' equals twelve, are provided with the
+// typedefs that std::unary_function formerly provided.
 //
 // General preconditions: 0 < 'n'; -1.0 <= 'i'; T is floating point.
 //
@@ -157,8 +162,9 @@ struct i_upper_n_over_n_from_i
 
 template<typename T>
 struct i_upper_12_over_12_from_i
-    :public std::unary_function<T,T>
 {
+    using argument_type = T;
+    using result_type   = T;
     static_assert(std::is_floating_point<T>::value);
     T operator()(T const& i) const
         {
@@ -168,7 +174,6 @@ struct i_upper_12_over_12_from_i
 
 template<typename T, int n>
 struct i_from_i_upper_n_over_n
-    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value);
     static_assert(0 < n);
@@ -183,7 +188,6 @@ struct i_from_i_upper_n_over_n
 
 template<typename T>
 struct i_from_i_upper_12_over_12
-    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value);
     T operator()(T const& i) const
@@ -194,7 +198,6 @@ struct i_from_i_upper_12_over_12
 
 template<typename T, int n>
 struct d_upper_n_from_i
-    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value);
     static_assert(0 < n);
@@ -220,7 +223,6 @@ struct d_upper_n_from_i
 
 template<typename T>
 struct d_upper_12_from_i
-    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value);
     T operator()(T const& i) const
@@ -270,7 +272,7 @@ struct net_i_from_gross
 ///   http://lists.nongnu.org/archive/html/lmi/2009-09/msg00001.html
 ///
 /// The value of 'q' might exceed unity, for example if guaranteed COI
-/// rates for simplified issue are 120% of 1980 CSO, so that case is
+/// rates for simplified issue are 125% of 1980 CSO, so that case is
 /// accommodated. A value of zero might arise from a partial-mortality
 /// multiplier that equals zero for some or all durations, and that
 /// case arises often enough to merit a special optimization.
@@ -287,8 +289,10 @@ struct net_i_from_gross
 
 template<typename T>
 struct coi_rate_from_q
-    :public std::binary_function<T,T,T>
 {
+    using first_argument_type  = T;
+    using second_argument_type = T;
+    using result_type          = T;
     static_assert(std::is_floating_point<T>::value);
     T operator()(T const& q, T const& max_coi) const
         {

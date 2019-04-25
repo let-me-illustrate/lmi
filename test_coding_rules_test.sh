@@ -21,13 +21,8 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# This script is intended to be invoked by lmi makefiles. If it is
-# run independently, the environment variable PERFORM should be set
-# to indicate any cross interpreter--e.g., use this command:
-#   PERFORM=wine /path/to/test_coding_rules_test.sh
-# to make this script run a cross-compiled 'test_coding_rules.exe'
-# built for msw in a GNU/Linux environment. It can be run natively
-# with $PERFORM unset.
+# This script is intended to be invoked by lmi makefiles; it would
+# rarely make sense to run it independently.
 
 echo "Testing 'test_coding_rules'."
 
@@ -366,6 +361,16 @@ touch another.unexpected.file
 
 # Compare observed to expected. Note that directory '.' is ignored.
 
+lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+case "$lmi_build_type" in
+    (*-*-linux*)
+        PERFORM=wine
+        ;;
+    (*)
+        PERFORM=
+        ;;
+esac
+
 2>&1 $PERFORM ./test_coding_rules \
   . \
   a_nonexistent_file \
@@ -427,7 +432,7 @@ File 'eraseme_marker_001' has irregular defect marker 'INELEGANT !!!'.
 File 'eraseme_marker_001' has irregular defect marker 'ELEGANT !! '.
 File 'eraseme_png_003-dot.dash-dot.png' exceeds 31-character file-name limit.
 File 'eraseme_taboo_001' breaks taboo 'Cambridge'.
-File 'eraseme_taboo_001' breaks taboo 'Temple'.
+File 'eraseme_taboo_001' breaks taboo 'Temple P'.
 File 'eraseme_taboo_001' breaks taboo 'Shibboleth'.
 File 'eraseme_taboo_001' breaks taboo 'sibboleth'.
 File 'eraseme_url_001' lacks lmi URL.

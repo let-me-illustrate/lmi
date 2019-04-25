@@ -22,7 +22,7 @@
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 # Suggested use:
-#   $make clobber; ./nychthemeral_test.sh 2>&1 | tee /tmp/lmi/logs/log | sed -f errors.sed
+#   $make clobber; ./nychthemeral_test.sh
 # Omitting the 'clobber' step when it's known to be unnecessary makes
 # that command take two minutes instead of five on a dual E5-2630 v3
 # machine. What's difficult is knowing when it's truly unnecessary.
@@ -36,10 +36,15 @@ set -e
 # provides no convenient alternative):
 setopt PIPE_FAIL
 
-if [ "$LMI_HOST" = "i686-w64-mingw32" ]
-then
-    PERFORM=wine
-fi
+lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+case "$lmi_build_type" in
+    (*-*-linux*)
+        PERFORM=wine
+        ;;
+    (*)
+        PERFORM=
+        ;;
+esac
 
 coefficiency=${coefficiency:-"--jobs=$(nproc)"}
 
@@ -97,39 +102,82 @@ schemata_clutter='
 /^  Done\.$/d
 '
 
-# Directory for test logs.
-mkdir --parents /tmp/lmi/logs
+nychthemeral_clutter='
+/^# install; check physical closure/d
+/^# cgi and cli tests/d
+/^Test common gateway interface:/d
+/^Test command line interface:/d
+/^Test sample.cns:/d
+/^Test sample.ill:/d
+/^# system test/d
+/^System test:/d
+/^All [1-9][0-9]* files match./d
+/^# unit tests/d
+/^[1-9][0-9]* tests succeeded/d
+/^# build with shared-object attributes/d
+/^# cgi and cli tests in libstdc++ debug mode/d
+/^Test common gateway interface:/d
+/^Test command line interface:/d
+/^Test sample.cns:/d
+/^Test sample.ill:/d
+/^# unit tests in libstdc++ debug mode/d
+/^[1-9][0-9]* tests succeeded/d
+/^# test concinnity/d
+/^  Problems detected by xmllint:/d
+/^  Miscellaneous problems:/d
+/^  *[1-9][0-9]* source files/d
+/^  *[1-9][0-9]* source lines/d
+/^  *[1-9][0-9]* marked defects/d
+/^# xrc tests/d
+/^# schema tests/d
+/^# test all valid emission types/d
+/^$/d
+'
 
+# Directory for test logs.
+log_dir=/tmp/lmi/logs
+mkdir --parents "$log_dir"
+
+{
 cd /opt/lmi/src/lmi
 
 printf '\n# test concinnity\n\n'
-make "$coefficiency" check_concinnity 2>&1 | sed -e "$build_clutter" -e "$concinnity_clutter"
+make "$coefficiency" check_concinnity 2>&1 \
+  | sed -e "$build_clutter" -e "$concinnity_clutter"
 
 printf '# install; check physical closure\n\n'
-make "$coefficiency" install check_physical_closure 2>&1 | tee /tmp/lmi/logs/install | sed -e "$build_clutter" -e "$install_clutter"
+make "$coefficiency" install check_physical_closure 2>&1 \
+  | tee "$log_dir"/install | sed -e "$build_clutter" -e "$install_clutter"
 
 printf 'Production system built--ready to start GUI test in another session.\n' > /dev/tty
 
 printf '\n# cgi and cli tests\n\n'
-make "$coefficiency" --output-sync=recurse cgi_tests cli_tests 2>&1 | tee /tmp/lmi/logs/cgi-cli | sed -e "$build_clutter" -e "$cli_cgi_clutter"
+make "$coefficiency" --output-sync=recurse cgi_tests cli_tests 2>&1 \
+  | tee "$log_dir"/cgi_cli | sed -e "$build_clutter" -e "$cli_cgi_clutter"
 
 printf '\n# system test\n\n'
-make "$coefficiency" system_test 2>&1 | tee /tmp/lmi/logs/system-test | sed -e "$build_clutter" -e "$install_clutter"
+make "$coefficiency" system_test 2>&1 \
+  | tee "$log_dir"/system_test | sed -e "$build_clutter" -e "$install_clutter"
 
 printf '\n# unit tests\n\n'
-make "$coefficiency" unit_tests 2>&1 | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >/tmp/lmi/logs/unit-tests
+make "$coefficiency" unit_tests 2>&1 \
+  | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests
 
 printf '\n# build with shared-object attributes\n\n'
-make "$coefficiency" all build_type=so_test USE_SO_ATTRIBUTES=1 2>&1 | tee /tmp/lmi/logs/so_test | sed -e "$build_clutter"
+make "$coefficiency" all build_type=so_test USE_SO_ATTRIBUTES=1 2>&1 \
+  | tee "$log_dir"/so_test | sed -e "$build_clutter"
 
 printf '\n# cgi and cli tests in libstdc++ debug mode\n\n'
-make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=safestdlib 2>&1 | tee /tmp/lmi/logs/cgi-cli-safestdlib | sed -e "$build_clutter" -e "$cli_cgi_clutter"
+make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=safestdlib 2>&1 \
+  | tee "$log_dir"/cgi_cli_safestdlib | sed -e "$build_clutter" -e "$cli_cgi_clutter"
 
 printf '\n# unit tests in libstdc++ debug mode\n\n'
-make "$coefficiency" unit_tests build_type=safestdlib 2>&1 | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >/tmp/lmi/logs/unit-tests-safestdlib
+make "$coefficiency" unit_tests build_type=safestdlib 2>&1 \
+  | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests_safestdlib
 
 printf '\n# xrc tests\n\n'
-java -jar /opt/lmi/third_party/rng/jing.jar -c xrc.rnc *.xrc 2>&1 | tee /tmp/lmi/logs/xrc
+java -jar /opt/lmi/third_party/rng/jing.jar -c xrc.rnc ./*.xrc 2>&1 \
+  | tee "$log_dir"/xrc
 
 # Run the following tests in a throwaway directory so that the files
 # they create can be cleaned up easily.
@@ -149,7 +197,8 @@ printf '\n# test all valid emission types\n\n'
 "$PERFORM" /opt/lmi/bin/lmi_cli_shared --file=/tmp/lmi/tmp/sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
 
 printf '\n# schema tests\n\n'
-/opt/lmi/src/lmi/test_schemata.sh 2>&1 | tee /tmp/lmi/logs/schemata | sed -e "$schemata_clutter"
+/opt/lmi/src/lmi/test_schemata.sh 2>&1 \
+  | tee "$log_dir"/schemata | sed -e "$schemata_clutter"
 
 # Clean up stray output. (The zsh '(N)' glob qualifier turns on
 # null_glob for a single expansion.)
@@ -159,3 +208,4 @@ for z in /tmp/lmi/tmp/*(N); do rm "$z"; done
 # no such actions must be performed manually while it is running.
 # Therefore, it is deliberately excluded from this script.
 printf '\nDo not forget to run wx_test.\n'
+} 2>&1 | tee "$log_dir"/nychthemeral_test | sed -e "$nychthemeral_clutter"

@@ -41,6 +41,8 @@ coefficiency=${coefficiency:-"--jobs=4"}
 
 MAKE=${MAKE:-"make $coefficiency"}
 
+host_type=${LMI_HOST:-"i686-w64-mingw32"}
+
 # Variables that normally should be left alone #################################
 
 mingw_dir=/MinGW_
@@ -75,10 +77,9 @@ fi
 git checkout "$wxpdfdoc_commit_sha"
 
 build_type=$("$proxy_wxpdfdoc_dir"/admin/build-aux/config.guess)
-host_type=i686-w64-mingw32
 
-case $(uname) in
-    CYGWIN*)
+case "$build_type" in
+    (*-*-cygwin*)
         mingw_bin_dir=$mingw_dir/bin/
         ;;
 esac
@@ -103,7 +104,7 @@ config_options="
 cd "$proxy_wxpdfdoc_dir"
 autoreconf --verbose
 
-build_dir="$prefix"/../wxpdfdoc-scratch/wxpdfdoc-$wxpdfdoc_commit_sha
+build_dir="$prefix"/../wxpdfdoc-ad_hoc/wxpdfdoc-$wxpdfdoc_commit_sha
 
 if [ "$wxpdfdoc_skip_clean" != 1 ]
 then

@@ -250,4 +250,10 @@ iconv -f ISO-8859-1 -t UTF-8 eraseme > product_data.cpp
 
   # Check spelling
 
-http://lists.nongnu.org/archive/html/lmi/2015-10/msg00076.html
+https://lists.nongnu.org/archive/html/lmi/2015-10/msg00076.html
+
+  # Test reinstallation; compare logs
+
+logfile=log-`date -u +'%Y%m%dT%H%MZ'`; echo "Log file is '$logfile.tar.bz2'."; ./install_msw.sh >$logfile 2>&1; tar -cjf $logfile.tar.bz2 $logfile; mv ${logfile}* ..
+
+git diff --no-index --color=always --color-moved=plain ../log-old ../log-new |sed -e's/^.\[3[12]m/&ZZZ/' |less -RS

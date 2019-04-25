@@ -48,7 +48,7 @@
 /// keystrokes for scrolling would, astonishingly, fail to work), and,
 /// for consistency, so does the first.
 
-class AboutDialog
+class AboutDialog final
     :public wxDialog
 {
   public:

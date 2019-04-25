@@ -37,7 +37,7 @@
 #include <algorithm>                    // count()
 #include <climits>                      // ULLONG_MAX
 #include <cstdlib>                      // strtoull()
-#include <cstring>                      // strncmp()
+#include <cstring>                      // memcpy(), strncmp()
 #include <iomanip>
 #include <ios>
 #include <istream>
@@ -155,7 +155,7 @@ inline
 T from_bytes(char const* bytes)
 {
     T t;
-    memcpy(&t, bytes, sizeof(T));
+    std::memcpy(&t, bytes, sizeof(T));
     return swap_bytes_if_big_endian(t);
 }
 
@@ -164,7 +164,7 @@ inline
 void to_bytes(char* bytes, T value)
 {
     T const t = swap_bytes_if_big_endian(value);
-    memcpy(bytes, &t, sizeof(T));
+    std::memcpy(bytes, &t, sizeof(T));
 }
 
 // Functions doing the same thing as istream::read() and ostream::write()

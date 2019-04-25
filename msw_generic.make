@@ -42,7 +42,7 @@ PERFORM := wine
 
 gcc_bin_dir :=
 
-host_prefix := i686-w64-mingw32-
+host_prefix := $(LMI_HOST)-
 
 AR      := $(gcc_bin_dir)$(host_prefix)ar
 CC      := $(gcc_bin_dir)$(host_prefix)gcc
@@ -57,7 +57,7 @@ RC      := $(gcc_bin_dir)$(host_prefix)windres
 # option returns an empty string with debian cross compilers.
 #
 # It might seem more robust to write something like
-#   compiler_sysroot := $(shell readlink -fn /usr/lib/gcc/i686-w64-mingw32/*-win32)
+#   compiler_sysroot := $(shell readlink -fn /usr/lib/gcc/$(LMI_HOST)/*-win32)
 # but that would actually weaken makefile portability, and there
 # is no guarantee that this directory will be named similarly in
 # future debian releases, much less on other OSs.
@@ -111,7 +111,7 @@ WGET    := wget
 # Instead of requiring installation of the build system's own libxml2:
     XMLLINT := xmllint
 # use the one that lmi builds:
-#   XMLLINT := $(PERFORM) /opt/lmi/local/bin/xmllint
+#   XMLLINT := $(PERFORM) $(localbindir)/xmllint
 # but don't do that until 'wine' is fixed--see:
 #   https://lists.nongnu.org/archive/html/lmi/2019-01/msg00034.html
 

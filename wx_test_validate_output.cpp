@@ -486,9 +486,7 @@ LMI_WX_TEST_CASE(validate_output_illustration)
     };
 
     // Create a new illustration with the special comment.
-
-    // Double parentheses circumvent the most vexing parse.
-    wx_test_new_illustration ill((enter_comment_in_illustration_dialog()));
+    wx_test_new_illustration ill {enter_comment_in_illustration_dialog()};
     ill.close_discard_changes();
 
     // And check that this resulted in the creation of the expected file.

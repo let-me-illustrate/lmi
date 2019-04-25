@@ -601,6 +601,9 @@ GetOpt::operator()()
               case LIST_ARG:
                 list_option = pfound; // fall through
 
+              case REQD_ARG: // fall through
+              case OPT_ARG:  // fall through
+              case ALT_ARG:  // fall through
               default:
                 optarg = nameend + 1;
                 break;
@@ -634,6 +637,8 @@ GetOpt::operator()()
                   }
                 break;
 
+              case NO_ARG:  // fall through
+              case OPT_ARG: // fall through
               default:
                 optarg = nullptr;
                 break;

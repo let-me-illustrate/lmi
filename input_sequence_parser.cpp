@@ -164,6 +164,14 @@ void SequenceParser::duration_scalar()
                 }
             }
             break;
+        case e_eof:
+        case e_major_separator:
+        case e_minor_separator:
+        case e_begin_incl:
+        case e_begin_excl:
+        case e_end_incl:
+        case e_end_excl:
+        case e_startup:
         default:
             {
             diagnostics_ << "Expected keyword, number, '@', or '#'. ";
@@ -191,6 +199,11 @@ void SequenceParser::duration_scalar()
             current_duration_scalar_ += last_input_duration_;
             }
             break;
+        case e_invalid_mode:
+        case e_inception:
+        case e_inforce:
+        case e_retirement:
+        case e_maturity:
         default:
             {
             diagnostics_ << "Expected number, '@', or '#'. ";
@@ -358,9 +371,9 @@ void SequenceParser::duration()
             null_duration();
             }
             break;
-        case e_number:
         case e_age_prefix:
         case e_cardinal_prefix:
+        case e_number:
         case e_keyword:
             {
             single_duration();
@@ -372,6 +385,10 @@ void SequenceParser::duration()
             intervalic_duration();
             }
             break;
+        case e_minor_separator:
+        case e_end_incl:
+        case e_end_excl:
+        case e_startup:
         default:
             {
             diagnostics_
@@ -436,6 +453,16 @@ void SequenceParser::value()
                 }
             }
             break;
+        case e_eof:
+        case e_major_separator:
+        case e_minor_separator:
+        case e_begin_incl:
+        case e_begin_excl:
+        case e_end_incl:
+        case e_end_excl:
+        case e_age_prefix:
+        case e_cardinal_prefix:
+        case e_startup:
         default:
             {
             diagnostics_ << "Expected number or keyword. ";
@@ -472,6 +499,9 @@ void SequenceParser::span()
             duration();
             }
             break;
+        case e_end_incl:
+        case e_end_excl:
+        case e_startup:
         default:
             {
             diagnostics_
@@ -532,6 +562,15 @@ void SequenceParser::sequence()
                 span();
                 }
                 break;
+            case e_minor_separator:
+            case e_begin_incl:
+            case e_begin_excl:
+            case e_end_incl:
+            case e_end_excl:
+            case e_age_prefix:
+            case e_cardinal_prefix:
+            case e_number:
+            case e_keyword:
             default:
                 {
                 diagnostics_ << "Expected ';'. ";

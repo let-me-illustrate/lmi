@@ -19,20 +19,23 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#include "pchfile.hpp"
+#ifndef cso_table_hpp
+#define cso_table_hpp
 
-#include "cso_tables.hpp"
+#include "config.hpp"
 
-/// Just a placeholder for the nonce.
+#include "mc_enum_types.hpp"
+#include "oecumenic_enumerations.hpp"
+#include "so_attributes.hpp"
 
-std::vector<double> const& cso_table
-    (oenum_cso_era    // cso_era
-    ,oenum_autopisty  // autopisty
-    ,oenum_alb_or_anb // alb_or_anb
-    ,mce_gender       // gender
-    ,mce_smoking      // smoking
-    )
-{
-    static std::vector<double> placeholder {1.0};
-    return placeholder;
-}
+#include <vector>
+
+std::vector<double> LMI_SO cso_table
+    (oenum_cso_era
+    ,oenum_autopisty
+    ,oenum_alb_or_anb
+    ,mcenum_gender
+    ,mcenum_smoking
+    );
+
+#endif // cso_table_hpp

@@ -24,8 +24,10 @@
 #include "tier_view_editor.hpp"
 
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "ieee754.hpp"                  // infinity<>()
 #include "multidimgrid_safe.tpp"
+#include "ssize_lmi.hpp"
 #include "stratified_charges.hpp"
 #include "value_cast.hpp"
 
@@ -81,7 +83,7 @@ void tier_entity_adapter::set_bands_count(unsigned int n)
         values().push_back(0.0);
         }
 
-    unsigned int const size = limits().size();
+    unsigned int const size = bourn_cast<unsigned int>(lmi::ssize(limits()));
 
     if(n < size)
         {

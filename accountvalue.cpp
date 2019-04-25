@@ -471,6 +471,9 @@ void AccountValue::PerformSpecAmtStrategy()
             SA = InvariantValues().SpecAmt[0];
             }
             break;
+        case mce_sa_gsp:      // fall through
+        case mce_sa_corridor: // fall through
+        case mce_sa_salary:   // fall through
         default:
             {
             alarum()
@@ -534,6 +537,8 @@ void AccountValue::TxOptionChange()
             // An alternative is to lapse the policy.
             }
             break;
+        case mce_rop: // fall through
+        case mce_mdb: // fall through
         default:
             {
             alarum() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
@@ -643,6 +648,9 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
             *a_Pmt = InvariantValues().EePmt[Year];
             }
             break;
+        case mce_pmt_gsp:      // fall through
+        case mce_pmt_corridor: // fall through
+        case mce_pmt_table:    // fall through
         default:
             {
             alarum()
@@ -753,6 +761,8 @@ void AccountValue::TxSetDeathBft()
                 ,YearsCorridorFactor * AV
                 );
             break;
+        case mce_rop: // fall through
+        case mce_mdb: // fall through
         default:
             {
             alarum() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
@@ -922,6 +932,8 @@ void AccountValue::TxTakeWD()
         case mce_option2:
             ;
             break;
+        case mce_rop: // fall through
+        case mce_mdb: // fall through
         default:
             {
             alarum() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;

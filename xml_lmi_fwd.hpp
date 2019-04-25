@@ -33,9 +33,11 @@ namespace xml // This is xmlwrapp's namespace.
     class schema;
     class tree_parser;
 
-    /// XMLWRAPP !! It is useful to distinguish elements from DOM
-    /// nodes that are not elements; xmlwrapp doesn't make this
-    /// distinction, but a future replacement might.
+    // It would be useful to distinguish elements from DOM nodes that
+    // are not elements; xmlwrapp doesn't make this distinction,
+    // because libxml2 doesn't. See:
+    //   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00048.html
+    // et seqq.
     typedef xml::node element;
 } // namespace xml
 

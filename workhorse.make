@@ -131,11 +131,11 @@ effective_default_target: $(default_targets)
 # $(subst): workaround for debian, whose MinGW-w64 identifies its
 # version 7.x.0 as "7.x-win32".
 
-ifeq (gcc,$(toolset))
+ifeq (gcc,$(toolchain))
   gcc_version   := $(subst -win32,.0,$(shell $(CXX)     -dumpversion))
 endif
 
-# These are defined even for toolsets other than gcc.
+# These are defined even for toolchains other than gcc.
 
 gnu_cpp_version := $(subst -win32,.0,$(shell $(GNU_CPP) -dumpversion))
 gnu_cxx_version := $(subst -win32,.0,$(shell $(GNU_CXX) -dumpversion))
@@ -147,6 +147,9 @@ else ifeq (4.9.2,$(gnu_cpp_version))
 else ifeq (6.3.0,$(gnu_cpp_version))
 else ifeq (7.2.0,$(gnu_cpp_version))
 else ifeq (7.3.0,$(gnu_cpp_version))
+else ifeq (8.1.0,$(gnu_cpp_version))
+else ifeq (8.2.0,$(gnu_cpp_version))
+else ifeq (8.3.0,$(gnu_cpp_version))
 else
   $(warning Untested $(GNU_CPP) version '$(gnu_cpp_version)')
 endif
@@ -158,6 +161,9 @@ else ifeq (4.9.2,$(gnu_cxx_version))
 else ifeq (6.3.0,$(gnu_cxx_version))
 else ifeq (7.2.0,$(gnu_cxx_version))
 else ifeq (7.3.0,$(gnu_cxx_version))
+else ifeq (8.1.0,$(gnu_cxx_version))
+else ifeq (8.2.0,$(gnu_cxx_version))
+else ifeq (8.3.0,$(gnu_cxx_version))
 else
   $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
 endif
@@ -166,20 +172,18 @@ endif
 
 # wx settings.
 
-wx_dir := /opt/lmi/local/bin
+wx_dir := $(localbindir)
 
 wx_config_script := wx-config
 
 # The conventional autotools usage...
-ifeq (gcc,$(toolset))
-  wx_config_cxxflags := $(shell $(wx_config_script) --cxxflags)
-  wx_config_libs     := $(shell $(wx_config_script) --libs)
-  wx_config_basename := $(shell $(wx_config_script) --basename)
-  wx_config_version  := $(shell $(wx_config_script) --version)
-  # [variables used to construct the names of wxCode libraries]
-  wxcode_basename := $(shell echo $(wx_config_basename) | sed 's/^wx/wxcode/')
-  wxcode_version  := $(shell echo $(wx_config_version) | sed 's/\.[0-9]*$$//')
-endif
+wx_config_cxxflags := $(shell $(wx_config_script) --cxxflags)
+wx_config_libs     := $(shell $(wx_config_script) --libs)
+wx_config_basename := $(shell $(wx_config_script) --basename)
+wx_config_version  := $(shell $(wx_config_script) --version)
+# [variables used to construct the names of wxCode libraries]
+wxcode_basename := $(shell echo $(wx_config_basename) | sed 's/^wx/wxcode/')
+wxcode_version  := $(shell echo $(wx_config_version) | sed 's/\.[0-9]*$$//')
 # ...combines options that we prefer to keep separate.
 
 wx_include_paths := \
@@ -277,17 +281,9 @@ wx_config_check:
 # For msw at least, these libraries are somewhat arbitrarily placed in
 #   /opt/lmi/third_party/
 # while properly autotoolized libraries are installed in
-#   /opt/lmi/local/
-# ; see:
+# $(locallibdir) and $(localbindir); see:
 #   http://lists.gnu.org/archive/html/lmi/2006-10/msg00046.html
 # for some discussion.
-
-# A default installation places gnome xml-library headers here:
-#  libxml2:  /usr/local/include/libxml2/libxml
-#  libxslt:  /usr/local/include/libxslt
-# Both those libraries provide '*-config' scripts that don't respect
-# an overriding $(prefix): they apparently hardcode the paths above,
-# so there's no point in calling them.
 
 all_include_directories := \
   . \
@@ -298,8 +294,8 @@ all_include_directories := \
   $(wx_include_paths) \
   /opt/lmi/third_party/include \
   /opt/lmi/third_party/src \
-  /opt/lmi/local/include \
-  /opt/lmi/local/include/libxml2 \
+  $(localincludedir) \
+  $(localincludedir)/libxml2 \
 
 all_source_directories := \
   $(srcdir) \
@@ -408,6 +404,16 @@ else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
   gcc_version_specific_warnings := \
 
   cxx_standard := -frounding-math -std=c++17
+else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0 8.3.0))
+  gcc_version_specific_warnings := \
+
+  ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_HOST)))
+# See:
+#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00026.html
+    tutelary_flag := -fomit-frame-pointer
+  endif
+
+  cxx_standard := -frounding-math -std=c++17
 endif
 
 treat_warnings_as_errors := -pedantic-errors -Werror
@@ -441,6 +447,7 @@ gcc_common_warnings := \
   -Wlogical-op \
   -Wmissing-include-dirs \
   -Wmultichar \
+  -Wnull-dereference \
   -Wpacked \
   -Wpointer-arith \
   -Wredundant-decls \
@@ -448,6 +455,7 @@ gcc_common_warnings := \
   -Wshadow \
   -Wsign-compare \
   -Wstack-protector \
+  -Wswitch-enum \
   -Wtrampolines \
   -Wundef \
   -Wunreachable-code \
@@ -456,16 +464,15 @@ gcc_common_warnings := \
   -Wwrite-strings \
   -Wno-parentheses \
 
-# Consider these later.
+# Warnings that are not generally useful.
 #
 # -Wdate-time: only for "bit-wise-identical reproducible compilations"
+# -Wmissing-declarations: for C++, this flags valid functions that
+#   arguably belong in an unnamed namespace
+# -Wunsafe-loop-optimizations: incompatible with ranged for-loops
 
+# Consider these later:
 postponed_gcc_common_warnings := \
-  -Wdate-time \
-  -Wmissing-declarations \
-  -Wnull-dereference \
-  -Wswitch-enum \
-  -Wunsafe-loop-optimizations \
 
 gcc_c_warnings := \
   $(c_standard) \
@@ -493,6 +500,7 @@ gcc_cxx_warnings := \
   -Wnoexcept \
   -Wnoexcept-type \
   -Wnon-template-friend \
+  -Wnon-virtual-dtor \
   -Woverloaded-virtual \
   -Wpmf-conversions \
   -Winvalid-pch \
@@ -502,18 +510,20 @@ gcc_cxx_warnings := \
   -Wsynth \
   -Wuseless-cast \
 
-# Consider these later.
+# Warnings that are not generally useful.
 #
-# -Wsuggest*: use these only occasionally, like -Weffc++
+# -Wsign-promo: too many false positives--see:
+#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00016.html
+# -Wsuggest-final-methods, and
+# -Wsuggest-final-types: use these only occasionally, like -Weffc++;
+#   work with '-Wsuggest-final-types' first, because making a class
+#   final may resolve '-Wsuggest-final-methods' suggestions for its
+#   members; but expect many false positives
+# -Wfloat-equal: too many warnings on correct code, e.g.,
+#   exact comparison to zero
 
+# Consider these later:
 postponed_gcc_cxx_warnings := \
-  -Wnon-virtual-dtor \
-  -Wsign-promo \
-  -Wsuggest-final-methods \
-  -Wsuggest-final-types \
-
-# Too many warnings on correct code, e.g. exact comparison to zero:
-#  -Wfloat-equal \
 
 gcc_common_extra_warnings := \
   -Wcast-qual \
@@ -529,9 +539,11 @@ gcc_common_extra_warnings := \
 wx_dependent_objects :=
 
 $(wx_dependent_objects): gcc_common_extra_warnings += \
+  -Wno-cast-function-type \
   -Wno-cast-qual \
   -Wno-double-promotion \
   -Wno-format-nonliteral \
+  -Wno-noexcept \
   -Wno-sign-conversion \
   -Wno-useless-cast \
 
@@ -557,7 +569,6 @@ operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
 $(boost_filesystem_objects): gcc_common_extra_warnings += \
   -Wno-deprecated-declarations \
   -Wno-unused-macros \
-  -Wno-useless-cast \
 
 $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
@@ -565,16 +576,23 @@ $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-implicit-fallthrough \
   -Wno-register \
   -Wno-shadow \
+  -Wno-switch-enum \
   -Wno-unused-macros \
   -Wno-useless-cast \
 
 boost_dependent_objects := \
   $(boost_regex_objects) \
-  expression_template_0_test.o \
   regex_test.o \
   test_coding_rules.o \
 
-$(boost_dependent_objects): gcc_common_extra_warnings += -Wno-unused-local-typedefs
+$(boost_dependent_objects): gcc_common_extra_warnings += \
+  -Wno-switch-enum \
+  -Wno-unused-local-typedefs
+
+expression_template_0_test.o: gcc_common_extra_warnings += \
+  -Wno-conversion \
+  -Wno-switch-enum \
+  -Wno-unused-local-typedefs
 
 # The boost regex library improperly defines "NOMINMAX":
 #   http://lists.boost.org/Archives/boost/2006/03/102189.php
@@ -604,11 +622,19 @@ endif
 # Too many warnings for wx and various boost libraries:
 #  -Wold-style-cast \
 
+# XMLWRAPP !! Remove these workarounds after updating xmlwrapp. See:
+#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00018.html
+# et seqq.:
+$(xmlwrapp_objects): gcc_common_extra_warnings += \
+  -Wno-conversion \
+  -Wno-null-dereference \
+  -Wno-switch-enum \
+
 # SOMEDAY !! Address some of these '-Wconversion' issues.
 
 wno_conv_objects := \
-  $(xmlwrapp_objects) \
   CgiUtils.o \
+  FormEntry.o \
   currency_test.o \
   rate_table.o \
   round_glibc.o \
@@ -621,7 +647,6 @@ wno_sign_conv_objects := \
   $(boost_filesystem_objects) \
   $(boost_regex_objects) \
   $(wx_dependent_objects) \
-  $(xmlwrapp_objects) \
   CgiEnvironment.o \
   CgiUtils.o \
   crc32.o \
@@ -656,7 +681,7 @@ CXX_WARNINGS = \
 # speed penalty that can be overcome by increasing parallelism. There
 # seems to be no need for them with gcc-4.x, which uses less RAM.
 
-ifeq (gcc,$(toolset))
+ifeq (gcc,$(toolchain))
   ifeq (3.4.5,$(gcc_version))
     ggc_flags := --param ggc-min-expand=25 --param ggc-min-heapsize=32768
   endif
@@ -841,6 +866,11 @@ ifneq (,$(USE_SO_ATTRIBUTES))
   actually_used_lmi_so_attributes = -DLMI_USE_SO_ATTRIBUTES $(lmi_so_attributes)
 endif
 
+# wx sets _FILE_OFFSET_BITS to 64; this definition is explicitly
+# repeated below to make assurance doubly sure--see:
+#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00039.html
+# et seq.
+#
 # The BOOST_STATIC_ASSERT definition seems to belong in CPPFLAGS with
 # the other macro definitions. However, writing it there elicits:
 #   warning: ISO C99 requires whitespace after the macro name
@@ -856,6 +886,7 @@ REQUIRED_CPPFLAGS = \
   $(platform_defines) \
   $(libstdcxx_warning_macros) \
   $(wx_predefinitions) \
+  -D_FILE_OFFSET_BITS=64 \
   -DBOOST_NO_AUTO_PTR \
   -DBOOST_STRICT_CONFIG \
   -DBOOST_STATIC_ASSERT_HPP \
@@ -896,9 +927,7 @@ $(boost_filesystem_objects): REQUIRED_CXXFLAGS += -Wno-error
 # specified in $(LIBS). Thus, a distinct variable is necessary for
 # path overrides, so distinct variables are necessary.
 
-# Two subdirectories of /opt/lmi/local/
-#   /opt/lmi/local/lib
-#   /opt/lmi/local/bin
+# Architecture-specific directories $(locallibdir) and $(localbindir)
 # are placed on the link path in order to accommodate msw dlls, for
 # which no canonical location is clearly specified by FHS, because
 # they're both binaries and libraries in a sense. These two
@@ -914,8 +943,8 @@ $(boost_filesystem_objects): REQUIRED_CXXFLAGS += -Wno-error
 all_library_directories := \
   . \
   $(overriding_library_directories) \
-  /opt/lmi/local/lib \
-  /opt/lmi/local/bin \
+  $(locallibdir) \
+  $(localbindir) \
 
 EXTRA_LDFLAGS :=
 
@@ -993,7 +1022,7 @@ ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 # ELF symbol visibility, a feature for which significant benefits are
 # claimed:
 #   http://www.nedprod.com/programs/gccvisibility.html
-# And dll attributes would still be necessary for other toolsets,
+# And dll attributes would still be necessary for other toolchains,
 # which therefore aren't fully supported yet.
 #
 # However, 'libwx_new.a' continues to use classic dll attributes,
@@ -1068,47 +1097,6 @@ lmi_msw_res.o: lmi.ico
 # different build_types and picking the latest version of each
 # component can produce a mismatched set.
 
-# SOMEDAY !! Follow the GNU Coding Standards
-#   https://www.gnu.org/prep/standards/html_node/Directory-Variables.html
-# more closely, changing the value of $(datadir), and perhaps using
-# some other standard directories that are commented out for now.
-
-prefix         := /opt/lmi
-# parent directory for machine-specific binaries
-exec_prefix    := $(prefix)
-# binaries that users can run
-bindir         := $(exec_prefix)/bin
-# binaries that administrators can run
-#sbindir        := $(exec_prefix)/sbin
-# binaries run by programs
-#libexecdir     := $(exec_prefix)/libexec
-# parent directory for read-only architecture-independent data files
-datarootdir    := $(prefix)/share
-# idiosyncratic read-only architecture-independent data files
-# GNU standard default:
-# datadir        := $(datarootdir)
-# nonstandard value used for now:
-datadir        := $(exec_prefix)/data
-# read-only data files that pertain to a single machine
-#sysconfdir     := $(prefix)/etc
-# architecture-independent data files which the programs modify while they run
-#sharedstatedir := $(prefix)/com
-# data files which the programs modify while they run
-#localstatedir  := $(prefix)/var
-# data files which the programs modify while they run, persisting until reboot
-#runstatedir    := $(localstatedir)/run
-# headers
-#includedir     := $(prefix)/include
-docdir         := $(datarootdir)/doc/lmi
-htmldir        := $(docdir)
-#libdir         := $(exec_prefix)/lib
-# srcdir: set to $(CURDIR) upstream; no GNU default value
-
-# no GNU standard for 'test' or 'touchstone': directory names therefore
-# contain '_' for distinction and clarity
-test_dir       := $(exec_prefix)/test
-touchstone_dir := $(exec_prefix)/touchstone
-
 data_files := \
   $(wildcard $(addprefix $(srcdir)/,*.ico *.png *.xml *.xrc *.xsd *.xsl)) \
 
@@ -1118,7 +1106,7 @@ help_files := \
 .PHONY: preinstall
 preinstall:
 	@[ -z "$(compiler_runtime_files)" ] \
-	  || $(CP) --preserve --update $(compiler_runtime_files) /opt/lmi/local/bin
+	  || $(CP) --preserve --update $(compiler_runtime_files) $(localbindir)
 
 .PHONY: install
 install: preinstall $(default_targets)
@@ -1172,18 +1160,30 @@ archive_shared_data_files:
 
 # End-user package for msw. No such thing is needed for posix.
 #
-# Eventually a source archive will be included automatically.
+# Planned improvements:
+#  - include a source archive automatically
+#  - copy 'configurable_settings.xml' from a configurable location
+#  - optionally build a tarball containing no subdirectory
+#  - optionally remove the dependency on 'install'
+#      (or keep it from running 'product_files' imperatively)
+#  - separate $(shared_data_files) out of $(fardel_files) below,
+#      making it independently overridable
+#  - consider making $(fardel_dir) local to 'fardel:', because
+#      it probably can't be overridden
 
-# To create a customized package, override:
+# To create a customized package, override one or more of:
 #  - fardel_name
-#  - fardel_dir
-#  - fardel_date_script
 #  - extra_fardel_binaries
 #  - extra_fardel_files
 #  - extra_fardel_checksummed_files
+# thus:
+#   make fardel_name=ThisWayIsGood fardel
+# and not thus:
+#   fardel_name=DoNotDoThisForItWillNotWork make fardel
 
 fardel_name := lmi-$(yyyymmddhhmm)
-fardel_dir  := $(prefix)/$(fardel_name)
+fardel_root := $(prefix)/fardels
+fardel_dir  := $(fardel_root)/$(fardel_name)
 
 # The obvious y2038 problem is ignored because any breakage it causes
 # will be, well, obvious.
@@ -1210,8 +1210,8 @@ fardel_binaries := \
   $(bindir)/skeleton$(SHREXT) \
   $(bindir)/wx_new$(SHREXT) \
   $(bindir)/wx_test$(EXEEXT) \
-  $(wildcard $(prefix)/local/bin/*$(SHREXT)) \
-  $(wildcard $(prefix)/local/lib/*$(SHREXT)) \
+  $(wildcard $(localbindir)/*$(SHREXT)) \
+  $(wildcard $(locallibdir)/*$(SHREXT)) \
   $(wildcard $(bindir)/product_files$(EXEEXT)) \
   $(extra_fardel_binaries) \
 
@@ -1253,7 +1253,7 @@ fardel_checksummed_files = \
 fardel: install
 	+@[ -d $(fardel_dir) ] || $(MKDIR) --parents $(fardel_dir)
 	@$(MAKE) --file=$(this_makefile) --directory=$(fardel_dir) wrap_fardel
-	@$(ECHO) "Created '$(fardel_name)' archive in '$(prefix)'."
+	@$(ECHO) "Created '$(fardel_name)' archive in '$(fardel_root)'."
 
 # A native 'md5sum$(EXEEXT)' must be provided because lmi uses it for
 # run-time authentication.
@@ -1272,8 +1272,8 @@ wrap_fardel:
 	@$(TAR) \
 	  --bzip2 \
 	  --create \
-	  --directory=$(prefix) \
-	  --file=$(prefix)/$(fardel_name).tar.bz2 \
+	  --directory=$(fardel_root) \
+	  --file=$(fardel_root)/$(fardel_name).tar.bz2 \
 	  $(fardel_name)
 
 ################################################################################

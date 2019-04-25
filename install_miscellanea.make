@@ -33,12 +33,14 @@ sf_mirror := https://downloads.sourceforge.net
 
 # Nonconfigurable settings #####################################################
 
-destination := $(prefix)/third_party
+dest_dir := $(prefix)/third_party
 
-third_party_bin_dir     := $(destination)/bin
-third_party_include_dir := $(destination)/include
-third_party_lib_dir     := $(destination)/lib
-third_party_source_dir  := $(destination)/src
+ad_hoc_dir := $(dest_dir)/ad_hoc
+
+third_party_bin_dir     := $(dest_dir)/bin
+third_party_include_dir := $(dest_dir)/include
+third_party_lib_dir     := $(dest_dir)/lib
+third_party_source_dir  := $(dest_dir)/src
 
 # File lists ###################################################################
 
@@ -102,15 +104,15 @@ WGET   := wget
 
 # Error messages ###############################################################
 
-destination_exists = \
-  "\nError: Destination directory '$(destination)' already exists." \
+dest_dir_exists = \
+  "\nError: Destination directory '$(dest_dir)' already exists." \
   "\nIt is generally unsafe to install one version of a program" \
   "\non top of another. Probably you ought to rename the old" \
   "\nversion in order to preserve it; if not, then remove it." \
   "\n"
 
-scratch_exists = \
-  "\nError: Scratch directory 'scratch' already exists." \
+ad_hoc_dir_exists = \
+  "\nError: Nonce directory '$(ad_hoc_dir)' already exists." \
   "\nProbably it is left over from a previous failure." \
   "\nJust remove it unless you're sure you want whatever files" \
   "\nit might contain." \
@@ -133,7 +135,7 @@ all: boost cgicc jing md5sum_msw sample trang xmlwrapp
 #
 #   cd /tmp
 #   diff --recursive --unified=3 original modified >foo.patch
-#   patch --strip=1 --dry-run --directory=/wherever/scratch </tmp/foo.patch
+#   patch --strip=1 --dry-run --directory=/any/where </tmp/foo.patch
 #
 # For example, to update the cgicc patch with additional changes:
 #   pushd /tmp
@@ -162,30 +164,30 @@ all: boost cgicc jing md5sum_msw sample trang xmlwrapp
 
 .PHONY: boost
 boost: $(file_list)
-	-[ -e $(stem).patch ] && $(PATCH) --directory=scratch --strip=1 < $(stem).patch
+	-[ -e $(stem).patch ] && $(PATCH) --directory=$(ad_hoc_dir) --strip=1 < $(stem).patch
 	$(MKDIR) $(third_party_include_dir)/boost/
-	$(CP) --force --preserve --recursive scratch/$(stem)/boost/* $(third_party_include_dir)/boost/
+	$(CP) --force --preserve --recursive $(ad_hoc_dir)/$(stem)/boost/* $(third_party_include_dir)/boost/
 	$(MKDIR) $(third_party_source_dir)/boost/
-	$(MV)                                scratch/$(stem)/*       $(third_party_source_dir)/boost/
+	$(MV)                                $(ad_hoc_dir)/$(stem)/*       $(third_party_source_dir)/boost/
 
 .PHONY: cgicc
 cgicc: $(file_list)
-	$(PATCH) --directory=scratch --strip=1 < $(stem).patch
+	$(PATCH) --directory=$(ad_hoc_dir) --strip=1 < $(stem).patch
 	$(MKDIR) $(third_party_include_dir)/cgicc
-	$(MV) scratch/$(stem)/cgicc/*.h   $(third_party_include_dir)/cgicc/
+	$(MV) $(ad_hoc_dir)/$(stem)/cgicc/*.h   $(third_party_include_dir)/cgicc/
 	$(MKDIR) $(third_party_source_dir)/cgicc
-	$(MV) scratch/$(stem)/cgicc/*.cpp $(third_party_source_dir)/cgicc/
-	cd $(destination) && $(MD5SUM) --binary include/cgicc/* src/cgicc/* >$(stem).md5sums
-	cd $(destination) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
-	$(SORT) --key=2 --output=$(stem).X                $(stem).md5sums
-	$(SORT) --key=2 --output=$(stem).Y $(destination)/$(stem).md5sums
-	$(DIFF) --unified $(stem).X $(stem).Y && $(RM) $(destination)/$(stem).md5sums $(stem).X $(stem).Y
+	$(MV) $(ad_hoc_dir)/$(stem)/cgicc/*.cpp $(third_party_source_dir)/cgicc/
+	cd $(dest_dir) && $(MD5SUM) --binary include/cgicc/* src/cgicc/* >$(stem).md5sums
+	cd $(dest_dir) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
+	$(SORT) --key=2 --output=$(stem).X             $(stem).md5sums
+	$(SORT) --key=2 --output=$(stem).Y $(dest_dir)/$(stem).md5sums
+	$(DIFF) --unified $(stem).X $(stem).Y && $(RM) $(dest_dir)/$(stem).md5sums $(stem).X $(stem).Y
 
 .PHONY: jing
 jing: $(file_list)
-	$(MKDIR) --parents $(destination)/rng
-	$(MV) scratch/$(stem)/bin/$@.jar         $(destination)/rng
-	$(MV) scratch/$(stem)/bin/xercesImpl.jar $(destination)/rng
+	$(MKDIR) --parents $(dest_dir)/rng
+	$(MV) $(ad_hoc_dir)/$(stem)/bin/$@.jar         $(dest_dir)/rng
+	$(MV) $(ad_hoc_dir)/$(stem)/bin/xercesImpl.jar $(dest_dir)/rng
 
 # The 'md5sum_msw' binary is redistributed to msw end users for
 # authentication, so the 'fardel' target requires it. On other
@@ -194,6 +196,12 @@ jing: $(file_list)
 #
 # It is placed in lmi's 'third_party/bin/' subdirectory--imperatively
 # not in lmi's 'local/bin/' subdirectory, which is added to $PATH.
+# For cygwin builds, the expressly downloaded 'md5sum.exe' is kept off
+# $PATH to prevent it from shadowing cygwin's own version. However,
+# for cross builds, it cannot shadow the native 'md5sum', yet some
+# cross-built unit tests require an msw binary, so add its directory
+# to $WINEPATH to make those tests work (incidentally, 'wine' doesn't
+# find it if it's simply symlinked).
 #
 # Should the given URL ever become invalid, see:
 #   http://www.openoffice.org/dev_docs/using_md5sums.html#links
@@ -210,43 +218,43 @@ md5sum_msw: $(file_list)
 .PHONY: sample
 sample: $(file_list)
 	-$(MKDIR) --parents $(prefix)/data
-	$(MV) scratch/$(stem)/* $(prefix)/data
+	$(MV) $(ad_hoc_dir)/$(stem)/* $(prefix)/data
 
 .PHONY: trang
 trang: $(file_list)
-	$(MKDIR) --parents $(destination)/rng
-	$(MV) scratch/$(stem)/$@.jar $(destination)/rng
+	$(MKDIR) --parents $(dest_dir)/rng
+	$(MV) $(ad_hoc_dir)/$(stem)/$@.jar $(dest_dir)/rng
 
 .PHONY: xmlwrapp
 xmlwrapp: $(file_list)
-	-[ -e $(stem).patch ] && $(PATCH) --directory=scratch --strip=1 < $(stem).patch
+	-[ -e $(stem).patch ] && $(PATCH) --directory=$(ad_hoc_dir) --strip=1 < $(stem).patch
 	$(MKDIR) $(third_party_include_dir)/xmlwrapp/
-	$(MV) scratch/$(stem)/include/xmlwrapp/*.h $(third_party_include_dir)/xmlwrapp/
+	$(MV) $(ad_hoc_dir)/$(stem)/include/xmlwrapp/*.h $(third_party_include_dir)/xmlwrapp/
 	$(MKDIR) $(third_party_include_dir)/xsltwrapp/
-	$(MV) scratch/$(stem)/include/xsltwrapp/*.h $(third_party_include_dir)/xsltwrapp/
+	$(MV) $(ad_hoc_dir)/$(stem)/include/xsltwrapp/*.h $(third_party_include_dir)/xsltwrapp/
 	$(MKDIR) $(third_party_source_dir)/libxml/
-	$(MV) scratch/$(stem)/src/libxml/* $(third_party_source_dir)/libxml/
+	$(MV) $(ad_hoc_dir)/$(stem)/src/libxml/* $(third_party_source_dir)/libxml/
 	$(MKDIR) $(third_party_source_dir)/libxslt/
-	$(MV) scratch/$(stem)/src/libxslt/* $(third_party_source_dir)/libxslt/
-	cd $(destination) && $(MD5SUM) --binary include/xmlwrapp/* include/xsltwrapp/* src/libxml/* src/libxslt/* >$(stem).md5sums
-	cd $(destination) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
-	$(SORT) --key=2 --output=$(stem).X                $(stem).md5sums
-	$(SORT) --key=2 --output=$(stem).Y $(destination)/$(stem).md5sums
-	$(DIFF) --unified $(stem).X $(stem).Y && $(RM) $(destination)/$(stem).md5sums $(stem).X $(stem).Y
+	$(MV) $(ad_hoc_dir)/$(stem)/src/libxslt/* $(third_party_source_dir)/libxslt/
+	cd $(dest_dir) && $(MD5SUM) --binary include/xmlwrapp/* include/xsltwrapp/* src/libxml/* src/libxslt/* >$(stem).md5sums
+	cd $(dest_dir) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
+	$(SORT) --key=2 --output=$(stem).X             $(stem).md5sums
+	$(SORT) --key=2 --output=$(stem).Y $(dest_dir)/$(stem).md5sums
+	$(DIFF) --unified $(stem).X $(stem).Y && $(RM) $(dest_dir)/$(stem).md5sums $(stem).X $(stem).Y
 
 $(file_list): initial_setup
 
 .PHONY: initial_setup
 initial_setup:
-	@[ ! -e $(destination) ]   || { printf '%b' $(destination_exists) && false; }
-	@[ ! -e scratch        ]   || { printf '%b' $(scratch_exists)     && false; }
+	@[ ! -e $(dest_dir)   ] || { printf '%b' $(dest_dir_exists)   && false; }
+	@[ ! -e $(ad_hoc_dir) ] || { printf '%b' $(ad_hoc_dir_exists) && false; }
 	$(MKDIR) --parents $(cache_dir)
-	$(MKDIR) --parents $(destination)
+	$(MKDIR) --parents $(dest_dir)
+	$(MKDIR) --parents $(ad_hoc_dir)
 	$(MKDIR) $(third_party_bin_dir)
 	$(MKDIR) $(third_party_include_dir)
 	$(MKDIR) $(third_party_lib_dir)
 	$(MKDIR) $(third_party_source_dir)
-	$(MKDIR) scratch
 
 TARFLAGS := --keep-old-files
 %.tar.bz2: TARFLAGS += --bzip2
@@ -260,7 +268,7 @@ WGETFLAGS := --no-check-certificate
 %.tar.bz2 %.tar.gz:
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
 	$(ECHO) "$($@-md5) *$(cache_dir)/$@" | $(MD5SUM) --check
-	-$(TAR) --extract $(TARFLAGS) --directory=scratch --file=$(cache_dir)/$@
+	-$(TAR) --extract $(TARFLAGS) --directory=$(ad_hoc_dir) --file=$(cache_dir)/$@
 
 .PHONY: %.exe
 %.exe:
@@ -272,7 +280,7 @@ WGETFLAGS := --no-check-certificate
 %.zip:
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
 	$(ECHO) "$($@-md5) *$(cache_dir)/$@" | $(MD5SUM) --check
-	-$(UNZIP) $(UNZIPFLAGS) $(cache_dir)/$@ -d scratch
+	-$(UNZIP) $(UNZIPFLAGS) $(cache_dir)/$@ -d $(ad_hoc_dir)
 
 # Maintenance ##################################################################
 
@@ -280,5 +288,5 @@ WGETFLAGS := --no-check-certificate
 
 .PHONY: clobber
 clobber:
-	$(RM) --force --recursive scratch
-	$(RM) --force --recursive $(destination)
+	$(RM) --force --recursive $(dest_dir)
+	$(RM) --force --recursive $(ad_hoc_dir)

@@ -694,7 +694,6 @@ void check_defect_markers(file const& f)
             &&  "BOOST "       != z[1]
             &&  "COMPILER "    != z[1]
             &&  "CURRENCY "    != z[1]
-            &&  "CYGWIN "      != z[1]
             &&  "DATABASE "    != z[1]
             &&  "DBO3 "        != z[1]
             &&  "ET "          != z[1]
@@ -1039,7 +1038,7 @@ void enforce_taboos(file const& f)
     taboo(f, R"(\(c\) *[0-9])");
     // Former addresses of the Free Software Foundation.
     taboo(f, "Cambridge");
-    taboo(f, "Temple");
+    taboo(f, "Temple P");
     // Patented.
     taboo(f, R"(\.gif)", boost::regex::icase);
     // Obsolete email address.
@@ -1068,6 +1067,7 @@ void enforce_taboos(file const& f)
     if
         (   !f.is_of_phylum(e_log)
         &&  !f.is_of_phylum(e_make)
+        &&  !f.is_of_phylum(e_script)
         &&  !f.is_of_phylum(e_synopsis)
         )
         {

@@ -36,10 +36,15 @@ set -e
 # provides no convenient alternative):
 setopt PIPE_FAIL
 
-if [ "$LMI_HOST" = "i686-w64-mingw32" ]
-then
-    PERFORM=wine
-fi
+lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+case "$lmi_build_type" in
+    (*-*-linux*)
+        PERFORM=wine
+        ;;
+    (*)
+        PERFORM=
+        ;;
+esac
 
 # Lines beginning with a capitalized word, viz.
 #   /^NOTE: starting the test suite$/d
@@ -137,4 +142,4 @@ mkdir --parents /tmp/lmi/logs
 
 cd /opt/lmi/src/lmi
 
-"$PERFORM" /opt/lmi/bin/wx_test --ash_nazg --data_path=/opt/lmi/data 2>&1 | tee /tmp/lmi/logs/gui-test | sed -e "$gui_test_clutter"
+"$PERFORM" /opt/lmi/bin/wx_test --ash_nazg --data_path=/opt/lmi/data 2>&1 | tee /tmp/lmi/logs/gui_test | sed -e "$gui_test_clutter"

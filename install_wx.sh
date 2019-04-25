@@ -41,6 +41,8 @@ coefficiency=${coefficiency:-"--jobs=4"}
 
 MAKE=${MAKE:-"make $coefficiency"}
 
+host_type=${LMI_HOST:-"i686-w64-mingw32"}
+
 # Variables that normally should be left alone #################################
 
 mingw_dir=/MinGW_
@@ -78,18 +80,16 @@ git checkout "$wx_commit_sha"
 git submodule update "$coefficiency" --recursive --init
 
 build_type=$("$proxy_wx_dir"/config.guess)
-host_type=i686-w64-mingw32
 
-case $(uname) in
-    CYGWIN*)
+case "$build_type" in
+    (*-*-cygwin*)
         mingw_bin_dir=$mingw_dir/bin/
         ;;
 esac
 
-# Construct a vendor string for this build using the compiler name and version
-# and the unique commit SHA-1.
+# Distinguish wx dll by host type, compiler version, and wx SHA1.
 gcc_version=$(${mingw_bin_dir}${host_type}-gcc -dumpversion|tr -d '\r')
-vendor=gcc-$gcc_version-$wx_commit_sha
+vendor=${host_type}-$gcc_version-$wx_commit_sha
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
@@ -134,7 +134,7 @@ config_options="
 
 [ -n "$mingw_bin_dir" ] && export PATH="$mingw_bin_dir:${PATH}"
 
-build_dir="$prefix"/../wx-scratch/lmi-gcc-$gcc_version
+build_dir="$prefix"/../wx-ad_hoc/lmi-gcc-$gcc_version
 
 if [ "$wx_skip_clean" != 1 ]
 then

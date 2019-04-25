@@ -322,10 +322,10 @@
     <ClCompile Include="ledger_variant_init.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cso_tables.cpp">
+    <ClCompile Include="verify_products.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="verify_products.cpp">
+    <ClCompile Include="cso_table.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

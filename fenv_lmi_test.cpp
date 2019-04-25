@@ -23,7 +23,7 @@
 
 // Include this first, in order to get the prototype for nonstandard
 // _control87() before any other header can include <float.h>.
-// CYGWIN !! For cygwin with '-mno-cygwin', that doesn't work quite
+// Historically, for cygwin with '-mno-cygwin', that didn't work quite
 // the same way as it does for MinGW:
 //   http://cygwin.com/ml/cygwin/2005-03/msg00752.html
 //   http://cygwin.com/ml/cygwin/2006-08/msg00521.html

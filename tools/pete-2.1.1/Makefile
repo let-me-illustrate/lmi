@@ -21,10 +21,10 @@
 
 ################################################################################
 
-uname := $(shell uname -s 2>/dev/null)
+lmi_build_type := $(shell /usr/share/libtool/build-aux/config.guess)
 
 EXEEXT :=
-ifeq (CYGWIN,$(findstring CYGWIN,$(uname)))
+ifeq (cygwin,$(findstring cygwin,$(lmi_build_type)))
   EXEEXT := .exe
 endif
 
@@ -52,7 +52,10 @@ et_vector_operators.hpp: et_vector.in
 
 clean:
 	rm -f et_vector_test$(EXEEXT)
-	rm -f $(wildcard *~ *.bak *eraseme*)
+
+distclean:
+	rm -f et_vector_test$(EXEEXT)
+	rm -f PETE/Tools/MakeOperators$(EXEEXT)
 
 maintainer-clean: clean
 	rm -f et_vector_operators.hpp

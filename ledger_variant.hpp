@@ -39,7 +39,7 @@
 
 class BasicValues;
 
-class LMI_SO LedgerVariant
+class LMI_SO LedgerVariant final
     :public LedgerBase
 {
   public:

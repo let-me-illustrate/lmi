@@ -30,6 +30,7 @@
 #include "main_common.hpp"              // initialize_application()
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "skeleton.hpp"
+#include "ssize_lmi.hpp"                // sstrlen()
 #include "wx_test_case.hpp"
 #include "wx_test_new.hpp"
 
@@ -302,7 +303,7 @@ bool application_test::process_command_line(int& argc, char* argv[])
     char const* last_test_option = nullptr;
 
     char const* opt_gui_test_path = "--gui_test_path";
-    int const opt_gui_test_path_length = strlen(opt_gui_test_path);
+    int const opt_gui_test_path_length = lmi::sstrlen(opt_gui_test_path);
 
     for(int n = 1; n < argc; )
         {
@@ -591,6 +592,7 @@ wxWindow* wx_test_focus_controller_child(MvcController& dialog, char const* name
     // until we reach it.
     for(wxWindow* maybe_page = w;;)
         {
+        LMI_ASSERT(maybe_page);
         wxWindow* const maybe_book = maybe_page->GetParent();
 
         // As we know that w is a descendant of the dialog, this check ensures
@@ -629,7 +631,7 @@ wxWindow* wx_test_focus_controller_child(MvcController& dialog, char const* name
 }
 
 // Application to drive the tests
-class SkeletonTest : public Skeleton
+class SkeletonTest final : public Skeleton
 {
   public:
     SkeletonTest()

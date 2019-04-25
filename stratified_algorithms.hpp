@@ -28,7 +28,6 @@
 #include "miscellany.hpp"               // minmax
 
 #include <algorithm>                    // is_sorted(), upper_bound()
-#include <functional>
 #include <vector>
 
 /// Numerical algorithms for stratified rates.
@@ -90,11 +89,6 @@ namespace tiered_and_banded_rates{} // doxygen workaround.
 // TieredGrossToNet() and TieredNetToGross() seem to be two-bracket
 // specializations that should be replaced by something more generic.
 //
-// 'tiered_product' and 'tiered_rate' masquerade as binary functions,
-// but they are not. The arguments could be grouped in std::pair
-// instances if binary functions are really needed, but probably it
-// would be better not to derive from std::binary_function at all.
-//
 // 'tiered' and 'banded' limits are expressed differently: as
 // incremental and cumulative limits, respectively. This may confuse
 // the careless reader, but presents limits to the product-editor user
@@ -130,7 +124,6 @@ double TieredNetToGross
 
 template<typename T>
 struct tiered_product
-    :public std::binary_function<T, T, T>
 {
     T operator()
         (T const&              new_incremental_amount
@@ -217,7 +210,6 @@ T tiered_product<T>::operator()
 
 template<typename T>
 struct tiered_rate
-    :public std::binary_function<T, T, T>
 {
     T operator()
         (T const& amount
@@ -253,7 +245,6 @@ T tiered_rate<T>::operator()
 
 template<typename T>
 struct banded_rate
-    :public std::binary_function<T, T, T>
 {
     T operator()
         (T const&              total_amount
@@ -317,7 +308,6 @@ T banded_rate<T>::operator()
 
 template<typename T>
 struct banded_product
-    :public std::binary_function<T, T, T>
 {
     T operator()
         (T const&              total_amount

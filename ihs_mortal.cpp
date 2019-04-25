@@ -28,6 +28,7 @@
 #include "basic_values.hpp"
 #include "et_vector.hpp"
 #include "math_functions.hpp"           // assign_midpoint()
+#include "oecumenic_enumerations.hpp"
 
 #include <algorithm>                    // min()
 
@@ -211,9 +212,9 @@ void MortalityRates::SetOtherRates()
 
     // Use reciprocal of CVAT corridor factor as NSP, for both GPT and
     // CVAT.
-    // TODO ?? TAXATION !! Do this only if DB_Irc7702NspWhence is 2
-    // (which should be an enum). This probably should have its own
-    // rounding rule.
+    // TODO ?? TAXATION !! Do this only if DB_Irc7702NspWhence equals
+    // oe_7702_nsp_reciprocal_cvat_corridor. DATABASE !! This probably
+    // should have its own rounding rule.
     LMI_ASSERT(CvatNspRates_.empty());
     for(int j = 0; j < Length_; ++j)
         {

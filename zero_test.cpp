@@ -36,9 +36,9 @@ namespace
 template<typename F>
 void test_zero(double bound0, double bound1, int dec, F f, double exact_root)
 {
-    root_type rn = decimal_root((bound0), (bound1), bias_none,   (dec), (f));
-    root_type rl = decimal_root((bound0), (bound1), bias_lower,  (dec), (f));
-    root_type rh = decimal_root((bound0), (bound1), bias_higher, (dec), (f));
+    root_type rn = decimal_root(bound0, bound1, bias_none,   dec, f);
+    root_type rl = decimal_root(bound0, bound1, bias_lower,  dec, f);
+    root_type rh = decimal_root(bound0, bound1, bias_higher, dec, f);
 
     BOOST_TEST(root_is_valid == rn.second);
     BOOST_TEST(root_is_valid == rl.second);
@@ -47,7 +47,7 @@ void test_zero(double bound0, double bound1, int dec, F f, double exact_root)
     BOOST_TEST(rl.first <= rn.first && rn.first <= rh.first);
 
     double tol =
-            std::pow(10.0, -(dec))
+            std::pow(10.0, -dec)
         +   6.0 * epsilon * std::max
                 (std::fabs(rl.first), std::fabs(rh.first)
                 )
@@ -55,16 +55,16 @@ void test_zero(double bound0, double bound1, int dec, F f, double exact_root)
     BOOST_TEST((rh.first - rl.first) <= tol);
 
     double toll =
-            std::pow(10.0, -(dec))
+            std::pow(10.0, -dec)
         +   6.0 * epsilon * std::fabs(rl.first)
         ;
-    BOOST_TEST((rl.first - (exact_root)) <= toll);
+    BOOST_TEST((rl.first - exact_root) <= toll);
 
     double tolh =
-            std::pow(10.0, -(dec))
+            std::pow(10.0, -dec)
         +   6.0 * epsilon * std::fabs(rh.first)
         ;
-    BOOST_TEST((rh.first - (exact_root)) <= tolh);
+    BOOST_TEST((rh.first - exact_root) <= tolh);
 }
 
 double e_function(double z)
@@ -110,16 +110,8 @@ struct e_former_rounding_problem
 int test_main(int, char*[])
 {
     // Test use with function.
-    //
-    // This would be more natural:
-    //  root_type r = decimal_root(0.5, 5.0, bias_none, 9, e_function);
-    // but borland compilers reject it:
-    //  Could not find a match for
-    //  'decimal_root<FunctionalType>(double,double,root_bias,int,double (*)(double))'
-    // even though 14.8.2.4/9 says T(*)(T) is deducible.
 
-    double(*f)(double) = e_function;
-    root_type r = decimal_root(0.5, 5.0, bias_none, 9, f);
+    root_type r = decimal_root(0.5, 5.0, bias_none, 9, e_function);
     BOOST_TEST(root_is_valid == r.second);
 
     // Test use with function object.

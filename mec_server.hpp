@@ -30,8 +30,6 @@
 
 #include <boost/filesystem/path.hpp>
 
-#include <functional>
-
 class mec_input;
 
 /// MEC-testing server.
@@ -47,7 +45,6 @@ class mec_input;
 /// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO mec_server final
-    :public std::unary_function<fs::path const&, bool>
 {
   public:
     explicit mec_server(mcenum_emission);

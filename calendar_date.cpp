@@ -738,8 +738,7 @@ class birthdate_limit
 
     double operator()(double candidate)
         {
-        // Double parentheses circumvent the most vexing parse.
-        calendar_date z((jdn_t(bourn_cast<int>(candidate))));
+        calendar_date const z {jdn_t(bourn_cast<int>(candidate))};
         return offset_ + notional_age(z, as_of_date_, alb_anb_) - limit_age_;
         }
 
@@ -821,13 +820,13 @@ std::string month_name(int month)
 
 calendar_date const& gregorian_epoch()
 {
-    static calendar_date const z((jdn_t(calendar_date::gregorian_epoch_jdn)));
+    static calendar_date const z {jdn_t(calendar_date::gregorian_epoch_jdn)};
     return z;
 }
 
 calendar_date const& last_yyyy_date()
 {
-    static calendar_date const z((jdn_t(calendar_date::last_yyyy_date_jdn)));
+    static calendar_date const z {jdn_t(calendar_date::last_yyyy_date_jdn)};
     return z;
 }
 

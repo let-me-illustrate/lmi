@@ -1138,6 +1138,11 @@ void group_quote_pdf_generator_wx::output_aggregate_values
                 // Do nothing: leave 'average_text' empty.
                 }
                 break;
+            case e_col_number: // fall through--should be unreachable
+            case e_col_name:   // fall through--should be unreachable
+            case e_col_age:    // fall through--should be unreachable
+            case e_col_dob:    // fall through--should be unreachable
+            case e_col_max:    // fall through--should be unreachable
             default:
                 {
                 alarum() << "Case " << i << " not found." << LMI_FLUSH;

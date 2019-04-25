@@ -23,25 +23,22 @@
 
 # Include platform-specific makefile.
 
-uname := $(shell uname -s 2>/dev/null)
+lmi_build_type := $(shell /usr/share/libtool/build-aux/config.guess)
 
-platform-makefile := posix_fhs.make
-
-ifeq (i686-w64-mingw32,$(findstring i686-w64-mingw32,$(LMI_HOST)))
-  platform-makefile := msw_generic.make
+ifeq (msys,$(findstring msys,$(lmi_build_type)))
+  platform_makefile := msw_msys.make
+else ifeq (cygwin,$(findstring cygwin,$(lmi_build_type)))
+  platform_makefile := msw_cygwin.make
+else
+  ifeq (mingw32,$(findstring mingw32,$(LMI_HOST)))
+    platform_makefile := msw_generic.make
+  else
+    platform_makefile := posix_fhs.make
+  endif
 endif
 
-ifeq (MINGW,$(findstring MINGW,$(uname)))
-  platform-makefile := msw_msys.make
-else ifeq (CYGWIN,$(findstring CYGWIN,$(uname)))
-  platform-makefile := msw_cygwin.make
-else ifeq (,$(uname))
-  uname := msw_generic
-  platform-makefile := msw_generic.make
-endif
-
-include $(srcdir)/$(platform-makefile)
-$(srcdir)/$(platform-makefile):: ;
+include $(srcdir)/$(platform_makefile)
+$(srcdir)/$(platform_makefile):: ;
 
 ################################################################################
 

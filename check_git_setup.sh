@@ -24,7 +24,7 @@
 # Navigate to the directory where this script resides, and make sure
 # it's a git "toplevel" directory.
 
-cd $(dirname $(readlink -f "$0")) || print "Cannot cd"
+cd $(dirname $(readlink -f "$0")) || printf 'Cannot cd\n'
 toplevel=$(git rev-parse --show-toplevel)
 printf '"%s" is current directory\n' "$PWD"
 printf '"%s" is git toplevel directory\n' "$toplevel"
@@ -34,13 +34,16 @@ printf '"%s" is git toplevel directory\n' "$toplevel"
 #'core.filemode' is "false". See:
 #   https://lists.nongnu.org/archive/html/lmi/2017-11/msg00018.html
 
-case $(uname -s) in
-  (CYGWIN*)
+lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+case "$lmi_build_type" in
+  (*-*-cygwin*)
     printf 'cygwin detected\n'
     printf 'forcing correct permissions '
       for d in . gwc; do (\
            printf '%s...' "$d" \
-        && find ./$d -maxdepth 1 -type f -not -name '*.sh' -not -name '*.sed' | xargs chmod -x \
+        && find ./$d -maxdepth 1 -type f \
+             -not -name '*.sh' -not -name '*.sed' \
+             | xargs chmod -x \
       )done; \
     printf 'all permissions forced\n'
     git config core.filemode false

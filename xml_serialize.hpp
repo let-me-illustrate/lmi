@@ -60,11 +60,7 @@ struct xml_io
 
     static void to_xml(xml::element& e, T const& t)
     {
-        e.clear();
-        // XMLWRAPP !! Someday, this might be rewritten thus:
-        //   e.set_content(value_cast<std::string>(t).c_str());
-        // but for now that doesn't work with embedded ampersands.
-        e.push_back(xml::node(xml::node::text(value_cast<std::string>(t).c_str())));
+        e.set_text_content(value_cast<std::string>(t).c_str());
     }
 
     static void from_xml(xml::element const& e, T& t)

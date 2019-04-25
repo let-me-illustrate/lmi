@@ -40,7 +40,7 @@
 class BasicValues;
 class Ledger;
 
-class LMI_SO LedgerInvariant
+class LMI_SO LedgerInvariant final
     :public LedgerBase
 {
   public:
