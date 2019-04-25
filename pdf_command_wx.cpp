@@ -1333,14 +1333,19 @@ class numbered_page : public page_with_marginals
 };
 
 /// Generic cover page for most ledger types.
+///
+/// See discussion here:
+///   https://lists.nongnu.org/archive/html/lmi/2019-04/msg00024.html
 
-class cover_page : public logical_page
+class cover_page : public numbered_page
 {
   public:
-    using logical_page::logical_page;
+    using numbered_page::numbered_page;
 
     void render() override
     {
+        // Call base-class implementation to render the footer.
+        numbered_page::render();
         int const height_contents = writer_.output_html
             (writer_.get_horz_margin()
             ,writer_.get_vert_margin()
@@ -1362,6 +1367,19 @@ class cover_page : public logical_page
             ,height_contents
             );
     }
+
+  private:
+    int get_extra_pages_needed() override
+    {
+        return 0;
+    }
+
+    // Only the lower part of the footer is wanted here.
+    std::string get_upper_footer_template_name() const override
+    {
+        return std::string {};
+    }
+
 };
 
 // Simplest possible page which is entirely defined by its external template
