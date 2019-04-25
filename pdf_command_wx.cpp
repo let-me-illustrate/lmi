@@ -1315,8 +1315,6 @@ class numbered_page : public page_with_marginals
     }
 
   private:
-    // Derived classes may override this function if they may need more than one
-    // physical page to show their contents.
     virtual int get_extra_pages_needed() = 0;
 
     std::string get_page_number() const override
