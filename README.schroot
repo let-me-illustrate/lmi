@@ -256,15 +256,16 @@ vim -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
 
 # Configure git. See:
 #   https://lists.nongnu.org/archive/html/lmi/2016-03/msg00006.html
-# Use your own name and email address.
-git config --global user.name "Gregory W. Chicares"
-git config --global user.email gchicares@sbcglobal.net
 git config --global color.ui auto
 git config --global core.pager "less -+F -+X"
-git config --global pull.ff only
-git config --global push.default simple
+git config --global diff.colormoved plain
 git config --global log.date iso8601-strict-local
 git config --global log.follow true
+git config --global pull.ff only
+git config --global push.default simple
+# Use your own name and email address.
+git config --global user.email gchicares@sbcglobal.net
+git config --global user.name "Gregory W. Chicares"
 
 # Initialize wine. See:
 #   https://lists.nongnu.org/archive/html/lmi/2016-10/msg00002.html
