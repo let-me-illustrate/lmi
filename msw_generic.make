@@ -68,7 +68,7 @@ compiler_sysroot := $(dir $(shell $(CXX) -print-libgcc-file-name))
 #   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=748353
 # | Provide compilers using Windows and POSIX threads. The default setup
 # | uses Windows threads, thus avoiding the dependency on the pthreads DLL
-# but including in this list with $(wildcard) does no harm.
+# but including it in this list with $(wildcard) does no harm.
 
 compiler_runtime_files := \
   $(wildcard $(compiler_sysroot)/libgcc*.dll) \
