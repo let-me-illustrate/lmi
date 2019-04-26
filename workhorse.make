@@ -1043,18 +1043,21 @@ lmi_msw_res.o: lmi.ico
 ################################################################################
 
 # Install.
-
-# TODO ?? This line
-#   $(CP) --preserve --update $^
-# isn't quite right: running 'make install build_type=[...]' with
-# different build_types and picking the latest version of each
-# component can produce a mismatched set.
+#
+# Architecture-independent files are copied with 'cp --update'.
+# Architecture-dependent files are copied without '--update'.
 
 data_files := \
   $(wildcard $(addprefix $(srcdir)/,*.ico *.png *.xml *.xrc *.xsd *.xsl)) \
 
 help_files := \
   $(wildcard $(addprefix $(srcdir)/,*.html)) \
+
+installable_binaries := \
+  $(default_targets) \
+  $(wildcard $(localbindir)/*$(SHREXT)) \
+  $(wildcard $(locallibdir)/*$(SHREXT)) \
+  $(wildcard $(prefix)/third_party/bin/*$(EXEEXT)) \
 
 .PHONY: install
 install: $(default_targets)
@@ -1063,7 +1066,7 @@ install: $(default_targets)
 	+@[ -d $(datadir)        ] || $(MKDIR) --parents $(datadir)
 	+@[ -d $(test_dir)       ] || $(MKDIR) --parents $(test_dir)
 	+@[ -d $(touchstone_dir) ] || $(MKDIR) --parents $(touchstone_dir)
-	@$(CP) --preserve --update $^ $(bindir)
+	@$(CP) --preserve $(installable_binaries) $(bindir)
 	@$(CP) --preserve --update $(data_files) $(datadir)
 	@$(CP) --preserve --update $(help_files) $(datadir)
 	@datadir=$(datadir) srcdir=$(srcdir) $(srcdir)/mst_to_xst.sh
