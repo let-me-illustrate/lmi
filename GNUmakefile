@@ -214,6 +214,9 @@ MAKETARGET = \
 .PHONY: $(build_dir)
 $(build_dir): $(gpl_files)
 	+@[ -d $@ ] || $(MKDIR) --parents $@
+	+@for z in $(compiler_runtime_files); \
+	  do [ -f $@/$$(basename $$z) ] || $(CP) --archive --verbose $$z $@ ; \
+	  done;
 	+@$(MAKETARGET)
 
 % :: $(build_dir) ; @:
