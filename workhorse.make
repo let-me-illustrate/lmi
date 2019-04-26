@@ -1071,7 +1071,7 @@ install: $(default_targets)
 	@$(CP) --preserve --update $(help_files) $(datadir)
 	@datadir=$(datadir) srcdir=$(srcdir) $(srcdir)/mst_to_xst.sh
 	@[ -z "$(compiler_runtime_files)" ] \
-	  || $(CP) --preserve --update $(compiler_runtime_files) /opt/lmi/local/bin
+	  || $(CP) --preserve $(compiler_runtime_files) $(bindir)
 ifeq (,$(USE_SO_ATTRIBUTES))
 	@cd $(datadir); $(PERFORM) $(bindir)/product_files$(EXEEXT)
 else
