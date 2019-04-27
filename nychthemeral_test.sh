@@ -135,7 +135,7 @@ nychthemeral_clutter='
 '
 
 # Directory for test logs.
-log_dir=/tmp/lmi/logs
+log_dir=/tmp/lmi/"$LMI_HOST"/logs
 mkdir --parents "$log_dir"
 
 {

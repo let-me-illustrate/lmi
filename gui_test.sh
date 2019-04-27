@@ -138,8 +138,10 @@ gui_test_clutter='
 '
 
 # Directory for test logs.
-mkdir --parents /tmp/lmi/logs
+log_dir=/tmp/lmi/"$LMI_HOST"/logs
+mkdir --parents "$log_dir"
 
 cd /opt/lmi/src/lmi
 
-"$PERFORM" /opt/lmi/bin/wx_test --ash_nazg --data_path=/opt/lmi/data 2>&1 | tee /tmp/lmi/logs/gui_test | sed -e "$gui_test_clutter"
+"$PERFORM" /opt/lmi/bin/wx_test --ash_nazg --data_path=/opt/lmi/data 2>&1 \
+  | tee "$log_dir"/gui_test | sed -e "$gui_test_clutter"
