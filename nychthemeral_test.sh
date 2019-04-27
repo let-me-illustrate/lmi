@@ -155,9 +155,14 @@ printf '\n# cgi and cli tests\n\n'
 make "$coefficiency" --output-sync=recurse cgi_tests cli_tests 2>&1 \
   | tee "$log_dir"/cgi_cli | sed -e "$build_clutter" -e "$cli_cgi_clutter"
 
-printf '\n# system test\n\n'
-make "$coefficiency" system_test 2>&1 \
-  | tee "$log_dir"/system_test | sed -e "$build_clutter" -e "$install_clutter"
+if [ "i686-w64-mingw32" = "$LMI_HOST" ]
+then
+  printf '\n# system test\n\n'
+  make "$coefficiency" system_test 2>&1 \
+    | tee "$log_dir"/system_test | sed -e "$build_clutter" -e "$install_clutter"
+else
+  printf '\n# system test skipped--it succeeds only with the production architecture\n\n'
+fi
 
 printf '\n# unit tests\n\n'
 make "$coefficiency" unit_tests 2>&1 \
