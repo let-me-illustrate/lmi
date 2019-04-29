@@ -208,6 +208,7 @@ MAKETARGET = \
                      localbindir='$(localbindir)' \
                      locallibdir='$(locallibdir)' \
                  localincludedir='$(localincludedir)' \
+                      winebindir='$(winebindir)' \
                         test_dir='$(test_dir)' \
                   touchstone_dir='$(touchstone_dir)' \
                     LMI_COMPILER='$(LMI_COMPILER)' \
