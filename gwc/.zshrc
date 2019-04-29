@@ -1,13 +1,11 @@
 # Personal configuration for cross-building in a chroot.
 
-export WINEPATH='Z:\\opt\\lmi\\local\\bin;Z:\\opt\\lmi\\local\\lib;Z:\\opt\\lmi\\third_party\\bin'
-export LMI_HOST=i686-w64-mingw32
+export LMI_COMPILER=gcc
+export LMI_TRIPLET=i686-w64-mingw32
 
 # Minimal system path.
 export MINIMAL_PATH="/usr/bin:/bin:/usr/sbin:/sbin"
 export PATH="$MINIMAL_PATH"
-# For the nonce, still do this:
-export PATH="/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH"
 
 # At a regular user prompt, outside the chroot, do this:
 #   $ echo $DISPLAY

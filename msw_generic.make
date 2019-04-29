@@ -33,6 +33,13 @@ system_root := /
 
 PERFORM := wine
 
+# $(winebindir) is where 'install_miscellanea.make' places 'md5sum.exe'.
+
+w0 := $(shell winepath -w $(localbindir) | sed -e's/\\/\\\\/g')
+w1 := $(shell winepath -w $(locallibdir) | sed -e's/\\/\\\\/g')
+w2 := $(shell winepath -w $(winebindir)  | sed -e's/\\/\\\\/g')
+export WINEPATH=$(w0);$(w1);$(w2)
+
 ################################################################################
 
 # Compiler, linker, and so on.
@@ -42,14 +49,14 @@ PERFORM := wine
 
 gcc_bin_dir :=
 
-host_prefix := $(LMI_HOST)-
+host_hyphen := $(LMI_TRIPLET)-
 
-AR      := $(gcc_bin_dir)$(host_prefix)ar
-CC      := $(gcc_bin_dir)$(host_prefix)gcc
-CPP     := $(gcc_bin_dir)$(host_prefix)cpp
-CXX     := $(gcc_bin_dir)$(host_prefix)g++
-LD      := $(gcc_bin_dir)$(host_prefix)g++
-RC      := $(gcc_bin_dir)$(host_prefix)windres
+AR      := $(gcc_bin_dir)$(host_hyphen)ar
+CC      := $(gcc_bin_dir)$(host_hyphen)gcc
+CPP     := $(gcc_bin_dir)$(host_hyphen)cpp
+CXX     := $(gcc_bin_dir)$(host_hyphen)g++
+LD      := $(gcc_bin_dir)$(host_hyphen)g++
+RC      := $(gcc_bin_dir)$(host_hyphen)windres
 
 # Identify run-time libraries for redistribution. See:
 #   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00046.html
@@ -57,7 +64,7 @@ RC      := $(gcc_bin_dir)$(host_prefix)windres
 # option returns an empty string with debian cross compilers.
 #
 # It might seem more robust to write something like
-#   compiler_sysroot := $(shell readlink -fn /usr/lib/gcc/$(LMI_HOST)/*-win32)
+#   compiler_sysroot := $(shell readlink -fn /usr/lib/gcc/$(LMI_TRIPLET)/*-win32)
 # but that would actually weaken makefile portability, and there
 # is no guarantee that this directory will be named similarly in
 # future debian releases, much less on other OSs.
@@ -68,7 +75,7 @@ compiler_sysroot := $(dir $(shell $(CXX) -print-libgcc-file-name))
 #   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=748353
 # | Provide compilers using Windows and POSIX threads. The default setup
 # | uses Windows threads, thus avoiding the dependency on the pthreads DLL
-# but including in this list with $(wildcard) does no harm.
+# but including it in this list with $(wildcard) does no harm.
 
 compiler_runtime_files := \
   $(wildcard $(compiler_sysroot)/libgcc*.dll) \

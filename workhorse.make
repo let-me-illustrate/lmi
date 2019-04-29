@@ -131,7 +131,7 @@ effective_default_target: $(default_targets)
 # $(subst): workaround for debian, whose MinGW-w64 identifies its
 # version 7.x.0 as "7.x-win32".
 
-ifeq (gcc,$(toolchain))
+ifeq (gcc,$(LMI_COMPILER))
   gcc_version   := $(subst -win32,.0,$(shell $(CXX)     -dumpversion))
 endif
 
@@ -407,7 +407,7 @@ else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
 else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0 8.3.0))
   gcc_version_specific_warnings := \
 
-  ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_HOST)))
+  ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
 # See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00026.html
     tutelary_flag := -fomit-frame-pointer
@@ -681,7 +681,7 @@ CXX_WARNINGS = \
 # speed penalty that can be overcome by increasing parallelism. There
 # seems to be no need for them with gcc-4.x, which uses less RAM.
 
-ifeq (gcc,$(toolchain))
+ifeq (gcc,$(LMI_COMPILER))
   ifeq (3.4.5,$(gcc_version))
     ggc_flags := --param ggc-min-expand=25 --param ggc-min-heapsize=32768
   endif
@@ -1090,12 +1090,9 @@ lmi_msw_res.o: lmi.ico
 ################################################################################
 
 # Install.
-
-# TODO ?? This line
-#   $(CP) --preserve --update $^
-# isn't quite right: running 'make install build_type=[...]' with
-# different build_types and picking the latest version of each
-# component can produce a mismatched set.
+#
+# Architecture-independent files are copied with 'cp --update'.
+# Architecture-dependent files are copied without '--update'.
 
 data_files := \
   $(wildcard $(addprefix $(srcdir)/,*.ico *.png *.xml *.xrc *.xsd *.xsl)) \
@@ -1103,22 +1100,25 @@ data_files := \
 help_files := \
   $(wildcard $(addprefix $(srcdir)/,*.html)) \
 
-.PHONY: preinstall
-preinstall:
-	@[ -z "$(compiler_runtime_files)" ] \
-	  || $(CP) --preserve --update $(compiler_runtime_files) $(localbindir)
+installable_binaries := \
+  $(default_targets) \
+  $(wildcard $(localbindir)/*$(SHREXT)) \
+  $(wildcard $(locallibdir)/*$(SHREXT)) \
+  $(wildcard $(prefix)/third_party/bin/*$(EXEEXT)) \
 
 .PHONY: install
-install: preinstall $(default_targets)
+install: $(default_targets)
 	+@[ -d $(exec_prefix)    ] || $(MKDIR) --parents $(exec_prefix)
 	+@[ -d $(bindir)         ] || $(MKDIR) --parents $(bindir)
 	+@[ -d $(datadir)        ] || $(MKDIR) --parents $(datadir)
 	+@[ -d $(test_dir)       ] || $(MKDIR) --parents $(test_dir)
 	+@[ -d $(touchstone_dir) ] || $(MKDIR) --parents $(touchstone_dir)
-	@$(CP) --preserve --update $(default_targets) $(bindir)
+	@$(CP) --preserve $(installable_binaries) $(bindir)
 	@$(CP) --preserve --update $(data_files) $(datadir)
 	@$(CP) --preserve --update $(help_files) $(datadir)
 	@datadir=$(datadir) srcdir=$(srcdir) $(srcdir)/mst_to_xst.sh
+	@[ -z "$(compiler_runtime_files)" ] \
+	  || $(CP) --preserve $(compiler_runtime_files) $(bindir)
 ifeq (,$(USE_SO_ATTRIBUTES))
 	@cd $(datadir); $(PERFORM) $(bindir)/product_files$(EXEEXT)
 else

@@ -195,9 +195,12 @@ fi
 make $coefficiency --output-sync=recurse -f install_miscellanea.make clobber
 make $coefficiency --output-sync=recurse -f install_miscellanea.make
 
-# This for-loop can iterate over as many architectures as desired.
-export LMI_HOST
-for LMI_HOST in i686-w64-mingw32 ;
+# This for-loop can iterate over as many toolchains as desired.
+# Make sure the current production architecture is built last, so that
+# it's the one installed to /opt/lmi/bin/ when this script ends.
+export LMI_COMPILER=gcc
+export LMI_TRIPLET
+for LMI_TRIPLET in x86_64-w64-mingw32 i686-w64-mingw32 ;
 do
     make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
 
@@ -206,7 +209,7 @@ do
 
     find /cache_for_lmi/downloads -type f | xargs md5sum
 
-    export PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$minimal_path
+    export PATH=/opt/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/local/bin:/opt/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/local/lib:$minimal_path
 
     make $coefficiency --output-sync=recurse wx_config_check
     make $coefficiency --output-sync=recurse show_flags
