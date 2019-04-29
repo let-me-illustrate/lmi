@@ -33,7 +33,7 @@
 # Cf.:
 # http://www-d0.fnal.gov/KAI/doc/UserGuide/faq.html#multiple_template_instance
 
-toolchain    := como
+LMI_COMPILER := como
 
 srcdir       := $(CURDIR)
 
@@ -222,7 +222,7 @@ CXX := \
 	  --jobs=1 \
 	                        gcc_version='$(gcc_version)' \
 	                             srcdir='$(srcdir)' \
-	                          toolchain='$(toolchain)' \
+	                       LMI_COMPILER='$(LMI_COMPILER)' \
 	                         C_WARNINGS='$(C_WARNINGS)' \
 	                       CXX_WARNINGS='$(CXX_WARNINGS)' \
 	                   C_EXTRA_WARNINGS='$(C_EXTRA_WARNINGS)' \

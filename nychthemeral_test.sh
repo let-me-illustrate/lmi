@@ -135,7 +135,7 @@ nychthemeral_clutter='
 '
 
 # Directory for test logs.
-log_dir=/tmp/lmi/"$LMI_HOST"/logs
+log_dir=/tmp/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/logs
 mkdir --parents "$log_dir"
 
 {
@@ -155,7 +155,7 @@ printf '\n# cgi and cli tests\n\n'
 make "$coefficiency" --output-sync=recurse cgi_tests cli_tests 2>&1 \
   | tee "$log_dir"/cgi_cli | sed -e "$build_clutter" -e "$cli_cgi_clutter"
 
-if [ "i686-w64-mingw32" = "$LMI_HOST" ]
+if [ "i686-w64-mingw32" = "$LMI_TRIPLET" ]
 then
   printf '\n# system test\n\n'
   make "$coefficiency" system_test 2>&1 \

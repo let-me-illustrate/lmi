@@ -138,7 +138,7 @@ gui_test_clutter='
 '
 
 # Directory for test logs.
-log_dir=/tmp/lmi/"$LMI_HOST"/logs
+log_dir=/tmp/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/logs
 mkdir --parents "$log_dir"
 
 cd /opt/lmi/src/lmi

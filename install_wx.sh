@@ -41,13 +41,14 @@ coefficiency=${coefficiency:-"--jobs=4"}
 
 MAKE=${MAKE:-"make $coefficiency"}
 
-host_type=${LMI_HOST:-"i686-w64-mingw32"}
+LMI_COMPILER=${LMI_COMPILER:-"gcc"}
+LMI_TRIPLET=${LMI_TRIPLET:-"i686-w64-mingw32"}
 
 # Variables that normally should be left alone #################################
 
 mingw_dir=/MinGW_
 
-prefix=/opt/lmi/local
+prefix=/opt/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/local
 exec_prefix="$prefix"
 
 repo_name="wxWidgets"
@@ -88,8 +89,8 @@ case "$build_type" in
 esac
 
 # Distinguish wx dll by host type, compiler version, and wx SHA1.
-gcc_version=$(${mingw_bin_dir}${host_type}-gcc -dumpversion|tr -d '\r')
-vendor=${host_type}-$gcc_version-$wx_commit_sha
+gcc_version=$(${mingw_bin_dir}${LMI_TRIPLET}-gcc -dumpversion|tr -d '\r')
+vendor=${LMI_TRIPLET}-$gcc_version-$wx_commit_sha
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
@@ -101,7 +102,7 @@ config_options="
   --prefix=$prefix
   --exec-prefix=$exec_prefix
   --build=$build_type
-  --host=$host_type
+  --host=$LMI_TRIPLET
   --disable-apple_ieee
   --disable-aui
   --disable-compat30

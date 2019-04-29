@@ -84,11 +84,14 @@ MAKEFLAGS := \
 # more closely, changing the value of $(datadir), and perhaps using
 # some other standard directories that are commented out for now.
 
+LMI_COMPILER ?= gcc
+LMI_TRIPLET  ?= i686-w64-mingw32
+
 prefix          := /opt/lmi
 # parent directory for machine-specific binaries
-exec_prefix     := $(prefix)
+exec_prefix     := $(prefix)/$(LMI_COMPILER)_$(LMI_TRIPLET)
 # binaries that users can run
-bindir          := $(exec_prefix)/bin
+bindir          := $(prefix)/bin
 # binaries that administrators can run
 #sbindir         := $(exec_prefix)/sbin
 # binaries run by programs
@@ -121,8 +124,9 @@ srcdir          := $(CURDIR)
 localbindir     := $(exec_prefix)/local/bin
 locallibdir     := $(exec_prefix)/local/lib
 localincludedir := $(exec_prefix)/local/include
-test_dir        := $(exec_prefix)/test
-touchstone_dir  := $(exec_prefix)/touchstone
+winebindir      := $(prefix)/third_party/bin
+test_dir        := $(prefix)/test
+touchstone_dir  := $(prefix)/touchstone
 
 ################################################################################
 
@@ -172,8 +176,7 @@ $(srcdir)/local_options.make:: ;
 # the make command line. Of course, other build types may be defined.
 
 build_type ?= ship
-toolchain ?= gcc
-build_dir := $(exec_prefix)/$(toolchain)/build/$(build_type)
+build_dir := $(exec_prefix)/build/$(build_type)
 
 gpl_files := \
   COPYING \
@@ -184,6 +187,8 @@ gpl_files := \
 # a submakefile is invoked, in order to allow a variable definition on
 # the 'make' command line to override any definition of the same
 # variable in $(local_options).
+
+export PATH := $(localbindir):$(locallibdir):$(PATH)
 
 MAKETARGET = \
   $(MAKE) \
@@ -205,7 +210,8 @@ MAKETARGET = \
                  localincludedir='$(localincludedir)' \
                         test_dir='$(test_dir)' \
                   touchstone_dir='$(touchstone_dir)' \
-                       toolchain='$(toolchain)' \
+                    LMI_COMPILER='$(LMI_COMPILER)' \
+                     LMI_TRIPLET='$(LMI_TRIPLET)' \
                       build_type='$(build_type)' \
                USE_SO_ATTRIBUTES='$(USE_SO_ATTRIBUTES)' \
                     yyyymmddhhmm='$(yyyymmddhhmm)' \
@@ -342,23 +348,29 @@ distclean mostlyclean maintainer-clean: clean
 # targets more clearly. To use an alternative like
 #   rm -rf $(build_dir)/../..
 # would be to invite disaster.
-ifneq ($(build_dir),$(exec_prefix)/$(toolchain)/build/$(build_type))
+ifneq ($(build_dir),$(exec_prefix)/build/$(build_type))
   $(error Assertion failure: build directory misconfigured)
 endif
 
 .PHONY: clean
 clean: source_clean
-	-$(RM) --force --recursive $(exec_prefix)/$(toolchain)/build/$(build_type)
+	-$(RM) --force --recursive $(exec_prefix)/build/$(build_type)
 
 .PHONY: clobber
 clobber: source_clean
-	-$(RM) --force --recursive $(exec_prefix)/$(toolchain)/build
+	-$(RM) --force --recursive $(exec_prefix)/build
 
 .PHONY: raze
-raze: clobber
-	-$(RM) --force --recursive $(prefix)/*ad_hoc*
-	-$(RM) --force --recursive $(prefix)/local
+raze: source_clean
+	-$(RM) --force --recursive $(exec_prefix)
+
+.PHONY: eviscerate
+eviscerate: source_clean
+	-$(RM) --force --recursive $(bindir)
 	-$(RM) --force --recursive $(prefix)/third_party
+	-$(RM) --force --recursive $(prefix)/gcc_i686-w64-mingw32
+	-$(RM) --force --recursive $(prefix)/gcc_x86_64-w64-mingw32
+	-$(RM) --force --recursive $(prefix)/gcc_x86_64-pc-linux-gnu
 
 ################################################################################
 

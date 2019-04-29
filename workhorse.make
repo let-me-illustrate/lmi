@@ -131,7 +131,7 @@ effective_default_target: $(default_targets)
 # $(subst): workaround for debian, whose MinGW-w64 identifies its
 # version 7.x.0 as "7.x-win32".
 
-ifeq (gcc,$(toolchain))
+ifeq (gcc,$(LMI_COMPILER))
   gcc_version   := $(subst -win32,.0,$(shell $(CXX)     -dumpversion))
 endif
 
@@ -405,7 +405,7 @@ else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
 else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0 8.3.0))
   gcc_version_specific_warnings := \
 
-  ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_HOST)))
+  ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
 # See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00026.html
     tutelary_flag := -fomit-frame-pointer
@@ -678,7 +678,7 @@ CXX_WARNINGS = \
 # speed penalty that can be overcome by increasing parallelism. There
 # seems to be no need for them with gcc-4.x, which uses less RAM.
 
-ifeq (gcc,$(toolchain))
+ifeq (gcc,$(LMI_COMPILER))
   ifeq (3.4.5,$(gcc_version))
     ggc_flags := --param ggc-min-expand=25 --param ggc-min-heapsize=32768
   endif

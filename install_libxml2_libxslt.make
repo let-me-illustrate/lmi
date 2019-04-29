@@ -48,9 +48,15 @@ $(xz_version).tar.gz: host_path := projects/lzmautils/files
 
 mingw_dir     := /MinGW_
 
-host_type     := $(if $(LMI_HOST),$(LMI_HOST),i686-w64-mingw32)
+LMI_COMPILER  ?= gcc
+LMI_TRIPLET   ?= i686-w64-mingw32
 
-prefix        := /opt/lmi/local
+# It would be cleaner to use the "LMI_*" components in $exec_prefix
+# (arch-dependent libraries) rather than in $prefix (arch-independent
+# headers, e.g.). However, libxml2's '--with-lzma' option assumes that
+# $prefix and $exec_prefix are the same directory--see:
+#   https://lists.nongnu.org/archive/html/lmi/2019-04/msg00018.html
+prefix        := /opt/lmi/$(LMI_COMPILER)_$(LMI_TRIPLET)/local
 exec_prefix   := $(prefix)
 
 cache_dir     := /cache_for_lmi/downloads
@@ -77,7 +83,7 @@ $(xz_version)_options := \
   --prefix=$(prefix) \
   --exec-prefix=$(exec_prefix) \
   --build=`$(build_dir)/$(xz_version)/build-aux/config.guess` \
-  --host=$(host_type) \
+  --host=$(LMI_TRIPLET) \
   --disable-dependency-tracking \
   CFLAGS="-g -O2 $(xz_cflags)" \
 
@@ -127,7 +133,7 @@ $(libxml2_version)_options := \
   --prefix=$(prefix) \
   --exec-prefix=$(exec_prefix) \
   --build=`$(build_dir)/$(libxml2_version)/config.guess` \
-  --host=$(host_type) \
+  --host=$(LMI_TRIPLET) \
   $(xmlsoft_common_options) \
   --with-lzma=$(prefix) \
   --with-schemas \
@@ -146,7 +152,7 @@ $(libxslt_version)_options := \
   --prefix=$(prefix) \
   --exec-prefix=$(exec_prefix) \
   --build=`$(build_dir)/$(libxslt_version)/config.guess` \
-  --host=$(host_type) \
+  --host=$(LMI_TRIPLET) \
   $(xmlsoft_common_options) \
   --with-libxml-prefix=$(exec_prefix) \
   --without-crypto \
