@@ -123,7 +123,7 @@ initial_setup:
 
 BSDTARFLAGS := --keep-old-files
 
-WGETFLAGS :=
+WGETFLAGS := --no-verbose
 
 # Fall back on a native binary if libarchive issue 629 occurs.
 

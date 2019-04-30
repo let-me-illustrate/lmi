@@ -195,6 +195,7 @@ WGETFLAGS = \
   --cut-dirs=$(words $(subst /, ,$(host_path))) \
   --force-directories \
   --no-host-directories \
+  --no-verbose \
 
 wget_whence = $(host)/$(host_path)
 
