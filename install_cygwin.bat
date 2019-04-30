@@ -23,17 +23,17 @@
 
 @REM Install Cygwin. See file 'INSTALL'.
 
-IF EXIST C:\cygwin\NUL     GOTO FoundOldInstallation
-IF EXIST C:\cygwin-lmi\NUL GOTO FoundOldInstallation
+IF EXIST C:\cygwin\NUL       GOTO FoundOldInstallation
+IF EXIST C:\cygwin64_lmi\NUL GOTO FoundOldInstallation
 
 C:
 cd C:\cache_for_lmi
 START "Installing Cygwin" /WAIT setup-x86_64 ^
   --wait --quiet-mode ^
   --site http://mirrors.kernel.org/sourceware/cygwin/ ^
-  --root C:/cygwin-lmi --packages ^
+  --root C:/cygwin64_lmi --packages ^
    "autoconf,automake,bsdtar,dos2unix,doxygen,gdb,git,libtool,make,openssh,patch,pkg-config,rsync,unzip,wget,zip,zsh"
-cd C:\cygwin-lmi\etc
+cd C:\cygwin64_lmi\etc
 echo # >> fstab
 echo C:/opt/lmi/MinGW-8_1_0 /MinGW_        lmi_specific binary,user 0 0 >> fstab
 echo C:/opt/lmi             /opt/lmi       lmi_specific binary,user 0 0 >> fstab
