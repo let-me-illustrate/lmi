@@ -61,15 +61,15 @@ gcc_bin_dir := /MinGW_/bin/
 #   i686-w64-mingw32-g++.exe
 # but not of the other tools.
 
-#host_prefix := i686-w64-mingw32-
-host_prefix :=
+#host_hyphen := i686-w64-mingw32-
+host_hyphen :=
 
-AR      := $(gcc_bin_dir)$(host_prefix)ar
-CC      := $(gcc_bin_dir)$(host_prefix)gcc
-CPP     := $(gcc_bin_dir)$(host_prefix)cpp
-CXX     := $(gcc_bin_dir)$(host_prefix)g++
-LD      := $(gcc_bin_dir)$(host_prefix)g++
-RC      := $(gcc_bin_dir)$(host_prefix)windres
+AR      := $(gcc_bin_dir)$(host_hyphen)ar
+CC      := $(gcc_bin_dir)$(host_hyphen)gcc
+CPP     := $(gcc_bin_dir)$(host_hyphen)cpp
+CXX     := $(gcc_bin_dir)$(host_hyphen)g++
+LD      := $(gcc_bin_dir)$(host_hyphen)g++
+RC      := $(gcc_bin_dir)$(host_hyphen)windres
 
 # Identify run-time libraries for redistribution. See:
 #   https://cygwin.com/ml/cygwin/2010-09/msg00553.html
