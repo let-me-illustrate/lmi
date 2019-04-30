@@ -37,7 +37,6 @@ cd C:\cygwin64_lmi\etc
 echo # >> fstab
 echo C:/opt/lmi/MinGW-8_1_0 /MinGW_        lmi_specific binary,user 0 0 >> fstab
 echo C:/opt/lmi             /opt/lmi       lmi_specific binary,user 0 0 >> fstab
-echo C:/lmi                 /lmi           lmi_specific binary,user 0 0 >> fstab
 echo C:/cache_for_lmi       /cache_for_lmi lmi_specific binary,user 0 0 >> fstab
 echo Cygwin installation seems to have succeeded
 GOTO End
