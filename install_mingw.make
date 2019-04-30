@@ -28,9 +28,9 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 # rather than release its own; lmi uses i686 builds with native
 # threads and SJLJ exceptions.
 
-version   := MinGW-8_1_0
+version    := MinGW-8_1_0
 
-file_list  = $($(version))
+file_list   = $($(version))
 
 # Prefer to set $(prefix) to anything but '/mingw', in order to avoid
 # the problem described here:
@@ -42,9 +42,9 @@ file_list  = $($(version))
 #   http://article.gmane.org/gmane.comp.gnu.mingw.user/14748
 #     [2005-01-17T18:15:26Z from Aaron W. LaFramboise]
 
-prefix    := /MinGW_
+prefix     := /MinGW_
 
-cache_dir := /cache_for_lmi/downloads
+cache_dir  := /cache_for_lmi/downloads
 
 ad_hoc_dir := $(prefix)/ad_hoc
 
@@ -52,7 +52,7 @@ ad_hoc_dir := $(prefix)/ad_hoc
 #  mirror := http://easynews.dl.sourceforge.net/sourceforge/mingw
 # but as of about 2006-12 sf.net seems to select one automatically
 # when this is passed to wget:
-mirror    := http://downloads.sourceforge.net/mingw-w64
+mirror     := http://downloads.sourceforge.net/mingw-w64
 
 # File lists ###################################################################
 
@@ -118,7 +118,6 @@ initial_setup:
 	[ ! -e $(prefix)     ]    || { printf '%b' $(prefix_exists)     && false; }
 	[ ! -e $(ad_hoc_dir) ]    || { printf '%b' $(ad_hoc_dir_exists) && false; }
 	$(MKDIR) --parents $(prefix)
-	$(RM) --force --recursive $(prefix)
 	$(MKDIR) --parents $(ad_hoc_dir)
 
 BSDTARFLAGS := --keep-old-files
