@@ -45,7 +45,7 @@ system_root := /cygdrive/c
 # Use cygwin as a quasi-cross-compiler for an i686-pc-mingw32 target.
 
 # For autotoolized libraries, pass these flags to 'configure':
-# cross_compile_flags := --build=i686-pc-cygwin --host=i686-w64-mingw32
+# cross_compile_flags := --build=i686-pc-cygwin --host=$(LMI_TRIPLET)
 
 ################################################################################
 
@@ -61,7 +61,7 @@ gcc_bin_dir := /MinGW_/bin/
 #   i686-w64-mingw32-g++.exe
 # but not of the other tools.
 
-#host_hyphen := i686-w64-mingw32-
+#host_hyphen := $(LMI_TRIPLET)-
 host_hyphen :=
 
 AR      := $(gcc_bin_dir)$(host_hyphen)ar
@@ -75,7 +75,7 @@ RC      := $(gcc_bin_dir)$(host_hyphen)windres
 #   https://cygwin.com/ml/cygwin/2010-09/msg00553.html
 # Of course manipulating an lmi user's $PATH is out of the question.
 
-compiler_sysroot := /MinGW_/i686-w64-mingw32/lib
+compiler_sysroot := /MinGW_/$(LMI_TRIPLET)/lib
 
 compiler_runtime_files := \
   $(wildcard $(compiler_sysroot)/libgcc*.dll) \
