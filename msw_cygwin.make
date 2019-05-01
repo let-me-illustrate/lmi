@@ -42,10 +42,10 @@ system_root := /cygdrive/c
 
 ################################################################################
 
-# Use cygwin as a quasi-cross-compiler for an i686-pc-mingw32 target.
+# Use cygwin as a quasi-cross-compiler for --host=*-w64-mingw32.
 
-# For autotoolized libraries, pass these flags to 'configure':
-# cross_compile_flags := --build=i686-pc-cygwin --host=$(LMI_TRIPLET)
+# For autotoolized libraries, pass flags such as these to 'configure':
+# cross_compile_flags := --build=x86_64-pc-cygwin --host=$(LMI_TRIPLET)
 
 ################################################################################
 
@@ -56,10 +56,14 @@ system_root := /cygdrive/c
 
 gcc_bin_dir := /MinGW_/bin/
 
-# Oddly, MinGW-w64 provides prefixed versions of compilers:
+# Oddly, MinGW-w64 provides prefixed versions of compilers, e.g.:
 #   i686-w64-mingw32-gcc.exe
-#   i686-w64-mingw32-g++.exe
-# but not of the other tools.
+#   x86_64-w64-mingw32-g++.exe
+# but not of the other tools. Yet its distributed archives each
+# contain a distinct subdirectory indicating word size, e.g.:
+#   mingw32/bin/g++.exe in 'i686-*' archives
+#   mingw64/bin/g++.exe in 'x86_64-*' archives
+# which can potentially coexist.
 
 #host_hyphen := $(LMI_TRIPLET)-
 host_hyphen :=
