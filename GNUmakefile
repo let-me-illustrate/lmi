@@ -367,7 +367,6 @@ raze: source_clean
 
 .PHONY: eviscerate
 eviscerate: source_clean
-	-$(RM) --force --recursive $(bindir)
 	-$(RM) --force --recursive $(prefix)/third_party
 	-$(RM) --force --recursive $(prefix)/gcc_i686-w64-mingw32
 	-$(RM) --force --recursive $(prefix)/gcc_x86_64-w64-mingw32
