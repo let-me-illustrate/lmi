@@ -200,7 +200,9 @@ make $coefficiency --output-sync=recurse -f install_miscellanea.make
 # it's the one installed to /opt/lmi/bin/ when this script ends.
 export LMI_COMPILER=gcc
 export LMI_TRIPLET
-for LMI_TRIPLET in x86_64-w64-mingw32 i686-w64-mingw32 ;
+# triplets=${triplets:-"x86_64-w64-mingw32 i686-w64-mingw32"}
+triplets=${triplets:-"i686-w64-mingw32"}
+for LMI_TRIPLET in "$triplets" ;
 do
     make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
 
