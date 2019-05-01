@@ -54,7 +54,13 @@ system_root := /cygdrive/c
 # Full path to gcc binaries, slash-terminated if nonempty. Setting it
 # to an empty string finds gcc on $PATH instead.
 
-gcc_bin_dir := /MinGW_/bin/
+ifeq (i686-w64-mingw32,$(LMI_TRIPLET))
+  gcc_bin_dir := /MinGW_/mingw32/bin/
+else ifeq (x86_64-w64-mingw32,$(LMI_TRIPLET))
+  gcc_bin_dir := /MinGW_/mingw64/bin/
+else
+  $(warning Unexpected triplet '$(LMI_TRIPLET)')
+endif
 
 # Oddly, MinGW-w64 provides prefixed versions of compilers, e.g.:
 #   i686-w64-mingw32-gcc.exe
