@@ -107,8 +107,6 @@ ad_hoc_dir_exists = \
 
 .PHONY: all
 all: $(file_list)
-	$(MKDIR) --parents $(prefix)
-	$(MKDIR) --parents $(ad_hoc_dir)
 	$(CP) --archive $(ad_hoc_dir)/mingw32 $(prefix)
 	$(RM) --force --recursive $(ad_hoc_dir)
 
@@ -119,6 +117,8 @@ initial_setup:
 	type "$(WGET)" >/dev/null || { printf '%b' $(wget_missing)      && false; }
 	[ ! -e $(prefix)     ]    || { printf '%b' $(prefix_exists)     && false; }
 	[ ! -e $(ad_hoc_dir) ]    || { printf '%b' $(ad_hoc_dir_exists) && false; }
+	$(MKDIR) --parents $(prefix)
+	$(MKDIR) --parents $(ad_hoc_dir)
 
 BSDTARFLAGS := --keep-old-files
 
