@@ -42,11 +42,11 @@ file_list   = $($(version))
 #   http://article.gmane.org/gmane.comp.gnu.mingw.user/14748
 #     [2005-01-17T18:15:26Z from Aaron W. LaFramboise]
 
-prefix     := /MinGW_
+prefix     := /opt/lmi/mingw
 
 cache_dir  := /cache_for_lmi/downloads
 
-ad_hoc_dir := $(prefix)/ad_hoc
+ad_hoc_dir := /opt/lmi/zzz/mingw-ad_hoc/ad_hoc
 
 # In the past, it seemed necessary to specify a mirror, e.g.:
 #  mirror := http://easynews.dl.sourceforge.net/sourceforge/mingw
@@ -129,4 +129,5 @@ WGETFLAGS := --no-verbose
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $(mirror)/$@
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
 	$(BSDTAR) --extract $(BSDTARFLAGS) --directory=$(ad_hoc_dir) --file=$(cache_dir)/$@ \
-	  || c:/Program\ Files/7-Zip/7z x `cygpath -w $(cache_dir)/$@` -o$(ad_hoc_dir)
+	  || c:/Program\ Files/7-Zip/7z x `cygpath -w $(cache_dir)/$@` -o$(ad_hoc_dir) \
+	  || c:/Program\ Files\ \(x86\)/7-Zip/7z x `cygpath -w $(cache_dir)/$@` -o`cygpath -w $(ad_hoc_dir)`

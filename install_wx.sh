@@ -46,7 +46,7 @@ LMI_TRIPLET=${LMI_TRIPLET:-"i686-w64-mingw32"}
 
 # Variables that normally should be left alone #################################
 
-mingw_dir=/MinGW_
+mingw_dir=/opt/lmi/mingw
 
 prefix=/opt/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/local
 exec_prefix="$prefix"

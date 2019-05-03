@@ -46,7 +46,7 @@ host_path     := libxml2
 $(xz_version).tar.gz: host      := https://sourceforge.net
 $(xz_version).tar.gz: host_path := projects/lzmautils/files
 
-mingw_dir     := /MinGW_
+mingw_dir     := /opt/lmi/mingw
 
 LMI_COMPILER  ?= gcc
 LMI_TRIPLET   ?= i686-w64-mingw32
