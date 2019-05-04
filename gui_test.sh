@@ -135,6 +135,7 @@ gui_test_clutter='
 /^time=[[:digit:]]\+ms (for validate_output_mec)$/d
 /^validate_output_mec: ok$/d
 /^time=[[:digit:]]\+ms (for all tests)$/d
+/^Warning: Test files path ..opt.lmi.gui_test. doesn.t exist\.$/d
 '
 
 # Directory for test logs.

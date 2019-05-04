@@ -33,6 +33,7 @@
 #   include <wx/msw/wrapwin.h>          // HWND etc.
 #endif // defined LMI_MSW
 
+#include <iostream>
 #include <stdexcept>
 
 LMI_FORCE_LINKING_IN_SITU(alert_wx)
@@ -71,6 +72,7 @@ void status_alert(std::string const& s)
 
 void warning_alert(std::string const& s)
 {
+    std::cerr << "Warning: " << s << std::endl;
     wxMessageBox(s, "Warning", wxOK, wxTheApp ? wxTheApp->GetTopWindow() : nullptr);
 }
 
@@ -84,6 +86,8 @@ void warning_alert(std::string const& s)
 
 void hobsons_choice_alert(std::string const& s)
 {
+    std::cerr << "Hobson's choice: " << s << std::endl;
+
     wxWindow* w = nullptr;
     if(wxTheApp)
         {
@@ -120,6 +124,7 @@ void hobsons_choice_alert(std::string const& s)
 
 void alarum_alert(std::string const& s)
 {
+    std::cerr << "Alarum: " << s << std::endl;
     throw std::runtime_error(s);
 }
 
@@ -147,9 +152,8 @@ void alarum_alert(std::string const& s)
 
 void safe_message_alert(char const* message)
 {
-#if !defined LMI_MSW
     safely_show_on_stderr(message);
-#else  // defined LMI_MSW
+#if defined LMI_MSW
     HWND handle = 0;
     if(wxTheApp && wxTheApp->GetTopWindow())
         {

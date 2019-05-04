@@ -68,9 +68,8 @@ inline bool any_function_pointer_has_been_set()
 
 void report_catastrophe(char const* message)
 {
-#if !defined LMI_MSW
     safely_show_on_stderr(message);
-#else  // defined LMI_MSW
+#if defined LMI_MSW
     ::MessageBoxA
         (0
         ,message
