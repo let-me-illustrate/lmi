@@ -163,6 +163,8 @@ std::ostream& LMI_SO warning();
 std::ostream& LMI_SO hobsons_choice();
 std::ostream& LMI_SO alarum();
 
+void LMI_SO safely_show_on_stderr(char const*);
+
 void LMI_SO safely_show_message(char const*);
 void LMI_SO safely_show_message(std::string const&);
 

@@ -23,12 +23,11 @@
 
 #include "alert.hpp"
 
-#if !defined LMI_MSW
-#   include <cstdio>
-#else  // defined LMI_MSW
+#if defined LMI_MSW
 #   include <windows.h>
 #endif // defined LMI_MSW
 
+#include <cstdio>                       // fputc(), fputs()
 #include <ios>
 #include <sstream>                      // stringbuf
 #include <stdexcept>
@@ -70,9 +69,7 @@ inline bool any_function_pointer_has_been_set()
 void report_catastrophe(char const* message)
 {
 #if !defined LMI_MSW
-    std::fputs(message, stderr);
-    std::fputc('\n'   , stderr);
-    std::fflush(stderr);
+    safely_show_on_stderr(message);
 #else  // defined LMI_MSW
     ::MessageBoxA
         (0
@@ -221,6 +218,19 @@ std::ostream& hobsons_choice()
 std::ostream& alarum()
 {
     return alert_stream<alarum_buf>();
+}
+
+void safely_show_on_stderr(char const* message)
+{
+    std::fputs(message, stderr);
+    std::fputc('\n'   , stderr);
+    // Flush explicitly. C99 7.19.3/7 says only that stderr is
+    // "not fully buffered", not that it is 'unbuffered'. See:
+    //   http://article.gmane.org/gmane.comp.gnu.mingw.user/14358
+    //     [2004-12-20T09:07:24Z from Danny Smith]
+    //   http://article.gmane.org/gmane.comp.gnu.mingw.user/15063
+    //     [2005-02-10T17:23:09Z from Greg Chicares]
+    std::fflush(stderr);
 }
 
 void safely_show_message(char const* message)
