@@ -27,6 +27,7 @@
 #include "platform_dependent.hpp"       // access()
 #include "test_tools.hpp"
 
+#include <boost/filesystem/convenience.hpp> // basename()
 #include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -36,6 +37,7 @@
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include <string>
 
 namespace
 {
@@ -136,23 +138,24 @@ void test_serial_file_path()
 
 void test_unique_filepath_with_normal_filenames()
 {
-    fs::path const tmpdir(fs::complete("/tmp"));
+    std::string const tmp = "/tmp/" + fs::basename(__FILE__);
+    fs::path const tmpdir(fs::complete(tmp));
     fs::create_directory(tmpdir);
 
     // These tests would fail if read-only files with the following
     // names already exist.
 
-    char const* p = "/tmp/eraseme.0";
-    char const* q = "/tmp/eraseme.xyzzy";
+    std::string const p = (tmp + "/eraseme.0");
+    std::string const q = (tmp + "/eraseme.xyzzy");
 
     // Don't test the return codes here. These files probably don't
     // exist, in which case C99 7.19.4.1 doesn't clearly prescribe
     // the semantics of std::remove().
-    std::remove(p);
-    std::remove(q);
+    std::remove(p.c_str());
+    std::remove(q.c_str());
 
     write_dummy_file(p);
-    BOOST_TEST_EQUAL(0, access(p, R_OK));
+    BOOST_TEST_EQUAL(0, access(p.c_str(), R_OK));
 
     fs::path path0 = unique_filepath(fs::path(p), ".xyzzy");
     BOOST_TEST_EQUAL(path0.string(), q);
@@ -196,9 +199,9 @@ void test_unique_filepath_with_normal_filenames()
     // Even the timestamp's length is implementation dependent, so a
     // change in implementation may be discovered by a failure here.
 
-    char const* r = "/tmp/eraseme.abc.def";
-    char const* s = "/tmp/eraseme.abc-CCYYMMDDTHHMMSSZ.def";
-//             NOT:  /tmp/eraseme.abc-CCYYMMDDTHHMMSSZ.abc.def
+    std::string const r = (tmp + "/eraseme.abc.def");
+    std::string const s = (tmp + "/eraseme.abc-CCYYMMDDTHHMMSSZ.def");
+//                   NOT:  tmp +  /eraseme.abc-CCYYMMDDTHHMMSSZ.abc.def
 
     fs::path path3 = unique_filepath(fs::path(p), ".abc.def");
     BOOST_TEST_EQUAL(path3.string(), r);
@@ -218,8 +221,8 @@ void test_unique_filepath_with_normal_filenames()
     BOOST_TEST(0 == std::remove(path3.string().c_str()));
     BOOST_TEST(0 == std::remove(path2.string().c_str()));
 #endif // defined LMI_MSW
-    BOOST_TEST(0 == std::remove(q));
-    BOOST_TEST(0 == std::remove(p));
+    BOOST_TEST(0 == std::remove(q.c_str()));
+    BOOST_TEST(0 == std::remove(p.c_str()));
 }
 
 void test_unique_filepath_with_ludicrous_filenames()

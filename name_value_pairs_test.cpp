@@ -26,18 +26,21 @@
 #include "miscellany.hpp"
 #include "test_tools.hpp"
 
+#include <boost/filesystem/convenience.hpp> // basename()
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
 #include <cstdio>                       // remove()
 #include <fstream>
+#include <string>
 
 int test_main(int, char*[])
 {
-    fs::path const tmpdir(fs::complete("/tmp"));
+    std::string const tmp = "/tmp/" + fs::basename(__FILE__);
+    fs::path const tmpdir(fs::complete(tmp));
     fs::create_directory(tmpdir);
 
-    std::string filename0("/tmp/eraseme");
+    std::string filename0(tmp + "/eraseme");
 
     {
     std::ofstream os(filename0.c_str(), ios_out_trunc_binary());
@@ -98,7 +101,7 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL("2.718" , nv_pairs_0.string_numeric_value("v"));
     BOOST_TEST_EQUAL("0"     , nv_pairs_0.string_numeric_value("s"));
 
-    std::string filename1("/tmp/nonexistent_name_value_pairs_test_file");
+    std::string filename1(tmp + "/nonexistent_name_value_pairs_test_file");
     name_value_pairs nv_pairs_1(filename1);
     std::map<std::string, std::string> m1 = nv_pairs_1.map();
     BOOST_TEST_EQUAL(0, m1.size());
