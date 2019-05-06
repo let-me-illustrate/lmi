@@ -122,6 +122,9 @@ fi
 
 java -version
 
+# Workaround issue with new i686-w64-mingw32-pkg-config
+export PKG_CONFIG=/usr/bin/pkg-config
+
 if [ "/opt/lmi/src/lmi" = "$PWD" ]
 then
     inhibit_git_clone=1
@@ -232,6 +235,7 @@ done
 # printf '2450449 2472011'             >expiry
 # printf '%s\n' "$(md5sum expiry)"     >validated.md5
 # [wine] /opt/lmi/bin/generate_passkey >passkey
+mkdir --parents /opt/lmi/data
 printf '2450449 2472011'                            >/opt/lmi/data/expiry
 printf '5fc68a795c9c60da1b32be989efc299a  expiry\n' >/opt/lmi/data/validated.md5
 printf '391daa5cbc54e118c4737446bcb84eea'           >/opt/lmi/data/passkey
