@@ -89,7 +89,7 @@ case "$build_type" in
 esac
 
 # Distinguish wx dll by host type, compiler version, and wx SHA1.
-gcc_version=$(${mingw_bin_dir}${LMI_TRIPLET}-gcc -dumpversion|tr -d '\r')
+gcc_version=$(${mingw_bin_dir}${LMI_TRIPLET}-$LMI_COMPILER -dumpversion|tr -d '\r')
 vendor=${LMI_TRIPLET}-$gcc_version-$wx_commit_sha
 
 # Configuration reference:
@@ -135,7 +135,7 @@ config_options="
 
 [ -n "$mingw_bin_dir" ] && export PATH="$mingw_bin_dir:${PATH}"
 
-build_dir="$prefix"/../wx-ad_hoc/lmi-gcc-$gcc_version
+build_dir="$prefix"/../wx-ad_hoc/lmi-$LMI_COMPILER-$gcc_version
 
 if [ "$wx_skip_clean" != 1 ]
 then
