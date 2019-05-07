@@ -105,7 +105,7 @@ ad_hoc_dir_exists = \
 
 .PHONY: all
 all: $(file_list)
-	$(CP) --archive $(ad_hoc_dir)/mingw32 $(prefix)
+	$(CP) --archive $(ad_hoc_dir)/mingw32/* $(prefix)
 	$(RM) --force --recursive $(ad_hoc_dir)
 
 $(file_list): initial_setup
