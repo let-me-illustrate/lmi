@@ -84,7 +84,6 @@ compiler_sysroot := /opt/lmi/mingw/$(LMI_TRIPLET)/lib
 compiler_runtime_files := \
   $(wildcard $(compiler_sysroot)/libgcc*.dll) \
   $(wildcard $(compiler_sysroot)/libstdc++*.dll) \
-  $(wildcard $(compiler_sysroot)/libwinpthread-1.dll) \
 
 ################################################################################
 
