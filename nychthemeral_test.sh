@@ -197,9 +197,9 @@ cp /opt/lmi/src/lmi/sample.cns .
 
 printf '\n# test all valid emission types\n\n'
 
-"$PERFORM" /opt/lmi/bin/lmi_cli_shared --file=/tmp/lmi/tmp/sample.ill --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
+$PERFORM /opt/lmi/bin/lmi_cli_shared --file=/tmp/lmi/tmp/sample.ill --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
 
-"$PERFORM" /opt/lmi/bin/lmi_cli_shared --file=/tmp/lmi/tmp/sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
+$PERFORM /opt/lmi/bin/lmi_cli_shared --file=/tmp/lmi/tmp/sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
 
 printf '\n# schema tests\n\n'
 /opt/lmi/src/lmi/test_schemata.sh 2>&1 \
