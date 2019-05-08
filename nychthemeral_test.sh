@@ -135,7 +135,12 @@ nychthemeral_clutter='
 '
 
 # Directory for test logs.
-log_dir=/tmp/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/logs
+#
+# It seems redundant to construct yet another $prefix and $exec_prefix here;
+# perhaps that should be done OAOO in a script that selects a toolchain.
+prefix=/opt/lmi
+exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
+log_dir="$exec_prefix"/logs
 mkdir --parents "$log_dir"
 
 {
@@ -186,9 +191,9 @@ java -jar /opt/lmi/third_party/rng/jing.jar -c xrc.rnc ./*.xrc 2>&1 \
 
 # Run the following tests in a throwaway directory so that the files
 # they create can be cleaned up easily.
-cd /tmp
-mkdir --parents /tmp/lmi/tmp
-cd /tmp/lmi/tmp
+throwaway_dir="$log_dir"/tmp
+mkdir --parents "$throwaway_dir"
+cd "$throwaway_dir"
 
 # Copy these files hither because the emission tests write some
 # output files to the input file's directory.
@@ -197,9 +202,9 @@ cp /opt/lmi/src/lmi/sample.cns .
 
 printf '\n# test all valid emission types\n\n'
 
-$PERFORM /opt/lmi/bin/lmi_cli_shared --file=/tmp/lmi/tmp/sample.ill --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
+$PERFORM /opt/lmi/bin/lmi_cli_shared --file="$throwaway_dir"/sample.ill --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
 
-$PERFORM /opt/lmi/bin/lmi_cli_shared --file=/tmp/lmi/tmp/sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
+$PERFORM /opt/lmi/bin/lmi_cli_shared --file="$throwaway_dir"/sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
 
 printf '\n# schema tests\n\n'
 /opt/lmi/src/lmi/test_schemata.sh 2>&1 \
@@ -207,7 +212,7 @@ printf '\n# schema tests\n\n'
 
 # Clean up stray output. (The zsh '(N)' glob qualifier turns on
 # null_glob for a single expansion.)
-for z in /tmp/lmi/tmp/*(N); do rm "$z"; done
+for z in "$throwaway_dir"/*(N); do rm "$z"; done
 
 # The automated GUI test simulates keyboard and mouse actions, so
 # no such actions must be performed manually while it is running.
