@@ -170,7 +170,7 @@ else
 fi
 
 printf '\n# unit tests\n\n'
-make "$coefficiency" unit_tests 2>&1 \
+make "$coefficiency" --output-sync=recurse unit_tests 2>&1 \
   | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests
 
 printf '\n# build with shared-object attributes\n\n'
@@ -182,7 +182,7 @@ make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=safest
   | tee "$log_dir"/cgi_cli_safestdlib | sed -e "$build_clutter" -e "$cli_cgi_clutter"
 
 printf '\n# unit tests in libstdc++ debug mode\n\n'
-make "$coefficiency" unit_tests build_type=safestdlib 2>&1 \
+make "$coefficiency" --output-sync=recurse unit_tests build_type=safestdlib 2>&1 \
   | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests_safestdlib
 
 printf '\n# xrc tests\n\n'
