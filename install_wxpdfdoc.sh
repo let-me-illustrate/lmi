@@ -49,7 +49,7 @@ LMI_TRIPLET=${LMI_TRIPLET:-"i686-w64-mingw32"}
 mingw_dir=/opt/lmi/mingw
 
 prefix=/opt/lmi/local
-exec_prefix="$prefix"/"${LMI_COMPILER}_${LMI_TRIPLET}"
+exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
 
 repo_name="wxpdfdoc"
 
@@ -105,13 +105,13 @@ config_options="
 cd "$proxy_wxpdfdoc_dir"
 autoreconf --verbose
 
-build_dir="$exec_prefix"/wxpdfdoc-ad_hoc/wxpdfdoc-$wxpdfdoc_commit_sha
+build_dir="$exec_prefix/wxpdfdoc-ad_hoc/wxpdfdoc-$wxpdfdoc_commit_sha"
 
 if [ "$wxpdfdoc_skip_clean" != 1 ]
 then
     rm --force --recursive "$build_dir"
-    rm --force --recursive $exec_prefix/lib/*wxcode*pdfdoc*
-    rm --force --recursive $exec_prefix/src/pdf*.inc
+    rm --force --recursive "$exec_prefix/lib/*wxcode*pdfdoc*"
+    rm --force --recursive "$exec_prefix/src/pdf*.inc"
 fi
 
 mkdir --parents "$build_dir"

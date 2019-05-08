@@ -49,7 +49,7 @@ LMI_TRIPLET=${LMI_TRIPLET:-"i686-w64-mingw32"}
 mingw_dir=/opt/lmi/mingw
 
 prefix=/opt/lmi/local
-exec_prefix="$prefix"/"${LMI_COMPILER}_${LMI_TRIPLET}"
+exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
 
 repo_name="wxWidgets"
 
@@ -89,7 +89,7 @@ case "$build_type" in
 esac
 
 # Distinguish wx dll by host type, compiler version, and wx SHA1.
-gcc_version=$(${mingw_bin_dir}${LMI_TRIPLET}-$LMI_COMPILER -dumpversion|tr -d '\r')
+gcc_version=$("${mingw_bin_dir}${LMI_TRIPLET}-$LMI_COMPILER" -dumpversion|tr -d '\r')
 vendor=${LMI_TRIPLET}-$gcc_version-$wx_commit_sha
 
 # Configuration reference:
@@ -135,17 +135,17 @@ config_options="
 
 [ -n "$mingw_bin_dir" ] && export PATH="$mingw_bin_dir:${PATH}"
 
-build_dir="$exec_prefix"/wx-ad_hoc/lmi-$LMI_COMPILER-$gcc_version
+build_dir="$exec_prefix/wx-ad_hoc/lmi-$LMI_COMPILER-$gcc_version"
 
 if [ "$wx_skip_clean" != 1 ]
 then
     rm --force --recursive "$build_dir"
     # This incidentally removes wxPdfDoc, but it's a good idea to rebuild that
     # whenever wx is upgraded anyway.
-    rm --force --recursive $exec_prefix/bin/wx*
-    rm --force --recursive $exec_prefix/include/wx*
-    rm --force --recursive $exec_prefix/lib/wx*
-    rm --force --recursive $exec_prefix/lib/libwx*
+    rm --force --recursive "$exec_prefix/bin/wx*"
+    rm --force --recursive "$exec_prefix/include/wx*"
+    rm --force --recursive "$exec_prefix/lib/wx*"
+    rm --force --recursive "$exec_prefix/lib/libwx*"
 fi
 
 mkdir --parents "$build_dir"
