@@ -139,7 +139,12 @@ gui_test_clutter='
 '
 
 # Directory for test logs.
-log_dir=/tmp/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/logs
+#
+# It seems redundant to construct yet another $prefix and $exec_prefix here;
+# perhaps that should be done OAOO in a script that selects a toolchain.
+prefix=/opt/lmi
+exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
+log_dir="$exec_prefix"/logs
 mkdir --parents "$log_dir"
 
 cd /opt/lmi/src/lmi
