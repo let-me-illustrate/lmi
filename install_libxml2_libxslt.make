@@ -23,16 +23,14 @@
 
 # Archives and their md5sums
 
-xz_version      := xz-5.2.3
 libxml2_version := libxml2-2.9.4
 libxslt_version := libxslt-1.1.29
 
-xz-5.2.3.tar.gz-md5       := ef68674fb47a8b8e741b34e429d86e9d
 libxml2-2.9.4.tar.gz-md5  := ae249165c173b1ff386ee8ad676815f5
 libxslt-1.1.29.tar.gz-md5 := a129d3c44c022de3b9dcf6d6f288d72e
 
 # Libraries are ordered by dependency, rather than alphabetically.
-libraries := $(xz_version) $(libxml2_version) $(libxslt_version)
+libraries := $(libxml2_version) $(libxslt_version)
 
 source_archives := $(addsuffix .tar.gz, $(libraries))
 
@@ -42,9 +40,6 @@ source_archives := $(addsuffix .tar.gz, $(libraries))
 
 host          := ftp://xmlsoft.org
 host_path     := libxml2
-
-$(xz_version).tar.gz: host      := https://sourceforge.net
-$(xz_version).tar.gz: host_path := projects/lzmautils/files
 
 mingw_dir     := /opt/lmi/mingw
 
@@ -67,20 +62,6 @@ lmi_build_type := $(shell /usr/share/libtool/build-aux/config.guess)
 ifeq (cygwin,$(findstring cygwin,$(lmi_build_type)))
   mingw_bin_dir := $(mingw_dir)/bin/
 endif
-
-xz_cflags := \
-  -Wno-format \
-  -Wno-format-extra-args \
-  -Wno-implicit-fallthrough \
-  -Wno-maybe-uninitialized \
-
-$(xz_version)_options := \
-  --prefix=$(prefix) \
-  --exec-prefix=$(exec_prefix) \
-  --build=`$(build_dir)/$(xz_version)/build-aux/config.guess` \
-  --host=$(LMI_TRIPLET) \
-  --disable-dependency-tracking \
-  CFLAGS="-g -O2 $(xz_cflags)" \
 
 # For 'host' and 'build' configure options, see:
 #   http://cygwin.com/ml/cygwin/2002-01/msg00837.html
@@ -170,7 +151,6 @@ all: clobber_exec_prefix_only $(source_archives) $(libraries)
 
 # Order-only prerequisites.
 
-$(libxml2_version):| $(xz_version)
 $(libxslt_version):| $(libxml2_version)
 $(libraries)      :| $(source_archives)
 $(source_archives):| initial_setup
@@ -229,20 +209,13 @@ $(libraries):
 
 .PHONY: clobber_exec_prefix_only
 clobber_exec_prefix_only:
-	-$(RM) --force --recursive $(exec_prefix)/bin/liblzma*
-	-$(RM) --force --recursive $(exec_prefix)/bin/lz*
-	-$(RM) --force --recursive $(exec_prefix)/bin/xz*
-	-$(RM) --force --recursive $(exec_prefix)/bin/unlz*
-	-$(RM) --force --recursive $(exec_prefix)/bin/unxz*
 	-$(RM) --force --recursive $(exec_prefix)/bin/*xml2*
 	-$(RM) --force --recursive $(exec_prefix)/bin/*xslt*
 	-$(RM) --force --recursive $(exec_prefix)/bin/xmllint*
 	-$(RM) --force --recursive $(exec_prefix)/bin/xmlcatalog*
-	-$(RM) --force --recursive $(exec_prefix)/include/lzma*
 	-$(RM) --force --recursive $(exec_prefix)/include/libxml2
 	-$(RM) --force --recursive $(exec_prefix)/include/libxslt
 	-$(RM) --force --recursive $(exec_prefix)/include/libexslt
-	-$(RM) --force --recursive $(exec_prefix)/lib/liblzma*
 	-$(RM) --force --recursive $(exec_prefix)/lib/*xml2*
 	-$(RM) --force --recursive $(exec_prefix)/lib/*xslt*
 	-$(RM) --force --recursive $(exec_prefix)/lib/cmake
