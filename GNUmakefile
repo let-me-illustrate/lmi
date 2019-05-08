@@ -121,9 +121,9 @@ srcdir          := $(CURDIR)
 
 # These directories are outside the scope of the GNU Coding Standards.
 # Therefore, their names may contain '_' for distinction and clarity.
-localbindir     := $(exec_prefix)/local/bin
-locallibdir     := $(exec_prefix)/local/lib
-localincludedir := $(exec_prefix)/local/include
+localbindir     := $(prefix)/local/$(LMI_COMPILER)_$(LMI_TRIPLET)/bin
+locallibdir     := $(prefix)/local/$(LMI_COMPILER)_$(LMI_TRIPLET)/lib
+localincludedir := $(prefix)/local/include
 winebindir      := $(prefix)/third_party/bin
 test_dir        := $(prefix)/test
 touchstone_dir  := $(prefix)/touchstone
@@ -367,6 +367,7 @@ raze: source_clean
 
 .PHONY: eviscerate
 eviscerate: source_clean
+	-$(RM) --force --recursive $(prefix)/local
 	-$(RM) --force --recursive $(prefix)/third_party
 	-$(RM) --force --recursive $(prefix)/gcc_i686-w64-mingw32
 	-$(RM) --force --recursive $(prefix)/gcc_x86_64-w64-mingw32

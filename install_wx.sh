@@ -48,8 +48,8 @@ LMI_TRIPLET=${LMI_TRIPLET:-"i686-w64-mingw32"}
 
 mingw_dir=/opt/lmi/mingw
 
-prefix=/opt/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/local
-exec_prefix="$prefix"
+prefix=/opt/lmi/local
+exec_prefix="$prefix"/"${LMI_COMPILER}_${LMI_TRIPLET}"
 
 repo_name="wxWidgets"
 
@@ -135,7 +135,7 @@ config_options="
 
 [ -n "$mingw_bin_dir" ] && export PATH="$mingw_bin_dir:${PATH}"
 
-build_dir="$prefix"/../wx-ad_hoc/lmi-$LMI_COMPILER-$gcc_version
+build_dir="$exec_prefix"/wx-ad_hoc/lmi-$LMI_COMPILER-$gcc_version
 
 if [ "$wx_skip_clean" != 1 ]
 then

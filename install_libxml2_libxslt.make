@@ -51,17 +51,12 @@ mingw_dir     := /opt/lmi/mingw
 LMI_COMPILER  ?= gcc
 LMI_TRIPLET   ?= i686-w64-mingw32
 
-# It would be cleaner to use the "LMI_*" components in $exec_prefix
-# (arch-dependent libraries) rather than in $prefix (arch-independent
-# headers, e.g.). However, libxml2's '--with-lzma' option assumes that
-# $prefix and $exec_prefix are the same directory--see:
-#   https://lists.nongnu.org/archive/html/lmi/2019-04/msg00018.html
-prefix        := /opt/lmi/$(LMI_COMPILER)_$(LMI_TRIPLET)/local
-exec_prefix   := $(prefix)
+prefix        := /opt/lmi/local
+exec_prefix   := $(prefix)/$(LMI_COMPILER)_$(LMI_TRIPLET)
 
 cache_dir     := /cache_for_lmi/downloads
 
-build_dir     := $(prefix)/../xml-ad_hoc
+build_dir     := $(exec_prefix)/xml-ad_hoc
 
 # Variables that normally should be left alone #################################
 
@@ -135,7 +130,7 @@ $(libxml2_version)_options := \
   --build=`$(build_dir)/$(libxml2_version)/config.guess` \
   --host=$(LMI_TRIPLET) \
   $(xmlsoft_common_options) \
-  --with-lzma=$(prefix) \
+  --without-lzma \
   --with-schemas \
   --without-iconv \
   --without-modules \
@@ -220,7 +215,7 @@ $(libraries):
 	-[ -e $@-lmi.patch ] && $(PATCH) --directory=$(build_dir) --strip=1 <$@-lmi.patch
 	cd $(build_dir)/$@ \
 	  && export PATH="$(mingw_bin_dir):${PATH}" \
-	  && PKG_CONFIG_PATH="$(prefix)/lib/pkgconfig" \
+	  && PKG_CONFIG_PATH="$(exec_prefix)/lib/pkgconfig" \
 	    $($@_overrides) ./configure $($@_options) \
 	  && $(MAKE) \
 	  && $(MAKE) install \
