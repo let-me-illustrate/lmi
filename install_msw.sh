@@ -37,6 +37,13 @@ echo "Started: $stamp0"
 # This should work with a rather minimal path.
 
 minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
+
+case "$lmi_build_type" in
+    (*-*-cygwin*)
+        minimal_path="$minimal_path:/cygdrive/c/Windows/system32"
+        ;;
+esac
+
 export PATH="$minimal_path"
 
 # '--jobs=4': big benefit for multicore, no penalty for single core
