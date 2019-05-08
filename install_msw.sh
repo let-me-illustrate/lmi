@@ -227,7 +227,9 @@ do
     fi
 done
 
-# To regenerate authentication files:
+mkdir --parents /opt/lmi/data
+
+# To regenerate authentication files for production distributions:
 # cd /opt/lmi/data
 # printf '2450449 2472011'             >expiry
 # printf '%s\n' "$(md5sum expiry)"     >validated.md5
