@@ -40,7 +40,7 @@ minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
 
 case "$lmi_build_type" in
     (*-*-cygwin*)
-        minimal_path="$minimal_path:/cygdrive/c/Windows/system32"
+        minimal_path="$minimal_path:$(cygpath --sysdir)"
         ;;
 esac
 
