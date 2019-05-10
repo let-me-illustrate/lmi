@@ -411,6 +411,7 @@ liblmi_la_SOURCES = \
     ihs_irc7702a.cpp \
     ihs_mortal.cpp \
     ihs_server7702.cpp \
+    irc7702_tables.cpp \
     lmi.cpp \
     md5.cpp \
     mec_input.cpp \
@@ -632,6 +633,7 @@ test_commutation_functions_SOURCES = \
   commutation_functions.cpp \
   commutation_functions_test.cpp \
   cso_table.cpp \
+  irc7702_tables.cpp \
   timer.cpp
 test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -1241,6 +1243,7 @@ noinst_HEADERS = \
     input_sequence_parser.hpp \
     interest_rates.hpp \
     interpolate_string.hpp \
+    irc7702_tables.hpp \
     istream_to_string.hpp \
     ledger.hpp \
     ledger_base.hpp \

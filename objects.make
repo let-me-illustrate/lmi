@@ -295,6 +295,7 @@ lmi_common_objects := \
   ihs_irc7702a.o \
   ihs_mortal.o \
   ihs_server7702.o \
+  irc7702_tables.o \
   lmi.o \
   md5.o \
   mec_input.o \
@@ -564,6 +565,7 @@ commutation_functions_test$(EXEEXT): \
   commutation_functions.o \
   commutation_functions_test.o \
   cso_table.o \
+  irc7702_tables.o \
   timer.o \
 
 configurable_settings_test$(EXEEXT): \
