@@ -964,10 +964,7 @@ std::vector<double> cso_table
         :                          throw "invalid cso omega"
         );
 
-    if(mce_unismoke != smoking)
-        {
-        LMI_ASSERT(each_equal(p, p + sns_age, 0.0));
-        }
+    LMI_ASSERT(each_equal(p, p + sns_age, 0.0));
 
     std::vector<double> v(p + sns_age, p + omega);
 
