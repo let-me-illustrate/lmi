@@ -76,7 +76,7 @@ UNUSED_compiler_impersonation_cppflags := \
   -D LMI_IGNORE_PCH \
   -D __COMO__ \
 
-gcc3_dir     := /MinGW_
+gcc3_dir     := /opt/lmi/mingw
 gcc3_bin_dir := $(gcc3_dir)/bin
 
 # Comeau C++ for msw requires both its own bin/ directory and the

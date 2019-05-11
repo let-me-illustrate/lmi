@@ -53,7 +53,7 @@ compiler_impersonation_cppflags := \
   -D WIN32_LEAN_AND_MEAN \
   -I $(shadow_header_directory) \
 
-gcc3_dir     := /MinGW_
+gcc3_dir     := /opt/lmi/mingw
 gcc3_bin_dir := $(gcc3_dir)/bin
 
 # Casual workarounds for borland C++ version 5.5.1 . The vendor calls

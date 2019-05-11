@@ -168,12 +168,6 @@ then
     # It seems quite unlikely that anyone who's building lmi would have
     # any other need for mounts with the names used here.
 
-    restore_MinGW_mount=$(mount --mount-entries | grep '/MinGW_ ')
-    [ -z "$restore_MinGW_mount" ] \
-      || printf '%s\n' "$restore_MinGW_mount" | grep --silent 'C:/opt/lmi/MinGW-8_1_0' \
-      || printf 'Replacing former MinGW_ mount:\n %s\n' "$restore_MinGW_mount" >/dev/tty
-    mount --force "C:/opt/lmi/MinGW-8_1_0" "/MinGW_"
-
     restore_cache_mount=$(mount --mount-entries | grep '/cache_for_lmi ')
     [ -z "$restore_cache_mount" ] \
       || printf '%s\n' "$restore_cache_mount" | grep --silent 'C:/cache_for_lmi' \
@@ -195,7 +189,7 @@ find /cache_for_lmi/downloads -type f | xargs md5sum
 if [ "Cygwin" = "$platform" ]
 then
     # For Cygwin, install and use this msw-native compiler.
-    rm --force --recursive /MinGW_
+    rm --force --recursive /opt/lmi/mingw
     make $coefficiency --output-sync=recurse -f install_mingw.make
 fi
 
