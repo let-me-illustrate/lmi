@@ -941,6 +941,8 @@ std::vector<double> cso_table
     ,oenum_alb_or_anb alb_or_anb
     ,mcenum_gender    gender
     ,mcenum_smoking   smoking
+    ,int              min_age
+    ,int              max_age
     )
 {
     bool const is_anb = alb_or_anb != oe_age_last_birthday;
@@ -965,8 +967,13 @@ std::vector<double> cso_table
         );
 
     LMI_ASSERT(each_equal(p, p + sns_age, 0.0));
+    LMI_ASSERT(0 == std::count(p + sns_age, p + omega, 0.0));
+    LMI_ASSERT(1.0 == p[omega - 1]);
 
-    std::vector<double> v(p + sns_age, p + omega);
+    if(-1 == min_age) min_age = sns_age;
+    if(-1 == max_age) max_age = omega;
+
+    std::vector<double> v(p + min_age, p + max_age);
 
     if
         (oe_heterodox    == autopisty
@@ -980,19 +987,17 @@ std::vector<double> cso_table
         // was also ratified by NAIC).
         if(is_anb)
             {
-            LMI_ASSERT(0.03831 == v[56]);
-            v[56] =    0.03891;
+            LMI_ASSERT(0.03831 == v[71 - min_age]);
+            v[71 - min_age] =    0.03891;
             }
         else
             {
-            LMI_ASSERT(0.03644 == v[55]);
-            v[55] =    0.03673;
-            LMI_ASSERT(0.04039 == v[56]);
-            v[56] =    0.04070;
+            LMI_ASSERT(0.03644 == v[71 - min_age - 1]);
+            v[71 - min_age - 1] =    0.03673;
+            LMI_ASSERT(0.04039 == v[71 - min_age]);
+            v[71 - min_age] =    0.04070;
             }
         }
 
-    LMI_ASSERT(0 == std::count(v.begin(), v.end(), 0.0));
-    LMI_ASSERT(1.0 == v.back());
     return v;
 }
