@@ -25,7 +25,7 @@ echo "  Test schemata..."
 
 # Directory where this script resides.
 
-srcdir=$(dirname $(readlink --canonicalize "$0"))
+srcdir=$(dirname "$(readlink --canonicalize "$0")")
 
 # Directory where 'jing.jar' and 'trang.jar' reside, along with their
 # support files--extracted from:
