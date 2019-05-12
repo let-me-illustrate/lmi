@@ -310,7 +310,7 @@ fi
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Finished: $stamp1"
 
-seconds=$(expr "$(date '+%s' -d "$stamp1")" - "$(date '+%s' -d "$stamp0")")
+seconds=$(($(date '+%s' -d "$stamp1") - $(date '+%s' -d "$stamp0")))
 elapsed=$(date -u -d @"$seconds" +'%H:%M:%S')
 echo "Elapsed: $elapsed"
 
