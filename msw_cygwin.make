@@ -54,7 +54,8 @@ system_root := /cygdrive/c
 # Full path to gcc binaries, slash-terminated if nonempty. Setting it
 # to an empty string finds gcc on $PATH instead.
 
-gcc_bin_dir := /opt/lmi/mingw/bin/
+mingw_dir   := /opt/lmi/mingw
+gcc_bin_dir := $(mingw_dir)/bin/
 
 # Oddly, MinGW-w64 provides prefixed versions of compilers, e.g.:
 #   i686-w64-mingw32-gcc.exe
@@ -79,7 +80,7 @@ RC      := $(gcc_bin_dir)$(host_hyphen)windres
 #   https://cygwin.com/ml/cygwin/2010-09/msg00553.html
 # Of course manipulating an lmi user's $PATH is out of the question.
 
-compiler_sysroot := /opt/lmi/mingw/$(LMI_TRIPLET)/lib
+compiler_sysroot := $(mingw_dir)/$(LMI_TRIPLET)/lib
 
 compiler_runtime_files := \
   $(wildcard $(compiler_sysroot)/libgcc*.dll) \

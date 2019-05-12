@@ -44,8 +44,10 @@ cp --preserve "$srcdir"/sort_cell_subelements.xsl .
 
 echo "  Test cell-subelement sorting."
 
-PATH="/opt/lmi/mingw/bin:$PATH" xsltproc sort_cell_subelements.xsl sample.cns | tr --delete '\r' > sorted.cns
-PATH="/opt/lmi/mingw/bin:$PATH" xsltproc sort_cell_subelements.xsl sample.ill | tr --delete '\r' > sorted.ill
+mingw_dir=/opt/lmi/mingw
+mingw_bin_dir="$mingw_dir"/bin
+PATH="$mingw_bin_dir:$PATH" xsltproc sort_cell_subelements.xsl sample.cns | tr --delete '\r' > sorted.cns
+PATH="$mingw_bin_dir:$PATH" xsltproc sort_cell_subelements.xsl sample.ill | tr --delete '\r' > sorted.ill
 diff --unified=0 sample.cns sorted.cns
 diff --unified=0 sample.ill sorted.ill
 

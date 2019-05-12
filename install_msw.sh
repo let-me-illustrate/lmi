@@ -189,7 +189,8 @@ find /cache_for_lmi/downloads -type f | xargs md5sum
 if [ "Cygwin" = "$platform" ]
 then
     # For Cygwin, install and use this msw-native compiler.
-    rm --force --recursive /opt/lmi/mingw
+    mingw_dir=/opt/lmi/mingw
+    [ -d "$mingw_dir" ] && rm --force --recursive "$mingw_dir"
     make $coefficiency --output-sync=recurse -f install_mingw.make
 fi
 
