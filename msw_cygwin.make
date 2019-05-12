@@ -54,7 +54,7 @@ system_root := /cygdrive/c
 # Full path to gcc binaries, slash-terminated if nonempty. Setting it
 # to an empty string finds gcc on $PATH instead.
 
-mingw_dir   := /opt/lmi/mingw
+mingw_dir   := /opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/gcc_msw
 gcc_bin_dir := $(mingw_dir)/bin/
 
 # Oddly, MinGW-w64 provides prefixed versions of compilers, e.g.:

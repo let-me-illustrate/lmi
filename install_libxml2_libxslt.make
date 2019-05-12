@@ -41,7 +41,7 @@ source_archives := $(addsuffix .tar.gz, $(libraries))
 host          := ftp://xmlsoft.org
 host_path     := libxml2
 
-mingw_dir     := /opt/lmi/mingw
+mingw_dir     := /opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/gcc_msw
 
 LMI_COMPILER  ?= gcc
 LMI_TRIPLET   ?= i686-w64-mingw32

@@ -42,7 +42,7 @@ file_list   = $($(version))
 #   https://sourceforge.net/p/mingw/mailman/message/15864075/
 #     [2005-01-17T18:15:26Z from Aaron W. LaFramboise]
 
-mingw_dir  := /opt/lmi/mingw
+mingw_dir  := /opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/gcc_msw
 prefix     := $(mingw_dir)
 
 cache_dir  := /cache_for_lmi/downloads

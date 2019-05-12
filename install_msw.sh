@@ -200,7 +200,7 @@ do
   if [ "Cygwin" = "$platform" ]
   then
     # For Cygwin, install and use this msw-native compiler.
-    mingw_dir=/opt/lmi/mingw
+    mingw_dir=/opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/gcc_msw
     [ -d "$mingw_dir" ] && rm --force --recursive "$mingw_dir"
     make $coefficiency --output-sync=recurse -f install_mingw.make
   fi
