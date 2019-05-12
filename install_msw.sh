@@ -186,14 +186,6 @@ mount
 md5sum "$0"
 find /cache_for_lmi/downloads -type f | xargs md5sum
 
-if [ "Cygwin" = "$platform" ]
-then
-    # For Cygwin, install and use this msw-native compiler.
-    mingw_dir=/opt/lmi/mingw
-    [ -d "$mingw_dir" ] && rm --force --recursive "$mingw_dir"
-    make $coefficiency --output-sync=recurse -f install_mingw.make
-fi
-
 make $coefficiency --output-sync=recurse -f install_miscellanea.make clobber
 make $coefficiency --output-sync=recurse -f install_miscellanea.make
 
@@ -205,6 +197,14 @@ export LMI_TRIPLET
 #for LMI_TRIPLET in x86_64-w64-mingw32 i686-w64-mingw32 ;
 for LMI_TRIPLET in i686-w64-mingw32 ;
 do
+  if [ "Cygwin" = "$platform" ]
+  then
+    # For Cygwin, install and use this msw-native compiler.
+    mingw_dir=/opt/lmi/mingw
+    [ -d "$mingw_dir" ] && rm --force --recursive "$mingw_dir"
+    make $coefficiency --output-sync=recurse -f install_mingw.make
+  fi
+
     make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
 
     ./install_wx.sh
