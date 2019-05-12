@@ -151,6 +151,8 @@ fi
 mkdir --parents "$build_dir"
 
 cd "$build_dir"
+# 'configure' options must not be double-quoted
+# shellcheck disable=SC2086
 "$proxy_wx_dir"/configure $config_options
 $MAKE
 $MAKE install
