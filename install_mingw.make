@@ -37,9 +37,9 @@ file_list   = $($(version))
 #   http://gcc.gnu.org/ml/gcc-patches/2004-06/msg00703.html
 # when multiple versions of MinGW gcc are installed, as discussed on
 # the mingw-users mailing list in these messages:
-#   http://article.gmane.org/gmane.comp.gnu.mingw.user/14747
+#   https://sourceforge.net/p/mingw/mailman/message/15864073/
 #     [2005-01-17T16:30:44Z from Greg Chicares]
-#   http://article.gmane.org/gmane.comp.gnu.mingw.user/14748
+#   https://sourceforge.net/p/mingw/mailman/message/15864075/
 #     [2005-01-17T18:15:26Z from Aaron W. LaFramboise]
 
 prefix     := /opt/lmi/mingw
