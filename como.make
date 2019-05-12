@@ -76,7 +76,9 @@ UNUSED_compiler_impersonation_cppflags := \
   -D LMI_IGNORE_PCH \
   -D __COMO__ \
 
-gcc3_dir     := /opt/lmi/mingw
+# This makefile because unusable long ago, so this dependency has been
+# renamed to avoid pointless maintenance updates.
+gcc3_dir     := /opt/lmi/no_longer_usable
 gcc3_bin_dir := $(gcc3_dir)/bin
 
 # Comeau C++ for msw requires both its own bin/ directory and the
