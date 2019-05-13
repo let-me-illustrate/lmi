@@ -34,6 +34,8 @@ set -vx
 stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
 
+lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+
 # This should work with a rather minimal path.
 
 minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
@@ -54,8 +56,6 @@ if [ -z "$coefficiency" ]
 then
     export coefficiency='--jobs=4'
 fi
-
-lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
 
 case "$lmi_build_type" in
     (*-*-cygwin*)
