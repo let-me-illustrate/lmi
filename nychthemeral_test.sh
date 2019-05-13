@@ -129,8 +129,9 @@ nychthemeral_clutter='
 /^  *[1-9][0-9]* source lines/d
 /^  *[1-9][0-9]* marked defects/d
 /^# xrc tests/d
-/^# schema tests/d
 /^# test all valid emission types/d
+/^# schema tests/d
+/^# test mst --> xst conversion/d
 /^$/d
 '
 
@@ -209,6 +210,35 @@ $PERFORM /opt/lmi/bin/lmi_cli_shared --file="$throwaway_dir"/sample.cns --accept
 printf '\n# schema tests\n\n'
 /opt/lmi/src/lmi/test_schemata.sh 2>&1 \
   | tee "$log_dir"/schemata | sed -e "$schemata_clutter"
+
+printf '\n# test mst --> xst conversion\n\n'
+
+# All unique characters found in '*.mst' as of 2019-05-13.
+cat >eraseme.mst <<'EOF'
+ !"#$%&'()*+,-./
+0123456789
+:;<=>?@
+ABCDEFGHIJKLMNOPRSTUVWXYZ
+[]^_
+abcdefghijklmnopqrstuvwxyz
+{}
+EOF
+
+printf '%b' "\
+\\0337\\0336\\0335\\0334\\0333\\0332\\0331\\0330\\0327\\0326\
+\\0325\\0324\\0323\\0322\\0321\\0320\\0365\\0317\\0316\\0315\
+\\0314\\0313\\0312\\0311\\0310\\0307\\0306\\0365\\0305\\0304\
+\\0303\\0302\\0301\\0300\\0277\\0365\\0276\\0275\\0274\\0273\
+\\0272\\0271\\0270\\0267\\0266\\0265\\0264\\0263\\0262\\0261\
+\\0260\\0257\\0255\\0254\\0253\\0252\\0251\\0250\\0247\\0246\
+\\0245\\0365\\0244\\0242\\0241\\0240\\0365\\0236\\0235\\0234\
+\\0233\\0232\\0231\\0230\\0227\\0226\\0225\\0224\\0223\\0222\
+\\0221\\0220\\0217\\0216\\0215\\0214\\0213\\0212\\0211\\0210\
+\\0207\\0206\\0205\\0365\\0204\\0202\\0365\
+" >eraseme.touchstone
+
+srcdir=. datadir=. /opt/lmi/src/lmi/mst_to_xst.sh
+cmp eraseme.xst eraseme.touchstone
 
 # Clean up stray output. (The zsh '(N)' glob qualifier turns on
 # null_glob for a single expansion.)
