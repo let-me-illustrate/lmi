@@ -165,17 +165,18 @@ EOF
 echo "  Test invalid input: '.cns'."
 
 <sample.cns >sample_bad.cns sed --file=eraseme.sed
-rm --force cns.eraseme
-echo "  invalid input, jing, .rnc:"                                      >> cns.eraseme 2>&1
-java -jar $jar_dir/jing.jar -c multiple_cell_document.rnc sample_bad.cns >> cns.eraseme 2>&1
-echo "  invalid input, jing, .xsd:"                                      >> cns.eraseme 2>&1
-java -jar $jar_dir/jing.jar multiple_cell_document.xsd    sample_bad.cns >> cns.eraseme 2>&1
-echo "  invalid input, xmllint, .xsd:"                                   >> cns.eraseme 2>&1
-xmllint --noout --schema multiple_cell_document.xsd       sample_bad.cns >> cns.eraseme 2>&1
-echo "  invalid input, jing, .rng:"                                      >> cns.eraseme 2>&1
-java -jar $jar_dir/jing.jar multiple_cell_document.rng    sample_bad.cns >> cns.eraseme 2>&1
-echo "  invalid input, xmllint, .rng:"                                   >> cns.eraseme 2>&1
-xmllint --noout --relaxng multiple_cell_document.rng      sample_bad.cns >> cns.eraseme 2>&1
+{
+  echo "  invalid input, jing, .rnc:"
+  java -jar $jar_dir/jing.jar -c multiple_cell_document.rnc sample_bad.cns
+  echo "  invalid input, jing, .xsd:"
+  java -jar $jar_dir/jing.jar multiple_cell_document.xsd    sample_bad.cns
+  echo "  invalid input, xmllint, .xsd:"
+  xmllint --noout --schema multiple_cell_document.xsd       sample_bad.cns
+  echo "  invalid input, jing, .rng:"
+  java -jar $jar_dir/jing.jar multiple_cell_document.rng    sample_bad.cns
+  echo "  invalid input, xmllint, .rng:"
+  xmllint --noout --relaxng multiple_cell_document.rng      sample_bad.cns
+} > cns.eraseme 2>&1
 sed -e 's/^.*error: //;s/\.cns fails/ fails/;s/  *$//' -i cns.eraseme
 sed -e 's/^.*Schemas validity error : //' -i cns.eraseme
 sed -e 's/^.*Relax-NG validity error : //' -i cns.eraseme
@@ -184,17 +185,18 @@ diff --unified=0 touchstone.eraseme cns.eraseme
 echo "  Test invalid input: '.ill'."
 
 <sample.ill >sample_bad.ill sed --file=eraseme.sed
-rm --force ill.eraseme
-echo "  invalid input, jing, .rnc:"                                      >> ill.eraseme 2>&1
-java -jar $jar_dir/jing.jar -c single_cell_document.rnc   sample_bad.ill >> ill.eraseme 2>&1
-echo "  invalid input, jing, .xsd:"                                      >> ill.eraseme 2>&1
-java -jar $jar_dir/jing.jar single_cell_document.xsd      sample_bad.ill >> ill.eraseme 2>&1
-echo "  invalid input, xmllint, .xsd:"                                   >> ill.eraseme 2>&1
-xmllint --noout --schema single_cell_document.xsd         sample_bad.ill >> ill.eraseme 2>&1
-echo "  invalid input, jing, .rng:"                                      >> ill.eraseme 2>&1
-java -jar $jar_dir/jing.jar single_cell_document.rng      sample_bad.ill >> ill.eraseme 2>&1
-echo "  invalid input, xmllint, .rng:"                                   >> ill.eraseme 2>&1
-xmllint --noout --relaxng single_cell_document.rng        sample_bad.ill >> ill.eraseme 2>&1
+{
+  echo "  invalid input, jing, .rnc:"
+  java -jar $jar_dir/jing.jar -c single_cell_document.rnc   sample_bad.ill
+  echo "  invalid input, jing, .xsd:"
+  java -jar $jar_dir/jing.jar single_cell_document.xsd      sample_bad.ill
+  echo "  invalid input, xmllint, .xsd:"
+  xmllint --noout --schema single_cell_document.xsd         sample_bad.ill
+  echo "  invalid input, jing, .rng:"
+  java -jar $jar_dir/jing.jar single_cell_document.rng      sample_bad.ill
+  echo "  invalid input, xmllint, .rng:"
+  xmllint --noout --relaxng single_cell_document.rng        sample_bad.ill
+} > ill.eraseme 2>&1
 sed -e 's/^.*error: //;s/\.ill fails/ fails/;s/  *$//' -i ill.eraseme
 sed -e 's/^.*Schemas validity error : //' -i ill.eraseme
 sed -e 's/^.*Relax-NG validity error : //' -i ill.eraseme
