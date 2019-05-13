@@ -149,6 +149,8 @@ Did not expect element StateOfJurisdictionMangledTag there
 sample_bad fails to validate
 EOF
 
+# '\/' really is an intentional escape (for sed, not sh).
+# shellcheck disable=SC1117
 cat >eraseme.sed <<EOF
 1,/<\/cell>/ {
   # Negative InforceDcv not allowed.

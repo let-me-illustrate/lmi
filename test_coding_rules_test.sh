@@ -24,6 +24,9 @@
 # This script is intended to be invoked by lmi makefiles; it would
 # rarely make sense to run it independently.
 
+# '\' really is an intentional escape in many here-documents.
+# shellcheck disable=SC1117
+
 echo "Testing 'test_coding_rules'."
 
 rm --force eraseme*
