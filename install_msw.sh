@@ -195,6 +195,7 @@ make $coefficiency --output-sync=recurse -f install_miscellanea.make
 export LMI_COMPILER=gcc
 export LMI_TRIPLET
 #for LMI_TRIPLET in x86_64-w64-mingw32 i686-w64-mingw32 ;
+# shellcheck disable=SC2043
 for LMI_TRIPLET in i686-w64-mingw32 ;
 do
   if [ "Cygwin" = "$platform" ]
