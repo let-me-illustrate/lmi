@@ -63,6 +63,12 @@ case "$lmi_build_type" in
         ;;
 esac
 
+case "$(uname -r)" in
+    (*Microsoft*)
+        platform=WSL
+        ;;
+esac
+
 if [ "Cygwin" = "$platform" ]
 then
     mount
@@ -125,6 +131,45 @@ then
     #   https://lists.nongnu.org/archive/html/lmi/2017-11/msg00018.html
 
     git config --global core.fileMode false
+fi
+
+if [ "WSL" = "$platform" ]
+then
+    # Install/update packages.
+    packages_list='autoconf automake bsdtar dos2unix doxygen
+      gdb git libtool make patch pkg-config rsync unzip wget
+      zip zsh g++-mingw-w64-i686'
+
+    # Disable shellcheck warning about the need to double quote $packages_list:
+    # it can't be done here and we really want word splitting to happen here.
+    # shellcheck disable=SC2086
+    missing_packages_count=$(dpkg-query -W -f="\${Status}\n" $packages_list 2>&1 | \
+      grep -v -c 'install ok installed')
+
+    if [ "$missing_packages_count" -gt 0 ]
+    then
+        sudo apt update
+        # shellcheck disable=SC2086
+        sudo apt install -y $packages_list
+    fi
+
+    # Mount /opt/lmi and /cache_for_lmi directories.
+    # Unfortunately sudo must be used because we don't have permissions to
+    # write to /opt and / directories.
+    mkdir --parents /mnt/c/opt/lmi/src/lmi
+    restore_lmi_mount=$(mount | grep '/opt/lmi')
+    if [ -z "$restore_lmi_mount" ]
+    then
+        [ ! -d /opt/lmi ] && sudo mkdir /opt/lmi
+        sudo mount --bind /mnt/c/opt/lmi /opt/lmi
+    fi
+    mkdir --parents /mnt/c/cache_for_lmi
+    restore_cache_mount=$(mount | grep '/cache_for_lmi')
+    if [ -z "$restore_cache_mount" ]
+    then
+        [ ! -d /cache_for_lmi ] && sudo mkdir /cache_for_lmi
+        sudo mount --bind /mnt/c/cache_for_lmi /cache_for_lmi
+    fi
 fi
 
 java -version
@@ -287,7 +332,7 @@ EOF
 # therefore, symlink the directories lmi uses as described in
 # 'README.schroot'.
 
-if [ "Cygwin" != "$platform" ]
+if [ "Cygwin" != "$platform" ] && [ "WSL" != "$platform" ]
 then
     sed -i /opt/lmi/data/configurable_settings.xml -e's/C://g'
 fi

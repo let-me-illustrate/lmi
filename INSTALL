@@ -23,6 +23,9 @@
   https://lists.nongnu.org/archive/html/lmi/2008-05/msg00001.html
 if you're not running ms windows.]
 
+Install using Cygwin
+---
+
 (1) Install Cygwin
 
 Open a "Command Prompt" window, and enable pasting into it:
@@ -85,3 +88,67 @@ copy and paste these lines into the shell:
 You should see lmi's GUI. Try "File | New | Illustration", then press "OK";
 you should see values. Then try "File | Print preview"; you should see an
 illustration in your 'pdf' viewer.
+
+
+Install using Windows Subsystem for Linux (Windows 10)
+---
+
+(1) Install WSL
+
+Open a "Windows PowerShell" window as Administrator:
+
+  Start | Programs | Windows PowerShell | Windows PowerShell
+
+Copy and paste the following lines into the "Windows PowerShell" window:
+
+  New-Item -ItemType Directory -Force -Path C:\cache_for_lmi
+  Set-Location -Path C:\cache_for_lmi
+  Invoke-WebRequest -Uri https://git.savannah.gnu.org/cgit/lmi.git/plain/install_wsl.ps1 -OutFile install_wsl.ps1 -UseBasicParsing
+  Set-ExecutionPolicy Unrestricted
+  Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+
+Agree to restart your computer.
+
+Note: Only the last two commands need administrator privileges. So if the execution
+policy already was set and Microsoft-Windows-Subsystem-Linux feature was enabled
+earlier, you don't need to execute them and restart the computer (and administrator
+privileges are not required neither).
+
+Open a "Windows PowerShell" window (administrator privileges are not required)
+and execute the installation script:
+
+  C:\cache_for_lmi\install_wsl.ps1
+
+Select preferred OS or simply press Enter to install Ubuntu 18.04.
+After a few minutes, you should see something like this at the end:
+
+  "WSL installation seems to have succeeded"
+
+Then return back to the Restricted policy after installing
+(restart "Windows PowerShell" window as Administrator to execute
+this command):
+
+  Set-ExecutionPolicy Restricted
+
+Close the "Windows PowerShell" window.
+
+(2) Install lmi
+
+Start a WSL shell:
+
+  Start | All Programs | Apps | <Installed OS name>
+
+Execute the same commands as for Cygwin written above to build lmi:
+
+  mkdir -p /tmp
+  export TMP=/tmp
+  install_script='https://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
+  cd /tmp
+  wget -N $install_script
+  chmod +x install_msw.sh
+  logfile=log_`date -u +'%Y%m%dT%H%MZ'`; echo "Log file is '$logfile.tar.bz2'."
+  ./install_msw.sh >$logfile 2>&1; tar -cjf $logfile.tar.bz2 $logfile
+
+Launch the lmi program via WSL shell:
+
+  cd /opt/lmi/bin; ./lmi_wx_shared.exe --data_path=C:/opt/lmi/data

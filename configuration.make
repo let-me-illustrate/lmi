@@ -30,7 +30,10 @@ ifeq (msys,$(findstring msys,$(lmi_build_type)))
 else ifeq (cygwin,$(findstring cygwin,$(lmi_build_type)))
   platform_makefile := msw_cygwin.make
 else
-  ifeq (mingw32,$(findstring mingw32,$(LMI_TRIPLET)))
+  kernel_release := $(shell uname -r)
+  ifeq (Microsoft,$(findstring Microsoft,$(kernel_release)))
+    platform_makefile := msw_wsl.make
+  else ifeq (mingw32,$(findstring mingw32,$(LMI_TRIPLET)))
     platform_makefile := msw_generic.make
   else
     platform_makefile := posix_fhs.make
