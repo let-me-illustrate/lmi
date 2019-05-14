@@ -1344,25 +1344,11 @@ class cover_page : public numbered_page
     {
         // Call base-class implementation to render the footer.
         numbered_page::render();
-        int const height_contents = writer_.output_html
+        writer_.output_html
             (writer_.get_horz_margin()
             ,writer_.get_vert_margin()
             ,writer_.get_page_width()
             ,interpolator_.expand_template("cover")
-            );
-
-        // There is no way to draw a border around the page contents in wxHTML
-        // currently, so do it manually.
-        auto& pdf_dc = writer_.dc();
-
-        pdf_dc.SetPen(wxPen(illustration_rule_color, 2));
-        pdf_dc.SetBrush(*wxTRANSPARENT_BRUSH);
-
-        pdf_dc.DrawRectangle
-            (writer_.get_horz_margin()
-            ,writer_.get_vert_margin()
-            ,writer_.get_page_width()
-            ,height_contents
             );
     }
 
@@ -1377,7 +1363,6 @@ class cover_page : public numbered_page
     {
         return std::string {};
     }
-
 };
 
 // Simplest possible page which is entirely defined by its external template
