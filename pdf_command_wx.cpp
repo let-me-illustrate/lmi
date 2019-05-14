@@ -1330,41 +1330,6 @@ class numbered_page : public page_with_marginals
     int               extra_pages_      {0};
 };
 
-/// Generic cover page for most ledger types.
-///
-/// See discussion here:
-///   https://lists.nongnu.org/archive/html/lmi/2019-04/msg00024.html
-
-class cover_page : public numbered_page
-{
-  public:
-    using numbered_page::numbered_page;
-
-    void render() override
-    {
-        // Call base-class implementation to render the footer.
-        numbered_page::render();
-        writer_.output_html
-            (writer_.get_horz_margin()
-            ,writer_.get_vert_margin()
-            ,writer_.get_page_width()
-            ,interpolator_.expand_template("cover")
-            );
-    }
-
-  private:
-    int get_extra_pages_needed() override
-    {
-        return 0;
-    }
-
-    // Only the lower part of the footer is wanted here.
-    std::string get_upper_footer_template_name() const override
-    {
-        return std::string {};
-    }
-};
-
 // Simplest possible page which is entirely defined by its external template
 // whose name must be specified when constructing it.
 class standard_page : public numbered_page
@@ -1487,6 +1452,60 @@ class standard_page : public numbered_page
     std::unique_ptr<wxHtmlContainerCell> page_body_cell_;
     std::unique_ptr<wxHtmlContainerCell> header_cell_;
     std::vector<int>                     page_break_positions_;
+};
+
+/// Generic cover page for most ledger types.
+///
+/// See discussion here:
+///   https://lists.nongnu.org/archive/html/lmi/2019-04/msg00024.html
+
+class cover_page : public standard_page
+{
+  public:
+    cover_page
+        (pdf_illustration  const& illustration
+        ,Ledger            const& ledger
+        ,pdf_writer_wx          & writer
+        ,html_interpolator const& interpolator
+        )
+        :standard_page
+            (illustration
+            ,ledger
+            ,writer
+            ,interpolator
+            ,"cover"
+            )
+    {
+    }
+
+#if 0
+// Now that this class derives from class standard_page, this virtual
+// member must no longer be overridden. If this override is not
+// commented out, then the cover page is entirely blank.
+//
+// Is this because standard_page::page_break_positions_ must be set
+// (by calling standard_page::get_extra_pages_needed() in any
+// override, or (as seems best in this case) by not overriding that
+// virtual member here)?
+//
+// But maybe that's not the reason: it seems remarkable that replacing
+// +        ,"ill_reg_numeric_summary"
+// -        ,"cover"
+// above in the ctor causes a non-blank first page to be printed, even
+// if this override is not commented out.
+//
+  private:
+    int get_extra_pages_needed() override
+    {
+        return 0;
+    }
+#endif // 0
+
+    // Only the lower part of the footer is wanted here.
+    std::string get_upper_footer_template_name() const override
+    {
+        return std::string {};
+    }
 };
 
 // Helper classes used to show the numeric summary table. The approach used
