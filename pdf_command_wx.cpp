@@ -1384,6 +1384,21 @@ class standard_page : public numbered_page
             }
     }
 
+  protected:
+    int get_extra_pages_needed() override
+    {
+        page_break_positions_ = writer_.paginate_html
+            (writer_.get_page_width()
+            ,get_page_body_height()
+            ,*page_body_cell_
+            );
+
+        // The cast is safe, we're never going to have more than INT_MAX
+        // pages and if we, somehow, do, the caller checks that this function
+        // returns a positive value.
+        return static_cast<int>(page_break_positions_.size()) - 1;
+    }
+
   private:
     // Parse HTML page contents once and store the result in page_body_cell_
     // and header_cell_ member variables.
@@ -1434,20 +1449,6 @@ class standard_page : public numbered_page
         return header_cell_.get();
     }
 
-    int get_extra_pages_needed() override
-    {
-        page_break_positions_ = writer_.paginate_html
-            (writer_.get_page_width()
-            ,get_page_body_height()
-            ,*page_body_cell_
-            );
-
-        // The cast is safe, we're never going to have more than INT_MAX
-        // pages and if we, somehow, do, the caller checks that this function
-        // returns a positive value.
-        return static_cast<int>(page_break_positions_.size()) - 1;
-    }
-
     char const* const                    page_template_name_;
     std::unique_ptr<wxHtmlContainerCell> page_body_cell_;
     std::unique_ptr<wxHtmlContainerCell> header_cell_;
@@ -1478,28 +1479,14 @@ class cover_page : public standard_page
     {
     }
 
-#if 0
-// Now that this class derives from class standard_page, this virtual
-// member must no longer be overridden. If this override is not
-// commented out, then the cover page is entirely blank.
-//
-// Is this because standard_page::page_break_positions_ must be set
-// (by calling standard_page::get_extra_pages_needed() in any
-// override, or (as seems best in this case) by not overriding that
-// virtual member here)?
-//
-// But maybe that's not the reason: it seems remarkable that replacing
-// +        ,"ill_reg_numeric_summary"
-// -        ,"cover"
-// above in the ctor causes a non-blank first page to be printed, even
-// if this override is not commented out.
-//
   private:
     int get_extra_pages_needed() override
     {
-        return 0;
+        int const extra = standard_page::get_extra_pages_needed();
+        if(0 != extra)
+            warning() << "Cover page will overflow." << LMI_FLUSH;
+        return extra;
     }
-#endif // 0
 
     // Only the lower part of the footer is wanted here.
     std::string get_upper_footer_template_name() const override
