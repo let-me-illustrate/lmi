@@ -42,7 +42,7 @@ minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
 
 case "$lmi_build_type" in
     (*-*-cygwin*)
-        java_path="/cygdrive/c/Program\ Files\ \(x86\)/Common\ Files/Oracle/Java/javapath"
+        java_path='/cygdrive/c/Program\ Files\ \(x86\)/Common\ Files/Oracle/Java/javapath'
         minimal_path="$minimal_path:$(cygpath --sysdir):$java_path"
         ;;
 esac
@@ -195,17 +195,22 @@ make $coefficiency --output-sync=recurse -f install_miscellanea.make
 # it's the one installed to /opt/lmi/bin/ when this script ends.
 export LMI_COMPILER=gcc
 export LMI_TRIPLET
-#for LMI_TRIPLET in x86_64-w64-mingw32 i686-w64-mingw32 ;
 # shellcheck disable=SC2043
-for LMI_TRIPLET in i686-w64-mingw32 ;
+#for LMI_TRIPLET in i686-w64-mingw32 ;
+for LMI_TRIPLET in x86_64-w64-mingw32 i686-w64-mingw32 ;
 do
-  if [ "Cygwin" = "$platform" ]
-  then
     # For Cygwin, install and use this msw-native compiler.
+    # Install it for other build types, too, even if only for
+    # validating the installation procedure.
     mingw_dir=/opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/gcc_msw
     [ -d "$mingw_dir" ] && rm --force --recursive "$mingw_dir"
-    make $coefficiency --output-sync=recurse -f install_mingw.make
-  fi
+    if   [ "i686-w64-mingw32"   = "$LMI_TRIPLET" ]; then
+      make $coefficiency --output-sync=recurse -f install_mingw32.make
+    elif [ "x86_64-w64-mingw32" = "$LMI_TRIPLET" ]; then
+      make $coefficiency --output-sync=recurse -f install_mingw.make
+    else
+      printf 'No MinGW compiler for this triplet.\n'
+    fi
 
     make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
 

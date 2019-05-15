@@ -1,4 +1,4 @@
-# Installer for MinGW-w64 64-bit msw-native toolchain.
+# Legacy installer for MinGW-w64 32-bit msw-native toolchain.
 #
 # Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
 #
@@ -57,11 +57,19 @@ mirror     := http://downloads.sourceforge.net/mingw-w64
 
 # File lists ###################################################################
 
-MinGW-8_1_0 := x86_64-8.1.0-release-win32-seh-rt_v6-rev0.7z
+#MinGW-6_3_0 := i686-6.3.0-release-win32-sjlj-rt_v5-rev1.7z
+MinGW-6_3_0 := i686-6.3.0-release-win32-sjlj-rt_v5-rev2.7z
+MinGW-7_2_0 := i686-7.2.0-release-win32-sjlj-rt_v5-rev0.7z
+MinGW-7_3_0 := i686-7.3.0-release-win32-sjlj-rt_v5-rev0.7z
+MinGW-8_1_0 := i686-8.1.0-release-win32-sjlj-rt_v6-rev0.7z
 
 # Archive md5sums ##############################################################
 
-$(MinGW-8_1_0)-md5 := ebe9cf22aa13c9e34f5e684a79efaf8e
+#$(MinGW-6_3_0)-md5 := b92e8480cf8d5904da78ab6d94f1a047
+$(MinGW-6_3_0)-md5 := 6e15de993400279c24b40b1f978e9380
+$(MinGW-7_2_0)-md5 := f34ff6eca4aa7a645f60c977b107c5d2
+$(MinGW-7_3_0)-md5 := 37d964d08ce48dc170cc95a84679cc4f
+$(MinGW-8_1_0)-md5 := 28ec1e65ab85a9e1043998516045ab62
 
 # Utilities ####################################################################
 
@@ -100,7 +108,7 @@ ad_hoc_dir_exists = \
 
 .PHONY: all
 all: $(file_list)
-	$(CP) --archive $(ad_hoc_dir)/mingw64/* $(prefix)
+	$(CP) --archive $(ad_hoc_dir)/mingw32/* $(prefix)
 	$(RM) --force --recursive $(ad_hoc_dir)
 
 $(file_list): initial_setup
