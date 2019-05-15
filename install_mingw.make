@@ -125,8 +125,6 @@ BSDTARFLAGS := --keep-old-files
 
 WGETFLAGS := --no-verbose
 
-# Fall back on a native binary if libarchive issue 629 occurs.
-
 .PHONY: %.7z
 %.7z:
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $(mirror)/$@
