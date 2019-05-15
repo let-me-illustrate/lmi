@@ -36,15 +36,7 @@ set -e
 # provides no convenient alternative):
 setopt PIPE_FAIL
 
-lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
-case "$lmi_build_type" in
-    (*-*-linux*)
-        PERFORM=wine
-        ;;
-    (*)
-        PERFORM=
-        ;;
-esac
+. ./set_toolchain.sh
 
 # Lines beginning with a capitalized word, viz.
 #   /^NOTE: starting the test suite$/d
