@@ -42,7 +42,7 @@ parent.make parent.make:: env.make ;
 #env.make: set.sh
 env.make:
 	@echo "Sourcing 'set.sh'"
-	. ./set.sh ; echo "export LMI_OUT1 := $$LMI_OUT1\\nexport LMI_OUT2 := $$LMI_OUT2" > env.make
+	. ./set.sh
 	@echo "target: LMI_IN in 'parent.make': $$LMI_IN"
 	@echo "target: LMI_OUT1 in 'parent.make': $$LMI_OUT1 ...but wait..."
 	@echo "target: LMI_OUT2 in 'parent.make': $$LMI_OUT2 ...but wait..."

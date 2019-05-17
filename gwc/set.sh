@@ -9,6 +9,10 @@ export LMI_OUT1="$LMI_IN"
 export LMI_OUT2="$LANG"
 echo "LMI_OUT1 leaving 'set.sh': $LMI_OUT1"
 echo "LMI_OUT2 leaving 'set.sh': $LMI_OUT2"
+{
+    echo "export LMI_OUT1 := $LMI_OUT1"
+    echo "export LMI_OUT2 := $LMI_OUT2"
+} > env.make
 }
 
 foo
