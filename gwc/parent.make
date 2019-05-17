@@ -1,3 +1,9 @@
+# IMPORTANT: the former 'env.make' has been replaced by
+#    env.$(LMI_TIMESTAMP).eraseme
+# in the non-commented-out code, but not in any comments.
+# Yet 'env.make' remains as a target; is that target's name
+# actually arbitrary?
+
 # This demonstration shows a way to source a script in a makefile,
 # and export environment variables set by that script to make's
 # environment, thus:
@@ -7,8 +13,8 @@
 #    then writes 'make' assignments like "export foo := bar"
 #    for each desired environment variable
 # To test:
-#   $export LMI_IN=X; make -f parent.make all
-#   $export LMI_IN=Q; make -f parent.make all
+#   $export LMI_IN=Russia; LANG=ru_RU make -f parent.make all
+#   $export LMI_IN=Mongolia; LANG=mn_MN make -f parent.make all
 # and check what appears on stdout.
 
 # A file named 'env.make' is created in the source directory.
@@ -21,6 +27,8 @@
 # prerequisite may impair the efficiency that was gained by
 # writing the double-colon rule.
 
+export LMI_TIMESTAMP := $(shell date -u +'%s.%N')
+
 # No good: syntax error.
 #include set.sh
 
@@ -31,10 +39,12 @@
 #parent.make: env.make
 parent.make parent.make:: env.make ;
 # $(eval include) here is necessary and sufficient.
-	$(eval include env.make)
+	$(eval include env.$(LMI_TIMESTAMP).eraseme)
 	@echo "eval: LMI_IN in 'parent.make': $$LMI_IN"
 	@echo "eval: LMI_OUT1 in 'parent.make': $$LMI_OUT1"
 	@echo "eval: LMI_OUT2 in 'parent.make': $$LMI_OUT2"
+# '--force': the file won't be there when this makefile is remade
+	rm --force env.$(LMI_TIMESTAMP).eraseme
 
 # Doesn't execute recipe without ".PHONY":
 .PHONY: env.make
