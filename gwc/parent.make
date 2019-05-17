@@ -33,7 +33,8 @@ parent.make parent.make:: env.make ;
 # $(eval include) here is necessary and sufficient.
 	$(eval include env.make)
 	@echo "eval: LMI_IN in 'parent.make': $$LMI_IN"
-	@echo "eval: LMI_OUT in 'parent.make': $$LMI_OUT"
+	@echo "eval: LMI_OUT1 in 'parent.make': $$LMI_OUT1"
+	@echo "eval: LMI_OUT2 in 'parent.make': $$LMI_OUT2"
 
 # Doesn't execute recipe without ".PHONY":
 .PHONY: env.make
@@ -41,12 +42,14 @@ parent.make parent.make:: env.make ;
 #env.make: set.sh
 env.make:
 	@echo "Sourcing 'set.sh'"
-	. ./set.sh ; echo "export LMI_OUT := $$LMI_OUT" > env.make
+	. ./set.sh ; echo "export LMI_OUT1 := $$LMI_OUT1\\nexport LMI_OUT2 := $$LMI_OUT2" > env.make
 	@echo "target: LMI_IN in 'parent.make': $$LMI_IN"
-	@echo "target: LMI_OUT in 'parent.make': $$LMI_OUT ...but wait..."
+	@echo "target: LMI_OUT1 in 'parent.make': $$LMI_OUT1 ...but wait..."
+	@echo "target: LMI_OUT2 in 'parent.make': $$LMI_OUT2 ...but wait..."
 
 all:
-	@echo "LMI_OUT for targets in 'parent.make': $$LMI_OUT"
+	@echo "LMI_OUT1 for targets in 'parent.make': $$LMI_OUT1"
+	@echo "LMI_OUT2 for targets in 'parent.make': $$LMI_OUT2"
 	$(MAKE) --no-print-directory -f child.make
 
 # Obviously one could simply write a cover script to replace direct

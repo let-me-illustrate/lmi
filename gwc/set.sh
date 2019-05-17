@@ -3,9 +3,12 @@
 foo()
 {
 echo "LMI_IN in 'set.sh': $LMI_IN"
-echo "LMI_OUT entering 'set.sh': $LMI_OUT"
-export LMI_OUT="$LMI_IN"
-echo "LMI_OUT leaving 'set.sh': $LMI_OUT"
+echo "LMI_OUT1 entering 'set.sh': $LMI_OUT1"
+echo "LMI_OUT2 entering 'set.sh': $LMI_OUT2"
+export LMI_OUT1="$LMI_IN"
+export LMI_OUT2="$LANG"
+echo "LMI_OUT1 leaving 'set.sh': $LMI_OUT1"
+echo "LMI_OUT2 leaving 'set.sh': $LMI_OUT2"
 }
 
 foo
