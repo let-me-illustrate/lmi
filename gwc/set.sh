@@ -5,9 +5,7 @@ foo()
 # $LMI_ENV_FILE is defined by the makefile that sources this script.
 # shellcheck disable=SC2154
 echo "LMI_ENV_FILE in 'set.sh': $LMI_ENV_FILE"
-echo "LMI_IN in 'set.sh': $LMI_IN"
-echo "LMI_OUT1 entering 'set.sh': $LMI_OUT1"
-echo "LMI_OUT2 entering 'set.sh': $LMI_OUT2"
+echo "entering 'set.sh': LMI_IN $LMI_IN; LMI_OUT1 $LMI_OUT1; LMI_OUT2 $LMI_OUT2"
 export LMI_OUT1="$LMI_IN"
 export LMI_OUT2="$LANG"
 
@@ -17,8 +15,7 @@ case "$LMI_IN" in
     (*) ;;
 esac
 
-echo "LMI_OUT1 leaving 'set.sh': $LMI_OUT1"
-echo "LMI_OUT2 leaving 'set.sh': $LMI_OUT2"
+echo "leaving 'set.sh': LMI_IN $LMI_IN; LMI_OUT1 $LMI_OUT1; LMI_OUT2 $LMI_OUT2"
 if [ -n "$LMI_ENV_FILE" ]; then
     {
     echo "export LMI_OUT1 := $LMI_OUT1"

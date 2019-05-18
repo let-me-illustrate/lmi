@@ -16,23 +16,18 @@ export LMI_ENV_FILE := env_$(shell date -u +'%s_%N').eraseme
 
 parent.make:: source_env_vars ;
 	$(eval include $(LMI_ENV_FILE))
-	@echo "eval: LMI_IN in 'parent.make': $$LMI_IN"
-	@echo "eval: LMI_OUT1 in 'parent.make': $$LMI_OUT1"
-	@echo "eval: LMI_OUT2 in 'parent.make': $$LMI_OUT2"
+	@echo "eval in 'parent.make': LMI_IN $$LMI_IN; LMI_OUT1 $$LMI_OUT1; LMI_OUT2 $$LMI_OUT2"
 # '--force': the file won't be there when this makefile is remade
 	rm --force $(LMI_ENV_FILE)
 
 .PHONY: source_env_vars
 source_env_vars:
-	@echo "Sourcing 'set.sh'"
-	. ./set.sh
-	@echo "target: LMI_IN in 'parent.make': $$LMI_IN"
-	@echo "target: LMI_OUT1 in 'parent.make': $$LMI_OUT1 ...but wait..."
-	@echo "target: LMI_OUT2 in 'parent.make': $$LMI_OUT2 ...but wait..."
+	@echo "Sourcing 'set.sh'"; \
+	. ./set.sh ; \
+	echo "sourced in 'parent.make': LMI_IN $$LMI_IN; LMI_OUT1 $$LMI_OUT1; LMI_OUT2 $$LMI_OUT2"
 
 all:
-	@echo "LMI_OUT1 for targets in 'parent.make': $$LMI_OUT1"
-	@echo "LMI_OUT2 for targets in 'parent.make': $$LMI_OUT2"
+	@echo "targets in 'parent.make': LMI_IN $$LMI_IN; LMI_OUT1 $$LMI_OUT1; LMI_OUT2 $$LMI_OUT2"
 	$(MAKE) --no-print-directory -f child.make
 
 # Obviously one could simply write a cover script to replace direct
