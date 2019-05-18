@@ -219,7 +219,7 @@ do
 
     find /cache_for_lmi/downloads -type f | xargs md5sum
 
-    export PATH="/opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/local/bin:/opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/local/lib:$minimal_path"
+    . ./set_toolchain.sh
 
     make $coefficiency --output-sync=recurse wx_config_check
     make $coefficiency --output-sync=recurse show_flags
