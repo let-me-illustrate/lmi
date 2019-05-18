@@ -4,9 +4,10 @@
 #  - form a unique name $LMI_ENV_FILE for a file to hold the value
 #  - add a 'source_env_vars' prerequisite for the top-level makefile,
 #    with recipe "$(eval include $LMI_ENV_FILE)"
-#  - add a phony 'source_env_vars' target that sources the script,
-#    then writes 'make' assignments like "export foo := bar"
-#    for each desired environment variable
+#  - add a phony 'source_env_vars' target that sources the script
+#  - make the script write 'make' assignments like "export foo := bar"
+#    for each desired environment variable to $LMI_ENV_FILE iff that
+#    filename is of nonzero length
 # To test:
 #   $export LMI_IN=Russia;   make -f parent.make all
 #   $export LMI_IN=Mongolia; make -f parent.make all
