@@ -31,15 +31,6 @@ endif
 
 system_root := /
 
-PERFORM := wine
-
-# $(winebindir) is where 'install_miscellanea.make' places 'md5sum.exe'.
-
-w0 := $(shell winepath -w $(localbindir) | sed -e's/\\/\\\\/g')
-w1 := $(shell winepath -w $(locallibdir) | sed -e's/\\/\\\\/g')
-w2 := $(shell winepath -w $(winebindir)  | sed -e's/\\/\\\\/g')
-export WINEPATH=$(w0);$(w1);$(w2)
-
 ################################################################################
 
 # Compiler, linker, and so on.
