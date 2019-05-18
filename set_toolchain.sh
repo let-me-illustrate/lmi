@@ -94,6 +94,7 @@ local      prefix="/opt/lmi"
 local exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
 local localbindir="$exec_prefix"/local/bin
 local locallibdir="$exec_prefix"/local/lib
+# $winebindir is where 'install_miscellanea.make' places 'md5sum.exe'.
 local  winebindir="$prefix"/third_party/bin
 
 # Running a command like this many times:
