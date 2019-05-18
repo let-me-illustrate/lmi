@@ -7,8 +7,8 @@
 #    then writes 'make' assignments like "export foo := bar"
 #    for each desired environment variable
 # To test:
-#   $export LMI_IN=Russia; LANG=ru_RU make -f parent.make all
-#   $export LMI_IN=Mongolia; LANG=mn_MN make -f parent.make all
+#   $export LMI_IN=Russia; make -f parent.make all
+#   $export LMI_IN=Mongolia; make -f parent.make all
 # and check what appears on stdout.
 
 export LMI_ENV_FILE := env_$(shell date -u +'%s_%N').eraseme
