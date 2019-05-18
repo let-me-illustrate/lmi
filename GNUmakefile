@@ -134,11 +134,15 @@ touchstone_dir  := $(prefix)/touchstone
 
 # Remake this file to "source" a script.
 
-GNUmakefile $(srcdir)/GNUmakefile:: source_env_vars ;
+export LMI_ENV_FILE := env_$(shell date -u +'%s_%N').eraseme
+
+GNUmakefile $(srcdir)/GNUmakefile:: source_env_vars
+	$(eval include $(LMI_ENV_FILE))
+	@rm $(LMI_ENV_FILE)
 
 .PHONY: source_env_vars
 source_env_vars:
-	@# nothing here yet
+	@. ./set_toolchain.sh
 
 # Included files that don't need to be remade are given explicit empty
 # commands, which significantly reduces the number of lines emitted by
@@ -191,8 +195,6 @@ gpl_files := \
 # a submakefile is invoked, in order to allow a variable definition on
 # the 'make' command line to override any definition of the same
 # variable in $(local_options).
-
-export PATH := $(localbindir):$(locallibdir):$(PATH)
 
 MAKETARGET = \
   $(MAKE) \

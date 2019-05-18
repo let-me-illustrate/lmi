@@ -108,12 +108,9 @@ local  winebindir="$prefix"/third_party/bin
 minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
 export PATH="$localbindir":"$locallibdir":"$minimal_path"
 
-# It is appropriate to unset $WINEPATH because no lmi script ever uses
-# it directly--it's used, implicitly, only by 'wine'. But $PERFORM is
-# used directly, so it's always exported, even if empty--though that's
-# probably just a matter of taste.
+# It is okay to export these two variables unconditionally.
 
-unset -v WINEPATH
+export WINEPATH
 export PERFORM
 
 # Are double quotes inside double quotes inside $() dubious? I.e.,
@@ -140,6 +137,13 @@ case "$lmi_build_type" in
         ;;
     (*) ;;
 esac
+if [ -n "$LMI_ENV_FILE" ]; then
+    {
+    echo "export PATH     := $PATH"
+    echo "export WINEPATH := $WINEPATH"
+    echo "export PERFORM  := $PERFORM"
+    } > "$LMI_ENV_FILE"
+fi
 }
 
 # This script is to be sourced, so it can't use a builtin command like
