@@ -199,6 +199,10 @@ export LMI_TRIPLET
 #for LMI_TRIPLET in i686-w64-mingw32 ;
 for LMI_TRIPLET in x86_64-w64-mingw32 i686-w64-mingw32 ;
 do
+    # Set a minimal path for makefiles and scripts that are
+    # designed to be independent of lmi's runtime path.
+    export PATH="$minimal_path"
+
     # For Cygwin, install and use this msw-native compiler.
     # Install it for other build types, too, even if only for
     # validating the installation procedure.
@@ -219,6 +223,7 @@ do
 
     find /cache_for_lmi/downloads -type f | xargs md5sum
 
+    # Source this script only for commands that depend upon it.
     . ./set_toolchain.sh
 
     make $coefficiency --output-sync=recurse wx_config_check
