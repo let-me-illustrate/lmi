@@ -17,28 +17,9 @@
 #   $export LMI_IN=Mongolia; LANG=mn_MN make -f parent.make all
 # and check what appears on stdout.
 
-# A file named 'env.make' is created in the source directory.
-# That unwanted side effect can be avoided by replacing it
-# with, say, '/run/var/lmi/env.make'.
-
-# lmi's 'GNUmakefile' uses a double-colon rule like this:
-#parent.make $(srcdir)/parent.make:: ;
-# which becomes relevant below. Possible problem: adding a
-# prerequisite may impair the efficiency that was gained by
-# writing the double-colon rule.
-
 export LMI_TIMESTAMP := $(shell date -u +'%s.%N')
 
-# No good: syntax error.
-#include set.sh
-
-# Neither necessary nor sufficient.
-#include env.make
-
-# This can't coexist with the desired double-colon rule (see above):
-#parent.make: env.make
 parent.make parent.make:: env.make ;
-# $(eval include) here is necessary and sufficient.
 	$(eval include env.$(LMI_TIMESTAMP).eraseme)
 	@echo "eval: LMI_IN in 'parent.make': $$LMI_IN"
 	@echo "eval: LMI_OUT1 in 'parent.make': $$LMI_OUT1"
@@ -46,10 +27,7 @@ parent.make parent.make:: env.make ;
 # '--force': the file won't be there when this makefile is remade
 	rm --force env.$(LMI_TIMESTAMP).eraseme
 
-# Doesn't execute recipe without ".PHONY":
 .PHONY: env.make
-# This prerequisite is unnecessary:
-#env.make: set.sh
 env.make:
 	@echo "Sourcing 'set.sh'"
 	. ./set.sh
