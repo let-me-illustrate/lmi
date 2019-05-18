@@ -132,9 +132,13 @@ touchstone_dir  := $(prefix)/touchstone
 
 # Other makefiles included; makefiles not to be remade.
 
-# Don't remake this file.
+# Remake this file to "source" a script.
 
-GNUmakefile $(srcdir)/GNUmakefile:: ;
+GNUmakefile $(srcdir)/GNUmakefile:: source_env_vars ;
+
+.PHONY: source_env_vars
+source_env_vars:
+	@# nothing here yet
 
 # Included files that don't need to be remade are given explicit empty
 # commands, which significantly reduces the number of lines emitted by
