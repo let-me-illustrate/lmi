@@ -1,15 +1,9 @@
-# IMPORTANT: the former 'env.make' has been replaced by
-#    env.$(LMI_TIMESTAMP).eraseme
-# in the non-commented-out code, but not in any comments.
-# Yet 'env.make' remains as a target; is that target's name
-# actually arbitrary?
-
 # This demonstration shows a way to source a script in a makefile,
 # and export environment variables set by that script to make's
 # environment, thus:
-#  - add an 'env.make' prerequisite for the top-level makefile,
-#    with recipe "$(eval include env.make)"
-#  - add a phony target for 'env.make' that sources the script,
+#  - add a 'source_env_vars' prerequisite for the top-level makefile,
+#    with recipe "$(eval include <tmpfile-name>)"
+#  - add a phony target for 'source_env_vars' that sources the script,
 #    then writes 'make' assignments like "export foo := bar"
 #    for each desired environment variable
 # To test:
@@ -19,7 +13,7 @@
 
 export LMI_TIMESTAMP := $(shell date -u +'%s.%N')
 
-parent.make parent.make:: env.make ;
+parent.make parent.make:: source_env_vars ;
 	$(eval include env.$(LMI_TIMESTAMP).eraseme)
 	@echo "eval: LMI_IN in 'parent.make': $$LMI_IN"
 	@echo "eval: LMI_OUT1 in 'parent.make': $$LMI_OUT1"
@@ -27,8 +21,8 @@ parent.make parent.make:: env.make ;
 # '--force': the file won't be there when this makefile is remade
 	rm --force env.$(LMI_TIMESTAMP).eraseme
 
-.PHONY: env.make
-env.make:
+.PHONY: source_env_vars
+source_env_vars:
 	@echo "Sourcing 'set.sh'"
 	. ./set.sh
 	@echo "target: LMI_IN in 'parent.make': $$LMI_IN"
