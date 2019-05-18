@@ -1,19 +1,20 @@
 # This demonstration shows a way to source a script in a makefile,
 # and export environment variables set by that script to make's
-# environment, thus:
+# environment:
+#  - form a unique name $LMI_ENV_FILE for a file to hold the value
 #  - add a 'source_env_vars' prerequisite for the top-level makefile,
-#    with recipe "$(eval include <tmpfile-name>)"
-#  - add a phony target for 'source_env_vars' that sources the script,
+#    with recipe "$(eval include $LMI_ENV_FILE)"
+#  - add a phony 'source_env_vars' target that sources the script,
 #    then writes 'make' assignments like "export foo := bar"
 #    for each desired environment variable
 # To test:
-#   $export LMI_IN=Russia; make -f parent.make all
+#   $export LMI_IN=Russia;   make -f parent.make all
 #   $export LMI_IN=Mongolia; make -f parent.make all
 # and check what appears on stdout.
 
 export LMI_ENV_FILE := env_$(shell date -u +'%s_%N').eraseme
 
-parent.make parent.make:: source_env_vars ;
+parent.make:: source_env_vars ;
 	$(eval include $(LMI_ENV_FILE))
 	@echo "eval: LMI_IN in 'parent.make': $$LMI_IN"
 	@echo "eval: LMI_OUT1 in 'parent.make': $$LMI_OUT1"
