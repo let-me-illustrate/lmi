@@ -18,8 +18,7 @@ export LMI_ENV_FILE := env_$(shell date -u +'%s_%N').eraseme
 parent.make:: source_env_vars ;
 	$(eval include $(LMI_ENV_FILE))
 	@echo "'$$LMI_IN' --> '$$LMI_OUT1', '$$LMI_OUT2' : eval in 'parent.make'"
-# '--force': the file won't be there when this makefile is remade
-	rm --force $(LMI_ENV_FILE)
+	rm $(LMI_ENV_FILE)
 
 .PHONY: source_env_vars
 source_env_vars:
