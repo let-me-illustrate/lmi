@@ -19,10 +19,12 @@ esac
 
 echo "LMI_OUT1 leaving 'set.sh': $LMI_OUT1"
 echo "LMI_OUT2 leaving 'set.sh': $LMI_OUT2"
-{
+if [ -n "$LMI_ENV_FILE" ]; then
+    {
     echo "export LMI_OUT1 := $LMI_OUT1"
     echo "export LMI_OUT2 := $LMI_OUT2"
-} > "$LMI_ENV_FILE"
+    } > "$LMI_ENV_FILE"
+fi
 }
 
 foo
