@@ -43,9 +43,6 @@ host_path     := libxml2
 
 mingw_dir     := /opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/gcc_msw
 
-LMI_COMPILER  ?= gcc
-LMI_TRIPLET   ?= i686-w64-mingw32
-
 prefix        := /opt/lmi/local
 exec_prefix   := $(prefix)/$(LMI_COMPILER)_$(LMI_TRIPLET)
 
@@ -158,6 +155,8 @@ initial_setup     :| clobber_exec_prefix_only
 
 .PHONY: initial_setup
 initial_setup:
+	[ -n "$$LMI_COMPILER" ] || { printf '%s\n' "no LMI_COMPILER" && false; }
+	[ -n "$$LMI_TRIPLET"  ] || { printf '%s\n' "no LMI_TRIPLET"  && false; }
 	$(MKDIR) --parents $(prefix)
 	$(MKDIR) --parents $(exec_prefix)
 	$(MKDIR) --parents $(cache_dir)
@@ -209,6 +208,8 @@ $(libraries):
 
 .PHONY: clobber_exec_prefix_only
 clobber_exec_prefix_only:
+	[ -n "$$LMI_COMPILER" ] || { printf '%s\n' "no LMI_COMPILER" && false; }
+	[ -n "$$LMI_TRIPLET"  ] || { printf '%s\n' "no LMI_TRIPLET"  && false; }
 	-$(RM) --force --recursive $(exec_prefix)/bin/*xml2*
 	-$(RM) --force --recursive $(exec_prefix)/bin/*xslt*
 	-$(RM) --force --recursive $(exec_prefix)/bin/xmllint*

@@ -115,9 +115,11 @@ $(file_list): initial_setup
 
 .PHONY: initial_setup
 initial_setup:
+	[   -n "$$LMI_COMPILER" ] || { printf '%s\n' "no LMI_COMPILER"  && false; }
+	[   -n "$$LMI_TRIPLET"  ] || { printf '%s\n' "no LMI_TRIPLET"   && false; }
 	type "$(WGET)" >/dev/null || { printf '%b' $(wget_missing)      && false; }
-	[ ! -e $(prefix)     ]    || { printf '%b' $(prefix_exists)     && false; }
-	[ ! -e $(ad_hoc_dir) ]    || { printf '%b' $(ad_hoc_dir_exists) && false; }
+	[ ! -e $(prefix)        ] || { printf '%b' $(prefix_exists)     && false; }
+	[ ! -e $(ad_hoc_dir)    ] || { printf '%b' $(ad_hoc_dir_exists) && false; }
 	$(MKDIR) --parents $(prefix)
 	$(MKDIR) --parents $(ad_hoc_dir)
 

@@ -41,8 +41,8 @@ coefficiency=${coefficiency:-"--jobs=4"}
 
 MAKE=${MAKE:-"make $coefficiency"}
 
-LMI_COMPILER=${LMI_COMPILER:-"gcc"}
-LMI_TRIPLET=${LMI_TRIPLET:-"i686-w64-mingw32"}
+[ -n "$LMI_COMPILER" ] || { printf '%s\n' "no LMI_COMPILER" && exit 1; }
+[ -n "$LMI_TRIPLET"  ] || { printf '%s\n' "no LMI_TRIPLET"  && exit 2; }
 
 # Variables that normally should be left alone #################################
 
