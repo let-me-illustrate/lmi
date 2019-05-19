@@ -134,6 +134,8 @@ if [ "/opt/lmi/src/lmi" = "$PWD" ]
 then
     inhibit_git_clone=1
     printf 'Running in lmi srcdir, so inhibiting git clone.\n'
+    printf 'Eviscerating...\n'
+    make eviscerate || true
 fi
 
 mkdir --parents /opt/lmi/src
