@@ -136,12 +136,11 @@ touchstone_dir  := $(prefix)/touchstone
 
 export LMI_ENV_FILE := env_$(shell date -u +'%s_%N').eraseme
 
-GNUmakefile $(srcdir)/GNUmakefile:: source_env_vars
+GNUmakefile $(srcdir)/GNUmakefile:: $(LMI_ENV_FILE)
 	$(eval include $(LMI_ENV_FILE))
 	@rm $(LMI_ENV_FILE)
 
-.PHONY: source_env_vars
-source_env_vars:
+$(LMI_ENV_FILE):
 	@. ./set_toolchain.sh
 
 # Included files that don't need to be remade are given explicit empty
