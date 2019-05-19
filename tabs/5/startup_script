@@ -3,7 +3,7 @@
 a='schroot --chroot=cross-lmi'
 
 b='cd /opt/lmi/bin'
-c='LMI_COMPILER=gcc ; LMI_TRIPLET=i686-w64-mingw32 ; . /opt/lmi/src/lmi/set_toolchain.sh'
+c='. /opt/lmi/src/lmi/set_toolchain.sh'
 d='wine ./lmi_wx_shared --ash_nazg --data_path=/opt/lmi/data'
 e='/opt/lmi/src/lmi/gui_test.sh'
 

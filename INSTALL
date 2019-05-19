@@ -79,7 +79,7 @@ Installation proceeds silently for anywhere from a few minutes to a couple
 of hours, depending on your computer. When you see "Finished building lmi",
 copy and paste these lines into the shell:
 
-  export LMI_COMPILER=gcc ; export LMI_TRIPLET=i686-w64-mingw32 ; . ./set_toolchain.sh
+  . /opt/lmi/src/lmi/set_toolchain.sh
   /opt/lmi/bin/lmi_wx_shared --data_path=/opt/lmi/data
 
 You should see lmi's GUI. Try "File | New | Illustration", then press "OK";

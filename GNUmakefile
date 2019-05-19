@@ -77,15 +77,26 @@ MAKEFLAGS := \
 
 ################################################################################
 
+# Remake this file to "source" a script that sets various crucial
+# environment variables.
+
+export LMI_ENV_FILE := env_$(shell date -u +'%s_%N').eraseme
+
+GNUmakefile $(srcdir)/GNUmakefile:: $(LMI_ENV_FILE)
+	$(eval include $(LMI_ENV_FILE))
+	@rm $(LMI_ENV_FILE)
+
+$(LMI_ENV_FILE):
+	@. ./set_toolchain.sh
+
+################################################################################
+
 # Directories.
 
 # SOMEDAY !! Follow the GNU Coding Standards
 #   https://www.gnu.org/prep/standards/html_node/Directory-Variables.html
 # more closely, changing the value of $(datadir), and perhaps using
 # some other standard directories that are commented out for now.
-
-LMI_COMPILER ?= gcc
-LMI_TRIPLET  ?= i686-w64-mingw32
 
 prefix          := /opt/lmi
 # parent directory for machine-specific binaries
@@ -131,18 +142,7 @@ touchstone_dir  := $(prefix)/touchstone
 ################################################################################
 
 # Other makefiles included; makefiles not to be remade.
-
-# Remake this file to "source" a script.
-
-export LMI_ENV_FILE := env_$(shell date -u +'%s_%N').eraseme
-
-GNUmakefile $(srcdir)/GNUmakefile:: $(LMI_ENV_FILE)
-	$(eval include $(LMI_ENV_FILE))
-	@rm $(LMI_ENV_FILE)
-
-$(LMI_ENV_FILE):
-	@. ./set_toolchain.sh
-
+#
 # Included files that don't need to be remade are given explicit empty
 # commands, which significantly reduces the number of lines emitted by
 # 'make -d', making debug output easier to read.

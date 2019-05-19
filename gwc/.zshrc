@@ -1,8 +1,5 @@
 # Personal configuration for cross-building in a chroot.
 
-export LMI_COMPILER=gcc
-export LMI_TRIPLET=i686-w64-mingw32
-
 # To work with lmi, it is crucial to source 'set_toolchain.sh'. It's
 # deliberately not sourced here, so that it can assume that some
 # things have already been set up: for instance, it assumes that
