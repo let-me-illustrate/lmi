@@ -387,6 +387,7 @@ TEST_CODING_RULES := $(build_dir)/test_coding_rules$(EXEEXT)
 .PHONY: custom_tools
 custom_tools:
 	@$(MAKE) --file=$(this_makefile) --directory=$(srcdir) test_coding_rules$(EXEEXT)
+	@$(MKDIR) --parents $(localbindir)
 	@$(CP) --preserve --update $(TEST_CODING_RULES) $(localbindir)
 
 ################################################################################
