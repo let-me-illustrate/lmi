@@ -23,16 +23,12 @@
 
 # Invoke as ". ./set_toolchain.sh" without the quotes.
 #
-# $LMI_COMPILER and $LMI_TRIPLET can be overridden at the command
-# line, e.g.:
+# $LMI_COMPILER and $LMI_TRIPLET are set to default values currently
+# used in production if they were unset or null beforehand. They can
+# be overridden at the command line, e.g.:
 #
-#   export LMI_COMPILER
-#   export LMI_TRIPLET
 #   LMI_COMPILER=gcc ; LMI_TRIPLET=i686-w64-mingw32 ; . ./set_toolchain.sh
 #   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-w64-mingw32 ; . ./set_toolchain.sh
-#
-# where the 'export' commands need be run only once, presumably in a
-# shell startup file.
 #
 # Implemented as a function that runs and then erases itself, so that
 # sourcing this script changes the environment only as intended. This
@@ -65,6 +61,7 @@
 # Supported values:
 #   LMI_COMPILER : gcc, clang
 #   LMI_TRIPLET  : i686-w64-mingw32, x86_64-w64-mingw32, x86_64-pc-linux-gnu
+# (clang and pc-linux-gnu are not yet tested).
 #
 # Examples:
 #
@@ -149,6 +146,11 @@ fi
 # This script is to be sourced, so it can't use a builtin command like
 # 'printf' here. Similarly, 'exit' would have a surprising effect.
 # Therefore, these precondition checks use 'echo' and 'return'.
+
+export LMI_COMPILER
+export LMI_TRIPLET
+       LMI_COMPILER=${LMI_COMPILER:-"gcc"}
+       LMI_TRIPLET=${LMI_TRIPLET:-"i686-w64-mingw32"}
 
 case "$LMI_COMPILER" in
     (gcc) ;;
