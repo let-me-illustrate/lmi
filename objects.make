@@ -511,10 +511,15 @@ alert_test$(EXEEXT): \
   alert_test.o \
 
 any_member_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
   $(common_test_objects) \
   any_member_test.o \
+  calendar_date.o \
   facets.o \
+  global_settings.o \
   miscellany.o \
+  null_stream.o \
+  path_utility.o \
 
 assert_lmi_test$(EXEEXT): \
   $(common_test_objects) \
@@ -640,13 +645,18 @@ global_settings_test$(EXEEXT): \
   path_utility.o \
 
 gpt_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
   $(common_test_objects) \
+  calendar_date.o \
   commutation_functions.o \
   cso_table.o \
+  global_settings.o \
   gpt_commutation_functions.o \
   gpt_test.o \
   ihs_irc7702.o \
   miscellany.o \
+  null_stream.o \
+  path_utility.o \
   timer.o \
 
 handle_exceptions_test$(EXEEXT): \
@@ -658,11 +668,16 @@ ieee754_test$(EXEEXT): \
   ieee754_test.o \
 
 input_sequence_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
   $(common_test_objects) \
+  calendar_date.o \
+  global_settings.o \
   input_sequence.o \
   input_sequence_parser.o \
   input_sequence_test.o \
   miscellany.o \
+  null_stream.o \
+  path_utility.o \
 
 input_test$(EXEEXT): \
   $(boost_filesystem_objects) \
@@ -717,10 +732,14 @@ irc7702a_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
+  calendar_date.o \
+  global_settings.o \
   ihs_irc7702a.o \
   irc7702a_test.o \
   mec_state.o \
   miscellany.o \
+  null_stream.o \
+  path_utility.o \
   stratified_algorithms.o \
   xml_lmi.o \
 
@@ -802,18 +821,27 @@ mortality_rates_test$(EXEEXT): \
 name_value_pairs_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
+  calendar_date.o \
+  global_settings.o \
   miscellany.o \
   name_value_pairs.o \
   name_value_pairs_test.o \
+  null_stream.o \
+  path_utility.o \
 
 ncnnnpnn_test$(EXEEXT): \
   $(common_test_objects) \
   ncnnnpnn_test.o \
 
 numeric_io_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
   $(common_test_objects) \
+  calendar_date.o \
+  global_settings.o \
   miscellany.o \
+  null_stream.o \
   numeric_io_test.o \
+  path_utility.o \
   timer.o \
 
 path_utility_test$(EXEEXT): \
@@ -854,9 +882,14 @@ premium_tax_test$(EXEEXT): \
   xml_lmi.o \
 
 print_matrix_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
   $(common_test_objects) \
+  calendar_date.o \
   cso_table.o \
+  global_settings.o \
   miscellany.o \
+  null_stream.o \
+  path_utility.o \
   print_matrix_test.o \
 
 product_file_test$(EXEEXT): \
@@ -975,17 +1008,27 @@ timer_test$(EXEEXT): \
   timer_test.o \
 
 tn_range_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
   $(common_test_objects) \
+  calendar_date.o \
   datum_base.o \
   facets.o \
+  global_settings.o \
   miscellany.o \
+  null_stream.o \
+  path_utility.o \
   tn_range_test.o \
   tn_range_test_aux.o \
 
 value_cast_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
   $(common_test_objects) \
+  calendar_date.o \
   facets.o \
+  global_settings.o \
   miscellany.o \
+  null_stream.o \
+  path_utility.o \
   value_cast_test.o \
 
 vector_test$(EXEEXT): \
@@ -998,9 +1041,14 @@ wx_new_test$(EXEEXT): \
   wx_new_test.o \
 
 xml_serialize_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
+  calendar_date.o \
+  global_settings.o \
   miscellany.o \
+  null_stream.o \
+  path_utility.o \
   timer.o \
   xml_lmi.o \
   xml_serialize_test.o \
