@@ -27,8 +27,9 @@ check_concinnity()
 {
     output=$( \
         make \
-          srcdir=/opt/lmi/src/lmi \
-          -f /opt/lmi/src/lmi/GNUmakefile \
+          prefascicle_dir="$1" \
+          --directory=/opt/lmi/src/lmi \
+          --no-print-directory \
           check_concinnity \
         2>&1 | sed \
           -e"/^Is it time to 'make release_candidate'?$/d" \
@@ -45,5 +46,5 @@ check_concinnity()
 }
 
 printf "checking..."
-check_concinnity
+check_concinnity /opt/lmi/src/lmi
 printf "okay\n"

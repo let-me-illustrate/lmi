@@ -388,7 +388,7 @@ TEST_CODING_RULES := $(build_dir)/test_coding_rules$(EXEEXT)
 
 .PHONY: custom_tools
 custom_tools:
-	@$(MAKE) --file=$(this_makefile) --directory=$(srcdir) test_coding_rules$(EXEEXT)
+	@$(MAKE) test_coding_rules$(EXEEXT)
 	@$(MKDIR) --parents $(localbindir)
 	@$(CP) --preserve --update $(TEST_CODING_RULES) $(localbindir)
 
@@ -409,7 +409,8 @@ custom_tools:
 # be made for msw '.bat' files, which normally should not be run in a
 # *nix shell.
 
-xml_files := $(wildcard *.cns *.ill *.xml *.xrc *.xsd *.xsl)
+prefascicle_dir ?= $(srcdir)
+xml_files := $(wildcard $(addprefix $(prefascicle_dir)/,*.cns *.ill *.xml *.xrc *.xsd *.xsl))
 
 .PHONY: check_concinnity
 check_concinnity: source_clean custom_tools
@@ -430,7 +431,7 @@ check_concinnity: source_clean custom_tools
 	  | $(MD5SUM) --check --quiet || true
 	@for z in $(build_dir)/*.d; do [ -s $$z ]         || echo $$z; done;
 	@for z in $(build_dir)/*.o; do [ -f $${z%%.o}.d ] || echo $$z; done;
-	@$(LS) --classify ./* \
+	@$(LS) --classify $(prefascicle_dir)/* \
 	  | $(SED) -e'/\*$$/!d' -e'/^\.\//!d' -e'/.sh\*$$/d' -e'/.sed\*$$/d' \
 	  | $(SED) -e's/^/Improperly executable: /'
 	@$(ECHO) "  Problems detected by xmllint:"
@@ -446,7 +447,7 @@ check_concinnity: source_clean custom_tools
 	      || $(ECHO) "... in file $$z"; \
 	  done;
 	@$(ECHO) "  Miscellaneous problems:"
-	@-$(PERFORM) $(TEST_CODING_RULES) *
+	@-$(PERFORM) $(TEST_CODING_RULES) $(prefascicle_dir)/*
 
 ################################################################################
 
