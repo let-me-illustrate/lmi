@@ -19,6 +19,11 @@
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 }}
 
+{{!
+    This is only required on the first page after the cover page,
+    but it seems more convenient to print it on all pages.
+}}
+
 <font size="-2">
 
 <p>

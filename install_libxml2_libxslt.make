@@ -23,16 +23,14 @@
 
 # Archives and their md5sums
 
-xz_version      := xz-5.2.3
 libxml2_version := libxml2-2.9.4
 libxslt_version := libxslt-1.1.29
 
-xz-5.2.3.tar.gz-md5       := ef68674fb47a8b8e741b34e429d86e9d
 libxml2-2.9.4.tar.gz-md5  := ae249165c173b1ff386ee8ad676815f5
 libxslt-1.1.29.tar.gz-md5 := a129d3c44c022de3b9dcf6d6f288d72e
 
 # Libraries are ordered by dependency, rather than alphabetically.
-libraries := $(xz_version) $(libxml2_version) $(libxslt_version)
+libraries := $(libxml2_version) $(libxslt_version)
 
 source_archives := $(addsuffix .tar.gz, $(libraries))
 
@@ -43,25 +41,14 @@ source_archives := $(addsuffix .tar.gz, $(libraries))
 host          := ftp://xmlsoft.org
 host_path     := libxml2
 
-$(xz_version).tar.gz: host      := https://sourceforge.net
-$(xz_version).tar.gz: host_path := projects/lzmautils/files
+mingw_dir     := /opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/gcc_msw
 
-mingw_dir     := /MinGW_
-
-LMI_COMPILER  ?= gcc
-LMI_TRIPLET   ?= i686-w64-mingw32
-
-# It would be cleaner to use the "LMI_*" components in $exec_prefix
-# (arch-dependent libraries) rather than in $prefix (arch-independent
-# headers, e.g.). However, libxml2's '--with-lzma' option assumes that
-# $prefix and $exec_prefix are the same directory--see:
-#   https://lists.nongnu.org/archive/html/lmi/2019-04/msg00018.html
-prefix        := /opt/lmi/$(LMI_COMPILER)_$(LMI_TRIPLET)/local
-exec_prefix   := $(prefix)
+prefix        := /opt/lmi/local
+exec_prefix   := $(prefix)/$(LMI_COMPILER)_$(LMI_TRIPLET)
 
 cache_dir     := /cache_for_lmi/downloads
 
-build_dir     := $(prefix)/../xml-ad_hoc
+build_dir     := $(exec_prefix)/xml-ad_hoc
 
 # Variables that normally should be left alone #################################
 
@@ -72,20 +59,6 @@ lmi_build_type := $(shell /usr/share/libtool/build-aux/config.guess)
 ifeq (cygwin,$(findstring cygwin,$(lmi_build_type)))
   mingw_bin_dir := $(mingw_dir)/bin/
 endif
-
-xz_cflags := \
-  -Wno-format \
-  -Wno-format-extra-args \
-  -Wno-implicit-fallthrough \
-  -Wno-maybe-uninitialized \
-
-$(xz_version)_options := \
-  --prefix=$(prefix) \
-  --exec-prefix=$(exec_prefix) \
-  --build=`$(build_dir)/$(xz_version)/build-aux/config.guess` \
-  --host=$(LMI_TRIPLET) \
-  --disable-dependency-tracking \
-  CFLAGS="-g -O2 $(xz_cflags)" \
 
 # For 'host' and 'build' configure options, see:
 #   http://cygwin.com/ml/cygwin/2002-01/msg00837.html
@@ -135,7 +108,7 @@ $(libxml2_version)_options := \
   --build=`$(build_dir)/$(libxml2_version)/config.guess` \
   --host=$(LMI_TRIPLET) \
   $(xmlsoft_common_options) \
-  --with-lzma=$(prefix) \
+  --without-lzma \
   --with-schemas \
   --without-iconv \
   --without-modules \
@@ -175,7 +148,6 @@ all: clobber_exec_prefix_only $(source_archives) $(libraries)
 
 # Order-only prerequisites.
 
-$(libxml2_version):| $(xz_version)
 $(libxslt_version):| $(libxml2_version)
 $(libraries)      :| $(source_archives)
 $(source_archives):| initial_setup
@@ -183,6 +155,8 @@ initial_setup     :| clobber_exec_prefix_only
 
 .PHONY: initial_setup
 initial_setup:
+	[ -n "$$LMI_COMPILER" ] || { printf '%s\n' "no LMI_COMPILER" && false; }
+	[ -n "$$LMI_TRIPLET"  ] || { printf '%s\n' "no LMI_TRIPLET"  && false; }
 	$(MKDIR) --parents $(prefix)
 	$(MKDIR) --parents $(exec_prefix)
 	$(MKDIR) --parents $(cache_dir)
@@ -195,6 +169,7 @@ WGETFLAGS = \
   --cut-dirs=$(words $(subst /, ,$(host_path))) \
   --force-directories \
   --no-host-directories \
+  --no-verbose \
 
 wget_whence = $(host)/$(host_path)
 
@@ -219,7 +194,7 @@ $(libraries):
 	-[ -e $@-lmi.patch ] && $(PATCH) --directory=$(build_dir) --strip=1 <$@-lmi.patch
 	cd $(build_dir)/$@ \
 	  && export PATH="$(mingw_bin_dir):${PATH}" \
-	  && PKG_CONFIG_PATH="$(prefix)/lib/pkgconfig" \
+	  && PKG_CONFIG_PATH="$(exec_prefix)/lib/pkgconfig" \
 	    $($@_overrides) ./configure $($@_options) \
 	  && $(MAKE) \
 	  && $(MAKE) install \
@@ -233,20 +208,15 @@ $(libraries):
 
 .PHONY: clobber_exec_prefix_only
 clobber_exec_prefix_only:
-	-$(RM) --force --recursive $(exec_prefix)/bin/liblzma*
-	-$(RM) --force --recursive $(exec_prefix)/bin/lz*
-	-$(RM) --force --recursive $(exec_prefix)/bin/xz*
-	-$(RM) --force --recursive $(exec_prefix)/bin/unlz*
-	-$(RM) --force --recursive $(exec_prefix)/bin/unxz*
+	[ -n "$$LMI_COMPILER" ] || { printf '%s\n' "no LMI_COMPILER" && false; }
+	[ -n "$$LMI_TRIPLET"  ] || { printf '%s\n' "no LMI_TRIPLET"  && false; }
 	-$(RM) --force --recursive $(exec_prefix)/bin/*xml2*
 	-$(RM) --force --recursive $(exec_prefix)/bin/*xslt*
 	-$(RM) --force --recursive $(exec_prefix)/bin/xmllint*
 	-$(RM) --force --recursive $(exec_prefix)/bin/xmlcatalog*
-	-$(RM) --force --recursive $(exec_prefix)/include/lzma*
 	-$(RM) --force --recursive $(exec_prefix)/include/libxml2
 	-$(RM) --force --recursive $(exec_prefix)/include/libxslt
 	-$(RM) --force --recursive $(exec_prefix)/include/libexslt
-	-$(RM) --force --recursive $(exec_prefix)/lib/liblzma*
 	-$(RM) --force --recursive $(exec_prefix)/lib/*xml2*
 	-$(RM) --force --recursive $(exec_prefix)/lib/*xslt*
 	-$(RM) --force --recursive $(exec_prefix)/lib/cmake

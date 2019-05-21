@@ -72,15 +72,15 @@ Copy the following, and paste it (Shift-Insert) into the shell:
   cd /tmp
   wget -N $install_script
   chmod +x install_msw.sh
-  logfile=log_`date -u +'%Y%m%dT%H%MZ'`; echo "Log file is '$logfile.tar.bz2'."
-  ./install_msw.sh >$logfile 2>&1; tar -cjf $logfile.tar.bz2 $logfile
+  logfile=log_`date -u +'%Y%m%dT%H%MZ'`; echo "Log file is '$logfile.tar.xz'."
+  ./install_msw.sh >$logfile 2>&1; tar -cJf $logfile.tar.xz $logfile
 
 Installation proceeds silently for anywhere from a few minutes to a couple
 of hours, depending on your computer. When you see "Finished building lmi",
 copy and paste these lines into the shell:
 
-  export PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH
-  cd /opt/lmi/bin; ./lmi_wx_shared --data_path=/opt/lmi/data
+  . /opt/lmi/src/lmi/set_toolchain.sh
+  /opt/lmi/bin/lmi_wx_shared --data_path=/opt/lmi/data
 
 You should see lmi's GUI. Try "File | New | Illustration", then press "OK";
 you should see values. Then try "File | Print preview"; you should see an

@@ -439,6 +439,7 @@ liblmi_la_SOURCES = \
     ihs_irc7702a.cpp \
     ihs_mortal.cpp \
     ihs_server7702.cpp \
+    irc7702_tables.cpp \
     lmi.cpp \
     md5.cpp \
     mec_input.cpp \
@@ -598,9 +599,15 @@ test_alert_CXXFLAGS = $(AM_CXXFLAGS)
 test_any_member_SOURCES = \
   $(common_test_objects) \
   any_member_test.cpp \
+  calendar_date.cpp \
   facets.cpp \
-  miscellany.cpp
+  global_settings.cpp \
+  miscellany.cpp \
+  null_stream.cpp \
+  path_utility.cpp
 test_any_member_CXXFLAGS = $(AM_CXXFLAGS)
+test_any_member_LDADD = \
+  $(BOOST_LIBS) \
 
 test_assert_lmi_SOURCES = \
   $(common_test_objects) \
@@ -660,6 +667,7 @@ test_commutation_functions_SOURCES = \
   commutation_functions.cpp \
   commutation_functions_test.cpp \
   cso_table.cpp \
+  irc7702_tables.cpp \
   timer.cpp
 test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -748,14 +756,20 @@ test_global_settings_LDADD = \
 
 test_gpt_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
   commutation_functions.cpp \
   cso_table.cpp \
+  global_settings.cpp \
   gpt_commutation_functions.cpp \
   gpt_test.cpp \
   ihs_irc7702.cpp \
   miscellany.cpp \
+  null_stream.cpp \
+  path_utility.cpp \
   timer.cpp
 test_gpt_CXXFLAGS = $(AM_CXXFLAGS)
+test_gpt_LDADD = \
+  $(BOOST_LIBS) \
 
 test_handle_exceptions_SOURCES = \
   $(common_test_objects) \
@@ -769,11 +783,17 @@ test_ieee754_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_input_seq_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
+  global_settings.cpp \
   input_sequence.cpp \
   input_sequence_parser.cpp \
   input_sequence_test.cpp \
-  miscellany.cpp
+  miscellany.cpp \
+  null_stream.cpp \
+  path_utility.cpp
 test_input_seq_CXXFLAGS = $(AM_CXXFLAGS)
+test_input_seq_LDADD = \
+  $(BOOST_LIBS) \
 
 test_input_SOURCES = \
   $(common_test_objects) \
@@ -829,10 +849,14 @@ test_interpolate_string_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_irc7702a_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
+  global_settings.cpp \
   ihs_irc7702a.cpp \
   irc7702a_test.cpp \
   mec_state.cpp \
   miscellany.cpp \
+  null_stream.cpp \
+  path_utility.cpp \
   stratified_algorithms.cpp \
   xml_lmi.cpp
 test_irc7702a_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
@@ -941,9 +965,13 @@ test_mortality_rates_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_name_value_pairs_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
+  global_settings.cpp \
   miscellany.cpp \
   name_value_pairs.cpp \
-  name_value_pairs_test.cpp
+  name_value_pairs_test.cpp \
+  null_stream.cpp \
+  path_utility.cpp
 test_name_value_pairs_CXXFLAGS = $(AM_CXXFLAGS)
 test_name_value_pairs_LDADD = \
   $(BOOST_LIBS)
@@ -955,10 +983,16 @@ test_ncnnnpnn_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_numeric_io_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
+  global_settings.cpp \
   miscellany.cpp \
+  null_stream.cpp \
   numeric_io_test.cpp \
+  path_utility.cpp \
   timer.cpp
 test_numeric_io_CXXFLAGS = $(AM_CXXFLAGS)
+test_numeric_io_LDADD = \
+  $(BOOST_LIBS) \
 
 test_path_utility_SOURCES = \
   $(common_test_objects) \
@@ -1003,10 +1037,16 @@ test_premium_tax_LDADD = \
 
 test_print_matrix_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
   cso_table.cpp \
+  global_settings.cpp \
   miscellany.cpp \
+  null_stream.cpp \
+  path_utility.cpp \
   print_matrix_test.cpp
 test_print_matrix_CXXFLAGS = $(AM_CXXFLAGS)
+test_print_matrix_LDADD = \
+  $(BOOST_LIBS) \
 
 test_product_file_SOURCES = \
   $(common_test_objects) \
@@ -1146,19 +1186,31 @@ test_timer_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_tn_range_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
   datum_base.cpp \
   facets.cpp \
+  global_settings.cpp \
   miscellany.cpp \
+  null_stream.cpp \
+  path_utility.cpp \
   tn_range_test.cpp \
   tn_range_test_aux.cpp
 test_tn_range_CXXFLAGS = $(AM_CXXFLAGS)
+test_tn_range_LDADD = \
+  $(BOOST_LIBS) \
 
 test_value_cast_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
   facets.cpp \
+  global_settings.cpp \
   miscellany.cpp \
+  null_stream.cpp \
+  path_utility.cpp \
   value_cast_test.cpp
 test_value_cast_CXXFLAGS = $(AM_CXXFLAGS)
+test_value_cast_LDADD = \
+  $(BOOST_LIBS) \
 
 test_vector_SOURCES = \
   $(common_test_objects) \
@@ -1173,12 +1225,17 @@ test_wx_new_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_xml_serialize_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
+  global_settings.cpp \
   miscellany.cpp \
+  null_stream.cpp \
+  path_utility.cpp \
   timer.cpp \
   xml_lmi.cpp \
   xml_serialize_test.cpp
 test_xml_serialize_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 test_xml_serialize_LDADD = \
+  $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
 test_zero_SOURCES = \
@@ -1282,6 +1339,7 @@ noinst_HEADERS = \
     input_sequence_parser.hpp \
     interest_rates.hpp \
     interpolate_string.hpp \
+    irc7702_tables.hpp \
     istream_to_string.hpp \
     ledger.hpp \
     ledger_base.hpp \

@@ -34,9 +34,19 @@ set -vx
 stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
 
+lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+
 # This should work with a rather minimal path.
 
 minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
+
+case "$lmi_build_type" in
+    (*-*-cygwin*)
+        java_path='/cygdrive/c/Program\ Files\ \(x86\)/Common\ Files/Oracle/Java/javapath'
+        minimal_path="$minimal_path:$(cygpath --sysdir):$java_path"
+        ;;
+esac
+
 export PATH="$minimal_path"
 
 # '--jobs=4': big benefit for multicore, no penalty for single core
@@ -47,8 +57,6 @@ if [ -z "$coefficiency" ]
 then
     export coefficiency='--jobs=4'
 fi
-
-lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
 
 case "$lmi_build_type" in
     (*-*-cygwin*)
@@ -126,6 +134,8 @@ if [ "/opt/lmi/src/lmi" = "$PWD" ]
 then
     inhibit_git_clone=1
     printf 'Running in lmi srcdir, so inhibiting git clone.\n'
+    printf 'Eviscerating...\n'
+    make eviscerate || true
 fi
 
 mkdir --parents /opt/lmi/src
@@ -161,12 +171,6 @@ then
     # It seems quite unlikely that anyone who's building lmi would have
     # any other need for mounts with the names used here.
 
-    restore_MinGW_mount=$(mount --mount-entries | grep '/MinGW_ ')
-    [ -z "$restore_MinGW_mount" ] \
-      || printf '%s\n' "$restore_MinGW_mount" | grep --silent 'C:/opt/lmi/MinGW-8_1_0' \
-      || printf 'Replacing former MinGW_ mount:\n %s\n' "$restore_MinGW_mount" >/dev/tty
-    mount --force "C:/opt/lmi/MinGW-8_1_0" "/MinGW_"
-
     restore_cache_mount=$(mount --mount-entries | grep '/cache_for_lmi ')
     [ -z "$restore_cache_mount" ] \
       || printf '%s\n' "$restore_cache_mount" | grep --silent 'C:/cache_for_lmi' \
@@ -185,13 +189,6 @@ mount
 md5sum "$0"
 find /cache_for_lmi/downloads -type f | xargs md5sum
 
-if [ "Cygwin" = "$platform" ]
-then
-    # For Cygwin, install and use this msw-native compiler.
-    rm --force --recursive /MinGW_
-    make $coefficiency --output-sync=recurse -f install_mingw.make
-fi
-
 make $coefficiency --output-sync=recurse -f install_miscellanea.make clobber
 make $coefficiency --output-sync=recurse -f install_miscellanea.make
 
@@ -200,8 +197,27 @@ make $coefficiency --output-sync=recurse -f install_miscellanea.make
 # it's the one installed to /opt/lmi/bin/ when this script ends.
 export LMI_COMPILER=gcc
 export LMI_TRIPLET
+# shellcheck disable=SC2043
+#for LMI_TRIPLET in i686-w64-mingw32 ;
 for LMI_TRIPLET in x86_64-w64-mingw32 i686-w64-mingw32 ;
 do
+    # Set a minimal path for makefiles and scripts that are
+    # designed to be independent of lmi's runtime path.
+    export PATH="$minimal_path"
+
+    # For Cygwin, install and use this msw-native compiler.
+    # Install it for other build types, too, even if only for
+    # validating the installation procedure.
+    mingw_dir=/opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/gcc_msw
+    [ -d "$mingw_dir" ] && rm --force --recursive "$mingw_dir"
+    if   [ "i686-w64-mingw32"   = "$LMI_TRIPLET" ]; then
+      make $coefficiency --output-sync=recurse -f install_mingw32.make
+    elif [ "x86_64-w64-mingw32" = "$LMI_TRIPLET" ]; then
+      make $coefficiency --output-sync=recurse -f install_mingw.make
+    else
+      printf 'No MinGW compiler for this triplet.\n'
+    fi
+
     make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
 
     ./install_wx.sh
@@ -209,7 +225,8 @@ do
 
     find /cache_for_lmi/downloads -type f | xargs md5sum
 
-    export PATH=/opt/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/local/bin:/opt/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/local/lib:$minimal_path
+    # Source this script only for commands that depend upon it.
+    . ./set_toolchain.sh
 
     make $coefficiency --output-sync=recurse wx_config_check
     make $coefficiency --output-sync=recurse show_flags
@@ -226,7 +243,9 @@ do
     fi
 done
 
-# To regenerate authentication files:
+mkdir --parents /opt/lmi/data
+
+# To regenerate authentication files for production distributions:
 # cd /opt/lmi/data
 # printf '2450449 2472011'             >expiry
 # printf '%s\n' "$(md5sum expiry)"     >validated.md5
@@ -235,9 +254,17 @@ printf '2450449 2472011'                            >/opt/lmi/data/expiry
 printf '5fc68a795c9c60da1b32be989efc299a  expiry\n' >/opt/lmi/data/validated.md5
 printf '391daa5cbc54e118c4737446bcb84eea'           >/opt/lmi/data/passkey
 
-# Surrogates for proprietary graphics:
-for z in company_logo.png group_quote_banner.png ;
-  do cp --archive /opt/lmi/src/lmi/gwc/$z /opt/lmi/data/ ;
+# Copy proprietary graphics if available; else use generic surrogates.
+graphics_dir_0=/opt/lmi/proprietary/graphics
+graphics_dir_1=/opt/lmi/src/lmi/gwc
+for z in company_logo.png group_quote_banner.png ; do
+  if   [ -f "$graphics_dir_0"/$z ]
+    then cp --archive "$graphics_dir_0"/$z /opt/lmi/data/
+  elif [ -f "$graphics_dir_1"/$z ]
+    then cp --archive "$graphics_dir_1"/$z /opt/lmi/data/
+  else
+    printf 'Graphics files not found.\n'
+  fi
 done
 
 # Configurable settings.
@@ -297,7 +324,7 @@ fi
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Finished: $stamp1"
 
-seconds=$(expr $(date '+%s' -d "$stamp1") - $(date '+%s' -d "$stamp0"))
+seconds=$(($(date '+%s' -d "$stamp1") - $(date '+%s' -d "$stamp0")))
 elapsed=$(date -u -d @"$seconds" +'%H:%M:%S')
 echo "Elapsed: $elapsed"
 

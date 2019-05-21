@@ -36,6 +36,16 @@ std::vector<double> LMI_SO cso_table
     ,oenum_alb_or_anb
     ,mcenum_gender
     ,mcenum_smoking
+    ,int              min_age
+    ,int              max_age
+    );
+
+std::vector<double> LMI_SO cso_table
+    (oenum_cso_era
+    ,oenum_autopisty
+    ,oenum_alb_or_anb
+    ,mcenum_gender
+    ,mcenum_smoking
     );
 
 #endif // cso_table_hpp

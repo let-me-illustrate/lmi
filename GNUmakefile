@@ -77,15 +77,26 @@ MAKEFLAGS := \
 
 ################################################################################
 
+# Remake this file to "source" a script that sets various crucial
+# environment variables.
+
+export LMI_ENV_FILE := env_$(shell date -u +'%s_%N').eraseme
+
+GNUmakefile $(srcdir)/GNUmakefile:: $(LMI_ENV_FILE)
+	$(eval include $(LMI_ENV_FILE))
+	@rm $(LMI_ENV_FILE)
+
+$(LMI_ENV_FILE):
+	@. ./set_toolchain.sh
+
+################################################################################
+
 # Directories.
 
 # SOMEDAY !! Follow the GNU Coding Standards
 #   https://www.gnu.org/prep/standards/html_node/Directory-Variables.html
 # more closely, changing the value of $(datadir), and perhaps using
 # some other standard directories that are commented out for now.
-
-LMI_COMPILER ?= gcc
-LMI_TRIPLET  ?= i686-w64-mingw32
 
 prefix          := /opt/lmi
 # parent directory for machine-specific binaries
@@ -121,9 +132,9 @@ srcdir          := $(CURDIR)
 
 # These directories are outside the scope of the GNU Coding Standards.
 # Therefore, their names may contain '_' for distinction and clarity.
-localbindir     := $(exec_prefix)/local/bin
-locallibdir     := $(exec_prefix)/local/lib
-localincludedir := $(exec_prefix)/local/include
+localbindir     := $(prefix)/local/$(LMI_COMPILER)_$(LMI_TRIPLET)/bin
+locallibdir     := $(prefix)/local/$(LMI_COMPILER)_$(LMI_TRIPLET)/lib
+localincludedir := $(prefix)/local/include
 winebindir      := $(prefix)/third_party/bin
 test_dir        := $(prefix)/test
 touchstone_dir  := $(prefix)/touchstone
@@ -131,11 +142,7 @@ touchstone_dir  := $(prefix)/touchstone
 ################################################################################
 
 # Other makefiles included; makefiles not to be remade.
-
-# Don't remake this file.
-
-GNUmakefile $(srcdir)/GNUmakefile:: ;
-
+#
 # Included files that don't need to be remade are given explicit empty
 # commands, which significantly reduces the number of lines emitted by
 # 'make -d', making debug output easier to read.
@@ -188,8 +195,6 @@ gpl_files := \
 # the 'make' command line to override any definition of the same
 # variable in $(local_options).
 
-export PATH := $(localbindir):$(locallibdir):$(PATH)
-
 MAKETARGET = \
   $(MAKE) \
     --directory=$@ \
@@ -222,7 +227,7 @@ MAKETARGET = \
 $(build_dir): $(gpl_files)
 	+@[ -d $@ ] || $(MKDIR) --parents $@
 	+@for z in $(compiler_runtime_files); \
-	  do [ -f $@/$$(basename $$z) ] || $(CP) --archive --verbose $$z $@ ; \
+	  do [ -f $@/$$(basename $$z) ] || $(CP) --archive $$z $@ ; \
 	  done;
 	+@$(MAKETARGET)
 
@@ -367,8 +372,10 @@ raze: source_clean
 
 .PHONY: eviscerate
 eviscerate: source_clean
-	-$(RM) --force --recursive $(bindir)
+	-$(RM) --force --recursive $(prefix)/bin
+	-$(RM) --force --recursive $(prefix)/local
 	-$(RM) --force --recursive $(prefix)/third_party
+	-$(RM) --force --recursive $(prefix)/zzz
 	-$(RM) --force --recursive $(prefix)/gcc_i686-w64-mingw32
 	-$(RM) --force --recursive $(prefix)/gcc_x86_64-w64-mingw32
 	-$(RM) --force --recursive $(prefix)/gcc_x86_64-pc-linux-gnu
@@ -382,6 +389,7 @@ TEST_CODING_RULES := $(build_dir)/test_coding_rules$(EXEEXT)
 .PHONY: custom_tools
 custom_tools:
 	@$(MAKE) --file=$(this_makefile) --directory=$(srcdir) test_coding_rules$(EXEEXT)
+	@$(MKDIR) --parents $(localbindir)
 	@$(CP) --preserve --update $(TEST_CODING_RULES) $(localbindir)
 
 ################################################################################

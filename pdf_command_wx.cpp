@@ -1330,56 +1330,6 @@ class numbered_page : public page_with_marginals
     int               extra_pages_      {0};
 };
 
-/// Generic cover page for most ledger types.
-///
-/// See discussion here:
-///   https://lists.nongnu.org/archive/html/lmi/2019-04/msg00024.html
-
-class cover_page : public numbered_page
-{
-  public:
-    using numbered_page::numbered_page;
-
-    void render() override
-    {
-        // Call base-class implementation to render the footer.
-        numbered_page::render();
-        int const height_contents = writer_.output_html
-            (writer_.get_horz_margin()
-            ,writer_.get_vert_margin()
-            ,writer_.get_page_width()
-            ,interpolator_.expand_template("cover")
-            );
-
-        // There is no way to draw a border around the page contents in wxHTML
-        // currently, so do it manually.
-        auto& pdf_dc = writer_.dc();
-
-        pdf_dc.SetPen(wxPen(illustration_rule_color, 2));
-        pdf_dc.SetBrush(*wxTRANSPARENT_BRUSH);
-
-        pdf_dc.DrawRectangle
-            (writer_.get_horz_margin()
-            ,writer_.get_vert_margin()
-            ,writer_.get_page_width()
-            ,height_contents
-            );
-    }
-
-  private:
-    int get_extra_pages_needed() override
-    {
-        return 0;
-    }
-
-    // Only the lower part of the footer is wanted here.
-    std::string get_upper_footer_template_name() const override
-    {
-        return std::string {};
-    }
-
-};
-
 // Simplest possible page which is entirely defined by its external template
 // whose name must be specified when constructing it.
 class standard_page : public numbered_page
@@ -1434,6 +1384,21 @@ class standard_page : public numbered_page
             }
     }
 
+  protected:
+    int get_extra_pages_needed() override
+    {
+        page_break_positions_ = writer_.paginate_html
+            (writer_.get_page_width()
+            ,get_page_body_height()
+            ,*page_body_cell_
+            );
+
+        // The cast is safe, we're never going to have more than INT_MAX
+        // pages and if we, somehow, do, the caller checks that this function
+        // returns a positive value.
+        return static_cast<int>(page_break_positions_.size()) - 1;
+    }
+
   private:
     // Parse HTML page contents once and store the result in page_body_cell_
     // and header_cell_ member variables.
@@ -1484,24 +1449,50 @@ class standard_page : public numbered_page
         return header_cell_.get();
     }
 
-    int get_extra_pages_needed() override
-    {
-        page_break_positions_ = writer_.paginate_html
-            (writer_.get_page_width()
-            ,get_page_body_height()
-            ,*page_body_cell_
-            );
-
-        // The cast is safe, we're never going to have more than INT_MAX
-        // pages and if we, somehow, do, the caller checks that this function
-        // returns a positive value.
-        return static_cast<int>(page_break_positions_.size()) - 1;
-    }
-
     char const* const                    page_template_name_;
     std::unique_ptr<wxHtmlContainerCell> page_body_cell_;
     std::unique_ptr<wxHtmlContainerCell> header_cell_;
     std::vector<int>                     page_break_positions_;
+};
+
+/// Generic cover page for most ledger types.
+///
+/// See discussion here:
+///   https://lists.nongnu.org/archive/html/lmi/2019-04/msg00024.html
+
+class cover_page : public standard_page
+{
+  public:
+    cover_page
+        (pdf_illustration  const& illustration
+        ,Ledger            const& ledger
+        ,pdf_writer_wx          & writer
+        ,html_interpolator const& interpolator
+        )
+        :standard_page
+            (illustration
+            ,ledger
+            ,writer
+            ,interpolator
+            ,"cover"
+            )
+    {
+    }
+
+  private:
+    int get_extra_pages_needed() override
+    {
+        int const extra = standard_page::get_extra_pages_needed();
+        if(0 != extra)
+            warning() << "Cover page will overflow." << LMI_FLUSH;
+        return extra;
+    }
+
+    // Only the lower part of the footer is wanted here.
+    std::string get_upper_footer_template_name() const override
+    {
+        return std::string {};
+    }
 };
 
 // Helper classes used to show the numeric summary table. The approach used

@@ -41,15 +41,15 @@ coefficiency=${coefficiency:-"--jobs=4"}
 
 MAKE=${MAKE:-"make $coefficiency"}
 
-LMI_COMPILER=${LMI_COMPILER:-"gcc"}
-LMI_TRIPLET=${LMI_TRIPLET:-"i686-w64-mingw32"}
+[ -n "$LMI_COMPILER" ] || { printf '%s\n' "no LMI_COMPILER" && exit 1; }
+[ -n "$LMI_TRIPLET"  ] || { printf '%s\n' "no LMI_TRIPLET"  && exit 2; }
 
 # Variables that normally should be left alone #################################
 
-mingw_dir=/MinGW_
+mingw_dir=/opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/gcc_msw
 
-prefix=/opt/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/local
-exec_prefix="$prefix"
+prefix=/opt/lmi/local
+exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
 
 repo_name="wxpdfdoc"
 
@@ -105,18 +105,20 @@ config_options="
 cd "$proxy_wxpdfdoc_dir"
 autoreconf --verbose
 
-build_dir="$prefix"/../wxpdfdoc-ad_hoc/wxpdfdoc-$wxpdfdoc_commit_sha
+build_dir="$exec_prefix/wxpdfdoc-ad_hoc/wxpdfdoc-$wxpdfdoc_commit_sha"
 
 if [ "$wxpdfdoc_skip_clean" != 1 ]
 then
     rm --force --recursive "$build_dir"
-    rm --force --recursive $exec_prefix/lib/*wxcode*pdfdoc*
-    rm --force --recursive $exec_prefix/src/pdf*.inc
+    rm --force --recursive "$exec_prefix/lib/*wxcode*pdfdoc*"
+    rm --force --recursive "$exec_prefix/src/pdf*.inc"
 fi
 
 mkdir --parents "$build_dir"
 
 cd "$build_dir"
+# 'configure' options must not be double-quoted
+# shellcheck disable=SC2086
 "$proxy_wxpdfdoc_dir"/configure $config_options
 $MAKE
 $MAKE install

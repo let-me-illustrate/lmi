@@ -21,11 +21,14 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+[ -n "$LMI_COMPILER" ] || { printf '%s\n' "no LMI_COMPILER" && exit 1; }
+[ -n "$LMI_TRIPLET"  ] || { printf '%s\n' "no LMI_TRIPLET"  && exit 2; }
+
 echo "  Test schemata..."
 
 # Directory where this script resides.
 
-srcdir=$(dirname $(readlink --canonicalize "$0"))
+srcdir=$(dirname "$(readlink --canonicalize "$0")")
 
 # Directory where 'jing.jar' and 'trang.jar' reside, along with their
 # support files--extracted from:
@@ -36,16 +39,18 @@ jar_dir=/opt/lmi/third_party/rng
 
 # Data for testing.
 
-cp --preserve $srcdir/sample.cns $srcdir/sample.ill .
+cp --preserve "$srcdir"/sample.cns "$srcdir"/sample.ill .
 
 # XSL template to sort cell subelements.
 
-cp --preserve $srcdir/sort_cell_subelements.xsl .
+cp --preserve "$srcdir"/sort_cell_subelements.xsl .
 
 echo "  Test cell-subelement sorting."
 
-xsltproc sort_cell_subelements.xsl sample.cns > sorted.cns
-xsltproc sort_cell_subelements.xsl sample.ill > sorted.ill
+mingw_dir=/opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/gcc_msw
+mingw_bin_dir="$mingw_dir"/bin
+PATH="$mingw_bin_dir:$PATH" xsltproc sort_cell_subelements.xsl sample.cns | tr --delete '\r' > sorted.cns
+PATH="$mingw_bin_dir:$PATH" xsltproc sort_cell_subelements.xsl sample.ill | tr --delete '\r' > sorted.ill
 diff --unified=0 sample.cns sorted.cns
 diff --unified=0 sample.ill sorted.ill
 
@@ -57,7 +62,7 @@ diff --unified=0 sample.ill sorted.ill
 #
 # Only RNC is to be edited; XSD and RNG are generated from it.
 
-cp --preserve $srcdir/types.rnc $srcdir/cell.rnc $srcdir/multiple_cell_document.rnc $srcdir/single_cell_document.rnc .
+cp --preserve "$srcdir"/types.rnc "$srcdir"/cell.rnc "$srcdir"/multiple_cell_document.rnc "$srcdir"/single_cell_document.rnc .
 
 echo "  Test RNC files with 'jing'."
 
@@ -73,7 +78,7 @@ java -jar $jar_dir/jing.jar -c single_cell_document.rnc   sample.ill
 # XSD, generated from RNG, is stored in the repository because it's
 # widely used.
 
-cp --preserve $srcdir/types.xsd $srcdir/cell.xsd $srcdir/multiple_cell_document.xsd $srcdir/single_cell_document.xsd .
+cp --preserve "$srcdir"/types.xsd "$srcdir"/cell.xsd "$srcdir"/multiple_cell_document.xsd "$srcdir"/single_cell_document.xsd .
 
 echo "  Test XSD files with 'jing'."
 
@@ -147,6 +152,8 @@ Did not expect element StateOfJurisdictionMangledTag there
 sample_bad fails to validate
 EOF
 
+# '\/' really is an intentional escape (for sed, not sh).
+# shellcheck disable=SC1117
 cat >eraseme.sed <<EOF
 1,/<\/cell>/ {
   # Negative InforceDcv not allowed.
@@ -161,17 +168,18 @@ EOF
 echo "  Test invalid input: '.cns'."
 
 <sample.cns >sample_bad.cns sed --file=eraseme.sed
-rm --force cns.eraseme
-echo "  invalid input, jing, .rnc:"                                      >> cns.eraseme 2>&1
-java -jar $jar_dir/jing.jar -c multiple_cell_document.rnc sample_bad.cns >> cns.eraseme 2>&1
-echo "  invalid input, jing, .xsd:"                                      >> cns.eraseme 2>&1
-java -jar $jar_dir/jing.jar multiple_cell_document.xsd    sample_bad.cns >> cns.eraseme 2>&1
-echo "  invalid input, xmllint, .xsd:"                                   >> cns.eraseme 2>&1
-xmllint --noout --schema multiple_cell_document.xsd       sample_bad.cns >> cns.eraseme 2>&1
-echo "  invalid input, jing, .rng:"                                      >> cns.eraseme 2>&1
-java -jar $jar_dir/jing.jar multiple_cell_document.rng    sample_bad.cns >> cns.eraseme 2>&1
-echo "  invalid input, xmllint, .rng:"                                   >> cns.eraseme 2>&1
-xmllint --noout --relaxng multiple_cell_document.rng      sample_bad.cns >> cns.eraseme 2>&1
+{
+  echo "  invalid input, jing, .rnc:"
+  java -jar $jar_dir/jing.jar -c multiple_cell_document.rnc sample_bad.cns
+  echo "  invalid input, jing, .xsd:"
+  java -jar $jar_dir/jing.jar multiple_cell_document.xsd    sample_bad.cns
+  echo "  invalid input, xmllint, .xsd:"
+  xmllint --noout --schema multiple_cell_document.xsd       sample_bad.cns
+  echo "  invalid input, jing, .rng:"
+  java -jar $jar_dir/jing.jar multiple_cell_document.rng    sample_bad.cns
+  echo "  invalid input, xmllint, .rng:"
+  xmllint --noout --relaxng multiple_cell_document.rng      sample_bad.cns
+} > cns.eraseme 2>&1
 sed -e 's/^.*error: //;s/\.cns fails/ fails/;s/  *$//' -i cns.eraseme
 sed -e 's/^.*Schemas validity error : //' -i cns.eraseme
 sed -e 's/^.*Relax-NG validity error : //' -i cns.eraseme
@@ -180,17 +188,18 @@ diff --unified=0 touchstone.eraseme cns.eraseme
 echo "  Test invalid input: '.ill'."
 
 <sample.ill >sample_bad.ill sed --file=eraseme.sed
-rm --force ill.eraseme
-echo "  invalid input, jing, .rnc:"                                      >> ill.eraseme 2>&1
-java -jar $jar_dir/jing.jar -c single_cell_document.rnc   sample_bad.ill >> ill.eraseme 2>&1
-echo "  invalid input, jing, .xsd:"                                      >> ill.eraseme 2>&1
-java -jar $jar_dir/jing.jar single_cell_document.xsd      sample_bad.ill >> ill.eraseme 2>&1
-echo "  invalid input, xmllint, .xsd:"                                   >> ill.eraseme 2>&1
-xmllint --noout --schema single_cell_document.xsd         sample_bad.ill >> ill.eraseme 2>&1
-echo "  invalid input, jing, .rng:"                                      >> ill.eraseme 2>&1
-java -jar $jar_dir/jing.jar single_cell_document.rng      sample_bad.ill >> ill.eraseme 2>&1
-echo "  invalid input, xmllint, .rng:"                                   >> ill.eraseme 2>&1
-xmllint --noout --relaxng single_cell_document.rng        sample_bad.ill >> ill.eraseme 2>&1
+{
+  echo "  invalid input, jing, .rnc:"
+  java -jar $jar_dir/jing.jar -c single_cell_document.rnc   sample_bad.ill
+  echo "  invalid input, jing, .xsd:"
+  java -jar $jar_dir/jing.jar single_cell_document.xsd      sample_bad.ill
+  echo "  invalid input, xmllint, .xsd:"
+  xmllint --noout --schema single_cell_document.xsd         sample_bad.ill
+  echo "  invalid input, jing, .rng:"
+  java -jar $jar_dir/jing.jar single_cell_document.rng      sample_bad.ill
+  echo "  invalid input, xmllint, .rng:"
+  xmllint --noout --relaxng single_cell_document.rng        sample_bad.ill
+} > ill.eraseme 2>&1
 sed -e 's/^.*error: //;s/\.ill fails/ fails/;s/  *$//' -i ill.eraseme
 sed -e 's/^.*Schemas validity error : //' -i ill.eraseme
 sed -e 's/^.*Relax-NG validity error : //' -i ill.eraseme
@@ -202,7 +211,7 @@ echo "  Regenerate XSD files as they should appear in the repository."
 # 'cell.xsd', which lacks <xs:complexType name="cell_element">, so
 # process 'multiple' before 'single'.
 
-cp --preserve $srcdir/types_*.rnc $srcdir/cell_*.rnc $srcdir/multiple_cell_document_*.rnc $srcdir/single_cell_document_*.rnc .
+cp --preserve "$srcdir"/types_*.rnc "$srcdir"/cell_*.rnc "$srcdir"/multiple_cell_document_*.rnc "$srcdir"/single_cell_document_*.rnc .
 
 java -jar $jar_dir/trang.jar multiple_cell_document.rnc    multiple_cell_document.xsd
 java -jar $jar_dir/trang.jar single_cell_document.rnc      single_cell_document.xsd

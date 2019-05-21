@@ -916,7 +916,35 @@ static double const q2017[cso_n_alb_or_anb][cso_n_gender][cso_n_smoking][cso_ome
   },
 };
 
+namespace
+{
+int get_sns_age(oenum_cso_era cso_era, mcenum_smoking smoking)
+{
+    return
+        ((mce_unismoke == smoking) ? 0
+        :(oe_1980cso == cso_era) ? cso_sns_age_1980
+        :(oe_2001cso == cso_era) ? cso_sns_age_2001
+        :(oe_2017cso == cso_era) ? cso_sns_age_2017
+        :                          throw "invalid cso sns age"
+        );
+}
+
+int get_omega(oenum_cso_era cso_era)
+{
+    return
+        ((oe_1980cso == cso_era) ? cso_omega_1980
+        :(oe_2001cso == cso_era) ? cso_omega_2001
+        :(oe_2017cso == cso_era) ? cso_omega_2017
+        :                          throw "invalid cso omega"
+        );
+}
+} // Unnamed namespace.
+
 /// Return a single CSO ultimate table.
+///
+/// This overload returns a [min_age, max_age] subset of a full
+/// valuation table that has been padded if necessary to provide
+/// values for all ages from zero to omega.
 ///
 /// Only the 1980, 2001, and 2017 eras are supported.
 ///
@@ -941,6 +969,8 @@ std::vector<double> cso_table
     ,oenum_alb_or_anb alb_or_anb
     ,mcenum_gender    gender
     ,mcenum_smoking   smoking
+    ,int              min_age
+    ,int              max_age
     )
 {
     bool const is_anb = alb_or_anb != oe_age_last_birthday;
@@ -950,26 +980,17 @@ std::vector<double> cso_table
         :(oe_2017cso == cso_era) ? q2017[is_anb][gender][smoking]
         :                          throw "invalid cso era"
         );
-    int const sns_age =
-        ((mce_unismoke == smoking) ? 0
-        :(oe_1980cso == cso_era) ? cso_sns_age_1980
-        :(oe_2001cso == cso_era) ? cso_sns_age_2001
-        :(oe_2017cso == cso_era) ? cso_sns_age_2017
-        :                          throw "invalid cso sns age"
-        );
-    int const omega =
-        ((oe_1980cso == cso_era) ? cso_omega_1980
-        :(oe_2001cso == cso_era) ? cso_omega_2001
-        :(oe_2017cso == cso_era) ? cso_omega_2017
-        :                          throw "invalid cso omega"
-        );
+    int const sns_age = get_sns_age(cso_era, smoking);
+    int const omega   = get_omega  (cso_era         );
 
-    if(mce_unismoke != smoking)
-        {
-        LMI_ASSERT(each_equal(p, p + sns_age, 0.0));
-        }
+    LMI_ASSERT(each_equal(p, p + sns_age, 0.0));
+    LMI_ASSERT(0 == std::count(p + sns_age, p + omega, 0.0));
+    LMI_ASSERT(1.0 == p[omega - 1]);
 
-    std::vector<double> v(p + sns_age, p + omega);
+    LMI_ASSERT(0 <= min_age);
+    LMI_ASSERT(max_age <= omega);
+
+    std::vector<double> v(p + min_age, p + max_age);
 
     if
         (oe_heterodox    == autopisty
@@ -983,19 +1004,43 @@ std::vector<double> cso_table
         // was also ratified by NAIC).
         if(is_anb)
             {
-            LMI_ASSERT(0.03831 == v[56]);
-            v[56] =    0.03891;
+            LMI_ASSERT(0.03831 == v[71 - min_age]);
+            v[71 - min_age] =    0.03891;
             }
         else
             {
-            LMI_ASSERT(0.03644 == v[55]);
-            v[55] =    0.03673;
-            LMI_ASSERT(0.04039 == v[56]);
-            v[56] =    0.04070;
+            LMI_ASSERT(0.03644 == v[71 - min_age - 1]);
+            v[71 - min_age - 1] =    0.03673;
+            LMI_ASSERT(0.04039 == v[71 - min_age]);
+            v[71 - min_age] =    0.04070;
             }
         }
 
-    LMI_ASSERT(0 == std::count(v.begin(), v.end(), 0.0));
-    LMI_ASSERT(1.0 == v.back());
     return v;
+}
+
+/// Return a single CSO ultimate table.
+///
+/// This overload returns a full valuation table including all ages
+/// from zero (padded if necessary) to omega.
+///
+/// See the overload with more arguments for details.
+
+std::vector<double> cso_table
+    (oenum_cso_era    cso_era
+    ,oenum_autopisty  autopisty
+    ,oenum_alb_or_anb alb_or_anb
+    ,mcenum_gender    gender
+    ,mcenum_smoking   smoking
+    )
+{
+    return cso_table
+        (cso_era
+        ,autopisty
+        ,alb_or_anb
+        ,gender
+        ,smoking
+        ,get_sns_age(cso_era, smoking)
+        ,get_omega  (cso_era         )
+        );
 }

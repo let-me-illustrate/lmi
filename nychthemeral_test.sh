@@ -36,15 +36,7 @@ set -e
 # provides no convenient alternative):
 setopt PIPE_FAIL
 
-lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
-case "$lmi_build_type" in
-    (*-*-linux*)
-        PERFORM=wine
-        ;;
-    (*)
-        PERFORM=
-        ;;
-esac
+. ./set_toolchain.sh
 
 coefficiency=${coefficiency:-"--jobs=$(nproc)"}
 
@@ -129,13 +121,19 @@ nychthemeral_clutter='
 /^  *[1-9][0-9]* source lines/d
 /^  *[1-9][0-9]* marked defects/d
 /^# xrc tests/d
-/^# schema tests/d
 /^# test all valid emission types/d
+/^# schema tests/d
+/^# test mst --> xst conversion/d
 /^$/d
 '
 
 # Directory for test logs.
-log_dir=/tmp/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/logs
+#
+# It seems redundant to construct yet another $prefix and $exec_prefix here;
+# perhaps that should be done OAOO in a script that selects a toolchain.
+prefix=/opt/lmi
+exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
+log_dir="$exec_prefix"/logs
 mkdir --parents "$log_dir"
 
 {
@@ -165,7 +163,7 @@ else
 fi
 
 printf '\n# unit tests\n\n'
-make "$coefficiency" unit_tests 2>&1 \
+make "$coefficiency" --output-sync=recurse unit_tests 2>&1 \
   | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests
 
 printf '\n# build with shared-object attributes\n\n'
@@ -177,7 +175,7 @@ make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=safest
   | tee "$log_dir"/cgi_cli_safestdlib | sed -e "$build_clutter" -e "$cli_cgi_clutter"
 
 printf '\n# unit tests in libstdc++ debug mode\n\n'
-make "$coefficiency" unit_tests build_type=safestdlib 2>&1 \
+make "$coefficiency" --output-sync=recurse unit_tests build_type=safestdlib 2>&1 \
   | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests_safestdlib
 
 printf '\n# xrc tests\n\n'
@@ -186,9 +184,9 @@ java -jar /opt/lmi/third_party/rng/jing.jar -c xrc.rnc ./*.xrc 2>&1 \
 
 # Run the following tests in a throwaway directory so that the files
 # they create can be cleaned up easily.
-cd /tmp
-mkdir --parents /tmp/lmi/tmp
-cd /tmp/lmi/tmp
+throwaway_dir="$log_dir"/tmp
+mkdir --parents "$throwaway_dir"
+cd "$throwaway_dir"
 
 # Copy these files hither because the emission tests write some
 # output files to the input file's directory.
@@ -197,17 +195,46 @@ cp /opt/lmi/src/lmi/sample.cns .
 
 printf '\n# test all valid emission types\n\n'
 
-"$PERFORM" /opt/lmi/bin/lmi_cli_shared --file=/tmp/lmi/tmp/sample.ill --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
+$PERFORM /opt/lmi/bin/lmi_cli_shared --file="$throwaway_dir"/sample.ill --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
 
-"$PERFORM" /opt/lmi/bin/lmi_cli_shared --file=/tmp/lmi/tmp/sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
+$PERFORM /opt/lmi/bin/lmi_cli_shared --file="$throwaway_dir"/sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
 
 printf '\n# schema tests\n\n'
 /opt/lmi/src/lmi/test_schemata.sh 2>&1 \
   | tee "$log_dir"/schemata | sed -e "$schemata_clutter"
 
+printf '\n# test mst --> xst conversion\n\n'
+
+# All unique characters found in '*.mst' as of 2019-05-13.
+cat >eraseme.mst <<'EOF'
+ !"#$%&'()*+,-./
+0123456789
+:;<=>?@
+ABCDEFGHIJKLMNOPRSTUVWXYZ
+[]^_
+abcdefghijklmnopqrstuvwxyz
+{}
+EOF
+
+printf '%b' "\
+\\0337\\0336\\0335\\0334\\0333\\0332\\0331\\0330\\0327\\0326\
+\\0325\\0324\\0323\\0322\\0321\\0320\\0365\\0317\\0316\\0315\
+\\0314\\0313\\0312\\0311\\0310\\0307\\0306\\0365\\0305\\0304\
+\\0303\\0302\\0301\\0300\\0277\\0365\\0276\\0275\\0274\\0273\
+\\0272\\0271\\0270\\0267\\0266\\0265\\0264\\0263\\0262\\0261\
+\\0260\\0257\\0255\\0254\\0253\\0252\\0251\\0250\\0247\\0246\
+\\0245\\0365\\0244\\0242\\0241\\0240\\0365\\0236\\0235\\0234\
+\\0233\\0232\\0231\\0230\\0227\\0226\\0225\\0224\\0223\\0222\
+\\0221\\0220\\0217\\0216\\0215\\0214\\0213\\0212\\0211\\0210\
+\\0207\\0206\\0205\\0365\\0204\\0202\\0365\
+" >eraseme.touchstone
+
+srcdir=. datadir=. /opt/lmi/src/lmi/mst_to_xst.sh
+cmp eraseme.xst eraseme.touchstone
+
 # Clean up stray output. (The zsh '(N)' glob qualifier turns on
 # null_glob for a single expansion.)
-for z in /tmp/lmi/tmp/*(N); do rm "$z"; done
+for z in "$throwaway_dir"/*(N); do rm "$z"; done
 
 # The automated GUI test simulates keyboard and mouse actions, so
 # no such actions must be performed manually while it is running.

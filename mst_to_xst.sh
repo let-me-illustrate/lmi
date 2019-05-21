@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 # Copy MST files, obfuscating them for distribution.
 
@@ -30,15 +30,26 @@
 # Stripping the copyright header before obfuscation is a possible
 # future enhancement that might improve runtime performance.
 
-# This script requires zsh because brace expansion is more convenient
-# than 'seq'. It is intended to be called from a makefile that sets
+# This script is intended to be called from a makefile that sets
 # both $datadir and $srcdir.
 
+seqq()
+{
+    first=$1 incr=$2 last=$3
+    echo "for (i = $first; i != $last+$incr; i+=$incr) i" | bc -l
+}
+
+# These variables are indeed not assigned here.
+# shellcheck disable=SC2154
 [ -d "$datadir" ] || { printf 'fail: invalid datadir\n'; exit 2; }
+# shellcheck disable=SC2154
 [ -d "$srcdir"  ] || { printf 'fail: invalid srcdir\n';  exit 3; }
 
-X=$(printf '\%03o' {255..0})
-Y=$(printf '\%03o' {0..255})
+# Word splitting is not a concern here.
+# shellcheck disable=SC2046
+X=$(printf '\\%03o' $(seqq '255' '-1'   '0'))
+# shellcheck disable=SC2046
+Y=$(printf '\\%03o' $(seqq   '0'  '1' '255'))
 
 cd "$srcdir" || { printf 'fail: cd\n'; exit 4; }
 for z in *.mst; do tr "$X" "$Y" <"$z" >"$datadir/${z%%.mst}.xst"; done

@@ -23,7 +23,7 @@
 
 #include "alert.hpp"
 
-#include <cstdio>                       // fputs(), getchar()
+#include <cstdio>                       // getchar()
 #include <iostream>
 #include <stdexcept>
 
@@ -99,13 +99,5 @@ void alarum_alert(std::string const& s)
 
 void safe_message_alert(char const* message)
 {
-    std::fputs(message, stderr);
-    std::fputc('\n', stderr);
-    // Flush explicitly. C99 7.19.3/7 says only that stderr is
-    // "not fully buffered", not that it is 'unbuffered'. See:
-    //   http://article.gmane.org/gmane.comp.gnu.mingw.user/14358
-    //     [2004-12-20T09:07:24Z from Danny Smith]
-    //   http://article.gmane.org/gmane.comp.gnu.mingw.user/15063
-    //     [2005-02-10T17:23:09Z from Greg Chicares]
-    std::fflush(stderr);
+    safely_show_on_stderr(message);
 }

@@ -31,15 +31,6 @@ endif
 
 system_root := /
 
-PERFORM := wine
-
-# $(winebindir) is where 'install_miscellanea.make' places 'md5sum.exe'.
-
-w0 := $(shell winepath -w $(localbindir) | sed -e's/\\/\\\\/g')
-w1 := $(shell winepath -w $(locallibdir) | sed -e's/\\/\\\\/g')
-w2 := $(shell winepath -w $(winebindir)  | sed -e's/\\/\\\\/g')
-export WINEPATH=$(w0);$(w1);$(w2)
-
 ################################################################################
 
 # Compiler, linker, and so on.
@@ -71,16 +62,9 @@ RC      := $(gcc_bin_dir)$(host_hyphen)windres
 
 compiler_sysroot := $(dir $(shell $(CXX) -print-libgcc-file-name))
 
-# 'libwinpthread*' is no longer needed for debian cross builds--see:
-#   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=748353
-# | Provide compilers using Windows and POSIX threads. The default setup
-# | uses Windows threads, thus avoiding the dependency on the pthreads DLL
-# but including it in this list with $(wildcard) does no harm.
-
 compiler_runtime_files := \
   $(wildcard $(compiler_sysroot)/libgcc*.dll) \
   $(wildcard $(compiler_sysroot)/libstdc++*.dll) \
-  $(wildcard $(compiler_sysroot)/libwinpthread-1.dll) \
 
 ################################################################################
 

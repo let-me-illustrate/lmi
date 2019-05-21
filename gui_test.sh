@@ -36,15 +36,7 @@ set -e
 # provides no convenient alternative):
 setopt PIPE_FAIL
 
-lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
-case "$lmi_build_type" in
-    (*-*-linux*)
-        PERFORM=wine
-        ;;
-    (*)
-        PERFORM=
-        ;;
-esac
+. ./set_toolchain.sh
 
 # Lines beginning with a capitalized word, viz.
 #   /^NOTE: starting the test suite$/d
@@ -135,13 +127,19 @@ gui_test_clutter='
 /^time=[[:digit:]]\+ms (for validate_output_mec)$/d
 /^validate_output_mec: ok$/d
 /^time=[[:digit:]]\+ms (for all tests)$/d
+/^Warning: Test files path ..opt.lmi.gui_test. doesn.t exist\.$/d
 '
 
 # Directory for test logs.
-log_dir=/tmp/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/logs
+#
+# It seems redundant to construct yet another $prefix and $exec_prefix here;
+# perhaps that should be done OAOO in a script that selects a toolchain.
+prefix=/opt/lmi
+exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
+log_dir="$exec_prefix"/logs
 mkdir --parents "$log_dir"
 
 cd /opt/lmi/src/lmi
 
-"$PERFORM" /opt/lmi/bin/wx_test --ash_nazg --data_path=/opt/lmi/data 2>&1 \
+$PERFORM /opt/lmi/bin/wx_test --ash_nazg --data_path=/opt/lmi/data 2>&1 \
   | tee "$log_dir"/gui_test | sed -e "$gui_test_clutter"

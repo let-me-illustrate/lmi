@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include "bourn_cast.hpp"
+#include "global_settings.hpp"
 #include "ieee754.hpp"                  // is_infinite<>()
 #include "miscellany.hpp"               // rtrim()
 
@@ -75,7 +76,8 @@ inline int floating_point_decimals(T t)
         return 0;
         }
     long double z = std::numeric_limits<T>::epsilon() * std::fabs(t);
-    return std::max(0, static_cast<int>(-std::log10(z)));
+    int const fuzz = global_settings::instance().regression_testing() ? -2 : 0;
+    return std::max(0, fuzz + static_cast<int>(-std::log10(z)));
 }
 
 /// Simplify a formatted floating-point number.

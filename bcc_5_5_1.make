@@ -53,7 +53,9 @@ compiler_impersonation_cppflags := \
   -D WIN32_LEAN_AND_MEAN \
   -I $(shadow_header_directory) \
 
-gcc3_dir     := /MinGW_
+# This makefile because unusable long ago, so this dependency has been
+# renamed to avoid pointless maintenance updates.
+gcc3_dir     := /opt/lmi/no_longer_usable
 gcc3_bin_dir := $(gcc3_dir)/bin
 
 # Casual workarounds for borland C++ version 5.5.1 . The vendor calls
