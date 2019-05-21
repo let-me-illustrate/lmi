@@ -82,12 +82,12 @@ MAKEFLAGS := \
 
 export LMI_ENV_FILE := env_$(shell date -u +'%s_%N').eraseme
 
-GNUmakefile $(srcdir)/GNUmakefile:: $(LMI_ENV_FILE)
+GNUmakefile $(CURDIR)/GNUmakefile:: $(LMI_ENV_FILE)
 	$(eval include $(LMI_ENV_FILE))
 	@rm $(LMI_ENV_FILE)
 
 $(LMI_ENV_FILE):
-	@. ./set_toolchain.sh
+	@. $(CURDIR)/set_toolchain.sh
 
 ################################################################################
 
