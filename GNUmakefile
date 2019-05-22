@@ -77,8 +77,14 @@ MAKEFLAGS := \
 
 ################################################################################
 
-# Remake this file to "source" a script that sets various crucial
+# Remake this makefile to "source" a script that sets various crucial
 # environment variables.
+#
+# For similar usage elsewhere, $(srcdir) is generally preferred to
+# $(CURDIR), especially in submakefiles made in other directories,
+# where $(CURDIR) would be wrong. In this particular case, however,
+# $(srcdir) has not yet been assigned, and it's best to remake this
+# makefile early.
 
 export LMI_ENV_FILE := env_$(shell date -u +'%s_%N').eraseme
 
@@ -129,6 +135,12 @@ htmldir         := $(docdir)
 #libdir          := $(exec_prefix)/lib
 # source files (GNU Coding Standards don't suggest any default value)
 srcdir          := $(CURDIR)
+
+# $(srcdir) really shouldn't be overridden. A noisy assertion is more
+# helpful than a silent 'override' directive.
+ifneq ($(srcdir),$(CURDIR))
+  $(error Assertion failure: source directory misconfigured)
+endif
 
 # These directories are outside the scope of the GNU Coding Standards.
 # Therefore, their names may contain '_' for distinction and clarity.
