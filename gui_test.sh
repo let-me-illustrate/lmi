@@ -94,6 +94,8 @@ gui_test_clutter='
 /^create_open_text: ok$/d
 /^default_input: started$/d
 /^default_input: skipped (not running distribution tests)$/d
+/^time=[[:digit:]]\+ms (for default_input)$/d
+/^default_input: ok$/d
 /^default_update: started$/d
 /^default_update: skipped (not running distribution tests)$/d
 /^expiry_dates: started$/d
