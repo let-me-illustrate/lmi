@@ -25,7 +25,7 @@
 #include "handle_exceptions.hpp"
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
-#include "miscellany.hpp"               // split_into_lines()
+#include "miscellany.hpp"               // begins_with(), split_into_lines()
 
 #include <boost/filesystem/convenience.hpp> // fs::extension()
 #include <boost/filesystem/fstream.hpp>
@@ -155,8 +155,9 @@ file::file(std::string const& file_path)
         throw std::runtime_error("Failure in file input stream.");
         }
 
-    // Sort these lists by enumerator, but keep 'e_ephemeral' last.
+    // Sort each sublist by enumerator, but keep 'e_ephemeral' last.
     phylum_ =
+        // extension() tests are simplest
           ".ico"        == extension() ? e_binary
         : ".ini"        == extension() ? e_binary
         : ".png"        == extension() ? e_binary
@@ -197,6 +198,7 @@ file::file(std::string const& file_path)
         : ".xrc"        == extension() ? e_xml_other
         : ".xsd"        == extension() ? e_xml_other
         : ".xsl"        == extension() ? e_xml_other
+        // phyloanalyze() tests inspect only file name
         : phyloanalyze("^ChangeLog-")  ? e_binary
         : phyloanalyze("^tags$")       ? e_expungible
         : phyloanalyze("^COPYING$")    ? e_gpl
@@ -207,6 +209,9 @@ file::file(std::string const& file_path)
         : phyloanalyze("^md5sums$")    ? e_md5
         : phyloanalyze("^INSTALL$")    ? e_synopsis
         : phyloanalyze("^README")      ? e_synopsis
+        // test file contents only if necessary
+        : begins_with(data(), "#!")    ? e_script
+        // keep this last
         : phyloanalyze("^eraseme")     ? e_ephemeral
         : throw std::runtime_error("File is unexpectedly uncategorizable.")
         ;
