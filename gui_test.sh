@@ -58,6 +58,9 @@ gui_test_clutter='
 /^time=[[:digit:]]\+ms (for about_dialog_version)$/d
 /^about_dialog_version: ok$/d
 /^benchmark_census: started$/d
+/^Run case for [_[:alnum:]]\+\.cns: [[:digit:]]\+ms elapsed$/d
+/^Print case to PDF for [_[:alnum:]]\+\.cns: [[:digit:]]\+ms elapsed$/d
+/^Print case to spreadsheet for [_[:alnum:]]\+\.cns: [[:digit:]]\+ms elapsed$/d
 /^time=[[:digit:]]\+ms (for benchmark_census)$/d
 /^benchmark_census: ok$/d
 /^calculation_summary: started$/d
