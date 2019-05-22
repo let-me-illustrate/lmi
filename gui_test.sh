@@ -141,5 +141,5 @@ mkdir --parents "$log_dir"
 
 cd /opt/lmi/src/lmi
 
-$PERFORM /opt/lmi/bin/wx_test --ash_nazg --data_path=/opt/lmi/data 2>&1 \
+$PERFORM /opt/lmi/bin/wx_test "$@" --ash_nazg --data_path=/opt/lmi/data 2>&1 \
   | tee "$log_dir"/gui_test | sed -e "$gui_test_clutter"
