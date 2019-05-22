@@ -91,7 +91,7 @@ printf "all permissions forced\n"
   # this command shows the same thing, unfiltered so that the diagnostics
   # are easier to understand.
 
-for z in src data graphics test tables; do \
+for z in src data graphics hooks test tables; do \
   make --directory=/opt/lmi/src/lmi --no-print-directory check_concinnity \
   prefascicle_dir=/opt/lmi/proprietary/$z ; done
 
