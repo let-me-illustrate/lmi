@@ -1072,6 +1072,14 @@ elapsed_time$(EXEEXT): \
   system_command_non_wx.o \
   timer.o \
 
+lmi_md5sum$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(main_auxiliary_common_objects) \
+  getopt.o \
+  md5.o \
+  md5sum.o \
+  md5sum_cli.o \
+
 generate_passkey$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(main_auxiliary_common_objects) \
