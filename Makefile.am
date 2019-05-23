@@ -44,6 +44,7 @@ bin_PROGRAMS = \
     lmi_cli \
     lmi_wx \
     elapsed_time \
+    lmi_md5sum \
     generate_passkey \
     antediluvian_cli \
     ihs_crc_comp \
@@ -453,6 +454,16 @@ libwx_new_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 libwx_new_la_LIBADD = $(WX_LIBS)
 
 # auxiliary executables
+
+lmi_md5sum_SOURCES = \
+    getopt.cpp \
+    md5.cpp \
+    md5sum.cpp \
+    md5sum_cli.cpp
+lmi_md5sum_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS)
+lmi_md5sum_LDADD = \
+    $(BOOST_LIBS) \
+    libmain_auxiliary_common.la
 
 generate_passkey_SOURCES = \
     authenticity.cpp \
