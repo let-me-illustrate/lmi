@@ -5,10 +5,9 @@
 #  - give the top-level makefile a target to remake itself, with
 #     - $(eval include $(LMI_ENV_FILE)) in its recipe, and
 #     - $(LMI_ENV_FILE) as a prerequisite
-#  - add a phony $(LMI_ENV_FILE) target that sources the script
-#  - make the script write 'make' assignments like "export foo := bar"
-#    for each desired environment variable to a file named
-#    $LMI_ENV_FILE, iff that filename is of nonzero length
+#  - add a phony $(LMI_ENV_FILE) target whose recipe sources the
+#    script and writes 'make' assignments like "export foo := bar"
+#    into the file it names
 # To test:
 #   $export LMI_IN=Russia;   make -f parent.make all
 #   $export LMI_IN=Mongolia; make -f parent.make all
@@ -22,13 +21,23 @@ parent.make:: $(LMI_ENV_FILE)
 	rm $(LMI_ENV_FILE)
 
 $(LMI_ENV_FILE):
-	@echo "Sourcing 'set.sh'"; \
-	. ./set.sh ; \
+	@echo "Sourcing 'set.sh'"
+	@. ./set.sh ; \
+	  { \
+	    echo "export LMI_OUT1 := $$LMI_OUT1"; \
+	    echo "export LMI_OUT2 := $$LMI_OUT2"; \
+	  } > $@ ; \
 	echo "'$$LMI_IN' --> '$$LMI_OUT1', '$$LMI_OUT2' : sourced in 'parent.make'"
 
 all:
 	@echo "'$$LMI_IN' --> '$$LMI_OUT1', '$$LMI_OUT2' : targets in 'parent.make'"
 	$(MAKE) --no-print-directory -f child.make
+
+# For real-world use, commit 3ff6c008 seems preferable. It writes
+# 'make' assignments in the script rather than in this makefile,
+# facilitating maintenance by keeping the list of variables in a
+# single file. See this discussion:
+#   https://lists.nongnu.org/archive/html/lmi/2019-05/msg00052.html
 
 # Obviously one could simply write a cover script to replace direct
 # invocation of 'make', but that's nasty. See:
