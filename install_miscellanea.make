@@ -47,7 +47,6 @@ third_party_source_dir  := $(dest_dir)/src
 boost_archive    := boost_1_33_1.tar.bz2
 cgicc_archive    := cgicc-3.1.4.tar.bz2
 jing_archive     := jing-20091111.zip
-md5sum_msw_exe   := md5sum.exe
 sample_archive   := lmi-data-20050618T1440Z.tar.bz2
 trang_archive    := trang-20091111.zip
 xmlwrapp_archive := xmlwrapp-0.9.0.tar.gz
@@ -56,14 +55,12 @@ file_list := \
   $(boost_archive) \
   $(cgicc_archive) \
   $(jing_archive) \
-  $(md5sum_msw_exe) \
   $(sample_archive) \
   $(trang_archive) \
   $(xmlwrapp_archive) \
 
 boost cgicc xmlwrapp: stem = $(basename $(basename $($@_archive)))
 jing trang:           stem =            $(basename $($@_archive))
-md5sum_msw:           stem = $(md5sum_msw_exe)
 sample:               stem = data
 
 # URLs and archive md5sums #####################################################
@@ -71,7 +68,6 @@ sample:               stem = data
 $(boost_archive)-url    := $(sf_mirror)/boost/$(boost_archive)
 $(cgicc_archive)-url    := ftp://ftp.gnu.org/pub/gnu/cgicc/$(cgicc_archive)
 $(jing_archive)-url     := https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jing-trang/$(jing_archive)
-$(md5sum_msw_exe)-url   := https://github.com/vadz/lmi/releases/download/new-cygwin-makefiles/md5sum.exe
 $(sample_archive)-url   := https://download.savannah.gnu.org/releases/lmi/$(sample_archive)
 $(trang_archive)-url    := https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jing-trang/$(trang_archive)
 $(xmlwrapp_archive)-url := https://github.com/vslavik/xmlwrapp/releases/download/v0.9.0/$(xmlwrapp_archive)
@@ -79,7 +75,6 @@ $(xmlwrapp_archive)-url := https://github.com/vslavik/xmlwrapp/releases/download
 $(boost_archive)-md5    := 2b999b2fb7798e1737d1fff8fac602ef
 $(cgicc_archive)-md5    := 6cb5153fc9fa64b4e50c7962aa557bbe
 $(jing_archive)-md5     := 13eef193921409a1636377d1efbf9843
-$(md5sum_msw_exe)-md5   := eb574b236133e60c989c6f472f07827b
 $(sample_archive)-md5   := e7f07133abfc3b9c2252dfa3b61191bc
 $(trang_archive)-md5    := 9d31799b948c350850eb9dd14e5b832d
 $(xmlwrapp_archive)-md5 := 5e8ac678ab03b7c60ce61ac5424e0849
@@ -120,7 +115,7 @@ ad_hoc_dir_exists = \
 # Targets ######################################################################
 
 .PHONY: all
-all: boost cgicc jing md5sum_msw sample trang xmlwrapp
+all: boost cgicc jing sample trang xmlwrapp
 
 # Patches were generated according to this advice:
 #
@@ -187,28 +182,6 @@ jing: $(file_list)
 	$(MKDIR) --parents $(dest_dir)/rng
 	$(MV) $(ad_hoc_dir)/$(stem)/bin/$@.jar         $(dest_dir)/rng
 	$(MV) $(ad_hoc_dir)/$(stem)/bin/xercesImpl.jar $(dest_dir)/rng
-
-# The 'md5sum_msw' binary is redistributed to msw end users for
-# authentication, so the 'fardel' target requires it. On other
-# platforms, it cannot be executed directly, but it is needed for
-# creating a cross 'fardel' and for running cross unit tests.
-#
-# It is placed in lmi's 'third_party/bin/' subdirectory--imperatively
-# not in lmi's 'local/bin/' subdirectory, which is added to $PATH.
-# For cygwin builds, the expressly downloaded 'md5sum.exe' is kept off
-# $PATH to prevent it from shadowing cygwin's own version. However,
-# for cross builds, it cannot shadow the native 'md5sum', yet some
-# cross-built unit tests require an msw binary, so add its directory
-# to $WINEPATH to make those tests work (incidentally, 'wine' doesn't
-# find it if it's simply symlinked).
-#
-# Should the given URL ever become invalid, see:
-#   http://www.openoffice.org/dev_docs/using_md5sums.html#links
-# to find another.
-
-.PHONY: md5sum_msw
-md5sum_msw: $(file_list)
-	$(CP) --preserve $(cache_dir)/$(stem) $(third_party_bin_dir)
 
 # The 'clobber' target doesn't remove $(prefix)/data because that
 # directory might contain valuable user-customized files; hence, in
