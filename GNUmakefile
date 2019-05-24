@@ -64,6 +64,11 @@ $(MAKECMDGOALS):
 
 .DELETE_ON_ERROR:
 
+# Process this makefile serially, but pass any '--jobs=' parameter to
+# submakefiles.
+
+.NOTPARALLEL:
+
 # Suppress default rules. Instead, specify all desired rules
 # explicitly.
 #
