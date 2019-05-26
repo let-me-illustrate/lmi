@@ -158,6 +158,10 @@ for z in * ; do [ -f $z ] && ( [ $z -nt /opt/lmi/src/lmi/$z ] || [ $z -ot /opt/l
 
 for z in $(git diff HEAD@{1} --name-only) ; do touch --reference=/opt/lmi/src/lmi/$z $z; done
 
+  # Alternatively, in source rather than mirror directory, especially
+  # after 'git checkout' to undo local modifications:
+for z in *(m-1) ; do touch --reference=$z /opt/lmi/free/src/lmi/$z; done
+
   # Third screen: only for building and testing
 
 cd /opt/lmi/src/lmi
