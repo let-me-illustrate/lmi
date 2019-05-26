@@ -264,7 +264,8 @@ void validate_print_case_output
         ,std::string const& insured_name
         )
 {
-    std::string const census_file(corp_name + tsv_ext());
+    fs::path p(configurable_settings::instance().print_directory());
+    std::string const census_file((p / (corp_name + tsv_ext())).string());
     output_file_existence_checker output_census(census_file);
 
     struct print_case
@@ -296,7 +297,8 @@ void validate_print_roster_output
         ,std::string const& insured_name
         )
 {
-    std::string const roster_file(corp_name + ".roster" + tsv_ext());
+    fs::path p(configurable_settings::instance().print_directory());
+    std::string const roster_file((p / (corp_name + ".roster" + tsv_ext())).string());
     output_file_existence_checker output_roster(roster_file);
 
     struct print_roster
