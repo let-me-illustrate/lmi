@@ -66,6 +66,12 @@ git fetch xanadu
 
 git cherry-pick ..xanadu/name_of_pull_request
 
+  # Alternatively, to cherry-pick from an online repository not set up
+  # as a remote:
+
+git fetch https://github.com/thesiv/lmi.git wsl
+git branch ilya-wsl FETCH_HEAD
+
   # Commit to a digressionary branch...
 
   # See:
