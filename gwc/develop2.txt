@@ -87,15 +87,13 @@ printf "forcing correct permissions "
   )done; \
 printf "all permissions forced\n"
 
-  # (2) Test concinnity. The git pre-commit hook shows these commands'
-  # output, filtered; these commands show the same thing, unfiltered
-  # so that the diagnostics are easier to understand.
+  # (2) Test concinnity. The git pre-commit hook shows filtered output;
+  # this command shows the same thing, unfiltered so that the diagnostics
+  # are easier to understand.
 
-cd /opt/lmi/proprietary/data/
-cd ../data  ; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
-cd ../src   ; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
-cd ../test  ; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
-cd ../tables; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
+for z in src data graphics hooks test tables; do \
+  make --directory=/opt/lmi/src/lmi --no-print-directory check_concinnity \
+  prefascicle_dir=/opt/lmi/proprietary/$z ; done
 
   # To update copyright notices annually
 

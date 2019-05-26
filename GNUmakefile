@@ -64,6 +64,11 @@ $(MAKECMDGOALS):
 
 .DELETE_ON_ERROR:
 
+# Process this makefile serially, but pass any '--jobs=' parameter to
+# submakefiles.
+
+.NOTPARALLEL:
+
 # Suppress default rules. Instead, specify all desired rules
 # explicitly.
 #
@@ -77,17 +82,23 @@ MAKEFLAGS := \
 
 ################################################################################
 
-# Remake this file to "source" a script that sets various crucial
+# Remake this makefile to "source" a script that sets various crucial
 # environment variables.
+#
+# For similar usage elsewhere, $(srcdir) is generally preferred to
+# $(CURDIR), especially in submakefiles made in other directories,
+# where $(CURDIR) would be wrong. In this particular case, however,
+# $(srcdir) has not yet been assigned, and it's best to remake this
+# makefile early.
 
 export LMI_ENV_FILE := env_$(shell date -u +'%s_%N').eraseme
 
-GNUmakefile $(srcdir)/GNUmakefile:: $(LMI_ENV_FILE)
+GNUmakefile $(CURDIR)/GNUmakefile:: $(LMI_ENV_FILE)
 	$(eval include $(LMI_ENV_FILE))
 	@rm $(LMI_ENV_FILE)
 
 $(LMI_ENV_FILE):
-	@. ./set_toolchain.sh
+	@. $(CURDIR)/set_toolchain.sh
 
 ################################################################################
 
@@ -129,6 +140,12 @@ htmldir         := $(docdir)
 #libdir          := $(exec_prefix)/lib
 # source files (GNU Coding Standards don't suggest any default value)
 srcdir          := $(CURDIR)
+
+# $(srcdir) really shouldn't be overridden. A noisy assertion is more
+# helpful than a silent 'override' directive.
+ifneq ($(srcdir),$(CURDIR))
+  $(error Assertion failure: source directory misconfigured)
+endif
 
 # These directories are outside the scope of the GNU Coding Standards.
 # Therefore, their names may contain '_' for distinction and clarity.
@@ -388,7 +405,7 @@ TEST_CODING_RULES := $(build_dir)/test_coding_rules$(EXEEXT)
 
 .PHONY: custom_tools
 custom_tools:
-	@$(MAKE) --file=$(this_makefile) --directory=$(srcdir) test_coding_rules$(EXEEXT)
+	@$(MAKE) test_coding_rules$(EXEEXT)
 	@$(MKDIR) --parents $(localbindir)
 	@$(CP) --preserve --update $(TEST_CODING_RULES) $(localbindir)
 
@@ -409,7 +426,8 @@ custom_tools:
 # be made for msw '.bat' files, which normally should not be run in a
 # *nix shell.
 
-xml_files := $(wildcard *.cns *.ill *.xml *.xrc *.xsd *.xsl)
+prefascicle_dir ?= $(srcdir)
+xml_files := $(wildcard $(addprefix $(prefascicle_dir)/,*.cns *.ill *.xml *.xrc *.xsd *.xsl))
 
 .PHONY: check_concinnity
 check_concinnity: source_clean custom_tools
@@ -430,7 +448,7 @@ check_concinnity: source_clean custom_tools
 	  | $(MD5SUM) --check --quiet || true
 	@for z in $(build_dir)/*.d; do [ -s $$z ]         || echo $$z; done;
 	@for z in $(build_dir)/*.o; do [ -f $${z%%.o}.d ] || echo $$z; done;
-	@$(LS) --classify ./* \
+	@$(LS) --classify $(prefascicle_dir)/* \
 	  | $(SED) -e'/\*$$/!d' -e'/^\.\//!d' -e'/.sh\*$$/d' -e'/.sed\*$$/d' \
 	  | $(SED) -e's/^/Improperly executable: /'
 	@$(ECHO) "  Problems detected by xmllint:"
@@ -446,7 +464,7 @@ check_concinnity: source_clean custom_tools
 	      || $(ECHO) "... in file $$z"; \
 	  done;
 	@$(ECHO) "  Miscellaneous problems:"
-	@-$(PERFORM) $(TEST_CODING_RULES) *
+	@-$(PERFORM) $(TEST_CODING_RULES) $(prefascicle_dir)/*
 
 ################################################################################
 

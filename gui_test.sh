@@ -58,6 +58,9 @@ gui_test_clutter='
 /^time=[[:digit:]]\+ms (for about_dialog_version)$/d
 /^about_dialog_version: ok$/d
 /^benchmark_census: started$/d
+/^Run case for [_[:alnum:]]\+\.cns: [[:digit:]]\+ms elapsed$/d
+/^Print case to PDF for [_[:alnum:]]\+\.cns: [[:digit:]]\+ms elapsed$/d
+/^Print case to spreadsheet for [_[:alnum:]]\+\.cns: [[:digit:]]\+ms elapsed$/d
 /^time=[[:digit:]]\+ms (for benchmark_census)$/d
 /^benchmark_census: ok$/d
 /^calculation_summary: started$/d
@@ -94,6 +97,8 @@ gui_test_clutter='
 /^create_open_text: ok$/d
 /^default_input: started$/d
 /^default_input: skipped (not running distribution tests)$/d
+/^time=[[:digit:]]\+ms (for default_input)$/d
+/^default_input: ok$/d
 /^default_update: started$/d
 /^default_update: skipped (not running distribution tests)$/d
 /^expiry_dates: started$/d
@@ -141,5 +146,5 @@ mkdir --parents "$log_dir"
 
 cd /opt/lmi/src/lmi
 
-$PERFORM /opt/lmi/bin/wx_test --ash_nazg --data_path=/opt/lmi/data 2>&1 \
+$PERFORM /opt/lmi/bin/wx_test "$@" --ash_nazg --data_path=/opt/lmi/data 2>&1 \
   | tee "$log_dir"/gui_test | sed -e "$gui_test_clutter"

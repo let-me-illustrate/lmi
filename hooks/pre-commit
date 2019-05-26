@@ -2,7 +2,7 @@
 
 # git pre-commit hook
 
-# Copyright (C) 2016, 2017, 2018 Gregory W. Chicares.
+# Copyright (C) 2016, 2017, 2018, 2019 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -27,8 +27,9 @@ check_concinnity()
 {
     output=$( \
         make \
-          srcdir=/opt/lmi/src/lmi \
-          -f /opt/lmi/src/lmi/GNUmakefile \
+          prefascicle_dir="$1" \
+          --directory=/opt/lmi/src/lmi \
+          --no-print-directory \
           check_concinnity \
         2>&1 | sed \
           -e"/^Is it time to 'make release_candidate'?$/d" \
@@ -44,6 +45,11 @@ check_concinnity()
     fi
 }
 
-printf "checking..."
-check_concinnity
+toplevel=$(git rev-parse --show-toplevel)
+
+printf "checking "
+printf "[toplevel]..."
+check_concinnity "$toplevel"
+printf "hooks..."
+check_concinnity "$toplevel/hooks"
 printf "okay\n"
