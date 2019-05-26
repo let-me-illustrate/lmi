@@ -19,11 +19,13 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-[Just go here:
+Just go here:
   https://lists.nongnu.org/archive/html/lmi/2008-05/msg00001.html
-if you're not running ms windows.]
+if you're not running ms windows. Otherwise, follow the steps below:
+ - either (A1) or (A2) to install Cygwin or WSL, respectively; then
+ - (B) to build and run lmi.
 
-(1) Install Cygwin
+(A1) Install Cygwin
 
 Open a "Command Prompt" window, and enable pasting into it:
 
@@ -55,7 +57,46 @@ After a few minutes, you should see something like this at the end:
 
 Close the "Command prompt" window.
 
-(2) Install lmi
+(A2) Install WSL
+
+Open a "Windows PowerShell" window as Administrator:
+
+  Start | Programs | Windows PowerShell | Windows PowerShell
+
+Copy and paste the following lines into the "Windows PowerShell" window:
+
+  New-Item -ItemType Directory -Force -Path C:\cache_for_lmi
+  Set-Location -Path C:\cache_for_lmi
+  Invoke-WebRequest -Uri https://git.savannah.gnu.org/cgit/lmi.git/plain/install_wsl.ps1 -OutFile install_wsl.ps1 -UseBasicParsing
+  Set-ExecutionPolicy Unrestricted
+  Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+
+Agree to restart your computer.
+
+Note: Only the last two commands need administrator privileges. So if the execution
+policy already was set and Microsoft-Windows-Subsystem-Linux feature was enabled
+earlier, you don't need to execute them and restart the computer (and administrator
+privileges are not required either).
+
+Open a "Windows PowerShell" window (administrator privileges are not required)
+and execute the installation script:
+
+  C:\cache_for_lmi\install_wsl.ps1
+
+Select preferred OS or simply press Enter to install Ubuntu 18.04.
+After a few minutes, you should see something like this at the end:
+
+  "WSL installation seems to have succeeded"
+
+Then return back to the Restricted policy after installing
+(restart "Windows PowerShell" window as Administrator to execute
+this command):
+
+  Set-ExecutionPolicy Restricted
+
+Close the "Windows PowerShell" window.
+
+(B) Install lmi
 
 [Experienced users: Make sure 'C:\cache_for_lmi\' contains any files you
 need to download manually due to corporate firewall weirdness.]
@@ -63,6 +104,10 @@ need to download manually due to corporate firewall weirdness.]
 Start a Cygwin shell:
 
   Start | Programs | Cygwin | Cygwin Terminal
+
+or a WSL shell:
+
+  Start | All Programs | Apps | <Installed OS name>
 
 Copy the following, and paste it (Shift-Insert) into the shell:
 
