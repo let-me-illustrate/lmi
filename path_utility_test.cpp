@@ -57,6 +57,36 @@ namespace
     }
 }
 
+void test_modify_directory()
+{
+    // Motivating case:
+    BOOST_TEST_EQUAL("/usr/bin/sh"  , modify_directory("/bin/sh", "/usr/bin").string());
+
+    fs::path const file("sh");
+    fs::path const dir0("/bin");
+    fs::path const dir1("/usr/bin/");
+
+    BOOST_TEST_EQUAL("/bin/sh"      , modify_directory(file     , dir0      ).string());
+    BOOST_TEST_EQUAL("/bin/sh"      , modify_directory("sh"     , "/bin/"   ).string());
+    BOOST_TEST_EQUAL("/usr/bin/wish", modify_directory("wish"   , dir1      ).string());
+    BOOST_TEST_EQUAL("/usr/bin/wish", modify_directory("wish"   , "/usr/bin").string());
+
+    // An empty directory may be supplied.
+    BOOST_TEST_EQUAL("sh"           , modify_directory("sh"     , ""        ).string());
+    BOOST_TEST_EQUAL("sh"           , modify_directory("/bin/sh", ""        ).string());
+
+    // Arguably this should be forbidden:
+    //   $ls /bin/sh/
+    //   ls: cannot access '/bin/sh/': Not a directory
+    BOOST_TEST_EQUAL("/bin/sh"      , modify_directory("sh/"    , "/bin/"   ).string());
+
+    BOOST_TEST_THROW
+        (modify_directory("", "/bin")
+        ,std::runtime_error
+        ,"Assertion 'original_filepath.has_leaf()' failed."
+        );
+}
+
 void test_orthodox_filename()
 {
     BOOST_TEST_THROW
@@ -311,6 +341,7 @@ void test_path_validation()
 
 int test_main(int, char*[])
 {
+    test_modify_directory();
     test_orthodox_filename();
     test_serial_file_path();
     test_unique_filepath_with_normal_filenames();

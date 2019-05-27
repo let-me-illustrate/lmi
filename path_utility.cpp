@@ -93,6 +93,52 @@ void initialize_filesystem()
     fs::initial_path();
 }
 
+/// Change '/path/to/file' to '/some/other/place/file'.
+///
+/// Motivation: It is anomalous that boost permits this:
+///   path file("/bin/sh";
+///   path dir ("/usr/bin");
+///   dir / path; // returns "/usr/bin/bin/sh"
+/// where true == file.is_complete().
+///
+/// Arguably the arguments should be given in the opposite order:
+///   modify_directory("sh", "/usr/bin") // present order
+///   modify_directory("/usr/bin", "sh") // opposite order
+/// because the path precedes the leaf in canonical form. However,
+/// fs::change_extension() uses the present argument order:
+///   function(original, new_part)
+/// and in a nondegenerate case such as:
+///   modify_directory("/bin/sh", "/usr/bin") // present order
+/// simply means "change the directory of /bin/sh to /usr/bin", while
+///   modify_directory("/usr/bin", "/bin/sh") // opposite order
+/// seems less natural.
+///
+/// "change_directory" might be a more natural name, except that it
+/// evokes chdir(2) and cd(1).
+///
+/// Asserted precondition:
+///   - 'original_filepath' is not empty (i.e., true == has_leaf())
+/// It is notably not required that 'supplied_directory' name an
+/// actual existing directory.
+///
+/// Boost provides no way to test whether a path has the form of a
+/// directory. Its fs::is_directory() asks the operating system:
+///   is_directory("/usr/lib")
+/// returns 'true' iff the OS reports that such a directory exists;
+/// but the same function call would return 'false' after
+///   rm -rf /usr/lib ; touch /usr/lib
+/// Notably, path("/bin/sh/") succeeds, silently discarding the
+/// trailing '/'.
+
+fs::path LMI_SO modify_directory
+    (fs::path const& original_filepath
+    ,fs::path const& supplied_directory
+    )
+{
+    LMI_ASSERT(original_filepath.has_leaf());
+    return supplied_directory / fs::path(original_filepath.leaf());
+}
+
 /// Return a filename appropriate for posix as well as msw.
 ///
 /// Precondition: argument is not empty.
