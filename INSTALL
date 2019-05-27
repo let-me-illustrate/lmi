@@ -83,7 +83,10 @@ and execute the installation script:
 
   C:\cache_for_lmi\install_wsl.ps1
 
-Select preferred OS or simply press Enter to install Ubuntu 18.04.
+Note: Only Ubuntu 18.04 is supported now because non-Debian-based OS won't work,
+as we use apt, Debian and Ubuntu 16.04 uses the i686-w64-mingw32-g++ package of
+lower version than required, so can't be used too.
+
 After a few minutes, you should see something like this at the end:
 
   "WSL installation seems to have succeeded"
