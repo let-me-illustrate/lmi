@@ -23,7 +23,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-if [ ! -f configure.ac -o ! -f Makefile.am -o ! -f lmi.png ]; then
+if [ ! -f configure.ac ] || [ ! -f Makefile.am ] || [ ! -f lmi.png ]; then
     echo "Please run this script from the lmi source directory."
     exit 2
 fi
