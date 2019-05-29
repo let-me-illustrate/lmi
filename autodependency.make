@@ -31,7 +31,7 @@ $(srcdir)/configuration.make:: ;
 # 'include' this in another makefile to create automatic dependencies.
 
 # The 'automake' technique is discussed here:
-#   http://make.paulandlesley.org/autodep.html
+#   https://make.mad-scientist.net/papers/advanced-auto-dependency-generation/
 # Its 'sed' processing is no longer necessary because of '-MP':
 #   http://makelinux.org/make3/make3-CHP-8-SECT-3.html
 # | This completely eliminates the messy five-part sed expression in

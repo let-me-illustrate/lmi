@@ -25,7 +25,7 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 # The general technique used in the 'Multiple build directories'
 # section is due to Paul D. Smith:
-#   http://make.paulandlesley.org/multi-arch.html#advanced
+#   https://make.mad-scientist.net/papers/multi-architecture-builds/#advanced
 # with the following significant differences:
 #
 # For greater clarity, the 'actual' makefile is a separate file,
