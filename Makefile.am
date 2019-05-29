@@ -579,7 +579,7 @@ test_any_member_SOURCES = \
   path_utility.cpp
 test_any_member_CXXFLAGS = $(AM_CXXFLAGS)
 test_any_member_LDADD = \
-  $(BOOST_LIBS) \
+  $(BOOST_LIBS)
 
 test_assert_lmi_SOURCES = \
   $(common_test_objects) \
@@ -741,7 +741,7 @@ test_gpt_SOURCES = \
   timer.cpp
 test_gpt_CXXFLAGS = $(AM_CXXFLAGS)
 test_gpt_LDADD = \
-  $(BOOST_LIBS) \
+  $(BOOST_LIBS)
 
 test_handle_exceptions_SOURCES = \
   $(common_test_objects) \
@@ -765,7 +765,7 @@ test_input_seq_SOURCES = \
   path_utility.cpp
 test_input_seq_CXXFLAGS = $(AM_CXXFLAGS)
 test_input_seq_LDADD = \
-  $(BOOST_LIBS) \
+  $(BOOST_LIBS)
 
 test_input_SOURCES = \
   $(common_test_objects) \
@@ -951,7 +951,7 @@ test_numeric_io_SOURCES = \
   timer.cpp
 test_numeric_io_CXXFLAGS = $(AM_CXXFLAGS)
 test_numeric_io_LDADD = \
-  $(BOOST_LIBS) \
+  $(BOOST_LIBS)
 
 test_path_utility_SOURCES = \
   $(common_test_objects) \
@@ -1005,7 +1005,7 @@ test_print_matrix_SOURCES = \
   print_matrix_test.cpp
 test_print_matrix_CXXFLAGS = $(AM_CXXFLAGS)
 test_print_matrix_LDADD = \
-  $(BOOST_LIBS) \
+  $(BOOST_LIBS)
 
 test_product_file_SOURCES = \
   $(common_test_objects) \
@@ -1156,7 +1156,7 @@ test_tn_range_SOURCES = \
   tn_range_test_aux.cpp
 test_tn_range_CXXFLAGS = $(AM_CXXFLAGS)
 test_tn_range_LDADD = \
-  $(BOOST_LIBS) \
+  $(BOOST_LIBS)
 
 test_value_cast_SOURCES = \
   $(common_test_objects) \
@@ -1169,7 +1169,7 @@ test_value_cast_SOURCES = \
   value_cast_test.cpp
 test_value_cast_CXXFLAGS = $(AM_CXXFLAGS)
 test_value_cast_LDADD = \
-  $(BOOST_LIBS) \
+  $(BOOST_LIBS)
 
 test_vector_SOURCES = \
   $(common_test_objects) \
