@@ -242,9 +242,13 @@ MAKETARGET = \
 
 .PHONY: $(build_dir)
 $(build_dir): $(gpl_files)
-	+@[ -d $@ ] || $(MKDIR) --parents $@
-	+@for z in $(compiler_runtime_files); \
-	  do $(CP) --archive --update $$z $@ ; \
+	+@[ -d $@                 ] || $(MKDIR) --parents $@
+	+@[ -d $(localbindir)     ] || $(MKDIR) --parents $(localbindir)
+	+@[ -d $(locallibdir)     ] || $(MKDIR) --parents $(locallibdir)
+	+@[ -d $(localincludedir) ] || $(MKDIR) --parents $(localincludedir)
+	+@for z in $(compiler_runtime_files); do \
+	    $(CP) --archive --update $$z $@ ; \
+	    $(CP) --archive --update $$z $(localbindir) ; \
 	  done;
 	+@$(MAKETARGET)
 
@@ -406,7 +410,6 @@ TEST_CODING_RULES := $(build_dir)/test_coding_rules$(EXEEXT)
 .PHONY: custom_tools
 custom_tools:
 	@$(MAKE) test_coding_rules$(EXEEXT)
-	@$(MKDIR) --parents $(localbindir)
 	@$(CP) --preserve --update $(TEST_CODING_RULES) $(localbindir)
 
 ################################################################################
