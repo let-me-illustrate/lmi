@@ -244,7 +244,7 @@ MAKETARGET = \
 $(build_dir): $(gpl_files)
 	+@[ -d $@ ] || $(MKDIR) --parents $@
 	+@for z in $(compiler_runtime_files); \
-	  do [ -f $@/$$(basename $$z) ] || $(CP) --archive $$z $@ ; \
+	  do $(CP) --archive --update $$z $@ ; \
 	  done;
 	+@$(MAKETARGET)
 
