@@ -454,6 +454,7 @@ check_concinnity: source_clean custom_tools
 	@$(LS) --classify $(prefascicle_dir)/* \
 	  | $(SED) -e'/\*$$/!d' -e'/^\.\//!d' -e'/.sh\*$$/d' -e'/.sed\*$$/d' \
 	  | $(SED) -e's/^/Improperly executable: /'
+	@find $(prefascicle_dir) -executable -type f -print0 | xargs -0 -n 1 -P 0 ./check_script.sh
 	@$(ECHO) "  Problems detected by xmllint:"
 	@for z in $(xml_files); \
 	  do \
