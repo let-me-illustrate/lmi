@@ -1071,7 +1071,7 @@ install: $(default_targets)
 	@$(CP) --preserve --update $(help_files) $(datadir)
 	@datadir=$(datadir) srcdir=$(srcdir) $(srcdir)/mst_to_xst.sh
 	@[ -z "$(compiler_runtime_files)" ] \
-	  || $(CP) --preserve $(compiler_runtime_files) $(bindir)
+	  || $(CP) --preserve $(compiler_runtime_files) $(localbindir)
 ifeq (,$(USE_SO_ATTRIBUTES))
 	@cd $(datadir); $(PERFORM) $(bindir)/product_files$(EXEEXT)
 else
