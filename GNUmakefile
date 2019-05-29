@@ -247,7 +247,6 @@ $(build_dir): $(gpl_files)
 	+@[ -d $(locallibdir)     ] || $(MKDIR) --parents $(locallibdir)
 	+@[ -d $(localincludedir) ] || $(MKDIR) --parents $(localincludedir)
 	+@for z in $(compiler_runtime_files); do \
-	    $(CP) --archive --update $$z $@ ; \
 	    $(CP) --archive --update $$z $(localbindir) ; \
 	  done;
 	+@$(MAKETARGET)
