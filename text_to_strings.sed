@@ -1,4 +1,4 @@
-#! /bin/sed -f
+#!/bin/sed -f
 
 # Transform flat text to C strings.
 # Motivating example:
