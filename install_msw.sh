@@ -146,7 +146,7 @@ then
     # Disable shellcheck warning about the need to double quote $packages_list:
     # it can't be done here and we really want word splitting to happen here.
     # shellcheck disable=SC2086
-    missing_packages_count=$(dpkg-query -W -f='\${Status}\n' $packages_list 2>&1 | \
+    missing_packages_count=$(dpkg-query -W -f='${Status}\n' $packages_list 2>&1 | \
       grep -v -c 'install ok installed')
 
     if [ "$missing_packages_count" -gt 0 ]
