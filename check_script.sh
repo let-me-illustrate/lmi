@@ -39,11 +39,7 @@ case $shebang  in
         shellcheck --external-sources "$1"
     ;;
     ("#!/bin/zsh")
-        new_name="/tmp/$(basename "$1")$(date -u +'%s_%N').eraseme"
-        cp -a "$1" "$new_name"
-        sed -i "$new_name" -e'1s/zsh/sh/'
-        shellcheck --external-sources "$new_name"
-        rm "$new_name"
+        sed -e'1s/zsh/sh/' "$1" | shellcheck --external-sources -
     ;;
     ("#!/usr/bin/make") ;;
     ("#!/bin/sed") ;;
