@@ -135,9 +135,11 @@ case "$lmi_build_type" in
 esac
 if [ -n "$LMI_ENV_FILE" ]; then
     {
-    printf '%s\n' "export PATH     := $PATH"
-    printf '%s\n' "export WINEPATH := $WINEPATH"
-    printf '%s\n' "export PERFORM  := $PERFORM"
+    printf '%s\n' "export LMI_COMPILER := $LMI_COMPILER"
+    printf '%s\n' "export LMI_TRIPLET  := $LMI_TRIPLET"
+    printf '%s\n' "export PATH         := $PATH"
+    printf '%s\n' "export WINEPATH     := $WINEPATH"
+    printf '%s\n' "export PERFORM      := $PERFORM"
     } > "$LMI_ENV_FILE"
 fi
 }
