@@ -36,7 +36,12 @@ set -e
 # provides no convenient alternative):
 setopt PIPE_FAIL
 
-. ./set_toolchain.sh
+# Directory where this script resides.
+
+srcdir=$(dirname "$(readlink --canonicalize "$0")")
+
+# shellcheck disable=SC1090
+. "$srcdir"/set_toolchain.sh
 
 coefficiency=${coefficiency:-"--jobs=$(nproc)"}
 

@@ -21,14 +21,14 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# Invoke as ". ./set_toolchain.sh" without the quotes.
+# Invoke as ". /opt/lmi/src/lmi/set_toolchain.sh" without the quotes.
 #
 # $LMI_COMPILER and $LMI_TRIPLET are set to default values currently
 # used in production if they were unset or null beforehand. They can
 # be overridden at the command line, e.g.:
 #
-#   LMI_COMPILER=gcc ; LMI_TRIPLET=i686-w64-mingw32 ; . ./set_toolchain.sh
-#   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-w64-mingw32 ; . ./set_toolchain.sh
+#   LMI_COMPILER=gcc ; LMI_TRIPLET=i686-w64-mingw32   ; . /opt/lmi/src/lmi/set_toolchain.sh
+#   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-w64-mingw32 ; . /opt/lmi/src/lmi/set_toolchain.sh
 #
 # Implemented as a function that runs and then erases itself, so that
 # sourcing this script changes the environment only as intended. This
