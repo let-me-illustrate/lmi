@@ -135,16 +135,15 @@ case "$lmi_build_type" in
 esac
 if [ -n "$LMI_ENV_FILE" ]; then
     {
-    echo "export PATH     := $PATH"
-    echo "export WINEPATH := $WINEPATH"
-    echo "export PERFORM  := $PERFORM"
+    printf '%s\n' "export PATH     := $PATH"
+    printf '%s\n' "export WINEPATH := $WINEPATH"
+    printf '%s\n' "export PERFORM  := $PERFORM"
     } > "$LMI_ENV_FILE"
 fi
 }
 
-# This script is to be sourced, so it can't use a builtin command like
-# 'printf' here. Similarly, 'exit' would have a surprising effect.
-# Therefore, these precondition checks use 'echo' and 'return'.
+# This script is to be sourced, so use 'return' because 'exit' would
+# have a surprising effect.
 
 export LMI_COMPILER
 export LMI_TRIPLET
@@ -154,7 +153,7 @@ export LMI_TRIPLET
 case "$LMI_COMPILER" in
     (gcc) ;;
     (*)
-        echo "Changed nothing because compiler '$LMI_COMPILER' is untested."
+        printf '%s\n' "Changed nothing because compiler '$LMI_COMPILER' is untested."
         return 2;
         ;;
 esac
@@ -163,7 +162,7 @@ case "$LMI_TRIPLET" in
     (i686-w64-mingw32)   ;;
     (x86_64-w64-mingw32) ;;
     (*)
-        echo "Changed nothing because host triplet '$LMI_TRIPLET' is untested."
+        printf '%s\n' "Changed nothing because host triplet '$LMI_TRIPLET' is untested."
         return 3;
         ;;
 esac
