@@ -21,9 +21,16 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+# Do nothing for cygwin, which has no 'shellcheck' package.
+
+lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+case "$lmi_build_type" in
+  (*-*-cygwin*) exit 0 ;;
+esac
+
 # Skip:
 #  - empty argument: no script to check
-#  - git's default hooks: the maintainers don't use shellcheck
+#  - git's default hooks: the maintainers don't use 'shellcheck'
 #  - tabs/ scripts: they're extraordinary
 
 case "$1" in
