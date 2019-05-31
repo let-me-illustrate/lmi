@@ -255,6 +255,20 @@ $(build_dir): $(gpl_files)
 
 ################################################################################
 
+# Display selected variables.
+
+.PHONY: show_env
+show_env:
+	@printf 'Internal make variables particular to lmi:\n\n'
+	@printf 'LMI_COMPILER = "%s"\n' "$(LMI_COMPILER)"
+	@printf 'LMI_TRIPLET  = "%s"\n' "$(LMI_TRIPLET)"
+	@printf 'coefficiency = "%s"\n' "$(coefficiency)"
+	@printf 'PATH         = "%s"\n' "$(PATH)"
+	@printf 'WINEPATH     = "%s"\n' "$(WINEPATH)"
+	@printf 'PERFORM      = "%s"\n' "$(PERFORM)"
+
+################################################################################
+
 # Datestamps. These are all UTC. Only the first has an explicit 'Z'
 # suffix, to avoid any ambiguity.
 
