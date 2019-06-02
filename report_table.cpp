@@ -95,6 +95,8 @@ std::vector<int> apportion(std::vector<int> const& votes, int total_seats)
 /// First, allocate adequate width to each inelastic column; then
 /// distribute any excess width left over among elastic columns.
 ///
+/// Asserted precondition: the number of columns passed is not zero.
+///
 /// Notes on arguments:
 ///   all_columns: the width of each inelastic column reflects:
 ///    - the header width, and
@@ -114,6 +116,11 @@ std::vector<int> set_column_widths
 {
     LMI_ASSERT(minimum_margin <= desired_margin);
     int const cardinality = lmi::ssize(all_columns);
+    if(0 == cardinality)
+        {
+        alarum() << "Report table would contain no columns." << LMI_FLUSH;
+        }
+
     int data_width = 0;
     int n_columns_to_show = 0;
     for(int j = 0, cum_min_width = 0; j < cardinality; ++j)

@@ -230,6 +230,14 @@ void report_table_test::test_column_widths_generally()
         ,"Not enough room for even the first column."
         );
 
+    // Report with zero columns.
+    v = bloat({}, {});
+    BOOST_TEST_THROW
+        (set_column_widths(v, 1, 2, 1)
+        ,std::runtime_error
+        ,"Report table would contain no columns."
+        );
+
     // Minimum margin greater than one.
     v = bloat({1, 2, 3}, {0, 0, 0});
     observed = set_column_widths(v, 16, 5, 3);
