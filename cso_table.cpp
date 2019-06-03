@@ -988,7 +988,8 @@ std::vector<double> cso_table
     LMI_ASSERT(1.0 == p[omega - 1]);
 
     LMI_ASSERT(0 <= min_age);
-    LMI_ASSERT(max_age <= omega);
+    LMI_ASSERT(     min_age <= max_age);
+    LMI_ASSERT(                max_age <= omega);
 
     std::vector<double> v(p + min_age, p + max_age);
 
