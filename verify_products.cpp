@@ -32,6 +32,7 @@
 #include "mc_enum.hpp"                  // all_strings<>()
 #include "product_data.hpp"
 #include "ssize_lmi.hpp"
+#include "value_cast.hpp"
 #include "yare_input.hpp"
 
 #include <iostream>
@@ -50,6 +51,10 @@ void verify_one_cell
     input["ProductName"] = product_name;
     input["Gender"     ] = gender;
     input["Smoking"    ] = smoking;
+
+    int const min_age = product_database(yare_input(input)).query<int>(DB_MinIssAge);
+    input["IssueAge"   ] = value_cast<std::string>(min_age);
+
     yare_input       const yi(input);
     product_database const db(yi);
     auto const era    = db.query<oenum_cso_era   >(DB_CsoEra);
