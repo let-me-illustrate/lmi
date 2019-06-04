@@ -88,7 +88,7 @@ void verify_one_cell
     if(v0 == v1)
         {
         std::cout
-            << "okay: table " << t
+            << "7702 q okay: table " << t
             << ' ' << gender
             << ' ' << smoking
             << std::endl
@@ -97,7 +97,7 @@ void verify_one_cell
     else
         {
         std::cout
-            << "PROBLEM: " << product_name
+            << "7702 q PROBLEM: " << product_name
             << ' ' << gender
             << ' ' << smoking
             << std::endl
