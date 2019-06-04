@@ -115,6 +115,7 @@ ifeq (,$(USE_SO_ATTRIBUTES))
     generate_passkey$(EXEEXT) \
     ihs_crc_comp$(EXEEXT) \
     rate_table_tool$(EXEEXT) \
+    test_coding_rules$(EXEEXT) \
 
   ifneq (so_test,$(findstring so_test,$(build_type)))
     default_targets += \

@@ -24,11 +24,13 @@
 #include "verify_products.hpp"
 
 #include "actuarial_table.hpp"
+//#include "assert_lmi.hpp"
 #include "ce_product_name.hpp"
 #include "cso_table.hpp"
 #include "data_directory.hpp"           // AddDataDir()
 #include "database.hpp"
 #include "input.hpp"
+#include "irc7702_tables.hpp"
 #include "mc_enum.hpp"                  // all_strings<>()
 #include "product_data.hpp"
 #include "ssize_lmi.hpp"
@@ -83,7 +85,7 @@ void verify_one_cell
     if(v0 == v1)
         {
         std::cout
-            << "okay: table " << t
+            << "7702 q okay: table " << t
             << ' ' << gender
             << ' ' << smoking
             << std::endl
@@ -92,7 +94,7 @@ void verify_one_cell
     else
         {
         std::cout
-            << "PROBLEM: " << product_name
+            << "7702 q PROBLEM: " << product_name
             << ' ' << gender
             << ' ' << smoking
             << std::endl
@@ -113,6 +115,84 @@ void verify_one_cell
             << std::endl
             ;
         }
+
+//  CvatCorridorFilename
+//  DB_CorridorTable
+    std::string const f7pp = AddDataDir(p.datum("SevenPayFilename"));
+    auto const t7pp        = db.query<int>   (DB_SevenPayTable);
+    if(!t7pp)
+        {
+        std::cout
+            << "7pp table 0: " << product_name
+            << ' ' << gender
+            << ' ' << smoking
+            << std::endl
+            ;
+        return;
+        }
+    actuarial_table const a7pp(f7pp, t7pp);
+    std::vector<double> const v1_7pp = a7pp.values
+        (a7pp.min_age()
+        ,1 + a7pp.max_age() - a7pp.min_age()
+        );
+
+    if(db.query<int>(DB_MinIssAge  ) !=     a7pp.min_age())
+        std::cout << "  7pp table " << t7pp << ": min age discrepancy" << std::endl;
+    if(db.query<int>(DB_MaturityAge) != 1 + a7pp.max_age())
+        std::cout << "  7pp table " << t7pp << ": max age discrepancy" << std::endl;
+
+    std::vector<double> ig;
+    db.query_into(DB_NaarDiscount, ig);
+    irc7702_tables z
+        (era
+        ,oe_orthodox
+        ,a_b
+        ,mce_gender (gender).value()
+        ,mce_smoking(smoking).value()
+        ,ig
+        ,1.0 / db.query<double>(DB_MaxMonthlyCoiRate)
+        ,a7pp.min_age()//,db.query<int   >(DB_MinIssAge)
+        ,1 + a7pp.max_age()//,db.query<int   >(DB_MaturityAge)
+        );
+//  std::vector<double> const& ul_corr = z.ul_corr();
+//  std::vector<double> const& ul_7pp  = z.ul_7pp ();
+//  std::vector<double> const& ol_corr = z.ol_corr();
+    std::vector<double> const& ol_7pp  = z.ol_7pp ();
+
+    std::cout
+        << "7pp table " << t7pp
+        << ' ' << lmi::ssize(v1_7pp)
+        << ' ' << lmi::ssize(ol_7pp)
+        << ' ' << ((lmi::ssize(v1_7pp) != lmi::ssize(ol_7pp)) ? "DIFF" : "SAME")
+        << std::endl
+        ;
+    int length = std::min(lmi::ssize(ol_7pp), lmi::ssize(v1_7pp));
+//  LMI_ASSERT(lmi::ssize(ol_7pp) == lmi::ssize(v1_7pp));
+    for(int j = 0; j < length; ++j)
+        {
+        if(v1_7pp[j] <= ol_7pp[j])
+            continue;
+        std::cout
+            << "7pp error:"
+            << " table " << t7pp
+            << ' ' << product_name
+            << ' ' << gender
+            << ' ' << smoking
+            << " omega " << 1 + a7pp.max_age()
+            << std::endl
+            << " dur " << j
+            << " tabular " << v1_7pp[j]
+            << " exceeds calculated " << ol_7pp[j]
+            << std::endl
+            ;
+        return;
+        }
+    std::cout
+        << "7pp okay: table " << t7pp
+        << ' ' << gender
+        << ' ' << smoking
+        << std::endl
+        ;
 }
 } // Unnamed namespace.
 

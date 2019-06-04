@@ -279,7 +279,6 @@ do
     make $coefficiency --output-sync=recurse show_flags
     make $coefficiency --output-sync=recurse clean
     make $coefficiency --output-sync=recurse install
-    make $coefficiency --output-sync=recurse custom_tools
 
     if [ "Cygwin" = "$platform" ]
     then
