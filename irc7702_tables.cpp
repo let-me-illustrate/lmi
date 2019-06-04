@@ -23,6 +23,7 @@
 
 #include "irc7702_tables.hpp"
 
+#include "assert_lmi.hpp"
 #include "commutation_functions.hpp"
 #include "cso_table.hpp"
 #include "et_vector.hpp"
@@ -61,6 +62,10 @@ irc7702_tables::irc7702_tables
         ,i_upper_12_over_12_from_i<double>()(0.04)
         );
     std::vector<double> const& ig(naar_discount);
+
+    LMI_ASSERT(lmi::ssize(q12) == length_);
+    LMI_ASSERT(lmi::ssize(ic ) == length_);
+    LMI_ASSERT(lmi::ssize(ig ) == length_);
 
     ULCommFns const ulcf(q12, ic, ig, mce_option1_for_7702, mce_monthly);
 
