@@ -244,6 +244,7 @@ class any_member final
   public:
     any_member();
     any_member(any_member const&);
+    any_member(any_member&&);
     ~any_member() override;
 
     template<typename ValueType>
@@ -252,6 +253,7 @@ class any_member final
     any_member& swap(any_member&);
     any_member& operator=(any_member const&);
     any_member& operator=(std::string const&);
+    any_member& operator=(any_member&&);
     bool operator==(any_member const&) const;
     bool operator!=(any_member const&) const;
 
@@ -280,6 +282,12 @@ template<typename ClassType>
 any_member<ClassType>::any_member(any_member const& other)
     :any_entity {other}
     ,content_   {other.content_ ? other.content_->clone() : nullptr}
+{}
+
+template<typename ClassType>
+any_member<ClassType>::any_member(any_member&& other)
+    :any_entity {std::move(other)}
+    ,content_   {std::exchange(other.content_, nullptr)}
 {}
 
 template<typename ClassType>
@@ -321,6 +329,16 @@ template<typename ClassType>
 any_member<ClassType>& any_member<ClassType>::operator=(std::string const& s)
 {
     return assign(s);
+}
+
+template<typename ClassType>
+any_member<ClassType>& any_member<ClassType>::operator=
+    (any_member<ClassType>&& other
+    )
+{
+    delete content_;
+    content_ = std::exchange(other.content_, nullptr);
+    return *this;
 }
 
 template<typename ClassType>
