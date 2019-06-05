@@ -1217,6 +1217,8 @@ fardel: install
 wrap_fardel:
 	@$(CP) $(prefix)/third_party/bin/md5sum$(EXEEXT) .
 	@$(CP) $(datadir)/configurable_settings.xml .
+	@$(CP) $(datadir)/company_logo.png .
+	@$(CP) $(datadir)/group_quote_banner.png .
 	@$(CP) --preserve $(fardel_binaries) $(fardel_files) .
 	@$(fardel_date_script)
 	@$(MD5SUM) --binary $(fardel_checksummed_files) >validated.md5
