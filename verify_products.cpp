@@ -62,12 +62,22 @@ void verify_one_cell
     auto const t      = db.query<int             >(DB_Irc7702QTable);
     auto const axis_g = db.query<bool            >(DB_Irc7702QAxisGender);
     auto const axis_s = db.query<bool            >(DB_Irc7702QAxisSmoking);
-    if
-        (  0 == t
-        || (!axis_g && "Unisex"   != gender)
-        || (!axis_s && "Unismoke" != smoking)
-        )
+
+    if((!axis_g && "Unisex" != gender) || (!axis_s && "Unismoke" != smoking))
         {
+        std::cout << "  skipping " << gender << ' ' << smoking << std::endl;
+        return;
+        }
+
+    if(0 == t)
+        {
+        std::cout
+            << "7702 q PROBLEM: " << product_name
+            << " nonexistent table zero"
+            << ' ' << gender
+            << ' ' << smoking
+            << std::endl
+            ;
         return;
         }
 
