@@ -936,6 +936,18 @@ sample2ipp::sample2ipp()
 sample2xyz::sample2xyz()
 {
     // Exotica.
+#if 0
+    // US 1980 CSO age last, not gender distinct. Unisex = table D.
+    // This deviation from the 'sample' family should necessitate
+    // different 7pp and corridor tables. Enable this deliberate
+    // inconsistency as an optional test of the product verifier.
+    int dims113[e_number_of_axes] = {1, 1, 3, 1, 1, 1, 1}; // smoking
+    double T7702q[3] = {111, 109, 107,}; // Smoker, nonsmoker, unismoke.
+    Add({DB_Irc7702QTable, e_number_of_axes, dims113, T7702q});
+    Add({DB_Irc7702QAxisGender  , false});
+    Add({DB_Irc7702QAxisSmoking , true});
+#endif // 0
+    // Arguably the most complex ledger type.
     Add({DB_LedgerType          , mce_finra});
     // Certain group-quote columns are available only when these two
     // entities are 'true':
