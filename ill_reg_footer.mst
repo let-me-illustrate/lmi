@@ -26,14 +26,14 @@
         <td colspan="3">&nbsp;</td>
     </tr>
     <tr>
-        <td>System Version: {{LmiVersion}}</td>
+        <td>Date Prepared: {{DatePrepared}}</td>
         <td align="center">{{page_number}}</td>
         <td align="right">{{InsCoName}}</td>
     </tr>
     <tr>
-        <td>{{StateMarketingImprimatur}}</td>
+        <td>System Version: {{LmiVersion}}</td>
         <td>&nbsp;</td>
-        <td align="right">Date Prepared: {{DatePrepared}}</td>
+        <td align="right">{{>imprimatur}}</td>
     </tr>
 </table>
 
