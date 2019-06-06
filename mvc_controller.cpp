@@ -353,7 +353,11 @@ void MvcController::ConditionallyEnableItems
             itembox->Set(cached_items);
             }
 
-        itembox->SetStringSelection(datum->str(datum->ordinal()));
+        auto const& selected_string = datum->str(datum->ordinal());
+        if(itembox->GetStringSelection() != selected_string)
+            {
+            itembox->SetStringSelection(selected_string);
+            }
         }
     else
         {
