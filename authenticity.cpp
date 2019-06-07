@@ -29,6 +29,7 @@
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
 #include "md5.hpp"
+#include "md5sum.hpp"
 #include "path_utility.hpp"             // fs::path inserter
 #include "platform_dependent.hpp"       // chdir()
 #include "system_command.hpp"
@@ -45,11 +46,6 @@
 // TODO ?? Known security hole: data files can be modified after they
 // have been validated with 'md5sum'. This problem will grow worse
 // when the binary database files are replaced with xml.
-
-namespace
-{
-    int const chars_per_formatted_hex_byte = CHAR_BIT / 4;
-} // Unnamed namespace.
 
 Authenticity& Authenticity::Instance()
 {
@@ -189,19 +185,25 @@ std::string Authenticity::Assay
         }
 
     // Validate all data files.
-    fs::path original_path(fs::current_path());
-    if(0 != chdir(data_path.string().c_str()))
-        {
-        oss
-            << "Unable to change directory to '"
-            << data_path
-            << "'. Try reinstalling."
-            ;
-        return oss.str();
-        }
     try
         {
-        system_command("md5sum --check --status " + std::string(md5sum_file()));
+        auto const sums = md5_read_checksum_file(data_path / md5sum_file());
+        for(auto const& s : sums)
+            {
+            auto const file_path = data_path / s.filename;
+            auto const md5 = md5_calculate_file_checksum
+                (data_path / s.filename
+                ,s.file_mode
+                );
+            if(md5 != s.md5sum)
+                {
+                    throw std::runtime_error
+                        ( "Integrity check failed for '"
+                        + s.filename.string()
+                        + "'"
+                        );
+                }
+            }
         }
     catch(...)
         {
@@ -209,15 +211,6 @@ std::string Authenticity::Assay
         oss
             << "At least one required file is missing, altered, or invalid."
             << " Try reinstalling."
-            ;
-        return oss.str();
-        }
-    if(0 != chdir(original_path.string().c_str()))
-        {
-        oss
-            << "Unable to restore directory to '"
-            << original_path
-            << "'. Try reinstalling."
             ;
         return oss.str();
         }
@@ -276,20 +269,4 @@ void authenticate_system()
         warning() << diagnostic_message << LMI_FLUSH;
         std::exit(EXIT_FAILURE);
         }
-}
-
-std::string md5_hex_string(std::vector<unsigned char> const& vuc)
-{
-    LMI_ASSERT(md5len == vuc.size());
-    std::stringstream oss;
-    oss << std::hex;
-    for(auto const& j : vuc)
-        {
-        oss
-            << std::setw(chars_per_formatted_hex_byte)
-            << std::setfill('0')
-            << static_cast<int>(j)
-            ;
-        }
-    return oss.str();
 }

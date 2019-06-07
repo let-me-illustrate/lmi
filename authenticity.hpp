@@ -25,18 +25,13 @@
 #include "config.hpp"
 
 #include "calendar_date.hpp"
+#include "md5sum.hpp"
 #include "so_attributes.hpp"
 
 #include <boost/filesystem/path.hpp>
 
-#include <climits>                      // CHAR_BIT
 #include <string>
 #include <vector>
-
-// The gnu libc md5 implementation seems to assume this:
-static_assert(8 == CHAR_BIT || 16 == CHAR_BIT);
-// so md5 output is 128 bits == 16 8-bit bytes or 8 16-bit bytes:
-enum {md5len = 128 / CHAR_BIT};
 
 /// Permit running the system iff data files and date are valid.
 ///
@@ -74,10 +69,6 @@ class Authenticity final
 /// skip authentication altogether for the most-privileged password.
 
 void LMI_SO authenticate_system();
-
-/// Hex representation of an md5 sum as a string.
-
-std::string md5_hex_string(std::vector<unsigned char> const&);
 
 /// Name of file containing md5sums of secured files.
 
