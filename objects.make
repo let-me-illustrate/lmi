@@ -299,6 +299,7 @@ lmi_common_objects := \
   irc7702_tables.o \
   lmi.o \
   md5.o \
+  md5sum.o \
   mec_input.o \
   mec_server.o \
   mec_state.o \
@@ -534,6 +535,7 @@ authenticity_test$(EXEEXT): \
   calendar_date.o \
   global_settings.o \
   md5.o \
+  md5sum.o \
   miscellany.o \
   null_stream.o \
   path_utility.o \
@@ -1078,6 +1080,7 @@ generate_passkey$(EXEEXT): \
   generate_passkey.o \
   global_settings.o \
   md5.o \
+  md5sum.o \
   miscellany.o \
   null_stream.o \
   path_utility.o \
