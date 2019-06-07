@@ -126,9 +126,11 @@ class LMI_SO DBDictionary
     database_entity AllowCvat           ;
     database_entity AllowGpt            ;
     database_entity AllowNo7702         ;
+    database_entity Irc7702Obreption    ;
     database_entity CorridorWhence      ;
     database_entity Irc7702NspWhence    ;
     database_entity SevenPayWhence      ;
+    database_entity Irc7702QWhence      ;
     database_entity CorridorTable       ;
     database_entity Irc7702NspTable     ;
     database_entity SevenPayTable       ;

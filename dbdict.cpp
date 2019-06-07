@@ -147,9 +147,11 @@ void DBDictionary::ascribe_members()
     ascribe("AllowCvat"           , &DBDictionary::AllowCvat           );
     ascribe("AllowGpt"            , &DBDictionary::AllowGpt            );
     ascribe("AllowNo7702"         , &DBDictionary::AllowNo7702         );
+    ascribe("Irc7702Obreption"    , &DBDictionary::Irc7702Obreption    );
     ascribe("CorridorWhence"      , &DBDictionary::CorridorWhence      );
     ascribe("Irc7702NspWhence"    , &DBDictionary::Irc7702NspWhence    );
     ascribe("SevenPayWhence"      , &DBDictionary::SevenPayWhence      );
+    ascribe("Irc7702QWhence"      , &DBDictionary::Irc7702QWhence      );
     ascribe("CorridorTable"       , &DBDictionary::CorridorTable       );
     ascribe("Irc7702NspTable"     , &DBDictionary::Irc7702NspTable     );
     ascribe("SevenPayTable"       , &DBDictionary::SevenPayTable       );
@@ -669,6 +671,7 @@ sample::sample()
     Add({DB_CorridorWhence      , oe_7702_corr_from_table});
     Add({DB_Irc7702NspWhence    , oe_7702_nsp_reciprocal_cvat_corridor});
     Add({DB_SevenPayWhence      , oe_7702_7pp_from_table});
+    Add({DB_Irc7702QWhence      , oe_7702_q_external_table});
 
     // This is just a sample product, so make do with plausible
     // all-male seven-pay premiums, and use GPT corridor factors for

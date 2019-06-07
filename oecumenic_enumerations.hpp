@@ -44,6 +44,11 @@ enum oenum_7702_nsp_whence
     ,oe_7702_nsp_reciprocal_cvat_corridor
     };
 
+enum oenum_7702_q_whence
+    {oe_7702_q_builtin
+    ,oe_7702_q_external_table
+    };
+
 enum oenum_7702_term
     {oe_7702_term_is_ignored
     ,oe_7702_term_is_db
