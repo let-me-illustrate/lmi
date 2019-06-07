@@ -26,6 +26,7 @@
 #include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "md5.hpp"
+#include "md5sum.hpp"
 #include "miscellany.hpp"
 #include "system_command.hpp"
 #include "test_tools.hpp"

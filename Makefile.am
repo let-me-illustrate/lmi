@@ -415,6 +415,7 @@ liblmi_la_SOURCES = \
     irc7702_tables.cpp \
     lmi.cpp \
     md5.cpp \
+    md5sum.cpp \
     mec_input.cpp \
     mec_server.cpp \
     mec_state.cpp \
@@ -459,6 +460,7 @@ generate_passkey_SOURCES = \
     generate_passkey.cpp \
     global_settings.cpp \
     md5.cpp \
+    md5sum.cpp \
     miscellany.cpp \
     null_stream.cpp \
     path_utility.cpp \
@@ -594,6 +596,7 @@ test_authenticity_SOURCES = \
   calendar_date.cpp \
   global_settings.cpp \
   md5.cpp \
+  md5sum.cpp \
   miscellany.cpp \
   null_stream.cpp \
   path_utility.cpp \
@@ -1329,6 +1332,7 @@ noinst_HEADERS = \
     mc_enum_types.hpp \
     mc_enum_types.xpp \
     mc_enum_types_aux.hpp \
+    md5sum.hpp \
     md5.hpp \
     mec_document.hpp \
     mec_input.hpp \
