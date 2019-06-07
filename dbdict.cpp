@@ -542,6 +542,10 @@ void DBDictionary::InitDB()
     // Some, like DB_IntSpreadMode, have no enumerator equal to zero,
     // and must be initialized explicitly with some actual enumerator.
     Add({DB_SmokeOrTobacco      , oe_smoker_nonsmoker});
+    Add({DB_CorridorWhence      , oe_7702_corr_first_principles});
+    Add({DB_Irc7702NspWhence    , oe_7702_nsp_first_principles});
+    Add({DB_SevenPayWhence      , oe_7702_7pp_first_principles});
+    Add({DB_Irc7702QWhence      , oe_7702_q_builtin});
     Add({DB_CvatMatChangeDefn   , mce_unnecessary_premium});
     Add({DB_Effective7702DboRop , mce_option1_for_7702});
     Add({DB_TermIsQABOrDb7702   , oe_7702_term_is_db});
