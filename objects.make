@@ -276,6 +276,7 @@ antediluvian_common_objects := \
 lmi_common_objects := \
   $(common_common_objects) \
   authenticity.o \
+  basic_tables.o \
   commutation_functions.o \
   cso_table.o \
   financial.o \

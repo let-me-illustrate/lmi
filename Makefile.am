@@ -392,6 +392,7 @@ libantediluvian_la_LIBADD = \
 
 liblmi_la_SOURCES = \
     authenticity.cpp \
+    basic_tables.cpp \
     commutation_functions.cpp \
     cso_table.cpp \
     financial.cpp \
@@ -1214,6 +1215,7 @@ noinst_HEADERS = \
     any_member.hpp \
     assert_lmi.hpp \
     authenticity.hpp \
+    basic_tables.hpp \
     basic_values.hpp \
     boost_regex.hpp \
     bourn_cast.hpp \
