@@ -25,6 +25,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "basic_tables.hpp"
 #include "bourn_cast.hpp"
 #include "calendar_date.hpp"
 #include "contains.hpp"
@@ -1858,9 +1859,11 @@ std::vector<double> const& BasicValues::GetMlyDcvqc() const
 
 std::vector<double> BasicValues::GetCvatCorridorFactors() const
 {
-    return GetTable
-        (product().datum("CvatCorridorFilename")
-        ,DB_CorridorTable
+    return cvat_corridor_factors
+        (product()
+        ,database()
+        ,GetIssueAge()
+        ,GetLength()
         );
 }
 
@@ -2011,11 +2014,11 @@ std::vector<double> BasicValues::GetGroupProxyRates() const
 
 std::vector<double> BasicValues::GetSevenPayRates() const
 {
-    return GetTable
-        (product().datum("SevenPayFilename")
-        ,DB_SevenPayTable
-    // TAXATION !! No table available if 7PP calculated from first principles.
-//        ,oe_7702_prem_from_table == database().query<bool>(DB_SevenPayWhence)
+    return irc_7702A_7pp
+        (product()
+        ,database()
+        ,GetIssueAge()
+        ,GetLength()
         );
 }
 
@@ -2041,9 +2044,11 @@ std::vector<double> BasicValues::GetTgtPremRates() const
 
 std::vector<double> BasicValues::GetIrc7702QRates() const
 {
-    return GetTable
-        (product().datum("Irc7702QFilename")
-        ,DB_Irc7702QTable
+    return irc_7702_q
+        (product()
+        ,database()
+        ,GetIssueAge()
+        ,GetLength()
         );
 }
 
