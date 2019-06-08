@@ -924,7 +924,7 @@ double BasicValues::GetModalPremMaxNonMec
 ///    nature; if it is nonetheless desired to add a policy fee to a
 ///    (conservative) table-derived 7pp, then 'oe_modal_table' should
 ///    be used instead.
-/// Therefore, an assertion (where 'TgtPremMonthlyPolFee' is assiged)
+/// Therefore, an assertion (where 'TgtPremMonthlyPolFee' is assigned)
 /// requires that the fee be zero in those cases, and also fires if
 /// this function is used for minimum premium with a nonzero fee
 /// (because no GetModalPremMinFromTable() has yet been written).
