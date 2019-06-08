@@ -142,7 +142,6 @@ class LMI_SO BasicValues
     // consequence.
 
     std::vector<double> GetCvatCorridorFactors() const;
-    std::vector<double> GetIrc7702NspRates() const;
     std::vector<double> GetCurrCOIRates0()   const;
     std::vector<double> GetCurrCOIRates1()   const;
     std::vector<double> GetCurrCOIRates2()   const;

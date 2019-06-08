@@ -1864,14 +1864,6 @@ std::vector<double> BasicValues::GetCvatCorridorFactors() const
         );
 }
 
-std::vector<double> BasicValues::GetIrc7702NspRates() const
-{
-    return GetTable
-        (product().datum("Irc7702NspFilename")
-        ,DB_CorridorTable
-        );
-}
-
 // Only current (hence midpoint) COI and term rates are blended.
 
 std::vector<double> BasicValues::GetCurrCOIRates0() const
