@@ -21,18 +21,20 @@
 
 #include "pchfile.hpp"
 
-#include "data_directory.hpp"           // AddDataDir()
+// Facilities offered by all of these headers are tested here.
 #include "database.hpp"
 #include "dbdict.hpp"
 #include "fund_data.hpp"
-#include "global_settings.hpp"
-#include "path_utility.hpp"             // initialize_filesystem()
 #include "product_data.hpp"
 #include "rounding_rules.hpp"
 #include "stratified_charges.hpp"
+// End of headers tested here.
 
+#include "data_directory.hpp"           // AddDataDir()
+#include "global_settings.hpp"
+#include "path_utility.hpp"             // initialize_filesystem()
 #include "test_tools.hpp"
-#include "timer.hpp"
+#include "timer.hpp"                    // TimeAnAliquot()
 
 #include <string>
 #include <utility>                      // move()
