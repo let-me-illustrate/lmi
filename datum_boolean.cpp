@@ -23,6 +23,9 @@
 
 #include "datum_boolean.hpp"
 
+#include <istream>
+#include <ostream>
+
 datum_boolean::datum_boolean(bool value)
     :value_ {value}
 {

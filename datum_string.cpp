@@ -25,6 +25,9 @@
 
 #include "facets.hpp"
 
+#include <istream>
+#include <ostream>
+
 datum_string::datum_string(std::string const& value)
     :value_ {value}
 {
