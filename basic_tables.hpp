@@ -24,11 +24,12 @@
 
 #include "config.hpp"
 
-#include "database.hpp"
-#include "product_data.hpp"
 #include "so_attributes.hpp"
 
 #include <vector>
+
+class LMI_SO_FWD_DECL product_data;
+class LMI_SO_FWD_DECL product_database;
 
 std::vector<double> LMI_SO irc_7702_q
     (product_data     const& product

@@ -25,8 +25,10 @@
 
 #include "actuarial_table.hpp"
 #include "data_directory.hpp"
+#include "database.hpp"
 #include "dbnames.hpp"                  // e_database_key
 #include "oecumenic_enumerations.hpp"
+#include "product_data.hpp"
 
 #include <string>
 
