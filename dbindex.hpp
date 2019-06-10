@@ -69,10 +69,6 @@ enum enum_database_dimensions
 class database_index
 {
   public:
-    database_index()
-        :idx_(number_of_indices)
-    {}
-
     database_index
         (mcenum_gender   gender
         ,mcenum_class    uw_class
