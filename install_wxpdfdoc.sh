@@ -85,8 +85,8 @@ case "$build_type" in
         ;;
 esac
 
-wxpdfdoc_cc_flags=-fno-omit-frame-pointer
-wxpdfdoc_cxx_flags=-fno-omit-frame-pointer
+wxpdfdoc_cc_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math'
+wxpdfdoc_cxx_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math'
 
 config_options="
   --prefix=$prefix
@@ -96,8 +96,6 @@ config_options="
   --build=$build_type
   --host=$LMI_TRIPLET
   --disable-dependency-tracking
-  CFLAGS=$wxpdfdoc_cc_flags
-  CXXFLAGS=$wxpdfdoc_cxx_flags
 "
 
 [ -n "$mingw_bin_dir" ] && export PATH="$mingw_bin_dir:${PATH}"
@@ -119,7 +117,7 @@ mkdir --parents "$build_dir"
 cd "$build_dir"
 # 'configure' options must not be double-quoted
 # shellcheck disable=SC2086
-"$proxy_wxpdfdoc_dir"/configure $config_options
+"$proxy_wxpdfdoc_dir"/configure $config_options CFLAGS="$wxpdfdoc_cc_flags" CXXFLAGS="$wxpdfdoc_cxx_flags"
 $MAKE
 $MAKE install
 

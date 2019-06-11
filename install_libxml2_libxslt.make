@@ -61,7 +61,9 @@ ifeq (cygwin,$(findstring cygwin,$(lmi_build_type)))
 endif
 
 # For 'host' and 'build' configure options, see:
-#   http://cygwin.com/ml/cygwin/2002-01/msg00837.html
+#   https://cygwin.com/ml/cygwin/2002-01/msg00837.html
+# Do not use '-fno-omit-frame-pointer' because of an ICE:
+#   https://lists.nongnu.org/archive/html/lmi/2019-06/msg00018.html
 
 # '--disable-dependency-tracking' is required with the MinGW toolchain
 # in a Cygwin shell, to prevent a catastrophic dependency-tracking
@@ -71,6 +73,8 @@ endif
 #   .deps/DOCBparser.Plo:1: *** multiple target patterns.  Stop.
 
 xmlsoft_common_cflags := \
+  -fno-ms-extensions \
+  -frounding-math \
   -Wno-cpp \
   -Wno-discarded-qualifiers \
   -Wno-format \

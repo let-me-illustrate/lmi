@@ -363,8 +363,8 @@ tutelary_flag :=
 # which causes harm while bringing no countervailing benefit--see:
 #   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
 
-c_standard   := -frounding-math -std=c99
-cxx_standard := -frounding-math -std=c++17
+c_standard   := -fno-ms-extensions -frounding-math -std=c99
+cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
 
 # Specify $(gcc_version_specific_warnings) last, in order to override
 # other options.
@@ -398,11 +398,11 @@ else ifneq (,$(filter $(gcc_version), 6.3.0))
   gcc_version_specific_warnings := \
     -Wno-conversion \
 
-  cxx_standard := -frounding-math -std=c++17
+  cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
 else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
   gcc_version_specific_warnings := \
 
-  cxx_standard := -frounding-math -std=c++17
+  cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
 else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0 8.3.0))
   gcc_version_specific_warnings := \
 
@@ -412,7 +412,7 @@ else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0 8.3.0))
     tutelary_flag := -fomit-frame-pointer
   endif
 
-  cxx_standard := -frounding-math -std=c++17
+  cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
 endif
 
 treat_warnings_as_errors := -pedantic-errors -Werror
