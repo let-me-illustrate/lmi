@@ -757,6 +757,9 @@ class logical_page
     // Render this page contents.
     virtual void render() = 0;
 
+    // Returns the name of the page. This name is use for diagnostic messages only.
+    virtual std::string get_name() = 0;
+
   protected:
     pdf_illustration  const& illustration_;
     Ledger            const& ledger_;
@@ -819,26 +822,58 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
 
         for(auto const& i : pages_)
             {
-            i->pre_render();
+            try
+                {
+                i->pre_render();
+                }
+            catch(const std::runtime_error& e)
+                {
+                std::ostringstream oss;
+                oss
+                    << e.what()
+                    << '\n'
+                    << "while preparing to render the page: \""
+                    << i->get_name()
+                    << '"'
+                    ;
+                // We assume that it's ok to rethrow this as a copy because we
+                // never use any exceptions of the derived classes.
+                throw std::runtime_error(oss.str());
+                }
             }
 
         bool first = true;
         for(auto const& i : pages_)
             {
-            if(first)
+            try
                 {
-                // We shouldn't start a new page before the very first one.
-                first = false;
-                }
-            else
-                {
-                // Do start a new physical page before rendering all the
-                // subsequent pages (notice that a page is also free to call
-                // next_page() from its render()).
-                get_writer().next_page();
-                }
+                if(first)
+                    {
+                    // We shouldn't start a new page before the very first one.
+                    first = false;
+                    }
+                else
+                    {
+                    // Do start a new physical page before rendering all the
+                    // subsequent pages (notice that a page is also free to call
+                    // next_page() from its render()).
+                    get_writer().next_page();
+                    }
 
-            i->render();
+                i->render();
+                }
+            catch(const std::runtime_error& e)
+                {
+                std::ostringstream oss;
+                oss
+                    << e.what()
+                    << '\n'
+                    << "while rendering the page \""
+                    << i->get_name()
+                    << '"'
+                    ;
+                throw std::runtime_error(oss.str());
+                }
             }
 
         get_writer().save();
@@ -1033,6 +1068,11 @@ class unnumbered_cover_page : public logical_page
             ,writer_.get_page_width()
             ,height_contents
             );
+    }
+
+    std::string get_name() override
+    {
+        return "unnumbered_cover_page";
     }
 };
 
@@ -1382,6 +1422,11 @@ class standard_page : public numbered_page
 
             last_page_break = page_break;
             }
+    }
+
+    std::string get_name() override
+    {
+        return page_template_name_;
     }
 
   protected:
@@ -1852,6 +1897,11 @@ class page_with_tabular_report
     void render() override
     {
         paginator::print();
+    }
+
+    std::string get_name() override
+    {
+        return get_fixed_page_contents_template_name();
     }
 
   protected:
