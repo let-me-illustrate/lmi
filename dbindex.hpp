@@ -77,14 +77,9 @@ class database_index
         ,mcenum_uw_basis uw_basis
         ,mcenum_state    state
         )
-        :idx_(number_of_indices)
+        :idx_ {gender, uw_class, smoking, issue_age, uw_basis, state}
     {
-        idx_[0] = gender   ;
-        idx_[1] = uw_class ;
-        idx_[2] = smoking  ;
-        idx_[3] = issue_age;
-        idx_[4] = uw_basis ;
-        idx_[5] = state    ;
+        check_issue_age();
     }
 
     std::vector<int> const& index_vector() const {return idx_;}
@@ -96,18 +91,26 @@ class database_index
     mcenum_uw_basis uw_basis () const {return static_cast<mcenum_uw_basis>(idx_[4]);}
     mcenum_state    state    () const {return static_cast<mcenum_state   >(idx_[5]);}
 
-    database_index& gender   (mcenum_gender   z) {idx_[0] = z; return *this;}
-    database_index& uw_class (mcenum_class    z) {idx_[1] = z; return *this;}
-    database_index& smoking  (mcenum_smoking  z) {idx_[2] = z; return *this;}
-    database_index& issue_age(int             z) {check_issue_age(z);
-                                                  idx_[3] = z; return *this;}
-    database_index& uw_basis (mcenum_uw_basis z) {idx_[4] = z; return *this;}
-    database_index& state    (mcenum_state    z) {idx_[5] = z; return *this;}
+    database_index gender   (mcenum_gender   z) const {auto i = idx_; i[0] = z; return {i};}
+    database_index uw_class (mcenum_class    z) const {auto i = idx_; i[1] = z; return {i};}
+    database_index smoking  (mcenum_smoking  z) const {auto i = idx_; i[2] = z; return {i};}
+    database_index issue_age(int             z) const {auto i = idx_; i[3] = z; return {i};}
+    database_index uw_basis (mcenum_uw_basis z) const {auto i = idx_; i[4] = z; return {i};}
+    database_index state    (mcenum_state    z) const {auto i = idx_; i[5] = z; return {i};}
 
   private:
-    void check_issue_age(int z) {LMI_ASSERT(0 <= z && z < e_max_dim_issue_age);}
+    database_index(std::vector<int> idx)
+        :idx_ {idx}
+    {
+        check_issue_age();
+    }
 
-    std::vector<int> idx_;
+    void check_issue_age()
+    {
+        LMI_ASSERT(0 <= issue_age() && issue_age() < e_max_dim_issue_age);
+    }
+
+    std::vector<int> const idx_;
 };
 
 #endif // dbindex_hpp
