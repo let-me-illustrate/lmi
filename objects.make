@@ -442,6 +442,7 @@ unit_test_targets := \
   materially_equal_test \
   math_functions_test \
   mc_enum_test \
+  md5sum_test \
   miscellany_test \
   mortality_rates_test \
   name_value_pairs_test \
@@ -810,6 +811,13 @@ mc_enum_test$(EXEEXT): \
   miscellany.o \
   null_stream.o \
   path_utility.o \
+
+md5sum_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(common_test_objects) \
+  md5.o \
+  md5sum.o \
+  md5sum_test.o \
 
 miscellany_test$(EXEEXT): \
   $(common_test_objects) \

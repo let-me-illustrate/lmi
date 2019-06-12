@@ -120,6 +120,7 @@ TESTS = \
     test_materially_equal \
     test_math_functions \
     test_mc_enum \
+    test_md5sum \
     test_miscellany \
     test_mortality_rates \
     test_name_value_pairs \
@@ -923,6 +924,15 @@ test_mc_enum_SOURCES = \
   path_utility.cpp
 test_mc_enum_CXXFLAGS = $(AM_CXXFLAGS)
 test_mc_enum_LDADD = \
+  $(BOOST_LIBS)
+
+test_md5sum_SOURCES = \
+  $(common_test_objects) \
+  md5.cpp \
+  md5sum.cpp \
+  md5sum_test.cpp
+test_md5sum_CXXFLAGS = $(AM_CXXFLAGS)
+test_md5sum_LDADD = \
   $(BOOST_LIBS)
 
 test_miscellany_SOURCES = \
