@@ -65,6 +65,18 @@ enum enum_database_dimensions
 /// Product-database lookup index.
 ///
 /// Implicitly-declared special member functions do the right thing.
+///
+/// Members such as state(mcenum_state) depart from this idiom:
+///   https://isocpp.org/wiki/faq/ctors#named-parameter-idiom
+/// so that idx_ can be const. In practice, they're used only to
+/// create throwaway database_index objects, so modifying the current
+/// object was actually undesirable. Arguably they should have more
+/// verbose names.
+///
+/// Arguably enumerators should be used rather than literal integers
+/// in the implementation, e.g.,
+///   s/5/e_axis_state/
+/// but OTOH compactness increases readability.
 
 class database_index
 {
