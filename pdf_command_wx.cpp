@@ -917,6 +917,8 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
 
         auto const& invar = ledger_.GetLedgerInvariant();
 
+        // PDF !! Abbreviations of different lengths are used in some
+        // derived classes; can uniform lengths be used everywhere?
         add_abbreviated_variable("CorpName", 60);
         add_abbreviated_variable("Insured1", 30);
 
@@ -2228,8 +2230,8 @@ class pdf_illustration_naic : public pdf_illustration
         auto const& policy_name = invar.PolicyLegalName;
         auto const& state_of_jurisdiction = invar.StateOfJurisdiction;
 
-        // Define variables specific to this illustration which doesn't use the
-        // standard 60/30 lengths for whatever reason.
+        // Define variables specific to this illustration.
+
         add_abbreviated_variable("CorpName", 50);
         add_abbreviated_variable("Insured1", 50);
 
@@ -2859,6 +2861,7 @@ class pdf_illustration_finra : public pdf_illustration
         auto const& invar = ledger.GetLedgerInvariant();
 
         // Define variables specific to this illustration.
+
         auto const& state_of_jurisdiction = invar.StateOfJurisdiction;
 
         add_variable
@@ -2956,6 +2959,7 @@ class pdf_illustration_reg_d_group : public pdf_illustration
         :pdf_illustration{ledger, pdf_out_file}
     {
         // Define variables specific to this illustration.
+
         auto const& invar = ledger.GetLedgerInvariant();
 
         add_variable
@@ -3243,6 +3247,7 @@ class pdf_illustration_reg_d_indiv : public pdf_illustration
         auto const& invar = ledger.GetLedgerInvariant();
 
         // Define variables specific to this illustration.
+
         add_abbreviated_variable("CorpName", 140);
         add_abbreviated_variable("Insured1", 140);
 
