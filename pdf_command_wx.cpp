@@ -970,7 +970,6 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
             ,invar.UWClass == "Rated"
             );
 
-        // Define variables specific to this illustration.
         if(!invar.ContractName.empty())
             {
             std::string s = invar.ContractName;
@@ -2859,6 +2858,7 @@ class pdf_illustration_finra : public pdf_illustration
     {
         auto const& invar = ledger.GetLedgerInvariant();
 
+        // Define variables specific to this illustration.
         auto const& state_of_jurisdiction = invar.StateOfJurisdiction;
 
         add_variable
