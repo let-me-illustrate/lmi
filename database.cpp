@@ -99,7 +99,7 @@ void product_database::query_into
     ,database_index const& i
     ) const
 {
-    int const local_length = maturity_age_ - i.index_vector()[e_axis_issue_age];
+    int const local_length = maturity_age_ - i.issue_age();
     LMI_ASSERT(0 < local_length && local_length <= methuselah);
     database_entity const& v = entity_from_key(k);
     double const*const z = v[i];
@@ -198,7 +198,7 @@ void product_database::initialize(std::string const& product_name)
         db_ = DBDictionary::read_via_cache(AddDataDir(filename));
         }
     query_into(DB_MaturityAge, maturity_age_);
-    length_ = maturity_age_ - index_.index_vector()[e_axis_issue_age];
+    length_ = maturity_age_ - index_.issue_age();
     LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }
 
