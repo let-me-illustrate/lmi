@@ -87,6 +87,15 @@ class database_index
         idx_[5] = state    ;
     }
 
+    std::vector<int> const& index_vector() const {return idx_;}
+
+    mcenum_gender   gender   () const {return static_cast<mcenum_gender  >(idx_[0]);}
+    mcenum_class    uw_class () const {return static_cast<mcenum_class   >(idx_[1]);}
+    mcenum_smoking  smoking  () const {return static_cast<mcenum_smoking >(idx_[2]);}
+    int             issue_age() const {return static_cast<int            >(idx_[3]);}
+    mcenum_uw_basis uw_basis () const {return static_cast<mcenum_uw_basis>(idx_[4]);}
+    mcenum_state    state    () const {return static_cast<mcenum_state   >(idx_[5]);}
+
     database_index& gender   (mcenum_gender   z) {idx_[0] = z; return *this;}
     database_index& uw_class (mcenum_class    z) {idx_[1] = z; return *this;}
     database_index& smoking  (mcenum_smoking  z) {idx_[2] = z; return *this;}
@@ -94,8 +103,6 @@ class database_index
                                                   idx_[3] = z; return *this;}
     database_index& uw_basis (mcenum_uw_basis z) {idx_[4] = z; return *this;}
     database_index& state    (mcenum_state    z) {idx_[5] = z; return *this;}
-
-    std::vector<int> const& index_vector() const {return idx_;}
 
   private:
     void check_issue_age(int z) {LMI_ASSERT(0 <= z && z < e_max_dim_issue_age);}
