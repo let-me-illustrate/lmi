@@ -27,7 +27,7 @@
 #include "assert_lmi.hpp"
 #include "mc_enum_type_enums.hpp"
 
-#include <vector>
+#include <array>
 
 /// Number of database axes, excluding the special duration axis.
 
@@ -82,7 +82,7 @@ class database_index
         check_issue_age();
     }
 
-    std::vector<int> const& index_vector() const {return idx_;}
+    std::array<int,number_of_indices> const& index_array() const {return idx_;}
 
     mcenum_gender   gender   () const {return static_cast<mcenum_gender  >(idx_[0]);}
     mcenum_class    uw_class () const {return static_cast<mcenum_class   >(idx_[1]);}
@@ -99,7 +99,7 @@ class database_index
     database_index state    (mcenum_state    z) const {auto i = idx_; i[5] = z; return {i};}
 
   private:
-    database_index(std::vector<int> idx)
+    database_index(std::array<int,number_of_indices> idx)
         :idx_ {idx}
     {
         check_issue_age();
@@ -110,7 +110,7 @@ class database_index
         LMI_ASSERT(0 <= issue_age() && issue_age() < e_max_dim_issue_age);
     }
 
-    std::vector<int> const idx_;
+    std::array<int,number_of_indices> const idx_;
 };
 
 #endif // dbindex_hpp
