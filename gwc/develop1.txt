@@ -122,6 +122,10 @@ git checkout HEAD^ census_view.cpp
 git remote -v update
 git pull
 
+  # If that yields "fatal: Not possible to fast-forward, aborting":
+
+git pull --rebase
+
   # Set local timestamps from RCS Id's, to match repository
   # (this should be necessary only if your clock is unsynchronized)
   #
@@ -269,6 +273,7 @@ https://lists.nongnu.org/archive/html/lmi/2015-10/msg00076.html
 
   # Test reinstallation; compare logs
 
-logfile=log-`date -u +'%Y%m%dT%H%MZ'`; echo "Log file is '$logfile.tar.bz2'."; ./install_msw.sh >$logfile 2>&1; tar -cjf $logfile.tar.bz2 $logfile; mv ${logfile}* ..
+mkdir --parents /opt/lmi/logs
+logfile=/opt/lmi/logs/log-$(date -u +'%Y%m%dT%H%MZ'); echo "Log file is '$logfile.tar.bz2'."; ./install_msw.sh >$logfile 2>&1; tar -cJf $logfile.tar.xz --directory=$(dirname $logfile) $(basename $logfile)
 
-git diff --no-index --color=always --color-moved=plain ../log-old ../log-new |sed -e's/^.\[3[12]m/&ZZZ/' |less -RS
+git diff --no-index --color=always --color-moved=plain /opt/lmi/logs/log-old /opt/lmi/logs/log-new |sed -e's/^.\[3[12]m/&ZZZ/' |less -RS
