@@ -97,9 +97,9 @@ class LMI_SO product_database final
     DBDictionary const& db() const;
     database_entity const& entity_from_key(e_database_key) const;
 
-    database_index  index_;
-    int             length_;
-    int             maturity_age_;
+    database_index const index_;
+    int                  length_;
+    int                  maturity_age_;
 
     std::shared_ptr<DBDictionary> db_;
 };
