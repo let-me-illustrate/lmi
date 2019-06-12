@@ -970,6 +970,19 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
             ,invar.UWClass == "Rated"
             );
 
+        // Define variables specific to this illustration.
+        if(!invar.ContractName.empty())
+            {
+            std::string s = invar.ContractName;
+            for(auto& c : s)
+                {
+                c = lmi_tolower(c);
+                }
+            s[0] = lmi_toupper(s[0]);
+
+            add_variable("ContractNameCap", s);
+            }
+
         // PDF !! Conditions of this ilk should become distinct entities in
         // the product files--or in this case, eliminated altogether: this
         // condition is used only in one place, in a really silly way.
@@ -2845,19 +2858,6 @@ class pdf_illustration_finra : public pdf_illustration
         :pdf_illustration{ledger, pdf_out_file}
     {
         auto const& invar = ledger.GetLedgerInvariant();
-
-        // Define variables specific to this illustration.
-        if(!invar.ContractName.empty())
-            {
-            std::string s = invar.ContractName;
-            for(auto& c : s)
-                {
-                c = lmi_tolower(c);
-                }
-            s[0] = lmi_toupper(s[0]);
-
-            add_variable("ContractNameCap", s);
-            }
 
         auto const& state_of_jurisdiction = invar.StateOfJurisdiction;
 
