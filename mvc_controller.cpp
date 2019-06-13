@@ -347,10 +347,9 @@ void MvcController::ConditionallyEnableItems
 
         wxWindowUpdateLocker u(&control);
 
-        if(items != cached_items)
+        if(cached_items != items)
             {
             std::swap(cached_items, items);
-
             itembox->Set(cached_items);
             }
 
