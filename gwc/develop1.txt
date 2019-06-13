@@ -72,6 +72,13 @@ git cherry-pick ..xanadu/name_of_pull_request
 git fetch https://github.com/thesiv/lmi.git wsl
 git branch ilya-wsl FETCH_HEAD
 
+  # example for a branch with two commits:
+
+git fetch https://github.com/thesiv/lmi.git speed_up_mvc_controller
+git branch ilya-mvc FETCH_HEAD
+git cherry-pick b7aa9bd5
+git cherry-pick 8e247c13
+
   # Commit to a digressionary branch...
 
   # See:
@@ -277,3 +284,12 @@ mkdir --parents /opt/lmi/logs
 logfile=/opt/lmi/logs/log-$(date -u +'%Y%m%dT%H%MZ'); echo "Log file is '$logfile.tar.bz2'."; ./install_msw.sh >$logfile 2>&1; tar -cJf $logfile.tar.xz --directory=$(dirname $logfile) $(basename $logfile)
 
 git diff --no-index --color=always --color-moved=plain /opt/lmi/logs/log-old /opt/lmi/logs/log-new |sed -e's/^.\[3[12]m/&ZZZ/' |less -RS
+
+  # Extract all rate tables from a database
+
+mkdir /tmp/q
+pushd /tmp/q
+
+[wine] /opt/lmi/bin/rate_table_tool --accept --file=/opt/lmi/data/some_name --extract-all
+  # for example:
+wine /opt/lmi/bin/rate_table_tool --accept --file=/opt/lmi/data/qx_cso --extract-all
