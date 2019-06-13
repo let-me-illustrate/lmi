@@ -51,6 +51,7 @@
 #include <wx/xrc/xmlres.h>
 
 #include <cstring>                      // strlen()
+#include <utility>                      // swap()
 
 namespace
 {
