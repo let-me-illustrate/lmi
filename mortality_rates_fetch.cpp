@@ -37,6 +37,15 @@
 // Mortality tables are read in class BasicValues, then used here.
 // The vectors are used by value, not by reference, so they are
 // copied needlessly. Tables should instead be read here.
+//
+// Instead of exposing class BasicValues here, it would be better to
+// pass only the required subset of data:
+//  basic_values.GetIssueAge()
+//  basic_values.GetLength()
+//  basic_values.database()
+//  basic_values.yare_input_
+//  basic_values.round_coi_rate()
+//  basic_values.GetGuarCOIRates() etc.
 
 //============================================================================
 void MortalityRates::fetch_parameters(BasicValues const& basic_values)
