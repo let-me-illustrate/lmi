@@ -2031,7 +2031,7 @@ std::vector<double> BasicValues::GetTgtPremRates() const
 //      ,oe_modal_table == TgtPremType
 // once the comment concerning GetModalPremMinFromTable()
 // in GetModalPremTgtFromTable() is addressed. Meanwhile, this kludge
-// permits table-drive minimum premiums in certain circumstances.
+// permits table-driven minimum premiums in certain circumstances.
         ,oe_modal_table == TgtPremType || oe_modal_table == MinPremType
 // To fix this properly, implement a new GetModalPremTgtFromTable();
 // separate 'oe_modal_table' into distinct enumerators such as
