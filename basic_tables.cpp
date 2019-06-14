@@ -30,6 +30,11 @@
 #include "oecumenic_enumerations.hpp"
 #include "product_data.hpp"
 
+#if 0 // For debugging only.
+#include "alert.hpp"
+#include "handle_exceptions.hpp"
+#endif // 0
+
 #include <string>
 
 namespace
@@ -43,12 +48,44 @@ std::vector<double> basic_table_rates
     ,int                     years_to_maturity
     )
 {
+#if 1
     return actuarial_table_rates
         (AddDataDir(product.datum(table_name))
         ,database.query<int>(table_id)
         ,issue_age
         ,years_to_maturity
         );
+#else // For debugging only. "Unsuitable for production" as explained below.
+    std::string const f = AddDataDir(product.datum(table_name));
+    int const t = database.query<int>(table_id);
+    try
+        {
+        return actuarial_table_rates(f, t, issue_age, years_to_maturity);
+        }
+    catch(...)
+        {
+        report_exception();
+        if(0 == t)
+            {
+            warning() << "Table number zero is always invalid." << LMI_FLUSH;
+            }
+        else
+            {
+            actuarial_table const a(f, t);
+            warning()
+                << "'" << f << "' rate-table database\n"
+                << t << " table number\n"
+                << issue_age << " issue_age argument\n"
+                << years_to_maturity << " years_to_maturity argument\n"
+                << a.min_age() << " table minimum age\n"
+                << a.max_age() << " table maximum age\n"
+                << LMI_FLUSH
+                ;
+            }
+        // Unsuitable for production, which must throw instead.
+        return std::vector<double>(years_to_maturity);
+        }
+#endif // 0
 }
 } // Unnamed namespace
 
