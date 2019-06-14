@@ -300,6 +300,7 @@
 {DB_FirstLoanMonth,DB_Topic_Loans,"FirstLoanMonth","Number of months loans not allowed [not supported yet]",}, \
 {DB_Topic_Premiums,DB_FIRST,"Premiums","Minimum and target premiums",}, \
 {DB_MinPremType,DB_Topic_Premiums,"MinPremType","Minimum premium: 0=based on monthly deductions, 1=7702A seven-pay premium",}, \
+{DB_MinPremTable,DB_Topic_Premiums,"MinPremTable","Annual minimum premium rates per $1 (index in mortality table database)",}, \
 {DB_MinPremIntSpread,DB_Topic_Premiums,"MinPremIntSpread","Interest spread from general-account rate used to capitalize monthly deductions for minimum premium calculation",}, \
 {DB_SplitMinPrem,DB_Topic_Premiums,"SplitMinPrem","Split monthly-deductions minimum premium by payor: 0=no, 1=yes",}, \
 {DB_UnsplitSplitMinPrem,DB_Topic_Premiums,"UnsplitSplitMinPrem","Payment strategies recombine split minimum premium: 0=no, 1=yes",}, \

@@ -294,15 +294,16 @@
 /DB_FirstLoanMonth\>/      s/^/L16/
 # DB_Topic_Premiums
 /DB_MinPremType\>/         s/^/M01/
-/DB_MinPremIntSpread\>/    s/^/M02/
-/DB_SplitMinPrem\>/        s/^/M03/
-/DB_UnsplitSplitMinPrem\>/ s/^/M04/
-/DB_ErNotionallyPaysTerm\>/s/^/M05/
-/DB_TgtPremType\>/         s/^/M06/
-/DB_TgtPremTable\>/        s/^/M07/
-/DB_TgtPremFixedAtIssue\>/ s/^/M08/
-/DB_TgtPremIgnoreSubstd\>/ s/^/M09/
-/DB_MinPmt\>/              s/^/M10/
+/DB_MinPremTable\>/        s/^/M02/
+/DB_MinPremIntSpread\>/    s/^/M03/
+/DB_SplitMinPrem\>/        s/^/M04/
+/DB_UnsplitSplitMinPrem\>/ s/^/M05/
+/DB_ErNotionallyPaysTerm\>/s/^/M06/
+/DB_TgtPremType\>/         s/^/M07/
+/DB_TgtPremTable\>/        s/^/M08/
+/DB_TgtPremFixedAtIssue\>/ s/^/M09/
+/DB_TgtPremIgnoreSubstd\>/ s/^/M10/
+/DB_MinPmt\>/              s/^/M11/
 # DB_Topic_SecondaryGuarantees
 /DB_NoLapseMinDur\>/       s/^/N01/
 /DB_NoLapseMinAge\>/       s/^/N02/

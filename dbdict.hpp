@@ -347,6 +347,7 @@ class LMI_SO DBDictionary
     database_entity CurrRegLoanSpread   ;
     database_entity FirstLoanMonth      ;
     database_entity MinPremType         ;
+    database_entity MinPremTable        ;
     database_entity MinPremIntSpread    ;
     database_entity SplitMinPrem        ;
     database_entity UnsplitSplitMinPrem ;

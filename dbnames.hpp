@@ -455,6 +455,7 @@ enum e_database_key
     ,DB_Topic_Premiums
 
         ,DB_MinPremType
+        ,DB_MinPremTable
         ,DB_MinPremIntSpread
         ,DB_SplitMinPrem
         ,DB_UnsplitSplitMinPrem
