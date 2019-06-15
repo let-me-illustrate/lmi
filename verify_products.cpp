@@ -71,64 +71,73 @@ void verify_one_cell
         return;
         }
 
-    if(0 == t)
+    switch(db.query<oenum_7702_q_whence>(DB_Irc7702QWhence))
         {
-        std::cout
-            << "7702 q PROBLEM: " << product_name
-            << " nonexistent table zero"
-            << ' ' << gender
-            << ' ' << smoking
-            << std::endl
-            ;
-        return;
-        }
+        case oe_7702_q_builtin:
+            {
+            }
+        case oe_7702_q_external_table:
+            {
+            if(0 == t)
+                {
+                std::cout
+                    << "7702 q PROBLEM: " << product_name
+                    << " nonexistent table zero"
+                    << ' ' << gender
+                    << ' ' << smoking
+                    << std::endl
+                    ;
+                return;
+                }
 
-    std::vector<double> const v0 = cso_table
-        (era
-        ,oe_orthodox // No other option currently supported for 7702.
-        ,a_b
-        ,mce_gender (gender).value()
-        ,mce_smoking(smoking).value()
-        );
-    std::string const f = AddDataDir(p.datum("Irc7702QFilename"));
-    actuarial_table const a(f, t);
-    std::vector<double> const v1 = a.values
-        (a.min_age()
-        ,1 + a.max_age() - a.min_age()
-        );
+            std::vector<double> const v0 = cso_table
+                (era
+                ,oe_orthodox // No other option currently supported for 7702.
+                ,a_b
+                ,mce_gender (gender).value()
+                ,mce_smoking(smoking).value()
+                );
+            std::string const f = AddDataDir(p.datum("Irc7702QFilename"));
+            actuarial_table const a(f, t);
+            std::vector<double> const v1 = a.values
+                (a.min_age()
+                ,1 + a.max_age() - a.min_age()
+                );
 
-    if(v0 == v1)
-        {
-        std::cout
-            << "7702 q okay: table " << t
-            << ' ' << gender
-            << ' ' << smoking
-            << std::endl
-            ;
-        }
-    else
-        {
-        std::cout
-            << "7702 q PROBLEM: " << product_name
-            << ' ' << gender
-            << ' ' << smoking
-            << std::endl
-            ;
-        std::cout
-            << "\n  CSO era: " << era
-            << "\n  ALB or ANB: " << a_b
-            << "\n  table file: " << f
-            << "\n  table number: " << t
-            << "\n  min age: " << a.min_age()
-            << "\n  max age: " << a.max_age()
-            << "\n  cso length: " << lmi::ssize(v0)
-            << "\n  table length: " << lmi::ssize(v1)
-            << "\n  v0.front(): " << v0.front()
-            << "\n  v1.front(): " << v1.front()
-            << "\n  v0.back (): " << v0.back ()
-            << "\n  v1.back (): " << v1.back ()
-            << std::endl
-            ;
+            if(v0 == v1)
+                {
+                std::cout
+                    << "7702 q okay: table " << t
+                    << ' ' << gender
+                    << ' ' << smoking
+                    << std::endl
+                    ;
+                }
+            else
+                {
+                std::cout
+                    << "7702 q PROBLEM: " << product_name
+                    << ' ' << gender
+                    << ' ' << smoking
+                    << std::endl
+                    ;
+                std::cout
+                    << "\n  CSO era: " << era
+                    << "\n  ALB or ANB: " << a_b
+                    << "\n  table file: " << f
+                    << "\n  table number: " << t
+                    << "\n  min age: " << a.min_age()
+                    << "\n  max age: " << a.max_age()
+                    << "\n  cso length: " << lmi::ssize(v0)
+                    << "\n  table length: " << lmi::ssize(v1)
+                    << "\n  v0.front(): " << v0.front()
+                    << "\n  v1.front(): " << v1.front()
+                    << "\n  v0.back (): " << v0.back ()
+                    << "\n  v1.back (): " << v1.back ()
+                    << std::endl
+                    ;
+                }
+            }
         }
 }
 } // Unnamed namespace.
