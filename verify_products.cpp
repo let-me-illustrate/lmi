@@ -63,6 +63,8 @@ void verify_one_cell
     auto const axis_g = db.query<bool            >(DB_Irc7702QAxisGender);
     auto const axis_s = db.query<bool            >(DB_Irc7702QAxisSmoking);
 
+    product_data const p(product_name);
+
     if((!axis_g && "Unisex" != gender) || (!axis_s && "Unismoke" != smoking))
         {
         std::cout << "  skipping " << gender << ' ' << smoking << std::endl;
@@ -83,18 +85,18 @@ void verify_one_cell
 
     std::vector<double> const v0 = cso_table
         (era
-        ,oe_orthodox
+        ,oe_orthodox // No other option currently supported for 7702.
         ,a_b
         ,mce_gender (gender).value()
         ,mce_smoking(smoking).value()
         );
-    product_data const p(product_name);
     std::string const f = AddDataDir(p.datum("Irc7702QFilename"));
     actuarial_table const a(f, t);
     std::vector<double> const v1 = a.values
         (a.min_age()
         ,1 + a.max_age() - a.min_age()
         );
+
     if(v0 == v1)
         {
         std::cout
