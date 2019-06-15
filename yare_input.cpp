@@ -86,6 +86,8 @@ yare_input::yare_input(Input const& z)
     AgentCity                        = z.AgentCity                       .value();
     AgentState                       = z.AgentState                      .value();
     AgentZipCode                     = z.AgentZipCode                    .value();
+    AgentPhone                       = z.AgentPhone                      .value();
+    AgentId                          = z.AgentId                         .value();
     InsuredPremiumTableFactor        = z.InsuredPremiumTableFactor       .value();
     CorporationPremiumTableFactor    = z.CorporationPremiumTableFactor   .value();
     EffectiveDate                    = z.EffectiveDate                   .value();

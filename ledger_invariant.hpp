@@ -348,6 +348,8 @@ class LMI_SO LedgerInvariant final
     std::string     ProducerName;
     std::string     ProducerStreet;
     std::string     ProducerCityEtc;
+    std::string     ProducerPhone;
+    std::string     ProducerId;
     std::string     CorpName;
     std::string     MasterContractNumber;
     std::string     ContractNumber;
