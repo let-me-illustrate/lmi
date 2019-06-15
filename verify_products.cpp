@@ -24,6 +24,7 @@
 #include "verify_products.hpp"
 
 #include "actuarial_table.hpp"
+#include "basic_tables.hpp"
 #include "ce_product_name.hpp"
 #include "cso_table.hpp"
 #include "data_directory.hpp"           // AddDataDir()
@@ -62,6 +63,9 @@ void verify_one_cell
     auto const t      = db.query<int             >(DB_Irc7702QTable);
     auto const axis_g = db.query<bool            >(DB_Irc7702QAxisGender);
     auto const axis_s = db.query<bool            >(DB_Irc7702QAxisSmoking);
+    auto const omega  = db.query<int             >(DB_MaturityAge);
+
+    int const years_to_maturity = omega - min_age;
 
     product_data const p(product_name);
 
@@ -73,9 +77,52 @@ void verify_one_cell
 
     switch(db.query<oenum_7702_q_whence>(DB_Irc7702QWhence))
         {
+        // Validate irc_7702_q_builtin(), which is implemented in
+        // terms of cso_table(). The interface of irc_7702_q()
+        // (which delegates to irc_7702_q_builtin()) specifies the
+        // [begin, end) age interval, so cso_table() is called with
+        // those arguments here. Passing this test means only that
+        // the irc_7702_q_builtin() logic is correct; the correctness
+        // of cso_table() is established elsewhere.
+        //
+        // This will fail for a product that incorrectly specifies a
+        // minimum age of zero for smoker-distinct CSO tables, which
+        // never begin at age zero.
         case oe_7702_q_builtin:
             {
+            std::vector<double> const v0 = cso_table
+                (era
+                ,oe_orthodox // No other option currently supported for 7702.
+                ,a_b
+                ,mce_gender (gender).value()
+                ,mce_smoking(smoking).value()
+                ,min_age
+                ,omega
+                );
+            std::vector<double> const v1 = irc_7702_q
+                (p
+                ,db
+                ,min_age
+                ,years_to_maturity
+                );
+            std::cout
+                << "7702 q okay: builtin "
+                << std::string((v0 == v1) ? "validated" : "PROBLEM")
+                << ' ' << gender
+                << ' ' << smoking
+                << std::endl
+                ;
+            return;
             }
+        // Validate an external table. Passing this test means that
+        // the external table is identical to the published CSO table,
+        // and that the external table can be discarded and its
+        // internal equivalent used instead. This is stricter than
+        // necessary: a product with an age range of [20, 95) could
+        // use an external table containing values only in that range;
+        // but it would be foolish to fabricate such a table when the
+        // full published table is available, as errors have been
+        // known to occur in fabrication.
         case oe_7702_q_external_table:
             {
             if(0 == t)
@@ -137,6 +184,7 @@ void verify_one_cell
                     << std::endl
                     ;
                 }
+            return;
             }
         }
 }
