@@ -132,6 +132,50 @@ void verify_one_cell
 } // Unnamed namespace.
 
 /// Verify all products.
+///
+/// Class product_database (with the instance of class database_index
+/// that it contains) suffices for retrieving data tabular data from
+/// internal sources such as cso_table(). Class product_data provides
+/// the names of tables stored in external database files.
+///
+/// For now at least, class Input is used merely as a convenient means
+/// of instantiating the necessary product_database object. No MVC
+/// Model function such as Reconcile() need be called to ensure the
+/// internal consistency of the Input instance.
+///
+/// Only 7702 tables are validated for now. Products have two distinct
+/// sets of gender axes: one for underwriting, and another for 7702
+/// Those axes needn't be the same. For example, a product might be
+/// issued only on a sex-distinct basis, yet use unisex 7702 tables
+/// (to stay within IRS Notice 88-128's safe harbor, or to use more
+/// liberal rates for one market segment at the cost of disadvantaging
+/// another. The smoking axes may differ likewise. Calling Reconcile()
+/// on an Input object enforces the underwriting axes, but it is the
+/// 7702 axes that are tested here.
+///
+/// Two booleans {DB_Irc7702QAxisGender, DB_Irc7702QAxisSmoking} are
+/// not adequate to describe all permissible variations. Arguably,
+/// a more complex paradigm would be desirable, e.g., because two
+/// booleans cannot represent a smoker-distinct-only product that
+/// needs no unismoke tables. However, the usual practice is to
+/// specify unismoke tables even when superfluous, and cso_table()
+/// of course provides a complete set. Furthermore, while a product
+/// may normally require sex-distinct rating, an exception is usually
+/// made for MT, so the simple boolean pair is adequate in practice.
+/// It would theoretically be possible to design a unisex or unismoke
+/// product with smoker- or sex-distinct 7702 calculations, but that
+/// seems most unlikely. Thus, the booleans may be read as meaning:
+///   DB_Irc7702QAxisGender:  iff false, force unisex   for 7702
+///   DB_Irc7702QAxisSmoking: iff false, force unismoke for 7702
+/// but honor the underwriting distinction otherwise (iff true).
+///
+/// It is often convenient to provide a full set of 7702 q tables even
+/// for products that cannot use some of them: ideally, a single set
+/// of {1980, 2001, 2017} X {ALB, ANB} tables would then be shared by
+/// all products. The presence of superfluous tables is not anomalous,
+/// and product verification need take no note of it. (It is generally
+/// not possible to share 7PP and corridor tables tables across all
+/// products, though, because those tables depend on maturity age.)
 
 void verify_products()
 {
