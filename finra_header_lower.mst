@@ -33,7 +33,7 @@
             {{Insured1Abbrev30}},
             {{Gender}} {{Smoker}} rates, Age {{Age}}<br>
         {{/Composite}}
-        {{ContractNameCap}}: {{PolicyMktgName}}<br>
+        {{ContractNameCap}}: {{PolicyForm}}&nbsp;{{PolicyMktgName}}<br>
         First Year Premium: ${{InitPrem}}<br>
         {{^Composite}}
             {{#UWTypeIsMedical}}

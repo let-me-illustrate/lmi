@@ -26,14 +26,14 @@
         <td colspan="3">&nbsp;</td>
     </tr>
     <tr>
-        <td>{{InsCoName}}</td>
-        <td align="center">Date Prepared: {{DatePrepared}}</td>
-        <td align="right">Policy Form: {{PolicyForm}}</td>
+        <td>System Version: {{LmiVersion}}</td>
+        <td align="center">{{page_number}}</td>
+        <td align="right">{{InsCoName}}</td>
     </tr>
     <tr>
-        <td>{{InsCoAddr}}</td>
-        <td align="center">System Version: {{LmiVersion}}</td>
-        <td align="right">{{page_number}}</td>
+        <td>{{StateMarketingImprimatur}}</td>
+        <td>&nbsp;</td>
+        <td align="right">Date Prepared: {{DatePrepared}}</td>
     </tr>
 </table>
 
