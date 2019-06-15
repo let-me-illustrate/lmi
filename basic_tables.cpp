@@ -24,6 +24,8 @@
 #include "basic_tables.hpp"
 
 #include "actuarial_table.hpp"
+#include "assert_lmi.hpp"
+#include "cso_table.hpp"
 #include "data_directory.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"                  // e_database_key
@@ -87,6 +89,32 @@ std::vector<double> basic_table_rates
         }
 #endif // 0
 }
+
+std::vector<double> LMI_SO irc_7702_q_builtin
+    (product_database const& db
+    ,int                     issue_age
+    ,int                     years_to_maturity
+    )
+{
+    auto const era    = db.query<oenum_cso_era   >(DB_CsoEra);
+    auto const a_b    = db.query<oenum_alb_or_anb>(DB_AgeLastOrNearest);
+    auto const axis_g = db.query<bool            >(DB_Irc7702QAxisGender);
+    auto const axis_s = db.query<bool            >(DB_Irc7702QAxisSmoking);
+    auto const omega  = db.query<int             >(DB_MaturityAge);
+    LMI_ASSERT(db.index().issue_age() == issue_age);
+    LMI_ASSERT(omega - issue_age == years_to_maturity);
+
+    // Use 7702 axes for gender and smoker--for 7702, not guar mort.
+    return cso_table
+        (era
+        ,oe_orthodox // No other option currently supported for 7702.
+        ,a_b
+        ,axis_g ? db.index().gender () : mce_unisex
+        ,axis_s ? db.index().smoking() : mce_unismoke
+        ,issue_age
+        ,omega
+        );
+}
 } // Unnamed namespace
 
 std::vector<double> LMI_SO irc_7702_q
@@ -100,7 +128,11 @@ std::vector<double> LMI_SO irc_7702_q
         {
         case oe_7702_q_builtin:
             {
-            throw "Not yet implemented.";
+            return irc_7702_q_builtin
+                (database
+                ,issue_age
+                ,years_to_maturity
+                );
             }
         case oe_7702_q_external_table:
             {
