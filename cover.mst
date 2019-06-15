@@ -121,7 +121,7 @@
     <tr>
         <td align="center">
             <font size="+2">
-                <b>CRN:</b> {{>imprimatur}}
+                {{>imprimatur}}
             </font>
         </td>
     </tr>
