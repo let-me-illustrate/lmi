@@ -826,7 +826,7 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
                 {
                 i->pre_render();
                 }
-            catch(const std::runtime_error& e)
+            catch(std::runtime_error const& e)
                 {
                 std::ostringstream oss;
                 oss
@@ -862,7 +862,7 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
 
                 i->render();
                 }
-            catch(const std::runtime_error& e)
+            catch(std::runtime_error const& e)
                 {
                 std::ostringstream oss;
                 oss
