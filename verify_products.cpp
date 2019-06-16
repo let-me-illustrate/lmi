@@ -112,8 +112,8 @@ void verify_one_cell
                 << ' ' << smoking
                 << std::endl
                 ;
-            return;
             }
+            break;
         // Validate an external table. Passing this test means that
         // the external table is identical to the published CSO table,
         // and that the external table can be discarded and its
@@ -184,8 +184,8 @@ void verify_one_cell
                     << std::endl
                     ;
                 }
-            return;
             }
+            break;
         }
 }
 } // Unnamed namespace.
