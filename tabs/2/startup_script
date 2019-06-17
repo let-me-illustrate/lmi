@@ -4,6 +4,7 @@ a='schroot --chroot=cross-lmi'
 
 b='cd /opt/lmi/src/lmi'
 c='git ls-files --deleted | xargs git checkout --'
+d='for z in *(m-1) ; do touch --reference=$z /opt/lmi/free/src/lmi/$z; done'
 u='eval `ssh-agent`'
 v='ssh-agent $SHELL'
 w='ssh-add ~/.ssh/id_rsa'
@@ -12,6 +13,7 @@ y='ssh-agent -k > /dev/null 2>&1'
 
 print -rs $b ; echo $b ; eval $b
 print -rs $c ; echo $c
+print -rs $d ; echo $d
 # 'ssh-agent' not presently used in chroot:
 #print -rs $u ; echo $u ; eval $u
 #echo $w >/dev/clipboard
@@ -24,6 +26,7 @@ print -rs $c ; echo $c
 unset a
 unset b
 unset c
+unset d
 unset u
 unset v
 unset w

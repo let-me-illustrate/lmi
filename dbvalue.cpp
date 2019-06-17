@@ -277,7 +277,7 @@ double& database_entity::operator[](std::vector<int> const& index)
 
 double const* database_entity::operator[](database_index const& idx) const
 {
-    std::vector<int> const& index(idx.index_vector());
+    auto const& index(idx.index_array());
     LMI_ASSERT(e_number_of_axes == 1 + index.size());
 
     int z = 0;

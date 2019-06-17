@@ -95,8 +95,8 @@ vendor=${LMI_TRIPLET}-$gcc_version-$wx_commit_sha
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
 
-wx_cc_flags=-fno-omit-frame-pointer
-wx_cxx_flags=-fno-omit-frame-pointer
+wx_cc_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math'
+wx_cxx_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math'
 
 config_options="
   --prefix=$prefix
@@ -128,8 +128,6 @@ config_options="
   --without-opengl
   --without-subdirs
   CPPFLAGS=-I$prefix/include
-  CFLAGS=$wx_cc_flags
-  CXXFLAGS=$wx_cxx_flags
   LDFLAGS=-L$exec_prefix/lib
 "
 
@@ -153,7 +151,7 @@ mkdir --parents "$build_dir"
 cd "$build_dir"
 # 'configure' options must not be double-quoted
 # shellcheck disable=SC2086
-"$proxy_wx_dir"/configure $config_options
+"$proxy_wx_dir"/configure $config_options CFLAGS="$wx_cc_flags" CXXFLAGS="$wx_cxx_flags"
 $MAKE
 $MAKE install
 

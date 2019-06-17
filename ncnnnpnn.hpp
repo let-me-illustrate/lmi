@@ -30,7 +30,6 @@
 
 #include <iomanip>
 #include <ios>
-#include <istream>
 #include <sstream>
 #include <stdexcept>
 #include <string>

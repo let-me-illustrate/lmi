@@ -226,36 +226,46 @@ void input_test::test_product_database()
 
     // Test presumptive issue-age bounds in class database_index.
     BOOST_TEST_THROW
+        (database_index({mce_male, mce_rated, mce_smoker, 100, mce_medical, mce_s_XX})
+        ,std::runtime_error
+        ,"Assertion '0 <= issue_age() && issue_age() < e_max_dim_issue_age' failed."
+        );
+    BOOST_TEST_THROW
+        (database_index({mce_male, mce_rated, mce_smoker, -1, mce_medical, mce_s_XX})
+        ,std::runtime_error
+        ,"Assertion '0 <= issue_age() && issue_age() < e_max_dim_issue_age' failed."
+        );
+    BOOST_TEST_THROW
         (index.issue_age(100)
         ,std::runtime_error
-        ,"Assertion '0 <= z && z < e_max_dim_issue_age' failed."
+        ,"Assertion '0 <= issue_age() && issue_age() < e_max_dim_issue_age' failed."
         );
     BOOST_TEST_THROW
         (index.issue_age(-1)
         ,std::runtime_error
-        ,"Assertion '0 <= z && z < e_max_dim_issue_age' failed."
+        ,"Assertion '0 <= issue_age() && issue_age() < e_max_dim_issue_age' failed."
         );
 
-    index.issue_age(99);
-    db.query_into(DB_SnflQ, v, index);
+    database_index idx99 = index.issue_age(99);
+    db.query_into(DB_SnflQ, v, idx99);
     BOOST_TEST_EQUAL( 1, v.size());
 
     // Force the product to mature at 98.
     db.maturity_age_ = 98;
-    index.issue_age(98);
-    db.query(DB_MaturityAge, index); // Accepted because maturity age is scalar.
+    database_index idx98 = index.issue_age(98);
+    db.query(DB_MaturityAge, idx98); // Accepted because maturity age is scalar.
     BOOST_TEST_THROW
-        (db.query_into(DB_SnflQ, v, index)
+        (db.query_into(DB_SnflQ, v, idx98)
         ,std::runtime_error
         ,"Assertion '0 < local_length && local_length <= methuselah' failed."
         );
 
     index.issue_age(97);
-    db.query_into(DB_SnflQ, v, index);
+    db.query_into(DB_SnflQ, v, index.issue_age(97));
     BOOST_TEST_EQUAL( 1, v.size());
 
     index.issue_age(0);
-    db.query_into(DB_SnflQ, v, index);
+    db.query_into(DB_SnflQ, v, index.issue_age(0));
     BOOST_TEST_EQUAL(98, v.size());
 }
 

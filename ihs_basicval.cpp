@@ -25,6 +25,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "basic_tables.hpp"
 #include "bourn_cast.hpp"
 #include "calendar_date.hpp"
 #include "contains.hpp"
@@ -924,7 +925,7 @@ double BasicValues::GetModalPremMaxNonMec
 ///    nature; if it is nonetheless desired to add a policy fee to a
 ///    (conservative) table-derived 7pp, then 'oe_modal_table' should
 ///    be used instead.
-/// Therefore, an assertion (where 'TgtPremMonthlyPolFee' is assiged)
+/// Therefore, an assertion (where 'TgtPremMonthlyPolFee' is assigned)
 /// requires that the fee be zero in those cases, and also fires if
 /// this function is used for minimum premium with a nonzero fee
 /// (because no GetModalPremMinFromTable() has yet been written).
@@ -1858,17 +1859,11 @@ std::vector<double> const& BasicValues::GetMlyDcvqc() const
 
 std::vector<double> BasicValues::GetCvatCorridorFactors() const
 {
-    return GetTable
-        (product().datum("CvatCorridorFilename")
-        ,DB_CorridorTable
-        );
-}
-
-std::vector<double> BasicValues::GetIrc7702NspRates() const
-{
-    return GetTable
-        (product().datum("Irc7702NspFilename")
-        ,DB_CorridorTable
+    return cvat_corridor_factors
+        (product()
+        ,database()
+        ,GetIssueAge()
+        ,GetLength()
         );
 }
 
@@ -2019,11 +2014,11 @@ std::vector<double> BasicValues::GetGroupProxyRates() const
 
 std::vector<double> BasicValues::GetSevenPayRates() const
 {
-    return GetTable
-        (product().datum("SevenPayFilename")
-        ,DB_SevenPayTable
-    // TAXATION !! No table available if 7PP calculated from first principles.
-//        ,oe_7702_prem_from_table == database().query<bool>(DB_SevenPayWhence)
+    return irc_7702A_7pp
+        (product()
+        ,database()
+        ,GetIssueAge()
+        ,GetLength()
         );
 }
 
@@ -2036,7 +2031,7 @@ std::vector<double> BasicValues::GetTgtPremRates() const
 //      ,oe_modal_table == TgtPremType
 // once the comment concerning GetModalPremMinFromTable()
 // in GetModalPremTgtFromTable() is addressed. Meanwhile, this kludge
-// permits table-drive minimum premiums in certain circumstances.
+// permits table-driven minimum premiums in certain circumstances.
         ,oe_modal_table == TgtPremType || oe_modal_table == MinPremType
 // To fix this properly, implement a new GetModalPremTgtFromTable();
 // separate 'oe_modal_table' into distinct enumerators such as
@@ -2049,9 +2044,11 @@ std::vector<double> BasicValues::GetTgtPremRates() const
 
 std::vector<double> BasicValues::GetIrc7702QRates() const
 {
-    return GetTable
-        (product().datum("Irc7702QFilename")
-        ,DB_Irc7702QTable
+    return irc_7702_q
+        (product()
+        ,database()
+        ,GetIssueAge()
+        ,GetLength()
         );
 }
 

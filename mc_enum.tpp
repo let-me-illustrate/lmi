@@ -28,6 +28,8 @@
 #include "rtti_lmi.hpp"
 
 #include <algorithm>                    // find()
+#include <istream>
+#include <ostream>
 #include <typeinfo>
 
 /// The header that defines class mc_enum is by design unaware of its

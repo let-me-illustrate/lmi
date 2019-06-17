@@ -21,18 +21,20 @@
 
 #include "pchfile.hpp"
 
-#include "data_directory.hpp"           // AddDataDir()
+// Facilities offered by all of these headers are tested here.
 #include "database.hpp"
 #include "dbdict.hpp"
 #include "fund_data.hpp"
-#include "global_settings.hpp"
-#include "path_utility.hpp"             // initialize_filesystem()
 #include "product_data.hpp"
 #include "rounding_rules.hpp"
 #include "stratified_charges.hpp"
+// End of headers tested here.
 
+#include "data_directory.hpp"           // AddDataDir()
+#include "global_settings.hpp"
+#include "path_utility.hpp"             // initialize_filesystem()
 #include "test_tools.hpp"
-#include "timer.hpp"
+#include "timer.hpp"                    // TimeAnAliquot()
 
 #include <string>
 #include <utility>                      // move()
@@ -103,11 +105,11 @@ void product_file_test::test_copying()
         ,mce_nonmedical
         ,mce_s_CT
         );
-    BOOST_TEST(mce_s_CT == d.index().index_vector()[5]);
+    BOOST_TEST(mce_s_CT == d.index().state());
     BOOST_TEST(      55 == d.length());
     BOOST_TEST(      99 == d.query<int>(DB_MaxIncrAge));
     product_database e(std::move(d));
-    BOOST_TEST(mce_s_CT == e.index().index_vector()[5]);
+    BOOST_TEST(mce_s_CT == e.index().state());
     BOOST_TEST(      55 == e.length());
     BOOST_TEST(      99 == e.query<int>(DB_MaxIncrAge));
 
@@ -122,10 +124,10 @@ void product_file_test::test_copying()
         ,mce_s_CT
         );
     product_database g(f);
-    BOOST_TEST(mce_s_CT == f.index().index_vector()[5]);
+    BOOST_TEST(mce_s_CT == f.index().state());
     BOOST_TEST(      41 == f.length());
     BOOST_TEST(      99 == f.query<int>(DB_MaxIncrAge));
-    BOOST_TEST(mce_s_CT == g.index().index_vector()[5]);
+    BOOST_TEST(mce_s_CT == g.index().state());
     BOOST_TEST(      41 == g.length());
     BOOST_TEST(      99 == g.query<int>(DB_MaxIncrAge));
 }

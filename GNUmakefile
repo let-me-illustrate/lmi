@@ -25,7 +25,7 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 # The general technique used in the 'Multiple build directories'
 # section is due to Paul D. Smith:
-#   http://make.paulandlesley.org/multi-arch.html#advanced
+#   https://make.mad-scientist.net/papers/multi-architecture-builds/#advanced
 # with the following significant differences:
 #
 # For greater clarity, the 'actual' makefile is a separate file,
@@ -242,13 +242,30 @@ MAKETARGET = \
 
 .PHONY: $(build_dir)
 $(build_dir): $(gpl_files)
-	+@[ -d $@ ] || $(MKDIR) --parents $@
-	+@for z in $(compiler_runtime_files); \
-	  do [ -f $@/$$(basename $$z) ] || $(CP) --archive $$z $@ ; \
+	+@[ -d $@                 ] || $(MKDIR) --parents $@
+	+@[ -d $(localbindir)     ] || $(MKDIR) --parents $(localbindir)
+	+@[ -d $(locallibdir)     ] || $(MKDIR) --parents $(locallibdir)
+	+@[ -d $(localincludedir) ] || $(MKDIR) --parents $(localincludedir)
+	+@for z in $(compiler_runtime_files); do \
+	    $(CP) --archive --update $$z $(localbindir) ; \
 	  done;
 	+@$(MAKETARGET)
 
 % :: $(build_dir) ; @:
+
+################################################################################
+
+# Display selected variables.
+
+.PHONY: show_env
+show_env:
+	@printf 'Internal make variables particular to lmi:\n\n'
+	@printf 'LMI_COMPILER = "%s"\n' "$(LMI_COMPILER)"
+	@printf 'LMI_TRIPLET  = "%s"\n' "$(LMI_TRIPLET)"
+	@printf 'coefficiency = "%s"\n' "$(coefficiency)"
+	@printf 'PATH         = "%s"\n' "$(PATH)"
+	@printf 'WINEPATH     = "%s"\n' "$(WINEPATH)"
+	@printf 'PERFORM      = "%s"\n' "$(PERFORM)"
 
 ################################################################################
 
@@ -406,7 +423,6 @@ TEST_CODING_RULES := $(build_dir)/test_coding_rules$(EXEEXT)
 .PHONY: custom_tools
 custom_tools:
 	@$(MAKE) test_coding_rules$(EXEEXT)
-	@$(MKDIR) --parents $(localbindir)
 	@$(CP) --preserve --update $(TEST_CODING_RULES) $(localbindir)
 
 ################################################################################
@@ -418,7 +434,7 @@ custom_tools:
 # Either of these suggests a build failure that may render dependency
 # files invalid; 'make clean' should provide symptomatic relief.
 #
-# The '$(LS) --classify' test somewhat loosely identifies source files
+# The "find ... '*.sed'" test somewhat loosely identifies source files
 # whose executable bit is improperly set. It is properly set iff the
 # file starts with a hash-bang; to avoid the cost of opening every
 # file, a simple heuristic is used, '*.sh *.sed' being the only files
@@ -443,14 +459,17 @@ check_concinnity: source_clean custom_tools
 	@$(RM) --force TODAY
 	@$(RM) --force BOM
 	@$(RM) --force BOY
-	@[ -f md5sums ] \
+	@cd $(prefascicle_dir) && [ -f md5sums ] \
 	  && <md5sums $(SED) -e'/\.test$$\|\.test0$$\|\.test1$$\|\.tsv$$\|\.xml$$/d' \
 	  | $(MD5SUM) --check --quiet || true
 	@for z in $(build_dir)/*.d; do [ -s $$z ]         || echo $$z; done;
 	@for z in $(build_dir)/*.o; do [ -f $${z%%.o}.d ] || echo $$z; done;
-	@$(LS) --classify $(prefascicle_dir)/* \
-	  | $(SED) -e'/\*$$/!d' -e'/^\.\//!d' -e'/.sh\*$$/d' -e'/.sed\*$$/d' \
+	@find $(prefascicle_dir) -maxdepth 1 -executable -type f \
+	  -not -name '*.sh' -not -name '*.sed' \
+	  -not -name 'commit-msg' -not -name 'pre-commit' \
 	  | $(SED) -e's/^/Improperly executable: /'
+	@find $(prefascicle_dir) -executable -type f -print0 \
+	  | xargs -0 -n 1 -P 0 ./check_script.sh
 	@$(ECHO) "  Problems detected by xmllint:"
 	@for z in $(xml_files); \
 	  do \

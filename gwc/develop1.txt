@@ -66,6 +66,19 @@ git fetch xanadu
 
 git cherry-pick ..xanadu/name_of_pull_request
 
+  # Alternatively, to cherry-pick from an online repository not set up
+  # as a remote:
+
+git fetch https://github.com/thesiv/lmi.git wsl
+git branch ilya-wsl FETCH_HEAD
+
+  # example for a branch with two commits:
+
+git fetch https://github.com/thesiv/lmi.git speed_up_mvc_controller
+git branch ilya-mvc FETCH_HEAD
+git cherry-pick b7aa9bd5
+git cherry-pick 8e247c13
+
   # Commit to a digressionary branch...
 
   # See:
@@ -116,6 +129,10 @@ git checkout HEAD^ census_view.cpp
 git remote -v update
 git pull
 
+  # If that yields "fatal: Not possible to fast-forward, aborting":
+
+git pull --rebase
+
   # Set local timestamps from RCS Id's, to match repository
   # (this should be necessary only if your clock is unsynchronized)
   #
@@ -158,6 +175,10 @@ for z in * ; do [ -f $z ] && ( [ $z -nt /opt/lmi/src/lmi/$z ] || [ $z -ot /opt/l
 
 for z in $(git diff HEAD@{1} --name-only) ; do touch --reference=/opt/lmi/src/lmi/$z $z; done
 
+  # Alternatively, in source rather than mirror directory, especially
+  # after 'git checkout' to undo local modifications:
+for z in *(m-1) ; do touch --reference=$z /opt/lmi/free/src/lmi/$z; done
+
   # Third screen: only for building and testing
 
 cd /opt/lmi/src/lmi
@@ -165,13 +186,13 @@ cd /opt/lmi/src/lmi
 make $coefficiency install check_physical_closure >../log 2>&1
 make $coefficiency cgi_tests cli_tests >../log 2>&1
 make $coefficiency system_test >../log 2>&1
-make $coefficiency unit_tests 2>&1 | tee >(grep '\*\*\*') >(grep '????') >(grep '!!!!' --count | xargs printf "%d tests succeeded\n") >../log
+make $coefficiency unit_tests 2>&1 | tee >(grep '\*\*\*') >(grep '????') >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >../log
 
   # other build types
 
 make $coefficiency all build_type=so_test USE_SO_ATTRIBUTES=1 2>&1 |less -S
 make $coefficiency cgi_tests cli_tests build_type=safestdlib  2>&1 |less -S
-make $coefficiency unit_tests build_type=safestdlib 2>&1 | tee >(grep '\*\*\*') >(grep '????') >(grep '!!!!' --count | xargs printf "%d tests succeeded\n") >../log
+make $coefficiency unit_tests build_type=safestdlib 2>&1 | tee >(grep '\*\*\*') >(grep '????') >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >../log
 
   # Run a single unit test
 
@@ -259,6 +280,16 @@ https://lists.nongnu.org/archive/html/lmi/2015-10/msg00076.html
 
   # Test reinstallation; compare logs
 
-logfile=log-`date -u +'%Y%m%dT%H%MZ'`; echo "Log file is '$logfile.tar.bz2'."; ./install_msw.sh >$logfile 2>&1; tar -cjf $logfile.tar.bz2 $logfile; mv ${logfile}* ..
+mkdir --parents /opt/lmi/logs
+logfile=/opt/lmi/logs/log-$(date -u +'%Y%m%dT%H%MZ'); echo "Log file is '$logfile.tar.bz2'."; ./install_msw.sh >$logfile 2>&1; tar -cJf $logfile.tar.xz --directory=$(dirname $logfile) $(basename $logfile)
 
-git diff --no-index --color=always --color-moved=plain ../log-old ../log-new |sed -e's/^.\[3[12]m/&ZZZ/' |less -RS
+git diff --no-index --color=always --color-moved=plain /opt/lmi/logs/log-old /opt/lmi/logs/log-new |sed -e's/^.\[3[12]m/&ZZZ/' |less -RS
+
+  # Extract all rate tables from a database
+
+mkdir /tmp/q
+pushd /tmp/q
+
+[wine] /opt/lmi/bin/rate_table_tool --accept --file=/opt/lmi/data/some_name --extract-all
+  # for example:
+wine /opt/lmi/bin/rate_table_tool --accept --file=/opt/lmi/data/qx_cso --extract-all

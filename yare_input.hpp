@@ -123,8 +123,8 @@ class yare_input final
     std::string                       AgentCity                       ;
     mcenum_state                      AgentState                      ;
     std::string                       AgentZipCode                    ;
-//    std::string                       AgentPhone                      ;
-//    std::string                       AgentId                         ;
+    std::string                       AgentPhone                      ;
+    std::string                       AgentId                         ;
 //    mcenum_premium_table              InsuredPremiumTableNumber       ;
     double                            InsuredPremiumTableFactor       ;
 //    mcenum_premium_table              CorporationPremiumTableNumber   ;

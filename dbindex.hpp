@@ -27,7 +27,7 @@
 #include "assert_lmi.hpp"
 #include "mc_enum_type_enums.hpp"
 
-#include <vector>
+#include <array>
 
 /// Number of database axes, excluding the special duration axis.
 
@@ -65,14 +65,22 @@ enum enum_database_dimensions
 /// Product-database lookup index.
 ///
 /// Implicitly-declared special member functions do the right thing.
+///
+/// Members such as state(mcenum_state) depart from this idiom:
+///   https://isocpp.org/wiki/faq/ctors#named-parameter-idiom
+/// so that idx_ can be const. In practice, they're used only to
+/// create throwaway database_index objects, so modifying the current
+/// object was actually undesirable. Arguably they should have more
+/// verbose names.
+///
+/// Arguably enumerators should be used rather than literal integers
+/// in the implementation, e.g.,
+///   s/5/e_axis_state/
+/// but OTOH compactness increases readability.
 
 class database_index
 {
   public:
-    database_index()
-        :idx_(number_of_indices)
-    {}
-
     database_index
         (mcenum_gender   gender
         ,mcenum_class    uw_class
@@ -81,30 +89,40 @@ class database_index
         ,mcenum_uw_basis uw_basis
         ,mcenum_state    state
         )
-        :idx_(number_of_indices)
+        :idx_ {gender, uw_class, smoking, issue_age, uw_basis, state}
     {
-        idx_[0] = gender   ;
-        idx_[1] = uw_class ;
-        idx_[2] = smoking  ;
-        idx_[3] = issue_age;
-        idx_[4] = uw_basis ;
-        idx_[5] = state    ;
+        check_issue_age();
     }
 
-    database_index& gender   (mcenum_gender   z) {idx_[0] = z; return *this;}
-    database_index& uw_class (mcenum_class    z) {idx_[1] = z; return *this;}
-    database_index& smoking  (mcenum_smoking  z) {idx_[2] = z; return *this;}
-    database_index& issue_age(int             z) {check_issue_age(z);
-                                                  idx_[3] = z; return *this;}
-    database_index& uw_basis (mcenum_uw_basis z) {idx_[4] = z; return *this;}
-    database_index& state    (mcenum_state    z) {idx_[5] = z; return *this;}
+    std::array<int,number_of_indices> const& index_array() const {return idx_;}
 
-    std::vector<int> const& index_vector() const {return idx_;}
+    mcenum_gender   gender   () const {return static_cast<mcenum_gender  >(idx_[0]);}
+    mcenum_class    uw_class () const {return static_cast<mcenum_class   >(idx_[1]);}
+    mcenum_smoking  smoking  () const {return static_cast<mcenum_smoking >(idx_[2]);}
+    int             issue_age() const {return static_cast<int            >(idx_[3]);}
+    mcenum_uw_basis uw_basis () const {return static_cast<mcenum_uw_basis>(idx_[4]);}
+    mcenum_state    state    () const {return static_cast<mcenum_state   >(idx_[5]);}
+
+    database_index gender   (mcenum_gender   z) const {auto i = idx_; i[0] = z; return {i};}
+    database_index uw_class (mcenum_class    z) const {auto i = idx_; i[1] = z; return {i};}
+    database_index smoking  (mcenum_smoking  z) const {auto i = idx_; i[2] = z; return {i};}
+    database_index issue_age(int             z) const {auto i = idx_; i[3] = z; return {i};}
+    database_index uw_basis (mcenum_uw_basis z) const {auto i = idx_; i[4] = z; return {i};}
+    database_index state    (mcenum_state    z) const {auto i = idx_; i[5] = z; return {i};}
 
   private:
-    void check_issue_age(int z) {LMI_ASSERT(0 <= z && z < e_max_dim_issue_age);}
+    database_index(std::array<int,number_of_indices> idx)
+        :idx_ {idx}
+    {
+        check_issue_age();
+    }
 
-    std::vector<int> idx_;
+    void check_issue_age()
+    {
+        LMI_ASSERT(0 <= issue_age() && issue_age() < e_max_dim_issue_age);
+    }
+
+    std::array<int,number_of_indices> const idx_;
 };
 
 #endif // dbindex_hpp

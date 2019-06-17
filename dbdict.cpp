@@ -147,9 +147,11 @@ void DBDictionary::ascribe_members()
     ascribe("AllowCvat"           , &DBDictionary::AllowCvat           );
     ascribe("AllowGpt"            , &DBDictionary::AllowGpt            );
     ascribe("AllowNo7702"         , &DBDictionary::AllowNo7702         );
+    ascribe("Irc7702Obreption"    , &DBDictionary::Irc7702Obreption    );
     ascribe("CorridorWhence"      , &DBDictionary::CorridorWhence      );
     ascribe("Irc7702NspWhence"    , &DBDictionary::Irc7702NspWhence    );
     ascribe("SevenPayWhence"      , &DBDictionary::SevenPayWhence      );
+    ascribe("Irc7702QWhence"      , &DBDictionary::Irc7702QWhence      );
     ascribe("CorridorTable"       , &DBDictionary::CorridorTable       );
     ascribe("Irc7702NspTable"     , &DBDictionary::Irc7702NspTable     );
     ascribe("SevenPayTable"       , &DBDictionary::SevenPayTable       );
@@ -366,6 +368,7 @@ void DBDictionary::ascribe_members()
     ascribe("CurrRegLoanSpread"   , &DBDictionary::CurrRegLoanSpread   );
     ascribe("FirstLoanMonth"      , &DBDictionary::FirstLoanMonth      );
     ascribe("MinPremType"         , &DBDictionary::MinPremType         );
+    ascribe("MinPremTable"        , &DBDictionary::MinPremTable        );
     ascribe("MinPremIntSpread"    , &DBDictionary::MinPremIntSpread    );
     ascribe("SplitMinPrem"        , &DBDictionary::SplitMinPrem        );
     ascribe("UnsplitSplitMinPrem" , &DBDictionary::UnsplitSplitMinPrem );
@@ -540,6 +543,10 @@ void DBDictionary::InitDB()
     // Some, like DB_IntSpreadMode, have no enumerator equal to zero,
     // and must be initialized explicitly with some actual enumerator.
     Add({DB_SmokeOrTobacco      , oe_smoker_nonsmoker});
+    Add({DB_CorridorWhence      , oe_7702_corr_first_principles});
+    Add({DB_Irc7702NspWhence    , oe_7702_nsp_first_principles});
+    Add({DB_SevenPayWhence      , oe_7702_7pp_first_principles});
+    Add({DB_Irc7702QWhence      , oe_7702_q_builtin});
     Add({DB_CvatMatChangeDefn   , mce_unnecessary_premium});
     Add({DB_Effective7702DboRop , mce_option1_for_7702});
     Add({DB_TermIsQABOrDb7702   , oe_7702_term_is_db});
@@ -669,6 +676,7 @@ sample::sample()
     Add({DB_CorridorWhence      , oe_7702_corr_from_table});
     Add({DB_Irc7702NspWhence    , oe_7702_nsp_reciprocal_cvat_corridor});
     Add({DB_SevenPayWhence      , oe_7702_7pp_from_table});
+    Add({DB_Irc7702QWhence      , oe_7702_q_external_table});
 
     // This is just a sample product, so make do with plausible
     // all-male seven-pay premiums, and use GPT corridor factors for
@@ -936,6 +944,18 @@ sample2ipp::sample2ipp()
 sample2xyz::sample2xyz()
 {
     // Exotica.
+#if 0
+    // US 1980 CSO age last, not gender distinct. Unisex = table D.
+    // This deviation from the 'sample' family should necessitate
+    // different 7pp and corridor tables. Enable this deliberate
+    // inconsistency as an optional test of the product verifier.
+    int dims113[e_number_of_axes] = {1, 1, 3, 1, 1, 1, 1}; // smoking
+    double T7702q[3] = {111, 109, 107,}; // Smoker, nonsmoker, unismoke.
+    Add({DB_Irc7702QTable, e_number_of_axes, dims113, T7702q});
+    Add({DB_Irc7702QAxisGender  , false});
+    Add({DB_Irc7702QAxisSmoking , true});
+#endif // 0
+    // Arguably the most complex ledger type.
     Add({DB_LedgerType          , mce_finra});
     // Certain group-quote columns are available only when these two
     // entities are 'true':

@@ -100,7 +100,7 @@ Input::Input()
     ,AgentCity                        {"*** REQUIRED FIELD MISSING ***"}
     ,AgentState                       {"CT"}
 //    ,AgentZipCode                     {""}
-//    ,AgentPhone                       {""}
+    ,AgentPhone                       {"*** REQUIRED FIELD MISSING ***"}
     ,AgentId                          {"*** REQUIRED FIELD MISSING ***"}
 //    ,InsuredPremiumTableNumber        {""}
     ,InsuredPremiumTableFactor        {"1"}

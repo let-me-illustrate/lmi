@@ -158,10 +158,12 @@ enum e_database_key
         ,DB_AllowCvat
         ,DB_AllowGpt
         ,DB_AllowNo7702
+        ,DB_Irc7702Obreption
 
         ,DB_CorridorWhence
         ,DB_Irc7702NspWhence
         ,DB_SevenPayWhence
+        ,DB_Irc7702QWhence
         ,DB_CorridorTable
         ,DB_Irc7702NspTable
         ,DB_SevenPayTable
@@ -453,6 +455,7 @@ enum e_database_key
     ,DB_Topic_Premiums
 
         ,DB_MinPremType
+        ,DB_MinPremTable
         ,DB_MinPremIntSpread
         ,DB_SplitMinPrem
         ,DB_UnsplitSplitMinPrem

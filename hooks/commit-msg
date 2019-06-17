@@ -36,8 +36,8 @@ z=$(sed -n -e "$sed_script" "$1")
 
 if [ -n "$z" ]; then
     printf '\n%s\n' "$z"
-    printf "COMMIT ABORTED\n"
+    printf '%s\n' "COMMIT ABORTED"
     exit 1
 fi
 
-printf "okay\n"
+printf '%s\n' "okay"

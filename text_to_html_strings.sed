@@ -1,4 +1,4 @@
-#! /bin/sed -f
+#!/bin/sed -f
 
 # Transform flat text to html represented as C strings.
 # Motivating example:

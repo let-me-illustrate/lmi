@@ -1,4 +1,5 @@
 #!/bin/zsh
+# shellcheck disable=SC1036,SC2039
 
 # Obfuscate-deobfuscate MST<->XST files. Cf. 'mst_to_xst.sh'.
 
@@ -38,5 +39,7 @@ Y=$(printf '\%03o' {0..255})
 MST=(*.mst(N))
 XST=(*.xst(N))
 
+# shellcheck disable=SC2128
 for z in $MST; do tr "$X" "$Y" <"$z" >"${z%%.mst}.xst"; done
+# shellcheck disable=SC2128
 for z in $XST; do tr "$X" "$Y" <"$z" >"${z%%.xst}.mst"; done

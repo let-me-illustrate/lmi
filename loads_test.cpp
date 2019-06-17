@@ -48,7 +48,6 @@ std::vector<double> BasicValues::GetCurrSpecAmtLoadTable() const {return dummy_v
 std::vector<double> BasicValues::GetGuarSpecAmtLoadTable() const {return dummy_vector;}
 
 #include "database.hpp"
-product_database::product_database(int length) :length_(length) {}
 int product_database::length() const {return length_;}
 void product_database::query_into(e_database_key, std::vector<double>& v) const {v.resize(length_);}
 double product_database::query(e_database_key, database_index const&) const {return 0.0;}

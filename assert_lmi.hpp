@@ -38,6 +38,14 @@
 /// macro is appropriate only for lightweight assertions that should
 /// be left in released code.
 ///
+/// The logic could more plainly be expressed as
+///   if(!(condition)) {throw...}
+/// but is instead written as
+///   if(condition) {} else {throw...}
+/// which, by avoiding an extra level of parentheses, helps compilers
+/// give better diagnostics--see:
+///   https://lists.nongnu.org/archive/html/lmi/2019-06/msg00010.html
+///
 /// The last line eats a semicolon written after the macro invocation.
 ///
 /// For a more-elaborate runtime-error facility, see 'alert*.?pp'.
@@ -45,7 +53,10 @@
 #define LMI_ASSERT(condition)                                   \
     do                                                          \
         {                                                       \
-        if(!(condition))                                        \
+        if(condition)                                           \
+            {                                                   \
+            }                                                   \
+        else                                                    \
             {                                                   \
             std::ostringstream assert_message;                  \
             assert_message                                      \
@@ -67,7 +78,10 @@
 #define LMI_ASSERT_WITH_MSG(condition,message)                  \
     do                                                          \
         {                                                       \
-        if(!(condition))                                        \
+        if(condition)                                           \
+            {                                                   \
+            }                                                   \
+        else                                                    \
             {                                                   \
             std::ostringstream assert_message;                  \
             assert_message                                      \

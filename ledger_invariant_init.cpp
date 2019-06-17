@@ -439,6 +439,9 @@ void LedgerInvariant::Init(BasicValues const* b)
 
     ProducerStreet          = b->yare_input_.AgentAddress;
     ProducerCityEtc         = agent_city_etc;
+    ProducerPhone           = b->yare_input_.AgentPhone;
+    ProducerId              = b->yare_input_.AgentId;
+
     CorpName                = b->yare_input_.CorporationName;
 
     MasterContractNumber    = b->yare_input_.MasterContractNumber;

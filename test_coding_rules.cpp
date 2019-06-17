@@ -180,6 +180,7 @@ file::file(std::string const& file_path)
         : ".ac"         == extension() ? e_script
         : ".bat"        == extension() ? e_script
         : ".m4"         == extension() ? e_script
+        : ".ps1"        == extension() ? e_script
         : ".rc"         == extension() ? e_script
         : ".sed"        == extension() ? e_script
         : ".sh"         == extension() ? e_script
@@ -1053,8 +1054,8 @@ void enforce_taboos(file const& f)
     // Certain proprietary libraries.
     taboo(f, R"(\bowl\b)", boost::regex::icase);
     taboo(f, "vtss", boost::regex::icase);
-    // Suspiciously specific to msw.
-    taboo(f, "Microsoft");
+    // Suspiciously specific to msw (although the string "Microsoft"
+    // is okay for identifying a GNU/Linux re-distribution).
     taboo(f, "Visual [A-Z]");
     taboo(f, R"(\bWIN\b)");
     taboo(f, R"(\bExcel\b)");

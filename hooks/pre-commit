@@ -40,7 +40,7 @@ check_concinnity()
       )
     if [ -n "$output" ]; then
         printf '\n%s\n' "$output"
-        printf "COMMIT ABORTED\n"
+        printf '%s\n' "COMMIT ABORTED"
         exit 1
     fi
 }
@@ -52,4 +52,4 @@ printf "[toplevel]..."
 check_concinnity "$toplevel"
 printf "hooks..."
 check_concinnity "$toplevel/hooks"
-printf "okay\n"
+printf '%s\n' "okay"

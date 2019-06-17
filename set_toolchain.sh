@@ -21,14 +21,14 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# Invoke as ". ./set_toolchain.sh" without the quotes.
+# Invoke as ". /opt/lmi/src/lmi/set_toolchain.sh" without the quotes.
 #
 # $LMI_COMPILER and $LMI_TRIPLET are set to default values currently
 # used in production if they were unset or null beforehand. They can
 # be overridden at the command line, e.g.:
 #
-#   LMI_COMPILER=gcc ; LMI_TRIPLET=i686-w64-mingw32 ; . ./set_toolchain.sh
-#   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-w64-mingw32 ; . ./set_toolchain.sh
+#   LMI_COMPILER=gcc ; LMI_TRIPLET=i686-w64-mingw32   ; . /opt/lmi/src/lmi/set_toolchain.sh
+#   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-w64-mingw32 ; . /opt/lmi/src/lmi/set_toolchain.sh
 #
 # Implemented as a function that runs and then erases itself, so that
 # sourcing this script changes the environment only as intended. This
@@ -88,7 +88,6 @@ local   lmi_build_type
         lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
 
 local      prefix="/opt/lmi"
-local exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
 local localbindir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/bin"
 local locallibdir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib"
 # $winebindir is where 'install_miscellanea.make' places 'md5sum.exe'.
@@ -136,16 +135,17 @@ case "$lmi_build_type" in
 esac
 if [ -n "$LMI_ENV_FILE" ]; then
     {
-    echo "export PATH     := $PATH"
-    echo "export WINEPATH := $WINEPATH"
-    echo "export PERFORM  := $PERFORM"
+    printf '%s\n' "export LMI_COMPILER := $LMI_COMPILER"
+    printf '%s\n' "export LMI_TRIPLET  := $LMI_TRIPLET"
+    printf '%s\n' "export PATH         := $PATH"
+    printf '%s\n' "export WINEPATH     := $WINEPATH"
+    printf '%s\n' "export PERFORM      := $PERFORM"
     } > "$LMI_ENV_FILE"
 fi
 }
 
-# This script is to be sourced, so it can't use a builtin command like
-# 'printf' here. Similarly, 'exit' would have a surprising effect.
-# Therefore, these precondition checks use 'echo' and 'return'.
+# This script is to be sourced, so use 'return' because 'exit' would
+# have a surprising effect.
 
 export LMI_COMPILER
 export LMI_TRIPLET
@@ -155,7 +155,7 @@ export LMI_TRIPLET
 case "$LMI_COMPILER" in
     (gcc) ;;
     (*)
-        echo "Changed nothing because compiler '$LMI_COMPILER' is untested."
+        printf '%s\n' "Changed nothing because compiler '$LMI_COMPILER' is untested."
         return 2;
         ;;
 esac
@@ -164,7 +164,7 @@ case "$LMI_TRIPLET" in
     (i686-w64-mingw32)   ;;
     (x86_64-w64-mingw32) ;;
     (*)
-        echo "Changed nothing because host triplet '$LMI_TRIPLET' is untested."
+        printf '%s\n' "Changed nothing because host triplet '$LMI_TRIPLET' is untested."
         return 3;
         ;;
 esac

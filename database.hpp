@@ -43,6 +43,7 @@ class yare_input;
 
 class LMI_SO product_database final
 {
+    friend struct LoadsTest;       // For product_database(int).
     friend class input_test;       // For test_product_database().
     friend class premium_tax_test; // For test_rates().
 
@@ -57,8 +58,6 @@ class LMI_SO product_database final
         ,mcenum_state       StateOfJurisdiction
         );
     explicit product_database(yare_input const&);
-    // Special ctor implemented only in a unit-test TU.
-    explicit product_database(int length);
     product_database(product_database &&) = default;
     product_database(product_database const&) = default;
     ~product_database() = default;
@@ -85,6 +84,12 @@ class LMI_SO product_database final
     bool varies_by_state(e_database_key) const;
 
   private:
+    // Special ctor used only in the unit-test TU for class Loads.
+    explicit product_database(int length)
+        :index_  {mce_male, mce_rated, mce_smoker, 0, mce_medical, mce_s_XX}
+        ,length_ {length}
+        {}
+
     product_database& operator=(product_database const&) = delete;
 
     void initialize(std::string const& product_name);
@@ -92,9 +97,9 @@ class LMI_SO product_database final
     DBDictionary const& db() const;
     database_entity const& entity_from_key(e_database_key) const;
 
-    database_index  index_;
-    int             length_;
-    int             maturity_age_;
+    database_index const index_;
+    int                  length_;
+    int                  maturity_age_;
 
     std::shared_ptr<DBDictionary> db_;
 };

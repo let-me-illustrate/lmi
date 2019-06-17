@@ -106,6 +106,20 @@
             </font>
         </td>
     </tr>
+    <tr>
+        <td align="center">
+            <font size="+2">
+                {{ProducerPhone}}
+            </font>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <font size="+2">
+                {{ProducerId}}
+            </font>
+        </td>
+    </tr>
     <tr><td>&nbsp;</td></tr>
     <tr><td>&nbsp;</td></tr>
     <tr>
@@ -117,8 +131,13 @@
     </tr>
     <tr><td>&nbsp;</td></tr>
     <tr><td>&nbsp;</td></tr>
-    <tr><td>&nbsp;</td></tr>
-    <tr><td>&nbsp;</td></tr>
+    <tr>
+        <td align="center">
+            <font size="+2">
+                {{>imprimatur}}
+            </font>
+        </td>
+    </tr>
 </table>
 
 <!--
@@ -126,7 +145,6 @@ This is ugly and error-prone, but there is no way to put the paragraph below at
 the bottom of the page currently, so we just insert enough white space to push
 it roughly where we want it to appear.
 -->
-<br></br>
 <br></br>
 <br></br>
 <br></br>
@@ -140,8 +158,6 @@ it roughly where we want it to appear.
 <font size="-1">
 
 <p align="center">{{MarketingNameFootnote}}</p>
-
-<p>&nbsp;&nbsp;&nbsp;{{StateMarketingImprimatur}}</p>
 
 <br></br>
 

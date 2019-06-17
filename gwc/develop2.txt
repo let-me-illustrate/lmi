@@ -64,36 +64,10 @@ wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --verify
   # To recover from errors
 
   # As long as git hooks are set up correctly, every commit is tested
-  # for common problems, and fails if any are found. Take these steps
-  # to diagnose or fix such failures.
-
-  # (1) Permissions may have been scrambled by msw (cygwin). Lines like
-  #   mode change 100644 => 100755 data/sample.database
-  # on the screen indicate such problems. For msw (cygwin) only, this
-  # command:
-
-git config --get-all core.filemode
-
-  # should print the word "false", in which case this nightmare should
-  # not occur.
-
-  # To unscramble permissions if necessary, before committing do:
-
-cd /opt/lmi/proprietary
-printf "forcing correct permissions "
-  for d in src data test tables; do (\
-       printf "$d..." \
-    && find ./$d -maxdepth 1 -type f -not -name '*.sh' -not -name '*.sed' | xargs chmod -x \
-  )done; \
-printf "all permissions forced\n"
-
-  # (2) Test concinnity. The git pre-commit hook shows filtered output;
-  # this command shows the same thing, unfiltered so that the diagnostics
-  # are easier to understand.
-
-for z in src data graphics hooks test tables; do \
-  make --directory=/opt/lmi/src/lmi --no-print-directory check_concinnity \
-  prefascicle_dir=/opt/lmi/proprietary/$z ; done
+  # for common problems, and fails if any are found. These commands:
+  #   ./check_git_setup.sh
+  #   ./hooks/pre-commit
+  # help to diagnose or fix such failures.
 
   # To update copyright notices annually
 

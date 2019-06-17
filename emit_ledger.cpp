@@ -57,19 +57,21 @@ ledger_emitter::ledger_emitter
     LMI_ASSERT(!case_filepath_.empty());
 
     configurable_settings const& c = configurable_settings::instance();
-    std::string const& tsv_ext = c.spreadsheet_file_extension();
+    std::string const& tsv_ext   = c.spreadsheet_file_extension();
+    std::string const& print_dir = c.print_directory();
+    fs::path const f(modify_directory(case_filepath_, print_dir));
 
     if(emission_ & mce_emit_spreadsheet)
         {
-        case_filepath_spreadsheet_  = unique_filepath(case_filepath,             tsv_ext);
+        case_filepath_spreadsheet_  = unique_filepath(f,             tsv_ext);
         }
     if(emission_ & mce_emit_group_roster)
         {
-        case_filepath_group_roster_ = unique_filepath(case_filepath, ".roster" + tsv_ext);
+        case_filepath_group_roster_ = unique_filepath(f, ".roster" + tsv_ext);
         }
     if(emission_ & mce_emit_group_quote)
         {
-        case_filepath_group_quote_  = unique_filepath(case_filepath, ".quote.pdf"       );
+        case_filepath_group_quote_  = unique_filepath(f, ".quote.pdf"       );
         }
 }
 

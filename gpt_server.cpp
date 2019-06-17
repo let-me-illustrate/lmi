@@ -23,9 +23,9 @@
 
 #include "gpt_server.hpp"
 
-#include "actuarial_table.hpp"
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "basic_tables.hpp"
 #include "commutation_functions.hpp"
 #include "configurable_settings.hpp"
 #include "contains.hpp"
@@ -140,28 +140,22 @@ gpt_state test_one_days_gpt_transactions
     round_to<double> const RoundNonMecPrem(2, r_downward);
     round_to<double> const round_max_premium(2, r_downward);
 
-    auto const target_premium_type = database.query<oenum_modal_prem_type>(DB_TgtPremType);
-    std::vector<double> TargetPremiumRates(input.years_to_maturity());
-    if(oe_modal_table == target_premium_type)
-        {
-        TargetPremiumRates = actuarial_table_rates
-            (AddDataDir(product_filenames.datum("TgtPremFilename"))
-            ,database.query<int>(DB_TgtPremTable)
-            ,input.issue_age()
-            ,input.years_to_maturity()
-            );
-        }
-    else
-        {
-        ; // Do nothing: 'TargetPremiumRates' won't be used.
-        }
-
-    std::vector<double> const CvatCorridorFactors = actuarial_table_rates
-        (AddDataDir(product_filenames.datum("CvatCorridorFilename"))
-        ,database.query<int>(DB_CorridorTable)
+    std::vector<double> TargetPremiumRates = target_premium_rates
+        (product_filenames
+        ,database
         ,input.issue_age()
         ,input.years_to_maturity()
         );
+
+    std::vector<double> const CvatCorridorFactors = cvat_corridor_factors
+        (product_filenames
+        ,database
+        ,input.issue_age()
+        ,input.years_to_maturity()
+        );
+
+    // These are the Ax and 7Px actually used in production, which
+    // aren't necessarily looked up in external tables.
 
     std::vector<double> tabular_Ax;
     for(int j = 0; j < input.years_to_maturity(); ++j)
@@ -171,16 +165,16 @@ gpt_state test_one_days_gpt_transactions
         }
     tabular_Ax.push_back(1.0);
 
-    std::vector<double> const tabular_7Px = actuarial_table_rates
-        (AddDataDir(product_filenames.datum("SevenPayFilename"))
-        ,database.query<int>(DB_SevenPayTable)
+    std::vector<double> const tabular_7Px = irc_7702A_7pp
+        (product_filenames
+        ,database
         ,input.issue_age()
         ,input.years_to_maturity()
         );
 
-    std::vector<double> Mly7702qc = actuarial_table_rates
-        (AddDataDir(product_filenames.datum("Irc7702QFilename"))
-        ,database.query<int>(DB_Irc7702QTable)
+    std::vector<double> Mly7702qc = irc_7702_q
+        (product_filenames
+        ,database
         ,input.issue_age()
         ,input.years_to_maturity()
         );
@@ -277,6 +271,7 @@ gpt_state test_one_days_gpt_transactions
         ? 0
         : input.inforce_year()
         ;
+    auto const target_premium_type = database.query<oenum_modal_prem_type>(DB_TgtPremType);
     if(oe_monthly_deduction == target_premium_type)
         {
         warning() << "Unsupported modal premium type." << LMI_FLUSH;

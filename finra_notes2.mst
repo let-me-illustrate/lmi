@@ -170,12 +170,6 @@ The state of issue is {{StateOfJurisdiction}}.
     </p>
 {{/IsInforce}}
 
-{{#HasComplianceTrackingNumber}}
-    <p>
-    Compliance tracking number: {{>imprimatur}}
-    </p>
-{{/HasComplianceTrackingNumber}}
-
 {{#CallGuarUwSubstd}}
     <p>
     *** This policy is classified as substandard guaranteed issue

@@ -249,6 +249,18 @@ bool need_loan_rates(yare_input const& yi)
 #endif // 0
 } // Unnamed namespace.
 
+#if 0
+instead of passing BasicValues, pass these requirements only:
+    v.yare_input_
+    v.database()
+    v.InvestmentManagementFee()
+    v.GetLength()
+    v.round_interest_rate()
+    v.round_interest_rate_7702()
+    v.IsSubjectToIllustrationReg()
+    v.SpreadFor7702()
+#endif // 0
+
 InterestRates::InterestRates(BasicValues const& v)
     :Length_             {v.GetLength()}
     ,RoundIntRate_       {v.round_interest_rate()}

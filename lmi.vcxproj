@@ -237,6 +237,7 @@
     <ClCompile Include="actuarial_table.cpp" />
     <ClCompile Include="alert.cpp" />
     <ClCompile Include="authenticity.cpp" />
+    <ClCompile Include="basic_tables.cpp" />
     <ClCompile Include="calendar_date.cpp" />
     <ClCompile Include="ce_product_name.cpp" />
     <ClCompile Include="ce_skin_name.cpp" />

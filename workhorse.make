@@ -115,6 +115,7 @@ ifeq (,$(USE_SO_ATTRIBUTES))
     generate_passkey$(EXEEXT) \
     ihs_crc_comp$(EXEEXT) \
     rate_table_tool$(EXEEXT) \
+    test_coding_rules$(EXEEXT) \
 
   ifneq (so_test,$(findstring so_test,$(build_type)))
     default_targets += \
@@ -364,8 +365,8 @@ tutelary_flag :=
 # which causes harm while bringing no countervailing benefit--see:
 #   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
 
-c_standard   := -frounding-math -std=c99
-cxx_standard := -frounding-math -std=c++17
+c_standard   := -fno-ms-extensions -frounding-math -std=c99
+cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
 
 # Specify $(gcc_version_specific_warnings) last, in order to override
 # other options.
@@ -399,11 +400,11 @@ else ifneq (,$(filter $(gcc_version), 6.3.0))
   gcc_version_specific_warnings := \
     -Wno-conversion \
 
-  cxx_standard := -frounding-math -std=c++17
+  cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
 else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
   gcc_version_specific_warnings := \
 
-  cxx_standard := -frounding-math -std=c++17
+  cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
 else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0 8.3.0))
   gcc_version_specific_warnings := \
 
@@ -413,7 +414,7 @@ else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0 8.3.0))
     tutelary_flag := -fomit-frame-pointer
   endif
 
-  cxx_standard := -frounding-math -std=c++17
+  cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
 endif
 
 treat_warnings_as_errors := -pedantic-errors -Werror
@@ -1117,8 +1118,6 @@ install: $(default_targets)
 	@$(CP) --preserve --update $(data_files) $(datadir)
 	@$(CP) --preserve --update $(help_files) $(datadir)
 	@datadir=$(datadir) srcdir=$(srcdir) $(srcdir)/mst_to_xst.sh
-	@[ -z "$(compiler_runtime_files)" ] \
-	  || $(CP) --preserve $(compiler_runtime_files) $(bindir)
 ifeq (,$(USE_SO_ATTRIBUTES))
 	@cd $(datadir); $(PERFORM) $(bindir)/product_files$(EXEEXT)
 else
@@ -1265,6 +1264,8 @@ fardel: install
 wrap_fardel:
 	@$(CP) $(prefix)/third_party/bin/md5sum$(EXEEXT) .
 	@$(CP) $(datadir)/configurable_settings.xml .
+	@$(CP) $(datadir)/company_logo.png .
+	@$(CP) $(datadir)/group_quote_banner.png .
 	@$(CP) --preserve $(fardel_binaries) $(fardel_files) .
 	@$(fardel_date_script)
 	@$(MD5SUM) --binary $(fardel_checksummed_files) >validated.md5
@@ -1351,7 +1352,7 @@ run_unit_tests: unit_tests_not_built $(addsuffix -run,$(unit_test_targets))
 
 .PHONY: %$(EXEEXT)-run
 %$(EXEEXT)-run:
-	@printf "\nRunning $*:\n"
+	@printf '\n%s\n' "Running $*:"
 	@-$(PERFORM) ./$* --accept
 
 ################################################################################

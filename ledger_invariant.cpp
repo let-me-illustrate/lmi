@@ -310,6 +310,8 @@ void LedgerInvariant::Alloc(int len)
     Strings["ProducerName"                  ] = &ProducerName                  ;
     Strings["ProducerStreet"                ] = &ProducerStreet                ;
     Strings["ProducerCityEtc"               ] = &ProducerCityEtc               ;
+    Strings["ProducerPhone"                 ] = &ProducerPhone                 ;
+    Strings["ProducerId"                    ] = &ProducerId                    ;
     Strings["CorpName"                      ] = &CorpName                      ;
     Strings["MasterContractNumber"          ] = &MasterContractNumber          ;
     Strings["ContractNumber"                ] = &ContractNumber                ;
@@ -528,6 +530,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     ProducerName                  = a_Addend.ProducerName;
     ProducerStreet                = a_Addend.ProducerStreet;
     ProducerCityEtc               = a_Addend.ProducerCityEtc;
+    ProducerPhone                 = a_Addend.ProducerPhone;
+    ProducerId                    = a_Addend.ProducerId;
     // This would necessarily vary by life:
 //  ContractNumber                = "";
 
@@ -752,10 +756,13 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     WriteTsvFile  = WriteTsvFile  || a_Addend.WriteTsvFile ;
 
-    // TODO ?? This doesn't seem quite right, but what would be better?
-    // We can't take the union of all columns selected for any life,
-    // because its cardinality might exceed the maximum.
-    SupplementalReport  = SupplementalReport || a_Addend.SupplementalReport;
+    // The composite has a supplemental report iff every cell has one,
+    // in which case it uses the same columns as the last cell. There
+    // is no better general way to decide which columns to use. (The
+    // union of all columns selected for any life becomes infeasible
+    // when its cardinality exceeds the maximum.)
+    //
+    SupplementalReport = SupplementalReport && a_Addend.SupplementalReport;
     SupplementalReportColumn00 = a_Addend.SupplementalReportColumn00;
     SupplementalReportColumn01 = a_Addend.SupplementalReportColumn01;
     SupplementalReportColumn02 = a_Addend.SupplementalReportColumn02;
