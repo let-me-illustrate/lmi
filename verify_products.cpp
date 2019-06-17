@@ -44,14 +44,14 @@ namespace
 {
 void verify_one_cell
     (std::string const& product_name
-    ,std::string const& gender
-    ,std::string const& smoking
+    ,std::string const& gender_str
+    ,std::string const& smoking_str
     )
 {
     Input input;
     input["ProductName"] = product_name;
-    input["Gender"     ] = gender;
-    input["Smoking"    ] = smoking;
+    input["Gender"     ] = gender_str;
+    input["Smoking"    ] = smoking_str;
 
     int const min_age = product_database(yare_input(input)).query<int>(DB_MinIssAge);
     input["IssueAge"   ] = value_cast<std::string>(min_age);
@@ -69,9 +69,17 @@ void verify_one_cell
 
     product_data const p(product_name);
 
-    if((!axis_g && "Unisex" != gender) || (!axis_s && "Unismoke" != smoking))
+    if
+        (   (!axis_g && "Unisex"   != gender_str )
+        ||  (!axis_s && "Unismoke" != smoking_str)
+        )
         {
-        std::cout << "  skipping " << gender << ' ' << smoking << std::endl;
+        std::cout
+            << "  skipping"
+            << ' ' << gender_str
+            << ' ' << smoking_str
+            << std::endl
+            ;
         return;
         }
 
@@ -94,8 +102,8 @@ void verify_one_cell
                 (era
                 ,oe_orthodox // No other option currently supported for 7702.
                 ,a_b
-                ,mce_gender (gender).value()
-                ,mce_smoking(smoking).value()
+                ,mce_gender (gender_str).value()
+                ,mce_smoking(smoking_str).value()
                 ,min_age
                 ,omega
                 );
@@ -108,8 +116,8 @@ void verify_one_cell
             std::cout
                 << "7702 q okay: builtin "
                 << std::string((v0 == v1) ? "validated" : "PROBLEM")
-                << ' ' << gender
-                << ' ' << smoking
+                << ' ' << gender_str
+                << ' ' << smoking_str
                 << std::endl
                 ;
             }
@@ -130,8 +138,8 @@ void verify_one_cell
                 std::cout
                     << "7702 q PROBLEM: " << product_name
                     << " nonexistent table zero"
-                    << ' ' << gender
-                    << ' ' << smoking
+                    << ' ' << gender_str
+                    << ' ' << smoking_str
                     << std::endl
                     ;
                 return;
@@ -141,8 +149,8 @@ void verify_one_cell
                 (era
                 ,oe_orthodox // No other option currently supported for 7702.
                 ,a_b
-                ,mce_gender (gender).value()
-                ,mce_smoking(smoking).value()
+                ,mce_gender (gender_str).value()
+                ,mce_smoking(smoking_str).value()
                 );
             std::string const f = AddDataDir(p.datum("Irc7702QFilename"));
             actuarial_table const a(f, t);
@@ -155,8 +163,8 @@ void verify_one_cell
                 {
                 std::cout
                     << "7702 q okay: table " << t
-                    << ' ' << gender
-                    << ' ' << smoking
+                    << ' ' << gender_str
+                    << ' ' << smoking_str
                     << std::endl
                     ;
                 }
@@ -164,8 +172,8 @@ void verify_one_cell
                 {
                 std::cout
                     << "7702 q PROBLEM: " << product_name
-                    << ' ' << gender
-                    << ' ' << smoking
+                    << ' ' << gender_str
+                    << ' ' << smoking_str
                     << std::endl
                     ;
                 std::cout
