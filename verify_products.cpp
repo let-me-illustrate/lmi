@@ -29,12 +29,9 @@
 #include "cso_table.hpp"
 #include "data_directory.hpp"           // AddDataDir()
 #include "database.hpp"
-#include "input.hpp"
 #include "mc_enum.hpp"                  // all_strings<>()
 #include "product_data.hpp"
 #include "ssize_lmi.hpp"
-#include "value_cast.hpp"
-#include "yare_input.hpp"
 
 #include <iostream>
 #include <string>
@@ -48,16 +45,30 @@ void verify_one_cell
     ,std::string const& smoking_str
     )
 {
-    Input input;
-    input["ProductName"] = product_name;
-    input["Gender"     ] = gender_str;
-    input["Smoking"    ] = smoking_str;
+    mcenum_gender  const gender  = mce_gender (gender_str ).value();
+    mcenum_smoking const smoking = mce_smoking(smoking_str).value();
 
-    int const min_age = product_database(yare_input(input)).query<int>(DB_MinIssAge);
-    input["IssueAge"   ] = value_cast<std::string>(min_age);
+    product_database const db0
+        (product_name
+        ,gender
+        ,mce_standard
+        ,smoking
+        ,45
+        ,mce_medical
+        ,mce_s_XX
+        );
+    int const min_age = db0.query<int>(DB_MinIssAge);
 
-    yare_input       const yi(input);
-    product_database const db(yi);
+    product_database const db
+        (product_name
+        ,gender
+        ,mce_standard
+        ,smoking
+        ,min_age
+        ,mce_medical
+        ,mce_s_XX
+        );
+
     auto const era    = db.query<oenum_cso_era   >(DB_CsoEra);
     auto const a_b    = db.query<oenum_alb_or_anb>(DB_AgeLastOrNearest);
     auto const t      = db.query<int             >(DB_Irc7702QTable);
@@ -205,20 +216,13 @@ void verify_one_cell
 /// internal sources such as cso_table(). Class product_data provides
 /// the names of tables stored in external database files.
 ///
-/// For now at least, class Input is used merely as a convenient means
-/// of instantiating the necessary product_database object. No MVC
-/// Model function such as Reconcile() need be called to ensure the
-/// internal consistency of the Input instance.
-///
 /// Only 7702 tables are validated for now. Products have two distinct
 /// sets of gender axes: one for underwriting, and another for 7702
 /// Those axes needn't be the same. For example, a product might be
 /// issued only on a sex-distinct basis, yet use unisex 7702 tables
 /// (to stay within IRS Notice 88-128's safe harbor, or to use more
 /// liberal rates for one market segment at the cost of disadvantaging
-/// another. The smoking axes may differ likewise. Calling Reconcile()
-/// on an Input object enforces the underwriting axes, but it is the
-/// 7702 axes that are tested here.
+/// another. The smoking axes may differ likewise.
 ///
 /// Two booleans {DB_Irc7702QAxisGender, DB_Irc7702QAxisSmoking} are
 /// not adequate to describe all permissible variations. Arguably,
