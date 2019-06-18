@@ -1018,38 +1018,6 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
     std::vector<std::unique_ptr<logical_page>> pages_;
 };
 
-// Cover page for finra only. PDF !! At the appropriate time, expunge
-// this class altogether, and use class cover_page instead.
-class unnumbered_cover_page : public logical_page
-{
-  public:
-    using logical_page::logical_page;
-
-    void render() override
-    {
-        int const height_contents = writer_.output_html
-            (writer_.get_horz_margin()
-            ,writer_.get_vert_margin()
-            ,writer_.get_page_width()
-            ,interpolator_.expand_template("cover")
-            );
-
-        // There is no way to draw a border around the page contents in wxHTML
-        // currently, so do it manually.
-        auto& pdf_dc = writer_.dc();
-
-        pdf_dc.SetPen(wxPen(illustration_rule_color, 2));
-        pdf_dc.SetBrush(*wxTRANSPARENT_BRUSH);
-
-        pdf_dc.DrawRectangle
-            (writer_.get_horz_margin()
-            ,writer_.get_vert_margin()
-            ,writer_.get_page_width()
-            ,height_contents
-            );
-    }
-};
-
 // Base class for all pages with a footer and/or header, collectively called
 // "marginals".
 class page_with_marginals : public logical_page
@@ -2882,8 +2850,8 @@ class pdf_illustration_finra : public pdf_illustration
             );
 
         // Add all the pages.
-        add<unnumbered_cover_page>();
         numbered_page::start_numbering();
+        add<cover_page>();
         add<finra_basic>();
         add<finra_supplemental>();
         add<standard_page>("finra_column_headings");
