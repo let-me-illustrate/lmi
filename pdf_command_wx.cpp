@@ -853,8 +853,13 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
     // level, the functions here define the default for all illustration pages.
     //
     // These functions are used by the pages deriving from page_with_marginals.
+    // The "lower" one formerly varied, but no longer does as of 2019-06; it's
+    // kept virtual just in case it ever needs to be overridden again.
     virtual std::string get_upper_footer_template_name() const = 0;
-    virtual std::string get_lower_footer_template_name() const = 0;
+    virtual std::string get_lower_footer_template_name() const
+    {
+        return "footer_lower";
+    }
 
   protected:
     // Explicitly retrieve references to base classes.
@@ -2336,8 +2341,6 @@ class pdf_illustration_naic : public pdf_illustration
 
     std::string get_upper_footer_template_name() const override
         { return {}; }
-    std::string get_lower_footer_template_name() const override
-        { return "ill_reg_footer"; }
 };
 
 // Common base class for basic illustration pages using the same columns in
@@ -2875,11 +2878,6 @@ class pdf_illustration_finra : public pdf_illustration
     {
         return "finra_footer_upper";
     }
-
-    std::string get_lower_footer_template_name() const override
-    {
-        return "finra_footer_lower";
-    }
 };
 
 // Basic illustration page of the private group placement illustration.
@@ -2951,11 +2949,6 @@ class pdf_illustration_reg_d_group : public pdf_illustration
     std::string get_upper_footer_template_name() const override
     {
         return "reg_d_group_footer_upper";
-    }
-
-    std::string get_lower_footer_template_name() const override
-    {
-        return "reg_d_group_footer_lower";
     }
 };
 
@@ -3236,11 +3229,6 @@ class pdf_illustration_reg_d_indiv : public pdf_illustration
     std::string get_upper_footer_template_name() const override
     {
         return "reg_d_indiv_footer_upper";
-    }
-
-    std::string get_lower_footer_template_name() const override
-    {
-        return "reg_d_indiv_footer_lower";
     }
 };
 } // Unnamed namespace.
