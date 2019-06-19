@@ -125,7 +125,7 @@ std::string md5_calculate_stream_checksum
     // below.
     constexpr std::streamsize block_size = 4096;
     md5_ctx ctx;
-    char buffer[block_size + 72];
+    char buffer[block_size];
     std::streamsize read_count;
 
     // Initialize the computation context.
