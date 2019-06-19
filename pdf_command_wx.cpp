@@ -943,15 +943,6 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
         add_abbreviated_variable("ContractNumber", full_abbrev_length);
         add_abbreviated_variable("ContractNumber", full_abbrev_length / 2);
 
-        // Check for anything but whitespace--see:
-        //   https://lists.nongnu.org/archive/html/lmi/2019-02/msg00001.html
-        add_variable
-            ("HasComplianceTrackingNumber"
-            ,expand_template("imprimatur")
-                .as_html().find_first_not_of(" \n")
-                != std::string::npos
-            );
-
         add_variable
             ("HasScaleUnit"
             ,!invar.scale_unit().empty()

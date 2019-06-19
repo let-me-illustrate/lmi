@@ -113,12 +113,6 @@ or sending money.
 The state of issue is {{StateOfJurisdiction}}.
 </p>
 
-{{#HasComplianceTrackingNumber}}
-    <p>
-    Compliance tracking number: {{>imprimatur}}
-    </p>
-{{/HasComplianceTrackingNumber}}
-
 <p>
 SEPARATE ACCOUNT
 </p>
