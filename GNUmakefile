@@ -260,12 +260,18 @@ $(build_dir): $(gpl_files)
 .PHONY: show_env
 show_env:
 	@printf 'Internal make variables particular to lmi:\n\n'
-	@printf 'LMI_COMPILER = "%s"\n' "$(LMI_COMPILER)"
-	@printf 'LMI_TRIPLET  = "%s"\n' "$(LMI_TRIPLET)"
-	@printf 'coefficiency = "%s"\n' "$(coefficiency)"
-	@printf 'PATH         = "%s"\n' "$(PATH)"
-	@printf 'WINEPATH     = "%s"\n' "$(WINEPATH)"
-	@printf 'PERFORM      = "%s"\n' "$(PERFORM)"
+	@printf 'LMI_COMPILER    = "%s"\n' "$(LMI_COMPILER)"
+	@printf 'LMI_TRIPLET     = "%s"\n' "$(LMI_TRIPLET)"
+	@printf 'coefficiency    = "%s"\n' "$(coefficiency)"
+	@printf 'PATH            = "%s"\n' "$(PATH)"
+	@printf 'WINEPATH        = "%s"\n' "$(WINEPATH)"
+	@printf 'PERFORM         = "%s"\n' "$(PERFORM)"
+	@printf 'prefix          = "%s"\n' "$(prefix)"
+	@printf 'exec_prefix     = "%s"\n' "$(exec_prefix)"
+	@printf 'localbindir     = "%s"\n' "$(localbindir)"
+	@printf 'locallibdir     = "%s"\n' "$(locallibdir)"
+	@printf 'localincludedir = "%s"\n' "$(localincludedir)"
+	@printf 'winebindir      = "%s"\n' "$(winebindir)"
 
 ################################################################################
 
