@@ -188,16 +188,13 @@ chown greg:greg /home/greg/.vimrc
 mkdir ~/.vim
 mkdir /home/greg/.vim
 chown greg:greg /home/greg/.vim
-# It's a much better idea to copy a mature spellfile hither,
+# It's a much better idea to copy a mature spellfile hither:
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/gwc/.vim/spell/en.utf-8.add'
 mkdir ~/.vim/spell
-cp --dereference --preserve \
-  /cache_for_lmi/.vim/spell/en.utf-8.add \
-  ~/.vim/spell/en.utf-8.add
+mv en.utf-8.add ~/.vim/spell/en.utf-8.add
 mkdir /home/greg/.vim/spell
 chown greg:greg /home/greg/.vim/spell
-cp --dereference --preserve \
-  /cache_for_lmi/.vim/spell/en.utf-8.add \
-  /home/greg/.vim/spell/en.utf-8.add
+cp -a ~/.vim/spell/en.utf-8.add /home/greg/.vim/spell/en.utf-8.add
 chown greg:greg /home/greg/.vim/spell/en.utf-8.add
 # and then (imperatively) run this command:
 vim -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
