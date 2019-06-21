@@ -49,7 +49,7 @@
 namespace
 {
     int const chars_per_formatted_hex_byte = CHAR_BIT / 4;
-}
+} // Unnamed namespace.
 
 Authenticity& Authenticity::Instance()
 {

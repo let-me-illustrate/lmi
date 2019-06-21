@@ -28,7 +28,7 @@
 namespace
 {
     callback<file_command_fp_type> file_command_callback;
-}
+} // Unnamed namespace.
 
 typedef file_command_fp_type FunctionPointer;
 template<> FunctionPointer callback<FunctionPointer>::function_pointer_ = nullptr;

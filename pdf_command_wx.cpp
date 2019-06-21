@@ -68,7 +68,6 @@ LMI_FORCE_LINKING_IN_SITU(pdf_command_wx)
 
 namespace
 {
-
 // This function is also provided in <boost/algorithm/string/predicate.hpp>,
 // but it's arguably not worth adding dependency on this Boost library just for
 // this function.

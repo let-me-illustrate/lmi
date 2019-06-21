@@ -56,7 +56,7 @@ namespace
     int                 ThatSolveEndYear;
     mcenum_gen_basis    ThatSolveBasis;
     bool                only_set_values;
-}
+} // Unnamed namespace.
 
 //============================================================================
 // This function isn't static and isn't in an unnamed namespace because

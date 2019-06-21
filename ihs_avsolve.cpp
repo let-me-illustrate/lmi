@@ -50,7 +50,7 @@ namespace
     // TODO ?? Shouldn't this be a typedef for a SolveHelper member?
     // As it stands, this would seem not to be reentrant.
     void (AccountValue::*solve_set_fn)(double);
-}
+} // Unnamed namespace.
 
 class SolveHelper
 {

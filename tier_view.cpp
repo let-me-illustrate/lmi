@@ -39,7 +39,6 @@
 
 namespace
 {
-
 struct tier_entity_info
 {
     e_stratified index;
@@ -88,7 +87,6 @@ tier_entity_info const& tier_tree_item_data::entity_info() const
 {
     return entity_info_;
 }
-
 } // Unnamed namespace.
 
 IMPLEMENT_DYNAMIC_CLASS(TierView, TreeGridViewBase)

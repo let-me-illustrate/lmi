@@ -92,7 +92,7 @@ namespace
         oss << "";
         return oss.str();
         }
-}
+} // Unnamed namespace.
 
 int try_main(int argc, char* argv[])
 {

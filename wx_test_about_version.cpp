@@ -159,7 +159,7 @@ wxHtmlWindow* find_html_window(wxWindow* parent, std::string const& dialog_name)
     return html_win;
 }
 
-} // anonymous namespace
+} // Unnamed namespace.
 
 LMI_WX_TEST_CASE(about_dialog_version)
 {

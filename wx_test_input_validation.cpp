@@ -84,7 +84,7 @@ coi_multiplier_test_data const test_cases[] =
     { "1.1" ,nullptr },
 };
 
-} // anonymous namespace
+} // Unnamed namespace.
 
 LMI_WX_TEST_CASE(input_validation)
 {

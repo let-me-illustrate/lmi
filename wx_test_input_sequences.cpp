@@ -79,7 +79,7 @@ input_sequence_test_data const test_cases[] =
     { "ProjectedSalary" ,"100000; 105000; 110000 retirement; 0"                        },
 };
 
-} // anonymous namespace
+} // Unnamed namespace.
 
 LMI_WX_TEST_CASE(input_sequences)
 {

@@ -98,7 +98,6 @@ bool MultiDimTableAny::DoRefreshAxisAdjustment
 
 namespace
 {
-
 /// MultiDimGridGrid is a customised version of wxGrid
 ///
 /// It is used by MultiDimGrid.
@@ -190,7 +189,6 @@ void MultiDimGridGrid::UponKeyDown(wxKeyEvent& event)
         event.Skip();
         }
 }
-
 } // Unnamed namespace.
 
 /// GridRefreshTableDataGuard: Table refresh guard class
@@ -273,7 +271,6 @@ inline unsigned int MDGridGetAxisAdjustRow(unsigned int n)
 {
     return MDGRID_AXIS_ROW + n * 2 + 1;
 }
-
 } // Unnamed namespace.
 
 void MultiDimGrid::Init()

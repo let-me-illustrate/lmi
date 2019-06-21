@@ -865,7 +865,6 @@ namespace
 
         return new_text;
         }
-
 } // Unnamed namespace.
 
 /// Handle 'Text Paste' events for all windows.

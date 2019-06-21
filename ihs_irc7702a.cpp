@@ -48,7 +48,7 @@ static int const         months_per_year              = 12          ;
 static int const         statutory_max_endowment_age  = 100         ;
 // TODO ?? TAXATION !! Test period not limited to seven years for survivorship.
 static int const         usual_test_period_length     = 7           ;
-}
+} // Unnamed namespace.
 
 //============================================================================
 Irc7702A::Irc7702A

@@ -378,7 +378,7 @@ void validate_run_cell_and_copy_output
         );
 }
 
-} // anonymous namespace
+} // Unnamed namespace.
 
 // Consider renaming this file to 'wx_test_spreadsheet_output.cpp'
 // e.g., because its purpose is to test *spreadsheet* output only.
