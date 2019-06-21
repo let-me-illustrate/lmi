@@ -450,10 +450,12 @@ class sample2gpp   : public sample2 {public: sample2gpp  ();};
 class sample2ipp   : public sample2 {public: sample2ipp  ();};
 class sample2xyz   : public sample2 {public: sample2xyz  ();};
 
+/// The 'sample' product DWISOTT. Its values, where specified at all
+/// (rather than defaulted to empty strings), are intended to be
+/// plausible, if perhaps whimsical.
+
 sample::sample()
 {
-    // 'sample' product
-
     // Names of lmi product files.
     item("DatabaseFilename")           = glossed_string("sample.database");
     item("FundFilename")               = glossed_string("sample.funds");
@@ -534,7 +536,28 @@ sample::sample()
     item("GroupQuoteFooterFusion")     = glossed_string("The employer and employee pay their respective premiums.");
 }
 
-    // 'sample2*' products
+/// The 'sample2*' products are designed to facilitate testing.
+/// There is one for each supported ledger type:
+///   sample2naic  mce_ill_reg
+///   sample2finra mce_finra
+///   sample2prosp mce_prospectus_abeyed ['emit_test_data' only]
+///   sample2gpp   mce_group_private_placement
+///   sample2ipp   mce_individual_private_placement
+/// and one for exotica:
+///   sample2xyz   mce_finra
+///
+/// "*Filename" members are names of actual lmi product files, or
+/// basenames of mortality-table databases, and their values must
+/// nominate actual files. Member 'InsCoDomicile' is used to
+/// determine retaliatory premium-tax rates, and must be a two-letter
+/// USPS abbreviation. All other members represent text that is used
+/// for report formatting; in order to make 'sample2*' more useful for
+/// developing and testing reports, each has a nonempty value that is
+/// its member name enclosed in braces ("{}"). Braces aren't otherwise
+/// used in values, so any output substring like "{contract}" here:
+///   "This {contract} provides valuable protection"
+/// necessarily represents a substitutable value, while everything
+/// else in a report is just literal text.
 
 sample2::sample2()
 {
@@ -592,6 +615,11 @@ sample2gpp::sample2gpp()
 {
     item("DatabaseFilename")           = glossed_string("sample2gpp.database");
 }
+
+/// This specimen product
+///   https://lists.nongnu.org/archive/html/lmi/2018-09/msg00039.html
+/// | has deliberately overlong footnotes
+/// for pagination testing.
 
 sample2ipp::sample2ipp()
 {
@@ -681,34 +709,7 @@ sample2xyz::sample2xyz()
 }
 } // Unnamed namespace.
 
-/// Create a product file for 'sample' products.
-///
-/// The 'sample' product DWISOTT. Its values, where specified at all
-/// (rather than defaulted to empty strings), are intended to be
-/// plausible, if perhaps whimsical.
-///
-/// The 'sample2*' products are designed to facilitate testing.
-/// There is one for each supported ledger type:
-///   sample2naic  mce_ill_reg
-///   sample2finra mce_finra
-///   sample2prosp mce_prospectus_abeyed ['emit_test_data' only]
-///   sample2gpp   mce_group_private_placement
-///   sample2ipp   mce_individual_private_placement
-/// and one for exotica:
-///   sample2xyz   mce_finra
-///
-/// "*Filename" members are names of actual lmi product files, or
-/// basenames of mortality-table databases, and their values must
-/// nominate actual files. Member 'InsCoDomicile' is used to
-/// determine retaliatory premium-tax rates, and must be a two-letter
-/// USPS abbreviation. All other members represent text that is used
-/// for report formatting; in order to make 'sample2*' more useful for
-/// developing and testing reports, each has a nonempty value that is
-/// its member name enclosed in braces ("{}"). Braces aren't otherwise
-/// used in values, so any output substring like "{contract}" here:
-///   "This {contract} provides valuable protection"
-/// necessarily represents a substitutable value, while everything
-/// else in a report is just literal text.
+/// Create product files for 'sample' products.
 
 void product_data::write_policy_files()
 {
