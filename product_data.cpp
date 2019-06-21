@@ -437,175 +437,166 @@ void product_data::redintegrate_ex_post
         }
 }
 
-/// Create a product file for 'sample' products.
-///
-/// The 'sample' product DWISOTT. Its values, where specified at all
-/// (rather than defaulted to empty strings), are intended to be
-/// plausible, if perhaps whimsical.
-///
-/// The 'sample2*' products are designed to facilitate testing.
-/// There is one for each supported ledger type:
-///   sample2naic  mce_ill_reg
-///   sample2finra mce_finra
-///   sample2prosp mce_prospectus_abeyed ['emit_test_data' only]
-///   sample2gpp   mce_group_private_placement
-///   sample2ipp   mce_individual_private_placement
-/// and one for exotica:
-///   sample2xyz   mce_finra
-///
-/// "*Filename" members are names of actual lmi product files, or
-/// basenames of mortality-table databases, and their values must
-/// nominate actual files. Member 'InsCoDomicile' is used to
-/// determine retaliatory premium-tax rates, and must be a two-letter
-/// USPS abbreviation. All other members represent text that is used
-/// for report formatting; in order to make 'sample2*' more useful for
-/// developing and testing reports, each has a nonempty value that is
-/// its member name enclosed in braces ("{}"). Braces aren't otherwise
-/// used in values, so any output substring like "{contract}" here:
-///   "This {contract} provides valuable protection"
-/// necessarily represents a substitutable value, while everything
-/// else in a report is just literal text.
-
-void product_data::write_policy_files()
+namespace
 {
-    product_data z;
+class sample : public product_data {public: sample();};
 
+class sample2 : public sample {public: sample2();};
+
+class sample2naic  : public sample2 {public: sample2naic ();};
+class sample2finra : public sample2 {public: sample2finra();};
+class sample2prosp : public sample2 {public: sample2prosp();};
+class sample2gpp   : public sample2 {public: sample2gpp  ();};
+class sample2ipp   : public sample2 {public: sample2ipp  ();};
+class sample2xyz   : public sample2 {public: sample2xyz  ();};
+
+sample::sample()
+{
     // 'sample' product
 
     // Names of lmi product files.
-    z.DatabaseFilename           = glossed_string("sample.database");
-    z.FundFilename               = glossed_string("sample.funds");
-    z.RoundingFilename           = glossed_string("sample.rounding");
-    z.TierFilename               = glossed_string("sample.strata");
+    item("DatabaseFilename")           = glossed_string("sample.database");
+    item("FundFilename")               = glossed_string("sample.funds");
+    item("RoundingFilename")           = glossed_string("sample.rounding");
+    item("TierFilename")               = glossed_string("sample.strata");
 
     // Base names of mortality-table databases.
-    z.CvatCorridorFilename       = glossed_string("sample");
-    z.Irc7702NspFilename         = glossed_string("sample");
-    z.CurrCOIFilename            = glossed_string("qx_cso");
-    z.GuarCOIFilename            = glossed_string("qx_cso");
-    z.WPFilename                 = glossed_string("sample");
-    z.ADDFilename                = glossed_string("qx_ins", "Specimen gloss.");
-    z.ChildRiderFilename         = glossed_string("qx_ins");
-    z.CurrSpouseRiderFilename    = glossed_string("qx_ins");
-    z.GuarSpouseRiderFilename    = glossed_string("qx_ins");
-    z.CurrTermFilename           = glossed_string("sample");
-    z.GuarTermFilename           = glossed_string("sample");
-    z.GroupProxyFilename         = glossed_string("qx_ins");
-    z.SevenPayFilename           = glossed_string("sample");
-    z.TgtPremFilename            = glossed_string("sample");
-    z.Irc7702QFilename           = glossed_string("qx_cso");
-    z.PartialMortalityFilename   = glossed_string("qx_ann");
-    z.SubstdTblMultFilename      = glossed_string("sample");
-    z.CurrSpecAmtLoadFilename    = glossed_string("sample");
-    z.GuarSpecAmtLoadFilename    = glossed_string("sample");
+    item("CvatCorridorFilename")       = glossed_string("sample");
+    item("Irc7702NspFilename")         = glossed_string("sample");
+    item("CurrCOIFilename")            = glossed_string("qx_cso");
+    item("GuarCOIFilename")            = glossed_string("qx_cso");
+    item("WPFilename")                 = glossed_string("sample");
+    item("ADDFilename")                = glossed_string("qx_ins", "Specimen gloss.");
+    item("ChildRiderFilename")         = glossed_string("qx_ins");
+    item("CurrSpouseRiderFilename")    = glossed_string("qx_ins");
+    item("GuarSpouseRiderFilename")    = glossed_string("qx_ins");
+    item("CurrTermFilename")           = glossed_string("sample");
+    item("GuarTermFilename")           = glossed_string("sample");
+    item("GroupProxyFilename")         = glossed_string("qx_ins");
+    item("SevenPayFilename")           = glossed_string("sample");
+    item("TgtPremFilename")            = glossed_string("sample");
+    item("Irc7702QFilename")           = glossed_string("qx_cso");
+    item("PartialMortalityFilename")   = glossed_string("qx_ann");
+    item("SubstdTblMultFilename")      = glossed_string("sample");
+    item("CurrSpecAmtLoadFilename")    = glossed_string("sample");
+    item("GuarSpecAmtLoadFilename")    = glossed_string("sample");
 
     // Other data that affect calculations.
-    z.InsCoDomicile              = glossed_string("WI");
+    item("InsCoDomicile")              = glossed_string("WI");
 
     // Substitutable strings.
-    z.PolicyForm                 = glossed_string("UL32768-NY");
-    z.PolicyFormAlternative      = glossed_string("UL32768-X");
-    z.PolicyMktgName             = glossed_string("UL Supreme");
-    z.PolicyLegalName            = glossed_string("Flexible Premium Adjustable Life Insurance Policy");
-    z.InsCoShortName             = glossed_string("Superior Life");
-    z.InsCoName                  = glossed_string("Superior Life Insurance Company");
-    z.InsCoAddr                  = glossed_string("Superior, WI 12345");
-    z.InsCoStreet                = glossed_string("246 Main Street");
-    z.InsCoPhone                 = glossed_string("(800) 555-1212");
-    z.MainUnderwriter            = glossed_string("Superior Securities");
-    z.MainUnderwriterAddress     = glossed_string("246-M Main Street, Superior, WI 12345");
-    z.CoUnderwriter              = glossed_string("Superior Investors");
-    z.CoUnderwriterAddress       = glossed_string("246-C Main Street, Superior, WI 12345");
-    z.AvName                     = glossed_string("Account");
-    z.CsvName                    = glossed_string("Cash Surrender");
-    z.CsvHeaderName              = glossed_string("Cash Surr");
-    z.NoLapseProvisionName       = glossed_string("No-lapse Provision");
-    z.ContractName               = glossed_string("contract"); // Alternatively, "policy" or "certificate".
-    z.DboNameLevel               = glossed_string("A");
-    z.DboNameIncreasing          = glossed_string("B");
-    z.DboNameReturnOfPremium     = glossed_string("ROP");
-    z.DboNameMinDeathBenefit     = glossed_string("MDB");
-    z.MarketingNameFootnote      = glossed_string("Policy form UL32768-NY is marketed as 'UL Supreme'.");
+    item("PolicyForm")                 = glossed_string("UL32768-NY");
+    item("PolicyFormAlternative")      = glossed_string("UL32768-X");
+    item("PolicyMktgName")             = glossed_string("UL Supreme");
+    item("PolicyLegalName")            = glossed_string("Flexible Premium Adjustable Life Insurance Policy");
+    item("InsCoShortName")             = glossed_string("Superior Life");
+    item("InsCoName")                  = glossed_string("Superior Life Insurance Company");
+    item("InsCoAddr")                  = glossed_string("Superior, WI 12345");
+    item("InsCoStreet")                = glossed_string("246 Main Street");
+    item("InsCoPhone")                 = glossed_string("(800) 555-1212");
+    item("MainUnderwriter")            = glossed_string("Superior Securities");
+    item("MainUnderwriterAddress")     = glossed_string("246-M Main Street, Superior, WI 12345");
+    item("CoUnderwriter")              = glossed_string("Superior Investors");
+    item("CoUnderwriterAddress")       = glossed_string("246-C Main Street, Superior, WI 12345");
+    item("AvName")                     = glossed_string("Account");
+    item("CsvName")                    = glossed_string("Cash Surrender");
+    item("CsvHeaderName")              = glossed_string("Cash Surr");
+    item("NoLapseProvisionName")       = glossed_string("No-lapse Provision");
+    item("ContractName")               = glossed_string("contract"); // Alternatively, "policy" or "certificate".
+    item("DboNameLevel")               = glossed_string("A");
+    item("DboNameIncreasing")          = glossed_string("B");
+    item("DboNameReturnOfPremium")     = glossed_string("ROP");
+    item("DboNameMinDeathBenefit")     = glossed_string("MDB");
+    item("MarketingNameFootnote")      = glossed_string("Policy form UL32768-NY is marketed as 'UL Supreme'.");
 
-    z.ADDTerseName               = glossed_string("Accident");
-    z.InsurabilityTerseName      = glossed_string("Insurability");
-    z.ChildTerseName             = glossed_string("Child");
-    z.SpouseTerseName            = glossed_string("Spouse");
-    z.TermTerseName              = glossed_string("Term");
-    z.WaiverTerseName            = glossed_string("Waiver");
-    z.AccelBftRiderTerseName     = glossed_string("Acceleration");
-    z.OverloanRiderTerseName     = glossed_string("Overloan");
+    item("ADDTerseName")               = glossed_string("Accident");
+    item("InsurabilityTerseName")      = glossed_string("Insurability");
+    item("ChildTerseName")             = glossed_string("Child");
+    item("SpouseTerseName")            = glossed_string("Spouse");
+    item("TermTerseName")              = glossed_string("Term");
+    item("WaiverTerseName")            = glossed_string("Waiver");
+    item("AccelBftRiderTerseName")     = glossed_string("Acceleration");
+    item("OverloanRiderTerseName")     = glossed_string("Overloan");
 
-    z.GroupQuoteShortProductName = glossed_string("UL SUPREME®");
-    z.GroupQuoteIsNotAnOffer     = glossed_string("This is not an offer of insurance.");
-    z.GroupQuoteRidersFooter     = glossed_string("Available riders: accident and waiver.");
-    z.GroupQuotePolicyFormId     = glossed_string("Policy form UL32768-NY is a flexible premium contract.");
-    z.GroupQuoteStateVariations  = glossed_string("Not available in all states.");
-    z.GroupQuoteProspectus       = glossed_string("Read the prospectus carefully.");
-    z.GroupQuoteUnderwriter      = glossed_string("Securities underwritten by Superior Securities.");
-    z.GroupQuoteBrokerDealer     = glossed_string("Securities offered through Superior Brokerage.");
-    z.GroupQuoteRubricMandatory  = glossed_string("Mandatory");
-    z.GroupQuoteRubricVoluntary  = glossed_string("Voluntary");
-    z.GroupQuoteRubricFusion     = glossed_string("Fusion");
-    z.GroupQuoteFooterMandatory  = glossed_string("The employer pays all premiums.");
-    z.GroupQuoteFooterVoluntary  = glossed_string("The employee pays all premiums.");
-    z.GroupQuoteFooterFusion     = glossed_string("The employer and employee pay their respective premiums.");
-
-    z.save(AddDataDir("sample.policy"));
+    item("GroupQuoteShortProductName") = glossed_string("UL SUPREME®");
+    item("GroupQuoteIsNotAnOffer")     = glossed_string("This is not an offer of insurance.");
+    item("GroupQuoteRidersFooter")     = glossed_string("Available riders: accident and waiver.");
+    item("GroupQuotePolicyFormId")     = glossed_string("Policy form UL32768-NY is a flexible premium contract.");
+    item("GroupQuoteStateVariations")  = glossed_string("Not available in all states.");
+    item("GroupQuoteProspectus")       = glossed_string("Read the prospectus carefully.");
+    item("GroupQuoteUnderwriter")      = glossed_string("Securities underwritten by Superior Securities.");
+    item("GroupQuoteBrokerDealer")     = glossed_string("Securities offered through Superior Brokerage.");
+    item("GroupQuoteRubricMandatory")  = glossed_string("Mandatory");
+    item("GroupQuoteRubricVoluntary")  = glossed_string("Voluntary");
+    item("GroupQuoteRubricFusion")     = glossed_string("Fusion");
+    item("GroupQuoteFooterMandatory")  = glossed_string("The employer pays all premiums.");
+    item("GroupQuoteFooterVoluntary")  = glossed_string("The employee pays all premiums.");
+    item("GroupQuoteFooterFusion")     = glossed_string("The employer and employee pay their respective premiums.");
+}
 
     // 'sample2*' products
 
-    for(auto const& i : z.member_names())
+sample2::sample2()
+{
+    for(auto const& i : member_names())
         {
-        z[i] = '{' + i + '}';
+        operator[](i) = '{' + i + '}';
         }
 
     // Names of lmi product files.
-    z.DatabaseFilename           = glossed_string("sample.database");
-    z.FundFilename               = glossed_string("sample.funds");
-    z.RoundingFilename           = glossed_string("sample.rounding");
-    z.TierFilename               = glossed_string("sample.strata");
+    item("DatabaseFilename")           = glossed_string("sample.database");
+    item("FundFilename")               = glossed_string("sample.funds");
+    item("RoundingFilename")           = glossed_string("sample.rounding");
+    item("TierFilename")               = glossed_string("sample.strata");
 
     // Base names of mortality-table databases.
-    z.CvatCorridorFilename       = glossed_string("sample");
-    z.Irc7702NspFilename         = glossed_string("sample");
-    z.CurrCOIFilename            = glossed_string("qx_cso");
-    z.GuarCOIFilename            = glossed_string("qx_cso");
-    z.WPFilename                 = glossed_string("sample");
-    z.ADDFilename                = glossed_string("qx_ins", "Specimen gloss.");
-    z.ChildRiderFilename         = glossed_string("qx_ins");
-    z.CurrSpouseRiderFilename    = glossed_string("qx_ins");
-    z.GuarSpouseRiderFilename    = glossed_string("qx_ins");
-    z.CurrTermFilename           = glossed_string("sample");
-    z.GuarTermFilename           = glossed_string("sample");
-    z.GroupProxyFilename         = glossed_string("qx_ins");
-    z.SevenPayFilename           = glossed_string("sample");
-    z.TgtPremFilename            = glossed_string("sample");
-    z.Irc7702QFilename           = glossed_string("qx_cso");
-    z.PartialMortalityFilename   = glossed_string("qx_ann");
-    z.SubstdTblMultFilename      = glossed_string("sample");
-    z.CurrSpecAmtLoadFilename    = glossed_string("sample");
-    z.GuarSpecAmtLoadFilename    = glossed_string("sample");
+    item("CvatCorridorFilename")       = glossed_string("sample");
+    item("Irc7702NspFilename")         = glossed_string("sample");
+    item("CurrCOIFilename")            = glossed_string("qx_cso");
+    item("GuarCOIFilename")            = glossed_string("qx_cso");
+    item("WPFilename")                 = glossed_string("sample");
+    item("ADDFilename")                = glossed_string("qx_ins", "Specimen gloss.");
+    item("ChildRiderFilename")         = glossed_string("qx_ins");
+    item("CurrSpouseRiderFilename")    = glossed_string("qx_ins");
+    item("GuarSpouseRiderFilename")    = glossed_string("qx_ins");
+    item("CurrTermFilename")           = glossed_string("sample");
+    item("GuarTermFilename")           = glossed_string("sample");
+    item("GroupProxyFilename")         = glossed_string("qx_ins");
+    item("SevenPayFilename")           = glossed_string("sample");
+    item("TgtPremFilename")            = glossed_string("sample");
+    item("Irc7702QFilename")           = glossed_string("qx_cso");
+    item("PartialMortalityFilename")   = glossed_string("qx_ann");
+    item("SubstdTblMultFilename")      = glossed_string("sample");
+    item("CurrSpecAmtLoadFilename")    = glossed_string("sample");
+    item("GuarSpecAmtLoadFilename")    = glossed_string("sample");
 
     // Other data that affect calculations.
-    z.InsCoDomicile              = glossed_string("WI");
+    item("InsCoDomicile")              = glossed_string("WI");
+}
 
-    z.save(AddDataDir("sample2naic.policy"));
+sample2naic::sample2naic()
+{
+}
 
-    z.DatabaseFilename           = glossed_string("sample2xyz.database");
-    z.save(AddDataDir("sample2xyz.policy"));
+sample2finra::sample2finra()
+{
+    item("DatabaseFilename")           = glossed_string("sample2finra.database");
+}
 
-    z.DatabaseFilename           = glossed_string("sample2finra.database");
-    z.save(AddDataDir("sample2finra.policy"));
+sample2prosp::sample2prosp()
+{
+    item("DatabaseFilename")           = glossed_string("sample2prosp.database");
+}
 
-    z.DatabaseFilename           = glossed_string("sample2prosp.database");
-    z.save(AddDataDir("sample2prosp.policy"));
+sample2gpp::sample2gpp()
+{
+    item("DatabaseFilename")           = glossed_string("sample2gpp.database");
+}
 
-    z.DatabaseFilename           = glossed_string("sample2gpp.database");
-    z.save(AddDataDir("sample2gpp.policy"));
-
-    z.DatabaseFilename           = glossed_string("sample2ipp.database");
-    z.IrrDbFootnote = glossed_string
+sample2ipp::sample2ipp()
+{
+    item("DatabaseFilename")           = glossed_string("sample2ipp.database");
+    item("IrrDbFootnote") = glossed_string
         ("The \"Red Death\" had long devastated the country. No pestilence"
          " had ever been so fatal, or so hideous. Blood was its Avatar and"
          " its seal--the redness and the horror of blood. There were sharp"
@@ -616,7 +607,7 @@ void product_data::write_policy_files()
          " And the whole seizure, progress and termination of the disease,"
          " were the incidents of half an hour."
         );
-    z.IrrCsvFootnote = glossed_string
+    item("IrrCsvFootnote") = glossed_string
         ("But the Prince Prospero was happy and dauntless and sagacious. When"
          " his dominions were half depopulated, he summoned to his presence a"
          " thousand hale and light-hearted friends from among the knights and"
@@ -636,13 +627,13 @@ void product_data::write_policy_files()
          " there was Beauty, there was wine. All these and security were"
          " within. Without was the \"Red Death\"."
         );
-    z.MortalityChargesFootnote = glossed_string
+    item("MortalityChargesFootnote") = glossed_string
         ("It was towards the close of the fifth or sixth month of his"
          " seclusion, and while the pestilence raged most furiously abroad,"
          " that the Prince Prospero entertained his thousand friends at a"
          " masked ball of the most unusual magnificence."
         );
-    z.PolicyYearFootnote = glossed_string
+    item("PolicyYearFootnote") = glossed_string
         ("It was a voluptuous scene, that masquerade. But first let me tell"
          " of the rooms in which it was held. These were seven--an imperial"
          " suite. In many palaces, however, such suites form a long and"
@@ -682,7 +673,52 @@ void product_data::write_policy_files()
          " who entered, that there were few of the company bold enough to set"
          " foot within its precincts at all."
         );
-    z.save(AddDataDir("sample2ipp.policy"));
+}
+
+sample2xyz::sample2xyz()
+{
+    item("DatabaseFilename")           = glossed_string("sample2xyz.database");
+}
+} // Unnamed namespace.
+
+/// Create a product file for 'sample' products.
+///
+/// The 'sample' product DWISOTT. Its values, where specified at all
+/// (rather than defaulted to empty strings), are intended to be
+/// plausible, if perhaps whimsical.
+///
+/// The 'sample2*' products are designed to facilitate testing.
+/// There is one for each supported ledger type:
+///   sample2naic  mce_ill_reg
+///   sample2finra mce_finra
+///   sample2prosp mce_prospectus_abeyed ['emit_test_data' only]
+///   sample2gpp   mce_group_private_placement
+///   sample2ipp   mce_individual_private_placement
+/// and one for exotica:
+///   sample2xyz   mce_finra
+///
+/// "*Filename" members are names of actual lmi product files, or
+/// basenames of mortality-table databases, and their values must
+/// nominate actual files. Member 'InsCoDomicile' is used to
+/// determine retaliatory premium-tax rates, and must be a two-letter
+/// USPS abbreviation. All other members represent text that is used
+/// for report formatting; in order to make 'sample2*' more useful for
+/// developing and testing reports, each has a nonempty value that is
+/// its member name enclosed in braces ("{}"). Braces aren't otherwise
+/// used in values, so any output substring like "{contract}" here:
+///   "This {contract} provides valuable protection"
+/// necessarily represents a substitutable value, while everything
+/// else in a report is just literal text.
+
+void product_data::write_policy_files()
+{
+    sample      ().save(AddDataDir("sample.policy"));
+    sample2naic ().save(AddDataDir("sample2naic.policy"));
+    sample2finra().save(AddDataDir("sample2finra.policy"));
+    sample2prosp().save(AddDataDir("sample2prosp.policy"));
+    sample2gpp  ().save(AddDataDir("sample2gpp.policy"));
+    sample2ipp  ().save(AddDataDir("sample2ipp.policy"));
+    sample2xyz  ().save(AddDataDir("sample2xyz.policy"));
 }
 
 /// Load from file. This free function can be invoked across dll
