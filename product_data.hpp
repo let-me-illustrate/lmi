@@ -76,7 +76,7 @@ template<> struct deserialized<product_data>
 ///
 /// Implicitly-declared special member functions do the right thing.
 
-class LMI_SO product_data final
+class LMI_SO product_data
     :public xml_serializable  <product_data>
     ,public MemberSymbolTable <product_data>
 {
@@ -96,8 +96,11 @@ class LMI_SO product_data final
     static void write_policy_files();
     static void write_proprietary_policy_files();
 
-  private:
+  protected:
     product_data();
+    glossed_string& item(std::string const& name);
+
+  private:
     product_data(product_data const&);
     product_data& operator=(product_data const&) = delete;
 

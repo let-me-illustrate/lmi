@@ -117,10 +117,7 @@ std::string const& glossed_string::gloss() const
     return gloss_;
 }
 
-/// Private default ctor.
-///
-/// Used only by friends: class PolicyDocument, 'my_prod.cpp',
-/// and 'basicvalues.cpp'.
+/// Default ctor, used only by derived classes and friends.
 
 product_data::product_data()
 {
@@ -171,6 +168,13 @@ product_data::~product_data() = default;
 std::string const& product_data::datum(std::string const& name) const
 {
     return member_cast<glossed_string>(operator[](name))->datum();
+}
+
+/// Reference to named member.
+
+glossed_string& product_data::item(std::string const& name)
+{
+    return *exact_cast<glossed_string>(operator[](name));
 }
 
 /// Enregister certain data members for access via any_member<>[].
