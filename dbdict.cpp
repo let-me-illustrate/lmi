@@ -628,6 +628,8 @@ void DBDictionary::InitDB()
     Add({DB_ExpSpecAmtLimit     , dbl_inf});
 }
 
+namespace
+{
 class sample : public DBDictionary {public: sample();};
 
 class sample2finra : public sample {public: sample2finra();};
@@ -971,6 +973,7 @@ sample2xyz::sample2xyz()
     double cv_enh[3] = {0.10, 0.05, 0.00};
     Add({DB_CashValueEnhMult, e_number_of_axes, dims_1111113, cv_enh});
 }
+} // Unnamed namespace.
 
 void DBDictionary::write_database_files()
 {
