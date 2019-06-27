@@ -31,23 +31,25 @@
 #include "mc_enum_type_enums.hpp"       // enum mcenum_emission
 #include "oecumenic_enumerations.hpp"
 
-#include <wx/object.h>                  // wxObjectDataPtr
+#include <wx/grid.h>
 
 #include <memory>                       // shared_ptr
 #include <string>
 #include <vector>
 
 class CensusDocument;
-class CensusViewDataViewModel;
+class CensusView;
+class CensusViewTable;
 
-class WXDLLIMPEXP_FWD_ADV wxDataViewEvent;
-class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
+class WXDLLIMPEXP_FWD_ADV wxGrid;
+class WXDLLIMPEXP_FWD_ADV wxGridEvent;
 
 class CensusView final
     :public ViewEx
 {
     friend class CensusDocument;
-    friend class CensusViewDataViewModel;
+    friend class CensusViewTable;
+    friend class CensusViewGrid;
 
   public:
     CensusView();
@@ -66,8 +68,8 @@ class CensusView final
     char const* menubar_xrc_resource() const override;
 
     // Event handlers, in event-table order (reflecting GUI order)
-    void UponRightClick             (wxDataViewEvent&);
-    void UponValueChanged           (wxDataViewEvent&);
+    void UponRightClick             (wxGridEvent&);
+    void UponValueChanged           (wxGridEvent&);
     void UponEditCell               (wxCommandEvent&);
     void UponEditClass              (wxCommandEvent&);
     void UponEditCase               (wxCommandEvent&);
@@ -127,12 +129,13 @@ class CensusView final
 
     void DoCopyCensus() const;
 
-    bool autosize_columns_;
+    bool             autosize_columns_;
+    std::vector<int> visible_columns_;
 
     std::shared_ptr<Ledger const> composite_ledger_;
 
-    wxDataViewCtrl* list_window_;
-    wxObjectDataPtr<CensusViewDataViewModel> list_model_;
+    wxGrid*          grid_window_;
+    CensusViewTable* grid_table_;
 
     DECLARE_DYNAMIC_CLASS(CensusView)
     DECLARE_EVENT_TABLE()
