@@ -207,13 +207,14 @@ void do_validate_monthly_trace
         ,char const* what
         )
 {
+    fs::path p(configurable_settings::instance().print_directory());
     std::string const cell_trace_file
-        (corp_name + "." + insured_name + monthly_trace_suffix(1)
+        (p.string() + "/" + corp_name + "." + insured_name + monthly_trace_suffix(1)
         );
     output_file_existence_checker output_cell_trace(cell_trace_file);
 
     std::string const census_trace_file
-        (corp_name + monthly_trace_suffix(2)
+        (p.string() + "/" + corp_name + monthly_trace_suffix(2)
         );
 
     output_file_existence_checker output_census_trace(census_trace_file);
@@ -335,8 +336,9 @@ void validate_run_cell_and_copy_output
         ,std::string const& insured_name
         )
 {
+    fs::path p(configurable_settings::instance().print_directory());
     std::string const cell_trace_file
-        (corp_name + "." + insured_name + monthly_trace_suffix(1)
+        (p.string() + "/" + corp_name + "." + insured_name + monthly_trace_suffix(1)
         );
     output_file_existence_checker output_cell_trace(cell_trace_file);
 
@@ -461,8 +463,9 @@ LMI_WX_TEST_CASE(validate_output_illustration)
 {
     // Build the path existence of which we're going to check and ensure that
     // it doesn't exist before the start of the test.
+    fs::path p(configurable_settings::instance().print_directory());
     output_file_existence_checker
-        unnamed_trace("unnamed.monthly_trace" + tsv_ext());
+        unnamed_trace(p.string() + "/" + "unnamed.monthly_trace" + tsv_ext());
 
     struct enter_comment_in_illustration_dialog
         :public wxExpectModalBase<MvcController>
