@@ -201,6 +201,9 @@ void LedgerInvariant::Alloc(int len)
     Strings["CsvHeaderName"                 ] = &CsvHeaderName                 ;
     Strings["NoLapseProvisionName"          ] = &NoLapseProvisionName          ;
     Strings["ContractName"                  ] = &ContractName                  ;
+    Strings["DboNameLevel"                  ] = &DboNameLevel                  ;
+    Strings["DboNameIncreasing"             ] = &DboNameIncreasing             ;
+    Strings["DboNameMinDeathBenefit"        ] = &DboNameMinDeathBenefit        ;
 
     Strings["AccountValueFootnote"          ] = &AccountValueFootnote          ;
     Strings["AttainedAgeFootnote"           ] = &AttainedAgeFootnote           ;
@@ -553,6 +556,9 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     CsvHeaderName                 = a_Addend.CsvHeaderName;
     NoLapseProvisionName          = a_Addend.NoLapseProvisionName;
     ContractName                  = a_Addend.ContractName;
+    DboNameLevel                  = a_Addend.DboNameLevel;
+    DboNameIncreasing             = a_Addend.DboNameIncreasing;
+    DboNameMinDeathBenefit        = a_Addend.DboNameMinDeathBenefit;
 
     AccountValueFootnote          = a_Addend.AccountValueFootnote;
     AttainedAgeFootnote           = a_Addend.AttainedAgeFootnote;

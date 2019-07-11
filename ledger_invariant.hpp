@@ -230,6 +230,17 @@ class LMI_SO LedgerInvariant final
     std::string     CsvHeaderName;
     std::string     NoLapseProvisionName;
     std::string     ContractName;
+    // PDF !! 'DboName*' variables are used only to assemble DBO
+    // definitions for mce_ill_reg PDFs. Probably those definitions
+    // should be moved into '.policy' files instead, in which case
+    // the 'DboName*' variables here can be expunged. Incidentally,
+    // 'DboNameReturnOfPremium' is omitted here only because the
+    // mce_ill_reg products that lmi supports happen not to use a
+    // definition for it today.
+    std::string     DboNameLevel;
+    std::string     DboNameIncreasing;
+//  std::string     DboNameReturnOfPremium;
+    std::string     DboNameMinDeathBenefit;
 
     // Ledger column definitions.
     std::string     AccountValueFootnote;

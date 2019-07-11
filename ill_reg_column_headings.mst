@@ -41,7 +41,7 @@ less any monthly charges deducted.
 </p>
 <p>
 <b>{{CsvName}} Value:</b>
-{{AvName}} Value less policy debt.
+{{AvName}} Value less {{ContractName}} debt.
 {{#Has1035ExchCharge}}
 {{CashSurrValueFootnote}}
 {{/Has1035ExchCharge}}
@@ -70,16 +70,16 @@ Presumably the description of death benefit options should be moved into
 -->
 </p>
 <p>
-<b>Death Benefit Option 1:</b>
+<b>Death Benefit Option {{DboNameLevel}}:</b>
 Option in which the death benefit is equal to the selected
-face amount of the contract on the date of death of the insured,
+face amount of the {{ContractName}} on the date of death of the insured,
 or if greater the {{AvName}} Value
 {{#SalesLoadRefundAvailable}}
 plus the refund of sales loads (if applicable)
 {{/SalesLoadRefundAvailable}}
 on the insured's date of death multiplied by the minimum face
 amount percentage for the insured's attained age at death
-(minimum face amount). Please refer to the contract
+(minimum face amount). Please refer to the {{ContractName}}
 for a detailed schedule of death benefit factors.
 </p>
 <!-- Group Experience Rating Logic -->
@@ -89,9 +89,9 @@ for a detailed schedule of death benefit factors.
 }}
 {{^AllowExperienceRating}}
 <p>
-<b>Death Benefit Option 2:</b>
+<b>Death Benefit Option {{DboNameIncreasing}}:</b>
 Option in which the death benefit is equal to the selected
-face amount of the contract
+face amount of the {{ContractName}}
 plus the {{AvName}} Value
 on the date of death of the insured, or if greater,
 the {{AvName}} Value
@@ -100,7 +100,7 @@ plus the refund of sales loads (if applicable)
 {{/SalesLoadRefundAvailable}}
 on the insured's date of death multiplied
 by the death benefit factor for the insured's attained age
-at death (minimum face amount). Please refer to the contract
+at death (minimum face amount). Please refer to the {{ContractName}}
 for a detailed schedule of death benefit factors.
 {{/AllowExperienceRating}}
 <!-- Group Experience Rating Logic -->
@@ -142,10 +142,10 @@ are based on the assumption that premium is paid as illustrated.
 <p>
 <b>MEC:</b>
 Modified Endowment Contract - this classification is given
-to a contract in violation of TAMRA
+to a {{ContractName}} in violation of TAMRA
 (Technical and Miscellaneous Revenue Act), which limits
 the amount of premium that can be paid into a life
-insurance contract. To the extent of gain in the contract, loans,
+insurance {{ContractName}}. To the extent of gain in the {{ContractName}}, loans,
 distributions and withdrawals from a MEC are subject
 to income tax and may also trigger a tax penalty.
 </p>
@@ -176,11 +176,11 @@ from lapsing, or payment required to reinstate the policy.
 The monthly charges for the following month which include:
 cost of insurance, plus face amount charges (if applicable),
 plus the administrative charge shown
-on the contract schedule page.
+on the {{ContractName}} schedule page.
 </p>
 <p>
 <b>Premium Outlay:</b>
-The amount of premium assumed to be paid by the contract owner
+The amount of premium assumed to be paid by the {{ContractName}} owner
 or other premium payor.
 </p>
 <p>
