@@ -380,11 +380,14 @@ void LedgerInvariant::Init(BasicValues const* b)
         CurrentValuesFootnote          = p.datum("CurrentValuesFootnote"          );
         DBOption1Footnote              = p.datum("DBOption1Footnote"              );
         DBOption2Footnote              = p.datum("DBOption2Footnote"              );
+        DBOption3Footnote              = p.datum("DBOption3Footnote"              );
+        MinDeathBenefitFootnote        = p.datum("MinDeathBenefitFootnote"        );
         ExpRatRiskChargeFootnote       = p.datum("ExpRatRiskChargeFootnote"       );
         ExchangeChargeFootnote1        = p.datum("ExchangeChargeFootnote1"        );
         FlexiblePremiumFootnote        = p.datum("FlexiblePremiumFootnote"        );
         GuaranteedValuesFootnote       = p.datum("GuaranteedValuesFootnote"       );
         CreditingRateFootnote          = p.datum("CreditingRateFootnote"          );
+        GuaranteedCreditRateFootnote   = p.datum("GuaranteedCreditRateFootnote"   );
         GrossRateFootnote              = p.datum("GrossRateFootnote"              );
         NetRateFootnote                = p.datum("NetRateFootnote"                );
         MecFootnote                    = p.datum("MecFootnote"                    );

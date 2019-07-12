@@ -283,11 +283,14 @@ void product_data::ascribe_members()
     ascribe("CurrentValuesFootnote"         , &product_data::CurrentValuesFootnote         );
     ascribe("DBOption1Footnote"             , &product_data::DBOption1Footnote             );
     ascribe("DBOption2Footnote"             , &product_data::DBOption2Footnote             );
+    ascribe("DBOption3Footnote"             , &product_data::DBOption3Footnote             );
+    ascribe("MinDeathBenefitFootnote"       , &product_data::MinDeathBenefitFootnote       );
     ascribe("ExpRatRiskChargeFootnote"      , &product_data::ExpRatRiskChargeFootnote      );
     ascribe("ExchangeChargeFootnote1"       , &product_data::ExchangeChargeFootnote1       );
     ascribe("FlexiblePremiumFootnote"       , &product_data::FlexiblePremiumFootnote       );
     ascribe("GuaranteedValuesFootnote"      , &product_data::GuaranteedValuesFootnote      );
     ascribe("CreditingRateFootnote"         , &product_data::CreditingRateFootnote         );
+    ascribe("GuaranteedCreditRateFootnote"  , &product_data::GuaranteedCreditRateFootnote  );
     ascribe("GrossRateFootnote"             , &product_data::GrossRateFootnote             );
     ascribe("NetRateFootnote"               , &product_data::NetRateFootnote               );
     ascribe("MecFootnote"                   , &product_data::MecFootnote                   );

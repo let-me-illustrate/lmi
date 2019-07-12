@@ -271,11 +271,14 @@ class LMI_SO product_data
     glossed_string CurrentValuesFootnote;
     glossed_string DBOption1Footnote;
     glossed_string DBOption2Footnote;
-    glossed_string ExpRatRiskChargeFootnote; // DATABASE !! Expunge or use.
+    glossed_string DBOption3Footnote;
+    glossed_string MinDeathBenefitFootnote;
+    glossed_string ExpRatRiskChargeFootnote;
     glossed_string ExchangeChargeFootnote1;
     glossed_string FlexiblePremiumFootnote;
     glossed_string GuaranteedValuesFootnote;
     glossed_string CreditingRateFootnote;
+    glossed_string GuaranteedCreditRateFootnote;
     glossed_string GrossRateFootnote;
     glossed_string NetRateFootnote;
     glossed_string MecFootnote;

@@ -309,11 +309,14 @@ class LMI_SO LedgerInvariant final
     std::string     CurrentValuesFootnote;
     std::string     DBOption1Footnote;
     std::string     DBOption2Footnote;
+    std::string     DBOption3Footnote;
+    std::string     MinDeathBenefitFootnote;
     std::string     ExpRatRiskChargeFootnote;
     std::string     ExchangeChargeFootnote1;
     std::string     FlexiblePremiumFootnote;
     std::string     GuaranteedValuesFootnote;
     std::string     CreditingRateFootnote;
+    std::string     GuaranteedCreditRateFootnote;
     std::string     GrossRateFootnote;
     std::string     NetRateFootnote;
     std::string     MecFootnote;
