@@ -159,10 +159,7 @@ that premium is paid as illustrated.
 {{#ModifiedSinglePremiumOrModifiedSinglePremium0}}
 <p>
 <b>Modified Single Premium:</b>
-After the single premium is paid, additional payment
-under this policy will only be accepted for repayment
-of policy debt, payment required to keep the policy
-from lapsing, or payment required to reinstate the policy.
+{{SinglePremiumFootnote}}
 </p>
 {{/ModifiedSinglePremiumOrModifiedSinglePremium0}}
 <p>
@@ -190,10 +187,7 @@ minimum defined in your policy.
 {{^ModifiedSinglePremiumOrModifiedSinglePremium0}}
 <p>
 <b>Single Premium:</b>
-After the single premium is paid, additional payment
-under this policy will only be accepted for repayment
-of policy debt, payment required to keep the policy
-from lapsing, or payment required to reinstate the policy.
+{{SinglePremiumFootnote}}
 </p>
 {{/ModifiedSinglePremiumOrModifiedSinglePremium0}}
 <!-- Single Premium Logic -->
