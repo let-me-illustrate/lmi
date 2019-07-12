@@ -108,11 +108,7 @@ for a detailed schedule of death benefit factors.
 </p>
 <p>
 <b>Experience Rating Risk Charge:</b>
-Applies only to certain experience rated groups.
-This charge is based on the cost of insurance charges
-assessed during the certificate year. It may be assessed against
-the account value once per certificate anniversary date
-and upon surrender of the group policy.
+{{ExpRatRiskChargeFootnote}}
 </p>
 {{/AllowExperienceRating}}
 <!-- Group Experience Rating Logic -->
