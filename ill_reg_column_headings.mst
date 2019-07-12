@@ -54,10 +54,7 @@ less any monthly charges deducted.
 {{/IsInforce}}
 <p>
 <b>Current Values:</b>
-Values assuming current interest crediting rates
-and current monthly charges. These values are not guaranteed
-and are based on the assumption that premium is paid
-as illustrated.
+{{CurrentValuesFootnote}}
 </p>
 <p>
 <b>Death Benefit:</b>
@@ -129,9 +126,7 @@ if the account value is sufficient to cover the monthly charges.
 </p>
 <p>
 <b>Guaranteed Values:</b>
-Values assuming the guaranteed crediting rate
-and the guaranteed maximum monthly charges. These values
-are based on the assumption that premium is paid as illustrated.
+{{GuaranteedValuesFootnote}}
 </p>
 <p>
 <b>MEC:</b>
@@ -146,13 +141,7 @@ to income tax and may also trigger a tax penalty.
 {{^IsInforce}}
 <p>
 <b>Midpoint Values:</b>
-Values assuming interest rates that are the average
-of the illustrated current crediting rates
-and the guaranteed minimum interest rate, and monthly charges
-that are the average of the current monthly charges
-and the guaranteed monthly charges.
-These values are not guaranteed and are based on the assumption
-that premium is paid as illustrated.
+{{MidpointValuesFootnote}}
 </p>
 {{/IsInforce}}
 <!-- Single Premium Logic -->
