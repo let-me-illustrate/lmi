@@ -120,9 +120,12 @@ for a detailed schedule of death benefit factors.
 {{^SinglePremium}}
 <p>
 <b>Flexible Premiums:</b>
-Premiums that may be increased, reduced, or not paid,
-if the account value is sufficient to cover the monthly charges.
+{{FlexiblePremiumFootnote}}
 {{/SinglePremium}}
+</p>
+<p>
+<b>Guaranteed Crediting Rate:</b>
+{{GuaranteedCreditRateFootnote}}
 </p>
 <p>
 <b>Guaranteed Values:</b>
