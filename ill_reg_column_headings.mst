@@ -97,6 +97,14 @@ on the insured's date of death multiplied
 by the death benefit factor for the insured's attained age
 at death (minimum face amount). Please refer to the {{ContractName}}
 for a detailed schedule of death benefit factors.
+
+{{^Composite}}
+<p>
+<b>End of Year Age:</b>
+{{AttainedAgeFootnote}}
+</p>
+{{/Composite}}
+
 {{/AllowExperienceRating}}
 <!-- Group Experience Rating Logic -->
 {{#AllowExperienceRating}}
@@ -161,6 +169,12 @@ cost of insurance, plus face amount charges (if applicable),
 plus the administrative charge shown
 on the {{ContractName}} schedule page.
 </p>
+
+<p>
+<b>Policy Year:</b>
+{{PolicyYearFootnote}}
+</p>
+
 <p>
 <b>Premium Outlay:</b>
 The amount of premium assumed to be paid by the {{ContractName}} owner
