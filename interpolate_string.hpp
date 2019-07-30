@@ -43,7 +43,7 @@ using lookup_function
 /// Return the input string after recursively replacing all {{variable}}
 /// references in it with the value of the variable as returned by the provided
 /// function. The syntax is a subset of Mustache templates with the following
-/// features being are supported:
+/// features being supported:
 ///  - Recursive variable expansion for {{variable}}, i.e. -- unlike in
 ///    Mustache -- any {{...}} in the returned expansion are expanded again.
 ///  - Conditional expansion using {{#variable}}...{{/variable}}.
