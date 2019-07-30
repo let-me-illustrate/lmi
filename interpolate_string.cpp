@@ -68,12 +68,12 @@ void do_interpolate_string_in_context
     ,lookup_function const& lookup
     ,std::string& out
     ,context& sections
-    ,std::string const& partial = std::string()
+    ,std::string const& variable_name = std::string()
     ,int recursion_level = 0
     )
 {
     // Guard against too deep recursion to avoid crashing on code using too
-    // many nested partials (either unintentionally, e.g. due to including a
+    // many nested expansions (either unintentionally, e.g. due to including a
     // partial from itself, or maliciously).
     //
     // The maximum recursion level is chosen completely arbitrarily, the only
@@ -82,8 +82,8 @@ void do_interpolate_string_in_context
     if(100 <= recursion_level)
         {
         alarum()
-            << "Nesting level too deep while expanding the partial \""
-            << partial
+            << "Nesting level too deep while expanding \""
+            << variable_name
             << "\""
             << std::flush
             ;
@@ -223,9 +223,16 @@ void do_interpolate_string_in_context
                                 // variable name may seem strange, but why not
                                 // allow using "{{}}" to insert something into
                                 // the interpolated string, after all?
-                                out += lookup
-                                    (name
-                                    ,interpolate_lookup_kind::variable
+                                do_interpolate_string_in_context
+                                    (lookup
+                                        (name
+                                        ,interpolate_lookup_kind::variable
+                                        ).c_str()
+                                    ,lookup
+                                    ,out
+                                    ,sections
+                                    ,name
+                                    ,recursion_level + 1
                                     );
                                 }
                         }

@@ -51,6 +51,41 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL( test_interpolate("{{! too}}{{x}}"),  "x"      );
     BOOST_TEST_EQUAL( test_interpolate("{{x}}{{!also}}"),  "x"      );
 
+    // Recursive interpolation should work too.
+    auto const test_recursive = [](char const* s)
+        {
+        return interpolate_string
+            (s
+            ,[](std::string const& s, interpolate_lookup_kind) -> std::string
+                {
+                if(s == "rec1") return "1 {{rec2}}";
+                if(s == "rec2") return "2 {{rec3}}";
+                if(s == "rec3") return "3"         ;
+                if(s == "inf" ) return "{{inf}}"   ;
+                if(s == "infA") return "{{infB}}"  ;
+                if(s == "infB") return "{{infA}}"  ;
+
+                throw std::runtime_error("no such variable '" + s + "'");
+                }
+            );
+        };
+
+    BOOST_TEST_EQUAL( test_recursive("{{rec3}}"), "3"     );
+    BOOST_TEST_EQUAL( test_recursive("{{rec2}}"), "2 3"   );
+    BOOST_TEST_EQUAL( test_recursive("{{rec1}}"), "1 2 3" );
+
+    BOOST_TEST_THROW
+        (test_recursive("error due to infinite recursion in {{inf}}")
+        ,std::runtime_error
+        ,lmi_test::what_regex("Nesting level too deep")
+        );
+
+    BOOST_TEST_THROW
+        (test_recursive("infinite co-recursion in {{infA}} is detected too")
+        ,std::runtime_error
+        ,lmi_test::what_regex("Nesting level too deep")
+        );
+
     // Sections.
     auto const section_test = [](char const* str)
         {
@@ -142,22 +177,6 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL
         (partial_test("no {{^sec}}{{>recursive}}{{/sec}} problem")
         ,"no  problem"
-        );
-
-    // Some special cases.
-    BOOST_TEST_EQUAL
-        (interpolate_string
-            ("{{expanded}}"
-            ,[](std::string const& s, interpolate_lookup_kind) -> std::string
-                {
-                if(s == "expanded")
-                    {
-                    return "{{unexpanded}}";
-                    }
-                throw std::runtime_error("no such variable '" + s + "'");
-                }
-            )
-        ,"{{unexpanded}}"
         );
 
     // Check that the kind of variable being expanded is correct.

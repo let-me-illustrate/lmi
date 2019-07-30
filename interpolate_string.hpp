@@ -40,26 +40,28 @@ using lookup_function
 
 /// Interpolate string containing embedded variable references.
 ///
-/// Return the input string after replacing all {{variable}} references in it
-/// with the value of the variable as returned by the provided function. The
-/// syntax is a (strict) subset of Mustache templates, the following features
-/// are supported:
-///  - Simple variable expansion for {{variable}}.
+/// Return the input string after recursively replacing all {{variable}}
+/// references in it with the value of the variable as returned by the provided
+/// function. The syntax is a subset of Mustache templates with the following
+/// features being are supported:
+///  - Recursive variable expansion for {{variable}}, i.e. -- unlike in
+///    Mustache -- any {{...}} in the returned expansion are expanded again.
 ///  - Conditional expansion using {{#variable}}...{{/variable}}.
 ///  - Negated checks of the form {{^variable}}...{{/variable}}.
 ///  - Partials support, i.e. {{>filename}}.
+///  - Comments of the form {{!this is ignored}}.
 ///
 /// The following features are explicitly _not_ supported:
 ///  - HTML escaping: this is done by a separate html::text class.
 ///  - Separate types: 0/1 is false/true, anything else is an error.
 ///  - Lists/section iteration (not needed yet).
-///  - Lambdas, comments, delimiter changes: omitted for simplicity.
+///  - Lambdas: can't be implemented in non-dynamic languages such as C++.
+///  - Changing delimiters: omitted for simplicity (to allow embedding literal
+///    "{{" fragment into the returned string, create a pseudo-variable
+///    expanding to these characters).
 ///
-/// To allow embedding literal "{{" fragment into the returned string, create a
-/// pseudo-variable expanding to these characters as its expansion, there is no
-/// built-in way to escape them.
-///
-/// Throw if the lookup function throws or if the string uses invalid syntax.
+/// Throw if the lookup function throws, if the string uses invalid syntax or
+/// if the maximum recursion level is exceeded.
 
 std::string LMI_SO interpolate_string
     (char const* s
