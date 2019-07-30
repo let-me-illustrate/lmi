@@ -34,24 +34,24 @@
     <p>
     Sales Load Refund: We will refund a portion of the sales load
     to you, as part of your {{CsvName}}
-    Value, if you surrender your contract within the first two
-    policy years. In policy year 1, we will refund
+    Value, if you surrender your {{ContractName}} within the first two
+    {{ContractName}} years. In {{ContractName}} year 1, we will refund
     {{SalesLoadRefundRate0}}
-    of the first contract year sales load collected
-    and in contract year 2, we will refund
+    of the first {{ContractName}} year sales load collected
+    and in {{ContractName}} year 2, we will refund
     {{SalesLoadRefundRate1}}
-    of the first contract year sales load collected.
+    of the first {{ContractName}} year sales load collected.
     </p>
 {{/SalesLoadRefundAvailable}}
 
 {{#NoLapse}}
     <p>
     {{NoLapseProvisionName}}:
-    The contract will remain in force after the first premium
+    The {{ContractName}} will remain in force after the first premium
     has been paid, even if there is insufficient
     {{AvName}} Value
     to cover the monthly charges provided that the insured
-    is not in a substandard rating class and the policy debt
+    is not in a substandard rating class and the {{ContractName}} debt
     does not exceed {{AvName}} Value.
     </p>
 {{/NoLapse}}
@@ -129,8 +129,8 @@ in the Tabular Detail.
 {{#AllowExperienceRating}}
     <p>
     We may assess a Market Value Adjustment upon a surrender
-    of the certificate when the surrender proceeds are intended
-    to be applied to an insurance policy issued by an insurer
+    of the {{ContractName}} when the surrender proceeds are intended
+    to be applied to an insurance {{ContractName}} issued by an insurer
     unaffiliated with
     {{InsCoShortName}}
     with an intent to qualify the exchange as a tax free exchange
@@ -145,7 +145,7 @@ in the Tabular Detail.
 
     <p>
     The guaranteed values reflect the maximum charges permitted
-    by the contract, which may include an Experience Rating
+    by the {{ContractName}}, which may include an Experience Rating
     Risk Charge.
     </p>
 
@@ -160,7 +160,7 @@ in the Tabular Detail.
 {{#Has1035ExchCharge}}
     <p>
     {{^SinglePremium}}
-        Upon surrender of this policy, where the surrender
+        Upon surrender of this {{ContractName}}, where the surrender
         proceeds are intended to be applied to an insurance policy
         or certificate issued in conjunction with an intent
         to qualify the exchange as a tax free exchange
@@ -173,11 +173,11 @@ in the Tabular Detail.
         will be the Percentage of Premium Charge only.
         The Exchange Charge will potentially reduce
         the surrender proceeds, but will never increase
-        the surrender proceeds. Please refer to your policy
+        the surrender proceeds. Please refer to your {{ContractName}}
         for details.
     {{/SinglePremium}}
     {{#SinglePremium}}
-        Upon surrender of this policy, where the surrender proceeds
+        Upon surrender of this {{ContractName}}, where the surrender proceeds
         are intended to be applied to an insurance policy
         or certificate issued in conjunction with an intent
         to qualify the exchange as a tax free exchange
@@ -185,7 +185,7 @@ in the Tabular Detail.
         Exchange), we may assess an Exchange Charge. The Exchange
         Charge will potentially reduce the surrender proceeds,
         but will never increase the surrender proceeds.
-        Please refer to your policy for details.
+        Please refer to your {{ContractName}} for details.
     {{/SinglePremium}}
     </p>
 {{/Has1035ExchCharge}}
@@ -196,7 +196,7 @@ in the Tabular Detail.
     rider provides term life insurance on the spouse
     (issue age {{SpouseIssueAge}})
     for a limited duration, for an extra charge.
-    Please refer to your contract for specific provisions
+    Please refer to your {{ContractName}} for specific provisions
     and a detailed schedule of charges.
     </p>
 {{/HasSpouseRider}}
@@ -206,7 +206,7 @@ in the Tabular Detail.
     The ${{ChildRiderAmount}} Child
     rider provides term life insurance on the insured's children
     for a limited duration, for an extra charge. Please refer
-    to your contract for specific provisions
+    to your {{ContractName}} for specific provisions
     and a detailed schedule of charges.
     </p>
 {{/HasChildRider}}
@@ -227,7 +227,7 @@ in the Tabular Detail.
 
 <!-- This is not appropriate for composites. -->
 <p>
-As illustrated, this contract
+As illustrated, this {{ContractName}}
 {{#IsMec}}
     becomes
 {{/IsMec}}
@@ -241,7 +241,7 @@ a Modified Endowment Contract (MEC)
 {{^IsMec}}
     under the Internal Revenue Code.
 {{/IsMec}}
-To the extent of gain in the contract, loans, distributions
+To the extent of gain in the {{ContractName}}, loans, distributions
 and withdrawals from a MEC are subject to income tax
 and may also trigger a penalty tax.
 </p>
@@ -257,12 +257,10 @@ and may also trigger a penalty tax.
 <p>
 <b>
 The information contained in this illustration is not written
-or intended as tax or legal advice, and may not be relied upon
-for purposes of avoiding any federal tax penalties.
-Neither {{InsCoShortName}} nor any
-of its employees or representatives are authorized to give tax
+or intended as tax or legal advice. Neither {{InsCoShortName}} its
+subsidiaries, employees or representatives are authorized to give tax
 or legal advice. For more information pertaining
-to the tax consequences of purchasing or owning this policy,
+to the tax consequences of purchasing or owning this {{ContractName}},
 consult with your own independent tax or legal counsel.
 </b>
 </p>

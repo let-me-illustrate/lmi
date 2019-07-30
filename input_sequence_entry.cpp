@@ -1382,7 +1382,6 @@ InputSequenceButton::InputSequenceButton(wxWindow* parent, wxWindowID id)
     :wxButton(parent, id, "...", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT)
 {
 }
-
 } // Unnamed namespace.
 
 InputSequenceEntry::InputSequenceEntry

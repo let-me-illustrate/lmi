@@ -43,7 +43,6 @@
 
 namespace
 {
-
 enum enum_rounding_button_id
     {e_rbi_not_at_all = wxID_HIGHEST
     ,e_rbi_to_nearest
@@ -143,7 +142,6 @@ void style_button(wxBitmapButton& button, rounding_style style, bool selected)
         : e_state_hover
         ));
 }
-
 } // Unnamed namespace.
 
 BEGIN_EVENT_TABLE(RoundingButtons, wxPanel)

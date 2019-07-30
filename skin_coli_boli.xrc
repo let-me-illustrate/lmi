@@ -621,7 +621,7 @@
                             <object class="wxRadioBox" name="SurviveToType">
                                 <help>Survival limit for partial mortality</help>
                                 <style>wxRA_SPECIFY_COLS</style>
-                                <label>Limit survival to expectancy</label>
+                                <label>Survival limit</label>
                                 <content>
                                     <item helptext="Partial mortality: no particular limit on survival">No survival limit</item>
                                     <item helptext="Partial mortality: survival limited to input age">Survive to age limit</item>

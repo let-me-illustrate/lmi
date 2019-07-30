@@ -29,12 +29,9 @@
 #include "cso_table.hpp"
 #include "data_directory.hpp"           // AddDataDir()
 #include "database.hpp"
-#include "input.hpp"
 #include "mc_enum.hpp"                  // all_strings<>()
 #include "product_data.hpp"
 #include "ssize_lmi.hpp"
-#include "value_cast.hpp"
-#include "yare_input.hpp"
 
 #include <iostream>
 #include <string>
@@ -42,40 +39,97 @@
 
 namespace
 {
-void verify_one_cell
-    (std::string const& product_name
-    ,std::string const& gender
-    ,std::string const& smoking
-    )
+class product_verifier
 {
-    Input input;
-    input["ProductName"] = product_name;
-    input["Gender"     ] = gender;
-    input["Smoking"    ] = smoking;
+  public:
+    product_verifier
+        (std::string const& product_name
+        ,std::string const& gender_str
+        ,std::string const& smoking_str
+        );
+    void verify();
 
-    int const min_age = product_database(yare_input(input)).query<int>(DB_MinIssAge);
-    input["IssueAge"   ] = value_cast<std::string>(min_age);
+  private:
+    void verify_7702q();
 
-    yare_input       const yi(input);
-    product_database const db(yi);
-    auto const era    = db.query<oenum_cso_era   >(DB_CsoEra);
-    auto const a_b    = db.query<oenum_alb_or_anb>(DB_AgeLastOrNearest);
-    auto const t      = db.query<int             >(DB_Irc7702QTable);
-    auto const axis_g = db.query<bool            >(DB_Irc7702QAxisGender);
-    auto const axis_s = db.query<bool            >(DB_Irc7702QAxisSmoking);
-    auto const omega  = db.query<int             >(DB_MaturityAge);
+    std::string      const product_name_;
+    std::string      const gender_str_  ;
+    std::string      const smoking_str_ ;
+    product_data     const p_           ;
+    mcenum_gender    const gender_      ;
+    mcenum_smoking   const smoking_     ;
+    product_database const db0_         ;
+    int              const min_age_     ;
+    product_database const db_          ;
+    oenum_cso_era    const era_         ;
+    oenum_alb_or_anb const a_b_         ;
+    int              const t_           ;
+    bool             const axis_g_      ;
+    bool             const axis_s_      ;
+    int              const omega_       ;
+};
 
-    int const years_to_maturity = omega - min_age;
+product_verifier::product_verifier
+    (std::string const& product_name
+    ,std::string const& gender_str
+    ,std::string const& smoking_str
+    )
+    :product_name_ {product_name}
+    ,gender_str_   {gender_str}
+    ,smoking_str_  {smoking_str}
+    ,p_            (product_name)
+    ,gender_       {mce_gender (gender_str ).value()}
+    ,smoking_      {mce_smoking(smoking_str).value()}
+    ,db0_
+        (product_name
+        ,gender_
+        ,mce_standard
+        ,smoking_
+        ,45
+        ,mce_medical
+        ,mce_s_XX
+        )
+    ,min_age_      {db0_.query<int>(DB_MinIssAge)}
+    ,db_
+        (product_name
+        ,gender_
+        ,mce_standard
+        ,smoking_
+        ,min_age_
+        ,mce_medical
+        ,mce_s_XX
+        )
+    ,era_          {db_.query<oenum_cso_era   >(DB_CsoEra)}
+    ,a_b_          {db_.query<oenum_alb_or_anb>(DB_AgeLastOrNearest)}
+    ,t_            {db_.query<int             >(DB_Irc7702QTable)}
+    ,axis_g_       {db_.query<bool            >(DB_Irc7702QAxisGender)}
+    ,axis_s_       {db_.query<bool            >(DB_Irc7702QAxisSmoking)}
+    ,omega_        {db_.query<int             >(DB_MaturityAge)}
+{
+}
 
-    product_data const p(product_name);
-
-    if((!axis_g && "Unisex" != gender) || (!axis_s && "Unismoke" != smoking))
+void product_verifier::verify()
+{
+    if
+        (   (!axis_g_ && mce_unisex   != gender_ )
+        ||  (!axis_s_ && mce_unismoke != smoking_)
+        )
         {
-        std::cout << "  skipping " << gender << ' ' << smoking << std::endl;
+        std::cout
+            << "  skipping"
+            << ' ' << gender_str_
+            << ' ' << smoking_str_
+            << std::endl
+            ;
         return;
         }
 
-    switch(db.query<oenum_7702_q_whence>(DB_Irc7702QWhence))
+    verify_7702q();
+}
+
+void product_verifier::verify_7702q()
+{
+    switch(db_.query<oenum_7702_q_whence>(DB_Irc7702QWhence))
         {
         // Validate irc_7702_q_builtin(), which is implemented in
         // terms of cso_table(). The interface of irc_7702_q()
@@ -91,29 +145,29 @@ void verify_one_cell
         case oe_7702_q_builtin:
             {
             std::vector<double> const v0 = cso_table
-                (era
+                (era_
                 ,oe_orthodox // No other option currently supported for 7702.
-                ,a_b
-                ,mce_gender (gender).value()
-                ,mce_smoking(smoking).value()
-                ,min_age
-                ,omega
+                ,a_b_
+                ,gender_
+                ,smoking_
+                ,min_age_
+                ,omega_
                 );
             std::vector<double> const v1 = irc_7702_q
-                (p
-                ,db
-                ,min_age
-                ,years_to_maturity
+                (p_
+                ,db_
+                ,min_age_
+                ,omega_ - min_age_
                 );
             std::cout
                 << "7702 q okay: builtin "
                 << std::string((v0 == v1) ? "validated" : "PROBLEM")
-                << ' ' << gender
-                << ' ' << smoking
+                << ' ' << gender_str_
+                << ' ' << smoking_str_
                 << std::endl
                 ;
-            return;
             }
+            break;
         // Validate an external table. Passing this test means that
         // the external table is identical to the published CSO table,
         // and that the external table can be discarded and its
@@ -125,27 +179,27 @@ void verify_one_cell
         // known to occur in fabrication.
         case oe_7702_q_external_table:
             {
-            if(0 == t)
+            if(0 == t_)
                 {
                 std::cout
-                    << "7702 q PROBLEM: " << product_name
+                    << "7702 q PROBLEM: " << product_name_
                     << " nonexistent table zero"
-                    << ' ' << gender
-                    << ' ' << smoking
+                    << ' ' << gender_str_
+                    << ' ' << smoking_str_
                     << std::endl
                     ;
                 return;
                 }
 
             std::vector<double> const v0 = cso_table
-                (era
+                (era_
                 ,oe_orthodox // No other option currently supported for 7702.
-                ,a_b
-                ,mce_gender (gender).value()
-                ,mce_smoking(smoking).value()
+                ,a_b_
+                ,gender_
+                ,smoking_
                 );
-            std::string const f = AddDataDir(p.datum("Irc7702QFilename"));
-            actuarial_table const a(f, t);
+            std::string const f = AddDataDir(p_.datum("Irc7702QFilename"));
+            actuarial_table const a(f, t_);
             std::vector<double> const v1 = a.values
                 (a.min_age()
                 ,1 + a.max_age() - a.min_age()
@@ -154,25 +208,25 @@ void verify_one_cell
             if(v0 == v1)
                 {
                 std::cout
-                    << "7702 q okay: table " << t
-                    << ' ' << gender
-                    << ' ' << smoking
+                    << "7702 q okay: table " << t_
+                    << ' ' << gender_str_
+                    << ' ' << smoking_str_
                     << std::endl
                     ;
                 }
             else
                 {
                 std::cout
-                    << "7702 q PROBLEM: " << product_name
-                    << ' ' << gender
-                    << ' ' << smoking
+                    << "7702 q PROBLEM: " << product_name_
+                    << ' ' << gender_str_
+                    << ' ' << smoking_str_
                     << std::endl
                     ;
                 std::cout
-                    << "\n  CSO era: " << era
-                    << "\n  ALB or ANB: " << a_b
+                    << "\n  CSO era: " << era_
+                    << "\n  ALB or ANB: " << a_b_
                     << "\n  table file: " << f
-                    << "\n  table number: " << t
+                    << "\n  table number: " << t_
                     << "\n  min age: " << a.min_age()
                     << "\n  max age: " << a.max_age()
                     << "\n  cso length: " << lmi::ssize(v0)
@@ -184,8 +238,8 @@ void verify_one_cell
                     << std::endl
                     ;
                 }
-            return;
             }
+            break;
         }
 }
 } // Unnamed namespace.
@@ -197,20 +251,13 @@ void verify_one_cell
 /// internal sources such as cso_table(). Class product_data provides
 /// the names of tables stored in external database files.
 ///
-/// For now at least, class Input is used merely as a convenient means
-/// of instantiating the necessary product_database object. No MVC
-/// Model function such as Reconcile() need be called to ensure the
-/// internal consistency of the Input instance.
-///
 /// Only 7702 tables are validated for now. Products have two distinct
 /// sets of gender axes: one for underwriting, and another for 7702
 /// Those axes needn't be the same. For example, a product might be
 /// issued only on a sex-distinct basis, yet use unisex 7702 tables
 /// (to stay within IRS Notice 88-128's safe harbor, or to use more
 /// liberal rates for one market segment at the cost of disadvantaging
-/// another. The smoking axes may differ likewise. Calling Reconcile()
-/// on an Input object enforces the underwriting axes, but it is the
-/// 7702 axes that are tested here.
+/// another. The smoking axes may differ likewise.
 ///
 /// Two booleans {DB_Irc7702QAxisGender, DB_Irc7702QAxisSmoking} are
 /// not adequate to describe all permissible variations. Arguably,
@@ -239,14 +286,14 @@ void verify_one_cell
 void verify_products()
 {
     std::vector<std::string> const& products = ce_product_name().all_strings();
-    for(auto const& z : products)
+    for(auto const& p : products)
         {
-        std::cout << "Testing product " << z << '\n';
+        std::cout << "Testing product " << p << '\n';
         for(auto const& g : all_strings<mcenum_gender>())
             {
             for(auto const& s : all_strings<mcenum_smoking>())
                 {
-                verify_one_cell(z, g, s);
+                product_verifier(p, g, s).verify();
                 }
             }
         }

@@ -114,7 +114,7 @@ namespace
         static std::vector<unsigned int> const v = make_table_0xedb88320U();
         return v;
         }
-}
+} // Unnamed namespace.
 
 //============================================================================
 CRC::CRC()

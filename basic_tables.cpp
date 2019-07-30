@@ -115,7 +115,7 @@ std::vector<double> LMI_SO irc_7702_q_builtin
         ,omega
         );
 }
-} // Unnamed namespace
+} // Unnamed namespace.
 
 std::vector<double> LMI_SO irc_7702_q
     (product_data     const& product

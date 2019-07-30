@@ -62,7 +62,7 @@ and may not be used to project or predict investment results.
             {{>contract_numbers}}
         </td>
         <td width="40%">
-            Policy: {{PolicyMktgName}}<br>
+            {{ContractNameCap}}: {{PolicyForm}}&nbsp;{{PolicyMktgName}}<br>
             {{^Composite}}
                 Underwriting Type:
                 {{#UWTypeIsMedical}}

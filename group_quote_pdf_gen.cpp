@@ -29,7 +29,7 @@ namespace
 {
 callback<group_quote_pdf_generator::creator_type>
     group_quote_pdf_generator_create_callback;
-} // Unnnamed namespace.
+} // Unnamed namespace.
 
 typedef group_quote_pdf_generator::creator_type FunctionPointer;
 template<> FunctionPointer callback<FunctionPointer>::function_pointer_ = nullptr;

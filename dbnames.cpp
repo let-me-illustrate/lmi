@@ -94,7 +94,6 @@ std::map<std::string,int> short_name_to_key_map()
         }
     return m;
 }
-
 } // Unnamed namespace.
 
 std::vector<db_names> const& GetDBNames()

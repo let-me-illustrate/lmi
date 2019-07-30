@@ -226,12 +226,12 @@ void input_test::test_product_database()
 
     // Test presumptive issue-age bounds in class database_index.
     BOOST_TEST_THROW
-        (database_index({mce_male, mce_rated, mce_smoker, 100, mce_medical, mce_s_XX})
+        ((database_index {mce_male, mce_rated, mce_smoker, 100, mce_medical, mce_s_XX})
         ,std::runtime_error
         ,"Assertion '0 <= issue_age() && issue_age() < e_max_dim_issue_age' failed."
         );
     BOOST_TEST_THROW
-        (database_index({mce_male, mce_rated, mce_smoker, -1, mce_medical, mce_s_XX})
+        ((database_index {mce_male, mce_rated, mce_smoker, -1, mce_medical, mce_s_XX})
         ,std::runtime_error
         ,"Assertion '0 <= issue_age() && issue_age() < e_max_dim_issue_age' failed."
         );

@@ -46,7 +46,7 @@ Even more surprisingly, 'AllowExperienceRating' has the same effect.
     {{PolicyMktgName}} is a
     {{#AllowExperienceRating}}group{{/AllowExperienceRating}}
     {{#GroupCarveout}}group{{/GroupCarveout}}
-    flexible premium adjustable life insurance contract.
+    flexible premium adjustable life insurance {{ContractName}}.
     {{#AllowExperienceRating}}
     It is a no-load policy and is intended for large case sales.
     It is primarily marketed to financial institutions
@@ -59,12 +59,12 @@ Even more surprisingly, 'AllowExperienceRating' has the same effect.
     {{#ModifiedSinglePremiumOrModifiedSinglePremium0}}
         {{PolicyMktgName}}
         is a modified single premium adjustable life
-        insurance contract. It features accumulating
+        insurance {{ContractName}}. It features accumulating
         account values, adjustable benefits, and single premium.
     {{/ModifiedSinglePremiumOrModifiedSinglePremium0}}
     {{^ModifiedSinglePremiumOrModifiedSinglePremium0}}
         {{PolicyMktgName}}
-        is a single premium adjustable life insurance contract.
+        is a single premium adjustable life insurance {{ContractName}}.
         It features accumulating account values,
         adjustable benefits, and single premium.
     {{/ModifiedSinglePremiumOrModifiedSinglePremium0}}
@@ -89,16 +89,16 @@ Even more surprisingly, 'AllowExperienceRating' has the same effect.
 <p>
 {{^SinglePremium}}
     Premiums are assumed to be paid on {{ErModeLCWithArticle}}
-    basis and received at the beginning of the contract year.
+    basis and received at the beginning of the {{ContractName}} year.
 {{/SinglePremium}}
 {{#SinglePremium}}
     The single premium is assumed to be paid at the beginning
-    of the contract year.
+    of the {{ContractName}} year.
 {{/SinglePremium}}
 
 {{AvName}} Values, {{CsvName}} Values,
 and death benefits are illustrated as of the end
-of the contract year. The method we use to allocate
+of the {{ContractName}} year. The method we use to allocate
 overhead expenses is the fully allocated expense method.
 </p>
 
@@ -116,7 +116,7 @@ overhead expenses is the fully allocated expense method.
     and the guaranteed interest crediting rate.
     {{#DefnLifeInsIsGPT}}
     This premium may be in excess of the maximum premium allowable
-    in order to qualify this policy as life insurance.
+    in order to qualify this {{ContractName}} as life insurance.
     {{/DefnLifeInsIsGPT}}
     </p>
 {{/SinglePremium}}
@@ -132,13 +132,13 @@ a spread, guaranteed not to exceed {{MaxAnnGuarLoanSpread}}.
     The term rider provides the option to purchase monthly
     term insurance on the life of the insured. The term rider
     selected face amount supplements the selected face amount
-    of the contract. If the term rider is attached, the policy
+    of the {{ContractName}}. If the term rider is attached, the {{ContractName}}
     to which it is attached may have a lower annual cutoff premium
     and, as a result, the lower overall sales loads paid may be
-    lower than a contract having the same total face amount,
+    lower than a {{ContractName}} having the same total face amount,
     but with no term rider.
     {{#NoLapse}}
-      Also, the lapse protection feature of the contract's
+      Also, the lapse protection feature of the {{ContractName}}'s
       {{NoLapseProvisionName}}
       does not apply to the term rider's selected face amount.
     {{/NoLapse}}
@@ -152,7 +152,7 @@ a spread, guaranteed not to exceed {{MaxAnnGuarLoanSpread}}.
     of the insured that begins before attained age 65
     and continues for at least 6 months, as described in the rider.
     An additional charge is associated with this rider. Please refer
-    to your contract for specific provisions and a detailed schedule
+    to your {{ContractName}} for specific provisions and a detailed schedule
     of charges.
     </p>
 {{/HasWP}}
@@ -161,13 +161,13 @@ a spread, guaranteed not to exceed {{MaxAnnGuarLoanSpread}}.
     <p>
     The Accidental Death benefit provides an additional benefit
     if death is due to accident. An additional charge is associated
-    with this rider. Please refer to your contract
+    with this rider. Please refer to your {{ContractName}}
     for specific provisions and a detailed schedule of charges.
     </p>
 {{/HasADD}}
 
 <p>
-The definition of life insurance for this contract is the
+The definition of life insurance for this {{ContractName}} is the
 {{#DefnLifeInsIsGPT}}
     guideline premium test. The guideline single premium
     is ${{InitGSP}}

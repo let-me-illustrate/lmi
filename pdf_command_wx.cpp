@@ -68,7 +68,6 @@ LMI_FORCE_LINKING_IN_SITU(pdf_command_wx)
 
 namespace
 {
-
 // This function is also provided in <boost/algorithm/string/predicate.hpp>,
 // but it's arguably not worth adding dependency on this Boost library just for
 // this function.
@@ -853,8 +852,13 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
     // level, the functions here define the default for all illustration pages.
     //
     // These functions are used by the pages deriving from page_with_marginals.
+    // The "lower" one formerly varied, but no longer does as of 2019-06; it's
+    // kept virtual just in case it ever needs to be overridden again.
     virtual std::string get_upper_footer_template_name() const = 0;
-    virtual std::string get_lower_footer_template_name() const = 0;
+    virtual std::string get_lower_footer_template_name() const
+    {
+        return "footer_lower";
+    }
 
   protected:
     // Explicitly retrieve references to base classes.
@@ -938,15 +942,6 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
         add_abbreviated_variable("ContractNumber", full_abbrev_length);
         add_abbreviated_variable("ContractNumber", full_abbrev_length / 2);
 
-        // Check for anything but whitespace--see:
-        //   https://lists.nongnu.org/archive/html/lmi/2019-02/msg00001.html
-        add_variable
-            ("HasComplianceTrackingNumber"
-            ,expand_template("imprimatur")
-                .as_html().find_first_not_of(" \n")
-                != std::string::npos
-            );
-
         add_variable
             ("HasScaleUnit"
             ,!invar.scale_unit().empty()
@@ -1016,38 +1011,6 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
 
     // All the pages of this illustration.
     std::vector<std::unique_ptr<logical_page>> pages_;
-};
-
-// Cover page for finra only. PDF !! At the appropriate time, expunge
-// this class altogether, and use class cover_page instead.
-class unnumbered_cover_page : public logical_page
-{
-  public:
-    using logical_page::logical_page;
-
-    void render() override
-    {
-        int const height_contents = writer_.output_html
-            (writer_.get_horz_margin()
-            ,writer_.get_vert_margin()
-            ,writer_.get_page_width()
-            ,interpolator_.expand_template("cover")
-            );
-
-        // There is no way to draw a border around the page contents in wxHTML
-        // currently, so do it manually.
-        auto& pdf_dc = writer_.dc();
-
-        pdf_dc.SetPen(wxPen(illustration_rule_color, 2));
-        pdf_dc.SetBrush(*wxTRANSPARENT_BRUSH);
-
-        pdf_dc.DrawRectangle
-            (writer_.get_horz_margin()
-            ,writer_.get_vert_margin()
-            ,writer_.get_page_width()
-            ,height_contents
-            );
-    }
 };
 
 // Base class for all pages with a footer and/or header, collectively called
@@ -2368,8 +2331,6 @@ class pdf_illustration_naic : public pdf_illustration
 
     std::string get_upper_footer_template_name() const override
         { return {}; }
-    std::string get_lower_footer_template_name() const override
-        { return "ill_reg_footer"; }
 };
 
 // Common base class for basic illustration pages using the same columns in
@@ -2882,8 +2843,8 @@ class pdf_illustration_finra : public pdf_illustration
             );
 
         // Add all the pages.
-        add<unnumbered_cover_page>();
         numbered_page::start_numbering();
+        add<cover_page>();
         add<finra_basic>();
         add<finra_supplemental>();
         add<standard_page>("finra_column_headings");
@@ -2906,11 +2867,6 @@ class pdf_illustration_finra : public pdf_illustration
     std::string get_upper_footer_template_name() const override
     {
         return "finra_footer_upper";
-    }
-
-    std::string get_lower_footer_template_name() const override
-    {
-        return "finra_footer_lower";
     }
 };
 
@@ -2983,11 +2939,6 @@ class pdf_illustration_reg_d_group : public pdf_illustration
     std::string get_upper_footer_template_name() const override
     {
         return "reg_d_group_footer_upper";
-    }
-
-    std::string get_lower_footer_template_name() const override
-    {
-        return "reg_d_group_footer_lower";
     }
 };
 
@@ -3268,11 +3219,6 @@ class pdf_illustration_reg_d_indiv : public pdf_illustration
     std::string get_upper_footer_template_name() const override
     {
         return "reg_d_indiv_footer_upper";
-    }
-
-    std::string get_lower_footer_template_name() const override
-    {
-        return "reg_d_indiv_footer_lower";
     }
 };
 } // Unnamed namespace.

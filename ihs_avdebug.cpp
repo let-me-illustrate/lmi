@@ -25,6 +25,7 @@
 
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
+#include "global_settings.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "ledger_invariant.hpp"
@@ -259,8 +260,11 @@ inline void AccountValue::SetMonthlyDetail(int enumerator, double d)
 void AccountValue::SetDebugFilename(std::string const& s)
 {
     configurable_settings const& c = configurable_settings::instance();
-    std::string const& z = c.spreadsheet_file_extension();
-    DebugFilename = unique_filepath(s, ".monthly_trace" + z).string();
+    std::string const& tsv_ext = c.spreadsheet_file_extension();
+    bool const regr_testing = global_settings::instance().regression_testing();
+    std::string const& print_dir = c.print_directory();
+    fs::path const f = regr_testing ? s : modify_directory(s, print_dir);
+    DebugFilename = unique_filepath(f, ".monthly_trace" + tsv_ext).string();
 }
 
 //============================================================================

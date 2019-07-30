@@ -368,7 +368,7 @@ std::ostream& operator<<(std::ostream& os, location_info const& loc)
     return os;
 }
 
-} // anonymous namespace
+} // Unnamed namespace.
 
 // Classes abstracting the difference between text and binary formats: both
 // namespaces define the same classes inside them, but the first one works with
@@ -1082,7 +1082,7 @@ void throw_if_missing_field(std::optional<T> const& o, enum_soa_field field)
         }
 }
 
-} // anonymous namespace
+} // Unnamed namespace.
 
 void table_impl::read_string
         (std::optional<std::string>& ostr

@@ -2647,6 +2647,34 @@ here, but it looks weird if we don't make this look like its siblings.
                                         <help>Agent ZIP code</help>
                                     </object>
                                 </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <border>8</border>
+                                    <object class="wxStaticText">
+                                        <label>Phone</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <border>2</border>
+                                    <object class="wxTextCtrl" name="AgentPhone">
+                                        <help>Agent telephone number</help>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <border>8</border>
+                                    <object class="wxStaticText">
+                                        <label>Id</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <border>2</border>
+                                    <object class="wxTextCtrl" name="AgentId">
+                                        <help>Agent identification code</help>
+                                    </object>
+                                </object>
                             </object>
                         </object>
                     </object>

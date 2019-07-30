@@ -55,7 +55,7 @@ namespace
         fs::ofstream ofs(p);
         ofs << p;
     }
-}
+} // Unnamed namespace.
 
 void test_modify_directory()
 {

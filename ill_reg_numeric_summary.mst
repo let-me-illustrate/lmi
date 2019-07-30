@@ -44,7 +44,7 @@ keeping the center alignment of the last "p" tag above.
 
 {{#Composite}}
 <p>
-    The year of policy lapse on a guaranteed, midpoint
+    The year of {{ContractName}} lapse on a guaranteed, midpoint
     and current basis is not depicted in the above table of values
     for this composite illustration because it is not applicable
     on a case basis.
@@ -56,7 +56,7 @@ keeping the center alignment of the last "p" tag above.
     <p>
         Additional premium will be required
         in year {{LapseYear_Guar_Plus1}}
-        or contract will lapse based on guaranteed monthly charges
+        or {{ContractName}} will lapse based on guaranteed monthly charges
         and interest rate.
     </p>
     {{/LapseYear_Guar_LT_MaxDur}}
@@ -65,7 +65,7 @@ keeping the center alignment of the last "p" tag above.
     <p>
         Additional premium will be required
         in year {{LapseYear_Mdpt_Plus1}}
-        or contract will lapse based on midpoint monthly charges
+        or {{ContractName}} will lapse based on midpoint monthly charges
         and interest rate.
     </p>
     {{/LapseYear_Mdpt_LT_MaxDur}}
@@ -74,7 +74,7 @@ keeping the center alignment of the last "p" tag above.
     <p>
         Additional premium will be required
         in year {{LapseYear_Curr_Plus1}}
-        or contract will lapse based on current monthly charges
+        or {{ContractName}} will lapse based on current monthly charges
         and interest rate.
     </p>
     {{/LapseYear_Curr_LT_MaxDur}}
@@ -92,7 +92,7 @@ keeping the center alignment of the last "p" tag above.
 
 <p align="center">Certification Statements</p>
     <p>
-      CONTRACT OWNER / APPLICANT
+      {{ContractNameCap}} Owner / Applicant
     </p>
     {{#HasInterestDisclaimer}}
       <p>
@@ -112,7 +112,7 @@ keeping the center alignment of the last "p" tag above.
         {{/StateIsIllinois}}
         {{#StateIsTexas}}
               A copy of this illustration has been provided
-              to the Applicant/Policyowner.
+              to the Applicant/{{ContractNameCap}}owner.
         {{/StateIsTexas}}
     {{/StateIsIllinoisOrTexas}}
     {{^StateIsIllinoisOrTexas}}
@@ -139,25 +139,25 @@ keeping the center alignment of the last "p" tag above.
         </tr>
         <tr>
             <td>
-                CONTRACT OWNER OR APPLICANT SIGNATURE
+                {{ContractNameCap}} Owner or Applicant Signature
             </td>
             <td>
                 {{Space32}}
             </td>
             <td>
-                DATE
+                Date
             </td>
         </tr>
     </table>
     <br>
     <br>
     <p>
-      AGENT / AUTHORIZED REPRESENTATIVE
+      Agent / Authorized Representative
     </p>
     <p>
         {{#StateIsIllinoisOrTexas}}
             {{#StateIsIllinois}}
-                I have informed the applicant or policyowner
+                I have informed the applicant or {{ContractName}}owner
                 that this illustration assumes that the currently illustrated
                 non-guaranteed elements will continue unchanged
                 for all years shown. This is not likely to occur,
@@ -165,7 +165,7 @@ keeping the center alignment of the last "p" tag above.
             {{/StateIsIllinois}}
             {{#StateIsTexas}}
                 A copy of this illustration has been provided
-                to the Applicant/Policyowner.
+                to the Applicant/{{ContractNameCap}}owner.
             {{/StateIsTexas}}
         {{/StateIsIllinoisOrTexas}}
         {{^StateIsIllinoisOrTexas}}
@@ -192,13 +192,13 @@ keeping the center alignment of the last "p" tag above.
         </tr>
         <tr>
             <td>
-                AGENT OR AUTHORIZED REPRESENTATIVE
+                Agent or Authorized Representative
             </td>
             <td>
                 {{Space32}}
             </td>
             <td>
-                DATE
+                Date
             </td>
         </tr>
     </table>

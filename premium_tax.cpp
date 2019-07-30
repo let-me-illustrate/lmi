@@ -33,7 +33,8 @@
 
 #include <algorithm>                    // max()
 
-namespace {
+namespace
+{
 /// Determine whether premium tax is retaliatory.
 ///
 /// Here's a general discussion:
