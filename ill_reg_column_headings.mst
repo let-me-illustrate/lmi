@@ -66,16 +66,7 @@ Presumably the description of death benefit options should be moved into
 </p>
 <p>
 <b>Death Benefit Option {{DboNameLevel}}:</b>
-Option in which the death benefit is equal to the selected
-face amount of the {{ContractName}} on the date of death of the insured,
-or if greater the {{AvName}} Value
-{{#SalesLoadRefundAvailable}}
-plus the refund of sales loads (if applicable)
-{{/SalesLoadRefundAvailable}}
-on the insured's date of death multiplied by the minimum face
-amount percentage for the insured's attained age at death
-(minimum face amount). Please refer to the {{ContractName}}
-for a detailed schedule of death benefit factors.
+{{DBOption1Footnote}}
 </p>
 <!-- Group Experience Rating Logic -->
 {{!
@@ -85,18 +76,8 @@ for a detailed schedule of death benefit factors.
 {{^AllowExperienceRating}}
 <p>
 <b>Death Benefit Option {{DboNameIncreasing}}:</b>
-Option in which the death benefit is equal to the selected
-face amount of the {{ContractName}}
-plus the {{AvName}} Value
-on the date of death of the insured, or if greater,
-the {{AvName}} Value
-{{#SalesLoadRefundAvailable}}
-plus the refund of sales loads (if applicable)
-{{/SalesLoadRefundAvailable}}
-on the insured's date of death multiplied
-by the death benefit factor for the insured's attained age
-at death (minimum face amount). Please refer to the {{ContractName}}
-for a detailed schedule of death benefit factors.
+{{DBOption2Footnote}}
+</p>
 
 {{^Composite}}
 <p>
