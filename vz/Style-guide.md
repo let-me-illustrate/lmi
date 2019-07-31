@@ -151,6 +151,15 @@ Other
 
 I.e. `1.0` instead of just `1.`.
 
+### Declare anonymous namespaces consistently
+
+Use the following style for anonymous namespaces:
+```cpp
+namespace
+{
+} // Unnamed namespace.
+
+```
 
 Semantic Rules
 ==============
