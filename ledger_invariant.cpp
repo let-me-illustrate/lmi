@@ -447,7 +447,7 @@ void LedgerInvariant::Init()
     Has1035ExchCharge   = false;
 
     WriteTsvFile        = false;
-    SupplementalReport  = false;
+    SupplementalReport  = true;
     AllowGroupQuote     = true;
 
     irr_precision_      = 0;
