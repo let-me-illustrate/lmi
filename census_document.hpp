@@ -29,7 +29,7 @@
 
 #include <wx/docview.h>
 
-class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
+class WXDLLIMPEXP_FWD_ADV wxGrid;
 
 class CensusDocument
     :public wxDocument
@@ -44,7 +44,7 @@ class CensusDocument
     CensusDocument(CensusDocument const&) = delete;
     CensusDocument& operator=(CensusDocument const&) = delete;
 
-    wxDataViewCtrl& PredominantViewWindow() const;
+    wxGrid& PredominantViewWindow() const;
 
     // wxDocument overrides.
     bool OnCreate(wxString const& filename, long int flags) override;
