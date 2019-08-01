@@ -400,6 +400,7 @@ class LMI_SO DBDictionary
     // treated the same way.
     database_entity PartialMortTable    ;
     database_entity UsePolicyFormAlt    ;
+    database_entity AllowGroupQuote     ;
     database_entity WeightClass         ;
     database_entity WeightGender        ;
     database_entity WeightSmoking       ;

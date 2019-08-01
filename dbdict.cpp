@@ -416,6 +416,7 @@ void DBDictionary::ascribe_members()
     ascribe("GroupProxyRateTable" , &DBDictionary::GroupProxyRateTable );
     ascribe("PartialMortTable"    , &DBDictionary::PartialMortTable    );
     ascribe("UsePolicyFormAlt"    , &DBDictionary::UsePolicyFormAlt    );
+    ascribe("AllowGroupQuote"     , &DBDictionary::AllowGroupQuote     );
     ascribe("WeightClass"         , &DBDictionary::WeightClass         );
     ascribe("WeightGender"        , &DBDictionary::WeightGender        );
     ascribe("WeightSmoking"       , &DBDictionary::WeightSmoking       );

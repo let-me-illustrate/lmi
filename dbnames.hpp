@@ -523,6 +523,7 @@ enum e_database_key
         ,DB_GroupProxyRateTable
         ,DB_PartialMortTable
         ,DB_UsePolicyFormAlt
+        ,DB_AllowGroupQuote
 
     ,DB_Topic_Weights
 

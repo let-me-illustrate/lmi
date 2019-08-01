@@ -347,6 +347,7 @@
 /DB_GroupProxyRateTable\>/ s/^/R09/
 /DB_PartialMortTable\>/    s/^/R10/
 /DB_UsePolicyFormAlt\>/    s/^/R11/
+/DB_AllowGroupQuote\>/     s/^/R12/
 # DB_Topic_Weights
 /DB_WeightClass\>/         s/^/S01/
 /DB_WeightGender\>/        s/^/S02/
