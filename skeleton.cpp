@@ -305,8 +305,8 @@ void Skeleton::InitDocManager()
         ,"cns"
         ,"Census document"
         ,"Census view"
-        ,CLASSINFO(CensusDocument)
-        ,CLASSINFO(CensusView)
+        ,CLASSINFO(CensusDVCDocument)
+        ,CLASSINFO(CensusDVCView)
         );
 
     new(wx) wxDocTemplate

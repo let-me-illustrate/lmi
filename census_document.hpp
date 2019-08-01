@@ -44,16 +44,28 @@ class CensusDocument
     CensusDocument(CensusDocument const&) = delete;
     CensusDocument& operator=(CensusDocument const&) = delete;
 
-    wxDataViewCtrl& PredominantViewWindow() const;
-
     // wxDocument overrides.
     bool OnCreate(wxString const& filename, long int flags) override;
     bool DoOpenDocument(wxString const& filename) override;
     bool DoSaveDocument(wxString const& filename) override;
 
     multiple_cell_document doc_;
+};
 
-    DECLARE_DYNAMIC_CLASS(CensusDocument)
+class CensusDVCDocument final
+    :public CensusDocument
+{
+  public:
+    CensusDVCDocument() = default;
+    ~CensusDVCDocument() override = default;
+
+  private:
+    CensusDVCDocument(CensusDVCDocument const&) = delete;
+    CensusDVCDocument& operator=(CensusDVCDocument const&) = delete;
+
+    wxDataViewCtrl& PredominantViewWindow() const;
+
+    DECLARE_DYNAMIC_CLASS(CensusDVCDocument)
 };
 
 #endif // census_document_hpp
