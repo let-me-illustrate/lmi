@@ -468,6 +468,16 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
 
     LedgerInvariant const& invar = ledger.GetLedgerInvariant();
 
+    // 'AllowGroupQuote' isn't an input field, so it cannot be
+    // checked by assert_okay_to_run_group_quote().
+    if(!static_cast<bool>(invar.AllowGroupQuote))
+        {
+        alarum()
+            << "Group quotes not allowed on this plan."
+            << LMI_FLUSH
+            ;
+        }
+
     // 'GroupIndivSelection' isn't an input field, so it cannot be
     // checked by assert_okay_to_run_group_quote(). It must be tested
     // (here) because some legacy products unfortunately combined

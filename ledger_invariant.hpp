@@ -166,6 +166,7 @@ class LMI_SO LedgerInvariant final
     double          RetAge;
     double          EndtAge;
     double          GroupIndivSelection;
+    double          AllowGroupQuote;
     double          TxCallsGuarUwSubstd;
     double          AllowExperienceRating;
     double          UseExperienceRating;

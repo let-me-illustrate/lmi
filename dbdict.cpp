@@ -922,6 +922,7 @@ sample::sample()
     alt_form[mce_s_KS] = true;
     alt_form[mce_s_KY] = true;
     Add({DB_UsePolicyFormAlt, premium_tax_dimensions, alt_form});
+    Add({DB_AllowGroupQuote     , true});
 }
 
 sample2finra::sample2finra()

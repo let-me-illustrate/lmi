@@ -142,6 +142,7 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["RetAge"                ] = &RetAge                 ;
     OtherScalars    ["EndtAge"               ] = &EndtAge                ;
     OtherScalars    ["GroupIndivSelection"   ] = &GroupIndivSelection    ;
+    OtherScalars    ["AllowGroupQuote"       ] = &AllowGroupQuote        ;
     OtherScalars    ["TxCallsGuarUwSubstd"   ] = &TxCallsGuarUwSubstd    ;
     OtherScalars    ["AllowExperienceRating" ] = &AllowExperienceRating  ;
     OtherScalars    ["UseExperienceRating"   ] = &UseExperienceRating    ;
@@ -447,6 +448,7 @@ void LedgerInvariant::Init()
 
     WriteTsvFile        = false;
     SupplementalReport  = false;
+    AllowGroupQuote     = true;
 
     irr_precision_      = 0;
     irr_initialized_    = false;
@@ -676,6 +678,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     StateOfJurisdiction           = a_Addend.StateOfJurisdiction;
     PremiumTaxState               = a_Addend.PremiumTaxState;
     GroupIndivSelection           = GroupIndivSelection   || a_Addend.GroupIndivSelection;
+    AllowGroupQuote               = AllowGroupQuote       && a_Addend.AllowGroupQuote;
     TxCallsGuarUwSubstd           = TxCallsGuarUwSubstd   || a_Addend.TxCallsGuarUwSubstd;
     AllowExperienceRating         = AllowExperienceRating || a_Addend.AllowExperienceRating;
     UseExperienceRating           = UseExperienceRating   || a_Addend.UseExperienceRating;
