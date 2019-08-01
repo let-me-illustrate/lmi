@@ -818,7 +818,7 @@ class CensusViewDataViewModel : public wxDataViewIndexListModel
     // Cell serial number: always shown in first column.
     static int const Col_CellNum = 0;
 
-    CensusViewDataViewModel(CensusView& view)
+    CensusViewDataViewModel(CensusDVCView& view)
         :view_ {view}
     {
     }
@@ -837,7 +837,7 @@ class CensusViewDataViewModel : public wxDataViewIndexListModel
   private:
     std::vector<std::string> const& all_headers() const;
 
-    CensusView& view_;
+    CensusDVCView& view_;
 };
 
 void CensusViewDataViewModel::GetValueByRow
@@ -934,11 +934,7 @@ inline std::vector<std::string> const& CensusViewDataViewModel::all_headers() co
 
 // class CensusView
 
-IMPLEMENT_DYNAMIC_CLASS(CensusView, ViewEx)
-
 BEGIN_EVENT_TABLE(CensusView, ViewEx)
-    EVT_DATAVIEW_ITEM_CONTEXT_MENU (wxID_ANY    ,CensusView::UponRightClick             )
-    EVT_DATAVIEW_ITEM_VALUE_CHANGED(wxID_ANY    ,CensusView::UponValueChanged           )
     EVT_MENU(XRCID("edit_cell"                 ),CensusView::UponEditCell               )
     EVT_MENU(XRCID("edit_class"                ),CensusView::UponEditClass              )
     EVT_MENU(XRCID("edit_case"                 ),CensusView::UponEditCase               )
@@ -957,11 +953,7 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_MENU(XRCID("delete_cells"              ),CensusView::UponDeleteCells            )
     EVT_MENU(XRCID("column_width_varying"      ),CensusView::UponColumnWidthVarying     )
     EVT_MENU(XRCID("column_width_fixed"        ),CensusView::UponColumnWidthFixed       )
-    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusView::UponUpdateSingleSelection  )
-    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusView::UponUpdateSingleSelection  )
     EVT_UPDATE_UI(XRCID("edit_case"            ),CensusView::UponUpdateAlwaysEnabled    )
-    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusView::UponUpdateSingleSelection  )
-    EVT_UPDATE_UI(XRCID("run_class"            ),CensusView::UponUpdateSingleSelection  )
     EVT_UPDATE_UI(XRCID("run_case"             ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("print_case"           ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("print_case_to_disk"   ),CensusView::UponUpdateAlwaysEnabled    )
@@ -982,9 +974,25 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_UPDATE_UI(XRCID("print_pdf"            ),CensusView::UponUpdateAlwaysDisabled   )
 END_EVENT_TABLE()
 
+IMPLEMENT_DYNAMIC_CLASS(CensusDVCView, CensusView)
+
+BEGIN_EVENT_TABLE(CensusDVCView, CensusView)
+    EVT_DATAVIEW_ITEM_CONTEXT_MENU (wxID_ANY    ,CensusDVCView::UponRightClick           )
+    EVT_DATAVIEW_ITEM_VALUE_CHANGED(wxID_ANY    ,CensusDVCView::UponValueChanged         )
+    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusDVCView::UponUpdateSingleSelection)
+    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusDVCView::UponUpdateSingleSelection)
+    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusDVCView::UponUpdateSingleSelection)
+    EVT_UPDATE_UI(XRCID("run_class"            ),CensusDVCView::UponUpdateSingleSelection)
+END_EVENT_TABLE()
+
 CensusView::CensusView()
     :ViewEx            {}
     ,autosize_columns_ {false}
+{
+}
+
+CensusDVCView::CensusDVCView()
+    :CensusView        {}
     ,list_window_      {nullptr}
     ,list_model_       {new(wx) CensusViewDataViewModel(*this)}
 {
@@ -1080,7 +1088,7 @@ bool CensusView::column_value_varies_across_cells(std::string const& header) con
     return false;
 }
 
-wxWindow* CensusView::CreateChildWindow()
+wxWindow* CensusDVCView::CreateChildWindow()
 {
     list_window_ = new(wx) wxDataViewCtrl
         (GetFrame()
@@ -1120,7 +1128,7 @@ oenum_mvc_dv_rc CensusView::edit_parameters
         );
 }
 
-int CensusView::selected_row()
+int CensusDVCView::selected_row()
 {
     int row = list_model_->GetRow(list_window_->GetSelection());
     LMI_ASSERT(0 <= row && row < bourn_cast<int>(list_model_->GetCount()));
@@ -1268,7 +1276,7 @@ void CensusView::apply_changes
         }
 }
 
-void CensusView::update_visible_columns()
+void CensusDVCView::update_visible_columns()
 {
     int width = autosize_columns_ ? wxCOL_WIDTH_AUTOSIZE : wxCOL_WIDTH_DEFAULT;
 
@@ -1389,7 +1397,7 @@ void CensusView::UponEditCase(wxCommandEvent&)
 /// Make each nonfrozen column wide enough to display its widest entry,
 /// ignoring column headers.
 
-void CensusView::UponColumnWidthVarying(wxCommandEvent&)
+void CensusDVCView::UponColumnWidthVarying(wxCommandEvent&)
 {
     autosize_columns_ = true;
 
@@ -1403,7 +1411,7 @@ void CensusView::UponColumnWidthVarying(wxCommandEvent&)
 
 /// Shrink all nonfrozen columns to default width.
 
-void CensusView::UponColumnWidthFixed(wxCommandEvent&)
+void CensusDVCView::UponColumnWidthFixed(wxCommandEvent&)
 {
     autosize_columns_ = false;
 
@@ -1415,7 +1423,7 @@ void CensusView::UponColumnWidthFixed(wxCommandEvent&)
     Update();
 }
 
-void CensusView::UponRightClick(wxDataViewEvent& e)
+void CensusDVCView::UponRightClick(wxDataViewEvent& e)
 {
     if(e.GetEventObject() != list_window_)
         {
@@ -1431,7 +1439,7 @@ void CensusView::UponRightClick(wxDataViewEvent& e)
     delete census_menu;
 }
 
-void CensusView::UponValueChanged(wxDataViewEvent&)
+void CensusDVCView::UponValueChanged(wxDataViewEvent&)
 {
     Timer timer;
     Update();
@@ -1448,13 +1456,13 @@ void CensusView::UponUpdateAlwaysEnabled(wxUpdateUIEvent& e)
     e.Enable(true);
 }
 
-void CensusView::UponUpdateSingleSelection(wxUpdateUIEvent& e)
+void CensusDVCView::UponUpdateSingleSelection(wxUpdateUIEvent& e)
 {
     bool const is_single_sel = list_window_->GetSelection().IsOk();
     e.Enable(is_single_sel);
 }
 
-void CensusView::UponUpdateNonemptySelection(wxUpdateUIEvent& e)
+void CensusDVCView::UponUpdateNonemptySelection(wxUpdateUIEvent& e)
 {
     wxDataViewItemArray selection;
     e.Enable(0 < list_window_->GetSelections(selection));
@@ -1475,7 +1483,7 @@ void CensusView::UponUpdateNonemptySelection(wxUpdateUIEvent& e)
 /// because if "IssueAge" varies, then so must either "DateOfBirth"
 /// or "EffectiveDate".
 
-void CensusView::UponUpdateColumnValuesVary(wxUpdateUIEvent& e)
+void CensusDVCView::UponUpdateColumnValuesVary(wxUpdateUIEvent& e)
 {
     static const std::string dob_header = insert_spaces_between_words("UseDOB");
     int const n_cols = bourn_cast<int>(list_window_->GetColumnCount());
@@ -1495,7 +1503,7 @@ void CensusView::UponUpdateColumnValuesVary(wxUpdateUIEvent& e)
 /// Similarly, if an old employee class is no longer used, remove it; and
 ///  if a new one comes into use, display it.
 
-void CensusView::Update()
+void CensusDVCView::Update()
 {
     LMI_ASSERT(list_model_->GetCount() == cell_parms().size());
 
@@ -1570,7 +1578,7 @@ bool CensusView::DoAllCells(mcenum_emission emission)
     return true;
 }
 
-void CensusView::UponAddCell(wxCommandEvent&)
+void CensusDVCView::UponAddCell(wxCommandEvent&)
 {
     wxBusyCursor reverie;
     Timer timer;
@@ -1589,7 +1597,7 @@ void CensusView::UponAddCell(wxCommandEvent&)
     status() << "Add: " << timer.stop().elapsed_msec_str() << std::flush;
 }
 
-void CensusView::UponDeleteCells(wxCommandEvent&)
+void CensusDVCView::UponDeleteCells(wxCommandEvent&)
 {
     int n_items = bourn_cast<int>(list_model_->GetCount());
     wxDataViewItemArray selection;
@@ -1707,7 +1715,7 @@ void CensusView::UponRunCaseToGroupQuote(wxCommandEvent&)
 /// file are assumed to represent user intention). In this case,
 /// pasted data is appended to the cells that were already present.
 
-void CensusView::UponPasteCensus(wxCommandEvent&)
+void CensusDVCView::UponPasteCensus(wxCommandEvent&)
 {
     std::string const census_data = ClipboardEx::GetText();
 

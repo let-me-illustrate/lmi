@@ -38,17 +38,10 @@
 #include <vector>
 
 class CensusDocument;
-class CensusViewDataViewModel;
 
-class WXDLLIMPEXP_FWD_ADV wxDataViewEvent;
-class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
-
-class CensusView final
+class CensusView
     :public ViewEx
 {
-    friend class CensusDocument;
-    friend class CensusViewDataViewModel;
-
   public:
     CensusView();
 
@@ -56,43 +49,40 @@ class CensusView final
     CensusView(CensusView const&) = delete;
     CensusView& operator=(CensusView const&) = delete;
 
-    void update_visible_columns();
+  protected:
+    virtual void update_visible_columns() = 0;
 
     CensusDocument& document() const;
 
     // ViewEx required implementation.
-    wxWindow* CreateChildWindow() override;
     char const* icon_xrc_resource   () const override;
     char const* menubar_xrc_resource() const override;
 
     // Event handlers, in event-table order (reflecting GUI order)
-    void UponRightClick             (wxDataViewEvent&);
-    void UponValueChanged           (wxDataViewEvent&);
-    void UponEditCell               (wxCommandEvent&);
-    void UponEditClass              (wxCommandEvent&);
-    void UponEditCase               (wxCommandEvent&);
-    void UponRunCell                (wxCommandEvent&);
-    void UponRunCase                (wxCommandEvent&);
-    void UponPrintCase              (wxCommandEvent&);
-    void UponPrintCaseToDisk        (wxCommandEvent&);
-    void UponRunCaseToSpreadsheet   (wxCommandEvent&);
-    void UponRunCaseToGroupRoster   (wxCommandEvent&);
-    void UponRunCaseToGroupQuote    (wxCommandEvent&);
-    void UponCopyCensus             (wxCommandEvent&);
-    void UponPasteCensus            (wxCommandEvent&);
-    void UponAddCell                (wxCommandEvent&);
-    void UponDeleteCells            (wxCommandEvent&);
-    void UponColumnWidthVarying     (wxCommandEvent&);
-    void UponColumnWidthFixed       (wxCommandEvent&);
-    void UponUpdateAlwaysDisabled   (wxUpdateUIEvent&);
-    void UponUpdateAlwaysEnabled    (wxUpdateUIEvent&);
-    void UponUpdateSingleSelection  (wxUpdateUIEvent&);
-    void UponUpdateNonemptySelection(wxUpdateUIEvent&);
-    void UponUpdateColumnValuesVary (wxUpdateUIEvent&);
+    void         UponEditCell               (wxCommandEvent&);
+    void         UponEditClass              (wxCommandEvent&);
+    void         UponEditCase               (wxCommandEvent&);
+    void         UponRunCell                (wxCommandEvent&);
+    void         UponRunCase                (wxCommandEvent&);
+    void         UponPrintCase              (wxCommandEvent&);
+    void         UponPrintCaseToDisk        (wxCommandEvent&);
+    void         UponRunCaseToSpreadsheet   (wxCommandEvent&);
+    void         UponRunCaseToGroupRoster   (wxCommandEvent&);
+    void         UponRunCaseToGroupQuote    (wxCommandEvent&);
+    void         UponCopyCensus             (wxCommandEvent&);
+    virtual void UponPasteCensus            (wxCommandEvent&) = 0;
+    virtual void UponAddCell                (wxCommandEvent&) = 0;
+    virtual void UponDeleteCells            (wxCommandEvent&) = 0;
+    virtual void UponColumnWidthVarying     (wxCommandEvent&) = 0;
+    virtual void UponColumnWidthFixed       (wxCommandEvent&) = 0;
+    void         UponUpdateAlwaysDisabled   (wxUpdateUIEvent&);
+    void         UponUpdateAlwaysEnabled    (wxUpdateUIEvent&);
+    virtual void UponUpdateNonemptySelection(wxUpdateUIEvent&) = 0;
+    virtual void UponUpdateColumnValuesVary (wxUpdateUIEvent&) = 0;
 
     bool DoAllCells(mcenum_emission);
 
-    void Update();
+    virtual void Update() = 0;
     void ViewOneCell(int);
     void ViewComposite();
 
@@ -121,7 +111,7 @@ class CensusView final
         ,std::string const& title
         );
 
-    int selected_row();
+    virtual int selected_row() = 0;
 
     void update_class_names();
 
@@ -131,10 +121,54 @@ class CensusView final
 
     std::shared_ptr<Ledger const> composite_ledger_;
 
-    wxDataViewCtrl* list_window_;
+    DECLARE_EVENT_TABLE()
+};
+
+class CensusDVCDocument;
+class CensusViewDataViewModel;
+
+class WXDLLIMPEXP_FWD_ADV wxDataViewEvent;
+class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
+
+class CensusDVCView final
+    :public CensusView
+{
+    friend class CensusDVCDocument;
+    friend class CensusViewDataViewModel;
+
+  public:
+    CensusDVCView();
+
+  private:
+    CensusDVCView(CensusDVCView const&) = delete;
+    CensusDVCView& operator=(CensusDVCView const&) = delete;
+
+    void update_visible_columns() override;
+
+    // ViewEx required implementation.
+    wxWindow* CreateChildWindow() override;
+
+    // Event handlers, in event-table order (reflecting GUI order)
+
+    void UponRightClick             (wxDataViewEvent&);
+    void UponValueChanged           (wxDataViewEvent&);
+    void UponPasteCensus            (wxCommandEvent&) override;
+    void UponAddCell                (wxCommandEvent&) override;
+    void UponDeleteCells            (wxCommandEvent&) override;
+    void UponColumnWidthVarying     (wxCommandEvent&) override;
+    void UponColumnWidthFixed       (wxCommandEvent&) override;
+    void UponUpdateSingleSelection  (wxUpdateUIEvent&);
+    void UponUpdateNonemptySelection(wxUpdateUIEvent&) override;
+    void UponUpdateColumnValuesVary (wxUpdateUIEvent&) override;
+
+    void Update() override;
+
+    int selected_row() override;
+
+    wxDataViewCtrl* list_window_ {nullptr};
     wxObjectDataPtr<CensusViewDataViewModel> list_model_;
 
-    DECLARE_DYNAMIC_CLASS(CensusView)
+    DECLARE_DYNAMIC_CLASS(CensusDVCView)
     DECLARE_EVENT_TABLE()
 };
 
