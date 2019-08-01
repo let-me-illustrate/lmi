@@ -38,6 +38,15 @@
 #include <vector>
 
 class CensusDocument;
+class CensusViewDataViewModel;
+class CensusViewGridTable;
+
+class WXDLLIMPEXP_FWD_ADV wxDataViewEvent;
+class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
+class WXDLLIMPEXP_FWD_ADV wxGrid;
+class WXDLLIMPEXP_FWD_ADV wxGridEvent;
+class WXDLLIMPEXP_FWD_ADV wxGridSizeEvent;
+
 
 class CensusView
     :public ViewEx
@@ -49,9 +58,9 @@ class CensusView
     CensusView(CensusView const&) = delete;
     CensusView& operator=(CensusView const&) = delete;
 
-  protected:
     virtual void update_visible_columns() = 0;
 
+  protected:
     CensusDocument& document() const;
 
     // ViewEx required implementation.
@@ -111,7 +120,7 @@ class CensusView
         ,std::string const& title
         );
 
-    virtual int selected_row() = 0;
+    virtual int current_row() = 0;
 
     void update_class_names();
 
@@ -123,12 +132,6 @@ class CensusView
 
     DECLARE_EVENT_TABLE()
 };
-
-class CensusDVCDocument;
-class CensusViewDataViewModel;
-
-class WXDLLIMPEXP_FWD_ADV wxDataViewEvent;
-class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
 
 class CensusDVCView final
     :public CensusView
@@ -149,7 +152,6 @@ class CensusDVCView final
     wxWindow* CreateChildWindow() override;
 
     // Event handlers, in event-table order (reflecting GUI order)
-
     void UponRightClick             (wxDataViewEvent&);
     void UponValueChanged           (wxDataViewEvent&);
     void UponPasteCensus            (wxCommandEvent&) override;
@@ -163,12 +165,53 @@ class CensusDVCView final
 
     void Update() override;
 
-    int selected_row() override;
+    int current_row() override;
 
-    wxDataViewCtrl* list_window_ {nullptr};
+    wxDataViewCtrl* list_window_;
     wxObjectDataPtr<CensusViewDataViewModel> list_model_;
 
     DECLARE_DYNAMIC_CLASS(CensusDVCView)
+    DECLARE_EVENT_TABLE()
+};
+
+class CensusGridView final
+    :public CensusView
+{
+    friend class CensusGridDocument;
+    friend class CensusViewGridTable;
+
+  public:
+    CensusGridView() = default;
+
+  private:
+    CensusGridView(CensusGridView const&) = delete;
+    CensusGridView& operator=(CensusGridView const&) = delete;
+
+    void update_visible_columns() override;
+
+    // ViewEx required implementation.
+    wxWindow* CreateChildWindow() override;
+
+    // Event handlers, in event-table order (reflecting GUI order)
+    void UponRightClick             (wxGridEvent&);
+    void UponValueChanged           (wxGridEvent&);
+    void UponColumnAutoSize         (wxGridSizeEvent&);
+    void UponPasteCensus            (wxCommandEvent&) override;
+    void UponAddCell                (wxCommandEvent&) override;
+    void UponDeleteCells            (wxCommandEvent&) override;
+    void UponColumnWidthVarying     (wxCommandEvent&) override;
+    void UponColumnWidthFixed       (wxCommandEvent&) override;
+    void UponUpdateNonemptySelection(wxUpdateUIEvent&) override;
+    void UponUpdateColumnValuesVary (wxUpdateUIEvent&) override;
+
+    void Update() override;
+
+    int current_row() override;
+
+    wxGrid*              grid_window_ {nullptr};
+    CensusViewGridTable* grid_table_  {nullptr};
+
+    DECLARE_DYNAMIC_CLASS(CensusGridView)
     DECLARE_EVENT_TABLE()
 };
 

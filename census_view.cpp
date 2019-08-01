@@ -54,10 +54,13 @@
 
 #include <wx/dataview.h>
 #include <wx/datectrl.h>
+#include <wx/grid.h>
+#include <wx/headercol.h>               // wxCOL_WIDTH_DEFAULT
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
 #include <wx/settings.h>
 #include <wx/spinctrl.h>
+#include <wx/textctrl.h>
 #include <wx/utils.h>                   // wxBusyCursor
 #include <wx/valnum.h>
 #include <wx/wupdlock.h>                // wxWindowUpdateLocker
@@ -932,6 +935,969 @@ inline std::vector<std::string> const& CensusViewDataViewModel::all_headers() co
     return view_.case_parms()[0].member_names();
 }
 
+namespace
+{
+
+// Declare the functions here, but implement after the CensusViewGridTable
+// declaration to avoid the "use of undefined type" error.
+
+// Get the cell value from the table.
+
+any_member<Input> const& cell_at(wxGridTableBase const& table, int row, int col);
+
+// Get the raw value from the table.
+
+Input const& row_at(wxGridTableBase const& table, int row);
+
+// Get the column name from the table.
+
+std::string const& col_name(wxGridTableBase const& table, int col);
+
+// class RangeDoubleEditor
+
+class RangeDoubleEditor
+    :public wxGridCellTextEditor
+{
+  public:
+    RangeDoubleEditor() = default;
+
+    void BeginEdit(int row, int col, wxGrid* grid) override
+    {
+        auto const& value = cell_at(*grid->GetTable(), row, col);
+        auto const* as_range = member_cast<tn_range_base>(value);
+        LMI_ASSERT(typeid(double) == as_range->value_type());
+
+        wxFloatingPointValidator<double> val;
+        val.SetRange(as_range->universal_minimum(), as_range->universal_maximum());
+        SetValidator(val);
+
+        wxGridCellTextEditor::BeginEdit(row, col, grid);
+    }
+};
+
+// class RangeDateEditor
+
+class RangeDateEditor
+    :public wxGridCellDateEditor
+{
+  public:
+    RangeDateEditor() = default;
+
+    void BeginEdit(int row, int col, wxGrid* grid) override
+    {
+        auto const& value = cell_at(*grid->GetTable(), row, col);
+        auto const* as_range = member_cast<tn_range_base>(value);
+        LMI_ASSERT(typeid(calendar_date) == as_range->value_type());
+
+        DatePicker()->SetValue(ConvertDateToWx(value_cast<calendar_date>(value)));
+
+        auto const min_value = as_range->universal_minimum();
+        auto const max_value = as_range->universal_maximum();
+
+        DatePicker()->SetRange
+            (ConvertDateToWx(jdn_t(bourn_cast<int>(min_value)))
+            ,ConvertDateToWx(jdn_t(bourn_cast<int>(max_value)))
+            );
+
+        DatePicker()->SetFocus();
+    }
+};
+
+// class DatumSequenceEditor
+
+class DatumSequenceEditorEvtHandler
+    :public wxEvtHandler
+{
+  public:
+    // wxIMPLEMENT_DYNAMIC_CLASS requires the default constructor
+    // so add the default value for the entry parameter.
+    explicit DatumSequenceEditorEvtHandler(InputSequenceEntry* entry = nullptr)
+        :entry_(entry)
+    {
+    }
+
+    void UponChar(wxKeyEvent& event)
+    {
+        switch(event.GetKeyCode())
+            {
+            case WXK_RETURN:
+            case WXK_NUMPAD_ENTER:
+                if(!wxGetKeyState(WXK_ALT))
+                    {
+                    event.Skip();
+                    return;
+                    }
+
+                // Just handle the event to not allow other handlers
+                // process it. The editor window opened in OnKeyDown.
+                break;
+            default:
+                event.Skip();
+                break;
+            }
+    }
+
+    void UponKeyDown(wxKeyEvent& event)
+    {
+        switch(event.GetKeyCode())
+            {
+            case WXK_RETURN:
+            case WXK_NUMPAD_ENTER:
+                if(!wxGetKeyState(WXK_ALT))
+                    {
+                    event.Skip();
+                    return;
+                    }
+
+                // We should handle the event in DatumSequenceEditorEvtHandler
+                // because otherwise the grid cell editor event handler will
+                // handle Enter.
+                entry_->open_editor();
+                break;
+            default:
+                event.Skip();
+                break;
+            }
+    }
+
+  private:
+    InputSequenceEntry* entry_{};
+
+    DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(DatumSequenceEditorEvtHandler)
+    DECLARE_NO_COPY_CLASS(DatumSequenceEditorEvtHandler)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(DatumSequenceEditorEvtHandler, wxEvtHandler)
+
+BEGIN_EVENT_TABLE(DatumSequenceEditorEvtHandler, wxEvtHandler)
+    EVT_CHAR(DatumSequenceEditorEvtHandler::UponChar)
+    EVT_KEY_DOWN(DatumSequenceEditorEvtHandler::UponKeyDown)
+END_EVENT_TABLE()
+
+class DatumSequenceEditor
+    :public wxGridCellEditor
+{
+  public:
+    DatumSequenceEditor() = default;
+    ~DatumSequenceEditor();
+
+    // We don't define a copy ctor because wxGridCellEditor doesn't provide one
+    // and its derived classes are supposed to override Clone() to support
+    // polymorphic copying, instead of using the copy ctor.
+    DatumSequenceEditor(DatumSequenceEditor const&) = delete;
+    DatumSequenceEditor& operator=(DatumSequenceEditor const&) = delete;
+
+    void Create(wxWindow* parent, wxWindowID id, wxEvtHandler* evtHandler) override;
+
+    void BeginEdit(int row, int col, wxGrid* grid) override;
+    bool EndEdit
+        (int row
+        ,int col
+        ,wxGrid const* grid
+        ,wxString const& oldval
+        ,wxString* newval
+        ) override;
+    void ApplyEdit(int row, int col, wxGrid* grid) override;
+
+    void Reset() override;
+
+    wxGridCellEditor* Clone() const override;
+
+    wxString GetValue() const override;
+
+  private:
+    InputSequenceEntry* Entry() const;
+
+    wxString     value_;
+    Input const* input_ {nullptr};
+    std::string  field_;
+};
+
+DatumSequenceEditor::~DatumSequenceEditor()
+{
+    // Pop the instance of DatumSequenceEditorEvtHandler.
+    if(m_control)
+        m_control->PopEventHandler(true /* delete it*/);
+}
+
+void DatumSequenceEditor::Create
+    (wxWindow*     parent
+    ,wxWindowID    id
+    ,wxEvtHandler* evtHandler
+    )
+{
+    m_control = new(wx) InputSequenceEntry(parent, id, "sequence_editor");
+
+    wxGridCellEditor::Create(parent, id, evtHandler);
+
+    m_control->PushEventHandler(new(wx) DatumSequenceEditorEvtHandler(Entry()));
+}
+
+void DatumSequenceEditor::BeginEdit(int row, int col, wxGrid* grid)
+{
+    auto table = grid->GetTable();
+    value_ = table->GetValue(row, col);
+    input_ = &row_at(*table, row);
+    field_ = col_name(*table, col);
+
+    auto entry = Entry();
+
+    entry->text_ctrl().SetValue(value_);
+    entry->input(*input_);
+    entry->field_name(field_);
+
+    entry->text_ctrl().SelectAll();
+    entry->text_ctrl().SetFocus();
+}
+
+bool DatumSequenceEditor::EndEdit
+    (int
+    ,int
+    ,wxGrid const*
+    ,wxString const&
+    ,wxString*       newval
+    )
+{
+    auto value = Entry()->text_ctrl().GetValue();
+
+    if(value == value_)
+        {
+        return false;
+        }
+
+    value_ = value;
+
+    *newval = GetValue();
+
+    return true;
+}
+
+void DatumSequenceEditor::ApplyEdit(int row, int col, wxGrid* grid)
+{
+    grid->GetTable()->SetValue(row, col, value_);
+}
+
+void DatumSequenceEditor::Reset()
+{
+    Entry()->text_ctrl().SetValue(value_);
+}
+
+wxGridCellEditor* DatumSequenceEditor::Clone() const
+{
+    auto editor = new(wx) DatumSequenceEditor();
+    editor->value_ = value_;
+    editor->input_ = input_;
+    editor->field_ = field_;
+
+    return editor;
+}
+
+wxString DatumSequenceEditor::GetValue() const
+{
+    return Entry()->text_ctrl().GetValue();
+}
+
+InputSequenceEntry* DatumSequenceEditor::Entry() const
+{
+    auto entry = dynamic_cast<InputSequenceEntry*>(m_control);
+    LMI_ASSERT(entry);
+    return entry;
+}
+
+// This class is used to implement conversion to and from strings shown in the
+// grid cells by CensusViewGridTable in a single place.
+
+class table_type_converter
+{
+  public:
+    virtual ~table_type_converter() = default;
+
+    virtual wxString to_renderer_value(std::string const& value) const
+    {
+        return wxString::FromUTF8(value);
+    }
+
+    virtual std::string from_editor_value(wxString const& value) const
+    {
+        return value.ToStdString(wxConvUTF8);
+    }
+
+    // Returns the name of derived type.
+    virtual char const* type() const = 0;
+
+    // Returns the grid value type, used by wxGridTypeRegistry.
+    virtual wxString grid_value_type(any_member<Input> const&) const
+    {
+        return type();
+    }
+
+    virtual void register_data_type(wxGrid* grid) const = 0;
+
+    static std::map<std::string, table_type_converter const*>& get_all();
+    static table_type_converter const& get_by_value(any_member<Input> const& value);
+
+  private:
+    template<typename T>
+    static table_type_converter const& get_impl();
+};
+
+// The base class for custom table type convertors which uses an own renderer
+// and an editor.
+
+class table_custom_type_converter : public table_type_converter
+{
+  public:
+    void register_data_type(wxGrid* grid) const override
+    {
+        grid->RegisterDataType
+            (type()
+            ,create_renderer()
+            ,create_editor()
+            );
+    }
+
+    virtual wxGridCellRenderer* create_renderer() const = 0;
+    virtual wxGridCellEditor* create_editor() const = 0;
+};
+
+// The base class for table type convertors which uses standard types
+// and don't need type registration.
+
+class table_standard_type_converter : public table_type_converter
+{
+  public:
+    void register_data_type(wxGrid*) const override
+    {
+        // Standard data types don't need to be registered, so nothing to do here.
+    }
+};
+
+// class table_bool_converter
+
+class table_bool_converter : public table_standard_type_converter
+{
+  public:
+    table_bool_converter()
+    {
+        wxGridCellBoolEditor::UseStringValues("Yes", "No");
+    }
+
+    char const* type() const override
+    {
+        return typeid(table_bool_converter).name();
+    }
+
+    wxString grid_value_type(any_member<Input> const&) const override
+    {
+        return wxGRID_VALUE_BOOL;
+    }
+};
+
+// class table_enum_converter
+
+class table_enum_converter : public table_standard_type_converter
+{
+  public:
+    char const* type() const override
+    {
+        return typeid(table_enum_converter).name();
+    }
+
+    wxString grid_value_type(any_member<Input> const& value) const override
+    {
+        wxString type = wxGRID_VALUE_CHOICE;
+        auto const* as_enum = member_cast<mc_enum_base>(value);
+        auto const& all_strings = as_enum->all_strings();
+
+        bool first = true;
+        for(auto const& s : all_strings)
+            {
+            type.append(first ? ':' : ',');
+            type.append(s);
+            first = false;
+            }
+
+        return type;
+    }
+};
+
+// class table_sequence_converter
+
+class table_sequence_converter : public table_custom_type_converter
+{
+  public:
+    char const* type() const override
+    {
+        return typeid(table_sequence_converter).name();
+    }
+
+    wxGridCellRenderer* create_renderer() const override
+    {
+        return new(wx) wxGridCellStringRenderer();
+    }
+
+    wxGridCellEditor* create_editor() const override
+    {
+        return new(wx) DatumSequenceEditor();
+    }
+};
+
+// class table_int_range_converter
+
+class table_int_range_converter : public table_standard_type_converter
+{
+  public:
+    char const* type() const override
+    {
+        return typeid(table_int_range_converter).name();
+    }
+
+    wxString grid_value_type(any_member<Input> const& value) const override
+    {
+        auto const* as_range = member_cast<tn_range_base>(value);
+
+        return wxString::Format
+            ("%s:%d,%d"
+            ,wxGRID_VALUE_NUMBER
+            ,bourn_cast<int>(as_range->universal_minimum())
+            ,bourn_cast<int>(as_range->universal_maximum())
+            );
+    }
+};
+
+// class table_double_range_converter
+
+class table_double_range_converter : public table_custom_type_converter
+{
+  public:
+    char const* type() const override
+    {
+        return typeid(table_double_range_converter).name();
+    }
+
+    wxGridCellRenderer* create_renderer() const override
+    {
+        // Use wxGridCellStringRenderer instead of wxGridCellFloatRenderer to
+        // keep the number format as is.
+        return new(wx) wxGridCellStringRenderer();
+    }
+
+    wxGridCellEditor* create_editor() const override
+    {
+        return new(wx) RangeDoubleEditor();
+    }
+};
+
+// class table_date_converter
+
+class table_date_converter : public table_custom_type_converter
+{
+  public:
+    wxString to_renderer_value(std::string const& value) const override
+    {
+        auto const date = ConvertDateToWx(value_cast<calendar_date>(value));
+        return date.FormatDate();
+    }
+
+    std::string from_editor_value(wxString const& value) const override
+    {
+        wxDateTime date;
+        auto date_parse_ok = date.ParseISODate(value);
+        LMI_ASSERT(date_parse_ok);
+
+        return value_cast<std::string>(ConvertDateFromWx(date));
+    }
+
+    char const* type() const override
+    {
+        return typeid(table_date_converter).name();
+    }
+
+    wxGridCellRenderer* create_renderer() const override
+    {
+        return new(wx) wxGridCellDateRenderer();
+    }
+
+    wxGridCellEditor* create_editor() const override
+    {
+        return new(wx) RangeDateEditor();
+    }
+};
+
+// class table_string_converter
+
+class table_string_converter : public table_standard_type_converter
+{
+  public:
+    char const* type() const override
+    {
+        return typeid(table_string_converter).name();
+    }
+
+    wxString grid_value_type(any_member<Input> const&) const override
+    {
+        return wxGRID_VALUE_STRING;
+    }
+};
+
+std::map<std::string, table_type_converter const*>&
+table_type_converter::get_all()
+{
+    static std::map<std::string, table_type_converter const*> all
+        {
+            { get_impl<table_bool_converter>().type()
+            ,&get_impl<table_bool_converter>()
+            }
+        ,
+            { get_impl<table_string_converter>().type()
+            ,&get_impl<table_string_converter>()
+            }
+        ,
+            { get_impl<table_sequence_converter>().type()
+            ,&get_impl<table_sequence_converter>()
+            }
+        ,
+            { get_impl<table_enum_converter>().type()
+            ,&get_impl<table_enum_converter>()
+            }
+        ,
+            { get_impl<table_int_range_converter>().type()
+            ,&get_impl<table_int_range_converter>()
+            }
+        ,
+            { get_impl<table_double_range_converter>().type()
+            ,&get_impl<table_double_range_converter>()
+            }
+        ,
+            { get_impl<table_date_converter>().type()
+            ,&get_impl<table_date_converter>()
+            }
+        ,
+        };
+    return all;
+}
+
+table_type_converter const&
+table_type_converter::get_by_value(any_member<Input> const& value)
+{
+    if(exact_cast<mce_yes_or_no>(value))
+        {
+        return get_impl<table_bool_converter>();
+        }
+    else if(exact_cast<datum_string>(value))
+        {
+        return get_impl<table_string_converter>();
+        }
+    else if(is_reconstitutable_as<datum_sequence>(value))
+        {
+        return get_impl<table_sequence_converter>();
+        }
+    else if(is_reconstitutable_as<mc_enum_base  >(value))
+        {
+        return get_impl<table_enum_converter>();
+        }
+    else if(is_reconstitutable_as<tn_range_base >(value))
+        {
+        tn_range_base const* as_range = member_cast<tn_range_base>(value);
+        if(typeid(int) == as_range->value_type())
+            {
+            return get_impl<table_int_range_converter>();
+            }
+        else if(typeid(double) == as_range->value_type())
+            {
+            return get_impl<table_double_range_converter>();
+            }
+        else if(typeid(calendar_date) == as_range->value_type())
+            {
+            return get_impl<table_date_converter>();
+            }
+        else
+            {
+            // Fall through to warn and treat datum as string.
+            }
+        }
+    else
+        {
+        warning()
+            << "Type '"
+            << lmi::TypeInfo(value.type())
+            << "' not recognized. Please report this anomaly."
+            << LMI_FLUSH
+            ;
+        // Fall through to treat datum as string.
+        }
+
+    return get_impl<table_string_converter>();
+}
+
+template<typename T>
+table_type_converter const& table_type_converter::get_impl()
+{
+    static T singleton;
+    return singleton;
+}
+
+} // Unnamed namespace.
+
+/// The attribute provider to make all odd rows appear grey.
+
+class CensusViewGridCellAttrProvider
+    :public wxGridCellAttrProvider
+{
+  public:
+    explicit CensusViewGridCellAttrProvider(wxGrid const* grid)
+        :attrForOddRows_{new wxGridCellAttr()}
+    {
+        // Determine the alternate rows colour automatically from the
+        // background colour.
+        wxColour const bgColor = grid->GetDefaultCellBackgroundColour();
+
+        // Depending on the background, alternate row color
+        // will be 3% more dark or 50% brighter.
+        int const alpha = bgColor.GetRGB() > 0x808080 ? 97 : 150;
+        altColor_ = bgColor.ChangeLightness(alpha);
+
+        attrForOddRows_->SetBackgroundColour(altColor_);
+    }
+
+    wxGridCellAttr* GetAttr
+        (int row
+        ,int col
+        ,wxGridCellAttr::wxAttrKind kind
+        ) const override
+    {
+        wxGridCellAttr* attr = wxGridCellAttrProvider::GetAttr(row, col, kind);
+
+        if(row % 2)
+            {
+            if(attr == nullptr)
+                {
+                attr = attrForOddRows_.get();
+                attr->IncRef();
+                }
+            else
+                {
+                if(!attr->HasBackgroundColour())
+                    {
+                    wxGridCellAttr* attrNew = attr->Clone();
+                    attr->DecRef();
+                    attr = attrNew;
+                    attr->SetBackgroundColour(altColor_);
+                    }
+                }
+            }
+
+        return attr;
+    }
+
+  private:
+    wxColor                         altColor_;
+    wxObjectDataPtr<wxGridCellAttr> attrForOddRows_;
+};
+
+/// Interface to the data for wxGrid.
+
+class CensusViewGridTable
+    :public wxGridTableBase
+{
+  public:
+    // Cell serial number: always shown in the first column.
+    static int const Col_CellNum = 0;
+
+    explicit CensusViewGridTable(CensusGridView& view)
+        :view_ {view}
+    {
+        wxGrid const* grid = view.grid_window_;
+        SetAttrProvider(new(wx) CensusViewGridCellAttrProvider(grid));
+        make_cell_number_column_read_only();
+    }
+
+    // return the number of rows and columns in this table.
+    int GetNumberRows() override;
+    int GetNumberCols() override;
+
+    wxString GetValue(int row, int col) override;
+    void SetValue(int row, int col, wxString const& value) override;
+
+    // Data type determination.
+    wxString GetTypeName(int row, int col) override;
+
+    // Override only used rows/cols handling functions.
+    bool AppendRows(size_t numRows) override;
+    bool DeleteRows(size_t pos, size_t numRows) override;
+    bool AppendCols(size_t numCols) override;
+    bool DeleteCols(size_t pos, size_t numCols) override;
+
+    wxString GetColLabelValue(int col) override;
+
+    void make_cell_number_column_read_only();
+
+    std::string const& col_name(int col) const;
+
+    Input& row_at(int row);
+    Input const& row_at(int row) const;
+
+    any_member<Input>& cell_at(int row, int col);
+    any_member<Input> const& cell_at(int row, int col) const;
+
+    std::vector<int> const& get_visible_columns() const
+    {
+        return visible_columns_;
+    }
+
+    void set_visible_columns(std::vector<int>&& new_visible_columns)
+    {
+        std::swap(new_visible_columns, visible_columns_);
+    }
+
+  private:
+    any_member<Input>& cell_at(int row, std::string const& col);
+    any_member<Input> const& cell_at(int row, std::string const& col) const;
+    std::vector<std::string> const& all_headers() const;
+
+    CensusGridView&  view_;
+
+    std::vector<int> visible_columns_;
+};
+
+int CensusViewGridTable::GetNumberRows()
+{
+    return lmi::ssize(view_.cell_parms());
+}
+
+int CensusViewGridTable::GetNumberCols()
+{
+    // "+ 1" for cell serial number in first column.
+    return lmi::ssize(visible_columns_) + 1;
+}
+
+wxString CensusViewGridTable::GetValue(int row, int col)
+{
+    if(col == Col_CellNum)
+        {
+        return value_cast<std::string>(1 + row);
+        }
+
+    auto const& cell = cell_at(row, col);
+    auto const& conv = table_type_converter::get_by_value(cell);
+    return conv.to_renderer_value(cell.str());
+}
+
+void CensusViewGridTable::SetValue(int row, int col, wxString const& value)
+{
+    LMI_ASSERT(col != Col_CellNum);
+
+    auto& cell = cell_at(row, col);
+    auto const& conv = table_type_converter::get_by_value(cell);
+    auto const& prev_val = cell.str();
+    auto const& new_val = conv.from_editor_value(value);
+
+    if(prev_val == new_val)
+        {
+        return;
+        }
+
+    cell = new_val;
+
+    Input& model = view_.cell_parms()[row];
+    model.Reconcile();
+
+    view_.document().Modify(true);
+}
+
+wxString CensusViewGridTable::GetTypeName(int row, int col)
+{
+    if(col == Col_CellNum)
+        {
+        return wxGRID_VALUE_NUMBER;
+        }
+
+    auto const& value = cell_at(row, col);
+    auto const& conv = table_type_converter::get_by_value(value);
+
+    return conv.grid_value_type(value);
+}
+
+wxString CensusViewGridTable::GetColLabelValue(int col)
+{
+    if(col == Col_CellNum)
+        {
+        return "Cell";
+        }
+
+    auto const& header = all_headers()[visible_columns_[col - 1]];
+    return insert_spaces_between_words(header);
+}
+
+bool CensusViewGridTable::AppendRows(size_t numRows)
+{
+    auto grid = GetView();
+    LMI_ASSERT(grid != nullptr);
+
+    wxGridTableMessage msg
+        (this
+        ,wxGRIDTABLE_NOTIFY_ROWS_APPENDED
+        ,bourn_cast<int>(numRows)
+        );
+    grid->ProcessTableMessage(msg);
+
+    return true;
+}
+
+bool CensusViewGridTable::DeleteRows(size_t pos, size_t num_rows)
+{
+    auto grid = GetView();
+    LMI_ASSERT(grid != nullptr);
+
+    auto const ipos = bourn_cast<int>(pos);
+    auto inum_rows = bourn_cast<int>(num_rows);
+    auto const cur_num_rows = GetView()->GetNumberRows();
+    LMI_ASSERT_WITH_MSG
+        (ipos < cur_num_rows
+        ,wxString::Format
+            ("Called CensusViewGridTable::DeleteRows(pos=%d, N=%d)\n"
+             "Pos value is invalid for present table with %d rows"
+            ,ipos
+            ,inum_rows
+            ,cur_num_rows
+            )
+        );
+
+    if(inum_rows > cur_num_rows - ipos)
+        {
+        inum_rows = cur_num_rows - ipos;
+        }
+
+    wxGridTableMessage msg
+        (this
+        ,wxGRIDTABLE_NOTIFY_ROWS_DELETED
+        ,ipos
+        ,inum_rows
+        );
+    grid->ProcessTableMessage(msg);
+
+    return true;
+}
+
+bool CensusViewGridTable::AppendCols(size_t numCols)
+{
+    auto grid = GetView();
+    LMI_ASSERT(grid != nullptr);
+
+    wxGridTableMessage msg
+        (this
+        ,wxGRIDTABLE_NOTIFY_COLS_APPENDED
+        ,bourn_cast<int>(numCols)
+        );
+    grid->ProcessTableMessage(msg);
+
+    return true;
+}
+
+bool CensusViewGridTable::DeleteCols(size_t pos, size_t num_cols)
+{
+    auto grid = GetView();
+    LMI_ASSERT(grid != nullptr);
+
+    auto const ipos = bourn_cast<int>(pos);
+    auto inum_cols = bourn_cast<int>(num_cols);
+    auto const cur_num_cols = GetView()->GetNumberCols();
+
+    LMI_ASSERT_WITH_MSG
+        (ipos < cur_num_cols
+        ,wxString::Format
+            ("Called CensusViewGridTable::DeleteCols(pos=%d, N=%d)\n"
+             "Pos value is invalid for present table with %d cols"
+            ,ipos
+            ,inum_cols
+            ,cur_num_cols
+            )
+        );
+
+    if(inum_cols > cur_num_cols - ipos)
+        {
+        inum_cols = cur_num_cols - ipos;
+        }
+
+    wxGridTableMessage msg
+        (this
+        ,wxGRIDTABLE_NOTIFY_COLS_DELETED
+        ,ipos
+        ,inum_cols
+        );
+    grid->ProcessTableMessage(msg);
+
+    return true;
+}
+
+void CensusViewGridTable::make_cell_number_column_read_only()
+{
+    auto attr = new(wx) wxGridCellAttr();
+    attr->SetReadOnly();
+    SetColAttr(attr, 0);
+}
+
+inline std::string const& CensusViewGridTable::col_name(int col) const
+{
+    LMI_ASSERT(0 < col);
+    // "- 1" because first column is cell serial number.
+    return all_headers()[visible_columns_[col - 1]];
+}
+
+inline Input& CensusViewGridTable::row_at(int row)
+{
+    return view_.cell_parms()[row];
+}
+
+inline Input const& CensusViewGridTable::row_at(int row) const
+{
+    return view_.cell_parms()[row];
+}
+
+inline any_member<Input>& CensusViewGridTable::cell_at(int row, int col)
+{
+    return cell_at(row, col_name(col));
+}
+
+inline any_member<Input> const& CensusViewGridTable::cell_at(int row, int col) const
+{
+    return cell_at(row, col_name(col));
+}
+
+inline any_member<Input>& CensusViewGridTable::cell_at(int row, std::string const& col)
+{
+    return row_at(row)[col];
+}
+
+inline any_member<Input> const& CensusViewGridTable::cell_at(int row, std::string const& col) const
+{
+    return row_at(row)[col];
+}
+
+inline std::vector<std::string> const& CensusViewGridTable::all_headers() const
+{
+    return view_.case_parms()[0].member_names();
+}
+
+namespace
+{
+any_member<Input> const& cell_at(wxGridTableBase const& table, int row, int col)
+{
+    return dynamic_cast<CensusViewGridTable const&>(table).cell_at(row, col);
+}
+
+Input const& row_at(wxGridTableBase const& table, int row)
+{
+    return dynamic_cast<CensusViewGridTable const&>(table).row_at(row);
+}
+
+std::string const& col_name(wxGridTableBase const& table, int col)
+{
+    return dynamic_cast<CensusViewGridTable const&>(table).col_name(col);
+}
+}
+
 // class CensusView
 
 BEGIN_EVENT_TABLE(CensusView, ViewEx)
@@ -963,7 +1929,7 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_UPDATE_UI(XRCID("copy_census"          ),CensusView::UponUpdateColumnValuesVary )
     EVT_UPDATE_UI(XRCID("paste_census"         ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateAlwaysEnabled    )
-    EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateNonemptySelection)
+    EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("column_width_varying" ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("column_width_fixed"   ),CensusView::UponUpdateAlwaysEnabled    )
     // Disable these printing commands on the "File" menu: specialized
@@ -983,6 +1949,18 @@ BEGIN_EVENT_TABLE(CensusDVCView, CensusView)
     EVT_UPDATE_UI(XRCID("edit_class"           ),CensusDVCView::UponUpdateSingleSelection)
     EVT_UPDATE_UI(XRCID("run_cell"             ),CensusDVCView::UponUpdateSingleSelection)
     EVT_UPDATE_UI(XRCID("run_class"            ),CensusDVCView::UponUpdateSingleSelection)
+END_EVENT_TABLE()
+
+IMPLEMENT_DYNAMIC_CLASS(CensusGridView, CensusView)
+
+BEGIN_EVENT_TABLE(CensusGridView, CensusView)
+    EVT_GRID_CELL_RIGHT_CLICK(                   CensusGridView::UponRightClick         )
+    EVT_GRID_CELL_CHANGED(                       CensusGridView::UponValueChanged       )
+    EVT_GRID_COL_AUTO_SIZE(                      CensusGridView::UponColumnAutoSize     )
+    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusGridView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusGridView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusGridView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("run_class"            ),CensusGridView::UponUpdateAlwaysEnabled)
 END_EVENT_TABLE()
 
 CensusView::CensusView()
@@ -1110,6 +2088,41 @@ wxWindow* CensusDVCView::CreateChildWindow()
     return list_window_;
 }
 
+wxWindow* CensusGridView::CreateChildWindow()
+{
+    grid_window_ = new(wx) wxGrid(GetFrame(), wxID_ANY);
+    grid_window_->HideRowLabels();
+    grid_window_->SetColLabelAlignment(wxALIGN_LEFT, wxALIGN_CENTRE);
+    grid_window_->SetDefaultCellAlignment(wxALIGN_LEFT, wxALIGN_CENTRE);
+    grid_window_->SetDefaultCellFitMode(wxGridFitMode::Ellipsize(wxELLIPSIZE_MIDDLE));
+    grid_window_->SetGridLineColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+
+    // Grid must be already created when we create the table because we use
+    // the default cell background color to determine the alternating color.
+    grid_table_ = new(wx) CensusViewGridTable(*this);
+    grid_window_->SetTable
+        (grid_table_
+        ,true // Take ownership of the table.
+        ,wxGrid::wxGridSelectRows
+        );
+
+    grid_window_->UseNativeColHeader();
+    grid_window_->DisableHidingColumns();
+    grid_window_->DisableDragRowSize();
+    grid_window_->SelectRow(0);
+
+    for(auto const& it : table_type_converter::get_all())
+        {
+        it.second->register_data_type(grid_window_);
+        }
+
+    // Show headers.
+    document().Modify(false);
+    Update();
+
+    return grid_window_;
+}
+
 CensusDocument& CensusView::document() const
 {
     return safely_dereference_as<CensusDocument>(GetDocument());
@@ -1128,10 +2141,17 @@ oenum_mvc_dv_rc CensusView::edit_parameters
         );
 }
 
-int CensusDVCView::selected_row()
+int CensusDVCView::current_row()
 {
     int row = list_model_->GetRow(list_window_->GetSelection());
     LMI_ASSERT(0 <= row && row < bourn_cast<int>(list_model_->GetCount()));
+    return row;
+}
+
+int CensusGridView::current_row()
+{
+    auto const& row = grid_window_->GetGridCursorRow();
+    LMI_ASSERT(0 <= row && row < grid_table_->GetRowsCount());
     return row;
 }
 
@@ -1325,6 +2345,64 @@ void CensusDVCView::update_visible_columns()
         }
 }
 
+void CensusGridView::update_visible_columns()
+{
+    // Display exactly those columns whose rows aren't all identical. For
+    // this purpose, consider as "rows" the individual cells--and also the
+    // case and class defaults, even though they aren't displayed in rows.
+    // Reason: although the case and class defaults are hidden, they're
+    // still information--so if the user made them different from any cell
+    // wrt some column, we respect that conscious decision.
+    std::vector<std::string> const& all_headers(case_parms()[0].member_names());
+    std::vector<int> new_visible_columns;
+    int column = 0;
+    for(auto const& header : all_headers)
+        {
+        if(column_value_varies_across_cells(header))
+            {
+            new_visible_columns.push_back(column);
+            }
+        ++column;
+        }
+
+    if(new_visible_columns != grid_table_->get_visible_columns())
+        {
+        auto const cursor_row = grid_window_->GetGridCursorRow();
+        auto const cursor_col = grid_window_->GetGridCursorCol();
+
+        auto const columns_count     =
+            lmi::ssize(grid_table_->get_visible_columns()) + 1;
+        auto const new_columns_count =
+            lmi::ssize(new_visible_columns)                + 1;
+
+        wxGridUpdateLocker grid_update_locker(grid_window_);
+
+        if(grid_window_->IsCellEditControlEnabled())
+            {
+            grid_window_->DisableCellEditControl();
+            }
+
+        grid_table_->set_visible_columns(std::move(new_visible_columns));
+
+        if(columns_count != new_columns_count)
+            {
+            grid_window_->DeleteCols(0, columns_count);
+            grid_window_->AppendCols(new_columns_count);
+            grid_table_->make_cell_number_column_read_only();
+            }
+
+        if(autosize_columns_)
+            {
+            grid_window_->AutoSize();
+            }
+
+        grid_window_->SetGridCursor
+            (cursor_row
+            ,std::min(cursor_col, new_columns_count - 1)
+            );
+        }
+}
+
 char const* CensusView::icon_xrc_resource() const
 {
     return "census_view_icon";
@@ -1337,7 +2415,7 @@ char const* CensusView::menubar_xrc_resource() const
 
 void CensusView::UponEditCell(wxCommandEvent&)
 {
-    int cell_number = selected_row();
+    int cell_number = current_row();
     Input& modifiable_parms = cell_parms()[cell_number];
     std::string const title = cell_title(cell_number);
 
@@ -1350,7 +2428,7 @@ void CensusView::UponEditCell(wxCommandEvent&)
 
 void CensusView::UponEditClass(wxCommandEvent&)
 {
-    int cell_number = selected_row();
+    int cell_number = current_row();
     std::string class_name = class_name_from_cell_number(cell_number);
     Input& modifiable_parms = *class_parms_from_class_name(class_name);
     Input const unmodified_parms(modifiable_parms);
@@ -1409,6 +2487,15 @@ void CensusDVCView::UponColumnWidthVarying(wxCommandEvent&)
     Update();
 }
 
+void CensusGridView::UponColumnWidthVarying(wxCommandEvent&)
+{
+    autosize_columns_ = true;
+
+    // Pass false to avoid setting min size to the best size.
+    grid_window_->AutoSizeColumns(false);
+    Update();
+}
+
 /// Shrink all nonfrozen columns to default width.
 
 void CensusDVCView::UponColumnWidthFixed(wxCommandEvent&)
@@ -1421,6 +2508,26 @@ void CensusDVCView::UponColumnWidthFixed(wxCommandEvent&)
         list_window_->GetColumn(j)->SetWidth(wxCOL_WIDTH_DEFAULT);
         }
     Update();
+}
+
+void CensusGridView::UponColumnWidthFixed(wxCommandEvent&)
+{
+    autosize_columns_ = false;
+
+    wxWindowUpdateLocker u(grid_window_);
+    for(int j = 0; j < grid_window_->GetNumberCols(); ++j)
+        {
+        grid_window_->SetColSize(j, WXGRID_DEFAULT_COL_WIDTH);
+        }
+    Update();
+}
+
+void CensusGridView::UponRightClick(wxGridEvent&)
+{
+    wxMenu* census_menu = wxXmlResource::Get()->LoadMenu("census_menu_ref");
+    LMI_ASSERT(census_menu);
+    grid_window_->PopupMenu(census_menu);
+    delete census_menu;
 }
 
 void CensusDVCView::UponRightClick(wxDataViewEvent& e)
@@ -1446,6 +2553,19 @@ void CensusDVCView::UponValueChanged(wxDataViewEvent&)
     status() << "Update: " << timer.stop().elapsed_msec_str() << std::flush;
 }
 
+void CensusGridView::UponValueChanged(wxGridEvent&)
+{
+    Timer timer;
+    Update();
+    status() << "Update: " << timer.stop().elapsed_msec_str() << std::flush;
+}
+
+void CensusGridView::UponColumnAutoSize(wxGridSizeEvent& e)
+{
+    // Pass false to avoid setting min size to the best size.
+    grid_window_->AutoSizeColumn(e.GetRowOrCol(), false);
+}
+
 void CensusView::UponUpdateAlwaysDisabled(wxUpdateUIEvent& e)
 {
     e.Enable(false);
@@ -1466,6 +2586,12 @@ void CensusDVCView::UponUpdateNonemptySelection(wxUpdateUIEvent& e)
 {
     wxDataViewItemArray selection;
     e.Enable(0 < list_window_->GetSelections(selection));
+}
+
+void CensusGridView::UponUpdateNonemptySelection(wxUpdateUIEvent& e)
+{
+    auto const& selected_rows = grid_window_->GetSelectedRows();
+    e.Enable(!selected_rows.empty());
 }
 
 /// Conditionally enable copying.
@@ -1494,6 +2620,17 @@ void CensusDVCView::UponUpdateColumnValuesVary(wxUpdateUIEvent& e)
     e.Enable(!disable);
 }
 
+void CensusGridView::UponUpdateColumnValuesVary(wxUpdateUIEvent& e)
+{
+    static const std::string dob_header = insert_spaces_between_words("UseDOB");
+    int const n_cols = grid_table_->GetColsCount();
+    bool const disable =
+            1 == n_cols
+        || (2 == n_cols && dob_header == grid_table_->GetColLabelValue(1))
+        ;
+    e.Enable(!disable);
+}
+
 /// Update the dataview display.
 ///
 /// If a parameter was formerly the same for all cells but now differs due
@@ -1502,6 +2639,16 @@ void CensusDVCView::UponUpdateColumnValuesVary(wxUpdateUIEvent& e)
 ///  due to editing, then display it no longer.
 /// Similarly, if an old employee class is no longer used, remove it; and
 ///  if a new one comes into use, display it.
+
+void CensusGridView::Update()
+{
+    LMI_ASSERT(grid_table_->GetRowsCount() == lmi::ssize(cell_parms()));
+
+    wxWindowUpdateLocker u(grid_window_);
+
+    update_class_names();
+    update_visible_columns();
+}
 
 void CensusDVCView::Update()
 {
@@ -1530,7 +2677,7 @@ void CensusView::UponRunCase(wxCommandEvent&)
 
 void CensusView::UponRunCell(wxCommandEvent&)
 {
-    int cell_number = selected_row();
+    int cell_number = current_row();
     ViewOneCell(cell_number);
 }
 
@@ -1593,6 +2740,27 @@ void CensusDVCView::UponAddCell(wxCommandEvent&)
     list_window_->UnselectAll();
     list_window_->Select(z);
     list_window_->EnsureVisible(z);
+
+    status() << "Add: " << timer.stop().elapsed_msec_str() << std::flush;
+}
+
+void CensusGridView::UponAddCell(wxCommandEvent&)
+{
+    wxBusyCursor reverie;
+    Timer timer;
+
+    cell_parms().push_back(case_parms()[0]);
+    grid_window_->AppendRows();
+
+    Update();
+    document().Modify(true);
+
+    grid_window_->GoToCell
+        (grid_table_->GetRowsCount() - 1
+        ,grid_window_->GetGridCursorCol()
+        );
+
+    grid_window_->SelectRow(grid_table_->GetRowsCount() - 1);
 
     status() << "Add: " << timer.stop().elapsed_msec_str() << std::flush;
 }
@@ -1670,6 +2838,89 @@ void CensusDVCView::UponDeleteCells(wxCommandEvent&)
     wxDataViewItem const& z = list_model_->GetItem(newsel);
     list_window_->Select(z);
     list_window_->EnsureVisible(z);
+
+    Update();
+    document().Modify(true);
+
+    status() << "Delete: " << timer.stop().elapsed_msec_str() << std::flush;
+}
+
+void CensusGridView::UponDeleteCells(wxCommandEvent&)
+{
+    auto const n_items = grid_table_->GetRowsCount();
+    auto rows = grid_window_->GetSelectedRows();
+    // If no cell is selected then use the current row
+    if (rows.empty())
+        {
+        rows.push_back(grid_window_->GetGridCursorRow());
+        }
+    auto const n_sel_items = lmi::ssize(rows);
+
+    if(n_items == n_sel_items)
+        {
+        warning()
+            << "Cannot delete all cells. A census must always"
+            << " contain at least one cell."
+            << LMI_FLUSH
+            ;
+        return;
+        }
+
+    LMI_ASSERT(n_sel_items < n_items);
+
+    std::ostringstream oss;
+    oss
+        << "Irrevocably delete "
+        << n_sel_items
+        << " of "
+        << n_items
+        << " cells?"
+        ;
+    int yes_or_no = wxMessageBox
+        (oss.str()
+        ,"Confirm deletion"
+        ,wxYES_NO | wxICON_QUESTION
+        );
+    if(wxYES != yes_or_no)
+        {
+        return;
+        }
+
+    wxBusyCursor reverie;
+    Timer timer;
+
+    auto const cursor_col = grid_window_->GetGridCursorCol();
+
+    std::sort(rows.begin(), rows.end());
+
+    LMI_ASSERT(lmi::ssize(cell_parms()) == n_items);
+
+    wxGridUpdateLocker grid_update_locker(grid_window_);
+    grid_window_->ClearSelection();
+
+    int items_left = n_sel_items;
+    while(items_left > 0)
+        {
+        int cur_item = items_left - 1;
+        for(; 0 < cur_item; --cur_item)
+            {
+            if(rows[cur_item] - 1 != rows[cur_item - 1])
+                break;
+            }
+        int const count = items_left - cur_item;
+        items_left -= count;
+
+        auto const first = cell_parms().begin() + cur_item;
+        cell_parms().erase(first, first + count);
+        grid_window_->DeleteRows(cur_item, count);
+        }
+    LMI_ASSERT(lmi::ssize(cell_parms()) == n_items - n_sel_items);
+
+    int const new_cursor_row(std::min
+        (rows.front()
+        ,lmi::ssize(cell_parms()) - 1
+        ));
+    grid_window_->GoToCell(new_cursor_row, cursor_col);
 
     Update();
     document().Modify(true);
@@ -1891,6 +3142,203 @@ void CensusDVCView::UponPasteCensus(wxCommandEvent&)
     wxDataViewItem const& z = list_model_->GetItem(selection);
     list_window_->Select(z);
     list_window_->EnsureVisible(z);
+
+    LMI_ASSERT(1 == case_parms().size());
+    LMI_ASSERT(!cell_parms ().empty());
+    LMI_ASSERT(!class_parms().empty());
+}
+
+void CensusGridView::UponPasteCensus(wxCommandEvent&)
+{
+    std::string const census_data = ClipboardEx::GetText();
+
+    std::vector<std::string> headers;
+    std::vector<Input> cells;
+
+    std::istringstream iss_census(census_data);
+    iss_census.imbue(tab_is_not_whitespace_locale());
+    std::string line;
+
+    // Get header line; parse into field names.
+    if(std::getline(iss_census, line, '\n'))
+        {
+        iss_census >> std::ws;
+
+        std::istringstream iss_line(line);
+        std::string token;
+
+        while(std::getline(iss_line, token, '\t'))
+            {
+            headers.push_back(token);
+            }
+        }
+    else
+        {
+        warning() << "Error pasting census data: no header line." << LMI_FLUSH;
+        return;
+        }
+
+    // Use a modifiable copy of case defaults as an archetype for new
+    // cells to be created by pasting. Modifications are conditionally
+    // written back to case defaults later.
+    Input archetype(case_parms()[0]);
+
+    // Force 'UseDOB' prn. Pasting it as a column never makes sense.
+    if(contains(headers, "UseDOB"))
+        {
+        warning() << "'UseDOB' is unnecessary and will be ignored." << std::flush;
+        }
+    bool const dob_pasted = contains(headers, "DateOfBirth");
+    bool const age_pasted = contains(headers, "IssueAge");
+    if(dob_pasted && age_pasted)
+        {
+        alarum()
+            << "Cannot paste both 'DateOfBirth' and 'IssueAge'."
+            << LMI_FLUSH
+            ;
+        }
+    else if(dob_pasted)
+        {
+        archetype["UseDOB"] = "Yes";
+        }
+    else if(age_pasted)
+        {
+        archetype["UseDOB"] = "No";
+        }
+    else
+        {
+        ; // Do nothing: neither age nor DOB pasted.
+        }
+
+    cells.reserve(std::count(census_data.begin(), census_data.end(), '\n'));
+
+    // Read each subsequent line into an input object representing one cell.
+    int current_line = 0;
+    while(std::getline(iss_census, line, '\n'))
+        {
+        ++current_line;
+
+        iss_census >> std::ws;
+
+        Input current_cell(archetype);
+
+        std::istringstream iss_line(line);
+        std::string token;
+        std::vector<std::string> values;
+
+        while(std::getline(iss_line, token, '\t'))
+            {
+            values.push_back(token);
+            }
+
+        if(values.size() != headers.size())
+            {
+            alarum()
+                << "Line #" << current_line << ": "
+                << "  (" << line << ") "
+                << "should have one value per column. "
+                << "Number of values: " << values.size() << "; "
+                << "number expected: " << headers.size() << "."
+                << LMI_FLUSH
+                ;
+            }
+
+        for(int j = 0; j < lmi::ssize(headers); ++j)
+            {
+            if(exact_cast<tnr_date>(current_cell[headers[j]]))
+                {
+                static int const jdn_min = calendar_date::gregorian_epoch_jdn;
+                static int const jdn_max = calendar_date::last_yyyy_date_jdn;
+                static int const ymd_min = JdnToYmd(jdn_t(jdn_min)).value();
+                static int const ymd_max = JdnToYmd(jdn_t(jdn_max)).value();
+                int z = value_cast<int>(values[j]);
+                if(jdn_min <= z && z <= jdn_max)
+                    {
+                    ; // Do nothing: JDN is the default expectation.
+                    }
+                else if(ymd_min <= z && z <= ymd_max)
+                    {
+                    z = YmdToJdn(ymd_t(z)).value();
+                    values[j] = value_cast<std::string>(z);
+                    }
+                else
+                    {
+                    alarum()
+                        << "Invalid date " << values[j]
+                        << " for '" << headers[j] << "'"
+                        << " on line " << current_line << "."
+                        << LMI_FLUSH
+                        ;
+                    }
+                }
+            current_cell[headers[j]] = values[j];
+            }
+        current_cell.Reconcile();
+        current_cell.RealizeAllSequenceInput();
+        cells.push_back(current_cell);
+
+        status() << "Added cell number " << cells.size() << '.' << std::flush;
+        }
+
+    if(0 == current_line)
+        {
+        warning() << "No cells to paste." << LMI_FLUSH;
+        return;
+        }
+
+    if(!document().IsModified() && !document().GetDocumentSaved())
+        {
+        case_parms ().clear();
+        case_parms ().push_back(archetype);
+        class_parms().clear();
+        class_parms().push_back(archetype);
+        cell_parms ().swap(cells);
+        }
+    else if(configurable_settings::instance().census_paste_palimpsestically())
+        {
+        cell_parms().swap(cells);
+        // Cells that were copied from lmi have DOB and not IssueAge,
+        // so pasting them back in sets UseDOB. Force UseDOB for case
+        // and class defaults to prevent showing a UseDOB column with
+        // each cell set to "Yes".
+        for(auto& j : case_parms ()) {j["UseDOB"] = "Yes";}
+        for(auto& j : class_parms()) {j["UseDOB"] = "Yes";}
+        }
+    else
+        {
+        cell_parms().reserve(cell_parms().size() + cells.size());
+        std::back_insert_iterator<std::vector<Input>> iip(cell_parms());
+        std::copy(cells.begin(), cells.end(), iip);
+        }
+
+    auto const old_rows = grid_window_->GetNumberRows();
+    auto const old_cols = grid_window_->GetNumberCols();
+    auto const new_rows = grid_table_->GetRowsCount();
+    auto const new_cols = grid_table_->GetColsCount();
+
+    wxGridUpdateLocker grid_update_locker(grid_window_);
+    grid_window_->ClearSelection();
+
+    if(grid_window_->IsCellEditControlEnabled())
+        {
+        grid_window_->DisableCellEditControl();
+        }
+
+    if(old_rows != new_rows || old_cols != new_cols)
+        {
+        grid_window_->DeleteRows(0, old_rows);
+        grid_window_->DeleteCols(0, old_cols);
+        grid_window_->AppendRows(new_rows);
+        grid_window_->AppendCols(new_cols);
+        grid_table_->make_cell_number_column_read_only();
+        if(autosize_columns_)
+            {
+            grid_window_->AutoSize();
+            }
+        }
+
+    document().Modify(true);
+    Update();
 
     LMI_ASSERT(1 == case_parms().size());
     LMI_ASSERT(!cell_parms ().empty());

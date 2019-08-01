@@ -34,12 +34,21 @@
 #include <fstream>
 
 IMPLEMENT_DYNAMIC_CLASS(CensusDVCDocument, CensusDocument)
+IMPLEMENT_DYNAMIC_CLASS(CensusGridDocument, CensusDocument)
 
 wxDataViewCtrl& CensusDVCDocument::PredominantViewWindow() const
 {
     return ::PredominantViewWindow<CensusDVCView,wxDataViewCtrl>
         (*this
         ,&CensusDVCView::list_window_
+        );
+}
+
+wxGrid& CensusGridDocument::PredominantViewWindow() const
+{
+    return ::PredominantViewWindow<CensusGridView,wxGrid>
+        (*this
+        ,&CensusGridView::grid_window_
         );
 }
 
