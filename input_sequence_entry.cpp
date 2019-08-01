@@ -1346,6 +1346,7 @@ class InputSequenceTextCtrl
 
   private:
     void UponChar(wxKeyEvent& event);
+    void UponKeyDown(wxKeyEvent& event);
 };
 
 InputSequenceTextCtrl::InputSequenceTextCtrl(wxWindow* parent, wxWindowID id)
@@ -1363,11 +1364,22 @@ InputSequenceTextCtrl::InputSequenceTextCtrl(wxWindow* parent, wxWindowID id)
             ,wxEVT_CHAR
             ,&InputSequenceTextCtrl::UponChar
             );
+    ::Connect
+            (this
+            ,wxEVT_KEY_DOWN
+            ,&InputSequenceTextCtrl::UponKeyDown
+            );
 }
 
 void InputSequenceTextCtrl::UponChar(wxKeyEvent& event)
 {
     if(!GetParent()->ProcessWindowEvent(event))
+        event.Skip();
+}
+
+void InputSequenceTextCtrl::UponKeyDown(wxKeyEvent& event)
+{
+    if (!GetParent()->ProcessWindowEvent(event))
         event.Skip();
 }
 
@@ -1446,6 +1458,15 @@ bool InputSequenceEntry::Create
         );
 
     return true;
+}
+
+void InputSequenceEntry::open_editor()
+{
+    DoOpenEditor();
+
+    // Put focus back on the control itself as normal focus restoring logic
+    // doesn't work as we block some of the events in UponChildKillFocus().
+    text_->SetFocus();
 }
 
 void InputSequenceEntry::input(Input const& input)
@@ -1534,11 +1555,7 @@ void InputSequenceEntry::UponEnter(wxCommandEvent& event)
         return;
         }
 
-    DoOpenEditor();
-
-    // Put focus back on the control itself as normal focus restoring logic
-    // doesn't work as we block some of the events in UponChildKillFocus().
-    text_->SetFocus();
+    open_editor();
 }
 
 void InputSequenceEntry::UponOpenEditor(wxCommandEvent&)

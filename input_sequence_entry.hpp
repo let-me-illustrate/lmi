@@ -55,6 +55,8 @@ class InputSequenceEntry final
 
     void set_popup_title(wxString const& title) {title_ = title;}
 
+    void open_editor();
+
   private:
     void UponChildKillFocus(wxFocusEvent&);
     void UponEnter(wxCommandEvent&);

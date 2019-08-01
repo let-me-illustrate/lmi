@@ -23,6 +23,7 @@
 
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
+#include "contains.hpp"
 #include "mvc_controller.hpp"
 #include "path_utility.hpp"
 #include "wx_test_case.hpp"
@@ -344,8 +345,21 @@ void validate_run_cell_and_copy_output
 
     wxUIActionSimulator ui;
 
-    ui.Char(WXK_HOME);           // Select the first cell.
-    ui.Char('r', wxMOD_CONTROL); // "Census|Run cell"
+    auto const use_grid =
+        contains(global_settings::instance().pyx(), "use_census_grid");
+
+    if(use_grid)
+        {
+        ui.Char(WXK_UP);                  // Clear the current selection if any.
+        ui.Char(WXK_HOME, wxMOD_CONTROL); // Go to the left top cell.
+        ui.Char(WXK_RIGHT, wxMOD_SHIFT);  // Select the first row.
+        }
+    else
+        {
+        ui.Char(WXK_HOME);               // Select the first cell.
+        }
+
+    ui.Char('r', wxMOD_CONTROL);         // "Census|Run cell"
     wxYield();
 
     LMI_ASSERT_WITH_MSG
