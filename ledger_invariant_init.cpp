@@ -257,6 +257,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     RetAge                  = b->yare_input_.RetirementAge;
     EndtAge                 = b->yare_input_.IssueAge + b->GetLength();
     b->database().query_into(DB_GroupIndivSelection, GroupIndivSelection);
+    NoLongerIssued          = b->database().query<bool>(DB_NoLongerIssued);
     AllowGroupQuote         = b->database().query<bool>(DB_AllowGroupQuote);
     b->database().query_into(DB_TxCallsGuarUwSubstd, TxCallsGuarUwSubstd);
     AllowExperienceRating   = b->database().query<bool>(DB_AllowExpRating);

@@ -347,9 +347,10 @@ void assert_nonblank(std::string const& value, std::string const& name)
 
 /// Copy global report data from ledger.
 ///
-/// All ledger data used here must be checked for consistency upstream
-/// by assert_okay_to_run_group_quote(); therefore, any changes in the
-/// set of data used here should be reflected there.
+/// Member data from class Input that are used here are checked for
+/// consistency upstream by assert_okay_to_run_group_quote().
+/// Therefore, any changes in the set of data used here should be
+/// reflected there if possible.
 
 void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     (Ledger      const& ledger
@@ -468,19 +469,21 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
 
     LedgerInvariant const& invar = ledger.GetLedgerInvariant();
 
-    // 'AllowGroupQuote' isn't an input field, so it cannot be
-    // checked by assert_okay_to_run_group_quote().
-    if(!static_cast<bool>(invar.AllowGroupQuote))
+    // Function assert_okay_to_run_group_quote() takes arguments only
+    // of class Input, so it can't check ledger variables such as
+    //   AllowGroupQuote
+    //   NoLongerIssued
+    //   GroupIndivSelection
+    // which are checked only here.
+    if
+        (  !static_cast<bool>(invar.AllowGroupQuote)
+        ||  static_cast<bool>(invar.NoLongerIssued)
+        )
         {
-        alarum()
-            << "Group quotes not allowed on this plan."
-            << LMI_FLUSH
-            ;
+        alarum() << "Group quotes not allowed on this plan." << LMI_FLUSH;
         }
 
-    // 'GroupIndivSelection' isn't an input field, so it cannot be
-    // checked by assert_okay_to_run_group_quote(). It must be tested
-    // (here) because some legacy products unfortunately combined
+    // Needed only because some legacy products unfortunately combined
     // mandatory (unismoke) and voluntary (smoker-distinct) rates in
     // the same plancode, when they should have used distinct subplans
     // because they serve different market segments.
