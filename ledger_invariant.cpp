@@ -167,6 +167,7 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["PostHoneymoonSpread"   ] = &PostHoneymoonSpread    ;
     OtherScalars    ["SplitMinPrem"          ] = &SplitMinPrem           ;
     OtherScalars    ["ErNotionallyPaysTerm"  ] = &ErNotionallyPaysTerm   ;
+    OtherScalars    ["IsSinglePremium"       ] = &IsSinglePremium        ;
     OtherScalars    ["MaxAnnGuarLoanSpread"  ] = &MaxAnnGuarLoanSpread   ;
     OtherScalars    ["MaxAnnCurrLoanDueRate" ] = &MaxAnnCurrLoanDueRate  ;
     OtherScalars    ["IsInforce"             ] = &IsInforce              ;
@@ -451,6 +452,7 @@ void LedgerInvariant::Init()
     SupplementalReport  = true;
     NoLongerIssued      = false;
     AllowGroupQuote     = true;
+    IsSinglePremium     = true;
 
     irr_precision_      = 0;
     irr_initialized_    = false;
@@ -756,6 +758,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     SplitMinPrem       = SplitMinPrem || a_Addend.SplitMinPrem ;
 
     ErNotionallyPaysTerm = ErNotionallyPaysTerm || a_Addend.ErNotionallyPaysTerm;
+    IsSinglePremium    = IsSinglePremium && a_Addend.IsSinglePremium;
 
     MaxAnnGuarLoanSpread   = std::max(a_Addend.MaxAnnGuarLoanSpread , MaxAnnGuarLoanSpread );
     MaxAnnCurrLoanDueRate  = std::max(a_Addend.MaxAnnCurrLoanDueRate, MaxAnnCurrLoanDueRate);

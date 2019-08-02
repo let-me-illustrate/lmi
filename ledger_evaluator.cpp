@@ -528,6 +528,7 @@ format_map_t static_formats()
     ,{"SplitFundAllocation"             , f1}
     ,{"SplitMinPrem"                    , f1}
     ,{"ErNotionallyPaysTerm"            , f1}
+    ,{"IsSinglePremium"                 , f1}
     ,{"SpouseIssueAge"                  , f1}
     ,{"SupplementalReport"              , f1}
     ,{"AllowExperienceRating"           , f1}
