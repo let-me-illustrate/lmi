@@ -304,6 +304,7 @@
 /DB_TgtPremFixedAtIssue\>/ s/^/M09/
 /DB_TgtPremIgnoreSubstd\>/ s/^/M10/
 /DB_MinPmt\>/              s/^/M11/
+/DB_IsSinglePremium\>/     s/^/M12/
 # DB_Topic_SecondaryGuarantees
 /DB_NoLapseMinDur\>/       s/^/N01/
 /DB_NoLapseMinAge\>/       s/^/N02/

@@ -357,6 +357,7 @@ class LMI_SO DBDictionary
     database_entity TgtPremFixedAtIssue ;
     database_entity TgtPremIgnoreSubstd ;
     database_entity MinPmt              ;
+    database_entity IsSinglePremium     ;
     database_entity NoLapseMinDur       ;
     database_entity NoLapseMinAge       ;
     database_entity NoLapseUnratedOnly  ;

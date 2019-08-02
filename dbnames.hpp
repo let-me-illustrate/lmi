@@ -465,6 +465,7 @@ enum e_database_key
         ,DB_TgtPremFixedAtIssue
         ,DB_TgtPremIgnoreSubstd
         ,DB_MinPmt
+        ,DB_IsSinglePremium
 
     ,DB_Topic_SecondaryGuarantees
 

@@ -378,6 +378,7 @@ void DBDictionary::ascribe_members()
     ascribe("TgtPremFixedAtIssue" , &DBDictionary::TgtPremFixedAtIssue );
     ascribe("TgtPremIgnoreSubstd" , &DBDictionary::TgtPremIgnoreSubstd );
     ascribe("MinPmt"              , &DBDictionary::MinPmt              );
+    ascribe("IsSinglePremium"     , &DBDictionary::IsSinglePremium     );
     ascribe("NoLapseMinDur"       , &DBDictionary::NoLapseMinDur       );
     ascribe("NoLapseMinAge"       , &DBDictionary::NoLapseMinAge       );
     ascribe("NoLapseUnratedOnly"  , &DBDictionary::NoLapseUnratedOnly  );
