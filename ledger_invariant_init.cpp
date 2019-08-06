@@ -317,7 +317,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         NoLapseProvisionName           = p.datum("NoLapseProvisionName"           );
         ContractName                   = p.datum("ContractName"                   );
         DboName                        = p.datum("DboName"                        );
-        // PDF !! It is hoped that these local variables (which
+        // PDF !! It is hoped that these three local variables (which
         // duplicate 'dbo_name_option1' etc. above) can be expunged.
         DboNameLevel                   = p.datum("DboNameLevel"                   );
         DboNameIncreasing              = p.datum("DboNameIncreasing"              );
@@ -327,6 +327,15 @@ void LedgerInvariant::Init(BasicValues const* b)
         SepAcctName                    = p.datum("SepAcctName"                    );
         SpecAmtName                    = p.datum("SpecAmtName"                    );
         SpecAmtNameElaborated          = p.datum("SpecAmtNameElaborated"          );
+        UwBasisMedical                 = p.datum("UwBasisMedical"                 );
+        UwBasisParamedical             = p.datum("UwBasisParamedical"             );
+        UwBasisNonmedical              = p.datum("UwBasisNonmedical"              );
+        UwBasisSimplified              = p.datum("UwBasisSimplified"              );
+        UwBasisGuaranteed              = p.datum("UwBasisGuaranteed"              );
+        UwClassPreferred               = p.datum("UwClassPreferred"               );
+        UwClassStandard                = p.datum("UwClassStandard"                );
+        UwClassRated                   = p.datum("UwClassRated"                   );
+        UwClassUltra                   = p.datum("UwClassUltra"                   );
 
         AccountValueFootnote           = p.datum("AccountValueFootnote"           );
         AttainedAgeFootnote            = p.datum("AttainedAgeFootnote"            );

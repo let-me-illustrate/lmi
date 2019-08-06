@@ -250,6 +250,15 @@ class LMI_SO LedgerInvariant final
     std::string     SepAcctName;
     std::string     SpecAmtName;
     std::string     SpecAmtNameElaborated;
+    std::string     UwBasisMedical;
+    std::string     UwBasisParamedical;
+    std::string     UwBasisNonmedical;
+    std::string     UwBasisSimplified;
+    std::string     UwBasisGuaranteed;
+    std::string     UwClassPreferred;
+    std::string     UwClassStandard;
+    std::string     UwClassRated;
+    std::string     UwClassUltra;
 
     // Ledger column definitions.
     std::string     AccountValueFootnote;

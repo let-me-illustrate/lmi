@@ -213,6 +213,15 @@ void LedgerInvariant::Alloc(int len)
     Strings["SepAcctName"                   ] = &SepAcctName                   ;
     Strings["SpecAmtName"                   ] = &SpecAmtName                   ;
     Strings["SpecAmtNameElaborated"         ] = &SpecAmtNameElaborated         ;
+    Strings["UwBasisMedical"                ] = &UwBasisMedical                ;
+    Strings["UwBasisParamedical"            ] = &UwBasisParamedical            ;
+    Strings["UwBasisNonmedical"             ] = &UwBasisNonmedical             ;
+    Strings["UwBasisSimplified"             ] = &UwBasisSimplified             ;
+    Strings["UwBasisGuaranteed"             ] = &UwBasisGuaranteed             ;
+    Strings["UwClassPreferred"              ] = &UwClassPreferred              ;
+    Strings["UwClassStandard"               ] = &UwClassStandard               ;
+    Strings["UwClassRated"                  ] = &UwClassRated                  ;
+    Strings["UwClassUltra"                  ] = &UwClassUltra                  ;
 
     Strings["AccountValueFootnote"          ] = &AccountValueFootnote          ;
     Strings["AttainedAgeFootnote"           ] = &AttainedAgeFootnote           ;
@@ -580,6 +589,15 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     SepAcctName                   = a_Addend.SepAcctName;
     SpecAmtName                   = a_Addend.SpecAmtName;
     SpecAmtNameElaborated         = a_Addend.SpecAmtNameElaborated;
+    UwBasisMedical                = a_Addend.UwBasisMedical;
+    UwBasisParamedical            = a_Addend.UwBasisParamedical;
+    UwBasisNonmedical             = a_Addend.UwBasisNonmedical;
+    UwBasisSimplified             = a_Addend.UwBasisSimplified;
+    UwBasisGuaranteed             = a_Addend.UwBasisGuaranteed;
+    UwClassPreferred              = a_Addend.UwClassPreferred;
+    UwClassStandard               = a_Addend.UwClassStandard;
+    UwClassRated                  = a_Addend.UwClassRated;
+    UwClassUltra                  = a_Addend.UwClassUltra;
 
     AccountValueFootnote          = a_Addend.AccountValueFootnote;
     AttainedAgeFootnote           = a_Addend.AttainedAgeFootnote;

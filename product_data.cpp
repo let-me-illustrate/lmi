@@ -233,6 +233,15 @@ void product_data::ascribe_members()
     ascribe("SepAcctName"                   , &product_data::SepAcctName                   );
     ascribe("SpecAmtName"                   , &product_data::SpecAmtName                   );
     ascribe("SpecAmtNameElaborated"         , &product_data::SpecAmtNameElaborated         );
+    ascribe("UwBasisMedical"                , &product_data::UwBasisMedical                );
+    ascribe("UwBasisParamedical"            , &product_data::UwBasisParamedical            );
+    ascribe("UwBasisNonmedical"             , &product_data::UwBasisNonmedical             );
+    ascribe("UwBasisSimplified"             , &product_data::UwBasisSimplified             );
+    ascribe("UwBasisGuaranteed"             , &product_data::UwBasisGuaranteed             );
+    ascribe("UwClassPreferred"              , &product_data::UwClassPreferred              );
+    ascribe("UwClassStandard"               , &product_data::UwClassStandard               );
+    ascribe("UwClassRated"                  , &product_data::UwClassRated                  );
+    ascribe("UwClassUltra"                  , &product_data::UwClassUltra                  );
     ascribe("AccountValueFootnote"          , &product_data::AccountValueFootnote          );
     ascribe("AttainedAgeFootnote"           , &product_data::AttainedAgeFootnote           );
     ascribe("CashSurrValueFootnote"         , &product_data::CashSurrValueFootnote         );
@@ -524,6 +533,15 @@ sample::sample()
     item("SepAcctName")                = glossed_string("Separate Account");
     item("SpecAmtName")                = glossed_string("Specified Amount");
     item("SpecAmtNameElaborated")      = glossed_string("Specified (Face) Amount");
+    item("UwBasisMedical")             = glossed_string("Medical");
+    item("UwBasisParamedical")         = glossed_string("Paramedical");
+    item("UwBasisNonmedical")          = glossed_string("Nonmedical");
+    item("UwBasisSimplified")          = glossed_string("Simplified Issue");
+    item("UwBasisGuaranteed")          = glossed_string("Guaranteed Issue");
+    item("UwClassPreferred")           = glossed_string("Preferred");
+    item("UwClassStandard")            = glossed_string("Standard");
+    item("UwClassRated")               = glossed_string("Rated");
+    item("UwClassUltra")               = glossed_string("Ultrapreferred");
     item("MarketingNameFootnote")      = glossed_string("Policy form UL32768-NY is marketed as 'UL Supreme'.");
 
     item("ADDTerseName")               = glossed_string("Accident");
