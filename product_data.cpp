@@ -223,10 +223,16 @@ void product_data::ascribe_members()
     ascribe("CsvHeaderName"                 , &product_data::CsvHeaderName                 );
     ascribe("NoLapseProvisionName"          , &product_data::NoLapseProvisionName          );
     ascribe("ContractName"                  , &product_data::ContractName                  );
+    ascribe("DboName"                       , &product_data::DboName                       );
     ascribe("DboNameLevel"                  , &product_data::DboNameLevel                  );
     ascribe("DboNameIncreasing"             , &product_data::DboNameIncreasing             );
     ascribe("DboNameReturnOfPremium"        , &product_data::DboNameReturnOfPremium        );
     ascribe("DboNameMinDeathBenefit"        , &product_data::DboNameMinDeathBenefit        );
+    ascribe("GenAcctName"                   , &product_data::GenAcctName                   );
+    ascribe("GenAcctNameElaborated"         , &product_data::GenAcctNameElaborated         );
+    ascribe("SepAcctName"                   , &product_data::SepAcctName                   );
+    ascribe("SpecAmtName"                   , &product_data::SpecAmtName                   );
+    ascribe("SpecAmtNameElaborated"         , &product_data::SpecAmtNameElaborated         );
     ascribe("AccountValueFootnote"          , &product_data::AccountValueFootnote          );
     ascribe("AttainedAgeFootnote"           , &product_data::AttainedAgeFootnote           );
     ascribe("CashSurrValueFootnote"         , &product_data::CashSurrValueFootnote         );
@@ -508,10 +514,16 @@ sample::sample()
     item("CsvHeaderName")              = glossed_string("Cash Surr");
     item("NoLapseProvisionName")       = glossed_string("No-lapse Provision");
     item("ContractName")               = glossed_string("contract"); // Alternatively, "policy" or "certificate".
+    item("DboName")                    = glossed_string("Death Benefit Option");
     item("DboNameLevel")               = glossed_string("A");
     item("DboNameIncreasing")          = glossed_string("B");
     item("DboNameReturnOfPremium")     = glossed_string("ROP");
     item("DboNameMinDeathBenefit")     = glossed_string("MDB");
+    item("GenAcctName")                = glossed_string("General Account");
+    item("GenAcctNameElaborated")      = glossed_string("General Account (GA)");
+    item("SepAcctName")                = glossed_string("Separate Account");
+    item("SpecAmtName")                = glossed_string("Specified Amount");
+    item("SpecAmtNameElaborated")      = glossed_string("Specified (Face) Amount");
     item("MarketingNameFootnote")      = glossed_string("Policy form UL32768-NY is marketed as 'UL Supreme'.");
 
     item("ADDTerseName")               = glossed_string("Accident");

@@ -233,7 +233,8 @@ class LMI_SO LedgerInvariant final
     std::string     CsvHeaderName;
     std::string     NoLapseProvisionName;
     std::string     ContractName;
-    // PDF !! 'DboName*' variables are used only to assemble DBO
+    std::string     DboName;
+    // PDF !! 'DboName+' variables are used only to assemble DBO
     // definitions for mce_ill_reg PDFs. Probably those definitions
     // should be moved into '.policy' files instead, in which case
     // the 'DboName*' variables here can be expunged. Incidentally,
@@ -244,6 +245,11 @@ class LMI_SO LedgerInvariant final
     std::string     DboNameIncreasing;
 //  std::string     DboNameReturnOfPremium;
     std::string     DboNameMinDeathBenefit;
+    std::string     GenAcctName;
+    std::string     GenAcctNameElaborated;
+    std::string     SepAcctName;
+    std::string     SpecAmtName;
+    std::string     SpecAmtNameElaborated;
 
     // Ledger column definitions.
     std::string     AccountValueFootnote;

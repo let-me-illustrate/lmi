@@ -189,10 +189,27 @@ class LMI_SO product_data
     glossed_string CsvHeaderName;
     glossed_string NoLapseProvisionName;
     glossed_string ContractName;
+    glossed_string DboName;
     glossed_string DboNameLevel;
     glossed_string DboNameIncreasing;
     glossed_string DboNameReturnOfPremium;
     glossed_string DboNameMinDeathBenefit;
+    glossed_string GenAcctName;
+    glossed_string GenAcctNameElaborated;
+    glossed_string SepAcctName;
+    glossed_string SpecAmtName;
+    glossed_string SpecAmtNameElaborated;
+
+    // Underwriting terms.
+    glossed_string UwBasisMedical;
+    glossed_string UwBasisParamedical;
+    glossed_string UwBasisNonmedical;
+    glossed_string UwBasisSimplified;
+    glossed_string UwBasisGuaranteed;
+    glossed_string UwClassPreferred;
+    glossed_string UwClassStandard;
+    glossed_string UwClassRated;
+    glossed_string UwClassUltra;
 
     // TODO ?? Most of the following are missing from the GUI.
 

@@ -204,9 +204,15 @@ void LedgerInvariant::Alloc(int len)
     Strings["CsvHeaderName"                 ] = &CsvHeaderName                 ;
     Strings["NoLapseProvisionName"          ] = &NoLapseProvisionName          ;
     Strings["ContractName"                  ] = &ContractName                  ;
+    Strings["DboName"                       ] = &DboName                       ;
     Strings["DboNameLevel"                  ] = &DboNameLevel                  ;
     Strings["DboNameIncreasing"             ] = &DboNameIncreasing             ;
     Strings["DboNameMinDeathBenefit"        ] = &DboNameMinDeathBenefit        ;
+    Strings["GenAcctName"                   ] = &GenAcctName                   ;
+    Strings["GenAcctNameElaborated"         ] = &GenAcctNameElaborated         ;
+    Strings["SepAcctName"                   ] = &SepAcctName                   ;
+    Strings["SpecAmtName"                   ] = &SpecAmtName                   ;
+    Strings["SpecAmtNameElaborated"         ] = &SpecAmtNameElaborated         ;
 
     Strings["AccountValueFootnote"          ] = &AccountValueFootnote          ;
     Strings["AttainedAgeFootnote"           ] = &AttainedAgeFootnote           ;
@@ -565,9 +571,15 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     CsvHeaderName                 = a_Addend.CsvHeaderName;
     NoLapseProvisionName          = a_Addend.NoLapseProvisionName;
     ContractName                  = a_Addend.ContractName;
+    DboName                       = a_Addend.DboName;
     DboNameLevel                  = a_Addend.DboNameLevel;
     DboNameIncreasing             = a_Addend.DboNameIncreasing;
     DboNameMinDeathBenefit        = a_Addend.DboNameMinDeathBenefit;
+    GenAcctName                   = a_Addend.GenAcctName;
+    GenAcctNameElaborated         = a_Addend.GenAcctNameElaborated;
+    SepAcctName                   = a_Addend.SepAcctName;
+    SpecAmtName                   = a_Addend.SpecAmtName;
+    SpecAmtNameElaborated         = a_Addend.SpecAmtNameElaborated;
 
     AccountValueFootnote          = a_Addend.AccountValueFootnote;
     AttainedAgeFootnote           = a_Addend.AttainedAgeFootnote;
