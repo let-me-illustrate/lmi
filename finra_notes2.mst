@@ -36,6 +36,7 @@ This illustration assumes death of the insured at
 age {{EndtAge}}.
 </p>
 
+<!-- PDF !! INSTEAD: S_GuarIssueDisclaimerNcSc -->
 {{#StateIsNorthOrSouthCarolina}}
     <p>
     In the states of North Carolina and South Carolina, Guaranteed Issue
@@ -44,6 +45,7 @@ age {{EndtAge}}.
     </p>
 {{/StateIsNorthOrSouthCarolina}}
 
+<!-- PDF !! INSTEAD: S_GuarIssueDisclaimerMd -->
 {{#StateIsMaryland}}
     <p>
     In the state of Maryland, Guaranteed Issue Underwriting
@@ -171,6 +173,7 @@ The state of issue is {{StateOfJurisdiction}}.
 {{/IsInforce}}
 
 {{#CallGuarUwSubstd}}
+<!-- PDF !! INSTEAD: S_GuarIssueDisclaimerTx -->
     <p>
     *** This policy is classified as substandard guaranteed issue
     per the requirements of the Texas Insurance Department.

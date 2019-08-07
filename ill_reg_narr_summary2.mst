@@ -108,6 +108,7 @@ in the Tabular Detail.
     </p>
 {{/Composite}}
 
+<!-- PDF !! INSTEAD: S_GuarIssueDisclaimerNcSc -->
 {{#StateIsNorthOrSouthCarolina}}
     <p>
     In the states of North Carolina and South Carolina,
@@ -117,6 +118,7 @@ in the Tabular Detail.
     </p>
 {{/StateIsNorthOrSouthCarolina}}
 
+<!-- PDF !! INSTEAD: S_GuarIssueDisclaimerMd -->
 {{#StateIsMaryland}}
     <p>
     In the state of Maryland, Guaranteed Issue Underwriting

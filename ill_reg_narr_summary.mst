@@ -186,6 +186,7 @@ and values set forth in the illustration are not guaranteed.
 </p>
 
 <p>
+<!-- PDF !! INSTEAD: S_NonGuaranteedFootnote1 -->
 {{^StateIsTexas}}
     This illustration assumes that the currently illustrated
     non-guaranteed elements will continue unchanged
@@ -196,6 +197,7 @@ and values set forth in the illustration are not guaranteed.
     and current monthly charges, which are subject to change by
     {{InsCoName}}.
 {{/StateIsTexas}}
+<!-- PDF !! INSTEAD: S_NonGuaranteedFootnote1Tx -->
 {{#StateIsTexas}}
     This illustration is based on both non-guaranteed
     and guaranteed assumptions. Non-guaranteed assumptions

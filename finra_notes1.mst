@@ -85,6 +85,7 @@ consult with your own independent tax or legal counsel.
 
 {{#NoLapse}}
     {{^StateIsNewYork}}
+<!-- PDF !! INSTEAD: S_NoLapseFootnote -->
         <p>
         {{NoLapseProvisionName}}:
         The {{NoLapseProvisionName}} is a lapse protection feature. If met,
@@ -97,6 +98,7 @@ consult with your own independent tax or legal counsel.
 {{/NoLapse}}
 
 {{#NoLapseAlwaysActive}}
+<!-- PDF !! INSTEAD: S_NoLapseEverFootnote -->
     <p>
     No-Lapse Guarantee: The {{ContractName}} will remain in force after the
     first premium has been paid, even if there is insufficient {{AvName}} Value
