@@ -277,6 +277,7 @@ void LedgerInvariant::Alloc(int len)
     Strings["MortalityBlendFootnote"        ] = &MortalityBlendFootnote        ;
     Strings["HypotheticalRatesFootnote"     ] = &HypotheticalRatesFootnote     ;
     Strings["SalesLoadRefundFootnote"       ] = &SalesLoadRefundFootnote       ;
+    Strings["NoLapseEverFootnote"           ] = &NoLapseEverFootnote           ;
     Strings["NoLapseFootnote"               ] = &NoLapseFootnote               ;
     Strings["MarketValueAdjFootnote"        ] = &MarketValueAdjFootnote        ;
     Strings["ExchangeChargeFootnote0"       ] = &ExchangeChargeFootnote0       ;
@@ -319,6 +320,8 @@ void LedgerInvariant::Alloc(int len)
     Strings["InforceNonGuaranteedFootnote2" ] = &InforceNonGuaranteedFootnote2 ;
     Strings["InforceNonGuaranteedFootnote3" ] = &InforceNonGuaranteedFootnote3 ;
     Strings["NonGuaranteedFootnote"         ] = &NonGuaranteedFootnote         ;
+    Strings["NonGuaranteedFootnote1"        ] = &NonGuaranteedFootnote1        ;
+    Strings["NonGuaranteedFootnote1Tx"      ] = &NonGuaranteedFootnote1Tx      ;
     Strings["MonthlyChargesPaymentFootnote" ] = &MonthlyChargesPaymentFootnote ;
     Strings["SurrenderFootnote"             ] = &SurrenderFootnote             ;
     Strings["PortabilityFootnote"           ] = &PortabilityFootnote           ;
@@ -329,6 +332,15 @@ void LedgerInvariant::Alloc(int len)
     Strings["SubsidiaryFootnote"            ] = &SubsidiaryFootnote            ;
     Strings["PlacementAgentFootnote"        ] = &PlacementAgentFootnote        ;
     Strings["MarketingNameFootnote"         ] = &MarketingNameFootnote         ;
+    Strings["GuarIssueDisclaimerNcSc"       ] = &GuarIssueDisclaimerNcSc       ;
+    Strings["GuarIssueDisclaimerMd"         ] = &GuarIssueDisclaimerMd         ;
+    Strings["GuarIssueDisclaimerTx"         ] = &GuarIssueDisclaimerTx         ;
+    Strings["IllRegCertAgent"               ] = &IllRegCertAgent               ;
+    Strings["IllRegCertAgentIl"             ] = &IllRegCertAgentIl             ;
+    Strings["IllRegCertAgentTx"             ] = &IllRegCertAgentTx             ;
+    Strings["IllRegCertClient"              ] = &IllRegCertClient              ;
+    Strings["IllRegCertClientIl"            ] = &IllRegCertClientIl            ;
+    Strings["IllRegCertClientTx"            ] = &IllRegCertClientTx            ;
 
     Strings["ProductName"                   ] = &ProductName                   ;
     Strings["ProducerName"                  ] = &ProducerName                  ;
@@ -654,6 +666,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     MortalityBlendFootnote        = a_Addend.MortalityBlendFootnote;
     HypotheticalRatesFootnote     = a_Addend.HypotheticalRatesFootnote;
     SalesLoadRefundFootnote       = a_Addend.SalesLoadRefundFootnote;
+    NoLapseEverFootnote           = a_Addend.NoLapseEverFootnote;
     NoLapseFootnote               = a_Addend.NoLapseFootnote;
     MarketValueAdjFootnote        = a_Addend.MarketValueAdjFootnote;
     ExchangeChargeFootnote0       = a_Addend.ExchangeChargeFootnote0;
@@ -696,6 +709,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     InforceNonGuaranteedFootnote2 = a_Addend.InforceNonGuaranteedFootnote2;
     InforceNonGuaranteedFootnote3 = a_Addend.InforceNonGuaranteedFootnote3;
     NonGuaranteedFootnote         = a_Addend.NonGuaranteedFootnote;
+    NonGuaranteedFootnote1        = a_Addend.NonGuaranteedFootnote1;
+    NonGuaranteedFootnote1Tx      = a_Addend.NonGuaranteedFootnote1Tx;
     MonthlyChargesPaymentFootnote = a_Addend.MonthlyChargesPaymentFootnote;
     SurrenderFootnote             = a_Addend.SurrenderFootnote;
     PortabilityFootnote           = a_Addend.PortabilityFootnote;
@@ -706,6 +721,15 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     SubsidiaryFootnote            = a_Addend.SubsidiaryFootnote;
     PlacementAgentFootnote        = a_Addend.PlacementAgentFootnote;
     MarketingNameFootnote         = a_Addend.MarketingNameFootnote;
+    GuarIssueDisclaimerNcSc       = a_Addend.GuarIssueDisclaimerNcSc;
+    GuarIssueDisclaimerMd         = a_Addend.GuarIssueDisclaimerMd;
+    GuarIssueDisclaimerTx         = a_Addend.GuarIssueDisclaimerTx;
+    IllRegCertAgent               = a_Addend.IllRegCertAgent;
+    IllRegCertAgentIl             = a_Addend.IllRegCertAgentIl;
+    IllRegCertAgentTx             = a_Addend.IllRegCertAgentTx;
+    IllRegCertClient              = a_Addend.IllRegCertClient;
+    IllRegCertClientIl            = a_Addend.IllRegCertClientIl;
+    IllRegCertClientTx            = a_Addend.IllRegCertClientTx;
 
     Comments                      = a_Addend.Comments;
 

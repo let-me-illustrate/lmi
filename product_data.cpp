@@ -292,6 +292,7 @@ void product_data::ascribe_members()
     ascribe("MortalityBlendFootnote"        , &product_data::MortalityBlendFootnote        );
     ascribe("HypotheticalRatesFootnote"     , &product_data::HypotheticalRatesFootnote     );
     ascribe("SalesLoadRefundFootnote"       , &product_data::SalesLoadRefundFootnote       );
+    ascribe("NoLapseEverFootnote"           , &product_data::NoLapseEverFootnote           );
     ascribe("NoLapseFootnote"               , &product_data::NoLapseFootnote               );
     ascribe("MarketValueAdjFootnote"        , &product_data::MarketValueAdjFootnote        );
     ascribe("ExchangeChargeFootnote0"       , &product_data::ExchangeChargeFootnote0       );
@@ -334,6 +335,8 @@ void product_data::ascribe_members()
     ascribe("InforceNonGuaranteedFootnote2" , &product_data::InforceNonGuaranteedFootnote2 );
     ascribe("InforceNonGuaranteedFootnote3" , &product_data::InforceNonGuaranteedFootnote3 );
     ascribe("NonGuaranteedFootnote"         , &product_data::NonGuaranteedFootnote         );
+    ascribe("NonGuaranteedFootnote1"        , &product_data::NonGuaranteedFootnote1        );
+    ascribe("NonGuaranteedFootnote1Tx"      , &product_data::NonGuaranteedFootnote1Tx      );
     ascribe("MonthlyChargesPaymentFootnote" , &product_data::MonthlyChargesPaymentFootnote );
     ascribe("SurrenderFootnote"             , &product_data::SurrenderFootnote             );
     ascribe("PortabilityFootnote"           , &product_data::PortabilityFootnote           );
@@ -344,6 +347,15 @@ void product_data::ascribe_members()
     ascribe("SubsidiaryFootnote"            , &product_data::SubsidiaryFootnote            );
     ascribe("PlacementAgentFootnote"        , &product_data::PlacementAgentFootnote        );
     ascribe("MarketingNameFootnote"         , &product_data::MarketingNameFootnote         );
+    ascribe("GuarIssueDisclaimerNcSc"       , &product_data::GuarIssueDisclaimerNcSc       );
+    ascribe("GuarIssueDisclaimerMd"         , &product_data::GuarIssueDisclaimerMd         );
+    ascribe("GuarIssueDisclaimerTx"         , &product_data::GuarIssueDisclaimerTx         );
+    ascribe("IllRegCertAgent"               , &product_data::IllRegCertAgent               );
+    ascribe("IllRegCertAgentIl"             , &product_data::IllRegCertAgentIl             );
+    ascribe("IllRegCertAgentTx"             , &product_data::IllRegCertAgentTx             );
+    ascribe("IllRegCertClient"              , &product_data::IllRegCertClient              );
+    ascribe("IllRegCertClientIl"            , &product_data::IllRegCertClientIl            );
+    ascribe("IllRegCertClientTx"            , &product_data::IllRegCertClientTx            );
 }
 
 /// Backward-compatibility serial number of this class's xml version.
@@ -457,6 +469,18 @@ void product_data::redintegrate_ex_post
 
 namespace
 {
+// These two certifications are copied verbatim et literatim from the
+// illustration reg.
+static std::string const S_IllRegCertAgent =
+  "I certify that this illustration has been presented to the applicant and"
+  " that I have explained that any non-guaranteed elements illustrated are"
+  " subject to change. I have made no statements that are inconsistent with"
+  " the illustration.";
+static std::string const S_IllRegCertClient =
+  "I have received a copy of this illustration and understand that any"
+  " non-guaranteed elements illustrated are subject to change and could be"
+  " either higher or lower. The agent has told me they are not guaranteed.";
+
 class sample : public product_data {public: sample();};
 
 class sample2 : public sample {public: sample2();};
@@ -543,6 +567,12 @@ sample::sample()
     item("UwClassRated")               = glossed_string("Rated");
     item("UwClassUltra")               = glossed_string("Ultrapreferred");
     item("MarketingNameFootnote")      = glossed_string("Policy form UL32768-NY is marketed as 'UL Supreme'.");
+    item("IllRegCertAgent")            = S_IllRegCertAgent;
+    item("IllRegCertAgentIl")          = S_IllRegCertAgent;
+    item("IllRegCertAgentTx")          = S_IllRegCertAgent;
+    item("IllRegCertClient")           = S_IllRegCertClient;
+    item("IllRegCertClientIl")         = S_IllRegCertClient;
+    item("IllRegCertClientTx")         = S_IllRegCertClient;
 
     item("ADDTerseName")               = glossed_string("Accident");
     item("InsurabilityTerseName")      = glossed_string("Insurability");

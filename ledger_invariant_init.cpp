@@ -392,6 +392,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         MortalityBlendFootnote         = p.datum("MortalityBlendFootnote"         );
         HypotheticalRatesFootnote      = p.datum("HypotheticalRatesFootnote"      );
         SalesLoadRefundFootnote        = p.datum("SalesLoadRefundFootnote"        );
+        NoLapseEverFootnote            = p.datum("NoLapseEverFootnote"            );
         NoLapseFootnote                = p.datum("NoLapseFootnote"                );
         MarketValueAdjFootnote         = p.datum("MarketValueAdjFootnote"         );
         ExchangeChargeFootnote0        = p.datum("ExchangeChargeFootnote0"        );
@@ -434,6 +435,8 @@ void LedgerInvariant::Init(BasicValues const* b)
         InforceNonGuaranteedFootnote2  = p.datum("InforceNonGuaranteedFootnote2"  );
         InforceNonGuaranteedFootnote3  = p.datum("InforceNonGuaranteedFootnote3"  );
         NonGuaranteedFootnote          = p.datum("NonGuaranteedFootnote"          );
+        NonGuaranteedFootnote1         = p.datum("NonGuaranteedFootnote1"         );
+        NonGuaranteedFootnote1Tx       = p.datum("NonGuaranteedFootnote1Tx"       );
         MonthlyChargesPaymentFootnote  = p.datum("MonthlyChargesPaymentFootnote"  );
         SurrenderFootnote              = p.datum("SurrenderFootnote"              );
         PortabilityFootnote            = p.datum("PortabilityFootnote"            );
@@ -444,6 +447,15 @@ void LedgerInvariant::Init(BasicValues const* b)
         SubsidiaryFootnote             = p.datum("SubsidiaryFootnote"             );
         PlacementAgentFootnote         = p.datum("PlacementAgentFootnote"         );
         MarketingNameFootnote          = p.datum("MarketingNameFootnote"          );
+        GuarIssueDisclaimerNcSc        = p.datum("GuarIssueDisclaimerNcSc"        );
+        GuarIssueDisclaimerMd          = p.datum("GuarIssueDisclaimerMd"          );
+        GuarIssueDisclaimerTx          = p.datum("GuarIssueDisclaimerTx"          );
+        IllRegCertAgent                = p.datum("IllRegCertAgent"                );
+        IllRegCertAgentIl              = p.datum("IllRegCertAgentIl"              );
+        IllRegCertAgentTx              = p.datum("IllRegCertAgentTx"              );
+        IllRegCertClient               = p.datum("IllRegCertClient"               );
+        IllRegCertClientIl             = p.datum("IllRegCertClientIl"             );
+        IllRegCertClientTx             = p.datum("IllRegCertClientTx"             );
         }
 
     ProductName             = b->yare_input_.ProductName;

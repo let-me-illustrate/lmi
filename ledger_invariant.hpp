@@ -321,6 +321,7 @@ class LMI_SO LedgerInvariant final
     std::string     MortalityBlendFootnote;
     std::string     HypotheticalRatesFootnote;
     std::string     SalesLoadRefundFootnote;
+    std::string     NoLapseEverFootnote;
     std::string     NoLapseFootnote;
     std::string     MarketValueAdjFootnote;
     std::string     ExchangeChargeFootnote0;
@@ -363,6 +364,8 @@ class LMI_SO LedgerInvariant final
     std::string     InforceNonGuaranteedFootnote2;
     std::string     InforceNonGuaranteedFootnote3;
     std::string     NonGuaranteedFootnote;
+    std::string     NonGuaranteedFootnote1;
+    std::string     NonGuaranteedFootnote1Tx;
     std::string     MonthlyChargesPaymentFootnote;
     std::string     SurrenderFootnote;
     std::string     PortabilityFootnote;
@@ -373,6 +376,15 @@ class LMI_SO LedgerInvariant final
     std::string     SubsidiaryFootnote;
     std::string     PlacementAgentFootnote;
     std::string     MarketingNameFootnote;
+    std::string     GuarIssueDisclaimerNcSc;
+    std::string     GuarIssueDisclaimerMd;
+    std::string     GuarIssueDisclaimerTx;
+    std::string     IllRegCertAgent;
+    std::string     IllRegCertAgentIl;
+    std::string     IllRegCertAgentTx;
+    std::string     IllRegCertClient;
+    std::string     IllRegCertClientIl;
+    std::string     IllRegCertClientTx;
 
     // Strings from class Input.
 

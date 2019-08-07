@@ -282,6 +282,7 @@ class LMI_SO product_data
     glossed_string MortalityBlendFootnote;
     glossed_string HypotheticalRatesFootnote;
     glossed_string SalesLoadRefundFootnote;
+    glossed_string NoLapseEverFootnote;
     glossed_string NoLapseFootnote;
     glossed_string MarketValueAdjFootnote;
     glossed_string ExchangeChargeFootnote0;
@@ -324,6 +325,8 @@ class LMI_SO product_data
     glossed_string InforceNonGuaranteedFootnote2;
     glossed_string InforceNonGuaranteedFootnote3;
     glossed_string NonGuaranteedFootnote;
+    glossed_string NonGuaranteedFootnote1;
+    glossed_string NonGuaranteedFootnote1Tx;
     glossed_string MonthlyChargesPaymentFootnote;
     glossed_string SurrenderFootnote;
     glossed_string PortabilityFootnote;
@@ -334,6 +337,15 @@ class LMI_SO product_data
     glossed_string SubsidiaryFootnote;
     glossed_string PlacementAgentFootnote;
     glossed_string MarketingNameFootnote;
+    glossed_string GuarIssueDisclaimerNcSc;
+    glossed_string GuarIssueDisclaimerMd;
+    glossed_string GuarIssueDisclaimerTx;
+    glossed_string IllRegCertAgent;
+    glossed_string IllRegCertAgentIl;
+    glossed_string IllRegCertAgentTx;
+    glossed_string IllRegCertClient;
+    glossed_string IllRegCertClientIl;
+    glossed_string IllRegCertClientTx;
 };
 
 void LMI_SO load(product_data      &, fs::path const&);
