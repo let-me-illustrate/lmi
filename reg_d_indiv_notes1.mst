@@ -105,47 +105,7 @@ willing to represent as such to {{InsCoShortName}}.
 </p>
 
 <p>
-{{! Experimental: This empty paragraph should be suppressed. }}
-</p>
-
-<p>
-{{! Experimental: This empty paragraph should be suppressed. }}
-</p>
-
-<p>
-{{! Experimental: This empty paragraph should be suppressed. }}
-</p>
-
-<p>
-{{! Experimental: This empty paragraph should be suppressed. }}
-</p>
-
-<p>
 <b>End of Year Age:</b> &nbsp; {{AttainedAgeFootnote}}
-</p>
-
-{{!
-    Experimental.
-
-    'ExchangeChargeFootnote0' is otherwise disused; its definition is
-    nonempty only for product 'sample2ipp'.
-
-    The following 'ExchangeChargeFootnote0' paragraph should print
-    something for 'sample2ipp' only. For any other product, it should
-    be suppressed, as though it weren't present at all, thus taking no
-    vertical space.
-}}
-
-<p>
-{{ExchangeChargeFootnote0}}
-</p>
-
-<p>
-{{! Experimental: This empty paragraph should be suppressed. }}
-</p>
-
-<p>
-{{! Experimental: This empty paragraph should be suppressed. }}
 </p>
 
 <p>

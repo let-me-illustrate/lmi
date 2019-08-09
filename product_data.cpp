@@ -764,14 +764,6 @@ sample2ipp::sample2ipp()
          " who entered, that there were few of the company bold enough to set"
          " foot within its precincts at all."
         );
-    // Experimental: 'ExchangeChargeFootnote0' is otherwise disused.
-    item("ExchangeChargeFootnote0") =
-        "«Guaranteed mortality column definition:»¶{{InsCoName}}"
-        " guarantees that this {{ContractName}}'s mortality charges will"
-        " never exceed the applicable CSO mortality tables."
-        "¶And here's another line (coded with a single pilcrow)."
-        "¶¶And here's another paragraph (coded with a double pilcrow)."
-        ;
 }
 
 sample2xyz::sample2xyz()
