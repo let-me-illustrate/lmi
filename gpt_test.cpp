@@ -51,7 +51,7 @@ std::vector<double> a_to_m(std::vector<double> const& q_a)
 std::vector<double> sample_q(int age)
 {
     static std::vector<double> const q_a = cso_table
-        (oe_1980cso
+        (mce_1980cso
         ,oe_orthodox
         ,oe_age_nearest_birthday_ties_younger
         ,mce_male

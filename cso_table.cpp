@@ -918,24 +918,24 @@ static double const q2017[cso_n_alb_or_anb][cso_n_gender][cso_n_smoking][cso_ome
 
 namespace
 {
-int get_sns_age(oenum_cso_era cso_era, mcenum_smoking smoking)
+int get_sns_age(mcenum_cso_era cso_era, mcenum_smoking smoking)
 {
     return
         ((mce_unismoke == smoking) ? 0
-        :(oe_1980cso == cso_era) ? cso_sns_age_1980
-        :(oe_2001cso == cso_era) ? cso_sns_age_2001
-        :(oe_2017cso == cso_era) ? cso_sns_age_2017
-        :                          throw "invalid cso sns age"
+        :(mce_1980cso == cso_era) ? cso_sns_age_1980
+        :(mce_2001cso == cso_era) ? cso_sns_age_2001
+        :(mce_2017cso == cso_era) ? cso_sns_age_2017
+        :                           throw "invalid cso sns age"
         );
 }
 
-int get_omega(oenum_cso_era cso_era)
+int get_omega(mcenum_cso_era cso_era)
 {
     return
-        ((oe_1980cso == cso_era) ? cso_omega_1980
-        :(oe_2001cso == cso_era) ? cso_omega_2001
-        :(oe_2017cso == cso_era) ? cso_omega_2017
-        :                          throw "invalid cso omega"
+        ((mce_1980cso == cso_era) ? cso_omega_1980
+        :(mce_2001cso == cso_era) ? cso_omega_2001
+        :(mce_2017cso == cso_era) ? cso_omega_2017
+        :                           throw "invalid cso omega"
         );
 }
 } // Unnamed namespace.
@@ -964,7 +964,7 @@ int get_omega(oenum_cso_era cso_era)
 ///  - The value at duration omega-1 equals unity.
 
 std::vector<double> cso_table
-    (oenum_cso_era    cso_era
+    (mcenum_cso_era   cso_era
     ,oenum_autopisty  autopisty
     ,oenum_alb_or_anb alb_or_anb
     ,mcenum_gender    gender
@@ -975,10 +975,10 @@ std::vector<double> cso_table
 {
     bool const is_anb = alb_or_anb != oe_age_last_birthday;
     double const* p
-        ((oe_1980cso == cso_era) ? q1980[is_anb][gender][smoking]
-        :(oe_2001cso == cso_era) ? q2001[is_anb][gender][smoking]
-        :(oe_2017cso == cso_era) ? q2017[is_anb][gender][smoking]
-        :                          throw "invalid cso era"
+        ((mce_1980cso == cso_era) ? q1980[is_anb][gender][smoking]
+        :(mce_2001cso == cso_era) ? q2001[is_anb][gender][smoking]
+        :(mce_2017cso == cso_era) ? q2017[is_anb][gender][smoking]
+        :                           throw "invalid cso era"
         );
     int const sns_age = get_sns_age(cso_era, smoking);
     int const omega   = get_omega  (cso_era         );
@@ -995,7 +995,7 @@ std::vector<double> cso_table
 
     if
         (oe_heterodox    == autopisty
-        && oe_1980cso    == cso_era
+        && mce_1980cso   == cso_era
         && mce_nonsmoker == smoking
         && mce_male      == gender
         )
@@ -1028,7 +1028,7 @@ std::vector<double> cso_table
 /// See the overload with more arguments for details.
 
 std::vector<double> cso_table
-    (oenum_cso_era    cso_era
+    (mcenum_cso_era   cso_era
     ,oenum_autopisty  autopisty
     ,oenum_alb_or_anb alb_or_anb
     ,mcenum_gender    gender

@@ -553,7 +553,7 @@ void DBDictionary::InitDB()
     Add({DB_Effective7702DboRop , mce_option1_for_7702});
     Add({DB_TermIsQABOrDb7702   , oe_7702_term_is_db});
     Add({DB_TermIsQABOrDb7702A  , oe_7702_term_is_db});
-    Add({DB_CsoEra              , oe_2017cso});
+    Add({DB_CsoEra              , mce_2017cso});
     Add({DB_CsoMisprint         , oe_orthodox});
     Add({DB_CoiInforceReentry   , e_reenter_never});
     Add({DB_SepAcctSpreadMethod , mce_spread_is_effective_annual});
@@ -690,7 +690,7 @@ sample::sample()
     Add({DB_Irc7702NspTable     , 0});
     Add({DB_SevenPayTable       , 10});
 
-    Add({DB_CsoEra              , oe_1980cso});
+    Add({DB_CsoEra              , mce_1980cso});
     // Following IRS Notice 88-128, use only the male and female
     // tables with no smoker distinction, and a unisex table where
     // required by state law.

@@ -76,12 +76,6 @@ enum oenum_autopisty
     ,oe_heterodox
     };
 
-enum oenum_cso_era
-    {oe_1980cso = 1980
-    ,oe_2001cso = 2001
-    ,oe_2017cso = 2017
-    };
-
 enum oenum_elasticity
     {oe_inelastic
     ,oe_elastic

@@ -33,7 +33,7 @@ namespace
 std::vector<double> const& sample_q()
 {
     static std::vector<double> const q = cso_table
-        (oe_1980cso
+        (mce_1980cso
         ,oe_orthodox
         ,oe_age_nearest_birthday_ties_younger
         ,mce_male

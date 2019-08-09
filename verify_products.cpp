@@ -61,7 +61,7 @@ class product_verifier
     product_database const db0_         ;
     int              const min_age_     ;
     product_database const db_          ;
-    oenum_cso_era    const era_         ;
+    mcenum_cso_era   const era_         ;
     oenum_alb_or_anb const a_b_         ;
     int              const t_           ;
     bool             const axis_g_      ;
@@ -99,7 +99,7 @@ product_verifier::product_verifier
         ,mce_medical
         ,mce_s_XX
         )
-    ,era_          {db_.query<oenum_cso_era   >(DB_CsoEra)}
+    ,era_          {db_.query<mcenum_cso_era  >(DB_CsoEra)}
     ,a_b_          {db_.query<oenum_alb_or_anb>(DB_AgeLastOrNearest)}
     ,t_            {db_.query<int             >(DB_Irc7702QTable)}
     ,axis_g_       {db_.query<bool            >(DB_Irc7702QAxisGender)}
