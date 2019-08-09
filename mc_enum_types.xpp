@@ -87,6 +87,17 @@
     ,"B" \
     };
 
+#define cso_era_VALUES \
+    {mce_1980cso \
+    ,mce_2001cso \
+    ,mce_2017cso \
+    };
+#define cso_era_NAMES \
+    {"1980" \
+    ,"2001" \
+    ,"2017" \
+    };
+
 #define mode_VALUES \
     {mce_annual \
     ,mce_semiannual \

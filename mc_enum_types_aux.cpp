@@ -129,6 +129,7 @@ std::string mc_str(T t)
 
 template std::string mc_str(mcenum_class               );
 template std::string mc_str(mcenum_country             );
+template std::string mc_str(mcenum_cso_era             );
 template std::string mc_str(mcenum_dbopt               );
 template std::string mc_str(mcenum_defn_life_ins       );
 template std::string mc_str(mcenum_defn_material_change);

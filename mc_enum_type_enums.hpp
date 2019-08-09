@@ -85,6 +85,12 @@ enum mcenum_spread_freq
     ,mce_spread_daily      = 365
     };
 
+enum mcenum_cso_era
+    {mce_1980cso = 1980
+    ,mce_2001cso = 2001
+    ,mce_2017cso = 2017
+    };
+
 enum mcenum_mode
     {mce_annual     =  1
     ,mce_semiannual =  2
@@ -104,7 +110,8 @@ MC_DEFINE_ENUMS(smoking)
 MC_DEFINE_ENUMS(class)
 MC_DEFINE_ENUMS(dbopt)
 MC_DEFINE_ENUMS(dbopt_7702)
-//MC_DEFINE_ENUMS(mode) // Defined above.
+//MC_DEFINE_ENUMS(cso_era) // Defined above.
+//MC_DEFINE_ENUMS(mode)    // Defined above.
 MC_DEFINE_ENUMS(gen_basis)
 MC_DEFINE_ENUMS(sep_basis)
 MC_DEFINE_ENUMS(rate_period)

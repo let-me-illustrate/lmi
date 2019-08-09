@@ -41,6 +41,7 @@ typedef mc_enum<mcenum_smoking              > mce_smoking              ;
 typedef mc_enum<mcenum_class                > mce_class                ;
 typedef mc_enum<mcenum_dbopt                > mce_dbopt                ;
 typedef mc_enum<mcenum_dbopt_7702           > mce_dbopt_7702           ;
+typedef mc_enum<mcenum_cso_era              > mce_cso_era              ;
 typedef mc_enum<mcenum_mode                 > mce_mode                 ;
 typedef mc_enum<mcenum_gen_basis            > mce_gen_basis            ;
 typedef mc_enum<mcenum_sep_basis            > mce_sep_basis            ;
