@@ -301,6 +301,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         PolicyForm = p.datum(alt_form ? "PolicyFormAlternative" : "PolicyForm");
         PolicyMktgName                 = p.datum("PolicyMktgName"                 );
         PolicyLegalName                = p.datum("PolicyLegalName"                );
+        CsoEra     = mc_str(b->database().query<mcenum_cso_era>(DB_CsoEra));
         InsCoShortName                 = p.datum("InsCoShortName"                 );
         InsCoName                      = p.datum("InsCoName"                      );
         InsCoAddr                      = p.datum("InsCoAddr"                      );

@@ -215,6 +215,7 @@ class LMI_SO LedgerInvariant final
     // Ledger needs no member like product_data::PolicyFormAlternative;
     std::string     PolicyMktgName;
     std::string     PolicyLegalName;
+    std::string     CsoEra;
     std::string     InsCoShortName;
     std::string     InsCoName;
     std::string     InsCoAddr;

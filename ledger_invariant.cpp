@@ -188,6 +188,7 @@ void LedgerInvariant::Alloc(int len)
 
     Strings["PolicyMktgName"                ] = &PolicyMktgName                ;
     Strings["PolicyLegalName"               ] = &PolicyLegalName               ;
+    Strings["CsoEra"                        ] = &CsoEra                        ;
     Strings["PolicyForm"                    ] = &PolicyForm                    ;
     Strings["InsCoShortName"                ] = &InsCoShortName                ;
     Strings["InsCoName"                     ] = &InsCoName                     ;
@@ -577,6 +578,10 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     PolicyForm                    = a_Addend.PolicyForm;
     PolicyMktgName                = a_Addend.PolicyMktgName;
     PolicyLegalName               = a_Addend.PolicyLegalName;
+    // This doesn't seem appropriate for a composite, which may
+    // include contracts issued in different CSO eras:
+//  CsoEra                        = a_Addend.CsoEra;
+    CsoEra                        = "[composite]";
     InsCoShortName                = a_Addend.InsCoShortName;
     InsCoName                     = a_Addend.InsCoName;
     InsCoAddr                     = a_Addend.InsCoAddr;
