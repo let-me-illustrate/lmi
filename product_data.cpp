@@ -566,7 +566,6 @@ sample::sample()
     item("UwClassStandard")            = glossed_string("Standard");
     item("UwClassRated")               = glossed_string("Rated");
     item("UwClassUltra")               = glossed_string("Ultrapreferred");
-    item("MarketingNameFootnote")      = glossed_string("Policy form UL32768-NY is marketed as 'UL Supreme'.");
     item("IllRegCertAgent")            = S_IllRegCertAgent;
     item("IllRegCertAgentIl")          = S_IllRegCertAgent;
     item("IllRegCertAgentTx")          = S_IllRegCertAgent;
@@ -582,6 +581,9 @@ sample::sample()
     item("WaiverTerseName")            = glossed_string("Waiver");
     item("AccelBftRiderTerseName")     = glossed_string("Acceleration");
     item("OverloanRiderTerseName")     = glossed_string("Overloan");
+
+    item("GuarMortalityFootnote")      = glossed_string("Guaranteed mortality basis: {{CsoEra}} CSO.");
+    item("MarketingNameFootnote")      = glossed_string("Policy form UL32768-NY is marketed as 'UL Supreme'.");
 
     item("GroupQuoteShortProductName") = glossed_string("UL SUPREME®");
     item("GroupQuoteIsNotAnOffer")     = glossed_string("This is not an offer of insurance.");
