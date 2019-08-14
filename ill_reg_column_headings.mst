@@ -177,10 +177,8 @@ minimum defined in your {{ContractName}}.
 {{SinglePremiumFootnote}}
 </p>
 {{/ModifiedSinglePremiumOrModifiedSinglePremium0}}
-<!-- Single Premium Logic -->
-<p>
-<b>Ultimate Illustrated Crediting Rate:</b>
-{{UltCreditingRateFootnote}}
 {{/SinglePremium}}
-</p>
+
+{{UltCreditingRateFootnote}}
+
 </font>
