@@ -59,34 +59,21 @@ less any monthly charges deducted.
 <p>
 <b>Death Benefit:</b>
 {{DeathBenefitFootnote}}
-<!--
-Presumably the description of death benefit options should be moved into
-'ProductDescription' (as has already been done in other '.mst' files).
--->
 </p>
-<p>
-<b>Death Benefit Option {{DboNameLevel}}:</b>
 {{DBOption1Footnote}}
-</p>
-<!-- Group Experience Rating Logic -->
-{{!
-  PDF !! Availability of DBO2 is unlikely to be correlated with experience rating.
-  DBO3 !! Such text should be controlled by product-database DBO entities.
-}}
-{{^AllowExperienceRating}}
-<p>
-<b>Death Benefit Option {{DboNameIncreasing}}:</b>
 {{DBOption2Footnote}}
-</p>
+{{DBOption3Footnote}}
 
+<!-- The experience-rating conditional here is absurd. -->
+{{^AllowExperienceRating}}
 {{^Composite}}
 <p>
 <b>End of Year Age:</b>
 {{AttainedAgeFootnote}}
 </p>
 {{/Composite}}
-
 {{/AllowExperienceRating}}
+
 <!-- Group Experience Rating Logic -->
 {{#AllowExperienceRating}}
 </p>
@@ -136,6 +123,7 @@ to income tax and may also trigger a tax penalty.
 {{MidpointValuesFootnote}}
 </p>
 {{/IsInforce}}
+{{MinDeathBenefitFootnote}}
 <!-- Single Premium Logic -->
 {{#ModifiedSinglePremiumOrModifiedSinglePremium0}}
 <p>
