@@ -416,6 +416,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         SinglePremiumFootnote          = p.datum("SinglePremiumFootnote"          );
         MonthlyChargesFootnote         = p.datum("MonthlyChargesFootnote"         );
         UltCreditingRateFootnote       = p.datum("UltCreditingRateFootnote"       );
+        UltCreditingRateHeader         = p.datum("UltCreditingRateHeader"         );
         MaxNaarFootnote                = p.datum("MaxNaarFootnote"                );
         PremTaxSurrChgFootnote         = p.datum("PremTaxSurrChgFootnote"         );
         PolicyFeeFootnote              = p.datum("PolicyFeeFootnote"              );

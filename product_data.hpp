@@ -305,6 +305,7 @@ class LMI_SO product_data
     glossed_string SinglePremiumFootnote;
     glossed_string MonthlyChargesFootnote;
     glossed_string UltCreditingRateFootnote;
+    glossed_string UltCreditingRateHeader;
     glossed_string MaxNaarFootnote;
     glossed_string PremTaxSurrChgFootnote;
     glossed_string PolicyFeeFootnote;

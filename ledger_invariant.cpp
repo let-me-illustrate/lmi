@@ -301,6 +301,7 @@ void LedgerInvariant::Alloc(int len)
     Strings["SinglePremiumFootnote"         ] = &SinglePremiumFootnote         ;
     Strings["MonthlyChargesFootnote"        ] = &MonthlyChargesFootnote        ;
     Strings["UltCreditingRateFootnote"      ] = &UltCreditingRateFootnote      ;
+    Strings["UltCreditingRateHeader"        ] = &UltCreditingRateHeader        ;
     Strings["MaxNaarFootnote"               ] = &MaxNaarFootnote               ;
     Strings["PremTaxSurrChgFootnote"        ] = &PremTaxSurrChgFootnote        ;
     Strings["PolicyFeeFootnote"             ] = &PolicyFeeFootnote             ;
@@ -694,6 +695,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     SinglePremiumFootnote         = a_Addend.SinglePremiumFootnote;
     MonthlyChargesFootnote        = a_Addend.MonthlyChargesFootnote;
     UltCreditingRateFootnote      = a_Addend.UltCreditingRateFootnote;
+    UltCreditingRateHeader        = a_Addend.UltCreditingRateHeader;
     MaxNaarFootnote               = a_Addend.MaxNaarFootnote;
     PremTaxSurrChgFootnote        = a_Addend.PremTaxSurrChgFootnote;
     PolicyFeeFootnote             = a_Addend.PolicyFeeFootnote;

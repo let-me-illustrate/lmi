@@ -88,17 +88,9 @@
             Current Illustrated Crediting Rate:
                 {{PresentCreditingRate}}<br>
 
-            {{#SinglePremium}}
-                {{#InforceYearLT5}}
-                    Ultimate Illustrated Crediting Rate:
-                    {{#ModifiedSinglePremium0}}
-                        {{AnnGAIntRate_Current[10]}}<br>
-                    {{/ModifiedSinglePremium0}}
-                    {{^ModifiedSinglePremium0}}
-                        {{AnnGAIntRate_Current[5]}}<br>
-                    {{/ModifiedSinglePremium0}}
-                {{/InforceYearLT5}}
-            {{/SinglePremium}}
+            {{#InforceYearLT5}}
+                {{UltCreditingRateHeader}}
+            {{/InforceYearLT5}}
 
             {{^Composite}}
                 Underwriting Type:

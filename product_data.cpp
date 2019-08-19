@@ -315,6 +315,7 @@ void product_data::ascribe_members()
     ascribe("SinglePremiumFootnote"         , &product_data::SinglePremiumFootnote         );
     ascribe("MonthlyChargesFootnote"        , &product_data::MonthlyChargesFootnote        );
     ascribe("UltCreditingRateFootnote"      , &product_data::UltCreditingRateFootnote      );
+    ascribe("UltCreditingRateHeader"        , &product_data::UltCreditingRateHeader        );
     ascribe("MaxNaarFootnote"               , &product_data::MaxNaarFootnote               );
     ascribe("PremTaxSurrChgFootnote"        , &product_data::PremTaxSurrChgFootnote        );
     ascribe("PolicyFeeFootnote"             , &product_data::PolicyFeeFootnote             );

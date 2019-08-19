@@ -345,6 +345,7 @@ class LMI_SO LedgerInvariant final
     std::string     SinglePremiumFootnote;
     std::string     MonthlyChargesFootnote;
     std::string     UltCreditingRateFootnote;
+    std::string     UltCreditingRateHeader;
     std::string     MaxNaarFootnote;
     std::string     PremTaxSurrChgFootnote;
     std::string     PolicyFeeFootnote;
