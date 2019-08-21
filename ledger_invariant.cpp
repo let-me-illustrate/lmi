@@ -579,10 +579,11 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     PolicyForm                    = a_Addend.PolicyForm;
     PolicyMktgName                = a_Addend.PolicyMktgName;
     PolicyLegalName               = a_Addend.PolicyLegalName;
-    // This doesn't seem appropriate for a composite, which may
-    // include contracts issued in different CSO eras:
-//  CsoEra                        = a_Addend.CsoEra;
-    CsoEra                        = "[composite]";
+    // It is inappropriate to "summarize" CsoEra for a composite that
+    // includes contracts issued in different CSO eras. Choosing the
+    // last cell's value does the "right" thing when all contracts are
+    // of the same CSO era, as is most often the case.
+    CsoEra                        = a_Addend.CsoEra;
     InsCoShortName                = a_Addend.InsCoShortName;
     InsCoName                     = a_Addend.InsCoName;
     InsCoAddr                     = a_Addend.InsCoAddr;
