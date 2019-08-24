@@ -198,6 +198,7 @@ void product_data::ascribe_members()
     ascribe("GuarTermFilename"              , &product_data::GuarTermFilename              );
     ascribe("GroupProxyFilename"            , &product_data::GroupProxyFilename            );
     ascribe("SevenPayFilename"              , &product_data::SevenPayFilename              );
+    ascribe("MinPremFilename"               , &product_data::MinPremFilename               );
     ascribe("TgtPremFilename"               , &product_data::TgtPremFilename               );
     ascribe("Irc7702QFilename"              , &product_data::Irc7702QFilename              );
     ascribe("PartialMortalityFilename"      , &product_data::PartialMortalityFilename      );
@@ -519,6 +520,7 @@ sample::sample()
     item("GuarTermFilename")           = glossed_string("sample");
     item("GroupProxyFilename")         = glossed_string("qx_ins");
     item("SevenPayFilename")           = glossed_string("sample");
+    item("MinPremFilename")            = glossed_string("sample");
     item("TgtPremFilename")            = glossed_string("sample");
     item("Irc7702QFilename")           = glossed_string("qx_cso");
     item("PartialMortalityFilename")   = glossed_string("qx_ann");
@@ -652,6 +654,7 @@ sample2::sample2()
     item("GuarTermFilename")           = glossed_string("sample");
     item("GroupProxyFilename")         = glossed_string("qx_ins");
     item("SevenPayFilename")           = glossed_string("sample");
+    item("MinPremFilename")            = glossed_string("sample");
     item("TgtPremFilename")            = glossed_string("sample");
     item("Irc7702QFilename")           = glossed_string("qx_cso");
     item("PartialMortalityFilename")   = glossed_string("qx_ann");
