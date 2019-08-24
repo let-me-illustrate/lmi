@@ -869,26 +869,16 @@ double BasicValues::GetModalPrem
     ,oenum_modal_prem_type a_prem_type
     ) const
 {
-    if(oe_monthly_deduction == a_prem_type)
+    switch(a_prem_type)
         {
-        return GetModalPremMlyDed      (a_year, a_mode, a_specamt);
+        case oe_monthly_deduction:
+            return GetModalPremMlyDed      (a_year, a_mode, a_specamt);
+        case oe_modal_nonmec:
+            return GetModalPremMaxNonMec   (a_year, a_mode, a_specamt);
+        case oe_modal_table:
+            return GetModalPremTgtFromTable(a_year, a_mode, a_specamt);
         }
-    else if(oe_modal_nonmec == a_prem_type)
-        {
-        return GetModalPremMaxNonMec   (a_year, a_mode, a_specamt);
-        }
-    else if(oe_modal_table == a_prem_type)
-        {
-        return GetModalPremTgtFromTable(a_year, a_mode, a_specamt);
-        }
-    else
-        {
-        alarum()
-            << "Unknown modal premium type " << a_prem_type << '.'
-            << LMI_FLUSH
-            ;
-        }
-    return 0.0;
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
 /// Calculate premium using a seven-pay ratio.
@@ -1408,30 +1398,20 @@ double BasicValues::GetModalSpecAmt
     ,oenum_modal_prem_type premium_type
     ) const
 {
-    if(oe_monthly_deduction == premium_type)
+    switch(premium_type)
         {
-        return GetModalSpecAmtMlyDed(annualized_pmt, mce_annual);
+        case oe_monthly_deduction:
+            return GetModalSpecAmtMlyDed(annualized_pmt, mce_annual);
+        case oe_modal_nonmec:
+            return GetModalSpecAmtMinNonMec(annualized_pmt);
+        case oe_modal_table:
+            return round_min_specamt()
+                (
+                    (annualized_pmt - TgtPremMonthlyPolFee * 12)
+                /   MortalityRates_->TargetPremiumRates()[0]
+                );
         }
-    else if(oe_modal_nonmec == premium_type)
-        {
-        return GetModalSpecAmtMinNonMec(annualized_pmt);
-        }
-    else if(oe_modal_table == premium_type)
-        {
-        return round_min_specamt()
-            (
-                (annualized_pmt - TgtPremMonthlyPolFee * 12)
-            /   MortalityRates_->TargetPremiumRates()[0]
-            );
-        }
-    else
-        {
-        alarum()
-            << "Unknown modal premium type " << premium_type << '.'
-            << LMI_FLUSH
-            ;
-        }
-    return 0.0;
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
 /// Calculate specified amount using a seven-pay ratio.
