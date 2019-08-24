@@ -374,12 +374,6 @@ class LMI_SO BasicValues
     BasicValues(BasicValues const&) = delete;
     BasicValues& operator=(BasicValues const&) = delete;
 
-    double GetModalPrem
-        (int                   a_year
-        ,mcenum_mode           a_mode
-        ,double                a_specamt
-        ,oenum_modal_prem_type a_prem_type
-        ) const;
     double mly_ded_discount_factor(int year, mcenum_mode mode) const;
     std::pair<double,double> approx_mly_ded
         (int    year
@@ -394,10 +388,6 @@ class LMI_SO BasicValues
         (int         year
         ,mcenum_mode mode
         ,double      specamt
-        ) const;
-    double GetModalSpecAmt
-        (double                annualized_pmt
-        ,oenum_modal_prem_type premium_type
         ) const;
     double GetModalSpecAmtMlyDed(double annualized_pmt, mcenum_mode) const;
 

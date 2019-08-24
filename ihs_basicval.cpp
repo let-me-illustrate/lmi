@@ -630,10 +630,7 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_TgtPremFixedAtIssue  , TgtPremFixedAtIssue);
     database().query_into(DB_TgtPremMonthlyPolFee , TgtPremMonthlyPolFee);
     // Assertion: see comments on GetModalPremTgtFromTable().
-    LMI_ASSERT
-        (  0.0 == TgtPremMonthlyPolFee
-        || (oe_modal_table == TgtPremType && oe_modal_table != MinPremType)
-        );
+    LMI_ASSERT(0.0 == TgtPremMonthlyPolFee || oe_modal_table == TgtPremType);
     database().query_into(DB_CurrCoiTable0Limit   , CurrCoiTable0Limit);
     database().query_into(DB_CurrCoiTable1Limit   , CurrCoiTable1Limit);
     LMI_ASSERT(0.0                <= CurrCoiTable0Limit);
@@ -843,7 +840,16 @@ double BasicValues::GetModalMinPrem
     ,double      a_specamt
     ) const
 {
-    return GetModalPrem(a_year, a_mode, a_specamt, MinPremType);
+    switch(MinPremType)
+        {
+        case oe_monthly_deduction:
+            return GetModalPremMlyDed      (a_year, a_mode, a_specamt);
+        case oe_modal_nonmec:
+            return GetModalPremMaxNonMec   (a_year, a_mode, a_specamt);
+        case oe_modal_table:
+            return GetModalPremMinFromTable(a_year, a_mode, a_specamt);
+        }
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
 /// Calculate target premium.
@@ -858,25 +864,14 @@ double BasicValues::GetModalTgtPrem
     ) const
 {
     int const target_year = TgtPremFixedAtIssue ? 0 : a_year;
-    return GetModalPrem(target_year, a_mode, a_specamt, TgtPremType);
-}
-
-//============================================================================
-double BasicValues::GetModalPrem
-    (int                   a_year
-    ,mcenum_mode           a_mode
-    ,double                a_specamt
-    ,oenum_modal_prem_type a_prem_type
-    ) const
-{
-    switch(a_prem_type)
+    switch(TgtPremType)
         {
         case oe_monthly_deduction:
-            return GetModalPremMlyDed      (a_year, a_mode, a_specamt);
+            return GetModalPremMlyDed      (target_year, a_mode, a_specamt);
         case oe_modal_nonmec:
-            return GetModalPremMaxNonMec   (a_year, a_mode, a_specamt);
+            return GetModalPremMaxNonMec   (target_year, a_mode, a_specamt);
         case oe_modal_table:
-            return GetModalPremTgtFromTable(a_year, a_mode, a_specamt);
+            return GetModalPremTgtFromTable(target_year, a_mode, a_specamt);
         }
     throw "Unreachable--silences a compiler diagnostic.";
 }
@@ -905,9 +900,6 @@ double BasicValues::GetModalPremMaxNonMec
 /// generally fixed at issue. This calculation remains naive in that
 /// the initial specified amount may also be fixed at issue, but that
 /// choice is left to the caller.
-///
-/// As the GetModalSpecAmt() documentation for 'oe_modal_table' says,
-/// target and minimum premiums really ought to distinguished.
 
 double BasicValues::GetModalPremMinFromTable
     (int      // a_year // Unused.
@@ -918,7 +910,13 @@ double BasicValues::GetModalPremMinFromTable
     return round_max_premium()
         (ldbl_eps_plus_one_times
             (
+#if 0
+                ( Loads_->monthly_policy_fee(mce_gen_curr)[0] * 12
+                + (a_specamt * MortalityRates_->MinimumPremiumRates()[0])
+                )
+#else
                 (a_specamt * MortalityRates_->MinimumPremiumRates()[0])
+#endif // 0
             /   a_mode
             )
         );
@@ -933,7 +931,7 @@ double BasicValues::GetModalPremMinFromTable
 ///
 /// 'TgtPremMonthlyPolFee' is applied here, not in GetModalTgtPrem(),
 /// because it is more appropriate here. In the other two cases that
-/// GetModalPrem() contemplates:
+/// GetModalTgtPrem() contemplates:
 ///  - 'oe_monthly_deduction': deductions would naturally include any
 ///    policy fee;
 ///  - 'oe_modal_nonmec': 7702A seven-pay premiums are net by their
@@ -941,12 +939,7 @@ double BasicValues::GetModalPremMinFromTable
 ///    (conservative) table-derived 7pp, then 'oe_modal_table' should
 ///    be used instead.
 /// Therefore, an assertion (where 'TgtPremMonthlyPolFee' is assigned)
-/// requires that the fee be zero in those cases, and also fires if
-/// this function is used for minimum premium with a nonzero fee
-/// (because no GetModalPremMinFromTable() has yet been written).
-///
-/// As the GetModalSpecAmt() documentation for 'oe_modal_table' says,
-/// target and minimum premiums really ought to distinguished.
+/// requires that the fee be zero in those cases.
 
 double BasicValues::GetModalPremTgtFromTable
     (int      // a_year // Unused.
@@ -1367,38 +1360,39 @@ std::pair<double,double> BasicValues::GetListBillPremMlyDedEx
         );
 }
 
-//============================================================================
 double BasicValues::GetModalSpecAmtMax(double annualized_pmt) const
 {
-    return GetModalSpecAmt(annualized_pmt, MinPremType);
+    switch(MinPremType)
+        {
+        case oe_monthly_deduction:
+            return GetModalSpecAmtMlyDed(annualized_pmt, mce_annual);
+        case oe_modal_nonmec:
+            return GetModalSpecAmtMinNonMec(annualized_pmt);
+        case oe_modal_table:
+            return round_min_specamt()
+                (
+#if 0
+                    ( annualized_pmt
+                    - Loads_->monthly_policy_fee(mce_gen_curr)[0] * 12
+                    )
+#else
+                    annualized_pmt
+#endif // 0
+                /   MortalityRates_->MinimumPremiumRates()[0]
+                );
+        }
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
-//============================================================================
-double BasicValues::GetModalSpecAmtTgt(double annualized_pmt) const
-{
-    return GetModalSpecAmt(annualized_pmt, TgtPremType);
-}
-
-/// Calculate specified amount as a simple function of premium.
-///
-/// A choice of several such simple functions is offered here to avoid
-/// code duplication in GetModalSpecAmtMax() and GetModalSpecAmtTgt().
-/// SOMEDAY !! However, in the 'oe_modal_table' case, distinct target
-/// and minimum tables and policy fees should be provided instead, and
-/// the present implementation moved into the calling functions.
-///
 /// Argument 'annualized_pmt' is net of any policy fee, such as might
 /// be included in a target premium. It's only a scalar, intended to
 /// represent an initial premium; reason: it's generally inappropriate
 /// for a specified-amount strategy to produce a result that varies by
 /// duration.
 
-double BasicValues::GetModalSpecAmt
-    (double                annualized_pmt
-    ,oenum_modal_prem_type premium_type
-    ) const
+double BasicValues::GetModalSpecAmtTgt(double annualized_pmt) const
 {
-    switch(premium_type)
+    switch(TgtPremType)
         {
         case oe_monthly_deduction:
             return GetModalSpecAmtMlyDed(annualized_pmt, mce_annual);
@@ -2041,18 +2035,7 @@ std::vector<double> BasicValues::GetTgtPremRates() const
     return GetTable
         (product().datum("TgtPremFilename")
         ,DB_TgtPremTable
-// Use this line instead:
-//      ,oe_modal_table == TgtPremType
-// once the comment concerning GetModalPremMinFromTable()
-// in GetModalPremTgtFromTable() is addressed. Meanwhile, this kludge
-// permits table-driven minimum premiums in certain circumstances.
-        ,oe_modal_table == TgtPremType || oe_modal_table == MinPremType
-// To fix this properly, implement a new GetModalPremTgtFromTable();
-// separate 'oe_modal_table' into distinct enumerators such as
-// 'oe_modal_min_table' and 'oe_modal_tgt_table'; and add a minimum-
-// premium rate table. More attention should be paid to the conditions
-// under which minimum and target premiums are recalculated--e.g.,
-// they might change iff specamt changes.
+        ,oe_modal_table == TgtPremType
         );
 }
 
