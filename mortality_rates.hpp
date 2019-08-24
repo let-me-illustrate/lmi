@@ -71,6 +71,7 @@ class MortalityRates
     std::vector<double> const& ChildRiderRates     () const;
     std::vector<double> const& SpouseRiderRates    (mcenum_gen_basis) const;
 
+    std::vector<double> const& MinimumPremiumRates () const;
     std::vector<double> const& TargetPremiumRates  () const;
 
     std::vector<double> const& Irc7702Q            () const;
@@ -152,6 +153,7 @@ class MortalityRates
     std::vector<double> CurrentSpouseRiderRates_;
     std::vector<double> MidpointSpouseRiderRates_;
 
+    std::vector<double> MinimumPremiumRates_;
     std::vector<double> TargetPremiumRates_;
 
     std::vector<double> Irc7702Q_;
@@ -175,6 +177,11 @@ inline std::vector<double> const& MortalityRates::WpRates() const
 inline std::vector<double> const& MortalityRates::ChildRiderRates() const
 {
     return ChildRiderRates_;
+}
+
+inline std::vector<double> const& MortalityRates::MinimumPremiumRates() const
+{
+    return MinimumPremiumRates_;
 }
 
 inline std::vector<double> const& MortalityRates::TargetPremiumRates() const

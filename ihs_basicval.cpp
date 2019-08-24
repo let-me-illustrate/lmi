@@ -909,6 +909,31 @@ double BasicValues::GetModalPremMaxNonMec
     return round_max_premium()(ldbl_eps_plus_one_times(temp * a_specamt / a_mode));
 }
 
+/// Calculate premium using a minimum-premium ratio.
+///
+/// Only the initial minimum-premium rate is used here, because that's
+/// generally fixed at issue. This calculation remains naive in that
+/// the initial specified amount may also be fixed at issue, but that
+/// choice is left to the caller.
+///
+/// As the GetModalSpecAmt() documentation for 'oe_modal_table' says,
+/// target and minimum premiums really ought to distinguished.
+
+double BasicValues::GetModalPremMinFromTable
+    (int      // a_year // Unused.
+    ,mcenum_mode a_mode
+    ,double      a_specamt
+    ) const
+{
+    return round_max_premium()
+        (ldbl_eps_plus_one_times
+            (
+                (a_specamt * MortalityRates_->MinimumPremiumRates()[0])
+            /   a_mode
+            )
+        );
+}
+
 /// Calculate premium using a target-premium ratio.
 ///
 /// Only the initial target-premium rate is used here, because that's
@@ -2019,6 +2044,15 @@ std::vector<double> BasicValues::GetSevenPayRates() const
         ,database()
         ,GetIssueAge()
         ,GetLength()
+        );
+}
+
+std::vector<double> BasicValues::GetMinPremRates() const
+{
+    return GetTable
+        (product().datum("MinPremFilename")
+        ,DB_MinPremTable
+        ,oe_modal_table == MinPremType
         );
 }
 

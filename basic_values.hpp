@@ -161,6 +161,7 @@ class LMI_SO BasicValues
     std::vector<double> GetGuaranteedTermRates()        const;
     std::vector<double> GetGroupProxyRates()            const;
     std::vector<double> GetSevenPayRates()              const;
+    std::vector<double> GetMinPremRates()               const;
     std::vector<double> GetTgtPremRates()               const;
     std::vector<double> GetIrc7702QRates()              const;
     std::vector<double> GetPartialMortalityRates()      const;
@@ -202,6 +203,11 @@ class LMI_SO BasicValues
         ,double      a_specamt
         ) const;
     double GetModalPremMaxNonMec
+        (int         a_year
+        ,mcenum_mode a_mode
+        ,double      a_specamt
+        ) const;
+    double GetModalPremMinFromTable
         (int         a_year
         ,mcenum_mode a_mode
         ,double      a_specamt
