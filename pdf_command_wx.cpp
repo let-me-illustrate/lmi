@@ -2241,14 +2241,9 @@ class pdf_illustration_naic : public pdf_illustration
             ||test_variable("ModifiedSinglePremium0")
             );
 
-        bool const is_single_premium =
-               starts_with(policy_name, "Single")
-            || starts_with(policy_name, "Modified")
-            ;
-        LMI_ASSERT(is_single_premium == invar.IsSinglePremium);
         add_variable
             ("SinglePremium"
-            ,is_single_premium
+            ,bourn_cast<bool>(invar.IsSinglePremium)
             );
 
         // Variable representing the premium payment frequency with the
