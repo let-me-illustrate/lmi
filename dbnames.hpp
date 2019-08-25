@@ -191,6 +191,7 @@ enum e_database_key
 
         ,DB_CsoEra
         ,DB_CsoMisprint
+        ,DB_GuarCoiWhence
         ,DB_GuarCoiTable
         ,DB_GuarCoiIsAnnual
         ,DB_GuarCoiMultiplier

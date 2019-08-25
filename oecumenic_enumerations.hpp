@@ -91,6 +91,11 @@ enum oenum_glp_or_gsp
     ,oe_gsp
     };
 
+enum oenum_guar_coi_whence
+    {oe_guar_coi_external_table
+    ,oe_guar_coi_builtin
+    };
+
 enum oenum_h_align
     {oe_left
     ,oe_center

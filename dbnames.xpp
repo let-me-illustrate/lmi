@@ -96,6 +96,7 @@
 {DB_Topic_MortalityCharges,DB_FIRST,"Mortality charges","Mortality rates, limits, conversions, and reentry",}, \
 {DB_CsoEra,DB_Topic_MortalityCharges,"CsoEra","CSO era: 1980, 2001, or 2017",}, \
 {DB_CsoMisprint,DB_Topic_MortalityCharges,"CsoMisprint","For 1980 CSO ANB MNS, use table F with misprinted value at age 71: 0=no, 1=yes",}, \
+{DB_GuarCoiWhence,DB_Topic_MortalityCharges,"GuarCoiWhence","Source of guaranteed mortality rates: 0=builtin tables, 1=external tables",}, \
 {DB_GuarCoiTable,DB_Topic_MortalityCharges,"GuarCoiTable","Guaranteed mortality charge table (index in mortality table database)",}, \
 {DB_GuarCoiIsAnnual,DB_Topic_MortalityCharges,"GuarCoiIsAnnual","Guaranteed cost of insurance table rates are: 0=monthly, 1=annual",}, \
 {DB_GuarCoiMultiplier,DB_Topic_MortalityCharges,"GuarCoiMultiplier","Multiplier applied to guaranteed cost of insurance charges",}, \
