@@ -833,7 +833,14 @@ void BasicValues::SetMaxSurvivalDur()
     LMI_ASSERT(MaxSurvivalDur <= EndtAge);
 }
 
-//============================================================================
+/// Ascertain modal payment for a minimum-premium strategy.
+///
+/// The term "minimum premium" is overloaded. It may mean the lowest
+/// payment that
+///  - fulfills a no-lapse guarantee (preventing lapse even if account
+///    value would otherwise be negative), or
+///  - keeps account value nonnegative (preventing lapse directly).
+
 double BasicValues::GetModalMinPrem
     (int         a_year
     ,mcenum_mode a_mode
@@ -852,10 +859,7 @@ double BasicValues::GetModalMinPrem
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
-/// Calculate target premium.
-///
-/// 'TgtPremMonthlyPolFee' is not added here, because it is added in
-/// GetModalPremTgtFromTable().
+/// Ascertain modal payment for a target-premium strategy.
 
 double BasicValues::GetModalTgtPrem
     (int         a_year
@@ -910,13 +914,7 @@ double BasicValues::GetModalPremMinFromTable
     return round_max_premium()
         (ldbl_eps_plus_one_times
             (
-#if 0
-                ( Loads_->monthly_policy_fee(mce_gen_curr)[0] * 12
-                + (a_specamt * MortalityRates_->MinimumPremiumRates()[0])
-                )
-#else
-                (a_specamt * MortalityRates_->MinimumPremiumRates()[0])
-#endif // 0
+                a_specamt * MortalityRates_->MinimumPremiumRates()[0]
             /   a_mode
             )
         );
@@ -929,17 +927,21 @@ double BasicValues::GetModalPremMinFromTable
 /// the initial specified amount may also be fixed at issue, but that
 /// choice is left to the caller.
 ///
-/// 'TgtPremMonthlyPolFee' is applied here, not in GetModalTgtPrem(),
-/// because it is more appropriate here. In the other two cases that
-/// GetModalTgtPrem() contemplates:
+/// 'TgtPremMonthlyPolFee' is reflected in the result. That's a weird
+/// thing to do--GetModalPremMinFromTable() ignores policy fees--but
+/// then again the whole notion of a 'TgtPremMonthlyPolFee' is weird,
+/// and would have no meaning if it weren't reflected here. And it
+/// wouldn't make sense in the other two cases that GetModalTgtPrem()
+/// contemplates:
 ///  - 'oe_monthly_deduction': deductions would naturally include any
 ///    policy fee;
 ///  - 'oe_modal_nonmec': 7702A seven-pay premiums are net by their
 ///    nature; if it is nonetheless desired to add a policy fee to a
 ///    (conservative) table-derived 7pp, then 'oe_modal_table' should
 ///    be used instead.
-/// Therefore, an assertion (where 'TgtPremMonthlyPolFee' is assigned)
-/// requires that the fee be zero in those cases.
+/// Therefore, in those other two cases, 'TgtPremMonthlyPolFee' is
+/// asserted to be zero--upstream, so that it'll signal an error even
+/// if a target strategy isn't used.
 
 double BasicValues::GetModalPremTgtFromTable
     (int      // a_year // Unused.
@@ -1371,24 +1373,18 @@ double BasicValues::GetModalSpecAmtMax(double annualized_pmt) const
         case oe_modal_table:
             return round_min_specamt()
                 (
-#if 0
-                    ( annualized_pmt
-                    - Loads_->monthly_policy_fee(mce_gen_curr)[0] * 12
-                    )
-#else
                     annualized_pmt
-#endif // 0
                 /   MortalityRates_->MinimumPremiumRates()[0]
                 );
         }
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
-/// Argument 'annualized_pmt' is net of any policy fee, such as might
-/// be included in a target premium. It's only a scalar, intended to
-/// represent an initial premium; reason: it's generally inappropriate
-/// for a specified-amount strategy to produce a result that varies by
-/// duration.
+/// Argument 'annualized_pmt' is a scalar, intended to represent an
+/// initial premium; reason: it's generally inappropriate for a
+/// specified-amount strategy to produce a result that varies by
+/// duration. It's taken to include 'TgtPremMonthlyPolFee', to make
+/// this function the inverse of GetModalPremTgtFromTable(), q.v.
 
 double BasicValues::GetModalSpecAmtTgt(double annualized_pmt) const
 {
