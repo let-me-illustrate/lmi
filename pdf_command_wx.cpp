@@ -2226,8 +2226,14 @@ class pdf_illustration_naic : public pdf_illustration
         add_abbreviated_variable("Insured1", 50);
 
         add_variable
+            ("SinglePremium"
+            ,     oe_plain_single_premium    == invar.IsSinglePremium
+               || oe_modified_single_premium == invar.IsSinglePremium
+            );
+
+        add_variable
             ("ModifiedSinglePremium"
-            ,starts_with(policy_name, "Single") && state_of_jurisdiction == "MA"
+            ,oe_modified_single_premium == invar.IsSinglePremium
             );
 
         add_variable
@@ -2239,12 +2245,6 @@ class pdf_illustration_naic : public pdf_illustration
             ("ModifiedSinglePremiumOrModifiedSinglePremium0"
             , test_variable("ModifiedSinglePremium")
             ||test_variable("ModifiedSinglePremium0")
-            );
-
-        add_variable
-            ("SinglePremium"
-            ,     oe_plain_single_premium    == invar.IsSinglePremium
-               || oe_modified_single_premium == invar.IsSinglePremium
             );
 
         // Variable representing the premium payment frequency with the
