@@ -566,6 +566,7 @@ void DBDictionary::InitDB()
     Add({DB_MaxWdDed            , mce_twelve_times_last});
     Add({DB_MinPremType         , oe_monthly_deduction});
     Add({DB_TgtPremType         , oe_monthly_deduction});
+    Add({DB_IsSinglePremium     , oe_flexible_premium});
     Add({DB_DeductionMethod     , oe_proportional});
     Add({DB_DeductionAcct       , oe_prefer_general_account});
     Add({DB_DistributionMethod  , oe_proportional});

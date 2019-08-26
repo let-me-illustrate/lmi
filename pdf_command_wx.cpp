@@ -2243,7 +2243,8 @@ class pdf_illustration_naic : public pdf_illustration
 
         add_variable
             ("SinglePremium"
-            ,bourn_cast<bool>(invar.IsSinglePremium)
+            ,     oe_plain_single_premium    == invar.IsSinglePremium
+               || oe_modified_single_premium == invar.IsSinglePremium
             );
 
         // Variable representing the premium payment frequency with the
