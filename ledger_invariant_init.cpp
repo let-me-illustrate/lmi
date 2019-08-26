@@ -257,6 +257,8 @@ void LedgerInvariant::Init(BasicValues const* b)
     RetAge                  = b->yare_input_.RetirementAge;
     EndtAge                 = b->yare_input_.IssueAge + b->GetLength();
     b->database().query_into(DB_GroupIndivSelection, GroupIndivSelection);
+    NoLongerIssued          = b->database().query<bool>(DB_NoLongerIssued);
+    AllowGroupQuote         = b->database().query<bool>(DB_AllowGroupQuote);
     b->database().query_into(DB_TxCallsGuarUwSubstd, TxCallsGuarUwSubstd);
     AllowExperienceRating   = b->database().query<bool>(DB_AllowExpRating);
     UseExperienceRating     = b->yare_input_.UseExperienceRating;
@@ -275,6 +277,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     PostHoneymoonSpread     = b->yare_input_.PostHoneymoonSpread;
     b->database().query_into(DB_SplitMinPrem        , SplitMinPrem);
     b->database().query_into(DB_ErNotionallyPaysTerm, ErNotionallyPaysTerm);
+    b->database().query_into(DB_IsSinglePremium     , IsSinglePremium);
 
     // These are reassigned below based on product data if available.
     std::string dbo_name_option1 = mc_str(mce_option1);
@@ -298,6 +301,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         PolicyForm = p.datum(alt_form ? "PolicyFormAlternative" : "PolicyForm");
         PolicyMktgName                 = p.datum("PolicyMktgName"                 );
         PolicyLegalName                = p.datum("PolicyLegalName"                );
+        CsoEra     = mc_str(b->database().query<mcenum_cso_era>(DB_CsoEra));
         InsCoShortName                 = p.datum("InsCoShortName"                 );
         InsCoName                      = p.datum("InsCoName"                      );
         InsCoAddr                      = p.datum("InsCoAddr"                      );
@@ -313,11 +317,26 @@ void LedgerInvariant::Init(BasicValues const* b)
         CsvHeaderName                  = p.datum("CsvHeaderName"                  );
         NoLapseProvisionName           = p.datum("NoLapseProvisionName"           );
         ContractName                   = p.datum("ContractName"                   );
-        // PDF !! It is hoped that these local variables (which
+        DboName                        = p.datum("DboName"                        );
+        // PDF !! It is hoped that these three local variables (which
         // duplicate 'dbo_name_option1' etc. above) can be expunged.
         DboNameLevel                   = p.datum("DboNameLevel"                   );
         DboNameIncreasing              = p.datum("DboNameIncreasing"              );
         DboNameMinDeathBenefit         = p.datum("DboNameMinDeathBenefit"         );
+        GenAcctName                    = p.datum("GenAcctName"                    );
+        GenAcctNameElaborated          = p.datum("GenAcctNameElaborated"          );
+        SepAcctName                    = p.datum("SepAcctName"                    );
+        SpecAmtName                    = p.datum("SpecAmtName"                    );
+        SpecAmtNameElaborated          = p.datum("SpecAmtNameElaborated"          );
+        UwBasisMedical                 = p.datum("UwBasisMedical"                 );
+        UwBasisParamedical             = p.datum("UwBasisParamedical"             );
+        UwBasisNonmedical              = p.datum("UwBasisNonmedical"              );
+        UwBasisSimplified              = p.datum("UwBasisSimplified"              );
+        UwBasisGuaranteed              = p.datum("UwBasisGuaranteed"              );
+        UwClassPreferred               = p.datum("UwClassPreferred"               );
+        UwClassStandard                = p.datum("UwClassStandard"                );
+        UwClassRated                   = p.datum("UwClassRated"                   );
+        UwClassUltra                   = p.datum("UwClassUltra"                   );
 
         AccountValueFootnote           = p.datum("AccountValueFootnote"           );
         AttainedAgeFootnote            = p.datum("AttainedAgeFootnote"            );
@@ -374,6 +393,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         MortalityBlendFootnote         = p.datum("MortalityBlendFootnote"         );
         HypotheticalRatesFootnote      = p.datum("HypotheticalRatesFootnote"      );
         SalesLoadRefundFootnote        = p.datum("SalesLoadRefundFootnote"        );
+        NoLapseEverFootnote            = p.datum("NoLapseEverFootnote"            );
         NoLapseFootnote                = p.datum("NoLapseFootnote"                );
         MarketValueAdjFootnote         = p.datum("MarketValueAdjFootnote"         );
         ExchangeChargeFootnote0        = p.datum("ExchangeChargeFootnote0"        );
@@ -396,6 +416,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         SinglePremiumFootnote          = p.datum("SinglePremiumFootnote"          );
         MonthlyChargesFootnote         = p.datum("MonthlyChargesFootnote"         );
         UltCreditingRateFootnote       = p.datum("UltCreditingRateFootnote"       );
+        UltCreditingRateHeader         = p.datum("UltCreditingRateHeader"         );
         MaxNaarFootnote                = p.datum("MaxNaarFootnote"                );
         PremTaxSurrChgFootnote         = p.datum("PremTaxSurrChgFootnote"         );
         PolicyFeeFootnote              = p.datum("PolicyFeeFootnote"              );
@@ -416,6 +437,8 @@ void LedgerInvariant::Init(BasicValues const* b)
         InforceNonGuaranteedFootnote2  = p.datum("InforceNonGuaranteedFootnote2"  );
         InforceNonGuaranteedFootnote3  = p.datum("InforceNonGuaranteedFootnote3"  );
         NonGuaranteedFootnote          = p.datum("NonGuaranteedFootnote"          );
+        NonGuaranteedFootnote1         = p.datum("NonGuaranteedFootnote1"         );
+        NonGuaranteedFootnote1Tx       = p.datum("NonGuaranteedFootnote1Tx"       );
         MonthlyChargesPaymentFootnote  = p.datum("MonthlyChargesPaymentFootnote"  );
         SurrenderFootnote              = p.datum("SurrenderFootnote"              );
         PortabilityFootnote            = p.datum("PortabilityFootnote"            );
@@ -426,6 +449,15 @@ void LedgerInvariant::Init(BasicValues const* b)
         SubsidiaryFootnote             = p.datum("SubsidiaryFootnote"             );
         PlacementAgentFootnote         = p.datum("PlacementAgentFootnote"         );
         MarketingNameFootnote          = p.datum("MarketingNameFootnote"          );
+        GuarIssueDisclaimerNcSc        = p.datum("GuarIssueDisclaimerNcSc"        );
+        GuarIssueDisclaimerMd          = p.datum("GuarIssueDisclaimerMd"          );
+        GuarIssueDisclaimerTx          = p.datum("GuarIssueDisclaimerTx"          );
+        IllRegCertAgent                = p.datum("IllRegCertAgent"                );
+        IllRegCertAgentIl              = p.datum("IllRegCertAgentIl"              );
+        IllRegCertAgentTx              = p.datum("IllRegCertAgentTx"              );
+        IllRegCertClient               = p.datum("IllRegCertClient"               );
+        IllRegCertClientIl             = p.datum("IllRegCertClientIl"             );
+        IllRegCertClientTx             = p.datum("IllRegCertClientTx"             );
         }
 
     ProductName             = b->yare_input_.ProductName;

@@ -223,10 +223,25 @@ void product_data::ascribe_members()
     ascribe("CsvHeaderName"                 , &product_data::CsvHeaderName                 );
     ascribe("NoLapseProvisionName"          , &product_data::NoLapseProvisionName          );
     ascribe("ContractName"                  , &product_data::ContractName                  );
+    ascribe("DboName"                       , &product_data::DboName                       );
     ascribe("DboNameLevel"                  , &product_data::DboNameLevel                  );
     ascribe("DboNameIncreasing"             , &product_data::DboNameIncreasing             );
     ascribe("DboNameReturnOfPremium"        , &product_data::DboNameReturnOfPremium        );
     ascribe("DboNameMinDeathBenefit"        , &product_data::DboNameMinDeathBenefit        );
+    ascribe("GenAcctName"                   , &product_data::GenAcctName                   );
+    ascribe("GenAcctNameElaborated"         , &product_data::GenAcctNameElaborated         );
+    ascribe("SepAcctName"                   , &product_data::SepAcctName                   );
+    ascribe("SpecAmtName"                   , &product_data::SpecAmtName                   );
+    ascribe("SpecAmtNameElaborated"         , &product_data::SpecAmtNameElaborated         );
+    ascribe("UwBasisMedical"                , &product_data::UwBasisMedical                );
+    ascribe("UwBasisParamedical"            , &product_data::UwBasisParamedical            );
+    ascribe("UwBasisNonmedical"             , &product_data::UwBasisNonmedical             );
+    ascribe("UwBasisSimplified"             , &product_data::UwBasisSimplified             );
+    ascribe("UwBasisGuaranteed"             , &product_data::UwBasisGuaranteed             );
+    ascribe("UwClassPreferred"              , &product_data::UwClassPreferred              );
+    ascribe("UwClassStandard"               , &product_data::UwClassStandard               );
+    ascribe("UwClassRated"                  , &product_data::UwClassRated                  );
+    ascribe("UwClassUltra"                  , &product_data::UwClassUltra                  );
     ascribe("AccountValueFootnote"          , &product_data::AccountValueFootnote          );
     ascribe("AttainedAgeFootnote"           , &product_data::AttainedAgeFootnote           );
     ascribe("CashSurrValueFootnote"         , &product_data::CashSurrValueFootnote         );
@@ -277,6 +292,7 @@ void product_data::ascribe_members()
     ascribe("MortalityBlendFootnote"        , &product_data::MortalityBlendFootnote        );
     ascribe("HypotheticalRatesFootnote"     , &product_data::HypotheticalRatesFootnote     );
     ascribe("SalesLoadRefundFootnote"       , &product_data::SalesLoadRefundFootnote       );
+    ascribe("NoLapseEverFootnote"           , &product_data::NoLapseEverFootnote           );
     ascribe("NoLapseFootnote"               , &product_data::NoLapseFootnote               );
     ascribe("MarketValueAdjFootnote"        , &product_data::MarketValueAdjFootnote        );
     ascribe("ExchangeChargeFootnote0"       , &product_data::ExchangeChargeFootnote0       );
@@ -299,6 +315,7 @@ void product_data::ascribe_members()
     ascribe("SinglePremiumFootnote"         , &product_data::SinglePremiumFootnote         );
     ascribe("MonthlyChargesFootnote"        , &product_data::MonthlyChargesFootnote        );
     ascribe("UltCreditingRateFootnote"      , &product_data::UltCreditingRateFootnote      );
+    ascribe("UltCreditingRateHeader"        , &product_data::UltCreditingRateHeader        );
     ascribe("MaxNaarFootnote"               , &product_data::MaxNaarFootnote               );
     ascribe("PremTaxSurrChgFootnote"        , &product_data::PremTaxSurrChgFootnote        );
     ascribe("PolicyFeeFootnote"             , &product_data::PolicyFeeFootnote             );
@@ -319,6 +336,8 @@ void product_data::ascribe_members()
     ascribe("InforceNonGuaranteedFootnote2" , &product_data::InforceNonGuaranteedFootnote2 );
     ascribe("InforceNonGuaranteedFootnote3" , &product_data::InforceNonGuaranteedFootnote3 );
     ascribe("NonGuaranteedFootnote"         , &product_data::NonGuaranteedFootnote         );
+    ascribe("NonGuaranteedFootnote1"        , &product_data::NonGuaranteedFootnote1        );
+    ascribe("NonGuaranteedFootnote1Tx"      , &product_data::NonGuaranteedFootnote1Tx      );
     ascribe("MonthlyChargesPaymentFootnote" , &product_data::MonthlyChargesPaymentFootnote );
     ascribe("SurrenderFootnote"             , &product_data::SurrenderFootnote             );
     ascribe("PortabilityFootnote"           , &product_data::PortabilityFootnote           );
@@ -329,6 +348,15 @@ void product_data::ascribe_members()
     ascribe("SubsidiaryFootnote"            , &product_data::SubsidiaryFootnote            );
     ascribe("PlacementAgentFootnote"        , &product_data::PlacementAgentFootnote        );
     ascribe("MarketingNameFootnote"         , &product_data::MarketingNameFootnote         );
+    ascribe("GuarIssueDisclaimerNcSc"       , &product_data::GuarIssueDisclaimerNcSc       );
+    ascribe("GuarIssueDisclaimerMd"         , &product_data::GuarIssueDisclaimerMd         );
+    ascribe("GuarIssueDisclaimerTx"         , &product_data::GuarIssueDisclaimerTx         );
+    ascribe("IllRegCertAgent"               , &product_data::IllRegCertAgent               );
+    ascribe("IllRegCertAgentIl"             , &product_data::IllRegCertAgentIl             );
+    ascribe("IllRegCertAgentTx"             , &product_data::IllRegCertAgentTx             );
+    ascribe("IllRegCertClient"              , &product_data::IllRegCertClient              );
+    ascribe("IllRegCertClientIl"            , &product_data::IllRegCertClientIl            );
+    ascribe("IllRegCertClientTx"            , &product_data::IllRegCertClientTx            );
 }
 
 /// Backward-compatibility serial number of this class's xml version.
@@ -442,6 +470,18 @@ void product_data::redintegrate_ex_post
 
 namespace
 {
+// These two certifications are copied verbatim et literatim from the
+// illustration reg.
+static std::string const S_IllRegCertAgent =
+  "I certify that this illustration has been presented to the applicant and"
+  " that I have explained that any non-guaranteed elements illustrated are"
+  " subject to change. I have made no statements that are inconsistent with"
+  " the illustration.";
+static std::string const S_IllRegCertClient =
+  "I have received a copy of this illustration and understand that any"
+  " non-guaranteed elements illustrated are subject to change and could be"
+  " either higher or lower. The agent has told me they are not guaranteed.";
+
 class sample : public product_data {public: sample();};
 
 class sample2 : public sample {public: sample2();};
@@ -508,11 +548,31 @@ sample::sample()
     item("CsvHeaderName")              = glossed_string("Cash Surr");
     item("NoLapseProvisionName")       = glossed_string("No-lapse Provision");
     item("ContractName")               = glossed_string("contract"); // Alternatively, "policy" or "certificate".
+    item("DboName")                    = glossed_string("Death Benefit Option");
     item("DboNameLevel")               = glossed_string("A");
     item("DboNameIncreasing")          = glossed_string("B");
     item("DboNameReturnOfPremium")     = glossed_string("ROP");
     item("DboNameMinDeathBenefit")     = glossed_string("MDB");
-    item("MarketingNameFootnote")      = glossed_string("Policy form UL32768-NY is marketed as 'UL Supreme'.");
+    item("GenAcctName")                = glossed_string("General Account");
+    item("GenAcctNameElaborated")      = glossed_string("General Account (GA)");
+    item("SepAcctName")                = glossed_string("Separate Account");
+    item("SpecAmtName")                = glossed_string("Specified Amount");
+    item("SpecAmtNameElaborated")      = glossed_string("Specified (Face) Amount");
+    item("UwBasisMedical")             = glossed_string("Medical");
+    item("UwBasisParamedical")         = glossed_string("Paramedical");
+    item("UwBasisNonmedical")          = glossed_string("Nonmedical");
+    item("UwBasisSimplified")          = glossed_string("Simplified Issue");
+    item("UwBasisGuaranteed")          = glossed_string("Guaranteed Issue");
+    item("UwClassPreferred")           = glossed_string("Preferred");
+    item("UwClassStandard")            = glossed_string("Standard");
+    item("UwClassRated")               = glossed_string("Rated");
+    item("UwClassUltra")               = glossed_string("Ultrapreferred");
+    item("IllRegCertAgent")            = S_IllRegCertAgent;
+    item("IllRegCertAgentIl")          = S_IllRegCertAgent;
+    item("IllRegCertAgentTx")          = S_IllRegCertAgent;
+    item("IllRegCertClient")           = S_IllRegCertClient;
+    item("IllRegCertClientIl")         = S_IllRegCertClient;
+    item("IllRegCertClientTx")         = S_IllRegCertClient;
 
     item("ADDTerseName")               = glossed_string("Accident");
     item("InsurabilityTerseName")      = glossed_string("Insurability");
@@ -522,6 +582,9 @@ sample::sample()
     item("WaiverTerseName")            = glossed_string("Waiver");
     item("AccelBftRiderTerseName")     = glossed_string("Acceleration");
     item("OverloanRiderTerseName")     = glossed_string("Overloan");
+
+    item("GuarMortalityFootnote")      = glossed_string("Guaranteed mortality basis: {{CsoEra}} CSO.");
+    item("MarketingNameFootnote")      = glossed_string("Policy form UL32768-NY is marketed as 'UL Supreme'.");
 
     item("GroupQuoteShortProductName") = glossed_string("UL SUPREME®");
     item("GroupQuoteIsNotAnOffer")     = glossed_string("This is not an offer of insurance.");

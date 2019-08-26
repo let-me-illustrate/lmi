@@ -378,6 +378,7 @@ void DBDictionary::ascribe_members()
     ascribe("TgtPremFixedAtIssue" , &DBDictionary::TgtPremFixedAtIssue );
     ascribe("TgtPremIgnoreSubstd" , &DBDictionary::TgtPremIgnoreSubstd );
     ascribe("MinPmt"              , &DBDictionary::MinPmt              );
+    ascribe("IsSinglePremium"     , &DBDictionary::IsSinglePremium     );
     ascribe("NoLapseMinDur"       , &DBDictionary::NoLapseMinDur       );
     ascribe("NoLapseMinAge"       , &DBDictionary::NoLapseMinAge       );
     ascribe("NoLapseUnratedOnly"  , &DBDictionary::NoLapseUnratedOnly  );
@@ -416,6 +417,7 @@ void DBDictionary::ascribe_members()
     ascribe("GroupProxyRateTable" , &DBDictionary::GroupProxyRateTable );
     ascribe("PartialMortTable"    , &DBDictionary::PartialMortTable    );
     ascribe("UsePolicyFormAlt"    , &DBDictionary::UsePolicyFormAlt    );
+    ascribe("AllowGroupQuote"     , &DBDictionary::AllowGroupQuote     );
     ascribe("WeightClass"         , &DBDictionary::WeightClass         );
     ascribe("WeightGender"        , &DBDictionary::WeightGender        );
     ascribe("WeightSmoking"       , &DBDictionary::WeightSmoking       );
@@ -551,7 +553,7 @@ void DBDictionary::InitDB()
     Add({DB_Effective7702DboRop , mce_option1_for_7702});
     Add({DB_TermIsQABOrDb7702   , oe_7702_term_is_db});
     Add({DB_TermIsQABOrDb7702A  , oe_7702_term_is_db});
-    Add({DB_CsoEra              , oe_2017cso});
+    Add({DB_CsoEra              , mce_2017cso});
     Add({DB_CsoMisprint         , oe_orthodox});
     Add({DB_CoiInforceReentry   , e_reenter_never});
     Add({DB_SepAcctSpreadMethod , mce_spread_is_effective_annual});
@@ -688,7 +690,7 @@ sample::sample()
     Add({DB_Irc7702NspTable     , 0});
     Add({DB_SevenPayTable       , 10});
 
-    Add({DB_CsoEra              , oe_1980cso});
+    Add({DB_CsoEra              , mce_1980cso});
     // Following IRS Notice 88-128, use only the male and female
     // tables with no smoker distinction, and a unisex table where
     // required by state law.
@@ -921,6 +923,7 @@ sample::sample()
     alt_form[mce_s_KS] = true;
     alt_form[mce_s_KY] = true;
     Add({DB_UsePolicyFormAlt, premium_tax_dimensions, alt_form});
+    Add({DB_AllowGroupQuote     , true});
 }
 
 sample2finra::sample2finra()

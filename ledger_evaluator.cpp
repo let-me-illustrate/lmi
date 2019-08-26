@@ -528,11 +528,14 @@ format_map_t static_formats()
     ,{"SplitFundAllocation"             , f1}
     ,{"SplitMinPrem"                    , f1}
     ,{"ErNotionallyPaysTerm"            , f1}
+    ,{"IsSinglePremium"                 , f1}
     ,{"SpouseIssueAge"                  , f1}
     ,{"SupplementalReport"              , f1}
     ,{"AllowExperienceRating"           , f1}
     ,{"UseExperienceRating"             , f1}
     ,{"GroupIndivSelection"             , f1}
+    ,{"NoLongerIssued"                  , f1}
+    ,{"AllowGroupQuote"                 , f1}
     ,{"TxCallsGuarUwSubstd"             , f1}
     ,{"UsePartialMort"                  , f1}
     ,{"WriteTsvFile"                    , f1}

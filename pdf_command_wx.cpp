@@ -58,6 +58,7 @@
 #include <fstream>
 #include <map>
 #include <memory>                       // make_unique(), unique_ptr
+#include <regex>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -143,6 +144,20 @@ class html_interpolator
         throw std::runtime_error("invalid lookup kind");
     }
 
+    static std::string reprocess(std::string const& raw_text)
+    {
+        std::string z = raw_text;
+
+        z = std::regex_replace(z, std::regex("¶"), "<br>");
+        z = std::regex_replace(z, std::regex("«"), "<strong>");
+        z = std::regex_replace(z, std::regex("»"), "</strong>");
+
+        std::regex const empty_paragraph("< *[Pp] *>[[:space:]]*< */[Pp] *>");
+        z = std::regex_replace(z, empty_paragraph, "");
+
+        return z;
+    }
+
     // A function which can be used to interpolate an HTML string containing
     // references to the variables defined for this illustration. The general
     // syntax is the same as in the global interpolate_string() function, i.e.
@@ -156,9 +171,21 @@ class html_interpolator
     // variables explicitly defined by add_variable() calls.
     html::text operator()(char const* s) const
     {
+        std::string z =
+            interpolate_string
+                (s
+                ,[this]
+                    (std::string const& str
+                    ,interpolate_lookup_kind kind
+                    )
+                    {
+                        return interpolation_func(str, kind);
+                    }
+                )
+            ;
         return html::text::from_html
             (interpolate_string
-                (s
+                (reprocess(z).c_str()
                 ,[this]
                     (std::string const& str
                     ,interpolate_lookup_kind kind
@@ -2214,9 +2241,14 @@ class pdf_illustration_naic : public pdf_illustration
             ||test_variable("ModifiedSinglePremium0")
             );
 
+        bool const is_single_premium =
+               starts_with(policy_name, "Single")
+            || starts_with(policy_name, "Modified")
+            ;
+        LMI_ASSERT(is_single_premium == invar.IsSinglePremium);
         add_variable
             ("SinglePremium"
-            ,starts_with(policy_name, "Single") || starts_with(policy_name, "Modified")
+            ,is_single_premium
             );
 
         // Variable representing the premium payment frequency with the

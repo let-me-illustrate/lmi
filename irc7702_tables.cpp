@@ -33,7 +33,7 @@
 #include <cmath>                        // log()
 
 irc7702_tables::irc7702_tables
-    (oenum_cso_era              cso_era
+    (mcenum_cso_era             cso_era
     ,oenum_autopisty            autopisty
     ,oenum_alb_or_anb           alb_or_anb
     ,mcenum_gender              gender

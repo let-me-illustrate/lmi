@@ -36,7 +36,7 @@ class LMI_SO irc7702_tables final
 
   public:
     irc7702_tables
-        (oenum_cso_era
+        (mcenum_cso_era
         ,oenum_autopisty
         ,oenum_alb_or_anb
         ,mcenum_gender

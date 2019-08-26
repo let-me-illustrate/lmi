@@ -357,6 +357,7 @@ class LMI_SO DBDictionary
     database_entity TgtPremFixedAtIssue ;
     database_entity TgtPremIgnoreSubstd ;
     database_entity MinPmt              ;
+    database_entity IsSinglePremium     ;
     database_entity NoLapseMinDur       ;
     database_entity NoLapseMinAge       ;
     database_entity NoLapseUnratedOnly  ;
@@ -400,6 +401,7 @@ class LMI_SO DBDictionary
     // treated the same way.
     database_entity PartialMortTable    ;
     database_entity UsePolicyFormAlt    ;
+    database_entity AllowGroupQuote     ;
     database_entity WeightClass         ;
     database_entity WeightGender        ;
     database_entity WeightSmoking       ;

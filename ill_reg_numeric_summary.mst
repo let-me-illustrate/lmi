@@ -102,6 +102,7 @@ keeping the center alignment of the last "p" tag above.
       </p>
     {{/HasInterestDisclaimer}}
     <p>
+<!-- PDF !! INSTEAD: S_IllRegCert* -->
     {{#StateIsIllinoisOrTexas}}
         {{#StateIsIllinois}}
             I have received a copy of this illustration and understand
@@ -155,6 +156,7 @@ keeping the center alignment of the last "p" tag above.
       Agent / Authorized Representative
     </p>
     <p>
+<!-- PDF !! INSTEAD: S_IllRegCert* -->
         {{#StateIsIllinoisOrTexas}}
             {{#StateIsIllinois}}
                 I have informed the applicant or {{ContractName}}owner

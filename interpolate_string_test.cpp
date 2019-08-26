@@ -56,16 +56,16 @@ int test_main(int, char*[])
         {
         return interpolate_string
             (s
-            ,[](std::string const& s, interpolate_lookup_kind) -> std::string
+            ,[](std::string const& k, interpolate_lookup_kind) -> std::string
                 {
-                if(s == "rec1") return "1 {{rec2}}";
-                if(s == "rec2") return "2 {{rec3}}";
-                if(s == "rec3") return "3"         ;
-                if(s == "inf" ) return "{{inf}}"   ;
-                if(s == "infA") return "{{infB}}"  ;
-                if(s == "infB") return "{{infA}}"  ;
+                if(k == "rec1") return "1 {{rec2}}";
+                if(k == "rec2") return "2 {{rec3}}";
+                if(k == "rec3") return "3"         ;
+                if(k == "inf" ) return "{{inf}}"   ;
+                if(k == "infA") return "{{infB}}"  ;
+                if(k == "infB") return "{{infA}}"  ;
 
-                throw std::runtime_error("no such variable '" + s + "'");
+                throw std::runtime_error("no such variable '" + k + "'");
                 }
             );
         };

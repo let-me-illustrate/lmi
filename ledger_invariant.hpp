@@ -166,6 +166,8 @@ class LMI_SO LedgerInvariant final
     double          RetAge;
     double          EndtAge;
     double          GroupIndivSelection;
+    double          NoLongerIssued;
+    double          AllowGroupQuote;
     double          TxCallsGuarUwSubstd;
     double          AllowExperienceRating;
     double          UseExperienceRating;
@@ -189,6 +191,7 @@ class LMI_SO LedgerInvariant final
     double          PostHoneymoonSpread;
     double          SplitMinPrem;
     double          ErNotionallyPaysTerm;
+    double          IsSinglePremium;
     double          MaxAnnGuarLoanSpread;
     double          MaxAnnCurrLoanDueRate;
     double          IsInforce;
@@ -212,6 +215,7 @@ class LMI_SO LedgerInvariant final
     // Ledger needs no member like product_data::PolicyFormAlternative;
     std::string     PolicyMktgName;
     std::string     PolicyLegalName;
+    std::string     CsoEra;
     std::string     InsCoShortName;
     std::string     InsCoName;
     std::string     InsCoAddr;
@@ -230,7 +234,8 @@ class LMI_SO LedgerInvariant final
     std::string     CsvHeaderName;
     std::string     NoLapseProvisionName;
     std::string     ContractName;
-    // PDF !! 'DboName*' variables are used only to assemble DBO
+    std::string     DboName;
+    // PDF !! 'DboName+' variables are used only to assemble DBO
     // definitions for mce_ill_reg PDFs. Probably those definitions
     // should be moved into '.policy' files instead, in which case
     // the 'DboName*' variables here can be expunged. Incidentally,
@@ -241,6 +246,20 @@ class LMI_SO LedgerInvariant final
     std::string     DboNameIncreasing;
 //  std::string     DboNameReturnOfPremium;
     std::string     DboNameMinDeathBenefit;
+    std::string     GenAcctName;
+    std::string     GenAcctNameElaborated;
+    std::string     SepAcctName;
+    std::string     SpecAmtName;
+    std::string     SpecAmtNameElaborated;
+    std::string     UwBasisMedical;
+    std::string     UwBasisParamedical;
+    std::string     UwBasisNonmedical;
+    std::string     UwBasisSimplified;
+    std::string     UwBasisGuaranteed;
+    std::string     UwClassPreferred;
+    std::string     UwClassStandard;
+    std::string     UwClassRated;
+    std::string     UwClassUltra;
 
     // Ledger column definitions.
     std::string     AccountValueFootnote;
@@ -303,6 +322,7 @@ class LMI_SO LedgerInvariant final
     std::string     MortalityBlendFootnote;
     std::string     HypotheticalRatesFootnote;
     std::string     SalesLoadRefundFootnote;
+    std::string     NoLapseEverFootnote;
     std::string     NoLapseFootnote;
     std::string     MarketValueAdjFootnote;
     std::string     ExchangeChargeFootnote0;
@@ -325,6 +345,7 @@ class LMI_SO LedgerInvariant final
     std::string     SinglePremiumFootnote;
     std::string     MonthlyChargesFootnote;
     std::string     UltCreditingRateFootnote;
+    std::string     UltCreditingRateHeader;
     std::string     MaxNaarFootnote;
     std::string     PremTaxSurrChgFootnote;
     std::string     PolicyFeeFootnote;
@@ -345,6 +366,8 @@ class LMI_SO LedgerInvariant final
     std::string     InforceNonGuaranteedFootnote2;
     std::string     InforceNonGuaranteedFootnote3;
     std::string     NonGuaranteedFootnote;
+    std::string     NonGuaranteedFootnote1;
+    std::string     NonGuaranteedFootnote1Tx;
     std::string     MonthlyChargesPaymentFootnote;
     std::string     SurrenderFootnote;
     std::string     PortabilityFootnote;
@@ -355,6 +378,15 @@ class LMI_SO LedgerInvariant final
     std::string     SubsidiaryFootnote;
     std::string     PlacementAgentFootnote;
     std::string     MarketingNameFootnote;
+    std::string     GuarIssueDisclaimerNcSc;
+    std::string     GuarIssueDisclaimerMd;
+    std::string     GuarIssueDisclaimerTx;
+    std::string     IllRegCertAgent;
+    std::string     IllRegCertAgentIl;
+    std::string     IllRegCertAgentTx;
+    std::string     IllRegCertClient;
+    std::string     IllRegCertClientIl;
+    std::string     IllRegCertClientTx;
 
     // Strings from class Input.
 

@@ -59,53 +59,21 @@ less any monthly charges deducted.
 <p>
 <b>Death Benefit:</b>
 {{DeathBenefitFootnote}}
-<!--
-Presumably the description of death benefit options should be moved into
-'ProductDescription' (as has already been done in other '.mst' files).
--->
 </p>
-<p>
-<b>Death Benefit Option {{DboNameLevel}}:</b>
-Option in which the death benefit is equal to the selected
-face amount of the {{ContractName}} on the date of death of the insured,
-or if greater the {{AvName}} Value
-{{#SalesLoadRefundAvailable}}
-plus the refund of sales loads (if applicable)
-{{/SalesLoadRefundAvailable}}
-on the insured's date of death multiplied by the minimum face
-amount percentage for the insured's attained age at death
-(minimum face amount). Please refer to the {{ContractName}}
-for a detailed schedule of death benefit factors.
-</p>
-<!-- Group Experience Rating Logic -->
-{{!
-  PDF !! Availability of DBO2 is unlikely to be correlated with experience rating.
-  DBO3 !! Such text should be controlled by product-database DBO entities.
-}}
-{{^AllowExperienceRating}}
-<p>
-<b>Death Benefit Option {{DboNameIncreasing}}:</b>
-Option in which the death benefit is equal to the selected
-face amount of the {{ContractName}}
-plus the {{AvName}} Value
-on the date of death of the insured, or if greater,
-the {{AvName}} Value
-{{#SalesLoadRefundAvailable}}
-plus the refund of sales loads (if applicable)
-{{/SalesLoadRefundAvailable}}
-on the insured's date of death multiplied
-by the death benefit factor for the insured's attained age
-at death (minimum face amount). Please refer to the {{ContractName}}
-for a detailed schedule of death benefit factors.
+{{DBOption1Footnote}}
+{{DBOption2Footnote}}
+{{DBOption3Footnote}}
 
+<!-- The experience-rating conditional here is absurd. -->
+{{^AllowExperienceRating}}
 {{^Composite}}
 <p>
 <b>End of Year Age:</b>
 {{AttainedAgeFootnote}}
 </p>
 {{/Composite}}
-
 {{/AllowExperienceRating}}
+
 <!-- Group Experience Rating Logic -->
 {{#AllowExperienceRating}}
 </p>
@@ -155,6 +123,7 @@ to income tax and may also trigger a tax penalty.
 {{MidpointValuesFootnote}}
 </p>
 {{/IsInforce}}
+{{MinDeathBenefitFootnote}}
 <!-- Single Premium Logic -->
 {{#ModifiedSinglePremiumOrModifiedSinglePremium0}}
 <p>
@@ -196,10 +165,8 @@ minimum defined in your {{ContractName}}.
 {{SinglePremiumFootnote}}
 </p>
 {{/ModifiedSinglePremiumOrModifiedSinglePremium0}}
-<!-- Single Premium Logic -->
-<p>
-<b>Ultimate Illustrated Crediting Rate:</b>
-{{UltCreditingRateFootnote}}
 {{/SinglePremium}}
-</p>
+
+{{UltCreditingRateFootnote}}
+
 </font>

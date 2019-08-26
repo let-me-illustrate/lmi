@@ -189,10 +189,27 @@ class LMI_SO product_data
     glossed_string CsvHeaderName;
     glossed_string NoLapseProvisionName;
     glossed_string ContractName;
+    glossed_string DboName;
     glossed_string DboNameLevel;
     glossed_string DboNameIncreasing;
     glossed_string DboNameReturnOfPremium;
     glossed_string DboNameMinDeathBenefit;
+    glossed_string GenAcctName;
+    glossed_string GenAcctNameElaborated;
+    glossed_string SepAcctName;
+    glossed_string SpecAmtName;
+    glossed_string SpecAmtNameElaborated;
+
+    // Underwriting terms.
+    glossed_string UwBasisMedical;
+    glossed_string UwBasisParamedical;
+    glossed_string UwBasisNonmedical;
+    glossed_string UwBasisSimplified;
+    glossed_string UwBasisGuaranteed;
+    glossed_string UwClassPreferred;
+    glossed_string UwClassStandard;
+    glossed_string UwClassRated;
+    glossed_string UwClassUltra;
 
     // TODO ?? Most of the following are missing from the GUI.
 
@@ -265,6 +282,7 @@ class LMI_SO product_data
     glossed_string MortalityBlendFootnote;
     glossed_string HypotheticalRatesFootnote;
     glossed_string SalesLoadRefundFootnote;
+    glossed_string NoLapseEverFootnote;
     glossed_string NoLapseFootnote;
     glossed_string MarketValueAdjFootnote;
     glossed_string ExchangeChargeFootnote0;
@@ -287,6 +305,7 @@ class LMI_SO product_data
     glossed_string SinglePremiumFootnote;
     glossed_string MonthlyChargesFootnote;
     glossed_string UltCreditingRateFootnote;
+    glossed_string UltCreditingRateHeader;
     glossed_string MaxNaarFootnote;
     glossed_string PremTaxSurrChgFootnote;
     glossed_string PolicyFeeFootnote;
@@ -307,6 +326,8 @@ class LMI_SO product_data
     glossed_string InforceNonGuaranteedFootnote2;
     glossed_string InforceNonGuaranteedFootnote3;
     glossed_string NonGuaranteedFootnote;
+    glossed_string NonGuaranteedFootnote1;
+    glossed_string NonGuaranteedFootnote1Tx;
     glossed_string MonthlyChargesPaymentFootnote;
     glossed_string SurrenderFootnote;
     glossed_string PortabilityFootnote;
@@ -317,6 +338,15 @@ class LMI_SO product_data
     glossed_string SubsidiaryFootnote;
     glossed_string PlacementAgentFootnote;
     glossed_string MarketingNameFootnote;
+    glossed_string GuarIssueDisclaimerNcSc;
+    glossed_string GuarIssueDisclaimerMd;
+    glossed_string GuarIssueDisclaimerTx;
+    glossed_string IllRegCertAgent;
+    glossed_string IllRegCertAgentIl;
+    glossed_string IllRegCertAgentTx;
+    glossed_string IllRegCertClient;
+    glossed_string IllRegCertClientIl;
+    glossed_string IllRegCertClientTx;
 };
 
 void LMI_SO load(product_data      &, fs::path const&);

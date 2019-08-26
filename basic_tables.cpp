@@ -96,7 +96,7 @@ std::vector<double> LMI_SO irc_7702_q_builtin
     ,int                     years_to_maturity
     )
 {
-    auto const era    = db.query<oenum_cso_era   >(DB_CsoEra);
+    auto const era    = db.query<mcenum_cso_era  >(DB_CsoEra);
     auto const a_b    = db.query<oenum_alb_or_anb>(DB_AgeLastOrNearest);
     auto const axis_g = db.query<bool            >(DB_Irc7702QAxisGender);
     auto const axis_s = db.query<bool            >(DB_Irc7702QAxisSmoking);

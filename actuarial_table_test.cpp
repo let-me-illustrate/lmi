@@ -67,7 +67,7 @@ std::vector<double> table_750()
 std::vector<double> table_42(int age)
 {
     static std::vector<double> const q = cso_table
-        (oe_1980cso
+        (mce_1980cso
         ,oe_orthodox
         ,oe_age_nearest_birthday_ties_younger
         ,mce_male
@@ -212,7 +212,7 @@ void test_80cso_erratum
     )
 {
     std::vector<double> v0 = cso_table
-        (oe_1980cso
+        (mce_1980cso
         ,autopisty
         ,alb_or_anb
         ,mce_male

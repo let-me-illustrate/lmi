@@ -142,6 +142,8 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["RetAge"                ] = &RetAge                 ;
     OtherScalars    ["EndtAge"               ] = &EndtAge                ;
     OtherScalars    ["GroupIndivSelection"   ] = &GroupIndivSelection    ;
+    OtherScalars    ["NoLongerIssued"        ] = &NoLongerIssued         ;
+    OtherScalars    ["AllowGroupQuote"       ] = &AllowGroupQuote        ;
     OtherScalars    ["TxCallsGuarUwSubstd"   ] = &TxCallsGuarUwSubstd    ;
     OtherScalars    ["AllowExperienceRating" ] = &AllowExperienceRating  ;
     OtherScalars    ["UseExperienceRating"   ] = &UseExperienceRating    ;
@@ -165,6 +167,7 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["PostHoneymoonSpread"   ] = &PostHoneymoonSpread    ;
     OtherScalars    ["SplitMinPrem"          ] = &SplitMinPrem           ;
     OtherScalars    ["ErNotionallyPaysTerm"  ] = &ErNotionallyPaysTerm   ;
+    OtherScalars    ["IsSinglePremium"       ] = &IsSinglePremium        ;
     OtherScalars    ["MaxAnnGuarLoanSpread"  ] = &MaxAnnGuarLoanSpread   ;
     OtherScalars    ["MaxAnnCurrLoanDueRate" ] = &MaxAnnCurrLoanDueRate  ;
     OtherScalars    ["IsInforce"             ] = &IsInforce              ;
@@ -185,6 +188,7 @@ void LedgerInvariant::Alloc(int len)
 
     Strings["PolicyMktgName"                ] = &PolicyMktgName                ;
     Strings["PolicyLegalName"               ] = &PolicyLegalName               ;
+    Strings["CsoEra"                        ] = &CsoEra                        ;
     Strings["PolicyForm"                    ] = &PolicyForm                    ;
     Strings["InsCoShortName"                ] = &InsCoShortName                ;
     Strings["InsCoName"                     ] = &InsCoName                     ;
@@ -201,9 +205,24 @@ void LedgerInvariant::Alloc(int len)
     Strings["CsvHeaderName"                 ] = &CsvHeaderName                 ;
     Strings["NoLapseProvisionName"          ] = &NoLapseProvisionName          ;
     Strings["ContractName"                  ] = &ContractName                  ;
+    Strings["DboName"                       ] = &DboName                       ;
     Strings["DboNameLevel"                  ] = &DboNameLevel                  ;
     Strings["DboNameIncreasing"             ] = &DboNameIncreasing             ;
     Strings["DboNameMinDeathBenefit"        ] = &DboNameMinDeathBenefit        ;
+    Strings["GenAcctName"                   ] = &GenAcctName                   ;
+    Strings["GenAcctNameElaborated"         ] = &GenAcctNameElaborated         ;
+    Strings["SepAcctName"                   ] = &SepAcctName                   ;
+    Strings["SpecAmtName"                   ] = &SpecAmtName                   ;
+    Strings["SpecAmtNameElaborated"         ] = &SpecAmtNameElaborated         ;
+    Strings["UwBasisMedical"                ] = &UwBasisMedical                ;
+    Strings["UwBasisParamedical"            ] = &UwBasisParamedical            ;
+    Strings["UwBasisNonmedical"             ] = &UwBasisNonmedical             ;
+    Strings["UwBasisSimplified"             ] = &UwBasisSimplified             ;
+    Strings["UwBasisGuaranteed"             ] = &UwBasisGuaranteed             ;
+    Strings["UwClassPreferred"              ] = &UwClassPreferred              ;
+    Strings["UwClassStandard"               ] = &UwClassStandard               ;
+    Strings["UwClassRated"                  ] = &UwClassRated                  ;
+    Strings["UwClassUltra"                  ] = &UwClassUltra                  ;
 
     Strings["AccountValueFootnote"          ] = &AccountValueFootnote          ;
     Strings["AttainedAgeFootnote"           ] = &AttainedAgeFootnote           ;
@@ -259,6 +278,7 @@ void LedgerInvariant::Alloc(int len)
     Strings["MortalityBlendFootnote"        ] = &MortalityBlendFootnote        ;
     Strings["HypotheticalRatesFootnote"     ] = &HypotheticalRatesFootnote     ;
     Strings["SalesLoadRefundFootnote"       ] = &SalesLoadRefundFootnote       ;
+    Strings["NoLapseEverFootnote"           ] = &NoLapseEverFootnote           ;
     Strings["NoLapseFootnote"               ] = &NoLapseFootnote               ;
     Strings["MarketValueAdjFootnote"        ] = &MarketValueAdjFootnote        ;
     Strings["ExchangeChargeFootnote0"       ] = &ExchangeChargeFootnote0       ;
@@ -281,6 +301,7 @@ void LedgerInvariant::Alloc(int len)
     Strings["SinglePremiumFootnote"         ] = &SinglePremiumFootnote         ;
     Strings["MonthlyChargesFootnote"        ] = &MonthlyChargesFootnote        ;
     Strings["UltCreditingRateFootnote"      ] = &UltCreditingRateFootnote      ;
+    Strings["UltCreditingRateHeader"        ] = &UltCreditingRateHeader        ;
     Strings["MaxNaarFootnote"               ] = &MaxNaarFootnote               ;
     Strings["PremTaxSurrChgFootnote"        ] = &PremTaxSurrChgFootnote        ;
     Strings["PolicyFeeFootnote"             ] = &PolicyFeeFootnote             ;
@@ -301,6 +322,8 @@ void LedgerInvariant::Alloc(int len)
     Strings["InforceNonGuaranteedFootnote2" ] = &InforceNonGuaranteedFootnote2 ;
     Strings["InforceNonGuaranteedFootnote3" ] = &InforceNonGuaranteedFootnote3 ;
     Strings["NonGuaranteedFootnote"         ] = &NonGuaranteedFootnote         ;
+    Strings["NonGuaranteedFootnote1"        ] = &NonGuaranteedFootnote1        ;
+    Strings["NonGuaranteedFootnote1Tx"      ] = &NonGuaranteedFootnote1Tx      ;
     Strings["MonthlyChargesPaymentFootnote" ] = &MonthlyChargesPaymentFootnote ;
     Strings["SurrenderFootnote"             ] = &SurrenderFootnote             ;
     Strings["PortabilityFootnote"           ] = &PortabilityFootnote           ;
@@ -311,6 +334,15 @@ void LedgerInvariant::Alloc(int len)
     Strings["SubsidiaryFootnote"            ] = &SubsidiaryFootnote            ;
     Strings["PlacementAgentFootnote"        ] = &PlacementAgentFootnote        ;
     Strings["MarketingNameFootnote"         ] = &MarketingNameFootnote         ;
+    Strings["GuarIssueDisclaimerNcSc"       ] = &GuarIssueDisclaimerNcSc       ;
+    Strings["GuarIssueDisclaimerMd"         ] = &GuarIssueDisclaimerMd         ;
+    Strings["GuarIssueDisclaimerTx"         ] = &GuarIssueDisclaimerTx         ;
+    Strings["IllRegCertAgent"               ] = &IllRegCertAgent               ;
+    Strings["IllRegCertAgentIl"             ] = &IllRegCertAgentIl             ;
+    Strings["IllRegCertAgentTx"             ] = &IllRegCertAgentTx             ;
+    Strings["IllRegCertClient"              ] = &IllRegCertClient              ;
+    Strings["IllRegCertClientIl"            ] = &IllRegCertClientIl            ;
+    Strings["IllRegCertClientTx"            ] = &IllRegCertClientTx            ;
 
     Strings["ProductName"                   ] = &ProductName                   ;
     Strings["ProducerName"                  ] = &ProducerName                  ;
@@ -446,7 +478,10 @@ void LedgerInvariant::Init()
     Has1035ExchCharge   = false;
 
     WriteTsvFile        = false;
-    SupplementalReport  = false;
+    SupplementalReport  = true;
+    NoLongerIssued      = false;
+    AllowGroupQuote     = true;
+    IsSinglePremium     = true;
 
     irr_precision_      = 0;
     irr_initialized_    = false;
@@ -544,6 +579,11 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     PolicyForm                    = a_Addend.PolicyForm;
     PolicyMktgName                = a_Addend.PolicyMktgName;
     PolicyLegalName               = a_Addend.PolicyLegalName;
+    // It is inappropriate to "summarize" CsoEra for a composite that
+    // includes contracts issued in different CSO eras. Choosing the
+    // last cell's value does the "right" thing when all contracts are
+    // of the same CSO era, as is most often the case.
+    CsoEra                        = a_Addend.CsoEra;
     InsCoShortName                = a_Addend.InsCoShortName;
     InsCoName                     = a_Addend.InsCoName;
     InsCoAddr                     = a_Addend.InsCoAddr;
@@ -559,9 +599,24 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     CsvHeaderName                 = a_Addend.CsvHeaderName;
     NoLapseProvisionName          = a_Addend.NoLapseProvisionName;
     ContractName                  = a_Addend.ContractName;
+    DboName                       = a_Addend.DboName;
     DboNameLevel                  = a_Addend.DboNameLevel;
     DboNameIncreasing             = a_Addend.DboNameIncreasing;
     DboNameMinDeathBenefit        = a_Addend.DboNameMinDeathBenefit;
+    GenAcctName                   = a_Addend.GenAcctName;
+    GenAcctNameElaborated         = a_Addend.GenAcctNameElaborated;
+    SepAcctName                   = a_Addend.SepAcctName;
+    SpecAmtName                   = a_Addend.SpecAmtName;
+    SpecAmtNameElaborated         = a_Addend.SpecAmtNameElaborated;
+    UwBasisMedical                = a_Addend.UwBasisMedical;
+    UwBasisParamedical            = a_Addend.UwBasisParamedical;
+    UwBasisNonmedical             = a_Addend.UwBasisNonmedical;
+    UwBasisSimplified             = a_Addend.UwBasisSimplified;
+    UwBasisGuaranteed             = a_Addend.UwBasisGuaranteed;
+    UwClassPreferred              = a_Addend.UwClassPreferred;
+    UwClassStandard               = a_Addend.UwClassStandard;
+    UwClassRated                  = a_Addend.UwClassRated;
+    UwClassUltra                  = a_Addend.UwClassUltra;
 
     AccountValueFootnote          = a_Addend.AccountValueFootnote;
     AttainedAgeFootnote           = a_Addend.AttainedAgeFootnote;
@@ -618,6 +673,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     MortalityBlendFootnote        = a_Addend.MortalityBlendFootnote;
     HypotheticalRatesFootnote     = a_Addend.HypotheticalRatesFootnote;
     SalesLoadRefundFootnote       = a_Addend.SalesLoadRefundFootnote;
+    NoLapseEverFootnote           = a_Addend.NoLapseEverFootnote;
     NoLapseFootnote               = a_Addend.NoLapseFootnote;
     MarketValueAdjFootnote        = a_Addend.MarketValueAdjFootnote;
     ExchangeChargeFootnote0       = a_Addend.ExchangeChargeFootnote0;
@@ -640,6 +696,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     SinglePremiumFootnote         = a_Addend.SinglePremiumFootnote;
     MonthlyChargesFootnote        = a_Addend.MonthlyChargesFootnote;
     UltCreditingRateFootnote      = a_Addend.UltCreditingRateFootnote;
+    UltCreditingRateHeader        = a_Addend.UltCreditingRateHeader;
     MaxNaarFootnote               = a_Addend.MaxNaarFootnote;
     PremTaxSurrChgFootnote        = a_Addend.PremTaxSurrChgFootnote;
     PolicyFeeFootnote             = a_Addend.PolicyFeeFootnote;
@@ -660,6 +717,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     InforceNonGuaranteedFootnote2 = a_Addend.InforceNonGuaranteedFootnote2;
     InforceNonGuaranteedFootnote3 = a_Addend.InforceNonGuaranteedFootnote3;
     NonGuaranteedFootnote         = a_Addend.NonGuaranteedFootnote;
+    NonGuaranteedFootnote1        = a_Addend.NonGuaranteedFootnote1;
+    NonGuaranteedFootnote1Tx      = a_Addend.NonGuaranteedFootnote1Tx;
     MonthlyChargesPaymentFootnote = a_Addend.MonthlyChargesPaymentFootnote;
     SurrenderFootnote             = a_Addend.SurrenderFootnote;
     PortabilityFootnote           = a_Addend.PortabilityFootnote;
@@ -670,12 +729,23 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     SubsidiaryFootnote            = a_Addend.SubsidiaryFootnote;
     PlacementAgentFootnote        = a_Addend.PlacementAgentFootnote;
     MarketingNameFootnote         = a_Addend.MarketingNameFootnote;
+    GuarIssueDisclaimerNcSc       = a_Addend.GuarIssueDisclaimerNcSc;
+    GuarIssueDisclaimerMd         = a_Addend.GuarIssueDisclaimerMd;
+    GuarIssueDisclaimerTx         = a_Addend.GuarIssueDisclaimerTx;
+    IllRegCertAgent               = a_Addend.IllRegCertAgent;
+    IllRegCertAgentIl             = a_Addend.IllRegCertAgentIl;
+    IllRegCertAgentTx             = a_Addend.IllRegCertAgentTx;
+    IllRegCertClient              = a_Addend.IllRegCertClient;
+    IllRegCertClientIl            = a_Addend.IllRegCertClientIl;
+    IllRegCertClientTx            = a_Addend.IllRegCertClientTx;
 
     Comments                      = a_Addend.Comments;
 
     StateOfJurisdiction           = a_Addend.StateOfJurisdiction;
     PremiumTaxState               = a_Addend.PremiumTaxState;
     GroupIndivSelection           = GroupIndivSelection   || a_Addend.GroupIndivSelection;
+    NoLongerIssued                = NoLongerIssued        || a_Addend.NoLongerIssued;
+    AllowGroupQuote               = AllowGroupQuote       && a_Addend.AllowGroupQuote;
     TxCallsGuarUwSubstd           = TxCallsGuarUwSubstd   || a_Addend.TxCallsGuarUwSubstd;
     AllowExperienceRating         = AllowExperienceRating || a_Addend.AllowExperienceRating;
     UseExperienceRating           = UseExperienceRating   || a_Addend.UseExperienceRating;
@@ -750,6 +820,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     SplitMinPrem       = SplitMinPrem || a_Addend.SplitMinPrem ;
 
     ErNotionallyPaysTerm = ErNotionallyPaysTerm || a_Addend.ErNotionallyPaysTerm;
+    IsSinglePremium    = IsSinglePremium && a_Addend.IsSinglePremium;
 
     MaxAnnGuarLoanSpread   = std::max(a_Addend.MaxAnnGuarLoanSpread , MaxAnnGuarLoanSpread );
     MaxAnnCurrLoanDueRate  = std::max(a_Addend.MaxAnnCurrLoanDueRate, MaxAnnCurrLoanDueRate);

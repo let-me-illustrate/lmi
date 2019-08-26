@@ -304,6 +304,7 @@
 /DB_TgtPremFixedAtIssue\>/ s/^/M09/
 /DB_TgtPremIgnoreSubstd\>/ s/^/M10/
 /DB_MinPmt\>/              s/^/M11/
+/DB_IsSinglePremium\>/     s/^/M12/
 # DB_Topic_SecondaryGuarantees
 /DB_NoLapseMinDur\>/       s/^/N01/
 /DB_NoLapseMinAge\>/       s/^/N02/
@@ -347,6 +348,7 @@
 /DB_GroupProxyRateTable\>/ s/^/R09/
 /DB_PartialMortTable\>/    s/^/R10/
 /DB_UsePolicyFormAlt\>/    s/^/R11/
+/DB_AllowGroupQuote\>/     s/^/R12/
 # DB_Topic_Weights
 /DB_WeightClass\>/         s/^/S01/
 /DB_WeightGender\>/        s/^/S02/

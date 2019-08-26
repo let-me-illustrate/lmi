@@ -124,7 +124,7 @@ Placement Agents: &nbsp; {{PlacementAgentFootnote}}
 </p>
 
 <p>
-Compliance tracking number: {{>imprimatur}}
+{{>imprimatur}}
 </p>
 
 </font>

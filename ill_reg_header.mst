@@ -35,8 +35,9 @@
     <br>{{ProducerStreet}}
     <br>{{ProducerCityEtc}}
 </p>
-<p>
-</p>
+<br>
+<br>
+<br>
 <table width="100%" cellspacing="0" cellpadding="0" valign="top">
     <tr>
         <td width="60%">
@@ -50,6 +51,7 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Age: {{Age}}<br>
             {{/Composite}}
             {{ContractNameCap}}: {{PolicyForm}}&nbsp;{{PolicyMktgName}}<br>
+            <!-- Translation: in MA (only), caption any single-premium product as "Modified". -->
             {{#ModifiedSinglePremium}}
                 Modified Single Premium Adjustable Life Insurance Policy<br>
             {{/ModifiedSinglePremium}}
@@ -86,17 +88,9 @@
             Current Illustrated Crediting Rate:
                 {{PresentCreditingRate}}<br>
 
-            {{#SinglePremium}}
-                {{#InforceYearLT5}}
-                    Ultimate Illustrated Crediting Rate:
-                    {{#ModifiedSinglePremium0}}
-                        {{AnnGAIntRate_Current[10]}}<br>
-                    {{/ModifiedSinglePremium0}}
-                    {{^ModifiedSinglePremium0}}
-                        {{AnnGAIntRate_Current[5]}}<br>
-                    {{/ModifiedSinglePremium0}}
-                {{/InforceYearLT5}}
-            {{/SinglePremium}}
+            {{#InforceYearLT5}}
+                {{UltCreditingRateHeader}}
+            {{/InforceYearLT5}}
 
             {{^Composite}}
                 Underwriting Type:
