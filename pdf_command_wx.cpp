@@ -2217,7 +2217,6 @@ class pdf_illustration_naic : public pdf_illustration
         :pdf_illustration{ledger, pdf_out_file}
     {
         auto const& invar = ledger.GetLedgerInvariant();
-        auto const& policy_name = invar.PolicyLegalName;
         auto const& state_of_jurisdiction = invar.StateOfJurisdiction;
 
         // Define variables specific to this illustration.
@@ -2234,17 +2233,6 @@ class pdf_illustration_naic : public pdf_illustration
         add_variable
             ("ModifiedSinglePremium"
             ,oe_modified_single_premium == invar.IsSinglePremium
-            );
-
-        add_variable
-            ("ModifiedSinglePremium0"
-            ,starts_with(policy_name, "Modified")
-            );
-
-        add_variable
-            ("ModifiedSinglePremiumOrModifiedSinglePremium0"
-            , test_variable("ModifiedSinglePremium")
-            ||test_variable("ModifiedSinglePremium0")
             );
 
         // Variable representing the premium payment frequency with the

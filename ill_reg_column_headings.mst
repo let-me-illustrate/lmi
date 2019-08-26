@@ -125,12 +125,12 @@ to income tax and may also trigger a tax penalty.
 {{/IsInforce}}
 {{MinDeathBenefitFootnote}}
 <!-- Single Premium Logic -->
-{{#ModifiedSinglePremiumOrModifiedSinglePremium0}}
+{{#ModifiedSinglePremium}}
 <p>
 <b>Modified Single Premium:</b>
 {{SinglePremiumFootnote}}
 </p>
-{{/ModifiedSinglePremiumOrModifiedSinglePremium0}}
+{{/ModifiedSinglePremium}}
 <p>
 <b>Monthly Charges:</b>
 The monthly charges for the following month which include:
@@ -159,12 +159,12 @@ minimum defined in your {{ContractName}}.
 </p>
 <!-- Single Premium Logic -->
 {{#SinglePremium}}
-{{^ModifiedSinglePremiumOrModifiedSinglePremium0}}
+{{^ModifiedSinglePremium}}
 <p>
 <b>Single Premium:</b>
 {{SinglePremiumFootnote}}
 </p>
-{{/ModifiedSinglePremiumOrModifiedSinglePremium0}}
+{{/ModifiedSinglePremium}}
 {{/SinglePremium}}
 
 {{UltCreditingRateFootnote}}
