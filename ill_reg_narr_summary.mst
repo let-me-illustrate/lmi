@@ -57,16 +57,17 @@ Even more surprisingly, 'AllowExperienceRating' has the same effect.
 {{/SinglePremium}}
 {{#SinglePremium}}
     {{#ModifiedSinglePremium}}
-        {{PolicyMktgName}}
-        is a modified single premium adjustable life
-        insurance {{ContractName}}. It features accumulating
-        account values, adjustable benefits, and single premium.
+        {{PolicyMktgName}} is a
+        modified
+        single premium adjustable life insurance {{ContractName}}.
+        It features accumulating account values, adjustable benefits,
+        and single premium.
     {{/ModifiedSinglePremium}}
     {{^ModifiedSinglePremium}}
-        {{PolicyMktgName}}
-        is a single premium adjustable life insurance {{ContractName}}.
-        It features accumulating account values,
-        adjustable benefits, and single premium.
+        {{PolicyMktgName}} is a
+        single premium adjustable life insurance {{ContractName}}.
+        It features accumulating account values, adjustable benefits,
+        and single premium.
     {{/ModifiedSinglePremium}}
 {{/SinglePremium}}
 </p>
