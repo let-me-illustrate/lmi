@@ -1006,16 +1006,6 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
             add_variable("ContractNameCap", s);
             }
 
-        // PDF !! Conditions of this ilk should become distinct entities in
-        // the product files--or in this case, eliminated altogether: this
-        // condition is used only in one place, in a really silly way.
-        auto const& policy_name = invar.PolicyLegalName;
-        add_variable
-            ("GroupCarveout"
-            ,    policy_name == "Group Flexible Premium Adjustable Life Insurance Certificate"
-              || policy_name == "Group Flexible Premium Variable Adjustable Life Insurance Certificate"
-            );
-
         auto const& state_of_jurisdiction = invar.StateOfJurisdiction;
         add_variable
             ("StateIsNorthOrSouthCarolina"

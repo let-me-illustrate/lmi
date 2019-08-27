@@ -27,41 +27,8 @@
 
 <font size="-1">
 
-{{!
-PDF !! The only effect of the 'GroupCarveout' conditional below is
-to produce the string:
-  "group flexible premium adjustable life insurance contract"
-if 'PolicyLegalName' exactly matches this string:
-  "Group Flexible Premium Adjustable Life Insurance Certificate"
-although probably "certificate" is desired instead of "contract".
-If it is actually considered useful to have two distinct strings
-that differ only in their capitalization, then both should reside
-in the '.policy' file.
-
-Even more surprisingly, 'AllowExperienceRating' has the same effect.
-}}
-
 <p>
-{{^SinglePremium}}
-    {{PolicyMktgName}} is a
-    {{#AllowExperienceRating}}group{{/AllowExperienceRating}}
-    {{#GroupCarveout}}group{{/GroupCarveout}}
-    flexible premium adjustable life insurance {{ContractName}}.
-    {{#AllowExperienceRating}}
-    It is a no-load policy and is intended for large case sales.
-    It is primarily marketed to financial institutions
-    to fund certain corporate liabilities.
-    {{/AllowExperienceRating}}
-    It features accumulating account values, adjustable benefits,
-    and flexible premiums.
-{{/SinglePremium}}
-{{#SinglePremium}}
-    {{PolicyMktgName}} is a
-    {{#ModifiedSinglePremium}}modified {{/ModifiedSinglePremium}}
-    single premium adjustable life insurance {{ContractName}}.
-    It features accumulating account values, adjustable benefits,
-    and single premium.
-{{/SinglePremium}}
+{{ProductDescription}}
 </p>
 
 {{^IsInforce}}
