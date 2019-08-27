@@ -102,26 +102,16 @@ keeping the center alignment of the last "p" tag above.
       </p>
     {{/HasInterestDisclaimer}}
     <p>
-<!-- PDF !! INSTEAD: S_IllRegCert* -->
     {{#StateIsIllinoisOrTexas}}
         {{#StateIsIllinois}}
-            I have received a copy of this illustration and understand
-            that this illustration assumes that the currently illustrated
-            non-guaranteed elements will continue unchanged
-            for all years shown. This is not likely to occur,
-            and actual results may be more or less favorable than those shown.
+            {{IllRegCertClientIl}}
         {{/StateIsIllinois}}
         {{#StateIsTexas}}
-              A copy of this illustration has been provided
-              to the Applicant/{{ContractNameCap}}owner.
+            {{IllRegCertClientTx}}
         {{/StateIsTexas}}
     {{/StateIsIllinoisOrTexas}}
     {{^StateIsIllinoisOrTexas}}
-          I have received a copy of this illustration, and I understand
-          that any non-guaranteed elements illustrated are subject
-          to change and could be either higher or lower. Additionally,
-          I have been informed by my agent that these values
-          are not guaranteed.
+            {{IllRegCertClient}}
     {{/StateIsIllinoisOrTexas}}
     </p>
     <br>
@@ -156,26 +146,16 @@ keeping the center alignment of the last "p" tag above.
       Agent / Authorized Representative
     </p>
     <p>
-<!-- PDF !! INSTEAD: S_IllRegCert* -->
         {{#StateIsIllinoisOrTexas}}
             {{#StateIsIllinois}}
-                I have informed the applicant or {{ContractName}}owner
-                that this illustration assumes that the currently illustrated
-                non-guaranteed elements will continue unchanged
-                for all years shown. This is not likely to occur,
-                and actual results may be more or less favorable than those shown.
+                {{IllRegCertAgentIl}}
             {{/StateIsIllinois}}
             {{#StateIsTexas}}
-                A copy of this illustration has been provided
-                to the Applicant/{{ContractNameCap}}owner.
+                {{IllRegCertAgentTx}}
             {{/StateIsTexas}}
         {{/StateIsIllinoisOrTexas}}
         {{^StateIsIllinoisOrTexas}}
-            I certify that this illustration has been presented
-            to the applicant, and that I have explained
-            that any non-guaranteed elements illustrated
-            are subject to change. I have made no statements
-            that are inconsistent with the illustration.
+                {{IllRegCertAgent}}
         {{/StateIsIllinoisOrTexas}}
     </p>
     <br>

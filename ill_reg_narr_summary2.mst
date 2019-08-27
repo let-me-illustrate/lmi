@@ -108,24 +108,12 @@ in the Tabular Detail.
     </p>
 {{/Composite}}
 
-<!-- PDF !! INSTEAD: S_GuarIssueDisclaimerNcSc -->
 {{#StateIsNorthOrSouthCarolina}}
-    <p>
-    In the states of North Carolina and South Carolina,
-    Guaranteed Issue Underwriting is referred
-    to as "Limited Underwriting" and Simplified
-    Issue Underwriting is referred to as "Simplified Underwriting".
-    </p>
+    <p>{{GuarIssueDisclaimerNcSc}}</p>
 {{/StateIsNorthOrSouthCarolina}}
 
-<!-- PDF !! INSTEAD: S_GuarIssueDisclaimerMd -->
 {{#StateIsMaryland}}
-    <p>
-    In the state of Maryland, Guaranteed Issue Underwriting
-    is referred to as "Nonstandard Limited Underwriting"
-    and Simplified Issue Underwriting is referred to as
-    "Nonstandard Simplified Underwriting".
-    </p>
+    <p>{{GuarIssueDisclaimerMd}}</p>
 {{/StateIsMaryland}}
 
 {{#AllowExperienceRating}}

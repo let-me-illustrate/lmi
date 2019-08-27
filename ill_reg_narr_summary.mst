@@ -146,29 +146,11 @@ and values set forth in the illustration are not guaranteed.
 </p>
 
 <p>
-<!-- PDF !! INSTEAD: S_NonGuaranteedFootnote1 -->
 {{^StateIsTexas}}
-    This illustration assumes that the currently illustrated
-    non-guaranteed elements will continue unchanged
-    for all years shown. This is not likely to occur
-    and actual results may be more or less favorable than shown.
-    The non-guaranteed benefits and values are not guaranteed
-    and are based on assumptions such as interest credited
-    and current monthly charges, which are subject to change by
-    {{InsCoName}}.
+    {{NonGuaranteedFootnote1}}
 {{/StateIsTexas}}
-<!-- PDF !! INSTEAD: S_NonGuaranteedFootnote1Tx -->
 {{#StateIsTexas}}
-    This illustration is based on both non-guaranteed
-    and guaranteed assumptions. Non-guaranteed assumptions
-    include interest rates and monthly charges.
-    This illustration assumes that the currently illustrated
-    non-guaranteed elements will continue unchanged
-    for all years shown. This is not likely to occur
-    and actual results may be more or less favorable than shown.
-    Factors that may affect future policy performance include
-    the company's expectations for future mortality, investments,
-    persistency, profits and expenses.
+    {{NonGuaranteedFootnote1Tx}}
 {{/StateIsTexas}}
 </p>
 
