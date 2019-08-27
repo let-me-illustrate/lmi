@@ -83,12 +83,24 @@ consult with your own independent tax or legal counsel.
 {{NoVanishPremiumFootnote}}
 </p>
 
+<!--
+PDF !! If NY doesn't approve the no-lapse guarantee contemplated
+here, then the NY condition belongs upstream: i.e., what should
+be avoided is not just describing the guarantee, but also
+illustrating its numerical effect.
+-->
 {{#NoLapse}}
     {{^StateIsNewYork}}
         <p>{{NoLapseFootnote}}</p>
     {{/StateIsNewYork}}
 {{/NoLapse}}
 
+<!--
+PDF !! This has no effect: no amount of premium can suffice to
+guarantee that a VUL contract never lapses, as a general rule,
+and no known VUL product offers such a guarantee. This belongs
+in an illustration-reg template, if anywhere.
+-->
 {{#NoLapseAlwaysActive}}
     <p>{{NoLapseEverFootnote}}</p>
 {{/NoLapseAlwaysActive}}
