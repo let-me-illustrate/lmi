@@ -45,16 +45,12 @@
 {{/SalesLoadRefundAvailable}}
 
 {{#NoLapse}}
-    <p>
-    {{NoLapseProvisionName}}:
-    The {{ContractName}} will remain in force after the first premium
-    has been paid, even if there is insufficient
-    {{AvName}} Value
-    to cover the monthly charges provided that the insured
-    is not in a substandard rating class and the {{ContractName}} debt
-    does not exceed {{AvName}} Value.
-    </p>
+    <p>{{NoLapseFootnote}}</p>
 {{/NoLapse}}
+
+{{#NoLapseAlwaysActive}}
+    <p>{{NoLapseEverFootnote}}</p>
+{{/NoLapseAlwaysActive}}
 
 <p>
 {{GuarMortalityFootnote}}
