@@ -83,16 +83,8 @@ consult with your own independent tax or legal counsel.
 {{NoVanishPremiumFootnote}}
 </p>
 
-<!--
-PDF !! If NY doesn't approve the no-lapse guarantee contemplated
-here, then the NY condition belongs upstream: i.e., what should
-be avoided is not just describing the guarantee, but also
-illustrating its numerical effect.
--->
 {{#NoLapse}}
-    {{^StateIsNewYork}}
-        <p>{{NoLapseFootnote}}</p>
-    {{/StateIsNewYork}}
+    <p>{{NoLapseFootnote}}</p>
 {{/NoLapse}}
 
 <!--

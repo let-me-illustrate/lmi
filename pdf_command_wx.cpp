@@ -2843,11 +2843,6 @@ class pdf_illustration_finra : public pdf_illustration
             ,test_variable("HasTerm") || test_variable("HasSupplSpecAmt")
             );
 
-        add_variable
-            ("StateIsNewYork"
-            ,state_of_jurisdiction == "NY"
-            );
-
         // Add all the pages.
         numbered_page::start_numbering();
         add<cover_page>();
