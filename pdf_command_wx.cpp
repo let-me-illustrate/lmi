@@ -2989,15 +2989,14 @@ class reg_d_indiv_irr_base : public page_with_tabular_report
             << "{{InitAnnSepAcctGrossInt_"
             << basis_suffix(get_basis())
             << ir_suffix(interest_rate::zero)
-            << "}} Hypothetical"
-            << "\nRate of Return*"
+            << "}} Hypothetical Rate of Return*"
             ;
 
         auto pos_y_copy = pos_y;
         table_gen.output_super_header
             (interpolator_(header_zero.str()).as_html()
             ,column_zero_cash_surr_value
-            ,column_zero_irr_surr_value
+            ,column_separator
             ,pos_y_copy
             ,output_mode
             );
@@ -3007,27 +3006,26 @@ class reg_d_indiv_irr_base : public page_with_tabular_report
             << "{{InitAnnSepAcctGrossInt_"
             << basis_suffix(get_basis())
             << ir_suffix(interest_rate::non_zero)
-            << "}} Hypothetical"
-            << "\nRate of Return*"
+            << "}} Hypothetical Rate of Return*"
             ;
 
         table_gen.output_super_header
             (interpolator_(header_nonzero.str()).as_html()
             ,column_nonzero_cash_surr_value
-            ,column_nonzero_irr_surr_value
+            ,column_max
             ,pos_y
             ,output_mode
             );
 
         table_gen.output_horz_separator
             (column_zero_cash_surr_value
-            ,column_zero_irr_surr_value
+            ,column_separator
             ,pos_y
             ,output_mode
             );
         table_gen.output_horz_separator
             (column_nonzero_cash_surr_value
-            ,column_nonzero_irr_surr_value
+            ,column_max
             ,pos_y
             ,output_mode
             );
