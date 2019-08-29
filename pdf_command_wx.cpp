@@ -2537,13 +2537,14 @@ class finra_basic : public page_with_basic_tabular_report
             << basis_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
             << "}} "
-            << "Assumed Sep Acct\n"
-            << "Gross Rate* "
+            << "Assumed"
+            << "\nSep Acct Gross"
+            << "\nRate* "
             << "({{InitAnnSepAcctNetInt_"
             << basis_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
-            << "}} net)\n"
-            << "{{InitAnnGenAcctInt_"
+            << "}} net)"
+            << "\n{{InitAnnGenAcctInt_"
             << basis_suffix(guar_or_curr)
             << "}} GPA rate"
             ;
