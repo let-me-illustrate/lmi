@@ -2989,8 +2989,8 @@ class reg_d_indiv_irr_base : public page_with_tabular_report
             << "{{InitAnnSepAcctGrossInt_"
             << basis_suffix(get_basis())
             << ir_suffix(interest_rate::zero)
-            << "}} Hypothetical Rate of\n"
-            << "Return*"
+            << "}} Hypothetical"
+            << "\nRate of Return*"
             ;
 
         auto pos_y_copy = pos_y;
@@ -3007,8 +3007,8 @@ class reg_d_indiv_irr_base : public page_with_tabular_report
             << "{{InitAnnSepAcctGrossInt_"
             << basis_suffix(get_basis())
             << ir_suffix(interest_rate::non_zero)
-            << "}} Hypothetical Rate of\n"
-            << "Return*"
+            << "}} Hypothetical"
+            << "\nRate of Return*"
             ;
 
         table_gen.output_super_header
