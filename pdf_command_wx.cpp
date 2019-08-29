@@ -2895,8 +2895,9 @@ class reg_d_group_basic : public page_with_basic_tabular_report
             << basis_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
             << "}} "
-            << "Hypothetical Gross\n"
-            << "Return ({{InitAnnSepAcctNetInt_"
+            << "Hypothetical"
+            << "\nGross Return"
+            << "\n({{InitAnnSepAcctNetInt_"
             << basis_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
             << "}} net)"
