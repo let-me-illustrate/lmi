@@ -21,6 +21,14 @@
 
 # Create a chroot for cross-building lmi--with wine, which is
 # required to run programs built in the chroot.
+#
+# CODENAME: debian release wanted in chroot (like `lsb_release --codename`)
+# CHRTVER : local serial number (nothing to do with /etc/debian_version)
+# CHRTNAME: physical name of chroot (SCHROOT_CHROOT_NAME)
+
+CODENAME=bullseye
+CHRTVER=0
+CHRTNAME=lmi_${CODENAME}${CHRTVER}
 
 # Log in as the user that will normally use the chroot.
 # Substitute that user's name wherever 'greg' appears below.
@@ -33,22 +41,22 @@ apt-get install schroot debootstrap
 # Download all OS essentials. This step may be done a single time, and
 # its tarball used repeatedly. The target ('/tmp/eraseme') directory
 # will be created and erased automatically.
-debootstrap --arch=amd64 --make-tarball=/var/cache/buster_bootstrap.tar buster /tmp/eraseme
+debootstrap --arch=amd64 --make-tarball=/var/cache/${CODENAME}_bootstrap.tar ${CODENAME} /tmp/eraseme
 
 # Unpack the OS tarball into the particular chroot being created.
 # (If the preceding apt-get and debootstrap steps have already been
 # completed once, then skip them and start here.)
-mkdir -p /srv/chroot/lmi-buster2
-debootstrap --arch=amd64 --unpack-tarball=/var/cache/buster_bootstrap.tar \
- buster /srv/chroot/lmi-buster2 >lmi-buster2-debootstrap-log 2>&1
+mkdir -p /srv/chroot/${CHRTNAME}
+debootstrap --arch=amd64 --unpack-tarball=/var/cache/${CODENAME}_bootstrap.tar \
+ ${CODENAME} /srv/chroot/${CHRTNAME} >${CHRTNAME}-debootstrap-log 2>&1
 
 # This command should produce no output:
-grep --invert-match '^I:' lmi-buster2-debootstrap-log
+grep --invert-match '^I:' ${CHRTNAME}-debootstrap-log
 
-cat >/etc/schroot/chroot.d/lmi-buster2.conf <<EOF
-[lmi-buster2]
-description=debian buster cross build
-directory=/srv/chroot/lmi-buster2
+cat >/etc/schroot/chroot.d/${CHRTNAME}.conf <<EOF
+[${CHRTNAME}]
+description=debian ${CODENAME} cross build ${CHRTVER}
+directory=/srv/chroot/${CHRTNAME}
 users=greg
 groups=greg
 root-groups=root
@@ -61,7 +69,7 @@ exit
 # This command--to start a root shell in the chroot--can be run as a
 # normal user. It will prompt for the root password.
 
-schroot --chroot=lmi-buster2 --user=root --directory=/
+schroot --chroot=${CHRTNAME} --user=root --directory=/
 # enter password
 #
 # Expect a warning that bash will be used because zsh isn't yet installed.
@@ -101,21 +109,21 @@ mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 #   umount ./dev/pts
 #   umount ./proc
 # ...or outside chroot:
-#   umount /srv/chroot/lmi-buster2/dev/pts/
-#   umount /srv/chroot/lmi-buster2/proc/
+#   umount /srv/chroot/${CHRTNAME}/dev/pts/
+#   umount /srv/chroot/${CHRTNAME}/proc/
 # Then, and only then:
-#   rm -rf /srv/chroot/lmi-buster2/
-#   rm /etc/schroot/chroot.d/lmi-buster2.conf
+#   rm -rf /srv/chroot/${CHRTNAME}/
+#   rm /etc/schroot/chroot.d/${CHRTNAME}.conf
 
 apt-get update
 apt-get --assume-yes install wget g++-mingw-w64 automake libtool make \
  pkg-config git cvs zsh bzip2 unzip sudo wine default-jre jing trang \
  g++-multilib libxml2-utils libxslt1-dev vim-gtk vim-doc shellcheck \
  bc bsdtar xsltproc \
- >lmi-buster2-apt-get-log 2>&1
+ >${CHRTNAME}-apt-get-log 2>&1
 
 # This command should produce little output:
-<lmi-buster2-apt-get-log sed -e'0,/^Preconfiguring/d' \
+<${CHRTNAME}-apt-get-log sed -e'0,/^Preconfiguring/d' \
  -e'/^Fetched\|^Preparing\|^Unpacking\|^Configuring\|^Selecting/d' \
  -e'/^Setting up\|^Processing\|^Adding\|^update-alternatives\|^[Dd]one./d' \
  -e'/^(Reading database\|^Linking\|^Moving old\|^Regenerating/d' \
@@ -203,9 +211,9 @@ vim -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
 # Enable stable and security upgrades:
 
 cat >/etc/apt/sources.list <<EOF
-deb http://deb.debian.org/debian/ buster main
-deb http://deb.debian.org/debian/ buster-updates main
-deb http://security.debian.org/   buster/updates main
+deb http://deb.debian.org/debian/ ${CODENAME} main
+deb http://deb.debian.org/debian/ ${CODENAME}-updates main
+deb http://security.debian.org/   ${CODENAME}/updates main
 EOF
 
 # Apply any available upgrades:
@@ -228,16 +236,16 @@ exit
 #     /srv/chroot/some-prior-chroot/opt/lmi/blessed/ /srv/cache_for_lmi
 # to update the host, and then:
 #   cp --dereference --preserve --recursive \
-#     /srv/cache_for_lmi/* /srv/chroot/lmi-buster2/cache_for_lmi/
+#     /srv/cache_for_lmi/* /srv/chroot/${CHRTNAME}/cache_for_lmi/
 #
 # Also copy any desired msw software into the chroot now, e.g.:
-#   cp -a /srv/chroot/some-prior-chroot/opt/xyzzy /srv/chroot/lmi-buster2/opt/xyzzy
+#   cp -a /srv/chroot/some-prior-chroot/opt/xyzzy /srv/chroot/${CHRTNAME}/opt/xyzzy
 # unless it requires running an "install" program, which must be postponed
 # until wine has been installed, below.
 
 # Configure ssh, iff this chroot needs write access to savannah.
 # The easiest way is to copy existing credentials, e.g.:
-#   cp -a ~/.ssh/ /srv/chroot/lmi-buster2/home/greg
+#   cp -a ~/.ssh/ /srv/chroot/${CHRTNAME}/home/greg
 # Make sure the .ssh/config file contains:
 #   Protocol 2
 #   HashKnownHosts no
@@ -246,7 +254,7 @@ exit
 
 # Enter the chroot as a normal user
 
-schroot --chroot=lmi-buster2
+schroot --chroot=${CHRTNAME}
 
 # Rebuild vim spellfile (as was done above for root)
 vim -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
@@ -396,7 +404,7 @@ exit
 # A minimalist cross-building chroot wouldn't normally contain its own
 # file manager--one in the host is enough. To set a bookmark into the
 # chroot, add a line such as:
-#   file:///srv/chroot/lmi-buster2/opt/lmi/src/lmi
+#   file:///srv/chroot/${CHRTNAME}/opt/lmi/src/lmi
 # to the GTK bookmarks file, which may be one of the following:
 #   vim ~/.gtk-bookmarks
 #   vim ~/.config/gtk-3.0/bookmarks
