@@ -55,6 +55,7 @@ grep --invert-match '^I:' ${CHRTNAME}-debootstrap-log
 
 cat >/etc/schroot/chroot.d/${CHRTNAME}.conf <<EOF
 [${CHRTNAME}]
+aliases=lmi
 description=debian ${CODENAME} cross build ${CHRTVER}
 directory=/srv/chroot/${CHRTNAME}
 users=greg
