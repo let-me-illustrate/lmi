@@ -123,11 +123,20 @@ apt-get --assume-yes install wget g++-mingw-w64 automake libtool make \
  >${CHRTNAME}-apt-get-log 2>&1
 
 # This command should produce little output:
-<${CHRTNAME}-apt-get-log sed -e'0,/^Preconfiguring/d' \
+<${CHRTNAME}-apt-get-log tr -d '\r' | sed \
+ -e'0,/^Preconfiguring/d' \
  -e'/^Fetched\|^Preparing\|^Unpacking\|^Configuring\|^Selecting/d' \
  -e'/^Setting up\|^Processing\|^Adding\|^update-alternatives\|^[Dd]one./d' \
  -e'/^(Reading database\|^Linking\|^Moving old\|^Regenerating/d' \
- -e'/^Creating config\|^Updating certificates\|^Running hooks/d'
+ -e'/^Creating config\|^Updating certificates\|^Running hooks/d' \
+ -e'/^Running in chroot, ignoring request.$/d' \
+ -e'/^update-rc.d: warning: start and stop actions are no longer supported; falling back to defaults$/d' \
+ -e'/^invoke-rc.d: policy-rc.d denied execution of start.$/d' \
+ -e'/^Warning: The home dir \/run\/uuidd you specified can.t be accessed: No such file or directory$/d' \
+ -e'/^Not creating home directory .\/run\/uuidd..$/d' \
+ -e'/^No schema files found: doing nothing.$/d' \
+ -e'/^[0-9][0-9]* added, [0-9][0-9]* removed; done.$/d' \
+
 #
 # Don't worry about messages like the following--see:
 #   https://lists.nongnu.org/archive/html/lmi/2016-09/msg00025.html
