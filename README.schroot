@@ -45,7 +45,7 @@ debootstrap --arch=amd64 --unpack-tarball=/var/cache/buster_bootstrap.tar \
 # This command should produce no output:
 grep --invert-match '^I:' lmi-buster2-debootstrap-log
 
-cat >/etc/schroot/chroot.d/lmi-buster2.conf <<\EOF
+cat >/etc/schroot/chroot.d/lmi-buster2.conf <<EOF
 [lmi-buster2]
 description=debian buster cross build
 directory=/srv/chroot/lmi-buster2
@@ -150,7 +150,7 @@ chsh -s /bin/zsh greg
 #   https://lists.gnu.org/archive/html/libtool-patches/2011-06/msg00001.html
 # Do this as root because root owns the file.
 
-cat >/home/greg/ltmain.sh.patch <<\EOF
+cat >/home/greg/ltmain.sh.patch <<EOF
 --- /usr/share/libtool/build-aux/ltmain.sh.orig 2016-08-20 12:34:31.000000000 +0000
 +++ /usr/share/libtool/build-aux/ltmain.sh 2017-08-10 13:10:28.466155965 +0000
 @@ -5555,7 +5555,7 @@
@@ -202,7 +202,7 @@ vim -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
 
 # Enable stable and security upgrades:
 
-cat >/etc/apt/sources.list <<\EOF
+cat >/etc/apt/sources.list <<EOF
 deb http://deb.debian.org/debian/ buster main
 deb http://deb.debian.org/debian/ buster-updates main
 deb http://security.debian.org/   buster/updates main
