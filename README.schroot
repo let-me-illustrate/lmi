@@ -115,6 +115,12 @@ mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 #   rm -rf /srv/chroot/${CHRTNAME}/
 #   rm /etc/schroot/chroot.d/${CHRTNAME}.conf
 
+# Notes on various distros' package names.
+#
+# redhat provides 'xsltproc' as part of libxslt, though not as a
+# separate package:
+#   https://bugzilla.redhat.com/show_bug.cgi?id=965996
+
 apt-get update
 apt-get --assume-yes install wget g++-mingw-w64 automake libtool make \
  pkg-config git cvs zsh bzip2 unzip sudo wine default-jre jing trang \
