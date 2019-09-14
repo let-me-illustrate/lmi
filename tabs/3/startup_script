@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-a='schroot --chroot=cross-lmi'
+a='schroot --chroot=lmi'
 
 b='cd /opt/lmi/src/lmi'
 c='make $coefficiency install check_physical_closure 2>&1 | tee ../log | sed -f diagnostics.sed | less -S'

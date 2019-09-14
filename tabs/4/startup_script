@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-a='schroot --chroot=cross-lmi'
+a='schroot --chroot=lmi'
 
 b='cd /opt/lmi/src/lmi'
 c='date -u +"%Y%m%dT%H%MZ" |tr -d "\\n" >/dev/clipboard'
