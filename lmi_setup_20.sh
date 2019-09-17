@@ -64,7 +64,12 @@ mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 
 # Notes on various distros' package names.
 #
-# redhat provides 'xsltproc' as part of libxslt, though not as a
+# redhat names some packages differently:
+#   pkgconfig ShellCheck libxml2 libxslt
+#   vim-X11 vim-common vim-enhanced vim-minimal
+#   mingw32-gcc-c++ mingw64-gcc-c++
+#   java-1.8.0-openjdk
+# It provides 'xsltproc' as part of libxslt, though not as a
 # separate package:
 #   https://bugzilla.redhat.com/show_bug.cgi?id=965996
 
