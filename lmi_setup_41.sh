@@ -43,7 +43,7 @@ ln --symbolic --relative --force --no-dereference /var/opt/lmi/ ./lmi
 popd
 
 # Rebuild vim spellfile (as was done above for root)
-vim -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
+vim -es -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
 
 # Configure git. See:
 #   https://lists.nongnu.org/archive/html/lmi/2016-03/msg00006.html
