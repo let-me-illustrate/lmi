@@ -44,6 +44,9 @@ git rev-parse HEAD
 mv .git/hooks .git/hooks-orig
 ln --symbolic --force --no-dereference ../hooks .git
 
+# Create a "stash" directory as a manual alternative to 'git-stash':
+mkdir --parents /opt/lmi/stash
+
 # Create and populate the proprietary source directory used by 'vpath':
 mkdir --parents /opt/lmi/src/products/src
 cp -a /opt/lmi/proprietary/src /opt/lmi/src/products
