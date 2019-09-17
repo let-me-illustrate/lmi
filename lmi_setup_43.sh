@@ -56,7 +56,8 @@ mkdir --parents /opt/lmi/touchstone
 cp -a /opt/lmi/proprietary/test/* /opt/lmi/touchstone/
 
 # Remove object files previously built without proprietary source:
-rm /opt/lmi/src/build/lmi/Linux/gcc/ship/my*
+. /opt/lmi/src/lmi/set_toolchain.sh
+rm /opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/build/ship/my*
 
 # Regenerate the binary database (expect the 'rm' command here to fail
 # the first time, because there are no old files to remove):
