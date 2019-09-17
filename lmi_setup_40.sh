@@ -34,14 +34,14 @@ WINEDLLOVERRIDES=mscoree=d wine wineboot
 
 # Configure wine:
 
-winecfg
 # First, to make it usable in general ("Default Settings"):
 #   on "Applications" tab, set "Windows Version" to "XP"
 #   on "Graphics" tab, set DPI to 192
+winecfg
 
-wine regedit
 # HKCU\Control Panel\International:
 #   set sShortDate and sLongDate to "yyyy-MM-dd"
+wine regedit
 
 # Troubleshoot wine:
 #
