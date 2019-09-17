@@ -81,3 +81,6 @@ cd /opt/lmi
 mkdir --parents free/src
 cd free/src
 git clone git://git.savannah.nongnu.org/lmi.git
+for z in **/*(D) ; do touch --reference=/opt/lmi/src/lmi/$z $z; done 2>&1 |sed \
+  -e'/\/.git\/FETCH_HEAD[^0-9A-Za-z-]/d' \
+  -e'/\/.git\/hooks\/[a-z-]*\.sample[^0-9A-Za-z-]/d'
