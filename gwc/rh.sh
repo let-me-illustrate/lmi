@@ -1,0 +1,106 @@
+#!/bin/do_not_run_this_as_a_script
+
+# Notes
+#
+# Needed to do this:
+# %s,https://git.savannah.nongnu.org/cgit/lmi.git/plain,https://github.com/vadz/lmi/raw/master,
+# for a corporate server that enables github but, incomprehensibly, blocks nongnu.org
+#
+# Set up an 'lmi' group...
+sudo groupadd lmi
+sudo usermod -a -G lmi ${USER}
+# if root already owns /opt as is likely:
+chown root:sudo /opt/lmi
+chmod g+w /opt/lmi
+ls -dl /opt/lmi
+
+# from lmi_setup_21.sh [do this as root]
+
+# Repair /usr/share/libtool/.../ltmain.sh as indicated here:
+#   https://lists.gnu.org/archive/html/libtool-patches/2011-06/msg00001.html
+# Do this as root because root owns the file.
+
+cat >/home/${USER}/ltmain.sh.patch <<EOF
+--- /usr/share/libtool/build-aux/ltmain.sh.orig 2016-08-20 12:34:31.000000000 +0000
++++ /usr/share/libtool/build-aux/ltmain.sh 2017-08-10 13:10:28.466155965 +0000
+@@ -5555,7 +5555,7 @@
+ /* declarations of non-ANSI functions */
+ #if defined __MINGW32__
+ # ifdef __STRICT_ANSI__
+-int _putenv (const char *);
++_CRTIMP int _putenv (const char *);
+ # endif
+ #elif defined __CYGWIN__
+ # ifdef __STRICT_ANSI__
+EOF
+
+patch --dry-run --strip=0 </home/${USER}/ltmain.sh.patch \
+ && patch --strip=0 </home/${USER}/ltmain.sh.patch
+
+# Configure zsh, for root as well as the user configured above.
+
+https://github.com/vadz/lmi/raw/master/gwc/.zshrc
+wget -N 'https://github.com/vadz/lmi/raw/master/gwc/.zshrc'
+mv .zshrc ~
+cp -a ~/.zshrc /home/${USER}/.zshrc
+chown ${USER}:${USER} /home/${USER}/.zshrc
+
+# Configure vim. Rather than trying to split its contents between
+# '~/.vimrc' and '/etc/vim/vimrc.local', just copy it everywhither.
+
+wget -N 'https://github.com/vadz/lmi/raw/master/gwc/.vimrc'
+mv .vimrc ~
+cp -a ~/.vimrc /etc/vim/vimrc.local
+cp -a ~/.vimrc /home/${USER}/.vimrc
+chown ${USER}:${USER} /home/${USER}/.vimrc
+
+# Without this, 'zg' gives an error message; with it, vim creates a
+# spellfile the first time 'zg' is used, if none already exists.
+mkdir ~/.vim
+mkdir /home/${USER}/.vim
+chown ${USER}:${USER} /home/${USER}/.vim
+# It's a much better idea to copy a mature spellfile hither:
+wget -N 'https://github.com/vadz/lmi/raw/master/gwc/.vim/spell/en.utf-8.add'
+mkdir ~/.vim/spell
+mv en.utf-8.add ~/.vim/spell/en.utf-8.add
+mkdir /home/${USER}/.vim/spell
+chown ${USER}:${USER} /home/${USER}/.vim/spell
+cp -a ~/.vim/spell/en.utf-8.add /home/${USER}/.vim/spell/en.utf-8.add
+chown ${USER}:${USER} /home/${USER}/.vim/spell/en.utf-8.add
+# and then (imperatively) run this command:
+vim -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
+# which will be repeated below in the user chroot.
+
+# from lmi_setup_41.sh [do this as normal user]
+
+# Rebuild vim spellfile (as was done above for root)
+vim -es -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
+
+# Configure git. See:
+#   https://lists.nongnu.org/archive/html/lmi/2016-03/msg00006.html
+git config --global color.ui auto
+git config --global commit.cleanup scissors
+git config --global core.pager "less -+F -+X"
+git config --global diff.colormoved plain
+git config --global log.date iso8601-strict-local
+git config --global log.follow true
+git config --global pull.ff only
+git config --global push.default simple
+
+# from lmi_setup_42.sh
+
+# Install lmi for wine.
+
+wget -N 'https://github.com/vadz/lmi/raw/master/install_msw.sh'
+chmod +x install_msw.sh
+./install_msw.sh >log 2>&1
+
+# Now everything should work much as it does in native msw. To run an
+# msw program, prefix its command line with 'wine'. Test the chroot by
+# running the lmi binary built in the preceding step:
+
+pushd /opt/lmi/bin
+wine ./lmi_wx_shared.exe --ash_nazg --data_path=../data
+
+# last command fails--wine cannot be configured without X?
+
