@@ -88,7 +88,7 @@ chown greg:greg /home/greg/.vim/spell
 cp -a ~/.vim/spell/en.utf-8.add /home/greg/.vim/spell/en.utf-8.add
 chown greg:greg /home/greg/.vim/spell/en.utf-8.add
 # and then (imperatively) run this command:
-vim -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
+vim -es -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
 # which will be repeated below in the user chroot.
 
 # Enable stable and security upgrades:
