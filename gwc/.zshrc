@@ -15,7 +15,10 @@ export PATH="$MINIMAL_PATH"
 # and replace :0.0 below with the string it returns:
 export DISPLAY=":0.0"
 
-export coefficiency='--jobs=32'
+# Something like
+#  "--jobs=$(nproc || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN)"
+# could be used instead for other *nix systems:
+export coefficiency="--jobs=$(nproc)"
 
 # export TZ=UCT
 export LANG=en_US.UTF-8 LC_ALL=C.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8

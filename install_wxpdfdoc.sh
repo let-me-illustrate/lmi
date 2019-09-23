@@ -37,7 +37,7 @@ wxpdfdoc_commit_sha=${wxpdfdoc_commit_sha:-"55366f01eed8549ca704f9d9825127868858
 
 wxpdfdoc_skip_clean=${wxpdfdoc_skip_clean:-"0"}
 
-coefficiency=${coefficiency:-"--jobs=4"}
+coefficiency=${coefficiency:-"--jobs=$(nproc)"}
 
 MAKE=${MAKE:-"make $coefficiency"}
 

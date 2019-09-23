@@ -49,13 +49,12 @@ esac
 
 export PATH="$minimal_path"
 
-# '--jobs=4': big benefit for multicore, no penalty for single core
-#   (but don't force it to 4 if it's already set).
-# '--output-sync=recurse' is also used, passim, to facilitate log
-#   comparison.
+# '--jobs=': big benefit for multicore (but can be overridden).
+# '--output-sync=recurse' is used passim to facilitate log comparison.
 if [ -z "$coefficiency" ]
 then
-    export coefficiency='--jobs=4'
+    coefficiency="--jobs=$(nproc)"
+    export coefficiency
 fi
 
 case "$lmi_build_type" in
@@ -236,8 +235,8 @@ mount
 md5sum "$0"
 find /cache_for_lmi/downloads -type f -print0 | xargs -0 md5sum
 
-make $coefficiency --output-sync=recurse -f install_miscellanea.make clobber
-make $coefficiency --output-sync=recurse -f install_miscellanea.make
+make "$coefficiency" --output-sync=recurse -f install_miscellanea.make clobber
+make "$coefficiency" --output-sync=recurse -f install_miscellanea.make
 
 # This for-loop can iterate over as many toolchains as desired.
 # Make sure the current production architecture is built last, so that
@@ -258,14 +257,14 @@ do
     mingw_dir=/opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/gcc_msw
     [ -d "$mingw_dir" ] && rm --force --recursive "$mingw_dir"
     if   [ "i686-w64-mingw32"   = "$LMI_TRIPLET" ]; then
-      make $coefficiency --output-sync=recurse -f install_mingw32.make
+      make "$coefficiency" --output-sync=recurse -f install_mingw32.make
     elif [ "x86_64-w64-mingw32" = "$LMI_TRIPLET" ]; then
-      make $coefficiency --output-sync=recurse -f install_mingw.make
+      make "$coefficiency" --output-sync=recurse -f install_mingw.make
     else
       printf 'No MinGW compiler for this triplet.\n'
     fi
 
-    make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
+    make "$coefficiency" --output-sync=recurse -f install_libxml2_libxslt.make
 
     ./install_wx.sh
     ./install_wxpdfdoc.sh
@@ -275,10 +274,10 @@ do
     # Source this script only for commands that depend upon it.
     . ./set_toolchain.sh
 
-    make $coefficiency --output-sync=recurse wx_config_check
-    make $coefficiency --output-sync=recurse show_flags
-    make $coefficiency --output-sync=recurse clean
-    make $coefficiency --output-sync=recurse install
+    make "$coefficiency" --output-sync=recurse wx_config_check
+    make "$coefficiency" --output-sync=recurse show_flags
+    make "$coefficiency" --output-sync=recurse clean
+    make "$coefficiency" --output-sync=recurse install
 
     if [ "Cygwin" = "$platform" ]
     then
