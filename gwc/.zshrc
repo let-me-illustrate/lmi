@@ -34,6 +34,9 @@ export LANG=en_US.UTF-8 LC_ALL=C.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
 # but it seems to be necessary nevertheless.
 export LESSCHARSET=utf-8
 
+# Use vim keybindings.
+bindkey -v
+
 # bindkey "\e[3~" delete-char      # Del
 # bindkey '\e[H' beginning-of-line # Home
 # bindkey '\e[F' end-of-line       # End
