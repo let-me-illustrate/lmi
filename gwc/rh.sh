@@ -1,11 +1,37 @@
 #!/bin/do_not_run_this_as_a_script
 
 # Notes
-#
+
+# * Root access
+
+# Both Kim and I have been added to the 'sudoers' group. Normally,
+# on my own machine I just do
+
+#  /home/greg[0]$su
+#  /root[0]#echo $USER
+#  greg
+
+# which runs /root/.zshrc, which is the same as /home/greg/.zshrc
+
+# Maybe instead I should do
+
+#  /home/greg[0]$su -
+#  /root[0]#echo $USER
+#  root
+
+# which runs .zprofile as well; someone online said that `su`
+# "impersonates" root, but with `su -` you "become" root, FWIW
+
+# We've been running
+#   sudo su -
+# on this server, which is good enough.
+
 # Needed to do this:
 # %s,https://git.savannah.nongnu.org/cgit/lmi.git/plain,https://github.com/vadz/lmi/raw/master,
 # for a corporate server that enables github but, incomprehensibly, blocks nongnu.org
-#
+
+# * Multi-user access
+
 # Set up an 'lmi' group...
 sudo groupadd lmi
 sudo usermod -a -G lmi ${USER}
@@ -15,6 +41,8 @@ chmod g+w /opt/lmi
 ls -dl /opt/lmi
 
 # from lmi_setup_21.sh [do this as root]
+
+# and likewise for /cache_for_lmi
 
 # Repair /usr/share/libtool/.../ltmain.sh as indicated here:
 #   https://lists.gnu.org/archive/html/libtool-patches/2011-06/msg00001.html
@@ -103,4 +131,4 @@ pushd /opt/lmi/bin
 wine ./lmi_wx_shared.exe --ash_nazg --data_path=../data
 
 # last command fails--wine cannot be configured without X?
-
+# yet 'wineconsole' does work; is that enough?
