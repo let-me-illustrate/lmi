@@ -50,7 +50,11 @@ ln -s /bin/true /usr/bin/ischroot
 mount -t devpts -o rw,nosuid,noexec,relatime,mode=600 devpts /dev/pts
 mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 
-# If the chroot is to be permanent, consider adding those mounts to /etc/fstab .
+# If the chroot is to be permanent, consider adding those mounts to /etc/fstab:
+#
+# devpts /srv/chroot/${CHRTNAME}/dev/pts devpts rw,nosuid,noexec,relatime,mode=600,ptmxmode=000 0 0
+# proc /srv/chroot/${CHRTNAME}/proc proc rw,nosuid,nodev,noexec,relatime 0 0
+#
 # If the chroot is ever to be eradicated, be sure to unmount first:
 # ...inside chroot:
 #   umount ./dev/pts
