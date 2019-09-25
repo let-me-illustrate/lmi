@@ -21,6 +21,8 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+set -vx
+
 if [ "$(id -u)" -ne 0 ]; then
    echo "Must be run as root."
    exit 1
