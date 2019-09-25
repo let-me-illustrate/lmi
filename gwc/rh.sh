@@ -40,6 +40,11 @@ chown root:sudo /opt/lmi
 chmod g+w /opt/lmi
 ls -dl /opt/lmi
 
+#
+sudo yum-config-manager --enable rhel-server-rhscl-7-rpms
+sudo yum install rh-git218
+scl enable rh-git218 bash
+
 # from lmi_setup_21.sh [do this as root]
 
 # and likewise for /cache_for_lmi
@@ -64,6 +69,13 @@ EOF
 
 patch --dry-run --strip=0 </home/${USER}/ltmain.sh.patch \
  && patch --strip=0 </home/${USER}/ltmain.sh.patch
+
+# A related matter: use 'cp' here because it's too much work to
+# edit every occurrence of the debian filepath throughout lmi.
+# See:
+#   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00035.html
+
+sudo cp -a /usr/share/libtool/config/config.guess /usr/share/libtool/build-aux/config.guess
 
 # Configure zsh, for root as well as the user configured above.
 
