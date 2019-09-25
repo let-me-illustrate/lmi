@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 # Create a chroot for cross-building "Let me illustrate...".
 #
@@ -28,3 +28,6 @@
 CODENAME=bullseye
 CHRTVER=0
 CHRTNAME=lmi_${CODENAME}${CHRTVER}
+# shellcheck disable=SC2034
+#   (this file should only be sourced)
+export CHRTNAME

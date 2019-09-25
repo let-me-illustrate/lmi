@@ -24,7 +24,7 @@
 . ./lmi_setup_inc.sh
 
 # Symlink the repository's hooks/ directory:
-cd /opt/lmi/src/lmi
+cd /opt/lmi/src/lmi || { printf 'failed: cd\n'; exit 3; }
 mv .git/hooks .git/hooks-orig
 ln --symbolic --force --no-dereference ../hooks .git
 
@@ -35,12 +35,12 @@ git remote set-url --push origin chicares@git.sv.gnu.org:/srv/git/lmi.git
 # Duplicate proprietary repository (if available).
 # First, copy "blessed" repository (here, 'cp' is sufficient: this
 # bare repository has no references that need to be resolved):
-cd /opt/lmi
+cd /opt/lmi || { printf 'failed: cd\n'; exit 3; }
 cp --dereference --preserve --recursive /cache_for_lmi/blessed .
 # Then create a working copy by cloning the bare repository...
 git clone -b master file:///opt/lmi/blessed/proprietary
 # ...and verify it:
-cd proprietary
+cd proprietary || { printf 'failed: cd\n'; exit 3; }
 git rev-parse HEAD
 # ...then symlink its hooks/ directory:
 mv .git/hooks .git/hooks-orig
@@ -59,30 +59,34 @@ cp -a /opt/lmi/proprietary/test/* /opt/lmi/touchstone/
 
 # Remove object files previously built without proprietary source:
 . /opt/lmi/src/lmi/set_toolchain.sh
-rm /opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/build/ship/my*
+rm /opt/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/build/ship/my*
 
 # Regenerate the binary database (expect the 'rm' command here to fail
 # the first time, because there are no old files to remove):
-cd /opt/lmi/data
+cd /opt/lmi/data || { printf 'failed: cd\n'; exit 3; }
 rm proprietary.dat proprietary.ndx
 wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
 
+coefficiency="--jobs=$(nproc)"
+
 # Run a system test.
-cd /opt/lmi/src/lmi
-make $coefficiency system_test 2>&1 |less -S
+cd /opt/lmi/src/lmi || { printf 'failed: cd\n'; exit 3; }
+make "$coefficiency" system_test 2>&1 |less -S
 # That test fails the first time because no results are saved in
 # touchstone/ yet. Copy the results just generated...
 cp -a /opt/lmi/test/* /opt/lmi/touchstone
 # ...removing summaries...
 rm /opt/lmi/touchstone/analysis* /opt/lmi/touchstone/diffs* /opt/lmi/touchstone/md5sum*
 # ...and rerun the test, which should now succeed:
-make $coefficiency system_test 2>&1 |less -S
+make "$coefficiency" system_test 2>&1 |less -S
 
 # Create a local mirror of the gnu.org repository:
-cd /opt/lmi
+cd /opt/lmi || { printf 'failed: cd\n'; exit 3; }
 mkdir --parents free/src
-cd free/src
+cd free/src || { printf 'failed: cd\n'; exit 3; }
 git clone git://git.savannah.nongnu.org/lmi.git
-for z in **/*(D) ; do touch --reference=/opt/lmi/src/lmi/$z $z; done 2>&1 |sed \
+# shellcheck disable=SC2039
+#   (zsh glob qualifier: GLOB_DOTS)
+for z in **/*(D) ; do touch --reference=/opt/lmi/src/lmi/"$z" "$z"; done 2>&1 |sed \
   -e'/\/.git\/FETCH_HEAD[^0-9A-Za-z-]/d' \
   -e'/\/.git\/hooks\/[a-z-]*\.sample[^0-9A-Za-z-]/d'

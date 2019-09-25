@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 # Create a chroot for cross-building "Let me illustrate...".
 #
@@ -25,6 +25,7 @@
 
 # Install lmi for wine.
 
+cd ~ || { printf 'failed: cd\n'; exit 3; }
 wget -N 'http://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
 chmod +x install_msw.sh
 ./install_msw.sh >log 2>&1
@@ -33,5 +34,5 @@ chmod +x install_msw.sh
 # msw program, prefix its command line with 'wine'. Test the chroot by
 # running the lmi binary built in the preceding step:
 
-pushd /opt/lmi/bin
+cd /opt/lmi/bin || { printf 'failed: cd\n'; exit 3; }
 wine ./lmi_wx_shared.exe --ash_nazg --data_path=../data

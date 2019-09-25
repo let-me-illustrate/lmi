@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 # Create a chroot for cross-building "Let me illustrate...".
 #
@@ -84,10 +84,10 @@ apt-get --assume-yes install wget g++-mingw-w64 automake libtool make \
  pkg-config git cvs zsh bzip2 unzip sudo wine default-jre jing trang \
  g++-multilib libxml2-utils libxslt1-dev vim-gtk vim-doc shellcheck \
  bc bsdtar xsltproc \
- >${CHRTNAME}-apt-get-log 2>&1
+ >"${CHRTNAME}"-apt-get-log 2>&1
 
 # This command should produce little output:
-<${CHRTNAME}-apt-get-log tr -d '\r' | sed \
+<"${CHRTNAME}"-apt-get-log tr -d '\r' | sed \
  -e'0,/^Preconfiguring/d' \
  -e'/^Fetched\|^Preparing\|^Unpacking\|^Configuring\|^Selecting/d' \
  -e'/^Setting up\|^Processing\|^Adding\|^update-alternatives\|^[Dd]one./d' \

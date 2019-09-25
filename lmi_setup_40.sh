@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 # Create a chroot for cross-building "Let me illustrate...".
 #

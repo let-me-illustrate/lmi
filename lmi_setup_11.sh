@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 # Create a chroot for cross-building "Let me illustrate...".
 #
@@ -26,14 +26,14 @@
 # Unpack the OS tarball into the particular chroot being created.
 # (If the preceding apt-get and debootstrap steps have already been
 # completed once, then skip them and start here.)
-mkdir -p /srv/chroot/${CHRTNAME}
-debootstrap --arch=amd64 --unpack-tarball=/var/cache/${CODENAME}_bootstrap.tar \
- ${CODENAME} /srv/chroot/${CHRTNAME} >${CHRTNAME}-debootstrap-log 2>&1
+mkdir -p /srv/chroot/"${CHRTNAME}"
+debootstrap --arch=amd64 --unpack-tarball=/var/cache/"${CODENAME}"_bootstrap.tar \
+ "${CODENAME}" /srv/chroot/"${CHRTNAME}" >"${CHRTNAME}"-debootstrap-log 2>&1
 
 # This command should produce no output:
-grep --invert-match '^I:' ${CHRTNAME}-debootstrap-log
+grep --invert-match '^I:' "${CHRTNAME}"-debootstrap-log
 
-cat >/etc/schroot/chroot.d/${CHRTNAME}.conf <<EOF
+cat >/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
 [${CHRTNAME}]
 aliases=lmi
 description=debian ${CODENAME} cross build ${CHRTVER}
