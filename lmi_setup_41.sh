@@ -21,6 +21,8 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+. ./lmi_setup_inc.sh
+
 # Symlink directories used by lmi, so that both native and wine
 # builds use the same directories and can share the same
 # architecture-independent 'configurable_settings.xml'--much like the

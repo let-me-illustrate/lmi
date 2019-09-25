@@ -21,6 +21,8 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+. ./lmi_setup_inc.sh
+
 # If cached lmi downloads are available elsewhere, copy them now.
 # Copying cache_for_lmi/downloads/ is an optional step that merely
 # conserves bandwidth. Directory cache_for_lmi/ in a native msw

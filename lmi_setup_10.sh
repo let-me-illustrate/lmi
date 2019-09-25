@@ -21,6 +21,8 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+. ./lmi_setup_inc.sh
+
 apt-get update
 apt-get install schroot debootstrap
 

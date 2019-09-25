@@ -21,6 +21,8 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+. ./lmi_setup_inc.sh
+
 addgroup --gid=1000 greg
 adduser --gid=1000 --uid=1000 greg
 # enter user password, twice

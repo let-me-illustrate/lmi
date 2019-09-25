@@ -21,6 +21,8 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+. ./lmi_setup_inc.sh
+
 # Install lmi for wine.
 
 wget -N 'http://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
