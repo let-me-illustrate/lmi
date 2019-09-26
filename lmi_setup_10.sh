@@ -34,4 +34,8 @@ apt-get install schroot debootstrap
 # Download all OS essentials. This step may be done a single time, and
 # its tarball used repeatedly. The target ('/tmp/eraseme') directory
 # will be created and erased automatically.
-debootstrap --arch=amd64 --make-tarball=/var/cache/"${CODENAME}"_bootstrap.tar "${CODENAME}" /tmp/eraseme
+
+if [ ! -e /var/cache/"${CODENAME}"_bootstrap.tar ]; then
+  debootstrap --arch=amd64 --make-tarball=/var/cache/"${CODENAME}"_bootstrap.tar \
+   "${CODENAME}" /tmp/eraseme
+fi
