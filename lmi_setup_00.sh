@@ -37,6 +37,7 @@ wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_40.sh'
 wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_41.sh'
 wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_42.sh'
 wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_43.sh'
+chmod +x lmi_setup_*.sh
 
 ./lmi_setup_10.sh
 ./lmi_setup_11.sh
