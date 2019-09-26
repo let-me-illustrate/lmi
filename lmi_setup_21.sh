@@ -25,6 +25,9 @@ set -vx
 
 . ./lmi_setup_inc.sh
 
+assert_su
+assert_chrooted
+
 addgroup --gid=1000 greg
 adduser --gid=1000 --uid=1000 greg
 # enter user password, twice

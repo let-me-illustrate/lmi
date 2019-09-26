@@ -25,6 +25,9 @@ set -vx
 
 . ./lmi_setup_inc.sh
 
+assert_not_su
+assert_not_chrooted
+
 # If cached lmi downloads are available elsewhere, copy them now.
 # Copying cache_for_lmi/downloads/ is an optional step that merely
 # conserves bandwidth. Directory cache_for_lmi/ in a native msw

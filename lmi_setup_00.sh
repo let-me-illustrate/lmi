@@ -23,21 +23,19 @@
 
 set -vx
 
-if [ "$(id -u)" -ne 0 ]; then
-   echo "Must be run as root."
-   exit 1
-fi
-
 . ./lmi_setup_inc.sh
+
+assert_su
+assert_not_chrooted
 
 # Progressively uncomment these lines as they're tested.
 
 # ./lmi_setup_10.sh
 # ./lmi_setup_11.sh
-# ./lmi_setup_20.sh
-# ./lmi_setup_21.sh
-# ./lmi_setup_30.sh
-# ./lmi_setup_40.sh
-# ./lmi_setup_41.sh
-# ./lmi_setup_42.sh
-# ./lmi_setup_43.sh
+# schroot --chroot=${CHRTNAME} --user=root --directory=/tmp ./lmi_setup_20.sh
+# schroot --chroot=${CHRTNAME} --user=root --directory=/tmp ./lmi_setup_21.sh
+# sudo -u greg ./lmi_setup_30.sh
+# schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_40.sh
+# schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_41.sh
+# schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_42.sh
+# schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_43.sh

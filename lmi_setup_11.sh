@@ -25,6 +25,9 @@ set -vx
 
 . ./lmi_setup_inc.sh
 
+assert_su
+assert_not_chrooted
+
 # Unpack the OS tarball into the particular chroot being created.
 # (If the preceding apt-get and debootstrap steps have already been
 # completed once, then skip them and start here.)

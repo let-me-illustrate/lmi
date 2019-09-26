@@ -31,3 +31,35 @@ CHRTNAME=lmi_${CODENAME}${CHRTVER}
 # shellcheck disable=SC2034
 #   (this file should only be sourced)
 export CHRTNAME
+
+assert_su()
+{
+if [ "$(id -u)" -ne 0 ]; then
+   echo "Must be run as root."
+   exit 1
+fi
+}
+
+assert_not_su()
+{
+if [ "$(id -u)" -eq 0 ]; then
+   echo "Must not be run as root."
+   exit 1
+fi
+}
+
+assert_chrooted()
+{
+if [ "$(ls -di /)" = "2 /" ]; then
+   echo "Must be run in chroot."
+   exit 1
+fi
+}
+
+assert_not_chrooted()
+{
+if [ "$(ls -di /)" != "2 /" ]; then
+   echo "Must not be run in chroot."
+   exit 1
+fi
+}

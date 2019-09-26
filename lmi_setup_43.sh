@@ -25,6 +25,9 @@ set -vx
 
 . ./lmi_setup_inc.sh
 
+assert_not_su
+assert_chrooted
+
 # Symlink the repository's hooks/ directory:
 cd /opt/lmi/src/lmi || { printf 'failed: cd\n'; exit 3; }
 mv .git/hooks .git/hooks-orig

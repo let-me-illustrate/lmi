@@ -25,6 +25,9 @@ set -vx
 
 . ./lmi_setup_inc.sh
 
+assert_not_su
+assert_chrooted
+
 # Initialize wine. See:
 #   https://lists.nongnu.org/archive/html/lmi/2016-10/msg00002.html
 WINEDLLOVERRIDES=mscoree=d wine wineboot

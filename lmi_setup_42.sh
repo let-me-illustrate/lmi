@@ -25,6 +25,9 @@ set -vx
 
 . ./lmi_setup_inc.sh
 
+assert_not_su
+assert_chrooted
+
 # Install lmi for wine.
 
 cd ~ || { printf 'failed: cd\n'; exit 3; }

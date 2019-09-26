@@ -25,6 +25,9 @@ set -vx
 
 . ./lmi_setup_inc.sh
 
+assert_su
+assert_chrooted
+
 # Add i386 before installing wine, so that wine can run 32-bit .exe's .
 
 dpkg --add-architecture i386

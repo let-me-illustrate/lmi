@@ -25,6 +25,9 @@ set -vx
 
 . ./lmi_setup_inc.sh
 
+assert_su
+assert_not_chrooted
+
 apt-get update
 apt-get install schroot debootstrap
 
