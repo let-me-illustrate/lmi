@@ -26,7 +26,7 @@
 # CHRTNAME: physical name of chroot (SCHROOT_CHROOT_NAME)
 
 CODENAME=bullseye
-CHRTVER=0
+CHRTVER=eraseme
 CHRTNAME=lmi_${CODENAME}${CHRTVER}
 # shellcheck disable=SC2034
 #   (this file should only be sourced)

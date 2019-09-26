@@ -28,14 +28,23 @@ set -vx
 assert_su
 assert_not_chrooted
 
-# Progressively uncomment these lines as they're tested.
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_10.sh'
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_11.sh'
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_20.sh'
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_21.sh'
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_30.sh'
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_40.sh'
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_41.sh'
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_42.sh'
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_43.sh'
 
-# ./lmi_setup_10.sh
-# ./lmi_setup_11.sh
-# schroot --chroot=${CHRTNAME} --user=root --directory=/tmp ./lmi_setup_20.sh
-# schroot --chroot=${CHRTNAME} --user=root --directory=/tmp ./lmi_setup_21.sh
-# sudo -u greg ./lmi_setup_30.sh
-# schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_40.sh
-# schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_41.sh
-# schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_42.sh
-# schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_43.sh
+./lmi_setup_10.sh
+./lmi_setup_11.sh
+cp -a lmi_setup_*.sh /srv/chroot/${CHRTNAME}/tmp
+schroot --chroot=${CHRTNAME} --user=root --directory=/tmp ./lmi_setup_20.sh
+schroot --chroot=${CHRTNAME} --user=root --directory=/tmp ./lmi_setup_21.sh
+sudo -u greg ./lmi_setup_30.sh
+schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_40.sh
+schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_41.sh
+schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_42.sh
+schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_43.sh
