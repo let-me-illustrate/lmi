@@ -46,3 +46,14 @@ groups=greg
 root-groups=root
 type=plain
 EOF
+
+# Bind-mount apt archives for the chroot's debian release, to save a
+# great deal of bandwidth if multiple chroots are created with the
+# same release. Do this:
+#   - after invoking 'debootstrap', so that /var exists; and
+#   - before invoking 'apt-get' in the chroot, to save bandwidth; and
+#   - while not chrooted, so that the host filesystem is accessible.
+# The alternative of rbind-mounting parent directory var/cache/apt is
+# not used because it's more complicated and has no benefit.
+mkdir -p /var/cache/"${CODENAME}"
+mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
