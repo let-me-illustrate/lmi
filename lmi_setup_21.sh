@@ -28,10 +28,22 @@ set -vx
 assert_su
 assert_chrooted
 
-addgroup --gid=1000 greg
-adduser --gid=1000 --uid=1000 greg
-# enter user password, twice
-# then just press Enter repeatedly to accept defaults
+# Add a normal user, and a corresponding group.
+#
+# No attempt is made to set a real password, because that can't be
+# done securely in a script. A better password can be set later,
+# interactively, if desired. Forcing the dummy password to expire
+# immediately, thus (e.g.):
+#   chage -d 0 greg
+# may seem like a good idea, but invoking schroot with that userid
+# doesn't prompt for a password change.
+groupadd --gid=1000 greg
+useradd --gid=1000 --groups=sudo --uid=1000 --create-home --shell=/bin/zsh \
+  --password="$(openssl passwd -1 expired)" greg
+
+# Add an 'lmi' group, which may be useful in a multi-user chroot.
+groupadd --gid=1001 lmi
+usermod -aG lmi greg
 
 mkdir -p /opt/lmi
 chown greg:greg /opt/lmi
