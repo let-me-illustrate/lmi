@@ -88,7 +88,7 @@ apt-get update
 apt-get --assume-yes install wget g++-mingw-w64 automake libtool make \
  pkg-config git cvs zsh bzip2 unzip sudo wine default-jre jing trang \
  g++-multilib libxml2-utils libxslt1-dev vim-gtk vim-doc shellcheck \
- bc bsdtar xsltproc \
+ bc libarchive-tools xsltproc \
  >"${CHRTNAME}"-apt-get-log 2>&1
 
 # This command should produce little output:
