@@ -29,7 +29,7 @@ assert_su
 assert_not_chrooted
 
 apt-get update
-apt-get install schroot debootstrap
+apt-get --assume-yes install schroot debootstrap
 
 # Download all OS essentials. This step may be done a single time, and
 # its tarball used repeatedly. The target ('/tmp/eraseme') directory

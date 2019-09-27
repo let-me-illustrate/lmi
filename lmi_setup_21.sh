@@ -108,6 +108,5 @@ EOF
 
 # Apply any available upgrades:
 
-apt-get update
-apt-get upgrade
-apt-get dist-upgrade
+apt-get --assume-yes update
+apt-get --assume-yes dist-upgrade
