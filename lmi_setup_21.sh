@@ -110,12 +110,25 @@ chown greg:greg /home/greg/.vim/spell/en.utf-8.add
 vim -es -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
 # which will be repeated below in the user chroot.
 
-# Enable stable and security upgrades:
+# Enable stable and security upgrades--see:
+#    https://www.debian.org/releases/stretch/amd64/apds03.html.en#idm4504
+# As this is written in 2019-09, 'bullseye' has not been officially
+# released, so it has no release-notes page like the one cited above
+# for 'stretch', which recommends adding 'security.debian.org'; and
+# adding 'security.debian.org' for 'bullseye' elicits:
+#   Err:4 http://security.debian.org bullseye/updates Release
+#     404  Not Found [IP: 151.101.184.204 80]
+#   Reading package lists...
+#   E: The repository 'http://security.debian.org bullseye/updates Release' does not have a Release file.
+# apparently because 'bullseye' is too new to have security updates
+# yet:
+#   http://forums.debian.net/viewtopic.php?f=5&t=143325
+# | Security repo may not be available for some time.
 
 cat >/etc/apt/sources.list <<EOF
 deb http://deb.debian.org/debian/ ${CODENAME} main
 deb http://deb.debian.org/debian/ ${CODENAME}-updates main
-deb http://security.debian.org/   ${CODENAME}/updates main
+#deb http://security.debian.org/   ${CODENAME}/updates main
 EOF
 
 # Apply any available upgrades:
