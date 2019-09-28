@@ -62,16 +62,32 @@ mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 # devpts /srv/chroot/${CHRTNAME}/dev/pts devpts rw,nosuid,noexec,relatime,mode=600,ptmxmode=000 0 0
 # proc /srv/chroot/${CHRTNAME}/proc proc rw,nosuid,nodev,noexec,relatime 0 0
 #
-# If the chroot is ever to be eradicated, be sure to unmount first:
-# ...inside chroot:
-#   umount ./dev/pts
-#   umount ./proc
-# ...or outside chroot:
-#   umount /srv/chroot/${CHRTNAME}/dev/pts/
-#   umount /srv/chroot/${CHRTNAME}/proc/
-# Then, and only then:
-#   rm -rf /srv/chroot/${CHRTNAME}/
-#   rm /etc/schroot/chroot.d/${CHRTNAME}.conf
+# If the chroot is ever to be eradicated, use 'lmi_destroy_chroot.sh',
+# which, crucially, unmounts before removing.
+#
+# As an alternative, configure the chroot with "type=directory"
+# instead of "type=plain", so that 'schroot' mounts the appropriate
+# filesystems when the chroot is entered, and unmounts them when it
+# is exited. Then problems like this:
+#   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00026.html
+# would be prevented. However, it would be necessary to adapt all of
+# the setup scripts, to avoid undesirable side effects as discussed
+# here:
+#   https://lists.gnu.org/archive/html/lmi/2016-09/msg00014.html
+# Adding a line like
+#   setup.fstab=minimal/fstab
+# to a 'plain' chroot's configuration file has no effect (and elicits
+# no diagnostic).
+#
+# See also:
+#   https://linux.die.net/man/7/schroot-faq
+# | Should I use the plain or directory chroot type? [...]
+# | plain is very simple and does not perform any setup tasks [...]
+# | directory chroots do run setup scripts, which can mount additional
+# | filesystems and do other setup tasks
+#
+# If a 'directory' chroot is to be configured, bind mounts may not be
+# shown clearly in /etc/mtab ; use 'findmnt' to see them.
 
 # Notes on various distros' package names.
 #
