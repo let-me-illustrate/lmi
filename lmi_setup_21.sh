@@ -46,13 +46,13 @@ groupadd --gid=1001 lmi
 usermod -aG lmi greg
 
 mkdir -p /opt/lmi
-chown greg:greg /opt/lmi
+chown greg:lmi /opt/lmi
 mkdir -p /etc/opt/lmi
-chown greg:greg /etc/opt/lmi
+chown greg:lmi /etc/opt/lmi
 mkdir -p /var/opt/lmi
-chown greg:greg /var/opt/lmi
+chown greg:lmi /var/opt/lmi
 mkdir -p /cache_for_lmi
-chown greg:greg /cache_for_lmi
+chown greg:lmi /cache_for_lmi
 
 chsh -s /bin/zsh greg
 
