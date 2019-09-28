@@ -74,8 +74,8 @@ cat >/home/greg/ltmain.sh.patch <<EOF
  # ifdef __STRICT_ANSI__
 EOF
 
-patch --dry-run --strip=0 </home/greg/ltmain.sh.patch \
- && patch --strip=0 </home/greg/ltmain.sh.patch
+patch --dry-run --strip=0 --directory=/ </home/greg/ltmain.sh.patch \
+ && patch --strip=0 --directory=/ </home/greg/ltmain.sh.patch
 
 # Configure zsh, for root as well as the user configured above.
 
