@@ -76,14 +76,14 @@ coefficiency="--jobs=$(nproc)"
 
 # Run a system test.
 cd /opt/lmi/src/lmi || { printf 'failed: cd\n'; exit 3; }
-make "$coefficiency" system_test 2>&1 |less -S
+make "$coefficiency" system_test 2>&1 |sed -e'/^Cannot open.*test/d'
 # That test fails the first time because no results are saved in
 # touchstone/ yet. Copy the results just generated...
 cp -a /opt/lmi/test/* /opt/lmi/touchstone
 # ...removing summaries...
 rm /opt/lmi/touchstone/analysis* /opt/lmi/touchstone/diffs* /opt/lmi/touchstone/md5sum*
 # ...and rerun the test, which should now succeed:
-make "$coefficiency" system_test 2>&1 |less -S
+make "$coefficiency" system_test
 
 # Create a local mirror of the gnu.org repository:
 cd /opt/lmi || { printf 'failed: cd\n'; exit 3; }
