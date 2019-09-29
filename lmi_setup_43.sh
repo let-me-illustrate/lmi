@@ -90,6 +90,7 @@ cd /opt/lmi || { printf 'failed: cd\n'; exit 3; }
 mkdir --parents free/src
 cd free/src || { printf 'failed: cd\n'; exit 3; }
 git clone git://git.savannah.nongnu.org/lmi.git
+cd lmi || { printf 'failed: cd\n'; exit 3; }
 # shellcheck disable=SC2039
 #   (zsh glob qualifier: GLOB_DOTS)
 for z in **/*(D) ; do touch --reference=/opt/lmi/src/lmi/"$z" "$z"; done 2>&1 |sed \
