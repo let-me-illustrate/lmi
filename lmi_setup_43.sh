@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 # Create a chroot for cross-building "Let me illustrate...".
 #
@@ -91,8 +91,5 @@ mkdir --parents free/src
 cd free/src || { printf 'failed: cd\n'; exit 3; }
 git clone git://git.savannah.nongnu.org/lmi.git
 cd lmi || { printf 'failed: cd\n'; exit 3; }
-# shellcheck disable=SC2039
-#   (zsh glob qualifier: GLOB_DOTS)
-for z in **/*(D) ; do touch --reference=/opt/lmi/src/lmi/"$z" "$z"; done 2>&1 |sed \
-  -e'/\/.git\/FETCH_HEAD[^0-9A-Za-z-]/d' \
-  -e'/\/.git\/hooks\/[a-z-]*\.sample[^0-9A-Za-z-]/d'
+find . -path ./.git -prune -o -type f -print0 \
+  | xargs -0 -n 1 -p 0 -i '{}' touch '--reference=/opt/lmi/src/lmi/{}' '{}'
