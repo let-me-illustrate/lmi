@@ -28,6 +28,9 @@ set -vx
 assert_su
 assert_not_chrooted
 
+stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+echo "Started: $stamp0"
+
 wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_10.sh'
 wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_11.sh'
 wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_20.sh'
@@ -49,3 +52,10 @@ schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_40.sh
 schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_41.sh
 schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_42.sh
 schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_43.sh
+
+stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+echo "Finished: $stamp1"
+
+seconds=$(($(date '+%s' -d "$stamp1") - $(date '+%s' -d "$stamp0")))
+elapsed=$(date -u -d @"$seconds" +'%H:%M:%S')
+echo "Elapsed: $elapsed"
