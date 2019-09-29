@@ -25,12 +25,11 @@
 # CHRTVER : local serial number (nothing to do with /etc/debian_version)
 # CHRTNAME: physical name of chroot (SCHROOT_CHROOT_NAME)
 
+# shellcheck disable=SC2034
+#   (this file should only be sourced)
 CODENAME=bullseye
 CHRTVER=eraseme
 CHRTNAME=lmi_${CODENAME}${CHRTVER}
-# shellcheck disable=SC2034
-#   (this file should only be sourced)
-export CHRTNAME
 
 assert_su()
 {
