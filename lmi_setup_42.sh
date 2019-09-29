@@ -37,7 +37,10 @@ chmod +x install_msw.sh
 
 # Now everything should work much as it does in native msw. To run an
 # msw program, prefix its command line with 'wine'. Test the chroot by
-# running the lmi binary built in the preceding step:
+# running the lmi binary built in the preceding step after setting
+# $DISPLAY, manually (not under control of this script, which should
+# run unattended):
 
-cd /opt/lmi/bin || { printf 'failed: cd\n'; exit 3; }
-wine ./lmi_wx_shared.exe --ash_nazg --data_path=../data
+# export DISPLAY=":0.0"
+# cd /opt/lmi/bin || { printf 'failed: cd\n'; exit 3; }
+# wine ./lmi_wx_shared.exe --ash_nazg --data_path=../data
