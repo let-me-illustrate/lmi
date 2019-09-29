@@ -32,5 +32,5 @@ umount /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 umount /srv/chroot/"${CHRTNAME}"/dev/pts
 umount /srv/chroot/"${CHRTNAME}"/proc
 
-rm -rf "$(schroot --chroot="${CHRTNAME}" --location)"
+rm --one-file-system --recursive --force "$(schroot --chroot="${CHRTNAME}" --location)"
 rm /etc/schroot/chroot.d/"${CHRTNAME}".conf
