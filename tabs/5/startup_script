@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-a='schroot --chroot=cross-lmi'
+a='schroot --chroot=lmi'
 
 b='cd /opt/lmi/bin'
 c='. /opt/lmi/src/lmi/set_toolchain.sh'

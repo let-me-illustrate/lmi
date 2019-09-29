@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-a='schroot --chroot=cross-lmi'
+a='schroot --chroot=lmi'
 
 b='cd /opt/lmi/free/src/lmi'
 c='git fetch --all --dry-run'

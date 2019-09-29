@@ -1006,16 +1006,6 @@ class pdf_illustration : protected html_interpolator, protected pdf_writer_wx
             add_variable("ContractNameCap", s);
             }
 
-        // PDF !! Conditions of this ilk should become distinct entities in
-        // the product files--or in this case, eliminated altogether: this
-        // condition is used only in one place, in a really silly way.
-        auto const& policy_name = invar.PolicyLegalName;
-        add_variable
-            ("GroupCarveout"
-            ,    policy_name == "Group Flexible Premium Adjustable Life Insurance Certificate"
-              || policy_name == "Group Flexible Premium Variable Adjustable Life Insurance Certificate"
-            );
-
         auto const& state_of_jurisdiction = invar.StateOfJurisdiction;
         add_variable
             ("StateIsNorthOrSouthCarolina"
@@ -2217,7 +2207,6 @@ class pdf_illustration_naic : public pdf_illustration
         :pdf_illustration{ledger, pdf_out_file}
     {
         auto const& invar = ledger.GetLedgerInvariant();
-        auto const& policy_name = invar.PolicyLegalName;
         auto const& state_of_jurisdiction = invar.StateOfJurisdiction;
 
         // Define variables specific to this illustration.
@@ -2226,29 +2215,14 @@ class pdf_illustration_naic : public pdf_illustration
         add_abbreviated_variable("Insured1", 50);
 
         add_variable
-            ("ModifiedSinglePremium"
-            ,starts_with(policy_name, "Single") && state_of_jurisdiction == "MA"
-            );
-
-        add_variable
-            ("ModifiedSinglePremium0"
-            ,starts_with(policy_name, "Modified")
-            );
-
-        add_variable
-            ("ModifiedSinglePremiumOrModifiedSinglePremium0"
-            , test_variable("ModifiedSinglePremium")
-            ||test_variable("ModifiedSinglePremium0")
-            );
-
-        bool const is_single_premium =
-               starts_with(policy_name, "Single")
-            || starts_with(policy_name, "Modified")
-            ;
-        LMI_ASSERT(is_single_premium == invar.IsSinglePremium);
-        add_variable
             ("SinglePremium"
-            ,is_single_premium
+            ,     oe_plain_single_premium    == invar.IsSinglePremium
+               || oe_modified_single_premium == invar.IsSinglePremium
+            );
+
+        add_variable
+            ("ModifiedSinglePremium"
+            ,oe_modified_single_premium == invar.IsSinglePremium
             );
 
         // Variable representing the premium payment frequency with the
@@ -2563,13 +2537,14 @@ class finra_basic : public page_with_basic_tabular_report
             << basis_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
             << "}} "
-            << "Assumed Sep Acct\n"
-            << "Gross Rate* "
+            << "Assumed"
+            << "\nSep Acct Gross"
+            << "\nRate* "
             << "({{InitAnnSepAcctNetInt_"
             << basis_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
-            << "}} net)\n"
-            << "{{InitAnnGenAcctInt_"
+            << "}} net)"
+            << "\n{{InitAnnGenAcctInt_"
             << basis_suffix(guar_or_curr)
             << "}} GPA rate"
             ;
@@ -2869,11 +2844,6 @@ class pdf_illustration_finra : public pdf_illustration
             ,test_variable("HasTerm") || test_variable("HasSupplSpecAmt")
             );
 
-        add_variable
-            ("StateIsNewYork"
-            ,state_of_jurisdiction == "NY"
-            );
-
         // Add all the pages.
         numbered_page::start_numbering();
         add<cover_page>();
@@ -2925,8 +2895,9 @@ class reg_d_group_basic : public page_with_basic_tabular_report
             << basis_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
             << "}} "
-            << "Hypothetical Gross\n"
-            << "Return ({{InitAnnSepAcctNetInt_"
+            << "Hypothetical"
+            << "\nGross Return"
+            << "\n({{InitAnnSepAcctNetInt_"
             << basis_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
             << "}} net)"
@@ -3019,15 +2990,14 @@ class reg_d_indiv_irr_base : public page_with_tabular_report
             << "{{InitAnnSepAcctGrossInt_"
             << basis_suffix(get_basis())
             << ir_suffix(interest_rate::zero)
-            << "}} Hypothetical Rate of\n"
-            << "Return*"
+            << "}} Hypothetical Rate of Return*"
             ;
 
         auto pos_y_copy = pos_y;
         table_gen.output_super_header
             (interpolator_(header_zero.str()).as_html()
             ,column_zero_cash_surr_value
-            ,column_zero_irr_surr_value
+            ,column_separator
             ,pos_y_copy
             ,output_mode
             );
@@ -3037,27 +3007,26 @@ class reg_d_indiv_irr_base : public page_with_tabular_report
             << "{{InitAnnSepAcctGrossInt_"
             << basis_suffix(get_basis())
             << ir_suffix(interest_rate::non_zero)
-            << "}} Hypothetical Rate of\n"
-            << "Return*"
+            << "}} Hypothetical Rate of Return*"
             ;
 
         table_gen.output_super_header
             (interpolator_(header_nonzero.str()).as_html()
             ,column_nonzero_cash_surr_value
-            ,column_nonzero_irr_surr_value
+            ,column_max
             ,pos_y
             ,output_mode
             );
 
         table_gen.output_horz_separator
             (column_zero_cash_surr_value
-            ,column_zero_irr_surr_value
+            ,column_separator
             ,pos_y
             ,output_mode
             );
         table_gen.output_horz_separator
             (column_nonzero_cash_surr_value
-            ,column_nonzero_irr_surr_value
+            ,column_max
             ,pos_y
             ,output_mode
             );

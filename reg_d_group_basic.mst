@@ -31,6 +31,5 @@ Basic Illustration
 {{>dollar_units}}
 
 <br></br>
-<br></br>
 
 {{! Basic illustration table is created from C++ code }}

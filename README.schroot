@@ -22,38 +22,16 @@
 # Create a chroot for cross-building lmi--with wine, which is
 # required to run programs built in the chroot.
 
+# First, make sure the options in 'lmi_setup_inc.sh' are suitable.
+
 # Log in as the user that will normally use the chroot.
 # Substitute that user's name wherever 'greg' appears below.
 
 # Temporarily enter a root shell.
 su
-apt-get update
-apt-get install schroot debootstrap
 
-# Download all OS essentials. This step may be done a single time, and
-# its tarball used repeatedly. The target ('/tmp/eraseme') directory
-# will be created and erased automatically.
-debootstrap --arch=amd64 --make-tarball=/var/cache/buster_bootstrap.tar buster /tmp/eraseme
-
-# Unpack the OS tarball into the particular chroot being created.
-# (If the preceding apt-get and debootstrap steps have already been
-# completed once, then skip them and start here.)
-mkdir -p /srv/chroot/lmi-buster2
-debootstrap --arch=amd64 --unpack-tarball=/var/cache/buster_bootstrap.tar \
- buster /srv/chroot/lmi-buster2 >lmi-buster2-debootstrap-log 2>&1
-
-# This command should produce no output:
-grep --invert-match '^I:' lmi-buster2-debootstrap-log
-
-cat >/etc/schroot/chroot.d/lmi-buster2.conf <<\EOF
-[lmi-buster2]
-description=debian buster cross build
-directory=/srv/chroot/lmi-buster2
-users=greg
-groups=greg
-root-groups=root
-type=plain
-EOF
+./lmi_setup_10.sh
+./lmi_setup_11.sh
 
 # Exit root shell (return to normal shell).
 exit
@@ -61,332 +39,27 @@ exit
 # This command--to start a root shell in the chroot--can be run as a
 # normal user. It will prompt for the root password.
 
-schroot --chroot=lmi-buster2 --user=root --directory=/
+schroot --chroot=${CHRTNAME} --user=root --directory=/
 # enter password
 #
 # Expect a warning that bash will be used because zsh isn't yet installed.
 
-# Add i386 before installing wine, so that wine can run 32-bit .exe's .
-
-dpkg --add-architecture i386
-
-# Prevent daemons from starting in the chroot; work around an
-# 'ischroot' defect. See:
-#   https://wiki.debian.org/chroot#Configuration
-
-cat >/usr/sbin/policy-rc.d <<EOF
-#!/bin/sh
-exit 101
-EOF
-
-chmod a+x /usr/sbin/policy-rc.d
-
-dpkg-divert --divert /usr/bin/ischroot.debianutils --rename /usr/bin/ischroot
-ln -s /bin/true /usr/bin/ischroot
-
-# For now at least, ignore this warning:
-#   dpkg-divert: warning: diverting file '/usr/bin/ischroot' from an Essential
-#   package with rename is dangerous, use --no-rename
-# because the debian.org wiki cited above still recommends this diversion
-# as of 2019-03, and the underlying defect is still unresolved:
-#   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=685034
-
-# This being a "plain" schroot, mount essential directories:
-mount -t devpts -o rw,nosuid,noexec,relatime,mode=600 devpts /dev/pts
-mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
-
-# If the chroot is to be permanent, consider adding those mounts to /etc/fstab .
-# If the chroot is ever to be eradicated, be sure to unmount first:
-# ...inside chroot:
-#   umount ./dev/pts
-#   umount ./proc
-# ...or outside chroot:
-#   umount /srv/chroot/lmi-buster2/dev/pts/
-#   umount /srv/chroot/lmi-buster2/proc/
-# Then, and only then:
-#   rm -rf /srv/chroot/lmi-buster2/
-#   rm /etc/schroot/chroot.d/lmi-buster2.conf
-
-apt-get update
-apt-get --assume-yes install wget g++-mingw-w64 automake libtool make \
- pkg-config git cvs zsh bzip2 unzip sudo wine default-jre jing trang \
- g++-multilib libxml2-utils libxslt1-dev vim-gtk vim-doc shellcheck \
- bc bsdtar xsltproc \
- >lmi-buster2-apt-get-log 2>&1
-
-# This command should produce little output:
-<lmi-buster2-apt-get-log sed -e'0,/^Preconfiguring/d' \
- -e'/^Fetched\|^Preparing\|^Unpacking\|^Configuring\|^Selecting/d' \
- -e'/^Setting up\|^Processing\|^Adding\|^update-alternatives\|^[Dd]one./d' \
- -e'/^(Reading database\|^Linking\|^Moving old\|^Regenerating/d' \
- -e'/^Creating config\|^Updating certificates\|^Running hooks/d'
-#
-# Don't worry about messages like the following--see:
-#   https://lists.nongnu.org/archive/html/lmi/2016-09/msg00025.html
-#
-#   update-rc.d: warning: start and stop actions are no longer supported; falling back to defaults
-#   invoke-rc.d: policy-rc.d denied execution of start.
-#   No schema files found: doing nothing.
-#   Warning: The home dir /run/uuidd you specified can't be accessed: No such file or directory
-#   Not creating home directory `/run/uuidd'.
-
-addgroup --gid=1000 greg
-adduser --gid=1000 --uid=1000 greg
-# enter user password, twice
-# then just press Enter repeatedly to accept defaults
-
-mkdir -p /opt/lmi
-chown greg:greg /opt/lmi
-mkdir -p /etc/opt/lmi
-chown greg:greg /etc/opt/lmi
-mkdir -p /var/opt/lmi
-chown greg:greg /var/opt/lmi
-mkdir -p /cache_for_lmi
-chown greg:greg /cache_for_lmi
-
-chsh -s /bin/zsh greg
-
-# Repair /usr/share/libtool/.../ltmain.sh as indicated here:
-#   https://lists.gnu.org/archive/html/libtool-patches/2011-06/msg00001.html
-# Do this as root because root owns the file.
-
-cat >/home/greg/ltmain.sh.patch <<\EOF
---- /usr/share/libtool/build-aux/ltmain.sh.orig 2016-08-20 12:34:31.000000000 +0000
-+++ /usr/share/libtool/build-aux/ltmain.sh 2017-08-10 13:10:28.466155965 +0000
-@@ -5555,7 +5555,7 @@
- /* declarations of non-ANSI functions */
- #if defined __MINGW32__
- # ifdef __STRICT_ANSI__
--int _putenv (const char *);
-+_CRTIMP int _putenv (const char *);
- # endif
- #elif defined __CYGWIN__
- # ifdef __STRICT_ANSI__
-EOF
-
-patch --dry-run --strip=0 </home/greg/ltmain.sh.patch \
- && patch --strip=0 </home/greg/ltmain.sh.patch
-
-# Configure zsh, for root as well as the user configured above.
-
-wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/gwc/.zshrc'
-mv .zshrc ~
-cp -a ~/.zshrc /home/greg/.zshrc
-chown greg:greg /home/greg/.zshrc
-
-# Configure vim. Rather than trying to split its contents between
-# '~/.vimrc' and '/etc/vim/vimrc.local', just copy it everywhither.
-
-wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/gwc/.vimrc'
-mv .vimrc ~
-cp -a ~/.vimrc /etc/vim/vimrc.local
-cp -a ~/.vimrc /home/greg/.vimrc
-chown greg:greg /home/greg/.vimrc
-
-# Without this, 'zg' gives an error message; with it, vim creates a
-# spellfile the first time 'zg' is used, if none already exists.
-mkdir ~/.vim
-mkdir /home/greg/.vim
-chown greg:greg /home/greg/.vim
-# It's a much better idea to copy a mature spellfile hither:
-wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/gwc/.vim/spell/en.utf-8.add'
-mkdir ~/.vim/spell
-mv en.utf-8.add ~/.vim/spell/en.utf-8.add
-mkdir /home/greg/.vim/spell
-chown greg:greg /home/greg/.vim/spell
-cp -a ~/.vim/spell/en.utf-8.add /home/greg/.vim/spell/en.utf-8.add
-chown greg:greg /home/greg/.vim/spell/en.utf-8.add
-# and then (imperatively) run this command:
-vim -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
-# which will be repeated below in the user chroot.
-
-# Enable stable and security upgrades:
-
-cat >/etc/apt/sources.list <<\EOF
-deb http://deb.debian.org/debian/ buster main
-deb http://deb.debian.org/debian/ buster-updates main
-deb http://security.debian.org/   buster/updates main
-EOF
-
-# Apply any available upgrades:
-
-apt-get update
-apt-get upgrade
-apt-get dist-upgrade
+./lmi_setup_20.sh
+./lmi_setup_21.sh
 
 # Exit from the root shell in the chroot.
 exit
 
-# If cached lmi downloads are available elsewhere, copy them now.
-# Copying cache_for_lmi/downloads/ is an optional step that merely
-# conserves bandwidth. Directory cache_for_lmi/ in a native msw
-# installation also contains cygwin files, which are not wanted in a
-# chroot. For convenience, add a bare repository of proprietary files
-# to this directory (after making sure it's up to date), e.g.:
-#   rm -rf /srv/cache_for_lmi/blessed/proprietary
-#   cp --dereference --preserve --recursive \
-#     /srv/chroot/some-prior-chroot/opt/lmi/blessed/ /srv/cache_for_lmi
-# to update the host, and then:
-#   cp --dereference --preserve --recursive \
-#     /srv/cache_for_lmi/* /srv/chroot/lmi-buster2/cache_for_lmi/
-#
-# Also copy any desired msw software into the chroot now, e.g.:
-#   cp -a /srv/chroot/some-prior-chroot/opt/xyzzy /srv/chroot/lmi-buster2/opt/xyzzy
-# unless it requires running an "install" program, which must be postponed
-# until wine has been installed, below.
-
-# Configure ssh, iff this chroot needs write access to savannah.
-# The easiest way is to copy existing credentials, e.g.:
-#   cp -a ~/.ssh/ /srv/chroot/lmi-buster2/home/greg
-# Make sure the .ssh/config file contains:
-#   Protocol 2
-#   HashKnownHosts no
-# See the discussion of hashing (inter alia) here:
-#   https://lists.nongnu.org/archive/html/lmi/2018-01/msg00003.html
+./lmi_setup_30.sh
 
 # Enter the chroot as a normal user
 
-schroot --chroot=lmi-buster2
+schroot --chroot=${CHRTNAME}
 
-# Rebuild vim spellfile (as was done above for root)
-vim -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
-
-# Configure git. See:
-#   https://lists.nongnu.org/archive/html/lmi/2016-03/msg00006.html
-git config --global color.ui auto
-git config --global commit.cleanup scissors
-git config --global core.pager "less -+F -+X"
-git config --global diff.colormoved plain
-git config --global log.date iso8601-strict-local
-git config --global log.follow true
-git config --global pull.ff only
-git config --global push.default simple
-# Use your own name and email address.
-git config --global user.email gchicares@sbcglobal.net
-git config --global user.name "Gregory W. Chicares"
-
-# Initialize wine. See:
-#   https://lists.nongnu.org/archive/html/lmi/2016-10/msg00002.html
-WINEDLLOVERRIDES=mscoree=d wine wineboot
-#
-# Don't worry about this:
-#   0009:err:file:init_redirects cannot open L"C:\\windows" (c000000f)
-# or a dozen or so lines of ':err:ole:' diagnostics mentioning
-# "IPSFactory" and "MarshalInterface", or this:
-#   0014:err:ole:get_local_server_stream Failed: 80004002
-#   Could not load wine-gecko. HTML rendering will be disabled.
-
-# Configure wine:
-
-winecfg
-# First, to make it usable in general ("Default Settings"):
-#   on "Applications" tab, set "Windows Version" to "XP"
-#   on "Graphics" tab, set DPI to 192
-
-wine regedit
-# HKCU\Control Panel\International:
-#   set sShortDate and sLongDate to "yyyy-MM-dd"
-
-# Troubleshoot wine:
-#
-# Later, to fix any application that gets the wrong X tab order:
-# winecfg
-#   "Applications": "add" (probably from drive Z:); then
-#   "Graphics": "Emulate virtual desktop"
-#     specify appropriate size: e.g., 1900x1120 for a 1920x1200 monitor
-#     (the other options don't seem to matter)
-#   then restart the application
-
-# Symlink directories used by lmi, so that both native and wine
-# builds use the same directories and can share the same
-# architecture-independent 'configurable_settings.xml'--much like the
-# "identity mount" technique used with cygwin. See:
-#   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00018.html
-
-mkdir -p ~/.wine/drive_c/users/greg/opt/
-pushd ~/.wine/drive_c/users/greg/opt/
-ln --symbolic --relative --force --no-dereference /opt/lmi/ ./lmi
-popd
-
-mkdir -p ~/.wine/drive_c/users/greg/etc/opt/
-pushd ~/.wine/drive_c/users/greg/etc/opt/
-ln --symbolic --relative --force --no-dereference /etc/opt/lmi/ ./lmi
-popd
-
-mkdir -p ~/.wine/drive_c/users/greg/var/opt/
-pushd ~/.wine/drive_c/users/greg/var/opt/
-ln --symbolic --relative --force --no-dereference /var/opt/lmi/ ./lmi
-popd
-
-# Install lmi for wine.
-
-wget -N 'http://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
-chmod +x install_msw.sh
-./install_msw.sh >log 2>&1
-
-# Now everything should work much as it does in native msw. To run an
-# msw program, prefix its command line with 'wine'. Test the chroot by
-# running the lmi binary built in the preceding step:
-
-pushd /opt/lmi/bin
-wine ./lmi_wx_shared.exe --ash_nazg --data_path=../data
-
-# Symlink the repository's hooks/ directory:
-cd /opt/lmi/src/lmi
-mv .git/hooks .git/hooks-orig
-ln --symbolic --force --no-dereference ../hooks .git
-
-# Iff this chroot needs write access to savannah, then reconfigure
-# the URL, using your savannah ID instead of mine:
-git remote set-url --push origin chicares@git.sv.gnu.org:/srv/git/lmi.git
-
-# Duplicate proprietary repository (if available).
-# First, copy "blessed" repository (here, 'cp' is sufficient: this
-# bare repository has no references that need to be resolved):
-cd /opt/lmi
-cp --dereference --preserve --recursive /cache_for_lmi/blessed .
-# Then create a working copy by cloning the bare repository...
-git clone -b master file:///opt/lmi/blessed/proprietary
-# ...and verify it:
-cd proprietary
-git rev-parse HEAD
-# ...then symlink its hooks/ directory:
-mv .git/hooks .git/hooks-orig
-ln --symbolic --force --no-dereference ../hooks .git
-
-# Create and populate the proprietary source directory used by 'vpath':
-mkdir --parents /opt/lmi/src/products/src
-cp -a /opt/lmi/proprietary/src /opt/lmi/src/products
-# ...and the directories for system testing:
-cp -a /opt/lmi/proprietary/test /opt/lmi
-mkdir --parents /opt/lmi/touchstone
-cp -a /opt/lmi/proprietary/test/* /opt/lmi/touchstone/
-
-# Remove object files previously built without proprietary source:
-rm /opt/lmi/src/build/lmi/Linux/gcc/ship/my*
-
-# Regenerate the binary database (expect the 'rm' command here to fail
-# the first time, because there are no old files to remove):
-cd /opt/lmi/data
-rm proprietary.dat proprietary.ndx
-wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
-
-# Run a system test.
-cd /opt/lmi/src/lmi
-make $coefficiency system_test 2>&1 |less -S
-# That test fails the first time because no results are saved in
-# touchstone/ yet. Copy the results just generated...
-cp -a /opt/lmi/test/* /opt/lmi/touchstone
-# ...removing summaries...
-rm /opt/lmi/touchstone/analysis* /opt/lmi/touchstone/diffs* /opt/lmi/touchstone/md5sum*
-# ...and rerun the test, which should now succeed:
-make $coefficiency system_test 2>&1 |less -S
-
-# Create a local mirror of the gnu.org repository:
-cd /opt/lmi
-mkdir --parents free/src
-cd free/src
-git clone git://git.savannah.nongnu.org/lmi.git
+./lmi_setup_40.sh
+./lmi_setup_41.sh
+./lmi_setup_42.sh
+./lmi_setup_43.sh
 
 # Exit the chroot.
 exit
@@ -396,7 +69,7 @@ exit
 # A minimalist cross-building chroot wouldn't normally contain its own
 # file manager--one in the host is enough. To set a bookmark into the
 # chroot, add a line such as:
-#   file:///srv/chroot/lmi-buster2/opt/lmi/src/lmi
+#   file:///srv/chroot/${CHRTNAME}/opt/lmi/src/lmi
 # to the GTK bookmarks file, which may be one of the following:
 #   vim ~/.gtk-bookmarks
 #   vim ~/.config/gtk-3.0/bookmarks

@@ -104,6 +104,7 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     ChildRiderRates_               = basic_values.GetChildRiderRates();
     GuaranteedSpouseRiderRates_    = basic_values.GetGuaranteedSpouseRiderRates();
     CurrentSpouseRiderRates_       = basic_values.GetCurrentSpouseRiderRates();
+    MinimumPremiumRates_           = basic_values.GetMinPremRates();
     TargetPremiumRates_            = basic_values.GetTgtPremRates();
 
     Irc7702Q_                      = basic_values.GetIrc7702QRates();

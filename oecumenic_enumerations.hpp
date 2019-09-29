@@ -91,6 +91,11 @@ enum oenum_glp_or_gsp
     ,oe_gsp
     };
 
+enum oenum_guar_coi_whence
+    {oe_guar_coi_external_table
+    ,oe_guar_coi_builtin
+    };
+
 enum oenum_h_align
     {oe_left
     ,oe_center
@@ -119,6 +124,26 @@ enum oenum_mvc_dv_rc
     {oe_mvc_dv_cancelled
     ,oe_mvc_dv_unchanged
     ,oe_mvc_dv_changed
+    };
+
+/// A regulatory association defines various types of life insurance here:
+///   https://www.insurancecompact.org/rulemaking_records/adopted_uniform_standards.pdf
+/// and "modified single premium" in particular here:
+///   https://www.insurancecompact.org/rulemaking_records/070930_mod_sp_adjustable.pdf
+/// but lists no non-"modified" category for single-premium UL.
+///
+/// At least one state apparently concludes that all single-premium UL
+/// must be captioned as "Modified". Use
+///   oe_modified_single_premium
+/// for states that require this "Modified" caption, and
+///   oe_plain_single_premium
+/// for states that allow captioning UL as "Single Premium" without
+/// the word "Modified".
+
+enum oenum_premium_flexibility
+    {oe_flexible_premium
+    ,oe_plain_single_premium
+    ,oe_modified_single_premium
     };
 
 /// Used only for backward compatibility with old versions that didn't

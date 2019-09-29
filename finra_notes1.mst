@@ -84,28 +84,17 @@ consult with your own independent tax or legal counsel.
 </p>
 
 {{#NoLapse}}
-    {{^StateIsNewYork}}
-<!-- PDF !! INSTEAD: S_NoLapseFootnote -->
-        <p>
-        {{NoLapseProvisionName}}:
-        The {{NoLapseProvisionName}} is a lapse protection feature. If met,
-        this test allows your {{ContractName}} to stay in force for a period of
-        time even if there is insufficient {{AvName}} Value to cover the
-        {{AvName}} Value charges. Refer to your {{ContractName}} for specific
-        requirements of meeting the {{NoLapseProvisionName}}.
-        </p>
-    {{/StateIsNewYork}}
+    <p>{{NoLapseFootnote}}</p>
 {{/NoLapse}}
 
+<!--
+PDF !! This has no effect: no amount of premium can suffice to
+guarantee that a VUL contract never lapses, as a general rule,
+and no known VUL product offers such a guarantee. This belongs
+in an illustration-reg template, if anywhere.
+-->
 {{#NoLapseAlwaysActive}}
-<!-- PDF !! INSTEAD: S_NoLapseEverFootnote -->
-    <p>
-    No-Lapse Guarantee: The {{ContractName}} will remain in force after the
-    first premium has been paid, even if there is insufficient {{AvName}} Value
-    to cover the monthly charges provided that the insured is not in a
-    substandard rating class and the {{ContractName}} debt does not exceed
-    {{AvName}} Value.
-    </p>
+    <p>{{NoLapseEverFootnote}}</p>
 {{/NoLapseAlwaysActive}}
 
 <p>

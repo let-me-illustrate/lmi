@@ -31,6 +31,7 @@
 #include "ledger.hpp"                   // for CalculateIrrs()
 #include "ledger_variant.hpp"           // for CalculateIrrs()
 #include "mc_enum_aux.hpp"              // mc_e_vector_to_string_vector()
+#include "oecumenic_enumerations.hpp"
 
 #include <algorithm>                    // max(), min()
 #include <ostream>
@@ -481,7 +482,7 @@ void LedgerInvariant::Init()
     SupplementalReport  = true;
     NoLongerIssued      = false;
     AllowGroupQuote     = true;
-    IsSinglePremium     = true;
+    IsSinglePremium     = oe_flexible_premium;
 
     irr_precision_      = 0;
     irr_initialized_    = false;
@@ -820,7 +821,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     SplitMinPrem       = SplitMinPrem || a_Addend.SplitMinPrem ;
 
     ErNotionallyPaysTerm = ErNotionallyPaysTerm || a_Addend.ErNotionallyPaysTerm;
-    IsSinglePremium    = IsSinglePremium && a_Addend.IsSinglePremium;
+
+    IsSinglePremium        = std::max(a_Addend.IsSinglePremium      , IsSinglePremium      );
 
     MaxAnnGuarLoanSpread   = std::max(a_Addend.MaxAnnGuarLoanSpread , MaxAnnGuarLoanSpread );
     MaxAnnCurrLoanDueRate  = std::max(a_Addend.MaxAnnCurrLoanDueRate, MaxAnnCurrLoanDueRate);

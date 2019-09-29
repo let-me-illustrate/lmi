@@ -153,6 +153,7 @@ class LMI_SO DBDictionary
     database_entity WpIsQAB             ;
     database_entity CsoEra              ;
     database_entity CsoMisprint         ;
+    database_entity GuarCoiWhence       ;
     database_entity GuarCoiTable        ;
     database_entity GuarCoiIsAnnual     ;
     database_entity GuarCoiMultiplier   ;

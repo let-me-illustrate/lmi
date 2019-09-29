@@ -159,6 +159,7 @@ class LMI_SO product_data
     glossed_string GuarTermFilename;
     glossed_string GroupProxyFilename;
     glossed_string SevenPayFilename;
+    glossed_string MinPremFilename;
     glossed_string TgtPremFilename;
     glossed_string Irc7702QFilename;
     glossed_string PartialMortalityFilename;

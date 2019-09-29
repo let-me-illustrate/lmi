@@ -174,6 +174,7 @@ void DBDictionary::ascribe_members()
     ascribe("WpIsQAB"             , &DBDictionary::WpIsQAB             );
     ascribe("CsoEra"              , &DBDictionary::CsoEra              );
     ascribe("CsoMisprint"         , &DBDictionary::CsoMisprint         );
+    ascribe("GuarCoiWhence"       , &DBDictionary::GuarCoiWhence       );
     ascribe("GuarCoiTable"        , &DBDictionary::GuarCoiTable        );
     ascribe("GuarCoiIsAnnual"     , &DBDictionary::GuarCoiIsAnnual     );
     ascribe("GuarCoiMultiplier"   , &DBDictionary::GuarCoiMultiplier   );
@@ -555,6 +556,7 @@ void DBDictionary::InitDB()
     Add({DB_TermIsQABOrDb7702A  , oe_7702_term_is_db});
     Add({DB_CsoEra              , mce_2017cso});
     Add({DB_CsoMisprint         , oe_orthodox});
+    Add({DB_GuarCoiWhence       , oe_guar_coi_external_table});
     Add({DB_CoiInforceReentry   , e_reenter_never});
     Add({DB_SepAcctSpreadMethod , mce_spread_is_effective_annual});
     Add({DB_IntSpreadMode       , mce_spread_daily});
@@ -564,6 +566,7 @@ void DBDictionary::InitDB()
     Add({DB_MaxWdDed            , mce_twelve_times_last});
     Add({DB_MinPremType         , oe_monthly_deduction});
     Add({DB_TgtPremType         , oe_monthly_deduction});
+    Add({DB_IsSinglePremium     , oe_flexible_premium});
     Add({DB_DeductionMethod     , oe_proportional});
     Add({DB_DeductionAcct       , oe_prefer_general_account});
     Add({DB_DistributionMethod  , oe_proportional});

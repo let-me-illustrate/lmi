@@ -45,16 +45,12 @@
 {{/SalesLoadRefundAvailable}}
 
 {{#NoLapse}}
-    <p>
-    {{NoLapseProvisionName}}:
-    The {{ContractName}} will remain in force after the first premium
-    has been paid, even if there is insufficient
-    {{AvName}} Value
-    to cover the monthly charges provided that the insured
-    is not in a substandard rating class and the {{ContractName}} debt
-    does not exceed {{AvName}} Value.
-    </p>
+    <p>{{NoLapseFootnote}}</p>
 {{/NoLapse}}
+
+{{#NoLapseAlwaysActive}}
+    <p>{{NoLapseEverFootnote}}</p>
+{{/NoLapseAlwaysActive}}
 
 <p>
 {{GuarMortalityFootnote}}
@@ -108,24 +104,12 @@ in the Tabular Detail.
     </p>
 {{/Composite}}
 
-<!-- PDF !! INSTEAD: S_GuarIssueDisclaimerNcSc -->
 {{#StateIsNorthOrSouthCarolina}}
-    <p>
-    In the states of North Carolina and South Carolina,
-    Guaranteed Issue Underwriting is referred
-    to as "Limited Underwriting" and Simplified
-    Issue Underwriting is referred to as "Simplified Underwriting".
-    </p>
+    <p>{{GuarIssueDisclaimerNcSc}}</p>
 {{/StateIsNorthOrSouthCarolina}}
 
-<!-- PDF !! INSTEAD: S_GuarIssueDisclaimerMd -->
 {{#StateIsMaryland}}
-    <p>
-    In the state of Maryland, Guaranteed Issue Underwriting
-    is referred to as "Nonstandard Limited Underwriting"
-    and Simplified Issue Underwriting is referred to as
-    "Nonstandard Simplified Underwriting".
-    </p>
+    <p>{{GuarIssueDisclaimerMd}}</p>
 {{/StateIsMaryland}}
 
 {{#AllowExperienceRating}}

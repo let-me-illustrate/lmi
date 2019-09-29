@@ -51,13 +51,7 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Age: {{Age}}<br>
             {{/Composite}}
             {{ContractNameCap}}: {{PolicyForm}}&nbsp;{{PolicyMktgName}}<br>
-            <!-- Translation: in MA (only), caption any single-premium product as "Modified". -->
-            {{#ModifiedSinglePremium}}
-                Modified Single Premium Adjustable Life Insurance Policy<br>
-            {{/ModifiedSinglePremium}}
-            {{^ModifiedSinglePremium}}
-                {{PolicyLegalName}}<br>
-            {{/ModifiedSinglePremium}}
+            {{PolicyLegalName}}<br>
 
             {{^IsInforce}}
                 {{^SinglePremium}}
