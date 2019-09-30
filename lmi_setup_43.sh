@@ -92,4 +92,4 @@ cd free/src || { printf 'failed: cd\n'; exit 3; }
 git clone git://git.savannah.nongnu.org/lmi.git
 cd lmi || { printf 'failed: cd\n'; exit 3; }
 find . -path ./.git -prune -o -type f -print0 \
-  | xargs -0 -n 1 -P 0 -i '{}' touch '--reference=/opt/lmi/src/lmi/{}' '{}'
+  | xargs --null --max-args=1 --max-procs="$(nproc)" --replace='{}' touch '--reference=/opt/lmi/src/lmi/{}' '{}'
