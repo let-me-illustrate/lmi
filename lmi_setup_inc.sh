@@ -27,9 +27,14 @@
 
 # shellcheck disable=SC2034
 #   (this file should only be sourced)
+
+set -vx
+
 CODENAME=bullseye
 CHRTVER=eraseme
 CHRTNAME=lmi_${CODENAME}${CHRTVER}
+
+set +vx
 
 assert_su()
 {
