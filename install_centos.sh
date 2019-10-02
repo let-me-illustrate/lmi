@@ -74,6 +74,18 @@ yum --assumeyes install devtoolset-8 rh-git218
 # In order to use the tools on the three preceding lines, do:
 #   scl enable devtoolset-8 rh-git218 $SHELL
 # and then they'll be available in that environment.
+
+# Install a debian chroot inside this centos chroot. See:
+#   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00037.html
+yum --assumeyes install ca-certificates curl
+#
+rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+yum install -y debootstrap.noarch
+#
+mkdir -p /srv/chroot/debian-stable
+debootstrap stable /src/chroot/debian-stable http://deb.debian.org/debian/
+#
+echo Installed debian-stable.
 EOF
 
 chmod +x /srv/chroot/centos7/tmp/setup0.sh
