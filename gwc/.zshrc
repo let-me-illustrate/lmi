@@ -51,9 +51,12 @@ bindkey '\e[1;5D' backward-word  # Ctrl-left
 bindkey '\e[1;5C' forward-word   # Ctrl-right
 bindkey '\e[1;3D' backward-word  # Alt-left
 bindkey '\e[1;3C' forward-word   # Alt-right
-# By default, zsh unfortunately binds ^S for this purpose;
-# use ^T instead, leaving ^S for flow control.
-bindkey '^T' history-incremental-search-forward
+
+# Enable useful features bound by default in emacs mode:
+bindkey '^F' history-incremental-search-forward  # emacs Ctrl-S
+bindkey '^A' history-incremental-search-backward # emacs Ctrl-R
+bindkey '^G' send-break                          # emacs Ctrl-G
+bindkey '^T' push-line                           # emacs Esc-Q
 
 prompt='%d[%?]%(!.#.$)'
 
