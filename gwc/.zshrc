@@ -43,11 +43,12 @@ export LESSCHARSET=utf-8
 # Use vim keybindings.
 bindkey -v
 
-# bindkey "\e[3~" delete-char      # Del
+# These three seem to be set by default:
+# bindkey '\e[3~' delete-char      # Del
 # bindkey '\e[H' beginning-of-line # Home
 # bindkey '\e[F' end-of-line       # End
-bindkey "^[[1;5D" backward-word  # Ctrl-left
-bindkey "^[[1;5C" forward-word   # Ctrl-right
+bindkey '\e[1;5D' backward-word  # Ctrl-left
+bindkey '\e[1;5C' forward-word   # Ctrl-right
 bindkey '\e[1;3D' backward-word  # Alt-left
 bindkey '\e[1;3C' forward-word   # Alt-right
 # By default, zsh unfortunately binds ^S for this purpose;
