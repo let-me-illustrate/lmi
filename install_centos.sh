@@ -65,6 +65,7 @@ mountpoint /dev/pts || mount -t devpts -o rw,nosuid,noexec,relatime,mode=600 dev
 mountpoint /proc    || mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 
 yum --assumeyes install ncurses-term zsh
+chsh -s /bin/zsh root
 chsh -s /bin/zsh greg
 
 yum --assumeyes install centos-release-scl
@@ -91,6 +92,7 @@ EOF
 chmod +x /srv/chroot/centos7/tmp/setup0.sh
 schroot --chroot=centos7 --user=root --directory=/tmp ./setup0.sh
 
+cp -a ~/.zshrc /srv/chroot/centos7/root/.zshrc
 cp -a ~/.zshrc /srv/chroot/centos7/home/greg/.zshrc
 
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
