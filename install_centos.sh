@@ -26,6 +26,10 @@ set -evx
 stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
 
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_inc.sh'
+chmod +x lmi_setup_inc.sh
+. ./lmi_setup_inc.sh
+
 cat >/etc/schroot/chroot.d/centos7.conf <<EOF
 [centos7]
 description=centos-7.7
@@ -71,22 +75,22 @@ chsh -s /bin/zsh greg
 yum --assumeyes install centos-release-scl
 yum-config-manager --enable rhel-server-rhscl-7-rpms
 yum --assumeyes install devtoolset-8 rh-git218
-
 # In order to use the tools on the three preceding lines, do:
 #   scl enable devtoolset-8 rh-git218 $SHELL
 # and then they'll be available in that environment.
 
+yum --assumeyes install schroot
+# To show available debootstrap scripts:
+#   ls /usr/share/debootstrap/scripts
+
 # Install a debian chroot inside this centos chroot. See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00037.html
-#
 yum --assumeyes install ca-certificates curl nss-pem
 rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-yum install -y debootstrap.noarch
-#
-mkdir -p /srv/chroot/debian-stable
-debootstrap stable /src/chroot/debian-stable http://deb.debian.org/debian/
-#
-echo Installed debian-stable.
+yum --assumeyes install debootstrap.noarch
+mkdir -p /srv/chroot/"${CHRTNAME}"
+debootstrap "${CODENAME}" /srv/chroot/"${CHRTNAME}" http://deb.debian.org/debian/
+echo Installed debian "${CODENAME}".
 EOF
 
 chmod +x /srv/chroot/centos7/tmp/setup0.sh
