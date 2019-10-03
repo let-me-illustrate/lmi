@@ -77,8 +77,8 @@ yum --assumeyes install devtoolset-8 rh-git218
 
 # Install a debian chroot inside this centos chroot. See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00037.html
-yum --assumeyes install ca-certificates curl
 #
+yum --assumeyes install ca-certificates curl nss-pem
 rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 yum install -y debootstrap.noarch
 #
