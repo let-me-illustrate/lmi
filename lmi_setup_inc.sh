@@ -31,8 +31,8 @@
 set -vx
 
 CODENAME=bullseye
-CHRTVER=eraseme
-CHRTNAME=lmi_${CODENAME}${CHRTVER}
+CHRTVER=1
+CHRTNAME=lmi_${CODENAME}_${CHRTVER}
 
 set +vx
 
