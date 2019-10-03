@@ -99,6 +99,57 @@ schroot --chroot=centos7 --user=root --directory=/tmp ./setup0.sh
 cp -a ~/.zshrc /srv/chroot/centos7/root/.zshrc
 cp -a ~/.zshrc /srv/chroot/centos7/home/greg/.zshrc
 
+cat >/srv/chroot/centos7/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
+[${CHRTNAME}]
+aliases=lmi
+description=debian ${CODENAME} cross build ${CHRTVER}
+directory=/srv/chroot/${CHRTNAME}
+users=greg
+groups=greg
+root-groups=root
+type=plain
+EOF
+
+mount --bind /var/cache/"${CODENAME}" /srv/chroot/centos7/var/cache/apt/archives
+
+cat >/srv/chroot/centos7/tmp/setup1.sh <<EOF
+#!/bin/sh
+set -evx
+
+echo "Adapted from 'lmi_setup_00.sh'."
+
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_10.sh'
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_11.sh'
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_20.sh'
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_21.sh'
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_30.sh'
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_40.sh'
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_41.sh'
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_42.sh'
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_43.sh'
+wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_inc.sh'
+chmod +x lmi_setup_*.sh
+
+. ./lmi_setup_inc.sh
+
+mkdir -p /var/cache/"${CODENAME}"
+mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Oops"
+
+# ./lmi_setup_10.sh
+# ./lmi_setup_11.sh
+cp -a lmi_setup_*.sh /srv/chroot/${CHRTNAME}/tmp
+schroot --chroot=${CHRTNAME} --user=root --directory=/tmp ./lmi_setup_20.sh
+schroot --chroot=${CHRTNAME} --user=root --directory=/tmp ./lmi_setup_21.sh
+# sudo -u greg ./lmi_setup_30.sh
+schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_40.sh
+schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_41.sh
+schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_42.sh
+schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_43.sh
+EOF
+
+chmod +x /srv/chroot/centos7/tmp/setup1.sh
+schroot --chroot=centos7 --user=root --directory=/tmp ./setup1.sh
+
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Finished: $stamp1"
 
