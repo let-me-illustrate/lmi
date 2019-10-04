@@ -111,6 +111,12 @@ type=plain
 EOF
 
 mount --bind /var/cache/"${CODENAME}" /srv/chroot/centos7lmi/var/cache/apt/archives || echo "Oops"
+mount --bind /var/cache/"${CODENAME}" /srv/chroot/centos7lmi/var/cache/bullseye     || echo "Oops"
+# It would also be interesting to ascertain where the centos chroot
+# caches its files: /srv/chroot/centos7lmi/var/cache/yum/x86_64/ seems
+# likely, but is empty? No, wait:
+#   #du -sb /srv/chroot/centos7lmi/var/cache/yum
+#   119535116       /srv/chroot/centos7lmi/var/cache/yum
 
 cat >/srv/chroot/centos7lmi/tmp/setup1.sh <<EOF
 #!/bin/sh
