@@ -45,7 +45,7 @@ rinse --arch amd64 --distribution centos-7 \
   --mirror http://mirror.net.cen.ct.gov/centos/7.7.1908/os/x86_64/Packages \
 
 # There should be no bind mounts yet:
-findmnt --kernel -n --list | grep '\['
+findmnt --kernel -n --list | grep '\[' |sort
 
 # Now centos has its own cache directory, with subdirectories:
 ls /srv/chroot/centos7lmi/var/cache/yum
@@ -57,7 +57,7 @@ mkdir -p /var/cache/centos_lmi
 du -sb /var/cache/centos_lmi
 # 'rbind' seems necessary because centos uses subdirs
 mount --rbind /var/cache/centos_lmi /srv/chroot/centos7lmi/var/cache/yum || echo "Oops"
-findmnt --kernel -n --list | grep '\['
+findmnt --kernel -n --list | grep '\[' |sort
 
 cat >/srv/chroot/centos7lmi/tmp/setup0.sh <<EOF
 #!/bin/sh
@@ -147,17 +147,17 @@ EOF
 # This seems to work perfectly:
 mkdir /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/cache_for_lmi
 mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/cache_for_lmi || echo "Oops"
-findmnt --kernel -n --list | grep '\['
+findmnt --kernel -n --list | grep '\[' |sort
 
 # At this point, the debian chroot's /var/cache/apt/archives/
 # directory exists, but is empty:
 du -sb /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 # The host's apt archives contain:
 du -sb /var/cache/"${CODENAME}"
-findmnt --kernel -n --list | grep '\['
+findmnt --kernel -n --list | grep '\[' |sort
 
 mount --bind /var/cache/"${CODENAME}" /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Oops"
-findmnt --kernel -n --list | grep '\['
+findmnt --kernel -n --list | grep '\[' |sort
 
 cat >/srv/chroot/centos7lmi/tmp/setup1.sh <<EOF
 #!/bin/sh
@@ -210,7 +210,7 @@ schroot --chroot=centos7lmi --user=root --directory=/tmp ./setup1.sh
 
 du -sb /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 du -sb /var/cache/"${CODENAME}"
-findmnt --kernel -n --list | grep '\['
+findmnt --kernel -n --list | grep '\[' |sort
 
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Finished: $stamp1"
