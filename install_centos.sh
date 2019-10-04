@@ -112,7 +112,7 @@ root-groups=root
 type=plain
 EOF
 
-mount --bind /var/cache/"${CODENAME}" /srv/chroot/centos7lmi/var/cache/apt/archives
+mount --bind /var/cache/"${CODENAME}" /srv/chroot/centos7lmi/var/cache/apt/archives || echo "Oops"
 
 cat >/srv/chroot/centos7lmi/tmp/setup1.sh <<EOF
 #!/bin/sh
