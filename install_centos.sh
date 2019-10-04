@@ -116,7 +116,7 @@ mount --bind /var/cache/"${CODENAME}" /srv/chroot/centos7lmi/var/cache/apt/archi
 
 cat >/srv/chroot/centos7lmi/tmp/setup1.sh <<EOF
 #!/bin/sh
-set -evx
+set -vx
 
 echo "Adapted from 'lmi_setup_00.sh'."
 
