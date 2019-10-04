@@ -30,10 +30,10 @@ wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_inc.sh'
 chmod +x lmi_setup_inc.sh
 . ./lmi_setup_inc.sh
 
-cat >/etc/schroot/chroot.d/centos7.conf <<EOF
-[centos7]
+cat >/etc/schroot/chroot.d/centos7lmi.conf <<EOF
+[centos7lmi]
 description=centos-7.7
-directory=/srv/chroot/centos7
+directory=/srv/chroot/centos7lmi
 users=greg
 groups=greg
 root-groups=root
@@ -43,10 +43,10 @@ EOF
 apt-get update
 apt-get --assume-yes install schroot rinse
 rinse --arch amd64 --distribution centos-7 \
-  --directory /srv/chroot/centos7 \
+  --directory /srv/chroot/centos7lmi \
   --mirror http://mirror.net.cen.ct.gov/centos/7.7.1908/os/x86_64/Packages \
 
-cat >/srv/chroot/centos7/tmp/setup0.sh <<EOF
+cat >/srv/chroot/centos7lmi/tmp/setup0.sh <<EOF
 #!/bin/sh
 set -evx
 
@@ -93,13 +93,13 @@ debootstrap "${CODENAME}" /srv/chroot/"${CHRTNAME}" http://deb.debian.org/debian
 echo Installed debian "${CODENAME}".
 EOF
 
-chmod +x /srv/chroot/centos7/tmp/setup0.sh
-schroot --chroot=centos7 --user=root --directory=/tmp ./setup0.sh
+chmod +x /srv/chroot/centos7lmi/tmp/setup0.sh
+schroot --chroot=centos7lmi --user=root --directory=/tmp ./setup0.sh
 
-cp -a ~/.zshrc /srv/chroot/centos7/root/.zshrc
-cp -a ~/.zshrc /srv/chroot/centos7/home/greg/.zshrc
+cp -a ~/.zshrc /srv/chroot/centos7lmi/root/.zshrc
+cp -a ~/.zshrc /srv/chroot/centos7lmi/home/greg/.zshrc
 
-cat >/srv/chroot/centos7/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
+cat >/srv/chroot/centos7lmi/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
 [${CHRTNAME}]
 aliases=lmi
 description=debian ${CODENAME} cross build ${CHRTVER}
@@ -110,9 +110,9 @@ root-groups=root
 type=plain
 EOF
 
-mount --bind /var/cache/"${CODENAME}" /srv/chroot/centos7/var/cache/apt/archives
+mount --bind /var/cache/"${CODENAME}" /srv/chroot/centos7lmi/var/cache/apt/archives
 
-cat >/srv/chroot/centos7/tmp/setup1.sh <<EOF
+cat >/srv/chroot/centos7lmi/tmp/setup1.sh <<EOF
 #!/bin/sh
 set -evx
 
@@ -147,8 +147,8 @@ schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_42.sh
 schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_43.sh
 EOF
 
-chmod +x /srv/chroot/centos7/tmp/setup1.sh
-schroot --chroot=centos7 --user=root --directory=/tmp ./setup1.sh
+chmod +x /srv/chroot/centos7lmi/tmp/setup1.sh
+schroot --chroot=centos7lmi --user=root --directory=/tmp ./setup1.sh
 
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Finished: $stamp1"
