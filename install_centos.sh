@@ -21,14 +21,12 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+. ./lmi_setup_inc.sh
+
 set -evx
 
 stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
-
-wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_inc.sh'
-chmod +x lmi_setup_inc.sh
-. ./lmi_setup_inc.sh
 
 cat >/etc/schroot/chroot.d/centos7lmi.conf <<EOF
 [centos7lmi]
