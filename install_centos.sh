@@ -79,14 +79,16 @@ yum --assumeyes install devtoolset-8 rh-git218
 #   scl enable devtoolset-8 rh-git218 $SHELL
 # and then they'll be available in that environment.
 
+# Install "EPEL". See:
+#   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00037.html
+yum --assumeyes install ca-certificates curl nss-pem
+rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
 yum --assumeyes install schroot
 # To show available debootstrap scripts:
 #   ls /usr/share/debootstrap/scripts
 
-# Install a debian chroot inside this centos chroot. See:
-#   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00037.html
-yum --assumeyes install ca-certificates curl nss-pem
-rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+# Install a debian chroot inside this centos chroot.
 yum --assumeyes install debootstrap.noarch
 mkdir -p /srv/chroot/"${CHRTNAME}"
 debootstrap "${CODENAME}" /srv/chroot/"${CHRTNAME}" http://deb.debian.org/debian/
