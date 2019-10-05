@@ -44,20 +44,9 @@ rinse --arch amd64 --distribution centos-7 \
   --directory /srv/chroot/centos7lmi \
   --mirror http://mirror.net.cen.ct.gov/centos/7.7.1908/os/x86_64/Packages \
 
-# There should be no bind mounts yet:
-findmnt --kernel -n --list | grep '\[' |sort
-
-# Now centos has its own cache directory, with subdirectories:
-ls /srv/chroot/centos7lmi/var/cache/yum
-ls /srv/chroot/centos7lmi/var/cache/yum/x86_64/7/
-# There's very little there--perhaps 49272 bytes:
-du -sb /srv/chroot/centos7lmi/var/cache/yum
-
 mkdir -p /var/cache/centos_lmi
-du -sb /var/cache/centos_lmi
 # 'rbind' seems necessary because centos uses subdirs
 mount --rbind /var/cache/centos_lmi /srv/chroot/centos7lmi/var/cache/yum || echo "Oops"
-findmnt --kernel -n --list | grep '\[' |sort
 
 cat >/srv/chroot/centos7lmi/tmp/setup0.sh <<EOF
 #!/bin/sh
@@ -81,54 +70,37 @@ getent passwd greg || useradd --gid=1000 --groups=greg --uid=1000 \
 mountpoint /dev/pts || mount -t devpts -o rw,nosuid,noexec,relatime,mode=600 devpts /dev/pts
 mountpoint /proc    || mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 
-du -sb /var/cache/yum
-
 yum --assumeyes install ncurses-term zsh
 chsh -s /bin/zsh root
 chsh -s /bin/zsh greg
 
-du -sb /var/cache/yum
-
 yum --assumeyes install centos-release-scl
 yum-config-manager --enable rhel-server-rhscl-7-rpms
-
-du -sb /var/cache/yum
 
 yum --assumeyes install devtoolset-8 rh-git218
 # In order to use the tools on the three preceding lines, do:
 #   scl enable devtoolset-8 rh-git218 $SHELL
 # and then they'll be available in that environment.
 
-du -sb /var/cache/yum
-
 # Install "EPEL". See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00037.html
 yum --assumeyes install ca-certificates curl nss-pem
 rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
-du -sb /var/cache/yum
-
 yum --assumeyes install schroot
 # To show available debootstrap scripts:
 #   ls /usr/share/debootstrap/scripts
-
-du -sb /var/cache/yum
 
 # Install a debian chroot inside this centos chroot.
 yum --assumeyes install debootstrap.noarch
 mkdir -p /srv/chroot/"${CHRTNAME}"
 debootstrap "${CODENAME}" /srv/chroot/"${CHRTNAME}" http://deb.debian.org/debian/
 
-du -sb /var/cache/yum
-
 echo Installed debian "${CODENAME}".
 EOF
 
 chmod +x /srv/chroot/centos7lmi/tmp/setup0.sh
 schroot --chroot=centos7lmi --user=root --directory=/tmp ./setup0.sh
-
-du -sb /var/cache/centos_lmi
-du -sb /srv/chroot/centos7lmi/var/cache/yum
 
 cp -a ~/.zshrc /srv/chroot/centos7lmi/root/.zshrc
 cp -a ~/.zshrc /srv/chroot/centos7lmi/home/greg/.zshrc
@@ -146,17 +118,8 @@ EOF
 
 mkdir /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/cache_for_lmi
 mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/cache_for_lmi || echo "Oops"
-findmnt --kernel -n --list | grep '\[' |sort
-
-# At this point, the debian chroot's /var/cache/apt/archives/
-# directory exists, but is empty:
-du -sb /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
-# The host's apt archives contain:
-du -sb /var/cache/"${CODENAME}"
-findmnt --kernel -n --list | grep '\[' |sort
 
 mount --bind /var/cache/"${CODENAME}" /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Oops"
-findmnt --kernel -n --list | grep '\[' |sort
 
 cat >/srv/chroot/centos7lmi/tmp/setup1.sh <<EOF
 #!/bin/sh
@@ -180,10 +143,6 @@ chmod +x lmi_setup_*.sh
 
 set -vx
 
-# At this point, the debian chroot's /var/cache/apt/archives/
-# directory exists, but is empty:
-du -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
-
 # ./lmi_setup_10.sh
 # ./lmi_setup_11.sh
 cp -a lmi_setup_*.sh /srv/chroot/${CHRTNAME}/tmp
@@ -198,10 +157,6 @@ EOF
 
 chmod +x /srv/chroot/centos7lmi/tmp/setup1.sh
 schroot --chroot=centos7lmi --user=root --directory=/tmp ./setup1.sh
-
-du -sb /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
-du -sb /var/cache/"${CODENAME}"
-findmnt --kernel -n --list | grep '\[' |sort
 
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Finished: $stamp1"
