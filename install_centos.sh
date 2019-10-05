@@ -21,6 +21,11 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+# To destroy a chroot from a prior run:
+#   grep centos /proc/mounts | cut -f2 -d" " | xargs umount
+#   rm -rf /srv/chroot/centos7lmi
+#   rm /etc/schroot/chroot.d/centos7lmi.conf
+
 . ./lmi_setup_inc.sh
 
 set -evx
