@@ -46,7 +46,7 @@ rinse --arch amd64 --distribution centos-7 \
 
 mkdir -p /var/cache/centos_lmi
 # 'rbind' seems necessary because centos uses subdirs
-mount --rbind /var/cache/centos_lmi /srv/chroot/centos7lmi/var/cache/yum || echo "Oops"
+mount --rbind /var/cache/centos_lmi /srv/chroot/centos7lmi/var/cache/yum
 
 cat >/srv/chroot/centos7lmi/tmp/setup0.sh <<EOF
 #!/bin/sh
@@ -117,9 +117,9 @@ type=plain
 EOF
 
 mkdir /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/cache_for_lmi
-mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/cache_for_lmi || echo "Oops"
+mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/cache_for_lmi
 
-mount --bind /var/cache/"${CODENAME}" /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Oops"
+mount --bind /var/cache/"${CODENAME}" /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 
 cat >/srv/chroot/centos7lmi/tmp/setup1.sh <<EOF
 #!/bin/sh
