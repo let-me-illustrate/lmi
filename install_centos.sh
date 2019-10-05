@@ -144,7 +144,6 @@ root-groups=root
 type=plain
 EOF
 
-# This seems to work perfectly:
 mkdir /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/cache_for_lmi
 mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/cache_for_lmi || echo "Oops"
 findmnt --kernel -n --list | grep '\[' |sort
@@ -181,14 +180,6 @@ chmod +x lmi_setup_*.sh
 
 set -vx
 
-# Just get rid of this stanza?
-# mkdir -p /var/cache/"${CODENAME}"
-# mountpoint /var/cache/apt/archives || mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Oops"
-# mountpoint: /var/cache/apt/archives: No such file or directory
-# This stanza (now suppressed) looks like a possible cause of the
-# circular bind mounts demonstrated below (search for "eraseme-findmnt"):
-# + mount --bind /var/cache/bullseye /srv/chroot/lmi_bullseye_1/var/cache/apt/archives
-
 # At this point, the debian chroot's /var/cache/apt/archives/
 # directory exists, but is empty:
 du -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
@@ -218,40 +209,3 @@ echo "Finished: $stamp1"
 seconds=$(($(date '+%s' -d "$stamp1") - $(date '+%s' -d "$stamp0")))
 elapsed=$(date -u -d @"$seconds" +'%H:%M:%S')
 echo "Elapsed: $elapsed"
-
-cat >/tmp/eraseme-findmnt <<EOF
-/root[0]#findmnt --kernel -n --list | grep '\[' |sort
-/srv/chroot/centos7lmi/srv/chroot/lmi_bullseye_1/var/cache/apt/archives /dev/sdb5[/srv/chroot/centos7lmi/var/cache/bullseye] ext4       rw,relatime,errors=remount-ro
-/srv/chroot/centos7lmi/srv/chroot/lmi_bullseye_1/var/cache/apt/archives /dev/sdb5[/var/cache/bullseye]                       ext4       rw,relatime,errors=remount-ro
-/var/cache/bullseye                                                     /dev/sdb5[/srv/chroot/centos7lmi/var/cache/bullseye] ext4       rw,relatime,errors=remount-ro
-/root[0]#
-/root[0]#du -sb /srv/chroot/centos7lmi/srv/chroot/lmi_bullseye_1/var/cache/apt/archives
-593658728       /srv/chroot/centos7lmi/srv/chroot/lmi_bullseye_1/var/cache/apt/archives
-/root[0]#du -sb /srv/chroot/centos7lmi/var/cache/bullseye
-593658728       /srv/chroot/centos7lmi/var/cache/bullseye
-/root[0]#du -sb /var/cache/bullseye
-593658728       /var/cache/bullseye
-/root[0]#
-/root[0]#umount /var/cache/bullseye
-/root[0]#du -sb /var/cache/bullseye
-682609842       /var/cache/bullseye
-/root[0]#
-/root[0]#findmnt --kernel -n --list | grep '\[' |sort
-/srv/chroot/centos7lmi/srv/chroot/lmi_bullseye_1/var/cache/apt/archives /dev/sdb5[/var/cache/bullseye] ext4       rw,relatime,errors=remount-ro
-/root[0]#du -sb /srv/chroot/centos7lmi/srv/chroot/lmi_bullseye_1/var/cache/apt/archives
-682609842       /srv/chroot/centos7lmi/srv/chroot/lmi_bullseye_1/var/cache/apt/archives
-/root[0]#du -sb /srv/chroot/centos7lmi/var/cache/bullseye
-593658728       /srv/chroot/centos7lmi/var/cache/bullseye
-/root[0]#
-/root[0]#du -sb /srv/chroot/centos7lmi/srv/chroot/lmi_bullseye_1/var/cache/apt/archives
-682609842       /srv/chroot/centos7lmi/srv/chroot/lmi_bullseye_1/var/cache/apt/archives
-/root[0]#du -sb /srv/chroot/centos7lmi/var/cache/bullseye
-593658728       /srv/chroot/centos7lmi/var/cache/bullseye
-/root[0]#umount /srv/chroot/centos7lmi/srv/chroot/lmi_bullseye_1/var/cache/apt/archives
-/root[0]#du -sb /srv/chroot/centos7lmi/srv/chroot/lmi_bullseye_1/var/cache/apt/archives
-49157474        /srv/chroot/centos7lmi/srv/chroot/lmi_bullseye_1/var/cache/apt/archives
-/root[0]#du -sb /srv/chroot/centos7lmi/var/cache/bullseye
-593658728       /srv/chroot/centos7lmi/var/cache/bullseye
-/root[0]#du -sb /var/cache/bullseye
-682609842       /var/cache/bullseye
-EOF
