@@ -88,10 +88,15 @@ chsh -s /bin/zsh greg
 #   scl enable devtoolset-8 rh-git218 $SHELL
 # and then they'll be available in that environment.
 
-# Install "EPEL". See:
-#   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00037.html
+# Fix weird errors like "Problem with the SSL CA cert (path? access rights?)".
 yum --assumeyes install ca-certificates curl nss-pem
-rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
+# Install "EPEL" by using 'rpm' directly [historical]. See:
+#   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00037.html
+#rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+# Instead, use 'yum' to install "EPEL".
+#yum --assumeyes install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+yum --assumeyes install epel-release
 
 yum --assumeyes install schroot
 # To show available debootstrap scripts:
