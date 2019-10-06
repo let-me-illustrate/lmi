@@ -79,10 +79,11 @@ yum --assumeyes install ncurses-term zsh
 chsh -s /bin/zsh root
 chsh -s /bin/zsh greg
 
-yum --assumeyes install centos-release-scl
-yum-config-manager --enable rhel-server-rhscl-7-rpms
-
-yum --assumeyes install devtoolset-8 rh-git218
+# Make a more modern 'git' available via 'scl'. This is not needed
+# if all real work is done in a debian chroot.
+#yum --assumeyes install centos-release-scl
+#yum-config-manager --enable rhel-server-rhscl-7-rpms
+#yum --assumeyes install devtoolset-8 rh-git218
 # In order to use the tools on the three preceding lines, do:
 #   scl enable devtoolset-8 rh-git218 $SHELL
 # and then they'll be available in that environment.
