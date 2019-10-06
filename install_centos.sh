@@ -103,7 +103,7 @@ yum --assumeyes install schroot
 #   ls /usr/share/debootstrap/scripts
 
 # Install a debian chroot inside this centos chroot.
-yum --assumeyes install debootstrap.noarch
+yum --assumeyes install debootstrap
 mkdir -p /srv/chroot/"${CHRTNAME}"
 debootstrap "${CODENAME}" /srv/chroot/"${CHRTNAME}" http://deb.debian.org/debian/
 
