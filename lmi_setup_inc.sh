@@ -33,6 +33,7 @@ set -vx
 CODENAME=bullseye
 CHRTVER=1
 CHRTNAME=lmi_${CODENAME}_${CHRTVER}
+NORMAL_USER=greg
 
 set +vx
 

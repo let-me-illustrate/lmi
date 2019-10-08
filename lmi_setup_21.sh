@@ -34,33 +34,33 @@ assert_chrooted
 # done securely in a script. A better password can be set later,
 # interactively, if desired. Forcing the dummy password to expire
 # immediately, thus (e.g.):
-#   chage -d 0 greg
+#   chage -d 0 "${NORMAL_USER}"
 # may seem like a good idea, but invoking schroot with that userid
 # doesn't prompt for a password change.
-groupadd --gid=1000 greg
+groupadd --gid=1000 "${NORMAL_USER}"
 useradd --gid=1000 --groups=sudo --uid=1000 --create-home --shell=/bin/zsh \
-  --password="$(openssl passwd -1 expired)" greg
+  --password="$(openssl passwd -1 expired)" "${NORMAL_USER}"
 
 # Add an 'lmi' group, which may be useful in a multi-user chroot.
 groupadd --gid=1001 lmi
-usermod -aG lmi greg
+usermod -aG lmi "${NORMAL_USER}"
 
 mkdir -p /opt/lmi
-chown greg:lmi /opt/lmi
+chown "${NORMAL_USER}":lmi /opt/lmi
 mkdir -p /etc/opt/lmi
-chown greg:lmi /etc/opt/lmi
+chown "${NORMAL_USER}":lmi /etc/opt/lmi
 mkdir -p /var/opt/lmi
-chown greg:lmi /var/opt/lmi
+chown "${NORMAL_USER}":lmi /var/opt/lmi
 mkdir -p /cache_for_lmi
-chown greg:lmi /cache_for_lmi
+chown "${NORMAL_USER}":lmi /cache_for_lmi
 
-chsh -s /bin/zsh greg
+chsh -s /bin/zsh "${NORMAL_USER}"
 
 # Repair /usr/share/libtool/.../ltmain.sh as indicated here:
 #   https://lists.gnu.org/archive/html/libtool-patches/2011-06/msg00001.html
 # Do this as root because root owns the file.
 
-cat >/home/greg/ltmain.sh.patch <<EOF
+cat >/home/"${NORMAL_USER}"/ltmain.sh.patch <<EOF
 --- /usr/share/libtool/build-aux/ltmain.sh.orig 2016-08-20 12:34:31.000000000 +0000
 +++ /usr/share/libtool/build-aux/ltmain.sh 2017-08-10 13:10:28.466155965 +0000
 @@ -5555,7 +5555,7 @@
@@ -74,15 +74,15 @@ cat >/home/greg/ltmain.sh.patch <<EOF
  # ifdef __STRICT_ANSI__
 EOF
 
-patch --dry-run --strip=0 --directory=/ </home/greg/ltmain.sh.patch \
- && patch --strip=0 --directory=/ </home/greg/ltmain.sh.patch
+patch --dry-run --strip=0 --directory=/ </home/"${NORMAL_USER}"/ltmain.sh.patch \
+ && patch --strip=0 --directory=/ </home/"${NORMAL_USER}"/ltmain.sh.patch
 
 # Configure zsh, for root as well as the user configured above.
 
 wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/gwc/.zshrc'
 mv .zshrc ~
-cp -a ~/.zshrc /home/greg/.zshrc
-chown greg:greg /home/greg/.zshrc
+cp -a ~/.zshrc /home/"${NORMAL_USER}"/.zshrc
+chown "${NORMAL_USER}":"${NORMAL_USER}" /home/"${NORMAL_USER}"/.zshrc
 
 # Configure vim. Rather than trying to split its contents between
 # '~/.vimrc' and '/etc/vim/vimrc.local', just copy it everywhither.
@@ -90,22 +90,22 @@ chown greg:greg /home/greg/.zshrc
 wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/gwc/.vimrc'
 mv .vimrc ~
 cp -a ~/.vimrc /etc/vim/vimrc.local
-cp -a ~/.vimrc /home/greg/.vimrc
-chown greg:greg /home/greg/.vimrc
+cp -a ~/.vimrc /home/"${NORMAL_USER}"/.vimrc
+chown "${NORMAL_USER}":"${NORMAL_USER}" /home/"${NORMAL_USER}"/.vimrc
 
 # Without this, 'zg' gives an error message; with it, vim creates a
 # spellfile the first time 'zg' is used, if none already exists.
 mkdir ~/.vim
-mkdir /home/greg/.vim
-chown greg:greg /home/greg/.vim
+mkdir /home/"${NORMAL_USER}"/.vim
+chown "${NORMAL_USER}":"${NORMAL_USER}" /home/"${NORMAL_USER}"/.vim
 # It's a much better idea to copy a mature spellfile hither:
 wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/gwc/.vim/spell/en.utf-8.add'
 mkdir ~/.vim/spell
 mv en.utf-8.add ~/.vim/spell/en.utf-8.add
-mkdir /home/greg/.vim/spell
-chown greg:greg /home/greg/.vim/spell
-cp -a ~/.vim/spell/en.utf-8.add /home/greg/.vim/spell/en.utf-8.add
-chown greg:greg /home/greg/.vim/spell/en.utf-8.add
+mkdir /home/"${NORMAL_USER}"/.vim/spell
+chown "${NORMAL_USER}":"${NORMAL_USER}" /home/"${NORMAL_USER}"/.vim/spell
+cp -a ~/.vim/spell/en.utf-8.add /home/"${NORMAL_USER}"/.vim/spell/en.utf-8.add
+chown "${NORMAL_USER}":"${NORMAL_USER}" /home/"${NORMAL_USER}"/.vim/spell/en.utf-8.add
 # and then (imperatively) run this command:
 vim -es -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
 # which will be repeated below in the user chroot.

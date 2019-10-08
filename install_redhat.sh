@@ -72,8 +72,8 @@ cat >/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
 aliases=lmi
 description=debian ${CODENAME} cross build ${CHRTVER}
 directory=/srv/chroot/${CHRTNAME}
-users=greg
-groups=greg
+users="${NORMAL_USER}"
+groups="${NORMAL_USER}"
 root-groups=root
 type=plain
 EOF
@@ -111,11 +111,11 @@ set -evx
 cp -a lmi_setup_*.sh /srv/chroot/${CHRTNAME}/tmp
 schroot --chroot=${CHRTNAME} --user=root --directory=/tmp ./lmi_setup_20.sh
 schroot --chroot=${CHRTNAME} --user=root --directory=/tmp ./lmi_setup_21.sh
-# sudo -u greg ./lmi_setup_30.sh
-schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_40.sh
-schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_41.sh
-schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_42.sh
-schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_43.sh
+# sudo -u "${NORMAL_USER}" ./lmi_setup_30.sh
+schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_40.sh
+schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_41.sh
+schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
+schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_43.sh
 
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Finished: $stamp1"

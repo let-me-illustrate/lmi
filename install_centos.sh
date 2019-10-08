@@ -37,8 +37,8 @@ cat >/etc/schroot/chroot.d/centos7lmi.conf <<EOF
 [centos7lmi]
 description=centos-7.7
 directory=/srv/chroot/centos7lmi
-users=greg
-groups=greg
+users="${NORMAL_USER}"
+groups="${NORMAL_USER}"
 root-groups=root
 type=plain
 EOF
@@ -67,17 +67,17 @@ chmod 666 /dev/null
 chmod 666 /dev/ptmx
 [ -d /dev/pts  ] || mkdir /dev/pts
 
-getent group greg || groupadd --gid=1000 greg
-getent passwd greg || useradd --gid=1000 --groups=greg --uid=1000 \
+getent group "${NORMAL_USER}" || groupadd --gid=1000 "${NORMAL_USER}"
+getent passwd "${NORMAL_USER}" || useradd --gid=1000 --groups="${NORMAL_USER}" --uid=1000 \
   --create-home --shell=/bin/zsh \
-  --password="$(openssl passwd -1 expired)" greg
+  --password="$(openssl passwd -1 expired)" "${NORMAL_USER}"
 
 mountpoint /dev/pts || mount -t devpts -o rw,nosuid,noexec,relatime,mode=600 devpts /dev/pts
 mountpoint /proc    || mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 
 yum --assumeyes install ncurses-term zsh
 chsh -s /bin/zsh root
-chsh -s /bin/zsh greg
+chsh -s /bin/zsh "${NORMAL_USER}"
 
 # Make a more modern 'git' available via 'scl'. This is not needed
 # if all real work is done in a debian chroot.
@@ -114,15 +114,15 @@ chmod +x /srv/chroot/centos7lmi/tmp/setup0.sh
 schroot --chroot=centos7lmi --user=root --directory=/tmp ./setup0.sh
 
 cp -a ~/.zshrc /srv/chroot/centos7lmi/root/.zshrc
-cp -a ~/.zshrc /srv/chroot/centos7lmi/home/greg/.zshrc
+cp -a ~/.zshrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.zshrc
 
 cat >/srv/chroot/centos7lmi/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
 [${CHRTNAME}]
 aliases=lmi
 description=debian ${CODENAME} cross build ${CHRTVER}
 directory=/srv/chroot/${CHRTNAME}
-users=greg
-groups=greg
+users="${NORMAL_USER}"
+groups="${NORMAL_USER}"
 root-groups=root
 type=plain
 EOF
@@ -159,11 +159,11 @@ set -vx
 cp -a lmi_setup_*.sh /srv/chroot/${CHRTNAME}/tmp
 schroot --chroot=${CHRTNAME} --user=root --directory=/tmp ./lmi_setup_20.sh
 schroot --chroot=${CHRTNAME} --user=root --directory=/tmp ./lmi_setup_21.sh
-# sudo -u greg ./lmi_setup_30.sh
-schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_40.sh
-schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_41.sh
-schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_42.sh
-schroot --chroot=${CHRTNAME} --user=greg --directory=/tmp ./lmi_setup_43.sh
+# sudo -u "${NORMAL_USER}" ./lmi_setup_30.sh
+schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_40.sh
+schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_41.sh
+schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
+schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_43.sh
 EOF
 
 chmod +x /srv/chroot/centos7lmi/tmp/setup1.sh

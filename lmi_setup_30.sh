@@ -48,7 +48,7 @@ cp --dereference --preserve --recursive \
 
 # Configure ssh, iff this chroot needs write access to savannah.
 # The easiest way is to copy existing credentials, e.g.:
-cp -a ~/.ssh/ /srv/chroot/${CHRTNAME}/home/greg
+cp -a ~/.ssh/ /srv/chroot/${CHRTNAME}/home/"${NORMAL_USER}"
 # Make sure the .ssh/config file contains:
 #   Protocol 2
 #   HashKnownHosts no
