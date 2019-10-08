@@ -89,7 +89,16 @@ make "$coefficiency" system_test
 cd /opt/lmi || { printf 'failed: cd\n'; exit 3; }
 mkdir --parents free/src
 cd free/src || { printf 'failed: cd\n'; exit 3; }
-git clone git://git.savannah.nongnu.org/lmi.git
+
+# Use git's own protocol wherever possible. In case that's blocked
+# by a corporate firewall, fall back on https. In case a firewall
+# inexplicably blocks the gnu.org domain, try Vadim's github clone
+# as a last resort.
+
+git clone git://git.savannah.nongnu.org/lmi.git \
+  || git clone https://git.savannah.nongnu.org/r/lmi.git \
+  || git clone https://github.com/vadz/lmi.git
+
 cd lmi || { printf 'failed: cd\n'; exit 3; }
 find . -path ./.git -prune -o -type f -print0 \
   | xargs --null --max-args=1 --max-procs="$(nproc)" --replace='{}' touch '--reference=/opt/lmi/src/lmi/{}' '{}'
