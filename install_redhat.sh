@@ -29,9 +29,10 @@ stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
 
 # First, destroy any chroot left by a prior run.
-grep "${CHRTNAME}" /proc/mounts | cut -f2 -d" " | xargs umount
+grep "${CHRTNAME}" /proc/mounts | cut -f2 -d" " | xargs umount || echo "None?"
 rm -rf /srv/chroot/"${CHRTNAME}"
-rm /etc/schroot/chroot.d/"${CHRTNAME}".conf
+rm /etc/schroot/chroot.d/"${CHRTNAME}".conf || echo "None?"
+umount /srv
 
 mount -t tmpfs -o size=10G tmpfs /srv
 findmnt /tmp
@@ -96,6 +97,10 @@ wget -N 'https://github.com/vadz/lmi/raw/master/lmi_setup_42.sh'
 wget -N 'https://github.com/vadz/lmi/raw/master/lmi_setup_43.sh'
 wget -N 'https://github.com/vadz/lmi/raw/master/lmi_setup_inc.sh'
 chmod +x lmi_setup_*.sh
+
+for z in lmi_setup_*.sh; do \
+  sed -i "$z" -e 's,https://git.savannah.nongnu.org/cgit/lmi.git/plain/,https://github.com/vadz/lmi/raw/master/,'
+done
 
 . ./lmi_setup_inc.sh
 
