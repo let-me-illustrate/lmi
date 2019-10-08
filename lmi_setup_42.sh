@@ -31,7 +31,7 @@ assert_chrooted
 # Install lmi for wine.
 
 cd ~ || { printf 'failed: cd\n'; exit 3; }
-wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/install_msw.sh'
+wget -N "${GIT_URL_BASE}"/install_msw.sh
 chmod +x install_msw.sh
 ./install_msw.sh >log 2>&1
 
