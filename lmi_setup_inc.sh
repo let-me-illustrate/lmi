@@ -35,7 +35,7 @@ CHRTVER=1
 CHRTNAME=lmi_${CODENAME}_${CHRTVER}
 NORMAL_USER=greg
 NORMAL_USER_UID=1000
-NORMAL_GROUP=1000
+NORMAL_GROUP=greg
 NORMAL_GROUP_GID=1000
 GIT_URL_BASE=https://git.savannah.nongnu.org/cgit/lmi.git/plain
 # For a server that, bizarrely, blocks gnu.org but allows github.com:
