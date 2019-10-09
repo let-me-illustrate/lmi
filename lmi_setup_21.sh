@@ -37,9 +37,9 @@ assert_chrooted
 #   chage -d 0 "${NORMAL_USER}"
 # may seem like a good idea, but invoking schroot with that userid
 # doesn't prompt for a password change.
-groupadd --gid="${NORMAL_USER_GID}" "${NORMAL_USER}"
+groupadd --gid="${NORMAL_GROUP_GID}" "${NORMAL_GROUP}"
 useradd \
-  --gid="${NORMAL_USER_GID}" \
+  --gid="${NORMAL_GROUP_GID}" \
   --uid="${NORMAL_USER_UID}" \
   --create-home \
   --shell=/bin/zsh \
@@ -49,17 +49,18 @@ useradd \
 usermod -aG sudo "${NORMAL_USER}"
 
 # Add an 'lmi' group, which may be useful in a multi-user chroot.
-groupadd --gid=1001 lmi
-usermod -aG lmi "${NORMAL_USER}"
+getent group 1001 || groupadd --gid=1001 lmi || echo "Oops."
+usermod -aG lmi "${NORMAL_USER}" || echo "Oops."
 
+# Here, the 'lmi' group should probably be the owner, eventually.
 mkdir -p /opt/lmi
-chown "${NORMAL_USER}":lmi /opt/lmi
+chown "${NORMAL_USER}":"${NORMAL_USER}" /opt/lmi
 mkdir -p /etc/opt/lmi
-chown "${NORMAL_USER}":lmi /etc/opt/lmi
+chown "${NORMAL_USER}":"${NORMAL_USER}" /etc/opt/lmi
 mkdir -p /var/opt/lmi
-chown "${NORMAL_USER}":lmi /var/opt/lmi
+chown "${NORMAL_USER}":"${NORMAL_USER}" /var/opt/lmi
 mkdir -p /cache_for_lmi
-chown "${NORMAL_USER}":lmi /cache_for_lmi
+chown "${NORMAL_USER}":"${NORMAL_USER}" /cache_for_lmi
 
 chsh -s /bin/zsh "${NORMAL_USER}"
 

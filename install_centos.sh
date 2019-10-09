@@ -38,7 +38,7 @@ cat >/etc/schroot/chroot.d/centos7lmi.conf <<EOF
 description=centos-7.7
 directory=/srv/chroot/centos7lmi
 users="${NORMAL_USER}"
-groups="${NORMAL_USER}"
+groups="${NORMAL_GROUP}"
 root-groups=root
 type=plain
 EOF
@@ -67,9 +67,9 @@ chmod 666 /dev/null
 chmod 666 /dev/ptmx
 [ -d /dev/pts  ] || mkdir /dev/pts
 
-getent group "${NORMAL_USER}" || groupadd --gid="${NORMAL_USER_GID}" "${NORMAL_USER}"
+getent group "${NORMAL_GROUP}" || groupadd --gid="${NORMAL_GROUP_GID}" "${NORMAL_GROUP}"
 getent passwd "${NORMAL_USER}" || useradd \
-  --gid="${NORMAL_USER_GID}" \
+  --gid="${NORMAL_GROUP_GID}" \
   --uid="${NORMAL_USER_UID}" \
   --create-home \
   --shell=/bin/zsh \
@@ -128,7 +128,7 @@ aliases=lmi
 description=debian ${CODENAME} cross build ${CHRTVER}
 directory=/srv/chroot/${CHRTNAME}
 users="${NORMAL_USER}"
-groups="${NORMAL_USER}"
+groups="${NORMAL_GROUP}"
 root-groups=root
 type=plain
 EOF
