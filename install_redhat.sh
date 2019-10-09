@@ -80,7 +80,7 @@ type=plain
 EOF
 
 mkdir -p /srv/chroot/"${CHRTNAME}"/cache_for_lmi
-mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/cache_for_lmi || echo "Oops."
+mount --bind /cache_for_lmi /srv/chroot/"${CHRTNAME}"/cache_for_lmi || echo "Oops."
 
 mkdir -p /var/cache/"${CODENAME}"
 mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Oops."
