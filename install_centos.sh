@@ -76,7 +76,7 @@ getent passwd "${NORMAL_USER}" || useradd \
   --password="$(openssl passwd -1 expired)" \
   "${NORMAL_USER}"
 
-usermod -aG sudo "${NORMAL_USER}"
+usermod -aG sudo "${NORMAL_USER}" || echo "Oops."
 
 mountpoint /dev/pts || mount -t devpts -o rw,nosuid,noexec,relatime,mode=600 devpts /dev/pts
 mountpoint /proc    || mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc

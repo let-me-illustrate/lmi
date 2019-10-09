@@ -46,7 +46,7 @@ useradd \
   --password="$(openssl passwd -1 expired)" \
   "${NORMAL_USER}"
 
-usermod -aG sudo "${NORMAL_USER}"
+usermod -aG sudo "${NORMAL_USER}" || echo "Oops."
 
 # Add an 'lmi' group, which may be useful in a multi-user chroot.
 getent group 1001 || groupadd --gid=1001 lmi || echo "Oops."
