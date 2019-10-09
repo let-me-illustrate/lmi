@@ -67,10 +67,16 @@ chmod 666 /dev/null
 chmod 666 /dev/ptmx
 [ -d /dev/pts  ] || mkdir /dev/pts
 
-getent group "${NORMAL_USER}" || groupadd --gid=1000 "${NORMAL_USER}"
-getent passwd "${NORMAL_USER}" || useradd --gid=1000 --groups="${NORMAL_USER}" --uid=1000 \
-  --create-home --shell=/bin/zsh \
-  --password="$(openssl passwd -1 expired)" "${NORMAL_USER}"
+getent group "${NORMAL_USER}" || groupadd --gid="${NORMAL_USER_GID}" "${NORMAL_USER}"
+getent passwd "${NORMAL_USER}" || useradd \
+  --gid="${NORMAL_USER_GID}" \
+  --uid="${NORMAL_USER_UID}" \
+  --create-home \
+  --shell=/bin/zsh \
+  --password="$(openssl passwd -1 expired)" \
+  "${NORMAL_USER}"
+
+usermod -aG sudo "${NORMAL_USER}"
 
 mountpoint /dev/pts || mount -t devpts -o rw,nosuid,noexec,relatime,mode=600 devpts /dev/pts
 mountpoint /proc    || mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc

@@ -37,9 +37,16 @@ assert_chrooted
 #   chage -d 0 "${NORMAL_USER}"
 # may seem like a good idea, but invoking schroot with that userid
 # doesn't prompt for a password change.
-groupadd --gid=1000 "${NORMAL_USER}"
-useradd --gid=1000 --groups=sudo --uid=1000 --create-home --shell=/bin/zsh \
-  --password="$(openssl passwd -1 expired)" "${NORMAL_USER}"
+groupadd --gid="${NORMAL_USER_GID}" "${NORMAL_USER}"
+useradd \
+  --gid="${NORMAL_USER_GID}" \
+  --uid="${NORMAL_USER_UID}" \
+  --create-home \
+  --shell=/bin/zsh \
+  --password="$(openssl passwd -1 expired)" \
+  "${NORMAL_USER}"
+
+usermod -aG sudo "${NORMAL_USER}"
 
 # Add an 'lmi' group, which may be useful in a multi-user chroot.
 groupadd --gid=1001 lmi
