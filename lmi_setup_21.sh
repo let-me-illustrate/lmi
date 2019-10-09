@@ -54,13 +54,13 @@ usermod -aG lmi "${NORMAL_USER}" || echo "Oops."
 
 # Here, the 'lmi' group should probably be the owner, eventually.
 mkdir -p /opt/lmi
-chown "${NORMAL_USER}":"${NORMAL_USER}" /opt/lmi
+chown "${NORMAL_USER}":"${NORMAL_GROUP}" /opt/lmi
 mkdir -p /etc/opt/lmi
-chown "${NORMAL_USER}":"${NORMAL_USER}" /etc/opt/lmi
+chown "${NORMAL_USER}":"${NORMAL_GROUP}" /etc/opt/lmi
 mkdir -p /var/opt/lmi
-chown "${NORMAL_USER}":"${NORMAL_USER}" /var/opt/lmi
+chown "${NORMAL_USER}":"${NORMAL_GROUP}" /var/opt/lmi
 mkdir -p /cache_for_lmi
-chown "${NORMAL_USER}":"${NORMAL_USER}" /cache_for_lmi
+chown "${NORMAL_USER}":"${NORMAL_GROUP}" /cache_for_lmi
 
 chsh -s /bin/zsh "${NORMAL_USER}"
 
@@ -90,7 +90,7 @@ patch --dry-run --strip=0 --directory=/ </home/"${NORMAL_USER}"/ltmain.sh.patch 
 wget -N "${GIT_URL_BASE}"/gwc/.zshrc
 mv .zshrc ~
 cp -a ~/.zshrc /home/"${NORMAL_USER}"/.zshrc
-chown "${NORMAL_USER}":"${NORMAL_USER}" /home/"${NORMAL_USER}"/.zshrc
+chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.zshrc
 
 # Configure vim. Rather than trying to split its contents between
 # '~/.vimrc' and '/etc/vim/vimrc.local', just copy it everywhither.
@@ -99,21 +99,21 @@ wget -N "${GIT_URL_BASE}"/gwc/.vimrc
 mv .vimrc ~
 cp -a ~/.vimrc /etc/vim/vimrc.local
 cp -a ~/.vimrc /home/"${NORMAL_USER}"/.vimrc
-chown "${NORMAL_USER}":"${NORMAL_USER}" /home/"${NORMAL_USER}"/.vimrc
+chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.vimrc
 
 # Without this, 'zg' gives an error message; with it, vim creates a
 # spellfile the first time 'zg' is used, if none already exists.
 mkdir ~/.vim
 mkdir /home/"${NORMAL_USER}"/.vim
-chown "${NORMAL_USER}":"${NORMAL_USER}" /home/"${NORMAL_USER}"/.vim
+chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.vim
 # It's a much better idea to copy a mature spellfile hither:
 wget -N "${GIT_URL_BASE}"/gwc/.vim/spell/en.utf-8.add
 mkdir ~/.vim/spell
 mv en.utf-8.add ~/.vim/spell/en.utf-8.add
 mkdir /home/"${NORMAL_USER}"/.vim/spell
-chown "${NORMAL_USER}":"${NORMAL_USER}" /home/"${NORMAL_USER}"/.vim/spell
+chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.vim/spell
 cp -a ~/.vim/spell/en.utf-8.add /home/"${NORMAL_USER}"/.vim/spell/en.utf-8.add
-chown "${NORMAL_USER}":"${NORMAL_USER}" /home/"${NORMAL_USER}"/.vim/spell/en.utf-8.add
+chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.vim/spell/en.utf-8.add
 # and then (imperatively) run this command:
 vim -es -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
 # which will be repeated below in the user chroot.
