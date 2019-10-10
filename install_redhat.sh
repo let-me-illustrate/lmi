@@ -35,7 +35,6 @@ rm /etc/schroot/chroot.d/"${CHRTNAME}".conf || echo "None?"
 umount /srv
 
 mount -t tmpfs -o size=10G tmpfs /srv
-findmnt /tmp
 findmnt /srv
 
 # Make a more modern 'git' available via 'scl'. This is not needed

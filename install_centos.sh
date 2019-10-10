@@ -81,6 +81,10 @@ usermod -aG sudo "${NORMAL_USER}" || echo "Oops."
 mountpoint /dev/pts || mount -t devpts -o rw,nosuid,noexec,relatime,mode=600 devpts /dev/pts
 mountpoint /proc    || mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 
+findmnt /var/cache/yum
+findmnt /proc
+findmnt /dev/pts
+
 yum --assumeyes install ncurses-term zsh
 chsh -s /bin/zsh root
 chsh -s /bin/zsh "${NORMAL_USER}"

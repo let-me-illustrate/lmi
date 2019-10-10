@@ -57,3 +57,7 @@ EOF
 # not used because it's more complicated and has no benefit.
 mkdir -p /var/cache/"${CODENAME}"
 mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
+
+findmnt /var/cache/"${CODENAME}"
+findmnt /proc
+findmnt /dev/pts
