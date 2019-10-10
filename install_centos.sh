@@ -37,8 +37,8 @@ cat >/etc/schroot/chroot.d/centos7lmi.conf <<EOF
 [centos7lmi]
 description=centos-7.7
 directory=/srv/chroot/centos7lmi
-users="${NORMAL_USER}"
-groups="${NORMAL_GROUP}"
+users=${NORMAL_USER}
+groups=${NORMAL_GROUP}
 root-groups=root
 type=plain
 EOF
@@ -131,8 +131,8 @@ cat >/srv/chroot/centos7lmi/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
 aliases=lmi
 description=debian ${CODENAME} cross build ${CHRTVER}
 directory=/srv/chroot/${CHRTNAME}
-users="${NORMAL_USER}"
-groups="${NORMAL_GROUP}"
+users=${NORMAL_USER}
+groups=${NORMAL_GROUP}
 root-groups=root
 type=plain
 EOF
