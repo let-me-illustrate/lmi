@@ -470,7 +470,6 @@ void PrintCellTabDelimited
     double total_spec_amt = Invar.InitBaseSpecAmt + Invar.InitTermSpecAmt;
     os << "  Total:\t\t"     << value_cast<std::string>(total_spec_amt) << '\n';
     os << "PolicyMktgName\t\t"    << Invar.value_str("PolicyMktgName" ) << '\n';
-    os << "PolicyLegalName\t\t"   << Invar.value_str("PolicyLegalName") << '\n';
     os << "PolicyForm\t\t"        << Invar.value_str("PolicyForm"     ) << '\n';
     os << "UWClass\t\t"           << Invar.value_str("UWClass"        ) << '\n';
     os << "UWType\t\t"            << Invar.value_str("UWType"         ) << '\n';
