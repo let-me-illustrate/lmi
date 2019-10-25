@@ -67,7 +67,18 @@ bindkey '^F' history-incremental-search-forward  # emacs Ctrl-S
 bindkey '^G' send-break                          # emacs Ctrl-G
 bindkey '^T' push-line                           # emacs Esc-Q
 
-prompt='%d[%?]%(!.#.$)'
+function zle-line-init zle-keymap-select {
+    local local_prompt='%d[%?]%(!.#.$)'
+    if [[ ${KEYMAP} == vicmd ]]; then
+        prompt="%F{yellow}${local_prompt}%f"
+    else
+        prompt="${local_prompt}"
+    fi
+    zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
 
 HISTSIZE=1000
 SAVEHIST=1000
