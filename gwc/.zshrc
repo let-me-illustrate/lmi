@@ -65,7 +65,7 @@ bindkey '\e[1;3C' forward-word   # Alt-right
 bindkey '^R' history-incremental-search-backward # emacs Ctrl-R
 bindkey '^F' history-incremental-search-forward  # emacs Ctrl-S
 bindkey '^G' send-break                          # emacs Ctrl-G
-bindkey '^T' push-line                           # emacs Esc-Q
+bindkey '\eq' push-line                          # emacs Esc-Q
 
 function zle-line-init zle-keymap-select {
     local local_prompt='%d[%?]%(!.#.$)'
