@@ -43,10 +43,17 @@ export LESSCHARSET=utf-8
 # Use vim keybindings.
 bindkey -v
 
-# These three seem to be set by default:
+# This seems to be set by default:
 # bindkey '\e[3~' delete-char      # Del
-# bindkey '\e[H' beginning-of-line # Home
-# bindkey '\e[F' end-of-line       # End
+
+# Explicitly bind these--see:
+#   https://lists.nongnu.org/archive/html/lmi/2019-10/msg00032.html
+bindkey '\e[H' beginning-of-line # Home
+bindkey '\e[F' end-of-line       # End
+# Bind those in the 'vicmd' keymap, too:
+bindkey -M vicmd '\e[H' beginning-of-line # Home
+bindkey -M vicmd '\e[F' end-of-line       # End
+
 bindkey '\e[1;5D' backward-word  # Ctrl-left
 bindkey '\e[1;5C' forward-word   # Ctrl-right
 bindkey '\e[1;3D' backward-word  # Alt-left
