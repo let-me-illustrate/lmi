@@ -405,8 +405,8 @@ if test "$USE_LINUX" = "1"; then
 else
     if test -z "$XMLWRAPP_CFLAGS" -o -z "$XMLWRAPP_LIBS"; then
         dnl --- XMLWRAPP (required) -------------------
-        AC_CHECK_PROG(lmi_xmlwrapp_config, xmlwrapp-config, yes, no)
-        if test "$lmi_xmlwrapp_config" = "no"; then
+        AC_CHECK_PROGS(lmi_xmlwrapp_config, xmlwrapp-config, not-found)
+        if test "$lmi_xmlwrapp_config" = "not-found"; then
             AC_MSG_ERROR([Unable to find xmlwrapp configuration program xmlwrapp-config in the path.])
         fi
 
