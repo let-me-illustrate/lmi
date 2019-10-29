@@ -46,6 +46,9 @@ bindkey -v
 # This seems to be set by default:
 # bindkey '\e[3~' delete-char      # Del
 
+# Replace the default vim keybinding, to reduce astonishment.
+bindkey '^?' backward-delete-char # Backspace
+
 # Explicitly bind these--see:
 #   https://lists.nongnu.org/archive/html/lmi/2019-10/msg00032.html
 bindkey '\e[H' beginning-of-line # Home
