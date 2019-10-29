@@ -61,7 +61,6 @@ bindkey '\e[1;3C' forward-word   # Alt-right
 
 # Enable useful features that emacs mode binds by default.
 # Binding '^R' here doesn't interfere with '^R' (undo) in vicmd mode.
-# There seems to be no way to bind 'Esc-Q' in vim mode.
 bindkey '^R' history-incremental-search-backward # emacs Ctrl-R
 bindkey '^F' history-incremental-search-forward  # emacs Ctrl-S
 bindkey '^G' send-break                          # emacs Ctrl-G
