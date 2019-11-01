@@ -53,14 +53,18 @@ bindkey '^?' backward-delete-char # Backspace
 #   https://lists.nongnu.org/archive/html/lmi/2019-10/msg00032.html
 bindkey '\e[H' beginning-of-line # Home
 bindkey '\e[F' end-of-line       # End
-# Bind those in the 'vicmd' keymap, too:
-bindkey -M vicmd '\e[H' beginning-of-line # Home
-bindkey -M vicmd '\e[F' end-of-line       # End
-
 bindkey '\e[1;5D' backward-word  # Ctrl-left
 bindkey '\e[1;5C' forward-word   # Ctrl-right
 bindkey '\e[1;3D' backward-word  # Alt-left
 bindkey '\e[1;3C' forward-word   # Alt-right
+
+# Bind those in the 'vicmd' keymap, too:
+bindkey -M vicmd '\e[H' beginning-of-line # Home
+bindkey -M vicmd '\e[F' end-of-line       # End
+bindkey -M vicmd '\e[1;5D' backward-word  # Ctrl-left
+bindkey -M vicmd '\e[1;5C' forward-word   # Ctrl-right
+bindkey -M vicmd '\e[1;3D' backward-word  # Alt-left
+bindkey -M vicmd '\e[1;3C' forward-word   # Alt-right
 
 # Enable useful features that emacs mode binds by default.
 # Binding '^R' here doesn't interfere with '^R' (undo) in vicmd mode.
