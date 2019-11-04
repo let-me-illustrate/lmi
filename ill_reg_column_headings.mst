@@ -122,10 +122,6 @@ to income tax and may also trigger a tax penalty.
 {{/IsInforce}}
 {{MinDeathBenefitFootnote}}
 
-{{#ModifiedSinglePremium}}
-  {{SinglePremiumFootnote}}
-{{/ModifiedSinglePremium}}
-
 <p>
 <b>Monthly Charges:</b>
 The monthly charges for the following month which include:
@@ -152,6 +148,10 @@ requested decrease is allowed only once per Policy Year, and the
 resulting Selected Face Amount after decrease must meet the
 minimum defined in your {{ContractName}}.
 </p>
+
+{{#ModifiedSinglePremium}}
+  {{SinglePremiumFootnote}}
+{{/ModifiedSinglePremium}}
 
 {{#SinglePremium}}
   {{^ModifiedSinglePremium}}
