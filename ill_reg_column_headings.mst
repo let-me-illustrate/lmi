@@ -149,15 +149,7 @@ resulting Selected Face Amount after decrease must meet the
 minimum defined in your {{ContractName}}.
 </p>
 
-{{#ModifiedSinglePremium}}
-  {{SinglePremiumFootnote}}
-{{/ModifiedSinglePremium}}
-
-{{#SinglePremium}}
-  {{^ModifiedSinglePremium}}
-    {{SinglePremiumFootnote}}
-  {{/ModifiedSinglePremium}}
-{{/SinglePremium}}
+{{SinglePremiumFootnote}}
 
 {{UltCreditingRateFootnote}}
 
