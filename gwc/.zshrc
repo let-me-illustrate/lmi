@@ -15,6 +15,12 @@ export PATH="$MINIMAL_PATH"
 # and replace :0.0 below with the string it returns:
 export DISPLAY=":0.0"
 
+# Make the X clipboard available to root, for vim only. See:
+#   https://lists.nongnu.org/archive/html/lmi/2019-10/msg00000.html
+if [ "$(id -u)" -eq 0 ]; then
+  alias vim='XAUTHORITY=/home/greg/.Xauthority vim'
+fi
+
 # Something like
 #  "--jobs=$(nproc || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN)"
 # could be used instead for other *nix systems:
@@ -37,18 +43,48 @@ export LESSCHARSET=utf-8
 # Use vim keybindings.
 bindkey -v
 
-# bindkey "\e[3~" delete-char      # Del
-# bindkey '\e[H' beginning-of-line # Home
-# bindkey '\e[F' end-of-line       # End
-bindkey "^[[1;5D" backward-word  # Ctrl-left
-bindkey "^[[1;5C" forward-word   # Ctrl-right
+# This seems to be set by default:
+# bindkey '\e[3~' delete-char      # Del
+
+# Replace the default vim keybinding, to reduce astonishment.
+bindkey '^?' backward-delete-char # Backspace
+
+# Explicitly bind these--see:
+#   https://lists.nongnu.org/archive/html/lmi/2019-10/msg00032.html
+bindkey '\e[H' beginning-of-line # Home
+bindkey '\e[F' end-of-line       # End
+bindkey '\e[1;5D' backward-word  # Ctrl-left
+bindkey '\e[1;5C' forward-word   # Ctrl-right
 bindkey '\e[1;3D' backward-word  # Alt-left
 bindkey '\e[1;3C' forward-word   # Alt-right
-# By default, zsh unfortunately binds ^S for this purpose;
-# use ^T instead, leaving ^S for flow control.
-bindkey '^T' history-incremental-search-forward
 
-prompt='%d[%?]%(!.#.$)'
+# Bind those in the 'vicmd' keymap, too:
+bindkey -M vicmd '\e[H' beginning-of-line # Home
+bindkey -M vicmd '\e[F' end-of-line       # End
+bindkey -M vicmd '\e[1;5D' backward-word  # Ctrl-left
+bindkey -M vicmd '\e[1;5C' forward-word   # Ctrl-right
+bindkey -M vicmd '\e[1;3D' backward-word  # Alt-left
+bindkey -M vicmd '\e[1;3C' forward-word   # Alt-right
+
+# Enable useful features that emacs mode binds by default.
+# Binding '^R' here doesn't interfere with '^R' (undo) in vicmd mode.
+bindkey '^R' history-incremental-search-backward # emacs Ctrl-R
+bindkey '^F' history-incremental-search-forward  # emacs Ctrl-S
+bindkey '^G' send-break                          # emacs Ctrl-G
+bindkey '\eq' push-line                          # emacs Esc-Q
+
+function zle-line-init zle-keymap-select {
+    local local_prompt='%d[%?]%(!.#.$)'
+    if [[ ${KEYMAP} == vicmd ]]; then
+        prompt="%F{yellow}${local_prompt}%f"
+    else
+        prompt="${local_prompt}"
+    fi
+    zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
 
 HISTSIZE=1000
 SAVEHIST=1000

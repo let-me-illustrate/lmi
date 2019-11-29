@@ -475,7 +475,7 @@ check_concinnity: source_clean custom_tools
 	  -not -name 'commit-msg' -not -name 'pre-commit' \
 	  | $(SED) -e's/^/Improperly executable: /'
 	@find $(prefascicle_dir) -executable -type f -print0 \
-	  | xargs -0 -n 1 -P 0 ./check_script.sh
+	  | xargs --null --max-args=1 --max-procs="$(shell nproc)" ./check_script.sh
 	@$(ECHO) "  Problems detected by xmllint:"
 	@for z in $(xml_files); \
 	  do \

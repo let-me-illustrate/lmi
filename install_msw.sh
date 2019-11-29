@@ -233,7 +233,7 @@ mkdir --parents /cache_for_lmi/downloads
 mount
 
 md5sum "$0"
-find /cache_for_lmi/downloads -type f -print0 | xargs -0 md5sum
+find /cache_for_lmi/downloads -type f -print0 | xargs --null md5sum
 
 make "$coefficiency" --output-sync=recurse -f install_miscellanea.make clobber
 make "$coefficiency" --output-sync=recurse -f install_miscellanea.make
@@ -269,7 +269,7 @@ do
     ./install_wx.sh
     ./install_wxpdfdoc.sh
 
-    find /cache_for_lmi/downloads -type f -print0 | xargs -0 md5sum
+    find /cache_for_lmi/downloads -type f -print0 | xargs --null md5sum
 
     # Source this script only for commands that depend upon it.
     . ./set_toolchain.sh

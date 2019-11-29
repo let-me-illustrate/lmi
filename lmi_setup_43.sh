@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 # Create a chroot for cross-building "Let me illustrate...".
 #
@@ -21,9 +21,9 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-set -vx
-
 . ./lmi_setup_inc.sh
+
+set -vx
 
 assert_not_su
 assert_chrooted
@@ -76,22 +76,29 @@ coefficiency="--jobs=$(nproc)"
 
 # Run a system test.
 cd /opt/lmi/src/lmi || { printf 'failed: cd\n'; exit 3; }
-make "$coefficiency" system_test 2>&1 |less -S
+make "$coefficiency" system_test 2>&1 |sed -e'/^Cannot open.*test/d'
 # That test fails the first time because no results are saved in
 # touchstone/ yet. Copy the results just generated...
 cp -a /opt/lmi/test/* /opt/lmi/touchstone
 # ...removing summaries...
 rm /opt/lmi/touchstone/analysis* /opt/lmi/touchstone/diffs* /opt/lmi/touchstone/md5sum*
 # ...and rerun the test, which should now succeed:
-make "$coefficiency" system_test 2>&1 |less -S
+make "$coefficiency" system_test
 
 # Create a local mirror of the gnu.org repository:
 cd /opt/lmi || { printf 'failed: cd\n'; exit 3; }
 mkdir --parents free/src
 cd free/src || { printf 'failed: cd\n'; exit 3; }
-git clone git://git.savannah.nongnu.org/lmi.git
-# shellcheck disable=SC2039
-#   (zsh glob qualifier: GLOB_DOTS)
-for z in **/*(D) ; do touch --reference=/opt/lmi/src/lmi/"$z" "$z"; done 2>&1 |sed \
-  -e'/\/.git\/FETCH_HEAD[^0-9A-Za-z-]/d' \
-  -e'/\/.git\/hooks\/[a-z-]*\.sample[^0-9A-Za-z-]/d'
+
+# Use git's own protocol wherever possible. In case that's blocked
+# by a corporate firewall, fall back on https. In case a firewall
+# inexplicably blocks the gnu.org domain, try Vadim's github clone
+# as a last resort.
+
+git clone git://git.savannah.nongnu.org/lmi.git \
+  || git clone https://git.savannah.nongnu.org/r/lmi.git \
+  || git clone https://github.com/vadz/lmi.git
+
+cd lmi || { printf 'failed: cd\n'; exit 3; }
+find . -path ./.git -prune -o -type f -print0 \
+  | xargs --null --max-args=1 --max-procs="$(nproc)" --replace='{}' touch '--reference=/opt/lmi/src/lmi/{}' '{}'

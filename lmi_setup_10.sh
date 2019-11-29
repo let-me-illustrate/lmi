@@ -21,9 +21,9 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-set -vx
-
 . ./lmi_setup_inc.sh
+
+set -vx
 
 assert_su
 assert_not_chrooted

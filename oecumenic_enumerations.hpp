@@ -134,16 +134,23 @@ enum oenum_mvc_dv_rc
 ///
 /// At least one state apparently concludes that all single-premium UL
 /// must be captioned as "Modified". Use
-///   oe_modified_single_premium
-/// for states that require this "Modified" caption, and
 ///   oe_plain_single_premium
 /// for states that allow captioning UL as "Single Premium" without
-/// the word "Modified".
+/// any modifier;
+///   oe_modified_single_premium
+/// for states that require a "Modified Single Premium" caption;
+///   oe_limited_flexible_premium
+/// in situations that require "Limited Flexible Premium" in lieu of
+/// "Modified Single Premium" (which means the same thing even though
+/// it might seem not to); and
+///   oe_flexible_premium
+/// otherwise.
 
 enum oenum_premium_flexibility
     {oe_flexible_premium
     ,oe_plain_single_premium
     ,oe_modified_single_premium
+    ,oe_limited_flexible_premium
     };
 
 /// Used only for backward compatibility with old versions that didn't

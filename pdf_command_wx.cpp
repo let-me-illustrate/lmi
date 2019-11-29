@@ -2216,13 +2216,24 @@ class pdf_illustration_naic : public pdf_illustration
 
         add_variable
             ("SinglePremium"
-            ,     oe_plain_single_premium    == invar.IsSinglePremium
-               || oe_modified_single_premium == invar.IsSinglePremium
+            ,     oe_plain_single_premium     == invar.IsSinglePremium
+               || oe_modified_single_premium  == invar.IsSinglePremium
+               || oe_limited_flexible_premium == invar.IsSinglePremium
+            );
+
+        add_variable
+            ("PlainSinglePremium"
+            ,oe_plain_single_premium     == invar.IsSinglePremium
             );
 
         add_variable
             ("ModifiedSinglePremium"
-            ,oe_modified_single_premium == invar.IsSinglePremium
+            ,oe_modified_single_premium  == invar.IsSinglePremium
+            );
+
+        add_variable
+            ("LimitedFlexiblePremium"
+            ,oe_limited_flexible_premium == invar.IsSinglePremium
             );
 
         // Variable representing the premium payment frequency with the

@@ -21,9 +21,9 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-set -vx
-
 . ./lmi_setup_inc.sh
+
+set -vx
 
 assert_not_su
 assert_chrooted
@@ -34,16 +34,16 @@ assert_chrooted
 # "identity mount" technique used with cygwin. See:
 #   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00018.html
 
-mkdir -p ~/.wine/drive_c/users/greg/opt/
-cd ~/.wine/drive_c/users/greg/opt/ || { printf 'failed: cd\n'; exit 3; }
+mkdir -p ~/.wine/drive_c/users/"${NORMAL_USER}"/opt/
+cd ~/.wine/drive_c/users/"${NORMAL_USER}"/opt/ || { printf 'failed: cd\n'; exit 3; }
 ln --symbolic --relative --force --no-dereference /opt/lmi/ ./lmi
 
-mkdir -p ~/.wine/drive_c/users/greg/etc/opt/
-cd ~/.wine/drive_c/users/greg/etc/opt/ || { printf 'failed: cd\n'; exit 3; }
+mkdir -p ~/.wine/drive_c/users/"${NORMAL_USER}"/etc/opt/
+cd ~/.wine/drive_c/users/"${NORMAL_USER}"/etc/opt/ || { printf 'failed: cd\n'; exit 3; }
 ln --symbolic --relative --force --no-dereference /etc/opt/lmi/ ./lmi
 
-mkdir -p ~/.wine/drive_c/users/greg/var/opt/
-cd ~/.wine/drive_c/users/greg/var/opt/ || { printf 'failed: cd\n'; exit 3; }
+mkdir -p ~/.wine/drive_c/users/"${NORMAL_USER}"/var/opt/
+cd ~/.wine/drive_c/users/"${NORMAL_USER}"/var/opt/ || { printf 'failed: cd\n'; exit 3; }
 ln --symbolic --relative --force --no-dereference /var/opt/lmi/ ./lmi
 
 cd ~ || { printf 'failed: cd\n'; exit 3; }

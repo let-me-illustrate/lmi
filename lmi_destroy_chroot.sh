@@ -21,9 +21,9 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-set -vx
-
 . ./lmi_setup_inc.sh
+
+set -vx
 
 assert_su
 assert_not_chrooted
@@ -32,5 +32,5 @@ umount /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 umount /srv/chroot/"${CHRTNAME}"/dev/pts
 umount /srv/chroot/"${CHRTNAME}"/proc
 
-rm -rf "$(schroot --chroot="${CHRTNAME}" --location)"
+rm --one-file-system --recursive --force "$(schroot --chroot="${CHRTNAME}" --location)"
 rm /etc/schroot/chroot.d/"${CHRTNAME}".conf

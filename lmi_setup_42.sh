@@ -21,9 +21,9 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-set -vx
-
 . ./lmi_setup_inc.sh
+
+set -vx
 
 assert_not_su
 assert_chrooted
@@ -31,13 +31,16 @@ assert_chrooted
 # Install lmi for wine.
 
 cd ~ || { printf 'failed: cd\n'; exit 3; }
-wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/install_msw.sh'
+wget -N "${GIT_URL_BASE}"/install_msw.sh
 chmod +x install_msw.sh
 ./install_msw.sh >log 2>&1
 
 # Now everything should work much as it does in native msw. To run an
 # msw program, prefix its command line with 'wine'. Test the chroot by
-# running the lmi binary built in the preceding step:
+# running the lmi binary built in the preceding step after setting
+# $DISPLAY, manually (not under control of this script, which should
+# run unattended):
 
-cd /opt/lmi/bin || { printf 'failed: cd\n'; exit 3; }
-wine ./lmi_wx_shared.exe --ash_nazg --data_path=../data
+# export DISPLAY=":0.0"
+# cd /opt/lmi/bin || { printf 'failed: cd\n'; exit 3; }
+# wine ./lmi_wx_shared.exe --ash_nazg --data_path=../data

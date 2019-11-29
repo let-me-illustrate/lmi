@@ -21,9 +21,9 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-set -vx
-
 . ./lmi_setup_inc.sh
+
+set -vx
 
 assert_su
 assert_not_chrooted
@@ -41,8 +41,8 @@ cat >/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
 aliases=lmi
 description=debian ${CODENAME} cross build ${CHRTVER}
 directory=/srv/chroot/${CHRTNAME}
-users=greg
-groups=greg
+users=${NORMAL_USER}
+groups=${NORMAL_GROUP}
 root-groups=root
 type=plain
 EOF
@@ -57,3 +57,7 @@ EOF
 # not used because it's more complicated and has no benefit.
 mkdir -p /var/cache/"${CODENAME}"
 mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
+
+findmnt /var/cache/"${CODENAME}"
+findmnt /proc
+findmnt /dev/pts

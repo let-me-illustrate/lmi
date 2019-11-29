@@ -44,7 +44,7 @@ case "$lmi_build_type" in
            printf '%s...' "$d" \
         && find ./$d -maxdepth 1 -type f \
              -not -name '*.sh' -not -name '*.sed' -print0 \
-             | xargs -0 chmod -x \
+             | xargs --null chmod -x \
       )done; \
     printf 'all incorrect execute permissions removed\n'
     git config core.filemode false
