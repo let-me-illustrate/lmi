@@ -376,8 +376,11 @@ double premium_tax::calculate_load(double payment, stratified_charges const& str
 /// changed in the meantime (and actually did, in the 20170508T1544Z
 /// commit). Expunge this block comment when the last assertion is
 /// expunged.
+///
+/// Implementation notes:
+///  - __DATE__[0] is month-name's first letter; D = December
+///  - __DATE__[10] is last digit of a four-digit year
 
-static_assert('D' != __DATE__[0] || '9' != __DATE__[10]);
 static_assert('D' != __DATE__[0] || '0' != __DATE__[10]);
 static_assert('D' != __DATE__[0] || '1' != __DATE__[10]);
 
@@ -400,7 +403,7 @@ std::vector<double> const& premium_tax_rates_for_life_insurance()
     static int const n = 53;
     static double const d[n] =
         //   AL       AK       AZ       AR       CA       CO       CT
-        {0.0230,  tiered,  0.0180,  0.0250,  0.0235,  0.0200,  0.0175
+        {0.0230,  tiered,  0.0175,  0.0250,  0.0235,  0.0200,  0.0175
         //   DE       DC       FL       GA       HI       ID
         ,0.0200,  0.0175,  0.0175,  0.0225,  0.0275,  0.0150
         //   IL       IN       IA       KS       KY       LA       ME
