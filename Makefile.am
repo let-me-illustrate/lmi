@@ -99,6 +99,7 @@ TESTS = \
     test_contains \
     test_crc32 \
     test_currency \
+    test_dbo_rules \
     test_expression_template_0 \
     test_fenv_lmi \
     test_file_command \
@@ -680,6 +681,16 @@ test_currency_SOURCES = \
   currency_test.cpp \
   timer.cpp
 test_currency_CXXFLAGS = $(AM_CXXFLAGS)
+
+test_dbo_rules_SOURCES = \
+  $(common_test_objects) \
+  dbo_rules.cpp \
+  dbo_rules_test.cpp \
+  facets.cpp \
+  mc_enum.cpp \
+  mc_enum_types.cpp \
+  timer.cpp
+test_dbo_rules_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_expression_template_0_SOURCES = \
   $(common_test_objects) \

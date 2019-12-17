@@ -421,6 +421,7 @@ unit_test_targets := \
   contains_test \
   crc32_test \
   currency_test \
+  dbo_rules_test \
   expression_template_0_test \
   fenv_lmi_test \
   file_command_test \
@@ -604,6 +605,15 @@ crc32_test$(EXEEXT): \
 currency_test$(EXEEXT): \
   $(common_test_objects) \
   currency_test.o \
+  timer.o \
+
+dbo_rules_test$(EXEEXT): \
+  $(common_test_objects) \
+  dbo_rules.o \
+  dbo_rules_test.o \
+  facets.o \
+  mc_enum.o \
+  mc_enum_types.o \
   timer.o \
 
 expression_template_0_test$(EXEEXT): \
