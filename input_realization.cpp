@@ -28,6 +28,7 @@
 #include "contains.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
+#include "dbo_rules.hpp"
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
 #include "input_sequence_aux.hpp"       // convert_vector()
@@ -594,7 +595,13 @@ std::string Input::RealizeDeathBenefitOption()
             );
         }
 
-    // DBO3 !! Need rules for changes to and from MDB as well.
+    // DBO3 !! Eventually validate all DBO sequences this way
+    // (but using DBO rules from the product database):
+    if(database_->query<bool>(DB_AllowDboMdb) && !contains(ProductName.value(), "sample"))
+        {
+        dbo_sequence_is_allowed(DeathBenefitOptionRealized_);
+        }
+
     return "";
 }
 

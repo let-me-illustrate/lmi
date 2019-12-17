@@ -194,6 +194,7 @@ common_common_objects := \
   datum_string.o \
   dbdict.o \
   dbnames.o \
+  dbo_rules.o \
   dbvalue.o \
   death_benefits.o \
   emit_ledger.o \
@@ -704,6 +705,7 @@ input_test$(EXEEXT): \
   datum_string.o \
   dbdict.o \
   dbnames.o \
+  dbo_rules.o \
   dbvalue.o \
   facets.o \
   global_settings.o \

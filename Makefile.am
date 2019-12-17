@@ -312,6 +312,7 @@ liblmi_common_sources = \
     datum_string.cpp \
     dbdict.cpp \
     dbnames.cpp \
+    dbo_rules.cpp \
     dbvalue.cpp \
     death_benefits.cpp \
     emit_ledger.cpp \
@@ -791,6 +792,7 @@ test_input_SOURCES = \
   datum_string.cpp \
   dbdict.cpp \
   dbnames.cpp \
+  dbo_rules.cpp \
   dbvalue.cpp \
   facets.cpp \
   global_settings.cpp \
