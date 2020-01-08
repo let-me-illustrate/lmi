@@ -251,8 +251,8 @@ bool custom_io_1_read(Input& z, std::string const& filename)
           ("L"   == DeathBenefitOption) ? "a"
         : ("I"   == DeathBenefitOption) ? "b"
 //      : ("ROP" == DeathBenefitOption) ? "rop" // Generally not offered for BOLI.
-// DBO3 !! "mdb" might need to be added here
-        : throw std::runtime_error(DeathBenefitOption + ": DeathBenefitOption not in {L,I}.")
+        : ("M"   == DeathBenefitOption) ? "mdb"
+        : throw std::runtime_error(DeathBenefitOption + ": DeathBenefitOption not in {L,I,M}.")
         ;
     // <FaceAmt> and <PremiumAmt> are both specified, so that both can
     // be rounded in reasonable ways--even for single-premium products
