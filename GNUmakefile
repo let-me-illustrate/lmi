@@ -499,7 +499,7 @@ check_concinnity: source_clean custom_tools
 # either in the last days of the old year or the first days of the
 # new, so they can't be derived dynamically from the current date.
 #
-# For rate tables etc., see 'gwc/develop2'.
+# For rate tables etc., see 'gwc/develop2.txt'.
 
 old_year := 2019
 new_year := 2020

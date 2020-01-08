@@ -1,4 +1,4 @@
-  # Work with proprietary repository (prerequisite: 'develop0')
+  # Work with proprietary repository (prerequisite: 'develop0.txt')
   #
   # Discussed in detail here:
   #   http://lists.nongnu.org/archive/html/lmi/2016-03/msg00031.html
@@ -79,8 +79,20 @@ wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --verify
   #   /opt/lmi/proprietary/test/ChangeLog
   # and adding the current year to each copyright notice, using an
   # expression such as
-  #   /Copyright/s/201X/201X, 201Y/
-  # (of course modifying the 'X' and 'Y' years)
+  #   /Copyright/s/202X/202X, 202Y/
+  # (of course modifying the 'X' and 'Y' years), e.g.:
+
+cd /opt/lmi/proprietary/
+for z in $(grep -l -dskip Copyright *); do sed -i $z -e'/Copyright/s/2019/2019, 2020/'; done
+
+cd /opt/lmi/proprietary/src
+for z in $(grep -l -dskip Copyright *); do sed -i $z -e'/Copyright/s/2019/2019, 2020/'; done
+
+cd /opt/lmi/proprietary/hooks
+for z in $(grep -l -dskip Copyright *); do sed -i $z -e'/Copyright/s/2019/2019, 2020/'; done
+
+cd /opt/lmi/proprietary/test
+for z in ChangeLog ; do sed -i $z -e'/Copyright/s/2019/2019, 2020/'; done
 
   # Regenerating XML product files in /opt/lmi/data updates their
   # copyright notices automatically to show the current year.
@@ -90,14 +102,14 @@ wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --verify
   # 'X' and 'Y' years):
 
 cd /opt/lmi/proprietary/data/
-for z in *; do sed -i $z -e'/Copyright/s/201X/201X, 201Y/'; done
+for z in *; do sed -i $z -e'/Copyright/s/202X/202Y/'; done
 
   # and compare to the regenerated set in /opt/lmi/data
 
   # Use the same command to update rate tables similarly:
 
 cd /opt/lmi/proprietary/tables
-for z in *; do sed -i $z -e'/Copyright/s/201X/201Y/'; done
+for z in *; do sed -i $z -e'/Copyright/s/202X/202Y/'; done
 
   # and regenerate the binary database.
 

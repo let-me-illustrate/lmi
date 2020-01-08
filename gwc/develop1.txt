@@ -1,4 +1,4 @@
-  # Set up my customary working environment (prerequisite: 'develop0')
+  # Set up my customary working environment (prerequisite: 'develop0.txt')
 
   # Work with multiple screens
   #
