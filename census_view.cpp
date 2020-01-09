@@ -1700,7 +1700,7 @@ void CensusViewGridTable::SetValue(int row, int col, wxString const& value)
 
     cell = new_val;
 
-    Input& model = view_.cell_parms()[row];
+    Input& model = view_.cell_parms().at(row);
     model.Reconcile();
 
     view_.document().Modify(true);
@@ -1842,17 +1842,17 @@ inline std::string const& CensusViewGridTable::col_name(int col) const
 {
     LMI_ASSERT(0 < col);
     // "- 1" because first column is cell serial number.
-    return all_headers()[visible_columns_[col - 1]];
+    return all_headers().at(visible_columns_.at(col - 1));
 }
 
 inline Input& CensusViewGridTable::row_at(int row)
 {
-    return view_.cell_parms()[row];
+    return view_.cell_parms().at(row);
 }
 
 inline Input const& CensusViewGridTable::row_at(int row) const
 {
-    return view_.cell_parms()[row];
+    return view_.cell_parms().at(row);
 }
 
 inline any_member<Input>& CensusViewGridTable::cell_at(int row, int col)
@@ -1877,7 +1877,7 @@ inline any_member<Input> const& CensusViewGridTable::cell_at(int row, std::strin
 
 inline std::vector<std::string> const& CensusViewGridTable::all_headers() const
 {
-    return view_.case_parms()[0].member_names();
+    return view_.case_parms().at(0).member_names();
 }
 
 namespace
