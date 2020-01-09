@@ -1,6 +1,6 @@
 # Makefile: object lists.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -201,6 +201,7 @@ common_common_objects := \
   datum_string.o \
   dbdict.o \
   dbnames.o \
+  dbo_rules.o \
   dbvalue.o \
   death_benefits.o \
   emit_ledger.o \
@@ -428,6 +429,7 @@ unit_test_targets := \
   contains_test \
   crc32_test \
   currency_test \
+  dbo_rules_test \
   expression_template_0_test \
   fenv_lmi_test \
   file_command_test \
@@ -613,6 +615,15 @@ currency_test$(EXEEXT): \
   currency_test.o \
   timer.o \
 
+dbo_rules_test$(EXEEXT): \
+  $(common_test_objects) \
+  dbo_rules.o \
+  dbo_rules_test.o \
+  facets.o \
+  mc_enum.o \
+  mc_enum_types.o \
+  timer.o \
+
 expression_template_0_test$(EXEEXT): \
   $(common_test_objects) \
   expression_template_0_test.o \
@@ -701,6 +712,7 @@ input_test$(EXEEXT): \
   datum_string.o \
   dbdict.o \
   dbnames.o \
+  dbo_rules.o \
   dbvalue.o \
   facets.o \
   global_settings.o \

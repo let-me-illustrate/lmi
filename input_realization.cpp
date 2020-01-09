@@ -1,6 +1,6 @@
 // Realize sequence-string input as vectors.
 //
-// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -28,6 +28,7 @@
 #include "contains.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
+#include "dbo_rules.hpp"
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
 #include "input_sequence_aux.hpp"       // convert_vector()
@@ -594,7 +595,13 @@ std::string Input::RealizeDeathBenefitOption()
             );
         }
 
-    // DBO3 !! Need rules for changes to and from MDB as well.
+    // DBO3 !! Eventually validate all DBO sequences this way
+    // (but using DBO rules from the product database):
+    if(database_->query<bool>(DB_AllowDboMdb) && !contains(ProductName.value(), "sample"))
+        {
+        dbo_sequence_is_allowed(DeathBenefitOptionRealized_);
+        }
+
     return "";
 }
 

@@ -2,7 +2,7 @@
 
 # Create a chroot for redhat-7.
 #
-# Copyright (C) 2019 Gregory W. Chicares.
+# Copyright (C) 2019, 2020 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as

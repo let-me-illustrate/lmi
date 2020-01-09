@@ -1,6 +1,6 @@
 // Custom interface number one.
 //
-// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Gregory W. Chicares.
+// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -251,8 +251,8 @@ bool custom_io_1_read(Input& z, std::string const& filename)
           ("L"   == DeathBenefitOption) ? "a"
         : ("I"   == DeathBenefitOption) ? "b"
 //      : ("ROP" == DeathBenefitOption) ? "rop" // Generally not offered for BOLI.
-// DBO3 !! "mdb" might need to be added here
-        : throw std::runtime_error(DeathBenefitOption + ": DeathBenefitOption not in {L,I}.")
+        : ("M"   == DeathBenefitOption) ? "mdb"
+        : throw std::runtime_error(DeathBenefitOption + ": DeathBenefitOption not in {L,I,M}.")
         ;
     // <FaceAmt> and <PremiumAmt> are both specified, so that both can
     // be rounded in reasonable ways--even for single-premium products

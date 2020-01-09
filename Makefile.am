@@ -1,7 +1,7 @@
 # Master automake makefile, run automake to generate Makefile.am from it (this
 # is also done by autogen.sh script)
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Vadim Zeitlin.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Vadim Zeitlin.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -126,6 +126,7 @@ TESTS = \
     test_contains \
     test_crc32 \
     test_currency \
+    test_dbo_rules \
     test_expression_template_0 \
     test_fenv_lmi \
     test_file_command \
@@ -339,6 +340,7 @@ liblmi_common_sources = \
     datum_string.cpp \
     dbdict.cpp \
     dbnames.cpp \
+    dbo_rules.cpp \
     dbvalue.cpp \
     death_benefits.cpp \
     emit_ledger.cpp \
@@ -709,6 +711,16 @@ test_currency_SOURCES = \
   timer.cpp
 test_currency_CXXFLAGS = $(AM_CXXFLAGS)
 
+test_dbo_rules_SOURCES = \
+  $(common_test_objects) \
+  dbo_rules.cpp \
+  dbo_rules_test.cpp \
+  facets.cpp \
+  mc_enum.cpp \
+  mc_enum_types.cpp \
+  timer.cpp
+test_dbo_rules_CXXFLAGS = $(AM_CXXFLAGS)
+
 test_expression_template_0_SOURCES = \
   $(common_test_objects) \
   expression_template_0_test.cpp \
@@ -808,6 +820,7 @@ test_input_SOURCES = \
   datum_string.cpp \
   dbdict.cpp \
   dbnames.cpp \
+  dbo_rules.cpp \
   dbvalue.cpp \
   facets.cpp \
   global_settings.cpp \
