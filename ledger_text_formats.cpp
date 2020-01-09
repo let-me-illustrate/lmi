@@ -555,9 +555,17 @@ void PrintCellTabDelimited
     for(int j = 0; j < max_length; ++j)
         {
         os << (j + 1                                    ) << '\t';
-        os << (j + Invar.Age                            ) << '\t';
 
-        os << Invar.DBOpt[j]                              << '\t';
+        if(ledger_values.is_composite())
+            {
+            os                                            << '\t';
+            os                                            << '\t';
+            }
+        else
+            {
+            os << (j + Invar.Age                        ) << '\t';
+            os << Invar.DBOpt[j]                          << '\t';
+            }
 
         os << Invar.value_str("EeGrossPmt"            ,j) << '\t';
         os << Invar.value_str("ErGrossPmt"            ,j) << '\t';
