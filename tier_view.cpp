@@ -26,7 +26,6 @@
 #include "multidimgrid_any.hpp"
 #include "multidimgrid_safe.tpp"
 #include "multidimgrid_tools.hpp"
-#include "multidimgrid_safe.tpp"
 #include "safely_dereference_as.hpp"
 #include "stratified_charges.hpp"
 #include "stratified_charges.xpp"
