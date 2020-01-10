@@ -255,6 +255,7 @@
     <ClCompile Include="datum_string.cpp" />
     <ClCompile Include="dbdict.cpp" />
     <ClCompile Include="dbnames.cpp" />
+    <ClCompile Include="dbo_rules.cpp" />
     <ClCompile Include="dbvalue.cpp" />
     <ClCompile Include="death_benefits.cpp" />
     <ClCompile Include="emit_ledger.cpp" />
