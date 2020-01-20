@@ -69,6 +69,11 @@ willing to represent as such to {{InsCoShortName}}.
 <b>Maximum Net Amount at Risk Limitation:</b> {{MaxNaarFootnote}}
 </p>
 
+{{!
+    PDF !! Either non-breaking spaces should be added in the preceding
+    paragraphs, or they should be removed in the following paragraphs.
+}}
+
 <p>
 <b>Monthly Charges:</b> &nbsp; {{MonthlyChargesPaymentFootnote}}
 </p>
