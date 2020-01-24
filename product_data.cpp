@@ -343,8 +343,6 @@ void product_data::ascribe_members()
     ascribe("SurrenderFootnote"             , &product_data::SurrenderFootnote             );
     ascribe("PortabilityFootnote"           , &product_data::PortabilityFootnote           );
     ascribe("FundRateFootnote"              , &product_data::FundRateFootnote              );
-    ascribe("FundRateFootnote0"             , &product_data::FundRateFootnote0             );
-    ascribe("FundRateFootnote1"             , &product_data::FundRateFootnote1             );
     ascribe("IssuingCompanyFootnote"        , &product_data::IssuingCompanyFootnote        );
     ascribe("SubsidiaryFootnote"            , &product_data::SubsidiaryFootnote            );
     ascribe("PlacementAgentFootnote"        , &product_data::PlacementAgentFootnote        );

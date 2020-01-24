@@ -329,8 +329,6 @@ void LedgerInvariant::Alloc(int len)
     Strings["SurrenderFootnote"             ] = &SurrenderFootnote             ;
     Strings["PortabilityFootnote"           ] = &PortabilityFootnote           ;
     Strings["FundRateFootnote"              ] = &FundRateFootnote              ;
-    Strings["FundRateFootnote0"             ] = &FundRateFootnote0             ;
-    Strings["FundRateFootnote1"             ] = &FundRateFootnote1             ;
     Strings["IssuingCompanyFootnote"        ] = &IssuingCompanyFootnote        ;
     Strings["SubsidiaryFootnote"            ] = &SubsidiaryFootnote            ;
     Strings["PlacementAgentFootnote"        ] = &PlacementAgentFootnote        ;
@@ -724,8 +722,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     SurrenderFootnote             = a_Addend.SurrenderFootnote;
     PortabilityFootnote           = a_Addend.PortabilityFootnote;
     FundRateFootnote              = a_Addend.FundRateFootnote;
-    FundRateFootnote0             = a_Addend.FundRateFootnote0;
-    FundRateFootnote1             = a_Addend.FundRateFootnote1;
     IssuingCompanyFootnote        = a_Addend.IssuingCompanyFootnote;
     SubsidiaryFootnote            = a_Addend.SubsidiaryFootnote;
     PlacementAgentFootnote        = a_Addend.PlacementAgentFootnote;
