@@ -85,9 +85,10 @@ set showtabline=2
 " while 'nbsp' and 'trail' are meant to stand out; 'extends' and
 " 'precedes' normally wouldn't be seen because of 'set wrap'.
 set list
-" On second thought, 'eol' should probably be left alone.
 " set listchars=nbsp:◙,eol:☜,tab:☞☞,extends:»,precedes:«,trail:▒
-set listchars=nbsp:◙,tab:☞☞,extends:»,precedes:«,trail:▒
+" On second thought, 'eol' should probably be left alone, and
+" 'shouldered open box' is conventional for nbsp.
+set listchars=nbsp:⍽,tab:☞☞,extends:»,precedes:«,trail:▒
 highlight clear NonText
 highlight NonText    ctermfg=gray " eol, extends, precedes
 highlight clear SpecialKey
