@@ -23,6 +23,7 @@
 
 #include "stream_cast.hpp"
 
+#include "calendar_date.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -137,6 +138,16 @@ int test_main(int, char*[])
         (stream_cast<std::string>((char const*)nullptr)
         ,std::runtime_error
         ,"Cannot convert (char const*)(0) to std::string."
+        );
+
+    calendar_date d;
+    d = stream_cast("2454687", d);
+    BOOST_TEST_EQUAL(2454687, d.julian_day_number());
+
+    BOOST_TEST_THROW
+        (stream_cast("2454687 ", d)
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Trailing whitespace remains converting '2454687 '")
         );
 
     assay_speed();

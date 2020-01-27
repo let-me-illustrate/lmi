@@ -1008,7 +1008,9 @@ stratified_algorithms_test$(EXEEXT): \
 
 stream_cast_test$(EXEEXT): \
   $(common_test_objects) \
+  calendar_date.o \
   facets.o \
+  null_stream.o \
   stream_cast_test.o \
   timer.o \
 
