@@ -1134,7 +1134,9 @@ test_stratified_algorithms_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_stream_cast_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
   facets.cpp \
+  null_stream.cpp \
   stream_cast_test.cpp \
   timer.cpp
 test_stream_cast_CXXFLAGS = $(AM_CXXFLAGS)
