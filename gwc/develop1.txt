@@ -123,6 +123,14 @@ git checkout -- ce_skin_name.cpp ce_skin_name.hpp
 git checkout [sha1sum] census_view.cpp
 git checkout HEAD^ census_view.cpp
 
+  # Obliterate unstaged changes
+
+git checkout .
+
+  # Obliterate unpushed commits
+
+git reset --hard origin/master
+
   # Update the local source tree (where I make my own changes) when
   # someone else has committed a change to the online master repo.
 
