@@ -70,6 +70,40 @@ int test_main(int, char*[])
 {
     std::string s;
 
+    // First, test each exception coded in the primary template.
+
+    BOOST_TEST_THROW
+        (stream_cast<std::string>(static_cast<std::streambuf*>(nullptr))
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Input failed")
+        );
+
+    BOOST_TEST_THROW
+        (stream_cast<double>("INF")
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Output failed")
+        );
+
+    // Throw if any trailing input remains...
+    BOOST_TEST_THROW
+        (stream_cast<double>("3.14 59")
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Unconverted data remains")
+        );
+    BOOST_TEST_THROW
+        (stream_cast<double>("3.14\r59")
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Unconverted data remains")
+        );
+    // ...unless it's all whitespace...
+    BOOST_TEST_EQUAL(2, stream_cast<int>("2\r"));
+    // ...as designated by blank_is_not_whitespace_locale()
+    BOOST_TEST_THROW
+        (stream_cast<double>("3.14 ")
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Unconverted data remains")
+        );
+
     // Conversion from an empty std::string to another std::string
     // works only because a specialization is used in that case.
     // This would fail if the type converted to were of a different

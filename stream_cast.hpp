@@ -122,11 +122,7 @@ To stream_cast(From from, To = To())
         {
         err << "Output failed ";
         }
-    else if(!(interpreter >> std::ws))
-        {
-        err << "Trailing whitespace remains ";
-        }
-    else if(!interpreter.eof())
+    else if(!(interpreter >> std::ws).eof())
         {
         err << "Unconverted data remains ";
         }
