@@ -86,8 +86,9 @@
 /// type std::string (but it works with value_cast).
 ///
 /// Blank is the only whitespace character not treated as whitespace,
-/// because blanks are more common than other whitespace characters in
-/// std::strings.
+/// because blanks are deliberately used in strings like "Allow MEC"
+/// that are mapped to enumerators in 'mc_enum_types.xpp', where other
+/// whitespace characters would not be used.
 ///
 /// This technique is generally inappropriate (and the implementation
 /// prevents its use) for arithmetic types, and especially for
