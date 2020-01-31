@@ -72,12 +72,29 @@ int test_main(int, char*[])
 
     // First, test each exception coded in the primary template.
 
+    // Induce failure in ostream inserter:
+    std::stringstream ss0;
+    ss0 << static_cast<std::streambuf*>(nullptr);
+    BOOST_TEST(std::ios_base::badbit == ss0.rdstate());
     BOOST_TEST_THROW
         (stream_cast<std::string>(static_cast<std::streambuf*>(nullptr))
         ,std::runtime_error
         ,lmi_test::what_regex("^Input failed")
         );
 
+    // Induce failure in istream extractor:
+    std::stringstream ss1;
+    ss1 << "INF";
+    BOOST_TEST(std::ios_base::goodbit == ss1.rdstate());
+    double d {0};
+    ss1 >> d;
+    // This test is defective. With clang, the stream state is good.
+    // With gcc, failbit is set, but apparently that's because gcc
+    // rejects the characters 'I' and 'N'--see:
+    //   https://lists.nongnu.org/archive/html/lmi/2020-01/msg00010.html
+    //   https://cplusplus.github.io/LWG/lwg-active.html#2381
+std::cout << ss1.rdstate() << std::endl;
+    BOOST_TEST(std::ios_base::failbit == ss1.rdstate());
     BOOST_TEST_THROW
         (stream_cast<double>("INF")
         ,std::runtime_error
