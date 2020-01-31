@@ -129,24 +129,19 @@ To stream_cast(From from, To = To())
         }
     else
         {
-        ; // Nothing left to do.
+        return result;
         }
 
-    if(!interpreter || !interpreter.eof())
-        {
-        err
-            << "converting '"
-            << from
-            << "' from type '"
-            << lmi::TypeInfo(typeid(From))
-            << "' to type '"
-            << lmi::TypeInfo(typeid(To))
-            << "'."
-            ;
-        throw std::runtime_error(err.str());
-        }
-
-    return result;
+    err
+        << "converting '"
+        << from
+        << "' from type '"
+        << lmi::TypeInfo(typeid(From))
+        << "' to type '"
+        << lmi::TypeInfo(typeid(To))
+        << "'."
+        ;
+    throw std::runtime_error(err.str());
 }
 
 template<>
