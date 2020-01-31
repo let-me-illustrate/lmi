@@ -117,11 +117,11 @@ To stream_cast(From from, To = To())
 
     if(!(interpreter << from))
         {
-        err << "Input failed ";
+        err << "Failure in ostream inserter ";
         }
     else if(!(interpreter >> result))
         {
-        err << "Output failed ";
+        err << "Failure in istream extractor ";
         }
     else if(!(interpreter >> std::ws).eof())
         {

@@ -79,7 +79,7 @@ int test_main(int, char*[])
     BOOST_TEST_THROW
         (stream_cast<std::string>(static_cast<std::streambuf*>(nullptr))
         ,std::runtime_error
-        ,lmi_test::what_regex("^Input failed")
+        ,lmi_test::what_regex("^Failure in ostream inserter")
         );
 
     // Induce failure in istream extractor:
@@ -92,7 +92,7 @@ int test_main(int, char*[])
     BOOST_TEST_THROW
         (stream_cast<bool>("3")
         ,std::runtime_error
-        ,lmi_test::what_regex("^Output failed")
+        ,lmi_test::what_regex("^Failure in istream extractor")
         );
 
     // Throw if any trailing input remains...
