@@ -104,8 +104,22 @@ To stream_cast(From from, To = To())
         );
     static_assert(!std::is_pointer<To>::value);
 
-    To result = To();
-    std::ostringstream err;
+    auto complain = [&](auto const& reason)
+        {
+        std::ostringstream err;
+        err
+            << reason
+            << " converting '"
+            << from
+            << "' from type '"
+            << lmi::TypeInfo(typeid(From))
+            << "' to type '"
+            << lmi::TypeInfo(typeid(To))
+            << "'."
+            ;
+        throw std::runtime_error(err.str());
+        };
+
     static std::stringstream interpreter = []
         {
         std::stringstream ss {};
@@ -115,33 +129,22 @@ To stream_cast(From from, To = To())
     interpreter.str(std::string{});
     interpreter.clear();
 
+    To result = To();
+
     if(!(interpreter << from))
         {
-        err << "Failure in ostream inserter ";
+        complain("Failure in ostream inserter");
         }
     else if(!(interpreter >> result))
         {
-        err << "Failure in istream extractor ";
+        complain("Failure in istream extractor");
         }
     else if(!(interpreter >> std::ws).eof())
         {
-        err << "Unconverted data remains ";
-        }
-    else
-        {
-        return result;
+        complain("Unconverted data remains");
         }
 
-    err
-        << "converting '"
-        << from
-        << "' from type '"
-        << lmi::TypeInfo(typeid(From))
-        << "' to type '"
-        << lmi::TypeInfo(typeid(To))
-        << "'."
-        ;
-    throw std::runtime_error(err.str());
+    return result;
 }
 
 template<>
