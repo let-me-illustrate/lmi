@@ -89,6 +89,10 @@ yum --assumeyes install ncurses-term zsh
 chsh -s /bin/zsh root
 chsh -s /bin/zsh "${NORMAL_USER}"
 
+# Suppress a nuisance: rh-based distributions provide a default
+# zsh logout file that clears the screen.
+sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /srv/chroot/centos7lmi/etc/zlogout
+
 # Make a more modern 'git' available via 'scl'. This is not needed
 # if all real work is done in a debian chroot.
 #yum --assumeyes install centos-release-scl

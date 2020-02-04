@@ -37,6 +37,10 @@ umount /srv
 mount -t tmpfs -o size=10G tmpfs /srv
 findmnt /srv
 
+# Suppress a nuisance: rh-based distributions provide a default
+# zsh logout file that clears the screen.
+sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /etc/zlogout
+
 # Make a more modern 'git' available via 'scl'. This is not needed
 # if all real work is done in a debian chroot.
 #yum --assumeyes install centos-release-scl
