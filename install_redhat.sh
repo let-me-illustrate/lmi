@@ -32,10 +32,23 @@ echo "Started: $stamp0"
 grep "${CHRTNAME}" /proc/mounts | cut -f2 -d" " | xargs umount || echo "None?"
 rm -rf /srv/chroot/"${CHRTNAME}"
 rm /etc/schroot/chroot.d/"${CHRTNAME}".conf || echo "None?"
-umount /srv
+umount /srv/chroot
 
-mount -t tmpfs -o size=10G tmpfs /srv
-findmnt /srv
+# On a server with tiny 4G partitions for /usr, /var, /tmp, /opt,
+# etc., no partition had room for a chroot. Using RAM:
+#   mount -t tmpfs -o size=10G tmpfs /srv
+# was sufficient for a proof of concept, but for real work it's
+# necessary to obtain sufficient storage, e.g.:
+#   parted --align optimal /dev/sdb -- mklabel msdos mkpart primary ext4 1MiB -1MiB
+#   e2label /dev/sdb1 lmi
+#   mkdir /lmi
+#   chgrp lmi /lmi
+#   echo "LABEL=lmi /srv/chroot ext4 defaults 0 0" >> /etc/fstab
+#   partprobe
+#   mount -a
+# Here, explicitly remount /srv/chroot because it was umounted above:
+mount LABEL=lmi /srv/chroot
+findmnt /srv/chroot
 
 # Suppress a nuisance: rh-based distributions provide a default
 # zsh logout file that clears the screen.
