@@ -26,10 +26,18 @@ fi
 # could be used instead for other *nix systems:
 export coefficiency="--jobs=$(nproc)"
 
+# This should be unnecessary:
 # export TZ=UCT
-export LANG=en_US.UTF-8 LC_ALL=C.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
-# It is generally preferable to do this:
-# update-locale LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
+
+# redhat-based distributions may lack 'C.UTF-8'--see:
+#   https://bugzilla.redhat.com/show_bug.cgi?id=902094
+if locale -a | grep --quiet C.UTF-8; then
+  pref_lc=C.UTF-8; else
+  pref_lc=en_US.UTF-8;
+fi
+export LANG=en_US.UTF-8 LC_ALL=$pref_lc LC_TIME=en_DK.UTF-8 LC_COLLATE=$pref_lc
+# Instead of assigning those variables, this is generally preferable:
+#   update-locale LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
 # but neither the chroot's nor the host's /etc/default/locale is
 # sourced by schroot, which strives to set as few environment
 # variables as possible.
