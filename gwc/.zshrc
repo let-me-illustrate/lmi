@@ -100,6 +100,23 @@ HISTFILE=~/.history
 setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_SPACE
 
+# Get rid of silly redhat defaults like their 1400-char $LS_COLORS.
+unset HISTCONTROL
+unset KDEDIRS
+unset LESSOPEN
+unset LS_COLORS
+unset MANPATH
+unset PERL5LIB
+unset PERL_LOCAL_LIB_ROOT
+unset PERL_MB_OPT
+unset PERL_MM_OPT
+unset QTDIR
+unset QT_GRAPHICSSYSTEM_CHECKED
+unset QTINC
+unset QTLIB
+unset QT_PLUGIN_PATH
+unset SYSTEMDIR
+
 autoload -U compinit
 compinit -u
 
