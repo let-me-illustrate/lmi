@@ -51,13 +51,12 @@ export LESSCHARSET=utf-8
 # Use vim keybindings.
 bindkey -v
 
-# This seems to be set by default:
-# bindkey '\e[3~' delete-char      # Del
-
 # Replace the default vim keybinding, to reduce astonishment.
 bindkey '^?' backward-delete-char # Backspace
 
-# Explicitly bind these--see:
+# This seems to be bound by default:
+# bindkey '\e[3~' delete-char    # Del
+# but bind these explicitly--see:
 #   https://lists.nongnu.org/archive/html/lmi/2019-10/msg00032.html
 bindkey '\e[H' beginning-of-line # Home
 bindkey '\e[F' end-of-line       # End
@@ -76,6 +75,7 @@ bindkey -M vicmd '\e[1;3C' forward-word   # Alt-right
 
 # Enable useful features that emacs mode binds by default.
 # Binding '^R' here doesn't interfere with '^R' (undo) in vicmd mode.
+# To reserve '^S' for flow control, prefer '^F' to emacs mode's '^S'.
 bindkey '^R' history-incremental-search-backward # emacs Ctrl-R
 bindkey '^F' history-incremental-search-forward  # emacs Ctrl-S
 bindkey '^G' send-break                          # emacs Ctrl-G
