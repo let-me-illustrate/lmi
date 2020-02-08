@@ -85,6 +85,10 @@ yum --assumeyes install debootstrap
 mkdir -p /srv/chroot/"${CHRTNAME}"
 debootstrap "${CODENAME}" /srv/chroot/"${CHRTNAME}" http://deb.debian.org/debian/
 
+# Make sure chroot's root directory is world-readable--see:
+#   https://lists.nongnu.org/archive/html/lmi/2020-02/msg00007.html
+chmod 0755 /srv/chroot/"${CHRTNAME}"
+
 echo Installed debian "${CODENAME}".
 
 cat >/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
