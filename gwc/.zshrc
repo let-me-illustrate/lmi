@@ -82,9 +82,9 @@ bindkey '^G' send-break                          # emacs Ctrl-G
 bindkey '\eq' push-line                          # emacs Esc-Q
 
 # Set this preemptively, even though it's reset almost immediately.
-# Otherwise, a redhat server initially shows an unwanted bash prompt
-# when zsh is started.
-prompt='%d[%?]%(!.#.$)'
+# Otherwise, a redhat server initially shows an unwanted default
+# prompt when zsh is started.
+PS1='%d[%?]%(!.#.$)'
 
 function zle-line-init zle-keymap-select {
     local local_prompt='%d[%?]%(!.#.$)'
