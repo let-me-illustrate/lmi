@@ -76,18 +76,22 @@ yum --assumeyes install ca-certificates curl nss-pem
 #yum --assumeyes install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 yum --assumeyes install epel-release
 
+# Make the about-to-be-created chroot's root directory, and files and
+# directories created under it, accessible to the "lmi" group--see:
+#   https://lists.nongnu.org/archive/html/lmi/2020-02/msg00007.html
+# et seqq.
+mkdir -p   /srv/chroot/"${CHRTNAME}"
+chgrp lmi  /srv/chroot/"${CHRTNAME}"
+chmod 2770 /srv/chroot/"${CHRTNAME}"
+umask 0007
+
 yum --assumeyes install schroot
 # To show available debootstrap scripts:
 #   ls /usr/share/debootstrap/scripts
 
 # Install a debian chroot inside this centos chroot.
 yum --assumeyes install debootstrap
-mkdir -p /srv/chroot/"${CHRTNAME}"
 debootstrap "${CODENAME}" /srv/chroot/"${CHRTNAME}" http://deb.debian.org/debian/
-
-# Make sure chroot's root directory is world-readable--see:
-#   https://lists.nongnu.org/archive/html/lmi/2020-02/msg00007.html
-chmod 0755 /srv/chroot/"${CHRTNAME}"
 
 echo Installed debian "${CODENAME}".
 
