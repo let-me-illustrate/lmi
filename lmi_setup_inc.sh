@@ -61,7 +61,7 @@ fi
 
 assert_chrooted()
 {
-if [ "$(ls -di /)" = "2 /" ]; then
+if [ -z "$SCHROOT_CHROOT_NAME" ]; then
    echo "Must be run in chroot."
    exit 1
 fi
@@ -69,7 +69,7 @@ fi
 
 assert_not_chrooted()
 {
-if [ "$(ls -di /)" != "2 /" ]; then
+if [ -n "$SCHROOT_CHROOT_NAME" ]; then
    echo "Must not be run in chroot."
    exit 1
 fi
