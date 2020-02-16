@@ -93,11 +93,11 @@ cp -a ~/.zshrc /home/"${NORMAL_USER}"/.zshrc
 chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.zshrc
 
 # Configure vim. Rather than trying to split its contents between
-# '~/.vimrc' and '/etc/vim/vimrc.local', just copy it everywhither.
+# '~/.vimrc' and '/etc/vim/vimrc.local', use '~/.vimrc' for all
+# customizations and copy that file for the normal user too.
 
 wget -N "${GIT_URL_BASE}"/gwc/.vimrc
 mv .vimrc ~
-cp -a ~/.vimrc /etc/vim/vimrc.local
 cp -a ~/.vimrc /home/"${NORMAL_USER}"/.vimrc
 chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.vimrc
 
