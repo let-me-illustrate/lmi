@@ -112,17 +112,17 @@ mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/cache_for_lmi || echo 
 mkdir -p /var/cache/"${CODENAME}"
 mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Oops."
 
-wget "${WGETFLAGS}" "${GIT_URL_BASE}"/lmi_setup_10.sh
-wget "${WGETFLAGS}" "${GIT_URL_BASE}"/lmi_setup_11.sh
-wget "${WGETFLAGS}" "${GIT_URL_BASE}"/lmi_setup_20.sh
-wget "${WGETFLAGS}" "${GIT_URL_BASE}"/lmi_setup_21.sh
-wget "${WGETFLAGS}" "${GIT_URL_BASE}"/lmi_setup_30.sh
-wget "${WGETFLAGS}" "${GIT_URL_BASE}"/lmi_setup_40.sh
-wget "${WGETFLAGS}" "${GIT_URL_BASE}"/lmi_setup_41.sh
-wget "${WGETFLAGS}" "${GIT_URL_BASE}"/lmi_setup_42.sh
-wget "${WGETFLAGS}" "${GIT_URL_BASE}"/lmi_setup_43.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_11.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_20.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_21.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_30.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_40.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_41.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_42.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_43.sh
 # Don't download this--it will have been customized locally.
-#wget "${WGETFLAGS}" "${GIT_URL_BASE}"/lmi_setup_inc.sh
+#wget -N -nv "${GIT_URL_BASE}"/lmi_setup_inc.sh
 chmod +x lmi_setup_*.sh
 
 . ./lmi_setup_inc.sh

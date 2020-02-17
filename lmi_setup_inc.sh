@@ -30,8 +30,6 @@
 
 set -vx
 
-WGETFLAGS='--timestamping --no-verbose'
-
 CODENAME=bullseye
 CHRTVER=1
 CHRTNAME=lmi_${CODENAME}_${CHRTVER}
