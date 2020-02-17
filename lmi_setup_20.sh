@@ -35,13 +35,15 @@ dpkg --add-architecture i386
 # Prevent daemons from starting in the chroot; work around an
 # 'ischroot' defect. See:
 #   https://wiki.debian.org/chroot#Configuration
+# and, for file permissions:
+#   https://lists.nongnu.org/archive/html/lmi/2020-02/msg00015.html
 
 cat >/usr/sbin/policy-rc.d <<EOF
 #!/bin/sh
 exit 101
 EOF
 
-chmod a+x /usr/sbin/policy-rc.d
+chmod 755 /usr/sbin/policy-rc.d
 
 dpkg-divert --divert /usr/bin/ischroot.debianutils --rename /usr/bin/ischroot
 ln -s /bin/true /usr/bin/ischroot
