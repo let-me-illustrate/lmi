@@ -30,6 +30,8 @@
 
 set -vx
 
+WGETFLAGS='--timestamping --no-verbose --show-progress'
+
 CODENAME=bullseye
 CHRTVER=1
 CHRTNAME=lmi_${CODENAME}_${CHRTVER}
