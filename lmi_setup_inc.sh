@@ -30,7 +30,7 @@
 
 set -vx
 
-WGETFLAGS='--timestamping --no-verbose --show-progress'
+WGETFLAGS='--timestamping --no-verbose'
 
 CODENAME=bullseye
 CHRTVER=1
