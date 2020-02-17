@@ -40,6 +40,12 @@ assert_not_chrooted
 # to update the host, and then:
 cp --dereference --preserve --recursive \
   /srv/cache_for_lmi/* /srv/chroot/${CHRTNAME}/cache_for_lmi/ || true
+# Messages like
+#  cp: '/srv/cache_for_lmi/downloads' and
+#    '/srv/chroot/lmi_bullseye_1/cache_for_lmi/downloads'
+#    are the same file
+# may arise, harmlessly, because of a mount command in an upstream
+# script.
 
 # Also copy any desired msw software into the chroot now, e.g.:
 #   cp -a /srv/chroot/some-prior-chroot/opt/xyzzy /srv/chroot/${CHRTNAME}/opt/xyzzy
