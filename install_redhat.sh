@@ -28,6 +28,9 @@ set -evx
 stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
 
+assert_su
+assert_not_chrooted
+
 # Override any too-restrictive corporate default (e.g., 077).
 umask 022
 
