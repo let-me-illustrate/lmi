@@ -93,6 +93,10 @@ debootstrap "${CODENAME}" /srv/chroot/"${CHRTNAME}" http://deb.debian.org/debian
 
 echo Installed debian "${CODENAME}".
 
+# Suppress a nuisance: debian-based distributions provide a default
+# bash logout file that clears the screen.
+sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /srv/chroot/"${CHRTNAME}"/etc/skel/.bash_logout
+
 cat >/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
 [${CHRTNAME}]
 aliases=lmi
