@@ -142,7 +142,10 @@ schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setu
 schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
 schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_43.sh
 
-cp -a /srv/chroot/${CHRTNAME}/home/"${NORMAL_USER}"/log /home/"${NORMAL_USER}"/lmi_rhlog_"$stamp0"
+# Copy log files that may be useful for tracking down problems with
+# certain commands whose output is voluminous and often uninteresting.
+cp -a /srv/chroot/${CHRTNAME}/home/"${NORMAL_USER}"/log /home/"${NORMAL_USER}"/lmi_rhlog_"${stamp0}"
+cp -a /srv/chroot/${CHRTNAME}/tmp/${CHRTNAME}-apt-get-log /home/"${NORMAL_USER}"/apt-get-log-"${stamp0}"
 
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Finished: $stamp1"
