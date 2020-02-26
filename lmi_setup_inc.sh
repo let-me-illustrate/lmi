@@ -37,9 +37,13 @@ NORMAL_USER=greg
 NORMAL_USER_UID=1000
 NORMAL_GROUP=greg
 NORMAL_GROUP_GID=1000
-GIT_URL_BASE=https://git.savannah.nongnu.org/cgit/lmi.git/plain
-# For a server that, bizarrely, blocks gnu.org but allows github.com:
-# GIT_URL_BASE=https://github.com/vadz/lmi/raw/master
+# A known corporate firewall blocks gnu.org even on a GNU/Linux
+# server, yet allows github.com:
+if curl https://git.savannah.nongnu.org:443 >/dev/null 2>&1 ; then
+  GIT_URL_BASE=https://git.savannah.nongnu.org/cgit/lmi.git/plain
+else
+  GIT_URL_BASE=https://github.com/vadz/lmi/raw/master
+fi
 
 set +vx
 
