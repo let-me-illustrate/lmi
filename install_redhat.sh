@@ -34,6 +34,23 @@ assert_not_chrooted
 # Override any too-restrictive corporate default (e.g., 077).
 umask 022
 
+# Configure some important variables dynamically.
+NORMAL_USER=$(id -un "$(logname)")
+NORMAL_USER_UID=$(id -u "$(logname)")
+NORMAL_GROUP=$(id -gn "$(logname)")
+NORMAL_GROUP_GID=$(id -g "$(logname)")
+export NORMAL_USER
+export NORMAL_USER_UID
+export NORMAL_GROUP
+export NORMAL_GROUP_GID
+# A known corporate firewall blocks gnu.org even on a GNU/Linux
+# server, yet allows github.com:
+if curl https://git.savannah.nongnu.org:443 >/dev/null 2>&1 ; then
+  GIT_URL_BASE=https://git.savannah.nongnu.org/cgit/lmi.git/plain
+else
+  GIT_URL_BASE=https://github.com/vadz/lmi/raw/master
+fi
+
 # First, destroy any chroot left by a prior run.
 grep "${CHRTNAME}" /proc/mounts | cut -f2 -d" " | xargs umount || echo "None?"
 rm -rf /srv/chroot/"${CHRTNAME}"
@@ -134,13 +151,13 @@ set -evx
 # ./lmi_setup_10.sh
 # ./lmi_setup_11.sh
 cp -a lmi_setup_*.sh /srv/chroot/${CHRTNAME}/tmp
-schroot --chroot=${CHRTNAME} --user=root --directory=/tmp ./lmi_setup_20.sh
-schroot --chroot=${CHRTNAME} --user=root --directory=/tmp ./lmi_setup_21.sh
+schroot --chroot=${CHRTNAME} --preserve-environment --user=root --directory=/tmp ./lmi_setup_20.sh
+schroot --chroot=${CHRTNAME} --preserve-environment --user=root --directory=/tmp ./lmi_setup_21.sh
 sudo -u "${NORMAL_USER}" ./lmi_setup_30.sh
-schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_40.sh
-schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_41.sh
-schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
-schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_43.sh
+schroot --chroot=${CHRTNAME} --preserve-environment --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_40.sh
+schroot --chroot=${CHRTNAME} --preserve-environment --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_41.sh
+schroot --chroot=${CHRTNAME} --preserve-environment --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
+schroot --chroot=${CHRTNAME} --preserve-environment --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_43.sh
 
 # Copy log files that may be useful for tracking down problems with
 # certain commands whose output is voluminous and often uninteresting.
