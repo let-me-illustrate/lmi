@@ -86,7 +86,7 @@ yum --assumeyes install schroot
 # To show available debootstrap scripts:
 #   ls /usr/share/debootstrap/scripts
 
-# Install a debian chroot inside this centos chroot.
+# Install a debian chroot inside this redhat chroot.
 yum --assumeyes install debootstrap
 mkdir -p /srv/chroot/"${CHRTNAME}"
 debootstrap "${CODENAME}" /srv/chroot/"${CHRTNAME}" http://deb.debian.org/debian/
