@@ -28,6 +28,9 @@ set -vx
 assert_not_su
 assert_chrooted
 
+# Kludge:
+HOME=/home/"${NORMAL_USER}"
+
 # Install lmi for wine.
 
 cd ~ || { printf 'failed: cd\n'; exit 3; }

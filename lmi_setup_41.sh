@@ -28,6 +28,9 @@ set -vx
 assert_not_su
 assert_chrooted
 
+# Kludge:
+HOME=/home/"${NORMAL_USER}"
+
 # Symlink directories used by lmi, so that both native and wine
 # builds use the same directories and can share the same
 # architecture-independent 'configurable_settings.xml'--much like the

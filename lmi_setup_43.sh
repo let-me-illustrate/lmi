@@ -28,6 +28,9 @@ set -vx
 assert_not_su
 assert_chrooted
 
+# Kludge:
+HOME=/home/"${NORMAL_USER}"
+
 # Symlink the repository's hooks/ directory:
 cd /opt/lmi/src/lmi || { printf 'failed: cd\n'; exit 3; }
 mv .git/hooks .git/hooks-orig

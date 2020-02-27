@@ -28,6 +28,9 @@ set -vx
 assert_not_su
 assert_chrooted
 
+# Kludge:
+HOME=/home/"${NORMAL_USER}"
+
 # Initialize wine. See:
 #   https://lists.nongnu.org/archive/html/lmi/2016-10/msg00002.html
 WINEDLLOVERRIDES=mscoree=d wine wineboot
