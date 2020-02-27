@@ -28,6 +28,9 @@ set -evx
 stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
 
+# Timestamp usable as a component of a portable filename.
+fstamp=$(date -u +"%Y%m%dT%H%MZ" -d "$stamp0")
+
 assert_su
 assert_not_chrooted
 
@@ -162,8 +165,8 @@ schroot --chroot=${CHRTNAME} --preserve-environment --user="${NORMAL_USER}" --di
 
 # Copy log files that may be useful for tracking down problems with
 # certain commands whose output is voluminous and often uninteresting.
-cp -a /srv/chroot/${CHRTNAME}/home/"${NORMAL_USER}"/log /home/"${NORMAL_USER}"/lmi_rhlog_"${stamp0}"
-cp -a /srv/chroot/${CHRTNAME}/tmp/${CHRTNAME}-apt-get-log /home/"${NORMAL_USER}"/apt-get-log-"${stamp0}"
+cp -a /srv/chroot/${CHRTNAME}/home/"${NORMAL_USER}"/log /home/"${NORMAL_USER}"/lmi_rhlog_"${fstamp}"
+cp -a /srv/chroot/${CHRTNAME}/tmp/${CHRTNAME}-apt-get-log /home/"${NORMAL_USER}"/apt-get-log-"${fstamp}"
 
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Finished: $stamp1"
