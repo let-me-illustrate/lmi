@@ -35,14 +35,15 @@ assert_not_chrooted
 umask 022
 
 # Configure some important variables dynamically.
-NORMAL_USER=$(id -un "$(logname)")
-NORMAL_USER_UID=$(id -u "$(logname)")
-NORMAL_GROUP=$(id -gn "$(logname)")
-NORMAL_GROUP_GID=$(id -g "$(logname)")
 export NORMAL_USER
 export NORMAL_USER_UID
 export NORMAL_GROUP
 export NORMAL_GROUP_GID
+export GIT_URL_BASE
+NORMAL_USER=$(id -un "$(logname)")
+NORMAL_USER_UID=$(id -u "$(logname)")
+NORMAL_GROUP=$(id -gn "$(logname)")
+NORMAL_GROUP_GID=$(id -g "$(logname)")
 # A known corporate firewall blocks gnu.org even on a GNU/Linux
 # server, yet allows github.com:
 if curl https://git.savannah.nongnu.org:443 >/dev/null 2>&1 ; then
