@@ -16,7 +16,7 @@ export PATH="$MINIMAL_PATH"
 export DISPLAY=":0.0"
 
 if [ "$(umask)" -ne 022 ]; then
-  printf "Overriding bogus umask %s\n", "$(umask)"
+  printf "Overriding bogus umask %s\n" "$(umask)"
   umask 022
 fi
 
