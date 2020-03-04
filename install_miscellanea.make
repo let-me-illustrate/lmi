@@ -86,7 +86,6 @@ $(xmlwrapp_archive)-md5 := 5e8ac678ab03b7c60ce61ac5424e0849
 
 # Utilities ####################################################################
 
-CHMOD  := chmod
 CP     := cp
 DIFF   := diff
 ECHO   := echo
@@ -274,7 +273,6 @@ WGETFLAGS := --no-check-certificate --no-verbose
 %.exe:
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
 	$(ECHO) "$($@-md5) *$(cache_dir)/$@" | $(MD5SUM) --check
-	$(CHMOD) 750 $(cache_dir)/$@
 
 .PHONY: %.zip
 %.zip:
