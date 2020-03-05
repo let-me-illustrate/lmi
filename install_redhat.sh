@@ -21,15 +21,10 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-. ./lmi_setup_inc.sh
-
 set -evx
 
 stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
-
-assert_su
-assert_not_chrooted
 
 # Override any too-restrictive corporate default (e.g., 077).
 umask 022
@@ -51,6 +46,25 @@ if curl https://git.savannah.nongnu.org:443 >/dev/null 2>&1 ; then
 else
   GIT_URL_BASE=https://github.com/vadz/lmi/raw/master
 fi
+
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_11.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_20.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_21.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_30.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_40.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_41.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_42.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_43.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_inc.sh
+chmod +x lmi_setup_*.sh
+
+. ./lmi_setup_inc.sh
+
+set -evx
+
+assert_su
+assert_not_chrooted
 
 # First, destroy any chroot left by a prior run.
 grep "${CHRTNAME}" /proc/mounts | cut -f2 -d" " | xargs umount || echo "None?"
@@ -131,23 +145,6 @@ mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/cache_for_lmi || echo 
 
 mkdir -p /var/cache/"${CODENAME}"
 mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Oops."
-
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_11.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_20.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_21.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_30.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_40.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_41.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_42.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_43.sh
-# Don't download this--it will have been customized locally.
-#wget -N -nv "${GIT_URL_BASE}"/lmi_setup_inc.sh
-chmod +x lmi_setup_*.sh
-
-. ./lmi_setup_inc.sh
-
-set -evx
 
 # ./lmi_setup_10.sh
 # ./lmi_setup_11.sh
