@@ -152,9 +152,9 @@ set -evx
 # ./lmi_setup_10.sh
 # ./lmi_setup_11.sh
 cp -a lmi_setup_*.sh /srv/chroot/${CHRTNAME}/tmp
-schroot --chroot=${CHRTNAME} --preserve-environment --user=root --directory=/tmp ./lmi_setup_20.sh
-schroot --chroot=${CHRTNAME} --preserve-environment --user=root --directory=/tmp ./lmi_setup_21.sh
-sudo -E -u "${NORMAL_USER}" ./lmi_setup_30.sh
+schroot --chroot=${CHRTNAME} --preserve-environment --user=root             --directory=/tmp ./lmi_setup_20.sh
+schroot --chroot=${CHRTNAME} --preserve-environment --user=root             --directory=/tmp ./lmi_setup_21.sh
+sudo                         --preserve-env         --user="${NORMAL_USER}"                  ./lmi_setup_30.sh
 schroot --chroot=${CHRTNAME} --preserve-environment --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_40.sh
 schroot --chroot=${CHRTNAME} --preserve-environment --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_41.sh
 schroot --chroot=${CHRTNAME} --preserve-environment --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
