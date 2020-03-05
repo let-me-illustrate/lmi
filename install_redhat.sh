@@ -57,7 +57,7 @@ wget -N -nv "${GIT_URL_BASE}"/lmi_setup_41.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_42.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_43.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_inc.sh
-chmod +x lmi_setup_*.sh
+chmod 0777 lmi_setup_*.sh
 
 . ./lmi_setup_inc.sh
 
