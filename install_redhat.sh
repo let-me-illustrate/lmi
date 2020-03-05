@@ -156,7 +156,7 @@ cat >/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
 aliases=lmi
 description=debian ${CODENAME} cross build ${CHRTVER}
 directory=/srv/chroot/${CHRTNAME}
-users=${NORMAL_USER}
+users=${CHROOT_USERS}
 groups=${NORMAL_GROUP}
 root-groups=root
 type=plain
