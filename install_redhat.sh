@@ -27,7 +27,10 @@ stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
 
 # Override any too-restrictive corporate default (e.g., 077).
-umask 022
+if [ "$(umask)" -ne 022 ]; then
+  printf "Overriding bogus umask %s\n" "$(umask)"
+  umask 022
+fi
 
 # Configure some important variables dynamically.
 export NORMAL_USER
