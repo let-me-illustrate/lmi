@@ -22,14 +22,12 @@
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 . ./lmi_setup_inc.sh
+. /tmp/schroot_env
 
 set -vx
 
 assert_not_su
 assert_chrooted
-
-# Kludge:
-HOME=/home/"${NORMAL_USER}"
 
 # Symlink the repository's hooks/ directory:
 cd /opt/lmi/src/lmi || { printf 'failed: cd\n'; exit 3; }

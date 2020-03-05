@@ -32,16 +32,6 @@ if [ "$(umask)" -ne 022 ]; then
   umask 022
 fi
 
-# Configure some important variables dynamically.
-export NORMAL_USER
-export NORMAL_USER_UID
-export NORMAL_GROUP
-export NORMAL_GROUP_GID
-export GIT_URL_BASE
-NORMAL_USER=$(id -un "$(logname)")
-NORMAL_USER_UID=$(id -u "$(logname)")
-NORMAL_GROUP=$(id -gn "$(logname)")
-NORMAL_GROUP_GID=$(id -g "$(logname)")
 # A known corporate firewall blocks gnu.org even on a GNU/Linux
 # server, yet allows github.com:
 if curl https://git.savannah.nongnu.org:443 >/dev/null 2>&1 ; then
@@ -132,6 +122,33 @@ echo Installed debian "${CODENAME}".
 # bash logout file that clears the screen.
 sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /srv/chroot/"${CHRTNAME}"/etc/skel/.bash_logout
 
+# Store dynamic configuration in a temporary file. This method is
+# simple and robust, and far better than trying to pass environment
+# variables across sudo and schroot barriers.
+
+       NORMAL_USER=$(id -un "$(logname)")
+   NORMAL_USER_UID=$(id -u  "$(logname)")
+
+if getent group lmi; then
+      NORMAL_GROUP=lmi
+  NORMAL_GROUP_GID=$(getent group "$(NORMAL_GROUP)" | cut -d: -f3)
+      CHROOT_USERS=$(getent group "$(NORMAL_GROUP)" | cut -d: -f4)
+else
+      NORMAL_GROUP=$(id -gn "$(logname)")
+  NORMAL_GROUP_GID=$(id -g  "$(logname)")
+      CHROOT_USERS=$(id -un "$(logname)")
+fi
+
+cat >/tmp/schroot_env <<EOF
+    CHROOT_USERS=$CHROOT_USERS
+    GIT_URL_BASE=$GIT_URL_BASE
+    NORMAL_GROUP=$NORMAL_GROUP
+NORMAL_GROUP_GID=$NORMAL_GROUP_GID
+     NORMAL_USER=$NORMAL_USER
+ NORMAL_USER_UID=$NORMAL_USER_UID
+EOF
+chmod 0666 /tmp/schroot_env
+
 cat >/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
 [${CHRTNAME}]
 aliases=lmi
@@ -151,14 +168,14 @@ mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/ar
 
 # ./lmi_setup_10.sh
 # ./lmi_setup_11.sh
-cp -a lmi_setup_*.sh /srv/chroot/${CHRTNAME}/tmp
-schroot --chroot=${CHRTNAME} --preserve-environment --user=root             --directory=/tmp ./lmi_setup_20.sh
-schroot --chroot=${CHRTNAME} --preserve-environment --user=root             --directory=/tmp ./lmi_setup_21.sh
-sudo                         --preserve-env         --user="${NORMAL_USER}"                  ./lmi_setup_30.sh
-schroot --chroot=${CHRTNAME} --preserve-environment --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_40.sh
-schroot --chroot=${CHRTNAME} --preserve-environment --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_41.sh
-schroot --chroot=${CHRTNAME} --preserve-environment --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
-schroot --chroot=${CHRTNAME} --preserve-environment --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_43.sh
+cp -a lmi_setup_*.sh /tmp/schroot_env /srv/chroot/${CHRTNAME}/tmp
+schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_20.sh
+schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_21.sh
+sudo                         --user="${NORMAL_USER}"                  ./lmi_setup_30.sh
+schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_40.sh
+schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_41.sh
+schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
+schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_43.sh
 
 # Copy log files that may be useful for tracking down problems with
 # certain commands whose output is voluminous and often uninteresting.

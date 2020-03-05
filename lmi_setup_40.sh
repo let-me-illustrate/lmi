@@ -22,14 +22,12 @@
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 . ./lmi_setup_inc.sh
+. /tmp/schroot_env
 
 set -vx
 
 assert_not_su
 assert_chrooted
-
-# Kludge:
-HOME=/home/"${NORMAL_USER}"
 
 # Initialize wine. See:
 #   https://lists.nongnu.org/archive/html/lmi/2016-10/msg00002.html

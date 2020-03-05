@@ -22,14 +22,12 @@
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 . ./lmi_setup_inc.sh
+. /tmp/schroot_env
 
 set -vx
 
 assert_not_su
 assert_not_chrooted
-
-# Kludge:
-HOME=/home/"${NORMAL_USER}"
 
 # If cached lmi downloads are available elsewhere, copy them now.
 # Copying cache_for_lmi/downloads/ is an optional step that merely

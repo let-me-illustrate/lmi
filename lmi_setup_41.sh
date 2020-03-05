@@ -22,14 +22,12 @@
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 . ./lmi_setup_inc.sh
+. /tmp/schroot_env
 
 set -vx
 
 assert_not_su
 assert_chrooted
-
-# Kludge:
-HOME=/home/"${NORMAL_USER}"
 
 # Symlink directories used by lmi, so that both native and wine
 # builds use the same directories and can share the same
