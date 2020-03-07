@@ -159,6 +159,7 @@ directory=/srv/chroot/${CHRTNAME}
 users=${CHROOT_USERS}
 groups=${NORMAL_GROUP}
 root-groups=root
+shell=/bin/zsh
 type=plain
 EOF
 

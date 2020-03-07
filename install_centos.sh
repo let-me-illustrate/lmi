@@ -40,6 +40,7 @@ directory=/srv/chroot/centos7lmi
 users=${NORMAL_USER}
 groups=${NORMAL_GROUP}
 root-groups=root
+shell=/bin/zsh
 type=plain
 EOF
 
@@ -138,6 +139,7 @@ directory=/srv/chroot/${CHRTNAME}
 users=${NORMAL_USER}
 groups=${NORMAL_GROUP}
 root-groups=root
+shell=/bin/zsh
 type=plain
 EOF
 
