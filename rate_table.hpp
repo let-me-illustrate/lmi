@@ -30,6 +30,7 @@
 #include <cstdint>
 #include <iosfwd>
 #include <memory>                       // shared_ptr
+#include <ostream>
 #include <string>
 #include <vector>
 
