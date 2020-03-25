@@ -461,7 +461,7 @@ void InterestRates::InitializeGeneralAccountRates()
             (spread[mce_gen_curr].begin()
             ,spread[mce_gen_curr].end()
             ,spread[mce_gen_curr].begin()
-            ,std::bind2nd(std::minus<double>(), spread[mce_gen_curr].front())
+            ,[&spread](double x) { return x - spread[mce_gen_curr].front(); }
             );
         // ET !! spread[mce_gen_mdpt] = 0.5 * spread[mce_gen_curr];
         // ...but writing it that way makes it look wrong.
@@ -469,7 +469,7 @@ void InterestRates::InitializeGeneralAccountRates()
             (spread[mce_gen_curr].begin()
             ,spread[mce_gen_curr].end()
             ,spread[mce_gen_mdpt].begin()
-            ,std::bind1st(std::multiplies<double>(), 0.5)
+            ,[](double x) { return 0.5*x; }
             );
         }
     else
@@ -571,7 +571,7 @@ void InterestRates::InitializeSeparateAccountRates()
                 (total_charges[j].begin()
                 ,total_charges[j].end()
                 ,total_charges[j].begin()
-                ,std::bind2nd(std::minus<double>(), total_charges[j].front())
+                ,[&total_charges, j](double x) { return x - total_charges[j].front(); }
                 );
             }
         fee = 0.0;
@@ -587,7 +587,7 @@ void InterestRates::InitializeSeparateAccountRates()
         (SepAcctGrossRate_[mce_sep_full].begin()
         ,SepAcctGrossRate_[mce_sep_full].end()
         ,std::back_inserter(SepAcctGrossRate_[mce_sep_half])
-        ,std::bind1st(std::multiplies<double>(), 0.5)
+        ,[](double x) { return 0.5*x; }
         );
 
     for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
@@ -1021,7 +1021,12 @@ void InterestRates::Initialize7702Rates()
 
     MlyGlpRate_.resize(Length_);
     // ET !! MlyGlpRate_ = max(0.04, annual_guar_rate);
-    std::transform(annual_guar_rate.begin(), annual_guar_rate.end(), MlyGlpRate_.begin(), std::bind1st(greater_of<double>(), 0.04));
+    std::transform
+        (annual_guar_rate.begin()
+        ,annual_guar_rate.end()
+        ,MlyGlpRate_.begin()
+        ,[](double x) { return std::max(0.04, x); }
+        );
     // ET !! This ought to be implicit, at least in some 'safe' mode:
     LMI_ASSERT(MlyGlpRate_.size() == SpreadFor7702_.size());
     // ET !! MlyGlpRate_ = i_upper_12_over_12_from_i(MlyGlpRate_ - SpreadFor7702_);
