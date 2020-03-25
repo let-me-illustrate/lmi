@@ -463,11 +463,18 @@ void test_m64_neighborhood()
     // unsigned integer is UB.
 
     unsigned long long int const ull_max = ull_traits::max();
+#if defined __clang__
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wimplicit-int-float-conversion"
+#endif // defined __clang__
 #if defined __GNUC__
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wfloat-conversion"
 #endif // defined __GNUC__
     float const f_ull_max = ull_max;
+#if defined __clang__
+#   pragma clang diagnostic pop
+#endif // defined __clang__
 #if defined __GNUC__
 #   pragma GCC diagnostic pop
 #endif // defined __GNUC__
