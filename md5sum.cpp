@@ -54,7 +54,7 @@ std::vector<md5sum_for_file> md5_read_checksum_stream
         ++line_number;
 
         // The minimal length: 32(md5sum) + 2(spaces) + 1(shortest file name)
-        size_t const minimal_line_length = 35;
+        std::size_t const minimal_line_length = 35;
 
         // Ignore comment lines, which begin with a '#' character.
         // Empty lines are not allowed.
