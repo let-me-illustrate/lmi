@@ -42,8 +42,7 @@
 #include <vector>
 
 // TODO ?? Known security hole: data files can be modified after they
-// have been validated with 'md5sum'. This problem will grow worse
-// when the binary database files are replaced with xml.
+// have been validated.
 
 Authenticity& Authenticity::Instance()
 {
