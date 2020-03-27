@@ -167,7 +167,7 @@ std::string md5_calculate_stream_checksum
         }
 
     // Add the last bytes if necessary.
-    if(read_count > 0)
+    if(0 < read_count)
         {
         // Note that we have to use md5_process_bytes() and not the faster
         // md5_process_block() here because the read_count is not necessarily
