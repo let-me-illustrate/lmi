@@ -64,13 +64,10 @@ char const* test_text_checksum = test_bin_checksum;
 
 char const* md5sums_filename = "md5_sums";
 
-// TODO: Ignore asterisk character in strings while processing a code with
-// `test_coding_rules` utility to not generate "should fuse '*' with type"
-// warning.
-// Use the '\x2a' esqape sequence to workaround the issue mentioned above.
+// Doubled '""': avoid "should fuse '*' with type" warning.
 std::string const md5sums_text =
     "00112233445566778899aabbccddeeff  test.txt\n"
-    "ffeeddccbbaa99887766554433221100 \x2atest.bin\n"
+    "ffeeddccbbaa99887766554433221100 *""test.bin\n"
     ;
 
 }
