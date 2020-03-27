@@ -23,7 +23,6 @@
 #define md5sum_hpp
 
 #include "config.hpp"
-#include "so_attributes.hpp"
 
 #include <boost/filesystem/path.hpp>
 
@@ -77,7 +76,7 @@ struct md5sum_for_file
 ///
 /// The stream_description parameter is only used in exceptions messages.
 
-std::vector<md5sum_for_file> LMI_SO md5_read_checksum_stream
+std::vector<md5sum_for_file> md5_read_checksum_stream
     (std::istream     & is
     ,std::string const& stream_description
     );
@@ -88,7 +87,7 @@ std::vector<md5sum_for_file> LMI_SO md5_read_checksum_stream
 ///
 /// Uses md5_read_checksum_stream to read the content of the file.
 
-std::vector<md5sum_for_file> LMI_SO md5_read_checksum_file
+std::vector<md5sum_for_file> md5_read_checksum_file
     (fs::path const& filename
     );
 
@@ -96,7 +95,7 @@ std::vector<md5sum_for_file> LMI_SO md5_read_checksum_file
 ///
 /// Throws an std::runtime_error in case of an error.
 
-std::string LMI_SO md5_calculate_stream_checksum
+std::string md5_calculate_stream_checksum
     (std::istream     & is
     ,std::string const& stream_description
     );
@@ -105,13 +104,13 @@ std::string LMI_SO md5_calculate_stream_checksum
 ///
 /// Throws an std::runtime_error in case of an error.
 
-std::string LMI_SO md5_calculate_file_checksum
+std::string md5_calculate_file_checksum
     (fs::path const& filename
     ,md5_file_mode   file_mode = md5_file_mode::binary
     );
 
 /// Hex representation of an md5 sum as a string.
 
-std::string LMI_SO md5_hex_string(std::vector<unsigned char> const&);
+std::string md5_hex_string(std::vector<unsigned char> const&);
 
 #endif // md5sum_hpp

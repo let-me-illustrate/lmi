@@ -181,7 +181,7 @@ std::string md5_calculate_stream_checksum
     return md5_hex_string(md5);
 }
 
-std::string LMI_SO md5_calculate_file_checksum
+std::string md5_calculate_file_checksum
     (fs::path const& filename
     ,md5_file_mode   file_mode
     )
