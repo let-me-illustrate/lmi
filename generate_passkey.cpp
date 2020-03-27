@@ -19,10 +19,10 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#include "authenticity.hpp"       // md5sum_file()
+#include "authenticity.hpp"             // md5sum_file()
 #include "main_common.hpp"
-#include "md5.hpp"
-#include "md5sum.hpp"             // md5_hex_string()
+#include "md5.hpp"                      // md5_buffer(), md5_stream()
+#include "md5sum.hpp"                   // md5_hex_string()
 
 #include <cstdio>
 #include <cstdlib>

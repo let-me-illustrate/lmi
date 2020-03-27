@@ -25,7 +25,10 @@
 #include "main_common.hpp"
 #include "md5sum.hpp"
 
+#include <cstdio>                       // fflush()
 #include <iostream>
+#include <stdexcept>
+#include <string>
 
 int usage(int status)
 {

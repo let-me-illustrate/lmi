@@ -21,21 +21,18 @@
 
 #include "pchfile.hpp"
 
-#include "assert_lmi.hpp"
-#include "contains.hpp"
 #include "md5sum.hpp"
-#include "miscellany.hpp"
-#include "system_command.hpp"
 #include "test_tools.hpp"
 
-#include <boost/filesystem/convenience.hpp> // basename()
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/operations.hpp> // fs::exists()
 #include <boost/filesystem/path.hpp>
 
-#include <cstdio>
-#include <cstring>                      // memcpy(), strlen()
+#include <cstdio>                       // remove()
 #include <fstream>
+#include <ios>                          // ios_base
+#include <ostream>
+#include <sstream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 

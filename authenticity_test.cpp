@@ -32,11 +32,10 @@
 #include "test_tools.hpp"
 
 #include <boost/filesystem/convenience.hpp> // basename()
-#include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <cstdio>
+#include <cstdio>                       // remove()
 #include <cstring>                      // memcpy(), strlen()
 #include <fstream>
 #include <string>

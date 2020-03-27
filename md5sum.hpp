@@ -28,7 +28,9 @@
 #include <boost/filesystem/path.hpp>
 
 #include <climits>                      // CHAR_BIT
+#include <iosfwd>
 #include <string>
+#include <utility>                      // move()
 #include <vector>
 
 // The gnu libc md5 implementation seems to assume this:

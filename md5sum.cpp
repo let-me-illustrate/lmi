@@ -24,10 +24,14 @@
 #include "assert_lmi.hpp"
 #include "md5.hpp"
 #include "md5sum.hpp"
-#include "miscellany.hpp"
 
+#include <cstddef>                      // size_t
 #include <fstream>
-#include <memory>
+#include <iomanip>                      // hex, setfill(), setw()
+#include <ios>                          // ios_base, streamsize
+#include <istream>
+#include <sstream>
+#include <stdexcept>
 
 std::vector<md5sum_for_file> md5_read_checksum_stream
     (std::istream& is

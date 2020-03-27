@@ -24,15 +24,12 @@
 #include "authenticity.hpp"
 
 #include "alert.hpp"
-#include "assert_lmi.hpp"
 #include "calendar_date.hpp"
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
 #include "md5.hpp"
 #include "md5sum.hpp"
 #include "path_utility.hpp"             // fs::path inserter
-#include "platform_dependent.hpp"       // chdir()
-#include "system_command.hpp"
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -40,8 +37,9 @@
 #include <cstdio>                       // fclose(), fopen()
 #include <cstdlib>                      // exit(), EXIT_FAILURE
 #include <cstring>                      // memcpy()
-#include <iomanip>
 #include <sstream>
+#include <stdexcept>
+#include <vector>
 
 // TODO ?? Known security hole: data files can be modified after they
 // have been validated with 'md5sum'. This problem will grow worse
