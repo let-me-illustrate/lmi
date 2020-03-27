@@ -80,7 +80,7 @@ std::ostream& operator<<(std::ostream& os, std::vector<md5sum_for_file> const& v
     for(auto const& s : v)
         {
         char delimiter;
-        switch (s.file_mode)
+        switch(s.file_mode)
             {
             case md5_file_mode::binary:
                 delimiter = '*';
@@ -122,10 +122,10 @@ class MD5SumTest
   private:
     void RemoveTestFilesIfNecessary(char const* file, int line) const;
     void WriteAndCheckFile
-        (char const* filename
+        (char const*        filename
         ,std::string const& text
-        ,char const* file
-        ,int line
+        ,char const*        file
+        ,int                line
         ) const;
 
     void InitializeTestFile() const;
@@ -283,10 +283,10 @@ void MD5SumTest::RemoveTestFilesIfNecessary(char const* file, int line) const
 /// Read the file back after the writing and check the content.
 
 void MD5SumTest::WriteAndCheckFile
-    (char const* filename
+    (char const*        filename
     ,std::string const& text
-    ,char const* file
-    ,int line
+    ,char const*        file
+    ,int                line
     ) const
 {
     std::ofstream os{filename, ios_out_trunc_binary()};

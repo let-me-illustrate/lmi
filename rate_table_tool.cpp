@@ -494,7 +494,7 @@ int try_main(int argc, char* argv[])
 
     while(EOF != (c = getopt_long ()))
       {
-        switch (c)
+        switch(c)
           {
           case 'a':
             {

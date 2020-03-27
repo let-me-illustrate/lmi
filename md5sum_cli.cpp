@@ -131,7 +131,7 @@ int try_main(int argc, char* argv[])
 
     while(EOF != (c = getopt_long ()))
         {
-        switch (c)
+        switch(c)
             {
             case 'b':
                 have_input_mode_option = true;

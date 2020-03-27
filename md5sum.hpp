@@ -36,9 +36,9 @@
 // The gnu libc md5 implementation seems to assume this:
 static_assert(8 == CHAR_BIT || 16 == CHAR_BIT);
 // so md5 output is 128 bits == 16 8-bit bytes or 8 16-bit bytes:
-enum { md5len = 128 / CHAR_BIT };
+enum {md5len = 128 / CHAR_BIT};
 
-enum { chars_per_formatted_hex_byte = CHAR_BIT / 4 };
+enum {chars_per_formatted_hex_byte = CHAR_BIT / 4};
 
 enum class md5_file_mode
 {
@@ -49,8 +49,8 @@ enum class md5_file_mode
 struct md5sum_for_file
 {
     md5sum_for_file(fs::path&& path, std::string&& sum, md5_file_mode mode)
-        :filename{std::move(path)}
-        ,md5sum{std::move(sum)}
+        :filename {std::move(path)}
+        ,md5sum   {std::move(sum)}
         ,file_mode{mode}
     {}
 
@@ -78,7 +78,7 @@ struct md5sum_for_file
 /// The stream_description parameter is only used in exceptions messages.
 
 std::vector<md5sum_for_file> LMI_SO md5_read_checksum_stream
-    (std::istream& is
+    (std::istream     & is
     ,std::string const& stream_description
     );
 
@@ -97,7 +97,7 @@ std::vector<md5sum_for_file> LMI_SO md5_read_checksum_file
 /// Throws an std::runtime_error in case of an error.
 
 std::string LMI_SO md5_calculate_stream_checksum
-    (std::istream& is
+    (std::istream     & is
     ,std::string const& stream_description
     );
 
@@ -107,7 +107,7 @@ std::string LMI_SO md5_calculate_stream_checksum
 
 std::string LMI_SO md5_calculate_file_checksum
     (fs::path const& filename
-    ,md5_file_mode file_mode = md5_file_mode::binary
+    ,md5_file_mode   file_mode = md5_file_mode::binary
     );
 
 /// Hex representation of an md5 sum as a string.

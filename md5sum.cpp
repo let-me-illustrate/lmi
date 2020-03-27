@@ -34,7 +34,7 @@
 #include <stdexcept>
 
 std::vector<md5sum_for_file> md5_read_checksum_stream
-    (std::istream& is
+    (std::istream     & is
     ,std::string const& stream_description
     )
 {
@@ -119,7 +119,7 @@ std::vector<md5sum_for_file> md5_read_checksum_file(fs::path const& filename)
 }
 
 std::string md5_calculate_stream_checksum
-    (std::istream& is
+    (std::istream     & is
     ,std::string const& stream_description
     )
 {
@@ -145,7 +145,7 @@ std::string md5_calculate_stream_checksum
         read_count = is.gcount();
 
         // If end of file is reached, end the loop.
-        if (is.eof())
+        if(is.eof())
             {
             break;
             }
@@ -183,7 +183,7 @@ std::string md5_calculate_stream_checksum
 
 std::string LMI_SO md5_calculate_file_checksum
     (fs::path const& filename
-    ,md5_file_mode file_mode
+    ,md5_file_mode   file_mode
     )
 {
     auto const filename_string = filename.string();
@@ -191,7 +191,7 @@ std::string LMI_SO md5_calculate_file_checksum
     std::vector<unsigned char> md5(md5len);
 
     std::ios_base::openmode open_mode{std::ios_base::in};
-    switch (file_mode)
+    switch(file_mode)
         {
         case md5_file_mode::binary:
             open_mode |= std::ios_base::binary;
