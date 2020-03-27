@@ -1,4 +1,4 @@
-// Limited functionality variant of GNU `md5sum` program.
+// Limited functionality variant of GNU 'md5sum' program.
 //
 // Copyright (C) 2020 Gregory W. Chicares.
 //

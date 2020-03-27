@@ -1362,7 +1362,7 @@ double Irc7702A::SAIncreaseToAvoidMec(bool a_TriggeredByUnnecPrem)
  *         GPT:
  *             whenever GP limit increases
  *             upon any ROP increase
- *                 doesn`t that increase the GP limit?
+ *                 doesn't that increase the GP limit?
  *         CVAT:
  *             whenever unnec prem paid
  *             upon any elected Bfts increase
