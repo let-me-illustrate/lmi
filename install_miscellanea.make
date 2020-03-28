@@ -37,7 +37,6 @@ dest_dir := $(prefix)/third_party
 
 ad_hoc_dir := $(dest_dir)/ad_hoc
 
-third_party_bin_dir     := $(dest_dir)/bin
 third_party_include_dir := $(dest_dir)/include
 third_party_lib_dir     := $(dest_dir)/lib
 third_party_source_dir  := $(dest_dir)/src
@@ -223,7 +222,6 @@ initial_setup:
 	$(MKDIR) --parents $(cache_dir)
 	$(MKDIR) --parents $(dest_dir)
 	$(MKDIR) --parents $(ad_hoc_dir)
-	$(MKDIR) $(third_party_bin_dir)
 	$(MKDIR) $(third_party_include_dir)
 	$(MKDIR) $(third_party_lib_dir)
 	$(MKDIR) $(third_party_source_dir)
