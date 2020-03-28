@@ -45,7 +45,9 @@ int test_main(int, char*[])
         (system_command("lmi_md5sum --check --status eraseme")
         ,std::runtime_error
         ,lmi_test::what_regex
-            ("Exit code [0-9]* from command 'lmi_md5sum --check --status eraseme'.")
+            ("Exit code [0-9]* from command"
+             " 'lmi_md5sum --check --status eraseme'."
+            )
         );
 
 #if !defined LMI_MSW
