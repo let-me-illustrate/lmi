@@ -530,6 +530,7 @@ assert_lmi_test$(EXEEXT): \
   $(common_test_objects) \
   assert_lmi_test.o \
 
+# MD5 !! Remove "timer.o" below.
 authenticity_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
@@ -544,6 +545,7 @@ authenticity_test$(EXEEXT): \
   path_utility.o \
   system_command.o \
   system_command_non_wx.o \
+  timer.o \
 
 bourn_cast_test$(EXEEXT): \
   $(common_test_objects) \
@@ -1100,6 +1102,7 @@ lmi_md5sum$(EXEEXT): \
   md5sum.o \
   md5sum_cli.o \
 
+# MD5 !! Remove "timer.o" below.
 generate_passkey$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(main_auxiliary_common_objects) \
@@ -1114,6 +1117,7 @@ generate_passkey$(EXEEXT): \
   path_utility.o \
   system_command.o \
   system_command_non_wx.o \
+  timer.o \
 
 ihs_crc_comp$(EXEEXT): \
   $(main_auxiliary_common_objects) \

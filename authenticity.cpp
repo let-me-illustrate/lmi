@@ -25,11 +25,15 @@
 
 #include "alert.hpp"
 #include "calendar_date.hpp"
+#include "contains.hpp"
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
 #include "md5.hpp"
 #include "md5sum.hpp"
 #include "path_utility.hpp"             // fs::path inserter
+#include "platform_dependent.hpp"       // chdir()
+#include "system_command.hpp"
+#include "timer.hpp"
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -37,6 +41,7 @@
 #include <cstdio>                       // fclose(), fopen()
 #include <cstdlib>                      // exit(), EXIT_FAILURE
 #include <cstring>                      // memcpy()
+#include <iostream>                     // cout, endl
 #include <sstream>
 #include <stdexcept>
 #include <vector>
@@ -69,11 +74,14 @@ std::string Authenticity::Assay
     ,fs::path const&      data_path
     )
 {
+    Timer timer;
+
     // The cached date is valid unless it's the peremptorily-invalid
     // default value of JDN zero.
     if
         (  calendar_date(jdn_t(0)) != Instance().CachedDate_
         && candidate               == Instance().CachedDate_
+        && !contains(global_settings::instance().pyx(), "measure_md5")
         )
         {
         return "cached";
@@ -240,6 +248,65 @@ std::string Authenticity::Assay
         }
     // Cache the validated date.
     Instance().CachedDate_ = candidate;
+
+    std::cout << "Assay: production " << timer.stop().elapsed_msec_str() << std::endl;
+
+    // MD5 !! Revert "measure_md5" instrumentation soon.
+  if(contains(global_settings::instance().pyx(), "measure_md5"))
+    {
+    try
+        {
+        timer.restart();
+        fs::path original_path(fs::current_path());
+        if(0 != chdir(data_path.string().c_str()))
+            {
+            oss
+                << "Unable to change directory to '"
+                << data_path
+                << "'. Try reinstalling."
+                ;
+            return oss.str();
+            }
+        system_command("md5sum --check --status " + (data_path / md5sum_file()).string());
+        if(0 != chdir(original_path.string().c_str()))
+            {
+            oss
+                << "Unable to restore directory to '"
+                << original_path
+                << "'. Try reinstalling."
+                ;
+            return oss.str();
+            }
+        std::cout << "Assay: external program " << timer.stop().elapsed_msec_str() << std::endl;
+
+        timer.restart();
+        auto const sums = md5_read_checksum_file(data_path / md5sum_file());
+        for(auto const& s : sums)
+            {
+            auto const file_path = data_path / s.filename;
+            auto const md5 = md5_calculate_file_checksum
+                (data_path / s.filename
+                ,s.file_mode
+                );
+            if(md5 != s.md5sum)
+                {
+                    throw std::runtime_error
+                        ( "Integrity check failed for '"
+                        + s.filename.string()
+                        + "'"
+                        );
+                }
+            }
+        std::cout << "Assay: internal " << timer.stop().elapsed_msec_str() << std::endl;
+        }
+    catch(...)
+        {
+        report_exception();
+        oss << "Failure in time measurements.";
+        return oss.str();
+        }
+    }
+
     return "validated";
 }
 
