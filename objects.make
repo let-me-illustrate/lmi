@@ -1094,6 +1094,10 @@ elapsed_time$(EXEEXT): \
   system_command_non_wx.o \
   timer.o \
 
+# Copy this binary to the local bin directory, so that it's available
+# for 'authenticity_test' and 'system_command_test'.
+# MD5 !! Obviate this by rewriting those unit tests.
+lmi_md5sum$(EXEEXT): POST_LINK_COMMAND = $(CP) --preserve $@ $(localbindir)
 lmi_md5sum$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(main_auxiliary_common_objects) \

@@ -1076,7 +1076,6 @@ ifeq (,$(USE_SO_ATTRIBUTES))
 else
 	@$(ECHO) "Can't build product_files$(EXEEXT) with USE_SO_ATTRIBUTES."
 endif
-	@$(CP) --preserve lmi_md5sum$(EXEEXT) $(prefix)/third_party/bin
 
 ################################################################################
 
@@ -1165,6 +1164,7 @@ fardel_binaries := \
   $(bindir)/wx_test$(EXEEXT) \
   $(wildcard $(localbindir)/*$(SHREXT)) \
   $(wildcard $(locallibdir)/*$(SHREXT)) \
+  $(wildcard $(bindir)/lmi_md5sum$(EXEEXT)) \
   $(wildcard $(bindir)/product_files$(EXEEXT)) \
   $(extra_fardel_binaries) \
 
@@ -1176,6 +1176,11 @@ fardel_files := \
   $(extra_fardel_files) \
 
 # Sensitive files are authenticated at run time.
+#
+# MD5 !! A native 'lmi_md5sum$(EXEEXT)' is provided because lmi once
+# used it for run-time authentication, and still uses it temporarily
+# for experimental timings. Once that experiment concludes, remove it
+# from $(fardel_checksummed_files) and $(fardel_binaries).
 #
 # Binary files other than 'lmi_md5sum$(EXEEXT)' are not authenticated
 # because they aren't easily forged but are sizable enough to make
@@ -1208,14 +1213,11 @@ fardel: install
 	@$(MAKE) --file=$(this_makefile) --directory=$(fardel_dir) wrap_fardel
 	@$(ECHO) "Created '$(fardel_name)' archive in '$(fardel_root)'."
 
-# A native 'lmi_md5sum$(EXEEXT)' is provided to be used by end users.
-#
 # $(CP) is used without '--update' so that custom extra files can
 # replace defaults regardless of their datestamps.
 
 .PHONY: wrap_fardel
 wrap_fardel:
-	@$(CP) $(prefix)/third_party/bin/lmi_md5sum$(EXEEXT) .
 	@$(CP) $(datadir)/configurable_settings.xml .
 	@$(CP) $(datadir)/company_logo.png .
 	@$(CP) $(datadir)/group_quote_banner.png .

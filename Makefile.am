@@ -53,6 +53,12 @@ bin_PROGRAMS = \
     test_coding_rules \
     wx_test
 
+# MD5 !! 'objects.make' copies lmi_md5sum$(EXEEXT) to $localbindir,
+# which is not a standard autotools directory. This doesn't matter
+# for production, because lmi itself no longer calls an external
+# program to validate its data files; but its absence may cause some
+# unit tests to fail.
+
 # other programs which may or not be built depending on configure arguments
 EXTRA_PROGRAMS = \
     antediluvian_cgi
