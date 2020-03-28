@@ -90,8 +90,6 @@ local   lmi_build_type
 local      prefix="/opt/lmi"
 local localbindir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/bin"
 local locallibdir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib"
-# $winebindir is where 'make install' places 'lmi_md5sum.exe'.
-local  winebindir="$prefix"/third_party/bin
 
 # Running a command like this many times:
 #   export PATH="$localbindir":"$locallibdir":"$PATH"
@@ -127,8 +125,7 @@ case "$lmi_build_type" in
     (*-*-linux*)
         w0="$(winepath -w "$localbindir" | sed -e's/\\/\\\\/g')"
         w1="$(winepath -w "$locallibdir" | sed -e's/\\/\\\\/g')"
-        w2="$(winepath -w "$winebindir"  | sed -e's/\\/\\\\/g')"
-        export WINEPATH="$w0;$w1;$w2"
+        export WINEPATH="$w0;$w1"
         export  PERFORM="wine"
         ;;
     (*) ;;

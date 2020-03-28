@@ -152,7 +152,6 @@ endif
 localbindir     := $(prefix)/local/$(LMI_COMPILER)_$(LMI_TRIPLET)/bin
 locallibdir     := $(prefix)/local/$(LMI_COMPILER)_$(LMI_TRIPLET)/lib
 localincludedir := $(prefix)/local/include
-winebindir      := $(prefix)/third_party/bin
 test_dir        := $(prefix)/test
 touchstone_dir  := $(prefix)/touchstone
 
@@ -230,7 +229,6 @@ MAKETARGET = \
                      localbindir='$(localbindir)' \
                      locallibdir='$(locallibdir)' \
                  localincludedir='$(localincludedir)' \
-                      winebindir='$(winebindir)' \
                         test_dir='$(test_dir)' \
                   touchstone_dir='$(touchstone_dir)' \
                     LMI_COMPILER='$(LMI_COMPILER)' \
@@ -271,7 +269,6 @@ show_env:
 	@printf 'localbindir     = "%s"\n' "$(localbindir)"
 	@printf 'locallibdir     = "%s"\n' "$(locallibdir)"
 	@printf 'localincludedir = "%s"\n' "$(localincludedir)"
-	@printf 'winebindir      = "%s"\n' "$(winebindir)"
 
 ################################################################################
 
