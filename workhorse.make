@@ -1181,8 +1181,8 @@ fardel_files := \
 # because they aren't easily forged but are sizable enough to make
 # authentication too slow. An incorrect version of any such file might
 # be distributed by accident, but that problem would not be caught by
-# generating an md5sum for the incorrect file. 'lmi_md5sum$(EXEEXT)' is
-# however authenticated because replacing it with a program that
+# generating an md5sum for the incorrect file. 'lmi_md5sum$(EXEEXT)'
+# is however authenticated because replacing it with a program that
 # always reports success would circumvent authentication.
 #
 # 'passkey' is derived from the md5sums of other files; computing its

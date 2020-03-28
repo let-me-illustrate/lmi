@@ -109,10 +109,10 @@ PasskeyTest::~PasskeyTest()
     RemoveTestFiles(__FILE__, __LINE__);
 }
 
-/// Regrettably, invoking 'lmi_md5sum' through a shell just to confirm its
-/// availability writes its output to stdout; however, without this
-/// test, it would be difficult to tell whether downstream errors stem
-/// from that program's absence.
+/// Regrettably, invoking 'lmi_md5sum' through a shell just to confirm
+/// its availability writes its output to stdout; however, without this
+/// function, it would be difficult to tell whether downstream errors
+/// stem from that program's absence.
 
 void PasskeyTest::EnsureMd5sumBinaryIsFound() const
 {
@@ -175,12 +175,12 @@ void PasskeyTest::InitializeDataFile() const
 ///
 /// This file consists of the md5 sum of the data file followed by two
 /// spaces and the name of the data file. Creating that file portably
-/// here by running 'lmi_md5sum' would require redirection, which isn't
-/// part of the standard C++ library, so the effect of 'lmi_md5sum' is
-/// instead emulated; testing that file here with 'lmi_md5sum' validates
-/// that emulation and guards against a bogus 'lmi_md5sum' program.
+/// here by running 'lmi_md5sum' would require redirection (and thus a
+/// shell), so the effect of 'lmi_md5sum' is instead emulated; testing
+/// that file here with 'lmi_md5sum' validates that emulation and
+/// guards against a bogus 'lmi_md5sum' program.
 ///
-/// Postcondition: the file passes a test with the 'lmi_md5sum' program.
+/// Postcondition: the file validates with the 'lmi_md5sum' program.
 
 void PasskeyTest::InitializeMd5sumFile() const
 {
