@@ -247,5 +247,5 @@ for z in "$throwaway_dir"/*(N); do rm "$z"; done
 # The automated GUI test simulates keyboard and mouse actions, so
 # no such actions must be performed manually while it is running.
 # Therefore, it is deliberately excluded from this script.
-printf '\nDo not forget to run wx_test.\n'
+printf "\nDo not forget to run the 'gui_test.sh' script.\n"
 } 2>&1 | tee "$log_dir"/nychthemeral_test | sed -e "$nychthemeral_clutter"
