@@ -112,9 +112,9 @@ ifeq (,$(USE_SO_ATTRIBUTES))
     bcc_ld$(EXEEXT) \
     bcc_rc$(EXEEXT) \
     elapsed_time$(EXEEXT) \
-    lmi_md5sum$(EXEEXT) \
     generate_passkey$(EXEEXT) \
     ihs_crc_comp$(EXEEXT) \
+    lmi_md5sum$(EXEEXT) \
     rate_table_tool$(EXEEXT) \
     test_coding_rules$(EXEEXT) \
 
