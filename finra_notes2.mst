@@ -32,8 +32,7 @@
 </p>
 
 <p>
-This illustration assumes death of the insured at
-age {{EndtAge}}.
+This illustration assumes death of the insured at age {{EndtAge}}.
 </p>
 
 {{#StateIsNorthOrSouthCarolina}}
