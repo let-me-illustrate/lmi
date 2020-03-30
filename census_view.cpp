@@ -1648,7 +1648,7 @@ class CensusViewGridTable
 
     void set_visible_columns(std::vector<int>&& new_visible_columns)
     {
-        std::swap(new_visible_columns, visible_columns_);
+        visible_columns_ = std::move(new_visible_columns);
     }
 
   private:
