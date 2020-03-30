@@ -443,8 +443,6 @@ void LedgerInvariant::Init(BasicValues const* b)
         SurrenderFootnote              = p.datum("SurrenderFootnote"              );
         PortabilityFootnote            = p.datum("PortabilityFootnote"            );
         FundRateFootnote               = p.datum("FundRateFootnote"               );
-        FundRateFootnote0              = p.datum("FundRateFootnote0"              );
-        FundRateFootnote1              = p.datum("FundRateFootnote1"              );
         IssuingCompanyFootnote         = p.datum("IssuingCompanyFootnote"         );
         SubsidiaryFootnote             = p.datum("SubsidiaryFootnote"             );
         PlacementAgentFootnote         = p.datum("PlacementAgentFootnote"         );

@@ -333,8 +333,6 @@ class LMI_SO product_data
     glossed_string SurrenderFootnote;
     glossed_string PortabilityFootnote;
     glossed_string FundRateFootnote;
-    glossed_string FundRateFootnote0;
-    glossed_string FundRateFootnote1;
     glossed_string IssuingCompanyFootnote;
     glossed_string SubsidiaryFootnote;
     glossed_string PlacementAgentFootnote;

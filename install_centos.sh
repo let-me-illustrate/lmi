@@ -40,6 +40,7 @@ directory=/srv/chroot/centos7lmi
 users=${NORMAL_USER}
 groups=${NORMAL_GROUP}
 root-groups=root
+shell=/bin/zsh
 type=plain
 EOF
 
@@ -89,6 +90,10 @@ yum --assumeyes install ncurses-term zsh
 chsh -s /bin/zsh root
 chsh -s /bin/zsh "${NORMAL_USER}"
 
+# Suppress a nuisance: rh-based distributions provide a default
+# zsh logout file that clears the screen.
+sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /srv/chroot/centos7lmi/etc/zlogout
+
 # Make a more modern 'git' available via 'scl'. This is not needed
 # if all real work is done in a debian chroot.
 #yum --assumeyes install centos-release-scl
@@ -134,6 +139,7 @@ directory=/srv/chroot/${CHRTNAME}
 users=${NORMAL_USER}
 groups=${NORMAL_GROUP}
 root-groups=root
+shell=/bin/zsh
 type=plain
 EOF
 
@@ -148,16 +154,16 @@ set -vx
 
 echo "Adapted from 'lmi_setup_00.sh'."
 
-wget -N "${GIT_URL_BASE}"/lmi_setup_10.sh
-wget -N "${GIT_URL_BASE}"/lmi_setup_11.sh
-wget -N "${GIT_URL_BASE}"/lmi_setup_20.sh
-wget -N "${GIT_URL_BASE}"/lmi_setup_21.sh
-wget -N "${GIT_URL_BASE}"/lmi_setup_30.sh
-wget -N "${GIT_URL_BASE}"/lmi_setup_40.sh
-wget -N "${GIT_URL_BASE}"/lmi_setup_41.sh
-wget -N "${GIT_URL_BASE}"/lmi_setup_42.sh
-wget -N "${GIT_URL_BASE}"/lmi_setup_43.sh
-wget -N "${GIT_URL_BASE}"/lmi_setup_inc.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_11.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_20.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_21.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_30.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_40.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_41.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_42.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_43.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_inc.sh
 chmod +x lmi_setup_*.sh
 
 . ./lmi_setup_inc.sh

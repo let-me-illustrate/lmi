@@ -372,8 +372,6 @@ class LMI_SO LedgerInvariant final
     std::string     SurrenderFootnote;
     std::string     PortabilityFootnote;
     std::string     FundRateFootnote;
-    std::string     FundRateFootnote0;
-    std::string     FundRateFootnote1;
     std::string     IssuingCompanyFootnote;
     std::string     SubsidiaryFootnote;
     std::string     PlacementAgentFootnote;

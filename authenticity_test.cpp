@@ -26,16 +26,16 @@
 #include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "md5.hpp"
+#include "md5sum.hpp"
 #include "miscellany.hpp"
 #include "system_command.hpp"
 #include "test_tools.hpp"
 
 #include <boost/filesystem/convenience.hpp> // basename()
-#include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <cstdio>
+#include <cstdio>                       // remove()
 #include <cstring>                      // memcpy(), strlen()
 #include <fstream>
 #include <string>
@@ -109,15 +109,15 @@ PasskeyTest::~PasskeyTest()
     RemoveTestFiles(__FILE__, __LINE__);
 }
 
-/// Regrettably, invoking 'md5sum' through a shell just to confirm its
-/// availability writes its output to stdout; however, without this
-/// test, it would be difficult to tell whether downstream errors stem
-/// from that program's absence.
+/// Regrettably, invoking 'lmi_md5sum' through a shell just to confirm
+/// its availability writes its output to stdout; however, without this
+/// function, it would be difficult to tell whether downstream errors
+/// stem from that program's absence.
 
 void PasskeyTest::EnsureMd5sumBinaryIsFound() const
 {
-    std::cout << "  Result of 'md5sum --version':" << std::endl;
-    system_command("md5sum --version");
+    std::cout << "  Result of 'lmi_md5sum --version':" << std::endl;
+    system_command("lmi_md5sum --version");
 }
 
 void PasskeyTest::RemoveTestFiles(char const* file, int line) const
@@ -168,19 +168,19 @@ void PasskeyTest::InitializeDataFile() const
     BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(sum));
 }
 
-/// Write a data file to be passed to the 'md5sum' program.
+/// Write a data file to be passed to the 'lmi_md5sum' program.
 ///
 /// For production, a file with md5 sums of crucial files is provided.
 /// For this unit test, file 'coleridge' is the sole crucial file.
 ///
 /// This file consists of the md5 sum of the data file followed by two
 /// spaces and the name of the data file. Creating that file portably
-/// here by running 'md5sum' would require redirection, which isn't
-/// part of the standard C++ library, so the effect of 'md5sum' is
-/// instead emulated; testing that file here with 'md5sum' validates
-/// that emulation and guards against a bogus 'md5sum' program.
+/// here by running 'lmi_md5sum' would require redirection (and thus a
+/// shell), so the effect of 'lmi_md5sum' is instead emulated; testing
+/// that file here with 'lmi_md5sum' validates that emulation and
+/// guards against a bogus 'lmi_md5sum' program.
 ///
-/// Postcondition: the file passes a test with the 'md5sum' program.
+/// Postcondition: the file validates with the 'lmi_md5sum' program.
 
 void PasskeyTest::InitializeMd5sumFile() const
 {
@@ -196,7 +196,7 @@ void PasskeyTest::InitializeMd5sumFile() const
     os << "  coleridge\n";
     os.close();
 
-    std::string s = "md5sum --check --status " + std::string(md5sum_file());
+    std::string s = "lmi_md5sum --check --status " + std::string(md5sum_file());
     system_command(s);
 }
 

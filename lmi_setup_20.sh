@@ -22,6 +22,7 @@
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 . ./lmi_setup_inc.sh
+. /tmp/schroot_env
 
 set -vx
 
@@ -35,13 +36,15 @@ dpkg --add-architecture i386
 # Prevent daemons from starting in the chroot; work around an
 # 'ischroot' defect. See:
 #   https://wiki.debian.org/chroot#Configuration
+# and, for file permissions:
+#   https://lists.nongnu.org/archive/html/lmi/2020-02/msg00015.html
 
 cat >/usr/sbin/policy-rc.d <<EOF
 #!/bin/sh
 exit 101
 EOF
 
-chmod a+x /usr/sbin/policy-rc.d
+chmod 755 /usr/sbin/policy-rc.d
 
 dpkg-divert --divert /usr/bin/ischroot.debianutils --rename /usr/bin/ischroot
 ln -s /bin/true /usr/bin/ischroot
@@ -89,7 +92,7 @@ mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 # If a 'directory' chroot is to be configured, bind mounts may not be
 # shown clearly in /etc/mtab ; use 'findmnt' to see them.
 
-# Notes on various distros' package names.
+# Historical notes on various distros' package names.
 #
 # redhat names some packages differently:
 #   pkgconfig ShellCheck libxml2 libxslt
@@ -99,12 +102,16 @@ mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 # It provides 'xsltproc' as part of libxslt, though not as a
 # separate package:
 #   https://bugzilla.redhat.com/show_bug.cgi?id=965996
+#
+# Instead of worrying about such gratuitous differences, this suite
+# of scripts installs a debian chroot on any host system, and builds
+# only in that chroot.
 
 apt-get update
 apt-get --assume-yes install wget g++-mingw-w64 automake libtool make \
  pkg-config git cvs zsh bzip2 unzip sudo wine default-jre jing trang \
  g++-multilib libxml2-utils libxslt1-dev vim-gtk vim-doc shellcheck \
- bc libarchive-tools xsltproc \
+ bc libarchive-tools xsltproc rsync curl \
  >"${CHRTNAME}"-apt-get-log 2>&1
 
 # This command should produce little output:

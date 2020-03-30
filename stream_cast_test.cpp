@@ -23,7 +23,6 @@
 
 #include "stream_cast.hpp"
 
-#include "calendar_date.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -70,6 +69,51 @@ void assay_speed()
 int test_main(int, char*[])
 {
     std::string s;
+
+    // First, test each exception coded in the primary template.
+
+    // Induce failure in ostream inserter:
+    std::stringstream ss0;
+    ss0 << static_cast<std::streambuf*>(nullptr);
+    BOOST_TEST(!ss0);
+    BOOST_TEST_THROW
+        (stream_cast<std::string>(static_cast<std::streambuf*>(nullptr))
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Failure in ostream inserter")
+        );
+
+    // Induce failure in istream extractor:
+    std::stringstream ss1;
+    ss1 << "3";
+    BOOST_TEST(! !ss1);
+    bool b {0};
+    ss1 >> b;
+    BOOST_TEST(!ss1);
+    BOOST_TEST_THROW
+        (stream_cast<bool>("3")
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Failure in istream extractor")
+        );
+
+    // Throw if any trailing input remains...
+    BOOST_TEST_THROW
+        (stream_cast<double>("3.14 59")
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Unconverted data remains")
+        );
+    BOOST_TEST_THROW
+        (stream_cast<double>("3.14\r59")
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Unconverted data remains")
+        );
+    // ...unless it's all whitespace...
+    BOOST_TEST_EQUAL(2, stream_cast<int>("2\r"));
+    // ...as designated by blank_is_not_whitespace_locale()
+    BOOST_TEST_THROW
+        (stream_cast<double>("3.14 ")
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Unconverted data remains")
+        );
 
     // Conversion from an empty std::string to another std::string
     // works only because a specialization is used in that case.
@@ -138,16 +182,6 @@ int test_main(int, char*[])
         (stream_cast<std::string>((char const*)nullptr)
         ,std::runtime_error
         ,"Cannot convert (char const*)(0) to std::string."
-        );
-
-    calendar_date d;
-    d = stream_cast("2454687", d);
-    BOOST_TEST_EQUAL(2454687, d.julian_day_number());
-
-    BOOST_TEST_THROW
-        (stream_cast("2454687 ", d)
-        ,std::runtime_error
-        ,lmi_test::what_regex("^Trailing whitespace remains converting '2454687 '")
         );
 
     assay_speed();

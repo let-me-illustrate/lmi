@@ -138,7 +138,7 @@ fi
 if [ "WSL" = "$platform" ]
 then
     # Install/update packages.
-    packages_list='autoconf automake bsdtar dos2unix doxygen
+    packages_list='autoconf automake bsdtar curl dos2unix doxygen
       gdb git libtool make patch pkg-config rsync unzip wget
       zip zsh g++-mingw-w64-i686'
 

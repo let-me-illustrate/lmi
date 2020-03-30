@@ -22,6 +22,7 @@
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 . ./lmi_setup_inc.sh
+. /tmp/schroot_env
 
 set -vx
 
@@ -39,7 +40,13 @@ assert_not_chrooted
 #     /srv/chroot/some-prior-chroot/opt/lmi/blessed/ /srv/cache_for_lmi
 # to update the host, and then:
 cp --dereference --preserve --recursive \
-  /srv/cache_for_lmi/* /srv/chroot/${CHRTNAME}/cache_for_lmi/
+  /srv/cache_for_lmi/* /srv/chroot/${CHRTNAME}/cache_for_lmi/ || true
+# Messages like
+#  cp: '/srv/cache_for_lmi/downloads' and
+#    '/srv/chroot/lmi_bullseye_1/cache_for_lmi/downloads'
+#    are the same file
+# may arise, harmlessly, because of a mount command in an upstream
+# script.
 
 # Also copy any desired msw software into the chroot now, e.g.:
 #   cp -a /srv/chroot/some-prior-chroot/opt/xyzzy /srv/chroot/${CHRTNAME}/opt/xyzzy
@@ -48,7 +55,7 @@ cp --dereference --preserve --recursive \
 
 # Configure ssh, iff this chroot needs write access to savannah.
 # The easiest way is to copy existing credentials, e.g.:
-cp -a ~/.ssh/ /srv/chroot/${CHRTNAME}/home/"${NORMAL_USER}"
+cp -a ~/.ssh/ /srv/chroot/${CHRTNAME}/home/"${NORMAL_USER}" || true
 # Make sure the .ssh/config file contains:
 #   Protocol 2
 #   HashKnownHosts no

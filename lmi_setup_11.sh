@@ -22,6 +22,7 @@
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 . ./lmi_setup_inc.sh
+. /tmp/schroot_env
 
 set -vx
 
@@ -44,6 +45,7 @@ directory=/srv/chroot/${CHRTNAME}
 users=${NORMAL_USER}
 groups=${NORMAL_GROUP}
 root-groups=root
+shell=/bin/zsh
 type=plain
 EOF
 

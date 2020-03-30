@@ -71,6 +71,7 @@ bin_PROGRAMS = \
     lmi_cli \
     lmi_wx \
     elapsed_time \
+    lmi_md5sum \
     generate_passkey \
     antediluvian_cli \
     ihs_crc_comp \
@@ -78,6 +79,12 @@ bin_PROGRAMS = \
     rate_table_tool \
     test_coding_rules \
     wx_test
+
+# MD5 !! 'objects.make' copies lmi_md5sum$(EXEEXT) to $localbindir,
+# which is not a standard autotools directory. This doesn't matter
+# for production, because lmi itself no longer calls an external
+# program to validate its data files; but its absence may cause some
+# unit tests to fail.
 
 # other programs which may or not be built depending on configure arguments
 EXTRA_PROGRAMS = \
@@ -148,6 +155,7 @@ TESTS = \
     test_materially_equal \
     test_math_functions \
     test_mc_enum \
+    test_md5sum \
     test_miscellany \
     test_mortality_rates \
     test_name_value_pairs \
@@ -445,6 +453,7 @@ liblmi_la_SOURCES = \
     irc7702_tables.cpp \
     lmi.cpp \
     md5.cpp \
+    md5sum.cpp \
     mec_input.cpp \
     mec_server.cpp \
     mec_state.cpp \
@@ -483,12 +492,23 @@ libwx_new_la_LIBADD = $(WX_LIBS)
 
 # auxiliary executables
 
+lmi_md5sum_SOURCES = \
+    getopt.cpp \
+    md5.cpp \
+    md5sum.cpp \
+    md5sum_cli.cpp
+lmi_md5sum_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS)
+lmi_md5sum_LDADD = \
+    $(BOOST_LIBS) \
+    libmain_auxiliary_common.la
+
 generate_passkey_SOURCES = \
     authenticity.cpp \
     calendar_date.cpp \
     generate_passkey.cpp \
     global_settings.cpp \
     md5.cpp \
+    md5sum.cpp \
     miscellany.cpp \
     null_stream.cpp \
     path_utility.cpp \
@@ -624,6 +644,7 @@ test_authenticity_SOURCES = \
   calendar_date.cpp \
   global_settings.cpp \
   md5.cpp \
+  md5sum.cpp \
   miscellany.cpp \
   null_stream.cpp \
   path_utility.cpp \
@@ -963,6 +984,15 @@ test_mc_enum_SOURCES = \
   path_utility.cpp
 test_mc_enum_CXXFLAGS = $(AM_CXXFLAGS)
 test_mc_enum_LDADD = \
+  $(BOOST_LIBS)
+
+test_md5sum_SOURCES = \
+  $(common_test_objects) \
+  md5.cpp \
+  md5sum.cpp \
+  md5sum_test.cpp
+test_md5sum_CXXFLAGS = $(AM_CXXFLAGS)
+test_md5sum_LDADD = \
   $(BOOST_LIBS)
 
 test_miscellany_SOURCES = \
@@ -1385,6 +1415,7 @@ noinst_HEADERS = \
     mc_enum_types.hpp \
     mc_enum_types.xpp \
     mc_enum_types_aux.hpp \
+    md5sum.hpp \
     md5.hpp \
     mec_document.hpp \
     mec_input.hpp \

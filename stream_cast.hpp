@@ -86,8 +86,9 @@
 /// type std::string (but it works with value_cast).
 ///
 /// Blank is the only whitespace character not treated as whitespace,
-/// because blanks are more common than other whitespace characters in
-/// std::strings.
+/// because blanks are deliberately used in strings like "Allow MEC"
+/// that are mapped to enumerators in 'mc_enum_types.xpp', where other
+/// whitespace characters would not be used.
 ///
 /// This technique is generally inappropriate (and the implementation
 /// prevents its use) for arithmetic types, and especially for
@@ -103,8 +104,22 @@ To stream_cast(From from, To = To())
         );
     static_assert(!std::is_pointer<To>::value);
 
-    To result = To();
-    std::ostringstream err;
+    auto complain = [&](auto const& reason)
+        {
+        std::ostringstream err;
+        err
+            << reason
+            << " converting '"
+            << from
+            << "' from type '"
+            << lmi::TypeInfo(typeid(From))
+            << "' to type '"
+            << lmi::TypeInfo(typeid(To))
+            << "'."
+            ;
+        throw std::runtime_error(err.str());
+        };
+
     static std::stringstream interpreter = []
         {
         std::stringstream ss {};
@@ -114,42 +129,19 @@ To stream_cast(From from, To = To())
     interpreter.str(std::string{});
     interpreter.clear();
 
+    To result = To();
+
     if(!(interpreter << from))
         {
-        err << "Input failed ";
+        complain("Failure in ostream inserter");
         }
     else if(!(interpreter >> result))
         {
-        err << "Output failed ";
+        complain("Failure in istream extractor");
         }
-    else if(!interpreter.eof())
+    else if(!(interpreter >> std::ws).eof())
         {
-        if(interpreter >> std::ws)
-            {
-            err << "Trailing whitespace remains ";
-            }
-        else
-            {
-            err << "Unconverted data remains ";
-            }
-        }
-    else
-        {
-        ; // Nothing left to do.
-        }
-
-    if(!interpreter || !interpreter.eof())
-        {
-        err
-            << "converting '"
-            << from
-            << "' from type '"
-            << lmi::TypeInfo(typeid(From))
-            << "' to type '"
-            << lmi::TypeInfo(typeid(To))
-            << "'."
-            ;
-        throw std::runtime_error(err.str());
+        complain("Unconverted data remains");
         }
 
     return result;

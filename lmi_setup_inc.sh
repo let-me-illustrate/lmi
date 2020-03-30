@@ -33,13 +33,6 @@ set -vx
 CODENAME=bullseye
 CHRTVER=1
 CHRTNAME=lmi_${CODENAME}_${CHRTVER}
-NORMAL_USER=greg
-NORMAL_USER_UID=1000
-NORMAL_GROUP=greg
-NORMAL_GROUP_GID=1000
-GIT_URL_BASE=https://git.savannah.nongnu.org/cgit/lmi.git/plain
-# For a server that, bizarrely, blocks gnu.org but allows github.com:
-# GIT_URL_BASE=https://github.com/vadz/lmi/raw/master
 
 set +vx
 
@@ -61,7 +54,7 @@ fi
 
 assert_chrooted()
 {
-if [ "$(ls -di /)" = "2 /" ]; then
+if [ -z "$SCHROOT_CHROOT_NAME" ]; then
    echo "Must be run in chroot."
    exit 1
 fi
@@ -69,7 +62,7 @@ fi
 
 assert_not_chrooted()
 {
-if [ "$(ls -di /)" != "2 /" ]; then
+if [ -n "$SCHROOT_CHROOT_NAME" ]; then
    echo "Must not be run in chroot."
    exit 1
 fi

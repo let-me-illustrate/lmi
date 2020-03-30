@@ -22,6 +22,7 @@
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 . ./lmi_setup_inc.sh
+. /tmp/schroot_env
 
 set -vx
 
@@ -31,7 +32,7 @@ assert_chrooted
 # Install lmi for wine.
 
 cd ~ || { printf 'failed: cd\n'; exit 3; }
-wget -N "${GIT_URL_BASE}"/install_msw.sh
+wget -N -nv "${GIT_URL_BASE}"/install_msw.sh
 chmod +x install_msw.sh
 ./install_msw.sh >log 2>&1
 

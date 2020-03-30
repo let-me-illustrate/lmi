@@ -22,6 +22,7 @@
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 . ./lmi_setup_inc.sh
+. /tmp/schroot_env
 
 set -vx
 
@@ -87,17 +88,17 @@ patch --dry-run --strip=0 --directory=/ </home/"${NORMAL_USER}"/ltmain.sh.patch 
 
 # Configure zsh, for root as well as the user configured above.
 
-wget -N "${GIT_URL_BASE}"/gwc/.zshrc
+wget -N -nv "${GIT_URL_BASE}"/gwc/.zshrc
 mv .zshrc ~
 cp -a ~/.zshrc /home/"${NORMAL_USER}"/.zshrc
 chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.zshrc
 
 # Configure vim. Rather than trying to split its contents between
-# '~/.vimrc' and '/etc/vim/vimrc.local', just copy it everywhither.
+# '~/.vimrc' and '/etc/vim/vimrc.local', use '~/.vimrc' for all
+# customizations and copy that file for the normal user too.
 
-wget -N "${GIT_URL_BASE}"/gwc/.vimrc
+wget -N -nv "${GIT_URL_BASE}"/gwc/.vimrc
 mv .vimrc ~
-cp -a ~/.vimrc /etc/vim/vimrc.local
 cp -a ~/.vimrc /home/"${NORMAL_USER}"/.vimrc
 chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.vimrc
 
@@ -107,7 +108,7 @@ mkdir ~/.vim
 mkdir /home/"${NORMAL_USER}"/.vim
 chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.vim
 # It's a much better idea to copy a mature spellfile hither:
-wget -N "${GIT_URL_BASE}"/gwc/.vim/spell/en.utf-8.add
+wget -N -nv "${GIT_URL_BASE}"/gwc/.vim/spell/en.utf-8.add
 mkdir ~/.vim/spell
 mv en.utf-8.add ~/.vim/spell/en.utf-8.add
 mkdir /home/"${NORMAL_USER}"/.vim/spell

@@ -307,6 +307,7 @@ lmi_common_objects := \
   irc7702_tables.o \
   lmi.o \
   md5.o \
+  md5sum.o \
   mec_input.o \
   mec_server.o \
   mec_state.o \
@@ -450,6 +451,7 @@ unit_test_targets := \
   materially_equal_test \
   math_functions_test \
   mc_enum_test \
+  md5sum_test \
   miscellany_test \
   mortality_rates_test \
   name_value_pairs_test \
@@ -535,6 +537,7 @@ assert_lmi_test$(EXEEXT): \
   $(common_test_objects) \
   assert_lmi_test.o \
 
+# MD5 !! Remove "timer.o" below.
 authenticity_test$(EXEEXT): \
   $(boost_common_objects) \
   $(common_test_objects) \
@@ -543,11 +546,13 @@ authenticity_test$(EXEEXT): \
   calendar_date.o \
   global_settings.o \
   md5.o \
+  md5sum.o \
   miscellany.o \
   null_stream.o \
   path_utility.o \
   system_command.o \
   system_command_non_wx.o \
+  timer.o \
 
 bourn_cast_test$(EXEEXT): \
   $(common_test_objects) \
@@ -828,6 +833,13 @@ mc_enum_test$(EXEEXT): \
   null_stream.o \
   path_utility.o \
 
+md5sum_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(common_test_objects) \
+  md5.o \
+  md5sum.o \
+  md5sum_test.o \
+
 miscellany_test$(EXEEXT): \
   $(common_test_objects) \
   miscellany.o \
@@ -1091,6 +1103,19 @@ elapsed_time$(EXEEXT): \
   system_command_non_wx.o \
   timer.o \
 
+# Copy this binary to the local bin directory, so that it's available
+# for 'authenticity_test' and 'system_command_test'.
+# MD5 !! Obviate this by rewriting those unit tests.
+lmi_md5sum$(EXEEXT): POST_LINK_COMMAND = $(CP) --preserve $@ $(localbindir)
+lmi_md5sum$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(main_auxiliary_common_objects) \
+  getopt.o \
+  md5.o \
+  md5sum.o \
+  md5sum_cli.o \
+
+# MD5 !! Remove "timer.o" below.
 generate_passkey$(EXEEXT): \
   $(boost_common_objects) \
   $(main_auxiliary_common_objects) \
@@ -1099,11 +1124,13 @@ generate_passkey$(EXEEXT): \
   generate_passkey.o \
   global_settings.o \
   md5.o \
+  md5sum.o \
   miscellany.o \
   null_stream.o \
   path_utility.o \
   system_command.o \
   system_command_non_wx.o \
+  timer.o \
 
 ihs_crc_comp$(EXEEXT): \
   $(main_auxiliary_common_objects) \

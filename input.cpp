@@ -113,7 +113,7 @@ Input::Input()
 //    ,RetireesCanEnroll                {""}
 //    ,GroupUnderwritingType            {""}
 //    ,LastCoiReentryDate               {""}
-      ,ListBillDate                     {"2440588"} // Assume no inforce so old
+      ,ListBillDate                   {"2440588"} // Assume no inforce <19700101
 //    ,BlendGender                      {""}
 //    ,BlendSmoking                     {""}
     ,MaleProportion                   {"1"}

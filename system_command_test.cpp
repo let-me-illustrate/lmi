@@ -39,13 +39,15 @@ int test_main(int, char*[])
     os1 << "e87dfb7b7c7f87985d3eff4782c172b8  eraseme\n";
     os1.close();
 
-    system_command("md5sum --check --status eraseme.md5");
+    system_command("lmi_md5sum --check --status eraseme.md5");
 
     BOOST_TEST_THROW
-        (system_command("md5sum --check --status eraseme")
+        (system_command("lmi_md5sum --check --status eraseme")
         ,std::runtime_error
         ,lmi_test::what_regex
-            ("Exit code [0-9]* from command 'md5sum --check --status eraseme'.")
+            ("Exit code [0-9]* from command"
+             " 'lmi_md5sum --check --status eraseme'."
+            )
         );
 
 #if !defined LMI_MSW

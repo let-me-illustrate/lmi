@@ -114,6 +114,7 @@ ifeq (,$(USE_SO_ATTRIBUTES))
     elapsed_time$(EXEEXT) \
     generate_passkey$(EXEEXT) \
     ihs_crc_comp$(EXEEXT) \
+    lmi_md5sum$(EXEEXT) \
     rate_table_tool$(EXEEXT) \
     test_coding_rules$(EXEEXT) \
 
@@ -1105,7 +1106,6 @@ installable_binaries := \
   $(default_targets) \
   $(wildcard $(localbindir)/*$(SHREXT)) \
   $(wildcard $(locallibdir)/*$(SHREXT)) \
-  $(wildcard $(prefix)/third_party/bin/*$(EXEEXT)) \
 
 .PHONY: install
 install: $(default_targets)
@@ -1211,6 +1211,7 @@ fardel_binaries := \
   $(bindir)/wx_test$(EXEEXT) \
   $(wildcard $(localbindir)/*$(SHREXT)) \
   $(wildcard $(locallibdir)/*$(SHREXT)) \
+  $(wildcard $(bindir)/lmi_md5sum$(EXEEXT)) \
   $(wildcard $(bindir)/product_files$(EXEEXT)) \
   $(extra_fardel_binaries) \
 
@@ -1223,12 +1224,17 @@ fardel_files := \
 
 # Sensitive files are authenticated at run time.
 #
-# Binary files other than 'md5sum$(EXEEXT)' are not authenticated
+# MD5 !! A native 'lmi_md5sum$(EXEEXT)' is provided because lmi once
+# used it for run-time authentication, and still uses it temporarily
+# for experimental timings. Once that experiment concludes, remove it
+# from $(fardel_checksummed_files) and $(fardel_binaries).
+#
+# Binary files other than 'lmi_md5sum$(EXEEXT)' are not authenticated
 # because they aren't easily forged but are sizable enough to make
 # authentication too slow. An incorrect version of any such file might
 # be distributed by accident, but that problem would not be caught by
-# generating an md5sum for the incorrect file. 'md5sum$(EXEEXT)' is
-# however authenticated because replacing it with a program that
+# generating an md5sum for the incorrect file. 'lmi_md5sum$(EXEEXT)'
+# is however authenticated because replacing it with a program that
 # always reports success would circumvent authentication.
 #
 # 'passkey' is derived from the md5sums of other files; computing its
@@ -1246,7 +1252,7 @@ fardel_checksummed_files = \
   $(extra_fardel_checksummed_files) \
   *.dat *.database *.funds *.ndx *.policy *.rounding *.strata *.xst \
   expiry \
-  md5sum$(EXEEXT) \
+  lmi_md5sum$(EXEEXT) \
 
 .PHONY: fardel
 fardel: install
@@ -1254,15 +1260,11 @@ fardel: install
 	@$(MAKE) --file=$(this_makefile) --directory=$(fardel_dir) wrap_fardel
 	@$(ECHO) "Created '$(fardel_name)' archive in '$(fardel_root)'."
 
-# A native 'md5sum$(EXEEXT)' must be provided because lmi uses it for
-# run-time authentication.
-#
 # $(CP) is used without '--update' so that custom extra files can
 # replace defaults regardless of their datestamps.
 
 .PHONY: wrap_fardel
 wrap_fardel:
-	@$(CP) $(prefix)/third_party/bin/md5sum$(EXEEXT) .
 	@$(CP) $(datadir)/configurable_settings.xml .
 	@$(CP) $(datadir)/company_logo.png .
 	@$(CP) $(datadir)/group_quote_banner.png .
