@@ -1556,9 +1556,8 @@ class CensusViewGridCellAttrProvider
         // Depending on the background, alternate row color
         // will be 3% more dark or 50% brighter.
         int const alpha = bgColor.GetRGB() > 0x808080 ? 97 : 150;
-        altColor_ = bgColor.ChangeLightness(alpha);
 
-        attrForOddRows_->SetBackgroundColour(altColor_);
+        attrForOddRows_->SetBackgroundColour(bgColor.ChangeLightness(alpha));
     }
 
     wxGridCellAttr* GetAttr
@@ -1583,7 +1582,9 @@ class CensusViewGridCellAttrProvider
                     wxGridCellAttr* attrNew = attr->Clone();
                     attr->DecRef();
                     attr = attrNew;
-                    attr->SetBackgroundColour(altColor_);
+                    attr->SetBackgroundColour
+                        (attrForOddRows_->GetBackgroundColour()
+                        );
                     }
                 }
             }
@@ -1592,7 +1593,6 @@ class CensusViewGridCellAttrProvider
     }
 
   private:
-    wxColor                         altColor_;
     wxObjectDataPtr<wxGridCellAttr> attrForOddRows_;
 };
 
