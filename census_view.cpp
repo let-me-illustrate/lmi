@@ -2100,11 +2100,7 @@ wxWindow* CensusGridView::CreateChildWindow()
     // Grid must be already created when we create the table because we use
     // the default cell background color to determine the alternating color.
     grid_table_ = new(wx) CensusViewGridTable(*this);
-    grid_window_->SetTable
-        (grid_table_
-        ,true // Take ownership of the table.
-        ,wxGrid::wxGridSelectRows
-        );
+    grid_window_->AssignTable(grid_table_, wxGrid::wxGridSelectRows);
 
     grid_window_->UseNativeColHeader();
     grid_window_->DisableHidingColumns();
