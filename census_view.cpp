@@ -1566,22 +1566,23 @@ class CensusViewGridCellAttrProvider
         ,wxGridCellAttr::wxAttrKind kind
         ) const override
     {
-        wxGridCellAttr* attr = wxGridCellAttrProvider::GetAttr(row, col, kind);
+        wxGridCellAttrPtr attr{wxGridCellAttrProvider::GetAttr(row, col, kind)};
 
         if(row % 2)
             {
-            if(attr == nullptr)
+            if(!attr)
                 {
-                attr = attrForOddRows_.get();
-                attr->IncRef();
+                attr = attrForOddRows_;
                 }
             else
                 {
                 if(!attr->HasBackgroundColour())
                     {
-                    wxGridCellAttr* attrNew = attr->Clone();
-                    attr->DecRef();
-                    attr = attrNew;
+                    // Note that we can't modify attr itself, as it can be used
+                    // for other cells and changing its background would change
+                    // their appearance, so allocate a new attribute for this
+                    // cell only.
+                    attr = attr->Clone();
                     attr->SetBackgroundColour
                         (attrForOddRows_->GetBackgroundColour()
                         );
@@ -1589,11 +1590,11 @@ class CensusViewGridCellAttrProvider
                 }
             }
 
-        return attr;
+        return attr.release();
     }
 
   private:
-    wxObjectDataPtr<wxGridCellAttr> attrForOddRows_;
+    wxGridCellAttrPtr attrForOddRows_;
 };
 
 /// Interface to the data for wxGrid.
