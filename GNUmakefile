@@ -269,6 +269,8 @@ show_env:
 	@printf 'localbindir     = "%s"\n' "$(localbindir)"
 	@printf 'locallibdir     = "%s"\n' "$(locallibdir)"
 	@printf 'localincludedir = "%s"\n' "$(localincludedir)"
+	@printf 'EXEEXT          = "%s"\n' "$(EXEEXT)"
+	@printf 'SHREXT          = "%s"\n' "$(SHREXT)"
 
 ################################################################################
 
