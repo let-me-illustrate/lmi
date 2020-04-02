@@ -82,8 +82,7 @@ MAKEFLAGS := \
 
 ################################################################################
 
-# Remake this makefile to "source" a script that sets various crucial
-# environment variables.
+# Remake this makefile.
 #
 # For similar usage elsewhere, $(srcdir) is generally preferred to
 # $(CURDIR), especially in submakefiles made in other directories,
@@ -91,14 +90,14 @@ MAKEFLAGS := \
 # $(srcdir) has not yet been assigned, and it's best to remake this
 # makefile early.
 
-export LMI_ENV_FILE := env_$(shell date -u +'%s_%N').eraseme
+GNUmakefile $(CURDIR)/GNUmakefile:: ;
 
-GNUmakefile $(CURDIR)/GNUmakefile:: $(LMI_ENV_FILE)
-	$(eval include $(LMI_ENV_FILE))
-	@rm $(LMI_ENV_FILE)
+# "Source" various crucial environment variables.
 
-$(LMI_ENV_FILE):
-	@. $(CURDIR)/set_toolchain.sh
+LMI_ENV_FILE := /tmp/lmi_env_$(shell date -u +'%s_%N').eraseme
+$(shell $(CURDIR)/transume_toolchain.sh > $(LMI_ENV_FILE))
+include $(LMI_ENV_FILE)
+$(LMI_ENV_FILE):: ;
 
 ################################################################################
 
