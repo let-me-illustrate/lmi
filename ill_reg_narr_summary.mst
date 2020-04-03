@@ -48,16 +48,14 @@
 
 <p>
 {{!
-    PDF !! This premium-mode footnote is misleading in several ways:
+    PDF !! This premium-mode footnote is misleading:
       - mode may vary by year, but only initial mode is shown
       - ee and er modes may differ, but only er mode is shown
-      - it makes no sense to say that premium paid on any mode other
-        than annual is received at BOY.
 }}
 
 {{^SinglePremium}}
     Premiums are assumed to be paid on {{ErModeLCWithArticle}}
-    basis and received at the beginning of the {{ContractName}} year.
+    basis and received at the beginning of the premium paying period.
 {{/SinglePremium}}
 {{#SinglePremium}}
     The single premium is assumed to be paid at the beginning
