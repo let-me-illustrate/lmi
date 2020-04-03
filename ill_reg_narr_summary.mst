@@ -72,12 +72,7 @@ overhead expenses is the fully allocated expense method.
     <p>
     In order to guarantee coverage to age
     {{EndtAge}}, {{ErModeLCWithArticle}} premium
-    {{#HasGuarPrem}}
     of ${{GuarPrem}} must be paid.
-    {{/HasGuarPrem}}
-    {{^HasGuarPrem}}
-    is defined.
-    {{/HasGuarPrem}}
     This amount is based on the guaranteed monthly charges
     and the guaranteed interest crediting rate.
     {{#DefnLifeInsIsGPT}}

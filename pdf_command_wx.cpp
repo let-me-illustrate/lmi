@@ -2257,11 +2257,6 @@ class pdf_illustration_naic : public pdf_illustration
             );
 
         add_variable
-            ("HasGuarPrem"
-            ,invar.GuarPrem != 0
-            );
-
-        add_variable
             ("StateIsIllinois"
             ,state_of_jurisdiction == "IL"
             );
