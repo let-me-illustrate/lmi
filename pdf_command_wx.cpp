@@ -2239,6 +2239,8 @@ class pdf_illustration_naic : public pdf_illustration
         // Variable representing the premium payment frequency with the
         // appropriate indefinite article preceding it, e.g. "an annual"
         // or "a monthly".
+        // The if-not-empty conditional is unneeded:
+        LMI_ASSERT(!invar.InitErMode.empty());
         std::string mode0 = invar.InitErMode;
         if(!mode0.empty())
             {
