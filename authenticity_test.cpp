@@ -435,6 +435,12 @@ void PasskeyTest::TestDataFile() const
     os.close();
 
     Authenticity::ResetCache();
+    std::cout
+        << "Expect"
+        << "\n  Integrity check failed for 'coleridge'"
+        << "\nto print:"
+        << std::endl
+        ;
     BOOST_TEST_EQUAL
         ("At least one required file is missing, altered, or invalid."
         " Try reinstalling."
