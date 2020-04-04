@@ -706,6 +706,7 @@ test_currency_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_dbo_rules_SOURCES = \
   $(common_test_objects) \
+  datum_base.cpp \
   dbo_rules.cpp \
   dbo_rules_test.cpp \
   facets.cpp \
@@ -883,6 +884,7 @@ test_ledger_SOURCES = \
   configurable_settings.cpp \
   crc32.cpp \
   data_directory.cpp \
+  datum_base.cpp \
   facets.cpp \
   global_settings.cpp \
   ledger.cpp \

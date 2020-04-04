@@ -23,6 +23,9 @@
 
 #include "datum_base.hpp"
 
+#include <istream>
+#include <ostream>
+
 void datum_base::enable(bool b)
 {
     enabled_ = b;
@@ -31,4 +34,14 @@ void datum_base::enable(bool b)
 bool datum_base::is_enabled() const
 {
     return enabled_;
+}
+
+std::istream& operator>>(std::istream& is, datum_base& z)
+{
+    return z.read(is);
+}
+
+std::ostream& operator<<(std::ostream& os, datum_base const& z)
+{
+    return z.write(os);
 }
