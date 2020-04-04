@@ -159,7 +159,7 @@ void mete_stl_plain()
             (sv1a.begin()
             ,sv1a.end()
             ,std::back_inserter(tmp0)
-            ,std::bind1st(std::multiplies<double>(), 2.1)
+            ,[](double x) { return 2.1 * x; }
             );
         std::transform
             (sv0a.begin()

@@ -1150,13 +1150,13 @@ void InterestRates::Initialize7702Rates()
         (Mly7702ig.begin()
         ,Mly7702ig.end()
         ,Mly7702ig.begin()
-        ,std::bind1st(std::divides<double>(), 1.0)
+        ,[](double x) { return 1.0 / x; }
         );
     std::transform
         (Mly7702ig.begin()
         ,Mly7702ig.end()
         ,Mly7702ig.begin()
-        ,std::bind2nd(std::minus<double>(), 1.0)
+        ,[](double x) { return x - 1.0; }
         );
 }
 #endif // 0
