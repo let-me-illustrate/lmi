@@ -464,7 +464,9 @@ void InterestRates::InitializeGeneralAccountRates()
             ,[&spread](double x) { return x - spread[mce_gen_curr].front(); }
             );
         // ET !! spread[mce_gen_mdpt] = 0.5 * spread[mce_gen_curr];
-        // ...but writing it that way makes it look wrong.
+        // (though it should be...
+        // ET !! spread[mce_gen_mdpt] = 0.5 * spread[mce_gen_curr] + 0.5 * spread[mce_gen_guar];
+        // ...if DB_GuarIntSpread is ever implemented)
         std::transform
             (spread[mce_gen_curr].begin()
             ,spread[mce_gen_curr].end()

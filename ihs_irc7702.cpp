@@ -479,7 +479,7 @@ void Irc7702::InitCorridor()
     // TODO ?? Substandard: set last NSP to 1.0? ignore flats? set NSP[omega] to 1?
     // TAXATION !! --better to ignore susbstandard
     CvatCorridor.resize(Length);
-    // ET !! CvatCorridor = CommFns[Opt1Int4Pct]->aD() / CommFns[Opt1Int4Pct]->kM();
+    // ET !! CvatCorridor = CommFns[Opt1Int4Pct]->aD() / (CommFns[Opt1Int4Pct]->kM() + DEndt[Opt1Int4Pct]);
     std::vector<double> denominator(CommFns[Opt1Int4Pct]->kM());
     std::transform
         (denominator.begin()
