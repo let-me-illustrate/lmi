@@ -469,7 +469,7 @@ void InterestRates::InitializeGeneralAccountRates()
             (spread[mce_gen_curr].begin()
             ,spread[mce_gen_curr].end()
             ,spread[mce_gen_mdpt].begin()
-            ,[](double x) { return 0.5*x; }
+            ,[](double x) { return 0.5 * x; }
             );
         }
     else
@@ -587,7 +587,7 @@ void InterestRates::InitializeSeparateAccountRates()
         (SepAcctGrossRate_[mce_sep_full].begin()
         ,SepAcctGrossRate_[mce_sep_full].end()
         ,std::back_inserter(SepAcctGrossRate_[mce_sep_half])
-        ,[](double x) { return 0.5*x; }
+        ,[](double x) { return 0.5 * x; }
         );
 
     for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
