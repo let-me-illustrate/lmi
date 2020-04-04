@@ -37,6 +37,7 @@
 
 #include <algorithm>                    // find()
 #include <istream>
+#include <ostream>
 
 namespace
 {
