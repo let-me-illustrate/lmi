@@ -43,7 +43,6 @@
 #include <istream>
 #include <limits>
 #include <map>
-#include <memory>
 #include <optional>
 #include <ostream>
 #include <sstream>
@@ -3166,6 +3165,12 @@ void database::save(std::ostream& index_os, std::ostream& data_os)
             << LMI_FLUSH
             ;
         }
+}
+
+std::ostream& operator<<(std::ostream& os, table::Number const& number)
+{
+    os << number.value();
+    return os;
 }
 
 } // namespace soa_v3_format

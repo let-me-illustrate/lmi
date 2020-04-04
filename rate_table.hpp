@@ -30,7 +30,6 @@
 #include <cstdint>
 #include <iosfwd>
 #include <memory>                       // shared_ptr
-#include <ostream>
 #include <string>
 #include <vector>
 
@@ -187,12 +186,7 @@ class database final
     database_impl* const impl_;
 };
 
-inline std::ostream& operator<<(std::ostream& os, table::Number const& number)
-{
-    os << number.value();
-
-    return os;
-}
+std::ostream& operator<<(std::ostream&, table::Number const&);
 
 } // namespace soa_v3_format
 
