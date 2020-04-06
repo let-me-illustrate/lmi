@@ -178,8 +178,8 @@ calendar_date LMI_SO operator+(int, calendar_date);
 calendar_date LMI_SO operator+(calendar_date, int);
 calendar_date LMI_SO operator-(calendar_date, int);
 
-std::ostream& LMI_SO operator<<(std::ostream& os, calendar_date const&);
-std::istream& LMI_SO operator>>(std::istream& is, calendar_date&);
+std::ostream& LMI_SO operator<<(std::ostream&, calendar_date const&);
+std::istream& LMI_SO operator>>(std::istream&, calendar_date&);
 
 calendar_date add_years
     (calendar_date const& date

@@ -82,32 +82,29 @@ MAKEFLAGS := \
 
 ################################################################################
 
-# Remake this makefile to "source" a script that sets various crucial
-# environment variables.
-#
-# For similar usage elsewhere, $(srcdir) is generally preferred to
-# $(CURDIR), especially in submakefiles made in other directories,
-# where $(CURDIR) would be wrong. In this particular case, however,
-# $(srcdir) has not yet been assigned, and it's best to remake this
-# makefile early.
-
-export LMI_ENV_FILE := env_$(shell date -u +'%s_%N').eraseme
-
-GNUmakefile $(CURDIR)/GNUmakefile:: $(LMI_ENV_FILE)
-	$(eval include $(LMI_ENV_FILE))
-	@rm $(LMI_ENV_FILE)
-
-$(LMI_ENV_FILE):
-	@. $(CURDIR)/set_toolchain.sh
-
-################################################################################
-
-# Directories.
+# Directories (and toolchain selection on which they depend).
 
 # SOMEDAY !! Follow the GNU Coding Standards
 #   https://www.gnu.org/prep/standards/html_node/Directory-Variables.html
 # more closely, changing the value of $(datadir), and perhaps using
 # some other standard directories that are commented out for now.
+
+# source files (GNU Coding Standards don't suggest any default value)
+srcdir          := $(CURDIR)
+
+# $(srcdir) really shouldn't be overridden. A noisy assertion is more
+# helpful than a silent 'override' directive.
+ifneq ($(srcdir),$(CURDIR))
+  $(error Assertion failure: source directory misconfigured)
+endif
+
+# "Source" various crucial environment variables that are used in the
+# definitions below.
+
+LMI_ENV_FILE := /tmp/lmi_env_$(shell date -u +'%s_%N').eraseme
+$(shell $(srcdir)/transume_toolchain.sh > $(LMI_ENV_FILE))
+include $(LMI_ENV_FILE)
+$(LMI_ENV_FILE):: ;
 
 prefix          := /opt/lmi
 # parent directory for machine-specific binaries
@@ -138,14 +135,6 @@ datadir         := $(prefix)/data
 docdir          := $(datarootdir)/doc/lmi
 htmldir         := $(docdir)
 #libdir          := $(exec_prefix)/lib
-# source files (GNU Coding Standards don't suggest any default value)
-srcdir          := $(CURDIR)
-
-# $(srcdir) really shouldn't be overridden. A noisy assertion is more
-# helpful than a silent 'override' directive.
-ifneq ($(srcdir),$(CURDIR))
-  $(error Assertion failure: source directory misconfigured)
-endif
 
 # These directories are outside the scope of the GNU Coding Standards.
 # Therefore, their names may contain '_' for distinction and clarity.
@@ -158,7 +147,7 @@ touchstone_dir  := $(prefix)/touchstone
 ################################################################################
 
 # Other makefiles included; makefiles not to be remade.
-#
+
 # Included files that don't need to be remade are given explicit empty
 # commands, which significantly reduces the number of lines emitted by
 # 'make -d', making debug output easier to read.
@@ -176,6 +165,10 @@ touchstone_dir  := $(prefix)/touchstone
 # 'main.c' version 1.194 seems to suggest that writing such a rule is
 # a poor practice, but empty commands ought to be excused from that
 # inline comment, and perhaps even from that diagnostic.
+
+# Don't remake this makefile.
+
+GNUmakefile $(srcdir)/GNUmakefile:: ;
 
 # Configuration.
 
@@ -269,6 +262,8 @@ show_env:
 	@printf 'localbindir     = "%s"\n' "$(localbindir)"
 	@printf 'locallibdir     = "%s"\n' "$(locallibdir)"
 	@printf 'localincludedir = "%s"\n' "$(localincludedir)"
+	@printf 'EXEEXT          = "%s"\n' "$(EXEEXT)"
+	@printf 'SHREXT          = "%s"\n' "$(SHREXT)"
 
 ################################################################################
 

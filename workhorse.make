@@ -96,8 +96,12 @@ ifneq (safestdlib,$(findstring safestdlib,$(build_type)))
     lmi_wx_shared$(EXEEXT) \
     skeleton$(SHREXT) \
     wx_new$(SHREXT) \
-    wx_test$(EXEEXT) \
 
+  ifneq (so_test,$(findstring so_test,$(build_type)))
+    default_targets += \
+      wx_test$(EXEEXT) \
+
+  endif
 endif
 
 # The product_files target doesn't build with shared-library
@@ -865,6 +869,7 @@ ifeq (3.4.5,$(gcc_version))
 endif
 
 ifneq (,$(USE_SO_ATTRIBUTES))
+  LDFLAGS += -Wl,--disable-auto-import -static-libstdc++
   actually_used_lmi_so_attributes = -DLMI_USE_SO_ATTRIBUTES $(lmi_so_attributes)
 endif
 

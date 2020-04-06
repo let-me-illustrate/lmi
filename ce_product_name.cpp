@@ -36,6 +36,8 @@
 #include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // find()
+#include <istream>
+#include <ostream>
 
 namespace
 {

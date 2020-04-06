@@ -479,13 +479,13 @@ void Irc7702::InitCorridor()
     // TODO ?? Substandard: set last NSP to 1.0? ignore flats? set NSP[omega] to 1?
     // TAXATION !! --better to ignore susbstandard
     CvatCorridor.resize(Length);
-    // ET !! CvatCorridor = CommFns[Opt1Int4Pct]->aD() / CommFns[Opt1Int4Pct]->kM();
+    // ET !! CvatCorridor = CommFns[Opt1Int4Pct]->aD() / (CommFns[Opt1Int4Pct]->kM() + DEndt[Opt1Int4Pct]);
     std::vector<double> denominator(CommFns[Opt1Int4Pct]->kM());
     std::transform
         (denominator.begin()
         ,denominator.end()
         ,denominator.begin()
-        ,std::bind1st(std::plus<double>(), DEndt[Opt1Int4Pct])
+        ,[this](double x) { return DEndt[Opt1Int4Pct] + x; }
         );
     std::transform
         (CommFns[Opt1Int4Pct]->aD().begin()
@@ -625,7 +625,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     npf_sgl_tgt = LoadTgt;
     LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt));
     std::transform(npf_sgl_tgt.begin(), npf_sgl_tgt.end(), npf_sgl_tgt.begin()
-        ,std::bind1st(std::minus<double>(), 1.0)
+        ,[](double x) { return 1.0 - x; }
         );
     LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
@@ -652,7 +652,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     npf_sgl_exc = LoadExc;
     LMI_ASSERT(Length == lmi::ssize(npf_sgl_exc));
     std::transform(npf_sgl_exc.begin(), npf_sgl_exc.end(), npf_sgl_exc.begin()
-        ,std::bind1st(std::minus<double>(), 1.0)
+        ,[](double x) { return 1.0 - x; }
         );
     LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt)); // TAXATION !! Shouldn't this be npf_sgl_exc?
     LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));

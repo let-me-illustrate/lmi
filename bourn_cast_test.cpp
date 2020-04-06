@@ -81,10 +81,6 @@ void test_same(char const* file, int line)
     // an 80-bit long double type whose 64-bit mantissa suffices to
     // test the limits of every integral type up to 64 digits exactly
     // because it can distinguish +/-(2^64) from +/-(2^64 - 1).
-    //
-    // The signed minimum given here assumes two's complement; it
-    // would be -(x - 1) for a ones' complement or sign-and-magnitude
-    // representation.
     if(traits::is_integer)
         {
         long double const x = std::scalbln(1.0l, traits::digits);
@@ -463,11 +459,18 @@ void test_m64_neighborhood()
     // unsigned integer is UB.
 
     unsigned long long int const ull_max = ull_traits::max();
+#if defined __clang__
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wimplicit-int-float-conversion"
+#endif // defined __clang__
 #if defined __GNUC__
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wfloat-conversion"
 #endif // defined __GNUC__
     float const f_ull_max = ull_max;
+#if defined __clang__
+#   pragma clang diagnostic pop
+#endif // defined __clang__
 #if defined __GNUC__
 #   pragma GCC diagnostic pop
 #endif // defined __GNUC__

@@ -622,6 +622,7 @@ currency_test$(EXEEXT): \
 
 dbo_rules_test$(EXEEXT): \
   $(common_test_objects) \
+  datum_base.o \
   dbo_rules.o \
   dbo_rules_test.o \
   facets.o \
@@ -781,6 +782,7 @@ ledger_test$(EXEEXT): \
   configurable_settings.o \
   crc32.o \
   data_directory.o \
+  datum_base.o \
   facets.o \
   global_settings.o \
   ledger.o \

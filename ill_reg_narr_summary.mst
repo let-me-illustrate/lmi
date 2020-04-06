@@ -47,9 +47,15 @@
 </p>
 
 <p>
+{{!
+    PDF !! This premium-mode footnote is misleading:
+      - mode may vary by year, but only initial mode is shown
+      - ee and er modes may differ, but only er mode is shown
+}}
+
 {{^SinglePremium}}
     Premiums are assumed to be paid on {{ErModeLCWithArticle}}
-    basis and received at the beginning of the {{ContractName}} year.
+    basis and received at the beginning of the premium paying period.
 {{/SinglePremium}}
 {{#SinglePremium}}
     The single premium is assumed to be paid at the beginning
@@ -66,12 +72,7 @@ overhead expenses is the fully allocated expense method.
     <p>
     In order to guarantee coverage to age
     {{EndtAge}}, {{ErModeLCWithArticle}} premium
-    {{#HasGuarPrem}}
     of ${{GuarPrem}} must be paid.
-    {{/HasGuarPrem}}
-    {{^HasGuarPrem}}
-    is defined.
-    {{/HasGuarPrem}}
     This amount is based on the guaranteed monthly charges
     and the guaranteed interest crediting rate.
     {{#DefnLifeInsIsGPT}}

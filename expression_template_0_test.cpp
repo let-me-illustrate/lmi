@@ -43,7 +43,14 @@
 #include "timer.hpp"
 
 #if defined USE_UBLAS
+#   if defined __clang__
+#       pragma clang diagnostic push
+#       pragma clang diagnostic ignored "-Wdeprecated-copy"
+#   endif
 #   include <boost/numeric/ublas/vector.hpp>
+#   if defined __clang__
+#       pragma clang diagnostic pop
+#   endif
 #endif // defined USE_UBLAS
 
 #include <algorithm>
@@ -159,7 +166,7 @@ void mete_stl_plain()
             (sv1a.begin()
             ,sv1a.end()
             ,std::back_inserter(tmp0)
-            ,std::bind1st(std::multiplies<double>(), 2.1)
+            ,[](double x) { return 2.1 * x; }
             );
         std::transform
             (sv0a.begin()

@@ -69,14 +69,6 @@ LMI_FORCE_LINKING_IN_SITU(pdf_command_wx)
 
 namespace
 {
-// This function is also provided in <boost/algorithm/string/predicate.hpp>,
-// but it's arguably not worth adding dependency on this Boost library just for
-// this function.
-inline
-bool starts_with(std::string const& s, char const* prefix)
-{
-    return s.compare(0, std::strlen(prefix), prefix) == 0;
-}
 
 // Helper enums identifying the possible {Guaranteed,Current}{Zero,}
 // combinations.
@@ -2239,6 +2231,8 @@ class pdf_illustration_naic : public pdf_illustration
         // Variable representing the premium payment frequency with the
         // appropriate indefinite article preceding it, e.g. "an annual"
         // or "a monthly".
+        // The if-not-empty conditional is unneeded:
+        LMI_ASSERT(!invar.InitErMode.empty());
         std::string mode0 = invar.InitErMode;
         if(!mode0.empty())
             {
@@ -2252,11 +2246,6 @@ class pdf_illustration_naic : public pdf_illustration
         add_variable
             ("HasInterestDisclaimer"
             ,!invar.InterestDisclaimer.empty()
-            );
-
-        add_variable
-            ("HasGuarPrem"
-            ,invar.GuarPrem != 0
             );
 
         add_variable

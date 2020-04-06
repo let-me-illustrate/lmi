@@ -26,6 +26,7 @@
 
 #include "mc_enum.hpp"
 
+#include <iosfwd>
 #include <string>
 #include <vector>
 

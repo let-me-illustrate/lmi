@@ -46,14 +46,7 @@ class LMI_SO datum_base
     bool enabled_ {true};
 };
 
-inline std::istream& operator>>(std::istream& is, datum_base& z)
-{
-    return z.read(is);
-}
-
-inline std::ostream& operator<<(std::ostream& os, datum_base const& z)
-{
-    return z.write(os);
-}
+std::istream& operator>>(std::istream&, datum_base&);
+std::ostream& operator<<(std::ostream&, datum_base const&);
 
 #endif // datum_base_hpp

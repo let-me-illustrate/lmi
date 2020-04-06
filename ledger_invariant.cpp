@@ -187,10 +187,10 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["WriteTsvFile"          ] = &WriteTsvFile           ;
     OtherScalars    ["SupplementalReport"    ] = &SupplementalReport     ;
 
+    Strings["PolicyForm"                    ] = &PolicyForm                    ;
     Strings["PolicyMktgName"                ] = &PolicyMktgName                ;
     Strings["PolicyLegalName"               ] = &PolicyLegalName               ;
     Strings["CsoEra"                        ] = &CsoEra                        ;
-    Strings["PolicyForm"                    ] = &PolicyForm                    ;
     Strings["InsCoShortName"                ] = &InsCoShortName                ;
     Strings["InsCoName"                     ] = &InsCoName                     ;
     Strings["InsCoAddr"                     ] = &InsCoAddr                     ;

@@ -176,15 +176,13 @@ constexpr inline To bourn_cast(From from, std::true_type, std::false_type)
 
     From const limit = std::ldexp(From(1), to_traits::digits);
 
-    constexpr bool is_twos_complement(~To(0) == -To(1));
-
     if(std::isnan(from))
         throw std::runtime_error("Cannot cast NaN to integral.");
     if(std::isinf(from))
         throw std::runtime_error("Cannot cast infinite to integral.");
     if(!to_traits::is_signed && from < 0)
         throw std::runtime_error("Cannot cast negative to unsigned.");
-    if(from < -limit || from == -limit && !is_twos_complement)
+    if(from < -limit)
         throw std::runtime_error("Cast would transgress lower limit.");
     if(limit <= from)
         throw std::runtime_error("Cast would transgress upper limit.");
