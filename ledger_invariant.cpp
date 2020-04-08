@@ -96,9 +96,10 @@ void LedgerInvariant::Alloc(int len)
     EndYearVectors  ["TermSpecAmt"           ] = &TermSpecAmt            ;
     EndYearVectors  ["SpecAmt"               ] = &SpecAmt                ;
 
+    ForborneVectors ["Salary"                ] = &Salary                 ;
+
     OtherVectors    ["IndvTaxBracket"        ] = &IndvTaxBracket         ;
     OtherVectors    ["CorpTaxBracket"        ] = &CorpTaxBracket         ;
-    OtherVectors    ["Salary"                ] = &Salary                 ;
     OtherVectors    ["AnnualFlatExtra"       ] = &AnnualFlatExtra        ;
     OtherVectors    ["HoneymoonValueSpread"  ] = &HoneymoonValueSpread   ;
     OtherVectors    ["PartMortTableMult"     ] = &PartMortTableMult      ;

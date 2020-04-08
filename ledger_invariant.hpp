@@ -85,10 +85,12 @@ class LMI_SO LedgerInvariant final
     std::vector<double> TermSpecAmt;
     std::vector<double> SpecAmt;
 
+    // Forborne vectors.
+    std::vector<double> Salary;
+
     // Other vectors.
     std::vector<double> IndvTaxBracket;
     std::vector<double> CorpTaxBracket;
-    std::vector<double> Salary;
     std::vector<double> AnnualFlatExtra;
     std::vector<double> HoneymoonValueSpread;
     std::vector<double> PartMortTableMult;
