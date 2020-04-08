@@ -204,7 +204,7 @@ LedgerVariant& LedgerVariant::PlusEq
     InitTgtPremHiLoadRate       = std::max(InitTgtPremHiLoadRate, a_Addend.InitTgtPremHiLoadRate);
     InitMlyPolFee               = std::max(InitMlyPolFee        , a_Addend.InitMlyPolFee        );
     InitAnnLoanCredRate         = a_Addend.InitAnnLoanCredRate;
-    // ET !! This is of the form 'x = (lengthof x) take y'.
+    // ET !! This is of the form 'x[iota rho y] gets y'.
     for(int j = 0; j < a_Addend.Length; ++j)
         {
         MlySAIntRate              [j]  = a_Addend.MlySAIntRate              [j];

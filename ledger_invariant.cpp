@@ -776,6 +776,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // answer--e.g., for ratios like 'CorridorFactor', where an
     // average weighted by number of lives would be inaccurate,
     // and any aggregate value could be misleading.)
+    //
+    // ET !! This is of the form 'x[iota rho y] gets y'.
     for(int j = 0; j < a_Addend.Length; ++j)
         {
         AnnLoanDueRate[j] = a_Addend.AnnLoanDueRate[j];
