@@ -79,6 +79,7 @@ class LMI_SO LedgerInvariant final
     std::vector<double> ModalMinimumPremium;
     std::vector<double> EeModalMinimumPremium;
     std::vector<double> ErModalMinimumPremium;
+    std::vector<double> AddonMonthlyFee;
 
     // EOY vectors.
     std::vector<double> TermSpecAmt;
@@ -91,7 +92,6 @@ class LMI_SO LedgerInvariant final
     std::vector<double> AnnualFlatExtra;
     std::vector<double> HoneymoonValueSpread;
     std::vector<double> PartMortTableMult;
-    std::vector<double> AddonMonthlyFee;
     std::vector<double> AddonCompOnAssets;
     std::vector<double> AddonCompOnPremium;
     std::vector<double> CorridorFactor;

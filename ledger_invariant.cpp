@@ -91,6 +91,7 @@ void LedgerInvariant::Alloc(int len)
     BegYearVectors  ["ModalMinimumPremium"   ] = &ModalMinimumPremium    ;
     BegYearVectors  ["EeModalMinimumPremium" ] = &EeModalMinimumPremium  ;
     BegYearVectors  ["ErModalMinimumPremium" ] = &ErModalMinimumPremium  ;
+    BegYearVectors  ["AddonMonthlyFee"       ] = &AddonMonthlyFee        ;
 
     EndYearVectors  ["TermSpecAmt"           ] = &TermSpecAmt            ;
     EndYearVectors  ["SpecAmt"               ] = &SpecAmt                ;
@@ -101,7 +102,6 @@ void LedgerInvariant::Alloc(int len)
     OtherVectors    ["AnnualFlatExtra"       ] = &AnnualFlatExtra        ;
     OtherVectors    ["HoneymoonValueSpread"  ] = &HoneymoonValueSpread   ;
     OtherVectors    ["PartMortTableMult"     ] = &PartMortTableMult      ;
-    OtherVectors    ["AddonMonthlyFee"       ] = &AddonMonthlyFee        ;
     OtherVectors    ["AddonCompOnAssets"     ] = &AddonCompOnAssets      ;
     OtherVectors    ["AddonCompOnPremium"    ] = &AddonCompOnPremium     ;
     OtherVectors    ["CorridorFactor"        ] = &CorridorFactor         ;
