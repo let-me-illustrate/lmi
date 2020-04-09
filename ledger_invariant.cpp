@@ -493,6 +493,17 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 {
     LedgerBase::PlusEq(a_Addend, a_Addend.InforceLives);
 
+    // For 'CorridorFactor', an average weighted by number of lives
+    // would be inaccurate, and indeed any aggregate value could be
+    // surprising because it would not necessarily be monotone (for
+    // two lives with a ten-year age difference, the last ten would
+    // depend on the younger life only, most likely producing a
+    // discontinuity at the older life's maturity age).
+    for(int j = 0; j < a_Addend.Length; ++j)
+        {
+        CorridorFactor       [j] = 0.0;
+        }
+
     irr_precision_ = a_Addend.irr_precision_;
 
     std::vector<double> const& N = a_Addend.InforceLives;
@@ -765,17 +776,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     Smoker                        = a_Addend.Smoker;
     SmokerDistinct                = a_Addend.SmokerDistinct;
     SmokerBlended                 = a_Addend.SmokerBlended;
-
-    // For 'CorridorFactor', an average weighted by number of lives
-    // would be inaccurate, and indeed any aggregate value could be
-    // surprising because it would not necessarily be monotone (for
-    // two lives with a ten-year age difference, the last ten would
-    // depend on the younger life only, most likely producing a
-    // discontinuity at the older life's maturity age).
-    for(int j = 0; j < a_Addend.Length; ++j)
-        {
-        CorridorFactor       [j] = 0.0;
-        }
 
     IsMec                         = a_Addend.IsMec        || IsMec;
     InforceIsMec                  = a_Addend.InforceIsMec || InforceIsMec;
