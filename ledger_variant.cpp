@@ -204,19 +204,6 @@ LedgerVariant& LedgerVariant::PlusEq
     InitTgtPremHiLoadRate       = std::max(InitTgtPremHiLoadRate, a_Addend.InitTgtPremHiLoadRate);
     InitMlyPolFee               = std::max(InitMlyPolFee        , a_Addend.InitMlyPolFee        );
     InitAnnLoanCredRate         = a_Addend.InitAnnLoanCredRate;
-    // ET !! This is of the form 'x[iota rho y] gets y'.
-    for(int j = 0; j < a_Addend.Length; ++j)
-        {
-        MlySAIntRate              [j]  = a_Addend.MlySAIntRate              [j];
-        MlyGAIntRate              [j]  = a_Addend.MlyGAIntRate              [j];
-        MlyHoneymoonValueRate     [j]  = a_Addend.MlyHoneymoonValueRate     [j];
-        MlyPostHoneymoonRate      [j]  = a_Addend.MlyPostHoneymoonRate      [j];
-        AnnSAIntRate              [j]  = a_Addend.AnnSAIntRate              [j];
-        AnnGAIntRate              [j]  = a_Addend.AnnGAIntRate              [j];
-        AnnHoneymoonValueRate     [j]  = a_Addend.AnnHoneymoonValueRate     [j];
-        AnnPostHoneymoonRate      [j]  = a_Addend.AnnPostHoneymoonRate      [j];
-        KFactor                   [j]  = a_Addend.KFactor                   [j];
-        }
 
     LMI_ASSERT(a_Addend.GenBasis_ == GenBasis_);
     LMI_ASSERT(a_Addend.SepBasis_ == SepBasis_);

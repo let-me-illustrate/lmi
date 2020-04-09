@@ -772,22 +772,9 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // two lives with a ten-year age difference, the last ten would
     // depend on the younger life only, most likely producing a
     // discontinuity at the older life's maturity age).
-    //
-    // ET !! This is of the form 'x[iota rho y] gets y'.
     for(int j = 0; j < a_Addend.Length; ++j)
         {
-        IndvTaxBracket       [j] = a_Addend.IndvTaxBracket       [j];
-        CorpTaxBracket       [j] = a_Addend.CorpTaxBracket       [j];
-        AnnualFlatExtra      [j] = a_Addend.AnnualFlatExtra      [j];
-        HoneymoonValueSpread [j] = a_Addend.HoneymoonValueSpread [j];
-        PartMortTableMult    [j] = a_Addend.PartMortTableMult    [j];
-        AddonCompOnAssets    [j] = a_Addend.AddonCompOnAssets    [j];
-        AddonCompOnPremium   [j] = a_Addend.AddonCompOnPremium   [j];
         CorridorFactor       [j] = 0.0;
-        AnnLoanDueRate       [j] = a_Addend.AnnLoanDueRate       [j];
-        CurrMandE            [j] = a_Addend.CurrMandE            [j];
-        TotalIMF             [j] = a_Addend.TotalIMF             [j];
-        RefundableSalesLoad  [j] = a_Addend.RefundableSalesLoad  [j];
         }
 
     IsMec                         = a_Addend.IsMec        || IsMec;
