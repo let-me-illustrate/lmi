@@ -386,8 +386,8 @@ double Irc7702::Forceout()
 void Irc7702::Init()
 {
     Length = lmi::ssize(Qc);
-    // TODO ?? Assumes that endowment age is always 100--should pass as arg instead.
-    // TAXATION !! Is the comment above correct? Maturity age is passed as an argument.
+    LMI_ASSERT(IssueAge <= EndtAge);
+    LMI_ASSERT(            EndtAge <= 100);
     LMI_ASSERT(Length == EndtAge - IssueAge);
 
     // TAXATION !! "For now": a decade has passed...
@@ -496,10 +496,9 @@ void Irc7702::InitCorridor()
         );
 
     // GPT corridor
-    LMI_ASSERT(IssueAge <= lmi::ssize(CompleteGptCorridor()));
     GptCorridor.assign
         (CompleteGptCorridor().begin() + IssueAge
-        ,CompleteGptCorridor().end()
+        ,CompleteGptCorridor().begin() + EndtAge
         );
 }
 
