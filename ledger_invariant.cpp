@@ -546,9 +546,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // InforceLives is one longer than the other vectors.
     InforceLives        [Max] += a_Addend.InforceLives  [Max];
 
-//  UWClass                 = a_Addend.Class;
-//  SubstandardTable
-
     EffDate                       = a_Addend.EffDate;
     EffDateJdn                    = a_Addend.EffDateJdn;
     DateOfBirth                   = a_Addend.DateOfBirth;
@@ -565,22 +562,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     RetAge                        = std::min(RetAge, a_Addend.RetAge); // TODO ?? Does this make sense?
     EndtAge                       = std::max(EndtAge, a_Addend.EndtAge);
 
-    DefnLifeIns                   = a_Addend.DefnLifeIns;
-    DefnMaterialChange            = a_Addend.DefnMaterialChange;
-    AvoidMec                      = a_Addend.AvoidMec;
-
-    // TODO ?? Probably we should assert that these don't vary by life.
-    CorpName                      = a_Addend.CorpName;
-    MasterContractNumber          = a_Addend.MasterContractNumber;
-    ProductName                   = a_Addend.ProductName;
-    ProducerName                  = a_Addend.ProducerName;
-    ProducerStreet                = a_Addend.ProducerStreet;
-    ProducerCityEtc               = a_Addend.ProducerCityEtc;
-    ProducerPhone                 = a_Addend.ProducerPhone;
-    ProducerId                    = a_Addend.ProducerId;
-    // This would necessarily vary by life:
-//  ContractNumber                = "";
-
+// STRINGS BEGIN
     PolicyForm                    = a_Addend.PolicyForm;
     PolicyMktgName                = a_Addend.PolicyMktgName;
     PolicyLegalName               = a_Addend.PolicyLegalName;
@@ -741,11 +723,55 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     IllRegCertClient              = a_Addend.IllRegCertClient;
     IllRegCertClientIl            = a_Addend.IllRegCertClientIl;
     IllRegCertClientTx            = a_Addend.IllRegCertClientTx;
+    // TODO ?? Probably we should assert that these don't vary by life.
+    ProductName                   = a_Addend.ProductName;
+    ProducerName                  = a_Addend.ProducerName;
+    ProducerStreet                = a_Addend.ProducerStreet;
+    ProducerCityEtc               = a_Addend.ProducerCityEtc;
+    ProducerPhone                 = a_Addend.ProducerPhone;
+    ProducerId                    = a_Addend.ProducerId;
+    CorpName                      = a_Addend.CorpName;
+    MasterContractNumber          = a_Addend.MasterContractNumber;
+    // This would necessarily vary by life:
+//  ContractNumber                = "";
 
-    Comments                      = a_Addend.Comments;
+    Insured1                      = ""; // a_Addend.Insured1;
+    Gender                        = ""; // a_Addend.Gender;
+    UWType                        = ""; // a_Addend.UWType;
+
+    Smoker                        = a_Addend.Smoker;
+    UWClass                       = ""; // a_Addend.UWClass;
+    SubstandardTable              = ""; // a_Addend.SubstandardTable;
+    DefnLifeIns                   = a_Addend.DefnLifeIns;
+    DefnMaterialChange            = a_Addend.DefnMaterialChange;
+    AvoidMec                      = a_Addend.AvoidMec;
+
+    PartMortTableName             = a_Addend.PartMortTableName;
 
     StateOfJurisdiction           = a_Addend.StateOfJurisdiction;
     PremiumTaxState               = a_Addend.PremiumTaxState;
+    CountryIso3166Abbrev          = ""; // a_Addend.CountryIso3166Abbrev;
+    Comments                      = a_Addend.Comments;
+
+    // The composite has a supplemental report iff every cell has one,
+    // in which case it uses the same columns as the last cell. There
+    // is no better general way to decide which columns to use. (The
+    // union of all columns selected for any life becomes infeasible
+    // when its cardinality exceeds the maximum.)
+    //
+    SupplementalReportColumn00 = a_Addend.SupplementalReportColumn00;
+    SupplementalReportColumn01 = a_Addend.SupplementalReportColumn01;
+    SupplementalReportColumn02 = a_Addend.SupplementalReportColumn02;
+    SupplementalReportColumn03 = a_Addend.SupplementalReportColumn03;
+    SupplementalReportColumn04 = a_Addend.SupplementalReportColumn04;
+    SupplementalReportColumn05 = a_Addend.SupplementalReportColumn05;
+    SupplementalReportColumn06 = a_Addend.SupplementalReportColumn06;
+    SupplementalReportColumn07 = a_Addend.SupplementalReportColumn07;
+    SupplementalReportColumn08 = a_Addend.SupplementalReportColumn08;
+    SupplementalReportColumn09 = a_Addend.SupplementalReportColumn09;
+    SupplementalReportColumn10 = a_Addend.SupplementalReportColumn10;
+    SupplementalReportColumn11 = a_Addend.SupplementalReportColumn11;
+// STRINGS END
     GroupIndivSelection           = GroupIndivSelection   || a_Addend.GroupIndivSelection;
     NoLongerIssued                = NoLongerIssued        || a_Addend.NoLongerIssued;
     AllowGroupQuote               = AllowGroupQuote       && a_Addend.AllowGroupQuote;
@@ -753,7 +779,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     AllowExperienceRating         = AllowExperienceRating || a_Addend.AllowExperienceRating;
     UseExperienceRating           = UseExperienceRating   || a_Addend.UseExperienceRating;
     UsePartialMort                = a_Addend.UsePartialMort;
-    PartMortTableName             = a_Addend.PartMortTableName;
+
     GuarMaxMandE                  = std::max(GuarMaxMandE   , a_Addend.GuarMaxMandE   );
     InitDacTaxRate                = std::max(InitDacTaxRate , a_Addend.InitDacTaxRate );
     InitPremTaxRate               = std::max(InitPremTaxRate, a_Addend.InitPremTaxRate);
@@ -767,7 +793,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     GenAcctAllocation             = a_Addend.GenAcctAllocation;
     GenderDistinct                = a_Addend.GenderDistinct;
     GenderBlended                 = a_Addend.GenderBlended;
-    Smoker                        = a_Addend.Smoker;
     SmokerDistinct                = a_Addend.SmokerDistinct;
     SmokerBlended                 = a_Addend.SmokerBlended;
 
@@ -827,25 +852,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     WriteTsvFile  = WriteTsvFile  || a_Addend.WriteTsvFile ;
 
-    // The composite has a supplemental report iff every cell has one,
-    // in which case it uses the same columns as the last cell. There
-    // is no better general way to decide which columns to use. (The
-    // union of all columns selected for any life becomes infeasible
-    // when its cardinality exceeds the maximum.)
-    //
+    // The composite has a supplemental report iff every cell has one.
     SupplementalReport = SupplementalReport && a_Addend.SupplementalReport;
-    SupplementalReportColumn00 = a_Addend.SupplementalReportColumn00;
-    SupplementalReportColumn01 = a_Addend.SupplementalReportColumn01;
-    SupplementalReportColumn02 = a_Addend.SupplementalReportColumn02;
-    SupplementalReportColumn03 = a_Addend.SupplementalReportColumn03;
-    SupplementalReportColumn04 = a_Addend.SupplementalReportColumn04;
-    SupplementalReportColumn05 = a_Addend.SupplementalReportColumn05;
-    SupplementalReportColumn06 = a_Addend.SupplementalReportColumn06;
-    SupplementalReportColumn07 = a_Addend.SupplementalReportColumn07;
-    SupplementalReportColumn08 = a_Addend.SupplementalReportColumn08;
-    SupplementalReportColumn09 = a_Addend.SupplementalReportColumn09;
-    SupplementalReportColumn10 = a_Addend.SupplementalReportColumn10;
-    SupplementalReportColumn11 = a_Addend.SupplementalReportColumn11;
 
     return *this;
 }
