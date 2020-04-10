@@ -732,16 +732,19 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     ProducerId                    = a_Addend.ProducerId;
     CorpName                      = a_Addend.CorpName;
     MasterContractNumber          = a_Addend.MasterContractNumber;
-    // This would necessarily vary by life:
-//  ContractNumber                = "";
 
-    Insured1                      = ""; // a_Addend.Insured1;
-    Gender                        = ""; // a_Addend.Gender;
-    UWType                        = ""; // a_Addend.UWType;
+    // This would often or even necessarily vary by life (except the
+    // "group underwriting type"...which might be "simplified" for most
+    // insureds, but "medical" for the oldest, but is most often the
+    // same for all):
+    ContractNumber                = "";
+    Insured1                      = "";
+    Gender                        = "";
+    UWType                        = a_Addend.UWType;
+    Smoker                        = "";
+    UWClass                       = "";
+    SubstandardTable              = "";
 
-    Smoker                        = a_Addend.Smoker;
-    UWClass                       = ""; // a_Addend.UWClass;
-    SubstandardTable              = ""; // a_Addend.SubstandardTable;
     DefnLifeIns                   = a_Addend.DefnLifeIns;
     DefnMaterialChange            = a_Addend.DefnMaterialChange;
     AvoidMec                      = a_Addend.AvoidMec;
@@ -750,7 +753,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     StateOfJurisdiction           = a_Addend.StateOfJurisdiction;
     PremiumTaxState               = a_Addend.PremiumTaxState;
-    CountryIso3166Abbrev          = ""; // a_Addend.CountryIso3166Abbrev;
+    CountryIso3166Abbrev          = a_Addend.CountryIso3166Abbrev;
     Comments                      = a_Addend.Comments;
 
     // The composite has a supplemental report iff every cell has one,
