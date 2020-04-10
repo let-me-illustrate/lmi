@@ -562,219 +562,20 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     RetAge                        = std::min(RetAge, a_Addend.RetAge); // TODO ?? Does this make sense?
     EndtAge                       = std::max(EndtAge, a_Addend.EndtAge);
 
-// STRINGS BEGIN
-    PolicyForm                    = a_Addend.PolicyForm;
-    PolicyMktgName                = a_Addend.PolicyMktgName;
-    PolicyLegalName               = a_Addend.PolicyLegalName;
-    // It is inappropriate to "summarize" CsoEra for a composite that
-    // includes contracts issued in different CSO eras. Choosing the
-    // last cell's value does the "right" thing when all contracts are
-    // of the same CSO era, as is most often the case.
-    CsoEra                        = a_Addend.CsoEra;
-    InsCoShortName                = a_Addend.InsCoShortName;
-    InsCoName                     = a_Addend.InsCoName;
-    InsCoAddr                     = a_Addend.InsCoAddr;
-    InsCoStreet                   = a_Addend.InsCoStreet;
-    InsCoPhone                    = a_Addend.InsCoPhone;
-    MainUnderwriter               = a_Addend.MainUnderwriter;
-    MainUnderwriterAddress        = a_Addend.MainUnderwriterAddress;
-    CoUnderwriter                 = a_Addend.CoUnderwriter;
-    CoUnderwriterAddress          = a_Addend.CoUnderwriterAddress;
-
-    AvName                        = a_Addend.AvName;
-    CsvName                       = a_Addend.CsvName;
-    CsvHeaderName                 = a_Addend.CsvHeaderName;
-    NoLapseProvisionName          = a_Addend.NoLapseProvisionName;
-    ContractName                  = a_Addend.ContractName;
-    DboName                       = a_Addend.DboName;
-    DboNameLevel                  = a_Addend.DboNameLevel;
-    DboNameIncreasing             = a_Addend.DboNameIncreasing;
-    DboNameMinDeathBenefit        = a_Addend.DboNameMinDeathBenefit;
-    GenAcctName                   = a_Addend.GenAcctName;
-    GenAcctNameElaborated         = a_Addend.GenAcctNameElaborated;
-    SepAcctName                   = a_Addend.SepAcctName;
-    SpecAmtName                   = a_Addend.SpecAmtName;
-    SpecAmtNameElaborated         = a_Addend.SpecAmtNameElaborated;
-    UwBasisMedical                = a_Addend.UwBasisMedical;
-    UwBasisParamedical            = a_Addend.UwBasisParamedical;
-    UwBasisNonmedical             = a_Addend.UwBasisNonmedical;
-    UwBasisSimplified             = a_Addend.UwBasisSimplified;
-    UwBasisGuaranteed             = a_Addend.UwBasisGuaranteed;
-    UwClassPreferred              = a_Addend.UwClassPreferred;
-    UwClassStandard               = a_Addend.UwClassStandard;
-    UwClassRated                  = a_Addend.UwClassRated;
-    UwClassUltra                  = a_Addend.UwClassUltra;
-
-    AccountValueFootnote          = a_Addend.AccountValueFootnote;
-    AttainedAgeFootnote           = a_Addend.AttainedAgeFootnote;
-    CashSurrValueFootnote         = a_Addend.CashSurrValueFootnote;
-    DeathBenefitFootnote          = a_Addend.DeathBenefitFootnote;
-    InitialPremiumFootnote        = a_Addend.InitialPremiumFootnote;
-    NetPremiumFootnote            = a_Addend.NetPremiumFootnote;
-    GrossPremiumFootnote          = a_Addend.GrossPremiumFootnote;
-    OutlayFootnote                = a_Addend.OutlayFootnote;
-    PolicyYearFootnote            = a_Addend.PolicyYearFootnote;
-
-    ADDTerseName                  = a_Addend.ADDTerseName;
-    InsurabilityTerseName         = a_Addend.InsurabilityTerseName;
-    ChildTerseName                = a_Addend.ChildTerseName;
-    SpouseTerseName               = a_Addend.SpouseTerseName;
-    TermTerseName                 = a_Addend.TermTerseName;
-    WaiverTerseName               = a_Addend.WaiverTerseName;
-    AccelBftRiderTerseName        = a_Addend.AccelBftRiderTerseName;
-    OverloanRiderTerseName        = a_Addend.OverloanRiderTerseName;
-
-    ADDFootnote                   = a_Addend.ADDFootnote;
-    ChildFootnote                 = a_Addend.ChildFootnote;
-    SpouseFootnote                = a_Addend.SpouseFootnote;
-    TermFootnote                  = a_Addend.TermFootnote;
-    WaiverFootnote                = a_Addend.WaiverFootnote;
-    AccelBftRiderFootnote         = a_Addend.AccelBftRiderFootnote;
-    OverloanRiderFootnote         = a_Addend.OverloanRiderFootnote;
-
-    GroupQuoteShortProductName    = a_Addend.GroupQuoteShortProductName;
-    GroupQuoteIsNotAnOffer        = a_Addend.GroupQuoteIsNotAnOffer    ;
-    GroupQuoteRidersFooter        = a_Addend.GroupQuoteRidersFooter    ;
-    GroupQuotePolicyFormId        = a_Addend.GroupQuotePolicyFormId    ;
-    GroupQuoteStateVariations     = a_Addend.GroupQuoteStateVariations ;
-    GroupQuoteProspectus          = a_Addend.GroupQuoteProspectus      ;
-    GroupQuoteUnderwriter         = a_Addend.GroupQuoteUnderwriter     ;
-    GroupQuoteBrokerDealer        = a_Addend.GroupQuoteBrokerDealer    ;
-    GroupQuoteRubricMandatory     = a_Addend.GroupQuoteRubricMandatory ;
-    GroupQuoteRubricVoluntary     = a_Addend.GroupQuoteRubricVoluntary ;
-    GroupQuoteRubricFusion        = a_Addend.GroupQuoteRubricFusion    ;
-    GroupQuoteFooterMandatory     = a_Addend.GroupQuoteFooterMandatory ;
-    GroupQuoteFooterVoluntary     = a_Addend.GroupQuoteFooterVoluntary ;
-    GroupQuoteFooterFusion        = a_Addend.GroupQuoteFooterFusion    ;
-
-    MinimumPremiumFootnote        = a_Addend.MinimumPremiumFootnote;
-    PremAllocationFootnote        = a_Addend.PremAllocationFootnote;
-
-    InterestDisclaimer            = a_Addend.InterestDisclaimer;
-    GuarMortalityFootnote         = a_Addend.GuarMortalityFootnote;
-    ProductDescription            = a_Addend.ProductDescription;
-    StableValueFootnote           = a_Addend.StableValueFootnote;
-    NoVanishPremiumFootnote       = a_Addend.NoVanishPremiumFootnote;
-    RejectPremiumFootnote         = a_Addend.RejectPremiumFootnote;
-    ExpRatingFootnote             = a_Addend.ExpRatingFootnote;
-    MortalityBlendFootnote        = a_Addend.MortalityBlendFootnote;
-    HypotheticalRatesFootnote     = a_Addend.HypotheticalRatesFootnote;
-    SalesLoadRefundFootnote       = a_Addend.SalesLoadRefundFootnote;
-    NoLapseEverFootnote           = a_Addend.NoLapseEverFootnote;
-    NoLapseFootnote               = a_Addend.NoLapseFootnote;
-    MarketValueAdjFootnote        = a_Addend.MarketValueAdjFootnote;
-    ExchangeChargeFootnote0       = a_Addend.ExchangeChargeFootnote0;
-    CurrentValuesFootnote         = a_Addend.CurrentValuesFootnote;
-    DBOption1Footnote             = a_Addend.DBOption1Footnote;
-    DBOption2Footnote             = a_Addend.DBOption2Footnote;
-    DBOption3Footnote             = a_Addend.DBOption3Footnote;
-    MinDeathBenefitFootnote       = a_Addend.MinDeathBenefitFootnote;
-    ExpRatRiskChargeFootnote      = a_Addend.ExpRatRiskChargeFootnote;
-    ExchangeChargeFootnote1       = a_Addend.ExchangeChargeFootnote1;
-    FlexiblePremiumFootnote       = a_Addend.FlexiblePremiumFootnote;
-    GuaranteedValuesFootnote      = a_Addend.GuaranteedValuesFootnote;
-    CreditingRateFootnote         = a_Addend.CreditingRateFootnote;
-    GuaranteedCreditRateFootnote  = a_Addend.GuaranteedCreditRateFootnote;
-    GrossRateFootnote             = a_Addend.GrossRateFootnote;
-    NetRateFootnote               = a_Addend.NetRateFootnote;
-    MecFootnote                   = a_Addend.MecFootnote;
-    GptFootnote                   = a_Addend.GptFootnote;
-    MidpointValuesFootnote        = a_Addend.MidpointValuesFootnote;
-    SinglePremiumFootnote         = a_Addend.SinglePremiumFootnote;
-    MonthlyChargesFootnote        = a_Addend.MonthlyChargesFootnote;
-    UltCreditingRateFootnote      = a_Addend.UltCreditingRateFootnote;
-    UltCreditingRateHeader        = a_Addend.UltCreditingRateHeader;
-    MaxNaarFootnote               = a_Addend.MaxNaarFootnote;
-    PremTaxSurrChgFootnote        = a_Addend.PremTaxSurrChgFootnote;
-    PolicyFeeFootnote             = a_Addend.PolicyFeeFootnote;
-    AssetChargeFootnote           = a_Addend.AssetChargeFootnote;
-    InvestmentIncomeFootnote      = a_Addend.InvestmentIncomeFootnote;
-    IrrDbFootnote                 = a_Addend.IrrDbFootnote;
-    IrrCsvFootnote                = a_Addend.IrrCsvFootnote;
-    MortalityChargesFootnote      = a_Addend.MortalityChargesFootnote;
-    LoanAndWithdrawalFootnote     = a_Addend.LoanAndWithdrawalFootnote;
-    LoanFootnote                  = a_Addend.LoanFootnote;
-    ImprimaturPresale             = a_Addend.ImprimaturPresale;
-    ImprimaturPresaleComposite    = a_Addend.ImprimaturPresaleComposite;
-    ImprimaturInforce             = a_Addend.ImprimaturInforce;
-    ImprimaturInforceComposite    = a_Addend.ImprimaturInforceComposite;
-    StateMarketingImprimatur      = a_Addend.StateMarketingImprimatur;
-    InforceNonGuaranteedFootnote0 = a_Addend.InforceNonGuaranteedFootnote0;
-    InforceNonGuaranteedFootnote1 = a_Addend.InforceNonGuaranteedFootnote1;
-    InforceNonGuaranteedFootnote2 = a_Addend.InforceNonGuaranteedFootnote2;
-    InforceNonGuaranteedFootnote3 = a_Addend.InforceNonGuaranteedFootnote3;
-    NonGuaranteedFootnote         = a_Addend.NonGuaranteedFootnote;
-    NonGuaranteedFootnote1        = a_Addend.NonGuaranteedFootnote1;
-    NonGuaranteedFootnote1Tx      = a_Addend.NonGuaranteedFootnote1Tx;
-    MonthlyChargesPaymentFootnote = a_Addend.MonthlyChargesPaymentFootnote;
-    SurrenderFootnote             = a_Addend.SurrenderFootnote;
-    PortabilityFootnote           = a_Addend.PortabilityFootnote;
-    FundRateFootnote              = a_Addend.FundRateFootnote;
-    IssuingCompanyFootnote        = a_Addend.IssuingCompanyFootnote;
-    SubsidiaryFootnote            = a_Addend.SubsidiaryFootnote;
-    PlacementAgentFootnote        = a_Addend.PlacementAgentFootnote;
-    MarketingNameFootnote         = a_Addend.MarketingNameFootnote;
-    GuarIssueDisclaimerNcSc       = a_Addend.GuarIssueDisclaimerNcSc;
-    GuarIssueDisclaimerMd         = a_Addend.GuarIssueDisclaimerMd;
-    GuarIssueDisclaimerTx         = a_Addend.GuarIssueDisclaimerTx;
-    IllRegCertAgent               = a_Addend.IllRegCertAgent;
-    IllRegCertAgentIl             = a_Addend.IllRegCertAgentIl;
-    IllRegCertAgentTx             = a_Addend.IllRegCertAgentTx;
-    IllRegCertClient              = a_Addend.IllRegCertClient;
-    IllRegCertClientIl            = a_Addend.IllRegCertClientIl;
-    IllRegCertClientTx            = a_Addend.IllRegCertClientTx;
-    // TODO ?? Probably we should assert that these don't vary by life.
-    ProductName                   = a_Addend.ProductName;
-    ProducerName                  = a_Addend.ProducerName;
-    ProducerStreet                = a_Addend.ProducerStreet;
-    ProducerCityEtc               = a_Addend.ProducerCityEtc;
-    ProducerPhone                 = a_Addend.ProducerPhone;
-    ProducerId                    = a_Addend.ProducerId;
-    CorpName                      = a_Addend.CorpName;
-    MasterContractNumber          = a_Addend.MasterContractNumber;
-
-    // This would often or even necessarily vary by life (except the
-    // "group underwriting type"...which might be "simplified" for most
-    // insureds, but "medical" for the oldest, but is most often the
-    // same for all):
+    // Strings.
+    //
+    // It might be a good idea to assert that some strings, such as
+    // MasterContractNumber, don't vary by life.
+    //
+    // Override the behavior of LedgerBase::PlusEq() for this handful
+    // of strings, which would often or even necessarily vary by life.
     ContractNumber                = "";
     Insured1                      = "";
     Gender                        = "";
-    UWType                        = a_Addend.UWType;
     Smoker                        = "";
     UWClass                       = "";
     SubstandardTable              = "";
 
-    DefnLifeIns                   = a_Addend.DefnLifeIns;
-    DefnMaterialChange            = a_Addend.DefnMaterialChange;
-    AvoidMec                      = a_Addend.AvoidMec;
-
-    PartMortTableName             = a_Addend.PartMortTableName;
-
-    StateOfJurisdiction           = a_Addend.StateOfJurisdiction;
-    PremiumTaxState               = a_Addend.PremiumTaxState;
-    CountryIso3166Abbrev          = a_Addend.CountryIso3166Abbrev;
-    Comments                      = a_Addend.Comments;
-
-    // The composite has a supplemental report iff every cell has one,
-    // in which case it uses the same columns as the last cell. There
-    // is no better general way to decide which columns to use. (The
-    // union of all columns selected for any life becomes infeasible
-    // when its cardinality exceeds the maximum.)
-    //
-    SupplementalReportColumn00 = a_Addend.SupplementalReportColumn00;
-    SupplementalReportColumn01 = a_Addend.SupplementalReportColumn01;
-    SupplementalReportColumn02 = a_Addend.SupplementalReportColumn02;
-    SupplementalReportColumn03 = a_Addend.SupplementalReportColumn03;
-    SupplementalReportColumn04 = a_Addend.SupplementalReportColumn04;
-    SupplementalReportColumn05 = a_Addend.SupplementalReportColumn05;
-    SupplementalReportColumn06 = a_Addend.SupplementalReportColumn06;
-    SupplementalReportColumn07 = a_Addend.SupplementalReportColumn07;
-    SupplementalReportColumn08 = a_Addend.SupplementalReportColumn08;
-    SupplementalReportColumn09 = a_Addend.SupplementalReportColumn09;
-    SupplementalReportColumn10 = a_Addend.SupplementalReportColumn10;
-    SupplementalReportColumn11 = a_Addend.SupplementalReportColumn11;
-// STRINGS END
     GroupIndivSelection           = GroupIndivSelection   || a_Addend.GroupIndivSelection;
     NoLongerIssued                = NoLongerIssued        || a_Addend.NoLongerIssued;
     AllowGroupQuote               = AllowGroupQuote       && a_Addend.AllowGroupQuote;
@@ -855,7 +656,12 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     WriteTsvFile  = WriteTsvFile  || a_Addend.WriteTsvFile ;
 
-    // The composite has a supplemental report iff every cell has one.
+    // The composite has a supplemental report iff every cell has one,
+    // in which case it uses the same columns as the last cell. There
+    // is no better general way to decide which columns to use. (The
+    // union of all columns selected for any life becomes infeasible
+    // when its cardinality exceeds the maximum.)
+    //
     SupplementalReport = SupplementalReport && a_Addend.SupplementalReport;
 
     return *this;

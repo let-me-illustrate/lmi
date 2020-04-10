@@ -344,6 +344,17 @@ LedgerBase& LedgerBase::PlusEq
         }
     LMI_ASSERT(a_Addend_ssmi == a_Addend.ScalableScalars.end());
 
+    string_map::const_iterator a_Addend_smi = a_Addend.Strings.begin();
+    for
+        (string_map::iterator smi = Strings.begin()
+        ;smi != Strings.end()
+        ;++smi, ++a_Addend_smi
+        )
+        {
+        *(*smi).second = *(*a_Addend_smi).second;
+        }
+    LMI_ASSERT(a_Addend_smi == a_Addend.Strings.end());
+
     return *this;
 }
 
