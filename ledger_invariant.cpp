@@ -598,17 +598,17 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
         }
     MecYear                       = std::min(MecYear, a_Addend.MecYear);
 
-    HasWP           = HasWP           || a_Addend.HasWP          ;
-    HasADD          = HasADD          || a_Addend.HasADD         ;
-    HasTerm         = HasTerm         || a_Addend.HasTerm        ;
-    HasSupplSpecAmt = HasSupplSpecAmt || a_Addend.HasSupplSpecAmt;
-    HasChildRider      = HasChildRider      || a_Addend.HasChildRider     ;
-    HasSpouseRider     = HasSpouseRider     || a_Addend.HasSpouseRider    ;
+    HasWP                         = HasWP           || a_Addend.HasWP          ;
+    HasADD                        = HasADD          || a_Addend.HasADD         ;
+    HasTerm                       = HasTerm         || a_Addend.HasTerm        ;
+    HasSupplSpecAmt               = HasSupplSpecAmt || a_Addend.HasSupplSpecAmt;
+    HasChildRider                 = HasChildRider      || a_Addend.HasChildRider     ;
+    HasSpouseRider                = HasSpouseRider     || a_Addend.HasSpouseRider    ;
 //  SpouseIssueAge
-    HasHoneymoon       = HasHoneymoon || a_Addend.HasHoneymoon ;
-    PostHoneymoonSpread= a_Addend.PostHoneymoonSpread          ;
-    SplitMinPrem       = SplitMinPrem || a_Addend.SplitMinPrem ;
-    ErNotionallyPaysTerm = ErNotionallyPaysTerm || a_Addend.ErNotionallyPaysTerm;
+    HasHoneymoon                  = HasHoneymoon || a_Addend.HasHoneymoon ;
+    PostHoneymoonSpread           = a_Addend.PostHoneymoonSpread          ;
+    SplitMinPrem                  = SplitMinPrem || a_Addend.SplitMinPrem ;
+    ErNotionallyPaysTerm          = ErNotionallyPaysTerm || a_Addend.ErNotionallyPaysTerm;
     IsSinglePremium        = std::max(a_Addend.IsSinglePremium      , IsSinglePremium      );
     MaxAnnGuarLoanSpread   = std::max(a_Addend.MaxAnnGuarLoanSpread , MaxAnnGuarLoanSpread );
     MaxAnnCurrLoanDueRate  = std::max(a_Addend.MaxAnnCurrLoanDueRate, MaxAnnCurrLoanDueRate);
@@ -618,13 +618,13 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // history. For another, even if we had it, payments probably
     // wouldn't be equally spaced, so we'd need a more general irr
     // routine.
-    IsInforce     = IsInforce     || a_Addend.IsInforce    ;
+    IsInforce                     = IsInforce     || a_Addend.IsInforce    ;
 
 //  CurrentCoiMultiplier
-    NoLapseAlwaysActive= a_Addend.NoLapseAlwaysActive|| NoLapseAlwaysActive;
-    NoLapseMinDur      = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
-    NoLapseMinAge      = std::min(a_Addend.NoLapseMinAge, NoLapseMinAge);
-    Has1035ExchCharge  = a_Addend.Has1035ExchCharge  || Has1035ExchCharge;
+    NoLapseAlwaysActive           = a_Addend.NoLapseAlwaysActive|| NoLapseAlwaysActive;
+    NoLapseMinDur                 = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
+    NoLapseMinAge                 = std::min(a_Addend.NoLapseMinAge, NoLapseMinAge);
+    Has1035ExchCharge             = a_Addend.Has1035ExchCharge  || Has1035ExchCharge;
     EffDateJdn                    = a_Addend.EffDateJdn;
     DateOfBirthJdn                = a_Addend.DateOfBirthJdn;
     LastCoiReentryDateJdn         = a_Addend.LastCoiReentryDateJdn;
@@ -632,7 +632,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     InforceAsOfDateJdn            = a_Addend.InforceAsOfDateJdn;
     SplitFundAllocation           = SplitFundAllocation   || a_Addend.SplitFundAllocation;
     GenAcctAllocation             = a_Addend.GenAcctAllocation;
-    WriteTsvFile  = WriteTsvFile  || a_Addend.WriteTsvFile ;
+    WriteTsvFile                  = WriteTsvFile || a_Addend.WriteTsvFile ;
 
     // The composite has a supplemental report iff every cell has one,
     // in which case it uses the same columns as the last cell. There
@@ -640,7 +640,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // union of all columns selected for any life becomes infeasible
     // when its cardinality exceeds the maximum.)
     //
-    SupplementalReport = SupplementalReport && a_Addend.SupplementalReport;
+    SupplementalReport            = SupplementalReport && a_Addend.SupplementalReport;
     // Nonscalable scalars end.
 
     // Strings.
