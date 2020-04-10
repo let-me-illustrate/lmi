@@ -488,7 +488,31 @@ void LedgerInvariant::Init()
     FullyInitialized    = false;
 }
 
-//============================================================================
+// Notes on effective date.
+//
+// Should different cells in a census have different effective dates?
+// Should there be any consistency requirements at all?
+//
+// Pro: A census is just a collection of individuals. We could consider
+// adding the ability to append any individual (.ill) to any census (.cns).
+// That might be handy for putting together a regression test deck. Most
+// important, suppose a client bought one product for a number of employees
+// a few years ago, and is now adding new employees under a successor product;
+// don't we want to give them a combined composite if they ask?
+//
+// Con: Our task is simpler if we enforce strict consistency requirements.
+// There's less to think of, so the program will probably have fewer bugs;
+// although if overly strict requirements prevent the user from doing what
+// they want in some cases, that's a defect. I believe that vendor systems
+// generally have very strict consistency requirements.
+//
+// As to effective date in particular, I'm not sure what this item will
+// actually mean when we do reproposals. If it's plan inception date, then
+// it should be allowed to vary. If it's "as-of date" then I can't see a
+// reason to let it vary. Maybe these are different needs requiring separate
+// input items. What would we do with a plan established thirty years ago
+// that includes an individual who's already past the maturity date?
+
 LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 {
     LedgerBase::PlusEq(a_Addend, a_Addend.InforceLives);
@@ -529,31 +553,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 //  SmokerBlended           = 0;
 //  UWClass                 = a_Addend.Class;
 //  SubstandardTable
-
-// Should different cells in a census have different effective dates?
-// Should there be any consistency requirements at all?
-//
-// Pro: A census is just a collection of individuals. We could consider
-// adding the ability to append any individual (.ill) to any census (.cns).
-// That might be handy for putting together a regression test deck. Most
-// important, suppose a client bought one product for a number of employees
-// a few years ago, and is now adding new employees under a successor product;
-// don't we want to give them a combined composite if they ask?
-//
-// Con: Our task is simpler if we enforce strict consistency requirements.
-// There's less to think of, so the program will probably have fewer bugs;
-// although if overly strict requirements prevent the user from doing what
-// they want in some cases, that's a defect. I believe that vendor systems
-// generally have very strict consistency requirements.
-//
-// As to effective date in particular, I'm not sure what this item will
-// actually mean when we do reproposals. If it's plan inception date, then
-// it should be allowed to vary. If it's "as-of date" then I can't see a
-// reason to let it vary. Maybe these are different needs requiring separate
-// input items. What would we do with a plan established thirty years ago
-// that includes an individual who's already past the maturity date?
-//
-// Anyway, those are my thoughts; what conclusion would you reach?
 
     EffDate                       = a_Addend.EffDate;
     EffDateJdn                    = a_Addend.EffDateJdn;
