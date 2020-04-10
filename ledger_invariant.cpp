@@ -564,9 +564,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     // Strings.
     //
-    // It might be a good idea to assert that some strings, such as
-    // MasterContractNumber, don't vary by life.
-    //
     // Override the behavior of LedgerBase::PlusEq() for this handful
     // of strings, which would often or even necessarily vary by life.
     ContractNumber                = "";
