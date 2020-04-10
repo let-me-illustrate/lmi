@@ -546,33 +546,26 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // InforceLives is one longer than the other vectors.
     InforceLives        [Max] += a_Addend.InforceLives  [Max];
 
-    EffDate                       = a_Addend.EffDate;
-    EffDateJdn                    = a_Addend.EffDateJdn;
-    DateOfBirth                   = a_Addend.DateOfBirth;
-    DateOfBirthJdn                = a_Addend.DateOfBirthJdn;
-    LastCoiReentryDate            = a_Addend.LastCoiReentryDate;
-    LastCoiReentryDateJdn         = a_Addend.LastCoiReentryDateJdn;
-    ListBillDate                  = a_Addend.ListBillDate;
-    ListBillDateJdn               = a_Addend.ListBillDateJdn;
-    InforceAsOfDate               = a_Addend.InforceAsOfDate;
-    InforceAsOfDateJdn            = a_Addend.InforceAsOfDateJdn;
-    InitErMode                    = a_Addend.InitErMode;
-    InitDBOpt                     = a_Addend.InitDBOpt;
+    FundNumbers                   = a_Addend.FundNumbers;
+    FundNames                     = a_Addend.FundNames;
+    FundAllocs                    = a_Addend.FundAllocs;
+    FundAllocations               = a_Addend.FundAllocations;
+
+    // Nonscalable scalars.
+
+//  MaleProportion
+//  NonsmokerProportion
+    GuarMaxMandE                  = std::max(GuarMaxMandE   , a_Addend.GuarMaxMandE   );
+    InitDacTaxRate                = std::max(InitDacTaxRate , a_Addend.InitDacTaxRate );
+    InitPremTaxRate               = std::max(InitPremTaxRate, a_Addend.InitPremTaxRate);
+    GenderDistinct                = a_Addend.GenderDistinct;
+    GenderBlended                 = a_Addend.GenderBlended;
+    SmokerDistinct                = a_Addend.SmokerDistinct;
+    SmokerBlended                 = a_Addend.SmokerBlended;
+//  SubstdTable
     Age                           = std::min(Age, a_Addend.Age);
     RetAge                        = std::min(RetAge, a_Addend.RetAge); // TODO ?? Does this make sense?
     EndtAge                       = std::max(EndtAge, a_Addend.EndtAge);
-
-    // Strings.
-    //
-    // Override the behavior of LedgerBase::PlusEq() for this handful
-    // of strings, which would often or even necessarily vary by life.
-    ContractNumber                = "";
-    Insured1                      = "";
-    Gender                        = "";
-    Smoker                        = "";
-    UWClass                       = "";
-    SubstandardTable              = "";
-
     GroupIndivSelection           = GroupIndivSelection   || a_Addend.GroupIndivSelection;
     NoLongerIssued                = NoLongerIssued        || a_Addend.NoLongerIssued;
     AllowGroupQuote               = AllowGroupQuote       && a_Addend.AllowGroupQuote;
@@ -580,23 +573,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     AllowExperienceRating         = AllowExperienceRating || a_Addend.AllowExperienceRating;
     UseExperienceRating           = UseExperienceRating   || a_Addend.UseExperienceRating;
     UsePartialMort                = a_Addend.UsePartialMort;
-
-    GuarMaxMandE                  = std::max(GuarMaxMandE   , a_Addend.GuarMaxMandE   );
-    InitDacTaxRate                = std::max(InitDacTaxRate , a_Addend.InitDacTaxRate );
-    InitPremTaxRate               = std::max(InitPremTaxRate, a_Addend.InitPremTaxRate);
     AvgFund                       = a_Addend.AvgFund;
     CustomFund                    = a_Addend.CustomFund;
-    FundNumbers                   = a_Addend.FundNumbers;
-    FundNames                     = a_Addend.FundNames;
-    FundAllocs                    = a_Addend.FundAllocs;
-    FundAllocations               = a_Addend.FundAllocations;
-    SplitFundAllocation           = SplitFundAllocation   || a_Addend.SplitFundAllocation;
-    GenAcctAllocation             = a_Addend.GenAcctAllocation;
-    GenderDistinct                = a_Addend.GenderDistinct;
-    GenderBlended                 = a_Addend.GenderBlended;
-    SmokerDistinct                = a_Addend.SmokerDistinct;
-    SmokerBlended                 = a_Addend.SmokerBlended;
-
     IsMec                         = a_Addend.IsMec        || IsMec;
     InforceIsMec                  = a_Addend.InforceIsMec || InforceIsMec;
 
@@ -624,25 +602,16 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     HasADD          = HasADD          || a_Addend.HasADD         ;
     HasTerm         = HasTerm         || a_Addend.HasTerm        ;
     HasSupplSpecAmt = HasSupplSpecAmt || a_Addend.HasSupplSpecAmt;
-
     HasChildRider      = HasChildRider      || a_Addend.HasChildRider     ;
     HasSpouseRider     = HasSpouseRider     || a_Addend.HasSpouseRider    ;
-
+//  SpouseIssueAge
     HasHoneymoon       = HasHoneymoon || a_Addend.HasHoneymoon ;
     PostHoneymoonSpread= a_Addend.PostHoneymoonSpread          ;
     SplitMinPrem       = SplitMinPrem || a_Addend.SplitMinPrem ;
-
     ErNotionallyPaysTerm = ErNotionallyPaysTerm || a_Addend.ErNotionallyPaysTerm;
-
     IsSinglePremium        = std::max(a_Addend.IsSinglePremium      , IsSinglePremium      );
-
     MaxAnnGuarLoanSpread   = std::max(a_Addend.MaxAnnGuarLoanSpread , MaxAnnGuarLoanSpread );
     MaxAnnCurrLoanDueRate  = std::max(a_Addend.MaxAnnCurrLoanDueRate, MaxAnnCurrLoanDueRate);
-
-    NoLapseMinDur      = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
-    NoLapseMinAge      = std::min(a_Addend.NoLapseMinAge, NoLapseMinAge);
-    NoLapseAlwaysActive= a_Addend.NoLapseAlwaysActive|| NoLapseAlwaysActive;
-    Has1035ExchCharge  = a_Addend.Has1035ExchCharge  || Has1035ExchCharge;
 
     // Logical OR because IsInforce is a taint that prevents us from
     // calculating a meaningful IRR. For one thing, we lack payment
@@ -651,6 +620,18 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // routine.
     IsInforce     = IsInforce     || a_Addend.IsInforce    ;
 
+//  CurrentCoiMultiplier
+    NoLapseAlwaysActive= a_Addend.NoLapseAlwaysActive|| NoLapseAlwaysActive;
+    NoLapseMinDur      = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
+    NoLapseMinAge      = std::min(a_Addend.NoLapseMinAge, NoLapseMinAge);
+    Has1035ExchCharge  = a_Addend.Has1035ExchCharge  || Has1035ExchCharge;
+    EffDateJdn                    = a_Addend.EffDateJdn;
+    DateOfBirthJdn                = a_Addend.DateOfBirthJdn;
+    LastCoiReentryDateJdn         = a_Addend.LastCoiReentryDateJdn;
+    ListBillDateJdn               = a_Addend.ListBillDateJdn;
+    InforceAsOfDateJdn            = a_Addend.InforceAsOfDateJdn;
+    SplitFundAllocation           = SplitFundAllocation   || a_Addend.SplitFundAllocation;
+    GenAcctAllocation             = a_Addend.GenAcctAllocation;
     WriteTsvFile  = WriteTsvFile  || a_Addend.WriteTsvFile ;
 
     // The composite has a supplemental report iff every cell has one,
@@ -660,6 +641,31 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // when its cardinality exceeds the maximum.)
     //
     SupplementalReport = SupplementalReport && a_Addend.SupplementalReport;
+    // Nonscalable scalars end.
+
+    // Strings.
+    //
+    // Override the behavior of LedgerBase::PlusEq() for this handful
+    // of strings, which would often or even necessarily vary by life.
+    ContractNumber                = "";
+    Insured1                      = "";
+    Gender                        = "";
+    Smoker                        = "";
+    UWClass                       = "";
+    SubstandardTable              = "";
+
+    // Special-case strings.
+
+    EffDate                       = a_Addend.EffDate;
+    DateOfBirth                   = a_Addend.DateOfBirth;
+    LastCoiReentryDate            = a_Addend.LastCoiReentryDate;
+    ListBillDate                  = a_Addend.ListBillDate;
+    InforceAsOfDate               = a_Addend.InforceAsOfDate;
+
+    // Special-case enumerative data.
+
+    InitErMode                    = a_Addend.InitErMode;
+    InitDBOpt                     = a_Addend.InitDBOpt;
 
     return *this;
 }
