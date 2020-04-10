@@ -546,11 +546,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // InforceLives is one longer than the other vectors.
     InforceLives        [Max] += a_Addend.InforceLives  [Max];
 
-//  GenderDistinct          = 0;
-//  GenderBlended           = 0;
-//  Smoker                  = a_Addend.Smoking;
-//  SmokerDistinct          = 0;
-//  SmokerBlended           = 0;
 //  UWClass                 = a_Addend.Class;
 //  SubstandardTable
 
