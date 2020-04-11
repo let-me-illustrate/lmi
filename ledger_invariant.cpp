@@ -475,6 +475,12 @@ void LedgerInvariant::Init()
     MecMonth            = 11;
 
     // TODO ?? Probably every member should be initialized.
+//  MaleProportion                // Default value unaffected by compositing.
+//  NonsmokerProportion           // Default value unaffected by compositing.
+//  SubstdTable                   // Default value unaffected by compositing.
+//  SpouseIssueAge                // Default value unaffected by compositing.
+//  CurrentCoiMultiplier          // Default value unaffected by compositing.
+
     Age                 = 0;
     EndtAge             = 100;
     NoLapseMinDur       = 100;
@@ -558,8 +564,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     // Nonscalable scalars.
 
-//  MaleProportion
-//  NonsmokerProportion
+//  MaleProportion                // Default value unaffected by compositing.
+//  NonsmokerProportion           // Default value unaffected by compositing.
     GuarMaxMandE                  = std::max(GuarMaxMandE   , a_Addend.GuarMaxMandE   );
     InitDacTaxRate                = std::max(InitDacTaxRate , a_Addend.InitDacTaxRate );
     InitPremTaxRate               = std::max(InitPremTaxRate, a_Addend.InitPremTaxRate);
@@ -567,7 +573,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     GenderBlended                 = a_Addend.GenderBlended;
     SmokerDistinct                = a_Addend.SmokerDistinct;
     SmokerBlended                 = a_Addend.SmokerBlended;
-//  SubstdTable
+//  SubstdTable                   // Default value unaffected by compositing.
     Age                           = std::min(Age, a_Addend.Age);
     RetAge                        = std::min(RetAge, a_Addend.RetAge); // TODO ?? Does this make sense?
     EndtAge                       = std::max(EndtAge, a_Addend.EndtAge);
@@ -609,7 +615,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     HasSupplSpecAmt               = HasSupplSpecAmt || a_Addend.HasSupplSpecAmt;
     HasChildRider                 = HasChildRider      || a_Addend.HasChildRider     ;
     HasSpouseRider                = HasSpouseRider     || a_Addend.HasSpouseRider    ;
-//  SpouseIssueAge
+//  SpouseIssueAge                // Default value unaffected by compositing.
     HasHoneymoon                  = HasHoneymoon || a_Addend.HasHoneymoon ;
     PostHoneymoonSpread           = a_Addend.PostHoneymoonSpread          ;
     SplitMinPrem                  = SplitMinPrem || a_Addend.SplitMinPrem ;
@@ -625,7 +631,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // routine.
     IsInforce                     = IsInforce     || a_Addend.IsInforce    ;
 
-//  CurrentCoiMultiplier
+//  CurrentCoiMultiplier          // Default value unaffected by compositing.
     NoLapseAlwaysActive           = a_Addend.NoLapseAlwaysActive|| NoLapseAlwaysActive;
     NoLapseMinDur                 = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
     NoLapseMinAge                 = std::min(a_Addend.NoLapseMinAge, NoLapseMinAge);
