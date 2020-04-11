@@ -468,31 +468,30 @@ void LedgerInvariant::Init()
     EeMode              .assign(Length, mce_mode(mce_annual));
     ErMode              .assign(Length, mce_mode(mce_annual));
 
-    InforceYear         = Length;
-    InforceMonth        = 11;
-
-    MecYear             = Length;
-    MecMonth            = 11;
+    // Nonscalable scalars.
 
     // TODO ?? Probably every member should be initialized.
-//  MaleProportion                // Default value unaffected by compositing.
-//  NonsmokerProportion           // Default value unaffected by compositing.
-//  SubstdTable                   // Default value unaffected by compositing.
-//  SpouseIssueAge                // Default value unaffected by compositing.
-//  CurrentCoiMultiplier          // Default value unaffected by compositing.
-
+    MaleProportion      = 0;
+    NonsmokerProportion = 0;
     Age                 = 0;
     EndtAge             = 100;
-    NoLapseMinDur       = 100;
-    NoLapseMinAge       = 100;
-    NoLapseAlwaysActive = false;
-    Has1035ExchCharge   = false;
-
-    WriteTsvFile        = false;
-    SupplementalReport  = true;
     NoLongerIssued      = false;
     AllowGroupQuote     = true;
+    InforceYear         = Length;
+    InforceMonth        = 11;
+    MecYear             = Length;
+    MecMonth            = 11;
+    SpouseIssueAge      = 100;
     IsSinglePremium     = oe_flexible_premium;
+    CurrentCoiMultiplier= 0;
+    NoLapseAlwaysActive = false;
+    NoLapseMinDur       = 100;
+    NoLapseMinAge       = 100;
+    Has1035ExchCharge   = false;
+    WriteTsvFile        = false;
+    SupplementalReport  = true;
+
+    // Private internals.
 
     irr_precision_      = 0;
     irr_initialized_    = false;
@@ -564,16 +563,16 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     // Nonscalable scalars.
 
-//  MaleProportion                // Default value unaffected by compositing.
-//  NonsmokerProportion           // Default value unaffected by compositing.
-    GuarMaxMandE                  = std::max(GuarMaxMandE   , a_Addend.GuarMaxMandE   );
-    InitDacTaxRate                = std::max(InitDacTaxRate , a_Addend.InitDacTaxRate );
-    InitPremTaxRate               = std::max(InitPremTaxRate, a_Addend.InitPremTaxRate);
+    MaleProportion                = std::max(MaleProportion     , a_Addend.MaleProportion);
+    NonsmokerProportion           = std::max(NonsmokerProportion, a_Addend.NonsmokerProportion);
+    GuarMaxMandE                  = std::max(GuarMaxMandE       , a_Addend.GuarMaxMandE);
+    InitDacTaxRate                = std::max(InitDacTaxRate     , a_Addend.InitDacTaxRate);
+    InitPremTaxRate               = std::max(InitPremTaxRate    , a_Addend.InitPremTaxRate);
     GenderDistinct                = a_Addend.GenderDistinct;
     GenderBlended                 = a_Addend.GenderBlended;
     SmokerDistinct                = a_Addend.SmokerDistinct;
     SmokerBlended                 = a_Addend.SmokerBlended;
-//  SubstdTable                   // Default value unaffected by compositing.
+    SubstdTable                   = a_Addend.SubstdTable;
     Age                           = std::min(Age, a_Addend.Age);
     RetAge                        = std::min(RetAge, a_Addend.RetAge); // TODO ?? Does this make sense?
     EndtAge                       = std::max(EndtAge, a_Addend.EndtAge);
@@ -615,7 +614,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     HasSupplSpecAmt               = HasSupplSpecAmt || a_Addend.HasSupplSpecAmt;
     HasChildRider                 = HasChildRider      || a_Addend.HasChildRider     ;
     HasSpouseRider                = HasSpouseRider     || a_Addend.HasSpouseRider    ;
-//  SpouseIssueAge                // Default value unaffected by compositing.
+    SpouseIssueAge                = std::min(SpouseIssueAge, a_Addend.SpouseIssueAge);
     HasHoneymoon                  = HasHoneymoon || a_Addend.HasHoneymoon ;
     PostHoneymoonSpread           = a_Addend.PostHoneymoonSpread          ;
     SplitMinPrem                  = SplitMinPrem || a_Addend.SplitMinPrem ;
@@ -631,7 +630,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // routine.
     IsInforce                     = IsInforce     || a_Addend.IsInforce    ;
 
-//  CurrentCoiMultiplier          // Default value unaffected by compositing.
+    CurrentCoiMultiplier   = std::max(a_Addend.CurrentCoiMultiplier , CurrentCoiMultiplier );
     NoLapseAlwaysActive           = a_Addend.NoLapseAlwaysActive|| NoLapseAlwaysActive;
     NoLapseMinDur                 = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
     NoLapseMinAge                 = std::min(a_Addend.NoLapseMinAge, NoLapseMinAge);
