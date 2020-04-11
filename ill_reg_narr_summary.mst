@@ -54,7 +54,8 @@
 }}
 
 {{^SinglePremium}}
-    Premiums are assumed to be paid on {{ErModeLCWithArticle}}
+    Premiums are assumed to be paid on
+    {{InitErModeWithIndefiniteArticle}}
     basis and received at the beginning of the premium paying period.
 {{/SinglePremium}}
 {{#SinglePremium}}
@@ -70,9 +71,9 @@ overhead expenses is the fully allocated expense method.
 
 {{^SinglePremium}}
     <p>
-    In order to guarantee coverage to age
-    {{EndtAge}}, {{ErModeLCWithArticle}} premium
-    of ${{GuarPrem}} must be paid.
+    In order to guarantee coverage to age {{EndtAge}},
+    {{InitEeModeWithIndefiniteArticle}}
+    premium of ${{GuarPrem}} must be paid.
     This amount is based on the guaranteed monthly charges
     and the guaranteed interest crediting rate.
     {{#DefnLifeInsIsGPT}}
