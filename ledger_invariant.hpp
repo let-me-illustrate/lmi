@@ -88,7 +88,7 @@ class LMI_SO LedgerInvariant final
     // Forborne vectors.
     std::vector<double> Salary;
 
-    // Other vectors.
+    // Nonscalable vectors.
     std::vector<double> IndvTaxBracket;
     std::vector<double> CorpTaxBracket;
     std::vector<double> AnnualFlatExtra;
@@ -105,33 +105,6 @@ class LMI_SO LedgerInvariant final
     // any tiered component, but in that case it would vary by basis.
     std::vector<double> TotalIMF;
     std::vector<double> RefundableSalesLoad;
-    // These two are used only for a payment-strategy kludge:
-    std::vector<double> EePmt;
-    std::vector<double> ErPmt;
-
-    // Special-case vectors (not <double>, or different length than others).
-    std::vector<mce_dbopt>DBOpt;
-    std::vector<mce_mode> EeMode;
-    std::vector<mce_mode> ErMode;
-
-    std::vector<double>      FundNumbers;
-    std::vector<std::string> FundNames;
-    std::vector<int>         FundAllocs; // Obsolete--spreadsheet only.
-    std::vector<double>      FundAllocations;
-
-    std::vector<double> InforceLives;
-
-    // IRRs that we need to think about some more before deciding
-    // where to put them.
-
-    std::vector<double> IrrCsvGuar0    ;
-    std::vector<double> IrrDbGuar0     ;
-    std::vector<double> IrrCsvCurr0    ;
-    std::vector<double> IrrDbCurr0     ;
-    std::vector<double> IrrCsvGuarInput;
-    std::vector<double> IrrDbGuarInput ;
-    std::vector<double> IrrCsvCurrInput;
-    std::vector<double> IrrDbCurrInput ;
 
     // Scalable scalars.
     double          InitBaseSpecAmt;
@@ -211,6 +184,8 @@ class LMI_SO LedgerInvariant final
     double          GenAcctAllocation;
     double          WriteTsvFile;
     double          SupplementalReport;
+
+    // Strings.
 
     // Essential strings describing the policy and company.
     std::string     PolicyForm;
@@ -436,6 +411,40 @@ class LMI_SO LedgerInvariant final
     std::string     InitDBOpt;
     std::string     InitEeMode;
     std::string     InitErMode;
+
+    // Public data members not included in any of the maps that are
+    // handled by the base class are "special".
+
+    // Special-case vectors.
+
+    // Vectors of type other than <double>.
+    std::vector<mce_dbopt>DBOpt;
+    std::vector<mce_mode> EeMode;
+    std::vector<mce_mode> ErMode;
+
+    // Different length than other vectors.
+    std::vector<double> InforceLives;
+
+    std::vector<double>      FundNumbers;
+    std::vector<std::string> FundNames;
+    std::vector<int>         FundAllocs; // Obsolete--spreadsheet only.
+    std::vector<double>      FundAllocations;
+
+    // These two are used only for a payment-strategy kludge:
+    std::vector<double> EePmt;
+    std::vector<double> ErPmt;
+
+    // IRRs that we need to think about some more before deciding
+    // where to put them.
+
+    std::vector<double> IrrCsvGuar0    ;
+    std::vector<double> IrrDbGuar0     ;
+    std::vector<double> IrrCsvCurr0    ;
+    std::vector<double> IrrDbCurr0     ;
+    std::vector<double> IrrCsvGuarInput;
+    std::vector<double> IrrDbGuarInput ;
+    std::vector<double> IrrCsvCurrInput;
+    std::vector<double> IrrDbCurrInput ;
 
     // Special-case strings.
 

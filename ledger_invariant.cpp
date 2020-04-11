@@ -79,6 +79,7 @@ void LedgerInvariant::Alloc(int len)
 {
     Length  = len;
 
+    // BOY vectors.
     BegYearVectors  ["TgtPrem"               ] = &TgtPrem                ;
     BegYearVectors  ["GrossPmt"              ] = &GrossPmt               ;
     BegYearVectors  ["EeGrossPmt"            ] = &EeGrossPmt             ;
@@ -93,11 +94,14 @@ void LedgerInvariant::Alloc(int len)
     BegYearVectors  ["ErModalMinimumPremium" ] = &ErModalMinimumPremium  ;
     BegYearVectors  ["AddonMonthlyFee"       ] = &AddonMonthlyFee        ;
 
+    // EOY vectors.
     EndYearVectors  ["TermSpecAmt"           ] = &TermSpecAmt            ;
     EndYearVectors  ["SpecAmt"               ] = &SpecAmt                ;
 
+    // Forborne vectors.
     ForborneVectors ["Salary"                ] = &Salary                 ;
 
+    // Nonscalable vectors.
     OtherVectors    ["IndvTaxBracket"        ] = &IndvTaxBracket         ;
     OtherVectors    ["CorpTaxBracket"        ] = &CorpTaxBracket         ;
     OtherVectors    ["AnnualFlatExtra"       ] = &AnnualFlatExtra        ;
@@ -111,6 +115,7 @@ void LedgerInvariant::Alloc(int len)
     OtherVectors    ["TotalIMF"              ] = &TotalIMF               ;
     OtherVectors    ["RefundableSalesLoad"   ] = &RefundableSalesLoad    ;
 
+    // Scalable scalars.
     ScalableScalars ["InitBaseSpecAmt"       ] = &InitBaseSpecAmt        ;
     ScalableScalars ["InitTermSpecAmt"       ] = &InitTermSpecAmt        ;
     ScalableScalars ["ChildRiderAmount"      ] = &ChildRiderAmount       ;
@@ -130,6 +135,7 @@ void LedgerInvariant::Alloc(int len)
     ScalableScalars ["InforceUnloanedAV"     ] = &InforceUnloanedAV      ;
     ScalableScalars ["InforceTaxBasis"       ] = &InforceTaxBasis        ;
 
+    // Nonscalable scalars.
     OtherScalars    ["MaleProportion"        ] = &MaleProportion         ;
     OtherScalars    ["NonsmokerProportion"   ] = &NonsmokerProportion    ;
     OtherScalars    ["GuarMaxMandE"          ] = &GuarMaxMandE           ;
@@ -188,6 +194,7 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["WriteTsvFile"          ] = &WriteTsvFile           ;
     OtherScalars    ["SupplementalReport"    ] = &SupplementalReport     ;
 
+    // Strings.
     Strings["PolicyForm"                    ] = &PolicyForm                    ;
     Strings["PolicyMktgName"                ] = &PolicyMktgName                ;
     Strings["PolicyLegalName"               ] = &PolicyLegalName               ;
