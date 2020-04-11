@@ -382,6 +382,7 @@ void LedgerInvariant::Alloc(int len)
     Strings["SupplementalReportColumn11"    ] = &SupplementalReportColumn11    ;
 
     Strings["InitDBOpt"                     ] = &InitDBOpt                     ;
+    Strings["InitEeMode"                    ] = &InitEeMode                    ;
     Strings["InitErMode"                    ] = &InitErMode                    ;
 
     LedgerBase::Alloc();

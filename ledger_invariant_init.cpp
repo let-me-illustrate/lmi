@@ -536,6 +536,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         :(mce_mdb     == init_dbo) ? dbo_name_mdb
         :throw std::logic_error("Unrecognized initial death benefit option.")
         ;
+    InitEeMode              = mc_str(b->Outlay_->ee_premium_modes()[0]);
     InitErMode              = mc_str(b->Outlay_->er_premium_modes()[0]);
 
     DefnLifeIns             = mc_str(b->yare_input_.DefinitionOfLifeInsurance);

@@ -434,6 +434,7 @@ class LMI_SO LedgerInvariant final
     // is not visible across a shared-library boundary. For now, this
     // kludge solves an immediate problem for premium quotes.
     std::string     InitDBOpt;
+    std::string     InitEeMode;
     std::string     InitErMode;
 
     // Special-case strings.
