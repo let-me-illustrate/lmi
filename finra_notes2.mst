@@ -100,7 +100,7 @@ This illustration assumes death of the insured at age {{EndtAge}}.
 {{#UsePartialMort}}
     <p>
     This illustration reflects the client's mortality assumption
-    of {{PartMortTableMult[1]}} of the {{PartMortTableName}}
+    of {{PartMortTableMult[0]}} of the {{PartMortTableName}}
     table with all deaths at the end of the year.
     </p>
 {{/UsePartialMort}}
@@ -183,7 +183,7 @@ issuing company or companies.
 {{^Composite}}
     <p>
     This illustration is based on total Separate Account
-    fund expenses of {{TotalIMF[1]}}.
+    fund expenses of {{TotalIMF[0]}}.
     </p>
     {{#AvgFund}}
         <p>

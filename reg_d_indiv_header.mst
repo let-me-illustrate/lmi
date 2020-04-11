@@ -79,7 +79,7 @@ and may not be used to project or predict investment results.
                     {{!
 PDF !! Flats don't require "Rated" class; and does this value actually print anyway?
                     }}
-                    Initial Annual Flat Extra: {{AnnualFlatExtra[1]}} per 1,000<br>
+                    Initial Annual Flat Extra: {{AnnualFlatExtra[0]}} per 1,000<br>
                 {{/UWClassIsRated}}
             {{/Composite}}
         </td>
