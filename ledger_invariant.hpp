@@ -428,6 +428,14 @@ class LMI_SO LedgerInvariant final
     std::string SupplementalReportColumn10;
     std::string SupplementalReportColumn11;
 
+    // Arguably enumerative members such as 'ErMode' should be of type
+    // std::string instead, because strings would be more useful for
+    // generating reports from this class's data, and mc_enum::str()
+    // is not visible across a shared-library boundary. For now, this
+    // kludge solves an immediate problem for premium quotes.
+    std::string     InitErMode;
+    std::string     InitDBOpt;
+
     // Special-case strings.
 
     // Calendar dates are special because date formatting might be
@@ -439,14 +447,6 @@ class LMI_SO LedgerInvariant final
     std::string     LastCoiReentryDate;
     std::string     ListBillDate;
     std::string     InforceAsOfDate;
-
-    // Arguably enumerative members such as 'ErMode' should be of type
-    // std::string instead, because strings would be more useful for
-    // generating reports from this class's data, and mc_enum::str()
-    // is not visible across a shared-library boundary. For now, this
-    // kludge solves an immediate problem for premium quotes.
-    std::string     InitErMode;
-    std::string     InitDBOpt;
 
   private:
     void Alloc(int len);

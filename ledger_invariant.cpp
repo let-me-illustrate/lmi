@@ -381,8 +381,7 @@ void LedgerInvariant::Alloc(int len)
     Strings["SupplementalReportColumn10"    ] = &SupplementalReportColumn10    ;
     Strings["SupplementalReportColumn11"    ] = &SupplementalReportColumn11    ;
 
-    // Special-case strings.
-
+    Strings["InitErMode"                    ] = &InitErMode                    ;
     Strings["InitDBOpt"                     ] = &InitDBOpt                     ;
 
     LedgerBase::Alloc();
@@ -437,8 +436,6 @@ void LedgerInvariant::Copy(LedgerInvariant const& obj)
     LastCoiReentryDate     = obj.LastCoiReentryDate    ;
     ListBillDate           = obj.ListBillDate          ;
     InforceAsOfDate        = obj.InforceAsOfDate       ;
-    InitErMode             = obj.InitErMode            ;
-    InitDBOpt              = obj.InitDBOpt             ;
 
     // Private internals.
     irr_precision_         = obj.irr_precision_        ;
@@ -661,11 +658,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     LastCoiReentryDate            = a_Addend.LastCoiReentryDate;
     ListBillDate                  = a_Addend.ListBillDate;
     InforceAsOfDate               = a_Addend.InforceAsOfDate;
-
-    // Special-case enumerative data.
-
-    InitErMode                    = a_Addend.InitErMode;
-    InitDBOpt                     = a_Addend.InitDBOpt;
 
     return *this;
 }
