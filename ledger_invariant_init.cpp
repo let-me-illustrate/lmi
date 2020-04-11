@@ -107,9 +107,9 @@ void LedgerInvariant::Init(BasicValues const* b)
     SpecAmt         = b->DeathBfts_->specamt();
     for(int j = 0; j < Length; ++j)
         {
+        DBOpt [j] = b->DeathBfts_->dbopt()[j];
         EeMode[j] = b->Outlay_->ee_premium_modes()[j];
         ErMode[j] = b->Outlay_->er_premium_modes()[j];
-        DBOpt [j] = b->DeathBfts_->dbopt()[j];
         }
 
     IndvTaxBracket       = b->yare_input_.TaxBracket                ;
@@ -527,7 +527,6 @@ void LedgerInvariant::Init(BasicValues const* b)
     ListBillDateJdn         = calendar_date(b->yare_input_.ListBillDate      ).julian_day_number();
     InforceAsOfDate         = calendar_date(b->yare_input_.InforceAsOfDate   ).str();
     InforceAsOfDateJdn      = calendar_date(b->yare_input_.InforceAsOfDate   ).julian_day_number();
-    InitErMode              = mc_str(b->Outlay_->er_premium_modes()[0]);
 
     mcenum_dbopt const init_dbo = b->DeathBfts_->dbopt()[0];
     InitDBOpt =
@@ -537,6 +536,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         :(mce_mdb     == init_dbo) ? dbo_name_mdb
         :throw std::logic_error("Unrecognized initial death benefit option.")
         ;
+    InitErMode              = mc_str(b->Outlay_->er_premium_modes()[0]);
 
     DefnLifeIns             = mc_str(b->yare_input_.DefinitionOfLifeInsurance);
     DefnMaterialChange      = mc_str(b->yare_input_.DefinitionOfMaterialChange);

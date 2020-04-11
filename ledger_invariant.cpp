@@ -381,8 +381,8 @@ void LedgerInvariant::Alloc(int len)
     Strings["SupplementalReportColumn10"    ] = &SupplementalReportColumn10    ;
     Strings["SupplementalReportColumn11"    ] = &SupplementalReportColumn11    ;
 
-    Strings["InitErMode"                    ] = &InitErMode                    ;
     Strings["InitDBOpt"                     ] = &InitDBOpt                     ;
+    Strings["InitErMode"                    ] = &InitErMode                    ;
 
     LedgerBase::Alloc();
 
@@ -390,9 +390,9 @@ void LedgerInvariant::Alloc(int len)
     // be part of the maps populated above. We can reserve space for
     // such vectors, though, if we know what their lengths will be.
 
+    DBOpt               .reserve(Length);
     EeMode              .reserve(Length);
     ErMode              .reserve(Length);
-    DBOpt               .reserve(Length);
 
     // Vectors of length other than 'Length' can't be part of the maps
     // populated above, but we can reserve space for them here if we
@@ -419,9 +419,9 @@ void LedgerInvariant::Copy(LedgerInvariant const& obj)
     LedgerBase::Copy(obj);
 
     // Vectors of type not compatible with double.
+    DBOpt                  = obj.DBOpt                 ;
     EeMode                 = obj.EeMode                ;
     ErMode                 = obj.ErMode                ;
-    DBOpt                  = obj.DBOpt                 ;
 
     // Vectors of idiosyncratic length.
     InforceLives           = obj.InforceLives          ;
@@ -456,9 +456,9 @@ void LedgerInvariant::Init()
     // Zero-initialize elements of AllVectors and AllScalars.
     LedgerBase::Initialize(GetLength());
 
+    DBOpt               .assign(Length, mce_dbopt(mce_option1));
     EeMode              .assign(Length, mce_mode(mce_annual));
     ErMode              .assign(Length, mce_mode(mce_annual));
-    DBOpt               .assign(Length, mce_dbopt(mce_option1));
 
     InforceYear         = Length;
     InforceMonth        = 11;
@@ -746,9 +746,9 @@ void LedgerInvariant::UpdateCRC(CRC& a_crc) const
     LedgerBase::UpdateCRC(a_crc);
 
     a_crc += InforceLives;
+    a_crc += mc_e_vector_to_string_vector(DBOpt);
     a_crc += mc_e_vector_to_string_vector(EeMode);
     a_crc += mc_e_vector_to_string_vector(ErMode);
-    a_crc += mc_e_vector_to_string_vector(DBOpt);
     a_crc += FundNumbers;
     a_crc += FundNames;
     a_crc += FundAllocs;
@@ -761,9 +761,9 @@ void LedgerInvariant::Spew(std::ostream& os) const
     LedgerBase::Spew(os);
 
     SpewVector(os, std::string("InforceLives")     ,InforceLives    );
+    SpewVector(os, std::string("DBOpt")            ,DBOpt           );
     SpewVector(os, std::string("EeMode")           ,EeMode          );
     SpewVector(os, std::string("ErMode")           ,ErMode          );
-    SpewVector(os, std::string("DBOpt")            ,DBOpt           );
     SpewVector(os, std::string("FundNumbers")      ,FundNumbers     );
     SpewVector(os, std::string("FundNames")        ,FundNames       );
     SpewVector(os, std::string("FundAllocs")       ,FundAllocs      );

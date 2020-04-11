@@ -110,9 +110,9 @@ class LMI_SO LedgerInvariant final
     std::vector<double> ErPmt;
 
     // Special-case vectors (not <double>, or different length than others).
+    std::vector<mce_dbopt>DBOpt;
     std::vector<mce_mode> EeMode;
     std::vector<mce_mode> ErMode;
-    std::vector<mce_dbopt>DBOpt;
 
     std::vector<double>      FundNumbers;
     std::vector<std::string> FundNames;
@@ -433,8 +433,8 @@ class LMI_SO LedgerInvariant final
     // generating reports from this class's data, and mc_enum::str()
     // is not visible across a shared-library boundary. For now, this
     // kludge solves an immediate problem for premium quotes.
-    std::string     InitErMode;
     std::string     InitDBOpt;
+    std::string     InitErMode;
 
     // Special-case strings.
 
