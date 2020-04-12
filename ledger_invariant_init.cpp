@@ -263,6 +263,26 @@ void LedgerInvariant::Init(BasicValues const* b)
     AllowExperienceRating   = b->database().query<bool>(DB_AllowExpRating);
     UseExperienceRating     = b->yare_input_.UseExperienceRating;
     UsePartialMort          = b->yare_input_.UsePartialMortality;
+
+    SurviveToExpectancy = false;
+    SurviveToYear       = false;
+    SurviveToAge        = false;
+    switch(b->yare_input_.SurviveToType)
+        {
+        case mce_no_survival_limit:     /* do nothing */   ; break;
+        case mce_survive_to_age:        SurviveToAge        = true; break;
+        case mce_survive_to_year:       SurviveToYear       = true; break;
+        case mce_survive_to_expectancy: SurviveToExpectancy = true; break;
+        }
+    LMI_ASSERT(SurviveToExpectancy + SurviveToYear + SurviveToAge <= 1);
+
+    // These aren't constrained to cell-specific max age or duration.
+    // If a composite has two cells, ages 20 and 80, and the input max
+    // duration for the case (and both cells) is 25 years, then the
+    // composite max duration really is 25: it's not limited to 20
+    // because the 80-year-old matures earlier.
+    SurvivalMaxYear         = b->yare_input_.SurviveToYear;
+    SurvivalMaxAge          = b->yare_input_.SurviveToAge;
     AvgFund                 = b->yare_input_.UseAverageOfAllFunds;
     CustomFund              = b->yare_input_.OverrideFundManagementFee;
 

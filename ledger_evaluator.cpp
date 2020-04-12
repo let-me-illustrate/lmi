@@ -535,6 +535,11 @@ format_map_t static_formats()
     ,{"SplitMinPrem"                    , f1}
     ,{"SpouseIssueAge"                  , f1}
     ,{"SupplementalReport"              , f1}
+    ,{"SurvivalMaxAge"                  , f1}
+    ,{"SurvivalMaxYear"                 , f1}
+    ,{"SurviveToAge"                    , f1}
+    ,{"SurviveToExpectancy"             , f1}
+    ,{"SurviveToYear"                   , f1}
     ,{"TxCallsGuarUwSubstd"             , f1}
     ,{"UseExperienceRating"             , f1}
     ,{"UsePartialMort"                  , f1}

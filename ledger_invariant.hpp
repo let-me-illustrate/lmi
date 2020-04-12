@@ -147,6 +147,11 @@ class LMI_SO LedgerInvariant final
     double          AllowExperienceRating;
     double          UseExperienceRating;
     double          UsePartialMort;
+    double          SurviveToExpectancy;
+    double          SurviveToYear;
+    double          SurviveToAge;
+    double          SurvivalMaxYear;
+    double          SurvivalMaxAge;
     double          AvgFund;
     double          CustomFund;
     double          IsMec;

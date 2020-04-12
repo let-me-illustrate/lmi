@@ -156,6 +156,13 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["AllowExperienceRating" ] = &AllowExperienceRating  ;
     OtherScalars    ["UseExperienceRating"   ] = &UseExperienceRating    ;
     OtherScalars    ["UsePartialMort"        ] = &UsePartialMort         ;
+
+    OtherScalars    ["SurviveToExpectancy"   ] = &SurviveToExpectancy    ;
+    OtherScalars    ["SurviveToYear"         ] = &SurviveToYear          ;
+    OtherScalars    ["SurviveToAge"          ] = &SurviveToAge           ;
+    OtherScalars    ["SurvivalMaxYear"       ] = &SurvivalMaxYear        ;
+    OtherScalars    ["SurvivalMaxAge"        ] = &SurvivalMaxAge         ;
+
     OtherScalars    ["AvgFund"               ] = &AvgFund                ;
     OtherScalars    ["CustomFund"            ] = &CustomFund             ;
     OtherScalars    ["IsMec"                 ] = &IsMec                  ;
@@ -477,6 +484,11 @@ void LedgerInvariant::Init()
     EndtAge             = 100;
     NoLongerIssued      = false;
     AllowGroupQuote     = true;
+    SurviveToExpectancy = true;
+    SurviveToYear       = true;
+    SurviveToAge        = true;
+    SurvivalMaxYear     = 0;
+    SurvivalMaxAge      = 0;
     InforceYear         = Length;
     InforceMonth        = 11;
     MecYear             = Length;
@@ -583,6 +595,14 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     AllowExperienceRating         = AllowExperienceRating || a_Addend.AllowExperienceRating;
     UseExperienceRating           = UseExperienceRating   || a_Addend.UseExperienceRating;
     UsePartialMort                = a_Addend.UsePartialMort;
+
+    SurviveToExpectancy           = SurviveToExpectancy   && a_Addend.SurviveToExpectancy;
+    SurviveToYear                 = SurviveToYear         && a_Addend.SurviveToYear;
+    SurviveToAge                  = SurviveToAge          && a_Addend.SurviveToAge;
+    LMI_ASSERT(SurviveToExpectancy + SurviveToYear + SurviveToAge <= 1);
+    SurvivalMaxYear               = std::max(SurvivalMaxYear, a_Addend.SurvivalMaxYear);
+    SurvivalMaxAge                = std::max(SurvivalMaxAge , a_Addend.SurvivalMaxAge);
+
     AvgFund                       = a_Addend.AvgFund;
     CustomFund                    = a_Addend.CustomFund;
     IsMec                         = a_Addend.IsMec        || IsMec;
