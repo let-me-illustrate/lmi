@@ -131,8 +131,8 @@ void LedgerInvariant::Init(BasicValues const* b)
 //  InitPrem                = 0;
 //  GuarPrem                = 0;
 //  InitSevenPayPrem        =
-//  InitGSP
-//  InitGLP
+//  InitGSP                 = DYNAMIC
+//  InitGLP                 = DYNAMIC
 //  InitTgtPrem             =
 //  ListBillPremium         =
 //  EeListBillPremium       =
@@ -205,12 +205,12 @@ void LedgerInvariant::Init(BasicValues const* b)
     AvgFund                 = b->yare_input_.UseAverageOfAllFunds;
     CustomFund              = b->yare_input_.OverrideFundManagementFee;
 
-// IsMec
-// InforceIsMec
-// InforceYear
-// InforceMonth
-// MecYear
-// MecMonth
+// IsMec                    =  DYNAMIC
+// InforceIsMec             =  DYNAMIC
+// InforceYear              =  DYNAMIC
+// InforceMonth             =  DYNAMIC
+// MecYear                  =  DYNAMIC
+// MecMonth                 =  DYNAMIC
 
     HasWP                   = b->yare_input_.WaiverOfPremiumBenefit;
     HasADD                  = b->yare_input_.AccidentalDeathBenefit;
