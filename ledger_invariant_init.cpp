@@ -51,27 +51,12 @@ void LedgerInvariant::Init(BasicValues const* b)
 
     irr_precision_ = b->round_irr().decimals();
 
-// EePmt and ErPmt are *input* values, used only as a kludge, e.g. in
-// premium-strategy calculations. Use E[er]GrossPmt for illustrations:
-// they're *output* values that result from transaction processing.
+    // BOY vectors.
 
-    EePmt           = b->Outlay_->ee_modal_premiums();
-    ErPmt           = b->Outlay_->er_modal_premiums();
 //  TgtPrem         =
 //  GrossPmt        =
 //  EeGrossPmt      =
 //  ErGrossPmt      =
-    // These must be set dynamically because they may be changed,
-    // e.g. to respect guideline limits.
-//    External1035Amount;
-//    Internal1035Amount;
-//    Dumpin               =
-
-    InforceUnloanedAV =
-          b->yare_input_.InforceGeneralAccountValue
-        + b->yare_input_.InforceSeparateAccountValue
-        ;
-    InforceTaxBasis      = b->yare_input_.InforceTaxBasis           ;
 
     // Certain data members, including but almost certainly not
     // limited to these, should not be initialized to any non-zero
@@ -79,13 +64,18 @@ void LedgerInvariant::Init(BasicValues const* b)
     // processing, subject to various restrictions that often cause
     // them to differ from input values. Notably, values need to be
     // zero after lapse.
-//    NetWD                 =
-//    NewCashLoan           =
-//    GptForceout           =
-//    NaarForceout          =
-//    ModalMinimumPremium   =
-//    EeModalMinimumPremium =
-//    ErModalMinimumPremium =
+//    NetWD                 = DYNAMIC
+//    NewCashLoan           = DYNAMIC
+//    Outlay                = DYNAMIC
+//    GptForceout           = DYNAMIC
+//    NaarForceout          = DYNAMIC
+//    ModalMinimumPremium   = DYNAMIC
+//    EeModalMinimumPremium = DYNAMIC
+//    ErModalMinimumPremium = DYNAMIC
+
+    AddonMonthlyFee      = b->yare_input_.ExtraMonthlyCustodialFee  ;
+
+    // EOY vectors.
 
     HasSupplSpecAmt = false;
     if(b->yare_input_.TermRider)
@@ -105,119 +95,32 @@ void LedgerInvariant::Init(BasicValues const* b)
         TermSpecAmt     .assign(Length, 0.0);
         }
     SpecAmt         = b->DeathBfts_->specamt();
-    for(int j = 0; j < Length; ++j)
-        {
-        DBOpt [j] = b->DeathBfts_->dbopt()[j];
-        EeMode[j] = b->Outlay_->ee_premium_modes()[j];
-        ErMode[j] = b->Outlay_->er_premium_modes()[j];
-        }
+
+    // Forborne vectors.
+
+    Salary               = b->yare_input_.ProjectedSalary           ;
+
+    // Nonscalable vectors.
 
     IndvTaxBracket       = b->yare_input_.TaxBracket                ;
     CorpTaxBracket       = b->yare_input_.CorporationTaxBracket     ;
-    Salary               = b->yare_input_.ProjectedSalary           ;
     AnnualFlatExtra      = b->yare_input_.FlatExtra                 ;
     HoneymoonValueSpread = b->yare_input_.HoneymoonValueSpread      ;
-    AddonMonthlyFee      = b->yare_input_.ExtraMonthlyCustodialFee  ;
+    PartMortTableMult       = b->yare_input_.PartialMortalityMultiplier;
     AddonCompOnAssets    = b->yare_input_.ExtraCompensationOnAssets ;
     AddonCompOnPremium   = b->yare_input_.ExtraCompensationOnPremium;
     CorridorFactor       = b->GetCorridorFactor();
 
-    std::vector<double> z= b->InterestRates_->RegLoanSpread(mce_gen_guar);
-    LMI_ASSERT(!z.empty()); // Ensure *(std::max_element()) works.
-    MaxAnnGuarLoanSpread = *std::max_element(z.begin(), z.end());
-
     AnnLoanDueRate       = b->InterestRates_->RegLnDueRate
         (mce_gen_curr
         ,mce_annual_rate
-        );
-    LMI_ASSERT(!AnnLoanDueRate.empty()); // Ensure *(std::max_element()) works.
-    MaxAnnCurrLoanDueRate = *std::max_element
-        (AnnLoanDueRate.begin()
-        ,AnnLoanDueRate.end()
         );
 
     CurrMandE            = b->InterestRates_->MAndERate(mce_gen_curr);
     TotalIMF             = b->InterestRates_->InvestmentManagementFee();
     RefundableSalesLoad  = b->Loads_->refundable_sales_load_proportion();
 
-    std::vector<double> coimult;
-    b->database().query_into(DB_CurrCoiMultiplier, coimult);
-    CurrentCoiMultiplier =
-          coimult                            [b->yare_input_.InforceYear]
-        * b->yare_input_.CurrentCoiMultiplier[b->yare_input_.InforceYear]
-        * b->yare_input_.CountryCoiMultiplier
-        ;
-
-    CountryIso3166Abbrev = mc_str(b->yare_input_.Country);
-    Comments             = b->yare_input_.Comments;
-
-    FundNumbers           .resize(0);
-    FundNames             .resize(0);
-    FundAllocs            .resize(0);
-    FundAllocations       .resize(0);
-
-    // The antediluvian branch doesn't meaningfully initialize class FundData.
-    int number_of_funds(0);
-    if(!is_antediluvian_fork())
-        {
-        number_of_funds = b->FundData_->GetNumberOfFunds();
-        }
-
-//    enum{NumberOfFunds = 30}; // DEPRECATED
-    int const NumberOfFunds = 30; // DEPRECATED
-    int expected_number_of_funds = std::max(number_of_funds, NumberOfFunds);
-    std::vector<double> v(b->yare_input_.FundAllocations);
-    if(lmi::ssize(v) < expected_number_of_funds)
-        {
-        v.insert(v.end(), expected_number_of_funds - v.size(), 0.0);
-        }
-
-    for(int j = 0; j < number_of_funds; ++j)
-        {
-        FundNumbers.push_back(j);
-        FundNames.push_back(b->FundData_->GetFundInfo(j).LongName());
-
-        // TODO ?? InputParms::NumberOfFunds is defectively hardcocded
-        // as thirty as this is written, but we need to support a product
-        // with more than thirty funds. The input routines respect that
-        // hardcoded limit and are difficult to change, so funds after
-        // the thirtieth cannot be selected individually; but if the
-        // rule 'equal initial fund allocations' is chosen instead of
-        // specifying individual allocations, then the average fund fee
-        // is calculated reflecting all funds, even past the thirtieth:
-        // thus, calculations are correct for any input, and the defect
-        // in the program itself is just that some legitimate inputs are
-        // not allowed, though the output spreadsheet has its own
-        // hardcoded limit (due to space), which is a separate defect.
-        // Here we pass a zero allocation to the output spreadsheet for
-        // all funds past the thirtieth, which is correct because no
-        // nonzero allocation can be selected. That's correct even if
-        // the 'equal initial allocations' rule is chosen, in which
-        // case the allocations are not explicitly shown, but are instead
-        // stated in words to be equal--because the spreadsheet layout
-        // otherwise shows allocations as integer percentages, and
-        // something like '.3333333...' would overflow the space available.
-        //
-        // As of 2008, most of the foregoing is no longer applicable,
-        // except for the hardcoded limit, which is copied above.
-        FundAllocs     .push_back(static_cast<int>(v[j]));
-        FundAllocations.push_back(0.01 * v[j]);
-        }
-
-    GenAcctAllocation = 1.0 - premium_allocation_to_sepacct(b->yare_input_);
-
-    SplitFundAllocation =
-            (0.0 != GenAcctAllocation && 1.0 != GenAcctAllocation)
-        ||
-            (  0.0 != b->yare_input_.InforceGeneralAccountValue
-            && 0.0 != b->yare_input_.InforceSeparateAccountValue
-            )
-        ;
-
-    b->database().query_into(DB_NoLapseAlwaysActive, NoLapseAlwaysActive);
-    b->database().query_into(DB_NoLapseMinDur      , NoLapseMinDur);
-    b->database().query_into(DB_NoLapseMinAge      , NoLapseMinAge);
-    b->database().query_into(DB_Has1035ExchCharge  , Has1035ExchCharge);
+    // Scalable scalars.
 
     // SOMEDAY !! Things indexed with '[0]' should probably use inforce year instead.
     InitBaseSpecAmt         = b->DeathBfts_->specamt()[0];
@@ -228,14 +131,29 @@ void LedgerInvariant::Init(BasicValues const* b)
 //  InitPrem                = 0;
 //  GuarPrem                = 0;
 //  InitSevenPayPrem        =
+//  InitGSP
+//  InitGLP
 //  InitTgtPrem             =
 //  ListBillPremium         =
 //  EeListBillPremium       =
 //  ErListBillPremium       =
 
+    // These must be set dynamically because they may be changed,
+    // e.g. to respect guideline limits.
+//    Dumpin               = DYNAMIC
+//    External1035Amount   = DYNAMIC
+//    Internal1035Amount   = DYNAMIC
+
+    InforceUnloanedAV =
+          b->yare_input_.InforceGeneralAccountValue
+        + b->yare_input_.InforceSeparateAccountValue
+        ;
+    InforceTaxBasis      = b->yare_input_.InforceTaxBasis           ;
+
+    // Nonscalable scalars.
+
     MaleProportion          = b->yare_input_.MaleProportion;
     NonsmokerProportion     = b->yare_input_.NonsmokerProportion;
-    PartMortTableMult       = b->yare_input_.PartialMortalityMultiplier;
 
     // Assert this because the illustration currently prints a scalar
     // guaranteed max, assuming that it's the same for all years.
@@ -283,12 +201,21 @@ void LedgerInvariant::Init(BasicValues const* b)
     // because the 80-year-old matures earlier.
     SurvivalMaxYear         = b->yare_input_.SurviveToYear;
     SurvivalMaxAge          = b->yare_input_.SurviveToAge;
+
     AvgFund                 = b->yare_input_.UseAverageOfAllFunds;
     CustomFund              = b->yare_input_.OverrideFundManagementFee;
+
+// IsMec
+// InforceIsMec
+// InforceYear
+// InforceMonth
+// MecYear
+// MecMonth
 
     HasWP                   = b->yare_input_.WaiverOfPremiumBenefit;
     HasADD                  = b->yare_input_.AccidentalDeathBenefit;
     HasTerm                 = b->yare_input_.TermRider;
+// HasSupplSpecAmt // Out of order--see above.
     HasChildRider           = b->yare_input_.ChildRider;
     HasSpouseRider          = b->yare_input_.SpouseRider;
     SpouseIssueAge          = b->yare_input_.SpouseIssueAge;
@@ -298,6 +225,64 @@ void LedgerInvariant::Init(BasicValues const* b)
     b->database().query_into(DB_SplitMinPrem        , SplitMinPrem);
     b->database().query_into(DB_ErNotionallyPaysTerm, ErNotionallyPaysTerm);
     b->database().query_into(DB_IsSinglePremium     , IsSinglePremium);
+
+    std::vector<double> z= b->InterestRates_->RegLoanSpread(mce_gen_guar);
+    LMI_ASSERT(!z.empty()); // Ensure *(std::max_element()) works.
+    MaxAnnGuarLoanSpread = *std::max_element(z.begin(), z.end());
+    LMI_ASSERT(!AnnLoanDueRate.empty()); // Ensure *(std::max_element()) works.
+    MaxAnnCurrLoanDueRate = *std::max_element
+        (AnnLoanDueRate.begin()
+        ,AnnLoanDueRate.end()
+        );
+
+    IsInforce = b->yare_input_.EffectiveDate != b->yare_input_.InforceAsOfDate;
+
+    // This test is probably redundant because it is already performed
+    // in class Input. But it's difficult to prove that it is actually
+    // redundant and will always remain so, while repeating it here
+    // costs little and gives a stronger guarantee that illustrations
+    // that would violate this rule cannot be produced.
+    if(IsInforce && (0 == b->yare_input_.InforceYear && 0 == b->yare_input_.InforceMonth))
+        {
+        alarum()
+            << "Inforce illustrations not permitted during month of issue."
+            << LMI_FLUSH
+            ;
+        }
+
+    std::vector<double> coimult;
+    b->database().query_into(DB_CurrCoiMultiplier, coimult);
+    CurrentCoiMultiplier =
+          coimult                            [b->yare_input_.InforceYear]
+        * b->yare_input_.CurrentCoiMultiplier[b->yare_input_.InforceYear]
+        * b->yare_input_.CountryCoiMultiplier
+        ;
+
+    b->database().query_into(DB_NoLapseAlwaysActive, NoLapseAlwaysActive);
+    b->database().query_into(DB_NoLapseMinDur      , NoLapseMinDur);
+    b->database().query_into(DB_NoLapseMinAge      , NoLapseMinAge);
+    b->database().query_into(DB_Has1035ExchCharge  , Has1035ExchCharge);
+
+    EffDateJdn              = calendar_date(b->yare_input_.EffectiveDate     ).julian_day_number();
+    DateOfBirthJdn          = calendar_date(b->yare_input_.DateOfBirth       ).julian_day_number();
+    LastCoiReentryDateJdn   = calendar_date(b->yare_input_.LastCoiReentryDate).julian_day_number();
+    ListBillDateJdn         = calendar_date(b->yare_input_.ListBillDate      ).julian_day_number();
+    InforceAsOfDateJdn      = calendar_date(b->yare_input_.InforceAsOfDate   ).julian_day_number();
+
+// Out of order due to dependency--reconsider.
+    GenAcctAllocation = 1.0 - premium_allocation_to_sepacct(b->yare_input_);
+
+    SplitFundAllocation =
+            (0.0 != GenAcctAllocation && 1.0 != GenAcctAllocation)
+        ||
+            (  0.0 != b->yare_input_.InforceGeneralAccountValue
+            && 0.0 != b->yare_input_.InforceSeparateAccountValue
+            )
+        ;
+
+    WriteTsvFile = contains(b->yare_input_.Comments, "idiosyncrasyY");
+
+    SupplementalReport         = b->yare_input_.CreateSupplementalReport;
 
     // These are reassigned below based on product data if available.
     std::string dbo_name_option1 = mc_str(mce_option1);
@@ -318,6 +303,9 @@ void LedgerInvariant::Init(BasicValues const* b)
         dbo_name_option2               = p.datum("DboNameIncreasing"              );
         dbo_name_rop                   = p.datum("DboNameReturnOfPremium"         );
         dbo_name_mdb                   = p.datum("DboNameMinDeathBenefit"         );
+
+        // Strings.
+
         PolicyForm = p.datum(alt_form ? "PolicyFormAlternative" : "PolicyForm");
         PolicyMktgName                 = p.datum("PolicyMktgName"                 );
         PolicyLegalName                = p.datum("PolicyLegalName"                );
@@ -331,6 +319,8 @@ void LedgerInvariant::Init(BasicValues const* b)
         MainUnderwriterAddress         = p.datum("MainUnderwriterAddress"         );
         CoUnderwriter                  = p.datum("CoUnderwriter"                  );
         CoUnderwriterAddress           = p.datum("CoUnderwriterAddress"           );
+
+        // Terms defined in the contract
 
         AvName                         = p.datum("AvName"                         );
         CsvName                        = p.datum("CsvName"                        );
@@ -358,6 +348,8 @@ void LedgerInvariant::Init(BasicValues const* b)
         UwClassRated                   = p.datum("UwClassRated"                   );
         UwClassUltra                   = p.datum("UwClassUltra"                   );
 
+        // Ledger column definitions.
+
         AccountValueFootnote           = p.datum("AccountValueFootnote"           );
         AttainedAgeFootnote            = p.datum("AttainedAgeFootnote"            );
         CashSurrValueFootnote          = p.datum("CashSurrValueFootnote"          );
@@ -368,6 +360,8 @@ void LedgerInvariant::Init(BasicValues const* b)
         OutlayFootnote                 = p.datum("OutlayFootnote"                 );
         PolicyYearFootnote             = p.datum("PolicyYearFootnote"             );
 
+        // Terse rider names.
+
         ADDTerseName                   = p.datum("ADDTerseName"                   );
         InsurabilityTerseName          = p.datum("InsurabilityTerseName"          );
         ChildTerseName                 = p.datum("ChildTerseName"                 );
@@ -377,6 +371,8 @@ void LedgerInvariant::Init(BasicValues const* b)
         AccelBftRiderTerseName         = p.datum("AccelBftRiderTerseName"         );
         OverloanRiderTerseName         = p.datum("OverloanRiderTerseName"         );
 
+        // Rider footnotes.
+
         ADDFootnote                    = p.datum("ADDFootnote"                    );
         ChildFootnote                  = p.datum("ChildFootnote"                  );
         SpouseFootnote                 = p.datum("SpouseFootnote"                 );
@@ -384,6 +380,8 @@ void LedgerInvariant::Init(BasicValues const* b)
         WaiverFootnote                 = p.datum("WaiverFootnote"                 );
         AccelBftRiderFootnote          = p.datum("AccelBftRiderFootnote"          );
         OverloanRiderFootnote          = p.datum("OverloanRiderFootnote"          );
+
+        // Group quote footnotes.
 
         GroupQuoteShortProductName     = p.datum("GroupQuoteShortProductName"     );
         GroupQuoteIsNotAnOffer         = p.datum("GroupQuoteIsNotAnOffer"         );
@@ -400,8 +398,12 @@ void LedgerInvariant::Init(BasicValues const* b)
         GroupQuoteFooterVoluntary      = p.datum("GroupQuoteFooterVoluntary"      );
         GroupQuoteFooterFusion         = p.datum("GroupQuoteFooterFusion"         );
 
+        // Premium-specific footnotes.
+
         MinimumPremiumFootnote         = p.datum("MinimumPremiumFootnote"         );
         PremAllocationFootnote         = p.datum("PremAllocationFootnote"         );
+
+        // Miscellaneous other footnotes.
 
         InterestDisclaimer             = p.datum("InterestDisclaimer"             );
         GuarMortalityFootnote          = p.datum("GuarMortalityFootnote"          );
@@ -478,6 +480,8 @@ void LedgerInvariant::Init(BasicValues const* b)
         IllRegCertClientTx             = p.datum("IllRegCertClientTx"             );
         }
 
+    // Strings from class Input.
+
     ProductName             = b->yare_input_.ProductName;
     ProducerName            = b->yare_input_.AgentName;
 
@@ -537,53 +541,15 @@ void LedgerInvariant::Init(BasicValues const* b)
     UWClass                 = mc_str(b->yare_input_.UnderwritingClass);
     SubstandardTable        = mc_str(b->yare_input_.SubstandardTable);
 
-    EffDate                 = calendar_date(b->yare_input_.EffectiveDate     ).str();
-    EffDateJdn              = calendar_date(b->yare_input_.EffectiveDate     ).julian_day_number();
-    DateOfBirth             = calendar_date(b->yare_input_.DateOfBirth       ).str();
-    DateOfBirthJdn          = calendar_date(b->yare_input_.DateOfBirth       ).julian_day_number();
-    LastCoiReentryDate      = calendar_date(b->yare_input_.LastCoiReentryDate).str();
-    LastCoiReentryDateJdn   = calendar_date(b->yare_input_.LastCoiReentryDate).julian_day_number();
-    ListBillDate            = calendar_date(b->yare_input_.ListBillDate      ).str();
-    ListBillDateJdn         = calendar_date(b->yare_input_.ListBillDate      ).julian_day_number();
-    InforceAsOfDate         = calendar_date(b->yare_input_.InforceAsOfDate   ).str();
-    InforceAsOfDateJdn      = calendar_date(b->yare_input_.InforceAsOfDate   ).julian_day_number();
-
-    mcenum_dbopt const init_dbo = b->DeathBfts_->dbopt()[0];
-    InitDBOpt =
-         (mce_option1 == init_dbo) ? dbo_name_option1
-        :(mce_option2 == init_dbo) ? dbo_name_option2
-        :(mce_rop     == init_dbo) ? dbo_name_rop
-        :(mce_mdb     == init_dbo) ? dbo_name_mdb
-        :throw std::logic_error("Unrecognized initial death benefit option.")
-        ;
-    InitEeMode              = mc_str(b->Outlay_->ee_premium_modes()[0]);
-    InitErMode              = mc_str(b->Outlay_->er_premium_modes()[0]);
-
     DefnLifeIns             = mc_str(b->yare_input_.DefinitionOfLifeInsurance);
     DefnMaterialChange      = mc_str(b->yare_input_.DefinitionOfMaterialChange);
     AvoidMec                = mc_str(b->yare_input_.AvoidMecMethod);
     PartMortTableName       = "1983 GAM"; // TODO ?? Hardcoded.
     StateOfJurisdiction     = mc_str(b->GetStateOfJurisdiction());
     PremiumTaxState         = mc_str(b->GetPremiumTaxState());
+    CountryIso3166Abbrev = mc_str(b->yare_input_.Country);
+    Comments             = b->yare_input_.Comments;
 
-    IsInforce = b->yare_input_.EffectiveDate != b->yare_input_.InforceAsOfDate;
-
-    // This test is probably redundant because it is already performed
-    // in class Input. But it's difficult to prove that it is actually
-    // redundant and will always remain so, while repeating it here
-    // costs little and gives a stronger guarantee that illustrations
-    // that would violate this rule cannot be produced.
-    if(IsInforce && (0 == b->yare_input_.InforceYear && 0 == b->yare_input_.InforceMonth))
-        {
-        alarum()
-            << "Inforce illustrations not permitted during month of issue."
-            << LMI_FLUSH
-            ;
-        }
-
-    WriteTsvFile = contains(b->yare_input_.Comments, "idiosyncrasyY");
-
-    SupplementalReport         = b->yare_input_.CreateSupplementalReport;
     SupplementalReportColumn00 = mc_str(b->yare_input_.SupplementalReportColumn00);
     SupplementalReportColumn01 = mc_str(b->yare_input_.SupplementalReportColumn01);
     SupplementalReportColumn02 = mc_str(b->yare_input_.SupplementalReportColumn02);
@@ -596,6 +562,94 @@ void LedgerInvariant::Init(BasicValues const* b)
     SupplementalReportColumn09 = mc_str(b->yare_input_.SupplementalReportColumn09);
     SupplementalReportColumn10 = mc_str(b->yare_input_.SupplementalReportColumn10);
     SupplementalReportColumn11 = mc_str(b->yare_input_.SupplementalReportColumn11);
+
+    mcenum_dbopt const init_dbo = b->DeathBfts_->dbopt()[0];
+    InitDBOpt =
+         (mce_option1 == init_dbo) ? dbo_name_option1
+        :(mce_option2 == init_dbo) ? dbo_name_option2
+        :(mce_rop     == init_dbo) ? dbo_name_rop
+        :(mce_mdb     == init_dbo) ? dbo_name_mdb
+        :throw std::logic_error("Unrecognized initial death benefit option.")
+        ;
+    InitEeMode              = mc_str(b->Outlay_->ee_premium_modes()[0]);
+    InitErMode              = mc_str(b->Outlay_->er_premium_modes()[0]);
+
+    // Special-case vectors.
+
+    for(int j = 0; j < Length; ++j)
+        {
+        DBOpt [j] = b->DeathBfts_->dbopt()[j];
+        EeMode[j] = b->Outlay_->ee_premium_modes()[j];
+        ErMode[j] = b->Outlay_->er_premium_modes()[j];
+        }
+
+    FundNumbers           .resize(0);
+    FundNames             .resize(0);
+    FundAllocs            .resize(0);
+    FundAllocations       .resize(0);
+
+    // The antediluvian branch doesn't meaningfully initialize class FundData.
+    int number_of_funds(0);
+    if(!is_antediluvian_fork())
+        {
+        number_of_funds = b->FundData_->GetNumberOfFunds();
+        }
+
+//    enum{NumberOfFunds = 30}; // DEPRECATED
+    int const NumberOfFunds = 30; // DEPRECATED
+    int expected_number_of_funds = std::max(number_of_funds, NumberOfFunds);
+    std::vector<double> v(b->yare_input_.FundAllocations);
+    if(lmi::ssize(v) < expected_number_of_funds)
+        {
+        v.insert(v.end(), expected_number_of_funds - v.size(), 0.0);
+        }
+
+    for(int j = 0; j < number_of_funds; ++j)
+        {
+        FundNumbers.push_back(j);
+        FundNames.push_back(b->FundData_->GetFundInfo(j).LongName());
+
+        // TODO ?? InputParms::NumberOfFunds is defectively hardcocded
+        // as thirty as this is written, but we need to support a product
+        // with more than thirty funds. The input routines respect that
+        // hardcoded limit and are difficult to change, so funds after
+        // the thirtieth cannot be selected individually; but if the
+        // rule 'equal initial fund allocations' is chosen instead of
+        // specifying individual allocations, then the average fund fee
+        // is calculated reflecting all funds, even past the thirtieth:
+        // thus, calculations are correct for any input, and the defect
+        // in the program itself is just that some legitimate inputs are
+        // not allowed, though the output spreadsheet has its own
+        // hardcoded limit (due to space), which is a separate defect.
+        // Here we pass a zero allocation to the output spreadsheet for
+        // all funds past the thirtieth, which is correct because no
+        // nonzero allocation can be selected. That's correct even if
+        // the 'equal initial allocations' rule is chosen, in which
+        // case the allocations are not explicitly shown, but are instead
+        // stated in words to be equal--because the spreadsheet layout
+        // otherwise shows allocations as integer percentages, and
+        // something like '.3333333...' would overflow the space available.
+        //
+        // As of 2008, most of the foregoing is no longer applicable,
+        // except for the hardcoded limit, which is copied above.
+        FundAllocs     .push_back(static_cast<int>(v[j]));
+        FundAllocations.push_back(0.01 * v[j]);
+        }
+
+// EePmt and ErPmt are *input* values, used only as a kludge, e.g. in
+// premium-strategy calculations. Use E[er]GrossPmt for illustrations:
+// they're *output* values that result from transaction processing.
+
+    EePmt           = b->Outlay_->ee_modal_premiums();
+    ErPmt           = b->Outlay_->er_modal_premiums();
+
+    // Special-case strings.
+
+    EffDate                 = calendar_date(b->yare_input_.EffectiveDate     ).str();
+    DateOfBirth             = calendar_date(b->yare_input_.DateOfBirth       ).str();
+    LastCoiReentryDate      = calendar_date(b->yare_input_.LastCoiReentryDate).str();
+    ListBillDate            = calendar_date(b->yare_input_.ListBillDate      ).str();
+    InforceAsOfDate         = calendar_date(b->yare_input_.InforceAsOfDate   ).str();
 
     // irr_initialized_ is deliberately not set here: it's not
     // encompassed by 'FullyInitialized'.
