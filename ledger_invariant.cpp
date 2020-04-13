@@ -535,6 +535,62 @@ void LedgerInvariant::Init()
 // input items. What would we do with a plan established thirty years ago
 // that includes an individual who's already past the maturity date?
 
+/// Accumulate an individual cell into a composite ledger.
+///
+/// For ledger members that are naturally additive, such as premiums,
+/// the composite value is the total (weighted by an inforce factor).
+/// For nonadditive members, some other operation may clearly be more
+/// appropriate than addition--e.g.:
+///
+///   NoLongerIssued: This flag prohibits new-business illustrations
+///   when necessary. Its composite value is a logical OR, so that the
+///   prohibition applies to a composite if it applies to any cell.
+///
+///   AllowGroupQuote: This flag permits group quotes if appropriate.
+///   Its composite value is a logical AND, so that the permission
+///   applies to a composite only if it applies to every cell.
+///
+/// Other members may use the same (or other) methods, although with a
+/// less cut-and-dried rationale--e.g.:
+///
+///   IsMec: Composite value is 'true' if any cell is 'true' (i.e.,
+///   logical OR). This doesn't mean that the aggregate is actually a
+///   MEC; it just means that the composite illustration ought to
+///   include the stern tax warnings that are required for a MEC.
+///   With a lot more work, footnotes could be specialized for
+///   composites ("One or more of these contracts is a MEC", e.g.),
+///   but insurers are generally unwilling to go to such lengths.
+///
+///   MecYear: Composite value is the least of any cell. Thus, if a
+///   footnote says that a contract becomes a MEC in a particular
+///   year, the composite uses the lowest such year. That's the least
+///   bad choice because it produces the most severe footnote.
+///
+/// For some other members, the composite value is the value for the
+/// last cell. This is the default behavior for non-additive members,
+/// and at least it has the advantage that if all cells have the same
+/// value, then the composite also has that value. For example:
+///
+///   GenAcctAllocation: Arguably a weighted average would be better,
+///   but averages aren't supported in this simple code yet. However,
+///   any average would be inaccurate.
+///
+///   SubstdTable: This generally represents a mortality multiplier,
+///   for which an average might seem somewhat suitable, but that's
+///   hardly possible because substandard tables are quantized. The
+///   average of "L=+300%" and "P=+400%" is not table N (350%) because
+///   no such table is defined.
+///
+///   WaiverFootnote: String members in general cannot be composited
+///   in any more reasonable way than taking the last cell's value.
+///   A composite may include cells whose policy forms have different
+///   premium-waiver footnotes, but insurers have little desire to
+///   combine them thoughtfully.
+///
+/// Thus, there exists One True Way for compositing additive members
+/// and some boolean members, but composite values assigned here for
+/// other members are often arbitrary.
+
 LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 {
     LedgerBase::PlusEq(a_Addend, a_Addend.InforceLives);
@@ -586,7 +642,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     SmokerBlended                 = a_Addend.SmokerBlended;
     SubstdTable                   = a_Addend.SubstdTable;
     Age                           = std::min(Age, a_Addend.Age);
-    RetAge                        = std::min(RetAge, a_Addend.RetAge); // TODO ?? Does this make sense?
+    RetAge                        = std::min(RetAge, a_Addend.RetAge);
     EndtAge                       = std::max(EndtAge, a_Addend.EndtAge);
     GroupIndivSelection           = GroupIndivSelection   || a_Addend.GroupIndivSelection;
     NoLongerIssued                = NoLongerIssued        || a_Addend.NoLongerIssued;
