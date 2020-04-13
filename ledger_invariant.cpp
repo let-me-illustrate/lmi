@@ -477,7 +477,6 @@ void LedgerInvariant::Init()
 
     // Nonscalable scalars.
 
-    // TODO ?? Probably every member should be initialized.
     MaleProportion      = 0;
     NonsmokerProportion = 0;
     Age                 = 0;
