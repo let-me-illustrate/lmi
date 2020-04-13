@@ -185,8 +185,8 @@ class LMI_SO LedgerInvariant final
     double          LastCoiReentryDateJdn;
     double          ListBillDateJdn;
     double          InforceAsOfDateJdn;
-    double          SplitFundAllocation;
     double          GenAcctAllocation;
+    double          SplitFundAllocation;
     double          WriteTsvFile;
     double          SupplementalReport;
 

@@ -196,8 +196,8 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["LastCoiReentryDateJdn" ] = &LastCoiReentryDateJdn  ;
     OtherScalars    ["ListBillDateJdn"       ] = &ListBillDateJdn        ;
     OtherScalars    ["InforceAsOfDateJdn"    ] = &InforceAsOfDateJdn     ;
-    OtherScalars    ["SplitFundAllocation"   ] = &SplitFundAllocation    ;
     OtherScalars    ["GenAcctAllocation"     ] = &GenAcctAllocation      ;
+    OtherScalars    ["SplitFundAllocation"   ] = &SplitFundAllocation    ;
     OtherScalars    ["WriteTsvFile"          ] = &WriteTsvFile           ;
     OtherScalars    ["SupplementalReport"    ] = &SupplementalReport     ;
 
@@ -715,8 +715,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     LastCoiReentryDateJdn         = a_Addend.LastCoiReentryDateJdn;
     ListBillDateJdn               = a_Addend.ListBillDateJdn;
     InforceAsOfDateJdn            = a_Addend.InforceAsOfDateJdn;
-    SplitFundAllocation           = SplitFundAllocation   || a_Addend.SplitFundAllocation;
     GenAcctAllocation             = a_Addend.GenAcctAllocation;
+    SplitFundAllocation           = SplitFundAllocation   || a_Addend.SplitFundAllocation;
     WriteTsvFile                  = WriteTsvFile || a_Addend.WriteTsvFile ;
 
     // The composite has a supplemental report iff every cell has one,

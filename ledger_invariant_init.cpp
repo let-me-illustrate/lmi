@@ -269,7 +269,6 @@ void LedgerInvariant::Init(BasicValues const* b)
     ListBillDateJdn         = calendar_date(b->yare_input_.ListBillDate      ).julian_day_number();
     InforceAsOfDateJdn      = calendar_date(b->yare_input_.InforceAsOfDate   ).julian_day_number();
 
-// Out of order due to dependency--reconsider.
     GenAcctAllocation = 1.0 - premium_allocation_to_sepacct(b->yare_input_);
 
     SplitFundAllocation =
