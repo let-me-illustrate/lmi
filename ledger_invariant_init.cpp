@@ -78,7 +78,6 @@ void LedgerInvariant::Init(BasicValues const* b)
 
     // BOY vectors.
 
-//  TgtPrem                    = UNUSED ?
 //  GrossPmt                   = DYNAMIC
 //  EeGrossPmt                 = DYNAMIC
 //  ErGrossPmt                 = DYNAMIC

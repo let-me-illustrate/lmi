@@ -80,7 +80,6 @@ void LedgerInvariant::Alloc(int len)
     Length = len;
 
     // BOY vectors.
-    BegYearVectors  ["TgtPrem"               ] = &TgtPrem                ;
     BegYearVectors  ["GrossPmt"              ] = &GrossPmt               ;
     BegYearVectors  ["EeGrossPmt"            ] = &EeGrossPmt             ;
     BegYearVectors  ["ErGrossPmt"            ] = &ErGrossPmt             ;

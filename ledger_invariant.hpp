@@ -67,7 +67,6 @@ class LMI_SO LedgerInvariant final
 // (e.g., outlay) could be calculated dynamically instead of stored.
 
     // BOY vectors.
-    std::vector<double> TgtPrem;    // Not currently used?
     std::vector<double> GrossPmt;   // TODO ?? Why "gross"?
     std::vector<double> EeGrossPmt;
     std::vector<double> ErGrossPmt;

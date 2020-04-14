@@ -264,7 +264,6 @@ title_map_t static_titles()
     ,{"TermPurchased_Current"           , "Curr Term\nAmt\nPurchased"}
     ,{"TermPurchased_Guaranteed"        , "Guar Term\nAmt\nPurchased"}
     ,{"TermSpecAmt"                     , "Term\nSpecified\nAmount"}
-    ,{"TgtPrem"                         , "Target\nPremium"}
     ,{"TotalIMF"                        , "Total\nInvestment\nMgt Fee"}
     ,{"TotalLoanBalance_Current"        , "Curr Total\nLoan\nBalance"}
     ,{"TotalLoanBalance_Guaranteed"     , "Guar Total\nLoan\nBalance"}
@@ -401,7 +400,6 @@ mask_map_t static_masks()
     ,{"TermPurchased_Current"           , "999,999,999"}
     ,{"TermPurchased_Guaranteed"        , "999,999,999"}
     ,{"TermSpecAmt"                     , "999,999,999"}
-    ,{"TgtPrem"                         , "999,999,999"}
     ,{"TotalIMF"                        ,      "99.99%"}
     ,{"TotalLoanBalance_Current"        , "999,999,999"}
     ,{"TotalLoanBalance_Guaranteed"     , "999,999,999"}
@@ -665,7 +663,6 @@ format_map_t static_formats()
     ,{"SurrChg"                         , f1}
     ,{"TermPurchased"                   , f1}
     ,{"TermSpecAmt"                     , f1}
-    ,{"TgtPrem"                         , f1}
     ,{"TotalLoanBalance"                , f1}
     };
 
