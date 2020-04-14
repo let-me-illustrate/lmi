@@ -77,7 +77,7 @@ LedgerInvariant::~LedgerInvariant()
 //============================================================================
 void LedgerInvariant::Alloc(int len)
 {
-    Length  = len;
+    Length = len;
 
     // BOY vectors.
     BegYearVectors  ["TgtPrem"               ] = &TgtPrem                ;
@@ -405,9 +405,9 @@ void LedgerInvariant::Alloc(int len)
     // be part of the maps populated above. We can reserve space for
     // such vectors, though, if we know what their lengths will be.
 
-    DBOpt               .reserve(Length);
-    EeMode              .reserve(Length);
-    ErMode              .reserve(Length);
+    DBOpt        .reserve(Length);
+    EeMode       .reserve(Length);
+    ErMode       .reserve(Length);
 
     // Vectors of length other than 'Length' can't be part of the maps
     // populated above, but we can reserve space for them here if we
@@ -420,7 +420,7 @@ void LedgerInvariant::Alloc(int len)
     // have zeros, so that adding each cell to it produces the
     // correct total. For each actual non-composite cell, it's
     // initialized correctly by the account-value class.
-    InforceLives        .assign(1 + Length, 0.0);
+    InforceLives .assign(1 + Length, 0.0);
 
     // Data excluded from the maps above must be copied explicitly in
     // Copy(), which is called by the copy ctor and assignment operator.
@@ -471,42 +471,42 @@ void LedgerInvariant::Init()
     // Zero-initialize elements of AllVectors and AllScalars.
     LedgerBase::Initialize(GetLength());
 
-    DBOpt               .assign(Length, mce_dbopt(mce_option1));
-    EeMode              .assign(Length, mce_mode(mce_annual));
-    ErMode              .assign(Length, mce_mode(mce_annual));
+    DBOpt                .assign(Length, mce_dbopt(mce_option1));
+    EeMode               .assign(Length, mce_mode(mce_annual));
+    ErMode               .assign(Length, mce_mode(mce_annual));
 
     // Nonscalable scalars.
 
-    MaleProportion      = 0;
-    NonsmokerProportion = 0;
-    Age                 = 0;
-    EndtAge             = 100;
-    NoLongerIssued      = false;
-    AllowGroupQuote     = true;
-    SurviveToExpectancy = true;
-    SurviveToYear       = true;
-    SurviveToAge        = true;
-    SurvivalMaxYear     = 0;
-    SurvivalMaxAge      = 0;
-    InforceYear         = Length;
-    InforceMonth        = 11;
-    MecYear             = Length;
-    MecMonth            = 11;
-    SpouseIssueAge      = 100;
-    IsSinglePremium     = oe_flexible_premium;
-    CurrentCoiMultiplier= 0;
-    NoLapseAlwaysActive = false;
-    NoLapseMinDur       = 100;
-    NoLapseMinAge       = 100;
-    Has1035ExchCharge   = false;
-    WriteTsvFile        = false;
-    SupplementalReport  = true;
+    MaleProportion       = 0;
+    NonsmokerProportion  = 0;
+    Age                  = 0;
+    EndtAge              = 100;
+    NoLongerIssued       = false;
+    AllowGroupQuote      = true;
+    SurviveToExpectancy  = true;
+    SurviveToYear        = true;
+    SurviveToAge         = true;
+    SurvivalMaxYear      = 0;
+    SurvivalMaxAge       = 0;
+    InforceYear          = Length;
+    InforceMonth         = 11;
+    MecYear              = Length;
+    MecMonth             = 11;
+    SpouseIssueAge       = 100;
+    IsSinglePremium      = oe_flexible_premium;
+    CurrentCoiMultiplier = 0;
+    NoLapseAlwaysActive  = false;
+    NoLapseMinDur        = 100;
+    NoLapseMinAge        = 100;
+    Has1035ExchCharge    = false;
+    WriteTsvFile         = false;
+    SupplementalReport   = true;
 
     // Private internals.
 
-    irr_precision_      = 0;
-    irr_initialized_    = false;
-    FullyInitialized    = false;
+    irr_precision_       = 0;
+    irr_initialized_     = false;
+    FullyInitialized     = false;
 }
 
 // Notes on effective date.
@@ -602,7 +602,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // discontinuity at the older life's maturity age).
     for(int j = 0; j < a_Addend.Length; ++j)
         {
-        CorridorFactor       [j] = 0.0;
+        CorridorFactor [j]  = 0.0;
         }
 
     irr_precision_ = a_Addend.irr_precision_;
@@ -618,106 +618,106 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
         if(0.0 == N[j])
             break;
         // Don't multiply InforceLives by N--it *is* N.
-        InforceLives    [j] += a_Addend.InforceLives    [j];
+        InforceLives   [j] += a_Addend.InforceLives    [j];
         }
     // InforceLives is one longer than the other vectors.
-    InforceLives        [Max] += a_Addend.InforceLives  [Max];
+    InforceLives     [Max] += a_Addend.InforceLives  [Max];
 
-    FundNumbers                   = a_Addend.FundNumbers;
-    FundNames                     = a_Addend.FundNames;
-    FundAllocs                    = a_Addend.FundAllocs;
-    FundAllocations               = a_Addend.FundAllocations;
+    FundNumbers                = a_Addend.FundNumbers;
+    FundNames                  = a_Addend.FundNames;
+    FundAllocs                 = a_Addend.FundAllocs;
+    FundAllocations            = a_Addend.FundAllocations;
 
     // Nonscalable scalars.
 
-    MaleProportion                = std::max(MaleProportion     , a_Addend.MaleProportion);
-    NonsmokerProportion           = std::max(NonsmokerProportion, a_Addend.NonsmokerProportion);
-    GuarMaxMandE                  = std::max(GuarMaxMandE       , a_Addend.GuarMaxMandE);
-    InitDacTaxRate                = std::max(InitDacTaxRate     , a_Addend.InitDacTaxRate);
-    InitPremTaxRate               = std::max(InitPremTaxRate    , a_Addend.InitPremTaxRate);
-    GenderDistinct                = a_Addend.GenderDistinct;
-    GenderBlended                 = a_Addend.GenderBlended;
-    SmokerDistinct                = a_Addend.SmokerDistinct;
-    SmokerBlended                 = a_Addend.SmokerBlended;
-    SubstdTable                   = a_Addend.SubstdTable;
-    Age                           = std::min(Age, a_Addend.Age);
-    RetAge                        = std::min(RetAge, a_Addend.RetAge);
-    EndtAge                       = std::max(EndtAge, a_Addend.EndtAge);
-    GroupIndivSelection           = GroupIndivSelection   || a_Addend.GroupIndivSelection;
-    NoLongerIssued                = NoLongerIssued        || a_Addend.NoLongerIssued;
-    AllowGroupQuote               = AllowGroupQuote       && a_Addend.AllowGroupQuote;
-    TxCallsGuarUwSubstd           = TxCallsGuarUwSubstd   || a_Addend.TxCallsGuarUwSubstd;
-    AllowExperienceRating         = AllowExperienceRating || a_Addend.AllowExperienceRating;
-    UseExperienceRating           = UseExperienceRating   || a_Addend.UseExperienceRating;
-    UsePartialMort                = a_Addend.UsePartialMort;
+    MaleProportion             = std::max(MaleProportion     , a_Addend.MaleProportion);
+    NonsmokerProportion        = std::max(NonsmokerProportion, a_Addend.NonsmokerProportion);
+    GuarMaxMandE               = std::max(GuarMaxMandE       , a_Addend.GuarMaxMandE);
+    InitDacTaxRate             = std::max(InitDacTaxRate     , a_Addend.InitDacTaxRate);
+    InitPremTaxRate            = std::max(InitPremTaxRate    , a_Addend.InitPremTaxRate);
+    GenderDistinct             = a_Addend.GenderDistinct;
+    GenderBlended              = a_Addend.GenderBlended;
+    SmokerDistinct             = a_Addend.SmokerDistinct;
+    SmokerBlended              = a_Addend.SmokerBlended;
+    SubstdTable                = a_Addend.SubstdTable;
+    Age                        = std::min(Age, a_Addend.Age);
+    RetAge                     = std::min(RetAge, a_Addend.RetAge);
+    EndtAge                    = std::max(EndtAge, a_Addend.EndtAge);
+    GroupIndivSelection        = GroupIndivSelection   || a_Addend.GroupIndivSelection;
+    NoLongerIssued             = NoLongerIssued        || a_Addend.NoLongerIssued;
+    AllowGroupQuote            = AllowGroupQuote       && a_Addend.AllowGroupQuote;
+    TxCallsGuarUwSubstd        = TxCallsGuarUwSubstd   || a_Addend.TxCallsGuarUwSubstd;
+    AllowExperienceRating      = AllowExperienceRating || a_Addend.AllowExperienceRating;
+    UseExperienceRating        = UseExperienceRating   || a_Addend.UseExperienceRating;
+    UsePartialMort             = a_Addend.UsePartialMort;
 
-    SurviveToExpectancy           = SurviveToExpectancy   && a_Addend.SurviveToExpectancy;
-    SurviveToYear                 = SurviveToYear         && a_Addend.SurviveToYear;
-    SurviveToAge                  = SurviveToAge          && a_Addend.SurviveToAge;
+    SurviveToExpectancy        = SurviveToExpectancy   && a_Addend.SurviveToExpectancy;
+    SurviveToYear              = SurviveToYear         && a_Addend.SurviveToYear;
+    SurviveToAge               = SurviveToAge          && a_Addend.SurviveToAge;
     LMI_ASSERT(SurviveToExpectancy + SurviveToYear + SurviveToAge <= 1);
-    SurvivalMaxYear               = std::max(SurvivalMaxYear, a_Addend.SurvivalMaxYear);
-    SurvivalMaxAge                = std::max(SurvivalMaxAge , a_Addend.SurvivalMaxAge);
+    SurvivalMaxYear            = std::max(SurvivalMaxYear, a_Addend.SurvivalMaxYear);
+    SurvivalMaxAge             = std::max(SurvivalMaxAge , a_Addend.SurvivalMaxAge);
 
-    AvgFund                       = a_Addend.AvgFund;
-    CustomFund                    = a_Addend.CustomFund;
-    IsMec                         = a_Addend.IsMec        || IsMec;
-    InforceIsMec                  = a_Addend.InforceIsMec || InforceIsMec;
+    AvgFund                    = a_Addend.AvgFund;
+    CustomFund                 = a_Addend.CustomFund;
+    IsMec                      = a_Addend.IsMec        || IsMec;
+    InforceIsMec               = a_Addend.InforceIsMec || InforceIsMec;
 
     if(InforceYear == a_Addend.InforceYear)
         {
-        InforceMonth              = std::min(InforceMonth, a_Addend.InforceMonth);
+        InforceMonth           = std::min(InforceMonth, a_Addend.InforceMonth);
         }
     else if(a_Addend.InforceYear < InforceYear)
         {
-        InforceMonth              = a_Addend.InforceMonth;
+        InforceMonth           = a_Addend.InforceMonth;
         }
-    InforceYear                   = std::min(InforceYear, a_Addend.InforceYear);
+    InforceYear                = std::min(InforceYear, a_Addend.InforceYear);
 
     if(MecYear == a_Addend.MecYear)
         {
-        MecMonth                  = std::min(MecMonth, a_Addend.MecMonth);
+        MecMonth               = std::min(MecMonth, a_Addend.MecMonth);
         }
     else if(a_Addend.MecYear < MecYear)
         {
-        MecMonth                  = a_Addend.MecMonth;
+        MecMonth               = a_Addend.MecMonth;
         }
-    MecYear                       = std::min(MecYear, a_Addend.MecYear);
+    MecYear                    = std::min(MecYear, a_Addend.MecYear);
 
-    HasWP                         = HasWP           || a_Addend.HasWP          ;
-    HasADD                        = HasADD          || a_Addend.HasADD         ;
-    HasTerm                       = HasTerm         || a_Addend.HasTerm        ;
-    HasSupplSpecAmt               = HasSupplSpecAmt || a_Addend.HasSupplSpecAmt;
-    HasChildRider                 = HasChildRider      || a_Addend.HasChildRider     ;
-    HasSpouseRider                = HasSpouseRider     || a_Addend.HasSpouseRider    ;
-    SpouseIssueAge                = std::min(SpouseIssueAge, a_Addend.SpouseIssueAge);
-    HasHoneymoon                  = HasHoneymoon || a_Addend.HasHoneymoon ;
-    PostHoneymoonSpread           = a_Addend.PostHoneymoonSpread          ;
-    SplitMinPrem                  = SplitMinPrem || a_Addend.SplitMinPrem ;
-    ErNotionallyPaysTerm          = ErNotionallyPaysTerm || a_Addend.ErNotionallyPaysTerm;
-    IsSinglePremium        = std::max(a_Addend.IsSinglePremium      , IsSinglePremium      );
-    MaxAnnGuarLoanSpread   = std::max(a_Addend.MaxAnnGuarLoanSpread , MaxAnnGuarLoanSpread );
-    MaxAnnCurrLoanDueRate  = std::max(a_Addend.MaxAnnCurrLoanDueRate, MaxAnnCurrLoanDueRate);
+    HasWP                      = HasWP           || a_Addend.HasWP          ;
+    HasADD                     = HasADD          || a_Addend.HasADD         ;
+    HasTerm                    = HasTerm         || a_Addend.HasTerm        ;
+    HasSupplSpecAmt            = HasSupplSpecAmt || a_Addend.HasSupplSpecAmt;
+    HasChildRider              = HasChildRider      || a_Addend.HasChildRider     ;
+    HasSpouseRider             = HasSpouseRider     || a_Addend.HasSpouseRider    ;
+    SpouseIssueAge             = std::min(SpouseIssueAge, a_Addend.SpouseIssueAge);
+    HasHoneymoon               = HasHoneymoon || a_Addend.HasHoneymoon ;
+    PostHoneymoonSpread        = a_Addend.PostHoneymoonSpread          ;
+    SplitMinPrem               = SplitMinPrem || a_Addend.SplitMinPrem ;
+    ErNotionallyPaysTerm       = ErNotionallyPaysTerm || a_Addend.ErNotionallyPaysTerm;
+    IsSinglePremium            = std::max(a_Addend.IsSinglePremium      , IsSinglePremium      );
+    MaxAnnGuarLoanSpread       = std::max(a_Addend.MaxAnnGuarLoanSpread , MaxAnnGuarLoanSpread );
+    MaxAnnCurrLoanDueRate      = std::max(a_Addend.MaxAnnCurrLoanDueRate, MaxAnnCurrLoanDueRate);
 
     // Logical OR because IsInforce is a taint that prevents us from
     // calculating a meaningful IRR. For one thing, we lack payment
     // history. For another, even if we had it, payments probably
     // wouldn't be equally spaced, so we'd need a more general irr
     // routine.
-    IsInforce                     = IsInforce     || a_Addend.IsInforce    ;
+    IsInforce                  = IsInforce     || a_Addend.IsInforce    ;
 
-    CurrentCoiMultiplier   = std::max(a_Addend.CurrentCoiMultiplier , CurrentCoiMultiplier );
-    NoLapseAlwaysActive           = a_Addend.NoLapseAlwaysActive|| NoLapseAlwaysActive;
-    NoLapseMinDur                 = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
-    NoLapseMinAge                 = std::min(a_Addend.NoLapseMinAge, NoLapseMinAge);
-    Has1035ExchCharge             = a_Addend.Has1035ExchCharge  || Has1035ExchCharge;
-    EffDateJdn                    = a_Addend.EffDateJdn;
-    DateOfBirthJdn                = a_Addend.DateOfBirthJdn;
-    LastCoiReentryDateJdn         = a_Addend.LastCoiReentryDateJdn;
-    ListBillDateJdn               = a_Addend.ListBillDateJdn;
-    InforceAsOfDateJdn            = a_Addend.InforceAsOfDateJdn;
-    GenAcctAllocation             = a_Addend.GenAcctAllocation;
-    SplitFundAllocation           = SplitFundAllocation   || a_Addend.SplitFundAllocation;
-    WriteTsvFile                  = WriteTsvFile || a_Addend.WriteTsvFile ;
+    CurrentCoiMultiplier       = std::max(a_Addend.CurrentCoiMultiplier , CurrentCoiMultiplier );
+    NoLapseAlwaysActive        = a_Addend.NoLapseAlwaysActive|| NoLapseAlwaysActive;
+    NoLapseMinDur              = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
+    NoLapseMinAge              = std::min(a_Addend.NoLapseMinAge, NoLapseMinAge);
+    Has1035ExchCharge          = a_Addend.Has1035ExchCharge  || Has1035ExchCharge;
+    EffDateJdn                 = a_Addend.EffDateJdn;
+    DateOfBirthJdn             = a_Addend.DateOfBirthJdn;
+    LastCoiReentryDateJdn      = a_Addend.LastCoiReentryDateJdn;
+    ListBillDateJdn            = a_Addend.ListBillDateJdn;
+    InforceAsOfDateJdn         = a_Addend.InforceAsOfDateJdn;
+    GenAcctAllocation          = a_Addend.GenAcctAllocation;
+    SplitFundAllocation        = SplitFundAllocation   || a_Addend.SplitFundAllocation;
+    WriteTsvFile               = WriteTsvFile || a_Addend.WriteTsvFile ;
 
     // The composite has a supplemental report iff every cell has one,
     // in which case it uses the same columns as the last cell. There
@@ -725,27 +725,27 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // union of all columns selected for any life becomes infeasible
     // when its cardinality exceeds the maximum.)
     //
-    SupplementalReport            = SupplementalReport && a_Addend.SupplementalReport;
+    SupplementalReport         = SupplementalReport && a_Addend.SupplementalReport;
     // Nonscalable scalars end.
 
     // Strings.
     //
     // Override the behavior of LedgerBase::PlusEq() for this handful
     // of strings, which would often or even necessarily vary by life.
-    ContractNumber                = "";
-    Insured1                      = "";
-    Gender                        = "";
-    Smoker                        = "";
-    UWClass                       = "";
-    SubstandardTable              = "";
+    ContractNumber             = "";
+    Insured1                   = "";
+    Gender                     = "";
+    Smoker                     = "";
+    UWClass                    = "";
+    SubstandardTable           = "";
 
     // Special-case strings.
 
-    EffDate                       = a_Addend.EffDate;
-    DateOfBirth                   = a_Addend.DateOfBirth;
-    LastCoiReentryDate            = a_Addend.LastCoiReentryDate;
-    ListBillDate                  = a_Addend.ListBillDate;
-    InforceAsOfDate               = a_Addend.InforceAsOfDate;
+    EffDate                    = a_Addend.EffDate;
+    DateOfBirth                = a_Addend.DateOfBirth;
+    LastCoiReentryDate         = a_Addend.LastCoiReentryDate;
+    ListBillDate               = a_Addend.ListBillDate;
+    InforceAsOfDate            = a_Addend.InforceAsOfDate;
 
     return *this;
 }
@@ -848,12 +848,12 @@ void LedgerInvariant::Spew(std::ostream& os) const
 {
     LedgerBase::Spew(os);
 
-    SpewVector(os, std::string("InforceLives")     ,InforceLives    );
-    SpewVector(os, std::string("DBOpt")            ,DBOpt           );
-    SpewVector(os, std::string("EeMode")           ,EeMode          );
-    SpewVector(os, std::string("ErMode")           ,ErMode          );
-    SpewVector(os, std::string("FundNumbers")      ,FundNumbers     );
-    SpewVector(os, std::string("FundNames")        ,FundNames       );
-    SpewVector(os, std::string("FundAllocs")       ,FundAllocs      );
-    SpewVector(os, std::string("FundAllocations")  ,FundAllocations );
+    SpewVector(os, std::string("InforceLives")    ,InforceLives    );
+    SpewVector(os, std::string("DBOpt")           ,DBOpt           );
+    SpewVector(os, std::string("EeMode")          ,EeMode          );
+    SpewVector(os, std::string("ErMode")          ,ErMode          );
+    SpewVector(os, std::string("FundNumbers")     ,FundNumbers     );
+    SpewVector(os, std::string("FundNames")       ,FundNames       );
+    SpewVector(os, std::string("FundAllocs")      ,FundAllocs      );
+    SpewVector(os, std::string("FundAllocations") ,FundAllocations );
 }

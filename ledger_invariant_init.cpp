@@ -53,10 +53,10 @@ void LedgerInvariant::Init(BasicValues const* b)
 
     // BOY vectors.
 
-//  TgtPrem         = DYNAMIC ?
-//  GrossPmt        = DYNAMIC
-//  EeGrossPmt      = DYNAMIC
-//  ErGrossPmt      = DYNAMIC
+//  TgtPrem                    = DYNAMIC ?
+//  GrossPmt                   = DYNAMIC
+//  EeGrossPmt                 = DYNAMIC
+//  ErGrossPmt                 = DYNAMIC
 
     // Certain data members, including but almost certainly not
     // limited to these, should not be initialized to any non-zero
@@ -64,96 +64,96 @@ void LedgerInvariant::Init(BasicValues const* b)
     // processing, subject to various restrictions that often cause
     // them to differ from input values. Notably, values need to be
     // zero after lapse.
-//    NetWD                 = DYNAMIC
-//    NewCashLoan           = DYNAMIC
-//    Outlay                = DYNAMIC
-//    GptForceout           = DYNAMIC
-//    NaarForceout          = DYNAMIC ?
-//    ModalMinimumPremium   = DYNAMIC
-//    EeModalMinimumPremium = DYNAMIC
-//    ErModalMinimumPremium = DYNAMIC
+//  NetWD                      = DYNAMIC
+//  NewCashLoan                = DYNAMIC
+//  Outlay                     = DYNAMIC
+//  GptForceout                = DYNAMIC
+//  NaarForceout               = DYNAMIC ?
+//  ModalMinimumPremium        = DYNAMIC
+//  EeModalMinimumPremium      = DYNAMIC
+//  ErModalMinimumPremium      = DYNAMIC
 
-    AddonMonthlyFee      = b->yare_input_.ExtraMonthlyCustodialFee  ;
+    AddonMonthlyFee            = b->yare_input_.ExtraMonthlyCustodialFee  ;
 
     // EOY vectors.
 
-    HasSupplSpecAmt = false;
+    HasSupplSpecAmt            = false;
     if(b->yare_input_.TermRider)
         {
-        TermSpecAmt     .assign(Length, b->yare_input_.TermRiderAmount);
+        TermSpecAmt            .assign(Length, b->yare_input_.TermRiderAmount);
         }
     else if(b->database().query<bool>(DB_TermIsNotRider))
         {
-        TermSpecAmt      = b->DeathBfts_->supplamt();
+        TermSpecAmt            = b->DeathBfts_->supplamt();
         if(!each_equal(TermSpecAmt, 0.0))
             {
-            HasSupplSpecAmt = true;
+            HasSupplSpecAmt    = true;
             }
         }
     else
         {
         TermSpecAmt     .assign(Length, 0.0);
         }
-    SpecAmt         = b->DeathBfts_->specamt();
+    SpecAmt                    = b->DeathBfts_->specamt();
 
     // Forborne vectors.
 
-    Salary               = b->yare_input_.ProjectedSalary           ;
+    Salary                     = b->yare_input_.ProjectedSalary           ;
 
     // Nonscalable vectors.
 
-    IndvTaxBracket       = b->yare_input_.TaxBracket                ;
-    CorpTaxBracket       = b->yare_input_.CorporationTaxBracket     ;
-    AnnualFlatExtra      = b->yare_input_.FlatExtra                 ;
-    HoneymoonValueSpread = b->yare_input_.HoneymoonValueSpread      ;
-    PartMortTableMult       = b->yare_input_.PartialMortalityMultiplier;
-    AddonCompOnAssets    = b->yare_input_.ExtraCompensationOnAssets ;
-    AddonCompOnPremium   = b->yare_input_.ExtraCompensationOnPremium;
-    CorridorFactor       = b->GetCorridorFactor();
+    IndvTaxBracket             = b->yare_input_.TaxBracket                ;
+    CorpTaxBracket             = b->yare_input_.CorporationTaxBracket     ;
+    AnnualFlatExtra            = b->yare_input_.FlatExtra                 ;
+    HoneymoonValueSpread       = b->yare_input_.HoneymoonValueSpread      ;
+    PartMortTableMult          = b->yare_input_.PartialMortalityMultiplier;
+    AddonCompOnAssets          = b->yare_input_.ExtraCompensationOnAssets ;
+    AddonCompOnPremium         = b->yare_input_.ExtraCompensationOnPremium;
+    CorridorFactor             = b->GetCorridorFactor();
 
-    AnnLoanDueRate       = b->InterestRates_->RegLnDueRate
+    AnnLoanDueRate = b->InterestRates_->RegLnDueRate
         (mce_gen_curr
         ,mce_annual_rate
         );
 
-    CurrMandE            = b->InterestRates_->MAndERate(mce_gen_curr);
-    TotalIMF             = b->InterestRates_->InvestmentManagementFee();
-    RefundableSalesLoad  = b->Loads_->refundable_sales_load_proportion();
+    CurrMandE                  = b->InterestRates_->MAndERate(mce_gen_curr);
+    TotalIMF                   = b->InterestRates_->InvestmentManagementFee();
+    RefundableSalesLoad        = b->Loads_->refundable_sales_load_proportion();
 
     // Scalable scalars.
 
     // SOMEDAY !! Things indexed with '[0]' should probably use inforce year instead.
-    InitBaseSpecAmt         = b->DeathBfts_->specamt()[0];
-    InitTermSpecAmt         = TermSpecAmt[0];
-    ChildRiderAmount        = b->yare_input_.ChildRiderAmount;
-    SpouseRiderAmount       = b->yare_input_.SpouseRiderAmount;
+    InitBaseSpecAmt            = b->DeathBfts_->specamt()[0];
+    InitTermSpecAmt            = TermSpecAmt[0];
+    ChildRiderAmount           = b->yare_input_.ChildRiderAmount;
+    SpouseRiderAmount          = b->yare_input_.SpouseRiderAmount;
 
-//  InitPrem                = DYNAMIC
-//  GuarPrem                = DYNAMIC
-//  InitSevenPayPrem        = DYNAMIC
-//  InitGSP                 = DYNAMIC
-//  InitGLP                 = DYNAMIC
-//  InitTgtPrem             = DYNAMIC
-//  ListBillPremium         = DYNAMIC
-//  EeListBillPremium       = DYNAMIC
-//  ErListBillPremium       = DYNAMIC
+//  InitPrem                   = DYNAMIC
+//  GuarPrem                   = DYNAMIC
+//  InitSevenPayPrem           = DYNAMIC
+//  InitGSP                    = DYNAMIC
+//  InitGLP                    = DYNAMIC
+//  InitTgtPrem                = DYNAMIC
+//  ListBillPremium            = DYNAMIC
+//  EeListBillPremium          = DYNAMIC
+//  ErListBillPremium          = DYNAMIC
 
     // These must be set dynamically because they may be changed,
     // e.g. to respect guideline limits. ?
-//    Dumpin               = DYNAMIC
-//    External1035Amount   = DYNAMIC
-//    Internal1035Amount   = DYNAMIC
+//  Dumpin                     = DYNAMIC
+//  External1035Amount         = DYNAMIC
+//  Internal1035Amount         = DYNAMIC
 
     InforceUnloanedAV =
           b->yare_input_.InforceGeneralAccountValue
         + b->yare_input_.InforceSeparateAccountValue
         ;
-    InforceTaxBasis      = b->yare_input_.InforceTaxBasis           ;
+    InforceTaxBasis            = b->yare_input_.InforceTaxBasis           ;
 
     // Nonscalable scalars.
 
-    MaleProportion          = b->yare_input_.MaleProportion;
-    NonsmokerProportion     = b->yare_input_.NonsmokerProportion;
+    MaleProportion             = b->yare_input_.MaleProportion;
+    NonsmokerProportion        = b->yare_input_.NonsmokerProportion;
 
     // Assert this because the illustration currently prints a scalar
     // guaranteed max, assuming that it's the same for all years.
@@ -161,30 +161,30 @@ void LedgerInvariant::Init(BasicValues const* b)
         (mce_gen_guar
         );
     LMI_ASSERT(each_equal(guar_m_and_e_rate, guar_m_and_e_rate.front()));
-    GuarMaxMandE            = guar_m_and_e_rate[0];
-    InitDacTaxRate          = b->Loads_->dac_tax_load()[b->yare_input_.InforceYear];
-    InitPremTaxRate         = b->PremiumTax_->maximum_load_rate();
-//  GenderDistinct          = UNUSED ?
-    GenderBlended           = b->yare_input_.BlendGender;
-//  SmokerDistinct          = UNUSED ?
-    SmokerBlended           = b->yare_input_.BlendSmoking;
+    GuarMaxMandE               = guar_m_and_e_rate[0];
+    InitDacTaxRate             = b->Loads_->dac_tax_load()[b->yare_input_.InforceYear];
+    InitPremTaxRate            = b->PremiumTax_->maximum_load_rate();
+//  GenderDistinct             = UNUSED ?
+    GenderBlended              = b->yare_input_.BlendGender;
+//  SmokerDistinct             = UNUSED ?
+    SmokerBlended              = b->yare_input_.BlendSmoking;
 
-    SubstdTable             = b->yare_input_.SubstandardTable;
+    SubstdTable                = b->yare_input_.SubstandardTable;
 
-    Age                     = b->yare_input_.IssueAge;
-    RetAge                  = b->yare_input_.RetirementAge;
-    EndtAge                 = b->yare_input_.IssueAge + b->GetLength();
+    Age                        = b->yare_input_.IssueAge;
+    RetAge                     = b->yare_input_.RetirementAge;
+    EndtAge                    = b->yare_input_.IssueAge + b->GetLength();
     b->database().query_into(DB_GroupIndivSelection, GroupIndivSelection);
-    NoLongerIssued          = b->database().query<bool>(DB_NoLongerIssued);
-    AllowGroupQuote         = b->database().query<bool>(DB_AllowGroupQuote);
+    NoLongerIssued             = b->database().query<bool>(DB_NoLongerIssued);
+    AllowGroupQuote            = b->database().query<bool>(DB_AllowGroupQuote);
     b->database().query_into(DB_TxCallsGuarUwSubstd, TxCallsGuarUwSubstd);
-    AllowExperienceRating   = b->database().query<bool>(DB_AllowExpRating);
-    UseExperienceRating     = b->yare_input_.UseExperienceRating;
-    UsePartialMort          = b->yare_input_.UsePartialMortality;
+    AllowExperienceRating      = b->database().query<bool>(DB_AllowExpRating);
+    UseExperienceRating        = b->yare_input_.UseExperienceRating;
+    UsePartialMort             = b->yare_input_.UsePartialMortality;
 
-    SurviveToExpectancy = false;
-    SurviveToYear       = false;
-    SurviveToAge        = false;
+    SurviveToExpectancy        = false;
+    SurviveToYear              = false;
+    SurviveToAge               = false;
     switch(b->yare_input_.SurviveToType)
         {
         case mce_no_survival_limit:     /* do nothing */   ; break;
@@ -199,38 +199,38 @@ void LedgerInvariant::Init(BasicValues const* b)
     // duration for the case (and both cells) is 25 years, then the
     // composite max duration really is 25: it's not limited to 20
     // because the 80-year-old matures earlier.
-    SurvivalMaxYear         = b->yare_input_.SurviveToYear;
-    SurvivalMaxAge          = b->yare_input_.SurviveToAge;
+    SurvivalMaxYear            = b->yare_input_.SurviveToYear;
+    SurvivalMaxAge             = b->yare_input_.SurviveToAge;
 
-    AvgFund                 = b->yare_input_.UseAverageOfAllFunds;
-    CustomFund              = b->yare_input_.OverrideFundManagementFee;
+    AvgFund                    = b->yare_input_.UseAverageOfAllFunds;
+    CustomFund                 = b->yare_input_.OverrideFundManagementFee;
 
-// IsMec                    =  DYNAMIC
-// InforceIsMec             =  DYNAMIC ?
-// InforceYear              =  DYNAMIC ?
-// InforceMonth             =  DYNAMIC ?
-// MecYear                  =  DYNAMIC
-// MecMonth                 =  DYNAMIC
+//  IsMec                      = DYNAMIC
+//  InforceIsMec               = DYNAMIC ?
+//  InforceYear                = DYNAMIC ?
+//  InforceMonth               = DYNAMIC ?
+//  MecYear                    = DYNAMIC
+//  MecMonth                   = DYNAMIC
 
-    HasWP                   = b->yare_input_.WaiverOfPremiumBenefit;
-    HasADD                  = b->yare_input_.AccidentalDeathBenefit;
-    HasTerm                 = b->yare_input_.TermRider;
-// HasSupplSpecAmt // Out of order--see above.
-    HasChildRider           = b->yare_input_.ChildRider;
-    HasSpouseRider          = b->yare_input_.SpouseRider;
-    SpouseIssueAge          = b->yare_input_.SpouseIssueAge;
+    HasWP                      = b->yare_input_.WaiverOfPremiumBenefit;
+    HasADD                     = b->yare_input_.AccidentalDeathBenefit;
+    HasTerm                    = b->yare_input_.TermRider;
+//  HasSupplSpecAmt // Out of order--see above.
+    HasChildRider              = b->yare_input_.ChildRider;
+    HasSpouseRider             = b->yare_input_.SpouseRider;
+    SpouseIssueAge             = b->yare_input_.SpouseIssueAge;
 
-    HasHoneymoon            = b->yare_input_.HoneymoonEndorsement;
-    PostHoneymoonSpread     = b->yare_input_.PostHoneymoonSpread;
+    HasHoneymoon               = b->yare_input_.HoneymoonEndorsement;
+    PostHoneymoonSpread        = b->yare_input_.PostHoneymoonSpread;
     b->database().query_into(DB_SplitMinPrem        , SplitMinPrem);
     b->database().query_into(DB_ErNotionallyPaysTerm, ErNotionallyPaysTerm);
     b->database().query_into(DB_IsSinglePremium     , IsSinglePremium);
 
-    std::vector<double> z= b->InterestRates_->RegLoanSpread(mce_gen_guar);
-    LMI_ASSERT(!z.empty()); // Ensure *(std::max_element()) works.
-    MaxAnnGuarLoanSpread = *std::max_element(z.begin(), z.end());
+    std::vector<double> z      = b->InterestRates_->RegLoanSpread(mce_gen_guar);
+    LMI_ASSERT(!z.empty());              // Ensure *(std::max_element()) works.
+    MaxAnnGuarLoanSpread       = *std::max_element(z.begin(), z.end());
     LMI_ASSERT(!AnnLoanDueRate.empty()); // Ensure *(std::max_element()) works.
-    MaxAnnCurrLoanDueRate = *std::max_element
+    MaxAnnCurrLoanDueRate      = *std::max_element
         (AnnLoanDueRate.begin()
         ,AnnLoanDueRate.end()
         );
@@ -263,13 +263,13 @@ void LedgerInvariant::Init(BasicValues const* b)
     b->database().query_into(DB_NoLapseMinAge      , NoLapseMinAge);
     b->database().query_into(DB_Has1035ExchCharge  , Has1035ExchCharge);
 
-    EffDateJdn              = calendar_date(b->yare_input_.EffectiveDate     ).julian_day_number();
-    DateOfBirthJdn          = calendar_date(b->yare_input_.DateOfBirth       ).julian_day_number();
-    LastCoiReentryDateJdn   = calendar_date(b->yare_input_.LastCoiReentryDate).julian_day_number();
-    ListBillDateJdn         = calendar_date(b->yare_input_.ListBillDate      ).julian_day_number();
-    InforceAsOfDateJdn      = calendar_date(b->yare_input_.InforceAsOfDate   ).julian_day_number();
+    EffDateJdn            = calendar_date(b->yare_input_.EffectiveDate     ).julian_day_number();
+    DateOfBirthJdn        = calendar_date(b->yare_input_.DateOfBirth       ).julian_day_number();
+    LastCoiReentryDateJdn = calendar_date(b->yare_input_.LastCoiReentryDate).julian_day_number();
+    ListBillDateJdn       = calendar_date(b->yare_input_.ListBillDate      ).julian_day_number();
+    InforceAsOfDateJdn    = calendar_date(b->yare_input_.InforceAsOfDate   ).julian_day_number();
 
-    GenAcctAllocation = 1.0 - premium_allocation_to_sepacct(b->yare_input_);
+    GenAcctAllocation          = 1.0 - premium_allocation_to_sepacct(b->yare_input_);
 
     SplitFundAllocation =
             (0.0 != GenAcctAllocation && 1.0 != GenAcctAllocation)
@@ -279,7 +279,7 @@ void LedgerInvariant::Init(BasicValues const* b)
             )
         ;
 
-    WriteTsvFile = contains(b->yare_input_.Comments, "idiosyncrasyY");
+    WriteTsvFile               = contains(b->yare_input_.Comments, "idiosyncrasyY");
 
     SupplementalReport         = b->yare_input_.CreateSupplementalReport;
 
@@ -298,191 +298,191 @@ void LedgerInvariant::Init(BasicValues const* b)
         // strings in class product_data vary across the same axes as
         // database_entity objects.
         bool alt_form = b->database().query<bool>(DB_UsePolicyFormAlt);
-        dbo_name_option1               = p.datum("DboNameLevel"                   );
-        dbo_name_option2               = p.datum("DboNameIncreasing"              );
-        dbo_name_rop                   = p.datum("DboNameReturnOfPremium"         );
-        dbo_name_mdb                   = p.datum("DboNameMinDeathBenefit"         );
+        dbo_name_option1              = p.datum("DboNameLevel"                   );
+        dbo_name_option2              = p.datum("DboNameIncreasing"              );
+        dbo_name_rop                  = p.datum("DboNameReturnOfPremium"         );
+        dbo_name_mdb                  = p.datum("DboNameMinDeathBenefit"         );
 
         // Strings.
 
         PolicyForm = p.datum(alt_form ? "PolicyFormAlternative" : "PolicyForm");
-        PolicyMktgName                 = p.datum("PolicyMktgName"                 );
-        PolicyLegalName                = p.datum("PolicyLegalName"                );
+        PolicyMktgName                = p.datum("PolicyMktgName"                 );
+        PolicyLegalName               = p.datum("PolicyLegalName"                );
         CsoEra     = mc_str(b->database().query<mcenum_cso_era>(DB_CsoEra));
-        InsCoShortName                 = p.datum("InsCoShortName"                 );
-        InsCoName                      = p.datum("InsCoName"                      );
-        InsCoAddr                      = p.datum("InsCoAddr"                      );
-        InsCoStreet                    = p.datum("InsCoStreet"                    );
-        InsCoPhone                     = p.datum("InsCoPhone"                     );
-        MainUnderwriter                = p.datum("MainUnderwriter"                );
-        MainUnderwriterAddress         = p.datum("MainUnderwriterAddress"         );
-        CoUnderwriter                  = p.datum("CoUnderwriter"                  );
-        CoUnderwriterAddress           = p.datum("CoUnderwriterAddress"           );
+        InsCoShortName                = p.datum("InsCoShortName"                 );
+        InsCoName                     = p.datum("InsCoName"                      );
+        InsCoAddr                     = p.datum("InsCoAddr"                      );
+        InsCoStreet                   = p.datum("InsCoStreet"                    );
+        InsCoPhone                    = p.datum("InsCoPhone"                     );
+        MainUnderwriter               = p.datum("MainUnderwriter"                );
+        MainUnderwriterAddress        = p.datum("MainUnderwriterAddress"         );
+        CoUnderwriter                 = p.datum("CoUnderwriter"                  );
+        CoUnderwriterAddress          = p.datum("CoUnderwriterAddress"           );
 
         // Terms defined in the contract
 
-        AvName                         = p.datum("AvName"                         );
-        CsvName                        = p.datum("CsvName"                        );
-        CsvHeaderName                  = p.datum("CsvHeaderName"                  );
-        NoLapseProvisionName           = p.datum("NoLapseProvisionName"           );
-        ContractName                   = p.datum("ContractName"                   );
-        DboName                        = p.datum("DboName"                        );
+        AvName                        = p.datum("AvName"                         );
+        CsvName                       = p.datum("CsvName"                        );
+        CsvHeaderName                 = p.datum("CsvHeaderName"                  );
+        NoLapseProvisionName          = p.datum("NoLapseProvisionName"           );
+        ContractName                  = p.datum("ContractName"                   );
+        DboName                       = p.datum("DboName"                        );
         // PDF !! It is hoped that these three local variables (which
         // duplicate 'dbo_name_option1' etc. above) can be expunged.
-        DboNameLevel                   = p.datum("DboNameLevel"                   );
-        DboNameIncreasing              = p.datum("DboNameIncreasing"              );
-        DboNameMinDeathBenefit         = p.datum("DboNameMinDeathBenefit"         );
-        GenAcctName                    = p.datum("GenAcctName"                    );
-        GenAcctNameElaborated          = p.datum("GenAcctNameElaborated"          );
-        SepAcctName                    = p.datum("SepAcctName"                    );
-        SpecAmtName                    = p.datum("SpecAmtName"                    );
-        SpecAmtNameElaborated          = p.datum("SpecAmtNameElaborated"          );
-        UwBasisMedical                 = p.datum("UwBasisMedical"                 );
-        UwBasisParamedical             = p.datum("UwBasisParamedical"             );
-        UwBasisNonmedical              = p.datum("UwBasisNonmedical"              );
-        UwBasisSimplified              = p.datum("UwBasisSimplified"              );
-        UwBasisGuaranteed              = p.datum("UwBasisGuaranteed"              );
-        UwClassPreferred               = p.datum("UwClassPreferred"               );
-        UwClassStandard                = p.datum("UwClassStandard"                );
-        UwClassRated                   = p.datum("UwClassRated"                   );
-        UwClassUltra                   = p.datum("UwClassUltra"                   );
+        DboNameLevel                  = p.datum("DboNameLevel"                   );
+        DboNameIncreasing             = p.datum("DboNameIncreasing"              );
+        DboNameMinDeathBenefit        = p.datum("DboNameMinDeathBenefit"         );
+        GenAcctName                   = p.datum("GenAcctName"                    );
+        GenAcctNameElaborated         = p.datum("GenAcctNameElaborated"          );
+        SepAcctName                   = p.datum("SepAcctName"                    );
+        SpecAmtName                   = p.datum("SpecAmtName"                    );
+        SpecAmtNameElaborated         = p.datum("SpecAmtNameElaborated"          );
+        UwBasisMedical                = p.datum("UwBasisMedical"                 );
+        UwBasisParamedical            = p.datum("UwBasisParamedical"             );
+        UwBasisNonmedical             = p.datum("UwBasisNonmedical"              );
+        UwBasisSimplified             = p.datum("UwBasisSimplified"              );
+        UwBasisGuaranteed             = p.datum("UwBasisGuaranteed"              );
+        UwClassPreferred              = p.datum("UwClassPreferred"               );
+        UwClassStandard               = p.datum("UwClassStandard"                );
+        UwClassRated                  = p.datum("UwClassRated"                   );
+        UwClassUltra                  = p.datum("UwClassUltra"                   );
 
         // Ledger column definitions.
 
-        AccountValueFootnote           = p.datum("AccountValueFootnote"           );
-        AttainedAgeFootnote            = p.datum("AttainedAgeFootnote"            );
-        CashSurrValueFootnote          = p.datum("CashSurrValueFootnote"          );
-        DeathBenefitFootnote           = p.datum("DeathBenefitFootnote"           );
-        InitialPremiumFootnote         = p.datum("InitialPremiumFootnote"         );
-        NetPremiumFootnote             = p.datum("NetPremiumFootnote"             );
-        GrossPremiumFootnote           = p.datum("GrossPremiumFootnote"           );
-        OutlayFootnote                 = p.datum("OutlayFootnote"                 );
-        PolicyYearFootnote             = p.datum("PolicyYearFootnote"             );
+        AccountValueFootnote          = p.datum("AccountValueFootnote"           );
+        AttainedAgeFootnote           = p.datum("AttainedAgeFootnote"            );
+        CashSurrValueFootnote         = p.datum("CashSurrValueFootnote"          );
+        DeathBenefitFootnote          = p.datum("DeathBenefitFootnote"           );
+        InitialPremiumFootnote        = p.datum("InitialPremiumFootnote"         );
+        NetPremiumFootnote            = p.datum("NetPremiumFootnote"             );
+        GrossPremiumFootnote          = p.datum("GrossPremiumFootnote"           );
+        OutlayFootnote                = p.datum("OutlayFootnote"                 );
+        PolicyYearFootnote            = p.datum("PolicyYearFootnote"             );
 
         // Terse rider names.
 
-        ADDTerseName                   = p.datum("ADDTerseName"                   );
-        InsurabilityTerseName          = p.datum("InsurabilityTerseName"          );
-        ChildTerseName                 = p.datum("ChildTerseName"                 );
-        SpouseTerseName                = p.datum("SpouseTerseName"                );
-        TermTerseName                  = p.datum("TermTerseName"                  );
-        WaiverTerseName                = p.datum("WaiverTerseName"                );
-        AccelBftRiderTerseName         = p.datum("AccelBftRiderTerseName"         );
-        OverloanRiderTerseName         = p.datum("OverloanRiderTerseName"         );
+        ADDTerseName                  = p.datum("ADDTerseName"                   );
+        InsurabilityTerseName         = p.datum("InsurabilityTerseName"          );
+        ChildTerseName                = p.datum("ChildTerseName"                 );
+        SpouseTerseName               = p.datum("SpouseTerseName"                );
+        TermTerseName                 = p.datum("TermTerseName"                  );
+        WaiverTerseName               = p.datum("WaiverTerseName"                );
+        AccelBftRiderTerseName        = p.datum("AccelBftRiderTerseName"         );
+        OverloanRiderTerseName        = p.datum("OverloanRiderTerseName"         );
 
         // Rider footnotes.
 
-        ADDFootnote                    = p.datum("ADDFootnote"                    );
-        ChildFootnote                  = p.datum("ChildFootnote"                  );
-        SpouseFootnote                 = p.datum("SpouseFootnote"                 );
-        TermFootnote                   = p.datum("TermFootnote"                   );
-        WaiverFootnote                 = p.datum("WaiverFootnote"                 );
-        AccelBftRiderFootnote          = p.datum("AccelBftRiderFootnote"          );
-        OverloanRiderFootnote          = p.datum("OverloanRiderFootnote"          );
+        ADDFootnote                   = p.datum("ADDFootnote"                    );
+        ChildFootnote                 = p.datum("ChildFootnote"                  );
+        SpouseFootnote                = p.datum("SpouseFootnote"                 );
+        TermFootnote                  = p.datum("TermFootnote"                   );
+        WaiverFootnote                = p.datum("WaiverFootnote"                 );
+        AccelBftRiderFootnote         = p.datum("AccelBftRiderFootnote"          );
+        OverloanRiderFootnote         = p.datum("OverloanRiderFootnote"          );
 
         // Group quote footnotes.
 
-        GroupQuoteShortProductName     = p.datum("GroupQuoteShortProductName"     );
-        GroupQuoteIsNotAnOffer         = p.datum("GroupQuoteIsNotAnOffer"         );
-        GroupQuoteRidersFooter         = p.datum("GroupQuoteRidersFooter"         );
-        GroupQuotePolicyFormId         = p.datum("GroupQuotePolicyFormId"         );
-        GroupQuoteStateVariations      = p.datum("GroupQuoteStateVariations"      );
-        GroupQuoteProspectus           = p.datum("GroupQuoteProspectus"           );
-        GroupQuoteUnderwriter          = p.datum("GroupQuoteUnderwriter"          );
-        GroupQuoteBrokerDealer         = p.datum("GroupQuoteBrokerDealer"         );
-        GroupQuoteRubricMandatory      = p.datum("GroupQuoteRubricMandatory"      );
-        GroupQuoteRubricVoluntary      = p.datum("GroupQuoteRubricVoluntary"      );
-        GroupQuoteRubricFusion         = p.datum("GroupQuoteRubricFusion"         );
-        GroupQuoteFooterMandatory      = p.datum("GroupQuoteFooterMandatory"      );
-        GroupQuoteFooterVoluntary      = p.datum("GroupQuoteFooterVoluntary"      );
-        GroupQuoteFooterFusion         = p.datum("GroupQuoteFooterFusion"         );
+        GroupQuoteShortProductName    = p.datum("GroupQuoteShortProductName"     );
+        GroupQuoteIsNotAnOffer        = p.datum("GroupQuoteIsNotAnOffer"         );
+        GroupQuoteRidersFooter        = p.datum("GroupQuoteRidersFooter"         );
+        GroupQuotePolicyFormId        = p.datum("GroupQuotePolicyFormId"         );
+        GroupQuoteStateVariations     = p.datum("GroupQuoteStateVariations"      );
+        GroupQuoteProspectus          = p.datum("GroupQuoteProspectus"           );
+        GroupQuoteUnderwriter         = p.datum("GroupQuoteUnderwriter"          );
+        GroupQuoteBrokerDealer        = p.datum("GroupQuoteBrokerDealer"         );
+        GroupQuoteRubricMandatory     = p.datum("GroupQuoteRubricMandatory"      );
+        GroupQuoteRubricVoluntary     = p.datum("GroupQuoteRubricVoluntary"      );
+        GroupQuoteRubricFusion        = p.datum("GroupQuoteRubricFusion"         );
+        GroupQuoteFooterMandatory     = p.datum("GroupQuoteFooterMandatory"      );
+        GroupQuoteFooterVoluntary     = p.datum("GroupQuoteFooterVoluntary"      );
+        GroupQuoteFooterFusion        = p.datum("GroupQuoteFooterFusion"         );
 
         // Premium-specific footnotes.
 
-        MinimumPremiumFootnote         = p.datum("MinimumPremiumFootnote"         );
-        PremAllocationFootnote         = p.datum("PremAllocationFootnote"         );
+        MinimumPremiumFootnote        = p.datum("MinimumPremiumFootnote"         );
+        PremAllocationFootnote        = p.datum("PremAllocationFootnote"         );
 
         // Miscellaneous other footnotes.
 
-        InterestDisclaimer             = p.datum("InterestDisclaimer"             );
-        GuarMortalityFootnote          = p.datum("GuarMortalityFootnote"          );
-        ProductDescription             = p.datum("ProductDescription"             );
-        StableValueFootnote            = p.datum("StableValueFootnote"            );
-        NoVanishPremiumFootnote        = p.datum("NoVanishPremiumFootnote"        );
-        RejectPremiumFootnote          = p.datum("RejectPremiumFootnote"          );
-        ExpRatingFootnote              = p.datum("ExpRatingFootnote"              );
-        MortalityBlendFootnote         = p.datum("MortalityBlendFootnote"         );
-        HypotheticalRatesFootnote      = p.datum("HypotheticalRatesFootnote"      );
-        SalesLoadRefundFootnote        = p.datum("SalesLoadRefundFootnote"        );
-        NoLapseEverFootnote            = p.datum("NoLapseEverFootnote"            );
-        NoLapseFootnote                = p.datum("NoLapseFootnote"                );
-        MarketValueAdjFootnote         = p.datum("MarketValueAdjFootnote"         );
-        ExchangeChargeFootnote0        = p.datum("ExchangeChargeFootnote0"        );
-        CurrentValuesFootnote          = p.datum("CurrentValuesFootnote"          );
-        DBOption1Footnote              = p.datum("DBOption1Footnote"              );
-        DBOption2Footnote              = p.datum("DBOption2Footnote"              );
-        DBOption3Footnote              = p.datum("DBOption3Footnote"              );
-        MinDeathBenefitFootnote        = p.datum("MinDeathBenefitFootnote"        );
-        ExpRatRiskChargeFootnote       = p.datum("ExpRatRiskChargeFootnote"       );
-        ExchangeChargeFootnote1        = p.datum("ExchangeChargeFootnote1"        );
-        FlexiblePremiumFootnote        = p.datum("FlexiblePremiumFootnote"        );
-        GuaranteedValuesFootnote       = p.datum("GuaranteedValuesFootnote"       );
-        CreditingRateFootnote          = p.datum("CreditingRateFootnote"          );
-        GuaranteedCreditRateFootnote   = p.datum("GuaranteedCreditRateFootnote"   );
-        GrossRateFootnote              = p.datum("GrossRateFootnote"              );
-        NetRateFootnote                = p.datum("NetRateFootnote"                );
-        MecFootnote                    = p.datum("MecFootnote"                    );
-        GptFootnote                    = p.datum("GptFootnote"                    );
-        MidpointValuesFootnote         = p.datum("MidpointValuesFootnote"         );
-        SinglePremiumFootnote          = p.datum("SinglePremiumFootnote"          );
-        MonthlyChargesFootnote         = p.datum("MonthlyChargesFootnote"         );
-        UltCreditingRateFootnote       = p.datum("UltCreditingRateFootnote"       );
-        UltCreditingRateHeader         = p.datum("UltCreditingRateHeader"         );
-        MaxNaarFootnote                = p.datum("MaxNaarFootnote"                );
-        PremTaxSurrChgFootnote         = p.datum("PremTaxSurrChgFootnote"         );
-        PolicyFeeFootnote              = p.datum("PolicyFeeFootnote"              );
-        AssetChargeFootnote            = p.datum("AssetChargeFootnote"            );
-        InvestmentIncomeFootnote       = p.datum("InvestmentIncomeFootnote"       );
-        IrrDbFootnote                  = p.datum("IrrDbFootnote"                  );
-        IrrCsvFootnote                 = p.datum("IrrCsvFootnote"                 );
-        MortalityChargesFootnote       = p.datum("MortalityChargesFootnote"       );
-        LoanAndWithdrawalFootnote      = p.datum("LoanAndWithdrawalFootnote"      );
-        LoanFootnote                   = p.datum("LoanFootnote"                   );
-        ImprimaturPresale              = p.datum("ImprimaturPresale"              );
-        ImprimaturPresaleComposite     = p.datum("ImprimaturPresaleComposite"     );
-        ImprimaturInforce              = p.datum("ImprimaturInforce"              );
-        ImprimaturInforceComposite     = p.datum("ImprimaturInforceComposite"     );
-        StateMarketingImprimatur       = p.datum("StateMarketingImprimatur"       );
-        InforceNonGuaranteedFootnote0  = p.datum("InforceNonGuaranteedFootnote0"  );
-        InforceNonGuaranteedFootnote1  = p.datum("InforceNonGuaranteedFootnote1"  );
-        InforceNonGuaranteedFootnote2  = p.datum("InforceNonGuaranteedFootnote2"  );
-        InforceNonGuaranteedFootnote3  = p.datum("InforceNonGuaranteedFootnote3"  );
-        NonGuaranteedFootnote          = p.datum("NonGuaranteedFootnote"          );
-        NonGuaranteedFootnote1         = p.datum("NonGuaranteedFootnote1"         );
-        NonGuaranteedFootnote1Tx       = p.datum("NonGuaranteedFootnote1Tx"       );
-        MonthlyChargesPaymentFootnote  = p.datum("MonthlyChargesPaymentFootnote"  );
-        SurrenderFootnote              = p.datum("SurrenderFootnote"              );
-        PortabilityFootnote            = p.datum("PortabilityFootnote"            );
-        FundRateFootnote               = p.datum("FundRateFootnote"               );
-        IssuingCompanyFootnote         = p.datum("IssuingCompanyFootnote"         );
-        SubsidiaryFootnote             = p.datum("SubsidiaryFootnote"             );
-        PlacementAgentFootnote         = p.datum("PlacementAgentFootnote"         );
-        MarketingNameFootnote          = p.datum("MarketingNameFootnote"          );
-        GuarIssueDisclaimerNcSc        = p.datum("GuarIssueDisclaimerNcSc"        );
-        GuarIssueDisclaimerMd          = p.datum("GuarIssueDisclaimerMd"          );
-        GuarIssueDisclaimerTx          = p.datum("GuarIssueDisclaimerTx"          );
-        IllRegCertAgent                = p.datum("IllRegCertAgent"                );
-        IllRegCertAgentIl              = p.datum("IllRegCertAgentIl"              );
-        IllRegCertAgentTx              = p.datum("IllRegCertAgentTx"              );
-        IllRegCertClient               = p.datum("IllRegCertClient"               );
-        IllRegCertClientIl             = p.datum("IllRegCertClientIl"             );
-        IllRegCertClientTx             = p.datum("IllRegCertClientTx"             );
+        InterestDisclaimer            = p.datum("InterestDisclaimer"             );
+        GuarMortalityFootnote         = p.datum("GuarMortalityFootnote"          );
+        ProductDescription            = p.datum("ProductDescription"             );
+        StableValueFootnote           = p.datum("StableValueFootnote"            );
+        NoVanishPremiumFootnote       = p.datum("NoVanishPremiumFootnote"        );
+        RejectPremiumFootnote         = p.datum("RejectPremiumFootnote"          );
+        ExpRatingFootnote             = p.datum("ExpRatingFootnote"              );
+        MortalityBlendFootnote        = p.datum("MortalityBlendFootnote"         );
+        HypotheticalRatesFootnote     = p.datum("HypotheticalRatesFootnote"      );
+        SalesLoadRefundFootnote       = p.datum("SalesLoadRefundFootnote"        );
+        NoLapseEverFootnote           = p.datum("NoLapseEverFootnote"            );
+        NoLapseFootnote               = p.datum("NoLapseFootnote"                );
+        MarketValueAdjFootnote        = p.datum("MarketValueAdjFootnote"         );
+        ExchangeChargeFootnote0       = p.datum("ExchangeChargeFootnote0"        );
+        CurrentValuesFootnote         = p.datum("CurrentValuesFootnote"          );
+        DBOption1Footnote             = p.datum("DBOption1Footnote"              );
+        DBOption2Footnote             = p.datum("DBOption2Footnote"              );
+        DBOption3Footnote             = p.datum("DBOption3Footnote"              );
+        MinDeathBenefitFootnote       = p.datum("MinDeathBenefitFootnote"        );
+        ExpRatRiskChargeFootnote      = p.datum("ExpRatRiskChargeFootnote"       );
+        ExchangeChargeFootnote1       = p.datum("ExchangeChargeFootnote1"        );
+        FlexiblePremiumFootnote       = p.datum("FlexiblePremiumFootnote"        );
+        GuaranteedValuesFootnote      = p.datum("GuaranteedValuesFootnote"       );
+        CreditingRateFootnote         = p.datum("CreditingRateFootnote"          );
+        GuaranteedCreditRateFootnote  = p.datum("GuaranteedCreditRateFootnote"   );
+        GrossRateFootnote             = p.datum("GrossRateFootnote"              );
+        NetRateFootnote               = p.datum("NetRateFootnote"                );
+        MecFootnote                   = p.datum("MecFootnote"                    );
+        GptFootnote                   = p.datum("GptFootnote"                    );
+        MidpointValuesFootnote        = p.datum("MidpointValuesFootnote"         );
+        SinglePremiumFootnote         = p.datum("SinglePremiumFootnote"          );
+        MonthlyChargesFootnote        = p.datum("MonthlyChargesFootnote"         );
+        UltCreditingRateFootnote      = p.datum("UltCreditingRateFootnote"       );
+        UltCreditingRateHeader        = p.datum("UltCreditingRateHeader"         );
+        MaxNaarFootnote               = p.datum("MaxNaarFootnote"                );
+        PremTaxSurrChgFootnote        = p.datum("PremTaxSurrChgFootnote"         );
+        PolicyFeeFootnote             = p.datum("PolicyFeeFootnote"              );
+        AssetChargeFootnote           = p.datum("AssetChargeFootnote"            );
+        InvestmentIncomeFootnote      = p.datum("InvestmentIncomeFootnote"       );
+        IrrDbFootnote                 = p.datum("IrrDbFootnote"                  );
+        IrrCsvFootnote                = p.datum("IrrCsvFootnote"                 );
+        MortalityChargesFootnote      = p.datum("MortalityChargesFootnote"       );
+        LoanAndWithdrawalFootnote     = p.datum("LoanAndWithdrawalFootnote"      );
+        LoanFootnote                  = p.datum("LoanFootnote"                   );
+        ImprimaturPresale             = p.datum("ImprimaturPresale"              );
+        ImprimaturPresaleComposite    = p.datum("ImprimaturPresaleComposite"     );
+        ImprimaturInforce             = p.datum("ImprimaturInforce"              );
+        ImprimaturInforceComposite    = p.datum("ImprimaturInforceComposite"     );
+        StateMarketingImprimatur      = p.datum("StateMarketingImprimatur"       );
+        InforceNonGuaranteedFootnote0 = p.datum("InforceNonGuaranteedFootnote0"  );
+        InforceNonGuaranteedFootnote1 = p.datum("InforceNonGuaranteedFootnote1"  );
+        InforceNonGuaranteedFootnote2 = p.datum("InforceNonGuaranteedFootnote2"  );
+        InforceNonGuaranteedFootnote3 = p.datum("InforceNonGuaranteedFootnote3"  );
+        NonGuaranteedFootnote         = p.datum("NonGuaranteedFootnote"          );
+        NonGuaranteedFootnote1        = p.datum("NonGuaranteedFootnote1"         );
+        NonGuaranteedFootnote1Tx      = p.datum("NonGuaranteedFootnote1Tx"       );
+        MonthlyChargesPaymentFootnote = p.datum("MonthlyChargesPaymentFootnote"  );
+        SurrenderFootnote             = p.datum("SurrenderFootnote"              );
+        PortabilityFootnote           = p.datum("PortabilityFootnote"            );
+        FundRateFootnote              = p.datum("FundRateFootnote"               );
+        IssuingCompanyFootnote        = p.datum("IssuingCompanyFootnote"         );
+        SubsidiaryFootnote            = p.datum("SubsidiaryFootnote"             );
+        PlacementAgentFootnote        = p.datum("PlacementAgentFootnote"         );
+        MarketingNameFootnote         = p.datum("MarketingNameFootnote"          );
+        GuarIssueDisclaimerNcSc       = p.datum("GuarIssueDisclaimerNcSc"        );
+        GuarIssueDisclaimerMd         = p.datum("GuarIssueDisclaimerMd"          );
+        GuarIssueDisclaimerTx         = p.datum("GuarIssueDisclaimerTx"          );
+        IllRegCertAgent               = p.datum("IllRegCertAgent"                );
+        IllRegCertAgentIl             = p.datum("IllRegCertAgentIl"              );
+        IllRegCertAgentTx             = p.datum("IllRegCertAgentTx"              );
+        IllRegCertClient              = p.datum("IllRegCertClient"               );
+        IllRegCertClientIl            = p.datum("IllRegCertClientIl"             );
+        IllRegCertClientTx            = p.datum("IllRegCertClientTx"             );
         }
 
     // Strings from class Input.
 
-    ProductName             = b->yare_input_.ProductName;
-    ProducerName            = b->yare_input_.AgentName;
+    ProductName                = b->yare_input_.ProductName;
+    ProducerName               = b->yare_input_.AgentName;
 
     std::string const agent_city     = b->yare_input_.AgentCity;
     std::string const agent_state    = mc_str(b->yare_input_.AgentState);
@@ -498,19 +498,19 @@ void LedgerInvariant::Init(BasicValues const* b)
         agent_city_etc += " " + agent_zip_code;
         }
 
-    ProducerStreet          = b->yare_input_.AgentAddress;
-    ProducerCityEtc         = agent_city_etc;
-    ProducerPhone           = b->yare_input_.AgentPhone;
-    ProducerId              = b->yare_input_.AgentId;
+    ProducerStreet             = b->yare_input_.AgentAddress;
+    ProducerCityEtc            = agent_city_etc;
+    ProducerPhone              = b->yare_input_.AgentPhone;
+    ProducerId                 = b->yare_input_.AgentId;
 
-    CorpName                = b->yare_input_.CorporationName;
+    CorpName                   = b->yare_input_.CorporationName;
 
-    MasterContractNumber    = b->yare_input_.MasterContractNumber;
-    ContractNumber          = b->yare_input_.ContractNumber;
+    MasterContractNumber       = b->yare_input_.MasterContractNumber;
+    ContractNumber             = b->yare_input_.ContractNumber;
 
-    Insured1                = b->yare_input_.InsuredName;
-    Gender                  = mc_str(b->yare_input_.Gender);
-    UWType                  = mc_str(b->yare_input_.GroupUnderwritingType);
+    Insured1                   = b->yare_input_.InsuredName;
+    Gender                     = mc_str(b->yare_input_.Gender);
+    UWType                     = mc_str(b->yare_input_.GroupUnderwritingType);
 
     // This could be factored out if it ever needs to be reused.
     //
@@ -537,17 +537,17 @@ void LedgerInvariant::Init(BasicValues const* b)
         throw std::logic_error("Unknown oe_smoker_nonsmoker convention.");
         }
 
-    UWClass                 = mc_str(b->yare_input_.UnderwritingClass);
-    SubstandardTable        = mc_str(b->yare_input_.SubstandardTable);
+    UWClass                    = mc_str(b->yare_input_.UnderwritingClass);
+    SubstandardTable           = mc_str(b->yare_input_.SubstandardTable);
 
-    DefnLifeIns             = mc_str(b->yare_input_.DefinitionOfLifeInsurance);
-    DefnMaterialChange      = mc_str(b->yare_input_.DefinitionOfMaterialChange);
-    AvoidMec                = mc_str(b->yare_input_.AvoidMecMethod);
-    PartMortTableName       = "1983 GAM"; // TODO ?? Hardcoded.
-    StateOfJurisdiction     = mc_str(b->GetStateOfJurisdiction());
-    PremiumTaxState         = mc_str(b->GetPremiumTaxState());
-    CountryIso3166Abbrev = mc_str(b->yare_input_.Country);
-    Comments             = b->yare_input_.Comments;
+    DefnLifeIns                = mc_str(b->yare_input_.DefinitionOfLifeInsurance);
+    DefnMaterialChange         = mc_str(b->yare_input_.DefinitionOfMaterialChange);
+    AvoidMec                   = mc_str(b->yare_input_.AvoidMecMethod);
+    PartMortTableName          = "1983 GAM"; // TODO ?? Hardcoded.
+    StateOfJurisdiction        = mc_str(b->GetStateOfJurisdiction());
+    PremiumTaxState            = mc_str(b->GetPremiumTaxState());
+    CountryIso3166Abbrev       = mc_str(b->yare_input_.Country);
+    Comments                   = b->yare_input_.Comments;
 
     SupplementalReportColumn00 = mc_str(b->yare_input_.SupplementalReportColumn00);
     SupplementalReportColumn01 = mc_str(b->yare_input_.SupplementalReportColumn01);
@@ -570,8 +570,8 @@ void LedgerInvariant::Init(BasicValues const* b)
         :(mce_mdb     == init_dbo) ? dbo_name_mdb
         :throw std::logic_error("Unrecognized initial death benefit option.")
         ;
-    InitEeMode              = mc_str(b->Outlay_->ee_premium_modes()[0]);
-    InitErMode              = mc_str(b->Outlay_->er_premium_modes()[0]);
+    InitEeMode                 = mc_str(b->Outlay_->ee_premium_modes()[0]);
+    InitErMode                 = mc_str(b->Outlay_->er_premium_modes()[0]);
 
     // Special-case vectors.
 
@@ -638,16 +638,16 @@ void LedgerInvariant::Init(BasicValues const* b)
 // premium-strategy calculations. Use E[er]GrossPmt for illustrations:
 // they're *output* values that result from transaction processing.
 
-    EePmt           = b->Outlay_->ee_modal_premiums();
-    ErPmt           = b->Outlay_->er_modal_premiums();
+    EePmt                      = b->Outlay_->ee_modal_premiums();
+    ErPmt                      = b->Outlay_->er_modal_premiums();
 
     // Special-case strings.
 
-    EffDate                 = calendar_date(b->yare_input_.EffectiveDate     ).str();
-    DateOfBirth             = calendar_date(b->yare_input_.DateOfBirth       ).str();
-    LastCoiReentryDate      = calendar_date(b->yare_input_.LastCoiReentryDate).str();
-    ListBillDate            = calendar_date(b->yare_input_.ListBillDate      ).str();
-    InforceAsOfDate         = calendar_date(b->yare_input_.InforceAsOfDate   ).str();
+    EffDate                    = calendar_date(b->yare_input_.EffectiveDate     ).str();
+    DateOfBirth                = calendar_date(b->yare_input_.DateOfBirth       ).str();
+    LastCoiReentryDate         = calendar_date(b->yare_input_.LastCoiReentryDate).str();
+    ListBillDate               = calendar_date(b->yare_input_.ListBillDate      ).str();
+    InforceAsOfDate            = calendar_date(b->yare_input_.InforceAsOfDate   ).str();
 
     // irr_initialized_ is deliberately not set here: it's not
     // encompassed by 'FullyInitialized'.
