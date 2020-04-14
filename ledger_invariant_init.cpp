@@ -78,7 +78,7 @@ void LedgerInvariant::Init(BasicValues const* b)
 
     // BOY vectors.
 
-//  TgtPrem                    = DYNAMIC ?
+//  TgtPrem                    = UNUSED ?
 //  GrossPmt                   = DYNAMIC
 //  EeGrossPmt                 = DYNAMIC
 //  ErGrossPmt                 = DYNAMIC
@@ -86,7 +86,7 @@ void LedgerInvariant::Init(BasicValues const* b)
 //  NewCashLoan                = DYNAMIC
 //  Outlay                     = DYNAMIC
 //  GptForceout                = DYNAMIC
-//  NaarForceout               = DYNAMIC ?
+//  NaarForceout               = DYNAMIC Not yet implemented.
 //  ModalMinimumPremium        = DYNAMIC
 //  EeModalMinimumPremium      = DYNAMIC
 //  ErModalMinimumPremium      = DYNAMIC
@@ -222,9 +222,9 @@ void LedgerInvariant::Init(BasicValues const* b)
     CustomFund                 = b->yare_input_.OverrideFundManagementFee;
 
 //  IsMec                      = DYNAMIC
-//  InforceIsMec               = DYNAMIC ?
-//  InforceYear                = DYNAMIC ?
-//  InforceMonth               = DYNAMIC ?
+//  InforceIsMec               = DYNAMIC ? Static: could be set here.
+//  InforceYear                = DYNAMIC ? Static: could be set here.
+//  InforceMonth               = DYNAMIC ? Static: could be set here.
 //  MecYear                    = DYNAMIC
 //  MecMonth                   = DYNAMIC
 
