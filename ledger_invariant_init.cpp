@@ -179,12 +179,8 @@ void LedgerInvariant::Init(BasicValues const* b)
     GuarMaxMandE               = guar_m_and_e_rate[0];
     InitDacTaxRate             = b->Loads_->dac_tax_load()[b->yare_input_.InforceYear];
     InitPremTaxRate            = b->PremiumTax_->maximum_load_rate();
-//  GenderDistinct             = UNUSED ?
     GenderBlended              = b->yare_input_.BlendGender;
-//  SmokerDistinct             = UNUSED ?
     SmokerBlended              = b->yare_input_.BlendSmoking;
-
-    SubstdTable                = b->yare_input_.SubstandardTable;
 
     Age                        = b->yare_input_.IssueAge;
     RetAge                     = b->yare_input_.RetirementAge;

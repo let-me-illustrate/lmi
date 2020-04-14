@@ -140,11 +140,8 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["GuarMaxMandE"          ] = &GuarMaxMandE           ;
     OtherScalars    ["InitDacTaxRate"        ] = &InitDacTaxRate         ;
     OtherScalars    ["InitPremTaxRate"       ] = &InitPremTaxRate        ;
-    OtherScalars    ["GenderDistinct"        ] = &GenderDistinct         ;
     OtherScalars    ["GenderBlended"         ] = &GenderBlended          ;
-    OtherScalars    ["SmokerDistinct"        ] = &SmokerDistinct         ;
     OtherScalars    ["SmokerBlended"         ] = &SmokerBlended          ;
-    OtherScalars    ["SubstdTable"           ] = &SubstdTable            ;
     OtherScalars    ["Age"                   ] = &Age                    ;
     OtherScalars    ["RetAge"                ] = &RetAge                 ;
     OtherScalars    ["EndtAge"               ] = &EndtAge                ;
@@ -573,11 +570,11 @@ void LedgerInvariant::Init()
 ///   but averages aren't supported in this simple code yet. However,
 ///   any average would be inaccurate.
 ///
-///   SubstdTable: This generally represents a mortality multiplier,
-///   for which an average might seem somewhat suitable, but that's
-///   hardly possible because substandard tables are quantized. The
-///   average of "L=+300%" and "P=+400%" is not table N (350%) because
-///   no such table is defined.
+///   SubstandardTable: This represents a mortality multiplier, for
+///   which an average might seem somewhat suitable, but that's hardly
+///   possible because substandard tables are quantized. The average
+///   of "L=+300%" and "P=+400%" is not table N (350%) because no such
+///   table is defined.
 ///
 ///   WaiverFootnote: String members in general cannot be composited
 ///   in any more reasonable way than taking the last cell's value.
@@ -634,11 +631,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     GuarMaxMandE               = std::max(GuarMaxMandE       , a_Addend.GuarMaxMandE);
     InitDacTaxRate             = std::max(InitDacTaxRate     , a_Addend.InitDacTaxRate);
     InitPremTaxRate            = std::max(InitPremTaxRate    , a_Addend.InitPremTaxRate);
-    GenderDistinct             = a_Addend.GenderDistinct;
     GenderBlended              = a_Addend.GenderBlended;
-    SmokerDistinct             = a_Addend.SmokerDistinct;
     SmokerBlended              = a_Addend.SmokerBlended;
-    SubstdTable                = a_Addend.SubstdTable;
     Age                        = std::min(Age, a_Addend.Age);
     RetAge                     = std::min(RetAge, a_Addend.RetAge);
     EndtAge                    = std::max(EndtAge, a_Addend.EndtAge);

@@ -110,7 +110,6 @@ bool unavailable(std::string const& s)
         ,"InforceAsOfDateJdn"    // probably not needed
         ,"InitDacTaxRate"        // used by PrintRosterTabDelimited(); not cents
         ,"InitPremTaxRate"       // used by PrintRosterTabDelimited(); not cents
-        ,"SubstdTable"           // probably not needed
         ,"InitMlyPolFee"         // used by PrintRosterTabDelimited()
         ,"InitTgtPremHiLoadRate" // used by PrintRosterTabDelimited(); not cents
         };
@@ -495,7 +494,6 @@ format_map_t static_formats()
     ,{"ErNotionallyPaysTerm"            , f1}
     ,{"External1035Amount"              , f1}
     ,{"GenderBlended"                   , f1}
-    ,{"GenderDistinct"                  , f1}
     ,{"GreatestLapseDuration"           , f1}
     ,{"GroupIndivSelection"             , f1}
     ,{"Has1035ExchCharge"               , f1}
@@ -528,7 +526,6 @@ format_map_t static_formats()
     ,{"RetAge"                          , f1}
     ,{"SalesLoadRefundAvailable"        , f1}
     ,{"SmokerBlended"                   , f1}
-    ,{"SmokerDistinct"                  , f1}
     ,{"SplitFundAllocation"             , f1}
     ,{"SplitMinPrem"                    , f1}
     ,{"SpouseIssueAge"                  , f1}

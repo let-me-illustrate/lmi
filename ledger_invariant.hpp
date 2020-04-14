@@ -131,11 +131,8 @@ class LMI_SO LedgerInvariant final
     double      GuarMaxMandE;
     double      InitDacTaxRate;
     double      InitPremTaxRate;
-    double      GenderDistinct;
     double      GenderBlended;
-    double      SmokerDistinct;
     double      SmokerBlended;
-    double      SubstdTable; // Prefer string 'SubstandardTable'.
     double      Age;
     double      RetAge;
     double      EndtAge;
