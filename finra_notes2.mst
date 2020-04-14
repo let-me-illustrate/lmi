@@ -31,6 +31,7 @@
 {{GuarMortalityFootnote}}
 </p>
 
+<!-- PDF !! FnMaturityAge -->
 <p>
 This illustration assumes death of the insured at age {{EndtAge}}.
 </p>
@@ -97,6 +98,7 @@ This illustration assumes death of the insured at age {{EndtAge}}.
     </p>
 {{/HasSpouseRider}}
 
+<!-- PDF !! FnPartialMortality -->
 {{#UsePartialMort}}
     <p>
     This illustration reflects the client's mortality assumption
@@ -105,6 +107,7 @@ This illustration assumes death of the insured at age {{EndtAge}}.
     </p>
 {{/UsePartialMort}}
 
+<!-- PDF !! MortalityBlendFootnote -->
 {{#GenderBlended}}
     <p>
     Custom blending of cost of insurance charges is based
@@ -145,12 +148,14 @@ The state of issue is {{StateOfJurisdiction}}.
 </p>
 
 {{#IsInforce}}
+<!-- PDF !! FnInforceAcctVal -->
     <p>
     This illustration assumes a beginning account value of
     ${{InforceUnloanedAV}} as
     of the date of this illustration.
     </p>
 
+<!-- PDF !! FnInforceTaxBasis -->
     <p>
     This illustration assumes a beginning cost basis of
     ${{InforceTaxBasis}} as
@@ -166,6 +171,7 @@ The state of issue is {{StateOfJurisdiction}}.
 
 <p align="center"><b>GUARANTEED PRINCIPAL ACCOUNT</b></p>
 
+<!-- PDF !! FnGeneralAccount -->
 <p>
 The Guaranteed Principal Account (GPA) has a guaranteed
 minimum annual interest rate of
@@ -181,6 +187,7 @@ issuing company or companies.
 </p>
 
 {{^Composite}}
+<!-- PDF !! FnImf -->
     <p>
     This illustration is based on total Separate Account
     fund expenses of {{TotalIMF[0]}}.
@@ -199,6 +206,7 @@ issuing company or companies.
     {{/CustomFund}}
 {{/Composite}}
 
+<!-- PDF !! FnProspectus -->
 <p>
 <b>
 This material must be preceded or accompanied by the current prospectus for the
@@ -215,6 +223,7 @@ investing or sending money.
 {{SubsidiaryFootnote}}
 </p>
 
+<!-- PDF !! PlacementAgentFootnote -->
 <p>
 Securities offered through registered representatives of
 {{CoUnderwriter}}&nbsp;

@@ -30,6 +30,7 @@
 
 <font size="-1">
 
+<!-- PDF !! SalesLoadRefundFootnote -->
 {{#SalesLoadRefundAvailable}}
     <p>
     Sales Load Refund: We will refund a portion of the sales load
@@ -56,16 +57,17 @@
 {{GuarMortalityFootnote}}
 </p>
 
+<!-- PDF !! FnMaturityAge -->
 <p>
 This illustration assumes death of the insured at age {{EndtAge}}.
 </p>
 
+<!-- PDF !! LoanFootnote -->
 {{!
     PDF !! 'MaxAnnCurrLoanDueRate': loan rate actually can vary by year,
     so text should say that the fixed loan rate is "guaranteed never
     to exceed" this value.
 }}
-
 <p>
 The loan interest rate is fixed at {{MaxAnnCurrLoanDueRate}} per year.
 </p>
@@ -74,6 +76,7 @@ The loan interest rate is fixed at {{MaxAnnCurrLoanDueRate}} per year.
 The state of issue is {{StateOfJurisdiction}}.
 </p>
 
+<!-- PDF !! FnInitialSpecAmt -->
 <p>
 This illustration assumes an initial Selected Face Amount of
 ${{InitBaseSpecAmt}}. Selected Face
@@ -82,11 +85,13 @@ in the Tabular Detail.
 </p>
 
 {{#IsInforce}}
+<!-- PDF !! FnInforceAcctVal -->
     <p>
     This illustration assumes a beginning account value of
     ${{InforceUnloanedAV}} as of the date of this illustration.
     </p>
 
+<!-- PDF !! FnInforceTaxBasis -->
     <p>
     This illustration assumes a beginning cost basis of
     ${{InforceTaxBasis}} as
@@ -96,6 +101,7 @@ in the Tabular Detail.
     </p>
 {{/IsInforce}}
 
+<!-- PDF !! FnCensus -->
 <!-- There is no "attached census". -->
 {{#Composite}}
     <p>
@@ -113,6 +119,7 @@ in the Tabular Detail.
 {{/StateIsMaryland}}
 
 {{#AllowExperienceRating}}
+<!-- PDF !! Irc1035ChargeFootnote should probably subsume this paragraph: -->
     <p>
     We may assess a Market Value Adjustment upon a surrender
     of the {{ContractName}} when the surrender proceeds are intended
@@ -143,6 +150,7 @@ in the Tabular Detail.
     </p>
 {{/AllowExperienceRating}}
 
+<!-- PDF !! Fn1035Charge -->
 {{#Has1035ExchCharge}}
     <p>
     {{^SinglePremium}}
@@ -176,6 +184,7 @@ in the Tabular Detail.
     </p>
 {{/Has1035ExchCharge}}
 
+<!-- PDF !! SpouseFootnote -->
 {{#HasSpouseRider}}
     <p>
     The ${{SpouseRiderAmount}} Spouse
@@ -187,6 +196,7 @@ in the Tabular Detail.
     </p>
 {{/HasSpouseRider}}
 
+<!-- PDF !! ChildFootnote -->
 {{#HasChildRider}}
     <p>
     The ${{ChildRiderAmount}} Child
@@ -207,6 +217,7 @@ in the Tabular Detail.
 
 <font size="-1">
 
+<!-- PDF !! MecFootnote -->
 <!-- This is not appropriate for composites. -->
 <p>
 As illustrated, this {{ContractName}}
@@ -236,6 +247,7 @@ and may also trigger a penalty tax.
     {{/IsInforce}}
 {{/SinglePremium}}
 
+<!-- PDF !! FnNotTaxAdvice -->
 <p>
 <b>
 The information contained in this illustration is not written

@@ -32,6 +32,7 @@
 <font size="+1"><b><u>The Illustration</u></b></font>
 </p>
 
+<!-- PDF !! FnPpMemorandum -->
 <p>
 This illustration is not a policy or an offer or solicitation
 to purchase a policy. Offers are made only through the
@@ -54,6 +55,7 @@ Confidential Private Placement Memorandum ("the PPM") for {{PolicyMktgName}}.
 <font size="+1"><b><u>The Policy</u></b></font>
 </p>
 
+<!-- PDF !! FnPpAccreditedInvestor -->
 <p>
 <b>Policy Requirements:</b>
 This policy is only available to persons who are deemed
@@ -133,6 +135,7 @@ willing to represent as such to {{InsCoShortName}}.
 <b>Policy Year:</b> &nbsp; {{PolicyYearFootnote}}
 </p>
 
+<!-- PDF !! FnPpLoads -->
 <p>
 <b>Premium Loads:</b> The applicable state premium tax, deferred acquisition
 cost tax charge, sales load (if any), separate account administrative charge
@@ -162,12 +165,12 @@ money manager (if any).
 <font size="+1"><b><u>Withdrawals and Policy Loans</u></b></font>
 </p>
 
+<!-- PDF !! subsume the next paragraph into LoanAndWithdrawalFootnote -->
 {{!
     PDF !! 'MaxAnnCurrLoanDueRate': loan rate actually can vary by year,
     so text should say that the fixed loan rate is "guaranteed never
     to exceed" this value.
 }}
-
 <p>
 If applicable, withdrawals and policy loans will appear on a
 supplemental report at the end of the illustration. Withdrawals

@@ -29,6 +29,8 @@
 </header>
 
 <font size="-1">
+
+<!-- PDF !! DefnAV -->
 <p>
 <b>{{AvName}} Value:</b>
 The accumulation at interest of the net premiums paid,
@@ -39,6 +41,8 @@ less any withdrawals, less any monthly charges deducted.
 less any monthly charges deducted.
 {{/SinglePremium}}
 </p>
+
+<!-- PDF !! DefnCSV -->
 <p>
 <b>{{CsvName}} Value:</b>
 {{AvName}} Value less {{ContractName}} debt.
@@ -46,6 +50,7 @@ less any monthly charges deducted.
 {{CashSurrValueFootnote}}
 {{/Has1035ExchCharge}}
 </p>
+
 {{^IsInforce}}
 <p>
 <b>Current Illustrated Crediting Rate:</b>
@@ -56,10 +61,12 @@ less any monthly charges deducted.
 <b>Current Values:</b>
 {{CurrentValuesFootnote}}
 </p>
+
 <p>
 <b>Death Benefit:</b>
 {{DeathBenefitFootnote}}
 </p>
+
 {{DBOption1Footnote}}
 {{DBOption2Footnote}}
 {{DBOption3Footnote}}
@@ -100,10 +107,13 @@ less any monthly charges deducted.
 <b>Guaranteed Crediting Rate:</b>
 {{GuaranteedCreditRateFootnote}}
 </p>
+
 <p>
 <b>Guaranteed Values:</b>
 {{GuaranteedValuesFootnote}}
 </p>
+
+<!-- PDF !! DefnMec -->
 <p>
 <b>MEC:</b>
 Modified Endowment Contract - this classification is given
@@ -114,11 +124,13 @@ insurance {{ContractName}}. To the extent of gain in the {{ContractName}}, loans
 distributions and withdrawals from a MEC are subject
 to income tax and may also trigger a tax penalty.
 </p>
+
 {{^IsInforce}}
 <p>
 <b>Midpoint Values:</b>
 {{MidpointValuesFootnote}}
 </p>
+
 {{/IsInforce}}
 {{MinDeathBenefitFootnote}}
 
@@ -132,11 +144,14 @@ to income tax and may also trigger a tax penalty.
 {{PolicyYearFootnote}}
 </p>
 
+<!-- PDF !! DefnOutlay -->
 <p>
 <b>Premium Outlay:</b>
 The amount of premium assumed to be paid by the {{ContractName}} owner
 or other premium payor.
 </p>
+
+<!-- PDF !! DefnSpecAmt -->
 <p>
 <b>Selected Face Amount:</b>
 The Selected Face Amount may be decreased upon written application
