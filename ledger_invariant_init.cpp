@@ -44,6 +44,31 @@
 #include <algorithm>                    // max(), max_element()
 #include <stdexcept>
 
+/// Initialize with values determined by BasicValues construction.
+///
+/// This class's own ctor initializes all its data members, generally
+/// to zero unless it can determine a better default. Many members
+/// have static values that are determined only when a BasicValues
+/// object is constructed; those are set here. This function is
+/// defined in its own TU in order to keep the rest of this class
+/// separated from BasicValues and its dependencies.
+///
+/// This function mentions every member, generally in declaration
+/// order, to ensure that nothing is overlooked. However, some
+/// members are mentioned only as comment lines, because their values
+/// may be changed during monthiversary processing; this class's ctor
+/// already initialized them, so there's no point in reinitializing
+/// them here to the same values.
+///
+/// It might seem that a member representing payments, e.g., should be
+/// initialized here with input values that are known to BasicValues.
+/// However, suppose the input payment is $10000 annually, but the
+/// contract lapses early: then the original initialization to zero
+/// was correct after the lapse year, and overriding it with a nonzero
+/// value made it incorrect. In such a case, it is better to leave all
+/// elements as zero, and assign nonzero values only as they emerge.
+/// Such members are indicated with the string "DYNAMIC".
+
 void LedgerInvariant::Init(BasicValues const* b)
 {
     // Zero-initialize almost everything.
@@ -57,13 +82,6 @@ void LedgerInvariant::Init(BasicValues const* b)
 //  GrossPmt                   = DYNAMIC
 //  EeGrossPmt                 = DYNAMIC
 //  ErGrossPmt                 = DYNAMIC
-
-    // Certain data members, including but almost certainly not
-    // limited to these, should not be initialized to any non-zero
-    // value here. Actual values are inserted in account-value
-    // processing, subject to various restrictions that often cause
-    // them to differ from input values. Notably, values need to be
-    // zero after lapse.
 //  NetWD                      = DYNAMIC
 //  NewCashLoan                = DYNAMIC
 //  Outlay                     = DYNAMIC
@@ -137,9 +155,7 @@ void LedgerInvariant::Init(BasicValues const* b)
 //  ListBillPremium            = DYNAMIC
 //  EeListBillPremium          = DYNAMIC
 //  ErListBillPremium          = DYNAMIC
-
-    // These must be set dynamically because they may be changed,
-    // e.g. to respect guideline limits. ?
+    // These may need to change, to respect guideline limits:
 //  Dumpin                     = DYNAMIC
 //  External1035Amount         = DYNAMIC
 //  Internal1035Amount         = DYNAMIC
@@ -215,7 +231,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     HasWP                      = b->yare_input_.WaiverOfPremiumBenefit;
     HasADD                     = b->yare_input_.AccidentalDeathBenefit;
     HasTerm                    = b->yare_input_.TermRider;
-//  HasSupplSpecAmt // Out of order--see above.
+//  HasSupplSpecAmt // Already assigned above.
     HasChildRider              = b->yare_input_.ChildRider;
     HasSpouseRider             = b->yare_input_.SpouseRider;
     SpouseIssueAge             = b->yare_input_.SpouseIssueAge;
