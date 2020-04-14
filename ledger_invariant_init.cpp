@@ -217,9 +217,11 @@ void LedgerInvariant::Init(BasicValues const* b)
     CustomFund                 = b->yare_input_.OverrideFundManagementFee;
 
 //  IsMec                      = DYNAMIC
-//  InforceIsMec               = DYNAMIC ? Static: could be set here.
-//  InforceYear                = DYNAMIC ? Static: could be set here.
-//  InforceMonth               = DYNAMIC ? Static: could be set here.
+    // INPUT !! This should depend only on 'yare_input_.InforceIsMec',
+    // but see its assignment in 'ihs_acctval.cpp'.
+//  InforceIsMec               = DYNAMIC
+    InforceYear                = b->yare_input_.InforceYear;
+    InforceMonth               = b->yare_input_.InforceMonth;
 //  MecYear                    = DYNAMIC
 //  MecMonth                   = DYNAMIC
 
