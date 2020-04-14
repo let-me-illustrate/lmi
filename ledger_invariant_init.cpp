@@ -594,7 +594,6 @@ void LedgerInvariant::Init(BasicValues const* b)
         number_of_funds = b->FundData_->GetNumberOfFunds();
         }
 
-//    enum{NumberOfFunds = 30}; // DEPRECATED
     int const NumberOfFunds = 30; // DEPRECATED
     int expected_number_of_funds = std::max(number_of_funds, NumberOfFunds);
     std::vector<double> v(b->yare_input_.FundAllocations);
