@@ -77,7 +77,7 @@ willing to represent as such to {{InsCoShortName}}.
 }}
 
 <p>
-<b>Monthly Charges:</b> &nbsp; {{MonthlyChargesPaymentFootnote}}
+<b>Monthly Charges:</b> &nbsp; {{FnMonthlyDeductions}}
 </p>
 
 <p>

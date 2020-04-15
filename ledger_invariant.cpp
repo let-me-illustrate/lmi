@@ -332,7 +332,7 @@ void LedgerInvariant::Alloc(int len)
     Strings["NonGuaranteedFootnote"         ] = &NonGuaranteedFootnote         ;
     Strings["NonGuaranteedFootnote1"        ] = &NonGuaranteedFootnote1        ;
     Strings["NonGuaranteedFootnote1Tx"      ] = &NonGuaranteedFootnote1Tx      ;
-    Strings["MonthlyChargesPaymentFootnote" ] = &MonthlyChargesPaymentFootnote ;
+    Strings["FnMonthlyDeductions"           ] = &FnMonthlyDeductions           ;
     Strings["SurrenderFootnote"             ] = &SurrenderFootnote             ;
     Strings["PortabilityFootnote"           ] = &PortabilityFootnote           ;
     Strings["FundRateFootnote"              ] = &FundRateFootnote              ;

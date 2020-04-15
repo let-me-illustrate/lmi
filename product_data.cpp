@@ -335,7 +335,7 @@ void product_data::ascribe_members()
     ascribe("NonGuaranteedFootnote"         , &product_data::NonGuaranteedFootnote         );
     ascribe("NonGuaranteedFootnote1"        , &product_data::NonGuaranteedFootnote1        );
     ascribe("NonGuaranteedFootnote1Tx"      , &product_data::NonGuaranteedFootnote1Tx      );
-    ascribe("MonthlyChargesPaymentFootnote" , &product_data::MonthlyChargesPaymentFootnote );
+    ascribe("FnMonthlyDeductions"           , &product_data::FnMonthlyDeductions           );
     ascribe("SurrenderFootnote"             , &product_data::SurrenderFootnote             );
     ascribe("PortabilityFootnote"           , &product_data::PortabilityFootnote           );
     ascribe("FundRateFootnote"              , &product_data::FundRateFootnote              );
@@ -492,6 +492,10 @@ void product_data::redintegrate_ex_post
 
 namespace
 {
+static std::string const S_FnMonthlyDeductions =
+  "Monthly charges are deducted from the account value; if it is depleted,"
+  " additional premiums may be required.";
+
 // These two certifications are copied verbatim et literatim from the
 // illustration reg.
 static std::string const S_IllRegCertAgent =
@@ -666,6 +670,7 @@ sample::sample()
     item("UwClassStandard")            = glossed_string("Standard");
     item("UwClassRated")               = glossed_string("Rated");
     item("UwClassUltra")               = glossed_string("Ultrapreferred");
+    item("FnMonthlyDeductions")        = S_FnMonthlyDeductions;
     item("IllRegCertAgent")            = S_IllRegCertAgent;
     item("IllRegCertAgentIl")          = S_IllRegCertAgent;
     item("IllRegCertAgentTx")          = S_IllRegCertAgent;

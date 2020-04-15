@@ -325,7 +325,7 @@ class LMI_SO product_data
     glossed_string NonGuaranteedFootnote;
     glossed_string NonGuaranteedFootnote1;
     glossed_string NonGuaranteedFootnote1Tx;
-    glossed_string MonthlyChargesPaymentFootnote;
+    glossed_string FnMonthlyDeductions;
     glossed_string SurrenderFootnote;
     glossed_string PortabilityFootnote;
     glossed_string FundRateFootnote;

@@ -469,7 +469,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         NonGuaranteedFootnote         = p.datum("NonGuaranteedFootnote"          );
         NonGuaranteedFootnote1        = p.datum("NonGuaranteedFootnote1"         );
         NonGuaranteedFootnote1Tx      = p.datum("NonGuaranteedFootnote1Tx"       );
-        MonthlyChargesPaymentFootnote = p.datum("MonthlyChargesPaymentFootnote"  );
+        FnMonthlyDeductions           = p.datum("FnMonthlyDeductions"            );
         SurrenderFootnote             = p.datum("SurrenderFootnote"              );
         PortabilityFootnote           = p.datum("PortabilityFootnote"            );
         FundRateFootnote              = p.datum("FundRateFootnote"               );

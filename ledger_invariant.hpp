@@ -342,7 +342,7 @@ class LMI_SO LedgerInvariant final
     std::string NonGuaranteedFootnote;
     std::string NonGuaranteedFootnote1;
     std::string NonGuaranteedFootnote1Tx;
-    std::string MonthlyChargesPaymentFootnote;
+    std::string FnMonthlyDeductions;
     std::string SurrenderFootnote;
     std::string PortabilityFootnote;
     std::string FundRateFootnote;
