@@ -332,10 +332,6 @@ void product_data::ascribe_members()
     ascribe("ImprimaturInforce"             , &product_data::ImprimaturInforce             );
     ascribe("ImprimaturInforceComposite"    , &product_data::ImprimaturInforceComposite    );
     ascribe("StateMarketingImprimatur"      , &product_data::StateMarketingImprimatur      );
-    ascribe("InforceNonGuaranteedFootnote0" , &product_data::InforceNonGuaranteedFootnote0 );
-    ascribe("InforceNonGuaranteedFootnote1" , &product_data::InforceNonGuaranteedFootnote1 );
-    ascribe("InforceNonGuaranteedFootnote2" , &product_data::InforceNonGuaranteedFootnote2 );
-    ascribe("InforceNonGuaranteedFootnote3" , &product_data::InforceNonGuaranteedFootnote3 );
     ascribe("NonGuaranteedFootnote"         , &product_data::NonGuaranteedFootnote         );
     ascribe("NonGuaranteedFootnote1"        , &product_data::NonGuaranteedFootnote1        );
     ascribe("NonGuaranteedFootnote1Tx"      , &product_data::NonGuaranteedFootnote1Tx      );

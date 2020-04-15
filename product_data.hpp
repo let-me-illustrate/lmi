@@ -322,10 +322,6 @@ class LMI_SO product_data
     glossed_string ImprimaturInforce;
     glossed_string ImprimaturInforceComposite;
     glossed_string StateMarketingImprimatur;
-    glossed_string InforceNonGuaranteedFootnote0;
-    glossed_string InforceNonGuaranteedFootnote1;
-    glossed_string InforceNonGuaranteedFootnote2;
-    glossed_string InforceNonGuaranteedFootnote3;
     glossed_string NonGuaranteedFootnote;
     glossed_string NonGuaranteedFootnote1;
     glossed_string NonGuaranteedFootnote1Tx;

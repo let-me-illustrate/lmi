@@ -339,10 +339,6 @@ class LMI_SO LedgerInvariant final
     std::string ImprimaturInforce;
     std::string ImprimaturInforceComposite;
     std::string StateMarketingImprimatur;
-    std::string InforceNonGuaranteedFootnote0;
-    std::string InforceNonGuaranteedFootnote1;
-    std::string InforceNonGuaranteedFootnote2;
-    std::string InforceNonGuaranteedFootnote3;
     std::string NonGuaranteedFootnote;
     std::string NonGuaranteedFootnote1;
     std::string NonGuaranteedFootnote1Tx;

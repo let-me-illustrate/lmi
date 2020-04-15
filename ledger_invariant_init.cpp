@@ -466,10 +466,6 @@ void LedgerInvariant::Init(BasicValues const* b)
         ImprimaturInforce             = p.datum("ImprimaturInforce"              );
         ImprimaturInforceComposite    = p.datum("ImprimaturInforceComposite"     );
         StateMarketingImprimatur      = p.datum("StateMarketingImprimatur"       );
-        InforceNonGuaranteedFootnote0 = p.datum("InforceNonGuaranteedFootnote0"  );
-        InforceNonGuaranteedFootnote1 = p.datum("InforceNonGuaranteedFootnote1"  );
-        InforceNonGuaranteedFootnote2 = p.datum("InforceNonGuaranteedFootnote2"  );
-        InforceNonGuaranteedFootnote3 = p.datum("InforceNonGuaranteedFootnote3"  );
         NonGuaranteedFootnote         = p.datum("NonGuaranteedFootnote"          );
         NonGuaranteedFootnote1        = p.datum("NonGuaranteedFootnote1"         );
         NonGuaranteedFootnote1Tx      = p.datum("NonGuaranteedFootnote1Tx"       );

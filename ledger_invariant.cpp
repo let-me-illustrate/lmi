@@ -329,10 +329,6 @@ void LedgerInvariant::Alloc(int len)
     Strings["ImprimaturInforce"             ] = &ImprimaturInforce             ;
     Strings["ImprimaturInforceComposite"    ] = &ImprimaturInforceComposite    ;
     Strings["StateMarketingImprimatur"      ] = &StateMarketingImprimatur      ;
-    Strings["InforceNonGuaranteedFootnote0" ] = &InforceNonGuaranteedFootnote0 ;
-    Strings["InforceNonGuaranteedFootnote1" ] = &InforceNonGuaranteedFootnote1 ;
-    Strings["InforceNonGuaranteedFootnote2" ] = &InforceNonGuaranteedFootnote2 ;
-    Strings["InforceNonGuaranteedFootnote3" ] = &InforceNonGuaranteedFootnote3 ;
     Strings["NonGuaranteedFootnote"         ] = &NonGuaranteedFootnote         ;
     Strings["NonGuaranteedFootnote1"        ] = &NonGuaranteedFootnote1        ;
     Strings["NonGuaranteedFootnote1Tx"      ] = &NonGuaranteedFootnote1Tx      ;
