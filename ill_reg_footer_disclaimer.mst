@@ -21,11 +21,6 @@
 
 <font size="-2">
 
-{{^IsInforce}}
-    {{NonGuaranteedFootnote}}
-{{/IsInforce}}
-{{#IsInforce}}
-    {{InforceNonGuaranteedFootnote0}}
-{{/IsInforce}}
+{{NonGuaranteedFootnote}}
 
 </font>
