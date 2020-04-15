@@ -314,7 +314,7 @@ class LMI_SO LedgerInvariant final
     std::string FlexiblePremiumFootnote;
     std::string GuaranteedValuesFootnote;
     std::string CreditingRateFootnote;
-    std::string GuaranteedCreditRateFootnote;
+    std::string DefnGuarGenAcctRate;
     std::string GrossRateFootnote;
     std::string NetRateFootnote;
     std::string MecFootnote;

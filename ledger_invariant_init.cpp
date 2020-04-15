@@ -441,7 +441,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         FlexiblePremiumFootnote       = p.datum("FlexiblePremiumFootnote"        );
         GuaranteedValuesFootnote      = p.datum("GuaranteedValuesFootnote"       );
         CreditingRateFootnote         = p.datum("CreditingRateFootnote"          );
-        GuaranteedCreditRateFootnote  = p.datum("GuaranteedCreditRateFootnote"   );
+        DefnGuarGenAcctRate           = p.datum("DefnGuarGenAcctRate"            );
         GrossRateFootnote             = p.datum("GrossRateFootnote"              );
         NetRateFootnote               = p.datum("NetRateFootnote"                );
         MecFootnote                   = p.datum("MecFootnote"                    );

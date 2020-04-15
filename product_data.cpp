@@ -307,7 +307,7 @@ void product_data::ascribe_members()
     ascribe("FlexiblePremiumFootnote"       , &product_data::FlexiblePremiumFootnote       );
     ascribe("GuaranteedValuesFootnote"      , &product_data::GuaranteedValuesFootnote      );
     ascribe("CreditingRateFootnote"         , &product_data::CreditingRateFootnote         );
-    ascribe("GuaranteedCreditRateFootnote"  , &product_data::GuaranteedCreditRateFootnote  );
+    ascribe("DefnGuarGenAcctRate"           , &product_data::DefnGuarGenAcctRate           );
     ascribe("GrossRateFootnote"             , &product_data::GrossRateFootnote             );
     ascribe("NetRateFootnote"               , &product_data::NetRateFootnote               );
     ascribe("MecFootnote"                   , &product_data::MecFootnote                   );
@@ -564,6 +564,10 @@ static std::string const S_FnOmnibusDisclaimer =
   " subject to change. Actual results may be more or less favorable.";
 static std::string const S_FnInitialDbo =
   "The initial death benefit option is {{InitDBOpt}}.";
+static std::string const S_DefnGuarGenAcctRate =
+  "¶¶«Guaranteed Crediting Rate:»"
+  " The minimum annual interest rate credited on unloaned funds."
+  ;
 static std::string const S_DefnAV =
   "Account value is the accumulation of payments less charges and disbursements.";
 static std::string const S_DefnCSV =
@@ -690,6 +694,7 @@ sample::sample()
     item("FnGuaranteedPremium")        = S_FnGuaranteedPremium;
     item("FnOmnibusDisclaimer")        = S_FnOmnibusDisclaimer;
     item("FnInitialDbo")               = S_FnInitialDbo;
+    item("DefnGuarGenAcctRate")        = S_DefnGuarGenAcctRate;
     item("DefnAV")                     = S_DefnAV;
     item("DefnCSV")                    = S_DefnCSV;
     item("DefnMec")                    = S_DefnMec;

@@ -304,7 +304,7 @@ void LedgerInvariant::Alloc(int len)
     Strings["FlexiblePremiumFootnote"       ] = &FlexiblePremiumFootnote       ;
     Strings["GuaranteedValuesFootnote"      ] = &GuaranteedValuesFootnote      ;
     Strings["CreditingRateFootnote"         ] = &CreditingRateFootnote         ;
-    Strings["GuaranteedCreditRateFootnote"  ] = &GuaranteedCreditRateFootnote  ;
+    Strings["DefnGuarGenAcctRate"           ] = &DefnGuarGenAcctRate           ;
     Strings["GrossRateFootnote"             ] = &GrossRateFootnote             ;
     Strings["NetRateFootnote"               ] = &NetRateFootnote               ;
     Strings["MecFootnote"                   ] = &MecFootnote                   ;

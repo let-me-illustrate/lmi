@@ -103,10 +103,7 @@ less any monthly charges deducted.
   {{FlexiblePremiumFootnote}}
 {{/SinglePremium}}
 
-<p>
-<b>Guaranteed Crediting Rate:</b>
-{{GuaranteedCreditRateFootnote}}
-</p>
+{{DefnGuarGenAcctRate}}
 
 <p>
 <b>Guaranteed Values:</b>
