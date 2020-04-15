@@ -25,8 +25,7 @@
     {{NonGuaranteedFootnote}}
 {{/IsInforce}}
 {{#IsInforce}}
-    {{InforceNonGuaranteedFootnote0}}<br>
-    <b>{{InforceNonGuaranteedFootnote3}}</b>
+    {{InforceNonGuaranteedFootnote0}}
 {{/IsInforce}}
 
 </font>
