@@ -363,6 +363,33 @@ class LMI_SO LedgerInvariant final
     std::string IllRegCertClient;
     std::string IllRegCertClientIl;
     std::string IllRegCertClientTx;
+    std::string FnMaturityAge;
+    std::string FnPartialMortality;
+    std::string FnProspectus;
+    std::string FnInitialSpecAmt;
+    std::string FnInforceAcctVal;
+    std::string FnInforceTaxBasis;
+    std::string Fn1035Charge;
+    std::string FnMecExtraWarning;
+    std::string FnNotTaxAdvice;
+    std::string FnImf;
+    std::string FnCensus;
+    std::string FnDacTax;
+    std::string FnDefnLifeIns;
+    std::string FnBoyEoy;
+    std::string FnGeneralAccount;
+    std::string FnPpMemorandum;
+    std::string FnPpAccreditedInvestor;
+    std::string FnPpLoads;
+    std::string FnProposalUnderwriting;
+    std::string FnGuaranteedPremium;
+    std::string FnOmnibusDisclaimer;
+    std::string FnInitialDbo;
+    std::string DefnAV;
+    std::string DefnCSV;
+    std::string DefnMec;
+    std::string DefnOutlay;
+    std::string DefnSpecAmt;
 
     // Strings from class Input.
 

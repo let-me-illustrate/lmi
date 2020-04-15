@@ -354,6 +354,35 @@ void LedgerInvariant::Alloc(int len)
     Strings["IllRegCertClientIl"            ] = &IllRegCertClientIl            ;
     Strings["IllRegCertClientTx"            ] = &IllRegCertClientTx            ;
 
+    Strings["FnMaturityAge"                 ] = &FnMaturityAge                 ;
+    Strings["FnPartialMortality"            ] = &FnPartialMortality            ;
+    Strings["FnProspectus"                  ] = &FnProspectus                  ;
+    Strings["FnInitialSpecAmt"              ] = &FnInitialSpecAmt              ;
+    Strings["FnInforceAcctVal"              ] = &FnInforceAcctVal              ;
+    Strings["FnInforceTaxBasis"             ] = &FnInforceTaxBasis             ;
+    Strings["Fn1035Charge"                  ] = &Fn1035Charge                  ;
+    Strings["FnMecExtraWarning"             ] = &FnMecExtraWarning             ;
+    Strings["FnNotTaxAdvice"                ] = &FnNotTaxAdvice                ;
+    Strings["FnImf"                         ] = &FnImf                         ;
+    Strings["FnCensus"                      ] = &FnCensus                      ;
+    Strings["FnDacTax"                      ] = &FnDacTax                      ;
+    Strings["FnDefnLifeIns"                 ] = &FnDefnLifeIns                 ;
+    Strings["FnBoyEoy"                      ] = &FnBoyEoy                      ;
+    Strings["FnGeneralAccount"              ] = &FnGeneralAccount              ;
+    Strings["FnPpMemorandum"                ] = &FnPpMemorandum                ;
+    Strings["FnPpAccreditedInvestor"        ] = &FnPpAccreditedInvestor        ;
+    Strings["FnPpLoads"                     ] = &FnPpLoads                     ;
+    Strings["FnProposalUnderwriting"        ] = &FnProposalUnderwriting        ;
+    Strings["FnGuaranteedPremium"           ] = &FnGuaranteedPremium           ;
+    Strings["FnOmnibusDisclaimer"           ] = &FnOmnibusDisclaimer           ;
+    Strings["FnInitialDbo"                  ] = &FnInitialDbo                  ;
+
+    Strings["DefnAV"                        ] = &DefnAV                        ;
+    Strings["DefnCSV"                       ] = &DefnCSV                       ;
+    Strings["DefnMec"                       ] = &DefnMec                       ;
+    Strings["DefnOutlay"                    ] = &DefnOutlay                    ;
+    Strings["DefnSpecAmt"                   ] = &DefnSpecAmt                   ;
+
     Strings["ProductName"                   ] = &ProductName                   ;
     Strings["ProducerName"                  ] = &ProducerName                  ;
     Strings["ProducerStreet"                ] = &ProducerStreet                ;

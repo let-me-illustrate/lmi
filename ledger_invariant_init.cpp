@@ -490,6 +490,33 @@ void LedgerInvariant::Init(BasicValues const* b)
         IllRegCertClient              = p.datum("IllRegCertClient"               );
         IllRegCertClientIl            = p.datum("IllRegCertClientIl"             );
         IllRegCertClientTx            = p.datum("IllRegCertClientTx"             );
+        FnMaturityAge                 = p.datum("FnMaturityAge"                  );
+        FnPartialMortality            = p.datum("FnPartialMortality"             );
+        FnProspectus                  = p.datum("FnProspectus"                   );
+        FnInitialSpecAmt              = p.datum("FnInitialSpecAmt"               );
+        FnInforceAcctVal              = p.datum("FnInforceAcctVal"               );
+        FnInforceTaxBasis             = p.datum("FnInforceTaxBasis"              );
+        Fn1035Charge                  = p.datum("Fn1035Charge"                   );
+        FnMecExtraWarning             = p.datum("FnMecExtraWarning"              );
+        FnNotTaxAdvice                = p.datum("FnNotTaxAdvice"                 );
+        FnImf                         = p.datum("FnImf"                          );
+        FnCensus                      = p.datum("FnCensus"                       );
+        FnDacTax                      = p.datum("FnDacTax"                       );
+        FnDefnLifeIns                 = p.datum("FnDefnLifeIns"                  );
+        FnBoyEoy                      = p.datum("FnBoyEoy"                       );
+        FnGeneralAccount              = p.datum("FnGeneralAccount"               );
+        FnPpMemorandum                = p.datum("FnPpMemorandum"                 );
+        FnPpAccreditedInvestor        = p.datum("FnPpAccreditedInvestor"         );
+        FnPpLoads                     = p.datum("FnPpLoads"                      );
+        FnProposalUnderwriting        = p.datum("FnProposalUnderwriting"         );
+        FnGuaranteedPremium           = p.datum("FnGuaranteedPremium"            );
+        FnOmnibusDisclaimer           = p.datum("FnOmnibusDisclaimer"            );
+        FnInitialDbo                  = p.datum("FnInitialDbo"                   );
+        DefnAV                        = p.datum("DefnAV"                         );
+        DefnCSV                       = p.datum("DefnCSV"                        );
+        DefnMec                       = p.datum("DefnMec"                        );
+        DefnOutlay                    = p.datum("DefnOutlay"                     );
+        DefnSpecAmt                   = p.datum("DefnSpecAmt"                    );
         }
 
     // Strings from class Input.

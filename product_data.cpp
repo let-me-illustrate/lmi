@@ -356,6 +356,33 @@ void product_data::ascribe_members()
     ascribe("IllRegCertClient"              , &product_data::IllRegCertClient              );
     ascribe("IllRegCertClientIl"            , &product_data::IllRegCertClientIl            );
     ascribe("IllRegCertClientTx"            , &product_data::IllRegCertClientTx            );
+    ascribe("FnMaturityAge"                 , &product_data::FnMaturityAge                 );
+    ascribe("FnPartialMortality"            , &product_data::FnPartialMortality            );
+    ascribe("FnProspectus"                  , &product_data::FnProspectus                  );
+    ascribe("FnInitialSpecAmt"              , &product_data::FnInitialSpecAmt              );
+    ascribe("FnInforceAcctVal"              , &product_data::FnInforceAcctVal              );
+    ascribe("FnInforceTaxBasis"             , &product_data::FnInforceTaxBasis             );
+    ascribe("Fn1035Charge"                  , &product_data::Fn1035Charge                  );
+    ascribe("FnMecExtraWarning"             , &product_data::FnMecExtraWarning             );
+    ascribe("FnNotTaxAdvice"                , &product_data::FnNotTaxAdvice                );
+    ascribe("FnImf"                         , &product_data::FnImf                         );
+    ascribe("FnCensus"                      , &product_data::FnCensus                      );
+    ascribe("FnDacTax"                      , &product_data::FnDacTax                      );
+    ascribe("FnDefnLifeIns"                 , &product_data::FnDefnLifeIns                 );
+    ascribe("FnBoyEoy"                      , &product_data::FnBoyEoy                      );
+    ascribe("FnGeneralAccount"              , &product_data::FnGeneralAccount              );
+    ascribe("FnPpMemorandum"                , &product_data::FnPpMemorandum                );
+    ascribe("FnPpAccreditedInvestor"        , &product_data::FnPpAccreditedInvestor        );
+    ascribe("FnPpLoads"                     , &product_data::FnPpLoads                     );
+    ascribe("FnProposalUnderwriting"        , &product_data::FnProposalUnderwriting        );
+    ascribe("FnGuaranteedPremium"           , &product_data::FnGuaranteedPremium           );
+    ascribe("FnOmnibusDisclaimer"           , &product_data::FnOmnibusDisclaimer           );
+    ascribe("FnInitialDbo"                  , &product_data::FnInitialDbo                  );
+    ascribe("DefnAV"                        , &product_data::DefnAV                        );
+    ascribe("DefnCSV"                       , &product_data::DefnCSV                       );
+    ascribe("DefnMec"                       , &product_data::DefnMec                       );
+    ascribe("DefnOutlay"                    , &product_data::DefnOutlay                    );
+    ascribe("DefnSpecAmt"                   , &product_data::DefnSpecAmt                   );
 }
 
 /// Backward-compatibility serial number of this class's xml version.
@@ -481,6 +508,78 @@ static std::string const S_IllRegCertClient =
   " non-guaranteed elements illustrated are subject to change and could be"
   " either higher or lower. The agent has told me they are not guaranteed.";
 
+static std::string const S_FnMaturityAge =
+  "Maturity age: {{EndtAge}}.";
+static std::string const S_FnPartialMortality =
+  "Columns reflect mortality, initially {{PartMortTableMult[0]}}"
+  " of the {{PartMortTableName}} table.";
+static std::string const S_FnProspectus =
+  "Must be preceded or accompanied by a prospectus.";
+static std::string const S_FnInitialSpecAmt =
+  "The initial specified amount is ${{InitTotalSA}}.";
+static std::string const S_FnInforceAcctVal =
+  "The inforce unloaned account value is ${{InforceUnloanedAV}}.";
+static std::string const S_FnInforceTaxBasis =
+  "The inforce tax basis is ${{InforceTaxBasis}}.";
+static std::string const S_Fn1035Charge =
+  "A charge may be deducted from the proceeds of a 1035 exchange.";
+static std::string const S_FnMecExtraWarning =
+  "{{#IsMec}}¶¶This is a Modified Endowment Contract.{{/IsMec}}";
+static std::string const S_FnNotTaxAdvice =
+  "{{InsCoShortName}} cannot give tax advice. Consult your own advisors.";
+static std::string const S_FnImf =
+  "Initial investment management fee: {{TotalIMF[0]}}.";
+static std::string const S_FnCensus =
+  ""; // There is no census attached to a composite.
+static std::string const S_FnDacTax =
+  "There is no explicit charge for DAC tax.";
+
+static std::string const S_FnDefnLifeIns =
+  "This policy is intended to qualify as life insurance under the IRC §7702"
+  "{{#DefnLifeInsIsGPT}}"
+  " guideline premium test. ${{InitGSP}} is the guideline single premium,"
+  " and ${{InitGLP}} is the guideline level premium."
+  "{{/DefnLifeInsIsGPT}}"
+  "{{^DefnLifeInsIsGPT}}"
+  "cash value accumulation test."
+  "{{/DefnLifeInsIsGPT}}";
+
+static std::string const S_FnBoyEoy =
+  "Premiums are payable in advance. Benefits are as of year end.";
+static std::string const S_FnGeneralAccount =
+  "The general account credits interest of at least {{InitAnnGenAcctInt_Guaranteed}}.";
+static std::string const S_FnPpMemorandum =
+  "Must be preceded or accompanied by a prospectus.";
+static std::string const S_FnPpAccreditedInvestor =
+  "Available only to accredited investors.";
+static std::string const S_FnPpLoads =
+  ""; // Explanation of any special loads.
+static std::string const S_FnProposalUnderwriting =
+  ""; // Explanation of group underwriting.
+static std::string const S_FnGuaranteedPremium =
+  "An outlay of ${{GuarPrem}} ({{InitEeMode}}) will guarantee coverage"
+  " to age {{EndtAge}}"
+  "{{#DefnLifeInsIsGPT}}"
+  ", subject to guideline premium test limits"
+  "{{/DefnLifeInsIsGPT}}"
+  ".";
+static std::string const S_FnOmnibusDisclaimer =
+  "Non-guaranteed values are based on current assumptions, which are"
+  " subject to change. Actual results may be more or less favorable.";
+static std::string const S_FnInitialDbo =
+  "The initial death benefit option is {{InitDBOpt}}.";
+static std::string const S_DefnAV =
+  "Account value is the accumulation of payments less charges and disbursements.";
+static std::string const S_DefnCSV =
+  "Cash surrender value is account value less any surrender charge.";
+static std::string const S_DefnMec =
+  "A Modified Endowment Contract is a contract that does not qualify"
+  " for favorable tax treatment under IRC §7702A.";
+static std::string const S_DefnOutlay =
+  "Outlay is premium paid out of pocket.";
+static std::string const S_DefnSpecAmt =
+  "Specified amount is the nominal face amount.";
+
 class sample : public product_data {public: sample();};
 
 class sample2 : public sample {public: sample2();};
@@ -573,6 +672,33 @@ sample::sample()
     item("IllRegCertClient")           = S_IllRegCertClient;
     item("IllRegCertClientIl")         = S_IllRegCertClient;
     item("IllRegCertClientTx")         = S_IllRegCertClient;
+    item("FnMaturityAge")              = S_FnMaturityAge;
+    item("FnPartialMortality")         = S_FnPartialMortality;
+    item("FnProspectus")               = S_FnProspectus;
+    item("FnInitialSpecAmt")           = S_FnInitialSpecAmt;
+    item("FnInforceAcctVal")           = S_FnInforceAcctVal;
+    item("FnInforceTaxBasis")          = S_FnInforceTaxBasis;
+    item("Fn1035Charge")               = S_Fn1035Charge;
+    item("FnMecExtraWarning")          = S_FnMecExtraWarning;
+    item("FnNotTaxAdvice")             = S_FnNotTaxAdvice;
+    item("FnImf")                      = S_FnImf;
+    item("FnCensus")                   = S_FnCensus;
+    item("FnDacTax")                   = S_FnDacTax;
+    item("FnDefnLifeIns")              = S_FnDefnLifeIns;
+    item("FnBoyEoy")                   = S_FnBoyEoy;
+    item("FnGeneralAccount")           = S_FnGeneralAccount;
+    item("FnPpMemorandum")             = S_FnPpMemorandum;
+    item("FnPpAccreditedInvestor")     = S_FnPpAccreditedInvestor;
+    item("FnPpLoads")                  = S_FnPpLoads;
+    item("FnProposalUnderwriting")     = S_FnProposalUnderwriting;
+    item("FnGuaranteedPremium")        = S_FnGuaranteedPremium;
+    item("FnOmnibusDisclaimer")        = S_FnOmnibusDisclaimer;
+    item("FnInitialDbo")               = S_FnInitialDbo;
+    item("DefnAV")                     = S_DefnAV;
+    item("DefnCSV")                    = S_DefnCSV;
+    item("DefnMec")                    = S_DefnMec;
+    item("DefnOutlay")                 = S_DefnOutlay;
+    item("DefnSpecAmt")                = S_DefnSpecAmt;
 
     item("ADDTerseName")               = glossed_string("Accident");
     item("InsurabilityTerseName")      = glossed_string("Insurability");
