@@ -86,6 +86,7 @@ in the Tabular Detail.
 
 {{#IsInforce}}
 <!-- PDF !! FnInforceAcctVal -->
+<!-- PDF !! Total AV is described, but only unloaned AV is shown. -->
     <p>
     This illustration assumes a beginning account value of
     ${{InforceUnloanedAV}} as of the date of this illustration.
