@@ -74,12 +74,9 @@ or sending money.
     </p>
 {{/HasWP}}
 
-<!-- PDF !! FnPartialMortality -->
 {{#UsePartialMort}}
     <p>
-    This illustration reflects an initial mortality assumption
-    of {{PartMortTableMult[0]}} of the {{PartMortTableName}}
-    table with all deaths at the end of the year.
+    {{FnPartialMortality}}
     </p>
 {{/UsePartialMort}}
 

@@ -57,6 +57,14 @@
 {{GuarMortalityFootnote}}
 </p>
 
+<!-- PDF !! Suppressed pending review.
+{{#UsePartialMort}}
+    <p>
+    {{FnPartialMortality}}
+    </p>
+{{/UsePartialMort}}
+-->
+
 <!-- PDF !! FnMaturityAge -->
 <p>
 This illustration assumes death of the insured at age {{EndtAge}}.
