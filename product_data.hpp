@@ -246,13 +246,13 @@ class LMI_SO product_data
 
     // Group quotes.
     glossed_string GroupQuoteShortProductName;
-    glossed_string GroupQuoteIsNotAnOffer    ;
-    glossed_string GroupQuoteRidersFooter    ;
-    glossed_string GroupQuotePolicyFormId    ;
-    glossed_string GroupQuoteStateVariations ;
-    glossed_string GroupQuoteProspectus      ;
-    glossed_string GroupQuoteUnderwriter     ;
-    glossed_string GroupQuoteBrokerDealer    ;
+    glossed_string GroupQuoteIsNotAnOffer;
+    glossed_string GroupQuoteRidersFooter;
+    glossed_string GroupQuotePolicyFormId;
+    glossed_string GroupQuoteStateVariations;
+    glossed_string GroupQuoteProspectus;
+    glossed_string GroupQuoteUnderwriter;
+    glossed_string GroupQuoteBrokerDealer;
     // Group plan type is one of:
     //   -Mandatory: no individual selection of amounts; typically,
     //     the employer pays the entire premium
@@ -261,12 +261,12 @@ class LMI_SO product_data
     //      when it complements a (separate) "mandatory" plan
     //   -Fusion: mandatory and supplemental combined; typically, the
     //      employer and employee pay their respective premiums
-    glossed_string GroupQuoteRubricMandatory ;
-    glossed_string GroupQuoteRubricVoluntary ;
-    glossed_string GroupQuoteRubricFusion    ;
-    glossed_string GroupQuoteFooterMandatory ;
-    glossed_string GroupQuoteFooterVoluntary ;
-    glossed_string GroupQuoteFooterFusion    ;
+    glossed_string GroupQuoteRubricMandatory;
+    glossed_string GroupQuoteRubricVoluntary;
+    glossed_string GroupQuoteRubricFusion;
+    glossed_string GroupQuoteFooterMandatory;
+    glossed_string GroupQuoteFooterVoluntary;
+    glossed_string GroupQuoteFooterFusion;
 
     // Premium-specific footnotes.
     glossed_string MinimumPremiumFootnote;

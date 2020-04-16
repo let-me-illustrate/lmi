@@ -109,7 +109,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         }
     else
         {
-        TermSpecAmt     .assign(Length, 0.0);
+        TermSpecAmt            .assign(Length, 0.0);
         }
     SpecAmt                    = b->DeathBfts_->specamt();
 
@@ -311,206 +311,206 @@ void LedgerInvariant::Init(BasicValues const* b)
         // strings in class product_data vary across the same axes as
         // database_entity objects.
         bool alt_form = b->database().query<bool>(DB_UsePolicyFormAlt);
-        dbo_name_option1              = p.datum("DboNameLevel"                   );
-        dbo_name_option2              = p.datum("DboNameIncreasing"              );
-        dbo_name_rop                  = p.datum("DboNameReturnOfPremium"         );
-        dbo_name_mdb                  = p.datum("DboNameMinDeathBenefit"         );
+        dbo_name_option1           = p.datum("DboNameLevel"                   );
+        dbo_name_option2           = p.datum("DboNameIncreasing"              );
+        dbo_name_rop               = p.datum("DboNameReturnOfPremium"         );
+        dbo_name_mdb               = p.datum("DboNameMinDeathBenefit"         );
 
         // Strings.
 
         PolicyForm = p.datum(alt_form ? "PolicyFormAlternative" : "PolicyForm");
-        PolicyMktgName                = p.datum("PolicyMktgName"                 );
-        PolicyLegalName               = p.datum("PolicyLegalName"                );
+        PolicyMktgName             = p.datum("PolicyMktgName"                 );
+        PolicyLegalName            = p.datum("PolicyLegalName"                );
         CsoEra     = mc_str(b->database().query<mcenum_cso_era>(DB_CsoEra));
-        InsCoShortName                = p.datum("InsCoShortName"                 );
-        InsCoName                     = p.datum("InsCoName"                      );
-        InsCoAddr                     = p.datum("InsCoAddr"                      );
-        InsCoStreet                   = p.datum("InsCoStreet"                    );
-        InsCoPhone                    = p.datum("InsCoPhone"                     );
-        MainUnderwriter               = p.datum("MainUnderwriter"                );
-        MainUnderwriterAddress        = p.datum("MainUnderwriterAddress"         );
-        CoUnderwriter                 = p.datum("CoUnderwriter"                  );
-        CoUnderwriterAddress          = p.datum("CoUnderwriterAddress"           );
+        InsCoShortName             = p.datum("InsCoShortName"                 );
+        InsCoName                  = p.datum("InsCoName"                      );
+        InsCoAddr                  = p.datum("InsCoAddr"                      );
+        InsCoStreet                = p.datum("InsCoStreet"                    );
+        InsCoPhone                 = p.datum("InsCoPhone"                     );
+        MainUnderwriter            = p.datum("MainUnderwriter"                );
+        MainUnderwriterAddress     = p.datum("MainUnderwriterAddress"         );
+        CoUnderwriter              = p.datum("CoUnderwriter"                  );
+        CoUnderwriterAddress       = p.datum("CoUnderwriterAddress"           );
 
         // Terms defined in the contract
 
-        AvName                        = p.datum("AvName"                         );
-        CsvName                       = p.datum("CsvName"                        );
-        CsvHeaderName                 = p.datum("CsvHeaderName"                  );
-        NoLapseProvisionName          = p.datum("NoLapseProvisionName"           );
-        ContractName                  = p.datum("ContractName"                   );
-        DboName                       = p.datum("DboName"                        );
+        AvName                     = p.datum("AvName"                         );
+        CsvName                    = p.datum("CsvName"                        );
+        CsvHeaderName              = p.datum("CsvHeaderName"                  );
+        NoLapseProvisionName       = p.datum("NoLapseProvisionName"           );
+        ContractName               = p.datum("ContractName"                   );
+        DboName                    = p.datum("DboName"                        );
         // PDF !! It is hoped that these three local variables (which
         // duplicate 'dbo_name_option1' etc. above) can be expunged.
-        DboNameLevel                  = p.datum("DboNameLevel"                   );
-        DboNameIncreasing             = p.datum("DboNameIncreasing"              );
-        DboNameMinDeathBenefit        = p.datum("DboNameMinDeathBenefit"         );
-        GenAcctName                   = p.datum("GenAcctName"                    );
-        GenAcctNameElaborated         = p.datum("GenAcctNameElaborated"          );
-        SepAcctName                   = p.datum("SepAcctName"                    );
-        SpecAmtName                   = p.datum("SpecAmtName"                    );
-        SpecAmtNameElaborated         = p.datum("SpecAmtNameElaborated"          );
-        UwBasisMedical                = p.datum("UwBasisMedical"                 );
-        UwBasisParamedical            = p.datum("UwBasisParamedical"             );
-        UwBasisNonmedical             = p.datum("UwBasisNonmedical"              );
-        UwBasisSimplified             = p.datum("UwBasisSimplified"              );
-        UwBasisGuaranteed             = p.datum("UwBasisGuaranteed"              );
-        UwClassPreferred              = p.datum("UwClassPreferred"               );
-        UwClassStandard               = p.datum("UwClassStandard"                );
-        UwClassRated                  = p.datum("UwClassRated"                   );
-        UwClassUltra                  = p.datum("UwClassUltra"                   );
+        DboNameLevel               = p.datum("DboNameLevel"                   );
+        DboNameIncreasing          = p.datum("DboNameIncreasing"              );
+        DboNameMinDeathBenefit     = p.datum("DboNameMinDeathBenefit"         );
+        GenAcctName                = p.datum("GenAcctName"                    );
+        GenAcctNameElaborated      = p.datum("GenAcctNameElaborated"          );
+        SepAcctName                = p.datum("SepAcctName"                    );
+        SpecAmtName                = p.datum("SpecAmtName"                    );
+        SpecAmtNameElaborated      = p.datum("SpecAmtNameElaborated"          );
+        UwBasisMedical             = p.datum("UwBasisMedical"                 );
+        UwBasisParamedical         = p.datum("UwBasisParamedical"             );
+        UwBasisNonmedical          = p.datum("UwBasisNonmedical"              );
+        UwBasisSimplified          = p.datum("UwBasisSimplified"              );
+        UwBasisGuaranteed          = p.datum("UwBasisGuaranteed"              );
+        UwClassPreferred           = p.datum("UwClassPreferred"               );
+        UwClassStandard            = p.datum("UwClassStandard"                );
+        UwClassRated               = p.datum("UwClassRated"                   );
+        UwClassUltra               = p.datum("UwClassUltra"                   );
 
         // Ledger column definitions.
 
-        AccountValueFootnote          = p.datum("AccountValueFootnote"           );
-        AttainedAgeFootnote           = p.datum("AttainedAgeFootnote"            );
-        CashSurrValueFootnote         = p.datum("CashSurrValueFootnote"          );
-        DeathBenefitFootnote          = p.datum("DeathBenefitFootnote"           );
-        InitialPremiumFootnote        = p.datum("InitialPremiumFootnote"         );
-        NetPremiumFootnote            = p.datum("NetPremiumFootnote"             );
-        GrossPremiumFootnote          = p.datum("GrossPremiumFootnote"           );
-        OutlayFootnote                = p.datum("OutlayFootnote"                 );
-        PolicyYearFootnote            = p.datum("PolicyYearFootnote"             );
+        AccountValueFootnote       = p.datum("AccountValueFootnote"           );
+        AttainedAgeFootnote        = p.datum("AttainedAgeFootnote"            );
+        CashSurrValueFootnote      = p.datum("CashSurrValueFootnote"          );
+        DeathBenefitFootnote       = p.datum("DeathBenefitFootnote"           );
+        InitialPremiumFootnote     = p.datum("InitialPremiumFootnote"         );
+        NetPremiumFootnote         = p.datum("NetPremiumFootnote"             );
+        GrossPremiumFootnote       = p.datum("GrossPremiumFootnote"           );
+        OutlayFootnote             = p.datum("OutlayFootnote"                 );
+        PolicyYearFootnote         = p.datum("PolicyYearFootnote"             );
 
         // Terse rider names.
 
-        ADDTerseName                  = p.datum("ADDTerseName"                   );
-        InsurabilityTerseName         = p.datum("InsurabilityTerseName"          );
-        ChildTerseName                = p.datum("ChildTerseName"                 );
-        SpouseTerseName               = p.datum("SpouseTerseName"                );
-        TermTerseName                 = p.datum("TermTerseName"                  );
-        WaiverTerseName               = p.datum("WaiverTerseName"                );
-        AccelBftRiderTerseName        = p.datum("AccelBftRiderTerseName"         );
-        OverloanRiderTerseName        = p.datum("OverloanRiderTerseName"         );
+        ADDTerseName               = p.datum("ADDTerseName"                   );
+        InsurabilityTerseName      = p.datum("InsurabilityTerseName"          );
+        ChildTerseName             = p.datum("ChildTerseName"                 );
+        SpouseTerseName            = p.datum("SpouseTerseName"                );
+        TermTerseName              = p.datum("TermTerseName"                  );
+        WaiverTerseName            = p.datum("WaiverTerseName"                );
+        AccelBftRiderTerseName     = p.datum("AccelBftRiderTerseName"         );
+        OverloanRiderTerseName     = p.datum("OverloanRiderTerseName"         );
 
         // Rider footnotes.
 
-        ADDFootnote                   = p.datum("ADDFootnote"                    );
-        ChildFootnote                 = p.datum("ChildFootnote"                  );
-        SpouseFootnote                = p.datum("SpouseFootnote"                 );
-        TermFootnote                  = p.datum("TermFootnote"                   );
-        WaiverFootnote                = p.datum("WaiverFootnote"                 );
-        AccelBftRiderFootnote         = p.datum("AccelBftRiderFootnote"          );
-        OverloanRiderFootnote         = p.datum("OverloanRiderFootnote"          );
+        ADDFootnote                = p.datum("ADDFootnote"                    );
+        ChildFootnote              = p.datum("ChildFootnote"                  );
+        SpouseFootnote             = p.datum("SpouseFootnote"                 );
+        TermFootnote               = p.datum("TermFootnote"                   );
+        WaiverFootnote             = p.datum("WaiverFootnote"                 );
+        AccelBftRiderFootnote      = p.datum("AccelBftRiderFootnote"          );
+        OverloanRiderFootnote      = p.datum("OverloanRiderFootnote"          );
 
         // Group quote footnotes.
 
-        GroupQuoteShortProductName    = p.datum("GroupQuoteShortProductName"     );
-        GroupQuoteIsNotAnOffer        = p.datum("GroupQuoteIsNotAnOffer"         );
-        GroupQuoteRidersFooter        = p.datum("GroupQuoteRidersFooter"         );
-        GroupQuotePolicyFormId        = p.datum("GroupQuotePolicyFormId"         );
-        GroupQuoteStateVariations     = p.datum("GroupQuoteStateVariations"      );
-        GroupQuoteProspectus          = p.datum("GroupQuoteProspectus"           );
-        GroupQuoteUnderwriter         = p.datum("GroupQuoteUnderwriter"          );
-        GroupQuoteBrokerDealer        = p.datum("GroupQuoteBrokerDealer"         );
-        GroupQuoteRubricMandatory     = p.datum("GroupQuoteRubricMandatory"      );
-        GroupQuoteRubricVoluntary     = p.datum("GroupQuoteRubricVoluntary"      );
-        GroupQuoteRubricFusion        = p.datum("GroupQuoteRubricFusion"         );
-        GroupQuoteFooterMandatory     = p.datum("GroupQuoteFooterMandatory"      );
-        GroupQuoteFooterVoluntary     = p.datum("GroupQuoteFooterVoluntary"      );
-        GroupQuoteFooterFusion        = p.datum("GroupQuoteFooterFusion"         );
+        GroupQuoteShortProductName = p.datum("GroupQuoteShortProductName"     );
+        GroupQuoteIsNotAnOffer     = p.datum("GroupQuoteIsNotAnOffer"         );
+        GroupQuoteRidersFooter     = p.datum("GroupQuoteRidersFooter"         );
+        GroupQuotePolicyFormId     = p.datum("GroupQuotePolicyFormId"         );
+        GroupQuoteStateVariations  = p.datum("GroupQuoteStateVariations"      );
+        GroupQuoteProspectus       = p.datum("GroupQuoteProspectus"           );
+        GroupQuoteUnderwriter      = p.datum("GroupQuoteUnderwriter"          );
+        GroupQuoteBrokerDealer     = p.datum("GroupQuoteBrokerDealer"         );
+        GroupQuoteRubricMandatory  = p.datum("GroupQuoteRubricMandatory"      );
+        GroupQuoteRubricVoluntary  = p.datum("GroupQuoteRubricVoluntary"      );
+        GroupQuoteRubricFusion     = p.datum("GroupQuoteRubricFusion"         );
+        GroupQuoteFooterMandatory  = p.datum("GroupQuoteFooterMandatory"      );
+        GroupQuoteFooterVoluntary  = p.datum("GroupQuoteFooterVoluntary"      );
+        GroupQuoteFooterFusion     = p.datum("GroupQuoteFooterFusion"         );
 
         // Premium-specific footnotes.
 
-        MinimumPremiumFootnote        = p.datum("MinimumPremiumFootnote"         );
-        PremAllocationFootnote        = p.datum("PremAllocationFootnote"         );
+        MinimumPremiumFootnote     = p.datum("MinimumPremiumFootnote"         );
+        PremAllocationFootnote     = p.datum("PremAllocationFootnote"         );
 
         // Miscellaneous other footnotes.
 
-        InterestDisclaimer            = p.datum("InterestDisclaimer"             );
-        GuarMortalityFootnote         = p.datum("GuarMortalityFootnote"          );
-        ProductDescription            = p.datum("ProductDescription"             );
-        StableValueFootnote           = p.datum("StableValueFootnote"            );
-        NoVanishPremiumFootnote       = p.datum("NoVanishPremiumFootnote"        );
-        RejectPremiumFootnote         = p.datum("RejectPremiumFootnote"          );
-        ExpRatingFootnote             = p.datum("ExpRatingFootnote"              );
-        MortalityBlendFootnote        = p.datum("MortalityBlendFootnote"         );
-        HypotheticalRatesFootnote     = p.datum("HypotheticalRatesFootnote"      );
-        SalesLoadRefundFootnote       = p.datum("SalesLoadRefundFootnote"        );
-        NoLapseEverFootnote           = p.datum("NoLapseEverFootnote"            );
-        NoLapseFootnote               = p.datum("NoLapseFootnote"                );
-        CurrentValuesFootnote         = p.datum("CurrentValuesFootnote"          );
-        DBOption1Footnote             = p.datum("DBOption1Footnote"              );
-        DBOption2Footnote             = p.datum("DBOption2Footnote"              );
-        DBOption3Footnote             = p.datum("DBOption3Footnote"              );
-        MinDeathBenefitFootnote       = p.datum("MinDeathBenefitFootnote"        );
-        ExpRatRiskChargeFootnote      = p.datum("ExpRatRiskChargeFootnote"       );
-        ExchangeChargeFootnote1       = p.datum("ExchangeChargeFootnote1"        );
-        FlexiblePremiumFootnote       = p.datum("FlexiblePremiumFootnote"        );
-        GuaranteedValuesFootnote      = p.datum("GuaranteedValuesFootnote"       );
-        CreditingRateFootnote         = p.datum("CreditingRateFootnote"          );
-        DefnGuarGenAcctRate           = p.datum("DefnGuarGenAcctRate"            );
-        GrossRateFootnote             = p.datum("GrossRateFootnote"              );
-        NetRateFootnote               = p.datum("NetRateFootnote"                );
-        MecFootnote                   = p.datum("MecFootnote"                    );
-        GptFootnote                   = p.datum("GptFootnote"                    );
-        MidpointValuesFootnote        = p.datum("MidpointValuesFootnote"         );
-        SinglePremiumFootnote         = p.datum("SinglePremiumFootnote"          );
-        MonthlyChargesFootnote        = p.datum("MonthlyChargesFootnote"         );
-        UltCreditingRateFootnote      = p.datum("UltCreditingRateFootnote"       );
-        UltCreditingRateHeader        = p.datum("UltCreditingRateHeader"         );
-        MaxNaarFootnote               = p.datum("MaxNaarFootnote"                );
-        PremTaxSurrChgFootnote        = p.datum("PremTaxSurrChgFootnote"         );
-        PolicyFeeFootnote             = p.datum("PolicyFeeFootnote"              );
-        AssetChargeFootnote           = p.datum("AssetChargeFootnote"            );
-        InvestmentIncomeFootnote      = p.datum("InvestmentIncomeFootnote"       );
-        IrrDbFootnote                 = p.datum("IrrDbFootnote"                  );
-        IrrCsvFootnote                = p.datum("IrrCsvFootnote"                 );
-        MortalityChargesFootnote      = p.datum("MortalityChargesFootnote"       );
-        LoanAndWithdrawalFootnote     = p.datum("LoanAndWithdrawalFootnote"      );
-        LoanFootnote                  = p.datum("LoanFootnote"                   );
-        ImprimaturPresale             = p.datum("ImprimaturPresale"              );
-        ImprimaturPresaleComposite    = p.datum("ImprimaturPresaleComposite"     );
-        ImprimaturInforce             = p.datum("ImprimaturInforce"              );
-        ImprimaturInforceComposite    = p.datum("ImprimaturInforceComposite"     );
-        StateMarketingImprimatur      = p.datum("StateMarketingImprimatur"       );
-        NonGuaranteedFootnote         = p.datum("NonGuaranteedFootnote"          );
-        NonGuaranteedFootnote1        = p.datum("NonGuaranteedFootnote1"         );
-        NonGuaranteedFootnote1Tx      = p.datum("NonGuaranteedFootnote1Tx"       );
-        FnMonthlyDeductions           = p.datum("FnMonthlyDeductions"            );
-        SurrenderFootnote             = p.datum("SurrenderFootnote"              );
-        PortabilityFootnote           = p.datum("PortabilityFootnote"            );
-        FundRateFootnote              = p.datum("FundRateFootnote"               );
-        IssuingCompanyFootnote        = p.datum("IssuingCompanyFootnote"         );
-        SubsidiaryFootnote            = p.datum("SubsidiaryFootnote"             );
-        PlacementAgentFootnote        = p.datum("PlacementAgentFootnote"         );
-        MarketingNameFootnote         = p.datum("MarketingNameFootnote"          );
-        GuarIssueDisclaimerNcSc       = p.datum("GuarIssueDisclaimerNcSc"        );
-        GuarIssueDisclaimerMd         = p.datum("GuarIssueDisclaimerMd"          );
-        GuarIssueDisclaimerTx         = p.datum("GuarIssueDisclaimerTx"          );
-        IllRegCertAgent               = p.datum("IllRegCertAgent"                );
-        IllRegCertAgentIl             = p.datum("IllRegCertAgentIl"              );
-        IllRegCertAgentTx             = p.datum("IllRegCertAgentTx"              );
-        IllRegCertClient              = p.datum("IllRegCertClient"               );
-        IllRegCertClientIl            = p.datum("IllRegCertClientIl"             );
-        IllRegCertClientTx            = p.datum("IllRegCertClientTx"             );
-        FnMaturityAge                 = p.datum("FnMaturityAge"                  );
-        FnPartialMortality            = p.datum("FnPartialMortality"             );
-        FnProspectus                  = p.datum("FnProspectus"                   );
-        FnInitialSpecAmt              = p.datum("FnInitialSpecAmt"               );
-        FnInforceAcctVal              = p.datum("FnInforceAcctVal"               );
-        FnInforceTaxBasis             = p.datum("FnInforceTaxBasis"              );
-        Fn1035Charge                  = p.datum("Fn1035Charge"                   );
-        FnMecExtraWarning             = p.datum("FnMecExtraWarning"              );
-        FnNotTaxAdvice                = p.datum("FnNotTaxAdvice"                 );
-        FnImf                         = p.datum("FnImf"                          );
-        FnCensus                      = p.datum("FnCensus"                       );
-        FnDacTax                      = p.datum("FnDacTax"                       );
-        FnDefnLifeIns                 = p.datum("FnDefnLifeIns"                  );
-        FnBoyEoy                      = p.datum("FnBoyEoy"                       );
-        FnGeneralAccount              = p.datum("FnGeneralAccount"               );
-        FnPpMemorandum                = p.datum("FnPpMemorandum"                 );
-        FnPpAccreditedInvestor        = p.datum("FnPpAccreditedInvestor"         );
-        FnPpLoads                     = p.datum("FnPpLoads"                      );
-        FnProposalUnderwriting        = p.datum("FnProposalUnderwriting"         );
-        FnGuaranteedPremium           = p.datum("FnGuaranteedPremium"            );
-        FnOmnibusDisclaimer           = p.datum("FnOmnibusDisclaimer"            );
-        FnInitialDbo                  = p.datum("FnInitialDbo"                   );
-        DefnAV                        = p.datum("DefnAV"                         );
-        DefnCSV                       = p.datum("DefnCSV"                        );
-        DefnMec                       = p.datum("DefnMec"                        );
-        DefnOutlay                    = p.datum("DefnOutlay"                     );
-        DefnSpecAmt                   = p.datum("DefnSpecAmt"                    );
+        InterestDisclaimer         = p.datum("InterestDisclaimer"             );
+        GuarMortalityFootnote      = p.datum("GuarMortalityFootnote"          );
+        ProductDescription         = p.datum("ProductDescription"             );
+        StableValueFootnote        = p.datum("StableValueFootnote"            );
+        NoVanishPremiumFootnote    = p.datum("NoVanishPremiumFootnote"        );
+        RejectPremiumFootnote      = p.datum("RejectPremiumFootnote"          );
+        ExpRatingFootnote          = p.datum("ExpRatingFootnote"              );
+        MortalityBlendFootnote     = p.datum("MortalityBlendFootnote"         );
+        HypotheticalRatesFootnote  = p.datum("HypotheticalRatesFootnote"      );
+        SalesLoadRefundFootnote    = p.datum("SalesLoadRefundFootnote"        );
+        NoLapseEverFootnote        = p.datum("NoLapseEverFootnote"            );
+        NoLapseFootnote            = p.datum("NoLapseFootnote"                );
+        CurrentValuesFootnote      = p.datum("CurrentValuesFootnote"          );
+        DBOption1Footnote          = p.datum("DBOption1Footnote"              );
+        DBOption2Footnote          = p.datum("DBOption2Footnote"              );
+        DBOption3Footnote          = p.datum("DBOption3Footnote"              );
+        MinDeathBenefitFootnote    = p.datum("MinDeathBenefitFootnote"        );
+        ExpRatRiskChargeFootnote   = p.datum("ExpRatRiskChargeFootnote"       );
+        ExchangeChargeFootnote1    = p.datum("ExchangeChargeFootnote1"        );
+        FlexiblePremiumFootnote    = p.datum("FlexiblePremiumFootnote"        );
+        GuaranteedValuesFootnote   = p.datum("GuaranteedValuesFootnote"       );
+        CreditingRateFootnote      = p.datum("CreditingRateFootnote"          );
+        DefnGuarGenAcctRate        = p.datum("DefnGuarGenAcctRate"            );
+        GrossRateFootnote          = p.datum("GrossRateFootnote"              );
+        NetRateFootnote            = p.datum("NetRateFootnote"                );
+        MecFootnote                = p.datum("MecFootnote"                    );
+        GptFootnote                = p.datum("GptFootnote"                    );
+        MidpointValuesFootnote     = p.datum("MidpointValuesFootnote"         );
+        SinglePremiumFootnote      = p.datum("SinglePremiumFootnote"          );
+        MonthlyChargesFootnote     = p.datum("MonthlyChargesFootnote"         );
+        UltCreditingRateFootnote   = p.datum("UltCreditingRateFootnote"       );
+        UltCreditingRateHeader     = p.datum("UltCreditingRateHeader"         );
+        MaxNaarFootnote            = p.datum("MaxNaarFootnote"                );
+        PremTaxSurrChgFootnote     = p.datum("PremTaxSurrChgFootnote"         );
+        PolicyFeeFootnote          = p.datum("PolicyFeeFootnote"              );
+        AssetChargeFootnote        = p.datum("AssetChargeFootnote"            );
+        InvestmentIncomeFootnote   = p.datum("InvestmentIncomeFootnote"       );
+        IrrDbFootnote              = p.datum("IrrDbFootnote"                  );
+        IrrCsvFootnote             = p.datum("IrrCsvFootnote"                 );
+        MortalityChargesFootnote   = p.datum("MortalityChargesFootnote"       );
+        LoanAndWithdrawalFootnote  = p.datum("LoanAndWithdrawalFootnote"      );
+        LoanFootnote               = p.datum("LoanFootnote"                   );
+        ImprimaturPresale          = p.datum("ImprimaturPresale"              );
+        ImprimaturPresaleComposite = p.datum("ImprimaturPresaleComposite"     );
+        ImprimaturInforce          = p.datum("ImprimaturInforce"              );
+        ImprimaturInforceComposite = p.datum("ImprimaturInforceComposite"     );
+        StateMarketingImprimatur   = p.datum("StateMarketingImprimatur"       );
+        NonGuaranteedFootnote      = p.datum("NonGuaranteedFootnote"          );
+        NonGuaranteedFootnote1     = p.datum("NonGuaranteedFootnote1"         );
+        NonGuaranteedFootnote1Tx   = p.datum("NonGuaranteedFootnote1Tx"       );
+        FnMonthlyDeductions        = p.datum("FnMonthlyDeductions"            );
+        SurrenderFootnote          = p.datum("SurrenderFootnote"              );
+        PortabilityFootnote        = p.datum("PortabilityFootnote"            );
+        FundRateFootnote           = p.datum("FundRateFootnote"               );
+        IssuingCompanyFootnote     = p.datum("IssuingCompanyFootnote"         );
+        SubsidiaryFootnote         = p.datum("SubsidiaryFootnote"             );
+        PlacementAgentFootnote     = p.datum("PlacementAgentFootnote"         );
+        MarketingNameFootnote      = p.datum("MarketingNameFootnote"          );
+        GuarIssueDisclaimerNcSc    = p.datum("GuarIssueDisclaimerNcSc"        );
+        GuarIssueDisclaimerMd      = p.datum("GuarIssueDisclaimerMd"          );
+        GuarIssueDisclaimerTx      = p.datum("GuarIssueDisclaimerTx"          );
+        IllRegCertAgent            = p.datum("IllRegCertAgent"                );
+        IllRegCertAgentIl          = p.datum("IllRegCertAgentIl"              );
+        IllRegCertAgentTx          = p.datum("IllRegCertAgentTx"              );
+        IllRegCertClient           = p.datum("IllRegCertClient"               );
+        IllRegCertClientIl         = p.datum("IllRegCertClientIl"             );
+        IllRegCertClientTx         = p.datum("IllRegCertClientTx"             );
+        FnMaturityAge              = p.datum("FnMaturityAge"                  );
+        FnPartialMortality         = p.datum("FnPartialMortality"             );
+        FnProspectus               = p.datum("FnProspectus"                   );
+        FnInitialSpecAmt           = p.datum("FnInitialSpecAmt"               );
+        FnInforceAcctVal           = p.datum("FnInforceAcctVal"               );
+        FnInforceTaxBasis          = p.datum("FnInforceTaxBasis"              );
+        Fn1035Charge               = p.datum("Fn1035Charge"                   );
+        FnMecExtraWarning          = p.datum("FnMecExtraWarning"              );
+        FnNotTaxAdvice             = p.datum("FnNotTaxAdvice"                 );
+        FnImf                      = p.datum("FnImf"                          );
+        FnCensus                   = p.datum("FnCensus"                       );
+        FnDacTax                   = p.datum("FnDacTax"                       );
+        FnDefnLifeIns              = p.datum("FnDefnLifeIns"                  );
+        FnBoyEoy                   = p.datum("FnBoyEoy"                       );
+        FnGeneralAccount           = p.datum("FnGeneralAccount"               );
+        FnPpMemorandum             = p.datum("FnPpMemorandum"                 );
+        FnPpAccreditedInvestor     = p.datum("FnPpAccreditedInvestor"         );
+        FnPpLoads                  = p.datum("FnPpLoads"                      );
+        FnProposalUnderwriting     = p.datum("FnProposalUnderwriting"         );
+        FnGuaranteedPremium        = p.datum("FnGuaranteedPremium"            );
+        FnOmnibusDisclaimer        = p.datum("FnOmnibusDisclaimer"            );
+        FnInitialDbo               = p.datum("FnInitialDbo"                   );
+        DefnAV                     = p.datum("DefnAV"                         );
+        DefnCSV                    = p.datum("DefnCSV"                        );
+        DefnMec                    = p.datum("DefnMec"                        );
+        DefnOutlay                 = p.datum("DefnOutlay"                     );
+        DefnSpecAmt                = p.datum("DefnSpecAmt"                    );
         }
 
     // Strings from class Input.

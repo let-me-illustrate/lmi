@@ -271,19 +271,19 @@ class LMI_SO LedgerInvariant final
 
     // Group quote footnotes.
     std::string GroupQuoteShortProductName;
-    std::string GroupQuoteIsNotAnOffer    ;
-    std::string GroupQuoteRidersFooter    ;
-    std::string GroupQuotePolicyFormId    ;
-    std::string GroupQuoteStateVariations ;
-    std::string GroupQuoteProspectus      ;
-    std::string GroupQuoteUnderwriter     ;
-    std::string GroupQuoteBrokerDealer    ;
-    std::string GroupQuoteRubricMandatory ;
-    std::string GroupQuoteRubricVoluntary ;
-    std::string GroupQuoteRubricFusion    ;
-    std::string GroupQuoteFooterMandatory ;
-    std::string GroupQuoteFooterVoluntary ;
-    std::string GroupQuoteFooterFusion    ;
+    std::string GroupQuoteIsNotAnOffer;
+    std::string GroupQuoteRidersFooter;
+    std::string GroupQuotePolicyFormId;
+    std::string GroupQuoteStateVariations;
+    std::string GroupQuoteProspectus;
+    std::string GroupQuoteUnderwriter;
+    std::string GroupQuoteBrokerDealer;
+    std::string GroupQuoteRubricMandatory;
+    std::string GroupQuoteRubricVoluntary;
+    std::string GroupQuoteRubricFusion;
+    std::string GroupQuoteFooterMandatory;
+    std::string GroupQuoteFooterVoluntary;
+    std::string GroupQuoteFooterFusion;
 
     // Premium-specific footnotes.
     std::string MinimumPremiumFootnote;
@@ -458,14 +458,14 @@ class LMI_SO LedgerInvariant final
     // IRRs that we need to think about some more before deciding
     // where to put them.
 
-    std::vector<double> IrrCsvGuar0    ;
-    std::vector<double> IrrDbGuar0     ;
-    std::vector<double> IrrCsvCurr0    ;
-    std::vector<double> IrrDbCurr0     ;
+    std::vector<double> IrrCsvGuar0;
+    std::vector<double> IrrDbGuar0;
+    std::vector<double> IrrCsvCurr0;
+    std::vector<double> IrrDbCurr0;
     std::vector<double> IrrCsvGuarInput;
-    std::vector<double> IrrDbGuarInput ;
+    std::vector<double> IrrDbGuarInput;
     std::vector<double> IrrCsvCurrInput;
-    std::vector<double> IrrDbCurrInput ;
+    std::vector<double> IrrDbCurrInput;
 
     // Special-case strings.
 
