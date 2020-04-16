@@ -292,8 +292,6 @@ void LedgerInvariant::Alloc(int len)
     Strings["SalesLoadRefundFootnote"       ] = &SalesLoadRefundFootnote       ;
     Strings["NoLapseEverFootnote"           ] = &NoLapseEverFootnote           ;
     Strings["NoLapseFootnote"               ] = &NoLapseFootnote               ;
-    Strings["MarketValueAdjFootnote"        ] = &MarketValueAdjFootnote        ;
-    Strings["ExchangeChargeFootnote0"       ] = &ExchangeChargeFootnote0       ;
     Strings["CurrentValuesFootnote"         ] = &CurrentValuesFootnote         ;
     Strings["DBOption1Footnote"             ] = &DBOption1Footnote             ;
     Strings["DBOption2Footnote"             ] = &DBOption2Footnote             ;
@@ -396,7 +394,6 @@ void LedgerInvariant::Alloc(int len)
     Strings["SubstandardTable"              ] = &SubstandardTable              ;
     Strings["DefnLifeIns"                   ] = &DefnLifeIns                   ;
     Strings["DefnMaterialChange"            ] = &DefnMaterialChange            ;
-    Strings["AvoidMec"                      ] = &AvoidMec                      ;
     Strings["PartMortTableName"             ] = &PartMortTableName             ;
     Strings["StateOfJurisdiction"           ] = &StateOfJurisdiction           ;
     Strings["PremiumTaxState"               ] = &PremiumTaxState               ;

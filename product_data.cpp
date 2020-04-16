@@ -295,8 +295,6 @@ void product_data::ascribe_members()
     ascribe("SalesLoadRefundFootnote"       , &product_data::SalesLoadRefundFootnote       );
     ascribe("NoLapseEverFootnote"           , &product_data::NoLapseEverFootnote           );
     ascribe("NoLapseFootnote"               , &product_data::NoLapseFootnote               );
-    ascribe("MarketValueAdjFootnote"        , &product_data::MarketValueAdjFootnote        );
-    ascribe("ExchangeChargeFootnote0"       , &product_data::ExchangeChargeFootnote0       );
     ascribe("CurrentValuesFootnote"         , &product_data::CurrentValuesFootnote         );
     ascribe("DBOption1Footnote"             , &product_data::DBOption1Footnote             );
     ascribe("DBOption2Footnote"             , &product_data::DBOption2Footnote             );

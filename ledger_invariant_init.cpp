@@ -429,8 +429,6 @@ void LedgerInvariant::Init(BasicValues const* b)
         SalesLoadRefundFootnote       = p.datum("SalesLoadRefundFootnote"        );
         NoLapseEverFootnote           = p.datum("NoLapseEverFootnote"            );
         NoLapseFootnote               = p.datum("NoLapseFootnote"                );
-        MarketValueAdjFootnote        = p.datum("MarketValueAdjFootnote"         );
-        ExchangeChargeFootnote0       = p.datum("ExchangeChargeFootnote0"        );
         CurrentValuesFootnote         = p.datum("CurrentValuesFootnote"          );
         DBOption1Footnote             = p.datum("DBOption1Footnote"              );
         DBOption2Footnote             = p.datum("DBOption2Footnote"              );
@@ -578,7 +576,6 @@ void LedgerInvariant::Init(BasicValues const* b)
 
     DefnLifeIns                = mc_str(b->yare_input_.DefinitionOfLifeInsurance);
     DefnMaterialChange         = mc_str(b->yare_input_.DefinitionOfMaterialChange);
-    AvoidMec                   = mc_str(b->yare_input_.AvoidMecMethod);
     PartMortTableName          = "1983 GAM"; // TODO ?? Hardcoded.
     StateOfJurisdiction        = mc_str(b->GetStateOfJurisdiction());
     PremiumTaxState            = mc_str(b->GetPremiumTaxState());

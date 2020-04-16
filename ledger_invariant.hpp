@@ -302,8 +302,6 @@ class LMI_SO LedgerInvariant final
     std::string SalesLoadRefundFootnote;
     std::string NoLapseEverFootnote;
     std::string NoLapseFootnote;
-    std::string MarketValueAdjFootnote;
-    std::string ExchangeChargeFootnote0;
     std::string CurrentValuesFootnote;
     std::string DBOption1Footnote;
     std::string DBOption2Footnote;
@@ -406,7 +404,6 @@ class LMI_SO LedgerInvariant final
     std::string SubstandardTable;
     std::string DefnLifeIns;
     std::string DefnMaterialChange;
-    std::string AvoidMec;
     std::string PartMortTableName;
 
     std::string StateOfJurisdiction;

@@ -285,8 +285,6 @@ class LMI_SO product_data
     glossed_string SalesLoadRefundFootnote;
     glossed_string NoLapseEverFootnote;
     glossed_string NoLapseFootnote;
-    glossed_string MarketValueAdjFootnote;
-    glossed_string ExchangeChargeFootnote0;
     glossed_string CurrentValuesFootnote;
     glossed_string DBOption1Footnote;
     glossed_string DBOption2Footnote;
