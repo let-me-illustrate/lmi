@@ -508,9 +508,22 @@ static std::string const S_IllRegCertClient =
 
 static std::string const S_FnMaturityAge =
   "Maturity age: {{EndtAge}}.";
+
 static std::string const S_FnPartialMortality =
-  "Columns reflect mortality, initially {{PartMortTableMult[0]}}"
-  " of the {{PartMortTableName}} table.";
+  "Columns reflect mortality, beginning at {{PartMortTableMult[0]}}"
+  " of the {{PartMortTableName}} table,"
+  " with all deaths at the end of each year"
+  "{{#SurviveToExpectancy}}"
+  " and survival limited to life expectancy"
+  "{{/SurviveToExpectancy}}"
+  "{{#SurviveToYear}}"
+  " and survival limited to {{SurvivalMaxYear}} years"
+  "{{/SurviveToYear}}"
+  "{{#SurviveToAge}}"
+  " and survival limited to age {{SurvivalMaxAge}}"
+  "{{/SurviveToAge}}"
+  ".";
+
 static std::string const S_FnProspectus =
   "Must be preceded or accompanied by a prospectus.";
 static std::string const S_FnInitialSpecAmt =
@@ -903,6 +916,8 @@ sample2ipp::sample2ipp()
 sample2xyz::sample2xyz()
 {
     item("DatabaseFilename")           = glossed_string("sample2xyz.database");
+    // Exotica.
+    item("FnPartialMortality")         = S_FnPartialMortality;
 }
 } // Unnamed namespace.
 
