@@ -47,16 +47,17 @@ less any monthly charges deducted.
 <b>{{CsvName}} Value:</b>
 {{AvName}} Value less {{ContractName}} debt.
 {{#Has1035ExchCharge}}
-{{CashSurrValueFootnote}}
+  {{CashSurrValueFootnote}}
 {{/Has1035ExchCharge}}
 </p>
 
 {{^IsInforce}}
-<p>
-<b>Current Illustrated Crediting Rate:</b>
-{{CreditingRateFootnote}}
-</p>
+  <p>
+  <b>Current Illustrated Crediting Rate:</b>
+  {{CreditingRateFootnote}}
+  </p>
 {{/IsInforce}}
+
 <p>
 <b>Current Values:</b>
 {{CurrentValuesFootnote}}
@@ -71,33 +72,19 @@ less any monthly charges deducted.
 {{DBOption2Footnote}}
 {{DBOption3Footnote}}
 
-<!-- The experience-rating conditional here is absurd. -->
-{{^AllowExperienceRating}}
 {{^Composite}}
-<p>
-<b>End of Year Age:</b>
-{{AttainedAgeFootnote}}
-</p>
+  <p>
+  <b>End of Year Age:</b>
+  {{AttainedAgeFootnote}}
+  </p>
 {{/Composite}}
-{{/AllowExperienceRating}}
 
-<!-- Group Experience Rating Logic -->
-{{#AllowExperienceRating}}
-</p>
-<p>
-<b>Experience Rating Risk Charge:</b>
-{{ExpRatRiskChargeFootnote}}
-</p>
-{{/AllowExperienceRating}}
-<!-- Group Experience Rating Logic -->
-{{^AllowExperienceRating}}
 {{#Has1035ExchCharge}}
-<p>
-<b>Exchange Charge:</b>
-{{ExchangeChargeFootnote1}}
-</p>
+  <p>
+  <b>Exchange Charge:</b>
+  {{ExchangeChargeFootnote1}}
+  </p>
 {{/Has1035ExchCharge}}
-{{/AllowExperienceRating}}
 
 {{^SinglePremium}}
   {{FlexiblePremiumFootnote}}
