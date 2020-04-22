@@ -1,6 +1,11 @@
 #!/bin/sh
 
 # Attempt to set up a git repository to be shared by multiple users.
+#
+# FETCH_HEAD doesn't get the right permissions, and that's a git
+# defect--see:
+#   https://lists.nongnu.org/archive/html/lmi/2020-03/msg00016.html
+#   https://public-inbox.org/git/20200319010321.18614-1-vz-git@zeitlins.org/T/#u
 
 # Unlike 'share_git1.sh', this script creates a non-bare repository.
 
