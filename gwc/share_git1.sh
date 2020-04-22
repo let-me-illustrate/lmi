@@ -7,6 +7,8 @@
 #   https://lists.nongnu.org/archive/html/lmi/2020-03/msg00016.html
 #   https://public-inbox.org/git/20200319010321.18614-1-vz-git@zeitlins.org/T/#u
 
+# Like 'share_git2.sh', but creates a bare repository.
+
 set -v
 
 # Start with a fresh throwaway directory.
@@ -15,7 +17,7 @@ rm -rf /tmp/eraseme
 mkdir -p /tmp/eraseme
 cd /tmp/eraseme || exit
 
-# expect group users to include 'pulse' as well as normal user:
+# Expect group users to include 'pulse' as well as normal user:
 getent group audio
 
 # Get this over with early. Reason: if script is piped into 'less',
@@ -31,6 +33,7 @@ sudo --user=pulse true
 # First method: emulate git-clone as three git commands, with
 # a single 'chgrp' call at exactly the right spot.
 
+# The crux of this method is 'git init':
 git init --bare --shared manual.git
 chgrp -R audio manual.git
 git -C manual.git remote add origin https://github.com/wxWidgets/zlib.git
@@ -44,7 +47,7 @@ ls -l ./manual.git/FETCH_HEAD
 # that of the second method, below.
 git -C manual.git pack-refs --all
 
-# this succeeds when run by owner:
+# This succeeds when run by owner:
 git -C manual.git fetch
 # this fails:
 sudo --user=pulse git -C manual.git fetch
@@ -65,8 +68,9 @@ umask 002
 chgrp audio .
 chmod g+ws .
 
+# The crux of this method is 'git clone':
 git clone --jobs=32 --bare --config core.SharedRepository=group https://github.com/wxWidgets/zlib.git
-# this succeeds when run by owner:
+# This succeeds when run by owner:
 git -C zlib.git fetch
 # this succeeds (but not without 'umask 002' above):
 sudo --user=pulse git -C zlib.git fetch
@@ -85,3 +89,7 @@ du -sb zlib.git manual.git
 git -C zlib.git fsck
 git -C manual.git fsck
 
+# List all files' permissions for comparison, e.g.:
+#   meld /srv/chroot/bullseye0/tmp/eraseme/ls-* &
+cd /tmp/eraseme/manual.git && ls -alR >/tmp/eraseme/ls-manual.git
+cd /tmp/eraseme/zlib.git   && ls -alR >/tmp/eraseme/ls-zlib.git

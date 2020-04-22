@@ -7,7 +7,7 @@
 #   https://lists.nongnu.org/archive/html/lmi/2020-03/msg00016.html
 #   https://public-inbox.org/git/20200319010321.18614-1-vz-git@zeitlins.org/T/#u
 
-# Unlike 'share_git1.sh', this script creates a non-bare repository.
+# Like 'share_git1.sh', but creates a non-bare repository.
 
 set -v
 
@@ -29,8 +29,10 @@ sudo --user=pulse true
 # a single 'chgrp' call at exactly the right spot.
 
 mkdir nonbare
-# Need to run 'chmod' because git didn't create this directory.
+# Need to run 'chmod' because git doesn't create this directory.
 chmod g+sw nonbare
+
+# The crux of this method is 'git init':
 git init --shared nonbare
 chgrp -R audio nonbare
 git -C nonbare remote add origin https://github.com/wxWidgets/zlib.git
@@ -59,6 +61,7 @@ chmod -R g=u nonbare
 
 # Second method: git-clone, and fix up permissions manually
 
+# The crux of this method is 'git clone':
 git clone --jobs=32 --config core.SharedRepository=group https://github.com/wxWidgets/zlib.git
 chgrp -R audio zlib
 # This is better than 'chmod -R g+s' (it affects only directories):
