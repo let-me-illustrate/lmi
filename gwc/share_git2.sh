@@ -75,11 +75,12 @@ git clone --jobs=32 --config core.SharedRepository=group https://github.com/wxWi
 chgrp -R audio zlib
 # This is better than 'chmod -R g+s' (it affects only directories):
 find zlib -type d -exec chmod g+s {} +
-# Specifying 's' here causes many 'S' occurrences in 'ls' output:
-# chmod -R g+swX zlib
+# Specifying 's' here would cause many 'S' occurrences in 'ls' output:
+#   chmod -R g+swX zlib
 # Specifying 'g+w' here would cause pack files to be group writable:
 chmod -R g=u zlib
-# Why doesn't 'g=u' override the earlier 'g+s'?
+# There, 'g=u' doesn't override the earlier 'g+s'--see:
+#   https://lists.nongnu.org/archive/html/lmi/2020-03/msg00019.html
 
 # Permissions seem to be okay...
 find ./zlib ! -perm -g=w |sed -e'/objects\/pack/d'

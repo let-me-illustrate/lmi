@@ -60,29 +60,40 @@ sudo --user=pulse git -C manual.git fetch
 
 # Second method: git-clone --bare --config core.SharedRepository=group
 
-# Instead of changing FETCH_HEAD's permissions below:
-umask 002
-
 chgrp audio .
 chmod g+ws .
 
 # The crux of this method is 'git clone':
 git clone --jobs=32 --bare --config core.SharedRepository=group https://github.com/wxWidgets/zlib.git
 
+# 'git clone' created its files with the intended group (so this:
+#   chgrp -R audio zlib.git
+# isn't needed), but it didn't make them group writable.
+# This is better than 'chmod -R g+s' (it affects only directories):
+find zlib.git -type d -exec chmod g+s {} +
+# Specifying 's' here would cause many 'S' occurrences in 'ls' output:
+#   chmod -R g+swX zlib.git
+# Specifying 'g+w' here would cause pack files to be group writable:
+chmod -R g=u zlib.git
+# There, 'g=u' doesn't override the earlier 'g+s'--see:
+#   https://lists.nongnu.org/archive/html/lmi/2020-03/msg00019.html
+
 # Permissions seem to be okay...
 find ./zlib.git ! -perm -g=w |sed -e'/objects\/pack/d'
-# ...though FETCH_HEAD doesn't yet exist:
+# ...but that's because FETCH_HEAD doesn't yet exist:
 ls -l ./zlib.git/*HEAD
 
 # This succeeds when run by owner:
 git -C zlib.git fetch
 
-# Permissions seem to be okay...
 find ./zlib.git ! -perm -g=w |sed -e'/objects\/pack/d'
-# ...including FETCH_HEAD:
+# Oops: FETCH_HEAD doesn't have group permissions:
 ls -l ./zlib.git/*HEAD
 
-# This succeeds (but not without 'umask 002' above):
+# This fails:
+sudo --user=pulse git -C zlib.git fetch
+# but it succeeds if FETCH_HEAD's permissions are fixed:
+chmod g+w zlib.git/FETCH_HEAD
 sudo --user=pulse git -C zlib.git fetch
 
 # The two methods produce somewhat similar results. Sizes:
