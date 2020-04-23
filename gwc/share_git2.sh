@@ -73,7 +73,10 @@ find zlib -type d -exec chmod g+s {} +
 chmod -R g=u zlib
 # Why doesn't 'g=u' override the earlier 'g+s'?
 
+# Permissions seem to be okay...
 find ./zlib ! -perm -g=w |sed -e'/objects\/pack/d'
+# ...but that's because FETCH_HEAD doesn't yet exist:
+ls -l ./zlib/.git/*HEAD
 
 # This succeeds when run by owner:
 git -C zlib fetch

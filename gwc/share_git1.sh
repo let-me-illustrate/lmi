@@ -70,9 +70,21 @@ chmod g+ws .
 
 # The crux of this method is 'git clone':
 git clone --jobs=32 --bare --config core.SharedRepository=group https://github.com/wxWidgets/zlib.git
+
+# Permissions seem to be okay...
+find ./zlib.git ! -perm -g=w |sed -e'/objects\/pack/d'
+# ...though FETCH_HEAD doesn't yet exist:
+ls -l ./zlib.git/*HEAD
+
 # This succeeds when run by owner:
 git -C zlib.git fetch
-# this succeeds (but not without 'umask 002' above):
+
+# Permissions seem to be okay...
+find ./zlib.git ! -perm -g=w |sed -e'/objects\/pack/d'
+# ...including FETCH_HEAD:
+ls -l ./zlib.git/*HEAD
+
+# This succeeds (but not without 'umask 002' above):
 sudo --user=pulse git -C zlib.git fetch
 
 # The two methods produce somewhat similar results. Sizes:
