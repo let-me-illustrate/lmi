@@ -7,9 +7,17 @@
 #   https://lists.nongnu.org/archive/html/lmi/2020-03/msg00016.html
 #   https://public-inbox.org/git/20200319010321.18614-1-vz-git@zeitlins.org/T/#u
 
+set -v
+
 # Like 'share_git2.sh', but creates a bare repository.
 
-set -v
+# Expect 022 here:
+umask
+# The FETCH_HEAD permission problem doesn't arise if umask is 002,
+# so one option is to execute
+#   umask 002
+# That affects only the shell in which this script runs, but it has a
+# persistent effect if run at the command line.
 
 # Start with a fresh throwaway directory.
 cd /tmp || exit
@@ -24,11 +32,6 @@ getent group audio
 # type the password before the screen fills and password characters
 # are treated as 'less' commands.
 sudo --user=pulse true
-
-# There would be no problem below if umask were 002, so one option
-# is to execute
-#   umask 002
-# so that FETCH_HEAD's permissions don't have to be changed below.
 
 # First method: emulate git-clone as three git commands, with
 # a single 'chgrp' call at exactly the right spot.
@@ -57,13 +60,8 @@ sudo --user=pulse git -C manual.git fetch
 
 # Second method: git-clone --bare --config core.SharedRepository=group
 
-# expect 022 here:
-umask
-# There is no problem below if umask is 002, so one option
-# is to execute
+# Instead of changing FETCH_HEAD's permissions below:
 umask 002
-# here. That affects only the shell in which this script runs,
-# though it has a persistent effect if run at the command line.
 
 chgrp audio .
 chmod g+ws .

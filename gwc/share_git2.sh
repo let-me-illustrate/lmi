@@ -7,9 +7,17 @@
 #   https://lists.nongnu.org/archive/html/lmi/2020-03/msg00016.html
 #   https://public-inbox.org/git/20200319010321.18614-1-vz-git@zeitlins.org/T/#u
 
+set -v
+
 # Like 'share_git1.sh', but creates a non-bare repository.
 
-set -v
+# Expect 022 here:
+umask
+# The FETCH_HEAD permission problem doesn't arise if umask is 002,
+# so one option is to execute
+#   umask 002
+# That affects only the shell in which this script runs, but it has a
+# persistent effect if run at the command line.
 
 # Start with a fresh throwaway directory.
 cd /tmp || exit
