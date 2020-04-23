@@ -82,8 +82,8 @@ du -sb zlib.git manual.git
 #      fetch = +refs/heads/*:refs/remotes/origin/*
 #    (which is just a default)
 #  - HEAD is
-#      refs/heads/master  [in zlib.git]
-#      refs/heads/wx      [in manual.git]
+#      refs/heads/master  [in manual.git]
+#      refs/heads/wx      [in zlib.git]
 #    though both seem to point to the same SHA1
 #  - git-fsck complains about an unborn branch, in manual.git only:
 git -C zlib.git fsck

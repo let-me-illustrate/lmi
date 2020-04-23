@@ -89,14 +89,11 @@ sudo --user=pulse git -C zlib fetch
 # The two methods produce somewhat similar results. Sizes:
 du -sb zlib nonbare/
 # are almost the same. Small differences:
-#  - nonbare/.git/config has this extra line under [remote "origin"]:
-#      fetch = +refs/heads/*:refs/remotes/origin/*
-#    (which is just a default)
 #  - HEAD is
-#      refs/heads/master  [in zlib]
-#      refs/heads/wx      [in nonbare]
+#      refs/heads/master  [in nonbare]
+#      refs/heads/wx      [in zlib]
 #    though both seem to point to the same SHA1
-#  - git-fsck complains about an unborn branch, in nonbare only:
+# git-fsck makes no complaint about either:
 git -C zlib fsck
 git -C nonbare fsck
 
