@@ -40,9 +40,7 @@ git -C nonbare fetch origin
 
 find ./nonbare ! -perm -g=w |sed -e'/objects\/pack/d'
 # Oops: FETCH_HEAD doesn't have group permissions:
-ls -l ./nonbare/.git/FETCH_HEAD
-chmod g+w nonbare/.git/FETCH_HEAD
-ls -l ./nonbare/.git/FETCH_HEAD
+ls -l ./nonbare/.git/*HEAD
 
 # This isn't really necessary; it just makes the result look more like
 # that of the second method, below.
@@ -53,7 +51,10 @@ git -C nonbare checkout master
 
 # This succeeds when run by owner:
 git -C nonbare fetch
-# This succeeds because FETCH_HEAD's permissions were fixed above:
+# this fails:
+sudo --user=pulse git -C nonbare fetch
+# but it succeeds if FETCH_HEAD's permissions are fixed:
+chmod g+w nonbare/.git/FETCH_HEAD
 sudo --user=pulse git -C nonbare fetch
 
 # Need to do this after fetching, for the worktree.
@@ -79,11 +80,12 @@ git -C zlib fetch
 
 find ./zlib ! -perm -g=w |sed -e'/objects\/pack/d'
 # Oops: FETCH_HEAD doesn't have group permissions:
-ls -l ./zlib/.git/FETCH_HEAD
-chmod g+w zlib/.git/FETCH_HEAD
-ls -l ./zlib/.git/FETCH_HEAD
+ls -l ./zlib/.git/*HEAD
 
-# This succeeds because FETCH_HEAD's permissions were fixed above:
+# This fails:
+sudo --user=pulse git -C zlib fetch
+# but it succeeds if FETCH_HEAD's permissions are fixed:
+chmod g+w zlib/.git/FETCH_HEAD
 sudo --user=pulse git -C zlib fetch
 
 # The two methods produce somewhat similar results. Sizes:

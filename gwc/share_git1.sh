@@ -41,7 +41,7 @@ git -C manual.git fetch origin
 
 find ./manual.git ! -perm -g=w |sed -e'/objects\/pack/d'
 # Oops: FETCH_HEAD doesn't have group permissions:
-ls -l ./manual.git/FETCH_HEAD
+ls -l ./manual.git/*HEAD
 
 # This isn't really necessary; it just makes the result look more like
 # that of the second method, below.
