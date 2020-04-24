@@ -36,82 +36,86 @@ sudo --user=pulse true
 # First method: emulate git-clone as three git commands, with
 # a single 'chgrp' call at exactly the right spot.
 
-mkdir nonbare
+inited="inited_nonbare"
+
+mkdir "$inited"
 # Need to run 'chmod' because git doesn't create this directory.
-chmod g+sw nonbare
+chmod g+sw "$inited"
 
 # The crux of this method is 'git init':
-git init --shared nonbare
-chgrp -R audio nonbare
-git -C nonbare remote add origin https://github.com/wxWidgets/zlib.git
-git -C nonbare fetch origin
+git init --shared "$inited"
+chgrp -R audio "$inited"
+git -C "$inited" remote add origin https://github.com/wxWidgets/zlib.git
+git -C "$inited" fetch origin
 
-find ./nonbare ! -perm -g=w |sed -e'/objects\/pack/d'
+find ./"$inited" ! -perm -g=w |sed -e'/objects\/pack/d'
 # Oops: FETCH_HEAD doesn't have group permissions:
-ls -l ./nonbare/.git/*HEAD
+ls -l ./"$inited"/.git/*HEAD
 
 # This isn't really necessary; it just makes the result look more like
 # that of the second method, below.
-git -C nonbare pack-refs --all
+git -C "$inited" pack-refs --all
 
 # Generate index and worktree:
-git -C nonbare checkout master
+git -C "$inited" checkout master
 
 # This succeeds when run by owner:
-git -C nonbare fetch
+git -C "$inited" fetch
 # this fails:
-sudo --user=pulse git -C nonbare fetch
+sudo --user=pulse git -C "$inited" fetch
 # but it succeeds if FETCH_HEAD's permissions are fixed:
-chmod g+w nonbare/.git/FETCH_HEAD
-sudo --user=pulse git -C nonbare fetch
+chmod g+w "$inited"/.git/FETCH_HEAD
+sudo --user=pulse git -C "$inited" fetch
 
 # Need to do this after fetching, for the worktree.
-chmod -R g=u nonbare
+chmod -R g=u "$inited"
 
 # Second method: git-clone, and fix up permissions manually
 
+cloned="cloned_nonbare"
+
 # The crux of this method is 'git clone':
-git clone --jobs=32 --config core.SharedRepository=group https://github.com/wxWidgets/zlib.git
-chgrp -R audio zlib
+git clone --jobs=32 --config core.SharedRepository=group https://github.com/wxWidgets/zlib.git "$cloned"
+chgrp -R audio "$cloned"
 # This is better than 'chmod -R g+s' (it affects only directories):
-find zlib -type d -exec chmod g+s {} +
+find "$cloned" -type d -exec chmod g+s {} +
 # Specifying 's' here would cause many 'S' occurrences in 'ls' output:
-#   chmod -R g+swX zlib
+#   chmod -R g+swX "$cloned"
 # Specifying 'g+w' here would cause pack files to be group writable:
-chmod -R g=u zlib
+chmod -R g=u "$cloned"
 # There, 'g=u' doesn't override the earlier 'g+s'--see:
 #   https://lists.nongnu.org/archive/html/lmi/2020-03/msg00019.html
 
 # Permissions seem to be okay...
-find ./zlib ! -perm -g=w |sed -e'/objects\/pack/d'
+find ./"$cloned" ! -perm -g=w |sed -e'/objects\/pack/d'
 # ...but that's because FETCH_HEAD doesn't yet exist:
-ls -l ./zlib/.git/*HEAD
+ls -l ./"$cloned"/.git/*HEAD
 
 # This succeeds when run by owner:
-git -C zlib fetch
+git -C "$cloned" fetch
 
-find ./zlib ! -perm -g=w |sed -e'/objects\/pack/d'
+find ./"$cloned" ! -perm -g=w |sed -e'/objects\/pack/d'
 # Oops: FETCH_HEAD doesn't have group permissions:
-ls -l ./zlib/.git/*HEAD
+ls -l ./"$cloned"/.git/*HEAD
 
 # This fails:
-sudo --user=pulse git -C zlib fetch
+sudo --user=pulse git -C "$cloned" fetch
 # but it succeeds if FETCH_HEAD's permissions are fixed:
-chmod g+w zlib/.git/FETCH_HEAD
-sudo --user=pulse git -C zlib fetch
+chmod g+w "$cloned"/.git/FETCH_HEAD
+sudo --user=pulse git -C "$cloned" fetch
 
 # The two methods produce somewhat similar results. Sizes:
-du -sb zlib nonbare/
+du -sb "$cloned" "$inited"
 # are almost the same. Small differences:
 #  - HEAD is
-#      refs/heads/master  [in nonbare]
-#      refs/heads/wx      [in zlib]
+#      refs/heads/master  [in inited_nonbare]
+#      refs/heads/wx      [in cloned_nonbare]
 #    though both seem to point to the same SHA1
 # git-fsck makes no complaint about either:
-git -C zlib fsck
-git -C nonbare fsck
+git -C "$cloned" fsck
+git -C "$inited" fsck
 
 # List all files' permissions for comparison, e.g.:
 #   meld /srv/chroot/bullseye0/tmp/eraseme/ls-* &
-cd /tmp/eraseme/nonbare && ls -alR >/tmp/eraseme/ls-nonbare
-cd /tmp/eraseme/zlib    && ls -alR >/tmp/eraseme/ls-zlib
+cd /tmp/eraseme/"$inited" && ls -alR >/tmp/eraseme/ls-"$inited"
+cd /tmp/eraseme/"$cloned" && ls -alR >/tmp/eraseme/ls-"$cloned"

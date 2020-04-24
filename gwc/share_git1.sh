@@ -36,81 +36,85 @@ sudo --user=pulse true
 # First method: emulate git-clone as three git commands, with
 # a single 'chgrp' call at exactly the right spot.
 
-# The crux of this method is 'git init':
-git init --bare --shared manual.git
-chgrp -R audio manual.git
-git -C manual.git remote add origin https://github.com/wxWidgets/zlib.git
-git -C manual.git fetch origin
+inited="inited_bare"
 
-find ./manual.git ! -perm -g=w |sed -e'/objects\/pack/d'
+# The crux of this method is 'git init':
+git init --bare --shared "$inited"
+chgrp -R audio "$inited"
+git -C "$inited" remote add origin https://github.com/wxWidgets/zlib.git
+git -C "$inited" fetch origin
+
+find ./"$inited" ! -perm -g=w |sed -e'/objects\/pack/d'
 # Oops: FETCH_HEAD doesn't have group permissions:
-ls -l ./manual.git/*HEAD
+ls -l ./"$inited"/*HEAD
 
 # This isn't really necessary; it just makes the result look more like
 # that of the second method, below.
-git -C manual.git pack-refs --all
+git -C "$inited" pack-refs --all
 
 # This succeeds when run by owner:
-git -C manual.git fetch
+git -C "$inited" fetch
 # this fails:
-sudo --user=pulse git -C manual.git fetch
+sudo --user=pulse git -C "$inited" fetch
 # but it succeeds if FETCH_HEAD's permissions are fixed:
-chmod g+w manual.git/FETCH_HEAD
-sudo --user=pulse git -C manual.git fetch
+chmod g+w "$inited"/FETCH_HEAD
+sudo --user=pulse git -C "$inited" fetch
 
 # Second method: git-clone --bare --config core.SharedRepository=group
 
 chgrp audio .
 chmod g+ws .
 
+cloned="cloned_bare"
+
 # The crux of this method is 'git clone':
-git clone --jobs=32 --bare --config core.SharedRepository=group https://github.com/wxWidgets/zlib.git
+git clone --jobs=32 --bare --config core.SharedRepository=group https://github.com/wxWidgets/zlib.git "$cloned"
 
 # 'git clone' created its files with the intended group (so this:
-#   chgrp -R audio zlib.git
+#   chgrp -R audio "$cloned"
 # isn't needed), but it didn't make them group writable.
 # This is better than 'chmod -R g+s' (it affects only directories):
-find zlib.git -type d -exec chmod g+s {} +
+find "$cloned" -type d -exec chmod g+s {} +
 # Specifying 's' here would cause many 'S' occurrences in 'ls' output:
-#   chmod -R g+swX zlib.git
+#   chmod -R g+swX "$cloned"
 # Specifying 'g+w' here would cause pack files to be group writable:
-chmod -R g=u zlib.git
+chmod -R g=u "$cloned"
 # There, 'g=u' doesn't override the earlier 'g+s'--see:
 #   https://lists.nongnu.org/archive/html/lmi/2020-03/msg00019.html
 
 # Permissions seem to be okay...
-find ./zlib.git ! -perm -g=w |sed -e'/objects\/pack/d'
+find ./"$cloned" ! -perm -g=w |sed -e'/objects\/pack/d'
 # ...but that's because FETCH_HEAD doesn't yet exist:
-ls -l ./zlib.git/*HEAD
+ls -l ./"$cloned"/*HEAD
 
 # This succeeds when run by owner:
-git -C zlib.git fetch
+git -C "$cloned" fetch
 
-find ./zlib.git ! -perm -g=w |sed -e'/objects\/pack/d'
+find ./"$cloned" ! -perm -g=w |sed -e'/objects\/pack/d'
 # Oops: FETCH_HEAD doesn't have group permissions:
-ls -l ./zlib.git/*HEAD
+ls -l ./"$cloned"/*HEAD
 
 # This fails:
-sudo --user=pulse git -C zlib.git fetch
+sudo --user=pulse git -C "$cloned" fetch
 # but it succeeds if FETCH_HEAD's permissions are fixed:
-chmod g+w zlib.git/FETCH_HEAD
-sudo --user=pulse git -C zlib.git fetch
+chmod g+w "$cloned"/FETCH_HEAD
+sudo --user=pulse git -C "$cloned" fetch
 
 # The two methods produce somewhat similar results. Sizes:
-du -sb zlib.git manual.git
+du -sb "$cloned" "$inited"
 # are almost the same. Small differences:
-#  - manual.git/config has this extra line under [remote "origin"]:
+#  - inited_bare/config has this extra line under [remote "origin"]:
 #      fetch = +refs/heads/*:refs/remotes/origin/*
 #    (which is just a default)
 #  - HEAD is
-#      refs/heads/master  [in manual.git]
-#      refs/heads/wx      [in zlib.git]
+#      refs/heads/master  [in inited_bare]
+#      refs/heads/wx      [in cloned_bare]
 #    though both seem to point to the same SHA1
-#  - git-fsck complains about an unborn branch, in manual.git only:
-git -C zlib.git fsck
-git -C manual.git fsck
+#  - git-fsck complains about an unborn branch, in inited_bare only:
+git -C "$cloned" fsck
+git -C "$inited" fsck
 
 # List all files' permissions for comparison, e.g.:
 #   meld /srv/chroot/bullseye0/tmp/eraseme/ls-* &
-cd /tmp/eraseme/manual.git && ls -alR >/tmp/eraseme/ls-manual.git
-cd /tmp/eraseme/zlib.git   && ls -alR >/tmp/eraseme/ls-zlib.git
+cd /tmp/eraseme/"$inited" && ls -alR >/tmp/eraseme/ls-"$inited"
+cd /tmp/eraseme/"$cloned" && ls -alR >/tmp/eraseme/ls-"$cloned"
