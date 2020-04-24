@@ -56,9 +56,6 @@ ls -l ./"$inited"/.git/*HEAD
 # that of the second method, below.
 git -C "$inited" pack-refs --all
 
-# Generate index and worktree:
-git -C "$inited" checkout master
-
 # This succeeds when run by owner:
 git -C "$inited" fetch
 # this fails:
@@ -67,7 +64,10 @@ sudo --user=pulse git -C "$inited" fetch
 chmod g+w "$inited"/.git/FETCH_HEAD
 sudo --user=pulse git -C "$inited" fetch
 
-# Need to do this after fetching, for the worktree.
+# To emulate a non-bare git clone, generate index and worktree:
+git -C "$inited" checkout master
+# ...and then fix their permissions manually--necessary despite
+# 'git init --shared' above):
 chmod -R g=u "$inited"
 
 # Second method: git-clone, then fix permissions manually--necessary
