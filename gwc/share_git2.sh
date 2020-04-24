@@ -70,7 +70,8 @@ sudo --user=pulse git -C "$inited" fetch
 # Need to do this after fetching, for the worktree.
 chmod -R g=u "$inited"
 
-# Second method: git-clone, and fix up permissions manually
+# Second method: git-clone, then fix permissions manually--necessary
+# despite '--config core.SharedRepository=group'.
 
 cloned="cloned_nonbare"
 

@@ -60,7 +60,8 @@ sudo --user=pulse git -C "$inited" fetch
 chmod g+w "$inited"/FETCH_HEAD
 sudo --user=pulse git -C "$inited" fetch
 
-# Second method: git-clone --bare --config core.SharedRepository=group
+# Second method: git-clone, then fix permissions manually--necessary
+# despite '--config core.SharedRepository=group'.
 
 chgrp audio .
 chmod g+ws .
