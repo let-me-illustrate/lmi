@@ -62,8 +62,9 @@ sudo --user=pulse git -C "$inited" fetch
 
 # To emulate a non-bare git clone, generate index and worktree:
 git -C "$inited" checkout master
-# ...and then fix their permissions manually--necessary despite
-# 'git init --shared' above):
+# ...and then fix their GID and permissions manually--necessary
+# despite 'git init --shared' above):
+chgrp -R audio "$inited"
 chmod -R g=u "$inited"
 
 # Second method: git-clone, then fix permissions manually--necessary
@@ -121,6 +122,11 @@ git -C "$inited" fsck
 # shellcheck disable=SC2012
 # shellcheck disable=SC2046
 ls -ld $(find .) |sed -e'/^.....w/d' -e'/objects\/pack/d'
+
+# Show any files whose GID isn't "audio", expecting '.' only.
+# shellcheck disable=SC2012
+# shellcheck disable=SC2046
+ls -ld $(find .) |sed -e'/ audio /d'
 
 # List all files' permissions for comparison, e.g.:
 #   meld /srv/chroot/bullseye0/tmp/eraseme/ls-* &

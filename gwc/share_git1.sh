@@ -125,6 +125,11 @@ git -C "$inited" fsck
 # shellcheck disable=SC2046
 ls -ld $(find .) |sed -e'/^.....w/d' -e'/objects\/pack/d'
 
+# Show any files whose GID isn't "audio", expecting '.' only.
+# shellcheck disable=SC2012
+# shellcheck disable=SC2046
+ls -ld $(find .) |sed -e'/ audio /d'
+
 # List all files' permissions for comparison, e.g.:
 #   meld /srv/chroot/bullseye0/tmp/eraseme/ls-* &
 cd /tmp/eraseme/"$inited" && ls -alR >/tmp/eraseme/ls-"$inited"
