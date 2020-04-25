@@ -49,7 +49,7 @@ git -C "$inited" remote add origin https://github.com/wxWidgets/zlib.git
 git -C "$inited" fetch origin
 
 find ./"$inited" ! -perm -g=w |sed -e'/objects\/pack/d'
-# Oops: FETCH_HEAD doesn't have group permissions:
+# Oops: FETCH_HEAD doesn't have group write permissions:
 ls -l ./"$inited"/.git/*HEAD
 
 # This isn't really necessary; it just makes the result look more like
@@ -96,7 +96,7 @@ ls -l ./"$cloned"/.git/*HEAD
 git -C "$cloned" fetch
 
 find ./"$cloned" ! -perm -g=w |sed -e'/objects\/pack/d'
-# Oops: FETCH_HEAD doesn't have group permissions:
+# Oops: FETCH_HEAD doesn't have group write permissions:
 ls -l ./"$cloned"/.git/*HEAD
 
 # This fails:
@@ -115,6 +115,16 @@ du -sb "$cloned" "$inited"
 # git-fsck makes no complaint about either:
 git -C "$cloned" fsck
 git -C "$inited" fsck
+
+# Show any files that aren't group writable, expecting '.' only.
+#
+# Something like this:
+#   stat --printf="%A %a\t%U %G %n\n" $(find .) |sed ...
+# could be used instead of 'ls', but the gain in robustness doesn't
+# seem worth the loss in readability.
+# shellcheck disable=SC2012
+# shellcheck disable=SC2046
+ls -ld $(find .) |sed -e'/^.....w/d' -e'/objects\/pack/d'
 
 # List all files' permissions for comparison, e.g.:
 #   meld /srv/chroot/bullseye0/tmp/eraseme/ls-* &
