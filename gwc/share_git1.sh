@@ -63,17 +63,11 @@ sudo --user=pulse git -C "$inited" fetch
 # Second method: git-clone, then fix permissions manually--necessary
 # despite '--config core.SharedRepository=group'.
 
-chgrp audio .
-chmod g+ws .
-
 cloned="cloned_bare"
 
 # The crux of this method is 'git clone':
 git clone --jobs=32 --bare --config core.SharedRepository=group https://github.com/wxWidgets/zlib.git "$cloned"
-
-# 'git clone' created its files with the intended group (so this:
-#   chgrp -R audio "$cloned"
-# isn't needed), but it didn't make them group writable.
+chgrp -R audio "$cloned"
 # This is better than 'chmod -R g+s' (it affects only directories):
 find "$cloned" -type d -exec chmod g+s {} +
 # Specifying 's' here would cause many 'S' occurrences in 'ls' output:
