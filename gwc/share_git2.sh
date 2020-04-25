@@ -38,10 +38,6 @@ sudo --user=pulse true
 
 inited="inited_nonbare"
 
-mkdir "$inited"
-# Need to run 'chmod' because git doesn't create this directory.
-chmod g+sw "$inited"
-
 # The crux of this method is 'git init':
 git init --shared "$inited"
 chgrp -R audio "$inited"
