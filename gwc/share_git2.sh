@@ -66,6 +66,7 @@ git -C "$inited" checkout master
 # despite 'git init --shared' above):
 chgrp -R audio "$inited"
 chmod -R g=u "$inited"
+find "$inited" -type d -exec chmod g+s {} +
 
 # Second method: git-clone, then fix permissions manually--necessary
 # despite '--config core.SharedRepository=group'.
