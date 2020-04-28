@@ -130,5 +130,7 @@ ls -ld $(find .) |sed -e'/ audio /d'
 
 # List all files' permissions for comparison, e.g.:
 #   meld /srv/chroot/bullseye0/tmp/eraseme/ls-* &
-cd /tmp/eraseme/"$inited" && ls -alR >/tmp/eraseme/ls-"$inited"
-cd /tmp/eraseme/"$cloned" && ls -alR >/tmp/eraseme/ls-"$cloned"
+# shellcheck disable=SC2046
+(cd "$inited" && ls -ld $(find .)) > ls-"$inited"
+# shellcheck disable=SC2046
+(cd "$cloned" && ls -ld $(find .)) > ls-"$cloned"
