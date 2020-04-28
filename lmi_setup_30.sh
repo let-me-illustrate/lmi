@@ -29,6 +29,20 @@ set -vx
 assert_not_su
 assert_not_chrooted
 
+# To copy the cache in /srv from a different drive:
+#
+# src=/mnt/sda1/srv/cache_for_lmi
+#
+# dst=/srv/cache_for_lmi
+# sudo mkdir ${dst} &&
+#   sudo chown greg:greg ${dst} &&
+#   cp --dereference --preserve --recursive ${src}/* ${dst}
+#
+# dst=/srv/chroot/"${CHRTNAME}"/cache_for_lmi
+# sudo mkdir ${dst} &&
+#   sudo chown greg:greg ${dst} &&
+#   cp --dereference --preserve --recursive ${src}/* ${dst}
+
 # If cached lmi downloads are available elsewhere, copy them now.
 # Copying cache_for_lmi/downloads/ is an optional step that merely
 # conserves bandwidth. Directory cache_for_lmi/ in a native msw
@@ -50,8 +64,13 @@ cp --dereference --preserve --recursive \
 
 # Also copy any desired msw software into the chroot now, e.g.:
 #   cp -a /srv/chroot/some-prior-chroot/opt/xyzzy /srv/chroot/${CHRTNAME}/opt/xyzzy
-# unless it requires running an "install" program, which must be postponed
-# until wine has been installed, below.
+# unless it requires running an "install" program, which must be
+# postponed until wine has been installed (in a later script). For
+# example, to copy all software installed in subdirectories of /opt/
+# other than /opt/lmi/ :
+#
+# setopt extended_glob &&
+#   sudo cp -a /mnt/sda1/srv/chroot/lmi-buster2/opt/^lmi /srv/chroot/"${CHRTNAME}"/opt
 
 # Configure ssh, iff this chroot needs write access to savannah.
 # The easiest way is to copy existing credentials, e.g.:
