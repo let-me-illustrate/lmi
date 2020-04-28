@@ -109,7 +109,8 @@ du -sb "$cloned" "$inited"
 git -C "$cloned" fsck
 git -C "$inited" fsck
 
-# Show any files that aren't group writable, expecting '.' only.
+# Show any files that aren't group writable, expecting '.' only
+# (excluding git pack files).
 #
 # Something like this:
 #   stat --printf="%A %a\t%U %G %n\n" $(find .) |sed ...
