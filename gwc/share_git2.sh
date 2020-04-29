@@ -121,18 +121,12 @@ git -C "$inited" fsck
 #   stat --printf="%A %a\t%U %G %n\n" $(find .) |sed ...
 # could be used instead of 'ls', but the gain in robustness doesn't
 # seem worth the loss in readability.
-# shellcheck disable=SC2012
-# shellcheck disable=SC2046
-ls -ld $(find .) |sed -e'/^.....w/d' -e'/objects\/pack/d'
+find . -print0 | xargs -0 ls -ld |sed -e'/^.....w/d' -e'/objects\/pack/d'
 
 # Show any files whose GID isn't "audio", expecting '.' only.
-# shellcheck disable=SC2012
-# shellcheck disable=SC2046
-ls -ld $(find .) |sed -e'/ audio /d'
+find . -print0 | xargs -0 ls -ld |sed -e'/ audio /d'
 
 # List all files' permissions for comparison, e.g.:
 #   meld /srv/chroot/bullseye0/tmp/eraseme/ls-* &
-# shellcheck disable=SC2046
-(cd "$inited" && ls -ld $(find .)) > ls-"$inited"
-# shellcheck disable=SC2046
-(cd "$cloned" && ls -ld $(find .)) > ls-"$cloned"
+(cd "$inited" && find . -print0 | xargs -0 ls -ld) > ls-"$inited"
+(cd "$cloned" && find . -print0 | xargs -0 ls -ld) > ls-"$cloned"
