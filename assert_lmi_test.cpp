@@ -50,10 +50,7 @@ int test_main(int, char*[])
         LMI_ASSERT(!not_true);
 
     // This use-case demonstrates why LMI_ASSERT_WITH_MSG's second
-    // parameter is not token-pasted. This is a deliberate tradeoff,
-    // with the consequence that this:
-    //   LMI_ASSERT_WITH_MSG(1&1,1&1);
-    // fails to compile.
+    // parameter is not token-pasted.
     BOOST_TEST_THROW
         (LMI_ASSERT_WITH_MSG(not_true,"<" << not_true << ">")
         ,std::runtime_error
@@ -66,7 +63,8 @@ int test_main(int, char*[])
         ,"Assertion '(not_true) == (true)' failed\n(expected 1 vs observed 0)." LMI_LOCATION
         );
 
-    // It does seem wrong that this fails to compile:
+    // This test demonstrated a historical error: it failed to compile
+    // when arguments were not parenthesized in the macro.
     LMI_ASSERT_EQUAL(1&1,1&1);
 
     return 0;
