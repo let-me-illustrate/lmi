@@ -28,6 +28,43 @@ grep centos /proc/mounts | cut -f2 -d" " | xargs umount
 rm -rf /srv/chroot/centos7lmi
 rm /etc/schroot/chroot.d/centos7lmi.conf
 
+# A known corporate firewall blocks gnu.org even on a GNU/Linux
+# server, yet allows github.com:
+if curl https://git.savannah.nongnu.org:443 >/dev/null 2>&1 ; then
+  GIT_URL_BASE=https://git.savannah.nongnu.org/cgit/lmi.git/plain
+else
+  GIT_URL_BASE=https://github.com/vadz/lmi/raw/master
+fi
+
+# Store dynamic configuration in a temporary file. This method is
+# simple and robust, and far better than trying to pass environment
+# variables across sudo and schroot barriers.
+
+       NORMAL_USER=$(id -un "$(logname)")
+   NORMAL_USER_UID=$(id -u  "$(logname)")
+
+if getent group lmi; then
+      NORMAL_GROUP=lmi
+  NORMAL_GROUP_GID=$(getent group "$NORMAL_GROUP" | cut -d: -f3)
+      CHROOT_USERS=$(getent group "$NORMAL_GROUP" | cut -d: -f4)
+else
+      NORMAL_GROUP=$(id -gn "$(logname)")
+  NORMAL_GROUP_GID=$(id -g  "$(logname)")
+      CHROOT_USERS=$(id -un "$(logname)")
+fi
+
+cat >/tmp/schroot_env <<EOF
+set -v
+    CHROOT_USERS=$CHROOT_USERS
+    GIT_URL_BASE=$GIT_URL_BASE
+    NORMAL_GROUP=$NORMAL_GROUP
+NORMAL_GROUP_GID=$NORMAL_GROUP_GID
+     NORMAL_USER=$NORMAL_USER
+ NORMAL_USER_UID=$NORMAL_USER_UID
+set +v
+EOF
+chmod 0666 /tmp/schroot_env
+
 set -evx
 
 stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
@@ -128,6 +165,8 @@ EOF
 chmod +x /srv/chroot/centos7lmi/tmp/setup0.sh
 schroot --chroot=centos7lmi --user=root --directory=/tmp ./setup0.sh
 
+cp -a /tmp/schroot_env /srv/chroot/centos7lmi/tmp
+
 cp -a ~/.zshrc /srv/chroot/centos7lmi/root/.zshrc
 cp -a ~/.zshrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.zshrc
 
@@ -164,7 +203,7 @@ wget -N -nv "${GIT_URL_BASE}"/lmi_setup_41.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_42.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_43.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_inc.sh
-chmod +x lmi_setup_*.sh
+chmod 0777 lmi_setup_*.sh
 
 . ./lmi_setup_inc.sh
 
@@ -172,10 +211,10 @@ set -vx
 
 # ./lmi_setup_10.sh
 # ./lmi_setup_11.sh
-cp -a lmi_setup_*.sh /srv/chroot/${CHRTNAME}/tmp
-schroot --chroot=${CHRTNAME} --user=root --directory=/tmp ./lmi_setup_20.sh
-schroot --chroot=${CHRTNAME} --user=root --directory=/tmp ./lmi_setup_21.sh
-# sudo -u "${NORMAL_USER}" ./lmi_setup_30.sh
+cp -a lmi_setup_*.sh /tmp/schroot_env /srv/chroot/${CHRTNAME}/tmp
+schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_20.sh
+schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_21.sh
+sudo                         --user="${NORMAL_USER}"                  ./lmi_setup_30.sh
 schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_40.sh
 schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_41.sh
 schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
@@ -188,6 +227,6 @@ schroot --chroot=centos7lmi --user=root --directory=/tmp ./setup1.sh
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Finished: $stamp1"
 
-seconds=$(($(date '+%s' -d "$stamp1") - $(date '+%s' -d "$stamp0")))
+seconds=$(($(date -u '+%s' -d "$stamp1") - $(date -u '+%s' -d "$stamp0")))
 elapsed=$(date -u -d @"$seconds" +'%H:%M:%S')
 echo "Elapsed: $elapsed"
