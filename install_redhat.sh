@@ -163,11 +163,15 @@ shell=/bin/zsh
 type=plain
 EOF
 
+mkdir -p /srv/cache_for_lmi
+du   -sb /srv/chroot/"${CHRTNAME}"/cache_for_lmi || echo "Okay."
 mkdir -p /srv/chroot/"${CHRTNAME}"/cache_for_lmi
-mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/cache_for_lmi || echo "Oops."
+mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/cache_for_lmi
 
 mkdir -p /var/cache/"${CODENAME}"
-mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Oops."
+du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Okay."
+mkdir -p /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
+mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 
 # ./lmi_setup_10.sh
 # ./lmi_setup_11.sh
