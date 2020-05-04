@@ -131,7 +131,7 @@ findmnt /var/cache/yum
 findmnt /proc
 findmnt /dev/pts
 
-yum --assumeyes install ncurses-term sudo zsh
+yum --assumeyes install ncurses-term less sudo vim zsh
 chsh -s /bin/zsh root
 chsh -s /bin/zsh "${NORMAL_USER}"
 
@@ -174,6 +174,9 @@ chmod +x /srv/chroot/centos7lmi/tmp/setup0.sh
 schroot --chroot=centos7lmi --user=root --directory=/tmp ./setup0.sh
 
 cp -a /tmp/schroot_env /srv/chroot/centos7lmi/tmp
+
+cp -a ~/.vimrc /srv/chroot/centos7lmi/root/.vimrc
+cp -a ~/.vimrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.vimrc
 
 cp -a ~/.zshrc /srv/chroot/centos7lmi/root/.zshrc
 cp -a ~/.zshrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.zshrc
