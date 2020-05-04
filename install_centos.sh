@@ -131,7 +131,7 @@ findmnt /var/cache/yum
 findmnt /proc
 findmnt /dev/pts
 
-yum --assumeyes install ncurses-term zsh
+yum --assumeyes install ncurses-term sudo zsh
 chsh -s /bin/zsh root
 chsh -s /bin/zsh "${NORMAL_USER}"
 
