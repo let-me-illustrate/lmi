@@ -21,12 +21,16 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-. ./lmi_setup_inc.sh
+set -evx
 
-# First, destroy any chroot left by a prior run.
-grep centos /proc/mounts | cut -f2 -d" " | xargs umount
-rm -rf /srv/chroot/centos7lmi
-rm /etc/schroot/chroot.d/centos7lmi.conf
+stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+echo "Started: $stamp0"
+
+# Override any too-restrictive default (e.g., 077).
+if [ "$(umask)" -ne 022 ]; then
+  printf "Overriding bogus umask %s\n" "$(umask)"
+  umask 022
+fi
 
 # A known corporate firewall blocks gnu.org even on a GNU/Linux
 # server, yet allows github.com:
@@ -35,6 +39,30 @@ if curl https://git.savannah.nongnu.org:443 >/dev/null 2>&1 ; then
 else
   GIT_URL_BASE=https://github.com/vadz/lmi/raw/master
 fi
+
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_11.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_20.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_21.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_30.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_40.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_41.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_42.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_43.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_inc.sh
+chmod 0777 lmi_setup_*.sh
+
+. ./lmi_setup_inc.sh
+
+set -evx
+
+assert_su
+assert_not_chrooted
+
+# First, destroy any chroot left by a prior run.
+grep centos /proc/mounts | cut -f2 -d" " | xargs umount
+rm -rf /srv/chroot/centos7lmi
+rm /etc/schroot/chroot.d/centos7lmi.conf
 
 # Store dynamic configuration in a temporary file. This method is
 # simple and robust, and far better than trying to pass environment
@@ -66,9 +94,6 @@ EOF
 chmod 0666 /tmp/schroot_env
 
 set -evx
-
-stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
-echo "Started: $stamp0"
 
 cat >/etc/schroot/chroot.d/centos7lmi.conf <<EOF
 [centos7lmi]
@@ -234,6 +259,13 @@ EOF
 
 chmod +x /srv/chroot/centos7lmi/tmp/setup1.sh
 schroot --chroot=centos7lmi --user=root --directory=/tmp ./setup1.sh
+
+# Copy log files that may be useful for tracking down problems with
+# certain commands whose output is voluminous and often uninteresting.
+# Embed a timestamp in the copies' names (no colons, for portability).
+fstamp=$(date -u +"%Y%m%dT%H%MZ" -d "$stamp0")
+cp -a /srv/chroot/centos7lmi/srv/chroot/${CHRTNAME}/home/"${NORMAL_USER}"/log /home/"${NORMAL_USER}"/lmi_rhlog_"${fstamp}"
+cp -a /srv/chroot/centos7lmi/srv/chroot/${CHRTNAME}/tmp/${CHRTNAME}-apt-get-log /home/"${NORMAL_USER}"/apt-get-log-"${fstamp}"
 
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Finished: $stamp1"
