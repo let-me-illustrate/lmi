@@ -94,6 +94,11 @@ mkdir -p /srv/chroot/centos7lmi/var/cache/yum
 # 'rbind' seems necessary because centos uses subdirs
 mount --rbind /var/cache/centos_lmi /srv/chroot/centos7lmi/var/cache/yum
 
+mkdir -p /var/cache/"${CODENAME}"
+du   -sb /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Okay."
+mkdir -p /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
+mount --bind /var/cache/"${CODENAME}" /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
+
 cat >/srv/chroot/centos7lmi/tmp/setup0.sh <<EOF
 #!/bin/sh
 set -evx
@@ -189,11 +194,6 @@ mkdir -p /srv/cache_for_lmi
 du   -sb /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/cache_for_lmi || echo "Okay."
 mkdir -p /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/cache_for_lmi
 mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/cache_for_lmi
-
-mkdir -p /var/cache/"${CODENAME}"
-du   -sb /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Okay."
-mkdir -p /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
-mount --bind /var/cache/"${CODENAME}" /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 
 cat >/srv/chroot/centos7lmi/tmp/setup1.sh <<EOF
 #!/bin/sh

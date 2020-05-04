@@ -81,6 +81,11 @@ umount /srv/chroot
 mount LABEL=lmi /srv/chroot
 findmnt /srv/chroot
 
+mkdir -p /var/cache/"${CODENAME}"
+du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Okay."
+mkdir -p /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
+mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
+
 # Suppress a nuisance: rh-based distributions provide a default
 # zsh logout file that clears the screen.
 sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /etc/zlogout
@@ -167,11 +172,6 @@ mkdir -p /srv/cache_for_lmi
 du   -sb /srv/chroot/"${CHRTNAME}"/cache_for_lmi || echo "Okay."
 mkdir -p /srv/chroot/"${CHRTNAME}"/cache_for_lmi
 mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/cache_for_lmi
-
-mkdir -p /var/cache/"${CODENAME}"
-du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Okay."
-mkdir -p /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
-mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 
 # ./lmi_setup_10.sh
 # ./lmi_setup_11.sh
