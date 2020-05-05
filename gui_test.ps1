@@ -32,8 +32,6 @@
 # Additional parameters, passed directly to wx_test, can be specified at the
 # end of the previous command line.
 
-$prefix = "/opt/lmi"
-
 # This script deliberately parallels gui_test.sh as closely as possible, in
 # particular the same sed syntax is used for the search expressions to
 # facilitate keeping them in sync between the two files, even if this requires
@@ -156,6 +154,8 @@ $test_ignore_patterns = $gui_test_clutter   `
     -creplace '^/'                          `
     -creplace '/d$'                         |
     Where-Object {$_}
+
+$prefix = "/opt/lmi"
 
 # Directory for test logs.
 $log_dir = "$prefix/gcc/i686-w64-mingw32/logs"
