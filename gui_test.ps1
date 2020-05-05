@@ -40,6 +40,20 @@ $prefix = "/opt/lmi"
 # some extra logic below to transform it into an array of regex patterns in the
 # format understood by PowerShell.
 
+# Lines beginning with a capitalized word, viz.
+#   /^NOTE: starting the test suite$/d
+# at the beginning and, e.g.,
+#   /^SUCCESS: 21 tests successfully completed\.$/d
+#   /^NOTE: 4 tests were skipped$/d
+# at the end, are deliberately not filtered out.
+
+# Output containing the substring
+#   'not running distribution tests'
+# is filtered out because it results from running 'wx_test' without
+# any proprietary input subdirectory. SOMEDAY !! It would be good to
+# filter out whatever normal output is seen when such a subdirectory
+# is used.
+
 $gui_test_clutter='
 /^about_dialog_version: started$/d
 /^About dialog version string is .[[:digit:]]\+T[[:digit:]]\+Z.\.$/d
