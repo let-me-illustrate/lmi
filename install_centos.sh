@@ -110,7 +110,6 @@ apt-get update
 apt-get --assume-yes install schroot rinse
 rinse --arch amd64 --distribution centos-7 \
   --directory /srv/chroot/centos7lmi \
-  --mirror http://mirror.net.cen.ct.gov/centos/7.7.1908/os/x86_64/Packages \
 
 mkdir -p /var/cache/centos_lmi
 # There are probably a few directories here, with no regular files.
