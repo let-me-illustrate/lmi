@@ -149,7 +149,7 @@ exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
 log_dir="$exec_prefix"/logs
 mkdir --parents "$log_dir"
 
-cd /opt/lmi/src/lmi
+cd "$prefix"/src/lmi
 
-$PERFORM /opt/lmi/bin/wx_test "$@" --ash_nazg --data_path=/opt/lmi/data 2>&1 \
+$PERFORM "$prefix"/bin/wx_test "$@" --ash_nazg --data_path="$prefix"/data 2>&1 \
   | tee "$log_dir"/gui_test | sed -e "$gui_test_clutter"
