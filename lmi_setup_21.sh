@@ -53,7 +53,6 @@ usermod -aG sudo "${NORMAL_USER}" || echo "Oops."
 getent group 1001 || groupadd --gid=1001 lmi || echo "Oops."
 usermod -aG lmi "${NORMAL_USER}" || echo "Oops."
 
-# Here, the 'lmi' group should probably be the owner, eventually.
 mkdir -p /opt/lmi
 chown "${NORMAL_USER}":"${NORMAL_GROUP}" /opt/lmi
 mkdir -p /etc/opt/lmi
