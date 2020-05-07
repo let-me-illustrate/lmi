@@ -26,11 +26,7 @@ set -evx
 stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
 
-# Override any too-restrictive default (e.g., 077).
-if [ "$(umask)" -ne 022 ]; then
-  printf "Overriding bogus umask %s\n" "$(umask)"
-  umask 022
-fi
+umask g=rwx
 
 # A known corporate firewall blocks gnu.org even on a GNU/Linux
 # server, yet allows github.com:
