@@ -27,7 +27,7 @@ IF EXIST C:\cygwin\NUL       GOTO FoundOldInstallation
 IF EXIST C:\cygwin64_lmi\NUL GOTO FoundOldInstallation
 
 C:
-cd C:\cache_for_lmi
+cd C:\srv\cache_for_lmi
 START "Installing Cygwin" /WAIT setup-x86_64 ^
   --wait --quiet-mode ^
   --site http://mirrors.kernel.org/sourceware/cygwin/ ^
@@ -35,8 +35,8 @@ START "Installing Cygwin" /WAIT setup-x86_64 ^
    "autoconf,automake,bc,bsdtar,curl,dos2unix,doxygen,gdb,git,libtool,make,openssh,patch,pkg-config,rsync,unzip,vim,wget,zip,zsh"
 cd C:\cygwin64_lmi\etc
 echo # >> fstab
-echo C:/opt/lmi             /opt/lmi       lmi_specific binary,user 0 0 >> fstab
-echo C:/cache_for_lmi       /cache_for_lmi lmi_specific binary,user 0 0 >> fstab
+echo C:/opt/lmi           /opt/lmi           lmi_specific binary,user 0 0 >> fstab
+echo C:/srv/cache_for_lmi /srv/cache_for_lmi lmi_specific binary,user 0 0 >> fstab
 echo Cygwin installation seems to have succeeded
 GOTO End
 
@@ -45,4 +45,4 @@ echo Cygwin appears already to have been installed
 GOTO End
 
 :End
-cd C:\cache_for_lmi
+cd C:\srv\cache_for_lmi

@@ -60,8 +60,8 @@ mkdir -p /etc/opt/lmi
 chown "${NORMAL_USER}":"${NORMAL_GROUP}" /etc/opt/lmi
 mkdir -p /var/opt/lmi
 chown "${NORMAL_USER}":"${NORMAL_GROUP}" /var/opt/lmi
-mkdir -p /cache_for_lmi
-chown "${NORMAL_USER}":"${NORMAL_GROUP}" /cache_for_lmi
+mkdir -p /srv/cache_for_lmi
+chown "${NORMAL_USER}":"${NORMAL_GROUP}" /srv/cache_for_lmi
 
 chsh -s /bin/zsh "${NORMAL_USER}"
 

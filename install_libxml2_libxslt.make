@@ -46,7 +46,7 @@ mingw_dir     := /opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/gcc_msw
 prefix        := /opt/lmi/local
 exec_prefix   := $(prefix)/$(LMI_COMPILER)_$(LMI_TRIPLET)
 
-cache_dir     := /cache_for_lmi/downloads
+cache_dir     := /srv/cache_for_lmi/downloads
 
 build_dir     := $(exec_prefix)/xml-ad_hoc
 

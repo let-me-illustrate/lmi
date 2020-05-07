@@ -23,7 +23,7 @@
 
 prefix    := /opt/lmi
 
-cache_dir := /cache_for_lmi/downloads
+cache_dir := /srv/cache_for_lmi/downloads
 
 # In the past, it seemed necessary to specify a mirror, e.g.:
 #  mirror := https://easynews.dl.sourceforge.net/sourceforge
@@ -134,8 +134,8 @@ all: boost cgicc jing sample trang xmlwrapp
 #   pushd /tmp
 #   mkdir original
 #   mkdir modified
-#   cd /tmp/original && tar -xjvf /cache_for_lmi/downloads/cgicc-3.1.4.tar.bz2
-#   cd /tmp/modified && tar -xjvf /cache_for_lmi/downloads/cgicc-3.1.4.tar.bz2
+#   cd /tmp/original && tar -xjvf /srv/cache_for_lmi/downloads/cgicc-3.1.4.tar.bz2
+#   cd /tmp/modified && tar -xjvf /srv/cache_for_lmi/downloads/cgicc-3.1.4.tar.bz2
 # Patch first with '--dry-run' to be sure, then for real:
 #   patch --strip=1 --dry-run </opt/lmi/src/lmi/cgicc-3.1.4.patch
 #   patch --strip=1 </opt/lmi/src/lmi/cgicc-3.1.4.patch

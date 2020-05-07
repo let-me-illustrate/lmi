@@ -169,9 +169,9 @@ type=plain
 EOF
 
 mkdir -p /srv/cache_for_lmi
-du   -sb /srv/chroot/"${CHRTNAME}"/cache_for_lmi || echo "Okay."
-mkdir -p /srv/chroot/"${CHRTNAME}"/cache_for_lmi
-mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/cache_for_lmi
+du   -sb /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi || echo "Okay."
+mkdir -p /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
+mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
 
 # ./lmi_setup_10.sh
 # ./lmi_setup_11.sh

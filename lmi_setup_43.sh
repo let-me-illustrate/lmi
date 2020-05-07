@@ -42,7 +42,7 @@ git remote set-url --push origin chicares@git.sv.gnu.org:/srv/git/lmi.git
 # First, copy "blessed" repository (here, 'cp' is sufficient: this
 # bare repository has no references that need to be resolved):
 cd /opt/lmi || { printf 'failed: cd\n'; exit 3; }
-cp --dereference --preserve --recursive /cache_for_lmi/blessed .
+cp --dereference --preserve --recursive /srv/cache_for_lmi/blessed .
 # Then create a working copy by cloning the bare repository...
 git clone -b master file:///opt/lmi/blessed/proprietary
 # ...and verify it:

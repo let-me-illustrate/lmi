@@ -38,14 +38,14 @@ assert_not_chrooted
 #   sudo chown greg:greg ${dst} &&
 #   cp --dereference --preserve --recursive ${src}/* ${dst}
 #
-# dst=/srv/chroot/"${CHRTNAME}"/cache_for_lmi
+# dst=/srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
 # sudo mkdir ${dst} &&
 #   sudo chown greg:greg ${dst} &&
 #   cp --dereference --preserve --recursive ${src}/* ${dst}
 
 # If cached lmi downloads are available elsewhere, copy them now.
 # Copying cache_for_lmi/downloads/ is an optional step that merely
-# conserves bandwidth. Directory cache_for_lmi/ in a native msw
+# conserves bandwidth. Directory /srv/cache_for_lmi/ in a native msw
 # installation also contains cygwin files, which are not wanted in a
 # chroot. For convenience, add a bare repository of proprietary files
 # to this directory (after making sure it's up to date), e.g.:
@@ -54,10 +54,10 @@ assert_not_chrooted
 #     /srv/chroot/some-prior-chroot/opt/lmi/blessed/ /srv/cache_for_lmi
 # to update the host, and then:
 cp --dereference --preserve --recursive \
-  /srv/cache_for_lmi/* /srv/chroot/${CHRTNAME}/cache_for_lmi/ || true
+  /srv/cache_for_lmi/* /srv/chroot/${CHRTNAME}/srv/cache_for_lmi/ || true
 # Messages like
 #  cp: '/srv/cache_for_lmi/downloads' and
-#    '/srv/chroot/lmi_bullseye_1/cache_for_lmi/downloads'
+#    '/srv/chroot/lmi_bullseye_1/srv/cache_for_lmi/downloads'
 #    are the same file
 # may arise, harmlessly, because of a mount command in an upstream
 # script.

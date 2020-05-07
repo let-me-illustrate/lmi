@@ -155,7 +155,7 @@ then
         sudo apt install -y $packages_list
     fi
 
-    # Mount /opt/lmi and /cache_for_lmi directories.
+    # Mount /opt/lmi and /srv/cache_for_lmi directories.
     # Unfortunately sudo must be used because we don't have permissions to
     # write to /opt and / directories.
     mkdir --parents /mnt/c/opt/lmi/src/lmi
@@ -165,12 +165,12 @@ then
         [ ! -d /opt/lmi ] && sudo mkdir /opt/lmi
         sudo mount --bind /mnt/c/opt/lmi /opt/lmi
     fi
-    mkdir --parents /mnt/c/cache_for_lmi
-    restore_cache_mount=$(mount | grep '/cache_for_lmi')
+    mkdir --parents /mnt/c/srv/cache_for_lmi
+    restore_cache_mount=$(mount | grep '/srv/cache_for_lmi')
     if [ -z "$restore_cache_mount" ]
     then
-        [ ! -d /cache_for_lmi ] && sudo mkdir /cache_for_lmi
-        sudo mount --bind /mnt/c/cache_for_lmi /cache_for_lmi
+        [ ! -d /srv/cache_for_lmi ] && sudo mkdir /srv/cache_for_lmi
+        sudo mount --bind /mnt/c/srv/cache_for_lmi /srv/cache_for_lmi
     fi
 fi
 
@@ -217,23 +217,23 @@ then
     # It seems quite unlikely that anyone who's building lmi would have
     # any other need for mounts with the names used here.
 
-    restore_cache_mount=$(mount --mount-entries | grep '/cache_for_lmi ')
+    restore_cache_mount=$(mount --mount-entries | grep '/srv/cache_for_lmi ')
     [ -z "$restore_cache_mount" ] \
-      || printf '%s\n' "$restore_cache_mount" | grep --silent 'C:/cache_for_lmi' \
+      || printf '%s\n' "$restore_cache_mount" | grep --silent 'C:/srv/cache_for_lmi' \
       || printf 'Replacing former cache mount:\n  %s\n' "$restore_cache_mount" >/dev/tty
-    mount --force "C:/cache_for_lmi" "/cache_for_lmi"
+    mount --force "C:/srv/cache_for_lmi" "/srv/cache_for_lmi"
 fi
 
-# Downloaded archives are kept in /cache_for_lmi/downloads/ because
+# Downloaded archives are kept in /srv/cache_for_lmi/downloads/ because
 # they are costly to download and some host might be temporarily
 # unavailable.
 
-mkdir --parents /cache_for_lmi/downloads
+mkdir --parents /srv/cache_for_lmi/downloads
 
 mount
 
 md5sum "$0"
-find /cache_for_lmi/downloads -type f -print0 | xargs --null md5sum
+find /srv/cache_for_lmi/downloads -type f -print0 | xargs --null md5sum
 
 make "$coefficiency" --output-sync=recurse -f install_miscellanea.make clobber
 make "$coefficiency" --output-sync=recurse -f install_miscellanea.make
@@ -269,7 +269,7 @@ do
     ./install_wx.sh
     ./install_wxpdfdoc.sh
 
-    find /cache_for_lmi/downloads -type f -print0 | xargs --null md5sum
+    find /srv/cache_for_lmi/downloads -type f -print0 | xargs --null md5sum
 
     # Source this script only for commands that depend upon it.
     . ./set_toolchain.sh

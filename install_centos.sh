@@ -217,26 +217,14 @@ shell=/bin/zsh
 type=plain
 EOF
 
-# 'cache_for_lmi' is a subdirectory of the root, in a guest used for
-# building lmi; but it is a subdirectory of /srv in a host used for
-# creating a guest for building lmi, because a corporation that owns
-# a host server might not allow a subdirectory of the system root to
-# be created.
-#
-# This centos chroot is a guest of an underlying host, but its purpose
-# is to emulate such a host. Therefore, its 'cache_for_lmi' directory
-# is a subdirectory of its /srv.
-#
-# The same host directory is mounted in the ultimate debian guest here
-# and now, only because that's so readily done.
-
 mkdir -p /srv/cache_for_lmi
 du   -sb /srv/chroot/centos7lmi/srv/cache_for_lmi || echo "Okay."
 mkdir -p /srv/chroot/centos7lmi/srv/cache_for_lmi
 mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/cache_for_lmi
-du   -sb /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/cache_for_lmi || echo "Okay."
-mkdir -p /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/cache_for_lmi
-mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/cache_for_lmi
+# Might as well do likewise now for ${CHRTNAME} as well.
+du   -sb /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi || echo "Okay."
+mkdir -p /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
+mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
 
 cat >/srv/chroot/centos7lmi/tmp/setup1.sh <<EOF
 #!/bin/sh

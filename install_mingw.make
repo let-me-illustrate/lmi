@@ -45,7 +45,7 @@ file_list   = $($(version))
 mingw_dir  := /opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/gcc_msw
 prefix     := $(mingw_dir)
 
-cache_dir  := /cache_for_lmi/downloads
+cache_dir  := /srv/cache_for_lmi/downloads
 
 ad_hoc_dir := /opt/lmi/zzz/mingw-ad_hoc/ad_hoc
 
