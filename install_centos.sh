@@ -198,8 +198,15 @@ cp -a /tmp/schroot_env /srv/chroot/centos7lmi/tmp
 cp -a ~/.vimrc /srv/chroot/centos7lmi/root/.vimrc
 cp -a ~/.vimrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.vimrc
 
+# Experimentally, instead of this:
+# cp -a ~/.zshrc /srv/chroot/centos7lmi/root/.zshrc
+# cp -a ~/.zshrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.zshrc
+# do this:
+wget -N -nv "${GIT_URL_BASE}"/gwc/.zshrc
 cp -a ~/.zshrc /srv/chroot/centos7lmi/root/.zshrc
 cp -a ~/.zshrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.zshrc
+# If that works well, then treat vim configuration the same way,
+# here and elsewhere.
 
 cat >/srv/chroot/centos7lmi/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
 [${CHRTNAME}]
