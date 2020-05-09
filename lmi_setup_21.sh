@@ -53,13 +53,17 @@ usermod -aG sudo "${NORMAL_USER}" || echo "Oops."
 getent group 1001 || groupadd --gid=1001 lmi || echo "Oops."
 usermod -aG lmi "${NORMAL_USER}" || echo "Oops."
 
-mkdir -p /opt/lmi
+mkdir --parents /opt/lmi
+chmod g=u+s     /opt/lmi
 chown "${NORMAL_USER}":"${NORMAL_GROUP}" /opt/lmi
-mkdir -p /etc/opt/lmi
+mkdir --parents /etc/opt/lmi
+chmod g=u+s     /etc/opt/lmi
 chown "${NORMAL_USER}":"${NORMAL_GROUP}" /etc/opt/lmi
-mkdir -p /var/opt/lmi
+mkdir --parents /var/opt/lmi
+chmod g=u+s     /var/opt/lmi
 chown "${NORMAL_USER}":"${NORMAL_GROUP}" /var/opt/lmi
-mkdir -p /srv/cache_for_lmi
+mkdir --parents /srv/cache_for_lmi
+chmod g=u+s     /srv/cache_for_lmi
 chown "${NORMAL_USER}":"${NORMAL_GROUP}" /srv/cache_for_lmi
 
 chsh -s /bin/zsh "${NORMAL_USER}"
