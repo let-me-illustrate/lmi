@@ -74,6 +74,7 @@ $(MinGW-8_1_0)-md5 := 28ec1e65ab85a9e1043998516045ab62
 # Utilities ####################################################################
 
 BSDTAR := bsdtar
+CHMOD  := chmod
 CP     := cp
 ECHO   := echo
 MD5SUM := md5sum
@@ -132,3 +133,4 @@ WGETFLAGS := --no-verbose
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $(mirror)/$@
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
 	$(BSDTAR) --extract $(BSDTARFLAGS) --directory=$(ad_hoc_dir) --file=$(cache_dir)/$@
+	$(CHMOD) -R g=u $(ad_hoc_dir)
