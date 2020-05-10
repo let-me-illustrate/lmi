@@ -37,13 +37,13 @@ if ((Test-Path -Path $wsl_registry) -And `
 }
 
 # Create the download directory.
-$dir = 'C:\cache_for_lmi\downloads\'
+$dir = 'C:\srv\cache_for_lmi\downloads\'
 If (!(Test-Path -Path $dir)) {
     New-Item -ItemType Directory -Force -Path $dir
 }
 
 # Download the OS distribution.
-$path = 'C:\cache_for_lmi\downloads\Ubuntu_18_04.appx'
+$path = 'C:\srv\cache_for_lmi\downloads\Ubuntu_18_04.appx'
 If (!(Test-Path -Path $path)) {
     Write-Output ('Downloading "Ubuntu 18.04"...')
     $os_uri = 'https://aka.ms/wsl-ubuntu-1804'

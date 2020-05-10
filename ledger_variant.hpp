@@ -137,8 +137,8 @@ class LMI_SO LedgerVariant final
     std::vector<double> KFactor;
 
     // Nonscalable scalars.
-    double          LapseMonth;
-    double          LapseYear;
+    double LapseMonth;
+    double LapseYear;
 
   private:
     void Alloc(int len);
@@ -147,12 +147,12 @@ class LMI_SO LedgerVariant final
     void Init();
 
     // Nonscalable scalars.
-    double  InitAnnLoanCredRate;
-    double  InitAnnGenAcctInt;
-    double  InitAnnSepAcctGrossInt;
-    double  InitAnnSepAcctNetInt;
-    double  InitTgtPremHiLoadRate; // Rate on first dollar, at maximum premium tax rate.
-    double  InitMlyPolFee;         // Nonscalable: policy parameter (unlike 'PolicyFee').
+    double InitAnnLoanCredRate;
+    double InitAnnGenAcctInt;
+    double InitAnnSepAcctGrossInt;
+    double InitAnnSepAcctNetInt;
+    double InitTgtPremHiLoadRate; // Rate on first dollar, at maximum premium tax rate.
+    double InitMlyPolFee;         // Nonscalable: policy parameter (unlike 'PolicyFee').
 
     // Special cases.
     int              Length;

@@ -39,16 +39,17 @@ Open a "Command Prompt" window, and enable pasting into it:
 Copy and paste the following lines into the "Command Prompt" window:
 
   C:
-  mkdir C:\cache_for_lmi
+  mkdir C:\srv
+  mkdir C:\srv\cache_for_lmi
 
-Save the following files into the 'C:\cache_for_lmi' directory:
+Save the following files into the 'C:\srv\cache_for_lmi' directory:
 
   https://cygwin.com/setup-x86_64.exe
   https://git.savannah.gnu.org/cgit/lmi.git/plain/install_cygwin.bat
 
 Copy and paste the following lines into the "Command prompt" window:
 
-  cd C:\cache_for_lmi
+  cd C:\srv\cache_for_lmi
   install_cygwin
 
 After a few minutes, you should see something like this at the end:
@@ -65,8 +66,8 @@ Open a "Windows PowerShell" window as Administrator:
 
 Copy and paste the following lines into the "Windows PowerShell" window:
 
-  New-Item -ItemType Directory -Force -Path C:\cache_for_lmi
-  Set-Location -Path C:\cache_for_lmi
+  New-Item -ItemType Directory -Force -Path C:\srv\cache_for_lmi
+  Set-Location -Path C:\srv\cache_for_lmi
   Invoke-WebRequest -Uri https://git.savannah.gnu.org/cgit/lmi.git/plain/install_wsl.ps1 -OutFile install_wsl.ps1 -UseBasicParsing
   Set-ExecutionPolicy Unrestricted
   Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
@@ -81,7 +82,7 @@ privileges are not required either).
 Open a "Windows PowerShell" window (administrator privileges are not required)
 and execute the installation script:
 
-  C:\cache_for_lmi\install_wsl.ps1
+  C:\srv\cache_for_lmi\install_wsl.ps1
 
 Note: Only Ubuntu 18.04 is supported now because non-Debian-based OS won't work,
 as we use apt, Debian and Ubuntu 16.04 uses the i686-w64-mingw32-g++ package of
@@ -101,7 +102,7 @@ Close the "Windows PowerShell" window.
 
 (B) Install lmi
 
-[Experienced users: Make sure 'C:\cache_for_lmi\' contains any files you
+[Experienced users: Make sure 'C:\srv\cache_for_lmi\' contains any files you
 need to download manually due to corporate firewall weirdness.]
 
 Start a Cygwin shell:

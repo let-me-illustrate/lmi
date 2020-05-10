@@ -47,8 +47,6 @@ scl enable rh-git218 bash
 
 # from lmi_setup_21.sh [do this as root]
 
-# and likewise for /cache_for_lmi
-
 # Repair /usr/share/libtool/.../ltmain.sh as indicated here:
 #   https://lists.gnu.org/archive/html/libtool-patches/2011-06/msg00001.html
 # Do this as root because root owns the file.

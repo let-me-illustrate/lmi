@@ -460,9 +460,8 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     // for all other bases. TODO ?? TAXATION !! How should we handle MEC-avoid
     // solves on bases other than current?
 
-    InvariantValues().InforceYear  = yare_input_.InforceYear;
-    InvariantValues().InforceMonth = yare_input_.InforceMonth;
-
+    // INPUT !! This should depend only on 'yare_input_.InforceIsMec',
+    // which probably should be forced to 'false' for new business.
     bool inforce_is_mec =
            yare_input_.EffectiveDate != yare_input_.InforceAsOfDate
         && yare_input_.InforceIsMec

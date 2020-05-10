@@ -23,8 +23,8 @@
 
 set -vxe
 
-# A repository is cached in /cache_for_lmi/vcs/, where it can be kept
-# up to date and reused cheaply--whereas cloning it from a remote
+# A repository is cached in /srv/cache_for_lmi/vcs/, where it can be
+# kept up to date and reused cheaply--whereas cloning it from a remote
 # host takes considerable time and bandwidth, and fails if internet
 # connectivity is lost, or the host is temporarily unavailable, or
 # it is blocked by a corporate firewall.
@@ -55,7 +55,7 @@ repo_name="wxpdfdoc"
 
 # Script commands ##############################################################
 
-proxy_parent_dir="/cache_for_lmi/vcs"
+proxy_parent_dir="/srv/cache_for_lmi/vcs"
 mkdir --parents "$proxy_parent_dir"
 
 proxy_wxpdfdoc_dir="$proxy_parent_dir"/$repo_name

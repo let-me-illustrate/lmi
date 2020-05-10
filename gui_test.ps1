@@ -1,5 +1,3 @@
-#!/bin/zsh
-
 # Run the automated GUI test, filtering normal output.
 
 # Copyright (C) 2018, 2019, 2020 Gregory W. Chicares.
@@ -21,29 +19,24 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# Suggested use: start 'nychthemeral_test.sh' in one session, in the
-# way its inline documentation suggests; then run
-#   $./gui_test.sh
-# in a different session when prompted.
+# If running this file directly is impossible, i.e. if the current execution
+# policy prohibits it and running
+#
+#           > powershell -Command "& {Set-ExecutionPolicy RemoteSigned}"
+#
+# fails due to lack of administrative rights, it has to be run using the
+# following command from cmd.exe command prompt:
+#
+#           > powershell -ExecutionPolicy Bypass -Command .\gui_test.ps1
+#
+# Additional parameters, passed directly to wx_test, can be specified at the
+# end of the previous command line.
 
-# SOMEDAY !! 'wx_test$(EXEEXT)' doesn't return nonzero on failure,
-# so 'set -e' doesn't reliably exit after the first test failure.
-# That doesn't much matter as long as only one real command is run.
-
-set -e
-
-# This is why 'zsh' is specified in the hash-bang (the POSIX shell
-# provides no convenient alternative):
-setopt PIPE_FAIL
-
-# Directory where this script resides.
-
-srcdir=$(dirname "$(readlink --canonicalize "$0")")
-
-# Cannot recursively check script on path determined at runtime, so
-# a directive like 'source="$srcdir"' doesn't work.
-# shellcheck disable=SC1090
-. "$srcdir"/set_toolchain.sh
+# This script deliberately parallels gui_test.sh as closely as possible, in
+# particular the same sed syntax is used for the search expressions to
+# facilitate keeping them in sync between the two files, even if this requires
+# some extra logic below to transform it into an array of regex patterns in the
+# format understood by PowerShell.
 
 # Lines beginning with a capitalized word, viz.
 #   /^NOTE: starting the test suite$/d
@@ -59,7 +52,7 @@ srcdir=$(dirname "$(readlink --canonicalize "$0")")
 # filter out whatever normal output is seen when such a subdirectory
 # is used.
 
-gui_test_clutter='
+$gui_test_clutter='
 /^about_dialog_version: started$/d
 /^About dialog version string is .[[:digit:]]\+T[[:digit:]]\+Z.\.$/d
 /^time=[[:digit:]]\+ms (for about_dialog_version)$/d
@@ -142,16 +135,37 @@ gui_test_clutter='
 /^Warning: Test files path ..opt.lmi.gui_test. doesn.t exist\.$/d
 '
 
-# Directory for test logs.
+# Convert sed expressions to simple regex patterns.
 #
-# It seems redundant to construct yet another $prefix and $exec_prefix here;
-# perhaps that should be done OAOO in a script that selects a toolchain.
-prefix=/opt/lmi
-exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
-log_dir="$exec_prefix"/logs
-mkdir --parents "$log_dir"
+# Points of note:
+#   - This file itself could use CR LF or just LF line terminators, accept
+#     both of them for robustness.
+#   - PowerShell doesn't support POSIX classes, so we need to expand them.
+#   - BRE syntax used by sed differs from RE syntax used by PowerShell in more
+#     aspects than those covered here, but handling [+()] is enough for now.
+#   - We need to filter out the empty lines that are part of the quoted text.
+$test_ignore_patterns = $gui_test_clutter   `
+    -split "`r?`n"                          `
+    -creplace '\[:alnum:]','A-Za-z0-9'      `
+    -creplace '\[:digit:]','0-9'            `
+    -creplace '\\\+','+'                    `
+    -creplace '\(','\('                     `
+    -creplace '\)','\)'                     `
+    -creplace '^/'                          `
+    -creplace '/d$'                         |
+    Where-Object {$_}
 
-cd "$srcdir"
+$prefix = "/opt/lmi"
 
-$PERFORM "$prefix"/bin/wx_test "$@" --ash_nazg --data_path="$prefix"/data 2>&1 \
-  | tee "$log_dir"/gui_test | sed -e "$gui_test_clutter"
+# Directory for test logs.
+$log_dir = "$prefix/gcc/i686-w64-mingw32/logs"
+
+if (!(Test-Path -PathType Container $log_dir)) {
+    New-Item -Path $log_dir -ItemType Directory > $null
+}
+
+Set-Location "$prefix/src/lmi"
+
+&"$prefix/bin/wx_test" $args --ash_nazg --data_path="$prefix/data" 2>&1 |
+    Tee-Object "$log_dir/gui_test" |
+    Select-String -NotMatch -Pattern $test_ignore_patterns

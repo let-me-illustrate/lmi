@@ -34,6 +34,12 @@ assert_chrooted
 # architecture-independent 'configurable_settings.xml'--much like the
 # "identity mount" technique used with cygwin. See:
 #   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00018.html
+# Because wine has its own notion of the filesystem, relative paths
+# are wanted, the GNUism '--relative' being used to translate the
+# absolute paths so that
+#   /opt/lmi/     becomes ../../../../../../../opt/lmi
+#   /etc/opt/lmi/ becomes ../../../../../../../../etc/opt/lmi
+#   /var/opt/lmi/ becomes ../../../../../../../../var/opt/lmi
 
 mkdir -p ~/.wine/drive_c/users/"${NORMAL_USER}"/opt/
 cd ~/.wine/drive_c/users/"${NORMAL_USER}"/opt/ || { printf 'failed: cd\n'; exit 3; }

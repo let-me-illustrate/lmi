@@ -26,11 +26,7 @@ set -evx
 stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
 
-# Override any too-restrictive corporate default (e.g., 077).
-if [ "$(umask)" -ne 022 ]; then
-  printf "Overriding bogus umask %s\n" "$(umask)"
-  umask 022
-fi
+umask g=rwx
 
 # A known corporate firewall blocks gnu.org even on a GNU/Linux
 # server, yet allows github.com:
@@ -80,6 +76,11 @@ umount /srv/chroot
 # Here, explicitly remount /srv/chroot because it was umounted above:
 mount LABEL=lmi /srv/chroot
 findmnt /srv/chroot
+
+mkdir -p /var/cache/"${CODENAME}"
+du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Okay."
+mkdir -p /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
+mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 
 # Suppress a nuisance: rh-based distributions provide a default
 # zsh logout file that clears the screen.
@@ -163,11 +164,10 @@ shell=/bin/zsh
 type=plain
 EOF
 
-mkdir -p /srv/chroot/"${CHRTNAME}"/cache_for_lmi
-mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/cache_for_lmi || echo "Oops."
-
-mkdir -p /var/cache/"${CODENAME}"
-mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Oops."
+mkdir -p /srv/cache_for_lmi
+du   -sb /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi || echo "Okay."
+mkdir -p /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
+mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
 
 # ./lmi_setup_10.sh
 # ./lmi_setup_11.sh

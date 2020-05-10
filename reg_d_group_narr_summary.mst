@@ -34,10 +34,12 @@
 <u>Stable Value Feature</u>&nbsp;{{StableValueFootnote}}
 </p>
 
+<!-- PDF !! FnInitialDbo -->
 <p>
 This illustration assumes Initial Death Benefit Option {{InitDBOpt}}.
 </p>
 
+<!-- PDF !! FnPpAccreditedInvestor -->
 <p>
 This policy is only available to entities that meet the definition
 of "accredited investor" or "qualified purchaser" under applicable
@@ -54,6 +56,7 @@ suitability standards.
 {{NoVanishPremiumFootnote}}
 </p>
 
+<!-- PDF !! FnDefnLifeIns -->
 <p>
 The definition of life insurance elected for this contract
 is the
@@ -78,11 +81,11 @@ Account values, cash surrender values, and death benefits
 are illustrated as of the end of the year.
 </p>
 
+<!-- PDF !! MecFootnote -->
 {{!
 PDF !! The 'MecYearIs0' logic below is poor and should be reworked--see:
     https://lists.nongnu.org/archive/html/lmi/2019-02/msg00000.html
 }}
-
 <p>
 PLEASE READ THE FOLLOWING IMPORTANT TAX DISCLOSURE
 <br>
@@ -118,6 +121,7 @@ of the Internal Revenue Code and therefore
 {{/IsMec}}
 </p>
 
+<!-- PDF !! FnNotTaxAdvice -->
 <p>
 <b>
 The information contained in this illustration is not written

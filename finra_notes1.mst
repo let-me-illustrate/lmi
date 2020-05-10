@@ -25,8 +25,8 @@
 
 <font size="-1">
 
+<!-- PDF !! MecFootnote -->
 <p align="center"><b>IMPORTANT TAX DISCLOSURE</b></p>
-
 <p>
 As illustrated, this {{ContractName}}
 {{#IsMec}}
@@ -53,12 +53,14 @@ and may also trigger a penalty tax.
     </p>
 {{/IsInforce}}
 
-<!-- The phrase "tax charge" is unclear. -->
+<!-- PDF !! FnDacTax -->
+<!-- The phrase "tax charge" is unclear. Probably the DAC tax is meant. -->
 <p>
 No tax charge is made to the Separate Account. However,
 such a charge may be made in the future.
 </p>
 
+<!-- PDF !! FnNotTaxAdvice -->
 <p>
 <b>
 The information contained in this illustration is not written
@@ -97,6 +99,7 @@ in an illustration-reg template, if anywhere.
     <p>{{NoLapseEverFootnote}}</p>
 {{/NoLapseAlwaysActive}}
 
+<!-- PDF !! FnDefnLifeIns -->
 <p>
 The definition of life insurance elected for this
 {{ContractName}} is the
@@ -116,12 +119,14 @@ The definition of life insurance elected for this
 </p>
 {{/DefnLifeInsIsGPT}}
 
+<!-- PDF !! RejectPremiumFootnote -->
 <p>
 {{InsCoName}} has the right to promptly refund any amount of premium paid if it
 will increase the net amount at risk (referred to in the {{ContractName}} as
 the Amount of Insurance that Requires a Charge).
 </p>
 
+<!-- PDF !! FnBoyEoy -->
 <p>
 Premium payments are assumed to be made at the beginning of the year. Account
 values, cash surrender values, and death benefits are illustrated as of the end

@@ -1,5 +1,4 @@
 #!/bin/zsh
-# shellcheck disable=SC1036,SC2039
 
 # Obfuscate-deobfuscate MST<->XST files. Cf. 'mst_to_xst.sh'.
 
@@ -32,6 +31,7 @@
 
 # This script requires zsh because brace expansion is more convenient
 # than 'seq', and especially because zsh offers glob qualifiers.
+# shellcheck disable=SC1036,SC2039
 
 X=$(printf '\%03o' {255..0})
 Y=$(printf '\%03o' {0..255})

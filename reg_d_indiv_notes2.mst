@@ -32,6 +32,7 @@
 <font size="+1"><b><u>Important Tax Disclosures</u></b></font>
 </p>
 
+<!-- PDF !! FnDefnLifeIns -->
 <p>
 The definition of life insurance elected for this policy is
 {{#DefnLifeInsIsGPT}}
@@ -45,6 +46,7 @@ The definition of life insurance elected for this policy is
 {{/DefnLifeInsIsGPT}}
 </p>
 
+<!-- PDF !! MecFootnote -->
 <p>
 The initial 7-pay premium limit is ${{InitSevenPayPrem}}.
 As illustrated, this policy
@@ -67,13 +69,13 @@ of the Internal Revenue Code and therefore
     to be retested and may result in the policy becoming a MEC.
 {{/IsMec}}
 </p>
-
 <p>
 If a policy is a MEC, withdrawals and policy loans are taxed to
 the extent of any gain in the policy, and an additional penalty
 tax may apply to the taxable portion of the distribution.
 </p>
 
+<!-- PDF !! FnNotTaxAdvice -->
 <p>
 <b>
 The information contained in this illustration is not written

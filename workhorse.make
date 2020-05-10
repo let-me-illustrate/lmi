@@ -156,6 +156,7 @@ else ifeq (7.3.0,$(gnu_cpp_version))
 else ifeq (8.1.0,$(gnu_cpp_version))
 else ifeq (8.2.0,$(gnu_cpp_version))
 else ifeq (8.3.0,$(gnu_cpp_version))
+else ifeq (9.3.0,$(gnu_cpp_version))
 else
   $(warning Untested $(GNU_CPP) version '$(gnu_cpp_version)')
 endif
@@ -170,6 +171,7 @@ else ifeq (7.3.0,$(gnu_cxx_version))
 else ifeq (8.1.0,$(gnu_cxx_version))
 else ifeq (8.2.0,$(gnu_cxx_version))
 else ifeq (8.3.0,$(gnu_cxx_version))
+else ifeq (9.3.0,$(gnu_cxx_version))
 else
   $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
 endif
@@ -410,7 +412,7 @@ else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
   gcc_version_specific_warnings := \
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
-else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0 8.3.0))
+else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0 8.3.0 9.3.0))
   gcc_version_specific_warnings := \
 
   ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
@@ -547,6 +549,7 @@ wx_dependent_objects :=
 $(wx_dependent_objects): gcc_common_extra_warnings += \
   -Wno-cast-function-type \
   -Wno-cast-qual \
+  -Wno-deprecated-copy \
   -Wno-double-promotion \
   -Wno-format-nonliteral \
   -Wno-noexcept \
@@ -573,11 +576,13 @@ operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
 # Some boost-1.33.1 libraries are incompatible with many warnings.
 
 $(boost_filesystem_objects): gcc_common_extra_warnings += \
+  -Wno-deprecated-copy \
   -Wno-deprecated-declarations \
   -Wno-unused-macros \
 
 $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
+  -Wno-deprecated-copy \
   -Wno-duplicated-branches \
   -Wno-implicit-fallthrough \
   -Wno-register \
@@ -592,6 +597,7 @@ boost_dependent_objects := \
   test_coding_rules.o \
 
 $(boost_dependent_objects): gcc_common_extra_warnings += \
+  -Wno-deprecated-copy \
   -Wno-switch-enum \
   -Wno-unused-local-typedefs
 

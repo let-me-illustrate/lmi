@@ -110,7 +110,6 @@ bool unavailable(std::string const& s)
         ,"InforceAsOfDateJdn"    // probably not needed
         ,"InitDacTaxRate"        // used by PrintRosterTabDelimited(); not cents
         ,"InitPremTaxRate"       // used by PrintRosterTabDelimited(); not cents
-        ,"SubstdTable"           // probably not needed
         ,"InitMlyPolFee"         // used by PrintRosterTabDelimited()
         ,"InitTgtPremHiLoadRate" // used by PrintRosterTabDelimited(); not cents
         };
@@ -170,6 +169,7 @@ title_map_t static_titles()
     ,{"AnnPostHoneymoonRate_Guaranteed" , "Guar Post\nHoneymoon\nRate"}
     ,{"AnnSAIntRate_Current"            , "Curr Ann\nSep Acct\nInt Rate"}
     ,{"AnnSAIntRate_Guaranteed"         , "Guar Ann\nSep Acct\nInt Rate"}
+    ,{"AnnualFlatExtra"                 , "Annual\nFlat\nExtra"}
     ,{"AttainedAge"                     , "End of\nYear\nAge"}
     ,{"AvgDeathBft_Current"             , "Curr Avg\nDeath\nBenefit"}
     ,{"AvgDeathBft_Guaranteed"          , "Guar Avg\nDeath\nBenefit"}
@@ -230,7 +230,6 @@ title_map_t static_titles()
     ,{"MlySAIntRate_Current"            , "Curr Monthly\nSep Acct\nInt Rate"}
     ,{"MlySAIntRate_Guaranteed"         , "Guar Monthly\nSep Acct\nInt Rate"}
     ,{"ModalMinimumPremium"             , "Modal\nMinimum\nPremium"}
-    ,{"AnnualFlatExtra"                 , "Annual\nFlat\nExtra"}
 //  ,{"NaarForceout"                    , "Forced\nWithdrawal\ndue to\nNAAR Limit"}
     ,{"NetCOICharge_Current"            , "Experience\nRating\nNet COI\nCharge"}
     ,{"NetClaims_Current"               , "Curr Net\nClaims"}
@@ -264,7 +263,6 @@ title_map_t static_titles()
     ,{"TermPurchased_Current"           , "Curr Term\nAmt\nPurchased"}
     ,{"TermPurchased_Guaranteed"        , "Guar Term\nAmt\nPurchased"}
     ,{"TermSpecAmt"                     , "Term\nSpecified\nAmount"}
-    ,{"TgtPrem"                         , "Target\nPremium"}
     ,{"TotalIMF"                        , "Total\nInvestment\nMgt Fee"}
     ,{"TotalLoanBalance_Current"        , "Curr Total\nLoan\nBalance"}
     ,{"TotalLoanBalance_Guaranteed"     , "Guar Total\nLoan\nBalance"}
@@ -307,6 +305,7 @@ mask_map_t static_masks()
     ,{"AnnPostHoneymoonRate_Guaranteed" ,      "99.99%"}
     ,{"AnnSAIntRate_Current"            ,      "99.99%"}
     ,{"AnnSAIntRate_Guaranteed"         ,      "99.99%"}
+    ,{"AnnualFlatExtra"                 , "999,999,999"}
     ,{"AttainedAge"                     ,         "999"}
     ,{"AvgDeathBft_Current"             , "999,999,999"}
     ,{"AvgDeathBft_Guaranteed"          , "999,999,999"}
@@ -367,7 +366,6 @@ mask_map_t static_masks()
     ,{"MlySAIntRate_Current"            ,      "99.99%"}
     ,{"MlySAIntRate_Guaranteed"         ,      "99.99%"}
     ,{"ModalMinimumPremium"             , "999,999,999"}
-    ,{"AnnualFlatExtra"                 , "999,999,999"}
 //  ,{"NaarForceout"                    , "999,999,999"}
     ,{"NetCOICharge_Current"            , "999,999,999"}
     ,{"NetClaims_Current"               , "999,999,999"}
@@ -401,7 +399,6 @@ mask_map_t static_masks()
     ,{"TermPurchased_Current"           , "999,999,999"}
     ,{"TermPurchased_Guaranteed"        , "999,999,999"}
     ,{"TermSpecAmt"                     , "999,999,999"}
-    ,{"TgtPrem"                         , "999,999,999"}
     ,{"TotalIMF"                        ,      "99.99%"}
     ,{"TotalLoanBalance_Current"        , "999,999,999"}
     ,{"TotalLoanBalance_Guaranteed"     , "999,999,999"}
@@ -454,17 +451,17 @@ format_map_t static_formats()
     ,{"InitAnnSepAcctGuarNet0Rate"      , f4}
     ,{"InitAnnSepAcctGuarNetHalfRate"   , f4}
     ,{"InitAnnSepAcctNetInt"            , f4}
-    ,{"MaxAnnGuarLoanSpread"            , f4}
     ,{"MaxAnnCurrLoanDueRate"           , f4}
+    ,{"MaxAnnGuarLoanSpread"            , f4}
     ,{"PostHoneymoonSpread"             , f4}
     ,{"Preferred"                       , f4}
     ,{"PremTaxRate"                     , f4}
 
 // F3: scaled by 100, zero decimals, with '%' at end:
 // > Format as percentage with no decimal places (##0%)
+    ,{"GenAcctAllocation"               , f3}
     ,{"SalesLoadRefundRate0"            , f3}
     ,{"SalesLoadRefundRate1"            , f3}
-    ,{"GenAcctAllocation"               , f3}
 
 // >
 // F2: two decimals, commas
@@ -487,15 +484,18 @@ format_map_t static_formats()
 // > Format as a number with thousand separators and no decimal places (#,###,###)
 // >
     ,{"Age"                             , f1}
+    ,{"AllowExperienceRating"           , f1}
+    ,{"AllowGroupQuote"                 , f1}
     ,{"AvgFund"                         , f1}
     ,{"ChildRiderAmount"                , f1}
     ,{"CustomFund"                      , f1}
     ,{"Dumpin"                          , f1}
     ,{"EndtAge"                         , f1}
+    ,{"ErNotionallyPaysTerm"            , f1}
     ,{"External1035Amount"              , f1}
     ,{"GenderBlended"                   , f1}
-    ,{"GenderDistinct"                  , f1}
     ,{"GreatestLapseDuration"           , f1}
+    ,{"GroupIndivSelection"             , f1}
     ,{"Has1035ExchCharge"               , f1}
     ,{"HasADD"                          , f1}
     ,{"HasChildRider"                   , f1}
@@ -513,6 +513,7 @@ format_map_t static_formats()
     ,{"Internal1035Amount"              , f1}
     ,{"IsInforce"                       , f1}
     ,{"IsMec"                           , f1}
+    ,{"IsSinglePremium"                 , f1}
     ,{"LapseMonth"                      , f1}
     ,{"LapseYear"                       , f1}
     ,{"MecMonth"                        , f1}
@@ -521,22 +522,21 @@ format_map_t static_formats()
     ,{"NoLapseAlwaysActive"             , f1}
     ,{"NoLapseMinAge"                   , f1}
     ,{"NoLapseMinDur"                   , f1}
+    ,{"NoLongerIssued"                  , f1}
     ,{"RetAge"                          , f1}
     ,{"SalesLoadRefundAvailable"        , f1}
     ,{"SmokerBlended"                   , f1}
-    ,{"SmokerDistinct"                  , f1}
     ,{"SplitFundAllocation"             , f1}
     ,{"SplitMinPrem"                    , f1}
-    ,{"ErNotionallyPaysTerm"            , f1}
-    ,{"IsSinglePremium"                 , f1}
     ,{"SpouseIssueAge"                  , f1}
     ,{"SupplementalReport"              , f1}
-    ,{"AllowExperienceRating"           , f1}
-    ,{"UseExperienceRating"             , f1}
-    ,{"GroupIndivSelection"             , f1}
-    ,{"NoLongerIssued"                  , f1}
-    ,{"AllowGroupQuote"                 , f1}
+    ,{"SurvivalMaxAge"                  , f1}
+    ,{"SurvivalMaxYear"                 , f1}
+    ,{"SurviveToAge"                    , f1}
+    ,{"SurviveToExpectancy"             , f1}
+    ,{"SurviveToYear"                   , f1}
     ,{"TxCallsGuarUwSubstd"             , f1}
+    ,{"UseExperienceRating"             , f1}
     ,{"UsePartialMort"                  , f1}
     ,{"WriteTsvFile"                    , f1}
 
@@ -594,37 +594,37 @@ format_map_t static_formats()
 // > Format as a number with thousand separators and two decimal places (#,###,###.00)
 // >
     ,{"AddonMonthlyFee"                 , f2}
+    ,{"AnnualFlatExtra"                 , f2}
 // TODO ?? The precision of 'InforceLives' and 'KFactor' is inadequate.
 // Is every other format OK?
     ,{"InforceLives"                    , f2}
     ,{"KFactor"                         , f2}
-    ,{"AnnualFlatExtra"                 , f2}
 // >
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
 // >
+    ,{"AVGenAcct"                       , f1}
+    ,{"AVRelOnDeath"                    , f1}
+    ,{"AVSepAcct"                       , f1}
     ,{"AcctVal"                         , f1}
     ,{"AccumulatedPremium"              , f1}
     ,{"AddonCompOnAssets"               , f1}
     ,{"AddonCompOnPremium"              , f1}
     ,{"AvgDeathBft"                     , f1}
-    ,{"AVGenAcct"                       , f1}
-    ,{"AVRelOnDeath"                    , f1}
-    ,{"AVSepAcct"                       , f1}
-    ,{"BaseDeathBft"                    , f1}
     ,{"BOYAssets"                       , f1}
-    ,{"ClaimsPaid"                      , f1}
+    ,{"BaseDeathBft"                    , f1}
     ,{"COICharge"                       , f1}
-    ,{"Composite"                       , f1}
     ,{"CSVNet"                          , f1}
     ,{"CV7702"                          , f1}
+    ,{"ClaimsPaid"                      , f1}
+    ,{"Composite"                       , f1}
     ,{"DacTaxLoad"                      , f1}
     ,{"DacTaxRsv"                       , f1}
     ,{"DeathProceedsPaid"               , f1}
+    ,{"EOYDeathBft"                     , f1}
     ,{"EeGrossPmt"                      , f1}
     ,{"EeModalMinimumPremium"           , f1}
 //  ,{"EeMode"                          , f1} // Not numeric.
-    ,{"EOYDeathBft"                     , f1}
     ,{"ErGrossPmt"                      , f1}
     ,{"ErModalMinimumPremium"           , f1}
 //  ,{"ErMode"                          , f1} // Not numeric.
@@ -639,8 +639,8 @@ format_map_t static_formats()
     ,{"LoanIntAccrued"                  , f1}
     ,{"ModalMinimumPremium"             , f1}
     ,{"NaarForceout"                    , f1}
-    ,{"NetClaims"                       , f1}
     ,{"NetCOICharge"                    , f1}
+    ,{"NetClaims"                       , f1}
     ,{"NetIntCredited"                  , f1}
     ,{"NetPmt"                          , f1}
     ,{"NetWD"                           , f1}
@@ -660,7 +660,6 @@ format_map_t static_formats()
     ,{"SurrChg"                         , f1}
     ,{"TermPurchased"                   , f1}
     ,{"TermSpecAmt"                     , f1}
-    ,{"TgtPrem"                         , f1}
     ,{"TotalLoanBalance"                , f1}
     };
 

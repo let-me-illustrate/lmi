@@ -30,6 +30,7 @@
 
 <font size="-1">
 
+<!-- PDF !! SalesLoadRefundFootnote -->
 {{#SalesLoadRefundAvailable}}
     <p>
     Sales Load Refund: We will refund a portion of the sales load
@@ -56,16 +57,25 @@
 {{GuarMortalityFootnote}}
 </p>
 
+<!-- PDF !! Suppressed pending review.
+{{#UsePartialMort}}
+    <p>
+    {{FnPartialMortality}}
+    </p>
+{{/UsePartialMort}}
+-->
+
+<!-- PDF !! FnMaturityAge -->
 <p>
 This illustration assumes death of the insured at age {{EndtAge}}.
 </p>
 
+<!-- PDF !! LoanFootnote -->
 {{!
     PDF !! 'MaxAnnCurrLoanDueRate': loan rate actually can vary by year,
     so text should say that the fixed loan rate is "guaranteed never
     to exceed" this value.
 }}
-
 <p>
 The loan interest rate is fixed at {{MaxAnnCurrLoanDueRate}} per year.
 </p>
@@ -74,6 +84,7 @@ The loan interest rate is fixed at {{MaxAnnCurrLoanDueRate}} per year.
 The state of issue is {{StateOfJurisdiction}}.
 </p>
 
+<!-- PDF !! FnInitialSpecAmt -->
 <p>
 This illustration assumes an initial Selected Face Amount of
 ${{InitBaseSpecAmt}}. Selected Face
@@ -82,11 +93,14 @@ in the Tabular Detail.
 </p>
 
 {{#IsInforce}}
+<!-- PDF !! FnInforceAcctVal -->
+<!-- PDF !! Total AV is described, but only unloaned AV is shown. -->
     <p>
     This illustration assumes a beginning account value of
     ${{InforceUnloanedAV}} as of the date of this illustration.
     </p>
 
+<!-- PDF !! FnInforceTaxBasis -->
     <p>
     This illustration assumes a beginning cost basis of
     ${{InforceTaxBasis}} as
@@ -96,6 +110,7 @@ in the Tabular Detail.
     </p>
 {{/IsInforce}}
 
+<!-- PDF !! FnCensus -->
 <!-- There is no "attached census". -->
 {{#Composite}}
     <p>
@@ -112,37 +127,7 @@ in the Tabular Detail.
     <p>{{GuarIssueDisclaimerMd}}</p>
 {{/StateIsMaryland}}
 
-{{#AllowExperienceRating}}
-    <p>
-    We may assess a Market Value Adjustment upon a surrender
-    of the {{ContractName}} when the surrender proceeds are intended
-    to be applied to an insurance {{ContractName}} issued by an insurer
-    unaffiliated with
-    {{InsCoShortName}}
-    with an intent to qualify the exchange as a tax free exchange
-    under IRC section 1035.
-    </p>
-
-    {{^UseExperienceRating}}
-        <p>
-        This illustration does not reflect experience rating.
-        </p>
-    {{/UseExperienceRating}}
-
-    <p>
-    The guaranteed values reflect the maximum charges permitted
-    by the {{ContractName}}, which may include an Experience Rating
-    Risk Charge.
-    </p>
-
-    <p>
-    No Experience Rating Risk Charge or a distribution
-    of an Experience Rating Reserve Credit is reflected
-    in the current, non-guaranteed values. Actual charges
-    and credits will be based on the actual experience of the group.
-    </p>
-{{/AllowExperienceRating}}
-
+<!-- PDF !! Fn1035Charge -->
 {{#Has1035ExchCharge}}
     <p>
     {{^SinglePremium}}
@@ -176,6 +161,7 @@ in the Tabular Detail.
     </p>
 {{/Has1035ExchCharge}}
 
+<!-- PDF !! SpouseFootnote -->
 {{#HasSpouseRider}}
     <p>
     The ${{SpouseRiderAmount}} Spouse
@@ -187,6 +173,7 @@ in the Tabular Detail.
     </p>
 {{/HasSpouseRider}}
 
+<!-- PDF !! ChildFootnote -->
 {{#HasChildRider}}
     <p>
     The ${{ChildRiderAmount}} Child
@@ -207,6 +194,7 @@ in the Tabular Detail.
 
 <font size="-1">
 
+<!-- PDF !! MecFootnote -->
 <!-- This is not appropriate for composites. -->
 <p>
 As illustrated, this {{ContractName}}
@@ -236,6 +224,7 @@ and may also trigger a penalty tax.
     {{/IsInforce}}
 {{/SinglePremium}}
 
+<!-- PDF !! FnNotTaxAdvice -->
 <p>
 <b>
 The information contained in this illustration is not written

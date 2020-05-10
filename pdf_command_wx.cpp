@@ -2228,20 +2228,20 @@ class pdf_illustration_naic : public pdf_illustration
             ,oe_limited_flexible_premium == invar.IsSinglePremium
             );
 
-        // Variable representing the premium payment frequency with the
-        // appropriate indefinite article preceding it, e.g. "an annual"
-        // or "a monthly".
-        // The if-not-empty conditional is unneeded:
-        LMI_ASSERT(!invar.InitErMode.empty());
-        std::string mode0 = invar.InitErMode;
-        if(!mode0.empty())
-            {
-            mode0[0] = lmi_tolower(mode0[0]);
-            add_variable
-                ("ErModeLCWithArticle"
-                ,(std::strchr("aeiou", mode0[0]) ? "an " : "a ") + mode0
-                );
-            }
+        // Lowercase initial payment mode with prepended indefinite
+        // article: e.g., "an annual" or "a monthly".
+        std::string eemode0 = invar.InitEeMode;
+        eemode0[0] = lmi_tolower(eemode0[0]);
+        add_variable
+            ("InitEeModeWithIndefiniteArticle"
+            ,(std::strchr("aeiou", eemode0[0]) ? "an " : "a ") + eemode0
+            );
+        std::string ermode0 = invar.InitErMode;
+        ermode0[0] = lmi_tolower(ermode0[0]);
+        add_variable
+            ("InitErModeWithIndefiniteArticle"
+            ,(std::strchr("aeiou", ermode0[0]) ? "an " : "a ") + ermode0
+            );
 
         add_variable
             ("HasInterestDisclaimer"

@@ -42,7 +42,7 @@ git remote set-url --push origin chicares@git.sv.gnu.org:/srv/git/lmi.git
 # First, copy "blessed" repository (here, 'cp' is sufficient: this
 # bare repository has no references that need to be resolved):
 cd /opt/lmi || { printf 'failed: cd\n'; exit 3; }
-cp --dereference --preserve --recursive /cache_for_lmi/blessed .
+cp --dereference --preserve --recursive /srv/cache_for_lmi/blessed .
 # Then create a working copy by cloning the bare repository...
 git clone -b master file:///opt/lmi/blessed/proprietary
 # ...and verify it:
@@ -54,13 +54,16 @@ ln --symbolic --force --no-dereference ../hooks .git
 
 # Create a "stash" directory as a manual alternative to 'git-stash':
 mkdir --parents /opt/lmi/stash
+chmod g=u+s     /opt/lmi/stash
 
 # Create and populate the proprietary source directory used by 'vpath':
 mkdir --parents /opt/lmi/src/products/src
+chmod g=u+s     /opt/lmi/src/products/src
 cp -a /opt/lmi/proprietary/src /opt/lmi/src/products
 # ...and the directories for system testing:
 cp -a /opt/lmi/proprietary/test /opt/lmi
 mkdir --parents /opt/lmi/touchstone
+chmod g=u+s     /opt/lmi/touchstone
 cp -a /opt/lmi/proprietary/test/* /opt/lmi/touchstone/
 
 # Remove object files previously built without proprietary source:
@@ -89,6 +92,7 @@ make "$coefficiency" system_test
 # Create a local mirror of the gnu.org repository:
 cd /opt/lmi || { printf 'failed: cd\n'; exit 3; }
 mkdir --parents free/src
+chmod g=u+s     free/src
 cd free/src || { printf 'failed: cd\n'; exit 3; }
 
 # Use git's own protocol wherever possible. In case that's blocked

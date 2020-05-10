@@ -39,6 +39,9 @@
 #       pragma GCC diagnostic ignored "-Wcast-function-type"
 #   endif // 8 <= __GNUC__
 #   pragma GCC diagnostic ignored "-Wcast-qual"
+#   if 9 <= __GNUC__
+#       pragma GCC diagnostic ignored "-Wdeprecated-copy"
+#   endif // 9 <= __GNUC__
 //  only 'strvararg.h:1048:19':
 #   pragma GCC diagnostic ignored "-Wdouble-promotion"
 #   pragma GCC diagnostic ignored "-Wformat-nonliteral"

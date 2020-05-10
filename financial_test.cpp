@@ -191,7 +191,17 @@ int test_main(int, char*[])
     static double const i = .05;
     static double const one_plus_i = 1.0 + i;
     std::vector<double> accum_p(p.size());
+// Avoid a gcc-9 anomaly--see:
+//   https://lists.nongnu.org/archive/html/lmi/2020-04/msg00024.html
+//   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94867
+#if defined __GNUC__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wnull-dereference"
+#endif // defined __GNUC__
     accum_p[0] = p[0] * one_plus_i;
+#if defined __GNUC__
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__
     for(int j = 1; j < lmi::ssize(p); ++j)
         {
         accum_p[j] = (accum_p[j - 1] + p[j]) * one_plus_i;

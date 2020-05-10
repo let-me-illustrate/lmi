@@ -77,312 +77,345 @@ LedgerInvariant::~LedgerInvariant()
 //============================================================================
 void LedgerInvariant::Alloc(int len)
 {
-    Length  = len;
+    Length = len;
 
-    BegYearVectors  ["TgtPrem"               ] = &TgtPrem                ;
-    BegYearVectors  ["GrossPmt"              ] = &GrossPmt               ;
-    BegYearVectors  ["EeGrossPmt"            ] = &EeGrossPmt             ;
-    BegYearVectors  ["ErGrossPmt"            ] = &ErGrossPmt             ;
-    BegYearVectors  ["NetWD"                 ] = &NetWD                  ;
-    BegYearVectors  ["NewCashLoan"           ] = &NewCashLoan            ;
-    BegYearVectors  ["Outlay"                ] = &Outlay                 ;
-    BegYearVectors  ["GptForceout"           ] = &GptForceout            ;
-    BegYearVectors  ["NaarForceout"          ] = &NaarForceout           ;
-    BegYearVectors  ["ModalMinimumPremium"   ] = &ModalMinimumPremium    ;
-    BegYearVectors  ["EeModalMinimumPremium" ] = &EeModalMinimumPremium  ;
-    BegYearVectors  ["ErModalMinimumPremium" ] = &ErModalMinimumPremium  ;
+    // BOY vectors.
+    BegYearVectors  ["GrossPmt"                   ] = &GrossPmt                   ;
+    BegYearVectors  ["EeGrossPmt"                 ] = &EeGrossPmt                 ;
+    BegYearVectors  ["ErGrossPmt"                 ] = &ErGrossPmt                 ;
+    BegYearVectors  ["NetWD"                      ] = &NetWD                      ;
+    BegYearVectors  ["NewCashLoan"                ] = &NewCashLoan                ;
+    BegYearVectors  ["Outlay"                     ] = &Outlay                     ;
+    BegYearVectors  ["GptForceout"                ] = &GptForceout                ;
+    BegYearVectors  ["NaarForceout"               ] = &NaarForceout               ;
+    BegYearVectors  ["ModalMinimumPremium"        ] = &ModalMinimumPremium        ;
+    BegYearVectors  ["EeModalMinimumPremium"      ] = &EeModalMinimumPremium      ;
+    BegYearVectors  ["ErModalMinimumPremium"      ] = &ErModalMinimumPremium      ;
+    BegYearVectors  ["AddonMonthlyFee"            ] = &AddonMonthlyFee            ;
 
-    EndYearVectors  ["TermSpecAmt"           ] = &TermSpecAmt            ;
-    EndYearVectors  ["SpecAmt"               ] = &SpecAmt                ;
+    // EOY vectors.
+    EndYearVectors  ["TermSpecAmt"                ] = &TermSpecAmt                ;
+    EndYearVectors  ["SpecAmt"                    ] = &SpecAmt                    ;
 
-    OtherVectors    ["IndvTaxBracket"        ] = &IndvTaxBracket         ;
-    OtherVectors    ["CorpTaxBracket"        ] = &CorpTaxBracket         ;
-    OtherVectors    ["Salary"                ] = &Salary                 ;
-    OtherVectors    ["AnnualFlatExtra"       ] = &AnnualFlatExtra        ;
-    OtherVectors    ["HoneymoonValueSpread"  ] = &HoneymoonValueSpread   ;
-    OtherVectors    ["PartMortTableMult"     ] = &PartMortTableMult      ;
-    OtherVectors    ["AddonMonthlyFee"       ] = &AddonMonthlyFee        ;
-    OtherVectors    ["AddonCompOnAssets"     ] = &AddonCompOnAssets      ;
-    OtherVectors    ["AddonCompOnPremium"    ] = &AddonCompOnPremium     ;
-    OtherVectors    ["CorridorFactor"        ] = &CorridorFactor         ;
-    OtherVectors    ["AnnLoanDueRate"        ] = &AnnLoanDueRate         ;
-    OtherVectors    ["CurrMandE"             ] = &CurrMandE              ;
-    OtherVectors    ["TotalIMF"              ] = &TotalIMF               ;
-    OtherVectors    ["RefundableSalesLoad"   ] = &RefundableSalesLoad    ;
+    // Forborne vectors.
+    ForborneVectors ["Salary"                     ] = &Salary                     ;
 
-    ScalableScalars ["InitBaseSpecAmt"       ] = &InitBaseSpecAmt        ;
-    ScalableScalars ["InitTermSpecAmt"       ] = &InitTermSpecAmt        ;
-    ScalableScalars ["ChildRiderAmount"      ] = &ChildRiderAmount       ;
-    ScalableScalars ["SpouseRiderAmount"     ] = &SpouseRiderAmount      ;
-    ScalableScalars ["InitPrem"              ] = &InitPrem               ;
-    ScalableScalars ["GuarPrem"              ] = &GuarPrem               ;
-    ScalableScalars ["InitSevenPayPrem"      ] = &InitSevenPayPrem       ;
-    ScalableScalars ["InitGSP"               ] = &InitGSP                ;
-    ScalableScalars ["InitGLP"               ] = &InitGLP                ;
-    ScalableScalars ["InitTgtPrem"           ] = &InitTgtPrem            ;
-    ScalableScalars ["ListBillPremium"       ] = &ListBillPremium        ;
-    ScalableScalars ["EeListBillPremium"     ] = &EeListBillPremium      ;
-    ScalableScalars ["ErListBillPremium"     ] = &ErListBillPremium      ;
-    ScalableScalars ["Dumpin"                ] = &Dumpin                 ;
-    ScalableScalars ["External1035Amount"    ] = &External1035Amount     ;
-    ScalableScalars ["Internal1035Amount"    ] = &Internal1035Amount     ;
-    ScalableScalars ["InforceUnloanedAV"     ] = &InforceUnloanedAV      ;
-    ScalableScalars ["InforceTaxBasis"       ] = &InforceTaxBasis        ;
+    // Nonscalable vectors.
+    OtherVectors    ["IndvTaxBracket"             ] = &IndvTaxBracket             ;
+    OtherVectors    ["CorpTaxBracket"             ] = &CorpTaxBracket             ;
+    OtherVectors    ["AnnualFlatExtra"            ] = &AnnualFlatExtra            ;
+    OtherVectors    ["HoneymoonValueSpread"       ] = &HoneymoonValueSpread       ;
+    OtherVectors    ["PartMortTableMult"          ] = &PartMortTableMult          ;
+    OtherVectors    ["AddonCompOnAssets"          ] = &AddonCompOnAssets          ;
+    OtherVectors    ["AddonCompOnPremium"         ] = &AddonCompOnPremium         ;
+    OtherVectors    ["CorridorFactor"             ] = &CorridorFactor             ;
+    OtherVectors    ["AnnLoanDueRate"             ] = &AnnLoanDueRate             ;
+    OtherVectors    ["CurrMandE"                  ] = &CurrMandE                  ;
+    OtherVectors    ["TotalIMF"                   ] = &TotalIMF                   ;
+    OtherVectors    ["RefundableSalesLoad"        ] = &RefundableSalesLoad        ;
 
-    OtherScalars    ["MaleProportion"        ] = &MaleProportion         ;
-    OtherScalars    ["NonsmokerProportion"   ] = &NonsmokerProportion    ;
-    OtherScalars    ["GuarMaxMandE"          ] = &GuarMaxMandE           ;
-    OtherScalars    ["InitDacTaxRate"        ] = &InitDacTaxRate         ;
-    OtherScalars    ["InitPremTaxRate"       ] = &InitPremTaxRate        ;
-    OtherScalars    ["GenderDistinct"        ] = &GenderDistinct         ;
-    OtherScalars    ["GenderBlended"         ] = &GenderBlended          ;
-    OtherScalars    ["SmokerDistinct"        ] = &SmokerDistinct         ;
-    OtherScalars    ["SmokerBlended"         ] = &SmokerBlended          ;
-    OtherScalars    ["SubstdTable"           ] = &SubstdTable            ;
-    OtherScalars    ["Age"                   ] = &Age                    ;
-    OtherScalars    ["RetAge"                ] = &RetAge                 ;
-    OtherScalars    ["EndtAge"               ] = &EndtAge                ;
-    OtherScalars    ["GroupIndivSelection"   ] = &GroupIndivSelection    ;
-    OtherScalars    ["NoLongerIssued"        ] = &NoLongerIssued         ;
-    OtherScalars    ["AllowGroupQuote"       ] = &AllowGroupQuote        ;
-    OtherScalars    ["TxCallsGuarUwSubstd"   ] = &TxCallsGuarUwSubstd    ;
-    OtherScalars    ["AllowExperienceRating" ] = &AllowExperienceRating  ;
-    OtherScalars    ["UseExperienceRating"   ] = &UseExperienceRating    ;
-    OtherScalars    ["UsePartialMort"        ] = &UsePartialMort         ;
-    OtherScalars    ["AvgFund"               ] = &AvgFund                ;
-    OtherScalars    ["CustomFund"            ] = &CustomFund             ;
-    OtherScalars    ["IsMec"                 ] = &IsMec                  ;
-    OtherScalars    ["InforceIsMec"          ] = &InforceIsMec           ;
-    OtherScalars    ["InforceYear"           ] = &InforceYear            ;
-    OtherScalars    ["InforceMonth"          ] = &InforceMonth           ;
-    OtherScalars    ["MecYear"               ] = &MecYear                ;
-    OtherScalars    ["MecMonth"              ] = &MecMonth               ;
-    OtherScalars    ["HasWP"                 ] = &HasWP                  ;
-    OtherScalars    ["HasADD"                ] = &HasADD                 ;
-    OtherScalars    ["HasTerm"               ] = &HasTerm                ;
-    OtherScalars    ["HasSupplSpecAmt"       ] = &HasSupplSpecAmt        ;
-    OtherScalars    ["HasChildRider"         ] = &HasChildRider          ;
-    OtherScalars    ["HasSpouseRider"        ] = &HasSpouseRider         ;
-    OtherScalars    ["SpouseIssueAge"        ] = &SpouseIssueAge         ;
-    OtherScalars    ["HasHoneymoon"          ] = &HasHoneymoon           ;
-    OtherScalars    ["PostHoneymoonSpread"   ] = &PostHoneymoonSpread    ;
-    OtherScalars    ["SplitMinPrem"          ] = &SplitMinPrem           ;
-    OtherScalars    ["ErNotionallyPaysTerm"  ] = &ErNotionallyPaysTerm   ;
-    OtherScalars    ["IsSinglePremium"       ] = &IsSinglePremium        ;
-    OtherScalars    ["MaxAnnGuarLoanSpread"  ] = &MaxAnnGuarLoanSpread   ;
-    OtherScalars    ["MaxAnnCurrLoanDueRate" ] = &MaxAnnCurrLoanDueRate  ;
-    OtherScalars    ["IsInforce"             ] = &IsInforce              ;
-    OtherScalars    ["CurrentCoiMultiplier"  ] = &CurrentCoiMultiplier   ;
-    OtherScalars    ["NoLapseAlwaysActive"   ] = &NoLapseAlwaysActive    ;
-    OtherScalars    ["NoLapseMinDur"         ] = &NoLapseMinDur          ;
-    OtherScalars    ["NoLapseMinAge"         ] = &NoLapseMinAge          ;
-    OtherScalars    ["Has1035ExchCharge"     ] = &Has1035ExchCharge      ;
-    OtherScalars    ["EffDateJdn"            ] = &EffDateJdn             ;
-    OtherScalars    ["DateOfBirthJdn"        ] = &DateOfBirthJdn         ;
-    OtherScalars    ["LastCoiReentryDateJdn" ] = &LastCoiReentryDateJdn  ;
-    OtherScalars    ["ListBillDateJdn"       ] = &ListBillDateJdn        ;
-    OtherScalars    ["InforceAsOfDateJdn"    ] = &InforceAsOfDateJdn     ;
-    OtherScalars    ["SplitFundAllocation"   ] = &SplitFundAllocation    ;
-    OtherScalars    ["GenAcctAllocation"     ] = &GenAcctAllocation      ;
-    OtherScalars    ["WriteTsvFile"          ] = &WriteTsvFile           ;
-    OtherScalars    ["SupplementalReport"    ] = &SupplementalReport     ;
+    // Scalable scalars.
+    ScalableScalars ["InitBaseSpecAmt"            ] = &InitBaseSpecAmt            ;
+    ScalableScalars ["InitTermSpecAmt"            ] = &InitTermSpecAmt            ;
+    ScalableScalars ["ChildRiderAmount"           ] = &ChildRiderAmount           ;
+    ScalableScalars ["SpouseRiderAmount"          ] = &SpouseRiderAmount          ;
+    ScalableScalars ["InitPrem"                   ] = &InitPrem                   ;
+    ScalableScalars ["GuarPrem"                   ] = &GuarPrem                   ;
+    ScalableScalars ["InitSevenPayPrem"           ] = &InitSevenPayPrem           ;
+    ScalableScalars ["InitGSP"                    ] = &InitGSP                    ;
+    ScalableScalars ["InitGLP"                    ] = &InitGLP                    ;
+    ScalableScalars ["InitTgtPrem"                ] = &InitTgtPrem                ;
+    ScalableScalars ["ListBillPremium"            ] = &ListBillPremium            ;
+    ScalableScalars ["EeListBillPremium"          ] = &EeListBillPremium          ;
+    ScalableScalars ["ErListBillPremium"          ] = &ErListBillPremium          ;
+    ScalableScalars ["Dumpin"                     ] = &Dumpin                     ;
+    ScalableScalars ["External1035Amount"         ] = &External1035Amount         ;
+    ScalableScalars ["Internal1035Amount"         ] = &Internal1035Amount         ;
+    ScalableScalars ["InforceUnloanedAV"          ] = &InforceUnloanedAV          ;
+    ScalableScalars ["InforceTaxBasis"            ] = &InforceTaxBasis            ;
 
-    Strings["PolicyForm"                    ] = &PolicyForm                    ;
-    Strings["PolicyMktgName"                ] = &PolicyMktgName                ;
-    Strings["PolicyLegalName"               ] = &PolicyLegalName               ;
-    Strings["CsoEra"                        ] = &CsoEra                        ;
-    Strings["InsCoShortName"                ] = &InsCoShortName                ;
-    Strings["InsCoName"                     ] = &InsCoName                     ;
-    Strings["InsCoAddr"                     ] = &InsCoAddr                     ;
-    Strings["InsCoStreet"                   ] = &InsCoStreet                   ;
-    Strings["InsCoPhone"                    ] = &InsCoPhone                    ;
-    Strings["MainUnderwriter"               ] = &MainUnderwriter               ;
-    Strings["MainUnderwriterAddress"        ] = &MainUnderwriterAddress        ;
-    Strings["CoUnderwriter"                 ] = &CoUnderwriter                 ;
-    Strings["CoUnderwriterAddress"          ] = &CoUnderwriterAddress          ;
+    // Nonscalable scalars.
+    OtherScalars    ["MaleProportion"             ] = &MaleProportion             ;
+    OtherScalars    ["NonsmokerProportion"        ] = &NonsmokerProportion        ;
+    OtherScalars    ["GuarMaxMandE"               ] = &GuarMaxMandE               ;
+    OtherScalars    ["InitDacTaxRate"             ] = &InitDacTaxRate             ;
+    OtherScalars    ["InitPremTaxRate"            ] = &InitPremTaxRate            ;
+    OtherScalars    ["GenderBlended"              ] = &GenderBlended              ;
+    OtherScalars    ["SmokerBlended"              ] = &SmokerBlended              ;
+    OtherScalars    ["Age"                        ] = &Age                        ;
+    OtherScalars    ["RetAge"                     ] = &RetAge                     ;
+    OtherScalars    ["EndtAge"                    ] = &EndtAge                    ;
+    OtherScalars    ["GroupIndivSelection"        ] = &GroupIndivSelection        ;
+    OtherScalars    ["NoLongerIssued"             ] = &NoLongerIssued             ;
+    OtherScalars    ["AllowGroupQuote"            ] = &AllowGroupQuote            ;
+    OtherScalars    ["TxCallsGuarUwSubstd"        ] = &TxCallsGuarUwSubstd        ;
+    OtherScalars    ["AllowExperienceRating"      ] = &AllowExperienceRating      ;
+    OtherScalars    ["UseExperienceRating"        ] = &UseExperienceRating        ;
+    OtherScalars    ["UsePartialMort"             ] = &UsePartialMort             ;
 
-    Strings["AvName"                        ] = &AvName                        ;
-    Strings["CsvName"                       ] = &CsvName                       ;
-    Strings["CsvHeaderName"                 ] = &CsvHeaderName                 ;
-    Strings["NoLapseProvisionName"          ] = &NoLapseProvisionName          ;
-    Strings["ContractName"                  ] = &ContractName                  ;
-    Strings["DboName"                       ] = &DboName                       ;
-    Strings["DboNameLevel"                  ] = &DboNameLevel                  ;
-    Strings["DboNameIncreasing"             ] = &DboNameIncreasing             ;
-    Strings["DboNameMinDeathBenefit"        ] = &DboNameMinDeathBenefit        ;
-    Strings["GenAcctName"                   ] = &GenAcctName                   ;
-    Strings["GenAcctNameElaborated"         ] = &GenAcctNameElaborated         ;
-    Strings["SepAcctName"                   ] = &SepAcctName                   ;
-    Strings["SpecAmtName"                   ] = &SpecAmtName                   ;
-    Strings["SpecAmtNameElaborated"         ] = &SpecAmtNameElaborated         ;
-    Strings["UwBasisMedical"                ] = &UwBasisMedical                ;
-    Strings["UwBasisParamedical"            ] = &UwBasisParamedical            ;
-    Strings["UwBasisNonmedical"             ] = &UwBasisNonmedical             ;
-    Strings["UwBasisSimplified"             ] = &UwBasisSimplified             ;
-    Strings["UwBasisGuaranteed"             ] = &UwBasisGuaranteed             ;
-    Strings["UwClassPreferred"              ] = &UwClassPreferred              ;
-    Strings["UwClassStandard"               ] = &UwClassStandard               ;
-    Strings["UwClassRated"                  ] = &UwClassRated                  ;
-    Strings["UwClassUltra"                  ] = &UwClassUltra                  ;
+    OtherScalars    ["SurviveToExpectancy"        ] = &SurviveToExpectancy        ;
+    OtherScalars    ["SurviveToYear"              ] = &SurviveToYear              ;
+    OtherScalars    ["SurviveToAge"               ] = &SurviveToAge               ;
+    OtherScalars    ["SurvivalMaxYear"            ] = &SurvivalMaxYear            ;
+    OtherScalars    ["SurvivalMaxAge"             ] = &SurvivalMaxAge             ;
 
-    Strings["AccountValueFootnote"          ] = &AccountValueFootnote          ;
-    Strings["AttainedAgeFootnote"           ] = &AttainedAgeFootnote           ;
-    Strings["CashSurrValueFootnote"         ] = &CashSurrValueFootnote         ;
-    Strings["DeathBenefitFootnote"          ] = &DeathBenefitFootnote          ;
-    Strings["InitialPremiumFootnote"        ] = &InitialPremiumFootnote        ;
-    Strings["NetPremiumFootnote"            ] = &NetPremiumFootnote            ;
-    Strings["GrossPremiumFootnote"          ] = &GrossPremiumFootnote          ;
-    Strings["OutlayFootnote"                ] = &OutlayFootnote                ;
-    Strings["PolicyYearFootnote"            ] = &PolicyYearFootnote            ;
+    OtherScalars    ["AvgFund"                    ] = &AvgFund                    ;
+    OtherScalars    ["CustomFund"                 ] = &CustomFund                 ;
+    OtherScalars    ["IsMec"                      ] = &IsMec                      ;
+    OtherScalars    ["InforceIsMec"               ] = &InforceIsMec               ;
+    OtherScalars    ["InforceYear"                ] = &InforceYear                ;
+    OtherScalars    ["InforceMonth"               ] = &InforceMonth               ;
+    OtherScalars    ["MecYear"                    ] = &MecYear                    ;
+    OtherScalars    ["MecMonth"                   ] = &MecMonth                   ;
+    OtherScalars    ["HasWP"                      ] = &HasWP                      ;
+    OtherScalars    ["HasADD"                     ] = &HasADD                     ;
+    OtherScalars    ["HasTerm"                    ] = &HasTerm                    ;
+    OtherScalars    ["HasSupplSpecAmt"            ] = &HasSupplSpecAmt            ;
+    OtherScalars    ["HasChildRider"              ] = &HasChildRider              ;
+    OtherScalars    ["HasSpouseRider"             ] = &HasSpouseRider             ;
+    OtherScalars    ["SpouseIssueAge"             ] = &SpouseIssueAge             ;
+    OtherScalars    ["HasHoneymoon"               ] = &HasHoneymoon               ;
+    OtherScalars    ["PostHoneymoonSpread"        ] = &PostHoneymoonSpread        ;
+    OtherScalars    ["SplitMinPrem"               ] = &SplitMinPrem               ;
+    OtherScalars    ["ErNotionallyPaysTerm"       ] = &ErNotionallyPaysTerm       ;
+    OtherScalars    ["IsSinglePremium"            ] = &IsSinglePremium            ;
+    OtherScalars    ["MaxAnnGuarLoanSpread"       ] = &MaxAnnGuarLoanSpread       ;
+    OtherScalars    ["MaxAnnCurrLoanDueRate"      ] = &MaxAnnCurrLoanDueRate      ;
+    OtherScalars    ["IsInforce"                  ] = &IsInforce                  ;
+    OtherScalars    ["CurrentCoiMultiplier"       ] = &CurrentCoiMultiplier       ;
+    OtherScalars    ["NoLapseAlwaysActive"        ] = &NoLapseAlwaysActive        ;
+    OtherScalars    ["NoLapseMinDur"              ] = &NoLapseMinDur              ;
+    OtherScalars    ["NoLapseMinAge"              ] = &NoLapseMinAge              ;
+    OtherScalars    ["Has1035ExchCharge"          ] = &Has1035ExchCharge          ;
+    OtherScalars    ["EffDateJdn"                 ] = &EffDateJdn                 ;
+    OtherScalars    ["DateOfBirthJdn"             ] = &DateOfBirthJdn             ;
+    OtherScalars    ["LastCoiReentryDateJdn"      ] = &LastCoiReentryDateJdn      ;
+    OtherScalars    ["ListBillDateJdn"            ] = &ListBillDateJdn            ;
+    OtherScalars    ["InforceAsOfDateJdn"         ] = &InforceAsOfDateJdn         ;
+    OtherScalars    ["GenAcctAllocation"          ] = &GenAcctAllocation          ;
+    OtherScalars    ["SplitFundAllocation"        ] = &SplitFundAllocation        ;
+    OtherScalars    ["WriteTsvFile"               ] = &WriteTsvFile               ;
+    OtherScalars    ["SupplementalReport"         ] = &SupplementalReport         ;
 
-    Strings["ADDTerseName"                  ] = &ADDTerseName                  ;
-    Strings["InsurabilityTerseName"         ] = &InsurabilityTerseName         ;
-    Strings["ChildTerseName"                ] = &ChildTerseName                ;
-    Strings["SpouseTerseName"               ] = &SpouseTerseName               ;
-    Strings["TermTerseName"                 ] = &TermTerseName                 ;
-    Strings["WaiverTerseName"               ] = &WaiverTerseName               ;
-    Strings["AccelBftRiderTerseName"        ] = &AccelBftRiderTerseName        ;
-    Strings["OverloanRiderTerseName"        ] = &OverloanRiderTerseName        ;
+    // Strings.
+    Strings         ["PolicyForm"                 ] = &PolicyForm                 ;
+    Strings         ["PolicyMktgName"             ] = &PolicyMktgName             ;
+    Strings         ["PolicyLegalName"            ] = &PolicyLegalName            ;
+    Strings         ["CsoEra"                     ] = &CsoEra                     ;
+    Strings         ["InsCoShortName"             ] = &InsCoShortName             ;
+    Strings         ["InsCoName"                  ] = &InsCoName                  ;
+    Strings         ["InsCoAddr"                  ] = &InsCoAddr                  ;
+    Strings         ["InsCoStreet"                ] = &InsCoStreet                ;
+    Strings         ["InsCoPhone"                 ] = &InsCoPhone                 ;
+    Strings         ["MainUnderwriter"            ] = &MainUnderwriter            ;
+    Strings         ["MainUnderwriterAddress"     ] = &MainUnderwriterAddress     ;
+    Strings         ["CoUnderwriter"              ] = &CoUnderwriter              ;
+    Strings         ["CoUnderwriterAddress"       ] = &CoUnderwriterAddress       ;
 
-    Strings["ADDFootnote"                   ] = &ADDFootnote                   ;
-    Strings["ChildFootnote"                 ] = &ChildFootnote                 ;
-    Strings["SpouseFootnote"                ] = &SpouseFootnote                ;
-    Strings["TermFootnote"                  ] = &TermFootnote                  ;
-    Strings["WaiverFootnote"                ] = &WaiverFootnote                ;
-    Strings["AccelBftRiderFootnote"         ] = &AccelBftRiderFootnote         ;
-    Strings["OverloanRiderFootnote"         ] = &OverloanRiderFootnote         ;
+    Strings         ["AvName"                     ] = &AvName                     ;
+    Strings         ["CsvName"                    ] = &CsvName                    ;
+    Strings         ["CsvHeaderName"              ] = &CsvHeaderName              ;
+    Strings         ["NoLapseProvisionName"       ] = &NoLapseProvisionName       ;
+    Strings         ["ContractName"               ] = &ContractName               ;
+    Strings         ["DboName"                    ] = &DboName                    ;
+    Strings         ["DboNameLevel"               ] = &DboNameLevel               ;
+    Strings         ["DboNameIncreasing"          ] = &DboNameIncreasing          ;
+    Strings         ["DboNameMinDeathBenefit"     ] = &DboNameMinDeathBenefit     ;
+    Strings         ["GenAcctName"                ] = &GenAcctName                ;
+    Strings         ["GenAcctNameElaborated"      ] = &GenAcctNameElaborated      ;
+    Strings         ["SepAcctName"                ] = &SepAcctName                ;
+    Strings         ["SpecAmtName"                ] = &SpecAmtName                ;
+    Strings         ["SpecAmtNameElaborated"      ] = &SpecAmtNameElaborated      ;
+    Strings         ["UwBasisMedical"             ] = &UwBasisMedical             ;
+    Strings         ["UwBasisParamedical"         ] = &UwBasisParamedical         ;
+    Strings         ["UwBasisNonmedical"          ] = &UwBasisNonmedical          ;
+    Strings         ["UwBasisSimplified"          ] = &UwBasisSimplified          ;
+    Strings         ["UwBasisGuaranteed"          ] = &UwBasisGuaranteed          ;
+    Strings         ["UwClassPreferred"           ] = &UwClassPreferred           ;
+    Strings         ["UwClassStandard"            ] = &UwClassStandard            ;
+    Strings         ["UwClassRated"               ] = &UwClassRated               ;
+    Strings         ["UwClassUltra"               ] = &UwClassUltra               ;
 
-    Strings["GroupQuoteShortProductName"    ] = &GroupQuoteShortProductName    ;
-    Strings["GroupQuoteIsNotAnOffer"        ] = &GroupQuoteIsNotAnOffer        ;
-    Strings["GroupQuoteRidersFooter"        ] = &GroupQuoteRidersFooter        ;
-    Strings["GroupQuotePolicyFormId"        ] = &GroupQuotePolicyFormId        ;
-    Strings["GroupQuoteStateVariations"     ] = &GroupQuoteStateVariations     ;
-    Strings["GroupQuoteProspectus"          ] = &GroupQuoteProspectus          ;
-    Strings["GroupQuoteUnderwriter"         ] = &GroupQuoteUnderwriter         ;
-    Strings["GroupQuoteBrokerDealer"        ] = &GroupQuoteBrokerDealer        ;
-    Strings["GroupQuoteRubricMandatory"     ] = &GroupQuoteRubricMandatory     ;
-    Strings["GroupQuoteRubricVoluntary"     ] = &GroupQuoteRubricVoluntary     ;
-    Strings["GroupQuoteRubricFusion"        ] = &GroupQuoteRubricFusion        ;
-    Strings["GroupQuoteFooterMandatory"     ] = &GroupQuoteFooterMandatory     ;
-    Strings["GroupQuoteFooterVoluntary"     ] = &GroupQuoteFooterVoluntary     ;
-    Strings["GroupQuoteFooterFusion"        ] = &GroupQuoteFooterFusion        ;
+    Strings         ["AccountValueFootnote"       ] = &AccountValueFootnote       ;
+    Strings         ["AttainedAgeFootnote"        ] = &AttainedAgeFootnote        ;
+    Strings         ["CashSurrValueFootnote"      ] = &CashSurrValueFootnote      ;
+    Strings         ["DeathBenefitFootnote"       ] = &DeathBenefitFootnote       ;
+    Strings         ["InitialPremiumFootnote"     ] = &InitialPremiumFootnote     ;
+    Strings         ["NetPremiumFootnote"         ] = &NetPremiumFootnote         ;
+    Strings         ["GrossPremiumFootnote"       ] = &GrossPremiumFootnote       ;
+    Strings         ["OutlayFootnote"             ] = &OutlayFootnote             ;
+    Strings         ["PolicyYearFootnote"         ] = &PolicyYearFootnote         ;
 
-    Strings["MinimumPremiumFootnote"        ] = &MinimumPremiumFootnote        ;
-    Strings["PremAllocationFootnote"        ] = &PremAllocationFootnote        ;
-    Strings["InterestDisclaimer"            ] = &InterestDisclaimer            ;
-    Strings["GuarMortalityFootnote"         ] = &GuarMortalityFootnote         ;
-    Strings["ProductDescription"            ] = &ProductDescription            ;
-    Strings["StableValueFootnote"           ] = &StableValueFootnote           ;
-    Strings["NoVanishPremiumFootnote"       ] = &NoVanishPremiumFootnote       ;
-    Strings["RejectPremiumFootnote"         ] = &RejectPremiumFootnote         ;
-    Strings["ExpRatingFootnote"             ] = &ExpRatingFootnote             ;
-    Strings["MortalityBlendFootnote"        ] = &MortalityBlendFootnote        ;
-    Strings["HypotheticalRatesFootnote"     ] = &HypotheticalRatesFootnote     ;
-    Strings["SalesLoadRefundFootnote"       ] = &SalesLoadRefundFootnote       ;
-    Strings["NoLapseEverFootnote"           ] = &NoLapseEverFootnote           ;
-    Strings["NoLapseFootnote"               ] = &NoLapseFootnote               ;
-    Strings["MarketValueAdjFootnote"        ] = &MarketValueAdjFootnote        ;
-    Strings["ExchangeChargeFootnote0"       ] = &ExchangeChargeFootnote0       ;
-    Strings["CurrentValuesFootnote"         ] = &CurrentValuesFootnote         ;
-    Strings["DBOption1Footnote"             ] = &DBOption1Footnote             ;
-    Strings["DBOption2Footnote"             ] = &DBOption2Footnote             ;
-    Strings["DBOption3Footnote"             ] = &DBOption3Footnote             ;
-    Strings["MinDeathBenefitFootnote"       ] = &MinDeathBenefitFootnote       ;
-    Strings["ExpRatRiskChargeFootnote"      ] = &ExpRatRiskChargeFootnote      ;
-    Strings["ExchangeChargeFootnote1"       ] = &ExchangeChargeFootnote1       ;
-    Strings["FlexiblePremiumFootnote"       ] = &FlexiblePremiumFootnote       ;
-    Strings["GuaranteedValuesFootnote"      ] = &GuaranteedValuesFootnote      ;
-    Strings["CreditingRateFootnote"         ] = &CreditingRateFootnote         ;
-    Strings["GuaranteedCreditRateFootnote"  ] = &GuaranteedCreditRateFootnote  ;
-    Strings["GrossRateFootnote"             ] = &GrossRateFootnote             ;
-    Strings["NetRateFootnote"               ] = &NetRateFootnote               ;
-    Strings["MecFootnote"                   ] = &MecFootnote                   ;
-    Strings["GptFootnote"                   ] = &GptFootnote                   ;
-    Strings["MidpointValuesFootnote"        ] = &MidpointValuesFootnote        ;
-    Strings["SinglePremiumFootnote"         ] = &SinglePremiumFootnote         ;
-    Strings["MonthlyChargesFootnote"        ] = &MonthlyChargesFootnote        ;
-    Strings["UltCreditingRateFootnote"      ] = &UltCreditingRateFootnote      ;
-    Strings["UltCreditingRateHeader"        ] = &UltCreditingRateHeader        ;
-    Strings["MaxNaarFootnote"               ] = &MaxNaarFootnote               ;
-    Strings["PremTaxSurrChgFootnote"        ] = &PremTaxSurrChgFootnote        ;
-    Strings["PolicyFeeFootnote"             ] = &PolicyFeeFootnote             ;
-    Strings["AssetChargeFootnote"           ] = &AssetChargeFootnote           ;
-    Strings["InvestmentIncomeFootnote"      ] = &InvestmentIncomeFootnote      ;
-    Strings["IrrDbFootnote"                 ] = &IrrDbFootnote                 ;
-    Strings["IrrCsvFootnote"                ] = &IrrCsvFootnote                ;
-    Strings["MortalityChargesFootnote"      ] = &MortalityChargesFootnote      ;
-    Strings["LoanAndWithdrawalFootnote"     ] = &LoanAndWithdrawalFootnote     ;
-    Strings["LoanFootnote"                  ] = &LoanFootnote                  ;
-    Strings["ImprimaturPresale"             ] = &ImprimaturPresale             ;
-    Strings["ImprimaturPresaleComposite"    ] = &ImprimaturPresaleComposite    ;
-    Strings["ImprimaturInforce"             ] = &ImprimaturInforce             ;
-    Strings["ImprimaturInforceComposite"    ] = &ImprimaturInforceComposite    ;
-    Strings["StateMarketingImprimatur"      ] = &StateMarketingImprimatur      ;
-    Strings["InforceNonGuaranteedFootnote0" ] = &InforceNonGuaranteedFootnote0 ;
-    Strings["InforceNonGuaranteedFootnote1" ] = &InforceNonGuaranteedFootnote1 ;
-    Strings["InforceNonGuaranteedFootnote2" ] = &InforceNonGuaranteedFootnote2 ;
-    Strings["InforceNonGuaranteedFootnote3" ] = &InforceNonGuaranteedFootnote3 ;
-    Strings["NonGuaranteedFootnote"         ] = &NonGuaranteedFootnote         ;
-    Strings["NonGuaranteedFootnote1"        ] = &NonGuaranteedFootnote1        ;
-    Strings["NonGuaranteedFootnote1Tx"      ] = &NonGuaranteedFootnote1Tx      ;
-    Strings["MonthlyChargesPaymentFootnote" ] = &MonthlyChargesPaymentFootnote ;
-    Strings["SurrenderFootnote"             ] = &SurrenderFootnote             ;
-    Strings["PortabilityFootnote"           ] = &PortabilityFootnote           ;
-    Strings["FundRateFootnote"              ] = &FundRateFootnote              ;
-    Strings["IssuingCompanyFootnote"        ] = &IssuingCompanyFootnote        ;
-    Strings["SubsidiaryFootnote"            ] = &SubsidiaryFootnote            ;
-    Strings["PlacementAgentFootnote"        ] = &PlacementAgentFootnote        ;
-    Strings["MarketingNameFootnote"         ] = &MarketingNameFootnote         ;
-    Strings["GuarIssueDisclaimerNcSc"       ] = &GuarIssueDisclaimerNcSc       ;
-    Strings["GuarIssueDisclaimerMd"         ] = &GuarIssueDisclaimerMd         ;
-    Strings["GuarIssueDisclaimerTx"         ] = &GuarIssueDisclaimerTx         ;
-    Strings["IllRegCertAgent"               ] = &IllRegCertAgent               ;
-    Strings["IllRegCertAgentIl"             ] = &IllRegCertAgentIl             ;
-    Strings["IllRegCertAgentTx"             ] = &IllRegCertAgentTx             ;
-    Strings["IllRegCertClient"              ] = &IllRegCertClient              ;
-    Strings["IllRegCertClientIl"            ] = &IllRegCertClientIl            ;
-    Strings["IllRegCertClientTx"            ] = &IllRegCertClientTx            ;
+    Strings         ["ADDTerseName"               ] = &ADDTerseName               ;
+    Strings         ["InsurabilityTerseName"      ] = &InsurabilityTerseName      ;
+    Strings         ["ChildTerseName"             ] = &ChildTerseName             ;
+    Strings         ["SpouseTerseName"            ] = &SpouseTerseName            ;
+    Strings         ["TermTerseName"              ] = &TermTerseName              ;
+    Strings         ["WaiverTerseName"            ] = &WaiverTerseName            ;
+    Strings         ["AccelBftRiderTerseName"     ] = &AccelBftRiderTerseName     ;
+    Strings         ["OverloanRiderTerseName"     ] = &OverloanRiderTerseName     ;
 
-    Strings["ProductName"                   ] = &ProductName                   ;
-    Strings["ProducerName"                  ] = &ProducerName                  ;
-    Strings["ProducerStreet"                ] = &ProducerStreet                ;
-    Strings["ProducerCityEtc"               ] = &ProducerCityEtc               ;
-    Strings["ProducerPhone"                 ] = &ProducerPhone                 ;
-    Strings["ProducerId"                    ] = &ProducerId                    ;
-    Strings["CorpName"                      ] = &CorpName                      ;
-    Strings["MasterContractNumber"          ] = &MasterContractNumber          ;
-    Strings["ContractNumber"                ] = &ContractNumber                ;
-    Strings["Insured1"                      ] = &Insured1                      ;
-    Strings["Gender"                        ] = &Gender                        ;
-    Strings["UWType"                        ] = &UWType                        ;
-    Strings["Smoker"                        ] = &Smoker                        ;
-    Strings["UWClass"                       ] = &UWClass                       ;
-    Strings["SubstandardTable"              ] = &SubstandardTable              ;
-    Strings["DefnLifeIns"                   ] = &DefnLifeIns                   ;
-    Strings["DefnMaterialChange"            ] = &DefnMaterialChange            ;
-    Strings["AvoidMec"                      ] = &AvoidMec                      ;
-    Strings["PartMortTableName"             ] = &PartMortTableName             ;
-    Strings["StateOfJurisdiction"           ] = &StateOfJurisdiction           ;
-    Strings["PremiumTaxState"               ] = &PremiumTaxState               ;
-    Strings["CountryIso3166Abbrev"          ] = &CountryIso3166Abbrev          ;
-    Strings["Comments"                      ] = &Comments                      ;
+    Strings         ["ADDFootnote"                ] = &ADDFootnote                ;
+    Strings         ["ChildFootnote"              ] = &ChildFootnote              ;
+    Strings         ["SpouseFootnote"             ] = &SpouseFootnote             ;
+    Strings         ["TermFootnote"               ] = &TermFootnote               ;
+    Strings         ["WaiverFootnote"             ] = &WaiverFootnote             ;
+    Strings         ["AccelBftRiderFootnote"      ] = &AccelBftRiderFootnote      ;
+    Strings         ["OverloanRiderFootnote"      ] = &OverloanRiderFootnote      ;
 
-    Strings["SupplementalReportColumn00"    ] = &SupplementalReportColumn00    ;
-    Strings["SupplementalReportColumn01"    ] = &SupplementalReportColumn01    ;
-    Strings["SupplementalReportColumn02"    ] = &SupplementalReportColumn02    ;
-    Strings["SupplementalReportColumn03"    ] = &SupplementalReportColumn03    ;
-    Strings["SupplementalReportColumn04"    ] = &SupplementalReportColumn04    ;
-    Strings["SupplementalReportColumn05"    ] = &SupplementalReportColumn05    ;
-    Strings["SupplementalReportColumn06"    ] = &SupplementalReportColumn06    ;
-    Strings["SupplementalReportColumn07"    ] = &SupplementalReportColumn07    ;
-    Strings["SupplementalReportColumn08"    ] = &SupplementalReportColumn08    ;
-    Strings["SupplementalReportColumn09"    ] = &SupplementalReportColumn09    ;
-    Strings["SupplementalReportColumn10"    ] = &SupplementalReportColumn10    ;
-    Strings["SupplementalReportColumn11"    ] = &SupplementalReportColumn11    ;
+    Strings         ["GroupQuoteShortProductName" ] = &GroupQuoteShortProductName ;
+    Strings         ["GroupQuoteIsNotAnOffer"     ] = &GroupQuoteIsNotAnOffer     ;
+    Strings         ["GroupQuoteRidersFooter"     ] = &GroupQuoteRidersFooter     ;
+    Strings         ["GroupQuotePolicyFormId"     ] = &GroupQuotePolicyFormId     ;
+    Strings         ["GroupQuoteStateVariations"  ] = &GroupQuoteStateVariations  ;
+    Strings         ["GroupQuoteProspectus"       ] = &GroupQuoteProspectus       ;
+    Strings         ["GroupQuoteUnderwriter"      ] = &GroupQuoteUnderwriter      ;
+    Strings         ["GroupQuoteBrokerDealer"     ] = &GroupQuoteBrokerDealer     ;
+    Strings         ["GroupQuoteRubricMandatory"  ] = &GroupQuoteRubricMandatory  ;
+    Strings         ["GroupQuoteRubricVoluntary"  ] = &GroupQuoteRubricVoluntary  ;
+    Strings         ["GroupQuoteRubricFusion"     ] = &GroupQuoteRubricFusion     ;
+    Strings         ["GroupQuoteFooterMandatory"  ] = &GroupQuoteFooterMandatory  ;
+    Strings         ["GroupQuoteFooterVoluntary"  ] = &GroupQuoteFooterVoluntary  ;
+    Strings         ["GroupQuoteFooterFusion"     ] = &GroupQuoteFooterFusion     ;
 
-    // Special-case strings.
+    Strings         ["MinimumPremiumFootnote"     ] = &MinimumPremiumFootnote     ;
+    Strings         ["PremAllocationFootnote"     ] = &PremAllocationFootnote     ;
+    Strings         ["InterestDisclaimer"         ] = &InterestDisclaimer         ;
+    Strings         ["GuarMortalityFootnote"      ] = &GuarMortalityFootnote      ;
+    Strings         ["ProductDescription"         ] = &ProductDescription         ;
+    Strings         ["StableValueFootnote"        ] = &StableValueFootnote        ;
+    Strings         ["NoVanishPremiumFootnote"    ] = &NoVanishPremiumFootnote    ;
+    Strings         ["RejectPremiumFootnote"      ] = &RejectPremiumFootnote      ;
+    Strings         ["ExpRatingFootnote"          ] = &ExpRatingFootnote          ;
+    Strings         ["MortalityBlendFootnote"     ] = &MortalityBlendFootnote     ;
+    Strings         ["HypotheticalRatesFootnote"  ] = &HypotheticalRatesFootnote  ;
+    Strings         ["SalesLoadRefundFootnote"    ] = &SalesLoadRefundFootnote    ;
+    Strings         ["NoLapseEverFootnote"        ] = &NoLapseEverFootnote        ;
+    Strings         ["NoLapseFootnote"            ] = &NoLapseFootnote            ;
+    Strings         ["CurrentValuesFootnote"      ] = &CurrentValuesFootnote      ;
+    Strings         ["DBOption1Footnote"          ] = &DBOption1Footnote          ;
+    Strings         ["DBOption2Footnote"          ] = &DBOption2Footnote          ;
+    Strings         ["DBOption3Footnote"          ] = &DBOption3Footnote          ;
+    Strings         ["MinDeathBenefitFootnote"    ] = &MinDeathBenefitFootnote    ;
+    Strings         ["ExpRatRiskChargeFootnote"   ] = &ExpRatRiskChargeFootnote   ;
+    Strings         ["ExchangeChargeFootnote1"    ] = &ExchangeChargeFootnote1    ;
+    Strings         ["FlexiblePremiumFootnote"    ] = &FlexiblePremiumFootnote    ;
+    Strings         ["GuaranteedValuesFootnote"   ] = &GuaranteedValuesFootnote   ;
+    Strings         ["CreditingRateFootnote"      ] = &CreditingRateFootnote      ;
+    Strings         ["DefnGuarGenAcctRate"        ] = &DefnGuarGenAcctRate        ;
+    Strings         ["GrossRateFootnote"          ] = &GrossRateFootnote          ;
+    Strings         ["NetRateFootnote"            ] = &NetRateFootnote            ;
+    Strings         ["MecFootnote"                ] = &MecFootnote                ;
+    Strings         ["GptFootnote"                ] = &GptFootnote                ;
+    Strings         ["MidpointValuesFootnote"     ] = &MidpointValuesFootnote     ;
+    Strings         ["SinglePremiumFootnote"      ] = &SinglePremiumFootnote      ;
+    Strings         ["MonthlyChargesFootnote"     ] = &MonthlyChargesFootnote     ;
+    Strings         ["UltCreditingRateFootnote"   ] = &UltCreditingRateFootnote   ;
+    Strings         ["UltCreditingRateHeader"     ] = &UltCreditingRateHeader     ;
+    Strings         ["MaxNaarFootnote"            ] = &MaxNaarFootnote            ;
+    Strings         ["PremTaxSurrChgFootnote"     ] = &PremTaxSurrChgFootnote     ;
+    Strings         ["PolicyFeeFootnote"          ] = &PolicyFeeFootnote          ;
+    Strings         ["AssetChargeFootnote"        ] = &AssetChargeFootnote        ;
+    Strings         ["InvestmentIncomeFootnote"   ] = &InvestmentIncomeFootnote   ;
+    Strings         ["IrrDbFootnote"              ] = &IrrDbFootnote              ;
+    Strings         ["IrrCsvFootnote"             ] = &IrrCsvFootnote             ;
+    Strings         ["MortalityChargesFootnote"   ] = &MortalityChargesFootnote   ;
+    Strings         ["LoanAndWithdrawalFootnote"  ] = &LoanAndWithdrawalFootnote  ;
+    Strings         ["LoanFootnote"               ] = &LoanFootnote               ;
+    Strings         ["ImprimaturPresale"          ] = &ImprimaturPresale          ;
+    Strings         ["ImprimaturPresaleComposite" ] = &ImprimaturPresaleComposite ;
+    Strings         ["ImprimaturInforce"          ] = &ImprimaturInforce          ;
+    Strings         ["ImprimaturInforceComposite" ] = &ImprimaturInforceComposite ;
+    Strings         ["StateMarketingImprimatur"   ] = &StateMarketingImprimatur   ;
+    Strings         ["NonGuaranteedFootnote"      ] = &NonGuaranteedFootnote      ;
+    Strings         ["NonGuaranteedFootnote1"     ] = &NonGuaranteedFootnote1     ;
+    Strings         ["NonGuaranteedFootnote1Tx"   ] = &NonGuaranteedFootnote1Tx   ;
+    Strings         ["FnMonthlyDeductions"        ] = &FnMonthlyDeductions        ;
+    Strings         ["SurrenderFootnote"          ] = &SurrenderFootnote          ;
+    Strings         ["PortabilityFootnote"        ] = &PortabilityFootnote        ;
+    Strings         ["FundRateFootnote"           ] = &FundRateFootnote           ;
+    Strings         ["IssuingCompanyFootnote"     ] = &IssuingCompanyFootnote     ;
+    Strings         ["SubsidiaryFootnote"         ] = &SubsidiaryFootnote         ;
+    Strings         ["PlacementAgentFootnote"     ] = &PlacementAgentFootnote     ;
+    Strings         ["MarketingNameFootnote"      ] = &MarketingNameFootnote      ;
+    Strings         ["GuarIssueDisclaimerNcSc"    ] = &GuarIssueDisclaimerNcSc    ;
+    Strings         ["GuarIssueDisclaimerMd"      ] = &GuarIssueDisclaimerMd      ;
+    Strings         ["GuarIssueDisclaimerTx"      ] = &GuarIssueDisclaimerTx      ;
+    Strings         ["IllRegCertAgent"            ] = &IllRegCertAgent            ;
+    Strings         ["IllRegCertAgentIl"          ] = &IllRegCertAgentIl          ;
+    Strings         ["IllRegCertAgentTx"          ] = &IllRegCertAgentTx          ;
+    Strings         ["IllRegCertClient"           ] = &IllRegCertClient           ;
+    Strings         ["IllRegCertClientIl"         ] = &IllRegCertClientIl         ;
+    Strings         ["IllRegCertClientTx"         ] = &IllRegCertClientTx         ;
 
-    Strings["InitDBOpt"                     ] = &InitDBOpt                     ;
+    Strings         ["FnMaturityAge"              ] = &FnMaturityAge              ;
+    Strings         ["FnPartialMortality"         ] = &FnPartialMortality         ;
+    Strings         ["FnProspectus"               ] = &FnProspectus               ;
+    Strings         ["FnInitialSpecAmt"           ] = &FnInitialSpecAmt           ;
+    Strings         ["FnInforceAcctVal"           ] = &FnInforceAcctVal           ;
+    Strings         ["FnInforceTaxBasis"          ] = &FnInforceTaxBasis          ;
+    Strings         ["Fn1035Charge"               ] = &Fn1035Charge               ;
+    Strings         ["FnMecExtraWarning"          ] = &FnMecExtraWarning          ;
+    Strings         ["FnNotTaxAdvice"             ] = &FnNotTaxAdvice             ;
+    Strings         ["FnImf"                      ] = &FnImf                      ;
+    Strings         ["FnCensus"                   ] = &FnCensus                   ;
+    Strings         ["FnDacTax"                   ] = &FnDacTax                   ;
+    Strings         ["FnDefnLifeIns"              ] = &FnDefnLifeIns              ;
+    Strings         ["FnBoyEoy"                   ] = &FnBoyEoy                   ;
+    Strings         ["FnGeneralAccount"           ] = &FnGeneralAccount           ;
+    Strings         ["FnPpMemorandum"             ] = &FnPpMemorandum             ;
+    Strings         ["FnPpAccreditedInvestor"     ] = &FnPpAccreditedInvestor     ;
+    Strings         ["FnPpLoads"                  ] = &FnPpLoads                  ;
+    Strings         ["FnProposalUnderwriting"     ] = &FnProposalUnderwriting     ;
+    Strings         ["FnGuaranteedPremium"        ] = &FnGuaranteedPremium        ;
+    Strings         ["FnOmnibusDisclaimer"        ] = &FnOmnibusDisclaimer        ;
+    Strings         ["FnInitialDbo"               ] = &FnInitialDbo               ;
+
+    Strings         ["DefnAV"                     ] = &DefnAV                     ;
+    Strings         ["DefnCSV"                    ] = &DefnCSV                    ;
+    Strings         ["DefnMec"                    ] = &DefnMec                    ;
+    Strings         ["DefnOutlay"                 ] = &DefnOutlay                 ;
+    Strings         ["DefnSpecAmt"                ] = &DefnSpecAmt                ;
+
+    Strings         ["ProductName"                ] = &ProductName                ;
+    Strings         ["ProducerName"               ] = &ProducerName               ;
+    Strings         ["ProducerStreet"             ] = &ProducerStreet             ;
+    Strings         ["ProducerCityEtc"            ] = &ProducerCityEtc            ;
+    Strings         ["ProducerPhone"              ] = &ProducerPhone              ;
+    Strings         ["ProducerId"                 ] = &ProducerId                 ;
+    Strings         ["CorpName"                   ] = &CorpName                   ;
+    Strings         ["MasterContractNumber"       ] = &MasterContractNumber       ;
+    Strings         ["ContractNumber"             ] = &ContractNumber             ;
+    Strings         ["Insured1"                   ] = &Insured1                   ;
+    Strings         ["Gender"                     ] = &Gender                     ;
+    Strings         ["UWType"                     ] = &UWType                     ;
+    Strings         ["Smoker"                     ] = &Smoker                     ;
+    Strings         ["UWClass"                    ] = &UWClass                    ;
+    Strings         ["SubstandardTable"           ] = &SubstandardTable           ;
+    Strings         ["DefnLifeIns"                ] = &DefnLifeIns                ;
+    Strings         ["DefnMaterialChange"         ] = &DefnMaterialChange         ;
+    Strings         ["PartMortTableName"          ] = &PartMortTableName          ;
+    Strings         ["StateOfJurisdiction"        ] = &StateOfJurisdiction        ;
+    Strings         ["PremiumTaxState"            ] = &PremiumTaxState            ;
+    Strings         ["CountryIso3166Abbrev"       ] = &CountryIso3166Abbrev       ;
+    Strings         ["Comments"                   ] = &Comments                   ;
+
+    Strings         ["SupplementalReportColumn00" ] = &SupplementalReportColumn00 ;
+    Strings         ["SupplementalReportColumn01" ] = &SupplementalReportColumn01 ;
+    Strings         ["SupplementalReportColumn02" ] = &SupplementalReportColumn02 ;
+    Strings         ["SupplementalReportColumn03" ] = &SupplementalReportColumn03 ;
+    Strings         ["SupplementalReportColumn04" ] = &SupplementalReportColumn04 ;
+    Strings         ["SupplementalReportColumn05" ] = &SupplementalReportColumn05 ;
+    Strings         ["SupplementalReportColumn06" ] = &SupplementalReportColumn06 ;
+    Strings         ["SupplementalReportColumn07" ] = &SupplementalReportColumn07 ;
+    Strings         ["SupplementalReportColumn08" ] = &SupplementalReportColumn08 ;
+    Strings         ["SupplementalReportColumn09" ] = &SupplementalReportColumn09 ;
+    Strings         ["SupplementalReportColumn10" ] = &SupplementalReportColumn10 ;
+    Strings         ["SupplementalReportColumn11" ] = &SupplementalReportColumn11 ;
+
+    Strings         ["InitDBOpt"                  ] = &InitDBOpt                  ;
+    Strings         ["InitEeMode"                 ] = &InitEeMode                 ;
+    Strings         ["InitErMode"                 ] = &InitErMode                 ;
 
     LedgerBase::Alloc();
 
@@ -390,9 +423,9 @@ void LedgerInvariant::Alloc(int len)
     // be part of the maps populated above. We can reserve space for
     // such vectors, though, if we know what their lengths will be.
 
-    EeMode              .reserve(Length);
-    ErMode              .reserve(Length);
-    DBOpt               .reserve(Length);
+    DBOpt        .reserve(Length);
+    EeMode       .reserve(Length);
+    ErMode       .reserve(Length);
 
     // Vectors of length other than 'Length' can't be part of the maps
     // populated above, but we can reserve space for them here if we
@@ -405,7 +438,7 @@ void LedgerInvariant::Alloc(int len)
     // have zeros, so that adding each cell to it produces the
     // correct total. For each actual non-composite cell, it's
     // initialized correctly by the account-value class.
-    InforceLives        .assign(1 + Length, 0.0);
+    InforceLives .assign(1 + Length, 0.0);
 
     // Data excluded from the maps above must be copied explicitly in
     // Copy(), which is called by the copy ctor and assignment operator.
@@ -419,9 +452,9 @@ void LedgerInvariant::Copy(LedgerInvariant const& obj)
     LedgerBase::Copy(obj);
 
     // Vectors of type not compatible with double.
+    DBOpt                  = obj.DBOpt                 ;
     EeMode                 = obj.EeMode                ;
     ErMode                 = obj.ErMode                ;
-    DBOpt                  = obj.DBOpt                 ;
 
     // Vectors of idiosyncratic length.
     InforceLives           = obj.InforceLives          ;
@@ -436,8 +469,6 @@ void LedgerInvariant::Copy(LedgerInvariant const& obj)
     LastCoiReentryDate     = obj.LastCoiReentryDate    ;
     ListBillDate           = obj.ListBillDate          ;
     InforceAsOfDate        = obj.InforceAsOfDate       ;
-    InitErMode             = obj.InitErMode            ;
-    InitDBOpt              = obj.InitDBOpt             ;
 
     // Private internals.
     irr_precision_         = obj.irr_precision_        ;
@@ -458,66 +489,46 @@ void LedgerInvariant::Init()
     // Zero-initialize elements of AllVectors and AllScalars.
     LedgerBase::Initialize(GetLength());
 
-    EeMode              .assign(Length, mce_mode(mce_annual));
-    ErMode              .assign(Length, mce_mode(mce_annual));
-    DBOpt               .assign(Length, mce_dbopt(mce_option1));
+    DBOpt                .assign(Length, mce_dbopt(mce_option1));
+    EeMode               .assign(Length, mce_mode(mce_annual));
+    ErMode               .assign(Length, mce_mode(mce_annual));
 
-    InforceYear         = Length;
-    InforceMonth        = 11;
+    // Nonscalable scalars.
 
-    MecYear             = Length;
-    MecMonth            = 11;
+    MaleProportion             = 0;
+    NonsmokerProportion        = 0;
+    Age                        = 0;
+    EndtAge                    = 100;
+    NoLongerIssued             = false;
+    AllowGroupQuote            = true;
+    SurviveToExpectancy        = true;
+    SurviveToYear              = true;
+    SurviveToAge               = true;
+    SurvivalMaxYear            = 0;
+    SurvivalMaxAge             = 0;
+    InforceYear                = Length;
+    InforceMonth               = 11;
+    MecYear                    = Length;
+    MecMonth                   = 11;
+    SpouseIssueAge             = 100;
+    IsSinglePremium            = oe_flexible_premium;
+    CurrentCoiMultiplier       = 0;
+    NoLapseAlwaysActive        = false;
+    NoLapseMinDur              = 100;
+    NoLapseMinAge              = 100;
+    Has1035ExchCharge          = false;
+    WriteTsvFile               = false;
+    SupplementalReport         = true;
 
-    // TODO ?? Probably every member should be initialized.
-    Age                 = 0;
-    EndtAge             = 100;
-    NoLapseMinDur       = 100;
-    NoLapseMinAge       = 100;
-    NoLapseAlwaysActive = false;
-    Has1035ExchCharge   = false;
+    // Private internals.
 
-    WriteTsvFile        = false;
-    SupplementalReport  = true;
-    NoLongerIssued      = false;
-    AllowGroupQuote     = true;
-    IsSinglePremium     = oe_flexible_premium;
-
-    irr_precision_      = 0;
-    irr_initialized_    = false;
-    FullyInitialized    = false;
+    irr_precision_             = 0;
+    irr_initialized_           = false;
+    FullyInitialized           = false;
 }
 
-//============================================================================
-LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
-{
-    LedgerBase::PlusEq(a_Addend, a_Addend.InforceLives);
-
-    irr_precision_ = a_Addend.irr_precision_;
-
-    std::vector<double> const& N = a_Addend.InforceLives;
-    int Max = std::min(Length, a_Addend.Length);
-
-    // ET !! This is of the form 'x = (lengthof x) take y'.
-    // Make sure total (this) has enough years to add all years of a_Addend to.
-    LMI_ASSERT(a_Addend.Length <= Length);
-    for(int j = 0; j < Max; ++j)
-        {
-        if(0.0 == N[j])
-            break;
-        // Don't multiply InforceLives by N--it *is* N.
-        InforceLives    [j] += a_Addend.InforceLives    [j];
-        }
-    // InforceLives is one longer than the other vectors.
-    InforceLives        [Max] += a_Addend.InforceLives  [Max];
-
-//  GenderDistinct          = 0;
-//  GenderBlended           = 0;
-//  Smoker                  = a_Addend.Smoking;
-//  SmokerDistinct          = 0;
-//  SmokerBlended           = 0;
-//  UWClass                 = a_Addend.Class;
-//  SubstandardTable
-
+// Notes on effective date.
+//
 // Should different cells in a census have different effective dates?
 // Should there be any consistency requirements at all?
 //
@@ -540,302 +551,188 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 // reason to let it vary. Maybe these are different needs requiring separate
 // input items. What would we do with a plan established thirty years ago
 // that includes an individual who's already past the maturity date?
-//
-// Anyway, those are my thoughts; what conclusion would you reach?
 
-    EffDate                       = a_Addend.EffDate;
-    EffDateJdn                    = a_Addend.EffDateJdn;
-    DateOfBirth                   = a_Addend.DateOfBirth;
-    DateOfBirthJdn                = a_Addend.DateOfBirthJdn;
-    LastCoiReentryDate            = a_Addend.LastCoiReentryDate;
-    LastCoiReentryDateJdn         = a_Addend.LastCoiReentryDateJdn;
-    ListBillDate                  = a_Addend.ListBillDate;
-    ListBillDateJdn               = a_Addend.ListBillDateJdn;
-    InforceAsOfDate               = a_Addend.InforceAsOfDate;
-    InforceAsOfDateJdn            = a_Addend.InforceAsOfDateJdn;
-    InitErMode                    = a_Addend.InitErMode;
-    InitDBOpt                     = a_Addend.InitDBOpt;
-    Age                           = std::min(Age, a_Addend.Age);
-    RetAge                        = std::min(RetAge, a_Addend.RetAge); // TODO ?? Does this make sense?
-    EndtAge                       = std::max(EndtAge, a_Addend.EndtAge);
+/// Accumulate an individual cell into a composite ledger.
+///
+/// For ledger members that are naturally additive, such as premiums,
+/// the composite value is the total (weighted by an inforce factor).
+/// For nonadditive members, some other operation may clearly be more
+/// appropriate than addition--e.g.:
+///
+///   NoLongerIssued: This flag prohibits new-business illustrations
+///   when necessary. Its composite value is a logical OR, so that the
+///   prohibition applies to a composite if it applies to any cell.
+///
+///   AllowGroupQuote: This flag permits group quotes if appropriate.
+///   Its composite value is a logical AND, so that the permission
+///   applies to a composite only if it applies to every cell.
+///
+/// Other members may use the same (or other) methods, although with a
+/// less cut-and-dried rationale--e.g.:
+///
+///   IsMec: Composite value is 'true' if any cell is 'true' (i.e.,
+///   logical OR). This doesn't mean that the aggregate is actually a
+///   MEC; it just means that the composite illustration ought to
+///   include the stern tax warnings that are required for a MEC.
+///   With a lot more work, footnotes could be specialized for
+///   composites ("One or more of these contracts is a MEC", e.g.),
+///   but insurers are generally unwilling to go to such lengths.
+///
+///   MecYear: Composite value is the least of any cell. Thus, if a
+///   footnote says that a contract becomes a MEC in a particular
+///   year, the composite uses the lowest such year. That's the least
+///   bad choice because it produces the most severe footnote.
+///
+/// For some other members, the composite value is the value for the
+/// last cell. This is the default behavior for non-additive members,
+/// and at least it has the advantage that if all cells have the same
+/// value, then the composite also has that value. For example:
+///
+///   GenAcctAllocation: Arguably a weighted average would be better,
+///   but averages aren't supported in this simple code yet. However,
+///   any average would be inaccurate.
+///
+///   SubstandardTable: This represents a mortality multiplier, for
+///   which an average might seem somewhat suitable, but that's hardly
+///   possible because substandard tables are quantized. The average
+///   of "L=+300%" and "P=+400%" is not table N (350%) because no such
+///   table is defined.
+///
+///   WaiverFootnote: String members in general cannot be composited
+///   in any more reasonable way than taking the last cell's value.
+///   A composite may include cells whose policy forms have different
+///   premium-waiver footnotes, but insurers have little desire to
+///   combine them thoughtfully.
+///
+/// Thus, there exists One True Way for compositing additive members
+/// and some boolean members, but composite values assigned here for
+/// other members are often arbitrary.
 
-    DefnLifeIns                   = a_Addend.DefnLifeIns;
-    DefnMaterialChange            = a_Addend.DefnMaterialChange;
-    AvoidMec                      = a_Addend.AvoidMec;
+LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
+{
+    LedgerBase::PlusEq(a_Addend, a_Addend.InforceLives);
 
-    // TODO ?? Probably we should assert that these don't vary by life.
-    CorpName                      = a_Addend.CorpName;
-    MasterContractNumber          = a_Addend.MasterContractNumber;
-    ProductName                   = a_Addend.ProductName;
-    ProducerName                  = a_Addend.ProducerName;
-    ProducerStreet                = a_Addend.ProducerStreet;
-    ProducerCityEtc               = a_Addend.ProducerCityEtc;
-    ProducerPhone                 = a_Addend.ProducerPhone;
-    ProducerId                    = a_Addend.ProducerId;
-    // This would necessarily vary by life:
-//  ContractNumber                = "";
-
-    PolicyForm                    = a_Addend.PolicyForm;
-    PolicyMktgName                = a_Addend.PolicyMktgName;
-    PolicyLegalName               = a_Addend.PolicyLegalName;
-    // It is inappropriate to "summarize" CsoEra for a composite that
-    // includes contracts issued in different CSO eras. Choosing the
-    // last cell's value does the "right" thing when all contracts are
-    // of the same CSO era, as is most often the case.
-    CsoEra                        = a_Addend.CsoEra;
-    InsCoShortName                = a_Addend.InsCoShortName;
-    InsCoName                     = a_Addend.InsCoName;
-    InsCoAddr                     = a_Addend.InsCoAddr;
-    InsCoStreet                   = a_Addend.InsCoStreet;
-    InsCoPhone                    = a_Addend.InsCoPhone;
-    MainUnderwriter               = a_Addend.MainUnderwriter;
-    MainUnderwriterAddress        = a_Addend.MainUnderwriterAddress;
-    CoUnderwriter                 = a_Addend.CoUnderwriter;
-    CoUnderwriterAddress          = a_Addend.CoUnderwriterAddress;
-
-    AvName                        = a_Addend.AvName;
-    CsvName                       = a_Addend.CsvName;
-    CsvHeaderName                 = a_Addend.CsvHeaderName;
-    NoLapseProvisionName          = a_Addend.NoLapseProvisionName;
-    ContractName                  = a_Addend.ContractName;
-    DboName                       = a_Addend.DboName;
-    DboNameLevel                  = a_Addend.DboNameLevel;
-    DboNameIncreasing             = a_Addend.DboNameIncreasing;
-    DboNameMinDeathBenefit        = a_Addend.DboNameMinDeathBenefit;
-    GenAcctName                   = a_Addend.GenAcctName;
-    GenAcctNameElaborated         = a_Addend.GenAcctNameElaborated;
-    SepAcctName                   = a_Addend.SepAcctName;
-    SpecAmtName                   = a_Addend.SpecAmtName;
-    SpecAmtNameElaborated         = a_Addend.SpecAmtNameElaborated;
-    UwBasisMedical                = a_Addend.UwBasisMedical;
-    UwBasisParamedical            = a_Addend.UwBasisParamedical;
-    UwBasisNonmedical             = a_Addend.UwBasisNonmedical;
-    UwBasisSimplified             = a_Addend.UwBasisSimplified;
-    UwBasisGuaranteed             = a_Addend.UwBasisGuaranteed;
-    UwClassPreferred              = a_Addend.UwClassPreferred;
-    UwClassStandard               = a_Addend.UwClassStandard;
-    UwClassRated                  = a_Addend.UwClassRated;
-    UwClassUltra                  = a_Addend.UwClassUltra;
-
-    AccountValueFootnote          = a_Addend.AccountValueFootnote;
-    AttainedAgeFootnote           = a_Addend.AttainedAgeFootnote;
-    CashSurrValueFootnote         = a_Addend.CashSurrValueFootnote;
-    DeathBenefitFootnote          = a_Addend.DeathBenefitFootnote;
-    InitialPremiumFootnote        = a_Addend.InitialPremiumFootnote;
-    NetPremiumFootnote            = a_Addend.NetPremiumFootnote;
-    GrossPremiumFootnote          = a_Addend.GrossPremiumFootnote;
-    OutlayFootnote                = a_Addend.OutlayFootnote;
-    PolicyYearFootnote            = a_Addend.PolicyYearFootnote;
-
-    ADDTerseName                  = a_Addend.ADDTerseName;
-    InsurabilityTerseName         = a_Addend.InsurabilityTerseName;
-    ChildTerseName                = a_Addend.ChildTerseName;
-    SpouseTerseName               = a_Addend.SpouseTerseName;
-    TermTerseName                 = a_Addend.TermTerseName;
-    WaiverTerseName               = a_Addend.WaiverTerseName;
-    AccelBftRiderTerseName        = a_Addend.AccelBftRiderTerseName;
-    OverloanRiderTerseName        = a_Addend.OverloanRiderTerseName;
-
-    ADDFootnote                   = a_Addend.ADDFootnote;
-    ChildFootnote                 = a_Addend.ChildFootnote;
-    SpouseFootnote                = a_Addend.SpouseFootnote;
-    TermFootnote                  = a_Addend.TermFootnote;
-    WaiverFootnote                = a_Addend.WaiverFootnote;
-    AccelBftRiderFootnote         = a_Addend.AccelBftRiderFootnote;
-    OverloanRiderFootnote         = a_Addend.OverloanRiderFootnote;
-
-    GroupQuoteShortProductName    = a_Addend.GroupQuoteShortProductName;
-    GroupQuoteIsNotAnOffer        = a_Addend.GroupQuoteIsNotAnOffer    ;
-    GroupQuoteRidersFooter        = a_Addend.GroupQuoteRidersFooter    ;
-    GroupQuotePolicyFormId        = a_Addend.GroupQuotePolicyFormId    ;
-    GroupQuoteStateVariations     = a_Addend.GroupQuoteStateVariations ;
-    GroupQuoteProspectus          = a_Addend.GroupQuoteProspectus      ;
-    GroupQuoteUnderwriter         = a_Addend.GroupQuoteUnderwriter     ;
-    GroupQuoteBrokerDealer        = a_Addend.GroupQuoteBrokerDealer    ;
-    GroupQuoteRubricMandatory     = a_Addend.GroupQuoteRubricMandatory ;
-    GroupQuoteRubricVoluntary     = a_Addend.GroupQuoteRubricVoluntary ;
-    GroupQuoteRubricFusion        = a_Addend.GroupQuoteRubricFusion    ;
-    GroupQuoteFooterMandatory     = a_Addend.GroupQuoteFooterMandatory ;
-    GroupQuoteFooterVoluntary     = a_Addend.GroupQuoteFooterVoluntary ;
-    GroupQuoteFooterFusion        = a_Addend.GroupQuoteFooterFusion    ;
-
-    MinimumPremiumFootnote        = a_Addend.MinimumPremiumFootnote;
-    PremAllocationFootnote        = a_Addend.PremAllocationFootnote;
-
-    InterestDisclaimer            = a_Addend.InterestDisclaimer;
-    GuarMortalityFootnote         = a_Addend.GuarMortalityFootnote;
-    ProductDescription            = a_Addend.ProductDescription;
-    StableValueFootnote           = a_Addend.StableValueFootnote;
-    NoVanishPremiumFootnote       = a_Addend.NoVanishPremiumFootnote;
-    RejectPremiumFootnote         = a_Addend.RejectPremiumFootnote;
-    ExpRatingFootnote             = a_Addend.ExpRatingFootnote;
-    MortalityBlendFootnote        = a_Addend.MortalityBlendFootnote;
-    HypotheticalRatesFootnote     = a_Addend.HypotheticalRatesFootnote;
-    SalesLoadRefundFootnote       = a_Addend.SalesLoadRefundFootnote;
-    NoLapseEverFootnote           = a_Addend.NoLapseEverFootnote;
-    NoLapseFootnote               = a_Addend.NoLapseFootnote;
-    MarketValueAdjFootnote        = a_Addend.MarketValueAdjFootnote;
-    ExchangeChargeFootnote0       = a_Addend.ExchangeChargeFootnote0;
-    CurrentValuesFootnote         = a_Addend.CurrentValuesFootnote;
-    DBOption1Footnote             = a_Addend.DBOption1Footnote;
-    DBOption2Footnote             = a_Addend.DBOption2Footnote;
-    DBOption3Footnote             = a_Addend.DBOption3Footnote;
-    MinDeathBenefitFootnote       = a_Addend.MinDeathBenefitFootnote;
-    ExpRatRiskChargeFootnote      = a_Addend.ExpRatRiskChargeFootnote;
-    ExchangeChargeFootnote1       = a_Addend.ExchangeChargeFootnote1;
-    FlexiblePremiumFootnote       = a_Addend.FlexiblePremiumFootnote;
-    GuaranteedValuesFootnote      = a_Addend.GuaranteedValuesFootnote;
-    CreditingRateFootnote         = a_Addend.CreditingRateFootnote;
-    GuaranteedCreditRateFootnote  = a_Addend.GuaranteedCreditRateFootnote;
-    GrossRateFootnote             = a_Addend.GrossRateFootnote;
-    NetRateFootnote               = a_Addend.NetRateFootnote;
-    MecFootnote                   = a_Addend.MecFootnote;
-    GptFootnote                   = a_Addend.GptFootnote;
-    MidpointValuesFootnote        = a_Addend.MidpointValuesFootnote;
-    SinglePremiumFootnote         = a_Addend.SinglePremiumFootnote;
-    MonthlyChargesFootnote        = a_Addend.MonthlyChargesFootnote;
-    UltCreditingRateFootnote      = a_Addend.UltCreditingRateFootnote;
-    UltCreditingRateHeader        = a_Addend.UltCreditingRateHeader;
-    MaxNaarFootnote               = a_Addend.MaxNaarFootnote;
-    PremTaxSurrChgFootnote        = a_Addend.PremTaxSurrChgFootnote;
-    PolicyFeeFootnote             = a_Addend.PolicyFeeFootnote;
-    AssetChargeFootnote           = a_Addend.AssetChargeFootnote;
-    InvestmentIncomeFootnote      = a_Addend.InvestmentIncomeFootnote;
-    IrrDbFootnote                 = a_Addend.IrrDbFootnote;
-    IrrCsvFootnote                = a_Addend.IrrCsvFootnote;
-    MortalityChargesFootnote      = a_Addend.MortalityChargesFootnote;
-    LoanAndWithdrawalFootnote     = a_Addend.LoanAndWithdrawalFootnote;
-    LoanFootnote                  = a_Addend.LoanFootnote;
-    ImprimaturPresale             = a_Addend.ImprimaturPresale;
-    ImprimaturPresaleComposite    = a_Addend.ImprimaturPresaleComposite;
-    ImprimaturInforce             = a_Addend.ImprimaturInforce;
-    ImprimaturInforceComposite    = a_Addend.ImprimaturInforceComposite;
-    StateMarketingImprimatur      = a_Addend.StateMarketingImprimatur;
-    InforceNonGuaranteedFootnote0 = a_Addend.InforceNonGuaranteedFootnote0;
-    InforceNonGuaranteedFootnote1 = a_Addend.InforceNonGuaranteedFootnote1;
-    InforceNonGuaranteedFootnote2 = a_Addend.InforceNonGuaranteedFootnote2;
-    InforceNonGuaranteedFootnote3 = a_Addend.InforceNonGuaranteedFootnote3;
-    NonGuaranteedFootnote         = a_Addend.NonGuaranteedFootnote;
-    NonGuaranteedFootnote1        = a_Addend.NonGuaranteedFootnote1;
-    NonGuaranteedFootnote1Tx      = a_Addend.NonGuaranteedFootnote1Tx;
-    MonthlyChargesPaymentFootnote = a_Addend.MonthlyChargesPaymentFootnote;
-    SurrenderFootnote             = a_Addend.SurrenderFootnote;
-    PortabilityFootnote           = a_Addend.PortabilityFootnote;
-    FundRateFootnote              = a_Addend.FundRateFootnote;
-    IssuingCompanyFootnote        = a_Addend.IssuingCompanyFootnote;
-    SubsidiaryFootnote            = a_Addend.SubsidiaryFootnote;
-    PlacementAgentFootnote        = a_Addend.PlacementAgentFootnote;
-    MarketingNameFootnote         = a_Addend.MarketingNameFootnote;
-    GuarIssueDisclaimerNcSc       = a_Addend.GuarIssueDisclaimerNcSc;
-    GuarIssueDisclaimerMd         = a_Addend.GuarIssueDisclaimerMd;
-    GuarIssueDisclaimerTx         = a_Addend.GuarIssueDisclaimerTx;
-    IllRegCertAgent               = a_Addend.IllRegCertAgent;
-    IllRegCertAgentIl             = a_Addend.IllRegCertAgentIl;
-    IllRegCertAgentTx             = a_Addend.IllRegCertAgentTx;
-    IllRegCertClient              = a_Addend.IllRegCertClient;
-    IllRegCertClientIl            = a_Addend.IllRegCertClientIl;
-    IllRegCertClientTx            = a_Addend.IllRegCertClientTx;
-
-    Comments                      = a_Addend.Comments;
-
-    StateOfJurisdiction           = a_Addend.StateOfJurisdiction;
-    PremiumTaxState               = a_Addend.PremiumTaxState;
-    GroupIndivSelection           = GroupIndivSelection   || a_Addend.GroupIndivSelection;
-    NoLongerIssued                = NoLongerIssued        || a_Addend.NoLongerIssued;
-    AllowGroupQuote               = AllowGroupQuote       && a_Addend.AllowGroupQuote;
-    TxCallsGuarUwSubstd           = TxCallsGuarUwSubstd   || a_Addend.TxCallsGuarUwSubstd;
-    AllowExperienceRating         = AllowExperienceRating || a_Addend.AllowExperienceRating;
-    UseExperienceRating           = UseExperienceRating   || a_Addend.UseExperienceRating;
-    UsePartialMort                = a_Addend.UsePartialMort;
-    PartMortTableName             = a_Addend.PartMortTableName;
-    GuarMaxMandE                  = std::max(GuarMaxMandE   , a_Addend.GuarMaxMandE   );
-    InitDacTaxRate                = std::max(InitDacTaxRate , a_Addend.InitDacTaxRate );
-    InitPremTaxRate               = std::max(InitPremTaxRate, a_Addend.InitPremTaxRate);
-    AvgFund                       = a_Addend.AvgFund;
-    CustomFund                    = a_Addend.CustomFund;
-    FundNumbers                   = a_Addend.FundNumbers;
-    FundNames                     = a_Addend.FundNames;
-    FundAllocs                    = a_Addend.FundAllocs;
-    FundAllocations               = a_Addend.FundAllocations;
-    SplitFundAllocation           = SplitFundAllocation   || a_Addend.SplitFundAllocation;
-    GenAcctAllocation             = a_Addend.GenAcctAllocation;
-    GenderDistinct                = a_Addend.GenderDistinct;
-    GenderBlended                 = a_Addend.GenderBlended;
-    Smoker                        = a_Addend.Smoker;
-    SmokerDistinct                = a_Addend.SmokerDistinct;
-    SmokerBlended                 = a_Addend.SmokerBlended;
-
-    PartMortTableMult             = a_Addend.PartMortTableMult;
-    TotalIMF                      = a_Addend.TotalIMF;
-    RefundableSalesLoad           = a_Addend.RefundableSalesLoad;
-
-    // PDF !! This is the logic used in the variant ledger class.
-    // It's not a very good idea, but until it can be replaced
-    // everywhere, at least it ensures that the composite value
-    // isn't zero. (In some other cases, zero might be a sensible
-    // answer--e.g., for ratios like 'CorridorFactor', where an
-    // average weighted by number of lives would be inaccurate,
-    // and any aggregate value could be misleading.)
+    // For 'CorridorFactor', an average weighted by number of lives
+    // would be inaccurate, and indeed any aggregate value could be
+    // surprising because it would not necessarily be monotone (for
+    // two lives with a ten-year age difference, the last ten would
+    // depend on the younger life only, most likely producing a
+    // discontinuity at the older life's maturity age).
     for(int j = 0; j < a_Addend.Length; ++j)
         {
-        AnnLoanDueRate[j] = a_Addend.AnnLoanDueRate[j];
+        CorridorFactor [j]  = 0.0;
         }
 
-    IsMec                         = a_Addend.IsMec        || IsMec;
-    InforceIsMec                  = a_Addend.InforceIsMec || InforceIsMec;
+    irr_precision_ = a_Addend.irr_precision_;
+
+    std::vector<double> const& N = a_Addend.InforceLives;
+    int Max = std::min(Length, a_Addend.Length);
+
+    // ET !! This is of the form 'x = (lengthof x) take y'.
+    // Make sure total (this) has enough years to add all years of a_Addend to.
+    LMI_ASSERT(a_Addend.Length <= Length);
+    for(int j = 0; j < Max; ++j)
+        {
+        if(0.0 == N[j])
+            break;
+        // Don't multiply InforceLives by N--it *is* N.
+        InforceLives   [j] += a_Addend.InforceLives    [j];
+        }
+    // InforceLives is one longer than the other vectors.
+    InforceLives     [Max] += a_Addend.InforceLives  [Max];
+
+    FundNumbers                = a_Addend.FundNumbers;
+    FundNames                  = a_Addend.FundNames;
+    FundAllocs                 = a_Addend.FundAllocs;
+    FundAllocations            = a_Addend.FundAllocations;
+
+    // Nonscalable scalars.
+
+    MaleProportion             = std::max(MaleProportion     , a_Addend.MaleProportion);
+    NonsmokerProportion        = std::max(NonsmokerProportion, a_Addend.NonsmokerProportion);
+    GuarMaxMandE               = std::max(GuarMaxMandE       , a_Addend.GuarMaxMandE);
+    InitDacTaxRate             = std::max(InitDacTaxRate     , a_Addend.InitDacTaxRate);
+    InitPremTaxRate            = std::max(InitPremTaxRate    , a_Addend.InitPremTaxRate);
+    GenderBlended              = a_Addend.GenderBlended;
+    SmokerBlended              = a_Addend.SmokerBlended;
+    Age                        = std::min(Age, a_Addend.Age);
+    RetAge                     = std::min(RetAge, a_Addend.RetAge);
+    EndtAge                    = std::max(EndtAge, a_Addend.EndtAge);
+    GroupIndivSelection        = GroupIndivSelection   || a_Addend.GroupIndivSelection;
+    NoLongerIssued             = NoLongerIssued        || a_Addend.NoLongerIssued;
+    AllowGroupQuote            = AllowGroupQuote       && a_Addend.AllowGroupQuote;
+    TxCallsGuarUwSubstd        = TxCallsGuarUwSubstd   || a_Addend.TxCallsGuarUwSubstd;
+    AllowExperienceRating      = AllowExperienceRating || a_Addend.AllowExperienceRating;
+    UseExperienceRating        = UseExperienceRating   || a_Addend.UseExperienceRating;
+    UsePartialMort             = a_Addend.UsePartialMort;
+
+    SurviveToExpectancy        = SurviveToExpectancy   && a_Addend.SurviveToExpectancy;
+    SurviveToYear              = SurviveToYear         && a_Addend.SurviveToYear;
+    SurviveToAge               = SurviveToAge          && a_Addend.SurviveToAge;
+    LMI_ASSERT(SurviveToExpectancy + SurviveToYear + SurviveToAge <= 1);
+    SurvivalMaxYear            = std::max(SurvivalMaxYear, a_Addend.SurvivalMaxYear);
+    SurvivalMaxAge             = std::max(SurvivalMaxAge , a_Addend.SurvivalMaxAge);
+
+    AvgFund                    = a_Addend.AvgFund;
+    CustomFund                 = a_Addend.CustomFund;
+    IsMec                      = a_Addend.IsMec        || IsMec;
+    InforceIsMec               = a_Addend.InforceIsMec || InforceIsMec;
 
     if(InforceYear == a_Addend.InforceYear)
         {
-        InforceMonth              = std::min(InforceMonth, a_Addend.InforceMonth);
+        InforceMonth           = std::min(InforceMonth, a_Addend.InforceMonth);
         }
     else if(a_Addend.InforceYear < InforceYear)
         {
-        InforceMonth              = a_Addend.InforceMonth;
+        InforceMonth           = a_Addend.InforceMonth;
         }
-    InforceYear                   = std::min(InforceYear, a_Addend.InforceYear);
+    InforceYear                = std::min(InforceYear, a_Addend.InforceYear);
 
     if(MecYear == a_Addend.MecYear)
         {
-        MecMonth                  = std::min(MecMonth, a_Addend.MecMonth);
+        MecMonth               = std::min(MecMonth, a_Addend.MecMonth);
         }
     else if(a_Addend.MecYear < MecYear)
         {
-        MecMonth                  = a_Addend.MecMonth;
+        MecMonth               = a_Addend.MecMonth;
         }
-    MecYear                       = std::min(MecYear, a_Addend.MecYear);
+    MecYear                    = std::min(MecYear, a_Addend.MecYear);
 
-    HasWP           = HasWP           || a_Addend.HasWP          ;
-    HasADD          = HasADD          || a_Addend.HasADD         ;
-    HasTerm         = HasTerm         || a_Addend.HasTerm        ;
-    HasSupplSpecAmt = HasSupplSpecAmt || a_Addend.HasSupplSpecAmt;
-
-    HasChildRider      = HasChildRider      || a_Addend.HasChildRider     ;
-    HasSpouseRider     = HasSpouseRider     || a_Addend.HasSpouseRider    ;
-
-    HasHoneymoon       = HasHoneymoon || a_Addend.HasHoneymoon ;
-    PostHoneymoonSpread= a_Addend.PostHoneymoonSpread          ;
-    SplitMinPrem       = SplitMinPrem || a_Addend.SplitMinPrem ;
-
-    ErNotionallyPaysTerm = ErNotionallyPaysTerm || a_Addend.ErNotionallyPaysTerm;
-
-    IsSinglePremium        = std::max(a_Addend.IsSinglePremium      , IsSinglePremium      );
-
-    MaxAnnGuarLoanSpread   = std::max(a_Addend.MaxAnnGuarLoanSpread , MaxAnnGuarLoanSpread );
-    MaxAnnCurrLoanDueRate  = std::max(a_Addend.MaxAnnCurrLoanDueRate, MaxAnnCurrLoanDueRate);
-
-    NoLapseMinDur      = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
-    NoLapseMinAge      = std::min(a_Addend.NoLapseMinAge, NoLapseMinAge);
-    NoLapseAlwaysActive= a_Addend.NoLapseAlwaysActive|| NoLapseAlwaysActive;
-    Has1035ExchCharge  = a_Addend.Has1035ExchCharge  || Has1035ExchCharge;
+    HasWP                      = HasWP           || a_Addend.HasWP          ;
+    HasADD                     = HasADD          || a_Addend.HasADD         ;
+    HasTerm                    = HasTerm         || a_Addend.HasTerm        ;
+    HasSupplSpecAmt            = HasSupplSpecAmt || a_Addend.HasSupplSpecAmt;
+    HasChildRider              = HasChildRider      || a_Addend.HasChildRider     ;
+    HasSpouseRider             = HasSpouseRider     || a_Addend.HasSpouseRider    ;
+    SpouseIssueAge             = std::min(SpouseIssueAge, a_Addend.SpouseIssueAge);
+    HasHoneymoon               = HasHoneymoon || a_Addend.HasHoneymoon ;
+    PostHoneymoonSpread        = a_Addend.PostHoneymoonSpread          ;
+    SplitMinPrem               = SplitMinPrem || a_Addend.SplitMinPrem ;
+    ErNotionallyPaysTerm       = ErNotionallyPaysTerm || a_Addend.ErNotionallyPaysTerm;
+    IsSinglePremium            = std::max(a_Addend.IsSinglePremium      , IsSinglePremium      );
+    MaxAnnGuarLoanSpread       = std::max(a_Addend.MaxAnnGuarLoanSpread , MaxAnnGuarLoanSpread );
+    MaxAnnCurrLoanDueRate      = std::max(a_Addend.MaxAnnCurrLoanDueRate, MaxAnnCurrLoanDueRate);
 
     // Logical OR because IsInforce is a taint that prevents us from
     // calculating a meaningful IRR. For one thing, we lack payment
     // history. For another, even if we had it, payments probably
     // wouldn't be equally spaced, so we'd need a more general irr
     // routine.
-    IsInforce     = IsInforce     || a_Addend.IsInforce    ;
+    IsInforce                  = IsInforce     || a_Addend.IsInforce    ;
 
-    WriteTsvFile  = WriteTsvFile  || a_Addend.WriteTsvFile ;
+    CurrentCoiMultiplier       = std::max(a_Addend.CurrentCoiMultiplier , CurrentCoiMultiplier );
+    NoLapseAlwaysActive        = a_Addend.NoLapseAlwaysActive|| NoLapseAlwaysActive;
+    NoLapseMinDur              = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
+    NoLapseMinAge              = std::min(a_Addend.NoLapseMinAge, NoLapseMinAge);
+    Has1035ExchCharge          = a_Addend.Has1035ExchCharge  || Has1035ExchCharge;
+    EffDateJdn                 = a_Addend.EffDateJdn;
+    DateOfBirthJdn             = a_Addend.DateOfBirthJdn;
+    LastCoiReentryDateJdn      = a_Addend.LastCoiReentryDateJdn;
+    ListBillDateJdn            = a_Addend.ListBillDateJdn;
+    InforceAsOfDateJdn         = a_Addend.InforceAsOfDateJdn;
+    GenAcctAllocation          = a_Addend.GenAcctAllocation;
+    SplitFundAllocation        = SplitFundAllocation   || a_Addend.SplitFundAllocation;
+    WriteTsvFile               = WriteTsvFile || a_Addend.WriteTsvFile ;
 
     // The composite has a supplemental report iff every cell has one,
     // in which case it uses the same columns as the last cell. There
@@ -843,19 +740,27 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // union of all columns selected for any life becomes infeasible
     // when its cardinality exceeds the maximum.)
     //
-    SupplementalReport = SupplementalReport && a_Addend.SupplementalReport;
-    SupplementalReportColumn00 = a_Addend.SupplementalReportColumn00;
-    SupplementalReportColumn01 = a_Addend.SupplementalReportColumn01;
-    SupplementalReportColumn02 = a_Addend.SupplementalReportColumn02;
-    SupplementalReportColumn03 = a_Addend.SupplementalReportColumn03;
-    SupplementalReportColumn04 = a_Addend.SupplementalReportColumn04;
-    SupplementalReportColumn05 = a_Addend.SupplementalReportColumn05;
-    SupplementalReportColumn06 = a_Addend.SupplementalReportColumn06;
-    SupplementalReportColumn07 = a_Addend.SupplementalReportColumn07;
-    SupplementalReportColumn08 = a_Addend.SupplementalReportColumn08;
-    SupplementalReportColumn09 = a_Addend.SupplementalReportColumn09;
-    SupplementalReportColumn10 = a_Addend.SupplementalReportColumn10;
-    SupplementalReportColumn11 = a_Addend.SupplementalReportColumn11;
+    SupplementalReport         = SupplementalReport && a_Addend.SupplementalReport;
+    // Nonscalable scalars end.
+
+    // Strings.
+    //
+    // Override the behavior of LedgerBase::PlusEq() for this handful
+    // of strings, which would often or even necessarily vary by life.
+    ContractNumber             = "";
+    Insured1                   = "";
+    Gender                     = "";
+    Smoker                     = "";
+    UWClass                    = "";
+    SubstandardTable           = "";
+
+    // Special-case strings.
+
+    EffDate                    = a_Addend.EffDate;
+    DateOfBirth                = a_Addend.DateOfBirth;
+    LastCoiReentryDate         = a_Addend.LastCoiReentryDate;
+    ListBillDate               = a_Addend.ListBillDate;
+    InforceAsOfDate            = a_Addend.InforceAsOfDate;
 
     return *this;
 }
@@ -944,9 +849,9 @@ void LedgerInvariant::UpdateCRC(CRC& a_crc) const
     LedgerBase::UpdateCRC(a_crc);
 
     a_crc += InforceLives;
+    a_crc += mc_e_vector_to_string_vector(DBOpt);
     a_crc += mc_e_vector_to_string_vector(EeMode);
     a_crc += mc_e_vector_to_string_vector(ErMode);
-    a_crc += mc_e_vector_to_string_vector(DBOpt);
     a_crc += FundNumbers;
     a_crc += FundNames;
     a_crc += FundAllocs;
@@ -958,12 +863,12 @@ void LedgerInvariant::Spew(std::ostream& os) const
 {
     LedgerBase::Spew(os);
 
-    SpewVector(os, std::string("InforceLives")     ,InforceLives    );
-    SpewVector(os, std::string("EeMode")           ,EeMode          );
-    SpewVector(os, std::string("ErMode")           ,ErMode          );
-    SpewVector(os, std::string("DBOpt")            ,DBOpt           );
-    SpewVector(os, std::string("FundNumbers")      ,FundNumbers     );
-    SpewVector(os, std::string("FundNames")        ,FundNames       );
-    SpewVector(os, std::string("FundAllocs")       ,FundAllocs      );
-    SpewVector(os, std::string("FundAllocations")  ,FundAllocations );
+    SpewVector(os, std::string("InforceLives")    ,InforceLives    );
+    SpewVector(os, std::string("DBOpt")           ,DBOpt           );
+    SpewVector(os, std::string("EeMode")          ,EeMode          );
+    SpewVector(os, std::string("ErMode")          ,ErMode          );
+    SpewVector(os, std::string("FundNumbers")     ,FundNumbers     );
+    SpewVector(os, std::string("FundNames")       ,FundNames       );
+    SpewVector(os, std::string("FundAllocs")      ,FundAllocs      );
+    SpewVector(os, std::string("FundAllocations") ,FundAllocations );
 }

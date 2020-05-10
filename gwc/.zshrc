@@ -15,10 +15,7 @@ export PATH="$MINIMAL_PATH"
 # and replace :0.0 below with the string it returns:
 export DISPLAY=":0.0"
 
-if [ "$(umask)" -ne 022 ]; then
-  printf "Overriding bogus umask %s\n" "$(umask)"
-  umask 022
-fi
+umask g=rwx
 
 # Make the X clipboard available to root, for vim only. See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-10/msg00000.html

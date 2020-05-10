@@ -246,13 +246,13 @@ class LMI_SO product_data
 
     // Group quotes.
     glossed_string GroupQuoteShortProductName;
-    glossed_string GroupQuoteIsNotAnOffer    ;
-    glossed_string GroupQuoteRidersFooter    ;
-    glossed_string GroupQuotePolicyFormId    ;
-    glossed_string GroupQuoteStateVariations ;
-    glossed_string GroupQuoteProspectus      ;
-    glossed_string GroupQuoteUnderwriter     ;
-    glossed_string GroupQuoteBrokerDealer    ;
+    glossed_string GroupQuoteIsNotAnOffer;
+    glossed_string GroupQuoteRidersFooter;
+    glossed_string GroupQuotePolicyFormId;
+    glossed_string GroupQuoteStateVariations;
+    glossed_string GroupQuoteProspectus;
+    glossed_string GroupQuoteUnderwriter;
+    glossed_string GroupQuoteBrokerDealer;
     // Group plan type is one of:
     //   -Mandatory: no individual selection of amounts; typically,
     //     the employer pays the entire premium
@@ -261,12 +261,12 @@ class LMI_SO product_data
     //      when it complements a (separate) "mandatory" plan
     //   -Fusion: mandatory and supplemental combined; typically, the
     //      employer and employee pay their respective premiums
-    glossed_string GroupQuoteRubricMandatory ;
-    glossed_string GroupQuoteRubricVoluntary ;
-    glossed_string GroupQuoteRubricFusion    ;
-    glossed_string GroupQuoteFooterMandatory ;
-    glossed_string GroupQuoteFooterVoluntary ;
-    glossed_string GroupQuoteFooterFusion    ;
+    glossed_string GroupQuoteRubricMandatory;
+    glossed_string GroupQuoteRubricVoluntary;
+    glossed_string GroupQuoteRubricFusion;
+    glossed_string GroupQuoteFooterMandatory;
+    glossed_string GroupQuoteFooterVoluntary;
+    glossed_string GroupQuoteFooterFusion;
 
     // Premium-specific footnotes.
     glossed_string MinimumPremiumFootnote;
@@ -285,8 +285,6 @@ class LMI_SO product_data
     glossed_string SalesLoadRefundFootnote;
     glossed_string NoLapseEverFootnote;
     glossed_string NoLapseFootnote;
-    glossed_string MarketValueAdjFootnote;
-    glossed_string ExchangeChargeFootnote0;
     glossed_string CurrentValuesFootnote;
     glossed_string DBOption1Footnote;
     glossed_string DBOption2Footnote;
@@ -297,7 +295,7 @@ class LMI_SO product_data
     glossed_string FlexiblePremiumFootnote;
     glossed_string GuaranteedValuesFootnote;
     glossed_string CreditingRateFootnote;
-    glossed_string GuaranteedCreditRateFootnote;
+    glossed_string DefnGuarGenAcctRate;
     glossed_string GrossRateFootnote;
     glossed_string NetRateFootnote;
     glossed_string MecFootnote;
@@ -322,14 +320,10 @@ class LMI_SO product_data
     glossed_string ImprimaturInforce;
     glossed_string ImprimaturInforceComposite;
     glossed_string StateMarketingImprimatur;
-    glossed_string InforceNonGuaranteedFootnote0;
-    glossed_string InforceNonGuaranteedFootnote1;
-    glossed_string InforceNonGuaranteedFootnote2;
-    glossed_string InforceNonGuaranteedFootnote3;
     glossed_string NonGuaranteedFootnote;
     glossed_string NonGuaranteedFootnote1;
     glossed_string NonGuaranteedFootnote1Tx;
-    glossed_string MonthlyChargesPaymentFootnote;
+    glossed_string FnMonthlyDeductions;
     glossed_string SurrenderFootnote;
     glossed_string PortabilityFootnote;
     glossed_string FundRateFootnote;
@@ -346,6 +340,33 @@ class LMI_SO product_data
     glossed_string IllRegCertClient;
     glossed_string IllRegCertClientIl;
     glossed_string IllRegCertClientTx;
+    glossed_string FnMaturityAge;
+    glossed_string FnPartialMortality;
+    glossed_string FnProspectus;
+    glossed_string FnInitialSpecAmt;
+    glossed_string FnInforceAcctVal;
+    glossed_string FnInforceTaxBasis;
+    glossed_string Fn1035Charge;
+    glossed_string FnMecExtraWarning;
+    glossed_string FnNotTaxAdvice;
+    glossed_string FnImf;
+    glossed_string FnCensus;
+    glossed_string FnDacTax;
+    glossed_string FnDefnLifeIns;
+    glossed_string FnBoyEoy;
+    glossed_string FnGeneralAccount;
+    glossed_string FnPpMemorandum;
+    glossed_string FnPpAccreditedInvestor;
+    glossed_string FnPpLoads;
+    glossed_string FnProposalUnderwriting;
+    glossed_string FnGuaranteedPremium;
+    glossed_string FnOmnibusDisclaimer;
+    glossed_string FnInitialDbo;
+    glossed_string DefnAV;
+    glossed_string DefnCSV;
+    glossed_string DefnMec;
+    glossed_string DefnOutlay;
+    glossed_string DefnSpecAmt;
 };
 
 void LMI_SO load(product_data      &, fs::path const&);

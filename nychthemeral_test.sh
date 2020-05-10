@@ -40,6 +40,8 @@ setopt PIPE_FAIL
 
 srcdir=$(dirname "$(readlink --canonicalize "$0")")
 
+# Cannot recursively check script on path determined at runtime, so
+# a directive like 'source="$srcdir"' doesn't work.
 # shellcheck disable=SC1090
 . "$srcdir"/set_toolchain.sh
 

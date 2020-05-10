@@ -67,8 +67,6 @@ class LMI_SO illustrator final
 
 Input const& LMI_SO default_cell();
 
-/// Test whether census is consistent wrt emission type; throw if not.
-
 void LMI_SO test_census_consensus
     (mcenum_emission           emission
     ,Input              const& case_default

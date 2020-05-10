@@ -80,6 +80,7 @@ keeping the center alignment of the last "p" tag above.
     {{/LapseYear_Curr_LT_MaxDur}}
 {{/Composite}}
 
+<!-- PDF !! FnMecExtraWarning -->
 {{#IsMec}}
 <p>
             IMPORTANT TAX DISCLOSURE: This is a Modified Endowment Contract.

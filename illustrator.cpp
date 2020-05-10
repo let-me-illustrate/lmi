@@ -314,6 +314,12 @@ void assert_okay_to_run_group_quote
 }
 } // Unnamed namespace.
 
+/// Test whether census is consistent wrt emission type; throw if not.
+///
+/// It might be a good idea to assert that some data never vary by
+/// life (MasterContractNumber, e.g.)--much as is already done in
+/// one particular circumstance by assert_okay_to_run_group_quote().
+
 void test_census_consensus
     (mcenum_emission           emission
     ,Input              const& case_default

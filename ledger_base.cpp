@@ -179,15 +179,20 @@ double_vector_map const& LedgerBase::all_vectors() const
 
 namespace
 {
-// Special non-general helper function.
-// The sole use of this function is to multiply y, a vector of values in
-// a ledger, by z, a vector of inforce factors. For this sole intended use,
-// we know that z is nonzero and nondecreasing; therefore, if it ever
-// becomes zero, it remains zero. We can safely break at that point in the
-// interest of speed because adding y times zero to z is a NOP. Note that
-// the inforce factor becomes zero upon lapse.
+/// Special non-general helper function.
+///
+/// Multiplies y, a vector of ledger values, by z, a vector of inforce
+/// factors; then adds the result into x, a vector of composite-ledger
+/// values, up to the length of y (which is less than or equal to the
+/// length of x).
+///
+/// In this sole use case, z must be nonincreasing and nonnegative,
+/// because it is a survivorship function. Once it becomes zero (due
+/// to maturity or lapse), it remains zero thenceforth; therefore, it
+/// is appropriate and safe to break the loop at that point.
+
     static void x_plus_eq_y_times_z
-        (std::vector<double>& x
+        (std::vector<double>      & x
         ,std::vector<double> const& y
         ,std::vector<double> const& z
         )
@@ -215,6 +220,31 @@ namespace
                 {
                 *ix++ += *iy++ * mult;
                 }
+            }
+    }
+
+/// Special non-general helper function.
+///
+/// Adds y, a vector of ledger values, into x, a vector of composite-
+/// ledger values, up to the length of y (which is less than or equal
+/// to the length of x).
+///
+/// Equivalent to:
+///   // ET !! This is of the form 'x[iota rho y] gets y'.
+///   for(int j = 0; j < y.size(); ++j) {x[j] = y[j];}
+
+    static void x_sub_iota_rho_y_gets_y
+        (std::vector<double>      & x
+        ,std::vector<double> const& y
+        )
+    {
+        std::vector<double>::iterator ix = x.begin();
+        std::vector<double>::const_iterator iy = y.begin();
+        LMI_ASSERT(y.size() <= x.size());
+        while(iy != y.end())
+            {
+            LMI_ASSERT(ix != x.end());
+            *ix++ = *iy++;
             }
     }
 } // Unnamed namespace.
@@ -289,6 +319,20 @@ LedgerBase& LedgerBase::PlusEq
         }
     LMI_ASSERT(a_Addend_svmi == a_Addend.ForborneVectors.end());
 
+    a_Addend_svmi = a_Addend.OtherVectors.begin();
+    for
+        (double_vector_map::iterator svmi = OtherVectors.begin()
+        ;svmi != OtherVectors.end()
+        ;++svmi, ++a_Addend_svmi
+        )
+        {
+        x_sub_iota_rho_y_gets_y
+            (*(*svmi).second
+            ,*(*a_Addend_svmi).second
+            );
+        }
+    LMI_ASSERT(a_Addend_svmi == a_Addend.OtherVectors.end());
+
     scalar_map::const_iterator a_Addend_ssmi = a_Addend.ScalableScalars.begin();
     for
         (scalar_map::iterator ssmi = ScalableScalars.begin()
@@ -299,6 +343,17 @@ LedgerBase& LedgerBase::PlusEq
         *(*ssmi).second += *(*a_Addend_ssmi).second * a_Inforce[0];
         }
     LMI_ASSERT(a_Addend_ssmi == a_Addend.ScalableScalars.end());
+
+    string_map::const_iterator a_Addend_smi = a_Addend.Strings.begin();
+    for
+        (string_map::iterator smi = Strings.begin()
+        ;smi != Strings.end()
+        ;++smi, ++a_Addend_smi
+        )
+        {
+        *(*smi).second = *(*a_Addend_smi).second;
+        }
+    LMI_ASSERT(a_Addend_smi == a_Addend.Strings.end());
 
     return *this;
 }

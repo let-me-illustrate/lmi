@@ -25,8 +25,8 @@
 # CHRTVER : local serial number (nothing to do with /etc/debian_version)
 # CHRTNAME: physical name of chroot (SCHROOT_CHROOT_NAME)
 
+# Variables defined but unused here: this file should only be sourced.
 # shellcheck disable=SC2034
-#   (this file should only be sourced)
 
 set -vx
 

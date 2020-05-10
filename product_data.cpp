@@ -181,181 +181,202 @@ glossed_string& product_data::item(std::string const& name)
 
 void product_data::ascribe_members()
 {
-    ascribe("DatabaseFilename"              , &product_data::DatabaseFilename              );
-    ascribe("FundFilename"                  , &product_data::FundFilename                  );
-    ascribe("RoundingFilename"              , &product_data::RoundingFilename              );
-    ascribe("TierFilename"                  , &product_data::TierFilename                  );
-    ascribe("CvatCorridorFilename"          , &product_data::CvatCorridorFilename          );
-    ascribe("Irc7702NspFilename"            , &product_data::Irc7702NspFilename            );
-    ascribe("CurrCOIFilename"               , &product_data::CurrCOIFilename               );
-    ascribe("GuarCOIFilename"               , &product_data::GuarCOIFilename               );
-    ascribe("WPFilename"                    , &product_data::WPFilename                    );
-    ascribe("ADDFilename"                   , &product_data::ADDFilename                   );
-    ascribe("ChildRiderFilename"            , &product_data::ChildRiderFilename            );
-    ascribe("CurrSpouseRiderFilename"       , &product_data::CurrSpouseRiderFilename       );
-    ascribe("GuarSpouseRiderFilename"       , &product_data::GuarSpouseRiderFilename       );
-    ascribe("CurrTermFilename"              , &product_data::CurrTermFilename              );
-    ascribe("GuarTermFilename"              , &product_data::GuarTermFilename              );
-    ascribe("GroupProxyFilename"            , &product_data::GroupProxyFilename            );
-    ascribe("SevenPayFilename"              , &product_data::SevenPayFilename              );
-    ascribe("MinPremFilename"               , &product_data::MinPremFilename               );
-    ascribe("TgtPremFilename"               , &product_data::TgtPremFilename               );
-    ascribe("Irc7702QFilename"              , &product_data::Irc7702QFilename              );
-    ascribe("PartialMortalityFilename"      , &product_data::PartialMortalityFilename      );
-    ascribe("SubstdTblMultFilename"         , &product_data::SubstdTblMultFilename         );
-    ascribe("CurrSpecAmtLoadFilename"       , &product_data::CurrSpecAmtLoadFilename       );
-    ascribe("GuarSpecAmtLoadFilename"       , &product_data::GuarSpecAmtLoadFilename       );
-    ascribe("PolicyForm"                    , &product_data::PolicyForm                    );
-    ascribe("PolicyFormAlternative"         , &product_data::PolicyFormAlternative         );
-    ascribe("PolicyMktgName"                , &product_data::PolicyMktgName                );
-    ascribe("PolicyLegalName"               , &product_data::PolicyLegalName               );
-    ascribe("InsCoShortName"                , &product_data::InsCoShortName                );
-    ascribe("InsCoName"                     , &product_data::InsCoName                     );
-    ascribe("InsCoAddr"                     , &product_data::InsCoAddr                     );
-    ascribe("InsCoStreet"                   , &product_data::InsCoStreet                   );
-    ascribe("InsCoPhone"                    , &product_data::InsCoPhone                    );
-    ascribe("InsCoDomicile"                 , &product_data::InsCoDomicile                 );
-    ascribe("MainUnderwriter"               , &product_data::MainUnderwriter               );
-    ascribe("MainUnderwriterAddress"        , &product_data::MainUnderwriterAddress        );
-    ascribe("CoUnderwriter"                 , &product_data::CoUnderwriter                 );
-    ascribe("CoUnderwriterAddress"          , &product_data::CoUnderwriterAddress          );
-    ascribe("AvName"                        , &product_data::AvName                        );
-    ascribe("CsvName"                       , &product_data::CsvName                       );
-    ascribe("CsvHeaderName"                 , &product_data::CsvHeaderName                 );
-    ascribe("NoLapseProvisionName"          , &product_data::NoLapseProvisionName          );
-    ascribe("ContractName"                  , &product_data::ContractName                  );
-    ascribe("DboName"                       , &product_data::DboName                       );
-    ascribe("DboNameLevel"                  , &product_data::DboNameLevel                  );
-    ascribe("DboNameIncreasing"             , &product_data::DboNameIncreasing             );
-    ascribe("DboNameReturnOfPremium"        , &product_data::DboNameReturnOfPremium        );
-    ascribe("DboNameMinDeathBenefit"        , &product_data::DboNameMinDeathBenefit        );
-    ascribe("GenAcctName"                   , &product_data::GenAcctName                   );
-    ascribe("GenAcctNameElaborated"         , &product_data::GenAcctNameElaborated         );
-    ascribe("SepAcctName"                   , &product_data::SepAcctName                   );
-    ascribe("SpecAmtName"                   , &product_data::SpecAmtName                   );
-    ascribe("SpecAmtNameElaborated"         , &product_data::SpecAmtNameElaborated         );
-    ascribe("UwBasisMedical"                , &product_data::UwBasisMedical                );
-    ascribe("UwBasisParamedical"            , &product_data::UwBasisParamedical            );
-    ascribe("UwBasisNonmedical"             , &product_data::UwBasisNonmedical             );
-    ascribe("UwBasisSimplified"             , &product_data::UwBasisSimplified             );
-    ascribe("UwBasisGuaranteed"             , &product_data::UwBasisGuaranteed             );
-    ascribe("UwClassPreferred"              , &product_data::UwClassPreferred              );
-    ascribe("UwClassStandard"               , &product_data::UwClassStandard               );
-    ascribe("UwClassRated"                  , &product_data::UwClassRated                  );
-    ascribe("UwClassUltra"                  , &product_data::UwClassUltra                  );
-    ascribe("AccountValueFootnote"          , &product_data::AccountValueFootnote          );
-    ascribe("AttainedAgeFootnote"           , &product_data::AttainedAgeFootnote           );
-    ascribe("CashSurrValueFootnote"         , &product_data::CashSurrValueFootnote         );
-    ascribe("DeathBenefitFootnote"          , &product_data::DeathBenefitFootnote          );
-    ascribe("InitialPremiumFootnote"        , &product_data::InitialPremiumFootnote        );
-    ascribe("NetPremiumFootnote"            , &product_data::NetPremiumFootnote            );
-    ascribe("GrossPremiumFootnote"          , &product_data::GrossPremiumFootnote          );
-    ascribe("OutlayFootnote"                , &product_data::OutlayFootnote                );
-    ascribe("PolicyYearFootnote"            , &product_data::PolicyYearFootnote            );
-    ascribe("ADDTerseName"                  , &product_data::ADDTerseName                  );
-    ascribe("InsurabilityTerseName"         , &product_data::InsurabilityTerseName         );
-    ascribe("ChildTerseName"                , &product_data::ChildTerseName                );
-    ascribe("SpouseTerseName"               , &product_data::SpouseTerseName               );
-    ascribe("TermTerseName"                 , &product_data::TermTerseName                 );
-    ascribe("WaiverTerseName"               , &product_data::WaiverTerseName               );
-    ascribe("AccelBftRiderTerseName"        , &product_data::AccelBftRiderTerseName        );
-    ascribe("OverloanRiderTerseName"        , &product_data::OverloanRiderTerseName        );
-    ascribe("ADDFootnote"                   , &product_data::ADDFootnote                   );
-    ascribe("ChildFootnote"                 , &product_data::ChildFootnote                 );
-    ascribe("SpouseFootnote"                , &product_data::SpouseFootnote                );
-    ascribe("TermFootnote"                  , &product_data::TermFootnote                  );
-    ascribe("WaiverFootnote"                , &product_data::WaiverFootnote                );
-    ascribe("AccelBftRiderFootnote"         , &product_data::AccelBftRiderFootnote         );
-    ascribe("OverloanRiderFootnote"         , &product_data::OverloanRiderFootnote         );
-    ascribe("GroupQuoteShortProductName"    , &product_data::GroupQuoteShortProductName    );
-    ascribe("GroupQuoteIsNotAnOffer"        , &product_data::GroupQuoteIsNotAnOffer        );
-    ascribe("GroupQuoteRidersFooter"        , &product_data::GroupQuoteRidersFooter        );
-    ascribe("GroupQuotePolicyFormId"        , &product_data::GroupQuotePolicyFormId        );
-    ascribe("GroupQuoteStateVariations"     , &product_data::GroupQuoteStateVariations     );
-    ascribe("GroupQuoteProspectus"          , &product_data::GroupQuoteProspectus          );
-    ascribe("GroupQuoteUnderwriter"         , &product_data::GroupQuoteUnderwriter         );
-    ascribe("GroupQuoteBrokerDealer"        , &product_data::GroupQuoteBrokerDealer        );
-    ascribe("GroupQuoteRubricMandatory"     , &product_data::GroupQuoteRubricMandatory     );
-    ascribe("GroupQuoteRubricVoluntary"     , &product_data::GroupQuoteRubricVoluntary     );
-    ascribe("GroupQuoteRubricFusion"        , &product_data::GroupQuoteRubricFusion        );
-    ascribe("GroupQuoteFooterMandatory"     , &product_data::GroupQuoteFooterMandatory     );
-    ascribe("GroupQuoteFooterVoluntary"     , &product_data::GroupQuoteFooterVoluntary     );
-    ascribe("GroupQuoteFooterFusion"        , &product_data::GroupQuoteFooterFusion        );
-    ascribe("MinimumPremiumFootnote"        , &product_data::MinimumPremiumFootnote        );
-    ascribe("PremAllocationFootnote"        , &product_data::PremAllocationFootnote        );
-    ascribe("InterestDisclaimer"            , &product_data::InterestDisclaimer            );
-    ascribe("GuarMortalityFootnote"         , &product_data::GuarMortalityFootnote         );
-    ascribe("ProductDescription"            , &product_data::ProductDescription            );
-    ascribe("StableValueFootnote"           , &product_data::StableValueFootnote           );
-    ascribe("NoVanishPremiumFootnote"       , &product_data::NoVanishPremiumFootnote       );
-    ascribe("RejectPremiumFootnote"         , &product_data::RejectPremiumFootnote         );
-    ascribe("ExpRatingFootnote"             , &product_data::ExpRatingFootnote             );
-    ascribe("MortalityBlendFootnote"        , &product_data::MortalityBlendFootnote        );
-    ascribe("HypotheticalRatesFootnote"     , &product_data::HypotheticalRatesFootnote     );
-    ascribe("SalesLoadRefundFootnote"       , &product_data::SalesLoadRefundFootnote       );
-    ascribe("NoLapseEverFootnote"           , &product_data::NoLapseEverFootnote           );
-    ascribe("NoLapseFootnote"               , &product_data::NoLapseFootnote               );
-    ascribe("MarketValueAdjFootnote"        , &product_data::MarketValueAdjFootnote        );
-    ascribe("ExchangeChargeFootnote0"       , &product_data::ExchangeChargeFootnote0       );
-    ascribe("CurrentValuesFootnote"         , &product_data::CurrentValuesFootnote         );
-    ascribe("DBOption1Footnote"             , &product_data::DBOption1Footnote             );
-    ascribe("DBOption2Footnote"             , &product_data::DBOption2Footnote             );
-    ascribe("DBOption3Footnote"             , &product_data::DBOption3Footnote             );
-    ascribe("MinDeathBenefitFootnote"       , &product_data::MinDeathBenefitFootnote       );
-    ascribe("ExpRatRiskChargeFootnote"      , &product_data::ExpRatRiskChargeFootnote      );
-    ascribe("ExchangeChargeFootnote1"       , &product_data::ExchangeChargeFootnote1       );
-    ascribe("FlexiblePremiumFootnote"       , &product_data::FlexiblePremiumFootnote       );
-    ascribe("GuaranteedValuesFootnote"      , &product_data::GuaranteedValuesFootnote      );
-    ascribe("CreditingRateFootnote"         , &product_data::CreditingRateFootnote         );
-    ascribe("GuaranteedCreditRateFootnote"  , &product_data::GuaranteedCreditRateFootnote  );
-    ascribe("GrossRateFootnote"             , &product_data::GrossRateFootnote             );
-    ascribe("NetRateFootnote"               , &product_data::NetRateFootnote               );
-    ascribe("MecFootnote"                   , &product_data::MecFootnote                   );
-    ascribe("GptFootnote"                   , &product_data::GptFootnote                   );
-    ascribe("MidpointValuesFootnote"        , &product_data::MidpointValuesFootnote        );
-    ascribe("SinglePremiumFootnote"         , &product_data::SinglePremiumFootnote         );
-    ascribe("MonthlyChargesFootnote"        , &product_data::MonthlyChargesFootnote        );
-    ascribe("UltCreditingRateFootnote"      , &product_data::UltCreditingRateFootnote      );
-    ascribe("UltCreditingRateHeader"        , &product_data::UltCreditingRateHeader        );
-    ascribe("MaxNaarFootnote"               , &product_data::MaxNaarFootnote               );
-    ascribe("PremTaxSurrChgFootnote"        , &product_data::PremTaxSurrChgFootnote        );
-    ascribe("PolicyFeeFootnote"             , &product_data::PolicyFeeFootnote             );
-    ascribe("AssetChargeFootnote"           , &product_data::AssetChargeFootnote           );
-    ascribe("InvestmentIncomeFootnote"      , &product_data::InvestmentIncomeFootnote      );
-    ascribe("IrrDbFootnote"                 , &product_data::IrrDbFootnote                 );
-    ascribe("IrrCsvFootnote"                , &product_data::IrrCsvFootnote                );
-    ascribe("MortalityChargesFootnote"      , &product_data::MortalityChargesFootnote      );
-    ascribe("LoanAndWithdrawalFootnote"     , &product_data::LoanAndWithdrawalFootnote     );
-    ascribe("LoanFootnote"                  , &product_data::LoanFootnote                  );
-    ascribe("ImprimaturPresale"             , &product_data::ImprimaturPresale             );
-    ascribe("ImprimaturPresaleComposite"    , &product_data::ImprimaturPresaleComposite    );
-    ascribe("ImprimaturInforce"             , &product_data::ImprimaturInforce             );
-    ascribe("ImprimaturInforceComposite"    , &product_data::ImprimaturInforceComposite    );
-    ascribe("StateMarketingImprimatur"      , &product_data::StateMarketingImprimatur      );
-    ascribe("InforceNonGuaranteedFootnote0" , &product_data::InforceNonGuaranteedFootnote0 );
-    ascribe("InforceNonGuaranteedFootnote1" , &product_data::InforceNonGuaranteedFootnote1 );
-    ascribe("InforceNonGuaranteedFootnote2" , &product_data::InforceNonGuaranteedFootnote2 );
-    ascribe("InforceNonGuaranteedFootnote3" , &product_data::InforceNonGuaranteedFootnote3 );
-    ascribe("NonGuaranteedFootnote"         , &product_data::NonGuaranteedFootnote         );
-    ascribe("NonGuaranteedFootnote1"        , &product_data::NonGuaranteedFootnote1        );
-    ascribe("NonGuaranteedFootnote1Tx"      , &product_data::NonGuaranteedFootnote1Tx      );
-    ascribe("MonthlyChargesPaymentFootnote" , &product_data::MonthlyChargesPaymentFootnote );
-    ascribe("SurrenderFootnote"             , &product_data::SurrenderFootnote             );
-    ascribe("PortabilityFootnote"           , &product_data::PortabilityFootnote           );
-    ascribe("FundRateFootnote"              , &product_data::FundRateFootnote              );
-    ascribe("IssuingCompanyFootnote"        , &product_data::IssuingCompanyFootnote        );
-    ascribe("SubsidiaryFootnote"            , &product_data::SubsidiaryFootnote            );
-    ascribe("PlacementAgentFootnote"        , &product_data::PlacementAgentFootnote        );
-    ascribe("MarketingNameFootnote"         , &product_data::MarketingNameFootnote         );
-    ascribe("GuarIssueDisclaimerNcSc"       , &product_data::GuarIssueDisclaimerNcSc       );
-    ascribe("GuarIssueDisclaimerMd"         , &product_data::GuarIssueDisclaimerMd         );
-    ascribe("GuarIssueDisclaimerTx"         , &product_data::GuarIssueDisclaimerTx         );
-    ascribe("IllRegCertAgent"               , &product_data::IllRegCertAgent               );
-    ascribe("IllRegCertAgentIl"             , &product_data::IllRegCertAgentIl             );
-    ascribe("IllRegCertAgentTx"             , &product_data::IllRegCertAgentTx             );
-    ascribe("IllRegCertClient"              , &product_data::IllRegCertClient              );
-    ascribe("IllRegCertClientIl"            , &product_data::IllRegCertClientIl            );
-    ascribe("IllRegCertClientTx"            , &product_data::IllRegCertClientTx            );
+    ascribe("DatabaseFilename"           , &product_data::DatabaseFilename              );
+    ascribe("FundFilename"               , &product_data::FundFilename                  );
+    ascribe("RoundingFilename"           , &product_data::RoundingFilename              );
+    ascribe("TierFilename"               , &product_data::TierFilename                  );
+    ascribe("CvatCorridorFilename"       , &product_data::CvatCorridorFilename          );
+    ascribe("Irc7702NspFilename"         , &product_data::Irc7702NspFilename            );
+    ascribe("CurrCOIFilename"            , &product_data::CurrCOIFilename               );
+    ascribe("GuarCOIFilename"            , &product_data::GuarCOIFilename               );
+    ascribe("WPFilename"                 , &product_data::WPFilename                    );
+    ascribe("ADDFilename"                , &product_data::ADDFilename                   );
+    ascribe("ChildRiderFilename"         , &product_data::ChildRiderFilename            );
+    ascribe("CurrSpouseRiderFilename"    , &product_data::CurrSpouseRiderFilename       );
+    ascribe("GuarSpouseRiderFilename"    , &product_data::GuarSpouseRiderFilename       );
+    ascribe("CurrTermFilename"           , &product_data::CurrTermFilename              );
+    ascribe("GuarTermFilename"           , &product_data::GuarTermFilename              );
+    ascribe("GroupProxyFilename"         , &product_data::GroupProxyFilename            );
+    ascribe("SevenPayFilename"           , &product_data::SevenPayFilename              );
+    ascribe("MinPremFilename"            , &product_data::MinPremFilename               );
+    ascribe("TgtPremFilename"            , &product_data::TgtPremFilename               );
+    ascribe("Irc7702QFilename"           , &product_data::Irc7702QFilename              );
+    ascribe("PartialMortalityFilename"   , &product_data::PartialMortalityFilename      );
+    ascribe("SubstdTblMultFilename"      , &product_data::SubstdTblMultFilename         );
+    ascribe("CurrSpecAmtLoadFilename"    , &product_data::CurrSpecAmtLoadFilename       );
+    ascribe("GuarSpecAmtLoadFilename"    , &product_data::GuarSpecAmtLoadFilename       );
+    ascribe("PolicyForm"                 , &product_data::PolicyForm                    );
+    ascribe("PolicyFormAlternative"      , &product_data::PolicyFormAlternative         );
+    ascribe("PolicyMktgName"             , &product_data::PolicyMktgName                );
+    ascribe("PolicyLegalName"            , &product_data::PolicyLegalName               );
+    ascribe("InsCoShortName"             , &product_data::InsCoShortName                );
+    ascribe("InsCoName"                  , &product_data::InsCoName                     );
+    ascribe("InsCoAddr"                  , &product_data::InsCoAddr                     );
+    ascribe("InsCoStreet"                , &product_data::InsCoStreet                   );
+    ascribe("InsCoPhone"                 , &product_data::InsCoPhone                    );
+    ascribe("InsCoDomicile"              , &product_data::InsCoDomicile                 );
+    ascribe("MainUnderwriter"            , &product_data::MainUnderwriter               );
+    ascribe("MainUnderwriterAddress"     , &product_data::MainUnderwriterAddress        );
+    ascribe("CoUnderwriter"              , &product_data::CoUnderwriter                 );
+    ascribe("CoUnderwriterAddress"       , &product_data::CoUnderwriterAddress          );
+    ascribe("AvName"                     , &product_data::AvName                        );
+    ascribe("CsvName"                    , &product_data::CsvName                       );
+    ascribe("CsvHeaderName"              , &product_data::CsvHeaderName                 );
+    ascribe("NoLapseProvisionName"       , &product_data::NoLapseProvisionName          );
+    ascribe("ContractName"               , &product_data::ContractName                  );
+    ascribe("DboName"                    , &product_data::DboName                       );
+    ascribe("DboNameLevel"               , &product_data::DboNameLevel                  );
+    ascribe("DboNameIncreasing"          , &product_data::DboNameIncreasing             );
+    ascribe("DboNameReturnOfPremium"     , &product_data::DboNameReturnOfPremium        );
+    ascribe("DboNameMinDeathBenefit"     , &product_data::DboNameMinDeathBenefit        );
+    ascribe("GenAcctName"                , &product_data::GenAcctName                   );
+    ascribe("GenAcctNameElaborated"      , &product_data::GenAcctNameElaborated         );
+    ascribe("SepAcctName"                , &product_data::SepAcctName                   );
+    ascribe("SpecAmtName"                , &product_data::SpecAmtName                   );
+    ascribe("SpecAmtNameElaborated"      , &product_data::SpecAmtNameElaborated         );
+    ascribe("UwBasisMedical"             , &product_data::UwBasisMedical                );
+    ascribe("UwBasisParamedical"         , &product_data::UwBasisParamedical            );
+    ascribe("UwBasisNonmedical"          , &product_data::UwBasisNonmedical             );
+    ascribe("UwBasisSimplified"          , &product_data::UwBasisSimplified             );
+    ascribe("UwBasisGuaranteed"          , &product_data::UwBasisGuaranteed             );
+    ascribe("UwClassPreferred"           , &product_data::UwClassPreferred              );
+    ascribe("UwClassStandard"            , &product_data::UwClassStandard               );
+    ascribe("UwClassRated"               , &product_data::UwClassRated                  );
+    ascribe("UwClassUltra"               , &product_data::UwClassUltra                  );
+    ascribe("AccountValueFootnote"       , &product_data::AccountValueFootnote          );
+    ascribe("AttainedAgeFootnote"        , &product_data::AttainedAgeFootnote           );
+    ascribe("CashSurrValueFootnote"      , &product_data::CashSurrValueFootnote         );
+    ascribe("DeathBenefitFootnote"       , &product_data::DeathBenefitFootnote          );
+    ascribe("InitialPremiumFootnote"     , &product_data::InitialPremiumFootnote        );
+    ascribe("NetPremiumFootnote"         , &product_data::NetPremiumFootnote            );
+    ascribe("GrossPremiumFootnote"       , &product_data::GrossPremiumFootnote          );
+    ascribe("OutlayFootnote"             , &product_data::OutlayFootnote                );
+    ascribe("PolicyYearFootnote"         , &product_data::PolicyYearFootnote            );
+    ascribe("ADDTerseName"               , &product_data::ADDTerseName                  );
+    ascribe("InsurabilityTerseName"      , &product_data::InsurabilityTerseName         );
+    ascribe("ChildTerseName"             , &product_data::ChildTerseName                );
+    ascribe("SpouseTerseName"            , &product_data::SpouseTerseName               );
+    ascribe("TermTerseName"              , &product_data::TermTerseName                 );
+    ascribe("WaiverTerseName"            , &product_data::WaiverTerseName               );
+    ascribe("AccelBftRiderTerseName"     , &product_data::AccelBftRiderTerseName        );
+    ascribe("OverloanRiderTerseName"     , &product_data::OverloanRiderTerseName        );
+    ascribe("ADDFootnote"                , &product_data::ADDFootnote                   );
+    ascribe("ChildFootnote"              , &product_data::ChildFootnote                 );
+    ascribe("SpouseFootnote"             , &product_data::SpouseFootnote                );
+    ascribe("TermFootnote"               , &product_data::TermFootnote                  );
+    ascribe("WaiverFootnote"             , &product_data::WaiverFootnote                );
+    ascribe("AccelBftRiderFootnote"      , &product_data::AccelBftRiderFootnote         );
+    ascribe("OverloanRiderFootnote"      , &product_data::OverloanRiderFootnote         );
+    ascribe("GroupQuoteShortProductName" , &product_data::GroupQuoteShortProductName    );
+    ascribe("GroupQuoteIsNotAnOffer"     , &product_data::GroupQuoteIsNotAnOffer        );
+    ascribe("GroupQuoteRidersFooter"     , &product_data::GroupQuoteRidersFooter        );
+    ascribe("GroupQuotePolicyFormId"     , &product_data::GroupQuotePolicyFormId        );
+    ascribe("GroupQuoteStateVariations"  , &product_data::GroupQuoteStateVariations     );
+    ascribe("GroupQuoteProspectus"       , &product_data::GroupQuoteProspectus          );
+    ascribe("GroupQuoteUnderwriter"      , &product_data::GroupQuoteUnderwriter         );
+    ascribe("GroupQuoteBrokerDealer"     , &product_data::GroupQuoteBrokerDealer        );
+    ascribe("GroupQuoteRubricMandatory"  , &product_data::GroupQuoteRubricMandatory     );
+    ascribe("GroupQuoteRubricVoluntary"  , &product_data::GroupQuoteRubricVoluntary     );
+    ascribe("GroupQuoteRubricFusion"     , &product_data::GroupQuoteRubricFusion        );
+    ascribe("GroupQuoteFooterMandatory"  , &product_data::GroupQuoteFooterMandatory     );
+    ascribe("GroupQuoteFooterVoluntary"  , &product_data::GroupQuoteFooterVoluntary     );
+    ascribe("GroupQuoteFooterFusion"     , &product_data::GroupQuoteFooterFusion        );
+    ascribe("MinimumPremiumFootnote"     , &product_data::MinimumPremiumFootnote        );
+    ascribe("PremAllocationFootnote"     , &product_data::PremAllocationFootnote        );
+    ascribe("InterestDisclaimer"         , &product_data::InterestDisclaimer            );
+    ascribe("GuarMortalityFootnote"      , &product_data::GuarMortalityFootnote         );
+    ascribe("ProductDescription"         , &product_data::ProductDescription            );
+    ascribe("StableValueFootnote"        , &product_data::StableValueFootnote           );
+    ascribe("NoVanishPremiumFootnote"    , &product_data::NoVanishPremiumFootnote       );
+    ascribe("RejectPremiumFootnote"      , &product_data::RejectPremiumFootnote         );
+    ascribe("ExpRatingFootnote"          , &product_data::ExpRatingFootnote             );
+    ascribe("MortalityBlendFootnote"     , &product_data::MortalityBlendFootnote        );
+    ascribe("HypotheticalRatesFootnote"  , &product_data::HypotheticalRatesFootnote     );
+    ascribe("SalesLoadRefundFootnote"    , &product_data::SalesLoadRefundFootnote       );
+    ascribe("NoLapseEverFootnote"        , &product_data::NoLapseEverFootnote           );
+    ascribe("NoLapseFootnote"            , &product_data::NoLapseFootnote               );
+    ascribe("CurrentValuesFootnote"      , &product_data::CurrentValuesFootnote         );
+    ascribe("DBOption1Footnote"          , &product_data::DBOption1Footnote             );
+    ascribe("DBOption2Footnote"          , &product_data::DBOption2Footnote             );
+    ascribe("DBOption3Footnote"          , &product_data::DBOption3Footnote             );
+    ascribe("MinDeathBenefitFootnote"    , &product_data::MinDeathBenefitFootnote       );
+    ascribe("ExpRatRiskChargeFootnote"   , &product_data::ExpRatRiskChargeFootnote      );
+    ascribe("ExchangeChargeFootnote1"    , &product_data::ExchangeChargeFootnote1       );
+    ascribe("FlexiblePremiumFootnote"    , &product_data::FlexiblePremiumFootnote       );
+    ascribe("GuaranteedValuesFootnote"   , &product_data::GuaranteedValuesFootnote      );
+    ascribe("CreditingRateFootnote"      , &product_data::CreditingRateFootnote         );
+    ascribe("DefnGuarGenAcctRate"        , &product_data::DefnGuarGenAcctRate           );
+    ascribe("GrossRateFootnote"          , &product_data::GrossRateFootnote             );
+    ascribe("NetRateFootnote"            , &product_data::NetRateFootnote               );
+    ascribe("MecFootnote"                , &product_data::MecFootnote                   );
+    ascribe("GptFootnote"                , &product_data::GptFootnote                   );
+    ascribe("MidpointValuesFootnote"     , &product_data::MidpointValuesFootnote        );
+    ascribe("SinglePremiumFootnote"      , &product_data::SinglePremiumFootnote         );
+    ascribe("MonthlyChargesFootnote"     , &product_data::MonthlyChargesFootnote        );
+    ascribe("UltCreditingRateFootnote"   , &product_data::UltCreditingRateFootnote      );
+    ascribe("UltCreditingRateHeader"     , &product_data::UltCreditingRateHeader        );
+    ascribe("MaxNaarFootnote"            , &product_data::MaxNaarFootnote               );
+    ascribe("PremTaxSurrChgFootnote"     , &product_data::PremTaxSurrChgFootnote        );
+    ascribe("PolicyFeeFootnote"          , &product_data::PolicyFeeFootnote             );
+    ascribe("AssetChargeFootnote"        , &product_data::AssetChargeFootnote           );
+    ascribe("InvestmentIncomeFootnote"   , &product_data::InvestmentIncomeFootnote      );
+    ascribe("IrrDbFootnote"              , &product_data::IrrDbFootnote                 );
+    ascribe("IrrCsvFootnote"             , &product_data::IrrCsvFootnote                );
+    ascribe("MortalityChargesFootnote"   , &product_data::MortalityChargesFootnote      );
+    ascribe("LoanAndWithdrawalFootnote"  , &product_data::LoanAndWithdrawalFootnote     );
+    ascribe("LoanFootnote"               , &product_data::LoanFootnote                  );
+    ascribe("ImprimaturPresale"          , &product_data::ImprimaturPresale             );
+    ascribe("ImprimaturPresaleComposite" , &product_data::ImprimaturPresaleComposite    );
+    ascribe("ImprimaturInforce"          , &product_data::ImprimaturInforce             );
+    ascribe("ImprimaturInforceComposite" , &product_data::ImprimaturInforceComposite    );
+    ascribe("StateMarketingImprimatur"   , &product_data::StateMarketingImprimatur      );
+    ascribe("NonGuaranteedFootnote"      , &product_data::NonGuaranteedFootnote         );
+    ascribe("NonGuaranteedFootnote1"     , &product_data::NonGuaranteedFootnote1        );
+    ascribe("NonGuaranteedFootnote1Tx"   , &product_data::NonGuaranteedFootnote1Tx      );
+    ascribe("FnMonthlyDeductions"        , &product_data::FnMonthlyDeductions           );
+    ascribe("SurrenderFootnote"          , &product_data::SurrenderFootnote             );
+    ascribe("PortabilityFootnote"        , &product_data::PortabilityFootnote           );
+    ascribe("FundRateFootnote"           , &product_data::FundRateFootnote              );
+    ascribe("IssuingCompanyFootnote"     , &product_data::IssuingCompanyFootnote        );
+    ascribe("SubsidiaryFootnote"         , &product_data::SubsidiaryFootnote            );
+    ascribe("PlacementAgentFootnote"     , &product_data::PlacementAgentFootnote        );
+    ascribe("MarketingNameFootnote"      , &product_data::MarketingNameFootnote         );
+    ascribe("GuarIssueDisclaimerNcSc"    , &product_data::GuarIssueDisclaimerNcSc       );
+    ascribe("GuarIssueDisclaimerMd"      , &product_data::GuarIssueDisclaimerMd         );
+    ascribe("GuarIssueDisclaimerTx"      , &product_data::GuarIssueDisclaimerTx         );
+    ascribe("IllRegCertAgent"            , &product_data::IllRegCertAgent               );
+    ascribe("IllRegCertAgentIl"          , &product_data::IllRegCertAgentIl             );
+    ascribe("IllRegCertAgentTx"          , &product_data::IllRegCertAgentTx             );
+    ascribe("IllRegCertClient"           , &product_data::IllRegCertClient              );
+    ascribe("IllRegCertClientIl"         , &product_data::IllRegCertClientIl            );
+    ascribe("IllRegCertClientTx"         , &product_data::IllRegCertClientTx            );
+    ascribe("FnMaturityAge"              , &product_data::FnMaturityAge                 );
+    ascribe("FnPartialMortality"         , &product_data::FnPartialMortality            );
+    ascribe("FnProspectus"               , &product_data::FnProspectus                  );
+    ascribe("FnInitialSpecAmt"           , &product_data::FnInitialSpecAmt              );
+    ascribe("FnInforceAcctVal"           , &product_data::FnInforceAcctVal              );
+    ascribe("FnInforceTaxBasis"          , &product_data::FnInforceTaxBasis             );
+    ascribe("Fn1035Charge"               , &product_data::Fn1035Charge                  );
+    ascribe("FnMecExtraWarning"          , &product_data::FnMecExtraWarning             );
+    ascribe("FnNotTaxAdvice"             , &product_data::FnNotTaxAdvice                );
+    ascribe("FnImf"                      , &product_data::FnImf                         );
+    ascribe("FnCensus"                   , &product_data::FnCensus                      );
+    ascribe("FnDacTax"                   , &product_data::FnDacTax                      );
+    ascribe("FnDefnLifeIns"              , &product_data::FnDefnLifeIns                 );
+    ascribe("FnBoyEoy"                   , &product_data::FnBoyEoy                      );
+    ascribe("FnGeneralAccount"           , &product_data::FnGeneralAccount              );
+    ascribe("FnPpMemorandum"             , &product_data::FnPpMemorandum                );
+    ascribe("FnPpAccreditedInvestor"     , &product_data::FnPpAccreditedInvestor        );
+    ascribe("FnPpLoads"                  , &product_data::FnPpLoads                     );
+    ascribe("FnProposalUnderwriting"     , &product_data::FnProposalUnderwriting        );
+    ascribe("FnGuaranteedPremium"        , &product_data::FnGuaranteedPremium           );
+    ascribe("FnOmnibusDisclaimer"        , &product_data::FnOmnibusDisclaimer           );
+    ascribe("FnInitialDbo"               , &product_data::FnInitialDbo                  );
+    ascribe("DefnAV"                     , &product_data::DefnAV                        );
+    ascribe("DefnCSV"                    , &product_data::DefnCSV                       );
+    ascribe("DefnMec"                    , &product_data::DefnMec                       );
+    ascribe("DefnOutlay"                 , &product_data::DefnOutlay                    );
+    ascribe("DefnSpecAmt"                , &product_data::DefnSpecAmt                   );
 }
 
 /// Backward-compatibility serial number of this class's xml version.
@@ -469,6 +490,10 @@ void product_data::redintegrate_ex_post
 
 namespace
 {
+static std::string const S_FnMonthlyDeductions =
+  "Monthly charges are deducted from the account value; if it is depleted,"
+  " additional premiums may be required.";
+
 // These two certifications are copied verbatim et literatim from the
 // illustration reg.
 static std::string const S_IllRegCertAgent =
@@ -480,6 +505,95 @@ static std::string const S_IllRegCertClient =
   "I have received a copy of this illustration and understand that any"
   " non-guaranteed elements illustrated are subject to change and could be"
   " either higher or lower. The agent has told me they are not guaranteed.";
+
+static std::string const S_FnMaturityAge =
+  "Maturity age: {{EndtAge}}.";
+
+static std::string const S_FnPartialMortality =
+  "Columns reflect mortality, beginning at {{PartMortTableMult[0]}}"
+  " of the {{PartMortTableName}} table,"
+  " with all deaths at the end of each year"
+  "{{#SurviveToExpectancy}}"
+  " and survival limited to life expectancy"
+  "{{/SurviveToExpectancy}}"
+  "{{#SurviveToYear}}"
+  " and survival limited to {{SurvivalMaxYear}} years"
+  "{{/SurviveToYear}}"
+  "{{#SurviveToAge}}"
+  " and survival limited to age {{SurvivalMaxAge}}"
+  "{{/SurviveToAge}}"
+  ".";
+
+static std::string const S_FnProspectus =
+  "Must be preceded or accompanied by a prospectus.";
+static std::string const S_FnInitialSpecAmt =
+  "The initial specified amount is ${{InitTotalSA}}.";
+static std::string const S_FnInforceAcctVal =
+  "The inforce unloaned account value is ${{InforceUnloanedAV}}.";
+static std::string const S_FnInforceTaxBasis =
+  "The inforce tax basis is ${{InforceTaxBasis}}.";
+static std::string const S_Fn1035Charge =
+  "A charge may be deducted from the proceeds of a 1035 exchange.";
+static std::string const S_FnMecExtraWarning =
+  "{{#IsMec}}¶¶This is a Modified Endowment Contract.{{/IsMec}}";
+static std::string const S_FnNotTaxAdvice =
+  "{{InsCoShortName}} cannot give tax advice. Consult your own advisors.";
+static std::string const S_FnImf =
+  "Initial investment management fee: {{TotalIMF[0]}}.";
+static std::string const S_FnCensus =
+  ""; // There is no census attached to a composite.
+static std::string const S_FnDacTax =
+  "There is no explicit charge for DAC tax.";
+
+static std::string const S_FnDefnLifeIns =
+  "This policy is intended to qualify as life insurance under the IRC §7702"
+  "{{#DefnLifeInsIsGPT}}"
+  " guideline premium test. ${{InitGSP}} is the guideline single premium,"
+  " and ${{InitGLP}} is the guideline level premium."
+  "{{/DefnLifeInsIsGPT}}"
+  "{{^DefnLifeInsIsGPT}}"
+  "cash value accumulation test."
+  "{{/DefnLifeInsIsGPT}}";
+
+static std::string const S_FnBoyEoy =
+  "Premiums are payable in advance. Benefits are as of year end.";
+static std::string const S_FnGeneralAccount =
+  "The general account credits interest of at least {{InitAnnGenAcctInt_Guaranteed}}.";
+static std::string const S_FnPpMemorandum =
+  "Must be preceded or accompanied by a prospectus.";
+static std::string const S_FnPpAccreditedInvestor =
+  "Available only to accredited investors.";
+static std::string const S_FnPpLoads =
+  ""; // Explanation of any special loads.
+static std::string const S_FnProposalUnderwriting =
+  ""; // Explanation of group underwriting.
+static std::string const S_FnGuaranteedPremium =
+  "An outlay of ${{GuarPrem}} ({{InitEeMode}}) will guarantee coverage"
+  " to age {{EndtAge}}"
+  "{{#DefnLifeInsIsGPT}}"
+  ", subject to guideline premium test limits"
+  "{{/DefnLifeInsIsGPT}}"
+  ".";
+static std::string const S_FnOmnibusDisclaimer =
+  "Non-guaranteed values are based on current assumptions, which are"
+  " subject to change. Actual results may be more or less favorable.";
+static std::string const S_FnInitialDbo =
+  "The initial death benefit option is {{InitDBOpt}}.";
+static std::string const S_DefnGuarGenAcctRate =
+  "¶¶«Guaranteed Crediting Rate:»"
+  " The minimum annual interest rate credited on unloaned funds."
+  ;
+static std::string const S_DefnAV =
+  "Account value is the accumulation of payments less charges and disbursements.";
+static std::string const S_DefnCSV =
+  "Cash surrender value is account value less any surrender charge.";
+static std::string const S_DefnMec =
+  "A Modified Endowment Contract is a contract that does not qualify"
+  " for favorable tax treatment under IRC §7702A.";
+static std::string const S_DefnOutlay =
+  "Outlay is premium paid out of pocket.";
+static std::string const S_DefnSpecAmt =
+  "Specified amount is the nominal face amount.";
 
 class sample : public product_data {public: sample();};
 
@@ -567,12 +681,41 @@ sample::sample()
     item("UwClassStandard")            = glossed_string("Standard");
     item("UwClassRated")               = glossed_string("Rated");
     item("UwClassUltra")               = glossed_string("Ultrapreferred");
+    item("FnMonthlyDeductions")        = S_FnMonthlyDeductions;
     item("IllRegCertAgent")            = S_IllRegCertAgent;
     item("IllRegCertAgentIl")          = S_IllRegCertAgent;
     item("IllRegCertAgentTx")          = S_IllRegCertAgent;
     item("IllRegCertClient")           = S_IllRegCertClient;
     item("IllRegCertClientIl")         = S_IllRegCertClient;
     item("IllRegCertClientTx")         = S_IllRegCertClient;
+    item("FnMaturityAge")              = S_FnMaturityAge;
+    item("FnPartialMortality")         = S_FnPartialMortality;
+    item("FnProspectus")               = S_FnProspectus;
+    item("FnInitialSpecAmt")           = S_FnInitialSpecAmt;
+    item("FnInforceAcctVal")           = S_FnInforceAcctVal;
+    item("FnInforceTaxBasis")          = S_FnInforceTaxBasis;
+    item("Fn1035Charge")               = S_Fn1035Charge;
+    item("FnMecExtraWarning")          = S_FnMecExtraWarning;
+    item("FnNotTaxAdvice")             = S_FnNotTaxAdvice;
+    item("FnImf")                      = S_FnImf;
+    item("FnCensus")                   = S_FnCensus;
+    item("FnDacTax")                   = S_FnDacTax;
+    item("FnDefnLifeIns")              = S_FnDefnLifeIns;
+    item("FnBoyEoy")                   = S_FnBoyEoy;
+    item("FnGeneralAccount")           = S_FnGeneralAccount;
+    item("FnPpMemorandum")             = S_FnPpMemorandum;
+    item("FnPpAccreditedInvestor")     = S_FnPpAccreditedInvestor;
+    item("FnPpLoads")                  = S_FnPpLoads;
+    item("FnProposalUnderwriting")     = S_FnProposalUnderwriting;
+    item("FnGuaranteedPremium")        = S_FnGuaranteedPremium;
+    item("FnOmnibusDisclaimer")        = S_FnOmnibusDisclaimer;
+    item("FnInitialDbo")               = S_FnInitialDbo;
+    item("DefnGuarGenAcctRate")        = S_DefnGuarGenAcctRate;
+    item("DefnAV")                     = S_DefnAV;
+    item("DefnCSV")                    = S_DefnCSV;
+    item("DefnMec")                    = S_DefnMec;
+    item("DefnOutlay")                 = S_DefnOutlay;
+    item("DefnSpecAmt")                = S_DefnSpecAmt;
 
     item("ADDTerseName")               = glossed_string("Accident");
     item("InsurabilityTerseName")      = glossed_string("Insurability");
@@ -773,6 +916,8 @@ sample2ipp::sample2ipp()
 sample2xyz::sample2xyz()
 {
     item("DatabaseFilename")           = glossed_string("sample2xyz.database");
+    // Exotica.
+    item("FnPartialMortality")         = S_FnPartialMortality;
 }
 } // Unnamed namespace.
 
