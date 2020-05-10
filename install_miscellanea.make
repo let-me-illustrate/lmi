@@ -240,11 +240,6 @@ WGETFLAGS := --no-check-certificate --no-verbose
 	$(ECHO) "$($@-md5) *$(cache_dir)/$@" | $(MD5SUM) --check
 	-$(TAR) --extract $(TARFLAGS) --directory=$(ad_hoc_dir) --file=$(cache_dir)/$@
 
-.PHONY: %.exe
-%.exe:
-	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
-	$(ECHO) "$($@-md5) *$(cache_dir)/$@" | $(MD5SUM) --check
-
 .PHONY: %.zip
 %.zip:
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
