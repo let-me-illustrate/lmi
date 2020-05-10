@@ -118,8 +118,6 @@ AC_PROG_CC
 CXXFLAGS=${CXXFLAGS:=}
 AC_PROG_CXX
 
-CXX="$CXX -std=c++17"
-
 dnl Check if the compiler supports C++17: this is a rather ad hoc test as it
 dnl doesn't check for full C++17 support, but it's enough for the subset of it
 dnl that is currently used in lmi and this check passes with with g++ 6, which
