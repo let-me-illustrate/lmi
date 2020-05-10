@@ -1656,7 +1656,7 @@ void table_impl::parse_values(std::istream& is, int& line_num)
 
     // Initialize this variable using a lambda with a switch inside just to
     // make sure this code gets updated if any new table types are added.
-    auto const is_select_table = [=]() {
+    auto const is_select_table = [this]() {
         switch(*type_) {
             case table_type::aggregate:
             case table_type::duration:

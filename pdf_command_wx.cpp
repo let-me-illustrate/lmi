@@ -2455,7 +2455,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
         // PDF !! This member is already a const reference, so why
         // declare a const reference to it?
         auto const& z = interpolator_;
-        auto const output_two_column_super_header = [=,&table_gen]
+        auto const output_two_column_super_header = [this,pos_y,output_mode,z,&table_gen]
             (basis         guar_or_curr
             ,interest_rate zero_or_not
             ,int           begin_column
