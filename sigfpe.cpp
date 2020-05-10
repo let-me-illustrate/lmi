@@ -75,14 +75,14 @@ void fpe_handler_test()
 
 // FPU arithmetic overflow. TODO ?? Is this right, and does it work?
     d2 = dm;
-    d2 *= dm;
+    d2 = d2 * dm;
 
 // FPU arithmetic underflow. TODO ?? Isn't this overflow? Does this work?
     d2 = (d1 / dm) / dm;
 
 // FPU precision loss. TODO ?? Is this right, and does it work?
     d2 = d1 / dm;
-    d2 /= dm;
+    d2 = d2 / dm;
 
 // SIGFPE explicitly raised.
     std::raise(SIGFPE);
