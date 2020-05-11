@@ -56,7 +56,7 @@ assert_su
 assert_not_chrooted
 
 # First, destroy any chroot left by a prior run.
-grep centos /proc/mounts | cut -f2 -d" " | xargs umount
+grep centos /proc/mounts | cut -f2 -d" " | xargs --no-run-if-empty umount
 rm -rf /srv/chroot/centos7lmi
 rm /etc/schroot/chroot.d/centos7lmi.conf
 

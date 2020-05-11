@@ -56,7 +56,7 @@ assert_su
 assert_not_chrooted
 
 # First, destroy any chroot left by a prior run.
-grep "${CHRTNAME}" /proc/mounts | cut -f2 -d" " | xargs umount || echo "None?"
+grep "${CHRTNAME}" /proc/mounts | cut -f2 -d" " | xargs --no-run-if-empty umount
 rm -rf /srv/chroot/"${CHRTNAME}"
 rm /etc/schroot/chroot.d/"${CHRTNAME}".conf || echo "None?"
 umount /srv/chroot
