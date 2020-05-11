@@ -151,6 +151,8 @@ findmnt /var/cache/yum
 findmnt /proc
 findmnt /dev/pts
 
+sed -i /etc/yum.conf -e's/keepcache=0/keepcache=1/'
+
 yum --assumeyes install ncurses-term less sudo vim zsh
 chsh -s /bin/zsh root
 chsh -s /bin/zsh "${NORMAL_USER}"
