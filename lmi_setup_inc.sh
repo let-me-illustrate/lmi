@@ -34,6 +34,10 @@ CODENAME=bullseye
 CHRTVER=1
 CHRTNAME=lmi_${CODENAME}_${CHRTVER}
 
+umask
+umask g=rwx
+umask
+
 set +vx
 
 assert_su()

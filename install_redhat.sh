@@ -26,8 +26,6 @@ set -evx
 stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
 
-umask g=rwx
-
 # A known corporate firewall blocks gnu.org even on a GNU/Linux
 # server, yet allows github.com:
 if curl https://git.savannah.nongnu.org:443 >/dev/null 2>&1 ; then
