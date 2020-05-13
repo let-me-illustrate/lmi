@@ -289,6 +289,9 @@ do
     fi
 done
 
+# User and group write permissions should be the same.
+find /opt/lmi -perm -200 \! -perm -020 -print0 | xargs -0 ls -ld
+
 mkdir --parents /opt/lmi/data
 
 # To regenerate authentication files for production distributions:
