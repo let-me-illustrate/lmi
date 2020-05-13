@@ -154,5 +154,13 @@ cd "$build_dir"
 "$proxy_wx_dir"/configure $config_options CFLAGS="$wx_cc_flags" CXXFLAGS="$wx_cxx_flags"
 $MAKE
 $MAKE install
+# autotools: 'make install' doesn't respect group permissions--see:
+#   https://lists.gnu.org/archive/html/automake/2019-01/msg00000.html
+chmod -R g=u "$prefix"/include/wx*
+chmod -R g=u "$exec_prefix"/lib/wx*
+chmod -R g=u "$exec_prefix"/lib/libwx*
+chmod -R g=u "$prefix"/share
+# This should find zero files:
+find "$prefix" -perm -200 \! -perm -020
 
 exit 0
