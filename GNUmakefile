@@ -239,6 +239,7 @@ $(build_dir): $(gpl_files)
 	+@[ -d $(localincludedir) ] || $(MKDIR) --parents $(localincludedir)
 	+@for z in $(compiler_runtime_files); do \
 	    $(CP) --archive --update $$z $(localbindir) ; \
+	    $(CHMOD) -R g=u $(localbindir)/`basename $$z` ; \
 	  done;
 	+@$(MAKETARGET)
 
