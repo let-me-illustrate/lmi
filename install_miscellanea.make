@@ -168,6 +168,7 @@ boost: $(file_list)
 .PHONY: cgicc
 cgicc: $(file_list)
 	$(PATCH) --directory=$(ad_hoc_dir) --strip=1 < $(stem).patch
+	$(CHMOD) -R g=u $(ad_hoc_dir)/$(stem)
 	$(MKDIR) $(third_party_include_dir)/cgicc
 	$(MV) $(ad_hoc_dir)/$(stem)/cgicc/*.h   $(third_party_include_dir)/cgicc/
 	$(MKDIR) $(third_party_source_dir)/cgicc
