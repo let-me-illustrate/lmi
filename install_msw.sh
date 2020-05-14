@@ -306,6 +306,11 @@ find /opt/lmi -perm -200 \! -perm -020 -print0 | xargs --no-run-if-empty -0 ls -
 # if the digits in the fourth and fifth columns differ. The second
 # column should contain '2' for all directories.
 find /opt/lmi/ -print0 | xargs -0 stat -c "%05a %F" | sort -u
+# Ad hoc repairs--see:
+#   https://lists.nongnu.org/archive/html/lmi/2020-05/msg00001.html
+# chgrp -R lmi /opt/lmi
+# find /opt/lmi -type d -exec chmod g+s {} +
+# chmod -R g=u /opt/lmi
 
 mkdir --parents /opt/lmi/data
 
