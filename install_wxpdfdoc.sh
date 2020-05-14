@@ -126,6 +126,6 @@ chmod -R g=u "$prefix"/include/wx*
 chmod -R g=u "$exec_prefix"/bin
 chmod -R g=u "$exec_prefix"/lib
 # This should find zero files:
-find "$prefix" -perm -200 \! -perm -020
+find "$prefix" -perm -200 -not -perm -020
 
 exit 0

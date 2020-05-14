@@ -217,7 +217,7 @@ $(libraries):
 	-$(CHMOD) -R g=u $(exec_prefix)/lib
 	-$(CHMOD) -R g=u $(prefix)/share/aclocal
 	-$(CHMOD) -R g=u $(prefix)/share/man
-	find $(prefix) -perm -200 \! -perm -020
+	find $(prefix) -perm -200 -not -perm -020
 
 # Nonchalantly remove pkgconfig and cmake subdirectories, even though
 # other libraries might someday write files in them, because lmi never

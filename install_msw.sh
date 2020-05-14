@@ -290,9 +290,9 @@ do
 done
 
 # GID should be the same for all files.
-find /opt/lmi/ \! -group "$(id -gn "$(logname)")" -print
+find /opt/lmi/ -not -group "$(id -gn "$(logname)")" -print
 # User and group write permissions should be the same.
-find /opt/lmi -perm -200 \! -perm -020 -print0 | xargs --no-run-if-empty -0 ls -ld
+find /opt/lmi -perm -200 -not -perm -020 -print0 | xargs --no-run-if-empty -0 ls -ld
 # Show all distinct file modes. Expect something like:
 #   00444 regular file
 #   00555 regular file

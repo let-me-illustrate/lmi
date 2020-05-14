@@ -161,6 +161,6 @@ chmod -R g=u "$exec_prefix"/lib/wx*
 chmod -R g=u "$exec_prefix"/lib/libwx*
 chmod -R g=u "$prefix"/share
 # This should find zero files:
-find "$prefix" -perm -200 \! -perm -020
+find "$prefix" -perm -200 -not -perm -020
 
 exit 0
