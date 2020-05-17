@@ -31,7 +31,7 @@
 set -vx
 
 CODENAME=bullseye
-CHRTVER=1
+CHRTVER=2
 CHRTNAME=lmi_${CODENAME}_${CHRTVER}
 
 umask
