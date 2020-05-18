@@ -71,6 +71,16 @@ umount /srv/chroot
 #   echo "LABEL=lmi /srv/chroot ext4 defaults 0 0" >> /etc/fstab
 #   partprobe
 #   mount -a
+# To change from ext4 to xfs, unmount and...
+#   mkfs.xfs -f -L lmi /dev/sdb1
+# after which
+#   blkid /dev/sdb1
+# should show
+#   /dev/sdb2: LABEL="lmi" ... TYPE="xfs"
+# Then do:
+#   echo "LABEL=lmi /srv/chroot xfs defaults 0 0" >> /etc/fstab
+# removing any former /srv/chroot line.
+#
 # Here, explicitly remount /srv/chroot because it was umounted above:
 mount LABEL=lmi /srv/chroot
 findmnt /srv/chroot
