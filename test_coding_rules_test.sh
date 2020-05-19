@@ -48,6 +48,13 @@ cat >eraseme_000 <<EOF
 $boilerplate
 EOF
 
+touch eraseme_0_bytes.touchstone
+
+printf '\n'   >eraseme_1_byte_good.touchstone
+printf ' '    >eraseme_1_byte_bad.touchstone
+printf 'z\n'  >eraseme_2_bytes_good.touchstone
+printf '\\\n' >eraseme_2_bytes_bad.touchstone
+
 # Files in general: copyright.
 
 cat >eraseme_copyright_000 <<EOF
@@ -389,6 +396,8 @@ Exception--file 'a_nonexistent_file': File not found.
 File 'an_expungible_file.bak' ignored as being expungible.
 Exception--file 'an_unexpected_file': File is unexpectedly uncategorizable.
 Exception--file 'another.unexpected.file': File is unexpectedly uncategorizable.
+Exception--file 'eraseme_1_byte_bad.touchstone': File does not end in newline.
+Exception--file 'eraseme_2_bytes_bad.touchstone': File ends in backslash-newline.
 File 'eraseme_copyright_001' lacks current copyright.
 File 'eraseme_copyright_001' breaks taboo '\(c\) *[0-9]'.
 File 'eraseme_copyright_003.html' lacks current copyright.
@@ -451,3 +460,5 @@ diff --unified=0 expected_eraseme observed_eraseme && rm --force \
   another.unexpected.file \
   eraseme* \
   ./*eraseme \
+
+# This file does not end in backslash-newline.

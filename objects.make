@@ -1208,3 +1208,5 @@ product_files$(EXEEXT): \
   my_rnd.o \
   my_tier.o \
   liblmi$(SHREXT) \
+
+# This file does not end in backslash-newline.
