@@ -382,9 +382,9 @@ esac
   another.unexpected.file \
   eraseme* \
   | sed -e '/^[ 0-9]\{9\} \(source files\|source lines\|marked defects\)/d' \
-  >eraseme_observed
+  >observed_eraseme
 
-cat >eraseme_expected <<EOF
+cat >expected_eraseme <<EOF
 Exception--file 'a_nonexistent_file': File not found.
 File 'an_expungible_file.bak' ignored as being expungible.
 Exception--file 'an_unexpected_file': File is unexpectedly uncategorizable.
@@ -445,8 +445,9 @@ Exception--file 'eraseme_whitespace_003': File contains '\t'.
 Exception--file 'eraseme_whitespace_004': File contains '\v'.
 EOF
 
-diff --unified=0 eraseme_expected eraseme_observed && rm --force \
-  eraseme* \
+diff --unified=0 expected_eraseme observed_eraseme && rm --force \
   an_expungible_file.bak \
   an_unexpected_file \
   another.unexpected.file \
+  eraseme* \
+  ./*eraseme \
