@@ -1171,7 +1171,7 @@ statistics statistics::analyze_file(file const& f)
     ++z.files_;
 
     std::string const& s = f.data();
-    for(std::string::size_type i = 1; i < s.size(); ++i)
+    for(int i = 1; i < lmi::ssize(s); ++i)
         {
         if('\n' == s[i])
             {
@@ -1199,7 +1199,7 @@ void statistics::print_summary() const
 statistics process_file(std::string const& file_path)
 {
     file f(file_path);
-    if(31 < f.leaf_name().size())
+    if(31 < lmi::ssize(f.leaf_name()))
         {
         complain(f, "exceeds 31-character file-name limit.");
         }
