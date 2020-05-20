@@ -36,6 +36,7 @@ fi
 
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_02.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_05r.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_07r.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_11.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_20.sh
@@ -95,33 +96,7 @@ mkdir -p /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 # END   ./lmi_setup_11.sh
 
-# BEGIN ./lmi_setup_07.sh
-# Suppress a nuisance: rh-based distributions provide a default
-# zsh logout file that clears the screen.
-sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /etc/zlogout
-
-# Make a more modern 'git' available via 'scl'. This is not needed
-# if all real work is done in a debian chroot.
-#yum --assumeyes install centos-release-scl
-#yum-config-manager --enable rhel-server-rhscl-7-rpms
-#yum --assumeyes install devtoolset-8 rh-git218
-# In order to use the tools on the three preceding lines, do:
-#   scl enable devtoolset-8 rh-git218 $SHELL
-# and then they'll be available in that environment.
-
-# Fix weird errors like "Problem with the SSL CA cert (path? access rights?)".
-# Try 'update' before 'install' as described here:
-#   https://lists.nongnu.org/archive/html/lmi/2020-02/msg00003.html
-yum --assumeyes update ca-certificates curl nss-pem
-yum --assumeyes install ca-certificates curl nss-pem
-
-# Install "EPEL" by using 'rpm' directly [historical]. See:
-#   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00037.html
-#rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-# Instead, use 'yum' to install "EPEL".
-#yum --assumeyes install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-yum --assumeyes install epel-release
-# END   ./lmi_setup_07.sh
+./lmi_setup_07r.sh
 
 # BEGIN ./lmi_setup_10.sh
 yum --assumeyes install schroot
