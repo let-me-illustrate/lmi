@@ -27,7 +27,7 @@
 set -evx
 
 assert_su
-assert_chrooted
+assert_not_chrooted
 
 # A _normal_ file /dev/null seems to be created automatically:
 #   -rw-r--r-- 1 root root    0 Oct  1 15:44 /dev/null

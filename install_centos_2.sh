@@ -27,7 +27,7 @@
 set -vx
 
 assert_su
-assert_chrooted
+assert_not_chrooted
 
 echo "Adapted from 'lmi_setup_00.sh'."
 
