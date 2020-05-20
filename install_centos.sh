@@ -34,6 +34,7 @@ else
   GIT_URL_BASE=https://github.com/vadz/lmi/raw/master
 fi
 
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_02c.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_11.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_20.sh
@@ -85,12 +86,7 @@ set +v
 EOF
 chmod 0666 /tmp/schroot_env
 
-# BEGIN ./lmi_setup_02.sh
-# First, destroy any chroot left by a prior run.
-grep centos /proc/mounts | cut -f2 -d" " | xargs --no-run-if-empty umount
-rm -rf /srv/chroot/centos7lmi
-rm /etc/schroot/chroot.d/centos7lmi.conf
-# END   ./lmi_setup_02.sh
+./lmi_setup_02c.sh
 
 set -evx
 
