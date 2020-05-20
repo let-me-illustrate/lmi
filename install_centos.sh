@@ -56,10 +56,12 @@ set -evx
 assert_su
 assert_not_chrooted
 
+# BEGIN ./lmi_setup_02.sh
 # First, destroy any chroot left by a prior run.
 grep centos /proc/mounts | cut -f2 -d" " | xargs --no-run-if-empty umount
 rm -rf /srv/chroot/centos7lmi
 rm /etc/schroot/chroot.d/centos7lmi.conf
+# END   ./lmi_setup_02.sh
 
 # Store dynamic configuration in a temporary file. This method is
 # simple and robust, and far better than trying to pass environment
@@ -139,6 +141,7 @@ cp -a ~/.zshrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.zshrc
 # If that works well, then treat vim configuration the same way,
 # here and elsewhere.
 
+# BEGIN ./lmi_setup_11.sh
 cat >/srv/chroot/centos7lmi/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
 [${CHRTNAME}]
 aliases=lmi
@@ -159,6 +162,7 @@ mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/cache_for_lmi
 du   -sb /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi || echo "Okay."
 mkdir -p /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
 mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
+# END   ./lmi_setup_11.sh
 
 schroot --chroot=centos7lmi --user=root --directory=/tmp ./install_centos_2.sh
 

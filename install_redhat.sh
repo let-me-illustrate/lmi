@@ -53,10 +53,14 @@ set -evx
 assert_su
 assert_not_chrooted
 
+# BEGIN ./lmi_setup_02.sh
 # First, destroy any chroot left by a prior run.
 grep "${CHRTNAME}" /proc/mounts | cut -f2 -d" " | xargs --no-run-if-empty umount
 rm -rf /srv/chroot/"${CHRTNAME}"
 rm /etc/schroot/chroot.d/"${CHRTNAME}".conf || echo "None?"
+# END   ./lmi_setup_02.sh
+
+# BEGIN ./lmi_setup_05.sh
 umount /srv/chroot
 
 # On a server with tiny 4G partitions for /usr, /var, /tmp, /opt,
@@ -84,12 +88,16 @@ umount /srv/chroot
 # Here, explicitly remount /srv/chroot because it was umounted above:
 mount LABEL=lmi /srv/chroot
 findmnt /srv/chroot
+# END   ./lmi_setup_05.sh
 
+# BEGIN ./lmi_setup_11.sh
 mkdir -p /var/cache/"${CODENAME}"
 du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Okay."
 mkdir -p /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
+# END   ./lmi_setup_11.sh
 
+# BEGIN ./lmi_setup_07.sh
 # Suppress a nuisance: rh-based distributions provide a default
 # zsh logout file that clears the screen.
 sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /etc/zlogout
@@ -115,21 +123,28 @@ yum --assumeyes install ca-certificates curl nss-pem
 # Instead, use 'yum' to install "EPEL".
 #yum --assumeyes install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 yum --assumeyes install epel-release
+# END   ./lmi_setup_07.sh
 
+# BEGIN ./lmi_setup_10.sh
 yum --assumeyes install schroot
 # To show available debootstrap scripts:
 #   ls /usr/share/debootstrap/scripts
+# END   ./lmi_setup_10.sh
 
+# BEGIN ./lmi_setup_11.sh
 # Install a debian chroot inside this redhat chroot.
 yum --assumeyes install debootstrap
 mkdir -p /srv/chroot/"${CHRTNAME}"
 debootstrap "${CODENAME}" /srv/chroot/"${CHRTNAME}" http://deb.debian.org/debian/
 
 echo Installed debian "${CODENAME}".
+# END   ./lmi_setup_11.sh
 
+# BEGIN ./lmi_setup_12.sh
 # Suppress a nuisance: debian-based distributions provide a default
 # bash logout file that clears the screen.
 sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /srv/chroot/"${CHRTNAME}"/etc/skel/.bash_logout
+# END   ./lmi_setup_12.sh
 
 # Store dynamic configuration in a temporary file. This method is
 # simple and robust, and far better than trying to pass environment
@@ -160,6 +175,7 @@ set +v
 EOF
 chmod 0666 /tmp/schroot_env
 
+# BEGIN ./lmi_setup_11.sh
 cat >/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
 [${CHRTNAME}]
 aliases=lmi
@@ -176,6 +192,7 @@ mkdir -p /srv/cache_for_lmi
 du   -sb /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi || echo "Okay."
 mkdir -p /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
 mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
+# END   ./lmi_setup_11.sh
 
 # ./lmi_setup_10.sh
 # ./lmi_setup_11.sh

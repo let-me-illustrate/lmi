@@ -29,6 +29,7 @@ set -evx
 assert_su
 assert_not_chrooted
 
+# BEGIN ./lmi_setup_05.sh
 # A _normal_ file /dev/null seems to be created automatically:
 #   -rw-r--r-- 1 root root    0 Oct  1 15:44 /dev/null
 # so it needs to be removed to create the pseudo-device.
@@ -62,7 +63,9 @@ sed -i /etc/yum.conf -e's/keepcache=0/keepcache=1/'
 yum --assumeyes install ncurses-term less sudo vim zsh
 chsh -s /bin/zsh root
 chsh -s /bin/zsh "${NORMAL_USER}"
+# END   ./lmi_setup_05.sh
 
+# BEGIN ./lmi_setup_07.sh
 # Suppress a nuisance: rh-based distributions provide a default
 # zsh logout file that clears the screen.
 sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /etc/zlogout
@@ -88,14 +91,19 @@ yum --assumeyes install ca-certificates curl nss-pem
 # Instead, use 'yum' to install "EPEL".
 #yum --assumeyes install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 yum --assumeyes install epel-release
+# END   ./lmi_setup_07.sh
 
+# BEGIN ./lmi_setup_10.sh
 yum --assumeyes install schroot
 # To show available debootstrap scripts:
 #   ls /usr/share/debootstrap/scripts
+# END   ./lmi_setup_10.sh
 
+# BEGIN ./lmi_setup_11.sh
 # Install a debian chroot inside this centos chroot.
 yum --assumeyes install debootstrap
 mkdir -p /srv/chroot/"${CHRTNAME}"
 debootstrap "${CODENAME}" /srv/chroot/"${CHRTNAME}" http://deb.debian.org/debian/
 
 echo Installed debian "${CODENAME}".
+# END   ./lmi_setup_11.sh
