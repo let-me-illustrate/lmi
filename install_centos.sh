@@ -35,6 +35,7 @@ else
 fi
 
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_02c.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_05c.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_11.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_20.sh

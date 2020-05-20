@@ -29,41 +29,7 @@ set -evx
 assert_su
 assert_not_chrooted
 
-# BEGIN ./lmi_setup_05.sh
-# A _normal_ file /dev/null seems to be created automatically:
-#   -rw-r--r-- 1 root root    0 Oct  1 15:44 /dev/null
-# so it needs to be removed to create the pseudo-device.
-
-[ -c /dev/null ] || ( rm /dev/null; mknod /dev/null c 1 3)
-chmod 666 /dev/null
-[ -c /dev/ptmx ] || mknod /dev/ptmx c 5 2
-chmod 666 /dev/ptmx
-[ -d /dev/pts  ] || mkdir /dev/pts
-
-getent group "${NORMAL_GROUP}" || groupadd --gid="${NORMAL_GROUP_GID}" "${NORMAL_GROUP}"
-getent passwd "${NORMAL_USER}" || useradd \
-  --gid="${NORMAL_GROUP_GID}" \
-  --uid="${NORMAL_USER_UID}" \
-  --create-home \
-  --shell=/bin/zsh \
-  --password="$(openssl passwd -1 expired)" \
-  "${NORMAL_USER}"
-
-usermod -aG sudo "${NORMAL_USER}" || echo "Oops."
-
-mountpoint /dev/pts || mount -t devpts -o rw,nosuid,noexec,relatime,mode=600 devpts /dev/pts
-mountpoint /proc    || mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
-
-findmnt /var/cache/yum
-findmnt /proc
-findmnt /dev/pts
-
-sed -i /etc/yum.conf -e's/keepcache=0/keepcache=1/'
-
-yum --assumeyes install ncurses-term less sudo vim zsh
-chsh -s /bin/zsh root
-chsh -s /bin/zsh "${NORMAL_USER}"
-# END   ./lmi_setup_05.sh
+./lmi_setup_05c.sh
 
 # BEGIN ./lmi_setup_07.sh
 # Suppress a nuisance: rh-based distributions provide a default
