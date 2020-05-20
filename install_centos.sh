@@ -56,13 +56,6 @@ set -evx
 assert_su
 assert_not_chrooted
 
-# BEGIN ./lmi_setup_02.sh
-# First, destroy any chroot left by a prior run.
-grep centos /proc/mounts | cut -f2 -d" " | xargs --no-run-if-empty umount
-rm -rf /srv/chroot/centos7lmi
-rm /etc/schroot/chroot.d/centos7lmi.conf
-# END   ./lmi_setup_02.sh
-
 # Store dynamic configuration in a temporary file. This method is
 # simple and robust, and far better than trying to pass environment
 # variables across sudo and schroot barriers.
@@ -91,6 +84,13 @@ NORMAL_GROUP_GID=$NORMAL_GROUP_GID
 set +v
 EOF
 chmod 0666 /tmp/schroot_env
+
+# BEGIN ./lmi_setup_02.sh
+# First, destroy any chroot left by a prior run.
+grep centos /proc/mounts | cut -f2 -d" " | xargs --no-run-if-empty umount
+rm -rf /srv/chroot/centos7lmi
+rm /etc/schroot/chroot.d/centos7lmi.conf
+# END   ./lmi_setup_02.sh
 
 set -evx
 

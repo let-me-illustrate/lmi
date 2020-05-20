@@ -53,6 +53,35 @@ set -evx
 assert_su
 assert_not_chrooted
 
+# Store dynamic configuration in a temporary file. This method is
+# simple and robust, and far better than trying to pass environment
+# variables across sudo and schroot barriers.
+
+       NORMAL_USER=$(id -un "$(logname)")
+   NORMAL_USER_UID=$(id -u  "$(logname)")
+
+if getent group lmi; then
+      NORMAL_GROUP=lmi
+  NORMAL_GROUP_GID=$(getent group "$NORMAL_GROUP" | cut -d: -f3)
+      CHROOT_USERS=$(getent group "$NORMAL_GROUP" | cut -d: -f4)
+else
+      NORMAL_GROUP=$(id -gn "$(logname)")
+  NORMAL_GROUP_GID=$(id -g  "$(logname)")
+      CHROOT_USERS=$(id -un "$(logname)")
+fi
+
+cat >/tmp/schroot_env <<EOF
+set -v
+    CHROOT_USERS=$CHROOT_USERS
+    GIT_URL_BASE=$GIT_URL_BASE
+    NORMAL_GROUP=$NORMAL_GROUP
+NORMAL_GROUP_GID=$NORMAL_GROUP_GID
+     NORMAL_USER=$NORMAL_USER
+ NORMAL_USER_UID=$NORMAL_USER_UID
+set +v
+EOF
+chmod 0666 /tmp/schroot_env
+
 # BEGIN ./lmi_setup_02.sh
 # First, destroy any chroot left by a prior run.
 grep "${CHRTNAME}" /proc/mounts | cut -f2 -d" " | xargs --no-run-if-empty umount
@@ -145,35 +174,6 @@ echo Installed debian "${CODENAME}".
 # bash logout file that clears the screen.
 sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /srv/chroot/"${CHRTNAME}"/etc/skel/.bash_logout
 # END   ./lmi_setup_12.sh
-
-# Store dynamic configuration in a temporary file. This method is
-# simple and robust, and far better than trying to pass environment
-# variables across sudo and schroot barriers.
-
-       NORMAL_USER=$(id -un "$(logname)")
-   NORMAL_USER_UID=$(id -u  "$(logname)")
-
-if getent group lmi; then
-      NORMAL_GROUP=lmi
-  NORMAL_GROUP_GID=$(getent group "$NORMAL_GROUP" | cut -d: -f3)
-      CHROOT_USERS=$(getent group "$NORMAL_GROUP" | cut -d: -f4)
-else
-      NORMAL_GROUP=$(id -gn "$(logname)")
-  NORMAL_GROUP_GID=$(id -g  "$(logname)")
-      CHROOT_USERS=$(id -un "$(logname)")
-fi
-
-cat >/tmp/schroot_env <<EOF
-set -v
-    CHROOT_USERS=$CHROOT_USERS
-    GIT_URL_BASE=$GIT_URL_BASE
-    NORMAL_GROUP=$NORMAL_GROUP
-NORMAL_GROUP_GID=$NORMAL_GROUP_GID
-     NORMAL_USER=$NORMAL_USER
- NORMAL_USER_UID=$NORMAL_USER_UID
-set +v
-EOF
-chmod 0666 /tmp/schroot_env
 
 # BEGIN ./lmi_setup_11.sh
 cat >/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
