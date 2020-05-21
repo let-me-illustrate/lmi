@@ -127,7 +127,7 @@ cp -a install_centos_* /srv/chroot/centos7lmi/tmp
 schroot --chroot=centos7lmi --user=root --directory=/tmp ./install_centos_1.sh
 
 cp -a ~/.vimrc /srv/chroot/centos7lmi/root/.vimrc
-cp -a ~/.vimrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.vimrc
+cp -a ~/.vimrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.vimrc || echo "Huh?"
 
 # Experimentally, instead of this:
 # cp -a ~/.zshrc /srv/chroot/centos7lmi/root/.zshrc
@@ -135,7 +135,7 @@ cp -a ~/.vimrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.vimrc
 # do this:
 wget -N -nv "${GIT_URL_BASE}"/gwc/.zshrc
 cp -a ~/.zshrc /srv/chroot/centos7lmi/root/.zshrc
-cp -a ~/.zshrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.zshrc
+cp -a ~/.zshrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.zshrc || echo "Huh?"
 # If that works well, then treat vim configuration the same way,
 # here and elsewhere.
 
