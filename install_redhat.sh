@@ -95,10 +95,11 @@ yum --assumeyes install debootstrap schroot
 # ./lmi_setup_10.sh
 
 # BEGIN ./lmi_setup_11.sh
-mkdir -p /var/cache/"${CODENAME}"
+CACHEDIR=/var/cache/"${CODENAME}"
+mkdir -p "${CACHEDIR}"
 du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Okay."
 mkdir -p /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
-mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
+mount --bind "${CACHEDIR}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 
 # Install a debian chroot inside this redhat chroot.
 mkdir -p /srv/chroot/"${CHRTNAME}"
