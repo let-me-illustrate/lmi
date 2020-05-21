@@ -61,6 +61,18 @@ debootstrap --arch=amd64 --cache-dir="${CACHEDIR}" \
 # This command should produce no output:
 grep --invert-match '^I:' "${CHRTNAME}"-debootstrap-log
 
+cat >/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
+[${CHRTNAME}]
+aliases=lmi
+description=debian ${CODENAME} cross build ${CHRTVER}
+directory=/srv/chroot/${CHRTNAME}
+users=${CHROOT_USERS}
+groups=${NORMAL_GROUP}
+root-groups=root
+shell=/bin/zsh
+type=plain
+EOF
+
 # Experimentally show whether anything's already here:
 du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 # Bind-mount apt archives for the chroot's debian release. Do this:

@@ -138,14 +138,16 @@ du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 #   - while not chrooted, so that the host filesystem is accessible.
 mount --bind "${CACHEDIR}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 
+echo Installed debian "${CODENAME}" chroot.
+# END   ./lmi_setup_11.sh
+# ./lmi_setup_11.sh
+
+# BEGIN ./lmi_setup_13.sh
 mkdir -p /srv/cache_for_lmi
 du   -sb /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi || echo "Okay."
 mkdir -p /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
 mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
-
-echo Installed debian "${CODENAME}" chroot.
-# END   ./lmi_setup_11.sh
-# ./lmi_setup_11.sh
+# END   ./lmi_setup_13.sh
 
 cp -a lmi_setup_*.sh /tmp/schroot_env /srv/chroot/${CHRTNAME}/tmp
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_20.sh
