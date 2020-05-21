@@ -72,7 +72,11 @@ du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 #   - while not chrooted, so that the host filesystem is accessible.
 mount --bind "${CACHEDIR}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 
+# Should the next two commands both find the mount just established?
 findmnt "${CACHEDIR}"
+findmnt /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
+
+# Are the next two commands useful?
 findmnt /proc
 findmnt /dev/pts
 
