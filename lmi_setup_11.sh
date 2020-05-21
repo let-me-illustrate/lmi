@@ -65,7 +65,7 @@ type=plain
 EOF
 
 # Bind-mount apt archives for the chroot's debian release. Do this:
-#   - after invoking 'debootstrap', so that /var exists; and
+#   - after invoking 'debootstrap', so the chroot's /var exists; and
 #   - before invoking 'apt-get' in the chroot, to save bandwidth; and
 #   - while not chrooted, so that the host filesystem is accessible.
 mount --bind "${CACHEDIR}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
