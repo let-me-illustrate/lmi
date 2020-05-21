@@ -48,7 +48,6 @@ wget -N -nv "${GIT_URL_BASE}"/lmi_setup_42.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_43.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_inc.sh
 wget -N -nv "${GIT_URL_BASE}"/install_centos_1.sh
-wget -N -nv "${GIT_URL_BASE}"/install_centos_2.sh
 chmod 0777 lmi_setup_*.sh
 chmod 0777 install_centos_*.sh
 
@@ -145,7 +144,6 @@ mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/cache_for_lmi
 # END   ./lmi_setup_13.sh
 
 schroot --chroot=centos7lmi --user=root --directory=/tmp ./install_centos_1.sh
-schroot --chroot=centos7lmi --user=root --directory=/tmp ./install_centos_2.sh
 
 # Copy log files that may be useful for tracking down problems with
 # certain commands whose output is voluminous and often uninteresting.
