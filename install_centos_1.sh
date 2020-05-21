@@ -61,5 +61,12 @@ debootstrap --arch=amd64 --cache-dir="${CACHEDIR}" \
 # This command should produce no output:
 grep --invert-match '^I:' "${CHRTNAME}"-debootstrap-log
 
+# Experimentally show whether anything's already here:
+du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
+# Bind-mount apt archives for the chroot's debian release. Do this:
+#   - after invoking 'debootstrap', so the chroot's /var exists; and
+#   - before invoking 'apt-get' in the chroot, to save bandwidth; and
+#   - while not chrooted, so that the host filesystem is accessible.
+mount --bind "${CACHEDIR}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 echo Installed debian "${CODENAME}" chroot.
 # END   ./lmi_setup_11.sh

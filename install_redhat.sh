@@ -105,9 +105,6 @@ yum --assumeyes install debootstrap schroot
 # might be investigated.
 CACHEDIR=/var/cache/"${CODENAME}"
 mkdir -p "${CACHEDIR}"
-du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Okay."
-mkdir -p /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
-mount --bind "${CACHEDIR}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 
 # Bootstrap a minimal debian system. Options:
 #   --include=zsh, because of "shell=/bin/zsh" below
@@ -132,6 +129,14 @@ root-groups=root
 shell=/bin/zsh
 type=plain
 EOF
+
+# Experimentally show whether anything's already here:
+du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
+# Bind-mount apt archives for the chroot's debian release. Do this:
+#   - after invoking 'debootstrap', so the chroot's /var exists; and
+#   - before invoking 'apt-get' in the chroot, to save bandwidth; and
+#   - while not chrooted, so that the host filesystem is accessible.
+mount --bind "${CACHEDIR}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 
 mkdir -p /srv/cache_for_lmi
 du   -sb /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi || echo "Okay."

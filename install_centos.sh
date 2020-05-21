@@ -120,12 +120,6 @@ mount --rbind /var/cache/centos_lmi /srv/chroot/centos7lmi/var/cache/yum
 
 echo Installed centos chroot.
 
-CACHEDIR=/var/cache/"${CODENAME}"
-mkdir -p "${CACHEDIR}"
-du   -sb /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Okay."
-mkdir -p /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
-mount --bind "${CACHEDIR}" /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
-
 cp -a /tmp/schroot_env /srv/chroot/centos7lmi/tmp
 cp -a lmi_setup_*.sh   /srv/chroot/centos7lmi/tmp
 cp -a install_centos_* /srv/chroot/centos7lmi/tmp
