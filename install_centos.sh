@@ -124,8 +124,6 @@ cp -a /tmp/schroot_env /srv/chroot/centos7lmi/tmp
 cp -a lmi_setup_*.sh   /srv/chroot/centos7lmi/tmp
 cp -a install_centos_* /srv/chroot/centos7lmi/tmp
 
-schroot --chroot=centos7lmi --user=root --directory=/tmp ./install_centos_1.sh
-
 cp -a ~/.vimrc /srv/chroot/centos7lmi/root/.vimrc
 cp -a ~/.vimrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.vimrc || echo "Huh?"
 
@@ -138,6 +136,8 @@ cp -a ~/.zshrc /srv/chroot/centos7lmi/root/.zshrc
 cp -a ~/.zshrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.zshrc || echo "Huh?"
 # If that works well, then treat vim configuration the same way,
 # here and elsewhere.
+
+schroot --chroot=centos7lmi --user=root --directory=/tmp ./install_centos_1.sh
 
 # BEGIN ./lmi_setup_13.sh
 mkdir -p /srv/cache_for_lmi
