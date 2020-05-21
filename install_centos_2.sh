@@ -24,28 +24,10 @@
 . ./lmi_setup_inc.sh
 . /tmp/schroot_env
 
-set -vx
+set -evx
 
 assert_su
 assert_not_chrooted
-
-echo "Adapted from 'lmi_setup_00.sh'."
-
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_11.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_20.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_21.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_30.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_40.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_41.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_42.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_43.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_inc.sh
-chmod 0777 lmi_setup_*.sh
-
-. ./lmi_setup_inc.sh
-
-set -vx
 
 # ./lmi_setup_10.sh
 # ./lmi_setup_11.sh
