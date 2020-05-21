@@ -86,37 +86,26 @@ EOF
 chmod 0666 /tmp/schroot_env
 
 ./lmi_setup_02.sh
-
 ./lmi_setup_05r.sh
+./lmi_setup_07r.sh
+
+# BEGIN ./lmi_setup_10.sh
+yum --assumeyes install debootstrap schroot
+# END   ./lmi_setup_10.sh
+# ./lmi_setup_10.sh
 
 # BEGIN ./lmi_setup_11.sh
 mkdir -p /var/cache/"${CODENAME}"
 du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Okay."
 mkdir -p /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
-# END   ./lmi_setup_11.sh
 
-./lmi_setup_07r.sh
-
-# BEGIN ./lmi_setup_10.sh
-yum --assumeyes install debootstrap schroot
-# END   ./lmi_setup_10.sh
-
-# BEGIN ./lmi_setup_11.sh
 # Install a debian chroot inside this redhat chroot.
 mkdir -p /srv/chroot/"${CHRTNAME}"
 debootstrap "${CODENAME}" /srv/chroot/"${CHRTNAME}" http://deb.debian.org/debian/
 
 echo Installed debian "${CODENAME}".
-# END   ./lmi_setup_11.sh
 
-# BEGIN ./lmi_setup_12.sh
-# Suppress a nuisance: debian-based distributions provide a default
-# bash logout file that clears the screen.
-sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /srv/chroot/"${CHRTNAME}"/etc/skel/.bash_logout
-# END   ./lmi_setup_12.sh
-
-# BEGIN ./lmi_setup_11.sh
 cat >/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
 [${CHRTNAME}]
 aliases=lmi
@@ -134,9 +123,14 @@ du   -sb /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi || echo "Okay."
 mkdir -p /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
 mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
 # END   ./lmi_setup_11.sh
-
-# ./lmi_setup_10.sh
 # ./lmi_setup_11.sh
+
+# BEGIN ./lmi_setup_12.sh
+# Suppress a nuisance: debian-based distributions provide a default
+# bash logout file that clears the screen.
+sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /srv/chroot/"${CHRTNAME}"/etc/skel/.bash_logout
+# END   ./lmi_setup_12.sh
+
 cp -a lmi_setup_*.sh /tmp/schroot_env /srv/chroot/${CHRTNAME}/tmp
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_20.sh
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_21.sh
