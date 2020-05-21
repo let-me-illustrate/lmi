@@ -125,12 +125,6 @@ mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
 # END   ./lmi_setup_11.sh
 # ./lmi_setup_11.sh
 
-# BEGIN ./lmi_setup_12.sh
-# Suppress a nuisance: debian-based distributions provide a default
-# bash logout file that clears the screen.
-sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /srv/chroot/"${CHRTNAME}"/etc/skel/.bash_logout
-# END   ./lmi_setup_12.sh
-
 cp -a lmi_setup_*.sh /tmp/schroot_env /srv/chroot/${CHRTNAME}/tmp
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_20.sh
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_21.sh

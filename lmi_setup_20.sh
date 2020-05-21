@@ -56,6 +56,10 @@ ln -s /bin/true /usr/bin/ischroot
 # as of 2019-03, and the underlying defect is still unresolved:
 #   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=685034
 
+# Suppress a nuisance: debian-based distributions provide a default
+# bash logout file that clears the screen.
+sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /etc/skel/.bash_logout
+
 # This being a "plain" schroot, mount essential directories:
 mount -t devpts -o rw,nosuid,noexec,relatime,mode=600 devpts /dev/pts
 mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
