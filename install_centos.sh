@@ -103,8 +103,11 @@ shell=/bin/zsh
 type=plain
 EOF
 
+# BEGIN ./lmi_setup_10c.sh
 apt-get update
-apt-get --assume-yes install schroot rinse
+apt-get --assume-yes install rinse schroot
+# END   ./lmi_setup_10c.sh
+
 rinse --arch amd64 --distribution centos-7 \
   --directory /srv/chroot/centos7lmi \
 

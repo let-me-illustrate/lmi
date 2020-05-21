@@ -99,14 +99,11 @@ mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/ar
 ./lmi_setup_07r.sh
 
 # BEGIN ./lmi_setup_10.sh
-yum --assumeyes install schroot
-# To show available debootstrap scripts:
-#   ls /usr/share/debootstrap/scripts
+yum --assumeyes install debootstrap schroot
 # END   ./lmi_setup_10.sh
 
 # BEGIN ./lmi_setup_11.sh
 # Install a debian chroot inside this redhat chroot.
-yum --assumeyes install debootstrap
 mkdir -p /srv/chroot/"${CHRTNAME}"
 debootstrap "${CODENAME}" /srv/chroot/"${CHRTNAME}" http://deb.debian.org/debian/
 
