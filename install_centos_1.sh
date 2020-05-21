@@ -38,3 +38,10 @@ yum --assumeyes install debootstrap schroot
 # END   ./lmi_setup_10.sh
 
 ./lmi_setup_11.sh
+
+# Experimental--see
+#    https://lists.nongnu.org/archive/html/lmi/2020-05/msg00040.html
+# for caveats.
+du   -sb /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi || echo "Okay."
+mkdir -p /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
+mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi

@@ -137,19 +137,14 @@ cp -a ~/.zshrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.zshrc || echo "Huh?
 # If that works well, then treat vim configuration the same way,
 # here and elsewhere.
 
-schroot --chroot=centos7lmi --user=root --directory=/tmp ./install_centos_1.sh
-
 # BEGIN ./lmi_setup_13.sh
 mkdir -p /srv/cache_for_lmi
 du   -sb /srv/chroot/centos7lmi/srv/cache_for_lmi || echo "Okay."
 mkdir -p /srv/chroot/centos7lmi/srv/cache_for_lmi
 mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/cache_for_lmi
-# Might as well do likewise now for ${CHRTNAME} as well.
-du   -sb /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi || echo "Okay."
-mkdir -p /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
-mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
 # END   ./lmi_setup_13.sh
 
+schroot --chroot=centos7lmi --user=root --directory=/tmp ./install_centos_1.sh
 schroot --chroot=centos7lmi --user=root --directory=/tmp ./install_centos_2.sh
 
 # Copy log files that may be useful for tracking down problems with
