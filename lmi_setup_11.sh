@@ -73,3 +73,5 @@ mount --bind "${CACHEDIR}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 findmnt "${CACHEDIR}"
 findmnt /proc
 findmnt /dev/pts
+
+echo Installed debian "${CODENAME}" chroot.

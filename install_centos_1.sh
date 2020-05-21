@@ -42,5 +42,5 @@ yum --assumeyes install debootstrap schroot
 mkdir -p /srv/chroot/"${CHRTNAME}"
 debootstrap "${CODENAME}" /srv/chroot/"${CHRTNAME}" http://deb.debian.org/debian/
 
-echo Installed debian "${CODENAME}".
+echo Installed debian "${CODENAME}" chroot.
 # END   ./lmi_setup_11.sh

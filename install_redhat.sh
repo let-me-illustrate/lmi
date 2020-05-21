@@ -104,8 +104,6 @@ mount --bind /var/cache/"${CODENAME}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/ar
 mkdir -p /srv/chroot/"${CHRTNAME}"
 debootstrap "${CODENAME}" /srv/chroot/"${CHRTNAME}" http://deb.debian.org/debian/
 
-echo Installed debian "${CODENAME}".
-
 cat >/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
 [${CHRTNAME}]
 aliases=lmi
@@ -122,6 +120,8 @@ mkdir -p /srv/cache_for_lmi
 du   -sb /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi || echo "Okay."
 mkdir -p /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
 mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
+
+echo Installed debian "${CODENAME}" chroot.
 # END   ./lmi_setup_11.sh
 # ./lmi_setup_11.sh
 

@@ -118,6 +118,8 @@ mkdir -p /srv/chroot/centos7lmi/var/cache/yum
 # 'rbind' seems necessary because centos uses subdirs
 mount --rbind /var/cache/centos_lmi /srv/chroot/centos7lmi/var/cache/yum
 
+echo Installed centos chroot.
+
 mkdir -p /var/cache/"${CODENAME}"
 du   -sb /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Okay."
 mkdir -p /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
