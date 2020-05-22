@@ -37,7 +37,7 @@ fi
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_02.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_05r.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_07r.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10r.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_11.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_20.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_21.sh
@@ -88,15 +88,12 @@ chmod 0666 /tmp/schroot_env
 ./lmi_setup_02.sh
 ./lmi_setup_05r.sh
 ./lmi_setup_07r.sh
-
-# BEGIN ./lmi_setup_10.sh
-yum --assumeyes install debootstrap schroot
-# END   ./lmi_setup_10.sh
-# ./lmi_setup_10.sh
-
+./lmi_setup_10r.sh
 ./lmi_setup_11.sh
 
 # BEGIN ./lmi_setup_13.sh
+# For caveats, see:
+#    https://lists.nongnu.org/archive/html/lmi/2020-05/msg00040.html
 mkdir -p /srv/cache_for_lmi
 du   -sb /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi || echo "Okay."
 mkdir -p /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi

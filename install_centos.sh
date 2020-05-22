@@ -37,7 +37,8 @@ fi
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_02c.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_05c.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_07r.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10c.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10r.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_11.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_20.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_21.sh
@@ -102,10 +103,7 @@ shell=/bin/zsh
 type=plain
 EOF
 
-# BEGIN ./lmi_setup_10c.sh
-apt-get update
-apt-get --assume-yes install rinse schroot
-# END   ./lmi_setup_10c.sh
+./lmi_setup_10c.sh
 
 rinse --arch amd64 --distribution centos-7 \
   --directory /srv/chroot/centos7lmi \
