@@ -103,8 +103,12 @@ mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
 cp -a lmi_setup_*.sh /tmp/schroot_env /srv/chroot/${CHRTNAME}/tmp
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_20.sh
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_21.sh
-# Use su instead of sudo on a server where root is not a sudoer.
-su                                  "${NORMAL_USER}"                  ./lmi_setup_30.sh
+# On a particular corporate server, root is not a sudoer.
+if sudo -l true; then
+  sudo                       --user="${NORMAL_USER}"                  ./lmi_setup_30.sh
+else
+  su                                "${NORMAL_USER}"                  ./lmi_setup_30.sh
+fi
 schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_40.sh
 schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_41.sh
 schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
