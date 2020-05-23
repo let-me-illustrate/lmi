@@ -38,7 +38,7 @@ assert_not_chrooted
 # support the centos chroot itself, but also mounts created to
 # support a debian chroot within the centos chroot.
 
-if [ "greg" != "$(id -un)" ]; then
+if [ "greg" != "$(logname)" ]; then
    echo "This script would eradicate all your centos chroots--beware."
    exit 1
 fi
