@@ -1234,7 +1234,7 @@ class table_type_converter
 
     virtual void register_data_type(wxGrid* grid) const = 0;
 
-    static std::map<std::string, table_type_converter const*>& get_all();
+    static std::map<std::string, table_type_converter const*> const& get_all();
     static table_type_converter const& get_by_value(any_member<Input> const& value);
 
   private:
@@ -1441,10 +1441,10 @@ class table_string_converter : public table_standard_type_converter
     }
 };
 
-std::map<std::string, table_type_converter const*>&
+std::map<std::string, table_type_converter const*> const&
 table_type_converter::get_all()
 {
-    static std::map<std::string, table_type_converter const*> all
+    static std::map<std::string, table_type_converter const*> const all
         {{ get_impl<table_bool_converter>().type()
          ,&get_impl<table_bool_converter>()
          }
