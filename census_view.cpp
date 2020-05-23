@@ -1028,8 +1028,9 @@ class DatumSequenceEditorEvtHandler
                     return;
                     }
 
-                // Just handle the event to not allow other handlers
-                // process it. The editor window opened in OnKeyDown.
+                // Just handle, i.e. don't skip, the event to not let any other
+                // handlers process it. The editor window was already opened in
+                // UponKeyDown() handler.
                 break;
             default:
                 event.Skip();
@@ -1049,9 +1050,8 @@ class DatumSequenceEditorEvtHandler
                     return;
                     }
 
-                // We should handle the event in DatumSequenceEditorEvtHandler
-                // because otherwise the grid cell editor event handler will
-                // handle Enter.
+                // Open the editor window when Alt-Enter is pressed instead of
+                // just closing the editor, as would be done by default.
                 entry_->open_editor();
                 break;
             default:
