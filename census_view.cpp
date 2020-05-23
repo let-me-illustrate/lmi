@@ -1012,6 +1012,8 @@ class DatumSequenceEditorEvtHandler
     explicit DatumSequenceEditorEvtHandler(InputSequenceEntry* entry)
         :entry_(entry)
     {
+        Bind(wxEVT_CHAR, &DatumSequenceEditorEvtHandler::UponChar, this);
+        Bind(wxEVT_KEY_DOWN, &DatumSequenceEditorEvtHandler::UponKeyDown, this);
     }
 
     void UponChar(wxKeyEvent& event)
@@ -1061,14 +1063,8 @@ class DatumSequenceEditorEvtHandler
   private:
     InputSequenceEntry* entry_{};
 
-    DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(DatumSequenceEditorEvtHandler)
 };
-
-BEGIN_EVENT_TABLE(DatumSequenceEditorEvtHandler, wxEvtHandler)
-    EVT_CHAR(DatumSequenceEditorEvtHandler::UponChar)
-    EVT_KEY_DOWN(DatumSequenceEditorEvtHandler::UponKeyDown)
-END_EVENT_TABLE()
 
 class DatumSequenceEditor
     :public wxGridCellEditor
