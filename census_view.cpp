@@ -1445,35 +1445,27 @@ std::map<std::string, table_type_converter const*>&
 table_type_converter::get_all()
 {
     static std::map<std::string, table_type_converter const*> all
-        {
-            { get_impl<table_bool_converter>().type()
-            ,&get_impl<table_bool_converter>()
-            }
-        ,
-            { get_impl<table_string_converter>().type()
-            ,&get_impl<table_string_converter>()
-            }
-        ,
-            { get_impl<table_sequence_converter>().type()
-            ,&get_impl<table_sequence_converter>()
-            }
-        ,
-            { get_impl<table_enum_converter>().type()
-            ,&get_impl<table_enum_converter>()
-            }
-        ,
-            { get_impl<table_int_range_converter>().type()
-            ,&get_impl<table_int_range_converter>()
-            }
-        ,
-            { get_impl<table_double_range_converter>().type()
-            ,&get_impl<table_double_range_converter>()
-            }
-        ,
-            { get_impl<table_date_converter>().type()
-            ,&get_impl<table_date_converter>()
-            }
-        ,
+        {{ get_impl<table_bool_converter>().type()
+         ,&get_impl<table_bool_converter>()
+         }
+        ,{ get_impl<table_string_converter>().type()
+         ,&get_impl<table_string_converter>()
+         }
+        ,{ get_impl<table_sequence_converter>().type()
+         ,&get_impl<table_sequence_converter>()
+         }
+        ,{ get_impl<table_enum_converter>().type()
+         ,&get_impl<table_enum_converter>()
+         }
+        ,{ get_impl<table_int_range_converter>().type()
+         ,&get_impl<table_int_range_converter>()
+         }
+        ,{ get_impl<table_double_range_converter>().type()
+         ,&get_impl<table_double_range_converter>()
+         }
+        ,{ get_impl<table_date_converter>().type()
+         ,&get_impl<table_date_converter>()
+         }
         };
     return all;
 }
