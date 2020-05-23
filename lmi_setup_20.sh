@@ -69,7 +69,7 @@ mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 # devpts /srv/chroot/${CHRTNAME}/dev/pts devpts rw,nosuid,noexec,relatime,mode=600,ptmxmode=000 0 0
 # proc /srv/chroot/${CHRTNAME}/proc proc rw,nosuid,nodev,noexec,relatime 0 0
 #
-# If the chroot is ever to be eradicated, use 'lmi_destroy_chroot.sh',
+# If the chroot is ever to be eradicated, use 'lmi_setup_02.sh',
 # which, crucially, unmounts before removing.
 #
 # As an alternative, configure the chroot with "type=directory"
