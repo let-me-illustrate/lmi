@@ -1012,30 +1012,7 @@ class DatumSequenceEditorEvtHandler
     explicit DatumSequenceEditorEvtHandler(InputSequenceEntry* entry)
         :entry_(entry)
     {
-        Bind(wxEVT_CHAR, &DatumSequenceEditorEvtHandler::UponChar, this);
         Bind(wxEVT_KEY_DOWN, &DatumSequenceEditorEvtHandler::UponKeyDown, this);
-    }
-
-    void UponChar(wxKeyEvent& event)
-    {
-        switch(event.GetKeyCode())
-            {
-            case WXK_RETURN:
-            case WXK_NUMPAD_ENTER:
-                if(!wxGetKeyState(WXK_ALT))
-                    {
-                    event.Skip();
-                    return;
-                    }
-
-                // Just handle, i.e. don't skip, the event to not let any other
-                // handlers process it. The editor window was already opened in
-                // UponKeyDown() handler.
-                break;
-            default:
-                event.Skip();
-                break;
-            }
     }
 
     void UponKeyDown(wxKeyEvent& event)
