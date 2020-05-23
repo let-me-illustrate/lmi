@@ -47,7 +47,6 @@ class WXDLLIMPEXP_FWD_ADV wxGrid;
 class WXDLLIMPEXP_FWD_ADV wxGridEvent;
 class WXDLLIMPEXP_FWD_ADV wxGridSizeEvent;
 
-
 class CensusView
     :public ViewEx
 {
