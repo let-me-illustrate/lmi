@@ -1009,9 +1009,7 @@ class DatumSequenceEditorEvtHandler
     :public wxEvtHandler
 {
   public:
-    // wxIMPLEMENT_DYNAMIC_CLASS requires the default constructor
-    // so add the default value for the entry parameter.
-    explicit DatumSequenceEditorEvtHandler(InputSequenceEntry* entry = nullptr)
+    explicit DatumSequenceEditorEvtHandler(InputSequenceEntry* entry)
         :entry_(entry)
     {
     }
@@ -1064,11 +1062,8 @@ class DatumSequenceEditorEvtHandler
     InputSequenceEntry* entry_{};
 
     DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(DatumSequenceEditorEvtHandler)
     DECLARE_NO_COPY_CLASS(DatumSequenceEditorEvtHandler)
 };
-
-IMPLEMENT_DYNAMIC_CLASS(DatumSequenceEditorEvtHandler, wxEvtHandler)
 
 BEGIN_EVENT_TABLE(DatumSequenceEditorEvtHandler, wxEvtHandler)
     EVT_CHAR(DatumSequenceEditorEvtHandler::UponChar)
