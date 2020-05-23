@@ -1061,7 +1061,7 @@ class DatumSequenceEditorEvtHandler
     }
 
   private:
-    InputSequenceEntry* entry_{};
+    InputSequenceEntry* const entry_{};
 
     DECLARE_NO_COPY_CLASS(DatumSequenceEditorEvtHandler)
 };
