@@ -938,8 +938,13 @@ inline std::vector<std::string> const& CensusViewDataViewModel::all_headers() co
 namespace
 {
 
-// Declare the functions here, but implement after the CensusViewGridTable
-// declaration to avoid the "use of undefined type" error.
+// Declare free functions corresponding to their namesakes in CensusViewGridTable
+// that can be used in the implementation of the custom editors below, which
+// are defined before CensusViewGridTable is declared.
+//
+// This seems preferable to intermixing the declarations and definitions, as it
+// allows to declare (and define) all the classes in consistent bottom-to-top
+// order -- but at a price of having these not really indispensable wrappers.
 
 // Get the cell value from the table.
 
