@@ -1171,14 +1171,8 @@ class table_type_converter
         return value.ToStdString(wxConvUTF8);
     }
 
-    // Returns the name of derived type.
-    virtual char const* type() const = 0;
-
     // Returns the grid value type, used by wxGridTypeRegistry.
-    virtual wxString grid_value_type(any_member<Input> const&) const
-    {
-        return type();
-    }
+    virtual wxString grid_value_type(any_member<Input> const& value) const = 0;
 
     static table_type_converter const& get(any_member<Input> const& value);
 
@@ -1188,20 +1182,34 @@ class table_type_converter
 };
 
 // The base class for table type converters using custom renderer and editor.
+// It uses CRTP pattern, i.e. the derived class should pass itself as the
+// template parameter to this one.
 
+template<typename T>
 class table_custom_type_converter : public table_type_converter
 {
   public:
-    static void register_all(wxGrid* grid);
+    wxString grid_value_type(any_member<Input> const&) const override
+    {
+        return grid_type();
+    }
 
-  private:
     void register_data_type(wxGrid* grid) const
     {
         grid->RegisterDataType
-            (type()
+            (grid_type()
             ,create_renderer()
             ,create_editor()
             );
+    }
+
+  private:
+    // Currently the grid data type used for custom converters doesn't depend
+    // on the concrete value, which allows us to define this function and use
+    // it in both grid_value_type() and register_data_type().
+    wxString grid_type() const
+    {
+        return typeid(T).name();
     }
 
     virtual wxGridCellRenderer* create_renderer() const = 0;
@@ -1219,11 +1227,6 @@ class table_bool_converter : public table_type_converter
         wxGridCellBoolEditor::UseStringValues("Yes", "No");
     }
 
-    char const* type() const override
-    {
-        return typeid(table_bool_converter).name();
-    }
-
     wxString grid_value_type(any_member<Input> const&) const override
     {
         return wxGRID_VALUE_BOOL;
@@ -1235,11 +1238,6 @@ class table_bool_converter : public table_type_converter
 class table_enum_converter : public table_type_converter
 {
   public:
-    char const* type() const override
-    {
-        return typeid(table_enum_converter).name();
-    }
-
     wxString grid_value_type(any_member<Input> const& value) const override
     {
         wxString type = wxGRID_VALUE_CHOICE;
@@ -1260,14 +1258,9 @@ class table_enum_converter : public table_type_converter
 
 // class table_sequence_converter
 
-class table_sequence_converter : public table_custom_type_converter
+class table_sequence_converter
+    :public table_custom_type_converter<table_sequence_converter>
 {
-  public:
-    char const* type() const override
-    {
-        return typeid(table_sequence_converter).name();
-    }
-
   private:
     wxGridCellRenderer* create_renderer() const override
     {
@@ -1285,11 +1278,6 @@ class table_sequence_converter : public table_custom_type_converter
 class table_int_range_converter : public table_type_converter
 {
   public:
-    char const* type() const override
-    {
-        return typeid(table_int_range_converter).name();
-    }
-
     wxString grid_value_type(any_member<Input> const& value) const override
     {
         auto const* as_range = member_cast<tn_range_base>(value);
@@ -1305,14 +1293,9 @@ class table_int_range_converter : public table_type_converter
 
 // class table_double_range_converter
 
-class table_double_range_converter : public table_custom_type_converter
+class table_double_range_converter
+    :public table_custom_type_converter<table_double_range_converter>
 {
-  public:
-    char const* type() const override
-    {
-        return typeid(table_double_range_converter).name();
-    }
-
   private:
     wxGridCellRenderer* create_renderer() const override
     {
@@ -1329,7 +1312,8 @@ class table_double_range_converter : public table_custom_type_converter
 
 // class table_date_converter
 
-class table_date_converter : public table_custom_type_converter
+class table_date_converter
+    :public table_custom_type_converter<table_date_converter>
 {
   public:
     wxString to_renderer_value(std::string const& value) const override
@@ -1345,11 +1329,6 @@ class table_date_converter : public table_custom_type_converter
         LMI_ASSERT(date_parse_ok);
 
         return value_cast<std::string>(ConvertDateFromWx(date));
-    }
-
-    char const* type() const override
-    {
-        return typeid(table_date_converter).name();
     }
 
   private:
@@ -1369,28 +1348,11 @@ class table_date_converter : public table_custom_type_converter
 class table_string_converter : public table_type_converter
 {
   public:
-    char const* type() const override
-    {
-        return typeid(table_string_converter).name();
-    }
-
     wxString grid_value_type(any_member<Input> const&) const override
     {
         return wxGRID_VALUE_STRING;
     }
 };
-
-void
-table_custom_type_converter::register_all(wxGrid* grid)
-{
-    // We could implement some kind of automatic registration, but it doesn't
-    // seem to be worth it for now, as we only have a few custom converters,
-    // all of which defined in this single file, so it's simpler to just list
-    // them explicitly here.
-    table_sequence_converter{}.register_data_type(grid);
-    table_double_range_converter{}.register_data_type(grid);
-    table_date_converter{}.register_data_type(grid);
-}
 
 table_type_converter const&
 table_type_converter::get(any_member<Input> const& value)
@@ -2022,7 +1984,13 @@ wxWindow* CensusGridView::CreateChildWindow()
     grid_window_->DisableDragRowSize();
     grid_window_->SelectRow(0);
 
-    table_custom_type_converter::register_all(grid_window_);
+    // We could implement some kind of automatic registration, but it doesn't
+    // seem to be worth it for now, as we only have a few custom converters,
+    // all of which defined in this single file, so it's simpler to just list
+    // them explicitly here.
+    table_sequence_converter{}.register_data_type(grid_window_);
+    table_double_range_converter{}.register_data_type(grid_window_);
+    table_date_converter{}.register_data_type(grid_window_);
 
     // Show headers.
     document().Modify(false);
