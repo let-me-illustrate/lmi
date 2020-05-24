@@ -1178,7 +1178,7 @@ class table_type_converter
     virtual void register_data_type(wxGrid* grid) const = 0;
 
     static void register_all(wxGrid* grid);
-    static table_type_converter const& get_by_value(any_member<Input> const& value);
+    static table_type_converter const& get(any_member<Input> const& value);
 
   private:
     template<typename T>
@@ -1392,7 +1392,7 @@ table_type_converter::register_all(wxGrid* grid)
 }
 
 table_type_converter const&
-table_type_converter::get_by_value(any_member<Input> const& value)
+table_type_converter::get(any_member<Input> const& value)
 {
     if(exact_cast<mce_yes_or_no>(value))
         {
@@ -1594,7 +1594,7 @@ wxString CensusViewGridTable::GetValue(int row, int col)
         }
 
     auto const& cell = cell_at(row, col);
-    auto const& conv = table_type_converter::get_by_value(cell);
+    auto const& conv = table_type_converter::get(cell);
     return conv.to_renderer_value(cell.str());
 }
 
@@ -1603,7 +1603,7 @@ void CensusViewGridTable::SetValue(int row, int col, wxString const& value)
     LMI_ASSERT(col != Col_CellNum);
 
     auto& cell = cell_at(row, col);
-    auto const& conv = table_type_converter::get_by_value(cell);
+    auto const& conv = table_type_converter::get(cell);
     auto const& prev_val = cell.str();
     auto const& new_val = conv.from_editor_value(value);
 
@@ -1628,7 +1628,7 @@ wxString CensusViewGridTable::GetTypeName(int row, int col)
         }
 
     auto const& value = cell_at(row, col);
-    auto const& conv = table_type_converter::get_by_value(value);
+    auto const& conv = table_type_converter::get(value);
 
     return conv.grid_value_type(value);
 }
