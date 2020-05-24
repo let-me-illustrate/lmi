@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Create a chroot for cross-building "Let me illustrate...".
+# Destroy all existing centos chroots, brutally.
 #
 # Copyright (C) 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
 #
@@ -29,8 +29,20 @@ set -vx
 assert_su
 assert_not_chrooted
 
-apt-get update
-apt-get --assume-yes install debootstrap schroot
+# This brutal approach assumes that only one centos chroot exists.
+# That's a workable assumption if a unique centos chroot is used
+# only to emulate an inconvenient corporate redhat server. See
+# 'lmi_setup_02.sh' for a more thoughtful approach.
+#
+# The grep command conveniently finds not only mounts created to
+# support the centos chroot itself, but also mounts created to
+# support a debian chroot within the centos chroot.
 
-# To show available debootstrap scripts:
-#   ls /usr/share/debootstrap/scripts
+if [ "greg" != "$(logname)" ]; then
+   echo "This script would eradicate all your centos chroots--beware."
+   exit 1
+fi
+
+grep centos /proc/mounts | cut -f2 -d" " | xargs --no-run-if-empty umount
+rm -rf /srv/chroot/centos7lmi
+rm /etc/schroot/chroot.d/centos7lmi.conf

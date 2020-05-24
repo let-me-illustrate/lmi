@@ -80,6 +80,7 @@ $(xmlwrapp_archive)-md5 := 5e8ac678ab03b7c60ce61ac5424e0849
 
 # Utilities ####################################################################
 
+CHMOD  := chmod
 CP     := cp
 DIFF   := diff
 ECHO   := echo
@@ -158,6 +159,7 @@ all: boost cgicc jing sample trang xmlwrapp
 .PHONY: boost
 boost: $(file_list)
 	-[ -e $(stem).patch ] && $(PATCH) --directory=$(ad_hoc_dir) --strip=1 < $(stem).patch
+	$(CHMOD) -R g=u $(ad_hoc_dir)/$(stem)
 	$(MKDIR) $(third_party_include_dir)/boost/
 	$(CP) --force --preserve --recursive $(ad_hoc_dir)/$(stem)/boost/* $(third_party_include_dir)/boost/
 	$(MKDIR) $(third_party_source_dir)/boost/
@@ -166,6 +168,7 @@ boost: $(file_list)
 .PHONY: cgicc
 cgicc: $(file_list)
 	$(PATCH) --directory=$(ad_hoc_dir) --strip=1 < $(stem).patch
+	$(CHMOD) -R g=u $(ad_hoc_dir)/$(stem)
 	$(MKDIR) $(third_party_include_dir)/cgicc
 	$(MV) $(ad_hoc_dir)/$(stem)/cgicc/*.h   $(third_party_include_dir)/cgicc/
 	$(MKDIR) $(third_party_source_dir)/cgicc
@@ -178,6 +181,7 @@ cgicc: $(file_list)
 
 .PHONY: jing
 jing: $(file_list)
+	$(CHMOD) -R g=u $(ad_hoc_dir)/$(stem)
 	$(MKDIR) --parents $(dest_dir)/rng
 	$(MV) $(ad_hoc_dir)/$(stem)/bin/$@.jar         $(dest_dir)/rng
 	$(MV) $(ad_hoc_dir)/$(stem)/bin/xercesImpl.jar $(dest_dir)/rng
@@ -193,12 +197,14 @@ sample: $(file_list)
 
 .PHONY: trang
 trang: $(file_list)
+	$(CHMOD) -R g=u $(ad_hoc_dir)/$(stem)
 	$(MKDIR) --parents $(dest_dir)/rng
 	$(MV) $(ad_hoc_dir)/$(stem)/$@.jar $(dest_dir)/rng
 
 .PHONY: xmlwrapp
 xmlwrapp: $(file_list)
 	-[ -e $(stem).patch ] && $(PATCH) --directory=$(ad_hoc_dir) --strip=1 < $(stem).patch
+	$(CHMOD) -R g=u $(ad_hoc_dir)/$(stem)
 	$(MKDIR) $(third_party_include_dir)/xmlwrapp/
 	$(MV) $(ad_hoc_dir)/$(stem)/include/xmlwrapp/*.h $(third_party_include_dir)/xmlwrapp/
 	$(MKDIR) $(third_party_include_dir)/xsltwrapp/
@@ -239,11 +245,6 @@ WGETFLAGS := --no-check-certificate --no-verbose
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
 	$(ECHO) "$($@-md5) *$(cache_dir)/$@" | $(MD5SUM) --check
 	-$(TAR) --extract $(TARFLAGS) --directory=$(ad_hoc_dir) --file=$(cache_dir)/$@
-
-.PHONY: %.exe
-%.exe:
-	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
-	$(ECHO) "$($@-md5) *$(cache_dir)/$@" | $(MD5SUM) --check
 
 .PHONY: %.zip
 %.zip:

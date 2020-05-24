@@ -92,6 +92,7 @@ compiler_runtime_files := \
 
 # Required in /bin (if anywhere) by FHS-2.2 .
 
+CHMOD   := chmod
 CP      := cp
 DATE    := date
 ECHO    := echo

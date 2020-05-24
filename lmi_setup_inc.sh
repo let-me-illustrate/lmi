@@ -31,8 +31,12 @@
 set -vx
 
 CODENAME=bullseye
-CHRTVER=1
+CHRTVER=2
 CHRTNAME=lmi_${CODENAME}_${CHRTVER}
+
+umask
+umask g=rwx
+umask
 
 set +vx
 
@@ -52,9 +56,12 @@ if [ "$(id -u)" -eq 0 ]; then
 fi
 }
 
+# Test for the ultimate chroot wherein lmi is built, ignoring any
+# intermediate level in a chain of chroots.
+
 assert_chrooted()
 {
-if [ -z "$SCHROOT_CHROOT_NAME" ]; then
+if [ "$CHRTNAME" != "$SCHROOT_CHROOT_NAME" ]; then
    echo "Must be run in chroot."
    exit 1
 fi
@@ -62,7 +69,7 @@ fi
 
 assert_not_chrooted()
 {
-if [ -n "$SCHROOT_CHROOT_NAME" ]; then
+if [ "$CHRTNAME" = "$SCHROOT_CHROOT_NAME" ]; then
    echo "Must not be run in chroot."
    exit 1
 fi

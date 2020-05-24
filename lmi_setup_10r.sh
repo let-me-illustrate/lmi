@@ -29,8 +29,7 @@ set -vx
 assert_su
 assert_not_chrooted
 
-apt-get update
-apt-get --assume-yes install debootstrap schroot
+yum --assumeyes install debootstrap schroot
 
 # To show available debootstrap scripts:
 #   ls /usr/share/debootstrap/scripts

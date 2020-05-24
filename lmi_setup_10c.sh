@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Destroy a chroot for cross-building "Let me illustrate...".
+# Create a chroot for cross-building "Let me illustrate...".
 #
 # Copyright (C) 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
 #
@@ -29,9 +29,5 @@ set -vx
 assert_su
 assert_not_chrooted
 
-umount /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
-umount /srv/chroot/"${CHRTNAME}"/dev/pts
-umount /srv/chroot/"${CHRTNAME}"/proc
-
-rm --one-file-system --recursive --force "$(schroot --chroot="${CHRTNAME}" --location)"
-rm /etc/schroot/chroot.d/"${CHRTNAME}".conf
+apt-get update
+apt-get --assume-yes install rinse schroot

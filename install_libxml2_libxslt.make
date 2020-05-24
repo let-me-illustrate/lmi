@@ -136,6 +136,7 @@ $(libxslt_version)_options := \
 
 # Utilities ####################################################################
 
+CHMOD  := chmod
 ECHO   := echo
 GREP   := grep
 MD5SUM := md5sum
@@ -188,6 +189,10 @@ TARFLAGS := --keep-old-files
 	  $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
 	$(TAR) --extract $(TARFLAGS) --directory=$(build_dir) --file=$(cache_dir)/$@
 
+# autotools: 'make install' doesn't respect group permissions--see:
+#   https://lists.gnu.org/archive/html/automake/2019-01/msg00000.html
+# After the 'chmod' calls, the 'find' command should find nothing.
+#
 # Someday it may be necessary to add a line like this to the recipe:
 #   export lt_cv_to_tool_file_cmd=func_convert_file_cygwin_to_w32
 # but that's not necessary for now. See:
@@ -200,8 +205,19 @@ $(libraries):
 	  && export PATH="$(mingw_bin_dir):${PATH}" \
 	  && PKG_CONFIG_PATH="$(exec_prefix)/lib/pkgconfig" \
 	    $($@_overrides) ./configure $($@_options) \
-	  && $(MAKE) \
-	  && $(MAKE) install \
+	  && $(MAKE) && $(MAKE) install
+	-$(CHMOD) -R g=u $(build_dir)
+	-$(CHMOD) -R g=u $(prefix)/include/libexslt
+	-$(CHMOD) -R g=u $(prefix)/include/libxml2
+	-$(CHMOD) -R g=u $(prefix)/include/libxslt
+	-$(CHMOD) -R g=u $(prefix)/share/doc/libxml2-*
+	-$(CHMOD) -R g=u $(prefix)/share/doc/libxslt-*
+	-$(CHMOD) -R g=u $(prefix)/share/gtk-doc/html/libxml2
+	-$(CHMOD) -R g=u $(exec_prefix)/bin
+	-$(CHMOD) -R g=u $(exec_prefix)/lib
+	-$(CHMOD) -R g=u $(prefix)/share/aclocal
+	-$(CHMOD) -R g=u $(prefix)/share/man
+	find $(prefix) -perm -200 -not -perm -020
 
 # Nonchalantly remove pkgconfig and cmake subdirectories, even though
 # other libraries might someday write files in them, because lmi never

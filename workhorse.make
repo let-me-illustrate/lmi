@@ -901,6 +901,7 @@ REQUIRED_CPPFLAGS = \
   $(wx_predefinitions) \
   -D_FILE_OFFSET_BITS=64 \
   -DBOOST_NO_AUTO_PTR \
+  -DBOOST_NO_STD_ALLOCATOR \
   -DBOOST_STRICT_CONFIG \
   -DBOOST_STATIC_ASSERT_HPP \
   $(actually_used_pch_flags) \

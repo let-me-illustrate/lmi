@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# Create a chroot for centos-7.
+# Create a chroot for cross-building "Let me illustrate..." on centos-7.
 #
-# Copyright (C) 2019, 2020 Gregory W. Chicares.
+# Copyright (C) 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -26,8 +26,6 @@ set -evx
 stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
 
-umask g=rwx
-
 # A known corporate firewall blocks gnu.org even on a GNU/Linux
 # server, yet allows github.com:
 if curl https://git.savannah.nongnu.org:443 >/dev/null 2>&1 ; then
@@ -36,7 +34,11 @@ else
   GIT_URL_BASE=https://github.com/vadz/lmi/raw/master
 fi
 
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_02c.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_05c.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_07r.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10c.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10r.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_11.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_20.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_21.sh
@@ -46,7 +48,9 @@ wget -N -nv "${GIT_URL_BASE}"/lmi_setup_41.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_42.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_43.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_inc.sh
+wget -N -nv "${GIT_URL_BASE}"/install_centos_1.sh
 chmod 0777 lmi_setup_*.sh
+chmod 0777 install_centos_*.sh
 
 . ./lmi_setup_inc.sh
 
@@ -54,11 +58,6 @@ set -evx
 
 assert_su
 assert_not_chrooted
-
-# First, destroy any chroot left by a prior run.
-grep centos /proc/mounts | cut -f2 -d" " | xargs umount
-rm -rf /srv/chroot/centos7lmi
-rm /etc/schroot/chroot.d/centos7lmi.conf
 
 # Store dynamic configuration in a temporary file. This method is
 # simple and robust, and far better than trying to pass environment
@@ -89,6 +88,8 @@ set +v
 EOF
 chmod 0666 /tmp/schroot_env
 
+./lmi_setup_02c.sh
+
 set -evx
 
 cat >/etc/schroot/chroot.d/centos7lmi.conf <<EOF
@@ -102,8 +103,8 @@ shell=/bin/zsh
 type=plain
 EOF
 
-apt-get update
-apt-get --assume-yes install schroot rinse
+./lmi_setup_10c.sh
+
 rinse --arch amd64 --distribution centos-7 \
   --directory /srv/chroot/centos7lmi \
 
@@ -114,89 +115,14 @@ mkdir -p /srv/chroot/centos7lmi/var/cache/yum
 # 'rbind' seems necessary because centos uses subdirs
 mount --rbind /var/cache/centos_lmi /srv/chroot/centos7lmi/var/cache/yum
 
-mkdir -p /var/cache/"${CODENAME}"
-du   -sb /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || echo "Okay."
-mkdir -p /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
-mount --bind /var/cache/"${CODENAME}" /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
-
-cat >/srv/chroot/centos7lmi/tmp/setup0.sh <<EOF
-#!/bin/sh
-set -evx
-
-# A _normal_ file /dev/null seems to be created automatically:
-#   -rw-r--r-- 1 root root    0 Oct  1 15:44 /dev/null
-# so it needs to be removed to create the pseudo-device.
-
-[ -c /dev/null ] || ( rm /dev/null; mknod /dev/null c 1 3)
-chmod 666 /dev/null
-[ -c /dev/ptmx ] || mknod /dev/ptmx c 5 2
-chmod 666 /dev/ptmx
-[ -d /dev/pts  ] || mkdir /dev/pts
-
-getent group "${NORMAL_GROUP}" || groupadd --gid="${NORMAL_GROUP_GID}" "${NORMAL_GROUP}"
-getent passwd "${NORMAL_USER}" || useradd \
-  --gid="${NORMAL_GROUP_GID}" \
-  --uid="${NORMAL_USER_UID}" \
-  --create-home \
-  --shell=/bin/zsh \
-  --password="$(openssl passwd -1 expired)" \
-  "${NORMAL_USER}"
-
-usermod -aG sudo "${NORMAL_USER}" || echo "Oops."
-
-mountpoint /dev/pts || mount -t devpts -o rw,nosuid,noexec,relatime,mode=600 devpts /dev/pts
-mountpoint /proc    || mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
-
-findmnt /var/cache/yum
-findmnt /proc
-findmnt /dev/pts
-
-yum --assumeyes install ncurses-term less sudo vim zsh
-chsh -s /bin/zsh root
-chsh -s /bin/zsh "${NORMAL_USER}"
-
-# Suppress a nuisance: rh-based distributions provide a default
-# zsh logout file that clears the screen.
-sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /etc/zlogout
-
-# Make a more modern 'git' available via 'scl'. This is not needed
-# if all real work is done in a debian chroot.
-#yum --assumeyes install centos-release-scl
-#yum-config-manager --enable rhel-server-rhscl-7-rpms
-#yum --assumeyes install devtoolset-8 rh-git218
-# In order to use the tools on the three preceding lines, do:
-#   scl enable devtoolset-8 rh-git218 $SHELL
-# and then they'll be available in that environment.
-
-# Fix weird errors like "Problem with the SSL CA cert (path? access rights?)".
-yum --assumeyes install ca-certificates curl nss-pem
-
-# Install "EPEL" by using 'rpm' directly [historical]. See:
-#   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00037.html
-#rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-# Instead, use 'yum' to install "EPEL".
-#yum --assumeyes install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-yum --assumeyes install epel-release
-
-yum --assumeyes install schroot
-# To show available debootstrap scripts:
-#   ls /usr/share/debootstrap/scripts
-
-# Install a debian chroot inside this centos chroot.
-yum --assumeyes install debootstrap
-mkdir -p /srv/chroot/"${CHRTNAME}"
-debootstrap "${CODENAME}" /srv/chroot/"${CHRTNAME}" http://deb.debian.org/debian/
-
-echo Installed debian "${CODENAME}".
-EOF
-
-chmod +x /srv/chroot/centos7lmi/tmp/setup0.sh
-schroot --chroot=centos7lmi --user=root --directory=/tmp ./setup0.sh
+echo Installed centos chroot.
 
 cp -a /tmp/schroot_env /srv/chroot/centos7lmi/tmp
+cp -a lmi_setup_*.sh   /srv/chroot/centos7lmi/tmp
+cp -a install_centos_* /srv/chroot/centos7lmi/tmp
 
 cp -a ~/.vimrc /srv/chroot/centos7lmi/root/.vimrc
-cp -a ~/.vimrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.vimrc
+cp -a ~/.vimrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.vimrc || echo "Huh?"
 
 # Experimentally, instead of this:
 # cp -a ~/.zshrc /srv/chroot/centos7lmi/root/.zshrc
@@ -204,67 +130,23 @@ cp -a ~/.vimrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.vimrc
 # do this:
 wget -N -nv "${GIT_URL_BASE}"/gwc/.zshrc
 cp -a ~/.zshrc /srv/chroot/centos7lmi/root/.zshrc
-cp -a ~/.zshrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.zshrc
+cp -a ~/.zshrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.zshrc || echo "Huh?"
 # If that works well, then treat vim configuration the same way,
 # here and elsewhere.
 
-cat >/srv/chroot/centos7lmi/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
-[${CHRTNAME}]
-aliases=lmi
-description=debian ${CODENAME} cross build ${CHRTVER}
-directory=/srv/chroot/${CHRTNAME}
-users=${CHROOT_USERS}
-groups=${NORMAL_GROUP}
-root-groups=root
-shell=/bin/zsh
-type=plain
-EOF
+# BEGIN ./lmi_setup_13.sh
+CACHEDIR=/var/cache/"${CODENAME}"
+mkdir -p "${CACHEDIR}"
+mkdir -p /srv/chroot/centos7lmi/"${CACHEDIR}"
+mount --bind "${CACHEDIR}" /srv/chroot/centos7lmi/"${CACHEDIR}"
 
 mkdir -p /srv/cache_for_lmi
 du   -sb /srv/chroot/centos7lmi/srv/cache_for_lmi || echo "Okay."
 mkdir -p /srv/chroot/centos7lmi/srv/cache_for_lmi
 mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/cache_for_lmi
-# Might as well do likewise now for ${CHRTNAME} as well.
-du   -sb /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi || echo "Okay."
-mkdir -p /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
-mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
+# END   ./lmi_setup_13.sh
 
-cat >/srv/chroot/centos7lmi/tmp/setup1.sh <<EOF
-#!/bin/sh
-set -vx
-
-echo "Adapted from 'lmi_setup_00.sh'."
-
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_11.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_20.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_21.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_30.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_40.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_41.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_42.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_43.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_inc.sh
-chmod 0777 lmi_setup_*.sh
-
-. ./lmi_setup_inc.sh
-
-set -vx
-
-# ./lmi_setup_10.sh
-# ./lmi_setup_11.sh
-cp -a lmi_setup_*.sh /tmp/schroot_env /srv/chroot/${CHRTNAME}/tmp
-schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_20.sh
-schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_21.sh
-sudo                         --user="${NORMAL_USER}"                  ./lmi_setup_30.sh
-schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_40.sh
-schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_41.sh
-schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
-schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_43.sh
-EOF
-
-chmod +x /srv/chroot/centos7lmi/tmp/setup1.sh
-schroot --chroot=centos7lmi --user=root --directory=/tmp ./setup1.sh
+schroot --chroot=centos7lmi --user=root --directory=/tmp ./install_centos_1.sh
 
 # Copy log files that may be useful for tracking down problems with
 # certain commands whose output is voluminous and often uninteresting.

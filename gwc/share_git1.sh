@@ -44,7 +44,7 @@ chgrp -R audio "$inited"
 git -C "$inited" remote add origin https://github.com/wxWidgets/zlib.git
 git -C "$inited" fetch origin
 
-find ./"$inited" ! -perm -g=w |sed -e'/objects\/pack/d'
+find ./"$inited" -not -perm -g=w |sed -e'/objects\/pack/d'
 # Oops: FETCH_HEAD doesn't have group write permissions:
 ls -l ./"$inited"/*HEAD
 
@@ -78,14 +78,14 @@ chmod -R g=u "$cloned"
 #   https://lists.nongnu.org/archive/html/lmi/2020-03/msg00019.html
 
 # Permissions seem to be okay...
-find ./"$cloned" ! -perm -g=w |sed -e'/objects\/pack/d'
+find ./"$cloned" -not -perm -g=w |sed -e'/objects\/pack/d'
 # ...but that's because FETCH_HEAD doesn't yet exist:
 ls -l ./"$cloned"/*HEAD
 
 # This succeeds when run by owner:
 git -C "$cloned" fetch
 
-find ./"$cloned" ! -perm -g=w |sed -e'/objects\/pack/d'
+find ./"$cloned" -not -perm -g=w |sed -e'/objects\/pack/d'
 # Oops: FETCH_HEAD doesn't have group write permissions:
 ls -l ./"$cloned"/*HEAD
 

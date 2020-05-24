@@ -43,8 +43,35 @@ git remote set-url --push origin chicares@git.sv.gnu.org:/srv/git/lmi.git
 # bare repository has no references that need to be resolved):
 cd /opt/lmi || { printf 'failed: cd\n'; exit 3; }
 cp --dereference --preserve --recursive /srv/cache_for_lmi/blessed .
+#
+# Fix ownership and permissions of bare repository, just in case.
+chgrp -R "$NORMAL_GROUP" blessed
+# This is better than 'chmod -R g+s' (it affects only directories):
+find blessed -type d -exec chmod g+s {} +
+# Specifying 's' here would cause many 'S' occurrences in 'ls' output;
+# specifying 'g+w' here would cause pack files to be group writable:
+#   chmod -R g+swX blessed
+# Instead, use 'g=u', which doesn't override the earlier 'g+s'--see:
+#   https://lists.nongnu.org/archive/html/lmi/2020-03/msg00019.html
+chmod -R g=u blessed
+#
 # Then create a working copy by cloning the bare repository...
+#
+# Apparently '--config core.SharedRepository=group' would have little
+# or no benefit here.
 git clone -b master file:///opt/lmi/blessed/proprietary
+#
+# Fix ownership and permissions of working copy.
+chgrp -R "$NORMAL_GROUP" proprietary
+# This is better than 'chmod -R g+s' (it affects only directories):
+find proprietary -type d -exec chmod g+s {} +
+# Specifying 's' here would cause many 'S' occurrences in 'ls' output;
+# specifying 'g+w' here would cause pack files to be group writable:
+#   chmod -R g+swX proprietary
+# Instead, use 'g=u', which doesn't override the earlier 'g+s'--see:
+#   https://lists.nongnu.org/archive/html/lmi/2020-03/msg00019.html
+chmod -R g=u proprietary
+#
 # ...and verify it:
 cd proprietary || { printf 'failed: cd\n'; exit 3; }
 git rev-parse HEAD

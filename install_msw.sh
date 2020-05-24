@@ -289,6 +289,29 @@ do
     fi
 done
 
+# GID should be the same for all files.
+find /opt/lmi/ -not -group "$(id -gn "$(logname)")" -print
+# User and group write permissions should be the same.
+find /opt/lmi -perm -200 -not -perm -020 -print0 | xargs --no-run-if-empty -0 ls -ld
+# Show all distinct file modes. Expect something like:
+#   00444 regular file
+#   00555 regular file
+#   00664 regular empty file
+#   00664 regular file
+#   00775 regular empty file
+#   00775 regular file
+#   00777 symbolic link
+#   02775 directory
+# User and group permissions differ (multi-user-ness is impaired)
+# if the digits in the fourth and fifth columns differ. The second
+# column should contain '2' for all directories.
+find /opt/lmi/ -print0 | xargs -0 stat -c "%05a %F" | sort -u
+# Ad hoc repairs--see:
+#   https://lists.nongnu.org/archive/html/lmi/2020-05/msg00001.html
+# chgrp -R lmi /opt/lmi
+# find /opt/lmi -type d -exec chmod g+s {} +
+# chmod -R g=u /opt/lmi
+
 mkdir --parents /opt/lmi/data
 
 # To regenerate authentication files for production distributions:

@@ -151,6 +151,13 @@ Element PremiumTaxState failed to validate content
 Did not expect element StateOfJurisdictionMangledTag there
 sample_bad fails to validate
 EOF
+xmllint_version=$(xmllint --version 2>&1 | sed -e'/version/!d' -e's/^.*version //')
+if [ "$xmllint_version" -ge 20910 ]; then
+# Two lines matching this regex are printed for XSD validation by
+# xmllint for libxml version 20904, but omitted for version 20910.
+# Its behavior for versions between those two is unknown.
+  sed -e '/^Element .*is not a valid value of the atomic type/d' -i touchstone.eraseme
+fi
 
 # '\/' really is an intentional escape (for sed, not sh).
 # shellcheck disable=SC1117

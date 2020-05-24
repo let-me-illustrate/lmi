@@ -26,6 +26,7 @@
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
 #include "miscellany.hpp"               // begins_with(), split_into_lines()
+#include "ssize_lmi.hpp"
 
 #include <boost/filesystem/convenience.hpp> // fs::extension()
 #include <boost/filesystem/fstream.hpp>
@@ -117,8 +118,9 @@ class file final
 /// an exception for empty files, but there's no reason for lmi to
 /// have any.
 ///
-/// Add a '\n' sentry at the beginning of the string for the reason
-/// explained in 'regex_test.cpp'.
+/// Add a newline at the beginning of the string, and require
+/// a newline at the end, so that "\n" can be used in regexen
+/// instead of '^' and '$' anchors--see 'regex_test.cpp'.
 ///
 /// Files
 ///   ChangeLog-2004-and-prior *.txt *.xpm
@@ -223,10 +225,15 @@ file::file(std::string const& file_path)
         }
 
     data_ = '\n' + data();
-    // The '\n' sentinel just added makes back() safe for 0-byte files:
-    if('\n' != data().back())
+
+    int const datasize = lmi::ssize(data());
+    if(1 <= datasize && '\n' != data_[datasize - 1])
         {
-        throw std::runtime_error(R"(File does not end in '\n'.)");
+        throw std::runtime_error(R"(File does not end in newline.)");
+        }
+    if(2 <= datasize && '\\' == data_[datasize - 2])
+        {
+        throw std::runtime_error(R"(File ends in backslash-newline.)");
         }
 }
 
@@ -1164,7 +1171,7 @@ statistics statistics::analyze_file(file const& f)
     ++z.files_;
 
     std::string const& s = f.data();
-    for(std::string::size_type i = 1; i < s.size(); ++i)
+    for(int i = 1; i < lmi::ssize(s); ++i)
         {
         if('\n' == s[i])
             {
@@ -1192,7 +1199,7 @@ void statistics::print_summary() const
 statistics process_file(std::string const& file_path)
 {
     file f(file_path);
-    if(31 < f.leaf_name().size())
+    if(31 < lmi::ssize(f.leaf_name()))
         {
         complain(f, "exceeds 31-character file-name limit.");
         }

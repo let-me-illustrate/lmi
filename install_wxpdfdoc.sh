@@ -120,5 +120,12 @@ cd "$build_dir"
 "$proxy_wxpdfdoc_dir"/configure $config_options CFLAGS="$wxpdfdoc_cc_flags" CXXFLAGS="$wxpdfdoc_cxx_flags"
 $MAKE
 $MAKE install
+# autotools: 'make install' doesn't respect group permissions--see:
+#   https://lists.gnu.org/archive/html/automake/2019-01/msg00000.html
+chmod -R g=u "$prefix"/include/wx*
+chmod -R g=u "$exec_prefix"/bin
+chmod -R g=u "$exec_prefix"/lib
+# This should find zero files:
+find "$prefix" -perm -200 -not -perm -020
 
 exit 0

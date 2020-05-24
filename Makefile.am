@@ -502,6 +502,7 @@ lmi_md5sum_LDADD = \
     $(BOOST_LIBS) \
     libmain_auxiliary_common.la
 
+# MD5 !! Remove "timer.cpp" below.
 generate_passkey_SOURCES = \
     authenticity.cpp \
     calendar_date.cpp \
@@ -513,7 +514,8 @@ generate_passkey_SOURCES = \
     null_stream.cpp \
     path_utility.cpp \
     system_command.cpp \
-    system_command_non_wx.cpp
+    system_command_non_wx.cpp \
+    timer.cpp
 generate_passkey_CXXFLAGS = $(AM_CXXFLAGS)
 generate_passkey_LDADD = \
     $(BOOST_LIBS) \
@@ -637,6 +639,7 @@ test_assert_lmi_SOURCES = \
   assert_lmi_test.cpp
 test_assert_lmi_CXXFLAGS = $(AM_CXXFLAGS)
 
+# MD5 !! Remove "timer.cpp" below.
 test_authenticity_SOURCES = \
   $(common_test_objects) \
   authenticity.cpp \
@@ -649,7 +652,8 @@ test_authenticity_SOURCES = \
   null_stream.cpp \
   path_utility.cpp \
   system_command.cpp \
-  system_command_non_wx.cpp
+  system_command_non_wx.cpp \
+  timer.cpp
 test_authenticity_CXXFLAGS = $(AM_CXXFLAGS)
 test_authenticity_LDADD = \
   $(BOOST_LIBS)
