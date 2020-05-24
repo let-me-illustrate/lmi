@@ -1447,7 +1447,7 @@ table_type_converter::get_by_value(any_member<Input> const& value)
 template<typename T>
 table_type_converter const& table_type_converter::get_impl()
 {
-    static T singleton;
+    static T const singleton;
     return singleton;
 }
 
