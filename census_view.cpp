@@ -1009,12 +1009,6 @@ class DatumSequenceEditor
   public:
     DatumSequenceEditor() = default;
 
-    // We don't define a copy ctor because wxGridCellEditor doesn't provide one
-    // and its derived classes are supposed to override Clone() to support
-    // polymorphic copying, instead of using the copy ctor.
-    DatumSequenceEditor(DatumSequenceEditor const&) = delete;
-    DatumSequenceEditor& operator=(DatumSequenceEditor const&) = delete;
-
     void Create(wxWindow* parent, wxWindowID id, wxEvtHandler* evtHandler) override;
 
     void BeginEdit(int row, int col, wxGrid* grid) override;
