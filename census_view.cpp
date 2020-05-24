@@ -1378,6 +1378,10 @@ class table_string_converter : public table_type_converter
 void
 table_custom_type_converter::register_all(wxGrid* grid)
 {
+    // We could implement some kind of automatic registration, but it doesn't
+    // seem to be worth it for now, as we only have a few custom converters,
+    // all of which defined in this single file, so it's simpler to just list
+    // them explicitly here.
     table_sequence_converter{}.register_data_type(grid);
     table_double_range_converter{}.register_data_type(grid);
     table_date_converter{}.register_data_type(grid);
