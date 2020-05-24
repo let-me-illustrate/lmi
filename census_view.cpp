@@ -1177,7 +1177,7 @@ class table_type_converter
 
     virtual void register_data_type(wxGrid* grid) const = 0;
 
-    static std::map<std::string, table_type_converter const*> const& get_all();
+    static void register_all(wxGrid* grid);
     static table_type_converter const& get_by_value(any_member<Input> const& value);
 
   private:
@@ -1185,8 +1185,7 @@ class table_type_converter
     static table_type_converter const& get_impl();
 };
 
-// The base class for custom table type convertors which uses an own renderer
-// and an editor.
+// The base class for table type converters using custom renderer and editor.
 
 class table_custom_type_converter : public table_type_converter
 {
@@ -1384,33 +1383,12 @@ class table_string_converter : public table_standard_type_converter
     }
 };
 
-std::map<std::string, table_type_converter const*> const&
-table_type_converter::get_all()
+void
+table_type_converter::register_all(wxGrid* grid)
 {
-    static std::map<std::string, table_type_converter const*> const all
-        {{ get_impl<table_bool_converter>().type()
-         ,&get_impl<table_bool_converter>()
-         }
-        ,{ get_impl<table_string_converter>().type()
-         ,&get_impl<table_string_converter>()
-         }
-        ,{ get_impl<table_sequence_converter>().type()
-         ,&get_impl<table_sequence_converter>()
-         }
-        ,{ get_impl<table_enum_converter>().type()
-         ,&get_impl<table_enum_converter>()
-         }
-        ,{ get_impl<table_int_range_converter>().type()
-         ,&get_impl<table_int_range_converter>()
-         }
-        ,{ get_impl<table_double_range_converter>().type()
-         ,&get_impl<table_double_range_converter>()
-         }
-        ,{ get_impl<table_date_converter>().type()
-         ,&get_impl<table_date_converter>()
-         }
-        };
-    return all;
+    get_impl<table_sequence_converter>().register_data_type(grid);
+    get_impl<table_double_range_converter>().register_data_type(grid);
+    get_impl<table_date_converter>().register_data_type(grid);
 }
 
 table_type_converter const&
@@ -2043,10 +2021,7 @@ wxWindow* CensusGridView::CreateChildWindow()
     grid_window_->DisableDragRowSize();
     grid_window_->SelectRow(0);
 
-    for(auto const& it : table_type_converter::get_all())
-        {
-        it.second->register_data_type(grid_window_);
-        }
+    table_type_converter::register_all(grid_window_);
 
     // Show headers.
     document().Modify(false);
