@@ -1175,9 +1175,6 @@ class table_type_converter
         return type();
     }
 
-    virtual void register_data_type(wxGrid* grid) const = 0;
-
-    static void register_all(wxGrid* grid);
     static table_type_converter const& get(any_member<Input> const& value);
 
   private:
@@ -1190,7 +1187,10 @@ class table_type_converter
 class table_custom_type_converter : public table_type_converter
 {
   public:
-    void register_data_type(wxGrid* grid) const override
+    static void register_all(wxGrid* grid);
+
+  private:
+    void register_data_type(wxGrid* grid) const
     {
         grid->RegisterDataType
             (type()
@@ -1201,23 +1201,12 @@ class table_custom_type_converter : public table_type_converter
 
     virtual wxGridCellRenderer* create_renderer() const = 0;
     virtual wxGridCellEditor* create_editor() const = 0;
-};
 
-// The base class for table type convertors which uses standard types
-// and don't need type registration.
-
-class table_standard_type_converter : public table_type_converter
-{
-  public:
-    void register_data_type(wxGrid*) const override
-    {
-        // Standard data types don't need to be registered, so nothing to do here.
-    }
 };
 
 // class table_bool_converter
 
-class table_bool_converter : public table_standard_type_converter
+class table_bool_converter : public table_type_converter
 {
   public:
     table_bool_converter()
@@ -1238,7 +1227,7 @@ class table_bool_converter : public table_standard_type_converter
 
 // class table_enum_converter
 
-class table_enum_converter : public table_standard_type_converter
+class table_enum_converter : public table_type_converter
 {
   public:
     char const* type() const override
@@ -1274,6 +1263,7 @@ class table_sequence_converter : public table_custom_type_converter
         return typeid(table_sequence_converter).name();
     }
 
+  private:
     wxGridCellRenderer* create_renderer() const override
     {
         return new(wx) wxGridCellStringRenderer();
@@ -1287,7 +1277,7 @@ class table_sequence_converter : public table_custom_type_converter
 
 // class table_int_range_converter
 
-class table_int_range_converter : public table_standard_type_converter
+class table_int_range_converter : public table_type_converter
 {
   public:
     char const* type() const override
@@ -1318,6 +1308,7 @@ class table_double_range_converter : public table_custom_type_converter
         return typeid(table_double_range_converter).name();
     }
 
+  private:
     wxGridCellRenderer* create_renderer() const override
     {
         // Use wxGridCellStringRenderer instead of wxGridCellFloatRenderer to
@@ -1356,6 +1347,7 @@ class table_date_converter : public table_custom_type_converter
         return typeid(table_date_converter).name();
     }
 
+  private:
     wxGridCellRenderer* create_renderer() const override
     {
         return new(wx) wxGridCellDateRenderer();
@@ -1369,7 +1361,7 @@ class table_date_converter : public table_custom_type_converter
 
 // class table_string_converter
 
-class table_string_converter : public table_standard_type_converter
+class table_string_converter : public table_type_converter
 {
   public:
     char const* type() const override
@@ -1384,11 +1376,11 @@ class table_string_converter : public table_standard_type_converter
 };
 
 void
-table_type_converter::register_all(wxGrid* grid)
+table_custom_type_converter::register_all(wxGrid* grid)
 {
-    get_impl<table_sequence_converter>().register_data_type(grid);
-    get_impl<table_double_range_converter>().register_data_type(grid);
-    get_impl<table_date_converter>().register_data_type(grid);
+    table_sequence_converter{}.register_data_type(grid);
+    table_double_range_converter{}.register_data_type(grid);
+    table_date_converter{}.register_data_type(grid);
 }
 
 table_type_converter const&
@@ -2021,7 +2013,7 @@ wxWindow* CensusGridView::CreateChildWindow()
     grid_window_->DisableDragRowSize();
     grid_window_->SelectRow(0);
 
-    table_type_converter::register_all(grid_window_);
+    table_custom_type_converter::register_all(grid_window_);
 
     // Show headers.
     document().Modify(false);
