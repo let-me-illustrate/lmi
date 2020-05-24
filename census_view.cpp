@@ -1003,52 +1003,11 @@ class RangeDateEditor
     }
 };
 
-// class DatumSequenceEditor
-
-class DatumSequenceEditorEvtHandler
-    :public wxEvtHandler
-{
-  public:
-    explicit DatumSequenceEditorEvtHandler(InputSequenceEntry* entry)
-        :entry_(entry)
-    {
-        Bind(wxEVT_KEY_DOWN, &DatumSequenceEditorEvtHandler::UponKeyDown, this);
-    }
-
-    void UponKeyDown(wxKeyEvent& event)
-    {
-        switch(event.GetKeyCode())
-            {
-            case WXK_RETURN:
-            case WXK_NUMPAD_ENTER:
-                if(!wxGetKeyState(WXK_ALT))
-                    {
-                    event.Skip();
-                    return;
-                    }
-
-                // Open the editor window when Alt-Enter is pressed instead of
-                // just closing the editor, as would be done by default.
-                entry_->open_editor();
-                break;
-            default:
-                event.Skip();
-                break;
-            }
-    }
-
-  private:
-    InputSequenceEntry* const entry_{};
-
-    DECLARE_NO_COPY_CLASS(DatumSequenceEditorEvtHandler)
-};
-
 class DatumSequenceEditor
     :public wxGridCellEditor
 {
   public:
     DatumSequenceEditor() = default;
-    ~DatumSequenceEditor();
 
     // We don't define a copy ctor because wxGridCellEditor doesn't provide one
     // and its derived classes are supposed to override Clone() to support
@@ -1082,24 +1041,50 @@ class DatumSequenceEditor
     std::string  field_;
 };
 
-DatumSequenceEditor::~DatumSequenceEditor()
-{
-    // Pop the instance of DatumSequenceEditorEvtHandler.
-    if(m_control)
-        m_control->PopEventHandler(true /* delete it*/);
-}
-
 void DatumSequenceEditor::Create
     (wxWindow*     parent
     ,wxWindowID    id
     ,wxEvtHandler* evtHandler
     )
 {
-    m_control = new(wx) InputSequenceEntry(parent, id, "sequence_editor");
+    auto* const entry = new(wx) InputSequenceEntry(parent, id, "sequence_editor");
+    m_control = entry;
 
     wxGridCellEditor::Create(parent, id, evtHandler);
 
-    m_control->PushEventHandler(new(wx) DatumSequenceEditorEvtHandler(Entry()));
+    // When an event handler is specified, it will get all the keys first and
+    // so we need to bind our wxEVT_KEY_DOWN handler to it, as we want to
+    // override the default keyboard handling. And currently it is always
+    // specified, but fall back to the control itself just in case this changes
+    // in the future.
+    if(!evtHandler)
+        {
+        evtHandler = m_control;
+        }
+
+    evtHandler->Bind
+        (wxEVT_KEY_DOWN
+        ,[entry](wxKeyEvent& event)
+        {
+            switch(event.GetKeyCode())
+                {
+                case WXK_RETURN:
+                case WXK_NUMPAD_ENTER:
+                    if(!wxGetKeyState(WXK_ALT))
+                        {
+                        event.Skip();
+                        return;
+                        }
+
+                    // Open the editor window when Alt-Enter is pressed instead of
+                    // just closing the editor, as would be done by default.
+                    entry->open_editor();
+                    break;
+                default:
+                    event.Skip();
+                    break;
+                }
+        });
 }
 
 void DatumSequenceEditor::BeginEdit(int row, int col, wxGrid* grid)
