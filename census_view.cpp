@@ -1062,27 +1062,23 @@ void DatumSequenceEditor::Create
         evtHandler = m_control;
         }
 
+    // Use a special handler to open the editor window when Alt-Enter is
+    // pressed instead of just closing the editor, as would be done by default.
     evtHandler->Bind
         (wxEVT_KEY_DOWN
         ,[entry](wxKeyEvent& event)
         {
-            switch(event.GetKeyCode())
+            auto const code = event.GetKeyCode();
+            if
+                (  (code == WXK_RETURN || code == WXK_NUMPAD_ENTER)
+                && wxGetKeyState(WXK_ALT)
+                )
                 {
-                case WXK_RETURN:
-                case WXK_NUMPAD_ENTER:
-                    if(!wxGetKeyState(WXK_ALT))
-                        {
-                        event.Skip();
-                        return;
-                        }
-
-                    // Open the editor window when Alt-Enter is pressed instead of
-                    // just closing the editor, as would be done by default.
-                    entry->open_editor();
-                    break;
-                default:
-                    event.Skip();
-                    break;
+                entry->open_editor();
+                }
+            else
+                {
+                event.Skip();
                 }
         });
 }
