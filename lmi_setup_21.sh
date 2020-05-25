@@ -38,13 +38,18 @@ assert_chrooted
 #   chage -d 0 "${NORMAL_USER}"
 # may seem like a good idea, but invoking schroot with that userid
 # doesn't prompt for a password change.
+#
+# Hardcode the salt so that repeated openssl invocations yield
+# identical results, to avoid gratuitous regressions when comparing
+# successive logs.
+
 groupadd --gid="${NORMAL_GROUP_GID}" "${NORMAL_GROUP}"
 useradd \
   --gid="${NORMAL_GROUP_GID}" \
   --uid="${NORMAL_USER_UID}" \
   --create-home \
   --shell=/bin/zsh \
-  --password="$(openssl passwd -1 expired)" \
+  --password="$(openssl passwd -1 --salt '' expired)" \
   "${NORMAL_USER}"
 
 usermod -aG sudo "${NORMAL_USER}" || echo "Oops."

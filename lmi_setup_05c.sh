@@ -39,13 +39,15 @@ chmod 666 /dev/null
 chmod 666 /dev/ptmx
 [ -d /dev/pts  ] || mkdir /dev/pts
 
+# This minimal centos chroot lacks openssl, so hardcode a password.
+
 getent group "${NORMAL_GROUP}" || groupadd --gid="${NORMAL_GROUP_GID}" "${NORMAL_GROUP}"
 getent passwd "${NORMAL_USER}" || useradd \
   --gid="${NORMAL_GROUP_GID}" \
   --uid="${NORMAL_USER_UID}" \
   --create-home \
   --shell=/bin/zsh \
-  --password="$(openssl passwd -1 expired)" \
+  --password="\$1\$\$AYD8bMyx6ho3BnmO3jjb60" \
   "${NORMAL_USER}"
 
 usermod -aG sudo "${NORMAL_USER}" || echo "Oops."
