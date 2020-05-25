@@ -2253,10 +2253,7 @@ void CensusGridView::update_visible_columns()
 
         wxGridUpdateLocker grid_update_locker(grid_window_);
 
-        if(grid_window_->IsCellEditControlEnabled())
-            {
-            grid_window_->DisableCellEditControl();
-            }
+        grid_window_->DisableCellEditControl();
 
         grid_table_->set_visible_columns(std::move(new_visible_columns));
 
@@ -3194,11 +3191,7 @@ void CensusGridView::UponPasteCensus(wxCommandEvent&)
 
     wxGridUpdateLocker grid_update_locker(grid_window_);
     grid_window_->ClearSelection();
-
-    if(grid_window_->IsCellEditControlEnabled())
-        {
-        grid_window_->DisableCellEditControl();
-        }
+    grid_window_->DisableCellEditControl();
 
     if(old_rows != new_rows || old_cols != new_cols)
         {
