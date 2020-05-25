@@ -45,8 +45,8 @@ sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /etc/zlogout
 # Fix weird errors like "Problem with the SSL CA cert (path? access rights?)".
 # Try 'update' before 'install' as described here:
 #   https://lists.nongnu.org/archive/html/lmi/2020-02/msg00003.html
-yum --assumeyes update ca-certificates curl nss-pem
-yum --assumeyes install ca-certificates curl nss-pem
+yum --assumeyes update  ca-certificates curl nss-pem wget
+yum --assumeyes install ca-certificates curl nss-pem wget
 
 # Install "EPEL" by using 'rpm' directly [historical]. See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00037.html
