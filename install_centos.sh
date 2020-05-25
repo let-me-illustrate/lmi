@@ -121,17 +121,6 @@ cp -a /tmp/schroot_env /srv/chroot/centos7lmi/tmp
 cp -a lmi_setup_*.sh   /srv/chroot/centos7lmi/tmp
 cp -a install_centos_* /srv/chroot/centos7lmi/tmp
 
-cp -a ~/.vimrc /srv/chroot/centos7lmi/root/.vimrc
-
-# Experimentally, instead of this:
-# cp -a ~/.zshrc /srv/chroot/centos7lmi/root/.zshrc
-# cp -a ~/.zshrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.zshrc
-# do this:
-wget -N -nv "${GIT_URL_BASE}"/gwc/.zshrc
-cp -a ~/.zshrc /srv/chroot/centos7lmi/root/.zshrc
-# If that works well, then treat vim configuration the same way,
-# here and elsewhere.
-
 # BEGIN ./lmi_setup_13.sh
 CACHEDIR=/var/cache/"${CODENAME}"
 mkdir -p "${CACHEDIR}"

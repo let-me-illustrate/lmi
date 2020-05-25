@@ -94,7 +94,8 @@ EOF
 patch --dry-run --strip=0 --directory=/ </home/"${NORMAL_USER}"/ltmain.sh.patch \
  && patch --strip=0 --directory=/ </home/"${NORMAL_USER}"/ltmain.sh.patch
 
-# Configure zsh, for root as well as the user configured above.
+# BEGIN ./lmi_setup_09.sh
+# Configure zsh, for root and normal users.
 
 wget -N -nv "${GIT_URL_BASE}"/gwc/.zshrc
 mv .zshrc ~
@@ -125,7 +126,8 @@ cp -a ~/.vim/spell/en.utf-8.add /home/"${NORMAL_USER}"/.vim/spell/en.utf-8.add
 chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.vim/spell/en.utf-8.add
 # and then (imperatively) run this command:
 vim -es -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
-# which will be repeated below in the user chroot.
+# which will be repeated later for the normal user.
+# END   ./lmi_setup_09.sh
 
 # Enable stable and security upgrades--see:
 #    https://www.debian.org/releases/stretch/amd64/apds03.html.en#idm4504
