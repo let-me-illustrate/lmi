@@ -122,7 +122,6 @@ cp -a lmi_setup_*.sh   /srv/chroot/centos7lmi/tmp
 cp -a install_centos_* /srv/chroot/centos7lmi/tmp
 
 cp -a ~/.vimrc /srv/chroot/centos7lmi/root/.vimrc
-cp -a ~/.vimrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.vimrc || echo "Huh?"
 
 # Experimentally, instead of this:
 # cp -a ~/.zshrc /srv/chroot/centos7lmi/root/.zshrc
@@ -130,7 +129,6 @@ cp -a ~/.vimrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.vimrc || echo "Huh?
 # do this:
 wget -N -nv "${GIT_URL_BASE}"/gwc/.zshrc
 cp -a ~/.zshrc /srv/chroot/centos7lmi/root/.zshrc
-cp -a ~/.zshrc /srv/chroot/centos7lmi/home/"${NORMAL_USER}"/.zshrc || echo "Huh?"
 # If that works well, then treat vim configuration the same way,
 # here and elsewhere.
 
