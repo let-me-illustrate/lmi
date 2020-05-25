@@ -61,7 +61,7 @@ getent passwd "${NORMAL_USER}" || useradd \
   --password="\$1\$\$AYD8bMyx6ho3BnmO3jjb60" \
   "${NORMAL_USER}"
 
-usermod -aG sudo "${NORMAL_USER}" || echo "Oops."
+usermod -aG wheel "${NORMAL_USER}"
 
 chsh -s /bin/zsh root
 chsh -s /bin/zsh "${NORMAL_USER}"
