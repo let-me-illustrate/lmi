@@ -39,6 +39,17 @@ chmod 666 /dev/null
 chmod 666 /dev/ptmx
 [ -d /dev/pts  ] || mkdir /dev/pts
 
+mountpoint /dev/pts || mount -t devpts -o rw,nosuid,noexec,relatime,mode=600 devpts /dev/pts
+mountpoint /proc    || mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
+
+findmnt /var/cache/yum
+findmnt /proc
+findmnt /dev/pts
+
+sed -i /etc/yum.conf -e's/keepcache=0/keepcache=1/'
+
+yum --assumeyes install ncurses-term less sudo vim zsh
+
 # This minimal centos chroot lacks openssl, so hardcode a password.
 
 getent group "${NORMAL_GROUP}" || groupadd --gid="${NORMAL_GROUP_GID}" "${NORMAL_GROUP}"
@@ -52,15 +63,5 @@ getent passwd "${NORMAL_USER}" || useradd \
 
 usermod -aG sudo "${NORMAL_USER}" || echo "Oops."
 
-mountpoint /dev/pts || mount -t devpts -o rw,nosuid,noexec,relatime,mode=600 devpts /dev/pts
-mountpoint /proc    || mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
-
-findmnt /var/cache/yum
-findmnt /proc
-findmnt /dev/pts
-
-sed -i /etc/yum.conf -e's/keepcache=0/keepcache=1/'
-
-yum --assumeyes install ncurses-term less sudo vim zsh
 chsh -s /bin/zsh root
 chsh -s /bin/zsh "${NORMAL_USER}"
