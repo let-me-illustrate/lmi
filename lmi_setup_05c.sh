@@ -50,10 +50,12 @@ sed -i /etc/yum.conf -e's/keepcache=0/keepcache=1/'
 
 yum --assumeyes install ncurses-term less sudo vim zsh
 
+# Add a normal user, and a corresponding group.
+#
 # This minimal centos chroot lacks openssl, so hardcode a password.
 
-getent group "${NORMAL_GROUP}" || groupadd --gid="${NORMAL_GROUP_GID}" "${NORMAL_GROUP}"
-getent passwd "${NORMAL_USER}" || useradd \
+groupadd --gid="${NORMAL_GROUP_GID}" "${NORMAL_GROUP}"
+useradd \
   --gid="${NORMAL_GROUP_GID}" \
   --uid="${NORMAL_USER_UID}" \
   --create-home \
