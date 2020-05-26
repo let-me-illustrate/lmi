@@ -34,28 +34,6 @@ else
   GIT_URL_BASE=https://github.com/vadz/lmi/raw/master
 fi
 
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_02.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_05r.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_07r.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10r.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_11.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_20.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_21.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_30.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_40.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_41.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_42.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_43.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_inc.sh
-chmod 0777 lmi_setup_*.sh
-
-. ./lmi_setup_inc.sh
-
-set -evx
-
-assert_su
-assert_not_chrooted
-
 # Store dynamic configuration in a temporary file. This method is
 # simple and robust, and far better than trying to pass environment
 # variables across sudo and schroot barriers.
@@ -84,6 +62,28 @@ NORMAL_GROUP_GID=$NORMAL_GROUP_GID
 set +v
 EOF
 chmod 0666 /tmp/schroot_env
+
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_02.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_05r.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_07r.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10r.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_11.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_20.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_21.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_30.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_40.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_41.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_42.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_43.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_inc.sh
+chmod 0777 lmi_setup_*.sh
+
+. ./lmi_setup_inc.sh
+
+set -evx
+
+assert_su
+assert_not_chrooted
 
 ./lmi_setup_02.sh
 ./lmi_setup_05r.sh
