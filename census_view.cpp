@@ -1965,20 +1965,27 @@ wxWindow* CensusDVCView::CreateChildWindow()
 
 wxWindow* CensusGridView::CreateChildWindow()
 {
+    // Create and customize the grid window: we want to hide its row labels
+    // because we show our own row number column, tweak its alignment slightly
+    // and, importantly, use ellipsis in the overlong cell values rather than
+    // silently truncating them. We also prefer to use the native column header
+    // for a better appearance under MSW and disable the operations which are
+    // either not supported or are not useful.
     grid_window_ = new(wx) wxGrid(GetFrame(), wxID_ANY);
     grid_window_->HideRowLabels();
     grid_window_->SetColLabelAlignment(wxALIGN_LEFT, wxALIGN_CENTRE);
     grid_window_->SetDefaultCellAlignment(wxALIGN_LEFT, wxALIGN_CENTRE);
     grid_window_->SetDefaultCellFitMode(wxGridFitMode::Ellipsize(wxELLIPSIZE_MIDDLE));
-
-    // Grid must be already created when we create the table because we use
-    // the default cell background color to determine the alternating color.
-    grid_table_ = new(wx) CensusViewGridTable(*this);
-    grid_window_->AssignTable(grid_table_, wxGrid::wxGridSelectRows);
-
     grid_window_->UseNativeColHeader();
     grid_window_->DisableHidingColumns();
     grid_window_->DisableDragRowSize();
+
+    // Create the table, providing the grid window with its data, now: notice
+    // that it must be done after creating the grid, as the table attribute
+    // provider uses the default grid cell background color to determine the
+    // alternating rows color.
+    grid_table_ = new(wx) CensusViewGridTable(*this);
+    grid_window_->AssignTable(grid_table_, wxGrid::wxGridSelectRows);
 
     // We could implement some kind of automatic registration, but it doesn't
     // seem to be worth it for now, as we only have a few custom converters,
