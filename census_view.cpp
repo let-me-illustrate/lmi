@@ -2264,15 +2264,17 @@ void CensusGridView::update_visible_columns()
             grid_table_->make_cell_number_column_read_only();
             }
 
-        if(autosize_columns_)
-            {
-            grid_window_->AutoSize();
-            }
-
         grid_window_->SetGridCursor
             (cursor_row
             ,std::min(cursor_col, new_columns_count - 1)
             );
+        }
+
+    // Even if the visible columns are the same as before, their contents could
+    // have changed, so always auto-size them if we're configured to do so.
+    if(autosize_columns_)
+        {
+        grid_window_->AutoSize();
         }
 }
 
