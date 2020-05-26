@@ -1536,6 +1536,7 @@ CensusViewGridTable::CensusViewGridTable(CensusGridView& view)
     wxGrid const* grid = view.grid_window_;
     SetAttrProvider(new(wx) CensusViewGridCellAttrProvider(grid));
 
+    // The first, special, column shows the cell row number and can't be edited.
     auto attr = new(wx) wxGridCellAttr();
     attr->SetReadOnly();
     SetColAttr(attr, 0);
