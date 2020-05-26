@@ -1970,7 +1970,6 @@ wxWindow* CensusGridView::CreateChildWindow()
     grid_window_->SetColLabelAlignment(wxALIGN_LEFT, wxALIGN_CENTRE);
     grid_window_->SetDefaultCellAlignment(wxALIGN_LEFT, wxALIGN_CENTRE);
     grid_window_->SetDefaultCellFitMode(wxGridFitMode::Ellipsize(wxELLIPSIZE_MIDDLE));
-    grid_window_->SetGridLineColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
 
     // Grid must be already created when we create the table because we use
     // the default cell background color to determine the alternating color.
