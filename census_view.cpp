@@ -2257,11 +2257,18 @@ void CensusGridView::update_visible_columns()
 
         grid_table_->set_visible_columns(std::move(new_visible_columns));
 
-        if(old_columns_count != new_columns_count)
+        // Bring the number of columns actually shown in the grid in sync with
+        // the number of columns in the table if necessary.
+        if(new_columns_count < old_columns_count)
             {
-            grid_window_->DeleteCols(0, old_columns_count);
-            grid_window_->AppendCols(new_columns_count);
-            grid_table_->make_cell_number_column_read_only();
+            grid_table_->DeleteCols
+                (new_columns_count
+                ,old_columns_count - new_columns_count
+                );
+            }
+        else if(old_columns_count < new_columns_count)
+            {
+            grid_table_->AppendCols(new_columns_count - old_columns_count);
             }
 
         grid_window_->SetGridCursor
