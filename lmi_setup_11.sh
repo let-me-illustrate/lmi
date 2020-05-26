@@ -35,8 +35,10 @@ assert_not_chrooted
 #   - before invoking 'debootstrap' (or 'apt-get' in the chroot),
 #     so that all packages are cached; and
 #   - while not chrooted, so that the host filesystem is accessible.
-# The alternative of rbind-mounting parent directory var/cache/apt
-# might be investigated.
+# The alternative of bind-mounting parent directory var/cache/apt
+# (using a single directory to store '.deb' files for all releases)
+# might be investigated--see:
+#   https://lists.nongnu.org/archive/html/lmi/2020-05/msg00028.html
 CACHEDIR=/var/cache/"${CODENAME}"
 mkdir -p "${CACHEDIR}"
 
