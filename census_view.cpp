@@ -1979,7 +1979,6 @@ wxWindow* CensusGridView::CreateChildWindow()
     grid_window_->UseNativeColHeader();
     grid_window_->DisableHidingColumns();
     grid_window_->DisableDragRowSize();
-    grid_window_->SelectRow(0);
 
     // We could implement some kind of automatic registration, but it doesn't
     // seem to be worth it for now, as we only have a few custom converters,
