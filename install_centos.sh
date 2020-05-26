@@ -112,8 +112,7 @@ mkdir -p /var/cache/centos_lmi
 # There are probably a few directories here, with no regular files.
 du   -sb /srv/chroot/centos7lmi/var/cache/yum || echo "Oops: rinse didn't create cache"
 mkdir -p /srv/chroot/centos7lmi/var/cache/yum
-# 'rbind' seems necessary because centos uses subdirs
-mount --rbind /var/cache/centos_lmi /srv/chroot/centos7lmi/var/cache/yum
+mount --bind /var/cache/centos_lmi /srv/chroot/centos7lmi/var/cache/yum
 
 echo Installed centos chroot.
 
