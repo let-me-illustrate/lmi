@@ -85,7 +85,6 @@ class CensusView
     virtual void UponColumnWidthFixed       (wxCommandEvent&) = 0;
     void         UponUpdateAlwaysDisabled   (wxUpdateUIEvent&);
     void         UponUpdateAlwaysEnabled    (wxUpdateUIEvent&);
-    virtual void UponUpdateNonemptySelection(wxUpdateUIEvent&) = 0;
     virtual void UponUpdateColumnValuesVary (wxUpdateUIEvent&) = 0;
 
     bool DoAllCells(mcenum_emission);
@@ -159,7 +158,7 @@ class CensusDVCView final
     void UponColumnWidthVarying     (wxCommandEvent&) override;
     void UponColumnWidthFixed       (wxCommandEvent&) override;
     void UponUpdateSingleSelection  (wxUpdateUIEvent&);
-    void UponUpdateNonemptySelection(wxUpdateUIEvent&) override;
+    void UponUpdateNonemptySelection(wxUpdateUIEvent&);
     void UponUpdateColumnValuesVary (wxUpdateUIEvent&) override;
 
     void Update() override;
@@ -200,7 +199,6 @@ class CensusGridView final
     void UponDeleteCells            (wxCommandEvent&) override;
     void UponColumnWidthVarying     (wxCommandEvent&) override;
     void UponColumnWidthFixed       (wxCommandEvent&) override;
-    void UponUpdateNonemptySelection(wxUpdateUIEvent&) override;
     void UponUpdateColumnValuesVary (wxUpdateUIEvent&) override;
 
     void Update() override;

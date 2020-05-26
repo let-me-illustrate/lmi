@@ -1803,7 +1803,6 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_UPDATE_UI(XRCID("copy_census"          ),CensusView::UponUpdateColumnValuesVary )
     EVT_UPDATE_UI(XRCID("paste_census"         ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateAlwaysEnabled    )
-    EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("column_width_varying" ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("column_width_fixed"   ),CensusView::UponUpdateAlwaysEnabled    )
     // Disable these printing commands on the "File" menu: specialized
@@ -1817,12 +1816,13 @@ END_EVENT_TABLE()
 IMPLEMENT_DYNAMIC_CLASS(CensusDVCView, CensusView)
 
 BEGIN_EVENT_TABLE(CensusDVCView, CensusView)
-    EVT_DATAVIEW_ITEM_CONTEXT_MENU (wxID_ANY    ,CensusDVCView::UponRightClick           )
-    EVT_DATAVIEW_ITEM_VALUE_CHANGED(wxID_ANY    ,CensusDVCView::UponValueChanged         )
-    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusDVCView::UponUpdateSingleSelection)
-    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusDVCView::UponUpdateSingleSelection)
-    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusDVCView::UponUpdateSingleSelection)
-    EVT_UPDATE_UI(XRCID("run_class"            ),CensusDVCView::UponUpdateSingleSelection)
+    EVT_DATAVIEW_ITEM_CONTEXT_MENU (wxID_ANY    ,CensusDVCView::UponRightClick             )
+    EVT_DATAVIEW_ITEM_VALUE_CHANGED(wxID_ANY    ,CensusDVCView::UponValueChanged           )
+    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusDVCView::UponUpdateSingleSelection  )
+    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusDVCView::UponUpdateSingleSelection  )
+    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusDVCView::UponUpdateSingleSelection  )
+    EVT_UPDATE_UI(XRCID("run_class"            ),CensusDVCView::UponUpdateSingleSelection  )
+    EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusDVCView::UponUpdateNonemptySelection)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(CensusGridView, CensusView)
@@ -1835,6 +1835,7 @@ BEGIN_EVENT_TABLE(CensusGridView, CensusView)
     EVT_UPDATE_UI(XRCID("edit_class"           ),CensusGridView::UponUpdateAlwaysEnabled)
     EVT_UPDATE_UI(XRCID("run_cell"             ),CensusGridView::UponUpdateAlwaysEnabled)
     EVT_UPDATE_UI(XRCID("run_class"            ),CensusGridView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusGridView::UponUpdateAlwaysEnabled)
 END_EVENT_TABLE()
 
 CensusView::CensusView()
@@ -2465,12 +2466,6 @@ void CensusDVCView::UponUpdateNonemptySelection(wxUpdateUIEvent& e)
 {
     wxDataViewItemArray selection;
     e.Enable(0 < list_window_->GetSelections(selection));
-}
-
-void CensusGridView::UponUpdateNonemptySelection(wxUpdateUIEvent& e)
-{
-    auto const& selected_rows = grid_window_->GetSelectedRows();
-    e.Enable(!selected_rows.empty());
 }
 
 /// Conditionally enable copying.
