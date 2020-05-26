@@ -3161,6 +3161,8 @@ void CensusGridView::UponPasteCensus(wxCommandEvent&)
         return;
         }
 
+    auto const old_rows = grid_table_->GetNumberRows();
+
     if(!document().IsModified() && !document().GetDocumentSaved())
         {
         case_parms ().clear();
@@ -3186,27 +3188,22 @@ void CensusGridView::UponPasteCensus(wxCommandEvent&)
         std::copy(cells.begin(), cells.end(), iip);
         }
 
-    auto const old_rows = grid_window_->GetNumberRows();
-    auto const old_cols = grid_window_->GetNumberCols();
-    auto const new_rows = grid_table_->GetRowsCount();
-    auto const new_cols = grid_table_->GetColsCount();
-
     wxGridUpdateLocker grid_update_locker(grid_window_);
     grid_window_->ClearSelection();
     grid_window_->DisableCellEditControl();
 
-    if(old_rows != new_rows || old_cols != new_cols)
+    // Check if we need to update the number of rows. Notice that Update() will
+    // take care of the columns, so we don't need to do it here.
+    auto const new_rows = grid_table_->GetRowsCount();
+    if(new_rows < old_rows)
         {
-        grid_window_->DeleteRows(0, old_rows);
-        grid_window_->DeleteCols(0, old_cols);
-        grid_window_->AppendRows(new_rows);
-        grid_window_->AppendCols(new_cols);
-        grid_table_->make_cell_number_column_read_only();
-        if(autosize_columns_)
-            {
-            grid_window_->AutoSize();
-            }
+        grid_table_->DeleteRows(new_rows, old_rows - new_rows);
         }
+    else if(old_rows < new_rows)
+        {
+        grid_table_->AppendRows(new_rows - old_rows);
+        }
+    //else: The number of rows didn't change, so keep the same ones.
 
     document().Modify(true);
     Update();
