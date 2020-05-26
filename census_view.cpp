@@ -2246,7 +2246,7 @@ void CensusGridView::update_visible_columns()
         auto const cursor_row = grid_window_->GetGridCursorRow();
         auto const cursor_col = grid_window_->GetGridCursorCol();
 
-        auto const columns_count     =
+        auto const old_columns_count =
             lmi::ssize(grid_table_->get_visible_columns()) + 1;
         auto const new_columns_count =
             lmi::ssize(new_visible_columns)                + 1;
@@ -2257,9 +2257,9 @@ void CensusGridView::update_visible_columns()
 
         grid_table_->set_visible_columns(std::move(new_visible_columns));
 
-        if(columns_count != new_columns_count)
+        if(old_columns_count != new_columns_count)
             {
-            grid_window_->DeleteCols(0, columns_count);
+            grid_window_->DeleteCols(0, old_columns_count);
             grid_window_->AppendCols(new_columns_count);
             grid_table_->make_cell_number_column_read_only();
             }
