@@ -1482,13 +1482,7 @@ class CensusViewGridTable
     // Cell serial number: always shown in the first column.
     static int const Col_CellNum = 0;
 
-    explicit CensusViewGridTable(CensusGridView& view)
-        :view_ {view}
-    {
-        wxGrid const* grid = view.grid_window_;
-        SetAttrProvider(new(wx) CensusViewGridCellAttrProvider(grid));
-        make_cell_number_column_read_only();
-    }
+    explicit CensusViewGridTable(CensusGridView& view);
 
     // return the number of rows and columns in this table.
     int GetNumberRows() override;
@@ -1507,8 +1501,6 @@ class CensusViewGridTable
     bool DeleteCols(size_t pos, size_t numCols) override;
 
     wxString GetColLabelValue(int col) override;
-
-    void make_cell_number_column_read_only();
 
     std::string const& col_name(int col) const;
 
@@ -1537,6 +1529,17 @@ class CensusViewGridTable
 
     std::vector<int> visible_columns_;
 };
+
+CensusViewGridTable::CensusViewGridTable(CensusGridView& view)
+    :view_ {view}
+{
+    wxGrid const* grid = view.grid_window_;
+    SetAttrProvider(new(wx) CensusViewGridCellAttrProvider(grid));
+
+    auto attr = new(wx) wxGridCellAttr();
+    attr->SetReadOnly();
+    SetColAttr(attr, 0);
+}
 
 int CensusViewGridTable::GetNumberRows()
 {
@@ -1706,13 +1709,6 @@ bool CensusViewGridTable::DeleteCols(size_t pos, size_t num_cols)
     grid->ProcessTableMessage(msg);
 
     return true;
-}
-
-void CensusViewGridTable::make_cell_number_column_read_only()
-{
-    auto attr = new(wx) wxGridCellAttr();
-    attr->SetReadOnly();
-    SetColAttr(attr, 0);
 }
 
 inline std::string const& CensusViewGridTable::col_name(int col) const
