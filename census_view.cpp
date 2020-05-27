@@ -2727,13 +2727,33 @@ void CensusDVCView::UponDeleteCells(wxCommandEvent&)
 void CensusGridView::UponDeleteCells(wxCommandEvent&)
 {
     auto const n_items = grid_table_->GetRowsCount();
-    auto rows = grid_window_->GetSelectedRows();
-    // If no cell is selected then use the current row
-    if (rows.empty())
+
+    // Iterate over selected blocks, not rows, as this can be significantly
+    // more efficient: in a grid with 10,000 rows, the user can easily select
+    // all of them, but the selection consists of just a single block, so
+    // iterating over it is quick, while iterating over all the individual rows
+    // would take much longer.
+    auto sel_blocks = grid_window_->GetSelectedRowBlocks();
+
+    int n_sel_items = 0;
+
+    // If no rows are selected, use the current row.
+    if (sel_blocks.empty())
         {
-        rows.push_back(grid_window_->GetGridCursorRow());
+        // Synthesize a block corresponding to the current row using 0 for the
+        // column values because we don't use them anyhow.
+        auto const cursor_row = grid_window_->GetGridCursorRow();
+        sel_blocks.push_back(wxGridBlockCoords{cursor_row, 0, cursor_row, 0});
+
+        n_sel_items = 1;
         }
-    auto const n_sel_items = lmi::ssize(rows);
+    else // Compute the total number of selected rows
+        {
+        for(auto const& block : sel_blocks)
+            {
+            n_sel_items += block.GetBottomRow() - block.GetTopRow() + 1;
+            }
+        }
 
     if(n_items == n_sel_items)
         {
@@ -2770,33 +2790,26 @@ void CensusGridView::UponDeleteCells(wxCommandEvent&)
 
     auto const cursor_col = grid_window_->GetGridCursorCol();
 
-    std::sort(rows.begin(), rows.end());
-
     LMI_ASSERT(lmi::ssize(cell_parms()) == n_items);
 
     wxGridUpdateLocker grid_update_locker(grid_window_);
     grid_window_->ClearSelection();
 
-    int items_left = n_sel_items;
-    while(items_left > 0)
+    // Annoyingly, range-for can't be used to iterate in the reverse direction
+    // before C++20, so do it manually.
+    for(auto i = sel_blocks.rbegin(); i != sel_blocks.rend(); ++i)
         {
-        int cur_item = items_left - 1;
-        for(; 0 < cur_item; --cur_item)
-            {
-            if(rows[cur_item] - 1 != rows[cur_item - 1])
-                break;
-            }
-        int const count = items_left - cur_item;
-        items_left -= count;
+        auto const& block = *i;
+        auto const count = block.GetBottomRow() - block.GetTopRow() + 1;
 
-        auto const first = cell_parms().begin() + cur_item;
+        auto const first = cell_parms().begin() + block.GetTopRow();
         cell_parms().erase(first, first + count);
-        grid_window_->DeleteRows(cur_item, count);
+        grid_window_->DeleteRows(block.GetTopRow(), count);
         }
     LMI_ASSERT(lmi::ssize(cell_parms()) == n_items - n_sel_items);
 
     int const new_cursor_row(std::min
-        (rows.front()
+        (sel_blocks.front().GetTopRow()
         ,lmi::ssize(cell_parms()) - 1
         ));
     grid_window_->GoToCell(new_cursor_row, cursor_col);
