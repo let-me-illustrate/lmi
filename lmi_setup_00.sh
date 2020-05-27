@@ -84,6 +84,16 @@ assert_not_chrooted
 
 ./lmi_setup_10.sh
 ./lmi_setup_11.sh
+
+# BEGIN ./lmi_setup_13.sh
+# For caveats, see:
+#    https://lists.nongnu.org/archive/html/lmi/2020-05/msg00040.html
+mkdir -p /srv/cache_for_lmi
+du   -sb /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi || echo "Okay."
+mkdir -p /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
+mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
+# END   ./lmi_setup_13.sh
+
 cp -a lmi_setup_*.sh /tmp/schroot_env /srv/chroot/${CHRTNAME}/tmp
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_20.sh
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_21.sh
@@ -98,9 +108,18 @@ schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setu
 schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
 schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_43.sh
 
+# Copy log files that may be useful for tracking down problems with
+# certain commands whose output is voluminous and often uninteresting.
+# Embed a timestamp in the copies' names (no colons, for portability).
+fstamp=$(date -u +"%Y%m%dT%H%MZ" -d "$stamp0")
+cp -a /srv/chroot/${CHRTNAME}/home/"${NORMAL_USER}"/log /home/"${NORMAL_USER}"/lmi_rhlog_"${fstamp}"
+cp -a /srv/chroot/${CHRTNAME}/tmp/${CHRTNAME}-apt-get-log /home/"${NORMAL_USER}"/apt-get-log-"${fstamp}"
+
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Finished: $stamp1"
 
 seconds=$(($(date -u '+%s' -d "$stamp1") - $(date -u '+%s' -d "$stamp0")))
 elapsed=$(date -u -d @"$seconds" +'%H:%M:%S')
 echo "Elapsed: $elapsed"
+
+echo Finished creating debian chroot. >/dev/tty

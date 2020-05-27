@@ -147,3 +147,5 @@ echo "Finished: $stamp1"
 seconds=$(($(date -u '+%s' -d "$stamp1") - $(date -u '+%s' -d "$stamp0")))
 elapsed=$(date -u -d @"$seconds" +'%H:%M:%S')
 echo "Elapsed: $elapsed"
+
+echo Finished creating debian chroot. >/dev/tty
