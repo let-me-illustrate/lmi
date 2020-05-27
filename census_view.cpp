@@ -2284,7 +2284,8 @@ void CensusGridView::update_visible_columns()
     // have changed, so always auto-size them if we're configured to do so.
     if(autosize_columns_)
         {
-        grid_window_->AutoSize();
+        // Pass false to avoid setting min size to the best size.
+        grid_window_->AutoSizeColumns(false);
         }
 }
 
