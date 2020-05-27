@@ -63,6 +63,7 @@ set +v
 EOF
 chmod 0666 /tmp/schroot_env
 
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_00c.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_02c.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_05c.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_07r.sh
@@ -77,9 +78,7 @@ wget -N -nv "${GIT_URL_BASE}"/lmi_setup_41.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_42.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_43.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_inc.sh
-wget -N -nv "${GIT_URL_BASE}"/install_centos_1.sh
 chmod 0777 lmi_setup_*.sh
-chmod 0777 install_centos_*.sh
 
 . ./lmi_setup_inc.sh
 
@@ -118,7 +117,6 @@ echo Installed centos chroot.
 
 cp -a /tmp/schroot_env /srv/chroot/centos7lmi/tmp
 cp -a lmi_setup_*.sh   /srv/chroot/centos7lmi/tmp
-cp -a install_centos_* /srv/chroot/centos7lmi/tmp
 
 # BEGIN ./lmi_setup_13.sh
 CACHEDIR=/var/cache/"${CODENAME}"
@@ -132,7 +130,7 @@ mkdir -p /srv/chroot/centos7lmi/srv/cache_for_lmi
 mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/cache_for_lmi
 # END   ./lmi_setup_13.sh
 
-schroot --chroot=centos7lmi --user=root --directory=/tmp ./install_centos_1.sh
+schroot --chroot=centos7lmi --user=root --directory=/tmp ./lmi_setup_00c.sh
 
 # Copy log files that may be useful for tracking down problems with
 # certain commands whose output is voluminous and often uninteresting.
