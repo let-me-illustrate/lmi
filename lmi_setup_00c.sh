@@ -31,8 +31,6 @@ assert_not_chrooted
 
 ./lmi_setup_02c.sh
 
-set -evx
-
 cat >/etc/schroot/chroot.d/centos7lmi.conf <<EOF
 [centos7lmi]
 description=centos-7.7
