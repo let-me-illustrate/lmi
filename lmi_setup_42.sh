@@ -34,7 +34,9 @@ assert_chrooted
 cd ~ || { printf 'failed: cd\n'; exit 3; }
 wget -N -nv "${GIT_URL_BASE}"/install_msw.sh
 chmod +x install_msw.sh
-./install_msw.sh >log 2>&1
+logdir=/srv/cache_for_lmi/logs
+mkdir -p "${logdir}"
+./install_msw.sh >"${logdir}"/lmi-log 2>&1
 
 # Now everything should work much as it does in native msw. To run an
 # msw program, prefix its command line with 'wine'. Test the chroot by

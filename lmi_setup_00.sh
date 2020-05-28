@@ -90,14 +90,22 @@ set -evx
 assert_su
 assert_not_chrooted
 
-./lmi_setup_01.sh
+# Timestamp suffix for log file names (no colons, for portability).
+fstamp=$(date -u +"%Y%m%dT%H%MZ" -d "$stamp0")
+
+logdir=/srv/cache_for_lmi/logs
+mkdir -p "${logdir}"
+./lmi_setup_01.sh >"${logdir}"/chroot-log_"${fstamp}" 2>&1
 
 # Copy log files that may be useful for tracking down problems with
 # certain commands whose output is voluminous and often uninteresting.
-# Embed a timestamp in the copies' names (no colons, for portability).
-fstamp=$(date -u +"%Y%m%dT%H%MZ" -d "$stamp0")
-cp -a /srv/chroot/${CHRTNAME}/home/"${NORMAL_USER}"/log /home/"${NORMAL_USER}"/lmi_rhlog_"${fstamp}"
-cp -a /srv/chroot/${CHRTNAME}/tmp/${CHRTNAME}-apt-get-log /home/"${NORMAL_USER}"/apt-get-log-"${fstamp}"
+# Archive them for easy sharing.
+(cd "${logdir}"
+for z in "${CHRTNAME}"-apt-get-log lmi-log; do
+  mv "${z}" "${z}_${fstamp}"
+done
+tar -cJvf chroot-logs_"${fstamp}".tar.xz ./*"${fstamp}"
+)
 
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Finished: $stamp1"

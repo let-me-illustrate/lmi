@@ -111,15 +111,17 @@ mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 # of scripts installs a debian chroot on any host system, and builds
 # only in that chroot.
 
+logdir=/srv/cache_for_lmi/logs
+mkdir -p "${logdir}"
 apt-get update
 apt-get --assume-yes install wget g++-mingw-w64 automake libtool make \
  pkg-config git cvs zsh bzip2 unzip sudo wine default-jre jing trang \
  g++-multilib libxml2-utils libxslt1-dev vim-gtk vim-doc shellcheck \
  bc libarchive-tools xsltproc rsync curl \
- >"${CHRTNAME}"-apt-get-log 2>&1
+ >"${logdir}/${CHRTNAME}"-apt-get-log 2>&1
 
 # This command should produce little output:
-<"${CHRTNAME}"-apt-get-log tr -d '\r' | sed \
+< "${logdir}/${CHRTNAME}"-apt-get-log tr -d '\r' | sed \
  -e'0,/^Preconfiguring/d' \
  -e'/^Fetched\|^Preparing\|^Unpacking\|^Configuring\|^Selecting/d' \
  -e'/^Setting up\|^Processing\|^Adding\|^update-alternatives\|^[Dd]one./d' \
