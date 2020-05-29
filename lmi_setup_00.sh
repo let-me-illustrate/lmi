@@ -64,6 +64,9 @@ EOF
 chmod 0666 /tmp/schroot_env
 
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_00c.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_01.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_01c.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_01r.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_02.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_02c.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_05c.sh
