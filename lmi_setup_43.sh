@@ -109,10 +109,10 @@ coefficiency="--jobs=$(nproc)"
 cd /opt/lmi/src/lmi || { printf 'failed: cd\n'; exit 3; }
 make "$coefficiency" system_test 2>&1 |sed -e'/^Cannot open.*test/d'
 # That test fails the first time because no results are saved in
-# touchstone/ yet. Copy the results just generated...
+# touchstone/ yet. Remove timestamped summaries...
+rm /opt/lmi/test/analysis-* /opt/lmi/test/diffs-* /opt/lmi/test/md5sums-*
+# ...copy the results just generated...
 cp -a /opt/lmi/test/* /opt/lmi/touchstone
-# ...removing summaries...
-rm /opt/lmi/touchstone/analysis* /opt/lmi/touchstone/diffs* /opt/lmi/touchstone/md5sum*
 # ...and rerun the test, which should now succeed:
 make "$coefficiency" system_test
 
