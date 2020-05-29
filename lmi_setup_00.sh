@@ -90,12 +90,36 @@ set -evx
 assert_su
 assert_not_chrooted
 
+case "$(cat /proc/version)" in
+    (*Debian*)    flavor_guess=debian ;;
+    (*"Red Hat"*) flavor_guess=redhat ;;
+    (*)           flavor_guess=debian
+        printf '%s\n' "OS not detected--assuming debian."
+        ;;
+esac
+
+# The 'centos' flavor is extraordinary. It calls for creating a centos
+# chroot with a debian chroot inside. Override 'flavor' on the command
+# line to use it, e.g.:
+#   flavor=centos ./lmi_setup_00.sh
+# The "_01" scripts construct a debian-testing chroot. The 'centos'
+# case correctly selects a "00" script, which first constructs a
+# centos chroot, within which a debian-testing chroot is constructed.
+
+flavor=${flavor:-"$flavor_guess"}
+case "${flavor}" in
+    (debian) flavor_script=lmi_setup_01.sh  ;;
+    (centos) flavor_script=lmi_setup_00c.sh ;;
+    (redhat) flavor_script=lmi_setup_01r.sh ;;
+    (*) printf '%s\n' "Unanticipated case--exiting."; exit 3 ;;
+esac
+
 # Timestamp suffix for log file names (no colons, for portability).
 fstamp=$(date -u +"%Y%m%dT%H%MZ" -d "$stamp0")
 
 logdir=/srv/cache_for_lmi/logs
 mkdir -p "${logdir}"
-./lmi_setup_01.sh >"${logdir}"/chroot-log_"${fstamp}" 2>&1
+./"${flavor_script}" >"${logdir}/${flavor}-log_${fstamp}" 2>&1
 
 # Copy log files that may be useful for tracking down problems with
 # certain commands whose output is voluminous and often uninteresting.
