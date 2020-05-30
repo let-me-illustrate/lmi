@@ -32,7 +32,7 @@ assert_chrooted
 # Install lmi for wine.
 
 cd ~ || { printf 'failed: cd\n'; exit 3; }
-wget -N -nv "${GIT_URL_BASE}"/install_msw.sh
+cp -a /tmp/install_msw.sh .
 chmod +x install_msw.sh
 logdir=/srv/cache_for_lmi/logs
 mkdir -p "${logdir}"
