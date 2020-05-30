@@ -2274,15 +2274,6 @@ void CensusGridView::update_visible_columns()
             grid_table_->AppendCols(new_columns_count - old_columns_count);
             }
 
-        // Recompute the best fitting sizes if the columns have changed.
-        // Ideally, we would only do it for the new columns, but this would be
-        // more complicated, and for now we prefer to keep the things simple.
-        if(autosize_columns_)
-            {
-            // Pass false to avoid setting min size to the best size.
-            grid_window_->AutoSizeColumns(false);
-            }
-
         grid_window_->SetGridCursor
             (cursor_row
             ,std::min(cursor_col, new_columns_count - 1)
