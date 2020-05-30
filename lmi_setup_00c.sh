@@ -57,6 +57,10 @@ echo Installed centos chroot.
 
 cp -a /tmp/schroot_env /srv/chroot/centos7lmi/tmp
 cp -a lmi_setup_*.sh   /srv/chroot/centos7lmi/tmp
+cp -a .zshrc           /srv/chroot/centos7lmi/tmp
+cp -a .vimrc           /srv/chroot/centos7lmi/tmp
+cp -a en.utf-8.add     /srv/chroot/centos7lmi/tmp
+cp -a install_msw.sh   /srv/chroot/centos7lmi/tmp
 
 # BEGIN ./lmi_setup_13.sh
 CACHEDIR=/var/cache/"${CODENAME}"

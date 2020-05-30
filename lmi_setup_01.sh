@@ -41,7 +41,13 @@ mkdir -p /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
 mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
 # END   ./lmi_setup_13.sh
 
-cp -a lmi_setup_*.sh /tmp/schroot_env /srv/chroot/${CHRTNAME}/tmp
+cp -a /tmp/schroot_env /srv/chroot/"${CHRTNAME}"/tmp
+cp -a lmi_setup_*.sh   /srv/chroot/"${CHRTNAME}"/tmp
+cp -a .zshrc           /srv/chroot/"${CHRTNAME}"/tmp
+cp -a .vimrc           /srv/chroot/"${CHRTNAME}"/tmp
+cp -a en.utf-8.add     /srv/chroot/"${CHRTNAME}"/tmp
+cp -a install_msw.sh   /srv/chroot/"${CHRTNAME}"/tmp
+
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_20.sh
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_21.sh
 # On a particular corporate server, root is not a sudoer.
