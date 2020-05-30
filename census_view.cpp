@@ -2371,7 +2371,6 @@ void CensusGridView::UponColumnWidthVarying(wxCommandEvent&)
 
     // Pass false to avoid setting min size to the best size.
     grid_window_->AutoSizeColumns(false);
-    Update();
 }
 
 /// Shrink all nonfrozen columns to default width.
@@ -2397,7 +2396,6 @@ void CensusGridView::UponColumnWidthFixed(wxCommandEvent&)
         {
         grid_window_->SetColSize(j, WXGRID_DEFAULT_COL_WIDTH);
         }
-    Update();
 }
 
 void CensusGridView::UponRightClick(wxGridEvent&)
