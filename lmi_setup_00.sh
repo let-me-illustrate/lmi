@@ -117,21 +117,34 @@ case "${flavor}" in
     (*) printf '%s\n' "Unanticipated case--exiting."; exit 3 ;;
 esac
 
-# Timestamp suffix for log file names (no colons, for portability).
-fstamp=$(date -u +"%Y%m%dT%H%MZ" -d "$stamp0")
-
 logdir=/srv/cache_for_lmi/logs
 mkdir -p "${logdir}"
-./"${flavor_script}" >"${logdir}/${flavor}-log_${fstamp}" 2>&1
+./"${flavor_script}" >"${logdir}/${flavor}-log" 2>&1
+
+# Timestamp suffix for log file names (no colons, for portability).
+fstamp=$(date -u +"%Y%m%dT%H%MZ" -d "$stamp0")
 
 # Copy log files that may be useful for tracking down problems with
 # certain commands whose output is voluminous and often uninteresting.
 # Archive them for easy sharing.
+#
+# It would be easier to specify the files to be archived as
+#   ./*"${fstamp}
+# but that would cause 'tar' to fail thus:
+#   tar: [filename]: file changed as we read it
+# if this script's output is redirected to a file that's uniquified
+# by the same $fstamp method used here.
+
 (cd "${logdir}"
-for z in "${CHRTNAME}"-apt-get-log lmi-log; do
-  mv "${z}" "${z}_${fstamp}"
+logfiles=
+for z in "${flavor}-log" "${CHRTNAME}"-apt-get-log lmi-log; do
+  z_stamped="${z}_${fstamp}"
+  mv "${z}" "${z_stamped}"
+  logfiles="${logfiles} ${z_stamped}"
 done
-tar -cJvf chroot-logs_"${fstamp}".tar.xz ./*"${fstamp}"
+# Word-splitting is definitely wanted for ${logfiles} here:
+# shellcheck disable=SC2086
+tar -cJvf chroot-logs_"${fstamp}".tar.xz ${logfiles}
 )
 
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
