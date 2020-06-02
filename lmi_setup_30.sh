@@ -80,3 +80,6 @@ cp -a ~/.ssh/ /srv/chroot/${CHRTNAME}/home/"${NORMAL_USER}" || true
 #   HashKnownHosts no
 # See the discussion of hashing (inter alia) here:
 #   https://lists.nongnu.org/archive/html/lmi/2018-01/msg00003.html
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Copied optional files."  | tee /dev/tty

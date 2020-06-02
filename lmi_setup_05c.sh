@@ -67,3 +67,6 @@ usermod -aG wheel "${NORMAL_USER}"
 
 chsh -s /bin/zsh root
 chsh -s /bin/zsh "${NORMAL_USER}"
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Reconfigured centos chroot."  | tee /dev/tty

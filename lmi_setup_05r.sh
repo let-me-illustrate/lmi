@@ -56,3 +56,6 @@ umount /srv/chroot
 # Here, explicitly remount /srv/chroot because it was umounted above:
 mount LABEL=lmi /srv/chroot
 findmnt /srv/chroot
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Reconfigured redhat chroot."  | tee /dev/tty

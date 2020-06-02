@@ -75,3 +75,6 @@ mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/cache_for_lmi
 # END   ./lmi_setup_13.sh
 
 schroot --chroot=centos7lmi --user=root --directory=/tmp ./lmi_setup_01c.sh
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0 Installed in centos chroot."  | tee /dev/tty

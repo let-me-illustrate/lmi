@@ -134,3 +134,6 @@ git clone git://git.savannah.nongnu.org/lmi.git \
 cd lmi || { printf 'failed: cd\n'; exit 3; }
 find . -path ./.git -prune -o -type f -print0 \
   | xargs --null --max-args=1 --max-procs="$(nproc)" --replace='{}' touch '--reference=/opt/lmi/src/lmi/{}' '{}'
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Tested lmi for $NORMAL_USER."  | tee /dev/tty

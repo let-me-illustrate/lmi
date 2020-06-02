@@ -60,3 +60,6 @@ wine regedit
 #     specify appropriate size: e.g., 1900x1120 for a 1920x1200 monitor
 #     (the other options don't seem to matter)
 #   then restart the application
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Installed 'wine'."  | tee /dev/tty

@@ -70,3 +70,6 @@ git config --global push.default simple
 # Use your own name and email address.
 git config --global user.email gchicares@sbcglobal.net
 git config --global user.name "Gregory W. Chicares"
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Configured 'wine' etc. for $NORMAL_USER."  | tee /dev/tty

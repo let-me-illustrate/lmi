@@ -46,3 +46,6 @@ fi
 grep centos /proc/mounts | cut -f2 -d" " | xargs --no-run-if-empty umount
 rm -rf /srv/chroot/centos7lmi
 rm /etc/schroot/chroot.d/centos7lmi.conf
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Removed old centos chroot."  | tee /dev/tty

@@ -47,3 +47,6 @@ mkdir -p "${logdir}"
 # export DISPLAY=":0.0"
 # cd /opt/lmi/bin || { printf 'failed: cd\n'; exit 3; }
 # wine ./lmi_wx_shared.exe --ash_nazg --data_path=../data
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Installed lmi for $NORMAL_USER."  | tee /dev/tty

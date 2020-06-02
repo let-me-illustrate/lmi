@@ -93,3 +93,6 @@ rm --one-file-system --recursive --force \
 rm /etc/schroot/chroot.d/"${CHRTNAME}".conf
 
 # These commands fail harmlessly if the chroot doesn't already exist.
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Removed old chroot."  | tee /dev/tty

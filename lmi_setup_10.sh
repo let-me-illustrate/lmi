@@ -34,3 +34,6 @@ apt-get --assume-yes install debootstrap schroot
 
 # To show available debootstrap scripts:
 #   ls /usr/share/debootstrap/scripts
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Installed 'debootstrap' [debian]."  | tee /dev/tty

@@ -82,4 +82,5 @@ findmnt /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 findmnt /proc
 findmnt /dev/pts
 
-echo Installed debian "${CODENAME}" chroot.
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Ran 'debootstrap'."  | tee /dev/tty

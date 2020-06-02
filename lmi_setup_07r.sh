@@ -55,3 +55,6 @@ yum --assumeyes install ca-certificates curl nss-pem wget
 # are required to install 'debootstrap' and 'schroot' later on RHEL:
 yum --assumeyes install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 yum --assumeyes install epel-release
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Installed EPEL."  | tee /dev/tty

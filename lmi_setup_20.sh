@@ -144,3 +144,6 @@ apt-get --assume-yes install wget g++-mingw-w64 automake libtool make \
 #   No schema files found: doing nothing.
 #   Warning: The home dir /run/uuidd you specified can't be accessed: No such file or directory
 #   Not creating home directory `/run/uuidd'.
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Installed debian packages."  | tee /dev/tty
