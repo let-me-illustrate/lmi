@@ -70,6 +70,8 @@ useradd \
   --password="\$1\$\$AYD8bMyx6ho3BnmO3jjb60" \
   "${NORMAL_USER}"
 
+# Where debian has a 'sudo' group, redhat has a 'wheel' group.
+# The difference seems to be nominal; neither is GID 0.
 usermod -aG wheel "${NORMAL_USER}"
 
 chsh -s /bin/zsh root
