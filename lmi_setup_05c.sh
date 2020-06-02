@@ -35,6 +35,13 @@ assert_not_chrooted
 
 [ -c /dev/null ] || ( rm /dev/null; mknod /dev/null c 1 3)
 chmod 666 /dev/null
+
+# /dev/tty likewise:
+
+[ -c /dev/tty  ] || ( rm /dev/tty ; mknod /dev/tty  c 5 0)
+chmod 666 /dev/tty
+chown root:tty /dev/tty
+
 [ -c /dev/ptmx ] || mknod /dev/ptmx c 5 2
 chmod 666 /dev/ptmx
 [ -d /dev/pts  ] || mkdir /dev/pts
