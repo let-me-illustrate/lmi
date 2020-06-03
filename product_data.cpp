@@ -529,7 +529,7 @@ static std::string const S_FnProspectus =
 static std::string const S_FnInitialSpecAmt =
   "The initial specified amount is ${{InitTotalSA}}.";
 static std::string const S_FnInforceAcctVal =
-  "The inforce unloaned account value is ${{InforceUnloanedAV}}.";
+  "The inforce account value is ${{InforceTotalAV}}.";
 static std::string const S_FnInforceTaxBasis =
   "The inforce tax basis is ${{InforceTaxBasis}}.";
 static std::string const S_Fn1035Charge =

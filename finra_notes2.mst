@@ -146,10 +146,9 @@ The state of issue is {{StateOfJurisdiction}}.
 
 {{#IsInforce}}
 <!-- PDF !! FnInforceAcctVal -->
-<!-- PDF !! Total AV is described, but only unloaned AV is shown. -->
     <p>
     This illustration assumes a beginning account value of
-    ${{InforceUnloanedAV}}
+    ${{InforceTotalAV}}
     as of {{InforceAsOfDate}},
     the end of the last completed {{ContractName}} month.
     </p>

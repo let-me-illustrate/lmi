@@ -131,7 +131,7 @@ void LedgerInvariant::Alloc(int len)
     ScalableScalars ["Dumpin"                     ] = &Dumpin                     ;
     ScalableScalars ["External1035Amount"         ] = &External1035Amount         ;
     ScalableScalars ["Internal1035Amount"         ] = &Internal1035Amount         ;
-    ScalableScalars ["InforceUnloanedAV"          ] = &InforceUnloanedAV          ;
+    ScalableScalars ["InforceTotalAV"             ] = &InforceTotalAV             ;
     ScalableScalars ["InforceTaxBasis"            ] = &InforceTaxBasis            ;
 
     // Nonscalable scalars.

@@ -159,8 +159,10 @@ void LedgerInvariant::Init(BasicValues const* b)
 //  External1035Amount         = DYNAMIC
 //  Internal1035Amount         = DYNAMIC
 
-    InforceUnloanedAV =
+    InforceTotalAV =
           b->yare_input_.InforceGeneralAccountValue
+        + b->yare_input_.InforceRegularLoanValue
+        + b->yare_input_.InforcePreferredLoanValue
         + b->yare_input_.InforceSeparateAccountValue
         ;
     InforceTaxBasis            = b->yare_input_.InforceTaxBasis           ;

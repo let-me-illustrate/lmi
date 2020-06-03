@@ -122,7 +122,7 @@ class LMI_SO LedgerInvariant final
     double      Dumpin;
     double      External1035Amount;
     double      Internal1035Amount;
-    double      InforceUnloanedAV;
+    double      InforceTotalAV;
     double      InforceTaxBasis;
 
     // Nonscalable scalars.

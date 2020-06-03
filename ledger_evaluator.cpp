@@ -472,7 +472,7 @@ format_map_t static_formats()
     ,{"ErListBillPremium"               , f2}
     ,{"GuarPrem"                        , f2}
     ,{"InforceTaxBasis"                 , f2}
-    ,{"InforceUnloanedAV"               , f2}
+    ,{"InforceTotalAV"                  , f2}
     ,{"InitGLP"                         , f2}
     ,{"InitGSP"                         , f2}
     ,{"InitPrem"                        , f2}
