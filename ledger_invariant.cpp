@@ -520,6 +520,14 @@ void LedgerInvariant::Init()
     WriteTsvFile               = false;
     SupplementalReport         = true;
 
+    // Probably this should be an "oecumenic" enumeration.
+    enum {gregorian_epoch_jdn = 2361222};
+    EffDateJdn                 = gregorian_epoch_jdn;
+    DateOfBirthJdn             = gregorian_epoch_jdn;
+    LastCoiReentryDateJdn      = gregorian_epoch_jdn;
+    ListBillDateJdn            = gregorian_epoch_jdn;
+    InforceAsOfDateJdn         = gregorian_epoch_jdn;
+
     // Private internals.
 
     irr_precision_             = 0;
