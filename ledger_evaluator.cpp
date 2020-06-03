@@ -838,6 +838,17 @@ ledger_evaluator Ledger::make_evaluator() const
         ;
     strings["DatePrepared" ] = &DatePrepared;
 
+    calendar_date inforce_as_of_date;
+    inforce_as_of_date.julian_day_number(bourn_cast<int>(invar.InforceAsOfDateJdn));
+    std::string InforceAsOfDate =
+          month_name(inforce_as_of_date.month())
+        + " "
+        + value_cast<std::string>(inforce_as_of_date.day())
+        + ", "
+        + value_cast<std::string>(inforce_as_of_date.year())
+        ;
+    strings["InforceAsOfDate" ] = &InforceAsOfDate;
+
     // PDF !! Sales-load refunds are mentioned on 'mce_ill_reg' PDFs
     // only. Other formats defectively ignore them.
     double SalesLoadRefundAvailable =
