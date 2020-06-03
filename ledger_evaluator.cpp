@@ -1000,6 +1000,8 @@ ledger_evaluator Ledger::make_evaluator() const
 
 std::string ledger_evaluator::value(std::string const& scalar_name) const
 {
+    if(!contains(scalars_, scalar_name))
+        alarum() << "Key '" << scalar_name << "' not found." << LMI_FLUSH;
     return map_lookup(scalars_, scalar_name);
 }
 
@@ -1008,6 +1010,8 @@ std::string ledger_evaluator::value
     ,int                index
     ) const
 {
+    if(!contains(vectors_, vector_name))
+        alarum() << "Key '" << vector_name << "' not found." << LMI_FLUSH;
     return map_lookup(vectors_, vector_name).at(index);
 }
 
