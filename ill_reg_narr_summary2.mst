@@ -97,16 +97,19 @@ in the Tabular Detail.
 <!-- PDF !! Total AV is described, but only unloaned AV is shown. -->
     <p>
     This illustration assumes a beginning account value of
-    ${{InforceUnloanedAV}} as of the date of this illustration.
+    ${{InforceUnloanedAV}}
+    as of {{InforceAsOfDate}},
+    the end of the last completed {{ContractName}} month.
     </p>
 
 <!-- PDF !! FnInforceTaxBasis -->
     <p>
     This illustration assumes a beginning cost basis of
-    ${{InforceTaxBasis}} as
-    of the date of this illustration; the actual cost basis
-    may be higher or lower. Consult the Home Office for cost
-    basis information.
+    ${{InforceTaxBasis}}
+    as of {{InforceAsOfDate}},
+    the end of the last completed {{ContractName}} month;
+    the actual cost basis may be higher or lower.
+    Consult the Home Office for cost basis information.
     </p>
 {{/IsInforce}}
 
