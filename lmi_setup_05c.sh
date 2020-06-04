@@ -73,6 +73,35 @@ useradd \
 # Where debian has a 'sudo' group, redhat has a 'wheel' group.
 # The difference seems to be nominal; neither is GID 0.
 usermod -aG wheel "${NORMAL_USER}"
+# Nevertheless, after exiting the chroot and reentering as 'greg':
+#   $groups greg
+#   greg : lmi wheel
+#   $sudo visudo
+#   sudo: no tty present and no askpass program specified
+#   $sudo -S visudo
+#   greg is not in the sudoers file.  This incident will be reported.
+#   $visudo
+#   greg is not in the sudoers file.
+#   $newgrp wheel
+#   $sudo visudo
+#   sudo: no tty present and no askpass program specified
+# even though the default /etc/sudoers contains:
+#   %wheel<Tab>ALL=(ALL)<Tab>ALL
+# Enabling the 'wheel' group with no password and disabling
+# 'requiretty', as shown below, didn't suffice...so explicitly add
+# the normal user:
+{
+  printf '# Customizations:\n'
+  printf '\n'
+  printf '# Disable "requiretty" if necessary--see:\n'
+  printf '#   https://bugzilla.redhat.com/show_bug.cgi?id=1020147\n'
+  printf '# Defaults    !requiretty\n'
+  printf '\n'
+  printf '%%wheel\tALL=(ALL)\tNOPASSWD: ALL\n'
+  printf -- '%s\tALL=(ALL)\tNOPASSWD: ALL\n' "${NORMAL_USER}"
+} >/etc/sudoers.d/"${NORMAL_USER}"
+chmod 0440 /etc/sudoers.d/"${NORMAL_USER}"
+visudo -cs
 
 chsh -s /bin/zsh root
 chsh -s /bin/zsh "${NORMAL_USER}"
