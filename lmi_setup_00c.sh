@@ -62,17 +62,7 @@ cp -a .vimrc           /srv/chroot/centos7lmi/tmp
 cp -a en.utf-8.add     /srv/chroot/centos7lmi/tmp
 cp -a install_msw.sh   /srv/chroot/centos7lmi/tmp
 
-# BEGIN ./lmi_setup_13.sh
-CACHEDIR=/var/cache/"${CODENAME}"
-mkdir -p "${CACHEDIR}"
-mkdir -p /srv/chroot/centos7lmi/"${CACHEDIR}"
-mount --bind "${CACHEDIR}" /srv/chroot/centos7lmi/"${CACHEDIR}"
-
-mkdir -p /srv/cache_for_lmi
-du   -sb /srv/chroot/centos7lmi/srv/cache_for_lmi || echo "Okay."
-mkdir -p /srv/chroot/centos7lmi/srv/cache_for_lmi
-mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/cache_for_lmi
-# END   ./lmi_setup_13.sh
+./lmi_setup_13c.sh
 
 schroot --chroot=centos7lmi --user=root --directory=/tmp ./lmi_setup_01c.sh
 

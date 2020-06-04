@@ -34,15 +34,7 @@ assert_not_chrooted
 ./lmi_setup_07r.sh
 ./lmi_setup_10r.sh
 ./lmi_setup_11.sh
-
-# BEGIN ./lmi_setup_13.sh
-# For caveats, see:
-#    https://lists.nongnu.org/archive/html/lmi/2020-05/msg00040.html
-mkdir -p /srv/cache_for_lmi
-du   -sb /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi || echo "Okay."
-mkdir -p /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
-mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
-# END   ./lmi_setup_13.sh
+./lmi_setup_13.sh
 
 cp -a /tmp/schroot_env /srv/chroot/"${CHRTNAME}"/tmp
 cp -a lmi_setup_*.sh   /srv/chroot/"${CHRTNAME}"/tmp
