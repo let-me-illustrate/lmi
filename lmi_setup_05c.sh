@@ -24,7 +24,7 @@
 . ./lmi_setup_inc.sh
 . /tmp/schroot_env
 
-set -vx
+set -evx
 
 assert_su
 assert_not_chrooted
@@ -33,12 +33,12 @@ assert_not_chrooted
 #   -rw-r--r-- 1 root root    0 Oct  1 15:44 /dev/null
 # so it needs to be removed to create the pseudo-device.
 
-[ -c /dev/null ] || ( rm /dev/null; mknod /dev/null c 1 3)
+[ -c /dev/null ] || ( rm --force /dev/null; mknod /dev/null c 1 3)
 chmod 666 /dev/null
 
 # /dev/tty likewise:
 
-[ -c /dev/tty  ] || ( rm /dev/tty ; mknod /dev/tty  c 5 0)
+[ -c /dev/tty  ] || ( rm --force /dev/tty ; mknod /dev/tty  c 5 0)
 chmod 666 /dev/tty
 chown root:tty /dev/tty
 

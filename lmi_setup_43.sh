@@ -24,7 +24,7 @@
 . ./lmi_setup_inc.sh
 . /tmp/schroot_env
 
-set -vx
+set -evx
 
 assert_not_su
 assert_chrooted
@@ -100,7 +100,7 @@ rm /opt/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/build/ship/my*
 # Regenerate the binary database (expect the 'rm' command here to fail
 # the first time, because there are no old files to remove):
 cd /opt/lmi/data || { printf 'failed: cd\n'; exit 3; }
-rm proprietary.dat proprietary.ndx
+rm --force proprietary.dat proprietary.ndx
 wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
 
 coefficiency="--jobs=$(nproc)"

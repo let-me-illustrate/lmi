@@ -24,7 +24,7 @@
 . ./lmi_setup_inc.sh
 . /tmp/schroot_env
 
-set -vx
+set -evx
 
 assert_su
 assert_not_chrooted
@@ -52,7 +52,7 @@ debootstrap --arch=amd64 --cache-dir="${CACHEDIR}" \
  "${CODENAME}" /srv/chroot/"${CHRTNAME}" >"${CHRTNAME}"-debootstrap-log 2>&1
 
 # This command should produce no output:
-grep --invert-match '^I:' "${CHRTNAME}"-debootstrap-log
+grep --invert-match '^I:' "${CHRTNAME}"-debootstrap-log || true
 
 cat >/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
 [${CHRTNAME}]

@@ -24,7 +24,7 @@
 . ./lmi_setup_inc.sh
 . /tmp/schroot_env
 
-set -vx
+set -evx
 
 assert_su
 assert_chrooted
