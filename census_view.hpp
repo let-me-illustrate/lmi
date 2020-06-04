@@ -56,7 +56,7 @@ class CensusView final
     CensusView(CensusView const&) = delete;
     CensusView& operator=(CensusView const&) = delete;
 
-    void update_visible_columns();
+    bool update_visible_columns();
 
     CensusDocument& document() const;
 
@@ -92,7 +92,7 @@ class CensusView final
 
     bool DoAllCells(mcenum_emission);
 
-    void Update();
+    bool Update();
     void ViewOneCell(int);
     void ViewComposite();
 
@@ -133,6 +133,14 @@ class CensusView final
 
     wxDataViewCtrl* list_window_;
     wxObjectDataPtr<CensusViewDataViewModel> list_model_;
+
+    struct header_column
+    {
+        std::string      name;
+        oenum_visibility visibility{oe_shown};
+    };
+
+    std::vector<header_column> current_headers_;
 
     DECLARE_DYNAMIC_CLASS(CensusView)
     DECLARE_EVENT_TABLE()
