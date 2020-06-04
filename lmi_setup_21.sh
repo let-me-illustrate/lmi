@@ -73,6 +73,8 @@ chown "${NORMAL_USER}":"${NORMAL_GROUP}" /srv/cache_for_lmi
 
 chsh -s /bin/zsh "${NORMAL_USER}"
 
+./lmi_setup_25.sh
+
 # Repair /usr/share/libtool/.../ltmain.sh as indicated here:
 #   https://lists.gnu.org/archive/html/libtool-patches/2011-06/msg00001.html
 # Do this as root because root owns the file.
@@ -93,38 +95,6 @@ EOF
 
 patch --dry-run --strip=0 --directory=/ </home/"${NORMAL_USER}"/ltmain.sh.patch \
  && patch --strip=0 --directory=/ </home/"${NORMAL_USER}"/ltmain.sh.patch
-
-# BEGIN ./lmi_setup_09.sh
-# Configure zsh, for root and normal users.
-
-cp -a .zshrc ~
-cp -a ~/.zshrc /home/"${NORMAL_USER}"/.zshrc
-chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.zshrc
-
-# Configure vim. Rather than trying to split its contents between
-# '~/.vimrc' and '/etc/vim/vimrc.local', use '~/.vimrc' for all
-# customizations and copy that file for the normal user too.
-
-cp -a .vimrc ~
-cp -a ~/.vimrc /home/"${NORMAL_USER}"/.vimrc
-chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.vimrc
-
-# Without this, 'zg' gives an error message; with it, vim creates a
-# spellfile the first time 'zg' is used, if none already exists.
-mkdir ~/.vim
-mkdir /home/"${NORMAL_USER}"/.vim
-chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.vim
-# It's a much better idea to install a mature spellfile:
-mkdir ~/.vim/spell
-cp -a en.utf-8.add ~/.vim/spell/en.utf-8.add
-mkdir /home/"${NORMAL_USER}"/.vim/spell
-chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.vim/spell
-cp -a ~/.vim/spell/en.utf-8.add /home/"${NORMAL_USER}"/.vim/spell/en.utf-8.add
-chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.vim/spell/en.utf-8.add
-# and then (imperatively) run this command:
-vim -es -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
-# which will be repeated later for the normal user.
-# END   ./lmi_setup_09.sh
 
 # Enable stable and security upgrades--see:
 #    https://www.debian.org/releases/stretch/amd64/apds03.html.en#idm4504

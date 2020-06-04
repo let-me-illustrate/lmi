@@ -31,42 +31,11 @@ assert_not_chrooted
 
 ./lmi_setup_05c.sh
 ./lmi_setup_07r.sh
-
-# BEGIN ./lmi_setup_09.sh
-# Configure zsh, for root and normal users.
-
-cp -a .zshrc ~
-cp -a ~/.zshrc /home/"${NORMAL_USER}"/.zshrc
-chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.zshrc
-
-# Configure vim. Rather than trying to split its contents between
-# '~/.vimrc' and '/etc/vim/vimrc.local', use '~/.vimrc' for all
-# customizations and copy that file for the normal user too.
-
-cp -a .vimrc ~
-cp -a ~/.vimrc /home/"${NORMAL_USER}"/.vimrc
-chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.vimrc
-
-# Without this, 'zg' gives an error message; with it, vim creates a
-# spellfile the first time 'zg' is used, if none already exists.
-mkdir ~/.vim
-mkdir /home/"${NORMAL_USER}"/.vim
-chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.vim
-# It's a much better idea to install a mature spellfile:
-mkdir ~/.vim/spell
-cp -a en.utf-8.add ~/.vim/spell/en.utf-8.add
-mkdir /home/"${NORMAL_USER}"/.vim/spell
-chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.vim/spell
-cp -a ~/.vim/spell/en.utf-8.add /home/"${NORMAL_USER}"/.vim/spell/en.utf-8.add
-chown "${NORMAL_USER}":"${NORMAL_GROUP}" /home/"${NORMAL_USER}"/.vim/spell/en.utf-8.add
-# and then (imperatively) run this command:
-vim -es -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
-# which will be repeated later for the normal user.
-# END   ./lmi_setup_09.sh
-
 ./lmi_setup_10r.sh
 ./lmi_setup_11.sh
 ./lmi_setup_13.sh
+
+./lmi_setup_25.sh
 
 cp -a /tmp/schroot_env /srv/chroot/"${CHRTNAME}"/tmp
 cp -a lmi_setup_*.sh   /srv/chroot/"${CHRTNAME}"/tmp
