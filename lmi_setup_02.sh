@@ -70,6 +70,7 @@ assert_not_chrooted
 # along with '-r' because '-l' does a poor job of columnization.
 
 umount /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
+umount /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
 umount /srv/chroot/"${CHRTNAME}"/dev/pts
 umount /srv/chroot/"${CHRTNAME}"/proc
 
