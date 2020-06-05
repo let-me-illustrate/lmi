@@ -69,10 +69,10 @@ assert_not_chrooted
 #   | column -t
 # along with '-r' because '-l' does a poor job of columnization.
 
-umount /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
-umount /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
-umount /srv/chroot/"${CHRTNAME}"/dev/pts
-umount /srv/chroot/"${CHRTNAME}"/proc
+umount /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || true
+umount /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi      || true
+umount /srv/chroot/"${CHRTNAME}"/dev/pts                || true
+umount /srv/chroot/"${CHRTNAME}"/proc                   || true
 
 findmnt -ro SOURCE,TARGET \
   | grep "${CHRTNAME}" \
@@ -91,7 +91,7 @@ rm --one-file-system --recursive --force \
 
 # schroot allows configuration files in /etc/schroot/chroot.d/ only.
 
-rm /etc/schroot/chroot.d/"${CHRTNAME}".conf
+rm --force /etc/schroot/chroot.d/"${CHRTNAME}".conf
 
 # These commands fail harmlessly if the chroot doesn't already exist.
 

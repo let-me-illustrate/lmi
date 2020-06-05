@@ -53,7 +53,7 @@ yum --assumeyes install ca-certificates curl nss-pem wget
 #rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 # Instead, use 'yum' to install "EPEL". Both of the following lines
 # are required to install 'debootstrap' and 'schroot' later on RHEL:
-yum --assumeyes install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+yum --assumeyes install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm || true
 yum --assumeyes install epel-release
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
