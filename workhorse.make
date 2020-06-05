@@ -157,7 +157,7 @@ else ifeq (8.1.0,$(gnu_cpp_version))
 else ifeq (8.2.0,$(gnu_cpp_version))
 else ifeq (8.3.0,$(gnu_cpp_version))
 else ifeq (9.3.0,$(gnu_cpp_version))
-else ifeq (10.0.0,$(gnu_cpp_version))
+else ifeq (10.0,$(gnu_cpp_version))
 else
   $(warning Untested $(GNU_CPP) version '$(gnu_cpp_version)')
 endif
@@ -173,7 +173,7 @@ else ifeq (8.1.0,$(gnu_cxx_version))
 else ifeq (8.2.0,$(gnu_cxx_version))
 else ifeq (8.3.0,$(gnu_cxx_version))
 else ifeq (9.3.0,$(gnu_cxx_version))
-else ifeq (10.0.0,$(gnu_cxx_version))
+else ifeq (10.0,$(gnu_cxx_version))
 else
   $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
 endif
@@ -412,7 +412,7 @@ else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
   gcc_version_specific_warnings := \
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
-else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0 8.3.0 9.3.0 10.0.0))
+else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0 8.3.0 9.3.0 10.0))
   gcc_version_specific_warnings := \
 
   ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
