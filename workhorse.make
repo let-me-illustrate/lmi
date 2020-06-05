@@ -550,6 +550,7 @@ $(wx_dependent_objects): gcc_common_extra_warnings += \
   -Wno-cast-qual \
   -Wno-deprecated-copy \
   -Wno-double-promotion \
+  -Wno-duplicated-branches \
   -Wno-format-nonliteral \
   -Wno-noexcept \
   -Wno-sign-conversion \

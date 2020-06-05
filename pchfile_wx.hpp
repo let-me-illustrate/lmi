@@ -42,8 +42,10 @@
 #   if 9 <= __GNUC__
 #       pragma GCC diagnostic ignored "-Wdeprecated-copy"
 #   endif // 9 <= __GNUC__
-//  only 'strvararg.h:1048:19':
+//  "-Wdouble-promotion": only 'strvararg.h:1048:19':
 #   pragma GCC diagnostic ignored "-Wdouble-promotion"
+//  "-Wduplicated-branches": only 'testing.h:55:38':
+#   pragma GCC diagnostic ignored "-Wduplicated-branches"
 #   pragma GCC diagnostic ignored "-Wformat-nonliteral"
 #   pragma GCC diagnostic ignored "-Wnoexcept"
 #   pragma GCC diagnostic ignored "-Wsign-conversion"
