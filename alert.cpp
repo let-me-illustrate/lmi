@@ -141,7 +141,7 @@ class alert_buf
   private:
     virtual void raise_alert() = 0;
 
-    std::string alert_string_;
+    std::string alert_string_ {};
 };
 
 class status_buf
