@@ -71,7 +71,7 @@ void report_catastrophe(char const* message)
     safely_show_on_stderr(message);
 #if defined LMI_MSW
     ::MessageBoxA
-        (0
+        (nullptr
         ,message
         ,"Catastrophic error"
         ,MB_OK | MB_SETFOREGROUND | MB_ICONHAND | MB_SYSTEMMODAL
