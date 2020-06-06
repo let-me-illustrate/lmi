@@ -52,15 +52,15 @@ int try_main(int argc, char* argv[])
     // librarian. TRICKY !! They are aliased to unlikely octal values.
     static Option long_options[] =
       {
-        {"help",         NO_ARG,   0, 001, 0, "display this help and exit"},
-        {"license",      NO_ARG,   0, 002, 0, "display license and exit"},
-        {"accept",       NO_ARG,   0, 003, 0, "accept license (-l to display)"},
-        {"program",      REQD_ARG, 0, 004, 0, "librarian's filepath"},
-        {"r",            REQD_ARG, 0, 'r', 0, "see inline documentation"},
-        {"s",            REQD_ARG, 0, 's', 0, "see inline documentation"},
-        {"u",            REQD_ARG, 0, 'u', 0, "see inline documentation"},
-        {"v",            REQD_ARG, 0, 'v', 0, "see inline documentation"},
-        {0,              NO_ARG,   0,   0, 0, ""}
+        {"help",         NO_ARG,   nullptr, 001, nullptr, "display this help and exit"},
+        {"license",      NO_ARG,   nullptr, 002, nullptr, "display license and exit"},
+        {"accept",       NO_ARG,   nullptr, 003, nullptr, "accept license (-l to display)"},
+        {"program",      REQD_ARG, nullptr, 004, nullptr, "librarian's filepath"},
+        {"r",            REQD_ARG, nullptr, 'r', nullptr, "see inline documentation"},
+        {"s",            REQD_ARG, nullptr, 's', nullptr, "see inline documentation"},
+        {"u",            REQD_ARG, nullptr, 'u', nullptr, "see inline documentation"},
+        {"v",            REQD_ARG, nullptr, 'v', nullptr, "see inline documentation"},
+        {nullptr,        NO_ARG,   nullptr, 000, nullptr, ""}
       };
 
     bool license_accepted = false;

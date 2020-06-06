@@ -445,19 +445,19 @@ int try_main(int argc, char* argv[])
     int option_index = 0;
     static struct Option long_options[] =
       {
-        {"help"        ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
-        {"delete"      ,REQD_ARG ,0 ,'d' ,0 ,"delete table #n from database"},
-        {"license"     ,NO_ARG   ,0 ,'l' ,0 ,"display license and exit"},
-        {"accept"      ,NO_ARG   ,0 ,'a' ,0 ,"accept license (-l to display)"},
-        {"file=FILE"   ,REQD_ARG ,0 ,'f' ,0 ,"use database FILE"},
-        {"crc"         ,NO_ARG   ,0 ,'c' ,0 ,"show CRCs of all tables"},
-        {"list"        ,NO_ARG   ,0 ,'t' ,0 ,"list all tables"},
-        {"merge=PATH"  ,REQD_ARG ,0 ,'m' ,0 ,"merge PATH (file or dir) into database"},
-        {"extract=n"   ,REQD_ARG ,0 ,'e' ,0 ,"extract table #n into '0000n.rates'"},
-        {"extract-all" ,NO_ARG   ,0 ,'x' ,0 ,"extract all tables to '.rates' files"},
-        {"rename=FILE" ,REQD_ARG ,0 ,'r' ,0 ,"rename tables from FILE"},
-        {"verify"      ,NO_ARG   ,0 ,'v' ,0 ,"verify integrity of all tables"},
-        {0             ,NO_ARG   ,0 ,0   ,0 ,""}
+        {"help"        ,NO_ARG   ,nullptr ,'h' ,nullptr ,"display this help and exit"},
+        {"delete"      ,REQD_ARG ,nullptr ,'d' ,nullptr ,"delete table #n from database"},
+        {"license"     ,NO_ARG   ,nullptr ,'l' ,nullptr ,"display license and exit"},
+        {"accept"      ,NO_ARG   ,nullptr ,'a' ,nullptr ,"accept license (-l to display)"},
+        {"file=FILE"   ,REQD_ARG ,nullptr ,'f' ,nullptr ,"use database FILE"},
+        {"crc"         ,NO_ARG   ,nullptr ,'c' ,nullptr ,"show CRCs of all tables"},
+        {"list"        ,NO_ARG   ,nullptr ,'t' ,nullptr ,"list all tables"},
+        {"merge=PATH"  ,REQD_ARG ,nullptr ,'m' ,nullptr ,"merge PATH (file or dir) into database"},
+        {"extract=n"   ,REQD_ARG ,nullptr ,'e' ,nullptr ,"extract table #n into '0000n.rates'"},
+        {"extract-all" ,NO_ARG   ,nullptr ,'x' ,nullptr ,"extract all tables to '.rates' files"},
+        {"rename=FILE" ,REQD_ARG ,nullptr ,'r' ,nullptr ,"rename tables from FILE"},
+        {"verify"      ,NO_ARG   ,nullptr ,'v' ,nullptr ,"verify integrity of all tables"},
+        {nullptr       ,NO_ARG   ,nullptr ,000 ,nullptr ,""}
       };
     bool license_accepted = false;
     bool show_license     = false;

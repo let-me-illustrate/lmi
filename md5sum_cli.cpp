@@ -96,14 +96,14 @@ int try_main(int argc, char* argv[])
     int option_index = 0;
     struct Option long_options[] =
         {
-            {"binary"      ,NO_ARG   ,0 ,'b'            ,0 ,""},
-            {"check"       ,NO_ARG   ,0 ,'c'            ,0 ,""},
-            {"quiet"       ,NO_ARG   ,0 ,QUIET_OPTION   ,0 ,""},
-            {"status"      ,NO_ARG   ,0 ,STATUS_OPTION  ,0 ,""},
-            {"text"        ,NO_ARG   ,0 ,'t'            ,0 ,""},
-            {"help"        ,NO_ARG   ,0 ,HELP_OPTION    ,0 ,""},
-            {"version"     ,NO_ARG   ,0 ,VERSION_OPTION ,0 ,""},
-            {0             ,NO_ARG   ,0 ,0              ,0 ,""}
+            {"binary"      ,NO_ARG   ,nullptr ,'b'            ,nullptr ,""},
+            {"check"       ,NO_ARG   ,nullptr ,'c'            ,nullptr ,""},
+            {"quiet"       ,NO_ARG   ,nullptr ,QUIET_OPTION   ,nullptr ,""},
+            {"status"      ,NO_ARG   ,nullptr ,STATUS_OPTION  ,nullptr ,""},
+            {"text"        ,NO_ARG   ,nullptr ,'t'            ,nullptr ,""},
+            {"help"        ,NO_ARG   ,nullptr ,HELP_OPTION    ,nullptr ,""},
+            {"version"     ,NO_ARG   ,nullptr ,VERSION_OPTION ,nullptr ,""},
+            {nullptr       ,NO_ARG   ,nullptr ,000            ,nullptr ,""}
         };
 
     bool show_help = false;
