@@ -662,7 +662,7 @@ bool Skeleton::OnInit()
         // developers.
         struct DebugStderrLog : wxLogInterposer
         {
-            virtual void DoLogTextAtLevel(wxLogLevel level, wxString const& msg)
+            void DoLogTextAtLevel(wxLogLevel level, wxString const& msg) override
                 {
                 switch(level)
                     {
