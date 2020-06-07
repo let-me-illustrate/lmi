@@ -154,7 +154,7 @@ void safe_message_alert(char const* message)
 {
     safely_show_on_stderr(message);
 #if defined LMI_MSW
-    HWND handle = 0;
+    HWND handle = nullptr;
     if(wxTheApp && wxTheApp->GetTopWindow())
         {
         handle = reinterpret_cast<HWND>(wxTheApp->GetTopWindow()->GetHandle());

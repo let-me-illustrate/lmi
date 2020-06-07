@@ -1193,18 +1193,18 @@ bool Skeleton::ProcessCommandLine()
     // TRICKY !! Some long options are aliased to unlikely octal values.
     static Option long_options[] =
       {
-        {"ash_nazg"     ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
-        {"ash_naz"      ,NO_ARG   ,0 ,077 ,0 ,"fraud"},
-        {"mellon"       ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
-        {"mello"        ,NO_ARG   ,0 ,077 ,0 ,"fraud"},
-        {"prospicience" ,REQD_ARG ,0 ,003 ,0 ,"validation date"},
-        {"data_path"    ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
-        {"file"         ,REQD_ARG ,0 ,'f' ,0 ,"input file to run"},
-        {"help"         ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
-        {"print_db"     ,NO_ARG   ,0 ,'p' ,0 ,"print products and exit"},
-        {"test_db"      ,NO_ARG   ,0 ,'t' ,0 ,"test products and exit"},
-        {"pyx"          ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
-        {0              ,NO_ARG   ,0 ,0   ,0 ,""}
+        {"ash_nazg"     ,NO_ARG   ,nullptr ,001 ,nullptr ,"ash nazg durbatulûk"},
+        {"ash_naz"      ,NO_ARG   ,nullptr ,077 ,nullptr ,"fraud"},
+        {"mellon"       ,NO_ARG   ,nullptr ,002 ,nullptr ,"pedo mellon a minno"},
+        {"mello"        ,NO_ARG   ,nullptr ,077 ,nullptr ,"fraud"},
+        {"prospicience" ,REQD_ARG ,nullptr ,003 ,nullptr ,"validation date"},
+        {"data_path"    ,REQD_ARG ,nullptr ,'d' ,nullptr ,"path to data files"},
+        {"file"         ,REQD_ARG ,nullptr ,'f' ,nullptr ,"input file to run"},
+        {"help"         ,NO_ARG   ,nullptr ,'h' ,nullptr ,"display this help and exit"},
+        {"print_db"     ,NO_ARG   ,nullptr ,'p' ,nullptr ,"print products and exit"},
+        {"test_db"      ,NO_ARG   ,nullptr ,'t' ,nullptr ,"test products and exit"},
+        {"pyx"          ,REQD_ARG ,nullptr ,'x' ,nullptr ,"for docimasy"},
+        {nullptr        ,NO_ARG   ,nullptr ,000 ,nullptr ,""}
       };
 
     std::vector<std::string> input_files;
