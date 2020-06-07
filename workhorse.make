@@ -550,7 +550,6 @@ wx_dependent_objects :=
 $(wx_dependent_objects): gcc_common_extra_warnings += \
   -Wno-cast-function-type \
   -Wno-cast-qual \
-  -Wno-deprecated-copy \
   -Wno-double-promotion \
   -Wno-duplicated-branches \
   -Wno-format-nonliteral \
@@ -578,13 +577,11 @@ operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
 # Some boost-1.33.1 libraries are incompatible with many warnings.
 
 $(boost_filesystem_objects): gcc_common_extra_warnings += \
-  -Wno-deprecated-copy \
   -Wno-deprecated-declarations \
   -Wno-unused-macros \
 
 $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
-  -Wno-deprecated-copy \
   -Wno-duplicated-branches \
   -Wno-implicit-fallthrough \
   -Wno-register \
@@ -599,7 +596,6 @@ boost_dependent_objects := \
   test_coding_rules.o \
 
 $(boost_dependent_objects): gcc_common_extra_warnings += \
-  -Wno-deprecated-copy \
   -Wno-switch-enum \
   -Wno-unused-local-typedefs
 
