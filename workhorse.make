@@ -503,21 +503,26 @@ gcc_cxx_warnings := \
   -Wc++11-compat \
   -Wc++14-compat \
   -Wc++1z-compat \
+  -Wcatch-value=3 \
   -Wconditionally-supported \
   -Wctor-dtor-privacy \
   -Wdelete-non-virtual-dtor \
   -Wdeprecated \
+  -Wextra-semi \
   -Wnoexcept \
   -Wnoexcept-type \
   -Wnon-template-friend \
   -Wnon-virtual-dtor \
   -Woverloaded-virtual \
+  -Wplacement-new=2 \
   -Wpmf-conversions \
   -Wregister \
   -Wreorder \
   -Wstrict-null-sentinel \
+  -Wsuggest-override \
   -Wsynth \
   -Wuseless-cast \
+  -Wzero-as-null-pointer-constant \
 
 # Warnings that are not generally useful.
 #
@@ -579,6 +584,7 @@ operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
 $(boost_filesystem_objects): gcc_common_extra_warnings += \
   -Wno-deprecated-declarations \
   -Wno-unused-macros \
+  -Wno-zero-as-null-pointer-constant \
 
 $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
@@ -589,6 +595,7 @@ $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-switch-enum \
   -Wno-unused-macros \
   -Wno-useless-cast \
+  -Wno-zero-as-null-pointer-constant \
 
 boost_dependent_objects := \
   $(boost_regex_objects) \
@@ -598,6 +605,9 @@ boost_dependent_objects := \
 $(boost_dependent_objects): gcc_common_extra_warnings += \
   -Wno-switch-enum \
   -Wno-unused-local-typedefs
+
+$(cgicc_objects): gcc_common_extra_warnings += \
+  -Wno-zero-as-null-pointer-constant \
 
 expression_template_0_test.o: gcc_common_extra_warnings += \
   -Wno-conversion \

@@ -50,6 +50,7 @@
 #   pragma GCC diagnostic ignored "-Wnoexcept"
 #   pragma GCC diagnostic ignored "-Wsign-conversion"
 #   pragma GCC diagnostic ignored "-Wuseless-cast"
+#   pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 #endif // defined __GNUC__ && !defined __clang__
 
 #if defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
