@@ -295,10 +295,12 @@ wx_config_check:
 #   http://lists.gnu.org/archive/html/lmi/2006-10/msg00046.html
 # for some discussion.
 
-all_include_directories := \
+lmi_include_directories := \
   $(srcdir) \
   $(srcdir)/tools/pete-2.1.1 \
   $(overriding_include_directories) \
+
+sys_include_directories := \
   $(compiler_include_directory) \
   $(wx_include_paths) \
   /opt/lmi/third_party/include \
@@ -855,7 +857,8 @@ endif
 # before or after '=' is an error.
 
 REQUIRED_CPPFLAGS = \
-  $(addprefix -I , $(all_include_directories)) \
+  $(addprefix -I , $(lmi_include_directories)) \
+  $(addprefix -isystem , $(sys_include_directories)) \
   $(lmi_wx_new_so_attributes) \
   $(actually_used_lmi_so_attributes) \
   $(platform_defines) \
@@ -924,19 +927,13 @@ REQUIRED_LDFLAGS = \
   $(REQUIRED_LIBS) \
 
 # The '--use-temp-file' windres option seems to be often helpful and
-# never harmful. The $(subst) workaround for '-I' isn't needed with
-#   GNU windres 2.15.91 20040904
-# and later versions, but is needed with
-#   GNU windres 2.13.90 20030111
-# and earlier versions. The $(subst) workaround for '-mno-cygwin' is
-# needed as long as
-#  - that option is included in $(ALL_CPPFLAGS), as it apparently
-#      should be because it affects the preprocessor; and
-#  - $(ALL_CPPFLAGS) is passed to 'windres', which seems common; and
-#  - 'windres' doesn't gracefully ignore that option.
+# never harmful.
+#
+# As seems customary, $(ALL_CPPFLAGS) is passed to 'windres', which
+# doesn't recognize '-isystem'--hence the $(subst) workaround.
 
 REQUIRED_RCFLAGS = \
-  $(subst -mno-cygwin,,$(subst -I,--include-dir ,$(ALL_CPPFLAGS))) \
+  $(subst -isystem,--include-dir,$(ALL_CPPFLAGS)) \
   --use-temp-file \
 
 # To create msw import libraries, use '-Wl,--out-implib,$@.a'. There
@@ -1617,7 +1614,8 @@ show_flags:
 	@printf 'ALL_LDFLAGS             = "%s"\n' "$(ALL_LDFLAGS)"
 	@printf 'ALL_RCFLAGS             = "%s"\n' "$(ALL_RCFLAGS)"
 	@printf 'srcdir                  = "%s"\n' "$(srcdir)"
-	@printf 'all_include_directories = "%s"\n' "$(all_include_directories)"
+	@printf 'lmi_include_directories = "%s"\n' "$(lmi_include_directories)"
+	@printf 'sys_include_directories = "%s"\n' "$(sys_include_directories)"
 	@printf 'all_source_directories  = "%s"\n' "$(all_source_directories)"
 	@printf 'wx_include_paths        = "%s"\n' "$(wx_include_paths)"
 	@printf 'wx_libraries            = "%s"\n' "$(wx_libraries)"
