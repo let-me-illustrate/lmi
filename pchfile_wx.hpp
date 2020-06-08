@@ -49,7 +49,6 @@
 #   pragma GCC diagnostic ignored "-Wformat-nonliteral"
 #   pragma GCC diagnostic ignored "-Wnoexcept"
 #   pragma GCC diagnostic ignored "-Wsign-conversion"
-#   pragma GCC diagnostic ignored "-Wuseless-cast"
 #   pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 #endif // defined __GNUC__ && !defined __clang__
 
