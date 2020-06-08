@@ -35,17 +35,6 @@
 // disable some warnings which are enabled for the rest of lmi code but have to
 // be disabled for the code using wxWidgets as they occur in wxWidgets headers.
 #if defined __GNUC__ && !defined __clang__
-#   pragma GCC diagnostic ignored "-Wcast-qual"
-#   if 9 <= __GNUC__
-#       pragma GCC diagnostic ignored "-Wdeprecated-copy"
-#   endif // 9 <= __GNUC__
-//  "-Wdouble-promotion": only 'strvararg.h:1048:19':
-#   pragma GCC diagnostic ignored "-Wdouble-promotion"
-//  "-Wduplicated-branches": only 'testing.h:55:38':
-#   pragma GCC diagnostic ignored "-Wduplicated-branches"
-#   pragma GCC diagnostic ignored "-Wformat-nonliteral"
-#   pragma GCC diagnostic ignored "-Wnoexcept"
-#   pragma GCC diagnostic ignored "-Wsign-conversion"
 #   pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 #endif // defined __GNUC__ && !defined __clang__
 
