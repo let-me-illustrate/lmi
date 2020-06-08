@@ -597,15 +597,6 @@ $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-useless-cast \
   -Wno-zero-as-null-pointer-constant \
 
-boost_dependent_objects := \
-  $(boost_regex_objects) \
-  regex_test.o \
-  test_coding_rules.o \
-
-$(boost_dependent_objects): gcc_common_extra_warnings += \
-  -Wno-switch-enum \
-  -Wno-unused-local-typedefs
-
 $(cgicc_objects): gcc_common_extra_warnings += \
   -Wno-zero-as-null-pointer-constant \
 
