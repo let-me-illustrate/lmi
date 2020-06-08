@@ -542,26 +542,6 @@ postponed_gcc_cxx_warnings := \
 gcc_common_extra_warnings := \
   -Wcast-qual \
 
-# WX !! The wx library triggers many diagnostics with the following
-# 'extra' flags. This makefile used to inhibit these flags for source
-# files that seemed to depend on wx according to a casual heuristic,
-# but now they're inhibited by a #pragma in the PCH file that all wx-
-# dependent TUs must include. For clarity, define this empty variable
-# and spell out the warnings here so that all warnings can be seen in
-# this one makefile.
-
-wx_dependent_objects :=
-
-$(wx_dependent_objects): gcc_common_extra_warnings += \
-  -Wno-cast-function-type \
-  -Wno-cast-qual \
-  -Wno-double-promotion \
-  -Wno-duplicated-branches \
-  -Wno-format-nonliteral \
-  -Wno-noexcept \
-  -Wno-sign-conversion \
-  -Wno-useless-cast \
-
 bourn_cast_test.o: gcc_common_extra_warnings += \
   -Wno-double-promotion \
 
@@ -591,11 +571,6 @@ $(cgicc_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
   -Wno-zero-as-null-pointer-constant \
 
-expression_template_0_test.o: gcc_common_extra_warnings += \
-  -Wno-conversion \
-  -Wno-switch-enum \
-  -Wno-unused-local-typedefs
-
 # The boost regex library improperly defines "NOMINMAX":
 #   http://lists.boost.org/Archives/boost/2006/03/102189.php
 # at least in version 1.33.1, and there seems to be no easy workaround
@@ -623,14 +598,6 @@ endif
 
 # Too many warnings for wx and various boost libraries:
 #  -Wold-style-cast \
-
-# XMLWRAPP !! Remove these workarounds after updating xmlwrapp. See:
-#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00018.html
-# et seqq.:
-$(xmlwrapp_objects): gcc_common_extra_warnings += \
-  -Wno-conversion \
-  -Wno-null-dereference \
-  -Wno-switch-enum \
 
 # SOMEDAY !! Address some of these '-Wconversion' issues.
 
