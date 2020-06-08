@@ -46,11 +46,26 @@ class jdn_t;
 /// (C++98 5.4), which is inherently unsafe. Its sole virtue is that
 /// it is easily searched for.
 
+#if defined __clang__
+#   pragma clang diagnostic push
+// Commented out--clang doesn't seem to have this diagnostic:
+// #   pragma clang diagnostic ignored "-Wcast-function-type"
+#elif defined __GNUC__
+#   pragma GCC diagnostic push
+#   if 8 <= __GNUC__
+#       pragma GCC diagnostic ignored "-Wcast-function-type"
+#   endif // 8 <= __GNUC__
+#endif // defined __GNUC__
 template<typename To, typename From>
 To c_cast(From z)
 {
     return (To)(z);
 }
+#if defined __clang__
+#   pragma clang diagnostic pop
+#elif defined __GNUC__
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__
 
 /// Encapsulate wx clipboard.
 ///

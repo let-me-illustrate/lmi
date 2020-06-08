@@ -35,9 +35,6 @@
 // disable some warnings which are enabled for the rest of lmi code but have to
 // be disabled for the code using wxWidgets as they occur in wxWidgets headers.
 #if defined __GNUC__ && !defined __clang__
-#   if 8 <= __GNUC__
-#       pragma GCC diagnostic ignored "-Wcast-function-type"
-#   endif // 8 <= __GNUC__
 #   pragma GCC diagnostic ignored "-Wcast-qual"
 #   if 9 <= __GNUC__
 #       pragma GCC diagnostic ignored "-Wdeprecated-copy"
