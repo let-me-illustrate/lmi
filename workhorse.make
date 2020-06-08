@@ -568,9 +568,6 @@ bourn_cast_test.o: gcc_common_extra_warnings += \
 currency_test.o: gcc_common_extra_warnings += \
   -Wno-useless-cast \
 
-md5.o: gcc_common_extra_warnings += \
-  -Wno-useless-cast \
-
 # Boost didn't remove an unused parameter in this file, which also
 # seems to contain a "maybe-uninitialized" variable--see:
 #   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00080.html

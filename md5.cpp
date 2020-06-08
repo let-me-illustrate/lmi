@@ -88,6 +88,12 @@
 # define SWAP(n) (n)
 #endif // !defined WORDS_BIGENDIAN
 
+#if defined __GNUC__ && !defined __clang__
+#   if 7 <= __GNUC__
+#       pragma GCC diagnostic ignored "-Wuseless-cast"
+#   endif // 7 <= __GNUC__
+#endif // defined __GNUC__ && !defined __clang__
+
 /* This array contains the bytes used to pad the buffer to the next
  * 64-byte boundary. (RFC 1321, 3.1: Step 1)
  */
