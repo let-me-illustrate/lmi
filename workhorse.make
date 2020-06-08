@@ -588,6 +588,7 @@ $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-zero-as-null-pointer-constant \
 
 $(cgicc_objects): gcc_common_extra_warnings += \
+  -Wno-conversion \
   -Wno-zero-as-null-pointer-constant \
 
 expression_template_0_test.o: gcc_common_extra_warnings += \
@@ -634,8 +635,6 @@ $(xmlwrapp_objects): gcc_common_extra_warnings += \
 # SOMEDAY !! Address some of these '-Wconversion' issues.
 
 wno_conv_objects := \
-  CgiUtils.o \
-  FormEntry.o \
   currency_test.o \
   rate_table.o \
   round_glibc.o \
@@ -648,8 +647,6 @@ wno_sign_conv_objects := \
   $(boost_filesystem_objects) \
   $(boost_regex_objects) \
   $(wx_dependent_objects) \
-  CgiEnvironment.o \
-  CgiUtils.o \
   crc32.o \
   getopt.o \
   md5.o \
