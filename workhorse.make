@@ -568,19 +568,12 @@ bourn_cast_test.o: gcc_common_extra_warnings += \
 currency_test.o: gcc_common_extra_warnings += \
   -Wno-useless-cast \
 
-# Boost didn't remove an unused parameter in this file, which also
-# seems to contain a "maybe-uninitialized" variable--see:
-#   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00080.html
-
-operations_posix_windows.o: gcc_common_extra_warnings += -Wno-maybe-uninitialized
-operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-macros
-operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
-
 # Some boost-1.33.1 libraries are incompatible with many warnings.
 
 $(boost_filesystem_objects): gcc_common_extra_warnings += \
   -Wno-deprecated-declarations \
   -Wno-unused-macros \
+  -Wno-unused-parameter \
   -Wno-zero-as-null-pointer-constant \
 
 $(boost_regex_objects): gcc_common_extra_warnings += \
