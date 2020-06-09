@@ -31,7 +31,23 @@
 #include "PETE/PETE.h"
 #include <vector>
 
+// gcc's '-Weffc++' flags user-defined boolean AND and OR operators
+// because they cannot implement short-circuit evaluation. Although
+// Meyers's "Never overload &&, ||, or ," is a generally sound rule
+// for scalar classes, it doesn't make sense for containers, where
+// short-circuit evaluation is not possible anyway. Presumably this
+// warning would be issued for std::valarray::operator||() and &&(),
+// except that they're standard. Similarly, it would issued here for
+// PETE's || and && operators, except for the pragma.
+
+#if defined __GNUC__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Weffc++"
+#endif // defined __GNUC__
 #include "et_vector_operators.hpp"
+#if defined __GNUC__
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__
 
 /// Create vector-iterator leaves.
 
