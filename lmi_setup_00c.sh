@@ -31,6 +31,7 @@ assert_not_chrooted
 
 ./lmi_setup_02c.sh
 
+# Installing 'schroot' creates this 'chroot.d' directory.
 cat >/etc/schroot/chroot.d/centos7lmi.conf <<EOF
 [centos7lmi]
 description=centos-7.7

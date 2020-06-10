@@ -54,6 +54,7 @@ debootstrap --arch=amd64 --cache-dir="${CACHEDIR}" \
 # This command should produce no output:
 grep --invert-match '^I:' "${CHRTNAME}"-debootstrap-log || true
 
+# Installing 'schroot' creates this 'chroot.d' directory.
 cat >/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
 [${CHRTNAME}]
 aliases=lmi
