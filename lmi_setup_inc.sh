@@ -28,7 +28,7 @@
 # Variables defined but unused here: this file should only be sourced.
 # shellcheck disable=SC2034
 
-set -vx
+set -evx
 
 CODENAME=bullseye
 CHRTVER=2
