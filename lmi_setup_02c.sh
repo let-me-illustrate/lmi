@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Destroy all existing centos chroots, brutally.
+# Destroy any existing centos chroot for lmi.
 #
 # Copyright (C) 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
 #
@@ -29,23 +29,24 @@ set -evx
 assert_su
 assert_not_chrooted
 
-# This brutal approach assumes that only one centos chroot exists.
-# That's a workable assumption if a unique centos chroot is used
-# only to emulate an inconvenient corporate redhat server. See
-# 'lmi_setup_02.sh' for a more thoughtful approach.
-#
-# The grep command conveniently finds not only mounts created to
-# support the centos chroot itself, but also mounts created to
-# support a debian chroot within the centos chroot.
+umount /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || true
+umount /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi      || true
+umount /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/dev/pts                || true
+umount /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/proc                   || true
+umount /srv/chroot/centos7lmi/var/cache/yum      || true
+umount /srv/chroot/centos7lmi/var/cache/bullseye || true
+umount /srv/chroot/centos7lmi/srv/cache_for_lmi  || true
+umount /srv/chroot/centos7lmi/dev/pts            || true
+umount /srv/chroot/centos7lmi/proc               || true
 
-if [ "greg" != "$(logname)" ]; then
-   echo "This script would eradicate all your centos chroots--beware."
-   exit 1
-fi
+findmnt -ro SOURCE,TARGET \
+  | grep centos7lmi \
+  | sed -e's,^[/A-Za-z0-9_-]*[[]\([^]]*\)[]],\1,' \
+  | column -t
 
-grep centos /proc/mounts | cut -f2 -d" " | xargs --no-run-if-empty umount
-rm -rf /srv/chroot/centos7lmi
-rm /etc/schroot/chroot.d/centos7lmi.conf
+rm --one-file-system --recursive --force \
+  "$(schroot --chroot=centos7lmi --location)"
+rm --force /etc/schroot/chroot.d/centos7lmi.conf
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
 echo "$stamp $0: Removed old centos chroot."  | tee /dev/tty
