@@ -66,6 +66,7 @@ chmod 0666 /tmp/schroot_env
 wget -N -nv "${GIT_URL_BASE}"/gwc/.zshrc
 wget -N -nv "${GIT_URL_BASE}"/gwc/.vimrc
 wget -N -nv "${GIT_URL_BASE}"/gwc/.vim/spell/en.utf-8.add
+chmod 0644 .zshrc .vimrc en.utf-8.add
 wget -N -nv "${GIT_URL_BASE}"/install_msw.sh
 chmod 0777 install_msw.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_00c.sh
