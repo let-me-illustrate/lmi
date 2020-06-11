@@ -53,23 +53,5 @@ mkdir -p ~/.wine/drive_c/users/"${NORMAL_USER}"/var/opt/
 cd ~/.wine/drive_c/users/"${NORMAL_USER}"/var/opt/ || { printf 'failed: cd\n'; exit 3; }
 ln --symbolic --relative --force --no-dereference /var/opt/lmi/ ./lmi
 
-cd ~ || { printf 'failed: cd\n'; exit 3; }
-# Rebuild vim spellfile (as was done above for root)
-vim -es -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
-
-# Configure git. See:
-#   https://lists.nongnu.org/archive/html/lmi/2016-03/msg00006.html
-git config --global color.ui auto
-git config --global commit.cleanup scissors
-git config --global core.pager "less -+F -+X"
-git config --global diff.colormoved plain
-git config --global log.date iso8601-strict-local
-git config --global log.follow true
-git config --global pull.ff only
-git config --global push.default simple
-# Use your own name and email address.
-git config --global user.email gchicares@sbcglobal.net
-git config --global user.name "Gregory W. Chicares"
-
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Configured 'wine' etc. for '$NORMAL_USER'."  | tee /dev/tty
+echo "$stamp $0: Configured 'wine' for '$NORMAL_USER'."  | tee /dev/tty
