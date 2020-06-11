@@ -92,6 +92,12 @@ git checkout odd/foo
 git commit sandbox_test.cpp
 git checkout master
 git push origin odd/foo
+
+  # to transplant already-pushed commits to a new branch
+git branch odd/foo
+git reset --keep origin/master
+  # ...and don't ever rebase that new branch
+
   # (to copy to a subdir before deletion, so it's in permanent history)
   # (this works only if all modified files are unique to the branch)
 git checkout master
