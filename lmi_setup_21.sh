@@ -29,37 +29,7 @@ set -evx
 assert_su
 assert_chrooted
 
-# Add a normal user, and a corresponding group.
-#
-# No attempt is made to set a real password, because that can't be
-# done securely in a script. A better password can be set later,
-# interactively, if desired. Forcing the dummy password to expire
-# immediately, thus (e.g.):
-#   chage -d 0 "${NORMAL_USER}"
-# may seem like a good idea, but invoking schroot with that userid
-# doesn't prompt for a password change.
-#
-# Hardcode the salt so that repeated openssl invocations yield
-# identical results, to avoid gratuitous regressions when comparing
-# successive logs.
-
-groupadd --gid="${NORMAL_GROUP_GID}" "${NORMAL_GROUP}"
-useradd \
-  --gid="${NORMAL_GROUP_GID}" \
-  --uid="${NORMAL_USER_UID}" \
-  --create-home \
-  --shell=/bin/zsh \
-  --password="$(openssl passwd -1 --salt '' expired)" \
-  "${NORMAL_USER}"
-
-usermod -aG sudo "${NORMAL_USER}" || echo "Oops."
-
-# Add an 'lmi' group, which may be useful in a multi-user chroot.
-getent group 1001 || groupadd --gid=1001 lmi || echo "Oops."
-usermod -aG lmi "${NORMAL_USER}" || echo "Oops."
-
-chsh -s /bin/zsh "${NORMAL_USER}"
-
+./lmi_setup_24.sh
 ./lmi_setup_25.sh
 ./lmi_setup_29.sh
 
