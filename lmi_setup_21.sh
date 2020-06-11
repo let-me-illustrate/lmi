@@ -77,9 +77,9 @@ chsh -s /bin/zsh "${NORMAL_USER}"
 
 # Repair /usr/share/libtool/.../ltmain.sh as indicated here:
 #   https://lists.gnu.org/archive/html/libtool-patches/2011-06/msg00001.html
-# Do this as root because root owns the file.
+# Do this as root because root owns the file to be patched.
 
-cat >/home/"${NORMAL_USER}"/ltmain.sh.patch <<EOF
+cat >~/ltmain.sh.patch <<EOF
 --- /usr/share/libtool/build-aux/ltmain.sh.orig 2016-08-20 12:34:31.000000000 +0000
 +++ /usr/share/libtool/build-aux/ltmain.sh 2017-08-10 13:10:28.466155965 +0000
 @@ -5555,7 +5555,7 @@
@@ -93,8 +93,8 @@ cat >/home/"${NORMAL_USER}"/ltmain.sh.patch <<EOF
  # ifdef __STRICT_ANSI__
 EOF
 
-patch --dry-run --strip=0 --directory=/ </home/"${NORMAL_USER}"/ltmain.sh.patch \
- && patch --strip=0 --directory=/ </home/"${NORMAL_USER}"/ltmain.sh.patch
+patch --dry-run --strip=0 --directory=/ <~/ltmain.sh.patch \
+ && patch --strip=0 --directory=/ <~/ltmain.sh.patch
 
 # Enable stable and security upgrades--see:
 #    https://www.debian.org/releases/stretch/amd64/apds03.html.en#idm4504
