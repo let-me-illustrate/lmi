@@ -34,13 +34,15 @@ groupadd --gid="${NORMAL_GROUP_GID}" "${NORMAL_GROUP}"
 # Add an 'lmi' group, which may be useful in a multi-user chroot.
 getent group 1001 || groupadd --gid=1001 lmi || echo "Oops."
 
+for user in $(echo "${CHROOT_USERS}" | tr ',' '\n'); do
+{
 # Add a normal user, setting its shell and groups.
 #
 # No attempt is made to set a real password, because that can't be
 # done securely in a script. A better password can be set later,
 # interactively, if desired. Forcing the dummy password to expire
 # immediately, thus (e.g.):
-#   chage -d 0 "${NORMAL_USER}"
+#   chage -d 0 "${user}"
 # may seem like a good idea, but invoking schroot with that userid
 # doesn't prompt for a password change.
 #
@@ -50,16 +52,21 @@ getent group 1001 || groupadd --gid=1001 lmi || echo "Oops."
 
 useradd \
   --gid="${NORMAL_GROUP_GID}" \
-  --uid="${NORMAL_USER_UID}" \
   --create-home \
   --shell=/bin/zsh \
   --password="$(openssl passwd -1 --salt '' expired)" \
-  "${NORMAL_USER}"
+  "${user}"
 
-usermod -aG lmi  "${NORMAL_USER}" || echo "Oops."
-usermod -aG sudo "${NORMAL_USER}" || echo "Oops."
+# Try to make the "normal" user's UID match its UID on the host.
+if [ "${NORMAL_USER}" = "${user}" ]; then
+  usermod -u "${NORMAL_USER_UID}" || echo "Oops."
+fi
 
-chsh -s /bin/zsh "${NORMAL_USER}"
+usermod -aG lmi  "${user}" || echo "Oops."
+usermod -aG sudo "${user}" || echo "Oops."
+
+chsh -s /bin/zsh "${user}"
+} done
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Configured user '${NORMAL_USER}'."  | tee /dev/tty
+echo "$stamp $0: Configured users."  | tee /dev/tty
