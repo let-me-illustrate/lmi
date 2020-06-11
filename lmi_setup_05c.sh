@@ -59,7 +59,5 @@ yum --assumeyes install ncurses-term less sudo vim zsh
 
 chsh -s /bin/zsh root
 
-./lmi_setup_24c.sh
-
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
 echo "$stamp $0: Reconfigured centos chroot."  | tee /dev/tty

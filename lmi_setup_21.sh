@@ -29,10 +29,6 @@ set -evx
 assert_su
 assert_chrooted
 
-./lmi_setup_24.sh
-./lmi_setup_25.sh
-./lmi_setup_29.sh
-
 # Repair /usr/share/libtool/.../ltmain.sh as indicated here:
 #   https://lists.gnu.org/archive/html/libtool-patches/2011-06/msg00001.html
 # Do this as root because root owns the file to be patched.
