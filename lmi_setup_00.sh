@@ -92,7 +92,6 @@ wget -N -nv "${GIT_URL_BASE}"/lmi_setup_25.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_29.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_30.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_40.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_41.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_42.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_43.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_inc.sh
