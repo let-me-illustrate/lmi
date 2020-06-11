@@ -58,22 +58,10 @@ usermod -aG sudo "${NORMAL_USER}" || echo "Oops."
 getent group 1001 || groupadd --gid=1001 lmi || echo "Oops."
 usermod -aG lmi "${NORMAL_USER}" || echo "Oops."
 
-mkdir --parents /opt/lmi
-chmod g=u+s     /opt/lmi
-chown "${NORMAL_USER}":"${NORMAL_GROUP}" /opt/lmi
-mkdir --parents /etc/opt/lmi
-chmod g=u+s     /etc/opt/lmi
-chown "${NORMAL_USER}":"${NORMAL_GROUP}" /etc/opt/lmi
-mkdir --parents /var/opt/lmi
-chmod g=u+s     /var/opt/lmi
-chown "${NORMAL_USER}":"${NORMAL_GROUP}" /var/opt/lmi
-mkdir --parents /srv/cache_for_lmi
-chmod g=u+s     /srv/cache_for_lmi
-chown "${NORMAL_USER}":"${NORMAL_GROUP}" /srv/cache_for_lmi
-
 chsh -s /bin/zsh "${NORMAL_USER}"
 
 ./lmi_setup_25.sh
+./lmi_setup_29.sh
 
 # Repair /usr/share/libtool/.../ltmain.sh as indicated here:
 #   https://lists.gnu.org/archive/html/libtool-patches/2011-06/msg00001.html
