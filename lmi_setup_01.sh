@@ -61,6 +61,7 @@ schroot --chroot=${CHRTNAME} --user="${user}"        --directory=/tmp ./lmi_setu
 } done
 schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
 schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_43.sh
+schroot --chroot=${CHRTNAME} --user=nemo             --directory=/tmp ./lmi_setup_44.sh
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
 echo "$stamp $0 [debian host]"  | tee /dev/tty

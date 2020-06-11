@@ -94,6 +94,7 @@ wget -N -nv "${GIT_URL_BASE}"/lmi_setup_30.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_40.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_42.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_43.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_44.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_inc.sh
 chmod 0777 lmi_setup_*.sh
 
