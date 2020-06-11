@@ -29,11 +29,15 @@ set -evx
 assert_su
 assert_not_chrooted
 
-# Add a normal user, and a corresponding group.
+groupadd --gid="${NORMAL_GROUP_GID}" "${NORMAL_GROUP}"
+
+# Add an 'lmi' group, which may be useful in a multi-user chroot.
+getent group 1001 || groupadd --gid=1001 lmi || echo "Oops."
+
+# Add a normal user, setting its shell and groups.
 #
 # This minimal centos chroot lacks openssl, so hardcode a password.
 
-groupadd --gid="${NORMAL_GROUP_GID}" "${NORMAL_GROUP}"
 useradd \
   --gid="${NORMAL_GROUP_GID}" \
   --uid="${NORMAL_USER_UID}" \
@@ -41,6 +45,8 @@ useradd \
   --shell=/bin/zsh \
   --password="\$1\$\$AYD8bMyx6ho3BnmO3jjb60" \
   "${NORMAL_USER}"
+
+usermod -aG lmi  "${NORMAL_USER}" || echo "Oops."
 
 # Where debian has a 'sudo' group, redhat has a 'wheel' group.
 # The difference seems to be nominal; neither is GID 0.

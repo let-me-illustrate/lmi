@@ -29,7 +29,12 @@ set -evx
 assert_su
 assert_chrooted
 
-# Add a normal user, and a corresponding group.
+groupadd --gid="${NORMAL_GROUP_GID}" "${NORMAL_GROUP}"
+
+# Add an 'lmi' group, which may be useful in a multi-user chroot.
+getent group 1001 || groupadd --gid=1001 lmi || echo "Oops."
+
+# Add a normal user, setting its shell and groups.
 #
 # No attempt is made to set a real password, because that can't be
 # done securely in a script. A better password can be set later,
@@ -43,7 +48,6 @@ assert_chrooted
 # identical results, to avoid gratuitous regressions when comparing
 # successive logs.
 
-groupadd --gid="${NORMAL_GROUP_GID}" "${NORMAL_GROUP}"
 useradd \
   --gid="${NORMAL_GROUP_GID}" \
   --uid="${NORMAL_USER_UID}" \
@@ -52,11 +56,8 @@ useradd \
   --password="$(openssl passwd -1 --salt '' expired)" \
   "${NORMAL_USER}"
 
+usermod -aG lmi  "${NORMAL_USER}" || echo "Oops."
 usermod -aG sudo "${NORMAL_USER}" || echo "Oops."
-
-# Add an 'lmi' group, which may be useful in a multi-user chroot.
-getent group 1001 || groupadd --gid=1001 lmi || echo "Oops."
-usermod -aG lmi "${NORMAL_USER}" || echo "Oops."
 
 chsh -s /bin/zsh "${NORMAL_USER}"
 
