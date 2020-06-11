@@ -37,6 +37,7 @@ assert_not_chrooted
 
 ./lmi_setup_24c.sh
 ./lmi_setup_25.sh
+su "${NORMAL_USER}" ./lmi_setup_25.sh
 
 cp -a /tmp/schroot_env /srv/chroot/"${CHRTNAME}"/tmp
 cp -a lmi_setup_*.sh   /srv/chroot/"${CHRTNAME}"/tmp
@@ -49,6 +50,7 @@ schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setu
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_21.sh
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_24.sh
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_25.sh
+schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_25.sh
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_29.sh
 # On a particular corporate server, root is not a sudoer.
 if sudo -l true; then

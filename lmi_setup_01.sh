@@ -44,8 +44,8 @@ schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setu
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_21.sh
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_24.sh
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_25.sh
+schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_25.sh
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_29.sh
-
 # On a particular corporate server, root is not a sudoer.
 if sudo -l true; then
   sudo                       --user="${NORMAL_USER}"                  ./lmi_setup_30.sh
