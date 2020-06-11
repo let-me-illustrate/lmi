@@ -61,6 +61,8 @@ wine regedit
 #     (the other options don't seem to matter)
 #   then restart the application
 
+user=$(whoami)
+
 # Symlink directories used by lmi, so that both native and wine
 # builds use the same directories and can share the same
 # architecture-independent 'configurable_settings.xml'--much like the
@@ -73,17 +75,17 @@ wine regedit
 #   /etc/opt/lmi/ becomes ../../../../../../../../etc/opt/lmi
 #   /var/opt/lmi/ becomes ../../../../../../../../var/opt/lmi
 
-mkdir -p ~/.wine/drive_c/users/"${NORMAL_USER}"/opt/
-cd ~/.wine/drive_c/users/"${NORMAL_USER}"/opt/ || { printf 'failed: cd\n'; exit 3; }
+mkdir -p ~/.wine/drive_c/users/"${user}"/opt/
+cd ~/.wine/drive_c/users/"${user}"/opt/ || { printf 'failed: cd\n'; exit 3; }
 ln --symbolic --relative --force --no-dereference /opt/lmi/ ./lmi
 
-mkdir -p ~/.wine/drive_c/users/"${NORMAL_USER}"/etc/opt/
-cd ~/.wine/drive_c/users/"${NORMAL_USER}"/etc/opt/ || { printf 'failed: cd\n'; exit 3; }
+mkdir -p ~/.wine/drive_c/users/"${user}"/etc/opt/
+cd ~/.wine/drive_c/users/"${user}"/etc/opt/ || { printf 'failed: cd\n'; exit 3; }
 ln --symbolic --relative --force --no-dereference /etc/opt/lmi/ ./lmi
 
-mkdir -p ~/.wine/drive_c/users/"${NORMAL_USER}"/var/opt/
-cd ~/.wine/drive_c/users/"${NORMAL_USER}"/var/opt/ || { printf 'failed: cd\n'; exit 3; }
+mkdir -p ~/.wine/drive_c/users/"${user}"/var/opt/
+cd ~/.wine/drive_c/users/"${user}"/var/opt/ || { printf 'failed: cd\n'; exit 3; }
 ln --symbolic --relative --force --no-dereference /var/opt/lmi/ ./lmi
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Configured 'wine' for '$NORMAL_USER'."  | tee /dev/tty
+echo "$stamp $0: Configured 'wine' for user '$user'."  | tee /dev/tty

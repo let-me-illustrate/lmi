@@ -58,7 +58,10 @@ if sudo -l true; then
 else
   su                                "${NORMAL_USER}"                  ./lmi_setup_30.sh
 fi
-schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_40.sh
+for user in $(echo "${CHROOT_USERS}" | tr ',' '\n'); do
+{
+schroot --chroot=${CHRTNAME} --user="${user}"        --directory=/tmp ./lmi_setup_40.sh
+} done
 schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
 schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_43.sh
 
