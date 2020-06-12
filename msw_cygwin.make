@@ -97,6 +97,7 @@ CP      := cp
 DATE    := date
 ECHO    := echo
 GZIP    := gzip
+INSTALL := install
 LS      := ls
 MKDIR   := mkdir
 MV      := mv
