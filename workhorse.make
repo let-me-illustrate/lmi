@@ -1009,8 +1009,10 @@ lmi_msw_res.o: lmi.ico
 
 # Install.
 #
-# Architecture-independent files are copied with 'cp --update'.
-# Architecture-dependent files are copied without '--update'.
+# Architecture-independent files are installed with '-c'.
+# Architecture-dependent files are installed without '-c'.
+# Of course, '-c' is ignored; it flags situations where '-C'
+# might be useful.
 
 data_files := \
   $(wildcard $(addprefix $(srcdir)/,*.ico *.png *.xml *.xrc *.xsd *.xsl)) \
@@ -1030,9 +1032,9 @@ install: $(default_targets)
 	+@[ -d $(datadir)        ] || $(MKDIR) --parents $(datadir)
 	+@[ -d $(test_dir)       ] || $(MKDIR) --parents $(test_dir)
 	+@[ -d $(touchstone_dir) ] || $(MKDIR) --parents $(touchstone_dir)
-	@$(CP) --preserve $(installable_binaries) $(bindir)
-	@$(CP) --preserve --update $(data_files) $(datadir)
-	@$(CP) --preserve --update $(help_files) $(datadir)
+	@$(INSTALL) -m 0775 $(installable_binaries) $(bindir)
+	@$(INSTALL) -c -m 0664 $(data_files) $(datadir)
+	@$(INSTALL) -c -m 0664 $(help_files) $(datadir)
 	@datadir=$(datadir) srcdir=$(srcdir) $(srcdir)/mst_to_xst.sh
 ifeq (,$(USE_SO_ATTRIBUTES))
 	@cd $(datadir); $(PERFORM) $(bindir)/product_files$(EXEEXT)
@@ -1176,15 +1178,13 @@ fardel: install
 	@$(MAKE) --file=$(this_makefile) --directory=$(fardel_dir) wrap_fardel
 	@$(ECHO) "Created '$(fardel_name)' archive in '$(fardel_root)'."
 
-# $(CP) is used without '--update' so that custom extra files can
-# replace defaults regardless of their datestamps.
-
 .PHONY: wrap_fardel
 wrap_fardel:
-	@$(CP) $(datadir)/configurable_settings.xml .
-	@$(CP) $(datadir)/company_logo.png .
-	@$(CP) $(datadir)/group_quote_banner.png .
-	@$(CP) --preserve $(fardel_binaries) $(fardel_files) .
+	@$(INSTALL) -m 0664 $(datadir)/configurable_settings.xml .
+	@$(INSTALL) -m 0664 $(datadir)/company_logo.png .
+	@$(INSTALL) -m 0664 $(datadir)/group_quote_banner.png .
+	@$(INSTALL) -m 0775 $(fardel_binaries) .
+	@$(INSTALL) -m 0664 $(fardel_files) .
 	@$(fardel_date_script)
 	@$(MD5SUM) --binary $(fardel_checksummed_files) >validated.md5
 	@$(PERFORM) $(bindir)/generate_passkey > passkey
@@ -1455,7 +1455,7 @@ system_test: $(datadir)/configurable_settings.xml $(touchstone_md5sums) install
 	  && $(MAKE) --file=$(this_makefile) --directory=$(test_dir) $$testdecks
 	@$(SORT) --output=$(system_test_analysis) $(system_test_analysis)
 	@$(SORT) --key=2  --output=$(system_test_md5sums) $(system_test_md5sums)
-	@$(CP) --preserve --update $(system_test_md5sums) $(system_test_md5sums2)
+	@$(INSTALL) -c -m 0664 $(system_test_md5sums) $(system_test_md5sums2)
 	@-< $(system_test_analysis) $(SED) \
 	  -e '/rel err.*e-0*1[5-9]/d' \
 	  -e '/abs.*0\.00.*rel/d' \
