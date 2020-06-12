@@ -203,8 +203,8 @@ cd "$throwaway_dir"
 
 # Copy these files hither because the emission tests write some
 # output files to the input file's directory.
-cp /opt/lmi/src/lmi/sample.ill .
-cp /opt/lmi/src/lmi/sample.cns .
+install -m 0664 /opt/lmi/src/lmi/sample.ill .
+install -m 0664 /opt/lmi/src/lmi/sample.cns .
 
 printf '\n# test all valid emission types\n\n'
 

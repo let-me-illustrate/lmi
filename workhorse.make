@@ -1215,10 +1215,10 @@ eraseme.policy:
 # Test data.
 
 sample.cns: $(srcdir)/sample.cns
-	$(CP) --preserve --update $< .
+	$(INSTALL) -c -m 0664 $< .
 
 sample.ill: $(srcdir)/sample.ill
-	$(CP) --preserve --update $< .
+	$(INSTALL) -c -m 0664 $< .
 
 test_data := \
   sample.cns \
@@ -1235,7 +1235,7 @@ test_data := \
 # local copies are provided for as needed.
 
 configurable_settings.xml:
-	@$(CP) --preserve --update $(datadir)/$@ .
+	@$(INSTALL) -c -m 0664 $(datadir)/$@ .
 
 ################################################################################
 
