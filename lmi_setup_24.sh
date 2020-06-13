@@ -59,7 +59,7 @@ useradd \
 
 # Try to make the "normal" user's UID match its UID on the host.
 if [ "${NORMAL_USER}" = "${user}" ]; then
-  usermod -u "${NORMAL_USER_UID}" || echo "Oops."
+  usermod -u "${NORMAL_USER_UID}" "${NORMAL_USER}" || echo "Oops."
 fi
 
 usermod -aG lmi  "${user}" || echo "Oops."
