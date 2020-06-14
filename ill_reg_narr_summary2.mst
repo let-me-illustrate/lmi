@@ -93,15 +93,27 @@ in the Tabular Detail.
 </p>
 
 {{#IsInforce}}
-<!-- PDF !! FnInforceAcctVal -->
+<!-- PDF !! Combine FnInforceAcctVal and FnInforceTaxBasis -->
+    <p>
+    This illustration assumes a beginning account value of
+    ${{InforceTotalAV}},
+    and a beginning cost basis of
+    ${{InforceTaxBasis}},
+    as of {{InforceAsOfDate}},
+    based on the last monthly calculation date.
+    The actual account value and cost basis may be higher or lower.
+    Consult the Home Office if you require further information.
+    </p>
+<!--
+  PDF !! THESE ARE TO BE COMBINED:
+  PDF !! FnInforceAcctVal
     <p>
     This illustration assumes a beginning account value of
     ${{InforceTotalAV}}
     as of {{InforceAsOfDate}},
     the end of the last completed {{ContractName}} month.
     </p>
-
-<!-- PDF !! FnInforceTaxBasis -->
+  PDF !! FnInforceTaxBasis
     <p>
     This illustration assumes a beginning cost basis of
     ${{InforceTaxBasis}}
@@ -110,6 +122,7 @@ in the Tabular Detail.
     the actual cost basis may be higher or lower.
     Consult the Home Office for cost basis information.
     </p>
+-->
 {{/IsInforce}}
 
 <!-- PDF !! FnCensus -->
