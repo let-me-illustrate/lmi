@@ -49,7 +49,7 @@ schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setu
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_25.sh
 for user in $(echo "${CHROOT_USERS}" | tr ',' '\n'); do
 {
-schroot --chroot=${CHRTNAME} --user="${user}"        --directory=/tmp ./lmi_setup_25.sh
+schroot --chroot=${CHRTNAME} --user="${user}"        --directory=/tmp ./lmi_setup_25.sh || echo "Oops."
 } done
 schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_29.sh
 # On a particular corporate server, root is not a sudoer.
@@ -60,7 +60,7 @@ else
 fi
 for user in $(echo "${CHROOT_USERS}" | tr ',' '\n'); do
 {
-schroot --chroot=${CHRTNAME} --user="${user}"        --directory=/tmp ./lmi_setup_40.sh
+schroot --chroot=${CHRTNAME} --user="${user}"        --directory=/tmp ./lmi_setup_40.sh || echo "Oops."
 } done
 schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
 schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_43.sh
