@@ -267,13 +267,13 @@ int test_main(int, char*[])
     test_interconvertibility(int( 1234),  "1234", __FILE__, __LINE__);
     test_interconvertibility(int(-4321), "-4321", __FILE__, __LINE__);
 
-    test_interconvertibility(float( 0.0f),    "0", __FILE__, __LINE__);
-    test_interconvertibility(float( 1.5f),  "1.5", __FILE__, __LINE__);
-    test_interconvertibility(float(-2.5f), "-2.5", __FILE__, __LINE__);
+    test_interconvertibility(      0.0f,    "0", __FILE__, __LINE__);
+    test_interconvertibility(      1.5f,  "1.5", __FILE__, __LINE__);
+    test_interconvertibility(     -2.5f, "-2.5", __FILE__, __LINE__);
 
-    test_interconvertibility(double( 0.0),    "0", __FILE__, __LINE__);
-    test_interconvertibility(double( 1.5),  "1.5", __FILE__, __LINE__);
-    test_interconvertibility(double(-2.5), "-2.5", __FILE__, __LINE__);
+    test_interconvertibility(      0.0 ,    "0", __FILE__, __LINE__);
+    test_interconvertibility(      1.5 ,  "1.5", __FILE__, __LINE__);
+    test_interconvertibility(     -2.5 , "-2.5", __FILE__, __LINE__);
 
     test_interconvertibility( double(1.0 / 3.0), "0.3333333333333333", __FILE__, __LINE__);
     test_interconvertibility(0.3333333333333333, "0.3333333333333333", __FILE__, __LINE__);
@@ -282,9 +282,9 @@ int test_main(int, char*[])
 
 #if !defined LMI_MSVCRT
 // COMPILER !! This C runtime doesn't support long double conversions.
-    test_interconvertibility((long double)( 0.0L),    "0", __FILE__, __LINE__);
-    test_interconvertibility((long double)( 1.5L),  "1.5", __FILE__, __LINE__);
-    test_interconvertibility((long double)(-2.5L), "-2.5", __FILE__, __LINE__);
+    test_interconvertibility(      0.0L,    "0", __FILE__, __LINE__);
+    test_interconvertibility(      1.5L,  "1.5", __FILE__, __LINE__);
+    test_interconvertibility(     -2.5L, "-2.5", __FILE__, __LINE__);
     BOOST_TEST_EQUAL(numeric_io_cast<long double>("3.36210314311209350626e-4932"), std::numeric_limits<long double>::min());
 #endif // !defined LMI_MSVCRT
 
