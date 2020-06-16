@@ -513,6 +513,7 @@ gcc_cxx_warnings := \
   -Wnoexcept-type \
   -Wnon-template-friend \
   -Wnon-virtual-dtor \
+  -Wold-style-cast \
   -Woverloaded-virtual \
   -Wplacement-new=2 \
   -Wpmf-conversions \
@@ -552,6 +553,7 @@ currency_test.o: gcc_common_extra_warnings += \
 
 $(boost_filesystem_objects): gcc_common_extra_warnings += \
   -Wno-deprecated-declarations \
+  -Wno-old-style-cast \
   -Wno-unused-macros \
   -Wno-unused-parameter \
   -Wno-zero-as-null-pointer-constant \
@@ -560,6 +562,7 @@ $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
   -Wno-duplicated-branches \
   -Wno-implicit-fallthrough \
+  -Wno-old-style-cast \
   -Wno-register \
   -Wno-shadow \
   -Wno-switch-enum \
