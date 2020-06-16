@@ -439,6 +439,7 @@ gcc_common_warnings := \
   -Walloc-zero \
   -Walloca \
   -Wcast-align \
+  -Wcast-function-type \
   -Wconversion \
   -Wdangling-else \
   -Wdeprecated-declarations \
