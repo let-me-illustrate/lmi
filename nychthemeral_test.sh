@@ -72,7 +72,6 @@ install_clutter='
 '
 
 cli_cgi_clutter='
-/^cp /d
 /^Test solve speed: /d
 /^Timing test skipped: takes too long in debug mode$/d
 /^    Input:        [0-9]* milliseconds$/d
