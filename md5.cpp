@@ -89,6 +89,7 @@
 #endif // !defined WORDS_BIGENDIAN
 
 #if defined __GNUC__ && !defined __clang__
+#   pragma GCC diagnostic ignored "-Wold-style-cast"
 #   pragma GCC diagnostic ignored "-Wuseless-cast"
 #endif // defined __GNUC__ && !defined __clang__
 

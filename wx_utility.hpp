@@ -55,6 +55,7 @@ class jdn_t;
 #   if 8 <= __GNUC__
 #       pragma GCC diagnostic ignored "-Wcast-function-type"
 #   endif // 8 <= __GNUC__
+#   pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif // defined __GNUC__
 template<typename To, typename From>
 To c_cast(From z)
