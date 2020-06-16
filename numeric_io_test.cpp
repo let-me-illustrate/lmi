@@ -232,19 +232,19 @@ int test_main(int, char*[])
 #   pragma GCC diagnostic ignored "-Wuseless-cast"
 #endif // defined __GNUC__
 
-    test_interconvertibility((         char)(   1), "1", __FILE__, __LINE__);
-    test_interconvertibility((         char)('\1'), "1", __FILE__, __LINE__);
+    test_interconvertibility(static_cast<         char>(   1), "1", __FILE__, __LINE__);
+    test_interconvertibility(static_cast<         char>('\1'), "1", __FILE__, __LINE__);
 
-    test_interconvertibility((  signed char)(   1), "1", __FILE__, __LINE__);
-    test_interconvertibility((  signed char)('\1'), "1", __FILE__, __LINE__);
+    test_interconvertibility(static_cast<  signed char>(   1), "1", __FILE__, __LINE__);
+    test_interconvertibility(static_cast<  signed char>('\1'), "1", __FILE__, __LINE__);
 
-    test_interconvertibility((unsigned char)(   1), "1", __FILE__, __LINE__);
-    test_interconvertibility((unsigned char)('\1'), "1", __FILE__, __LINE__);
+    test_interconvertibility(static_cast<unsigned char>(   1), "1", __FILE__, __LINE__);
+    test_interconvertibility(static_cast<unsigned char>('\1'), "1", __FILE__, __LINE__);
 
-    test_interconvertibility((  signed char)(-1),  "-1", __FILE__, __LINE__);
+    test_interconvertibility(static_cast<  signed char>(-1),  "-1", __FILE__, __LINE__);
     std::ostringstream u;
     u << static_cast<unsigned int>(std::numeric_limits<unsigned char>::max());
-    test_interconvertibility((unsigned char)(-1), u.str(), __FILE__, __LINE__);
+    test_interconvertibility(static_cast<unsigned char>(-1), u.str(), __FILE__, __LINE__);
 
     // This test should fail because numeric_io_cast interprets
     // arithmetic types as numeric values, so the value of ' ' might
@@ -336,12 +336,12 @@ int test_main(int, char*[])
 //    BOOST_TEST_THROW(numeric_io_cast<double*>("0"), std::invalid_argument, "");
 
     BOOST_TEST_THROW
-        (numeric_io_cast<std::string>((char const*)nullptr)
+        (numeric_io_cast<std::string>(static_cast<char const*>(nullptr))
         ,std::runtime_error
         ,"Cannot convert (char const*)(0) to std::string."
         );
     BOOST_TEST_THROW
-        (numeric_io_cast<unsigned int>((char const*)nullptr)
+        (numeric_io_cast<unsigned int>(static_cast<char const*>(nullptr))
         ,std::runtime_error
         ,"Cannot convert (char const*)(0) to number."
         );

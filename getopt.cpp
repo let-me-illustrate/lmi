@@ -197,7 +197,7 @@ GetOpt::Initialize(std::string const& a_optstring)
 void
 GetOpt::exchange(char** argv)
 {
-  int nonopts_size = (last_nonopt - first_nonopt) * (int)sizeof(char*);
+  int nonopts_size = (last_nonopt - first_nonopt) * static_cast<int>(sizeof(char*));
 // GWC substituted std::malloc() for alloca() and added call to std::free() below.
 //  char** temp = static_cast<char**>(alloca(nonopts_size));
   char** temp = static_cast<char**>(std::malloc(nonopts_size));
