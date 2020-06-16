@@ -1215,10 +1215,10 @@ eraseme.policy:
 # Test data.
 
 sample.cns: $(srcdir)/sample.cns
-	$(INSTALL) -c -m 0664 $< .
+	@$(INSTALL) -c -m 0664 $< .
 
 sample.ill: $(srcdir)/sample.ill
-	$(INSTALL) -c -m 0664 $< .
+	@$(INSTALL) -c -m 0664 $< .
 
 test_data := \
   sample.cns \
