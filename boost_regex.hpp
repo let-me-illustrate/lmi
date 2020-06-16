@@ -33,13 +33,13 @@
 #   if 7 <= __GNUC__
 #       pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #       pragma GCC diagnostic ignored "-Wregister"
-#       pragma GCC diagnostic ignored "-Wuseless-cast"
 #   endif // 7 <= __GNUC__
 #   if 10 <= __GNUC__
 #       pragma GCC diagnostic ignored "-Wdeprecated-copy"
 #   endif // 10 <= __GNUC__
 #   pragma GCC diagnostic ignored "-Wshadow"
 #   pragma GCC diagnostic ignored "-Wswitch-enum"
+#   pragma GCC diagnostic ignored "-Wuseless-cast"
 #endif // defined __GNUC__
 #include <boost/regex.hpp>
 #if defined __clang__
