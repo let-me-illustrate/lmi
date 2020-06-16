@@ -423,6 +423,10 @@ else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0 8.3.0 9.3.0 10.0))
     tutelary_flag := -fomit-frame-pointer
   endif
 
+  ifneq (,$(filter $(gcc_version), 10.0))
+    gcc_cxx_warnings += -Wredundant-tags -Wvolatile
+  endif
+
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
 endif
 
