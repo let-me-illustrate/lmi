@@ -147,7 +147,7 @@ cd /opt/lmi/src/lmi
 
 printf '\n# test concinnity\n\n'
 make "$coefficiency" check_concinnity 2>&1 \
-  | sed -e "$build_clutter" -e "$concinnity_clutter"
+  | tee "$log_dir"/concinnity | sed -e "$build_clutter" -e "$concinnity_clutter"
 
 printf '# install; check physical closure\n\n'
 make "$coefficiency" install check_physical_closure 2>&1 \
