@@ -21,6 +21,14 @@
 
 #include "pchfile.hpp"
 
+#if defined __GNUC__ && !defined __clang__
+#   pragma GCC diagnostic ignored "-Wextra-semi"
+#   pragma GCC diagnostic ignored "-Wnull-dereference"
+#   pragma GCC diagnostic ignored "-Wsuggest-override"
+#   pragma GCC diagnostic ignored "-Wswitch-enum"
+#   pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+#endif // defined __GNUC__ && !defined __clang__
+
 #define HAVE_BOOST_POOL_SINGLETON_POOL_HPP
 
 #include "libxml/ait_impl.cxx"

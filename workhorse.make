@@ -299,12 +299,12 @@ lmi_include_directories := \
   $(srcdir) \
   $(srcdir)/tools/pete-2.1.1 \
   $(overriding_include_directories) \
+  /opt/lmi/third_party/src \
 
 sys_include_directories := \
   $(compiler_include_directory) \
   $(wx_include_paths) \
   /opt/lmi/third_party/include \
-  /opt/lmi/third_party/src \
   $(localincludedir) \
   $(localincludedir)/libxml2 \
 

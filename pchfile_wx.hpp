@@ -35,6 +35,14 @@
 // disable some warnings which are enabled for the rest of lmi code but have to
 // be disabled for the code using wxWidgets as they occur in wxWidgets headers.
 #if defined __GNUC__ && !defined __clang__
+//#   pragma GCC diagnostic ignored "-Wcast-qual"
+//#   pragma GCC diagnostic ignored "-Wdouble-promotion"
+//#   pragma GCC diagnostic ignored "-Wextra-semi"
+//#   pragma GCC diagnostic ignored "-Wformat-nonliteral"
+//#   pragma GCC diagnostic ignored "-Wnoexcept"
+//#   pragma GCC diagnostic ignored "-Wold-style-cast"
+//#   pragma GCC diagnostic ignored "-Wsuggest-override"
+//#   pragma GCC diagnostic ignored "-Wuseless-cast"
 #   pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 #endif // defined __GNUC__ && !defined __clang__
 
