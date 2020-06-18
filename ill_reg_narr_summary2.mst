@@ -99,9 +99,9 @@ in the Tabular Detail.
     ${{InforceTotalAV}},
     and a beginning cost basis of
     ${{InforceTaxBasis}},
-    as of {{InforceAsOfDate}},
-    based on the last monthly calculation date.
-    The actual account value and cost basis may be higher or lower.
+    based on the last monthly calculation date,
+    {{InforceAsOfDate}}.
+    The current account value and cost basis may be higher or lower.
     Consult the Home Office if you require further information.
     </p>
 <!--
