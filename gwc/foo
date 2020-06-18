@@ -1,0 +1,29 @@
+#!/bin/sh
+
+set -vx
+
+CHROOT_USERS=$(getent group "lmi" | cut -d: -f4)
+CHROOT_UIDS=
+for user in $(echo "${CHROOT_USERS}" | tr ',' '\n'); do
+  echo "${user}" "$(id -u "${user}")"
+  CHROOT_UIDS="${CHROOT_UIDS} $(id -u "${user}")"
+done
+echo "${CHROOT_USERS}"
+echo "${CHROOT_UIDS}"
+
+i=0
+for i in 1 2 3 4; do
+  echo "${CHROOT_UIDS}" | cut -d' ' -f"${i}"
+done
+
+echo "${CHROOT_UIDS}" | cut -d' ' -f1
+echo "${CHROOT_UIDS}" | cut -d' ' -f2
+echo "${CHROOT_UIDS}" | cut -d' ' -f3
+echo "${CHROOT_UIDS}" | cut -d' ' -f4
+
+i=1
+while [ "$i" -ne 10 ]
+do
+    echo "$i"
+    i=$((i + 1))
+done
