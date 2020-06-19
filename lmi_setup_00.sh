@@ -43,8 +43,8 @@ fi
 
 if getent group lmi; then
       NORMAL_GROUP=lmi
-  NORMAL_GROUP_GID=$(getent group "$NORMAL_GROUP" | cut -d: -f3)
-      CHROOT_USERS=$(getent group "$NORMAL_GROUP" | cut -d: -f4)
+  NORMAL_GROUP_GID=$(getent group "$NORMAL_GROUP" | cut -d ':' -f3)
+      CHROOT_USERS=$(getent group "$NORMAL_GROUP" | cut -d ':' -f4)
 else
       NORMAL_GROUP=$(id -gn "$(logname)")
   NORMAL_GROUP_GID=$(id -g  "$(logname)")
