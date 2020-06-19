@@ -36,36 +36,36 @@ getent group 1001 || groupadd --gid=1001 lmi || echo "Oops."
 
 for user in $(echo "${CHROOT_USERS}" | tr ',' '\n'); do
 {
-# Add a normal user, setting its shell and groups.
-#
-# No attempt is made to set a real password, because that can't be
-# done securely in a script. A better password can be set later,
-# interactively, if desired. Forcing the dummy password to expire
-# immediately, thus (e.g.):
-#   chage -d 0 "${user}"
-# may seem like a good idea, but invoking schroot with that userid
-# doesn't prompt for a password change.
-#
-# Hardcode the salt so that repeated openssl invocations yield
-# identical results, to avoid gratuitous regressions when comparing
-# successive logs.
+  # Add a normal user, setting its shell and groups.
+  #
+  # No attempt is made to set a real password, because that can't be
+  # done securely in a script. A better password can be set later,
+  # interactively, if desired. Forcing the dummy password to expire
+  # immediately, thus (e.g.):
+  #   chage -d 0 "${user}"
+  # may seem like a good idea, but invoking schroot with that userid
+  # doesn't prompt for a password change.
+  #
+  # Hardcode the salt so that repeated openssl invocations yield
+  # identical results, to avoid gratuitous regressions when comparing
+  # successive logs.
 
-useradd \
-  --gid="${NORMAL_GROUP_GID}" \
-  --create-home \
-  --shell=/bin/zsh \
-  --password="$(openssl passwd -1 --salt '' expired)" \
-  "${user}"
+  useradd \
+    --gid="${NORMAL_GROUP_GID}" \
+    --create-home \
+    --shell=/bin/zsh \
+    --password="$(openssl passwd -1 --salt '' expired)" \
+    "${user}"
 
-# Try to make the "normal" user's UID match its UID on the host.
-if [ "${NORMAL_USER}" = "${user}" ]; then
-  usermod -u "${NORMAL_USER_UID}" "${NORMAL_USER}" || echo "Oops."
-fi
+  # Try to make the "normal" user's UID match its UID on the host.
+  if [ "${NORMAL_USER}" = "${user}" ]; then
+    usermod -u "${NORMAL_USER_UID}" "${NORMAL_USER}" || echo "Oops."
+  fi
 
-usermod -aG lmi  "${user}" || echo "Oops."
-usermod -aG sudo "${user}" || echo "Oops."
+  usermod -aG lmi  "${user}" || echo "Oops."
+  usermod -aG sudo "${user}" || echo "Oops."
 
-chsh -s /bin/zsh "${user}"
+  chsh -s /bin/zsh "${user}"
 } done
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')

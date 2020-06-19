@@ -36,58 +36,58 @@ getent group 1001 || groupadd --gid=1001 lmi || echo "Oops."
 
 for user in $(echo "${CHROOT_USERS}" | tr ',' '\n'); do
 {
-# Add a normal user, setting its shell and groups.
-#
-# This minimal centos chroot lacks openssl, so hardcode a password.
+  # Add a normal user, setting its shell and groups.
+  #
+  # This minimal centos chroot lacks openssl, so hardcode a password.
 
-useradd \
-  --gid="${NORMAL_GROUP_GID}" \
-  --create-home \
-  --shell=/bin/zsh \
-  --password="\$1\$\$AYD8bMyx6ho3BnmO3jjb60" \
-  "${user}"
+  useradd \
+    --gid="${NORMAL_GROUP_GID}" \
+    --create-home \
+    --shell=/bin/zsh \
+    --password="\$1\$\$AYD8bMyx6ho3BnmO3jjb60" \
+    "${user}"
 
-# Try to make the "normal" user's UID match its UID on the host.
-if [ "${NORMAL_USER}" = "${user}" ]; then
-  usermod -u "${NORMAL_USER_UID}" || echo "Oops."
-fi
+  # Try to make the "normal" user's UID match its UID on the host.
+  if [ "${NORMAL_USER}" = "${user}" ]; then
+    usermod -u "${NORMAL_USER_UID}" || echo "Oops."
+  fi
 
-usermod -aG lmi  "${user}" || echo "Oops."
+  usermod -aG lmi  "${user}" || echo "Oops."
 
-# Where debian has a 'sudo' group, redhat has a 'wheel' group.
-# The difference seems to be nominal; neither is GID 0.
-usermod -aG wheel "${user}"
-# Nevertheless, after exiting the chroot and reentering as 'greg':
-#   $groups greg
-#   greg : lmi wheel
-#   $sudo visudo
-#   sudo: no tty present and no askpass program specified
-#   $sudo -S visudo
-#   greg is not in the sudoers file.  This incident will be reported.
-#   $visudo
-#   greg is not in the sudoers file.
-#   $newgrp wheel
-#   $sudo visudo
-#   sudo: no tty present and no askpass program specified
-# even though the default /etc/sudoers contains:
-#   %wheel<Tab>ALL=(ALL)<Tab>ALL
-# Enabling the 'wheel' group with no password and disabling
-# 'requiretty', as shown below, didn't suffice...so explicitly add
-# the normal user:
-{
-  printf '# Customizations:\n'
-  printf '\n'
-  printf '# Disable "requiretty" if necessary--see:\n'
-  printf '#   https://bugzilla.redhat.com/show_bug.cgi?id=1020147\n'
-  printf '# Defaults    !requiretty\n'
-  printf '\n'
-  printf '%%wheel\tALL=(ALL)\tNOPASSWD: ALL\n'
-  printf -- '%s\tALL=(ALL)\tNOPASSWD: ALL\n' "${user}"
-} >/etc/sudoers.d/"${user}"
-chmod 0440 /etc/sudoers.d/"${user}"
-visudo -cs
+  # Where debian has a 'sudo' group, redhat has a 'wheel' group.
+  # The difference seems to be nominal; neither is GID 0.
+  usermod -aG wheel "${user}"
+  # Nevertheless, after exiting the chroot and reentering as 'greg':
+  #   $groups greg
+  #   greg : lmi wheel
+  #   $sudo visudo
+  #   sudo: no tty present and no askpass program specified
+  #   $sudo -S visudo
+  #   greg is not in the sudoers file.  This incident will be reported.
+  #   $visudo
+  #   greg is not in the sudoers file.
+  #   $newgrp wheel
+  #   $sudo visudo
+  #   sudo: no tty present and no askpass program specified
+  # even though the default /etc/sudoers contains:
+  #   %wheel<Tab>ALL=(ALL)<Tab>ALL
+  # Enabling the 'wheel' group with no password and disabling
+  # 'requiretty', as shown below, didn't suffice...so explicitly add
+  # the normal user:
+  {
+    printf '# Customizations:\n'
+    printf '\n'
+    printf '# Disable "requiretty" if necessary--see:\n'
+    printf '#   https://bugzilla.redhat.com/show_bug.cgi?id=1020147\n'
+    printf '# Defaults    !requiretty\n'
+    printf '\n'
+    printf '%%wheel\tALL=(ALL)\tNOPASSWD: ALL\n'
+    printf -- '%s\tALL=(ALL)\tNOPASSWD: ALL\n' "${user}"
+  } >/etc/sudoers.d/"${user}"
+  chmod 0440 /etc/sudoers.d/"${user}"
+  visudo -cs
 
-chsh -s /bin/zsh "${user}"
+  chsh -s /bin/zsh "${user}"
 } done
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
