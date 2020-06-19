@@ -34,23 +34,28 @@ groupadd --gid="${NORMAL_GROUP_GID}" "${NORMAL_GROUP}"
 # Add an 'lmi' group, which may be useful in a multi-user chroot.
 getent group 1001 || groupadd --gid=1001 lmi || echo "Oops."
 
-for user in $(echo "${CHROOT_USERS}" | tr ',' '\n'); do
+i=1
+while true
+do
 {
+  uid=$( echo "${CHROOT_UIDS}"  | cut -d ',' -f"${i}")
+  user=$(echo "${CHROOT_USERS}" | cut -d ',' -f"${i}")
+  if [ -z "${user}" ] && [ -z "${uid}" ] ; then break; fi
+  if [ -z "${user}" ] || [ -z "${uid}" ] ; then echo "Oops."; exit 9; fi
+  # Now ${user} and ${uid} have corresponding values.
+  i=$((i + 1))
+
   # Add a normal user, setting its shell and groups.
   #
   # This minimal centos chroot lacks openssl, so hardcode a password.
 
   useradd \
     --gid="${NORMAL_GROUP_GID}" \
+    --uid="${uid}" \
     --create-home \
     --shell=/bin/zsh \
     --password="\$1\$\$AYD8bMyx6ho3BnmO3jjb60" \
     "${user}"
-
-  # Try to make the "normal" user's UID match its UID on the host.
-  if [ "${NORMAL_USER}" = "${user}" ]; then
-    usermod -u "${NORMAL_USER_UID}" || echo "Oops."
-  fi
 
   usermod -aG lmi  "${user}" || echo "Oops."
 

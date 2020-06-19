@@ -39,7 +39,6 @@ fi
 # variables across sudo and schroot barriers.
 
        NORMAL_USER=$(id -un "$(logname)")
-   NORMAL_USER_UID=$(id -u  "$(logname)")
 
 if getent group lmi; then
       NORMAL_GROUP=lmi
@@ -51,14 +50,23 @@ else
       CHROOT_USERS=$(id -un "$(logname)")
 fi
 
+CHROOT_UIDS=
+for user in $(echo "${CHROOT_USERS}" | tr ',' ' '); do
+  uid=$(id -u "${user}")
+  [ -z "${uid}" ] && echo "Oops."
+  CHROOT_UIDS="${CHROOT_UIDS},${uid}"
+done
+# Remove leading delimiter.
+CHROOT_UIDS=$(echo "${CHROOT_UIDS}" | sed -e's/^,//')
+
 cat >/tmp/schroot_env <<EOF
 set -v
+     CHROOT_UIDS=$CHROOT_UIDS
     CHROOT_USERS=$CHROOT_USERS
     GIT_URL_BASE=$GIT_URL_BASE
     NORMAL_GROUP=$NORMAL_GROUP
 NORMAL_GROUP_GID=$NORMAL_GROUP_GID
      NORMAL_USER=$NORMAL_USER
- NORMAL_USER_UID=$NORMAL_USER_UID
 set +v
 EOF
 chmod 0666 /tmp/schroot_env
