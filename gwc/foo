@@ -20,7 +20,7 @@ do
   user=$(echo "${CHROOT_USERS}" | cut -d' ' -f"${i}")
   if [ -z "$user" ] && [ -z "$uid" ] ; then break; fi
   if [ -z "$user" ] || [ -z "$uid" ] ; then
-    printf 'Problem: both "%s" and "%" must be nonempty.\n' "$user" "$uid"
+    printf 'Problem: both "%s" and "%s" must be nonempty.\n' "${user}" "${uid}"
     break
   fi
   printf '  user %i: name %s; uid %i\n' "$i" "$user" "$uid"
