@@ -1793,7 +1793,11 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_MENU(XRCID("delete_cells"              ),CensusView::UponDeleteCells            )
     EVT_MENU(XRCID("column_width_varying"      ),CensusView::UponColumnWidthVarying     )
     EVT_MENU(XRCID("column_width_fixed"        ),CensusView::UponColumnWidthFixed       )
+    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusView::UponUpdateSingleSelection  )
+    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusView::UponUpdateSingleSelection  )
     EVT_UPDATE_UI(XRCID("edit_case"            ),CensusView::UponUpdateAlwaysEnabled    )
+    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusView::UponUpdateSingleSelection  )
+    EVT_UPDATE_UI(XRCID("run_class"            ),CensusView::UponUpdateSingleSelection  )
     EVT_UPDATE_UI(XRCID("run_case"             ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("print_case"           ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("print_case_to_disk"   ),CensusView::UponUpdateAlwaysEnabled    )
@@ -1818,10 +1822,6 @@ IMPLEMENT_DYNAMIC_CLASS(CensusDVCView, CensusView)
 BEGIN_EVENT_TABLE(CensusDVCView, CensusView)
     EVT_DATAVIEW_ITEM_CONTEXT_MENU (wxID_ANY    ,CensusDVCView::UponRightClick             )
     EVT_DATAVIEW_ITEM_VALUE_CHANGED(wxID_ANY    ,CensusDVCView::UponValueChanged           )
-    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusDVCView::UponUpdateSingleSelection  )
-    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusDVCView::UponUpdateSingleSelection  )
-    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusDVCView::UponUpdateSingleSelection  )
-    EVT_UPDATE_UI(XRCID("run_class"            ),CensusDVCView::UponUpdateSingleSelection  )
     EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusDVCView::UponUpdateNonemptySelection)
 END_EVENT_TABLE()
 
@@ -1831,10 +1831,6 @@ BEGIN_EVENT_TABLE(CensusGridView, CensusView)
     EVT_GRID_CELL_RIGHT_CLICK(                   CensusGridView::UponRightClick         )
     EVT_GRID_CELL_CHANGED(                       CensusGridView::UponValueChanged       )
     EVT_GRID_COL_AUTO_SIZE(                      CensusGridView::UponColumnAutoSize     )
-    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusGridView::UponUpdateAlwaysEnabled)
-    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusGridView::UponUpdateAlwaysEnabled)
-    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusGridView::UponUpdateAlwaysEnabled)
-    EVT_UPDATE_UI(XRCID("run_class"            ),CensusGridView::UponUpdateAlwaysEnabled)
     EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusGridView::UponUpdateAlwaysEnabled)
 END_EVENT_TABLE()
 
@@ -2455,6 +2451,21 @@ void CensusView::UponUpdateAlwaysEnabled(wxUpdateUIEvent& e)
 void CensusDVCView::UponUpdateSingleSelection(wxUpdateUIEvent& e)
 {
     bool const is_single_sel = list_window_->GetSelection().IsOk();
+    e.Enable(is_single_sel);
+}
+
+void CensusGridView::UponUpdateSingleSelection(wxUpdateUIEvent& e)
+{
+    // We consider that in absence of any selected rows, the current row is the
+    // selected/active one, so what we actually check for here is that we do
+    // not have more than a single row selected.
+    auto const sel_blocks = grid_window_->GetSelectedRowBlocks();
+    bool const is_single_sel
+        =  sel_blocks.empty()
+        || (sel_blocks.size() == 1
+            && sel_blocks[0].GetTopRow() == sel_blocks[0].GetBottomRow())
+        ;
+
     e.Enable(is_single_sel);
 }
 
