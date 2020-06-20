@@ -1502,6 +1502,8 @@ class CensusViewGridTable
 
     wxString GetColLabelValue(int col) override;
 
+    bool CanMeasureColUsingSameAttr(int col) const override;
+
     std::string const& col_name(int col) const;
 
     Input& row_at(int row);
@@ -1609,6 +1611,15 @@ wxString CensusViewGridTable::GetColLabelValue(int col)
 
     auto const& header = all_headers()[visible_columns_[col - 1]];
     return insert_spaces_between_words(header);
+}
+
+bool CensusViewGridTable::CanMeasureColUsingSameAttr(int) const
+{
+    // All our columns use the same type and practically the same attribute:
+    // only its background colour varies, but the colour doesn't matter for
+    // measuring, so we can always return true from here and allow wxGrid to
+    // reuse the same attribute for the entire column.
+    return true;
 }
 
 bool CensusViewGridTable::AppendRows(size_t numRows)
