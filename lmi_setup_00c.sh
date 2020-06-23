@@ -30,6 +30,7 @@ assert_su
 assert_not_chrooted
 
 ./lmi_setup_02c.sh
+./lmi_setup_10c.sh
 
 # Installing 'schroot' creates this 'chroot.d' directory.
 cat >/etc/schroot/chroot.d/centos7lmi.conf <<EOF
@@ -42,8 +43,6 @@ root-groups=root
 shell=/bin/zsh
 type=plain
 EOF
-
-./lmi_setup_10c.sh
 
 # Use the same cache directory for all chroot package downloads.
 #
