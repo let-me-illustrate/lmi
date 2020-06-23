@@ -3,7 +3,7 @@
 a='schroot --chroot=lmi'
 
 b='cd /opt/lmi/src/lmi'
-c='git ls-files --deleted | xargs git checkout --'
+c='git ls-files --deleted | xargs -t git checkout --'
 d='for z in *(m-1) ; do touch --reference=$z /opt/lmi/free/src/lmi/$z; done'
 u='eval `ssh-agent`'
 v='ssh-agent $SHELL'
