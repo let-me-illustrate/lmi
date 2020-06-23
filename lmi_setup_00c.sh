@@ -35,14 +35,25 @@ assert_not_chrooted
 # Installing 'schroot' creates this 'chroot.d' directory.
 cat >/etc/schroot/chroot.d/centos7lmi.conf <<EOF
 [centos7lmi]
+# aliases=deliberately_unused
 description=centos-7.7
 directory=/srv/chroot/centos7lmi
 users=${CHROOT_USERS}
 groups=${NORMAL_GROUP}
 root-groups=root
 shell=/bin/zsh
-type=plain
+type=directory
+profile=lmi_profile
+# setup.config=lmi_profile/deliberately_unused
 EOF
+
+mkdir -p /etc/schroot/lmi_profile
+rm    -f /etc/schroot/lmi_profile/copyfiles
+touch    /etc/schroot/lmi_profile/copyfiles
+rm    -f /etc/schroot/lmi_profile/fstab
+touch    /etc/schroot/lmi_profile/fstab
+rm    -f /etc/schroot/lmi_profile/nssdatabases
+touch    /etc/schroot/lmi_profile/nssdatabases
 
 # Use the same cache directory for all chroot package downloads.
 #

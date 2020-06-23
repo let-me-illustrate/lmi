@@ -69,8 +69,18 @@ users=${CHROOT_USERS}
 groups=${NORMAL_GROUP}
 root-groups=root
 shell=/bin/zsh
-type=plain
+type=directory
+profile=lmi_profile
+# setup.config=lmi_profile/deliberately_unused
 EOF
+
+mkdir -p /etc/schroot/lmi_profile
+rm    -f /etc/schroot/lmi_profile/copyfiles
+touch    /etc/schroot/lmi_profile/copyfiles
+rm    -f /etc/schroot/lmi_profile/fstab
+touch    /etc/schroot/lmi_profile/fstab
+rm    -f /etc/schroot/lmi_profile/nssdatabases
+touch    /etc/schroot/lmi_profile/nssdatabases
 
 # Experimentally show whether anything's already here:
 du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
