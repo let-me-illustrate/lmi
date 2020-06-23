@@ -29,7 +29,7 @@ set -evx
 assert_su
 assert_not_chrooted
 
-CACHEDIR=/var/cache/"${CODENAME}"
+CACHEDIR=/var/cache/lmi_schroots
 mkdir -p "${CACHEDIR}"
 mkdir -p /srv/chroot/centos7lmi/"${CACHEDIR}"
 mount --bind "${CACHEDIR}" /srv/chroot/centos7lmi/"${CACHEDIR}"

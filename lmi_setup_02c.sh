@@ -34,7 +34,7 @@ umount /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/var/cache/apt/archives ||
 umount /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/dev/pts                || true
 umount /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/proc                   || true
 umount /srv/chroot/centos7lmi/srv/cache_for_lmi      || true
-umount /srv/chroot/centos7lmi/var/cache/"${CODENAME}"|| true
+umount /srv/chroot/centos7lmi/var/cache/lmi_schroots || true
 umount /srv/chroot/centos7lmi/var/cache/yum          || true
 umount /srv/chroot/centos7lmi/dev/pts                || true
 umount /srv/chroot/centos7lmi/proc                   || true

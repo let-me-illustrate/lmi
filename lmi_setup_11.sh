@@ -37,9 +37,14 @@ assert_not_chrooted
 #   - while not chrooted, so that the host filesystem is accessible.
 # The alternative of bind-mounting parent directory var/cache/apt
 # (using a single directory to store '.deb' files for all releases)
-# might be investigated--see:
+# was considered, but seemed too extraordinary--see:
 #   https://lists.nongnu.org/archive/html/lmi/2020-05/msg00028.html
-CACHEDIR=/var/cache/"${CODENAME}"
+# Instead, chroot package downloads are kept in their own directory
+# (distinct from the host's own cache), and commingled there (because
+# they're uniquely named, there's no need to segregate packages by
+# OS release, or to separate '.deb' from '.rpm' files).
+
+CACHEDIR=/var/cache/lmi_schroots
 mkdir -p "${CACHEDIR}"
 
 # Bootstrap a minimal debian system. Options:

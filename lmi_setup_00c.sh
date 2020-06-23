@@ -55,7 +55,7 @@ EOF
 # 'x86_64/7/...', so the files remain segregated. Some duplication of
 # '.rpm' files may occur, but that's harmless.
 
-CACHEDIR=/var/cache/centos_lmi
+CACHEDIR=/var/cache/lmi_schroots
 mkdir -p "${CACHEDIR}"
 
 rinse --arch amd64 --distribution centos-7 \
