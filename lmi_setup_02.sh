@@ -69,8 +69,8 @@ assert_not_chrooted
 #   | column -t
 # along with '-r' because '-l' does a poor job of columnization.
 
-umount /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || true
 umount /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi      || true
+umount /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || true
 umount /srv/chroot/"${CHRTNAME}"/dev/pts                || true
 umount /srv/chroot/"${CHRTNAME}"/proc                   || true
 
