@@ -45,14 +45,27 @@ EOF
 
 ./lmi_setup_10c.sh
 
+# Use the same cache directory for all chroot package downloads.
+#
+# Packages ('.deb' as well as '.rpm') are uniquely named, so no
+# collision can occur.
+#
+# Actually, 'rinse' creates a subdirectory like 'centos-7.amd64/', and
+# updating the centos chroot using 'yum' creates subdirectories like
+# 'x86_64/7/...', so the files remain segregated. Some duplication of
+# '.rpm' files may occur, but that's harmless.
+
+CACHEDIR=/var/cache/centos_lmi
+mkdir -p "${CACHEDIR}"
+
 rinse --arch amd64 --distribution centos-7 \
+  --cache-dir "${CACHEDIR}" \
   --directory /srv/chroot/centos7lmi \
 
-mkdir -p /var/cache/centos_lmi
 # There are probably a few directories here, with no regular files.
 du   -sb /srv/chroot/centos7lmi/var/cache/yum || echo "Oops: rinse didn't create cache"
 mkdir -p /srv/chroot/centos7lmi/var/cache/yum
-mount --bind /var/cache/centos_lmi /srv/chroot/centos7lmi/var/cache/yum
+mount --bind "${CACHEDIR}" /srv/chroot/centos7lmi/var/cache/yum
 
 echo Installed centos chroot.
 
