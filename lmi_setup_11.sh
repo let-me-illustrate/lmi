@@ -87,10 +87,29 @@ EOF
 mkdir -p /etc/schroot/lmi_profile
 rm    -f /etc/schroot/lmi_profile/copyfiles
 touch    /etc/schroot/lmi_profile/copyfiles
-rm    -f /etc/schroot/lmi_profile/fstab
-touch    /etc/schroot/lmi_profile/fstab
 rm    -f /etc/schroot/lmi_profile/nssdatabases
 touch    /etc/schroot/lmi_profile/nssdatabases
+
+cat >/etc/schroot/lmi_profile/fstab <<EOF
+# fstab: static file system information for chroots.
+# Note that the mount point will be prefixed by the chroot path
+# (CHROOT_PATH)
+#
+# <file system>        <mount point>           <type>  <options>  <dump>  <pass>
+/dev/pts                /dev/pts                none    rw,bind    0       0
+/proc                   /proc                   none    rw,bind    0       0
+/srv/cache_for_lmi      /srv/cache_for_lmi      none    rw,bind    0       0
+/var/cache/lmi_schroots /var/cache/apt/archives none    rw,bind    0       0
+# It is convenient to bind a redhat cache mountpoint as well:
+/var/cache/lmi_schroots /var/cache/yum          none    rw,bind    0       0
+# ...and also a pass-through mount for an intermediate chroot:
+/var/cache/lmi_schroots /var/cache/lmi_schroots none    rw,bind    0       0
+#
+# schroot creates a mountpoint if it does not already exist:
+# /tmp                  /nonexistent/mountpoint none    rw,bind    0       0
+# but of course schroot won't create a nonexistent filesystem:
+# /dev/nonexistent      /var/cache/nonexistent  none    rw,bind    0       0
+EOF
 
 # Experimentally show whether anything's already here:
 du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
