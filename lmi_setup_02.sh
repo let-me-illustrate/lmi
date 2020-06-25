@@ -79,21 +79,39 @@ findmnt -ro SOURCE,TARGET \
   | sed -e's,^[/A-Za-z0-9_-]*[[]\([^]]*\)[]],\1,' \
   | column -t
 
+# Abort if any $CHRTNAME mountpoint remains.
+#
+# This shouldn't occur, and 'rm --one-file-system' below should be
+# safe anyway, yet an actual catastrophe did occur nonetheless.
+findmnt | grep "${CHRTNAME}" && exit 9
+
 # Use '--one-file-system' because it was designed for this use case:
 #   https://lists.gnu.org/archive/html/bug-coreutils/2006-10/msg00332.html
 # | This option is useful when removing a build "chroot" hierarchy
 #
-# Use 'schroot --location' rather than /srv/chroot/"$CHRTNAME" because
-# chroots need not be located in /srv .
+# These scripts create a chroot in /srv/chroot/"$CHRTNAME", but
+# chroots need not be located in /srv , so use 'schroot --location'
+# to attempt to detect any manual override. Such detection may fail
+# (e.g., if the chroot's '.conf' file is missing).
 
-rm --one-file-system --recursive --force \
-  "$(schroot --chroot="${CHRTNAME}" --location)"
+loc0=/srv/chroot/"${CHRTNAME}"
+loc1="$(schroot --chroot="${CHRTNAME}" --location)"
+if [ -n "${loc1}" ] && [ "${loc0}" != "${loc1}" ]; then
+  echo "chroot found in unexpected location--remove it manually"
+  exit 9
+fi
+
+# Remove the directory that these scripts would create. Removing
+# "${loc1}" wouldn't be appropriate because it can be an empty string.
+
+rm --one-file-system --recursive --force "${loc0}"
+
+# Explicitly test postcondition.
+if [ -e "${loc0}" ] || [ -e "${loc1}" ] ; then echo "Oops."; exit 9; fi
 
 # schroot allows configuration files in /etc/schroot/chroot.d/ only.
 
 rm --force /etc/schroot/chroot.d/"${CHRTNAME}".conf
-
-# These commands fail harmlessly if the chroot doesn't already exist.
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
 echo "$stamp $0: Removed old chroot."  | tee /dev/tty

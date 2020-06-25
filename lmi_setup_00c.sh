@@ -68,6 +68,7 @@ touch    /etc/schroot/lmi_profile/nssdatabases
 CACHEDIR=/var/cache/lmi_schroots
 mkdir -p "${CACHEDIR}"
 
+if [ -e /srv/chroot/centos7lmi ] ; then echo "Oops."; exit 9; fi
 rinse --arch amd64 --distribution centos-7 \
   --cache-dir "${CACHEDIR}" \
   --directory /srv/chroot/centos7lmi \

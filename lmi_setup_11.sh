@@ -47,11 +47,21 @@ assert_not_chrooted
 CACHEDIR=/var/cache/lmi_schroots
 mkdir -p "${CACHEDIR}"
 
+# At this point,
+#   /srv/
+# probably exists already; and
+#   /srv/chroot/
+# might not exist (in which case 'debootstrap' will create it); but
+#   /srv/chroot/"${CHRTNAME}"
+# should not exist--debootstrapping into a nonempty directory can
+# fail in mysterious ways.
+if [ -e /srv/chroot/"${CHRTNAME}" ] ; then echo "Oops."; exit 9; fi
+mkdir -p /srv/chroot/"${CHRTNAME}"
+
 # Bootstrap a minimal debian system. Options:
 #   --include=zsh, because of "shell=/bin/zsh" below
 #   --variant=minbase, as explained here:
 #     https://lists.nongnu.org/archive/html/lmi/2020-05/msg00026.html
-mkdir -p /srv/chroot/"${CHRTNAME}"
 debootstrap --arch=amd64 --cache-dir="${CACHEDIR}" \
  --variant=minbase --include=zsh \
  "${CODENAME}" /srv/chroot/"${CHRTNAME}" >"${CHRTNAME}"-debootstrap-log 2>&1
