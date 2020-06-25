@@ -61,8 +61,8 @@ ln -s /bin/true /usr/bin/ischroot
 sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /etc/skel/.bash_logout
 
 # This being a "plain" schroot, mount essential directories:
-mount -t devpts -o rw,nosuid,noexec,relatime,mode=600 devpts /dev/pts
-mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
+mountpoint /dev/pts || mount -t devpts -o rw,nosuid,noexec,relatime,mode=600 devpts /dev/pts
+mountpoint /proc    || mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 
 # If the chroot is to be permanent, consider adding those mounts to /etc/fstab:
 #
