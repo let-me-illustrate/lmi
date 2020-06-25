@@ -2469,13 +2469,20 @@ void CensusGridView::UponUpdateSingleSelection(wxUpdateUIEvent& e)
 {
     // We consider that in absence of any selected rows, the current row is the
     // selected/active one, so what we actually check for here is that we do
-    // not have more than a single row selected.
-    auto const sel_blocks = grid_window_->GetSelectedRowBlocks();
-    bool const is_single_sel
-        =  sel_blocks.empty()
-        || (sel_blocks.size() == 1
-            && sel_blocks[0].GetTopRow() == sel_blocks[0].GetBottomRow())
-        ;
+    // not have any rows other than, possibly, the current one, selected.
+    bool is_single_sel = true;
+    for(auto const& sel_block: grid_window_->GetSelectedRowBlocks())
+        {
+            auto const cursor_row = grid_window_->GetGridCursorRow();
+            if
+                (  sel_block.GetTopRow()    != cursor_row
+                || sel_block.GetBottomRow() != cursor_row
+                )
+                {
+                is_single_sel = false;
+                break;
+                }
+        }
 
     e.Enable(is_single_sel);
 }
