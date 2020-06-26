@@ -29,17 +29,13 @@ set -evx
 assert_su
 assert_not_chrooted
 
-# umount expected mounts, then list any that seem to have been missed.
+# Show all lmi mountpoints; abort if there are any.
 #
-# It might seem snazzier to extract the relevant field of
-#   grep "${CHRTNAME}" /proc/mounts
-# and pipe it into
-#   xargs umount
-# but that would do something astonishing if two chroots (one nested
-# and the other not) have mounted /proc thus:
-#   proc /srv/chroot/"${CHRTNAME}"/proc
-#   proc /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/proc
-# and only the non-nested one is intended to be destroyed.
+# The most likely cause is that a user has entered the chroot with
+# 'schroot', but has not yet left it. Otherwise, this "shouldn't"
+# occur (although it has been observed), and 'rm --one-file-system'
+# below should be safe anyway (yet an actual catastrophe did occur
+# nonetheless).
 #
 # The 'findmnt' invocation is elaborated thus:
 #   -r
@@ -69,20 +65,11 @@ assert_not_chrooted
 #   | column -t
 # along with '-r' because '-l' does a poor job of columnization.
 
-umount /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi      || true
-umount /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives || true
-umount /srv/chroot/"${CHRTNAME}"/dev/pts                || true
-umount /srv/chroot/"${CHRTNAME}"/proc                   || true
-
 findmnt -ro SOURCE,TARGET \
   | grep "${CHRTNAME}" \
   | sed -e's,^[/A-Za-z0-9_-]*[[]\([^]]*\)[]],\1,' \
   | column -t
 
-# Abort if any $CHRTNAME mountpoint remains.
-#
-# This shouldn't occur, and 'rm --one-file-system' below should be
-# safe anyway, yet an actual catastrophe did occur nonetheless.
 findmnt | grep "${CHRTNAME}" && exit 9
 
 # Use '--one-file-system' because it was designed for this use case:
