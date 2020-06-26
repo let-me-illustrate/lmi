@@ -29,15 +29,7 @@ set -evx
 assert_su
 assert_not_chrooted
 
-CACHEDIR=/var/cache/lmi_schroots
-mkdir -p "${CACHEDIR}"
-mkdir -p /srv/chroot/centos7lmi/"${CACHEDIR}"
-mount --bind "${CACHEDIR}" /srv/chroot/centos7lmi/"${CACHEDIR}"
-
-mkdir -p /srv/cache_for_lmi
-du   -sb /srv/chroot/centos7lmi/srv/cache_for_lmi || echo "Okay."
-mkdir -p /srv/chroot/centos7lmi/srv/cache_for_lmi
-mount --bind /srv/cache_for_lmi /srv/chroot/centos7lmi/srv/cache_for_lmi
+# Nothing left to do here.
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
 echo "$stamp $0: Mounted cache_for_lmi [centos]."  | tee /dev/tty

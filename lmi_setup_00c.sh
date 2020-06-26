@@ -54,6 +54,10 @@ rm    -f /etc/schroot/lmi_profile/nssdatabases
 touch    /etc/schroot/lmi_profile/nssdatabases
 
 cat >/etc/schroot/lmi_profile/fstab <<EOF
+# For caveats, see:
+#    https://lists.nongnu.org/archive/html/lmi/2020-05/msg00040.html
+#
+# [block comment copied from 'schroot' distribution]
 # fstab: static file system information for chroots.
 # Note that the mount point will be prefixed by the chroot path
 # (CHROOT_PATH)
@@ -92,10 +96,10 @@ rinse --arch amd64 --distribution centos-7 \
   --cache-dir "${CACHEDIR}" \
   --directory /srv/chroot/centos7lmi \
 
-# There are probably a few directories here, with no regular files.
+# There are probably a few directories here, with few regular files,
+# because this script is intended to be run on a yum-free debian host.
 du   -sb /srv/chroot/centos7lmi/var/cache/yum || echo "Oops: rinse didn't create cache"
-mkdir -p /srv/chroot/centos7lmi/var/cache/yum
-mount --bind "${CACHEDIR}" /srv/chroot/centos7lmi/var/cache/yum
+find /srv/chroot/centos7lmi/var/cache/yum -type f -print0 | xargs -0 ls -l
 
 echo Installed centos chroot.
 

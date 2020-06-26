@@ -52,15 +52,8 @@ assert_not_chrooted
 #   rm -rf /srv/cache_for_lmi/blessed/proprietary
 #   cp --dereference --preserve --recursive \
 #     /srv/chroot/some-prior-chroot/opt/lmi/blessed/ /srv/cache_for_lmi
-# to update the host, and then:
-cp --dereference --preserve --recursive \
-  /srv/cache_for_lmi/* /srv/chroot/${CHRTNAME}/srv/cache_for_lmi/ || true
-# Messages like
-#  cp: '/srv/cache_for_lmi/downloads' and
-#    '/srv/chroot/lmi_bullseye_1/srv/cache_for_lmi/downloads'
-#    are the same file
-# may arise, harmlessly, because of a mount command in an upstream
-# script.
+# to update the host; then those files will be accessible in chroots
+# created by these scripts (which mount that directory).
 
 # Also copy any desired msw software into the chroot now, e.g.:
 #   cp -a /srv/chroot/some-prior-chroot/opt/xyzzy /srv/chroot/${CHRTNAME}/opt/xyzzy

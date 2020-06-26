@@ -46,9 +46,6 @@ chown root:tty /dev/tty
 chmod 666 /dev/ptmx
 [ -d /dev/pts  ] || mkdir /dev/pts
 
-mountpoint /dev/pts || mount -t devpts -o rw,nosuid,noexec,relatime,mode=600 devpts /dev/pts
-mountpoint /proc    || mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
-
 findmnt /var/cache/yum
 findmnt /proc
 findmnt /dev/pts

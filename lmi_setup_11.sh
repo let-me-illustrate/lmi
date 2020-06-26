@@ -91,6 +91,10 @@ rm    -f /etc/schroot/lmi_profile/nssdatabases
 touch    /etc/schroot/lmi_profile/nssdatabases
 
 cat >/etc/schroot/lmi_profile/fstab <<EOF
+# For caveats, see:
+#    https://lists.nongnu.org/archive/html/lmi/2020-05/msg00040.html
+#
+# [block comment copied from 'schroot' distribution]
 # fstab: static file system information for chroots.
 # Note that the mount point will be prefixed by the chroot path
 # (CHROOT_PATH)
@@ -111,22 +115,10 @@ cat >/etc/schroot/lmi_profile/fstab <<EOF
 # /dev/nonexistent      /var/cache/nonexistent  none    rw,bind    0       0
 EOF
 
-# Experimentally show whether anything's already here:
+# Summarize what's already here--nothing if /var/cache/lmi_schroots
+# has never been populated, or a full system if these scripts have
+# been run previously:
 du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
-# Bind-mount apt archives for the chroot's debian release. Do this:
-#   - after invoking 'debootstrap', so the chroot's /var exists; and
-#   - before invoking 'apt-get' in the chroot, to save bandwidth; and
-#   - while not chrooted, so that the host filesystem is accessible.
-mount --bind "${CACHEDIR}" /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
-
-# Show the mount just established:
-findmnt /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
-# Show any underlying mount (e.g., for an intermediate chroot):
-findmnt "${CACHEDIR}" || true
-
-# Are the next two commands useful?
-findmnt /proc
-findmnt /dev/pts
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
 echo "$stamp $0: Ran 'debootstrap'."  | tee /dev/tty

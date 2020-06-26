@@ -29,12 +29,7 @@ set -evx
 assert_su
 assert_not_chrooted
 
-# For caveats, see:
-#    https://lists.nongnu.org/archive/html/lmi/2020-05/msg00040.html
-mkdir -p /srv/cache_for_lmi
-du   -sb /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi || echo "Okay."
-mkdir -p /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
-mount --bind /srv/cache_for_lmi /srv/chroot/"${CHRTNAME}"/srv/cache_for_lmi
+# Nothing left to do here.
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
 echo "$stamp $0: Mounted cache_for_lmi."  | tee /dev/tty
