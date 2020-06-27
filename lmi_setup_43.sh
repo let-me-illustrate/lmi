@@ -36,7 +36,9 @@ ln --symbolic --force --no-dereference ../hooks .git
 
 # Iff this chroot needs write access to savannah, then reconfigure
 # the URL, using your savannah ID instead of mine:
-git remote set-url --push origin chicares@git.sv.gnu.org:/srv/git/lmi.git
+if [ "greg" = "$(whoami)" ]; then
+  git remote set-url --push origin chicares@git.sv.gnu.org:/srv/git/lmi.git
+fi
 
 # Duplicate proprietary repository (if available).
 # First, copy "blessed" repository (here, 'cp' is sufficient: this
