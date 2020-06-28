@@ -29,7 +29,7 @@ set -evx
 assert_not_su
 assert_chrooted
 
-# Temporarily allow this to fail.
+# Allow scipt to continue even if some test fails.
 /opt/lmi/src/lmi/nychthemeral_test.sh || true
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
