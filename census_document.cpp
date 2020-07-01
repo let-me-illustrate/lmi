@@ -35,11 +35,11 @@
 
 IMPLEMENT_DYNAMIC_CLASS(CensusDocument, wxDocument)
 
-wxDataViewCtrl& CensusDocument::PredominantViewWindow() const
+wxGrid& CensusDocument::PredominantViewWindow() const
 {
-    return ::PredominantViewWindow<CensusView,wxDataViewCtrl>
+    return ::PredominantViewWindow<CensusView,wxGrid>
         (*this
-        ,&CensusView::list_window_
+        ,&CensusView::grid_window_
         );
 }
 

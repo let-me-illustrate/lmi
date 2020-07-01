@@ -38,16 +38,17 @@
 #include <vector>
 
 class CensusDocument;
-class CensusViewDataViewModel;
+class CensusViewGridTable;
 
-class WXDLLIMPEXP_FWD_ADV wxDataViewEvent;
-class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
+class WXDLLIMPEXP_FWD_ADV wxGrid;
+class WXDLLIMPEXP_FWD_ADV wxGridEvent;
+class WXDLLIMPEXP_FWD_ADV wxGridSizeEvent;
 
 class CensusView final
     :public ViewEx
 {
     friend class CensusDocument;
-    friend class CensusViewDataViewModel;
+    friend class CensusViewGridTable;
 
   public:
     CensusView();
@@ -66,8 +67,9 @@ class CensusView final
     char const* menubar_xrc_resource() const override;
 
     // Event handlers, in event-table order (reflecting GUI order)
-    void UponRightClick             (wxDataViewEvent&);
-    void UponValueChanged           (wxDataViewEvent&);
+    void UponRightClick             (wxGridEvent&);
+    void UponValueChanged           (wxGridEvent&);
+    void UponColumnAutoSize         (wxGridSizeEvent&);
     void UponEditCell               (wxCommandEvent&);
     void UponEditClass              (wxCommandEvent&);
     void UponEditCase               (wxCommandEvent&);
@@ -87,7 +89,6 @@ class CensusView final
     void UponUpdateAlwaysDisabled   (wxUpdateUIEvent&);
     void UponUpdateAlwaysEnabled    (wxUpdateUIEvent&);
     void UponUpdateSingleSelection  (wxUpdateUIEvent&);
-    void UponUpdateNonemptySelection(wxUpdateUIEvent&);
     void UponUpdateColumnValuesVary (wxUpdateUIEvent&);
 
     bool DoAllCells(mcenum_emission);
@@ -121,7 +122,7 @@ class CensusView final
         ,std::string const& title
         );
 
-    int selected_row();
+    int current_row();
 
     void update_class_names();
 
@@ -131,8 +132,8 @@ class CensusView final
 
     std::shared_ptr<Ledger const> composite_ledger_;
 
-    wxDataViewCtrl* list_window_;
-    wxObjectDataPtr<CensusViewDataViewModel> list_model_;
+    wxGrid*              grid_window_ {nullptr};
+    CensusViewGridTable* grid_table_  {nullptr};
 
     DECLARE_DYNAMIC_CLASS(CensusView)
     DECLARE_EVENT_TABLE()
