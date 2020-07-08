@@ -501,9 +501,9 @@ void LedgerInvariant::Init()
     EndtAge                    = 100;
     NoLongerIssued             = false;
     AllowGroupQuote            = true;
-    SurviveToExpectancy        = true;
-    SurviveToYear              = true;
-    SurviveToAge               = true;
+    SurviveToExpectancy        = false;
+    SurviveToYear              = false;
+    SurviveToAge               = false;
     SurvivalMaxYear            = 0;
     SurvivalMaxAge             = 0;
     InforceYear                = Length;
@@ -674,12 +674,11 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     UseExperienceRating        = UseExperienceRating   || a_Addend.UseExperienceRating;
     UsePartialMort             = a_Addend.UsePartialMort;
 
-    SurviveToExpectancy        = SurviveToExpectancy   && a_Addend.SurviveToExpectancy;
-    SurviveToYear              = SurviveToYear         && a_Addend.SurviveToYear;
-    SurviveToAge               = SurviveToAge          && a_Addend.SurviveToAge;
-    LMI_ASSERT(SurviveToExpectancy + SurviveToYear + SurviveToAge <= 1);
-    SurvivalMaxYear            = std::max(SurvivalMaxYear, a_Addend.SurvivalMaxYear);
-    SurvivalMaxAge             = std::max(SurvivalMaxAge , a_Addend.SurvivalMaxAge);
+    SurviveToExpectancy        = a_Addend.SurviveToExpectancy;
+    SurviveToYear              = a_Addend.SurviveToYear;
+    SurviveToAge               = a_Addend.SurviveToAge;
+    SurvivalMaxYear            = a_Addend.SurvivalMaxYear;
+    SurvivalMaxAge             = a_Addend.SurvivalMaxAge;
 
     AvgFund                    = a_Addend.AvgFund;
     CustomFund                 = a_Addend.CustomFund;
