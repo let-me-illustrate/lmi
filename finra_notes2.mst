@@ -31,11 +31,6 @@
 {{GuarMortalityFootnote}}
 </p>
 
-<!-- PDF !! FnMaturityAge -->
-<p>
-This illustration assumes death of the insured at age {{EndtAge}}.
-</p>
-
 {{#StateIsNorthOrSouthCarolina}}
     <p>{{GuarIssueDisclaimerNcSc}}</p>
 {{/StateIsNorthOrSouthCarolina}}
@@ -97,6 +92,8 @@ This illustration assumes death of the insured at age {{EndtAge}}.
     The ${{SpouseRiderAmount}}&nbsp; {{SpouseFootnote}}
     </p>
 {{/HasSpouseRider}}
+
+{{FnMaturityAge}}
 
 {{FnPartialMortality}}
 

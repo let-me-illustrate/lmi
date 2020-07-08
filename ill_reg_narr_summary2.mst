@@ -57,12 +57,9 @@
 {{GuarMortalityFootnote}}
 </p>
 
-{{FnPartialMortality}}
+{{FnMaturityAge}}
 
-<!-- PDF !! FnMaturityAge -->
-<p>
-This illustration assumes death of the insured at age {{EndtAge}}.
-</p>
+{{FnPartialMortality}}
 
 <!-- PDF !! LoanFootnote -->
 {{!
