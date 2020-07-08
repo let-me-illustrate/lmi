@@ -74,11 +74,7 @@ or sending money.
     </p>
 {{/HasWP}}
 
-{{#UsePartialMort}}
-    <p>
-    {{FnPartialMortality}}
-    </p>
-{{/UsePartialMort}}
+{{FnPartialMortality}}
 
 <!-- PDF !! MortalityBlendFootnote -->
 {{#GenderBlended}}

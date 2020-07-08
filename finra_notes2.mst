@@ -98,11 +98,7 @@ This illustration assumes death of the insured at age {{EndtAge}}.
     </p>
 {{/HasSpouseRider}}
 
-{{#UsePartialMort}}
-    <p>
-    {{FnPartialMortality}}
-    </p>
-{{/UsePartialMort}}
+{{FnPartialMortality}}
 
 <!-- PDF !! MortalityBlendFootnote -->
 {{#GenderBlended}}

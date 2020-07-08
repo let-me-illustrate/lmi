@@ -57,11 +57,7 @@
 {{GuarMortalityFootnote}}
 </p>
 
-{{#UsePartialMort}}
-    <p>
-    {{FnPartialMortality}}
-    </p>
-{{/UsePartialMort}}
+{{FnPartialMortality}}
 
 <!-- PDF !! FnMaturityAge -->
 <p>
