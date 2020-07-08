@@ -507,10 +507,10 @@ static std::string const S_IllRegCertClient =
   " either higher or lower. The agent has told me they are not guaranteed.";
 
 static std::string const S_FnMaturityAge =
-  "Maturity age: {{EndtAge}}.";
+  "¶¶Maturity age: {{EndtAge}}.";
 
 static std::string const S_FnPartialMortality =
-  "Columns reflect mortality, beginning at {{PartMortTableMult[0]}}"
+  "¶¶Columns reflect mortality, beginning at {{PartMortTableMult[0]}}"
   " of the {{PartMortTableName}} table,"
   " with all deaths at the end of each year"
   "{{#SurviveToExpectancy}}"
@@ -917,6 +917,7 @@ sample2xyz::sample2xyz()
 {
     item("DatabaseFilename")           = glossed_string("sample2xyz.database");
     // Exotica.
+    item("FnMaturityAge")              = S_FnMaturityAge;
     item("FnPartialMortality")         = S_FnPartialMortality;
 }
 } // Unnamed namespace.
