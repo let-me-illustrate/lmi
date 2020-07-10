@@ -205,6 +205,11 @@ int find_model_column_by_title
 
 LMI_WX_TEST_CASE(paste_census)
 {
+    // Update this file (and the webpage cited above) in 2040--see:
+    //   https://lists.nongnu.org/archive/html/lmi/2020-06/msg00037.html
+    // __DATE__[9] is second-to-last digit of a four-digit year
+    static_assert('4' != __DATE__[9]);
+
     // The column titles are the user-visible strings corresponding to the
     // internal column names actually used in the census data below.
     std::set<std::string> column_titles;
@@ -216,13 +221,13 @@ LMI_WX_TEST_CASE(paste_census)
     char const* const census_data =
         "Gender\tDateOfBirth\tEmployeeClass\tSpecifiedAmount\n"
         "\n"
-        "Female\t19851231\tClerical\t100000, @65; 50000\n"
-        "Male\t19801130\tClerical\t200000, @65; 50000\n"
-        "Female\t19751029\tTechnical\t300000, @65; 50000\n"
-        "Male\t19700928\tTechnical\t400000, @65; 50000\n"
-        "Female\t19650827\tSupervisor\t500000, @65; 50000\n"
-        "Male\t19600726\tAttorney\t600000, @65; 75000\n"
-        "Female\t19550625\tPresident\t700000, @65; 100000\n"
+        "Female\t19851231\tClerical\t100000, @85; 50000\n"
+        "Male\t19801130\tClerical\t200000, @85; 50000\n"
+        "Female\t19751029\tTechnical\t300000, @85; 50000\n"
+        "Male\t19700928\tTechnical\t400000, @85; 50000\n"
+        "Female\t19650827\tSupervisor\t500000, @85; 50000\n"
+        "Male\t19600726\tAttorney\t600000, @85; 75000\n"
+        "Female\t19550625\tPresident\t700000, @85; 100000\n"
         ;
 
     int const number_of_rows =
