@@ -44,7 +44,6 @@ git mv lmi.rc lmi_msw_res.rc
   # Make a patch against repository from local tree
 
 git diff file0.cpp file1.cpp >/dev/clipboard
-cvs diff -U3 file0.cpp file1.cpp >/dev/clipboard
 
   # Apply an email patch
 
