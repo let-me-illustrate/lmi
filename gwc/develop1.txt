@@ -147,16 +147,6 @@ git pull
 
 git pull --rebase
 
-  # Set local timestamps from RCS Id's, to match repository
-  # (this should be necessary only if your clock is unsynchronized)
-  #
-  # This is slow, so consider specifying the names of changed files
-  # instead of using '*' at the beginning
-  #
-  # ...for cvs:
-
-for z in * ; do grep --directories=skip --quiet --files-with-matches '$Id:' $z && touch "--date=$(<$z sed -e'/$Id:/!d' |sed -e's/^.*\([0-9]\{4\}[0-9\/: ]*\) .*$/\1/')" $z && date -u +'%Y%m%dT%H%MZ' -r $z; done;
-
   # If msw sets an incorrect executable bit, and you accidentally
   # commit it (without first running 'make check_concinnity', which
   # would catch the error), fix it thus:
