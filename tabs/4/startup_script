@@ -3,21 +3,17 @@
 a='schroot --chroot=lmi'
 
 b='cd /opt/lmi/src/lmi'
-c='date -u +"%Y%m%dT%H%MZ" |tr -d "\\n" >/dev/clipboard'
 d='make $coefficiency check_concinnity 2>&1 |less -S -N'
 e='sed -f diagnostics.sed ../log 2>&1 |less -S'
 f='pushd /tmp; /opt/lmi/src/lmi/test_schemata.sh 2>&1 |less; popd'
 
 print -rs $b ; echo $b ; eval $b
-# '/dev/clipboard' is a cygwinism.
-#print -rs $c ; echo $c
 print -rs $d ; echo $d
 print -rs $e ; echo $e
 print -rs $f ; echo $f
 
 unset a
 unset b
-unset c
 unset d
 unset e
 unset f

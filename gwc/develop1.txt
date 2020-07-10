@@ -43,7 +43,7 @@ git mv lmi.rc lmi_msw_res.rc
 
   # Make a patch against repository from local tree
 
-git diff file0.cpp file1.cpp >/dev/clipboard
+git diff file0.cpp file1.cpp >some_new_file
 
   # Apply an email patch
 
@@ -238,10 +238,6 @@ cd /opt/lmi/src/lmi
 
 make $coefficiency check_concinnity >../log 2>&1
 sed -f diagnostics.sed ../log 2>&1 |less -S
-
-  # Copy date to clipboard for pasting
-
-date -u +'%Y%m%dT%H%MZ' |tr -d '\n' >/dev/clipboard
 
   # Fifth screen: only for running lmi and its GUI tests
 
