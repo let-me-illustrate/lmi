@@ -1,0 +1,63 @@
+# Continuous integration workflow for lmi: build Linux and MSW binaries.
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-msw32-cross:
+    runs-on: ubuntu-20.04
+    name: Cross-compile for MSW-32
+    env:
+      LMI_COMPILER: gcc
+      LMI_TRIPLET: i686-w64-mingw32
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install required packages
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get --assume-yes install \
+            automake bc bsdmainutils bzip2 curl cvs default-jre \
+            g++-mingw-w64-i686 g++-multilib git jing libarchive-tools \
+            libtool libxml2-utils libxslt1-dev make patch pkg-config rsync \
+            shellcheck sudo trang unzip wine32 wget xsltproc
+
+      - name: Fix up libtool
+        run: sudo sed -i'' -e 's/^int _putenv/_CRTIMP int _putenv/' /usr/share/libtool/build-aux/ltmain.sh
+
+      - name: Set environment variables
+        run: |
+          echo "::set-env name=NORMAL_UID::`id --user`"
+          echo "::set-env name=coefficiency::--jobs=`nproc`"
+
+      - name: Create lmi directories
+        run: >
+          for d in /opt/lmi /etc/opt/lmi /srv/cache_for_lmi; do
+            sudo mkdir --parents $d;
+            sudo --preserve-env chown $NORMAL_UID $d;
+          done;
+          mkdir /srv/cache_for_lmi/downloads
+
+      - name: Build miscellanea
+        run: make $coefficiency --output-sync=recurse -f install_miscellanea.make
+
+      - name: Build libxml2
+        run: make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
+
+      - name: Build wxWidgets
+        run: ./install_wx.sh
+
+      - name: Build wxPdfDoc
+        run: ./install_wxpdfdoc.sh
+
+      - name: Build lmi
+        run: make $coefficiency --output-sync=recurse install
