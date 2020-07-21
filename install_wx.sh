@@ -115,6 +115,7 @@ config_options="
   --disable-ribbon
   --disable-richtext
   --disable-stc
+  --disable-sys-libs
   --disable-webview
   --enable-monolithic
   --enable-option-checking
@@ -122,9 +123,6 @@ config_options="
   --enable-stl
   --enable-vendor=$vendor
   --with-cxx=11
-  --with-expat=builtin
-  --with-libpng=builtin
-  --with-zlib=builtin
   --without-opengl
   --without-subdirs
   CPPFLAGS=-I$prefix/include
