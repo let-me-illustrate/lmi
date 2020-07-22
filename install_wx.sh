@@ -33,7 +33,7 @@ set -vxe
 
 remote_host_url=${remote_host_url:-"https://github.com/wxWidgets/wxWidgets.git"}
 
-wx_commit_sha=${wx_commit_sha:-"5a0723223dfac29998f323252fd1b286f902d7be"}
+wx_commit_sha=${wx_commit_sha:-"3c259eb56d924a4aa9b6d32e33367976eab919b6"}
 
 wx_skip_clean=${wx_skip_clean:-"0"}
 
