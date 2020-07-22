@@ -472,7 +472,7 @@ format_map_t static_formats()
     ,{"ErListBillPremium"               , f2}
     ,{"GuarPrem"                        , f2}
     ,{"InforceTaxBasis"                 , f2}
-    ,{"InforceUnloanedAV"               , f2}
+    ,{"InforceTotalAV"                  , f2}
     ,{"InitGLP"                         , f2}
     ,{"InitGSP"                         , f2}
     ,{"InitPrem"                        , f2}
@@ -810,7 +810,7 @@ ledger_evaluator Ledger::make_evaluator() const
     scalars["NoLapse"] = &NoLapse;
 
     std::string LmiVersion(LMI_VERSION);
-    calendar_date prep_date;
+    calendar_date date_prepared;
 
     // Skip authentication for non-interactive regression testing.
     if(!global_settings::instance().regression_testing())
@@ -824,19 +824,30 @@ ledger_evaluator Ledger::make_evaluator() const
         //   - use EffDate as date prepared
         // in order to avoid gratuitous failures.
         LmiVersion = "Regression testing";
-        prep_date.julian_day_number(bourn_cast<int>(invar.EffDateJdn));
+        date_prepared.julian_day_number(bourn_cast<int>(invar.EffDateJdn));
         }
 
     strings["LmiVersion"] = &LmiVersion;
 
     std::string DatePrepared =
-          month_name(prep_date.month())
+          month_name(date_prepared.month())
         + " "
-        + value_cast<std::string>(prep_date.day())
+        + value_cast<std::string>(date_prepared.day())
         + ", "
-        + value_cast<std::string>(prep_date.year())
+        + value_cast<std::string>(date_prepared.year())
         ;
     strings["DatePrepared" ] = &DatePrepared;
+
+    calendar_date inforce_as_of_date;
+    inforce_as_of_date.julian_day_number(bourn_cast<int>(invar.InforceAsOfDateJdn));
+    std::string InforceAsOfDate =
+          month_name(inforce_as_of_date.month())
+        + " "
+        + value_cast<std::string>(inforce_as_of_date.day())
+        + ", "
+        + value_cast<std::string>(inforce_as_of_date.year())
+        ;
+    strings["InforceAsOfDate" ] = &InforceAsOfDate;
 
     // PDF !! Sales-load refunds are mentioned on 'mce_ill_reg' PDFs
     // only. Other formats defectively ignore them.
@@ -1000,6 +1011,8 @@ ledger_evaluator Ledger::make_evaluator() const
 
 std::string ledger_evaluator::value(std::string const& scalar_name) const
 {
+    if(!contains(scalars_, scalar_name))
+        alarum() << "Key '" << scalar_name << "' not found." << LMI_FLUSH;
     return map_lookup(scalars_, scalar_name);
 }
 
@@ -1008,6 +1021,8 @@ std::string ledger_evaluator::value
     ,int                index
     ) const
 {
+    if(!contains(vectors_, vector_name))
+        alarum() << "Key '" << vector_name << "' not found." << LMI_FLUSH;
     return map_lookup(vectors_, vector_name).at(index);
 }
 

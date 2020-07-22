@@ -24,7 +24,7 @@
 . ./lmi_setup_inc.sh
 . /tmp/schroot_env
 
-set -vx
+set -evx
 
 assert_not_su
 assert_chrooted
@@ -60,3 +60,32 @@ wine regedit
 #     specify appropriate size: e.g., 1900x1120 for a 1920x1200 monitor
 #     (the other options don't seem to matter)
 #   then restart the application
+
+user=$(whoami)
+
+# Symlink directories used by lmi, so that both native and wine
+# builds use the same directories and can share the same
+# architecture-independent 'configurable_settings.xml'--much like the
+# "identity mount" technique used with cygwin. See:
+#   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00018.html
+# Because wine has its own notion of the filesystem, relative paths
+# are wanted, the GNUism '--relative' being used to translate the
+# absolute paths so that
+#   /opt/lmi/     becomes ../../../../../../../opt/lmi
+#   /etc/opt/lmi/ becomes ../../../../../../../../etc/opt/lmi
+#   /var/opt/lmi/ becomes ../../../../../../../../var/opt/lmi
+
+mkdir -p ~/.wine/drive_c/users/"${user}"/opt/
+cd ~/.wine/drive_c/users/"${user}"/opt/ || { printf 'failed: cd\n'; exit 3; }
+ln --symbolic --relative --force --no-dereference /opt/lmi/ ./lmi
+
+mkdir -p ~/.wine/drive_c/users/"${user}"/etc/opt/
+cd ~/.wine/drive_c/users/"${user}"/etc/opt/ || { printf 'failed: cd\n'; exit 3; }
+ln --symbolic --relative --force --no-dereference /etc/opt/lmi/ ./lmi
+
+mkdir -p ~/.wine/drive_c/users/"${user}"/var/opt/
+cd ~/.wine/drive_c/users/"${user}"/var/opt/ || { printf 'failed: cd\n'; exit 3; }
+ln --symbolic --relative --force --no-dereference /var/opt/lmi/ ./lmi
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Configured 'wine' for user '$user'."  | tee /dev/tty

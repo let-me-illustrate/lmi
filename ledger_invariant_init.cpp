@@ -159,8 +159,10 @@ void LedgerInvariant::Init(BasicValues const* b)
 //  External1035Amount         = DYNAMIC
 //  Internal1035Amount         = DYNAMIC
 
-    InforceUnloanedAV =
+    InforceTotalAV =
           b->yare_input_.InforceGeneralAccountValue
+        + b->yare_input_.InforceRegularLoanValue
+        + b->yare_input_.InforcePreferredLoanValue
         + b->yare_input_.InforceSeparateAccountValue
         ;
     InforceTaxBasis            = b->yare_input_.InforceTaxBasis           ;
@@ -205,13 +207,15 @@ void LedgerInvariant::Init(BasicValues const* b)
         }
     LMI_ASSERT(SurviveToExpectancy + SurviveToYear + SurviveToAge <= 1);
 
-    // These aren't constrained to cell-specific max age or duration.
+    // This isn't constrained to the cell-specific maturity duration.
     // If a composite has two cells, ages 20 and 80, and the input max
     // duration for the case (and both cells) is 25 years, then the
     // composite max duration really is 25: it's not limited to 20
     // because the 80-year-old matures earlier.
     SurvivalMaxYear            = b->yare_input_.SurviveToYear;
+    // However, this one is so constrained:
     SurvivalMaxAge             = b->yare_input_.SurviveToAge;
+    SurvivalMaxAge             = std::min(EndtAge, SurvivalMaxAge);
 
     AvgFund                    = b->yare_input_.UseAverageOfAllFunds;
     CustomFund                 = b->yare_input_.OverrideFundManagementFee;

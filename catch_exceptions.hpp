@@ -116,7 +116,7 @@ namespace lmi_test
     // arguments (ISO 15.3 paragraphs 18 & 19). Apparently const isn't
     // required, but it doesn't hurt and some programmers ask for it.
 
-        catch(char const* e)
+        catch(char const*& e)
             {detail::report_exception(out, ""                      , e);}
         catch(std::string const& e)
             {detail::report_exception(out, ""                      , e.c_str());}

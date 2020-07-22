@@ -71,7 +71,7 @@ void report_catastrophe(char const* message)
     safely_show_on_stderr(message);
 #if defined LMI_MSW
     ::MessageBoxA
-        (0
+        (nullptr
         ,message
         ,"Catastrophic error"
         ,MB_OK | MB_SETFOREGROUND | MB_ICONHAND | MB_SYSTEMMODAL
@@ -141,7 +141,7 @@ class alert_buf
   private:
     virtual void raise_alert() = 0;
 
-    std::string alert_string_;
+    std::string alert_string_ {};
 };
 
 class status_buf

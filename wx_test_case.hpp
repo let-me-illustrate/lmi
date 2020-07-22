@@ -117,7 +117,7 @@ class wx_test_case_##name \
         { \
         } \
  \
-    virtual void run(); \
+    void run() override; \
 }; \
 static wx_test_case_##name wx_test_case_##name##_instance; \
 void wx_test_case_##name::run()

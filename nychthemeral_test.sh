@@ -72,7 +72,6 @@ install_clutter='
 '
 
 cli_cgi_clutter='
-/^cp /d
 /^Test solve speed: /d
 /^Timing test skipped: takes too long in debug mode$/d
 /^    Input:        [0-9]* milliseconds$/d
@@ -148,7 +147,7 @@ cd /opt/lmi/src/lmi
 
 printf '\n# test concinnity\n\n'
 make "$coefficiency" check_concinnity 2>&1 \
-  | sed -e "$build_clutter" -e "$concinnity_clutter"
+  | tee "$log_dir"/concinnity | sed -e "$build_clutter" -e "$concinnity_clutter"
 
 printf '# install; check physical closure\n\n'
 make "$coefficiency" install check_physical_closure 2>&1 \
@@ -203,8 +202,8 @@ cd "$throwaway_dir"
 
 # Copy these files hither because the emission tests write some
 # output files to the input file's directory.
-cp /opt/lmi/src/lmi/sample.ill .
-cp /opt/lmi/src/lmi/sample.cns .
+install -m 0664 /opt/lmi/src/lmi/sample.ill .
+install -m 0664 /opt/lmi/src/lmi/sample.cns .
 
 printf '\n# test all valid emission types\n\n'
 

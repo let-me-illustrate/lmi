@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Destroy all existing centos chroots, brutally.
+# Destroy any existing centos chroot for lmi.
 #
 # Copyright (C) 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
 #
@@ -24,25 +24,37 @@
 . ./lmi_setup_inc.sh
 . /tmp/schroot_env
 
-set -vx
+set -evx
 
 assert_su
 assert_not_chrooted
 
-# This brutal approach assumes that only one centos chroot exists.
-# That's a workable assumption if a unique centos chroot is used
-# only to emulate an inconvenient corporate redhat server. See
-# 'lmi_setup_02.sh' for a more thoughtful approach.
+# Show all centos lmi mountpoints; abort if there are any.
 #
-# The grep command conveniently finds not only mounts created to
-# support the centos chroot itself, but also mounts created to
-# support a debian chroot within the centos chroot.
+# The most likely cause is that a user has entered the chroot with
+# 'schroot', but has not yet left it. Otherwise, this "shouldn't"
+# occur (although it has been observed), and 'rm --one-file-system'
+# below should be safe anyway (yet an actual catastrophe did occur
+# nonetheless).
 
-if [ "greg" != "$(logname)" ]; then
-   echo "This script would eradicate all your centos chroots--beware."
-   exit 1
+findmnt -ro SOURCE,TARGET \
+  | grep centos7lmi \
+  | sed -e's,^[/A-Za-z0-9_-]*[[]\([^]]*\)[]],\1,' \
+  | column -t
+
+findmnt | grep 'centos.*lmi' && exit 9
+
+loc0=/srv/chroot/centos7lmi
+loc1="$(schroot --chroot=centos7lmi --location)"
+if [ -n "${loc1}" ] && [ "${loc0}" != "${loc1}" ]; then
+  echo "chroot found in unexpected location--remove it manually"
+  exit 9
 fi
 
-grep centos /proc/mounts | cut -f2 -d" " | xargs --no-run-if-empty umount
-rm -rf /srv/chroot/centos7lmi
-rm /etc/schroot/chroot.d/centos7lmi.conf
+rm --one-file-system --recursive --force "${loc0}"
+if [ -e "${loc0}" ] || [ -e "${loc1}" ] ; then echo "Oops."; exit 9; fi
+
+rm --force /etc/schroot/chroot.d/centos7lmi.conf
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Removed old centos chroot."  | tee /dev/tty

@@ -328,9 +328,9 @@ graphics_dir_0=/opt/lmi/proprietary/graphics
 graphics_dir_1=/opt/lmi/src/lmi/gwc
 for z in company_logo.png group_quote_banner.png ; do
   if   [ -f "$graphics_dir_0"/$z ]
-    then cp --archive "$graphics_dir_0"/$z /opt/lmi/data/
+    then install -m 0664 "$graphics_dir_0"/$z /opt/lmi/data/
   elif [ -f "$graphics_dir_1"/$z ]
-    then cp --archive "$graphics_dir_1"/$z /opt/lmi/data/
+    then install -m 0664 "$graphics_dir_1"/$z /opt/lmi/data/
   else
     printf 'Graphics files not found.\n'
   fi

@@ -131,7 +131,7 @@ void LedgerInvariant::Alloc(int len)
     ScalableScalars ["Dumpin"                     ] = &Dumpin                     ;
     ScalableScalars ["External1035Amount"         ] = &External1035Amount         ;
     ScalableScalars ["Internal1035Amount"         ] = &Internal1035Amount         ;
-    ScalableScalars ["InforceUnloanedAV"          ] = &InforceUnloanedAV          ;
+    ScalableScalars ["InforceTotalAV"             ] = &InforceTotalAV             ;
     ScalableScalars ["InforceTaxBasis"            ] = &InforceTaxBasis            ;
 
     // Nonscalable scalars.
@@ -501,9 +501,9 @@ void LedgerInvariant::Init()
     EndtAge                    = 100;
     NoLongerIssued             = false;
     AllowGroupQuote            = true;
-    SurviveToExpectancy        = true;
-    SurviveToYear              = true;
-    SurviveToAge               = true;
+    SurviveToExpectancy        = false;
+    SurviveToYear              = false;
+    SurviveToAge               = false;
     SurvivalMaxYear            = 0;
     SurvivalMaxAge             = 0;
     InforceYear                = Length;
@@ -519,6 +519,14 @@ void LedgerInvariant::Init()
     Has1035ExchCharge          = false;
     WriteTsvFile               = false;
     SupplementalReport         = true;
+
+    // Probably this should be an "oecumenic" enumeration.
+    enum {gregorian_epoch_jdn = 2361222};
+    EffDateJdn                 = gregorian_epoch_jdn;
+    DateOfBirthJdn             = gregorian_epoch_jdn;
+    LastCoiReentryDateJdn      = gregorian_epoch_jdn;
+    ListBillDateJdn            = gregorian_epoch_jdn;
+    InforceAsOfDateJdn         = gregorian_epoch_jdn;
 
     // Private internals.
 
@@ -666,12 +674,11 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     UseExperienceRating        = UseExperienceRating   || a_Addend.UseExperienceRating;
     UsePartialMort             = a_Addend.UsePartialMort;
 
-    SurviveToExpectancy        = SurviveToExpectancy   && a_Addend.SurviveToExpectancy;
-    SurviveToYear              = SurviveToYear         && a_Addend.SurviveToYear;
-    SurviveToAge               = SurviveToAge          && a_Addend.SurviveToAge;
-    LMI_ASSERT(SurviveToExpectancy + SurviveToYear + SurviveToAge <= 1);
-    SurvivalMaxYear            = std::max(SurvivalMaxYear, a_Addend.SurvivalMaxYear);
-    SurvivalMaxAge             = std::max(SurvivalMaxAge , a_Addend.SurvivalMaxAge);
+    SurviveToExpectancy        = a_Addend.SurviveToExpectancy;
+    SurviveToYear              = a_Addend.SurviveToYear;
+    SurviveToAge               = a_Addend.SurviveToAge;
+    SurvivalMaxYear            = a_Addend.SurvivalMaxYear;
+    SurvivalMaxAge             = a_Addend.SurvivalMaxAge;
 
     AvgFund                    = a_Addend.AvgFund;
     CustomFund                 = a_Addend.CustomFund;

@@ -53,7 +53,7 @@ struct has_member_find
 
     static yea_t deduce(...);
 
-    static bool const value = sizeof(yea_t) == sizeof deduce((Derived*)nullptr);
+    static bool const value = sizeof(yea_t) == sizeof deduce(static_cast<Derived*>(nullptr));
 };
 
 /// Ascertain whether a "container" includes a given element.

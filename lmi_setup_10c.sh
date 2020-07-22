@@ -24,10 +24,13 @@
 . ./lmi_setup_inc.sh
 . /tmp/schroot_env
 
-set -vx
+set -evx
 
 assert_su
 assert_not_chrooted
 
 apt-get update
 apt-get --assume-yes install rinse schroot
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Installed 'rinse' [centos]."  | tee /dev/tty

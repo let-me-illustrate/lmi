@@ -34,15 +34,75 @@ else
   GIT_URL_BASE=https://github.com/vadz/lmi/raw/master
 fi
 
+# Store dynamic configuration in a temporary file. This method is
+# simple and robust, and far better than trying to pass environment
+# variables across sudo and schroot barriers.
+
+       NORMAL_USER=$(id -un "$(logname)")
+
+if getent group lmi; then
+      NORMAL_GROUP=lmi
+  NORMAL_GROUP_GID=$(getent group "$NORMAL_GROUP" | cut -d ':' -f3)
+      CHROOT_USERS=$(getent group "$NORMAL_GROUP" | cut -d ':' -f4)
+else
+      NORMAL_GROUP=$(id -gn "$(logname)")
+  NORMAL_GROUP_GID=$(id -g  "$(logname)")
+      CHROOT_USERS=$(id -un "$(logname)")
+fi
+
+CHROOT_UIDS=
+for user in $(echo "${CHROOT_USERS}" | tr ',' ' '); do
+  uid=$(id -u "${user}")
+  [ -z "${uid}" ] && echo "Oops."
+  CHROOT_UIDS="${CHROOT_UIDS},${uid}"
+done
+# Remove leading delimiter.
+CHROOT_UIDS=$(echo "${CHROOT_UIDS}" | sed -e's/^,//')
+
+cat >/tmp/schroot_env <<EOF
+set -v
+     CHROOT_UIDS=$CHROOT_UIDS
+    CHROOT_USERS=$CHROOT_USERS
+    GIT_URL_BASE=$GIT_URL_BASE
+    NORMAL_GROUP=$NORMAL_GROUP
+NORMAL_GROUP_GID=$NORMAL_GROUP_GID
+     NORMAL_USER=$NORMAL_USER
+set +v
+EOF
+chmod 0666 /tmp/schroot_env
+
+wget -N -nv "${GIT_URL_BASE}"/gwc/.zshrc
+wget -N -nv "${GIT_URL_BASE}"/gwc/.vimrc
+wget -N -nv "${GIT_URL_BASE}"/gwc/.vim/spell/en.utf-8.add
+chmod 0644 .zshrc .vimrc en.utf-8.add
+wget -N -nv "${GIT_URL_BASE}"/install_msw.sh
+chmod 0777 install_msw.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_00c.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_01.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_01c.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_01r.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_02.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_02c.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_05c.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_05r.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_07r.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10c.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10r.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_11.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_13.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_13c.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_20.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_21.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_24.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_24c.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_25.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_29.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_30.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_40.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_41.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_42.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_43.sh
+wget -N -nv "${GIT_URL_BASE}"/lmi_setup_44.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_inc.sh
 chmod 0777 lmi_setup_*.sh
 
@@ -53,54 +113,66 @@ set -evx
 assert_su
 assert_not_chrooted
 
-# Store dynamic configuration in a temporary file. This method is
-# simple and robust, and far better than trying to pass environment
-# variables across sudo and schroot barriers.
+case "$(cat /proc/version)" in
+    (*Debian*)    flavor_guess=debian ;;
+    (*"Red Hat"*) flavor_guess=redhat ;;
+    (*)           flavor_guess=debian
+        printf '%s\n' "OS not detected--assuming debian."
+        ;;
+esac
 
-       NORMAL_USER=$(id -un "$(logname)")
-   NORMAL_USER_UID=$(id -u  "$(logname)")
+# The 'centos' flavor is extraordinary. It calls for creating a centos
+# chroot with a debian chroot inside. Override 'flavor' on the command
+# line to use it, e.g.:
+#   flavor=centos ./lmi_setup_00.sh
+# The "_01" scripts construct a debian-testing chroot. The 'centos'
+# case correctly selects a "00" script, which first constructs a
+# centos chroot, within which a debian-testing chroot is constructed.
 
-if getent group lmi; then
-      NORMAL_GROUP=lmi
-  NORMAL_GROUP_GID=$(getent group "$NORMAL_GROUP" | cut -d: -f3)
-      CHROOT_USERS=$(getent group "$NORMAL_GROUP" | cut -d: -f4)
-else
-      NORMAL_GROUP=$(id -gn "$(logname)")
-  NORMAL_GROUP_GID=$(id -g  "$(logname)")
-      CHROOT_USERS=$(id -un "$(logname)")
-fi
+flavor=${flavor:-"$flavor_guess"}
+case "${flavor}" in
+    (debian) flavor_script=lmi_setup_01.sh  ;;
+    (centos) flavor_script=lmi_setup_00c.sh ;;
+    (redhat) flavor_script=lmi_setup_01r.sh ;;
+    (*) printf '%s\n' "Unanticipated case--exiting."; exit 3 ;;
+esac
 
-cat >/tmp/schroot_env <<EOF
-set -v
-    CHROOT_USERS=$CHROOT_USERS
-    GIT_URL_BASE=$GIT_URL_BASE
-    NORMAL_GROUP=$NORMAL_GROUP
-NORMAL_GROUP_GID=$NORMAL_GROUP_GID
-     NORMAL_USER=$NORMAL_USER
- NORMAL_USER_UID=$NORMAL_USER_UID
-set +v
-EOF
-chmod 0666 /tmp/schroot_env
+logdir=/srv/cache_for_lmi/logs
+mkdir -p "${logdir}"
+./"${flavor_script}" >"${logdir}/${flavor}-log" 2>&1
 
-./lmi_setup_10.sh
-./lmi_setup_11.sh
-cp -a lmi_setup_*.sh /tmp/schroot_env /srv/chroot/${CHRTNAME}/tmp
-schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_20.sh
-schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_21.sh
-# On a particular corporate server, root is not a sudoer.
-if sudo -l true; then
-  sudo                       --user="${NORMAL_USER}"                  ./lmi_setup_30.sh
-else
-  su                                "${NORMAL_USER}"                  ./lmi_setup_30.sh
-fi
-schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_40.sh
-schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_41.sh
-schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
-schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_43.sh
+# Timestamp suffix for log file names (no colons, for portability).
+fstamp=$(date -u +"%Y%m%dT%H%MZ" -d "$stamp0")
+
+# Copy log files that may be useful for tracking down problems with
+# certain commands whose output is voluminous and often uninteresting.
+# Archive them for easy sharing.
+#
+# It would be easier to specify the files to be archived as
+#   ./*"${fstamp}
+# but that would cause 'tar' to fail thus:
+#   tar: [filename]: file changed as we read it
+# if this script's output is redirected to a file that's uniquified
+# by the same $fstamp method used here.
+
+(cd "${logdir}"
+logfiles=
+for z in "${flavor}-log" "${CHRTNAME}"-apt-get-log lmi-log; do
+  z_stamped="${z}_${fstamp}"
+  mv "${z}" "${z_stamped}"
+  logfiles="${logfiles} ${z_stamped}"
+done
+# Word-splitting is definitely wanted for ${logfiles} here:
+# shellcheck disable=SC2086
+tar -cJvf chroot-logs_"${fstamp}".tar.xz ${logfiles}
+)
 
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Finished: $stamp1"
 
 seconds=$(($(date -u '+%s' -d "$stamp1") - $(date -u '+%s' -d "$stamp0")))
 elapsed=$(date -u -d @"$seconds" +'%H:%M:%S')
-echo "Elapsed: $elapsed"
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0 Installed and tested lmi."    | tee /dev/tty
+echo "Elapsed: $elapsed; log suffix: $fstamp" | tee /dev/tty

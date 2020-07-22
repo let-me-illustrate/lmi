@@ -24,37 +24,27 @@
 . ./lmi_setup_inc.sh
 . /tmp/schroot_env
 
-set -vx
+set -evx
 
-assert_not_su
-assert_chrooted
+# doesn't matter whether superuser or not
+# doesn't matter whether chrooted or not
 
-# Symlink directories used by lmi, so that both native and wine
-# builds use the same directories and can share the same
-# architecture-independent 'configurable_settings.xml'--much like the
-# "identity mount" technique used with cygwin. See:
-#   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00018.html
-# Because wine has its own notion of the filesystem, relative paths
-# are wanted, the GNUism '--relative' being used to translate the
-# absolute paths so that
-#   /opt/lmi/     becomes ../../../../../../../opt/lmi
-#   /etc/opt/lmi/ becomes ../../../../../../../../etc/opt/lmi
-#   /var/opt/lmi/ becomes ../../../../../../../../var/opt/lmi
+# Configure zsh.
 
-mkdir -p ~/.wine/drive_c/users/"${NORMAL_USER}"/opt/
-cd ~/.wine/drive_c/users/"${NORMAL_USER}"/opt/ || { printf 'failed: cd\n'; exit 3; }
-ln --symbolic --relative --force --no-dereference /opt/lmi/ ./lmi
+cp -a .zshrc ~
 
-mkdir -p ~/.wine/drive_c/users/"${NORMAL_USER}"/etc/opt/
-cd ~/.wine/drive_c/users/"${NORMAL_USER}"/etc/opt/ || { printf 'failed: cd\n'; exit 3; }
-ln --symbolic --relative --force --no-dereference /etc/opt/lmi/ ./lmi
+# Configure vim. Rather than trying to split its contents between
+# '~/.vimrc' and '/etc/vim/vimrc.local', use '~/.vimrc' for all
+# customizations, and copy that file for each user.
 
-mkdir -p ~/.wine/drive_c/users/"${NORMAL_USER}"/var/opt/
-cd ~/.wine/drive_c/users/"${NORMAL_USER}"/var/opt/ || { printf 'failed: cd\n'; exit 3; }
-ln --symbolic --relative --force --no-dereference /var/opt/lmi/ ./lmi
+cp -a .vimrc ~
 
-cd ~ || { printf 'failed: cd\n'; exit 3; }
-# Rebuild vim spellfile (as was done above for root)
+# Without this, 'zg' gives an error message; with it, vim creates a
+# spellfile the first time 'zg' is used, if none already exists.
+# But it's a much better idea to install a mature spellfile and
+# (imperatively) run 'mkspell':
+mkdir -p ~/.vim/spell
+cp -a en.utf-8.add ~/.vim/spell/en.utf-8.add
 vim -es -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
 
 # Configure git. See:
@@ -67,6 +57,10 @@ git config --global log.date iso8601-strict-local
 git config --global log.follow true
 git config --global pull.ff only
 git config --global push.default simple
-# Use your own name and email address.
+if [ "greg" = "$(whoami)" ]; then
 git config --global user.email gchicares@sbcglobal.net
 git config --global user.name "Gregory W. Chicares"
+fi
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Configured {zsh,vim,git} for user '$(whoami)'."  | tee /dev/tty

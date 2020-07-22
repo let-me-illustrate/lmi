@@ -756,17 +756,17 @@ int test_main(int, char*[])
     // are guaranteed to cover such diversity, even on a machine where
     // unsigned char and unsigned long long int are synonyms.
 
-    BOOST_TEST_EQUAL(true , bourn_cast<bool>((signed char)(1)));
-    BOOST_TEST_EQUAL(false, bourn_cast<bool>((signed char)(0)));
+    BOOST_TEST_EQUAL(true , bourn_cast<bool>(static_cast<signed char>(1)));
+    BOOST_TEST_EQUAL(false, bourn_cast<bool>(static_cast<signed char>(0)));
 
     BOOST_TEST_THROW
-        (bourn_cast<bool>((signed char)(2))
+        (bourn_cast<bool>(static_cast<signed char>(2))
         ,std::runtime_error
         ,"Cast would transgress upper limit."
         );
 
     BOOST_TEST_THROW
-        (bourn_cast<bool>((signed char)(-1))
+        (bourn_cast<bool>(static_cast<signed char>(-1))
         ,std::runtime_error
         ,"Cannot cast negative to unsigned."
         );

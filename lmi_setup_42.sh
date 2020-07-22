@@ -24,7 +24,7 @@
 . ./lmi_setup_inc.sh
 . /tmp/schroot_env
 
-set -vx
+set -evx
 
 assert_not_su
 assert_chrooted
@@ -32,9 +32,11 @@ assert_chrooted
 # Install lmi for wine.
 
 cd ~ || { printf 'failed: cd\n'; exit 3; }
-wget -N -nv "${GIT_URL_BASE}"/install_msw.sh
+cp -a /tmp/install_msw.sh .
 chmod +x install_msw.sh
-./install_msw.sh >log 2>&1
+logdir=/srv/cache_for_lmi/logs
+mkdir -p "${logdir}"
+./install_msw.sh >"${logdir}"/lmi-log 2>&1
 
 # Now everything should work much as it does in native msw. To run an
 # msw program, prefix its command line with 'wine'. Test the chroot by
@@ -45,3 +47,6 @@ chmod +x install_msw.sh
 # export DISPLAY=":0.0"
 # cd /opt/lmi/bin || { printf 'failed: cd\n'; exit 3; }
 # wine ./lmi_wx_shared.exe --ash_nazg --data_path=../data
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Installed lmi for '$NORMAL_USER'."  | tee /dev/tty

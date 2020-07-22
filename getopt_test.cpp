@@ -68,20 +68,20 @@ std::string getopt_test::test(int argc, char* argv[])
     static char const* vopt [] = {"optional", "alternative", nullptr};
     static Option long_options[] =
         {
-            {"add"     ,REQD_ARG ,0 ,  0 ,0     ,""},
-            {"append"  ,NO_ARG   ,0 ,  0 ,0     ,""},
-            {"delete"  ,REQD_ARG ,0 ,  0 ,0     ,""},
-            {"verbose" ,NO_ARG   ,0 ,  0 ,0     ,""},
-            {"create"  ,NO_ARG   ,0 ,  0 ,0     ,""},
-            {"file"    ,REQD_ARG ,0 ,  0 ,0     ,""},
-            {"list"    ,LIST_ARG ,0 ,  0 ,0     ,""},
-            {"opt"     ,OPT_ARG  ,0 ,  0 ,0     ,""},
-            {"alt"     ,ALT_ARG  ,0 ,  0 ,0     ,""},
-            {"vfile"   ,REQD_ARG ,0 ,  0 ,vfile ,""},
-            {"vlist"   ,LIST_ARG ,0 ,  0 ,vlist ,""},
-            {"vopt"    ,OPT_ARG  ,0 ,  0 ,vopt  ,""},
-            {"valt"    ,ALT_ARG  ,0 ,  0 ,vopt  ,""},
-            {0         ,NO_ARG   ,0 ,  0 ,0     ,""}
+            {"add"     ,REQD_ARG ,nullptr ,  0 ,nullptr ,""},
+            {"append"  ,NO_ARG   ,nullptr ,  0 ,nullptr ,""},
+            {"delete"  ,REQD_ARG ,nullptr ,  0 ,nullptr ,""},
+            {"verbose" ,NO_ARG   ,nullptr ,  0 ,nullptr ,""},
+            {"create"  ,NO_ARG   ,nullptr ,  0 ,nullptr ,""},
+            {"file"    ,REQD_ARG ,nullptr ,  0 ,nullptr ,""},
+            {"list"    ,LIST_ARG ,nullptr ,  0 ,nullptr ,""},
+            {"opt"     ,OPT_ARG  ,nullptr ,  0 ,nullptr ,""},
+            {"alt"     ,ALT_ARG  ,nullptr ,  0 ,nullptr ,""},
+            {"vfile"   ,REQD_ARG ,nullptr ,  0 ,vfile   ,""},
+            {"vlist"   ,LIST_ARG ,nullptr ,  0 ,vlist   ,""},
+            {"vopt"    ,OPT_ARG  ,nullptr ,  0 ,vopt    ,""},
+            {"valt"    ,ALT_ARG  ,nullptr ,  0 ,vopt    ,""},
+            {nullptr   ,NO_ARG   ,nullptr ,  0 ,nullptr ,""}
         };
     int option_index = 0;
     GetOpt getopt_long

@@ -68,14 +68,14 @@ void concrete_system_command(std::string const& command_line)
     // POSIX too) because of this msw implementation detail.
     std::string non_const_cmd_line_copy = command_line;
     ::CreateProcessA
-        (0
+        (nullptr
         ,non_const_cmd_line_copy.data()
-        ,0
-        ,0
+        ,nullptr
+        ,nullptr
         ,true
         ,NORMAL_PRIORITY_CLASS
-        ,0
-        ,0
+        ,nullptr
+        ,nullptr
         ,&startup_info
         ,&process_info
         );

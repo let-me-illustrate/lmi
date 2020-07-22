@@ -232,19 +232,19 @@ int test_main(int, char*[])
 #   pragma GCC diagnostic ignored "-Wuseless-cast"
 #endif // defined __GNUC__
 
-    test_interconvertibility((         char)(   1), "1", __FILE__, __LINE__);
-    test_interconvertibility((         char)('\1'), "1", __FILE__, __LINE__);
+    test_interconvertibility(static_cast<         char>(   1), "1", __FILE__, __LINE__);
+    test_interconvertibility(static_cast<         char>('\1'), "1", __FILE__, __LINE__);
 
-    test_interconvertibility((  signed char)(   1), "1", __FILE__, __LINE__);
-    test_interconvertibility((  signed char)('\1'), "1", __FILE__, __LINE__);
+    test_interconvertibility(static_cast<  signed char>(   1), "1", __FILE__, __LINE__);
+    test_interconvertibility(static_cast<  signed char>('\1'), "1", __FILE__, __LINE__);
 
-    test_interconvertibility((unsigned char)(   1), "1", __FILE__, __LINE__);
-    test_interconvertibility((unsigned char)('\1'), "1", __FILE__, __LINE__);
+    test_interconvertibility(static_cast<unsigned char>(   1), "1", __FILE__, __LINE__);
+    test_interconvertibility(static_cast<unsigned char>('\1'), "1", __FILE__, __LINE__);
 
-    test_interconvertibility((  signed char)(-1),  "-1", __FILE__, __LINE__);
+    test_interconvertibility(static_cast<  signed char>(-1),  "-1", __FILE__, __LINE__);
     std::ostringstream u;
     u << static_cast<unsigned int>(std::numeric_limits<unsigned char>::max());
-    test_interconvertibility((unsigned char)(-1), u.str(), __FILE__, __LINE__);
+    test_interconvertibility(static_cast<unsigned char>(-1), u.str(), __FILE__, __LINE__);
 
     // This test should fail because numeric_io_cast interprets
     // arithmetic types as numeric values, so the value of ' ' might
@@ -267,13 +267,13 @@ int test_main(int, char*[])
     test_interconvertibility(int( 1234),  "1234", __FILE__, __LINE__);
     test_interconvertibility(int(-4321), "-4321", __FILE__, __LINE__);
 
-    test_interconvertibility(float( 0.0f),    "0", __FILE__, __LINE__);
-    test_interconvertibility(float( 1.5f),  "1.5", __FILE__, __LINE__);
-    test_interconvertibility(float(-2.5f), "-2.5", __FILE__, __LINE__);
+    test_interconvertibility(      0.0f,    "0", __FILE__, __LINE__);
+    test_interconvertibility(      1.5f,  "1.5", __FILE__, __LINE__);
+    test_interconvertibility(     -2.5f, "-2.5", __FILE__, __LINE__);
 
-    test_interconvertibility(double( 0.0),    "0", __FILE__, __LINE__);
-    test_interconvertibility(double( 1.5),  "1.5", __FILE__, __LINE__);
-    test_interconvertibility(double(-2.5), "-2.5", __FILE__, __LINE__);
+    test_interconvertibility(      0.0 ,    "0", __FILE__, __LINE__);
+    test_interconvertibility(      1.5 ,  "1.5", __FILE__, __LINE__);
+    test_interconvertibility(     -2.5 , "-2.5", __FILE__, __LINE__);
 
     test_interconvertibility( double(1.0 / 3.0), "0.3333333333333333", __FILE__, __LINE__);
     test_interconvertibility(0.3333333333333333, "0.3333333333333333", __FILE__, __LINE__);
@@ -282,9 +282,9 @@ int test_main(int, char*[])
 
 #if !defined LMI_MSVCRT
 // COMPILER !! This C runtime doesn't support long double conversions.
-    test_interconvertibility((long double)( 0.0L),    "0", __FILE__, __LINE__);
-    test_interconvertibility((long double)( 1.5L),  "1.5", __FILE__, __LINE__);
-    test_interconvertibility((long double)(-2.5L), "-2.5", __FILE__, __LINE__);
+    test_interconvertibility(      0.0L,    "0", __FILE__, __LINE__);
+    test_interconvertibility(      1.5L,  "1.5", __FILE__, __LINE__);
+    test_interconvertibility(     -2.5L, "-2.5", __FILE__, __LINE__);
     BOOST_TEST_EQUAL(numeric_io_cast<long double>("3.36210314311209350626e-4932"), std::numeric_limits<long double>::min());
 #endif // !defined LMI_MSVCRT
 
@@ -336,12 +336,12 @@ int test_main(int, char*[])
 //    BOOST_TEST_THROW(numeric_io_cast<double*>("0"), std::invalid_argument, "");
 
     BOOST_TEST_THROW
-        (numeric_io_cast<std::string>((char const*)nullptr)
+        (numeric_io_cast<std::string>(static_cast<char const*>(nullptr))
         ,std::runtime_error
         ,"Cannot convert (char const*)(0) to std::string."
         );
     BOOST_TEST_THROW
-        (numeric_io_cast<unsigned int>((char const*)nullptr)
+        (numeric_io_cast<unsigned int>(static_cast<char const*>(nullptr))
         ,std::runtime_error
         ,"Cannot convert (char const*)(0) to number."
         );

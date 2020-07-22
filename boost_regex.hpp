@@ -33,12 +33,13 @@
 #   if 7 <= __GNUC__
 #       pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #       pragma GCC diagnostic ignored "-Wregister"
-#       pragma GCC diagnostic ignored "-Wuseless-cast"
-#       if 10 <= __GNUC__
-#           pragma GCC diagnostic ignored "-Wdeprecated-copy"
-#       endif // 10 <= __GNUC__
 #   endif // 7 <= __GNUC__
+#   if 10 <= __GNUC__
+#       pragma GCC diagnostic ignored "-Wdeprecated-copy"
+#   endif // 10 <= __GNUC__
 #   pragma GCC diagnostic ignored "-Wshadow"
+#   pragma GCC diagnostic ignored "-Wswitch-enum"
+#   pragma GCC diagnostic ignored "-Wuseless-cast"
 #endif // defined __GNUC__
 #if defined _MSC_VER
 #   pragma warning(push, 1)

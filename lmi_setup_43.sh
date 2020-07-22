@@ -24,7 +24,7 @@
 . ./lmi_setup_inc.sh
 . /tmp/schroot_env
 
-set -vx
+set -evx
 
 assert_not_su
 assert_chrooted
@@ -36,7 +36,9 @@ ln --symbolic --force --no-dereference ../hooks .git
 
 # Iff this chroot needs write access to savannah, then reconfigure
 # the URL, using your savannah ID instead of mine:
-git remote set-url --push origin chicares@git.sv.gnu.org:/srv/git/lmi.git
+if [ "greg" = "$(whoami)" ]; then
+  git remote set-url --push origin chicares@git.sv.gnu.org:/srv/git/lmi.git
+fi
 
 # Duplicate proprietary repository (if available).
 # First, copy "blessed" repository (here, 'cp' is sufficient: this
@@ -100,7 +102,7 @@ rm /opt/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/build/ship/my*
 # Regenerate the binary database (expect the 'rm' command here to fail
 # the first time, because there are no old files to remove):
 cd /opt/lmi/data || { printf 'failed: cd\n'; exit 3; }
-rm proprietary.dat proprietary.ndx
+rm --force proprietary.dat proprietary.ndx
 wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
 
 coefficiency="--jobs=$(nproc)"
@@ -109,10 +111,10 @@ coefficiency="--jobs=$(nproc)"
 cd /opt/lmi/src/lmi || { printf 'failed: cd\n'; exit 3; }
 make "$coefficiency" system_test 2>&1 |sed -e'/^Cannot open.*test/d'
 # That test fails the first time because no results are saved in
-# touchstone/ yet. Copy the results just generated...
+# touchstone/ yet. Remove timestamped summaries...
+rm --force /opt/lmi/test/analysis-* /opt/lmi/test/diffs-* /opt/lmi/test/md5sums-*
+# ...copy the results just generated...
 cp -a /opt/lmi/test/* /opt/lmi/touchstone
-# ...removing summaries...
-rm /opt/lmi/touchstone/analysis* /opt/lmi/touchstone/diffs* /opt/lmi/touchstone/md5sum*
 # ...and rerun the test, which should now succeed:
 make "$coefficiency" system_test
 
@@ -134,3 +136,6 @@ git clone git://git.savannah.nongnu.org/lmi.git \
 cd lmi || { printf 'failed: cd\n'; exit 3; }
 find . -path ./.git -prune -o -type f -print0 \
   | xargs --null --max-args=1 --max-procs="$(nproc)" --replace='{}' touch '--reference=/opt/lmi/src/lmi/{}' '{}'
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Ran system test for '$(whoami)'."  | tee /dev/tty

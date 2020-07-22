@@ -39,11 +39,11 @@ jar_dir=/opt/lmi/third_party/rng
 
 # Data for testing.
 
-cp --preserve "$srcdir"/sample.cns "$srcdir"/sample.ill .
+install -m 0664 "$srcdir"/sample.cns "$srcdir"/sample.ill .
 
 # XSL template to sort cell subelements.
 
-cp --preserve "$srcdir"/sort_cell_subelements.xsl .
+install -m 0664 "$srcdir"/sort_cell_subelements.xsl .
 
 echo "  Test cell-subelement sorting."
 
@@ -62,7 +62,7 @@ diff --unified=0 sample.ill sorted.ill
 #
 # Only RNC is to be edited; XSD and RNG are generated from it.
 
-cp --preserve "$srcdir"/types.rnc "$srcdir"/cell.rnc "$srcdir"/multiple_cell_document.rnc "$srcdir"/single_cell_document.rnc .
+install -m 0664 "$srcdir"/types.rnc "$srcdir"/cell.rnc "$srcdir"/multiple_cell_document.rnc "$srcdir"/single_cell_document.rnc .
 
 echo "  Test RNC files with 'jing'."
 
@@ -78,7 +78,7 @@ java -jar $jar_dir/jing.jar -c single_cell_document.rnc   sample.ill
 # XSD, generated from RNG, is stored in the repository because it's
 # widely used.
 
-cp --preserve "$srcdir"/types.xsd "$srcdir"/cell.xsd "$srcdir"/multiple_cell_document.xsd "$srcdir"/single_cell_document.xsd .
+install -m 0664 "$srcdir"/types.xsd "$srcdir"/cell.xsd "$srcdir"/multiple_cell_document.xsd "$srcdir"/single_cell_document.xsd .
 
 echo "  Test XSD files with 'jing'."
 
@@ -218,7 +218,7 @@ echo "  Regenerate XSD files as they should appear in the repository."
 # 'cell.xsd', which lacks <xs:complexType name="cell_element">, so
 # process 'multiple' before 'single'.
 
-cp --preserve "$srcdir"/types_*.rnc "$srcdir"/cell_*.rnc "$srcdir"/multiple_cell_document_*.rnc "$srcdir"/single_cell_document_*.rnc .
+install -m 0664 "$srcdir"/types_*.rnc "$srcdir"/cell_*.rnc "$srcdir"/multiple_cell_document_*.rnc "$srcdir"/single_cell_document_*.rnc .
 
 java -jar $jar_dir/trang.jar multiple_cell_document.rnc    multiple_cell_document.xsd
 java -jar $jar_dir/trang.jar single_cell_document.rnc      single_cell_document.xsd

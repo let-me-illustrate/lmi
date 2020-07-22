@@ -82,7 +82,7 @@ namespace lmi_test
     class test_tools_exception : public std::runtime_error
     {
       public:
-        test_tools_exception() : std::runtime_error("fatal test error") {};
+        test_tools_exception() : std::runtime_error("fatal test error") {}
     };
   } // namespace test
 

@@ -157,6 +157,7 @@ else ifeq (8.1.0,$(gnu_cpp_version))
 else ifeq (8.2.0,$(gnu_cpp_version))
 else ifeq (8.3.0,$(gnu_cpp_version))
 else ifeq (9.3.0,$(gnu_cpp_version))
+else ifeq (10.0,$(gnu_cpp_version))
 else
   $(warning Untested $(GNU_CPP) version '$(gnu_cpp_version)')
 endif
@@ -172,6 +173,7 @@ else ifeq (8.1.0,$(gnu_cxx_version))
 else ifeq (8.2.0,$(gnu_cxx_version))
 else ifeq (8.3.0,$(gnu_cxx_version))
 else ifeq (9.3.0,$(gnu_cxx_version))
+else ifeq (10.0,$(gnu_cxx_version))
 else
   $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
 endif
@@ -293,15 +295,16 @@ wx_config_check:
 #   http://lists.gnu.org/archive/html/lmi/2006-10/msg00046.html
 # for some discussion.
 
-all_include_directories := \
-  . \
+lmi_include_directories := \
   $(srcdir) \
   $(srcdir)/tools/pete-2.1.1 \
   $(overriding_include_directories) \
+  /opt/lmi/third_party/src \
+
+sys_include_directories := \
   $(compiler_include_directory) \
   $(wx_include_paths) \
   /opt/lmi/third_party/include \
-  /opt/lmi/third_party/src \
   $(localincludedir) \
   $(localincludedir)/libxml2 \
 
@@ -412,13 +415,17 @@ else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
   gcc_version_specific_warnings := \
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
-else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0 8.3.0 9.3.0))
+else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0 8.3.0 9.3.0 10.0))
   gcc_version_specific_warnings := \
 
   ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
 # See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00026.html
     tutelary_flag := -fomit-frame-pointer
+  endif
+
+  ifneq (,$(filter $(gcc_version), 10.0))
+    gcc_cxx_warnings += -Wredundant-tags -Wvolatile
   endif
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
@@ -437,6 +444,7 @@ gcc_common_warnings := \
   -Walloc-zero \
   -Walloca \
   -Wcast-align \
+  -Wcast-function-type \
   -Wconversion \
   -Wdangling-else \
   -Wdeprecated-declarations \
@@ -501,22 +509,28 @@ gcc_cxx_warnings := \
   -Wc++11-compat \
   -Wc++14-compat \
   -Wc++1z-compat \
+  -Wcatch-value=3 \
   -Wconditionally-supported \
   -Wctor-dtor-privacy \
   -Wdelete-non-virtual-dtor \
   -Wdeprecated \
+  -Wextra-semi \
   -Wnoexcept \
   -Wnoexcept-type \
   -Wnon-template-friend \
   -Wnon-virtual-dtor \
+  -Wold-style-cast \
   -Woverloaded-virtual \
+  -Wplacement-new=2 \
   -Wpmf-conversions \
   -Winvalid-pch \
   -Wregister \
   -Wreorder \
   -Wstrict-null-sentinel \
+  -Wsuggest-override \
   -Wsynth \
   -Wuseless-cast \
+  -Wzero-as-null-pointer-constant \
 
 # Warnings that are not generally useful.
 #
@@ -536,75 +550,36 @@ postponed_gcc_cxx_warnings := \
 gcc_common_extra_warnings := \
   -Wcast-qual \
 
-# WX !! The wx library triggers many diagnostics with the following
-# 'extra' flags. This makefile used to inhibit these flags for source
-# files that seemed to depend on wx according to a casual heuristic,
-# but now they're inhibited by a #pragma in the PCH file that all wx-
-# dependent TUs must include. For clarity, define this empty variable
-# and spell out the warnings here so that all warnings can be seen in
-# this one makefile.
-
-wx_dependent_objects :=
-
-$(wx_dependent_objects): gcc_common_extra_warnings += \
-  -Wno-cast-function-type \
-  -Wno-cast-qual \
-  -Wno-deprecated-copy \
-  -Wno-double-promotion \
-  -Wno-format-nonliteral \
-  -Wno-noexcept \
-  -Wno-sign-conversion \
-  -Wno-useless-cast \
-
 bourn_cast_test.o: gcc_common_extra_warnings += \
   -Wno-double-promotion \
 
 currency_test.o: gcc_common_extra_warnings += \
   -Wno-useless-cast \
 
-md5.o: gcc_common_extra_warnings += \
-  -Wno-useless-cast \
-
-# Boost didn't remove an unused parameter in this file, which also
-# seems to contain a "maybe-uninitialized" variable--see:
-#   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00080.html
-
-operations_posix_windows.o: gcc_common_extra_warnings += -Wno-maybe-uninitialized
-operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-macros
-operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
-
 # Some boost-1.33.1 libraries are incompatible with many warnings.
 
 $(boost_filesystem_objects): gcc_common_extra_warnings += \
-  -Wno-deprecated-copy \
   -Wno-deprecated-declarations \
+  -Wno-old-style-cast \
   -Wno-unused-macros \
+  -Wno-unused-parameter \
+  -Wno-zero-as-null-pointer-constant \
 
 $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
-  -Wno-deprecated-copy \
   -Wno-duplicated-branches \
   -Wno-implicit-fallthrough \
+  -Wno-old-style-cast \
   -Wno-register \
   -Wno-shadow \
   -Wno-switch-enum \
   -Wno-unused-macros \
   -Wno-useless-cast \
+  -Wno-zero-as-null-pointer-constant \
 
-boost_dependent_objects := \
-  $(boost_regex_objects) \
-  regex_test.o \
-  test_coding_rules.o \
-
-$(boost_dependent_objects): gcc_common_extra_warnings += \
-  -Wno-deprecated-copy \
-  -Wno-switch-enum \
-  -Wno-unused-local-typedefs
-
-expression_template_0_test.o: gcc_common_extra_warnings += \
+$(cgicc_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
-  -Wno-switch-enum \
-  -Wno-unused-local-typedefs
+  -Wno-zero-as-null-pointer-constant \
 
 # The boost regex library improperly defines "NOMINMAX":
 #   http://lists.boost.org/Archives/boost/2006/03/102189.php
@@ -639,14 +614,10 @@ endif
 # et seqq.:
 $(xmlwrapp_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
-  -Wno-null-dereference \
-  -Wno-switch-enum \
 
 # SOMEDAY !! Address some of these '-Wconversion' issues.
 
 wno_conv_objects := \
-  CgiUtils.o \
-  FormEntry.o \
   currency_test.o \
   rate_table.o \
   round_glibc.o \
@@ -659,8 +630,6 @@ wno_sign_conv_objects := \
   $(boost_filesystem_objects) \
   $(boost_regex_objects) \
   $(wx_dependent_objects) \
-  CgiEnvironment.o \
-  CgiUtils.o \
   crc32.o \
   getopt.o \
   md5.o \
@@ -893,7 +862,8 @@ endif
 # before or after '=' is an error.
 
 REQUIRED_CPPFLAGS = \
-  $(addprefix -I , $(all_include_directories)) \
+  $(addprefix -I , $(lmi_include_directories)) \
+  $(addprefix -isystem , $(sys_include_directories)) \
   $(lmi_wx_new_so_attributes) \
   $(actually_used_lmi_so_attributes) \
   $(platform_defines) \
@@ -968,19 +938,13 @@ REQUIRED_LDFLAGS = \
   $(REQUIRED_LIBS) \
 
 # The '--use-temp-file' windres option seems to be often helpful and
-# never harmful. The $(subst) workaround for '-I' isn't needed with
-#   GNU windres 2.15.91 20040904
-# and later versions, but is needed with
-#   GNU windres 2.13.90 20030111
-# and earlier versions. The $(subst) workaround for '-mno-cygwin' is
-# needed as long as
-#  - that option is included in $(ALL_CPPFLAGS), as it apparently
-#      should be because it affects the preprocessor; and
-#  - $(ALL_CPPFLAGS) is passed to 'windres', which seems common; and
-#  - 'windres' doesn't gracefully ignore that option.
+# never harmful.
+#
+# As seems customary, $(ALL_CPPFLAGS) is passed to 'windres', which
+# doesn't recognize '-isystem'--hence the $(subst) workaround.
 
 REQUIRED_RCFLAGS = \
-  $(subst -mno-cygwin,,$(subst -I,--include-dir ,$(ALL_CPPFLAGS))) \
+  $(subst -isystem,--include-dir,$(ALL_CPPFLAGS)) \
   --use-temp-file \
 
 # To create msw import libraries, use '-Wl,--out-implib,$@.a'. There
@@ -1105,8 +1069,10 @@ lmi_msw_res.o: lmi.ico
 
 # Install.
 #
-# Architecture-independent files are copied with 'cp --update'.
-# Architecture-dependent files are copied without '--update'.
+# Architecture-independent files are installed with '-c'.
+# Architecture-dependent files are installed without '-c'.
+# Of course, '-c' is ignored; it flags situations where '-C'
+# might be useful.
 
 data_files := \
   $(wildcard $(addprefix $(srcdir)/,*.ico *.png *.xml *.xrc *.xsd *.xsl)) \
@@ -1126,9 +1092,9 @@ install: $(default_targets)
 	+@[ -d $(datadir)        ] || $(MKDIR) --parents $(datadir)
 	+@[ -d $(test_dir)       ] || $(MKDIR) --parents $(test_dir)
 	+@[ -d $(touchstone_dir) ] || $(MKDIR) --parents $(touchstone_dir)
-	@$(CP) --preserve $(installable_binaries) $(bindir)
-	@$(CP) --preserve --update $(data_files) $(datadir)
-	@$(CP) --preserve --update $(help_files) $(datadir)
+	@$(INSTALL) -m 0775 $(installable_binaries) $(bindir)
+	@$(INSTALL) -c -m 0664 $(data_files) $(datadir)
+	@$(INSTALL) -c -m 0664 $(help_files) $(datadir)
 	@datadir=$(datadir) srcdir=$(srcdir) $(srcdir)/mst_to_xst.sh
 ifeq (,$(USE_SO_ATTRIBUTES))
 	@cd $(datadir); $(PERFORM) $(bindir)/product_files$(EXEEXT)
@@ -1272,15 +1238,13 @@ fardel: install
 	@$(MAKE) --file=$(this_makefile) --directory=$(fardel_dir) wrap_fardel
 	@$(ECHO) "Created '$(fardel_name)' archive in '$(fardel_root)'."
 
-# $(CP) is used without '--update' so that custom extra files can
-# replace defaults regardless of their datestamps.
-
 .PHONY: wrap_fardel
 wrap_fardel:
-	@$(CP) $(datadir)/configurable_settings.xml .
-	@$(CP) $(datadir)/company_logo.png .
-	@$(CP) $(datadir)/group_quote_banner.png .
-	@$(CP) --preserve $(fardel_binaries) $(fardel_files) .
+	@$(INSTALL) -m 0664 $(datadir)/configurable_settings.xml .
+	@$(INSTALL) -m 0664 $(datadir)/company_logo.png .
+	@$(INSTALL) -m 0664 $(datadir)/group_quote_banner.png .
+	@$(INSTALL) -m 0775 $(fardel_binaries) .
+	@$(INSTALL) -m 0664 $(fardel_files) .
 	@$(fardel_date_script)
 	@$(MD5SUM) --binary $(fardel_checksummed_files) >validated.md5
 	@$(PERFORM) $(bindir)/generate_passkey > passkey
@@ -1311,10 +1275,10 @@ eraseme.policy:
 # Test data.
 
 sample.cns: $(srcdir)/sample.cns
-	$(CP) --preserve --update $< .
+	@$(INSTALL) -c -m 0664 $< .
 
 sample.ill: $(srcdir)/sample.ill
-	$(CP) --preserve --update $< .
+	@$(INSTALL) -c -m 0664 $< .
 
 test_data := \
   sample.cns \
@@ -1331,7 +1295,7 @@ test_data := \
 # local copies are provided for as needed.
 
 configurable_settings.xml:
-	@$(CP) --preserve --update $(datadir)/$@ .
+	@$(INSTALL) -c -m 0664 $(datadir)/$@ .
 
 ################################################################################
 
@@ -1551,7 +1515,7 @@ system_test: $(datadir)/configurable_settings.xml $(touchstone_md5sums) install
 	  && $(MAKE) --file=$(this_makefile) --directory=$(test_dir) $$testdecks
 	@$(SORT) --output=$(system_test_analysis) $(system_test_analysis)
 	@$(SORT) --key=2  --output=$(system_test_md5sums) $(system_test_md5sums)
-	@$(CP) --preserve --update $(system_test_md5sums) $(system_test_md5sums2)
+	@$(INSTALL) -c -m 0664 $(system_test_md5sums) $(system_test_md5sums2)
 	@-< $(system_test_analysis) $(SED) \
 	  -e '/rel err.*e-0*1[5-9]/d' \
 	  -e '/abs.*0\.00.*rel/d' \
@@ -1661,7 +1625,8 @@ show_flags:
 	@printf 'ALL_LDFLAGS             = "%s"\n' "$(ALL_LDFLAGS)"
 	@printf 'ALL_RCFLAGS             = "%s"\n' "$(ALL_RCFLAGS)"
 	@printf 'srcdir                  = "%s"\n' "$(srcdir)"
-	@printf 'all_include_directories = "%s"\n' "$(all_include_directories)"
+	@printf 'lmi_include_directories = "%s"\n' "$(lmi_include_directories)"
+	@printf 'sys_include_directories = "%s"\n' "$(sys_include_directories)"
 	@printf 'all_source_directories  = "%s"\n' "$(all_source_directories)"
 	@printf 'wx_include_paths        = "%s"\n' "$(wx_include_paths)"
 	@printf 'wx_libraries            = "%s"\n' "$(wx_libraries)"

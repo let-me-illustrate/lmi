@@ -24,7 +24,7 @@
 . ./lmi_setup_inc.sh
 . /tmp/schroot_env
 
-set -vx
+set -evx
 
 assert_su
 assert_not_chrooted
@@ -45,12 +45,16 @@ sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /etc/zlogout
 # Fix weird errors like "Problem with the SSL CA cert (path? access rights?)".
 # Try 'update' before 'install' as described here:
 #   https://lists.nongnu.org/archive/html/lmi/2020-02/msg00003.html
-yum --assumeyes update ca-certificates curl nss-pem
-yum --assumeyes install ca-certificates curl nss-pem
+yum --assumeyes update  ca-certificates curl nss-pem wget
+yum --assumeyes install ca-certificates curl nss-pem wget
 
 # Install "EPEL" by using 'rpm' directly [historical]. See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00037.html
 #rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-# Instead, use 'yum' to install "EPEL".
-#yum --assumeyes install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+# Instead, use 'yum' to install "EPEL". Both of the following lines
+# are required to install 'debootstrap' and 'schroot' later on RHEL:
+yum --assumeyes install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm || true
 yum --assumeyes install epel-release
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Installed EPEL."  | tee /dev/tty

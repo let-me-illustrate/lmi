@@ -156,7 +156,7 @@ static_assert(true);
 #endif
 ]])
 
-AC_CACHE_CHECK([whether compiler supports C++17],
+AC_CACHE_CHECK([whether compiler supports C++17 without any options],
     lmi_cv_cxx_std17,
     [
         AC_LANG_PUSH([C++])
@@ -167,6 +167,12 @@ AC_CACHE_CHECK([whether compiler supports C++17],
         AC_LANG_POP([C++])
     ]
 )
+
+if test "$lmi_cv_cxx_std17" = "no"; then
+    AX_CXX_CHECK_FLAG([-std=c++17],,,[CXXFLAGS="$CXXFLAGS -std=c++17"],
+        AC_MSG_ERROR([Can't enable C++17 support required for building lmi.])
+    )
+fi
 
 AC_PROG_LD
 

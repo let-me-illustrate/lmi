@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Create a chroot for cross-building "Let me illustrate...".
+# Create a chroot for cross-building "Let me illustrate..." on centos-7.
 #
 # Copyright (C) 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
 #
@@ -29,52 +29,15 @@ set -evx
 assert_su
 assert_not_chrooted
 
-# Cache apt archives for the chroot's debian release, to save a great
-# deal of bandwidth if multiple chroots are created with the same
-# release. Do this:
-#   - before invoking 'debootstrap' (or 'apt-get' in the chroot),
-#     so that all packages are cached; and
-#   - while not chrooted, so that the host filesystem is accessible.
-# The alternative of bind-mounting parent directory var/cache/apt
-# (using a single directory to store '.deb' files for all releases)
-# was considered, but seemed too extraordinary--see:
-#   https://lists.nongnu.org/archive/html/lmi/2020-05/msg00028.html
-# Instead, chroot package downloads are kept in their own directory
-# (distinct from the host's own cache), and commingled there (because
-# they're uniquely named, there's no need to segregate packages by
-# OS release, or to separate '.deb' from '.rpm' files).
-
-CACHEDIR=/var/cache/lmi_schroots
-mkdir -p "${CACHEDIR}"
-
-# At this point,
-#   /srv/
-# probably exists already; and
-#   /srv/chroot/
-# might not exist (in which case 'debootstrap' will create it); but
-#   /srv/chroot/"${CHRTNAME}"
-# should not exist--debootstrapping into a nonempty directory can
-# fail in mysterious ways.
-if [ -e /srv/chroot/"${CHRTNAME}" ] ; then echo "Oops."; exit 9; fi
-mkdir -p /srv/chroot/"${CHRTNAME}"
-
-# Bootstrap a minimal debian system. Options:
-#   --include=zsh, because of "shell=/bin/zsh" below
-#   --variant=minbase, as explained here:
-#     https://lists.nongnu.org/archive/html/lmi/2020-05/msg00026.html
-debootstrap --arch=amd64 --cache-dir="${CACHEDIR}" \
- --variant=minbase --include=zsh \
- "${CODENAME}" /srv/chroot/"${CHRTNAME}" >"${CHRTNAME}"-debootstrap-log 2>&1
-
-# This command should produce no output:
-grep --invert-match '^I:' "${CHRTNAME}"-debootstrap-log || true
+./lmi_setup_02c.sh
+./lmi_setup_10c.sh
 
 # Installing 'schroot' creates this 'chroot.d' directory.
-cat >/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
-[${CHRTNAME}]
-aliases=lmi
-description=debian ${CODENAME} cross build ${CHRTVER}
-directory=/srv/chroot/${CHRTNAME}
+cat >/etc/schroot/chroot.d/centos7lmi.conf <<EOF
+[centos7lmi]
+# aliases=deliberately_unused
+description=centos-7.7
+directory=/srv/chroot/centos7lmi
 users=${CHROOT_USERS}
 groups=${NORMAL_GROUP}
 root-groups=root
@@ -115,10 +78,41 @@ cat >/etc/schroot/lmi_profile/fstab <<EOF
 # /dev/nonexistent      /var/cache/nonexistent  none    rw,bind    0       0
 EOF
 
-# Summarize what's already here--nothing if /var/cache/lmi_schroots
-# has never been populated, or a full system if these scripts have
-# been run previously:
-du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
+# Use the same cache directory for all chroot package downloads.
+#
+# Packages ('.deb' as well as '.rpm') are uniquely named, so no
+# collision can occur.
+#
+# Actually, 'rinse' creates a subdirectory like 'centos-7.amd64/', and
+# updating the centos chroot using 'yum' creates subdirectories like
+# 'x86_64/7/...', so the files remain segregated. Some duplication of
+# '.rpm' files may occur, but that's harmless.
+
+CACHEDIR=/var/cache/lmi_schroots
+mkdir -p "${CACHEDIR}"
+
+if [ -e /srv/chroot/centos7lmi ] ; then echo "Oops."; exit 9; fi
+rinse --arch amd64 --distribution centos-7 \
+  --cache-dir "${CACHEDIR}" \
+  --directory /srv/chroot/centos7lmi \
+
+# There are probably a few directories here, with few regular files,
+# because this script is intended to be run on a yum-free debian host.
+du   -sb /srv/chroot/centos7lmi/var/cache/yum || echo "Oops: rinse didn't create cache"
+find /srv/chroot/centos7lmi/var/cache/yum -type f -print0 | xargs -0 ls -l
+
+echo Installed centos chroot.
+
+cp -a /tmp/schroot_env /srv/chroot/centos7lmi/tmp
+cp -a lmi_setup_*.sh   /srv/chroot/centos7lmi/tmp
+cp -a .zshrc           /srv/chroot/centos7lmi/tmp
+cp -a .vimrc           /srv/chroot/centos7lmi/tmp
+cp -a en.utf-8.add     /srv/chroot/centos7lmi/tmp
+cp -a install_msw.sh   /srv/chroot/centos7lmi/tmp
+
+./lmi_setup_13c.sh
+
+schroot --chroot=centos7lmi --user=root --directory=/tmp ./lmi_setup_01c.sh
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Ran 'debootstrap'."  | tee /dev/tty
+echo "$stamp $0 Installed in centos chroot."  | tee /dev/tty

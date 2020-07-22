@@ -119,7 +119,7 @@ void mc_enum_test::test()
     // Cardinality.
     BOOST_TEST_EQUAL(holiday4.cardinality(), 3);
     mc_enum_base* base_pointer = dynamic_cast<mc_enum_base*>(&holiday4);
-    BOOST_TEST_UNEQUAL(base_pointer, 0);
+    BOOST_TEST(nullptr != base_pointer);
     int expected_cardinality = 0;
     if(base_pointer)
         {

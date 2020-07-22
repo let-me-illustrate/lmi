@@ -77,7 +77,6 @@ std::vector<double> monthly_rates()
 }
 } // Unnamed namespace.
 
-[[noreturn]]
 void MortalityRates::fetch_parameters(BasicValues const&) {throw "Error";}
 
 MortalityRates::MortalityRates()

@@ -24,22 +24,18 @@
 . ./lmi_setup_inc.sh
 . /tmp/schroot_env
 
-set -vx
+set -evx
 
 assert_su
 assert_not_chrooted
 
-# umount expected mounts, then list any that seem to have been missed.
+# Show all lmi mountpoints; abort if there are any.
 #
-# It might seem snazzier to extract the relevant field of
-#   grep "${CHRTNAME}" /proc/mounts
-# and pipe it into
-#   xargs umount
-# but that would do something astonishing if two chroots (one nested
-# and the other not) have mounted /proc thus:
-#   proc /srv/chroot/"${CHRTNAME}"/proc
-#   proc /srv/chroot/centos7lmi/srv/chroot/"${CHRTNAME}"/proc
-# and only the non-nested one is intended to be destroyed.
+# The most likely cause is that a user has entered the chroot with
+# 'schroot', but has not yet left it. Otherwise, this "shouldn't"
+# occur (although it has been observed), and 'rm --one-file-system'
+# below should be safe anyway (yet an actual catastrophe did occur
+# nonetheless).
 #
 # The 'findmnt' invocation is elaborated thus:
 #   -r
@@ -69,27 +65,40 @@ assert_not_chrooted
 #   | column -t
 # along with '-r' because '-l' does a poor job of columnization.
 
-umount /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
-umount /srv/chroot/"${CHRTNAME}"/dev/pts
-umount /srv/chroot/"${CHRTNAME}"/proc
-
 findmnt -ro SOURCE,TARGET \
   | grep "${CHRTNAME}" \
   | sed -e's,^[/A-Za-z0-9_-]*[[]\([^]]*\)[]],\1,' \
   | column -t
 
+findmnt | grep "${CHRTNAME}" && exit 9
+
 # Use '--one-file-system' because it was designed for this use case:
 #   https://lists.gnu.org/archive/html/bug-coreutils/2006-10/msg00332.html
 # | This option is useful when removing a build "chroot" hierarchy
 #
-# Use 'schroot --location' rather than /srv/chroot/"$CHRTNAME" because
-# chroots need not be located in /srv .
+# These scripts create a chroot in /srv/chroot/"$CHRTNAME", but
+# chroots need not be located in /srv , so use 'schroot --location'
+# to attempt to detect any manual override. Such detection may fail
+# (e.g., if the chroot's '.conf' file is missing).
 
-rm --one-file-system --recursive --force \
-  "$(schroot --chroot="${CHRTNAME}" --location)"
+loc0=/srv/chroot/"${CHRTNAME}"
+loc1="$(schroot --chroot="${CHRTNAME}" --location)"
+if [ -n "${loc1}" ] && [ "${loc0}" != "${loc1}" ]; then
+  echo "chroot found in unexpected location--remove it manually"
+  exit 9
+fi
+
+# Remove the directory that these scripts would create. Removing
+# "${loc1}" wouldn't be appropriate because it can be an empty string.
+
+rm --one-file-system --recursive --force "${loc0}"
+
+# Explicitly test postcondition.
+if [ -e "${loc0}" ] || [ -e "${loc1}" ] ; then echo "Oops."; exit 9; fi
 
 # schroot allows configuration files in /etc/schroot/chroot.d/ only.
 
-rm /etc/schroot/chroot.d/"${CHRTNAME}".conf
+rm --force /etc/schroot/chroot.d/"${CHRTNAME}".conf
 
-# These commands fail harmlessly if the chroot doesn't already exist.
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Removed old chroot."  | tee /dev/tty

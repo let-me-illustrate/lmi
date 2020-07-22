@@ -74,11 +74,9 @@ or sending money.
     </p>
 {{/HasWP}}
 
-{{#UsePartialMort}}
-    <p>
-    {{FnPartialMortality}}
-    </p>
-{{/UsePartialMort}}
+{{FnMaturityAge}}
+
+{{FnPartialMortality}}
 
 <!-- PDF !! MortalityBlendFootnote -->
 {{#GenderBlended}}

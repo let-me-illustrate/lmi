@@ -43,8 +43,7 @@ git mv lmi.rc lmi_msw_res.rc
 
   # Make a patch against repository from local tree
 
-git diff file0.cpp file1.cpp >/dev/clipboard
-cvs diff -U3 file0.cpp file1.cpp >/dev/clipboard
+git diff file0.cpp file1.cpp >some_new_file
 
   # Apply an email patch
 
@@ -92,6 +91,12 @@ git checkout odd/foo
 git commit sandbox_test.cpp
 git checkout master
 git push origin odd/foo
+
+  # to transplant already-pushed commits to a new branch
+git branch odd/foo
+git reset --keep origin/master
+  # ...and don't ever rebase that new branch
+
   # (to copy to a subdir before deletion, so it's in permanent history)
   # (this works only if all modified files are unique to the branch)
 git checkout master
@@ -140,16 +145,6 @@ git pull
   # If that yields "fatal: Not possible to fast-forward, aborting":
 
 git pull --rebase
-
-  # Set local timestamps from RCS Id's, to match repository
-  # (this should be necessary only if your clock is unsynchronized)
-  #
-  # This is slow, so consider specifying the names of changed files
-  # instead of using '*' at the beginning
-  #
-  # ...for cvs:
-
-for z in * ; do grep --directories=skip --quiet --files-with-matches '$Id:' $z && touch "--date=$(<$z sed -e'/$Id:/!d' |sed -e's/^.*\([0-9]\{4\}[0-9\/: ]*\) .*$/\1/')" $z && date -u +'%Y%m%dT%H%MZ' -r $z; done;
 
   # If msw sets an incorrect executable bit, and you accidentally
   # commit it (without first running 'make check_concinnity', which
@@ -220,8 +215,7 @@ make $coefficiency --output-sync=recurse -f install_wx.make >../log 2>&1
 make $coefficiency --output-sync=recurse -f install_wxpdfdoc.make >../log 2>&1
 
   # Shift differing system-test files among directories:
-cd /opt/lmi/touchstone
-d="/opt/lmi/touchstone-old/touchstone-$(date -u +'%Y%m%dT%H%MZ')" && mkdir -p $d && for z in *; do cmp --quiet $z ../test/$z || ( mv $z $d/$z; mv ../test/$z ./$z; ) ; done
+pushd /opt/lmi/touchstone && d="/opt/lmi/touchstone-old/touchstone-$(date -u +'%Y%m%dT%H%MZ')" && mkdir -p $d && for z in *; do cmp --quiet $z ../test/$z || ( mv $z $d/$z; mv ../test/$z ./$z; ) ; done && popd
 
   # Validate xrc files
 
@@ -244,10 +238,6 @@ cd /opt/lmi/src/lmi
 
 make $coefficiency check_concinnity >../log 2>&1
 sed -f diagnostics.sed ../log 2>&1 |less -S
-
-  # Copy date to clipboard for pasting
-
-date -u +'%Y%m%dT%H%MZ' |tr -d '\n' >/dev/clipboard
 
   # Fifth screen: only for running lmi and its GUI tests
 

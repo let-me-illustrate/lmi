@@ -154,11 +154,11 @@ void safe_message_alert(char const* message)
 {
     safely_show_on_stderr(message);
 #if defined LMI_MSW
-    HWND handle = 0;
-    if(wxTheApp && wxTheApp->GetTopWindow())
-        {
-        handle = reinterpret_cast<HWND>(wxTheApp->GetTopWindow()->GetHandle());
-        }
+    auto handle =
+        (wxTheApp && wxTheApp->GetTopWindow())
+        ? wxTheApp->GetTopWindow()->GetHandle()
+        : nullptr
+        ;
     ::MessageBoxA(handle, message, "Error", MB_OK | MB_ICONSTOP | MB_TASKMODAL);
 #endif // defined LMI_MSW
 }

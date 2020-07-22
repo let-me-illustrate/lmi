@@ -82,7 +82,7 @@ void MswDllPreloader::PreloadOneDll(std::string const& dll_name)
 
     fenv_initialize();
 
-    if(0 == ::LoadLibraryA(dll_name.c_str()))
+    if(nullptr == ::LoadLibraryA(dll_name.c_str()))
         {
         warning() << "Failed to preload '" << dll_name << "'." << LMI_FLUSH;
         }

@@ -222,8 +222,8 @@ class control_word
 
   public:
     control_word(std::uint32_t w)
+        :cw_ {ControlWordType::reserved_values | ControlWordType::settable & w}
         {
-        cw_ = ControlWordType::reserved_values | ControlWordType::settable & w;
         }
 
     template<typename X>

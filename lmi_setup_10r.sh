@@ -24,7 +24,7 @@
 . ./lmi_setup_inc.sh
 . /tmp/schroot_env
 
-set -vx
+set -evx
 
 assert_su
 assert_not_chrooted
@@ -33,3 +33,6 @@ yum --assumeyes install debootstrap schroot
 
 # To show available debootstrap scripts:
 #   ls /usr/share/debootstrap/scripts
+
+stamp=$(date -u +'%Y%m%dT%H%M%SZ')
+echo "$stamp $0: Installed 'debootstrap' [redhat]."  | tee /dev/tty

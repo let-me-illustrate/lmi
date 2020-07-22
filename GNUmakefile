@@ -238,8 +238,7 @@ $(build_dir): $(gpl_files)
 	+@[ -d $(locallibdir)     ] || $(MKDIR) --parents $(locallibdir)
 	+@[ -d $(localincludedir) ] || $(MKDIR) --parents $(localincludedir)
 	+@for z in $(compiler_runtime_files); do \
-	    $(CP) --archive --update $$z $(localbindir) ; \
-	    $(CHMOD) -R g=u $(localbindir)/`basename $$z` ; \
+	    $(INSTALL) -c -m 0775 -c $$z $(localbindir) ; \
 	  done;
 	+@$(MAKETARGET)
 
@@ -422,7 +421,7 @@ TEST_CODING_RULES := $(build_dir)/test_coding_rules$(EXEEXT)
 .PHONY: custom_tools
 custom_tools:
 	@$(MAKE) test_coding_rules$(EXEEXT)
-	@$(CP) --preserve --update $(TEST_CODING_RULES) $(localbindir)
+	@$(INSTALL) -c -m 0775 $(TEST_CODING_RULES) $(localbindir)
 
 ################################################################################
 

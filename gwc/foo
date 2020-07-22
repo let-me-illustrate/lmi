@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# set -vx
+
+CHROOT_USERS=$(getent group "lmi" | cut -d':' -f4 | tr ',' ' ')
+CHROOT_UIDS=
+for u in ${CHROOT_USERS}; do
+  echo "${u}" "$(id -u "${u}")"
+  CHROOT_UIDS="${CHROOT_UIDS} $(id -u "${u}")"
+done
+# Remove leading delimiter.
+CHROOT_UIDS=$(echo "${CHROOT_UIDS}" | sed -e's/^ //')
+echo "'${CHROOT_USERS}'"
+echo "'${CHROOT_UIDS}'"
+
+i=1
+while true
+do
+  uid=$(echo "${CHROOT_UIDS}" | cut -d' ' -f"${i}")
+  user=$(echo "${CHROOT_USERS}" | cut -d' ' -f"${i}")
+  if [ -z "$user" ] && [ -z "$uid" ] ; then break; fi
+  if [ -z "$user" ] || [ -z "$uid" ] ; then
+    printf 'Problem: both "%s" and "%s" must be nonempty.\n' "${user}" "${uid}"
+    break
+  fi
+  printf '  user %i: name %s; uid %i\n' "$i" "$user" "$uid"
+  i=$((i + 1))
+done
