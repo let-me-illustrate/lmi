@@ -110,8 +110,6 @@ cp -a .vimrc           /srv/chroot/centos7lmi/tmp
 cp -a en.utf-8.add     /srv/chroot/centos7lmi/tmp
 cp -a install_msw.sh   /srv/chroot/centos7lmi/tmp
 
-./lmi_setup_13c.sh
-
 schroot --chroot=centos7lmi --user=root --directory=/tmp ./lmi_setup_01c.sh
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')

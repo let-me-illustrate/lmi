@@ -33,7 +33,6 @@ assert_not_chrooted
 ./lmi_setup_07r.sh
 ./lmi_setup_10r.sh
 ./lmi_setup_11.sh
-./lmi_setup_13.sh
 
 ./lmi_setup_24c.sh
 ./lmi_setup_25.sh

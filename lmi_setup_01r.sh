@@ -34,7 +34,6 @@ assert_not_chrooted
 ./lmi_setup_07r.sh
 ./lmi_setup_10r.sh
 ./lmi_setup_11.sh
-./lmi_setup_13.sh
 
 cp -a /tmp/schroot_env /srv/chroot/"${CHRTNAME}"/tmp
 cp -a lmi_setup_*.sh   /srv/chroot/"${CHRTNAME}"/tmp
