@@ -42,16 +42,3 @@
 #if !wxUSE_PRINTING_ARCHITECTURE
 #   error Enable wxUSE_PRINTING_ARCHITECTURE in wx setup.
 #endif // !wxUSE_PRINTING_ARCHITECTURE
-
-// Ensure that certain inappropriate options aren't used.
-
-// License not obviously compatible with GPL.
-#if wxUSE_APPLE_IEEE
-#   error Disable wxUSE_APPLE_IEEE in wx setup.
-#endif // wxUSE_APPLE_IEEE
-
-// The patents have expired, but the stench lingers:
-//   https://www.gnu.org/philosophy/gif.html
-#if wxUSE_GIF
-#   error Disable wxUSE_GIF in wx setup.
-#endif // wxUSE_GIF
