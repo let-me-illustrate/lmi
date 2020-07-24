@@ -133,6 +133,13 @@ nychthemeral_clutter='
 /^$/d
 '
 
+# This for-loop can iterate over as many toolchains as desired.
+# Make sure the current production architecture is built last, so that
+# it's the one installed to /opt/lmi/bin/ when this script ends.
+export LMI_COMPILER=gcc
+export LMI_TRIPLET
+for LMI_TRIPLET in x86_64-w64-mingw32 i686-w64-mingw32 ;
+do
 # Directory for test logs.
 #
 # It seems redundant to construct yet another $prefix and $exec_prefix here;
@@ -141,7 +148,6 @@ prefix=/opt/lmi
 exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
 log_dir="$exec_prefix"/logs
 mkdir --parents "$log_dir"
-
 {
 cd /opt/lmi/src/lmi
 
@@ -254,3 +260,4 @@ for z in "$throwaway_dir"/*(N); do rm "$z"; done
 # Therefore, it is deliberately excluded from this script.
 printf "\nDo not forget to run the 'gui_test.sh' script.\n"
 } 2>&1 | tee "$log_dir"/nychthemeral_test | sed -e "$nychthemeral_clutter"
+done
