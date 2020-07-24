@@ -2008,7 +2008,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveBeginYear">
                                                         <help>Solve beginning duration</help>
-                                                        <size>20,-1</size>
                                                         <style>wxSP_ARROW_KEYS</style>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -2024,7 +2023,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveBeginAge">
                                                         <help>Solve beginning age</help>
-                                                        <size>20,-1</size>
                                                         <style>wxSP_ARROW_KEYS</style>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -2069,7 +2067,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveEndYear">
                                                         <help>Solve ending duration</help>
-                                                        <size>20,-1</size>
                                                         <style>wxSP_ARROW_KEYS</style>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -2085,7 +2082,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveEndAge">
                                                         <help>Solve ending age</help>
-                                                        <size>20,-1</size>
                                                         <style>wxSP_ARROW_KEYS</style>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -2130,7 +2126,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveTargetYear">
                                                         <help>Duration to achieve target surrender value</help>
-                                                        <size>20,-1</size>
                                                         <style>wxSP_ARROW_KEYS</style>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -2146,7 +2141,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveTargetAge">
                                                         <help>Attained age to achieve target surrender value</help>
-                                                        <size>20,-1</size>
                                                         <style>wxSP_ARROW_KEYS</style>
                                                         <max>100</max>
                                                         <value>99</value>

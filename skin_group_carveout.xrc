@@ -2354,7 +2354,6 @@ here, but it looks weird if we don't make this look like its siblings.
                     <border>4</border>
                     <object class="wxSpinCtrl" name="SpouseIssueAge">
                         <help>Spouse insurance age on date of issue</help>
-                        <size>45,-1</size>
                         <style>wxSP_ARROW_KEYS</style>
                     </object>
                 </object>

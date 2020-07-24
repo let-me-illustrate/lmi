@@ -641,7 +641,6 @@
                                     <border>2</border>
                                     <object class="wxSpinCtrl" name="SurviveToAge">
                                         <help>Partial mortality survival age limit</help>
-                                        <size>30,-1d</size>
                                         <style>wxSP_ARROW_KEYS</style>
                                     </object>
                                 </object>
@@ -650,7 +649,6 @@
                                     <border>2</border>
                                     <object class="wxSpinCtrl" name="SurviveToYear">
                                         <help>Partial mortality survival year limit</help>
-                                        <size>30,-1d</size>
                                         <style>wxSP_ARROW_KEYS</style>
                                     </object>
                                 </object>
