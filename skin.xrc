@@ -2623,6 +2623,8 @@ the other is perforce ignored.
                 <orient>wxVERTICAL</orient>
                 <label>Funds</label>
                 <object class="sizeritem">
+                    <flag>wxGROW|wxALL</flag>
+                    <border>2</border>
                     <object class="wxRadioBox" name="FundChoiceType">
                         <help>Fund allocation: for 100% general account, pick "Choose funds"; for 100% separate account, pick "Average fund"</help>
                         <style>wxRA_SPECIFY_COLS</style>
@@ -2634,12 +2636,13 @@ the other is perforce ignored.
                     </object>
                 </object>
                 <object class="sizeritem">
+                    <flag>wxGROW|wxALL</flag>
+                    <border>2</border>
                     <object class="wxFlexGridSizer">
                         <rows>1</rows>
                         <growablecols>1</growablecols>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                            <border>4</border>
                             <object class="wxStaticText">
                                 <label>fee</label>
                             </object>

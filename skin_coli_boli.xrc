@@ -611,7 +611,6 @@
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW|wxLEFT|wxTOP</flag>
-                    <border>2</border>
                     <object class="wxFlexGridSizer">
                         <cols>3</cols>
                         <rows>1</rows>
@@ -3243,7 +3242,6 @@ here, but it looks weird if we don't make this look like its siblings.
                         <label>Honeymoon</label>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                            <border>2</border>
                             <object class="wxFlexGridSizer">
                                 <cols>1</cols>
                                 <rows>3</rows>
@@ -3260,7 +3258,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxLEFT|wxTOP|wxBOTTOM</flag>
-                                    <border>2</border>
                                     <object class="wxFlexGridSizer">
                                         <cols>2</cols>
                                         <rows>1</rows>
@@ -3284,7 +3281,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
-                                    <border>2</border>
                                     <object class="wxFlexGridSizer">
                                         <cols>1</cols>
                                         <rows>2</rows>
