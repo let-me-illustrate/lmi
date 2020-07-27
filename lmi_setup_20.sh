@@ -78,10 +78,36 @@ sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /etc/skel/.bash_logout
 logdir=/srv/cache_for_lmi/logs
 mkdir -p "${logdir}"
 apt-get update
-apt-get --assume-yes install wget g++-mingw-w64 automake libtool make \
- pkg-config git cvs zsh bzip2 unzip sudo wine default-jre jing trang \
- g++-multilib libxml2-utils libxslt1-dev vim-gtk vim-doc shellcheck \
- patch bc libarchive-tools xsltproc rsync curl bsdmainutils \
+apt-get --assume-yes install \
+  automake \
+  bc \
+  bsdmainutils \
+  bzip2 \
+  curl \
+  cvs \
+  default-jre \
+  g++-mingw-w64 \
+  g++-multilib \
+  git \
+  jing \
+  libarchive-tools \
+  libtool \
+  libxml2-utils \
+  libxslt1-dev \
+  make \
+  patch \
+  pkg-config \
+  rsync \
+  shellcheck \
+  sudo \
+  trang \
+  unzip \
+  vim-doc \
+  vim-gtk \
+  wget \
+  wine \
+  xsltproc \
+  zsh \
  >"${logdir}/${CHRTNAME}"-apt-get-log 2>&1
 
 # This command should produce little output:
