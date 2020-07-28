@@ -75,6 +75,11 @@ then
     git fetch origin
 fi
 
+# Reset in case git-checkout would fail. See:
+#   https://lists.nongnu.org/archive/html/lmi/2020-07/msg00053.html
+git reset --hard
+git submodule foreach 'git reset --hard'
+
 git checkout "$wx_commit_sha"
 
 # Get any new submodules that may have been added, even if nested.

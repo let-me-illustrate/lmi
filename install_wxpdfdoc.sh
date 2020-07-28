@@ -75,6 +75,10 @@ then
     git fetch origin
 fi
 
+# Reset in case git-checkout would fail. See:
+#   https://lists.nongnu.org/archive/html/lmi/2020-07/msg00053.html
+git reset --hard
+
 git checkout "$wxpdfdoc_commit_sha"
 
 build_type=$("$proxy_wxpdfdoc_dir"/admin/build-aux/config.guess)
