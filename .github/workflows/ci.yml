@@ -30,7 +30,7 @@ jobs:
             automake bc bsdmainutils bzip2 curl cvs default-jre \
             g++-mingw-w64-i686 g++-multilib git jing libarchive-tools \
             libtool libxml2-utils libxslt1-dev make patch pkg-config rsync \
-            shellcheck sudo trang unzip wine32 wget xsltproc
+            shellcheck sudo trang unzip wget wine32 xsltproc
 
       - name: Fix up libtool
         run: sudo sed -i'' -e 's/^int _putenv/_CRTIMP int _putenv/' /usr/share/libtool/build-aux/ltmain.sh
