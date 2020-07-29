@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -25,7 +25,7 @@ set -vx
 
 # To get the latest version of this script:
 #
-# wget -N 'https://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
+# wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/install_msw.sh'
 
 # To remove lmi prior to reinstalling with this script:
 #

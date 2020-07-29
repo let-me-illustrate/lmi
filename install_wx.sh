@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -98,7 +98,7 @@ gcc_version=$("${mingw_bin_dir}${LMI_TRIPLET}-$LMI_COMPILER" -dumpversion|tr -d 
 vendor=${LMI_TRIPLET}-$gcc_version-$wx_commit_sha
 
 # Configuration reference:
-#   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
+#   https://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
 
 wx_cc_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math'
 wx_cxx_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math'

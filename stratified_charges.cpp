@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -575,7 +575,7 @@ void stratified_charges::write_proem
 void stratified_charges::write_strata_files()
 {
     // Guard against recurrence of the problem described here:
-    //   http://lists.nongnu.org/archive/html/lmi/2008-02/msg00024.html
+    //   https://lists.nongnu.org/archive/html/lmi/2008-02/msg00024.html
     status() << "This line does nothing, but must not fail." << std::flush;
 
     static double const dbl_inf = infinity<double>();

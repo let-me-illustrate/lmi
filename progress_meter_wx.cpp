@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -115,7 +115,7 @@ concrete_progress_meter::concrete_progress_meter
 ///
 /// Sleep only for a tenth of a second at a time, to ensure that the
 /// application remains responsive--see:
-///   http://lists.nongnu.org/archive/html/lmi/2013-11/msg00006.html
+///   https://lists.nongnu.org/archive/html/lmi/2013-11/msg00006.html
 /// Count down the remaining delay to reassure end users that activity
 /// is taking place.
 

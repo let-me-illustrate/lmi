@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -362,7 +362,7 @@ void test_input_sequence_regex()
     BOOST_TEST( boost::regex_match("  "                                                         , r));
     // Interval notation.
     BOOST_TEST( boost::regex_match("1 [2,3);4 (5,6]"                                            , r));
-    // User-manual examples. See: http://www.nongnu.org/lmi/sequence_input.html
+    // User-manual examples. See: https://www.nongnu.org/lmi/sequence_input.html
     BOOST_TEST( boost::regex_match("sevenpay 7; 250000 retirement; 100000 #10; 75000 @95; 50000", r));
     BOOST_TEST( boost::regex_match("100000; 110000; 120000; 130000; 140000; 150000"             , r));
     BOOST_TEST( boost::regex_match("target; maximum"                                            , r)); // [Modified example.]

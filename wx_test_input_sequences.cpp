@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -36,7 +36,7 @@
 ///
 /// Test a broad variety of input sequences. For now, use the set in
 /// the user manual:
-///   http://www.nongnu.org/lmi/sequence_input.html
+///   https://www.nongnu.org/lmi/sequence_input.html
 /// but hard code them here--later they might differ, e.g. if we
 /// decide to add extra tests here.
 ///

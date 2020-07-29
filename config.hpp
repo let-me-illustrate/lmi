@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -78,7 +78,7 @@ namespace fs = boost::filesystem;
 // slightly better to use LMI_MSC in the conditional instead, but
 // that doesn't justify moving this test block far away from where
 // LMI_X86 is set. See:
-//   http://lists.nongnu.org/archive/html/lmi/2017-01/msg00009.html
+//   https://lists.nongnu.org/archive/html/lmi/2017-01/msg00009.html
 
 #if defined LMI_X86
 #   if defined __GNUC__

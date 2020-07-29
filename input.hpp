@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -403,7 +403,7 @@ class LMI_SO Input final
     numeric_sequence         FlatExtra                       ;
     numeric_sequence         PolicyLevelFlatExtra            ;
     numeric_sequence         HoneymoonValueSpread            ;
-    datum_string             FundAllocations                 ; // INPUT !! http://savannah.nongnu.org/support/?104481
+    datum_string             FundAllocations                 ; // INPUT !! https://savannah.nongnu.org/support/?104481
     numeric_sequence         CashValueEnhancementRate        ;
     datum_string             AdditionalReports               ;
     mce_suppl_illus_type     SupplementalIllustrationType    ;

@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -292,7 +292,7 @@ wx_config_check:
 #   /opt/lmi/third_party/
 # while properly autotoolized libraries are installed in
 # $(locallibdir) and $(localbindir); see:
-#   http://lists.gnu.org/archive/html/lmi/2006-10/msg00046.html
+#   https://lists.nongnu.org/archive/html/lmi/2006-10/msg00046.html
 # for some discussion.
 
 lmi_include_directories := \
@@ -372,7 +372,7 @@ tutelary_flag :=
 # The default '-fno-rounding-math' means something like
 #   #pragma STDC FENV ACCESS OFF
 # which causes harm while bringing no countervailing benefit--see:
-#   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
+#   https://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
 
 c_standard   := -fno-ms-extensions -frounding-math -std=c99
 cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
@@ -397,8 +397,8 @@ else ifeq (3.4.5,$(gcc_version))
   cxx_standard += -posix
 else ifneq (,$(filter $(gcc_version), 4.9.1 4.9.2))
   # See:
-  #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00028.html
-  #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
+  #   https://lists.nongnu.org/archive/html/lmi/2015-12/msg00028.html
+  #   https://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
   gcc_version_specific_warnings := \
     -Wno-conversion \
     -Wno-unused-local-typedefs \

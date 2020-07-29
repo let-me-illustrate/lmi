@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -123,7 +123,7 @@ gpt_commfns::gpt_commfns
     mm b(        ic                  ); LMI_ASSERT(0.0 <= b && b <  1.0);
     mm c(        ig                  ); LMI_ASSERT(0.0 <= c && c <  1.0);
     // Assertions on the next line are required by section B.8 here:
-    //   http://www.nongnu.org/lmi/7702.html
+    //   https://www.nongnu.org/lmi/7702.html
     // and therefore must not blithely be weakened, even if there's
     // a good reason for loosening the assertions above.
     LMI_ASSERT(0.0 <= a && 0.0 <= b && -1.0 < c);

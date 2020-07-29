@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -507,13 +507,13 @@ void Skeleton::UponEditDefaultCell(wxCommandEvent&)
 ///
 /// If wxLaunchDefaultBrowser() fails, then it normally displays an
 /// error message of its own, which is suppressed here. See:
-///   http://lists.nongnu.org/archive/html/lmi/2009-03/msg00039.html
+///   https://lists.nongnu.org/archive/html/lmi/2009-03/msg00039.html
 
 void Skeleton::UponHelp(wxCommandEvent&)
 {
     fenv_guard fg;
 
-    std::string const canonical_url("http://lmi.nongnu.org/user_manual.html");
+    std::string const canonical_url("https://lmi.nongnu.org/user_manual.html");
 
     std::string s(AddDataDir("user_manual.html"));
     fs::path p(fs::system_complete(fs::path(s)));
@@ -628,7 +628,7 @@ bool Skeleton::OnExceptionInMainLoop()
 /// wxApp::OnExit() override.
 ///
 /// Call the base class's implementation--see:
-///   http://lists.nongnu.org/archive/html/lmi/2013-11/msg00020.html
+///   https://lists.nongnu.org/archive/html/lmi/2013-11/msg00020.html
 
 int Skeleton::OnExit()
 {
@@ -796,7 +796,7 @@ bool Skeleton::OnInit()
         {
         report_exception();
         // Orderly termination: see
-        //   http://lists.gnu.org/archive/html/lmi/2005-12/msg00020.html
+        //   https://lists.nongnu.org/archive/html/lmi/2005-12/msg00020.html
         // Returning 'true' here without creating a frame would leave
         // the application running as an apparent zombie.
         if(GetTopWindow())
@@ -1078,7 +1078,7 @@ void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
 /// Test custom handler UponPaste().
 ///
 /// See:
-///   http://savannah.nongnu.org/task/?5224
+///   https://savannah.nongnu.org/task/?5224
 
 void Skeleton::UponTestPasting(wxCommandEvent&)
 {

@@ -1,7 +1,7 @@
   # Work with proprietary repository (prerequisite: 'develop0.txt')
   #
   # Discussed in detail here:
-  #   http://lists.nongnu.org/archive/html/lmi/2016-03/msg00031.html
+  #   https://lists.nongnu.org/archive/html/lmi/2016-03/msg00031.html
 
   # Initial setup: create a working copy, cloned from the
   # already-provided "blessed" repo...

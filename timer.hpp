@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -94,7 +94,7 @@ class LMI_SO Timer
 /// due, e.g., to cache effects); execute the operation repeatedly,
 /// until the stopping criterion is satisfied; and then record the
 /// minimum measured time, which is more useful than the mean--see:
-///   http://lists.nongnu.org/archive/html/lmi/2017-05/msg00005.html
+///   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00005.html
 /// The stopping criterion is that both:
 ///  - at least one percent of the allotted time has been spent; and
 ///  - either all allotted time has been used, or the repetition count

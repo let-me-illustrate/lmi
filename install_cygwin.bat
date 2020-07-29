@@ -15,7 +15,7 @@
 @REM along with this program; if not, write to the Free Software Foundation,
 @REM Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 @REM
-@REM http://savannah.nongnu.org/projects/lmi
+@REM https://savannah.nongnu.org/projects/lmi
 @REM email: <gchicares@sbcglobal.net>
 @REM snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 

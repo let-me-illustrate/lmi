@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -116,7 +116,7 @@ char const* mec_view::menubar_xrc_resource() const
 ///
 /// Trap exceptions to ensure that this function returns 'false' on
 /// failure, lest wx's doc-view framework create a zombie view. See:
-///   http://lists.nongnu.org/archive/html/lmi/2008-12/msg00017.html
+///   https://lists.nongnu.org/archive/html/lmi/2008-12/msg00017.html
 
 bool mec_view::OnCreate(wxDocument* doc, long int flags)
 {

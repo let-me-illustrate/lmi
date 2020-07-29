@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -670,7 +670,7 @@ void input_sequence_test::test()
     }
 
     // Test all examples in the user manual:
-    //   http://www.nongnu.org/lmi/sequence_input.html
+    //   https://www.nongnu.org/lmi/sequence_input.html
     // Each example is quoted unmodified as a comment before its test.
     // Some examples have been superficially changed to work with
     // check(), e.g. because check() uses issue age 90. Others scale

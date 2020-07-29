@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -168,7 +168,7 @@ bool fenv_is_valid()
     // which exceptions are actually enabled. std::fetestexcept() is
     // useless for this purpose because it tests the status word
     // rather than the control word--see:
-    //   http://lists.nongnu.org/archive/html/lmi/2017-01/msg00024.html
+    //   https://lists.nongnu.org/archive/html/lmi/2017-01/msg00024.html
     return FE_TONEAREST == std::fegetround();
 #endif // !defined LMI_X87
 }
@@ -190,7 +190,7 @@ std::string fenv_explain_invalid_control_word()
     // which exceptions are actually enabled. std::fetestexcept() is
     // useless for this purpose because it tests the status word
     // rather than the control word--see:
-    //   http://lists.nongnu.org/archive/html/lmi/2017-01/msg00024.html
+    //   https://lists.nongnu.org/archive/html/lmi/2017-01/msg00024.html
     oss
         << "The floating-point environment unexpectedly changed."
         << "\nThe rounding mode is " << std::fegetround()

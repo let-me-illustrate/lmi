@@ -30,7 +30,7 @@
  * This is a derived work. Any defect in it should not reflect on
  * Ulrich Drepper's reputation.
  *
- * http://savannah.nongnu.org/projects/lmi
+ * https://savannah.nongnu.org/projects/lmi
  * email: <gchicares@sbcglobal.net>
  * snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
  *

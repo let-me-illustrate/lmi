@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -38,7 +38,7 @@ good_copyright="...Copyright (C)...$(date -u +'%Y')..."
 # Dollar signs must be escaped with '\' in here-documents; writing
 # them on different lines prevents RCS substitution here.
 
-good_url="...http://savannah.nongnu.org/projects/lmi..."
+good_url="...https://savannah.nongnu.org/projects/lmi..."
 
 boilerplate=$(printf '%s\n%s' "$good_copyright" "$good_url")
 
@@ -129,7 +129,7 @@ EOF
 
 cat >eraseme_url_000 <<EOF
 $good_copyright
-<http://savannah.nongnu.org/projects/lmi>
+<https://savannah.nongnu.org/projects/lmi>
 EOF
 
 cat >eraseme_url_001 <<EOF

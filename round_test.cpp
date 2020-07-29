@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -193,7 +193,7 @@ bool test_one_case
     // All tests pass even with a tolerance of zero, for
     //  - candidate libmingwex as 20080603Z, and
     //  - glibc for amd64, as reported here:
-    //    http://lists.nongnu.org/archive/html/lmi/2008-06/msg00019.html
+    //    https://lists.nongnu.org/archive/html/lmi/2008-06/msg00019.html
     // Code to support a more liberal tolerance is retained in case
     // it someday proves useful on some other platform.
 

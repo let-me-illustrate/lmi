@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -73,7 +73,7 @@ void assemble_console_lines
 /// Show elapsed time on statusbar iff statusbar is available.
 ///
 /// See:
-///   http://lists.nongnu.org/archive/html/lmi/2013-11/msg00017.html
+///   https://lists.nongnu.org/archive/html/lmi/2013-11/msg00017.html
 /// for the wxEXEC_NODISABLE rationale. This is potentially dangerous,
 /// and could be inhibited (by an extra argument) if ever needed.
 

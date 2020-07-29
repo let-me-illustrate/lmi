@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -602,7 +602,7 @@ false // Silly workaround for now.
 //
 // At any rate, keywords should not be blocked when the control is
 // disabled: see
-//   http://lists.nongnu.org/archive/html/lmi/2010-07/msg00006.html
+//   https://lists.nongnu.org/archive/html/lmi/2010-07/msg00006.html
 
     Payment           .enable(mce_solve_ee_prem != SolveType);
     CorporationPayment.enable(mce_solve_er_prem != SolveType);
@@ -671,7 +671,7 @@ false // Silly workaround for now.
 //
 // TODO ?? WX PORT !! But for now, use this workaround: products that have no
 // general account can't select non-custom funds--there's no GUI for
-// that anyway. INPUT !! See: http://savannah.nongnu.org/support/?104481
+// that anyway. INPUT !! See: https://savannah.nongnu.org/support/?104481
 // However, don't impose that restriction on regression tests that
 // cover the once and future ability to choose funds.
     if(!global_settings::instance().regression_testing())
@@ -763,7 +763,7 @@ false // Silly workaround for now.
     // INPUT !! The minimum 'SolveEndYear' and 'SolveTargetYear' set
     // here mean that a solve to or at retirement is a request, not a
     // command.
-#if 0 // http://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
+#if 0 // https://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
     SolveBeginYear .minimum_and_maximum(0                         , years_to_maturity());
     SolveEndYear   .minimum_and_maximum(    SolveBeginYear.value(), years_to_maturity());
     SolveTargetYear.minimum_and_maximum(1 + SolveBeginYear.value(), years_to_maturity());
@@ -773,7 +773,7 @@ false // Silly workaround for now.
     SolveEndAge   .enable(actually_solving && mce_to_age   == SolveToWhich);
     SolveTargetAge.enable(actually_solving && mce_to_age   == SolveTgtAtWhich && mce_solve_for_non_mec != SolveTarget);
 
-#if 0 // http://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
+#if 0 // https://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
     SolveBeginAge .minimum_and_maximum(issue_age()          , maturity_age());
     SolveEndAge   .minimum_and_maximum(SolveBeginAge.value(), maturity_age());
     SolveTargetAge.minimum_and_maximum(SolveBeginAge.value(), maturity_age());
@@ -885,7 +885,7 @@ void Input::DoTransmogrify()
         {
         // If DOB does not govern, adjust the birthdate appropriately,
         // with particular caution on February twenty-ninth. See:
-        //   http://lists.nongnu.org/archive/html/lmi/2008-07/msg00006.html
+        //   https://lists.nongnu.org/archive/html/lmi/2008-07/msg00006.html
         DateOfBirth = add_years
             (DateOfBirth.value()
             ,apparent_age - IssueAge.value()
@@ -987,7 +987,7 @@ void Input::set_solve_durations()
         }
 
     // Remove the following three lines (and <algorithm>) after fixing this:
-    //   http://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
+    //   https://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
     SolveTargetYear = std::max(0, std::min(years_to_maturity(), SolveTargetYear.value()));
     SolveBeginYear  = std::max(0, std::min(years_to_maturity(), SolveBeginYear .value()));
     SolveEndYear    = std::max(0, std::min(years_to_maturity(), SolveEndYear   .value()));

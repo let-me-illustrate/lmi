@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -32,7 +32,7 @@
 yare_input::yare_input(Input const& z)
 {
 // TODO ?? This temporarily works around a deeper defect. See:
-//   http://lists.nongnu.org/archive/html/lmi/2009-02/msg00074.html
+//   https://lists.nongnu.org/archive/html/lmi/2009-02/msg00074.html
 #if defined LMI_MSC
     const_cast<Input&>(z).RealizeAllSequenceInput();
 #endif // defined LMI_MSC

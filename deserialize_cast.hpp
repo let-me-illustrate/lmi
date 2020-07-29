@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -41,7 +41,7 @@
 /// generate equally efficient code.
 ///
 /// See the thread culminating in this message:
-///   http://lists.nongnu.org/archive/html/lmi/2015-09/msg00010.html
+///   https://lists.nongnu.org/archive/html/lmi/2015-09/msg00010.html
 
 template<typename T>
 inline T deserialize_cast(char const* z)

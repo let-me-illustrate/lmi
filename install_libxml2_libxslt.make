@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -196,7 +196,7 @@ TARFLAGS := --keep-old-files
 # Someday it may be necessary to add a line like this to the recipe:
 #   export lt_cv_to_tool_file_cmd=func_convert_file_cygwin_to_w32
 # but that's not necessary for now. See:
-#   http://lists.nongnu.org/archive/html/lmi/2011-06/msg00025.html
+#   https://lists.nongnu.org/archive/html/lmi/2011-06/msg00025.html
 
 .PHONY: $(libraries)
 $(libraries):

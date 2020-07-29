@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -173,7 +173,7 @@ namespace
 {
 // Naturally {value_number, value_keyword} constitute a discriminated
 // union: perhaps std::variant when lmi someday requires C++17. See:
-//   http://lists.nongnu.org/archive/html/lmi/2017-02/msg00025.html
+//   https://lists.nongnu.org/archive/html/lmi/2017-02/msg00025.html
 // Until then...
 
 void set_value(ValueInterval& v, double d)

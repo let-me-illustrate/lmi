@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -33,7 +33,7 @@
 /// Transient state of guideline premium test.
 ///
 /// For design discussion, see:
-///   http://lists.nongnu.org/archive/html/lmi/2009-07/msg00002.html
+///   https://lists.nongnu.org/archive/html/lmi/2009-07/msg00002.html
 ///
 /// When any GPT work is to be done, some 7702A work is probably
 /// needed as well. Therefore, this class is more a superset than a

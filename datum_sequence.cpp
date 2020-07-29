@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -121,7 +121,7 @@ std::map<std::string,std::string> const datum_sequence::allowed_keywords() const
 /// Determine whether two objects are equivalent.
 ///
 /// Rationale: to support free function operator==(). See:
-///   http://lists.nongnu.org/archive/html/lmi/2010-07/msg00002.html
+///   https://lists.nongnu.org/archive/html/lmi/2010-07/msg00002.html
 /// It would be simpler to provide a trivial accessor for the member
 /// datum, but maintaining strong encapsulation reduces the temptation
 /// for one component of MVC to inspect another's internals.

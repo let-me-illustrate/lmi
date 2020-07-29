@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -60,7 +60,7 @@ bool is_three_rate_finra(mcenum_ledger_type);
 /// Transform a plain enumerator to its string equivalent.
 ///
 /// This message:
-///   http://lists.nongnu.org/archive/html/lmi/2008-08/msg00022.html
+///   https://lists.nongnu.org/archive/html/lmi/2008-08/msg00022.html
 /// explains why this template is explicitly instantiated in the
 /// accompanying TU, and not defined here.
 

@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -589,13 +589,13 @@ void test_m64_neighborhood()
 }
 
 /// Test boost::numeric_cast anomalies reported here:
-///   http://lists.nongnu.org/archive/html/lmi/2017-03/msg00127.html
+///   https://lists.nongnu.org/archive/html/lmi/2017-03/msg00127.html
 /// All these tests fail with boost-1.33.1 and gcc-4.9 '-O2' on
 ///   x86_64-linux-gnu
 ///   i686-linux-gnu
 ///   i686-w64-mingw32
 /// and also with boost-1.62 and x86_64-linux-gnu as confirmed here:
-///   http://lists.nongnu.org/archive/html/lmi/2017-03/msg00128.html
+///   https://lists.nongnu.org/archive/html/lmi/2017-03/msg00128.html
 
 void test_boost_anomalies()
 {

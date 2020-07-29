@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -1182,7 +1182,7 @@ inline LedgerVariant   const& FlatTextLedgerPrinter::mdpt_() const
 // F4: scaled by 100, two decimals, with '%' at end:
 //
 // As discussed on the mailing list, e.g.:
-//   http://lists.nongnu.org/archive/html/lmi/2006-10/msg00066.html
+//   https://lists.nongnu.org/archive/html/lmi/2006-10/msg00066.html
 // the appropriate abstraction is
 //   {number of decimals [0, DECIMAL_DIG], style}
 // where for now percentage is the only nondefault 'style', but others

@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -593,7 +593,7 @@ void OLCommFnsTest()
 /// The monthly COI rate is limited to one-eleventh: one-twelfth
 /// divided by one minus itself, because deducting the COI charge at
 /// the beginning of the month increases the amount actually at risk:
-///   http://lists.nongnu.org/archive/html/lmi/2009-09/msg00001.html
+///   https://lists.nongnu.org/archive/html/lmi/2009-09/msg00001.html
 /// It is interesting to substitute a limit of unity and observe the
 /// effect on account value in the last few years before maturity;
 /// that exercise shows why a COI limit of unity is impractical.

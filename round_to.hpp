@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -59,7 +59,7 @@ namespace detail
 /// Motivation: To raise an integer-valued real to a positive integer
 /// power without any roundoff error as long as the result is exactly
 /// representable. See:
-///   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00049.html
+///   https://lists.nongnu.org/archive/html/lmi/2016-12/msg00049.html
 ///
 /// For negative 'n', the most accurate result possible is obtained by
 /// calculating power(r, -n), and returning its reciprocal calculated
@@ -100,7 +100,7 @@ RealType perform_pow(RealType r, int n)
 /// Raise an integer-valued real to an integer power.
 ///
 /// Motivation: calculate accurate powers of ten. See:
-///   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00049.html
+///   https://lists.nongnu.org/archive/html/lmi/2016-12/msg00049.html
 /// Library authors often optimize pow() for integral exponents,
 /// using multiplication rather than a transcendental calculation.
 /// When 'r' is exactly representable, positive integral powers

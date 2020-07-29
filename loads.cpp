@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -185,7 +185,7 @@ void Loads::Calculate(load_details const& details)
 // However, this throws an "Erroneous rounding function" exception,
 // because apply_unary() and apply_binary() use a default-constructed
 // function object:
-//   http://svn.savannah.nongnu.org/viewvc/lmi/trunk/tools/pete-2.1.1/PETE/Tools/PeteOps.in?root=lmi&r1=4151&r2=4150&pathrev=4151
+//   https://svn.savannah.nongnu.org/viewvc/lmi/trunk/tools/pete-2.1.1/PETE/Tools/PeteOps.in?root=lmi&r1=4151&r2=4150&pathrev=4151
 // but round_to<> is stateful, and deliberately throws that exception
 // when a default-constructed object is used.
             assign

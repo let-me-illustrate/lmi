@@ -15,12 +15,12 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 # This is a derived work based on Vaclav Slavik's original here:
-#   http://lists.nongnu.org/archive/html/lmi/2013-10/msg00003.html
+#   https://lists.nongnu.org/archive/html/lmi/2013-10/msg00003.html
 
 default namespace     = "http://www.wxwidgets.org/wxxrc"
         namespace xrc = "http://www.wxwidgets.org/wxxrc"

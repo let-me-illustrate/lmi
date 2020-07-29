@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -255,7 +255,7 @@ int find_table_column_by_title
 ///
 /// Create a set of data that might reasonably be copied from a
 /// spreadsheet. Initially at least, use the data in the user manual:
-///   http://www.nongnu.org/lmi/pasting_to_a_census.html
+///   https://www.nongnu.org/lmi/pasting_to_a_census.html
 /// Hardcode the data here; don't read them from the user manual.
 /// (That didactic example was designed mainly to fit on a web page
 /// and to make sense to end users. Some day we might want to make

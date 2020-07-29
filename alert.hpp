@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -107,7 +107,7 @@
 /// always works, is self documenting, and adds no header dependency.
 /// Writing it the same way everywhere requires no invention and
 /// increases global comprehensibility; see:
-///   http://lists.nongnu.org/archive/html/lmi/2007-03/msg00008.html
+///   https://lists.nongnu.org/archive/html/lmi/2007-03/msg00008.html
 ///
 /// Design decisions, and paths not taken.
 ///
@@ -198,7 +198,7 @@ void safe_message_alert   (char const*);
 ///   http://groups.google.com/groups?selm=d6651fb6.0111221034.42e78b95@posting.google.com
 /// The technique and its documentation could be improved as discussed
 /// here:
-///   http://lists.nongnu.org/archive/html/lmi/2005-11/msg00016.html
+///   https://lists.nongnu.org/archive/html/lmi/2005-11/msg00016.html
 
 bool LMI_SO set_alert_functions
     (void(*status_alert_function_pointer        )(std::string const&)
