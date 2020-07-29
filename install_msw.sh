@@ -42,8 +42,15 @@ minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
 
 case "$lmi_build_type" in
     (*-*-cygwin*)
+        minimal_path="$minimal_path:$(cygpath --sysdir)"
+        java -version
+        # Probably $java_path is unhelpful and should be deleted.A
+        # Avoid appending it to $PATH because it contains spaces.
         java_path="/cygdrive/c/Program\ Files\ \(x86\)/Common\ Files/Oracle/Java/javapath"
-        minimal_path="$minimal_path:$(cygpath --sysdir):$java_path"
+        "$java_path"/java -version
+        ;;
+    (*)
+        java -version
         ;;
 esac
 
@@ -173,8 +180,6 @@ then
         sudo mount --bind /mnt/c/srv/cache_for_lmi /srv/cache_for_lmi
     fi
 fi
-
-java -version
 
 if [ "/opt/lmi/src/lmi" = "$PWD" ]
 then
