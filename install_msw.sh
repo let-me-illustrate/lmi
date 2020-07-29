@@ -42,7 +42,7 @@ minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
 
 case "$lmi_build_type" in
     (*-*-cygwin*)
-        java_path='/cygdrive/c/Program\ Files\ \(x86\)/Common\ Files/Oracle/Java/javapath'
+        java_path="/cygdrive/c/Program\ Files\ \(x86\)/Common\ Files/Oracle/Java/javapath"
         minimal_path="$minimal_path:$(cygpath --sysdir):$java_path"
         ;;
 esac
