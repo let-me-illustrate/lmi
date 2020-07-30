@@ -400,7 +400,9 @@ clobber: source_clean
 
 .PHONY: raze
 raze: source_clean
-	-$(RM) --force --recursive $(exec_prefix)
+	-$(RM) --force --recursive $(prefix)/gcc_i686-w64-mingw32/build
+	-$(RM) --force --recursive $(prefix)/gcc_x86_64-w64-mingw32/build
+	-$(RM) --force --recursive $(prefix)/gcc_x86_64-pc-linux-gnu/build
 
 .PHONY: eviscerate
 eviscerate: source_clean
