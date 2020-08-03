@@ -49,6 +49,7 @@
 #include "outlay.hpp"
 #include "premium_tax.hpp"
 #include "rounding_rules.hpp"
+#include "stl_extensions.hpp"           // nonstd::power()
 #include "stratified_charges.hpp"
 #include "value_cast.hpp"
 
@@ -1434,10 +1435,44 @@ double BasicValues::GetModalSpecAmtGSP(double annualized_pmt) const
 /// Only the initial corridor factor is used here, because this
 /// strategy makes sense only at issue. Thus, arguments should
 /// represent initial premium and mode.
+///
+/// Corridor factors are stored as double-precision values, but in
+/// practice they usually represent whole-number percentages, which
+/// are typically printed for each year on policy schedule pages.
+/// For GPT, they're defined that way by statute; for CVAT, by
+/// convention. Accordingly, round_corridor_factor() rounds to the
+/// nearest two decimals for all known products, although it would
+/// not be inconceivable to round to three, for example.
+///
+/// Extra care must be taken in this function, because the specified
+/// amount is often rounded to whole dollars (a finer granularity such
+/// as cents being used for all other values). Consider this case:
+///   $100000 initial payment
+///   490% corridor
+/// Using 'gnumeric' to view lmi's monthly detail, 4.9 is stored as:
+///   4.9000000000000003552713679
+///   0 0000000011111111
+///   1 2345678901234567 <-- differs in seventeenth significant digit
+/// which is presumably the closest representable value. Multiplying
+/// that value by 100000 and rounding up to the next dollar gives
+/// 490001, but 490000 is desired. To that end, the corridor factor is
+/// first scaled by the appropriate power of ten (by one hundred in
+/// typical practice) and rounded to integer to recapture the intended
+/// value.
+///
+/// Of course, lmi would allow a table of corridor factors to have,
+/// say, seven decimal digits, so rounding might give an undesired
+/// answer even with a payment that exceeds the above example's 10^5
+/// by a factor of one plus epsilon. Until such amounts are stored as
+/// integral cents, this implementation cannot guarantee to give the
+/// desired answer in every case.
 
 double BasicValues::GetModalSpecAmtCorridor(double annualized_pmt) const
 {
-    return round_min_specamt()(annualized_pmt * GetCorridorFactor()[0]);
+    int const k = round_corridor_factor().decimals();
+    double const s = nonstd::power(10, k);
+    double const z = std::round(s * GetCorridorFactor()[0]);
+    return round_min_specamt()((z * annualized_pmt) / s);
 }
 
 /// Calculate specified amount based on salary.
