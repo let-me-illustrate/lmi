@@ -197,22 +197,22 @@ class currency
 
 inline currency operator+(currency lhs, currency rhs)
 {
-    return currency(lhs) += rhs;
+    return lhs += rhs;
 }
 
 inline currency operator-(currency lhs, currency rhs)
 {
-    return currency(lhs) -= rhs;
+    return lhs -= rhs;
 }
 
 inline currency operator*(currency lhs, int rhs)
 {
-    return currency(lhs) *= rhs;
+    return lhs *= rhs;
 }
 
 inline currency operator*(int lhs, currency rhs)
 {
-    return currency(rhs) *= lhs;
+    return rhs *= lhs;
 }
 
 /// Insert the dollars-and-cents amount into a stream.

@@ -551,9 +551,6 @@ gcc_common_extra_warnings := \
 bourn_cast_test.o: gcc_common_extra_warnings += \
   -Wno-double-promotion \
 
-currency_test.o: gcc_common_extra_warnings += \
-  -Wno-useless-cast \
-
 # Some boost-1.33.1 libraries are incompatible with many warnings.
 
 $(boost_filesystem_objects): gcc_common_extra_warnings += \
