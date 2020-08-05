@@ -53,7 +53,7 @@ class currency
 
   public:
     /// Using int32_t for the value would limit the range to about
-    /// twenty million dollars, which is insufficient; but int32_t
+    /// twenty million dollars, which is insufficient; but int64_t
     /// accommodates values up to about ninety quadrillion dollars,
     /// which is enough for any life insurance contract in 2016.
 
