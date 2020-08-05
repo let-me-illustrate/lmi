@@ -24,6 +24,8 @@
 
 #include "config.hpp"
 
+#include "bourn_cast.hpp"
+
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
@@ -132,7 +134,7 @@ class currency
 
     int cents() const
         {
-        return cents_ % cents_per_dollar;
+        return bourn_cast<int>(cents_ % cents_per_dollar);
         }
 
     /// Total number of cents, e.g., 123 for 1 dollar and 23 cents.
@@ -146,7 +148,7 @@ class currency
 
     double value() const
         {
-        double result = cents_;
+        double result = bourn_cast<double>(cents_);
         result /= cents_per_dollar;
         return result;
         }

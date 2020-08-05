@@ -23,6 +23,7 @@
 
 #include "currency.hpp"
 
+#include "bourn_cast.hpp"
 #include "materially_equal.hpp"
 #include "miscellany.hpp"               // stifle_warning_for_unused_value()
 #include "test_tools.hpp"
@@ -226,7 +227,7 @@ currency currency_test::arbitrary_amount<currency>()
 template<typename T>
 inline double convert_to_double(T t)
 {
-    return t;
+    return bourn_cast<double>(t);
 }
 
 template<>
@@ -238,7 +239,7 @@ inline double convert_to_double(currency c)
 template<typename T>
 inline T convert_from_double(double d)
 {
-    return d;
+    return bourn_cast<T>(d);
 }
 
 template<>

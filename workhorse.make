@@ -613,12 +613,10 @@ $(xmlwrapp_objects): gcc_common_extra_warnings += \
 # SOMEDAY !! Address some of these '-Wconversion' issues.
 
 wno_conv_objects := \
-  currency_test.o \
   rate_table.o \
   round_glibc.o \
 
 $(wno_conv_objects): gcc_common_extra_warnings += -Wno-conversion -Wfloat-conversion
-currency_test.o: gcc_common_extra_warnings += -Wno-float-conversion
 
 wno_sign_conv_objects := \
   $(boost_dependent_objects) \
