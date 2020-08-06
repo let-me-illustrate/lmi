@@ -446,6 +446,7 @@ unit_test_targets := \
   mc_enum_test \
   md5sum_test \
   miscellany_test \
+  monnaie_test \
   mortality_rates_test \
   name_value_pairs_test \
   ncnnnpnn_test \
@@ -839,6 +840,11 @@ miscellany_test$(EXEEXT): \
   $(common_test_objects) \
   miscellany.o \
   miscellany_test.o \
+
+monnaie_test$(EXEEXT): \
+  $(common_test_objects) \
+  monnaie_test.o \
+  timer.o \
 
 mortality_rates_test$(EXEEXT): \
   $(common_test_objects) \

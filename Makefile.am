@@ -129,6 +129,7 @@ TESTS = \
     test_mc_enum \
     test_md5sum \
     test_miscellany \
+    test_monnaie \
     test_mortality_rates \
     test_name_value_pairs \
     test_ncnnnpnn \
@@ -966,6 +967,12 @@ test_miscellany_SOURCES = \
   miscellany_test.cpp
 test_miscellany_CXXFLAGS = $(AM_CXXFLAGS)
 
+test_monnaie_SOURCES = \
+  $(common_test_objects) \
+  monnaie_test.cpp \
+  timer.cpp
+test_monnaie_CXXFLAGS = $(AM_CXXFLAGS)
+
 test_mortality_rates_SOURCES = \
   $(common_test_objects) \
   ihs_mortal.cpp \
@@ -1387,6 +1394,7 @@ noinst_HEADERS = \
     mec_view.hpp \
     mec_xml_document.hpp \
     miscellany.hpp \
+    monnaie.hpp \
     mortality_rates.hpp \
     msw_workarounds.hpp \
     multidimgrid_any.hpp \
