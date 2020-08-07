@@ -141,7 +141,7 @@ void self_test()
 #else  // !defined _GLIBCXX_DEBUG
     std::cout
         << "Test solve speed: "
-        << TimeAnAliquot(std::bind(z, "CLI_selftest", IP), 0.1)
+        << TimeAnAliquot(std::bind(z, "CLI_selftest", IP))
         << '\n'
         ;
 #endif // !defined _GLIBCXX_DEBUG
