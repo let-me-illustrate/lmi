@@ -1975,7 +1975,7 @@ void AccountValue::TxTakeSepAcctLoad()
         YearsSepAcctLoadRate = round_interest_rate()(YearsSepAcctLoadRate);
         }
 
-    SepAcctLoad = YearsSepAcctLoadRate * AVSepAcct;
+    SepAcctLoad = round_interest_credit()(YearsSepAcctLoadRate * AVSepAcct);
     process_deduction(SepAcctLoad);
     YearsTotalSepAcctLoad += SepAcctLoad;
     Dcv -= SepAcctLoad;
