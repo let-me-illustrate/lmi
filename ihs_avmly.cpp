@@ -1972,7 +1972,7 @@ void AccountValue::TxTakeSepAcctLoad()
         YearsSepAcctLoadRate += stratified_load;
         YearsSepAcctLoadRate += tiered_comp;
         YearsSepAcctLoadRate = i_upper_12_over_12_from_i<double>()(YearsSepAcctLoadRate);
-        round_interest_rate()(YearsSepAcctLoadRate);
+        YearsSepAcctLoadRate = round_interest_rate()(YearsSepAcctLoadRate);
         }
 
     SepAcctLoad = YearsSepAcctLoadRate * AVSepAcct;
