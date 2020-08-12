@@ -79,6 +79,7 @@ BasicValues::BasicValues(Input const& input)
     ,round_max_specamt_       {0, r_downward  }
     ,round_min_premium_       {2, r_upward    }
     ,round_max_premium_       {2, r_downward  }
+    ,round_minutiae_          {2, r_to_nearest}
 {
     Init();
 }

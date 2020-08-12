@@ -316,6 +316,18 @@
                                         <size>-1,-1</size>
                                     </object>
                                 </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Minutiae</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="round_minutiae">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
                             </object>
                         </object>
                     </object>

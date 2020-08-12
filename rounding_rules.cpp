@@ -152,6 +152,7 @@ rounding_rules::rounding_rules()
     ,round_max_specamt_       (0, r_downward  , "")
     ,round_min_premium_       (2, r_upward    , "")
     ,round_max_premium_       (2, r_downward  , "")
+    ,round_minutiae_          (2, r_to_nearest, "")
 {
     ascribe_members();
 }
@@ -222,6 +223,7 @@ void rounding_rules::ascribe_members()
     ascribe("RoundMaxSpecamt"  , &rounding_rules::round_max_specamt_       );
     ascribe("RoundMinPrem"     , &rounding_rules::round_min_premium_       );
     ascribe("RoundMaxPrem"     , &rounding_rules::round_max_premium_       );
+    ascribe("RoundMinutiae"    , &rounding_rules::round_minutiae_          );
 }
 
 /// Backward-compatibility serial number of this class's xml version.

@@ -794,6 +794,7 @@ void BasicValues::SetRoundingFunctors()
     set_rounding_rule(round_max_specamt_       , RoundingRules_->datum("RoundMaxSpecamt"  ));
     set_rounding_rule(round_min_premium_       , RoundingRules_->datum("RoundMinPrem"     ));
     set_rounding_rule(round_max_premium_       , RoundingRules_->datum("RoundMaxPrem"     ));
+    set_rounding_rule(round_minutiae_          , RoundingRules_->datum("RoundMinutiae"    ));
 }
 
 /// Establish maximum survivorship duration.

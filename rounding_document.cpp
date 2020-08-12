@@ -58,6 +58,7 @@ RoundingDocument::RoundingDocument()
     values_["round_max_specamt"       ] = &rounding_rules_.round_max_specamt_       ;
     values_["round_min_premium"       ] = &rounding_rules_.round_min_premium_       ;
     values_["round_max_premium"       ] = &rounding_rules_.round_max_premium_       ;
+    values_["round_minutiae"          ] = &rounding_rules_.round_minutiae_          ;
 }
 
 void RoundingDocument::ReadDocument(std::string const& filename)
