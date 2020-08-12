@@ -1871,7 +1871,7 @@ void AccountValue::TxDoMlyDed()
         +   DcvWpCharge
         ;
 
-    RiderCharges = simple_rider_charges + TermCharge + WpCharge;
+    RiderCharges = round_minutiae()(simple_rider_charges + TermCharge + WpCharge);
     YearsTotalRiderCharges += RiderCharges;
     MlyDed = CoiCharge + RiderCharges;
 
