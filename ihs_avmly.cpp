@@ -1520,7 +1520,7 @@ void AccountValue::TxSetBOMAV()
         }
     YearsTotalPolicyFee += MonthsPolicyFees;
 
-    SpecAmtLoad = YearsSpecAmtLoadRate * SpecAmtLoadBase;
+    SpecAmtLoad = round_minutiae()(YearsSpecAmtLoadRate * SpecAmtLoadBase);
     YearsTotalSpecAmtLoad += SpecAmtLoad;
 
     process_deduction(MonthsPolicyFees + SpecAmtLoad);
