@@ -971,12 +971,13 @@ double BasicValues::GetModalPremProxyTable
     ,double      a_table_multiplier
     ) const
 {
-    return
+    return round_gross_premium()
+        (
           a_specamt
         * MortalityRates_->GroupProxyRates()[a_year]
         * a_table_multiplier
         / a_mode
-        ;
+        );
 }
 
 /// Calculate premium using a corridor ratio.
