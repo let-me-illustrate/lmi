@@ -294,8 +294,10 @@ double AccountValue::DoPerformPmtStrategy
             }
         case mce_pmt_corridor:
             {
-// TODO ?? Shouldn't this be initial specified amount?
-            double sa = ActualSpecAmt + (TermIsDbFor7702 ? TermSpecAmt : 0.0);
+            double sa =
+                                     InvariantValues().SpecAmt    [0]
+                + (TermIsDbFor7702 ? InvariantValues().TermSpecAmt[0] : 0.0)
+                ;
             return GetModalPremCorridor(0, a_InitialMode, sa);
             }
         case mce_pmt_table:
