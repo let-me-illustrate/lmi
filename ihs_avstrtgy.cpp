@@ -300,12 +300,12 @@ double AccountValue::DoPerformPmtStrategy
             }
         case mce_pmt_table:
             {
-            return
-                  ActualSpecAmt
-                * MortalityRates_->GroupProxyRates()[Year]
-                * a_TblMult
-                / a_CurrentMode
-                ;
+            return GetModalPremProxyTable
+                (Year
+                ,a_CurrentMode
+                ,ActualSpecAmt
+                ,a_TblMult
+                );
             }
         }
     throw "Unreachable--silences a compiler diagnostic.";

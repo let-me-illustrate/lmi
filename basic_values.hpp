@@ -218,6 +218,12 @@ class LMI_SO BasicValues
         ,mcenum_mode a_mode
         ,double      a_specamt
         ) const;
+    double GetModalPremProxyTable
+        (int         a_year
+        ,mcenum_mode a_mode
+        ,double      a_specamt
+        ,double      a_table_multiplier
+        ) const;
     double GetModalPremCorridor
         (int         a_year
         ,mcenum_mode a_mode

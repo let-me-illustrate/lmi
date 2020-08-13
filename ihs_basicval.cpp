@@ -962,6 +962,23 @@ double BasicValues::GetModalPremTgtFromTable
         );
 }
 
+/// Calculate premium using a tabular proxy for group insurance.
+
+double BasicValues::GetModalPremProxyTable
+    (int         a_year
+    ,mcenum_mode a_mode
+    ,double      a_specamt
+    ,double      a_table_multiplier
+    ) const
+{
+    return
+          a_specamt
+        * MortalityRates_->GroupProxyRates()[a_year]
+        * a_table_multiplier
+        / a_mode
+        ;
+}
+
 /// Calculate premium using a corridor ratio.
 ///
 /// Only the initial corridor factor is used here, because this
