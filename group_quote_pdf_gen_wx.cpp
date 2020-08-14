@@ -888,9 +888,6 @@ void group_quote_pdf_generator_wx::output_image_header
 
     wxDCFontChanger set_bigger_font(pdf_dc, pdf_dc.GetFont().Scaled(1.5));
     wxDCTextColorChanger set_white_text(pdf_dc, *wxWHITE);
-    // PDF !! This should not be necessary--see:
-    //   https://lists.nongnu.org/archive/html/lmi/2020-08/msg00003.html
-    wxDCTextBgModeChanger set_transparent_background(pdf_dc, wxPENSTYLE_TRANSPARENT);
 
     // Don't use html::text::from() here: instead, call
     // wxString::FromUTF8() directly, e.g., to preserve literal '&'.
