@@ -247,13 +247,32 @@ void test_unique_filepath_with_normal_filenames()
 
     keep_open.close();
 
-    // Clean up the files created in this function.
+    // Clean up the files created by this function.
 
     BOOST_TEST(0 == std::remove(path3.string().c_str()));
     BOOST_TEST(0 == std::remove(path2.string().c_str()));
 #endif // defined LMI_MSW
     BOOST_TEST(0 == std::remove(q.c_str()));
     BOOST_TEST(0 == std::remove(p.c_str()));
+
+    // Also remove the temporary directory created by this function.
+    //
+    // These calls to std::remove() fail, at least with 'wine':
+//  BOOST_TEST(0 == std::remove(tmp.c_str()));
+//  BOOST_TEST(0 == std::remove(tmpdir.string().c_str()));
+    // They return nonzero, and do not remove the directory. The
+    // reason is that the msw C library's remove() function doesn't
+    // delete directories; it sets errno to 13, which means EACCESS,
+    // and _doserrno to 5, which might mean EIO. The boost:filesystem
+    // msw implementation calls RemoveDirectoryA() instead of the C
+    // remove() function in this case. The std::filesystem::remove()
+    // specification in C++17 (N4659) [30.10.15.30] says:
+    //   "the file p is removed as if by POSIX remove()".
+    // Therefore, use the filesystem function to remove the directory:
+    fs::remove(tmpdir);
+    // For std::filesystem::remove(), this is a documented
+    // postcondition. It does no harm to validate it here.
+    BOOST_TEST(0 != access(tmpdir.string().c_str(), R_OK));
 }
 
 void test_unique_filepath_with_ludicrous_filenames()
