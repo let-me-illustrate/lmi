@@ -168,7 +168,8 @@ void test_serial_file_path()
 
 void test_unique_filepath_with_normal_filenames()
 {
-    std::string const tmp = "/tmp/" + fs::basename(__FILE__);
+    fs::path const u = unique_filepath("/tmp/" + fs::basename(__FILE__), "");
+    std::string const tmp = u.string();
     fs::path const tmpdir(fs::complete(tmp));
     fs::create_directory(tmpdir);
 
@@ -291,6 +292,15 @@ void test_path_validation()
     std::string context("Unit test file");
 
     // Create a file and a directory to test.
+    //
+    // Another test that calls fs::create_directory() uses an absolute
+    // path that's uniquified and canonicalized with fs::complete().
+    // This call uses a relative path, with no such safeguards; this
+    // being a unit test, it is appropriate to retain some fragility.
+    // If one user runs this test, and the directory created here
+    // somehow doesn't get deleted, then the test might fail for
+    // another user; that's interesting enough to report.
+
     fs::create_directory("path_utility_test_dir");
     write_dummy_file("path_utility_test_file");
 
