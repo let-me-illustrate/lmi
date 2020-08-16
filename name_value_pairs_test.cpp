@@ -106,5 +106,7 @@ int test_main(int, char*[])
     std::map<std::string, std::string> m1 = nv_pairs_1.map();
     BOOST_TEST_EQUAL(0, m1.size());
 
+    fs::remove(tmpdir);
+
     return EXIT_SUCCESS;
 }

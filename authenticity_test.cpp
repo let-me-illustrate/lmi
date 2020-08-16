@@ -294,6 +294,7 @@ void PasskeyTest::TestFromAfar() const
     BOOST_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
     BOOST_TEST_EQUAL(0, chdir(Pwd_.string().c_str()));
     BOOST_TEST_EQUAL(Pwd_.string(), fs::current_path().string());
+    fs::remove(remote_dir_0);
 
 #if defined LMI_MSW
     CheckNominal(__FILE__, __LINE__);
