@@ -168,6 +168,10 @@ void test_serial_file_path()
 
 void test_unique_filepath_with_normal_filenames()
 {
+    // Although it's okay for this unit test, using unique_filepath()
+    // as a substitute for the nonstandard mkstemp() is a bad idea.
+    // See:
+    //   https://lists.nongnu.org/archive/html/lmi/2020-08/msg00015.html
     fs::path const u = unique_filepath("/tmp/" + fs::basename(__FILE__), "");
     std::string const tmp = u.string();
     fs::path const tmpdir(fs::complete(tmp));

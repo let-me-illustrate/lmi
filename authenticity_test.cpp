@@ -263,13 +263,21 @@ void PasskeyTest::CheckNominal(char const* file, int line) const
         );
 }
 
-/// Authenticate from a remote directory. The current directory should
-/// be the same after authentication as it was before.
+/// Authenticate from afar, to ensure non-dependence on ${PWD}.
+///
+/// By default, lmi authenticates itself at startup. Its executable
+/// and data files shouldn't need to be in any particular directory;
+/// an invocation like this:
+///   wine /opt/lmi/bin/lmi_wx_shared --data_path=/opt/lmi/data
+/// should just work. This test checks that invariant, as follows.
+///
+/// First, change ${PWD}; authenticate; and restore ${PWD}, verifying
+/// that the restoration succeeded.
 ///
 /// Authenticate also from the root directory on a different drive, on
 /// a multiple-root system. This is perforce platform specific; msw is
-/// used because it happens to be common. This test assumes that an
-/// 'F:' drive exists and is not the "current" drive; it is skipped
+/// tested because it's common and problematic. This test assumes that
+/// an 'F:' drive exists and is not the "current" drive; it is skipped
 /// if no 'F:' drive exists.
 ///
 /// BOOST !! This test traps an exception that boost-1.33.1 can throw
