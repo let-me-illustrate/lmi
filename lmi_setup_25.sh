@@ -62,5 +62,14 @@ git config --global user.email gchicares@sbcglobal.net
 git config --global user.name "Gregory W. Chicares"
 fi
 
+# Avoid "fatal: Invalid cleanup mode scissors" with ancient git.
+# This is just a temporary workaround that can be deleted once RHEL
+# catches up to git-2.x, so nothing more elaborate is warranted.
+case "$(git --version)" in
+  ("git version 1*")
+    git config --global --unset commit.cleanup
+    ;;
+esac
+
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
 echo "$stamp $0: Configured {zsh,vim,git} for user '$(whoami)'."  | tee /dev/tty
