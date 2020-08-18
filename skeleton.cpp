@@ -297,8 +297,6 @@ void Skeleton::InitDocManager()
     doc_manager_ = CreateDocManager();
     doc_manager_->FileHistoryLoad(*config_);
 
-    auto const use_grid =
-        contains(global_settings::instance().pyx(), "use_census_grid");
     new(wx) wxDocTemplate
         (doc_manager_
         ,"Census"
@@ -307,8 +305,8 @@ void Skeleton::InitDocManager()
         ,"cns"
         ,"Census document"
         ,"Census view"
-        ,use_grid ? CLASSINFO(CensusGridDocument) : CLASSINFO(CensusDVCDocument)
-        ,use_grid ? CLASSINFO(CensusGridView)     : CLASSINFO(CensusDVCView)
+        ,CLASSINFO(CensusDocument)
+        ,CLASSINFO(CensusView)
         );
 
     new(wx) wxDocTemplate

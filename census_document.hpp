@@ -29,7 +29,6 @@
 
 #include <wx/docview.h>
 
-class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
 class WXDLLIMPEXP_FWD_ADV wxGrid;
 
 class CensusDocument
@@ -45,44 +44,16 @@ class CensusDocument
     CensusDocument(CensusDocument const&) = delete;
     CensusDocument& operator=(CensusDocument const&) = delete;
 
+    wxGrid& PredominantViewWindow() const;
+
     // wxDocument overrides.
     bool OnCreate(wxString const& filename, long int flags) override;
     bool DoOpenDocument(wxString const& filename) override;
     bool DoSaveDocument(wxString const& filename) override;
 
     multiple_cell_document doc_;
-};
 
-class CensusDVCDocument final
-    :public CensusDocument
-{
-  public:
-    CensusDVCDocument() = default;
-    ~CensusDVCDocument() override = default;
-
-  private:
-    CensusDVCDocument(CensusDVCDocument const&) = delete;
-    CensusDVCDocument& operator=(CensusDVCDocument const&) = delete;
-
-    wxDataViewCtrl& PredominantViewWindow() const;
-
-    DECLARE_DYNAMIC_CLASS(CensusDVCDocument)
-};
-
-class CensusGridDocument final
-    :public CensusDocument
-{
-  public:
-    CensusGridDocument() = default;
-    ~CensusGridDocument() override = default;
-
-  private:
-    CensusGridDocument(CensusGridDocument const&) = delete;
-    CensusGridDocument& operator=(CensusGridDocument const&) = delete;
-
-    wxGrid& PredominantViewWindow() const;
-
-    DECLARE_DYNAMIC_CLASS(CensusGridDocument)
+    DECLARE_DYNAMIC_CLASS(CensusDocument)
 };
 
 #endif // census_document_hpp
