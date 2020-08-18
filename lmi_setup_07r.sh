@@ -48,12 +48,13 @@ sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /etc/zlogout
 yum --assumeyes update  ca-certificates curl nss-pem wget
 yum --assumeyes install ca-certificates curl nss-pem wget
 
-# Install "EPEL" by using 'rpm' directly [historical]. See:
+# Install "EPEL", which is required to install 'debootstrap' and
+# 'schroot' later on RHEL--see:
 #   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00037.html
-#rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-# Instead, use 'yum' to install "EPEL". Both of the following lines
-# are required to install 'debootstrap' and 'schroot' later on RHEL:
 yum --assumeyes install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm || true
+# This command is recommended for RHEL-7, as EPEL packages may
+# depend on it:
+subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extras-rpms"  --enable "rhel-ha-for-rhel-*-server-rpms"
 yum --assumeyes install epel-release
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
