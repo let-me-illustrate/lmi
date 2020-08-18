@@ -82,7 +82,7 @@ findmnt | grep "${CHRTNAME}" && exit 9
 # (e.g., if the chroot's '.conf' file is missing).
 
 loc0=/srv/chroot/"${CHRTNAME}"
-loc1="$(schroot --chroot="${CHRTNAME}" --location)"
+loc1="$(schroot --chroot="${CHRTNAME}" --location)" || true
 if [ -n "${loc1}" ] && [ "${loc0}" != "${loc1}" ]; then
   echo "chroot found in unexpected location--remove it manually"
   exit 9
