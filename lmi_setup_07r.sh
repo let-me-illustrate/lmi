@@ -52,9 +52,10 @@ yum --assumeyes install ca-certificates curl nss-pem wget
 # 'schroot' later on RHEL--see:
 #   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00037.html
 yum --assumeyes install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm || true
-# This command is recommended for RHEL-7, as EPEL packages may
-# depend on it:
-subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extras-rpms"  --enable "rhel-ha-for-rhel-*-server-rpms"
+# This command is recommended for RHEL-7, as EPEL packages may depend
+# on it; but it's allowed to fail, because of a corporate server that
+# allows access only to its own customized RHEL stuff:
+subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extras-rpms"  --enable "rhel-ha-for-rhel-*-server-rpms" || true
 yum --assumeyes install epel-release
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
