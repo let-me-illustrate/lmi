@@ -104,10 +104,12 @@ cat >/etc/schroot/lmi_profile/fstab <<EOF
 /proc                   /proc                   none    rw,bind    0       0
 /srv/cache_for_lmi      /srv/cache_for_lmi      none    rw,bind    0       0
 /var/cache/lmi_schroots /var/cache/apt/archives none    rw,bind    0       0
-# It is convenient to bind a redhat cache mountpoint as well:
+# If a debian-within-centos-within-debian intermediate chroot is used,
+# then it is convenient to bind a redhat cache mountpoint as well:
 /var/cache/lmi_schroots /var/cache/yum          none    rw,bind    0       0
 # ...and also a pass-through mount for an intermediate chroot:
 /var/cache/lmi_schroots /var/cache/lmi_schroots none    rw,bind    0       0
+# ...and setting up those extra mounts in simpler cases costs nothing.
 #
 # schroot creates a mountpoint if it does not already exist:
 # /tmp                  /nonexistent/mountpoint none    rw,bind    0       0
