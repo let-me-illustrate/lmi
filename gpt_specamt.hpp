@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+#include "currency.hpp"
 #include "ihs_irc7702.hpp"              // Irc7702::EIOBasis
 #include "mc_enum_type_enums.hpp"       // mcenum_dbopt_7702
 
@@ -53,24 +54,24 @@ class gpt_specamt
     typedef Irc7702::EIOBasis EIOBasis;
 
   public:
-    static double CalculateGLPSpecAmt
+    static currency CalculateGLPSpecAmt
         (BasicValues const& a_Values
         ,int                a_Duration
-        ,double             a_Premium
+        ,currency           a_Premium
         ,mcenum_dbopt_7702  a_DBOpt
         );
-    static double CalculateGSPSpecAmt
+    static currency CalculateGSPSpecAmt
         (BasicValues const& a_Values
         ,int                a_Duration
-        ,double             a_Premium
+        ,currency           a_Premium
         );
 
   private:
-    static double CalculateSpecAmt
+    static currency CalculateSpecAmt
         (BasicValues const& a_Values
         ,Irc7702::EIOBasis  a_EIOBasis
         ,int                a_Duration
-        ,double             a_Premium
+        ,currency           a_Premium
         ,double             a_NetPmtFactorTgt
         ,double             a_NetPmtFactorExc
         );

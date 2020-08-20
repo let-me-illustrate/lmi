@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+#include "currency.hpp"
 #include "mc_enum_type_enums.hpp"
 #include "round_to.hpp"
 
@@ -41,12 +42,12 @@ class death_benefits final
         );
     ~death_benefits() = default;
 
-    void set_specamt (double z, int from_year, int to_year);
-    void set_supplamt(double z, int from_year, int to_year);
+    void set_specamt (currency z, int from_year, int to_year);
+    void set_supplamt(currency z, int from_year, int to_year);
 
     std::vector<mcenum_dbopt> const& dbopt   () const;
-    std::vector<double>       const& specamt () const;
-    std::vector<double>       const& supplamt() const;
+    std::vector<currency>     const& specamt () const;
+    std::vector<currency>     const& supplamt() const;
 
   private:
     death_benefits(death_benefits const&) = delete;
@@ -57,8 +58,8 @@ class death_benefits final
     round_to<double> round_specamt_;
 
     std::vector<mcenum_dbopt> dbopt_   ;
-    std::vector<double>       specamt_ ;
-    std::vector<double>       supplamt_;
+    std::vector<currency>     specamt_ ;
+    std::vector<currency>     supplamt_;
 };
 
 inline std::vector<mcenum_dbopt> const& death_benefits::dbopt() const
@@ -66,12 +67,12 @@ inline std::vector<mcenum_dbopt> const& death_benefits::dbopt() const
     return dbopt_;
 }
 
-inline std::vector<double> const& death_benefits::specamt() const
+inline std::vector<currency> const& death_benefits::specamt() const
 {
     return specamt_;
 }
 
-inline std::vector<double> const& death_benefits::supplamt() const
+inline std::vector<currency> const& death_benefits::supplamt() const
 {
     return supplamt_;
 }
