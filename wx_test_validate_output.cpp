@@ -344,9 +344,8 @@ void validate_run_cell_and_copy_output
 
     wxUIActionSimulator ui;
 
-    ui.Char(WXK_UP);                  // Clear the current selection if any.
-    ui.Char(WXK_HOME, wxMOD_CONTROL); // Go to the left top cell.
-    ui.Char(WXK_RIGHT, wxMOD_SHIFT);  // Select the first row.
+    ui.Char(WXK_ESCAPE);              // Clear any selection.
+    ui.Char(WXK_HOME, wxMOD_CONTROL); // Move focus to top row.
 
     ui.Char('r', wxMOD_CONTROL);      // "Census|Run cell"
     wxYield();
