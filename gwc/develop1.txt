@@ -87,9 +87,12 @@ git cherry-pick 8e247c13
   # ...for pure divagations
 
 git branch odd/foo
-git checkout odd/foo
+git switch odd/foo
+  or
+git switch --create odd/foo
+  (instead of separate git-branch and git-switch commands)
 git commit sandbox_test.cpp
-git checkout master
+git switch master
 git push origin odd/foo
 
   # to transplant already-pushed commits to a new branch
@@ -109,12 +112,12 @@ git push origin --delete odd/foo
   # ...for failing unit tests that are to be...
 
 git branch odd/foo
-git checkout odd/foo
+git switch odd/foo
 git commit miscellany_test.cpp -m"Add a failing unit test"
   # ...corrected later (see:
   #   https://lists.nongnu.org/archive/html/lmi/2018-03/msg00084.html
   # for a git-merge alternative)
-git checkout master
+git switch master
 git cherry-pick --no-commit ..odd/foo
 git commit miscellany.cpp miscellany_test.cpp -m"Enhance to pass new unit test"
 git push origin odd/foo
