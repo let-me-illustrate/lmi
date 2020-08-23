@@ -228,8 +228,9 @@ void BasicValues::Init()
     MortalityRates_.reset(new MortalityRates (*this));
     InterestRates_ .reset(new InterestRates  (*this));
     DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
-    // Outlay requires only input; it might someday use interest rates.
-    Outlay_        .reset(new modal_outlay   (yare_input_));
+    // Outlay requires only input and rounding; it might someday use
+    // interest rates.
+    Outlay_        .reset(new modal_outlay   (yare_input_, round_gross_premium_, round_withdrawal_, round_loan_));
     PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, StateOfDomicile_, yare_input_.AmortizePremiumLoad, database(), *StratifiedCharges_));
     Loads_         .reset(new Loads          (*this));
 
@@ -315,8 +316,9 @@ void BasicValues::GPTServerInit()
     MortalityRates_.reset(new MortalityRates (*this)); // Used by certain target-premium calculations.
 //  InterestRates_ .reset(new InterestRates  (*this));
 //  DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
-    // Outlay requires only input; it might someday use interest rates.
-//  Outlay_        .reset(new modal_outlay   (yare_input_));
+    // Outlay requires only input and rounding; it might someday use
+    // interest rates.
+//  Outlay_        .reset(new modal_outlay   (yare_input_, round_gross_premium_, round_withdrawal_, round_loan_));
     PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, StateOfDomicile_, yare_input_.AmortizePremiumLoad, database(), *StratifiedCharges_));
     Loads_         .reset(new Loads          (*this));
 

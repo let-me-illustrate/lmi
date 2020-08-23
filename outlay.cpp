@@ -28,8 +28,16 @@
 
 #include <algorithm>
 
-modal_outlay::modal_outlay(yare_input const& yi)
-    :dumpin_               {yi.Dumpin}
+modal_outlay::modal_outlay
+    (yare_input       const& yi
+    ,round_to<double> const& round_gross_premium
+    ,round_to<double> const& round_withdrawal
+    ,round_to<double> const& round_loan
+    )
+    :round_gross_premium_  {round_gross_premium}
+    ,round_withdrawal_     {round_withdrawal}
+    ,round_loan_           {round_loan}
+    ,dumpin_               {yi.Dumpin}
     ,external_1035_amount_ {yi.External1035ExchangeAmount}
     ,internal_1035_amount_ {yi.Internal1035ExchangeAmount}
     ,ee_modal_premiums_    {yi.Payment}

@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"
+#include "round_to.hpp"
 
 #include <vector>
 
@@ -35,7 +36,12 @@ class modal_outlay final
     friend class AccountValue;
 
   public:
-    explicit modal_outlay(yare_input const&);
+    explicit modal_outlay
+        (yare_input       const&
+        ,round_to<double> const& round_gross_premium
+        ,round_to<double> const& round_withdrawal
+        ,round_to<double> const& round_loan
+        );
     ~modal_outlay() = default;
 
     double                          dumpin               () const;
@@ -61,6 +67,10 @@ class modal_outlay final
     void set_er_modal_premiums(std::vector<double> const&);
     void set_withdrawals      (double z, int from_year, int to_year);
     void set_new_cash_loans   (double z, int from_year, int to_year);
+
+    round_to<double> round_gross_premium_;
+    round_to<double> round_withdrawal_;
+    round_to<double> round_loan_;
 
     double                   dumpin_;
     double                   external_1035_amount_;
