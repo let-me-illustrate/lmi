@@ -49,6 +49,16 @@ modal_outlay::modal_outlay
 {
 }
 
+void modal_outlay::set_external_1035_amount(double z)
+{
+    external_1035_amount_ = round_gross_premium_(z);
+}
+
+void modal_outlay::set_internal_1035_amount(double z)
+{
+    internal_1035_amount_ = round_gross_premium_(z);
+}
+
 void modal_outlay::set_ee_modal_premiums(double z, int from_year, int to_year)
 {
     z = round_gross_premium_(z);
