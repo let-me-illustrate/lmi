@@ -36,8 +36,8 @@ modal_outlay::modal_outlay(yare_input const& yi)
     ,ee_premium_modes_     {yi.PaymentMode}
     ,er_modal_premiums_    {yi.CorporationPayment}
     ,er_premium_modes_     {yi.CorporationPaymentMode}
-    ,new_cash_loans_       {yi.NewLoan}
     ,withdrawals_          {yi.Withdrawal}
+    ,new_cash_loans_       {yi.NewLoan}
 {
 }
 
@@ -57,12 +57,12 @@ void modal_outlay::set_er_modal_premiums(std::vector<double> const& z)
     er_modal_premiums_ = z;
 }
 
-void modal_outlay::set_new_cash_loans(double z, int from_year, int to_year)
-{
-    std::fill_n(new_cash_loans_.begin() + from_year, to_year - from_year, z);
-}
-
 void modal_outlay::set_withdrawals(double z, int from_year, int to_year)
 {
     std::fill_n(withdrawals_.begin() + from_year, to_year - from_year, z);
+}
+
+void modal_outlay::set_new_cash_loans(double z, int from_year, int to_year)
+{
+    std::fill_n(new_cash_loans_.begin() + from_year, to_year - from_year, z);
 }

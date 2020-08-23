@@ -45,8 +45,8 @@ class modal_outlay final
     std::vector<mcenum_mode> const& ee_premium_modes     () const;
     std::vector<double>      const& er_modal_premiums    () const;
     std::vector<mcenum_mode> const& er_premium_modes     () const;
-    std::vector<double>      const& new_cash_loans       () const;
     std::vector<double>      const& withdrawals          () const;
+    std::vector<double>      const& new_cash_loans       () const;
 
   private:
     modal_outlay(modal_outlay const&) = delete;
@@ -59,8 +59,8 @@ class modal_outlay final
     void set_ee_modal_premiums(double z, int from_year, int to_year);
     void set_er_modal_premiums(double z, int from_year, int to_year);
     void set_er_modal_premiums(std::vector<double> const&);
-    void set_new_cash_loans   (double z, int from_year, int to_year);
     void set_withdrawals      (double z, int from_year, int to_year);
+    void set_new_cash_loans   (double z, int from_year, int to_year);
 
     double                   dumpin_;
     double                   external_1035_amount_;
@@ -69,8 +69,8 @@ class modal_outlay final
     std::vector<mcenum_mode> ee_premium_modes_;
     std::vector<double>      er_modal_premiums_;
     std::vector<mcenum_mode> er_premium_modes_;
-    std::vector<double>      new_cash_loans_;
     std::vector<double>      withdrawals_;
+    std::vector<double>      new_cash_loans_;
 };
 
 inline double modal_outlay::dumpin() const
@@ -108,14 +108,14 @@ inline std::vector<mcenum_mode> const& modal_outlay::er_premium_modes() const
     return er_premium_modes_;
 }
 
-inline std::vector<double> const& modal_outlay::new_cash_loans() const
-{
-    return new_cash_loans_;
-}
-
 inline std::vector<double> const& modal_outlay::withdrawals() const
 {
     return withdrawals_;
+}
+
+inline std::vector<double> const& modal_outlay::new_cash_loans() const
+{
+    return new_cash_loans_;
 }
 
 inline void modal_outlay::set_external_1035_amount(double z)
