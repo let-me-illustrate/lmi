@@ -130,12 +130,12 @@ inline std::vector<double> const& modal_outlay::new_cash_loans() const
 
 inline void modal_outlay::set_external_1035_amount(double z)
 {
-    external_1035_amount_ = z;
+    external_1035_amount_ = round_gross_premium_(z);
 }
 
 inline void modal_outlay::set_internal_1035_amount(double z)
 {
-    internal_1035_amount_ = z;
+    internal_1035_amount_ = round_gross_premium_(z);
 }
 
 #endif // outlay_hpp

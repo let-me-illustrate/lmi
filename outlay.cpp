@@ -35,42 +35,46 @@ modal_outlay::modal_outlay
     ,round_to<double> const& round_loan
     )
     :round_gross_premium_  {round_gross_premium}
-    ,round_withdrawal_     {round_withdrawal}
-    ,round_loan_           {round_loan}
-    ,dumpin_               {yi.Dumpin}
-    ,external_1035_amount_ {yi.External1035ExchangeAmount}
-    ,internal_1035_amount_ {yi.Internal1035ExchangeAmount}
-    ,ee_modal_premiums_    {yi.Payment}
-    ,ee_premium_modes_     {yi.PaymentMode}
-    ,er_modal_premiums_    {yi.CorporationPayment}
-    ,er_premium_modes_     {yi.CorporationPaymentMode}
-    ,withdrawals_          {yi.Withdrawal}
-    ,new_cash_loans_       {yi.NewLoan}
+    ,round_withdrawal_     {round_withdrawal   }
+    ,round_loan_           {round_loan         }
+    ,dumpin_               {round_gross_premium_(yi.Dumpin)                    }
+    ,external_1035_amount_ {round_gross_premium_(yi.External1035ExchangeAmount)}
+    ,internal_1035_amount_ {round_gross_premium_(yi.Internal1035ExchangeAmount)}
+    ,ee_modal_premiums_    {round_gross_premium_(yi.Payment)                   }
+    ,ee_premium_modes_     {                     yi.PaymentMode                }
+    ,er_modal_premiums_    {round_gross_premium_(yi.CorporationPayment)        }
+    ,er_premium_modes_     {                     yi.CorporationPaymentMode     }
+    ,withdrawals_          {round_withdrawal_   (yi.Withdrawal)                }
+    ,new_cash_loans_       {round_loan_         (yi.NewLoan)                   }
 {
 }
 
 void modal_outlay::set_ee_modal_premiums(double z, int from_year, int to_year)
 {
+    z = round_gross_premium_(z);
     std::fill_n(ee_modal_premiums_.begin() + from_year, to_year - from_year, z);
 }
 
 void modal_outlay::set_er_modal_premiums(double z, int from_year, int to_year)
 {
+    z = round_gross_premium_(z);
     std::fill_n(er_modal_premiums_.begin() + from_year, to_year - from_year, z);
 }
 
 void modal_outlay::set_er_modal_premiums(std::vector<double> const& z)
 {
     LMI_ASSERT(z.size() == er_modal_premiums_.size());
-    er_modal_premiums_ = z;
+    er_modal_premiums_ = round_gross_premium_(z);
 }
 
 void modal_outlay::set_withdrawals(double z, int from_year, int to_year)
 {
+    z = round_withdrawal_(z);
     std::fill_n(withdrawals_.begin() + from_year, to_year - from_year, z);
 }
 
 void modal_outlay::set_new_cash_loans(double z, int from_year, int to_year)
 {
+    z = round_loan_(z);
     std::fill_n(new_cash_loans_.begin() + from_year, to_year - from_year, z);
 }
