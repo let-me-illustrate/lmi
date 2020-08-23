@@ -24,7 +24,7 @@
 
 #include "config.hpp"
 
-#include "mc_enum_type_enums.hpp"
+#include "mc_enum_type_enums.hpp"       // enum rounding_style
 #include "stl_extensions.hpp"           // nonstd::power()
 
 #include <cmath>
