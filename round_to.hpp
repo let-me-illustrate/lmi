@@ -31,6 +31,7 @@
 #include <limits>
 #include <stdexcept>
 #include <type_traits>
+#include <vector>
 
 // Round a floating-point number to a given number of decimal places,
 // following a given rounding style.
@@ -263,6 +264,7 @@ class round_to
 
     bool operator==(round_to const&) const;
     RealType operator()(RealType r) const;
+    std::vector<RealType> operator()(std::vector<RealType> r) const;
 
     int decimals() const;
     rounding_style style() const;
@@ -356,6 +358,15 @@ inline RealType round_to<RealType>::operator()(RealType r) const
     return static_cast<RealType>
         (rounding_function_(static_cast<RealType>(r * scale_fwd_)) * scale_back_
         );
+}
+
+template<typename RealType>
+inline std::vector<RealType> round_to<RealType>::operator()(std::vector<RealType> r) const
+{
+    std::vector<RealType> z;
+    z.reserve(r.size());
+    for(auto const& i : r) {z.push_back(operator()(i));}
+    return z;
 }
 
 template<typename RealType>

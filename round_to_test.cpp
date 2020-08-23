@@ -544,6 +544,13 @@ int test_main(int, char*[])
     BOOST_TEST(2 == round1.decimals());
     BOOST_TEST(r_to_nearest == round1.style());
 
+    // Test a vector.
+    std::vector<double> const v0 {3.1415926535, 2.718281828};
+    std::vector<double> const v1 {round0(v0)};
+    BOOST_TEST_EQUAL(v0.size(), v1.size());
+    BOOST_TEST((3.14 - v1[0]) < 1e-14);
+    BOOST_TEST((2.72 - v1[1]) < 1e-14);
+
     // Try to provoke division by zero in ctor-initializer.
     //
     // nonstd::power() negates a negative exponent, but negating
