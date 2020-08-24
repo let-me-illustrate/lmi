@@ -62,6 +62,9 @@ class product_database;
 /// charge--it is expressed annually, converted to monthly in the
 /// implementation, and then must be rounded.
 ///
+/// round_minutiae_: Rounding function-object used for policy fees,
+/// which generally are an integral number of cents.
+///
 /// VectorExtraCompLoad_: Input extra load per dollar of premium.
 ///
 /// VectorExtraAssetComp_: Input extra load per dollar of assets.
@@ -93,6 +96,7 @@ struct load_details
         ,oenum_asset_charge_type    asset_charge_type
         ,bool                       NeedMidpointRates
         ,round_to<double>    const& round_interest_rate
+        ,round_to<double>    const& round_minutiae
         ,std::vector<double> const& VectorExtraCompLoad
         ,std::vector<double> const& VectorExtraAssetComp
         ,std::vector<double> const& VectorExtraPolFee
@@ -110,6 +114,7 @@ struct load_details
         ,asset_charge_type_               {asset_charge_type}
         ,NeedMidpointRates_               {NeedMidpointRates}
         ,round_interest_rate_             {round_interest_rate}
+        ,round_minutiae_                  {round_minutiae}
         ,VectorExtraCompLoad_             {VectorExtraCompLoad}
         ,VectorExtraAssetComp_            {VectorExtraAssetComp}
         ,VectorExtraPolFee_               {VectorExtraPolFee}
@@ -128,6 +133,7 @@ struct load_details
     oenum_asset_charge_type    asset_charge_type_;
     bool                       NeedMidpointRates_;
     round_to<double>    const& round_interest_rate_;
+    round_to<double>    const& round_minutiae_;
     std::vector<double> const& VectorExtraCompLoad_;
     std::vector<double> const& VectorExtraAssetComp_;
     std::vector<double> const& VectorExtraPolFee_;

@@ -54,6 +54,7 @@ Loads::Loads(BasicValues& V)
         ,V.database().query<oenum_asset_charge_type>(DB_AssetChargeType)
         ,V.IsSubjectToIllustrationReg()
         ,V.round_interest_rate()
+        ,V.round_minutiae()
         ,V.yare_input_.ExtraCompensationOnPremium
         ,V.yare_input_.ExtraCompensationOnAssets
         ,V.yare_input_.ExtraMonthlyCustodialFee
@@ -308,6 +309,18 @@ void Loads::Calculate(load_details const& details)
         assign_midpoint(excess_sales_load_    [mce_gen_mdpt], excess_sales_load_    [mce_gen_guar], excess_sales_load_    [mce_gen_curr]);
         assign_midpoint(target_total_load_    [mce_gen_mdpt], target_total_load_    [mce_gen_guar], target_total_load_    [mce_gen_curr]);
         assign_midpoint(excess_total_load_    [mce_gen_mdpt], excess_total_load_    [mce_gen_guar], excess_total_load_    [mce_gen_curr]);
+        }
+
+    // Round policy fees. No known product specifies any policy fee
+    // in fractional cents. However, if the monthly policy fee is
+    // $3.25 (current) and $5.00 (guaranteed), the midpoint shouldn't
+    // be $4.125, because subtracting that from the account value
+    // would make it a non-integral number of cents.
+
+    for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
+        {
+        monthly_policy_fee_ [j] = details.round_minutiae_(monthly_policy_fee_ [j]);
+        annual_policy_fee_  [j] = details.round_minutiae_(annual_policy_fee_  [j]);
         }
 }
 

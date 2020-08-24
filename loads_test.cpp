@@ -95,7 +95,7 @@ void LoadsTest::Reinitialize()
     loads_.target_sales_load_    [mce_gen_guar] = std::vector<double>(length, 0.30000);
     loads_.excess_sales_load_    [mce_gen_guar] = std::vector<double>(length, 0.15000);
 
-    loads_.monthly_policy_fee_   [mce_gen_curr] = std::vector<double>(length, 5.00000);
+    loads_.monthly_policy_fee_   [mce_gen_curr] = std::vector<double>(length, 5.25000);
     loads_.annual_policy_fee_    [mce_gen_curr] = std::vector<double>(length, 1.00000);
     loads_.specified_amount_load_[mce_gen_curr] = std::vector<double>(length, 0.00002);
     loads_.separate_account_load_[mce_gen_curr] = std::vector<double>(length, 0.00110);
@@ -158,7 +158,7 @@ void LoadsTest::TestCalculations(char const* file, int line)
 {
     INVOKE_BOOST_TEST(materially_equal(0.500000, loads_.refundable_sales_load_proportion()[0]), file, line);
 
-    INVOKE_BOOST_TEST(materially_equal(6.800000, loads_.monthly_policy_fee    (mce_gen_mdpt)[0]), file, line);
+    INVOKE_BOOST_TEST(materially_equal(6.920000, loads_.monthly_policy_fee    (mce_gen_mdpt)[0]), file, line);
     INVOKE_BOOST_TEST(materially_equal(1.500000, loads_.annual_policy_fee     (mce_gen_mdpt)[0]), file, line);
     INVOKE_BOOST_TEST(materially_equal(0.000625, loads_.specified_amount_load (mce_gen_mdpt)[0]), file, line);
     // 12 bp and 19 bp, both converted to monthly, then added together.
@@ -192,6 +192,7 @@ void LoadsTest::TestCalculations(char const* file, int line)
 int test_main(int, char*[])
 {
     round_to<double> round_interest_rate(0, r_not_at_all);
+    round_to<double> round_minutiae     (2, r_to_nearest);
     std::vector<double> extra_comp_load  (length, 0.0170);
     std::vector<double> extra_asset_comp (length, 0.0019);
     std::vector<double> extra_policy_fee (length, 0.6000);
@@ -210,6 +211,7 @@ int test_main(int, char*[])
         ,oe_asset_charge_load   // asset_charge_type_
         ,true                   // NeedMidpointRates_
         ,round_interest_rate    // round_interest_rate_
+        ,round_minutiae         // round_minutiae_
         ,extra_comp_load        // VectorExtraCompLoad_
         ,extra_asset_comp       // VectorExtraAssetComp_
         ,extra_policy_fee       // VectorExtraPolFee_
