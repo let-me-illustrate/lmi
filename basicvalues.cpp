@@ -113,7 +113,7 @@ void BasicValues::Init()
     // Multilife contracts will need a vector of mortality-rate objects.
     MortalityRates_.reset(new MortalityRates (*this));
     InterestRates_ .reset(new InterestRates  (*this));
-    DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
+    DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_, round_specamt_));
     Outlay_        .reset(new modal_outlay   (yare_input_, round_gross_premium_, round_withdrawal_, round_loan_));
     PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, database()));
     Loads_         .reset(new Loads(database(), IsSubjectToIllustrationReg()));

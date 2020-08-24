@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"
+#include "round_to.hpp"
 
 #include <vector>
 
@@ -33,7 +34,11 @@ class yare_input;
 class death_benefits final
 {
   public:
-    death_benefits(int, yare_input const&);
+    explicit death_benefits
+        (int                     length
+        ,yare_input       const&
+        ,round_to<double> const& round_specamt
+        );
     ~death_benefits() = default;
 
     void set_specamt (double z, int from_year, int to_year);
@@ -48,6 +53,9 @@ class death_benefits final
     death_benefits& operator=(death_benefits const&) = delete;
 
     int length_;
+
+    round_to<double> round_specamt_;
+
     std::vector<mcenum_dbopt> dbopt_   ;
     std::vector<double>       specamt_ ;
     std::vector<double>       supplamt_;

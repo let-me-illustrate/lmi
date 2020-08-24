@@ -29,8 +29,13 @@
 #include <algorithm>                    // min()
 
 //============================================================================
-death_benefits::death_benefits(int length, yare_input const& yi)
-    :length_ {length}
+death_benefits::death_benefits
+    (int                     length
+    ,yare_input       const& yi
+    ,round_to<double> const& round_specamt
+    )
+    :length_        {length}
+    ,round_specamt_ {round_specamt}
 {
     // In the antediluvian branch, the vector in the input class
     // is padded to a greater length.
@@ -44,9 +49,9 @@ death_benefits::death_benefits(int length, yare_input const& yi)
     supplamt_.resize(length_);
     for(int j = 0; j < length_; ++j)
         {
-        dbopt_   [j] = yi.DeathBenefitOption[j];
-        specamt_ [j] = yi.SpecifiedAmount   [j];
-        supplamt_[j] = yi.SupplementalAmount[j];
+        dbopt_   [j] =                yi.DeathBenefitOption[j];
+        specamt_ [j] = round_specamt_(yi.SpecifiedAmount   [j]);
+        supplamt_[j] = round_specamt_(yi.SupplementalAmount[j]);
         }
 }
 
@@ -62,6 +67,7 @@ void death_benefits::set_specamt(double z, int from_year, int to_year)
     LMI_ASSERT(                  to_year < length_);
     std::fill_n(specamt_.begin() + from_year, to_year - from_year, z);
 #endif // 0
+    z = round_specamt_(z);
     for(int j = from_year; j < std::min(length_, to_year); ++j)
         {
         specamt_[j] = z;
@@ -80,6 +86,7 @@ void death_benefits::set_supplamt(double z, int from_year, int to_year)
     LMI_ASSERT(                  to_year < length_);
     std::fill_n(supplamt_.begin() + from_year, to_year - from_year, z);
 #endif // 0
+    z = round_specamt_(z);
     for(int j = from_year; j < std::min(length_, to_year); ++j)
         {
         supplamt_[j] = z;

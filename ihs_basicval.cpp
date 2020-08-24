@@ -227,7 +227,7 @@ void BasicValues::Init()
     // Interest rates require tiered data and 7702 spread.
     MortalityRates_.reset(new MortalityRates (*this));
     InterestRates_ .reset(new InterestRates  (*this));
-    DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
+    DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_, round_specamt_));
     // Outlay requires only input and rounding; it might someday use
     // interest rates.
     Outlay_        .reset(new modal_outlay   (yare_input_, round_gross_premium_, round_withdrawal_, round_loan_));
@@ -315,7 +315,7 @@ void BasicValues::GPTServerInit()
     // Requires database.
     MortalityRates_.reset(new MortalityRates (*this)); // Used by certain target-premium calculations.
 //  InterestRates_ .reset(new InterestRates  (*this));
-//  DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
+//  DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_, round_specamt_));
     // Outlay requires only input and rounding; it might someday use
     // interest rates.
 //  Outlay_        .reset(new modal_outlay   (yare_input_, round_gross_premium_, round_withdrawal_, round_loan_));
