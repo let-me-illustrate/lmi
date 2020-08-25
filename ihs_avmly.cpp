@@ -284,7 +284,17 @@ void AccountValue::process_payment(double payment)
         {
         er_proportion = ErGrossPmts[Month] / gross_non_1035_pmts;
         }
-    double er_net_pmt = er_proportion * payment;
+
+    // This is a net premium that's multiplied by a gross-premium
+    // proportion, because that's the only way the proportion can be
+    // deduced from input. But it remains a net premium, so the
+    // net-premium rounding rule is appropriate.
+    double er_net_pmt = round_net_premium()(er_proportion * payment);
+    // This is deliberately not rounded. The crucial invariant that
+    // must be preserved is that ee + er = total; but rounding both
+    // addends could break that invariant, e.g.:
+    //   round(2.5) + round(2.5)
+    // might not produce 5.0 as desired.
     double ee_net_pmt = payment - er_net_pmt;
 
     switch(ee_premium_allocation_method)
