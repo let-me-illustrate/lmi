@@ -174,6 +174,7 @@ class LMI_SO BasicValues
     round_to<double> const& round_naar              () const {return round_naar_              ;}
     round_to<double> const& round_coi_rate          () const {return round_coi_rate_          ;}
     round_to<double> const& round_coi_charge        () const {return round_coi_charge_        ;}
+    round_to<double> const& round_rider_charges     () const {return round_rider_charges_     ;}
     round_to<double> const& round_gross_premium     () const {return round_gross_premium_     ;}
     round_to<double> const& round_net_premium       () const {return round_net_premium_       ;}
     round_to<double> const& round_interest_rate     () const {return round_interest_rate_     ;}
@@ -441,6 +442,7 @@ class LMI_SO BasicValues
     round_to<double> round_naar_              ;
     round_to<double> round_coi_rate_          ;
     round_to<double> round_coi_charge_        ;
+    round_to<double> round_rider_charges_     ;
     round_to<double> round_gross_premium_     ;
     round_to<double> round_net_premium_       ;
     round_to<double> round_interest_rate_     ;

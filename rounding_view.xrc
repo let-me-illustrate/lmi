@@ -111,6 +111,18 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
+                                        <label>Rider charges</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="round_rider_charges">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
                                         <label>Gross premium</label>
                                     </object>
                                 </object>

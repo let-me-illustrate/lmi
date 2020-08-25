@@ -780,6 +780,7 @@ void BasicValues::SetRoundingFunctors()
     set_rounding_rule(round_naar_              , RoundingRules_->datum("RoundNaar"        ));
     set_rounding_rule(round_coi_rate_          , RoundingRules_->datum("RoundCoiRate"     ));
     set_rounding_rule(round_coi_charge_        , RoundingRules_->datum("RoundCoiCharge"   ));
+    set_rounding_rule(round_rider_charges_     , RoundingRules_->datum("RoundRiderCharges"));
     set_rounding_rule(round_gross_premium_     , RoundingRules_->datum("RoundGrossPrem"   ));
     set_rounding_rule(round_net_premium_       , RoundingRules_->datum("RoundNetPrem"     ));
     set_rounding_rule(round_interest_rate_     , RoundingRules_->datum("RoundIntRate"     ));

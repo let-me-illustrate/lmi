@@ -136,6 +136,7 @@ rounding_rules::rounding_rules()
     ,round_naar_              (2, r_to_nearest, "")
     ,round_coi_rate_          (8, r_downward  , "")
     ,round_coi_charge_        (2, r_to_nearest, "")
+    ,round_rider_charges_     (2, r_to_nearest, "")
     ,round_gross_premium_     (2, r_to_nearest, "")
     ,round_net_premium_       (2, r_to_nearest, "")
     ,round_interest_rate_     (0, r_not_at_all, "")
@@ -207,6 +208,7 @@ void rounding_rules::ascribe_members()
     ascribe("RoundNaar"        , &rounding_rules::round_naar_              );
     ascribe("RoundCoiRate"     , &rounding_rules::round_coi_rate_          );
     ascribe("RoundCoiCharge"   , &rounding_rules::round_coi_charge_        );
+    ascribe("RoundRiderCharges", &rounding_rules::round_rider_charges_     );
     ascribe("RoundGrossPrem"   , &rounding_rules::round_gross_premium_     );
     ascribe("RoundNetPrem"     , &rounding_rules::round_net_premium_       );
     ascribe("RoundIntRate"     , &rounding_rules::round_interest_rate_     );

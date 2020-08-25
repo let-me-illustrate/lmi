@@ -135,6 +135,7 @@ class LMI_SO rounding_rules final
     rounding_parameters round_naar_              ;
     rounding_parameters round_coi_rate_          ;
     rounding_parameters round_coi_charge_        ;
+    rounding_parameters round_rider_charges_     ;
     rounding_parameters round_gross_premium_     ;
     rounding_parameters round_net_premium_       ;
     rounding_parameters round_interest_rate_     ;

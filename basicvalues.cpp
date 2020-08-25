@@ -65,6 +65,7 @@ BasicValues::BasicValues(Input const& input)
     ,round_naar_              {2, r_to_nearest}
     ,round_coi_rate_          {8, r_downward  }
     ,round_coi_charge_        {2, r_to_nearest}
+    ,round_rider_charges_     {2, r_to_nearest}
     ,round_gross_premium_     {2, r_to_nearest}
     ,round_net_premium_       {2, r_to_nearest}
     ,round_interest_rate_     {0, r_not_at_all}

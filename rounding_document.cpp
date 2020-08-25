@@ -42,6 +42,7 @@ RoundingDocument::RoundingDocument()
     values_["round_naar"              ] = &rounding_rules_.round_naar_              ;
     values_["round_coi_rate"          ] = &rounding_rules_.round_coi_rate_          ;
     values_["round_coi_charge"        ] = &rounding_rules_.round_coi_charge_        ;
+    values_["round_rider_charges"     ] = &rounding_rules_.round_rider_charges_     ;
     values_["round_gross_premium"     ] = &rounding_rules_.round_gross_premium_     ;
     values_["round_net_premium"       ] = &rounding_rules_.round_net_premium_       ;
     values_["round_interest_rate"     ] = &rounding_rules_.round_interest_rate_     ;
