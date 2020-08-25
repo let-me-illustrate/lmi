@@ -1778,17 +1778,21 @@ void AccountValue::TxSetRiderDed()
     if(yare_input_.AccidentalDeathBenefit)
         {
         AdbCharge = YearsAdbRate * std::min(ActualSpecAmt, AdbLimit);
+        AdbCharge = round_rider_charges()(AdbCharge);
         }
 
     SpouseRiderCharge = 0.0;
     if(yare_input_.SpouseRider)
         {
         SpouseRiderCharge = YearsSpouseRiderRate * yare_input_.SpouseRiderAmount;
+        SpouseRiderCharge = round_rider_charges()(SpouseRiderCharge);
         }
+
     ChildRiderCharge = 0.0;
     if(yare_input_.ChildRider)
         {
         ChildRiderCharge = YearsChildRiderRate * yare_input_.ChildRiderAmount;
+        ChildRiderCharge = round_rider_charges()(ChildRiderCharge);
         }
 
     TermCharge = 0.0;
@@ -1796,6 +1800,7 @@ void AccountValue::TxSetRiderDed()
     if(TermRiderActive)
         {
         TermCharge    = YearsTermRate   * TermDB * DBDiscountRate[Year];
+        TermCharge    = round_rider_charges()(TermCharge);
         // TAXATION !! Integrated term: s/TermDB/TermSpecAmt/ because
         // it can't go into the corridor under tax assumptions.
         // TAXATION !! Use a distinct discount rate for taxation? Or
@@ -1812,6 +1817,7 @@ void AccountValue::TxSetRiderDed()
             case oe_waiver_times_specamt:
                 {
                 WpCharge = YearsWpRate * std::min(ActualSpecAmt, WpLimit);
+                WpCharge = round_rider_charges()(WpCharge);
                 DcvWpCharge = WpCharge;
                 }
                 break;
@@ -1830,6 +1836,7 @@ void AccountValue::TxSetRiderDed()
                         +   ChildRiderCharge
                         +   TermCharge
                         );
+                WpCharge = round_rider_charges()(WpCharge);
                 DcvWpCharge =
                     YearsWpRate
                     *   (
@@ -1871,6 +1878,8 @@ void AccountValue::TxDoMlyDed()
         +   DcvWpCharge
         ;
 
+    // Round total rider charges, even if each individual charge was
+    // not rounded, so that deductions can be integral cents.
     RiderCharges = round_minutiae()(simple_rider_charges + TermCharge + WpCharge);
     YearsTotalRiderCharges += RiderCharges;
     MlyDed = CoiCharge + RiderCharges;
