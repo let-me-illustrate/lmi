@@ -279,12 +279,12 @@ void AccountValue::process_payment(double payment)
         gross_1035 = External1035Amount + Internal1035Amount;
         }
     double gross_non_1035_pmts = GrossPmts[Month] - gross_1035;
-    double er_ratio = 0.0;
+    double er_proportion = 0.0;
     if(0.0 != gross_non_1035_pmts)
         {
-        er_ratio = ErGrossPmts[Month] / gross_non_1035_pmts;
+        er_proportion = ErGrossPmts[Month] / gross_non_1035_pmts;
         }
-    double er_net_pmt = er_ratio * payment;
+    double er_net_pmt = er_proportion * payment;
     double ee_net_pmt = payment - er_net_pmt;
 
     switch(ee_premium_allocation_method)
