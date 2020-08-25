@@ -29,6 +29,11 @@ git commit one_file another_file -m"One set of changes"
 git commit --all -m"Another set of changes"
 git push
 
+  # ...commit only up to {second-to-last; a specific} commit
+
+git push origin HEAD^1:master
+git push origin SHA1:master
+
   # ...commit a change to cvs repository
 
 export CVS_RSH="ssh"
