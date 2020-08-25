@@ -273,8 +273,6 @@ void AccountValue::process_payment(double payment)
     LMI_ASSERT(0.0 <= EeGrossPmts[Month]);
     LMI_ASSERT(0.0 <= ErGrossPmts[Month]);
 
-    double net_pmt = payment;
-
     double gross_1035 = 0.0;
     if(0 == Year && 0 == Month)
         {
@@ -286,8 +284,8 @@ void AccountValue::process_payment(double payment)
         {
         er_ratio = ErGrossPmts[Month] / gross_non_1035_pmts;
         }
-    double er_net_pmt = er_ratio * net_pmt;
-    double ee_net_pmt = net_pmt - er_net_pmt;
+    double er_net_pmt = er_ratio * payment;
+    double ee_net_pmt = payment - er_net_pmt;
 
     switch(ee_premium_allocation_method)
         {
