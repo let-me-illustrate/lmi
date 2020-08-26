@@ -691,6 +691,7 @@ double AccountValue::minimum_specified_amount(bool issuing_now, bool term_rider)
 void AccountValue::ChangeSpecAmtBy(double delta)
 {
     double ProportionAppliedToTerm = 0.0;
+    double const old_total_specamt = ActualSpecAmt + TermSpecAmt;
     // Adjust term here only if it's formally a rider.
     if(TermRiderActive && !TermIsNotRider)
         {
@@ -703,9 +704,7 @@ void AccountValue::ChangeSpecAmtBy(double delta)
                 break;
             case mce_adjust_both:
                 {
-                ProportionAppliedToTerm =
-                    TermSpecAmt
-                    / (ActualSpecAmt + TermSpecAmt);
+                ProportionAppliedToTerm = TermSpecAmt / old_total_specamt;
                 }
                 break;
             case mce_adjust_base:
