@@ -333,8 +333,11 @@ void AccountValue::process_payment(double payment)
 // portions of unloaned account value according to input allocations.
 void AccountValue::IncrementAVProportionally(double increment)
 {
-    AVGenAcct += increment * GenAcctPaymentAllocation;
-    AVSepAcct += increment * SepAcctPaymentAllocation;
+    increment = round_minutiae()(increment);
+    double genacct_increment = increment * GenAcctPaymentAllocation;
+    genacct_increment = round_minutiae()(genacct_increment);
+    AVGenAcct += genacct_increment;
+    AVSepAcct += increment - genacct_increment;
 }
 
 //============================================================================
