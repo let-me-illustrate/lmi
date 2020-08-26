@@ -412,6 +412,8 @@ void AccountValue::process_distribution(double decrement)
 
 void AccountValue::DecrementAVProportionally(double decrement)
 {
+    decrement = round_minutiae()(decrement);
+
     if(materially_equal(decrement, AVGenAcct + AVSepAcct))
         {
         AVGenAcct = 0.0;
@@ -451,8 +453,14 @@ void AccountValue::DecrementAVProportionally(double decrement)
             ,1.0
             )
         );
-    AVGenAcct -= decrement * general_account_proportion;
-    AVSepAcct -= decrement * separate_account_proportion;
+    // Disregard 'separate_account_proportion' in order to ensure
+    // that the sum of the distinct decrements here equals the
+    // total decrement. Keep 'separate_account_proportion' above
+    // because there may still be value in the assertions.
+    double genacct_decrement = decrement * general_account_proportion;
+    genacct_decrement = round_minutiae()(genacct_decrement);
+    AVGenAcct -= genacct_decrement;
+    AVSepAcct -= decrement - genacct_decrement;
 }
 
 /// Apportion decrements to account value between separate- and
