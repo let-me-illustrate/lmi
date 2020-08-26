@@ -690,6 +690,7 @@ double AccountValue::minimum_specified_amount(bool issuing_now, bool term_rider)
 // Make sure ActualSpecAmt is never less than minimum specamt.
 void AccountValue::ChangeSpecAmtBy(double delta)
 {
+    delta = round_specamt()(delta);
     double term_proportion = 0.0;
     double const old_total_specamt = ActualSpecAmt + TermSpecAmt;
     // Adjust term here only if it's formally a rider.
@@ -783,6 +784,7 @@ void AccountValue::ChangeSpecAmtBy(double delta)
 
 void AccountValue::ChangeSupplAmtBy(double delta)
 {
+    delta = round_specamt()(delta);
     TermSpecAmt += delta;
 
     TermSpecAmt = std::max
