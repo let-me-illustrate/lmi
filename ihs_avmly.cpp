@@ -715,7 +715,9 @@ void AccountValue::ChangeSpecAmtBy(double delta)
             }
 
         ActualSpecAmt += delta * (1.0 - term_proportion);
-        TermSpecAmt += delta * term_proportion;
+        ActualSpecAmt = round_specamt()(ActualSpecAmt);
+        TermSpecAmt = old_total_specamt + delta - ActualSpecAmt;
+
         if(TermSpecAmt < 0.0)
             {
             // Reducing the term rider's specified amount to a value
