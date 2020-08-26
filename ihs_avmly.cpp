@@ -2332,7 +2332,7 @@ void AccountValue::TxTakeWD()
 
     if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {
-        NetWD = std::min(RequestedWD, MaxWD);
+        NetWD = round_withdrawal()(std::min(RequestedWD, MaxWD));
         OverridingWD[Year] = NetWD;
         }
     else
@@ -2458,7 +2458,7 @@ void AccountValue::TxTakeWD()
         return;
         }
 
-    GrossWD = NetWD + std::min(WDFee, NetWD * WDFeeRate);
+    GrossWD = round_withdrawal()(NetWD + std::min(WDFee, NetWD * WDFeeRate));
 
     // Free partial surrenders: for instance, the first 20% of account
     // value might be withdrawn each policy year free of surrender
@@ -2479,7 +2479,7 @@ void AccountValue::TxTakeWD()
         non_free_wd = std::max(0.0, GrossWD - free_wd);
         }
     double partial_surrchg = non_free_wd * surrchg_proportion;
-    GrossWD += partial_surrchg;
+    GrossWD += round_withdrawal()(partial_surrchg);
 
     process_distribution(GrossWD);
     Dcv -= GrossWD;
