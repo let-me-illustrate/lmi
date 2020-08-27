@@ -27,6 +27,7 @@
 #include "death_benefits.hpp"
 #include "ledger_invariant.hpp"
 #include "mortality_rates.hpp"
+#include "outlay.hpp"
 
 #include <algorithm>
 #include <utility>
@@ -63,9 +64,9 @@ double AccountValue::CalculateSpecAmtFromStrategy
     ) const
 {
     double annualized_pmt =
-            InvariantValues().EeMode[reference_year].value()
+            Outlay_->ee_premium_modes()[reference_year]
           * InvariantValues().EePmt [reference_year]
-        +   InvariantValues().ErMode[reference_year].value()
+        +   Outlay_->er_premium_modes()[reference_year]
           * InvariantValues().ErPmt [reference_year]
         ;
     switch(strategy)
@@ -319,8 +320,8 @@ double AccountValue::PerformEePmtStrategy() const
 {
     return DoPerformPmtStrategy
         (mce_solve_ee_prem
-        ,InvariantValues().EeMode[Year].value()
-        ,InvariantValues().EeMode[0]   .value()
+        ,Outlay_->ee_premium_modes()[Year]
+        ,Outlay_->ee_premium_modes()[0]
         ,yare_input_.InsuredPremiumTableFactor
         ,InvariantValues().EePmt
         ,yare_input_.PaymentStrategy
@@ -333,8 +334,8 @@ double AccountValue::PerformErPmtStrategy() const
 {
     return DoPerformPmtStrategy
         (mce_solve_er_prem
-        ,InvariantValues().ErMode[Year].value()
-        ,InvariantValues().ErMode[0]   .value()
+        ,Outlay_->er_premium_modes()[Year]
+        ,Outlay_->er_premium_modes()[0]
         ,yare_input_.CorporationPremiumTableFactor
         ,InvariantValues().ErPmt
         ,yare_input_.CorporationPaymentStrategy

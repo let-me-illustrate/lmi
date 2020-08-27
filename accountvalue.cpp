@@ -285,7 +285,7 @@ void AccountValue::DoYear
     ActualSpecAmt         = InvariantValues().SpecAmt[Year];
 
     // These variables are set for each pass independently.
-    pmt_mode        = InvariantValues().EeMode[Year].value();
+    pmt_mode        = Outlay_->ee_premium_modes()[Year];
     ModeIndex       = get_mode_index(pmt_mode);
     RequestedLoan   = Outlay_->new_cash_loans()[Year];
     wd              = Outlay_->withdrawals()[Year];
@@ -443,12 +443,12 @@ void AccountValue::PerformSpecAmtStrategy()
             break;
         case mce_sa_maximum:
             {
-            SA = GetModalMaxSpecAmt(InvariantValues().EeMode[0].value(), InvariantValues().EePmt[0]);
+            SA = GetModalMaxSpecAmt(Outlay_->ee_premium_modes()[0], InvariantValues().EePmt[0]);
             }
             break;
         case mce_sa_target:
             {
-            SA = GetModalTgtSpecAmt(InvariantValues().EeMode[0].value(), InvariantValues().EePmt[0]);
+            SA = GetModalTgtSpecAmt(Outlay_->ee_premium_modes()[0], InvariantValues().EePmt[0]);
             }
             break;
         case mce_sa_mep:

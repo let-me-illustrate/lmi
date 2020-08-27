@@ -674,7 +674,7 @@ bool AccountValue::IsModalPmtDate(mcenum_mode mode) const
 
 int AccountValue::MonthsToNextModalPmtDate() const
 {
-    return 1 + (11 - Month) % (12 / InvariantValues().ErMode[Year].value());
+    return 1 + (11 - Month) % (12 / Outlay_->er_premium_modes()[Year]);
 }
 
 /// Determine instantaneous base-policy minimum specified amount.
@@ -1168,8 +1168,8 @@ void AccountValue::TxAscertainDesiredPayment()
 //     does GPT effect also vary by basis?
 //       e.g. when opt change produces different spec amts
 
-    mcenum_mode const ee_mode = InvariantValues().EeMode[Year].value();
-    mcenum_mode const er_mode = InvariantValues().ErMode[Year].value();
+    mcenum_mode const ee_mode = Outlay_->ee_premium_modes()[Year];
+    mcenum_mode const er_mode = Outlay_->er_premium_modes()[Year];
     bool const ee_pay_this_month = IsModalPmtDate(ee_mode);
     bool const er_pay_this_month = IsModalPmtDate(er_mode);
     // Month zero must be a modal payment date for both ee and er.

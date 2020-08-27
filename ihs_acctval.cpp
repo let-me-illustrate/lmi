@@ -928,7 +928,7 @@ void AccountValue::InitializeSpecAmt()
         {
         auto const z = GetModalMinPrem
             (Year
-            ,InvariantValues().ErMode[Year].value()
+            ,Outlay_->er_premium_modes()[Year]
             ,InvariantValues().SpecAmt[Year]
             );
         InvariantValues().ModalMinimumPremium[Year]   = z;
@@ -938,7 +938,7 @@ void AccountValue::InitializeSpecAmt()
         {
         auto const z = GetModalPremMlyDedEx
             (Year
-            ,InvariantValues().ErMode[Year].value()
+            ,Outlay_->er_premium_modes()[Year]
             ,InvariantValues().SpecAmt[Year]
             ,InvariantValues().TermSpecAmt[Year]
             );
@@ -1016,7 +1016,7 @@ void AccountValue::set_list_bill_premium()
         {
         auto const z = GetListBillPremMlyDed
             (Year
-            ,InvariantValues().ErMode[Year].value()
+            ,Outlay_->er_premium_modes()[Year]
             ,InvariantValues().SpecAmt[Year]
             );
         InvariantValues().ListBillPremium   = z;
@@ -1026,7 +1026,7 @@ void AccountValue::set_list_bill_premium()
         {
         auto const z = GetListBillPremMlyDedEx
             (Year
-            ,InvariantValues().ErMode[Year].value()
+            ,Outlay_->er_premium_modes()[Year]
             ,InvariantValues().SpecAmt[Year]
             ,InvariantValues().TermSpecAmt[Year]
             );
