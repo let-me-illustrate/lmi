@@ -1130,7 +1130,6 @@ void AccountValue::TxTestGPT()
         Irc7702A_->InduceMaterialChange();
         }
 
-    // TODO ?? TAXATION !! GPT--perform only if current basis?
     OldDBOpt = YearsDBOpt;
 }
 
