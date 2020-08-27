@@ -105,7 +105,7 @@ double SolveTest()
             {
             // We take endowment to mean for spec amt, so it's the
             // same for options A and B.
-            switch(ConstThat->InvariantValues().DBOpt[ThatSolveTgtYear - 1].value())
+            switch(ConstThat->DeathBfts_->dbopt()[ThatSolveTgtYear - 1])
                 {
                 case mce_option1:
                     {

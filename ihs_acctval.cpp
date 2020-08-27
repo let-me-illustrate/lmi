@@ -424,7 +424,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     VariantValues().Init(*this, GenBasis_, SepBasis_);
     InvariantValues().Init(this);
 
-    OldDBOpt = InvariantValues().DBOpt[0].value();
+    OldDBOpt = DeathBfts_->dbopt()[0];
     // TAXATION !! 'OldSA' and 'OldDB' need to be distinguished for 7702 and 7702A,
     // with inclusion of term dependent on 'TermIsDbFor7702' and 'TermIsDbFor7702A'.
     OldSA = InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0];
@@ -448,7 +448,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     Irc7702_->Initialize7702
         (sa
         ,sa
-        ,effective_dbopt_7702(InvariantValues().DBOpt[0].value(), Effective7702DboRop)
+        ,effective_dbopt_7702(DeathBfts_->dbopt()[0], Effective7702DboRop)
         ,annual_target_premium
         );
 
