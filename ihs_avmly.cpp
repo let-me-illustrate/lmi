@@ -1168,10 +1168,8 @@ void AccountValue::TxAscertainDesiredPayment()
 //     does GPT effect also vary by basis?
 //       e.g. when opt change produces different spec amts
 
-    mcenum_mode const ee_mode = Outlay_->ee_premium_modes()[Year];
-    mcenum_mode const er_mode = Outlay_->er_premium_modes()[Year];
-    bool const ee_pay_this_month = IsModalPmtDate(ee_mode);
-    bool const er_pay_this_month = IsModalPmtDate(er_mode);
+    bool const ee_pay_this_month = IsModalPmtDate(Outlay_->ee_premium_modes()[Year]);
+    bool const er_pay_this_month = IsModalPmtDate(Outlay_->er_premium_modes()[Year]);
     // Month zero must be a modal payment date for both ee and er.
     LMI_ASSERT((ee_pay_this_month && er_pay_this_month) || (0 != Month));
 
