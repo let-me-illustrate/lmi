@@ -926,14 +926,13 @@ void AccountValue::InitializeSpecAmt()
     // they're calculated along with 'MlyNoLapsePrem'.
     if(!SplitMinPrem)
         {
-        InvariantValues().ModalMinimumPremium[Year] = GetModalMinPrem
+        auto const z = GetModalMinPrem
             (Year
             ,InvariantValues().ErMode[Year].value()
             ,InvariantValues().SpecAmt[Year]
             );
-        InvariantValues().ErModalMinimumPremium[Year] =
-            InvariantValues().ModalMinimumPremium[Year]
-            ;
+        InvariantValues().ModalMinimumPremium[Year]   = z;
+        InvariantValues().ErModalMinimumPremium[Year] = z;
         }
     else
         {
@@ -1015,14 +1014,13 @@ void AccountValue::set_list_bill_premium()
 
     if(!SplitMinPrem)
         {
-        InvariantValues().ListBillPremium = GetListBillPremMlyDed
+        auto const z = GetListBillPremMlyDed
             (Year
             ,InvariantValues().ErMode[Year].value()
             ,InvariantValues().SpecAmt[Year]
             );
-        InvariantValues().ErListBillPremium =
-            InvariantValues().ListBillPremium
-            ;
+        InvariantValues().ListBillPremium   = z;
+        InvariantValues().ErListBillPremium = z;
         }
     else
         {
