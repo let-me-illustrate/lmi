@@ -362,7 +362,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     if(!SolvingForGuarPremium)
         {
         // TODO ?? There used to be some code in FinalizeYear() below that
-        // sets InvariantValues().EePmt to an annualized value, but
+        // set the former InvariantValues().EePmt to an annualized value, but
         // PerformSpecAmtStrategy() expects a modal value. The
         // annualized value is wiped out a few lines below anyway.
         // This is a crock to suppress an observed symptom.

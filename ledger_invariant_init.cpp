@@ -671,13 +671,6 @@ void LedgerInvariant::Init(BasicValues const* b)
         FundAllocations.push_back(0.01 * v[j]);
         }
 
-// EePmt and ErPmt are *input* values, used only as a kludge, e.g. in
-// premium-strategy calculations. Use E[er]GrossPmt for illustrations:
-// they're *output* values that result from transaction processing.
-
-    EePmt                      = b->Outlay_->ee_modal_premiums();
-    ErPmt                      = b->Outlay_->er_modal_premiums();
-
     // Special-case strings.
 
     EffDate                    = calendar_date(b->yare_input_.EffectiveDate     ).str();

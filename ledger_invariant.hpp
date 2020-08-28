@@ -451,10 +451,6 @@ class LMI_SO LedgerInvariant final
     std::vector<int>         FundAllocs; // Obsolete--spreadsheet only.
     std::vector<double>      FundAllocations;
 
-    // These two are used only for a payment-strategy kludge:
-    std::vector<double> EePmt;
-    std::vector<double> ErPmt;
-
     // IRRs that we need to think about some more before deciding
     // where to put them.
 
