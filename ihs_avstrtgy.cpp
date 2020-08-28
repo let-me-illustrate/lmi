@@ -63,11 +63,13 @@ double AccountValue::CalculateSpecAmtFromStrategy
     ,mcenum_sa_strategy strategy
     ) const
 {
+    LMI_ASSERT(Outlay_->ee_modal_premiums() == InvariantValues().EePmt);
+    LMI_ASSERT(Outlay_->er_modal_premiums() == InvariantValues().ErPmt);
     double annualized_pmt =
-            Outlay_->ee_premium_modes()[reference_year]
-          * InvariantValues().EePmt [reference_year]
-        +   Outlay_->er_premium_modes()[reference_year]
-          * InvariantValues().ErPmt [reference_year]
+            Outlay_->ee_premium_modes ()[reference_year]
+          * Outlay_->ee_modal_premiums()[reference_year]
+        +   Outlay_->er_premium_modes ()[reference_year]
+          * Outlay_->er_modal_premiums()[reference_year]
         ;
     switch(strategy)
         {
@@ -318,12 +320,13 @@ double AccountValue::DoPerformPmtStrategy
 
 double AccountValue::PerformEePmtStrategy() const
 {
+    LMI_ASSERT(Outlay_->ee_modal_premiums() == InvariantValues().EePmt);
     return DoPerformPmtStrategy
         (mce_solve_ee_prem
         ,Outlay_->ee_premium_modes()[Year]
         ,Outlay_->ee_premium_modes()[0]
         ,yare_input_.InsuredPremiumTableFactor
-        ,InvariantValues().EePmt
+        ,Outlay_->ee_modal_premiums()
         ,yare_input_.PaymentStrategy
         );
 }
@@ -332,12 +335,13 @@ double AccountValue::PerformEePmtStrategy() const
 
 double AccountValue::PerformErPmtStrategy() const
 {
+    LMI_ASSERT(Outlay_->er_modal_premiums() == InvariantValues().ErPmt);
     return DoPerformPmtStrategy
         (mce_solve_er_prem
         ,Outlay_->er_premium_modes()[Year]
         ,Outlay_->er_premium_modes()[0]
         ,yare_input_.CorporationPremiumTableFactor
-        ,InvariantValues().ErPmt
+        ,Outlay_->er_modal_premiums()
         ,yare_input_.CorporationPaymentStrategy
         );
 }
