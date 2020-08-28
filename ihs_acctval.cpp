@@ -436,6 +436,11 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     LMI_ASSERT(11                       == InvariantValues().MecMonth);
     LMI_ASSERT(BasicValues::GetLength() == InvariantValues().MecYear );
 
+    daily_interest_accounting = contains
+        (yare_input_.Comments
+        ,"idiosyncrasy_daily_interest_accounting"
+        );
+
     OldDBOpt = DeathBfts_->dbopt()[0];
     // TAXATION !! 'OldSA' and 'OldDB' need to be distinguished for 7702 and 7702A,
     // with inclusion of term dependent on 'TermIsDbFor7702' and 'TermIsDbFor7702A'.
@@ -532,13 +537,6 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         ,lowest_death_benefit // TAXATION !! See above--use input LDB instead.
         ,pmts_7702a
         ,bfts_7702a
-        );
-
-    //  TAXATION !! Move this before 7702 and 7702A stuff, to make it
-    // harder to overlook.
-    daily_interest_accounting = contains
-        (yare_input_.Comments
-        ,"idiosyncrasy_daily_interest_accounting"
         );
 }
 
