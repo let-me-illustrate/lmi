@@ -361,7 +361,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     // but the result is always the same (because the premium is).
     if(!SolvingForGuarPremium)
         {
-        // TODO ?? There's some code in FinalizeYear() below that
+        // TODO ?? There used to be some code in FinalizeYear() below that
         // sets InvariantValues().EePmt to an annualized value, but
         // PerformSpecAmtStrategy() expects a modal value. The
         // annualized value is wiped out a few lines below anyway.
@@ -1381,9 +1381,6 @@ void AccountValue::FinalizeYear()
             -   InvariantValues().NetWD      [Year]
             -   InvariantValues().NewCashLoan[Year]
             ;
-
-        InvariantValues().EePmt[Year] = InvariantValues().EeGrossPmt[Year];
-        InvariantValues().ErPmt[Year] = InvariantValues().ErGrossPmt[Year];
 
         InvariantValues().GptForceout[Year] = YearsTotalGptForceout;
 
