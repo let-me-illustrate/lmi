@@ -508,6 +508,7 @@ void LedgerInvariant::Init()
     SurvivalMaxAge             = 0;
     InforceYear                = Length;
     InforceMonth               = 11;
+    IsMec                      = false;
     MecYear                    = Length;
     MecMonth                   = 11;
     SpouseIssueAge             = 100;
