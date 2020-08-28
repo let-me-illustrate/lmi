@@ -595,6 +595,7 @@ class LMI_SO AccountValue final
     // other bases.
 
     std::vector<double> OverridingPmts; // Antediluvian.
+    std::vector<double> stored_pmts;    // Antediluvian.
 
     std::vector<double> OverridingEePmts;
     std::vector<double> OverridingErPmts;

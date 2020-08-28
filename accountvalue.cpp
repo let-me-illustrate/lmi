@@ -118,6 +118,7 @@ AccountValue::AccountValue(Input const& input)
     ,pmt_mode          {mce_annual}
     ,OldDBOpt          {mce_option1}
     ,YearsDBOpt        {mce_option1}
+    ,stored_pmts       {Outlay_->ee_modal_premiums()}
 {
     GrossPmts  .resize(12);
     NetPmts    .resize(12);
@@ -134,7 +135,7 @@ std::shared_ptr<Ledger const> AccountValue::ledger_from_av() const
 double AccountValue::RunAV()
 {
     InvariantValues().Init(this);
-    OverridingPmts = InvariantValues().EePmt;
+    OverridingPmts = stored_pmts;
     Solving = mce_solve_none != yare_input_.SolveType;
     return RunAllApplicableBases();
 }
@@ -180,7 +181,7 @@ double AccountValue::RunAllApplicableBases()
     if(Solving)
         {
         z = Solve();
-        OverridingPmts = InvariantValues().EePmt;
+        OverridingPmts = stored_pmts;
         ledger_->SetOneLedgerVariant(run_basis, VariantValues());
         Solving = false;
         }
@@ -206,6 +207,7 @@ double AccountValue::RunOneCell(mcenum_run_basis TheBasis)
 {
     if(Solving)
         {
+        stored_pmts = Outlay_->ee_modal_premiums();
         // IHS !! This seems wasteful. Track down the reason for doing it.
         InvariantValues().Init(this);
         }
@@ -279,7 +281,7 @@ void AccountValue::DoYear
         )[Year]
         ;
 
-    pmt                   = InvariantValues().EePmt[Year];
+    pmt                   = stored_pmts[Year];
     YearsPremLoadTgt      = Loads_->target_premium_load(GenBasis_)[Year];
     YearsMonthlyPolicyFee = Loads_->monthly_policy_fee(GenBasis_)[Year];
     ActualSpecAmt         = InvariantValues().SpecAmt[Year];
@@ -443,12 +445,12 @@ void AccountValue::PerformSpecAmtStrategy()
             break;
         case mce_sa_maximum:
             {
-            SA = GetModalMaxSpecAmt(Outlay_->ee_premium_modes()[0], InvariantValues().EePmt[0]);
+            SA = GetModalMaxSpecAmt(Outlay_->ee_premium_modes()[0], stored_pmts[0]);
             }
             break;
         case mce_sa_target:
             {
-            SA = GetModalTgtSpecAmt(Outlay_->ee_premium_modes()[0], InvariantValues().EePmt[0]);
+            SA = GetModalTgtSpecAmt(Outlay_->ee_premium_modes()[0], stored_pmts[0]);
             }
             break;
         case mce_sa_mep:
@@ -607,7 +609,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
         {
         case mce_pmt_input_scalar:
             {
-            *a_Pmt = InvariantValues().EePmt[Year];
+            *a_Pmt = stored_pmts[Year];
             }
             break;
         case mce_pmt_minimum:
@@ -635,7 +637,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
                 << " Payment set to scalar input value."
                 << LMI_FLUSH
                 ;
-            *a_Pmt = InvariantValues().EePmt[Year];
+            *a_Pmt = stored_pmts[Year];
             }
             break;
         case mce_pmt_glp:
@@ -645,7 +647,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
                 << " Payment set to scalar input value."
                 << LMI_FLUSH
                 ;
-            *a_Pmt = InvariantValues().EePmt[Year];
+            *a_Pmt = stored_pmts[Year];
             }
             break;
         case mce_pmt_gsp:      // fall through
