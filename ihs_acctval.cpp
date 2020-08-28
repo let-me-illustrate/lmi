@@ -424,6 +424,18 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     VariantValues().Init(*this, GenBasis_, SepBasis_);
     InvariantValues().Init(this);
 
+    // Assume by default that the policy never lapses or becomes a MEC,
+    // so that the lapse and MEC durations are the last possible month.
+    // TODO ?? TAXATION !! Last possible month? Why? In that month, it doesn't quite
+    // lapse, and it's certainly wrong to assume it becomes a MEC then.
+
+    VariantValues().LapseMonth  = 11;
+    VariantValues().LapseYear   = BasicValues::GetLength();
+
+    InvariantValues().IsMec     = false;
+    InvariantValues().MecMonth  = 11;
+    InvariantValues().MecYear   = BasicValues::GetLength();
+
     OldDBOpt = DeathBfts_->dbopt()[0];
     // TAXATION !! 'OldSA' and 'OldDB' need to be distinguished for 7702 and 7702A,
     // with inclusion of term dependent on 'TermIsDbFor7702' and 'TermIsDbFor7702A'.
@@ -646,17 +658,8 @@ void AccountValue::SetInitialValues()
     TermRiderActive             = true;
     TermDB                      = 0.0;
 
-    // Assume by default that the policy never lapses or becomes a MEC,
-    // so that the lapse and MEC durations are the last possible month.
-    // TODO ?? TAXATION !! Last possible month? Why? In that month, it doesn't quite
-    // lapse, and it's certainly wrong to assume it becomes a MEC then.
     ItLapsed                    = false;
-    VariantValues().LapseMonth  = 11;
-    VariantValues().LapseYear   = BasicValues::GetLength();
 
-    InvariantValues().IsMec     = false;
-    InvariantValues().MecMonth  = 11;
-    InvariantValues().MecYear   = BasicValues::GetLength();
     Dcv                         = yare_input_.InforceDcv;
     DcvDeathBft                 = 0.0;
     DcvNaar                     = 0.0;
