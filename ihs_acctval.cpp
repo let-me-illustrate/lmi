@@ -125,44 +125,6 @@ AccountValue::AccountValue(Input const& input)
     // If BasicValues changes, then this init becomes invalid
     //   e.g. solves change BasicValues
 
-    // Iff partial mortality is used, save yearly values in a vector
-    // for use elsewhere in this class, and store yearly inforce lives
-    // (assuming no one ever lapses) in the invariant ledger object.
-    //
-    // A contract may be in force at the end of its maturity year,
-    // and it's necessary to treat it that way because other year-end
-    // composite values are multiplied by the number of lives inforce.
-    // Of course, a contract is not normally in force after maturity.
-
-    LMI_ASSERT
-        (   lmi::ssize(InvariantValues().InforceLives)
-        ==  1 + BasicValues::GetLength()
-        );
-    partial_mortality_q.resize(BasicValues::GetLength());
-    // TODO ?? 'InvariantValues().InforceLives' may be thought of as
-    // counting potential inforce lives: it does not reflect lapses.
-    // It should either reflect lapses or be renamed. Meanwhile,
-    // InforceLivesBoy() and InforceLivesEoy() may be used where
-    // lapses should be taken into account.
-    if(yare_input_.UsePartialMortality)
-        {
-        double inforce_lives = yare_input_.NumberOfIdenticalLives;
-        InvariantValues().InforceLives[0] = inforce_lives;
-        for(int j = 0; j < BasicValues::GetLength(); ++j)
-            {
-            partial_mortality_q[j] = GetPartMortQ(j);
-            inforce_lives *= 1.0 - partial_mortality_q[j];
-            InvariantValues().InforceLives[1 + j] = inforce_lives;
-            }
-        }
-    else
-        {
-        InvariantValues().InforceLives.assign
-            (InvariantValues().InforceLives.size()
-            ,yare_input_.NumberOfIdenticalLives
-            );
-        }
-
     set_list_bill_year_and_month();
 
     OverridingEePmts    .resize(12 * BasicValues::GetLength());
@@ -460,6 +422,45 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
                              InvariantValues().SpecAmt    [0]
         + (TermIsDbFor7702 ? InvariantValues().TermSpecAmt[0] : 0.0)
         ;
+
+    // Iff partial mortality is used, save yearly values in a vector
+    // for use elsewhere in this class, and store yearly inforce lives
+    // (assuming no one ever lapses) in the invariant ledger object.
+    //
+    // A contract may be in force at the end of its maturity year,
+    // and it's necessary to treat it that way because other year-end
+    // composite values are multiplied by the number of lives inforce.
+    // Of course, a contract is not normally in force after maturity.
+
+    LMI_ASSERT
+        (   lmi::ssize(InvariantValues().InforceLives)
+        ==  1 + BasicValues::GetLength()
+        );
+    partial_mortality_q.resize(BasicValues::GetLength());
+    // TODO ?? 'InvariantValues().InforceLives' may be thought of as
+    // counting potential inforce lives: it does not reflect lapses.
+    // It should either reflect lapses or be renamed. Meanwhile,
+    // InforceLivesBoy() and InforceLivesEoy() may be used where
+    // lapses should be taken into account.
+    if(yare_input_.UsePartialMortality)
+        {
+        double inforce_lives = yare_input_.NumberOfIdenticalLives;
+        InvariantValues().InforceLives[0] = inforce_lives;
+        for(int j = 0; j < BasicValues::GetLength(); ++j)
+            {
+            partial_mortality_q[j] = GetPartMortQ(j);
+            inforce_lives *= 1.0 - partial_mortality_q[j];
+            InvariantValues().InforceLives[1 + j] = inforce_lives;
+            }
+        }
+    else
+        {
+        InvariantValues().InforceLives.assign
+            (InvariantValues().InforceLives.size()
+            ,yare_input_.NumberOfIdenticalLives
+            );
+        }
+
     // It is at best superfluous to do this for every basis.
     // TAXATION !! Don't do that then.
     Irc7702_->Initialize7702
