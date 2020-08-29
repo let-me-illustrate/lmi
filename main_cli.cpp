@@ -76,6 +76,7 @@ void self_test()
     illustrator z(mce_emit_nothing);
 
     Input IP;
+    IP["ProductName"       ] = "sample2naic";
     IP["Gender"            ] = "Male";
     IP["Smoking"           ] = "Nonsmoker";
     IP["UnderwritingClass" ] = "Standard";
