@@ -75,22 +75,23 @@ void self_test()
 
     illustrator z(mce_emit_nothing);
 
-    Input IP;
-    IP["ProductName"       ] = "sample2naic";
-    IP["Gender"            ] = "Male";
-    IP["Smoking"           ] = "Nonsmoker";
-    IP["UnderwritingClass" ] = "Standard";
-    IP["GeneralAccountRate"] = "0.06";
-    IP["Payment"           ] = "20000.0";
-    IP["SpecifiedAmount"   ] = "1000000.0";
-    IP.RealizeAllSequenceInput();
+    Input naic_no_solve;
+    naic_no_solve["ProductName"       ] = "sample2naic";
+    naic_no_solve["SolveType"         ] = "No solve";
+    naic_no_solve["Gender"            ] = "Male";
+    naic_no_solve["Smoking"           ] = "Nonsmoker";
+    naic_no_solve["UnderwritingClass" ] = "Standard";
+    naic_no_solve["GeneralAccountRate"] = "0.06";
+    naic_no_solve["Payment"           ] = "20000.0";
+    naic_no_solve["SpecifiedAmount"   ] = "1000000.0";
+    naic_no_solve["SolveToWhich"      ] = "Maturity";
+    naic_no_solve.RealizeAllSequenceInput();
 
     double expected_value = 0.0;
     double observed_value = 0.0;
 
-    IP["SolveType"] = "No solve";
     expected_value = 6305652.52;
-    z("CLI_selftest", IP);
+    z("CLI_selftest", naic_no_solve);
     observed_value = z.principal_ledger()->GetCurrFull().AcctVal.back();
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
@@ -104,10 +105,10 @@ void self_test()
             ;
         }
 
-    IP["SolveToWhich"] = "Maturity";
-    IP["SolveType"] = "Specified amount";
+    Input naic_solve_specamt {naic_no_solve};
+    naic_solve_specamt["SolveType"] = "Specified amount";
     expected_value = 1879139.14;
-    z("CLI_selftest", IP);
+    z("CLI_selftest", naic_solve_specamt);
     observed_value = z.principal_ledger()->GetCurrFull().AcctVal.back();
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
@@ -121,9 +122,10 @@ void self_test()
             ;
         }
 
-    IP["SolveType"] = "Employee premium";
+    Input naic_solve_ee_prem {naic_no_solve};
+    naic_solve_ee_prem["SolveType"] = "Employee premium";
     expected_value = 10673.51;
-    z("CLI_selftest", IP);
+    z("CLI_selftest", naic_solve_ee_prem);
     observed_value = z.principal_ledger()->GetLedgerInvariant().EeGrossPmt.front();
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
@@ -141,9 +143,14 @@ void self_test()
     std::cout << "Timing test skipped: takes too long in debug mode" << std::endl;
 #else  // !defined _GLIBCXX_DEBUG
     std::cout
-        << "Test solve speed: "
-        << TimeAnAliquot(std::bind(z, "CLI_selftest", IP))
-        << '\n'
+        << "Test speed: "
+        << "\n  naic, no solve     : "
+        << TimeAnAliquot(std::bind(z, "CLI_selftest", naic_no_solve))
+        << "\n  naic, specamt solve: "
+        << TimeAnAliquot(std::bind(z, "CLI_selftest", naic_solve_specamt))
+        << "\n  naic, ee prem solve: "
+        << TimeAnAliquot(std::bind(z, "CLI_selftest", naic_solve_ee_prem))
+        << std::endl
         ;
 #endif // !defined _GLIBCXX_DEBUG
 }
