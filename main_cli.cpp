@@ -139,17 +139,30 @@ void self_test()
             ;
         }
 
+    Input finra_no_solve      {naic_no_solve};
+    Input finra_solve_specamt {naic_solve_specamt};
+    Input finra_solve_ee_prem {naic_solve_ee_prem};
+    finra_no_solve     ["ProductName"] = "sample2finra";
+    finra_solve_specamt["ProductName"] = "sample2finra";
+    finra_solve_ee_prem["ProductName"] = "sample2finra";
+
 #if defined _GLIBCXX_DEBUG
     std::cout << "Timing test skipped: takes too long in debug mode" << std::endl;
 #else  // !defined _GLIBCXX_DEBUG
     std::cout
-        << "Test speed: "
-        << "\n  naic, no solve     : "
+        << "Test speed:"
+        << "\n  naic, no solve      : "
         << TimeAnAliquot(std::bind(z, "CLI_selftest", naic_no_solve))
-        << "\n  naic, specamt solve: "
+        << "\n  naic, specamt solve : "
         << TimeAnAliquot(std::bind(z, "CLI_selftest", naic_solve_specamt))
-        << "\n  naic, ee prem solve: "
+        << "\n  naic, ee prem solve : "
         << TimeAnAliquot(std::bind(z, "CLI_selftest", naic_solve_ee_prem))
+        << "\n  finra, no solve     : "
+        << TimeAnAliquot(std::bind(z, "CLI_selftest", finra_no_solve))
+        << "\n  finra, specamt solve: "
+        << TimeAnAliquot(std::bind(z, "CLI_selftest", finra_solve_specamt))
+        << "\n  finra, ee prem solve: "
+        << TimeAnAliquot(std::bind(z, "CLI_selftest", finra_solve_ee_prem))
         << std::endl
         ;
 #endif // !defined _GLIBCXX_DEBUG
