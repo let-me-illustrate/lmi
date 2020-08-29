@@ -72,8 +72,11 @@ install_clutter='
 '
 
 cli_cgi_clutter='
-/^Test solve speed: /d
+/^Test speed:/d
 /^Timing test skipped: takes too long in debug mode$/d
+/^  naic.*solve *: [0123456789.e-]* s mean; *[0123456789]* us.*runs/d
+/^  finra.*solve *: [0123456789.e-]* s mean; *[0123456789]* us.*runs/d
+/^    Input:        [0-9]* milliseconds$/d
 /^    Input:        [0-9]* milliseconds$/d
 /^    Calculations: [0-9]* milliseconds$/d
 /^    Output:       [0-9]* milliseconds$/d
@@ -149,6 +152,8 @@ exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
 log_dir="$exec_prefix"/logs
 mkdir --parents "$log_dir"
 {
+printf 'LMI_TRIPLET = "%s"\n' "$LMI_TRIPLET" > /dev/tty
+
 cd /opt/lmi/src/lmi
 
 printf '\n# test concinnity\n\n'
@@ -159,7 +164,7 @@ printf '# install; check physical closure\n\n'
 make "$coefficiency" install check_physical_closure 2>&1 \
   | tee "$log_dir"/install | sed -e "$build_clutter" -e "$install_clutter"
 
-printf 'Production system built--ready to start GUI test in another session.\n' > /dev/tty
+printf '  Production system built--ready to start GUI test in another session.\n' > /dev/tty
 
 printf '\n# cgi and cli tests\n\n'
 make "$coefficiency" --output-sync=recurse cgi_tests cli_tests 2>&1 \
@@ -258,6 +263,6 @@ for z in "$throwaway_dir"/*(N); do rm "$z"; done
 # The automated GUI test simulates keyboard and mouse actions, so
 # no such actions must be performed manually while it is running.
 # Therefore, it is deliberately excluded from this script.
-printf "\nDo not forget to run the 'gui_test.sh' script.\n"
+printf "\n  Do not forget to run the 'gui_test.sh' script.\n"
 } 2>&1 | tee "$log_dir"/nychthemeral_test | sed -e "$nychthemeral_clutter"
 done
