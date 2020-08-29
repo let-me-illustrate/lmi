@@ -116,15 +116,6 @@ AccountValue::AccountValue(Input const& input)
     hasadb                   = false;      // Antediluvian.
     mlydedtonextmodalpmtdate = 0.0;        // Antediluvian.
 
-    InvariantValues().Init(this);
-// TODO ?? What are the values of the last two arguments here?
-    VariantValues().Init(*this, GenBasis_, SepBasis_);
-    // TODO ?? There are several variants. We have to initialize all of them.
-    // This is probably best done through a function in class Ledger.
-    // We haven't yet laid the groundwork for that, though.
-    // If BasicValues changes, then this init becomes invalid
-    //   e.g. solves change BasicValues
-
     set_list_bill_year_and_month();
 
     OverridingEePmts    .resize(12 * BasicValues::GetLength());
@@ -338,20 +329,6 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     RunBasis_ = a_Basis;
     set_cloven_bases_from_run_basis(RunBasis_, GenBasis_, SepBasis_);
 
-// JOE I moved the next three lines of code up here from below. Reason:
-// output showed wrong specamt if specamt strategy is target, non-MEC,
-// or corridor--because first the specamt for output was set by this line
-//   InvariantValues().Init(...
-// before the specamt strategy was applied.
-//
-// The situation is really unsatisfactory.
-// InvariantValues().Init() is called earlier in the ctor;
-// then we call PerformSpecAmtStrategy(), which assigns values to
-// InvariantValues().SpecAmt; then we call InvariantValues().Init() again.
-// But calling InvariantValues().Init() again wiped out the SpecAmt, because
-// it reinitialized it based on DeathBfts_::specamt(), so I called
-// DeathBfts_->set_specamt() in AccountValue::PerformSpecAmtStrategy().
-
     SetInitialValues();
 
     // TODO ?? This is a nasty workaround. It seems that some or all strategies
@@ -361,22 +338,14 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     // but the result is always the same (because the premium is).
     if(!SolvingForGuarPremium)
         {
-        // TODO ?? There used to be some code in FinalizeYear() below that
-        // set the former InvariantValues().EePmt to an annualized value, but
-        // PerformSpecAmtStrategy() expects a modal value. The
-        // annualized value is wiped out a few lines below anyway.
-        // This is a crock to suppress an observed symptom.
-        InvariantValues().Init(this);
         PerformSpecAmtStrategy();
         PerformSupplAmtStrategy();
         }
 
-    // TODO ?? It seems wrong to initialize the ledger values here.
-    // I believe, but do not know, that the only reason for doing
-    // this is that the solve routines can change parameters in
+    // Call Init() here. The solve routines can change parameters in
     // class BasicValues or objects it contains, parameters which
     // determine ledger values that are used by the solve routines.
-    // It would seem appropriate to treat such parameters instead
+    // It might be more appropriate to treat such parameters instead
     // as local state of class AccountValue itself, or of a contained
     // class smaller than the ledger hierarchy--which we need anyway
     // for 7702 and 7702A. Or perhaps the solve functions should
