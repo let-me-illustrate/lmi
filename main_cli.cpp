@@ -51,13 +51,14 @@
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <algorithm>
-#include <cmath>
+#include <algorithm>                    // for_each()
+#include <cmath>                        // fabs()
 #include <cstdio>                       // printf()
 #include <functional>                   // bind()
 #include <ios>
 #include <iostream>
 #include <ostream>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -103,7 +104,6 @@ void self_test()
         }
 
     IP["SolveToWhich"] = "Maturity";
-
     IP["SolveType"] = "Specified amount";
     expected_value = 1879139.14;
     z("CLI_selftest", IP);
