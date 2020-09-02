@@ -962,24 +962,34 @@ void AccountValue::TxSpecAmtChange()
 {
     if(0 != Month || 0 == Year)
         {
-        // What needful thing does this accomplish?
-        // Set option 2 death benefit, e.g.?
-
 // > This initializes DBReflectingCorr and others so that the at-issue but
 // > post-1035 exchange calculation of the seven pay will have a death benefit
 // > amount to base its calculations on.
-//
-// TODO ?? We should find a better way. The original intention of this block
-// was to return immediately without doing anything at all except on renewal
-// anniversaries, because elective spec amt changes are not allowed at the
-// issue date or in any off-anniversary month. The line added to change the
-// specified amount by zero is executed almost every month. The call is costly
-// and very probably superfluous. It is probably one reason why calculations
-// are so slow when the term rider is present. ChangeSpecAmtBy() was designed
-// to be called only when the spec amt changes; calling it with an argument
-// of zero is a rather bizarre concept.
-
+#if 1
         ChangeSpecAmtBy(0.0);
+#else // 0
+        // TODO ?? Changing specamt by zero is absurd. The following
+        // commented-out alternative seems to do the same thing as
+        // the line above--at least the regression test succeeds.
+        // However, both ways are unclean, and both may be incorrect.
+        //
+        // Carry specamt forward into all future years.
+        for(int j = Year; j < BasicValues::GetLength(); ++j)
+            {
+            ActualSpecAmt = std::max
+                (ActualSpecAmt
+                ,minimum_specified_amount(0 == Year && 0 == Month, TermRiderActive)
+                );
+            ActualSpecAmt = round_specamt()(ActualSpecAmt);
+            InvariantValues().SpecAmt[j] = ActualSpecAmt;
+            if(!TermIsNotRider)
+                {
+                InvariantValues().TermSpecAmt[j] = TermSpecAmt;
+                }
+            }
+        // Set BOM DB for 7702 and 7702A.
+        TxSetDeathBft();
+#endif // 0
         return;
         }
 
