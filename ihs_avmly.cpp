@@ -950,6 +950,9 @@ void AccountValue::TxOptionChange()
 
 /// Process an owner-initiated specified-amount increase or decrease.
 ///
+/// Illustrations allow elective increases and decreases only on
+/// renewal anniversaries.
+///
 /// Ignores multiple layers of coverage: not correct for select and
 /// ultimate COI rates if select period restarts on increase.
 ///
@@ -957,8 +960,6 @@ void AccountValue::TxOptionChange()
 
 void AccountValue::TxSpecAmtChange()
 {
-    // Illustrations allow increases and decreases only on anniversary,
-    // but not on the zeroth anniversary.
     if(0 != Month || 0 == Year)
         {
         // What needful thing does this accomplish?
