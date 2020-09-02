@@ -866,8 +866,6 @@ void AccountValue::InitializeYear()
 //============================================================================
 void AccountValue::InitializeSpecAmt()
 {
-    YearsSpecAmt        = DeathBfts_->specamt()[Year];
-
     // TODO ?? These variables are set in current run and used in guar and midpt.
     ActualSpecAmt       = InvariantValues().SpecAmt[Year];
     TermSpecAmt         = InvariantValues().TermSpecAmt[Year];

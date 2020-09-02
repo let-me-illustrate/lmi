@@ -989,6 +989,7 @@ void AccountValue::TxSpecAmtChange()
         ChangeSupplAmtBy(DeathBfts_->supplamt()[Year] - TermSpecAmt);
         }
 
+    double const YearsSpecAmt = DeathBfts_->specamt()[Year];
     double const old_specamt = DeathBfts_->specamt()[Year - 1];
 
     // Nothing to do if no increase or decrease requested.

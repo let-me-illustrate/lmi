@@ -298,7 +298,6 @@ void AccountValue::DoYear
                 ,mce_monthly_rate
                 )[Year]
             );
-    YearsSpecAmt    = DeathBfts_->specamt()[Year];
     YearsDBOpt      = DeathBfts_->dbopt()[Year];
 
     // For guaranteed-basis run, what loan rates should be used?

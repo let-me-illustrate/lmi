@@ -475,7 +475,6 @@ class LMI_SO AccountValue final
     // annual invariants.
     double       YearsCorridorFactor;
     mcenum_dbopt YearsDBOpt;
-    double       YearsSpecAmt;
     double       YearsAnnualPolicyFee;
     double       YearsMonthlyPolicyFee;
     double       YearsGenAcctIntRate;
