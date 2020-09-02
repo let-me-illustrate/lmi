@@ -989,12 +989,12 @@ void AccountValue::TxSpecAmtChange()
         ChangeSupplAmtBy(DeathBfts_->supplamt()[Year] - TermSpecAmt);
         }
 
-    double const YearsSpecAmt = DeathBfts_->specamt()[Year];
+    double const new_specamt = DeathBfts_->specamt()[Year];
     double const old_specamt = DeathBfts_->specamt()[Year - 1];
 
     // Nothing to do if no increase or decrease requested.
-    // TODO ?? YearsSpecAmt != ActualSpecAmt; the latter should be used.
-    if(YearsSpecAmt == old_specamt)
+    // TODO ?? new_specamt != ActualSpecAmt; the latter should be used.
+    if(new_specamt == old_specamt)
         {
         return;
         }
@@ -1002,7 +1002,7 @@ void AccountValue::TxSpecAmtChange()
     if
         (
             !AllowSAIncr
-        &&  ActualSpecAmt < YearsSpecAmt
+        &&  ActualSpecAmt < new_specamt
         )
         {
         alarum()
@@ -1015,7 +1015,7 @@ void AccountValue::TxSpecAmtChange()
     if
         (
             MaxIncrAge < Year + BasicValues::GetIssueAge()
-        &&  ActualSpecAmt < YearsSpecAmt
+        &&  ActualSpecAmt < new_specamt
         )
         {
         alarum()
@@ -1027,7 +1027,7 @@ void AccountValue::TxSpecAmtChange()
         return;
         }
 
-    ChangeSpecAmtBy(YearsSpecAmt - ActualSpecAmt);
+    ChangeSpecAmtBy(new_specamt - ActualSpecAmt);
 
     // TODO ?? TAXATION !! Should 7702 or 7702A processing be done here?
 }
