@@ -124,6 +124,13 @@ AccountValue::AccountValue(Input const& input)
     NetPmts    .resize(12);
 }
 
+/// Specified amount.
+
+double AccountValue::base_specamt(int year) const
+{
+    return InvariantValues().SpecAmt[year];
+}
+
 //============================================================================
 std::shared_ptr<Ledger const> AccountValue::ledger_from_av() const
 {

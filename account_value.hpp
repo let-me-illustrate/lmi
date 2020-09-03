@@ -115,6 +115,11 @@ class LMI_SO AccountValue final
     double TotalAccountValue() const;
     double CashValueFor7702() const;
 
+    double base_specamt(int year) const;
+    double term_specamt(int year) const;
+    double specamt_for_7702(int year) const;
+    double specamt_for_7702A(int year) const;
+
     // We're not yet entirely sure how to handle ledger values. Right now,
     // we have pointers to a Ledger and also to its variant and invariant
     // parts. We put data into the parts, and then insert the parts into

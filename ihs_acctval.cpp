@@ -138,6 +138,40 @@ AccountValue::AccountValue(Input const& input)
     withdrawal_ullage_  .reserve(BasicValues::GetLength());
 }
 
+/// Specified amount (disregarding any term or "supplemental" amount).
+
+double AccountValue::base_specamt(int year) const
+{
+    return InvariantValues().SpecAmt[year];
+}
+
+/// Specified amount of term rider.
+
+double AccountValue::term_specamt(int year) const
+{
+    return InvariantValues().TermSpecAmt[year];
+}
+
+/// Specified amount for 7702 (not 7702A).
+
+double AccountValue::specamt_for_7702(int year) const
+{
+    return
+                              InvariantValues().SpecAmt    [year]
+        + (TermIsDbFor7702  ? InvariantValues().TermSpecAmt[year] : 0.0)
+        ;
+}
+
+/// Specified amount for 7702A (not 7702).
+
+double AccountValue::specamt_for_7702A(int year) const
+{
+    return
+                              InvariantValues().SpecAmt    [year]
+        + (TermIsDbFor7702A ? InvariantValues().TermSpecAmt[year] : 0.0)
+        ;
+}
+
 //============================================================================
 std::shared_ptr<Ledger const> AccountValue::ledger_from_av() const
 {
