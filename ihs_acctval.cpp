@@ -409,10 +409,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         ,mce_annual
         ,InvariantValues().SpecAmt[0]
         );
-    double sa =
-                             InvariantValues().SpecAmt    [0]
-        + (TermIsDbFor7702 ? InvariantValues().TermSpecAmt[0] : 0.0)
-        ;
+    double sa = specamt_for_7702(0);
 
     // Iff partial mortality is used, save yearly values in a vector
     // for use elsewhere in this class, and store yearly inforce lives
@@ -494,10 +491,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     if(yare_input_.EffectiveDate == yare_input_.InforceAsOfDate)
         {
         // No need to initialize 'pmts_7702a' in this case.
-        bfts_7702a.push_back
-            (                     InvariantValues().SpecAmt    [0]
-            + (TermIsDbFor7702A ? InvariantValues().TermSpecAmt[0] : 0.0)
-            );
+        bfts_7702a.push_back(specamt_for_7702A(0));
         }
     else
         {

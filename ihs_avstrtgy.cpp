@@ -271,34 +271,22 @@ double AccountValue::DoPerformPmtStrategy
             }
         case mce_pmt_mep:
             {
-            double sa =
-                                      InvariantValues().SpecAmt    [0]
-                + (TermIsDbFor7702A ? InvariantValues().TermSpecAmt[0] : 0.0)
-                ;
+            double sa = specamt_for_7702A(0);
             return GetModalPremMaxNonMec(0, a_InitialMode, sa);
             }
         case mce_pmt_glp:
             {
-            double sa =
-                                     InvariantValues().SpecAmt    [0]
-                + (TermIsDbFor7702 ? InvariantValues().TermSpecAmt[0] : 0.0)
-                ;
+            double sa = specamt_for_7702(0);
             return GetModalPremGLP(0, a_InitialMode, sa, sa);
             }
         case mce_pmt_gsp:
             {
-            double sa =
-                                     InvariantValues().SpecAmt    [0]
-                + (TermIsDbFor7702 ? InvariantValues().TermSpecAmt[0] : 0.0)
-                ;
+            double sa = specamt_for_7702(0);
             return GetModalPremGSP(0, a_InitialMode, sa, sa);
             }
         case mce_pmt_corridor:
             {
-            double sa =
-                                     InvariantValues().SpecAmt    [0]
-                + (TermIsDbFor7702 ? InvariantValues().TermSpecAmt[0] : 0.0)
-                ;
+            double sa = specamt_for_7702(0);
             return GetModalPremCorridor(0, a_InitialMode, sa);
             }
         case mce_pmt_table:
