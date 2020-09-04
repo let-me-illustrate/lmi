@@ -288,6 +288,7 @@ class LMI_SO AccountValue final
 
     void   set_list_bill_year_and_month();
     void   set_list_bill_premium();
+    void   set_modal_min_premium();
 
     void   SetMaxLoan              ();
     void   SetMaxWD                ();

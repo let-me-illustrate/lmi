@@ -872,39 +872,7 @@ void AccountValue::InitializeSpecAmt()
     ActualSpecAmt       = InvariantValues().SpecAmt[Year];
     TermSpecAmt         = InvariantValues().TermSpecAmt[Year];
 
-    // These "modal minimum" premiums are designed for group plans.
-    // They are intended roughly to approximate the minimum payment
-    // (at a modal frequency chosen by the employer) necessary to
-    // prevent lapse if no other premium is paid.
-    //
-    // Some products apportion them explicitly between ee and er. For
-    // those that don't, convention deems the er to pay it all.
-    //
-    // Most other yearly values are posted to InvariantValues() in
-    // FinalizeYear(), but it seems clearer to post these here where
-    // they're calculated along with 'MlyNoLapsePrem'.
-    if(!SplitMinPrem)
-        {
-        auto const z = GetModalMinPrem
-            (Year
-            ,Outlay_->er_premium_modes()[Year]
-            ,InvariantValues().SpecAmt[Year]
-            );
-        InvariantValues().ModalMinimumPremium[Year]   = z;
-        InvariantValues().ErModalMinimumPremium[Year] = z;
-        }
-    else
-        {
-        auto const z = GetModalPremMlyDedEx
-            (Year
-            ,Outlay_->er_premium_modes()[Year]
-            ,InvariantValues().SpecAmt[Year]
-            ,InvariantValues().TermSpecAmt[Year]
-            );
-        InvariantValues().EeModalMinimumPremium[Year] = z.first;
-        InvariantValues().ErModalMinimumPremium[Year] = z.second;
-        InvariantValues().ModalMinimumPremium[Year] = z.first + z.second;
-        }
+    set_modal_min_premium();
 
     // No-lapse premium generally changes whenever specamt changes for
     // any reason (e.g., elective increases or decreases, DBO changes,
@@ -992,6 +960,43 @@ void AccountValue::set_list_bill_premium()
         InvariantValues().EeListBillPremium = z.first;
         InvariantValues().ErListBillPremium = z.second;
         InvariantValues().ListBillPremium = z.first + z.second;
+        }
+}
+
+void AccountValue::set_modal_min_premium()
+{
+    // These "modal minimum" premiums are designed for group plans.
+    // They are intended roughly to approximate the minimum payment
+    // (at a modal frequency chosen by the employer) necessary to
+    // prevent lapse if no other premium is paid.
+    //
+    // Some products apportion them explicitly between ee and er. For
+    // those that don't, convention deems the er to pay it all.
+    //
+    // Most other yearly values are posted to InvariantValues() in
+    // FinalizeYear(), but it seems clearer to post these here where
+    // they're calculated along with 'MlyNoLapsePrem'.
+    if(!SplitMinPrem)
+        {
+        auto const z = GetModalMinPrem
+            (Year
+            ,Outlay_->er_premium_modes()[Year]
+            ,InvariantValues().SpecAmt[Year]
+            );
+        InvariantValues().ModalMinimumPremium[Year]   = z;
+        InvariantValues().ErModalMinimumPremium[Year] = z;
+        }
+    else
+        {
+        auto const z = GetModalPremMlyDedEx
+            (Year
+            ,Outlay_->er_premium_modes()[Year]
+            ,InvariantValues().SpecAmt[Year]
+            ,InvariantValues().TermSpecAmt[Year]
+            );
+        InvariantValues().EeModalMinimumPremium[Year] = z.first;
+        InvariantValues().ErModalMinimumPremium[Year] = z.second;
+        InvariantValues().ModalMinimumPremium[Year] = z.first + z.second;
         }
 }
 
