@@ -157,8 +157,8 @@ double AccountValue::term_specamt(int year) const
 double AccountValue::specamt_for_7702(int year) const
 {
     return
-                              InvariantValues().SpecAmt    [year]
-        + (TermIsDbFor7702  ? InvariantValues().TermSpecAmt[year] : 0.0)
+                              base_specamt(year)
+        + (TermIsDbFor7702  ? term_specamt(year) : 0.0)
         ;
 }
 
@@ -167,8 +167,8 @@ double AccountValue::specamt_for_7702(int year) const
 double AccountValue::specamt_for_7702A(int year) const
 {
     return
-                              InvariantValues().SpecAmt    [year]
-        + (TermIsDbFor7702A ? InvariantValues().TermSpecAmt[year] : 0.0)
+                              base_specamt(year)
+        + (TermIsDbFor7702A ? term_specamt(year) : 0.0)
         ;
 }
 
@@ -397,7 +397,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     OldDBOpt = DeathBfts_->dbopt()[0];
     // TAXATION !! 'OldSA' and 'OldDB' need to be distinguished for 7702 and 7702A,
     // with inclusion of term dependent on 'TermIsDbFor7702' and 'TermIsDbFor7702A'.
-    OldSA = InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0];
+    OldSA = base_specamt(0) + term_specamt(0);
     // TODO ?? TAXATION !! Shouldn't we increase initial SA if contract in corridor at issue?
     OldDB = OldSA;
 
@@ -407,7 +407,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     double annual_target_premium = GetModalTgtPrem
         (0
         ,mce_annual
-        ,InvariantValues().SpecAmt[0]
+        ,base_specamt(0)
         );
     double sa = specamt_for_7702(0);
 
@@ -895,8 +895,8 @@ void AccountValue::InitializeYear()
 void AccountValue::InitializeSpecAmt()
 {
     // TODO ?? These variables are set in current run and used in guar and midpt.
-    ActualSpecAmt       = InvariantValues().SpecAmt[Year];
-    TermSpecAmt         = InvariantValues().TermSpecAmt[Year];
+    ActualSpecAmt = base_specamt(Year);
+    TermSpecAmt   = term_specamt(Year);
 
     set_modal_min_premium();
 
@@ -913,7 +913,7 @@ void AccountValue::InitializeSpecAmt()
     // frequent mode (monthly for lmi), because no-lapse guarantees
     // are offered for all modes.
     //
-    // Arguably InvariantValues().TermSpecAmt should be used in the
+    // Arguably the "supplemental" specamt should be included in the
     // target or even the minimum calculation in the TermIsNotRider
     // case; but that's used only with one family of exotic products
     // for which these quantities don't matter anyway.
@@ -922,12 +922,12 @@ void AccountValue::InitializeSpecAmt()
     MlyNoLapsePrem = GetModalMinPrem
         (target_year
         ,mce_monthly
-        ,InvariantValues().SpecAmt[target_year]
+        ,base_specamt(target_year)
         );
     UnusedTargetPrem = GetModalTgtPrem
         (target_year
         ,mce_annual
-        ,InvariantValues().SpecAmt[target_year]
+        ,base_specamt(target_year)
         );
     AnnualTargetPrem = UnusedTargetPrem;
 
@@ -970,7 +970,7 @@ void AccountValue::set_list_bill_premium()
         auto const z = GetListBillPremMlyDed
             (Year
             ,Outlay_->er_premium_modes()[Year]
-            ,InvariantValues().SpecAmt[Year]
+            ,base_specamt(Year)
             );
         InvariantValues().ListBillPremium   = z;
         InvariantValues().ErListBillPremium = z;
@@ -980,8 +980,8 @@ void AccountValue::set_list_bill_premium()
         auto const z = GetListBillPremMlyDedEx
             (Year
             ,Outlay_->er_premium_modes()[Year]
-            ,InvariantValues().SpecAmt[Year]
-            ,InvariantValues().TermSpecAmt[Year]
+            ,base_specamt(Year)
+            ,term_specamt(Year)
             );
         InvariantValues().EeListBillPremium = z.first;
         InvariantValues().ErListBillPremium = z.second;
@@ -1008,7 +1008,7 @@ void AccountValue::set_modal_min_premium()
         auto const z = GetModalMinPrem
             (Year
             ,Outlay_->er_premium_modes()[Year]
-            ,InvariantValues().SpecAmt[Year]
+            ,base_specamt(Year)
             );
         InvariantValues().ModalMinimumPremium[Year]   = z;
         InvariantValues().ErModalMinimumPremium[Year] = z;
@@ -1018,8 +1018,8 @@ void AccountValue::set_modal_min_premium()
         auto const z = GetModalPremMlyDedEx
             (Year
             ,Outlay_->er_premium_modes()[Year]
-            ,InvariantValues().SpecAmt[Year]
-            ,InvariantValues().TermSpecAmt[Year]
+            ,base_specamt(Year)
+            ,term_specamt(Year)
             );
         InvariantValues().EeModalMinimumPremium[Year] = z.first;
         InvariantValues().ErModalMinimumPremium[Year] = z.second;

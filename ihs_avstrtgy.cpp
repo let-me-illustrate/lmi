@@ -266,7 +266,7 @@ double AccountValue::DoPerformPmtStrategy
         case mce_pmt_target:
             {
             int const target_year = TgtPremFixedAtIssue ? 0 : Year;
-            double sa = InvariantValues().SpecAmt[target_year];
+            double sa = base_specamt(target_year);
             return GetModalTgtPrem(Year, a_CurrentMode, sa);
             }
         case mce_pmt_mep:

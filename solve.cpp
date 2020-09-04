@@ -109,12 +109,12 @@ double SolveTest()
                 {
                 case mce_option1:
                     {
-                    y = ConstThat->InvariantValues().SpecAmt[ThatSolveTgtYear - 1];
+                    y = ConstThat->base_specamt(ThatSolveTgtYear - 1);
                     }
                     break;
                 case mce_option2:
                     {
-                    y = ConstThat->InvariantValues().SpecAmt[ThatSolveTgtYear - 1];
+                    y = ConstThat->base_specamt(ThatSolveTgtYear - 1);
                     }
                     break;
                 case mce_rop: // fall through

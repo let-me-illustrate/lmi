@@ -221,7 +221,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
         {
         // The input specified amount mustn't be used here because
         // it wouldn't reflect dynamic adjustments.
-        SolveTargetCsv_ = InvariantValues().SpecAmt[SolveTargetDuration_ - 1];
+        SolveTargetCsv_ = base_specamt(SolveTargetDuration_ - 1);
         }
 
     if(mce_solve_for_tax_basis == SolveTarget_)

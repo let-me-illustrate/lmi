@@ -291,7 +291,7 @@ void AccountValue::DoYear
     pmt                   = stored_pmts[Year];
     YearsPremLoadTgt      = Loads_->target_premium_load(GenBasis_)[Year];
     YearsMonthlyPolicyFee = Loads_->monthly_policy_fee(GenBasis_)[Year];
-    ActualSpecAmt         = InvariantValues().SpecAmt[Year];
+    ActualSpecAmt         = base_specamt(Year);
 
     // These variables are set for each pass independently.
     pmt_mode        = Outlay_->ee_premium_modes()[Year];
@@ -446,7 +446,7 @@ void AccountValue::PerformSpecAmtStrategy()
         {
         case mce_sa_input_scalar:
             {
-            SA = InvariantValues().SpecAmt[0];
+            SA = base_specamt(0);
             }
             break;
         case mce_sa_maximum:
@@ -466,7 +466,7 @@ void AccountValue::PerformSpecAmtStrategy()
                 << " Payment set to scalar input value."
                 << LMI_FLUSH
                 ;
-            SA = InvariantValues().SpecAmt[0];
+            SA = base_specamt(0);
             }
             break;
         case mce_sa_glp:
@@ -476,7 +476,7 @@ void AccountValue::PerformSpecAmtStrategy()
                 << " Payment set to scalar input value."
                 << LMI_FLUSH
                 ;
-            SA = InvariantValues().SpecAmt[0];
+            SA = base_specamt(0);
             }
             break;
         case mce_sa_gsp:      // fall through
