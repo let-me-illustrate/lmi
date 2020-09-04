@@ -100,6 +100,12 @@ AccountValue::AccountValue(Input const& input)
     ,OldDBOpt              {mce_option1}
     ,YearsDBOpt            {mce_option1}
 {
+    SetInitialValues();
+    LMI_ASSERT(InforceYear < methuselah);
+    PerformSpecAmtStrategy();
+    PerformSupplAmtStrategy();
+    InvariantValues().Init(this);
+
     // Explicitly initialize antediluvian members. It's generally
     // better to do this in the initializer-list, but here they can
     // all be kept together.
@@ -329,31 +335,13 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     RunBasis_ = a_Basis;
     set_cloven_bases_from_run_basis(RunBasis_, GenBasis_, SepBasis_);
 
+    // Many values set by SetInitialValues() are never subsequently
+    // changed. SOMEDAY !! Factor those out into a function that can
+    // be called OAOO.
     SetInitialValues();
 
-    // TODO ?? This is a nasty workaround. It seems that some or all strategies
-    // should be performed at a much higher level, say in Run*(). Without
-    // the conditional here, guar prem is wrong for 7-pay spec amt strategy.
-    // It's wasteful to call PerformSpecAmtStrategy() once per basis,
-    // but the result is always the same (because the premium is).
-    if(!SolvingForGuarPremium)
-        {
-        PerformSpecAmtStrategy();
-        PerformSupplAmtStrategy();
-        }
-
-    // Call Init() here. The solve routines can change parameters in
-    // class BasicValues or objects it contains, parameters which
-    // determine ledger values that are used by the solve routines.
-    // It might be more appropriate to treat such parameters instead
-    // as local state of class AccountValue itself, or of a contained
-    // class smaller than the ledger hierarchy--which we need anyway
-    // for 7702 and 7702A. Or perhaps the solve functions should
-    // manipulate the state of just those elements of the ledgers
-    // that it needs to, to avoid the massive overhead of
-    // unconditionally reinitializing all elements.
     VariantValues().Init(*this, GenBasis_, SepBasis_);
-    InvariantValues().Init(this);
+    InvariantValues().ReInit(this);
 
     // Default initial values assume that the policy never lapses or
     // becomes a MEC, so that the lapse and MEC durations are the last

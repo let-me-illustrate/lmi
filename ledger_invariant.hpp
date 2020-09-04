@@ -50,6 +50,7 @@ class LMI_SO LedgerInvariant final
     ~LedgerInvariant() override;
 
     void Init(BasicValues const*);
+    void ReInit(BasicValues const*);
 
     LedgerInvariant& PlusEq(LedgerInvariant const& a_Addend);
 

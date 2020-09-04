@@ -683,3 +683,63 @@ void LedgerInvariant::Init(BasicValues const* b)
     // encompassed by 'FullyInitialized'.
     FullyInitialized = true;
 }
+
+/// TODO ?? Temporary kludge.
+///
+/// Objects of this class should be used only to store final values
+/// that result from monthiversary processing, and to use those values
+/// to generate reports. Therefore, they should need to be initialized
+/// only once. However, they've been (ab)used to store intermediate
+/// values during monthiversary processing, and thus, defectively,
+/// some data members need to be reinitialized when calculations are
+/// to be performed again on a different basis.
+///
+/// Complete reinitialization is costly, so this function does it only
+/// for data members that actually require it. Each such member
+/// represents a defect. When the last such defect is resolved, this
+/// function will be empty and can itself be removed, along with the
+/// following commentary transplanted from the call site:
+///
+/// // Call Init() here. The solve routines can change parameters in
+/// // class BasicValues or objects it contains, parameters which
+/// // determine ledger values that are used by the solve routines.
+/// // It might be more appropriate to treat such parameters instead
+/// // as local state of class AccountValue itself, or of a contained
+/// // class smaller than the ledger hierarchy--which we need anyway
+/// // for 7702 and 7702A. Or perhaps the solve functions should
+/// // manipulate the state of just those elements of the ledgers
+/// // that it needs to, to avoid the massive overhead of
+/// // unconditionally reinitializing all elements.
+
+void LedgerInvariant::ReInit(BasicValues const* b)
+{
+    HasSupplSpecAmt            = false;
+    if(b->yare_input_.TermRider)
+        {
+        TermSpecAmt            .assign(Length, b->yare_input_.TermRiderAmount);
+        }
+    else if(b->database().query<bool>(DB_TermIsNotRider))
+        {
+        TermSpecAmt            = b->DeathBfts_->supplamt();
+        if(!each_equal(TermSpecAmt, 0.0))
+            {
+            HasSupplSpecAmt    = true;
+            }
+        }
+    else
+        {
+        TermSpecAmt            .assign(Length, 0.0);
+        }
+    SpecAmt                    = b->DeathBfts_->specamt();
+
+    InitBaseSpecAmt            = b->DeathBfts_->specamt()[0];
+    InitTermSpecAmt            = TermSpecAmt[0];
+
+    IsMec                      = false;
+    MecMonth                   = 11;
+    MecYear                    = Length;
+
+    ModalMinimumPremium        .assign(Length, 0.0);
+    EeModalMinimumPremium      .assign(Length, 0.0);
+    ErModalMinimumPremium      .assign(Length, 0.0);
+}
