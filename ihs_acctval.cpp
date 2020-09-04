@@ -963,19 +963,20 @@ void AccountValue::set_list_bill_premium()
         }
 }
 
+/// Calculate "modal minimum" premiums designed for group plans.
+///
+/// They are intended roughly to approximate the minimum payment
+/// (at a modal frequency chosen by the employer) necessary to
+/// prevent lapse if no other premium is paid.
+///
+/// Some products apportion them explicitly between ee and er. For
+/// those that don't, convention deems the er to pay it all.
+///
+/// These values are calculated for all products, but probably should
+/// be restricted to group plans that actually use them on reports.
+
 void AccountValue::set_modal_min_premium()
 {
-    // These "modal minimum" premiums are designed for group plans.
-    // They are intended roughly to approximate the minimum payment
-    // (at a modal frequency chosen by the employer) necessary to
-    // prevent lapse if no other premium is paid.
-    //
-    // Some products apportion them explicitly between ee and er. For
-    // those that don't, convention deems the er to pay it all.
-    //
-    // Most other yearly values are posted to InvariantValues() in
-    // FinalizeYear(), but it seems clearer to post these here where
-    // they're calculated along with 'MlyNoLapsePrem'.
     if(!SplitMinPrem)
         {
         auto const z = GetModalMinPrem
