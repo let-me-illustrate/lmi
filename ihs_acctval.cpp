@@ -1431,25 +1431,28 @@ void AccountValue::SetAnnualInvariants()
     YearsDacTaxLoadRate     = Loads_->dac_tax_load                    ()[Year];
 }
 
+/// Calculate and store actuarial functions for partial mortality.
+///
+/// Iff partial mortality is used, save yearly values in a vector
+/// for use elsewhere in this class, and store yearly inforce lives
+/// (assuming no one ever lapses) in the invariant ledger object.
+///
+/// A contract may be in force at the end of its maturity year,
+/// and it's necessary to treat it that way because other year-end
+/// composite values are multiplied by the number of lives inforce.
+/// Of course, a contract is not normally in force after maturity.
+///
+/// TODO ?? These actuarial functions may be thought of as
+/// counting potential inforce lives: they do not reflect lapses.
+/// InforceLivesBoy() and InforceLivesEoy() may be used where
+/// lapses should be taken into account.
+
 void AccountValue::set_partial_mortality()
 {
-    // Iff partial mortality is used, save yearly values in a vector
-    // for use elsewhere in this class, and store yearly inforce lives
-    // (assuming no one ever lapses) in the invariant ledger object.
-    //
-    // A contract may be in force at the end of its maturity year,
-    // and it's necessary to treat it that way because other year-end
-    // composite values are multiplied by the number of lives inforce.
-    // Of course, a contract is not normally in force after maturity.
-
     double const inforce_lives = yare_input_.NumberOfIdenticalLives;
     partial_mortality_qx .resize(    BasicValues::GetLength());
     partial_mortality_tpx.resize(1 + BasicValues::GetLength(), 1.0);
     partial_mortality_lx .resize(1 + BasicValues::GetLength(), inforce_lives);
-    // TODO ?? These actuarial functions may be thought of as
-    // counting potential inforce lives: they do not reflect lapses.
-    // InforceLivesBoy() and InforceLivesEoy() may be used where
-    // lapses should be taken into account.
     if(yare_input_.UsePartialMortality)
         {
         // partial_mortality_lx[0] was set above.
