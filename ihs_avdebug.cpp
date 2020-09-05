@@ -433,9 +433,7 @@ void AccountValue::DebugPrint()
     LMI_ASSERT(0 != yare_input_.NumberOfIdenticalLives);
     SetMonthlyDetail
         (eInforceFactor
-        ,ItLapsed
-            ? 0.0
-            : partial_mortality_lx[Year] / yare_input_.NumberOfIdenticalLives
+        ,ItLapsed ? 0.0 : partial_mortality_tpx[Year]
         );
 
     // TODO ?? Claims appear as zero because SetClaims() is called not
