@@ -435,7 +435,7 @@ void AccountValue::DebugPrint()
         (eInforceFactor
         ,ItLapsed
             ? 0.0
-            : InvariantValues().InforceLives[Year] / yare_input_.NumberOfIdenticalLives
+            : partial_mortality_lx[Year] / yare_input_.NumberOfIdenticalLives
         );
 
     // TODO ?? Claims appear as zero because SetClaims() is called not

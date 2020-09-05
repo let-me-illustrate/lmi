@@ -424,7 +424,8 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         (   lmi::ssize(InvariantValues().InforceLives)
         ==  1 + BasicValues::GetLength()
         );
-    partial_mortality_qx.resize(BasicValues::GetLength());
+    partial_mortality_qx.resize(    BasicValues::GetLength());
+    partial_mortality_lx.resize(1 + BasicValues::GetLength());
     // TODO ?? 'InvariantValues().InforceLives' may be thought of as
     // counting potential inforce lives: it does not reflect lapses.
     // It should either reflect lapses or be renamed. Meanwhile,
@@ -433,21 +434,22 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     if(yare_input_.UsePartialMortality)
         {
         double inforce_lives = yare_input_.NumberOfIdenticalLives;
-        InvariantValues().InforceLives[0] = inforce_lives;
+        partial_mortality_lx[0] = inforce_lives;
         for(int j = 0; j < BasicValues::GetLength(); ++j)
             {
             partial_mortality_qx[j] = GetPartMortQ(j);
             inforce_lives *= 1.0 - partial_mortality_qx[j];
-            InvariantValues().InforceLives[1 + j] = inforce_lives;
+            partial_mortality_lx[1 + j] = inforce_lives;
             }
         }
     else
         {
-        InvariantValues().InforceLives.assign
-            (InvariantValues().InforceLives.size()
+        partial_mortality_lx.assign
+            (partial_mortality_lx.size()
             ,yare_input_.NumberOfIdenticalLives
             );
         }
+    InvariantValues().InforceLives = partial_mortality_lx;
 
     // It is at best superfluous to do this for every basis.
     // TAXATION !! Don't do that then.
@@ -1497,7 +1499,7 @@ double AccountValue::GetSepAcctAssetsInforce() const
         return 0.0;
         }
 
-    return SepAcctValueAfterDeduction * InvariantValues().InforceLives[Year];
+    return SepAcctValueAfterDeduction * partial_mortality_lx[Year];
 }
 
 //============================================================================
@@ -1533,7 +1535,7 @@ double AccountValue::GetCurtateNetClaimsInforce() const
         }
 
     LMI_ASSERT(11 == Month);
-    return YearsNetClaims * InvariantValues().InforceLives[Year];
+    return YearsNetClaims * partial_mortality_lx[Year];
 }
 
 //============================================================================
@@ -1608,7 +1610,7 @@ double AccountValue::InforceLivesBoy() const
         return 0.0;
         }
 
-    return InvariantValues().InforceLives.at(Year);
+    return partial_mortality_lx.at(Year);
 }
 
 //============================================================================
@@ -1622,7 +1624,7 @@ double AccountValue::InforceLivesEoy() const
         return 0.0;
         }
 
-    return InvariantValues().InforceLives.at(1 + Year);
+    return partial_mortality_lx.at(1 + Year);
 }
 
 //============================================================================

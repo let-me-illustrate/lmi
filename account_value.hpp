@@ -584,6 +584,7 @@ class LMI_SO AccountValue final
     double  YearsTotalSepAcctLoad;
 
     std::vector<double> partial_mortality_qx;
+    std::vector<double> partial_mortality_lx;
 
     // For experience rating.
     double  CoiRetentionRate;
