@@ -278,11 +278,7 @@ double AccountValue::SolveGuarPremium()
     // Store original er premiums for later restoration.
     std::vector<double> stored = Outlay_->er_modal_premiums();
     // Zero out er premiums and solve for ee premiums only.
-    Outlay_->set_er_modal_premiums
-        (0.0
-        ,0
-        ,static_cast<int>(InvariantValues().EndtAge - InvariantValues().Age)
-        );
+    Outlay_->set_er_modal_premiums(0.0, 0, BasicValues::GetLength());
 
     bool temp_solving     = Solving;
     Solving               = true;
@@ -292,10 +288,10 @@ double AccountValue::SolveGuarPremium()
     double guar_premium = Solve
         (mce_solve_ee_prem
         ,0
-        ,static_cast<int>(InvariantValues().EndtAge - InvariantValues().Age)
+        ,BasicValues::GetLength()
         ,mce_solve_for_endt
         ,0.0
-        ,static_cast<int>(InvariantValues().EndtAge - InvariantValues().Age)
+        ,BasicValues::GetLength()
         ,mce_gen_guar
         ,mce_sep_full
         );

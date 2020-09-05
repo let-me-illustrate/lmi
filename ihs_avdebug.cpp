@@ -310,7 +310,7 @@ void AccountValue::DebugPrint()
     SetMonthlyDetail(eYear               ,Year);
     SetMonthlyDetail(eMonth              ,Month);
     SetMonthlyDetail(eBasis              ,mc_str(RunBasis_));
-    SetMonthlyDetail(eAge                ,InvariantValues().Age + Year);
+    SetMonthlyDetail(eAge                ,BasicValues::GetIssueAge() + Year);
 
     // Initial values at beginning of run, reflecting inforce if applicable.
     if(InforceYear == Year && InforceMonth == Month)
