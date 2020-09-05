@@ -420,12 +420,9 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     // composite values are multiplied by the number of lives inforce.
     // Of course, a contract is not normally in force after maturity.
 
-    LMI_ASSERT
-        (   lmi::ssize(InvariantValues().InforceLives)
-        ==  1 + BasicValues::GetLength()
-        );
+    double inforce_lives = yare_input_.NumberOfIdenticalLives;
     partial_mortality_qx.resize(    BasicValues::GetLength());
-    partial_mortality_lx.resize(1 + BasicValues::GetLength());
+    partial_mortality_lx.resize(1 + BasicValues::GetLength(), inforce_lives);
     // TODO ?? 'InvariantValues().InforceLives' may be thought of as
     // counting potential inforce lives: it does not reflect lapses.
     // It should either reflect lapses or be renamed. Meanwhile,
@@ -433,21 +430,13 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     // lapses should be taken into account.
     if(yare_input_.UsePartialMortality)
         {
-        double inforce_lives = yare_input_.NumberOfIdenticalLives;
-        partial_mortality_lx[0] = inforce_lives;
+        // partial_mortality_lx[0] was set above.
         for(int j = 0; j < BasicValues::GetLength(); ++j)
             {
             partial_mortality_qx[j] = GetPartMortQ(j);
             inforce_lives *= 1.0 - partial_mortality_qx[j];
             partial_mortality_lx[1 + j] = inforce_lives;
             }
-        }
-    else
-        {
-        partial_mortality_lx.assign
-            (partial_mortality_lx.size()
-            ,yare_input_.NumberOfIdenticalLives
-            );
         }
     InvariantValues().InforceLives = partial_mortality_lx;
 
