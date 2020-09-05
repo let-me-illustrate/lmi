@@ -1440,14 +1440,16 @@ void AccountValue::SetAnnualInvariants()
 /// limit (if any). If partial mortality is not used, then qx is
 /// uniformly zero, tpx is one, and lx is the radix.
 ///
+/// tpx and lx both have one more element than qx; dropping the first
+/// or last element gives EOY and BOY vectors, respectively.
+///
 /// Whether a contract continues after its normal maturity date does
 /// not matter. It is treated as not expiring on that date because
 /// year-end composite values are multiplied by this lx.
 ///
-/// TODO ?? These actuarial functions may be thought of as
-/// counting potential inforce lives: they do not reflect lapses.
-/// InforceLivesBoy() and InforceLivesEoy() may be used where
-/// lapses should be taken into account.
+/// These actuarial functions reflect survivorship only, not lapses.
+/// Use AccountValue::InforceLives{E,B}oy() where lapses should be
+/// taken into account; cf. Ledger::ZeroInforceAfterLapse().
 
 void AccountValue::set_partial_mortality()
 {
@@ -1472,7 +1474,7 @@ void AccountValue::set_partial_mortality()
 double AccountValue::GetPartMortQ(int a_year) const
 {
     LMI_ASSERT(a_year <= BasicValues::GetLength());
-    if(!yare_input_.UsePartialMortality || ItLapsed)
+    if(!yare_input_.UsePartialMortality)
         {
         return 0.0;
         }

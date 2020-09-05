@@ -177,9 +177,6 @@ void Ledger::SetRunBases(int length)
 /// want to truncate values on that other basis, even if it means
 /// that the vector of inforce lives does not correspond to the
 /// current values.
-///
-/// SOMEDAY !! Reconsider whether the values this function sets to
-/// zero should somehow be set to zero upstream.
 
 void Ledger::ZeroInforceAfterLapse()
 {
