@@ -1433,14 +1433,16 @@ void AccountValue::SetAnnualInvariants()
 
 /// Calculate and store actuarial functions for partial mortality.
 ///
-/// Iff partial mortality is used, save yearly values in a vector
-/// for use elsewhere in this class, and store yearly inforce lives
-/// (assuming no one ever lapses) in the invariant ledger object.
+/// Iff partial mortality is used, save qx, tpx, and lx in vectors
+/// for use elsewhere in this class and for compositing ledgers.
+/// The radix for lx is the number of identical lives that an input
+/// cell represents, and qx is forced to unity at the survivorship
+/// limit (if any). If partial mortality is not used, then qx is
+/// uniformly zero, tpx is one, and lx is the radix.
 ///
-/// A contract may be in force at the end of its maturity year,
-/// and it's necessary to treat it that way because other year-end
-/// composite values are multiplied by the number of lives inforce.
-/// Of course, a contract is not normally in force after maturity.
+/// Whether a contract continues after its normal maturity date does
+/// not matter. It is treated as not expiring on that date because
+/// year-end composite values are multiplied by this lx.
 ///
 /// TODO ?? These actuarial functions may be thought of as
 /// counting potential inforce lives: they do not reflect lapses.
