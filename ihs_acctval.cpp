@@ -1590,32 +1590,20 @@ double AccountValue::ApportionNetMortalityReserve
     return apportioned_reserve * yare_input_.NumberOfIdenticalLives;
 }
 
-//============================================================================
+/// Beginning of year inforce lives, reflecting lapses and survivorship.
+
 double AccountValue::InforceLivesBoy() const
 {
-    if
-        (   ItLapsed
-        ||  BasicValues::GetLength() <= Year
-        )
-        {
-        return 0.0;
-        }
-
-    return partial_mortality_lx.at(Year);
+    bool const b {ItLapsed || BasicValues::GetLength() <= Year};
+    return b ? 0.0 : partial_mortality_lx.at(Year);
 }
 
-//============================================================================
+/// End of year inforce lives, reflecting lapses and survivorship.
+
 double AccountValue::InforceLivesEoy() const
 {
-    if
-        (   ItLapsed
-        ||  BasicValues::GetLength() <= Year
-        )
-        {
-        return 0.0;
-        }
-
-    return partial_mortality_lx.at(1 + Year);
+    bool const b {ItLapsed || BasicValues::GetLength() <= Year};
+    return b ? 0.0 : partial_mortality_lx.at(1 + Year);
 }
 
 //============================================================================
