@@ -106,6 +106,9 @@ AccountValue::AccountValue(Input const& input)
     PerformSupplAmtStrategy();
     InvariantValues().Init(this);
 
+    set_partial_mortality();
+    InvariantValues().InforceLives = partial_mortality_lx;
+
     // Explicitly initialize antediluvian members. It's generally
     // better to do this in the initializer-list, but here they can
     // all be kept together.
@@ -410,9 +413,6 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         ,base_specamt(0)
         );
     double sa = specamt_for_7702(0);
-
-    set_partial_mortality();
-    InvariantValues().InforceLives = partial_mortality_lx;
 
     // It is at best superfluous to do this for every basis.
     // TAXATION !! Don't do that then.
