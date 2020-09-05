@@ -210,6 +210,7 @@ class LMI_SO AccountValue final
 
     double SolveGuarPremium        ();
 
+    void set_partial_mortality     ();
     double GetPartMortQ            (int year) const;
 
     void PerformSpecAmtStrategy();
