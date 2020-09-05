@@ -424,7 +424,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         (   lmi::ssize(InvariantValues().InforceLives)
         ==  1 + BasicValues::GetLength()
         );
-    partial_mortality_q.resize(BasicValues::GetLength());
+    partial_mortality_qx.resize(BasicValues::GetLength());
     // TODO ?? 'InvariantValues().InforceLives' may be thought of as
     // counting potential inforce lives: it does not reflect lapses.
     // It should either reflect lapses or be renamed. Meanwhile,
@@ -436,8 +436,8 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         InvariantValues().InforceLives[0] = inforce_lives;
         for(int j = 0; j < BasicValues::GetLength(); ++j)
             {
-            partial_mortality_q[j] = GetPartMortQ(j);
-            inforce_lives *= 1.0 - partial_mortality_q[j];
+            partial_mortality_qx[j] = GetPartMortQ(j);
+            inforce_lives *= 1.0 - partial_mortality_qx[j];
             InvariantValues().InforceLives[1 + j] = inforce_lives;
             }
         }
@@ -1098,9 +1098,9 @@ void AccountValue::SetClaims()
     TxSetDeathBft();
     TxSetTermAmt();
 
-    YearsGrossClaims       = partial_mortality_q[Year] * DBReflectingCorr;
-    YearsAVRelOnDeath      = partial_mortality_q[Year] * TotalAccountValue();
-    YearsLoanRepaidOnDeath = partial_mortality_q[Year] * (RegLnBal + PrfLnBal);
+    YearsGrossClaims       = partial_mortality_qx[Year] * DBReflectingCorr;
+    YearsAVRelOnDeath      = partial_mortality_qx[Year] * TotalAccountValue();
+    YearsLoanRepaidOnDeath = partial_mortality_qx[Year] * (RegLnBal + PrfLnBal);
     YearsDeathProceeds = material_difference
         (YearsGrossClaims
         ,YearsLoanRepaidOnDeath
