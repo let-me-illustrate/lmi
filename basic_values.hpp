@@ -109,6 +109,11 @@ class LMI_SO BasicValues
     mcenum_state          GetStateOfJurisdiction()     const;
     mcenum_state          GetStateOfDomicile()         const;
     mcenum_state          GetPremiumTaxState()         const;
+
+    auto const& partial_mortality_qx () const {return partial_mortality_qx_ ;}
+    auto const& partial_mortality_tpx() const {return partial_mortality_tpx_;}
+    auto const& partial_mortality_lx () const {return partial_mortality_lx_ ;}
+
     double                InvestmentManagementFee()    const;
 
     yare_input                          yare_input_;
@@ -382,6 +387,9 @@ class LMI_SO BasicValues
     BasicValues(BasicValues const&) = delete;
     BasicValues& operator=(BasicValues const&) = delete;
 
+    void set_partial_mortality();
+    double GetPartMortQ(int year) const;
+
     double mly_ded_discount_factor(int year, mcenum_mode mode) const;
     std::pair<double,double> approx_mly_ded
         (int    year
@@ -424,6 +432,11 @@ class LMI_SO BasicValues
     mcenum_state        StateOfJurisdiction_;
     mcenum_state        StateOfDomicile_;
     mcenum_state        PremiumTaxState_;
+
+    std::vector<double> partial_mortality_qx_;
+    std::vector<double> partial_mortality_tpx_;
+    std::vector<double> partial_mortality_lx_;
+
     mutable double      InitialTargetPremium;
 
     void                Init7702();

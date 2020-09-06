@@ -106,9 +106,6 @@ AccountValue::AccountValue(Input const& input)
     PerformSupplAmtStrategy();
     InvariantValues().Init(this);
 
-    set_partial_mortality();
-    InvariantValues().InforceLives = partial_mortality_lx();
-
     // Explicitly initialize antediluvian members. It's generally
     // better to do this in the initializer-list, but here they can
     // all be kept together.
@@ -1429,68 +1426,6 @@ void AccountValue::SetAnnualInvariants()
     YearsSepAcctLoadRate    = Loads_->separate_account_load (GenBasis_)[Year];
     YearsSalesLoadRefundRate= Loads_->refundable_sales_load_proportion()[Year];
     YearsDacTaxLoadRate     = Loads_->dac_tax_load                    ()[Year];
-}
-
-/// Calculate and store actuarial functions for partial mortality.
-///
-/// Iff partial mortality is used, save qx, tpx, and lx in vectors
-/// for use elsewhere in this class and for compositing ledgers.
-/// The radix for lx is the number of identical lives that an input
-/// cell represents, and qx is forced to unity at the survivorship
-/// limit (if any). If partial mortality is not used, then qx is
-/// uniformly zero, tpx is one, and lx is the radix.
-///
-/// tpx and lx both have one more element than qx; dropping the first
-/// or last element gives EOY and BOY vectors, respectively.
-///
-/// Whether a contract continues after its normal maturity date does
-/// not matter. It is treated as not expiring on that date because
-/// year-end composite values are multiplied by this lx.
-///
-/// These actuarial functions reflect survivorship only, not lapses.
-/// Use AccountValue::InforceLives{E,B}oy() where lapses should be
-/// taken into account; cf. Ledger::ZeroInforceAfterLapse().
-
-void AccountValue::set_partial_mortality()
-{
-    double const inforce_lives = yare_input_.NumberOfIdenticalLives;
-    partial_mortality_qx_ .resize(    BasicValues::GetLength());
-    partial_mortality_tpx_.resize(1 + BasicValues::GetLength(), 1.0);
-    partial_mortality_lx_ .resize(1 + BasicValues::GetLength(), inforce_lives);
-    if(yare_input_.UsePartialMortality)
-        {
-        // The first elements of lx and tpx were set above.
-        for(int j = 0; j < BasicValues::GetLength(); ++j)
-            {
-            partial_mortality_qx_[j] = GetPartMortQ(j);
-            double const px = 1.0 - partial_mortality_qx_[j];
-            partial_mortality_tpx_[1 + j] = px * partial_mortality_tpx_[j];
-            partial_mortality_lx_ [1 + j] = px * partial_mortality_lx_ [j];
-            }
-        }
-}
-
-//============================================================================
-double AccountValue::GetPartMortQ(int a_year) const
-{
-    LMI_ASSERT(a_year <= BasicValues::GetLength());
-    if(!yare_input_.UsePartialMortality)
-        {
-        return 0.0;
-        }
-    if
-        (   MaxSurvivalDur <= a_year
-        ||  a_year == BasicValues::GetLength()
-        )
-        {
-        return 1.0;
-        }
-
-    double z =
-          MortalityRates_->PartialMortalityQ()[a_year]
-        * yare_input_.PartialMortalityMultiplier[a_year]
-        ;
-    return std::max(0.0, std::min(1.0, z));
 }
 
 //============================================================================

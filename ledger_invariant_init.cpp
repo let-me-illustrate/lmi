@@ -74,6 +74,8 @@ void LedgerInvariant::Init(BasicValues const* b)
     // Zero-initialize almost everything.
     Init();
 
+    InforceLives = b->partial_mortality_lx();
+
     irr_precision_ = b->round_irr().decimals();
 
     // BOY vectors.
