@@ -107,7 +107,7 @@ AccountValue::AccountValue(Input const& input)
     InvariantValues().Init(this);
 
     set_partial_mortality();
-    InvariantValues().InforceLives = partial_mortality_lx;
+    InvariantValues().InforceLives = partial_mortality_lx();
 
     // Explicitly initialize antediluvian members. It's generally
     // better to do this in the initializer-list, but here they can
@@ -1063,9 +1063,9 @@ void AccountValue::SetClaims()
     TxSetDeathBft();
     TxSetTermAmt();
 
-    YearsGrossClaims       = partial_mortality_qx[Year] * DBReflectingCorr;
-    YearsAVRelOnDeath      = partial_mortality_qx[Year] * TotalAccountValue();
-    YearsLoanRepaidOnDeath = partial_mortality_qx[Year] * (RegLnBal + PrfLnBal);
+    YearsGrossClaims       = partial_mortality_qx()[Year] * DBReflectingCorr;
+    YearsAVRelOnDeath      = partial_mortality_qx()[Year] * TotalAccountValue();
+    YearsLoanRepaidOnDeath = partial_mortality_qx()[Year] * (RegLnBal + PrfLnBal);
     YearsDeathProceeds = material_difference
         (YearsGrossClaims
         ,YearsLoanRepaidOnDeath
@@ -1454,18 +1454,18 @@ void AccountValue::SetAnnualInvariants()
 void AccountValue::set_partial_mortality()
 {
     double const inforce_lives = yare_input_.NumberOfIdenticalLives;
-    partial_mortality_qx .resize(    BasicValues::GetLength());
-    partial_mortality_tpx.resize(1 + BasicValues::GetLength(), 1.0);
-    partial_mortality_lx .resize(1 + BasicValues::GetLength(), inforce_lives);
+    partial_mortality_qx_ .resize(    BasicValues::GetLength());
+    partial_mortality_tpx_.resize(1 + BasicValues::GetLength(), 1.0);
+    partial_mortality_lx_ .resize(1 + BasicValues::GetLength(), inforce_lives);
     if(yare_input_.UsePartialMortality)
         {
         // The first elements of lx and tpx were set above.
         for(int j = 0; j < BasicValues::GetLength(); ++j)
             {
-            partial_mortality_qx[j] = GetPartMortQ(j);
-            double const px = 1.0 - partial_mortality_qx[j];
-            partial_mortality_tpx[1 + j] = px * partial_mortality_tpx[j];
-            partial_mortality_lx [1 + j] = px * partial_mortality_lx [j];
+            partial_mortality_qx_[j] = GetPartMortQ(j);
+            double const px = 1.0 - partial_mortality_qx_[j];
+            partial_mortality_tpx_[1 + j] = px * partial_mortality_tpx_[j];
+            partial_mortality_lx_ [1 + j] = px * partial_mortality_lx_ [j];
             }
         }
 }
@@ -1501,7 +1501,7 @@ double AccountValue::GetSepAcctAssetsInforce() const
         return 0.0;
         }
 
-    return SepAcctValueAfterDeduction * partial_mortality_lx[Year];
+    return SepAcctValueAfterDeduction * partial_mortality_lx()[Year];
 }
 
 //============================================================================
@@ -1537,7 +1537,7 @@ double AccountValue::GetCurtateNetClaimsInforce() const
         }
 
     LMI_ASSERT(11 == Month);
-    return YearsNetClaims * partial_mortality_lx[Year];
+    return YearsNetClaims * partial_mortality_lx()[Year];
 }
 
 //============================================================================
@@ -1606,7 +1606,7 @@ double AccountValue::ApportionNetMortalityReserve
 double AccountValue::InforceLivesBoy() const
 {
     bool const b {ItLapsed || BasicValues::GetLength() <= Year};
-    return b ? 0.0 : partial_mortality_lx.at(Year);
+    return b ? 0.0 : partial_mortality_lx().at(Year);
 }
 
 /// End of year inforce lives, reflecting lapses and survivorship.
@@ -1614,7 +1614,7 @@ double AccountValue::InforceLivesBoy() const
 double AccountValue::InforceLivesEoy() const
 {
     bool const b {ItLapsed || BasicValues::GetLength() <= Year};
-    return b ? 0.0 : partial_mortality_lx.at(1 + Year);
+    return b ? 0.0 : partial_mortality_lx().at(1 + Year);
 }
 
 //============================================================================

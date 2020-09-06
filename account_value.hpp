@@ -91,6 +91,10 @@ class LMI_SO AccountValue final
 
     std::shared_ptr<Ledger const> ledger_from_av() const;
 
+    auto const& partial_mortality_qx () const {return partial_mortality_qx_ ;}
+    auto const& partial_mortality_tpx() const {return partial_mortality_tpx_;}
+    auto const& partial_mortality_lx () const {return partial_mortality_lx_ ;}
+
   private:
     AccountValue(AccountValue const&) = delete;
     AccountValue& operator=(AccountValue const&) = delete;
@@ -584,9 +588,9 @@ class LMI_SO AccountValue final
     double  YearsTotalSpecAmtLoad;
     double  YearsTotalSepAcctLoad;
 
-    std::vector<double> partial_mortality_qx;
-    std::vector<double> partial_mortality_tpx;
-    std::vector<double> partial_mortality_lx;
+    std::vector<double> partial_mortality_qx_;
+    std::vector<double> partial_mortality_tpx_;
+    std::vector<double> partial_mortality_lx_;
 
     // For experience rating.
     double  CoiRetentionRate;
