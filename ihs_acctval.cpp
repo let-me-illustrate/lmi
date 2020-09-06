@@ -1459,7 +1459,7 @@ void AccountValue::set_partial_mortality()
     partial_mortality_lx .resize(1 + BasicValues::GetLength(), inforce_lives);
     if(yare_input_.UsePartialMortality)
         {
-        // partial_mortality_lx[0] was set above.
+        // The first elements of lx and tpx were set above.
         for(int j = 0; j < BasicValues::GetLength(); ++j)
             {
             partial_mortality_qx[j] = GetPartMortQ(j);
