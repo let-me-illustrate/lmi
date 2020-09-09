@@ -56,7 +56,7 @@ death_benefits::death_benefits
 }
 
 //============================================================================
-void death_benefits::set_specamt(double z, int from_year, int to_year)
+void death_benefits::set_specamt(currency z, int from_year, int to_year)
 {
 #if 0
     // Something like this would seem preferable, but it gives
@@ -75,7 +75,7 @@ void death_benefits::set_specamt(double z, int from_year, int to_year)
 }
 
 //============================================================================
-void death_benefits::set_supplamt(double z, int from_year, int to_year)
+void death_benefits::set_supplamt(currency z, int from_year, int to_year)
 {
 #if 0
     // Something like this would seem preferable, but it gives

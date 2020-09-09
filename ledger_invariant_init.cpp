@@ -27,6 +27,7 @@
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
 #include "contains.hpp"
+#include "currency.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
@@ -103,7 +104,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         }
     else if(b->database().query<bool>(DB_TermIsNotRider))
         {
-        TermSpecAmt            = b->DeathBfts_->supplamt();
+        TermSpecAmt            = doubleize(b->DeathBfts_->supplamt());
         if(!each_equal(TermSpecAmt, 0.0))
             {
             HasSupplSpecAmt    = true;
@@ -113,7 +114,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         {
         TermSpecAmt            .assign(Length, 0.0);
         }
-    SpecAmt                    = b->DeathBfts_->specamt();
+    SpecAmt                    = doubleize(b->DeathBfts_->specamt());
 
     // Forborne vectors.
 
@@ -722,7 +723,7 @@ void LedgerInvariant::ReInit(BasicValues const* b)
         }
     else if(b->database().query<bool>(DB_TermIsNotRider))
         {
-        TermSpecAmt            = b->DeathBfts_->supplamt();
+        TermSpecAmt            = doubleize(b->DeathBfts_->supplamt());
         if(!each_equal(TermSpecAmt, 0.0))
             {
             HasSupplSpecAmt    = true;
@@ -732,7 +733,7 @@ void LedgerInvariant::ReInit(BasicValues const* b)
         {
         TermSpecAmt            .assign(Length, 0.0);
         }
-    SpecAmt                    = b->DeathBfts_->specamt();
+    SpecAmt                    = doubleize(b->DeathBfts_->specamt());
 
     InitBaseSpecAmt            = b->DeathBfts_->specamt()[0];
     InitTermSpecAmt            = TermSpecAmt[0];

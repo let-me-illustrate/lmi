@@ -418,7 +418,7 @@ census_run_result run_census_in_parallel::operator()
                     ;
             for(int month = inforce_month; month < 12; ++month)
                 {
-                double assets = 0.0;
+                currency assets = currency(0);
 
                 // Get total case assets prior to interest crediting because
                 // those assets may determine the M&E charge.

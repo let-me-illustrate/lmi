@@ -28,10 +28,10 @@
 #include "safely_dereference_as.hpp"
 #include "zero.hpp"
 
-double gpt_specamt::CalculateGLPSpecAmt
+currency gpt_specamt::CalculateGLPSpecAmt
     (BasicValues const& a_Values
     ,int                a_Duration
-    ,double             a_Premium
+    ,currency           a_Premium
     ,mcenum_dbopt_7702  a_DBOpt
     )
 {
@@ -46,10 +46,10 @@ double gpt_specamt::CalculateGLPSpecAmt
         );
 }
 
-double gpt_specamt::CalculateGSPSpecAmt
+currency gpt_specamt::CalculateGSPSpecAmt
     (BasicValues const& a_Values
     ,int                a_Duration
-    ,double             a_Premium
+    ,currency           a_Premium
     )
 {
     Irc7702 const& z(safely_dereference_as<Irc7702>(a_Values.Irc7702_.get()));
@@ -73,7 +73,7 @@ class FindSpecAmt
     double      const  Premium;
     double      const  NetPmtFactorTgt;
     double      const  NetPmtFactorExc;
-    double             SpecAmt;
+    currency           SpecAmt;
 
   public:
     FindSpecAmt
@@ -92,7 +92,7 @@ class FindSpecAmt
         ,Premium         {a_Premium}
         ,NetPmtFactorTgt {a_NetPmtFactorTgt}
         ,NetPmtFactorExc {a_NetPmtFactorExc}
-        ,SpecAmt         {0.0}
+        ,SpecAmt         {currency(0.0)}
         {
         }
     double operator()(double a_Trial)
@@ -130,11 +130,11 @@ class FindSpecAmt
 /// because it is typically used to set an input parameter, and
 /// specamt is such a parameter whereas DB is not.
 
-double gpt_specamt::CalculateSpecAmt
+currency gpt_specamt::CalculateSpecAmt
     (BasicValues const& a_Values
     ,EIOBasis           a_EIOBasis
     ,int                a_Duration
-    ,double             a_Premium
+    ,currency           a_Premium
     ,double             a_NetPmtFactorTgt
     ,double             a_NetPmtFactorExc
     )
@@ -166,5 +166,5 @@ double gpt_specamt::CalculateSpecAmt
         ,true
         );
 
-    return fsa.Get();
+    return currency(fsa.Get());
 }

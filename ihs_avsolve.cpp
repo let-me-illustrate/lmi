@@ -49,7 +49,7 @@ namespace
 {
     // TODO ?? Shouldn't this be a typedef for a SolveHelper member?
     // As it stands, this would seem not to be reentrant.
-    void (AccountValue::*solve_set_fn)(double);
+    void (AccountValue::*solve_set_fn)(currency);
 } // Unnamed namespace.
 
 class SolveHelper
@@ -60,9 +60,10 @@ class SolveHelper
         :av {a_av}
         {
         }
+//  double operator()(currency a_CandidateValue)
     double operator()(double a_CandidateValue)
         {
-        return av.SolveTest(a_CandidateValue);
+        return av.SolveTest(currency(a_CandidateValue));
         }
 };
 
@@ -155,7 +156,7 @@ class SolveHelper
 ///   "Section 7B(2) does not preclude the illustrating of premiums
 ///   that exceed the guideline premiums in Section 7702 of the IRC."
 
-double AccountValue::SolveTest(double a_CandidateValue)
+currency AccountValue::SolveTest(currency a_CandidateValue)
 {
     (this->*solve_set_fn)(a_CandidateValue);
 
@@ -173,7 +174,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
         ,0
         );
     LMI_ASSERT(0 <= no_lapse_dur);
-    double most_negative_csv = 0.0;
+    currency most_negative_csv(0);
     if(no_lapse_dur < SolveTargetDuration_)
         {
         most_negative_csv = *std::min_element
@@ -184,27 +185,27 @@ double AccountValue::SolveTest(double a_CandidateValue)
 
     // AccountValue::Solve() asserts that SolveTargetDuration_ lies
     // within appropriate bounds.
-    double greatest_loan_ullage = *std::max_element
+    currency greatest_loan_ullage = *std::max_element
         (loan_ullage_.begin()
         ,loan_ullage_.begin() + SolveTargetDuration_
         );
-    double greatest_withdrawal_ullage = *std::max_element
+    currency greatest_withdrawal_ullage = *std::max_element
         (withdrawal_ullage_.begin()
         ,withdrawal_ullage_.begin() + SolveTargetDuration_
         );
-    double greatest_ullage = std::max
+    currency greatest_ullage = std::max
         (greatest_loan_ullage
         ,greatest_withdrawal_ullage
         );
-    double worst_negative = std::min
+    currency worst_negative = std::min
         (most_negative_csv
-        ,-greatest_ullage
+        ,currency(-greatest_ullage) // really want a unary-negation operator
         );
 
     // SolveTargetDuration_ is in origin one. That's natural for loop
     // counters and iterators--it's one past the end--but indexing
     // must decrement it.
-    double value = VariantValues().CSVNet[SolveTargetDuration_ - 1];
+    currency value = currency(VariantValues().CSVNet[SolveTargetDuration_ - 1]);
     if(mce_solve_for_target_naar == SolveTarget_)
         {
         value =
@@ -231,14 +232,15 @@ double AccountValue::SolveTest(double a_CandidateValue)
 
     if(mce_solve_for_non_mec == SolveTarget_)
         {
-        return 0.5 - InvariantValues().IsMec;
+//      return 0.5 - InvariantValues().IsMec;
+        return currency(InvariantValues().IsMec ? -1.0 : 1.0); // Backport first.
         }
 
     return value - SolveTargetCsv_;
 }
 
 //============================================================================
-void AccountValue::SolveSetSpecAmt(double a_CandidateValue)
+void AccountValue::SolveSetSpecAmt(currency a_CandidateValue)
 {
 // TODO ?? Does this change the surrchg when specamt changes?
     DeathBfts_->set_specamt
@@ -249,48 +251,48 @@ void AccountValue::SolveSetSpecAmt(double a_CandidateValue)
 }
 
 //============================================================================
-void AccountValue::SolveSetEePrem(double a_CandidateValue)
+void AccountValue::SolveSetEePrem(currency a_CandidateValue)
 {
     Outlay_->set_ee_modal_premiums(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
 //============================================================================
-void AccountValue::SolveSetErPrem(double a_CandidateValue)
+void AccountValue::SolveSetErPrem(currency a_CandidateValue)
 {
     Outlay_->set_er_modal_premiums(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
 //============================================================================
-void AccountValue::SolveSetLoan(double a_CandidateValue)
+void AccountValue::SolveSetLoan(currency a_CandidateValue)
 {
     Outlay_->set_new_cash_loans(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
 //============================================================================
-void AccountValue::SolveSetWD(double a_CandidateValue)
+void AccountValue::SolveSetWD(currency a_CandidateValue)
 {
     Outlay_->set_withdrawals(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
 //============================================================================
-double AccountValue::SolveGuarPremium()
+currency AccountValue::SolveGuarPremium()
 {
     // Store original er premiums for later restoration.
-    std::vector<double> stored = Outlay_->er_modal_premiums();
+    std::vector<currency> stored = Outlay_->er_modal_premiums();
     // Zero out er premiums and solve for ee premiums only.
-    Outlay_->set_er_modal_premiums(0.0, 0, BasicValues::GetLength());
+    Outlay_->set_er_modal_premiums(currency(0), 0, BasicValues::GetLength());
 
     bool temp_solving     = Solving;
     Solving               = true;
     SolvingForGuarPremium = true;
 
     // Run the solve using guaranteed assumptions.
-    double guar_premium = Solve
+    currency guar_premium = Solve
         (mce_solve_ee_prem
         ,0
         ,BasicValues::GetLength()
         ,mce_solve_for_endt
-        ,0.0
+        ,currency(0)
         ,BasicValues::GetLength()
         ,mce_gen_guar
         ,mce_sep_full
@@ -305,12 +307,12 @@ double AccountValue::SolveGuarPremium()
 }
 
 //============================================================================
-double AccountValue::Solve
+currency AccountValue::Solve
     (mcenum_solve_type   a_SolveType
     ,int                 a_SolveBeginYear
     ,int                 a_SolveEndYear
     ,mcenum_solve_target a_SolveTarget
-    ,double              a_SolveTargetCsv
+    ,currency            a_SolveTargetCsv
     ,int                 a_SolveTargetYear
     ,mcenum_gen_basis    a_SolveGenBasis
     ,mcenum_sep_basis    a_SolveSepBasis
@@ -442,6 +444,6 @@ double AccountValue::Solve
     // are stored now, and values are regenerated downstream.
 
     Solving = false;
-    (this->*solve_set_fn)(solution.first);
-    return solution.first;
+    (this->*solve_set_fn)(currency(solution.first));
+    return currency(solution.first);
 }

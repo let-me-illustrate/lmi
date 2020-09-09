@@ -126,9 +126,9 @@ AccountValue::AccountValue(Input const& input)
 
 /// Specified amount.
 
-double AccountValue::base_specamt(int year) const
+currency AccountValue::base_specamt(int year) const
 {
-    return InvariantValues().SpecAmt[year];
+    return currency(InvariantValues().SpecAmt[year]);
 }
 
 //============================================================================
@@ -139,7 +139,7 @@ std::shared_ptr<Ledger const> AccountValue::ledger_from_av() const
 }
 
 //============================================================================
-double AccountValue::RunAV()
+currency AccountValue::RunAV()
 {
     InvariantValues().Init(this);
     OverridingPmts = stored_pmts;
@@ -148,9 +148,9 @@ double AccountValue::RunAV()
 }
 
 //============================================================================
-double AccountValue::RunOneBasis(mcenum_run_basis TheBasis)
+currency AccountValue::RunOneBasis(mcenum_run_basis TheBasis)
 {
-    double z;
+    currency z;
     if(Solving)
         {
         // IHS !! Isn't this unreachable?
@@ -172,7 +172,7 @@ double AccountValue::RunOneBasis(mcenum_run_basis TheBasis)
 //   if running all bases
 //     run all bases
 //
-double AccountValue::RunAllApplicableBases()
+currency AccountValue::RunAllApplicableBases()
 {
     // set pmts, specamt, surrchg
 
@@ -184,7 +184,7 @@ double AccountValue::RunAllApplicableBases()
         ,mce_sep_full
         );
 
-    double z = 0.0;
+    currency z = currency(0);
     if(Solving)
         {
         z = Solve();
@@ -210,7 +210,7 @@ double AccountValue::RunAllApplicableBases()
 }
 
 //============================================================================
-double AccountValue::RunOneCell(mcenum_run_basis TheBasis)
+currency AccountValue::RunOneCell(mcenum_run_basis TheBasis)
 {
     if(Solving)
         {
@@ -331,8 +331,8 @@ void AccountValue::DoYear
 
     YearsCorridorFactor = BasicValues::GetCorridorFactor()[Year];
 
-    GrossPmts  .assign(12, 0.0);
-    NetPmts    .assign(12, 0.0);
+    GrossPmts  .assign(12, currency(0));
+    NetPmts    .assign(12, currency(0));
 
     // IHS !! Strategy here?
 
@@ -441,7 +441,7 @@ inline int AccountValue::MonthsToNextModalPmtDate() const
 // Set specamt according to selected strategy, in every year.
 void AccountValue::PerformSpecAmtStrategy()
 {
-    double SA = 0.0;
+    currency SA = currency(0);
     switch(yare_input_.SpecifiedAmountStrategy[0])
         {
         case mce_sa_input_scalar:
@@ -522,7 +522,7 @@ void AccountValue::TxOptionChange()
         }
 
     // Nothing to do unless AV is positive.
-    double AV = AVUnloaned + AVRegLn + AVPrfLn;
+    currency AV = AVUnloaned + AVRegLn + AVPrfLn;
     if(AV <= 0.0)
         {
         return;
@@ -595,7 +595,7 @@ void AccountValue::TxSpecAmtChange()
 
 //============================================================================
 // Set payment according to selected strategy, in each non-solve year.
-void AccountValue::PerformPmtStrategy(double* a_Pmt)
+void AccountValue::PerformPmtStrategy(currency* a_Pmt)
 {
     // Don't override premium during solve period.
     if
@@ -694,7 +694,7 @@ void AccountValue::TxPmt()
     GrossPmts[Month] = pmt;
     if(0 == Year && 0 == Month)
         {
-        double TotalDumpin =
+        currency TotalDumpin =
               Outlay_->dumpin()
             + Outlay_->external_1035_amount()
             + Outlay_->internal_1035_amount()
@@ -750,7 +750,8 @@ void AccountValue::TxSetBOMAV()
 void AccountValue::TxSetDeathBft()
 {
     // Total account value is unloaned plus loaned.
-    double AV = AVUnloaned + AVRegLn + AVPrfLn;
+    currency AV = AVUnloaned + AVRegLn + AVPrfLn;
+    currency corr = currency(round_death_benefit()(YearsCorridorFactor * AV));
 
     // Set death benefit reflecting corridor and death benefit option.
     switch(YearsDBOpt)
@@ -758,15 +759,15 @@ void AccountValue::TxSetDeathBft()
         case mce_option1:
             {
             // Option 1: specamt, or corridor times AV if greater.
-            deathbft = std::max(ActualSpecAmt, YearsCorridorFactor * AV);
+            deathbft = std::max(ActualSpecAmt, corr);
             }
             break;
         case mce_option2:
             // Option 2: specamt plus AV, or corridor times AV if greater.
             // Negative AV doesn't decrease death benefit.
             deathbft = std::max
-                (ActualSpecAmt + std::max(0.0, AV)
-                ,YearsCorridorFactor * AV
+                (ActualSpecAmt + std::max(currency(0), AV)
+                ,corr
                 );
             break;
         case mce_rop: // fall through
@@ -810,7 +811,7 @@ void AccountValue::TxSetRiderDed()
     AdbCharge = 0.0;
     if(hasadb)
         {
-        AdbCharge = YearsAdbRate * std::min(500000.0, ActualSpecAmt);
+        AdbCharge = currency(YearsAdbRate * std::min<double>(500000.0, ActualSpecAmt));
         }
 }
 
@@ -820,7 +821,7 @@ void AccountValue::TxDoMlyDed()
 {
     AVUnloaned -=             CoiCharge + AdbCharge + WpCharge;
     MlyDed = YearsMonthlyPolicyFee + CoiCharge + AdbCharge + WpCharge;
-    mlydedtonextmodalpmtdate = MlyDed * MonthsToNextModalPmtDate();
+    mlydedtonextmodalpmtdate = currency(doubleize(MlyDed) * MonthsToNextModalPmtDate());
 }
 
 /// Credit interest on account value.
@@ -832,7 +833,7 @@ void AccountValue::TxCreditInt()
     if(0.0 < AVUnloaned)
         {
         // IHS !! Each interest increment is rounded separately in lmi.
-        double z = round_interest_credit()(AVUnloaned * YearsGenAcctIntRate);
+        currency z = currency(round_interest_credit()(AVUnloaned * YearsGenAcctIntRate));
         AVUnloaned += z;
         }
     // Loaned account value cannot be negative.
@@ -857,8 +858,8 @@ void AccountValue::TxLoanInt()
     AVRegLn += RegLnIntCred;
     AVPrfLn += PrfLnIntCred;
 
-    double RegLnIntAccrued = round_interest_credit()(RegLnBal * YearsRegLnIntDueRate);
-    double PrfLnIntAccrued = round_interest_credit()(PrfLnBal * YearsPrfLnIntDueRate);
+    currency RegLnIntAccrued = currency(round_interest_credit()(RegLnBal * YearsRegLnIntDueRate));
+    currency PrfLnIntAccrued = currency(round_interest_credit()(PrfLnBal * YearsPrfLnIntDueRate));
 
     RegLnBal += RegLnIntAccrued;
     PrfLnBal += PrfLnIntAccrued;
@@ -899,7 +900,7 @@ void AccountValue::TxTakeWD()
     //   max loan: cannot become overloaned until end of policy year.
     // However, lmi provides a variety of implementations instead of
     // only one.
-    double max_wd =
+    currency max_wd =
           AVUnloaned
         + (AVRegLn  + AVPrfLn)
         - (RegLnBal + PrfLnBal)
@@ -949,7 +950,7 @@ void AccountValue::TxTakeWD()
         }
 
     // Deduct withdrawal fee.
-    wd -= std::min(WDFee, wd * WDFeeRate);
+    wd -= std::min(WDFee, currency(wd * WDFeeRate));
     // IHS !! This treats input WD as gross; it probably should be net. But compare lmi.
 
     InvariantValues().NetWD[Year] = wd;
@@ -987,7 +988,7 @@ void AccountValue::TxTakeLoan()
     double IntAdj = std::pow((1.0 + YearsRegLnIntDueRate), 12 - Month);
     IntAdj = (IntAdj - 1.0) / IntAdj;
     MaxLoan *= 1.0 - IntAdj;
-    MaxLoan = std::max(0.0, MaxLoan);
+    MaxLoan = std::max(currency(0), MaxLoan);
     MaxLoan = round_loan()(MaxLoan);
 
     // IHS !! Preferred loan calculations would go here: implemented in lmi.
@@ -1064,9 +1065,9 @@ double AccountValue::GetProjectedCoiChargeInforce() const
     {return 0.0;}
 double AccountValue::GetSepAcctAssetsInforce() const
     {return 0.0;}
-double AccountValue::IncrementBOM(int, int, double)
-    {return 0.0;}
-void   AccountValue::IncrementEOM(int, int, double, double)
+currency AccountValue::IncrementBOM(int, int, double)
+    {return currency(0);}
+void   AccountValue::IncrementEOM(int, int, currency, currency)
     {return;}
 void   AccountValue::IncrementEOY(int)
     {return;}

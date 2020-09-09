@@ -61,7 +61,7 @@ namespace
 //============================================================================
 // This function isn't static and isn't in an unnamed namespace because
 // that would make it difficult to grant it friendship.
-double SolveTest()
+currency SolveTest()
 {
     // Separate-account basis hardcoded because separate account not supported.
     mcenum_run_basis temp;
@@ -79,12 +79,12 @@ double SolveTest()
     //   CSV at target duration
     //   lowest negative CSV through target duration
     //   amount of loan in excess of maximum loan through target duration
-    double Negative = 0.0;
+    currency Negative(0);
 
     // IHS !! Start counting only at end of no-lapse period--lmi does that already.
     for(int j = 0; j < ThatSolveTgtYear; ++j)
         {
-        Negative = std::min
+        Negative = std::min<double>
             (Negative
             ,ConstThat->VariantValues().CSVNet[j]
 // Ideally, it'd be this:
@@ -93,12 +93,12 @@ double SolveTest()
             );
         }
 
-    double z = ConstThat->VariantValues().CSVNet[ThatSolveTgtYear - 1];
+    currency z = currency(ConstThat->VariantValues().CSVNet[ThatSolveTgtYear - 1]);
     if(Negative < 0.0)
         z = std::min(z, Negative);
     // IHS !! If SolveTgtYr within no-lapse period...see lmi.
 
-    double y = 0.0;
+    currency y(0);
     switch(ThatSolveTarget)
         {
         case mce_solve_for_endt:
@@ -151,38 +151,42 @@ double SolveTest()
 
 //============================================================================
 inline static double SolveSpecAmt(double CandidateValue)
+//inline static double SolveSpecAmt(currency CandidateValue)
 {
 // IHS !! Change surrchg when SA changes?
-    That->SolveSetSpecAmt(CandidateValue, ThatSolveBegYear, ThatSolveEndYear);
+    That->SolveSetSpecAmt(currency(CandidateValue), ThatSolveBegYear, ThatSolveEndYear);
     return only_set_values ? 0.0 : SolveTest();
 }
 
 //============================================================================
 inline static double SolvePrem(double CandidateValue)
+//inline static double SolvePrem(currency CandidateValue)
 {
-    That->SolveSetPmts(CandidateValue, ThatSolveBegYear, ThatSolveEndYear);
+    That->SolveSetPmts(currency(CandidateValue), ThatSolveBegYear, ThatSolveEndYear);
     return only_set_values ? 0.0 : SolveTest();
 }
 
 //============================================================================
 inline static double SolveLoan(double CandidateValue)
+//inline static double SolveLoan(currency CandidateValue)
 {
-    That->SolveSetLoans(CandidateValue, ThatSolveBegYear, ThatSolveEndYear);
+    That->SolveSetLoans(currency(CandidateValue), ThatSolveBegYear, ThatSolveEndYear);
     return only_set_values ? 0.0 : SolveTest();
 }
 
 //============================================================================
 inline static double SolveWD(double CandidateValue)
+//inline static double SolveWD(currency CandidateValue)
 {
-    That->SolveSetWDs(CandidateValue, ThatSolveBegYear, ThatSolveEndYear);
+    That->SolveSetWDs(currency(CandidateValue), ThatSolveBegYear, ThatSolveEndYear);
     return only_set_values ? 0.0 : SolveTest();
 }
 
 //============================================================================
 void AccountValue::SolveSetPmts
-    (double a_Pmt
-    ,int    ThatSolveBegYear
-    ,int    ThatSolveEndYear
+    (currency a_Pmt
+    ,int      ThatSolveBegYear
+    ,int      ThatSolveEndYear
     )
 {
     Outlay_->set_ee_modal_premiums(a_Pmt, ThatSolveBegYear, ThatSolveEndYear);
@@ -190,9 +194,9 @@ void AccountValue::SolveSetPmts
 
 //============================================================================
 void AccountValue::SolveSetSpecAmt
-    (double a_Bft
-    ,int    ThatSolveBegYear
-    ,int    ThatSolveEndYear
+    (currency a_Bft
+    ,int      ThatSolveBegYear
+    ,int      ThatSolveEndYear
     )
 {
     DeathBfts_->set_specamt(a_Bft, ThatSolveBegYear, ThatSolveEndYear);
@@ -200,9 +204,9 @@ void AccountValue::SolveSetSpecAmt
 
 //============================================================================
 void AccountValue::SolveSetLoans
-    (double a_Loan
-    ,int    ThatSolveBegYear
-    ,int    ThatSolveEndYear
+    (currency a_Loan
+    ,int      ThatSolveBegYear
+    ,int      ThatSolveEndYear
     )
 {
     Outlay_->set_new_cash_loans(a_Loan, ThatSolveBegYear, ThatSolveEndYear);
@@ -210,9 +214,9 @@ void AccountValue::SolveSetLoans
 
 //============================================================================
 void AccountValue::SolveSetWDs
-    (double a_WD
-    ,int    ThatSolveBegYear
-    ,int    ThatSolveEndYear
+    (currency a_WD
+    ,int      ThatSolveBegYear
+    ,int      ThatSolveEndYear
     )
 {
     Outlay_->set_withdrawals(a_WD, ThatSolveBegYear, ThatSolveEndYear);
@@ -220,16 +224,16 @@ void AccountValue::SolveSetWDs
 
 //============================================================================
 void AccountValue::SolveSetLoanThenWD
-    (double // Amt
-    ,int    // ThatSolveBegYear
-    ,int    // ThatSolveEndYear
+    (currency // Amt
+    ,int      // ThatSolveBegYear
+    ,int      // ThatSolveEndYear
     )
 {
     // IHS !! Implemented in lmi.
 }
 
 //============================================================================
-double AccountValue::Solve()
+currency AccountValue::Solve()
 {
     That = this;
     ThatSolveTargetValue = yare_input_.SolveTargetValue;
@@ -254,6 +258,7 @@ double AccountValue::Solve()
         }
 
     double(*SolveFn)(double)     = nullptr;
+//  double(*SolveFn)(currency)   = nullptr;
     double           LowerBound  = 0.0;
     double           UpperBound  = 0.0;
     root_bias        Bias        = bias_higher;
@@ -346,7 +351,7 @@ double AccountValue::Solve()
     // generate or analyze account values. This global variable is a
     // kludge, but so is 'That'; a function object is wanted instead.
     only_set_values = !Solving;
-    double actual_solution = Solution.first;
+    currency actual_solution = currency(Solution.first);
 
     SolveFn(actual_solution);
     return actual_solution;

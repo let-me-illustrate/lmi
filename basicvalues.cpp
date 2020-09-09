@@ -119,9 +119,14 @@ void BasicValues::Init()
     PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, database()));
     Loads_         .reset(new Loads(database(), IsSubjectToIllustrationReg()));
 
-    database().query_into(DB_MinSpecAmt, MinSpecAmt);
-    database().query_into(DB_MinWd     , MinWD     );
-    database().query_into(DB_WdFee     , WDFee     );
+//  database().query_into(DB_MinSpecAmt, MinSpecAmt);
+//  database().query_into(DB_MinWd     , MinWD     );
+//  database().query_into(DB_WdFee     , WDFee     );
+//  database().query_into(DB_WdFeeRate , WDFeeRate );
+    MinSpecAmt = database().query<int>(DB_MinSpecAmt);
+    MinWD      = database().query<int>(DB_MinWd     );
+    WDFee      = database().query<int>(DB_WdFee     );
+//  WDFeeRate  = database().query<int>(DB_WdFeeRate ); // no, this line looks wrong
     database().query_into(DB_WdFeeRate , WDFeeRate );
 
 // The antediluvian branch leaves FundData_, StratifiedCharges_, and
@@ -137,20 +142,20 @@ double BasicValues::InvestmentManagementFee() const
 
 //============================================================================
 // IHS !! Simply calls the target-premium routine for now--see lmi.
-double BasicValues::GetModalMinPrem
+currency BasicValues::GetModalMinPrem
     (int         a_year
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ) const
 {
     return GetModalTgtPrem(a_year, a_mode, a_specamt);
 }
 
 //============================================================================
-double BasicValues::GetModalTgtPrem
+currency BasicValues::GetModalTgtPrem
     (int         a_year
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ) const
 {
     // IHS !! Simplistic. Ignores table ratings, flat extras, and
@@ -212,23 +217,23 @@ double BasicValues::GetModalTgtPrem
 
     // IHS !! Parameterized in lmi.
     static round_to<double> const round_it(2, r_upward);
-    return round_it(z);
+    return currency(round_it(z));
 }
 
 //============================================================================
 // Simply calls the target-specamt routine for now.
-double BasicValues::GetModalMaxSpecAmt
+currency BasicValues::GetModalMaxSpecAmt
     (mcenum_mode a_mode
-    ,double      a_pmt
+    ,currency    a_pmt
     ) const
 {
     return GetModalTgtSpecAmt(a_mode, a_pmt);
 }
 
 //============================================================================
-double BasicValues::GetModalTgtSpecAmt
+currency BasicValues::GetModalTgtSpecAmt
     (mcenum_mode a_mode
-    ,double      a_pmt
+    ,currency    a_pmt
     ) const
 {
     // IHS !! Factor out the (defectively simplistic) code this
@@ -286,7 +291,7 @@ double BasicValues::GetModalTgtSpecAmt
 
     // IHS !! Parameterized in lmi.
     static round_to<double> const round_it(0, r_downward);
-    return round_it(z);
+    return currency(round_it(z));
 }
 
 //============================================================================
