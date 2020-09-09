@@ -178,7 +178,7 @@ void AccountValue::PerformSupplAmtStrategy()
         currency explicit_value = DeathBfts_->supplamt()[j];
         mcenum_sa_strategy strategy = yare_input_.SupplementalAmountStrategy[j];
         currency z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
-        DeathBfts_->set_supplamt(currency(round_specamt()(std::max(m, z))), j, 1 + j);
+        DeathBfts_->set_supplamt(currency(round_specamt()(std::max(m, z))), j, 1 + j); // rounding
         }
 }
 

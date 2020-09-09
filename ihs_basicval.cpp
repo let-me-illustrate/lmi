@@ -972,7 +972,8 @@ currency BasicValues::GetModalPremMaxNonMec
 {
     // TAXATION !! No table available if 7PP calculated from first principles.
     double temp = MortalityRates_->SevenPayRates()[0];
-    return currency(round_max_premium()(ldbl_eps_plus_one_times(temp * a_specamt / a_mode)));
+    double z = round_max_premium()(ldbl_eps_plus_one_times(temp * a_specamt / a_mode));
+    return currency(z);
 }
 
 /// Calculate premium using a minimum-premium ratio.
@@ -988,15 +989,14 @@ currency BasicValues::GetModalPremMinFromTable
     ,currency    a_specamt
     ) const
 {
-    return currency(
-            round_max_premium()
-            (ldbl_eps_plus_one_times
-                (
-                    a_specamt * MortalityRates_->MinimumPremiumRates()[0]
-                /   a_mode
-                )
+    double z = round_max_premium()
+        (ldbl_eps_plus_one_times
+            (
+                a_specamt * MortalityRates_->MinimumPremiumRates()[0]
+            /   a_mode
             )
         );
+    return currency(z);
 }
 
 /// Calculate premium using a target-premium ratio.
@@ -1028,7 +1028,7 @@ currency BasicValues::GetModalPremTgtFromTable
     ,currency    a_specamt
     ) const
 {
-    return currency(round_max_premium()
+    double z = round_max_premium()
         (ldbl_eps_plus_one_times
             (
                 ( TgtPremMonthlyPolFee * 12.0
@@ -1036,7 +1036,8 @@ currency BasicValues::GetModalPremTgtFromTable
                 )
             /   a_mode
             )
-        ));
+        );
+    return currency(z);
 }
 
 /// Calculate premium using a tabular proxy for group insurance.
@@ -1048,13 +1049,14 @@ currency BasicValues::GetModalPremProxyTable
     ,double      a_table_multiplier
     ) const
 {
-    return currency(round_gross_premium()
+    double z = round_gross_premium()
         (
           a_specamt
         * MortalityRates_->GroupProxyRates()[a_year]
         * a_table_multiplier
         / a_mode
-        ));
+        );
+    return currency(z);
 }
 
 /// Calculate premium using a corridor ratio.
@@ -1070,7 +1072,8 @@ currency BasicValues::GetModalPremCorridor
     ) const
 {
     double temp = GetCorridorFactor()[0];
-    return currency(round_max_premium()(ldbl_eps_plus_one_times((a_specamt / temp) / a_mode)));
+    double z = round_max_premium()(ldbl_eps_plus_one_times((a_specamt / temp) / a_mode));
+    return currency(z);
 }
 
 //============================================================================
@@ -1470,11 +1473,13 @@ currency BasicValues::GetModalSpecAmtMax(currency annualized_pmt) const
         case oe_modal_nonmec:
             return GetModalSpecAmtMinNonMec(annualized_pmt);
         case oe_modal_table:
-            return currency(round_min_specamt()
-                (
-                    annualized_pmt
-                /   MortalityRates_->MinimumPremiumRates()[0]
-                ));
+            return currency
+                (round_min_specamt()
+                    (
+                        annualized_pmt
+                    /   MortalityRates_->MinimumPremiumRates()[0]
+                    )
+                );
         }
     throw "Unreachable--silences a compiler diagnostic.";
 }
@@ -1494,11 +1499,13 @@ currency BasicValues::GetModalSpecAmtTgt(currency annualized_pmt) const
         case oe_modal_nonmec:
             return GetModalSpecAmtMinNonMec(annualized_pmt);
         case oe_modal_table:
-            return currency(round_min_specamt()
-                (
-                    (annualized_pmt - TgtPremMonthlyPolFee * 12.0)
-                /   MortalityRates_->TargetPremiumRates()[0]
-                ));
+            return currency
+                (round_min_specamt()
+                    (
+                        (annualized_pmt - TgtPremMonthlyPolFee * 12.0)
+                    /   MortalityRates_->TargetPremiumRates()[0]
+                    )
+                );
         }
     throw "Unreachable--silences a compiler diagnostic.";
 }
