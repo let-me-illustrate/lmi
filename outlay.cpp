@@ -34,18 +34,18 @@ modal_outlay::modal_outlay
     ,round_to<double> const& round_withdrawal
     ,round_to<double> const& round_loan
     )
-    :round_gross_premium_  {            round_gross_premium}
-    ,round_withdrawal_     {            round_withdrawal   }
-    ,round_loan_           {            round_loan         }
-    ,dumpin_               {           (round_gross_premium_(yi.Dumpin)                    )}
-    ,external_1035_amount_ {           (round_gross_premium_(yi.External1035ExchangeAmount))}
-    ,internal_1035_amount_ {           (round_gross_premium_(yi.Internal1035ExchangeAmount))}
-    ,ee_modal_premiums_    {currencyize(round_gross_premium_(yi.Payment)                   )}
-    ,ee_premium_modes_     {                     yi.PaymentMode                }
-    ,er_modal_premiums_    {currencyize(round_gross_premium_(yi.CorporationPayment)        )}
-    ,er_premium_modes_     {                     yi.CorporationPaymentMode     }
-    ,withdrawals_          {currencyize(round_withdrawal_   (yi.Withdrawal)                )}
-    ,new_cash_loans_       {currencyize(round_loan_         (yi.NewLoan)                   )}
+    :round_gross_premium_  {round_gross_premium}
+    ,round_withdrawal_     {round_withdrawal   }
+    ,round_loan_           {round_loan         }
+    ,dumpin_               {            round_gross_premium_(yi.Dumpin)                    }
+    ,external_1035_amount_ {            round_gross_premium_(yi.External1035ExchangeAmount)}
+    ,internal_1035_amount_ {            round_gross_premium_(yi.Internal1035ExchangeAmount)}
+    ,ee_modal_premiums_    {currencyize(round_gross_premium_(yi.Payment)                  )}
+    ,ee_premium_modes_     {                                 yi.PaymentMode                }
+    ,er_modal_premiums_    {currencyize(round_gross_premium_(yi.CorporationPayment)       )}
+    ,er_premium_modes_     {                                 yi.CorporationPaymentMode     }
+    ,withdrawals_          {currencyize(round_withdrawal_   (yi.Withdrawal)               )}
+    ,new_cash_loans_       {currencyize(round_loan_         (yi.NewLoan)                  )}
 {
 }
 
