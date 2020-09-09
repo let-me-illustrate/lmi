@@ -28,6 +28,7 @@
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
 #include "contains.hpp"
+#include "currency.hpp"
 #include "emit_ledger.hpp"
 #include "fenv_guard.hpp"
 #include "input.hpp"

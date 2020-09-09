@@ -1440,7 +1440,11 @@ void AccountValue::SetAnnualInvariants()
     YearsDacTaxLoadRate     = Loads_->dac_tax_load                    ()[Year];
 }
 
-//============================================================================
+/// Separate-account assets, after deductions, times survivorship.
+///
+/// Returns a double: assets are ordinarily currency, but these are
+/// multiplied by a survivorship factor.
+
 double AccountValue::GetSepAcctAssetsInforce() const
 {
     if(ItLapsed || BasicValues::GetLength() <= Year)
