@@ -202,7 +202,7 @@ void AccountValue::DoMonthDR()
         gross_1035 = External1035Amount + Internal1035Amount;
         }
     double necessary_premium = std::min
-        (GrossPmts[Month] - gross_1035
+        (material_difference(GrossPmts[Month], gross_1035)
         ,max_necessary_premium
         );
     double unnecessary_premium = material_difference
