@@ -218,6 +218,9 @@ void AccountValue::DoMonthDR()
     UnnecessaryPremium = unnecessary_premium;
     if(necessary_premium < 0.0 || unnecessary_premium < 0.0)
         warning()
+//          << GrossPmts[Month] << " GrossPmts[Month]\n"
+//          << gross_1035 << " gross_1035\n"
+//          << GrossPmts[Month] - gross_1035 << " GrossPmts[Month] - gross_1035\n"
             << necessary_premium << " necessary_premium\n"
             << unnecessary_premium << " unnecessary_premium\n"
             << Year << " Year\n"
@@ -1213,6 +1216,16 @@ void AccountValue::TxAscertainDesiredPayment()
         return;
         }
 
+    if(!(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month])))
+        warning()
+            << GrossPmts[Month] << " GrossPmts[Month]\n"
+            << EeGrossPmts[Month] + ErGrossPmts[Month] << " EeGrossPmts[Month] + ErGrossPmts[Month]\n"
+            << EeGrossPmts[Month] << " EeGrossPmts[Month]\n"
+            << ErGrossPmts[Month] << " ErGrossPmts[Month]\n"
+            << Year << " Year\n"
+            << Month << " Month\n"
+            << LMI_FLUSH
+            ;
     LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
     currency eepmt = currency(0);
@@ -1245,6 +1258,16 @@ void AccountValue::TxAscertainDesiredPayment()
         GrossPmts  [Month] += erpmt;
         }
 
+    if(!(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month])))
+        warning()
+            << GrossPmts[Month] << " GrossPmts[Month]\n"
+            << EeGrossPmts[Month] + ErGrossPmts[Month] << " EeGrossPmts[Month] + ErGrossPmts[Month]\n"
+            << EeGrossPmts[Month] << " EeGrossPmts[Month]\n"
+            << ErGrossPmts[Month] << " ErGrossPmts[Month]\n"
+            << Year << " Year\n"
+            << Month << " Month\n"
+            << LMI_FLUSH
+            ;
     LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
     LMI_ASSERT(GrossPmts[Month] < 1.0e100);
 
@@ -1261,6 +1284,16 @@ void AccountValue::TxAscertainDesiredPayment()
         GrossPmts  [Month] += Dumpin;
         }
 
+    if(!(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month])))
+        warning()
+            << GrossPmts[Month] << " GrossPmts[Month]\n"
+            << EeGrossPmts[Month] + ErGrossPmts[Month] << " EeGrossPmts[Month] + ErGrossPmts[Month]\n"
+            << EeGrossPmts[Month] << " EeGrossPmts[Month]\n"
+            << ErGrossPmts[Month] << " ErGrossPmts[Month]\n"
+            << Year << " Year\n"
+            << Month << " Month\n"
+            << LMI_FLUSH
+            ;
     LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 }
 
@@ -1277,6 +1310,16 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
     // we shouldn't.
 // TODO ?? TAXATION !! Clean this up, and put GPT limit here, on prem net of WD.
 
+    if(!(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month])))
+        warning()
+            << GrossPmts[Month] << " GrossPmts[Month]\n"
+            << EeGrossPmts[Month] + ErGrossPmts[Month] << " EeGrossPmts[Month] + ErGrossPmts[Month]\n"
+            << EeGrossPmts[Month] << " EeGrossPmts[Month]\n"
+            << ErGrossPmts[Month] << " ErGrossPmts[Month]\n"
+            << Year << " Year\n"
+            << Month << " Month\n"
+            << LMI_FLUSH
+            ;
     LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
     if(mce_reduce_prem == yare_input_.AvoidMecMethod && !Irc7702A_->IsMecAlready())
@@ -1490,6 +1533,7 @@ currency AccountValue::GetPremLoad
         ;
     LMI_ASSERT(0.0 <= sum_of_separate_loads);
 
+#if 1
     double total_load =
           target_portion * YearsTotLoadTgt
         + excess_portion * YearsTotLoadExc
@@ -1499,7 +1543,7 @@ currency AccountValue::GetPremLoad
         (   PremiumTax_->is_tiered()
         ||  materially_equal(total_load, sum_of_separate_loads)
         );
-
+#endif // 0
     return currency(round_net_premium()(sum_of_separate_loads));
 }
 

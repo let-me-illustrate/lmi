@@ -1332,6 +1332,7 @@ void AccountValue::FinalizeYear()
             {
             InvariantValues().InitPrem = InvariantValues().GrossPmt[Year];
             }
+#if 1
         LMI_ASSERT
             (materially_equal
                 (   InvariantValues().GrossPmt  [Year]
@@ -1339,6 +1340,7 @@ void AccountValue::FinalizeYear()
                 +   InvariantValues().ErGrossPmt[Year]
                 )
             );
+#endif // 0
         InvariantValues().Outlay[Year] =
                 InvariantValues().GrossPmt   [Year]
             -   InvariantValues().NetWD      [Year]
