@@ -125,6 +125,11 @@ class SolveHelper
 /// contract ever becomes a MEC. The result is naturally a boundary
 /// value, so it is not interesting to compare it to any solve input.
 ///
+/// Non-MEC solves for loan or withdrawal are untested because they
+/// probably make no sense--see:
+///   https://lists.nongnu.org/archive/html/lmi/2009-02/msg00028.html
+/// so perhaps they should be prohibited.
+///
 /// Non-MEC solves seem acceptably fast despite this two-valued step
 /// function. Other options considered include:
 ///  - Use MEC duration. This inserts a monotone segment into the
@@ -231,7 +236,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
 
     if(mce_solve_for_non_mec == SolveTarget_)
         {
-        return 0.5 - InvariantValues().IsMec;
+        return InvariantValues().IsMec ? -1.0 : 1.0;
         }
 
     return value - SolveTargetCsv_;
