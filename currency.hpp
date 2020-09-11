@@ -116,6 +116,8 @@ class currency
     // ...less bad:
     data_type from_double(double d) const {return round(100.0 * d);}
     double to_double() const {return bourn_cast<double>(m_) / 100.0;}
+//  data_type from_double(double d) const {return static_cast<data_type>(100.0 * d);}
+//  double to_double() const {return static_cast<double>(m_) / 100.0;}
 
     data_type round(double d) const
         {
