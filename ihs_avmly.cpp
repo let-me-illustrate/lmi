@@ -580,7 +580,7 @@ void AccountValue::TxExch1035()
         {
         amount_exempt_from_premium_tax = Internal1035Amount;
         }
-    double actual_load = GetPremLoad
+    currency actual_load = GetPremLoad
         (GrossPmts[Month]
         ,amount_exempt_from_premium_tax
         );
