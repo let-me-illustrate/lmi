@@ -1260,7 +1260,7 @@ void AccountValue::FinalizeYear()
     VariantValues().SpecAmtLoad       [Year] = YearsTotalSpecAmtLoad      ;
     VariantValues().PremTaxLoad       [Year] = PremiumTax_->ytd_load();
 
-    double notional_sep_acct_charge =
+    currency notional_sep_acct_charge =
           YearsTotalSepAcctLoad
         + YearsTotalGrossIntCredited
         - YearsTotalNetIntCredited
