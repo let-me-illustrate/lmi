@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+//#include "alert.hpp"
 #include "currency.hpp"
 #include "mc_enum_type_enums.hpp"       // enum rounding_style
 #include "stl_extensions.hpp"           // nonstd::power()
@@ -385,6 +386,23 @@ inline currency round_to<RealType>::c(RealType r) const
         );
     // include required headers
     return currency(bourn_cast<std::int64_t>(z), true);
+#if 0
+    // don't do this in production:
+    if(z != std::trunc(z))
+        warning()
+            << z << " does not equal\n"
+            << trunc(z) << "\n"
+            << LMI_FLUSH
+            ;
+    currency k(bourn_cast<std::int64_t>(z), true);
+    if(k.m() != bourn_cast<std::int64_t>(std::trunc(k.m())))
+        warning()
+            << k.m() << " does not equal\n"
+            << trunc(bourn_cast<double>(k.m())) << "\n"
+            << LMI_FLUSH
+            ;
+    return k;
+#endif // 0
 }
 
 template<typename RealType>
