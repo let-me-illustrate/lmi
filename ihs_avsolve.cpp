@@ -177,7 +177,7 @@ currency AccountValue::SolveTest(currency a_CandidateValue)
         ,0
         );
     LMI_ASSERT(0 <= no_lapse_dur);
-    currency most_negative_csv(0);
+    currency most_negative_csv(0.0);
     if(no_lapse_dur < SolveTargetDuration_)
         {
         most_negative_csv = *std::min_element
@@ -282,7 +282,7 @@ currency AccountValue::SolveGuarPremium()
     // Store original er premiums for later restoration.
     std::vector<currency> stored = Outlay_->er_modal_premiums();
     // Zero out er premiums and solve for ee premiums only.
-    Outlay_->set_er_modal_premiums(currency(0), 0, BasicValues::GetLength());
+    Outlay_->set_er_modal_premiums(currency(0.0), 0, BasicValues::GetLength());
 
     bool temp_solving     = Solving;
     Solving               = true;
@@ -294,7 +294,7 @@ currency AccountValue::SolveGuarPremium()
         ,0
         ,BasicValues::GetLength()
         ,mce_solve_for_endt
-        ,currency(0)
+        ,currency(0.0)
         ,BasicValues::GetLength()
         ,mce_gen_guar
         ,mce_sep_full

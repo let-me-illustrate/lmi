@@ -174,7 +174,7 @@ void AccountValue::PerformSupplAmtStrategy()
 {
     for(int j = 0; j < BasicValues::Length; ++j)
         {
-        currency m = currency(0); // No minimum other than zero is defined.
+        currency m = currency(0.0); // No minimum other than zero is defined.
         currency explicit_value = DeathBfts_->supplamt()[j];
         mcenum_sa_strategy strategy = yare_input_.SupplementalAmountStrategy[j];
         currency z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
@@ -273,22 +273,22 @@ currency AccountValue::DoPerformPmtStrategy
             }
         case mce_pmt_mep:
             {
-            currency sa = specamt_for_7702A(0);
+            currency sa = specamt_for_7702A(0.0);
             return GetModalPremMaxNonMec(0, a_InitialMode, sa);
             }
         case mce_pmt_glp:
             {
-            currency sa = specamt_for_7702(0);
+            currency sa = specamt_for_7702(0.0);
             return GetModalPremGLP(0, a_InitialMode, sa, sa);
             }
         case mce_pmt_gsp:
             {
-            currency sa = specamt_for_7702(0);
+            currency sa = specamt_for_7702(0.0);
             return GetModalPremGSP(0, a_InitialMode, sa, sa);
             }
         case mce_pmt_corridor:
             {
-            currency sa = specamt_for_7702(0);
+            currency sa = specamt_for_7702(0.0);
             return GetModalPremCorridor(0, a_InitialMode, sa);
             }
         case mce_pmt_table:

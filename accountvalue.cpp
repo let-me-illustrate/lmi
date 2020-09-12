@@ -184,7 +184,7 @@ currency AccountValue::RunAllApplicableBases()
         ,mce_sep_full
         );
 
-    currency z = currency(0);
+    currency z = currency(0.0);
     if(Solving)
         {
         z = Solve();
@@ -331,8 +331,8 @@ void AccountValue::DoYear
 
     YearsCorridorFactor = BasicValues::GetCorridorFactor()[Year];
 
-    GrossPmts  .assign(12, currency(0));
-    NetPmts    .assign(12, currency(0));
+    GrossPmts  .assign(12, currency(0.0));
+    NetPmts    .assign(12, currency(0.0));
 
     // IHS !! Strategy here?
 
@@ -441,7 +441,7 @@ inline int AccountValue::MonthsToNextModalPmtDate() const
 // Set specamt according to selected strategy, in every year.
 void AccountValue::PerformSpecAmtStrategy()
 {
-    currency SA = currency(0);
+    currency SA = currency(0.0);
     switch(yare_input_.SpecifiedAmountStrategy[0])
         {
         case mce_sa_input_scalar:
@@ -766,7 +766,7 @@ void AccountValue::TxSetDeathBft()
             // Option 2: specamt plus AV, or corridor times AV if greater.
             // Negative AV doesn't decrease death benefit.
             deathbft = std::max
-                (ActualSpecAmt + std::max(currency(0), AV)
+                (ActualSpecAmt + std::max(currency(0.0), AV)
                 ,corr
                 );
             break;
@@ -988,7 +988,7 @@ void AccountValue::TxTakeLoan()
     double IntAdj = std::pow((1.0 + YearsRegLnIntDueRate), 12 - Month);
     IntAdj = (IntAdj - 1.0) / IntAdj;
     MaxLoan *= 1.0 - IntAdj;
-    MaxLoan = std::max(currency(0), MaxLoan);
+    MaxLoan = std::max(currency(0.0), MaxLoan);
     MaxLoan = round_loan()(MaxLoan);
 
     // IHS !! Preferred loan calculations would go here: implemented in lmi.
@@ -1066,7 +1066,7 @@ double AccountValue::GetProjectedCoiChargeInforce() const
 double AccountValue::GetSepAcctAssetsInforce() const
     {return 0.0;}
 currency AccountValue::IncrementBOM(int, int, double)
-    {return currency(0);}
+    {return currency(0.0);}
 void   AccountValue::IncrementEOM(int, int, currency, currency)
     {return;}
 void   AccountValue::IncrementEOY(int)
