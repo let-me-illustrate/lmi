@@ -147,6 +147,7 @@ void AccountValue::PerformSpecAmtStrategy()
             strategy = mce_sa_input_scalar;
             }
         currency z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
+        // Shouldn't rounding be done upstream?
         DeathBfts_->set_specamt(currency(round_specamt()(std::max(m, z))), j, 1 + j);
         if
             (  j == InforceYear
@@ -178,7 +179,8 @@ void AccountValue::PerformSupplAmtStrategy()
         currency explicit_value = DeathBfts_->supplamt()[j];
         mcenum_sa_strategy strategy = yare_input_.SupplementalAmountStrategy[j];
         currency z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
-        DeathBfts_->set_supplamt(currency(round_specamt()(std::max(m, z))), j, 1 + j); // rounding
+        // Shouldn't rounding be done upstream?
+        DeathBfts_->set_supplamt(currency(round_specamt()(std::max(m, z))), j, 1 + j);
         }
 }
 
