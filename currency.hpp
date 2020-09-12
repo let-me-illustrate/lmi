@@ -139,7 +139,7 @@ inline currency operator+(currency lhs, double rhs) {return lhs += currency(rhs)
 inline currency operator-(currency lhs, double rhs) {return lhs -= currency(rhs);}
 //inline currency operator*(currency lhs, double rhs) {return lhs *= currency(rhs);}
 ////inline double operator*(currency lhs, double rhs) {return lhs *= currency(rhs);}
-inline double operator*(currency lhs, double rhs) {return lhs.operator double() * rhs;}
+inline double operator*(currency lhs, double rhs) {return lhs.operator*=(rhs);}
 //inline currency operator*(currency lhs, int rhs) {return lhs *= rhs;}
 //inline currency operator*(int lhs, currency rhs) {return rhs *= lhs;}
 
