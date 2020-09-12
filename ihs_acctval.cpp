@@ -1265,6 +1265,15 @@ void AccountValue::FinalizeYear()
         + YearsTotalGrossIntCredited
         - YearsTotalNetIntCredited
         ;
+#if 0 // not needed--already currency
+    double notional_sep_acct_charge =
+          YearsTotalSepAcctLoad.d()
+        + material_difference
+            (YearsTotalGrossIntCredited
+            ,YearsTotalNetIntCredited
+            )
+        ;
+#endif // 0
     VariantValues().SepAcctCharges    [Year] = notional_sep_acct_charge   ;
 
     // Record dynamic interest rate in ledger object.
