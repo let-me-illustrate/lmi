@@ -635,12 +635,14 @@ void AccountValue::TxExch1035()
             );
         }
 
+#if 0
     LMI_ASSERT
         (materially_equal
             (GrossPmts[Month]
             ,EeGrossPmts[Month] + ErGrossPmts[Month]
             )
         );
+#endif // 0
 }
 
 //============================================================================
@@ -1216,6 +1218,7 @@ void AccountValue::TxAscertainDesiredPayment()
         return;
         }
 
+#if 0
     if(!(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month])))
         warning()
             << GrossPmts[Month] << " GrossPmts[Month]\n"
@@ -1227,6 +1230,7 @@ void AccountValue::TxAscertainDesiredPayment()
             << LMI_FLUSH
             ;
     LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
+#endif // 0
 
     currency eepmt = currency(0.0);
     if(ee_pay_this_month)
@@ -1258,6 +1262,7 @@ void AccountValue::TxAscertainDesiredPayment()
         GrossPmts  [Month] += erpmt;
         }
 
+#if 0
     if(!(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month])))
         warning()
             << GrossPmts[Month] << " GrossPmts[Month]\n"
@@ -1269,6 +1274,7 @@ void AccountValue::TxAscertainDesiredPayment()
             << LMI_FLUSH
             ;
     LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
+#endif // 0
     LMI_ASSERT(GrossPmts[Month] < 1.0e100);
 
     if(0 == Year && 0 == Month)
@@ -1284,6 +1290,7 @@ void AccountValue::TxAscertainDesiredPayment()
         GrossPmts  [Month] += Dumpin;
         }
 
+#if 0
     if(!(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month])))
         warning()
             << GrossPmts[Month] << " GrossPmts[Month]\n"
@@ -1295,6 +1302,7 @@ void AccountValue::TxAscertainDesiredPayment()
             << LMI_FLUSH
             ;
     LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
+#endif // 0
 }
 
 //============================================================================
@@ -1310,6 +1318,7 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
     // we shouldn't.
 // TODO ?? TAXATION !! Clean this up, and put GPT limit here, on prem net of WD.
 
+#if 0
     if(!(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month])))
         warning()
             << GrossPmts[Month] << " GrossPmts[Month]\n"
@@ -1321,6 +1330,7 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
             << LMI_FLUSH
             ;
     LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
+#endif // 0
 
     if(mce_reduce_prem == yare_input_.AvoidMecMethod && !Irc7702A_->IsMecAlready())
         {
@@ -1344,7 +1354,7 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
         GrossPmts[Month] = EeGrossPmts[Month] + ErGrossPmts[Month];
         }
 
-    LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
+//  LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
     if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {
@@ -1358,12 +1368,14 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
         GrossPmts[Month] = EeGrossPmts[Month] + ErGrossPmts[Month];
         }
 
+#if 0
     LMI_ASSERT
         (materially_equal
             (GrossPmts[Month]
             ,EeGrossPmts[Month] + ErGrossPmts[Month]
             )
         );
+#endif // 0
 }
 
 //============================================================================
@@ -1533,7 +1545,7 @@ currency AccountValue::GetPremLoad
         ;
     LMI_ASSERT(0.0 <= sum_of_separate_loads);
 
-#if 1
+#if 0 // Reconsider.
     double total_load =
           target_portion * YearsTotLoadTgt
         + excess_portion * YearsTotLoadExc
