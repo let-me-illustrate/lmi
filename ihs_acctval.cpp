@@ -342,13 +342,10 @@ currency AccountValue::RunOneCell(mcenum_run_basis a_Basis)
             // rating is impossible. USER !! Explain this in user
             // documentation.
             IncrementBOM(year, month, 1.0);
-            // TODO ?? PRESSING Adjusting this by inforce is wrong for
-            // individual cells run as such, because they don't
-            // reflect partial mortality.
             IncrementEOM
                 (year
                 ,month
-                ,currency(SepAcctValueAfterDeduction * InforceLivesBoy())
+                ,currency(SepAcctValueAfterDeduction)
                 ,CumPmts
                 );
             }
