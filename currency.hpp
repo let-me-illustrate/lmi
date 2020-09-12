@@ -25,7 +25,7 @@
 #include "config.hpp"
 
 #include "bourn_cast.hpp"
-#include "round_to.hpp"
+////#include "round_to.hpp"
 
 #include <cstdint>                      // int64_t
 #include <iostream>                     // ostream
@@ -44,22 +44,27 @@ using currency = double;
 #if defined USE_CURRENCY_CLASS
 class currency
 {
-//#if defined __GNUC__
-//#   pragma GCC diagnostic ignored "-Wuseless-cast"
-//#endif // defined __GNUC__
-//  using data_type = double;
+  #if defined __GNUC__
+  #   pragma GCC diagnostic ignored "-Wuseless-cast"
+  #endif // defined __GNUC__
+    using data_type = double;
 //  using data_type = long double;
-    using data_type = std::int64_t;
+//  using data_type = std::int64_t;
 
     friend std::ostream& operator<<(std::ostream&, currency const&);
     friend class currency_test;
 
   public:
+    static constexpr int cents_digits = 2;
+    static constexpr int cents_per_dollar = 100; // 10 ^ cents_digits
+
     currency() = default;
     currency(currency const&) = default;
     ~currency() = default;
 
     explicit currency(double d)  {m_ = from_double(d);}
+    // avoid troublesome overloads
+    explicit currency(std::int64_t d, bool) {m_ = bourn_cast<data_type>(d);} // instead: init-list
 
     currency& operator=(currency const&) = default;
     currency& operator=(double d) {m_ = from_double(d); return *this;}
@@ -106,6 +111,8 @@ class currency
 // Dangerous--can somehow take the place of operator*(double)
 //  currency const& operator*=(int z) {m_ *= z; return *this;}
 
+    data_type m() const {return m_;} // restrict to friends?
+
   private:
     // Want something just slightly more permissive:
 //  data_type from_double(double d) const {return bourn_cast<data_type>(100.0 * d);}
@@ -114,17 +121,17 @@ class currency
     // ...and a bit insidious:
 //  data_type from_double(double d) const {return static_cast<data_type>(100.000000000001 * d);}
     // ...less bad:
-    data_type from_double(double d) const {return round(100.0 * d);}
-    double to_double() const {return bourn_cast<double>(m_) / 100.0;}
-//  data_type from_double(double d) const {return static_cast<data_type>(100.0 * d);}
-//  double to_double() const {return static_cast<double>(m_) / 100.0;}
-
+//  data_type from_double(double d) const {return round(cents_per_dollar * d);}
+//  double to_double() const {return bourn_cast<double>(m_) / cents_per_dollar;}
+    data_type from_double(double d) const {return static_cast<data_type>(cents_per_dollar * d);}
+    double to_double() const {return static_cast<double>(m_) / cents_per_dollar;}
+#if 0 // will a fwd decl be wanted somewhere?
     data_type round(double d) const
         {
         static round_to<double> const r(0, r_to_nearest);
         return static_cast<data_type>(r(d));
         }
-
+#endif // 0
     data_type m_ = {0};
 };
 

@@ -37,15 +37,15 @@ modal_outlay::modal_outlay
     :round_gross_premium_  {round_gross_premium}
     ,round_withdrawal_     {round_withdrawal   }
     ,round_loan_           {round_loan         }
-    ,dumpin_               {            round_gross_premium_(yi.Dumpin)                    }
-    ,external_1035_amount_ {            round_gross_premium_(yi.External1035ExchangeAmount)}
-    ,internal_1035_amount_ {            round_gross_premium_(yi.Internal1035ExchangeAmount)}
-    ,ee_modal_premiums_    {currencyize(round_gross_premium_(yi.Payment)                  )}
-    ,ee_premium_modes_     {                                 yi.PaymentMode                }
-    ,er_modal_premiums_    {currencyize(round_gross_premium_(yi.CorporationPayment)       )}
-    ,er_premium_modes_     {                                 yi.CorporationPaymentMode     }
-    ,withdrawals_          {currencyize(round_withdrawal_   (yi.Withdrawal)               )}
-    ,new_cash_loans_       {currencyize(round_loan_         (yi.NewLoan)                  )}
+    ,dumpin_               {round_gross_premium_(  yi.Dumpin)                    }
+    ,external_1035_amount_ {round_gross_premium_(  yi.External1035ExchangeAmount)}
+    ,internal_1035_amount_ {round_gross_premium_(  yi.Internal1035ExchangeAmount)}
+    ,ee_modal_premiums_    {round_gross_premium_.c(yi.Payment)                   }
+    ,ee_premium_modes_     {                       yi.PaymentMode                }
+    ,er_modal_premiums_    {round_gross_premium_.c(yi.CorporationPayment)        }
+    ,er_premium_modes_     {                       yi.CorporationPaymentMode     }
+    ,withdrawals_          {round_withdrawal_   .c(yi.Withdrawal)                }
+    ,new_cash_loans_       {round_loan_         .c(yi.NewLoan)                   }
 {
 }
 

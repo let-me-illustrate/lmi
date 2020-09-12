@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+#include "currency.hpp"
 #include "mc_enum_type_enums.hpp"       // enum rounding_style
 #include "stl_extensions.hpp"           // nonstd::power()
 
@@ -266,6 +267,9 @@ class round_to
     RealType operator()(RealType r) const;
     std::vector<RealType> operator()(std::vector<RealType> r) const;
 
+    currency c(RealType r) const;
+    std::vector<currency> c(std::vector<RealType> r) const;
+
     int decimals() const;
     rounding_style style() const;
 
@@ -276,7 +280,9 @@ class round_to
     int decimals_                    {0};
     rounding_style style_            {r_indeterminate};
     max_prec_real scale_fwd_         {1.0};
+    max_prec_real scale_fwd_c_       {1.0};
     max_prec_real scale_back_        {1.0};
+    max_prec_real scale_back_c_      {1.0};
     rounding_fn_t rounding_function_ {detail::erroneous_rounding_function};
 };
 
@@ -309,7 +315,9 @@ round_to<RealType>::round_to(int decimals, rounding_style a_style)
     :decimals_          {decimals}
     ,style_             {a_style}
     ,scale_fwd_         {detail::perform_pow(max_prec_real(10.0), decimals)}
+    ,scale_fwd_c_       {detail::perform_pow(max_prec_real(10.0), decimals - currency::cents_digits)}
     ,scale_back_        {max_prec_real(1.0) / scale_fwd_}
+    ,scale_back_c_      {max_prec_real(1.0) / scale_fwd_c_}
     ,rounding_function_ {select_rounding_function(a_style)}
 {
 /*
@@ -366,6 +374,25 @@ inline std::vector<RealType> round_to<RealType>::operator()(std::vector<RealType
     std::vector<RealType> z;
     z.reserve(r.size());
     for(auto const& i : r) {z.push_back(operator()(i));}
+    return z;
+}
+
+template<typename RealType>
+inline currency round_to<RealType>::c(RealType r) const
+{
+    RealType z = static_cast<RealType>
+        (rounding_function_(static_cast<RealType>(r * scale_fwd_)) * scale_back_c_
+        );
+    // include required headers
+    return currency(bourn_cast<std::int64_t>(z), true);
+}
+
+template<typename RealType>
+inline std::vector<currency> round_to<RealType>::c(std::vector<RealType> r) const
+{
+    std::vector<currency> z;
+    z.reserve(r.size());
+    for(auto const& i : r) {z.push_back(c(i));}
     return z;
 }
 
