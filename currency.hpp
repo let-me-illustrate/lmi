@@ -47,9 +47,9 @@ class currency
   #if defined __GNUC__
   #   pragma GCC diagnostic ignored "-Wuseless-cast"
   #endif // defined __GNUC__
-    using data_type = double;
+//  using data_type = double;
 //  using data_type = long double;
-//  using data_type = std::int64_t;
+    using data_type = std::int64_t;
 
     friend std::ostream& operator<<(std::ostream&, currency const&);
     friend class currency_test;
@@ -67,9 +67,11 @@ class currency
     explicit currency(std::int64_t d, bool) {m_ = bourn_cast<data_type>(d);} // instead: init-list
 
     currency& operator=(currency const&) = default;
+    // IMPORTANT eventually suppress this?
     currency& operator=(double d) {m_ = from_double(d); return *this;}
 
     operator double() const {return to_double();}
+    double d() const {return to_double();}
 
     // Is this better, with 'const&'?
 //  bool operator==(currency const& z) const {return z.m_ == m_;}
@@ -135,6 +137,7 @@ class currency
     data_type m_ = {0};
 };
 
+//inline currency operator+(currency lhs, currency rhs) {return lhs += rhs;}
 inline currency operator+(currency lhs, double rhs) {return lhs += currency(rhs);}
 inline currency operator-(currency lhs, double rhs) {return lhs -= currency(rhs);}
 //inline currency operator*(currency lhs, double rhs) {return lhs *= currency(rhs);}
@@ -151,6 +154,7 @@ inline std::ostream& operator<<(std::ostream& os, currency const& c)
 
 #endif // defined USE_CURRENCY_CLASS
 
+#if 0
 // Sloppy.
 inline currency requantize(double z) {return currency(z);}
 
@@ -162,10 +166,12 @@ inline std::vector<currency> currencyize(std::vector<double> const& z)
         r.push_back(currency(i));
     return r;
 }
+#endif // 0
 
 inline double doubleize(currency const& z)
 {
-    return currency(z); // This implementation seems surprising.
+//  return currency(z); // This implementation would seem surprising.
+    return z.d();
 }
 
 inline std::vector<double> doubleize(std::vector<currency> const& z)
@@ -174,7 +180,8 @@ inline std::vector<double> doubleize(std::vector<currency> const& z)
     r.reserve(z.size());
     for(auto const& i : z)
 //      r.push_back(i.operator double()); // no need to convert explicitly
-        r.push_back(i);
+// but that relies on a public operator double(), which is better avoided
+        r.push_back(i.d());
     return r;
 }
 
