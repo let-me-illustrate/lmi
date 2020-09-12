@@ -43,7 +43,7 @@ void currency_test::test()
 
 void currency_test::test_something()
 {
-    currency a0;
+    currency const a0;
     std::cout << a0 << std::endl;
     BOOST_TEST(0.00 == a0.operator double());
     BOOST_TEST(   0 == a0.m_);
@@ -101,6 +101,15 @@ std::cout << a4 << std::endl;
 std::cout << too_big << std::endl;
 std::cout << "rounded: " << round(too_big) << std::endl;
 std::cout << 100.0 * too_big << std::endl;
+
+    currency b0(464.180000000000006821);
+    currency b1(263.01999999999998181);
+    currency b2(0.0);
+    b2 += b0;
+    b2 += b1;
+    currency b3 = b0 + b1;
+    BOOST_TEST_EQUAL(b2.m(), b3.m());
+    BOOST_TEST_EQUAL(b2, b3);
 }
 
 int test_main(int, char*[])
