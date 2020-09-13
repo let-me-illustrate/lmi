@@ -493,7 +493,7 @@ void AccountValue::PerformSpecAmtStrategy()
             }
         }
 
-    SA = round_specamt()(SA);
+    SA = round_specamt().c(SA); // already rounded
 
     for(int j = 0; j < BasicValues::GetLength(); ++j)
         {
@@ -552,7 +552,7 @@ void AccountValue::TxOptionChange()
             alarum() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
             }
         }
-    ActualSpecAmt = round_specamt()(ActualSpecAmt);
+    ActualSpecAmt = round_specamt().c(ActualSpecAmt); // already rounded
 
     // Carry the new spec amt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); ++j)
@@ -706,7 +706,7 @@ void AccountValue::TxPmt()
 //            (DB-AV)/YearsCorridorFactor - AV
 
     // Subtract premium load from gross premium yielding net premium.
-    NetPmts[Month] = round_net_premium()
+    NetPmts[Month] = round_net_premium().c
         (GrossPmts[Month] * (1.0 - YearsPremLoadTgt)
         );
     // Should we instead do the following?
@@ -751,7 +751,7 @@ void AccountValue::TxSetDeathBft()
 {
     // Total account value is unloaned plus loaned.
     currency AV = AVUnloaned + AVRegLn + AVPrfLn;
-    currency corr = currency(round_death_benefit()(YearsCorridorFactor * AV));
+    currency corr = round_death_benefit().c(YearsCorridorFactor * AV);
 
     // Set death benefit reflecting corridor and death benefit option.
     switch(YearsDBOpt)
@@ -778,7 +778,7 @@ void AccountValue::TxSetDeathBft()
             }
         }
 
-    deathbft = round_death_benefit()(deathbft);
+    deathbft = round_death_benefit().c(deathbft); // already rounded
 
     // SOMEDAY !! Accumulate average death benefit for profit testing here.
 }
@@ -792,7 +792,7 @@ void AccountValue::TxSetCoiCharge()
     // Negative AV doesn't increase NAAR.
     NAAR = round_naar()(deathbft * mlyguarv - (AVUnloaned + AVRegLn + AVPrfLn));
 
-    CoiCharge = round_coi_charge()(NAAR * YearsCoiRate0);
+    CoiCharge = round_coi_charge().c(NAAR * YearsCoiRate0);
 }
 
 /// Calculate rider charges.
@@ -833,7 +833,7 @@ void AccountValue::TxCreditInt()
     if(0.0 < AVUnloaned)
         {
         // IHS !! Each interest increment is rounded separately in lmi.
-        currency z = currency(round_interest_credit()(AVUnloaned * YearsGenAcctIntRate));
+        currency z = round_interest_credit().c(AVUnloaned * YearsGenAcctIntRate);
         AVUnloaned += z;
         }
     // Loaned account value cannot be negative.
@@ -852,14 +852,14 @@ void AccountValue::TxLoanInt()
 
     // We may want to display credited interest separately.
     // IHS !! Each interest increment is rounded separately in lmi.
-    RegLnIntCred = round_interest_credit()(AVRegLn * YearsRegLnIntCredRate);
-    PrfLnIntCred = round_interest_credit()(AVPrfLn * YearsPrfLnIntCredRate);
+    RegLnIntCred = round_interest_credit().c(AVRegLn * YearsRegLnIntCredRate);
+    PrfLnIntCred = round_interest_credit().c(AVPrfLn * YearsPrfLnIntCredRate);
 
     AVRegLn += RegLnIntCred;
     AVPrfLn += PrfLnIntCred;
 
-    currency RegLnIntAccrued = currency(round_interest_credit()(RegLnBal * YearsRegLnIntDueRate));
-    currency PrfLnIntAccrued = currency(round_interest_credit()(PrfLnBal * YearsPrfLnIntDueRate));
+    currency RegLnIntAccrued = round_interest_credit().c(RegLnBal * YearsRegLnIntDueRate);
+    currency PrfLnIntAccrued = round_interest_credit().c(PrfLnBal * YearsPrfLnIntDueRate);
 
     RegLnBal += RegLnIntAccrued;
     PrfLnBal += PrfLnIntAccrued;
@@ -925,7 +925,7 @@ void AccountValue::TxTakeWD()
 // IHS !!            ActualSpecAmt = std::min(ActualSpecAmt, deathbft - wd);
             ActualSpecAmt -= wd;
             ActualSpecAmt = std::max(ActualSpecAmt, MinSpecAmt);
-            ActualSpecAmt = round_specamt()(ActualSpecAmt);
+            ActualSpecAmt = round_specamt().c(ActualSpecAmt); // already rounded
             // IHS !! If WD causes AV < min AV, do we:
             //   reduce the WD?
             //   lapse the policy?
@@ -976,7 +976,7 @@ void AccountValue::TxTakeLoan()
     // Impose maximum amount.
     // If maximum exceeded...limit it.
     // IHS !! For solves, the lmi branch uses an 'ullage' concept.
-    MaxLoan =
+    double max_loan =
           AVUnloaned * 0.9    // IHS !! Icky manifest constant--lmi uses a database entity.
         // - surrchg
         + (AVRegLn + AVPrfLn)
@@ -987,9 +987,9 @@ void AccountValue::TxTakeLoan()
     // Witholding this keeps policy from becoming overloaned before year end.
     double IntAdj = std::pow((1.0 + YearsRegLnIntDueRate), 12 - Month);
     IntAdj = (IntAdj - 1.0) / IntAdj;
-    MaxLoan *= 1.0 - IntAdj;
-    MaxLoan = std::max(currency(0.0), MaxLoan);
-    MaxLoan = round_loan()(MaxLoan);
+    max_loan *= 1.0 - IntAdj;
+    max_loan = std::max(0.0, max_loan);
+    MaxLoan = round_loan().c(max_loan);
 
     // IHS !! Preferred loan calculations would go here: implemented in lmi.
 
