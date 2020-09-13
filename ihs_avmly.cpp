@@ -308,7 +308,7 @@ void AccountValue::process_payment(currency payment)
     // proportion, because that's the only way the proportion can be
     // deduced from input. But it remains a net premium, so the
     // net-premium rounding rule is appropriate.
-    currency er_net_pmt = currency(round_net_premium()(er_proportion * payment));
+    currency er_net_pmt = round_net_premium().c(er_proportion * payment);
     // This is deliberately not rounded. The crucial invariant that
     // must be preserved is that ee + er = total; but rounding both
     // addends could break that invariant, e.g.:
@@ -352,9 +352,8 @@ void AccountValue::process_payment(currency payment)
 // portions of unloaned account value according to input allocations.
 void AccountValue::IncrementAVProportionally(currency increment)
 {
-    increment = round_minutiae()(increment);
-    double genacct_increment = increment * GenAcctPaymentAllocation;
-    genacct_increment = round_minutiae()(genacct_increment);
+    increment = round_minutiae().c(increment); // already rounded?
+    currency genacct_increment = round_minutiae().c(increment * GenAcctPaymentAllocation);
     AVGenAcct += genacct_increment;
     AVSepAcct += increment - genacct_increment;
 }
@@ -434,7 +433,7 @@ void AccountValue::process_distribution(currency decrement)
 
 void AccountValue::DecrementAVProportionally(currency decrement)
 {
-    decrement = round_minutiae()(decrement);
+    decrement = round_minutiae().c(decrement); // already rounded?
 
     if(materially_equal(decrement, AVGenAcct + AVSepAcct))
         {
@@ -479,8 +478,7 @@ void AccountValue::DecrementAVProportionally(currency decrement)
     // that the sum of the distinct decrements here equals the
     // total decrement. Keep 'separate_account_proportion' above
     // because there may still be value in the assertions.
-    double genacct_decrement = decrement * general_account_proportion;
-    genacct_decrement = round_minutiae()(genacct_decrement);
+    currency genacct_decrement = round_minutiae().c(decrement * general_account_proportion);
     AVGenAcct -= genacct_decrement;
     AVSepAcct -= decrement - genacct_decrement;
 }
@@ -680,7 +678,7 @@ currency AccountValue::InterestCredited
     ,double monthly_rate
     ) const
 {
-    return currency(round_interest_credit()(principal * ActualMonthlyRate(monthly_rate)));
+    return round_interest_credit().c(principal * ActualMonthlyRate(monthly_rate));
 }
 
 //============================================================================
@@ -723,7 +721,7 @@ currency AccountValue::minimum_specified_amount(bool issuing_now, bool term_ride
 // Make sure ActualSpecAmt is never less than minimum specamt.
 void AccountValue::ChangeSpecAmtBy(currency delta)
 {
-    delta = round_specamt()(delta);
+    delta = round_specamt().c(delta); // already rounded?
     double term_proportion = 0.0;
     currency const old_total_specamt = ActualSpecAmt + TermSpecAmt;
     // Adjust term here only if it's formally a rider.
@@ -748,8 +746,7 @@ void AccountValue::ChangeSpecAmtBy(currency delta)
                 break;
             }
 
-        ActualSpecAmt += delta * (1.0 - term_proportion);
-        ActualSpecAmt = round_specamt()(ActualSpecAmt);
+        ActualSpecAmt += round_specamt().c(delta * (1.0 - term_proportion));
         TermSpecAmt = old_total_specamt + delta - ActualSpecAmt;
 
         if(TermSpecAmt < 0.0)
@@ -773,7 +770,7 @@ void AccountValue::ChangeSpecAmtBy(currency delta)
                     - ActualSpecAmt
                     ;
                 }
-            TermSpecAmt = round_specamt()(TermSpecAmt);
+            TermSpecAmt = round_specamt().c(TermSpecAmt); // already rounded?
             }
         }
     else
@@ -783,11 +780,12 @@ void AccountValue::ChangeSpecAmtBy(currency delta)
 
     // If specamt would be reduced below the minimum (e.g., by a large
     // withdrawal), then force it to the minimum.
-    ActualSpecAmt = std::max
-        (ActualSpecAmt
-        ,minimum_specified_amount(0 == Year && 0 == Month, TermRiderActive)
+    ActualSpecAmt = round_specamt().c // already rounded?
+        (std::max
+            (ActualSpecAmt
+            ,minimum_specified_amount(0 == Year && 0 == Month, TermRiderActive)
+            )
         );
-    ActualSpecAmt = round_specamt()(ActualSpecAmt);
 
     // Carry the new specamt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); ++j)
@@ -817,14 +815,14 @@ void AccountValue::ChangeSpecAmtBy(currency delta)
 
 void AccountValue::ChangeSupplAmtBy(currency delta)
 {
-    delta = round_specamt()(delta);
+    delta = round_specamt().c(delta); // already rounded?
     TermSpecAmt += delta;
 
     TermSpecAmt = std::max
         (TermSpecAmt
         ,currency(0.0) // No minimum other than zero is defined.
         );
-    TermSpecAmt = round_specamt()(TermSpecAmt);
+    TermSpecAmt = round_specamt().c(TermSpecAmt); // already rounded?
     // At least for now, there is no effect on surrender charges.
 
     // Carry the new supplemental amount forward into all future years.
@@ -1002,7 +1000,7 @@ void AccountValue::TxSpecAmtChange()
                 (ActualSpecAmt
                 ,minimum_specified_amount(0 == Year && 0 == Month, TermRiderActive)
                 );
-            ActualSpecAmt = round_specamt()(ActualSpecAmt);
+            ActualSpecAmt = round_specamt().c(ActualSpecAmt); // already rounded?
             InvariantValues().SpecAmt[j] = ActualSpecAmt;
             if(!TermIsNotRider)
                 {
@@ -1544,7 +1542,7 @@ currency AccountValue::GetPremLoad
         ||  materially_equal(total_load, sum_of_separate_loads)
         );
 #endif // 0
-    return currency(round_net_premium()(sum_of_separate_loads));
+    return round_net_premium().c(sum_of_separate_loads);
 }
 
 //============================================================================
@@ -1609,15 +1607,18 @@ void AccountValue::TxSetBOMAV()
             LMI_ASSERT(0.0 == term_specamt(0));
             }
         LMI_ASSERT(yare_input_.InforceSpecAmtLoadBase <= SpecAmtLoadLimit);
-        SpecAmtLoadBase =
-            (0 == Year && 0 == Month)
-            ? std::max
-                (term_specamt(0) + base_specamt(0)
-                ,currency(round_death_benefit()(NetPmts[0] * YearsCorridorFactor))
+        SpecAmtLoadBase = round_specamt().c
+            (
+            std::min<double>
+                (   SpecAmtLoadLimit
+                ,   (0 == Year && 0 == Month)
+                    ? std::max
+                        (term_specamt(0) + base_specamt(0)
+                        ,round_death_benefit().c(NetPmts[0] * YearsCorridorFactor)
+                        )
+                    : yare_input_.InforceSpecAmtLoadBase
                 )
-            : yare_input_.InforceSpecAmtLoadBase
-            ;
-        SpecAmtLoadBase = currency(std::min<double>(SpecAmtLoadBase, SpecAmtLoadLimit));
+            );
         }
 
     // These assignments must happen every month.
@@ -1629,7 +1630,7 @@ void AccountValue::TxSetBOMAV()
         }
     YearsTotalPolicyFee += MonthsPolicyFees;
 
-    SpecAmtLoad = round_minutiae()(YearsSpecAmtLoadRate * SpecAmtLoadBase);
+    SpecAmtLoad = round_minutiae().c(YearsSpecAmtLoadRate * SpecAmtLoadBase);
     YearsTotalSpecAmtLoad += SpecAmtLoad;
 
     process_deduction(MonthsPolicyFees + SpecAmtLoad);
@@ -1723,9 +1724,9 @@ void AccountValue::TxSetDeathBft()
 
     DBReflectingCorr = std::max
         (DBIgnoringCorr
-        ,currency(round_death_benefit()(YearsCorridorFactor * std::max(currency(0.0), cash_value_for_corridor)))
+        ,round_death_benefit().c(YearsCorridorFactor * std::max(currency(0.0), cash_value_for_corridor))
         );
-    DBReflectingCorr = round_death_benefit()(DBReflectingCorr);
+    DBReflectingCorr = round_death_benefit().c(DBReflectingCorr); // already rounded?
     LMI_ASSERT(0.0 <= DBReflectingCorr);
     // This overrides the value assigned above. There's more than one
     // way to interpret 7702A "death benefit"; this is just one.
@@ -1773,7 +1774,7 @@ void AccountValue::TxSetTermAmt()
         }
 
     TermDB = std::max(currency(0.0), TermSpecAmt + DBIgnoringCorr - DBReflectingCorr);
-    TermDB = round_death_benefit()(TermDB);
+    TermDB = round_death_benefit().c(TermDB); // already rounded?
 }
 
 /// Terminate the term rider, optionally converting it to base.
@@ -1871,7 +1872,7 @@ void AccountValue::TxSetCoiCharge()
         retention_charge = round_coi_charge()(NAAR * retention_rate);
         }
 
-    CoiCharge    = round_coi_charge()(NAAR * ActualCoiRate);
+    CoiCharge    = round_coi_charge().c(NAAR * ActualCoiRate);
     NetCoiCharge = CoiCharge - retention_charge;
     YearsTotalCoiCharge += CoiCharge;
 
@@ -1886,30 +1887,34 @@ void AccountValue::TxSetRiderDed()
     AdbCharge = 0.0;
     if(yare_input_.AccidentalDeathBenefit)
         {
-        AdbCharge = YearsAdbRate * std::min<double>(ActualSpecAmt, AdbLimit);
-        AdbCharge = round_rider_charges()(AdbCharge);
+        AdbCharge = round_rider_charges().c
+            (YearsAdbRate * std::min<double>(ActualSpecAmt, AdbLimit)
+            );
         }
 
     SpouseRiderCharge = 0.0;
     if(yare_input_.SpouseRider)
         {
-        SpouseRiderCharge = YearsSpouseRiderRate * yare_input_.SpouseRiderAmount;
-        SpouseRiderCharge = round_rider_charges()(SpouseRiderCharge);
+        SpouseRiderCharge = round_rider_charges().c
+            (YearsSpouseRiderRate * yare_input_.SpouseRiderAmount
+            );
         }
 
     ChildRiderCharge = 0.0;
     if(yare_input_.ChildRider)
         {
-        ChildRiderCharge = YearsChildRiderRate * yare_input_.ChildRiderAmount;
-        ChildRiderCharge = round_rider_charges()(ChildRiderCharge);
+        ChildRiderCharge = round_rider_charges().c
+            (YearsChildRiderRate * yare_input_.ChildRiderAmount
+            );
         }
 
     TermCharge = 0.0;
     DcvTermCharge = 0.0;
     if(TermRiderActive)
         {
-        TermCharge    = YearsTermRate   * TermDB * DBDiscountRate[Year];
-        TermCharge    = round_rider_charges()(TermCharge);
+        TermCharge    = round_rider_charges().c
+            (YearsTermRate   * TermDB * DBDiscountRate[Year]
+            );
         // TAXATION !! Integrated term: s/TermDB/TermSpecAmt/ because
         // it can't go into the corridor under tax assumptions.
         // TAXATION !! Use a distinct discount rate for taxation? Or
@@ -1925,8 +1930,9 @@ void AccountValue::TxSetRiderDed()
             {
             case oe_waiver_times_specamt:
                 {
-                WpCharge = YearsWpRate * std::min<double>(ActualSpecAmt, WpLimit);
-                WpCharge = round_rider_charges()(WpCharge);
+                WpCharge = round_rider_charges().c
+                    (YearsWpRate * std::min<double>(ActualSpecAmt, WpLimit)
+                    );
                 DcvWpCharge = WpCharge;
                 }
                 break;
@@ -1934,7 +1940,8 @@ void AccountValue::TxSetRiderDed()
                 {
                 // Premium load and M&E charges are not waived.
                 // The amount waived is subject to no maximum.
-                WpCharge =
+                WpCharge = round_rider_charges().c
+                    (
                     YearsWpRate
                     *   (
                             CoiCharge
@@ -1944,8 +1951,8 @@ void AccountValue::TxSetRiderDed()
                         +   SpouseRiderCharge
                         +   ChildRiderCharge
                         +   TermCharge
-                        );
-                WpCharge = round_rider_charges()(WpCharge);
+                        )
+                    );
                 DcvWpCharge =
                     YearsWpRate
                     *   (
@@ -1989,7 +1996,7 @@ void AccountValue::TxDoMlyDed()
 
     // Round total rider charges, even if each individual charge was
     // not rounded, so that deductions can be integral cents.
-    RiderCharges = round_minutiae()(simple_rider_charges + TermCharge + WpCharge);
+    RiderCharges = round_minutiae().c(simple_rider_charges + TermCharge + WpCharge);
     YearsTotalRiderCharges += RiderCharges;
     MlyDed = CoiCharge + RiderCharges;
 
@@ -2093,7 +2100,7 @@ void AccountValue::TxTakeSepAcctLoad()
         YearsSepAcctLoadRate = round_interest_rate()(YearsSepAcctLoadRate);
         }
 
-    SepAcctLoad = round_interest_credit()(YearsSepAcctLoadRate * AVSepAcct);
+    SepAcctLoad = round_interest_credit().c(YearsSepAcctLoadRate * AVSepAcct);
     process_deduction(SepAcctLoad);
     YearsTotalSepAcctLoad += SepAcctLoad;
     Dcv -= SepAcctLoad;
@@ -2430,7 +2437,7 @@ void AccountValue::TxTakeWD()
 
     if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {
-        NetWD = round_withdrawal()(std::min(RequestedWD, MaxWD));
+        NetWD = round_withdrawal().c(std::min(RequestedWD, MaxWD));
         OverridingWD[Year] = NetWD;
         }
     else
@@ -2556,7 +2563,7 @@ void AccountValue::TxTakeWD()
         return;
         }
 
-    GrossWD = currency(round_withdrawal()(NetWD + std::min<double>(WDFee, NetWD * WDFeeRate)));
+    GrossWD = round_withdrawal().c(NetWD + std::min<double>(WDFee, NetWD * WDFeeRate));
 
     // Free partial surrenders: for instance, the first 20% of account
     // value might be withdrawn each policy year free of surrender
@@ -2577,7 +2584,7 @@ void AccountValue::TxTakeWD()
         non_free_wd = std::max(0.0, doubleize(GrossWD) - free_wd);
         }
     double partial_surrchg = non_free_wd * surrchg_proportion;
-    GrossWD += round_withdrawal()(partial_surrchg);
+    GrossWD += round_withdrawal().c(partial_surrchg);
 
     process_distribution(GrossWD);
     Dcv -= GrossWD;
@@ -2728,7 +2735,7 @@ void AccountValue::SetMaxLoan()
     //
     max_loan *= 1.0 - (reg_loan_factor) / (1.0 + reg_loan_factor);
 
-    MaxLoan = round_loan()(max_loan);
+    MaxLoan = round_loan().c(max_loan);
 
     // I do not think we want a MaxLoan < current level of indebtedness.
     MaxLoan = std::max((AVRegLn + AVPrfLn), MaxLoan);

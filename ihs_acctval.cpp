@@ -532,12 +532,12 @@ void AccountValue::SetInitialValues()
 
     DB7702A                     = 0.0;  // TODO ?? TAXATION !! This seems silly.
 
-    AVRegLn                     = InforceAVRegLn;
-    AVPrfLn                     = InforceAVPrfLn;
-    RegLnBal                    = InforceRegLnBal;
-    PrfLnBal                    = InforcePrfLnBal;
-    AVGenAcct                   = InforceAVGenAcct;
-    AVSepAcct                   = InforceAVSepAcct;
+    AVRegLn                     = round_minutiae().c(InforceAVRegLn);
+    AVPrfLn                     = round_minutiae().c(InforceAVPrfLn);
+    RegLnBal                    = round_minutiae().c(InforceRegLnBal);
+    PrfLnBal                    = round_minutiae().c(InforcePrfLnBal);
+    AVGenAcct                   = round_minutiae().c(InforceAVGenAcct);
+    AVSepAcct                   = round_minutiae().c(InforceAVSepAcct);
 
     SepAcctPaymentAllocation = premium_allocation_to_sepacct(yare_input_);
     GenAcctPaymentAllocation = 1.0 - SepAcctPaymentAllocation;

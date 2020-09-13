@@ -217,7 +217,7 @@ currency BasicValues::GetModalTgtPrem
 
     // IHS !! Parameterized in lmi.
     static round_to<double> const round_it(2, r_upward);
-    return currency(round_it(z));
+    return round_it.c(z);
 }
 
 //============================================================================
@@ -291,7 +291,7 @@ currency BasicValues::GetModalTgtSpecAmt
 
     // IHS !! Parameterized in lmi.
     static round_to<double> const round_it(0, r_downward);
-    return currency(round_it(z));
+    return round_it.c(z);
 }
 
 //============================================================================

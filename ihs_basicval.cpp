@@ -972,8 +972,7 @@ currency BasicValues::GetModalPremMaxNonMec
 {
     // TAXATION !! No table available if 7PP calculated from first principles.
     double temp = MortalityRates_->SevenPayRates()[0];
-    double z = round_max_premium()(ldbl_eps_plus_one_times(temp * a_specamt / a_mode));
-    return currency(z);
+    return round_max_premium().c(ldbl_eps_plus_one_times(temp * a_specamt / a_mode));
 }
 
 /// Calculate premium using a minimum-premium ratio.
@@ -989,14 +988,13 @@ currency BasicValues::GetModalPremMinFromTable
     ,currency    a_specamt
     ) const
 {
-    double z = round_max_premium()
+    return round_max_premium().c
         (ldbl_eps_plus_one_times
             (
                 a_specamt * MortalityRates_->MinimumPremiumRates()[0]
             /   a_mode
             )
         );
-    return currency(z);
 }
 
 /// Calculate premium using a target-premium ratio.
@@ -1028,7 +1026,7 @@ currency BasicValues::GetModalPremTgtFromTable
     ,currency    a_specamt
     ) const
 {
-    double z = round_max_premium()
+    return round_max_premium().c
         (ldbl_eps_plus_one_times
             (
                 ( TgtPremMonthlyPolFee * 12.0
@@ -1037,7 +1035,6 @@ currency BasicValues::GetModalPremTgtFromTable
             /   a_mode
             )
         );
-    return currency(z);
 }
 
 /// Calculate premium using a tabular proxy for group insurance.
@@ -1049,14 +1046,13 @@ currency BasicValues::GetModalPremProxyTable
     ,double      a_table_multiplier
     ) const
 {
-    double z = round_gross_premium()
+    return round_gross_premium().c
         (
           a_specamt
         * MortalityRates_->GroupProxyRates()[a_year]
         * a_table_multiplier
         / a_mode
         );
-    return currency(z);
 }
 
 /// Calculate premium using a corridor ratio.
@@ -1072,8 +1068,7 @@ currency BasicValues::GetModalPremCorridor
     ) const
 {
     double temp = GetCorridorFactor()[0];
-    double z = round_max_premium()(ldbl_eps_plus_one_times((a_specamt / temp) / a_mode));
-    return currency(z);
+    return round_max_premium().c(ldbl_eps_plus_one_times((a_specamt / temp) / a_mode));
 }
 
 //============================================================================
@@ -1099,7 +1094,7 @@ currency BasicValues::GetModalPremGLP
 // term rider, dumpin
 
     z /= a_mode;
-    return currency(round_max_premium()(ldbl_eps_plus_one_times(z)));
+    return round_max_premium().c(ldbl_eps_plus_one_times(z));
 }
 
 //============================================================================
@@ -1122,7 +1117,7 @@ currency BasicValues::GetModalPremGSP
 // term rider, dumpin
 
     z /= a_mode;
-    return currency(round_max_premium()(ldbl_eps_plus_one_times(z)));
+    return round_max_premium().c(ldbl_eps_plus_one_times(z));
 }
 
 /// Calculate a monthly-deduction discount factor on the fly.
@@ -1364,7 +1359,7 @@ currency BasicValues::GetModalPremMlyDed
     double const mly_ded = deductions.second;
     double const v12 = mly_ded_discount_factor(year, mode);
     double const annuity = (1.0 - std::pow(v12, 12.0 / mode)) / (1.0 - v12);
-    return currency(round_min_premium()(ann_ded + mly_ded * annuity));
+    return round_min_premium().c(ann_ded + mly_ded * annuity);
 }
 
 /// Determine approximate ee and er "pay as you go" modal premiums.
@@ -1382,8 +1377,8 @@ std::pair<currency,currency> BasicValues::GetModalPremMlyDedEx
     double const v12 = DBDiscountRate[year];
     double const annuity = (1.0 - std::pow(v12, 12.0 / mode)) / (1.0 - v12);
     return std::make_pair
-        (currency(round_min_premium()(ee_ded * annuity))
-        ,currency(round_min_premium()(er_ded * annuity))
+        (round_min_premium().c(ee_ded * annuity)
+        ,round_min_premium().c(er_ded * annuity)
         );
 }
 
@@ -1425,7 +1420,7 @@ currency BasicValues::GetListBillPremMlyDed
         ,yare_input_.ListBillDate
         ,mly_ded_discount_factor(year, mode)
         );
-    return currency(round_min_premium()(z));
+    return round_min_premium().c(z);
 }
 
 std::pair<currency,currency> BasicValues::GetListBillPremMlyDedEx
@@ -1459,8 +1454,8 @@ std::pair<currency,currency> BasicValues::GetListBillPremMlyDedEx
         ,DBDiscountRate[year]
         );
     return std::make_pair
-        (currency(round_min_premium()(ee_prem))
-        ,currency(round_min_premium()(er_prem))
+        (round_min_premium().c(ee_prem)
+        ,round_min_premium().c(er_prem)
         );
 }
 
@@ -1473,12 +1468,10 @@ currency BasicValues::GetModalSpecAmtMax(currency annualized_pmt) const
         case oe_modal_nonmec:
             return GetModalSpecAmtMinNonMec(annualized_pmt);
         case oe_modal_table:
-            return currency
-                (round_min_specamt()
-                    (
-                        annualized_pmt
-                    /   MortalityRates_->MinimumPremiumRates()[0]
-                    )
+            return round_min_specamt().c
+                (
+                    annualized_pmt
+                /   MortalityRates_->MinimumPremiumRates()[0]
                 );
         }
     throw "Unreachable--silences a compiler diagnostic.";
@@ -1499,12 +1492,10 @@ currency BasicValues::GetModalSpecAmtTgt(currency annualized_pmt) const
         case oe_modal_nonmec:
             return GetModalSpecAmtMinNonMec(annualized_pmt);
         case oe_modal_table:
-            return currency
-                (round_min_specamt()
-                    (
-                        (annualized_pmt - TgtPremMonthlyPolFee * 12.0)
-                    /   MortalityRates_->TargetPremiumRates()[0]
-                    )
+            return round_min_specamt().c
+                (
+                    (annualized_pmt - TgtPremMonthlyPolFee * 12.0)
+                /   MortalityRates_->TargetPremiumRates()[0]
                 );
         }
     throw "Unreachable--silences a compiler diagnostic.";
@@ -1519,7 +1510,7 @@ currency BasicValues::GetModalSpecAmtTgt(currency annualized_pmt) const
 currency BasicValues::GetModalSpecAmtMinNonMec(currency annualized_pmt) const
 {
     // TAXATION !! No table available if 7PP calculated from first principles.
-    return currency(round_min_specamt()(annualized_pmt / MortalityRates_->SevenPayRates()[0]));
+    return round_min_specamt().c(annualized_pmt / MortalityRates_->SevenPayRates()[0]);
 }
 
 //============================================================================
@@ -1577,7 +1568,7 @@ currency BasicValues::GetModalSpecAmtCorridor(currency annualized_pmt) const
     int const k = round_corridor_factor().decimals();
     double const s = nonstd::power(10, k);
     double const z = std::round(s * GetCorridorFactor()[0]);
-    return currency(round_min_specamt()((z * annualized_pmt) / s));
+    return round_min_specamt().c((z * annualized_pmt) / s);
 }
 
 /// Calculate specified amount based on salary.
@@ -1598,7 +1589,7 @@ currency BasicValues::GetModalSpecAmtSalary(int a_year) const
         z = std::min(z, yare_input_.SalarySpecifiedAmountCap);
         }
     z -= yare_input_.SalarySpecifiedAmountOffset;
-    return currency(round_min_specamt()(std::max(0.0, z)));
+    return round_min_specamt().c(std::max(0.0, z));
 }
 
 /// In general, strategies linking specamt and premium commute. The
