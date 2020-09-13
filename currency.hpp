@@ -129,6 +129,7 @@ class currency
     // ...and a bit insidious:
 //  data_type from_double(double d) const {return static_cast<data_type>(100.000000000001 * d);}
     // ...less bad:
+//  data_type from_double(double d) const {return bourn_cast<data_type>(round(cents_per_dollar * d));}
     data_type from_double(double d) const {return round(cents_per_dollar * d);}
     double to_double() const {return bourn_cast<double>(m_) / cents_per_dollar;}
 //  data_type from_double(double d) const {return static_cast<data_type>(cents_per_dollar * d);}
