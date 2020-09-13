@@ -113,9 +113,9 @@ class currency
     // Far too permissive:
 //  currency& operator*=(double z) {m_ = static_cast<data_type>(100.0 * to_double() * z); return *this;}
     // wrong: doesn't affect '*this'
-    double operator*=(double z) {return to_double() * z;}
+//  double operator*=(double z) {return to_double() * z;}
 // Dangerous--can somehow take the place of operator*(double)
-//  currency const& operator*=(int z) {m_ *= z; return *this;}
+    currency const& operator*=(int z) {m_ *= z; return *this;}
 
     data_type m() const {return m_;} // restrict to friends?
 
@@ -191,7 +191,11 @@ inline currency operator+(currency lhs, double rhs) {return lhs += currency(rhs)
 inline currency operator-(currency lhs, double rhs) {return lhs -= currency(rhs);}
 //inline currency operator*(currency lhs, double rhs) {return lhs *= currency(rhs);}
 ////inline double operator*(currency lhs, double rhs) {return lhs *= currency(rhs);}
-inline double operator*(currency lhs, double rhs) {return lhs.operator*=(rhs);}
+// Don't actually want any member operator*() for double:
+inline double operator*(currency lhs, double rhs) {return lhs.d() *  rhs;}
+inline double operator*(double lhs, currency rhs) {return lhs *  rhs.d();}
+inline currency    operator*(currency lhs, int    rhs) {return lhs *= rhs;}
+inline currency    operator*(int    lhs, currency rhs) {return rhs *= lhs;}
 //inline currency operator*(currency lhs, int rhs) {return lhs *= rhs;}
 //inline currency operator*(int lhs, currency rhs) {return rhs *= lhs;}
 
