@@ -54,15 +54,9 @@ void currency_test::test_something()
     currency a1(3.25);
     BOOST_TEST(3.25 == a1.d());
     BOOST_TEST( 325 == a1.m_);
-    BOOST_TEST(   0 == a1 * a0);
     a1 += a1;
     BOOST_TEST(6.50 == a1.d());
     BOOST_TEST( 650 == a1.m_);
-    a1 *= a0;
-    BOOST_TEST(0.00 == a1.d());
-    BOOST_TEST(   0 == a1.m_);
-// Not sure what this should do, if anything, but it prints "6.5".
-std::cout << a1 << std::endl;
 
     currency a2 = currency(0.0) - a1;
     BOOST_TEST(-6.50 == a2.d());
