@@ -390,7 +390,7 @@ inline currency round_to<RealType>::c(RealType r) const
         (rounding_function_(static_cast<RealType>(r * scale_fwd_)) * scale_back_c_
         );
     // include required headers
-    return currency(bourn_cast<std::int64_t>(z), true);
+    return currency(bourn_cast<std::int64_t>(z));
 #if 0
     // don't do this in production:
     if(z != std::trunc(z))
