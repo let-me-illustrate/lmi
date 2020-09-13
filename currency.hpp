@@ -63,9 +63,9 @@ class currency
     currency(currency const&) = default;
     ~currency() = default;
 
-    explicit currency(double       d) : m_ {from_double(d)}           {}
-    explicit currency(int          i) : m_ {bourn_cast<data_type>(i)} {}
-    explicit currency(std::int64_t i) : m_ {bourn_cast<data_type>(i)} {}
+    explicit currency(double    d) : m_ {from_double(d)}           {}
+    explicit currency(int       i) : m_ {bourn_cast<data_type>(i)} {}
+    explicit currency(data_type i) : m_ {bourn_cast<data_type>(i)} {}
 
     currency& operator=(currency const&) = default;
     // IMPORTANT eventually suppress this? or both of these?

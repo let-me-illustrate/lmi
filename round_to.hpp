@@ -390,7 +390,7 @@ inline currency round_to<RealType>::c(RealType r) const
         (rounding_function_(static_cast<RealType>(r * scale_fwd_)) * scale_back_c_
         );
     // include required headers
-    return currency(bourn_cast<std::int64_t>(z));
+    return currency(bourn_cast<currency::data_type>(z));
 #if 0
     // don't do this in production:
     if(z != std::trunc(z))
@@ -399,8 +399,8 @@ inline currency round_to<RealType>::c(RealType r) const
             << trunc(z) << "\n"
             << LMI_FLUSH
             ;
-    currency k(bourn_cast<std::int64_t>(z), true);
-    if(k.m() != bourn_cast<std::int64_t>(std::trunc(k.m())))
+    currency k(bourn_cast<currency::data_type>(z), true);
+    if(k.m() != bourn_cast<currency::data_type>(std::trunc(k.m())))
         warning()
             << k.m() << " does not equal\n"
             << trunc(bourn_cast<double>(k.m())) << "\n"
