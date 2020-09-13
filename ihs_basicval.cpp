@@ -240,7 +240,7 @@ void BasicValues::Init()
     // by GPTServerInit(); the value assigned here is overridden by a
     // downstream call to Irc7702::Initialize7702(). TAXATION !! So
     // eliminate the member when it becomes unnecessary.
-    InitialTargetPremium = 0.0;
+    InitialTargetPremium = currency();
 
     SetMaxSurvivalDur();
     set_partial_mortality();
