@@ -27,6 +27,7 @@
 #include "bourn_cast.hpp"
 ////#include "round_to.hpp"
 
+#include <cmath>                        // round
 #include <cstdint>                      // int64_t
 #include <iostream>                     // ostream
 #include <vector>
@@ -109,6 +110,7 @@ class currency
 //  currency& operator*=(double z) {m_ = bourn_cast<data_type>(100.0 * to_double() * z); return *this;}
     // Far too permissive:
 //  currency& operator*=(double z) {m_ = static_cast<data_type>(100.0 * to_double() * z); return *this;}
+    // wrong: doesn't affect '*this'
     double operator*=(double z) {return to_double() * z;}
 // Dangerous--can somehow take the place of operator*(double)
 //  currency const& operator*=(int z) {m_ *= z; return *this;}
@@ -123,17 +125,22 @@ class currency
     // ...and a bit insidious:
 //  data_type from_double(double d) const {return static_cast<data_type>(100.000000000001 * d);}
     // ...less bad:
-//  data_type from_double(double d) const {return round(cents_per_dollar * d);}
-//  double to_double() const {return bourn_cast<double>(m_) / cents_per_dollar;}
-    data_type from_double(double d) const {return static_cast<data_type>(cents_per_dollar * d);}
-    double to_double() const {return static_cast<double>(m_) / cents_per_dollar;}
+    data_type from_double(double d) const {return round(cents_per_dollar * d);}
+    double to_double() const {return bourn_cast<double>(m_) / cents_per_dollar;}
+//  data_type from_double(double d) const {return static_cast<data_type>(cents_per_dollar * d);}
+//  double to_double() const {return static_cast<double>(m_) / cents_per_dollar;}
 #if 0 // will a fwd decl be wanted somewhere?
     data_type round(double d) const
         {
         static round_to<double> const r(0, r_to_nearest);
         return static_cast<data_type>(r(d));
         }
-#endif // 0
+#else // 1
+    data_type round(double d) const
+        {
+        return static_cast<data_type>(std::round(d));
+        }
+#endif // 1
     data_type m_ = {0};
 };
 
