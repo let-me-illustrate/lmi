@@ -188,7 +188,9 @@ inline bool operator>=(double   const& lhs, currency const& rhs){return !operato
 inline currency operator+(currency lhs, currency rhs) {return lhs += rhs;}
 inline currency operator-(currency lhs, currency rhs) {return lhs -= rhs;}
 inline currency operator+(currency lhs, double rhs) {return lhs += currency(rhs);}
+inline currency operator+(double lhs, currency rhs) {return currency(lhs) += rhs;}
 inline currency operator-(currency lhs, double rhs) {return lhs -= currency(rhs);}
+inline currency operator-(double lhs, currency rhs) {return currency(lhs) -= rhs;}
 //inline currency operator*(currency lhs, double rhs) {return lhs *= currency(rhs);}
 ////inline double operator*(currency lhs, double rhs) {return lhs *= currency(rhs);}
 // Don't actually want any member operator*() for double:
