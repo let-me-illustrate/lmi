@@ -80,8 +80,8 @@ std::cout << "int0: " << big_int0 << std::endl;
 std::cout << "int1: " << big_int1 << std::endl;
     currency::data_type big_int2 = 10.0 * big_num;
 std::cout << "int2: " << big_int2 << std::endl;
-    currency::data_type big_inte = 100.0 * big_num;
-std::cout << "int3: " << big_inte << std::endl;
+    currency::data_type big_int3 = 100.0 * big_num;
+std::cout << "int3: " << big_int3 << std::endl;
     currency::data_type big_int4 = round(100.0 * big_num);
 std::cout << "int4: " << big_int4 << std::endl;
 
