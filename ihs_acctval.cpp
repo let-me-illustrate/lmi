@@ -1329,7 +1329,7 @@ void AccountValue::FinalizeYear()
 
         for(int j = 0; j < 12; ++j)
             {
-//          LMI_ASSERT(materially_equal(GrossPmts[j], EeGrossPmts[j] + ErGrossPmts[j]));
+            LMI_ASSERT(materially_equal(GrossPmts[j], EeGrossPmts[j] + ErGrossPmts[j]));
             InvariantValues().GrossPmt  [Year]  += GrossPmts[j];
             InvariantValues().EeGrossPmt[Year]  += EeGrossPmts[j];
             InvariantValues().ErGrossPmt[Year]  += ErGrossPmts[j];
@@ -1338,7 +1338,7 @@ void AccountValue::FinalizeYear()
             {
             InvariantValues().InitPrem = InvariantValues().GrossPmt[Year];
             }
-#if 0
+#if 1
         LMI_ASSERT
             (materially_equal
                 (   InvariantValues().GrossPmt  [Year]
