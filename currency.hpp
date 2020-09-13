@@ -143,7 +143,7 @@ class currency
 #else // 1
     data_type round(double d) const
         {
-        return static_cast<data_type>(std::round(d));
+        return bourn_cast<data_type>(std::round(d));
         }
 #endif // 1
     data_type m_ = {0};

@@ -85,24 +85,38 @@ std::cout << "int3: " << big_int3 << std::endl;
     currency::data_type big_int4 = round(100.0 * big_num);
 std::cout << "int4: " << big_int4 << std::endl;
 
-    currency a3(big_num / 1000.0);
-std::cout << a3 << std::endl;
-std::cout << big_num << std::endl;
-std::cout << "rounded: " << round(big_num) << std::endl;
+    BOOST_TEST_THROW
+        (currency a3(big_num / 1000.0)
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
+//std::cout << a3 << std::endl;
+//std::cout << big_num << std::endl;
+//std::cout << "rounded: " << round(big_num) << std::endl;
 
-    std::cout << "\ntoo big:" << std::endl;
     double too_big = std::numeric_limits<double>::max();
-    currency a4(too_big);
-std::cout << a4 << std::endl;
-std::cout << too_big << std::endl;
-std::cout << "rounded: " << round(too_big) << std::endl;
-std::cout << 100.0 * too_big << std::endl;
+    BOOST_TEST_THROW
+        (currency a4(too_big)
+        ,std::runtime_error
+//      ,"Cast would transgress upper limit."
+        ,"Cannot cast infinite to integral."
+        );
+//    currency a4(too_big);
+//std::cout << a4 << std::endl;
+//std::cout << too_big << std::endl;
+//std::cout << "rounded: " << round(too_big) << std::endl;
+//std::cout << 100.0 * too_big << std::endl;
 
-    std::cout << "\nstill too big:" << std::endl;
     BOOST_TEST_THROW
         (currency(bourn_cast<currency::data_type>(too_big))
         ,std::runtime_error
         ,"Cast would transgress upper limit."
+        );
+    BOOST_TEST_THROW
+        (currency xyzzy(too_big)
+        ,std::runtime_error
+//      ,"Cast would transgress upper limit."
+        ,"Cannot cast infinite to integral."
         );
 
     currency b0(464.180000000000006821);
