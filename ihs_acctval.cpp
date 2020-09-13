@@ -398,7 +398,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     // TODO ?? TAXATION !! Shouldn't we increase initial SA if contract in corridor at issue?
     OldDB = OldSA;
 
-    SurrChg_.assign(BasicValues::GetLength(), currency(0.0));
+    SurrChg_.assign(BasicValues::GetLength(), currency());
 
     // TAXATION !! Input::InforceAnnualTargetPremium should be used here.
     double annual_target_premium = GetModalTgtPrem
@@ -575,15 +575,15 @@ void AccountValue::SetInitialValues()
 
     CumPmts                     = InforceCumPmts;
     TaxBasis                    = InforceTaxBasis;
-    YearlyTaxBasis.assign(BasicValues::GetLength(), currency(0.0));
+    YearlyTaxBasis.assign(BasicValues::GetLength(), currency());
     MlyNoLapsePrem              = 0.0;
     CumNoLapsePrem              = InforceCumNoLapsePrem;
 
     // Initialize all elements of this vector to 'false'. Then, when
     // the no-lapse criteria fail to be met, future values are right.
     YearlyNoLapseActive.assign(BasicValues::GetLength(), false);
-    loan_ullage_       .assign(BasicValues::GetLength(), currency(0.0));
-    withdrawal_ullage_ .assign(BasicValues::GetLength(), currency(0.0));
+    loan_ullage_       .assign(BasicValues::GetLength(), currency());
+    withdrawal_ullage_ .assign(BasicValues::GetLength(), currency());
     NoLapseActive               = true;
     if(NoLapseDboLvlOnly && mce_option1 != DeathBfts_->dbopt()[0])
         {
@@ -687,7 +687,7 @@ currency AccountValue::IncrementBOM
         {
         // Return value is total assets. After the policy has lapsed or
         // matured, there are no assets.
-        return currency(0.0);
+        return currency();
         }
 
     // Paranoid check.
@@ -759,8 +759,8 @@ void AccountValue::IncrementEOM
 
     // Save arguments, constraining their values to be nonnegative,
     // for calculating banded and tiered quantities.
-    AssetsPostBom  = std::max(currency(0.0), assets_post_bom  );
-    CumPmtsPostBom = std::max(currency(0.0), cum_pmts_post_bom);
+    AssetsPostBom  = std::max(currency(), assets_post_bom  );
+    CumPmtsPostBom = std::max(currency(), cum_pmts_post_bom);
 
     DoMonthCR();
 }
@@ -842,10 +842,10 @@ void AccountValue::InitializeYear()
     // value depends on the maximum loan, so it cannot be known here.
     ActualLoan                  = 0.0;
 
-    GrossPmts   .assign(12, currency(0.0));
-    EeGrossPmts .assign(12, currency(0.0));
-    ErGrossPmts .assign(12, currency(0.0));
-    NetPmts     .assign(12, currency(0.0));
+    GrossPmts   .assign(12, currency());
+    EeGrossPmts .assign(12, currency());
+    ErGrossPmts .assign(12, currency());
+    NetPmts     .assign(12, currency());
 
     InitializeSpecAmt();
 }
@@ -1020,7 +1020,7 @@ currency AccountValue::CSVBoost() const
         + yare_input_.CashValueEnhancementRate[Year]
         ;
     LMI_ASSERT(0.0 <= z);
-    return round_minutiae().c(z * std::max(currency(0.0), TotalAccountValue()));
+    return round_minutiae().c(z * std::max(currency(), TotalAccountValue()));
 }
 
 //============================================================================
@@ -1177,7 +1177,7 @@ void AccountValue::FinalizeYear()
 
     if(!Solving)
         {
-        csv_net = std::max(csv_net, currency(0.0));
+        csv_net = std::max(csv_net, currency());
         }
 
     if(Solving)

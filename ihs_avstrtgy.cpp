@@ -175,7 +175,7 @@ void AccountValue::PerformSupplAmtStrategy()
 {
     for(int j = 0; j < BasicValues::Length; ++j)
         {
-        currency m = currency(0.0); // No minimum other than zero is defined.
+        currency m {}; // No minimum other than zero is defined.
         currency explicit_value = DeathBfts_->supplamt()[j];
         mcenum_sa_strategy strategy = yare_input_.SupplementalAmountStrategy[j];
         currency z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);

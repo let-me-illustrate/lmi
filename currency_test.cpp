@@ -58,7 +58,7 @@ void currency_test::test_something()
     BOOST_TEST(6.50 == a1.d());
     BOOST_TEST( 650 == a1.m_);
 
-    currency a2 = currency(0.0) - a1;
+    currency a2 = currency() - a1;
     BOOST_TEST(-6.50 == a2.d());
     BOOST_TEST( -650 == a2.m_);
 

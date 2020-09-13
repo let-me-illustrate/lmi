@@ -92,7 +92,7 @@ class FindSpecAmt
         ,Premium         {a_Premium}
         ,NetPmtFactorTgt {a_NetPmtFactorTgt}
         ,NetPmtFactorExc {a_NetPmtFactorExc}
-        ,SpecAmt         {currency(0.0)}
+        ,SpecAmt         {currency {}}
         {
         }
     double operator()(double a_Trial)

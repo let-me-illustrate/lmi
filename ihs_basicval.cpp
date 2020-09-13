@@ -1605,7 +1605,7 @@ currency BasicValues::GetModalSpecAmtMlyDed(currency, mcenum_mode) const
         << "No maximum specified amount is defined for this product."
         << LMI_FLUSH
         ;
-    return currency(0.0);
+    return currency {};
 }
 
 /// 'Unusual' banding is one particular approach we needed to model.
