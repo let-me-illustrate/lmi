@@ -271,6 +271,10 @@ class round_to
     currency c(RealType r) const;
     std::vector<currency> c(std::vector<RealType> r) const;
 
+    currency c(currency z) const;
+// is this wanted?
+//  std::vector<currency> c(std::vector<RealType> r) const;
+
     int decimals() const;
     rounding_style style() const;
 
@@ -412,6 +416,14 @@ inline std::vector<currency> round_to<RealType>::c(std::vector<RealType> r) cons
     std::vector<currency> z;
     z.reserve(r.size());
     for(auto const& i : r) {z.push_back(c(i));}
+    return z;
+}
+
+template<typename RealType>
+inline currency round_to<RealType>::c(currency z) const
+{
+    LMI_ASSERT(decimals() <= 2); // ROUNDING similarly restrict rounding_rules
+    // instead, this ought to verify proper rounding
     return z;
 }
 
