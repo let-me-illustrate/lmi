@@ -74,6 +74,7 @@ class currency
     operator double() const {return to_double();}
     double d() const {return to_double();}
 
+#if 0
     // Is this better, with 'const&'?
 //  bool operator==(currency const& z) const {return z.m_ == m_;}
 
@@ -90,6 +91,7 @@ class currency
     bool operator!=(double d) const {return to_double() != d;}
     bool operator> (double d) const {return to_double() >  d;}
     bool operator>=(double d) const {return to_double() >= d;}
+#endif // 0
 
     // Is this the ideal signature for this operator?
 //  currency operator-() const {return currency(-m_);}
@@ -143,6 +145,45 @@ class currency
 #endif // 1
     data_type m_ = {0};
 };
+
+inline bool operator==(currency const& lhs, currency const& rhs){return lhs.m() == rhs.m();}
+inline bool operator< (currency const& lhs, currency const& rhs){return lhs.m() <  rhs.m();}
+inline bool operator!=(currency const& lhs, currency const& rhs){return !operator==(lhs,rhs);}
+inline bool operator> (currency const& lhs, currency const& rhs){return  operator< (rhs,lhs);}
+inline bool operator<=(currency const& lhs, currency const& rhs){return !operator> (lhs,rhs);}
+inline bool operator>=(currency const& lhs, currency const& rhs){return !operator< (lhs,rhs);}
+
+inline bool operator==(currency const& lhs, int      const& rhs){return lhs.m() == rhs;}
+inline bool operator< (currency const& lhs, int      const& rhs){return lhs.m() <  rhs;}
+inline bool operator==(int      const& lhs, currency const& rhs){return lhs == rhs.m();}
+inline bool operator< (int      const& lhs, currency const& rhs){return lhs <  rhs.m();}
+
+inline bool operator!=(currency const& lhs, int      const& rhs){return !operator==(lhs,rhs);}
+inline bool operator> (currency const& lhs, int      const& rhs){return  operator< (rhs,lhs);}
+inline bool operator<=(currency const& lhs, int      const& rhs){return !operator> (lhs,rhs);}
+inline bool operator>=(currency const& lhs, int      const& rhs){return !operator< (lhs,rhs);}
+
+inline bool operator!=(int      const& lhs, currency const& rhs){return !operator==(lhs,rhs);}
+inline bool operator> (int      const& lhs, currency const& rhs){return  operator< (rhs,lhs);}
+inline bool operator<=(int      const& lhs, currency const& rhs){return !operator> (lhs,rhs);}
+inline bool operator>=(int      const& lhs, currency const& rhs){return !operator< (lhs,rhs);}
+
+// double--avoid these:
+
+inline bool operator==(currency const& lhs, double   const& rhs){return lhs.d() == rhs;}
+inline bool operator< (currency const& lhs, double   const& rhs){return lhs.d() <  rhs;}
+inline bool operator==(double   const& lhs, currency const& rhs){return lhs == rhs.d();}
+inline bool operator< (double   const& lhs, currency const& rhs){return lhs <  rhs.d();}
+
+inline bool operator!=(currency const& lhs, double   const& rhs){return !operator==(lhs,rhs);}
+inline bool operator> (currency const& lhs, double   const& rhs){return  operator< (rhs,lhs);}
+inline bool operator<=(currency const& lhs, double   const& rhs){return !operator> (lhs,rhs);}
+inline bool operator>=(currency const& lhs, double   const& rhs){return !operator< (lhs,rhs);}
+
+inline bool operator!=(double   const& lhs, currency const& rhs){return !operator==(lhs,rhs);}
+inline bool operator> (double   const& lhs, currency const& rhs){return  operator< (rhs,lhs);}
+inline bool operator<=(double   const& lhs, currency const& rhs){return !operator> (lhs,rhs);}
+inline bool operator>=(double   const& lhs, currency const& rhs){return !operator< (lhs,rhs);}
 
 inline currency operator+(currency lhs, currency rhs) {return lhs += rhs;}
 inline currency operator-(currency lhs, currency rhs) {return lhs -= rhs;}
