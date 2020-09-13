@@ -301,7 +301,7 @@ void AccountValue::process_payment(currency payment)
     double er_proportion = 0.0;
     if(0.0 != gross_non_1035_pmts)
         {
-        er_proportion = ErGrossPmts[Month] / gross_non_1035_pmts;
+        er_proportion = ErGrossPmts[Month] / gross_non_1035_pmts.d();
         }
 
     // This is a net premium that's multiplied by a gross-premium
@@ -736,7 +736,7 @@ void AccountValue::ChangeSpecAmtBy(currency delta)
                 break;
             case mce_adjust_both:
                 {
-                term_proportion = TermSpecAmt / old_total_specamt;
+                term_proportion = TermSpecAmt / old_total_specamt.d();
                 }
                 break;
             case mce_adjust_base:
@@ -2570,7 +2570,7 @@ void AccountValue::TxTakeWD()
     // charge. This would become more complicated if we maintained
     // distinct surrender-charge layers.
 
-    double surrchg_proportion = SurrChg_[Year] / csv;
+    double surrchg_proportion = SurrChg_[Year] / csv.d();
     currency non_free_wd = GrossWD;
     if(0.0 != FreeWDProportion[Year])
         {

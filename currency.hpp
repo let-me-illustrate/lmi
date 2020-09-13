@@ -198,6 +198,8 @@ inline currency    operator*(currency lhs, int    rhs) {return lhs *= rhs;}
 inline currency    operator*(int    lhs, currency rhs) {return rhs *= lhs;}
 //inline currency operator*(currency lhs, int rhs) {return lhs *= rhs;}
 //inline currency operator*(int lhs, currency rhs) {return rhs *= lhs;}
+inline double operator/(currency lhs, double rhs) {return lhs.d() /  rhs;}
+inline double operator/(double lhs, currency rhs) {return lhs /  rhs.d();}
 
 inline std::ostream& operator<<(std::ostream& os, currency const& c)
 {
