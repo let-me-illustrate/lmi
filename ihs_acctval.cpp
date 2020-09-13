@@ -514,30 +514,30 @@ void AccountValue::FinalizeLifeAllBases()
 //============================================================================
 void AccountValue::SetInitialValues()
 {
-    InforceYear                 = yare_input_.InforceYear                     ;
-    InforceMonth                = yare_input_.InforceMonth                    ;
-    InforceAVGenAcct            = yare_input_.InforceGeneralAccountValue      ;
-    InforceAVSepAcct            = yare_input_.InforceSeparateAccountValue     ;
-    InforceAVRegLn              = yare_input_.InforceRegularLoanValue         ;
-    InforceAVPrfLn              = yare_input_.InforcePreferredLoanValue       ;
-    InforceRegLnBal             = yare_input_.InforceRegularLoanBalance       ;
-    InforcePrfLnBal             = yare_input_.InforcePreferredLoanBalance     ;
-    InforceCumNoLapsePrem       = yare_input_.InforceCumulativeNoLapsePremium ;
-    InforceCumPmts              = yare_input_.InforceCumulativeNoLapsePayments;
-    InforceTaxBasis             = yare_input_.InforceTaxBasis                 ;
+    InforceYear           = yare_input_.InforceYear                     ;
+    InforceMonth          = yare_input_.InforceMonth                    ;
+    InforceAVGenAcct      = round_minutiae().c(yare_input_.InforceGeneralAccountValue      );
+    InforceAVSepAcct      = round_minutiae().c(yare_input_.InforceSeparateAccountValue     );
+    InforceAVRegLn        = round_minutiae().c(yare_input_.InforceRegularLoanValue         );
+    InforceAVPrfLn        = round_minutiae().c(yare_input_.InforcePreferredLoanValue       );
+    InforceRegLnBal       = round_minutiae().c(yare_input_.InforceRegularLoanBalance       );
+    InforcePrfLnBal       = round_minutiae().c(yare_input_.InforcePreferredLoanBalance     );
+    InforceCumNoLapsePrem = round_minutiae().c(yare_input_.InforceCumulativeNoLapsePremium );
+    InforceCumPmts        = round_minutiae().c(yare_input_.InforceCumulativeNoLapsePayments);
+    InforceTaxBasis       = round_minutiae().c(yare_input_.InforceTaxBasis                 );
 
-    Year                        = InforceYear;
-    Month                       = InforceMonth;
+    Year                  = InforceYear;
+    Month                 = InforceMonth;
     CoordinateCounters();
 
-    DB7702A                     = 0.0;  // TODO ?? TAXATION !! This seems silly.
+    DB7702A               = 0.0;  // TODO ?? TAXATION !! This seems silly.
 
-    AVRegLn                     = round_minutiae().c(InforceAVRegLn);
-    AVPrfLn                     = round_minutiae().c(InforceAVPrfLn);
-    RegLnBal                    = round_minutiae().c(InforceRegLnBal);
-    PrfLnBal                    = round_minutiae().c(InforcePrfLnBal);
-    AVGenAcct                   = round_minutiae().c(InforceAVGenAcct);
-    AVSepAcct                   = round_minutiae().c(InforceAVSepAcct);
+    AVRegLn               = round_minutiae().c(InforceAVRegLn);
+    AVPrfLn               = round_minutiae().c(InforceAVPrfLn);
+    RegLnBal              = round_minutiae().c(InforceRegLnBal);
+    PrfLnBal              = round_minutiae().c(InforcePrfLnBal);
+    AVGenAcct             = round_minutiae().c(InforceAVGenAcct);
+    AVSepAcct             = round_minutiae().c(InforceAVSepAcct);
 
     SepAcctPaymentAllocation = premium_allocation_to_sepacct(yare_input_);
     GenAcctPaymentAllocation = 1.0 - SepAcctPaymentAllocation;
@@ -624,7 +624,7 @@ void AccountValue::SetInitialValues()
             }
         if(HoneymoonActive)
             {
-            HoneymoonValue = yare_input_.InforceHoneymoonValue;
+            HoneymoonValue = round_minutiae().c(yare_input_.InforceHoneymoonValue);
             }
         }
 
@@ -632,7 +632,7 @@ void AccountValue::SetInitialValues()
     RiderCharges                = 0.0;
     NetCoiCharge                = 0.0;
     MlyDed                      = 0.0;
-    CumulativeSalesLoad         = yare_input_.InforceCumulativeSalesLoad;
+    CumulativeSalesLoad         = round_minutiae().c(yare_input_.InforceCumulativeSalesLoad);
 
     database().query_into(DB_ExpRatCoiRetention, CoiRetentionRate);
     database().query_into(DB_ExpRatAmortPeriod , ExperienceRatingAmortizationYears);
@@ -1365,6 +1365,7 @@ void AccountValue::SetAnnualInvariants()
 {
     YearsCorridorFactor     = GetCorridorFactor()[Year];
     YearsDBOpt              = DeathBfts_->dbopt()[Year];
+    // policy fee should be rounded in loads class
     YearsMonthlyPolicyFee   = Loads_->monthly_policy_fee(GenBasis_)[Year];
     YearsAnnualPolicyFee    = Loads_->annual_policy_fee (GenBasis_)[Year];
 
