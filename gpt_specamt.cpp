@@ -97,7 +97,7 @@ class FindSpecAmt
         }
     double operator()(double a_Trial)
         {
-        SpecAmt = a_Trial;
+        SpecAmt = currency(a_Trial);
         return
                 Irc7702_.CalculatePremium
                     (EIOBasis_
