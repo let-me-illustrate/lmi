@@ -257,6 +257,12 @@ inline void AccountValue::SetMonthlyDetail(int enumerator, double d)
 }
 
 //============================================================================
+inline void AccountValue::SetMonthlyDetail(int enumerator, currency c)
+{
+    DebugRecord[enumerator] = value_cast<std::string>(c);
+}
+
+//============================================================================
 void AccountValue::SetDebugFilename(std::string const& s)
 {
     configurable_settings const& c = configurable_settings::instance();
