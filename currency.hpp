@@ -144,7 +144,7 @@ class currency
     data_type m_ = {0};
 };
 
-//inline currency operator+(currency lhs, currency rhs) {return lhs += rhs;}
+inline currency operator+(currency lhs, currency rhs) {return lhs += rhs;}
 inline currency operator+(currency lhs, double rhs) {return lhs += currency(rhs);}
 inline currency operator-(currency lhs, double rhs) {return lhs -= currency(rhs);}
 //inline currency operator*(currency lhs, double rhs) {return lhs *= currency(rhs);}
