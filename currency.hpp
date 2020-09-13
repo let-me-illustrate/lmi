@@ -45,6 +45,10 @@ using currency = double;
 #if defined USE_CURRENCY_CLASS
 class currency
 {
+    friend std::ostream& operator<<(std::ostream&, currency const&);
+    friend class currency_test;
+
+  public:
   #if defined __GNUC__
   #   pragma GCC diagnostic ignored "-Wuseless-cast"
   #endif // defined __GNUC__
@@ -52,10 +56,6 @@ class currency
 //  using data_type = long double;
     using data_type = std::int64_t;
 
-    friend std::ostream& operator<<(std::ostream&, currency const&);
-    friend class currency_test;
-
-  public:
     static constexpr int cents_digits = 2;
     static constexpr int cents_per_dollar = 100; // 10 ^ cents_digits
 
