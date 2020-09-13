@@ -89,12 +89,21 @@ std::cout << "int4: " << big_int4 << std::endl;
 std::cout << a3 << std::endl;
 std::cout << big_num << std::endl;
 std::cout << "rounded: " << round(big_num) << std::endl;
+
+    std::cout << "\ntoo big:" << std::endl;
     double too_big = std::numeric_limits<double>::max();
     currency a4(too_big);
 std::cout << a4 << std::endl;
 std::cout << too_big << std::endl;
 std::cout << "rounded: " << round(too_big) << std::endl;
 std::cout << 100.0 * too_big << std::endl;
+
+    std::cout << "\nstill too big:" << std::endl;
+    BOOST_TEST_THROW
+        (currency(bourn_cast<currency::data_type>(too_big))
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
 
     currency b0(464.180000000000006821);
     currency b1(263.01999999999998181);
