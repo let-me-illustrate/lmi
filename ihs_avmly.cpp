@@ -1295,10 +1295,14 @@ void AccountValue::TxAscertainDesiredPayment()
     LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 }
 
-//============================================================================
-// TAXATION !! Should this be called for gpt? or, if it's called,
-// should it assert that it has no effect?
-//void AccountValue::TxLimitPayment(currency a_maxpmt)
+/// Limit payment (e.g., to the non-MEC maximum).
+///
+/// The limit argument is of type double because the taxation code may
+/// return DBL_MAX.
+///
+/// TAXATION !! Should this be called for gpt? or, if it's called,
+/// should it assert that it has no effect?
+
 void AccountValue::TxLimitPayment(double a_maxpmt)
 {
 // Subtract premium load from gross premium yielding net premium.
