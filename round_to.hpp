@@ -24,7 +24,7 @@
 
 #include "config.hpp"
 
-//#include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "currency.hpp"
 #include "mc_enum_type_enums.hpp"       // enum rounding_style
 #include "stl_extensions.hpp"           // nonstd::power()
@@ -381,6 +381,7 @@ inline std::vector<RealType> round_to<RealType>::operator()(std::vector<RealType
 template<typename RealType>
 inline currency round_to<RealType>::c(RealType r) const
 {
+    LMI_ASSERT(decimals() <= 2); // ROUNDING similarly restrict rounding_rules
     RealType z = static_cast<RealType>
         (rounding_function_(static_cast<RealType>(r * scale_fwd_)) * scale_back_c_
         );
