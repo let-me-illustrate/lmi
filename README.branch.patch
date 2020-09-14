@@ -1,0 +1,88 @@
+As of
+  commit 7bac50c7154a419ff93a1398313dc7fe6d9fbed5 (HEAD -> valyuta/002)
+  Date:   2020-09-13T23:50:07+00:00
+the currency class adds considerable overhead: about 42% in the
+"finra, no solve" case, and much more in the other cases, which all
+involve solves (even "naic, no solve" has a guaranteed-premium solve).
+Thus, solves need to be looked at.
+
+production:
+
+  naic, no solve      : 5.122e-02 s mean;      50922 us least of  20 runs
+  naic, specamt solve : 9.235e-02 s mean;      91375 us least of  11 runs
+  naic, ee prem solve : 8.451e-02 s mean;      83933 us least of  12 runs
+  finra, no solve     : 2.068e-02 s mean;      20534 us least of  49 runs
+  finra, specamt solve: 5.816e-02 s mean;      57775 us least of  18 runs
+  finra, ee prem solve: 5.385e-02 s mean;      53643 us least of  19 runs
+
+currency, without patch below:
+
+Test speed:
+  naic, no solve      : 1.248e-01 s mean;     123517 us least of   9 runs  2.43
+  naic, specamt solve : 2.139e-01 s mean;     212435 us least of   5 runs  2.32
+  naic, ee prem solve : 2.024e-01 s mean;     198110 us least of   5 runs  2.36
+  finra, no solve     : 2.958e-02 s mean;      29122 us least of  34 runs  1.42
+  finra, specamt solve: 1.087e-01 s mean;     107460 us least of  10 runs  1.86
+  finra, ee prem solve: 1.041e-01 s mean;     102665 us least of  10 runs  1.91
+
+currency, with patch below:
+
+Test speed:
+  naic, no solve      : 7.284e-02 s mean;      72125 us least of  14 runs  1.42
+  naic, specamt solve : 1.317e-01 s mean;     130443 us least of   8 runs  1.43
+  naic, ee prem solve : 1.190e-01 s mean;     117681 us least of   9 runs  1.40
+  finra, no solve     : 2.360e-02 s mean;      23285 us least of  43 runs  1.13
+  finra, specamt solve: 7.287e-02 s mean;      72060 us least of  14 runs  1.25
+  finra, ee prem solve: 6.995e-02 s mean;      69262 us least of  15 runs  1.29
+
+This patch causes serious regressions. Its purpose is only to show
+the effect of removing as much overhead from class currency as seems
+possible.
+
+diff --git a/currency.hpp b/currency.hpp
+index 0a54a917..20123047 100644
+--- a/currency.hpp
++++ b/currency.hpp
+@@ -64,8 +64,8 @@ class currency
+     ~currency() = default;
+ 
+     explicit currency(double    d) : m_ {from_double(d)}           {}
+-    explicit currency(int       i) : m_ {bourn_cast<data_type>(i)} {}
+-    explicit currency(data_type i) : m_ {bourn_cast<data_type>(i)} {}
++    explicit currency(int       i) : m_ {static_cast<data_type>(i)} {}
++    explicit currency(data_type i) : m_ {static_cast<data_type>(i)} {}
+ 
+     currency& operator=(currency const&) = default;
+     // IMPORTANT eventually suppress this? or both of these?
+@@ -131,7 +131,7 @@ class currency
+     // ...less bad:
+ //  data_type from_double(double d) const {return bourn_cast<data_type>(round(cents_per_dollar * d));}
+     data_type from_double(double d) const {return round(cents_per_dollar * d);}
+-    double to_double() const {return bourn_cast<double>(m_) / cents_per_dollar;}
++    double to_double() const {return static_cast<double>(m_) / cents_per_dollar;}
+ //  data_type from_double(double d) const {return static_cast<data_type>(cents_per_dollar * d);}
+ //  double to_double() const {return static_cast<double>(m_) / cents_per_dollar;}
+ #if 0 // will a fwd decl be wanted somewhere?
+@@ -143,7 +143,8 @@ class currency
+ #else // 1
+     data_type round(double d) const
+         {
+-        return bourn_cast<data_type>(std::round(d));
++//      return bourn_cast<data_type>(std::round(d));
++        return static_cast<data_type>(d);
+         }
+ #endif // 1
+     data_type m_ = {0};
+diff --git a/round_to.hpp b/round_to.hpp
+index 84772dc8..59c37d49 100644
+--- a/round_to.hpp
++++ b/round_to.hpp
+@@ -390,7 +390,7 @@ inline currency round_to<RealType>::c(RealType r) const
+         (rounding_function_(static_cast<RealType>(r * scale_fwd_)) * scale_back_c_
+         );
+     // include required headers
+-    return currency(bourn_cast<currency::data_type>(z));
++    return currency(static_cast<currency::data_type>(z));
+ #if 0
+     // don't do this in production:
+     if(z != std::trunc(z))
