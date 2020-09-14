@@ -60,6 +60,10 @@ class SolveHelper
         :av {a_av}
         {
         }
+
+    // decimal_root() calls this thus:
+    //   static_cast<double>(f(double));
+    // so double f(double) is most natural here:
 //  double operator()(currency a_CandidateValue)
     double operator()(double a_CandidateValue)
         {
