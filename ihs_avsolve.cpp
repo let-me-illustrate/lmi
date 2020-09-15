@@ -181,7 +181,7 @@ currency AccountValue::SolveTest(currency a_CandidateValue)
         ,0
         );
     LMI_ASSERT(0 <= no_lapse_dur);
-    currency most_negative_csv(0.0);
+    currency most_negative_csv {};
     if(no_lapse_dur < SolveTargetDuration_)
         {
         most_negative_csv = currency

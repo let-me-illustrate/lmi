@@ -201,7 +201,7 @@ void AccountValue::DoMonthDR()
         {
         gross_1035 = External1035Amount + Internal1035Amount;
         }
-    double necessary_premium = std::min<double> // round?
+    double necessary_premium = std::min // round?
         (material_difference // round?
             (doubleize(GrossPmts[Month])
             ,doubleize(gross_1035)
@@ -288,9 +288,9 @@ void AccountValue::process_payment(currency payment)
     // contracts. We deem net payments to have the same proportion
     // as gross payments, which we do have for ee and er separately.
 
-    LMI_ASSERT(0.0 <=   GrossPmts[Month]);
-    LMI_ASSERT(0.0 <= EeGrossPmts[Month]);
-    LMI_ASSERT(0.0 <= ErGrossPmts[Month]);
+    LMI_ASSERT(currency() <=   GrossPmts[Month]);
+    LMI_ASSERT(currency() <= EeGrossPmts[Month]);
+    LMI_ASSERT(currency() <= ErGrossPmts[Month]);
 
     currency gross_1035 {};
     if(0 == Year && 0 == Month)
@@ -299,7 +299,7 @@ void AccountValue::process_payment(currency payment)
         }
     currency gross_non_1035_pmts = GrossPmts[Month] - gross_1035;
     double er_proportion = 0.0;
-    if(0.0 != gross_non_1035_pmts)
+    if(currency() != gross_non_1035_pmts)
         {
         er_proportion = ErGrossPmts[Month] / gross_non_1035_pmts.d();
         }
@@ -532,16 +532,16 @@ void AccountValue::TxExch1035()
 
     LMI_ASSERT(Year == InforceYear);
     LMI_ASSERT(Month == InforceMonth);
-    LMI_ASSERT(0.0 ==   GrossPmts[Month]);
-    LMI_ASSERT(0.0 == EeGrossPmts[Month]);
-    LMI_ASSERT(0.0 == ErGrossPmts[Month]);
+    LMI_ASSERT(currency() ==   GrossPmts[Month]);
+    LMI_ASSERT(currency() == EeGrossPmts[Month]);
+    LMI_ASSERT(currency() == ErGrossPmts[Month]);
 
     // Policy issue date is always a modal payment date.
     GrossPmts[Month] = External1035Amount + Internal1035Amount;
 
 // TODO ?? TAXATION !! This looks like a good idea, but it would prevent the
 // initial seven-pay premium from being set.
-//    if(0.0 == GrossPmts[Month])
+//    if(currency() == GrossPmts[Month])
 //        {
 //        return;
 //        }
@@ -590,8 +590,8 @@ void AccountValue::TxExch1035()
 
     NetPmts[Month] = GrossPmts[Month] - actual_load;
 
-    LMI_ASSERT(0.0 == AVGenAcct);
-    LMI_ASSERT(0.0 == AVSepAcct);
+    LMI_ASSERT(currency() == AVGenAcct);
+    LMI_ASSERT(currency() == AVSepAcct);
     process_payment(NetPmts[Month]);
 
     DBReflectingCorr = currency();
@@ -747,7 +747,7 @@ void AccountValue::ChangeSpecAmtBy(currency delta)
         ActualSpecAmt += round_specamt().c(delta * (1.0 - term_proportion));
         TermSpecAmt = old_total_specamt + delta - ActualSpecAmt;
 
-        if(TermSpecAmt < 0.0)
+        if(TermSpecAmt < currency())
             {
             // Reducing the term rider's specified amount to a value
             // less than zero is taken as a request to terminate the
@@ -920,7 +920,7 @@ void AccountValue::TxOptionChange()
                     // Do nothing. An argument could be made for this
                     // alternative:
                     //   TxSetDeathBft(); // update DBReflectingCorr
-                    //   ChangeSpecAmtBy(std::max(0.0, DBReflectingCorr));
+                    //   ChangeSpecAmtBy(std::max(currency(), DBReflectingCorr));
                     // but that takes more work and is not clearly
                     // preferable.
                     }
@@ -1375,7 +1375,7 @@ void AccountValue::TxRecognizePaymentFor7702A
     ,bool   a_this_payment_is_unnecessary
     )
 {
-    if(0.0 == a_pmt)
+    if(currency() == a_pmt)
         {
         return;
         }
@@ -1415,12 +1415,12 @@ void AccountValue::TxRecognizePaymentFor7702A
 //============================================================================
 void AccountValue::TxAcceptPayment(currency a_pmt)
 {
-    if(0.0 == a_pmt)
+    if(currency() == a_pmt)
         {
         return;
         }
 
-    if(a_pmt < 0.0)
+    if(a_pmt < currency())
         warning()
             << a_pmt << " a_pmt\n"
             << Year << " Year\n"
@@ -1428,12 +1428,12 @@ void AccountValue::TxAcceptPayment(currency a_pmt)
 //          << z << " z\n"
             << LMI_FLUSH
             ;
-    LMI_ASSERT(0.0 <= a_pmt);
+    LMI_ASSERT(currency() <= a_pmt);
     // Internal 1035 exchanges may be exempt from premium tax; they're
     // handled elsewhere, so here the exempt amount is always zero.
     currency actual_load = GetPremLoad(a_pmt, currency());
     currency net_pmt = a_pmt - actual_load;
-    LMI_ASSERT(0.0 <= net_pmt);
+    LMI_ASSERT(currency() <= net_pmt);
     NetPmts[Month] += net_pmt;
 
     // If a payment on an ROP contract is treated as an adjustable event,
@@ -1557,10 +1557,10 @@ currency AccountValue::GetRefundableSalesLoad() const
 #if 0
     // CURRENCY !! Assertions such as these are desirable, but adding
     // them now would cause regression artifacts.
-    LMI_ASSERT(0.0 <= CumulativeSalesLoad);
-    LMI_ASSERT(0.0 <= YearsSalesLoadRefundRate);
+    LMI_ASSERT(currency() <= CumulativeSalesLoad);
+    LMI_ASSERT(currency() <= YearsSalesLoadRefundRate);
     double const z = CumulativeSalesLoad * YearsSalesLoadRefundRate;
-    LMI_ASSERT(0.0 <= z);
+    LMI_ASSERT(currency() <= z);
     return z;
 #endif // 0
 }
@@ -1576,7 +1576,7 @@ void AccountValue::TxLoanRepay()
         }
 
     // Nothing to do if no loan repayment requested.
-    if(0.0 <= RequestedLoan)
+    if(currency() <= RequestedLoan)
         {
         return;
         }
@@ -1609,12 +1609,12 @@ void AccountValue::TxSetBOMAV()
         {
         if(!yare_input_.TermRider && !TermIsNotRider)
             {
-            LMI_ASSERT(0.0 == term_specamt(0));
+            LMI_ASSERT(currency() == term_specamt(0));
             }
         LMI_ASSERT(yare_input_.InforceSpecAmtLoadBase <= SpecAmtLoadLimit);
         SpecAmtLoadBase = round_specamt().c
             (
-            std::min<double>
+            std::min
                 (   SpecAmtLoadLimit
                 ,   (0 == Year && 0 == Month)
                     ? std::max
@@ -1732,7 +1732,7 @@ void AccountValue::TxSetDeathBft()
         ,round_death_benefit().c(YearsCorridorFactor * std::max(currency(), cash_value_for_corridor))
         );
     DBReflectingCorr = round_death_benefit().c(DBReflectingCorr); // already rounded?
-    LMI_ASSERT(0.0 <= DBReflectingCorr);
+    LMI_ASSERT(currency() <= DBReflectingCorr);
     // This overrides the value assigned above. There's more than one
     // way to interpret 7702A "death benefit"; this is just one.
     // TAXATION !! Use DB_Irc7702BftIsSpecAmt
@@ -1844,7 +1844,7 @@ void AccountValue::TxSetCoiCharge()
 // TAXATION !! Should this be handled at the same time as GPT forceouts?
 
     DcvNaar = material_difference
-        (std::max<double>(DcvDeathBft, DBIgnoringCorr.d()) * DBDiscountRate[Year]
+        (std::max(DcvDeathBft, DBIgnoringCorr.d()) * DBDiscountRate[Year]
         ,std::max(0.0, Dcv)
         );
     // DCV need not be rounded.
@@ -2054,7 +2054,7 @@ void AccountValue::TxTestHoneymoonForExpiration()
     // And it doesn't make sense for the honeymoon provision to
     // keep the contract in force if 'HoneymoonValue' is -10000
     // and CSV is -20000.
-    if(HoneymoonValue <= 0.0 || HoneymoonValue < csv_ignoring_loan)
+    if(HoneymoonValue <= currency() || HoneymoonValue < csv_ignoring_loan)
         {
         HoneymoonActive = false;
         HoneymoonValue  = -std::numeric_limits<int>::max(); // yick
@@ -2224,7 +2224,7 @@ void AccountValue::TxCreditInt()
         gross_sep_acct_rate = 0.0;
         }
 
-    if(0.0 < AVSepAcct)
+    if(currency() < AVSepAcct)
         {
         SepAcctIntCred = InterestCredited(AVSepAcct, YearsSepAcctIntRate);
         double gross   = InterestCredited(AVSepAcct, gross_sep_acct_rate).d();
@@ -2248,7 +2248,7 @@ void AccountValue::TxCreditInt()
         SepAcctIntCred = currency();
         }
 
-    if(0.0 < AVGenAcct)
+    if(currency() < AVGenAcct)
         {
         double effective_general_account_interest_factor = YearsGenAcctIntRate;
         if
@@ -2287,7 +2287,7 @@ void AccountValue::TxCreditInt()
         }
 
     // Loaned account value must not be negative.
-    LMI_ASSERT(0.0 <= AVRegLn && 0.0 <= AVPrfLn);
+    LMI_ASSERT(currency() <= AVRegLn && currency() <= AVPrfLn);
 
     currency z = RegLnIntCred + PrfLnIntCred + SepAcctIntCred + GenAcctIntCred;
     YearsTotalNetIntCredited   += z;
@@ -2304,7 +2304,7 @@ void AccountValue::TxLoanInt()
     PrfLnIntCred = currency();
 
     // Nothing more to do if there's no loan outstanding.
-    if(currency() == RegLnBal && 0.0 == PrfLnBal)
+    if(currency() == RegLnBal && currency() == PrfLnBal)
         {
         return;
         }
@@ -2413,7 +2413,7 @@ void AccountValue::TxTakeWD()
     GrossWD = currency();
     RequestedWD = Outlay_->withdrawals()[Year];
 
-    if(Debugging || 0.0 != RequestedWD)
+    if(Debugging || currency() != RequestedWD)
         {
         SetMaxWD();
         }
@@ -2421,7 +2421,7 @@ void AccountValue::TxTakeWD()
     NetWD = currency();
 
     // Nothing more to do if no withdrawal requested.
-    if(0.0 == RequestedWD)
+    if(currency() == RequestedWD)
         {
         withdrawal_ullage_[Year] = currency();
 // This seems wrong. If we're changing something that's invariant among
@@ -2501,7 +2501,7 @@ void AccountValue::TxTakeWD()
         RequestedLoan += RequestedWD - NetWD;
         }
 
-    if(NetWD <= 0.0)
+    if(NetWD <= currency())
         {
 // TODO ?? What should this be?
 //      withdrawal_ullage_[Year] = ?
@@ -2555,8 +2555,8 @@ void AccountValue::TxTakeWD()
 
     currency av = TotalAccountValue();
     currency csv = av - SurrChg_[Year];
-    LMI_ASSERT(0.0 <= SurrChg_[Year]);
-    if(csv <= 0.0)
+    LMI_ASSERT(currency() <= SurrChg_[Year]);
+    if(csv <= currency())
         {
 // TODO ?? What should this be?
 //      withdrawal_ullage_[Year] = ?
@@ -2759,7 +2759,7 @@ void AccountValue::TxTakeLoan()
 
     // Even if no loan is requested, the maximum loan is still shown
     // in a monthly trace.
-    if(Debugging || 0.0 <= RequestedLoan)
+    if(Debugging || currency() <= RequestedLoan)
         {
         SetMaxLoan();
         }
@@ -2904,11 +2904,11 @@ void AccountValue::TxTestLapse()
     // Otherwise if CSV is negative or if overloaned, then lapse the policy.
     else if
         (
-            (!NoLapseActive && lapse_test_csv < 0.0)
+            (!NoLapseActive && lapse_test_csv < currency())
         // Lapse if overloaned regardless of guar DB.
         // CSV includes a positive loan (that can offset a negative AV);
         // however, we still need to test for NoLapseActive.
-        ||  (!NoLapseActive && (AVGenAcct + AVSepAcct) < 0.0)
+        ||  (!NoLapseActive && (AVGenAcct + AVSepAcct) < currency())
         // Test for nonnegative unloaned account value.
         // We are aware that some companies test against loan balance:
 // TODO ?? Would the explicit test
@@ -2936,14 +2936,14 @@ void AccountValue::TxTestLapse()
         }
     else
         {
-        if(NoLapseActive && lapse_test_csv < 0.0)
+        if(NoLapseActive && lapse_test_csv < currency())
             {
             AVGenAcct = currency();
             AVSepAcct = currency();
             // TODO ?? Can't this be done elsewhere?
             VariantValues().CSVNet[Year] = 0.0;
             }
-        else if(!HoneymoonActive && !Solving && lapse_test_csv < 0.0)
+        else if(!HoneymoonActive && !Solving && lapse_test_csv < currency())
             {
             alarum()
                 << "Unloaned value not positive,"

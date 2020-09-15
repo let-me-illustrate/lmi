@@ -79,7 +79,7 @@ currency SolveTest()
     //   CSV at target duration
     //   lowest negative CSV through target duration
     //   amount of loan in excess of maximum loan through target duration
-    currency Negative(0.0);
+    currency Negative {};
 
     // IHS !! Start counting only at end of no-lapse period--lmi does that already.
     for(int j = 0; j < ThatSolveTgtYear; ++j)
@@ -98,7 +98,7 @@ currency SolveTest()
         z = std::min(z, Negative);
     // IHS !! If SolveTgtYr within no-lapse period...see lmi.
 
-    currency y(0.0);
+    currency y {};
     switch(ThatSolveTarget)
         {
         case mce_solve_for_endt:

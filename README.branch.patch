@@ -35,14 +35,6 @@ cancellation, made improvements like this:
 
 random notes--further cleanup and other future tasks:
 
-+    if(currency() == RegLnBal && 0.0 == PrfLnBal)
-                                  ^^^ should be "currency()"
-
-max<double>...should rarely if ever need to specify template parameter
-
-should be currency():
-+    AVUnloaned               = 0;          // Antediluvian.
-
 unary operator-()
 
 loads class should use currency type for policy fees

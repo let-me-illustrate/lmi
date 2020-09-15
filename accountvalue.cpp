@@ -813,7 +813,7 @@ void AccountValue::TxSetRiderDed()
     AdbCharge = currency();
     if(hasadb)
         {
-        AdbCharge = currency(YearsAdbRate * std::min<double>(500000.0, ActualSpecAmt.d()));
+        AdbCharge = currency(YearsAdbRate * std::min(500000.0, ActualSpecAmt.d()));
         }
 }
 

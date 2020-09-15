@@ -111,16 +111,16 @@ AccountValue::AccountValue(Input const& input)
     // all be kept together.
     LapseMonth               = 0;          // Antediluvian.
     LapseYear                = 0;          // Antediluvian.
-    AVUnloaned               = 0;          // Antediluvian.
-    pmt                      = 0;          // Antediluvian.
+    AVUnloaned               = currency(); // Antediluvian.
+    pmt                      = currency(); // Antediluvian.
     pmt_mode                 = mce_annual; // Antediluvian.
     ModeIndex                = 0;          // Antediluvian.
-    wd                       = 0;          // Antediluvian.
+    wd                       = currency(); // Antediluvian.
     mlyguarv                 = 0.0;        // Antediluvian.
-    deathbft                 = 0;          // Antediluvian.
+    deathbft                 = currency(); // Antediluvian.
     haswp                    = false;      // Antediluvian.
     hasadb                   = false;      // Antediluvian.
-    mlydedtonextmodalpmtdate = 0;          // Antediluvian.
+    mlydedtonextmodalpmtdate = currency(); // Antediluvian.
 
     set_list_bill_year_and_month();
 
@@ -240,7 +240,7 @@ currency AccountValue::RunOneBasis(mcenum_run_basis a_Basis)
             ;
         }
 
-    currency z(0.0);
+    currency z {};
     if(Solving)
         {
 // Apparently this should never be done because Solve() is called in
@@ -265,7 +265,7 @@ currency AccountValue::RunOneBasis(mcenum_run_basis a_Basis)
 //
 currency AccountValue::RunAllApplicableBases()
 {
-    currency z(0.0);
+    currency z {};
 
     // TODO ?? Normally, running on the current basis determines the
     // overriding values for all components of outlay--e.g., premiums,
@@ -434,9 +434,9 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     InvariantValues().InforceIsMec = inforce_is_mec;
     bool mec_1035 =
               yare_input_.External1035ExchangeFromMec
-           && 0.0 != Outlay_->external_1035_amount()
+           && currency() != Outlay_->external_1035_amount()
         ||    yare_input_.Internal1035ExchangeFromMec
-           && 0.0 != Outlay_->internal_1035_amount()
+           && currency() != Outlay_->internal_1035_amount()
         ;
     bool is_already_a_mec = inforce_is_mec || mec_1035;
     if(is_already_a_mec)
@@ -1002,7 +1002,7 @@ void AccountValue::set_modal_min_premium()
 
 currency AccountValue::SurrChg() const
 {
-    LMI_ASSERT(0.0 <= SurrChg_[Year]);
+    LMI_ASSERT(currency() <= SurrChg_[Year]);
     // For the nonce, CSVBoost() is netted against surrender charge.
     // This class's implementation should be revised to distinguish
     // these additive and subtractive components of CSV.
@@ -1164,7 +1164,7 @@ void AccountValue::FinalizeYear()
 
     // While performing a solve, ignore any positive surrender charge
     // that cannot cause the contract to lapse.
-    if(Solving && 0.0 < surr_chg && LapseIgnoresSurrChg)
+    if(Solving && currency() < surr_chg && LapseIgnoresSurrChg)
         {
         ; // Do nothing.
         }
@@ -1195,7 +1195,7 @@ void AccountValue::FinalizeYear()
     // the surrender charge are negative while others are positive,
     // consider only their sum here, instead of considering the sign
     // of each component individually.
-    if(surr_chg < 0.0)
+    if(surr_chg < currency())
         {
         cv_7702 -= surr_chg;
         }
