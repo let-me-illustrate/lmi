@@ -386,6 +386,8 @@ template<typename RealType>
 inline currency round_to<RealType>::c(RealType r) const
 {
     LMI_ASSERT(decimals() <= 2); // ROUNDING similarly restrict rounding_rules
+    // Precondition for casting to integer below:
+    LMI_ASSERT(decimals() <= currency::cents_digits);
     RealType z = static_cast<RealType>
         (rounding_function_(static_cast<RealType>(r * scale_fwd_)) * scale_back_c_
         );
