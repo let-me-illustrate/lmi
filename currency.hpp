@@ -64,16 +64,16 @@ class currency
     ~currency() = default;
 
     explicit currency(double    d) : m_ {from_double(d)}           {}
-    explicit currency(int       i) : m_ {bourn_cast<data_type>(i)} {}
+    explicit currency(int       i) : m_ {cents_per_dollar * bourn_cast<data_type>(i)} {}
     explicit currency(data_type i) : m_ {bourn_cast<data_type>(i)} {}
 
     currency& operator=(currency const&) = default;
     // IMPORTANT eventually suppress this? or both of these?
     // defining both causes real problems
-    currency& operator=(double d) {m_ = from_double(d);           return *this;}
-//  currency& operator=(int    i) {m_ = bourn_cast<data_type>(i); return *this;}
+//  currency& operator=(double d) {m_ = from_double(d);           return *this;}
+    currency& operator=(int    i) {m_ = cents_per_dollar * bourn_cast<data_type>(i); return *this;}
 
-    operator double() const {return to_double();}
+//  operator double() const {return to_double();}
     double d() const {return to_double();}
 
 #if 0

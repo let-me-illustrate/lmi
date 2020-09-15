@@ -143,7 +143,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     // Scalable scalars.
 
     // SOMEDAY !! Things indexed with '[0]' should probably use inforce year instead.
-    InitBaseSpecAmt            = b->DeathBfts_->specamt()[0];
+    InitBaseSpecAmt            = (b->DeathBfts_->specamt()[0]).d();
     InitTermSpecAmt            = TermSpecAmt[0];
     ChildRiderAmount           = b->yare_input_.ChildRiderAmount;
     SpouseRiderAmount          = b->yare_input_.SpouseRiderAmount;
@@ -735,7 +735,7 @@ void LedgerInvariant::ReInit(BasicValues const* b)
         }
     SpecAmt                    = doubleize(b->DeathBfts_->specamt());
 
-    InitBaseSpecAmt            = b->DeathBfts_->specamt()[0];
+    InitBaseSpecAmt            = (b->DeathBfts_->specamt()[0]).d();
     InitTermSpecAmt            = TermSpecAmt[0];
 
     IsMec                      = false;

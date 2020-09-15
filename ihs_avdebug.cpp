@@ -419,19 +419,19 @@ void AccountValue::DebugPrint()
     SetMonthlyDetail(eCumNoLapsePrem     ,CumNoLapsePrem                   );
     SetMonthlyDetail(eNoLapseActive      ,NoLapseActive                    );
     SetMonthlyDetail(eEOMAV              ,TotalAccountValue()              );
-    SetMonthlyDetail(eHMValue            ,std::max<double>(HoneymoonValue, 0.0));
+    SetMonthlyDetail(eHMValue            ,std::max(HoneymoonValue, currency()));
     SetMonthlyDetail(eSurrChg            ,SurrChg()                        );
 
 // TODO ?? Unfortunately duplicated from AccountValue::FinalizeYear().
-    double total_av = TotalAccountValue();
-    double csv_net =
+    currency total_av = TotalAccountValue();
+    currency csv_net =
             total_av
         -   SurrChg()
         -   RegLnBal
         +   GetRefundableSalesLoad()
 //        +   std::max(0.0, ExpRatReserve) // This would be added if it existed.
         ;
-    csv_net = std::max<double>(HoneymoonValue, csv_net);
+    csv_net = std::max(HoneymoonValue, csv_net);
 
     SetMonthlyDetail(eEOMCSVNet          ,csv_net                          );
     SetMonthlyDetail(eEOMCV7702          ,CashValueFor7702()               );

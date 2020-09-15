@@ -228,19 +228,19 @@ currency AccountValue::RunOneCell(mcenum_run_basis TheBasis)
 
     InforceYear      = yare_input_.InforceYear;
     InforceMonth     = yare_input_.InforceMonth;
-    InforceAVGenAcct = yare_input_.InforceGeneralAccountValue;
+    InforceAVGenAcct = currency(yare_input_.InforceGeneralAccountValue);
 
     ItLapsed         = false;
     LapseMonth       = 0;
     LapseYear        = 0;
 
-    TaxBasis         = 0.0;
+    TaxBasis         = currency();
 
-    MaxLoan          = 0.0;
-    RegLnBal         = 0.0;
-    PrfLnBal         = 0.0;
-    AVRegLn          = 0.0;
-    AVPrfLn          = 0.0;
+    MaxLoan          = currency();
+    RegLnBal         = currency();
+    PrfLnBal         = currency();
+    AVRegLn          = currency();
+    AVPrfLn          = currency();
 
     // 'InforceAVGenAcct' is unloaned only; this branch wasn't
     // designed to allow inforce loans.
@@ -290,7 +290,7 @@ void AccountValue::DoYear
 
     pmt                   = stored_pmts[Year];
     YearsPremLoadTgt      = Loads_->target_premium_load(GenBasis_)[Year];
-    YearsMonthlyPolicyFee = Loads_->monthly_policy_fee(GenBasis_)[Year];
+    YearsMonthlyPolicyFee = currency(Loads_->monthly_policy_fee(GenBasis_)[Year]);
     ActualSpecAmt         = base_specamt(Year);
 
     // These variables are set for each pass independently.
@@ -345,16 +345,16 @@ void AccountValue::DoYear
             }
         }
 
-    VariantValues().AcctVal[Year] = AVUnloaned + AVRegLn + AVPrfLn;
+    VariantValues().AcctVal[Year] = (AVUnloaned + AVRegLn + AVPrfLn).d();
     VariantValues().CSVNet[Year] = VariantValues().AcctVal[Year] - VariantValues().SurrChg[Year];
     // Update death benefit: "deathbft" currently holds benefit as of the
     //   beginning of month 12, but we want it as of the end of that month,
     //   in case the corridor or option 2 drove it up during the last month.
     TxSetDeathBft();
-    VariantValues().EOYDeathBft[Year] = deathbft;
+    VariantValues().EOYDeathBft[Year] = deathbft.d();
 
     // IHS !! Change one of these names, which differ only in the terminal 's'.
-    InvariantValues().GrossPmt[Year] += std::accumulate(GrossPmts.begin(), GrossPmts.end(), 0.0);
+    InvariantValues().GrossPmt[Year] += std::accumulate(GrossPmts.begin(), GrossPmts.end(), currency()).d();
     InvariantValues().Outlay[Year] =
             InvariantValues().GrossPmt   [Year]
         -   InvariantValues().NetWD      [Year]
@@ -497,7 +497,7 @@ void AccountValue::PerformSpecAmtStrategy()
 
     for(int j = 0; j < BasicValues::GetLength(); ++j)
         {
-        InvariantValues().SpecAmt[j] = SA;
+        InvariantValues().SpecAmt[j] = SA.d();
         }
 }
 
@@ -557,7 +557,7 @@ void AccountValue::TxOptionChange()
     // Carry the new spec amt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); ++j)
         {
-        InvariantValues().SpecAmt[j] = ActualSpecAmt;
+        InvariantValues().SpecAmt[j] = ActualSpecAmt.d();
         }
 }
 
@@ -589,7 +589,7 @@ void AccountValue::TxSpecAmtChange()
     // Carry the new spec amt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); ++j)
         {
-        InvariantValues().SpecAmt[j] = ActualSpecAmt;
+        InvariantValues().SpecAmt[j] = ActualSpecAmt.d();
         }
 }
 
@@ -734,7 +734,7 @@ void AccountValue::TxLoanRepay()
 
     AVUnloaned -= RequestedLoan;
     AVRegLn += RequestedLoan;    // IHS !! Preferred loans--see lmi.
-    InvariantValues().NewCashLoan[Year] = RequestedLoan;
+    InvariantValues().NewCashLoan[Year] = RequestedLoan.d();
 }
 
 /// Set account value before monthly deductions.
@@ -790,7 +790,8 @@ void AccountValue::TxSetCoiCharge()
     TxSetDeathBft();
 
     // Negative AV doesn't increase NAAR.
-    NAAR = round_naar()(deathbft * mlyguarv - (AVUnloaned + AVRegLn + AVPrfLn));
+    NAAR = (deathbft * mlyguarv - (AVUnloaned + AVRegLn + AVPrfLn)).d();
+    NAAR = round_naar()(NAAR);
 
     CoiCharge = round_coi_charge().c(NAAR * YearsCoiRate0);
 }
@@ -799,19 +800,20 @@ void AccountValue::TxSetCoiCharge()
 
 void AccountValue::TxSetRiderDed()
 {
-    WpCharge = 0.0;
+    WpCharge = currency();
     if(haswp)
         {
-        WpCharge =
+        WpCharge = currency
+            (
                 YearsWpRate
             *   (CoiCharge + YearsMonthlyPolicyFee + AdbCharge)
-            ;
+            );
         }
 
-    AdbCharge = 0.0;
+    AdbCharge = currency();
     if(hasadb)
         {
-        AdbCharge = currency(YearsAdbRate * std::min<double>(500000.0, ActualSpecAmt));
+        AdbCharge = currency(YearsAdbRate * std::min<double>(500000.0, ActualSpecAmt.d()));
         }
 }
 
@@ -879,7 +881,7 @@ void AccountValue::TxTakeWD()
         }
 
     // Nothing to do if no withdrawal requested.
-    if(0.0 == wd)
+    if(currency() == wd)
         {
         return;
         }
@@ -889,7 +891,7 @@ void AccountValue::TxTakeWD()
     // Impose minimum amount (if nonzero) on withdrawals.
     if(wd < MinWD)
         {
-        wd = 0.0;
+        wd = currency();
         }
 
     // Impose maximum amount.
@@ -934,7 +936,7 @@ void AccountValue::TxTakeWD()
             // Carry the new spec amt forward into all future years.
             for(int j = Year; j < BasicValues::GetLength(); ++j)
                 {
-                InvariantValues().SpecAmt[j] = ActualSpecAmt;
+                InvariantValues().SpecAmt[j] = ActualSpecAmt.d();
                 }
             }
             break;
@@ -953,7 +955,7 @@ void AccountValue::TxTakeWD()
     wd -= std::min(WDFee, currency(wd * WDFeeRate));
     // IHS !! This treats input WD as gross; it probably should be net. But compare lmi.
 
-    InvariantValues().NetWD[Year] = wd;
+    InvariantValues().NetWD[Year] = wd.d();
 // IHS !!    TaxBasis -= wd; // Withdrawals are subtracted from basis in lmi.
 }
 
@@ -977,12 +979,13 @@ void AccountValue::TxTakeLoan()
     // If maximum exceeded...limit it.
     // IHS !! For solves, the lmi branch uses an 'ullage' concept.
     double max_loan =
-          AVUnloaned * 0.9    // IHS !! Icky manifest constant--lmi uses a database entity.
+          AVUnloaned.d() * 0.9    // IHS !! Icky manifest constant--lmi uses a database entity.
         // - surrchg
-        + (AVRegLn + AVPrfLn)
-        - RegLnBal * (std::pow((1.0 + YearsRegLnIntDueRate), 12 - Month) - 1.0)
-        - PrfLnBal * (std::pow((1.0 + YearsPrfLnIntDueRate), 12 - Month) - 1.0)
-        - mlydedtonextmodalpmtdate;
+        + (AVRegLn + AVPrfLn).d()
+        - RegLnBal.d() * (std::pow((1.0 + YearsRegLnIntDueRate), 12 - Month) - 1.0)
+        - PrfLnBal.d() * (std::pow((1.0 + YearsPrfLnIntDueRate), 12 - Month) - 1.0)
+        - mlydedtonextmodalpmtdate.d()
+        ;
     // Interest adjustment: d upper n where n is # months remaining in year.
     // Witholding this keeps policy from becoming overloaned before year end.
     double IntAdj = std::pow((1.0 + YearsRegLnIntDueRate), 12 - Month);
@@ -1002,7 +1005,7 @@ void AccountValue::TxTakeLoan()
 
     AVUnloaned -= RequestedLoan;
     AVRegLn += RequestedLoan;    // IHS !! Also preferred loans: implemented in lmi.
-    InvariantValues().NewCashLoan[Year] = RequestedLoan;
+    InvariantValues().NewCashLoan[Year] = RequestedLoan.d();
 }
 
 /// Test for lapse.

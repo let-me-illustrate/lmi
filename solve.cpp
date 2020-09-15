@@ -84,9 +84,9 @@ currency SolveTest()
     // IHS !! Start counting only at end of no-lapse period--lmi does that already.
     for(int j = 0; j < ThatSolveTgtYear; ++j)
         {
-        Negative = std::min<double>
+        Negative = std::min
             (Negative
-            ,ConstThat->VariantValues().CSVNet[j]
+            ,currency(ConstThat->VariantValues().CSVNet[j])
 // Ideally, it'd be this:
 //          ,std::min(ConstThat->VariantValues().CSVNet[j], ConstThat->loan_ullage_[j])
 // but the antediluvian branch doesn't calculate ullage at all.
@@ -133,7 +133,7 @@ currency SolveTest()
             break;
         case mce_solve_for_target_csv:
             {
-            y = ThatSolveTargetValue;
+            y = currency(ThatSolveTargetValue);
             }
             break;
         case mce_solve_for_target_naar: // Fall through.
@@ -155,7 +155,7 @@ inline static double SolveSpecAmt(double CandidateValue)
 {
 // IHS !! Change surrchg when SA changes?
     That->SolveSetSpecAmt(currency(CandidateValue), ThatSolveBegYear, ThatSolveEndYear);
-    return only_set_values ? 0.0 : SolveTest();
+    return only_set_values ? 0.0 : SolveTest().d();
 }
 
 //============================================================================
@@ -163,7 +163,7 @@ inline static double SolvePrem(double CandidateValue)
 //inline static double SolvePrem(currency CandidateValue)
 {
     That->SolveSetPmts(currency(CandidateValue), ThatSolveBegYear, ThatSolveEndYear);
-    return only_set_values ? 0.0 : SolveTest();
+    return only_set_values ? 0.0 : SolveTest().d();
 }
 
 //============================================================================
@@ -171,7 +171,7 @@ inline static double SolveLoan(double CandidateValue)
 //inline static double SolveLoan(currency CandidateValue)
 {
     That->SolveSetLoans(currency(CandidateValue), ThatSolveBegYear, ThatSolveEndYear);
-    return only_set_values ? 0.0 : SolveTest();
+    return only_set_values ? 0.0 : SolveTest().d();
 }
 
 //============================================================================
@@ -179,7 +179,7 @@ inline static double SolveWD(double CandidateValue)
 //inline static double SolveWD(currency CandidateValue)
 {
     That->SolveSetWDs(currency(CandidateValue), ThatSolveBegYear, ThatSolveEndYear);
-    return only_set_values ? 0.0 : SolveTest();
+    return only_set_values ? 0.0 : SolveTest().d();
 }
 
 //============================================================================
@@ -283,7 +283,7 @@ currency AccountValue::Solve()
             LowerBound = 0.0;
             // If solved premium exceeds specified amount, there's a problem.
             // IHS !! Better to use the maximum SA, not the first SA?
-            UpperBound = DeathBfts_->specamt()[0];
+            UpperBound = DeathBfts_->specamt()[0].d();
             Decimals   = 2;
             SolveFn    = SolvePrem;
             }
@@ -353,6 +353,6 @@ currency AccountValue::Solve()
     only_set_values = !Solving;
     currency actual_solution = currency(Solution.first);
 
-    SolveFn(actual_solution);
+    SolveFn(actual_solution.d());
     return actual_solution;
 }

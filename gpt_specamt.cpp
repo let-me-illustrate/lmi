@@ -107,14 +107,14 @@ class FindSpecAmt
                     ,a_Trial
                     ,NetPmtFactorTgt
                     ,NetPmtFactorExc
-                    ,Values_.GetAnnualTgtPrem(Duration, SpecAmt)
+                    ,Values_.GetAnnualTgtPrem(Duration, SpecAmt).d()
                     )
             -   Premium
             ;
         }
     double Get()
         {
-        return SpecAmt;
+        return SpecAmt.d();
         }
 };
 
@@ -150,7 +150,7 @@ currency gpt_specamt::CalculateSpecAmt
         ,z
         ,a_EIOBasis
         ,a_Duration
-        ,a_Premium
+        ,a_Premium.d()
         ,a_NetPmtFactorTgt
         ,a_NetPmtFactorExc
         );

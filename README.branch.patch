@@ -1,3 +1,80 @@
+Make conversions explicit, e.g.:
+  currency amount;
+- amount = 3.14;           // implicit
++ amount = currency(3.14); // explicit
+  double floating;
+- floating = amount;       // was implicit
++ floating = amount.d();
+That may seem like mere ugly verbosity, but...
+- amount = 0.0;            // (integer)(round(100.0 * 0.0))
++ amount = currency();     // integer = 0
++ currency amount {};      // even better, where possible
+- if(0.0 == amount)        // 0.0 == (double)(amount / 100.0)
++ if(currency() == amount) // integer == integer
+A user-defined literals like "0_c" could replace
+
+Removed the very costly implicit conversions:
+    currency& operator=(double d)
+    operator double() const
+but allowed
+    currency& operator=(int i) // assigns 100.0 * argument
+
+Because using integer math means not having to worry about catastrophic
+cancellation, made improvements like this:
+
+- LMI_ASSERT(materially_equal(GrossPmts[j], EeGrossPmts[j] + ErGrossPmts[j]));
++ LMI_ASSERT(GrossPmts[j] == EeGrossPmts[j] + ErGrossPmts[j]);
+
+     double max_loan =
+          AVUnloaned.d() * 0.9
+        + (AVRegLn + AVPrfLn).d()
+        - RegLnBal.d() * i_reg
+        - PrfLnBal.d() * i_prf
+        - mlydedtonextmodalpmtdate.d()
+        ;
+
+random notes--further cleanup and other future tasks:
+
++    if(currency() == RegLnBal && 0.0 == PrfLnBal)
+                                  ^^^ should be "currency()"
+
+max<double>...should rarely if ever need to specify template parameter
+
+should be currency():
++    AVUnloaned               = 0;          // Antediluvian.
+
+unary operator-()
+
+loads class should use currency type for policy fees
+
+probably DCV should be currency instead of double
+
+Solves are still a puzzle: is it inherently slower to find an
+integral root than a floating-point root of a polynomial? That
+question is crucial because making solves dramatically slower
+could mean that a currency class is unaffordable.
+
+After the changes in this commit:
+
+  naic, no solve      : 1.085e-01 s mean;     103995 us least of  10 runs
+  naic, specamt solve : 1.798e-01 s mean;     179138 us least of   6 runs
+  naic, ee prem solve : 1.672e-01 s mean;     166277 us least of   6 runs
+  finra, no solve     : 2.711e-02 s mean;      26542 us least of  37 runs
+  finra, specamt solve: 9.375e-02 s mean;      93087 us least of  11 runs
+  finra, ee prem solve: 8.994e-02 s mean;      89230 us least of  12 runs
+
+which is about ten percent faster for "finra, no solve", the
+only scenario that involves no explicit or implicit solve,
+so these improvements are valuable even if making all the
+conversions explicit impairs readability somewhat. Still,
+solves need to be looked at. Compared to production, even with
+these changes the currency branch is thirty percent slower for the
+"finra, no solve" case (yet further improvements might bring that
+into an acceptable range), but only half as fast for the "naic"
+scenarios (which involve solves).
+
+//
+
 As of
   commit 7bac50c7154a419ff93a1398313dc7fe6d9fbed5 (HEAD -> valyuta/002)
   Date:   2020-09-13T23:50:07+00:00

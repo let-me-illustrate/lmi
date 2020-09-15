@@ -40,10 +40,10 @@ double IllusVal::run(Input const& input)
     AccountValue av(input);
     av.SetDebugFilename(filename_);
 
-    double z = av.RunAV();
+    currency z = av.RunAV();
     ledger_ = av.ledger_from_av();
 
-    return z;
+    return z.d(); // or just change return type to currency?
 }
 
 std::shared_ptr<Ledger const> IllusVal::ledger() const

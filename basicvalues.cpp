@@ -200,7 +200,7 @@ currency BasicValues::GetModalTgtPrem
     // IHS !! Implemented better in lmi.
     double Annuity = (1.0 - std::pow(u, 12 / a_mode)) / (1.0 - u);
 
-    double z = a_specamt;
+    double z = a_specamt.d();
     z /=
         (   1.0
         +   InterestRates_->GenAcctNetRate
@@ -274,7 +274,7 @@ currency BasicValues::GetModalTgtSpecAmt
         );
     double Annuity = (1.0 - std::pow(u, 12 / a_mode)) / (1.0 - u);
 
-    double z = a_pmt;
+    double z = a_pmt.d();
     z /= Annuity;
     z *= 1.0 - Loads_->target_premium_load(mce_gen_curr)[0];
 //    z /= WpRate;

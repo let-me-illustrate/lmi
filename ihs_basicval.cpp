@@ -565,7 +565,7 @@ void BasicValues::Init7702()
 /// These loads should instead reflect the lowest premium-tax rate.
             ,Loads_->target_premium_load_excluding_premium_tax()
             ,Loads_->excess_premium_load_excluding_premium_tax()
-            ,InitialTargetPremium
+            ,InitialTargetPremium.d()
             ,round_min_premium()
             ,round_max_premium()
             ,round_min_specamt()
@@ -614,10 +614,10 @@ currency BasicValues::GetAnnualTgtPrem(int a_year, currency a_specamt) const
 void BasicValues::SetPermanentInvariants()
 {
     // maybe implement query_into<currency>
-    MinIssSpecAmt      = database().query<int>(DB_MinIssSpecAmt);
-    MinIssBaseSpecAmt  = database().query<int>(DB_MinIssBaseSpecAmt);
-    MinRenlSpecAmt     = database().query<int>(DB_MinRenlSpecAmt);
-    MinRenlBaseSpecAmt = database().query<int>(DB_MinRenlBaseSpecAmt);
+    MinIssSpecAmt      = currency(database().query<int>(DB_MinIssSpecAmt     ));
+    MinIssBaseSpecAmt  = currency(database().query<int>(DB_MinIssBaseSpecAmt ));
+    MinRenlSpecAmt     = currency(database().query<int>(DB_MinRenlSpecAmt    ));
+    MinRenlBaseSpecAmt = currency(database().query<int>(DB_MinRenlBaseSpecAmt));
     database().query_into(DB_NoLapseDboLvlOnly    , NoLapseDboLvlOnly);
     database().query_into(DB_NoLapseUnratedOnly   , NoLapseUnratedOnly);
     database().query_into(DB_DboChgCanIncrSpecAmt , OptChgCanIncrSA);
@@ -635,7 +635,7 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_MinPremType          , MinPremType);
     database().query_into(DB_TgtPremType          , TgtPremType);
     database().query_into(DB_TgtPremFixedAtIssue  , TgtPremFixedAtIssue);
-    TgtPremMonthlyPolFee = database().query<int>(DB_TgtPremMonthlyPolFee);
+    TgtPremMonthlyPolFee = currency(database().query<int>(DB_TgtPremMonthlyPolFee));
     // Assertion: see comments on GetModalPremTgtFromTable().
     LMI_ASSERT(0.0 == TgtPremMonthlyPolFee || oe_modal_table == TgtPremType);
     database().query_into(DB_CurrCoiTable0Limit   , CurrCoiTable0Limit);
@@ -661,8 +661,8 @@ void BasicValues::SetPermanentInvariants()
 //  AdbLimit         = database().query<int>(DB_AdbLimit        );
 //  WpLimit          = database().query<int>(DB_WpLimit         );
 //  SpecAmtLoadLimit = database().query<int>(DB_SpecAmtLoadLimit);
-    MinWD            = database().query<int>(DB_MinWd           );
-    WDFee            = database().query<int>(DB_WdFee           );
+    MinWD            = currency(database().query<int>(DB_MinWd           ));
+    WDFee            = currency(database().query<int>(DB_WdFee           ));
     database().query_into(DB_WdFeeRate            , WDFeeRate);
     database().query_into(DB_AllowChangeToDbo2    , AllowChangeToDBO2);
     database().query_into(DB_AllowSpecAmtIncr     , AllowSAIncr);
@@ -770,7 +770,7 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_Effective7702DboRop, Effective7702DboRop);
     TermIsDbFor7702     = oe_7702_term_is_db == database().query<oenum_7702_term>(DB_TermIsQABOrDb7702 );
     TermIsDbFor7702A    = oe_7702_term_is_db == database().query<oenum_7702_term>(DB_TermIsQABOrDb7702A);
-    MaxNAAR             = yare_input_.MaximumNaar;
+    MaxNAAR             = currency(yare_input_.MaximumNaar);
 
     database().query_into(DB_MinPremIntSpread, MinPremIntSpread_);
 }
@@ -1083,8 +1083,8 @@ currency BasicValues::GetModalPremGLP
     // for GPT reimplementation.
     double z = Irc7702_->CalculateGLP
         (a_duration
-        ,a_bft_amt
-        ,a_specamt
+        ,a_bft_amt.d()
+        ,a_specamt.d()
         ,Irc7702_->GetLeastBftAmtEver()
         ,effective_dbopt_7702(DeathBfts_->dbopt()[0], Effective7702DboRop)
         );
@@ -1107,8 +1107,8 @@ currency BasicValues::GetModalPremGSP
 {
     double z = Irc7702_->CalculateGSP
         (a_duration
-        ,a_bft_amt
-        ,a_specamt
+        ,a_bft_amt.d()
+        ,a_specamt.d()
         ,Irc7702_->GetLeastBftAmtEver()
         );
 
@@ -1203,7 +1203,7 @@ std::pair<double,double> BasicValues::approx_mly_ded
     if(yare_input_.AccidentalDeathBenefit)
         {
         double const r = MortalityRates_->AdbRates()[year];
-        mly_ded += r * std::min<double>(specamt, AdbLimit);
+        mly_ded += r * std::min(specamt.d(), AdbLimit);
         }
 
     if(yare_input_.SpouseRider)
@@ -1221,7 +1221,7 @@ std::pair<double,double> BasicValues::approx_mly_ded
     if(true) // Written thus for parallelism and to keep 'r' local.
         {
         double const r = Loads_->specified_amount_load(mce_gen_curr)[year];
-        mly_ded += r * std::min<double>(specamt, SpecAmtLoadLimit);
+        mly_ded += r * std::min(specamt.d(), SpecAmtLoadLimit);
         }
 
     mly_ded += Loads_->monthly_policy_fee(mce_gen_curr)[year];
@@ -1235,7 +1235,7 @@ std::pair<double,double> BasicValues::approx_mly_ded
             {
             case oe_waiver_times_specamt:
                 {
-                mly_ded += r * std::min<double>(specamt, WpLimit);
+                mly_ded += r * std::min(specamt.d(), WpLimit);
                 }
                 break;
             case oe_waiver_times_deductions:
@@ -1291,7 +1291,7 @@ std::pair<double,double> BasicValues::approx_mly_ded_ex
     if(yare_input_.AccidentalDeathBenefit)
         {
         double const r = MortalityRates_->AdbRates()[year];
-        er_ded += r * std::min<double>(specamt, AdbLimit);
+        er_ded += r * std::min(specamt.d(), AdbLimit);
         }
 
     // Paid by ee.
@@ -1312,7 +1312,7 @@ std::pair<double,double> BasicValues::approx_mly_ded_ex
     if(true) // Written thus for parallelism and to keep 'r' local.
         {
         double const r = Loads_->specified_amount_load(mce_gen_curr)[year];
-        er_ded += r * std::min<double>(specamt, SpecAmtLoadLimit);
+        er_ded += r * std::min(specamt.d(), SpecAmtLoadLimit);
         }
 
     // Paid by er.
@@ -1326,7 +1326,7 @@ std::pair<double,double> BasicValues::approx_mly_ded_ex
             case oe_waiver_times_specamt:
                 {
                 // Paid by er. (In this case, WP excludes term.)
-                er_ded += r * std::min<double>(specamt, WpLimit);
+                er_ded += r * std::min(specamt.d(), WpLimit);
                 }
                 break;
             case oe_waiver_times_deductions:

@@ -67,7 +67,7 @@ class SolveHelper
 //  double operator()(currency a_CandidateValue)
     double operator()(double a_CandidateValue)
         {
-        return av.SolveTest(currency(a_CandidateValue));
+        return av.SolveTest(currency(a_CandidateValue)).d();
         }
 };
 
@@ -184,9 +184,11 @@ currency AccountValue::SolveTest(currency a_CandidateValue)
     currency most_negative_csv(0.0);
     if(no_lapse_dur < SolveTargetDuration_)
         {
-        most_negative_csv = *std::min_element
-            (VariantValues().CSVNet.begin() + no_lapse_dur
-            ,VariantValues().CSVNet.begin() + SolveTargetDuration_
+        most_negative_csv = currency
+            (*std::min_element
+                (VariantValues().CSVNet.begin() + no_lapse_dur
+                ,VariantValues().CSVNet.begin() + SolveTargetDuration_
+                )
             );
         }
 
@@ -206,7 +208,7 @@ currency AccountValue::SolveTest(currency a_CandidateValue)
         );
     currency worst_negative = std::min
         (most_negative_csv
-        ,currency(-greatest_ullage) // really want a unary-negation operator
+        ,currency() - greatest_ullage // really want a unary-negation operator
         );
 
     // SolveTargetDuration_ is in origin one. That's natural for loop
@@ -215,10 +217,11 @@ currency AccountValue::SolveTest(currency a_CandidateValue)
     currency value = currency(VariantValues().CSVNet[SolveTargetDuration_ - 1]);
     if(mce_solve_for_target_naar == SolveTarget_)
         {
-        value =
+        value = currency
+            (
               VariantValues().EOYDeathBft[SolveTargetDuration_ - 1]
             - VariantValues().AcctVal    [SolveTargetDuration_ - 1]
-            ;
+            );
         }
     if(worst_negative < 0.0)
         {
@@ -370,7 +373,7 @@ currency AccountValue::Solve
                 (  0 == SolveBeginYear_
                 && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
                 ,false
-                );
+                ).d();
             }
             break;
         case mce_solve_ee_prem:

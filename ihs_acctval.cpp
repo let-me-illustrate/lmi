@@ -111,16 +111,16 @@ AccountValue::AccountValue(Input const& input)
     // all be kept together.
     LapseMonth               = 0;          // Antediluvian.
     LapseYear                = 0;          // Antediluvian.
-    AVUnloaned               = 0.0;        // Antediluvian.
-    pmt                      = 0.0;        // Antediluvian.
+    AVUnloaned               = 0;          // Antediluvian.
+    pmt                      = 0;          // Antediluvian.
     pmt_mode                 = mce_annual; // Antediluvian.
     ModeIndex                = 0;          // Antediluvian.
-    wd                       = 0.0;        // Antediluvian.
+    wd                       = 0;          // Antediluvian.
     mlyguarv                 = 0.0;        // Antediluvian.
-    deathbft                 = 0.0;        // Antediluvian.
+    deathbft                 = 0;          // Antediluvian.
     haswp                    = false;      // Antediluvian.
     hasadb                   = false;      // Antediluvian.
-    mlydedtonextmodalpmtdate = 0.0;        // Antediluvian.
+    mlydedtonextmodalpmtdate = 0;          // Antediluvian.
 
     set_list_bill_year_and_month();
 
@@ -158,7 +158,7 @@ currency AccountValue::specamt_for_7702(int year) const
 {
     return
                               base_specamt(year)
-        + (TermIsDbFor7702  ? term_specamt(year) : 0.0)
+        + (TermIsDbFor7702  ? term_specamt(year) : currency())
         ;
 }
 
@@ -168,7 +168,7 @@ currency AccountValue::specamt_for_7702A(int year) const
 {
     return
                               base_specamt(year)
-        + (TermIsDbFor7702A ? term_specamt(year) : 0.0)
+        + (TermIsDbFor7702A ? term_specamt(year) : currency())
         ;
 }
 
@@ -217,13 +217,13 @@ Then run other bases.
 // this rather expensive function.
 void AccountValue::SetGuarPrem()
 {
-    GuarPremium = 0.0;
+    GuarPremium = currency();
     if(BasicValues::IsSubjectToIllustrationReg())
         {
         GuarPremium = SolveGuarPremium();
         }
     LMI_ASSERT(GuarPremium < 1.0e100);
-    ledger_->SetGuarPremium(GuarPremium);
+    ledger_->SetGuarPremium(GuarPremium.d());
 }
 
 //============================================================================
@@ -405,8 +405,8 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         (0
         ,mce_annual
         ,base_specamt(0)
-        );
-    double sa = specamt_for_7702(0);
+        ).d();
+    double sa = specamt_for_7702(0).d();
 
     // It is at best superfluous to do this for every basis.
     // TAXATION !! Don't do that then.
@@ -450,7 +450,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     if(yare_input_.EffectiveDate == yare_input_.InforceAsOfDate)
         {
         // No need to initialize 'pmts_7702a' in this case.
-        bfts_7702a.push_back(specamt_for_7702A(0));
+        bfts_7702a.push_back(specamt_for_7702A(0).d());
         }
     else
         {
@@ -530,7 +530,7 @@ void AccountValue::SetInitialValues()
     Month                 = InforceMonth;
     CoordinateCounters();
 
-    DB7702A               = 0.0;  // TODO ?? TAXATION !! This seems silly.
+    DB7702A               = currency();  // TODO ?? TAXATION !! This seems silly.
 
     AVRegLn               = round_minutiae().c(InforceAVRegLn);
     AVPrfLn               = round_minutiae().c(InforceAVPrfLn);
@@ -562,21 +562,21 @@ void AccountValue::SetInitialValues()
             ;
         }
 
-    MaxLoan                     = 0.0;
+    MaxLoan                     = currency();
 
-    GenAcctIntCred              = 0.0;
-    SepAcctIntCred              = 0.0;
-    RegLnIntCred                = 0.0;
-    PrfLnIntCred                = 0.0;
+    GenAcctIntCred              = currency();
+    SepAcctIntCred              = currency();
+    RegLnIntCred                = currency();
+    PrfLnIntCred                = currency();
 
-    MaxWD                       = 0.0;
-    GrossWD                     = 0.0;
-    NetWD                       = 0.0;
+    MaxWD                       = currency();
+    GrossWD                     = currency();
+    NetWD                       = currency();
 
     CumPmts                     = InforceCumPmts;
     TaxBasis                    = InforceTaxBasis;
     YearlyTaxBasis.assign(BasicValues::GetLength(), currency());
-    MlyNoLapsePrem              = 0.0;
+    MlyNoLapsePrem              = currency();
     CumNoLapsePrem              = InforceCumNoLapsePrem;
 
     // Initialize all elements of this vector to 'false'. Then, when
@@ -599,7 +599,7 @@ void AccountValue::SetInitialValues()
 
     database().query_into(DB_TermCanLapse       , TermCanLapse);
     TermRiderActive             = true;
-    TermDB                      = 0.0;
+    TermDB                      = currency();
 
     ItLapsed                    = false;
 
@@ -628,10 +628,10 @@ void AccountValue::SetInitialValues()
             }
         }
 
-    CoiCharge                   = 0.0;
-    RiderCharges                = 0.0;
-    NetCoiCharge                = 0.0;
-    MlyDed                      = 0.0;
+    CoiCharge                   = currency();
+    RiderCharges                = currency();
+    NetCoiCharge                = currency();
+    MlyDed                      = currency();
     CumulativeSalesLoad         = round_minutiae().c(yare_input_.InforceCumulativeSalesLoad);
 
     database().query_into(DB_ExpRatCoiRetention, CoiRetentionRate);
@@ -807,29 +807,29 @@ void AccountValue::InitializeYear()
         Irc7702A_->UpdateBOY7702A(Year);
         }
 
-    MonthsPolicyFees            = 0.0;
-    SpecAmtLoad                 = 0.0;
+    MonthsPolicyFees            = currency();
+    SpecAmtLoad                 = currency();
 
-    AssetsPostBom               = 0.0;
-    CumPmtsPostBom              = 0.0;
-    SepAcctLoad                 = 0.0;
+    AssetsPostBom               = currency();
+    CumPmtsPostBom              = currency();
+    SepAcctLoad                 = currency();
 
-    YearsTotalCoiCharge         = 0.0;
-    YearsTotalRiderCharges      = 0.0;
+    YearsTotalCoiCharge         = currency();
+    YearsTotalRiderCharges      = currency();
     YearsAVRelOnDeath           = 0.0;
     YearsLoanRepaidOnDeath      = 0.0;
     YearsGrossClaims            = 0.0;
     YearsDeathProceeds          = 0.0;
     YearsNetClaims              = 0.0;
-    YearsTotalNetIntCredited    = 0.0;
-    YearsTotalGrossIntCredited  = 0.0;
-    YearsTotalLoanIntAccrued    = 0.0;
+    YearsTotalNetIntCredited    = currency();
+    YearsTotalGrossIntCredited  = currency();
+    YearsTotalLoanIntAccrued    = currency();
     YearsTotalNetCoiCharge      = 0.0;
-    YearsTotalPolicyFee         = 0.0;
+    YearsTotalPolicyFee         = currency();
     YearsTotalDacTaxLoad        = 0.0;
-    YearsTotalSpecAmtLoad       = 0.0;
-    YearsTotalSepAcctLoad       = 0.0;
-    YearsTotalGptForceout       = 0.0;
+    YearsTotalSpecAmtLoad       = currency();
+    YearsTotalSepAcctLoad       = currency();
+    YearsTotalGptForceout       = currency();
 
     NextYearsProjectedCoiCharge = 0.0;
 
@@ -840,7 +840,7 @@ void AccountValue::InitializeYear()
     // variable in each function might have sufficed, except that this
     // quantity is used in the optional monthly detail report. Its
     // value depends on the maximum loan, so it cannot be known here.
-    ActualLoan                  = 0.0;
+    ActualLoan                  = currency();
 
     GrossPmts   .assign(12, currency());
     EeGrossPmts .assign(12, currency());
@@ -892,7 +892,7 @@ void AccountValue::InitializeSpecAmt()
 
     if(0 == Year)
         {
-        InvariantValues().InitTgtPrem = AnnualTargetPrem;
+        InvariantValues().InitTgtPrem = AnnualTargetPrem.d();
         }
 
     // TODO ?? Perform specamt strategy here?
@@ -931,8 +931,8 @@ void AccountValue::set_list_bill_premium()
             ,Outlay_->er_premium_modes()[Year]
             ,base_specamt(Year)
             );
-        InvariantValues().ListBillPremium   = z;
-        InvariantValues().ErListBillPremium = z;
+        InvariantValues().ListBillPremium   = z.d();
+        InvariantValues().ErListBillPremium = z.d();
         }
     else
         {
@@ -942,9 +942,9 @@ void AccountValue::set_list_bill_premium()
             ,base_specamt(Year)
             ,term_specamt(Year)
             );
-        InvariantValues().EeListBillPremium = z.first;
-        InvariantValues().ErListBillPremium = z.second;
-        InvariantValues().ListBillPremium = z.first + z.second;
+        InvariantValues().EeListBillPremium = z.first.d();
+        InvariantValues().ErListBillPremium = z.second.d();
+        InvariantValues().ListBillPremium = z.first.d() + z.second.d();
         }
 }
 
@@ -969,8 +969,8 @@ void AccountValue::set_modal_min_premium()
             ,Outlay_->er_premium_modes()[Year]
             ,base_specamt(Year)
             );
-        InvariantValues().ModalMinimumPremium[Year]   = z;
-        InvariantValues().ErModalMinimumPremium[Year] = z;
+        InvariantValues().ModalMinimumPremium[Year]   = z.d();
+        InvariantValues().ErModalMinimumPremium[Year] = z.d();
         }
     else
         {
@@ -980,9 +980,9 @@ void AccountValue::set_modal_min_premium()
             ,base_specamt(Year)
             ,term_specamt(Year)
             );
-        InvariantValues().EeModalMinimumPremium[Year] = z.first;
-        InvariantValues().ErModalMinimumPremium[Year] = z.second;
-        InvariantValues().ModalMinimumPremium[Year] = z.first + z.second;
+        InvariantValues().EeModalMinimumPremium[Year] = z.first.d();
+        InvariantValues().ErModalMinimumPremium[Year] = z.second.d();
+        InvariantValues().ModalMinimumPremium[Year] = z.first.d() + z.second.d();
         }
 }
 
@@ -1145,7 +1145,7 @@ void AccountValue::SetProjectedCoiCharge()
 
 void AccountValue::FinalizeYear()
 {
-    VariantValues().TotalLoanBalance[Year] = RegLnBal + PrfLnBal;
+    VariantValues().TotalLoanBalance[Year] = (RegLnBal + PrfLnBal).d();
 
     currency total_av = TotalAccountValue();
     currency surr_chg = SurrChg();
@@ -1201,12 +1201,12 @@ void AccountValue::FinalizeYear()
         }
     cv_7702 = std::max(cv_7702, HoneymoonValue);
 
-    VariantValues().AcctVal     [Year] = total_av;
-    VariantValues().AVGenAcct   [Year] = AVGenAcct + AVRegLn + AVPrfLn;
-    VariantValues().AVSepAcct   [Year] = AVSepAcct;
+    VariantValues().AcctVal     [Year] = total_av.d();
+    VariantValues().AVGenAcct   [Year] = (AVGenAcct + AVRegLn + AVPrfLn).d();
+    VariantValues().AVSepAcct   [Year] = AVSepAcct.d();
     VariantValues().DacTaxRsv   [Year] = DacTaxRsv;
-    VariantValues().CSVNet      [Year] = csv_net;
-    VariantValues().CV7702      [Year] = cv_7702;
+    VariantValues().CSVNet      [Year] = csv_net.d();
+    VariantValues().CV7702      [Year] = cv_7702.d();
 
     // Update death benefit. 'DBReflectingCorr' currently equals the
     // death benefit as of the beginning of the twelfth month, but its
@@ -1216,11 +1216,11 @@ void AccountValue::FinalizeYear()
     TxSetDeathBft();
     TxSetTermAmt();
     // post values to LedgerVariant
-    InvariantValues().TermSpecAmt   [Year] = TermSpecAmt;
-    VariantValues().TermPurchased   [Year] = TermDB;
+    InvariantValues().TermSpecAmt   [Year] = TermSpecAmt.d();
+    VariantValues().TermPurchased   [Year] = TermDB.d();
     // Add term rider DB
-    VariantValues().BaseDeathBft    [Year] = DBReflectingCorr;
-    VariantValues().EOYDeathBft     [Year] = DBReflectingCorr + TermDB;
+    VariantValues().BaseDeathBft    [Year] = DBReflectingCorr.d();
+    VariantValues().EOYDeathBft     [Year] = (DBReflectingCorr + TermDB).d();
 
 /*
     // AV already includes any experience refund credited, but it's
@@ -1245,19 +1245,19 @@ void AccountValue::FinalizeYear()
 
     // Monthly deduction detail
 
-    VariantValues().COICharge         [Year] = YearsTotalCoiCharge        ;
-    VariantValues().RiderCharges      [Year] = YearsTotalRiderCharges     ;
+    VariantValues().COICharge         [Year] = YearsTotalCoiCharge.d()    ;
+    VariantValues().RiderCharges      [Year] = YearsTotalRiderCharges.d() ;
     VariantValues().AVRelOnDeath      [Year] = YearsAVRelOnDeath          ;
     VariantValues().ClaimsPaid        [Year] = YearsGrossClaims           ;
     VariantValues().DeathProceedsPaid [Year] = YearsDeathProceeds         ;
     VariantValues().NetClaims         [Year] = YearsNetClaims             ;
-    VariantValues().NetIntCredited    [Year] = YearsTotalNetIntCredited   ;
-    VariantValues().GrossIntCredited  [Year] = YearsTotalGrossIntCredited ;
-    VariantValues().LoanIntAccrued    [Year] = YearsTotalLoanIntAccrued   ;
+    VariantValues().NetIntCredited    [Year] = YearsTotalNetIntCredited.d();
+    VariantValues().GrossIntCredited  [Year] = YearsTotalGrossIntCredited.d();
+    VariantValues().LoanIntAccrued    [Year] = YearsTotalLoanIntAccrued.d();
     VariantValues().NetCOICharge      [Year] = YearsTotalNetCoiCharge     ;
-    VariantValues().PolicyFee         [Year] = YearsTotalPolicyFee        ;
+    VariantValues().PolicyFee         [Year] = YearsTotalPolicyFee.d()    ;
     VariantValues().DacTaxLoad        [Year] = YearsTotalDacTaxLoad       ;
-    VariantValues().SpecAmtLoad       [Year] = YearsTotalSpecAmtLoad      ;
+    VariantValues().SpecAmtLoad       [Year] = YearsTotalSpecAmtLoad.d()  ;
     VariantValues().PremTaxLoad       [Year] = PremiumTax_->ytd_load();
 
     currency notional_sep_acct_charge =
@@ -1274,7 +1274,7 @@ void AccountValue::FinalizeYear()
             )
         ;
 #endif // 0
-    VariantValues().SepAcctCharges    [Year] = notional_sep_acct_charge   ;
+    VariantValues().SepAcctCharges    [Year] = notional_sep_acct_charge.d();
 
     // Record dynamic interest rate in ledger object.
     //
@@ -1311,8 +1311,8 @@ void AccountValue::FinalizeYear()
     VariantValues().NetPmt[Year] = std::accumulate
         (NetPmts.begin()
         ,NetPmts.end()
-        ,-YearsTotalGptForceout
-        );
+        ,currency() - YearsTotalGptForceout.d() // unary operator-()
+        ).d();
 
     if(mce_run_gen_curr_sep_full == RunBasis_)
         {
@@ -1324,15 +1324,16 @@ void AccountValue::FinalizeYear()
         // Forceouts should be a distinct component, passed separately
         // to ledger values. Probably we should treat 1035 exchanges
         // and NAAR 'forceouts' the same way.
-        InvariantValues().GrossPmt  [Year]  -= YearsTotalGptForceout;
-        InvariantValues().EeGrossPmt[Year]  -= YearsTotalGptForceout;
+        InvariantValues().GrossPmt  [Year]  -= YearsTotalGptForceout.d();
+        InvariantValues().EeGrossPmt[Year]  -= YearsTotalGptForceout.d();
 
         for(int j = 0; j < 12; ++j)
             {
-            LMI_ASSERT(materially_equal(GrossPmts[j], EeGrossPmts[j] + ErGrossPmts[j]));
-            InvariantValues().GrossPmt  [Year]  += GrossPmts[j];
-            InvariantValues().EeGrossPmt[Year]  += EeGrossPmts[j];
-            InvariantValues().ErGrossPmt[Year]  += ErGrossPmts[j];
+//          LMI_ASSERT(materially_equal(GrossPmts[j], EeGrossPmts[j] + ErGrossPmts[j]));
+            LMI_ASSERT(GrossPmts[j] == EeGrossPmts[j] + ErGrossPmts[j]);
+            InvariantValues().GrossPmt  [Year]  += GrossPmts  [j].d();
+            InvariantValues().EeGrossPmt[Year]  += EeGrossPmts[j].d();
+            InvariantValues().ErGrossPmt[Year]  += ErGrossPmts[j].d();
             }
         if(0 == Year)
             {
@@ -1353,7 +1354,7 @@ void AccountValue::FinalizeYear()
             -   InvariantValues().NewCashLoan[Year]
             ;
 
-        InvariantValues().GptForceout[Year] = YearsTotalGptForceout;
+        InvariantValues().GptForceout[Year] = YearsTotalGptForceout.d();
 
 // SOMEDAY !! Not yet implemented.
 //        InvariantValues().NaarForceout[Year] = InvariantValues().ErGrossPmt[Year];
@@ -1366,8 +1367,8 @@ void AccountValue::SetAnnualInvariants()
     YearsCorridorFactor     = GetCorridorFactor()[Year];
     YearsDBOpt              = DeathBfts_->dbopt()[Year];
     // policy fee should be rounded in loads class
-    YearsMonthlyPolicyFee   = Loads_->monthly_policy_fee(GenBasis_)[Year];
-    YearsAnnualPolicyFee    = Loads_->annual_policy_fee (GenBasis_)[Year];
+    YearsMonthlyPolicyFee   = currency(Loads_->monthly_policy_fee(GenBasis_)[Year]);
+    YearsAnnualPolicyFee    = currency(Loads_->annual_policy_fee (GenBasis_)[Year]);
 
     YearsGenAcctIntRate     = InterestRates_->GenAcctNetRate
         (GenBasis_
