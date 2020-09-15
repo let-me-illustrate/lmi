@@ -1,3 +1,14 @@
+More incremental improvement--as of commit 39d842f5d0:
+
+  naic, no solve      : 1.065e-01 s mean;      99740 us least of  10 runs
+  naic, specamt solve : 1.731e-01 s mean;     172259 us least of   6 runs
+  naic, ee prem solve : 1.611e-01 s mean;     159984 us least of   7 runs
+  finra, no solve     : 2.644e-02 s mean;      26227 us least of  38 runs
+  finra, specamt solve: 9.114e-02 s mean;      90629 us least of  11 runs
+  finra, ee prem solve: 8.721e-02 s mean;      86662 us least of  12 runs
+
+//
+
 Make conversions explicit, e.g.:
   currency amount;
 - amount = 3.14;           // implicit
@@ -46,7 +57,7 @@ integral root than a floating-point root of a polynomial? That
 question is crucial because making solves dramatically slower
 could mean that a currency class is unaffordable.
 
-After the changes in this commit:
+After the changes in commit a32e29bb3cb:
 
   naic, no solve      : 1.085e-01 s mean;     103995 us least of  10 runs
   naic, specamt solve : 1.798e-01 s mean;     179138 us least of   6 runs
