@@ -2212,7 +2212,7 @@ void AccountValue::TxCreditInt()
 {
     ApplyDynamicMandE(AssetsPostBom);
 
-    double notional_sep_acct_charge = 0.0;
+    currency notional_sep_acct_charge {};
 
     // SOMEDAY !! This should be done in the interest-rate class.
     double gross_sep_acct_rate = i_upper_12_over_12_from_i<double>()
@@ -2227,21 +2227,9 @@ void AccountValue::TxCreditInt()
     if(currency() < AVSepAcct)
         {
         SepAcctIntCred = InterestCredited(AVSepAcct, YearsSepAcctIntRate);
-        double gross   = InterestCredited(AVSepAcct, gross_sep_acct_rate).d();
-        notional_sep_acct_charge = (gross - SepAcctIntCred).d();
-        // Guard against catastrophic cancellation. Testing the
-        // absolute values of the addends for material equality is not
-        // sufficient, because the interest increment has already been
-        // rounded.
-        double result = (AVSepAcct + SepAcctIntCred).d();
-        if(result < 0.0 && 0.0 <= AVSepAcct)
-            {
-            AVSepAcct = currency();
-            }
-        else
-            {
-            AVSepAcct = currency(result);
-            }
+        currency gross = InterestCredited(AVSepAcct, gross_sep_acct_rate);
+        notional_sep_acct_charge = gross - SepAcctIntCred;
+        AVSepAcct += SepAcctIntCred;
         }
     else
         {
