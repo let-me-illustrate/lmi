@@ -142,7 +142,7 @@ void AccountValue::DoMonthDR()
         // exchanges, but now seems unnecessary because this
         // assertion never fires:
         //   LMI_ASSERT(kludge_account_value == Dcv);
-        kludge_account_value = currency(Dcv);
+        kludge_account_value = round_minutiae().c(Dcv);
         }
     kludge_account_value = std::max
         (HoneymoonValue
@@ -169,8 +169,8 @@ void AccountValue::DoMonthDR()
     // Saved for monthly detail report only. TAXATION !! Then are
     // these still needed...perhaps in order to report their values
     // prior to accepting any payment?
-    NetMaxNecessaryPremium   = currency(Irc7702A_->DebugGetNetMaxNecPm  ());
-    GrossMaxNecessaryPremium = currency(Irc7702A_->DebugGetGrossMaxNecPm());
+    NetMaxNecessaryPremium   = round_minutiae().c(Irc7702A_->DebugGetNetMaxNecPm  ());
+    GrossMaxNecessaryPremium = round_minutiae().c(Irc7702A_->DebugGetGrossMaxNecPm());
 
     // Determine list-bill premiums only after transactions that
     // might change specamt have been processed.
@@ -214,8 +214,8 @@ void AccountValue::DoMonthDR()
         );
 //  NetMaxNecessaryPremium
 //  GrossMaxNecessaryPremium
-    NecessaryPremium   = currency(necessary_premium  );
-    UnnecessaryPremium = currency(unnecessary_premium);
+    NecessaryPremium   = round_minutiae().c(necessary_premium  );
+    UnnecessaryPremium = round_minutiae().c(unnecessary_premium);
     if(necessary_premium < 0.0 || unnecessary_premium < 0.0)
         warning()
 //          << GrossPmts[Month] << " GrossPmts[Month]\n"
@@ -558,7 +558,7 @@ void AccountValue::TxExch1035()
             // Maybe this should return the modified value instead of altering the argument.
             double z = GrossPmts[Month].d();
             Irc7702_->ProcessGptPmt(Year, z);
-            GrossPmts[Month] = currency(z);
+            GrossPmts[Month] = round_gross_premium().c(z);
             }
         // Limit external 1035 first, then internal, as necessary to avoid
         // exceeding the guideline limit. This is what the customer would
@@ -1142,7 +1142,7 @@ void AccountValue::TxTestGPT()
             );
         }
 
-    GptForceout = currency(Irc7702_->Forceout());
+    GptForceout = round_minutiae().c(Irc7702_->Forceout());
     // TODO ?? TAXATION !! On other bases, nothing is forced out, and payments aren't limited.
     process_distribution(GptForceout);
     YearsTotalGptForceout += GptForceout;
@@ -1234,7 +1234,7 @@ void AccountValue::TxAscertainDesiredPayment()
             {
             double z = eepmt.d();
             Irc7702_->ProcessGptPmt(Year, z);
-            eepmt = currency(z);
+            eepmt = round_gross_premium().c(z);
             }
         EeGrossPmts[Month] += eepmt;
         GrossPmts  [Month] += eepmt;
@@ -1249,7 +1249,7 @@ void AccountValue::TxAscertainDesiredPayment()
             {
             double z = erpmt.d();
             Irc7702_->ProcessGptPmt(Year, z);
-            erpmt = currency(z);
+            erpmt = round_gross_premium().c(z);
             }
         ErGrossPmts[Month] += erpmt;
         GrossPmts  [Month] += erpmt;
@@ -1276,7 +1276,7 @@ void AccountValue::TxAscertainDesiredPayment()
             {
             double z = Dumpin.d();
             Irc7702_->ProcessGptPmt(Year, z);
-            Dumpin = currency(z);
+            Dumpin = round_gross_premium().c(z);
             }
         EeGrossPmts[Month] += Dumpin;
         GrossPmts  [Month] += Dumpin;
@@ -1387,7 +1387,7 @@ void AccountValue::TxRecognizePaymentFor7702A
     currency kludge_account_value = std::max(TotalAccountValue(), HoneymoonValue);
     if(0 == Year && 0 == Month)
         {
-        kludge_account_value = currency(Dcv);
+        kludge_account_value = round_minutiae().c(Dcv);
         }
     kludge_account_value = std::max
         (HoneymoonValue
