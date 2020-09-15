@@ -123,9 +123,9 @@ void BasicValues::Init()
 //  database().query_into(DB_MinWd     , MinWD     );
 //  database().query_into(DB_WdFee     , WDFee     );
 //  database().query_into(DB_WdFeeRate , WDFeeRate );
-    MinSpecAmt = database().query<int>(DB_MinSpecAmt);
-    MinWD      = database().query<int>(DB_MinWd     );
-    WDFee      = database().query<int>(DB_WdFee     );
+    MinSpecAmt = currency(database().query<int>(DB_MinSpecAmt));
+    MinWD      = currency(database().query<int>(DB_MinWd     ));
+    WDFee      = currency(database().query<int>(DB_WdFee     ));
 //  WDFeeRate  = database().query<int>(DB_WdFeeRate ); // no, this line looks wrong
     database().query_into(DB_WdFeeRate , WDFeeRate );
 

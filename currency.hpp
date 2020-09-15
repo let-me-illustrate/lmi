@@ -71,7 +71,7 @@ class currency
     // IMPORTANT eventually suppress this? or both of these?
     // defining both causes real problems
 //  currency& operator=(double d) {m_ = from_double(d);           return *this;}
-    currency& operator=(int    i) {m_ = cents_per_dollar * bourn_cast<data_type>(i); return *this;}
+//  currency& operator=(int    i) {m_ = cents_per_dollar * bourn_cast<data_type>(i); return *this;}
 
 //  operator double() const {return to_double();}
     double d() const {return to_double();}

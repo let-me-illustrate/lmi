@@ -611,7 +611,7 @@ void AccountValue::SetInitialValues()
     DcvWpCharge                 = 0.0;
 
     HoneymoonActive             = false;
-    HoneymoonValue              = -std::numeric_limits<int>::max(); // yick
+    HoneymoonValue              = currency(-std::numeric_limits<int>::max()); // yick
     if(mce_gen_curr == GenBasis_)
         {
         HoneymoonActive = yare_input_.HoneymoonEndorsement;

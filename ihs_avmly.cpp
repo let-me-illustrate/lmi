@@ -2057,7 +2057,7 @@ void AccountValue::TxTestHoneymoonForExpiration()
     if(HoneymoonValue <= currency() || HoneymoonValue < csv_ignoring_loan)
         {
         HoneymoonActive = false;
-        HoneymoonValue  = -std::numeric_limits<int>::max(); // yick
+        HoneymoonValue  = currency(-std::numeric_limits<int>::max()); // yick
         }
 }
 
