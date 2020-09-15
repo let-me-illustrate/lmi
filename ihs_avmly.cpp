@@ -2611,7 +2611,7 @@ void AccountValue::TxTakeWD()
             // Do you really want 'face' here rather than specamt? --Yes
             if(WdDecrSpecAmtDboLvl)
                 {
-                ChangeSpecAmtBy(currency() - GrossWD);
+                ChangeSpecAmtBy(currency() - GrossWD); // unary operator-()
                 // Min AV after WD not directly implemented.
                 // If WD causes AV < min AV, do we:
                 //   reduce the WD?
@@ -2631,7 +2631,7 @@ void AccountValue::TxTakeWD()
             {
             if(WdDecrSpecAmtDboInc)
                 {
-                ChangeSpecAmtBy(currency() - GrossWD);
+                ChangeSpecAmtBy(currency() - GrossWD); // unary operator-()
                 }
             else
                 {
@@ -2643,7 +2643,7 @@ void AccountValue::TxTakeWD()
             {
             if(WdDecrSpecAmtDboRop)
                 {
-                ChangeSpecAmtBy(currency() - GrossWD);
+                ChangeSpecAmtBy(currency() - GrossWD); // unary operator-()
                 }
             else
                 {
