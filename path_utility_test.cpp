@@ -78,7 +78,7 @@ void test_modify_directory()
     BOOST_TEST_THROW
         (modify_directory("", "/bin")
         ,std::runtime_error
-        ,"Assertion 'original_filepath.has_leaf()' failed."
+        ,"Assertion 'original_filepath.has_filename()' failed."
         );
 }
 

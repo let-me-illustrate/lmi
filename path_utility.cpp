@@ -58,7 +58,7 @@
 /// evokes chdir(2) and cd(1).
 ///
 /// Asserted precondition:
-///   - 'original_filepath' is not empty (i.e., true == has_leaf())
+///   - 'original_filepath' is not empty (i.e., true == has_filename())
 /// It is notably not required that 'supplied_directory' name an
 /// actual existing directory.
 ///
@@ -76,7 +76,7 @@ fs::path modify_directory
     ,fs::path const& supplied_directory
     )
 {
-    LMI_ASSERT(original_filepath.has_leaf());
+    LMI_ASSERT(original_filepath.has_filename());
     return supplied_directory / fs::path(original_filepath.leaf());
 }
 
@@ -225,7 +225,7 @@ fs::path serial_file_path
     )
 {
     LMI_ASSERT(!exemplar.empty());
-    LMI_ASSERT(exemplar.has_leaf());
+    LMI_ASSERT(exemplar.has_filename());
     std::string s(serial_extension(serial_number, extension));
     if
         (  !personal_name.empty()
