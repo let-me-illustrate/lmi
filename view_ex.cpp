@@ -199,14 +199,14 @@ void ViewEx::OnDraw(wxDC*)
 ///
 /// Using wxDocument::GetUserReadableName() means the name can be
 /// altered by calling wxDocument::SetTitle(). By default, the title
-/// is the filename with no path. The call to leaf() guarantees that
+/// is the filename with no path. The call to filename() guarantees that
 /// the result is pathless, even if e.g. the title has been set to the
-/// document's full filepath. If leaf() is empty, then a name that
+/// document's full filepath. If filename() is empty, then a name that
 /// recognizably should never be uttered is returned.
 
 std::string ViewEx::base_filename() const
 {
     std::string t(GetDocument()->GetUserReadableName().ToStdString(wxConvUTF8));
     fs::path path(t);
-    return path.has_filename() ? path.leaf() : std::string("Hastur");
+    return path.has_filename() ? path.filename().string() : std::string("Hastur");
 }
