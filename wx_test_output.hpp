@@ -56,7 +56,7 @@ class output_file_existence_checker
         return fs::exists(path_);
         }
 
-    std::string const& path() const
+    std::string path() const
         {
         return path_.string();
         }
