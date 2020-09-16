@@ -1,3 +1,29 @@
+64-bit valyuta/002 commit 49f84a1e
+  naic, no solve      : 3.517e-02 s mean;      34812 us least of  29 runs
+  naic, specamt solve : 5.662e-02 s mean;      55880 us least of  18 runs
+  naic, ee prem solve : 5.393e-02 s mean;      53008 us least of  19 runs
+  finra, no solve     : 1.500e-02 s mean;      14688 us least of  67 runs
+  finra, specamt solve: 3.411e-02 s mean;      33652 us least of  30 runs
+  finra, ee prem solve: 3.436e-02 s mean;      32527 us least of  30 runs
+
+64-bit origin/master commit 6a05bcee
+  naic, no solve      : 2.566e-02 s mean;      25448 us least of  39 runs
+  naic, specamt solve : 4.102e-02 s mean;      40694 us least of  25 runs
+  naic, ee prem solve : 3.809e-02 s mean;      37757 us least of  27 runs
+  finra, no solve     : 1.384e-02 s mean;      13679 us least of  73 runs
+  finra, specamt solve: 2.790e-02 s mean;      27633 us least of  36 runs
+  finra, ee prem solve: 2.631e-02 s mean;      26060 us least of  39 runs
+
+Thus, for 64-bit builds, the "currency" penalty is only about seven
+percent for the plain "finra, no solve" scenario: much less bad than
+the 32-bit results, perhaps because int64_t is the "natural" integer
+size for 64-bit binaries. However, the penalty for scenarios with
+solves is still high--especially for "naic" runs, which always have
+an implicit solve for guaranteed premium, and may also have explicit
+solves as indicated above.
+
+//
+
 More incremental improvement--as of commit 39d842f5d0:
 
   naic, no solve      : 1.065e-01 s mean;      99740 us least of  10 runs
