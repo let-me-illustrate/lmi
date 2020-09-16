@@ -459,7 +459,7 @@ mec_server::mec_server(mcenum_emission emission) : emission_(emission)
 
 bool mec_server::operator()(fs::path const& file_path)
 {
-    std::string const extension = fs::extension(file_path);
+    std::string const extension = file_path.extension().string();
     if(".mec" == extension)
         {
         Timer timer;

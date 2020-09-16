@@ -53,7 +53,7 @@ illustrator::illustrator(mcenum_emission emission)
 
 bool illustrator::operator()(fs::path const& file_path)
 {
-    std::string const extension = fs::extension(file_path);
+    std::string const extension = file_path.extension().string();
     if(".cns" == extension)
         {
         Timer timer;
