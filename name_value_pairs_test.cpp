@@ -33,7 +33,7 @@
 
 int test_main(int, char*[])
 {
-    std::string const tmp = "/tmp/" + fs::basename(__FILE__);
+    std::string const tmp = "/tmp/" + fs::path{__FILE__}.stem().string();
     fs::path const tmpdir(fs::absolute(tmp));
     fs::create_directory(tmpdir);
 
