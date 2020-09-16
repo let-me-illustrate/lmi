@@ -38,9 +38,6 @@
 /// Exception: for msw at least, wx doesn't use main(). The way
 /// diagnostic messages are displayed for wx is different enough to
 /// warrant a parallel implementation.
-///
-/// Don't initialize boost::filesystem here, to avoid creating a
-/// dependency on its object files for applications that don't use it.
 
 int main(int argc, char* argv[])
 {

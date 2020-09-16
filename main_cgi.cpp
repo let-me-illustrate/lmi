@@ -42,7 +42,6 @@
 #include "main_common.hpp"
 #include "mc_enum_type_enums.hpp"       // mcenum_emission
 #include "miscellany.hpp"
-#include "path_utility.hpp"
 #include "platform_dependent.hpp"       // putenv() [GWC]
 #include "ssize_lmi.hpp"
 #include "timer.hpp"
@@ -88,8 +87,6 @@ void ShowCensusOutput(Input const&, std::string const&, bool);
 int try_main(int argc, char* argv[])
 {
   try {
-    initialize_filesystem();
-
     global_settings::instance().set_data_directory("/opt/lmi/data");
 
     gLogFile.rdbuf()->open

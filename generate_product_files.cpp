@@ -24,7 +24,6 @@
 #include "dbdict.hpp"
 #include "fund_data.hpp"
 #include "main_common.hpp"
-#include "path_utility.hpp"             // initialize_filesystem()
 #include "product_data.hpp"
 #include "rounding_rules.hpp"
 #include "stratified_charges.hpp"
@@ -34,8 +33,6 @@
 
 int try_main(int, char*[])
 {
-    initialize_filesystem();
-
     std::cout << "Generating product files." << std::endl;
 
     DBDictionary       ::write_database_files ();
