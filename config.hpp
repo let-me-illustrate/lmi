@@ -27,8 +27,8 @@
 
 #if defined __cplusplus
 // Namespace alii.
-namespace boost {namespace filesystem {} }
-namespace fs = boost::filesystem;
+namespace std {namespace filesystem {} }
+namespace fs = std::filesystem;
 #endif // defined __cplusplus
 
 // The msw platform-identifying macro that its vendor encourages
