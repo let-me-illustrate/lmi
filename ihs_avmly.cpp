@@ -2063,7 +2063,7 @@ void AccountValue::TxTestHoneymoonForExpiration()
         // negative number that can be negated without the sort of
         // surprising result seen with INT_MIN, which is -2147483648.
         // Why that intention makes sense is another matter.
-        HoneymoonValue  = currency(-2147483647);
+        HoneymoonValue  = currency(-9223372036854775807);
         }
 }
 
