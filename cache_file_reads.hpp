@@ -69,7 +69,7 @@ class file_cache
     retrieved_type retrieve_or_reload(std::string const& filename)
         {
         // Throws if !exists(filename).
-        std::time_t const write_time = fs::last_write_time(filename);
+        auto const write_time = fs::last_write_time(filename);
 
         auto i = cache_.lower_bound(filename);
         if
@@ -98,10 +98,11 @@ class file_cache
     file_cache(file_cache const&) = delete;
     file_cache& operator=(file_cache const&) = delete;
 
+    using file_time_type = fs::file_time_type;
     struct record
     {
         retrieved_type data;
-        std::time_t    write_time;
+        file_time_type write_time;
     };
 
     std::map<std::string,record> cache_;
