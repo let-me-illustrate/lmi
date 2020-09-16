@@ -443,8 +443,6 @@ void test_oddities()
 
 int test_main(int, char*[])
 {
-    initialize_filesystem();
-
     test_modify_directory();
     test_orthodox_filename();
     test_serial_file_path();

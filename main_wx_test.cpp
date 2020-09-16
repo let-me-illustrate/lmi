@@ -28,7 +28,6 @@
 #include "force_linking.hpp"
 #include "handle_exceptions.hpp"        // stealth_exception
 #include "main_common.hpp"              // initialize_application()
-#include "path_utility.hpp"             // initialize_filesystem()
 #include "skeleton.hpp"
 #include "ssize_lmi.hpp"                // sstrlen()
 #include "wx_test_case.hpp"
@@ -947,7 +946,6 @@ void SkeletonTest::RunTheTests()
 int main(int argc, char* argv[])
 {
     initialize_application();
-    initialize_filesystem();
 
     if(!application_test::instance().process_command_line(argc, argv))
         {

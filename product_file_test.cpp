@@ -33,7 +33,6 @@
 
 #include "data_directory.hpp"           // AddDataDir()
 #include "global_settings.hpp"
-#include "path_utility.hpp"             // initialize_filesystem()
 #include "test_tools.hpp"
 #include "timer.hpp"                    // TimeAnAliquot()
 
@@ -189,9 +188,6 @@ void product_file_test::assay_speed()
 
 int test_main(int, char*[])
 {
-    // Absolute paths require "native" name-checking policy for msw.
-    initialize_filesystem();
-
     product_file_test::test();
     return EXIT_SUCCESS;
 }

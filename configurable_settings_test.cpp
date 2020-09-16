@@ -24,7 +24,6 @@
 #include "configurable_settings.hpp"
 
 #include "miscellany.hpp"               // ios_out_trunc_binary()
-#include "path_utility.hpp"             // initialize_filesystem()
 #include "test_tools.hpp"
 
 #include <boost/filesystem/fstream.hpp>
@@ -97,9 +96,6 @@ void configurable_settings_test::test_backward_compatibility()
 
 int test_main(int, char*[])
 {
-    // Absolute paths require "native" name-checking policy for msw.
-    initialize_filesystem();
-
     configurable_settings_test::test();
 
     return EXIT_SUCCESS;

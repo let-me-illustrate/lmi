@@ -37,62 +37,6 @@
 #include <iomanip>
 #include <sstream>
 
-/// Preserve initial path and set "native" name-checking policy for
-/// boost filesystem library.
-///
-/// Applications that end users would normally run should call this
-/// function during initialization--before using this boost library
-/// in any other way, to ensure uniform name checking (which enables
-/// them to use nonportable paths, as some demand), and to make it
-/// potentially possible to protect them somewhat from the strange
-/// effects of inadvertent changes to the current working directory.
-/// As boost's documentation notes, msw may resolve relative paths as
-///   "complete( path, kinky ), where kinky is the current directory
-///   for the [path's] drive. This will be the current directory of
-///   that drive the last time it was set, and thus may well be
-///   residue left over from some prior program run by the command
-///   processor! Although these semantics are often useful, they are
-///   also very error-prone, and certainly deserve to be called
-///   'kinky'."
-/// although it's unclear whether there's any way to get msw to do
-/// this exactly when end users desire it and not otherwise.
-///
-/// Call this function during initialization for any program that
-/// could be passed a path argument, even if the argument is a
-/// portable path. Motivating case: MSYS's bash translated it to a
-/// nonportable path; e.g., if this function wasn't called, then
-///   --data_path='/opt/lmi/data'
-/// engendered this diagnostic:
-///   boost::filesystem::path: [line split for readability]
-///     invalid name "C:" in path: "C:/msys/1.0/opt/lmi/data"
-/// Keep doing this for future-proofing even though MSYS is no longer
-/// supported.
-///
-/// This function is not called in the initialization routine used by
-/// all programs, because simple command-line tools should not be
-/// forced to depend on this boost library.
-///
-/// Resist the urge to write its simple implementation inline because
-/// that may fail with gcc on msw--see:
-///   http://article.gmane.org/gmane.comp.gnu.mingw.user/18633
-///     [2006-01-14T11:55:49Z from Greg Chicares]
-///
-/// The boost documentation says:
-///   "The preferred implementation would be to call initial_path()
-///   during program initialization, before the call to main().
-///   This is, however, not possible with changing the C++ runtime
-///   library."
-/// One could wish that they had expressed that in code instead of
-/// commentary: std::cout manages to work this way by using the
-/// so-called "nifty counter" technique, which perhaps ought to be
-/// used here.
-
-void initialize_filesystem()
-{
-    fs::path::default_name_check(fs::native);
-    fs::initial_path();
-}
-
 /// Change '/path/to/file' to '/some/other/place/file'.
 ///
 /// Motivation: It is anomalous that boost permits this:

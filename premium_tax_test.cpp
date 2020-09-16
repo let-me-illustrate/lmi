@@ -27,7 +27,6 @@
 #include "database.hpp"
 #include "dbdict.hpp"
 #include "global_settings.hpp"
-#include "path_utility.hpp"             // initialize_filesystem()
 #include "product_data.hpp"
 #include "stratified_charges.hpp"
 #include "test_tools.hpp"
@@ -131,9 +130,6 @@ void premium_tax_test::test_rates()
 
 int test_main(int, char*[])
 {
-    // Absolute paths require "native" name-checking policy for msw.
-    initialize_filesystem();
-
     premium_tax_test::test();
 
     return EXIT_SUCCESS;
