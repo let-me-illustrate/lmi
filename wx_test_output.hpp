@@ -57,9 +57,9 @@ class output_file_existence_checker
         return fs::exists(path_);
         }
 
-    std::string const& path() const
+    fs::path const& path() const
         {
-        return path_.string();
+        return path_;
         }
 
     // Objects of this class can't be copied, because of side effects of its
