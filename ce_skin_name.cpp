@@ -41,15 +41,18 @@ std::vector<std::string> fetch_skin_names()
 {
     fs::path path(global_settings::instance().data_directory());
     std::vector<std::string> names;
-    fs::directory_iterator i(path);
-    fs::directory_iterator end_i;
-    for(; i != end_i; ++i)
+    for(auto const& i : fs::directory_iterator(path))
         {
-        if(is_directory(*i) || ".xrc" != fs::extension(*i))
+        if(i.is_directory())
             {
             continue;
             }
-        std::string const name(i->leaf());
+        auto const current_path{i.path()};
+        if(".xrc" != current_path.extension())
+            {
+            continue;
+            }
+        std::string const name(current_path.leaf());
         if(!begins_with(name, "skin"))
             {
             continue;

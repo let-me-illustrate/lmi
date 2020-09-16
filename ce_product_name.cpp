@@ -42,15 +42,18 @@ std::vector<std::string> fetch_product_names()
 {
     fs::path path(global_settings::instance().data_directory());
     std::vector<std::string> names;
-    fs::directory_iterator i(path);
-    fs::directory_iterator end_i;
-    for(; i != end_i; ++i)
+    for(auto const& i : fs::directory_iterator(path))
         {
-        if(".policy" != fs::extension(*i) || is_directory(*i))
+        if(i.is_directory())
             {
             continue;
             }
-        names.push_back(basename(*i));
+        auto const current_path{i.path()};
+        if(".policy" != current_path.extension())
+            {
+            continue;
+            }
+        names.push_back(basename(current_path));
         }
 
     if(names.empty())
