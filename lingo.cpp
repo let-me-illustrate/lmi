@@ -656,7 +656,7 @@ void lingo::write_lingo_files()
 
     fs::path const path(AddDataDir("sample.lingo"));
     xml_lmi::xml_document document(xml_root_name());
-    write_proem(document, fs::basename(path));
+    write_proem(document, path.stem().string());
     xml::element& root = document.root_node();
     xml_lmi::set_attr(root, "version", class_version());
     xml_serialize::to_xml(root, enumerative_map);

@@ -292,7 +292,7 @@ fs::path unique_filepath
         }
     catch(std::exception const&)
         {
-        std::string basename  = fs::basename (filepath);
+        std::string basename  = filepath.stem().string();
         std::string const extension = filepath.extension().string();
         basename += '-' + iso_8601_datestamp_terse() + extension;
         filepath = filepath.branch_path() / basename;
