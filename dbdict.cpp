@@ -1612,19 +1612,17 @@ void DBDictionary::InitAntediluvian()
 void print_databases()
 {
     fs::path path(global_settings::instance().data_directory());
-    fs::directory_iterator i(path);
-    fs::directory_iterator end_i;
-    for(; i != end_i; ++i)
+    for(auto const& e : fs::directory_iterator(path))
         {
-        if(is_directory(*i) || ".database" != fs::extension(*i))
+        if(e.is_directory() || ".database" != e.path().extension())
             {
             continue;
             }
         try
             {
-            DBDictionary const z(i->string());
+            DBDictionary const z(e.path().string());
 
-            fs::path out_file = *i;
+            fs::path out_file{e.path()};
             out_file.replace_extension(".dbt");
             fs::ofstream os(out_file, ios_out_trunc_binary());
             for(auto const& j : z.member_names())

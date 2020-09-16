@@ -55,7 +55,7 @@
 /// products before approval.
 ///
 /// data_directory_: Path to data files, initialized to ".", not an
-/// empty string. Reason: objects of the boost filesystem library's
+/// empty string. Reason: objects of the std::filesystem library's
 /// path class are created from these strings, which, if the strings
 /// were empty, would trigger exceptions when passed to that library's
 /// directory_iterator ctor.
