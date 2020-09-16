@@ -1,3 +1,123 @@
+Final timings as of 2020-09-16:
+
+32-bit valyuta/002 commit d124022d
+  naic, no solve      : 1.025e-01 s mean;     102020 us least of  10 runs
+  naic, specamt solve : 1.796e-01 s mean;     179040 us least of   6 runs
+  naic, ee prem solve : 1.787e-01 s mean;     162828 us least of   6 runs
+  finra, no solve     : 2.663e-02 s mean;      26256 us least of  38 runs
+  finra, specamt solve: 9.554e-02 s mean;      94678 us least of  11 runs
+  finra, ee prem solve: 8.758e-02 s mean;      86966 us least of  12 runs
+
+64-bit valyuta/002 commit d124022d
+  naic, no solve      : 3.514e-02 s mean;      34749 us least of  29 runs
+  naic, specamt solve : 5.748e-02 s mean;      56785 us least of  18 runs
+  naic, ee prem solve : 5.316e-02 s mean;      52317 us least of  19 runs
+  finra, no solve     : 1.500e-02 s mean;      14669 us least of  67 runs
+  finra, specamt solve: 3.501e-02 s mean;      34537 us least of  29 runs
+  finra, ee prem solve: 3.414e-02 s mean;      32419 us least of  30 runs
+
+32-bit origin/master commit 3023433f
+
+  naic, no solve      : 5.199e-02 s mean;      51227 us least of  20 runs
+  naic, specamt solve : 9.311e-02 s mean;      92312 us least of  11 runs
+  naic, ee prem solve : 8.570e-02 s mean;      84947 us least of  12 runs
+  finra, no solve     : 2.110e-02 s mean;      20654 us least of  48 runs
+  finra, specamt solve: 5.881e-02 s mean;      58151 us least of  18 runs
+  finra, ee prem solve: 5.471e-02 s mean;      54206 us least of  19 runs
+
+64-bit origin/master commit 3023433f
+  naic, no solve      : 2.502e-02 s mean;      24783 us least of  40 runs
+  naic, specamt solve : 4.071e-02 s mean;      40252 us least of  25 runs
+  naic, ee prem solve : 3.776e-02 s mean;      37410 us least of  27 runs
+  finra, no solve     : 1.323e-02 s mean;      13009 us least of  76 runs
+  finra, specamt solve: 2.796e-02 s mean;      27122 us least of  36 runs
+  finra, ee prem solve: 2.669e-02 s mean;      26127 us least of  38 runs
+
+tabulating more compactly:
+
+  valyuta, master, ratio: 32 bit
+
+   102020   51227   1.99 [scenarios in same order as above]
+   179040   92312   1.94
+   162828   84947   1.92
+    26256   20654   1.27
+    94678   58151   1.63
+    86966   54206   1.60
+
+  valyuta, master, ratio: 64 bit
+    34749   24783   1.40
+    56785   40252   1.41
+    52317   37410   1.40
+    14669   13009   1.13
+    34537   27122   1.27
+    32419   26127   1.24
+
+The first three rows of each set of six are the most important, because
+they are the most solve-heavy.
+
+At first, it seemed that the solve-free fourth scenario might represent
+the true system speed, and that the other five scenarios demonstrated
+some unexplained penalty for solves, which we might have hoped to reduce
+or eliminate. However, the immediately-preceding commit showed that hope
+to be forlorn: to within the expected representation error for formatted
+numbers such as
+  iteration 17 iterand 1879003 value 136.140000000828877091 vs.
+  iteration 17 iterand 1879003 value 136.139999999999986358
+the traces of each solve iteration are identical. In reality, therefore,
+producing an illustration means
+  do_lots_of_setup(based_on_input)
+  for each basis in {current, guaranteed, midpoint} (e.g.)
+    call RunOneCell()
+  do_lots_of_output()
+while solves just invoke RunOneCell() iteratively, so the fourth
+scenario above measures the ratio of
+  one-time setup and output, plus about three calls to RunOneCell()
+while the second and third compare
+  one-time setup and output, plus about fifty calls to RunOneCell()
+The conclusion is that using the currency class imposes a speed
+penalty in the code that uses it (i.e., RunOneCell()) of about one
+hundred percent for 32- and forty percent for 64-bit builds.
+
+The reason is that lmi quantities are mostly integer-valued, but they're
+heavily dependent on floating-point calculations--for example:
+  monthly_interest_factor const = (1.04)^(1/12) - 1
+  old_value = $1,234.56
+  new_value = old_value + round_to_cents(old_value * monthly_interest_factor)
+At least in the present experimental branch, this is realized as if by:
+  double floating_old_value = static_cast<double>(100.0 * old_value)
+  double floating_increment = floating_old_value * monthly_interest_factor
+  new_value += round_to_cents(floating_increment / 100.0)
+It's certainly possible to rewrite the code to avoid multiplying and
+dividing by 100.0 repeatedly, although the effort would be considerable.
+But it is not possible to maintain values as integer and never transform
+them to floating-point and back--so, if such transformations are inherently
+very costly, then there's no way to avoid a penalty.
+
+OTOH, instead of an integer type like std::int64_t, we might use scaled,
+integer-valued doubles--e.g., instead of the problematic
+  double old_value = 1234.56; // actually 1234.55999999xyz
+we could store
+  double old_value = 123456;  // exactly  123456.0000000000000000
+
+If we're going to use a currency class, we should make the switch before
+this branch rots. Taking the third scenario above as representative:
+  valyuta, master
+   162828   84947  32 bit
+    52317   37410  64 bit
+we can't go from 84947 us to 162828 us directly, because end users would
+not view that favorably. But we could go from 84947 to 52317 (releasing
+a currency-based 64-bit build to replace 32-bit master), and then make
+incremental improvements at our leisure. However, it's hard to tell
+whether the 'currency' penalty can be made close to zero, or possibly
+negative; if it can't, then is a currency class worth the bother? Pros:
+ - currency is natural in the problem domain
+ - it avoids some nasty catastrophic-cancellation issues
+Cons:
+ - it makes the code less clear
+ - it imposes a performance penalty that may turn out to be inherent
+
+//
+
 64-bit valyuta/002 commit 49f84a1e
   naic, no solve      : 3.517e-02 s mean;      34812 us least of  29 runs
   naic, specamt solve : 5.662e-02 s mean;      55880 us least of  18 runs
