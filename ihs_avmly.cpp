@@ -2057,7 +2057,13 @@ void AccountValue::TxTestHoneymoonForExpiration()
     if(HoneymoonValue <= currency() || HoneymoonValue < csv_ignoring_loan)
         {
         HoneymoonActive = false;
-        HoneymoonValue  = currency(-std::numeric_limits<int>::max()); // yick
+        // -2147483647 is
+        //   -std::numeric_limits<int>::max())
+        // The apparent intention was to choose an implausibly large
+        // negative number that can be negated without the sort of
+        // surprising result seen with INT_MIN, which is -2147483648.
+        // Why that intention makes sense is another matter.
+        HoneymoonValue  = currency(-2147483647);
         }
 }
 
