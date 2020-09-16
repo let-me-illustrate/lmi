@@ -46,8 +46,8 @@
 ///   modify_directory("sh", "/usr/bin") // present order
 ///   modify_directory("/usr/bin", "sh") // opposite order
 /// because the path precedes the leaf in canonical form. However,
-/// fs::change_extension() uses the present argument order:
-///   function(original, new_part)
+/// fs::path::replace_extension() uses the present argument order:
+///   original.replace_extension(new_part)
 /// and in a nondegenerate case such as:
 ///   modify_directory("/bin/sh", "/usr/bin") // present order
 /// simply means "change the directory of /bin/sh to /usr/bin", while
@@ -234,7 +234,7 @@ fs::path serial_file_path
         {
         s = '.' + orthodox_filename(personal_name) + s;
         }
-    return fs::change_extension(exemplar.leaf(), s);
+    return fs::path{exemplar.leaf()}.replace_extension(s);
 }
 
 /// Create a unique file path, following input as closely as possible.
@@ -279,7 +279,7 @@ fs::path unique_filepath
     )
 {
     fs::path filepath(original_filepath);
-    filepath = fs::change_extension(filepath, supplied_extension);
+    filepath.replace_extension(supplied_extension);
     if(!fs::exists(filepath))
         {
         return filepath;

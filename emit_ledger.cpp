@@ -123,7 +123,7 @@ double ledger_emitter::emit_cell
     if(emission_ & mce_emit_test_data)
         {
         fs::ofstream ofs
-            (fs::change_extension(cell_filepath, ".test")
+            (fs::path{cell_filepath}.replace_extension(".test")
             ,ios_out_trunc_binary()
             );
         ledger.Spew(ofs);
@@ -150,7 +150,7 @@ double ledger_emitter::emit_cell
         fs::path out_file =
             cell_filepath.string() == c.custom_input_0_filename()
             ? c.custom_output_0_filename()
-            : fs::change_extension(cell_filepath, ".test0")
+            : fs::path{cell_filepath}.replace_extension(".test0")
             ;
         custom_io_0_write(ledger, out_file.string());
         }
@@ -160,7 +160,7 @@ double ledger_emitter::emit_cell
         fs::path out_file =
             cell_filepath.string() == c.custom_input_1_filename()
             ? c.custom_output_1_filename()
-            : fs::change_extension(cell_filepath, ".test1")
+            : fs::path{cell_filepath}.replace_extension(".test1")
             ;
         custom_io_1_write(ledger, out_file.string());
         }

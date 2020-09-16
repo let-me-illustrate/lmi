@@ -204,7 +204,7 @@ void actuarial_table::find_table()
     LMI_ASSERT(0 != table_number_);
 
     fs::path index_path(filename_);
-    index_path = fs::change_extension(index_path, ".ndx");
+    index_path.replace_extension(".ndx");
     fs::ifstream index_ifs(index_path, ios_in_binary());
     if(!index_ifs)
         {
@@ -294,7 +294,7 @@ void actuarial_table::parse_table()
     LMI_ASSERT(-1 == max_select_age_);
 
     fs::path data_path(filename_);
-    data_path = fs::change_extension(data_path, ".dat");
+    data_path.replace_extension(".dat");
     fs::ifstream data_ifs(data_path, ios_in_binary());
     if(!data_ifs)
         {

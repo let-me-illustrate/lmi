@@ -1624,7 +1624,8 @@ void print_databases()
             {
             DBDictionary const z(i->string());
 
-            fs::path out_file = fs::change_extension(*i, ".dbt");
+            fs::path out_file = *i;
+            out_file.replace_extension(".dbt");
             fs::ofstream os(out_file, ios_out_trunc_binary());
             for(auto const& j : z.member_names())
                 {

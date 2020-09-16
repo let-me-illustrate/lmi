@@ -950,7 +950,7 @@ std::string filename_from_product_name(std::string const& product_name)
 {
     fs::path path(product_name);
     LMI_ASSERT(product_name == fs::basename(path));
-    path = fs::change_extension(path, ".policy");
+    path.replace_extension(".policy");
     return AddDataDir(path.string());
 }
 
