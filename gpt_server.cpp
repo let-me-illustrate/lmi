@@ -538,7 +538,7 @@ bool gpt_server::operator()(fs::path const& file_path, gpt_input const& z)
     timer.restart();
     if(mce_emit_test_data & emission_)
         {
-        state_.save(fs::change_extension(file_path, ".gpt.xml"));
+        state_.save(fs::path{file_path}.replace_extension(".gpt.xml"));
         }
     seconds_for_output_       = timer.stop().elapsed_seconds();
     conditionally_show_timings_on_stdout();
