@@ -169,7 +169,7 @@ void test_unique_filepath_with_normal_filenames()
     //   https://lists.nongnu.org/archive/html/lmi/2020-08/msg00015.html
     fs::path const u = unique_filepath("/tmp/" + fs::basename(__FILE__), "");
     std::string const tmp = u.string();
-    fs::path const tmpdir(fs::complete(tmp));
+    fs::path const tmpdir(fs::canonical(tmp));
     fs::create_directory(tmpdir);
 
     // These tests would fail if read-only files with the following
@@ -312,7 +312,7 @@ void test_path_validation()
     // Create a file and a directory to test.
     //
     // Another test that calls fs::create_directory() uses an absolute
-    // path that's uniquified and canonicalized with fs::complete().
+    // path that's uniquified and canonicalized with fs::canonical().
     // This call uses a relative path, with no such safeguards; this
     // being a unit test, it is appropriate to retain some fragility.
     // If one user runs this test, and the directory created here
