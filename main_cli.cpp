@@ -506,7 +506,6 @@ void process_command_line(int argc, char* argv[])
 
 int try_main(int argc, char* argv[])
 {
-    initialize_filesystem();
     process_command_line(argc, argv);
     return EXIT_SUCCESS;
 }
