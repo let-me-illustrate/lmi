@@ -54,6 +54,7 @@
 #include <algorithm>                    // for_each()
 #include <cmath>                        // fabs()
 #include <cstdio>                       // printf()
+#include <fstream>
 #include <functional>                   // bind()
 #include <ios>
 #include <iostream>
@@ -165,6 +166,28 @@ void self_test()
         << TimeAnAliquot(std::bind(z, "CLI_selftest", finra_solve_ee_prem))
         << std::endl
         ;
+
+    // Trace solves.
+    naic_no_solve      ["Comments"] = "idiosyncrasyT";
+    naic_solve_specamt ["Comments"] = "idiosyncrasyT";
+    naic_solve_ee_prem ["Comments"] = "idiosyncrasyT";
+    finra_no_solve     ["Comments"] = "idiosyncrasyT";
+    finra_solve_specamt["Comments"] = "idiosyncrasyT";
+    finra_solve_ee_prem["Comments"] = "idiosyncrasyT";
+
+    {std::ofstream ofs_trace("trace.txt", ios_out_trunc_binary());}
+    {std::ofstream ofs_trace("trace.txt", ios_out_app_binary()); ofs_trace << " 0\n";}
+    z("CLI_selftest", naic_no_solve);
+    {std::ofstream ofs_trace("trace.txt", ios_out_app_binary()); ofs_trace << " 1\n";}
+    z("CLI_selftest", naic_solve_specamt);
+    {std::ofstream ofs_trace("trace.txt", ios_out_app_binary()); ofs_trace << " 2\n";}
+    z("CLI_selftest", naic_solve_ee_prem);
+    {std::ofstream ofs_trace("trace.txt", ios_out_app_binary()); ofs_trace << " 3\n";}
+    z("CLI_selftest", finra_no_solve);
+    {std::ofstream ofs_trace("trace.txt", ios_out_app_binary()); ofs_trace << " 4\n";}
+    z("CLI_selftest", finra_solve_specamt);
+    {std::ofstream ofs_trace("trace.txt", ios_out_app_binary()); ofs_trace << " 5\n";}
+    z("CLI_selftest", finra_solve_ee_prem);
 #endif // !defined _GLIBCXX_DEBUG
 }
 
