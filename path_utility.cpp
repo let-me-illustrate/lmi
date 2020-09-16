@@ -78,7 +78,7 @@ fs::path LMI_SO modify_directory
     )
 {
     LMI_ASSERT(original_filepath.has_filename());
-    return supplied_directory / fs::path(original_filepath.leaf());
+    return supplied_directory / original_filepath.filename();
 }
 
 /// Return a filename appropriate for posix as well as msw.
@@ -210,7 +210,7 @@ fs::path serial_file_path
         {
         s = '.' + orthodox_filename(personal_name) + s;
         }
-    return fs::path{exemplar.leaf()}.replace_extension(s);
+    return fs::path{exemplar}.filename().replace_extension(s);
 }
 
 /// Create a unique file path, following input as closely as possible.

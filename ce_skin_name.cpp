@@ -52,7 +52,7 @@ std::vector<std::string> fetch_skin_names()
             {
             continue;
             }
-        std::string const name(current_path.leaf());
+        std::string const name(current_path.filename().string());
         if(!begins_with(name, "skin"))
             {
             continue;
