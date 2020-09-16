@@ -289,7 +289,7 @@ void PasskeyTest::TestFromAfar() const
     CheckNominal(__FILE__, __LINE__);
 
     std::string const tmp = "/tmp/" + fs::basename(__FILE__);
-    fs::path const remote_dir_0(fs::complete(tmp));
+    fs::path const remote_dir_0(fs::absolute(tmp));
     fs::create_directory(remote_dir_0);
     BOOST_TEST(fs::exists(remote_dir_0) && fs::is_directory(remote_dir_0));
     BOOST_TEST_EQUAL(0, chdir(remote_dir_0.string().c_str()));
@@ -304,7 +304,7 @@ void PasskeyTest::TestFromAfar() const
 #if defined LMI_MSW
     CheckNominal(__FILE__, __LINE__);
 
-    fs::path const remote_dir_1(fs::complete(fs::path("F:/", fs::native)));
+    fs::path const remote_dir_1(fs::absolute(fs::path("F:/", fs::native)));
     if(!fs::exists(remote_dir_1))
         {
         goto done;
