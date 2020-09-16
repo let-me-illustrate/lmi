@@ -28,10 +28,10 @@
 #include "wx_test_case.hpp"
 #include "wx_test_date.hpp"
 
-#include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 
 #include <iostream>
+#include <fstream>
 
 /// Validate dates in the 'expiry' file.
 ///
@@ -68,7 +68,7 @@ LMI_WX_TEST_CASE(expiry_dates)
 {
     // Check that the expiry file can be read and is in valid format.
     fs::path expiry_path(global_settings::instance().data_directory() / "expiry");
-    fs::ifstream is(expiry_path);
+    std::ifstream is(expiry_path);
     LMI_ASSERT_WITH_MSG(is, "Failed to open \"expiry\" file for reading");
 
     calendar_date begin(last_yyyy_date ());

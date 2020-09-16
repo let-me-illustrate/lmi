@@ -28,7 +28,6 @@
 #include "path_utility.hpp"
 #include "test_tools.hpp"
 
-#include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 
 #include <fstream>

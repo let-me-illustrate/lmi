@@ -27,8 +27,9 @@
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "test_tools.hpp"
 
-#include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/path.hpp>
+
+#include <fstream>
 
 class configurable_settings_test
 {
@@ -74,7 +75,7 @@ void configurable_settings_test::test_writability()
 void configurable_settings_test::test_backward_compatibility()
 {
     fs::path const filename("eraseme");
-    fs::ofstream ofs(filename, ios_out_trunc_binary());
+    std::ofstream ofs(filename, ios_out_trunc_binary());
     ofs
         << "<?xml version=\"1.0\"?>\n"
         << "<configurable_settings>\n"

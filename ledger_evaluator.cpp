@@ -44,10 +44,10 @@
 #include "value_cast.hpp"
 #include "version.hpp"
 
-#include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // transform()
+#include <fstream>
 #include <functional>                   // minus
 #include <map>
 #include <numeric>                      // iota()
@@ -1040,7 +1040,7 @@ void ledger_evaluator::write_tsv(fs::path const& pdf_out_file) const
     configurable_settings const& c = configurable_settings::instance();
     std::string const& z = c.spreadsheet_file_extension();
     fs::path filepath = unique_filepath(pdf_out_file, ".values" + z);
-    fs::ofstream ofs(filepath, ios_out_trunc_binary());
+    std::ofstream ofs(filepath, ios_out_trunc_binary());
 
     using v_map_t = std::map<std::string,std::vector<std::string>> const;
     v_map_t sorted_vectors(vectors_.begin(), vectors_.end());

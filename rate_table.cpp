@@ -32,12 +32,12 @@
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/exception.hpp>
-#include <boost/filesystem/fstream.hpp>
 
 #include <algorithm>                    // count()
 #include <climits>                      // ULLONG_MAX
 #include <cstdlib>                      // strtoull()
 #include <cstring>                      // memcpy(), strncmp()
+#include <fstream>
 #include <iomanip>
 #include <ios>
 #include <istream>
@@ -2259,7 +2259,7 @@ std::uint32_t table_impl::compute_hash_value() const
 
 table table::read_from_text(fs::path const& file)
 {
-    fs::ifstream ifs(file, ios_in_binary());
+    std::ifstream ifs(file, ios_in_binary());
     if(!ifs) alarum() << "Unable to open '" << file << "'." << LMI_FLUSH;
 
     try
@@ -2299,7 +2299,7 @@ table table::read_from_text(std::string const& text)
 
 void table::save_as_text(fs::path const& file) const
 {
-    fs::ofstream ofs(file, ios_out_trunc_binary());
+    std::ofstream ofs(file, ios_out_trunc_binary());
     if(!ofs) alarum() << "Unable to open '" << file << "'." << LMI_FLUSH;
     impl_->write_as_text(ofs);
 }
@@ -2475,7 +2475,7 @@ database_impl::database_impl(fs::path const& path)
         }
 
     fs::path const index_path = get_index_path(path);
-    fs::ifstream ifs(index_path, ios_in_binary());
+    std::ifstream ifs(index_path, ios_in_binary());
     if(!ifs) alarum() << "Unable to open '" << index_path << "'." << LMI_FLUSH;
     read_index(ifs);
 
@@ -2483,7 +2483,7 @@ database_impl::database_impl(fs::path const& path)
     // don't need it just yet. As it will be used soon anyhow, delaying opening
     // it wouldn't be a useful optimization.
     fs::path const data_path = get_data_path(path);
-    auto const pifs = std::make_shared<fs::ifstream>(data_path, ios_in_binary());
+    auto const pifs = std::make_shared<std::ifstream>(data_path, ios_in_binary());
     if(!*pifs) alarum() << "Unable to open '" << data_path << "'." << LMI_FLUSH;
     data_is_ = pifs;
 }
@@ -2917,7 +2917,7 @@ void database_impl::save(fs::path const& path)
             fs::path const path_;
             fs::path const temp_path_;
             char const* description_;
-            fs::ofstream ofs_;
+            std::ofstream ofs_;
         };
 
         safe_output_file index_;

@@ -30,8 +30,6 @@
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 
-#include <boost/filesystem/fstream.hpp>
-
 #include <limits>
 #include <sstream>
 #include <vector>

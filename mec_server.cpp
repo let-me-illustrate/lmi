@@ -53,9 +53,9 @@
 #include "value_cast.hpp"
 
 #include <boost/filesystem/convenience.hpp> // extension(), change_extension()
-#include <boost/filesystem/fstream.hpp>
 
 #include <algorithm>                    // min()
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -424,7 +424,7 @@ mec_state test_one_days_7702A_transactions
     configurable_settings const& c = configurable_settings::instance();
     std::string const extension(".mec" + c.spreadsheet_file_extension());
     fs::path spreadsheet_filename = unique_filepath(file_path, extension);
-    fs::ofstream ofs(spreadsheet_filename, ios_out_trunc_binary());
+    std::ofstream ofs(spreadsheet_filename, ios_out_trunc_binary());
     ofs << "This temporary output file will be removed in a future release.\n";
     ofs
         << "t\t"

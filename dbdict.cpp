@@ -42,10 +42,10 @@
 #include "xml_serialize.hpp"
 
 #include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
+#include <fstream>
 #include <vector>
 
 template class xml_serializable<DBDictionary>;
@@ -1096,7 +1096,7 @@ void print_databases()
             DBDictionary const z(i->string());
 
             fs::path out_file = fs::change_extension(*i, ".dbt");
-            fs::ofstream os(out_file, ios_out_trunc_binary());
+            std::ofstream os(out_file, ios_out_trunc_binary());
             for(auto const& j : z.member_names())
                 {
                 z.datum(j).write(os);

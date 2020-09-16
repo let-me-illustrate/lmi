@@ -29,7 +29,6 @@
 
 #include <boost/filesystem/convenience.hpp> // basename()
 #include <boost/filesystem/exception.hpp>
-#include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
@@ -52,7 +51,7 @@ namespace
 
     void write_dummy_file(fs::path p)
     {
-        fs::ofstream ofs(p);
+        std::ofstream ofs(p);
         ofs << p;
     }
 } // Unnamed namespace.
@@ -208,7 +207,7 @@ void test_unique_filepath_with_normal_filenames()
     // Open a file for writing, and leave it open, preventing it from
     // being erased and therefore forcing unique_filepath() to use a
     // different name. This behavior isn't guaranteed on toy OS's.
-    fs::ofstream keep_open(path1, ios_out_app_binary());
+    std::ofstream keep_open(path1, ios_out_app_binary());
 
     fs::path path2 = unique_filepath(fs::path(p), ".xyzzy");
     BOOST_TEST_UNEQUAL(path2.string(), q);

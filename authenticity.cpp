@@ -33,12 +33,12 @@
 #include "path_utility.hpp"             // fs::path inserter
 #include "timer.hpp"
 
-#include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 
 #include <cstdio>                       // fclose(), fopen()
 #include <cstdlib>                      // exit(), EXIT_FAILURE
 #include <cstring>                      // memcpy()
+#include <fstream>
 #include <iostream>                     // cout, endl
 #include <sstream>
 #include <stdexcept>
@@ -99,7 +99,7 @@ std::string Authenticity::Assay
     std::string passkey;
     {
     fs::path passkey_path(data_path / "passkey");
-    fs::ifstream is(passkey_path);
+    std::ifstream is(passkey_path);
     if(!is)
         {
         oss
@@ -141,7 +141,7 @@ std::string Authenticity::Assay
     calendar_date end  (gregorian_epoch());
     {
     fs::path expiry_path(data_path / "expiry");
-    fs::ifstream is(expiry_path);
+    std::ifstream is(expiry_path);
     if(!is)
         {
         oss

@@ -29,12 +29,12 @@
 #include "ssize_lmi.hpp"
 
 #include <boost/filesystem/convenience.hpp> // fs::extension()
-#include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>  // fs::exists(), fs::is_directory()
 #include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // is_sorted()
 #include <ctime>
+#include <fstream>
 #include <iomanip>
 #include <ios>
 #include <iostream>
@@ -150,7 +150,7 @@ file::file(std::string const& file_path)
         return;
         }
 
-    fs::ifstream ifs(path_, std::ios_base::binary);
+    std::ifstream ifs(path_, std::ios_base::binary);
     istream_to_string(ifs, data_);
     if(!ifs)
         {

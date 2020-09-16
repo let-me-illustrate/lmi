@@ -37,8 +37,8 @@
 #include "timer.hpp"
 
 #include <boost/filesystem/convenience.hpp> // change_extension()
-#include <boost/filesystem/fstream.hpp>
 
+#include <fstream>
 #include <iostream>
 #include <string>
 
@@ -124,7 +124,7 @@ double ledger_emitter::emit_cell
         }
     if(emission_ & mce_emit_test_data)
         {
-        fs::ofstream ofs
+        std::ofstream ofs
             (fs::change_extension(cell_filepath, ".test")
             ,ios_out_trunc_binary()
             );

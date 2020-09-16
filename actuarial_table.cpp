@@ -33,12 +33,12 @@
 #include "ssize_lmi.hpp"
 
 #include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // max(), min()
 #include <cctype>                       // toupper()
 #include <cstdint>
+#include <fstream>
 #include <ios>
 #include <istream>
 #include <limits>
@@ -207,7 +207,7 @@ void actuarial_table::find_table()
 
     fs::path index_path(filename_);
     index_path = fs::change_extension(index_path, ".ndx");
-    fs::ifstream index_ifs(index_path, ios_in_binary());
+    std::ifstream index_ifs(index_path, ios_in_binary());
     if(!index_ifs)
         {
         alarum()
@@ -297,7 +297,7 @@ void actuarial_table::parse_table()
 
     fs::path data_path(filename_);
     data_path = fs::change_extension(data_path, ".dat");
-    fs::ifstream data_ifs(data_path, ios_in_binary());
+    std::ifstream data_ifs(data_path, ios_in_binary());
     if(!data_ifs)
         {
         alarum()
