@@ -26,8 +26,7 @@
 
 #include "so_attributes.hpp"
 
-#include <boost/filesystem/path.hpp>
-
+#include <filesystem>
 #include <string>
 #include <unordered_map>
 #include <utility>                      // move()

@@ -25,7 +25,7 @@
 #include "configurable_settings.hpp"
 #include "wx_test_case.hpp"
 
-#include <boost/filesystem/operations.hpp>
+#include <filesystem>
 
 /*
     Test configurable_settings.xml file.

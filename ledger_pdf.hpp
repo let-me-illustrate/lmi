@@ -24,8 +24,7 @@
 
 #include "config.hpp"
 
-#include <boost/filesystem/path.hpp>
-
+#include <filesystem>
 #include <string>
 
 class Ledger;

@@ -28,7 +28,7 @@
 #include "mec_state.hpp"
 #include "so_attributes.hpp"
 
-#include <boost/filesystem/path.hpp>
+#include <filesystem>
 
 class mec_input;
 

@@ -31,9 +31,8 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
-#include <boost/filesystem/operations.hpp>
-
 #include <cmath>                        // fabs()
+#include <filesystem>
 #include <iostream>
 
 namespace

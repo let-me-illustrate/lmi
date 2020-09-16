@@ -34,9 +34,7 @@
 #include "path_utility.hpp"             // validate_directory(), validate_filepath()
 #include "platform_dependent.hpp"       // access()
 
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
-
+#include <filesystem>
 #include <iterator>                     // istream_iterator
 #include <sstream>
 #include <stdexcept>

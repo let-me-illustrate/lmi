@@ -82,9 +82,6 @@
 #include "wx_new.hpp"
 #include "wx_utility.hpp"               // class ClipboardEx
 
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
-
 #include <wx/artprov.h>
 #include <wx/config.h>
 #include <wx/cshelp.h>
@@ -102,6 +99,7 @@
 #include <wx/utils.h>                   // wxMilliSleep(), wxSafeYield()
 #include <wx/xrc/xmlres.h>
 
+#include <filesystem>
 #include <iterator>                     // insert_iterator
 #include <list>
 #include <sstream>

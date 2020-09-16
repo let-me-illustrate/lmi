@@ -43,12 +43,10 @@
 #include <wx/uiaction.h>
 #include <wx/wfstream.h>
 
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
-
 #include <algorithm>                    // sort()
 #include <cstring>                      // strcmp()
 #include <exception>                    // uncaught_exceptions()
+#include <filesystem>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>

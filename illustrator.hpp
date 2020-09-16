@@ -27,8 +27,7 @@
 #include "mc_enum_type_enums.hpp"       // enum mcenum_emission
 #include "so_attributes.hpp"
 
-#include <boost/filesystem/path.hpp>
-
+#include <filesystem>
 #include <memory>                       // shared_ptr
 #include <vector>
 

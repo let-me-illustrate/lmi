@@ -34,7 +34,7 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
-#include <boost/filesystem/operations.hpp>
+#include <filesystem>
 
 /// Make sure the default input file can be opened, modified, and saved.
 ///

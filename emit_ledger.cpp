@@ -36,8 +36,7 @@
 #include "path_utility.hpp"             // unique_filepath()
 #include "timer.hpp"
 
-#include <boost/filesystem/convenience.hpp> // change_extension()
-
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <string>

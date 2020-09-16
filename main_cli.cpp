@@ -48,12 +48,10 @@
 #include "value_cast.hpp"
 #include "verify_products.hpp"
 
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
-
 #include <algorithm>                    // for_each()
 #include <cmath>                        // fabs()
 #include <cstdio>                       // printf()
+#include <filesystem>
 #include <functional>                   // bind()
 #include <ios>
 #include <iostream>

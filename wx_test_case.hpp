@@ -24,7 +24,7 @@
 
 #include "config.hpp"
 
-#include <boost/filesystem/path.hpp>
+#include <filesystem>
 
 /// Base class for the test case objects.
 ///

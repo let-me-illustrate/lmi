@@ -28,11 +28,9 @@
 #include "data_directory.hpp"           // AddDataDir()
 #include "path_utility.hpp"             // fs::path inserter
 
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
-
 #include <wx/image.h>
 
+#include <filesystem>
 #include <sstream>
 
 /// Enumerate lmi icon names; map 'wxART_' id's to icon names.

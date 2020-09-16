@@ -32,8 +32,7 @@
 #include "xml_lmi.hpp"
 #include "xml_serialize.hpp"
 
-#include <boost/filesystem/convenience.hpp> // basename()
-#include <boost/filesystem/path.hpp>
+#include <filesystem>
 
 //============================================================================
 FundInfo::FundInfo

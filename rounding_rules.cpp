@@ -30,8 +30,7 @@
 #include "my_proem.hpp"                 // ::write_proem()
 #include "xml_serialize.hpp"
 
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
+#include <filesystem>
 
 template class xml_serializable<rounding_rules>;
 

@@ -28,10 +28,9 @@
 #include "wx_test_case.hpp"
 #include "wx_test_date.hpp"
 
-#include <boost/filesystem/operations.hpp>
-
-#include <iostream>
+#include <filesystem>
 #include <fstream>
+#include <iostream>
 
 /// Validate dates in the 'expiry' file.
 ///

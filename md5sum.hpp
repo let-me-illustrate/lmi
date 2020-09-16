@@ -24,9 +24,8 @@
 
 #include "config.hpp"
 
-#include <boost/filesystem/path.hpp>
-
 #include <climits>                      // CHAR_BIT
+#include <filesystem>
 #include <iosfwd>
 #include <string>
 #include <utility>                      // move()

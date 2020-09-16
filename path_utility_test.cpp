@@ -27,12 +27,8 @@
 #include "platform_dependent.hpp"       // access()
 #include "test_tools.hpp"
 
-#include <boost/filesystem/convenience.hpp> // basename()
-#include <boost/filesystem/exception.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
-
 #include <cstdio>                       // remove()
+#include <filesystem>
 #include <fstream>
 #include <sstream>
 #include <stdexcept>

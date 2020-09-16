@@ -30,13 +30,11 @@
 #include "path_utility.hpp"
 #include "value_cast.hpp"
 
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/exception.hpp>
-
 #include <algorithm>                    // count()
 #include <climits>                      // ULLONG_MAX
 #include <cstdlib>                      // strtoull()
 #include <cstring>                      // memcpy(), strncmp()
+#include <filesystem>
 #include <fstream>
 #include <iomanip>
 #include <ios>

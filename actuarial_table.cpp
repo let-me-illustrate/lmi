@@ -32,12 +32,10 @@
 #include "path_utility.hpp"             // fs::path inserter
 #include "ssize_lmi.hpp"
 
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
-
 #include <algorithm>                    // max(), min()
 #include <cctype>                       // toupper()
 #include <cstdint>
+#include <filesystem>
 #include <fstream>
 #include <ios>
 #include <istream>

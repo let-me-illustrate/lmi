@@ -26,12 +26,10 @@
 #include "alert.hpp"
 #include "force_linking.hpp"
 
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
-
 #include <wx/mimetype.h>
 #include <wx/utils.h>                   // wxExecute()
 
+#include <filesystem>
 #include <memory>                       // unique_ptr
 
 LMI_FORCE_LINKING_IN_SITU(file_command_wx)

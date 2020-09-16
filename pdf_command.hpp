@@ -26,7 +26,7 @@
 
 #include "so_attributes.hpp"
 
-#include <boost/filesystem/path.hpp>
+#include <filesystem>
 
 class Ledger;
 

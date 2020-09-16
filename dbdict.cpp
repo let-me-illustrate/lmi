@@ -41,10 +41,7 @@
 #include "xml_lmi.hpp"
 #include "xml_serialize.hpp"
 
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
-
+#include <filesystem>
 #include <fstream>
 #include <vector>
 

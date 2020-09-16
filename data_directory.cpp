@@ -26,8 +26,7 @@
 #include "assert_lmi.hpp"
 #include "global_settings.hpp"
 
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
+#include <filesystem>
 
 //============================================================================
 std::string AddDataDir(std::string const& a_filename)

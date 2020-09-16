@@ -28,8 +28,7 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <boost/filesystem/exception.hpp>
-
+#include <filesystem>
 #include <fstream>
 
 class X

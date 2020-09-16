@@ -28,13 +28,11 @@
 #include "path_utility.hpp"
 #include "rate_table.hpp"
 
-#include <boost/filesystem/convenience.hpp> // extension()
-#include <boost/filesystem/operations.hpp>  // is_directory(), directory_iterator
-
 #include <algorithm>                    // sort()
 #include <cstdio>                       // fflush()
 #include <cstdlib>                      // atoi()
 #include <exception>
+#include <filesystem>
 #include <fstream>
 #include <iomanip>                      // setw(), setfill()
 #include <iostream>                     // cout, cerr

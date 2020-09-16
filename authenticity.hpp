@@ -27,8 +27,7 @@
 #include "calendar_date.hpp"
 #include "so_attributes.hpp"
 
-#include <boost/filesystem/path.hpp>
-
+#include <filesystem>
 #include <string>
 
 /// Permit running the system iff data files and date are valid.

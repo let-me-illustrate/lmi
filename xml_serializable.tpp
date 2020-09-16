@@ -27,11 +27,10 @@
 #include "platform_dependent.hpp"       // access()
 #include "xml_lmi.hpp"
 
-#include <boost/filesystem/convenience.hpp> // basename()
-
 #include <xmlwrapp/nodes_view.h>
 
 #include <algorithm>                    // copy(), find()
+#include <filesystem>
 #include <iterator>                     // back_inserter()
 #include <sstream>
 #include <type_traits>

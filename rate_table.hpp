@@ -24,10 +24,9 @@
 
 #include "config.hpp"
 
-#include <boost/filesystem/path.hpp>
-
 #include <cstddef>                      // size_t
 #include <cstdint>
+#include <filesystem>
 #include <iosfwd>
 #include <memory>                       // shared_ptr
 #include <string>

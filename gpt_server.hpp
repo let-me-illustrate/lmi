@@ -28,7 +28,7 @@
 #include "mc_enum_type_enums.hpp"       // enum mcenum_emission
 #include "so_attributes.hpp"
 
-#include <boost/filesystem/path.hpp>
+#include <filesystem>
 
 class gpt_input;
 

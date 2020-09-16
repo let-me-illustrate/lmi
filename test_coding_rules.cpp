@@ -28,12 +28,9 @@
 #include "miscellany.hpp"               // begins_with(), split_into_lines()
 #include "ssize_lmi.hpp"
 
-#include <boost/filesystem/convenience.hpp> // fs::extension()
-#include <boost/filesystem/operations.hpp>  // fs::exists(), fs::is_directory()
-#include <boost/filesystem/path.hpp>
-
 #include <algorithm>                    // is_sorted()
 #include <ctime>
+#include <filesystem>
 #include <fstream>
 #include <iomanip>
 #include <ios>

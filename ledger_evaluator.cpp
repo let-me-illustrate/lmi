@@ -44,9 +44,8 @@
 #include "value_cast.hpp"
 #include "version.hpp"
 
-#include <boost/filesystem/path.hpp>
-
 #include <algorithm>                    // transform()
+#include <filesystem>
 #include <fstream>
 #include <functional>                   // minus
 #include <map>

@@ -50,8 +50,6 @@
 #include "wx_new.hpp"
 #include "wx_utility.hpp"               // class ClipboardEx
 
-#include <boost/filesystem/convenience.hpp> // basename()
-
 #include <wx/datectrl.h>
 #include <wx/grid.h>
 #include <wx/headercol.h>               // wxCOL_WIDTH_DEFAULT
@@ -67,6 +65,7 @@
 
 #include <algorithm>
 #include <cctype>                       // isupper()
+#include <filesystem>
 #include <fstream>
 #include <istream>                      // ws
 #include <iterator>                     // insert_iterator

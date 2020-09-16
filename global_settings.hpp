@@ -27,9 +27,7 @@
 #include "calendar_date.hpp"
 #include "so_attributes.hpp"
 
-#include <boost/filesystem/operations.hpp> // fs::system_complete()
-#include <boost/filesystem/path.hpp>
-
+#include <filesystem>
 #include <string>
 
 /// Design notes for class global_settings.

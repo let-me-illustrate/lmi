@@ -24,7 +24,7 @@
 
 #include "config.hpp"
 
-#include <boost/filesystem/operations.hpp>
+#include <filesystem>
 
 /// Class helping to check for the expected output file existence.
 ///

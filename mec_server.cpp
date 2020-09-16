@@ -52,9 +52,8 @@
 #include "timer.hpp"
 #include "value_cast.hpp"
 
-#include <boost/filesystem/convenience.hpp> // extension(), change_extension()
-
 #include <algorithm>                    // min()
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <string>

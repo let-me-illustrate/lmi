@@ -39,8 +39,7 @@
 #include "single_cell_document.hpp"
 #include "timer.hpp"
 
-#include <boost/filesystem/convenience.hpp>
-
+#include <filesystem>
 #include <iostream>
 #include <string>
 

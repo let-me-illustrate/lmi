@@ -47,8 +47,6 @@
 #include "skeleton.hpp"                 // Skeleton::CreateChildFrame()
 #include "wx_new.hpp"
 
-#include <boost/filesystem/path.hpp>
-
 #include <wx/app.h>                     // GetInstance()
 #include <wx/dc.h>
 #include <wx/icon.h>
@@ -56,6 +54,7 @@
 #include <wx/xrc/xmlres.h>
 
 #include <cstdlib>                      // exit(), EXIT_FAILURE
+#include <filesystem>
 
 IMPLEMENT_ABSTRACT_CLASS(ViewEx, wxView)
 

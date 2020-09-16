@@ -27,8 +27,7 @@
 #include "so_attributes.hpp"
 #include "xml_lmi_fwd.hpp"
 
-#include <boost/filesystem/path.hpp>
-
+#include <filesystem>
 #include <list>
 #include <map>
 #include <string>
