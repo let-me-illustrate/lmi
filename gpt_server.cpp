@@ -508,7 +508,7 @@ gpt_server::gpt_server(mcenum_emission emission) : emission_(emission)
 
 bool gpt_server::operator()(fs::path const& file_path)
 {
-    std::string const extension = fs::extension(file_path);
+    std::string const extension = file_path.extension().string();
     if(".gpt" == extension)
         {
         Timer timer;
