@@ -294,7 +294,7 @@ fs::path unique_filepath
         std::string basename  = filepath.stem().string();
         std::string const extension = filepath.extension().string();
         basename += '-' + iso_8601_datestamp_terse() + extension;
-        filepath = filepath.branch_path() / basename;
+        filepath = filepath.parent_path() / basename;
         if(fs::exists(filepath))
             {
             alarum()
