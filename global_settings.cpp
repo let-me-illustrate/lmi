@@ -84,7 +84,7 @@ void global_settings::set_regression_testing(bool b)
 void global_settings::set_data_directory(std::string const& s)
 {
     validate_directory(s, "Data directory");
-    data_directory_ = fs::system_complete(s);
+    data_directory_ = fs::absolute(s);
 }
 
 void global_settings::set_prospicience_date(calendar_date const& d)
