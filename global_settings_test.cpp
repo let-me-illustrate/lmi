@@ -86,7 +86,7 @@ int test_main(int, char*[])
 
     fs::directory_iterator i(path);
 
-    BOOST_TEST(exists(*i));
+    BOOST_TEST(i->exists());
 
     // Certain other operations are required to throw.
 
