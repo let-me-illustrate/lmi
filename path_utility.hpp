@@ -31,8 +31,6 @@
 #include <ostream>
 #include <string>
 
-void LMI_SO initialize_filesystem(); // Listed first because of its importance.
-
 fs::path LMI_SO modify_directory
     (fs::path const& original_filepath
     ,fs::path const& supplied_directory

@@ -23,7 +23,6 @@
 
 #include "global_settings.hpp"
 
-#include "path_utility.hpp"             // initialize_filesystem()
 #include "test_tools.hpp"
 
 #include <boost/filesystem/exception.hpp>
@@ -78,10 +77,6 @@ void test_directory_exceptions()
 
 int test_main(int, char*[])
 {
-    // Absolute paths require "native" name-checking policy for msw.
-
-    initialize_filesystem();
-
     // Initial values of 'directory' data members must be valid: the
     // operations tested here are required not to throw.
 
