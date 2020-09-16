@@ -133,7 +133,7 @@ file::file(std::string const& file_path)
     :path_      {file_path}
     ,full_name_ {file_path}
     ,leaf_name_ {path_.leaf()}
-    ,extension_ {fs::extension(path_)}
+    ,extension_ {path_.extension().string()}
     ,phylum_    {e_no_phylum}
 {
     if(!fs::exists(path_))
