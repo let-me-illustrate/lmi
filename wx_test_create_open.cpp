@@ -171,7 +171,7 @@ LMI_WX_TEST_CASE(create_open_mec)
         {
         LMI_ASSERT_WITH_MSG
             (extra_output_files[n].exists()
-            ,"file \"" << extra_output_files[n].path() << "\""
+            ,"file \"" << extra_output_files[n] << "\""
             );
         }
 }
