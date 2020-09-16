@@ -53,7 +53,7 @@ std::vector<std::string> fetch_product_names()
             {
             continue;
             }
-        names.push_back(basename(current_path));
+        names.push_back(current_path.stem().string());
         }
 
     if(names.empty())

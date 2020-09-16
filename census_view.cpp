@@ -1998,7 +1998,7 @@ void CensusView::DoCopyCensus() const
     configurable_settings const& c = configurable_settings::instance();
     std::string const& print_dir = c.print_directory();
     std::string const& tsv_ext = c.spreadsheet_file_extension();
-    std::string const f = fs::basename(base_filename()) + ".census.cns";
+    fs::path const f = fs::path{base_filename()}.replace_extension(".census.cns");
     fs::path const g(modify_directory(f, print_dir));
     std::string file_name = unique_filepath(g, tsv_ext).string();
     std::ofstream ofs(file_name.c_str(), ios_out_app_binary());
