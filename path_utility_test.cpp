@@ -167,7 +167,7 @@ void test_unique_filepath_with_normal_filenames()
     // as a substitute for the nonstandard mkstemp() is a bad idea.
     // See:
     //   https://lists.nongnu.org/archive/html/lmi/2020-08/msg00015.html
-    fs::path const u = unique_filepath("/tmp/" + fs::basename(__FILE__), "");
+    fs::path const u = unique_filepath("/tmp/" + fs::path{__FILE__}.stem().string(), "");
     std::string const tmp = u.string();
     fs::path const tmpdir(fs::absolute(tmp));
     fs::create_directory(tmpdir);

@@ -949,7 +949,7 @@ void product_data::write_policy_files()
 std::string filename_from_product_name(std::string const& product_name)
 {
     fs::path path(product_name);
-    LMI_ASSERT(product_name == fs::basename(path));
+    LMI_ASSERT(product_name == path.stem());
     path.replace_extension(".policy");
     return AddDataDir(path.string());
 }

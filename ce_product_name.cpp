@@ -48,7 +48,7 @@ std::vector<std::string> fetch_product_names()
             {
             continue;
             }
-        names.push_back(basename(de.path()));
+        names.push_back(de.path().stem().string());
         }
 
     if(names.empty())
