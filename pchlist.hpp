@@ -97,10 +97,6 @@
 #   include "yare_input.hpp"
 #   include "zero.hpp"
 
-#   include <boost/filesystem/convenience.hpp>
-#   include <boost/filesystem/operations.hpp>
-#   include <boost/filesystem/path.hpp>
-
 #   include <cstddef>
 #   include <cstdlib>
 #   include <exception>
