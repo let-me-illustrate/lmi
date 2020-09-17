@@ -310,20 +310,7 @@ void PasskeyTest::TestFromAfar() const
         goto done;
         }
 
-    try
-        {
-        BOOST_TEST(fs::is_directory(remote_dir_1));
-        }
-    catch(std::exception const& e)
-        {
-        std::string s(e.what());
-        if(contains(s, "boost::filesystem::is_directory"))
-            {
-            BOOST_TEST(false);
-            goto done;
-            }
-        throw;
-        }
+    BOOST_TEST(fs::is_directory(remote_dir_1));
 
     BOOST_TEST_EQUAL(0, chdir(remote_dir_1.string().c_str()));
     BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
