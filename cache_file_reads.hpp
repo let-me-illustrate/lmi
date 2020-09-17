@@ -98,11 +98,10 @@ class file_cache
     file_cache(file_cache const&) = delete;
     file_cache& operator=(file_cache const&) = delete;
 
-    using file_time_type = fs::file_time_type;
     struct record
     {
-        retrieved_type data;
-        file_time_type write_time;
+        retrieved_type     data;
+        fs::file_time_type write_time;
     };
 
     std::map<std::string,record> cache_;
