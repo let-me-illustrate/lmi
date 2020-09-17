@@ -135,7 +135,7 @@ class census_benchmark
 
 LMI_WX_TEST_CASE(benchmark_census)
 {
-    for(auto& i : fs::directory_iterator(get_test_files_path()))
+    for(auto const& i : fs::directory_iterator(get_test_files_path()))
         {
         auto const path{i.path()};
         if(!wxString::FromUTF8(path.filename().u8string()).Matches("MSEC*.cns"))

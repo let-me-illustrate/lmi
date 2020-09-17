@@ -84,7 +84,7 @@ int test_main(int, char*[])
 
     fs::path path(global_settings::instance().data_directory());
 
-    fs::directory_iterator i(path);
+    fs::directory_iterator const i(path);
 
     BOOST_TEST(i->exists());
 

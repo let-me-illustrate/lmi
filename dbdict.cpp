@@ -1080,7 +1080,7 @@ void DBDictionary::InitAntediluvian()
 void print_databases()
 {
     fs::path path(global_settings::instance().data_directory());
-    for(auto& i : fs::directory_iterator(path))
+    for(auto const& i : fs::directory_iterator(path))
         {
         if(i.is_directory())
             {

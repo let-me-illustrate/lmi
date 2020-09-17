@@ -143,7 +143,7 @@ void merge
         // to verify than equivalence: databases created this way from
         // the same data on different machines have identical md5sums.
         std::vector<fs::path> table_names;
-        for(auto& i : fs::directory_iterator(path_to_merge))
+        for(auto const& i : fs::directory_iterator(path_to_merge))
             {
             auto const path{i.path()};
             if(".rates" == path.extension())
