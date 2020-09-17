@@ -59,9 +59,6 @@ extern "C" unsigned int _get_output_format(void) {return 1;}
 /// Common application initialization.
 ///
 /// Also see the similar code in 'cpp_main.cpp' (for unit tests).
-///
-/// Don't initialize boost::filesystem here, to avoid creating a
-/// dependency on its object files for applications that don't use it.
 
 void initialize_application()
 {
