@@ -109,7 +109,7 @@ fs::path modify_directory
 ///   http://www.cantrip.org/coding-standard2.html
 /// would prefer a predicate phrase like is_portable_file_name():
 /// cf. std::isalnum(), std::numeric_limits::is_signed(), and even
-/// boost::filesystem::is_complete().
+/// std::filesystem::path::is_absolute().
 
 std::string orthodox_filename(std::string const& original_filename)
 {
@@ -214,7 +214,7 @@ std::string serial_extension
 ///
 /// It is necessary to call orthodox_filename() on the insured's name
 /// in case it contains a character (probably whitespace) that might
-/// fail a boost::filesystem name check.
+/// fail a std::filesystem name check.
 
 fs::path serial_file_path
     (fs::path    const& exemplar
