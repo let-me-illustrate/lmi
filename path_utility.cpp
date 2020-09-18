@@ -36,7 +36,6 @@
 
 /// Change '/path/to/file' to '/some/other/place/file'.
 ///
-/// TODO: Check the motivation after moving to std::filesystem.
 /// Motivation: It is anomalous that boost permits this:
 ///   path file("/bin/sh";
 ///   path dir ("/usr/bin");
