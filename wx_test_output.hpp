@@ -57,11 +57,6 @@ class output_file_existence_checker
         return fs::exists(path_);
         }
 
-    fs::path const& path() const
-        {
-        return path_;
-        }
-
     // Objects of this class can't be copied, because of side effects of its
     // dtor, but can be moved.
     output_file_existence_checker(output_file_existence_checker&&) = default;
@@ -72,6 +67,19 @@ class output_file_existence_checker
 
   private:
     fs::path path_;
+
+    friend std::ostream& operator<<(
+        std::ostream& os,
+        output_file_existence_checker const& p
+    );
 };
+
+inline std::ostream& operator<<(
+    std::ostream& os,
+    output_file_existence_checker const& p
+)
+{
+    return os << p.path_.generic_string();
+}
 
 #endif // wx_test_output_hpp
