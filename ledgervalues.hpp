@@ -42,7 +42,7 @@ class IllusVal final
     explicit IllusVal(std::string const& filename);
     ~IllusVal() = default;
 
-    double run(Input const&);
+    void run(Input const&);
 
     std::shared_ptr<Ledger const> ledger() const;
 

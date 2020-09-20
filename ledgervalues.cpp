@@ -34,16 +34,13 @@ IllusVal::IllusVal(std::string const& filename)
 {
 }
 
-double IllusVal::run(Input const& input)
+void IllusVal::run(Input const& input)
 {
     fenv_guard fg;
     AccountValue av(input);
     av.SetDebugFilename(filename_);
-
-    double z = av.RunAV();
+    av.RunAV();
     ledger_ = av.ledger_from_av();
-
-    return z;
 }
 
 std::shared_ptr<Ledger const> IllusVal::ledger() const
