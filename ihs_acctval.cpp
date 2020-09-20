@@ -205,11 +205,7 @@ Then run other bases.
         DebugPrintInit();
         }
 
-<<<<<<< HEAD
-    double z = RunAllApplicableBases();
-=======
     RunAllApplicableBases();
->>>>>>> 5447866e... Do away with unused return value #2
 
     FinalizeLifeAllBases();
 }
@@ -265,10 +261,8 @@ double AccountValue::RunOneBasis(mcenum_run_basis a_Basis)
 //   if running all bases
 //     run all bases
 //
-double AccountValue::RunAllApplicableBases()
+void AccountValue::RunAllApplicableBases()
 {
-    double z = 0.0;
-
     // TODO ?? Normally, running on the current basis determines the
     // overriding values for all components of outlay--e.g., premiums,
     // forceouts, loans, and withdrawals. For a solve on any basis
@@ -293,7 +287,7 @@ double AccountValue::RunAllApplicableBases()
             RunOneBasis(mce_run_gen_curr_sep_full);
             }
 
-        z = Solve
+        Solve
             (yare_input_.SolveType
             ,yare_input_.SolveBeginYear
             ,yare_input_.SolveEndYear
@@ -312,7 +306,6 @@ double AccountValue::RunAllApplicableBases()
         {
         RunOneBasis(b);
         }
-    return z;
 }
 
 //============================================================================

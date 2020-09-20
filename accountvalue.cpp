@@ -172,7 +172,7 @@ double AccountValue::RunOneBasis(mcenum_run_basis TheBasis)
 //   if running all bases
 //     run all bases
 //
-double AccountValue::RunAllApplicableBases()
+void AccountValue::RunAllApplicableBases()
 {
     // set pmts, specamt, surrchg
 
@@ -184,10 +184,9 @@ double AccountValue::RunAllApplicableBases()
         ,mce_sep_full
         );
 
-    double z = 0.0;
     if(Solving)
         {
-        z = Solve();
+        Solve();
         OverridingPmts = stored_pmts;
         ledger_->SetOneLedgerVariant(run_basis, VariantValues());
         Solving = false;
@@ -205,8 +204,6 @@ double AccountValue::RunAllApplicableBases()
     run_basis = mce_run_gen_mdpt_sep_full;
     RunOneBasis(run_basis);
     ledger_->SetOneLedgerVariant(run_basis, VariantValues());
-
-    return z;
 }
 
 //============================================================================

@@ -132,7 +132,7 @@ class LMI_SO AccountValue final
 
     double RunOneCell              (mcenum_run_basis);
     double RunOneBasis             (mcenum_run_basis);
-    double RunAllApplicableBases   ();
+    void   RunAllApplicableBases   ();
     void   InitializeLife          (mcenum_run_basis);
     void   FinalizeLife            (mcenum_run_basis);
     void   FinalizeLifeAllBases    ();
