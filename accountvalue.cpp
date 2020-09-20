@@ -139,12 +139,12 @@ std::shared_ptr<Ledger const> AccountValue::ledger_from_av() const
 }
 
 //============================================================================
-double AccountValue::RunAV()
+void AccountValue::RunAV()
 {
     InvariantValues().Init(this);
     OverridingPmts = stored_pmts;
     Solving = mce_solve_none != yare_input_.SolveType;
-    return RunAllApplicableBases();
+    RunAllApplicableBases();
 }
 
 //============================================================================

@@ -180,7 +180,7 @@ std::shared_ptr<Ledger const> AccountValue::ledger_from_av() const
 }
 
 //============================================================================
-double AccountValue::RunAV()
+void AccountValue::RunAV()
 {
 /*
 First run current, for solves and strategies. This determines
@@ -205,11 +205,13 @@ Then run other bases.
         DebugPrintInit();
         }
 
+<<<<<<< HEAD
     double z = RunAllApplicableBases();
+=======
+    RunAllApplicableBases();
+>>>>>>> 5447866e... Do away with unused return value #2
 
     FinalizeLifeAllBases();
-
-    return z;
 }
 
 //============================================================================

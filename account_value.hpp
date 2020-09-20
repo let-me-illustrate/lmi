@@ -59,7 +59,7 @@ class LMI_SO AccountValue final
     AccountValue(AccountValue&&) = default;
     ~AccountValue() override = default;
 
-    double RunAV                ();
+    void RunAV();
 
     void SetDebugFilename    (std::string const&);
 
