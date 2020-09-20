@@ -304,7 +304,7 @@ void PasskeyTest::TestFromAfar() const
 #if defined LMI_MSW
     CheckNominal(__FILE__, __LINE__);
 
-    fs::path const remote_dir_1(fs::canonical(fs::path("F:/", fs::native)));
+    fs::path const remote_dir_1(fs::canonical("F:/"));
     if(!fs::exists(remote_dir_1))
         {
         goto done;
