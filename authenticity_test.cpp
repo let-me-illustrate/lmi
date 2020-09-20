@@ -288,7 +288,7 @@ void PasskeyTest::TestFromAfar() const
 {
     CheckNominal(__FILE__, __LINE__);
 
-    fs::path const tmp = "/tmp/" + fs::path{__FILE__}.stem();
+    fs::path const tmp = "/tmp" / fs::path{__FILE__}.stem();
     fs::path const remote_dir_0(fs::canonical(tmp));
     fs::create_directory(remote_dir_0);
     BOOST_TEST(fs::exists(remote_dir_0) && fs::is_directory(remote_dir_0));
