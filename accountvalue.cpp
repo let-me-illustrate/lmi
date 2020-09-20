@@ -148,21 +148,18 @@ void AccountValue::RunAV()
 }
 
 //============================================================================
-double AccountValue::RunOneBasis(mcenum_run_basis TheBasis)
+void AccountValue::RunOneBasis(mcenum_run_basis TheBasis)
 {
-    double z;
     if(Solving)
         {
         // IHS !! Isn't this unreachable?
         throw std::logic_error("This line had seemed to be unreachable.");
 //        LMI_ASSERT(TheBasis corresponds to yare_input_.SolveExpenseGeneralAccountBasis);
-//        z = Solve();
         }
     else
         {
-        z = RunOneCell(TheBasis);
+        RunOneCell(TheBasis);
         }
-    return z;
 }
 
 //============================================================================

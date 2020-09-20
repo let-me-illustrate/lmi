@@ -131,7 +131,7 @@ class LMI_SO AccountValue final
     LedgerVariant  & VariantValues  ();
 
     double RunOneCell              (mcenum_run_basis);
-    double RunOneBasis             (mcenum_run_basis);
+    void   RunOneBasis             (mcenum_run_basis);
     void   RunAllApplicableBases   ();
     void   InitializeLife          (mcenum_run_basis);
     void   FinalizeLife            (mcenum_run_basis);

@@ -225,7 +225,7 @@ void AccountValue::SetGuarPrem()
 }
 
 //============================================================================
-double AccountValue::RunOneBasis(mcenum_run_basis a_Basis)
+void AccountValue::RunOneBasis(mcenum_run_basis a_Basis)
 {
     if
         (  !BasicValues::IsSubjectToIllustrationReg()
@@ -238,20 +238,17 @@ double AccountValue::RunOneBasis(mcenum_run_basis a_Basis)
             ;
         }
 
-    double z = 0.0;
     if(Solving)
         {
 // Apparently this should never be done because Solve() is called in
 //   RunAllApplicableBases() .
 // TODO ?? Isn't this unreachable?
 //      LMI_ASSERT(a_Basis corresponds to yare_input_.SolveExpenseGeneralAccountBasis);
-//      z = Solve();
         }
     else
         {
-        z = RunOneCell(a_Basis);
+        RunOneCell(a_Basis);
         }
-    return z;
 }
 
 //============================================================================
