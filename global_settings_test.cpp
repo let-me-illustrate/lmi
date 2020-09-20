@@ -91,16 +91,6 @@ int test_main(int, char*[])
 
     test_directory_exceptions();
 
-    // Attempting to set a default name-checking policy after creating
-    // an instance of class global_settings should throw. Test this in
-    // order to guard against changes to the boost filesystem library.
-
-    BOOST_TEST_THROW
-        (fs::path::default_name_check(fs::native)
-        ,fs::filesystem_error
-        ,""
-        );
-
     // 'ash_nazg' implies 'mellon'.
     global_settings::instance().set_mellon(false);
     BOOST_TEST(!global_settings::instance().mellon());
