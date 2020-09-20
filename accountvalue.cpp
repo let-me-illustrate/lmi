@@ -204,7 +204,7 @@ void AccountValue::RunAllApplicableBases()
 }
 
 //============================================================================
-double AccountValue::RunOneCell(mcenum_run_basis TheBasis)
+void AccountValue::RunOneCell(mcenum_run_basis TheBasis)
 {
     if(Solving)
         {
@@ -249,8 +249,6 @@ double AccountValue::RunOneCell(mcenum_run_basis TheBasis)
             DoYear(TheBasis, Year, (Year == InforceYear) ? InforceMonth : 0);
             }
         }
-
-    return AVUnloaned + AVRegLn + AVPrfLn;
 }
 
 //============================================================================

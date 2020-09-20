@@ -314,7 +314,7 @@ void AccountValue::RunAllApplicableBases()
 /// which isn't necessary anyway because all the functions it calls
 /// contain such a condition.
 
-double AccountValue::RunOneCell(mcenum_run_basis a_Basis)
+void AccountValue::RunOneCell(mcenum_run_basis a_Basis)
 {
     InitializeLife(a_Basis);
 
@@ -348,8 +348,6 @@ double AccountValue::RunOneCell(mcenum_run_basis a_Basis)
         }
 
     FinalizeLife(a_Basis);
-
-    return TotalAccountValue();
 }
 
 //============================================================================
