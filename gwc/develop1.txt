@@ -100,10 +100,14 @@ git commit sandbox_test.cpp
 git switch master
 git push origin odd/foo
 
-  # to transplant already-pushed commits to a new branch
+  # to transplant already-pushed commits to a new branch--see:
+  #   https://lists.nongnu.org/archive/html/lmi/2020-09/msg00034.html
 git branch odd/foo
 git reset --keep origin/master
-  # ...and don't ever rebase that new branch
+  # specify upstream on the first push (ignore if it's never pushed)
+git push --set-upstream origin odd/foo
+  # ...and, if that branch is (later) to be rebased on 'master', be
+  # sure to use either '--no-fork-point' or an explicit branch name.
 
   # (to copy to a subdir before deletion, so it's in permanent history)
   # (this works only if all modified files are unique to the branch)
