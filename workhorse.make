@@ -457,7 +457,6 @@ gcc_common_warnings := \
   -Wformat-signedness \
   -Wformat-y2k \
   -Wimport \
-  -Winit-self \
   -Winvalid-pch \
   -Wlogical-op \
   -Wmissing-include-dirs \
@@ -476,7 +475,6 @@ gcc_common_warnings := \
   -Wunreachable-code \
   -Wunused-macros \
   -Wvector-operation-performance \
-  -Wwrite-strings \
   -Wno-parentheses \
 
 # Warnings that are not generally useful.
@@ -494,6 +492,7 @@ gcc_c_warnings := \
   $(gcc_common_warnings) \
   -Wbad-function-cast \
   -Wc++-compat \
+  -Winit-self \
   -Wjump-misses-init \
   -Wmissing-prototypes \
   -Wnested-externs \
@@ -501,6 +500,7 @@ gcc_c_warnings := \
   -Wstrict-prototypes \
   -Wtraditional-conversion \
   -Wunsuffixed-float-constants \
+  -Wwrite-strings \
 
 gcc_cxx_warnings := \
   $(cxx_standard) \
