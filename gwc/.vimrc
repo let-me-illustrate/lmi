@@ -36,6 +36,9 @@ set cinoptions=t0\ g0\ {s\ (0\ U1 comments^=:///
 " By default, vim detects '*.mak' as type make, but not '*.make'
 au BufNewFile,BufRead *.make setf make
 
+" Restore last position
+au BufReadPost * normal! g`"zv
+
 au BufReadPost,BufNewFile *.tpp set ft=cpp
 au BufReadPost,BufNewFile *.xpp set ft=cpp
 " au BufReadPost,BufNewFile *.?pp set ft=cpp
