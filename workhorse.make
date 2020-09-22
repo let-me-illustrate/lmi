@@ -1065,12 +1065,12 @@ shared_data_files = \
   qx_ins.dat \
   qx_ins.ndx \
   sample.dat \
-  sample.database \
-  sample.funds \
+  sample*.database \
+  sample*.funds \
   sample.ndx \
-  sample.policy \
-  sample.rounding \
-  sample.strata \
+  sample*.policy \
+  sample*.rounding \
+  sample*.strata \
 
 .PHONY: archive_shared_data_files
 archive_shared_data_files:
