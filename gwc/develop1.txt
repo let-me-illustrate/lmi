@@ -46,6 +46,10 @@ cvs commit -m "Modify foo webpage" bar.html
 
 git mv lmi.rc lmi_msw_res.rc
 
+  # Reuse commit message when commit originally failed
+
+git commit --edit --file=.git/COMMIT_EDITMSG -- [files]
+
   # Make a patch against repository from local tree
 
 git diff file0.cpp file1.cpp >some_new_file
