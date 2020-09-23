@@ -313,10 +313,13 @@ void PasskeyTest::TestFromAfar() const
     BOOST_TEST(fs::is_directory(remote_dir_1));
 
     BOOST_TEST_EQUAL(0, chdir(remote_dir_1.string().c_str()));
-    BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
+    // Note that fs::current_path() returns path in the native format but we
+    // initialize remote_dir_1 with the path in generic format so use
+    // generic_string() for the current path.
+    BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().generic_string());
     Authenticity::ResetCache();
     BOOST_TEST_EQUAL("validated", Authenticity::Assay(BeginDate_, Pwd_));
-    BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
+    BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().generic_string());
     BOOST_TEST_EQUAL(0, chdir(Pwd_.string().c_str()));
     BOOST_TEST_EQUAL(Pwd_.string(), fs::current_path().string());
 
