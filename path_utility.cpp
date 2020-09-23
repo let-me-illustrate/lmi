@@ -36,11 +36,11 @@
 
 /// Change '/path/to/file' to '/some/other/place/file'.
 ///
-/// Motivation: It is anomalous that boost permits this:
+/// Motivation: It is anomalous that std::filesystem permits this:
 ///   path file("/bin/sh";
 ///   path dir ("/usr/bin");
-///   dir / path; // returns "/usr/bin/bin/sh"
-/// where true == file.is_complete().
+///   dir / path; // returns "/bin/sh"
+/// where true == file.is_absolute().
 ///
 /// Arguably the arguments should be given in the opposite order:
 ///   modify_directory("sh", "/usr/bin") // present order
@@ -62,14 +62,13 @@
 /// It is notably not required that 'supplied_directory' name an
 /// actual existing directory.
 ///
-/// Boost provides no way to test whether a path has the form of a
-/// directory. Its fs::is_directory() asks the operating system:
+/// std::filesystem provides no way to test whether a path has the form
+/// of a directory. Its fs::is_directory() asks the operating system:
 ///   is_directory("/usr/lib")
 /// returns 'true' iff the OS reports that such a directory exists;
 /// but the same function call would return 'false' after
 ///   rm -rf /usr/lib ; touch /usr/lib
-/// Notably, path("/bin/sh/") succeeds, silently discarding the
-/// trailing '/'.
+/// Notably, path("/bin/sh/") fails because it hasn't the filename.
 
 fs::path modify_directory
     (fs::path const& original_filepath

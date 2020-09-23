@@ -70,10 +70,15 @@ void test_modify_directory()
     LMI_TEST_EQUAL("sh"           , modify_directory("sh"     , ""        ).string());
     LMI_TEST_EQUAL("sh"           , modify_directory("/bin/sh", ""        ).string());
 
-    // Arguably this should be forbidden:
+    // This is forbidden, consistently with the observed behaviour:
     //   $ls /bin/sh/
     //   ls: cannot access '/bin/sh/': Not a directory
-    LMI_TEST_EQUAL("/bin/sh"      , modify_directory("sh/"    , "/bin/"   ).string());
+    // because "sh/" doesn't have the filename.
+    LMI_TEST_THROW
+        (modify_directory("sh/", "/bin/")
+        ,std::runtime_error
+        ,"Assertion 'original_filepath.has_filename()' failed."
+        );
 
     LMI_TEST_THROW
         (modify_directory("", "/bin")
