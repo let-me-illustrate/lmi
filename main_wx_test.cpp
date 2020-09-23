@@ -422,7 +422,7 @@ bool application_test::process_command_line(int& argc, char* argv[])
         }
     else
         {
-        test_files_path_ = fs::canonical(test_files_path_);
+        test_files_path_ = fs::absolute(test_files_path_);
         }
 
     return true;

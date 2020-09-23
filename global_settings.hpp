@@ -99,7 +99,7 @@ class LMI_SO global_settings final
     std::string pyx_                 {};
     bool custom_io_0_                {false};
     bool regression_testing_         {false};
-    fs::path data_directory_         {fs::canonical(".")};
+    fs::path data_directory_         {fs::absolute(".")};
     calendar_date prospicience_date_ {last_yyyy_date()};
 };
 

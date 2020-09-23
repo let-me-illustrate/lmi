@@ -34,7 +34,7 @@
 int test_main(int, char*[])
 {
     std::string const tmp = "/tmp/" + fs::path{__FILE__}.stem().string();
-    fs::path const tmpdir(fs::canonical(tmp));
+    fs::path const tmpdir(fs::absolute(tmp));
     fs::create_directory(tmpdir);
 
     std::string filename0(tmp + "/eraseme");

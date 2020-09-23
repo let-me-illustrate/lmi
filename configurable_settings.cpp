@@ -119,7 +119,7 @@ std::string const& configuration_filepath()
         }
 
     validate_filepath(filename, "Configurable-settings file");
-    complete_path = fs::canonical(filename).string();
+    complete_path = fs::absolute(filename).string();
     return complete_path;
 }
 
@@ -143,8 +143,8 @@ configurable_settings::configurable_settings()
     ascribe_members();
     load();
 
-    default_input_filename_ = fs::canonical(default_input_filename_).string();
-    print_directory_        = fs::canonical(print_directory_       ).string();
+    default_input_filename_ = fs::absolute(default_input_filename_).string();
+    print_directory_        = fs::absolute(print_directory_       ).string();
 
     try
         {
@@ -153,7 +153,7 @@ configurable_settings::configurable_settings()
     catch(...)
         {
         report_exception();
-        print_directory_ = fs::canonical(".").string();
+        print_directory_ = fs::absolute(".").string();
         warning()
             << "If possible, current directory '"
             << print_directory_

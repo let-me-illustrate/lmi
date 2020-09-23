@@ -53,7 +53,7 @@ bool is_calculation_summary_column_name(std::string const& member_name)
 std::string generic_path(std::string const& s)
 {
 #if defined LMI_MSW
-    return fs::canonical(fs::path(s)).string();
+    return fs::absolute(fs::path(s)).string();
 #else  // !defined LMI_MSW
     return s;
 #endif // !defined LMI_MSW
@@ -75,7 +75,7 @@ std::string generic_path(std::string const& s)
 std::string native_path(std::string const& s)
 {
 #if defined LMI_MSW
-    return fs::canonical(fs::path(s)).string();
+    return fs::absolute(fs::path(s)).string();
 #else  // !defined LMI_MSW
     return s;
 #endif // !defined LMI_MSW

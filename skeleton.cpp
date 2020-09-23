@@ -512,7 +512,7 @@ void Skeleton::UponHelp(wxCommandEvent&)
     std::string const canonical_url("https://lmi.nongnu.org/user_manual.html");
 
     std::string s(AddDataDir("user_manual.html"));
-    fs::path p(fs::canonical(fs::path(s)));
+    fs::path p(fs::absolute(fs::path(s)));
     if(fs::exists(p))
         {
         s = "file://" + p.string();
