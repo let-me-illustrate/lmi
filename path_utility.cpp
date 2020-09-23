@@ -101,14 +101,6 @@ fs::path modify_directory
 /// in case an end user types something like
 ///   Crime and/or Punishment
 /// with no intention of denoting a path.
-///
-/// Although portable_filename() would be a better name, that would be
-/// confusing because the boost filesystem library already provides
-/// boolean predicates like portable_file_name(), where Myers
-///   http://www.cantrip.org/coding-standard2.html
-/// would prefer a predicate phrase like is_portable_file_name():
-/// cf. std::isalnum(), std::numeric_limits::is_signed(), and even
-/// std::filesystem::path::is_absolute().
 
 std::string orthodox_filename(std::string const& original_filename)
 {
