@@ -45,7 +45,7 @@
 /// Arguably the arguments should be given in the opposite order:
 ///   modify_directory("sh", "/usr/bin") // present order
 ///   modify_directory("/usr/bin", "sh") // opposite order
-/// because the path precedes the leaf in canonical form. However,
+/// because the path precedes the filename in canonical form. However,
 /// fs::path::replace_extension() uses the present argument order:
 ///   original.replace_extension(new_part)
 /// and in a nondegenerate case such as:
@@ -189,12 +189,11 @@ std::string serial_extension
 /// output filenames simpler and more regular, yet doesn't suppress
 /// any information that would actually be useful.
 ///
-/// Preconditions: census input filepath is nonempty and has a leaf.
-/// It's not apparent how a nonempty path could fail to have a leaf,
-/// but presumably boost has some undocumented reason.
+/// Preconditions: census input filepath is nonempty and has a filename.
+/// For example `path/without/name/` is nonempty but hasn't the filename.
 ///
 /// Any extension or path is discarded from the input census filepath;
-/// only the filename leaf is used.
+/// only the filename is used.
 ///
 /// It is necessary to call orthodox_filename() on the insured's name
 /// in case it contains a character (probably whitespace) that might
