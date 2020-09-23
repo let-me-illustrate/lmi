@@ -325,9 +325,8 @@ namespace
 /// appropriate here, std::runtime_error (via alarum()) is chosen
 /// because the 'a_path' argument may be specified by users.
 ///
-/// Exceptions thrown from the boost filesystem library on path
-/// assignment are caught in order to rethrow with 'context'
-/// prepended.
+/// Note that std::filesystem::path constructor doesn't throws even
+/// if the path is not allowed to exist on the current file system or OS.
 ///
 /// Design alternative: instead of calling this function from
 /// validate_directory() and validate_filepath(), eliminate those
@@ -340,15 +339,7 @@ void validate_path
     ,std::string const& context
     )
 {
-    fs::path path;
-    try
-        {
-        path = a_path;
-        }
-    catch(fs::filesystem_error const& e)
-        {
-        alarum() << context << ": " << e.what() << LMI_FLUSH;
-        }
+    fs::path path{a_path};
 
     if(path.empty())
         {
