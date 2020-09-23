@@ -276,13 +276,6 @@ void PasskeyTest::CheckNominal(char const* file, int line) const
 /// tested because it's common and problematic. This test assumes that
 /// an 'F:' drive exists and is not the "current" drive; it is skipped
 /// if no 'F:' drive exists.
-///
-/// BOOST !! This test traps an exception that boost-1.33.1 can throw
-/// if exists("F:/") returns true but ::GetFileAttributesA() fails.
-/// That's supposed to be impossible because the is_directory()
-/// documentation says:
-///   "Throws: if !exists(ph)"
-/// but it can be reproduced by placing an unformatted disk in "F:".
 
 void PasskeyTest::TestFromAfar() const
 {
