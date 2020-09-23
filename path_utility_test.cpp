@@ -289,19 +289,14 @@ void test_unique_filepath_with_ludicrous_filenames()
     fs::path path2 = unique_filepath(fs::path(""), "");
     LMI_TEST_EQUAL(path2.string(), "");
 
-#if defined LMI_MSW
-    // fs::change_extension()'s argument is ".[extension]", so ".."
+    // fs::replace_extension()'s argument is ".[extension]", so ".."
     // represents a '.' extension-delimiter followed by an extension
-    // consisting of a single '.'. When fs::change_extension() is
+    // consisting of a single '.'. When fs::replace_extension() is
     // called by unique_filepath() here, adding that extension to ".."
-    // yields "...", which is forbidden by msw, but allowed (although
-    // of course discouraged) by posix.
-    LMI_TEST_THROW
-        (unique_filepath(fs::path(".."), "..")
-        ,fs::filesystem_error
-        ,""
-        );
-#endif // defined LMI_MSW
+    // yields "...." path, which won't work if it is actually used by msw,
+    // but is still allowed (although of course discouraged).
+    fs::path path3 = unique_filepath(fs::path(".."), "..");
+    LMI_TEST_EQUAL(path3.string(), "....");
 }
 
 void test_path_inserter()
