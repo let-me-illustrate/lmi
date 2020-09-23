@@ -360,7 +360,7 @@ void test_path_validation()
     LMI_TEST_THROW
         (validate_filepath("<|>", context)
         ,std::runtime_error
-        ,lmi_test::what_regex("invalid name \"<|>\" in path")
+        ,"Unit test file '<|>' not found."
         );
 #endif // defined LMI_MSW
 
