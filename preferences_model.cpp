@@ -75,7 +75,7 @@ std::string generic_path(std::string const& s)
 std::string native_path(std::string const& s)
 {
 #if defined LMI_MSW
-    return fs::absolute(fs::path(s)).string();
+    return fs::absolute(fs::path(s)).make_preferred().string();
 #else  // !defined LMI_MSW
     return s;
 #endif // !defined LMI_MSW
