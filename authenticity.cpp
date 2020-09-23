@@ -96,7 +96,10 @@ std::string Authenticity::Assay
     // Read saved passkey from file.
     std::string passkey;
     {
-    fs::path passkey_path(data_path / "passkey");
+    fs::path passkey_path("passkey");
+    // Add only non-empty data path to avoid adding "./".
+    if(!data_path.empty())
+        passkey_path = data_path / passkey_path;
     fs::ifstream is(passkey_path);
     if(!is)
         {
@@ -138,7 +141,10 @@ std::string Authenticity::Assay
     calendar_date begin(last_yyyy_date ());
     calendar_date end  (gregorian_epoch());
     {
-    fs::path expiry_path(data_path / "expiry");
+    fs::path expiry_path("expiry");
+    // Add only non-empty data path to avoid adding "./".
+    if(!data_path.empty())
+        expiry_path = data_path / expiry_path;
     fs::ifstream is(expiry_path);
     if(!is)
         {
