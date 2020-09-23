@@ -466,7 +466,9 @@ check_concinnity: source_clean custom_tools
 	@for z in $(build_dir)/*.o; do [ -f $${z%%.o}.d ] || echo $$z; done;
 	@find $(prefascicle_dir) -maxdepth 1 -executable -type f \
 	  -not -name '*.sh' -not -name '*.sed' \
-	  -not -name 'commit-msg' -not -name 'pre-commit' \
+	  -not -name 'commit-msg' \
+	  -not -name 'pre-commit' \
+	  -not -name 'post-checkout' \
 	  | $(SED) -e's/^/Improperly executable: /'
 	@find $(prefascicle_dir) -executable -type f -print0 \
 	  | xargs --null --max-args=1 --max-procs="$(shell nproc)" ./check_script.sh

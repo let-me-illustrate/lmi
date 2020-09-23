@@ -1,0 +1,62 @@
+#!/bin/sh
+
+# Synchronize timestamps in a local mirror directory if you are I.
+#
+# Copyright (C) 2020 Gregory W. Chicares.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software Foundation,
+# Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+#
+# https://savannah.nongnu.org/projects/lmi
+# email: <gchicares@sbcglobal.net>
+# snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+set -e
+
+# This is a personal hook. You probably don't want to use it.
+
+if [ "greg" != "$(whoami)" ]; then
+  exit 0
+fi
+
+# Motivation. I maintain a local mirror of origin/master in a
+# directory named by ${mirror_dir}. It is often convenient to
+# compare it to my working directory using some GUI diff program,
+# which may assume that files differ when their dates differ, even
+# if their contents match--as often occurs when 'git switch' is
+# used. To prevent that inconvenience, this script synchronizes
+# the mirror directory's timestamps to the working copy's.
+#
+# Running 'cmp' against hundreds of pairs of files takes enough
+# time to be inconvenient, so this script considers only files
+# that should differ between the old and new HEADs.
+
+old_head=$1
+new_head=$2
+# not useful here:
+# branch_flag=$3
+
+old_head_name="$(git name-rev --name-only "$old_head")"
+new_head_name="$(git name-rev --name-only "$new_head")"
+
+changed_files=$(git diff --name-only "$old_head_name..$new_head_name")
+
+mirror_dir=/opt/lmi/free/src/lmi/
+
+for z in $changed_files
+do
+    y=$mirror_dir/$z
+    if cmp --quiet "$y" "$z" ; then
+        touch --no-create --reference="$z" "$y";
+    fi
+done
