@@ -414,7 +414,7 @@ bool application_test::process_command_line(int& argc, char* argv[])
         {
         warning()
             << "Test files path '"
-            << test_files_path_
+            << test_files_path_.generic_string()
             << "' doesn't exist."
             << std::flush
             ;

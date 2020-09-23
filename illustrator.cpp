@@ -105,7 +105,7 @@ bool illustrator::operator()(fs::path const& file_path)
         {
         alarum()
             << "File '"
-            << file_path
+            << file_path.generic_string()
             << "': extension '"
             << extension
             << "' not supported."

@@ -475,7 +475,7 @@ mec_state test_one_days_7702A_transactions
         {
         warning()
             << "Unable to write '"
-            << spreadsheet_filename
+            << spreadsheet_filename.generic_string()
             << "'."
             << LMI_FLUSH
             ;
@@ -503,7 +503,7 @@ bool mec_server::operator()(fs::path const& file_path)
         {
         alarum()
             << "File '"
-            << file_path
+            << file_path.generic_string()
             << "': extension '"
             << extension
             << "' not supported."

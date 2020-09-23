@@ -53,7 +53,7 @@ void xml_serializable<T>::load(fs::path const& path)
         {
         alarum()
             << "File '"
-            << path
+            << path.generic_string()
             << "' is required but could not be found. Try reinstalling."
             << LMI_FLUSH
             ;

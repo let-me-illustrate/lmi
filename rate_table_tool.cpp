@@ -240,7 +240,8 @@ void rename_tables
     if(!ifs)
         {
         alarum()
-            << "File with the new table names \"" << filename_of_table_names
+            << "File with the new table names \""
+            << filename_of_table_names.generic_string()
             << "\" couldn't be opened."
             << std::flush
             ;
@@ -294,7 +295,8 @@ void rename_tables
         if(!error.empty())
             {
             alarum()
-                << "Error in new table names file \"" << filename_of_table_names
+                << "Error in new table names file \""
+                << filename_of_table_names.generic_string()
                 << "\": " << error << " at line " << line_num << "."
                 << std::flush
                 ;

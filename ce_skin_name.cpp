@@ -64,7 +64,7 @@ std::vector<std::string> fetch_skin_names()
         {
         alarum()
             << "Data directory '"
-            << path
+            << path.generic_string()
             << "' contains no skin files."
             << LMI_FLUSH
             ;

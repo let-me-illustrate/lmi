@@ -186,7 +186,7 @@ wxBitmap icon_monger::CreateBitmap
             {
             warning()
                 << "Unable to find icon '"
-                << icon_path
+                << icon_path.generic_string()
                 << "'. Try reinstalling."
                 << "\nA builtin alternative will be used instead,"
                 << " but it may be visually jarring."
@@ -198,7 +198,7 @@ wxBitmap icon_monger::CreateBitmap
             {
             warning()
                 << "Unable to find icon '"
-                << icon_path
+                << icon_path.generic_string()
                 << "'. Try reinstalling."
                 << "\nA blank icon will be used instead."
                 << LMI_FLUSH
@@ -212,7 +212,7 @@ wxBitmap icon_monger::CreateBitmap
         {
         warning()
             << "Unable to load image '"
-            << icon_path
+            << icon_path.generic_string()
             << "'. Try reinstalling."
             << LMI_FLUSH
             ;
@@ -229,7 +229,7 @@ wxBitmap icon_monger::CreateBitmap
         {
         warning()
             << "Image '"
-            << icon_path
+            << icon_path.generic_string()
             << "' of size "
             << image.GetWidth()
             << " by "
@@ -272,7 +272,7 @@ wxImage load_image(char const* file)
         {
         warning()
             << "Unable to find image '"
-            << image_path
+            << image_path.generic_string()
             << "'. Try reinstalling."
             << "\nA blank image will be used instead."
             << LMI_FLUSH
@@ -285,7 +285,7 @@ wxImage load_image(char const* file)
         {
         warning()
             << "Unable to load image '"
-            << image_path
+            << image_path.generic_string()
             << "'. Try reinstalling."
             << "\nA blank image will be used instead."
             << LMI_FLUSH

@@ -492,7 +492,7 @@ gpt_state test_one_days_gpt_transactions
         {
         warning()
             << "Unable to write '"
-            << spreadsheet_filename
+            << spreadsheet_filename.generic_string()
             << "'."
             << LMI_FLUSH
             ;
@@ -521,7 +521,7 @@ bool gpt_server::operator()(fs::path const& file_path)
         {
         alarum()
             << "File '"
-            << file_path
+            << file_path.generic_string()
             << "': extension '"
             << extension
             << "' not supported."

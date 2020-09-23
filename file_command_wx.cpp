@@ -90,7 +90,7 @@ void concrete_file_command
             << "Unable to determine command to '"
             << action
             << "' file '"
-            << path
+            << path.generic_string()
             << "'."
             << LMI_FLUSH
             ;
@@ -102,7 +102,7 @@ void concrete_file_command
             << "Unable to '"
             << action
             << "' file '"
-            << path
+            << path.generic_string()
             << "'. Return code: '"
             << okay
             << "'."

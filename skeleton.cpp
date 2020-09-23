@@ -485,7 +485,7 @@ void Skeleton::UponEditDefaultCell(wxCommandEvent&)
         {
         alarum()
             << "The default input file, '"
-            << p
+            << p.generic_string()
             << "', could not be read.\n\n"
             << "Use the \"Preferences\" dialog to select any saved"
             << " illustration-input file as the default."
@@ -521,7 +521,7 @@ void Skeleton::UponHelp(wxCommandEvent&)
         {
         warning()
             << "A local copy of the user manual should have been placed here:"
-            << "\n    " << p
+            << "\n    " << p.generic_string()
             << "\nbut was not. Try reinstalling."
             << '\n'
             << "\nMeanwhile, the online user manual will be used if possible."
