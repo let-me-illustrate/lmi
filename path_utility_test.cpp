@@ -70,10 +70,12 @@ void test_modify_directory()
     BOOST_TEST_EQUAL("sh"           , modify_directory("sh"     , ""        ).string());
     BOOST_TEST_EQUAL("sh"           , modify_directory("/bin/sh", ""        ).string());
 
-    // Arguably this should be forbidden:
-    //   $ls /bin/sh/
-    //   ls: cannot access '/bin/sh/': Not a directory
-    BOOST_TEST_EQUAL("/bin/sh"      , modify_directory("sh/"    , "/bin/"   ).string());
+    // "sh/" hasn't the filename.
+    BOOST_TEST_THROW
+        (modify_directory("sh/", "/bin/")
+        ,std::runtime_error
+        ,"Assertion 'original_filepath.has_filename()' failed."
+        );
 
     BOOST_TEST_THROW
         (modify_directory("", "/bin")
