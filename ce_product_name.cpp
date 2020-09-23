@@ -60,7 +60,7 @@ std::vector<std::string> fetch_product_names()
         {
         alarum()
             << "Data directory '"
-            << path
+            << path.generic_string()
             << "' contains no product files."
             << LMI_FLUSH
             ;

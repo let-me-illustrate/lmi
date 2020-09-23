@@ -103,7 +103,7 @@ std::string Authenticity::Assay
         {
         oss
             << "Unable to read passkey file '"
-            << passkey_path
+            << passkey_path.generic_string()
             << "'. Try reinstalling."
             ;
         return oss.str();
@@ -114,7 +114,7 @@ std::string Authenticity::Assay
         {
         oss
             << "Error reading passkey file '"
-            << passkey_path
+            << passkey_path.generic_string()
             << "'. Try reinstalling."
             ;
         return oss.str();
@@ -145,7 +145,7 @@ std::string Authenticity::Assay
         {
         oss
             << "Unable to read expiry file '"
-            << expiry_path
+            << expiry_path.generic_string()
             << "'. Try reinstalling."
             ;
         return oss.str();
@@ -156,7 +156,7 @@ std::string Authenticity::Assay
         {
         oss
             << "Error reading expiry file '"
-            << expiry_path
+            << expiry_path.generic_string()
             << "'. Try reinstalling."
             ;
         return oss.str();

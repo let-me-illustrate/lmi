@@ -1080,6 +1080,6 @@ void ledger_evaluator::write_tsv(fs::path const& pdf_out_file) const
 
     if(!ofs)
         {
-        alarum() << "Unable to write '" << filepath << "'." << LMI_FLUSH;
+        alarum() << "Unable to write '" << filepath.generic_string() << "'." << LMI_FLUSH;
         }
 }

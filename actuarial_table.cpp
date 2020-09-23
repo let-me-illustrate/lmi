@@ -210,7 +210,7 @@ void actuarial_table::find_table()
         {
         alarum()
             << "File '"
-            << index_path
+            << index_path.generic_string()
             << "' is required but could not be found. Try reinstalling."
             << LMI_FLUSH
             ;
@@ -300,7 +300,7 @@ void actuarial_table::parse_table()
         {
         alarum()
             << "File '"
-            << data_path
+            << data_path.generic_string()
             << "' is required but could not be found. Try reinstalling."
             << LMI_FLUSH
             ;

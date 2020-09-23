@@ -2258,7 +2258,7 @@ std::uint32_t table_impl::compute_hash_value() const
 table table::read_from_text(fs::path const& file)
 {
     std::ifstream ifs(file, ios_in_binary());
-    if(!ifs) alarum() << "Unable to open '" << file << "'." << LMI_FLUSH;
+    if(!ifs) alarum() << "Unable to open '" << file.generic_string() << "'." << LMI_FLUSH;
 
     try
         {
@@ -2298,7 +2298,7 @@ table table::read_from_text(std::string const& text)
 void table::save_as_text(fs::path const& file) const
 {
     std::ofstream ofs(file, ios_out_trunc_binary());
-    if(!ofs) alarum() << "Unable to open '" << file << "'." << LMI_FLUSH;
+    if(!ofs) alarum() << "Unable to open '" << file.generic_string() << "'." << LMI_FLUSH;
     impl_->write_as_text(ofs);
 }
 
@@ -2474,7 +2474,7 @@ database_impl::database_impl(fs::path const& path)
 
     fs::path const index_path = get_index_path(path);
     std::ifstream ifs(index_path, ios_in_binary());
-    if(!ifs) alarum() << "Unable to open '" << index_path << "'." << LMI_FLUSH;
+    if(!ifs) alarum() << "Unable to open '" << index_path.generic_string() << "'." << LMI_FLUSH;
     read_index(ifs);
 
     // Open the database file right now to ensure that we can do it, even if we
@@ -2482,7 +2482,7 @@ database_impl::database_impl(fs::path const& path)
     // it wouldn't be a useful optimization.
     fs::path const data_path = get_data_path(path);
     auto const pifs = std::make_shared<std::ifstream>(data_path, ios_in_binary());
-    if(!*pifs) alarum() << "Unable to open '" << data_path << "'." << LMI_FLUSH;
+    if(!*pifs) alarum() << "Unable to open '" << data_path.generic_string() << "'." << LMI_FLUSH;
     data_is_ = pifs;
 }
 
@@ -2871,7 +2871,7 @@ void database_impl::save(fs::path const& path)
                 ,description_ {description}
             {
             ofs_.open(temp_path_, ios_out_trunc_binary());
-            if(!ofs_) alarum() << "Unable to open '" << temp_path_ << "'." << LMI_FLUSH;
+            if(!ofs_) alarum() << "Unable to open '" << temp_path_.generic_string() << "'." << LMI_FLUSH;
             }
 
             safe_output_file(safe_output_file const&) = delete;
@@ -3006,7 +3006,7 @@ try
 catch(std::runtime_error const& e)
 {
     alarum()
-        << "Error reading database from '" << path << "': "
+        << "Error reading database from '" << path.generic_string() << "': "
         << e.what()
         << "."
         << LMI_FLUSH

@@ -77,7 +77,8 @@ fs::path LMI_SO modify_directory
     )
 {
     LMI_ASSERT(original_filepath.has_filename());
-    return supplied_directory / original_filepath.filename();
+    // Use `generic_string()` to convert 
+    return (supplied_directory / original_filepath.filename()).generic_string();
 }
 
 /// Return a filename appropriate for posix as well as msw.
@@ -275,7 +276,7 @@ fs::path unique_filepath
             {
             alarum()
                 << "Cannot create unique file path from file name '"
-                << original_filepath
+                << original_filepath.generic_string()
                 << "' with extension '"
                 << supplied_extension
                 << "'."
@@ -333,7 +334,7 @@ void validate_path
         }
     if(!fs::exists(path))
         {
-        alarum() << context << " '" << path << "' not found." << LMI_FLUSH;
+        alarum() << context << " '" << path.generic_string() << "' not found." << LMI_FLUSH;
         }
 }
 } // Unnamed namespace.

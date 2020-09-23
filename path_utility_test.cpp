@@ -48,7 +48,7 @@ namespace
     void write_dummy_file(fs::path p)
     {
         std::ofstream ofs(p);
-        ofs << p;
+        ofs << p.generic_string();
     }
 } // Unnamed namespace.
 
@@ -301,7 +301,7 @@ void test_path_inserter()
     char const* z = "/opt/lmi/test/foo.bar";
     fs::path const p(z);
     std::ostringstream oss;
-    oss << p;
+    oss << p.generic_string();
     BOOST_TEST_EQUAL(z, oss.str());
 }
 
