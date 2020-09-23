@@ -261,8 +261,7 @@ fs::path serial_file_path
 ///
 /// A try-block is necessary because fs::remove() can throw. The
 /// postcondition is asserted explicitly at the end of the try-block
-/// because that boost function's semantics have changed between
-/// versions, and its documentation is still unclear in boost-1.34:
+/// because that fs::remove() documentation is still unclear:
 /// apparently it mustn't fail without throwing, yet it doesn't throw
 /// on an operation that must fail, like removing a file that's locked
 /// by another process as in the motivating example above.
