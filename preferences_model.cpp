@@ -53,7 +53,13 @@ bool is_calculation_summary_column_name(std::string const& member_name)
 std::string generic_path(std::string const& s)
 {
 #if defined LMI_MSW
-    return fs::absolute(fs::path(s)).string();
+    fs::path const absolute_path{fs::absolute(s)};
+    // Construct the result without the disk name.
+    fs::path const result
+        = absolute_path.root_directory()
+        / absolute_path.relative_path()
+        ;
+    return result.generic_string();
 #else  // !defined LMI_MSW
     return s;
 #endif // !defined LMI_MSW
