@@ -403,7 +403,7 @@ void PasskeyTest::TestPasskey() const
     BOOST_TEST(!fs::exists("passkey"));
     Authenticity::ResetCache();
     BOOST_TEST_EQUAL
-        ("Unable to read passkey file 'passkey'. Try reinstalling."
+        ("Unable to read passkey file './passkey'. Try reinstalling."
         ,Authenticity::Assay(BeginDate_, ".")
         );
 
@@ -455,7 +455,7 @@ void PasskeyTest::TestExpiry() const
     BOOST_TEST(!fs::exists("expiry"));
     Authenticity::ResetCache();
     BOOST_TEST_EQUAL
-        ("Unable to read expiry file 'expiry'. Try reinstalling."
+        ("Unable to read expiry file './expiry'. Try reinstalling."
         ,Authenticity::Assay(BeginDate_, ".")
         );
 
@@ -465,7 +465,7 @@ void PasskeyTest::TestExpiry() const
     os.close();
     Authenticity::ResetCache();
     BOOST_TEST_EQUAL
-        ("Error reading expiry file 'expiry'. Try reinstalling."
+        ("Error reading expiry file './expiry'. Try reinstalling."
         ,Authenticity::Assay(BeginDate_, ".")
         );
     }
@@ -477,7 +477,7 @@ void PasskeyTest::TestExpiry() const
     os.close();
     Authenticity::ResetCache();
     BOOST_TEST_EQUAL
-        ("Error reading expiry file 'expiry'. Try reinstalling."
+        ("Error reading expiry file './expiry'. Try reinstalling."
         ,Authenticity::Assay(BeginDate_, ".")
         );
     }
@@ -489,7 +489,7 @@ void PasskeyTest::TestExpiry() const
     os.close();
     Authenticity::ResetCache();
     BOOST_TEST_EQUAL
-        ("Error reading expiry file 'expiry'. Try reinstalling."
+        ("Error reading expiry file './expiry'. Try reinstalling."
         ,Authenticity::Assay(BeginDate_, ".")
         );
     }
