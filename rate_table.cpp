@@ -184,19 +184,10 @@ inline bool stream_read(std::istream& is, void* data, std::size_t length)
 // there is no way to handle these errors anyhow, e.g. when we're trying to
 // clean up while handling a previous exception and so can't let another one
 // propagate.
-//
-// BOOST !! Use "ec" argument with later versions instead of throwing and
-// catching the exception.
 void remove_nothrow(fs::path const& path)
 {
-    try
-        {
-        fs::remove(path);
-        }
-    catch(fs::filesystem_error const&)
-        {
-        // Intentionally ignore.
-        }
+    std::error_code ec;
+    fs::remove(path, ec);
 }
 
 // Helper function wrapping std::strtoull() and hiding its peculiarities:
