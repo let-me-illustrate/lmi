@@ -303,11 +303,22 @@ void test_unique_filepath_with_ludicrous_filenames()
 
 void test_path_inserter()
 {
+    {
     char const* z = "/opt/lmi/test/foo.bar";
     fs::path const p(z);
     std::ostringstream oss;
     oss << p;
     BOOST_TEST_EQUAL(z, oss.str());
+    }
+
+    // Ensure that operator<<() works with spaces in path.
+    {
+    char const* z = "/My Opt/lmi/My Tests/My Foo.My Bar";
+    fs::path const p(z);
+    std::ostringstream oss;
+    oss << p;
+    BOOST_TEST_EQUAL(z, oss.str());
+    }
 }
 
 void test_path_validation()
@@ -374,6 +385,8 @@ void test_path_validation()
 
 int test_main(int, char*[])
 {
+    initialize_filesystem();
+
     test_modify_directory();
     test_orthodox_filename();
     test_serial_file_path();
