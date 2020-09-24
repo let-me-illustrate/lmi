@@ -75,53 +75,19 @@ The loan interest rate is fixed at {{MaxAnnCurrLoanDueRate}} per year.
 The state of issue is {{StateOfJurisdiction}}.
 </p>
 
-<!-- PDF !! FnInitialSpecAmt -->
 <p>
-This illustration assumes an initial Selected Face Amount of
-${{InitBaseSpecAmt}}. Selected Face
-Amount reductions assumed in this illustration (if any) are shown
-in the Tabular Detail.
+    {{FnInitialSpecAmt}}
 </p>
 
 {{#IsInforce}}
-<!-- PDF !! Combine FnInforceAcctVal and FnInforceTaxBasis -->
     <p>
-    This illustration assumes a beginning account value of
-    ${{InforceTotalAV}},
-    and a beginning cost basis of
-    ${{InforceTaxBasis}},
-    based on the last monthly calculation date,
-    {{InforceAsOfDate}}.
-    The current account value and cost basis may be higher or lower.
-    Consult the Home Office if you require further information.
+    {{FnInforceAcctVal}}
     </p>
-<!--
-  PDF !! THESE ARE TO BE COMBINED:
-  PDF !! FnInforceAcctVal
-    <p>
-    This illustration assumes a beginning account value of
-    ${{InforceTotalAV}}
-    as of {{InforceAsOfDate}},
-    the end of the last completed {{ContractName}} month.
-    </p>
-  PDF !! FnInforceTaxBasis
-    <p>
-    This illustration assumes a beginning cost basis of
-    ${{InforceTaxBasis}}
-    as of {{InforceAsOfDate}},
-    the end of the last completed {{ContractName}} month;
-    the actual cost basis may be higher or lower.
-    Consult the Home Office for cost basis information.
-    </p>
--->
 {{/IsInforce}}
 
-<!-- PDF !! FnCensus -->
-<!-- There is no "attached census". -->
 {{#Composite}}
     <p>
-    Please see the attached census, listing the face amounts,
-    underwriting classes and issue ages for individual participants.
+    {{FnCensus}}
     </p>
 {{/Composite}}
 
@@ -133,37 +99,9 @@ in the Tabular Detail.
     <p>{{GuarIssueDisclaimerMd}}</p>
 {{/StateIsMaryland}}
 
-<!-- PDF !! Fn1035Charge -->
 {{#Has1035ExchCharge}}
     <p>
-    {{^SinglePremium}}
-        Upon surrender of this {{ContractName}}, where the surrender
-        proceeds are intended to be applied to an insurance policy
-        or certificate issued in conjunction with an intent
-        to qualify the exchange as a tax free exchange
-        under Section 1035 of the Internal Revenue Code,
-        we may assess an Exchange Charge. The Exchange Charge
-        is the greater of the Market Value Adjustment Charge
-        and the Percentage of Premium Charge. In the states
-        of Florida or Indiana, the Exchange charge
-        (referred to as Assignment Charge in Florida)
-        will be the Percentage of Premium Charge only.
-        The Exchange Charge will potentially reduce
-        the surrender proceeds, but will never increase
-        the surrender proceeds. Please refer to your {{ContractName}}
-        for details.
-    {{/SinglePremium}}
-    {{#SinglePremium}}
-        Upon surrender of this {{ContractName}}, where the surrender proceeds
-        are intended to be applied to an insurance policy
-        or certificate issued in conjunction with an intent
-        to qualify the exchange as a tax free exchange
-        under Section 1035 of the Internal Revenue Code (1035
-        Exchange), we may assess an Exchange Charge. The Exchange
-        Charge will potentially reduce the surrender proceeds,
-        but will never increase the surrender proceeds.
-        Please refer to your {{ContractName}} for details.
-    {{/SinglePremium}}
+    {{Fn1035Charge}}
     </p>
 {{/Has1035ExchCharge}}
 

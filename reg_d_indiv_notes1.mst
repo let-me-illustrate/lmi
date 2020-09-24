@@ -135,12 +135,8 @@ willing to represent as such to {{InsCoShortName}}.
 <b>Policy Year:</b> &nbsp; {{PolicyYearFootnote}}
 </p>
 
-<!-- PDF !! FnPpLoads -->
 <p>
-<b>Premium Loads:</b> The applicable state premium tax, deferred acquisition
-cost tax charge, sales load (if any), separate account administrative charge
-(if any), and other charges incurred as a result of retaining an unaffiliated
-money manager (if any).
+<b>Premium Loads:</b> &nbsp; {{FnPpLoads}}
 </p>
 
 <p>

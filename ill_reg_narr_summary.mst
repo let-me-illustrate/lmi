@@ -31,15 +31,9 @@
 {{ProductDescription}}
 </p>
 
-<!-- PDF !! FnProposalUnderwriting -->
 {{^IsInforce}}
     <p>
-    Coverage may be available on a Guaranteed Standard Issue basis.
-    All proposals are based on case characteristics and must
-    be approved by the {{InsCoShortName}}
-    Home Office. For details regarding underwriting
-    and coverage limitations refer to your offer letter
-    or contact your {{InsCoShortName}} representative.
+    {{FnProposalUnderwriting}}
     </p>
 {{/IsInforce}}
 
@@ -71,19 +65,10 @@ of the {{ContractName}} year. The method we use to allocate
 overhead expenses is the fully allocated expense method.
 </p>
 
-<!-- PDF !! FnGuaranteedPremium -->
 {{^SinglePremium}}
-    <p>
-    In order to guarantee coverage to age {{EndtAge}},
-    {{InitEeModeWithIndefiniteArticle}}
-    premium of ${{GuarPrem}} must be paid.
-    This amount is based on the guaranteed monthly charges
-    and the guaranteed interest crediting rate.
-    {{#DefnLifeInsIsGPT}}
-    This premium may be in excess of the maximum premium allowable
-    in order to qualify this {{ContractName}} as life insurance.
-    {{/DefnLifeInsIsGPT}}
-    </p>
+<p>
+    {{FnGuaranteedPremium}}
+</p>
 {{/SinglePremium}}
 
 <!-- PDF !! LoanFootnote -->
@@ -146,11 +131,8 @@ The definition of life insurance for this {{ContractName}} is the
 {{/DefnLifeInsIsGPT}}
 </p>
 
-<!-- PDF !! FnOmnibusDisclaimer -->
 <p>
-This is an illustration only. An illustration is not intended
-to predict actual performance. Interest rates
-and values set forth in the illustration are not guaranteed.
+    {{FnOmnibusDisclaimer}}
 </p>
 
 <p>

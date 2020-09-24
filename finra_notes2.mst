@@ -138,36 +138,9 @@ The state of issue is {{StateOfJurisdiction}}.
 </p>
 
 {{#IsInforce}}
-<!-- PDF !! Combine FnInforceAcctVal and FnInforceTaxBasis -->
     <p>
-    This illustration assumes a beginning account value of
-    ${{InforceTotalAV}},
-    and a beginning cost basis of
-    ${{InforceTaxBasis}},
-    based on the last monthly calculation date,
-    {{InforceAsOfDate}}.
-    The current account value and cost basis may be higher or lower.
-    Consult the Home Office if you require further information.
+    {{FnInforceAcctVal}}
     </p>
-<!--
-  PDF !! THESE ARE TO BE COMBINED:
-  PDF !! FnInforceAcctVal
-    <p>
-    This illustration assumes a beginning account value of
-    ${{InforceTotalAV}}
-    as of {{InforceAsOfDate}},
-    the end of the last completed {{ContractName}} month.
-    </p>
-  PDF !! FnInforceTaxBasis
-    <p>
-    This illustration assumes a beginning cost basis of
-    ${{InforceTaxBasis}}
-    as of {{InforceAsOfDate}},
-    the end of the last completed {{ContractName}} month;
-    the actual cost basis may be higher or lower.
-    Consult the Home Office for cost basis information.
-    </p>
--->
 {{/IsInforce}}
 
 {{#CallGuarUwSubstd}}
@@ -176,13 +149,8 @@ The state of issue is {{StateOfJurisdiction}}.
 
 <p align="center"><b>GUARANTEED PRINCIPAL ACCOUNT</b></p>
 
-<!-- PDF !! FnGeneralAccount -->
 <p>
-The Guaranteed Principal Account (GPA) has a guaranteed
-minimum annual interest rate of
-{{InitAnnGenAcctInt_Guaranteed}}.
-Guarantees are based on the claims-paying ability of the
-issuing company or companies.
+    {{FnGeneralAccount}}
 </p>
 
 <p align="center"><b>SEPARATE ACCOUNT</b></p>

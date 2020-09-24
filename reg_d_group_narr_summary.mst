@@ -34,9 +34,8 @@
 <u>Stable Value Feature</u>&nbsp;{{StableValueFootnote}}
 </p>
 
-<!-- PDF !! FnInitialDbo -->
 <p>
-This illustration assumes Initial Death Benefit Option {{InitDBOpt}}.
+    {{FnInitialDbo}}
 </p>
 
 <!-- PDF !! FnPpAccreditedInvestor -->
