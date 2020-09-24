@@ -39,6 +39,8 @@ jobs:
         run: |
           echo "::set-env name=NORMAL_UID::`id --user`"
           echo "::set-env name=coefficiency::--jobs=`nproc`"
+          gcc_version=$(${LMI_TRIPLET}-${LMI_COMPILER} -dumpversion|tr -d '\r')
+          echo "::set-env name=gcc_version::$gcc_version"
 
       - name: Create lmi directories
         run: >
@@ -61,13 +63,26 @@ jobs:
       - name: Build miscellanea
         run: make $coefficiency --output-sync=recurse -f install_miscellanea.make
 
+      - name: Cache libxml2, wxWidgets and wxPdfDoc
+        id: cache-local
+        uses: actions/cache@v2
+        with:
+          path: |
+            /opt/lmi/local/${{ env.LMI_COMPILER }}_${{ env.LMI_TRIPLET }}
+            /opt/lmi/local/include
+            /opt/lmi/local/share
+          key: build-${{ env.LMI_COMPILER }}-${{ env.gcc_version }}-${{ env.LMI_TRIPLET }}-${{ hashFiles('install_libxml2_libxslt.make', 'install_wx.sh', 'install_wxpdfdoc.sh') }}
+
       - name: Build libxml2
+        if: steps.cache-local.outputs.cache-hit != 'true'
         run: make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
 
       - name: Build wxWidgets
+        if: steps.cache-local.outputs.cache-hit != 'true'
         run: ./install_wx.sh
 
       - name: Build wxPdfDoc
+        if: steps.cache-local.outputs.cache-hit != 'true'
         run: ./install_wxpdfdoc.sh
 
       - name: Build lmi
