@@ -160,36 +160,11 @@ The state of issue is {{StateOfJurisdiction}}.
 </p>
 
 {{^Composite}}
-<!-- PDF !! FnImf -->
-    <p>
-    This illustration is based on total Separate Account
-    fund expenses of {{TotalIMF[0]}}.
-    </p>
-    {{#AvgFund}}
-        <p>
-        Investment management fees are based on equal
-        initial allocations among the available funds.
-        </p>
-    {{/AvgFund}}
-    {{#CustomFund}}
-        <p>
-        Investment management fees are based on an initial allocation
-        of 100% to a custom fund selected by the purchaser.
-        </p>
-    {{/CustomFund}}
+    {{FnImf}}
 {{/Composite}}
 
-<!-- PDF !! FnProspectus -->
 <p>
-<b>
-This material must be preceded or accompanied by the current prospectus for the
-{{PolicyMktgName}} Insurance {{ContractName}} and the prospectuses (or summary
-prospectuses, if available) for its underlying investment choices. Before
-purchasing a {{ContractName}}, you should carefully consider the investment
-objectives, risks, charges and expenses of the {{ContractName}} and its
-underlying investment choices. Please read the prospectuses carefully before
-investing or sending money.
-</b>
+    <b>{{FnProspectus}}</b>
 </p>
 
 <p>

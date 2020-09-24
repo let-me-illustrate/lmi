@@ -57,16 +57,8 @@ and may also trigger a penalty tax.
     {{FnDacTax}}
 </p>
 
-<!-- PDF !! FnNotTaxAdvice -->
 <p>
-<b>
-The information contained in this illustration is not written
-or intended as tax or legal advice. Neither {{InsCoShortName}} its
-subsidiaries, employees or representatives are authorized to give tax
-or legal advice. For more information pertaining
-to the tax consequences of purchasing or owning this {{ContractName}},
-consult with your own independent tax or legal counsel.
-</b>
+    {{FnNotTaxAdvice}}
 </p>
 
 <br></br>
@@ -96,18 +88,8 @@ in an illustration-reg template, if anywhere.
     <p>{{NoLapseEverFootnote}}</p>
 {{/NoLapseAlwaysActive}}
 
-<!-- PDF !! FnDefnLifeIns -->
 <p>
-The definition of life insurance elected for this
-{{ContractName}} is the
-{{#DefnLifeInsIsGPT}}
-    guideline premium test. The guideline single premium is
-    ${{InitGSP}} and the guideline
-    level premium is ${{InitGLP}}.
-{{/DefnLifeInsIsGPT}}
-{{^DefnLifeInsIsGPT}}
-    cash value accumulation test.
-{{/DefnLifeInsIsGPT}}
+    {{FnDefnLifeIns}}
 </p>
 
 {{#DefnLifeInsIsGPT}}
@@ -123,11 +105,8 @@ will increase the net amount at risk (referred to in the {{ContractName}} as
 the Amount of Insurance that Requires a Charge).
 </p>
 
-<!-- PDF !! FnBoyEoy -->
 <p>
-Premium payments are assumed to be made at the beginning of the year. Account
-values, cash surrender values, and death benefits are illustrated as of the end
-of the year. {{MinimumPremiumFootnote}}
+    {{FnBoyEoy}}
 </p>
 
 </font>

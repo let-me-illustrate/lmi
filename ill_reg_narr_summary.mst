@@ -42,27 +42,7 @@
 </p>
 
 <p>
-{{!
-    PDF !! This premium-mode footnote is misleading:
-      - mode may vary by year, but only initial mode is shown
-      - ee and er modes may differ, but only er mode is shown
-}}
-
-<!-- PDF !! FnBoyEoy -->
-{{^SinglePremium}}
-    Premiums are assumed to be paid on
-    {{InitErModeWithIndefiniteArticle}}
-    basis and received at the beginning of the premium paying period.
-{{/SinglePremium}}
-{{#SinglePremium}}
-    The single premium is assumed to be paid at the beginning
-    of the {{ContractName}} year.
-{{/SinglePremium}}
-
-{{AvName}} Values, {{CsvName}} Values,
-and death benefits are illustrated as of the end
-of the {{ContractName}} year. The method we use to allocate
-overhead expenses is the fully allocated expense method.
+    {{FnBoyEoy}}
 </p>
 
 {{^SinglePremium}}
@@ -117,18 +97,8 @@ a spread, guaranteed not to exceed {{MaxAnnGuarLoanSpread}}.
     </p>
 {{/HasADD}}
 
-<!-- PDF !! FnDefnLifeIns -->
 <p>
-The definition of life insurance for this {{ContractName}} is the
-{{#DefnLifeInsIsGPT}}
-    guideline premium test. The guideline single premium
-    is ${{InitGSP}}
-    and the guideline level premium
-    is ${{InitGLP}}
-{{/DefnLifeInsIsGPT}}
-{{^DefnLifeInsIsGPT}}
-    cash value accumulation test.
-{{/DefnLifeInsIsGPT}}
+    {{FnDefnLifeIns}}
 </p>
 
 <p>

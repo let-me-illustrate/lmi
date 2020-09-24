@@ -38,36 +38,16 @@
     {{FnInitialDbo}}
 </p>
 
-<!-- PDF !! FnPpAccreditedInvestor -->
 <p>
-This policy is only available to entities that meet the definition
-of "accredited investor" or "qualified purchaser" under applicable
-Federal securities laws.  Purchase of this policy is suitable
-only for entities of substantial economic means. Each prospective
-purchaser will be required to represent that it is familiar
-with and understands the fundamental risks and financial hazards
-of purchasing the policy. Each prospective purchaser must
-also represent that it meets minimum financial and other
-suitability standards.
+    {{FnPpAccreditedInvestor}}
 </p>
 
 <p>
 {{NoVanishPremiumFootnote}}
 </p>
 
-<!-- PDF !! FnDefnLifeIns -->
 <p>
-The definition of life insurance elected for this contract
-is the
-{{#DefnLifeInsIsGPT}}
-    guideline premium test. The guideline single premium
-    is ${{InitGSP}}
-    and the guideline level premium
-    is ${{InitGLP}}.
-{{/DefnLifeInsIsGPT}}
-{{^DefnLifeInsIsGPT}}
-    cash value accumulation test.
-{{/DefnLifeInsIsGPT}}
+    {{FnDefnLifeIns}}
 </p>
 
 <p>
@@ -120,14 +100,6 @@ of the Internal Revenue Code and therefore
 {{/IsMec}}
 </p>
 
-<!-- PDF !! FnNotTaxAdvice -->
 <p>
-<b>
-The information contained in this illustration is not written
-or intended as tax or legal advice. Neither {{InsCoShortName}} its
-subsidiaries, employees or representatives are authorized to give tax
-or legal advice. For more information pertaining
-to the tax consequences of purchasing or owning this {{ContractName}},
-consult with your own independent tax or legal counsel.
-</b>
+    {{FnNotTaxAdvice}}
 </p>

@@ -32,11 +32,8 @@
 <font size="+1"><b><u>The Illustration</u></b></font>
 </p>
 
-<!-- PDF !! FnPpMemorandum -->
 <p>
-This illustration is not a policy or an offer or solicitation
-to purchase a policy. Offers are made only through the
-Confidential Private Placement Memorandum ("the PPM") for {{PolicyMktgName}}.
+    {{FnPpMemorandum}}
 </p>
 
 <p>
@@ -55,16 +52,8 @@ Confidential Private Placement Memorandum ("the PPM") for {{PolicyMktgName}}.
 <font size="+1"><b><u>The Policy</u></b></font>
 </p>
 
-<!-- PDF !! FnPpAccreditedInvestor -->
 <p>
-<b>Policy Requirements:</b>
-This policy is only available to persons who are deemed
-accredited investors and qualified purchasers under applicable
-federal securities laws. The policy owner must be able to bear
-the risk of loss of the entire investment in the policy. The
-policy owner must be familiar with and understand the fundamental
-risks and financial hazards of investing in the policy, and be
-willing to represent as such to {{InsCoShortName}}.
+    {{FnPpAccreditedInvestor}}
 </p>
 
 <p>
