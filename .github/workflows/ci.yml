@@ -12,10 +12,11 @@ on:
 jobs:
   build-msw32-cross:
     runs-on: ubuntu-20.04
-    name: Cross-compile for MSW-32
+    name: Cross-compile for MSW-64
     env:
       LMI_COMPILER: gcc
-      LMI_TRIPLET: i686-w64-mingw32
+      LMI_TRIPLET: x86_64-w64-mingw32
+      PERFORM: wine64
 
     steps:
       - name: Checkout
@@ -23,14 +24,12 @@ jobs:
 
       - name: Install required packages
         run: |
-          sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get --assume-yes install libgcc-s1:i386 # Avoid configuration error later
           sudo apt-get --assume-yes install \
             automake bc bsdmainutils bzip2 curl cvs default-jre \
-            g++-mingw-w64-i686 g++-multilib git jing libarchive-tools \
+            g++-mingw-w64-x86-64 g++-multilib git jing libarchive-tools \
             libtool libxml2-utils libxslt1-dev make patch pkg-config rsync \
-            shellcheck sudo trang unzip wget wine32 xsltproc
+            shellcheck sudo trang unzip wget wine64 xsltproc
 
       - name: Fix up libtool
         run: sudo sed -i'' -e 's/^int _putenv/_CRTIMP int _putenv/' /usr/share/libtool/build-aux/ltmain.sh
