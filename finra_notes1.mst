@@ -98,11 +98,8 @@ in an illustration-reg template, if anywhere.
 </p>
 {{/DefnLifeInsIsGPT}}
 
-<!-- PDF !! RejectPremiumFootnote -->
 <p>
-{{InsCoName}} has the right to promptly refund any amount of premium paid if it
-will increase the net amount at risk (referred to in the {{ContractName}} as
-the Amount of Insurance that Requires a Charge).
+    {{RejectPremiumFootnote}}
 </p>
 
 <p>
