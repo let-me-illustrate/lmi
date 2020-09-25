@@ -65,35 +65,7 @@ by the policy owner.
 
 {{FnPartialMortality}}
 
-<!-- PDF !! MortalityBlendFootnote -->
-{{#GenderBlended}}
-    <p>
-    {{MortalityBlendFootnote}}
-    Custom blend assumptions:
-    {{#SmokerBlended}}
-        nontobacco = {{NonsmokerProportion}};
-    {{/SmokerBlended}}
-    {{^SmokerBlended}}
-        no blending by tobacco use;
-    {{/SmokerBlended}}
-    male = {{MaleProportion}}.
-    </p>
-{{/GenderBlended}}
-{{^GenderBlended}}
-    {{#SmokerBlended}}
-        <p>
-        {{MortalityBlendFootnote}}
-        Custom blend assumptions:
-        nontobacco = {{NonsmokerProportion}};
-        {{#GenderBlended}}
-            male = {{MaleProportion}}.
-        {{/GenderBlended}}
-        {{^GenderBlended}}
-            no blending by gender.
-        {{/GenderBlended}}
-      </p>
-    {{/SmokerBlended}}
-{{/GenderBlended}}
+{{MortalityBlendFootnote}}
 
 <p>
 The state of issue is {{StateOfJurisdiction}}.

@@ -97,41 +97,7 @@
 
 {{FnPartialMortality}}
 
-<!-- PDF !! MortalityBlendFootnote -->
-{{#GenderBlended}}
-    <p>
-    Custom blending of cost of insurance charges is based
-    on the plan's assumed distribution of initial selected
-    face amount by gender and tobacco use. This illustration
-    assumes that the distribution remains constant
-    in future years. Custom blending is available only on plans
-    of 100 or more lives. Custom blend assumptions:
-    {{#SmokerBlended}}
-        nontobacco = {{NonsmokerProportion}};
-    {{/SmokerBlended}}
-    {{^SmokerBlended}}
-        no blending by tobacco use;
-    {{/SmokerBlended}}
-    male = {{MaleProportion}}.
-    </p>
-{{/GenderBlended}}
-{{#SmokerBlended}}
-    <p>
-    Custom blending of cost of insurance charges is based
-    on the plan's assumed distribution of initial selected
-    face amount by gender and tobacco use. This illustration
-    assumes that the distribution remains constant
-    in future years. Custom blending is available only on plans
-    of 100 or more lives. Custom blend assumptions:
-    nontobacco = {{NonsmokerProportion}};
-    {{#GenderBlended}}
-        male = {{MaleProportion}}.
-    {{/GenderBlended}}
-    {{^GenderBlended}}
-        no blending by gender.
-    {{/GenderBlended}}
-    </p>
-{{/SmokerBlended}}
+{{MortalityBlendFootnote}}
 
 <p>
 The state of issue is {{StateOfJurisdiction}}.
