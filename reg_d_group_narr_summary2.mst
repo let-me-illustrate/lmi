@@ -87,23 +87,6 @@ SEPARATE ACCOUNT
     {{FnNotTaxAdvice}}
 </p>
 
-<!-- PDF !! PlacementAgentFootnote -->
 <p>
-Placement Agents:
-{{CoUnderwriter}} serves as the
-placement agent for contracts sold by its registered
-representatives.
-&nbsp;{{MainUnderwriter}}
-serves as the placement agent for contracts sold by registered
-representatives of other broker-dealers that have entered into
-distribution agreements with
-&nbsp;{{MainUnderwriter}}.
-</p>
-<p>
-{{CoUnderwriter}} and
-&nbsp;{{MainUnderwriter}} are
-subsidiaries of {{InsCoName}}
-({{InsCoShortName}}) and are
-located at {{InsCoStreet}}.
-</p>
+    {{PlacementAgentFootnote}}
 </p>
