@@ -30,18 +30,9 @@
 
 <font size="-1">
 
-<!-- PDF !! SalesLoadRefundFootnote -->
 {{#SalesLoadRefundAvailable}}
     <p>
-    Sales Load Refund: We will refund a portion of the sales load
-    to you, as part of your {{CsvName}}
-    Value, if you surrender your {{ContractName}} within the first two
-    {{ContractName}} years. In {{ContractName}} year 1, we will refund
-    {{SalesLoadRefundRate0}}
-    of the first {{ContractName}} year sales load collected
-    and in {{ContractName}} year 2, we will refund
-    {{SalesLoadRefundRate1}}
-    of the first {{ContractName}} year sales load collected.
+    {{SalesLoadRefundFootnote}}
     </p>
 {{/SalesLoadRefundAvailable}}
 
