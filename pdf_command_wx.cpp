@@ -2921,11 +2921,6 @@ class pdf_illustration_reg_d_group : public pdf_illustration
 
         auto const& invar = ledger.GetLedgerInvariant();
 
-        add_variable
-            ("MecYearIs0"
-            ,invar.MecYear == 0
-            );
-
         // Add all the pages.
         numbered_page::start_numbering();
         add<cover_page>();
