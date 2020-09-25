@@ -52,16 +52,6 @@
 
 {{FnPartialMortality}}
 
-<!-- PDF !! LoanFootnote -->
-{{!
-    PDF !! 'MaxAnnCurrLoanDueRate': loan rate actually can vary by year,
-    so text should say that the fixed loan rate is "guaranteed never
-    to exceed" this value.
-}}
-<p>
-The loan interest rate is fixed at {{MaxAnnCurrLoanDueRate}} per year.
-</p>
-
 <p>
 The state of issue is {{StateOfJurisdiction}}.
 </p>

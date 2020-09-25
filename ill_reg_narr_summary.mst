@@ -52,6 +52,16 @@
 {{/SinglePremium}}
 
 <!-- PDF !! LoanFootnote -->
+{{!
+    PDF !! 'MaxAnnCurrLoanDueRate': loan rate actually can vary by year,
+    so text should say that the fixed loan rate is "guaranteed never
+    to exceed" this value.
+}}
+<p>
+The loan interest rate is fixed at {{MaxAnnCurrLoanDueRate}} per year.
+</p>
+
+<!-- PDF !! LoanFootnote -->
 <p>
 Loaned amounts of the {{AvName}}
 Value will be credited a rate equal to the loan interest rate less
