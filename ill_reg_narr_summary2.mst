@@ -117,14 +117,9 @@ The state of issue is {{StateOfJurisdiction}}.
     </p>
 {{/HasSpouseRider}}
 
-<!-- PDF !! ChildFootnote -->
 {{#HasChildRider}}
     <p>
-    The ${{ChildRiderAmount}} Child
-    rider provides term life insurance on the insured's children
-    for a limited duration, for an extra charge. Please refer
-    to your {{ContractName}} for specific provisions
-    and a detailed schedule of charges.
+    {{ChildFootnote}}
     </p>
 {{/HasChildRider}}
 
