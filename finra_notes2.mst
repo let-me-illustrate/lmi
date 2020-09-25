@@ -83,13 +83,13 @@
 
 {{#HasChildRider}}
     <p>
-    The ${{ChildRiderAmount}}&nbsp; {{ChildFootnote}}
+    {{ChildFootnote}}
     </p>
 {{/HasChildRider}}
 
 {{#HasSpouseRider}}
     <p>
-    The ${{SpouseRiderAmount}}&nbsp; {{SpouseFootnote}}
+    {{SpouseFootnote}}
     </p>
 {{/HasSpouseRider}}
 
