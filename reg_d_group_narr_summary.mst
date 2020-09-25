@@ -59,44 +59,10 @@ Account values, cash surrender values, and death benefits
 are illustrated as of the end of the year.
 </p>
 
-<!-- PDF !! MecFootnote -->
-{{!
-PDF !! The 'MecYearIs0' logic below is poor and should be reworked--see:
-    https://lists.nongnu.org/archive/html/lmi/2019-02/msg00000.html
-}}
 <p>
 PLEASE READ THE FOLLOWING IMPORTANT TAX DISCLOSURE
 <br>
-The initial 7-pay premium limit is ${{InitSevenPayPrem}}.
-As illustrated, this contract
-{{#IsMec}}
-    fails
-{{/IsMec}}
-{{^IsMec}}
-    passes
-{{/IsMec}}
-the seven-pay test defined in Section 7702A
-of the Internal Revenue Code and therefore
-{{#IsMec}}
-    {{^MecYearIs0}}
-        becomes a Modified Endowment Contract (MEC) in policy year
-        {{MecYearPlus1}}.
-    {{/MecYearIs0}}
-    {{#MecYearIs0}}
-        is a Modified Endowment Contract (MEC).
-    {{/MecYearIs0}}
-    As a MEC, any loans or withdrawals are taxed to the extent
-    of any gain in the contract, and an additional 10% penalty
-    tax will apply to the taxable portion of the loan
-    or withdrawal.
-{{/IsMec}}
-{{^IsMec}}
-    is not a Modified Endowment Contract (MEC).
-    Subsequent changes in the contract, including but not limited
-    to increases and decreases in premiums or benefits, may cause
-    the contract to be retested and may result in the contract
-    becoming a MEC.
-{{/IsMec}}
+    {{MecFootnote}}
 </p>
 
 <p>

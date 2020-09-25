@@ -36,33 +36,8 @@
     {{FnDefnLifeIns}}
 </p>
 
-<!-- PDF !! MecFootnote -->
 <p>
-The initial 7-pay premium limit is ${{InitSevenPayPrem}}.
-As illustrated, this policy
-{{#IsMec}}
-    fails
-{{/IsMec}}
-{{^IsMec}}
-    passes
-{{/IsMec}}
-the seven-pay test defined in Section 7702A
-of the Internal Revenue Code and therefore
-{{#IsMec}}
-    becomes a Modified Endowment Contract (MEC)
-    in policy year {{MecYearPlus1}}.
-{{/IsMec}}
-{{^IsMec}}
-    is not a Modified Endowment Contract (MEC). Subsequent changes
-    to the policy, including but not limited to increases
-    and decreases in premiums or benefits, may cause the policy
-    to be retested and may result in the policy becoming a MEC.
-{{/IsMec}}
-</p>
-<p>
-If a policy is a MEC, withdrawals and policy loans are taxed to
-the extent of any gain in the policy, and an additional penalty
-tax may apply to the taxable portion of the distribution.
+    {{MecFootnote}}
 </p>
 
 <p>

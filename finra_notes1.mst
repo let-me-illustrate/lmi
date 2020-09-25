@@ -25,26 +25,9 @@
 
 <font size="-1">
 
-<!-- PDF !! MecFootnote -->
 <p align="center"><b>IMPORTANT TAX DISCLOSURE</b></p>
 <p>
-As illustrated, this {{ContractName}}
-{{#IsMec}}
-    becomes
-{{/IsMec}}
-{{^IsMec}}
-    would not become
-{{/IsMec}}
-a Modified Endowment Contract (MEC)
-{{#IsMec}}
-    under the Internal Revenue Code in year {{MecYearPlus1}}.
-{{/IsMec}}
-{{^IsMec}}
-    under the Internal Revenue Code.
-{{/IsMec}}
-To the extent of gain in the {{ContractName}}, loans, distributions
-and withdrawals from a MEC are subject to income tax
-and may also trigger a penalty tax.
+    {{MecFootnote}}
 </p>
 
 {{^IsInforce}}
