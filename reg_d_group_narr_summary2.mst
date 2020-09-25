@@ -29,10 +29,8 @@
 {{GuarMortalityFootnote}}
 </p>
 
-<!-- PDF !! LoanFootnote -->
 <p>
-The loan interest rate may be fixed or adjustable as elected
-by the policy owner.
+    {{LoanFootnote}}
 </p>
 
 <p>
