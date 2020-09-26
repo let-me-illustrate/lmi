@@ -558,6 +558,7 @@ $(boost_filesystem_objects): gcc_common_extra_warnings += \
   -Wno-old-style-cast \
   -Wno-unused-macros \
   -Wno-unused-parameter \
+  -Wno-useless-cast \
   -Wno-zero-as-null-pointer-constant \
 
 $(boost_regex_objects): gcc_common_extra_warnings += \
