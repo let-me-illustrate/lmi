@@ -27,8 +27,9 @@
 # used in production if they were unset or null beforehand. They can
 # be overridden at the command line, e.g.:
 #
-#   LMI_COMPILER=gcc ; LMI_TRIPLET=i686-w64-mingw32   ; . /opt/lmi/src/lmi/set_toolchain.sh
-#   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-w64-mingw32 ; . /opt/lmi/src/lmi/set_toolchain.sh
+#   LMI_COMPILER=gcc ; LMI_TRIPLET=i686-w64-mingw32    ; . /opt/lmi/src/lmi/set_toolchain.sh
+#   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-w64-mingw32  ; . /opt/lmi/src/lmi/set_toolchain.sh
+#   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-pc-linux-gnu ; . /opt/lmi/src/lmi/set_toolchain.sh
 #
 # Implemented as a function that runs and then erases itself, so that
 # sourcing this script changes the environment only as intended. This
@@ -149,8 +150,9 @@ case "$LMI_COMPILER" in
 esac
 
 case "$LMI_TRIPLET" in
-    (i686-w64-mingw32)   ;;
-    (x86_64-w64-mingw32) ;;
+    (i686-w64-mingw32)    ;;
+    (x86_64-w64-mingw32)  ;;
+    (x86_64-pc-linux-gnu) printf '%s\n' "GUI build not yet supported." > /dev/tty ;;
     (*)
         printf '%s\n' "Changed nothing because host triplet '$LMI_TRIPLET' is untested."
         return 3;
