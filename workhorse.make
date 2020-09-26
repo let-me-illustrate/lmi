@@ -768,9 +768,20 @@ wx_pdfdoc_ldflags := \
 
 # Flags.
 
-# Define FLAGS variables recursively for greater flexibility: e.g., so
-# that they reflect downstream conditional changes to the variables
-# they're composed from.
+# Define uppercase FLAGS recursively for greater flexibility: e.g., so
+# that they reflect downstream conditional changes to the lowercase
+# (and often immediately-expanded) variables they're composed from.
+
+# 'c_l_flags' are to be used in both compiler and linker commands.
+# The gprof '-pg' flag is one example. Another is '-fPIC', which
+# pc-linux-gnu requires for '-shared':
+#   https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html#DOCF1
+
+c_l_flags := $(gprof_flag)
+
+ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
+  c_l_flags += -fPIC
+endif
 
 debug_flag := -ggdb
 
@@ -783,14 +794,12 @@ ifeq (3.4.2,$(gcc_version))
 endif
 
 CFLAGS = \
-  $(ggc_flags) $(debug_flag) $(optimization_flag) $(gprof_flag) \
+  $(ggc_flags) $(debug_flag) $(optimization_flag) $(c_l_flags) \
 
 CXXFLAGS = \
-  $(ggc_flags) $(debug_flag) $(optimization_flag) $(gprof_flag) \
+  $(ggc_flags) $(debug_flag) $(optimization_flag) $(c_l_flags) \
 
-LDFLAGS = \
-  $(gprof_flag) \
-  -Wl,-Map,$@.map \
+LDFLAGS = $(c_l_flags) -Wl,-Map,$@.map \
 
 # Explicitly disable the infelicitous auto-import default. See:
 #   http://article.gmane.org/gmane.comp.gnu.mingw.user/19758
