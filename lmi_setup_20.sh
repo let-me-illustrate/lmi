@@ -113,6 +113,7 @@ apt-get --assume-yes install \
   trang \
   unzip \
   vim-doc \
+  vim-fugitive \
   vim-gtk \
   wget \
   wine \
