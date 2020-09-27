@@ -42,10 +42,15 @@ cp -a .vimrc ~
 # Without this, 'zg' gives an error message; with it, vim creates a
 # spellfile the first time 'zg' is used, if none already exists.
 # But it's a much better idea to install a mature spellfile and
-# (imperatively) run 'mkspell':
+# (imperatively) run 'mkspell'. However, 'vim-gtk (2:8.2.0716-3)'
+# balks at doing that automatically here:
+#  - as given: "No protocol specified"
+#  - with '-X' or '-v': silently returns 1
+# so it might need to be done manually later.
 mkdir -p ~/.vim/spell
 cp -a en.utf-8.add ~/.vim/spell/en.utf-8.add
-vim -es -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
+vim -es -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q' ||
+  echo "Run ':mkspell! ~/.vim/spell/en.utf-8.add' manually."
 
 # Configure git. See:
 #   https://lists.nongnu.org/archive/html/lmi/2016-03/msg00006.html
