@@ -650,22 +650,6 @@ CXX_WARNINGS = \
 
 ################################################################################
 
-# Flags for tuning gcc.
-
-# As this is written in 2012, lmi is often built on machines with less
-# RAM per core than gcc wants. Experiments show that these flags cut
-# gcc's RAM appetite by fifty percent, in return for a ten-percent
-# speed penalty that can be overcome by increasing parallelism. There
-# seems to be no need for them with gcc-4.x, which uses less RAM.
-
-ifeq (gcc,$(LMI_COMPILER))
-  ifeq (3.4.5,$(gcc_version))
-    ggc_flags := --param ggc-min-expand=25 --param ggc-min-heapsize=32768
-  endif
-endif
-
-################################################################################
-
 # Build type governs
 #  - optimization flags
 #  - gprof
@@ -772,17 +756,6 @@ wx_pdfdoc_ldflags := \
 # that they reflect downstream conditional changes to the lowercase
 # (and often immediately-expanded) variables they're composed from.
 
-# 'c_l_flags' are to be used in both compiler and linker commands.
-# The gprof '-pg' flag is one example. Another is '-fPIC', which
-# pc-linux-gnu requires for '-shared':
-#   https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html#DOCF1
-
-c_l_flags := $(gprof_flag)
-
-ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
-  c_l_flags += -fPIC
-endif
-
 debug_flag := -ggdb
 
 # MinGW gcc-3.4.2 writes dwarf2 debug records if '-ggdb' is specified,
@@ -793,11 +766,35 @@ ifeq (3.4.2,$(gcc_version))
   gcc_version_specific_warnings := -Wno-uninitialized
 endif
 
+# 'c_l_flags' are to be used in both compiler and linker commands.
+# The gprof '-pg' flag is one example. Another is '-fPIC', which
+# pc-linux-gnu requires for '-shared':
+#   https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html#DOCF1
+# Yet another is 'debug_flag'.
+
+c_l_flags := $(debug_flag) $(gprof_flag)
+
+ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
+  c_l_flags += -fPIC
+endif
+
+# As this is written in 2012, lmi is often built on machines with less
+# RAM per core than gcc wants. Experiments show that these flags cut
+# gcc's RAM appetite by fifty percent, in return for a ten-percent
+# speed penalty that can be overcome by increasing parallelism. There
+# seems to be no need for them with gcc-4.x, which uses less RAM.
+
+ifeq (gcc,$(LMI_COMPILER))
+  ifeq (3.4.5,$(gcc_version))
+    ggc_flags := --param ggc-min-expand=25 --param ggc-min-heapsize=32768
+  endif
+endif
+
 CFLAGS = \
-  $(ggc_flags) $(debug_flag) $(optimization_flag) $(c_l_flags) \
+  $(ggc_flags) $(optimization_flag) $(c_l_flags) \
 
 CXXFLAGS = \
-  $(ggc_flags) $(debug_flag) $(optimization_flag) $(c_l_flags) \
+  $(ggc_flags) $(optimization_flag) $(c_l_flags) \
 
 LDFLAGS = $(c_l_flags) -Wl,-Map,$@.map \
 
