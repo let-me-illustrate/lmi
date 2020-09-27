@@ -75,15 +75,6 @@ sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /etc/skel/.bash_logout
 # of scripts installs a debian chroot on any host system, and builds
 # only in that chroot.
 
-# Versioning copied from /bin/perf
-perf_version="$(uname -r)"
-perf_version="${perf_version%%-*}"
-case "$perf_version" in
-    *.*.*)
-        perf_version="${perf_version%.*}"
-        ;;
-esac
-
 logdir=/srv/cache_for_lmi/logs
 mkdir -p "${logdir}"
 apt-get update
@@ -103,7 +94,6 @@ apt-get --assume-yes install \
   libtool \
   libxml2-utils \
   libxslt1-dev \
-  linux-perf-"${perf_version}" \
   make \
   patch \
   pkg-config \
