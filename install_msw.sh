@@ -209,6 +209,11 @@ then
     git clone git://git.savannah.nongnu.org/lmi.git \
       || git clone https://git.savannah.nongnu.org/r/lmi.git \
       || git clone https://github.com/vadz/lmi.git
+
+    # This could be replaced with --recurse-submodules option of git-clone,
+    # but do it in a separate command just to avoid repeating this option
+    # thrice above -- it's exactly the same thing, anyhow.
+    git submodule update --init
 fi
 
 cd /opt/lmi/src/lmi || printf 'Cannot cd\n'
@@ -269,7 +274,7 @@ do
       printf 'No MinGW compiler for this triplet.\n'
     fi
 
-    make "$coefficiency" --output-sync=recurse -f install_libxml2_libxslt.make
+    ./install_libxml2_libxslt.sh
 
     ./install_wx.sh
     ./install_wxpdfdoc.sh

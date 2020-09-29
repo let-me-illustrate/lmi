@@ -1,0 +1,8 @@
+[submodule "third_party/libxml2"]
+	path = third_party/libxml2
+	url = https://github.com/let-me-illustrate/libxml2.git
+	branch = lmi
+[submodule "third_party/libxslt"]
+	path = third_party/libxslt
+	url = https://github.com/let-me-illustrate/libxslt.git
+	branch = lmi
