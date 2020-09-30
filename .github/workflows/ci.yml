@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
 
       - name: Install required packages
         run: |
@@ -71,11 +73,11 @@ jobs:
             /opt/lmi/local/${{ env.LMI_COMPILER }}_${{ env.LMI_TRIPLET }}
             /opt/lmi/local/include
             /opt/lmi/local/share
-          key: build-${{ env.LMI_COMPILER }}-${{ env.gcc_version }}-${{ env.LMI_TRIPLET }}-${{ hashFiles('install_libxml2_libxslt.make', 'install_wx.sh', 'install_wxpdfdoc.sh') }}
+          key: build-${{ env.LMI_COMPILER }}-${{ env.gcc_version }}-${{ env.LMI_TRIPLET }}-${{ hashFiles('install_libxml2_libxslt.sh', 'install_wx.sh', 'install_wxpdfdoc.sh') }}
 
       - name: Build libxml2
         if: steps.cache-local.outputs.cache-hit != 'true'
-        run: make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
+        run: ./install_libxml2_libxslt.sh
 
       - name: Build wxWidgets
         if: steps.cache-local.outputs.cache-hit != 'true'
