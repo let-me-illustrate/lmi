@@ -470,7 +470,10 @@ check_concinnity: source_clean custom_tools
 	  -not -name 'pre-commit' \
 	  -not -name 'post-checkout' \
 	  | $(SED) -e's/^/Improperly executable: /'
-	@find $(prefascicle_dir) -executable -type f -print0 \
+	@find $(prefascicle_dir) \
+	  -not \( -path $(prefascicle_dir)/third_party -prune \) \
+	  -not \( -path $(prefascicle_dir)/.git/modules -prune \) \
+	  -executable -type f -print0 \
 	  | xargs --null --max-args=1 --max-procs="$(shell nproc)" ./check_script.sh
 	@$(ECHO) "  Problems detected by xmllint:"
 	@for z in $(xml_files); \
