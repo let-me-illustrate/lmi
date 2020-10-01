@@ -220,6 +220,9 @@ cd /opt/lmi/src/lmi || printf 'Cannot cd\n'
 
 ./check_git_setup.sh
 
+# Get any new submodules that may have been added, even if nested.
+git submodule update "$coefficiency" --recursive --init
+
 if [ "Cygwin" = "$platform" ]
 then
     # A "Replacing former [...] mount:" message probably means that this
