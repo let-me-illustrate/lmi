@@ -50,6 +50,10 @@ git mv lmi.rc lmi_msw_res.rc
 
 git commit --edit --file=.git/COMMIT_EDITMSG -- [files]
 
+  # Regex for conflict markers
+
+^[<=>]\{7\}\( \|$\)
+
   # Make a patch against repository from local tree
 
 git diff file0.cpp file1.cpp >some_new_file
