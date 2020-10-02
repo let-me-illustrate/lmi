@@ -205,9 +205,12 @@ then
     # by a corporate firewall, fall back on https. In case a firewall
     # inexplicably blocks the gnu.org domain, try Vadim's github clone
     # as a last resort.
-    git clone      "$coefficiency" --recurse-submodules git://git.savannah.nongnu.org/lmi.git \
-      || git clone "$coefficiency" --recurse-submodules https://git.savannah.nongnu.org/r/lmi.git \
-      || git clone "$coefficiency" --recurse-submodules https://github.com/vadz/lmi.git
+    clone_opts="$coefficiency --recurse-submodules"
+    # 'git clone' options must not be double-quoted
+    # shellcheck disable=SC2086
+    git clone      $clone_opts git://git.savannah.nongnu.org/lmi.git \
+      || git clone $clone_opts https://git.savannah.nongnu.org/r/lmi.git \
+      || git clone $clone_opts https://github.com/vadz/lmi.git
 fi
 
 cd /opt/lmi/src/lmi || printf 'Cannot cd\n'
