@@ -44,6 +44,9 @@ jobs:
           gcc_version=$(${LMI_TRIPLET}-${LMI_COMPILER} -dumpversion|tr -d '\r')
           echo "gcc_version=$gcc_version" >> $GITHUB_ENV
 
+          echo "xml2_sha1=$(git rev-parse HEAD:third_party/libxml2)" >> $GITHUB_ENV
+          echo "xslt_sha1=$(git rev-parse HEAD:third_party/libxslt)" >> $GITHUB_ENV
+
       - name: Create lmi directories
         run: >
           for d in /opt/lmi /etc/opt/lmi /srv/cache_for_lmi; do
@@ -73,7 +76,7 @@ jobs:
             /opt/lmi/local/${{ env.LMI_COMPILER }}_${{ env.LMI_TRIPLET }}
             /opt/lmi/local/include
             /opt/lmi/local/share
-          key: build-${{ env.LMI_COMPILER }}-${{ env.gcc_version }}-${{ env.LMI_TRIPLET }}-${{ hashFiles('install_libxml2_libxslt.sh', 'install_wx.sh', 'install_wxpdfdoc.sh') }}
+          key: build-${{ env.LMI_COMPILER }}-${{ env.gcc_version }}-${{ env.LMI_TRIPLET }}-${{ hashFiles('install_libxml2_libxslt.sh', 'install_wx.sh', 'install_wxpdfdoc.sh') }}-${{ env.xml2_sha1 }}-${{ env.xslt_sha1 }}
 
       - name: Build libxml2
         if: steps.cache-local.outputs.cache-hit != 'true'
