@@ -95,3 +95,15 @@ jobs:
 
       - name: Build lmi with SO attributes
         run: make $coefficiency --output-sync=recurse build_type=so_test USE_SO_ATTRIBUTES=1 all
+
+      - name: Install
+        run: make install
+
+      - name: Check physical closure
+        run: make check_physical_closure
+
+      - name: Run CLI tests
+        run: make cli_tests
+
+      - name: Run unit tests
+        run: make unit_tests
