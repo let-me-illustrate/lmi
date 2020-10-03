@@ -516,13 +516,13 @@ void Skeleton::UponHelp(wxCommandEvent&)
     fs::path p(fs::absolute(fs::path(s)));
     if(fs::exists(p))
         {
-        s = "file://" + p.native_file_string();
+        s = "file://" + p.string();
         }
     else
         {
         warning()
             << "A local copy of the user manual should have been placed here:"
-            << "\n    " << p.native_file_string()
+            << "\n    " << p
             << "\nbut was not. Try reinstalling."
             << '\n'
             << "\nMeanwhile, the online user manual will be used if possible."
@@ -534,7 +534,7 @@ void Skeleton::UponHelp(wxCommandEvent&)
     bool r = false;
     {
     wxLogNull x;
-    r = wxLaunchDefaultBrowser(s);
+    r = wxLaunchDefaultBrowser(wxString::FromUTF8(s));
     }
     if(!r)
         {

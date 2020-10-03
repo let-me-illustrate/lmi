@@ -419,7 +419,7 @@ bool application_test::process_command_line(int& argc, char* argv[])
         {
         warning()
             << "Test files path '"
-            << test_files_path_.native_file_string()
+            << test_files_path_
             << "' doesn't exist."
             << std::flush
             ;
@@ -570,7 +570,7 @@ fs::path wx_base_test_case::get_test_files_path() const
 std::string
 wx_base_test_case::get_test_file_path_for(std::string const& basename) const
 {
-    return (get_test_files_path() / basename).native_file_string();
+    return (get_test_files_path() / basename).string();
 }
 
 bool wx_base_test_case::is_distribution_test() const
