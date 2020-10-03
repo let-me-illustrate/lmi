@@ -27,6 +27,7 @@
 #include "so_attributes.hpp"
 
 #include <filesystem>
+#include <fstream>
 #include <ostream>
 #include <string>
 #include <system_error> // std::error_code
@@ -340,6 +341,8 @@ class LMI_SO path
     friend bool operator>(const path& lhs, const path& rhs) noexcept;
     friend bool operator>=(const path& lhs, const path& rhs) noexcept;
     friend path operator/(const path& lhs, const path& rhs);
+    friend class ifstream;
+    friend class ofstream;
 };
 
 /// Non-member operators.
@@ -407,6 +410,82 @@ inline path current_path(std::error_code& ec)
 {
     return std::filesystem::current_path(ec);
 }
+
+/// File streams.
+///
+/// Motivation: our own file streams can be constructed from our own path
+/// class. fs::path has `operator std::filesystem::path()`, but the following
+/// code fails:
+///
+/// fs::path p{"file.ext"};
+/// fs::ifstream s{p};
+///
+/// So implement our own classes for the exact match of constructor parameters.
+///
+/// Note that fs::path can be constructed from a string using fs::u8path()
+/// which leads to differences with the standard file streams constructing:
+///
+/// std::string filename{"unicode_filename.ext"};
+/// fs::ifstream fs1 {filename}; // The filename treated as UTF8 encoded.
+/// std::ifstream fs2{filename}; // Used the current locale.
+
+class LMI_SO ifstream final
+    :public std::ifstream
+{
+  public:
+    ifstream() = default;
+
+    explicit ifstream
+        (path const& p
+        ,std::ios_base::openmode mode = std::ios_base::in
+        )
+        :std::ifstream(p.path_, mode)
+        {
+        }
+
+    ifstream(ifstream const&) = delete;
+    ifstream(ifstream&&) = default;
+
+    void open
+        (path const& p
+        ,std::ios_base::openmode mode = std::ios_base::in
+        )
+        {
+            std::ifstream::open
+                (p.path_
+                ,mode
+                );
+        }
+};
+
+class LMI_SO ofstream final
+    :public std::ofstream
+{
+  public:
+    ofstream() = default;
+
+    explicit ofstream
+        (path const& p
+        ,std::ios_base::openmode mode = std::ios_base::out
+        )
+        :std::ofstream(p.path_, mode)
+        {
+        }
+
+    ofstream(ofstream const&) = delete;
+    ofstream(ofstream&&) = default;
+
+    void open
+        (path const& p
+        ,std::ios_base::openmode mode = std::ios_base::out
+        )
+        {
+        std::ofstream::open
+            (p.path_
+            ,mode
+            );
+        }
+};
 
 } // namespace fs
 
