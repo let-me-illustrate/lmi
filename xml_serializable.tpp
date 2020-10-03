@@ -24,10 +24,9 @@
 #include "alert.hpp"
 #include "any_member.hpp"               // MemberSymbolTable<>
 #include "contains.hpp"
+#include "path.hpp"
 #include "platform_dependent.hpp"       // access()
 #include "xml_lmi.hpp"
-
-#include <boost/filesystem/convenience.hpp> // basename()
 
 #include <xmlwrapp/nodes_view.h>
 

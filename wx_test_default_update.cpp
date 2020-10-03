@@ -24,6 +24,7 @@
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
 #include "mvc_controller.hpp"
+#include "path.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_new.hpp"
 #include "wx_test_statusbar.hpp"
@@ -33,8 +34,6 @@
 #include <wx/radiobox.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
-
-#include <boost/filesystem/operations.hpp>
 
 /// Make sure the default input file can be opened, modified, and saved.
 ///

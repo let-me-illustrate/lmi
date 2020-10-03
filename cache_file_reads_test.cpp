@@ -25,10 +25,9 @@
 
 #include "istream_to_string.hpp"
 #include "miscellany.hpp"               // ios_in_binary()
+#include "path.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
-
-#include <boost/filesystem/exception.hpp>
 
 #include <fstream>
 

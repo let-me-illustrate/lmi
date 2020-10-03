@@ -23,8 +23,7 @@
 #define wx_test_case_hpp
 
 #include "config.hpp"
-
-#include <boost/filesystem/path.hpp>
+#include "path.hpp"
 
 /// Base class for the test case objects.
 ///

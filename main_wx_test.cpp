@@ -28,6 +28,7 @@
 #include "force_linking.hpp"
 #include "handle_exceptions.hpp"        // stealth_exception
 #include "main_common.hpp"              // initialize_application()
+#include "path.hpp"
 #include "skeleton.hpp"
 #include "ssize_lmi.hpp"                // sstrlen()
 #include "wx_test_case.hpp"
@@ -42,9 +43,6 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 #include <wx/wfstream.h>
-
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // sort()
 #include <cstring>                      // strcmp()

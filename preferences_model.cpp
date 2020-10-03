@@ -26,11 +26,9 @@
 #include "alert.hpp"
 #include "configurable_settings.hpp"
 #include "miscellany.hpp"               // begins_with()
+#include "path.hpp"
 #include "ssize_lmi.hpp"
 #include "value_cast.hpp"
-
-#include <boost/filesystem/operations.hpp> // fs::system_complete()
-#include <boost/filesystem/path.hpp>
 
 #include <sstream>
 #include <vector>

@@ -23,8 +23,7 @@
 #define wx_test_output_hpp
 
 #include "config.hpp"
-
-#include <boost/filesystem/operations.hpp>
+#include "path.hpp"
 
 /// Class helping to check for the expected output file existence.
 ///

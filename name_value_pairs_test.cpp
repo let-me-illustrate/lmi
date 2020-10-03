@@ -24,11 +24,8 @@
 #include "name_value_pairs.hpp"
 
 #include "miscellany.hpp"
+#include "path.hpp"
 #include "test_tools.hpp"
-
-#include <boost/filesystem/convenience.hpp> // basename()
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <cstdio>                       // remove()
 #include <fstream>

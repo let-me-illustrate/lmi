@@ -27,12 +27,9 @@
 #include "bourn_cast.hpp"
 #include "crc32.hpp"
 #include "miscellany.hpp"               // ios_in_binary(), ios_out_trunc_binary()
+#include "path.hpp"
 #include "path_utility.hpp"
 #include "value_cast.hpp"
-
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/exception.hpp>
-#include <boost/filesystem/fstream.hpp>
 
 #include <algorithm>                    // count()
 #include <climits>                      // ULLONG_MAX

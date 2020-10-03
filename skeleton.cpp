@@ -65,6 +65,7 @@
 #include "miscellany.hpp"
 #include "msw_workarounds.hpp"          // PreloadDesignatedDlls()
 #include "mvc_controller.hpp"
+#include "path.hpp"
 #include "path_utility.hpp"             // fs::path inserter
 #include "policy_document.hpp"
 #include "policy_view.hpp"
@@ -81,9 +82,6 @@
 #include "verify_products.hpp"
 #include "wx_new.hpp"
 #include "wx_utility.hpp"               // class ClipboardEx
-
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <wx/artprov.h>
 #include <wx/config.h>

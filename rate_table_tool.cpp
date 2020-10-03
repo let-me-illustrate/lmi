@@ -25,11 +25,9 @@
 #include "getopt.hpp"
 #include "license.hpp"
 #include "main_common.hpp"
+#include "path.hpp"
 #include "path_utility.hpp"
 #include "rate_table.hpp"
-
-#include <boost/filesystem/convenience.hpp> // extension()
-#include <boost/filesystem/operations.hpp>  // is_directory(), directory_iterator
 
 #include <algorithm>                    // sort()
 #include <cstdio>                       // fflush()

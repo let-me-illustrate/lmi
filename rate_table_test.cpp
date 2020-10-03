@@ -25,11 +25,9 @@
 
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"
+#include "path.hpp"
 #include "path_utility.hpp"
 #include "test_tools.hpp"
-
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>
 
 #include <fstream>
 #include <iomanip>                      // setw(), setfill()

@@ -27,10 +27,7 @@
 #include "assert_lmi.hpp"
 #include "global_settings.hpp"
 #include "miscellany.hpp"               // iso_8601_datestamp_terse()
-
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/exception.hpp>
-#include <boost/filesystem/operations.hpp>
+#include "path.hpp"
 
 #include <cctype>                       // isalnum()
 #include <exception>

@@ -25,9 +25,8 @@
 #include "config.hpp"
 
 #include "configurable_settings.hpp"
+#include "path.hpp"
 #include "wx_test_output.hpp"
-
-#include <boost/filesystem/operations.hpp>
 
 /// Specialized version of output_file_existence_checker for the output PDF
 /// files: it takes just the base name of the file, without neither the

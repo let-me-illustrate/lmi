@@ -23,9 +23,8 @@
 
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
+#include "path.hpp"
 #include "wx_test_case.hpp"
-
-#include <boost/filesystem/operations.hpp>
 
 /*
     Test configurable_settings.xml file.

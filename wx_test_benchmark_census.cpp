@@ -22,6 +22,7 @@
 #include "pchfile_wx.hpp"
 
 #include "assert_lmi.hpp"
+#include "path.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_statusbar.hpp"
 
@@ -30,8 +31,6 @@
 #include <wx/scopeguard.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
-
-#include <boost/filesystem/operations.hpp>
 
 #include <cmath>                        // fabs()
 #include <iostream>

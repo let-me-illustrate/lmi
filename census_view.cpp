@@ -41,6 +41,7 @@
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
 #include "miscellany.hpp"               // is_ok_for_cctype(), ios_out_app_binary()
+#include "path.hpp"
 #include "path_utility.hpp"             // unique_filepath()
 #include "rtti_lmi.hpp"                 // lmi::TypeInfo
 #include "safely_dereference_as.hpp"
@@ -49,8 +50,6 @@
 #include "value_cast.hpp"
 #include "wx_new.hpp"
 #include "wx_utility.hpp"               // class ClipboardEx
-
-#include <boost/filesystem/convenience.hpp> // basename()
 
 #include <wx/datectrl.h>
 #include <wx/grid.h>

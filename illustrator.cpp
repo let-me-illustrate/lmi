@@ -34,12 +34,11 @@
 #include "input.hpp"
 #include "ledgervalues.hpp"
 #include "multiple_cell_document.hpp"
+#include "path.hpp"
 #include "path_utility.hpp"             // fs::path inserter
 #include "platform_dependent.hpp"       // access()
 #include "single_cell_document.hpp"
 #include "timer.hpp"
-
-#include <boost/filesystem/convenience.hpp>
 
 #include <iostream>
 #include <string>
