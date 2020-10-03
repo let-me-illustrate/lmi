@@ -25,12 +25,6 @@
 #ifndef config_hpp
 #define config_hpp
 
-#if defined __cplusplus
-// Namespace alii.
-namespace boost {namespace filesystem {} }
-namespace fs = boost::filesystem;
-#endif // defined __cplusplus
-
 // The msw platform-identifying macro that its vendor encourages
 // people to use contains the word "win". I don't consider a non-free
 // operating system a win, and won't advertise it as such by writing
