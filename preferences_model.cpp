@@ -30,9 +30,6 @@
 #include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 
-#include <boost/filesystem/operations.hpp> // fs::system_complete()
-#include <boost/filesystem/path.hpp>
-
 #include <sstream>
 #include <vector>
 

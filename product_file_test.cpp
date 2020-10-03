@@ -33,10 +33,9 @@
 
 #include "data_directory.hpp"           // AddDataDir()
 #include "global_settings.hpp"
+#include "path.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"                    // TimeAnAliquot()
-
-#include <boost/filesystem/path.hpp>
 
 #include <string>
 #include <utility>                      // move()

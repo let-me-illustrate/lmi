@@ -31,8 +31,6 @@
 #include "xml_lmi.hpp"
 #include "xml_serialize.hpp"
 
-#include <boost/filesystem/convenience.hpp>
-
 /// Construct from filename.
 
 lingo::lingo(fs::path const& filename)

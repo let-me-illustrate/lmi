@@ -43,11 +43,10 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "docmanager_ex.hpp"
+#include "path.hpp"
 #include "safely_dereference_as.hpp"
 #include "skeleton.hpp"                 // Skeleton::CreateChildFrame()
 #include "wx_new.hpp"
-
-#include <boost/filesystem/path.hpp>
 
 #include <wx/app.h>                     // GetInstance()
 #include <wx/dc.h>

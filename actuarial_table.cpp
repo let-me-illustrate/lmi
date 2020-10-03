@@ -29,12 +29,9 @@
 #include "deserialize_cast.hpp"
 #include "miscellany.hpp"
 #include "oecumenic_enumerations.hpp"   // methuselah
+#include "path.hpp"
 #include "path_utility.hpp"             // fs::path inserter
 #include "ssize_lmi.hpp"
-
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // max(), min()
 #if 202002 <= __cplusplus

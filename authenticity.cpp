@@ -30,11 +30,9 @@
 #include "handle_exceptions.hpp"        // report_exception()
 #include "md5.hpp"
 #include "md5sum.hpp"
+#include "path.hpp"
 #include "path_utility.hpp"             // fs::path inserter
 #include "timer.hpp"
-
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>
 
 #include <cstdio>                       // fclose(), fopen()
 #include <cstdlib>                      // exit(), EXIT_FAILURE

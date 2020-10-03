@@ -30,9 +30,8 @@
 #include "data_directory.hpp"           // AddDataDir()
 #include "map_lookup.hpp"
 #include "my_proem.hpp"                 // ::write_proem()
+#include "path.hpp"
 #include "xml_serialize.hpp"
-
-#include <boost/filesystem/convenience.hpp>
 
 #include <vector>
 

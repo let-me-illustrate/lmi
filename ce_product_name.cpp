@@ -28,12 +28,9 @@
 #include "contains.hpp"
 #include "facets.hpp"
 #include "global_settings.hpp"
+#include "path.hpp"
 #include "path_utility.hpp"             // fs::path inserter
 #include "ssize_lmi.hpp"
-
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // find()
 #include <istream>

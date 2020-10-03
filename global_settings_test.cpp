@@ -22,12 +22,9 @@
 #include "pchfile.hpp"
 
 #include "global_settings.hpp"
+#include "path.hpp"
 
 #include "test_tools.hpp"
-
-#include <boost/filesystem/exception.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 void test_directory_exceptions()
 {

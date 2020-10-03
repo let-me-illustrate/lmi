@@ -43,14 +43,12 @@
 #include "mc_enum_types_aux.hpp"        // allowed_strings_emission(), mc_emission_from_string()
 #include "mec_server.hpp"
 #include "miscellany.hpp"
+#include "path.hpp"
 #include "path_utility.hpp"
 #include "so_attributes.hpp"
 #include "timer.hpp"
 #include "value_cast.hpp"
 #include "verify_products.hpp"
-
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // for_each()
 #include <cmath>                        // fabs()

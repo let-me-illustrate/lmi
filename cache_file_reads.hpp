@@ -25,9 +25,7 @@
 #include "config.hpp"
 
 #include "assert_lmi.hpp"
-
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
+#include "path.hpp"
 
 #include <ctime>                        // time_t
 #include <map>
