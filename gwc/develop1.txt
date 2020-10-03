@@ -173,6 +173,11 @@ git pull --rebase
 git add --chmod=+x some-file-name
 git add --chmod=-x some-file-name
 
+  # Show branch topology (last 200 commits, e.g.)
+
+git log -200 --graph --oneline --all --full-history
+git log -200 --graph --oneline --all --simplify-by-decoration
+
   # Second screen: only for updating local shadow copy of repository
   #
   # I use the last line repeatedly to keep my local shadow copy current
