@@ -37,15 +37,11 @@
 #include "miscellany.hpp"
 #include "my_proem.hpp"                 // ::write_proem()
 #include "oecumenic_enumerations.hpp"
+#include "path.hpp"
 #include "premium_tax.hpp"              // premium_tax_rates_for_life_insurance()
 #include "sample.hpp"                   // superior::lingo
 #include "xml_lmi.hpp"
 #include "xml_serialize.hpp"
-
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <vector>
 

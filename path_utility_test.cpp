@@ -24,14 +24,9 @@
 #include "path_utility.hpp"
 
 #include "miscellany.hpp"
+#include "path.hpp"
 #include "platform_dependent.hpp"       // access()
 #include "test_tools.hpp"
-
-#include <boost/filesystem/convenience.hpp> // basename()
-#include <boost/filesystem/exception.hpp>
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <cstdio>                       // remove()
 #include <fstream>

@@ -26,10 +26,8 @@
 #include "alert.hpp"
 #include "contains.hpp"
 #include "data_directory.hpp"           // AddDataDir()
+#include "path.hpp"
 #include "path_utility.hpp"             // fs::path inserter
-
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <wx/image.h>
 

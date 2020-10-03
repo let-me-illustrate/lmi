@@ -26,9 +26,8 @@
 
 #include "mc_enum_type_enums.hpp"       // enum mcenum_emission
 #include "mec_state.hpp"
+#include "path.hpp"
 #include "so_attributes.hpp"
-
-#include <boost/filesystem/path.hpp>
 
 class mec_input;
 

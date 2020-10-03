@@ -24,10 +24,8 @@
 #include "configurable_settings.hpp"
 
 #include "miscellany.hpp"               // ios_out_trunc_binary()
+#include "path.hpp"
 #include "test_tools.hpp"
-
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/path.hpp>
 
 class configurable_settings_test
 {

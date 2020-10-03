@@ -33,11 +33,9 @@
 #include "ledger_pdf.hpp"
 #include "ledger_text_formats.hpp"
 #include "miscellany.hpp"               // ios_out_trunc_binary()
+#include "path.hpp"
 #include "path_utility.hpp"             // unique_filepath()
 #include "timer.hpp"
-
-#include <boost/filesystem/convenience.hpp> // change_extension()
-#include <boost/filesystem/fstream.hpp>
 
 #include <iostream>
 #include <string>

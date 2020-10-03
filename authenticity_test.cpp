@@ -28,12 +28,9 @@
 #include "md5.hpp"
 #include "md5sum.hpp"
 #include "miscellany.hpp"
+#include "path.hpp"
 #include "system_command.hpp"
 #include "test_tools.hpp"
-
-#include <boost/filesystem/convenience.hpp> // basename()
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <cstdio>                       // remove()
 #include <cstring>                      // memcpy(), strlen()

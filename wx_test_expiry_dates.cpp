@@ -24,12 +24,10 @@
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"
 #include "global_settings.hpp"
+#include "path.hpp"
 #include "version.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_date.hpp"
-
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>
 
 #include <iostream>
 

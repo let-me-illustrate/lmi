@@ -24,9 +24,8 @@
 
 #include "config.hpp"
 
+#include "path.hpp"
 #include "so_attributes.hpp"
-
-#include <boost/filesystem/path.hpp>
 
 #include <string>
 #include <unordered_map>

@@ -42,6 +42,7 @@
 #include "mec_xml_document.hpp"
 #include "miscellany.hpp"               // each_equal(), ios_out_trunc_binary()
 #include "oecumenic_enumerations.hpp"
+#include "path.hpp"
 #include "path_utility.hpp"             // unique_filepath(), fs::path inserter
 #include "premium_tax.hpp"
 #include "product_data.hpp"
@@ -51,9 +52,6 @@
 #include "stratified_charges.hpp"
 #include "timer.hpp"
 #include "value_cast.hpp"
-
-#include <boost/filesystem/convenience.hpp> // extension(), change_extension()
-#include <boost/filesystem/fstream.hpp>
 
 #include <algorithm>                    // min()
 #include <iostream>

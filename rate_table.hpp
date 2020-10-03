@@ -23,8 +23,7 @@
 #define rate_table_hpp
 
 #include "config.hpp"
-
-#include <boost/filesystem/path.hpp>
+#include "path.hpp"
 
 #include <cstddef>                      // size_t
 #include <cstdint>
