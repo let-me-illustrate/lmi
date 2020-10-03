@@ -71,16 +71,11 @@ std::string generic_path(std::string const& s)
 /// counterpart generic_path() are used to translate between the two
 /// styles, so that backward slashes are sequestered in the GUI and do
 /// not flow into 'configurable_settings.xml'.
-///
-/// At least with the version of boost currently used (2016-06),
-/// native_file_string() and native_directory_string() are identical,
-/// so there is no need to differentiate between directories and
-/// filepaths.
 
 std::string native_path(std::string const& s)
 {
 #if defined LMI_MSW
-    return fs::absolute(fs::path(s)).native_file_string();
+    return fs::absolute(fs::path(s)).native_string();
 #else  // !defined LMI_MSW
     return s;
 #endif // !defined LMI_MSW
