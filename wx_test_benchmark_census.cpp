@@ -49,7 +49,7 @@ class census_benchmark
         z.Char('o', wxMOD_CONTROL); // "File|Open"
         wxTEST_DIALOG
             (wxYield()
-            ,wxExpectModal<wxFileDialog>(path.native_file_string())
+            ,wxExpectModal<wxFileDialog>(wxString::FromUTF8(path.string()))
             );
         wxYield();
         }
