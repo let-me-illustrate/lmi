@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include <filesystem>
+#include <fstream>
 #include <ostream>
 #include <string>
 #include <system_error> // std::error_code
@@ -480,6 +481,85 @@ inline path current_path(std::error_code& ec)
 {
     return std::filesystem::current_path(ec);
 }
+
+/// File stream classes working with fs::path.
+///
+/// These classes are equivalents of the standard classes with the same name
+/// that can be constructed from std::filesystem::path objects, but not from
+/// fs::path objects in a context in which implicit conversions, such as those
+/// performed by fs::path operator std::filesystem::path(), are disabled. I.e.
+/// these classes allow the following code to compile
+///
+/// fs::path p = ...;
+/// fs::ifstream ifs{p};
+///
+/// while with std::ifstream only
+///
+/// std::ifstream ifs(p);
+///
+/// could be used or an explicit conversion would be required.
+///
+/// Another advantage of using these classes is that, like fs::path itself,
+/// they interpret all strings as being in UTF-8, while the standard file
+/// streams use the current locale encoding for them.
+
+class ifstream final
+    :public std::ifstream
+{
+  public:
+    ifstream() = default;
+
+    explicit ifstream
+        (path const& p
+        ,std::ios_base::openmode mode = std::ios_base::in
+        )
+        :std::ifstream(p.path_, mode)
+        {
+        }
+
+    ifstream(ifstream const&) = delete;
+    ifstream(ifstream&&) = default;
+
+    void open
+        (path const& p
+        ,std::ios_base::openmode mode = std::ios_base::in
+        )
+        {
+            std::ifstream::open
+                (p.path_
+                ,mode
+                );
+        }
+};
+
+class ofstream final
+    :public std::ofstream
+{
+  public:
+    ofstream() = default;
+
+    explicit ofstream
+        (path const& p
+        ,std::ios_base::openmode mode = std::ios_base::out
+        )
+        :std::ofstream(p.path_, mode)
+        {
+        }
+
+    ofstream(ofstream const&) = delete;
+    ofstream(ofstream&&) = default;
+
+    void open
+        (path const& p
+        ,std::ios_base::openmode mode = std::ios_base::out
+        )
+        {
+        std::ofstream::open
+            (p.path_
+            ,mode
+            );
+        }
+};
 
 } // namespace fs
 
