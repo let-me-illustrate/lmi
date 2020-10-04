@@ -162,28 +162,30 @@ void sample_results()
     std::cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
     std::cout.precision(25);
     std::cout
-        << "\n  daily rate corresponding to 1% annual interest"
-        << ", by various methods\n"
-        << "    method in production\n      "
-        << i_upper_n_over_n_from_i      <long double,365>()(0.01) << '\n'
+        << "\nDaily rate corresponding to 1% annual interest"
+        << ", by various methods:\n"
+        << "        000000000111111111122\n"
+        << "        123456789012345678901\n"
+        << "  " << i_upper_n_over_n_from_i      <long double,365>()(0.01)
+        << "  method in production\n"
         ;
 #if defined LMI_X87
     fenv_precision(fe_ldblprec);
     std::cout
-        << "    long double precision, std::expm1 and std::log1p\n      "
-        << i_upper_n_over_n_from_i_T    <long double,365>()(0.01) << '\n'
-        << "    long double precision, std::pow\n      "
-        << i_upper_n_over_n_from_i_naive<long double,365>()(0.01) << '\n'
+        << "  " << i_upper_n_over_n_from_i_T    <long double,365>()(0.01)
+        << "  long double precision, std::expm1 and std::log1p\n"
+        << "  " << i_upper_n_over_n_from_i_naive<long double,365>()(0.01)
+        << "  long double precision, std::pow\n"
         ;
 
     fenv_initialize();
     fenv_precision(fe_dblprec);
 #endif // defined LMI_X87
     std::cout
-        << "    double precision, std::expm1 and std::log1p\n      "
-        << i_upper_n_over_n_from_i_T    <double,365>()(0.01) << '\n'
-        << "    double precision, std::pow\n      "
-        << i_upper_n_over_n_from_i_naive<double,365>()(0.01) << '\n'
+        << "  " << i_upper_n_over_n_from_i_T    <double,365>()(0.01)
+        << "  double precision, std::expm1 and std::log1p\n"
+        << "  " << i_upper_n_over_n_from_i_naive<double,365>()(0.01)
+        << "  double precision, std::pow\n"
         ;
 
     fenv_initialize();
@@ -215,10 +217,27 @@ void mete1()
     x = net_i_from_gross<double,365>()(0.04, 0.007, 0.003);
 }
 
+void mete2()
+{
+    double volatile x;
+    stifle_warning_for_unused_value(x);
+    x = i_upper_n_over_n_from_i_T<double,365>()(0.01);
+}
+
+void mete3()
+{
+    double volatile x;
+    stifle_warning_for_unused_value(x);
+    x = static_cast<double>(i_upper_n_over_n_from_i_T<long double,365>()(0.01));
+}
+
 void assay_speed()
 {
-    std::cout << "  Speed test: std::pow  \n    " << TimeAnAliquot(mete0) << '\n';
-    std::cout << "  Speed test: std::expm1\n    " << TimeAnAliquot(mete1) << '\n';
+    std::cout << "Speed tests:\n";
+    std::cout << "  std::pow         " << TimeAnAliquot(mete0) << '\n';
+    std::cout << "  std::expm1       " << TimeAnAliquot(mete1) << '\n';
+    std::cout << "  double      i365 " << TimeAnAliquot(mete2) << '\n';
+    std::cout << "  long double i365 " << TimeAnAliquot(mete3) << '\n';
 }
 
 int test_main(int, char*[])
