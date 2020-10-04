@@ -91,6 +91,7 @@ apt-get --assume-yes install \
   git \
   jing \
   libarchive-tools \
+  libc6-dbg \
   libtool \
   libxml2-utils \
   libxslt1-dev \
