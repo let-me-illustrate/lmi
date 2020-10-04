@@ -39,10 +39,10 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo "::set-env name=NORMAL_UID::`id --user`"
-          echo "::set-env name=coefficiency::--jobs=`nproc`"
+          echo "NORMAL_UID=`id --user`" >> $GITHUB_ENV
+          echo "coefficiency=--jobs=`nproc`" >> $GITHUB_ENV
           gcc_version=$(${LMI_TRIPLET}-${LMI_COMPILER} -dumpversion|tr -d '\r')
-          echo "::set-env name=gcc_version::$gcc_version"
+          echo "gcc_version=$gcc_version" >> $GITHUB_ENV
 
       - name: Create lmi directories
         run: >
