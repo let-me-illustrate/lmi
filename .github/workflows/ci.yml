@@ -49,7 +49,7 @@ jobs:
 
       - name: Create lmi directories
         run: >
-          for d in /opt/lmi /etc/opt/lmi /srv/cache_for_lmi; do
+          for d in /opt/lmi /opt/lmi/print /etc/opt/lmi /srv/cache_for_lmi; do
             sudo mkdir --parents $d;
             sudo --preserve-env chown $NORMAL_UID $d;
           done;
