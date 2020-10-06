@@ -48,7 +48,6 @@ cgicc_archive    := cgicc-3.1.4.tar.bz2
 jing_archive     := jing-20091111.zip
 sample_archive   := lmi-data-20050618T1440Z.tar.bz2
 trang_archive    := trang-20091111.zip
-xmlwrapp_archive := xmlwrapp-0.9.0.tar.gz
 
 file_list := \
   $(boost_archive) \
@@ -56,9 +55,8 @@ file_list := \
   $(jing_archive) \
   $(sample_archive) \
   $(trang_archive) \
-  $(xmlwrapp_archive) \
 
-boost cgicc xmlwrapp: stem = $(basename $(basename $($@_archive)))
+boost cgicc:          stem = $(basename $(basename $($@_archive)))
 jing trang:           stem =            $(basename $($@_archive))
 sample:               stem = data
 
@@ -69,14 +67,12 @@ $(cgicc_archive)-url    := ftp://ftp.gnu.org/pub/gnu/cgicc/$(cgicc_archive)
 $(jing_archive)-url     := https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jing-trang/$(jing_archive)
 $(sample_archive)-url   := https://download.savannah.gnu.org/releases/lmi/$(sample_archive)
 $(trang_archive)-url    := https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jing-trang/$(trang_archive)
-$(xmlwrapp_archive)-url := https://github.com/vslavik/xmlwrapp/releases/download/v0.9.0/$(xmlwrapp_archive)
 
 $(boost_archive)-md5    := 2b999b2fb7798e1737d1fff8fac602ef
 $(cgicc_archive)-md5    := 6cb5153fc9fa64b4e50c7962aa557bbe
 $(jing_archive)-md5     := 13eef193921409a1636377d1efbf9843
 $(sample_archive)-md5   := e7f07133abfc3b9c2252dfa3b61191bc
 $(trang_archive)-md5    := 9d31799b948c350850eb9dd14e5b832d
-$(xmlwrapp_archive)-md5 := 5e8ac678ab03b7c60ce61ac5424e0849
 
 # Utilities ####################################################################
 
@@ -115,7 +111,7 @@ ad_hoc_dir_exists = \
 # Targets ######################################################################
 
 .PHONY: all
-all: boost cgicc jing sample trang xmlwrapp
+all: boost cgicc jing sample trang
 
 # Patches were generated according to this advice:
 #
@@ -200,24 +196,6 @@ trang: $(file_list)
 	$(CHMOD) -R g=u $(ad_hoc_dir)/$(stem)
 	$(MKDIR) --parents $(dest_dir)/rng
 	$(MV) $(ad_hoc_dir)/$(stem)/$@.jar $(dest_dir)/rng
-
-.PHONY: xmlwrapp
-xmlwrapp: $(file_list)
-	-[ -e $(stem).patch ] && $(PATCH) --directory=$(ad_hoc_dir) --strip=1 < $(stem).patch
-	$(CHMOD) -R g=u $(ad_hoc_dir)/$(stem)
-	$(MKDIR) $(third_party_include_dir)/xmlwrapp/
-	$(MV) $(ad_hoc_dir)/$(stem)/include/xmlwrapp/*.h $(third_party_include_dir)/xmlwrapp/
-	$(MKDIR) $(third_party_include_dir)/xsltwrapp/
-	$(MV) $(ad_hoc_dir)/$(stem)/include/xsltwrapp/*.h $(third_party_include_dir)/xsltwrapp/
-	$(MKDIR) $(third_party_source_dir)/libxml/
-	$(MV) $(ad_hoc_dir)/$(stem)/src/libxml/* $(third_party_source_dir)/libxml/
-	$(MKDIR) $(third_party_source_dir)/libxslt/
-	$(MV) $(ad_hoc_dir)/$(stem)/src/libxslt/* $(third_party_source_dir)/libxslt/
-	cd $(dest_dir) && $(MD5SUM) --binary include/xmlwrapp/* include/xsltwrapp/* src/libxml/* src/libxslt/* >$(stem).md5sums
-	cd $(dest_dir) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
-	$(SORT) --key=2 --output=$(stem).X             $(stem).md5sums
-	$(SORT) --key=2 --output=$(stem).Y $(dest_dir)/$(stem).md5sums
-	$(DIFF) --unified $(stem).X $(stem).Y && $(RM) $(dest_dir)/$(stem).md5sums $(stem).X $(stem).Y
 
 $(file_list): initial_setup
 

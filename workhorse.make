@@ -305,11 +305,11 @@ lmi_include_directories := \
   $(srcdir) \
   $(srcdir)/tools/pete-2.1.1 \
   $(overriding_include_directories) \
-  /opt/lmi/third_party/src \
 
 sys_include_directories := \
   $(compiler_include_directory) \
   $(wx_include_paths) \
+  $(srcdir)/third_party/xmlwrapp/include \
   /opt/lmi/third_party/include \
   $(localincludedir) \
   $(localincludedir)/libxml2 \
