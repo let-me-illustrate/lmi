@@ -6,3 +6,7 @@
 	path = third_party/libxslt
 	url = https://github.com/let-me-illustrate/libxslt.git
 	branch = lmi
+[submodule "third_party/xmlwrapp"]
+	path = third_party/xmlwrapp
+	url = https://github.com/let-me-illustrate/xmlwrapp.git
+	branch = lmi
