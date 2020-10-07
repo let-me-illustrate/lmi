@@ -50,11 +50,11 @@
 /// fe[gs]etprecision(). At least for now, they are meaningfully
 /// implemented for x87 only.
 ///
-///   bool LMI_SO fenv_is_valid()
+///   LMI_SO bool fenv_is_valid()
 /// If current floating-point environment matches lmi default, then
 /// return 'true'; else return 'false'.
 ///
-///   bool LMI_SO fenv_validate();
+///   LMI_SO bool fenv_validate();
 /// Make sure current floating-point environment matches lmi default.
 /// If it doesn't, then reset it to lmi default, display a message,
 /// and return 'false'; else return 'true'.
@@ -91,15 +91,15 @@ enum enum_fenv_indulgence
     ,e_fenv_indulge_0x027f  = 0x027f
     };
 
-void LMI_SO fenv_initialize();
+LMI_SO void fenv_initialize();
 
-e_ieee754_precision LMI_SO fenv_precision();
-void                LMI_SO fenv_precision(e_ieee754_precision);
+LMI_SO e_ieee754_precision fenv_precision();
+LMI_SO void                fenv_precision(e_ieee754_precision);
 
-e_ieee754_rounding LMI_SO fenv_rounding();
-void               LMI_SO fenv_rounding(e_ieee754_rounding);
+LMI_SO e_ieee754_rounding fenv_rounding();
+LMI_SO void               fenv_rounding(e_ieee754_rounding);
 
-bool LMI_SO fenv_is_valid();
-bool LMI_SO fenv_validate(enum_fenv_indulgence = e_fenv_indulge_nothing);
+LMI_SO bool fenv_is_valid();
+LMI_SO bool fenv_validate(enum_fenv_indulgence = e_fenv_indulge_nothing);
 
 #endif // fenv_lmi_hpp

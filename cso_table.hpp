@@ -30,7 +30,7 @@
 
 #include <vector>
 
-std::vector<double> LMI_SO cso_table
+LMI_SO std::vector<double> cso_table
     (mcenum_cso_era
     ,oenum_autopisty
     ,oenum_alb_or_anb
@@ -40,7 +40,7 @@ std::vector<double> LMI_SO cso_table
     ,int              max_age
     );
 
-std::vector<double> LMI_SO cso_table
+LMI_SO std::vector<double> cso_table
     (mcenum_cso_era
     ,oenum_autopisty
     ,oenum_alb_or_anb

@@ -155,7 +155,7 @@ class LMI_SO rounding_rules final
     rounding_parameters round_minutiae_          ;
 };
 
-void LMI_SO load(rounding_rules      &, fs::path const&);
-void LMI_SO save(rounding_rules const&, fs::path const&);
+LMI_SO void load(rounding_rules      &, fs::path const&);
+LMI_SO void save(rounding_rules const&, fs::path const&);
 
 #endif // rounding_rules_hpp

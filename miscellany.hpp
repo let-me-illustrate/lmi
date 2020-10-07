@@ -127,21 +127,21 @@ template<typename T> bool operator<=(T t, minmax<T> m) {return t <= m.minimum();
 template<typename T> bool operator< (minmax<T> m, T t) {return m.maximum() <  t;}
 template<typename T> bool operator<=(minmax<T> m, T t) {return m.maximum() <= t;}
 
-int LMI_SO scale_power(int max_power, double min_value, double max_value);
+LMI_SO int scale_power(int max_power, double min_value, double max_value);
 
-int LMI_SO count_newlines(std::string const&);
+LMI_SO int count_newlines(std::string const&);
 
-std::vector<std::string> LMI_SO split_into_lines(std::string const&);
+LMI_SO std::vector<std::string> split_into_lines(std::string const&);
 
 std::string htmlize(std::string const&);
 
-bool LMI_SO begins_with(std::string const& s, std::string const& prefix);
+LMI_SO bool begins_with(std::string const& s, std::string const& prefix);
 
-bool LMI_SO ends_with(std::string const& s, std::string const& suffix);
+LMI_SO bool ends_with(std::string const& s, std::string const& suffix);
 
-void LMI_SO ltrim(std::string& s, char const* superfluous);
+LMI_SO void ltrim(std::string& s, char const* superfluous);
 
-void LMI_SO rtrim(std::string& s, char const* superfluous);
+LMI_SO void rtrim(std::string& s, char const* superfluous);
 
 inline std::ios_base::openmode ios_in_binary()
 {

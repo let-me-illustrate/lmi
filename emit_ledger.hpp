@@ -65,7 +65,7 @@ class LMI_SO ledger_emitter final
     std::unique_ptr<group_quote_pdf_generator> group_quote_pdf_gen_;
 };
 
-double LMI_SO emit_ledger
+LMI_SO double emit_ledger
     (fs::path const& cell_filepath
     ,Ledger const&   ledger
     ,mcenum_emission emission

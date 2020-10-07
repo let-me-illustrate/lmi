@@ -108,7 +108,7 @@ class LMI_SO database_entity final
     std::string         gloss_;
 };
 
-std::vector<int> const& LMI_SO maximum_database_dimensions();
+LMI_SO std::vector<int> const& maximum_database_dimensions();
 
 /*
 Some data are scalar by nature--for example, DB_MaturityAge.

@@ -31,35 +31,35 @@
 class LMI_SO_FWD_DECL product_data;
 class LMI_SO_FWD_DECL product_database;
 
-std::vector<double> LMI_SO irc_7702_q
+LMI_SO std::vector<double> irc_7702_q
     (product_data     const& product
     ,product_database const& database
     ,int                     issue_age
     ,int                     years_to_maturity
     );
 
-std::vector<double> LMI_SO irc_7702A_7pp
+LMI_SO std::vector<double> irc_7702A_7pp
     (product_data     const& product
     ,product_database const& database
     ,int                     issue_age
     ,int                     years_to_maturity
     );
 
-std::vector<double> LMI_SO irc_7702_nsp
+LMI_SO std::vector<double> irc_7702_nsp
     (product_data     const& product
     ,product_database const& database
     ,int                     issue_age
     ,int                     years_to_maturity
     );
 
-std::vector<double> LMI_SO cvat_corridor_factors
+LMI_SO std::vector<double> cvat_corridor_factors
     (product_data     const& product
     ,product_database const& database
     ,int                     issue_age
     ,int                     years_to_maturity
     );
 
-std::vector<double> LMI_SO target_premium_rates
+LMI_SO std::vector<double> target_premium_rates
     (product_data     const& product
     ,product_database const& database
     ,int                     issue_age

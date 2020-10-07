@@ -31,7 +31,7 @@
 
 #include <vector>
 
-void LMI_SO TestIrc7702A();
+LMI_SO void TestIrc7702A();
 
 // TAXATION !! TODO ?? Known defects:
 //   need to handle withdrawals correctly;

@@ -66,7 +66,7 @@ class Authenticity final
 /// Terminate the program immediately if authentication fails. But
 /// skip authentication altogether for the most-privileged password.
 
-void LMI_SO authenticate_system();
+LMI_SO void authenticate_system();
 
 /// Name of file containing md5sums of secured files.
 

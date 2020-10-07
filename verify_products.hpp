@@ -26,6 +26,6 @@
 
 #include "so_attributes.hpp"
 
-void LMI_SO verify_products();
+LMI_SO void verify_products();
 
 #endif // verify_products_hpp

@@ -439,6 +439,6 @@ class LMI_SO DBDictionary
     database_entity SecondaryHurdle     ;
 };
 
-void LMI_SO print_databases();
+LMI_SO void print_databases();
 
 #endif // dbdict_hpp
