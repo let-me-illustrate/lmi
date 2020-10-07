@@ -176,7 +176,7 @@ else ifeq (8.2.0,$(gnu_cxx_version))
 else ifeq (8.3.0,$(gnu_cxx_version))
 else ifeq (9,$(gnu_cxx_version))
 else ifeq (9.3.0,$(gnu_cxx_version))
-else ifeq (10,$(gnu_cpp_version))
+else ifeq (10,$(gnu_cxx_version))
 else ifeq (10.0,$(gnu_cxx_version))
 else
   $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
