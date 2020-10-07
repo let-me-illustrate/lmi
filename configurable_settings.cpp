@@ -146,11 +146,25 @@ configurable_settings::configurable_settings()
     ascribe_members();
     load();
 
-    default_input_filename_ = fs::system_complete(default_input_filename_).string();
-    print_directory_        = fs::system_complete(print_directory_       ).string();
+    try
+        {
+        default_input_filename_ = fs::system_complete(default_input_filename_).string();
+// Performing this test seems like a good idea, but it would flag
+// an empty path as an error.
+//      validate_filepath(default_input_filename_, "Default input file");
+        }
+    catch(...)
+        {
+        report_exception();
+        // Silently replace invalid path with an empty string,
+        // which will produce an informative diagnostic when
+        // a default is needed.
+        default_input_filename_ = {};
+        }
 
     try
         {
+        print_directory_ = fs::system_complete(print_directory_).string();
         validate_directory(print_directory_, "Print directory");
         }
     catch(...)
