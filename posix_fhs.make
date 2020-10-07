@@ -31,19 +31,15 @@ PERFORM :=
 platform_boost_libraries := \
   -lboost_filesystem-gcc \
 
-platform_xmlwrapp_libraries := \
-  -lxsltwrapp \
-  -lxmlwrapp \
-
 # The libraries referenced above may be used if desired, but are not
 # necessary because lmi compiles their source code to object files.
 platform_boost_libraries :=
-platform_xmlwrapp_libraries :=
 
 # '-lexslt'--see:
 #   http://mail.gnome.org/archives/xslt/2001-October/msg00133.html
 
-platform_gnome_xml_libraries := \
+platform_xml_libraries := \
+  $(shell xmlwrapp-config --libs) \
   -lexslt \
   $(shell xslt-config --libs) \
   $(shell xml2-config --libs) \

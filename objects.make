@@ -65,7 +65,7 @@ boost_regex_objects := \
 # run correctly.
 
 ifneq (,$(USE_SO_ATTRIBUTES))
-  duplicated_objects = $(boost_filesystem_objects) $(xmlwrapp_objects)
+  duplicated_objects = $(boost_filesystem_objects)
 endif
 
 # GNU cgicc.
@@ -109,11 +109,7 @@ cgicc_3_1_4_objects = \
   HTTPHeaders.o \
   MStreamable.o \
 
-# xmlwrapp and xsltwrapp.
-
-xmlwrapp_objects := xml_xslt_wrapp.o
-
-# For systems that already have boost, cgicc, and xmlwrapp libraries
+# For systems that already have boost and cgicc libraries
 # installed, define 'HAVE_THIRD_PARTY_LIBRARIES' to use them instead
 # of using the workarounds above.
 #
@@ -125,7 +121,6 @@ ifdef HAVE_THIRD_PARTY_LIBRARIES
   boost_filesystem_objects :=
   boost_regex_objects :=
   cgicc_objects :=
-  xmlwrapp_objects :=
 endif
 
 ################################################################################
@@ -176,7 +171,6 @@ cli_objects := \
 
 common_common_objects := \
   $(boost_filesystem_objects) \
-  $(xmlwrapp_objects) \
   actuarial_table.o \
   alert.o \
   calendar_date.o \
@@ -505,7 +499,6 @@ account_value_test$(EXEEXT): \
 actuarial_table_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
-  $(xmlwrapp_objects) \
   actuarial_table.o \
   actuarial_table_test.o \
   cso_table.o \
@@ -585,7 +578,6 @@ commutation_functions_test$(EXEEXT): \
 configurable_settings_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
-  $(xmlwrapp_objects) \
   calendar_date.o \
   configurable_settings.o \
   configurable_settings_test.o \
@@ -701,7 +693,6 @@ input_sequence_test$(EXEEXT): \
 input_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
-  $(xmlwrapp_objects) \
   calendar_date.o \
   ce_product_name.o \
   configurable_settings.o \
@@ -751,7 +742,6 @@ interpolate_string_test$(EXEEXT): \
 irc7702a_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
-  $(xmlwrapp_objects) \
   calendar_date.o \
   global_settings.o \
   ihs_irc7702a.o \
@@ -771,7 +761,6 @@ istream_to_string_test$(EXEEXT): \
 ledger_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
-  $(xmlwrapp_objects) \
   calendar_date.o \
   configurable_settings.o \
   crc32.o \
@@ -890,7 +879,6 @@ path_utility_test$(EXEEXT): \
 premium_tax_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
-  $(xmlwrapp_objects) \
   calendar_date.o \
   data_directory.o \
   database.o \
@@ -928,7 +916,6 @@ print_matrix_test$(EXEEXT): \
 product_file_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
-  $(xmlwrapp_objects) \
   calendar_date.o \
   data_directory.o \
   database.o \
@@ -1076,7 +1063,6 @@ wx_new_test$(EXEEXT): \
 xml_serialize_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
-  $(xmlwrapp_objects) \
   calendar_date.o \
   global_settings.o \
   miscellany.o \

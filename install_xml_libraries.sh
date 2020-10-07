@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Install libxml2 and libxslt with options suitable for lmi.
+# Install libxml2, libxslt and xmlwrapp with options suitable for lmi.
 #
 # Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
 #
@@ -93,7 +93,7 @@ xmlsoft_common_cflags=$(echo '
   -Wno-unused-variable
 ' | tr '\n' ' ' | tr -s ' ' )
 
-xmlsoft_common_options="
+third_party_libraries_common_options="
   --prefix=$prefix
   --exec-prefix=$exec_prefix
   --build=$build_type
@@ -101,6 +101,10 @@ xmlsoft_common_options="
   --disable-dependency-tracking
   --disable-static
   --enable-shared
+"
+
+xmlsoft_common_options="
+  $third_party_libraries_common_options
   --with-debug
   --without-python
 "
@@ -131,6 +135,13 @@ libxslt_options="
   --without-crypto
 "
 
+xmlwrapp_options="
+  $third_party_libraries_common_options
+  --disable-docs
+  --disable-examples
+  --disable-tests
+"
+
 # Actually build ##############################################################
 
 # Nonchalantly remove pkgconfig and cmake subdirectories, even though
@@ -141,13 +152,17 @@ libxslt_options="
 # each package's makefile.
 if [ "$xml_skip_clean" != 1 ]; then
     rm --force --recursive "$exec_prefix"/bin/*xml2*
+    rm --force --recursive "$exec_prefix"/bin/*xmlwrapp*
     rm --force --recursive "$exec_prefix"/bin/*xslt*
     rm --force --recursive "$exec_prefix"/bin/xmllint*
     rm --force --recursive "$exec_prefix"/bin/xmlcatalog*
     rm --force --recursive "$exec_prefix"/include/libxml2
+    rm --force --recursive "$exec_prefix"/include/libxmlwrapp
     rm --force --recursive "$exec_prefix"/include/libxslt
+    rm --force --recursive "$exec_prefix"/include/libxsltwrapp
     rm --force --recursive "$exec_prefix"/include/libexslt
     rm --force --recursive "$exec_prefix"/lib/*xml2*
+    rm --force --recursive "$exec_prefix"/lib/*xmlwrapp*
     rm --force --recursive "$exec_prefix"/lib/*xslt*
     rm --force --recursive "$exec_prefix"/lib/cmake
     rm --force --recursive "$exec_prefix"/lib/pkgconfig
@@ -172,6 +187,24 @@ for lib in libxml2 libxslt; do
     $MAKE install
 done
 
+# Building xmlwrapp is similar, but sufficiently different to not try to fit it
+# into the loop above, but reuse the same structure for it just to emphasize
+# the similarity.
+for lib in xmlwrapp; do
+    libdir="$srcdir/third_party/$lib"
+    if [ ! -x "$libdir/configure" ]; then
+        cd "$libdir"
+        ./bootstrap
+    fi
+    mkdir --parents "$build_dir/$lib"
+    cd "$build_dir/$lib"
+    # shellcheck disable=SC2046
+    "$libdir/configure" \
+        PKG_CONFIG_LIBDIR=$exec_prefix/lib/pkgconfig \
+        $xmlwrapp_options
+    $MAKE install
+done
+
 # autotools: 'make install' doesn't respect group permissions--see:
 #   https://lists.gnu.org/archive/html/automake/2019-01/msg00000.html
 # After the 'chmod' calls, the 'find' command should find nothing.
@@ -185,6 +218,8 @@ chmod -R g=u "$build_dir"
 chmod -R g=u "$prefix"/include/libexslt
 chmod -R g=u "$prefix"/include/libxml2
 chmod -R g=u "$prefix"/include/libxslt
+chmod -R g=u "$prefix"/include/xmlwrapp
+chmod -R g=u "$prefix"/include/xsltwrapp
 chmod -R g=u "$prefix"/share/doc/libxml2-*
 chmod -R g=u "$prefix"/share/doc/libxslt-*
 chmod -R g=u "$prefix"/share/gtk-doc/html/libxml2
