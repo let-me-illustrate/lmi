@@ -93,7 +93,7 @@ jobs:
         run: ./install_wxpdfdoc.sh
 
       - name: Build lmi
-        run: make $coefficiency --output-sync=recurse install
+        run: make $coefficiency --output-sync=recurse
 
       - name: Build lmi with SO attributes
         run: make $coefficiency --output-sync=recurse build_type=so_test USE_SO_ATTRIBUTES=1 all
