@@ -63,7 +63,7 @@ using lookup_function
 /// Throw if the lookup function throws, if the string uses invalid syntax or
 /// if the maximum recursion level is exceeded.
 
-std::string LMI_SO interpolate_string
+LMI_SO std::string interpolate_string
     (char const* s
     ,lookup_function const& lookup
     );

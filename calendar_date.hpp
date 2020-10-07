@@ -68,8 +68,8 @@ class ymd_t
     int value_;
 };
 
-ymd_t LMI_SO JdnToYmd(jdn_t);
-jdn_t LMI_SO YmdToJdn(ymd_t);
+LMI_SO ymd_t JdnToYmd(jdn_t);
+LMI_SO jdn_t YmdToJdn(ymd_t);
 
 /// Class calendar_date represents a gregorian-calendar date in the
 /// range [1752-09-14, 9999-12-31]. Date calculations are probably
@@ -174,12 +174,12 @@ class LMI_SO calendar_date
     mutable int cached_day_;
 };
 
-calendar_date LMI_SO operator+(int, calendar_date);
-calendar_date LMI_SO operator+(calendar_date, int);
-calendar_date LMI_SO operator-(calendar_date, int);
+LMI_SO calendar_date operator+(int, calendar_date);
+LMI_SO calendar_date operator+(calendar_date, int);
+LMI_SO calendar_date operator-(calendar_date, int);
 
-std::ostream& LMI_SO operator<<(std::ostream&, calendar_date const&);
-std::istream& LMI_SO operator>>(std::istream&, calendar_date&);
+LMI_SO std::ostream& operator<<(std::ostream&, calendar_date const&);
+LMI_SO std::istream& operator>>(std::istream&, calendar_date&);
 
 calendar_date add_years
     (calendar_date const& date
@@ -237,8 +237,8 @@ std::string month_name(int);
 
 // Some particularly useful dates.
 
-calendar_date const& LMI_SO gregorian_epoch();
-calendar_date const& LMI_SO last_yyyy_date();
-calendar_date        LMI_SO today();
+LMI_SO calendar_date const& gregorian_epoch();
+LMI_SO calendar_date const& last_yyyy_date();
+LMI_SO calendar_date        today();
 
 #endif // calendar_date_hpp

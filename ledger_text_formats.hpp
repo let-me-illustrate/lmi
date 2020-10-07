@@ -34,22 +34,22 @@
 
 class Ledger;
 
-std::string LMI_SO FormatSelectedValuesAsHtml(Ledger const&);
-std::string LMI_SO FormatSelectedValuesAsTsv (Ledger const&);
+LMI_SO std::string FormatSelectedValuesAsHtml(Ledger const&);
+LMI_SO std::string FormatSelectedValuesAsTsv (Ledger const&);
 
-void LMI_SO PrintCellTabDelimited  (Ledger const&, std::string const& file_name);
+LMI_SO void PrintCellTabDelimited  (Ledger const&, std::string const& file_name);
 
-void LMI_SO PrintRosterHeaders     (               std::string const& file_name);
-void LMI_SO PrintRosterTabDelimited(Ledger const&, std::string const& file_name);
+LMI_SO void PrintRosterHeaders     (               std::string const& file_name);
+LMI_SO void PrintRosterTabDelimited(Ledger const&, std::string const& file_name);
 
-void LMI_SO PrintLedgerFlatText    (Ledger const&, std::ostream&);
+LMI_SO void PrintLedgerFlatText    (Ledger const&, std::ostream&);
 
-std::string LMI_SO ledger_format
+LMI_SO std::string ledger_format
     (double                            d
     ,std::pair<int,oenum_format_style> f
     );
 
-std::vector<std::string> LMI_SO ledger_format
+LMI_SO std::vector<std::string> ledger_format
     (std::vector<double> const&        dv
     ,std::pair<int,oenum_format_style> f
     );

@@ -45,7 +45,7 @@ namespace detail
 {
     typedef std::map<std::string,std::string> stringmap;
 
-    std::vector<std::string> LMI_SO extract_keys_from_string_map
+    LMI_SO std::vector<std::string> extract_keys_from_string_map
         (stringmap const& keyword_dictionary
         );
 

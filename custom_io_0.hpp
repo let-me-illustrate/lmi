@@ -31,7 +31,7 @@
 class Input;
 class Ledger;
 
-bool LMI_SO custom_io_0_file_exists();
+LMI_SO bool custom_io_0_file_exists();
 
 // These two functions take std::string arguments that either contain
 // filenames or are blank. If they're blank, as they normally are,
@@ -43,7 +43,7 @@ bool LMI_SO custom_io_0_file_exists();
 // that input and output files share a common stem; in this custom
 // situation, that need not be the case.
 
-bool LMI_SO custom_io_0_read (Input&       , std::string const& filename);
-void LMI_SO custom_io_0_write(Ledger const&, std::string const& filename);
+LMI_SO bool custom_io_0_read (Input&       , std::string const& filename);
+LMI_SO void custom_io_0_write(Ledger const&, std::string const& filename);
 
 #endif // custom_io_0_hpp

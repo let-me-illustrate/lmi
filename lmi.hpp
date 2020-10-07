@@ -28,6 +28,6 @@
 
 /// Distinguish the antediluvian fork from production.
 
-bool LMI_SO is_antediluvian_fork();
+LMI_SO bool is_antediluvian_fork();
 
 #endif // lmi_hpp

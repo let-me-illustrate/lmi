@@ -28,6 +28,6 @@
 
 #include <string>
 
-std::string LMI_SO AddDataDir(std::string const& filename);
+LMI_SO std::string AddDataDir(std::string const& filename);
 
 #endif // data_directory_hpp

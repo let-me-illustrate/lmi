@@ -30,7 +30,7 @@
 
 typedef void (*file_command_fp_type)(std::string const&, std::string const&);
 
-bool LMI_SO file_command_initialize(file_command_fp_type);
+LMI_SO bool file_command_initialize(file_command_fp_type);
 
 /// Execute a named command for a file, choosing the appropriate
 /// action based on the file's mime type (for gnome or kde) or its

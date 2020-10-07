@@ -32,8 +32,8 @@ class Ledger;
 
 typedef void (*pdf_command_fp_type)(Ledger const&, fs::path const&);
 
-bool LMI_SO pdf_command_initialize(pdf_command_fp_type);
+LMI_SO bool pdf_command_initialize(pdf_command_fp_type);
 
-void LMI_SO pdf_command(Ledger const&, fs::path const&);
+LMI_SO void pdf_command(Ledger const&, fs::path const&);
 
 #endif // pdf_command_hpp

@@ -130,7 +130,7 @@ void initialize_filesystem()
 /// Notably, path("/bin/sh/") succeeds, silently discarding the
 /// trailing '/'.
 
-fs::path LMI_SO modify_directory
+fs::path modify_directory
     (fs::path const& original_filepath
     ,fs::path const& supplied_directory
     )

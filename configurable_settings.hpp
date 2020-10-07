@@ -110,10 +110,10 @@ class LMI_SO configurable_settings final
     bool        use_builtin_calculation_summary_;
 };
 
-std::string const& LMI_SO configuration_filepath();
+LMI_SO std::string const&       configuration_filepath();
 
 std::vector<std::string>        input_calculation_summary_columns();
 // This function must be visible to 'wx_test_calculation_summary.cpp'.
-std::vector<std::string> LMI_SO effective_calculation_summary_columns();
+LMI_SO std::vector<std::string> effective_calculation_summary_columns();
 
 #endif // configurable_settings_hpp
