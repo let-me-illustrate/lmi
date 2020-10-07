@@ -418,7 +418,7 @@ else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
   gcc_version_specific_warnings := \
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
-else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0 8.3.0 9.3.0 10.0))
+else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0 8.3.0 9.3.0 10 10.0))
   gcc_version_specific_warnings := \
 
   ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
@@ -427,7 +427,7 @@ else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0 8.3.0 9.3.0 10.0))
     tutelary_flag := -fomit-frame-pointer
   endif
 
-  ifneq (,$(filter $(gcc_version), 10.0))
+  ifneq (,$(filter $(gcc_version), 10 10.0))
     gcc_cxx_warnings += -Wredundant-tags -Wvolatile
   endif
 
