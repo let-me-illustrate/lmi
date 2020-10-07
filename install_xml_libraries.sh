@@ -96,6 +96,13 @@ xmlsoft_common_cflags=$(echo '
   -Wno-unused-variable
 ' | tr '\n' ' ' | tr -s ' ' )
 
+xmlsoft_common_ldflags=""
+case "$LMI_TRIPLET" in
+    *-*-cygwin*|*-*-mingw*)
+        xmlsoft_common_ldflags="$xmlsoft_common_ldflags -lws2_32"
+        ;;
+esac
+
 third_party_libraries_common_options="
   --prefix=$prefix
   --exec-prefix=$exec_prefix
@@ -183,7 +190,7 @@ for lib in libxml2 libxslt; do
     # 'configure' options must not be double-quoted
     # shellcheck disable=SC2046
     "$libdir/configure" \
-        LDFLAGS='-lws2_32' \
+        LDFLAGS="$xmlsoft_common_ldflags" \
         CPPFLAGS='-w' \
         CFLAGS="-g -O2 $xmlsoft_common_cflags" \
         $(eval "echo \$${lib}_options")
