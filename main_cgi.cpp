@@ -35,6 +35,7 @@
 
 #include "alert.hpp"
 #include "configurable_settings.hpp"
+#include "global_settings.hpp"
 #include "illustrator.hpp"
 #include "input.hpp"
 #include "lmi.hpp"                      // is_antediluvian_fork()
@@ -88,6 +89,8 @@ int try_main(int argc, char* argv[])
 {
   try {
     initialize_filesystem();
+
+    global_settings::instance().set_data_directory("/opt/lmi/data");
 
     gLogFile.rdbuf()->open
         (configurable_settings::instance().cgi_bin_log_filename().c_str()
