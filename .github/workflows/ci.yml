@@ -45,6 +45,7 @@ jobs:
           echo "gcc_version=$gcc_version" >> $GITHUB_ENV
 
           echo "xml2_sha1=$(git rev-parse HEAD:third_party/libxml2)" >> $GITHUB_ENV
+          echo "xmlwrapp_sha1=$(git rev-parse HEAD:third_party/xmlwrapp)" >> $GITHUB_ENV
           echo "xslt_sha1=$(git rev-parse HEAD:third_party/libxslt)" >> $GITHUB_ENV
 
       - name: Create lmi directories
@@ -69,7 +70,7 @@ jobs:
       - name: Build miscellanea
         run: make $coefficiency --output-sync=recurse -f install_miscellanea.make
 
-      - name: Cache libxml2, wxWidgets and wxPdfDoc
+      - name: Cache third-party libraries
         id: cache-local
         uses: actions/cache@v2
         with:
@@ -77,9 +78,9 @@ jobs:
             /opt/lmi/local/${{ env.LMI_COMPILER }}_${{ env.LMI_TRIPLET }}
             /opt/lmi/local/include
             /opt/lmi/local/share
-          key: build-${{ env.LMI_COMPILER }}-${{ env.gcc_version }}-${{ env.LMI_TRIPLET }}-${{ hashFiles('install_xml_libraries.sh', 'install_wx.sh', 'install_wxpdfdoc.sh') }}-${{ env.xml2_sha1 }}-${{ env.xslt_sha1 }}
+          key: build-${{ env.LMI_COMPILER }}-${{ env.gcc_version }}-${{ env.LMI_TRIPLET }}-${{ hashFiles('install_xml_libraries.sh', 'install_wx.sh', 'install_wxpdfdoc.sh') }}-${{ env.xml2_sha1 }}-${{ env.xmlwrapp_sha1 }}-${{ env.xslt_sha1 }}
 
-      - name: Build libxml2
+      - name: Build XML libraries
         if: steps.cache-local.outputs.cache-hit != 'true'
         run: ./install_xml_libraries.sh
 
