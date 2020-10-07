@@ -58,12 +58,13 @@ jobs:
       - name: Cache downloaded archives
         uses: actions/cache@v2
         with:
-          # Use combined key for files downloaded by both makefiles, even
-          # though this means that we would redownload the same files from the
-          # unchanged makefile if only one of them changes -- but they don't
-          # change often enough to make this a real problem in practice.
+          # Using the hash of the makefile means that we're going to have
+          # false negatives, i.e. re-download the files unnecessarily if the
+          # makefile changes but the MD5 checksums of the files in it do not,
+          # but this is much simpler than extracting those MD5s from it and it
+          # changes rarely enough that this shouldn't be a problem in practice.
           path: /srv/cache_for_lmi/downloads
-          key: downloads-${{ hashFiles('install_miscellanea.make') }}-${{ hashFiles('install_libxml2_libxslt.make') }}
+          key: downloads-${{ hashFiles('install_miscellanea.make') }}
 
       - name: Build miscellanea
         run: make $coefficiency --output-sync=recurse -f install_miscellanea.make
