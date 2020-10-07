@@ -149,10 +149,10 @@ jobs:
         run: make install
 
       - name: Check physical closure
-        run: make check_physical_closure
+        run: make $coefficiency check_physical_closure
 
       - name: Run CLI tests
-        run: make cli_tests
+        run: make $coefficiency cli_tests
 
       - name: Run unit tests
         run: |
@@ -161,4 +161,4 @@ jobs:
             # Currently failing tests.
             exclude_args="excluded_unit_test_targets=path_utility_test"
           fi
-          make unit_tests $exclude_args
+          make $coefficiency unit_tests $exclude_args
