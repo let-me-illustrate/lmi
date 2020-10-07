@@ -40,20 +40,20 @@ enum
     ,mc_n_rate_periods = 2
     };
 
-std::vector<std::string> const& LMI_SO all_strings_gender   ();
-std::vector<std::string> const& LMI_SO all_strings_class    ();
-std::vector<std::string> const& LMI_SO all_strings_smoking  ();
-std::vector<std::string> const& LMI_SO all_strings_uw_basis ();
-std::vector<std::string> const& LMI_SO all_strings_state    ();
+LMI_SO std::vector<std::string> const& all_strings_gender   ();
+LMI_SO std::vector<std::string> const& all_strings_class    ();
+LMI_SO std::vector<std::string> const& all_strings_smoking  ();
+LMI_SO std::vector<std::string> const& all_strings_uw_basis ();
+LMI_SO std::vector<std::string> const& all_strings_state    ();
 
-std::vector<std::string> LMI_SO allowed_strings_emission();
+LMI_SO std::vector<std::string> allowed_strings_emission();
 
 mcenum_dbopt_7702 effective_dbopt_7702
     (mcenum_dbopt      actual_dbopt
     ,mcenum_dbopt_7702 rop_equivalent
     );
 
-bool LMI_SO is_subject_to_ill_reg(mcenum_ledger_type);
+LMI_SO bool is_subject_to_ill_reg(mcenum_ledger_type);
 
 bool is_three_rate_finra(mcenum_ledger_type);
 
@@ -67,7 +67,7 @@ bool is_three_rate_finra(mcenum_ledger_type);
 template<typename T>
 std::string mc_str(T);
 
-mcenum_emission LMI_SO mc_emission_from_string(std::string const&);
+LMI_SO mcenum_emission mc_emission_from_string(std::string const&);
 
 mcenum_state mc_state_from_string(std::string const&);
 

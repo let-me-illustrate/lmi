@@ -198,7 +198,7 @@
 #include <memory>                       // unique_ptr
 #include <string>
 
-std::ostringstream& LMI_SO progress_meter_unit_test_stream();
+LMI_SO std::ostringstream& progress_meter_unit_test_stream();
 
 class LMI_SO progress_meter
 {
@@ -249,7 +249,7 @@ class LMI_SO progress_meter
     bool              was_cancelled_;
 };
 
-std::unique_ptr<progress_meter> LMI_SO create_progress_meter
+LMI_SO std::unique_ptr<progress_meter> create_progress_meter
     (int                               max_count
     ,std::string const&                title = std::string()
     ,progress_meter::enum_display_mode       = progress_meter::e_normal_display
@@ -261,6 +261,6 @@ typedef std::unique_ptr<progress_meter> (*progress_meter_creator_type)
     ,progress_meter::enum_display_mode
     );
 
-bool LMI_SO set_progress_meter_creator(progress_meter_creator_type);
+LMI_SO bool set_progress_meter_creator(progress_meter_creator_type);
 
 #endif // progress_meter_hpp

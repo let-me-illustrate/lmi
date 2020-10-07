@@ -90,7 +90,7 @@ std::vector<double> basic_table_rates
 #endif // 0
 }
 
-std::vector<double> LMI_SO irc_7702_q_builtin
+std::vector<double> irc_7702_q_builtin
     (product_database const& db
     ,int                     issue_age
     ,int                     years_to_maturity
@@ -117,7 +117,7 @@ std::vector<double> LMI_SO irc_7702_q_builtin
 }
 } // Unnamed namespace.
 
-std::vector<double> LMI_SO irc_7702_q
+std::vector<double> irc_7702_q
     (product_data     const& product
     ,product_database const& database
     ,int                     issue_age
@@ -149,7 +149,7 @@ std::vector<double> LMI_SO irc_7702_q
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
-std::vector<double> LMI_SO irc_7702A_7pp
+std::vector<double> irc_7702A_7pp
     (product_data     const& product
     ,product_database const& database
     ,int                     issue_age
@@ -177,7 +177,7 @@ std::vector<double> LMI_SO irc_7702A_7pp
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
-std::vector<double> LMI_SO irc_7702_nsp
+std::vector<double> irc_7702_nsp
     (product_data     const& product
     ,product_database const& database
     ,int                     issue_age
@@ -209,7 +209,7 @@ std::vector<double> LMI_SO irc_7702_nsp
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
-std::vector<double> LMI_SO cvat_corridor_factors
+std::vector<double> cvat_corridor_factors
     (product_data     const& product
     ,product_database const& database
     ,int                     issue_age
@@ -237,7 +237,7 @@ std::vector<double> LMI_SO cvat_corridor_factors
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
-std::vector<double> LMI_SO target_premium_rates
+std::vector<double> target_premium_rates
     (product_data     const& product
     ,product_database const& database
     ,int                     issue_age

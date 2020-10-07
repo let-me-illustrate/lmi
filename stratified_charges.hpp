@@ -208,11 +208,11 @@ class LMI_SO stratified_charges final
     stratified_entity TieredSDPremTax;
 };
 
-void LMI_SO load(stratified_charges      &, fs::path const&);
-void LMI_SO save(stratified_charges const&, fs::path const&);
+LMI_SO void load(stratified_charges      &, fs::path const&);
+LMI_SO void save(stratified_charges const&, fs::path const&);
 
-stratified_entity const& LMI_SO StatutoryAKPremTax();
-stratified_entity const& LMI_SO StatutoryDEPremTax();
-stratified_entity const& LMI_SO StatutorySDPremTax();
+LMI_SO stratified_entity const& StatutoryAKPremTax();
+LMI_SO stratified_entity const& StatutoryDEPremTax();
+LMI_SO stratified_entity const& StatutorySDPremTax();
 
 #endif // stratified_charges_hpp

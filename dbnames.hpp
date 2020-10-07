@@ -589,9 +589,9 @@ struct db_names
     char const*         LongName;
 };
 
-std::vector<db_names> const& LMI_SO GetDBNames();
+LMI_SO std::vector<db_names> const& GetDBNames();
 
-int         LMI_SO db_key_from_name(std::string const&);
-std::string LMI_SO db_name_from_key(int);
+LMI_SO int         db_key_from_name(std::string const&);
+LMI_SO std::string db_name_from_key(int);
 
 #endif // dbnames_hpp

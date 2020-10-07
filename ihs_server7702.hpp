@@ -46,7 +46,7 @@ struct Server7702Output
     double           GuidelineSinglePremiumPolicyC; // the GSP for notional policy C; 0.0 at issue or if there has been no adjustable event.
 };
 
-Server7702Output LMI_SO RunServer7702FromStruct(gpt_input a_Input);
+LMI_SO Server7702Output RunServer7702FromStruct(gpt_input a_Input);
 
 class Server7702
 {

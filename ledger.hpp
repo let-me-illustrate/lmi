@@ -140,7 +140,7 @@ std::vector<double> numeric_vector
     ,std::string const& compound_name
     );
 
-bool LMI_SO is_interdicted      (Ledger const&);
-void LMI_SO throw_if_interdicted(Ledger const&);
+LMI_SO bool is_interdicted      (Ledger const&);
+LMI_SO void throw_if_interdicted(Ledger const&);
 
 #endif // ledger_hpp

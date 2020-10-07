@@ -36,9 +36,9 @@
 // ensures that the license and its required notices are available
 // unaltered.
 
-std::string const& LMI_SO license_as_html();
-std::string const& LMI_SO license_as_text();
-std::string const& LMI_SO license_notices_as_html();
-std::string const& LMI_SO license_notices_as_text();
+LMI_SO std::string const& license_as_html();
+LMI_SO std::string const& license_as_text();
+LMI_SO std::string const& license_notices_as_html();
+LMI_SO std::string const& license_notices_as_text();
 
 #endif // license_hpp

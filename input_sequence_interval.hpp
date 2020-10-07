@@ -58,6 +58,6 @@ struct ValueInterval
     bool          insane           = false;
 };
 
-std::string LMI_SO abridge_diagnostics(char const* what);
+LMI_SO std::string abridge_diagnostics(char const* what);
 
 #endif // input_sequence_interval_hpp

@@ -26,9 +26,9 @@
 
 #include "so_attributes.hpp"
 
-void LMI_SO floating_point_error_handler(int);
+LMI_SO void floating_point_error_handler(int);
 
 // TODO ?? Make the unit test a separate module.
-void LMI_SO fpe_handler_test();
+LMI_SO void fpe_handler_test();
 
 #endif // sigfpe_hpp

@@ -65,9 +65,9 @@ class LMI_SO illustrator final
     double seconds_for_output_;
 };
 
-Input const& LMI_SO default_cell();
+LMI_SO Input const& default_cell();
 
-void LMI_SO test_census_consensus
+LMI_SO void test_census_consensus
     (mcenum_emission           emission
     ,Input              const& case_default
     ,std::vector<Input> const& all_cells

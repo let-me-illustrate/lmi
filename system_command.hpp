@@ -30,7 +30,7 @@
 
 typedef void (*system_command_fp_type)(std::string const&);
 
-bool LMI_SO system_command_initialize(system_command_fp_type);
+LMI_SO bool system_command_initialize(system_command_fp_type);
 
 /// Wrapper for std::system() that throws on failure.
 ///
@@ -66,6 +66,6 @@ bool LMI_SO system_command_initialize(system_command_fp_type);
 /// that platform: it just makes it do what a posix platform would do
 /// without such complicated workarounds.
 
-void LMI_SO system_command(std::string const& command_line);
+LMI_SO void system_command(std::string const& command_line);
 
 #endif // system_command_hpp

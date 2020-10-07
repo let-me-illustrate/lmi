@@ -370,7 +370,7 @@ class LMI_SO product_data
     glossed_string DefnSpecAmt;
 };
 
-void LMI_SO load(product_data      &, fs::path const&);
-void LMI_SO save(product_data const&, fs::path const&);
+LMI_SO void load(product_data      &, fs::path const&);
+LMI_SO void save(product_data const&, fs::path const&);
 
 #endif // product_data_hpp
