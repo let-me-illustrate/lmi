@@ -29,6 +29,15 @@
 
 echo "Testing 'test_coding_rules'."
 
+# Directory where this script resides.
+
+srcdir=$(dirname "$(readlink --canonicalize "$0")")
+
+# Cannot recursively check script on path determined at runtime, so
+# a directive like 'source="$srcdir"' doesn't work.
+# shellcheck disable=SC1090
+. "$srcdir"/set_toolchain.sh
+
 rm --force eraseme*
 
 # Boilerplate required in most files.
@@ -370,16 +379,6 @@ touch an_unexpected_file
 touch another.unexpected.file
 
 # Compare observed to expected. Note that directory '.' is ignored.
-
-lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
-case "$lmi_build_type" in
-    (*-*-linux*)
-        PERFORM=wine
-        ;;
-    (*)
-        PERFORM=
-        ;;
-esac
 
 2>&1 $PERFORM ./test_coding_rules \
   . \
