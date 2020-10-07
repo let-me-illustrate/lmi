@@ -156,9 +156,9 @@ configurable_settings::configurable_settings()
     catch(...)
         {
         report_exception();
-        print_directory_ = fs::system_complete(".").string();
+        print_directory_ = fs::system_complete(AddDataDir(".")).string();
         warning()
-            << "If possible, current directory '"
+            << "If possible, data directory '"
             << print_directory_
             << "' will be used for print files instead."
             << LMI_FLUSH
