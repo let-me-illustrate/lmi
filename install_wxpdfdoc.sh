@@ -62,10 +62,18 @@ config_options="
   --exec-prefix=$exec_prefix
   --with-wx-prefix=$prefix
   --with-wx-exec-prefix=$exec_prefix
-  --build=$build_type
-  --host=$LMI_TRIPLET
   --disable-dependency-tracking
 "
+
+# Provide the host and the build type only when cross-compiling.
+if [ "$LMI_TRIPLET" != "$build_type" ]
+then
+    config_options="
+      $config_options
+      --build=$build_type
+      --host=$LMI_TRIPLET
+    "
+fi
 
 [ -n "$mingw_bin_dir" ] && export PATH="$mingw_bin_dir:${PATH}"
 
