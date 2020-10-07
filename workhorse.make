@@ -575,6 +575,7 @@ $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-shadow \
   -Wno-switch-enum \
   -Wno-unused-macros \
+  -Wno-unused-result \
   -Wno-useless-cast \
   -Wno-zero-as-null-pointer-constant \
 
