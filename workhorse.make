@@ -812,7 +812,9 @@ ifeq (3.4.5,$(gcc_version))
 endif
 
 ifneq (,$(USE_SO_ATTRIBUTES))
-  LDFLAGS += -Wl,--disable-auto-import -static-libstdc++
+  ifneq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
+    LDFLAGS += -Wl,--disable-auto-import -static-libstdc++
+  endif
   actually_used_lmi_so_attributes = -DLMI_USE_SO_ATTRIBUTES $(lmi_so_attributes)
 endif
 
