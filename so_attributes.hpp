@@ -124,7 +124,7 @@
 #       if defined LMI_MINGW_W64
 #           define LMI_SO_FWD_DECL
 #       else  // !defined LMI_MINGW_W64
-#           define LMI_SO_FWD_DECL LMI_SO
+#           define LMI_SO_FWD_DECL
 #       endif // !defined LMI_MINGW_W64
 #   else  // !defined __GNUC__
 #       define LMI_SO_FWD_DECL LMI_SO
