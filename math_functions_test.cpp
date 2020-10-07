@@ -200,10 +200,13 @@ void mete0()
 {
     double volatile x;
     stifle_warning_for_unused_value(x);
-    x = i_upper_12_over_12_from_i_naive<double>()(0.04);
-    x = i_from_i_upper_12_over_12_naive<double>()(0.04);
-    x = d_upper_12_from_i_naive        <double>()(0.04);
-    x = net_i_from_gross_naive<double,365>()(0.04, 0.007, 0.003);
+    for(int j = 0; j < 100000; ++j)
+        {
+        x = i_upper_12_over_12_from_i_naive<double>()(0.04);
+        x = i_from_i_upper_12_over_12_naive<double>()(0.04);
+        x = d_upper_12_from_i_naive        <double>()(0.04);
+        x = net_i_from_gross_naive<double,365>()(0.04, 0.007, 0.003);
+        }
 }
 
 // This implementation uses production functors.
@@ -211,24 +214,33 @@ void mete1()
 {
     double volatile x;
     stifle_warning_for_unused_value(x);
-    x = i_upper_12_over_12_from_i<double>()(0.04);
-    x = i_from_i_upper_12_over_12<double>()(0.04);
-    x = d_upper_12_from_i        <double>()(0.04);
-    x = net_i_from_gross<double,365>()(0.04, 0.007, 0.003);
+    for(int j = 0; j < 100000; ++j)
+        {
+        x = i_upper_12_over_12_from_i<double>()(0.04);
+        x = i_from_i_upper_12_over_12<double>()(0.04);
+        x = d_upper_12_from_i        <double>()(0.04);
+        x = net_i_from_gross<double,365>()(0.04, 0.007, 0.003);
+        }
 }
 
 void mete2()
 {
     double volatile x;
     stifle_warning_for_unused_value(x);
-    x = i_upper_n_over_n_from_i_T<double,365>()(0.01);
+    for(int j = 0; j < 100000; ++j)
+        {
+        x = i_upper_n_over_n_from_i_T<double,365>()(0.01);
+        }
 }
 
 void mete3()
 {
-    double volatile x;
+    long double volatile x;
     stifle_warning_for_unused_value(x);
-    x = static_cast<double>(i_upper_n_over_n_from_i_T<long double,365>()(0.01));
+    for(int j = 0; j < 100000; ++j)
+        {
+        x = i_upper_n_over_n_from_i_T<long double,365>()(0.01);
+        }
 }
 
 void assay_speed()
