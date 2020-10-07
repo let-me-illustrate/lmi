@@ -99,7 +99,12 @@ int try_main(int argc, char* argv[])
 
     if(argc == 2 && argv[1] == std::string("--capture"))
         {
-        std::system("set > settings");
+        int exit_code = std::system("set > settings");
+        if(EXIT_SUCCESS != exit_code)
+            {
+            std::cerr << "Failed to execute 'set' command;";
+            return EXIT_FAILURE;
+            }
         std::ofstream os("stdin.txt", ios_out_trunc_binary());
         os << std::cin.rdbuf();
         std::cout
