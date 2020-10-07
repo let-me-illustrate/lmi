@@ -77,11 +77,11 @@ jobs:
             /opt/lmi/local/${{ env.LMI_COMPILER }}_${{ env.LMI_TRIPLET }}
             /opt/lmi/local/include
             /opt/lmi/local/share
-          key: build-${{ env.LMI_COMPILER }}-${{ env.gcc_version }}-${{ env.LMI_TRIPLET }}-${{ hashFiles('install_libxml2_libxslt.sh', 'install_wx.sh', 'install_wxpdfdoc.sh') }}-${{ env.xml2_sha1 }}-${{ env.xslt_sha1 }}
+          key: build-${{ env.LMI_COMPILER }}-${{ env.gcc_version }}-${{ env.LMI_TRIPLET }}-${{ hashFiles('install_xml_libraries.sh', 'install_wx.sh', 'install_wxpdfdoc.sh') }}-${{ env.xml2_sha1 }}-${{ env.xslt_sha1 }}
 
       - name: Build libxml2
         if: steps.cache-local.outputs.cache-hit != 'true'
-        run: ./install_libxml2_libxslt.sh
+        run: ./install_xml_libraries.sh
 
       - name: Build wxWidgets
         if: steps.cache-local.outputs.cache-hit != 'true'

@@ -41,7 +41,9 @@ platform_defines := \
 
 platform_gui_ldflags := -mwindows
 
-platform_gnome_xml_libraries := \
+platform_xml_libraries := \
+  -lxsltwrapp \
+  -lxmlwrapp \
   -lexslt \
   -lxslt \
   -lxml2 \
@@ -57,8 +59,6 @@ platform_gnome_xml_libraries := \
 platform_boost_libraries :=
 
 platform_cgicc_libraries :=
-
-platform_xmlwrapp_libraries :=
 
 ################################################################################
 

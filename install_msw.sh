@@ -270,7 +270,7 @@ do
       printf 'No MinGW compiler for this triplet.\n'
     fi
 
-    ./install_libxml2_libxslt.sh
+    ./install_xml_libraries.sh
 
     ./install_wx.sh
     ./install_wxpdfdoc.sh

@@ -309,7 +309,6 @@ lmi_include_directories := \
 sys_include_directories := \
   $(compiler_include_directory) \
   $(wx_include_paths) \
-  $(srcdir)/third_party/xmlwrapp/include \
   /opt/lmi/third_party/include \
   $(localincludedir) \
   $(localincludedir)/libxml2 \
@@ -742,8 +741,7 @@ $(product_file_sources): tutelary_flag += $(product_file_flags)
 
 REQUIRED_LIBS := \
   $(platform_boost_libraries) \
-  $(platform_xmlwrapp_libraries) \
-  $(platform_gnome_xml_libraries) \
+  $(platform_xml_libraries) \
 
 wx_ldflags = \
   $(wx_library_paths) $(wx_libraries) \
