@@ -36,7 +36,6 @@ SHREXT := .dll
 # and rarely needs to be updated.
 
 platform_defines := \
-  -DLIBXML_USE_DLL \
   -DSTRICT \
 
 platform_gui_ldflags := -mwindows
