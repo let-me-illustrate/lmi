@@ -44,10 +44,6 @@ case "$lmi_build_type" in
     (*-*-cygwin*)
         minimal_path="$minimal_path:$(cygpath --sysdir)"
         java -version
-        # Probably $java_path is unhelpful and should be deleted.A
-        # Avoid appending it to $PATH because it contains spaces.
-        java_path="/cygdrive/c/Program\ Files\ \(x86\)/Common\ Files/Oracle/Java/javapath"
-        "$java_path"/java -version
         ;;
     (*)
         java -version
