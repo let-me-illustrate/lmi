@@ -14,3 +14,7 @@
 	path = third_party/wx
 	url = https://github.com/let-me-illustrate/wx.git
 	branch = lmi
+[submodule "third_party/wxpdfdoc"]
+	path = third_party/wxpdfdoc
+	url = https://github.com/let-me-illustrate/wxpdfdoc.git
+	branch = lmi
