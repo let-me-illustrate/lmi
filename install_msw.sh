@@ -344,7 +344,7 @@ done
 
 # Configurable settings.
 #
-# Tailored to msw; for POSIX, s|C:|| and s|CMD /c|/bin/sh| (e.g.).
+# Tailored to msw; for POSIX, s|C:||.
 
 mkdir --parents /opt/lmi/print
 
