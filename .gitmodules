@@ -10,3 +10,7 @@
 	path = third_party/xmlwrapp
 	url = https://github.com/let-me-illustrate/xmlwrapp.git
 	branch = lmi
+[submodule "third_party/wx"]
+	path = third_party/wx
+	url = https://github.com/let-me-illustrate/wx.git
+	branch = lmi
