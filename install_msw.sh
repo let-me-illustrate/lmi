@@ -343,10 +343,22 @@ for z in company_logo.png group_quote_banner.png ; do
 done
 
 # Configurable settings.
-#
-# Tailored to msw; for POSIX, s|C:||.
 
 mkdir --parents /opt/lmi/print
+
+# Like std::filesystem::root_name().
+root_name=C:
+
+# Don't use "C:" for wine: it designates the "wine prefix" directory.
+# "Z:" could be used instead, because that's where wine maps the
+# apparent root, but that wouldn't work with posix builds. Instead,
+# therefore, symlink the directories lmi uses as described in
+# 'README.schroot'.
+
+if [ "Cygwin" != "$platform" ] && [ "WSL" != "$platform" ]
+then
+    root_name=
+fi
 
 cat >/opt/lmi/data/configurable_settings.xml <<EOF
 <?xml version="1.0"?>
@@ -358,27 +370,16 @@ cat >/opt/lmi/data/configurable_settings.xml <<EOF
   <custom_input_1_filename>custom.inix</custom_input_1_filename>
   <custom_output_0_filename>custom.out0</custom_output_0_filename>
   <custom_output_1_filename>custom.out1</custom_output_1_filename>
-  <default_input_filename>C:/etc/opt/lmi/default.ill</default_input_filename>
+  <default_input_filename>${root_name}/etc/opt/lmi/default.ill</default_input_filename>
   <libraries_to_preload/>
   <offer_hobsons_choice>0</offer_hobsons_choice>
-  <print_directory>C:/opt/lmi/print</print_directory>
+  <print_directory>${root_name}/opt/lmi/print</print_directory>
   <seconds_to_pause_between_printouts>10</seconds_to_pause_between_printouts>
   <skin_filename>skin.xrc</skin_filename>
   <spreadsheet_file_extension>.tsv</spreadsheet_file_extension>
   <use_builtin_calculation_summary>1</use_builtin_calculation_summary>
 </configurable_settings>
 EOF
-
-# Remove "C:" for wine: it designates the "wine prefix" directory.
-# "Z:" could be used instead, because that's where wine maps the
-# apparent root, but that wouldn't work with posix builds. Instead,
-# therefore, symlink the directories lmi uses as described in
-# 'README.schroot'.
-
-if [ "Cygwin" != "$platform" ] && [ "WSL" != "$platform" ]
-then
-    sed -i /opt/lmi/data/configurable_settings.xml -e's/C://g'
-fi
 
 # Restore any preexisting source directory that had been preserved
 # above, renaming the pristine checkout that had replaced it.
