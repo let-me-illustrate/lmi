@@ -56,7 +56,7 @@ esac
 
 # Distinguish wx dll by host type, compiler version, and wx SHA1.
 gcc_version=$("${mingw_bin_dir}${LMI_TRIPLET}-$LMI_COMPILER" -dumpversion|tr -d '\r')
-vendor=${LMI_TRIPLET}-$gcc_version-$wx_commit_sha
+vendor=${LMI_TRIPLET}-$gcc_version-$(git rev-parse --short HEAD:third_party/wx)
 
 # Configuration reference:
 #   https://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html

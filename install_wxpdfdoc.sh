@@ -72,7 +72,8 @@ config_options="
 cd "$wxpdfdoc_dir"
 autoreconf --verbose
 
-build_dir="$exec_prefix/wxpdfdoc-ad_hoc/wxpdfdoc-$wxpdfdoc_commit_sha"
+gcc_version=$("${mingw_bin_dir}${LMI_TRIPLET}-$LMI_COMPILER" -dumpversion|tr -d '\r')
+build_dir="$exec_prefix/wxpdfdoc-ad_hoc/lmi-$LMI_COMPILER-$gcc_version"
 
 if [ "$wxpdfdoc_skip_clean" != 1 ]
 then

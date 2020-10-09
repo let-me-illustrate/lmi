@@ -112,7 +112,7 @@ xmlsoft_common_options="
   --without-python
 "
 
-# This variable is used inside eval, which is beyond spellcheck's ken.
+# This variable is used inside eval, which is beyond shellcheck's ken.
 # shellcheck disable=SC2034
 libxml2_options="
   $xmlsoft_common_options
@@ -193,6 +193,7 @@ done
 # Building xmlwrapp is similar, but sufficiently different to not try to fit it
 # into the loop above, but reuse the same structure for it just to emphasize
 # the similarity.
+# shellcheck disable=SC2043
 for lib in xmlwrapp; do
     libdir="$srcdir/third_party/$lib"
     if [ ! -x "$libdir/configure" ]; then
@@ -201,9 +202,9 @@ for lib in xmlwrapp; do
     fi
     mkdir --parents "$build_dir/$lib"
     cd "$build_dir/$lib"
-    # shellcheck disable=SC2046
+    # shellcheck disable=SC2086
     "$libdir/configure" \
-        PKG_CONFIG_LIBDIR=$exec_prefix/lib/pkgconfig \
+        PKG_CONFIG_LIBDIR="$exec_prefix"/lib/pkgconfig \
         $xmlwrapp_options
     $MAKE install
 done
