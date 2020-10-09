@@ -55,6 +55,9 @@ esac
 
 export PKG_CONFIG_PATH="$exec_prefix/lib/pkgconfig"
 
+# Don't prepend libraries and headers paths with the sysroot directory.
+export PKG_CONFIG_SYSROOT_DIR=
+
 # For 'host' and 'build' configure options, see:
 #   https://cygwin.com/ml/cygwin/2002-01/msg00837.html
 # Do not use '-fno-omit-frame-pointer' because of an ICE:
