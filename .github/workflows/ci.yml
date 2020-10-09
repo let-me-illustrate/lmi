@@ -72,6 +72,12 @@ jobs:
           echo "xmlwrapp_sha1=$(git rev-parse HEAD:third_party/xmlwrapp)" >> $GITHUB_ENV
           echo "xslt_sha1=$(git rev-parse HEAD:third_party/libxslt)" >> $GITHUB_ENV
 
+          echo "PATH=$PATH:/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/bin" >> $GITHUB_ENV
+
+          LD_LIBRARY_PATH=/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib
+          LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/build/ship
+          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> $GITHUB_ENV
+
       - name: Create lmi directories
         run: >
           for d in /opt/lmi /opt/lmi/print /etc/opt/lmi /srv/cache_for_lmi; do
