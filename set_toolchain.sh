@@ -156,7 +156,7 @@ esac
 case "$LMI_TRIPLET" in
     (i686-w64-mingw32)    ;;
     (x86_64-w64-mingw32)  ;;
-    (x86_64-pc-linux-gnu) printf '%s\n' "GUI build not yet supported." > /dev/tty ;;
+    (x86_64-pc-linux-gnu) ;;
     (*)
         printf '%s\n' "Changed nothing because host triplet '$LMI_TRIPLET' is untested."
         return 3;
