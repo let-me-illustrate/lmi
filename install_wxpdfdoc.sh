@@ -72,7 +72,7 @@ config_options="
 cd "$wxpdfdoc_dir"
 autoreconf --verbose
 
-gcc_version=$("${mingw_bin_dir}${LMI_TRIPLET}-$LMI_COMPILER" -dumpversion|tr -d '\r')
+gcc_version=$(make show_gcc_version)
 build_dir="$exec_prefix/wxpdfdoc-ad_hoc/lmi-$LMI_COMPILER-$gcc_version"
 
 if [ "$wxpdfdoc_skip_clean" != 1 ]

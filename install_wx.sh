@@ -55,7 +55,7 @@ case "$build_type" in
 esac
 
 # Distinguish wx dll by host type, compiler version, and wx SHA1.
-gcc_version=$("${mingw_bin_dir}${LMI_TRIPLET}-$LMI_COMPILER" -dumpversion|tr -d '\r')
+gcc_version=$(make show_gcc_version)
 vendor=${LMI_TRIPLET}-$gcc_version-$(git rev-parse --short HEAD:third_party/wx)
 
 # Configuration reference:

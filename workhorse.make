@@ -1571,6 +1571,16 @@ clean_edg:
 
 ################################################################################
 
+# Report gcc version.
+#
+# Intended for use in shell scripts thus:
+#   gcc_version=$(make show_gcc_version)
+# so no newline is printed.
+
+.PHONY: show_flags
+show_gcc_version:
+	@printf "$(gcc_version)"
+
 # Display selected variables.
 
 .PHONY: show_flags
