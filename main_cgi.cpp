@@ -99,7 +99,11 @@ int try_main(int argc, char* argv[])
 
     if(argc == 2 && argv[1] == std::string("--capture"))
         {
+#       if defined LMI_POSIX
+        int exit_code = std::system("env > settings");
+#       else
         int exit_code = std::system("set > settings");
+#       endif // defined LMI_POSIX
         if(EXIT_SUCCESS != exit_code)
             {
             std::cerr << "Failed to execute 'set' command;";
