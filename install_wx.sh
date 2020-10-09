@@ -44,9 +44,9 @@ exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
 srcdir=$(dirname "$(readlink --canonicalize "$0")")
 wx_dir="$srcdir/third_party/wx"
 
-# Script commands ##############################################################
+build_type=$(/usr/share/libtool/build-aux/config.guess)
 
-build_type=$("$wx_dir"/config.guess)
+# Script commands ##############################################################
 
 case "$build_type" in
     (*-*-cygwin*)
