@@ -27,7 +27,7 @@
 # on this server, which is good enough.
 
 # Needed to do this:
-# %s,https://git.savannah.nongnu.org/cgit/lmi.git/plain,https://github.com/vadz/lmi/raw/master,
+# %s,https://git.savannah.nongnu.org/cgit/lmi.git/plain,https://github.com/let-me-illustrate/lmi/raw/master,
 # for a corporate server that enables github but, incomprehensibly, blocks nongnu.org
 
 # * Multi-user access
@@ -77,8 +77,7 @@ sudo cp -a /usr/share/libtool/config/config.guess /usr/share/libtool/build-aux/c
 
 # Configure zsh, for root as well as the user configured above.
 
-https://github.com/vadz/lmi/raw/master/gwc/.zshrc
-wget -N -nv 'https://github.com/vadz/lmi/raw/master/gwc/.zshrc'
+wget -N -nv 'https://github.com/let-me-illustrate/lmi/raw/master/gwc/.zshrc'
 mv .zshrc ~
 cp -a ~/.zshrc /home/${USER}/.zshrc
 chown ${USER}:${USER} /home/${USER}/.zshrc
@@ -87,7 +86,7 @@ chown ${USER}:${USER} /home/${USER}/.zshrc
 # '~/.vimrc' and '/etc/vim/vimrc.local', use '~/.vimrc' for all
 # customizations and copy that file for the normal user too.
 
-wget -N -nv 'https://github.com/vadz/lmi/raw/master/gwc/.vimrc'
+wget -N -nv 'https://github.com/let-me-illustrate/lmi/raw/master/gwc/.vimrc'
 mv .vimrc ~
 cp -a ~/.vimrc /home/${USER}/.vimrc
 chown ${USER}:${USER} /home/${USER}/.vimrc
@@ -98,7 +97,7 @@ mkdir ~/.vim
 mkdir /home/${USER}/.vim
 chown ${USER}:${USER} /home/${USER}/.vim
 # It's a much better idea to copy a mature spellfile hither:
-wget -N -nv 'https://github.com/vadz/lmi/raw/master/gwc/.vim/spell/en.utf-8.add'
+wget -N -nv 'https://github.com/let-me-illustrate/lmi/raw/master/gwc/.vim/spell/en.utf-8.add'
 mkdir ~/.vim/spell
 mv en.utf-8.add ~/.vim/spell/en.utf-8.add
 mkdir /home/${USER}/.vim/spell
@@ -129,7 +128,7 @@ git config --global push.default simple
 
 # Install lmi for wine.
 
-wget -N -nv 'https://github.com/vadz/lmi/raw/master/install_msw.sh'
+wget -N -nv 'https://github.com/let-me-illustrate/lmi/raw/master/install_msw.sh'
 chmod +x install_msw.sh
 ./install_msw.sh >log 2>&1
 

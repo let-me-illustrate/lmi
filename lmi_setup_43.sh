@@ -131,7 +131,7 @@ cd free/src || { printf 'failed: cd\n'; exit 3; }
 
 git clone git://git.savannah.nongnu.org/lmi.git \
   || git clone https://git.savannah.nongnu.org/r/lmi.git \
-  || git clone https://github.com/vadz/lmi.git
+  || git clone https://github.com/let-me-illustrate/lmi.git
 
 cd lmi || { printf 'failed: cd\n'; exit 3; }
 find . -path ./.git -prune -o -type f -print0 \

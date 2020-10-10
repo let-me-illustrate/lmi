@@ -206,7 +206,7 @@ then
     # shellcheck disable=SC2086
     git clone      $clone_opts git://git.savannah.nongnu.org/lmi.git \
       || git clone $clone_opts https://git.savannah.nongnu.org/r/lmi.git \
-      || git clone $clone_opts https://github.com/vadz/lmi.git
+      || git clone $clone_opts https://github.com/let-me-illustrate/lmi.git
 fi
 
 cd /opt/lmi/src/lmi || printf 'Cannot cd\n'

@@ -31,7 +31,7 @@ echo "Started: $stamp0"
 if curl https://git.savannah.nongnu.org:443 >/dev/null 2>&1 ; then
   GIT_URL_BASE=https://git.savannah.nongnu.org/cgit/lmi.git/plain
 else
-  GIT_URL_BASE=https://github.com/vadz/lmi/raw/master
+  GIT_URL_BASE=https://github.com/let-me-illustrate/lmi/raw/master
 fi
 
 # Store dynamic configuration in a temporary file. This method is
