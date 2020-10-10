@@ -65,7 +65,12 @@ config_options="
   --disable-dependency-tracking
 "
 
-# Provide the host and the build type only when cross-compiling.
+# Provide the host and the build type only when cross-compiling,
+# because specifying host for native builds, e.g.:
+#   wx-config --host=$(/usr/share/libtool/build-aux/config.guess)
+# fails. See:
+#   https://lists.nongnu.org/archive/html/lmi/2020-10/msg00039.html
+#   https://trac.wxwidgets.org/ticket/12698
 if [ "$LMI_TRIPLET" != "$build_type" ]
 then
     config_options="
