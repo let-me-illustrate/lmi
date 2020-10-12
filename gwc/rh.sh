@@ -73,7 +73,7 @@ patch --dry-run --strip=0 </home/${USER}/ltmain.sh.patch \
 # See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00035.html
 
-sudo cp -a /usr/share/libtool/config/config.guess /usr/share/libtool/build-aux/config.guess
+sudo cp -a /usr/share/libtool/config/config.guess /usr/share/misc/config.guess
 
 # Configure zsh, for root as well as the user configured above.
 

@@ -44,7 +44,7 @@ exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
 srcdir=$(dirname "$(readlink --canonicalize "$0")")
 wx_dir="$srcdir/third_party/wx"
 
-build_type=$(/usr/share/libtool/build-aux/config.guess)
+build_type=$(/usr/share/misc/config.guess)
 
 # Script commands ##############################################################
 

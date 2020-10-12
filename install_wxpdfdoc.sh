@@ -44,7 +44,7 @@ exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
 srcdir=$(dirname "$(readlink --canonicalize "$0")")
 wxpdfdoc_dir="$srcdir/third_party/wxpdfdoc"
 
-build_type=$(/usr/share/libtool/build-aux/config.guess)
+build_type=$(/usr/share/misc/config.guess)
 
 # Script commands ##############################################################
 
@@ -67,7 +67,7 @@ config_options="
 
 # Provide the host and the build type only when cross-compiling,
 # because specifying host for native builds, e.g.:
-#   wx-config --host=$(/usr/share/libtool/build-aux/config.guess)
+#   wx-config --host=$(/usr/share/misc/config.guess)
 # fails. See:
 #   https://lists.nongnu.org/archive/html/lmi/2020-10/msg00039.html
 #   https://trac.wxwidgets.org/ticket/12698

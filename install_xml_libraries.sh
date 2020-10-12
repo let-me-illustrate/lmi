@@ -45,7 +45,7 @@ srcdir=$(dirname "$(readlink --canonicalize "$0")")
 
 build_dir="${exec_prefix}/xml-ad_hoc"
 
-build_type=$(/usr/share/libtool/build-aux/config.guess)
+build_type=$(/usr/share/misc/config.guess)
 
 case "$build_type" in
     (*-*-cygwin*)

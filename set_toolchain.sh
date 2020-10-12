@@ -86,7 +86,7 @@
 foo()
 {
 local   lmi_build_type
-        lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+        lmi_build_type=$(/usr/share/misc/config.guess)
 
 local      prefix="/opt/lmi"
 local localbindir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/bin"

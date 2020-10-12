@@ -23,7 +23,7 @@
 
 # Include platform-specific makefile.
 
-lmi_build_type := $(shell /usr/share/libtool/build-aux/config.guess)
+lmi_build_type := $(shell /usr/share/misc/config.guess)
 
 ifeq (msys,$(findstring msys,$(lmi_build_type)))
   platform_makefile := msw_msys.make

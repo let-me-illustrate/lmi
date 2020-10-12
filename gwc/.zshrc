@@ -3,7 +3,7 @@
 # To work with lmi, it is crucial to source 'set_toolchain.sh'. It's
 # deliberately not sourced here, so that it can assume that some
 # things have already been set up: for instance, it assumes that
-#   /usr/share/libtool/build-aux/config.guess
+#   /usr/share/misc/config.guess
 # is present, which need not be the case in a brand-new chroot.
 
 # Minimal system path.

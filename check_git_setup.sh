@@ -35,7 +35,7 @@ printf '"%s" is git toplevel directory\n' "$toplevel"
 # 'core.filemode' is "false". See:
 #   https://lists.nongnu.org/archive/html/lmi/2017-11/msg00018.html
 
-lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+lmi_build_type=$(/usr/share/misc/config.guess)
 case "$lmi_build_type" in
   (*-*-cygwin*)
     printf 'cygwin detected\n'

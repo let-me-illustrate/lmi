@@ -34,7 +34,7 @@ set -vx
 stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
 
-lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+lmi_build_type=$(/usr/share/misc/config.guess)
 
 # This should work with a rather minimal path.
 

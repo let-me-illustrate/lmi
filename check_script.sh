@@ -23,7 +23,7 @@
 
 # Do nothing for cygwin, which has no 'shellcheck' package.
 
-lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+lmi_build_type=$(/usr/share/misc/config.guess)
 case "$lmi_build_type" in
   (*-*-cygwin*) exit 0 ;;
 esac
