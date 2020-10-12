@@ -85,6 +85,7 @@ jobs:
             sudo --preserve-env chown $NORMAL_UID $d;
           done;
           mkdir /srv/cache_for_lmi/downloads
+          mkdir /opt/lmi/src
 
       - name: Cache downloaded archives
         uses: actions/cache@v2
@@ -151,6 +152,12 @@ jobs:
             <use_builtin_calculation_summary>1</use_builtin_calculation_summary>
           </configurable_settings>
           EOF
+
+          # Create the symbolic link to pass `check_concinnity` tests.
+          ln -s $GITHUB_WORKSPACE /opt/lmi/src/lmi
+
+          # Fix the symbolic link to .git/hooks.
+          ./check_git_setup.sh
 
       - name: Install
         run: make install
