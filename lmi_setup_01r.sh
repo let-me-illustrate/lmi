@@ -63,7 +63,12 @@ schroot --chroot=${CHRTNAME} --user="${user}"        --directory=/tmp ./lmi_setu
 } done
 schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
 schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_43.sh
-schroot --chroot=${CHRTNAME} --user=nemo             --directory=/tmp ./lmi_setup_44.sh
+# Ideally, this test would be run as a different user, but the 'nemo'
+# account created for that purpose stopped working on a corporate
+# redhat server--see:
+#   https://lists.nongnu.org/archive/html/lmi/2020-10/msg00058.html
+# schroot --chroot=${CHRTNAME} --user=nemo             --directory=/tmp ./lmi_setup_44.sh
+schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_44.sh
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
 echo "$stamp $0 [redhat host]"  | tee /dev/tty
