@@ -155,6 +155,9 @@ jobs:
       - name: Install
         run: make install
 
+      - name: Check concinnity
+        run: make $coefficiency check_concinnity
+
       - name: Check physical closure
         run: make $coefficiency check_physical_closure
 
