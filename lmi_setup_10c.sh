@@ -22,6 +22,7 @@
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 . ./lmi_setup_inc.sh
+# shellcheck disable=SC1091
 . /tmp/schroot_env
 
 set -evx
