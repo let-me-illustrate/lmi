@@ -42,13 +42,6 @@ platform_defines := \
 
 platform_gui_ldflags := -mwindows
 
-platform_xml_libraries := \
-  -lxsltwrapp \
-  -lxmlwrapp \
-  -lexslt \
-  -lxslt \
-  -lxml2 \
-
 # In addition to other reasons for treating these libraries as mere
 # collections of source files, there's a specific problem with boost.
 # The build system provided by boost produces library names such as

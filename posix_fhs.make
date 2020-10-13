@@ -35,17 +35,6 @@ platform_boost_libraries := \
 # necessary because lmi compiles their source code to object files.
 platform_boost_libraries :=
 
-# Flags for all other xml libraries are provided by *-config scripts,
-# but '-lexslt' is a special case--see:
-#   https://mail.gnome.org/archives/xslt/2001-October/msg00133.html
-#   https://lists.nongnu.org/archive/html/lmi/2020-10/msg00066.html
-
-platform_xml_libraries := \
-  $(shell xmlwrapp-config --libs) \
-  -lexslt \
-  $(shell xslt-config --libs) \
-  $(shell xml2-config --libs) \
-
 AR      := ar
 CC      := gcc
 CPP     := cpp
