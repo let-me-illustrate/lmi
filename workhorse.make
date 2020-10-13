@@ -742,7 +742,7 @@ $(product_file_sources): tutelary_flag += $(product_file_flags)
 
 REQUIRED_LIBS := \
   $(platform_boost_libraries) \
-  $(platform_xml_libraries) \
+  $(xml_libraries) \
 
 wx_ldflags = \
   $(wx_library_paths) $(wx_libraries) \
