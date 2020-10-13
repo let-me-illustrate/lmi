@@ -294,6 +294,7 @@ do
     make "$coefficiency" --output-sync=recurse wx_config_check
     make "$coefficiency" --output-sync=recurse show_flags
     make "$coefficiency" --output-sync=recurse clean
+    make "$coefficiency" --output-sync=recurse uninstall
     make "$coefficiency" --output-sync=recurse install
 
     if [ "Cygwin" = "$platform" ]

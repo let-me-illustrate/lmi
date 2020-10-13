@@ -414,6 +414,10 @@ eviscerate: source_clean
 	-$(RM) --force --recursive $(prefix)/gcc_x86_64-w64-mingw32
 	-$(RM) --force --recursive $(prefix)/gcc_x86_64-pc-linux-gnu
 
+.PHONY: uninstall
+uninstall:
+	-$(RM) --force --recursive $(bindir)
+
 ################################################################################
 
 # Custom tools built from source.
