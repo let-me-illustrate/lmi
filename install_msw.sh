@@ -285,12 +285,6 @@ do
     # Source this script only for commands that depend upon it.
     . ./set_toolchain.sh
 
-    # For pc-linux-gnu, this is not ideal, but it does work.
-    export LD_LIBRARY_PATH
-    LD_LIBRARY_PATH=.
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/lmi/local/"gcc_${LMI_TRIPLET}"/lib
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/lmi/bin
-
     make "$coefficiency" --output-sync=recurse wx_config_check
     make "$coefficiency" --output-sync=recurse show_flags
     make "$coefficiency" --output-sync=recurse clean

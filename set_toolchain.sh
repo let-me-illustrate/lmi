@@ -135,6 +135,12 @@ case "$lmi_build_type" in
         ;;
     (*) ;;
 esac
+    # For pc-linux-gnu, this is not ideal, but it does work.
+    export LD_LIBRARY_PATH
+    LD_LIBRARY_PATH=.
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/lmi/local/"gcc_${LMI_TRIPLET}"/lib
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/lmi/bin
+
 }
 
 # This script is to be sourced, so use 'return' because 'exit' would
