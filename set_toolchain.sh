@@ -89,6 +89,7 @@ local   lmi_build_type
         lmi_build_type=$(/usr/share/misc/config.guess)
 
 local      prefix="/opt/lmi"
+local      bindir="$prefix/bin"
 local localbindir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/bin"
 local locallibdir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib"
 
@@ -131,16 +132,17 @@ case "$lmi_build_type" in
                 export WINEPATH="$w0;$w1"
                 export  PERFORM="wine"
                 ;;
+            (x86_64-pc-linux-gnu)
+                # Using LD_LIBRARY_PATH is not ideal, but it does work.
+                export LD_LIBRARY_PATH
+                LD_LIBRARY_PATH=.
+                LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$locallibdir"
+                LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$bindir"
+                ;;
         esac
         ;;
     (*) ;;
 esac
-    # For pc-linux-gnu, this is not ideal, but it does work.
-    export LD_LIBRARY_PATH
-    LD_LIBRARY_PATH=.
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/lmi/local/"gcc_${LMI_TRIPLET}"/lib
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/lmi/bin
-
 }
 
 # This script is to be sourced, so use 'return' because 'exit' would
