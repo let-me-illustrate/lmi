@@ -47,21 +47,6 @@ $(srcdir)/$(platform_makefile):: ;
 
 ################################################################################
 
-# Generic settings.
-
-# Flags for all other xml libraries are provided by *-config scripts,
-# but '-lexslt' is a special case--see:
-#   https://mail.gnome.org/archives/xslt/2001-October/msg00133.html
-#   https://lists.nongnu.org/archive/html/lmi/2020-10/msg00066.html
-
-xml_libraries := \
-  $(shell xmlwrapp-config --libs) \
-  -lexslt \
-  $(shell xslt-config --libs) \
-  $(shell xml2-config --libs) \
-
-################################################################################
-
 # GNU tools for special purposes.
 
 # Always use the GNU C++ compiler and preprocessor, version 3.x or
