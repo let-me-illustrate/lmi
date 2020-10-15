@@ -1578,7 +1578,7 @@ clean_edg:
 #   gcc_version=$(make show_gcc_version)
 # so no newline is printed.
 
-.PHONY: show_flags
+.PHONY: show_gcc_version
 show_gcc_version:
 	@printf "$(gcc_version)"
 
