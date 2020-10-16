@@ -359,6 +359,7 @@ void product_data::ascribe_members()
     ascribe("Fn1035Charge"               , &product_data::Fn1035Charge                  );
     ascribe("FnMecExtraWarning"          , &product_data::FnMecExtraWarning             );
     ascribe("FnNotTaxAdvice"             , &product_data::FnNotTaxAdvice                );
+    ascribe("FnNotTaxAdvice2"            , &product_data::FnNotTaxAdvice2               );
     ascribe("FnImf"                      , &product_data::FnImf                         );
     ascribe("FnCensus"                   , &product_data::FnCensus                      );
     ascribe("FnDacTax"                   , &product_data::FnDacTax                      );
@@ -697,6 +698,7 @@ sample::sample()
     item("Fn1035Charge")               = S_Fn1035Charge;
     item("FnMecExtraWarning")          = S_FnMecExtraWarning;
     item("FnNotTaxAdvice")             = S_FnNotTaxAdvice;
+    item("FnNotTaxAdvice2")            = ""; // Deliberately empty: shouldn't even exist.
     item("FnImf")                      = S_FnImf;
     item("FnCensus")                   = S_FnCensus;
     item("FnDacTax")                   = S_FnDacTax;

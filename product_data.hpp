@@ -349,6 +349,7 @@ class LMI_SO product_data
     glossed_string Fn1035Charge;
     glossed_string FnMecExtraWarning;
     glossed_string FnNotTaxAdvice;
+    glossed_string FnNotTaxAdvice2;
     glossed_string FnImf;
     glossed_string FnCensus;
     glossed_string FnDacTax;

@@ -367,6 +367,7 @@ class LMI_SO LedgerInvariant final
     std::string Fn1035Charge;
     std::string FnMecExtraWarning;
     std::string FnNotTaxAdvice;
+    std::string FnNotTaxAdvice2;
     std::string FnImf;
     std::string FnCensus;
     std::string FnDacTax;

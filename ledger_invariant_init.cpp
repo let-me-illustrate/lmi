@@ -499,6 +499,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         Fn1035Charge               = p.datum("Fn1035Charge"                   );
         FnMecExtraWarning          = p.datum("FnMecExtraWarning"              );
         FnNotTaxAdvice             = p.datum("FnNotTaxAdvice"                 );
+        FnNotTaxAdvice2            = p.datum("FnNotTaxAdvice2"                );
         FnImf                      = p.datum("FnImf"                          );
         FnCensus                   = p.datum("FnCensus"                       );
         FnDacTax                   = p.datum("FnDacTax"                       );

@@ -357,6 +357,7 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["Fn1035Charge"               ] = &Fn1035Charge               ;
     Strings         ["FnMecExtraWarning"          ] = &FnMecExtraWarning          ;
     Strings         ["FnNotTaxAdvice"             ] = &FnNotTaxAdvice             ;
+    Strings         ["FnNotTaxAdvice2"            ] = &FnNotTaxAdvice2            ;
     Strings         ["FnImf"                      ] = &FnImf                      ;
     Strings         ["FnCensus"                   ] = &FnCensus                   ;
     Strings         ["FnDacTax"                   ] = &FnDacTax                   ;
