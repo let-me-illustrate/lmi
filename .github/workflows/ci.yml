@@ -152,9 +152,6 @@ jobs:
           </configurable_settings>
           EOF
 
-          # Create the symbolic link to pass `check_concinnity` tests.
-          ln -s $GITHUB_WORKSPACE /opt/lmi/src/lmi
-
           # Tests rely on the symlinks set up by this script, so run it.
           ./check_git_setup.sh
 
