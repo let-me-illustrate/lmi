@@ -63,6 +63,7 @@ git config --global log.date iso8601-strict-local
 git config --global log.follow true
 git config --global pull.ff only
 git config --global push.default simple
+git config --global push.recurseSubmodules check
 if [ "greg" = "$(whoami)" ]; then
 git config --global user.email gchicares@sbcglobal.net
 git config --global user.name "Gregory W. Chicares"
