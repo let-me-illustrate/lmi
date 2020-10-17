@@ -1076,8 +1076,24 @@ Input* CensusView::class_parms_from_class_name(std::string const& class_name)
 bool CensusView::column_value_varies_across_cells(std::string const& header) const
 {
     auto const z = case_parms()[0][header];
-    for(auto const& j : class_parms()) {if(z != j[header]) return true;}
-    for(auto const& j : cell_parms() ) {if(z != j[header]) return true;}
+
+    auto const class_header_index = class_parms().begin()->get_member_index(header);
+    for(auto const& j : class_parms())
+        {
+        if(z != j.get_member_by_index(class_header_index))
+            {
+            return true;
+            }
+        }
+
+    auto const cell_header_index = cell_parms().begin()->get_member_index(header);
+    for(auto const& j : cell_parms())
+        {
+        if(z != j.get_member_by_index(cell_header_index))
+            {
+            return true;
+            }
+        }
     return false;
 }
 

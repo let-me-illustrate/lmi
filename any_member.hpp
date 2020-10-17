@@ -244,6 +244,7 @@ class any_member final
   public:
     any_member();
     any_member(any_member const&);
+    any_member(any_member&&);
     ~any_member() override;
 
     template<typename ValueType>
@@ -252,6 +253,7 @@ class any_member final
     any_member& swap(any_member&);
     any_member& operator=(any_member const&);
     any_member& operator=(std::string const&);
+    any_member& operator=(any_member&&);
     bool operator==(any_member const&) const;
     bool operator!=(any_member const&) const;
 
@@ -266,7 +268,6 @@ class any_member final
     // any_entity required implementation.
     any_member& assign(std::string const&) override;
 
-    ClassType* object_;
     placeholder* content_;
 };
 
@@ -274,15 +275,19 @@ class any_member final
 
 template<typename ClassType>
 any_member<ClassType>::any_member()
-    :object_  {nullptr}
-    ,content_ {nullptr}
+    :content_ {nullptr}
 {}
 
 template<typename ClassType>
 any_member<ClassType>::any_member(any_member const& other)
     :any_entity {other}
-    ,object_    {other.object_}
     ,content_   {other.content_ ? other.content_->clone() : nullptr}
+{}
+
+template<typename ClassType>
+any_member<ClassType>::any_member(any_member&& other)
+    :any_entity {std::move(other)}
+    ,content_   {std::exchange(other.content_, nullptr)}
 {}
 
 template<typename ClassType>
@@ -294,8 +299,7 @@ any_member<ClassType>::~any_member()
 template<typename ClassType>
 template<typename ValueType>
 any_member<ClassType>::any_member(ClassType* object, ValueType const& value)
-    :object_  {object}
-    ,content_ {new holder<ClassType,ValueType>(object, value)}
+    :content_ {new holder<ClassType,ValueType>(object, value)}
 {}
 
 template<typename ClassType>
@@ -325,6 +329,16 @@ template<typename ClassType>
 any_member<ClassType>& any_member<ClassType>::operator=(std::string const& s)
 {
     return assign(s);
+}
+
+template<typename ClassType>
+any_member<ClassType>& any_member<ClassType>::operator=
+    (any_member<ClassType>&& other
+    )
+{
+    delete content_;
+    content_ = std::exchange(other.content_, nullptr);
+    return *this;
 }
 
 template<typename ClassType>
@@ -368,9 +382,10 @@ ExactMemberType* any_member<ClassType>::exact_cast()
     typedef holder<ClassType,pmd_type> holder_type;
     LMI_ASSERT(content_);
 #if !defined LMI_MSC
-    pmd_type pmd = static_cast<holder_type*>(content_)->held_;
-    LMI_ASSERT(object_);
-    return &(object_->*pmd);
+    holder_type* const holder = static_cast<holder_type*>(content_);
+    pmd_type pmd = holder->held_;
+    LMI_ASSERT(holder->object_);
+    return &(holder->object_->*pmd);
 #else  // defined LMI_MSC
     return static_cast<ExactMemberType*>(content_->defraud());
 #endif // defined LMI_MSC
@@ -526,9 +541,6 @@ MemberType const* member_cast(any_member<ClassType> const& member)
 template<typename ClassType>
 class MemberSymbolTable
 {
-    typedef std::map<std::string, any_member<ClassType>> member_map_type;
-    typedef typename member_map_type::value_type member_pair_type;
-
   public:
     virtual ~MemberSymbolTable();
 
@@ -538,6 +550,9 @@ class MemberSymbolTable
     MemberSymbolTable<ClassType>& assign(MemberSymbolTable<ClassType> const&);
     bool equals(MemberSymbolTable<ClassType> const&) const;
     std::vector<std::string> const& member_names() const;
+
+    int get_member_index(std::string const&) const;
+    any_member<ClassType> const& get_member_by_index(int) const;
 
   protected:
     MemberSymbolTable();
@@ -552,7 +567,7 @@ class MemberSymbolTable
     [[noreturn]]
     void complain_that_no_such_member_is_ascribed(std::string const&) const;
 
-    member_map_type map_;
+    std::vector<any_member<ClassType>> member_values_;
     std::vector<std::string> member_names_;
 };
 
@@ -585,16 +600,29 @@ void MemberSymbolTable<ClassType>::complain_that_no_such_member_is_ascribed
 }
 
 template<typename ClassType>
+int MemberSymbolTable<ClassType>::get_member_index(std::string const& s) const
+{
+    auto const i = std::lower_bound(member_names_.begin(), member_names_.end(), s);
+    if(i == member_names_.end() || (*i != s))
+        {
+        complain_that_no_such_member_is_ascribed(s);
+        }
+    return i - member_names_.begin();
+}
+
+template<typename ClassType>
+any_member<ClassType> const&
+MemberSymbolTable<ClassType>::get_member_by_index(int n) const
+{
+    return member_values_[n];
+}
+
+template<typename ClassType>
 any_member<ClassType>& MemberSymbolTable<ClassType>::operator[]
     (std::string const& s
     )
 {
-    auto i = map_.find(s);
-    if(map_.end() == i)
-        {
-        complain_that_no_such_member_is_ascribed(s);
-        }
-    return i->second;
+    return member_values_[get_member_index(s)];
 }
 
 template<typename ClassType>
@@ -602,12 +630,7 @@ any_member<ClassType> const& MemberSymbolTable<ClassType>::operator[]
     (std::string const& s
     ) const
 {
-    auto const i = map_.find(s);
-    if(map_.end() == i)
-        {
-        complain_that_no_such_member_is_ascribed(s);
-        }
-    return i->second;
+    return (const_cast<MemberSymbolTable<ClassType>&>(*this))[s];
 }
 
 template<typename ClassType>
@@ -632,10 +655,15 @@ void MemberSymbolTable<ClassType>::ascribe
             >::value
         );
 
+    auto const i = std::lower_bound(member_names_.begin(), member_names_.end(), s);
+
     ClassType* class_object = static_cast<ClassType*>(this);
-    map_.insert(member_pair_type(s, any_member<ClassType>(class_object, p2m)));
-    // TODO ?? This would appear to be O(N^2).
-    auto i = std::lower_bound(member_names_.begin(), member_names_.end(), s);
+
+    auto const index = i - member_names_.begin();
+    member_values_.emplace(member_values_.begin() + index, class_object, p2m);
+
+    // Notice that insert() may invalidate the iterator, so it can only be done
+    // after using "i" for computing the index into member_values_ above.
     member_names_.insert(i, s);
 }
 
