@@ -23,7 +23,12 @@
 
 # See 'GNUmakefile' for suggested use.
 
-. ./set_toolchain.sh
+# Directory where this script resides.
+
+srcdir=$(dirname "$(readlink --canonicalize "$0")")
+
+# shellcheck disable=SC1090
+. "$srcdir"/set_toolchain.sh
 
 printf '%s\n' "export LMI_COMPILER := $LMI_COMPILER"
 printf '%s\n' "export LMI_TRIPLET  := $LMI_TRIPLET"
