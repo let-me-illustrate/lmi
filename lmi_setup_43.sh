@@ -97,6 +97,7 @@ chmod g=u+s     /opt/lmi/touchstone
 cp -a /opt/lmi/proprietary/test/* /opt/lmi/touchstone/
 
 # Remove object files previously built without proprietary source:
+# shellcheck disable=SC1091
 . /opt/lmi/src/lmi/set_toolchain.sh
 rm /opt/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/build/ship/my*
 
