@@ -30,8 +30,9 @@ srcdir=$(dirname "$(readlink --canonicalize "$0")")
 # shellcheck disable=SC1090
 . "$srcdir"/set_toolchain.sh
 
-printf '%s\n' "export LMI_COMPILER := $LMI_COMPILER"
-printf '%s\n' "export LMI_TRIPLET  := $LMI_TRIPLET"
-printf '%s\n' "export PATH         := $PATH"
-printf '%s\n' "export WINEPATH     := $WINEPATH"
-printf '%s\n' "export PERFORM      := $PERFORM"
+printf '%s\n' "export LMI_COMPILER    := $LMI_COMPILER"
+printf '%s\n' "export LMI_TRIPLET     := $LMI_TRIPLET"
+printf '%s\n' "export PATH            := $PATH"
+printf '%s\n' "export WINEPATH        := $WINEPATH"
+printf '%s\n' "export PERFORM         := $PERFORM"
+printf '%s\n' "export LD_LIBRARY_PATH := $LD_LIBRARY_PATH"
