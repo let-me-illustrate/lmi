@@ -29,6 +29,8 @@ if [ "greg" != "$(whoami)" ]; then
   exit 0
 fi
 
+printf "running post-checkout hook...\n"
+
 # Motivation. I maintain a local mirror of origin/master in a
 # directory named by ${mirror_dir}. It is often convenient to
 # compare it to my working directory using some GUI diff program,
@@ -51,7 +53,7 @@ new_head_name="$(git name-rev --name-only "$new_head")"
 
 changed_files=$(git diff --name-only "$old_head_name..$new_head_name")
 
-mirror_dir=/opt/lmi/free/src/lmi/
+mirror_dir=/opt/lmi/free/src/lmi
 
 for z in $changed_files
 do
@@ -60,3 +62,5 @@ do
         touch --no-create --reference="$z" "$y";
     fi
 done
+
+printf "...post-checkout hook finished.\n"
