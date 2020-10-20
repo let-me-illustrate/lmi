@@ -112,14 +112,6 @@ The state of issue is {{StateOfJurisdiction}}.
     {{MecFootnote}}
 </p>
 
-{{^SinglePremium}}
-    {{^IsInforce}}
-        <p>
-        The initial 7-pay premium limit is ${{InitSevenPayPrem}}.
-        </p>
-    {{/IsInforce}}
-{{/SinglePremium}}
-
 <p>
     {{FnNotTaxAdvice}}
 </p>
