@@ -142,7 +142,7 @@ if [ "WSL" = "$platform" ]
 then
     # Install and upgrade all packages if any is missing.
     packages_list='autoconf automake bsdtar curl dos2unix doxygen
-      gdb git libtool make patch pkg-config rsync unzip wget
+      gdb git libgtk-3-dev libtool make patch pkg-config rsync unzip wget
       zip zsh g++-mingw-w64-i686'
 
     # Disable shellcheck warning about the need to double quote $packages_list:
