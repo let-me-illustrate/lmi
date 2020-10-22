@@ -69,7 +69,7 @@ struct xml_io
     }
 };
 
-/// Serialization for sequences [23.1.1].
+/// Serialization for sequence containers.
 ///
 /// Derive publicly from this to use its implementation when
 /// specializing class template xml_io for a particular sequence.
