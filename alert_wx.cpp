@@ -73,7 +73,15 @@ void status_alert(std::string const& s)
 void warning_alert(std::string const& s)
 {
     std::cerr << "Warning: " << s << std::endl;
-    wxMessageBox(s, "Warning", wxOK, wxTheApp ? wxTheApp->GetTopWindow() : nullptr);
+
+#if defined __WXGTK__
+    // wxMessageBox() crashes under GTK if the application is not initialized.
+    const bool show_message = (wxTheApp != NULL);
+#else // !defined __WXGTK__
+    const bool show_message = true;
+#endif // !defined __WXGTK__
+    if(show_message)
+        wxMessageBox(s, "Warning", wxOK, wxTheApp ? wxTheApp->GetTopWindow() : nullptr);
 }
 
 /// It seems silly to offer an option that should never be declined,
