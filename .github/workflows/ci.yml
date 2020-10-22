@@ -40,7 +40,7 @@ jobs:
             automake bc bsdmainutils bzip2 curl cvs default-jre \
             g++-multilib git jing libarchive-tools \
             libtool libxml2-utils libxslt1-dev make patch pkg-config rsync \
-            shellcheck sudo trang unzip wget xsltproc
+            shellcheck sudo trang unzip wget xsltproc xvfb zsh
 
           if ${{ matrix.mingw }}
           then
@@ -84,6 +84,7 @@ jobs:
             sudo --preserve-env chown $NORMAL_UID $d
           done
           mkdir /srv/cache_for_lmi/downloads
+          mkdir /opt/lmi/gui_test
           mkdir /opt/lmi/src
 
       - name: Cache downloaded archives
@@ -157,6 +158,14 @@ jobs:
           # Tests rely on the symlinks set up by this script, so run it.
           ./check_git_setup.sh
 
+          # Copy a placeholder logo image.
+          cp ./gwc/company_logo.png /opt/lmi/data/
+
+          # Create authentication files.
+          printf '2450449 2472011'                            >/opt/lmi/data/expiry
+          printf '5fc68a795c9c60da1b32be989efc299a  expiry\n' >/opt/lmi/data/validated.md5
+          printf '391daa5cbc54e118c4737446bcb84eea'           >/opt/lmi/data/passkey
+
       - name: Install
         run: make install
 
@@ -177,3 +186,7 @@ jobs:
             exclude_args="excluded_unit_test_targets=path_utility_test"
           fi
           make $coefficiency unit_tests $exclude_args
+
+      - name: Run GUI tests
+        if: matrix.mingw
+        run: xvfb-run ./gui_test.sh
