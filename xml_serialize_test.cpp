@@ -110,71 +110,38 @@ void mete_read_0()
 // These /mete_._[write|read]/ functions are like write() and read()
 // except that they each test a single datatype repeatedly.
 
-void mete_write_d()
+template<typename T>
+void mete_write(char const* name, T const& data)
 {
     xml_lmi::xml_document document("eraseme");
     xml::element& root = document.root_node();
     for(int j = 0; j < number_of_elements; ++j)
         {
-        root.erase("d");
-        xml_serialize::set_element(root, "d", d0);
+        root.erase(name);
+        xml_serialize::set_element(root, name, data);
         }
     dom_string = document.str();
 }
 
-void mete_read_d()
+template<typename T>
+void mete_read(char const* name, T& data)
 {
     xml_lmi::dom_parser parser(dom_string.c_str(), dom_string.size());
     xml::element const& root = parser.root_node("eraseme");
     for(int j = 0; j < number_of_elements; ++j)
         {
-        xml_serialize::get_element(root, "d", d1);
+        xml_serialize::get_element(root, name, data);
         }
 }
 
-void mete_write_s()
-{
-    xml_lmi::xml_document document("eraseme");
-    xml::element& root = document.root_node();
-    for(int j = 0; j < number_of_elements; ++j)
-        {
-        root.erase("s");
-        xml_serialize::set_element(root, "s", s0);
-        }
-    dom_string = document.str();
-}
+void mete_write_d() {mete_write("d", d0);}
+void mete_read_d()  {mete_read ("d", d1);}
 
-void mete_read_s()
-{
-    xml_lmi::dom_parser parser(dom_string.c_str(), dom_string.size());
-    xml::element const& root = parser.root_node("eraseme");
-    for(int j = 0; j < number_of_elements; ++j)
-        {
-        xml_serialize::get_element(root, "s", s1);
-        }
-}
+void mete_write_s() {mete_write("s", s0);}
+void mete_read_s()  {mete_read ("s", s1);}
 
-void mete_write_v()
-{
-    xml_lmi::xml_document document("eraseme");
-    xml::element& root = document.root_node();
-    for(int j = 0; j < number_of_elements; ++j)
-        {
-        root.erase("v");
-        xml_serialize::set_element(root, "v", v0);
-        }
-    dom_string = document.str();
-}
-
-void mete_read_v()
-{
-    xml_lmi::dom_parser parser(dom_string.c_str(), dom_string.size());
-    xml::element const& root = parser.root_node("eraseme");
-    for(int j = 0; j < number_of_elements; ++j)
-        {
-        xml_serialize::get_element(root, "v", v1);
-        }
-}
+void mete_write_v() {mete_write("v", v0);}
+void mete_read_v()  {mete_read ("v", v1);}
 
 int test_main(int, char*[])
 {
