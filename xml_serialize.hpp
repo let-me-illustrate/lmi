@@ -78,36 +78,36 @@ struct xml_io
 /// (and non-element nodes) that might have been added manually,
 /// e.g., as documentation.
 ///
-/// C++11 has no way to assert that T is a Sequence; for the nonce,
+/// C++11 has no way to assert that C is a Sequence; for the nonce,
 /// no other Sequence being used, assert that it's a vector.
 
-template<typename T>
+template<typename C>
 struct xml_sequence_io
 {
-    typedef typename T::value_type item_t;
-    static_assert(std::is_same<T,std::vector<item_t>>::value);
+    using T = typename C::value_type;
+    static_assert(std::is_same<C,std::vector<T>>::value);
 
-    static void to_xml(xml::element& e, T const& t)
+    static void to_xml(xml::element& e, C const& c)
     {
         e.clear();
-        for(auto const& i : t)
+        for(auto const& i : c)
             {
             // This is not equivalent to calling set_element():
             // multiple <item> elements are expressly permitted.
             xml::element z("item");
-            xml_io<item_t>::to_xml(z, i);
+            xml_io<T>::to_xml(z, i);
             e.push_back(z);
             }
     }
 
-    static void from_xml(xml::element const& e, T& t)
+    static void from_xml(xml::element const& e, C& c)
     {
-        t.clear();
+        c.clear();
         for(auto const& i : e.elements("item"))
             {
-            item_t z;
-            xml_io<item_t>::from_xml(i, z);
-            t.push_back(z);
+            T z;
+            xml_io<T>::from_xml(i, z);
+            c.push_back(z);
             }
     }
 };
