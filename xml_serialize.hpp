@@ -85,29 +85,30 @@ template<typename C>
 struct xml_sequence_io
 {
     using T = typename C::value_type;
+
     static_assert(std::is_same<C,std::vector<T>>::value);
 
-    static void to_xml(xml::element& e, C const& c)
+    static void to_xml(xml::element& parent, C const& c)
     {
-        e.clear();
+        parent.clear();
         for(auto const& i : c)
             {
             // This is not equivalent to calling set_element():
             // multiple <item> elements are expressly permitted.
-            xml::element z("item");
-            xml_io<T>::to_xml(z, i);
-            e.push_back(z);
+            xml::element e("item");
+            xml_io<T>::to_xml(e, i);
+            parent.push_back(e);
             }
     }
 
-    static void from_xml(xml::element const& e, C& c)
+    static void from_xml(xml::element const& parent, C& c)
     {
         c.clear();
-        for(auto const& i : e.elements("item"))
+        for(auto const& i : parent.elements("item"))
             {
-            T z;
-            xml_io<T>::from_xml(i, z);
-            c.push_back(z);
+            T t;
+            xml_io<T>::from_xml(i, t);
+            c.push_back(t);
             }
     }
 };
@@ -126,9 +127,9 @@ template<typename T>
 void set_element(xml::element& parent, std::string const& name, T const& t)
 {
     LMI_ASSERT(parent.end() == parent.find(name.c_str()));
-    xml::element z(name.c_str());
-    xml_io<T>::to_xml(z, t);
-    parent.push_back(z);
+    xml::element e(name.c_str());
+    xml_io<T>::to_xml(e, t);
+    parent.push_back(e);
 }
 
 /// Deserialize a datum from a subelement of the given xml element.
