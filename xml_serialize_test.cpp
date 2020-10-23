@@ -153,9 +153,18 @@ int test_main(int, char*[])
     // documentation for value_cast<>().
     BOOST_TEST(d0 == d1);
     BOOST_TEST_EQUAL(d0, d1);
+
     BOOST_TEST(s0 == s1);
     BOOST_TEST_EQUAL(s0, s1);
-    // BOOST_TEST_EQUAL(v0, v1); // No--couldn't display if not equal.
+
+    // BOOST_TEST_EQUAL() inserts unequal values into an ostream, so
+    // it can only be used with streamable types (as above).
+
+    // For Containers, test both
+    //   P: c0 == c1
+    //   Q: c0.size() == c1.size()
+    // even though P implies Q, because Q AND ~P is easy to detect.
+
     BOOST_TEST(v0 == v1);
     BOOST_TEST_EQUAL(v0.size(), v1.size());
 
