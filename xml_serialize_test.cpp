@@ -92,7 +92,7 @@ void read_erroneous()
 // except that they don't actually do anything: they serve only to
 // measure overhead.
 
-void mete_write()
+void mete_write_0()
 {
     xml_lmi::xml_document document("eraseme");
     xml::element& root = document.root_node();
@@ -100,7 +100,7 @@ void mete_write()
     dom_string = document.str();
 }
 
-void mete_read()
+void mete_read_0()
 {
     xml_lmi::dom_parser parser(dom_string.c_str(), dom_string.size());
     xml::element const& root = parser.root_node("eraseme");
@@ -110,7 +110,7 @@ void mete_read()
 // These /mete_._[write|read]/ functions are like write() and read()
 // except that they each test a single datatype repeatedly.
 
-void mete_d_write()
+void mete_write_d()
 {
     xml_lmi::xml_document document("eraseme");
     xml::element& root = document.root_node();
@@ -122,7 +122,7 @@ void mete_d_write()
     dom_string = document.str();
 }
 
-void mete_d_read()
+void mete_read_d()
 {
     xml_lmi::dom_parser parser(dom_string.c_str(), dom_string.size());
     xml::element const& root = parser.root_node("eraseme");
@@ -132,7 +132,7 @@ void mete_d_read()
         }
 }
 
-void mete_s_write()
+void mete_write_s()
 {
     xml_lmi::xml_document document("eraseme");
     xml::element& root = document.root_node();
@@ -144,7 +144,7 @@ void mete_s_write()
     dom_string = document.str();
 }
 
-void mete_s_read()
+void mete_read_s()
 {
     xml_lmi::dom_parser parser(dom_string.c_str(), dom_string.size());
     xml::element const& root = parser.root_node("eraseme");
@@ -154,7 +154,7 @@ void mete_s_read()
         }
 }
 
-void mete_v_write()
+void mete_write_v()
 {
     xml_lmi::xml_document document("eraseme");
     xml::element& root = document.root_node();
@@ -166,7 +166,7 @@ void mete_v_write()
     dom_string = document.str();
 }
 
-void mete_v_read()
+void mete_read_v()
 {
     xml_lmi::dom_parser parser(dom_string.c_str(), dom_string.size());
     xml::element const& root = parser.root_node("eraseme");
@@ -201,14 +201,14 @@ int test_main(int, char*[])
     BOOST_TEST_THROW(read_erroneous(), std::runtime_error, not_found);
 
     std::cout << "  Speed tests...\n";
-    std::cout << "  Write empty : " << TimeAnAliquot(mete_write  ) << '\n';
-    std::cout << "  Read  empty : " << TimeAnAliquot(mete_read   ) << '\n';
-    std::cout << "  Write d     : " << TimeAnAliquot(mete_d_write) << '\n';
-    std::cout << "  Read  d     : " << TimeAnAliquot(mete_d_read ) << '\n';
-    std::cout << "  Write s     : " << TimeAnAliquot(mete_s_write) << '\n';
-    std::cout << "  Read  s     : " << TimeAnAliquot(mete_s_read ) << '\n';
-    std::cout << "  Write v     : " << TimeAnAliquot(mete_v_write) << '\n';
-    std::cout << "  Read  v     : " << TimeAnAliquot(mete_v_read ) << '\n';
+    std::cout << "  Write empty : " << TimeAnAliquot(mete_write_0) << '\n';
+    std::cout << "  Read  empty : " << TimeAnAliquot(mete_read_0 ) << '\n';
+    std::cout << "  Write d     : " << TimeAnAliquot(mete_write_d) << '\n';
+    std::cout << "  Read  d     : " << TimeAnAliquot(mete_read_d ) << '\n';
+    std::cout << "  Write s     : " << TimeAnAliquot(mete_write_s) << '\n';
+    std::cout << "  Read  s     : " << TimeAnAliquot(mete_read_s ) << '\n';
+    std::cout << "  Write v     : " << TimeAnAliquot(mete_write_v) << '\n';
+    std::cout << "  Read  v     : " << TimeAnAliquot(mete_read_v ) << '\n';
     std::cout << std::endl;
 
     return 0;
