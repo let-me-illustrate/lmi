@@ -110,28 +110,6 @@ void mete_read()
 // These /mete_._[write|read]/ functions are like write() and read()
 // except that they each test a single datatype repeatedly.
 
-void mete_s_write()
-{
-    xml_lmi::xml_document document("eraseme");
-    xml::element& root = document.root_node();
-    for(int j = 0; j < number_of_elements; ++j)
-        {
-        root.erase("s");
-        xml_serialize::set_element(root, "s", s0);
-        }
-    dom_string = document.str();
-}
-
-void mete_s_read()
-{
-    xml_lmi::dom_parser parser(dom_string.c_str(), dom_string.size());
-    xml::element const& root = parser.root_node("eraseme");
-    for(int j = 0; j < number_of_elements; ++j)
-        {
-        xml_serialize::get_element(root, "s", s1);
-        }
-}
-
 void mete_d_write()
 {
     xml_lmi::xml_document document("eraseme");
@@ -151,6 +129,28 @@ void mete_d_read()
     for(int j = 0; j < number_of_elements; ++j)
         {
         xml_serialize::get_element(root, "d", d1);
+        }
+}
+
+void mete_s_write()
+{
+    xml_lmi::xml_document document("eraseme");
+    xml::element& root = document.root_node();
+    for(int j = 0; j < number_of_elements; ++j)
+        {
+        root.erase("s");
+        xml_serialize::set_element(root, "s", s0);
+        }
+    dom_string = document.str();
+}
+
+void mete_s_read()
+{
+    xml_lmi::dom_parser parser(dom_string.c_str(), dom_string.size());
+    xml::element const& root = parser.root_node("eraseme");
+    for(int j = 0; j < number_of_elements; ++j)
+        {
+        xml_serialize::get_element(root, "s", s1);
         }
 }
 
@@ -203,10 +203,10 @@ int test_main(int, char*[])
     std::cout << "  Speed tests...\n";
     std::cout << "  Write   : " << TimeAnAliquot(mete_write  ) << '\n';
     std::cout << "  Read    : " << TimeAnAliquot(mete_read   ) << '\n';
-    std::cout << "  Write s : " << TimeAnAliquot(mete_s_write) << '\n';
-    std::cout << "  Read  s : " << TimeAnAliquot(mete_s_read ) << '\n';
     std::cout << "  Write d : " << TimeAnAliquot(mete_d_write) << '\n';
     std::cout << "  Read  d : " << TimeAnAliquot(mete_d_read ) << '\n';
+    std::cout << "  Write s : " << TimeAnAliquot(mete_s_write) << '\n';
+    std::cout << "  Read  s : " << TimeAnAliquot(mete_s_read ) << '\n';
     std::cout << "  Write v : " << TimeAnAliquot(mete_v_write) << '\n';
     std::cout << "  Read  v : " << TimeAnAliquot(mete_v_read ) << '\n';
     std::cout << std::endl;
