@@ -201,14 +201,14 @@ int test_main(int, char*[])
     BOOST_TEST_THROW(read_erroneous(), std::runtime_error, not_found);
 
     std::cout << "  Speed tests...\n";
-    std::cout << "  Write   : " << TimeAnAliquot(mete_write  ) << '\n';
-    std::cout << "  Read    : " << TimeAnAliquot(mete_read   ) << '\n';
-    std::cout << "  Write d : " << TimeAnAliquot(mete_d_write) << '\n';
-    std::cout << "  Read  d : " << TimeAnAliquot(mete_d_read ) << '\n';
-    std::cout << "  Write s : " << TimeAnAliquot(mete_s_write) << '\n';
-    std::cout << "  Read  s : " << TimeAnAliquot(mete_s_read ) << '\n';
-    std::cout << "  Write v : " << TimeAnAliquot(mete_v_write) << '\n';
-    std::cout << "  Read  v : " << TimeAnAliquot(mete_v_read ) << '\n';
+    std::cout << "  Write empty : " << TimeAnAliquot(mete_write  ) << '\n';
+    std::cout << "  Read  empty : " << TimeAnAliquot(mete_read   ) << '\n';
+    std::cout << "  Write d     : " << TimeAnAliquot(mete_d_write) << '\n';
+    std::cout << "  Read  d     : " << TimeAnAliquot(mete_d_read ) << '\n';
+    std::cout << "  Write s     : " << TimeAnAliquot(mete_s_write) << '\n';
+    std::cout << "  Read  s     : " << TimeAnAliquot(mete_s_read ) << '\n';
+    std::cout << "  Write v     : " << TimeAnAliquot(mete_v_write) << '\n';
+    std::cout << "  Read  v     : " << TimeAnAliquot(mete_v_read ) << '\n';
     std::cout << std::endl;
 
     return 0;
