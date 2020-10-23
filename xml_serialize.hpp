@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include "assert_lmi.hpp"
+#include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 
@@ -32,6 +33,7 @@
 
 #include <string>
 #include <type_traits>
+#include <utility>                      // pair
 #include <vector>
 
 /// Serialization to and from xml.
@@ -68,6 +70,48 @@ struct xml_io
         t = value_cast<T>(xml_lmi::get_content(e));
     }
 };
+
+/// Serialization for std::pair.
+
+template<typename P>
+struct xml_pair_io
+{
+    using T1 = typename P::first_type;
+    using T2 = typename P::second_type;
+
+    static_assert(std::is_same<P,std::pair<T1,T2>>::value);
+
+    static void to_xml(xml::element& parent, P const& p)
+    {
+        parent.clear();
+
+        // This is equivalent to calling set_element(), except that
+        // the parent element has imperatively been cleared.
+        xml::element e1("first");
+        xml_io<T1>::to_xml(e1, p.first);
+        parent.push_back(e1);
+
+        xml::element e2("second");
+        xml_io<T2>::to_xml(e2, p.second);
+        parent.push_back(e2);
+    }
+
+    static void from_xml(xml::element const& parent, P& p)
+    {
+        auto const& view_first {parent.elements("first")};
+        LMI_ASSERT(1 == lmi::ssize(view_first));
+        xml_io<T1>::from_xml(*view_first.begin(), p.first);
+
+        auto const& view_second {parent.elements("second")};
+        LMI_ASSERT(1 == lmi::ssize(view_second));
+        xml_io<T2>::from_xml(*view_second.begin(), p.second);
+    }
+};
+
+template<typename T1, typename T2>
+struct xml_io<std::pair<T1,T2>>
+  :public xml_pair_io<std::pair<T1,T2>>
+{};
 
 /// Serialization for sequence containers.
 ///

@@ -28,6 +28,7 @@
 #include "timer.hpp"
 
 #include <string>
+#include <utility>                      // pair
 #include <vector>
 
 // All /write.*/ functions save xml to this string.
@@ -41,13 +42,15 @@ int const number_of_elements = 20;
 // /[dsv]0/: constant values for /write.*/ functions.
 // /[dsv]1/: variables for /read.*/ functions.
 
-double           const d0(2.718281828459045235360);
-std::string      const s0("string with ampersand & embedded spaces");
-std::vector<int> const v0 {10, 2, 4}; // Be a pepper...
+double             const d0(2.718281828459045235360);
+std::string        const s0("string with ampersand & embedded spaces");
+std::pair<int,int> const p0 {17, 19};
+std::vector<int>   const v0 {10, 2, 4}; // Be a pepper...
 
-double                 d1;
-std::string            s1;
-std::vector<int>       v1;
+double                   d1;
+std::string              s1;
+std::pair<int,int>       p1;
+std::vector<int>         v1;
 
 void write()
 {
@@ -55,6 +58,7 @@ void write()
     xml::element& root = document.root_node();
     xml_serialize::set_element(root, "d", d0);
     xml_serialize::set_element(root, "s", s0);
+    xml_serialize::set_element(root, "p", p0);
     xml_serialize::set_element(root, "v", v0);
     dom_string = document.str();
 }
@@ -65,6 +69,7 @@ void read()
     xml::element const& root = parser.root_node("eraseme");
     xml_serialize::get_element(root, "d", d1);
     xml_serialize::get_element(root, "s", s1);
+    xml_serialize::get_element(root, "p", p1);
     xml_serialize::get_element(root, "v", v1);
 }
 
@@ -84,6 +89,7 @@ void read_erroneous()
     xml::element const& root = parser.root_node("eraseme");
     xml_serialize::get_element(root, "d", d1);
     xml_serialize::get_element(root, "s", s1);
+    xml_serialize::get_element(root, "p", p1);
     xml_serialize::get_element(root, "v", v1);
     xml_serialize::get_element(root, "f", f1); // Error: no <f> element.
 }
@@ -140,6 +146,9 @@ void mete_read_d()  {mete_read ("d", d1);}
 void mete_write_s() {mete_write("s", s0);}
 void mete_read_s()  {mete_read ("s", s1);}
 
+void mete_write_p() {mete_write("p", p0);}
+void mete_read_p()  {mete_read ("p", p1);}
+
 void mete_write_v() {mete_write("v", v0);}
 void mete_read_v()  {mete_read ("v", v1);}
 
@@ -159,6 +168,8 @@ int test_main(int, char*[])
 
     // BOOST_TEST_EQUAL() inserts unequal values into an ostream, so
     // it can only be used with streamable types (as above).
+
+    BOOST_TEST(p0 == p1);
 
     // For Containers, test both
     //   P: c0 == c1
@@ -183,6 +194,8 @@ int test_main(int, char*[])
     std::cout << "  Read  d     : " << TimeAnAliquot(mete_read_d ) << '\n';
     std::cout << "  Write s     : " << TimeAnAliquot(mete_write_s) << '\n';
     std::cout << "  Read  s     : " << TimeAnAliquot(mete_read_s ) << '\n';
+    std::cout << "  Write p     : " << TimeAnAliquot(mete_write_p) << '\n';
+    std::cout << "  Read  p     : " << TimeAnAliquot(mete_read_p ) << '\n';
     std::cout << "  Write v     : " << TimeAnAliquot(mete_write_v) << '\n';
     std::cout << "  Read  v     : " << TimeAnAliquot(mete_read_v ) << '\n';
     std::cout << std::endl;
