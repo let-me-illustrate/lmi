@@ -40,7 +40,7 @@ std::string dom_string;
 
 // Repetition count for /mete.*/ functions, tuned for speed and accuracy.
 
-int const number_of_elements = 20;
+int const number_of_iterations = 20;
 
 using omap = std::          map<std::string, float>;
 using umap = std::unordered_map<int        , float>;
@@ -137,7 +137,7 @@ void mete_write(char const* name, T const& data)
 {
     xml_lmi::xml_document document("eraseme");
     xml::element& root = document.root_node();
-    for(int j = 0; j < number_of_elements; ++j)
+    for(int j = 0; j < number_of_iterations; ++j)
         {
         root.erase(name);
         xml_serialize::set_element(root, name, data);
@@ -150,7 +150,7 @@ void mete_read(char const* name, T& data)
 {
     xml_lmi::dom_parser parser(dom_string.c_str(), dom_string.size());
     xml::element const& root = parser.root_node("eraseme");
-    for(int j = 0; j < number_of_elements; ++j)
+    for(int j = 0; j < number_of_iterations; ++j)
         {
         xml_serialize::get_element(root, name, data);
         }
