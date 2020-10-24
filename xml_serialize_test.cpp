@@ -27,11 +27,14 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
+#include <map>
 #include <string>
+#include <unordered_map>
 #include <utility>                      // pair
 #include <vector>
 
-// All /write.*/ functions save xml to this string.
+// All /write.*/ functions save xml to this string, and
+// all /read.*/ functions read from it.
 
 std::string dom_string;
 
@@ -39,18 +42,25 @@ std::string dom_string;
 
 int const number_of_elements = 20;
 
-// /[dsv]0/: constant values for /write.*/ functions.
-// /[dsv]1/: variables for /read.*/ functions.
+using omap = std::          map<std::string, float>;
+using umap = std::unordered_map<int        , float>;
+
+// /[dspvou]0/: constant values for /write.*/ functions.
+// /[dspvou]1/: variables for /read.*/ functions.
 
 double             const d0(2.718281828459045235360);
 std::string        const s0("string with ampersand & embedded spaces");
 std::pair<int,int> const p0 {17, 19};
 std::vector<int>   const v0 {10, 2, 4}; // Be a pepper...
+omap               const o0 {{"a",  1.1f}, {"b",  2.2f}, {"c",  3.3f}};
+umap               const u0 {{1, 101.01f}, {2, 202.02f}, {3, 303.03f}};
 
 double                   d1;
 std::string              s1;
 std::pair<int,int>       p1;
 std::vector<int>         v1;
+omap                     o1;
+umap                     u1;
 
 void write()
 {
@@ -60,6 +70,8 @@ void write()
     xml_serialize::set_element(root, "s", s0);
     xml_serialize::set_element(root, "p", p0);
     xml_serialize::set_element(root, "v", v0);
+    xml_serialize::set_element(root, "o", o0);
+    xml_serialize::set_element(root, "u", u0);
     dom_string = document.str();
 }
 
@@ -71,6 +83,8 @@ void read()
     xml_serialize::get_element(root, "s", s1);
     xml_serialize::get_element(root, "p", p1);
     xml_serialize::get_element(root, "v", v1);
+    xml_serialize::get_element(root, "o", o1);
+    xml_serialize::get_element(root, "u", u1);
 }
 
 void write_erroneous()
@@ -91,6 +105,8 @@ void read_erroneous()
     xml_serialize::get_element(root, "s", s1);
     xml_serialize::get_element(root, "p", p1);
     xml_serialize::get_element(root, "v", v1);
+    xml_serialize::get_element(root, "o", o1);
+    xml_serialize::get_element(root, "u", u1);
     xml_serialize::get_element(root, "f", f1); // Error: no <f> element.
 }
 
@@ -152,6 +168,12 @@ void mete_read_p()  {mete_read ("p", p1);}
 void mete_write_v() {mete_write("v", v0);}
 void mete_read_v()  {mete_read ("v", v1);}
 
+void mete_write_o() {mete_write("o", o0);}
+void mete_read_o()  {mete_read ("o", o1);}
+
+void mete_write_u() {mete_write("u", u0);}
+void mete_read_u()  {mete_read ("u", u1);}
+
 int test_main(int, char*[])
 {
     write();
@@ -179,6 +201,12 @@ int test_main(int, char*[])
     BOOST_TEST(v0 == v1);
     BOOST_TEST_EQUAL(v0.size(), v1.size());
 
+    BOOST_TEST(o0 == o1);
+    BOOST_TEST_EQUAL(o0.size(), o1.size());
+
+    BOOST_TEST(u0 == u1);
+    BOOST_TEST_EQUAL(u0.size(), u1.size());
+
     std::string found
         ("Assertion 'parent.end() == parent.find(name.c_str())' failed."
         );
@@ -198,6 +226,10 @@ int test_main(int, char*[])
     std::cout << "  Read  p     : " << TimeAnAliquot(mete_read_p ) << '\n';
     std::cout << "  Write v     : " << TimeAnAliquot(mete_write_v) << '\n';
     std::cout << "  Read  v     : " << TimeAnAliquot(mete_read_v ) << '\n';
+    std::cout << "  Write o     : " << TimeAnAliquot(mete_write_o) << '\n';
+    std::cout << "  Read  o     : " << TimeAnAliquot(mete_read_o ) << '\n';
+    std::cout << "  Write u     : " << TimeAnAliquot(mete_write_u) << '\n';
+    std::cout << "  Read  u     : " << TimeAnAliquot(mete_read_u ) << '\n';
     std::cout << std::endl;
 
     return 0;
