@@ -117,8 +117,8 @@ To numeric_io_cast(From from, To = To())
 template<typename To, typename From>
 struct numeric_converter
 {
-    static_assert(std::is_void<To  >::value);
-    static_assert(std::is_void<From>::value);
+    static_assert(std::is_void_v<To  >);
+    static_assert(std::is_void_v<From>);
 
     To operator()(From const&) const
         {
@@ -132,7 +132,7 @@ struct numeric_converter
 template<typename To>
 struct numeric_converter<To, std::string>
 {
-    static_assert(std::is_arithmetic<To>::value);
+    static_assert(std::is_arithmetic_v<To>);
 
     typedef std::string From;
     To operator()(From const& from) const
@@ -201,7 +201,7 @@ struct numeric_converter<To, char const*>
 template<typename From>
 struct numeric_converter<std::string, From>
 {
-    static_assert(std::is_arithmetic<From>::value);
+    static_assert(std::is_arithmetic_v<From>);
 
     typedef std::string To;
     To operator()(From const& from) const

@@ -46,6 +46,16 @@ void test_has_member_find()
     static_assert( has_member_find<std::map   <int,int>>::value);
     static_assert( has_member_find<std::set   <int    >>::value);
     static_assert(!has_member_find<std::vector<int    >>::value);
+
+    // same, with has_member_find_v
+    static_assert( has_member_find_v<HasFind  >);
+    static_assert(!has_member_find_v<LacksFind>);
+
+    static_assert( has_member_find_v<std::string>);
+
+    static_assert( has_member_find_v<std::map   <int,int>>);
+    static_assert( has_member_find_v<std::set   <int    >>);
+    static_assert(!has_member_find_v<std::vector<int    >>);
 }
 
 /// Test standard "containers" for which find() makes sense.

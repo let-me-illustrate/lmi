@@ -68,7 +68,7 @@
 template<typename T, typename U>
 T& safely_dereference_as(U* u)
 {
-    static_assert(std::is_base_of<U,T>::value);
+    static_assert(std::is_base_of_v<U,T>);
     if(!u)
         {
         std::ostringstream oss;

@@ -105,7 +105,7 @@ namespace detail
 template<typename T>
 std::vector<T> convert_vector_type
     (std::vector<mc_enum<T>> const& ve
-    ,typename std::enable_if<std::is_enum<T>::value>::type* = nullptr
+    ,typename std::enable_if<std::is_enum_v<T>>::type* = nullptr
     )
 {
     std::vector<T> z;

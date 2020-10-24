@@ -30,6 +30,7 @@
 #include <limits>
 #include <ostream>
 #include <sstream>
+#include <type_traits>
 
 namespace
 {
@@ -53,7 +54,7 @@ namespace
     template
         <typename T
         ,bool=std::numeric_limits<T>::is_specialized
-        ,bool=std::is_floating_point<T>::value
+        ,bool=std::is_floating_point_v<T>
         >
     struct strictly_between_extrema_tester
     {};
@@ -108,7 +109,7 @@ namespace
     template<typename T>
     T signum(T t)
     {
-        static_assert(std::is_arithmetic<T>::value);
+        static_assert(std::is_arithmetic_v<T>);
         return (0 == t) ? 0 : std::signbit(t) ? -1 : 1;
     }
 
@@ -166,7 +167,7 @@ namespace
     ///   http://groups.google.com/groups?th=1b868327b241fb74
     ///   http://groups.google.com/groups?selm=3DF66B8D.F1C3D2C0%40sun.com
 
-    template<typename T, bool=std::is_floating_point<T>::value>
+    template<typename T, bool=std::is_floating_point_v<T>>
     struct is_exact_integer_tester
     {};
 
@@ -179,7 +180,7 @@ namespace
     template<typename T>
     struct is_exact_integer_tester<T,true>
     {
-        static_assert(std::is_floating_point<T>::value);
+        static_assert(std::is_floating_point_v<T>);
         bool operator()(T t)
             {
             // SOMEDAY !! nonstd::power() [SGI extension] may be
@@ -218,7 +219,7 @@ namespace
     template<typename T>
     T adjust_bound(T t, T direction)
     {
-        static_assert(std::is_floating_point<T>::value);
+        static_assert(std::is_floating_point_v<T>);
         if(is_exact_integer(t))
             {
             return t;
@@ -261,7 +262,7 @@ namespace
     template<typename T>
     struct bound_adjuster<T,-1>
     {
-        static_assert(std::is_floating_point<T>::value);
+        static_assert(std::is_floating_point_v<T>);
         T operator()(T t)
             {
             static T const extremum = -std::numeric_limits<T>::max();
@@ -272,7 +273,7 @@ namespace
     template<typename T>
     struct bound_adjuster<T,1>
     {
-        static_assert(std::is_floating_point<T>::value);
+        static_assert(std::is_floating_point_v<T>);
         T operator()(T t)
             {
             static T const extremum = std::numeric_limits<T>::max();
@@ -283,13 +284,13 @@ namespace
     template<typename T>
     T adjust_minimum(T t)
     {
-        return bound_adjuster<T,std::is_floating_point<T>::value ? -1 : 0>()(t);
+        return bound_adjuster<T,std::is_floating_point_v<T> ? -1 : 0>()(t);
     }
 
     template<typename T>
     T adjust_maximum(T t)
     {
-        return bound_adjuster<T,std::is_floating_point<T>::value ? 1 : 0>()(t);
+        return bound_adjuster<T,std::is_floating_point_v<T> ? 1 : 0>()(t);
     }
 } // Unnamed namespace.
 

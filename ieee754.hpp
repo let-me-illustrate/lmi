@@ -43,7 +43,7 @@
 template<typename T>
 T implausible_value(T const& t = -9.99999e35f)
 {
-    static_assert(::std::is_floating_point<T>::value);
+    static_assert(::std::is_floating_point_v<T>);
 
     if(std::numeric_limits<T>::has_quiet_NaN)
         {
@@ -71,7 +71,7 @@ T implausible_value(T const& t = -9.99999e35f)
 template<typename T>
 inline T infinity()
 {
-    static_assert(::std::is_floating_point<T>::value);
+    static_assert(::std::is_floating_point_v<T>);
     static_assert(std::numeric_limits<T>::has_infinity);
     static T const volatile z = std::numeric_limits<T>::infinity();
     return z;
@@ -103,7 +103,7 @@ inline T infinity()
 template<typename T>
 inline bool is_infinite(T t)
 {
-    static_assert(::std::is_floating_point<T>::value);
+    static_assert(::std::is_floating_point_v<T>);
     static T const volatile pos_inf =  std::numeric_limits<T>::infinity();
     static T const volatile neg_inf = -std::numeric_limits<T>::infinity();
     static bool const has_inf = std::numeric_limits<T>::has_infinity;

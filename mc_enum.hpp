@@ -92,7 +92,7 @@ template<typename T>
 class mc_enum final
     :public mc_enum_base
 {
-    static_assert(std::is_enum<T>::value);
+    static_assert(std::is_enum_v<T>);
 
     friend class mc_enum_test;
     template<typename U> friend std::vector<std::string> const& all_strings();

@@ -60,7 +60,7 @@ namespace xml_serialize
 template<typename T>
 struct xml_io
 {
-    static_assert(!std::is_enum<T>::value); // Prefer mc_enum.
+    static_assert(!std::is_enum_v<T>); // Prefer mc_enum.
 
     static void to_xml(xml::element& e, T const& t)
     {
@@ -81,7 +81,7 @@ struct xml_pair_io
     using T1 = typename P::first_type;
     using T2 = typename P::second_type;
 
-    static_assert(std::is_same<P,std::pair<T1,T2>>::value);
+    static_assert(std::is_same_v<P,std::pair<T1,T2>>);
 
     static void to_xml(xml::element& parent, P const& p)
     {
@@ -132,7 +132,7 @@ struct xml_sequence_io
 {
     using T = typename C::value_type;
 
-    static_assert(std::is_same<C,std::vector<T>>::value);
+    static_assert(std::is_same_v<C,std::vector<T>>);
 
     static void to_xml(xml::element& parent, C const& c)
     {
@@ -190,8 +190,8 @@ struct xml_pair_container_io
     using V = std::pair<K,T>;
 
     static_assert
-        (  std::is_same<C,std::map<K,T>>::value
-        || std::is_same<C,std::unordered_map<K,T>>::value
+        (  std::is_same_v<C,std::map<K,T>>
+        || std::is_same_v<C,std::unordered_map<K,T>>
         );
 
     static void to_xml(xml::element& parent, C const& c)

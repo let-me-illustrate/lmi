@@ -99,10 +99,10 @@ template<typename To, typename From>
 To stream_cast(From from, To = To())
 {
     static_assert
-        (   !std::is_arithmetic<From>::value
-        ||  !std::is_arithmetic<To  >::value
+        (   !std::is_arithmetic_v<From>
+        ||  !std::is_arithmetic_v<To  >
         );
-    static_assert(!std::is_pointer<To>::value);
+    static_assert(!std::is_pointer_v<To>);
 
     auto complain = [&](auto const& reason)
         {

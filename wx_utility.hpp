@@ -95,10 +95,10 @@ void Connect
     ,wxEvtHandler*   event_sink = nullptr
     )
 {
-    static_assert(std::is_same<void,Return>::value);
-    static_assert(std::is_base_of<wxEvtHandler,Class>::value);
+    static_assert(std::is_same_v<void,Return>);
+    static_assert(std::is_base_of_v<wxEvtHandler,Class>);
     typedef typename std::remove_reference<Argument>::type argument_type;
-    static_assert(std::is_base_of<wxEvent,argument_type>::value);
+    static_assert(std::is_base_of_v<wxEvent,argument_type>);
 
     if(!object)
         {

@@ -96,9 +96,9 @@
 template<typename FunctionPointer>
 class LMI_SO callback final
 {
-    static_assert(std::is_pointer<FunctionPointer>::value);
+    static_assert(std::is_pointer_v<FunctionPointer>);
     typedef typename std::remove_pointer<FunctionPointer>::type f_type;
-    static_assert(std::is_function<f_type>::value);
+    static_assert(std::is_function_v<f_type>);
 
   public:
     callback() = default;

@@ -86,7 +86,7 @@ struct mean
     using first_argument_type  = T;
     using second_argument_type = T;
     using result_type          = T;
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     T operator()(T const& x, T const& y) const
         {return 0.5 * x + 0.5 * y;}
 };
@@ -100,7 +100,7 @@ struct mean
 template<typename T>
 inline T outward_quotient(T numerator, T denominator)
 {
-    static_assert(std::is_integral<T>::value);
+    static_assert(std::is_integral_v<T>);
 
     LMI_ASSERT(0 != denominator);
 
@@ -138,7 +138,7 @@ inline T outward_quotient(T numerator, T denominator)
 template<typename T, int n>
 struct i_upper_n_over_n_from_i
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     static_assert(0 < n);
     T operator()(T const& i) const
         {
@@ -165,7 +165,7 @@ struct i_upper_12_over_12_from_i
 {
     using argument_type = T;
     using result_type   = T;
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     T operator()(T const& i) const
         {
         return i_upper_n_over_n_from_i<T,12>()(i);
@@ -175,7 +175,7 @@ struct i_upper_12_over_12_from_i
 template<typename T, int n>
 struct i_from_i_upper_n_over_n
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     static_assert(0 < n);
     T operator()(T const& i) const
         {
@@ -189,7 +189,7 @@ struct i_from_i_upper_n_over_n
 template<typename T>
 struct i_from_i_upper_12_over_12
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     T operator()(T const& i) const
         {
         return i_from_i_upper_n_over_n<T,12>()(i);
@@ -199,7 +199,7 @@ struct i_from_i_upper_12_over_12
 template<typename T, int n>
 struct d_upper_n_from_i
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     static_assert(0 < n);
     T operator()(T const& i) const
         {
@@ -224,7 +224,7 @@ struct d_upper_n_from_i
 template<typename T>
 struct d_upper_12_from_i
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     T operator()(T const& i) const
         {
         return d_upper_n_from_i<T,12>()(i);
@@ -240,7 +240,7 @@ struct d_upper_12_from_i
 template<typename T, int n>
 struct net_i_from_gross
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     static_assert(0 < n);
     T operator()(T const& i, T const& spread, T const& fee) const
         {
@@ -293,7 +293,7 @@ struct coi_rate_from_q
     using first_argument_type  = T;
     using second_argument_type = T;
     using result_type          = T;
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     T operator()(T const& q, T const& max_coi) const
         {
         if(!(0.0 <= max_coi && max_coi <= 1.0))

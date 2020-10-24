@@ -121,8 +121,11 @@ template<typename T>
 struct is_string
 {
     // Here, is_convertible means 'T' is convertible to std::string.
-    enum {value = std::is_convertible<T,std::string>::value};
+    enum {value = std::is_convertible_v<T,std::string>};
 };
+
+template<typename T>
+inline constexpr bool is_string_v = is_string<T>::value;
 
 template<typename T>
 void throw_if_null_pointer(T)
@@ -162,23 +165,23 @@ struct value_cast_choice
         {
         // Here, is_convertible means 'From' is convertible to 'To'.
         felicitously_convertible =
-                std::is_convertible<From,To>::value
-            &&!(std::is_array   <From>::value && std::is_same<bool,To>::value)
-            &&!(std::is_pointer <From>::value && std::is_same<bool,To>::value)
+                std::is_convertible_v<From,To>
+            &&!(std::is_array_v  <From> && std::is_same_v<bool,To>)
+            &&!(std::is_pointer_v<From> && std::is_same_v<bool,To>)
         };
 
     enum
         {
         both_numeric =
-                std::is_arithmetic<From>::value
-            &&  std::is_arithmetic<To  >::value
+                std::is_arithmetic_v<From>
+            &&  std::is_arithmetic_v<To  >
         };
 
     enum
         {
         one_numeric_one_string =
-                std::is_arithmetic<From>::value && is_string<To  >::value
-            ||  std::is_arithmetic<To  >::value && is_string<From>::value
+                std::is_arithmetic_v<From> && is_string_v<To  >
+            ||  std::is_arithmetic_v<To  > && is_string_v<From>
         };
 
     enum
@@ -229,7 +232,7 @@ struct value_cast_chooser<To,From,e_stream>
 template<typename To, typename From>
 To value_cast(From const& from)
 {
-    static_assert(!std::is_pointer<To>::value);
+    static_assert(!std::is_pointer_v<To>);
     return value_cast_chooser<To,From>()(from);
 }
 

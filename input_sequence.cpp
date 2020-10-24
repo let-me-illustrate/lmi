@@ -212,8 +212,8 @@ void set_value(ValueInterval& v, std::string const& s)
 template<typename T>
 void InputSequence::initialize_from_vector(std::vector<T> const& v)
 {
-    bool const T_is_double = std::is_same<T,double     >::value;
-    bool const T_is_string = std::is_same<T,std::string>::value;
+    bool const T_is_double = std::is_same_v<T,double     >;
+    bool const T_is_string = std::is_same_v<T,std::string>;
     static_assert(T_is_double || T_is_string);
 
     ValueInterval default_interval;

@@ -252,7 +252,7 @@ RealType erroneous_rounding_function(RealType)
 template<typename RealType>
 class round_to
 {
-    static_assert(std::is_floating_point<RealType>::value);
+    static_assert(std::is_floating_point_v<RealType>);
 
   public:
     /// The default ctor only makes the class DefaultConstructible;

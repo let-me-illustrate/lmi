@@ -59,20 +59,20 @@ int test_main(int, char*[])
     // These could be static assertions, but any failure would prevent
     // other tests from running.
 
-    BOOST_TEST( is_string<char               *>::value);
-    BOOST_TEST( is_string<char const         *>::value);
-    BOOST_TEST(!is_string<char       volatile*>::value);
-    BOOST_TEST(!is_string<char const volatile*>::value);
+    BOOST_TEST( is_string_v<char               *>);
+    BOOST_TEST( is_string_v<char const         *>);
+    BOOST_TEST(!is_string_v<char       volatile*>);
+    BOOST_TEST(!is_string_v<char const volatile*>);
 
-    BOOST_TEST( is_string<std::string                >::value);
-    BOOST_TEST( is_string<std::string const          >::value);
-    BOOST_TEST(!is_string<std::string       volatile >::value);
-    BOOST_TEST(!is_string<std::string const volatile >::value);
+    BOOST_TEST( is_string_v<std::string                >);
+    BOOST_TEST( is_string_v<std::string const          >);
+    BOOST_TEST(!is_string_v<std::string       volatile >);
+    BOOST_TEST(!is_string_v<std::string const volatile >);
 
-    BOOST_TEST( is_string<std::string               &>::value);
-    BOOST_TEST( is_string<std::string const         &>::value);
-    BOOST_TEST(!is_string<std::string       volatile&>::value);
-    BOOST_TEST(!is_string<std::string const volatile&>::value);
+    BOOST_TEST( is_string_v<std::string               &>);
+    BOOST_TEST( is_string_v<std::string const         &>);
+    BOOST_TEST(!is_string_v<std::string       volatile&>);
+    BOOST_TEST(!is_string_v<std::string const volatile&>);
 
     char const* ccp = "2.71828";
     char* cp = const_cast<char*>("3.14159");

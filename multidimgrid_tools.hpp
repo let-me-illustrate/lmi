@@ -88,7 +88,7 @@ template<typename Integral>
 class AxisMaxBoundAdjuster
     :public AxisMaxBoundAdjusterBase
 {
-    static_assert(std::is_integral<Integral>::value);
+    static_assert(std::is_integral_v<Integral>);
 
   public:
     AxisMaxBoundAdjuster

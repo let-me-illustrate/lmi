@@ -69,8 +69,8 @@ T const& MvcController::ModelReference(std::string const& name) const
 template<typename T>
 T& MvcController::WindowFromXrcName(char const* name) const
 {
-    static_assert(!std::is_pointer<T>::value);
-    static_assert(std::is_base_of<wxWindow,T>::value);
+    static_assert(!std::is_pointer_v<T>);
+    static_assert(std::is_base_of_v<wxWindow,T>);
 
     wxWindow* w = FindWindow(wxXmlResource::GetXRCID(name));
     if(!w)

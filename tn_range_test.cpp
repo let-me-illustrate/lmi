@@ -138,7 +138,7 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
     T const minT = std::numeric_limits<T>::lowest();
 
     INVOKE_BOOST_TEST(!is_strictly_between_extrema(maxT), file, line);
-    if(!std::is_same<bool,typename std::remove_cv<T>::type>::value)
+    if(!std::is_same_v<bool,typename std::remove_cv<T>::type>)
         {
         INVOKE_BOOST_TEST( is_strictly_between_extrema<T>(1), file, line);
         }

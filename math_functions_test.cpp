@@ -47,7 +47,7 @@ namespace
 template<typename T>
 struct i_upper_12_over_12_from_i_naive
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     T operator()(T const& i) const
         {
         long double z = -1.0L + std::pow((1.0L + i), 1.0L / 12.0L);
@@ -58,7 +58,7 @@ struct i_upper_12_over_12_from_i_naive
 template<typename T>
 struct i_from_i_upper_12_over_12_naive
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     T operator()(T const& i) const
         {
         long double z = -1.0L + std::pow((1.0L + i), 12.0L);
@@ -69,7 +69,7 @@ struct i_from_i_upper_12_over_12_naive
 template<typename T>
 struct d_upper_12_from_i_naive
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     T operator()(T const& i) const
         {
         long double z = 12.0L * (1.0L - std::pow(1.0L + i, -1.0L / 12.0L));
@@ -80,7 +80,7 @@ struct d_upper_12_from_i_naive
 template<typename T, int n>
 struct net_i_from_gross_naive
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     T operator()(T const& i, T const& spread, T const& fee) const
         {
         static long double const reciprocal_n = 1.0L / n;
@@ -99,7 +99,7 @@ struct net_i_from_gross_naive
 template<typename T>
 struct coi_rate_from_q_naive
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     T operator()(T const& q, T const& max_coi) const
         {
         if(0.0 == q)
@@ -124,7 +124,7 @@ struct coi_rate_from_q_naive
 template<typename T, int n>
 struct i_upper_n_over_n_from_i_naive
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     T operator()(T const& i) const
         {
         return T(-1) + std::pow((T(1) + i), T(1) / n);
@@ -137,7 +137,7 @@ struct i_upper_n_over_n_from_i_naive
 template<typename T, int n>
 struct i_upper_n_over_n_from_i_T
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     T operator()(T const& i) const
         {
         static T const reciprocal_n = T(1) / n;

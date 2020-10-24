@@ -56,6 +56,9 @@ struct has_member_find
     static bool const value = sizeof(yea_t) == sizeof deduce(static_cast<Derived*>(nullptr));
 };
 
+template<typename T>
+inline constexpr bool has_member_find_v = has_member_find<T>::value;
+
 /// Ascertain whether a "container" includes a given element.
 ///
 /// Here, std::basic_string is considered a "container", this:
@@ -69,7 +72,7 @@ template<typename T>
 bool contains
     (T const& t
     ,typename T::value_type const& element
-    ,typename std::enable_if<!has_member_find<T>::value>::type* = nullptr
+    ,typename std::enable_if<!has_member_find_v<T>>::type* = nullptr
     )
 {
     return t.end() != std::find(t.begin(), t.end(), element);

@@ -229,7 +229,7 @@ template<typename Number, typename Trammel>
 class tn_range final
     :public tn_range_base
 {
-    static_assert(std::is_base_of<trammel_base<Number>,Trammel>::value);
+    static_assert(std::is_base_of_v<trammel_base<Number>,Trammel>);
 
     friend class tn_range_test;
 

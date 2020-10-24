@@ -43,8 +43,8 @@ xml_serializable<T>::~xml_serializable()
     // Assert that static_cast<T cv&> doesn't engender undefined
     // behavior, and that class T provides the expected operator[]()
     // and member_names() functions.
-    static_assert(std::is_base_of<xml_serializable <T>,T>::value);
-    static_assert(std::is_base_of<MemberSymbolTable<T>,T>::value);
+    static_assert(std::is_base_of_v<xml_serializable <T>,T>);
+    static_assert(std::is_base_of_v<MemberSymbolTable<T>,T>);
 }
 
 template<typename T>
@@ -187,7 +187,7 @@ void xml_serializable<T>::immit_members_into(xml::element& root) const
 template<typename X, typename Y>
 inline Y sfinae_cast
     (X const& x
-    ,typename std::enable_if<std::is_same<X,Y>::value>::type* = nullptr
+    ,typename std::enable_if<std::is_same_v<X,Y>>::type* = nullptr
     )
 {
     return x;
@@ -196,7 +196,7 @@ inline Y sfinae_cast
 template<typename X, typename Y>
 inline Y sfinae_cast
     (X const&
-    ,typename std::enable_if<!std::is_same<X,Y>::value>::type* = nullptr
+    ,typename std::enable_if<!std::is_same_v<X,Y>>::type* = nullptr
     )
 {
     alarum() << "Impermissible type conversion." << LMI_FLUSH;

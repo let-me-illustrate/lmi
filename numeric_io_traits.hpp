@@ -59,7 +59,7 @@
 template<typename T>
 inline int floating_point_decimals(T t)
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
 #if defined LMI_MSVCRT
     // COMPILER !! This C runtime not only writes infinity as "1.#INF"
     // instead of "inf" but also "respects" the precision specifier
