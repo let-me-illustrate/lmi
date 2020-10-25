@@ -27,9 +27,9 @@
 # used in production if they were unset or null beforehand. They can
 # be overridden at the command line, e.g.:
 #
+#   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-pc-linux-gnu ; . /opt/lmi/src/lmi/set_toolchain.sh
 #   LMI_COMPILER=gcc ; LMI_TRIPLET=i686-w64-mingw32    ; . /opt/lmi/src/lmi/set_toolchain.sh
 #   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-w64-mingw32  ; . /opt/lmi/src/lmi/set_toolchain.sh
-#   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-pc-linux-gnu ; . /opt/lmi/src/lmi/set_toolchain.sh
 #
 # Implemented as a function that runs and then erases itself, so that
 # sourcing this script changes the environment only as intended. This
@@ -61,8 +61,8 @@
 #
 # Supported values:
 #   LMI_COMPILER : gcc, clang
-#   LMI_TRIPLET  : i686-w64-mingw32, x86_64-w64-mingw32, x86_64-pc-linux-gnu
-# (clang and pc-linux-gnu are not yet tested).
+#   LMI_TRIPLET  : x86_64-pc-linux-gnu, i686-w64-mingw32, x86_64-w64-mingw32
+# (clang not yet tested).
 #
 # Examples:
 #
@@ -126,18 +126,18 @@ export PERFORM
 case "$lmi_build_type" in
     (*-*-linux*)
         case "$LMI_TRIPLET" in
-            (*-*-mingw32)
-                w0="$(winepath -w "$localbindir" | sed -e's/\\/\\\\/g')"
-                w1="$(winepath -w "$locallibdir" | sed -e's/\\/\\\\/g')"
-                export WINEPATH="$w0;$w1"
-                export  PERFORM="wine"
-                ;;
             (x86_64-pc-linux-gnu)
                 # Using LD_LIBRARY_PATH is not ideal, but it does work.
                 export LD_LIBRARY_PATH
                 LD_LIBRARY_PATH=.
                 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$locallibdir"
                 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$bindir"
+                ;;
+            (*-*-mingw32)
+                w0="$(winepath -w "$localbindir" | sed -e's/\\/\\\\/g')"
+                w1="$(winepath -w "$locallibdir" | sed -e's/\\/\\\\/g')"
+                export WINEPATH="$w0;$w1"
+                export  PERFORM="wine"
                 ;;
         esac
         ;;
@@ -162,9 +162,9 @@ case "$LMI_COMPILER" in
 esac
 
 case "$LMI_TRIPLET" in
+    (x86_64-pc-linux-gnu) ;;
     (i686-w64-mingw32)    ;;
     (x86_64-w64-mingw32)  ;;
-    (x86_64-pc-linux-gnu) ;;
     (*)
         printf '%s\n' "Changed nothing because host triplet '$LMI_TRIPLET' is untested."
         return 3;
