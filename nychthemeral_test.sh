@@ -40,11 +40,6 @@ setopt PIPE_FAIL
 
 srcdir=$(dirname "$(readlink --canonicalize "$0")")
 
-# Cannot recursively check script on path determined at runtime, so
-# a directive like 'source="$srcdir"' doesn't work.
-# shellcheck disable=SC1090
-. "$srcdir"/set_toolchain.sh
-
 coefficiency=${coefficiency:-"--jobs=$(nproc)"}
 
 build_clutter='
@@ -136,12 +131,31 @@ nychthemeral_clutter='
 /^$/d
 '
 
+lmi_build_type=$(/usr/share/misc/config.guess)
+
+case "$lmi_build_type" in
+    (*-*-cygwin*)
+        platform=Cygwin
+        ;;
+esac
+
 # This for-loop can iterate over as many toolchains as desired.
 # Make sure the current production architecture is built last, so that
 # it's the one installed to /opt/lmi/bin/ when this script ends.
+triplets="x86_64-w64-mingw32 i686-w64-mingw32"
+if [ "Cygwin" != "$platform" ] && [ "WSL" != "$platform" ]
+then
+# 'triplets' really is used, but in a zsh-specific way
+# shellcheck disable=SC2034
+    triplets="x86_64-pc-linux-gnu x86_64-w64-mingw32 i686-w64-mingw32"
+fi
 export LMI_COMPILER=gcc
 export LMI_TRIPLET
-for LMI_TRIPLET in x86_64-w64-mingw32 i686-w64-mingw32 ;
+# shellcheck disable=SC2043
+#for LMI_TRIPLET in i686-w64-mingw32 ;
+# "${=...} expansion--see zsh faq 3.1:
+#  "Why does $var where var="foo bar" not do what I expect?"
+for LMI_TRIPLET in ${=triplets} ;
 do
 # Directory for test logs.
 #
@@ -153,6 +167,11 @@ log_dir="$exec_prefix"/logs
 mkdir --parents "$log_dir"
 {
 printf 'LMI_TRIPLET = "%s"\n' "$LMI_TRIPLET" > /dev/tty
+
+# Cannot recursively check script on path determined at runtime, so
+# a directive like 'source="$srcdir"' doesn't work.
+# shellcheck disable=SC1090
+. "$srcdir"/set_toolchain.sh
 
 cd /opt/lmi/src/lmi
 
