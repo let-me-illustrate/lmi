@@ -1,6 +1,6 @@
 #!/bin/sh this-script-must-be-sourced-not-run
 
-# Set $PATH, $WINEPATH, and $PERFORM based on $LMI_COMPILER and $LMI_TRIPLET.
+# Set $PATH variants and $PERFORM based on $LMI_COMPILER and $LMI_TRIPLET.
 
 # Copyright (C) 2019, 2020 Gregory W. Chicares.
 #
@@ -104,10 +104,11 @@ local locallibdir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib"
 minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
 export PATH="$localbindir":"$locallibdir":"$minimal_path"
 
-# It is okay to export these two variables unconditionally.
+# It is okay to export these variables unconditionally.
 
-export WINEPATH
+export LD_LIBRARY_PATH
 export PERFORM
+export WINEPATH
 
 # Are double quotes inside double quotes inside $() dubious? I.e.,
 #  " $( "is this string quoted?" ) "
@@ -128,16 +129,15 @@ case "$lmi_build_type" in
         case "$LMI_TRIPLET" in
             (x86_64-pc-linux-gnu)
                 # Using LD_LIBRARY_PATH is not ideal, but it does work.
-                export LD_LIBRARY_PATH
                 LD_LIBRARY_PATH=.
                 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$locallibdir"
                 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$bindir"
                 ;;
             (*-*-mingw32)
+                PERFORM="wine"
                 w0="$(winepath -w "$localbindir" | sed -e's/\\/\\\\/g')"
                 w1="$(winepath -w "$locallibdir" | sed -e's/\\/\\\\/g')"
-                export WINEPATH="$w0;$w1"
-                export  PERFORM="wine"
+                WINEPATH="$w0;$w1"
                 ;;
         esac
         ;;
