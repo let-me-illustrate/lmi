@@ -132,8 +132,12 @@ case "$lmi_build_type" in
                 LD_LIBRARY_PATH=.
                 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$locallibdir"
                 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$bindir"
+                # Nullify any leftover "wine" value.
+                PERFORM=
                 ;;
             (*-*-mingw32)
+                # Nullify any leftover value from the native case above.
+                LD_LIBRARY_PATH=
                 PERFORM="wine"
                 w0="$(winepath -w "$localbindir" | sed -e's/\\/\\\\/g')"
                 w1="$(winepath -w "$locallibdir" | sed -e's/\\/\\\\/g')"

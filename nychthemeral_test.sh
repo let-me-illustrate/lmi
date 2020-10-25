@@ -175,6 +175,8 @@ printf 'LMI_TRIPLET = "%s"\n' "$LMI_TRIPLET" > /dev/tty
 
 cd /opt/lmi/src/lmi
 
+make "$coefficiency" --output-sync=recurse uninstall
+
 printf '\n# test concinnity\n\n'
 make "$coefficiency" check_concinnity 2>&1 \
   | tee "$log_dir"/concinnity | sed -e "$build_clutter" -e "$concinnity_clutter"
