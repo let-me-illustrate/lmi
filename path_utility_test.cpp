@@ -294,11 +294,19 @@ void test_unique_filepath_with_ludicrous_filenames()
     fs::path path2 = unique_filepath(fs::path(""), "");
     BOOST_TEST_EQUAL(path2.string(), "");
 
+#if defined LMI_MSW
+    // fs::change_extension()'s argument is ".[extension]", so ".."
+    // represents a '.' extension-delimiter followed by an extension
+    // consisting of a single '.'. When fs::change_extension() is
+    // called by unique_filepath() here, adding that extension to ".."
+    // yields "...", which is forbidden by msw, but allowed (although
+    // of course discouraged) by posix.
     BOOST_TEST_THROW
         (unique_filepath(fs::path(".."), "..")
         ,fs::filesystem_error
         ,""
         );
+#endif // defined LMI_MSW
 }
 
 void test_path_inserter()
@@ -344,11 +352,27 @@ void test_path_validation()
     validate_filepath("./path_utility_test_file", context);
 
     // Not well formed.
+#if 0
+    // Neither posix nor msw allows NUL in paths. However, the boost
+    // filesystem library doesn't throw an explicit exception here;
+    // instead, it aborts with:
+    //   "Assertion `src.size() == std::strlen( src.c_str() )' failed."
+    // Perhaps std::filesystem will trap this and throw an exception.
+    std::string nulls = {'\0', '\0'};
+    BOOST_TEST_THROW
+        (validate_filepath(nulls, context)
+        ,std::runtime_error
+        ,lmi_test::what_regex("invalid name \"<|>\" in path")
+        );
+#endif // 0
+
+#if defined LMI_MSW
     BOOST_TEST_THROW
         (validate_filepath("<|>", context)
         ,std::runtime_error
         ,lmi_test::what_regex("invalid name \"<|>\" in path")
         );
+#endif // defined LMI_MSW
 
     // Not empty.
     BOOST_TEST_THROW
