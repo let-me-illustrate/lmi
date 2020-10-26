@@ -55,6 +55,10 @@ build_clutter='
 /^[^ ]*windres -o /d
 '
 
+uninstall_clutter='
+/^rm --force --recursive \/opt\/lmi\/bin$/d
+'
+
 concinnity_clutter='
 /.*\/test_coding_rules_test\.sh$/d
 /^Testing .test_coding_rules.\.$/d
@@ -175,7 +179,8 @@ printf 'LMI_TRIPLET = "%s"\n' "$LMI_TRIPLET" > /dev/tty
 
 cd /opt/lmi/src/lmi
 
-make "$coefficiency" --output-sync=recurse uninstall
+make "$coefficiency" uninstall 2>&1 \
+  | tee "$log_dir"/uninstall | sed -e "$build_clutter" -e "$uninstall_clutter"
 
 printf '\n# test concinnity\n\n'
 make "$coefficiency" check_concinnity 2>&1 \
