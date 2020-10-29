@@ -36,7 +36,6 @@ jobs:
         run: |
           sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get dist-upgrade -o APT::Immediate-Configure=0 # Avoid configuration error later
           sudo apt-get --assume-yes install \
             automake bc bsdmainutils bzip2 curl cvs default-jre \
             g++-multilib git jing libarchive-tools \
