@@ -34,6 +34,25 @@ set -vx
 stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
 
+# Ensure that '/usr/share/misc/config.guess' is available for all
+# lmi scripts and makefiles. That's the closest thing to a canonical
+# location for it. If it's not there, then try to copy it from other
+# places where installing 'libtool' would have placed it on various
+# debian and redhat systems.
+
+config_guess_0=/usr/share/misc/config.guess
+config_guess_1=/usr/share/libtool/build-aux/config.guess
+config_guess_2=/usr/share/libtool/config/config.guess
+if   [ -f "$config_guess_0" ]
+  then printf '"config.guess" found in canonical location.\n'
+elif [ -f "$config_guess_1" ]
+  then cp -a "$config_guess_1" "$config_guess_0"
+elif [ -f "$config_guess_2" ]
+  then cp -a "$config_guess_2" "$config_guess_0"
+else
+  printf '"config.guess" not found: cannot continue.\n'; exit 3;
+fi
+
 lmi_build_type=$(/usr/share/misc/config.guess)
 
 # This should work with a rather minimal path.
