@@ -205,7 +205,7 @@ for lib in xmlwrapp; do
     libdir="$srcdir/third_party/$lib"
     if [ ! -x "$libdir/configure" ]; then
         cd "$libdir"
-        ./bootstrap
+        autoreconf --install
     fi
     mkdir --parents "$build_dir/$lib"
     cd "$build_dir/$lib"
