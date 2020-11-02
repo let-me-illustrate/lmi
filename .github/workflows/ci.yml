@@ -78,11 +78,11 @@ jobs:
           echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
       - name: Create lmi directories
-        run: >
+        run: |
           for d in /opt/lmi /opt/lmi/print /etc/opt/lmi /srv/cache_for_lmi; do
-            sudo mkdir --parents $d;
-            sudo --preserve-env chown $NORMAL_UID $d;
-          done;
+            sudo mkdir --parents $d
+            sudo --preserve-env chown $NORMAL_UID $d
+          done
           mkdir /srv/cache_for_lmi/downloads
           mkdir /opt/lmi/src
 
