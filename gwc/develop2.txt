@@ -32,7 +32,7 @@ git commit --all -m"Another set of changes"
   # When everything is ready to share...
 
 cd /opt/lmi/proprietary
-git bundle create YourBundleName origin/master..HEAD --branches
+git bundle create YourBundleName origin/master..HEAD
   # for example (substitute your own initials)
 git bundle create /opt/lmi/blessed/$(date -u +'%Y%m%dT%H%MZ')-gwc.bundle origin/master..HEAD --branches
 
@@ -44,12 +44,6 @@ git push
 
 cd /opt/lmi/proprietary
 git bundle verify /path/where/you/saved/TheirBundleName
-git pull /path/where/you/saved/TheirBundleName
-
-  # [if git-pull fails with
-  #   fatal: Couldn't find remote ref HEAD
-  # try adding 'master at the end...
-
 git pull /path/where/you/saved/TheirBundleName master
 
   # ...then synchronize your "blessed" repository with your correspondent's
