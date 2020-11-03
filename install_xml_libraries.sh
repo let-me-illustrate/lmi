@@ -152,7 +152,7 @@ xmlwrapp_options="
   --disable-tests
 "
 
-# Actually build ##############################################################
+# Optionally, clean beforehand ################################################
 
 # Nonchalantly remove pkgconfig and cmake subdirectories, even though
 # other libraries might someday write files in them, because lmi never
@@ -178,6 +178,31 @@ if [ "$xml_skip_clean" != 1 ]; then
     rm --force --recursive "$exec_prefix"/lib/pkgconfig
     rm --force --recursive "$build_dir"
 fi
+
+# Create an XML catalog #######################################################
+
+# This forestalls about a thousand lines of bogus error messages.
+
+throwaway_catalog=/etc/opt/lmi/xml_catalog
+
+cat >"$throwaway_catalog" <<EOF
+<?xml version="1.0"?>
+<!DOCTYPE catalog PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN" "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+  <rewriteURI uriStartString="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+   rewritePrefix="file://$PWD/third_party/libxml2/test/valid/dtds/xhtml1-transitional.dtd"/>
+  <rewriteURI uriStartString="http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent"
+   rewritePrefix="file://$PWD/third_party/libxml2/test/valid/dtds/xhtml-lat1.ent"/>
+  <rewriteURI uriStartString="http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent"
+   rewritePrefix="file://$PWD/third_party/libxml2/test/valid/dtds/xhtml-special.ent"/>
+  <rewriteURI uriStartString="http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent"
+   rewritePrefix="file://$PWD/third_party/libxml2/test/valid/dtds/xhtml-symbol.ent"/>
+</catalog>
+EOF
+
+export XML_CATALOG_FILES="$throwaway_catalog"
+
+# Actually build ##############################################################
 
 for lib in libxml2 libxslt; do
     libdir="$srcdir/third_party/$lib"
@@ -215,6 +240,9 @@ for lib in xmlwrapp; do
         $xmlwrapp_options
     $MAKE install
 done
+
+# Expunge the throwaway XML catalog.
+rm --force "$throwaway_catalog"
 
 # autotools: 'make install' doesn't respect group permissions--see:
 #   https://lists.gnu.org/archive/html/automake/2019-01/msg00000.html
