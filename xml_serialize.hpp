@@ -60,8 +60,6 @@ namespace xml_serialize
 template<typename T>
 struct xml_io
 {
-    static_assert(!std::is_enum_v<T>); // Prefer mc_enum.
-
     static void to_xml(xml::element& e, T const& t)
     {
         e.set_text_content(value_cast<std::string>(t).c_str());
