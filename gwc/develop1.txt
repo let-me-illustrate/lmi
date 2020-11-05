@@ -108,9 +108,13 @@ git commit sandbox_test.cpp
 git switch master
 git push origin odd/foo
 
-  # to transplant already-pushed commits to a new branch--see:
+  # to transplant unpushed commits to a new branch--see:
   #   https://lists.nongnu.org/archive/html/lmi/2020-09/msg00034.html
+  # this git-branch command creates a new branch with the given name,
+  # which points to HEAD; but it does not switch to that branch...
 git branch odd/foo
+  # ...and therefore this git-reset command affects the current
+  # branch (e.g., 'master'), but does not affect the new branch:
 git reset --keep origin/master
   # specify upstream on the first push (ignore if it's never pushed)
 git push --set-upstream origin odd/foo
