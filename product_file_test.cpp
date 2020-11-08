@@ -133,33 +133,33 @@ void product_file_test::test_copying()
 }
 
 // This implementation:
-//   auto d = DBDictionary::read_via_cache(database_filename_);
+//   auto z = DBDictionary::read_via_cache(database_filename_);
 // would cause assay_speed() to report a much faster run time,
 // yet such a timing would have little significance.
 
 void product_file_test::read_database_file()
 {
-    DBDictionary d(database_filename_);
+    DBDictionary z(database_filename_);
 }
 
 void product_file_test::read_fund_file()
 {
-    FundData f(fund_filename_);
+    FundData z(fund_filename_);
 }
 
 void product_file_test::read_policy_file()
 {
-    product_data p(policy_filename_);
+    product_data z(policy_filename_);
 }
 
 void product_file_test::read_rounding_file()
 {
-    rounding_rules r(rounding_filename_);
+    rounding_rules z(rounding_filename_);
 }
 
 void product_file_test::read_stratified_file()
 {
-    stratified_charges s(stratified_filename_);
+    stratified_charges z(stratified_filename_);
 }
 
 void product_file_test::assay_speed()
