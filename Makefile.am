@@ -424,6 +424,7 @@ liblmi_la_SOURCES = \
     ihs_mortal.cpp \
     ihs_server7702.cpp \
     irc7702_tables.cpp \
+    lingo.cpp \
     lmi.cpp \
     md5.cpp \
     md5sum.cpp \
@@ -529,6 +530,7 @@ product_files_SOURCES = \
     main_common_non_wx.cpp \
     my_db.cpp \
     my_fund.cpp \
+    my_lingo.cpp \
     my_prod.cpp \
     my_proem.cpp \
     my_rnd.cpp \
@@ -1076,6 +1078,7 @@ test_product_file_SOURCES = \
   facets.cpp \
   fund_data.cpp \
   global_settings.cpp \
+  lingo.cpp \
   lmi.cpp \
   mc_enum.cpp \
   mc_enum_types.cpp \
@@ -1367,6 +1370,7 @@ noinst_HEADERS = \
     ledger_variant.hpp \
     ledgervalues.hpp \
     license.hpp \
+    lingo.hpp \
     lmi.hpp \
     loads.hpp \
     loads_impl.hpp \
@@ -1436,6 +1440,7 @@ noinst_HEADERS = \
     rounding_view_editor.hpp \
     rtti_lmi.hpp \
     safely_dereference_as.hpp \
+    sample.hpp \
     sigfpe.hpp \
     single_cell_document.hpp \
     single_choice_popup_menu.hpp \

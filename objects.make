@@ -292,6 +292,7 @@ lmi_common_objects := \
   ihs_mortal.o \
   ihs_server7702.o \
   irc7702_tables.o \
+  lingo.o \
   lmi.o \
   md5.o \
   md5sum.o \
@@ -926,6 +927,7 @@ product_file_test$(EXEEXT): \
   facets.o \
   fund_data.o \
   global_settings.o \
+  lingo.o \
   lmi.o \
   mc_enum.o \
   mc_enum_types.o \
@@ -1195,6 +1197,7 @@ product_files$(EXEEXT): \
   main_common_non_wx.o \
   my_db.o \
   my_fund.o \
+  my_lingo.o \
   my_prod.o \
   my_proem.o \
   my_rnd.o \

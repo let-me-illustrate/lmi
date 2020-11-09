@@ -194,6 +194,7 @@ file::file(std::string const& file_path)
         : ".inix"       == extension() ? e_xml_input
         : ".database"   == extension() ? e_xml_other
         : ".funds"      == extension() ? e_xml_other
+        : ".lingo"      == extension() ? e_xml_other
         : ".policy"     == extension() ? e_xml_other
         : ".rounding"   == extension() ? e_xml_other
         : ".strata"     == extension() ? e_xml_other
