@@ -58,6 +58,7 @@ void product_data::write_proprietary_policy_files()
 
     z.DatabaseFilename           = glossed_string("sample.database");
     z.FundFilename               = glossed_string("sample.funds");
+    z.LingoFilename              = glossed_string("sample.lingo");
     z.RoundingFilename           = glossed_string("sample.rounding");
     z.TierFilename               = glossed_string("sample.strata");
 

@@ -183,6 +183,7 @@ void product_data::ascribe_members()
 {
     ascribe("DatabaseFilename"           , &product_data::DatabaseFilename              );
     ascribe("FundFilename"               , &product_data::FundFilename                  );
+    ascribe("LingoFilename"              , &product_data::LingoFilename                 );
     ascribe("RoundingFilename"           , &product_data::RoundingFilename              );
     ascribe("TierFilename"               , &product_data::TierFilename                  );
     ascribe("CvatCorridorFilename"       , &product_data::CvatCorridorFilename          );
@@ -616,6 +617,7 @@ sample::sample()
     // Names of lmi product files.
     item("DatabaseFilename")           = glossed_string("sample.database");
     item("FundFilename")               = glossed_string("sample.funds");
+    item("LingoFilename")              = glossed_string("sample.lingo");
     item("RoundingFilename")           = glossed_string("sample.rounding");
     item("TierFilename")               = glossed_string("sample.strata");
 
@@ -780,6 +782,7 @@ sample2::sample2()
     // Names of lmi product files.
     item("DatabaseFilename")           = glossed_string("sample.database");
     item("FundFilename")               = glossed_string("sample.funds");
+    item("LingoFilename")              = glossed_string("sample.lingo");
     item("RoundingFilename")           = glossed_string("sample.rounding");
     item("TierFilename")               = glossed_string("sample.strata");
 

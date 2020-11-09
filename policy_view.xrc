@@ -64,6 +64,17 @@
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                         <object class="wxStaticText">
+                                            <label>LingoFilename</label>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxTextCtrl" name="LingoFilename"/>
+                                        <minsize>160,-1</minsize>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxStaticText">
                                             <label>TierFilename</label>
                                         </object>
                                     </object>

@@ -1096,6 +1096,7 @@ shared_data_files = \
   sample.dat \
   sample*.database \
   sample*.funds \
+  sample*.lingo \
   sample.ndx \
   sample*.policy \
   sample*.rounding \
@@ -1206,7 +1207,7 @@ extra_fardel_checksummed_files = \
 
 fardel_checksummed_files = \
   $(extra_fardel_checksummed_files) \
-  *.dat *.database *.funds *.ndx *.policy *.rounding *.strata *.xst \
+  *.dat *.database *.funds *.lingo *.ndx *.policy *.rounding *.strata *.xst \
   expiry \
   lmi_md5sum$(EXEEXT) \
 

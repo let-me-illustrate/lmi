@@ -25,6 +25,7 @@
 #include "database.hpp"
 #include "dbdict.hpp"
 #include "fund_data.hpp"
+#include "lingo.hpp"
 #include "product_data.hpp"
 #include "rounding_rules.hpp"
 #include "stratified_charges.hpp"
@@ -57,12 +58,14 @@ class product_file_test
     static void assay_speed();
     static void read_database_file()   ;
     static void read_fund_file()       ;
+    static void read_lingo_file()      ;
     static void read_policy_file()     ;
     static void read_rounding_file()   ;
     static void read_stratified_file() ;
 
     static std::string database_filename_   ;
     static std::string fund_filename_       ;
+    static std::string lingo_filename_      ;
     static std::string policy_filename_     ;
     static std::string rounding_filename_   ;
     static std::string stratified_filename_ ;
@@ -70,6 +73,7 @@ class product_file_test
 
 std::string product_file_test::database_filename_   ;
 std::string product_file_test::fund_filename_       ;
+std::string product_file_test::lingo_filename_      ;
 std::string product_file_test::policy_filename_     ;
 std::string product_file_test::rounding_filename_   ;
 std::string product_file_test::stratified_filename_ ;
@@ -80,6 +84,7 @@ void product_file_test::get_filenames()
     product_data p(policy_filename_);
     database_filename_   = AddDataDir(p.datum("DatabaseFilename"));
     fund_filename_       = AddDataDir(p.datum("FundFilename"    ));
+    lingo_filename_      = AddDataDir(p.datum("LingoFilename"   ));
     rounding_filename_   = AddDataDir(p.datum("RoundingFilename"));
     stratified_filename_ = AddDataDir(p.datum("TierFilename"    ));
 }
@@ -92,6 +97,7 @@ void product_file_test::test_copying()
     product_data q(p);
     BOOST_TEST(database_filename_   == AddDataDir(q.datum("DatabaseFilename")));
     BOOST_TEST(fund_filename_       == AddDataDir(q.datum("FundFilename"    )));
+    BOOST_TEST(lingo_filename_      == AddDataDir(q.datum("LingoFilename"   )));
     BOOST_TEST(rounding_filename_   == AddDataDir(q.datum("RoundingFilename")));
     BOOST_TEST(stratified_filename_ == AddDataDir(q.datum("TierFilename"    )));
 
@@ -147,6 +153,11 @@ void product_file_test::read_fund_file()
     FundData z(fund_filename_);
 }
 
+void product_file_test::read_lingo_file()
+{
+    lingo z(lingo_filename_);
+}
+
 void product_file_test::read_policy_file()
 {
     product_data z(policy_filename_);
@@ -168,6 +179,7 @@ void product_file_test::assay_speed()
         << "  Speed tests..."
         << "\n  Read 'database'   : " << TimeAnAliquot(read_database_file  )
         << "\n  Read 'fund'       : " << TimeAnAliquot(read_fund_file      )
+        << "\n  Read 'lingo'      : " << TimeAnAliquot(read_lingo_file     )
         << "\n  Read 'policy'     : " << TimeAnAliquot(read_policy_file    )
         << "\n  Read 'rounding'   : " << TimeAnAliquot(read_rounding_file  )
         << "\n  Read 'stratified' : " << TimeAnAliquot(read_stratified_file)

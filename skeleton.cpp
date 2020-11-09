@@ -338,7 +338,8 @@ void Skeleton::InitDocManager()
         ,CLASSINFO(DatabaseView)
         );
 
-    // Apparently there's no way to edit a '.funds' file.
+    // There is intentionally no GUI editor for '.lingo' files.
+    // There's no GUI editor for '.funds' files either.
 
     new(wx) wxDocTemplate
         (doc_manager_

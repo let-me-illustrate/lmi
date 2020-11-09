@@ -23,6 +23,7 @@
 
 #include "dbdict.hpp"
 #include "fund_data.hpp"
+#include "lingo.hpp"
 #include "main_common.hpp"
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "product_data.hpp"
@@ -40,12 +41,14 @@ int try_main(int, char*[])
 
     DBDictionary       ::write_database_files ();
     FundData           ::write_funds_files    ();
+    lingo              ::write_lingo_files    ();
     product_data       ::write_policy_files   ();
     rounding_rules     ::write_rounding_files ();
     stratified_charges ::write_strata_files   ();
 
     DBDictionary       ::write_proprietary_database_files ();
     FundData           ::write_proprietary_funds_files    ();
+    lingo              ::write_proprietary_lingo_files    ();
     product_data       ::write_proprietary_policy_files   ();
     rounding_rules     ::write_proprietary_rounding_files ();
     stratified_charges ::write_proprietary_strata_files   ();

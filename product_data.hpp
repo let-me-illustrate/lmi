@@ -142,6 +142,7 @@ class LMI_SO product_data
     // Names of files that contain other product data.
     glossed_string DatabaseFilename;
     glossed_string FundFilename;
+    glossed_string LingoFilename;
     glossed_string RoundingFilename;
     glossed_string TierFilename;
 
