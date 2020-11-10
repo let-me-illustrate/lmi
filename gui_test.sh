@@ -26,10 +26,6 @@
 #   $./gui_test.sh
 # in a different session when prompted.
 
-# SOMEDAY !! 'wx_test$(EXEEXT)' doesn't return nonzero on failure,
-# so 'set -e' doesn't reliably exit after the first test failure.
-# That doesn't much matter as long as only one real command is run.
-
 set -e
 
 # This is why 'zsh' is specified in the hash-bang (the POSIX shell
