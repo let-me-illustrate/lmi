@@ -414,9 +414,18 @@ eviscerate: source_clean
 	-$(RM) --force --recursive $(prefix)/gcc_x86_64-w64-mingw32
 	-$(RM) --force --recursive $(prefix)/gcc_x86_64-pc-linux-gnu
 
+# A simple '$(RM) --force --recursive $(bindir)' would remove the
+# directory as well as its contents. However, if $(bindir) is the
+# current working directory in another terminal, hilarity ensues:
+#   sh: 0: getcwd() failed: No such file or directory
+# While '-delete' is not POSIX, it's supported by GNU coreutils and
+# {Open,Free}BSD. The command might instead have been written thus:
+#   find $(bindir) -type f -print0 | xargs -0 rm -rf
+# but '-print0' isn't POSIX either.
+
 .PHONY: uninstall
 uninstall:
-	-$(RM) --force --recursive $(bindir)
+	-find $(bindir) -type f -delete
 
 ################################################################################
 
