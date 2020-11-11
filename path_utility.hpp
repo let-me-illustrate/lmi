@@ -42,6 +42,10 @@ LMI_SO std::string orthodox_filename
     (std::string const& original_filename
     );
 
+LMI_SO fs::path remove_alien_msw_root
+    (fs::path    const& original_filepath
+    );
+
 LMI_SO fs::path serial_file_path
     (fs::path    const& exemplar
     ,std::string const& personal_name

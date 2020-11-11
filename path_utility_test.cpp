@@ -416,18 +416,29 @@ void test_path_validation()
 /// does something bizarre, viz.:
 ///   fs::system_complete(/opt/lmi/data) returns:
 ///   /opt/lmi/data
-///   fs::system_complete(Z:/opt/lmi/data) returns:
+/// as expected, but
+///   fs::system_complete(Z:/opt/lmi/data) bizarrely returns:
 ///   /opt/lmi/gcc_x86_64-pc-linux-gnu/build/ship/Z:/opt/lmi/data
+/// or something like that, depending on the build directory.
 
 void test_oddities()
 {
-    std::cout << "Test fs::system_complete():" << std::endl;
-    std::string z0 = "/opt/lmi/data";
-    std::cout << "fs::system_complete(" << z0 << ") returns:" << std::endl;
-    std::cout << fs::system_complete(z0).string() << std::endl;
-    std::string z1 = "Z:/opt/lmi/data";
-    std::cout << "fs::system_complete(" << z1 << ") returns:" << std::endl;
-    std::cout << fs::system_complete(z1).string() << std::endl;
+    std::string const z0 = "/opt/lmi/data";
+    std::string const z1 = "Z:/opt/lmi/data";
+    std::string const z2 = remove_alien_msw_root(z1).string();
+#if defined LMI_POSIX
+    BOOST_TEST_EQUAL  (z0, fs::system_complete(z0).string());
+    BOOST_TEST_UNEQUAL(z0, fs::system_complete(z1).string());
+    BOOST_TEST_EQUAL  (z0, z2);
+    BOOST_TEST_EQUAL  (z0, fs::system_complete(z2).string());
+#elif defined LMI_MSW
+    BOOST_TEST_EQUAL  (z1, fs::system_complete(z0).string());
+    BOOST_TEST_EQUAL  (z1, fs::system_complete(z1).string());
+    BOOST_TEST_EQUAL  (z1, z2);
+    BOOST_TEST_EQUAL  (z1, fs::system_complete(z2).string());
+#else  // Unknown platform.
+    throw "Unrecognized platform."
+#endif // Unknown platform.
 }
 
 int test_main(int, char*[])

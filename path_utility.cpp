@@ -193,6 +193,31 @@ std::string orthodox_filename(std::string const& original_filename)
     return s;
 }
 
+/// Remove an msw root /^.*:/ from path iff system is not msw.
+///
+/// Motivation: Prevent the ghastly outcome demonstrated in the unit
+/// test when an msw-native path is used on a posix system.
+///
+/// On an msw system, return the path unaltered: it may contain a
+/// 'root-name', but that 'root-name' is native, not alien.
+
+fs::path remove_alien_msw_root(fs::path const& original_filepath)
+{
+#if defined LMI_POSIX
+    std::string s {original_filepath.string()};
+    std::string::size_type p = s.find_last_of(':');
+    if(std::string::npos != p)
+        {
+        s.erase(0, 1 + p);
+        }
+    return s;
+#elif defined LMI_MSW
+    return original_filepath;
+#else  // Unknown platform.
+    throw "Unrecognized platform."
+#endif // Unknown platform.
+}
+
 namespace
 {
 /// Prepend a serial number to a file extension. This is intended to
