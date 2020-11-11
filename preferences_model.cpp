@@ -26,6 +26,7 @@
 #include "alert.hpp"
 #include "configurable_settings.hpp"
 #include "miscellany.hpp"               // begins_with()
+#include "path_utility.hpp"             // remove_alien_msw_root()
 #include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 
@@ -57,7 +58,7 @@ std::string generic_path(std::string const& s)
 #if defined LMI_MSW
     return fs::system_complete(fs::path(s)).string();
 #else  // !defined LMI_MSW
-    return s;
+    return remove_alien_msw_root(s).string();
 #endif // !defined LMI_MSW
 }
 

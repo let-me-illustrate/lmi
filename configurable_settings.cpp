@@ -164,6 +164,7 @@ configurable_settings::configurable_settings()
 
     try
         {
+        print_directory_ = remove_alien_msw_root(print_directory_).string();
         print_directory_ = fs::system_complete(print_directory_).string();
         validate_directory(print_directory_, "Print directory");
         }
