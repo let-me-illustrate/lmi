@@ -407,6 +407,29 @@ void test_path_validation()
     fs::remove("path_utility_test_dir");
 }
 
+/// Demonstrate a boost::filesystem oddity.
+///
+/// A print directory is specified in 'configurable_settings.xml', and
+/// managed by 'preferences_model.cpp'. Using an msw build of lmi to
+/// change its value endues it with a 'root-name'. Subsequently using
+/// a posix build of lmi does not remove the 'root-name'; instead, it
+/// does something bizarre, viz.:
+///   fs::system_complete(/opt/lmi/data) returns:
+///   /opt/lmi/data
+///   fs::system_complete(Z:/opt/lmi/data) returns:
+///   /opt/lmi/gcc_x86_64-pc-linux-gnu/build/ship/Z:/opt/lmi/data
+
+void test_oddities()
+{
+    std::cout << "Test fs::system_complete():" << std::endl;
+    std::string z0 = "/opt/lmi/data";
+    std::cout << "fs::system_complete(" << z0 << ") returns:" << std::endl;
+    std::cout << fs::system_complete(z0).string() << std::endl;
+    std::string z1 = "Z:/opt/lmi/data";
+    std::cout << "fs::system_complete(" << z1 << ") returns:" << std::endl;
+    std::cout << fs::system_complete(z1).string() << std::endl;
+}
+
 int test_main(int, char*[])
 {
     initialize_filesystem();
@@ -418,6 +441,7 @@ int test_main(int, char*[])
     test_unique_filepath_with_ludicrous_filenames();
     test_path_inserter();
     test_path_validation();
+    test_oddities();
 
     return EXIT_SUCCESS;
 }
