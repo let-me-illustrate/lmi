@@ -56,7 +56,7 @@ build_clutter='
 '
 
 uninstall_clutter='
-/^rm --force --recursive \/opt\/lmi\/bin$/d
+/^find \/opt\/lmi\/bin -type f -delete$/d
 '
 
 concinnity_clutter='
