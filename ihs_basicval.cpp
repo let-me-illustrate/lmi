@@ -41,6 +41,7 @@
 #include "ihs_irc7702a.hpp"
 #include "input.hpp"
 #include "interest_rates.hpp"
+#include "lingo.hpp"
 #include "loads.hpp"
 #include "math_functions.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_str()
@@ -208,6 +209,7 @@ void BasicValues::Init()
             << LMI_FLUSH
             ;
         }
+    lingo_.reset(new lingo(AddDataDir(product().datum("LingoFilename"))));
     FundData_.reset(new FundData(AddDataDir(product().datum("FundFilename"))));
     RoundingRules_.reset
         (new rounding_rules(AddDataDir(product().datum("RoundingFilename")))
@@ -298,9 +300,8 @@ void BasicValues::GPTServerInit()
             std::string("Issue age greater than maximum")
             );
         }
-//  FundData_       = new FundData
-//      (AddDataDir(product().datum("FundFilename"))
-//      );
+//  lingo_.reset(new lingo(AddDataDir(product().datum("LingoFilename"))));
+//  FundData_.reset(new FundData(AddDataDir(product().datum("FundFilename"))));
     RoundingRules_.reset
         (new rounding_rules(AddDataDir(product().datum("RoundingFilename")))
         );

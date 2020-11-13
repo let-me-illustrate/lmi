@@ -59,6 +59,7 @@ class Irc7702A;
 class Loads;
 class MortalityRates;
 class death_benefits;
+class lingo;
 class modal_outlay;
 class premium_tax;
 class rounding_rules;
@@ -119,6 +120,7 @@ class LMI_SO BasicValues
     yare_input                          yare_input_;
     product_data     const              product_;
     product_database const              database_;
+    std::shared_ptr<lingo>              lingo_;
     std::shared_ptr<FundData>           FundData_;
     std::shared_ptr<rounding_rules>     RoundingRules_;
     std::shared_ptr<stratified_charges> StratifiedCharges_;
