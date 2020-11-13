@@ -23,6 +23,7 @@
 
 #include "fund_data.hpp"
 #include "gpt_server.hpp"
+#include "lingo.hpp"
 #include "lmi.hpp"                      // is_antediluvian_fork()
 #include "mec_server.hpp"
 #include "product_data.hpp"
@@ -86,6 +87,11 @@ std::string const& gpt_state::xml_root_name() const
 bool gpt_state::is_detritus(std::string const&) const
 {
     return false;
+}
+
+std::string const& lingo::lookup(int) const
+{
+    return empty_string;
 }
 
 mec_server::mec_server(mcenum_emission)

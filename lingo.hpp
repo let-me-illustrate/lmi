@@ -37,6 +37,8 @@ class LMI_SO lingo final
   public:
     explicit lingo(std::string const& filename);
 
+    std::string const& lookup(int) const;
+
     // Legacy functions to support creating product files programmatically.
     static void write_lingo_files();
     static void write_proprietary_lingo_files();

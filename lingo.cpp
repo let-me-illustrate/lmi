@@ -25,6 +25,7 @@
 
 #include "alert.hpp"
 #include "data_directory.hpp"           // AddDataDir()
+#include "map_lookup.hpp"
 #include "my_proem.hpp"                 // ::write_proem()
 #include "sample.hpp"                   // superior::lingo
 #include "xml_lmi.hpp"
@@ -50,6 +51,11 @@ lingo::lingo(std::string const& filename)
             ;
         }
     xml_serialize::from_xml(root, map_);
+}
+
+std::string const& lingo::lookup(int index) const
+{
+    return map_lookup(map_, index);
 }
 
 void lingo::write_lingo_files()
