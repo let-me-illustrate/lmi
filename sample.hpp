@@ -24,6 +24,34 @@
 
 #include "config.hpp"
 
-// Coming soon...
+// For now, this file contains only an enumeration, but someday it may
+// include other information that applies to an entire portfolio.
+
+/// For the fictional Superior Life Insurance Company of Superior, WI.
+
+namespace superior
+{
+/// Enumerate lingo strings.
+///
+/// This is deliberately defined with enum-key 'enum' rather than
+/// 'enum class' or 'enum struct'. Because it is defined inside a
+/// namespace, with an enum-base, it is the same as an 'enum class'
+/// except that its enumerators decay to int as nature intended.
+/// Feature comparison:
+///
+///   this enum  enum class   desirable properties
+///   ---------  ----------   --------------------
+///      yes        yes       avoids polluting global namespace
+///      yes        yes       specifies underlying type
+///      yes         no       implicitly converts to int
+///
+/// Use nondefault initializers just to demonstrate that they work.
+/// Ultimately, enumerator zero will be reserved for an empty string.
+
+enum lingo : int
+    {policy_form       = 13
+    ,policy_form_KS_KY = 0
+    };
+} // namespace superior
 
 #endif // sample_hpp
