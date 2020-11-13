@@ -26,10 +26,14 @@
 #include "alert.hpp"
 #include "data_directory.hpp"           // AddDataDir()
 #include "my_proem.hpp"                 // ::write_proem()
+#include "sample.hpp"                   // superior::lingo
 #include "xml_lmi.hpp"
+#include "xml_serialize.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
+
+/// Construct from filename.
 
 lingo::lingo(std::string const& filename)
 {
@@ -45,15 +49,25 @@ lingo::lingo(std::string const& filename)
             << LMI_FLUSH
             ;
         }
+    xml_serialize::from_xml(root, map_);
 }
 
 void lingo::write_lingo_files()
 {
+    // superior::lingo enumerators are used for clarity in specifying
+    // this map. They decay to integers in the resulting file, which
+    // can therefore be read without the enumerators being visible.
+    static std::unordered_map<superior::lingo,std::string> enumerative_map
+        {{superior::policy_form      , "UL32768-NY"}
+        ,{superior::policy_form_KS_KY, "UL32768-X"}
+        };
+
     fs::path const path(AddDataDir("sample.lingo"));
     xml_lmi::xml_document document(xml_root_name());
     write_proem(document, fs::basename(path));
     xml::element& root = document.root_node();
     xml_lmi::set_attr(root, "version", class_version());
+    xml_serialize::to_xml(root, enumerative_map);
     document.save(path.string());
 }
 

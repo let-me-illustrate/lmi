@@ -28,6 +28,7 @@
 #include "xml_lmi_fwd.hpp"
 
 #include <string>
+#include <unordered_map>
 
 /// Company-specific lingo.
 
@@ -50,6 +51,8 @@ class LMI_SO lingo final
         (xml_lmi::xml_document& document
         ,std::string const&     file_leaf_name
         );
+
+    std::unordered_map<int,std::string> map_;
 };
 
 #endif // lingo_hpp
