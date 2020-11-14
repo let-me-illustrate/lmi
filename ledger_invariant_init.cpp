@@ -327,12 +327,18 @@ void LedgerInvariant::Init(BasicValues const* b)
 
         PolicyForm = p.datum(alt_form ? "PolicyFormAlternative" : "PolicyForm");
 
-        if("sample" == b->yare_input_.ProductName)
-            {
-            auto policy_form = b->database().query<int>(DB_PolicyForm);
-            LMI_ASSERT(b->lingo_->lookup(policy_form) == PolicyForm);
-            PolicyForm = b->lingo_->lookup(policy_form);
-            }
+        auto policy_form = b->database().query<int>(DB_PolicyForm);
+        bool const policy_form_is_okay =
+               b->lingo_->lookup(policy_form) == PolicyForm
+            || "{PolicyForm}" == PolicyForm
+            ;
+        if(!policy_form_is_okay)
+            alarum()
+                << b->lingo_->lookup(policy_form) << " b->lingo_->lookup(policy_form)\n"
+                << PolicyForm << " PolicyForm\n"
+                << LMI_FLUSH
+                ;
+        PolicyForm = b->lingo_->lookup(policy_form);
 
         PolicyMktgName             = p.datum("PolicyMktgName"                 );
         PolicyLegalName            = p.datum("PolicyLegalName"                );
