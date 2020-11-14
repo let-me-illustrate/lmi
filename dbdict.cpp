@@ -419,6 +419,7 @@ void DBDictionary::ascribe_members()
     ascribe("PartialMortTable"    , &DBDictionary::PartialMortTable    );
     ascribe("UsePolicyFormAlt"    , &DBDictionary::UsePolicyFormAlt    );
     ascribe("AllowGroupQuote"     , &DBDictionary::AllowGroupQuote     );
+    ascribe("PolicyForm"          , &DBDictionary::PolicyForm          );
     ascribe("WeightClass"         , &DBDictionary::WeightClass         );
     ascribe("WeightGender"        , &DBDictionary::WeightGender        );
     ascribe("WeightSmoking"       , &DBDictionary::WeightSmoking       );

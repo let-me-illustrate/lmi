@@ -356,6 +356,8 @@
 {DB_PartialMortTable,DB_Topic_Miscellanea,"PartialMortTable","Partial mortality table (index in mortality table database)",}, \
 {DB_UsePolicyFormAlt,DB_Topic_Miscellanea,"UsePolicyFormAlt","Use alternative policy-form name: 0=no, 1=yes",}, \
 {DB_AllowGroupQuote,DB_Topic_Miscellanea,"AllowGroupQuote","Allow group premium quotes: 0=no, 1=yes",}, \
+{DB_Topic_Lingo,DB_FIRST,"Lingo","Text to be dropped into report templates: index into lingo file",}, \
+{DB_PolicyForm,DB_Topic_Lingo,"PolicyForm","Policy form",}, \
 {DB_Topic_Weights,DB_FIRST,"Weights","Weights for profit analysis cells [not yet implemented]",}, \
 {DB_WeightClass,DB_Topic_Weights,"WeightClass","Weight by underwriting class [not yet implemented]",}, \
 {DB_WeightGender,DB_Topic_Weights,"WeightGender","Weight by gender [not yet implemented]",}, \

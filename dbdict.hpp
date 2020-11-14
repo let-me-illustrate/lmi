@@ -403,6 +403,7 @@ class LMI_SO DBDictionary
     database_entity PartialMortTable    ;
     database_entity UsePolicyFormAlt    ;
     database_entity AllowGroupQuote     ;
+    database_entity PolicyForm          ;
     database_entity WeightClass         ;
     database_entity WeightGender        ;
     database_entity WeightSmoking       ;

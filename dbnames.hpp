@@ -527,6 +527,10 @@ enum e_database_key
         ,DB_UsePolicyFormAlt
         ,DB_AllowGroupQuote
 
+    ,DB_Topic_Lingo
+
+        ,DB_PolicyForm
+
     ,DB_Topic_Weights
 
         ,DB_WeightClass
