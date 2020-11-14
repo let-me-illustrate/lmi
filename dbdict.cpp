@@ -38,6 +38,7 @@
 #include "my_proem.hpp"                 // ::write_proem()
 #include "oecumenic_enumerations.hpp"
 #include "premium_tax.hpp"              // premium_tax_rates_for_life_insurance()
+#include "sample.hpp"                   // superior::lingo
 #include "xml_lmi.hpp"
 #include "xml_serialize.hpp"
 
@@ -927,7 +928,14 @@ sample::sample()
     alt_form[mce_s_KS] = true;
     alt_form[mce_s_KY] = true;
     Add({DB_UsePolicyFormAlt, premium_tax_dimensions, alt_form});
+
     Add({DB_AllowGroupQuote     , true});
+
+    // Policy form differs in states beginning with "K".
+    std::vector<double> policy_form(e_max_dim_state, superior::policy_form);
+    policy_form[mce_s_KS] = superior::policy_form_KS_KY;
+    policy_form[mce_s_KY] = superior::policy_form_KS_KY;
+    Add({DB_PolicyForm, premium_tax_dimensions, policy_form});
 }
 
 sample2finra::sample2finra()

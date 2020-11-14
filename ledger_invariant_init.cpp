@@ -32,6 +32,7 @@
 #include "death_benefits.hpp"
 #include "fund_data.hpp"
 #include "interest_rates.hpp"
+#include "lingo.hpp"
 #include "lmi.hpp"                      // is_antediluvian_fork()
 #include "loads.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_str()
@@ -325,6 +326,14 @@ void LedgerInvariant::Init(BasicValues const* b)
         // Strings.
 
         PolicyForm = p.datum(alt_form ? "PolicyFormAlternative" : "PolicyForm");
+
+        if("sample" == b->yare_input_.ProductName)
+            {
+            auto policy_form = b->database().query<int>(DB_PolicyForm);
+            LMI_ASSERT(b->lingo_->lookup(policy_form) == PolicyForm);
+            PolicyForm = b->lingo_->lookup(policy_form);
+            }
+
         PolicyMktgName             = p.datum("PolicyMktgName"                 );
         PolicyLegalName            = p.datum("PolicyLegalName"                );
         CsoEra     = mc_str(b->database().query<mcenum_cso_era>(DB_CsoEra));
