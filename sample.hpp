@@ -45,12 +45,13 @@ namespace superior
 ///      yes        yes       specifies underlying type
 ///      yes         no       implicitly converts to int
 ///
-/// Use nondefault initializers just to demonstrate that they work.
-/// Ultimately, enumerator zero will be reserved for an empty string.
+/// Enumerator zero is reserved for an empty string because zero is
+/// the default value for database entities.
 
 enum lingo : int
-    {policy_form       = 13
-    ,policy_form_KS_KY = 0
+    {empty_string = 0
+    ,policy_form
+    ,policy_form_KS_KY
     };
 } // namespace superior
 

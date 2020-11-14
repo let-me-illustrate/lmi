@@ -64,7 +64,8 @@ void lingo::write_lingo_files()
     // this map. They decay to integers in the resulting file, which
     // can therefore be read without the enumerators being visible.
     static std::unordered_map<superior::lingo,std::string> const enumerative_map
-        {{superior::policy_form      , "UL32768-NY"}
+        {{superior::empty_string     , ""}
+        ,{superior::policy_form      , "UL32768-NY"}
         ,{superior::policy_form_KS_KY, "UL32768-X"}
         };
 
