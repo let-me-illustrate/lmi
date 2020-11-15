@@ -328,10 +328,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         PolicyForm = p.datum(alt_form ? "PolicyFormAlternative" : "PolicyForm");
 
         auto policy_form = b->database().query<int>(DB_PolicyForm);
-        bool const policy_form_is_okay =
-               b->lingo_->lookup(policy_form) == PolicyForm
-            || "{PolicyForm}" == PolicyForm
-            ;
+        bool const policy_form_is_okay = b->lingo_->lookup(policy_form) == PolicyForm;
         if(!policy_form_is_okay)
             alarum()
                 << b->lingo_->lookup(policy_form) << " b->lingo_->lookup(policy_form)\n"
