@@ -639,11 +639,14 @@ namespace
 {
 class sample : public DBDictionary {public: sample();};
 
-class sample2finra : public sample {public: sample2finra();};
-class sample2prosp : public sample {public: sample2prosp();};
-class sample2gpp   : public sample {public: sample2gpp  ();};
-class sample2ipp   : public sample {public: sample2ipp  ();};
-class sample2xyz   : public sample {public: sample2xyz  ();};
+class sample2 : public sample {public: sample2();};
+
+class sample2naic  : public sample2 {public: sample2naic ();};
+class sample2finra : public sample2 {public: sample2finra();};
+class sample2prosp : public sample2 {public: sample2prosp();};
+class sample2gpp   : public sample2 {public: sample2gpp  ();};
+class sample2ipp   : public sample2 {public: sample2ipp  ();};
+class sample2xyz   : public sample2 {public: sample2xyz  ();};
 
 sample::sample()
 {
@@ -938,6 +941,18 @@ sample::sample()
     Add({DB_PolicyForm, premium_tax_dimensions, policy_form});
 }
 
+sample2::sample2()
+{
+    // Eventually, perhaps all "lingo" entities can be initialized
+    // to a corresponding "_term" value using some terse syntax.
+    Add({DB_PolicyForm          , superior::policy_form_term});
+}
+
+sample2naic::sample2naic()
+{
+    Add({DB_LedgerType          , mce_ill_reg});
+}
+
 sample2finra::sample2finra()
 {
     Add({DB_LedgerType          , mce_finra});
@@ -993,6 +1008,7 @@ sample2xyz::sample2xyz()
 void DBDictionary::write_database_files()
 {
     sample      ().WriteDB(AddDataDir("sample.database"));
+    sample2naic ().WriteDB(AddDataDir("sample2naic.database"));
     sample2finra().WriteDB(AddDataDir("sample2finra.database"));
     sample2prosp().WriteDB(AddDataDir("sample2prosp.database"));
     sample2gpp  ().WriteDB(AddDataDir("sample2gpp.database"));

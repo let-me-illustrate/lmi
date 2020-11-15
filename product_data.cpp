@@ -814,6 +814,7 @@ sample2::sample2()
 
 sample2naic::sample2naic()
 {
+    item("DatabaseFilename")           = glossed_string("sample2naic.database");
 }
 
 sample2finra::sample2finra()

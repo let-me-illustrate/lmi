@@ -50,6 +50,7 @@ namespace superior
 
 enum lingo : int
     {empty_string = 0
+    ,policy_form_term
     ,policy_form
     ,policy_form_KS_KY
     };
