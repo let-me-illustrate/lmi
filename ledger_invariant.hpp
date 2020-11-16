@@ -191,7 +191,7 @@ class LMI_SO LedgerInvariant final
 
     // Essential strings describing the policy and company.
     std::string PolicyForm;
-    // Ledger needs no member like product_data::PolicyFormAlternative;
+    // Ledger needs no member like product_data::PolicyFormAlternative; // LINGO !! expunge
     std::string PolicyMktgName;
     std::string PolicyLegalName;
     std::string CsoEra;

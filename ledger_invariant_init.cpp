@@ -313,7 +313,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     if(!is_antediluvian_fork())
         {
         product_data const& p = b->product();
-        // Accommodate one alternative policy-form name.
+        // Accommodate one alternative policy-form name. // LINGO !! expunge this block:
         // DATABASE !! It would be much better, of course, to let all
         // strings in class product_data vary across the same axes as
         // database_entity objects.
@@ -325,7 +325,7 @@ void LedgerInvariant::Init(BasicValues const* b)
 
         // Strings.
 
-        PolicyForm = p.datum(alt_form ? "PolicyFormAlternative" : "PolicyForm");
+        PolicyForm = p.datum(alt_form ? "PolicyFormAlternative" : "PolicyForm"); // LINGO !! expunge old implementation here
 
         auto policy_form = b->database().query<int>(DB_PolicyForm);
         bool const policy_form_is_okay =

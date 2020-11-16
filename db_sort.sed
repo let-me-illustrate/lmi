@@ -348,6 +348,7 @@
 /DB_DefaultProcessOrder\>/       s/^/R08/
 /DB_GroupProxyRateTable\>/       s/^/R09/
 /DB_PartialMortTable\>/          s/^/R10/
+# // LINGO !! expunge
 /DB_UsePolicyFormAlt\>/          s/^/R11/
 /DB_AllowGroupQuote\>/           s/^/R12/
 # DB_Topic_Lingo

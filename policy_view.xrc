@@ -324,6 +324,7 @@
                                     <growablecols>1</growablecols>
                                     <hgap>8</hgap>
                                     <vgap>4</vgap>
+                                    <!-- LINGO !! expunge next two textctrls -->
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                         <object class="wxStaticText">

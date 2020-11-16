@@ -206,8 +206,8 @@ void product_data::ascribe_members()
     ascribe("SubstdTblMultFilename"      , &product_data::SubstdTblMultFilename         );
     ascribe("CurrSpecAmtLoadFilename"    , &product_data::CurrSpecAmtLoadFilename       );
     ascribe("GuarSpecAmtLoadFilename"    , &product_data::GuarSpecAmtLoadFilename       );
-    ascribe("PolicyForm"                 , &product_data::PolicyForm                    );
-    ascribe("PolicyFormAlternative"      , &product_data::PolicyFormAlternative         );
+    ascribe("PolicyForm"                 , &product_data::PolicyForm                    ); // LINGO !! expunge
+    ascribe("PolicyFormAlternative"      , &product_data::PolicyFormAlternative         ); // LINGO !! expunge
     ascribe("PolicyMktgName"             , &product_data::PolicyMktgName                );
     ascribe("PolicyLegalName"            , &product_data::PolicyLegalName               );
     ascribe("InsCoShortName"             , &product_data::InsCoShortName                );
@@ -647,8 +647,8 @@ sample::sample()
     item("InsCoDomicile")              = glossed_string("WI");
 
     // Substitutable strings.
-    item("PolicyForm")                 = glossed_string("UL32768-NY");
-    item("PolicyFormAlternative")      = glossed_string("UL32768-X");
+    item("PolicyForm")                 = glossed_string("UL32768-NY"); // LINGO !! expunge
+    item("PolicyFormAlternative")      = glossed_string("UL32768-X");  // LINGO !! expunge
     item("PolicyMktgName")             = glossed_string("UL Supreme");
     item("PolicyLegalName")            = glossed_string("Flexible Premium Adjustable Life Insurance Policy");
     item("InsCoShortName")             = glossed_string("Superior Life");

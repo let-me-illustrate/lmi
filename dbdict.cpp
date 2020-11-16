@@ -418,7 +418,7 @@ void DBDictionary::ascribe_members()
     ascribe("DefaultProcessOrder"       , &DBDictionary::DefaultProcessOrder       );
     ascribe("GroupProxyRateTable"       , &DBDictionary::GroupProxyRateTable       );
     ascribe("PartialMortTable"          , &DBDictionary::PartialMortTable          );
-    ascribe("UsePolicyFormAlt"          , &DBDictionary::UsePolicyFormAlt          );
+    ascribe("UsePolicyFormAlt"          , &DBDictionary::UsePolicyFormAlt          ); // LINGO !! expunge
     ascribe("AllowGroupQuote"           , &DBDictionary::AllowGroupQuote           );
     ascribe("PolicyForm"                , &DBDictionary::PolicyForm                );
     ascribe("WeightClass"               , &DBDictionary::WeightClass               );
@@ -926,11 +926,11 @@ sample::sample()
     double T83Gam[3] = {825, 826, 826,}; // f, m, u
     Add({DB_PartialMortTable, e_number_of_axes, dims311, T83Gam});
 
-    // Use alternative policy form name in states beginning with "K".
-    std::vector<double> alt_form(e_max_dim_state);
-    alt_form[mce_s_KS] = true;
-    alt_form[mce_s_KY] = true;
-    Add({DB_UsePolicyFormAlt, premium_tax_dimensions, alt_form});
+    // Use alternative policy form name in states beginning with "K". // LINGO !! expunge
+    std::vector<double> alt_form(e_max_dim_state); // LINGO !! expunge
+    alt_form[mce_s_KS] = true; // LINGO !! expunge
+    alt_form[mce_s_KY] = true; // LINGO !! expunge
+    Add({DB_UsePolicyFormAlt, premium_tax_dimensions, alt_form}); // LINGO !! expunge
 
     Add({DB_AllowGroupQuote     , true});
 

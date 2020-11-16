@@ -401,7 +401,7 @@ class LMI_SO DBDictionary
     // make this entity superfluous. 'GroupProxyRateTable' could be
     // treated the same way.
     database_entity PartialMortTable          ;
-    database_entity UsePolicyFormAlt          ;
+    database_entity UsePolicyFormAlt          ; // LINGO !! expunge
     database_entity AllowGroupQuote           ;
     database_entity PolicyForm                ;
     database_entity WeightClass               ;

@@ -715,6 +715,7 @@ void check_defect_markers(file const& f)
             &&  "IHS "         != z[1]
             &&  "INELEGANT "   != z[1]
             &&  "INPUT "       != z[1]
+            &&  "LINGO "       != z[1]
             &&  "MD5 "         != z[1]
             &&  "PDF "         != z[1]
             &&  "PORT "        != z[1]

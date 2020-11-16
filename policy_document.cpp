@@ -62,8 +62,8 @@ PolicyDocument::PolicyDocument()
     values_["GuarSpecAmtLoadFilename" ] = &product_data_.GuarSpecAmtLoadFilename .datum_;
     values_["RoundingFilename"        ] = &product_data_.RoundingFilename        .datum_;
     values_["TierFilename"            ] = &product_data_.TierFilename            .datum_;
-    values_["PolicyForm"              ] = &product_data_.PolicyForm              .datum_;
-    values_["PolicyFormAlternative"   ] = &product_data_.PolicyFormAlternative   .datum_;
+    values_["PolicyForm"              ] = &product_data_.PolicyForm              .datum_; // LINGO !! expunge
+    values_["PolicyFormAlternative"   ] = &product_data_.PolicyFormAlternative   .datum_; // LINGO !! expunge
     values_["PolicyMktgName"          ] = &product_data_.PolicyMktgName          .datum_;
     values_["PolicyLegalName"         ] = &product_data_.PolicyLegalName         .datum_;
     values_["InsCoShortName"          ] = &product_data_.InsCoShortName          .datum_;
