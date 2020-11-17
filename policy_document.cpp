@@ -39,10 +39,18 @@ PolicyDocument::PolicyDocument()
     ,values_               {}
 {
     values_["DatabaseFilename"        ] = &product_data_.DatabaseFilename        .datum_;
-    values_["FundFilename"            ] = &product_data_.FundFilename            .datum_;
     values_["LingoFilename"           ] = &product_data_.LingoFilename           .datum_;
-    values_["CvatCorridorFilename"    ] = &product_data_.CvatCorridorFilename    .datum_;
+    values_["RoundingFilename"        ] = &product_data_.RoundingFilename        .datum_;
+    values_["FundFilename"            ] = &product_data_.FundFilename            .datum_;
+    values_["TierFilename"            ] = &product_data_.TierFilename            .datum_;
+    values_["Irc7702QFilename"        ] = &product_data_.Irc7702QFilename        .datum_;
     values_["Irc7702NspFilename"      ] = &product_data_.Irc7702NspFilename      .datum_;
+    values_["CvatCorridorFilename"    ] = &product_data_.CvatCorridorFilename    .datum_;
+    values_["SevenPayFilename"        ] = &product_data_.SevenPayFilename        .datum_;
+    values_["GroupProxyFilename"      ] = &product_data_.GroupProxyFilename      .datum_;
+    values_["PartialMortalityFilename"] = &product_data_.PartialMortalityFilename.datum_;
+    values_["SubstdTblMultFilename"   ] = &product_data_.SubstdTblMultFilename   .datum_;
+    values_["InsCoDomicile"           ] = &product_data_.InsCoDomicile           .datum_;
     values_["CurrCOIFilename"         ] = &product_data_.CurrCOIFilename         .datum_;
     values_["GuarCOIFilename"         ] = &product_data_.GuarCOIFilename         .datum_;
     values_["WPFilename"              ] = &product_data_.WPFilename              .datum_;
@@ -52,36 +60,9 @@ PolicyDocument::PolicyDocument()
     values_["GuarSpouseRiderFilename" ] = &product_data_.GuarSpouseRiderFilename .datum_;
     values_["CurrTermFilename"        ] = &product_data_.CurrTermFilename        .datum_;
     values_["GuarTermFilename"        ] = &product_data_.GuarTermFilename        .datum_;
-    values_["GroupProxyFilename"      ] = &product_data_.GroupProxyFilename      .datum_;
-    values_["SevenPayFilename"        ] = &product_data_.SevenPayFilename        .datum_;
-    values_["TgtPremFilename"         ] = &product_data_.TgtPremFilename         .datum_;
-    values_["Irc7702QFilename"        ] = &product_data_.Irc7702QFilename        .datum_;
-    values_["PartialMortalityFilename"] = &product_data_.PartialMortalityFilename.datum_;
-    values_["SubstdTblMultFilename"   ] = &product_data_.SubstdTblMultFilename   .datum_;
     values_["CurrSpecAmtLoadFilename" ] = &product_data_.CurrSpecAmtLoadFilename .datum_;
     values_["GuarSpecAmtLoadFilename" ] = &product_data_.GuarSpecAmtLoadFilename .datum_;
-    values_["RoundingFilename"        ] = &product_data_.RoundingFilename        .datum_;
-    values_["TierFilename"            ] = &product_data_.TierFilename            .datum_;
-    values_["PolicyForm"              ] = &product_data_.PolicyForm              .datum_; // LINGO !! expunge
-    values_["PolicyFormAlternative"   ] = &product_data_.PolicyFormAlternative   .datum_; // LINGO !! expunge
-    values_["PolicyMktgName"          ] = &product_data_.PolicyMktgName          .datum_;
-    values_["PolicyLegalName"         ] = &product_data_.PolicyLegalName         .datum_;
-    values_["InsCoShortName"          ] = &product_data_.InsCoShortName          .datum_;
-    values_["InsCoName"               ] = &product_data_.InsCoName               .datum_;
-    values_["InsCoAddr"               ] = &product_data_.InsCoAddr               .datum_;
-    values_["InsCoStreet"             ] = &product_data_.InsCoStreet             .datum_;
-    values_["InsCoPhone"              ] = &product_data_.InsCoPhone              .datum_;
-    values_["InsCoDomicile"           ] = &product_data_.InsCoDomicile           .datum_;
-    values_["MainUnderwriter"         ] = &product_data_.MainUnderwriter         .datum_;
-    values_["MainUnderwriterAddress"  ] = &product_data_.MainUnderwriterAddress  .datum_;
-    values_["CoUnderwriter"           ] = &product_data_.CoUnderwriter           .datum_;
-    values_["CoUnderwriterAddress"    ] = &product_data_.CoUnderwriterAddress    .datum_;
-    values_["AvName"                  ] = &product_data_.AvName                  .datum_;
-    values_["CsvName"                 ] = &product_data_.CsvName                 .datum_;
-    values_["CsvHeaderName"           ] = &product_data_.CsvHeaderName           .datum_;
-    values_["NoLapseProvisionName"    ] = &product_data_.NoLapseProvisionName    .datum_;
-    values_["InterestDisclaimer"      ] = &product_data_.InterestDisclaimer      .datum_;
-    values_["GuarMortalityFootnote"   ] = &product_data_.GuarMortalityFootnote   .datum_;
+    values_["TgtPremFilename"         ] = &product_data_.TgtPremFilename         .datum_;
 }
 
 PolicyView& PolicyDocument::PredominantView() const

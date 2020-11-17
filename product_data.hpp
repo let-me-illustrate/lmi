@@ -213,8 +213,6 @@ class LMI_SO product_data
     glossed_string UwClassRated;
     glossed_string UwClassUltra;
 
-    // TODO ?? Most of the following are missing from the GUI.
-
     // Ledger column definitions.
     glossed_string AccountValueFootnote;
     glossed_string AttainedAgeFootnote;

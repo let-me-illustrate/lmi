@@ -75,17 +75,6 @@
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                         <object class="wxStaticText">
-                                            <label>TierFilename</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="TierFilename"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
                                             <label>RoundingFilename</label>
                                         </object>
                                     </object>
@@ -108,12 +97,23 @@
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                         <object class="wxStaticText">
-                                            <label>CvatCorridorFilename</label>
+                                            <label>TierFilename</label>
                                         </object>
                                     </object>
                                     <object class="sizeritem">
                                         <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="CvatCorridorFilename"/>
+                                        <object class="wxTextCtrl" name="TierFilename"/>
+                                        <minsize>160,-1</minsize>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxStaticText">
+                                            <label>Irc7702QFilename</label>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxTextCtrl" name="Irc7702QFilename"/>
                                         <minsize>160,-1</minsize>
                                     </object>
                                     <object class="sizeritem">
@@ -127,6 +127,82 @@
                                         <object class="wxTextCtrl" name="Irc7702NspFilename"/>
                                         <minsize>160,-1</minsize>
                                     </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxStaticText">
+                                            <label>CvatCorridorFilename</label>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxTextCtrl" name="CvatCorridorFilename"/>
+                                        <minsize>160,-1</minsize>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxStaticText">
+                                            <label>SevenPayFilename</label>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxTextCtrl" name="SevenPayFilename"/>
+                                        <minsize>160,-1</minsize>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxStaticText">
+                                            <label>GroupProxyFilename</label>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxTextCtrl" name="GroupProxyFilename"/>
+                                        <minsize>160,-1</minsize>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxStaticText">
+                                            <label>PartialMortalityFilename</label>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxTextCtrl" name="PartialMortalityFilename"/>
+                                        <minsize>160,-1</minsize>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxStaticText">
+                                            <label>SubstdTblMultFilename</label>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxTextCtrl" name="SubstdTblMultFilename"/>
+                                        <minsize>160,-1</minsize>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxStaticText">
+                                            <label>InsCoDomicile</label>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxTextCtrl" name="InsCoDomicile"/>
+                                        <minsize>160,-1</minsize>
+                                    </object>
+                                </object><!-- wxFlexGridSizer -->
+                            </object><!-- sizeritem -->
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxBOTTOM|wxLEFT|wxRIGHT</flag>
+                                <border>6</border>
+                                <object class="wxFlexGridSizer">
+                                    <cols>2</cols>
+                                    <growablecols>1</growablecols>
+                                    <hgap>8</hgap>
+                                    <vgap>4</vgap>
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                         <object class="wxStaticText">
@@ -229,72 +305,6 @@
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                         <object class="wxStaticText">
-                                            <label>GroupProxyFilename</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="GroupProxyFilename"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>SevenPayFilename</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="SevenPayFilename"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>TgtPremFilename</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="TgtPremFilename"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>Irc7702QFilename</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="Irc7702QFilename"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>PartialMortalityFilename</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="PartialMortalityFilename"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>SubstdTblMultFilename</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="SubstdTblMultFilename"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
                                             <label>CurrSpecAmtLoadFilename</label>
                                         </object>
                                     </object>
@@ -314,235 +324,15 @@
                                         <object class="wxTextCtrl" name="GuarSpecAmtLoadFilename"/>
                                         <minsize>160,-1</minsize>
                                     </object>
-                                </object><!-- wxFlexGridSizer -->
-                            </object><!-- sizeritem -->
-                            <object class="sizeritem">
-                                <flag>wxGROW|wxBOTTOM|wxLEFT|wxRIGHT</flag>
-                                <border>6</border>
-                                <object class="wxFlexGridSizer">
-                                    <cols>2</cols>
-                                    <growablecols>1</growablecols>
-                                    <hgap>8</hgap>
-                                    <vgap>4</vgap>
-                                    <!-- LINGO !! expunge next two textctrls -->
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                         <object class="wxStaticText">
-                                            <label>PolicyForm</label>
+                                            <label>TgtPremFilename</label>
                                         </object>
                                     </object>
                                     <object class="sizeritem">
                                         <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="PolicyForm"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>PolicyFormAlternative</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="PolicyFormAlternative"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>PolicyMktgName</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="PolicyMktgName"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>PolicyLegalName</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="PolicyLegalName"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>InsCoShortName</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="InsCoShortName"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>InsCoName</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="InsCoName"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>InsCoAddr</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="InsCoAddr"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>InsCoStreet</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="InsCoStreet"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>InsCoPhone</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="InsCoPhone"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>InsCoDomicile</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="InsCoDomicile"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>MainUnderwriter</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="MainUnderwriter"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>MainUnderwriterAddress</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="MainUnderwriterAddress"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>CoUnderwriter</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="CoUnderwriter"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>CoUnderwriterAddress</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="CoUnderwriterAddress"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>AvName</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="AvName"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>CsvName</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="CsvName"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>CsvHeaderName</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="CsvHeaderName"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>NoLapseProvisionName</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="NoLapseProvisionName"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>InterestDisclaimer</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="InterestDisclaimer"/>
-                                        <minsize>160,-1</minsize>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxStaticText">
-                                            <label>GuarMortalityFootnote</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                        <object class="wxTextCtrl" name="GuarMortalityFootnote"/>
+                                        <object class="wxTextCtrl" name="TgtPremFilename"/>
                                         <minsize>160,-1</minsize>
                                     </object>
                                 </object><!-- wxFlexGridSizer -->
