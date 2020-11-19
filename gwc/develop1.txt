@@ -299,6 +299,10 @@ popd
 
 cd /opt/lmi/src/lmi
 
+  # Find long lines in vim
+
+/\%>80v.\+
+
   # Identify source files not encoded compatibly with UTF-8
 
 for z in *.?pp; (iconv -f UTF-8 -t UTF-8 $z &>/dev/null || echo $z)
