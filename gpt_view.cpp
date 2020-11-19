@@ -27,7 +27,7 @@
 #include "gpt_document.hpp"
 #include "gpt_input.hpp"
 #include "gpt_server.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "safely_dereference_as.hpp"
 #include "wx_new.hpp"
 

@@ -30,7 +30,7 @@
 #include "custom_io_1.hpp"
 #include "emit_ledger.hpp"
 #include "group_values.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "input.hpp"
 #include "ledgervalues.hpp"
 #include "multiple_cell_document.hpp"

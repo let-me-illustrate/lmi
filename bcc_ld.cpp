@@ -36,7 +36,7 @@
 // in '.o' are objects, and files ending in '.lib' or '.a' are libraries.
 
 #include "getopt.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "license.hpp"
 #include "miscellany.hpp"               // ends_with()
 #include "system_command.hpp"

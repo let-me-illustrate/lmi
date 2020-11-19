@@ -24,7 +24,7 @@
 #include "global_settings.hpp"
 
 #include "alert.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "path_utility.hpp"
 
 /// 6.7/4 might seem to permit instance() to call the ctor before the

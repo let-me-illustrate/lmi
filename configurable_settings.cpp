@@ -27,7 +27,7 @@
 #include "alert.hpp"
 #include "contains.hpp"
 #include "data_directory.hpp"           // AddDataDir()
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "map_lookup.hpp"
 #include "mc_enum.hpp"                  // all_strings<>()
 #include "mc_enum_type_enums.hpp"       // mcenum_report_column

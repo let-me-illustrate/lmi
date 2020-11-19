@@ -34,7 +34,7 @@
 
 #if 0 // For debugging only.
 #include "alert.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #endif // 0
 
 #include <string>

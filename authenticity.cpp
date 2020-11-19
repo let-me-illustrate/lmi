@@ -27,7 +27,7 @@
 #include "calendar_date.hpp"
 #include "contains.hpp"
 #include "global_settings.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "md5.hpp"
 #include "md5sum.hpp"
 #include "path_utility.hpp"             // fs::path inserter

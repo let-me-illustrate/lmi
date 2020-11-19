@@ -31,7 +31,7 @@
 #include "configurable_settings.hpp"
 #include "contains.hpp"
 #include "global_settings.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "ledger_invariant.hpp"
 #include "ledger_text_formats.hpp"      // ledger_format()
 #include "ledger_variant.hpp"

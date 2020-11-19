@@ -24,7 +24,7 @@
 #include "mec_view.hpp"
 
 #include "edit_mvc_docview_parameters.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "mec_document.hpp"
 #include "mec_input.hpp"
 #include "mec_server.hpp"

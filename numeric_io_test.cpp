@@ -23,7 +23,7 @@
 
 #include "numeric_io_cast.hpp"
 
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "ieee754.hpp"                  // infinity<>()
 #include "miscellany.hpp"
 #include "test_tools.hpp"

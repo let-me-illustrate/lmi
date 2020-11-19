@@ -28,7 +28,7 @@
 #include "contains.hpp"
 #include "dbnames.hpp"
 #include "et_vector.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "math_functions.hpp"           // lesser_of()
 #include "print_matrix.hpp"
 #include "value_cast.hpp"

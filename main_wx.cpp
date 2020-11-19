@@ -34,7 +34,7 @@
 #include "alert.hpp"                    // safely_show_message()
 #include "fenv_lmi.hpp"
 #include "force_linking.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "main_common.hpp"              // initialize_application()
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "skeleton.hpp"

@@ -31,7 +31,7 @@
 #include "data_directory.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "ieee754.hpp"                  // infinity<>()
 #include "mc_enum_type_enums.hpp"
 #include "miscellany.hpp"

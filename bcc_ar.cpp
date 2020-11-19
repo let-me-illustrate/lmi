@@ -36,7 +36,7 @@
 // any existing library and create a new one from scratch.
 
 #include "getopt.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "license.hpp"
 #include "system_command.hpp"
 

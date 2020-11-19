@@ -24,7 +24,7 @@
 #include "main_common.hpp"
 
 #include "fenv_lmi.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 
 #include <iostream>
 #include <ostream>

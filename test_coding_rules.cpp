@@ -22,7 +22,7 @@
 #include "assert_lmi.hpp"
 #include "boost_regex.hpp"
 #include "contains.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
 #include "miscellany.hpp"               // begins_with(), split_into_lines()

@@ -28,7 +28,7 @@
 #include "alert.hpp"
 #include "configurable_settings.hpp"
 #include "fenv_lmi.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 
 #include <windows.h>
 

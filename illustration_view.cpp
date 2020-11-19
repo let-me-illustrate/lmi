@@ -41,7 +41,7 @@
 #include "default_view.hpp"
 #include "edit_mvc_docview_parameters.hpp"
 #include "emit_ledger.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "illustration_document.hpp"
 #include "illustrator.hpp"
 #include "input.hpp"

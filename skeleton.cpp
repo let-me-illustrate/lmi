@@ -54,7 +54,7 @@
 #include "global_settings.hpp"
 #include "gpt_document.hpp"
 #include "gpt_view.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "icon_monger.hpp"
 #include "illustration_document.hpp"
 #include "illustration_view.hpp"
