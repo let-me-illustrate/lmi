@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include "mc_enum.hpp"
+#include "so_attributes.hpp"
 
 #include <iosfwd>
 #include <string>
@@ -51,7 +52,7 @@
 /// possible without adjusting the base class's 'allowed_' vector and
 /// perhaps changing the way ordinal() works?
 
-class ce_product_name
+class LMI_SO ce_product_name
     :public mc_enum_base
 {
   public:

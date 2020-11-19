@@ -539,7 +539,16 @@ void AccountValue::SetInitialValues()
     AVGenAcct                   = InforceAVGenAcct;
     AVSepAcct                   = InforceAVSepAcct;
 
-    SepAcctPaymentAllocation = premium_allocation_to_sepacct(yare_input_);
+    // WX PORT !! When fund selection is finally ported from ihs,
+    // this workaround should not be needed; until then, it sidesteps
+    // spurious errors in product_test().
+    double const sa_allocation =  premium_allocation_to_sepacct(yare_input_);
+    bool const override_allocation =
+           !database().query<bool>(DB_AllowGenAcct)
+        && global_settings::instance().regression_testing()
+        ;
+//  SepAcctPaymentAllocation = premium_allocation_to_sepacct(yare_input_);
+    SepAcctPaymentAllocation = override_allocation ? 1.0 : sa_allocation ;
     GenAcctPaymentAllocation = 1.0 - SepAcctPaymentAllocation;
 
     if(!database().query<bool>(DB_AllowGenAcct) && 0.0 != GenAcctPaymentAllocation)

@@ -29,6 +29,7 @@
 #include "getopt.hpp"
 #include "global_settings.hpp"
 #include "gpt_server.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "illustrator.hpp"
 #include "input.hpp"
 #include "ledger.hpp"
@@ -168,13 +169,45 @@ void self_test()
 #endif // !defined _GLIBCXX_DEBUG
 }
 
-/// Run self-test repeatedly (intended for use with 'gprof').
+/// Validate products.
+///
+/// Run an illustration for every product in every state (whether
+/// approved there or not), reporting any conflict in parameters
+/// that would make that impossible. See:
+///   https://lists.nongnu.org/archive/html/lmi/2020-11/msg00020.html
 
-void profile()
+void product_test()
 {
-    for(int j = 0; j < 10; ++j)
+    // Allow unapproved states.
+    global_settings::instance().set_regression_testing(true);
+
+    // Pay zero and don't solve, to make this test go faster.
+    Input input;
+    input["Payment"           ] = "0.0";
+    input["SolveType"         ] = "No solve";
+
+    illustrator z(mce_emit_nothing);
+
+    ce_product_name c;
+    std::vector<std::string> const& p = c.all_strings();
+    std::vector<std::string> const& s = all_strings_state();
+    for(auto const& i : p)
         {
-        self_test();
+        std::cout << "Testing product " << i << std::endl;
+        input["ProductName"        ] = i;
+        for(auto const& j : s)
+            {
+            input["StateOfJurisdiction"] = j;
+            try
+                {
+                z("eraseme", input);
+                }
+            catch(...)
+                {
+                std::cout << i << ", " << j << ":" << std::endl;
+                report_exception();
+                }
+            }
         }
 }
 
@@ -194,7 +227,7 @@ void process_command_line(int argc, char* argv[])
         {"file"         ,REQD_ARG ,nullptr ,'f' ,nullptr ,"input file to run"},
         {"help"         ,NO_ARG   ,nullptr ,'h' ,nullptr ,"display this help and exit"},
         {"license"      ,NO_ARG   ,nullptr ,'l' ,nullptr ,"display license and exit"},
-        {"profile"      ,NO_ARG   ,nullptr ,'o' ,nullptr ,"set up for profiling and exit"},
+        {"product_test" ,NO_ARG   ,nullptr ,'o' ,nullptr ,"validate products and exit"},
         {"print_db"     ,NO_ARG   ,nullptr ,'p' ,nullptr ,"print products and exit"},
         {"selftest"     ,NO_ARG   ,nullptr ,'s' ,nullptr ,"perform self test and exit"},
         {"test_db"      ,NO_ARG   ,nullptr ,'t' ,nullptr ,"test products and exit"},
@@ -389,7 +422,7 @@ void process_command_line(int argc, char* argv[])
 
             case 'o':
                 {
-                profile();
+                product_test();
                 return;
                 }
                 break;
