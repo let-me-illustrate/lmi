@@ -202,8 +202,9 @@ file::file(std::string const& file_path)
         : ".xrc"        == extension() ? e_xml_other
         : ".xsd"        == extension() ? e_xml_other
         : ".xsl"        == extension() ? e_xml_other
-        // phyloanalyze() tests inspect only file name
+        // phyloanalyze() tests inspect only file name [sort by enumerator]
         : phyloanalyze("^ChangeLog-")  ? e_binary
+        : phyloanalyze("^Speed_")      ? e_binary
         : phyloanalyze("^tags$")       ? e_expungible
         : phyloanalyze("^COPYING$")    ? e_gpl
         : phyloanalyze("^quoted_gpl")  ? e_gpl

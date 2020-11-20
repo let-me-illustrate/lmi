@@ -1349,6 +1349,11 @@ cli_selftest:
 	@$(PERFORM) ./lmi_cli_shared$(EXEEXT) $(self_test_options) > /dev/null
 	@$(PERFORM) ./lmi_cli_shared$(EXEEXT) $(self_test_options)
 
+.PHONY: cli_timing
+cli_timing: lmi_cli_shared$(EXEEXT)
+	@$(PERFORM) ./lmi_cli_shared$(EXEEXT) $(self_test_options) \
+	  >$(srcdir)/Speed_$(LMI_COMPILER)_$(LMI_TRIPLET)
+
 cli_test-sample.ill: special_emission :=
 cli_test-sample.cns: special_emission := emit_composite_only
 

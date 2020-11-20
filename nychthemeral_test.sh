@@ -128,6 +128,7 @@ nychthemeral_clutter='
 /^  *[1-9][0-9]* source files/d
 /^  *[1-9][0-9]* source lines/d
 /^  *[1-9][0-9]* marked defects/d
+/^# speed test/d
 /^# xrc tests/d
 /^# test all valid emission types/d
 /^# schema tests/d
@@ -151,7 +152,7 @@ if [ "Cygwin" != "$platform" ] && [ "WSL" != "$platform" ]
 then
 # 'triplets' really is used, but in a zsh-specific way
 # shellcheck disable=SC2034
-    triplets="x86_64-pc-linux-gnu x86_64-w64-mingw32 i686-w64-mingw32"
+  triplets="x86_64-pc-linux-gnu x86_64-w64-mingw32 i686-w64-mingw32"
 fi
 export LMI_COMPILER=gcc
 export LMI_TRIPLET
@@ -226,6 +227,12 @@ printf '\n# unit tests in libstdc++ debug mode\n\n'
 # shellcheck disable=SC2039
 make "$coefficiency" --output-sync=recurse unit_tests build_type=safestdlib 2>&1 \
   | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests_safestdlib
+
+if [ "greg" = "$(whoami)" ]
+then
+  printf '\n# speed test\n\n'
+  make cli_timing
+fi
 
 printf '\n# xrc tests\n\n'
 java -jar /opt/lmi/third_party/rng/jing.jar -c xrc.rnc ./*.xrc 2>&1 \
