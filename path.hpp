@@ -212,7 +212,7 @@ class path
         {
         // make_preferred() changes the path, so make copy of path_.
         std::filesystem::path tmp{path_};
-        return tmp.make_preferred().u8string();
+        return u8string_as_string(tmp.make_preferred().u8string());
         }
 
     /// Returns the UTF-8 encoded string in the lexically normalized generic
@@ -221,7 +221,7 @@ class path
 
     std::string string() const
         {
-        return path_.lexically_normal().generic_u8string();
+        return u8string_as_string(path_.lexically_normal().generic_u8string());
         }
 
     /// Generation.
@@ -342,6 +342,39 @@ class path
 
   private:
     std::filesystem::path path_;
+
+#if defined __cpp_char8_t
+    static std::string u8string_as_string(std::u8string const& s8)
+        {
+        // In C++20 u8string is a specialization of basic_string<> for char8_t
+        // which is a different type from char, hence u8string cannot be used
+        // for basically anything. In lmi we assume that all non-ASCII strings
+        // use UTF-8 encoding, so we simply reuse u8string contents as normal
+        // char string. Note that this cast is safe because of special property
+        // of char pointers that can be used to iterate over any buffer and
+        // that u8string contents can always be stored in string (unlike vice
+        // versa).
+        //
+        // Also note that the input string can't contain embedded NULs here, as
+        // they're not allowed in file paths, hence there is no need to use
+        // size.
+        return reinterpret_cast<char const*>(s8.c_str());
+        }
+#endif // defined __cpp_char8_t
+
+    // Until C++20 u8string() and generic_u8string() return std::string, so
+    // there is no need to do anything and, hopefully, the compiler will just
+    // optimize this function call away.
+    //
+    // Note that we define this overload even when using C++20, as some
+    // std::filesystem implementations haven't been updated to return
+    // std::u8string from path::u8string() (which some have already been), so
+    // it's simpler to always define it and let the compiler select the
+    // appropriate overload to call.
+    static std::string u8string_as_string(std::string const& s8)
+        {
+        return s8;
+        }
 
     friend bool operator==(path const& lhs, path const& rhs) noexcept;
     friend bool operator!=(path const& lhs, path const& rhs) noexcept;
