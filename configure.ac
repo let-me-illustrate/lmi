@@ -348,12 +348,11 @@ AC_CHECK_HEADER([boost/type_traits.hpp],
 
 dnl The default boost library name should be used unless otherwise specified
 dnl via --with-boost-tookit options, in which case we need to add
-dnl toolkit suffix to the library name (example -lboost_filesystem-gcc-mt).
+dnl toolkit suffix to the library name (example -lboost_regex-gcc-mt).
 if test "x$lmi_boost_toolkit" != "x"; then
     lmi_boost_toolkit="-$lmi_boost_toolkit"
 fi
 boost_libsystem="boost_system$lmi_boost_toolkit"
-boost_libfs="boost_filesystem$lmi_boost_toolkit"
 boost_libregex="boost_regex$lmi_boost_toolkit"
 
 save_LIBS=$LIBS
@@ -376,13 +375,6 @@ dnl usually when we want to check for a library we use AC_CHECK_LIB and main()
 dnl but since under mingw with -pedantic and -std= options test does not pass
 dnl we are forced to use a bit more sophisticated construct
 
-LIBS="$LIBS $BOOST_LIBS -l$boost_libfs"
-AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/filesystem/operations.hpp>]],
-    [[boost::filesystem::current_path()]])],
-    [],
-    [AC_MSG_FAILURE([Boost filesystem library $boost_libfs not found, $errmsg])]
-)
-
 LIBS="$save_LIBS -l$boost_libregex"
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/regex.hpp>]],
     [[boost::regex *r]])],
@@ -393,7 +385,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/regex.hpp>]],
 LDFLAGS=$save_LDFLAGS
 LIBS=$save_LIBS
 
-BOOST_LIBS="-l$boost_libfs -l$boost_libregex $BOOST_LIBS"
+BOOST_LIBS="-l$boost_libregex $BOOST_LIBS"
 
 dnl contains flags needed to link to externally or internally built
 dnl boost libraries
