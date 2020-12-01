@@ -306,7 +306,6 @@ void product_data::ascribe_members()
     ascribe("FlexiblePremiumFootnote"    , &product_data::FlexiblePremiumFootnote       );
     ascribe("GuaranteedValuesFootnote"   , &product_data::GuaranteedValuesFootnote      );
     ascribe("CreditingRateFootnote"      , &product_data::CreditingRateFootnote         );
-    ascribe("DefnGuarGenAcctRate"        , &product_data::DefnGuarGenAcctRate           );
     ascribe("GrossRateFootnote"          , &product_data::GrossRateFootnote             );
     ascribe("NetRateFootnote"            , &product_data::NetRateFootnote               );
     ascribe("MecFootnote"                , &product_data::MecFootnote                   );
@@ -374,6 +373,7 @@ void product_data::ascribe_members()
     ascribe("FnGuaranteedPremium"        , &product_data::FnGuaranteedPremium           );
     ascribe("FnOmnibusDisclaimer"        , &product_data::FnOmnibusDisclaimer           );
     ascribe("FnInitialDbo"               , &product_data::FnInitialDbo                  );
+    ascribe("DefnGuarGenAcctRate"        , &product_data::DefnGuarGenAcctRate           );
     ascribe("DefnAV"                     , &product_data::DefnAV                        );
     ascribe("DefnCSV"                    , &product_data::DefnCSV                       );
     ascribe("DefnMec"                    , &product_data::DefnMec                       );

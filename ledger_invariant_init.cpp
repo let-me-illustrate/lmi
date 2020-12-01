@@ -460,7 +460,6 @@ void LedgerInvariant::Init(BasicValues const* b)
         FlexiblePremiumFootnote    = p.datum("FlexiblePremiumFootnote"        );
         GuaranteedValuesFootnote   = p.datum("GuaranteedValuesFootnote"       );
         CreditingRateFootnote      = p.datum("CreditingRateFootnote"          );
-        DefnGuarGenAcctRate        = p.datum("DefnGuarGenAcctRate"            );
         GrossRateFootnote          = p.datum("GrossRateFootnote"              );
         NetRateFootnote            = p.datum("NetRateFootnote"                );
         MecFootnote                = p.datum("MecFootnote"                    );
@@ -528,6 +527,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         FnGuaranteedPremium        = p.datum("FnGuaranteedPremium"            );
         FnOmnibusDisclaimer        = p.datum("FnOmnibusDisclaimer"            );
         FnInitialDbo               = p.datum("FnInitialDbo"                   );
+        DefnGuarGenAcctRate        = p.datum("DefnGuarGenAcctRate"            );
         DefnAV                     = p.datum("DefnAV"                         );
         DefnCSV                    = p.datum("DefnCSV"                        );
         DefnMec                    = p.datum("DefnMec"                        );

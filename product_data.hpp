@@ -294,7 +294,6 @@ class LMI_SO product_data
     glossed_string FlexiblePremiumFootnote;
     glossed_string GuaranteedValuesFootnote;
     glossed_string CreditingRateFootnote;
-    glossed_string DefnGuarGenAcctRate;
     glossed_string GrossRateFootnote;
     glossed_string NetRateFootnote;
     glossed_string MecFootnote;
@@ -362,6 +361,7 @@ class LMI_SO product_data
     glossed_string FnGuaranteedPremium;
     glossed_string FnOmnibusDisclaimer;
     glossed_string FnInitialDbo;
+    glossed_string DefnGuarGenAcctRate;
     glossed_string DefnAV;
     glossed_string DefnCSV;
     glossed_string DefnMec;

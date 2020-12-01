@@ -313,7 +313,6 @@ class LMI_SO LedgerInvariant final
     std::string FlexiblePremiumFootnote;
     std::string GuaranteedValuesFootnote;
     std::string CreditingRateFootnote;
-    std::string DefnGuarGenAcctRate;
     std::string GrossRateFootnote;
     std::string NetRateFootnote;
     std::string MecFootnote;
@@ -381,6 +380,7 @@ class LMI_SO LedgerInvariant final
     std::string FnGuaranteedPremium;
     std::string FnOmnibusDisclaimer;
     std::string FnInitialDbo;
+    std::string DefnGuarGenAcctRate;
     std::string DefnAV;
     std::string DefnCSV;
     std::string DefnMec;

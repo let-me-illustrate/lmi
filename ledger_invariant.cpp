@@ -302,7 +302,6 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["FlexiblePremiumFootnote"    ] = &FlexiblePremiumFootnote    ;
     Strings         ["GuaranteedValuesFootnote"   ] = &GuaranteedValuesFootnote   ;
     Strings         ["CreditingRateFootnote"      ] = &CreditingRateFootnote      ;
-    Strings         ["DefnGuarGenAcctRate"        ] = &DefnGuarGenAcctRate        ;
     Strings         ["GrossRateFootnote"          ] = &GrossRateFootnote          ;
     Strings         ["NetRateFootnote"            ] = &NetRateFootnote            ;
     Strings         ["MecFootnote"                ] = &MecFootnote                ;
@@ -372,6 +371,7 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["FnOmnibusDisclaimer"        ] = &FnOmnibusDisclaimer        ;
     Strings         ["FnInitialDbo"               ] = &FnInitialDbo               ;
 
+    Strings         ["DefnGuarGenAcctRate"        ] = &DefnGuarGenAcctRate        ;
     Strings         ["DefnAV"                     ] = &DefnAV                     ;
     Strings         ["DefnCSV"                    ] = &DefnCSV                    ;
     Strings         ["DefnMec"                    ] = &DefnMec                    ;
