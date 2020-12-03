@@ -343,6 +343,40 @@ void LedgerInvariant::Init(BasicValues const* b)
                 ;
         PolicyForm = b->lingo_->lookup(policy_form);
 
+        // LINGO !! Temporary expedient: validate all lingo.
+        if(begins_with(ProductName, "sample"))
+            for(auto const& i : p.member_names())
+                {
+                if(ends_with(i, "Filename") || i == "InsCoDomicile")
+                    continue;
+                auto const k = static_cast<e_database_key>(db_key_from_name(i));
+                auto const lingo_index = b->database().query<e_database_key>(k);
+                std::string const newer = b->lingo_->lookup(lingo_index);
+                std::string const older = p.datum(i);
+                if(newer != older)
+                    {
+                    // Allow an "alternative" policy form for now.
+                    if("PolicyForm" == i)
+                        warning()
+                            << "Expected difference:\n"
+                            << i << " entity\n"
+                            << newer << " newer\n"
+                            << older << " older\n"
+                            << StateOfJurisdiction << " StateOfJurisdiction\n"
+                            << LMI_FLUSH
+                            ;
+                    else
+                        alarum()
+                            << "ERROR:\n"
+                            << i << " entity\n"
+                            << newer << " newer\n"
+                            << older << " older\n"
+                            << StateOfJurisdiction << " StateOfJurisdiction\n"
+                            << LMI_FLUSH
+                            ;
+                    }
+                }
+
         PolicyMktgName             = p.datum("PolicyMktgName"                 );
         PolicyLegalName            = p.datum("PolicyLegalName"                );
         CsoEra     = mc_str(b->database().query<mcenum_cso_era>(DB_CsoEra));
