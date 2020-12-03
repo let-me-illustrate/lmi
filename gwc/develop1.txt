@@ -299,9 +299,22 @@ popd
 
 cd /opt/lmi/src/lmi
 
-  # Find long lines in vim
+  # Useful vim commands that are not readily remembered
+
+  # Find long lines
 
 /\%>80v.\+
+
+  # Change column 41 to a comma, for non-matching lines in a range
+  # ('|41' seems incompatible with '|' separator, so use 'cursor')
+
+:'<,'>g!/xyzzy/call cursor (0,41) | norm r,
+
+  # In a range, copy each matching line, appending "_term" to the copy
+
+:'<,'>g/^    ,/ copy . | s/^    ,[^ ]*/&_term
+
+  # All other...
 
   # Identify source files not encoded compatibly with UTF-8
 
