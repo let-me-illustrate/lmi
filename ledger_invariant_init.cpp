@@ -79,6 +79,9 @@ void LedgerInvariant::Init(BasicValues const* b)
 
     irr_precision_ = b->round_irr().decimals();
 
+    ProductName                = b->yare_input_.ProductName;
+    StateOfJurisdiction        = mc_str(b->GetStateOfJurisdiction());
+
     // BOY vectors.
 
 //  GrossPmt                   = DYNAMIC
@@ -537,7 +540,6 @@ void LedgerInvariant::Init(BasicValues const* b)
 
     // Strings from class Input.
 
-    ProductName                = b->yare_input_.ProductName;
     ProducerName               = b->yare_input_.AgentName;
 
     std::string const agent_city     = b->yare_input_.AgentCity;
@@ -599,7 +601,6 @@ void LedgerInvariant::Init(BasicValues const* b)
     DefnLifeIns                = mc_str(b->yare_input_.DefinitionOfLifeInsurance);
     DefnMaterialChange         = mc_str(b->yare_input_.DefinitionOfMaterialChange);
     PartMortTableName          = "1983 GAM"; // TODO ?? Hardcoded.
-    StateOfJurisdiction        = mc_str(b->GetStateOfJurisdiction());
     PremiumTaxState            = mc_str(b->GetPremiumTaxState());
     CountryIso3166Abbrev       = mc_str(b->yare_input_.Country);
     Comments                   = b->yare_input_.Comments;
