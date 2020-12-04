@@ -209,7 +209,7 @@ void BasicValues::Init()
             << LMI_FLUSH
             ;
         }
-    lingo_.reset(new lingo(AddDataDir(product().datum("LingoFilename"))));
+    lingo_ = lingo::read_via_cache(AddDataDir(product().datum("LingoFilename")));
     FundData_.reset(new FundData(AddDataDir(product().datum("FundFilename"))));
     RoundingRules_.reset
         (new rounding_rules(AddDataDir(product().datum("RoundingFilename")))

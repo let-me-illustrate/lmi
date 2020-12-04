@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+#include "cache_file_reads.hpp"
 #include "so_attributes.hpp"
 #include "xml_lmi_fwd.hpp"
 
@@ -33,6 +34,7 @@
 /// Company-specific lingo.
 
 class LMI_SO lingo final
+    :public cache_file_reads<lingo>
 {
   public:
     explicit lingo(std::string const& filename);

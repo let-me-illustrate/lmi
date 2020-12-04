@@ -1,7 +1,7 @@
 Test speed:
-  naic, no solve      : 2.960e-02 s mean;      29448 us least of  34 runs
-  naic, specamt solve : 4.473e-02 s mean;      44543 us least of  23 runs
-  naic, ee prem solve : 4.205e-02 s mean;      41773 us least of  24 runs
-  finra, no solve     : 1.784e-02 s mean;      17712 us least of  57 runs
-  finra, specamt solve: 3.194e-02 s mean;      31680 us least of  32 runs
-  finra, ee prem solve: 3.040e-02 s mean;      30232 us least of  33 runs
+  naic, no solve      : 2.666e-02 s mean;      26496 us least of  38 runs
+  naic, specamt solve : 4.186e-02 s mean;      41651 us least of  24 runs
+  naic, ee prem solve : 3.903e-02 s mean;      38808 us least of  26 runs
+  finra, no solve     : 1.498e-02 s mean;      14804 us least of  67 runs
+  finra, specamt solve: 2.897e-02 s mean;      28771 us least of  35 runs
+  finra, ee prem solve: 2.745e-02 s mean;      27208 us least of  37 runs
