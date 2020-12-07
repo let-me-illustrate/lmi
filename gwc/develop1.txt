@@ -120,6 +120,18 @@ git reset --keep origin/master
 git push --set-upstream origin odd/foo
   # ...and, if that branch is (later) to be rebased on 'master', be
   # sure to use either '--no-fork-point' or an explicit branch name.
+  #
+  # Alternatively, instead of the above commands, use the following:
+  # ...create and switch to a new branch (for unpushed commits)...
+git switch --create odd/foo
+  # ...add any further commits...
+git commit whatever.cpp
+  # ...specify upstream on first push, as above...
+git push --set-upstream origin odd/foo
+  # ...then awaken from the dream...
+git switch master
+  # ...and forget it, if desired, as above...
+git reset --keep origin/master
 
   # (to copy to a subdir before deletion, so it's in permanent history)
   # (this works only if all modified files are unique to the branch)
