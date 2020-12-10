@@ -168,6 +168,10 @@ git checkout HEAD^ census_view.cpp
 
 git checkout .
 
+  # Switch locally to a particular SHA1
+
+git switch --detach [sha1sum]
+
   # Obliterate unpushed commits
 
 git reset --hard origin/master
@@ -193,6 +197,10 @@ git add --chmod=-x some-file-name
 
 git log -200 --graph --oneline --all --full-history
 git log -200 --graph --oneline --all --simplify-by-decoration
+
+  # Show git's file permissions
+
+git ls-files --stage -- gwc/*.sh |less
 
   # Second screen: only for updating local shadow copy of repository
   #
