@@ -27,6 +27,9 @@
 # This may become useful someday, but for now...
 exit 9
 
+# See:
+#   https://lists.nongnu.org/archive/html/lmi/2020-09/msg00073.html
+
 cd /usr/bin || { printf 'failed: cd\n'; exit 3; }
 groupadd perf_users
 chgrp perf_users perf
@@ -47,5 +50,6 @@ echo "usermod -aG perf_users SomeUserName"
 # but see:
 #   https://lists.nongnu.org/archive/html/lmi/2020-09/msg00073.html
 
-# Disliked alternative:
-# echo 1 >/proc/sys/kernel/perf_event_paranoid
+# Disliked alternative, which has the virtue of actually working--see:
+#   https://lists.nongnu.org/archive/html/lmi/2020-10/msg00017.html
+echo 1 >/proc/sys/kernel/perf_event_paranoid
