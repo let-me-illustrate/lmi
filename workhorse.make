@@ -441,9 +441,8 @@ else ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0 9 9.3.0 10 10.0))
 # See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00026.html
 #   https://lists.nongnu.org/archive/html/lmi/2020-12/msg00000.html
-    ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0))
-      tutelary_flag := -fomit-frame-pointer
-    endif
+#   https://lists.nongnu.org/archive/html/lmi/2020-12/msg00002.html
+    tutelary_flag := -fomit-frame-pointer
   endif
 
   ifneq (,$(filter $(gcc_version), 10 10.0))
