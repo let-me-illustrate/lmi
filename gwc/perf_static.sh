@@ -40,7 +40,8 @@ set -vx
 # pushd   /usr/src/linux-source-4.19/tools/perf
 #   this fails...
 # make clean; make EXTRA_LDFLAGS=-static 2>&1 |less
-#   ...so do this instead
+#   ...so do this instead--see:
+#   https://lists.nongnu.org/archive/html/lmi/2020-12/msg00003.html
 # make clean; make EXTRA_LDFLAGS=-static EXTRA_CFLAGS=-Wno-discarded-qualifiers 2>&1 |less
 #   still, it's not purely static:
 # ldd /usr/src/linux-source-4.19/tools/perf/perf
@@ -64,7 +65,7 @@ ln /usr/src/linux-source-4.19/tools/perf/perf $d/perf
 # later, in a chroot that mounts /srv/cache_for_lmi/
 # cd /opt/lmi/bin
 #   library path required only for lmi's libraries, not perf's
-# LD_LIBRARY_PATH=.:/opt/lmi/local/gcc_x86_64-pc-linux-gnu/lib/ /srv/cache_for_lmi/perf_static/perf record --call-graph lbr ./lmi_cli_shared --accept --data_path=/opt/lmi/data --selftest
+# LD_LIBRARY_PATH=.:/opt/lmi/local/gcc_x86_64-pc-linux-gnu/lib/ /srv/cache_for_lmi/perf_static/perf record --freq=max --call-graph lbr ./lmi_cli_shared --accept --data_path=/opt/lmi/data --selftest
 # Failed to open [ext4], continuing without symbols
 # Failed to open [kvm], continuing without symbols
 # Failed to open [fscrypto], continuing without symbols

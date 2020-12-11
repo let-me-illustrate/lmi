@@ -50,7 +50,7 @@ do ln $z $d/"$(basename "$z")"; done
 # later, in a chroot that mounts /srv/cache_for_lmi/
 # cd /opt/lmi/bin
 #   library path required for perf's and lmi's binaries
-# LD_LIBRARY_PATH=.:/opt/lmi/local/gcc_x86_64-pc-linux-gnu/lib/:/srv/cache_for_lmi/perf_ln /srv/cache_for_lmi/perf_ln/perf_4.19 record --call-graph lbr ./lmi_cli_shared --accept --data_path=/opt/lmi/data --selftest
+# LD_LIBRARY_PATH=.:/opt/lmi/local/gcc_x86_64-pc-linux-gnu/lib/:/srv/cache_for_lmi/perf_ln /srv/cache_for_lmi/perf_ln/perf_4.19 record --freq=max --call-graph lbr ./lmi_cli_shared --accept --data_path=/opt/lmi/data --selftest
 # Failed to open [ext4], continuing without symbols
 # Failed to open [fscrypto], continuing without symbols
 # Failed to open [kvm], continuing without symbols
