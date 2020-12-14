@@ -67,7 +67,7 @@ struct LoadsTest
         {}
 
     void Allocate  () {loads_.Allocate(details_.length_);}
-    void Initialize() {loads_.Initialize(database_);}
+    void Initialize() {loads_.Initialize(database_, details_);}
     void Calculate () {loads_.Calculate(details_);}
 
     void Reinitialize();
@@ -83,26 +83,26 @@ struct LoadsTest
 
 void LoadsTest::Reinitialize()
 {
-    loads_.refundable_sales_load_proportion_    = std::vector<double>(length, 0.50000);
-    loads_.dac_tax_load_                        = std::vector<double>(length, 0.00500);
+    loads_.refundable_sales_load_proportion_    = std::vector<double>  (length, 0.50000);
+    loads_.dac_tax_load_                        = std::vector<double>  (length, 0.00500);
 
-    loads_.monthly_policy_fee_   [mce_gen_guar] = std::vector<double>(length, 8.00000);
-    loads_.annual_policy_fee_    [mce_gen_guar] = std::vector<double>(length, 2.00000);
-    loads_.specified_amount_load_[mce_gen_guar] = std::vector<double>(length, 0.00003);
-    loads_.separate_account_load_[mce_gen_guar] = std::vector<double>(length, 0.00130);
-    loads_.target_premium_load_  [mce_gen_guar] = std::vector<double>(length, 0.04000);
-    loads_.excess_premium_load_  [mce_gen_guar] = std::vector<double>(length, 0.03000);
-    loads_.target_sales_load_    [mce_gen_guar] = std::vector<double>(length, 0.30000);
-    loads_.excess_sales_load_    [mce_gen_guar] = std::vector<double>(length, 0.15000);
+    loads_.monthly_policy_fee_   [mce_gen_guar] = std::vector<currency>(length, from_cents(800));
+    loads_.annual_policy_fee_    [mce_gen_guar] = std::vector<currency>(length, from_cents(200));
+    loads_.specified_amount_load_[mce_gen_guar] = std::vector<double>  (length, 0.00003);
+    loads_.separate_account_load_[mce_gen_guar] = std::vector<double>  (length, 0.00130);
+    loads_.target_premium_load_  [mce_gen_guar] = std::vector<double>  (length, 0.04000);
+    loads_.excess_premium_load_  [mce_gen_guar] = std::vector<double>  (length, 0.03000);
+    loads_.target_sales_load_    [mce_gen_guar] = std::vector<double>  (length, 0.30000);
+    loads_.excess_sales_load_    [mce_gen_guar] = std::vector<double>  (length, 0.15000);
 
-    loads_.monthly_policy_fee_   [mce_gen_curr] = std::vector<double>(length, 5.25000);
-    loads_.annual_policy_fee_    [mce_gen_curr] = std::vector<double>(length, 1.00000);
-    loads_.specified_amount_load_[mce_gen_curr] = std::vector<double>(length, 0.00002);
-    loads_.separate_account_load_[mce_gen_curr] = std::vector<double>(length, 0.00110);
-    loads_.target_premium_load_  [mce_gen_curr] = std::vector<double>(length, 0.02000);
-    loads_.excess_premium_load_  [mce_gen_curr] = std::vector<double>(length, 0.01000);
-    loads_.target_sales_load_    [mce_gen_curr] = std::vector<double>(length, 0.10000);
-    loads_.excess_sales_load_    [mce_gen_curr] = std::vector<double>(length, 0.05000);
+    loads_.monthly_policy_fee_   [mce_gen_curr] = std::vector<currency>(length, from_cents(525));
+    loads_.annual_policy_fee_    [mce_gen_curr] = std::vector<currency>(length, from_cents(100));
+    loads_.specified_amount_load_[mce_gen_curr] = std::vector<double>  (length, 0.00002);
+    loads_.separate_account_load_[mce_gen_curr] = std::vector<double>  (length, 0.00110);
+    loads_.target_premium_load_  [mce_gen_curr] = std::vector<double>  (length, 0.02000);
+    loads_.excess_premium_load_  [mce_gen_curr] = std::vector<double>  (length, 0.01000);
+    loads_.target_sales_load_    [mce_gen_curr] = std::vector<double>  (length, 0.10000);
+    loads_.excess_sales_load_    [mce_gen_curr] = std::vector<double>  (length, 0.05000);
 }
 
 void LoadsTest::TestVectorLengths(char const* file, int line)
@@ -158,8 +158,13 @@ void LoadsTest::TestCalculations(char const* file, int line)
 {
     INVOKE_BOOST_TEST(materially_equal(0.500000, loads_.refundable_sales_load_proportion()[0]), file, line);
 
-    INVOKE_BOOST_TEST(materially_equal(6.920000, loads_.monthly_policy_fee    (mce_gen_mdpt)[0]), file, line);
-    INVOKE_BOOST_TEST(materially_equal(1.500000, loads_.annual_policy_fee     (mce_gen_mdpt)[0]), file, line);
+    // (8.00 + 5.25 + 0.50) / 2 = 13.75 / 2 = 6.875, rounded to cents
+#   if defined CURRENCY_UNIT_IS_CENTS
+    INVOKE_BOOST_TEST(from_cents(688) == loads_.monthly_policy_fee (mce_gen_mdpt)[0] , file, line);
+#   else  // !defined CURRENCY_UNIT_IS_CENTS
+    INVOKE_BOOST_TEST(materially_equal(6.88, dblize(loads_.monthly_policy_fee (mce_gen_mdpt)[0])), file, line);
+#   endif // !defined CURRENCY_UNIT_IS_CENTS
+    INVOKE_BOOST_TEST(from_cents(150) == loads_.annual_policy_fee  (mce_gen_mdpt)[0] , file, line);
     INVOKE_BOOST_TEST(materially_equal(0.000625, loads_.specified_amount_load (mce_gen_mdpt)[0]), file, line);
     // 12 bp and 19 bp, both converted to monthly, then added together.
     INVOKE_BOOST_TEST(materially_equal(0.0002581402795930, loads_.separate_account_load (mce_gen_mdpt)[0]), file, line);
@@ -193,11 +198,11 @@ int test_main(int, char*[])
 {
     round_to<double> round_interest_rate(0, r_not_at_all);
     round_to<double> round_minutiae     (2, r_to_nearest);
-    std::vector<double> extra_comp_load  (length, 0.0170);
-    std::vector<double> extra_asset_comp (length, 0.0019);
-    std::vector<double> extra_policy_fee (length, 0.6000);
-    std::vector<double> guar_specamt_load(length, 0.0007);
-    std::vector<double> curr_specamt_load(length, 0.0005);
+    std::vector<double>   extra_comp_load  (length, 0.0170);
+    std::vector<double>   extra_asset_comp (length, 0.0019);
+    std::vector<currency> extra_policy_fee (length, from_cents(50));
+    std::vector<double>   guar_specamt_load(length, 0.0007);
+    std::vector<double>   curr_specamt_load(length, 0.0005);
 
     load_details details
         (length                 // length_

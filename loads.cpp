@@ -35,6 +35,35 @@
 #include "oecumenic_enumerations.hpp"
 #include "premium_tax.hpp"
 
+namespace
+{
+void query_into
+    (product_database const& database
+    ,e_database_key          key
+    ,std::vector<currency>&  v
+    ,round_to<double> const& round_minutiae
+    )
+{
+    std::vector<double> z;
+    database.query_into(key, z);
+    v = round_minutiae.c(z);
+}
+
+void assign_midpoint
+    (std::vector<currency>      & out
+    ,std::vector<currency> const& in_0
+    ,std::vector<currency> const& in_1
+    ,round_to<double>      const& round_minutiae
+    )
+{
+    std::vector<double> const v0 = dblize(in_0);
+    std::vector<double> const v1 = dblize(in_1);
+    std::vector<double>       z;
+    ::assign_midpoint(z, v0, v1);
+    out = round_minutiae.c(z);
+}
+} // Unnamed namespace.
+
 /// Ctor for production branch.
 
 Loads::Loads(BasicValues& V)
@@ -57,12 +86,12 @@ Loads::Loads(BasicValues& V)
         ,V.round_minutiae()
         ,V.yare_input_.ExtraCompensationOnPremium
         ,V.yare_input_.ExtraCompensationOnAssets
-        ,V.yare_input_.ExtraMonthlyCustodialFee
+        ,V.round_minutiae().c(V.yare_input_.ExtraMonthlyCustodialFee)
         ,V.GetGuarSpecAmtLoadTable()
         ,V.GetCurrSpecAmtLoadTable()
         );
     Allocate(length);
-    Initialize(V.database());
+    Initialize(V.database(), details);
     Calculate(details);
 }
 
@@ -115,13 +144,15 @@ void Loads::Allocate(int length)
 
 /// Set various data members from product database.
 
-void Loads::Initialize(product_database const& database)
+void Loads::Initialize(product_database const& database, load_details const& details)
 {
+    round_to<double> const& r = details.round_minutiae_;
+
     database.query_into(DB_LoadRfdProportion , refundable_sales_load_proportion_   );
     database.query_into(DB_DacTaxPremLoad    , dac_tax_load_                       );
 
-    database.query_into(DB_GuarMonthlyPolFee , monthly_policy_fee_   [mce_gen_guar]);
-    database.query_into(DB_GuarAnnualPolFee  , annual_policy_fee_    [mce_gen_guar]);
+    query_into(database, DB_GuarMonthlyPolFee, monthly_policy_fee_   [mce_gen_guar], r);
+    query_into(database, DB_GuarAnnualPolFee , annual_policy_fee_    [mce_gen_guar], r);
     database.query_into(DB_GuarSpecAmtLoad   , specified_amount_load_[mce_gen_guar]);
     database.query_into(DB_GuarAcctValLoad   , separate_account_load_[mce_gen_guar]);
     database.query_into(DB_GuarPremLoadTgt   , target_premium_load_  [mce_gen_guar]);
@@ -129,8 +160,8 @@ void Loads::Initialize(product_database const& database)
     database.query_into(DB_GuarPremLoadTgtRfd, target_sales_load_    [mce_gen_guar]);
     database.query_into(DB_GuarPremLoadExcRfd, excess_sales_load_    [mce_gen_guar]);
 
-    database.query_into(DB_CurrMonthlyPolFee , monthly_policy_fee_   [mce_gen_curr]);
-    database.query_into(DB_CurrAnnualPolFee  , annual_policy_fee_    [mce_gen_curr]);
+    query_into(database, DB_CurrMonthlyPolFee, monthly_policy_fee_   [mce_gen_curr], r);
+    query_into(database, DB_CurrAnnualPolFee , annual_policy_fee_    [mce_gen_curr], r);
     database.query_into(DB_CurrSpecAmtLoad   , specified_amount_load_[mce_gen_curr]);
     database.query_into(DB_CurrAcctValLoad   , separate_account_load_[mce_gen_curr]);
     database.query_into(DB_CurrPremLoadTgt   , target_premium_load_  [mce_gen_curr]);
@@ -143,6 +174,8 @@ void Loads::Initialize(product_database const& database)
 
 void Loads::Calculate(load_details const& details)
 {
+    round_to<double> const& r = details.round_minutiae_;
+
     premium_tax_load_.assign(details.length_, details.premium_tax_load_);
 
     for(int j = mce_gen_curr; j != mc_n_gen_bases; ++j)
@@ -275,6 +308,7 @@ void Loads::Calculate(load_details const& details)
     // consistent with this constraint.
 
     monthly_policy_fee_[mce_gen_curr] += details.VectorExtraPolFee_;
+
     for(int j = 0; j < details.length_; ++j)
         {
         if
@@ -299,8 +333,8 @@ void Loads::Calculate(load_details const& details)
 
     if(details.NeedMidpointRates_)
         {
-        assign_midpoint(monthly_policy_fee_   [mce_gen_mdpt], monthly_policy_fee_   [mce_gen_guar], monthly_policy_fee_   [mce_gen_curr]);
-        assign_midpoint(annual_policy_fee_    [mce_gen_mdpt], annual_policy_fee_    [mce_gen_guar], annual_policy_fee_    [mce_gen_curr]);
+        assign_midpoint(monthly_policy_fee_   [mce_gen_mdpt], monthly_policy_fee_   [mce_gen_guar], monthly_policy_fee_   [mce_gen_curr], r);
+        assign_midpoint(annual_policy_fee_    [mce_gen_mdpt], annual_policy_fee_    [mce_gen_guar], annual_policy_fee_    [mce_gen_curr], r);
         assign_midpoint(specified_amount_load_[mce_gen_mdpt], specified_amount_load_[mce_gen_guar], specified_amount_load_[mce_gen_curr]);
         assign_midpoint(separate_account_load_[mce_gen_mdpt], separate_account_load_[mce_gen_guar], separate_account_load_[mce_gen_curr]);
         assign_midpoint(target_premium_load_  [mce_gen_mdpt], target_premium_load_  [mce_gen_guar], target_premium_load_  [mce_gen_curr]);
@@ -309,18 +343,6 @@ void Loads::Calculate(load_details const& details)
         assign_midpoint(excess_sales_load_    [mce_gen_mdpt], excess_sales_load_    [mce_gen_guar], excess_sales_load_    [mce_gen_curr]);
         assign_midpoint(target_total_load_    [mce_gen_mdpt], target_total_load_    [mce_gen_guar], target_total_load_    [mce_gen_curr]);
         assign_midpoint(excess_total_load_    [mce_gen_mdpt], excess_total_load_    [mce_gen_guar], excess_total_load_    [mce_gen_curr]);
-        }
-
-    // Round policy fees. No known product specifies any policy fee
-    // in fractional cents. However, if the monthly policy fee is
-    // $3.25 (current) and $5.00 (guaranteed), the midpoint shouldn't
-    // be $4.125, because subtracting that from the account value
-    // would make it a non-integral number of cents.
-
-    for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
-        {
-        monthly_policy_fee_ [j] = details.round_minutiae_(monthly_policy_fee_ [j]);
-        annual_policy_fee_  [j] = details.round_minutiae_(annual_policy_fee_  [j]);
         }
 }
 
@@ -351,26 +373,28 @@ void Loads::AmortizePremiumTax(load_details const&)
 
 Loads::Loads(product_database const& database, bool NeedMidpointRates)
 {
+    round_to<double> const& r {2, r_to_nearest};
+
     monthly_policy_fee_   .resize(mc_n_gen_bases);
     target_premium_load_  .resize(mc_n_gen_bases);
     excess_premium_load_  .resize(mc_n_gen_bases);
     specified_amount_load_.resize(mc_n_gen_bases);
 
-    database.query_into(DB_GuarMonthlyPolFee, monthly_policy_fee_   [mce_gen_guar]);
-    database.query_into(DB_GuarPremLoadTgt  , target_premium_load_  [mce_gen_guar]);
-    database.query_into(DB_GuarPremLoadExc  , excess_premium_load_  [mce_gen_guar]);
-    database.query_into(DB_GuarSpecAmtLoad  , specified_amount_load_[mce_gen_guar]);
+    query_into(database, DB_GuarMonthlyPolFee, monthly_policy_fee_   [mce_gen_guar], r);
+    database.query_into(DB_GuarPremLoadTgt   , target_premium_load_  [mce_gen_guar]);
+    database.query_into(DB_GuarPremLoadExc   , excess_premium_load_  [mce_gen_guar]);
+    database.query_into(DB_GuarSpecAmtLoad   , specified_amount_load_[mce_gen_guar]);
 
-    database.query_into(DB_CurrMonthlyPolFee, monthly_policy_fee_   [mce_gen_curr]);
-    database.query_into(DB_CurrPremLoadTgt  , target_premium_load_  [mce_gen_curr]);
-    database.query_into(DB_CurrPremLoadExc  , excess_premium_load_  [mce_gen_curr]);
-    database.query_into(DB_CurrSpecAmtLoad  , specified_amount_load_[mce_gen_curr]);
+    query_into(database, DB_CurrMonthlyPolFee, monthly_policy_fee_   [mce_gen_curr], r);
+    database.query_into(DB_CurrPremLoadTgt   , target_premium_load_  [mce_gen_curr]);
+    database.query_into(DB_CurrPremLoadExc   , excess_premium_load_  [mce_gen_curr]);
+    database.query_into(DB_CurrSpecAmtLoad   , specified_amount_load_[mce_gen_curr]);
 
     // This ctor ignores tabular specified-amount loads.
 
     if(NeedMidpointRates)
         {
-        assign_midpoint(monthly_policy_fee_   [mce_gen_mdpt], monthly_policy_fee_   [mce_gen_guar], monthly_policy_fee_   [mce_gen_curr]);
+        assign_midpoint(monthly_policy_fee_   [mce_gen_mdpt], monthly_policy_fee_   [mce_gen_guar], monthly_policy_fee_   [mce_gen_curr], r);
         assign_midpoint(target_premium_load_  [mce_gen_mdpt], target_premium_load_  [mce_gen_guar], target_premium_load_  [mce_gen_curr]);
         assign_midpoint(excess_premium_load_  [mce_gen_mdpt], excess_premium_load_  [mce_gen_guar], excess_premium_load_  [mce_gen_curr]);
         assign_midpoint(specified_amount_load_[mce_gen_mdpt], specified_amount_load_[mce_gen_guar], specified_amount_load_[mce_gen_curr]);

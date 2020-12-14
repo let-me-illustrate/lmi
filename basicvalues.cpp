@@ -204,7 +204,7 @@ currency BasicValues::GetModalTgtPrem
                 )[a_year]
         );
     z *= MortalityRates_->MonthlyCoiRates(mce_gen_curr)[a_year];
-    z += Loads_->monthly_policy_fee(mce_gen_curr)[a_year];
+    z += dblize(Loads_->monthly_policy_fee(mce_gen_curr)[a_year]);
 //    z += AdbRate;
 //    z *= 1.0 + WpRate;
     z /= 1.0 - Loads_->target_premium_load(mce_gen_curr)[a_year];
@@ -274,7 +274,7 @@ currency BasicValues::GetModalTgtSpecAmt
     z *= 1.0 - Loads_->target_premium_load(mce_gen_curr)[0];
 //    z /= WpRate;
 //    z -= AdbRate;
-    z -= Loads_->monthly_policy_fee(mce_gen_curr)[0];
+    z -= dblize(Loads_->monthly_policy_fee(mce_gen_curr)[0]);
     z /= MortalityRates_->MonthlyCoiRates(mce_gen_curr)[0];
     z *=
         (   1.0

@@ -76,10 +76,10 @@ class Loads
     Loads() = default; // Ctor for unit testing.
 
     void Allocate(int length);
-    void Initialize(product_database const&);
+    void Initialize(product_database const&, load_details const&);
     void Calculate(load_details const&);
 
-    void AmortizePremiumTax(load_details const& details);
+    void AmortizePremiumTax(load_details const&);
 
     std::vector<double> refundable_sales_load_proportion_;
 

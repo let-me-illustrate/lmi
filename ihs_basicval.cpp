@@ -494,9 +494,9 @@ void BasicValues::Init7702()
             ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
             ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
             ,effective_dbopt_7702(yare_input_.DeathBenefitOption[0], Effective7702DboRop)
-            ,Loads_->annual_policy_fee    (mce_gen_curr)
-            ,Loads_->monthly_policy_fee   (mce_gen_curr)
-            ,Loads_->specified_amount_load(mce_gen_curr)
+            ,dblize(Loads_->annual_policy_fee  (mce_gen_curr))
+            ,dblize(Loads_->monthly_policy_fee (mce_gen_curr))
+            ,Loads_->specified_amount_load     (mce_gen_curr)
             ,SpecAmtLoadLimit
             ,local_mly_charge_add
             ,local_adb_limit
@@ -1157,9 +1157,9 @@ std::pair<double,double> BasicValues::approx_mly_ded
         mly_ded += r * std::min(specamt, SpecAmtLoadLimit);
         }
 
-    mly_ded += Loads_->monthly_policy_fee(mce_gen_curr)[year];
+    mly_ded += dblize(Loads_->monthly_policy_fee(mce_gen_curr)[year]);
 
-    double ann_ded = Loads_->annual_policy_fee(mce_gen_curr)[year];
+    double ann_ded = dblize(Loads_->annual_policy_fee(mce_gen_curr)[year]);
 
     if(yare_input_.WaiverOfPremiumBenefit)
         {
@@ -1211,7 +1211,7 @@ std::pair<double,double> BasicValues::approx_mly_ded_ex
     ,currency termamt
     ) const
 {
-    if(0.0 != Loads_->annual_policy_fee(mce_gen_curr)[year])
+    if(C0 != Loads_->annual_policy_fee(mce_gen_curr)[year])
         {
         return {0.0, 0.0};
         }
@@ -1251,7 +1251,7 @@ std::pair<double,double> BasicValues::approx_mly_ded_ex
         }
 
     // Paid by er.
-    er_ded += Loads_->monthly_policy_fee(mce_gen_curr)[year];
+    er_ded += dblize(Loads_->monthly_policy_fee(mce_gen_curr)[year]);
 
     if(yare_input_.WaiverOfPremiumBenefit)
         {
