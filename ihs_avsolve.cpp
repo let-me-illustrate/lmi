@@ -435,7 +435,7 @@ currency AccountValue::Solve
 
     if(root_not_bracketed == solution.second)
         {
-        solution.first = 0.0;
+        LMI_ASSERT(0.0 == solution.first);
         // Don't want this firing continually in census runs.
         if(!SolvingForGuarPremium)
             {

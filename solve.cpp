@@ -24,6 +24,7 @@
 #include "account_value.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "death_benefits.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
@@ -327,7 +328,7 @@ currency AccountValue::Solve()
         );
     if(root_not_bracketed == Solution.second)
         {
-        Solution.first = 0.0;
+        LMI_ASSERT(0.0 == Solution.first);
         warning() << "Solution not found. Using zero instead." << LMI_FLUSH;
         }
 
