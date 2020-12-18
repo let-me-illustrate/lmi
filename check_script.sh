@@ -63,5 +63,12 @@ case $shebang  in
     ;;
     ("#!/usr/bin/make") ;;
     ("#!/bin/sed") ;;
-    (*) printf '%s\n' "unknown shebang $shebang in file $1" ;;
+    (*)
+        printf '%s\n' "file $1 is executable, but should it be?"
+        printf '%s\n' "if it's a script, then its shebang"
+        printf '%s\n' "  $shebang"
+        printf '%s\n' "is unknown; otherwise, consider running"
+        printf '%s\n' "  chmod -x $1"
+        printf '%s\n' "to remove the executable bit"
+    ;;
 esac
