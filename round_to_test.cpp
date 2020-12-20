@@ -453,7 +453,7 @@ void test_rounding()
     // rigorous bounds, both overall and for each step.
 }
 
-int test_all_modes(bool synchronize)
+void test_all_modes(bool synchronize)
 {
     // As stated above, we'd like this to be true for all
     // floating-point types:
@@ -511,8 +511,6 @@ int test_all_modes(bool synchronize)
         << std::endl
         ;
     test_rounding();
-
-    return 0;
 }
 
 int test_main(int, char*[])
@@ -564,11 +562,9 @@ int test_main(int, char*[])
     // The software default rounding style and the hardware rounding
     // mode may be either synchronized or not, so test both ways.
     std::cout << "  Default style synchronized to hardware mode:\n";
-    bool rc = test_all_modes(true);
+    test_all_modes(true);
     std::cout << "  Default style NOT synchronized to hardware mode:\n";
-    // Use '+' rather than '||' to avoid short-circuit evaluation,
-    // so that failure on one test doesn't prevent downstream tests
-    // from being run.
-    rc = rc + test_all_modes(false);
-    return rc;
+    test_all_modes(false);
+
+    return EXIT_SUCCESS;
 }
