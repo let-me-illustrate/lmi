@@ -23,6 +23,7 @@
 
 #include "round_to.hpp"
 
+#include "currency.hpp"                 // currency::cents_digits
 #include "fenv_lmi.hpp"
 #include "miscellany.hpp"               // floating_rep()
 #include "test_tools.hpp"
@@ -583,15 +584,18 @@ void round_to_test::test_fundamentals()
     BOOST_TEST((3.14 - v1[0]) < 1e-14);
     BOOST_TEST((2.72 - v1[1]) < 1e-14);
 
+#if defined USE_CURRENCY_CLASS
     // Try to provoke division by zero in ctor-initializer.
     //
     // nonstd::power() negates a negative exponent, but negating
-    // INT_MIN constitutes UB, so use 1 + INT_MIN.
+    // INT_MIN constitutes UB, so add one, plus currency::cents_digits
+    // because of the interplay between classes currency and round_to.
     BOOST_TEST_THROW
-        (round_to<double>(1 + INT_MIN, r_to_nearest)
+        (round_to<double>(1 + currency::cents_digits + INT_MIN, r_to_nearest)
         ,std::domain_error
         ,"Invalid number of decimals."
         );
+#endif // defined USE_CURRENCY_CLASS
 }
 
 void round_to_test::test()
