@@ -172,6 +172,10 @@ git checkout .
 
 git switch --detach [sha1sum]
 
+  # ...and undo that switch (after stashing any changes)
+
+git switch -
+
   # Obliterate unpushed commits
 
 git reset --hard origin/master
