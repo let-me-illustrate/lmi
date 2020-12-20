@@ -110,8 +110,42 @@ void set_hardware_rounding_mode(e_ieee754_rounding mode, bool synchronize)
         }
 }
 
+class round_to_test
+{
+  public:
+    static void test();
+
+  private:
+    static void test_fundamentals();
+    static void test_all_modes(bool synchronize);
+    static void test_rounding();
+    static void test_various_styles
+        (long double    unrounded
+        ,long double    expected
+        );
+    static void test_various_decimals
+        (rounding_style style
+        ,long double    unrounded
+        ,long double    expected
+        );
+    static void test_various_float_types
+        (int            decimals
+        ,rounding_style style
+        ,long double    unrounded
+        ,long double    expected
+        );
+
+    template<typename RealType>
+    static bool test_one_case
+        (RealType       unrounded
+        ,RealType       expected
+        ,int            decimals
+        ,rounding_style style
+        );
+};
+
 template<typename RealType>
-bool test_one_case
+bool round_to_test::test_one_case
     (RealType       unrounded
     ,RealType       expected
     ,int            decimals
@@ -258,7 +292,7 @@ bool test_one_case
     return error_is_within_tolerance;
 }
 
-void test_various_float_types
+void round_to_test::test_various_float_types
     (int            decimals
     ,rounding_style style
     ,long double    unrounded
@@ -274,7 +308,7 @@ void test_various_float_types
 }
 
 // Test rounding to various numbers of decimal places.
-void test_various_decimals
+void round_to_test::test_various_decimals
     (rounding_style style
     ,long double    unrounded
     ,long double    expected
@@ -288,7 +322,7 @@ void test_various_decimals
 }
 
 // Test rounding to zero decimals with each rounding style.
-void test_various_styles
+void round_to_test::test_various_styles
     (long double    unrounded
     ,long double    expected
     )
@@ -300,7 +334,7 @@ void test_various_styles
     test_various_float_types(0, r_not_at_all,  unrounded, expected);
 }
 
-void test_rounding()
+void round_to_test::test_rounding()
 {
     // The first several blocks of tests use values with no more than
     // six significant decimal digits, six being a natural value for
@@ -453,7 +487,7 @@ void test_rounding()
     // rigorous bounds, both overall and for each step.
 }
 
-void test_all_modes(bool synchronize)
+void round_to_test::test_all_modes(bool synchronize)
 {
     // As stated above, we'd like this to be true for all
     // floating-point types:
@@ -513,7 +547,7 @@ void test_all_modes(bool synchronize)
     test_rounding();
 }
 
-int test_main(int, char*[])
+void round_to_test::test_fundamentals()
 {
     default_rounding_style() = r_indeterminate;
 
@@ -558,6 +592,11 @@ int test_main(int, char*[])
         ,std::domain_error
         ,"Invalid number of decimals."
         );
+}
+
+void round_to_test::test()
+{
+    test_fundamentals();
 
     // The software default rounding style and the hardware rounding
     // mode may be either synchronized or not, so test both ways.
@@ -565,6 +604,11 @@ int test_main(int, char*[])
     test_all_modes(true);
     std::cout << "  Default style NOT synchronized to hardware mode:\n";
     test_all_modes(false);
+}
+
+int test_main(int, char*[])
+{
+    round_to_test::test();
 
     return EXIT_SUCCESS;
 }
