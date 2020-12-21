@@ -2189,19 +2189,6 @@ void AccountValue::TxCreditInt()
 
     currency notional_sep_acct_charge = C0;
 
-    { // Temporary validating assertion.
-    // SOMEDAY !! This should be done in the interest-rate class.
-    double gross_sep_acct_rate = i_upper_12_over_12_from_i<double>()
-        (InterestRates_->SepAcctGrossRate(SepBasis_)[Year]
-        );
-    gross_sep_acct_rate = round_interest_rate()(gross_sep_acct_rate);
-    if(mce_gen_mdpt == GenBasis_)
-        {
-        gross_sep_acct_rate = 0.0;
-        }
-    LMI_ASSERT(gross_sep_acct_rate == YearsSepAcctGrossRate);
-    }
-
     if(C0 < AVSepAcct)
         {
         SepAcctIntCred = InterestCredited(AVSepAcct, YearsSepAcctIntRate);
