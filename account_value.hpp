@@ -487,7 +487,8 @@ class LMI_SO AccountValue final
     currency     YearsAnnualPolicyFee;
     currency     YearsMonthlyPolicyFee;
     double       YearsGenAcctIntRate;
-    double       YearsSepAcctIntRate;
+    double       YearsSepAcctIntRate; // Rename: "Net"
+    double       YearsSepAcctGrossRate;
 
     double       YearsDcvIntRate;
 

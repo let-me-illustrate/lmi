@@ -39,6 +39,7 @@
 #include "ledger_variant.hpp"
 #include "loads.hpp"
 #include "materially_equal.hpp"
+#include "math_functions.hpp"
 #include "miscellany.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
@@ -1398,6 +1399,15 @@ void AccountValue::SetAnnualInvariants()
         )
         [Year]
         ;
+    // SOMEDAY !! This should be done in the interest-rate class.
+    YearsSepAcctGrossRate = 0.0;
+    if(mce_gen_mdpt != GenBasis_)
+        {
+        YearsSepAcctGrossRate = i_upper_12_over_12_from_i<double>()
+            (InterestRates_->SepAcctGrossRate(SepBasis_)[Year]
+            );
+        YearsSepAcctGrossRate = round_interest_rate()(YearsSepAcctGrossRate);
+        }
 
     YearsDcvIntRate         = GetMly7702iGlp()[Year];
     YearsHoneymoonValueRate = InterestRates_->HoneymoonValueRate
