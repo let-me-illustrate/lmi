@@ -268,6 +268,12 @@ void BasicValues::GPTServerInit()
     SetPermanentInvariants();
 
     StateOfDomicile_ = mc_state_from_string(product().datum("InsCoDomicile"));
+    // TODO ?? It seems that this assertion should fail sometimes,
+    // because StateOfJurisdiction_ is set from a ctor argument that
+    // may represent any state, but yare_input_.StateOfJurisdiction
+    // is not assigned that value above, and always retains its
+    // default value.
+    LMI_ASSERT_EQUAL(StateOfJurisdiction_, yare_input_.StateOfJurisdiction);
     StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
     PremiumTaxState_     = yare_input_.PremiumTaxState    ;
 
