@@ -272,13 +272,14 @@ void BasicValues::GPTServerInit()
     Length = EndtAge - IssueAge;
     LMI_ASSERT(database().length() == Length);
 
-    yare_input_.ExtraMonthlyCustodialFee  .resize(Length);
-    yare_input_.ExtraCompensationOnAssets .resize(Length);
-    yare_input_.ExtraCompensationOnPremium.resize(Length);
-    yare_input_.CurrentCoiMultiplier      .assign(Length, 1.0);
-    yare_input_.SpecifiedAmount           .assign(Length, yare_input_.SpecifiedAmount   [0]);
-    yare_input_.DeathBenefitOption        .assign(Length, yare_input_.DeathBenefitOption[0]);
-    yare_input_.FlatExtra                 .resize(Length);
+    int const db_len = database().length();
+    yare_input_.ExtraMonthlyCustodialFee  .resize(db_len);
+    yare_input_.ExtraCompensationOnAssets .resize(db_len);
+    yare_input_.ExtraCompensationOnPremium.resize(db_len);
+    yare_input_.CurrentCoiMultiplier      .assign(db_len, 1.0);
+    yare_input_.SpecifiedAmount           .assign(db_len, yare_input_.SpecifiedAmount   [0]);
+    yare_input_.DeathBenefitOption        .assign(db_len, yare_input_.DeathBenefitOption[0]);
+    yare_input_.FlatExtra                 .resize(db_len);
 
     database().query_into(DB_LedgerType    , ledger_type_);
     database().query_into(DB_Nonillustrated, nonillustrated_);
