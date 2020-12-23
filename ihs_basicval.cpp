@@ -179,6 +179,7 @@ void BasicValues::Init()
 
     database().query_into(DB_MaturityAge   , EndtAge);
     Length = EndtAge - IssueAge;
+    LMI_ASSERT(database().length() == Length);
 
     database().query_into(DB_LedgerType    , ledger_type_);
     database().query_into(DB_Nonillustrated, nonillustrated_);
@@ -269,6 +270,7 @@ void BasicValues::GPTServerInit()
 
     database().query_into(DB_MaturityAge   , EndtAge);
     Length = EndtAge - IssueAge;
+    LMI_ASSERT(database().length() == Length);
 
     yare_input_.ExtraMonthlyCustodialFee  .resize(Length);
     yare_input_.ExtraCompensationOnAssets .resize(Length);
