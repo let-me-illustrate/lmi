@@ -215,7 +215,7 @@ void Server7702::VerifyPlausibilityOfInput() const
 //============================================================================
 void Server7702::DecideWhatToCalculate()
 {
-    // TODO ?? Is this not superfluous?
+    // TAXATION !! Is this not superfluous?
     if
         (
 //          Input.NewIssueAge               != Input.OldIssueAge // Not differentiated.
@@ -232,16 +232,16 @@ void Server7702::DecideWhatToCalculate()
     IsIssuedToday = Input.EffectiveDate == Input.InforceAsOfDate;
 
     IsPossibleAdjustableEvent =
-// TODO ?? Why treat a taxable withdrawal as an adjustment event?
+// TAXATION !! Why treat a taxable withdrawal as an adjustment event?
 //            0.0                             != Input.PremsPaidDecrement
             Input.NewDbo                    != Input.OldDbo
         ||  (   Input.NewSpecAmt            != Input.OldSpecAmt
             &&  Input.NewDeathBft           != Input.OldDeathBft
             )
-// TODO ?? NEED DECISION whether it's a SA or DB change that causes adj event
+// TAXATION !! NEED DECISION whether it's a SA or DB change that causes adj event
         ||  Input.NewQabTermAmt             != Input.OldQabTermAmt
-// TODO ?? No adj event if term and SA change but DB remains constant, but
-// TODO ?? NEED DECISION whether it's a SA or DB change that causes adj event
+// TAXATION !! No adj event if term and SA change but DB remains constant, but
+// TAXATION !! NEED DECISION whether it's a SA or DB change that causes adj event
         ||  Input.NewSmoking                != Input.OldSmoking
 // 7702 mortality basis is the same for preferred vs. standard
 // Assume nothing else (e.g. loads) varies by that either
@@ -295,7 +295,7 @@ void Server7702::ProcessNewIssue()
     SetDoleBentsenValuesA();
     Output.GuidelineLevelPremium    = Output.GuidelineLevelPremiumPolicyA;
     Output.GuidelineSinglePremium   = Output.GuidelineSinglePremiumPolicyA;
-// TODO ?? NEED DECISION Only if an adj event really occurred, as defined.
+// TAXATION !! NEED DECISION Only if an adj event really occurred, as defined.
     LMI_ASSERT(false == Output.AdjustableEventOccurred);
 }
 
@@ -303,7 +303,7 @@ void Server7702::ProcessNewIssue()
 // Set new GLP and GSP following an adjustable event, after validating input.
 void Server7702::ProcessAdjustableEvent()
 {
-// TODO ??  Input.OldDeathBft = ?;
+// TAXATION !!  Input.OldDeathBft = ?;
 //  GuidelineLevelPremium
 //  GuidelineSinglePremium
 
