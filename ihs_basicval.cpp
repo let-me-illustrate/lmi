@@ -267,15 +267,15 @@ void BasicValues::GPTServerInit()
 {
     SetPermanentInvariants();
 
+    StateOfDomicile_ = mc_state_from_string(product().datum("InsCoDomicile"));
+    StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
+    PremiumTaxState_     = yare_input_.PremiumTaxState    ;
+
     IssueAge = yare_input_.IssueAge;
     RetAge   = yare_input_.RetirementAge;
     LMI_ASSERT(IssueAge < 100);
     LMI_ASSERT(RetAge <= 100);
     LMI_ASSERT(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
-
-    StateOfDomicile_ = mc_state_from_string(product().datum("InsCoDomicile"));
-    StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
-    PremiumTaxState_     = yare_input_.PremiumTaxState    ;
 
     database().query_into(DB_MaturityAge   , EndtAge);
     Length = EndtAge - IssueAge;
