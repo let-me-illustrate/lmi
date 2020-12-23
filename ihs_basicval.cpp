@@ -143,6 +143,15 @@ BasicValues::BasicValues
         );
     yare_input_.DeathBenefitOption         .assign(1, z.value());
 
+    int const db_len = database().length();
+    yare_input_.ExtraMonthlyCustodialFee  .resize(db_len);
+    yare_input_.ExtraCompensationOnAssets .resize(db_len);
+    yare_input_.ExtraCompensationOnPremium.resize(db_len);
+    yare_input_.CurrentCoiMultiplier      .assign(db_len, 1.0);
+    yare_input_.SpecifiedAmount           .assign(db_len, yare_input_.SpecifiedAmount   [0]);
+    yare_input_.DeathBenefitOption        .assign(db_len, yare_input_.DeathBenefitOption[0]);
+    yare_input_.FlatExtra                 .resize(db_len);
+
     GPTServerInit();
 }
 
@@ -271,15 +280,6 @@ void BasicValues::GPTServerInit()
     database().query_into(DB_MaturityAge   , EndtAge);
     Length = EndtAge - IssueAge;
     LMI_ASSERT(database().length() == Length);
-
-    int const db_len = database().length();
-    yare_input_.ExtraMonthlyCustodialFee  .resize(db_len);
-    yare_input_.ExtraCompensationOnAssets .resize(db_len);
-    yare_input_.ExtraCompensationOnPremium.resize(db_len);
-    yare_input_.CurrentCoiMultiplier      .assign(db_len, 1.0);
-    yare_input_.SpecifiedAmount           .assign(db_len, yare_input_.SpecifiedAmount   [0]);
-    yare_input_.DeathBenefitOption        .assign(db_len, yare_input_.DeathBenefitOption[0]);
-    yare_input_.FlatExtra                 .resize(db_len);
 
     database().query_into(DB_LedgerType    , ledger_type_);
     database().query_into(DB_Nonillustrated, nonillustrated_);
