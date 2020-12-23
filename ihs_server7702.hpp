@@ -87,17 +87,6 @@ class Server7702
     bool IsPossibleAdjustableEvent;
 };
 
-enum
-    {unknown_error                          = 0x0001
-    ,precision_changed                      = 0x0002
-    ,implausible_input                      = 0x0004
-    ,inconsistent_input                     = 0x0008
-    ,product_rule_violated                  = 0x0010
-    ,adjustable_event_forbidden_at_issue    = 0x0020
-    ,guideline_negative                     = 0x0040
-    ,misstatement_of_age_or_gender          = 0x0080
-    };
-
 // We have no specific exception class for unknown_error
 // precisely because it's unknown. We return it when we
 // catch class exception after trying all the more
