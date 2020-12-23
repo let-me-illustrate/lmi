@@ -101,8 +101,9 @@ void Server7702::Process()
         }
     catch(server7702_precision_changed const& e)
         {
-        // TODO ?? Perhaps the control word should be changed and
-        // processing restarted.
+        // If an x87 build of a GPT server were to be released, then
+        // perhaps the control word should be changed and processing
+        // restarted.
         Output.Status |= precision_changed;
         warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
@@ -185,7 +186,6 @@ void Server7702::PerformProcessing()
 
 //============================================================================
 // Other conditions are tested elsewhere.
-// TODO ?? We can add many similar conditions here.
 void Server7702::VerifyPlausibilityOfInput() const
 {
     if(Input.IssueAge.value() < 0)
@@ -285,7 +285,6 @@ void Server7702::ProcessNewIssue()
         &&  Input.OldDbo                    == Input.NewDbo
         ;
 
-    // TODO ?? It would be better to spell them all out.
     if(!okay)
         {
         throw server7702_inconsistent_input
