@@ -252,7 +252,6 @@ void BasicValues::Init()
 }
 
 //============================================================================
-#include "ihs_x_type.hpp"               // x_product_rule_violated TAXATION !! remove later
 // TODO ??  Not for general use--use for GPT server only, for now. TAXATION !! refactor later
 void BasicValues::GPTServerInit()
 {
@@ -288,17 +287,25 @@ void BasicValues::GPTServerInit()
 
     if(IssueAge < database().query<int>(DB_MinIssAge))
         {
-        throw x_product_rule_violated
-            (
-            std::string("Issue age less than minimum")
-            );
+        alarum()
+            << "Issue age "
+            << IssueAge
+            << " less than minimum "
+            << database().query<int>(DB_MinIssAge)
+            << '.'
+            << LMI_FLUSH
+            ;
         }
     if(database().query<int>(DB_MaxIssAge) < IssueAge)
         {
-        throw x_product_rule_violated
-            (
-            std::string("Issue age greater than maximum")
-            );
+        alarum()
+            << "Issue age "
+            << IssueAge
+            << " greater than maximum "
+            << database().query<int>(DB_MaxIssAge)
+            << '.'
+            << LMI_FLUSH
+            ;
         }
 //  lingo_.reset(new lingo(AddDataDir(product().datum("LingoFilename"))));
 //  FundData_.reset(new FundData(AddDataDir(product().datum("FundFilename"))));

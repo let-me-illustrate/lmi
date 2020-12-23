@@ -32,7 +32,6 @@
 #include "fenv_lmi.hpp"
 #include "gpt_input.hpp"
 #include "ihs_irc7702.hpp"
-#include "ihs_x_type.hpp"
 
 #include <exception>
 
@@ -41,10 +40,10 @@ enum
     ,precision_changed                      = 0x0002
     ,implausible_input                      = 0x0004
     ,inconsistent_input                     = 0x0008
-    ,product_rule_violated                  = 0x0010
-    ,adjustable_event_forbidden_at_issue    = 0x0020
-    ,guideline_negative                     = 0x0040
-    ,misstatement_of_age_or_gender          = 0x0080
+    ,adjustable_event_forbidden_at_issue    = 0x0010
+    ,guideline_negative                     = 0x0020
+    ,misstatement_of_age_or_gender          = 0x0040
+    ,runtime_error                          = 0x0080
     };
 
 //============================================================================
@@ -116,11 +115,6 @@ void Server7702::Process()
         Output.Status |= inconsistent_input;
         warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
-    catch(x_product_rule_violated const& e)
-        {
-        Output.Status |= product_rule_violated;
-        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
-        }
     catch(server7702_adjustable_event_forbidden_at_issue const& e)
         {
         Output.Status |= adjustable_event_forbidden_at_issue;
@@ -139,6 +133,11 @@ void Server7702::Process()
     catch(std::range_error const& e)
         {
         Output.Status |= implausible_input; // TODO ?? can we be more specific?
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
+        }
+    catch(std::runtime_error const& e)
+        {
+        Output.Status |= runtime_error;
         warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
 

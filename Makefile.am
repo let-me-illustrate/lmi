@@ -1347,7 +1347,6 @@ noinst_HEADERS = \
     ihs_irc7702.hpp \
     ihs_irc7702a.hpp \
     ihs_server7702.hpp \
-    ihs_x_type.hpp \
     illustration_document.hpp \
     illustration_view.hpp \
     illustrator.hpp \
