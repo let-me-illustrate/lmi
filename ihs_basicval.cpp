@@ -134,22 +134,22 @@ BasicValues::BasicValues
     yare_input_.DefinitionOfLifeInsurance  = mce_gpt              ;
     yare_input_.DefinitionOfMaterialChange = mce_adjustment_event ;
 
-    yare_input_.SpecifiedAmount            .assign(1, a_FaceAmount);
+    int const db_len = database().length();
 
+    yare_input_.SpecifiedAmount           .assign(db_len, a_FaceAmount);
+
+    // Cf. effective_dbopt_7702()
     mce_dbopt const z
         (mce_option1_for_7702 == a_DBOptFor7702 ? mce_option1
         :mce_option2_for_7702 == a_DBOptFor7702 ? mce_option2
         :throw std::runtime_error("Unexpected DB option.")
         );
-    yare_input_.DeathBenefitOption         .assign(1, z.value());
+    yare_input_.DeathBenefitOption        .assign(db_len, z.value());
 
-    int const db_len = database().length();
     yare_input_.ExtraMonthlyCustodialFee  .resize(db_len);
     yare_input_.ExtraCompensationOnAssets .resize(db_len);
     yare_input_.ExtraCompensationOnPremium.resize(db_len);
     yare_input_.CurrentCoiMultiplier      .assign(db_len, 1.0);
-    yare_input_.SpecifiedAmount           .assign(db_len, yare_input_.SpecifiedAmount   [0]);
-    yare_input_.DeathBenefitOption        .assign(db_len, yare_input_.DeathBenefitOption[0]);
     yare_input_.FlatExtra                 .resize(db_len);
 
     GPTServerInit();
