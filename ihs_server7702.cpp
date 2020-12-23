@@ -43,7 +43,8 @@ enum
     ,adjustable_event_forbidden_at_issue    = 0x0010
     ,guideline_negative                     = 0x0020
     ,misstatement_of_age_or_gender          = 0x0040
-    ,runtime_error                          = 0x0080
+    ,range_error                            = 0x0080
+    ,runtime_error                          = 0x0100
     };
 
 //============================================================================
@@ -132,7 +133,7 @@ void Server7702::Process()
         }
     catch(std::range_error const& e)
         {
-        Output.Status |= implausible_input; // TODO ?? can we be more specific?
+        Output.Status |= range_error;
         warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
     catch(std::runtime_error const& e)
