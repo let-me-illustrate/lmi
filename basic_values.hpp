@@ -439,7 +439,7 @@ class LMI_SO BasicValues
     std::vector<double> partial_mortality_tpx_;
     std::vector<double> partial_mortality_lx_;
 
-    mutable double      InitialTargetPremium;
+    double              InitialTargetPremium;
 
     void                Init7702();
     void                Init7702A();
