@@ -138,6 +138,10 @@ BasicValues::BasicValues
     int const db_len = database().length();
 
     yare_input_.SpecifiedAmount           .assign(db_len, a_FaceAmount);
+    // The tax law recognizes no "supplemental" amount, but
+    // class death_benefits expects SupplementalAmount to have
+    // the same length as SpecifiedAmount.
+    yare_input_.SupplementalAmount        .assign(db_len, 0.0);
 
     // Cf. effective_dbopt_7702()
     mce_dbopt const z
@@ -272,6 +276,22 @@ void BasicValues::GPTServerInit()
     StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
     PremiumTaxState_     = yare_input_.PremiumTaxState    ;
 
+    if
+        (   !database().query<bool>(DB_StateApproved)
+        &&  !global_settings::instance().ash_nazg()
+        &&  !global_settings::instance().regression_testing()
+        )
+        {
+        alarum()
+            << "Product "
+            << yare_input_.ProductName
+            << " not approved in state "
+            << mc_str(GetStateOfJurisdiction())
+            << "."
+            << LMI_FLUSH
+            ;
+        }
+
     IssueAge = yare_input_.IssueAge;
     RetAge   = yare_input_.RetirementAge;
     LMI_ASSERT(IssueAge < 100);
@@ -311,8 +331,8 @@ void BasicValues::GPTServerInit()
             << LMI_FLUSH
             ;
         }
-//  lingo_.reset(new lingo(AddDataDir(product().datum("LingoFilename"))));
-//  FundData_.reset(new FundData(AddDataDir(product().datum("FundFilename"))));
+    lingo_ = lingo::read_via_cache(AddDataDir(product().datum("LingoFilename")));
+    FundData_.reset(new FundData(AddDataDir(product().datum("FundFilename"))));
     RoundingRules_.reset
         (new rounding_rules(AddDataDir(product().datum("RoundingFilename")))
         );
@@ -325,20 +345,24 @@ void BasicValues::GPTServerInit()
         ,StratifiedCharges_->minimum_tiered_spread_for_7702()
         );
 
-    // Requires database.
-    MortalityRates_.reset(new MortalityRates (*this)); // Used by certain target-premium calculations.
-//  InterestRates_ .reset(new InterestRates  (*this));
-//  DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_, round_specamt_));
+    // Multilife contracts will need a vector of mortality-rate objects.
+
+    // Mortality and interest rates require database and rounding.
+    // Interest rates require tiered data and 7702 spread.
+    MortalityRates_.reset(new MortalityRates (*this));
+    InterestRates_ .reset(new InterestRates  (*this));
+    DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_, round_specamt_));
     // Outlay requires only input and rounding; it might someday use
     // interest rates.
-//  Outlay_        .reset(new modal_outlay   (yare_input_, round_gross_premium_, round_withdrawal_, round_loan_));
+    Outlay_        .reset(new modal_outlay   (yare_input_, round_gross_premium_, round_withdrawal_, round_loan_));
     PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, StateOfDomicile_, yare_input_.AmortizePremiumLoad, database(), *StratifiedCharges_));
     Loads_         .reset(new Loads          (*this));
 
     SetMaxSurvivalDur();
-//  set_partial_mortality(); // Not needed here.
+    set_partial_mortality();
 
     Init7702();
+    Init7702A();
 }
 
 //============================================================================
