@@ -158,110 +158,11 @@ BasicValues::BasicValues
     yare_input_.CurrentCoiMultiplier      .assign(db_len, 1.0);
     yare_input_.FlatExtra                 .resize(db_len);
 
-    GPTServerInit();
+    Init();
 }
 
 //============================================================================
 void BasicValues::Init()
-{
-    SetPermanentInvariants();
-
-    StateOfDomicile_ = mc_state_from_string(product().datum("InsCoDomicile"));
-    StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
-    PremiumTaxState_     = yare_input_.PremiumTaxState    ;
-
-    if
-        (   !database().query<bool>(DB_StateApproved)
-        &&  !global_settings::instance().ash_nazg()
-        &&  !global_settings::instance().regression_testing()
-        )
-        {
-        alarum()
-            << "Product "
-            << yare_input_.ProductName
-            << " not approved in state "
-            << mc_str(GetStateOfJurisdiction())
-            << "."
-            << LMI_FLUSH
-            ;
-        }
-
-    IssueAge = yare_input_.IssueAge;
-    RetAge   = yare_input_.RetirementAge;
-    LMI_ASSERT(IssueAge < 100);
-    LMI_ASSERT(RetAge <= 100);
-    LMI_ASSERT(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
-
-    database().query_into(DB_MaturityAge   , EndtAge);
-    Length = EndtAge - IssueAge;
-    LMI_ASSERT(database().length() == Length);
-
-    database().query_into(DB_LedgerType    , ledger_type_);
-    database().query_into(DB_Nonillustrated, nonillustrated_);
-    bool no_longer_issued = database().query<bool>(DB_NoLongerIssued);
-    bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;
-    no_can_issue_         = no_longer_issued && is_new_business;
-    IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(ledger_type());
-
-    if(IssueAge < database().query<int>(DB_MinIssAge))
-        {
-        alarum()
-            << "Issue age "
-            << IssueAge
-            << " less than minimum "
-            << database().query<int>(DB_MinIssAge)
-            << '.'
-            << LMI_FLUSH
-            ;
-        }
-    if(database().query<int>(DB_MaxIssAge) < IssueAge)
-        {
-        alarum()
-            << "Issue age "
-            << IssueAge
-            << " greater than maximum "
-            << database().query<int>(DB_MaxIssAge)
-            << '.'
-            << LMI_FLUSH
-            ;
-        }
-    lingo_ = lingo::read_via_cache(AddDataDir(product().datum("LingoFilename")));
-    FundData_.reset(new FundData(AddDataDir(product().datum("FundFilename"))));
-    RoundingRules_.reset
-        (new rounding_rules(AddDataDir(product().datum("RoundingFilename")))
-        );
-    SetRoundingFunctors();
-    StratifiedCharges_.reset
-        (new stratified_charges(AddDataDir(product().datum("TierFilename")))
-        );
-    SpreadFor7702_.assign
-        (Length
-        ,StratifiedCharges_->minimum_tiered_spread_for_7702()
-        );
-
-    // Multilife contracts will need a vector of mortality-rate objects.
-
-    // Mortality and interest rates require database and rounding.
-    // Interest rates require tiered data and 7702 spread.
-    MortalityRates_.reset(new MortalityRates (*this));
-    InterestRates_ .reset(new InterestRates  (*this));
-    DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_, round_specamt_));
-    // Outlay requires only input and rounding; it might someday use
-    // interest rates.
-    Outlay_        .reset(new modal_outlay   (yare_input_, round_gross_premium_, round_withdrawal_, round_loan_));
-    PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, StateOfDomicile_, yare_input_.AmortizePremiumLoad, database(), *StratifiedCharges_));
-    Loads_         .reset(new Loads          (*this));
-
-    SetMaxSurvivalDur();
-    set_partial_mortality();
-
-    Init7702();
-    Init7702A();
-}
-
-//============================================================================
-// TODO ??  Not for general use--use for GPT server only, for now. TAXATION !! refactor later
-void BasicValues::GPTServerInit()
 {
     SetPermanentInvariants();
 

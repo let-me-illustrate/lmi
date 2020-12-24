@@ -98,7 +98,6 @@ class LMI_SO BasicValues
     virtual ~BasicValues() = default;
 
     void Init();
-    void GPTServerInit();
 
     int                   GetLength()                  const;
     int                   GetIssueAge()                const;
