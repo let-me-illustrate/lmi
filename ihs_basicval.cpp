@@ -74,6 +74,7 @@ BasicValues::BasicValues(Input const& input)
     ,StateOfJurisdiction_{mce_s_CT}
     ,StateOfDomicile_    {mce_s_CT}
     ,PremiumTaxState_    {mce_s_CT}
+    ,InitialTargetPremium{0.0}
 {
     Init();
 }
@@ -250,14 +251,6 @@ void BasicValues::Init()
     Outlay_        .reset(new modal_outlay   (yare_input_, round_gross_premium_, round_withdrawal_, round_loan_));
     PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, StateOfDomicile_, yare_input_.AmortizePremiumLoad, database(), *StratifiedCharges_));
     Loads_         .reset(new Loads          (*this));
-
-    // The target premium can't be ascertained yet if specamt is
-    // determined by a strategy. This data member is used only by
-    // Init7702(), and is meaningful only when that function is called
-    // by GPTServerInit(); the value assigned here is overridden by a
-    // downstream call to Irc7702::Initialize7702(). TAXATION !! So
-    // eliminate the member when it becomes unnecessary.
-    InitialTargetPremium = 0.0;
 
     SetMaxSurvivalDur();
     set_partial_mortality();
@@ -574,6 +567,13 @@ void BasicValues::Init7702()
         }
 
     double local_adb_limit = database().query<bool>(DB_AdbIsQAB) ? AdbLimit : 0.0;
+
+    // BasicValues::InitialTargetPremium is used only here. For
+    // standalone GPT calculations, it's an input field. For
+    // illustrations, it's simply initialized to zero: the target
+    // premium can't be ascertained yet if the specified amount is
+    // to be determined by a strategy, but a downstream call to
+    // Irc7702::Initialize7702() takes care of that.
 
     Irc7702_.reset
         (new Irc7702
