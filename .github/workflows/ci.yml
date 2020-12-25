@@ -32,10 +32,25 @@ jobs:
         with:
           submodules: 'recursive'
 
-      - name: Install required packages
+      - name: Install Wine
+        if: matrix.mingw
         run: |
           sudo dpkg --add-architecture i386
+
+          wget -qO - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
+          sudo add-apt-repository ppa:cybermax-dexter/sdl2-backport
+          sudo add-apt-repository "deb https://dl.winehq.org/wine-builds/ubuntu $(lsb_release -cs) main"
+
           sudo apt-get update
+
+          # Workaround the issue with Wine.
+          sudo apt-get install libasound2-plugins:i386 libgphoto2-6:i386
+          sudo apt-get install wine-stable-i386
+          sudo apt-get install wine-stable
+          sudo apt-get install --install-recommends winehq-stable
+
+      - name: Install required packages
+        run: |
           sudo apt-get --assume-yes install \
             automake bc bsdmainutils bzip2 curl cvs default-jre \
             g++-multilib git jing libarchive-tools \
@@ -45,7 +60,7 @@ jobs:
           if ${{ matrix.mingw }}
           then
             sudo apt-get --assume-yes install \
-              g++-mingw-w64-i686 wine32
+              g++-mingw-w64-i686
           else
             sudo apt-get --assume-yes install \
               libgtk-3-dev
