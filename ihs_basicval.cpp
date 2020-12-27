@@ -164,6 +164,16 @@ BasicValues::BasicValues
 //============================================================================
 void BasicValues::Init()
 {
+    lingo_ = lingo::read_via_cache(AddDataDir(product().datum("LingoFilename")));
+    FundData_.reset(new FundData(AddDataDir(product().datum("FundFilename"))));
+    RoundingRules_.reset
+        (new rounding_rules(AddDataDir(product().datum("RoundingFilename")))
+        );
+    SetRoundingFunctors();
+    StratifiedCharges_.reset
+        (new stratified_charges(AddDataDir(product().datum("TierFilename")))
+        );
+
     SetPermanentInvariants();
 
     StateOfDomicile_ = mc_state_from_string(product().datum("InsCoDomicile"));
@@ -214,6 +224,7 @@ void BasicValues::Init()
             << LMI_FLUSH
             ;
         }
+
     if(database().query<int>(DB_MaxIssAge) < IssueAge)
         {
         alarum()
@@ -225,15 +236,7 @@ void BasicValues::Init()
             << LMI_FLUSH
             ;
         }
-    lingo_ = lingo::read_via_cache(AddDataDir(product().datum("LingoFilename")));
-    FundData_.reset(new FundData(AddDataDir(product().datum("FundFilename"))));
-    RoundingRules_.reset
-        (new rounding_rules(AddDataDir(product().datum("RoundingFilename")))
-        );
-    SetRoundingFunctors();
-    StratifiedCharges_.reset
-        (new stratified_charges(AddDataDir(product().datum("TierFilename")))
-        );
+
     SpreadFor7702_.assign
         (Length
         ,StratifiedCharges_->minimum_tiered_spread_for_7702()
