@@ -80,7 +80,7 @@ BasicValues::BasicValues(Input const& input)
 }
 
 //============================================================================
-// TODO ?? Not for general use--use for GPT server only. This is bad design. TAXATION !! Eliminate this.
+// Designed for GPT server, but available for general use.
 BasicValues::BasicValues
     (std::string  const& a_ProductName
     ,mcenum_gender       a_Gender
