@@ -400,7 +400,8 @@ void test_path_validation()
     fs::remove("path_utility_test_dir");
 }
 
-/// Demonstrate a boost::filesystem oddity.
+/// Demonstrate that "root name" part is handled differently by std::filesystem
+/// library under different platforms.
 ///
 /// A print directory is specified in 'configurable_settings.xml', and
 /// managed by 'preferences_model.cpp'. Using an msw build of lmi to
@@ -416,8 +417,21 @@ void test_path_validation()
 
 void test_oddities()
 {
+    // The exact value of the root name doesn't matter under POSIX systems but
+    // under MSW we must use the actual root name, and not the hard-coded "Z:",
+    // as this is what absolute() uses for completing the path and comparisons
+    // below would fail under this platform unless the root name actually
+    // happens to be "Z:".
+    std::string root_name = fs::current_path().root_name().string();
+    if(root_name.empty())
+        {
+        // Root name not used under this platform, just use something non-empty.
+        root_name = "Z:";
+        }
+    LMI_TEST_EQUAL  (root_name.size(), 2);
+
     std::string const z0 = "/opt/lmi/data";
-    std::string const z1 = "Z:/opt/lmi/data";
+    std::string const z1 = root_name + "/opt/lmi/data";
     std::string const z2 = remove_alien_msw_root(z1).string();
 #if defined LMI_POSIX
     LMI_TEST_EQUAL  (z0, fs::absolute(z0).string());
