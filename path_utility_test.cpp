@@ -410,8 +410,15 @@ void test_path_validation()
 
 void test_oddities()
 {
+#if defined LMI_POSIX
+    std::string const root_name = "Z:";
+#else
+    std::string const root_name = fs::current_path().root_name().string();
+#endif
+    BOOST_TEST_EQUAL  (root_name.size(), 2);
+
     std::string const z0 = "/opt/lmi/data";
-    std::string const z1 = "Z:/opt/lmi/data";
+    std::string const z1 = root_name + "/opt/lmi/data";
     std::string const z2 = remove_alien_msw_root(z1).string();
 #if defined LMI_POSIX
     BOOST_TEST_EQUAL  (z0, fs::absolute(z0).string());
