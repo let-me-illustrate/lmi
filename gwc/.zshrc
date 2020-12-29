@@ -109,6 +109,9 @@ HISTFILE=~/.history
 setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_SPACE
 
+# Don't kill session if Ctrl-D hit by accident.
+setopt IGNORE_EOF
+
 # Get rid of silly redhat defaults like their 1400-char $LS_COLORS.
 unset HISTCONTROL
 unset KDEDIRS
