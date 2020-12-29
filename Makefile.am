@@ -119,6 +119,7 @@ TESTS = \
     test_input_seq \
     test_input \
     test_interpolate_string \
+    test_irc7702_tables \
     test_irc7702a \
     test_istream_to_string \
     test_ledger \
@@ -670,7 +671,6 @@ test_commutation_functions_SOURCES = \
   commutation_functions.cpp \
   commutation_functions_test.cpp \
   cso_table.cpp \
-  irc7702_tables.cpp \
   timer.cpp
 test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -861,6 +861,14 @@ test_interpolate_string_SOURCES = \
   interpolate_string.cpp \
   interpolate_string_test.cpp
 test_interpolate_string_CXXFLAGS = $(AM_CXXFLAGS)
+
+test_irc7702_tables_SOURCES = \
+  $(common_test_objects) \
+  commutation_functions.cpp \
+  cso_table.cpp \
+  irc7702_tables.cpp \
+  irc7702_tables_test.cpp
+test_irc7702_tables_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_irc7702a_SOURCES = \
   $(common_test_objects) \

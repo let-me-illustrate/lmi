@@ -431,6 +431,7 @@ unit_test_targets := \
   input_sequence_test \
   input_test \
   interpolate_string_test \
+  irc7702_tables_test \
   irc7702a_test \
   istream_to_string_test \
   ledger_test \
@@ -573,7 +574,6 @@ commutation_functions_test$(EXEEXT): \
   commutation_functions.o \
   commutation_functions_test.o \
   cso_table.o \
-  irc7702_tables.o \
   timer.o \
 
 configurable_settings_test$(EXEEXT): \
@@ -739,6 +739,13 @@ interpolate_string_test$(EXEEXT): \
   $(common_test_objects) \
   interpolate_string.o \
   interpolate_string_test.o \
+
+irc7702_tables_test$(EXEEXT): \
+  $(common_test_objects) \
+  commutation_functions.o \
+  cso_table.o \
+  irc7702_tables.o \
+  irc7702_tables_test.o \
 
 irc7702a_test$(EXEEXT): \
   $(boost_filesystem_objects) \
