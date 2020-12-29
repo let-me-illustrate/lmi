@@ -866,12 +866,19 @@ test_interpolate_string_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_irc7702_tables_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
   commutation_functions.cpp \
   cso_table.cpp \
+  global_settings.cpp \
   irc7702_interest.cpp \
   irc7702_tables.cpp \
-  irc7702_tables_test.cpp
+  irc7702_tables_test.cpp \
+  miscellany.cpp \
+  null_stream.cpp \
+  path_utility.cpp
 test_irc7702_tables_CXXFLAGS = $(AM_CXXFLAGS)
+test_irc7702_tables_LDADD = \
+  $(BOOST_LIBS)
 
 test_irc7702a_SOURCES = \
   $(common_test_objects) \

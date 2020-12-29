@@ -743,12 +743,18 @@ interpolate_string_test$(EXEEXT): \
   interpolate_string_test.o \
 
 irc7702_tables_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
   $(common_test_objects) \
+  calendar_date.o \
   commutation_functions.o \
   cso_table.o \
+  global_settings.o \
   irc7702_interest.o \
   irc7702_tables.o \
   irc7702_tables_test.o \
+  miscellany.o \
+  null_stream.o \
+  path_utility.o \
 
 irc7702a_test$(EXEEXT): \
   $(boost_filesystem_objects) \
