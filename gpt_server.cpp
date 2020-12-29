@@ -38,6 +38,7 @@
 #include "ieee754.hpp"                  // ldbl_eps_plus_one_times()
 #include "ihs_irc7702a.hpp"
 #include "ihs_server7702.hpp"           // RunServer7702FromStruct()
+#include "irc7702_interest.hpp"         // iglp(), igsp()
 #include "materially_equal.hpp"         // material_difference()
 #include "math_functions.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_state_from_string()
@@ -197,9 +198,11 @@ gpt_state test_one_days_gpt_transactions
         (Mly7702iGlp
         ,apply_unary
             (i_upper_12_over_12_from_i<double>()
-            ,apply_binary(greater_of<double>(), 0.04, guar_int) - spread
+            ,apply_binary(greater_of<double>(), iglp(), guar_int) - spread
             )
         );
+    // TAXATION !! Similarly, GSP should be calculated, using igsp(), if
+    // this code is to be kept.
 
     std::vector<double> Mly7702ig;
     database.query_into(DB_NaarDiscount, Mly7702ig);

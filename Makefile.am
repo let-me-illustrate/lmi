@@ -1358,6 +1358,7 @@ noinst_HEADERS = \
     input_sequence_parser.hpp \
     interest_rates.hpp \
     interpolate_string.hpp \
+    irc7702_interest.hpp \
     irc7702_tables.hpp \
     istream_to_string.hpp \
     ledger.hpp \

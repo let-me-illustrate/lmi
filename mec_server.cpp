@@ -35,6 +35,7 @@
 #include "et_vector.hpp"
 #include "ieee754.hpp"                  // ldbl_eps_plus_one_times()
 #include "ihs_irc7702a.hpp"
+#include "irc7702_interest.hpp"         // iglp()
 #include "materially_equal.hpp"         // material_difference()
 #include "math_functions.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_state_from_string()
@@ -180,7 +181,7 @@ mec_state test_one_days_7702A_transactions
         (Mly7702iGlp
         ,apply_unary
             (i_upper_12_over_12_from_i<double>()
-            ,apply_binary(greater_of<double>(), 0.04, guar_int) - spread
+            ,apply_binary(greater_of<double>(), iglp(), guar_int) - spread
             )
         );
 

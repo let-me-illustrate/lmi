@@ -28,6 +28,7 @@
 #include "basic_values.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
+#include "irc7702_interest.hpp"         // iglp(), igsp()
 #include "math_functions.hpp"           // assign_midpoint()
 #include "miscellany.hpp"               // each_equal()
 #include "ssize_lmi.hpp"
@@ -1022,12 +1023,12 @@ void InterestRates::Initialize7702Rates()
     std::vector<double> const& annual_guar_rate = GenAcctGrossRate_[mce_gen_guar];
 
     MlyGlpRate_.resize(Length_);
-    // ET !! MlyGlpRate_ = max(0.04, annual_guar_rate);
+    // ET !! MlyGlpRate_ = max(iglp(), annual_guar_rate);
     std::transform
         (annual_guar_rate.begin()
         ,annual_guar_rate.end()
         ,MlyGlpRate_.begin()
-        ,[](double x) { return std::max(0.04, x); }
+        ,[](double x) { return std::max(iglp(), x); }
         );
     // ET !! This ought to be implicit, at least in some 'safe' mode:
     LMI_ASSERT(MlyGlpRate_.size() == SpreadFor7702_.size());
@@ -1099,7 +1100,7 @@ void InterestRates::Initialize7702Rates()
 */
 
     // ET !! Mly7702iGlp = i_upper_12_over_12_from_i(max(.04, guar_int) - SpreadFor7702_);
-    Mly7702iGlp.assign(Length, 0.04);
+    Mly7702iGlp.assign(Length, iglp());
     std::transform
         (guar_int.begin()
         ,guar_int.end()
@@ -1122,7 +1123,7 @@ void InterestRates::Initialize7702Rates()
         );
 
     // ET !! Mly7702iGlp = i_upper_12_over_12_from_i(max(.06, guar_int) - SpreadFor7702_);
-    Mly7702iGsp.assign(Length, 0.06);
+    Mly7702iGsp.assign(Length, igsp());
     std::transform
         (guar_int.begin()
         ,guar_int.end()

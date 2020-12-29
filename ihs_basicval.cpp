@@ -41,6 +41,7 @@
 #include "ihs_irc7702a.hpp"
 #include "input.hpp"
 #include "interest_rates.hpp"
+#include "irc7702_interest.hpp"         // iglp(), igsp()
 #include "lingo.hpp"
 #include "loads.hpp"
 #include "math_functions.hpp"
@@ -446,7 +447,7 @@ void BasicValues::Init7702()
         (Mly7702iGlp
         ,apply_unary
             (i_upper_12_over_12_from_i<double>()
-            ,apply_binary(greater_of<double>(), 0.04, guar_int) - SpreadFor7702_
+            ,apply_binary(greater_of<double>(), iglp(), guar_int) - SpreadFor7702_
             )
         );
 
@@ -455,7 +456,7 @@ void BasicValues::Init7702()
         (Mly7702iGsp
         ,apply_unary
             (i_upper_12_over_12_from_i<double>()
-            ,apply_binary(greater_of<double>(), 0.06, guar_int) - SpreadFor7702_
+            ,apply_binary(greater_of<double>(), igsp(), guar_int) - SpreadFor7702_
             )
         );
 

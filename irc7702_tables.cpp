@@ -27,6 +27,7 @@
 #include "commutation_functions.hpp"
 #include "cso_table.hpp"
 #include "et_vector.hpp"
+#include "irc7702_interest.hpp"         // iglp()
 #include "math_functions.hpp"
 #include "ssize_lmi.hpp"
 
@@ -54,12 +55,12 @@ irc7702_tables::irc7702_tables
     std::vector<double> q12(length_);
     assign(q12, apply_binary(coi_rate_from_q<double>(), q_, max_coi_rate));
 
-    // ic: 0.04 is the statutory rate.
+    // ic: iglp() is the statutory rate.
     // ig: Argument 'naar_discount' corresponds to DB_NaarDiscount,
     //   which is assumed to be rounded appropriately if at all.
     std::vector<double> const ic
         (length_
-        ,i_upper_12_over_12_from_i<double>()(0.04)
+        ,i_upper_12_over_12_from_i<double>()(iglp())
         );
     std::vector<double> const& ig(naar_discount);
 
@@ -77,8 +78,8 @@ irc7702_tables::irc7702_tables
     E7aN.erase(E7aN.begin(), 7 + E7aN.begin());
     ul_7pp_ += (ulcf.aDomega() + ulcf.kM()) / (ulcf.aN() - E7aN);
 
-    double const i_over_delta = 0.04 / std::log(1.04);
-    std::vector<double> const i(length_, 0.04);
+    double const i_over_delta = iglp() / std::log(1 + iglp());
+    std::vector<double> const i(length_, iglp());
     OLCommFns const olcf(q_, i);
 
     // Alternative calculations that may be useful someday are given

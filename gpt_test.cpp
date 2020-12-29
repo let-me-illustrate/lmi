@@ -26,6 +26,7 @@
 
 #include "assert_lmi.hpp"
 #include "cso_table.hpp"
+#include "irc7702_interest.hpp"         // iglp(), igsp()
 #include "materially_equal.hpp"
 #include "math_functions.hpp"
 #include "ssize_lmi.hpp"
@@ -236,8 +237,8 @@ class gpt_test
 
 void gpt_test::initialize(int issue_age)
 {
-    static double const i_m_4 = i_upper_12_over_12_from_i<double>()(0.04);
-    static double const i_m_6 = i_upper_12_over_12_from_i<double>()(0.06);
+    static double const i_m_4 = i_upper_12_over_12_from_i<double>()(iglp());
+    static double const i_m_6 = i_upper_12_over_12_from_i<double>()(igsp());
     q_m = sample_q(issue_age);
     int const length = lmi::ssize(q_m);
     glp_ic               .assign(length,     i_m_4);
