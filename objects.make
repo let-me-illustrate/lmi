@@ -291,6 +291,7 @@ lmi_common_objects := \
   ihs_irc7702a.o \
   ihs_mortal.o \
   ihs_server7702.o \
+  irc7702_interest.o \
   irc7702_tables.o \
   lingo.o \
   lmi.o \
@@ -666,6 +667,7 @@ gpt_test$(EXEEXT): \
   gpt_commutation_functions.o \
   gpt_test.o \
   ihs_irc7702.o \
+  irc7702_interest.o \
   miscellany.o \
   null_stream.o \
   path_utility.o \
@@ -744,6 +746,7 @@ irc7702_tables_test$(EXEEXT): \
   $(common_test_objects) \
   commutation_functions.o \
   cso_table.o \
+  irc7702_interest.o \
   irc7702_tables.o \
   irc7702_tables_test.o \
 

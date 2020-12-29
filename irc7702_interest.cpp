@@ -19,14 +19,20 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifndef irc7702_interest_hpp
-#define irc7702_interest_hpp
+#include "pchfile.hpp"
 
-#include "config.hpp"
+#include "irc7702_interest.hpp"
 
-#include "so_attributes.hpp"
+/// Statutory interest rate for 7702 and 7702A (except GSP).
 
-LMI_SO double iglp();
-LMI_SO double igsp();
+double iglp()
+{
+    return 0.04;
+}
 
-#endif // irc7702_interest_hpp
+/// Statutory interest rate for 7702 (GSP only).
+
+double igsp()
+{
+    return 0.02 + iglp();
+}

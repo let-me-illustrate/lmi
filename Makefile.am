@@ -424,6 +424,7 @@ liblmi_la_SOURCES = \
     ihs_irc7702a.cpp \
     ihs_mortal.cpp \
     ihs_server7702.cpp \
+    irc7702_interest.cpp \
     irc7702_tables.cpp \
     lingo.cpp \
     lmi.cpp \
@@ -777,6 +778,7 @@ test_gpt_SOURCES = \
   gpt_commutation_functions.cpp \
   gpt_test.cpp \
   ihs_irc7702.cpp \
+  irc7702_interest.cpp \
   miscellany.cpp \
   null_stream.cpp \
   path_utility.cpp \
@@ -866,6 +868,7 @@ test_irc7702_tables_SOURCES = \
   $(common_test_objects) \
   commutation_functions.cpp \
   cso_table.cpp \
+  irc7702_interest.cpp \
   irc7702_tables.cpp \
   irc7702_tables_test.cpp
 test_irc7702_tables_CXXFLAGS = $(AM_CXXFLAGS)

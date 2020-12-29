@@ -42,6 +42,16 @@ namespace
 void authenticate_system()
 {}
 
+double iglp()
+{
+    return 0.04;
+}
+
+double igsp()
+{
+    return 0.02 + iglp();
+}
+
 bool is_antediluvian_fork()
 {
     return true;
