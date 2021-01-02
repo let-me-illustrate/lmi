@@ -183,7 +183,7 @@ fi
 
 # This forestalls about a thousand lines of bogus error messages.
 
-throwaway_catalog=/etc/opt/lmi/xml_catalog
+throwaway_catalog=/tmp/xml_catalog
 
 cat >"$throwaway_catalog" <<EOF
 <?xml version="1.0"?>
