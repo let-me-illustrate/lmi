@@ -25,7 +25,7 @@
 /* 2003-02 GWC got this code from
  *   http://www.nondot.org/gcc/md5_8c-source.html
  * and modified it as indicated below by initials 'GWC'. Modifications are
- *   Copyright (C) 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares
+ *   Copyright (C) 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares
  * and licensed under the same terms as the original, as given above.
  * This is a derived work. Any defect in it should not reflect on
  * Ulrich Drepper's reputation.

@@ -1,6 +1,6 @@
 // MD5 sum--unit test.
 //
-// Copyright (C) 2020 Gregory W. Chicares.
+// Copyright (C) 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
