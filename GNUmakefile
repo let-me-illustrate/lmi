@@ -520,11 +520,16 @@ backup_directory := ../saved_$(old_year)
 
 unutterable := Copyright
 
+# The first two commands in the recipe use 'mkdir' without '-p',
+# deliberately: if they fail, something is amiss (probably the
+# result of trying to update copyrights twice in the same year).
+
 .PHONY: happy_new_year
 happy_new_year: source_clean
 	$(MKDIR) $(backup_directory)
+	$(MKDIR) $(backup_directory)/hooks
 	$(TOUCH) --date=$(old_year)0101 BOY
-	for z in *; \
+	for z in * hooks/*; \
 	  do \
 	       [ $$z -nt BOY ] \
 	    && [ ! -d $$z ] \
@@ -540,12 +545,14 @@ happy_new_year: source_clean
 	$(GREP) --directories=skip '$(old_year)[, ]*$(old_year)' * || true
 	$(GREP) --directories=skip '$(new_year)[, ]*$(old_year)' * || true
 	$(GREP) --directories=skip '$(new_year)[, ]*$(new_year)' * || true
+	@$(ECHO) "...end first list of potential issues."
 	[ -z '$(wildcard *.?pp)' ] || $(GREP) '$(old_year)' *.?pp \
 	  | $(SED) \
 	    -e '/$(old_year)[, ]*$(new_year)/d' \
 	    -e'/https*:\/\/lists.nongnu.org\/archive\/html\/lmi\/$(old_year)/d' \
 	    -e'/\(VERSION\|version\).*$(old_year)[0-9]\{4\}T[0-9]\{4\}Z/d' \
 	  || true
+	@$(ECHO) "...end second list of potential issues."
 	$(GREP) --directories=skip $(unutterable) * \
 	  | $(SED) \
 	    -e '/$(unutterable).*$(new_year) Gregory W. Chicares/d' \
@@ -582,12 +589,13 @@ happy_new_year: source_clean
 	    -e '/:good_copyright=/d' \
 	    -e '/:$(unutterable) (C)$$/d' \
 	    -e '/$(unutterable) (C) 1900/d' \
-	    -e '/$(unutterable).*`date -u +.%Y.`/d' \
+	    -e '/$(unutterable).*[$$](date -u +.%Y.)/d' \
 	    -e '/http:\/\/www.gnu.org\/prep\/maintain\/maintain.html#$(unutterable)-Notices/d' \
 	    -e '/year appears on the same line as the word "$(unutterable)"/d' \
 	    -e '/document.add_comment("$(unutterable) (C) " + y + " Gregory W. Chicares.");/d' \
-	    -e '/oss << "$(unutterable) .*" << year;/d' \
+	    -e '/oss << R*"$(unutterable) .*" << year;/d' \
 	  || true
+	@$(ECHO) "...end third list of potential issues."
 	@$(ECHO) "Done."
 
 ################################################################################

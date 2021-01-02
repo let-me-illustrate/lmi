@@ -509,14 +509,14 @@ void check_copyright(file const& f)
 
     { // Scope to avoid unwanted '-Wshadow' diagnostic.
     std::ostringstream oss;
-    oss << R"(Copyright \(C\)[^\n]*)" << year;
+    oss << 'C' << R"(opyright \(C\)[^\n]*)" << year;
     require(f, oss.str(), "lacks current copyright.");
     }
 
     if(f.is_of_phylum(e_html) && !f.phyloanalyze("^COPYING"))
         {
         std::ostringstream oss;
-        oss << R"(Copyright &copy;[^\n]*)" << year;
+        oss << 'C' << R"(opyright &copy;[^\n]*)" << year;
         require(f, oss.str(), "lacks current secondary copyright.");
         }
 }
