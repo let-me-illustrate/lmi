@@ -81,11 +81,15 @@ int year_from_string(wxString const& s)
 // May throw if the input doesn't conform to the expectations.
 int extract_last_copyright_year(wxString const& html)
 {
-    // Find the line starting with "C""opyright".
+    // Uttering this word without obfuscation would confuse the
+    // 'make happy_new_year' copyright-update recipe.
+    static std::string const unutterable {"C""opyright"};
+
+    // Find the line starting with that unutterable word.
     wxString copyright_line;
     for(auto const& line : wxSplit(html ,'\n' ,'\0'))
         {
-        if(line.StartsWith("C""opyright"))
+        if(line.StartsWith(unutterable.c_str()))
             {
             LMI_ASSERT_WITH_MSG
                 (copyright_line.empty()
@@ -99,7 +103,7 @@ int extract_last_copyright_year(wxString const& html)
 
     LMI_ASSERT_WITH_MSG
         (!copyright_line.empty()
-        ,"C""opyright line not found in the license notices text"
+        ,unutterable + " line not found in the license notices text"
         );
 
     // We suppose that we have a sequence of comma-separated (4 digit, let
@@ -120,9 +124,10 @@ int extract_last_copyright_year(wxString const& html)
             ,m
             ,std::regex("(?:\\d{4}, )+(\\d{4})")
             )
-        , "C""opyright line \""
+        , unutterable
+        + " line '"
         + copyright_line
-        + "\" doesn't contain copyright years"
+        + "' doesn't contain copyright years"
         );
 
     return year_from_string(wxString(m[1]));
