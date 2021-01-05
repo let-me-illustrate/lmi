@@ -121,6 +121,8 @@ class LMI_SO AccountValue final
     currency specamt_for_7702(int year) const;
     currency specamt_for_7702A(int year) const;
 
+    void assert_pmts_add_up(char const* file, int line, int month);
+
     // We're not yet entirely sure how to handle ledger values. Right now,
     // we have pointers to a Ledger and also to its variant and invariant
     // parts. We put data into the parts, and then insert the parts into

@@ -613,12 +613,7 @@ void AccountValue::TxExch1035()
             );
         }
 
-    LMI_ASSERT
-        (materially_equal
-            (GrossPmts[Month]
-            ,EeGrossPmts[Month] + ErGrossPmts[Month]
-            )
-        );
+    assert_pmts_add_up(__FILE__, __LINE__, Month);
 }
 
 //============================================================================
@@ -1194,7 +1189,7 @@ void AccountValue::TxAscertainDesiredPayment()
         return;
         }
 
-    LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
+    assert_pmts_add_up(__FILE__, __LINE__, Month);
 
     double eepmt = 0.0;
     if(ee_pay_this_month)
@@ -1222,8 +1217,9 @@ void AccountValue::TxAscertainDesiredPayment()
         GrossPmts  [Month] += erpmt;
         }
 
-    LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
-    LMI_ASSERT(GrossPmts[Month] < 1.0e100);
+    assert_pmts_add_up(__FILE__, __LINE__, Month);
+    // bignum: the largest integer convertible to and from double.
+    LMI_ASSERT(GrossPmts[Month] < from_cents(1LL << 53));
 
     if(0 == Year && 0 == Month)
         {
@@ -1236,7 +1232,7 @@ void AccountValue::TxAscertainDesiredPayment()
         GrossPmts  [Month] += Dumpin;
         }
 
-    LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
+    assert_pmts_add_up(__FILE__, __LINE__, Month);
 }
 
 /// Limit payment (e.g., to the non-MEC maximum).
@@ -1256,7 +1252,7 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
     // we shouldn't.
 // TODO ?? TAXATION !! Clean this up, and put GPT limit here, on prem net of WD.
 
-    LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
+    assert_pmts_add_up(__FILE__, __LINE__, Month);
 
     if(mce_reduce_prem == yare_input_.AvoidMecMethod && !Irc7702A_->IsMecAlready())
         {
@@ -1280,7 +1276,7 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
         GrossPmts[Month] = EeGrossPmts[Month] + ErGrossPmts[Month];
         }
 
-    LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
+    assert_pmts_add_up(__FILE__, __LINE__, Month);
 
     if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {
@@ -1294,12 +1290,7 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
         GrossPmts[Month] = EeGrossPmts[Month] + ErGrossPmts[Month];
         }
 
-    LMI_ASSERT
-        (materially_equal
-            (GrossPmts[Month]
-            ,EeGrossPmts[Month] + ErGrossPmts[Month]
-            )
-        );
+    assert_pmts_add_up(__FILE__, __LINE__, Month);
 }
 
 //============================================================================

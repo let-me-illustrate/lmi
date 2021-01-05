@@ -47,7 +47,10 @@
 #include "stratified_algorithms.hpp"
 
 #include <algorithm>
+#include <cfloat>                       // DECIMAL_DIG
 #include <cmath>
+#include <iomanip>                      // setprecision()
+#include <ios>                          // ios_base::fixed()
 #include <iterator>                     // back_inserter()
 #include <limits>
 #include <numeric>
@@ -169,6 +172,36 @@ currency AccountValue::specamt_for_7702A(int year) const
     return
                               base_specamt(year)
         + (TermIsDbFor7702A ? term_specamt(year) : 0.0)
+        ;
+}
+
+void AccountValue::assert_pmts_add_up(char const* file, int line, int month)
+{
+    // If the currency unit is cents (as it ultimately will be), then
+    // all currency amounts should be an exact integral number of
+    // cents, and payments should add up exactly. For the nonce, the
+    // currency unit might not be cents, in which case payments should
+    // add up within a tiny tolerance.
+    bool const okay =
+#if defined CURRENCY_UNIT_IS_CENTS
+                         GrossPmts[month] ==   EeGrossPmts[month]     + ErGrossPmts[month]
+#else  // !defined CURRENCY_UNIT_IS_CENTS
+        materially_equal(dblize(GrossPmts[month]), dblize(EeGrossPmts[month]) + dblize(ErGrossPmts[month]))
+#endif // !defined CURRENCY_UNIT_IS_CENTS
+        ;
+    if(okay)
+        return;
+
+    alarum()
+        << "Payments don't add up [file '" << file << "', line " << line << "]\n"
+        << month << " month\n"
+        << Year << " Year\n"
+        << std::fixed << std::setprecision(DECIMAL_DIG)
+        << EeGrossPmts[month] << " EeGrossPmts[month]\n"
+        << ErGrossPmts[month] << " ErGrossPmts[month]\n"
+        << GrossPmts[month] << " GrossPmts[month]\n"
+        << EeGrossPmts[month] + ErGrossPmts[month] << " EeGrossPmts[month] + ErGrossPmts[month]\n"
+        << LMI_FLUSH
         ;
 }
 
@@ -1307,10 +1340,10 @@ void AccountValue::FinalizeYear()
 
         for(int j = 0; j < 12; ++j)
             {
-            LMI_ASSERT(materially_equal(GrossPmts[j], EeGrossPmts[j] + ErGrossPmts[j]));
-            InvariantValues().GrossPmt  [Year]  += GrossPmts[j];
-            InvariantValues().EeGrossPmt[Year]  += EeGrossPmts[j];
-            InvariantValues().ErGrossPmt[Year]  += ErGrossPmts[j];
+            assert_pmts_add_up(__FILE__, __LINE__, j);
+            InvariantValues().GrossPmt  [Year]  += dblize(GrossPmts  [j]);
+            InvariantValues().EeGrossPmt[Year]  += dblize(EeGrossPmts[j]);
+            InvariantValues().ErGrossPmt[Year]  += dblize(ErGrossPmts[j]);
             }
         if(0 == Year)
             {
