@@ -524,13 +524,11 @@ enum e_database_key
 
         ,DB_GroupProxyRateTable
         ,DB_PartialMortTable
-        ,DB_UsePolicyFormAlt // LINGO !! expunge
         ,DB_AllowGroupQuote
 
     ,DB_Topic_Lingo
 
         ,DB_PolicyForm
-        ,DB_PolicyFormAlternative // LINGO !! expunge
         ,DB_PolicyMktgName
         ,DB_PolicyLegalName
         ,DB_InsCoShortName

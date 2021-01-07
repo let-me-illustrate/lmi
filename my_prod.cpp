@@ -81,8 +81,6 @@ void product_data::write_proprietary_policy_files()
     z.SubstdTblMultFilename      = glossed_string("sample");
     z.CurrSpecAmtLoadFilename    = glossed_string("sample");
     z.GuarSpecAmtLoadFilename    = glossed_string("sample");
-    z.PolicyForm                 = glossed_string("UL32768-NY"); // LINGO !! expunge
-    z.PolicyFormAlternative      = glossed_string("UL32768-X"); // LINGO !! expunge
     z.PolicyMktgName             = glossed_string("UL Supreme");
     z.PolicyLegalName            = glossed_string("Flexible Premium Adjustable Life Insurance Policy");
     z.InsCoShortName             = glossed_string("Superior Life");

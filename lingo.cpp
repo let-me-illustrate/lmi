@@ -278,8 +278,6 @@ void lingo::write_lingo_files()
         // string that has no lower_case_with_underscores variant:
 //      ,{superior::PolicyForm_term                     , "{PolicyForm}"}
 //      ,{superior::PolicyForm                          , "UL32768-NY"}
-        ,{superior::PolicyFormAlternative_term          , "{PolicyFormAlternative}"} // LINGO !! expunge
-        ,{superior::PolicyFormAlternative               , "UL32768-X"} // LINGO !! expunge
         ,{superior::PolicyMktgName_term                 , "{PolicyMktgName}"}
         ,{superior::PolicyMktgName                      , "UL Supreme"}
         ,{superior::PolicyLegalName_term                , "{PolicyLegalName}"}

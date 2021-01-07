@@ -60,8 +60,6 @@ enum lingo : int
     // string that has no lower_case_with_underscores variant:
 //  ,PolicyForm_term
 //  ,PolicyForm
-    ,PolicyFormAlternative_term // LINGO !! expunge
-    ,PolicyFormAlternative // LINGO !! expunge
     ,PolicyMktgName_term
     ,PolicyMktgName
     ,PolicyLegalName_term

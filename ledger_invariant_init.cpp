@@ -316,11 +316,9 @@ void LedgerInvariant::Init(BasicValues const* b)
     if(!is_antediluvian_fork())
         {
         product_data const& p = b->product();
-        // Accommodate one alternative policy-form name. // LINGO !! expunge this block:
-        // DATABASE !! It would be much better, of course, to let all
+        // LINGO !! DATABASE !! It would be much better, of course, to let all
         // strings in class product_data vary across the same axes as
         // database_entity objects.
-        bool alt_form = b->database().query<bool>(DB_UsePolicyFormAlt);
         dbo_name_option1           = p.datum("DboNameLevel"                   );
         dbo_name_option2           = p.datum("DboNameIncreasing"              );
         dbo_name_rop               = p.datum("DboNameReturnOfPremium"         );
@@ -328,54 +326,8 @@ void LedgerInvariant::Init(BasicValues const* b)
 
         // Strings.
 
-        PolicyForm = p.datum(alt_form ? "PolicyFormAlternative" : "PolicyForm"); // LINGO !! expunge old implementation here
-
         auto policy_form = b->database().query<int>(DB_PolicyForm);
-        bool const policy_form_is_okay =
-               b->lingo_->lookup(policy_form) == PolicyForm
-            || "{PolicyFormAlternative}" == PolicyForm
-            ;
-        if(!policy_form_is_okay)
-            alarum()
-                << b->lingo_->lookup(policy_form) << " b->lingo_->lookup(policy_form)\n"
-                << PolicyForm << " PolicyForm\n"
-                << LMI_FLUSH
-                ;
         PolicyForm = b->lingo_->lookup(policy_form);
-
-        // LINGO !! Temporary expedient: validate all lingo.
-        if(begins_with(ProductName, "sample"))
-            for(auto const& i : p.member_names())
-                {
-                if(ends_with(i, "Filename") || i == "InsCoDomicile")
-                    continue;
-                auto const k = static_cast<e_database_key>(db_key_from_name(i));
-                auto const lingo_index = b->database().query<e_database_key>(k);
-                std::string const newer = b->lingo_->lookup(lingo_index);
-                std::string const older = p.datum(i);
-                if(newer != older)
-                    {
-                    // Allow an "alternative" policy form for now.
-                    if("PolicyForm" == i)
-                        warning()
-                            << "Expected difference:\n"
-                            << i << " entity\n"
-                            << newer << " newer\n"
-                            << older << " older\n"
-                            << StateOfJurisdiction << " StateOfJurisdiction\n"
-                            << LMI_FLUSH
-                            ;
-                    else
-                        alarum()
-                            << "ERROR:\n"
-                            << i << " entity\n"
-                            << newer << " newer\n"
-                            << older << " older\n"
-                            << StateOfJurisdiction << " StateOfJurisdiction\n"
-                            << LMI_FLUSH
-                            ;
-                    }
-                }
 
         PolicyMktgName             = p.datum("PolicyMktgName"                 );
         PolicyLegalName            = p.datum("PolicyLegalName"                );

@@ -418,10 +418,8 @@ void DBDictionary::ascribe_members()
     ascribe("DefaultProcessOrder"       , &DBDictionary::DefaultProcessOrder       );
     ascribe("GroupProxyRateTable"       , &DBDictionary::GroupProxyRateTable       );
     ascribe("PartialMortTable"          , &DBDictionary::PartialMortTable          );
-    ascribe("UsePolicyFormAlt"          , &DBDictionary::UsePolicyFormAlt          ); // LINGO !! expunge
     ascribe("AllowGroupQuote"           , &DBDictionary::AllowGroupQuote           );
     ascribe("PolicyForm"                , &DBDictionary::PolicyForm                );
-    ascribe("PolicyFormAlternative"     , &DBDictionary::PolicyFormAlternative     ); // LINGO !! expunge
     ascribe("PolicyMktgName"            , &DBDictionary::PolicyMktgName            );
     ascribe("PolicyLegalName"           , &DBDictionary::PolicyLegalName           );
     ascribe("InsCoShortName"            , &DBDictionary::InsCoShortName            );
@@ -1097,12 +1095,6 @@ sample::sample()
     double T83Gam[3] = {825, 826, 826,}; // f, m, u
     Add({DB_PartialMortTable, e_number_of_axes, dims311, T83Gam});
 
-    // Use alternative policy form name in states beginning with "K". // LINGO !! expunge
-    std::vector<double> alt_form(e_max_dim_state); // LINGO !! expunge
-    alt_form[mce_s_KS] = true; // LINGO !! expunge
-    alt_form[mce_s_KY] = true; // LINGO !! expunge
-    Add({DB_UsePolicyFormAlt, premium_tax_dimensions, alt_form}); // LINGO !! expunge
-
     Add({DB_AllowGroupQuote     , true});
 
     // Policy form differs in states beginning with "K".
@@ -1110,7 +1102,6 @@ sample::sample()
     policy_form[mce_s_KS] = superior::policy_form_KS_KY;
     policy_form[mce_s_KY] = superior::policy_form_KS_KY;
     Add({DB_PolicyForm, premium_tax_dimensions, policy_form});
-    Add({DB_PolicyFormAlternative      , superior::PolicyFormAlternative}); // LINGO !! expunge
     Add({DB_PolicyMktgName             , superior::PolicyMktgName});
     Add({DB_PolicyLegalName            , superior::PolicyLegalName});
     Add({DB_InsCoShortName             , superior::InsCoShortName});
@@ -1288,7 +1279,6 @@ sample2::sample2()
     // LINGO !! Eventually, perhaps these all can be initialized
     // to a corresponding "_term" value using some terse syntax.
     Add({DB_PolicyForm                 , superior::policy_form_term});
-    Add({DB_PolicyFormAlternative      , superior::PolicyFormAlternative_term}); // LINGO !! expunge
     Add({DB_PolicyMktgName             , superior::PolicyMktgName_term});
     Add({DB_PolicyLegalName            , superior::PolicyLegalName_term});
     Add({DB_InsCoShortName             , superior::InsCoShortName_term});

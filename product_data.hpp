@@ -169,8 +169,6 @@ class LMI_SO product_data
     glossed_string GuarSpecAmtLoadFilename;
 
     // Essential strings describing the policy and company.
-    glossed_string PolicyForm; // LINGO !! expunge
-    glossed_string PolicyFormAlternative; // LINGO !! expunge
     glossed_string PolicyMktgName;
     glossed_string PolicyLegalName;
     glossed_string InsCoShortName;
