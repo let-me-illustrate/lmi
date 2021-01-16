@@ -212,7 +212,7 @@ struct msvc_control_word_parameters
 template<typename ControlWordType>
 class control_word
 {
-    template<typename T> friend class control_word;
+    template<typename> friend class control_word;
     friend int test_main(int, char*[]);
 
     typedef typename ControlWordType::integer_type integer_type;

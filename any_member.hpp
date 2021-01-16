@@ -113,7 +113,7 @@ class holder final
 {
     // Friendship is extended to class any_member only to support its
     // cast operations.
-    template<typename T> friend class any_member;
+    template<typename> friend class any_member;
 
   public:
     holder(ClassType*, ValueType const&);

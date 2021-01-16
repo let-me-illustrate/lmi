@@ -47,7 +47,7 @@ void lmi_sleep(int seconds);
 class LMI_SO Timer
 {
     friend class TimerTest;
-    template<typename F> friend class AliquotTimer;
+    template<typename> friend class AliquotTimer;
 
   public:
     Timer();

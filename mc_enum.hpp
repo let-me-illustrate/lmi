@@ -95,7 +95,7 @@ class mc_enum final
     static_assert(std::is_enum_v<T>);
 
     friend class mc_enum_test;
-    template<typename U> friend std::vector<std::string> const& all_strings();
+    template<typename> friend std::vector<std::string> const& all_strings();
 
   public:
     typedef T enum_type;
