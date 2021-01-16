@@ -28,10 +28,10 @@
 #include "safely_dereference_as.hpp"
 #include "zero.hpp"
 
-double gpt_specamt::CalculateGLPSpecAmt
+currency gpt_specamt::CalculateGLPSpecAmt
     (BasicValues const& a_Values
     ,int                a_Duration
-    ,double             a_Premium
+    ,currency           a_Premium
     ,mcenum_dbopt_7702  a_DBOpt
     )
 {
@@ -46,10 +46,10 @@ double gpt_specamt::CalculateGLPSpecAmt
         );
 }
 
-double gpt_specamt::CalculateGSPSpecAmt
+currency gpt_specamt::CalculateGSPSpecAmt
     (BasicValues const& a_Values
     ,int                a_Duration
-    ,double             a_Premium
+    ,currency           a_Premium
     )
 {
     Irc7702 const& z(safely_dereference_as<Irc7702>(a_Values.Irc7702_.get()));
@@ -70,10 +70,10 @@ class FindSpecAmt
     Irc7702     const& Irc7702_;
     EIOBasis    const  EIOBasis_;
     int         const  Duration;
-    double      const  Premium;
+    double      const  Premium; // CURRENCY !! not currency?
     double      const  NetPmtFactorTgt;
     double      const  NetPmtFactorExc;
-    double             SpecAmt;
+    currency           SpecAmt;
 
   public:
     FindSpecAmt
@@ -81,7 +81,7 @@ class FindSpecAmt
         ,Irc7702 const&     a_IRC7702
         ,EIOBasis           a_EIOBasis
         ,int                a_Duration
-        ,double             a_Premium
+        ,double             a_Premium // CURRENCY !! not currency?
         ,double             a_NetPmtFactorTgt
         ,double             a_NetPmtFactorExc
         )
@@ -95,6 +95,7 @@ class FindSpecAmt
         ,SpecAmt         {0.0}
         {
         }
+    // CURRENCY !! decimal_root() expects this; but see 'ihs_avsolve.cpp'.
     double operator()(double a_Trial)
         {
         SpecAmt = a_Trial;
@@ -112,7 +113,7 @@ class FindSpecAmt
             -   Premium
             ;
         }
-    double Get()
+    currency Get()
         {
         return SpecAmt;
         }
@@ -130,11 +131,11 @@ class FindSpecAmt
 /// because it is typically used to set an input parameter, and
 /// specamt is such a parameter whereas DB is not.
 
-double gpt_specamt::CalculateSpecAmt
+currency gpt_specamt::CalculateSpecAmt
     (BasicValues const& a_Values
     ,EIOBasis           a_EIOBasis
     ,int                a_Duration
-    ,double             a_Premium
+    ,currency           a_Premium
     ,double             a_NetPmtFactorTgt
     ,double             a_NetPmtFactorExc
     )

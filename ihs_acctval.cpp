@@ -140,21 +140,21 @@ AccountValue::AccountValue(Input const& input)
 
 /// Specified amount (disregarding any term or "supplemental" amount).
 
-double AccountValue::base_specamt(int year) const
+currency AccountValue::base_specamt(int year) const
 {
     return InvariantValues().SpecAmt[year];
 }
 
 /// Specified amount of term rider.
 
-double AccountValue::term_specamt(int year) const
+currency AccountValue::term_specamt(int year) const
 {
     return InvariantValues().TermSpecAmt[year];
 }
 
 /// Specified amount for 7702 (not 7702A).
 
-double AccountValue::specamt_for_7702(int year) const
+currency AccountValue::specamt_for_7702(int year) const
 {
     return
                               base_specamt(year)
@@ -164,7 +164,7 @@ double AccountValue::specamt_for_7702(int year) const
 
 /// Specified amount for 7702A (not 7702).
 
-double AccountValue::specamt_for_7702A(int year) const
+currency AccountValue::specamt_for_7702A(int year) const
 {
     return
                               base_specamt(year)
@@ -676,7 +676,7 @@ void AccountValue::SetInitialValues()
 
 //============================================================================
 // Process monthly transactions up to but excluding interest credit
-double AccountValue::IncrementBOM
+currency AccountValue::IncrementBOM
     (int    year
     ,int    month
     ,double a_case_k_factor
@@ -735,10 +735,10 @@ double AccountValue::IncrementBOM
 //============================================================================
 // Credit interest and process all subsequent monthly transactions
 void AccountValue::IncrementEOM
-    (int year
-    ,int month
-    ,double assets_post_bom
-    ,double cum_pmts_post_bom
+    (int      year
+    ,int      month
+    ,currency assets_post_bom
+    ,currency cum_pmts_post_bom
     )
 {
     if(ItLapsed || BasicValues::GetLength() <= Year)
@@ -999,7 +999,7 @@ void AccountValue::set_modal_min_premium()
 ///
 /// SOMEDAY !! Table support and UL model reg formulas should be added.
 
-double AccountValue::SurrChg() const
+currency AccountValue::SurrChg() const
 {
     LMI_ASSERT(0.0 <= SurrChg_[Year]);
     // For the nonce, CSVBoost() is netted against surrender charge.
@@ -1012,7 +1012,7 @@ double AccountValue::SurrChg() const
 ///
 /// Probably the input field should be expunged.
 
-double AccountValue::CSVBoost() const
+currency AccountValue::CSVBoost() const
 {
     double const z =
           CashValueEnhMult[Year]
@@ -1424,8 +1424,13 @@ void AccountValue::SetAnnualInvariants()
     YearsDacTaxLoadRate     = Loads_->dac_tax_load                    ()[Year];
 }
 
-//============================================================================
-double AccountValue::GetSepAcctAssetsInforce() const
+/// Separate-account assets, after deductions, times survivorship.
+///
+/// Returns a currency value because assets are ordinarily thought of
+/// as currency, and because this function is used only where currency
+/// is wanted--even though it's multiplied by a survivorship factor.
+
+currency AccountValue::GetSepAcctAssetsInforce() const
 {
     if(ItLapsed || BasicValues::GetLength() <= Year)
         {

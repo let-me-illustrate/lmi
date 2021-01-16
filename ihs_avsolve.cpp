@@ -49,7 +49,7 @@ namespace
 {
     // TODO ?? Shouldn't this be a typedef for a SolveHelper member?
     // As it stands, this would seem not to be reentrant.
-    void (AccountValue::*solve_set_fn)(double);
+    void (AccountValue::*solve_set_fn)(currency);
 } // Unnamed namespace.
 
 class SolveHelper
@@ -60,6 +60,12 @@ class SolveHelper
         :av {a_av}
         {
         }
+    // CURRENCY !! decimal_root() invokes this thus:
+    //   static_cast<double>(function(double));
+    // so
+    //   double function(double)
+    // is the appropriate signature here. Someday it might make sense
+    // to modify decimal_root to work with currency types directly.
     double operator()(double a_CandidateValue)
         {
         return av.SolveTest(a_CandidateValue);
@@ -160,7 +166,7 @@ class SolveHelper
 ///   "Section 7B(2) does not preclude the illustrating of premiums
 ///   that exceed the guideline premiums in Section 7702 of the IRC."
 
-double AccountValue::SolveTest(double a_CandidateValue)
+currency AccountValue::SolveTest(currency a_CandidateValue)
 {
     (this->*solve_set_fn)(a_CandidateValue);
 
@@ -243,7 +249,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
 }
 
 //============================================================================
-void AccountValue::SolveSetSpecAmt(double a_CandidateValue)
+void AccountValue::SolveSetSpecAmt(currency a_CandidateValue)
 {
 // TODO ?? Does this change the surrchg when specamt changes?
     DeathBfts_->set_specamt
@@ -254,31 +260,31 @@ void AccountValue::SolveSetSpecAmt(double a_CandidateValue)
 }
 
 //============================================================================
-void AccountValue::SolveSetEePrem(double a_CandidateValue)
+void AccountValue::SolveSetEePrem(currency a_CandidateValue)
 {
     Outlay_->set_ee_modal_premiums(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
 //============================================================================
-void AccountValue::SolveSetErPrem(double a_CandidateValue)
+void AccountValue::SolveSetErPrem(currency a_CandidateValue)
 {
     Outlay_->set_er_modal_premiums(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
 //============================================================================
-void AccountValue::SolveSetLoan(double a_CandidateValue)
+void AccountValue::SolveSetLoan(currency a_CandidateValue)
 {
     Outlay_->set_new_cash_loans(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
 //============================================================================
-void AccountValue::SolveSetWD(double a_CandidateValue)
+void AccountValue::SolveSetWD(currency a_CandidateValue)
 {
     Outlay_->set_withdrawals(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
 //============================================================================
-double AccountValue::SolveGuarPremium()
+currency AccountValue::SolveGuarPremium()
 {
     // Store original er premiums for later restoration.
     std::vector<double> stored = Outlay_->er_modal_premiums();
@@ -310,12 +316,12 @@ double AccountValue::SolveGuarPremium()
 }
 
 //============================================================================
-double AccountValue::Solve
+currency AccountValue::Solve
     (mcenum_solve_type   a_SolveType
     ,int                 a_SolveBeginYear
     ,int                 a_SolveEndYear
     ,mcenum_solve_target a_SolveTarget
-    ,double              a_SolveTargetCsv
+    ,currency            a_SolveTargetCsv
     ,int                 a_SolveTargetYear
     ,mcenum_gen_basis    a_SolveGenBasis
     ,mcenum_sep_basis    a_SolveSepBasis

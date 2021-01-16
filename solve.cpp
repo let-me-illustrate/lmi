@@ -61,7 +61,7 @@ namespace
 //============================================================================
 // This function isn't static and isn't in an unnamed namespace because
 // that would make it difficult to grant it friendship.
-double SolveTest()
+currency SolveTest()
 {
     // Separate-account basis hardcoded because separate account not supported.
     mcenum_run_basis temp;
@@ -180,9 +180,9 @@ inline static double SolveWD(double CandidateValue)
 
 //============================================================================
 void AccountValue::SolveSetPmts
-    (double a_Pmt
-    ,int    ThatSolveBegYear
-    ,int    ThatSolveEndYear
+    (currency a_Pmt
+    ,int      ThatSolveBegYear
+    ,int      ThatSolveEndYear
     )
 {
     Outlay_->set_ee_modal_premiums(a_Pmt, ThatSolveBegYear, ThatSolveEndYear);
@@ -190,9 +190,9 @@ void AccountValue::SolveSetPmts
 
 //============================================================================
 void AccountValue::SolveSetSpecAmt
-    (double a_Bft
-    ,int    ThatSolveBegYear
-    ,int    ThatSolveEndYear
+    (currency a_Bft
+    ,int      ThatSolveBegYear
+    ,int      ThatSolveEndYear
     )
 {
     DeathBfts_->set_specamt(a_Bft, ThatSolveBegYear, ThatSolveEndYear);
@@ -200,9 +200,9 @@ void AccountValue::SolveSetSpecAmt
 
 //============================================================================
 void AccountValue::SolveSetLoans
-    (double a_Loan
-    ,int    ThatSolveBegYear
-    ,int    ThatSolveEndYear
+    (currency a_Loan
+    ,int      ThatSolveBegYear
+    ,int      ThatSolveEndYear
     )
 {
     Outlay_->set_new_cash_loans(a_Loan, ThatSolveBegYear, ThatSolveEndYear);
@@ -210,9 +210,9 @@ void AccountValue::SolveSetLoans
 
 //============================================================================
 void AccountValue::SolveSetWDs
-    (double a_WD
-    ,int    ThatSolveBegYear
-    ,int    ThatSolveEndYear
+    (currency a_WD
+    ,int      ThatSolveBegYear
+    ,int      ThatSolveEndYear
     )
 {
     Outlay_->set_withdrawals(a_WD, ThatSolveBegYear, ThatSolveEndYear);
@@ -220,16 +220,16 @@ void AccountValue::SolveSetWDs
 
 //============================================================================
 void AccountValue::SolveSetLoanThenWD
-    (double // Amt
-    ,int    // ThatSolveBegYear
-    ,int    // ThatSolveEndYear
+    (currency // Amt
+    ,int      // ThatSolveBegYear
+    ,int      // ThatSolveEndYear
     )
 {
     // IHS !! Implemented in lmi.
 }
 
 //============================================================================
-double AccountValue::Solve()
+currency AccountValue::Solve()
 {
     That = this;
     ThatSolveTargetValue = yare_input_.SolveTargetValue;

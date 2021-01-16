@@ -126,7 +126,7 @@ AccountValue::AccountValue(Input const& input)
 
 /// Specified amount.
 
-double AccountValue::base_specamt(int year) const
+currency AccountValue::base_specamt(int year) const
 {
     return InvariantValues().SpecAmt[year];
 }
@@ -587,7 +587,7 @@ void AccountValue::TxSpecAmtChange()
 
 //============================================================================
 // Set payment according to selected strategy, in each non-solve year.
-void AccountValue::PerformPmtStrategy(double* a_Pmt)
+void AccountValue::PerformPmtStrategy(currency* a_Pmt)
 {
     // Don't override premium during solve period.
     if
@@ -1054,11 +1054,11 @@ double AccountValue::GetCurtateNetCoiChargeInforce() const
     {return 0.0;}
 double AccountValue::GetProjectedCoiChargeInforce() const
     {return 0.0;}
-double AccountValue::GetSepAcctAssetsInforce() const
+currency AccountValue::GetSepAcctAssetsInforce() const
     {return 0.0;}
-double AccountValue::IncrementBOM(int, int, double)
+currency AccountValue::IncrementBOM(int, int, double)
     {return 0.0;}
-void   AccountValue::IncrementEOM(int, int, double, double)
+void   AccountValue::IncrementEOM(int, int, currency, currency)
     {return;}
 void   AccountValue::IncrementEOY(int)
     {return;}

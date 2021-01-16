@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+#include "currency.hpp"
 #include "mc_enum_type_enums.hpp"
 
 #include <vector>
@@ -49,16 +50,16 @@ class Loads
     // termination, the refund applies only to the sales load.
     std::vector<double> const& refundable_sales_load_proportion() const;
 
-    std::vector<double> const& monthly_policy_fee    (mcenum_gen_basis) const;
-    std::vector<double> const& annual_policy_fee     (mcenum_gen_basis) const;
-    std::vector<double> const& specified_amount_load (mcenum_gen_basis) const;
-    std::vector<double> const& separate_account_load (mcenum_gen_basis) const;
-    std::vector<double> const& target_premium_load   (mcenum_gen_basis) const;
-    std::vector<double> const& excess_premium_load   (mcenum_gen_basis) const;
-    std::vector<double> const& target_sales_load     (mcenum_gen_basis) const;
-    std::vector<double> const& excess_sales_load     (mcenum_gen_basis) const;
-    std::vector<double> const& target_total_load     (mcenum_gen_basis) const;
-    std::vector<double> const& excess_total_load     (mcenum_gen_basis) const;
+    std::vector<currency> const& monthly_policy_fee    (mcenum_gen_basis) const;
+    std::vector<currency> const& annual_policy_fee     (mcenum_gen_basis) const;
+    std::vector<double>   const& specified_amount_load (mcenum_gen_basis) const;
+    std::vector<double>   const& separate_account_load (mcenum_gen_basis) const;
+    std::vector<double>   const& target_premium_load   (mcenum_gen_basis) const;
+    std::vector<double>   const& excess_premium_load   (mcenum_gen_basis) const;
+    std::vector<double>   const& target_sales_load     (mcenum_gen_basis) const;
+    std::vector<double>   const& excess_sales_load     (mcenum_gen_basis) const;
+    std::vector<double>   const& target_total_load     (mcenum_gen_basis) const;
+    std::vector<double>   const& excess_total_load     (mcenum_gen_basis) const;
 
     std::vector<double> const& premium_tax_load           () const;
     std::vector<double> const& amortized_premium_tax_load () const;
@@ -82,16 +83,16 @@ class Loads
 
     std::vector<double> refundable_sales_load_proportion_;
 
-    std::vector<std::vector<double>> monthly_policy_fee_;
-    std::vector<std::vector<double>> annual_policy_fee_;
-    std::vector<std::vector<double>> specified_amount_load_;
-    std::vector<std::vector<double>> separate_account_load_;
-    std::vector<std::vector<double>> target_premium_load_;
-    std::vector<std::vector<double>> excess_premium_load_;
-    std::vector<std::vector<double>> target_sales_load_;
-    std::vector<std::vector<double>> excess_sales_load_;
-    std::vector<std::vector<double>> target_total_load_;
-    std::vector<std::vector<double>> excess_total_load_;
+    std::vector<std::vector<currency>> monthly_policy_fee_;
+    std::vector<std::vector<currency>> annual_policy_fee_;
+    std::vector<std::vector<double>>   specified_amount_load_;
+    std::vector<std::vector<double>>   separate_account_load_;
+    std::vector<std::vector<double>>   target_premium_load_;
+    std::vector<std::vector<double>>   excess_premium_load_;
+    std::vector<std::vector<double>>   target_sales_load_;
+    std::vector<std::vector<double>>   excess_sales_load_;
+    std::vector<std::vector<double>>   target_total_load_;
+    std::vector<std::vector<double>>   excess_total_load_;
 
     std::vector<double> premium_tax_load_;
     std::vector<double> amortized_premium_tax_load_;
@@ -111,13 +112,13 @@ Loads::refundable_sales_load_proportion() const
     return refundable_sales_load_proportion_;
 }
 
-inline std::vector<double> const&
+inline std::vector<currency> const&
 Loads::monthly_policy_fee(mcenum_gen_basis b) const
 {
     return monthly_policy_fee_[b];
 }
 
-inline std::vector<double> const&
+inline std::vector<currency> const&
 Loads::annual_policy_fee(mcenum_gen_basis b) const
 {
     return annual_policy_fee_[b];

@@ -137,20 +137,20 @@ double BasicValues::InvestmentManagementFee() const
 
 //============================================================================
 // IHS !! Simply calls the target-premium routine for now--see lmi.
-double BasicValues::GetModalMinPrem
+currency BasicValues::GetModalMinPrem
     (int         a_year
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ) const
 {
     return GetModalTgtPrem(a_year, a_mode, a_specamt);
 }
 
 //============================================================================
-double BasicValues::GetModalTgtPrem
+currency BasicValues::GetModalTgtPrem
     (int         a_year
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ) const
 {
     // IHS !! Simplistic. Ignores table ratings, flat extras, and
@@ -217,18 +217,18 @@ double BasicValues::GetModalTgtPrem
 
 //============================================================================
 // Simply calls the target-specamt routine for now.
-double BasicValues::GetModalMaxSpecAmt
+currency BasicValues::GetModalMaxSpecAmt
     (mcenum_mode a_mode
-    ,double      a_pmt
+    ,currency    a_pmt
     ) const
 {
     return GetModalTgtSpecAmt(a_mode, a_pmt);
 }
 
 //============================================================================
-double BasicValues::GetModalTgtSpecAmt
+currency BasicValues::GetModalTgtSpecAmt
     (mcenum_mode a_mode
-    ,double      a_pmt
+    ,currency    a_pmt
     ) const
 {
     // IHS !! Factor out the (defectively simplistic) code this

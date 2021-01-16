@@ -56,10 +56,10 @@
 ///
 /// No minimum is imposed here; see PerformSpecAmtStrategy().
 
-double AccountValue::CalculateSpecAmtFromStrategy
+currency AccountValue::CalculateSpecAmtFromStrategy
     (int                actual_year
     ,int                reference_year
-    ,double             explicit_value
+    ,currency           explicit_value
     ,mcenum_sa_strategy strategy
     ) const
 {
@@ -182,12 +182,12 @@ void AccountValue::PerformSupplAmtStrategy()
 
 /// Set payment according to selected strategy in a non-solve year.
 
-double AccountValue::DoPerformPmtStrategy
+currency AccountValue::DoPerformPmtStrategy
     (mcenum_solve_type                       a_SolveForWhichPrem
     ,mcenum_mode                             a_CurrentMode
     ,mcenum_mode                             a_InitialMode
     ,double                                  a_TblMult
-    ,std::vector<double> const&              a_PmtVector
+    ,std::vector<currency> const&            a_PmtVector
     ,std::vector<mcenum_pmt_strategy> const& a_StrategyVector
     ) const
 {
@@ -304,7 +304,7 @@ double AccountValue::DoPerformPmtStrategy
 
 /// Set employee payment according to selected strategy.
 
-double AccountValue::PerformEePmtStrategy() const
+currency AccountValue::PerformEePmtStrategy() const
 {
     return DoPerformPmtStrategy
         (mce_solve_ee_prem
@@ -318,7 +318,7 @@ double AccountValue::PerformEePmtStrategy() const
 
 /// Set employer payment according to selected strategy.
 
-double AccountValue::PerformErPmtStrategy() const
+currency AccountValue::PerformErPmtStrategy() const
 {
     return DoPerformPmtStrategy
         (mce_solve_er_prem

@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+#include "currency.hpp"
 #include "mc_enum_type_enums.hpp"
 #include "round_to.hpp"
 
@@ -44,61 +45,61 @@ class modal_outlay final
         );
     ~modal_outlay() = default;
 
-    double                          dumpin               () const;
-    double                          external_1035_amount () const;
-    double                          internal_1035_amount () const;
-    std::vector<double>      const& ee_modal_premiums    () const;
+    currency                        dumpin               () const;
+    currency                        external_1035_amount () const;
+    currency                        internal_1035_amount () const;
+    std::vector<currency>    const& ee_modal_premiums    () const;
     std::vector<mcenum_mode> const& ee_premium_modes     () const;
-    std::vector<double>      const& er_modal_premiums    () const;
+    std::vector<currency>    const& er_modal_premiums    () const;
     std::vector<mcenum_mode> const& er_premium_modes     () const;
-    std::vector<double>      const& withdrawals          () const;
-    std::vector<double>      const& new_cash_loans       () const;
+    std::vector<currency>    const& withdrawals          () const;
+    std::vector<currency>    const& new_cash_loans       () const;
 
   private:
     modal_outlay(modal_outlay const&) = delete;
     modal_outlay& operator=(modal_outlay const&) = delete;
 
     // Not yet used, but needed for MEC avoidance.
-    void set_external_1035_amount(double z);
-    void set_internal_1035_amount(double z);
+    void set_external_1035_amount(currency z);
+    void set_internal_1035_amount(currency z);
 
-    void set_ee_modal_premiums(double z, int from_year, int to_year);
-    void set_er_modal_premiums(double z, int from_year, int to_year);
-    void set_er_modal_premiums(std::vector<double> const&);
-    void set_withdrawals      (double z, int from_year, int to_year);
-    void set_new_cash_loans   (double z, int from_year, int to_year);
+    void set_ee_modal_premiums(currency z, int from_year, int to_year);
+    void set_er_modal_premiums(currency z, int from_year, int to_year);
+    void set_er_modal_premiums(std::vector<currency> const&);
+    void set_withdrawals      (currency z, int from_year, int to_year);
+    void set_new_cash_loans   (currency z, int from_year, int to_year);
 
     round_to<double> round_gross_premium_;
     round_to<double> round_withdrawal_;
     round_to<double> round_loan_;
 
-    double                   dumpin_;
-    double                   external_1035_amount_;
-    double                   internal_1035_amount_;
-    std::vector<double>      ee_modal_premiums_;
+    currency                 dumpin_;
+    currency                 external_1035_amount_;
+    currency                 internal_1035_amount_;
+    std::vector<currency>    ee_modal_premiums_;
     std::vector<mcenum_mode> ee_premium_modes_;
-    std::vector<double>      er_modal_premiums_;
+    std::vector<currency>    er_modal_premiums_;
     std::vector<mcenum_mode> er_premium_modes_;
-    std::vector<double>      withdrawals_;
-    std::vector<double>      new_cash_loans_;
+    std::vector<currency>    withdrawals_;
+    std::vector<currency>    new_cash_loans_;
 };
 
-inline double modal_outlay::dumpin() const
+inline currency modal_outlay::dumpin() const
 {
     return dumpin_;
 }
 
-inline double modal_outlay::external_1035_amount() const
+inline currency modal_outlay::external_1035_amount() const
 {
     return external_1035_amount_;
 }
 
-inline double modal_outlay::internal_1035_amount() const
+inline currency modal_outlay::internal_1035_amount() const
 {
     return internal_1035_amount_;
 }
 
-inline std::vector<double> const& modal_outlay::ee_modal_premiums() const
+inline std::vector<currency> const& modal_outlay::ee_modal_premiums() const
 {
     return ee_modal_premiums_;
 }
@@ -108,7 +109,7 @@ inline std::vector<mcenum_mode> const& modal_outlay::ee_premium_modes() const
     return ee_premium_modes_;
 }
 
-inline std::vector<double> const& modal_outlay::er_modal_premiums() const
+inline std::vector<currency> const& modal_outlay::er_modal_premiums() const
 {
     return er_modal_premiums_;
 }
@@ -118,12 +119,12 @@ inline std::vector<mcenum_mode> const& modal_outlay::er_premium_modes() const
     return er_premium_modes_;
 }
 
-inline std::vector<double> const& modal_outlay::withdrawals() const
+inline std::vector<currency> const& modal_outlay::withdrawals() const
 {
     return withdrawals_;
 }
 
-inline std::vector<double> const& modal_outlay::new_cash_loans() const
+inline std::vector<currency> const& modal_outlay::new_cash_loans() const
 {
     return new_cash_loans_;
 }

@@ -261,7 +261,7 @@ void AccountValue::DoMonthCR()
 
 //============================================================================
 // Apportion all payments among accounts.
-void AccountValue::process_payment(double payment)
+void AccountValue::process_payment(currency payment)
 {
     // Apply ee and er net payments according to database rules.
     // Net payments were already aggregated, then split between
@@ -331,7 +331,7 @@ void AccountValue::process_payment(double payment)
 //============================================================================
 // Prorate increments to account value between separate- and general-account
 // portions of unloaned account value according to input allocations.
-void AccountValue::IncrementAVProportionally(double increment)
+void AccountValue::IncrementAVProportionally(currency increment)
 {
     increment = round_minutiae()(increment);
     double genacct_increment = increment * GenAcctPaymentAllocation;
@@ -343,7 +343,7 @@ void AccountValue::IncrementAVProportionally(double increment)
 //============================================================================
 // Apply increments to account value to the preferred account.
 void AccountValue::IncrementAVPreferentially
-    (double                             increment
+    (currency                           increment
     ,oenum_increment_account_preference preferred_account
     )
 {
@@ -365,7 +365,7 @@ void AccountValue::IncrementAVPreferentially
 /// Apportion all charges to be deducted from account value among
 /// accounts.
 
-void AccountValue::process_deduction(double decrement)
+void AccountValue::process_deduction(currency decrement)
 {
     switch(deduction_method)
         {
@@ -384,7 +384,7 @@ void AccountValue::process_deduction(double decrement)
 
 /// Apportion all distributions from account value among accounts.
 
-void AccountValue::process_distribution(double decrement)
+void AccountValue::process_distribution(currency decrement)
 {
     switch(distribution_method)
         {
@@ -413,7 +413,7 @@ void AccountValue::process_distribution(double decrement)
 /// Otherwise, unloaned account value might have a minuscule negative
 /// value due to catastrophic cancellation, improperly causing lapse.
 
-void AccountValue::DecrementAVProportionally(double decrement)
+void AccountValue::DecrementAVProportionally(currency decrement)
 {
     decrement = round_minutiae()(decrement);
 
@@ -477,7 +477,7 @@ void AccountValue::DecrementAVProportionally(double decrement)
 /// value due to catastrophic cancellation, improperly causing lapse.
 
 void AccountValue::DecrementAVProgressively
-    (double                             decrement
+    (currency                           decrement
     ,oenum_increment_account_preference preferred_account
     )
 {
@@ -622,7 +622,7 @@ void AccountValue::TxExch1035()
 }
 
 //============================================================================
-double AccountValue::CashValueFor7702() const
+currency AccountValue::CashValueFor7702() const
 {
     return std::max
         (HoneymoonValue
@@ -653,9 +653,9 @@ double AccountValue::ActualMonthlyRate(double monthly_rate) const
 
 //============================================================================
 // Rounded interest increment.
-double AccountValue::InterestCredited
-    (double principal
-    ,double monthly_rate
+currency AccountValue::InterestCredited
+    (currency principal
+    ,double   monthly_rate
     ) const
 {
     return round_interest_credit()(principal * ActualMonthlyRate(monthly_rate));
@@ -686,7 +686,7 @@ int AccountValue::MonthsToNextModalPmtDate() const
 /// Argument 'term_rider' indicates whether a term rider is to be
 /// taken into account, as that affects the base-policy minimum.
 
-double AccountValue::minimum_specified_amount(bool issuing_now, bool term_rider) const
+currency AccountValue::minimum_specified_amount(bool issuing_now, bool term_rider) const
 {
     return
           issuing_now
@@ -699,7 +699,7 @@ double AccountValue::minimum_specified_amount(bool issuing_now, bool term_rider)
 // All changes to SA must be handled here.
 // Proportionately reduce base and term SA if term rider present.
 // Make sure ActualSpecAmt is never less than minimum specamt.
-void AccountValue::ChangeSpecAmtBy(double delta)
+void AccountValue::ChangeSpecAmtBy(currency delta)
 {
     delta = round_specamt()(delta);
     double term_proportion = 0.0;
@@ -793,7 +793,7 @@ void AccountValue::ChangeSpecAmtBy(double delta)
     TxSetDeathBft();
 }
 
-void AccountValue::ChangeSupplAmtBy(double delta)
+void AccountValue::ChangeSupplAmtBy(currency delta)
 {
     delta = round_specamt()(delta);
     TermSpecAmt += delta;
@@ -1239,9 +1239,14 @@ void AccountValue::TxAscertainDesiredPayment()
     LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 }
 
-//============================================================================
-// TAXATION !! Should this be called for gpt? or, if it's called,
-// should it assert that it has no effect?
+/// Limit payment (e.g., to the non-MEC maximum).
+///
+/// The limit argument is of type double because the taxation code may
+/// return DBL_MAX. CURRENCY !! Can currency work with such values?
+///
+/// TAXATION !! Should this be called for gpt? or, if it's called,
+/// should it assert that it has no effect?
+
 void AccountValue::TxLimitPayment(double a_maxpmt)
 {
 // Subtract premium load from gross premium yielding net premium.
@@ -1299,8 +1304,8 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
 
 //============================================================================
 void AccountValue::TxRecognizePaymentFor7702A
-    (double a_pmt
-    ,bool   a_this_payment_is_unnecessary
+    (currency a_pmt
+    ,bool     a_this_payment_is_unnecessary
     )
 {
     if(0.0 == a_pmt)
@@ -1341,7 +1346,7 @@ void AccountValue::TxRecognizePaymentFor7702A
 }
 
 //============================================================================
-void AccountValue::TxAcceptPayment(double a_pmt)
+void AccountValue::TxAcceptPayment(currency a_pmt)
 {
     if(0.0 == a_pmt)
         {
@@ -1403,9 +1408,9 @@ void AccountValue::TxAcceptPayment(double a_pmt)
 /// calculation doesn't require too many adjustments, in particular
 /// when tiered premium tax is passed through as a load.
 
-double AccountValue::GetPremLoad
-    (double a_pmt
-    ,double a_portion_exempt_from_premium_tax
+currency AccountValue::GetPremLoad
+    (currency a_pmt
+    ,currency a_portion_exempt_from_premium_tax
     )
 {
     double excess_portion;
@@ -1470,7 +1475,7 @@ double AccountValue::GetPremLoad
 }
 
 //============================================================================
-double AccountValue::GetRefundableSalesLoad() const
+currency AccountValue::GetRefundableSalesLoad() const
 {
     return CumulativeSalesLoad * YearsSalesLoadRefundRate;
 #if 0
@@ -2025,7 +2030,7 @@ void AccountValue::TxTakeSepAcctLoad()
 //============================================================================
 // When the M&E charge depends on each month's case total assets, the
 // interest rate is no longer an annual invariant. Set it monthly here.
-void AccountValue::ApplyDynamicMandE(double assets)
+void AccountValue::ApplyDynamicMandE(currency assets)
 {
     if(!MandEIsDynamic)
         {
@@ -2254,7 +2259,7 @@ void AccountValue::TxLoanInt()
 // actual future deductions--particularly in the month of issue, when
 // it is zero.
 //
-double AccountValue::anticipated_deduction
+currency AccountValue::anticipated_deduction
     (mcenum_anticipated_deduction method)
 {
     switch(method)

@@ -541,7 +541,7 @@ void BasicValues::Init7702A()
 
 /// Public function used for GPT specamt calculation.
 
-double BasicValues::GetAnnualTgtPrem(int a_year, double a_specamt) const
+currency BasicValues::GetAnnualTgtPrem(int a_year, currency a_specamt) const
 {
     return GetModalTgtPrem(a_year, mce_annual, a_specamt);
 }
@@ -851,10 +851,10 @@ double BasicValues::GetPartMortQ(int a_year) const
 ///    value would otherwise be negative), or
 ///  - keeps account value nonnegative (preventing lapse directly).
 
-double BasicValues::GetModalMinPrem
+currency BasicValues::GetModalMinPrem
     (int         a_year
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ) const
 {
     switch(MinPremType)
@@ -871,10 +871,10 @@ double BasicValues::GetModalMinPrem
 
 /// Ascertain modal payment for a target-premium strategy.
 
-double BasicValues::GetModalTgtPrem
+currency BasicValues::GetModalTgtPrem
     (int         a_year
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ) const
 {
     int const target_year = TgtPremFixedAtIssue ? 0 : a_year;
@@ -897,10 +897,10 @@ double BasicValues::GetModalTgtPrem
 /// and specified amount. Thus, arguments should represent initial
 /// premium and mode.
 
-double BasicValues::GetModalPremMaxNonMec
+currency BasicValues::GetModalPremMaxNonMec
     (int      // a_year // Unused.
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ) const
 {
     // TAXATION !! No table available if 7PP calculated from first principles.
@@ -915,10 +915,10 @@ double BasicValues::GetModalPremMaxNonMec
 /// the initial specified amount may also be fixed at issue, but that
 /// choice is left to the caller.
 
-double BasicValues::GetModalPremMinFromTable
+currency BasicValues::GetModalPremMinFromTable
     (int      // a_year // Unused.
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ) const
 {
     return round_max_premium()
@@ -953,10 +953,10 @@ double BasicValues::GetModalPremMinFromTable
 /// asserted to be zero--upstream, so that it'll signal an error even
 /// if a target strategy isn't used.
 
-double BasicValues::GetModalPremTgtFromTable
+currency BasicValues::GetModalPremTgtFromTable
     (int      // a_year // Unused.
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ) const
 {
     return round_max_premium()
@@ -972,10 +972,10 @@ double BasicValues::GetModalPremTgtFromTable
 
 /// Calculate premium using a tabular proxy for group insurance.
 
-double BasicValues::GetModalPremProxyTable
+currency BasicValues::GetModalPremProxyTable
     (int         a_year
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ,double      a_table_multiplier
     ) const
 {
@@ -994,10 +994,10 @@ double BasicValues::GetModalPremProxyTable
 /// strategy makes sense only at issue. Thus, arguments should
 /// represent initial specified amount and mode.
 
-double BasicValues::GetModalPremCorridor
+currency BasicValues::GetModalPremCorridor
     (int      // a_year // Unused.
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ) const
 {
     double temp = GetCorridorFactor()[0];
@@ -1005,11 +1005,11 @@ double BasicValues::GetModalPremCorridor
 }
 
 //============================================================================
-double BasicValues::GetModalPremGLP
+currency BasicValues::GetModalPremGLP
     (int         a_duration
     ,mcenum_mode a_mode
-    ,double      a_bft_amt
-    ,double      a_specamt
+    ,currency    a_bft_amt
+    ,currency    a_specamt
     ) const
 {
     // TAXATION !! Use GetAnnualTgtPrem() to get target here if needed
@@ -1031,11 +1031,11 @@ double BasicValues::GetModalPremGLP
 }
 
 //============================================================================
-double BasicValues::GetModalPremGSP
+currency BasicValues::GetModalPremGSP
     (int         a_duration
     ,mcenum_mode a_mode
-    ,double      a_bft_amt
-    ,double      a_specamt
+    ,currency    a_bft_amt
+    ,currency    a_specamt
     ) const
 {
     double z = Irc7702_->CalculateGSP
@@ -1122,10 +1122,12 @@ double BasicValues::mly_ded_discount_factor(int year, mcenum_mode mode) const
 /// employer typically pays the approximate monthly deductions, but
 /// may also be used with any UL product when such a payment pattern
 /// is desired.
+///
+/// Returns a pair of deliberately unrounded doubles.
 
 std::pair<double,double> BasicValues::approx_mly_ded
-    (int    year
-    ,double specamt
+    (int      year
+    ,currency specamt
     ) const
 {
     double mly_ded = specamt * DBDiscountRate[year];
@@ -1200,11 +1202,13 @@ std::pair<double,double> BasicValues::approx_mly_ded
 /// (e.g., a fee to offset underwriting costs for private placements)
 /// are extraordinary, and occur only on products for which a split
 /// between ee and er would not be wanted.
+///
+/// Returns a pair of deliberately unrounded doubles.
 
 std::pair<double,double> BasicValues::approx_mly_ded_ex
-    (int    year
-    ,double specamt
-    ,double termamt
+    (int      year
+    ,currency specamt
+    ,currency termamt
     ) const
 {
     if(0.0 != Loads_->annual_policy_fee(mce_gen_curr)[year])
@@ -1279,10 +1283,10 @@ std::pair<double,double> BasicValues::approx_mly_ded_ex
 
 /// Determine an approximate "pay as you go" modal premium.
 
-double BasicValues::GetModalPremMlyDed
+currency BasicValues::GetModalPremMlyDed
     (int         year
     ,mcenum_mode mode
-    ,double      specamt
+    ,currency    specamt
     ) const
 {
     auto const deductions = approx_mly_ded(year, specamt);
@@ -1295,11 +1299,11 @@ double BasicValues::GetModalPremMlyDed
 
 /// Determine approximate ee and er "pay as you go" modal premiums.
 
-std::pair<double,double> BasicValues::GetModalPremMlyDedEx
+std::pair<currency,currency> BasicValues::GetModalPremMlyDedEx
     (int         year
     ,mcenum_mode mode
-    ,double      specamt
-    ,double      termamt
+    ,currency    specamt
+    ,currency    termamt
     ) const
 {
     auto const deductions = approx_mly_ded_ex(year, specamt, termamt);
@@ -1330,10 +1334,10 @@ std::pair<double,double> BasicValues::GetModalPremMlyDedEx
 /// are extraordinary, and occur only on products for which list bills
 /// would not be wanted.
 
-double BasicValues::GetListBillPremMlyDed
+currency BasicValues::GetListBillPremMlyDed
     (int         year
     ,mcenum_mode mode
-    ,double      specamt
+    ,currency    specamt
     ) const
 {
     double const p0 = approx_mly_ded(year, specamt).second;
@@ -1354,11 +1358,11 @@ double BasicValues::GetListBillPremMlyDed
     return round_min_premium()(z);
 }
 
-std::pair<double,double> BasicValues::GetListBillPremMlyDedEx
+std::pair<currency,currency> BasicValues::GetListBillPremMlyDedEx
     (int         year
     ,mcenum_mode mode
-    ,double      specamt
-    ,double      termamt
+    ,currency    specamt
+    ,currency    termamt
     ) const
 {
     auto const p0 = approx_mly_ded_ex(year, specamt, termamt);
@@ -1390,7 +1394,7 @@ std::pair<double,double> BasicValues::GetListBillPremMlyDedEx
         );
 }
 
-double BasicValues::GetModalSpecAmtMax(double annualized_pmt) const
+currency BasicValues::GetModalSpecAmtMax(currency annualized_pmt) const
 {
     switch(MinPremType)
         {
@@ -1414,7 +1418,7 @@ double BasicValues::GetModalSpecAmtMax(double annualized_pmt) const
 /// duration. It's taken to include 'TgtPremMonthlyPolFee', to make
 /// this function the inverse of GetModalPremTgtFromTable(), q.v.
 
-double BasicValues::GetModalSpecAmtTgt(double annualized_pmt) const
+currency BasicValues::GetModalSpecAmtTgt(currency annualized_pmt) const
 {
     switch(TgtPremType)
         {
@@ -1438,21 +1442,21 @@ double BasicValues::GetModalSpecAmtTgt(double annualized_pmt) const
 /// changes dramatically complicate the relationship between premium
 /// and specified amount.
 
-double BasicValues::GetModalSpecAmtMinNonMec(double annualized_pmt) const
+currency BasicValues::GetModalSpecAmtMinNonMec(currency annualized_pmt) const
 {
     // TAXATION !! No table available if 7PP calculated from first principles.
     return round_min_specamt()(annualized_pmt / MortalityRates_->SevenPayRates()[0]);
 }
 
 //============================================================================
-double BasicValues::GetModalSpecAmtGLP(double annualized_pmt) const
+currency BasicValues::GetModalSpecAmtGLP(currency annualized_pmt) const
 {
     mcenum_dbopt_7702 const z = effective_dbopt_7702(DeathBfts_->dbopt()[0], Effective7702DboRop);
     return gpt_specamt::CalculateGLPSpecAmt(*this, 0, annualized_pmt, z);
 }
 
 //============================================================================
-double BasicValues::GetModalSpecAmtGSP(double annualized_pmt) const
+currency BasicValues::GetModalSpecAmtGSP(currency annualized_pmt) const
 {
     return gpt_specamt::CalculateGSPSpecAmt(*this, 0, annualized_pmt);
 }
@@ -1494,7 +1498,7 @@ double BasicValues::GetModalSpecAmtGSP(double annualized_pmt) const
 /// integral cents, this implementation cannot guarantee to give the
 /// desired answer in every case.
 
-double BasicValues::GetModalSpecAmtCorridor(double annualized_pmt) const
+currency BasicValues::GetModalSpecAmtCorridor(currency annualized_pmt) const
 {
     int const k = round_corridor_factor().decimals();
     double const s = nonstd::power(10, k);
@@ -1509,7 +1513,7 @@ double BasicValues::GetModalSpecAmtCorridor(double annualized_pmt) const
 /// sufficiently large, then specamt would be negative, which cannot
 /// make any sense.
 
-double BasicValues::GetModalSpecAmtSalary(int a_year) const
+currency BasicValues::GetModalSpecAmtSalary(int a_year) const
 {
     double z =
           yare_input_.ProjectedSalary[a_year]
@@ -1530,7 +1534,7 @@ double BasicValues::GetModalSpecAmtSalary(int a_year) const
 /// calling this function elicits an error message. SOMEDAY !! It
 /// would be better to disable this strategy in the GUI.
 
-double BasicValues::GetModalSpecAmtMlyDed(double, mcenum_mode) const
+currency BasicValues::GetModalSpecAmtMlyDed(currency, mcenum_mode) const
 {
     alarum()
         << "No maximum specified amount is defined for this product."
@@ -1547,7 +1551,7 @@ double BasicValues::GetModalSpecAmtMlyDed(double, mcenum_mode) const
 
 std::vector<double> const& BasicValues::GetBandedCoiRates
     (mcenum_gen_basis rate_basis
-    ,double           a_specamt
+    ,currency         a_specamt
     ) const
 {
     if(UseUnusualCOIBanding && mce_gen_guar != rate_basis)
