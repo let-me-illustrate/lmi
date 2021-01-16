@@ -32,6 +32,6 @@
 
 bool dbo_at_issue_is_allowed(mce_dbopt);
 bool dbo_transition_is_allowed(mce_dbopt from, mce_dbopt to);
-bool dbo_sequence_is_allowed(std::vector<mce_dbopt>);
+bool dbo_sequence_is_allowed(std::vector<mce_dbopt> const&);
 
 #endif // dbo_rules_hpp

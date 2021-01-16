@@ -264,7 +264,7 @@ class round_to
 
     bool operator==(round_to const&) const;
     RealType operator()(RealType r) const;
-    std::vector<RealType> operator()(std::vector<RealType> r) const;
+    std::vector<RealType> operator()(std::vector<RealType> const& r) const;
 
     int decimals() const;
     rounding_style style() const;
@@ -361,7 +361,8 @@ inline RealType round_to<RealType>::operator()(RealType r) const
 }
 
 template<typename RealType>
-inline std::vector<RealType> round_to<RealType>::operator()(std::vector<RealType> r) const
+inline std::vector<RealType> round_to<RealType>::operator()
+    (std::vector<RealType> const& r) const
 {
     std::vector<RealType> z;
     z.reserve(r.size());

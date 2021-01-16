@@ -96,7 +96,7 @@ bool dbo_transition_is_allowed(mce_dbopt from, mce_dbopt to)
 
 // The return value is fairly useless, and may later be removed.
 
-bool dbo_sequence_is_allowed(std::vector<mce_dbopt> v)
+bool dbo_sequence_is_allowed(std::vector<mce_dbopt> const& v)
 {
     if(0 == lmi::ssize(v))
         {

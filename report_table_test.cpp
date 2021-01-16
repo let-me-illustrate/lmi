@@ -69,7 +69,7 @@ std::vector<table_column_info> bloat
     return v;
 }
 
-int sum(std::vector<int> z)
+int sum(std::vector<int> const& z)
 {
     return std::accumulate(z.begin(), z.end(), 0);
 }
