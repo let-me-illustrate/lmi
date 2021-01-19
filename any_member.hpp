@@ -105,6 +105,11 @@ class placeholder
 
 inline placeholder::~placeholder() = default;
 
+// Forward declaration of class any_member.
+
+template<typename ClassType>
+class any_member;
+
 // Definition of class holder.
 
 template<typename ClassType, typename ValueType>
@@ -113,7 +118,7 @@ class holder final
 {
     // Friendship is extended to class any_member only to support its
     // cast operations.
-    template<typename> friend class any_member;
+    friend class any_member<ClassType>;
 
   public:
     holder(ClassType*, ValueType const&);
@@ -214,13 +219,6 @@ void* holder<ClassType,ValueType>::defraud() const
 }
 #endif // defined LMI_MSC
 
-// Definition of class any_member.
-
-// This class is necessarily Assignable, so that a std::map can hold it.
-
-template<typename ClassType>
-class any_member;
-
 template<typename MemberType, typename ClassType>
 MemberType* exact_cast(any_member<ClassType>&);
 
@@ -228,6 +226,10 @@ template<typename MemberType, typename ClassType>
 MemberType* member_cast(any_member<ClassType>&);
 
 struct any_member_test;
+
+// Definition of class any_member.
+
+// This class is necessarily Assignable, so that a std::map can hold it.
 
 template<typename ClassType>
 class any_member final
