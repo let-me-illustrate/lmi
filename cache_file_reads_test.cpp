@@ -36,7 +36,6 @@ class X
     :public cache_file_reads<X>
 {
   public:
-    X() = default;
     X(std::string const& filename)
         {
         std::ifstream ifs(filename, ios_in_binary());
@@ -71,9 +70,8 @@ class cache_file_reads_test
 
 void cache_file_reads_test::test_preconditions()
 {
-    // X() and X(filename) are required.
-    X x0;
-    X x1("sample.ill");
+    // X(filename) is required.
+    X x0("sample.ill");;
 
     // The cache is accessible with or without an object.
     BOOST_TEST_EQUAL

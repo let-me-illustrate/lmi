@@ -41,7 +41,7 @@ namespace detail
 /// Motivation: It is costly to deserialize objects from xml, so cache
 /// them for reuse. The cache persists until the program terminates.
 ///
-/// Requires: T::T() and T::T(std::string const& filename).
+/// Requires: T::T(std::string const& filename), though not T::T().
 ///
 /// For each filename, the cache stores one instance, which is
 /// replaced by reloading the file if its write time has changed.
