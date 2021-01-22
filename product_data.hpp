@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include "any_member.hpp"
+#include "cache_file_reads.hpp"
 #include "so_attributes.hpp"
 #include "xml_serializable.hpp"
 
@@ -81,6 +82,7 @@ template<> struct deserialized<product_data>
 class LMI_SO product_data
     :public xml_serializable  <product_data>
     ,public MemberSymbolTable <product_data>
+    ,public cache_file_reads  <product_data>
 {
     friend class BasicValues; // For antediluvian fork only.
     friend class PolicyDocument;

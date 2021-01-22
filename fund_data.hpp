@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+#include "cache_file_reads.hpp"
 #include "so_attributes.hpp"
 
 #include <boost/filesystem/path.hpp>
@@ -62,6 +63,7 @@ class LMI_SO FundInfo final
 };
 
 class LMI_SO FundData final
+    :public cache_file_reads<FundData>
 {
   public:
     explicit FundData(fs::path const& a_Filename);

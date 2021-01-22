@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include "any_member.hpp"
+#include "cache_file_reads.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
 #include "so_attributes.hpp"
@@ -93,6 +94,7 @@ class LMI_SO rounding_parameters final
 class LMI_SO rounding_rules final
     :public xml_serializable  <rounding_rules>
     ,public MemberSymbolTable <rounding_rules>
+    ,public cache_file_reads  <rounding_rules>
 {
     friend class RoundingDocument;
 

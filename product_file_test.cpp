@@ -37,6 +37,8 @@
 #include "test_tools.hpp"
 #include "timer.hpp"                    // TimeAnAliquot()
 
+#include <boost/filesystem/path.hpp>
+
 #include <string>
 #include <utility>                      // move()
 
@@ -62,25 +64,26 @@ class product_file_test
     static void read_policy_file()     ;
     static void read_rounding_file()   ;
     static void read_stratified_file() ;
+    static void read_cached_files()    ;
 
-    static std::string database_filename_   ;
-    static std::string fund_filename_       ;
-    static std::string lingo_filename_      ;
-    static std::string policy_filename_     ;
-    static std::string rounding_filename_   ;
-    static std::string stratified_filename_ ;
+    static fs::path database_filename_   ;
+    static fs::path fund_filename_       ;
+    static fs::path lingo_filename_      ;
+    static fs::path policy_filename_     ;
+    static fs::path rounding_filename_   ;
+    static fs::path stratified_filename_ ;
 };
 
-std::string product_file_test::database_filename_   ;
-std::string product_file_test::fund_filename_       ;
-std::string product_file_test::lingo_filename_      ;
-std::string product_file_test::policy_filename_     ;
-std::string product_file_test::rounding_filename_   ;
-std::string product_file_test::stratified_filename_ ;
+fs::path product_file_test::database_filename_   ;
+fs::path product_file_test::fund_filename_       ;
+fs::path product_file_test::lingo_filename_      ;
+fs::path product_file_test::policy_filename_     ;
+fs::path product_file_test::rounding_filename_   ;
+fs::path product_file_test::stratified_filename_ ;
 
 void product_file_test::get_filenames()
 {
-    policy_filename_     = "sample";
+    policy_filename_     = filename_from_product_name("sample");
     product_data p(policy_filename_);
     database_filename_   = AddDataDir(p.datum("DatabaseFilename"));
     fund_filename_       = AddDataDir(p.datum("FundFilename"    ));
@@ -138,11 +141,6 @@ void product_file_test::test_copying()
     BOOST_TEST(      99 == g.query<int>(DB_MaxIncrAge));
 }
 
-// This implementation:
-//   auto z = DBDictionary::read_via_cache(database_filename_);
-// would cause assay_speed() to report a much faster run time,
-// yet such a timing would have little significance.
-
 void product_file_test::read_database_file()
 {
     DBDictionary z(database_filename_);
@@ -173,6 +171,16 @@ void product_file_test::read_stratified_file()
     stratified_charges z(stratified_filename_);
 }
 
+void product_file_test::read_cached_files()
+{
+    DBDictionary       ::read_via_cache(database_filename_);
+    FundData           ::read_via_cache(fund_filename_);
+    lingo              ::read_via_cache(lingo_filename_);
+    product_data       ::read_via_cache(policy_filename_);
+    rounding_rules     ::read_via_cache(rounding_filename_);
+    stratified_charges ::read_via_cache(stratified_filename_);
+}
+
 void product_file_test::assay_speed()
 {
     std::cout
@@ -183,6 +191,7 @@ void product_file_test::assay_speed()
         << "\n  Read 'policy'     : " << TimeAnAliquot(read_policy_file    )
         << "\n  Read 'rounding'   : " << TimeAnAliquot(read_rounding_file  )
         << "\n  Read 'stratified' : " << TimeAnAliquot(read_stratified_file)
+        << "\n  Read all, cached' : " << TimeAnAliquot(read_cached_files   )
         << '\n'
         ;
 }

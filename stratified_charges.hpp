@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include "any_member.hpp"
+#include "cache_file_reads.hpp"
 #include "mc_enum_type_enums.hpp"
 #include "so_attributes.hpp"
 #include "xml_serializable.hpp"
@@ -99,8 +100,9 @@ class LMI_SO stratified_entity final
 /// Rates that depend upon the amount they're multiplied by.
 
 class LMI_SO stratified_charges final
-    :public  xml_serializable  <stratified_charges>
-    ,public  MemberSymbolTable <stratified_charges>
+    :public xml_serializable  <stratified_charges>
+    ,public MemberSymbolTable <stratified_charges>
+    ,public cache_file_reads  <stratified_charges>
 {
     friend class TierDocument;
 
