@@ -29,6 +29,8 @@
 #include "so_attributes.hpp"
 #include "xml_serializable.hpp"
 
+#include <boost/filesystem/path.hpp>
+
 #include <string>
 #include <vector>
 
@@ -103,7 +105,7 @@ class LMI_SO stratified_charges final
     friend class TierDocument;
 
   public:
-    stratified_charges(std::string const& filename);
+    explicit stratified_charges(fs::path const& filename);
     stratified_charges(stratified_charges const&);
     ~stratified_charges() override = default;
 

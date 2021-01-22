@@ -168,7 +168,7 @@ stratified_charges::stratified_charges()
     ascribe_members();
 }
 
-stratified_charges::stratified_charges(std::string const& filename)
+stratified_charges::stratified_charges(fs::path const& filename)
 {
     ascribe_members();
     load(filename);

@@ -32,13 +32,12 @@
 #include "xml_serialize.hpp"
 
 #include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
 
 /// Construct from filename.
 
-lingo::lingo(std::string const& filename)
+lingo::lingo(fs::path const& filename)
 {
-    xml_lmi::dom_parser parser(filename);
+    xml_lmi::dom_parser parser(filename.string());
     xml::element const& root = parser.root_node(xml_root_name());
     int file_version = 0;
     if(!xml_lmi::get_attr(root, "version", file_version))

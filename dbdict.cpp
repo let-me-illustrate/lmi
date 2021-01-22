@@ -45,7 +45,6 @@
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <vector>
 
@@ -99,11 +98,11 @@ DBDictionary::DBDictionary()
 /// seem unnecessary, in case the file read by Init() lacks any member
 /// entity (because it's an older version or has been edited, e.g.).
 
-DBDictionary::DBDictionary(std::string const& filename)
+DBDictionary::DBDictionary(fs::path const& filename)
 {
     ascribe_members();
     InitDB();
-    Init(filename);
+    Init(filename.string());
 }
 
 database_entity const& DBDictionary::datum(std::string const& name) const

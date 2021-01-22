@@ -30,6 +30,8 @@
 #include "so_attributes.hpp"
 #include "xml_serializable.hpp"
 
+#include <boost/filesystem/path.hpp>
+
 #include <string>
 
 /// Cached product database.
@@ -45,7 +47,7 @@ class LMI_SO DBDictionary
 
   public:
     DBDictionary();
-    DBDictionary(std::string const& filename);
+    explicit DBDictionary(fs::path const& filename);
 
     ~DBDictionary() override = default;
 

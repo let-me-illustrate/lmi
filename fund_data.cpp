@@ -33,7 +33,6 @@
 #include "xml_serialize.hpp"
 
 #include <boost/filesystem/convenience.hpp> // basename()
-#include <boost/filesystem/path.hpp>
 
 //============================================================================
 FundInfo::FundInfo
@@ -77,9 +76,9 @@ template<> struct xml_io<FundInfo>
 } // namespace xml_serialize
 
 //============================================================================
-FundData::FundData(std::string const& a_Filename)
+FundData::FundData(fs::path const& a_Filename)
 {
-    Read(a_Filename);
+    Read(a_Filename.string());
 }
 
 int FundData::GetNumberOfFunds() const

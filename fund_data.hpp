@@ -26,6 +26,8 @@
 
 #include "so_attributes.hpp"
 
+#include <boost/filesystem/path.hpp>
+
 #include <string>
 #include <vector>
 
@@ -62,7 +64,7 @@ class LMI_SO FundInfo final
 class LMI_SO FundData final
 {
   public:
-    FundData(std::string const& a_Filename);
+    explicit FundData(fs::path const& a_Filename);
     ~FundData() = default;
 
     static void write_funds_files();

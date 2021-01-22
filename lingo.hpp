@@ -28,6 +28,8 @@
 #include "so_attributes.hpp"
 #include "xml_lmi_fwd.hpp"
 
+#include <boost/filesystem/path.hpp>
+
 #include <string>
 #include <unordered_map>
 
@@ -37,7 +39,7 @@ class LMI_SO lingo final
     :public cache_file_reads<lingo>
 {
   public:
-    explicit lingo(std::string const& filename);
+    explicit lingo(fs::path const& filename);
 
     std::string const& lookup(int) const;
 

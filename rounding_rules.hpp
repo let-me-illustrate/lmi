@@ -30,6 +30,8 @@
 #include "so_attributes.hpp"
 #include "xml_serializable.hpp"
 
+#include <boost/filesystem/path.hpp>
+
 #include <string>
 
 /// Parameters of a rounding rule.
@@ -95,7 +97,7 @@ class LMI_SO rounding_rules final
     friend class RoundingDocument;
 
   public:
-    explicit rounding_rules(std::string const& filename);
+    explicit rounding_rules(fs::path const& filename);
     ~rounding_rules() override = default;
 
     rounding_parameters const& datum(std::string const& name) const;

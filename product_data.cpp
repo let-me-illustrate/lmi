@@ -33,7 +33,6 @@
 #include "xml_serialize.hpp"
 
 #include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <vector>
 
@@ -124,27 +123,15 @@ product_data::product_data()
     ascribe_members();
 }
 
-/// Construct from product name.
-///
-/// The argument is a string (typically Input::ProductName) such as
-/// 'sample'. The appropriate extension and path are added here to
-/// produce a filepath.
-///
-/// Somewhat arbitrarily, forbid '.' in product names. There's no real
-/// need to allow that, and it would complicate the code. A product
-/// name like "ul.with.variable.funds" could too easily be mistaken
-/// for a '.funds' file. The boost filesystem portability guidelines
-/// suggest "Do not use more that [sic] one period in a file name",
-/// and extensions are added to product names to create file names.
-
-product_data::product_data(std::string const& product_name)
+product_data::product_data(fs::path const& product_filename)
 {
     ascribe_members();
+    load(product_filename);
+}
 
-    fs::path path(product_name);
-    LMI_ASSERT(product_name == fs::basename(path));
-    path = fs::change_extension(path, ".policy");
-    load(AddDataDir(path.string()));
+product_data::product_data(std::string const& product_name)
+    :product_data(fs::path(filename_from_product_name(product_name)))
+{
 }
 
 product_data::product_data(product_data const& z)
@@ -936,6 +923,36 @@ void product_data::write_policy_files()
     sample2gpp  ().save(AddDataDir("sample2gpp.policy"));
     sample2ipp  ().save(AddDataDir("sample2ipp.policy"));
     sample2xyz  ().save(AddDataDir("sample2xyz.policy"));
+}
+
+/// Convert a product name to the name of its '.product' file.
+///
+/// For example: 'sample' --> '/opt/lmi/data/sample.product'.
+///
+/// The argument is a string (typically Input::ProductName) such as
+/// 'sample'. The appropriate extension and path are added here to
+/// produce a filepath.
+///
+/// Somewhat arbitrarily, forbid '.' in product names. There's no real
+/// need to allow that, and it would complicate the code. A product
+/// name like "ul.with.variable.funds" could too easily be mistaken
+/// for a '.funds' file. The boost filesystem portability guidelines
+/// suggest "Do not use more that [sic] one period in a file name",
+/// and extensions are added to product names to create file names.
+///
+/// Rejected alternative: take a 'ce_product_name' argument instead.
+/// That would constrain the argument in a natural way, but would
+/// force coupling between class ce_product_name and client code
+/// that has no other need to know about it; furthermore, the range
+/// of 'ce_product_name' values is determined only at run time, and
+/// it would be strange to propagate a run-time dependency.
+
+std::string filename_from_product_name(std::string const& product_name)
+{
+    fs::path path(product_name);
+    LMI_ASSERT(product_name == fs::basename(path));
+    path = fs::change_extension(path, ".policy");
+    return AddDataDir(path.string());
 }
 
 /// Load from file. This free function can be invoked across dll

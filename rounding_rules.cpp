@@ -31,7 +31,6 @@
 #include "xml_serialize.hpp"
 
 #include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
 
 template class xml_serializable<rounding_rules>;
 
@@ -167,7 +166,7 @@ rounding_rules::rounding_rules()
 /// that violate this precondition, but this ctor prevents them from
 /// being used to produce illustrations.
 
-rounding_rules::rounding_rules(std::string const& filename)
+rounding_rules::rounding_rules(fs::path const& filename)
 {
     ascribe_members();
 

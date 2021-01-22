@@ -28,6 +28,8 @@
 #include "so_attributes.hpp"
 #include "xml_serializable.hpp"
 
+#include <boost/filesystem/path.hpp>
+
 #include <string>
 
 /// A single product datum: a string with an optional gloss.
@@ -87,6 +89,7 @@ class LMI_SO product_data
     typedef deserialized<product_data>::value_type value_type;
 
   public:
+    explicit product_data(fs::path const& product_filename);
     explicit product_data(std::string const& product_name);
     ~product_data() override;
 
@@ -366,6 +369,8 @@ class LMI_SO product_data
     glossed_string DefnOutlay;
     glossed_string DefnSpecAmt;
 };
+
+LMI_SO std::string filename_from_product_name(std::string const&);
 
 LMI_SO void load(product_data      &, fs::path const&);
 LMI_SO void save(product_data const&, fs::path const&);
