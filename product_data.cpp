@@ -134,8 +134,8 @@ product_data::product_data()
 /// need to allow that, and it would complicate the code. A product
 /// name like "ul.with.variable.funds" could too easily be mistaken
 /// for a '.funds' file. The boost filesystem portability guidelines
-/// suggest "Do not use more that one period in a file name", and
-/// extensions are added to product names to create file names.
+/// suggest "Do not use more that [sic] one period in a file name",
+/// and extensions are added to product names to create file names.
 
 product_data::product_data(std::string const& product_name)
 {
