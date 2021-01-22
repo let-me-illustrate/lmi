@@ -27,6 +27,7 @@
 #include "assert_lmi.hpp"
 
 #include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include <ctime>                        // time_t
 #include <map>
@@ -41,7 +42,7 @@ namespace detail
 /// Motivation: It is costly to deserialize objects from xml, so cache
 /// them for reuse. The cache persists until the program terminates.
 ///
-/// Requires: T::T(std::string const& filename), though not T::T().
+/// Requires: T::T(fs::path const& filename), though not T::T().
 ///
 /// For each filename, the cache stores one instance, which is
 /// replaced by reloading the file if its write time has changed.
@@ -67,7 +68,7 @@ class file_cache
         return z;
         }
 
-    retrieved_type retrieve_or_reload(std::string const& filename)
+    retrieved_type retrieve_or_reload(fs::path const& filename)
         {
         // Throws if !exists(filename).
         std::time_t const write_time = fs::last_write_time(filename);
@@ -105,7 +106,7 @@ class file_cache
         std::time_t    write_time;
     };
 
-    std::map<std::string,record> cache_;
+    std::map<fs::path,record> cache_;
 };
 } // namespace detail
 
@@ -124,7 +125,7 @@ class cache_file_reads
     /// Postcondition: returned pointer is not null; otherwise,
     /// file_cache::retrieve_or_reload() throws.
 
-    static retrieved_type read_via_cache(std::string const& filename)
+    static retrieved_type read_via_cache(fs::path const& filename)
         {
         return detail::file_cache<T>::instance().retrieve_or_reload(filename);
         }

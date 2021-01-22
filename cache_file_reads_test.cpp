@@ -29,6 +29,7 @@
 #include "timer.hpp"
 
 #include <boost/filesystem/exception.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include <fstream>
 
@@ -36,9 +37,9 @@ class X
     :public cache_file_reads<X>
 {
   public:
-    X(std::string const& filename)
+    X(fs::path const& filename)
         {
-        std::ifstream ifs(filename, ios_in_binary());
+        std::ifstream ifs(filename.string(), ios_in_binary());
         istream_to_string(ifs, s_);
         }
 
@@ -70,8 +71,8 @@ class cache_file_reads_test
 
 void cache_file_reads_test::test_preconditions()
 {
-    // X(filename) is required.
-    X x0("sample.ill");;
+    // X(fs::path const&) is required.
+    X x0("sample.ill");
 
     // The cache is accessible with or without an object.
     BOOST_TEST_EQUAL
