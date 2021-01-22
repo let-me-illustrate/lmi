@@ -126,7 +126,7 @@
                     <border>2</border>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
-                        <growablerows>0,1,2,3,4,5,6,7</growablerows>
+                        <growablerows>0,1,2,3,4,5,6</growablerows>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
                             <border>2</border>
