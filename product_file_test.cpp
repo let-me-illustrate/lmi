@@ -66,20 +66,13 @@ class product_file_test
     static void read_stratified_file() ;
     static void read_cached_files()    ;
 
-    static fs::path database_filename_   ;
-    static fs::path fund_filename_       ;
-    static fs::path lingo_filename_      ;
-    static fs::path policy_filename_     ;
-    static fs::path rounding_filename_   ;
-    static fs::path stratified_filename_ ;
+    inline static fs::path database_filename_   ;
+    inline static fs::path fund_filename_       ;
+    inline static fs::path lingo_filename_      ;
+    inline static fs::path policy_filename_     ;
+    inline static fs::path rounding_filename_   ;
+    inline static fs::path stratified_filename_ ;
 };
-
-fs::path product_file_test::database_filename_   ;
-fs::path product_file_test::fund_filename_       ;
-fs::path product_file_test::lingo_filename_      ;
-fs::path product_file_test::policy_filename_     ;
-fs::path product_file_test::rounding_filename_   ;
-fs::path product_file_test::stratified_filename_ ;
 
 void product_file_test::get_filenames()
 {
