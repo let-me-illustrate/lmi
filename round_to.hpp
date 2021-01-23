@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+#include "currency.hpp"
 #include "mc_enum_type_enums.hpp"       // enum rounding_style
 #include "stl_extensions.hpp"           // nonstd::power()
 
@@ -266,6 +267,14 @@ class round_to
     RealType operator()(RealType) const;
     std::vector<RealType> operator()(std::vector<RealType> const&) const;
 
+    currency c(RealType) const;
+    std::vector<currency> c(std::vector<RealType> const&) const;
+
+#if defined USE_CURRENCY_CLASS
+    currency c(currency) const;
+    std::vector<currency> c(std::vector<currency> const&) const;
+#endif // defined USE_CURRENCY_CLASS
+
     int decimals() const;
     rounding_style style() const;
 
@@ -277,6 +286,9 @@ class round_to
     rounding_style style_            {r_indeterminate};
     max_prec_real scale_fwd_         {1.0};
     max_prec_real scale_back_        {1.0};
+    int decimals_cents_              {0};
+    max_prec_real scale_fwd_cents_   {1.0};
+    max_prec_real scale_back_cents_  {1.0};
     rounding_fn_t rounding_function_ {detail::erroneous_rounding_function};
 };
 
@@ -310,6 +322,13 @@ round_to<RealType>::round_to(int a_decimals, rounding_style a_style)
     ,style_             {a_style}
     ,scale_fwd_         {detail::int_pow(max_prec_real(10.0), decimals_)}
     ,scale_back_        {max_prec_real(1.0) / scale_fwd_}
+#if defined USE_CURRENCY_CLASS
+    ,decimals_cents_    {decimals_ - currency::cents_digits}
+#else  // !defined USE_CURRENCY_CLASS
+    ,decimals_cents_    {decimals_ - 0}
+#endif // ! defined USE_CURRENCY_CLASS
+    ,scale_fwd_cents_   {detail::int_pow(max_prec_real(10.0), decimals_cents_)}
+    ,scale_back_cents_  {max_prec_real(1.0) / scale_fwd_cents_}
     ,rounding_function_ {select_rounding_function(style_)}
 {
 /*
@@ -370,6 +389,54 @@ inline std::vector<RealType> round_to<RealType>::operator()
     for(auto const& i : v) {z.push_back(operator()(i));}
     return z;
 }
+
+template<typename RealType>
+inline currency round_to<RealType>::c(RealType r) const
+{
+    RealType const z = static_cast<RealType>
+        ( rounding_function_(static_cast<RealType>(r * scale_fwd_))
+        * scale_back_cents_
+        );
+#if defined USE_CURRENCY_CLASS
+    // CURRENCY !! static_cast: possible range error
+    return currency(static_cast<currency::data_type>(z), raw_cents {});
+#else  // !defined USE_CURRENCY_CLASS
+    return currency(z);
+#endif // ! defined USE_CURRENCY_CLASS
+}
+
+template<typename RealType>
+inline std::vector<currency> round_to<RealType>::c
+    (std::vector<RealType> const& v) const
+{
+    std::vector<currency> z;
+    z.reserve(v.size());
+    for(auto const& i : v) {z.push_back(c(i));}
+    return z;
+}
+
+#if defined USE_CURRENCY_CLASS
+// CURRENCY !! need unit tests
+template<typename RealType>
+inline currency round_to<RealType>::c(currency z) const
+{
+#   if defined CURRENCY_UNIT_IS_CENTS
+    return (decimals_ < currency::cents_digits) ? c(z.d()) : z;
+#   else  // !defined CURRENCY_UNIT_IS_CENTS
+    return c(z.d());
+#   endif // !defined CURRENCY_UNIT_IS_CENTS
+}
+
+template<typename RealType>
+inline std::vector<currency> round_to<RealType>::c
+    (std::vector<currency> const& v) const
+{
+    std::vector<currency> z;
+    z.reserve(v.size());
+    for(auto const& i : v) {z.push_back(c(i));}
+    return z;
+}
+#endif // defined USE_CURRENCY_CLASS
 
 template<typename RealType>
 int round_to<RealType>::decimals() const
