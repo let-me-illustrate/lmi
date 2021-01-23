@@ -80,7 +80,7 @@ namespace detail
 /// which suffices there because its 'r' is always ten.
 
 template<typename RealType>
-RealType perform_pow(RealType r, int n)
+RealType int_pow(RealType r, int n)
 {
     if(0 == n)
         {
@@ -116,7 +116,7 @@ RealType perform_pow(RealType r, int n)
 /// in the preceding example.
 
 template<typename RealType>
-RealType perform_pow(RealType r, int n)
+RealType int_pow(RealType r, int n)
 {
     if(0 == n)
         {
@@ -258,13 +258,13 @@ class round_to
     /// The default ctor only makes the class DefaultConstructible;
     /// the object it creates throws on use.
     round_to() = default;
-    round_to(int decimals, rounding_style style);
+    round_to(int a_decimals, rounding_style);
     round_to(round_to const&) = default;
     round_to& operator=(round_to const&) = default;
 
     bool operator==(round_to const&) const;
-    RealType operator()(RealType r) const;
-    std::vector<RealType> operator()(std::vector<RealType> const& r) const;
+    RealType operator()(RealType) const;
+    std::vector<RealType> operator()(std::vector<RealType> const&) const;
 
     int decimals() const;
     rounding_style style() const;
@@ -305,24 +305,24 @@ class round_to
 // clearer if we quantified the effect on accuracy.
 
 template<typename RealType>
-round_to<RealType>::round_to(int decimals, rounding_style a_style)
-    :decimals_          {decimals}
+round_to<RealType>::round_to(int a_decimals, rounding_style a_style)
+    :decimals_          {a_decimals}
     ,style_             {a_style}
-    ,scale_fwd_         {detail::perform_pow(max_prec_real(10.0), decimals)}
+    ,scale_fwd_         {detail::int_pow(max_prec_real(10.0), decimals_)}
     ,scale_back_        {max_prec_real(1.0) / scale_fwd_}
-    ,rounding_function_ {select_rounding_function(a_style)}
+    ,rounding_function_ {select_rounding_function(style_)}
 {
 /*
 // TODO ?? This might improve accuracy slightly, but would prevent
 // the data members from being const.
-    if(0 <= decimals)
+    if(0 <= a_decimals)
         {
-        scale_fwd_  = detail::perform_pow(max_prec_real(10.0), decimals);
+        scale_fwd_  = detail::int_pow(max_prec_real(10.0), a_decimals);
         scale_back_ = max_prec_real(1.0) / scale_fwd_;
         }
     else
         {
-        scale_back_ = detail::perform_pow(max_prec_real(10.0), -decimals);
+        scale_back_ = detail::int_pow(max_prec_real(10.0), -a_decimals);
         scale_fwd_  = max_prec_real(1.0) / scale_back_;
         }
 */
@@ -335,8 +335,8 @@ round_to<RealType>::round_to(int decimals, rounding_style a_style)
     //    std::numeric_limits<RealType>::max_exponent10
     // decimals.
     if
-        (  decimals < std::numeric_limits<RealType>::min_exponent10
-        ||            std::numeric_limits<RealType>::max_exponent10 < decimals
+        (a_decimals < std::numeric_limits<RealType>::min_exponent10
+        ||            std::numeric_limits<RealType>::max_exponent10 < a_decimals
         )
         {
         throw std::domain_error("Invalid number of decimals.");
@@ -356,17 +356,18 @@ template<typename RealType>
 inline RealType round_to<RealType>::operator()(RealType r) const
 {
     return static_cast<RealType>
-        (rounding_function_(static_cast<RealType>(r * scale_fwd_)) * scale_back_
+        ( rounding_function_(static_cast<RealType>(r * scale_fwd_))
+        * scale_back_
         );
 }
 
 template<typename RealType>
 inline std::vector<RealType> round_to<RealType>::operator()
-    (std::vector<RealType> const& r) const
+    (std::vector<RealType> const& v) const
 {
     std::vector<RealType> z;
-    z.reserve(r.size());
-    for(auto const& i : r) {z.push_back(operator()(i));}
+    z.reserve(v.size());
+    for(auto const& i : v) {z.push_back(operator()(i));}
     return z;
 }
 
