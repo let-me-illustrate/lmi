@@ -577,6 +577,20 @@ void round_to_test::test_fundamentals()
     BOOST_TEST(2 == round1.decimals());
     BOOST_TEST(r_to_nearest == round1.style());
 
+    // Test rounding double to currency.
+    currency c = round0.c(1.61803398875);
+    BOOST_TEST((1.62 - dblize(c)) < 1e-14);
+#if defined USE_CURRENCY_CLASS
+#   if defined CURRENCY_UNIT_IS_CENTS
+    BOOST_TEST_EQUAL(162, c.cents());
+#   else  // !defined CURRENCY_UNIT_IS_CENTS
+    // Arguably this isn't quite meaningful:
+    BOOST_TEST_EQUAL(1.62, c.cents());
+#   endif // !defined CURRENCY_UNIT_IS_CENTS
+#endif // defined USE_CURRENCY_CLASS
+//  c *= 0.61803398875;
+//  BOOST_TEST_EQUAL(1, c);
+
     // Test a vector.
     std::vector<double> const v0 {3.1415926535, 2.718281828};
     std::vector<double> const v1 {round0(v0)};
