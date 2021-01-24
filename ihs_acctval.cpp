@@ -537,30 +537,30 @@ void AccountValue::FinalizeLifeAllBases()
 //============================================================================
 void AccountValue::SetInitialValues()
 {
-    InforceYear                 = yare_input_.InforceYear                     ;
-    InforceMonth                = yare_input_.InforceMonth                    ;
-    InforceAVGenAcct            = yare_input_.InforceGeneralAccountValue      ;
-    InforceAVSepAcct            = yare_input_.InforceSeparateAccountValue     ;
-    InforceAVRegLn              = yare_input_.InforceRegularLoanValue         ;
-    InforceAVPrfLn              = yare_input_.InforcePreferredLoanValue       ;
-    InforceRegLnBal             = yare_input_.InforceRegularLoanBalance       ;
-    InforcePrfLnBal             = yare_input_.InforcePreferredLoanBalance     ;
-    InforceCumNoLapsePrem       = yare_input_.InforceCumulativeNoLapsePremium ;
-    InforceCumPmts              = yare_input_.InforceCumulativeNoLapsePayments;
-    InforceTaxBasis             = yare_input_.InforceTaxBasis                 ;
+    InforceYear           = yare_input_.InforceYear                     ;
+    InforceMonth          = yare_input_.InforceMonth                    ;
+    InforceAVGenAcct      = yare_input_.InforceGeneralAccountValue      ;
+    InforceAVSepAcct      = yare_input_.InforceSeparateAccountValue     ;
+    InforceAVRegLn        = yare_input_.InforceRegularLoanValue         ;
+    InforceAVPrfLn        = yare_input_.InforcePreferredLoanValue       ;
+    InforceRegLnBal       = yare_input_.InforceRegularLoanBalance       ;
+    InforcePrfLnBal       = yare_input_.InforcePreferredLoanBalance     ;
+    InforceCumNoLapsePrem = yare_input_.InforceCumulativeNoLapsePremium ;
+    InforceCumPmts        = yare_input_.InforceCumulativeNoLapsePayments;
+    InforceTaxBasis       = yare_input_.InforceTaxBasis                 ;
 
-    Year                        = InforceYear;
-    Month                       = InforceMonth;
+    Year                  = InforceYear;
+    Month                 = InforceMonth;
     CoordinateCounters();
 
-    DB7702A                     = C0;  // TODO ?? TAXATION !! This seems silly.
+    DB7702A               = C0;  // TODO ?? TAXATION !! This seems silly.
 
-    AVRegLn                     = InforceAVRegLn;
-    AVPrfLn                     = InforceAVPrfLn;
-    RegLnBal                    = InforceRegLnBal;
-    PrfLnBal                    = InforcePrfLnBal;
-    AVGenAcct                   = InforceAVGenAcct;
-    AVSepAcct                   = InforceAVSepAcct;
+    AVRegLn               = InforceAVRegLn;
+    AVPrfLn               = InforceAVPrfLn;
+    RegLnBal              = InforceRegLnBal;
+    PrfLnBal              = InforcePrfLnBal;
+    AVGenAcct             = InforceAVGenAcct;
+    AVSepAcct             = InforceAVSepAcct;
 
     // WX PORT !! When fund selection is finally ported from ihs,
     // this workaround should not be needed; until then, it sidesteps
