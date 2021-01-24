@@ -257,6 +257,14 @@ inline void AccountValue::SetMonthlyDetail(int enumerator, double d)
 }
 
 //============================================================================
+#if defined USE_CURRENCY_CLASS
+inline void AccountValue::SetMonthlyDetail(int enumerator, currency c)
+{
+    DebugRecord[enumerator] = value_cast<std::string>(dblize(c));
+}
+#endif // defined USE_CURRENCY_CLASS
+
+//============================================================================
 void AccountValue::SetDebugFilename(std::string const& s)
 {
     configurable_settings const& c = configurable_settings::instance();
@@ -413,12 +421,12 @@ void AccountValue::DebugPrint()
     SetMonthlyDetail(eCumNoLapsePrem     ,CumNoLapsePrem                   );
     SetMonthlyDetail(eNoLapseActive      ,NoLapseActive                    );
     SetMonthlyDetail(eEOMAV              ,TotalAccountValue()              );
-    SetMonthlyDetail(eHMValue            ,std::max(HoneymoonValue, 0.0)    );
+    SetMonthlyDetail(eHMValue            ,std::max(HoneymoonValue, C0)     );
     SetMonthlyDetail(eSurrChg            ,SurrChg()                        );
 
 // TODO ?? Unfortunately duplicated from AccountValue::FinalizeYear().
-    double total_av = TotalAccountValue();
-    double csv_net =
+    currency total_av = TotalAccountValue();
+    currency csv_net =
             total_av
         -   SurrChg()
         -   RegLnBal
