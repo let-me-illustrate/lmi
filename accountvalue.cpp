@@ -228,13 +228,13 @@ void AccountValue::RunOneCell(mcenum_run_basis TheBasis)
     LapseMonth       = 0;
     LapseYear        = 0;
 
-    TaxBasis         = 0.0;
+    TaxBasis         = C0;
 
-    MaxLoan          = 0.0;
-    RegLnBal         = 0.0;
-    PrfLnBal         = 0.0;
-    AVRegLn          = 0.0;
-    AVPrfLn          = 0.0;
+    MaxLoan          = C0;
+    RegLnBal         = C0;
+    PrfLnBal         = C0;
+    AVRegLn          = C0;
+    AVPrfLn          = C0;
 
     // 'InforceAVGenAcct' is unloaned only; this branch wasn't
     // designed to allow inforce loans.
@@ -323,8 +323,8 @@ void AccountValue::DoYear
 
     YearsCorridorFactor = BasicValues::GetCorridorFactor()[Year];
 
-    GrossPmts  .assign(12, 0.0);
-    NetPmts    .assign(12, 0.0);
+    GrossPmts  .assign(12, C0);
+    NetPmts    .assign(12, C0);
 
     // IHS !! Strategy here?
 
@@ -433,7 +433,7 @@ inline int AccountValue::MonthsToNextModalPmtDate() const
 // Set specamt according to selected strategy, in every year.
 void AccountValue::PerformSpecAmtStrategy()
 {
-    double SA = 0.0;
+    currency SA = C0;
     switch(yare_input_.SpecifiedAmountStrategy[0])
         {
         case mce_sa_input_scalar:
@@ -514,8 +514,8 @@ void AccountValue::TxOptionChange()
         }
 
     // Nothing to do unless AV is positive.
-    double AV = AVUnloaned + AVRegLn + AVPrfLn;
-    if(AV <= 0.0)
+    currency AV = AVUnloaned + AVRegLn + AVPrfLn;
+    if(AV <= C0)
         {
         return;
         }
@@ -719,7 +719,7 @@ void AccountValue::TxLoanRepay()
         }
 
     // Nothing to do if no loan repayment requested.
-    if(0.0 <= RequestedLoan)
+    if(C0 <= RequestedLoan)
         {
         return;
         }
@@ -757,7 +757,7 @@ void AccountValue::TxSetDeathBft()
             // Option 2: specamt plus AV, or corridor times AV if greater.
             // Negative AV doesn't decrease death benefit.
             deathbft = std::max
-                (ActualSpecAmt + std::max(0.0, AV)
+                (ActualSpecAmt + std::max(C0, AV)
                 ,YearsCorridorFactor * AV
                 );
             break;
@@ -790,7 +790,7 @@ void AccountValue::TxSetCoiCharge()
 
 void AccountValue::TxSetRiderDed()
 {
-    WpCharge = 0.0;
+    WpCharge = C0;
     if(haswp)
         {
         WpCharge =
@@ -799,9 +799,10 @@ void AccountValue::TxSetRiderDed()
             ;
         }
 
-    AdbCharge = 0.0;
+    AdbCharge = C0;
     if(hasadb)
         {
+        // IHS !! Icky manifest constant--lmi uses a database entity.
         AdbCharge = YearsAdbRate * std::min(500000.0, ActualSpecAmt);
         }
 }
@@ -821,14 +822,14 @@ void AccountValue::TxCreditInt()
 {
     // Accrue interest on unloaned and loaned account value separately,
     //   but do not charge interest on negative account value.
-    if(0.0 < AVUnloaned)
+    if(C0 < AVUnloaned)
         {
         // IHS !! Each interest increment is rounded separately in lmi.
         double z = round_interest_credit()(AVUnloaned * YearsGenAcctIntRate);
         AVUnloaned += z;
         }
     // Loaned account value cannot be negative.
-    LMI_ASSERT(0.0 <= AVRegLn + AVPrfLn);
+    LMI_ASSERT(C0 <= AVRegLn + AVPrfLn);
 }
 
 /// Accrue loan interest, and calculate interest credit on loaned AV.
@@ -836,7 +837,7 @@ void AccountValue::TxCreditInt()
 void AccountValue::TxLoanInt()
 {
     // Nothing to do if there's no loan outstanding.
-    if(0.0 == RegLnBal && 0.0 == PrfLnBal)
+    if(C0 == RegLnBal && C0 == PrfLnBal)
         {
         return;
         }
@@ -870,7 +871,7 @@ void AccountValue::TxTakeWD()
         }
 
     // Nothing to do if no withdrawal requested.
-    if(0.0 == wd)
+    if(C0 == wd)
         {
         return;
         }
@@ -880,7 +881,7 @@ void AccountValue::TxTakeWD()
     // Impose minimum amount (if nonzero) on withdrawals.
     if(wd < MinWD)
         {
-        wd = 0.0;
+        wd = C0;
         }
 
     // Impose maximum amount.
@@ -959,7 +960,7 @@ void AccountValue::TxTakeLoan()
         }
 
     // Nothing to do if no loan requested.
-    if(RequestedLoan <= 0.0)
+    if(RequestedLoan <= C0)
         {
         return;
         }
@@ -1012,7 +1013,7 @@ void AccountValue::TxTestLapse()
     // Otherwise if AV is negative or if overloaned, then lapse the policy.
     else if
         (
-            (AVUnloaned + AVRegLn + AVPrfLn < 0.0)
+            (AVUnloaned + AVRegLn + AVPrfLn < C0)
         ||  (MaxLoan < RegLnBal + PrfLnBal)
         )
         {
@@ -1055,9 +1056,9 @@ double AccountValue::GetCurtateNetCoiChargeInforce() const
 double AccountValue::GetProjectedCoiChargeInforce() const
     {return 0.0;}
 currency AccountValue::GetSepAcctAssetsInforce() const
-    {return 0.0;}
+    {return C0;}
 currency AccountValue::IncrementBOM(int, int, double)
-    {return 0.0;}
+    {return C0;}
 void   AccountValue::IncrementEOM(int, int, currency, currency)
     {return;}
 void   AccountValue::IncrementEOY(int)

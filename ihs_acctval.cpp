@@ -114,16 +114,16 @@ AccountValue::AccountValue(Input const& input)
     // all be kept together.
     LapseMonth               = 0;          // Antediluvian.
     LapseYear                = 0;          // Antediluvian.
-    AVUnloaned               = 0.0;        // Antediluvian.
-    pmt                      = 0.0;        // Antediluvian.
+    AVUnloaned               = C0;         // Antediluvian.
+    pmt                      = C0;         // Antediluvian.
     pmt_mode                 = mce_annual; // Antediluvian.
     ModeIndex                = 0;          // Antediluvian.
-    wd                       = 0.0;        // Antediluvian.
+    wd                       = C0;         // Antediluvian.
     mlyguarv                 = 0.0;        // Antediluvian.
-    deathbft                 = 0.0;        // Antediluvian.
+    deathbft                 = C0;         // Antediluvian.
     haswp                    = false;      // Antediluvian.
     hasadb                   = false;      // Antediluvian.
-    mlydedtonextmodalpmtdate = 0.0;        // Antediluvian.
+    mlydedtonextmodalpmtdate = C0;         // Antediluvian.
 
     set_list_bill_year_and_month();
 
@@ -161,7 +161,7 @@ currency AccountValue::specamt_for_7702(int year) const
 {
     return
                               base_specamt(year)
-        + (TermIsDbFor7702  ? term_specamt(year) : 0.0)
+        + (TermIsDbFor7702  ? term_specamt(year) : C0)
         ;
 }
 
@@ -171,7 +171,7 @@ currency AccountValue::specamt_for_7702A(int year) const
 {
     return
                               base_specamt(year)
-        + (TermIsDbFor7702A ? term_specamt(year) : 0.0)
+        + (TermIsDbFor7702A ? term_specamt(year) : C0)
         ;
 }
 
@@ -248,7 +248,7 @@ Then run other bases.
 // this rather expensive function.
 void AccountValue::SetGuarPrem()
 {
-    GuarPremium = 0.0;
+    GuarPremium = C0;
     if(BasicValues::IsSubjectToIllustrationReg())
         {
         GuarPremium = SolveGuarPremium();
@@ -421,7 +421,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     // TODO ?? TAXATION !! Shouldn't we increase initial SA if contract in corridor at issue?
     OldDB = OldSA;
 
-    SurrChg_.assign(BasicValues::GetLength(), 0.0);
+    SurrChg_.assign(BasicValues::GetLength(), C0);
 
     // TAXATION !! Input::InforceAnnualTargetPremium should be used here.
     double annual_target_premium = GetModalTgtPrem
@@ -457,9 +457,9 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     InvariantValues().InforceIsMec = inforce_is_mec;
     bool mec_1035 =
               yare_input_.External1035ExchangeFromMec
-           && 0.0 != Outlay_->external_1035_amount()
+           && C0 != Outlay_->external_1035_amount()
         ||    yare_input_.Internal1035ExchangeFromMec
-           && 0.0 != Outlay_->internal_1035_amount()
+           && C0 != Outlay_->internal_1035_amount()
         ;
     bool is_already_a_mec = inforce_is_mec || mec_1035;
     if(is_already_a_mec)
@@ -553,7 +553,7 @@ void AccountValue::SetInitialValues()
     Month                       = InforceMonth;
     CoordinateCounters();
 
-    DB7702A                     = 0.0;  // TODO ?? TAXATION !! This seems silly.
+    DB7702A                     = C0;  // TODO ?? TAXATION !! This seems silly.
 
     AVRegLn                     = InforceAVRegLn;
     AVPrfLn                     = InforceAVPrfLn;
@@ -594,28 +594,28 @@ void AccountValue::SetInitialValues()
             ;
         }
 
-    MaxLoan                     = 0.0;
+    MaxLoan                     = C0;
 
-    GenAcctIntCred              = 0.0;
-    SepAcctIntCred              = 0.0;
-    RegLnIntCred                = 0.0;
-    PrfLnIntCred                = 0.0;
+    GenAcctIntCred              = C0;
+    SepAcctIntCred              = C0;
+    RegLnIntCred                = C0;
+    PrfLnIntCred                = C0;
 
-    MaxWD                       = 0.0;
-    GrossWD                     = 0.0;
-    NetWD                       = 0.0;
+    MaxWD                       = C0;
+    GrossWD                     = C0;
+    NetWD                       = C0;
 
     CumPmts                     = InforceCumPmts;
     TaxBasis                    = InforceTaxBasis;
-    YearlyTaxBasis.assign(BasicValues::GetLength(), 0.0);
-    MlyNoLapsePrem              = 0.0;
+    YearlyTaxBasis.assign(BasicValues::GetLength(), C0);
+    MlyNoLapsePrem              = C0;
     CumNoLapsePrem              = InforceCumNoLapsePrem;
 
     // Initialize all elements of this vector to 'false'. Then, when
     // the no-lapse criteria fail to be met, future values are right.
     YearlyNoLapseActive.assign(BasicValues::GetLength(), false);
-    loan_ullage_       .assign(BasicValues::GetLength(), 0.0);
-    withdrawal_ullage_ .assign(BasicValues::GetLength(), 0.0);
+    loan_ullage_       .assign(BasicValues::GetLength(), C0);
+    withdrawal_ullage_ .assign(BasicValues::GetLength(), C0);
     NoLapseActive               = true;
     if(NoLapseDboLvlOnly && mce_option1 != DeathBfts_->dbopt()[0])
         {
@@ -631,7 +631,7 @@ void AccountValue::SetInitialValues()
 
     database().query_into(DB_TermCanLapse       , TermCanLapse);
     TermRiderActive             = true;
-    TermDB                      = 0.0;
+    TermDB                      = C0;
 
     ItLapsed                    = false;
 
@@ -660,10 +660,10 @@ void AccountValue::SetInitialValues()
             }
         }
 
-    CoiCharge                   = 0.0;
-    RiderCharges                = 0.0;
-    NetCoiCharge                = 0.0;
-    MlyDed                      = 0.0;
+    CoiCharge                   = C0;
+    RiderCharges                = C0;
+    NetCoiCharge                = C0;
+    MlyDed                      = C0;
     CumulativeSalesLoad         = yare_input_.InforceCumulativeSalesLoad;
 
     database().query_into(DB_ExpRatCoiRetention, CoiRetentionRate);
@@ -719,7 +719,7 @@ currency AccountValue::IncrementBOM
         {
         // Return value is total assets. After the policy has lapsed or
         // matured, there are no assets.
-        return 0.0;
+        return C0;
         }
 
     // Paranoid check.
@@ -791,8 +791,8 @@ void AccountValue::IncrementEOM
 
     // Save arguments, constraining their values to be nonnegative,
     // for calculating banded and tiered quantities.
-    AssetsPostBom  = std::max(0.0, assets_post_bom  );
-    CumPmtsPostBom = std::max(0.0, cum_pmts_post_bom);
+    AssetsPostBom  = std::max(C0, assets_post_bom  );
+    CumPmtsPostBom = std::max(C0, cum_pmts_post_bom);
 
     DoMonthCR();
 }
@@ -839,29 +839,29 @@ void AccountValue::InitializeYear()
         Irc7702A_->UpdateBOY7702A(Year);
         }
 
-    MonthsPolicyFees            = 0.0;
-    SpecAmtLoad                 = 0.0;
+    MonthsPolicyFees            = C0;
+    SpecAmtLoad                 = C0;
 
-    AssetsPostBom               = 0.0;
-    CumPmtsPostBom              = 0.0;
-    SepAcctLoad                 = 0.0;
+    AssetsPostBom               = C0;
+    CumPmtsPostBom              = C0;
+    SepAcctLoad                 = C0;
 
-    YearsTotalCoiCharge         = 0.0;
-    YearsTotalRiderCharges      = 0.0;
+    YearsTotalCoiCharge         = C0;
+    YearsTotalRiderCharges      = C0;
     YearsAVRelOnDeath           = 0.0;
     YearsLoanRepaidOnDeath      = 0.0;
     YearsGrossClaims            = 0.0;
     YearsDeathProceeds          = 0.0;
     YearsNetClaims              = 0.0;
-    YearsTotalNetIntCredited    = 0.0;
-    YearsTotalGrossIntCredited  = 0.0;
-    YearsTotalLoanIntAccrued    = 0.0;
+    YearsTotalNetIntCredited    = C0;
+    YearsTotalGrossIntCredited  = C0;
+    YearsTotalLoanIntAccrued    = C0;
     YearsTotalNetCoiCharge      = 0.0;
-    YearsTotalPolicyFee         = 0.0;
+    YearsTotalPolicyFee         = C0;
     YearsTotalDacTaxLoad        = 0.0;
-    YearsTotalSpecAmtLoad       = 0.0;
-    YearsTotalSepAcctLoad       = 0.0;
-    YearsTotalGptForceout       = 0.0;
+    YearsTotalSpecAmtLoad       = C0;
+    YearsTotalSepAcctLoad       = C0;
+    YearsTotalGptForceout       = C0;
 
     NextYearsProjectedCoiCharge = 0.0;
 
@@ -872,12 +872,12 @@ void AccountValue::InitializeYear()
     // variable in each function might have sufficed, except that this
     // quantity is used in the optional monthly detail report. Its
     // value depends on the maximum loan, so it cannot be known here.
-    ActualLoan                  = 0.0;
+    ActualLoan                  = C0;
 
-    GrossPmts   .assign(12, 0.0);
-    EeGrossPmts .assign(12, 0.0);
-    ErGrossPmts .assign(12, 0.0);
-    NetPmts     .assign(12, 0.0);
+    GrossPmts   .assign(12, C0);
+    EeGrossPmts .assign(12, C0);
+    ErGrossPmts .assign(12, C0);
+    NetPmts     .assign(12, C0);
 
     InitializeSpecAmt();
 }
@@ -1034,7 +1034,7 @@ void AccountValue::set_modal_min_premium()
 
 currency AccountValue::SurrChg() const
 {
-    LMI_ASSERT(0.0 <= SurrChg_[Year]);
+    LMI_ASSERT(C0 <= SurrChg_[Year]);
     // For the nonce, CSVBoost() is netted against surrender charge.
     // This class's implementation should be revised to distinguish
     // these additive and subtractive components of CSV.
@@ -1052,7 +1052,7 @@ currency AccountValue::CSVBoost() const
         + yare_input_.CashValueEnhancementRate[Year]
         ;
     LMI_ASSERT(0.0 <= z);
-    return z * std::max(0.0, TotalAccountValue());
+    return z * std::max(C0, TotalAccountValue());
 }
 
 //============================================================================
@@ -1184,7 +1184,7 @@ void AccountValue::FinalizeYear()
 
     // While performing a solve, ignore any positive surrender charge
     // that cannot cause the contract to lapse.
-    if(Solving && 0.0 < surr_chg && LapseIgnoresSurrChg)
+    if(Solving && C0 < surr_chg && LapseIgnoresSurrChg)
         {
         ; // Do nothing.
         }
@@ -1197,7 +1197,7 @@ void AccountValue::FinalizeYear()
 
     if(!Solving)
         {
-        csv_net = std::max(csv_net, 0.0);
+        csv_net = std::max(csv_net, C0);
         }
 
     if(Solving)
@@ -1215,7 +1215,7 @@ void AccountValue::FinalizeYear()
     // the surrender charge are negative while others are positive,
     // consider only their sum here, instead of considering the sign
     // of each component individually.
-    if(surr_chg < 0.0)
+    if(surr_chg < C0)
         {
         cv_7702 -= surr_chg;
         }
@@ -1467,7 +1467,7 @@ currency AccountValue::GetSepAcctAssetsInforce() const
 {
     if(ItLapsed || BasicValues::GetLength() <= Year)
         {
-        return 0.0;
+        return C0;
         }
 
     return SepAcctValueAfterDeduction * partial_mortality_lx()[Year];

@@ -92,7 +92,7 @@ class FindSpecAmt
         ,Premium         {a_Premium}
         ,NetPmtFactorTgt {a_NetPmtFactorTgt}
         ,NetPmtFactorExc {a_NetPmtFactorExc}
-        ,SpecAmt         {0.0}
+        ,SpecAmt         {C0}
         {
         }
     // CURRENCY !! decimal_root() expects this; but see 'ihs_avsolve.cpp'.
@@ -140,7 +140,7 @@ currency gpt_specamt::CalculateSpecAmt
     ,double             a_NetPmtFactorExc
     )
 {
-    LMI_ASSERT(0.0 != a_Premium);
+    LMI_ASSERT(C0  != a_Premium);
     LMI_ASSERT(0.0 != a_NetPmtFactorTgt);
     LMI_ASSERT(0.0 != a_NetPmtFactorExc);
 
