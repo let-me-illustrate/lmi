@@ -63,7 +63,7 @@ currency AccountValue::CalculateSpecAmtFromStrategy
     ,mcenum_sa_strategy strategy
     ) const
 {
-    double annualized_pmt =
+    currency annualized_pmt =
             Outlay_->ee_premium_modes ()[reference_year]
           * Outlay_->ee_modal_premiums()[reference_year]
         +   Outlay_->er_premium_modes ()[reference_year]
@@ -127,12 +127,12 @@ void AccountValue::PerformSpecAmtStrategy()
     // yare_input_.SpecifiedAmount means that the inforce warning
     // appears only once, because the former is overwritten but the
     // latter is not.
-    double const inforce_specamt = DeathBfts_->specamt().at(InforceYear);
+    currency const inforce_specamt = DeathBfts_->specamt().at(InforceYear);
     for(int j = 0; j < BasicValues::Length; ++j)
         {
         bool t = yare_input_.TermRider && 0.0 != yare_input_.TermRiderAmount;
-        double m = minimum_specified_amount(0 == j, t);
-        double explicit_value = DeathBfts_->specamt()[j];
+        currency m = minimum_specified_amount(0 == j, t);
+        currency explicit_value = DeathBfts_->specamt()[j];
         mcenum_sa_strategy strategy = yare_input_.SpecifiedAmountStrategy[j];
         // Don't override a specamt that's being solved for.
         if
@@ -144,7 +144,7 @@ void AccountValue::PerformSpecAmtStrategy()
             {
             strategy = mce_sa_input_scalar;
             }
-        double z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
+        currency z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
         DeathBfts_->set_specamt(round_specamt()(std::max(m, z)), j, 1 + j);
         if
             (  j == InforceYear
@@ -172,10 +172,10 @@ void AccountValue::PerformSupplAmtStrategy()
 {
     for(int j = 0; j < BasicValues::Length; ++j)
         {
-        double m = 0.0; // No minimum other than zero is defined.
-        double explicit_value = DeathBfts_->supplamt()[j];
+        currency m = C0; // No minimum other than zero is defined.
+        currency explicit_value = DeathBfts_->supplamt()[j];
         mcenum_sa_strategy strategy = yare_input_.SupplementalAmountStrategy[j];
-        double z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
+        currency z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
         DeathBfts_->set_supplamt(round_specamt()(std::max(m, z)), j, 1 + j);
         }
 }
@@ -258,7 +258,7 @@ currency AccountValue::DoPerformPmtStrategy
                 }
             else
                 {
-                double sa = ActualSpecAmt + TermSpecAmt;
+                currency sa = ActualSpecAmt + TermSpecAmt;
                 return GetModalMinPrem(Year, a_CurrentMode, sa);
                 }
             }
@@ -266,27 +266,27 @@ currency AccountValue::DoPerformPmtStrategy
         case mce_pmt_target:
             {
             int const target_year = TgtPremFixedAtIssue ? 0 : Year;
-            double sa = base_specamt(target_year);
+            currency sa = base_specamt(target_year);
             return GetModalTgtPrem(Year, a_CurrentMode, sa);
             }
         case mce_pmt_mep:
             {
-            double sa = specamt_for_7702A(0);
+            currency sa = specamt_for_7702A(0);
             return GetModalPremMaxNonMec(0, a_InitialMode, sa);
             }
         case mce_pmt_glp:
             {
-            double sa = specamt_for_7702(0);
+            currency sa = specamt_for_7702(0);
             return GetModalPremGLP(0, a_InitialMode, sa, sa);
             }
         case mce_pmt_gsp:
             {
-            double sa = specamt_for_7702(0);
+            currency sa = specamt_for_7702(0);
             return GetModalPremGSP(0, a_InitialMode, sa, sa);
             }
         case mce_pmt_corridor:
             {
-            double sa = specamt_for_7702(0);
+            currency sa = specamt_for_7702(0);
             return GetModalPremCorridor(0, a_InitialMode, sa);
             }
         case mce_pmt_table:
