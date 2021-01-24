@@ -27,6 +27,7 @@
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
 #include "contains.hpp"
+#include "currency.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
@@ -107,7 +108,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         }
     else if(b->database().query<bool>(DB_TermIsNotRider))
         {
-        TermSpecAmt            = b->DeathBfts_->supplamt();
+        TermSpecAmt            = dblize(b->DeathBfts_->supplamt());
         if(!each_equal(TermSpecAmt, 0.0))
             {
             HasSupplSpecAmt    = true;
@@ -117,7 +118,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         {
         TermSpecAmt            .assign(Length, 0.0);
         }
-    SpecAmt                    = b->DeathBfts_->specamt();
+    SpecAmt                    = dblize(b->DeathBfts_->specamt());
 
     // Forborne vectors.
 
@@ -146,7 +147,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     // Scalable scalars.
 
     // SOMEDAY !! Things indexed with '[0]' should probably use inforce year instead.
-    InitBaseSpecAmt            = b->DeathBfts_->specamt()[0];
+    InitBaseSpecAmt            = dblize(b->DeathBfts_->specamt()[0]);
     InitTermSpecAmt            = TermSpecAmt[0];
     ChildRiderAmount           = b->yare_input_.ChildRiderAmount;
     SpouseRiderAmount          = b->yare_input_.SpouseRiderAmount;
@@ -725,7 +726,7 @@ void LedgerInvariant::ReInit(BasicValues const* b)
         }
     else if(b->database().query<bool>(DB_TermIsNotRider))
         {
-        TermSpecAmt            = b->DeathBfts_->supplamt();
+        TermSpecAmt            = dblize(b->DeathBfts_->supplamt());
         if(!each_equal(TermSpecAmt, 0.0))
             {
             HasSupplSpecAmt    = true;
@@ -735,9 +736,9 @@ void LedgerInvariant::ReInit(BasicValues const* b)
         {
         TermSpecAmt            .assign(Length, 0.0);
         }
-    SpecAmt                    = b->DeathBfts_->specamt();
+    SpecAmt                    = dblize(b->DeathBfts_->specamt());
 
-    InitBaseSpecAmt            = b->DeathBfts_->specamt()[0];
+    InitBaseSpecAmt            = dblize(b->DeathBfts_->specamt()[0]);
     InitTermSpecAmt            = TermSpecAmt[0];
 
     IsMec                      = false;

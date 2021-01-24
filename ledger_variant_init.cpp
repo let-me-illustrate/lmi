@@ -112,7 +112,7 @@ void LedgerVariant::Init
         ;
 
     InitTgtPremHiLoadRate = bv.Loads_->target_premium_load_maximum_premium_tax()[bv.yare_input_.InforceYear];
-    InitMlyPolFee         = bv.Loads_->monthly_policy_fee(GenBasis_)            [bv.yare_input_.InforceYear];
+    InitMlyPolFee         = dblize(bv.Loads_->monthly_policy_fee(GenBasis_)     [bv.yare_input_.InforceYear]);
 
     FullyInitialized = true;
 }
