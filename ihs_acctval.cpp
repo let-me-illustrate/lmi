@@ -539,15 +539,15 @@ void AccountValue::SetInitialValues()
 {
     InforceYear           = yare_input_.InforceYear                     ;
     InforceMonth          = yare_input_.InforceMonth                    ;
-    InforceAVGenAcct      = yare_input_.InforceGeneralAccountValue      ;
-    InforceAVSepAcct      = yare_input_.InforceSeparateAccountValue     ;
-    InforceAVRegLn        = yare_input_.InforceRegularLoanValue         ;
-    InforceAVPrfLn        = yare_input_.InforcePreferredLoanValue       ;
-    InforceRegLnBal       = yare_input_.InforceRegularLoanBalance       ;
-    InforcePrfLnBal       = yare_input_.InforcePreferredLoanBalance     ;
-    InforceCumNoLapsePrem = yare_input_.InforceCumulativeNoLapsePremium ;
-    InforceCumPmts        = yare_input_.InforceCumulativeNoLapsePayments;
-    InforceTaxBasis       = yare_input_.InforceTaxBasis                 ;
+    InforceAVGenAcct      = round_minutiae().c(yare_input_.InforceGeneralAccountValue      );
+    InforceAVSepAcct      = round_minutiae().c(yare_input_.InforceSeparateAccountValue     );
+    InforceAVRegLn        = round_minutiae().c(yare_input_.InforceRegularLoanValue         );
+    InforceAVPrfLn        = round_minutiae().c(yare_input_.InforcePreferredLoanValue       );
+    InforceRegLnBal       = round_minutiae().c(yare_input_.InforceRegularLoanBalance       );
+    InforcePrfLnBal       = round_minutiae().c(yare_input_.InforcePreferredLoanBalance     );
+    InforceCumNoLapsePrem = round_minutiae().c(yare_input_.InforceCumulativeNoLapsePremium );
+    InforceCumPmts        = round_minutiae().c(yare_input_.InforceCumulativeNoLapsePayments);
+    InforceTaxBasis       = round_minutiae().c(yare_input_.InforceTaxBasis                 );
 
     Year                  = InforceYear;
     Month                 = InforceMonth;

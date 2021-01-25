@@ -128,7 +128,8 @@ AccountValue::AccountValue(Input const& input)
 
 currency AccountValue::base_specamt(int year) const
 {
-    return InvariantValues().SpecAmt[year];
+    // CURRENCY !! Cents in ledger will make rounding unnecessary.
+    return round_specamt().c(InvariantValues().SpecAmt[year]);
 }
 
 //============================================================================
@@ -222,7 +223,7 @@ void AccountValue::RunOneCell(mcenum_run_basis TheBasis)
 
     InforceYear      = yare_input_.InforceYear;
     InforceMonth     = yare_input_.InforceMonth;
-    InforceAVGenAcct = yare_input_.InforceGeneralAccountValue;
+    InforceAVGenAcct = round_minutiae().c(yare_input_.InforceGeneralAccountValue);
 
     ItLapsed         = false;
     LapseMonth       = 0;
@@ -282,7 +283,7 @@ void AccountValue::DoYear
 
     pmt                   = stored_pmts[Year];
     YearsPremLoadTgt      = Loads_->target_premium_load(GenBasis_)[Year];
-    YearsMonthlyPolicyFee = Loads_->monthly_policy_fee(GenBasis_)[Year];
+    YearsMonthlyPolicyFee = Loads_->monthly_policy_fee (GenBasis_)[Year];
     ActualSpecAmt         = base_specamt(Year);
 
     // These variables are set for each pass independently.
@@ -485,7 +486,7 @@ void AccountValue::PerformSpecAmtStrategy()
             }
         }
 
-    SA = round_specamt()(SA);
+    SA = round_specamt().c(SA);
 
     for(int j = 0; j < BasicValues::GetLength(); ++j)
         {
@@ -544,7 +545,7 @@ void AccountValue::TxOptionChange()
             alarum() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
             }
         }
-    ActualSpecAmt = round_specamt()(ActualSpecAmt);
+    ActualSpecAmt = round_specamt().c(ActualSpecAmt);
 
     // Carry the new spec amt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); ++j)
@@ -698,7 +699,7 @@ void AccountValue::TxPmt()
 //            (DB-AV)/YearsCorridorFactor - AV
 
     // Subtract premium load from gross premium yielding net premium.
-    NetPmts[Month] = round_net_premium()
+    NetPmts[Month] = round_net_premium().c
         (GrossPmts[Month] * (1.0 - YearsPremLoadTgt)
         );
     // Should we instead do the following?
@@ -769,7 +770,7 @@ void AccountValue::TxSetDeathBft()
             }
         }
 
-    deathbft = round_death_benefit()(deathbft);
+    deathbft = round_death_benefit().c(deathbft);
 
     // SOMEDAY !! Accumulate average death benefit for profit testing here.
 }
@@ -783,7 +784,7 @@ void AccountValue::TxSetCoiCharge()
     // Negative AV doesn't increase NAAR.
     NAAR = round_naar()(deathbft * mlyguarv - (AVUnloaned + AVRegLn + AVPrfLn));
 
-    CoiCharge = round_coi_charge()(NAAR * YearsCoiRate0);
+    CoiCharge = round_coi_charge().c(NAAR * YearsCoiRate0);
 }
 
 /// Calculate rider charges.
@@ -825,8 +826,7 @@ void AccountValue::TxCreditInt()
     if(C0 < AVUnloaned)
         {
         // IHS !! Each interest increment is rounded separately in lmi.
-        double z = round_interest_credit()(AVUnloaned * YearsGenAcctIntRate);
-        AVUnloaned += z;
+        AVUnloaned += round_interest_credit().c(AVUnloaned * YearsGenAcctIntRate);
         }
     // Loaned account value cannot be negative.
     LMI_ASSERT(C0 <= AVRegLn + AVPrfLn);
@@ -844,14 +844,14 @@ void AccountValue::TxLoanInt()
 
     // We may want to display credited interest separately.
     // IHS !! Each interest increment is rounded separately in lmi.
-    RegLnIntCred = round_interest_credit()(AVRegLn * YearsRegLnIntCredRate);
-    PrfLnIntCred = round_interest_credit()(AVPrfLn * YearsPrfLnIntCredRate);
+    RegLnIntCred = round_interest_credit().c(AVRegLn * YearsRegLnIntCredRate);
+    PrfLnIntCred = round_interest_credit().c(AVPrfLn * YearsPrfLnIntCredRate);
 
     AVRegLn += RegLnIntCred;
     AVPrfLn += PrfLnIntCred;
 
-    double RegLnIntAccrued = round_interest_credit()(RegLnBal * YearsRegLnIntDueRate);
-    double PrfLnIntAccrued = round_interest_credit()(PrfLnBal * YearsPrfLnIntDueRate);
+    currency RegLnIntAccrued = round_interest_credit().c(RegLnBal * YearsRegLnIntDueRate);
+    currency PrfLnIntAccrued = round_interest_credit().c(PrfLnBal * YearsPrfLnIntDueRate);
 
     RegLnBal += RegLnIntAccrued;
     PrfLnBal += PrfLnIntAccrued;
@@ -917,7 +917,7 @@ void AccountValue::TxTakeWD()
 // IHS !!            ActualSpecAmt = std::min(ActualSpecAmt, deathbft - wd);
             ActualSpecAmt -= wd;
             ActualSpecAmt = std::max(ActualSpecAmt, MinSpecAmt);
-            ActualSpecAmt = round_specamt()(ActualSpecAmt);
+            ActualSpecAmt = round_specamt().c(ActualSpecAmt);
             // IHS !! If WD causes AV < min AV, do we:
             //   reduce the WD?
             //   lapse the policy?
