@@ -108,7 +108,7 @@ class FindSpecAmt
                     ,a_Trial
                     ,NetPmtFactorTgt
                     ,NetPmtFactorExc
-                    ,Values_.GetAnnualTgtPrem(Duration, SpecAmt)
+                    ,dblize(Values_.GetAnnualTgtPrem(Duration, SpecAmt))
                     )
             -   Premium
             ;
@@ -151,7 +151,7 @@ currency gpt_specamt::CalculateSpecAmt
         ,z
         ,a_EIOBasis
         ,a_Duration
-        ,a_Premium
+        ,dblize(a_Premium)
         ,a_NetPmtFactorTgt
         ,a_NetPmtFactorExc
         );

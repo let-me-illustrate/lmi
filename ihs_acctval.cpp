@@ -424,12 +424,12 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     SurrChg_.assign(BasicValues::GetLength(), C0);
 
     // TAXATION !! Input::InforceAnnualTargetPremium should be used here.
-    double annual_target_premium = GetModalTgtPrem
+    double annual_target_premium = dblize(GetModalTgtPrem
         (0
         ,mce_annual
         ,base_specamt(0)
-        );
-    double sa = specamt_for_7702(0);
+        ));
+    double sa = dblize(specamt_for_7702(0));
 
     // It is at best superfluous to do this for every basis.
     // TAXATION !! Don't do that then.
@@ -473,7 +473,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     if(yare_input_.EffectiveDate == yare_input_.InforceAsOfDate)
         {
         // No need to initialize 'pmts_7702a' in this case.
-        bfts_7702a.push_back(specamt_for_7702A(0));
+        bfts_7702a.push_back(dblize(specamt_for_7702A(0)));
         }
     else
         {
@@ -924,7 +924,7 @@ void AccountValue::InitializeSpecAmt()
 
     if(0 == Year)
         {
-        InvariantValues().InitTgtPrem = AnnualTargetPrem;
+        InvariantValues().InitTgtPrem = dblize(AnnualTargetPrem);
         }
 
     // TODO ?? Perform specamt strategy here?
@@ -963,8 +963,8 @@ void AccountValue::set_list_bill_premium()
             ,Outlay_->er_premium_modes()[Year]
             ,base_specamt(Year)
             );
-        InvariantValues().ListBillPremium   = z;
-        InvariantValues().ErListBillPremium = z;
+        InvariantValues().ListBillPremium   = dblize(z);
+        InvariantValues().ErListBillPremium = dblize(z);
         }
     else
         {
@@ -974,9 +974,9 @@ void AccountValue::set_list_bill_premium()
             ,base_specamt(Year)
             ,term_specamt(Year)
             );
-        InvariantValues().EeListBillPremium = z.first;
-        InvariantValues().ErListBillPremium = z.second;
-        InvariantValues().ListBillPremium = z.first + z.second;
+        InvariantValues().EeListBillPremium = dblize(z.first);
+        InvariantValues().ErListBillPremium = dblize(z.second);
+        InvariantValues().ListBillPremium = dblize(z.first + z.second);
         }
 }
 
@@ -1001,8 +1001,8 @@ void AccountValue::set_modal_min_premium()
             ,Outlay_->er_premium_modes()[Year]
             ,base_specamt(Year)
             );
-        InvariantValues().ModalMinimumPremium[Year]   = z;
-        InvariantValues().ErModalMinimumPremium[Year] = z;
+        InvariantValues().ModalMinimumPremium[Year]   = dblize(z);
+        InvariantValues().ErModalMinimumPremium[Year] = dblize(z);
         }
     else
         {
@@ -1012,9 +1012,9 @@ void AccountValue::set_modal_min_premium()
             ,base_specamt(Year)
             ,term_specamt(Year)
             );
-        InvariantValues().EeModalMinimumPremium[Year] = z.first;
-        InvariantValues().ErModalMinimumPremium[Year] = z.second;
-        InvariantValues().ModalMinimumPremium[Year] = z.first + z.second;
+        InvariantValues().EeModalMinimumPremium[Year] = dblize(z.first);
+        InvariantValues().ErModalMinimumPremium[Year] = dblize(z.second);
+        InvariantValues().ModalMinimumPremium[Year] = dblize(z.first + z.second);
         }
 }
 
@@ -1130,8 +1130,8 @@ void AccountValue::SetProjectedCoiCharge()
     TxSetDeathBft();
     TxSetTermAmt();
     double this_years_terminal_naar = material_difference
-        (DBReflectingCorr + TermDB
-        ,TotalAccountValue()
+        (dblize(DBReflectingCorr + TermDB)
+        ,dblize(TotalAccountValue())
         );
     this_years_terminal_naar = std::max(0.0, this_years_terminal_naar);
     double next_years_coi_rate = GetBandedCoiRates(GenBasis_, ActualSpecAmt)[1 + Year];
@@ -1165,7 +1165,7 @@ void AccountValue::SetProjectedCoiCharge()
 
 void AccountValue::FinalizeYear()
 {
-    VariantValues().TotalLoanBalance[Year] = RegLnBal + PrfLnBal;
+    VariantValues().TotalLoanBalance[Year] = dblize(RegLnBal + PrfLnBal);
 
     double total_av = TotalAccountValue();
     double surr_chg = SurrChg();
@@ -1221,12 +1221,12 @@ void AccountValue::FinalizeYear()
         }
     cv_7702 = std::max(cv_7702, HoneymoonValue);
 
-    VariantValues().AcctVal     [Year] = total_av;
-    VariantValues().AVGenAcct   [Year] = AVGenAcct + AVRegLn + AVPrfLn;
-    VariantValues().AVSepAcct   [Year] = AVSepAcct;
+    VariantValues().AcctVal     [Year] = dblize(total_av);
+    VariantValues().AVGenAcct   [Year] = dblize(AVGenAcct + AVRegLn + AVPrfLn);
+    VariantValues().AVSepAcct   [Year] = dblize(AVSepAcct);
     VariantValues().DacTaxRsv   [Year] = DacTaxRsv;
-    VariantValues().CSVNet      [Year] = csv_net;
-    VariantValues().CV7702      [Year] = cv_7702;
+    VariantValues().CSVNet      [Year] = dblize(csv_net);
+    VariantValues().CV7702      [Year] = dblize(cv_7702);
 
     // Update death benefit. 'DBReflectingCorr' currently equals the
     // death benefit as of the beginning of the twelfth month, but its
@@ -1236,11 +1236,11 @@ void AccountValue::FinalizeYear()
     TxSetDeathBft();
     TxSetTermAmt();
     // post values to LedgerVariant
-    InvariantValues().TermSpecAmt   [Year] = TermSpecAmt;
-    VariantValues().TermPurchased   [Year] = TermDB;
+    InvariantValues().TermSpecAmt   [Year] = dblize(TermSpecAmt);
+    VariantValues().TermPurchased   [Year] = dblize(TermDB);
     // Add term rider DB
-    VariantValues().BaseDeathBft    [Year] = DBReflectingCorr;
-    VariantValues().EOYDeathBft     [Year] = DBReflectingCorr + TermDB;
+    VariantValues().BaseDeathBft    [Year] = dblize(DBReflectingCorr);
+    VariantValues().EOYDeathBft     [Year] = dblize(DBReflectingCorr + TermDB);
 
 /*
     // AV already includes any experience refund credited, but it's
@@ -1265,20 +1265,20 @@ void AccountValue::FinalizeYear()
 
     // Monthly deduction detail
 
-    VariantValues().COICharge         [Year] = YearsTotalCoiCharge        ;
-    VariantValues().RiderCharges      [Year] = YearsTotalRiderCharges     ;
-    VariantValues().AVRelOnDeath      [Year] = YearsAVRelOnDeath          ;
-    VariantValues().ClaimsPaid        [Year] = YearsGrossClaims           ;
-    VariantValues().DeathProceedsPaid [Year] = YearsDeathProceeds         ;
-    VariantValues().NetClaims         [Year] = YearsNetClaims             ;
-    VariantValues().NetIntCredited    [Year] = YearsTotalNetIntCredited   ;
-    VariantValues().GrossIntCredited  [Year] = YearsTotalGrossIntCredited ;
-    VariantValues().LoanIntAccrued    [Year] = YearsTotalLoanIntAccrued   ;
-    VariantValues().NetCOICharge      [Year] = YearsTotalNetCoiCharge     ;
-    VariantValues().PolicyFee         [Year] = YearsTotalPolicyFee        ;
-    VariantValues().DacTaxLoad        [Year] = YearsTotalDacTaxLoad       ;
-    VariantValues().SpecAmtLoad       [Year] = YearsTotalSpecAmtLoad      ;
-    VariantValues().PremTaxLoad       [Year] = PremiumTax_->ytd_load();
+    VariantValues().COICharge         [Year] = dblize(YearsTotalCoiCharge)    ;
+    VariantValues().RiderCharges      [Year] = dblize(YearsTotalRiderCharges) ;
+    VariantValues().AVRelOnDeath      [Year] = YearsAVRelOnDeath              ;
+    VariantValues().ClaimsPaid        [Year] = YearsGrossClaims               ;
+    VariantValues().DeathProceedsPaid [Year] = YearsDeathProceeds             ;
+    VariantValues().NetClaims         [Year] = YearsNetClaims                 ;
+    VariantValues().NetIntCredited    [Year] = dblize(YearsTotalNetIntCredited);
+    VariantValues().GrossIntCredited  [Year] = dblize(YearsTotalGrossIntCredited);
+    VariantValues().LoanIntAccrued    [Year] = dblize(YearsTotalLoanIntAccrued);
+    VariantValues().NetCOICharge      [Year] = YearsTotalNetCoiCharge         ;
+    VariantValues().PolicyFee         [Year] = dblize(YearsTotalPolicyFee)    ;
+    VariantValues().DacTaxLoad        [Year] = YearsTotalDacTaxLoad           ;
+    VariantValues().SpecAmtLoad       [Year] = dblize(YearsTotalSpecAmtLoad)  ;
+    VariantValues().PremTaxLoad       [Year] = PremiumTax_->ytd_load()        ;
 
     double notional_sep_acct_charge =
           YearsTotalSepAcctLoad
@@ -1319,11 +1319,11 @@ void AccountValue::FinalizeYear()
             );
         }
 
-    VariantValues().NetPmt[Year] = std::accumulate
+    VariantValues().NetPmt[Year] = dblize(std::accumulate
         (NetPmts.begin()
         ,NetPmts.end()
         ,-YearsTotalGptForceout
-        );
+        ));
 
     if(mce_run_gen_curr_sep_full == RunBasis_)
         {
@@ -1335,8 +1335,8 @@ void AccountValue::FinalizeYear()
         // Forceouts should be a distinct component, passed separately
         // to ledger values. Probably we should treat 1035 exchanges
         // and NAAR 'forceouts' the same way.
-        InvariantValues().GrossPmt  [Year]  -= YearsTotalGptForceout;
-        InvariantValues().EeGrossPmt[Year]  -= YearsTotalGptForceout;
+        InvariantValues().GrossPmt  [Year]  -= dblize(YearsTotalGptForceout);
+        InvariantValues().EeGrossPmt[Year]  -= dblize(YearsTotalGptForceout);
 
         for(int j = 0; j < 12; ++j)
             {
@@ -1362,7 +1362,7 @@ void AccountValue::FinalizeYear()
             -   InvariantValues().NewCashLoan[Year]
             ;
 
-        InvariantValues().GptForceout[Year] = YearsTotalGptForceout;
+        InvariantValues().GptForceout[Year] = dblize(YearsTotalGptForceout);
 
 // SOMEDAY !! Not yet implemented.
 //        InvariantValues().NaarForceout[Year] = InvariantValues().ErGrossPmt[Year];

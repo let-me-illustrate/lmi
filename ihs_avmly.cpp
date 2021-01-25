@@ -120,14 +120,14 @@ void AccountValue::DoMonthDR()
     // TAXATION !! Is it really useful to comment the arguments here?
     Irc7702A_->UpdateBft7702A
         (Dcv
-        ,DBReflectingCorr + TermDB // DB7702A
-        ,OldDB // prior_db_7702A
+        ,dblize(DBReflectingCorr + TermDB) // DB7702A
+        ,dblize(OldDB) // prior_db_7702A
         ,DBReflectingCorr == DBIgnoringCorr
         // TAXATION !! This assumes the term rider can be treated as death benefit;
         // use 'TermIsDbFor7702A'.
-        ,ActualSpecAmt + TermSpecAmt
-        ,OldSA // prior_sa_7702A
-        ,CashValueFor7702()
+        ,dblize(ActualSpecAmt + TermSpecAmt)
+        ,dblize(OldSA) // prior_sa_7702A
+        ,dblize(CashValueFor7702())
         );
 
     NetPmts  [Month] = C0; // TODO ?? expunge as being unnecessary
@@ -153,17 +153,17 @@ void AccountValue::DoMonthDR()
 // TODO ?? TAXATION !! Use CashValueFor7702() instead?
     double max_necessary_premium = Irc7702A_->MaxNecessaryPremium
         (Dcv
-        ,AnnualTargetPrem
+        ,dblize(AnnualTargetPrem)
         ,YearsTotLoadTgtLowestPremtax
         ,YearsTotLoadExcLowestPremtax
-        ,kludge_account_value
+        ,dblize(kludge_account_value)
         );
     double max_non_mec_premium = Irc7702A_->MaxNonMecPremium
         (Dcv
-        ,AnnualTargetPrem
+        ,dblize(AnnualTargetPrem)
         ,YearsTotLoadTgtLowestPremtax
         ,YearsTotLoadExcLowestPremtax
-        ,kludge_account_value
+        ,dblize(kludge_account_value)
         );
 
     // Saved for monthly detail report only. TAXATION !! Then are
@@ -187,12 +187,12 @@ void AccountValue::DoMonthDR()
         {
         Irc7702A_->UpdatePmt7702A
             (Dcv
-            ,-NetWD // TAXATION !! This should be gross, not net.
+            ,dblize(-NetWD) // TAXATION !! This should be gross, not net.
             ,false
-            ,AnnualTargetPrem
+            ,dblize(AnnualTargetPrem)
             ,YearsTotLoadTgtLowestPremtax
             ,YearsTotLoadExcLowestPremtax
-            ,kludge_account_value
+            ,dblize(kludge_account_value)
             );
         }
 
@@ -228,7 +228,7 @@ void AccountValue::DoMonthDR()
         (Dcv // Potentially modified.
         ,unnecessary_premium
         ,necessary_premium
-        ,CashValueFor7702()
+        ,dblize(CashValueFor7702())
         );
     LMI_ASSERT(0.0 <= Dcv);
 
@@ -579,10 +579,10 @@ void AccountValue::TxExch1035()
     LMI_ASSERT(0.0 == Dcv);
     Irc7702A_->Update1035Exch7702A
         (Dcv
-        ,NetPmts[Month]
+        ,dblize(NetPmts[Month])
         // TAXATION !! This assumes the term rider can be treated as death benefit;
         // use 'TermIsDbFor7702A'.
-        ,ActualSpecAmt + TermSpecAmt
+        ,dblize(ActualSpecAmt + TermSpecAmt)
 //        ,DBReflectingCorr + TermDB // TAXATION !! Alternate if 7702A benefit is DB?
         );
 
@@ -769,12 +769,12 @@ void AccountValue::ChangeSpecAmtBy(currency delta)
 // TODO ?? Shouldn't this be moved to FinalizeMonth()? The problem is
 // that the ledger object is used for working storage, where it should
 // probably be write-only instead.
-        InvariantValues().SpecAmt[j] = ActualSpecAmt;
+        InvariantValues().SpecAmt[j] = dblize(ActualSpecAmt);
         // Adjust term here only if it's formally a rider.
         // Otherwise, its amount should not have been changed.
         if(!TermIsNotRider)
             {
-            InvariantValues().TermSpecAmt[j] = TermSpecAmt;
+            InvariantValues().TermSpecAmt[j] = dblize(TermSpecAmt);
             }
 // Term specamt is a vector in class LedgerInvariant, but a scalar in
 // the input classes, e.g.:
@@ -800,7 +800,7 @@ void AccountValue::ChangeSupplAmtBy(currency delta)
     // At least for now, there is no effect on surrender charges.
     for(int j = Year; j < BasicValues::GetLength(); ++j)
         {
-        InvariantValues().TermSpecAmt[j] = TermSpecAmt;
+        InvariantValues().TermSpecAmt[j] = dblize(TermSpecAmt);
         }
     // Reset term DB whenever term SA changes. It's not obviously
     // necessary to do this here, but neither should it do any harm.
@@ -1104,15 +1104,15 @@ void AccountValue::TxTestGPT()
         // Or maybe not, because we can't match it if there was a plan change.
         Irc7702_->ProcessAdjustableEvent
             (Year
-            ,DBReflectingCorr + TermDB
-            ,OldDB
+            ,dblize(DBReflectingCorr + TermDB)
+            ,dblize(OldDB)
             // TAXATION !! This assumes the term rider can be treated as death benefit;
             // use 'TermIsDbFor7702'.
-            ,ActualSpecAmt + TermSpecAmt
-            ,OldSA
+            ,dblize(ActualSpecAmt + TermSpecAmt)
+            ,dblize(OldSA)
             ,new_dbopt
             ,old_dbopt
-            ,AnnualTargetPrem
+            ,dblize(AnnualTargetPrem)
             );
         }
 
@@ -1324,12 +1324,12 @@ void AccountValue::TxRecognizePaymentFor7702A
     double amount_paid_7702A = a_pmt;
     Irc7702A_->UpdatePmt7702A
         (Dcv
-        ,amount_paid_7702A
+        ,dblize(amount_paid_7702A)
         ,a_this_payment_is_unnecessary
-        ,AnnualTargetPrem
+        ,dblize(AnnualTargetPrem)
         ,YearsTotLoadTgtLowestPremtax
         ,YearsTotLoadExcLowestPremtax
-        ,kludge_account_value
+        ,dblize(kludge_account_value)
         );
 }
 
@@ -1505,7 +1505,7 @@ void AccountValue::TxLoanRepay()
 // This seems wrong. If we're changing something that's invariant among
 // bases, why do we change it for each basis?
 // TODO ?? Shouldn't this be moved to FinalizeMonth()?
-    InvariantValues().NewCashLoan[Year] = ActualLoan;
+    InvariantValues().NewCashLoan[Year] = dblize(ActualLoan);
     // TODO ?? Consider changing loan_ullage_[Year] here.
 }
 
@@ -1724,7 +1724,7 @@ void AccountValue::EndTermRider(bool convert)
     // Carry the new term spec amt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); ++j)
         {
-        InvariantValues().TermSpecAmt[j] = TermSpecAmt;
+        InvariantValues().TermSpecAmt[j] = dblize(TermSpecAmt);
         }
 }
 
@@ -2590,7 +2590,7 @@ void AccountValue::TxTakeWD()
 // This seems wrong. If we're changing something that's invariant among
 // bases, why do we change it for each basis?
 // TODO ?? Shouldn't this be moved to FinalizeMonth()?
-    InvariantValues().NetWD[Year] = NetWD;
+    InvariantValues().NetWD[Year] = dblize(NetWD);
 }
 
 //============================================================================
@@ -2694,7 +2694,7 @@ void AccountValue::TxTakeLoan()
         ActualLoan = std::min(max_loan_increment, RequestedLoan);
         ActualLoan = std::max(ActualLoan, C0);
         // TODO ?? Shouldn't this happen in FinalizeMonth()?
-        InvariantValues().NewCashLoan[Year] = ActualLoan;
+        InvariantValues().NewCashLoan[Year] = dblize(ActualLoan);
         }
 
     {
@@ -2869,9 +2869,9 @@ void AccountValue::FinalizeMonth()
         {
         if(0 == Year && 0 == Month)
             {
-            InvariantValues().External1035Amount = External1035Amount;
-            InvariantValues().Internal1035Amount = Internal1035Amount;
-            InvariantValues().Dumpin = Dumpin;
+            InvariantValues().External1035Amount = dblize(External1035Amount);
+            InvariantValues().Internal1035Amount = dblize(Internal1035Amount);
+            InvariantValues().Dumpin = dblize(Dumpin);
             }
 
         // TAXATION !! We could also capture MEC status on other bases here.

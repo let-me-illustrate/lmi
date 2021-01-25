@@ -1016,8 +1016,8 @@ currency BasicValues::GetModalPremGLP
     // for GPT reimplementation.
     double z = Irc7702_->CalculateGLP
         (a_duration
-        ,a_bft_amt
-        ,a_specamt
+        ,dblize(a_bft_amt)
+        ,dblize(a_specamt)
         ,Irc7702_->GetLeastBftAmtEver()
         ,effective_dbopt_7702(DeathBfts_->dbopt()[0], Effective7702DboRop)
         );
@@ -1040,8 +1040,8 @@ currency BasicValues::GetModalPremGSP
 {
     double z = Irc7702_->CalculateGSP
         (a_duration
-        ,a_bft_amt
-        ,a_specamt
+        ,dblize(a_bft_amt)
+        ,dblize(a_specamt)
         ,Irc7702_->GetLeastBftAmtEver()
         );
 
