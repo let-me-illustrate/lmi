@@ -135,14 +135,14 @@ void AccountValue::DoMonthDR()
     TxExch1035();
     // TODO ?? TAXATION !! Is this where spec amt should be increased by GPT?
 
-    double kludge_account_value = std::max(TotalAccountValue(), HoneymoonValue);
+    currency kludge_account_value = std::max(TotalAccountValue(), HoneymoonValue);
     if(0 == Year && 0 == Month)
         {
         // This special case was apparently intended for 1035
         // exchanges, but now seems unnecessary because this
         // assertion never fires:
         //   LMI_ASSERT(kludge_account_value == Dcv);
-        kludge_account_value = Dcv;
+        kludge_account_value = round_minutiae().c(Dcv);
         }
     kludge_account_value = std::max
         (HoneymoonValue
@@ -169,8 +169,8 @@ void AccountValue::DoMonthDR()
     // Saved for monthly detail report only. TAXATION !! Then are
     // these still needed...perhaps in order to report their values
     // prior to accepting any payment?
-    NetMaxNecessaryPremium   = Irc7702A_->DebugGetNetMaxNecPm  ();
-    GrossMaxNecessaryPremium = Irc7702A_->DebugGetGrossMaxNecPm();
+    NetMaxNecessaryPremium   = round_minutiae().c(Irc7702A_->DebugGetNetMaxNecPm  ());
+    GrossMaxNecessaryPremium = round_minutiae().c(Irc7702A_->DebugGetGrossMaxNecPm());
 
     // Determine list-bill premiums only after transactions that
     // might change specamt have been processed.
@@ -196,7 +196,7 @@ void AccountValue::DoMonthDR()
             );
         }
 
-    double gross_1035 = C0;
+    currency gross_1035 = C0;
     if(0 == Year && 0 == Month)
         {
         gross_1035 = External1035Amount + Internal1035Amount;
@@ -273,29 +273,29 @@ void AccountValue::process_payment(currency payment)
     LMI_ASSERT(C0 <= EeGrossPmts[Month]);
     LMI_ASSERT(C0 <= ErGrossPmts[Month]);
 
-    double gross_1035 = C0;
+    currency gross_1035 = C0;
     if(0 == Year && 0 == Month)
         {
         gross_1035 = External1035Amount + Internal1035Amount;
         }
-    double gross_non_1035_pmts = GrossPmts[Month] - gross_1035;
+    currency gross_non_1035_pmts = GrossPmts[Month] - gross_1035;
     double er_proportion = 0.0;
     if(C0 != gross_non_1035_pmts)
         {
-        er_proportion = ErGrossPmts[Month] / gross_non_1035_pmts;
+        er_proportion = ErGrossPmts[Month] / dblize(gross_non_1035_pmts);
         }
 
     // This is a net premium that's multiplied by a gross-premium
     // proportion, because that's the only way the proportion can be
     // deduced from input. But it remains a net premium, so the
     // net-premium rounding rule is appropriate.
-    double er_net_pmt = round_net_premium()(er_proportion * payment);
+    currency er_net_pmt = round_net_premium().c(er_proportion * payment);
     // This is deliberately not rounded. The crucial invariant that
     // must be preserved is that ee + er = total; but rounding both
     // addends could break that invariant, e.g.:
     //   round(2.5) + round(2.5)
     // might not produce 5.0 as desired.
-    double ee_net_pmt = payment - er_net_pmt;
+    currency ee_net_pmt = payment - er_net_pmt;
 
     switch(ee_premium_allocation_method)
         {
@@ -414,9 +414,13 @@ void AccountValue::process_distribution(currency decrement)
 
 void AccountValue::DecrementAVProportionally(currency decrement)
 {
-    decrement = round_minutiae().c(decrement);
+    decrement = round_minutiae().c(decrement); // CURRENCY !! already rounded?
 
+#if defined USE_CURRENCY_CLASS
+    if(decrement == AVGenAcct + AVSepAcct)
+#else  // !defined USE_CURRENCY_CLASS
     if(materially_equal(decrement, AVGenAcct + AVSepAcct))
+#endif // !defined USE_CURRENCY_CLASS
         {
         AVGenAcct = C0;
         AVSepAcct = C0;
@@ -425,8 +429,8 @@ void AccountValue::DecrementAVProportionally(currency decrement)
 
     double general_account_proportion  = 0.0;
     double separate_account_proportion = 0.0;
-    double general_account_nonnegative_assets  = std::max(0.0, AVGenAcct);
-    double separate_account_nonnegative_assets = std::max(0.0, AVSepAcct);
+    double general_account_nonnegative_assets  = dblize(std::max(C0, AVGenAcct));
+    double separate_account_nonnegative_assets = dblize(std::max(C0, AVSepAcct));
     if
         (  0.0 == general_account_nonnegative_assets
         && 0.0 == separate_account_nonnegative_assets
@@ -479,7 +483,11 @@ void AccountValue::DecrementAVProgressively
     ,oenum_increment_account_preference preferred_account
     )
 {
+#if defined USE_CURRENCY_CLASS
+    if(decrement == AVGenAcct + AVSepAcct)
+#else  // !defined USE_CURRENCY_CLASS
     if(materially_equal(decrement, AVGenAcct + AVSepAcct))
+#endif // !defined USE_CURRENCY_CLASS
         {
         AVGenAcct = C0;
         AVSepAcct = C0;
@@ -554,12 +562,12 @@ void AccountValue::TxExch1035()
 
     // TODO ?? Assume for now that all 1035 exchanges represent ee payments.
     EeGrossPmts[Month] = GrossPmts[Month];
-    double amount_exempt_from_premium_tax = C0;
+    currency amount_exempt_from_premium_tax = C0;
     if(WaivePmTxInt1035)
         {
         amount_exempt_from_premium_tax = Internal1035Amount;
         }
-    double actual_load = GetPremLoad
+    currency actual_load = GetPremLoad
         (GrossPmts[Month]
         ,amount_exempt_from_premium_tax
         );
@@ -600,7 +608,7 @@ void AccountValue::TxExch1035()
         // Immediately after a 1035 exchange, DCV should be
         // the 1035 amount reduced by any premium-based loads,
         // but only for the current rate basis.
-        LMI_ASSERT(materially_equal(Dcv, NetPmts[Month]));
+        LMI_ASSERT(materially_equal(Dcv, dblize(NetPmts[Month])));
 
         // The initial seven-pay premium shown on the illustration
         // must be its value immediately after any 1035 exchange,
@@ -694,9 +702,9 @@ currency AccountValue::minimum_specified_amount(bool issuing_now, bool term_ride
 // Make sure ActualSpecAmt is never less than minimum specamt.
 void AccountValue::ChangeSpecAmtBy(currency delta)
 {
-    delta = round_specamt().c(delta);
+    delta = round_specamt().c(delta); // CURRENCY !! already rounded?
     double term_proportion = 0.0;
-    double const old_total_specamt = ActualSpecAmt + TermSpecAmt;
+    currency const old_total_specamt = ActualSpecAmt + TermSpecAmt;
     // Adjust term here only if it's formally a rider.
     if(TermRiderActive && !TermIsNotRider)
         {
@@ -709,7 +717,7 @@ void AccountValue::ChangeSpecAmtBy(currency delta)
                 break;
             case mce_adjust_both:
                 {
-                term_proportion = TermSpecAmt / old_total_specamt;
+                term_proportion = TermSpecAmt / dblize(old_total_specamt);
                 }
                 break;
             case mce_adjust_base:
@@ -787,7 +795,7 @@ void AccountValue::ChangeSpecAmtBy(currency delta)
 
 void AccountValue::ChangeSupplAmtBy(currency delta)
 {
-    delta = round_specamt().c(delta);
+    delta = round_specamt().c(delta); // CURRENCY !! already rounded?
     TermSpecAmt += delta;
 
     // No minimum other than zero is defined.
@@ -970,7 +978,7 @@ void AccountValue::TxSpecAmtChange()
                 (ActualSpecAmt
                 ,minimum_specified_amount(0 == Year && 0 == Month, TermRiderActive)
                 );
-            ActualSpecAmt = round_specamt().c(ActualSpecAmt);
+            ActualSpecAmt = round_specamt().c(ActualSpecAmt); // CURRENCY !! already rounded?
             InvariantValues().SpecAmt[j] = ActualSpecAmt;
             if(!TermIsNotRider)
                 {
@@ -1090,10 +1098,15 @@ void AccountValue::TxTestGPT()
     // TAXATION !! This assumes the term rider can be treated as death benefit;
     // use 'TermIsDbFor7702'.
     bool adj_event =
-            (
-                !materially_equal(OldSA, ActualSpecAmt + TermSpecAmt)
+#if defined USE_CURRENCY_CLASS
+            (   OldSA != ActualSpecAmt + TermSpecAmt
+            &&  OldDB != DBReflectingCorr + TermDB
+            )
+#else  // !defined USE_CURRENCY_CLASS
+            (   !materially_equal(OldSA, ActualSpecAmt + TermSpecAmt)
             &&  !materially_equal(OldDB, DBReflectingCorr + TermDB)
             )
+#endif // !defined USE_CURRENCY_CLASS
         ||  old_dbopt != new_dbopt
         ;
     if(adj_event)
@@ -1114,7 +1127,7 @@ void AccountValue::TxTestGPT()
             );
         }
 
-    GptForceout = Irc7702_->Forceout();
+    GptForceout = round_minutiae().c(Irc7702_->Forceout());
     // TODO ?? TAXATION !! On other bases, nothing is forced out, and payments aren't limited.
     process_distribution(GptForceout);
     YearsTotalGptForceout += GptForceout;
@@ -1186,7 +1199,7 @@ void AccountValue::TxAscertainDesiredPayment()
 
     assert_pmts_add_up(__FILE__, __LINE__, Month);
 
-    double eepmt = C0;
+    currency eepmt = C0;
     if(ee_pay_this_month)
         {
         eepmt = PerformEePmtStrategy();
@@ -1199,7 +1212,7 @@ void AccountValue::TxAscertainDesiredPayment()
         GrossPmts  [Month] += eepmt;
         }
 
-    double erpmt = C0;
+    currency erpmt = C0;
     if(er_pay_this_month)
         {
         erpmt = PerformErPmtStrategy();
@@ -1213,7 +1226,8 @@ void AccountValue::TxAscertainDesiredPayment()
         }
 
     assert_pmts_add_up(__FILE__, __LINE__, Month);
-    // bignum: the largest integer convertible to and from double.
+    // bignum: the largest integer convertible to and from double
+    // such that incrementing it by one loses that property.
     LMI_ASSERT(GrossPmts[Month] < from_cents(1LL << 53));
 
     if(0 == Year && 0 == Month)
@@ -1251,13 +1265,15 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
 
     if(mce_reduce_prem == yare_input_.AvoidMecMethod && !Irc7702A_->IsMecAlready())
         {
-        double gross_1035 = C0;
+        currency gross_1035 = C0;
         if(0 == Year && 0 == Month)
             {
             gross_1035 = External1035Amount + Internal1035Amount;
             }
-        double gross_pmt_without_1035 = GrossPmts[Month] - gross_1035;
-        gross_pmt_without_1035 = std::min(gross_pmt_without_1035, a_maxpmt);
+        currency gross_pmt_without_1035 = GrossPmts[Month] - gross_1035;
+        // CURRENCY !! support infinities?
+//      gross_pmt_without_1035 = std::min(gross_pmt_without_1035, a_maxpmt);
+        gross_pmt_without_1035 = round_gross_premium().c(std::min(dblize(gross_pmt_without_1035), a_maxpmt));
         // TODO ?? For now at least, reduce employee premium first.
         progressively_limit
             (EeGrossPmts[Month]
@@ -1303,10 +1319,10 @@ void AccountValue::TxRecognizePaymentFor7702A
 
     // Policy issue date is always a modal payment date.
 
-    double kludge_account_value = std::max(TotalAccountValue(), HoneymoonValue);
+    currency kludge_account_value = std::max(TotalAccountValue(), HoneymoonValue);
     if(0 == Year && 0 == Month)
         {
-        kludge_account_value = Dcv;
+        kludge_account_value = round_minutiae().c(Dcv);
         }
     kludge_account_value = std::max
         (HoneymoonValue
@@ -1319,7 +1335,7 @@ void AccountValue::TxRecognizePaymentFor7702A
     // TODO ?? TAXATION !! Not correct yet--need to test pmt less deductible WD; and
     // shouldn't we deduct the *gross* WD? [Yes, if any fee is part of the
     // WD, which it normally is.]
-    double amount_paid_7702A = a_pmt;
+    currency amount_paid_7702A = a_pmt;
     Irc7702A_->UpdatePmt7702A
         (Dcv
         ,dblize(amount_paid_7702A)
@@ -1355,7 +1371,7 @@ void AccountValue::TxAcceptPayment(currency a_pmt)
 
     process_payment(net_pmt);
 
-    Dcv += std::max(0.0, net_pmt);
+    Dcv += std::max(0.0, dblize(net_pmt));
     LMI_ASSERT(0.0 <= Dcv);
 
     if(HoneymoonActive)
@@ -1527,11 +1543,12 @@ void AccountValue::TxSetBOMAV()
             (0 == Year && 0 == Month)
             ? std::max
                 (term_specamt(0) + base_specamt(0)
-                ,NetPmts[0] * YearsCorridorFactor
+                ,round_specamt().c(NetPmts[0] * YearsCorridorFactor)
                 )
-            : yare_input_.InforceSpecAmtLoadBase
+            : round_specamt().c(yare_input_.InforceSpecAmtLoadBase)
             ;
-        SpecAmtLoadBase = std::min(SpecAmtLoadBase, SpecAmtLoadLimit);
+        // CURRENCY !! support infinities?
+        SpecAmtLoadBase = round_specamt().c(std::min(dblize(SpecAmtLoadBase), SpecAmtLoadLimit));
         }
 
     // These assignments must happen every month.
@@ -1548,7 +1565,7 @@ void AccountValue::TxSetBOMAV()
 
     process_deduction(MonthsPolicyFees + SpecAmtLoad);
 
-    Dcv -= MonthsPolicyFees + SpecAmtLoad;
+    Dcv -= dblize(MonthsPolicyFees + SpecAmtLoad);
     Dcv = std::max(0.0, Dcv);
 }
 
@@ -1646,12 +1663,12 @@ void AccountValue::TxSetDeathBft()
     DB7702A = DBReflectingCorr + TermDB;
 
     DcvDeathBft = std::max
-        (DBIgnoringCorr
+        (   dblize(DBIgnoringCorr)
         ,   (
                 YearsCorridorFactor
             *   (   Dcv
-                -   std::min(C0, SurrChg())
-                +   GetRefundableSalesLoad()
+                -   dblize(std::min(C0, SurrChg()))
+                +   dblize(GetRefundableSalesLoad())
 //                +   std::max(0.0, ExpRatReserve) // This would be added if it existed.
                 )
             )
@@ -1686,7 +1703,7 @@ void AccountValue::TxSetTermAmt()
         }
 
     TermDB = std::max(C0, TermSpecAmt + DBIgnoringCorr - DBReflectingCorr);
-    TermDB = round_death_benefit().c(TermDB);
+    TermDB = round_death_benefit().c(TermDB); // CURRENCY !! already rounded?
 }
 
 /// Terminate the term rider, optionally converting it to base.
@@ -1853,7 +1870,7 @@ void AccountValue::TxSetRiderDed()
                 WpCharge = round_rider_charges().c
                     (YearsWpRate * std::min(dblize(ActualSpecAmt), WpLimit)
                     );
-                DcvWpCharge = WpCharge;
+                DcvWpCharge = dblize(WpCharge);
                 }
                 break;
             case oe_waiver_times_deductions:
@@ -1877,11 +1894,13 @@ void AccountValue::TxSetRiderDed()
                     YearsWpRate
                     *   (
                             DcvCoiCharge
-                        +   MonthsPolicyFees
-                        +   SpecAmtLoad
-                        +   AdbCharge
-                        +   SpouseRiderCharge
-                        +   ChildRiderCharge
+                        +   dblize(
+                                MonthsPolicyFees
+                            +   SpecAmtLoad
+                            +   AdbCharge
+                            +   SpouseRiderCharge
+                            +   ChildRiderCharge
+                            )
                         +   DcvTermCharge
                         );
                 }
@@ -1909,7 +1928,7 @@ void AccountValue::TxDoMlyDed()
 
     double dcv_mly_ded =
             DcvCoiCharge
-        +   simple_rider_charges
+        +   dblize(simple_rider_charges)
         +   DcvTermCharge
         +   DcvWpCharge
         ;
@@ -1990,17 +2009,18 @@ void AccountValue::TxTakeSepAcctLoad()
 {
     if(SepAcctLoadIsDynamic)
         {
+        // CURRENCY !! should class stratified_charges use currency?
         double stratified_load = StratifiedCharges_->stratified_sepacct_load
             (GenBasis_
-            ,AssetsPostBom
-            ,CumPmtsPostBom
+            ,dblize(AssetsPostBom)
+            ,dblize(CumPmtsPostBom)
             ,database().query<double>(DB_DynSepAcctLoadLimit)
             );
 
         double tiered_comp = 0.0;
         if(oe_asset_charge_load == database().query<oenum_asset_charge_type>(DB_AssetChargeType))
             {
-            tiered_comp = StratifiedCharges_->tiered_asset_based_compensation(AssetsPostBom);
+            tiered_comp = StratifiedCharges_->tiered_asset_based_compensation(dblize(AssetsPostBom));
             }
         if(0.0 != tiered_comp)
             {
@@ -2027,7 +2047,7 @@ void AccountValue::TxTakeSepAcctLoad()
     SepAcctLoad = round_interest_credit().c(YearsSepAcctLoadRate * AVSepAcct);
     process_deduction(SepAcctLoad);
     YearsTotalSepAcctLoad += SepAcctLoad;
-    Dcv -= SepAcctLoad;
+    Dcv -= dblize(SepAcctLoad);
     Dcv = std::max(0.0, Dcv);
 }
 
@@ -2068,8 +2088,8 @@ void AccountValue::ApplyDynamicMandE(currency assets)
 
     // Annual separate-account rates.
 
-    double m_and_e_rate = StratifiedCharges_->tiered_m_and_e(GenBasis_, assets);
-    double imf_rate = StratifiedCharges_->tiered_investment_management_fee(assets);
+    double m_and_e_rate = StratifiedCharges_->tiered_m_and_e(GenBasis_, dblize(assets));
+    double imf_rate = StratifiedCharges_->tiered_investment_management_fee(dblize(assets));
     if(0.0 != imf_rate)
         {
         alarum()
@@ -2079,7 +2099,7 @@ void AccountValue::ApplyDynamicMandE(currency assets)
         }
     double asset_comp_rate =
         (oe_asset_charge_spread == database().query<oenum_asset_charge_type>(DB_AssetChargeType))
-            ? StratifiedCharges_->tiered_asset_based_compensation(assets)
+            ? StratifiedCharges_->tiered_asset_based_compensation(dblize(assets))
             : 0.0
             ;
     if(0.0 != asset_comp_rate)
@@ -2146,8 +2166,11 @@ void AccountValue::TxCreditInt()
     if(C0 < AVSepAcct)
         {
         SepAcctIntCred = InterestCredited(AVSepAcct, YearsSepAcctIntRate);
-        currency gross   = InterestCredited(AVSepAcct, gross_sep_acct_rate);
+        currency gross = InterestCredited(AVSepAcct, gross_sep_acct_rate);
         notional_sep_acct_charge = gross - SepAcctIntCred;
+#if defined USE_CURRENCY_CLASS
+        AVSepAcct += SepAcctIntCred;
+#else  // !defined USE_CURRENCY_CLASS
         // Guard against catastrophic cancellation. Testing the
         // absolute values of the addends for material equality is not
         // sufficient, because the interest increment has already been
@@ -2161,6 +2184,7 @@ void AccountValue::TxCreditInt()
             {
             AVSepAcct = result;
             }
+#endif // !defined USE_CURRENCY_CLASS
         }
     else
         {
@@ -2305,18 +2329,20 @@ currency AccountValue::anticipated_deduction
 void AccountValue::SetMaxWD()
 {
     MaxWD =
-          AVGenAcct * MaxWdGenAcctValMult
-        + AVSepAcct * MaxWdSepAcctValMult
+          round_withdrawal().c
+              ( AVGenAcct * MaxWdGenAcctValMult
+              + AVSepAcct * MaxWdSepAcctValMult
+              )
         + (AVRegLn  + AVPrfLn)
         - (RegLnBal + PrfLnBal)
         - anticipated_deduction(MaxWDDed_)
-        - std::max(0.0, SurrChg())
+        - std::max(C0, SurrChg())
         ;
     if(MaxWD < MinWD)
         {
-        MaxWD = 0.0;
+        MaxWD = C0;
         }
-    MaxWD = std::max(0.0, MaxWD);
+    MaxWD = std::max(C0, MaxWD);
 }
 
 /// Take a withdrawal.
@@ -2361,7 +2387,7 @@ void AccountValue::TxTakeWD()
 
     if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {
-        NetWD = round_withdrawal().c(std::min(RequestedWD, MaxWD));
+        NetWD = round_withdrawal().c(std::min(RequestedWD, MaxWD)); // CURRENCY !! already rounded?
         OverridingWD[Year] = NetWD;
         }
     else
@@ -2487,14 +2513,14 @@ void AccountValue::TxTakeWD()
         return;
         }
 
-    GrossWD = round_withdrawal()(NetWD + std::min(WDFee, NetWD * WDFeeRate));
+    GrossWD = NetWD + std::min(WDFee, round_withdrawal().c(NetWD * WDFeeRate));
 
     // Free partial surrenders: for instance, the first 20% of account
     // value might be withdrawn each policy year free of surrender
     // charge. This would become more complicated if we maintained
     // distinct surrender-charge layers.
 
-    double surrchg_proportion = SurrChg_[Year] / csv;
+    double surrchg_proportion = SurrChg_[Year] / dblize(csv);
     currency non_free_wd = GrossWD;
     if(0.0 != FreeWDProportion[Year])
         {
@@ -2511,7 +2537,7 @@ void AccountValue::TxTakeWD()
     GrossWD += round_withdrawal().c(partial_surrchg);
 
     process_distribution(GrossWD);
-    Dcv -= GrossWD;
+    Dcv -= dblize(GrossWD);
     Dcv = std::max(0.0, Dcv);
 
     switch(YearsDBOpt)
@@ -2593,7 +2619,7 @@ void AccountValue::TxTakeWD()
             {
             // TODO ?? TAXATION !! What if reference argument
             // 'premiums_paid_increment' is modified?
-            double premiums_paid_increment = -GrossWD;
+            double premiums_paid_increment = -dblize(GrossWD);
             Irc7702_->ProcessGptPmt(Year, premiums_paid_increment);
             }
         }
@@ -2609,7 +2635,7 @@ void AccountValue::TxTakeWD()
 void AccountValue::SetMaxLoan()
 {
     MaxLoan =
-          (AVGenAcct + AVSepAcct) * MaxLoanAVMult
+          round_loan().c((AVGenAcct + AVSepAcct) * MaxLoanAVMult)
         + (AVRegLn + AVPrfLn)
         - anticipated_deduction(MaxLoanDed_)
         - std::max(C0, SurrChg())
@@ -2647,19 +2673,19 @@ void AccountValue::SetMaxLoan()
     // the end of the policy year--but does not guarantee that, e.g.
     // because the specified amount may change between anniversaries,
     // even on illustrations.
-    MaxLoan -=
+    MaxLoan -= round_loan().c
+        (
           RegLnBal * reg_loan_factor
         + PrfLnBal * prf_loan_factor
-        ;
+        );
 
     // TODO ?? This adjustment isn't quite right because it uses only
     // the regular-loan interest factor. Is it conservative under the
     // plausible but unasserted assumption that that factor is more
     // liberal than the preferred-loan factor?
     //
-    MaxLoan *= 1.0 - (reg_loan_factor) / (1.0 + reg_loan_factor);
-
-    MaxLoan = round_loan().c(MaxLoan);
+    double adj = 1.0 - (reg_loan_factor) / (1.0 + reg_loan_factor);
+    MaxLoan = round_loan().c(MaxLoan * adj);
 
     // I do not think we want a MaxLoan < current level of indebtedness.
     MaxLoan = std::max((AVRegLn + AVPrfLn), MaxLoan);
@@ -2690,7 +2716,7 @@ void AccountValue::TxTakeLoan()
         return;
         }
 
-    double max_loan_increment = MaxLoan - (AVRegLn + AVPrfLn);
+    currency max_loan_increment = MaxLoan - (AVRegLn + AVPrfLn);
 
     // When performing a solve, let it become overloaned--otherwise
     // we'd introduce a discontinuity in the function for which we
@@ -2795,7 +2821,10 @@ void AccountValue::TxTestLapse()
             (       NoLapseMinAge <= Year + BasicValues::GetIssueAge()
                 &&  NoLapseMinDur <= Year
             ||      CumPmts < CumNoLapsePrem
+#if defined USE_CURRENCY_CLASS
+#else  // !defined USE_CURRENCY_CLASS
                 &&  !materially_equal(CumPmts, CumNoLapsePrem)
+#endif // !defined USE_CURRENCY_CLASS
             )
             {
             NoLapseActive = false;
