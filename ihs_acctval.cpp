@@ -253,8 +253,7 @@ void AccountValue::SetGuarPrem()
         {
         GuarPremium = SolveGuarPremium();
         }
-    LMI_ASSERT(GuarPremium < 1.0e100);
-    ledger_->SetGuarPremium(GuarPremium);
+    ledger_->SetGuarPremium(dblize(GuarPremium));
 }
 
 //============================================================================
