@@ -202,18 +202,22 @@ void AccountValue::DoMonthDR()
         gross_1035 = External1035Amount + Internal1035Amount;
         }
     double necessary_premium = std::min
-        (material_difference(GrossPmts[Month], gross_1035)
+        (material_difference
+            (dblize(GrossPmts[Month])
+            ,dblize(gross_1035)
+            )
         ,max_necessary_premium
         );
     double unnecessary_premium = material_difference
-        (GrossPmts[Month]
-        ,gross_1035 + necessary_premium
+        (dblize(GrossPmts[Month])
+        ,dblize(gross_1035) + necessary_premium
         );
-
+    NecessaryPremium   = round_minutiae().c(necessary_premium  );
+    UnnecessaryPremium = round_minutiae().c(unnecessary_premium);
     // It is crucial to accept necessary premium before processing a
     // material change, so that the correct DCV is used.
-    TxRecognizePaymentFor7702A(necessary_premium, false);
-    TxAcceptPayment(necessary_premium);
+    TxRecognizePaymentFor7702A(NecessaryPremium, false);
+    TxAcceptPayment(NecessaryPremium);
     if(0.0 < unnecessary_premium)
         {
         Irc7702A_->InduceMaterialChange();
@@ -232,9 +236,8 @@ void AccountValue::DoMonthDR()
         );
     LMI_ASSERT(0.0 <= Dcv);
 
-    UnnecessaryPremium = unnecessary_premium;
-    TxRecognizePaymentFor7702A(unnecessary_premium, true);
-    TxAcceptPayment(unnecessary_premium);
+    TxRecognizePaymentFor7702A(UnnecessaryPremium, true);
+    TxAcceptPayment(UnnecessaryPremium);
 
     TxTakeLoan();
     TxLoanRepay();
@@ -542,7 +545,10 @@ void AccountValue::TxExch1035()
         // Illustration-reg guaranteed premium ignores GPT limit.
         if(!SolvingForGuarPremium)
             {
-            Irc7702_->ProcessGptPmt(Year, GrossPmts[Month]);
+            // CURRENCY !! return modified value instead of altering argument
+            double z = dblize(GrossPmts[Month]);
+            Irc7702_->ProcessGptPmt(Year, z);
+            GrossPmts[Month] = round_gross_premium().c(z);
             }
         // Limit external 1035 first, then internal, as necessary to avoid
         // exceeding the guideline limit. This is what the customer would
@@ -1206,7 +1212,10 @@ void AccountValue::TxAscertainDesiredPayment()
         // Illustration-reg guaranteed premium ignores GPT limit.
         if(!SolvingForGuarPremium)
             {
-            Irc7702_->ProcessGptPmt(Year, eepmt);
+            // CURRENCY !! return modified value instead of altering argument
+            double z = dblize(eepmt);
+            Irc7702_->ProcessGptPmt(Year, z);
+            eepmt = round_gross_premium().c(z);
             }
         EeGrossPmts[Month] += eepmt;
         GrossPmts  [Month] += eepmt;
@@ -1219,7 +1228,10 @@ void AccountValue::TxAscertainDesiredPayment()
         // Illustration-reg guaranteed premium ignores GPT limit.
         if(!SolvingForGuarPremium)
             {
-            Irc7702_->ProcessGptPmt(Year, erpmt);
+            // CURRENCY !! return modified value instead of altering argument
+            double z = dblize(erpmt);
+            Irc7702_->ProcessGptPmt(Year, z);
+            erpmt = round_gross_premium().c(z);
             }
         ErGrossPmts[Month] += erpmt;
         GrossPmts  [Month] += erpmt;
@@ -1235,7 +1247,10 @@ void AccountValue::TxAscertainDesiredPayment()
         // Illustration-reg guaranteed premium ignores GPT limit.
         if(!SolvingForGuarPremium)
             {
-            Irc7702_->ProcessGptPmt(Year, Dumpin);
+            // CURRENCY !! return modified value instead of altering argument
+            double z = dblize(Dumpin);
+            Irc7702_->ProcessGptPmt(Year, z);
+            Dumpin = round_gross_premium().c(z);
             }
         EeGrossPmts[Month] += Dumpin;
         GrossPmts  [Month] += Dumpin;
