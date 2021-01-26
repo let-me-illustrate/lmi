@@ -334,8 +334,7 @@ void AccountValue::process_payment(currency payment)
 void AccountValue::IncrementAVProportionally(currency increment)
 {
     increment = round_minutiae().c(increment);
-    double genacct_increment = increment * GenAcctPaymentAllocation;
-    genacct_increment = round_minutiae()(genacct_increment);
+    currency genacct_increment = round_minutiae().c(increment * GenAcctPaymentAllocation);
     AVGenAcct += genacct_increment;
     AVSepAcct += increment - genacct_increment;
 }
@@ -460,8 +459,7 @@ void AccountValue::DecrementAVProportionally(currency decrement)
     // that the sum of the distinct decrements here equals the
     // total decrement. Keep 'separate_account_proportion' above
     // because there may still be value in the assertions.
-    double genacct_decrement = decrement * general_account_proportion;
-    genacct_decrement = round_minutiae()(genacct_decrement);
+    currency genacct_decrement = round_minutiae().c(decrement * general_account_proportion);
     AVGenAcct -= genacct_decrement;
     AVSepAcct -= decrement - genacct_decrement;
 }
@@ -592,10 +590,10 @@ void AccountValue::TxExch1035()
         }
 
     CumPmts += GrossPmts[Month];
-    TaxBasis +=
-          yare_input_.External1035ExchangeTaxBasis
+    TaxBasis += round_minutiae().c
+        ( yare_input_.External1035ExchangeTaxBasis
         + yare_input_.Internal1035ExchangeTaxBasis
-        ;
+        );
 
     if(mce_run_gen_curr_sep_full == RunBasis_)
         {
@@ -972,7 +970,7 @@ void AccountValue::TxSpecAmtChange()
                 (ActualSpecAmt
                 ,minimum_specified_amount(0 == Year && 0 == Month, TermRiderActive)
                 );
-            ActualSpecAmt = round_specamt()(ActualSpecAmt);
+            ActualSpecAmt = round_specamt().c(ActualSpecAmt);
             InvariantValues().SpecAmt[j] = ActualSpecAmt;
             if(!TermIsNotRider)
                 {
@@ -1431,6 +1429,8 @@ currency AccountValue::GetPremLoad
         +   excess_portion * YearsSalesLoadExc
         ;
     LMI_ASSERT(0.0 <= sales_load_);
+    // CURRENCY !! ROUNDING This needs to be rounded.
+//  CumulativeSalesLoad += round_net_premium().c(sales_load_);
     CumulativeSalesLoad += sales_load_;
 
     premium_tax_load_ = PremiumTax_->calculate_load
@@ -1459,13 +1459,13 @@ currency AccountValue::GetPremLoad
         ||  materially_equal(total_load, sum_of_separate_loads)
         );
 
-    return round_net_premium()(sum_of_separate_loads);
+    return round_net_premium().c(sum_of_separate_loads);
 }
 
 //============================================================================
 currency AccountValue::GetRefundableSalesLoad() const
 {
-    // CURRENCY !! This needs to be rounded.
+    // CURRENCY !! ROUNDING This needs to be rounded.
     return CumulativeSalesLoad * YearsSalesLoadRefundRate;
 #if 0
     // CURRENCY !! Assertions such as these are desirable, but adding
@@ -1639,9 +1639,8 @@ void AccountValue::TxSetDeathBft()
 
     DBReflectingCorr = std::max
         (DBIgnoringCorr
-        ,YearsCorridorFactor * std::max(C0, cash_value_for_corridor)
+        ,round_death_benefit().c(YearsCorridorFactor * std::max(C0, cash_value_for_corridor))
         );
-    DBReflectingCorr = round_death_benefit()(DBReflectingCorr);
     LMI_ASSERT(C0 <= DBReflectingCorr);
     // This overrides the value assigned above. There's more than one
     // way to interpret 7702A "death benefit"; this is just one.
@@ -1845,8 +1844,9 @@ void AccountValue::TxSetRiderDed()
             {
             case oe_waiver_times_specamt:
                 {
-                WpCharge = YearsWpRate * std::min(ActualSpecAmt, WpLimit);
-                WpCharge = round_rider_charges()(WpCharge);
+                WpCharge = round_rider_charges().c
+                    (YearsWpRate * std::min(ActualSpecAmt, WpLimit)
+                    );
                 DcvWpCharge = WpCharge;
                 }
                 break;
@@ -1854,7 +1854,8 @@ void AccountValue::TxSetRiderDed()
                 {
                 // Premium load and M&E charges are not waived.
                 // The amount waived is subject to no maximum.
-                WpCharge =
+                WpCharge = round_rider_charges().c
+                    (
                     YearsWpRate
                     *   (
                             CoiCharge
@@ -1864,8 +1865,8 @@ void AccountValue::TxSetRiderDed()
                         +   SpouseRiderCharge
                         +   ChildRiderCharge
                         +   TermCharge
-                        );
-                WpCharge = round_rider_charges()(WpCharge);
+                        )
+                    );
                 DcvWpCharge =
                     YearsWpRate
                     *   (
@@ -1909,7 +1910,7 @@ void AccountValue::TxDoMlyDed()
 
     // Round total rider charges, even if each individual charge was
     // not rounded, so that deductions can be integral cents.
-    RiderCharges = round_minutiae()(simple_rider_charges + TermCharge + WpCharge);
+    RiderCharges = round_minutiae().c(simple_rider_charges + TermCharge + WpCharge);
     YearsTotalRiderCharges += RiderCharges;
     MlyDed = CoiCharge + RiderCharges;
 
