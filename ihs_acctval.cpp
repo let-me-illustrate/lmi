@@ -1169,9 +1169,9 @@ void AccountValue::FinalizeYear()
 {
     VariantValues().TotalLoanBalance[Year] = dblize(RegLnBal + PrfLnBal);
 
-    double total_av = TotalAccountValue();
-    double surr_chg = SurrChg();
-    double csv_net =
+    currency total_av = TotalAccountValue();
+    currency surr_chg = SurrChg();
+    currency csv_net =
           total_av
         - (RegLnBal + PrfLnBal)
 //        + ExpRatReserve // This would be added if it existed.
@@ -1208,7 +1208,7 @@ void AccountValue::FinalizeYear()
         }
 
     // 7702(f)(2)(A)
-    double cv_7702 =
+    currency cv_7702 =
           total_av
         + GetRefundableSalesLoad()
 //        + std::max(0.0, ExpRatReserve) // This would be added if it existed.
@@ -1282,12 +1282,12 @@ void AccountValue::FinalizeYear()
     VariantValues().SpecAmtLoad       [Year] = dblize(YearsTotalSpecAmtLoad)  ;
     VariantValues().PremTaxLoad       [Year] = PremiumTax_->ytd_load()        ;
 
-    double notional_sep_acct_charge =
+    currency notional_sep_acct_charge =
           YearsTotalSepAcctLoad
         + YearsTotalGrossIntCredited
         - YearsTotalNetIntCredited
         ;
-    VariantValues().SepAcctCharges    [Year] = notional_sep_acct_charge   ;
+    VariantValues().SepAcctCharges    [Year] = dblize(notional_sep_acct_charge);
 
     // Record dynamic interest rate in ledger object.
     //

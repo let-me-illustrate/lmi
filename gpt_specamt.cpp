@@ -98,7 +98,7 @@ class FindSpecAmt
     // CURRENCY !! decimal_root() expects this; but see 'ihs_avsolve.cpp'.
     double operator()(double a_Trial)
         {
-        SpecAmt = a_Trial;
+        SpecAmt = Values_.round_min_specamt().c(a_Trial);
         return
                 Irc7702_.CalculatePremium
                     (EIOBasis_

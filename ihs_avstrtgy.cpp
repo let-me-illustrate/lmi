@@ -145,7 +145,7 @@ void AccountValue::PerformSpecAmtStrategy()
             strategy = mce_sa_input_scalar;
             }
         currency z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
-        DeathBfts_->set_specamt(round_specamt()(std::max(m, z)), j, 1 + j);
+        DeathBfts_->set_specamt(round_specamt().c(std::max(m, z)), j, 1 + j);
         if
             (  j == InforceYear
             && yare_input_.EffectiveDate != yare_input_.InforceAsOfDate
@@ -176,7 +176,7 @@ void AccountValue::PerformSupplAmtStrategy()
         currency explicit_value = DeathBfts_->supplamt()[j];
         mcenum_sa_strategy strategy = yare_input_.SupplementalAmountStrategy[j];
         currency z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
-        DeathBfts_->set_supplamt(round_specamt()(std::max(m, z)), j, 1 + j);
+        DeathBfts_->set_supplamt(round_specamt().c(std::max(m, z)), j, 1 + j);
         }
 }
 

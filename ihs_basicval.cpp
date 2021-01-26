@@ -962,7 +962,7 @@ currency BasicValues::GetModalPremTgtFromTable
     return round_max_premium().c
         (ldbl_eps_plus_one_times
             (
-                ( TgtPremMonthlyPolFee * 12
+                ( TgtPremMonthlyPolFee * 12.0
                 + (a_specamt * MortalityRates_->TargetPremiumRates()[0])
                 )
             /   a_mode
@@ -1136,7 +1136,11 @@ std::pair<double,double> BasicValues::approx_mly_ded
     if(yare_input_.AccidentalDeathBenefit)
         {
         double const r = MortalityRates_->AdbRates()[year];
-        mly_ded += r * std::min(specamt, AdbLimit);
+        // CURRENCY !! Here and elsewhere in this file, consider
+        // letting currency objects assume infinite values--so that
+        // 'AdbLimit' could be of currency type, and dblize() would
+        // not be needed.
+        mly_ded += r * std::min(dblize(specamt), AdbLimit);
         }
 
     if(yare_input_.SpouseRider)
@@ -1154,7 +1158,7 @@ std::pair<double,double> BasicValues::approx_mly_ded
     if(true) // Written thus for parallelism and to keep 'r' local.
         {
         double const r = Loads_->specified_amount_load(mce_gen_curr)[year];
-        mly_ded += r * std::min(specamt, SpecAmtLoadLimit);
+        mly_ded += r * std::min(dblize(specamt), SpecAmtLoadLimit);
         }
 
     mly_ded += dblize(Loads_->monthly_policy_fee(mce_gen_curr)[year]);
@@ -1168,7 +1172,7 @@ std::pair<double,double> BasicValues::approx_mly_ded
             {
             case oe_waiver_times_specamt:
                 {
-                mly_ded += r * std::min(specamt, WpLimit);
+                mly_ded += r * std::min(dblize(specamt), WpLimit);
                 }
                 break;
             case oe_waiver_times_deductions:
@@ -1226,7 +1230,7 @@ std::pair<double,double> BasicValues::approx_mly_ded_ex
     if(yare_input_.AccidentalDeathBenefit)
         {
         double const r = MortalityRates_->AdbRates()[year];
-        er_ded += r * std::min(specamt, AdbLimit);
+        er_ded += r * std::min(dblize(specamt), AdbLimit);
         }
 
     // Paid by ee.
@@ -1247,7 +1251,7 @@ std::pair<double,double> BasicValues::approx_mly_ded_ex
     if(true) // Written thus for parallelism and to keep 'r' local.
         {
         double const r = Loads_->specified_amount_load(mce_gen_curr)[year];
-        er_ded += r * std::min(specamt, SpecAmtLoadLimit);
+        er_ded += r * std::min(dblize(specamt), SpecAmtLoadLimit);
         }
 
     // Paid by er.
@@ -1261,7 +1265,7 @@ std::pair<double,double> BasicValues::approx_mly_ded_ex
             case oe_waiver_times_specamt:
                 {
                 // Paid by er. (In this case, WP excludes term.)
-                er_ded += r * std::min(specamt, WpLimit);
+                er_ded += r * std::min(dblize(specamt), WpLimit);
                 }
                 break;
             case oe_waiver_times_deductions:
@@ -1556,11 +1560,11 @@ std::vector<double> const& BasicValues::GetBandedCoiRates
 {
     if(UseUnusualCOIBanding && mce_gen_guar != rate_basis)
         {
-        if(CurrCoiTable0Limit <= a_specamt && a_specamt < CurrCoiTable1Limit)
+        if(CurrCoiTable0Limit <= dblize(a_specamt) && dblize(a_specamt) < CurrCoiTable1Limit)
             {
             return MortalityRates_->MonthlyCoiRatesBand1(rate_basis);
             }
-        else if(CurrCoiTable1Limit <= a_specamt)
+        else if(CurrCoiTable1Limit <= dblize(a_specamt))
             {
             return MortalityRates_->MonthlyCoiRatesBand2(rate_basis);
             }
