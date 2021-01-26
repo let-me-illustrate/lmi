@@ -31,7 +31,7 @@
 currency gpt_specamt::CalculateGLPSpecAmt
     (BasicValues const& a_Values
     ,int                a_Duration
-    ,currency           a_Premium
+    ,double             a_Premium
     ,mcenum_dbopt_7702  a_DBOpt
     )
 {
@@ -49,7 +49,7 @@ currency gpt_specamt::CalculateGLPSpecAmt
 currency gpt_specamt::CalculateGSPSpecAmt
     (BasicValues const& a_Values
     ,int                a_Duration
-    ,currency           a_Premium
+    ,double             a_Premium
     )
 {
     Irc7702 const& z(safely_dereference_as<Irc7702>(a_Values.Irc7702_.get()));
@@ -70,7 +70,7 @@ class FindSpecAmt
     Irc7702     const& Irc7702_;
     EIOBasis    const  EIOBasis_;
     int         const  Duration;
-    double      const  Premium; // CURRENCY !! not currency?
+    double      const  Premium;
     double      const  NetPmtFactorTgt;
     double      const  NetPmtFactorExc;
     currency           SpecAmt;
@@ -81,7 +81,7 @@ class FindSpecAmt
         ,Irc7702 const&     a_IRC7702
         ,EIOBasis           a_EIOBasis
         ,int                a_Duration
-        ,double             a_Premium // CURRENCY !! not currency?
+        ,double             a_Premium
         ,double             a_NetPmtFactorTgt
         ,double             a_NetPmtFactorExc
         )
@@ -135,12 +135,12 @@ currency gpt_specamt::CalculateSpecAmt
     (BasicValues const& a_Values
     ,EIOBasis           a_EIOBasis
     ,int                a_Duration
-    ,currency           a_Premium
+    ,double             a_Premium
     ,double             a_NetPmtFactorTgt
     ,double             a_NetPmtFactorExc
     )
 {
-    LMI_ASSERT(C0  != a_Premium);
+    LMI_ASSERT(0.0 != a_Premium);
     LMI_ASSERT(0.0 != a_NetPmtFactorTgt);
     LMI_ASSERT(0.0 != a_NetPmtFactorExc);
 
@@ -151,7 +151,7 @@ currency gpt_specamt::CalculateSpecAmt
         ,z
         ,a_EIOBasis
         ,a_Duration
-        ,dblize(a_Premium)
+        ,a_Premium
         ,a_NetPmtFactorTgt
         ,a_NetPmtFactorExc
         );

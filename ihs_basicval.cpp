@@ -1456,13 +1456,13 @@ currency BasicValues::GetModalSpecAmtMinNonMec(currency annualized_pmt) const
 currency BasicValues::GetModalSpecAmtGLP(currency annualized_pmt) const
 {
     mcenum_dbopt_7702 const z = effective_dbopt_7702(DeathBfts_->dbopt()[0], Effective7702DboRop);
-    return gpt_specamt::CalculateGLPSpecAmt(*this, 0, annualized_pmt, z);
+    return gpt_specamt::CalculateGLPSpecAmt(*this, 0, dblize(annualized_pmt), z);
 }
 
 //============================================================================
 currency BasicValues::GetModalSpecAmtGSP(currency annualized_pmt) const
 {
-    return gpt_specamt::CalculateGSPSpecAmt(*this, 0, annualized_pmt);
+    return gpt_specamt::CalculateGSPSpecAmt(*this, 0, dblize(annualized_pmt));
 }
 
 /// Calculate specified amount using a corridor ratio.

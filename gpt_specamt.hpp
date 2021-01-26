@@ -57,13 +57,13 @@ class gpt_specamt
     static currency CalculateGLPSpecAmt
         (BasicValues const& a_Values
         ,int                a_Duration
-        ,currency           a_Premium
+        ,double             a_Premium
         ,mcenum_dbopt_7702  a_DBOpt
         );
     static currency CalculateGSPSpecAmt
         (BasicValues const& a_Values
         ,int                a_Duration
-        ,currency           a_Premium
+        ,double             a_Premium
         );
 
   private:
@@ -71,7 +71,7 @@ class gpt_specamt
         (BasicValues const& a_Values
         ,Irc7702::EIOBasis  a_EIOBasis
         ,int                a_Duration
-        ,currency           a_Premium
+        ,double             a_Premium
         ,double             a_NetPmtFactorTgt
         ,double             a_NetPmtFactorExc
         );
