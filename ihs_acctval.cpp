@@ -1052,9 +1052,7 @@ currency AccountValue::CSVBoost() const
         + yare_input_.CashValueEnhancementRate[Year]
         ;
     LMI_ASSERT(0.0 <= z);
-    return z * std::max(C0, TotalAccountValue());
-    // CURRENCY !! This should be rounded.
-//  return round_minutiae().c(z * std::max(C0, TotalAccountValue()));
+    return round_minutiae().c(z * std::max(C0, TotalAccountValue()));
 }
 
 //============================================================================
