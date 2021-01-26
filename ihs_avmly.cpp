@@ -1429,9 +1429,7 @@ currency AccountValue::GetPremLoad
         +   excess_portion * YearsSalesLoadExc
         ;
     LMI_ASSERT(0.0 <= sales_load_);
-    // CURRENCY !! ROUNDING This needs to be rounded.
-//  CumulativeSalesLoad += round_net_premium().c(sales_load_);
-    CumulativeSalesLoad += sales_load_;
+    CumulativeSalesLoad += round_net_premium().c(sales_load_);
 
     premium_tax_load_ = PremiumTax_->calculate_load
         (a_pmt - a_portion_exempt_from_premium_tax
@@ -1465,8 +1463,7 @@ currency AccountValue::GetPremLoad
 //============================================================================
 currency AccountValue::GetRefundableSalesLoad() const
 {
-    // CURRENCY !! ROUNDING This needs to be rounded.
-    return CumulativeSalesLoad * YearsSalesLoadRefundRate;
+    return round_net_premium().c(CumulativeSalesLoad * YearsSalesLoadRefundRate);
 #if 0
     // CURRENCY !! Assertions such as these are desirable, but adding
     // them now would cause regression artifacts.
