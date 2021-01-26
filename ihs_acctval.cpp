@@ -424,20 +424,20 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     SurrChg_.assign(BasicValues::GetLength(), C0);
 
     // TAXATION !! Input::InforceAnnualTargetPremium should be used here.
-    double annual_target_premium = dblize(GetModalTgtPrem
+    currency annual_target_premium = GetModalTgtPrem
         (0
         ,mce_annual
         ,base_specamt(0)
-        ));
-    double sa = dblize(specamt_for_7702(0));
+        );
+    currency sa = specamt_for_7702(0);
 
     // It is at best superfluous to do this for every basis.
     // TAXATION !! Don't do that then.
     Irc7702_->Initialize7702
-        (sa
-        ,sa
+        (dblize(sa)
+        ,dblize(sa)
         ,effective_dbopt_7702(DeathBfts_->dbopt()[0], Effective7702DboRop)
-        ,annual_target_premium
+        ,dblize(annual_target_premium)
         );
 
     InvariantValues().InitGLP = Irc7702_->RoundedGLP();
