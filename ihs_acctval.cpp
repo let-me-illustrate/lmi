@@ -642,7 +642,12 @@ void AccountValue::SetInitialValues()
     DcvWpCharge                 = 0.0;
 
     HoneymoonActive             = false;
-    HoneymoonValue              = -std::numeric_limits<double>::max();
+    // Identity element for std::max(), disregarding -INF and NaN.
+#if defined USE_CURRENCY_CLASS
+    HoneymoonValue = -from_cents(std::numeric_limits<currency::data_type>::max());
+#else  // !defined USE_CURRENCY_CLASS
+    HoneymoonValue = -std::numeric_limits<double>::max();
+#endif // !defined USE_CURRENCY_CLASS
     if(mce_gen_curr == GenBasis_)
         {
         HoneymoonActive = yare_input_.HoneymoonEndorsement;
