@@ -65,10 +65,11 @@ class SolveHelper
     // so
     //   double function(double)
     // is the appropriate signature here. Someday it might make sense
-    // to modify decimal_root to work with currency types directly.
+    // to modify decimal_root to work with currency types directly,
+    // or at least to make this function take a 'currency' argument.
     double operator()(double a_CandidateValue)
         {
-        return av.SolveTest(a_CandidateValue);
+        return dblize(av.SolveTest(av.round_minutiae().c(a_CandidateValue)));
         }
 };
 
@@ -184,30 +185,33 @@ currency AccountValue::SolveTest(currency a_CandidateValue)
         ,0
         );
     LMI_ASSERT(0 <= no_lapse_dur);
-    double most_negative_csv = 0.0;
+    currency most_negative_csv = C0;
     if(no_lapse_dur < SolveTargetDuration_)
         {
-        most_negative_csv = *std::min_element
-            (VariantValues().CSVNet.begin() + no_lapse_dur
-            ,VariantValues().CSVNet.begin() + SolveTargetDuration_
+        // CURRENCY !! Cents in ledger will make rounding unnecessary.
+        most_negative_csv = round_minutiae().c
+            (*std::min_element
+                (VariantValues().CSVNet.begin() + no_lapse_dur
+                ,VariantValues().CSVNet.begin() + SolveTargetDuration_
+                )
             );
         }
 
     // AccountValue::Solve() asserts that SolveTargetDuration_ lies
     // within appropriate bounds.
-    double greatest_loan_ullage = *std::max_element
+    currency greatest_loan_ullage = *std::max_element
         (loan_ullage_.begin()
         ,loan_ullage_.begin() + SolveTargetDuration_
         );
-    double greatest_withdrawal_ullage = *std::max_element
+    currency greatest_withdrawal_ullage = *std::max_element
         (withdrawal_ullage_.begin()
         ,withdrawal_ullage_.begin() + SolveTargetDuration_
         );
-    double greatest_ullage = std::max
+    currency greatest_ullage = std::max
         (greatest_loan_ullage
         ,greatest_withdrawal_ullage
         );
-    double worst_negative = std::min
+    currency worst_negative = std::min
         (most_negative_csv
         ,-greatest_ullage
         );
@@ -215,15 +219,18 @@ currency AccountValue::SolveTest(currency a_CandidateValue)
     // SolveTargetDuration_ is in origin one. That's natural for loop
     // counters and iterators--it's one past the end--but indexing
     // must decrement it.
-    double value = VariantValues().CSVNet[SolveTargetDuration_ - 1];
+    // CURRENCY !! Cents in ledger will make rounding unnecessary.
+    currency value = round_minutiae().c(VariantValues().CSVNet[SolveTargetDuration_ - 1]);
     if(mce_solve_for_target_naar == SolveTarget_)
         {
-        value =
+        // CURRENCY !! Cents in ledger will make rounding unnecessary.
+        value = round_minutiae().c
+            (
               VariantValues().EOYDeathBft[SolveTargetDuration_ - 1]
             - VariantValues().AcctVal    [SolveTargetDuration_ - 1]
-            ;
+            );
         }
-    if(worst_negative < 0.0)
+    if(worst_negative < C0)
         {
         value = std::min(value, worst_negative);
         }
@@ -242,7 +249,8 @@ currency AccountValue::SolveTest(currency a_CandidateValue)
 
     if(mce_solve_for_non_mec == SolveTarget_)
         {
-        return InvariantValues().IsMec ? -1.0 : 1.0;
+        static const currency C100 = from_cents(100); // one dollar
+        return InvariantValues().IsMec ? -C100 : C100;
         }
 
     return value - SolveTargetCsv_;
@@ -287,21 +295,21 @@ void AccountValue::SolveSetWD(currency a_CandidateValue)
 currency AccountValue::SolveGuarPremium()
 {
     // Store original er premiums for later restoration.
-    std::vector<double> stored = Outlay_->er_modal_premiums();
+    std::vector<currency> stored = Outlay_->er_modal_premiums();
     // Zero out er premiums and solve for ee premiums only.
-    Outlay_->set_er_modal_premiums(0.0, 0, BasicValues::GetLength());
+    Outlay_->set_er_modal_premiums(C0, 0, BasicValues::GetLength());
 
     bool temp_solving     = Solving;
     Solving               = true;
     SolvingForGuarPremium = true;
 
     // Run the solve using guaranteed assumptions.
-    double guar_premium = Solve
+    currency guar_premium = Solve
         (mce_solve_ee_prem
         ,0
         ,BasicValues::GetLength()
         ,mce_solve_for_endt
-        ,0.0
+        ,C0
         ,BasicValues::GetLength()
         ,mce_gen_guar
         ,mce_sep_full
@@ -369,10 +377,12 @@ currency AccountValue::Solve
             // Generally, base and term are independent, and it is
             // the base specamt that's being solved for here, so set
             // the minimum as though there were no term.
-            lower_bound = minimum_specified_amount
-                (  0 == SolveBeginYear_
-                && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
-                ,false
+            lower_bound = dblize
+                (minimum_specified_amount
+                    (  0 == SolveBeginYear_
+                    && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
+                    ,false
+                    )
                 );
             }
             break;
@@ -453,6 +463,7 @@ currency AccountValue::Solve
     // are stored now, and values are regenerated downstream.
 
     Solving = false;
-    (this->*solve_set_fn)(solution.first);
-    return solution.first;
+    currency const solution_cents = round_minutiae().c(solution.first);
+    (this->*solve_set_fn)(solution_cents);
+    return solution_cents;
 }

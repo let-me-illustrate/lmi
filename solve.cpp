@@ -30,6 +30,7 @@
 #include "ledger_variant.hpp"
 #include "mc_enum_types_aux.hpp"        // set_run_basis_from_cloven_bases()
 #include "outlay.hpp"
+#include "round_to.hpp"
 #include "zero.hpp"
 
 #include <algorithm>                    // max(), min()
@@ -57,6 +58,8 @@ namespace
     int                 ThatSolveEndYear;
     mcenum_gen_basis    ThatSolveBasis;
     bool                only_set_values;
+
+    round_to<double> const round_to_cents(2, r_to_nearest);
 } // Unnamed namespace.
 
 //============================================================================
@@ -80,26 +83,28 @@ currency SolveTest()
     //   CSV at target duration
     //   lowest negative CSV through target duration
     //   amount of loan in excess of maximum loan through target duration
-    double Negative = 0.0;
+    currency Negative = C0;
 
     // IHS !! Start counting only at end of no-lapse period--lmi does that already.
     for(int j = 0; j < ThatSolveTgtYear; ++j)
         {
         Negative = std::min
             (Negative
-            ,ConstThat->VariantValues().CSVNet[j]
+            // CURRENCY !! Cents in ledger will make rounding unnecessary.
+            ,round_to_cents.c(ConstThat->VariantValues().CSVNet[j])
 // Ideally, it'd be this:
 //          ,std::min(ConstThat->VariantValues().CSVNet[j], ConstThat->loan_ullage_[j])
 // but the antediluvian branch doesn't calculate ullage at all.
             );
         }
 
-    double z = ConstThat->VariantValues().CSVNet[ThatSolveTgtYear - 1];
-    if(Negative < 0.0)
+    // CURRENCY !! Cents in ledger will make rounding unnecessary.
+    currency z = round_to_cents.c(ConstThat->VariantValues().CSVNet[ThatSolveTgtYear - 1]);
+    if(Negative < C0)
         z = std::min(z, Negative);
     // IHS !! If SolveTgtYr within no-lapse period...see lmi.
 
-    double y = 0.0;
+    currency y = C0;
     switch(ThatSolveTarget)
         {
         case mce_solve_for_endt:
@@ -134,7 +139,7 @@ currency SolveTest()
             break;
         case mce_solve_for_target_csv:
             {
-            y = ThatSolveTargetValue;
+            y = round_to_cents.c(ThatSolveTargetValue);
             }
             break;
         case mce_solve_for_target_naar: // Fall through.
@@ -154,29 +159,29 @@ currency SolveTest()
 inline static double SolveSpecAmt(double CandidateValue)
 {
 // IHS !! Change surrchg when SA changes?
-    That->SolveSetSpecAmt(CandidateValue, ThatSolveBegYear, ThatSolveEndYear);
-    return only_set_values ? 0.0 : SolveTest();
+    That->SolveSetSpecAmt(round_to_cents.c(CandidateValue), ThatSolveBegYear, ThatSolveEndYear);
+    return only_set_values ? 0.0 : dblize(SolveTest());
 }
 
 //============================================================================
 inline static double SolvePrem(double CandidateValue)
 {
-    That->SolveSetPmts(CandidateValue, ThatSolveBegYear, ThatSolveEndYear);
-    return only_set_values ? 0.0 : SolveTest();
+    That->SolveSetPmts(round_to_cents.c(CandidateValue), ThatSolveBegYear, ThatSolveEndYear);
+    return only_set_values ? 0.0 : dblize(SolveTest());
 }
 
 //============================================================================
 inline static double SolveLoan(double CandidateValue)
 {
-    That->SolveSetLoans(CandidateValue, ThatSolveBegYear, ThatSolveEndYear);
-    return only_set_values ? 0.0 : SolveTest();
+    That->SolveSetLoans(round_to_cents.c(CandidateValue), ThatSolveBegYear, ThatSolveEndYear);
+    return only_set_values ? 0.0 : dblize(SolveTest());
 }
 
 //============================================================================
 inline static double SolveWD(double CandidateValue)
 {
-    That->SolveSetWDs(CandidateValue, ThatSolveBegYear, ThatSolveEndYear);
-    return only_set_values ? 0.0 : SolveTest();
+    That->SolveSetWDs(round_to_cents.c(CandidateValue), ThatSolveBegYear, ThatSolveEndYear);
+    return only_set_values ? 0.0 : dblize(SolveTest());
 }
 
 //============================================================================
@@ -279,7 +284,7 @@ currency AccountValue::Solve()
             LowerBound = 0.0;
             // If solved premium exceeds specified amount, there's a problem.
             // IHS !! Better to use the maximum SA, not the first SA?
-            UpperBound = DeathBfts_->specamt()[0];
+            UpperBound = dblize(DeathBfts_->specamt()[0]);
             Decimals   = 2;
             SolveFn    = SolvePrem;
             }
@@ -347,8 +352,8 @@ currency AccountValue::Solve()
     // generate or analyze account values. This global variable is a
     // kludge, but so is 'That'; a function object is wanted instead.
     only_set_values = !Solving;
-    double actual_solution = Solution.first;
 
-    SolveFn(actual_solution);
-    return actual_solution;
+    currency const solution_cents = round_to_cents.c(Solution.first);
+    SolveFn(dblize(solution_cents));
+    return solution_cents;
 }
