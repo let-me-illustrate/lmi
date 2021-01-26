@@ -420,7 +420,7 @@ class LMI_SO AccountValue final
     currency SepAcctValueAfterDeduction;
     double   GenAcctPaymentAllocation;
     double   SepAcctPaymentAllocation;
-    double   NAAR; // CURRENCY !! not currency?
+    currency NAAR;
     currency CoiCharge;
     currency RiderCharges;
     currency NetCoiCharge;

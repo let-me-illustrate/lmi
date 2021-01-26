@@ -990,8 +990,8 @@ void AccountValue::TxSpecAmtChange()
         ChangeSupplAmtBy(DeathBfts_->supplamt()[Year] - TermSpecAmt);
         }
 
-    double const new_specamt = DeathBfts_->specamt()[Year];
-    double const old_specamt = DeathBfts_->specamt()[Year - 1];
+    currency const new_specamt = DeathBfts_->specamt()[Year];
+    currency const old_specamt = DeathBfts_->specamt()[Year - 1];
 
     // Nothing to do if no increase or decrease requested.
     // TODO ?? new_specamt != ActualSpecAmt; the latter should be used.
@@ -1342,8 +1342,8 @@ void AccountValue::TxAcceptPayment(currency a_pmt)
     LMI_ASSERT(C0 <= a_pmt);
     // Internal 1035 exchanges may be exempt from premium tax; they're
     // handled elsewhere, so here the exempt amount is always zero.
-    double actual_load = GetPremLoad(a_pmt, C0);
-    double net_pmt = a_pmt - actual_load;
+    currency actual_load = GetPremLoad(a_pmt, C0);
+    currency net_pmt = a_pmt - actual_load;
     LMI_ASSERT(C0 <= net_pmt);
     NetPmts[Month] += net_pmt;
 
@@ -1399,7 +1399,7 @@ currency AccountValue::GetPremLoad
     ,currency a_portion_exempt_from_premium_tax
     )
 {
-    double excess_portion;
+    currency excess_portion;
     // All excess.
     if(C0 == UnusedTargetPrem)
         {
@@ -1417,7 +1417,7 @@ currency AccountValue::GetPremLoad
         excess_portion = C0;
         UnusedTargetPrem -= a_pmt;
         }
-    double target_portion = a_pmt - excess_portion;
+    currency target_portion = a_pmt - excess_portion;
 
     premium_load_ =
             target_portion * YearsPremLoadTgt
@@ -1432,7 +1432,7 @@ currency AccountValue::GetPremLoad
     CumulativeSalesLoad += round_net_premium().c(sales_load_);
 
     premium_tax_load_ = PremiumTax_->calculate_load
-        (a_pmt - a_portion_exempt_from_premium_tax
+        (dblize(a_pmt - a_portion_exempt_from_premium_tax)
         ,*StratifiedCharges_
         );
 
@@ -1491,7 +1491,8 @@ void AccountValue::TxLoanRepay()
         return;
         }
 
-    // TODO ?? This idiom seems too cute. And it can return -0.0 .
+    // TODO ?? This idiom seems too cute. And it can return -0.0 . See:
+    //   https://lists.nongnu.org/archive/html/lmi/2020-09/msg00005.html
     // Maximum repayment is total debt.
     ActualLoan = -std::min(-RequestedLoan, RegLnBal + PrfLnBal);
 
@@ -1575,8 +1576,8 @@ void AccountValue::TxSetBOMAV()
 ///
 /// TODO ?? TAXATION !! Should 7702 or 7702A processing be done here?
 /// If so, then this code may be useful:
-///    double prior_db_7702A = DB7702A;
-///    double prior_sa_7702A = ActualSpecAmt;
+///    currency prior_db_7702A = DB7702A;
+///    currency prior_sa_7702A = ActualSpecAmt;
 /// toward the beginning, and:
 ///    Irc7702A_->UpdateBft7702A(...);
 ///    LMI_ASSERT(0.0 <= Dcv);
@@ -1622,7 +1623,7 @@ void AccountValue::TxSetDeathBft()
 
     // Surrender charges are generally ignored here, but any negative
     // surrender charge must be subtracted, increasing the account value.
-    double cash_value_for_corridor =
+    currency cash_value_for_corridor =
           TotalAccountValue()
         - std::min(C0, SurrChg())
         + GetRefundableSalesLoad()
@@ -1685,7 +1686,7 @@ void AccountValue::TxSetTermAmt()
         }
 
     TermDB = std::max(C0, TermSpecAmt + DBIgnoringCorr - DBReflectingCorr);
-    TermDB = round_death_benefit()(TermDB);
+    TermDB = round_death_benefit().c(TermDB);
 }
 
 /// Terminate the term rider, optionally converting it to base.
@@ -1716,7 +1717,7 @@ void AccountValue::EndTermRider(bool convert)
         ChangeSpecAmtBy(TermSpecAmt);
         }
     TermSpecAmt = C0;
-    TermDB = C0;
+    TermDB      = C0;
     // Carry the new term spec amt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); ++j)
         {
@@ -1738,19 +1739,27 @@ void AccountValue::TxSetCoiCharge()
     // than zero because the corridor factor can be as low as unity,
     // but it's constrained to be nonnegative to prevent increasing
     // the account value by deducting a negative mortality charge.
+#if defined USE_CURRENCY_CLASS
+    NAAR = round_naar().c
+        (  DBReflectingCorr * DBDiscountRate[Year]
+        - dblize(std::max(C0, TotalAccountValue()))
+        );
+    LMI_ASSERT(C0 <= NAAR);
+#else  // !defined USE_CURRENCY_CLASS
     NAAR = material_difference
         (DBReflectingCorr * DBDiscountRate[Year]
         ,std::max(0.0, TotalAccountValue())
         );
     NAAR = std::max(0.0, round_naar()(NAAR));
+#endif // !defined USE_CURRENCY_CLASS
 
 // TODO ?? This doesn't work. We need to reconsider the basic transactions.
-//  double naar_forceout = std::max(0.0, NAAR - MaxNAAR);
+//  currency naar_forceout = std::max(0.0, NAAR - MaxNAAR);
 //  process_distribution(naar_forceout);
 // TAXATION !! Should this be handled at the same time as GPT forceouts?
 
     DcvNaar = material_difference
-        (std::max(DcvDeathBft, DBIgnoringCorr) * DBDiscountRate[Year]
+        (std::max(DcvDeathBft, dblize(DBIgnoringCorr)) * DBDiscountRate[Year]
         ,std::max(0.0, Dcv)
         );
     // DCV need not be rounded.
@@ -1780,11 +1789,11 @@ void AccountValue::TxSetCoiCharge()
                 )
             );
         double retention_rate = round_coi_rate()(coi_rate * CoiRetentionRate);
-        retention_charge = round_coi_charge()(NAAR * retention_rate);
+        retention_charge = NAAR * retention_rate;
         }
 
     CoiCharge    = round_coi_charge().c(NAAR * ActualCoiRate);
-    NetCoiCharge = CoiCharge - retention_charge;
+    NetCoiCharge = CoiCharge - round_coi_charge().c(retention_charge);
     YearsTotalCoiCharge += CoiCharge;
 
     // DCV need not be rounded.
@@ -1799,7 +1808,7 @@ void AccountValue::TxSetRiderDed()
     if(yare_input_.AccidentalDeathBenefit)
         {
         AdbCharge = round_rider_charges().c
-            (YearsAdbRate * std::min(ActualSpecAmt, AdbLimit)
+            (YearsAdbRate * std::min(dblize(ActualSpecAmt), AdbLimit)
             );
         }
 
@@ -1842,7 +1851,7 @@ void AccountValue::TxSetRiderDed()
             case oe_waiver_times_specamt:
                 {
                 WpCharge = round_rider_charges().c
-                    (YearsWpRate * std::min(ActualSpecAmt, WpLimit)
+                    (YearsWpRate * std::min(dblize(ActualSpecAmt), WpLimit)
                     );
                 DcvWpCharge = WpCharge;
                 }
@@ -1892,7 +1901,7 @@ void AccountValue::TxDoMlyDed()
         }
 
     // 'Simple' riders are the same for AV and DCV.
-    double simple_rider_charges =
+    currency simple_rider_charges =
             AdbCharge
         +   SpouseRiderCharge
         +   ChildRiderCharge
@@ -1921,7 +1930,7 @@ void AccountValue::TxDoMlyDed()
     // determined.
     MlyDed += MonthsPolicyFees + SpecAmtLoad;
 
-    YearsTotalNetCoiCharge += NetCoiCharge;
+    YearsTotalNetCoiCharge += dblize(NetCoiCharge);
 
     SepAcctValueAfterDeduction = AVSepAcct;
 }
@@ -1945,7 +1954,7 @@ void AccountValue::TxTestHoneymoonForExpiration()
     // experience rating reserve would affect the cash surrender value
     // but not the honeymoon value.
     //
-    double csv_ignoring_loan =
+    currency csv_ignoring_loan =
           TotalAccountValue()
         - SurrChg()
         + GetRefundableSalesLoad()
@@ -1963,7 +1972,11 @@ void AccountValue::TxTestHoneymoonForExpiration()
     if(HoneymoonValue <= C0 || HoneymoonValue < csv_ignoring_loan)
         {
         HoneymoonActive = false;
-        HoneymoonValue  = -std::numeric_limits<double>::max();
+#if defined USE_CURRENCY_CLASS
+        HoneymoonValue = -from_cents(std::numeric_limits<currency::data_type>::max());
+#else  // !defined USE_CURRENCY_CLASS
+        HoneymoonValue = -std::numeric_limits<double>::max();
+#endif // !defined USE_CURRENCY_CLASS
         }
 }
 
@@ -2118,7 +2131,7 @@ void AccountValue::TxCreditInt()
 {
     ApplyDynamicMandE(AssetsPostBom);
 
-    double notional_sep_acct_charge = C0;
+    currency notional_sep_acct_charge = C0;
 
     // SOMEDAY !! This should be done in the interest-rate class.
     double gross_sep_acct_rate = i_upper_12_over_12_from_i<double>()
@@ -2130,10 +2143,10 @@ void AccountValue::TxCreditInt()
         gross_sep_acct_rate = 0.0;
         }
 
-    if(0.0 < AVSepAcct)
+    if(C0 < AVSepAcct)
         {
         SepAcctIntCred = InterestCredited(AVSepAcct, YearsSepAcctIntRate);
-        double gross   = InterestCredited(AVSepAcct, gross_sep_acct_rate);
+        currency gross   = InterestCredited(AVSepAcct, gross_sep_acct_rate);
         notional_sep_acct_charge = gross - SepAcctIntCred;
         // Guard against catastrophic cancellation. Testing the
         // absolute values of the addends for material equality is not
@@ -2154,7 +2167,7 @@ void AccountValue::TxCreditInt()
         SepAcctIntCred = C0;
         }
 
-    if(0.0 < AVGenAcct)
+    if(C0 < AVGenAcct)
         {
         double effective_general_account_interest_factor = YearsGenAcctIntRate;
         if
@@ -2195,7 +2208,7 @@ void AccountValue::TxCreditInt()
     // Loaned account value must not be negative.
     LMI_ASSERT(C0 <= AVRegLn && C0 <= AVPrfLn);
 
-    double z = RegLnIntCred + PrfLnIntCred + SepAcctIntCred + GenAcctIntCred;
+    currency z = RegLnIntCred + PrfLnIntCred + SepAcctIntCred + GenAcctIntCred;
     YearsTotalNetIntCredited   += z;
     YearsTotalGrossIntCredited += z + notional_sep_acct_charge;
 }
@@ -2223,8 +2236,8 @@ void AccountValue::TxLoanInt()
     AVRegLn += RegLnIntCred;
     AVPrfLn += PrfLnIntCred;
 
-    double RegLnIntAccrued = InterestCredited(RegLnBal, YearsRegLnIntDueRate);
-    double PrfLnIntAccrued = InterestCredited(PrfLnBal, YearsPrfLnIntDueRate);
+    currency RegLnIntAccrued = InterestCredited(RegLnBal, YearsRegLnIntDueRate);
+    currency PrfLnIntAccrued = InterestCredited(PrfLnBal, YearsPrfLnIntDueRate);
 
     RegLnBal += RegLnIntAccrued;
     PrfLnBal += PrfLnIntAccrued;
@@ -2257,11 +2270,11 @@ currency AccountValue::anticipated_deduction
         {
         case mce_twelve_times_last:
             {
-            return 12.0 * MlyDed;
+            return 12 * MlyDed;
             }
         case mce_eighteen_times_last:
             {
-            return 18.0 * MlyDed;
+            return 18 * MlyDed;
             }
         case mce_to_next_anniversary:
             {
@@ -2348,7 +2361,7 @@ void AccountValue::TxTakeWD()
 
     if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {
-        NetWD = round_withdrawal()(std::min(RequestedWD, MaxWD));
+        NetWD = round_withdrawal().c(std::min(RequestedWD, MaxWD));
         OverridingWD[Year] = NetWD;
         }
     else
@@ -2459,8 +2472,8 @@ void AccountValue::TxTakeWD()
     // the fee based on the requested proceeds and add that
     // to the partial surrender amount.
 
-    double av = TotalAccountValue();
-    double csv = av - SurrChg_[Year];
+    currency av = TotalAccountValue();
+    currency csv = av - SurrChg_[Year];
     LMI_ASSERT(C0 <= SurrChg_[Year]);
     if(csv <= C0)
         {
@@ -2482,7 +2495,7 @@ void AccountValue::TxTakeWD()
     // distinct surrender-charge layers.
 
     double surrchg_proportion = SurrChg_[Year] / csv;
-    double non_free_wd = GrossWD;
+    currency non_free_wd = GrossWD;
     if(0.0 != FreeWDProportion[Year])
         {
         // The free partial surrender amount is determined annually,
@@ -2491,11 +2504,11 @@ void AccountValue::TxTakeWD()
         LMI_ASSERT(AVRegLn == RegLnBal);
         LMI_ASSERT(AVPrfLn == PrfLnBal);
         LMI_ASSERT(av == AVGenAcct + AVSepAcct);
-        double free_wd = FreeWDProportion[Year] * av;
+        currency free_wd = round_withdrawal().c(FreeWDProportion[Year] * av);
         non_free_wd = std::max(C0, GrossWD - free_wd);
         }
     double partial_surrchg = non_free_wd * surrchg_proportion;
-    GrossWD += round_withdrawal()(partial_surrchg);
+    GrossWD += round_withdrawal().c(partial_surrchg);
 
     process_distribution(GrossWD);
     Dcv -= GrossWD;
@@ -2763,7 +2776,7 @@ void AccountValue::TxTestLapse()
     // is an actual balance-sheet item that is actually held in the
     // certificate.
 
-    double lapse_test_csv =
+    currency lapse_test_csv =
           TotalAccountValue()
         - (RegLnBal + PrfLnBal)
 //        + std::max(0.0, ExpRatReserve) // This would be added if it existed.

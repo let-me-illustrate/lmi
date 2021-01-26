@@ -687,7 +687,7 @@ void AccountValue::TxPmt()
     GrossPmts[Month] = pmt;
     if(0 == Year && 0 == Month)
         {
-        double TotalDumpin =
+        currency TotalDumpin =
               Outlay_->dumpin()
             + Outlay_->external_1035_amount()
             + Outlay_->internal_1035_amount()
@@ -743,7 +743,8 @@ void AccountValue::TxSetBOMAV()
 void AccountValue::TxSetDeathBft()
 {
     // Total account value is unloaned plus loaned.
-    double AV = AVUnloaned + AVRegLn + AVPrfLn;
+    currency AV = AVUnloaned + AVRegLn + AVPrfLn;
+    currency corr = round_death_benefit().c(YearsCorridorFactor * AV);
 
     // Set death benefit reflecting corridor and death benefit option.
     switch(YearsDBOpt)
@@ -751,16 +752,13 @@ void AccountValue::TxSetDeathBft()
         case mce_option1:
             {
             // Option 1: specamt, or corridor times AV if greater.
-            deathbft = std::max(ActualSpecAmt, YearsCorridorFactor * AV);
+            deathbft = std::max(ActualSpecAmt, corr);
             }
             break;
         case mce_option2:
             // Option 2: specamt plus AV, or corridor times AV if greater.
             // Negative AV doesn't decrease death benefit.
-            deathbft = std::max
-                (ActualSpecAmt + std::max(C0, AV)
-                ,YearsCorridorFactor * AV
-                );
+            deathbft = std::max(ActualSpecAmt + std::max(C0, AV), corr);
             break;
         case mce_rop: // fall through
         case mce_mdb: // fall through
@@ -782,7 +780,7 @@ void AccountValue::TxSetCoiCharge()
     TxSetDeathBft();
 
     // Negative AV doesn't increase NAAR.
-    NAAR = round_naar()(deathbft * mlyguarv - (AVUnloaned + AVRegLn + AVPrfLn));
+    NAAR = round_naar().c(deathbft * mlyguarv - dblize(AVUnloaned + AVRegLn + AVPrfLn));
 
     CoiCharge = round_coi_charge().c(NAAR * YearsCoiRate0);
 }
@@ -806,7 +804,7 @@ void AccountValue::TxSetRiderDed()
         AdbCharge =  round_rider_charges().c
             ( YearsAdbRate
             // IHS !! Icky manifest constant--lmi uses a database entity.
-            * std::min(500000.0, ActualSpecAmt)
+            * std::min(from_cents(50000000), ActualSpecAmt)
             );
         }
 }
@@ -895,7 +893,7 @@ void AccountValue::TxTakeWD()
     //   max loan: cannot become overloaned until end of policy year.
     // However, lmi provides a variety of implementations instead of
     // only one.
-    double max_wd =
+    currency max_wd =
           AVUnloaned
         + (AVRegLn  + AVPrfLn)
         - (RegLnBal + PrfLnBal)
@@ -971,20 +969,21 @@ void AccountValue::TxTakeLoan()
     // Impose maximum amount.
     // If maximum exceeded...limit it.
     // IHS !! For solves, the lmi branch uses an 'ullage' concept.
-    MaxLoan =
+    double max_loan =
           AVUnloaned * 0.9    // IHS !! Icky manifest constant--lmi uses a database entity.
         // - surrchg
-        + (AVRegLn + AVPrfLn)
+        + dblize(AVRegLn + AVPrfLn)
         - RegLnBal * (std::pow((1.0 + YearsRegLnIntDueRate), 12 - Month) - 1.0)
         - PrfLnBal * (std::pow((1.0 + YearsPrfLnIntDueRate), 12 - Month) - 1.0)
-        - mlydedtonextmodalpmtdate;
+        - dblize(mlydedtonextmodalpmtdate)
+        ;
     // Interest adjustment: d upper n where n is # months remaining in year.
     // Witholding this keeps policy from becoming overloaned before year end.
     double IntAdj = std::pow((1.0 + YearsRegLnIntDueRate), 12 - Month);
     IntAdj = (IntAdj - 1.0) / IntAdj;
-    MaxLoan *= 1.0 - IntAdj;
-    MaxLoan = std::max(0.0, MaxLoan);
-    MaxLoan = round_loan()(MaxLoan);
+    max_loan *= 1.0 - IntAdj;
+    max_loan = std::max(0.0, max_loan);
+    MaxLoan = round_loan().c(max_loan);
 
     // IHS !! Preferred loan calculations would go here: implemented in lmi.
 
