@@ -119,9 +119,9 @@ void BasicValues::Init()
     PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, database()));
     Loads_         .reset(new Loads(database(), IsSubjectToIllustrationReg()));
 
-    database().query_into(DB_MinSpecAmt, MinSpecAmt);
-    database().query_into(DB_MinWd     , MinWD     );
-    database().query_into(DB_WdFee     , WDFee     );
+    MinSpecAmt = round_specamt   ().c(database().query<double>(DB_MinSpecAmt));
+    MinWD      = round_withdrawal().c(database().query<double>(DB_MinWd     ));
+    WDFee      = round_withdrawal().c(database().query<double>(DB_WdFee     ));
     database().query_into(DB_WdFeeRate , WDFeeRate );
 
 // The antediluvian branch leaves FundData_, StratifiedCharges_, and
@@ -212,7 +212,7 @@ currency BasicValues::GetModalTgtPrem
 
     // IHS !! Parameterized in lmi.
     static round_to<double> const round_it(2, r_upward);
-    return round_it(z);
+    return round_it.c(z);
 }
 
 //============================================================================
@@ -286,7 +286,7 @@ currency BasicValues::GetModalTgtSpecAmt
 
     // IHS !! Parameterized in lmi.
     static round_to<double> const round_it(0, r_downward);
-    return round_it(z);
+    return round_it.c(z);
 }
 
 //============================================================================

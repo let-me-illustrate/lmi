@@ -145,14 +145,14 @@ AccountValue::AccountValue(Input const& input)
 
 currency AccountValue::base_specamt(int year) const
 {
-    return InvariantValues().SpecAmt[year];
+    return round_specamt().c(InvariantValues().SpecAmt[year]);
 }
 
 /// Specified amount of term rider.
 
 currency AccountValue::term_specamt(int year) const
 {
-    return InvariantValues().TermSpecAmt[year];
+    return round_specamt().c(InvariantValues().TermSpecAmt[year]);
 }
 
 /// Specified amount for 7702 (not 7702A).
@@ -322,7 +322,7 @@ void AccountValue::RunAllApplicableBases()
             ,yare_input_.SolveBeginYear
             ,yare_input_.SolveEndYear
             ,yare_input_.SolveTarget
-            ,yare_input_.SolveTargetValue
+            ,round_minutiae().c(yare_input_.SolveTargetValue)
             ,yare_input_.SolveTargetYear
             ,yare_input_.SolveExpenseGeneralAccountBasis
             ,yare_input_.SolveSeparateAccountBasis
@@ -656,7 +656,7 @@ void AccountValue::SetInitialValues()
             }
         if(HoneymoonActive)
             {
-            HoneymoonValue = yare_input_.InforceHoneymoonValue;
+            HoneymoonValue = round_minutiae().c(yare_input_.InforceHoneymoonValue);
             }
         }
 
@@ -664,7 +664,7 @@ void AccountValue::SetInitialValues()
     RiderCharges                = C0;
     NetCoiCharge                = C0;
     MlyDed                      = C0;
-    CumulativeSalesLoad         = yare_input_.InforceCumulativeSalesLoad;
+    CumulativeSalesLoad         = round_minutiae().c(yare_input_.InforceCumulativeSalesLoad);
 
     database().query_into(DB_ExpRatCoiRetention, CoiRetentionRate);
     database().query_into(DB_ExpRatAmortPeriod , ExperienceRatingAmortizationYears);
@@ -1053,6 +1053,8 @@ currency AccountValue::CSVBoost() const
         ;
     LMI_ASSERT(0.0 <= z);
     return z * std::max(C0, TotalAccountValue());
+    // CURRENCY !! This should be rounded.
+//  return round_minutiae().c(z * std::max(C0, TotalAccountValue()));
 }
 
 //============================================================================
@@ -1470,7 +1472,7 @@ currency AccountValue::GetSepAcctAssetsInforce() const
         return C0;
         }
 
-    return SepAcctValueAfterDeduction * partial_mortality_lx()[Year];
+    return round_minutiae().c(SepAcctValueAfterDeduction * partial_mortality_lx()[Year]);
 }
 
 //============================================================================

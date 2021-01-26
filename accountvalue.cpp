@@ -794,17 +794,20 @@ void AccountValue::TxSetRiderDed()
     WpCharge = C0;
     if(haswp)
         {
-        WpCharge =
-                YearsWpRate
+        WpCharge = round_rider_charges().c
+            (   YearsWpRate
             *   (CoiCharge + YearsMonthlyPolicyFee + AdbCharge)
-            ;
+            );
         }
 
     AdbCharge = C0;
     if(hasadb)
         {
-        // IHS !! Icky manifest constant--lmi uses a database entity.
-        AdbCharge = YearsAdbRate * std::min(500000.0, ActualSpecAmt);
+        AdbCharge =  round_rider_charges().c
+            ( YearsAdbRate
+            // IHS !! Icky manifest constant--lmi uses a database entity.
+            * std::min(500000.0, ActualSpecAmt)
+            );
         }
 }
 
@@ -942,7 +945,7 @@ void AccountValue::TxTakeWD()
         }
 
     // Deduct withdrawal fee.
-    wd -= std::min(WDFee, wd * WDFeeRate);
+    wd -= std::min(WDFee, round_withdrawal().c(wd * WDFeeRate));
     // IHS !! This treats input WD as gross; it probably should be net. But compare lmi.
 
     InvariantValues().NetWD[Year] = dblize(wd);
