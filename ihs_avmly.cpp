@@ -2672,11 +2672,13 @@ void AccountValue::TxTakeWD()
 // Calculate maximum permissible total loan (not increment).
 void AccountValue::SetMaxLoan()
 {
-    MaxLoan =
-          round_loan().c((AVGenAcct + AVSepAcct) * MaxLoanAVMult)
-        + (AVRegLn + AVPrfLn)
-        - anticipated_deduction(MaxLoanDed_)
-        - std::max(C0, SurrChg())
+    double max_loan =
+          (AVGenAcct + AVSepAcct) * MaxLoanAVMult
+        + dblize
+            ( (AVRegLn + AVPrfLn)
+            - anticipated_deduction(MaxLoanDed_)
+            - std::max(C0, SurrChg())
+            )
         ;
 
     // Illustrations generally permit loans only on anniversary.
@@ -2711,19 +2713,19 @@ void AccountValue::SetMaxLoan()
     // the end of the policy year--but does not guarantee that, e.g.
     // because the specified amount may change between anniversaries,
     // even on illustrations.
-    MaxLoan -= round_loan().c
-        (
+    max_loan -=
           RegLnBal * reg_loan_factor
         + PrfLnBal * prf_loan_factor
-        );
+        ;
 
     // TODO ?? This adjustment isn't quite right because it uses only
     // the regular-loan interest factor. Is it conservative under the
     // plausible but unasserted assumption that that factor is more
     // liberal than the preferred-loan factor?
     //
-    double adj = 1.0 - (reg_loan_factor) / (1.0 + reg_loan_factor);
-    MaxLoan = round_loan().c(MaxLoan * adj);
+    max_loan *= 1.0 - (reg_loan_factor) / (1.0 + reg_loan_factor);
+
+    MaxLoan = round_loan().c(max_loan);
 
     // I do not think we want a MaxLoan < current level of indebtedness.
     MaxLoan = std::max((AVRegLn + AVPrfLn), MaxLoan);
