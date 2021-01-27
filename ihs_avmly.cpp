@@ -158,6 +158,9 @@ void AccountValue::DoMonthDR()
         ,YearsTotLoadExcLowestPremtax
         ,dblize(kludge_account_value)
         );
+// TAXATION !! Should round here, but need to investigate regressions.
+//  max_necessary_premium = round_max_premium()(max_necessary_premium);
+    // CURRENCY !! already rounded by class Irc7702A--appropriately?
     double max_non_mec_premium = Irc7702A_->MaxNonMecPremium
         (Dcv
         ,dblize(AnnualTargetPrem)
@@ -203,12 +206,14 @@ void AccountValue::DoMonthDR()
         }
     // CURRENCY !! currency is immune to catastrophic cancellation
     double necessary_premium = std::min
+        // CURRENCY !! Wouldn't simple subtraction do, for currency?
         (material_difference
             (dblize(GrossPmts[Month])
             ,dblize(gross_1035)
             )
         ,max_necessary_premium
         );
+    // CURRENCY !! Wouldn't simple subtraction do, for currency?
     double unnecessary_premium = material_difference
         (dblize(GrossPmts[Month])
         ,dblize(gross_1035) + necessary_premium
@@ -338,7 +343,7 @@ void AccountValue::process_payment(currency payment)
 // portions of unloaned account value according to input allocations.
 void AccountValue::IncrementAVProportionally(currency increment)
 {
-    increment = round_minutiae().c(increment);
+    increment = round_minutiae().c(increment); // CURRENCY !! already rounded?
     currency genacct_increment = round_minutiae().c(increment * GenAcctPaymentAllocation);
     AVGenAcct += genacct_increment;
     AVSepAcct += increment - genacct_increment;
@@ -1137,6 +1142,7 @@ void AccountValue::TxTestGPT()
             );
         }
 
+    // CURRENCY !! already rounded by class Irc7702--appropriately?
     GptForceout = round_minutiae().c(Irc7702_->Forceout());
     // TODO ?? TAXATION !! On other bases, nothing is forced out, and payments aren't limited.
     process_distribution(GptForceout);
@@ -1901,25 +1907,25 @@ void AccountValue::TxSetRiderDed()
                     (
                     YearsWpRate
                     *   (
-                            CoiCharge
-                        +   MonthsPolicyFees
-                        +   SpecAmtLoad
-                        +   AdbCharge
-                        +   SpouseRiderCharge
-                        +   ChildRiderCharge
-                        +   TermCharge
+                          CoiCharge
+                        + MonthsPolicyFees
+                        + SpecAmtLoad
+                        + AdbCharge
+                        + SpouseRiderCharge
+                        + ChildRiderCharge
+                        + TermCharge
                         )
                     );
                 DcvWpCharge =
                     YearsWpRate
                     *   (
                             DcvCoiCharge
-                        +   dblize(
-                                MonthsPolicyFees
-                            +   SpecAmtLoad
-                            +   AdbCharge
-                            +   SpouseRiderCharge
-                            +   ChildRiderCharge
+                        +   dblize
+                            ( MonthsPolicyFees
+                            + SpecAmtLoad
+                            + AdbCharge
+                            + SpouseRiderCharge
+                            + ChildRiderCharge
                             )
                         +   DcvTermCharge
                         );
@@ -2066,6 +2072,7 @@ void AccountValue::TxTakeSepAcctLoad()
         }
 
     SepAcctLoad = round_interest_credit().c(YearsSepAcctLoadRate * AVSepAcct);
+    // CURRENCY !! Does this seem right? Mightn't it take a sepacct load from the genacct?
     process_deduction(SepAcctLoad);
     YearsTotalSepAcctLoad += SepAcctLoad;
     Dcv -= dblize(SepAcctLoad);
@@ -2360,9 +2367,9 @@ void AccountValue::SetMaxWD()
 {
     MaxWD =
           round_withdrawal().c
-              ( AVGenAcct * MaxWdGenAcctValMult
-              + AVSepAcct * MaxWdSepAcctValMult
-              )
+            ( AVGenAcct * MaxWdGenAcctValMult
+            + AVSepAcct * MaxWdSepAcctValMult
+            )
         + (AVRegLn  + AVPrfLn)
         - (RegLnBal + PrfLnBal)
         - anticipated_deduction(MaxWDDed_)

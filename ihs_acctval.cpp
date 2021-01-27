@@ -145,6 +145,7 @@ AccountValue::AccountValue(Input const& input)
 
 currency AccountValue::base_specamt(int year) const
 {
+    // CURRENCY !! Cents in ledger will make rounding unnecessary.
     return round_specamt().c(InvariantValues().SpecAmt[year]);
 }
 
@@ -152,6 +153,7 @@ currency AccountValue::base_specamt(int year) const
 
 currency AccountValue::term_specamt(int year) const
 {
+    // CURRENCY !! Cents in ledger will make rounding unnecessary.
     return round_specamt().c(InvariantValues().TermSpecAmt[year]);
 }
 
@@ -643,6 +645,7 @@ void AccountValue::SetInitialValues()
 
     HoneymoonActive             = false;
     // Identity element for std::max(), disregarding -INF and NaN.
+    // CURRENCY !! support infinities?
 #if defined USE_CURRENCY_CLASS
     HoneymoonValue = -from_cents(std::numeric_limits<currency::data_type>::max());
 #else  // !defined USE_CURRENCY_CLASS
@@ -1133,6 +1136,7 @@ void AccountValue::SetProjectedCoiCharge()
 
     TxSetDeathBft();
     TxSetTermAmt();
+    // CURRENCY !! presumably material_difference() isn't needed at all? um...yes, it is
     double this_years_terminal_naar = material_difference
         (dblize(DBReflectingCorr + TermDB)
         ,dblize(TotalAccountValue())

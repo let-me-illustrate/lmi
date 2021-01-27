@@ -545,6 +545,7 @@ void AccountValue::TxOptionChange()
             alarum() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
             }
         }
+    // AV normally rounded to cents, but specamt perhaps to dollars.
     ActualSpecAmt = round_specamt().c(ActualSpecAmt);
 
     // Carry the new spec amt forward into all future years.
@@ -801,7 +802,7 @@ void AccountValue::TxSetRiderDed()
     AdbCharge = C0;
     if(hasadb)
         {
-        AdbCharge =  round_rider_charges().c
+        AdbCharge = round_rider_charges().c
             ( YearsAdbRate
             // IHS !! Icky manifest constant--lmi uses a database entity.
             * std::min(from_cents(50000000), ActualSpecAmt)
@@ -970,7 +971,7 @@ void AccountValue::TxTakeLoan()
     // If maximum exceeded...limit it.
     // IHS !! For solves, the lmi branch uses an 'ullage' concept.
     double max_loan =
-          AVUnloaned * 0.9    // IHS !! Icky manifest constant--lmi uses a database entity.
+          AVUnloaned * 0.9 // IHS !! Icky manifest constant--lmi uses a database entity.
         // - surrchg
         + dblize(AVRegLn + AVPrfLn)
         - RegLnBal * (std::pow((1.0 + YearsRegLnIntDueRate), 12 - Month) - 1.0)
