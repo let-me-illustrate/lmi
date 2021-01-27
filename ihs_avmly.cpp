@@ -201,6 +201,7 @@ void AccountValue::DoMonthDR()
         {
         gross_1035 = External1035Amount + Internal1035Amount;
         }
+    // CURRENCY !! currency is immune to catastrophic cancellation
     double necessary_premium = std::min
         (material_difference
             (dblize(GrossPmts[Month])
@@ -285,6 +286,7 @@ void AccountValue::process_payment(currency payment)
     double er_proportion = 0.0;
     if(C0 != gross_non_1035_pmts)
         {
+        // CURRENCY !! more efficient: currency / currency --> double
         er_proportion = ErGrossPmts[Month] / dblize(gross_non_1035_pmts);
         }
 
@@ -432,6 +434,7 @@ void AccountValue::DecrementAVProportionally(currency decrement)
 
     double general_account_proportion  = 0.0;
     double separate_account_proportion = 0.0;
+    // CURRENCY !! more efficient: currency / currency --> double
     double general_account_nonnegative_assets  = dblize(std::max(C0, AVGenAcct));
     double separate_account_nonnegative_assets = dblize(std::max(C0, AVSepAcct));
     if
@@ -723,6 +726,7 @@ void AccountValue::ChangeSpecAmtBy(currency delta)
                 break;
             case mce_adjust_both:
                 {
+                // CURRENCY !! more efficient: currency / currency --> double
                 term_proportion = TermSpecAmt / dblize(old_total_specamt);
                 }
                 break;
@@ -1238,6 +1242,7 @@ void AccountValue::TxAscertainDesiredPayment()
         }
 
     assert_pmts_add_up(__FILE__, __LINE__, Month);
+    // CURRENCY !! is this useful?
     // bignum: the largest integer convertible to and from double
     // such that incrementing it by one loses that property.
     LMI_ASSERT(GrossPmts[Month] < from_cents(1LL << 53));
@@ -2007,6 +2012,7 @@ void AccountValue::TxTestHoneymoonForExpiration()
         {
         HoneymoonActive = false;
 #if defined USE_CURRENCY_CLASS
+        // CURRENCY !! support infinities?
         HoneymoonValue = -from_cents(std::numeric_limits<currency::data_type>::max());
 #else  // !defined USE_CURRENCY_CLASS
         HoneymoonValue = -std::numeric_limits<double>::max();
@@ -2184,6 +2190,7 @@ void AccountValue::TxCreditInt()
         currency gross = InterestCredited(AVSepAcct, gross_sep_acct_rate);
         notional_sep_acct_charge = gross - SepAcctIntCred;
 #if defined USE_CURRENCY_CLASS
+        // CURRENCY !! too cavalier?
         AVSepAcct += SepAcctIntCred;
 #else  // !defined USE_CURRENCY_CLASS
         // Guard against catastrophic cancellation. Testing the
@@ -2535,6 +2542,7 @@ void AccountValue::TxTakeWD()
     // charge. This would become more complicated if we maintained
     // distinct surrender-charge layers.
 
+    // CURRENCY !! more efficient: currency / currency --> double
     double surrchg_proportion = SurrChg_[Year] / dblize(csv);
     currency non_free_wd = GrossWD;
     if(0.0 != FreeWDProportion[Year])
@@ -2837,6 +2845,7 @@ void AccountValue::TxTestLapse()
                 &&  NoLapseMinDur <= Year
             ||      CumPmts < CumNoLapsePrem
 #if defined USE_CURRENCY_CLASS
+            // x<y --> x<>y for x,y integral
 #else  // !defined USE_CURRENCY_CLASS
                 &&  !materially_equal(CumPmts, CumNoLapsePrem)
 #endif // !defined USE_CURRENCY_CLASS
