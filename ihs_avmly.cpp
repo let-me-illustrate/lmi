@@ -2668,20 +2668,10 @@ void AccountValue::TxTakeWD()
     InvariantValues().NetWD[Year] = dblize(NetWD);
 }
 
-//============================================================================
-// Calculate maximum permissible total loan (not increment).
+/// Calculate maximum permissible total loan (not increment).
+
 void AccountValue::SetMaxLoan()
 {
-    double max_loan =
-          (AVGenAcct + AVSepAcct) * MaxLoanAVMult
-        + dblize
-            ( (AVRegLn + AVPrfLn)
-            - anticipated_deduction(MaxLoanDed_)
-            - std::max(C0, SurrChg())
-            )
-        ;
-
-    // Illustrations generally permit loans only on anniversary.
     double reg_loan_factor = InterestRates_->RegLnDueRate
         (GenBasis_
         ,mce_annual_rate
@@ -2694,6 +2684,7 @@ void AccountValue::SetMaxLoan()
         )
         [Year]
         ;
+    // Illustrations generally permit loans only on anniversary.
     if(0 != Month)
         {
         alarum() << "Off-anniversary loans untested." << LMI_FLUSH;
@@ -2706,6 +2697,15 @@ void AccountValue::SetMaxLoan()
             -   1.0
             ;
         }
+
+    double max_loan =
+          (AVGenAcct + AVSepAcct) * MaxLoanAVMult
+        + dblize
+            ( (AVRegLn + AVPrfLn)
+            - anticipated_deduction(MaxLoanDed_)
+            - std::max(C0, SurrChg())
+            )
+        ;
 
     // Withholding anticipated interest, with the adjustment
     //   d upper n, where n is # months remaining in year,
