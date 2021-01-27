@@ -33,7 +33,7 @@
 // elsewhere. Eventually they'll both be eliminated, along with
 // all code along paths where they aren't both defined.
 
-// #define USE_CURRENCY_CLASS
+#define USE_CURRENCY_CLASS
 
 #if !defined USE_CURRENCY_CLASS
 #   undef CURRENCY_UNIT_IS_CENTS // Requires currency class.
