@@ -1919,15 +1919,15 @@ void AccountValue::TxSetRiderDed()
                 DcvWpCharge =
                     YearsWpRate
                     *   (
-                            DcvCoiCharge
-                        +   dblize
+                          DcvCoiCharge
+                        + dblize
                             ( MonthsPolicyFees
                             + SpecAmtLoad
                             + AdbCharge
                             + SpouseRiderCharge
                             + ChildRiderCharge
                             )
-                        +   DcvTermCharge
+                        + DcvTermCharge
                         );
                 }
                 break;
