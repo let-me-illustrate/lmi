@@ -2190,8 +2190,16 @@ void AccountValue::TxCreditInt()
         currency gross = InterestCredited(AVSepAcct, gross_sep_acct_rate);
         notional_sep_acct_charge = gross - SepAcctIntCred;
 #if defined USE_CURRENCY_CLASS
-        // CURRENCY !! too cavalier?
-        AVSepAcct += SepAcctIntCred;
+        currency result = AVSepAcct + SepAcctIntCred;
+        // CURRENCY !! rethink this weird logic
+        if(result < C0 && C0 <= AVSepAcct)
+            {
+            AVSepAcct = C0;
+            }
+        else
+            {
+            AVSepAcct = result;
+            }
 #else  // !defined USE_CURRENCY_CLASS
         // Guard against catastrophic cancellation. Testing the
         // absolute values of the addends for material equality is not
