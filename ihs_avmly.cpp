@@ -1776,7 +1776,7 @@ void AccountValue::TxSetCoiCharge()
         (  DBReflectingCorr * DBDiscountRate[Year]
         - dblize(std::max(C0, TotalAccountValue()))
         );
-    LMI_ASSERT(C0 <= NAAR);
+    NAAR = std::max(C0, NAAR);
 #else  // !defined USE_CURRENCY_CLASS
     NAAR = material_difference
         (DBReflectingCorr * DBDiscountRate[Year]
