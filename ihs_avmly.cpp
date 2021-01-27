@@ -347,6 +347,10 @@ void AccountValue::IncrementAVProportionally(currency increment)
     currency genacct_increment = round_minutiae().c(increment * GenAcctPaymentAllocation);
     AVGenAcct += genacct_increment;
     AVSepAcct += increment - genacct_increment;
+#if !defined CURRENCY_UNIT_IS_CENTS
+    AVSepAcct = round_minutiae().c(dblize(AVSepAcct));
+    if(0.0 == dblize(AVSepAcct)) AVSepAcct = C0; // Negate negative zeroes.
+#endif // !defined CURRENCY_UNIT_IS_CENTS
 }
 
 //============================================================================
@@ -477,6 +481,10 @@ void AccountValue::DecrementAVProportionally(currency decrement)
     currency genacct_decrement = round_minutiae().c(decrement * general_account_proportion);
     AVGenAcct -= genacct_decrement;
     AVSepAcct -= decrement - genacct_decrement;
+#if !defined CURRENCY_UNIT_IS_CENTS
+    AVSepAcct = round_minutiae().c(dblize(AVSepAcct));
+    if(0.0 == dblize(AVSepAcct)) AVSepAcct = C0; // Negate negative zeroes.
+#endif // !defined CURRENCY_UNIT_IS_CENTS
 }
 
 /// Apportion decrements to account value between separate- and
