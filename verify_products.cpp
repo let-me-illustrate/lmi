@@ -52,21 +52,21 @@ class product_verifier
   private:
     void verify_7702q();
 
-    std::string      const product_name_;
-    std::string      const gender_str_  ;
-    std::string      const smoking_str_ ;
-    product_data     const p_           ;
-    mcenum_gender    const gender_      ;
-    mcenum_smoking   const smoking_     ;
-    product_database const db0_         ;
-    int              const min_age_     ;
-    product_database const db_          ;
-    mcenum_cso_era   const era_         ;
-    oenum_alb_or_anb const a_b_         ;
-    int              const t_           ;
-    bool             const axis_g_      ;
-    bool             const axis_s_      ;
-    int              const omega_       ;
+    std::string      const  product_name_;
+    std::string      const  gender_str_  ;
+    std::string      const  smoking_str_ ;
+    product_data     const& p_           ;
+    mcenum_gender    const  gender_      ;
+    mcenum_smoking   const  smoking_     ;
+    product_database const  db0_         ;
+    int              const  min_age_     ;
+    product_database const  db_          ;
+    mcenum_cso_era   const  era_         ;
+    oenum_alb_or_anb const  a_b_         ;
+    int              const  t_           ;
+    bool             const  axis_g_      ;
+    bool             const  axis_s_      ;
+    int              const  omega_       ;
 };
 
 product_verifier::product_verifier
@@ -77,7 +77,7 @@ product_verifier::product_verifier
     :product_name_ {product_name}
     ,gender_str_   {gender_str}
     ,smoking_str_  {smoking_str}
-    ,p_            (product_name)
+    ,p_            (*product_data::read_via_cache(filename_from_product_name(product_name)))
     ,gender_       {mce_gender (gender_str ).value()}
     ,smoking_      {mce_smoking(smoking_str).value()}
     ,db0_

@@ -192,7 +192,8 @@ void product_database::initialize(std::string const& product_name)
         }
     else
         {
-        product_data const p(product_name);
+        std::string const f = filename_from_product_name(product_name);
+        product_data const& p(*product_data::read_via_cache(f));
         std::string const filename(p.datum("DatabaseFilename"));
         LMI_ASSERT(!filename.empty());
         db_ = DBDictionary::read_via_cache(AddDataDir(filename));

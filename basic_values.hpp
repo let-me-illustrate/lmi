@@ -118,7 +118,7 @@ class LMI_SO BasicValues
     double                InvestmentManagementFee()    const;
 
     yare_input                          yare_input_;
-    product_data     const              product_;
+    std::shared_ptr<product_data>       product_;
     product_database const              database_;
     std::shared_ptr<lingo>              lingo_;
     std::shared_ptr<FundData>           FundData_;
@@ -133,7 +133,7 @@ class LMI_SO BasicValues
     std::shared_ptr<Irc7702>            Irc7702_;
     std::shared_ptr<Irc7702A>           Irc7702A_;
 
-    product_data     const& product () const {return product_;}
+    product_data     const& product () const {return *product_;}
     product_database const& database() const {return database_;}
 
     currency GetAnnualTgtPrem(int a_year, currency a_specamt) const;

@@ -65,7 +65,7 @@
 //============================================================================
 BasicValues::BasicValues(Input const& input)
     :yare_input_         (input)
-    ,product_            (yare_input_.ProductName)
+    ,product_            (product_data::read_via_cache(filename_from_product_name(yare_input_.ProductName)))
     ,database_           (yare_input_)
     ,DefnLifeIns_        {mce_cvat}
     ,DefnMaterialChange_ {mce_unnecessary_premium}
@@ -97,7 +97,7 @@ BasicValues::BasicValues
     // TODO ?? Need loan rate type here?
     )
     :yare_input_         (Input{})
-    ,product_            (a_ProductName)
+    ,product_            (product_data::read_via_cache(filename_from_product_name(a_ProductName)))
     ,database_
         (a_ProductName
         ,a_Gender
@@ -165,15 +165,15 @@ BasicValues::BasicValues
 //============================================================================
 void BasicValues::Init()
 {
-    lingo_ = lingo::read_via_cache(AddDataDir(product().datum("LingoFilename")));
-    FundData_.reset(new FundData(AddDataDir(product().datum("FundFilename"))));
-    RoundingRules_.reset
-        (new rounding_rules(AddDataDir(product().datum("RoundingFilename")))
-        );
+    lingo_             = lingo::read_via_cache
+        (AddDataDir(product().datum("LingoFilename")));
+    FundData_          = FundData::read_via_cache
+        (AddDataDir(product().datum("FundFilename")));
+    RoundingRules_     = rounding_rules::read_via_cache
+        (AddDataDir(product().datum("RoundingFilename")));
     SetRoundingFunctors();
-    StratifiedCharges_.reset
-        (new stratified_charges(AddDataDir(product().datum("TierFilename")))
-        );
+    StratifiedCharges_ = stratified_charges::read_via_cache
+        (AddDataDir(product().datum("TierFilename")));
 
     SetPermanentInvariants();
 
