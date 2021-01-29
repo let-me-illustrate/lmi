@@ -2195,16 +2195,9 @@ void AccountValue::TxCreditInt()
         currency gross = InterestCredited(AVSepAcct, YearsSepAcctGrossRate);
         notional_sep_acct_charge = gross - SepAcctIntCred;
 #if defined USE_CURRENCY_CLASS
-        currency result = AVSepAcct + SepAcctIntCred;
-        // CURRENCY !! rethink this weird logic
-        if(result < C0 && C0 <= AVSepAcct)
-            {
-            AVSepAcct = C0;
-            }
-        else
-            {
-            AVSepAcct = result;
-            }
+        // CURRENCY !! Further simplify the local logic after
+        // expunging macro USE_CURRENCY_CLASS.
+        AVSepAcct = std::max(C0, AVSepAcct + SepAcctIntCred);
 #else  // !defined USE_CURRENCY_CLASS
         // Guard against catastrophic cancellation. Testing the
         // absolute values of the addends for material equality is not
