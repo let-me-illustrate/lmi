@@ -56,7 +56,8 @@
 #include "value_cast.hpp"
 
 #include <algorithm>
-#include <cmath>                        // pow()
+#include <cfenv>                        // fesetround()
+#include <cmath>                        // nearbyint(), pow()
 #include <functional>                   // multiplies
 #include <limits>
 #include <numeric>
@@ -1495,18 +1496,17 @@ currency BasicValues::GetModalSpecAmtGSP(currency annualized_pmt) const
 /// typical practice) and rounded to integer to recapture the intended
 /// value.
 ///
-/// Of course, lmi would allow a table of corridor factors to have,
-/// say, seven decimal digits, so rounding might give an undesired
-/// answer even with a payment that exceeds the above example's 10^5
-/// by a factor of one plus epsilon. Until such amounts are stored as
-/// integral cents, this implementation cannot guarantee to give the
-/// desired answer in every case.
+/// This cannot be implemented as a single call to round_to() because
+/// it rounds twice: once to convert a floating-point corridor factor
+/// to an exact integer (4.9 --> 490 in the example above), and again
+/// after multiplying that integral factor by premium.
 
 currency BasicValues::GetModalSpecAmtCorridor(currency annualized_pmt) const
 {
     int const k = round_corridor_factor().decimals();
     double const s = nonstd::power(10, k);
-    double const z = std::round(s * GetCorridorFactor()[0]);
+    std::fesetround(FE_TONEAREST);
+    double const z = std::nearbyint(s * GetCorridorFactor()[0]);
     return round_min_specamt().c((z * annualized_pmt) / s);
 }
 
