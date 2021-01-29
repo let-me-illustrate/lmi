@@ -486,8 +486,6 @@ void AccountValue::PerformSpecAmtStrategy()
             }
         }
 
-    SA = round_specamt().c(SA);
-
     for(int j = 0; j < BasicValues::GetLength(); ++j)
         {
         InvariantValues().SpecAmt[j] = dblize(SA);

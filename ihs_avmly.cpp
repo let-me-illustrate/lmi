@@ -724,7 +724,11 @@ currency AccountValue::minimum_specified_amount(bool issuing_now, bool term_ride
 // Make sure ActualSpecAmt is never less than minimum specamt.
 void AccountValue::ChangeSpecAmtBy(currency delta)
 {
-    delta = round_specamt().c(delta); // CURRENCY !! already rounded?
+    // The argument is already currency, but it might not be rounded
+    // in the right way--e.g., if a withdrawal of twenty cents is
+    // taken, rounding rules might require specamt to decrease by
+    // one full dollar.
+    delta = round_specamt().c(delta);
     double term_proportion = 0.0;
     currency const old_total_specamt = ActualSpecAmt + TermSpecAmt;
     // Adjust term here only if it's formally a rider.
@@ -774,7 +778,6 @@ void AccountValue::ChangeSpecAmtBy(currency delta)
                     - ActualSpecAmt
                     ;
                 }
-            TermSpecAmt = round_specamt().c(TermSpecAmt); // CURRENCY !! already rounded?
             }
         }
     else
@@ -788,7 +791,6 @@ void AccountValue::ChangeSpecAmtBy(currency delta)
         (ActualSpecAmt
         ,minimum_specified_amount(0 == Year && 0 == Month, TermRiderActive)
         );
-    ActualSpecAmt = round_specamt().c(ActualSpecAmt); // CURRENCY !! already rounded?
 
     // Carry the new specamt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); ++j)
@@ -818,12 +820,11 @@ void AccountValue::ChangeSpecAmtBy(currency delta)
 
 void AccountValue::ChangeSupplAmtBy(currency delta)
 {
-    delta = round_specamt().c(delta); // CURRENCY !! already rounded?
+    delta = round_specamt().c(delta);
     TermSpecAmt += delta;
 
     // No minimum other than zero is defined.
     TermSpecAmt = std::max(TermSpecAmt, C0);
-    TermSpecAmt = round_specamt().c(TermSpecAmt); // CURRENCY !! already rounded?
 
     // Carry the new supplemental amount forward into all future years.
     // At least for now, there is no effect on surrender charges.
@@ -1737,7 +1738,6 @@ void AccountValue::TxSetTermAmt()
         }
 
     TermDB = std::max(C0, TermSpecAmt + DBIgnoringCorr - DBReflectingCorr);
-    TermDB = round_death_benefit().c(TermDB); // CURRENCY !! already rounded?
 }
 
 /// Terminate the term rider, optionally converting it to base.
@@ -2422,7 +2422,7 @@ void AccountValue::TxTakeWD()
 
     if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {
-        NetWD = round_withdrawal().c(std::min(RequestedWD, MaxWD)); // CURRENCY !! already rounded?
+        NetWD = std::min(RequestedWD, MaxWD);
         OverridingWD[Year] = NetWD;
         }
     else
