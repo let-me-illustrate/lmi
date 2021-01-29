@@ -1408,7 +1408,7 @@ currency BasicValues::GetModalSpecAmtMax(currency annualized_pmt) const
         case oe_modal_nonmec:
             return GetModalSpecAmtMinNonMec(annualized_pmt);
         case oe_modal_table:
-            return round_min_specamt().c
+            return round_specamt().c
                 (
                     annualized_pmt
                 /   MortalityRates_->MinimumPremiumRates()[0]
@@ -1432,7 +1432,7 @@ currency BasicValues::GetModalSpecAmtTgt(currency annualized_pmt) const
         case oe_modal_nonmec:
             return GetModalSpecAmtMinNonMec(annualized_pmt);
         case oe_modal_table:
-            return round_min_specamt().c
+            return round_specamt().c
                 (
                     (annualized_pmt - TgtPremMonthlyPolFee * 12)
                 /   MortalityRates_->TargetPremiumRates()[0]
@@ -1528,7 +1528,7 @@ currency BasicValues::GetModalSpecAmtSalary(int a_year) const
         z = std::min(z, yare_input_.SalarySpecifiedAmountCap);
         }
     z -= yare_input_.SalarySpecifiedAmountOffset;
-    return round_min_specamt().c(std::max(0.0, z));
+    return round_specamt().c(std::max(0.0, z));
 }
 
 /// In general, strategies linking specamt and premium commute. The
