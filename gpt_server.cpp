@@ -123,6 +123,7 @@ gpt_state test_one_days_gpt_transactions
     double                      Payment                      = exact_cast<tnr_nonnegative_double  >(input["Payment"                     ])->value();
     double                      BenefitAmount                = exact_cast<tnr_nonnegative_double  >(input["BenefitAmount"               ])->value();
 
+    // DATABASE !! consider caching these product files
     product_data product_filenames(ProductName);
 
     product_database database
