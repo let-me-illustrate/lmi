@@ -125,6 +125,8 @@ inline double operator*(double lhs, currency rhs)
     {return lhs * rhs.d();}
 inline double operator/(currency lhs, double rhs)
     {return lhs.d() / rhs;}
+inline double operator/(currency lhs, currency rhs)
+    {return lhs.cents() / rhs.cents();}
 
 inline std::ostream& operator<<(std::ostream& os, currency z)
     {return os << z.d();}

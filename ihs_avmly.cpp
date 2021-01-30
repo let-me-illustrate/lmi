@@ -291,8 +291,7 @@ void AccountValue::process_payment(currency payment)
     double er_proportion = 0.0;
     if(C0 != gross_non_1035_pmts)
         {
-        // CURRENCY !! more efficient: currency / currency --> double
-        er_proportion = ErGrossPmts[Month] / dblize(gross_non_1035_pmts);
+        er_proportion = ErGrossPmts[Month] / gross_non_1035_pmts;
         }
 
     // This is a net premium that's multiplied by a gross-premium
@@ -443,12 +442,11 @@ void AccountValue::DecrementAVProportionally(currency decrement)
 
     double general_account_proportion  = 0.0;
     double separate_account_proportion = 0.0;
-    // CURRENCY !! more efficient: currency / currency --> double
-    double general_account_nonnegative_assets  = dblize(std::max(C0, AVGenAcct));
-    double separate_account_nonnegative_assets = dblize(std::max(C0, AVSepAcct));
+    currency general_account_nonnegative_assets  = std::max(C0, AVGenAcct);
+    currency separate_account_nonnegative_assets = std::max(C0, AVSepAcct);
     if
-        (  0.0 == general_account_nonnegative_assets
-        && 0.0 == separate_account_nonnegative_assets
+        (  C0 == general_account_nonnegative_assets
+        && C0 == separate_account_nonnegative_assets
         )
         {
         general_account_proportion  = GenAcctPaymentAllocation;
@@ -743,8 +741,7 @@ void AccountValue::ChangeSpecAmtBy(currency delta)
                 break;
             case mce_adjust_both:
                 {
-                // CURRENCY !! more efficient: currency / currency --> double
-                term_proportion = TermSpecAmt / dblize(old_total_specamt);
+                term_proportion = TermSpecAmt / old_total_specamt;
                 }
                 break;
             case mce_adjust_base:
@@ -2548,8 +2545,7 @@ void AccountValue::TxTakeWD()
     // charge. This would become more complicated if we maintained
     // distinct surrender-charge layers.
 
-    // CURRENCY !! more efficient: currency / currency --> double
-    double surrchg_proportion = SurrChg_[Year] / dblize(csv);
+    double surrchg_proportion = SurrChg_[Year] / csv;
     currency non_free_wd = GrossWD;
     if(0.0 != FreeWDProportion[Year])
         {
