@@ -165,7 +165,7 @@ census_run_result run_census_in_series::operator()
     return result;
 }
 
-/// Illustrations with group experience rating
+/// Illustrations with group experience rating // EXPUNGE
 ///
 /// Mortality profit,
 ///   accumulated (net mortality charges - net claims) - IBNR,
@@ -357,46 +357,50 @@ census_run_result run_census_in_parallel::operator()
             ,progress_meter_mode(emission)
             );
 
-        // Variables to support tiering and experience rating.
+#if 0 // EXPUNGE
+        // Variables to support tiering and experience rating. // EXPUNGE [nothing here for tiering]
 
-        double const case_ibnr_months =
+        double const case_ibnr_months = // EXPUNGE
             cell_values.front().ibnr_as_months_of_mortality_charges()
             ;
-        double const case_experience_rating_amortization_years =
+        double const case_experience_rating_amortization_years = // EXPUNGE
             cell_values.front().experience_rating_amortization_years()
             ;
 
-        double case_accum_net_mortchgs = 0.0;
-        double case_accum_net_claims   = 0.0;
-        double case_k_factor = cell_values.front().yare_input_.ExperienceRatingInitialKFactor;
+        double case_accum_net_mortchgs = 0.0; // EXPUNGE
+        double case_accum_net_claims   = 0.0; // EXPUNGE
+        double case_k_factor = cell_values.front().yare_input_.ExperienceRatingInitialKFactor; // EXPUNGE
 
-        // Experience rating as implemented here uses either a special
+        // Experience rating as implemented here uses either a special // EXPUNGE
         // scalar input rate, or the separate-account rate. Those
         // rates as entered might vary across cells, but there must be
         // only one rate: therefore, use the first cell's rate, and
         // extend its last element if it doesn't have enough values.
 
-        std::vector<double> experience_reserve_rate;
+        std::vector<double> experience_reserve_rate; // EXPUNGE
         std::copy
             (cell_values.front().yare_input_.SeparateAccountRate.begin()
             ,cell_values.front().yare_input_.SeparateAccountRate.end()
             ,std::back_inserter(experience_reserve_rate)
             );
         experience_reserve_rate.resize(MaxYr, experience_reserve_rate.back());
-        if(cell_values.front().yare_input_.OverrideExperienceReserveRate)
+        if(cell_values.front().yare_input_.OverrideExperienceReserveRate) // EXPUNGE
             {
             experience_reserve_rate.assign
                 (experience_reserve_rate.size()
-                ,cell_values.front().yare_input_.ExperienceReserveRate
+                ,cell_values.front().yare_input_.ExperienceReserveRate // EXPUNGE
                 );
             }
+#endif // EXPUNGE
 
         for(int year = first_cell_inforce_year; year < MaxYr; ++year)
             {
-            double experience_reserve_annual_u =
+#if 0 // EXPUNGE
+            double experience_reserve_annual_u = // EXPUNGE
                     1.0
                 +   experience_reserve_rate[year]
                 ;
+#endif // EXPUNGE
 
             for(auto& i : cell_values)
                 {
@@ -433,7 +437,7 @@ census_run_result run_census_in_parallel::operator()
                         }
                     i.Month = month;
                     i.CoordinateCounters();
-                    i.IncrementBOM(year, month, case_k_factor);
+                    i.IncrementBOM(year, month, 0.0); // EXPUNGE case_k_factor);
                     assets += i.GetSepAcctAssetsInforce();
                     }
 
@@ -460,9 +464,11 @@ census_run_result run_census_in_parallel::operator()
             // mortality.
 
             double eoy_inforce_lives      = 0.0;
-            double years_net_claims       = 0.0;
-            double years_net_mortchgs     = 0.0;
-            double projected_net_mortchgs = 0.0;
+#if 0 // EXPUNGE
+            double years_net_claims       = 0.0; // EXPUNGE
+            double years_net_mortchgs     = 0.0; // EXPUNGE
+            double projected_net_mortchgs = 0.0; // EXPUNGE
+#endif // EXPUNGE
             for(auto& i : cell_values)
                 {
                 if(i.PrecedesInforceDuration(year, 11))
@@ -470,15 +476,20 @@ census_run_result run_census_in_parallel::operator()
                     continue;
                     }
                 i.SetClaims();
-                i.SetProjectedCoiCharge();
+#if 0 // EXPUNGE
+                i.SetProjectedCoiCharge(); // EXPUNGE
+#endif // EXPUNGE
                 eoy_inforce_lives      += i.InforceLivesEoy();
                 i.IncrementEOY(year);
-                years_net_claims       += i.GetCurtateNetClaimsInforce();
-                years_net_mortchgs     += i.GetCurtateNetCoiChargeInforce();
-                projected_net_mortchgs += i.GetProjectedCoiChargeInforce();
+#if 0 // EXPUNGE
+                years_net_claims       += i.GetCurtateNetClaimsInforce(); // EXPUNGE
+                years_net_mortchgs     += i.GetCurtateNetCoiChargeInforce(); // EXPUNGE
+                projected_net_mortchgs += i.GetProjectedCoiChargeInforce(); // EXPUNGE
+#endif // EXPUNGE
                 }
 
-            // Calculate next year's k factor. Do this only for
+#if 0 // EXPUNGE
+            // Calculate next year's k factor. Do this only for // EXPUNGE
             // current-expense bases, not as a speed optimization,
             // but rather because experience rating on other bases
             // is undefined.
@@ -507,7 +518,7 @@ census_run_result run_census_in_parallel::operator()
             // charge is captured separately for adjusting IBNR, it
             // would be incorrect to add it here.
 
-            if(first_cell_inforce_year == year)
+            if(first_cell_inforce_year == year) // EXPUNGE
                 {
                 case_accum_net_mortchgs += cell_values.front().yare_input_.InforceNetExperienceReserve;
                 }
@@ -521,7 +532,7 @@ census_run_result run_census_in_parallel::operator()
             // is summed across cells and asserted materially to
             // equal the original total reserve.
 
-            if
+            if // EXPUNGE
                 (   cell_values.front().yare_input_.UseExperienceRating
                 &&  mce_gen_curr == expense_and_general_account_basis
                 &&  0.0 != eoy_inforce_lives
@@ -531,12 +542,12 @@ census_run_result run_census_in_parallel::operator()
                     {
                     years_net_mortchgs += cell_values.front().yare_input_.InforceYtdNetCoiCharge;
                     }
-                double case_ibnr =
+                double case_ibnr = // EXPUNGE
                         years_net_mortchgs
                     *   case_ibnr_months
                     /   12.0
                     ;
-                double case_net_mortality_reserve =
+                double case_net_mortality_reserve = // EXPUNGE
                         case_accum_net_mortchgs
                     -   case_accum_net_claims
                     -   case_ibnr
@@ -560,20 +571,20 @@ census_run_result run_census_in_parallel::operator()
                         );
                     }
 
-                double case_net_mortality_reserve_checksum = 0.0;
+                double case_net_mortality_reserve_checksum = 0.0; // EXPUNGE
                 for(auto& i : cell_values)
                     {
                     if(i.PrecedesInforceDuration(year, 11))
                         {
                         continue;
                         }
-                    case_net_mortality_reserve_checksum +=
-                        i.ApportionNetMortalityReserve
+                    case_net_mortality_reserve_checksum += // EXPUNGE
+                        i.ApportionNetMortalityReserve // EXPUNGE
                             (   case_net_mortality_reserve
                             /   eoy_inforce_lives
                             );
                     }
-                if
+                if // EXPUNGE
                     (!materially_equal
                         (case_net_mortality_reserve
                         ,case_net_mortality_reserve_checksum
@@ -591,6 +602,7 @@ census_run_result run_census_in_parallel::operator()
                         ;
                     }
                 }
+#endif // EXPUNGE
 
             if(!meter->reflect_progress())
                 {

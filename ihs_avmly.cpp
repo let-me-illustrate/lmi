@@ -1813,7 +1813,8 @@ void AccountValue::TxSetCoiCharge()
     // DCV need not be rounded.
     DcvNaar = std::max(0.0, DcvNaar);
 
-    double retention_charge = 0.0;
+    double retention_charge = 0.0; // EXPUNGE
+stifle_warning_for_unused_value(retention_charge); // EXPUNGE
     double coi_rate = GetBandedCoiRates(GenBasis_, ActualSpecAmt)[Year];
     ActualCoiRate = coi_rate;
 
@@ -1837,11 +1838,11 @@ void AccountValue::TxSetCoiCharge()
                 )
             );
         double retention_rate = round_coi_rate()(coi_rate * CoiRetentionRate);
-        retention_charge = NAAR * retention_rate;
+        retention_charge = 0.0 * NAAR * retention_rate; // EXPUNGE
         }
 
     CoiCharge    = round_coi_charge().c(NAAR * ActualCoiRate);
-    NetCoiCharge = CoiCharge - round_coi_charge().c(retention_charge);
+//  NetCoiCharge = CoiCharge - round_coi_charge().c(retention_charge); // EXPUNGE
     YearsTotalCoiCharge += CoiCharge;
 
     // DCV need not be rounded.
@@ -1980,7 +1981,7 @@ void AccountValue::TxDoMlyDed()
     // determined.
     MlyDed += MonthsPolicyFees + SpecAmtLoad;
 
-    YearsTotalNetCoiCharge += dblize(NetCoiCharge);
+//  YearsTotalNetCoiCharge += dblize(NetCoiCharge); // EXPUNGE
 
     SepAcctValueAfterDeduction = AVSepAcct;
 }

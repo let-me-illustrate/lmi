@@ -378,7 +378,7 @@ void AccountValue::RunOneCell(mcenum_run_basis a_Basis)
             }
 
         SetClaims();
-        SetProjectedCoiCharge();
+//      SetProjectedCoiCharge(); // EXPUNGE
         IncrementEOY(year);
         }
 
@@ -670,7 +670,7 @@ void AccountValue::SetInitialValues()
 
     CoiCharge                   = C0;
     RiderCharges                = C0;
-    NetCoiCharge                = C0;
+    NetCoiCharge                = C0; // EXPUNGE
     MlyDed                      = C0;
     CumulativeSalesLoad         = round_minutiae().c(yare_input_.InforceCumulativeSalesLoad);
 
@@ -864,7 +864,7 @@ void AccountValue::InitializeYear()
     YearsTotalNetIntCredited    = C0;
     YearsTotalGrossIntCredited  = C0;
     YearsTotalLoanIntAccrued    = C0;
-    YearsTotalNetCoiCharge      = 0.0;
+    YearsTotalNetCoiCharge      = 0.0; // EXPUNGE
     YearsTotalPolicyFee         = C0;
     YearsTotalDacTaxLoad        = 0.0;
     YearsTotalSpecAmtLoad       = C0;
@@ -1110,9 +1110,10 @@ void AccountValue::SetClaims()
         );
 }
 
+#if 0 // EXPUNGE
 //============================================================================
 // Proxy for next year's COI charge, used only for experience rating.
-void AccountValue::SetProjectedCoiCharge()
+void AccountValue::SetProjectedCoiCharge() // EXPUNGE
 {
     if
         (   ItLapsed
@@ -1151,6 +1152,7 @@ void AccountValue::SetProjectedCoiCharge()
         *   next_years_coi_rate
         ;
 }
+#endif // EXPUNGE
 
 /// Post year-end results to ledger.
 ///
@@ -1283,7 +1285,7 @@ void AccountValue::FinalizeYear()
     VariantValues().NetIntCredited    [Year] = dblize(YearsTotalNetIntCredited);
     VariantValues().GrossIntCredited  [Year] = dblize(YearsTotalGrossIntCredited);
     VariantValues().LoanIntAccrued    [Year] = dblize(YearsTotalLoanIntAccrued);
-    VariantValues().NetCOICharge      [Year] = YearsTotalNetCoiCharge         ;
+    VariantValues().NetCOICharge      [Year] = YearsTotalNetCoiCharge         ; // EXPUNGE
     VariantValues().PolicyFee         [Year] = dblize(YearsTotalPolicyFee)    ;
     VariantValues().DacTaxLoad        [Year] = YearsTotalDacTaxLoad           ;
     VariantValues().SpecAmtLoad       [Year] = dblize(YearsTotalSpecAmtLoad)  ;
@@ -1491,8 +1493,9 @@ currency AccountValue::GetSepAcctAssetsInforce() const
     return round_minutiae().c(SepAcctValueAfterDeduction * partial_mortality_lx()[Year]);
 }
 
+#if 0 // EXPUNGE
 //============================================================================
-double AccountValue::GetCurtateNetCoiChargeInforce() const
+double AccountValue::GetCurtateNetCoiChargeInforce() const // EXPUNGE
 {
     if
         (   ItLapsed
@@ -1510,7 +1513,7 @@ double AccountValue::GetCurtateNetCoiChargeInforce() const
 }
 
 //============================================================================
-double AccountValue::GetCurtateNetClaimsInforce() const
+double AccountValue::GetCurtateNetClaimsInforce() const // EXPUNGE
 {
     if
         (   ItLapsed
@@ -1528,7 +1531,7 @@ double AccountValue::GetCurtateNetClaimsInforce() const
 }
 
 //============================================================================
-double AccountValue::GetProjectedCoiChargeInforce() const
+double AccountValue::GetProjectedCoiChargeInforce() const // EXPUNGE
 {
     if
         (   ItLapsed
@@ -1554,7 +1557,7 @@ double AccountValue::GetProjectedCoiChargeInforce() const
 // The return value, added across cells, should reproduce the total
 // total reserve at the case level, as the caller may assert.
 //
-double AccountValue::ApportionNetMortalityReserve
+double AccountValue::ApportionNetMortalityReserve // EXPUNGE
     (double reserve_per_life_inforce
     )
 {
@@ -1587,6 +1590,7 @@ double AccountValue::ApportionNetMortalityReserve
 
     return apportioned_reserve * yare_input_.NumberOfIdenticalLives;
 }
+#endif // EXPUNGE
 
 /// Beginning of year inforce lives, reflecting lapses and survivorship.
 

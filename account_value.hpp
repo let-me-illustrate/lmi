@@ -164,13 +164,13 @@ class LMI_SO AccountValue final
     void   DebugPrint           ();
 
     void   SetClaims();
-    double GetCurtateNetClaimsInforce    () const;
-    double GetCurtateNetCoiChargeInforce () const;
-    void   SetProjectedCoiCharge         ();
-    double GetProjectedCoiChargeInforce  () const;
-    double ApportionNetMortalityReserve(double reserve_per_life_inforce);
-    double experience_rating_amortization_years() const;
-    double ibnr_as_months_of_mortality_charges() const;
+    double GetCurtateNetClaimsInforce    () const; // EXPUNGE
+    double GetCurtateNetCoiChargeInforce () const; // EXPUNGE
+    void   SetProjectedCoiCharge         (); // EXPUNGE
+    double GetProjectedCoiChargeInforce  () const; // EXPUNGE
+    double ApportionNetMortalityReserve(double reserve_per_life_inforce); // EXPUNGE
+    double experience_rating_amortization_years() const; // EXPUNGE
+    double ibnr_as_months_of_mortality_charges() const; // EXPUNGE
 
     // To support the notion of an M&E charge that depends on total case
     // assets, we provide these functions, which are designed to be
@@ -183,7 +183,7 @@ class LMI_SO AccountValue final
     currency IncrementBOM
         (int    year
         ,int    month
-        ,double a_case_k_factor
+        ,double a_case_k_factor // EXPUNGE
         );
     // Credit interest and process all subsequent monthly transactions
     void IncrementEOM
@@ -423,7 +423,7 @@ class LMI_SO AccountValue final
     currency NAAR;
     currency CoiCharge;
     currency RiderCharges;
-    currency NetCoiCharge;
+    currency NetCoiCharge; // EXPUNGE
     currency SpecAmtLoadBase;
     double   DacTaxRsv; // CURRENCY !! obsolete--always zero
 
@@ -590,11 +590,11 @@ class LMI_SO AccountValue final
     currency YearsTotalSepAcctLoad;
 
     // For experience rating.
-    double   CoiRetentionRate;
-    double   ExperienceRatingAmortizationYears;
-    double   IbnrAsMonthsOfMortalityCharges;
-    double   NextYearsProjectedCoiCharge;
-    double   YearsTotalNetCoiCharge;
+    double   CoiRetentionRate; // EXPUNGE
+    double   ExperienceRatingAmortizationYears; // EXPUNGE
+    double   IbnrAsMonthsOfMortalityCharges; // EXPUNGE
+    double   NextYearsProjectedCoiCharge; // EXPUNGE
+    double   YearsTotalNetCoiCharge; // EXPUNGE
 
     currency CumulativeSalesLoad;
 
