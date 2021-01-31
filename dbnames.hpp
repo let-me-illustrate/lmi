@@ -499,15 +499,6 @@ enum e_database_key
         ,DB_AllowExtraAssetComp
         ,DB_AllowExtraPremComp
 
-    ,DB_Topic_ExperienceRating
-
-        ,DB_AllowExpRating
-        ,DB_ExpRatStdDevMult
-        ,DB_ExpRatIbnrMult
-        ,DB_ExpRatCoiRetention
-        ,DB_ExpRatRiskCoiMult
-        ,DB_ExpRatAmortPeriod
-
     ,DB_Topic_Miscellanea
 
         ,DB_LedgerType

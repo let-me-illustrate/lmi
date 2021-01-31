@@ -330,13 +330,6 @@
 /DB_AssetComp\>/                 s/^/P05/
 /DB_AllowExtraAssetComp\>/       s/^/P06/
 /DB_AllowExtraPremComp\>/        s/^/P07/
-# DB_Topic_ExperienceRating
-/DB_AllowExpRating\>/            s/^/Q01/
-/DB_ExpRatStdDevMult\>/          s/^/Q02/
-/DB_ExpRatIbnrMult\>/            s/^/Q03/
-/DB_ExpRatCoiRetention\>/        s/^/Q04/
-/DB_ExpRatRiskCoiMult\>/         s/^/Q05/
-/DB_ExpRatAmortPeriod\>/         s/^/Q06/
 # DB_Topic_Miscellanea
 /DB_LedgerType\>/                s/^/R01/
 /DB_Nonillustrated\>/            s/^/R02/

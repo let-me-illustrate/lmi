@@ -198,7 +198,6 @@ void LedgerInvariant::Init(BasicValues const* b)
     NoLongerIssued             = b->database().query<bool>(DB_NoLongerIssued);
     AllowGroupQuote            = b->database().query<bool>(DB_AllowGroupQuote);
     b->database().query_into(DB_TxCallsGuarUwSubstd, TxCallsGuarUwSubstd);
-    AllowExperienceRating      = b->database().query<bool>(DB_AllowExpRating);
     UseExperienceRating        = b->yare_input_.UseExperienceRating;
     UsePartialMort             = b->yare_input_.UsePartialMortality;
 

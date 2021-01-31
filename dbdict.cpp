@@ -401,12 +401,6 @@ void DBDictionary::ascribe_members()
     ascribe("AssetComp"                 , &DBDictionary::AssetComp                 );
     ascribe("AllowExtraAssetComp"       , &DBDictionary::AllowExtraAssetComp       );
     ascribe("AllowExtraPremComp"        , &DBDictionary::AllowExtraPremComp        );
-    ascribe("AllowExpRating"            , &DBDictionary::AllowExpRating            );
-    ascribe("ExpRatStdDevMult"          , &DBDictionary::ExpRatStdDevMult          );
-    ascribe("ExpRatIbnrMult"            , &DBDictionary::ExpRatIbnrMult            );
-    ascribe("ExpRatCoiRetention"        , &DBDictionary::ExpRatCoiRetention        );
-    ascribe("ExpRatRiskCoiMult"         , &DBDictionary::ExpRatRiskCoiMult         );
-    ascribe("ExpRatAmortPeriod"         , &DBDictionary::ExpRatAmortPeriod         );
     ascribe("LedgerType"                , &DBDictionary::LedgerType                );
     ascribe("Nonillustrated"            , &DBDictionary::Nonillustrated            );
     ascribe("NoLongerIssued"            , &DBDictionary::NoLongerIssued            );
@@ -1077,14 +1071,6 @@ sample::sample()
     Add({DB_AllowHoneymoon      , true});
     Add({DB_AllowExtraAssetComp , true});
     Add({DB_AllowExtraPremComp  , true});
-    Add({DB_AllowExpRating      , false});
-    Add({DB_AllowExpRating      , true});
-    Add({DB_ExpRatStdDevMult    , 0.0});
-    Add({DB_ExpRatIbnrMult      , 0.0});
-    Add({DB_ExpRatIbnrMult      , 6.0});
-    Add({DB_ExpRatCoiRetention  , 0.0});
-    Add({DB_ExpRatRiskCoiMult   , 0});
-    Add({DB_ExpRatAmortPeriod   , 4.0});
     Add({DB_LedgerType          , mce_ill_reg});
     Add({DB_AgeLastOrNearest    , oe_age_last_birthday});
     Add({DB_MaturityAge         , 100});
@@ -1598,7 +1584,6 @@ void DBDictionary::InitAntediluvian()
     Add({DB_NoLapseMinDur       , 0.0});
     Add({DB_NoLapseMinAge       , 0.0});
     Add({DB_NoLapseAlwaysActive , 0.0});
-    Add({DB_ExpRatAmortPeriod   , 4.0});
     Add({DB_LedgerType          , mce_ill_reg});
     Add({DB_AgeLastOrNearest    , oe_age_nearest_birthday_ties_older});
     Add({DB_MaturityAge         , 100});

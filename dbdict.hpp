@@ -382,12 +382,6 @@ class LMI_SO DBDictionary
     database_entity AssetComp                 ;
     database_entity AllowExtraAssetComp       ;
     database_entity AllowExtraPremComp        ;
-    database_entity AllowExpRating            ;
-    database_entity ExpRatStdDevMult          ;
-    database_entity ExpRatIbnrMult            ;
-    database_entity ExpRatCoiRetention        ;
-    database_entity ExpRatRiskCoiMult         ;
-    database_entity ExpRatAmortPeriod         ;
     database_entity LedgerType                ;
     database_entity Nonillustrated            ;
     database_entity NoLongerIssued            ;

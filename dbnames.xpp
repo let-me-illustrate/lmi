@@ -336,13 +336,6 @@
 {DB_AssetComp,DB_Topic_Compensation,"AssetComp","Producer-only compensation on separate-account assets--not tiered by assets [not yet implemented]",}, \
 {DB_AllowExtraAssetComp,DB_Topic_Compensation,"AllowExtraAssetComp","Allow input extra asset-based compensation: 0=no, 1=yes",}, \
 {DB_AllowExtraPremComp,DB_Topic_Compensation,"AllowExtraPremComp","Allow input extra premium-based compensation: 0=no, 1=yes",}, \
-{DB_Topic_ExperienceRating,DB_FIRST,"Experience rating","Experience-rating parameters",}, \
-{DB_AllowExpRating,DB_Topic_ExperienceRating,"AllowExpRating","Allow experience rating: 0=no, 1=yes",}, \
-{DB_ExpRatStdDevMult,DB_Topic_ExperienceRating,"ExpRatStdDevMult","Experience rating reserve as multiple of standard deviation of expected claims net of account value released on death",}, \
-{DB_ExpRatIbnrMult,DB_Topic_ExperienceRating,"ExpRatIbnrMult","Experience rating IBNR as number of months of net cost of insurance charges",}, \
-{DB_ExpRatCoiRetention,DB_Topic_ExperienceRating,"ExpRatCoiRetention","Experience rating retention as proportion of net cost of insurance charges",}, \
-{DB_ExpRatRiskCoiMult,DB_Topic_ExperienceRating,"ExpRatRiskCoiMult","Maximum risk charge as a multiple of annual cost of insurance charges",}, \
-{DB_ExpRatAmortPeriod,DB_Topic_ExperienceRating,"ExpRatAmortPeriod","Experience rating amortization period",}, \
 {DB_Topic_Miscellanea,DB_FIRST,"Miscellanea","Parameters that don't fit tidily into other categories",}, \
 {DB_LedgerType,DB_Topic_Miscellanea,"LedgerType","Ledger type: 0=illustration reg, 1=FINRA, 3=group private placement, 6=individual private placement",}, \
 {DB_Nonillustrated,DB_Topic_Miscellanea,"Nonillustrated","Forbid all illustrations: 0=no, 1=yes",}, \

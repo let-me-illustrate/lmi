@@ -206,38 +206,6 @@ void Input::DoHarmonize()
     SurviveToYear             .enable(part_mort_used && mce_survive_to_year == SurviveToType);
     SurviveToAge              .enable(part_mort_used && mce_survive_to_age  == SurviveToType);
 
-    bool enable_experience_rating =
-            database_->query<bool>(DB_AllowExpRating)
-        &&  part_mort_used
-        &&  mce_month_by_month == RunOrder
-        ;
-    UseExperienceRating.enable(enable_experience_rating);
-
-    // TODO ?? These shouldn't need to depend on 'enable_experience_rating';
-    // instead, 'UseExperienceRating' should be transmogrified if it's not
-    // enabled.
-    OverrideExperienceReserveRate.enable
-        (   enable_experience_rating
-        &&  mce_yes == UseExperienceRating
-        );
-    ExperienceReserveRate.enable
-        (   enable_experience_rating
-        &&  mce_yes == UseExperienceRating
-        &&  mce_yes == OverrideExperienceReserveRate
-        );
-    ExperienceRatingInitialKFactor.enable
-        (   enable_experience_rating
-        &&  mce_yes == UseExperienceRating
-        );
-    InforceNetExperienceReserve.enable
-        (   enable_experience_rating
-        &&  mce_yes == UseExperienceRating
-        );
-    InforceYtdNetCoiCharge.enable
-        (   enable_experience_rating
-        &&  mce_yes == UseExperienceRating
-        );
-
     EffectiveDate.enable(mce_no == EffectiveDateToday);
 
     IssueAge        .enable(mce_no  == UseDOB);
