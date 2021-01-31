@@ -206,7 +206,6 @@ title_map_t static_titles()
     ,{"ErMode"                          , "ER\nPayment\nMode"}
     ,{"ExpenseCharges_Current"          , "Curr\nExpense\nCharge"}
     ,{"ExpenseCharges_Guaranteed"       , "Guar\nExpense\nCharge"}
-    ,{"ExperienceReserve_Current"       , "Experience\nRating\nReserve"}
     ,{"GptForceout"                     , "Forceout"}
     ,{"GrossIntCredited_Current"        , "Curr Gross\nInt\nCredited"}
     ,{"GrossIntCredited_Guaranteed"     , "Guar Gross\nInt\nCredited"}
@@ -218,7 +217,6 @@ title_map_t static_titles()
     ,{"IrrCsv_Guaranteed"               , "Guar IRR\non CSV"}
     ,{"IrrDb_Current"                   , "Curr IRR\non DB"}
     ,{"IrrDb_Guaranteed"                , "Guar IRR\non DB"}
-    ,{"KFactor_Current"                 , "Experience\nRating\nK Factor"}
     ,{"LoanIntAccrued_Current"          , "Curr Loan\nInt\nAccrued"}
     ,{"LoanIntAccrued_Guaranteed"       , "Guar Loan\nInt\nAccrued"}
     ,{"MlyGAIntRate_Current"            , "Curr Monthly\nGen Acct\nInt Rate"}
@@ -231,7 +229,6 @@ title_map_t static_titles()
     ,{"MlySAIntRate_Guaranteed"         , "Guar Monthly\nSep Acct\nInt Rate"}
     ,{"ModalMinimumPremium"             , "Modal\nMinimum\nPremium"}
 //  ,{"NaarForceout"                    , "Forced\nWithdrawal\ndue to\nNAAR Limit"}
-    ,{"NetCOICharge_Current"            , "Experience\nRating\nNet COI\nCharge"}
     ,{"NetClaims_Current"               , "Curr Net\nClaims"}
     ,{"NetClaims_Guaranteed"            , "Guar Net\nClaims"}
     ,{"NetIntCredited_Current"          , "Curr Net\nInt\nCredited"}
@@ -249,7 +246,6 @@ title_map_t static_titles()
     ,{"PrefLoanBalance_Guaranteed"      , "Guar\nPreferred\nLoan Bal"}
     ,{"PremTaxLoad_Current"             , "Curr\nPremium\nTax Load"}
     ,{"PremTaxLoad_Guaranteed"          , "Guar\nPremium\nTax Load"}
-    ,{"ProjectedCoiCharge_Current"      , "Experience\nRating\nProjected\nCOI Charge"}
     ,{"RefundableSalesLoad"             , "Refundable\nSales\nLoad"}
     ,{"RiderCharges_Current"            , "Curr Rider\nCharges"}
     ,{"Salary"                          , "Salary"}
@@ -342,7 +338,6 @@ mask_map_t static_masks()
     ,{"ErMode"                          ,  "Semiannual"}
     ,{"ExpenseCharges_Current"          , "999,999,999"}
     ,{"ExpenseCharges_Guaranteed"       , "999,999,999"}
-    ,{"ExperienceReserve_Current"       , "999,999,999"}
     ,{"GptForceout"                     , "999,999,999"}
     ,{"GrossIntCredited_Current"        , "999,999,999"}
     ,{"GrossIntCredited_Guaranteed"     , "999,999,999"}
@@ -354,7 +349,6 @@ mask_map_t static_masks()
     ,{"IrrCsv_Guaranteed"               ,  "100000.00%"}
     ,{"IrrDb_Current"                   ,  "100000.00%"}
     ,{"IrrDb_Guaranteed"                ,  "100000.00%"}
-    ,{"KFactor_Current"                 ,    "9,999.99"}
     ,{"LoanIntAccrued_Current"          , "999,999,999"}
     ,{"LoanIntAccrued_Guaranteed"       , "999,999,999"}
     ,{"MlyGAIntRate_Current"            ,      "99.99%"}
@@ -367,7 +361,6 @@ mask_map_t static_masks()
     ,{"MlySAIntRate_Guaranteed"         ,      "99.99%"}
     ,{"ModalMinimumPremium"             , "999,999,999"}
 //  ,{"NaarForceout"                    , "999,999,999"}
-    ,{"NetCOICharge_Current"            , "999,999,999"}
     ,{"NetClaims_Current"               , "999,999,999"}
     ,{"NetClaims_Guaranteed"            , "999,999,999"}
     ,{"NetIntCredited_Current"          , "999,999,999"}
@@ -385,7 +378,6 @@ mask_map_t static_masks()
     ,{"PrefLoanBalance_Guaranteed"      , "999,999,999"}
     ,{"PremTaxLoad_Current"             , "999,999,999"}
     ,{"PremTaxLoad_Guaranteed"          , "999,999,999"}
-    ,{"ProjectedCoiCharge_Current"      , "999,999,999"}
     ,{"RefundableSalesLoad"             , "999,999,999"}
     ,{"RiderCharges_Current"            , "999,999,999"}
     ,{"Salary"                          , "999,999,999"}
@@ -593,10 +585,8 @@ format_map_t static_formats()
 // >
     ,{"AddonMonthlyFee"                 , f2}
     ,{"AnnualFlatExtra"                 , f2}
-// TODO ?? The precision of 'InforceLives' and 'KFactor' is inadequate.
-// Is every other format OK?
+// TODO ?? The precision of 'InforceLives' is inadequate. Is every other format OK?
     ,{"InforceLives"                    , f2}
-    ,{"KFactor"                         , f2}
 // >
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
@@ -627,7 +617,6 @@ format_map_t static_formats()
     ,{"ErModalMinimumPremium"           , f1}
 //  ,{"ErMode"                          , f1} // Not numeric.
     ,{"ExpenseCharges"                  , f1}
-    ,{"ExperienceReserve"               , f1}
     ,{"FundNumbers"                     , f1}
     ,{"GptForceout"                     , f1}
     ,{"GrossIntCredited"                , f1}
@@ -637,7 +626,6 @@ format_map_t static_formats()
     ,{"LoanIntAccrued"                  , f1}
     ,{"ModalMinimumPremium"             , f1}
     ,{"NaarForceout"                    , f1}
-    ,{"NetCOICharge"                    , f1}
     ,{"NetClaims"                       , f1}
     ,{"NetIntCredited"                  , f1}
     ,{"NetPmt"                          , f1}
@@ -647,7 +635,6 @@ format_map_t static_formats()
     ,{"PolicyFee"                       , f1}
     ,{"PrefLoanBalance"                 , f1}
     ,{"PremTaxLoad"                     , f1}
-    ,{"ProjectedCoiCharge"              , f1}
     ,{"RefundableSalesLoad"             , f1}
     ,{"RiderCharges"                    , f1}
     ,{"Salary"                          , f1}

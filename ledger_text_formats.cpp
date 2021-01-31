@@ -107,11 +107,7 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
         m["IrrCsv_Guaranteed"          ] = ledger_metadata(2, oe_format_percentage, "Guar IRR on CSV"                       ); // "Guaranteed Cash Value IRR"
         m["IrrDb_Current"              ] = ledger_metadata(2, oe_format_percentage, "Curr IRR on DB"                        ); // "Current Death Benefit IRR"
         m["IrrDb_Guaranteed"           ] = ledger_metadata(2, oe_format_percentage, "Guar IRR on DB"                        ); // "Guaranteed Death Benefit IRR"
-        m["ExperienceReserve_Current"  ] = ledger_metadata(0, oe_format_normal    , "Experience Rating Reserve"             ); // "Net Mortality Reserve"
         m["NetClaims_Current"          ] = ledger_metadata(0, oe_format_normal    , "Curr Net Claims"                       ); // "Experience Rating Current Net Claims"
-        m["NetCOICharge_Current"       ] = ledger_metadata(0, oe_format_normal    , "Experience Rating Net COI Charge"      ); // "Net Mortality Charge"
-        m["ProjectedCoiCharge_Current" ] = ledger_metadata(0, oe_format_normal    , "Experience Rating Projected COI Charge"); // "Projected Mortality Charge"
-        m["KFactor_Current"            ] = ledger_metadata(4, oe_format_normal    , "Experience Rating K Factor"            );
         m["GrossPmt"                   ] = ledger_metadata(0, oe_format_normal    , "Premium Outlay"                        ); // "Total Payment"
         m["LoanIntAccrued_Current"     ] = ledger_metadata(0, oe_format_normal    , "Curr Loan Int Accrued"                 ); // "Current Accrued Loan Interest"
         m["NetDeathBenefit"            ] = ledger_metadata(0, oe_format_normal    , "Net Death Benefit"                     ); // "Current Net Death Benefit"
@@ -536,14 +532,14 @@ void PrintCellTabDelimited
         ,"YearEndInforceLives"
         ,"ClaimsPaid"
         ,"NetClaims"
-        ,"ExperienceReserve"
+        ,"[obsolete]"
         ,"ProjectedMortalityCharge"
-        ,"KFactor"
+        ,"[obsolete]"
         ,"NetMortalityCharge0Int"
         ,"NetClaims0Int"
-        ,"ExperienceReserve0Int"
+        ,"[obsolete]"
         ,"ProjectedMortalityCharge0Int"
-        ,"KFactor0Int"
+        ,"[obsolete]"
         };
 
     for(auto const& i : sheaders)
@@ -583,7 +579,7 @@ void PrintCellTabDelimited
         os << Invar.value_str("AnnualFlatExtra"       ,j) << '\t';
         os << Curr_.value_str("COICharge"             ,j) << '\t';
         os << Curr_.value_str("RiderCharges"          ,j) << '\t';
-        os << Curr_.value_str("NetCOICharge"          ,j) << '\t';
+        os << "0\t"; // obsolete
         os << Curr_.value_str("SepAcctCharges"        ,j) << '\t';
 
         os << Curr_.value_str("AnnSAIntRate"          ,j) << '\t';
@@ -614,35 +610,14 @@ void PrintCellTabDelimited
 
         os << Curr_.value_str("ClaimsPaid"            ,j) << '\t';
         os << Curr_.value_str("NetClaims"             ,j) << '\t';
-        os << Curr_.value_str("ExperienceReserve"     ,j) << '\t';
-        os << Curr_.value_str("ProjectedCoiCharge"    ,j) << '\t';
-        os << Curr_.value_str("KFactor"               ,j) << '\t';
-
-        // Show experience-rating columns for current-expense, zero-
-        // interest basis if used, to support testing.
-        std::vector<mcenum_run_basis> const& bases(ledger_values.GetRunBases());
-        if(contains(bases, mce_run_gen_curr_sep_zero))
-            {
-            LedgerVariant const& Curr0 = ledger_values.GetCurrZero();
-            os << Curr0.value_str("NetCOICharge"          ,j) << '\t';
-            os << Curr0.value_str("NetClaims"             ,j) << '\t';
-            os << Curr0.value_str("ExperienceReserve"     ,j) << '\t';
-            os << Curr0.value_str("ProjectedCoiCharge"    ,j) << '\t';
-            os << Curr0.value_str("KFactor"               ,j) << '\t';
-            }
-        else
-            {
-            os << "0\t";
-            os << "0\t";
-            os << "0\t";
-            os << "0\t";
-            os << "0\t";
-            }
-
-        if(contains(bases, mce_run_gen_curr_sep_half))
-            {
-            alarum() << "Three-rate illustrations not supported." << LMI_FLUSH;
-            }
+        os << "0\t"; // obsolete
+        os << "0\t"; // obsolete
+        os << "0\t"; // obsolete
+        os << "0\t"; // obsolete
+        os << "0\t"; // obsolete
+        os << "0\t"; // obsolete
+        os << "0\t"; // obsolete
+        os << "0\t"; // obsolete
 
         os << '\n';
         }

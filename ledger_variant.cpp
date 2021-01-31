@@ -93,10 +93,6 @@ void LedgerVariant::Alloc(int len)
     BegYearVectors  ["GrossIntCredited"       ] = &GrossIntCredited       ;
     BegYearVectors  ["LoanIntAccrued"         ] = &LoanIntAccrued         ;
 
-    BegYearVectors  ["NetCOICharge"           ] = &NetCOICharge           ;
-
-    ForborneVectors ["ExperienceReserve"      ] = &ExperienceReserve      ;
-
     BegYearVectors  ["PolicyFee"              ] = &PolicyFee              ;
     BegYearVectors  ["PremTaxLoad"            ] = &PremTaxLoad            ;
     BegYearVectors  ["DacTaxLoad"             ] = &DacTaxLoad             ;
@@ -123,7 +119,6 @@ void LedgerVariant::Alloc(int len)
     EndYearVectors  ["SurrChg"                ] = &SurrChg                ;
     EndYearVectors  ["TermPurchased"          ] = &TermPurchased          ;
     EndYearVectors  ["BaseDeathBft"           ] = &BaseDeathBft           ;
-    EndYearVectors  ["ProjectedCoiCharge"     ] = &ProjectedCoiCharge     ;
 
     OtherVectors    ["MlySAIntRate"           ] = &MlySAIntRate           ;
     OtherVectors    ["MlyGAIntRate"           ] = &MlyGAIntRate           ;
@@ -133,7 +128,6 @@ void LedgerVariant::Alloc(int len)
     OtherVectors    ["AnnGAIntRate"           ] = &AnnGAIntRate           ;
     OtherVectors    ["AnnHoneymoonValueRate"  ] = &AnnHoneymoonValueRate  ;
     OtherVectors    ["AnnPostHoneymoonRate"   ] = &AnnPostHoneymoonRate   ;
-    OtherVectors    ["KFactor"                ] = &KFactor                ;
 
     OtherScalars    ["LapseMonth"             ] = &LapseMonth             ;
     OtherScalars    ["LapseYear"              ] = &LapseYear              ;

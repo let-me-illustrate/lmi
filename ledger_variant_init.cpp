@@ -86,8 +86,6 @@ void LedgerVariant::Init
 //  SurrChg         =
 //  TermPurchased   =
 //  BaseDeathBft    =
-//  ProjectedCoiCharge =
-//  KFactor         =
 
     InitAnnLoanCredRate = bv.InterestRates_->RegLnCredRate
         (GenBasis_

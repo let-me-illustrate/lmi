@@ -94,7 +94,6 @@ class LMI_SO LedgerVariant final
     std::vector<double> NetIntCredited;
     std::vector<double> GrossIntCredited;
     std::vector<double> LoanIntAccrued;
-    std::vector<double> NetCOICharge;
     std::vector<double> PolicyFee;
     std::vector<double> PremTaxLoad;
     std::vector<double> DacTaxLoad;
@@ -120,10 +119,8 @@ class LMI_SO LedgerVariant final
     std::vector<double> SurrChg;         // Not used yet.
     std::vector<double> TermPurchased;
     std::vector<double> BaseDeathBft;
-    std::vector<double> ProjectedCoiCharge;
 
-    // Forborne vectors.
-    std::vector<double> ExperienceReserve;
+    // Forborne vectors [none presently].
 
     // Nonscalable vectors.
     std::vector<double> MlySAIntRate;
@@ -134,7 +131,6 @@ class LMI_SO LedgerVariant final
     std::vector<double> AnnGAIntRate;
     std::vector<double> AnnHoneymoonValueRate;
     std::vector<double> AnnPostHoneymoonRate;
-    std::vector<double> KFactor;
 
     // Nonscalable scalars.
     double LapseMonth;

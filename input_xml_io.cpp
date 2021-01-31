@@ -360,6 +360,22 @@ void Input::redintegrate_ex_ante
             {
             value = "[none]";
             }
+        // Prior to 2021-01-31, experience-rating columns were offered
+        // for some supplemental reports, but have been withdrawn. For
+        // backward compatibility, they're silently ignored wherever
+        // they occurred in old input files.
+        if
+            (   contains(name, "SupplementalReportColumn")
+            &&
+                (  contains(value, "ExperienceReserve")
+                || contains(value, "NetCOICharge")
+                || contains(value, "ProjectedCoiCharge")
+                || contains(value, "KFactor")
+                )
+            )
+            {
+            value = "[none]";
+            }
         }
 }
 

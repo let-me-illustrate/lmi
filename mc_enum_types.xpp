@@ -602,11 +602,7 @@
     ,mce_guaranteed_cash_value_irr \
     ,mce_current_death_benefit_irr \
     ,mce_guaranteed_death_benefit_irr \
-    ,mce_experience_reserve \
     ,mce_current_net_claims \
-    ,mce_current_net_coi_charge \
-    ,mce_current_projected_coi_charge \
-    ,mce_current_k_factor \
     ,mce_total_payment \
     ,mce_current_loan_interest_accrued \
     ,mce_net_death_benefit \
@@ -659,11 +655,7 @@
     ,"IrrCsv_Guaranteed" \
     ,"IrrDb_Current" \
     ,"IrrDb_Guaranteed" \
-    ,"ExperienceReserve_Current" \
     ,"NetClaims_Current" \
-    ,"NetCOICharge_Current" \
-    ,"ProjectedCoiCharge_Current" \
-    ,"KFactor_Current" \
     ,"GrossPmt" \
     ,"LoanIntAccrued_Current" \
     ,"NetDeathBenefit" \
@@ -718,11 +710,7 @@
     ,"Guaranteed Cash Value IRR" \
     ,"Current Death Benefit IRR" \
     ,"Guaranteed Death Benefit IRR" \
-    ,"Net Mortality Reserve" \
     ,"Experience Rating Current Net Claims" \
-    ,"Net Mortality Charge" \
-    ,"Projected Mortality Charge" \
-    ,"Experience Rating K Factor" \
     ,"Total Payment" \
     ,"Current Accrued Loan Interest" \
     ,"Current Net Death Benefit" \
