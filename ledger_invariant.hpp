@@ -141,8 +141,6 @@ class LMI_SO LedgerInvariant final
     double      NoLongerIssued;
     double      AllowGroupQuote;
     double      TxCallsGuarUwSubstd;
-    double      AllowExperienceRating;
-    double      UseExperienceRating;
     double      UsePartialMort;
     double      SurviveToExpectancy;
     double      SurviveToYear;

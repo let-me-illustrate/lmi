@@ -625,10 +625,9 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_UnusualCoiBanding    , UseUnusualCOIBanding);
 
     // 'Unusual' COI banding accommodates a particular idiosyncratic
-    // product which has no term rider and doesn't permit experience
-    // rating, so we assert those preconditions and write simple code
-    // for 'unusual' COI banding that ignores those features.
-    LMI_ASSERT(!(UseUnusualCOIBanding && yare_input_.UseExperienceRating));
+    // product which has no term rider, so assert the absence of term
+    // as a precondition and write simple code for 'unusual' COI
+    // banding that ignores term.
     LMI_ASSERT(!(UseUnusualCOIBanding && database().query<bool>(DB_AllowTerm)));
 
     // Flat extras can be used even with guaranteed issue, e.g., for

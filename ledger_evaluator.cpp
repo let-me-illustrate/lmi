@@ -484,7 +484,6 @@ format_map_t static_formats()
 // > Format as a number with thousand separators and no decimal places (#,###,###)
 // >
     ,{"Age"                             , f1}
-    ,{"AllowExperienceRating"           , f1}
     ,{"AllowGroupQuote"                 , f1}
     ,{"AvgFund"                         , f1}
     ,{"ChildRiderAmount"                , f1}
@@ -536,7 +535,6 @@ format_map_t static_formats()
     ,{"SurviveToExpectancy"             , f1}
     ,{"SurviveToYear"                   , f1}
     ,{"TxCallsGuarUwSubstd"             , f1}
-    ,{"UseExperienceRating"             , f1}
     ,{"UsePartialMort"                  , f1}
     ,{"WriteTsvFile"                    , f1}
 

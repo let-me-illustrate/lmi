@@ -34,13 +34,8 @@
 </p>
 
 <p>
-{{#UseExperienceRating}}
-    {{ExpRatingFootnote}}
-{{/UseExperienceRating}}
-{{^UseExperienceRating}}
-    The illustration does not assume any mortality
-    experience rating.
-{{/UseExperienceRating}}
+<!-- PDF !! Move this to {{ExpRatingFootnote}}. -->
+    The illustration does not assume any mortality experience rating.
 </p>
 
 <p>

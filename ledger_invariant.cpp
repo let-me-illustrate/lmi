@@ -149,8 +149,6 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["NoLongerIssued"             ] = &NoLongerIssued             ;
     OtherScalars    ["AllowGroupQuote"            ] = &AllowGroupQuote            ;
     OtherScalars    ["TxCallsGuarUwSubstd"        ] = &TxCallsGuarUwSubstd        ;
-    OtherScalars    ["AllowExperienceRating"      ] = &AllowExperienceRating      ;
-    OtherScalars    ["UseExperienceRating"        ] = &UseExperienceRating        ;
     OtherScalars    ["UsePartialMort"             ] = &UsePartialMort             ;
 
     OtherScalars    ["SurviveToExpectancy"        ] = &SurviveToExpectancy        ;
@@ -672,8 +670,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     NoLongerIssued             = NoLongerIssued        || a_Addend.NoLongerIssued;
     AllowGroupQuote            = AllowGroupQuote       && a_Addend.AllowGroupQuote;
     TxCallsGuarUwSubstd        = TxCallsGuarUwSubstd   || a_Addend.TxCallsGuarUwSubstd;
-    AllowExperienceRating      = AllowExperienceRating || a_Addend.AllowExperienceRating;
-    UseExperienceRating        = UseExperienceRating   || a_Addend.UseExperienceRating;
     UsePartialMort             = a_Addend.UsePartialMort;
 
     SurviveToExpectancy        = a_Addend.SurviveToExpectancy;
