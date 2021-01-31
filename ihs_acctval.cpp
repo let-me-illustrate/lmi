@@ -364,11 +364,7 @@ void AccountValue::RunOneCell(mcenum_run_basis a_Basis)
             {
             Month = month;
             CoordinateCounters();
-            // Absent a group context, case-level k factor is unity:
-            // because partial mortality has no effect, experience
-            // rating is impossible. USER !! Explain this in user
-            // documentation.
-            IncrementBOM(year, month, 1.0);
+            IncrementBOM(year, month);
             IncrementEOM
                 (year
                 ,month
@@ -378,7 +374,6 @@ void AccountValue::RunOneCell(mcenum_run_basis a_Basis)
             }
 
         SetClaims();
-//      SetProjectedCoiCharge(); // EXPUNGE
         IncrementEOY(year);
         }
 
@@ -670,13 +665,8 @@ void AccountValue::SetInitialValues()
 
     CoiCharge                   = C0;
     RiderCharges                = C0;
-    NetCoiCharge                = C0; // EXPUNGE
     MlyDed                      = C0;
     CumulativeSalesLoad         = round_minutiae().c(yare_input_.InforceCumulativeSalesLoad);
-
-    database().query_into(DB_ExpRatCoiRetention, CoiRetentionRate);
-    database().query_into(DB_ExpRatAmortPeriod , ExperienceRatingAmortizationYears);
-    database().query_into(DB_ExpRatIbnrMult    , IbnrAsMonthsOfMortalityCharges);
 
     Dumpin             = Outlay_->dumpin();
     External1035Amount = Outlay_->external_1035_amount();
@@ -720,7 +710,6 @@ void AccountValue::SetInitialValues()
 currency AccountValue::IncrementBOM
     (int    year
     ,int    month
-    ,double a_case_k_factor
     )
 {
     if(ItLapsed || BasicValues::GetLength() <= year)
@@ -758,15 +747,6 @@ currency AccountValue::IncrementBOM
             << "Days in policy month = " << days_in_policy_month << ".\n"
             << LMI_FLUSH
             ;
-        }
-
-    if
-        (   yare_input_.UsePartialMortality
-        &&  yare_input_.UseExperienceRating
-        &&  mce_gen_curr == GenBasis_
-        )
-        {
-        case_k_factor = a_case_k_factor;
         }
 
     DoMonthDR();
@@ -864,14 +844,11 @@ void AccountValue::InitializeYear()
     YearsTotalNetIntCredited    = C0;
     YearsTotalGrossIntCredited  = C0;
     YearsTotalLoanIntAccrued    = C0;
-    YearsTotalNetCoiCharge      = 0.0; // EXPUNGE
     YearsTotalPolicyFee         = C0;
     YearsTotalDacTaxLoad        = 0.0;
     YearsTotalSpecAmtLoad       = C0;
     YearsTotalSepAcctLoad       = C0;
     YearsTotalGptForceout       = C0;
-
-    NextYearsProjectedCoiCharge = 0.0;
 
     DacTaxRsv                   = 0.0;
 
@@ -1110,50 +1087,6 @@ void AccountValue::SetClaims()
         );
 }
 
-#if 0 // EXPUNGE
-//============================================================================
-// Proxy for next year's COI charge, used only for experience rating.
-void AccountValue::SetProjectedCoiCharge() // EXPUNGE
-{
-    if
-        (   ItLapsed
-        ||  BasicValues::GetLength() <= Year
-        ||  !yare_input_.UsePartialMortality
-        ||  !yare_input_.UseExperienceRating
-        ||  mce_gen_curr != GenBasis_
-        )
-        {
-        return;
-        }
-
-    // Project a charge of zero for the year after maturity.
-    //
-    // This is written separately to emphasize its meaning, though it
-    // obviously could be combined with the above '<=' comparison.
-    //
-    if(BasicValues::GetLength() == 1 + Year)
-        {
-        return;
-        }
-
-    TxSetDeathBft();
-    TxSetTermAmt();
-    // CURRENCY !! presumably material_difference() isn't needed at all? um...yes, it is
-    double this_years_terminal_naar = material_difference
-        (dblize(DBReflectingCorr + TermDB)
-        ,dblize(TotalAccountValue())
-        );
-    this_years_terminal_naar = std::max(0.0, this_years_terminal_naar);
-    double next_years_coi_rate = GetBandedCoiRates(GenBasis_, ActualSpecAmt)[1 + Year];
-
-    NextYearsProjectedCoiCharge =
-            12.0
-        *   this_years_terminal_naar
-        *   next_years_coi_rate
-        ;
-}
-#endif // EXPUNGE
-
 /// Post year-end results to ledger.
 ///
 /// This function is called only if the contract is in force at the
@@ -1183,7 +1116,6 @@ void AccountValue::FinalizeYear()
     currency csv_net =
           total_av
         - (RegLnBal + PrfLnBal)
-//        + ExpRatReserve // This would be added if it existed.
         ;
 
     // While performing a solve, ignore any sales-load refund, because
@@ -1220,7 +1152,6 @@ void AccountValue::FinalizeYear()
     currency cv_7702 =
           total_av
         + GetRefundableSalesLoad()
-//        + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         ;
     // Increase by negative surrender charge. If some components of
     // the surrender charge are negative while others are positive,
@@ -1253,27 +1184,6 @@ void AccountValue::FinalizeYear()
     VariantValues().BaseDeathBft    [Year] = dblize(DBReflectingCorr);
     VariantValues().EOYDeathBft     [Year] = dblize(DBReflectingCorr + TermDB);
 
-/*
-    // AV already includes any experience refund credited, but it's
-    // forborne among the survivors. That was the right thing to use
-    // for calculating the corridor death benefit for each individual.
-    // But it's not the right thing to multiply by EOY inforce and add
-    // into a composite. The right thing is for the composite to sum
-    // the AV plus *cash* refund instead of forborne, multiplied by EOY
-    // inforce. Otherwise an account-value rollforward cross-check
-    // wouldn't work.
-    //
-    // TODO ?? Maybe the AV before this adjustment is what we really want
-    // to display for an individual illustration. That's what we did
-    // originally, and I'm not at all sure it's right to change it
-    // now.
-    VariantValues().AcctVal         [Year] =
-          TotalAccountValue()
-        + VariantValues().ExpRatRfdCash     [Year]
-        - VariantValues().ExpRatRfdForborne [Year]
-        ;
-*/
-
     // Monthly deduction detail
 
     VariantValues().COICharge         [Year] = dblize(YearsTotalCoiCharge)    ;
@@ -1285,7 +1195,6 @@ void AccountValue::FinalizeYear()
     VariantValues().NetIntCredited    [Year] = dblize(YearsTotalNetIntCredited);
     VariantValues().GrossIntCredited  [Year] = dblize(YearsTotalGrossIntCredited);
     VariantValues().LoanIntAccrued    [Year] = dblize(YearsTotalLoanIntAccrued);
-    VariantValues().NetCOICharge      [Year] = YearsTotalNetCoiCharge         ; // EXPUNGE
     VariantValues().PolicyFee         [Year] = dblize(YearsTotalPolicyFee)    ;
     VariantValues().DacTaxLoad        [Year] = YearsTotalDacTaxLoad           ;
     VariantValues().SpecAmtLoad       [Year] = dblize(YearsTotalSpecAmtLoad)  ;
@@ -1492,105 +1401,6 @@ currency AccountValue::GetSepAcctAssetsInforce() const
 
     return round_minutiae().c(SepAcctValueAfterDeduction * partial_mortality_lx()[Year]);
 }
-
-#if 0 // EXPUNGE
-//============================================================================
-double AccountValue::GetCurtateNetCoiChargeInforce() const // EXPUNGE
-{
-    if
-        (   ItLapsed
-        ||  BasicValues::GetLength() <= Year
-        ||  !yare_input_.UsePartialMortality
-        ||  !yare_input_.UseExperienceRating
-        ||  mce_gen_curr != GenBasis_
-        )
-        {
-        return 0.0;
-        }
-
-    LMI_ASSERT(11 == Month);
-    return YearsTotalNetCoiCharge * InforceLivesBoy();
-}
-
-//============================================================================
-double AccountValue::GetCurtateNetClaimsInforce() const // EXPUNGE
-{
-    if
-        (   ItLapsed
-        ||  BasicValues::GetLength() <= Year
-        ||  !yare_input_.UsePartialMortality
-        ||  !yare_input_.UseExperienceRating
-        ||  mce_gen_curr != GenBasis_
-        )
-        {
-        return 0.0;
-        }
-
-    LMI_ASSERT(11 == Month);
-    return YearsNetClaims * partial_mortality_lx()[Year];
-}
-
-//============================================================================
-double AccountValue::GetProjectedCoiChargeInforce() const // EXPUNGE
-{
-    if
-        (   ItLapsed
-        ||  BasicValues::GetLength() <= Year
-        ||  !yare_input_.UsePartialMortality
-        ||  !yare_input_.UseExperienceRating
-        ||  mce_gen_curr != GenBasis_
-        )
-        {
-        return 0.0;
-        }
-
-    LMI_ASSERT(11 == Month);
-    return NextYearsProjectedCoiCharge * InforceLivesEoy();
-}
-
-//============================================================================
-// The experience-rating mortality reserve isn't actually held in
-// individual certificates: it really exists only at the case level.
-// Yet it is apportioned among certificates in order to conform to the
-// design invariant that a composite is a weighted sum of cells.
-//
-// The return value, added across cells, should reproduce the total
-// total reserve at the case level, as the caller may assert.
-//
-double AccountValue::ApportionNetMortalityReserve // EXPUNGE
-    (double reserve_per_life_inforce
-    )
-{
-    if
-        (   ItLapsed
-        ||  BasicValues::GetLength() <= Year
-        ||  !yare_input_.UsePartialMortality
-        ||  !yare_input_.UseExperienceRating
-        ||  mce_gen_curr != GenBasis_
-        )
-        {
-        return 0.0;
-        }
-
-    double inforce_factor =
-        (0.0 != yare_input_.NumberOfIdenticalLives)
-        ? InforceLivesEoy() / yare_input_.NumberOfIdenticalLives
-        : 0.0
-        ;
-
-    double apportioned_reserve = reserve_per_life_inforce * inforce_factor;
-
-    // The experience-rating reserve can't be posted to the ledger in
-    // FinalizeYear(), which is run before the reserve is calculated.
-    // The projected COI charge and K factor are posted to the ledger
-    // here as well, simply for uniformity.
-    VariantValues().ExperienceReserve [Year] = apportioned_reserve;
-    VariantValues().ProjectedCoiCharge[Year] = NextYearsProjectedCoiCharge;
-    VariantValues().KFactor           [Year] = case_k_factor;
-
-    return apportioned_reserve * yare_input_.NumberOfIdenticalLives;
-}
-#endif // EXPUNGE
 
 /// Beginning of year inforce lives, reflecting lapses and survivorship.
 

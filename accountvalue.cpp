@@ -1038,8 +1038,6 @@ void AccountValue::SetDebugFilename(std::string const& s)
 
 // Stubs for member functions not implemented on this branch.
 
-double AccountValue::ApportionNetMortalityReserve(double)
-    {return 0.0;}
 void   AccountValue::CoordinateCounters()
     {return;}
 void   AccountValue::DebugPrint()
@@ -1050,15 +1048,9 @@ void   AccountValue::FinalizeLife(mcenum_run_basis)
     {return;}
 void   AccountValue::FinalizeLifeAllBases()
     {return;}
-double AccountValue::GetCurtateNetClaimsInforce() const
-    {return 0.0;}
-double AccountValue::GetCurtateNetCoiChargeInforce() const
-    {return 0.0;}
-double AccountValue::GetProjectedCoiChargeInforce() const
-    {return 0.0;}
 currency AccountValue::GetSepAcctAssetsInforce() const
     {return C0;}
-currency AccountValue::IncrementBOM(int, int, double)
+currency AccountValue::IncrementBOM(int, int)
     {return C0;}
 void   AccountValue::IncrementEOM(int, int, currency, currency)
     {return;}
@@ -1075,6 +1067,4 @@ void   AccountValue::InitializeYear()
 bool   AccountValue::PrecedesInforceDuration(int, int)
     {return false;}
 void   AccountValue::SetClaims()
-    {return;}
-void   AccountValue::SetProjectedCoiCharge()
     {return;}

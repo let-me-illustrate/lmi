@@ -75,7 +75,6 @@
 // - loan balance             yes  no    no   yes  n/a  n/a   ?     no
 // + refundable sales load    yes  yes   yes  no   no   no?   no    yes?
 // - surrender charge         yes  if<0  if<0 if>0 if>0 if>0  if>0? yes
-// + experience reserve       yes  if>0  if>0 no   no   no    yes   if>0
 // - anticipated deductions   no   no    no   yes  yes  no    no    no
 // honeymoon value if greater yes  ?     yes  no   no   no?   yes   n/a
 //
@@ -148,7 +147,6 @@ void AccountValue::DoMonthDR()
         (HoneymoonValue
         ,   kludge_account_value
           + GetRefundableSalesLoad()
-//          + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         );
 // TODO ?? TAXATION !! Use CashValueFor7702() instead?
     double max_necessary_premium = Irc7702A_->MaxNecessaryPremium
@@ -649,7 +647,6 @@ currency AccountValue::CashValueFor7702() const
         (HoneymoonValue
         ,   TotalAccountValue()
           + GetRefundableSalesLoad()
-//          + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         );
 }
 
@@ -1360,7 +1357,6 @@ void AccountValue::TxRecognizePaymentFor7702A
         (HoneymoonValue
         ,   kludge_account_value
           + GetRefundableSalesLoad()
-//          + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         );
     LMI_ASSERT(0.0 <= Dcv);
 
@@ -1676,7 +1672,6 @@ void AccountValue::TxSetDeathBft()
           TotalAccountValue()
         - std::min(C0, SurrChg())
         + GetRefundableSalesLoad()
-//        + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         ;
 
     cash_value_for_corridor = std::max
@@ -1701,7 +1696,6 @@ void AccountValue::TxSetDeathBft()
             *   (   Dcv
                 -   dblize(std::min(C0, SurrChg()))
                 +   dblize(GetRefundableSalesLoad())
-//                +   std::max(0.0, ExpRatReserve) // This would be added if it existed.
                 )
             )
         );
@@ -1813,40 +1807,14 @@ void AccountValue::TxSetCoiCharge()
     // DCV need not be rounded.
     DcvNaar = std::max(0.0, DcvNaar);
 
-    double retention_charge = 0.0; // EXPUNGE
-stifle_warning_for_unused_value(retention_charge); // EXPUNGE
     double coi_rate = GetBandedCoiRates(GenBasis_, ActualSpecAmt)[Year];
     ActualCoiRate = coi_rate;
 
-    // COI retention is a percentage of tabular rather than current
-    // COI charge. It's a risk charge, so it follows mortality
-    // expectations rather than fluctuations.
-    //
-    // TODO ?? For now, however, the COI retention calculated here
-    // improvidently reflects the current COI multiplier, so end users
-    // need to divide input CoiRetentionRate by that multiplier.
-
-    if
-        (   yare_input_.UseExperienceRating
-        &&  mce_gen_curr == GenBasis_
-        )
-        {
-        ActualCoiRate = round_coi_rate()
-            (std::min
-                (GetBandedCoiRates(mce_gen_guar, ActualSpecAmt)[Year]
-                ,coi_rate * (case_k_factor + CoiRetentionRate)
-                )
-            );
-        double retention_rate = round_coi_rate()(coi_rate * CoiRetentionRate);
-        retention_charge = 0.0 * NAAR * retention_rate; // EXPUNGE
-        }
-
     CoiCharge    = round_coi_charge().c(NAAR * ActualCoiRate);
-//  NetCoiCharge = CoiCharge - round_coi_charge().c(retention_charge); // EXPUNGE
     YearsTotalCoiCharge += CoiCharge;
 
     // DCV need not be rounded.
-    DcvCoiCharge = DcvNaar * (YearsDcvCoiRate + CoiRetentionRate);
+    DcvCoiCharge = DcvNaar * YearsDcvCoiRate;
 }
 
 /// Calculate rider charges.
@@ -1981,8 +1949,6 @@ void AccountValue::TxDoMlyDed()
     // determined.
     MlyDed += MonthsPolicyFees + SpecAmtLoad;
 
-//  YearsTotalNetCoiCharge += dblize(NetCoiCharge); // EXPUNGE
-
     SepAcctValueAfterDeduction = AVSepAcct;
 }
 
@@ -1999,17 +1965,10 @@ void AccountValue::TxTestHoneymoonForExpiration()
     // Loan balance should not be subtracted from this value: if it
     // were, then the owner could retain the honeymoon forever by
     // maintaining a maximum loan.
-    //
-    // Honeymoon provisions are probably inconsistent with experience
-    // rating. If those features occur together, then presumably the
-    // experience rating reserve would affect the cash surrender value
-    // but not the honeymoon value.
-    //
     currency csv_ignoring_loan =
           TotalAccountValue()
         - SurrChg()
         + GetRefundableSalesLoad()
-//        + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         ;
 
     // It may seem 'obvious' that 'HoneymoonValue' can never be
@@ -2825,15 +2784,10 @@ void AccountValue::TxTestLapse()
     // The refundable load cannot prevent a lapse that would otherwise
     // occur, because it is refunded only after termination. The same
     // principle applies to a negative surrender charge.
-    //
-    // The experience rating reserve can prevent a lapse, because it
-    // is an actual balance-sheet item that is actually held in the
-    // certificate.
 
     currency lapse_test_csv =
           TotalAccountValue()
         - (RegLnBal + PrfLnBal)
-//        + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         ;
     if(!LapseIgnoresSurrChg)
         {

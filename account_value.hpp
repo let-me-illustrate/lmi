@@ -164,13 +164,6 @@ class LMI_SO AccountValue final
     void   DebugPrint           ();
 
     void   SetClaims();
-    double GetCurtateNetClaimsInforce    () const; // EXPUNGE
-    double GetCurtateNetCoiChargeInforce () const; // EXPUNGE
-    void   SetProjectedCoiCharge         (); // EXPUNGE
-    double GetProjectedCoiChargeInforce  () const; // EXPUNGE
-    double ApportionNetMortalityReserve(double reserve_per_life_inforce); // EXPUNGE
-    double experience_rating_amortization_years() const; // EXPUNGE
-    double ibnr_as_months_of_mortality_charges() const; // EXPUNGE
 
     // To support the notion of an M&E charge that depends on total case
     // assets, we provide these functions, which are designed to be
@@ -183,7 +176,6 @@ class LMI_SO AccountValue final
     currency IncrementBOM
         (int    year
         ,int    month
-        ,double a_case_k_factor // EXPUNGE
         );
     // Credit interest and process all subsequent monthly transactions
     void IncrementEOM
@@ -423,7 +415,6 @@ class LMI_SO AccountValue final
     currency NAAR;
     currency CoiCharge;
     currency RiderCharges;
-    currency NetCoiCharge; // EXPUNGE
     currency SpecAmtLoadBase;
     double   DacTaxRsv; // CURRENCY !! obsolete--always zero
 
@@ -539,7 +530,6 @@ class LMI_SO AccountValue final
     currency CumPmtsPostBom;
     currency SepAcctLoad;
 
-    double   case_k_factor;
     double   ActualCoiRate;
 
     bool     SplitMinPrem;
@@ -588,13 +578,6 @@ class LMI_SO AccountValue final
     double   YearsTotalDacTaxLoad; // cumulative (unrounded) 'dac_tax_load_'
     currency YearsTotalSpecAmtLoad;
     currency YearsTotalSepAcctLoad;
-
-    // For experience rating.
-    double   CoiRetentionRate; // EXPUNGE
-    double   ExperienceRatingAmortizationYears; // EXPUNGE
-    double   IbnrAsMonthsOfMortalityCharges; // EXPUNGE
-    double   NextYearsProjectedCoiCharge; // EXPUNGE
-    double   YearsTotalNetCoiCharge; // EXPUNGE
 
     currency CumulativeSalesLoad;
 
@@ -654,18 +637,6 @@ inline LedgerInvariant const& AccountValue::InvariantValues() const
 inline int AccountValue::GetLength() const
 {
     return BasicValues::GetLength();
-}
-
-//============================================================================
-inline double AccountValue::experience_rating_amortization_years() const
-{
-    return ExperienceRatingAmortizationYears;
-}
-
-//============================================================================
-inline double AccountValue::ibnr_as_months_of_mortality_charges() const
-{
-    return IbnrAsMonthsOfMortalityCharges;
 }
 
 #endif // account_value_hpp

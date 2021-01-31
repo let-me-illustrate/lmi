@@ -165,74 +165,6 @@ census_run_result run_census_in_series::operator()
     return result;
 }
 
-/// Illustrations with group experience rating // EXPUNGE
-///
-/// Mortality profit,
-///   accumulated (net mortality charges - net claims) - IBNR,
-/// is amortized into future mortality charges by applying a k factor
-/// to COI rates. This profit accumulates in the general account at
-/// a special input gross rate that's notionally similar to a LIBOR
-/// rate; optionally, the separate-account rate may be used, but the
-/// reserve is nonetheless still held in the general account. This is
-/// a life-insurance reserve; it does not affect a certificate's CSV
-/// or 7702 corridor.
-///
-/// Yearly totals (without monthly interest) of monthly values of the
-/// accumulands are accumulated at annual interest. Treating mortality
-/// charges as though they were deducted at the end of the year is
-/// consistent with curtate partial mortality, though not with normal
-/// monthiversary processing. Both accumulands are zero in a lapse
-/// year. These simplifying assumptions are okay because this process
-/// is self correcting and therefore needs no exquisite refinements.
-///
-/// The current COI rate is the tabular current COI rate times the
-/// input current COI multiplier, with all other customary adjustments
-/// for substandard, foreign country, etc., but with no adjustment for
-/// retention or k factor--yet never to exceed the guaranteed COI rate.
-///
-/// The actual mortality charge deducted from the account value is
-/// loaded for retention, and reflects experience through the k factor.
-/// The net mortality charge is whatever remains after subtracting the
-/// retention charge from the actual mortality charge.
-///
-///   actual mortality charge = NAAR * min(G, C * (R + K))
-///   retention charge        = NAAR *        C *  R
-///   net mortality charge = actual mortality charge - retention charge
-///
-/// where C is the current COI rate defined above, G is its guaranteed
-/// analogue, R is the retention rate, K is the k factor, and NAAR is
-/// by convention nonnegative.
-///
-/// Database entity 'UseRawTableForRetention' optionally causes R to be
-/// divided by the input current COI multiplier, removing the latter
-/// from the retention calculation; in that case, retention becomes
-/// zero whenever the input current COI multiplier is zero.
-///
-/// Net claims = partial mortality rate times (DB - AV).
-///
-/// IBNR (incurred but not reported reserve) is zero on the issue date;
-/// on each anniversary, it becomes
-///   the past twelve months' total net mortality charges, times
-///   one-twelfth (to get a monthly average), times
-///   the number of months given in database entity ExpRatIBNRMult.
-///
-/// On the date the projection begins--the issue date for new business,
-/// else the inforce date--the k factor is an input scalar. On each
-/// anniversary, it becomes
-///   1 - (mortality profit / denominator),
-/// denominator being the number of years specified in database entity
-/// ExpRatAmortPeriod times a proxy for the coming year's mortality
-/// charge:
-///   the just-completed year's EOY (DB - AV), times
-///   the about-to-begin year's COI rate times twelve, times
-///   the proportion surviving into the about-to-begin year;
-/// except that the k factor is set to
-///   0.0 if it would otherwise be less than 0.0, or
-///   1.0 if the denominator is zero.
-/// Here, EOY AV reflects interest to the last day of the year, and
-/// EOY DB reflects EOY AV: thus, they're the values normally printed
-/// on an illustration.
-
 census_run_result run_census_in_parallel::operator()
     (fs::path           const& file
     ,mcenum_emission    const  emission
@@ -357,51 +289,8 @@ census_run_result run_census_in_parallel::operator()
             ,progress_meter_mode(emission)
             );
 
-#if 0 // EXPUNGE
-        // Variables to support tiering and experience rating. // EXPUNGE [nothing here for tiering]
-
-        double const case_ibnr_months = // EXPUNGE
-            cell_values.front().ibnr_as_months_of_mortality_charges()
-            ;
-        double const case_experience_rating_amortization_years = // EXPUNGE
-            cell_values.front().experience_rating_amortization_years()
-            ;
-
-        double case_accum_net_mortchgs = 0.0; // EXPUNGE
-        double case_accum_net_claims   = 0.0; // EXPUNGE
-        double case_k_factor = cell_values.front().yare_input_.ExperienceRatingInitialKFactor; // EXPUNGE
-
-        // Experience rating as implemented here uses either a special // EXPUNGE
-        // scalar input rate, or the separate-account rate. Those
-        // rates as entered might vary across cells, but there must be
-        // only one rate: therefore, use the first cell's rate, and
-        // extend its last element if it doesn't have enough values.
-
-        std::vector<double> experience_reserve_rate; // EXPUNGE
-        std::copy
-            (cell_values.front().yare_input_.SeparateAccountRate.begin()
-            ,cell_values.front().yare_input_.SeparateAccountRate.end()
-            ,std::back_inserter(experience_reserve_rate)
-            );
-        experience_reserve_rate.resize(MaxYr, experience_reserve_rate.back());
-        if(cell_values.front().yare_input_.OverrideExperienceReserveRate) // EXPUNGE
-            {
-            experience_reserve_rate.assign
-                (experience_reserve_rate.size()
-                ,cell_values.front().yare_input_.ExperienceReserveRate // EXPUNGE
-                );
-            }
-#endif // EXPUNGE
-
         for(int year = first_cell_inforce_year; year < MaxYr; ++year)
             {
-#if 0 // EXPUNGE
-            double experience_reserve_annual_u = // EXPUNGE
-                    1.0
-                +   experience_reserve_rate[year]
-                ;
-#endif // EXPUNGE
-
             for(auto& i : cell_values)
                 {
                 // A cell must be initialized at the beginning of any
@@ -437,7 +326,7 @@ census_run_result run_census_in_parallel::operator()
                         }
                     i.Month = month;
                     i.CoordinateCounters();
-                    i.IncrementBOM(year, month, 0.0); // EXPUNGE case_k_factor);
+                    i.IncrementBOM(year, month);
                     assets += i.GetSepAcctAssetsInforce();
                     }
 
@@ -464,11 +353,6 @@ census_run_result run_census_in_parallel::operator()
             // mortality.
 
             double eoy_inforce_lives      = 0.0;
-#if 0 // EXPUNGE
-            double years_net_claims       = 0.0; // EXPUNGE
-            double years_net_mortchgs     = 0.0; // EXPUNGE
-            double projected_net_mortchgs = 0.0; // EXPUNGE
-#endif // EXPUNGE
             for(auto& i : cell_values)
                 {
                 if(i.PrecedesInforceDuration(year, 11))
@@ -476,133 +360,9 @@ census_run_result run_census_in_parallel::operator()
                     continue;
                     }
                 i.SetClaims();
-#if 0 // EXPUNGE
-                i.SetProjectedCoiCharge(); // EXPUNGE
-#endif // EXPUNGE
                 eoy_inforce_lives      += i.InforceLivesEoy();
                 i.IncrementEOY(year);
-#if 0 // EXPUNGE
-                years_net_claims       += i.GetCurtateNetClaimsInforce(); // EXPUNGE
-                years_net_mortchgs     += i.GetCurtateNetCoiChargeInforce(); // EXPUNGE
-                projected_net_mortchgs += i.GetProjectedCoiChargeInforce(); // EXPUNGE
-#endif // EXPUNGE
                 }
-
-#if 0 // EXPUNGE
-            // Calculate next year's k factor. Do this only for // EXPUNGE
-            // current-expense bases, not as a speed optimization,
-            // but rather because experience rating on other bases
-            // is undefined.
-
-            case_accum_net_claims   *= experience_reserve_annual_u;
-            case_accum_net_claims   += years_net_claims;
-
-            case_accum_net_mortchgs *= experience_reserve_annual_u;
-            case_accum_net_mortchgs += years_net_mortchgs;
-
-            // Presumably an admin system would maintain a scalar
-            // reserve instead of tracking claims and mortality
-            // charges separately, and accumulate it at interest more
-            // frequently than once a year.
-            //
-            // Therefore, add inforce reserve here, to avoid crediting
-            // a year's interest to it. Because only a scalar reserve
-            // is captured, it must all be added to one side of the
-            // reserve equation: the distinction between claims and
-            // mortality charges is lost, but their difference is
-            // preserved, so the resulting reserve is correct.
-            //
-            // The inforce reserve would reflect net claims already
-            // paid as well as mortality charges already deducted for
-            // any partial year. Therefore, although inforce YTD COI
-            // charge is captured separately for adjusting IBNR, it
-            // would be incorrect to add it here.
-
-            if(first_cell_inforce_year == year) // EXPUNGE
-                {
-                case_accum_net_mortchgs += cell_values.front().yare_input_.InforceNetExperienceReserve;
-                }
-
-            // Apportion experience-rating reserve uniformly across
-            // inforce lives. Previously, it had been apportioned by
-            // projected mortality charges; that proved unworkable
-            // when a cell lapsed, matured, or failed to have a
-            // nonzero NAAR due to a corridor factor of unity. To
-            // guard against such problems, the apportioned reserve
-            // is summed across cells and asserted materially to
-            // equal the original total reserve.
-
-            if // EXPUNGE
-                (   cell_values.front().yare_input_.UseExperienceRating
-                &&  mce_gen_curr == expense_and_general_account_basis
-                &&  0.0 != eoy_inforce_lives
-                )
-                {
-                if(first_cell_inforce_year == year)
-                    {
-                    years_net_mortchgs += cell_values.front().yare_input_.InforceYtdNetCoiCharge;
-                    }
-                double case_ibnr = // EXPUNGE
-                        years_net_mortchgs
-                    *   case_ibnr_months
-                    /   12.0
-                    ;
-                double case_net_mortality_reserve = // EXPUNGE
-                        case_accum_net_mortchgs
-                    -   case_accum_net_claims
-                    -   case_ibnr
-                    ;
-
-                // Current net mortality charge can actually be zero,
-                // e.g., when the corridor factor is unity.
-                double denominator =
-                        case_experience_rating_amortization_years
-                    *   projected_net_mortchgs
-                    ;
-                if(0.0 == denominator)
-                    {
-                    case_k_factor = 1.0;
-                    }
-                else
-                    {
-                    case_k_factor = std::max
-                        (0.0
-                        ,1.0 - case_net_mortality_reserve / denominator
-                        );
-                    }
-
-                double case_net_mortality_reserve_checksum = 0.0; // EXPUNGE
-                for(auto& i : cell_values)
-                    {
-                    if(i.PrecedesInforceDuration(year, 11))
-                        {
-                        continue;
-                        }
-                    case_net_mortality_reserve_checksum += // EXPUNGE
-                        i.ApportionNetMortalityReserve // EXPUNGE
-                            (   case_net_mortality_reserve
-                            /   eoy_inforce_lives
-                            );
-                    }
-                if // EXPUNGE
-                    (!materially_equal
-                        (case_net_mortality_reserve
-                        ,case_net_mortality_reserve_checksum
-                        )
-                    )
-                    {
-                    alarum()
-                        << "\nExperience-rating reserve discrepancy in year "
-                        << year
-                        << ": "
-                        << case_net_mortality_reserve
-                        << " != "
-                        << case_net_mortality_reserve_checksum
-                        << LMI_FLUSH
-                        ;
-                    }
-                }
-#endif // EXPUNGE
 
             if(!meter->reflect_progress())
                 {
