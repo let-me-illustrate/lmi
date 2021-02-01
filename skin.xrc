@@ -390,7 +390,7 @@
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
                         <growablecols>0</growablecols>
-                        <growablerows>0,1,2,3,4,5,6,7,8,9,10</growablerows>
+                        <growablerows>0,1,2,3,4,5,6,7</growablerows>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
                             <object class="wxFlexGridSizer">
@@ -499,65 +499,6 @@
                                         <content>
                                             <item>83GAM</item>
                                         </content>
-                                    </object>
-                                </object>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
-                            <object class="wxCheckBox" name="UseExperienceRating">
-                                <help>Use experience rating (composite only)--available only with both partial mortality and month-by-month</help>
-                                <label>Experience rating</label>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
-                            <object class="wxFlexGridSizer">
-                                <rows>1</rows>
-                                <growablecols>1</growablecols>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                    <object class="wxStaticText">
-                                        <label>Experience-rating initial k factor </label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW</flag>
-                                    <object class="wxTextCtrl" name="ExperienceRatingInitialKFactor">
-                                        <help>Initial k factor for experience rating</help>
-                                        <size>10,-1</size>
-                                    </object>
-                                </object>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
-                            <object class="wxFlexGridSizer">
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxALL</flag>
-                                    <object class="wxCheckBox" name="OverrideExperienceReserveRate">
-                                        <help>Override experience-rating reserve rate</help>
-                                        <label>Override experience-rating reserve rate</label>
-                                    </object>
-                                </object>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
-                            <object class="wxFlexGridSizer">
-                                <rows>1</rows>
-                                <growablecols>1</growablecols>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                    <object class="wxStaticText">
-                                        <label>Experience-rating reserve rate </label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxALL</flag>
-                                    <object class="wxTextCtrl" name="ExperienceReserveRate">
-                                        <help>Experience-rating reserve rate</help>
-                                        <size>10,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -1495,7 +1436,7 @@ here, but it looks weird if we don't make this look like its siblings.
                             <object class="wxFlexGridSizer">
                                 <cols>2</cols>
                                 <growablecols>1</growablecols>
-                                <growablerows>0,1,2,3,4,5,6,7,8,9,10</growablerows>
+                                <growablerows>0,1,2,3,4,5,6,7,8</growablerows>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
@@ -1627,36 +1568,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceHoneymoonValue">
                                         <help>Inforce honeymoon value</help>
-                                        <size>80,-1</size>
-                                        <value>0</value>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <border>4</border>
-                                    <object class="wxStaticText">
-                                        <label>Case experience reserve</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxTextCtrl" name="InforceNetExperienceReserve">
-                                        <help>Inforce case net experience reserve</help>
-                                        <size>80,-1</size>
-                                        <value>0</value>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <border>4</border>
-                                    <object class="wxStaticText">
-                                        <label>Case YTD net COI charges</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxTextCtrl" name="InforceYtdNetCoiCharge">
-                                        <help>Inforce case year-to-date net COI charges</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>

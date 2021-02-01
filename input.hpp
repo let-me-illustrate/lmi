@@ -271,9 +271,6 @@ class LMI_SO Input final
     mce_sep_acct_rate_type   SeparateAccountRateType         ;
     tnr_proportion           LoanRate                        ;
     mce_loan_rate_type       LoanRateType                    ;
-    mce_yes_or_no            OverrideExperienceReserveRate   ;
-    tnr_proportion           ExperienceReserveRate           ;
-    tnr_nonnegative_double   ExperienceRatingInitialKFactor  ;
     mce_yes_or_no            WithdrawToBasisThenLoan         ;
     mce_yes_or_no            UseAverageOfAllFunds            ;
     mce_yes_or_no            OverrideFundManagementFee       ;
@@ -281,7 +278,6 @@ class LMI_SO Input final
     tnr_proportion           InputFundManagementFee          ;
     mce_run_order            RunOrder                        ;
     tnr_nonnegative_integer  NumberOfIdenticalLives          ;
-    mce_yes_or_no            UseExperienceRating             ;
     mce_yes_or_no            UsePartialMortality             ;
     mce_part_mort_table      PartialMortalityTable           ;
     datum_string             InsuredName                     ;
@@ -346,8 +342,6 @@ class LMI_SO Input final
     tnr_nonnegative_double   InforceSpecAmtLoadBase          ;
     tnr_nonnegative_double   InforceHoneymoonValue           ;
     tnr_nonnegative_double   InforceCorporationStake         ;
-    tnr_unrestricted_double  InforceNetExperienceReserve     ;
-    tnr_nonnegative_double   InforceYtdNetCoiCharge          ;
     tnr_unrestricted_double  InforceTaxBasis                 ;
     tnr_unrestricted_double  InforceGlp                      ;
     tnr_unrestricted_double  InforceCumulativeGlp            ;

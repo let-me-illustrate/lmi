@@ -71,9 +71,6 @@ Input::Input()
     ,SeparateAccountRateType          {"Gross rate"}
     ,LoanRate                         {"0.06"}
 //    ,LoanRateType                     {""}
-    ,OverrideExperienceReserveRate    {"Yes"}
-    ,ExperienceReserveRate            {"0.02"}
-    ,ExperienceRatingInitialKFactor   {"1"}
 //    ,WithdrawToBasisThenLoan          {""}
 //    ,UseAverageOfAllFunds             {""}
 //    ,OverrideFundManagementFee        {""}
@@ -81,7 +78,6 @@ Input::Input()
 //    ,InputFundManagementFee           {""}
 //    ,RunOrder                         {""}
     ,NumberOfIdenticalLives           {"1"}
-//    ,UseExperienceRating              {""}
 //    ,UsePartialMortality              {""}
 //    ,PartialMortalityTable            {""}
 //    ,InsuredName                      {""}
@@ -146,8 +142,6 @@ Input::Input()
 //    ,InforceSpecAmtLoadBase           {""}
 //    ,InforceHoneymoonValue            {""}
 //    ,InforceCorporationStake          {""}
-//    ,InforceNetExperienceReserve      {""}
-//    ,InforceYtdNetCoiCharge           {""}
 //    ,InforceTaxBasis                  {""}
 //    ,InforceGlp                       {""}
 //    ,InforceCumulativeGlp             {""}
@@ -318,9 +312,6 @@ void Input::AscribeMembers()
     ascribe("SeparateAccountRateType"         , &Input::SeparateAccountRateType         );
     ascribe("LoanRate"                        , &Input::LoanRate                        );
     ascribe("LoanRateType"                    , &Input::LoanRateType                    );
-    ascribe("OverrideExperienceReserveRate"   , &Input::OverrideExperienceReserveRate   );
-    ascribe("ExperienceReserveRate"           , &Input::ExperienceReserveRate           );
-    ascribe("ExperienceRatingInitialKFactor"  , &Input::ExperienceRatingInitialKFactor  );
     ascribe("WithdrawToBasisThenLoan"         , &Input::WithdrawToBasisThenLoan         );
     ascribe("UseAverageOfAllFunds"            , &Input::UseAverageOfAllFunds            );
     ascribe("OverrideFundManagementFee"       , &Input::OverrideFundManagementFee       );
@@ -328,7 +319,6 @@ void Input::AscribeMembers()
     ascribe("InputFundManagementFee"          , &Input::InputFundManagementFee          );
     ascribe("RunOrder"                        , &Input::RunOrder                        );
     ascribe("NumberOfIdenticalLives"          , &Input::NumberOfIdenticalLives          );
-    ascribe("UseExperienceRating"             , &Input::UseExperienceRating             );
     ascribe("UsePartialMortality"             , &Input::UsePartialMortality             );
 ////    ascribe("PartialMortalityTable"           , &Input::PartialMortalityTable           ); // INPUT !! Not yet implemented.
     ascribe("InsuredName"                     , &Input::InsuredName                     );
@@ -393,8 +383,6 @@ void Input::AscribeMembers()
     ascribe("InforceSpecAmtLoadBase"          , &Input::InforceSpecAmtLoadBase          );
     ascribe("InforceHoneymoonValue"           , &Input::InforceHoneymoonValue           );
     ascribe("InforceCorporationStake"         , &Input::InforceCorporationStake         );
-    ascribe("InforceNetExperienceReserve"     , &Input::InforceNetExperienceReserve     );
-    ascribe("InforceYtdNetCoiCharge"          , &Input::InforceYtdNetCoiCharge          );
     ascribe("InforceTaxBasis"                 , &Input::InforceTaxBasis                 );
     ascribe("InforceGlp"                      , &Input::InforceGlp                      );
     ascribe("InforceCumulativeGlp"            , &Input::InforceCumulativeGlp            );

@@ -115,11 +115,6 @@ cell_element = element cell
      ## make input easier. E.g., specified amount for 'partners' might
      ## be two times salary, while 'all others' get a flat $50K.
      element EmployeeClass                    {text}
-    ,## Factor for amortizing mortality profit into future charges.
-     ## Default: '1'.
-     element ExperienceRatingInitialKFactor   {nonnegative_double}
-    ,## Overridden reserve rate for experience rating.
-     element ExperienceReserveRate            {proportion_double}
     ,## * Amount of 1035 exchange from a different insurer.
      element External1035ExchangeAmount       {nonnegative_double}
     ,## * MEC status of 1035 exchange from a different insurer.
@@ -233,8 +228,6 @@ cell_element = element cell
      element InforceMonth                     {month_int}
     ,## Monthly premium required to maintain no-lapse guarantee.
      element InforceMonthlyNoLapsePremium     {nonnegative_double}
-    ,## Inforce net reserve for experience rating.
-     element InforceNetExperienceReserve      {xsd:double}
     ,## No-lapse guarantee is in effect.
      element InforceNoLapseActive             {yes_or_no}
     ,## Inforce balance (total indebtedness) for preferred loans:
@@ -266,8 +259,6 @@ cell_element = element cell
      element InforceYear                      {duration_int}
     ,## Policy-year-to-date payments counted toward target premium.
      element InforceYtdGrossPremium           {nonnegative_double}
-    ,## Policy-year-to-date "net" COI charge for experience rating.
-     element InforceYtdNetCoiCharge           {nonnegative_double}
     ,## Policy-year-to-date payments subject to premium tax.
      element InforceYtdTaxablePremium         {nonnegative_double}
     ,## * Investment management fee of a custom fund.
@@ -327,8 +318,6 @@ cell_element = element cell
      element NumberOfIdenticalLives           {xsd:nonNegativeInteger}
     ,## * Override country COI multiplier. Default: 'Yes'.
      element OverrideCoiMultiplier            {yes_or_no}
-    ,## Override reserve rate for experience rating. Default: 'Yes'.
-     element OverrideExperienceReserveRate    {yes_or_no}
     ,## * Override investment management fee: used only with custom funds.
      element OverrideFundManagementFee        {yes_or_no}
     ,## * Multiplier applied to partial-mortality table. Default: '1'.
@@ -492,8 +481,6 @@ cell_element = element cell
      element UseCurrentDeclaredRate           {yes_or_no}
     ,## * Let date of birth override issue age. Default: 'Yes'.
      element UseDOB                           {yes_or_no}
-    ,## Use experience rating, on the few contracts that offer it.
-     element UseExperienceRating              {yes_or_no}
     ,## * Illustrate "partial mortality": i.e., reflect assumed deaths
      ## in a composite illustration.
      element UsePartialMortality              {yes_or_no}

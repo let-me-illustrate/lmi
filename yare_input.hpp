@@ -94,9 +94,6 @@ class yare_input final
     mcenum_sep_acct_rate_type         SeparateAccountRateType         ;
     double                            LoanRate                        ;
     mcenum_loan_rate_type             LoanRateType                    ;
-    bool                              OverrideExperienceReserveRate   ;
-    double                            ExperienceReserveRate           ;
-    double                            ExperienceRatingInitialKFactor  ;
     bool                              WithdrawToBasisThenLoan         ;
     bool                              UseAverageOfAllFunds            ;
     bool                              OverrideFundManagementFee       ;
@@ -104,7 +101,6 @@ class yare_input final
     double                            InputFundManagementFee          ;
     mcenum_run_order                  RunOrder                        ;
     int                               NumberOfIdenticalLives          ;
-    bool                              UseExperienceRating             ;
     bool                              UsePartialMortality             ;
 //    mcenum_part_mort_table            PartialMortalityTable           ;
     std::string                       InsuredName                     ;
@@ -167,8 +163,6 @@ class yare_input final
     double                            InforceCumulativeSalesLoad      ;
     double                            InforceSpecAmtLoadBase          ;
     double                            InforceHoneymoonValue           ;
-    double                            InforceNetExperienceReserve     ;
-    double                            InforceYtdNetCoiCharge          ;
     double                            InforceTaxBasis                 ;
     double                            InforceGlp                      ;
     double                            InforceCumulativeGlp            ;

@@ -68,16 +68,12 @@ yare_input::yare_input(Input const& z)
     SeparateAccountRateType          = z.SeparateAccountRateType         .value();
     LoanRate                         = z.LoanRate                        .value();
     LoanRateType                     = z.LoanRateType                    .value();
-    OverrideExperienceReserveRate    = z.OverrideExperienceReserveRate   .value();
-    ExperienceReserveRate            = z.ExperienceReserveRate           .value();
-    ExperienceRatingInitialKFactor   = z.ExperienceRatingInitialKFactor  .value();
     WithdrawToBasisThenLoan          = z.WithdrawToBasisThenLoan         .value();
     UseAverageOfAllFunds             = z.UseAverageOfAllFunds            .value();
     OverrideFundManagementFee        = z.OverrideFundManagementFee       .value();
     InputFundManagementFee           = z.InputFundManagementFee          .value();
     RunOrder                         = z.RunOrder                        .value();
     NumberOfIdenticalLives           = z.NumberOfIdenticalLives          .value();
-    UseExperienceRating              = z.UseExperienceRating             .value();
     UsePartialMortality              = z.UsePartialMortality             .value();
     InsuredName                      = z.InsuredName                     .value();
     CorporationName                  = z.CorporationName                 .value();
@@ -128,8 +124,6 @@ yare_input::yare_input(Input const& z)
     InforceCumulativeSalesLoad       = z.InforceCumulativeSalesLoad      .value();
     InforceSpecAmtLoadBase           = z.InforceSpecAmtLoadBase          .value();
     InforceHoneymoonValue            = z.InforceHoneymoonValue           .value();
-    InforceNetExperienceReserve      = z.InforceNetExperienceReserve     .value();
-    InforceYtdNetCoiCharge           = z.InforceYtdNetCoiCharge          .value();
     InforceTaxBasis                  = z.InforceTaxBasis                 .value();
     InforceGlp                       = z.InforceGlp                      .value();
     InforceCumulativeGlp             = z.InforceCumulativeGlp            .value();

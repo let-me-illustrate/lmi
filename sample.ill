@@ -42,8 +42,6 @@
     <EffectiveDate>2458301</EffectiveDate>
     <EffectiveDateToday>No</EffectiveDateToday>
     <EmployeeClass/>
-    <ExperienceRatingInitialKFactor>1</ExperienceRatingInitialKFactor>
-    <ExperienceReserveRate>0.02</ExperienceReserveRate>
     <External1035ExchangeAmount>0</External1035ExchangeAmount>
     <External1035ExchangeFromMec>No</External1035ExchangeFromMec>
     <External1035ExchangeTaxBasis>0</External1035ExchangeTaxBasis>
@@ -83,7 +81,6 @@
     <InforceLeastDeathBenefit>0</InforceLeastDeathBenefit>
     <InforceMonth>0</InforceMonth>
     <InforceMonthlyNoLapsePremium>0</InforceMonthlyNoLapsePremium>
-    <InforceNetExperienceReserve>0</InforceNetExperienceReserve>
     <InforceNoLapseActive>No</InforceNoLapseActive>
     <InforcePreferredLoanBalance>0</InforcePreferredLoanBalance>
     <InforcePreferredLoanValue>0</InforcePreferredLoanValue>
@@ -95,7 +92,6 @@
     <InforceTaxBasis>0</InforceTaxBasis>
     <InforceYear>0</InforceYear>
     <InforceYtdGrossPremium>0</InforceYtdGrossPremium>
-    <InforceYtdNetCoiCharge>0</InforceYtdNetCoiCharge>
     <InforceYtdTaxablePremium>0</InforceYtdTaxablePremium>
     <InputFundManagementFee>0</InputFundManagementFee>
     <InsuredName/>
@@ -117,7 +113,6 @@
     <NonsmokerProportion>1</NonsmokerProportion>
     <NumberOfIdenticalLives>1</NumberOfIdenticalLives>
     <OverrideCoiMultiplier>No</OverrideCoiMultiplier>
-    <OverrideExperienceReserveRate>Yes</OverrideExperienceReserveRate>
     <OverrideFundManagementFee>No</OverrideFundManagementFee>
     <PartialMortalityMultiplier>1</PartialMortalityMultiplier>
     <Payment>20000</Payment>
@@ -190,7 +185,6 @@
     <UseAverageOfAllFunds>No</UseAverageOfAllFunds>
     <UseCurrentDeclaredRate>Yes</UseCurrentDeclaredRate>
     <UseDOB>No</UseDOB>
-    <UseExperienceRating>No</UseExperienceRating>
     <UsePartialMortality>No</UsePartialMortality>
     <WaiverOfPremiumBenefit>No</WaiverOfPremiumBenefit>
     <WithdrawToBasisThenLoan>No</WithdrawToBasisThenLoan>

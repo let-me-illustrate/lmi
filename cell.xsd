@@ -80,8 +80,6 @@
         <xs:element ref="EffectiveDate"/>
         <xs:element ref="EffectiveDateToday"/>
         <xs:element ref="EmployeeClass"/>
-        <xs:element ref="ExperienceRatingInitialKFactor"/>
-        <xs:element ref="ExperienceReserveRate"/>
         <xs:element ref="External1035ExchangeAmount"/>
         <xs:element ref="External1035ExchangeFromMec"/>
         <xs:element ref="External1035ExchangeTaxBasis"/>
@@ -121,7 +119,6 @@
         <xs:element ref="InforceLeastDeathBenefit"/>
         <xs:element ref="InforceMonth"/>
         <xs:element ref="InforceMonthlyNoLapsePremium"/>
-        <xs:element ref="InforceNetExperienceReserve"/>
         <xs:element ref="InforceNoLapseActive"/>
         <xs:element ref="InforcePreferredLoanBalance"/>
         <xs:element ref="InforcePreferredLoanValue"/>
@@ -133,7 +130,6 @@
         <xs:element ref="InforceTaxBasis"/>
         <xs:element ref="InforceYear"/>
         <xs:element ref="InforceYtdGrossPremium"/>
-        <xs:element ref="InforceYtdNetCoiCharge"/>
         <xs:element ref="InforceYtdTaxablePremium"/>
         <xs:element ref="InputFundManagementFee"/>
         <xs:element ref="InsuredName"/>
@@ -155,7 +151,6 @@
         <xs:element ref="NonsmokerProportion"/>
         <xs:element ref="NumberOfIdenticalLives"/>
         <xs:element ref="OverrideCoiMultiplier"/>
-        <xs:element ref="OverrideExperienceReserveRate"/>
         <xs:element ref="OverrideFundManagementFee"/>
         <xs:element ref="PartialMortalityMultiplier"/>
         <xs:element ref="Payment"/>
@@ -228,7 +223,6 @@
         <xs:element ref="UseAverageOfAllFunds"/>
         <xs:element ref="UseCurrentDeclaredRate"/>
         <xs:element ref="UseDOB"/>
-        <xs:element ref="UseExperienceRating"/>
         <xs:element ref="UsePartialMortality"/>
         <xs:element ref="WaiverOfPremiumBenefit"/>
         <xs:element ref="WithdrawToBasisThenLoan"/>
@@ -452,17 +446,6 @@ called a "number", is often not purely numeric.</xs:documentation>
       <xs:documentation>* Employee class, used for grouping individuals in order to
 make input easier. E.g., specified amount for 'partners' might
 be two times salary, while 'all others' get a flat $50K.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="ExperienceRatingInitialKFactor" type="nonnegative_double">
-    <xs:annotation>
-      <xs:documentation>Factor for amortizing mortality profit into future charges.
-Default: '1'.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="ExperienceReserveRate" type="proportion_double">
-    <xs:annotation>
-      <xs:documentation>Overridden reserve rate for experience rating.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="External1035ExchangeAmount" type="nonnegative_double">
@@ -695,11 +678,6 @@ was never present.</xs:documentation>
       <xs:documentation>Monthly premium required to maintain no-lapse guarantee.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="InforceNetExperienceReserve" type="xs:double">
-    <xs:annotation>
-      <xs:documentation>Inforce net reserve for experience rating.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
   <xs:element name="InforceNoLapseActive" type="yes_or_no">
     <xs:annotation>
       <xs:documentation>No-lapse guarantee is in effect.</xs:documentation>
@@ -762,11 +740,6 @@ regard to term rider and corridor.</xs:documentation>
   <xs:element name="InforceYtdGrossPremium" type="nonnegative_double">
     <xs:annotation>
       <xs:documentation>Policy-year-to-date payments counted toward target premium.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="InforceYtdNetCoiCharge" type="nonnegative_double">
-    <xs:annotation>
-      <xs:documentation>Policy-year-to-date "net" COI charge for experience rating.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforceYtdTaxablePremium" type="nonnegative_double">
@@ -889,11 +862,6 @@ each one represents. Default: '1'.</xs:documentation>
   <xs:element name="OverrideCoiMultiplier" type="yes_or_no">
     <xs:annotation>
       <xs:documentation>* Override country COI multiplier. Default: 'Yes'.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="OverrideExperienceReserveRate" type="yes_or_no">
-    <xs:annotation>
-      <xs:documentation>Override reserve rate for experience rating. Default: 'Yes'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="OverrideFundManagementFee" type="yes_or_no">
@@ -1273,11 +1241,6 @@ instead of entering the crediting rate explicitly. Default: 'Yes'.</xs:documenta
   <xs:element name="UseDOB" type="yes_or_no">
     <xs:annotation>
       <xs:documentation>* Let date of birth override issue age. Default: 'Yes'.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="UseExperienceRating" type="yes_or_no">
-    <xs:annotation>
-      <xs:documentation>Use experience rating, on the few contracts that offer it.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="UsePartialMortality" type="yes_or_no">

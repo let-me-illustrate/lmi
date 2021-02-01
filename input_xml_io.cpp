@@ -117,6 +117,8 @@ bool Input::is_detritus(std::string const& s) const
         ,"DeprecatedSolveToWhich"           // Renamed (without 'Deprecated'-).
         ,"DeprecatedUseDOB"                 // Renamed (without 'Deprecated'-).
         ,"DeprecatedUseDOR"                 // Withdrawn.
+        ,"ExperienceRatingInitialKFactor"   // Withdrawn.
+        ,"ExperienceReserveRate"            // Withdrawn.
         ,"External1035ExchangeBasis"        // Renamed to 'External1035ExchangeTaxBasis'.
         ,"FilingApprovalState"              // Alias for 'StateOfJurisdiction'.
         ,"FirstName"                        // Single name instead.
@@ -130,6 +132,8 @@ bool Input::is_detritus(std::string const& s) const
         ,"InforceDataSource"                // Supplanted by 'data_source' attribute.
         ,"InforceDcvDeathBenefit"           // Misbegotten.
         ,"InforceExperienceReserve"         // Renamed before implementation.
+        ,"InforceNetExperienceReserve"      // Withdrawn.
+        ,"InforceYtdNetCoiCharge"           // Withdrawn.
         ,"InsuredPremiumTableNumber"        // Never implemented.
         ,"Internal1035ExchangeBasis"        // Renamed to 'Internal1035ExchangeTaxBasis'.
         ,"LastName"                         // Single name instead.
@@ -143,6 +147,7 @@ bool Input::is_detritus(std::string const& s) const
         ,"MiddleName"                       // Single name instead.
         ,"NetMortalityChargeHistory"        // Renamed before implementation.
         ,"OffshoreCorridorFactor"           // Withdrawn.
+        ,"OverrideExperienceReserveRate"    // Withdrawn.
         ,"PartialMortalityTable"            // Never implemented.
         ,"PayLoanInterestInCash"            // Never implemented.
         ,"PolicyDate"                       // Never implemented.
@@ -160,6 +165,7 @@ bool Input::is_detritus(std::string const& s) const
         ,"SpecifiedAmountFromIssue"         // Withdrawn.
         ,"SpecifiedAmountFromRetirement"    // Withdrawn.
         ,"TermProportion"                   // Disused: cf. 'TermRiderProportion'.
+        ,"UseExperienceRating"              // Withdrawn.
         ,"UseOffshoreCorridorFactor"        // Withdrawn.
         ,"WithdrawalAmount"                 // Withdrawn.
         ,"WithdrawalFromAge"                // Withdrawn.
