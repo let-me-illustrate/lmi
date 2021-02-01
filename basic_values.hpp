@@ -117,13 +117,15 @@ class LMI_SO BasicValues
 
     double                InvestmentManagementFee()    const;
 
-    yare_input                          yare_input_;
-    std::shared_ptr<product_data>       product_;
-    product_database const              database_;
-    std::shared_ptr<lingo>              lingo_;
-    std::shared_ptr<FundData>           FundData_;
-    std::shared_ptr<rounding_rules>     RoundingRules_;
-    std::shared_ptr<stratified_charges> StratifiedCharges_;
+    yare_input                                yare_input_;
+
+    std::shared_ptr<product_data       const> product_;
+    product_database                   const  database_;
+    std::shared_ptr<lingo              const> lingo_;
+    std::shared_ptr<FundData           const> FundData_;
+    std::shared_ptr<rounding_rules     const> RoundingRules_;
+    std::shared_ptr<stratified_charges const> StratifiedCharges_;
+
     std::shared_ptr<MortalityRates>     MortalityRates_;
     std::shared_ptr<InterestRates>      InterestRates_;
     std::shared_ptr<death_benefits>     DeathBfts_;
