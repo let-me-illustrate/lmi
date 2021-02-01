@@ -533,12 +533,12 @@ void PrintCellTabDelimited
         ,"ClaimsPaid"
         ,"NetClaims"
         ,"[obsolete]"
-        ,"ProjectedMortalityCharge"
         ,"[obsolete]"
-        ,"NetMortalityCharge0Int"
-        ,"NetClaims0Int"
         ,"[obsolete]"
-        ,"ProjectedMortalityCharge0Int"
+        ,"[obsolete]"
+        ,"[obsolete]"
+        ,"[obsolete]"
+        ,"[obsolete]"
         ,"[obsolete]"
         };
 

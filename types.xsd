@@ -771,11 +771,7 @@ proved unworkable (e.g., because of underwriting).</xs:documentation>
       <xs:enumeration value="IrrCsv_Guaranteed"/>
       <xs:enumeration value="IrrDb_Current"/>
       <xs:enumeration value="IrrDb_Guaranteed"/>
-      <xs:enumeration value="ExperienceReserve_Current"/>
       <xs:enumeration value="NetClaims_Current"/>
-      <xs:enumeration value="NetCOICharge_Current"/>
-      <xs:enumeration value="ProjectedCoiCharge_Current"/>
-      <xs:enumeration value="KFactor_Current"/>
       <xs:enumeration value="GrossPmt"/>
       <xs:enumeration value="LoanIntAccrued_Current"/>
       <xs:enumeration value="NetDeathBenefit"/>
