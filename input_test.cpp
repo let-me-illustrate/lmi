@@ -101,7 +101,11 @@ void input_test::test_product_database()
     Input input;
     yare_input yi(input);
     product_database db(yi);
-    DBDictionary& dictionary = const_cast<DBDictionary&>(*db.db_);
+    std::shared_ptr<DBDictionary> x(new DBDictionary);
+    db.db_ = x;
+    DBDictionary& dictionary = *x;
+    dictionary.Add({DB_ChildRiderMinAmt, 25000});
+    dictionary.Add({DB_NaarDiscount    , 0.00246627});
 
     std::vector<double> v;
     std::vector<double> w;
@@ -173,23 +177,6 @@ void input_test::test_product_database()
         ,std::runtime_error
         ,"Cast would not preserve value."
         );
-
-    auto f0 = [&db]     {db.initialize("sample");};
-    auto f1 = [&db, &v] {db.query_into(DB_MaturityAge, v);};
-    auto f2 = [&db]     {db.query<int>(DB_MaturityAge);};
-    auto f3 = [&db]     {db.query<oenum_alb_or_anb>(DB_AgeLastOrNearest);};
-    auto f4 = [&db, &a] {db.query_into(DB_AgeLastOrNearest, a);};
-    auto f5 = [&db]     {db.entity_from_key(DB_MaturityAge);};
-    std::cout
-        << "\n  Database speed tests..."
-        << "\n  initialize()        : " << TimeAnAliquot(f0)
-        << "\n  query_into (vector) : " << TimeAnAliquot(f1)
-        << "\n  query<int> (scalar) : " << TimeAnAliquot(f2)
-        << "\n  query<enum>(scalar) : " << TimeAnAliquot(f3)
-        << "\n  query_into (scalar) : " << TimeAnAliquot(f4)
-        << "\n  entity_from_key()   : " << TimeAnAliquot(f5)
-        << '\n'
-        ;
 
     database_entity const maturity = db.entity_from_key(DB_MaturityAge);
 
@@ -267,6 +254,23 @@ void input_test::test_product_database()
     index.issue_age(0);
     db.query_into(DB_SnflQ, v, index.issue_age(0));
     BOOST_TEST_EQUAL(98, v.size());
+
+    auto f0 = [&db]     {db.initialize("sample");};
+    auto f1 = [&db, &v] {db.query_into(DB_MaturityAge, v);};
+    auto f2 = [&db]     {db.query<int>(DB_MaturityAge);};
+    auto f3 = [&db]     {db.query<oenum_alb_or_anb>(DB_AgeLastOrNearest);};
+    auto f4 = [&db, &a] {db.query_into(DB_AgeLastOrNearest, a);};
+    auto f5 = [&db]     {db.entity_from_key(DB_MaturityAge);};
+    std::cout
+        << "\n  Database speed tests..."
+        << "\n  initialize()        : " << TimeAnAliquot(f0)
+        << "\n  query_into (vector) : " << TimeAnAliquot(f1)
+        << "\n  query<int> (scalar) : " << TimeAnAliquot(f2)
+        << "\n  query<enum>(scalar) : " << TimeAnAliquot(f3)
+        << "\n  query_into (scalar) : " << TimeAnAliquot(f4)
+        << "\n  entity_from_key()   : " << TimeAnAliquot(f5)
+        << '\n'
+        ;
 }
 
 void input_test::test_input_class()
