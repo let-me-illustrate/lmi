@@ -101,7 +101,7 @@ class LMI_SO product_database final
     int                  length_;
     int                  maturity_age_;
 
-    std::shared_ptr<DBDictionary> db_;
+    std::shared_ptr<DBDictionary const> db_;
 };
 
 /// Query database, using default index; return a scalar.

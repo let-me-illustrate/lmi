@@ -170,7 +170,7 @@ namespace
 ///
 /// Postcondition: returned pointer is not null; throws otherwise.
 
-std::shared_ptr<DBDictionary> antediluvian_db()
+std::shared_ptr<DBDictionary const> antediluvian_db()
 {
     std::shared_ptr<DBDictionary> z(new DBDictionary);
     z->InitAntediluvian();
@@ -187,7 +187,7 @@ void product_database::initialize(std::string const& product_name)
 {
     if(is_antediluvian_fork())
         {
-        static std::shared_ptr<DBDictionary> z(antediluvian_db());
+        static std::shared_ptr<DBDictionary const> z(antediluvian_db());
         db_ = z;
         }
     else

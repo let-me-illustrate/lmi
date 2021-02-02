@@ -47,11 +47,11 @@ namespace detail
 /// For each filename, the cache stores one instance, which is
 /// replaced by reloading the file if its write time has changed.
 ///
-/// Instances are retrieved as shared_ptr<T> so that they remain
+/// Instances are retrieved as shared_ptr<T const> so that they remain
 /// valid even when the file changes. The client is responsible for
-/// updating any stale pointers it holds. An earlier version returned
-/// shared_ptr<T const> instead, but legitimate non-const use cases
-/// exist, so managing constness is better left to each client.
+/// updating any stale pointers it holds, if it chooses to refresh the
+/// data; if it doesn't, then it uses older data, which remain valid
+/// as long as it holds a pointer to them.
 ///
 /// Implemented as a simple Meyers singleton, with the expected
 /// dead-reference and threading issues.
@@ -60,7 +60,7 @@ template<typename T>
 class file_cache
 {
   public:
-    using retrieved_type = std::shared_ptr<T>;
+    using retrieved_type = std::shared_ptr<T const>;
 
     static file_cache<T>& instance()
         {
