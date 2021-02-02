@@ -46,8 +46,8 @@ class currency_test
     static void test_negation();
     static void test_plus_or_minus_eq();
     static void test_plus_or_minus();
-    static void test_times_int();
-    static void test_times_double();
+    static void test_multiply_by_int();
+    static void test_multiply_by_double();
     static void test_divide_by_double();
     static void test_relops();
     static void test_stream_inserter();
@@ -70,8 +70,8 @@ void currency_test::test()
 #   if defined CURRENCY_UNIT_IS_CENTS
     test_plus_or_minus_eq();
     test_plus_or_minus();
-    test_times_int();
-    test_times_double();
+    test_multiply_by_int();
+    test_multiply_by_double();
     test_divide_by_double();
     test_relops();
     test_stream_inserter();
@@ -157,7 +157,7 @@ void currency_test::test_plus_or_minus()
     BOOST_TEST_EQUAL( -650, a2.m_);
 }
 
-void currency_test::test_times_int()
+void currency_test::test_multiply_by_int()
 {
     // currency * int returns currency
     currency const mult2 {3125, raw_cents {}};
@@ -166,7 +166,7 @@ void currency_test::test_times_int()
     BOOST_TEST_EQUAL(100000, (mult2 * 32).m_);
 }
 
-void currency_test::test_times_double()
+void currency_test::test_multiply_by_double()
 {
     currency const mult2 {3125, raw_cents {}};
     // currency * double returns double
