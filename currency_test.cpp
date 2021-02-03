@@ -54,6 +54,7 @@ class currency_test
     static void test_dollars();
     static void test_round_double();
     static void test_round_currency();
+    static void test_infinite();
     static void test_quodlibet();
 };
 
@@ -78,6 +79,7 @@ void currency_test::test()
     test_dollars();
     test_round_double();
     test_round_currency();
+    test_infinite();
     test_quodlibet();
 #   endif // defined CURRENCY_UNIT_IS_CENTS
 #endif // defined USE_CURRENCY_CLASS
@@ -230,6 +232,41 @@ void currency_test::test_round_double()
 
 void currency_test::test_round_currency()
 {
+}
+
+void currency_test::test_infinite()
+{
+    double const d0 = std::numeric_limits<double>::infinity();
+
+    // Negative infinity.
+    currency const c0(-d0, raw_cents{});
+    BOOST_TEST_EQUAL(-d0, c0.d());
+    BOOST_TEST_EQUAL(-d0, dblize(c0));
+
+    // Test with from_cents(arg), which asserts that arg==rint(arg).
+    // Pedantically speaking, that assertion depends on rint(INF),
+    // which is implementation-defined, but what other result can
+    // rint(INF) reasonably return than INF?
+    currency const c1 = from_cents(-d0);
+    BOOST_TEST( c0 ==  c1);
+    BOOST_TEST(c1 < from_cents(1.0e100));
+
+    // Positive infinity.
+    currency const c2 = from_cents(d0);
+    BOOST_TEST_EQUAL(d0, c2.d());
+    BOOST_TEST_EQUAL(d0, dblize(c2));
+
+    BOOST_TEST(-c0 ==  c2);
+    BOOST_TEST( c0 == -c2);
+    BOOST_TEST(from_cents(1.0e100) < c2);
+
+    std::ostringstream oss;
+    oss << c1;
+    BOOST_TEST_EQUAL("-inf", oss.str());
+    oss.str("");
+    oss.clear();
+    oss << c2;
+    BOOST_TEST_EQUAL("inf", oss.str());
 }
 
 void currency_test::test_quodlibet()
