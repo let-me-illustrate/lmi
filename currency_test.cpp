@@ -25,7 +25,9 @@
 
 #include "round_to.hpp"
 #include "test_tools.hpp"
+#include "timer.hpp"
 
+#include <algorithm>                    // min()
 #include <limits>
 #include <sstream>
 
@@ -54,6 +56,8 @@ class currency_test
     static void test_dollars();
     static void test_round_double();
     static void test_round_currency();
+    static void mete_humongous();
+    static void mete_infinite();
     static void test_infinite();
     static void test_quodlibet();
 };
@@ -234,6 +238,28 @@ void currency_test::test_round_currency()
 {
 }
 
+void currency_test::mete_humongous()
+{
+    static constexpr double d0 = std::numeric_limits<double>::max();
+    static currency const extreme = from_cents(d0);
+    static currency const value   = from_cents(1234567);
+    for(int i = 0; i < 100000; ++i)
+        {
+        currency volatile z = std::min(extreme, value);
+        }
+}
+
+void currency_test::mete_infinite()
+{
+    static constexpr double d0 = std::numeric_limits<double>::infinity();
+    static currency const extreme = from_cents(d0);
+    static currency const value   = from_cents(1234567);
+    for(int i = 0; i < 100000; ++i)
+        {
+        currency volatile z = std::min(extreme, value);
+        }
+}
+
 void currency_test::test_infinite()
 {
     double const d0 = std::numeric_limits<double>::infinity();
@@ -267,6 +293,22 @@ void currency_test::test_infinite()
     oss.clear();
     oss << c2;
     BOOST_TEST_EQUAL("inf", oss.str());
+
+    // Often lmi uses an identity element for std::min or std::max.
+    // For example, a monthly charge might apply only to amounts up
+    // to a given limit, thus:
+    //   charge = std::min(amount, limit);
+    // In cases where no limit applies, it is convenient to set that
+    // limit to an enormous value, so that the expression above does
+    // the right thing; but for that purpose, is the largest finite
+    // representable value faster than infinity? At least with 32-
+    // and 64-bit gcc-8 and -10, this test says "no".
+    std::cout
+        << "\n  Speed tests..."
+        << "\n  humongous: " << TimeAnAliquot(mete_humongous)
+        << "\n  infinite : " << TimeAnAliquot(mete_infinite )
+        << std::endl
+        ;
 }
 
 void currency_test::test_quodlibet()
