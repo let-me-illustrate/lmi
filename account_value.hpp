@@ -395,10 +395,8 @@ class LMI_SO AccountValue final
     currency InforceRegLnBal;
     currency InforcePrfLnBal;
     currency InforceCumNoLapsePrem;
-    currency InforceBasis; // CURRENCY !! unused
     currency InforceCumPmts;
     currency InforceTaxBasis;
-    currency InforceLoanBalance; // CURRENCY !! unused
 
     // Intermediate values.
     int      Year;

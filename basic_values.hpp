@@ -334,7 +334,6 @@ class LMI_SO BasicValues
     int                          TermForcedConvDur;
     bool                         TermIsDbFor7702;
     bool                         TermIsDbFor7702A;
-    double                       ExpPerKLimit; // CURRENCY !! may be infinity
     oenum_modal_prem_type        MinPremType;
     oenum_modal_prem_type        TgtPremType;
     bool                         TgtPremFixedAtIssue;

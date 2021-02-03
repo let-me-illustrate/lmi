@@ -571,7 +571,6 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_TermIsNotRider       , TermIsNotRider);
     database().query_into(DB_TermForcedConvAge    , TermForcedConvAge);
     database().query_into(DB_TermForcedConvDur    , TermForcedConvDur);
-    database().query_into(DB_ExpSpecAmtLimit      , ExpPerKLimit);
     database().query_into(DB_MinPremType          , MinPremType);
     database().query_into(DB_TgtPremType          , TgtPremType);
     database().query_into(DB_TgtPremFixedAtIssue  , TgtPremFixedAtIssue);
