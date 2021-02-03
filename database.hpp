@@ -35,6 +35,7 @@
 #include <type_traits>                  // is_integral_v, underlying_type_t
 #include <vector>
 
+class currency;
 class database_entity;
 class DBDictionary;
 class yare_input;
@@ -71,6 +72,9 @@ class LMI_SO product_database final
         ,database_index const&
         ) const;
     void query_into(e_database_key, std::vector<double>&) const;
+
+    void query_into(e_database_key, currency&) const;
+    void query_into(e_database_key, std::vector<currency>&) const;
 
     double query(e_database_key, database_index const&) const;
 

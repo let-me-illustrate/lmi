@@ -23,13 +23,17 @@
 
 #include "database.hpp"
 
+#include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "currency.hpp"
 #include "data_directory.hpp"
 #include "dbdict.hpp"
 #include "dbvalue.hpp"
 #include "lmi.hpp"                      // is_antediluvian_fork()
 #include "oecumenic_enumerations.hpp"   // methuselah
 #include "product_data.hpp"
+#include "round_to.hpp"
+#include "ssize_lmi.hpp"
 #include "yare_input.hpp"
 
 #include <algorithm>                    // min()
@@ -115,11 +119,61 @@ void product_database::query_into
         }
 }
 
-/// Query database, using default index; write result into vector argument.
+/// Query database, using default index; write to vector<double> argument.
 
 void product_database::query_into(e_database_key k, std::vector<double>& dst) const
 {
     return query_into(k, dst, index_);
+}
+
+/// Query database, using default index; write to currency& argument.
+///
+/// Throws if conversion from double to currency (nearest cent)
+/// does not preserve value.
+
+void product_database::query_into(e_database_key k, currency& dst) const
+{
+    static round_to<double> const round_to_cents(2, r_to_nearest);
+    double z;
+    query_into(k, z);
+    dst = round_to_cents.c(z);
+    if(dblize(dst) != z)
+        {
+        alarum()
+            << "Database key '" << db_name_from_key(k)
+            << ": value " << z
+            << " not preserved in conversion"
+            << " to " << dst.cents() << " cents."
+            << LMI_FLUSH
+            ;
+        }
+}
+
+/// Query database, using default index; write to vector<currency> argument.
+///
+/// Throws if conversion from double to currency (nearest cent)
+/// does not preserve value for all elements.
+
+void product_database::query_into(e_database_key k, std::vector<currency>& dst) const
+{
+    static round_to<double> const round_to_cents(2, r_to_nearest);
+    std::vector<double> z;
+    query_into(k, z);
+    dst = round_to_cents.c(z);
+    for(int j = 0; j < lmi::ssize(z); ++j)
+        {
+        if(dblize(dst[j]) != z[j])
+            {
+            alarum()
+                << "Database key '" << db_name_from_key(k)
+                << "', duration " << j
+                << ": value " << z[j]
+                << " not preserved in conversion"
+                << " to " << dst[j].cents() << " cents."
+                << LMI_FLUSH
+                ;
+            }
+        }
 }
 
 /// Query database; return a scalar.
