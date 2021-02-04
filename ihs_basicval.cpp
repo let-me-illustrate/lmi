@@ -1959,7 +1959,7 @@ std::vector<double> BasicValues::GetCurrCOIRates1() const
     return GetTable
         (product().datum("CurrCOIFilename")
         ,DB_CurrCoiTable1
-        ,CurrCoiTable0Limit < std::numeric_limits<double>::max()
+        ,!isinf(CurrCoiTable0Limit)
         ,CanBlend
         ,CanBlend
         );
@@ -1970,7 +1970,7 @@ std::vector<double> BasicValues::GetCurrCOIRates2() const
     return GetTable
         (product().datum("CurrCOIFilename")
         ,DB_CurrCoiTable2
-        ,CurrCoiTable1Limit < std::numeric_limits<double>::max()
+        ,!isinf(CurrCoiTable1Limit)
         ,CanBlend
         ,CanBlend
         );
