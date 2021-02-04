@@ -380,18 +380,9 @@ void BasicValues::Init7702()
     max_coi_rate = 1.0 / max_coi_rate;
     assign(Mly7702qc, apply_binary(coi_rate_from_q<double>(), Mly7702qc, max_coi_rate));
 
-    MlyDcvqc = Mly7702qc;
-    // CURRENCY !! Isn't there a vector overload for this?
-    std::transform
-        (MlyDcvqc.begin()
-        ,MlyDcvqc.end()
-        ,MlyDcvqc.begin()
-        ,round_coi_rate()
-        );
-    // Temporary test scaffolding:
-    std::vector<double> MlyDcvqc2;
-    MlyDcvqc2 = round_coi_rate()(Mly7702qc);
-    LMI_ASSERT(std::operator==(MlyDcvqc2, MlyDcvqc));
+    // DCV follows the usual monthiversary mechanics, which involve
+    // (optionally) rounding monthly COI rates.
+    MlyDcvqc = round_coi_rate()(Mly7702qc);
 
     // Monthly guar net int for 7702, with 4 or 6% min, is
     //   greater of {4%, 6%} and annual guar int rate
