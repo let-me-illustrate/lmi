@@ -381,6 +381,7 @@ void BasicValues::Init7702()
     assign(Mly7702qc, apply_binary(coi_rate_from_q<double>(), Mly7702qc, max_coi_rate));
 
     MlyDcvqc = Mly7702qc;
+    // CURRENCY !! Isn't there a vector overload for this?
     std::transform
         (MlyDcvqc.begin()
         ,MlyDcvqc.end()
