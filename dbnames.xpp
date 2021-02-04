@@ -342,6 +342,7 @@
 {DB_NoLongerIssued,DB_Topic_Miscellanea,"NoLongerIssued","Forbid new-business illustrations: 0=no, 1=yes",}, \
 {DB_AgeLastOrNearest,DB_Topic_Miscellanea,"AgeLastOrNearest","Age calculated as of last or nearest birthday: 0=ALB, 1=ANB (ties --> younger), 2=ANB (ties --> older)",}, \
 {DB_MaturityAge,DB_Topic_Miscellanea,"MaturityAge","Normal maturity age",}, \
+{DB_AllowCashValueEnh,DB_Topic_Miscellanea,"AllowCashValueEnh","Allow multiplicative cash value enhancement: 0=no, 1=yes",}, \
 {DB_CashValueEnhMult,DB_Topic_Miscellanea,"CashValueEnhMult","Cash value enhancement multiple: e.g. 0.03 to make cash value three percent higher than account value",}, \
 {DB_LapseIgnoresSurrChg,DB_Topic_Miscellanea,"LapseIgnoresSurrChg","Ignore tabular surrender charge for lapse processing",}, \
 {DB_DefaultProcessOrder,DB_Topic_Miscellanea,"DefaultProcessOrder","Default processing order: 0=life by life, 1=month by month [not yet implemented]",}, \

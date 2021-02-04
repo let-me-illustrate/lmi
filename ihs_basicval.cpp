@@ -614,6 +614,7 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_AllowSpecAmtIncr     , AllowSAIncr);
     database().query_into(DB_NoLapseAlwaysActive  , NoLapseAlwaysActive);
     database().query_into(DB_WpChargeMethod       , WaiverChargeMethod);
+    database().query_into(DB_AllowCashValueEnh    , AllowCashValueEnh);
     database().query_into(DB_CashValueEnhMult     , CashValueEnhMult);
     database().query_into(DB_LapseIgnoresSurrChg  , LapseIgnoresSurrChg);
     database().query_into(DB_SurrChgOnIncr        , SurrChgOnIncr);

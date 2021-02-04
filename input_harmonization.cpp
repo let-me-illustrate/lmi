@@ -195,7 +195,7 @@ void Input::DoHarmonize()
     PartialMortalityTable     .enable(part_mort_used);
     PartialMortalityMultiplier.enable(part_mort_used);
 
-    CashValueEnhancementRate  .enable(home_office_only);
+    CashValueEnhancementRate  .enable(home_office_only && database_->query<bool>(DB_AllowCashValueEnh));
 
     SurviveToType             .allow(mce_no_survival_limit    , part_mort_used);
     SurviveToType             .allow(mce_survive_to_age       , part_mort_used);

@@ -508,6 +508,7 @@ enum e_database_key
         ,DB_AgeLastOrNearest
         ,DB_MaturityAge
 
+        ,DB_AllowCashValueEnh
         ,DB_CashValueEnhMult
         ,DB_LapseIgnoresSurrChg
 

@@ -1028,10 +1028,11 @@ currency AccountValue::SurrChg() const
 
 /// Cash value augmentation--like a negative surrender charge.
 ///
-/// Probably the input field should be expunged.
+/// INPUT !! Probably the input field should be expunged.
 
 currency AccountValue::CSVBoost() const
 {
+    if(!AllowCashValueEnh) return C0;
     double const z =
           CashValueEnhMult[Year]
         + yare_input_.CashValueEnhancementRate[Year]

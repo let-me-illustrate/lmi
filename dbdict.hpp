@@ -387,6 +387,7 @@ class LMI_SO DBDictionary
     database_entity NoLongerIssued            ;
     database_entity AgeLastOrNearest          ;
     database_entity MaturityAge               ;
+    database_entity AllowCashValueEnh         ;
     database_entity CashValueEnhMult          ;
     database_entity LapseIgnoresSurrChg       ;
     database_entity DefaultProcessOrder       ;

@@ -351,6 +351,7 @@ class LMI_SO BasicValues
     int                          NoLapseMinDur;
     int                          NoLapseMinAge;
     oenum_waiver_charge_method   WaiverChargeMethod;
+    bool                         AllowCashValueEnh;
     std::vector<double>          CashValueEnhMult;
     bool                         LapseIgnoresSurrChg;
     bool                         SurrChgOnIncr;

@@ -406,6 +406,7 @@ void DBDictionary::ascribe_members()
     ascribe("NoLongerIssued"            , &DBDictionary::NoLongerIssued            );
     ascribe("AgeLastOrNearest"          , &DBDictionary::AgeLastOrNearest          );
     ascribe("MaturityAge"               , &DBDictionary::MaturityAge               );
+    ascribe("AllowCashValueEnh"         , &DBDictionary::AllowCashValueEnh         );
     ascribe("CashValueEnhMult"          , &DBDictionary::CashValueEnhMult          );
     ascribe("LapseIgnoresSurrChg"       , &DBDictionary::LapseIgnoresSurrChg       );
     ascribe("DefaultProcessOrder"       , &DBDictionary::DefaultProcessOrder       );
@@ -1492,6 +1493,7 @@ sample2xyz::sample2xyz()
     int dims_1111113[e_number_of_axes] = {1, 1, 1, 1, 1, 1, 3};
     double loanrate[3] = {0.06, 0.05, 0.04};
     Add({DB_FixedLoanRate, e_number_of_axes, dims_1111113, loanrate});
+    Add({DB_AllowCashValueEnh   , true});
     double cv_enh[3] = {0.10, 0.05, 0.00};
     Add({DB_CashValueEnhMult, e_number_of_axes, dims_1111113, cv_enh});
     Add({DB_FnMaturityAge              , superior::FnMaturityAge});
