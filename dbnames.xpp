@@ -173,7 +173,7 @@
 {DB_CurrAcctValLoad,DB_Topic_Loads,"CurrAcctValLoad","Expense charge as proportion of separate account value",}, \
 {DB_TgtPremMonthlyPolFee,DB_Topic_Loads,"TgtPremMonthlyPolFee","Target-premium monthly policy fee",}, \
 {DB_LoadRfdProportion,DB_Topic_Loads,"LoadRfdProportion","Proportion of sales load refundable on full surrender",}, \
-{DB_SpecAmtLoadLimit,DB_Topic_Loads,"SpecAmtLoadLimit","Limit up to which charge per $1 of specified amount applies",}, \
+{DB_SpecAmtLoadLimit,DB_Topic_Loads,"SpecAmtLoadLimit","Maximum specified amount to which load per $1 of specified amount can apply",}, \
 {DB_DynamicSepAcctLoad,DB_Topic_Loads,"DynamicSepAcctLoad","Separate account AV load dynamically determined based on total case assets: 0=no, 1=yes",}, \
 {DB_DynSepAcctLoadLimit,DB_Topic_Loads,"DynSepAcctLoadLimit","Highest separate-account balance subject to dynamic AV load",}, \
 {DB_Topic_DacAndPremiumTax,DB_FIRST,"DAC and premium tax","DAC and premium tax parameters and charges",}, \
@@ -536,7 +536,7 @@
 {DB_VarExpPrem,DB_Topic_Expenses,"VarExpPrem","Variable expense per $1 of premium [not yet implemented]",}, \
 {DB_VarExpDumpin,DB_Topic_Expenses,"VarExpDumpin","Variable expense per $1 of dumpin [not yet implemented]",}, \
 {DB_VarExpSpecAmt,DB_Topic_Expenses,"VarExpSpecAmt","Variable expense per $1 of specified amount [not yet implemented]",}, \
-{DB_ExpSpecAmtLimit,DB_Topic_Expenses,"ExpSpecAmtLimit","Maximum specified amount to which expense per $1 of specified amount applies [not yet implemented]",}, \
+{DB_ExpSpecAmtLimit,DB_Topic_Expenses,"ExpSpecAmtLimit","Maximum specified amount to which expense per $1 of specified amount can apply [not yet implemented]",}, \
 {DB_MedicalProportion,DB_Topic_Expenses,"MedicalProportion","Proportion requiring medical or paramedical underwriting [not yet implemented]",}, \
 {DB_UwTestCost,DB_Topic_Expenses,"UwTestCost","Expense per policy issue for underwriting tests [not yet implemented]",}, \
 {DB_Topic_Reserves,DB_FIRST,"Reserves","Reserves [not yet implemented]",}, \
