@@ -473,7 +473,7 @@ void BasicValues::Init7702()
         local_mly_charge_add = GetAdbRates();
         }
 
-    double local_adb_limit = database().query<bool>(DB_AdbIsQAB) ? AdbLimit : 0.0;
+    double local_adb_limit = database().query<bool>(DB_AdbIsQAB) ? dblize(AdbLimit) : 0.0;
 
     // BasicValues::InitialTargetPremium is used only here. For
     // standalone GPT calculations, it's an input field. For
@@ -499,7 +499,7 @@ void BasicValues::Init7702()
             ,dblize(Loads_->annual_policy_fee  (mce_gen_curr))
             ,dblize(Loads_->monthly_policy_fee (mce_gen_curr))
             ,Loads_->specified_amount_load     (mce_gen_curr)
-            ,SpecAmtLoadLimit
+            ,dblize(SpecAmtLoadLimit)
             ,local_mly_charge_add
             ,local_adb_limit
 /// TAXATION !! No contemporary authority seems to believe that a
@@ -587,8 +587,11 @@ void BasicValues::SetPermanentInvariants()
     LMI_ASSERT(C0 == TgtPremMonthlyPolFee || oe_modal_table == TgtPremType);
     database().query_into(DB_CurrCoiTable0Limit   , CurrCoiTable0Limit);
     database().query_into(DB_CurrCoiTable1Limit   , CurrCoiTable1Limit);
-    LMI_ASSERT(0.0                <= CurrCoiTable0Limit);
+    LMI_ASSERT(C0                 <= CurrCoiTable0Limit);
     LMI_ASSERT(CurrCoiTable0Limit <= CurrCoiTable1Limit);
+    // Make sure database contents have no excess precision.
+    LMI_ASSERT(round_specamt().c(CurrCoiTable0Limit) == CurrCoiTable0Limit);
+    LMI_ASSERT(round_specamt().c(CurrCoiTable1Limit) == CurrCoiTable1Limit);
     database().query_into(DB_CoiInforceReentry    , CoiInforceReentry);
     database().query_into(DB_MaxWdDed             , MaxWDDed_);
     database().query_into(DB_MaxWdGenAcctValMult  , MaxWdGenAcctValMult);
@@ -602,6 +605,10 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_AdbLimit             , AdbLimit);
     database().query_into(DB_WpLimit              , WpLimit);
     database().query_into(DB_SpecAmtLoadLimit     , SpecAmtLoadLimit);
+    // Make sure database contents have no excess precision.
+    LMI_ASSERT(round_specamt().c(AdbLimit)         == AdbLimit);
+    LMI_ASSERT(round_specamt().c(WpLimit)          == WpLimit);
+    LMI_ASSERT(round_specamt().c(SpecAmtLoadLimit) == SpecAmtLoadLimit);
     database().query_into(DB_MinWd                , MinWD);
     database().query_into(DB_WdFee                , WDFee);
     // Make sure database contents have no excess precision.
@@ -1146,11 +1153,7 @@ std::pair<double,double> BasicValues::approx_mly_ded
     if(yare_input_.AccidentalDeathBenefit)
         {
         double const r = MortalityRates_->AdbRates()[year];
-        // CURRENCY !! Here and elsewhere in this file, consider
-        // letting currency objects assume infinite values--so that
-        // 'AdbLimit' could be of currency type, and dblize() would
-        // not be needed.
-        mly_ded += r * std::min(dblize(specamt), AdbLimit);
+        mly_ded += r * std::min(specamt, AdbLimit);
         }
 
     if(yare_input_.SpouseRider)
@@ -1168,7 +1171,7 @@ std::pair<double,double> BasicValues::approx_mly_ded
     if(true) // Written thus for parallelism and to keep 'r' local.
         {
         double const r = Loads_->specified_amount_load(mce_gen_curr)[year];
-        mly_ded += r * std::min(dblize(specamt), SpecAmtLoadLimit);
+        mly_ded += r * std::min(specamt, SpecAmtLoadLimit);
         }
 
     mly_ded += dblize(Loads_->monthly_policy_fee(mce_gen_curr)[year]);
@@ -1182,7 +1185,7 @@ std::pair<double,double> BasicValues::approx_mly_ded
             {
             case oe_waiver_times_specamt:
                 {
-                mly_ded += r * std::min(dblize(specamt), WpLimit);
+                mly_ded += r * std::min(specamt, WpLimit);
                 }
                 break;
             case oe_waiver_times_deductions:
@@ -1240,7 +1243,7 @@ std::pair<double,double> BasicValues::approx_mly_ded_ex
     if(yare_input_.AccidentalDeathBenefit)
         {
         double const r = MortalityRates_->AdbRates()[year];
-        er_ded += r * std::min(dblize(specamt), AdbLimit);
+        er_ded += r * std::min(specamt, AdbLimit);
         }
 
     // Paid by ee.
@@ -1261,7 +1264,7 @@ std::pair<double,double> BasicValues::approx_mly_ded_ex
     if(true) // Written thus for parallelism and to keep 'r' local.
         {
         double const r = Loads_->specified_amount_load(mce_gen_curr)[year];
-        er_ded += r * std::min(dblize(specamt), SpecAmtLoadLimit);
+        er_ded += r * std::min(specamt, SpecAmtLoadLimit);
         }
 
     // Paid by er.
@@ -1275,7 +1278,7 @@ std::pair<double,double> BasicValues::approx_mly_ded_ex
             case oe_waiver_times_specamt:
                 {
                 // Paid by er. (In this case, WP excludes term.)
-                er_ded += r * std::min(dblize(specamt), WpLimit);
+                er_ded += r * std::min(specamt, WpLimit);
                 }
                 break;
             case oe_waiver_times_deductions:
@@ -1569,11 +1572,11 @@ std::vector<double> const& BasicValues::GetBandedCoiRates
 {
     if(UseUnusualCOIBanding && mce_gen_guar != rate_basis)
         {
-        if(CurrCoiTable0Limit <= dblize(a_specamt) && dblize(a_specamt) < CurrCoiTable1Limit)
+        if(CurrCoiTable0Limit <= a_specamt && a_specamt < CurrCoiTable1Limit)
             {
             return MortalityRates_->MonthlyCoiRatesBand1(rate_basis);
             }
-        else if(CurrCoiTable1Limit <= dblize(a_specamt))
+        else if(CurrCoiTable1Limit <= a_specamt)
             {
             return MortalityRates_->MonthlyCoiRatesBand2(rate_basis);
             }
@@ -1956,10 +1959,12 @@ std::vector<double> BasicValues::GetCurrCOIRates0() const
 
 std::vector<double> BasicValues::GetCurrCOIRates1() const
 {
+    static constexpr double dbl_inf = std::numeric_limits<double>::infinity();
+    static const currency inf = from_cents(dbl_inf);
     return GetTable
         (product().datum("CurrCOIFilename")
         ,DB_CurrCoiTable1
-        ,!isinf(CurrCoiTable0Limit)
+        ,CurrCoiTable0Limit < inf
         ,CanBlend
         ,CanBlend
         );
@@ -1967,10 +1972,12 @@ std::vector<double> BasicValues::GetCurrCOIRates1() const
 
 std::vector<double> BasicValues::GetCurrCOIRates2() const
 {
+    static constexpr double dbl_inf = std::numeric_limits<double>::infinity();
+    static const currency inf = from_cents(dbl_inf);
     return GetTable
         (product().datum("CurrCOIFilename")
         ,DB_CurrCoiTable2
-        ,!isinf(CurrCoiTable1Limit)
+        ,CurrCoiTable1Limit < inf
         ,CanBlend
         ,CanBlend
         );

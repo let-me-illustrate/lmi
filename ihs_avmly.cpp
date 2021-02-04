@@ -1566,7 +1566,9 @@ void AccountValue::TxSetBOMAV()
             {
             LMI_ASSERT(C0 == term_specamt(0));
             }
-        LMI_ASSERT(yare_input_.InforceSpecAmtLoadBase <= SpecAmtLoadLimit);
+        // CURRENCY !! Should yare_input convert currency inputs to
+        // type currency, which is more yare than double?
+        LMI_ASSERT(yare_input_.InforceSpecAmtLoadBase <= dblize(SpecAmtLoadLimit));
         SpecAmtLoadBase =
             (0 == Year && 0 == Month)
             ? std::max
@@ -1575,8 +1577,7 @@ void AccountValue::TxSetBOMAV()
                 )
             : round_specamt().c(yare_input_.InforceSpecAmtLoadBase)
             ;
-        // CURRENCY !! support infinities?
-        SpecAmtLoadBase = round_specamt().c(std::min(dblize(SpecAmtLoadBase), SpecAmtLoadLimit));
+        SpecAmtLoadBase = std::min(SpecAmtLoadBase, SpecAmtLoadLimit);
         }
 
     // These assignments must happen every month.
@@ -1825,7 +1826,7 @@ void AccountValue::TxSetRiderDed()
     if(yare_input_.AccidentalDeathBenefit)
         {
         AdbCharge = round_rider_charges().c
-            (YearsAdbRate * std::min(dblize(ActualSpecAmt), AdbLimit)
+            (YearsAdbRate * std::min(ActualSpecAmt, AdbLimit)
             );
         }
 
@@ -1868,7 +1869,7 @@ void AccountValue::TxSetRiderDed()
             case oe_waiver_times_specamt:
                 {
                 WpCharge = round_rider_charges().c
-                    (YearsWpRate * std::min(dblize(ActualSpecAmt), WpLimit)
+                    (YearsWpRate * std::min(ActualSpecAmt, WpLimit)
                     );
                 DcvWpCharge = dblize(WpCharge);
                 }

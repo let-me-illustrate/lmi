@@ -338,8 +338,8 @@ class LMI_SO BasicValues
     oenum_modal_prem_type        TgtPremType;
     bool                         TgtPremFixedAtIssue;
     currency                     TgtPremMonthlyPolFee;
-    double                       CurrCoiTable0Limit; // CURRENCY !! may be infinity
-    double                       CurrCoiTable1Limit; // CURRENCY !! may be infinity
+    currency                     CurrCoiTable0Limit;
+    currency                     CurrCoiTable1Limit;
     e_actuarial_table_method     CoiInforceReentry;
     mcenum_anticipated_deduction MaxWDDed_;
     double                       MaxWdGenAcctValMult;
@@ -357,9 +357,9 @@ class LMI_SO BasicValues
     bool                         SurrChgOnDecr;
     std::vector<double>          FreeWDProportion;
 
-    double                  AdbLimit; // CURRENCY !! may be infinity
-    double                  WpLimit; // CURRENCY !! may be infinity
-    double                  SpecAmtLoadLimit; // CURRENCY !! may be infinity
+    currency                AdbLimit;
+    currency                WpLimit;
+    currency                SpecAmtLoadLimit;
     currency                MinWD;
     currency                WDFee;
     double                  WDFeeRate;
