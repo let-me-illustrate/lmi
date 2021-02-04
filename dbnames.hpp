@@ -158,6 +158,8 @@ enum e_database_key
         ,DB_AllowCvat
         ,DB_AllowGpt
         ,DB_AllowNo7702
+        ,DB_AnnInterestRate7702
+        ,DB_MlyDiscountRate7702
         ,DB_Irc7702Obreption
 
         ,DB_CorridorWhence

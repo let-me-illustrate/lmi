@@ -147,6 +147,8 @@ void DBDictionary::ascribe_members()
     ascribe("AllowCvat"                 , &DBDictionary::AllowCvat                 );
     ascribe("AllowGpt"                  , &DBDictionary::AllowGpt                  );
     ascribe("AllowNo7702"               , &DBDictionary::AllowNo7702               );
+    ascribe("AnnInterestRate7702"       , &DBDictionary::AnnInterestRate7702       );
+    ascribe("MlyDiscountRate7702"       , &DBDictionary::MlyDiscountRate7702       );
     ascribe("Irc7702Obreption"          , &DBDictionary::Irc7702Obreption          );
     ascribe("CorridorWhence"            , &DBDictionary::CorridorWhence            );
     ascribe("Irc7702NspWhence"          , &DBDictionary::Irc7702NspWhence          );
@@ -772,6 +774,12 @@ void DBDictionary::InitDB()
     int ptd[e_number_of_axes] = {1, 1, 1, 1, 1, e_max_dim_state, 1};
     std::vector<int> premium_tax_dimensions(ptd, ptd + e_number_of_axes);
     Add({DB_PremTaxRate, premium_tax_dimensions, premium_tax_rates_for_life_insurance()});
+
+    // This is determined by law, in a way that varies by product;
+    // all pre-2021 products use this default.
+    Add({DB_AnnInterestRate7702 , 0.04});
+    // This probably should correspond to the annual 7702 rate.
+    Add({DB_MlyDiscountRate7702 , 0.0032737});
 
     Add({DB_MaxIssSpecAmt       , dbl_inf});
     Add({DB_MaxRenlSpecAmt      , dbl_inf});
