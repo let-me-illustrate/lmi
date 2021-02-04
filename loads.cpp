@@ -34,21 +34,10 @@
 #include "mc_enum_types_aux.hpp"        // mc_n_ enumerators
 #include "oecumenic_enumerations.hpp"
 #include "premium_tax.hpp"
+#include "round_to.hpp"
 
 namespace
 {
-void query_into
-    (product_database const& database
-    ,e_database_key          key
-    ,std::vector<currency>&  v
-    ,round_to<double> const& round_minutiae
-    )
-{
-    std::vector<double> z;
-    database.query_into(key, z);
-    v = round_minutiae.c(z);
-}
-
 void assign_midpoint
     (std::vector<currency>      & out
     ,std::vector<currency> const& in_0
@@ -151,8 +140,8 @@ void Loads::Initialize(product_database const& database, load_details const& det
     database.query_into(DB_LoadRfdProportion , refundable_sales_load_proportion_   );
     database.query_into(DB_DacTaxPremLoad    , dac_tax_load_                       );
 
-    query_into(database, DB_GuarMonthlyPolFee, monthly_policy_fee_   [mce_gen_guar], r);
-    query_into(database, DB_GuarAnnualPolFee , annual_policy_fee_    [mce_gen_guar], r);
+    database.query_into(DB_GuarMonthlyPolFee , monthly_policy_fee_   [mce_gen_guar]);
+    database.query_into(DB_GuarAnnualPolFee  , annual_policy_fee_    [mce_gen_guar]);
     database.query_into(DB_GuarSpecAmtLoad   , specified_amount_load_[mce_gen_guar]);
     database.query_into(DB_GuarAcctValLoad   , separate_account_load_[mce_gen_guar]);
     database.query_into(DB_GuarPremLoadTgt   , target_premium_load_  [mce_gen_guar]);
@@ -160,14 +149,32 @@ void Loads::Initialize(product_database const& database, load_details const& det
     database.query_into(DB_GuarPremLoadTgtRfd, target_sales_load_    [mce_gen_guar]);
     database.query_into(DB_GuarPremLoadExcRfd, excess_sales_load_    [mce_gen_guar]);
 
-    query_into(database, DB_CurrMonthlyPolFee, monthly_policy_fee_   [mce_gen_curr], r);
-    query_into(database, DB_CurrAnnualPolFee , annual_policy_fee_    [mce_gen_curr], r);
+    database.query_into(DB_CurrMonthlyPolFee , monthly_policy_fee_   [mce_gen_curr]);
+    database.query_into(DB_CurrAnnualPolFee  , annual_policy_fee_    [mce_gen_curr]);
     database.query_into(DB_CurrSpecAmtLoad   , specified_amount_load_[mce_gen_curr]);
     database.query_into(DB_CurrAcctValLoad   , separate_account_load_[mce_gen_curr]);
     database.query_into(DB_CurrPremLoadTgt   , target_premium_load_  [mce_gen_curr]);
     database.query_into(DB_CurrPremLoadExc   , excess_premium_load_  [mce_gen_curr]);
     database.query_into(DB_CurrPremLoadTgtRfd, target_sales_load_    [mce_gen_curr]);
     database.query_into(DB_CurrPremLoadExcRfd, excess_sales_load_    [mce_gen_curr]);
+
+    // Make sure database contents have no excess precision.
+    LMI_ASSERT(std::operator==
+        (r.c(monthly_policy_fee_   [mce_gen_guar])
+        ,    monthly_policy_fee_   [mce_gen_guar]
+        ));
+    LMI_ASSERT(std::operator==
+        (r.c(annual_policy_fee_    [mce_gen_guar])
+        ,    annual_policy_fee_    [mce_gen_guar]
+        ));
+    LMI_ASSERT(std::operator==
+        (r.c(monthly_policy_fee_   [mce_gen_curr])
+        ,    monthly_policy_fee_   [mce_gen_curr]
+        ));
+    LMI_ASSERT(std::operator==
+        (r.c(annual_policy_fee_    [mce_gen_curr])
+        ,    annual_policy_fee_    [mce_gen_curr]
+        ));
 }
 
 /// Transform raw input and database data into directly-useful rates.
@@ -380,15 +387,25 @@ Loads::Loads(product_database const& database, bool NeedMidpointRates)
     excess_premium_load_  .resize(mc_n_gen_bases);
     specified_amount_load_.resize(mc_n_gen_bases);
 
-    query_into(database, DB_GuarMonthlyPolFee, monthly_policy_fee_   [mce_gen_guar], r);
+    database.query_into(DB_GuarMonthlyPolFee , monthly_policy_fee_   [mce_gen_guar]);
     database.query_into(DB_GuarPremLoadTgt   , target_premium_load_  [mce_gen_guar]);
     database.query_into(DB_GuarPremLoadExc   , excess_premium_load_  [mce_gen_guar]);
     database.query_into(DB_GuarSpecAmtLoad   , specified_amount_load_[mce_gen_guar]);
 
-    query_into(database, DB_CurrMonthlyPolFee, monthly_policy_fee_   [mce_gen_curr], r);
+    database.query_into(DB_CurrMonthlyPolFee , monthly_policy_fee_   [mce_gen_curr]);
     database.query_into(DB_CurrPremLoadTgt   , target_premium_load_  [mce_gen_curr]);
     database.query_into(DB_CurrPremLoadExc   , excess_premium_load_  [mce_gen_curr]);
     database.query_into(DB_CurrSpecAmtLoad   , specified_amount_load_[mce_gen_curr]);
+
+    // Make sure database contents have no excess precision.
+    LMI_ASSERT(std::operator==
+        (r.c(monthly_policy_fee_   [mce_gen_guar])
+        ,    monthly_policy_fee_   [mce_gen_guar]
+        ));
+    LMI_ASSERT(std::operator==
+        (r.c(monthly_policy_fee_   [mce_gen_curr])
+        ,    monthly_policy_fee_   [mce_gen_curr]
+        ));
 
     // This ctor ignores tabular specified-amount loads.
 
