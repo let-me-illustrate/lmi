@@ -556,10 +556,15 @@ currency BasicValues::GetAnnualTgtPrem(int a_year, currency a_specamt) const
 
 void BasicValues::SetPermanentInvariants()
 {
-    MinIssSpecAmt      = round_specamt().c(database().query<double>(DB_MinIssSpecAmt     ));
-    MinIssBaseSpecAmt  = round_specamt().c(database().query<double>(DB_MinIssBaseSpecAmt ));
-    MinRenlSpecAmt     = round_specamt().c(database().query<double>(DB_MinRenlSpecAmt    ));
-    MinRenlBaseSpecAmt = round_specamt().c(database().query<double>(DB_MinRenlBaseSpecAmt));
+    database().query_into(DB_MinIssSpecAmt        , MinIssSpecAmt);
+    database().query_into(DB_MinIssBaseSpecAmt    , MinIssBaseSpecAmt);
+    database().query_into(DB_MinRenlSpecAmt       , MinRenlSpecAmt);
+    database().query_into(DB_MinRenlBaseSpecAmt   , MinRenlBaseSpecAmt);
+    // Make sure database contents have no excess precision.
+    LMI_ASSERT(round_specamt().c(MinIssSpecAmt     ) == MinIssSpecAmt     );
+    LMI_ASSERT(round_specamt().c(MinIssBaseSpecAmt ) == MinIssBaseSpecAmt );
+    LMI_ASSERT(round_specamt().c(MinRenlSpecAmt    ) == MinRenlSpecAmt    );
+    LMI_ASSERT(round_specamt().c(MinRenlBaseSpecAmt) == MinRenlBaseSpecAmt);
     database().query_into(DB_NoLapseDboLvlOnly    , NoLapseDboLvlOnly);
     database().query_into(DB_NoLapseUnratedOnly   , NoLapseUnratedOnly);
     database().query_into(DB_DboChgCanIncrSpecAmt , OptChgCanIncrSA);
@@ -575,7 +580,9 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_MinPremType          , MinPremType);
     database().query_into(DB_TgtPremType          , TgtPremType);
     database().query_into(DB_TgtPremFixedAtIssue  , TgtPremFixedAtIssue);
-    TgtPremMonthlyPolFee = round_gross_premium().c(database().query<double>(DB_TgtPremMonthlyPolFee));
+    database().query_into(DB_TgtPremMonthlyPolFee , TgtPremMonthlyPolFee);
+    // Make sure database contents have no excess precision.
+    LMI_ASSERT(round_gross_premium().c(TgtPremMonthlyPolFee) == TgtPremMonthlyPolFee);
     // Assertion: see comments on GetModalPremTgtFromTable().
     LMI_ASSERT(C0 == TgtPremMonthlyPolFee || oe_modal_table == TgtPremType);
     database().query_into(DB_CurrCoiTable0Limit   , CurrCoiTable0Limit);
@@ -595,8 +602,11 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_AdbLimit             , AdbLimit);
     database().query_into(DB_WpLimit              , WpLimit);
     database().query_into(DB_SpecAmtLoadLimit     , SpecAmtLoadLimit);
-    MinWD = round_withdrawal().c(database().query<double>(DB_MinWd));
-    WDFee = round_withdrawal().c(database().query<double>(DB_WdFee));
+    database().query_into(DB_MinWd                , MinWD);
+    database().query_into(DB_WdFee                , WDFee);
+    // Make sure database contents have no excess precision.
+    LMI_ASSERT(round_withdrawal().c(MinWD) == MinWD);
+    LMI_ASSERT(round_withdrawal().c(WDFee) == WDFee);
     database().query_into(DB_WdFeeRate            , WDFeeRate);
     database().query_into(DB_AllowChangeToDbo2    , AllowChangeToDBO2);
     database().query_into(DB_AllowSpecAmtIncr     , AllowSAIncr);
