@@ -388,6 +388,10 @@ void BasicValues::Init7702()
         ,MlyDcvqc.begin()
         ,round_coi_rate()
         );
+    // Temporary test scaffolding:
+    std::vector<double> MlyDcvqc2;
+    MlyDcvqc2 = round_coi_rate()(Mly7702qc);
+    LMI_ASSERT(std::operator==(MlyDcvqc2, MlyDcvqc));
 
     // Monthly guar net int for 7702, with 4 or 6% min, is
     //   greater of {4%, 6%} and annual guar int rate
