@@ -26,6 +26,8 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "death_benefits.hpp"
+#include "ihs_irc7702.hpp"              // dtor only, for (unused) unique_ptr
+#include "ihs_irc7702a.hpp"             // dtor only, for (unused) unique_ptr
 #include "input.hpp"
 #include "interest_rates.hpp"
 #include "loads.hpp"

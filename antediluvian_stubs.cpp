@@ -21,8 +21,10 @@
 
 #include "pchfile.hpp"
 
+#include "commutation_functions.hpp"
 #include "fund_data.hpp"
 #include "gpt_server.hpp"
+#include "ihs_irc7702.hpp"
 #include "lingo.hpp"
 #include "lmi.hpp"                      // is_antediluvian_fork()
 #include "mec_server.hpp"
@@ -66,6 +68,8 @@ int FundData::GetNumberOfFunds() const
 {
     return 0;
 }
+
+Irc7702::~Irc7702() = default;
 
 gpt_server::gpt_server(mcenum_emission)
 {}

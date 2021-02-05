@@ -35,7 +35,7 @@
 #include "so_attributes.hpp"
 #include "yare_input.hpp"
 
-#include <memory>                       // shared_ptr
+#include <memory>                       // shared_ptr, unique_ptr
 #include <string>
 #include <utility>                      // pair
 #include <vector>
@@ -126,14 +126,14 @@ class LMI_SO BasicValues
     std::shared_ptr<rounding_rules     const> RoundingRules_;
     std::shared_ptr<stratified_charges const> StratifiedCharges_;
 
-    std::shared_ptr<MortalityRates>     MortalityRates_;
-    std::shared_ptr<InterestRates>      InterestRates_;
-    std::shared_ptr<death_benefits>     DeathBfts_;
-    std::shared_ptr<modal_outlay>       Outlay_;
-    std::shared_ptr<premium_tax>        PremiumTax_;
-    std::shared_ptr<Loads>              Loads_;
-    std::shared_ptr<Irc7702>            Irc7702_;
-    std::shared_ptr<Irc7702A>           Irc7702A_;
+    std::unique_ptr<MortalityRates>     MortalityRates_;
+    std::unique_ptr<InterestRates>      InterestRates_;
+    std::unique_ptr<death_benefits>     DeathBfts_;
+    std::unique_ptr<modal_outlay>       Outlay_;
+    std::unique_ptr<premium_tax>        PremiumTax_;
+    std::unique_ptr<Loads>              Loads_;
+    std::unique_ptr<Irc7702>            Irc7702_;
+    std::unique_ptr<Irc7702A>           Irc7702A_;
 
     product_data     const& product () const {return *product_;}
     product_database const& database() const {return database_;}
