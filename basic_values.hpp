@@ -96,7 +96,7 @@ class LMI_SO BasicValues
         ,double             a_TargetPremium
         );
     BasicValues(BasicValues&&) = default;
-    virtual ~BasicValues() = default;
+    virtual ~BasicValues();
 
     void Init();
 

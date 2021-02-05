@@ -204,9 +204,10 @@ Irc7702::Irc7702
 
 /// Destructor.
 ///
-/// Although it is explicitly defaulted, this destructor cannot be
-/// implemented inside the class definition, where a class type that
-/// it depends upon is incomplete.
+/// Although it is explicitly defaulted, this destructor is not
+/// implemented inside the class definition, because the header
+/// forward-declares one or more classes that are held by
+/// std::unique_ptr, so their destructors are visible only here.
 
 Irc7702::~Irc7702() = default;
 

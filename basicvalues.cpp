@@ -85,6 +85,15 @@ BasicValues::BasicValues(Input const& input)
     Init();
 }
 
+/// Destructor.
+///
+/// Although it is explicitly defaulted, this destructor is not
+/// implemented inside the class definition, because the header
+/// forward-declares one or more classes that are held by
+/// std::unique_ptr, so their destructors are visible only here.
+
+BasicValues::~BasicValues() = default;
+
 //============================================================================
 void BasicValues::Init()
 {
