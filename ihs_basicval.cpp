@@ -257,14 +257,29 @@ void BasicValues::Init()
 
     // Mortality and interest rates require database and rounding.
     // Interest rates require tiered data and 7702 spread.
-    MortalityRates_.reset(new MortalityRates (*this));
-    InterestRates_ .reset(new InterestRates  (*this));
-    DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_, round_specamt_));
+    MortalityRates_ = std::make_unique<MortalityRates>(*this);
+    InterestRates_  = std::make_unique<InterestRates >(*this);
+    DeathBfts_      = std::make_unique<death_benefits>
+        (GetLength()
+        ,yare_input_
+        ,round_specamt_
+        );
     // Outlay requires only input and rounding; it might someday use
     // interest rates.
-    Outlay_        .reset(new modal_outlay   (yare_input_, round_gross_premium_, round_withdrawal_, round_loan_));
-    PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, StateOfDomicile_, yare_input_.AmortizePremiumLoad, database(), *StratifiedCharges_));
-    Loads_         .reset(new Loads          (*this));
+    Outlay_         = std::make_unique<modal_outlay>
+        (yare_input_
+        ,round_gross_premium_
+        ,round_withdrawal_
+        ,round_loan_
+        );
+    PremiumTax_     = std::make_unique<premium_tax>
+        (PremiumTaxState_
+        ,StateOfDomicile_
+        ,yare_input_.AmortizePremiumLoad
+        ,database()
+        ,*StratifiedCharges_
+        );
+    Loads_          = std::make_unique<Loads>(*this);
 
     SetMaxSurvivalDur();
     set_partial_mortality();
@@ -486,62 +501,58 @@ void BasicValues::Init7702()
     // to be determined by a strategy, but a downstream call to
     // Irc7702::Initialize7702() takes care of that.
 
-    Irc7702_.reset
-        (new Irc7702
-            (yare_input_.DefinitionOfLifeInsurance
-            ,yare_input_.IssueAge
-            ,EndtAge
-            ,Mly7702qc
-            ,Mly7702iGlp
-            ,Mly7702iGsp
-            ,Mly7702ig
-            ,SpreadFor7702_
-            ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
-            ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
-            ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
-            ,effective_dbopt_7702(yare_input_.DeathBenefitOption[0], Effective7702DboRop)
-            ,dblize(Loads_->annual_policy_fee  (mce_gen_curr))
-            ,dblize(Loads_->monthly_policy_fee (mce_gen_curr))
-            ,Loads_->specified_amount_load     (mce_gen_curr)
-            ,dblize(SpecAmtLoadLimit)
-            ,local_mly_charge_add
-            ,local_adb_limit
+    Irc7702_= std::make_unique<Irc7702>
+        (yare_input_.DefinitionOfLifeInsurance
+        ,yare_input_.IssueAge
+        ,EndtAge
+        ,Mly7702qc
+        ,Mly7702iGlp
+        ,Mly7702iGsp
+        ,Mly7702ig
+        ,SpreadFor7702_
+        ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
+        ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
+        ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
+        ,effective_dbopt_7702(yare_input_.DeathBenefitOption[0], Effective7702DboRop)
+        ,dblize(Loads_->annual_policy_fee  (mce_gen_curr))
+        ,dblize(Loads_->monthly_policy_fee (mce_gen_curr))
+        ,Loads_->specified_amount_load     (mce_gen_curr)
+        ,dblize(SpecAmtLoadLimit)
+        ,local_mly_charge_add
+        ,local_adb_limit
 /// TAXATION !! No contemporary authority seems to believe that a
 /// change in the premium-tax rate, even if passed through to the
 /// policyowner, is a 7702A material change or a GPT adjustment event.
 /// These loads should instead reflect the lowest premium-tax rate.
-            ,Loads_->target_premium_load_excluding_premium_tax()
-            ,Loads_->excess_premium_load_excluding_premium_tax()
-            ,InitialTargetPremium
-            ,round_min_premium()
-            ,round_max_premium()
-            ,round_min_specamt()
-            ,round_max_specamt()
-            ,yare_input_.InforceYear
-            ,yare_input_.InforceMonth
-            ,yare_input_.InforceGlp
-            ,yare_input_.InforceCumulativeGlp
-            ,yare_input_.InforceGsp
-            ,yare_input_.InforceCumulativeGptPremiumsPaid
-            )
+        ,Loads_->target_premium_load_excluding_premium_tax()
+        ,Loads_->excess_premium_load_excluding_premium_tax()
+        ,InitialTargetPremium
+        ,round_min_premium()
+        ,round_max_premium()
+        ,round_min_specamt()
+        ,round_max_specamt()
+        ,yare_input_.InforceYear
+        ,yare_input_.InforceMonth
+        ,yare_input_.InforceGlp
+        ,yare_input_.InforceCumulativeGlp
+        ,yare_input_.InforceGsp
+        ,yare_input_.InforceCumulativeGptPremiumsPaid
         );
 }
 
 //============================================================================
 void BasicValues::Init7702A()
 {
-    Irc7702A_.reset
-        (new Irc7702A
-            (DefnLifeIns_
-            ,DefnMaterialChange_
-            ,false // TODO ?? TAXATION !! Joint life: hardcoded for now.
-            ,yare_input_.AvoidMecMethod
-            ,true  // TODO ?? TAXATION !! Use table for 7pp: hardcoded for now.
-            ,true  // TODO ?? TAXATION !! Use table for NSP: hardcoded for now.
-            ,MortalityRates_->SevenPayRates()
-            ,MortalityRates_->CvatNspRates()
-            ,round_max_premium()
-            )
+    Irc7702A_= std::make_unique<Irc7702A>
+        (DefnLifeIns_
+        ,DefnMaterialChange_
+        ,false // TODO ?? TAXATION !! Joint life: hardcoded for now.
+        ,yare_input_.AvoidMecMethod
+        ,true  // TODO ?? TAXATION !! Use table for 7pp: hardcoded for now.
+        ,true  // TODO ?? TAXATION !! Use table for NSP: hardcoded for now.
+        ,MortalityRates_->SevenPayRates()
+        ,MortalityRates_->CvatNspRates()
+        ,round_max_premium()
         );
 }
 

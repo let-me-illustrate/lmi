@@ -123,12 +123,27 @@ void BasicValues::Init()
     SpreadFor7702_.assign(Length, 0.0);
 
     // Multilife contracts will need a vector of mortality-rate objects.
-    MortalityRates_.reset(new MortalityRates (*this));
-    InterestRates_ .reset(new InterestRates  (*this));
-    DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_, round_specamt_));
-    Outlay_        .reset(new modal_outlay   (yare_input_, round_gross_premium_, round_withdrawal_, round_loan_));
-    PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, database()));
-    Loads_         .reset(new Loads(database(), IsSubjectToIllustrationReg()));
+    MortalityRates_ = std::make_unique<MortalityRates>(*this);
+    InterestRates_  = std::make_unique<InterestRates >(*this);
+    DeathBfts_      = std::make_unique<death_benefits>
+        (GetLength()
+        ,yare_input_
+        ,round_specamt_
+        );
+    Outlay_         = std::make_unique<modal_outlay>
+        (yare_input_
+        ,round_gross_premium_
+        ,round_withdrawal_
+        ,round_loan_
+        );
+    PremiumTax_     = std::make_unique<premium_tax>
+        (PremiumTaxState_
+        ,database()
+        );
+    Loads_          = std::make_unique<Loads>
+        (database()
+        ,IsSubjectToIllustrationReg()
+        );
 
     MinSpecAmt = round_specamt   ().c(database().query<double>(DB_MinSpecAmt));
     MinWD      = round_withdrawal().c(database().query<double>(DB_MinWd     ));
