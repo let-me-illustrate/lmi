@@ -2996,13 +2996,13 @@ bool database::exists(fs::path const& path)
 }
 
 database::database()
-    :impl_ {new database_impl(fs::path())}
+    :impl_ {::new database_impl(fs::path())}
 {
 }
 
 database::database(fs::path const& path)
 try
-    :impl_ {new database_impl(path)}
+    :impl_ {::new database_impl(path)}
 {
 }
 catch(std::runtime_error const& e)
@@ -3020,7 +3020,7 @@ database::database
     ,std::shared_ptr<std::istream> data_is
     )
 try
-    :impl_ {new database_impl(index_is, data_is)}
+    :impl_ {::new database_impl(index_is, data_is)}
 {
 }
 catch(std::runtime_error const& e)

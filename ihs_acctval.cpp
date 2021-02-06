@@ -93,9 +93,9 @@ AccountValue::AccountValue(Input const& input)
     ,Solving               {mce_solve_none != BasicValues::yare_input_.SolveType}
     ,SolvingForGuarPremium {false}
     ,ItLapsed              {false}
-    ,ledger_{new Ledger(BasicValues::GetLength(), BasicValues::ledger_type(), BasicValues::nonillustrated(), BasicValues::no_can_issue(), false)}
-    ,ledger_invariant_     {new LedgerInvariant(BasicValues::GetLength())}
-    ,ledger_variant_       {new LedgerVariant  (BasicValues::GetLength())}
+    ,ledger_{::new Ledger(BasicValues::GetLength(), BasicValues::ledger_type(), BasicValues::nonillustrated(), BasicValues::no_can_issue(), false)}
+    ,ledger_invariant_     {::new LedgerInvariant(BasicValues::GetLength())}
+    ,ledger_variant_       {::new LedgerVariant  (BasicValues::GetLength())}
     ,SolveGenBasis_        {mce_gen_curr}
     ,SolveSepBasis_        {mce_sep_full}
     ,RunBasis_             {mce_run_gen_curr_sep_full}

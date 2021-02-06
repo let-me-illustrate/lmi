@@ -82,7 +82,7 @@ void Input::DoAdaptExternalities()
     CachedStateOfJurisdiction_   = StateOfJurisdiction  .value();
 
     database_.reset
-        (new product_database
+        (::new product_database
             (CachedProductName_
             ,CachedGender_
             ,CachedUnderwritingClass_

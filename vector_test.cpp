@@ -172,7 +172,7 @@ class simple_array0
     simple_array0(int n, double d = 0.0)
         :length_ {n}
         {
-        data_ = new double[length_];
+        data_ = ::new double[length_];
         for(int j = 0; j < length_; ++j) data_[j] = d;
         }
 
@@ -198,7 +198,7 @@ class simple_array0
         {
         delete[] data_;
         length_ = new_size;
-        data_ = new double[length_];
+        data_ = ::new double[length_];
         for(int j = 0; j < length_; ++j) data_[j] = j;
         }
 

@@ -227,7 +227,7 @@ std::string calculation_summary_formatter::format_as_html() const
     std::ostringstream oss;
 
     std::locale loc;
-    std::locale new_loc(loc, new comma_punct);
+    std::locale new_loc(loc, ::new comma_punct);
     oss.imbue(new_loc);
     oss.setf(std::ios_base::fixed, std::ios_base::floatfield);
 
@@ -340,7 +340,7 @@ std::string calculation_summary_formatter::format_as_tsv() const
     std::ostringstream oss;
 
     std::locale loc;
-    std::locale new_loc(loc, new comma_punct);
+    std::locale new_loc(loc, ::new comma_punct);
     oss.imbue(new_loc);
     oss.setf(std::ios_base::fixed, std::ios_base::floatfield);
 
@@ -1177,7 +1177,7 @@ std::string ledger_format
         {
         std::stringstream ss {};
         std::locale loc;
-        std::locale new_loc(loc, new comma_punct);
+        std::locale new_loc(loc, ::new comma_punct);
         ss.imbue(new_loc);
         ss.setf(std::ios_base::fixed, std::ios_base::floatfield);
         return ss;

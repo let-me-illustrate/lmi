@@ -435,7 +435,7 @@ Irc7702& gpt_test::instantiate_old(int issue_age)
     assign(adj_qab_adb_rate, qab_adb_rate * adj);
     delete ugliness;
     ugliness =
-        (new Irc7702
+        (::new Irc7702
             (mce_gpt                         // a_Test7702
             ,issue_age                       // a_IssueAge
             ,issue_age + length              // a_EndtAge

@@ -439,7 +439,7 @@ void Irc7702::InitCommFns()
 
     // Commutation functions using 4% min i: both options 1 and 2
     CommFns[Opt1Int4Pct].reset
-        (new ULCommFns
+        (::new ULCommFns
             (Qc
             ,GLPic
             ,glp_naar_disc_rate
@@ -450,7 +450,7 @@ void Irc7702::InitCommFns()
     DEndt[Opt1Int4Pct] = CommFns[Opt1Int4Pct]->aDomega();
 
     CommFns[Opt2Int4Pct].reset
-        (new ULCommFns
+        (::new ULCommFns
             (Qc
             ,GLPic
             ,glp_naar_disc_rate
@@ -462,7 +462,7 @@ void Irc7702::InitCommFns()
 
     // Commutation functions using 6% min i: always option 1
     CommFns[Opt1Int6Pct].reset
-        (new ULCommFns
+        (::new ULCommFns
             (Qc
             ,GSPic
             ,gsp_naar_disc_rate
@@ -1048,7 +1048,7 @@ int main()
 
     Timer timer;
 
-    Irc7702* Irc7702_ = new Irc7702
+    Irc7702* Irc7702_ = ::new Irc7702
         (CVAT
         ,45
         ,100000.0

@@ -75,8 +75,8 @@ Ledger::Ledger
     ,nonillustrated_       {nonillustrated}
     ,no_can_issue_         {no_can_issue}
     ,is_composite_         {is_composite}
-    ,ledger_map_           {new ledger_map_holder}
-    ,ledger_invariant_     {new LedgerInvariant(length)}
+    ,ledger_map_           {::new ledger_map_holder}
+    ,ledger_invariant_     {::new LedgerInvariant(length)}
 {
     SetRunBases(length);
 

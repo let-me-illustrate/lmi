@@ -279,12 +279,12 @@ wxMenuBar* Skeleton::AdjustMenus(wxMenuBar* argument)
 
 /// Create the MDI document manager.
 ///
-/// This uses 'new' rather than 'new(wx)' because the object is
+/// This uses '::new' rather than 'new(wx)' because the object is
 /// explicitly deleted in OnExit().
 
 DocManagerEx* Skeleton::CreateDocManager()
 {
-    return new DocManagerEx;
+    return ::new DocManagerEx;
 }
 
 void Skeleton::InitDocManager()
@@ -1081,10 +1081,10 @@ void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
 
 void Skeleton::UponTestPasting(wxCommandEvent&)
 {
-    // This uses 'new' rather than 'new(wx)' because the object is
+    // This uses '::new' rather than 'new(wx)' because the object is
     // explicitly deleted by calling Destroy(); yet the Destroy()
     // call isn't reached if an exception is thrown.
-    InputSequenceEntry* z = new InputSequenceEntry(frame_, wxID_ANY, "Testing...");
+    InputSequenceEntry* z = ::new InputSequenceEntry(frame_, wxID_ANY, "Testing...");
     LMI_ASSERT(z);
     wxTextCtrl& t = z->text_ctrl();
 

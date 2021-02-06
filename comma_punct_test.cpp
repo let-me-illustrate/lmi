@@ -36,7 +36,7 @@ int test_main(int, char*[])
     std::ostringstream oss;
 
     std::locale loc;
-    std::locale new_loc(loc, new comma_punct);
+    std::locale new_loc(loc, ::new comma_punct);
     oss.imbue(new_loc);
     oss.setf(std::ios_base::fixed, std::ios_base::floatfield);
 

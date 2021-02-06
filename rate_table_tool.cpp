@@ -126,11 +126,11 @@ void merge
     std::unique_ptr<database> table_file;
     if(database::exists(database_filename))
         {
-        table_file.reset(new database(database_filename));
+        table_file.reset(::new database(database_filename));
         }
     else
         {
-        table_file.reset(new database);
+        table_file.reset(::new database);
         }
 
     int count = 0;

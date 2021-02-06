@@ -62,7 +62,7 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
             {
             throw std::runtime_error("File does not exist.");
             }
-        parser_.reset(new DomParser(filename.c_str()));
+        parser_.reset(::new DomParser(filename.c_str()));
         }
     catch(std::exception const& e)
         {
@@ -85,7 +85,7 @@ xml_lmi::dom_parser::dom_parser(char const* data, std::size_t length)
     try
         {
         error_context_ = "Unable to parse xml data: ";
-        parser_.reset(new DomParser(data, length));
+        parser_.reset(::new DomParser(data, length));
         }
     catch(std::exception const& e)
         {
@@ -120,7 +120,7 @@ xml_lmi::dom_parser::dom_parser(std::istream const& is)
             }
         std::string s;
         istream_to_string(is, s);
-        parser_.reset(new DomParser(s.c_str(), 1 + s.size()));
+        parser_.reset(::new DomParser(s.c_str(), 1 + s.size()));
         }
     catch(std::exception const& e)
         {
@@ -202,7 +202,7 @@ xml::element const& xml_lmi::dom_parser::root_node
 }
 
 xml_lmi::xml_document::xml_document(std::string const& root_node_name)
-    :document_ {new xml_lmi::Document(xml::element(root_node_name.c_str()))}
+    :document_ {::new xml_lmi::Document(xml::element(root_node_name.c_str()))}
 {
 }
 

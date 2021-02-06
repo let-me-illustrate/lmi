@@ -466,7 +466,7 @@ census_run_result run_census::operator()
     // If cell_should_be_ignored() is true for all cells, composite
     // length is appropriately zero.
     composite_.reset
-        (new Ledger
+        (::new Ledger
             (composite_length
             ,cells[0].ledger_type()
             ,false

@@ -702,7 +702,7 @@ DocManagerEx* SkeletonTest::CreateDocManager()
 
     // As in the base class version, notice that we must not use 'new(wx)' here
     // as this object is deleted by wxWidgets itself.
-    return new DocManagerTest;
+    return ::new DocManagerTest;
 }
 
 bool SkeletonTest::OnInit()

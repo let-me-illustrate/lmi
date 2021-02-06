@@ -81,7 +81,7 @@ class file_cache
             )
             {
             // Construct before inserting because ctor might throw.
-            retrieved_type value(new T(filename));
+            retrieved_type value(::new T(filename));
 
             // insert() doesn't update the value if the key is already
             // present, so insert a dummy value and then modify it.

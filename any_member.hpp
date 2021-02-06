@@ -181,7 +181,7 @@ holder<ClassType,ValueType>& holder<ClassType,ValueType>::assign
 template<typename ClassType, typename ValueType>
 placeholder* holder<ClassType,ValueType>::clone() const
 {
-    return new holder(object_, held_);
+    return ::new holder(object_, held_);
 }
 
 template<typename ClassType, typename ValueType>
@@ -297,7 +297,7 @@ template<typename ClassType>
 template<typename ValueType>
 any_member<ClassType>::any_member(ClassType* object, ValueType const& value)
     :object_  {object}
-    ,content_ {new holder<ClassType,ValueType>(object, value)}
+    ,content_ {::new holder<ClassType,ValueType>(object, value)}
 {}
 
 template<typename ClassType>
