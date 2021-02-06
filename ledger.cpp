@@ -43,8 +43,8 @@
 //   Ledger Ledger::Clone() const
 //   {
 //       Ledger new_ledger(*this);
-//       new_ledger.ledger_map_       = std::shared_ptr<ledger_map_holder>(new ledger_map_holder(*ledger_map_));
-//       new_ledger.ledger_invariant_ = std::shared_ptr<LedgerInvariant>(new LedgerInvariant(*ledger_invariant_));
+//       new_ledger.ledger_map_       = std::make_shared<ledger_map_holder>(*ledger_map_);
+//       new_ledger.ledger_invariant_ = std::make_shared_ptr<LedgerInvariant>(*ledger_invariant_);
 //       return new_ledger;
 //   }
 // that would make unshared copies? If not, then Clone() would be

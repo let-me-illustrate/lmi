@@ -99,7 +99,7 @@ void premium_tax_test::test_rates()
     // A uniform but nonzero load would elicit a runtime error,
     // because the tiered load is not zero.
     {
-    std::shared_ptr<DBDictionary> x(new DBDictionary);
+    auto x = std::make_shared<DBDictionary>();
     db.db_ = x;
     DBDictionary& dictionary = *x;
 

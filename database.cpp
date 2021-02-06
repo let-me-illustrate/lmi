@@ -226,7 +226,7 @@ namespace
 
 std::shared_ptr<DBDictionary const> antediluvian_db()
 {
-    std::shared_ptr<DBDictionary> z(new DBDictionary);
+    auto z = std::make_shared<DBDictionary>();
     z->InitAntediluvian();
     LMI_ASSERT(z);
     return z;

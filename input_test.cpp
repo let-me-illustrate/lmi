@@ -101,7 +101,7 @@ void input_test::test_product_database()
     Input input;
     yare_input yi(input);
     product_database db(yi);
-    std::shared_ptr<DBDictionary> x(new DBDictionary);
+    auto x = std::make_shared<DBDictionary>();
     db.db_ = x;
     DBDictionary& dictionary = *x;
     dictionary.Add({DB_ChildRiderMinAmt, 25000});
