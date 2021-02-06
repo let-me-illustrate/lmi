@@ -35,6 +35,7 @@
 #include "calendar_date.hpp"
 #include "input_sequence_entry.hpp"
 #include "numeric_io_cast.hpp"
+#include "wx_new.hpp"
 #include "wx_utility.hpp"
 
 #include <wx/button.h>
@@ -93,7 +94,7 @@ Transferor::Transferor(std::string& data, std::string const& name)
 
 wxObject* Transferor::Clone() const
 {
-    return new Transferor(data_, name_);
+    return new(wx) Transferor(data_, name_);
 }
 
 std::string const& Transferor::name() const

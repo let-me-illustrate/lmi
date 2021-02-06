@@ -28,6 +28,7 @@
 #include "contains.hpp"
 #include "global_settings.hpp"
 #include "html.hpp"
+#include "wx_new.hpp"
 
 #include <wx/filesys.h>
 #include <wx/html/htmlcell.h>
@@ -126,7 +127,7 @@ pdf_writer_wx::pdf_writer_wx
 
     // Create the virtual file system object for loading images referenced from
     // HTML and interpret relative paths from the data directory.
-    html_vfs_.reset(new wxFileSystem());
+    html_vfs_.reset(new(wx) wxFileSystem());
     html_vfs_->ChangePathTo
         (global_settings::instance().data_directory().string()
         ,true // argument is a directory, not file path

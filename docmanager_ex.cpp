@@ -151,7 +151,7 @@ void DocManagerEx::UponPreview(wxCommandEvent&)
             );
         return;
         }
-    PreviewFrameEx* frame = new PreviewFrameEx(preview);
+    PreviewFrameEx* frame = new(wx) PreviewFrameEx(preview);
     frame->Center(wxBOTH);
     frame->Initialize();
     frame->Show(true);
@@ -210,7 +210,7 @@ wxDocTemplate* DocManagerEx::SelectDocumentType
     )
 {
     wxArrayString strings;
-    wxDocTemplate** data = new wxDocTemplate*[noTemplates];
+    wxDocTemplate** data = new(wx) wxDocTemplate*[noTemplates];
     int i;
     int n = 0;
 

@@ -222,7 +222,7 @@ wxMDIChildFrame* Skeleton::CreateChildFrame
             frame_->GetActiveChild()
         &&  frame_->GetActiveChild()->IsMaximized()
         ;
-    wxDocMDIChildFrame* child_frame = new wxDocMDIChildFrame
+    wxDocMDIChildFrame* child_frame = new(wx) wxDocMDIChildFrame
         (doc
         ,view
         ,frame_
@@ -683,7 +683,7 @@ bool Skeleton::OnInit()
                 }
         };
 
-        wxLog::SetActiveTarget(new DebugStderrLog);
+        wxLog::SetActiveTarget(new(wx) DebugStderrLog);
 #endif // defined __WXMSW__
 
         if(false == ProcessCommandLine())
@@ -1081,6 +1081,9 @@ void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
 
 void Skeleton::UponTestPasting(wxCommandEvent&)
 {
+    // This uses 'new' rather than 'new(wx)' because the object is
+    // explicitly deleted by calling Destroy(); yet the Destroy()
+    // call isn't reached if an exception is thrown.
     InputSequenceEntry* z = new InputSequenceEntry(frame_, wxID_ANY, "Testing...");
     LMI_ASSERT(z);
     wxTextCtrl& t = z->text_ctrl();

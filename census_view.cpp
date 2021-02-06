@@ -574,7 +574,7 @@ class CensusViewGridCellAttrProvider
 {
   public:
     explicit CensusViewGridCellAttrProvider(wxGrid const* grid)
-        :attrForOddRows_{new wxGridCellAttr()}
+        :attrForOddRows_{new(wx) wxGridCellAttr()}
     {
         // Determine the alternate rows colour automatically from the
         // background colour.
