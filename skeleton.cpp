@@ -1081,11 +1081,7 @@ void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
 
 void Skeleton::UponTestPasting(wxCommandEvent&)
 {
-    // This uses '::new' rather than 'new(wx)' because the object is
-    // explicitly deleted by calling Destroy(); yet the Destroy()
-    // call isn't reached if an exception is thrown.
-    InputSequenceEntry* z = ::new InputSequenceEntry(frame_, wxID_ANY, "Testing...");
-    LMI_ASSERT(z);
+    InputSequenceEntry* z = new(wx) InputSequenceEntry(frame_, wxID_ANY, "Testing...");
     wxTextCtrl& t = z->text_ctrl();
 
     ClipboardEx::SetText("1\r\n2\r\n3\r\n");
