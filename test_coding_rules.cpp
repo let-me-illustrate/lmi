@@ -928,7 +928,7 @@ bool check_reserved_name_exception(std::string const& s)
         ,"_snprintf"
         ,"_vsnprintf"
         ,"_wcsdup"
-    // Compiler specific: gcc.
+    // Compiler specific: gcc, clang.
         ,"__FLOAT_WORD_ORDER__"
         ,"__GLIBCPP__"
         ,"__GNUC_MINOR__"
@@ -943,7 +943,11 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__asm__"
         ,"__attribute__"
         ,"__clang__"
+        ,"__class_type_info"
         ,"__cxa_demangle"
+        ,"__cxa_rethrow"
+        ,"__cxa_throw"
+        ,"__dynamic_cast"
     // Compiler specific: gcc, Cygwin.
         ,"__CYGWIN__"
     // Compiler specific: gcc, MinGW.

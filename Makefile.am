@@ -377,6 +377,7 @@ liblmi_common_sources = \
     system_command.cpp \
     timer.cpp \
     tn_range_types.cpp \
+    unwind.cpp \
     xml_lmi.cpp \
     yare_input.cpp
 
@@ -574,7 +575,8 @@ common_test_objects = \
     alert_cli.cpp \
     fenv_lmi.cpp \
     getopt.cpp \
-    license.cpp
+    license.cpp \
+    unwind.cpp
 
 test_account_value_SOURCES = \
   $(common_test_objects) \
@@ -1485,6 +1487,7 @@ noinst_HEADERS = \
     tn_range_type_trammels.hpp \
     tn_range_types.hpp \
     transferor.hpp \
+    unwind.hpp \
     value_cast.hpp \
     verify_products.hpp \
     version.hpp \

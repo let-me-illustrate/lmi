@@ -243,6 +243,7 @@ common_common_objects := \
   system_command.o \
   timer.o \
   tn_range_types.o \
+  unwind.o \
   xml_lmi.o \
   yare_input.o \
 
@@ -488,6 +489,7 @@ common_test_objects := \
   fenv_lmi.o \
   getopt.o \
   license.o \
+  unwind.o \
 
 # List required object files explicitly for each test unless several
 # dozen are required. List only object files, not libraries, to avoid

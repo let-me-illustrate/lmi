@@ -916,6 +916,7 @@ REQUIRED_LDFLAGS = \
   $(addprefix -L , $(all_library_directories)) \
   $(EXTRA_LDFLAGS) \
   $(REQUIRED_LIBS) \
+  $(EXTRA_LIBS) \
 
 # The '--use-temp-file' windres option seems to be often helpful and
 # never harmful.

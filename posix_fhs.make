@@ -28,6 +28,8 @@ SHREXT := .so
 
 PERFORM :=
 
+EXTRA_LIBS := -ldw -lunwind -ldl
+
 platform_boost_libraries := \
   -lboost_filesystem-gcc \
 

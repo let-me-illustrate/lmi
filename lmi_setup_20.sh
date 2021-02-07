@@ -93,9 +93,11 @@ apt-get --assume-yes install \
   jing \
   libarchive-tools \
   libc6-dbg \
+  libdw-dev \
   libgtk-3-dev \
   libtool \
   libxml2-utils \
+  libunwind-dev \
   libxslt1-dev \
   make \
   patch \
