@@ -31,6 +31,7 @@
 #include <cstdlib>                      // free()
 #include <cxxabi.h>
 #include <dlfcn.h>
+#include <elfutils/libdwfl.h>
 #include <exception>
 #include <execinfo.h>
 #include <libunwind.h>
@@ -118,21 +119,36 @@ void fail(char const* msg)
 
 void print_backtrace()
 {
+    // Initialize libdw.
+    char* debuginfo_path     = 0;
+    Dwfl_Callbacks callbacks = {};
+    callbacks.find_elf       = dwfl_linux_proc_find_elf;
+    callbacks.find_debuginfo = dwfl_standard_find_debuginfo;
+    callbacks.debuginfo_path = &debuginfo_path;
+    Dwfl* dwfl = dwfl_begin(&callbacks);
+    if
+        (dwfl == 0
+        || 0 != dwfl_linux_proc_report(dwfl, getpid())
+        || 0 != dwfl_report_end(dwfl, 0, 0)
+        )
+        {fail("Error initializing DWARF."); return;}
+
+    // Initialize libunwind.
     unw_context_t context;
     if(0 != unw_getcontext(&context))
-        {fail("Failed to get machine state");}
+        {fail("Failed to get machine state"); return;}
 
     unw_cursor_t cursor;
     if(0 != unw_init_local(&cursor, &context))
-        {fail("Failed to initialize cursor");}
+        {fail("Failed to initialize cursor"); return;}
 
     // IP is in this function, so first frame could be skipped.
+    int frame_number = 0;
     while(0 < unw_step(&cursor))
         {
-        unw_word_t pc;
-        if(0 != unw_get_reg(&cursor, UNW_REG_IP, &pc))
-            {fail("Failed to read IP");}
-        std::fprintf(stderr, "0x%lx: ", pc);
+        unw_word_t ip;
+        if(0 != unw_get_reg(&cursor, UNW_REG_IP, &ip))
+            {fail("Failed to read IP register"); return;}
 
         char symbol[4096]; // Should be plenty.
         unw_word_t offset;
@@ -140,14 +156,33 @@ void print_backtrace()
             {
             int status = 0;
             char* demangled_name = abi::__cxa_demangle(symbol, 0, 0, &status);
-            char* name = (0 == status) ? demangled_name : symbol;
-            std::fprintf(stderr, "(%s+0x%lx)\n", name, offset);
+            char* function_name = (0 == status) ? demangled_name : symbol;
+
+            char const* source_file = "?""?""?";
+            int line_number = 0;
+
+            Dwarf_Addr addr = ip - 4;
+            Dwfl_Line* obj_line = dwfl_getsrc(dwfl, addr);
+            if (obj_line != 0)
+                {
+                source_file = dwfl_lineinfo(obj_line, &addr, &line_number, 0, 0, 0);
+                }
+
+            std::fprintf(stderr, "#%2d"      , frame_number);
+            std::fprintf(stderr, " 0x%lx:"   , ip);
+            std::fprintf(stderr, " %s:%d"    , source_file, line_number);
+// 'offset' doesn't seem very useful
+//          std::fprintf(stderr, " %s +0x%lx", function_name, offset);
+            std::fprintf(stderr, " %s"       , function_name);
+            std::fprintf(stderr, "\n");
+
             std::free(demangled_name);
             }
         else
             {
             std::fprintf(stderr, "Failed to get symbol name.\n");
             }
+        ++frame_number;
         }
 }
 
