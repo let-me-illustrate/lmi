@@ -1488,6 +1488,9 @@ sample2xyz::sample2xyz()
     Add({DB_Irc7702QAxisGender  , false});
     Add({DB_Irc7702QAxisSmoking , true});
 #endif // 0
+    // This is determined by law, in a way that varies by product;
+    // 2021 products use this two-percent rate.
+    Add({DB_AnnInterestRate7702 , 0.02});
     // Arguably the most complex ledger type.
     Add({DB_LedgerType          , mce_finra});
     // Certain group-quote columns are available only when these two
