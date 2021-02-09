@@ -1081,7 +1081,11 @@ void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
 
 void Skeleton::UponTestPasting(wxCommandEvent&)
 {
-    InputSequenceEntry* z = new(wx) InputSequenceEntry(frame_, wxID_ANY, "Testing...");
+    auto const z = std::make_unique<InputSequenceEntry>
+        (frame_
+        ,wxID_ANY
+        ,"Testing..."
+        );
     wxTextCtrl& t = z->text_ctrl();
 
     ClipboardEx::SetText("1\r\n2\r\n3\r\n");
@@ -1100,7 +1104,6 @@ void Skeleton::UponTestPasting(wxCommandEvent&)
         warning() << "'X;Y;Z;' != '" << t.GetValue() << "'" << LMI_FLUSH;
         }
 
-    z->Destroy();
     status() << "Pasting test finished." << std::flush;
 }
 
