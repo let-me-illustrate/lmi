@@ -1,0 +1,3371 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "https://www.w3.org/TR/html4/strict.dtd">
+
+<!--
+    Let me illustrate... &sect;7702 and &sect;7702A specifications.
+
+    Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    https://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+    Add formulas for NSP (corr) and 7PP
+    8/2: move parenthetical into footnote; explain 88-128 vs
+      Notice 2006-95 6.01 and 6.02 (cf. DesRochers page 58)
+
+-->
+
+<!--
+
+To renumber footnotes, paste the following into a shell:
+
+m=1
+while grep -q '#fn.*[^\]$' 7702.html; do \
+  sed -i 7702.html \
+    -e"/RENU[M]BERED/,/#fn/s|<a.*#fn.*a>|<a href=\"@fn$m\" name=\"fr$m\" title=\"\">[$m]</a>|" \
+    -e"/RENU[M]BERED/,/#fr/s|<a.*#fr.*a>|<a name=\"fn$m\" href=\"@fr$m\">$m</a>|" \
+    ; \
+  (( m += 1 )); \
+done
+sed -i 7702.html \
+  -e'/RENU[M]BERED/,$s|@fn|#fn|' \
+  -e'/RENU[M]BERED/,$s|@fr|#fr|' \
+  ;
+
+# RENUMBERED
+
+-->
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Let me illustrate&hellip; &sect;7702 and &sect;7702A specifications</title>
+</head>
+
+<body>
+
+<h2>
+Introduction
+</h2>
+
+<p>
+Traditionally, US federal tax law has treated life insurance
+quite liberally:
+</p>
+
+<ul>
+  <li>
+  Inside buildup of cash value is not taxed as current income.
+  </li>
+  <li>
+  Distributions are generally taxed on a FIFO basis.
+  </li>
+  <li>
+  Death benefits are normally not taxable.
+  </li>
+</ul>
+
+<p>
+This is good public policy when we contemplate destitute widows
+and orphans as the beneficiaries, but not when a flimsy insurance
+veneer is tacked on to an investment in the hope of gaining a
+generous tax break.
+Internal Revenue Code &sect;7702 and &sect;7702A were enacted to
+temper these advantages for investment-oriented contracts, by
+imposing limitations on premiums and cash values in relation to
+death benefits.
+Three classes of contracts result:
+</p>
+
+<ul>
+  <li>
+  A policy that doesn&rsquo;t meet the requirements of &sect;7702
+  isn&rsquo;t life insurance at all for federal tax purposes.
+  In practice, such policies aren&rsquo;t knowingly sold.
+  </li>
+  <li>
+  A modified endowment contract (MEC) meets the requirements of
+  &sect;7702, but not &sect;7702A.
+  Gain in a MEC is still shielded from taxation as long as
+  it&rsquo;s realized through death, but distributions are
+  subject to LIFO taxation and may incur an excise penalty.
+  </li>
+  <li>
+  A &ldquo;non-MEC&rdquo; contract&mdash;one that fulfills all
+  the requirements of both &sect;7702 and
+  &sect;7702A&mdash;receives all the traditional tax benefits of
+  life insurance.
+  </li>
+</ul>
+
+<p>
+Insurers are responsible for compliance with &sect;7702 and, if
+the owner elects, &sect;7702A.
+They face severe
+penalties<a href="#fn1" name="fr1" title="">[1]</a>
+even for &ldquo;slight&rdquo; or &ldquo;reasonable&rdquo;
+mistakes, which are all too common due to the difficulty of
+understanding and implementing the requirements correctly.
+Unlike state nonforfeiture law, which is a reversible translation
+of straightforward actuarial formulas into English, &sect;7702
+and &sect;7702A merely hint at the intricate calculations that
+they ordain.
+Dismay awaits anyone who delves into them hoping to come face to
+to face with an unambigous algorithm reflected through a glass
+darkly by the statutes.
+The legislative history is more illuminating, but cannot be
+distilled into one unequivocal specification: the drafters
+weren&rsquo;t programmers or actuaries.
+Published commentary usually surveys the spectrum of permissible
+compliance methods without resolving all the quandaries that
+arise along any particular path.
+The goal of this monograph is to describe every detail of one
+sound path through the &sect;7702 and &sect;7702A
+thicket; there are other valid paths, but this is the one
+<tt>lmi</tt> follows.
+</p>
+
+<p>
+These specifications apply only to contracts that were issued
+since &sect;7702 and &sect;7702A became effective, or that later
+become subject to them through loss of grandfathering.
+They do not address taxation of MECs: it is assumed that an
+existing admin system does that correctly.
+For the same reason, they do not address the &sect;7702A(d)
+anticipation-of-failure rule, the &sect;72(e)(11)(A)(i)
+anti-abuse rule that aggregates all MECs a company issues to
+a policyholder in a calendar year, or the &sect;7702(c)(4) rule
+that aggregates all contracts of $10,000 or less.
+</p>
+
+<h2>
+1 Overview of &sect;7702
+</h2>
+
+<p>
+1 Life insurance contracts must meet one of two tests
+prescribed by Internal Revenue Code &sect;7702 in order to
+qualify for favorable tax treatment in the United States.
+One is the cash value accumulation test (CVAT); the other is
+the guideline premium and corridor test (GPT).
+</p>
+
+<p>
+2 The CVAT has only one requirement: that the death benefit (DB)
+must never be less than a certain corridor factor times the
+&sect;7702(f)(2)(A) &ldquo;cash surrender value&rdquo; (CSV).
+Departing from common industry
+usage, the statute defines CSV as account value (AV)
+ignoring any surrender charge, loan, reasonable termination
+dividend<a href="#fn2" name="fr2" title="">[2]</a>,
+or dividend
+accumulation<a href="#fn3" name="fr3" title="">[3]</a>;
+some products include certain other items in
+CSV<a href="#fn4" name="fr4" title="">[4]</a>.
+The CVAT corridor factor for each attained age is calculated at
+issue under assumptions prescribed by law (&para;4/2), always
+assuming DBO A.
+It normally varies by gender, and sometimes by tobacco use and
+underwriting class.
+</p>
+
+<p>
+3 The GPT has two requirements that must both be met at all
+times.
+The first is that the DB must never be less than a certain
+corridor factor times the &sect;7702(f)(2)(A) CSV.
+The GPT corridor factors vary only by attained age, and not by
+gender, tobacco use, or underwriting class.
+The corridor factors are more liberal than for the CVAT because
+the GPT also imposes premium limits.
+</p>
+
+<p>
+4 The second GPT requirement limits cumulative premiums at
+each moment.
+The limit is the greater of the guideline
+single premium (GSP) or the cumulative annual guideline
+level premium (GLP).
+Both guideline premiums are generally
+calculated according to actual contract mechanics, using
+assumptions prescribed by law.
+The minimum interest
+assumption is higher for the GSP than for the GLP.
+Unlike
+seven-pay premiums used for MEC testing, guideline premiums
+are loaded for current expense charges.
+The GLP varies by DBO, but the GSP always assumes DBO A.
+Guideline premiums are calculated at issue, and do not
+automatically change as attained age increases.
+They do generally change when benefits change.
+</p>
+
+<p>
+5 A product can offer a choice of GPT or CVAT, but one test
+must be chosen for each contract when it is issued.
+The test chosen generally cannot be changed after
+issue<a href="#fn5" name="fr5" title="">[5]</a>.
+Compared to
+the CVAT, the GPT is generally more conservative at early
+durations due to a stricter initial premium limit based on
+6% interest, but more liberal in later years because of
+lower corridor factors.
+The CVAT is the simpler and more
+flexible &sect;7702 test, but MEC testing can be much simpler for
+GPT contracts.
+The GPT is preferred in the high net worth
+market where the net amount at risk (NAAR) may ultimately
+exceed available reinsurance.
+</p>
+
+<h2>
+1A Overview of &sect;7702A
+</h2>
+
+<p>
+1 Life insurance receives more favorable tax treatment than
+annuities.
+&sect;7702A&rsquo;s intention is to deny preferential treatment
+of living benefits on contracts whose early funding is deemed
+excessive, by defining them as MECs and exposing them to taxation
+under &sect;72(e)(10), (e)(11), and (v).
+A life insurance policy becomes a MEC if it is issued in exchange
+for a
+MEC<a href="#fn6" name="fr6" title="">[6]</a>,
+or if premiums are paid at a rate more rapid than one seven-pay
+premium for each of the first seven years.
+Certain changes cause the policy to be treated as a new contract
+with an adjusted premium limitation for a new seven-year period.
+</p>
+
+<p>
+2 &sect;7702A would have no effect if the death benefit could
+be reduced without penalty the day after a large payment.
+Therefore, when the death benefit decreases, premium testing
+generally has to be repeated as though the lower death
+benefit had been in effect since the beginning of the most
+recent seven-year test period.
+For most policies, retesting is not necessary for decreases
+that occur beyond the end of the last seven-year test period.
+</p>
+
+<p>
+3 Complex rules prescribe the &sect;7702A treatment of other
+contract changes.
+Into every CVAT contract &sect;7702A embeds a deemed contract.
+Its deemed cash value (DCV) accumulates like the
+actual cash value, but under prescribed assumptions.
+A premium is &ldquo;necessary&rdquo; to the extent it
+doesn&rsquo;t cause the DCV to exceed the net single premium
+(NSP) that defines the CVAT corridor.
+Any further payment (which would cause the DCV to enter the
+corridor) is &ldquo;unnecessary&rdquo; premium.
+A &ldquo;material change&rdquo; occurs, e.g.,
+when benefits increase for any reason (even if due solely to
+the corridor or to option B), but its recognition may be
+deferred until unnecessary premium has been paid.
+Notionally, when that happens, the cash value buys a paid-up
+policy, and we issue a new contract for the current death
+benefit minus the paid-up amount.
+The new contract is subject to a new seven-year premium limit.
+We don&rsquo;t actually
+issue new policies; we just perform &sect;7702A calculations as
+though we had.
+For GPT contracts, we calculate no DCV, but
+instead treat all premium as necessary and handle changes
+under our GPT rules (&para;13/2&ndash;3).
+</p>
+
+<h2>
+2 Issue, attained, and maturity age
+</h2>
+
+<p>
+1 Age means insurance age, nearest (ANB) or last (ALB) birthday
+as specified by the contract, as long as it is within one year
+of actual
+age<a href="#fn7" name="fr7" title="">[7]</a>.
+For ANB, if two
+birthdays are equally near, either age may be used.
+</p>
+
+<p>
+2 The issue age is the insurance age on the contract
+effective date.
+When a contract is backdated, this produces
+the correct result because it is the effective date that is
+backdated.
+&sect;7702 does not allow artificial age adjustments
+exceeding one year, such as the setbacks for female or
+substandard that were common in the past, or the joint
+equivalent age method that is still sometimes used for
+survivorship contracts.
+</p>
+
+<p>
+3 The insurance age at the beginning of the policy year
+defines the attained age, which is used for all off-anniversary
+changes.
+If an insured born on 1960-01-01
+purchases an ANB contract on 2000-07-02 at insurance age 40,
+and changes it on 2001-07-01, the day before the first
+anniversary, then all &sect;7702 calculations for the change use
+age 40, even though the transaction occurs 41 years and 181
+days after birth.
+</p>
+
+<p>
+4 Rates and values are looked up by attained age as defined
+above for &sect;7702A calculations as well.
+Thus, when an
+off-anniversary material change causes the &sect;7702A(c)(3)(A)(i)
+&ldquo;contract year&rdquo; not to coincide with any policy year, the
+attained age is still the insurance age defined in terms of
+the effective date given in the contract.
+</p>
+
+<p>
+5 &sect;7702 deems the contract to mature between ages 95 and 100
+inclusive.
+Contracts maturing for a reduced endowment prior
+to age 95 are deemed to mature at age 95.
+If the contract
+does not specify any maturity age, then age 100 is
+used<a href="#fn8" name="fr8" title="">[8]</a>.
+</p>
+
+<p>
+6 Riders mature when they expire by their terms, or at age
+100 if they do not expire.
+</p>
+
+<h2>
+3 Initial death benefit, premium, dumpins, and &sect;1035
+exchanges
+</h2>
+
+<p>
+1 On the issue date, guideline and seven-pay premiums must
+be calculated based on the DB before any payment or &sect;1035
+exchange amount is applied; by definition, this DB cannot
+exceed the specified amount (SA).
+In order to achieve the most
+favorable guideline premiums, a contract should generally be
+issued at a SA no lower than its corridor DB (&para;4/2) after
+the initial premium, dumpin, and any estimated &sect;1035
+exchange amount are recognized, net of any term rider.
+If this is precluded by sales considerations that demand a
+lower SA, then that lower SA becomes the DB for initial
+guideline and seven-pay premiums.
+Using any higher amount
+would expose the contract to &sect;7702A difficulties: if poor
+investment performance caused the DB to decrease, then the
+seven-pay test would need to be reapplied retrospectively
+using the decreased DB.
+If the original seven-pay premium
+was paid on the issue date and such a decrease occurred more
+than sixty days after the first anniversary but before the
+eighth year, then the contract would become an irremediable MEC.
+</p>
+
+<p>
+2 In certain sales situations, we may elect to use a lower
+amount for initial &sect;7702 and &sect;7702A calculations.
+For instance, if it is intended to take a $10,000 withdrawal
+from a $100,000 policy in the first seven years, we may
+choose to treat the initial death benefit as $90,000.
+Then we need not recognize a decrease or an adjustment event when
+the $10,000 withdrawal occurs.
+This requires adding an extra
+input parameter to existing systems.
+</p>
+
+<p>
+3 In general, we should perform &sect;1035 calculations at issue,
+using an assumed &sect;1035 amount.
+The old contract is assigned
+to us and we surrender it, perhaps some months after the new
+contract was issued.
+When we get the actual funds, we redo
+the &sect;7702 and &sect;7702A calculations as though we had known the
+correct amount on the issue date.
+To prevent the later
+receipt of the rollover from causing a material change or an
+adjustment event, it is important not to underestimate the
+&sect;1035 amount.
+</p>
+
+<h2>
+4 Cash values and benefits
+</h2>
+
+<p>
+1 Cash surrender value (CSV) for all &sect;7702 and &sect;7702A
+purposes is the amount payable on full surrender, treating
+surrender charges and policy loans as though they did not exist.
+It equals account value (whether loaned or unloaned) plus any
+extra amounts payable on surrender other than dividend
+accumulations or reasonable termination
+dividends<a href="#fn9" name="fr9" title="">[9]</a>.
+The specifications for some products
+deem certain additional amounts to be included in CSV for
+determining the corridor DB: for example, a refundable sales
+load or an experience-rating &ldquo;reserve&rdquo;.
+Fortunately, adjustment events and material changes do not cause
+recalculation of the add-on amounts in either of these
+particular examples, although &sect;7702A(c)(2)(A) decreases do
+require such a
+recalculation<a href="#fn10" name="fr10" title="">[10]</a>.
+Actuaries contemplating such
+add-ons for new products should strive to avoid any
+dependency that would cause such a recalculation.
+</p>
+
+<p>
+2 Death benefit is the amount payable by reason of death.
+To satisfy the &sect;7702 definition of life insurance, it must
+never be less than a corridor factor times the CSV.
+The GPT corridor factors are given in the
+statute<a href="#fn11" name="fr11" title="">[11]</a>.
+The CVAT corridor factors are the reciprocal of the sum of the
+NSP and the present value of any
+qualified additional benefit (QAB)
+charges<a href="#fn12" name="fr12" title="">[12]</a>.
+</p>
+
+<p>
+3 Decreasing benefits specified in the contract, for instance in
+the case of decreasing term, must be taken into account;
+<tt>lmi</tt> does not address such benefits at this time.
+Riders that terminate before maturity may be handled under
+the QAB rules.
+</p>
+
+<p>
+4 Decreasing benefits not specified in the contract need not
+be taken into account.
+Where an elective decrease is
+intended, we should reduce the initial death benefit (&para;3/2).
+</p>
+
+<p>
+5 Increasing benefits can be taken into account prospectively
+only if they are specified in the contract itself, and then only
+to the extent they do not increase the NAAR.
+This includes the usual option B when it is elected.
+Increases not specified in the contract are always ignored.
+It makes no difference that such increases follow a specific
+pattern specified in advance, as in a letter from the owner
+or an illustration signed by the owner, because even such
+manifest intentions are not bound to be performed.
+It makes no difference that the contract contains a provision
+allowing such increases to be elected at the owner&rsquo;s option.
+</p>
+
+<p>
+6 The &sect;7702A CVAT DCV always uses the actual death benefit
+option, but the usual return of premium (ROP) death benefit
+option is generally treated as option A for guideline
+premium purposes (but for ROP forceouts see &para;6/4).
+Therefore, a change from
+option A to ROP or ROP to A is not an adjustment event.
+In theory, for ROP we could take into account increases up to
+the option B amount, but only to the extent they are certain
+to occur; yet this is awkward or impossible to apply when
+the premium is flexible.
+</p>
+
+<p>
+7 Increasing benefits specified in the contract that do
+increase the NAAR must be taken into account as they occur.
+For instance, a &ldquo;jumping juvenile&rdquo; contract that provides a
+death benefit of $1000 per unit through age 20, and $5000
+per unit from age 21 on, has an adjustment event at age 21.
+It is treated exactly the same as a level contract with an
+elective increase at age 21.
+</p>
+
+<p>
+8 &sect;7702 and &sect;7702A calculations take an endowment benefit
+into account.
+But if the contract specifies a reduced
+endowment benefit (as some retirement income policies do),
+then the endowment benefit cannot exceed that reduced amount
+(<tt>lmi</tt> does not support this).
+Initially, the endowment benefit is the SA at issue.
+For CVAT contracts, it is reset
+to the new SA upon each material change.
+For GPT contracts,
+it is reset to the new SA upon each adjustment event, but
+only with respect to the seven-pay premium and the quantity
+B in the
+A&nbsp;+&nbsp;B&nbsp;&minus;&nbsp;C
+formula (&para;5/4); the quantities A and C
+use the SA immediately prior to the adjustment
+event<a href="#fn13" name="fr13" title="">[13]</a>.
+</p>
+
+<h2>
+5 Post-issue changes
+</h2>
+
+<p>
+1 Guideline premiums are recalculated whenever certain
+changes (&ldquo;adjustment events&rdquo;) occur.
+Adjustment events include
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>changes in SA, if and only if DB also changes,
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>changes in death benefit option,
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>changes in QABs,
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>reductions in substandard table ratings or flat extras, including rider ratings, and
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>changes in the &sect;7702 mortality or interest basis.
+<br>
+These transactions are adjustment events only if they change
+factors or values actually used in the guideline calculations;
+for instance, if the implementation conservatively ignores
+substandard charges and QABs, then no adjustment event arises
+when they change.
+The server must
+nevertheless be notified of all such changes, because an
+insurer might amend its current practices at any time.
+Automatic adjustments in the DB of an &ldquo;integrated&rdquo; (&para;11/8)
+term rider due to the corridor are not adjustment events if
+the total DB does not change; early termination of the rider
+and voluntary changes in its SA are adjustment events if the
+total DB changes.
+Since an adjustment event may be triggered
+by any transaction that affects the SA, we must test all
+withdrawals.
+Refer all cases of misstatement of age or gender to the actuarial
+department<a href="#fn14" name="fr14" title="">[14]</a>.
+</p>
+
+<p>
+2 The owner cannot directly change the DB, because the
+contract&rsquo;s elective increase and decrease provisions apply
+specifically to the SA only.
+A change in SA is not an
+adjustment event if the DB does not also change&mdash;for example,
+a $10,000 SA increase on an option A contract with a $100,000 SA
+and a $150,000 corridor DB is not an adjustment event.
+But there may be an adjustment event in this example
+due to some other cause, for instance if the DBO is changed
+on the same date.
+</p>
+
+<p>
+3 A DBO change is an adjustment event (but see &para;4/6) even
+if it doesn&rsquo;t cause the SA or the DB to change, because it
+directly affects the GLP calculation (&para;14.3/1).
+When a DBO change is the only adjustment event, GSP does not
+change, because by definition it is independent of DBO.
+In that circumstance, recalculating GSP is a superfluous step
+that leaves the value unchanged.
+It may be performed anyway if that is simpler than writing code
+to anticipate and avoid this special case, or it may be omitted.
+</p>
+
+<p>
+4 Recalculations follow the
+A&nbsp;+&nbsp;B&nbsp;&minus;&nbsp;C
+method.
+The formula is:
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>A = guideline premium before change
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>B = guideline premium at attained age for new DB and new DBO
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>C = guideline premium at attained age for old DB and old DBO
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>new guideline premium = A&nbsp;+&nbsp;B&nbsp;&minus;&nbsp;C
+<br>
+This formula is applied to both the GLP and the GSP (which
+latter never varies by DBO).
+The new GLP and GSP apply until
+the next change, and are used as the quantity A above in
+calculating the effect of any subsequent change.
+</p>
+
+<p>
+5 Special care must be taken in defining the benefit amount
+for B and C above.
+Some older published actuarial
+commentary, citing &sect;7702(f)(7)(A), suggests using the SA
+(thus, significantly, ignoring the corridor), but the
+drafters considered a contract in the corridor as fully
+funded for the corridor amount, making any premium increase
+with respect to the corridor redundant.
+For instance, consider an option A contract with a $100,000 SA
+and a $150,000 corridor DB.
+A $1 SA increase should not cause the
+guideline limit to increase substantially if at all.
+A $1 SA decrease should not cause the guideline limit to increase
+at all.
+Following this reasoning, IRS might look askance at a
+strategy of increasing the SA in exact anticipation of each
+corridor increase.
+</p>
+
+<p>
+6 Instead we define B and C according to &sect;7702(f)(3): &ldquo;the
+term &lsquo;death benefit&rsquo; means the amount payable by reason of
+the death of the insured&rdquo;. This ensures that no extra
+allowance is given for extra death benefit that has arisen
+due to the corridor.
+</p>
+
+<p>
+7 The &ldquo;old DB&rdquo; is captured before the day&rsquo;s transactions are
+applied, using the current day&rsquo;s corridor factor and the
+latest unit values available at that moment.
+It is not altered as a result of the day&rsquo;s transactions.
+For instance, if SA is increased on the same day as a premium
+payment, then the potential adjustment event is processed
+ignoring the premium.
+The premium does not affect the &ldquo;old DB&rdquo;, even
+if it would otherwise drive the contract into the
+corridor<a href="#fn15" name="fr15" title="">[15]</a>.
+Neither does it affect the &ldquo;new DB&rdquo; because adjustments must
+be processed before premium can be accepted (&para;5/8).
+</p>
+
+<p>
+8 Events occurring on different days are never combined.
+All adjustment events and material changes that occur on the
+same date are combined together and processed as one single
+change.
+This is done as soon as all transactions that
+potentially create adjustment events have been applied, and
+must be done before any new premium is accepted because an
+adjustment can affect the guideline premium limit.
+This aggregation is impossible in the case of a DB increase due
+to a payment under the ROP
+DBO<a href="#fn16" name="fr16" title="">[16]</a>
+because the payment changes
+the SA and potentially the DB, but other adjustment events
+must be processed before the payment is accepted.
+Furthermore, any such increase is not a material change due
+to the necessary premium exception.
+Therefore, we ignore DB
+increases arising out of the normal operation of the ROP
+benefit, treating them no more liberally than corridor DB
+increases.
+This means that the guideline limit would be
+higher on an otherwise identical option A contract with
+elective SA increases tailored to match the ROP DB pattern.
+</p>
+
+<p>
+9 If the guideline limit becomes negative, ensuing
+forceouts may eventually reduce CSV to
+zero<a href="#fn17" name="fr17" title="">[17]</a>;
+in that case,
+&sect;7702(f)(6) might justify maintaining the contract
+effectively as term insurance (&para;6/7).
+Alternatively, administrative practice can simply forbid any
+change that would reduce the guideline limit to an amount less
+than zero.
+</p>
+
+<p>
+10 Off-anniversary changes never amend past history.
+They have only a prospective effect on guideline premiums, which
+are linearly interpolated between A and
+(A&nbsp;+&nbsp;B&nbsp;&minus;&nbsp;C)
+according to the proportion of the policy year completed at
+the time of the change.
+For example, if a contract with a
+$10,000 GLP is changed 249 days after its anniversary in a
+leap year, such that its new GLP by the
+A&nbsp;+&nbsp;B&nbsp;&minus;&nbsp;C method
+is $46,600, then the GLP limit for that policy year is $21,700:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;$21,700 = 10,000 &times; [249 &divide; 366] + 46,600 &times; [1 &minus; (249 &divide; 366)]
+<br>
+Any fraction of a cent must be discarded.
+<tt>lmi</tt> does not perform the interpolation because
+illustration systems generally do not allow such changes.
+</p>
+
+<p>
+11 Less favorable taxation (under &sect;72, without considering
+the exception in &sect;72(e)(5)) applies to cash distributions
+accompanied by benefit reductions within the first fifteen
+years from the issue date actually shown in the contract.
+This issue date is not adjusted when &sect;7702 or &sect;7702A
+merely deems the contract to be reissued or exchanged.
+But for a &sect;1035 exchange, it is the date shown in the new
+contract.
+Cash distributions include forceouts, dividends, and
+withdrawals, but do not include loans or amounts returned
+(&para;6/2) to preserve the &sect;7702 or &sect;7702A status of
+the contract.
+A benefit reduction is any decrease either in the death benefit
+or in any QAB benefit below the level assumed on the issue date.
+A cash distribution accompanies a benefit
+reduction if it occurs on the same date as the reduction or
+within the preceding two
+years<a href="#fn18" name="fr18" title="">[18]</a>.
+</p>
+
+<p>
+12 The amount subject to LIFO taxation due to benefit
+reductions in the first fifteen years is the actual cash
+distribution,
+limited to a so-called &ldquo;recapture ceiling&rdquo; that may be
+thought of as the excess of actual CSV before the reduction,
+over allowable CSV after the reduction.
+The recapture ceiling is thus in the nature of a forceout amount,
+except that funds are not necessarily forced out of the contract.
+If the benefit reduction occurs during the first five policy
+years, the recapture ceiling for a CVAT contract is the
+excess of CSV immediately before the reduction over NSP
+immediately after the reduction.
+If the benefit reduction
+occurs during the first five policy years, the recapture
+ceiling for a GPT contract is the excess of CSV immediately
+before the reduction over corridor cash value (DB times
+corridor factor) immediately after the reduction; or the
+excess of premiums paid immediately before the reduction over
+the guideline limit immediately after the reduction:
+whichever is more restrictive.
+If the benefit reduction
+occurs after the first five years but during the first
+fifteen years, then the recapture ceiling is the excess of
+CSV over corridor cash value using GPT corridor factors for
+both GPT and CVAT contracts.
+If the recapture ceiling is
+zero or negative, then no adverse taxation applies.
+An admin system that doesn&rsquo;t actually perform tax reporting
+must nevertheless flag such reductions for manual attention.
+The recapture ceiling is irrelevant to a MEC.
+</p>
+
+<p>
+13 Unilateral changes the insurer makes in current interest,
+mortality, expense, or
+QAB<a href="#fn19" name="fr19" title="">[19]</a>
+rates are neither adjustment events
+nor material changes; they are reflected immediately in the
+CVAT DCV, but otherwise only when an adjustment event or
+material change later occurs, and only with prospective
+effect in either case.
+Changes in rate class that are initiated by the
+owner<a href="#fn20" name="fr20" title="">[20]</a>
+(such as smoker-to-nonsmoker changes
+and reductions in substandard table ratings or flat extras)
+are adjustment events and material changes to the extent
+they affect &sect;7702 and &sect;7702A calculations, respectively;
+typically, such changes are subject to underwriting and
+affect guaranteed as well as current charges.
+</p>
+
+<p>
+14 For &sect;7702 and &sect;7702A purposes, a substitution of insured
+is treated as a taxable
+exchange<a href="#fn21" name="fr21" title="">[21]</a>
+rather than an
+adjustment<a href="#fn22" name="fr22" title="">[22]</a>.
+A new contract is deemed to be issued.
+Any value in the old contract is taxed as a full surrender, and
+the remainder is rolled into the new contract.
+The effective date of the new contract is deemed
+to be the effective date of the exchange.
+However, a substitution performed under a binding obligation in
+the contract does not disturb grandfathering or restart the
+fifteen-year clock (&para;15/12).
+</p>
+
+<h2>
+6 Premiums, withdrawals, and forceouts
+</h2>
+
+<p>
+1 For &sect;7702 purposes, premiums paid are all payments&mdash;no
+matter who pays them&mdash;less forceouts, nontaxable
+withdrawals<a href="#fn23" name="fr23" title="">[23]</a>,
+amounts returned under &para;6/2, and charges for non-qualified
+additional benefits that are not deducted from AV.
+However, amounts the insurer pays into the contract under a
+waiver benefit are
+excluded<a href="#fn24" name="fr24" title="">[24]</a>.
+</p>
+
+<p>
+2 Amounts returned in order to preserve the &sect;7702
+qualification<a href="#fn25" name="fr25" title="">[25]</a>
+of the contract reduce premiums paid, as long
+as they are returned with taxable interest within sixty days
+of the end of the policy year of payment.
+Amounts returned in like manner to prevent a MEC under
+&sect;7702A<a href="#fn26" name="fr26" title="">[26]</a>
+are treated
+the same way, because they are in the nature of forceouts.
+The interest that is obligatorily added to such amounts does
+not reduce premiums paid.
+</p>
+
+<p>
+3 No admin system should accept any premium (or process any
+other transaction) that makes a contract a
+MEC<a href="#fn27" name="fr27" title="">[27]</a>
+without the owner&rsquo;s prior consent.
+No system&mdash;not even an illustration system&mdash;should
+ever accept any premium that violates the guideline limit; the
+great majority of vendor admin systems refuse to, and so does
+<tt>lmi</tt>.
+The alternative of accepting premium
+unconditionally and processing a countervailing transaction
+later is unreliable.
+Across the industry, many MEC failures
+have resulted from reliance on this alternative, when the
+countervailing transaction is not processed in time.
+</p>
+
+<p>
+4 If a post-issue change reduces the guideline limit below
+cumulative premiums paid, the excess is forced out of the
+contract.
+Any such distribution is subject to the normal rules of
+taxation<a href="#fn28" name="fr28" title="">[28]</a>,
+particularly including those described
+in &para;5/11&ndash;12.
+A forceout is otherwise similar to a withdrawal
+transaction except that it is not subject to any fees or
+limits that apply to voluntary withdrawals.
+Customarily, withdrawals reduce the SA, but forceouts do not.
+If a forceout reduces the amount of premium considered under
+the terms of an ROP benefit, then a cyclical formula results.
+This can be resolved by applying the formula repeatedly until it
+yields no further forceout of even a fraction of a
+cent<a href="#fn29" name="fr29" title="">[29]</a>.
+</p>
+
+<p>
+5 Products for the high net worth market typically require
+involuntary
+withdrawals<a href="#fn30" name="fr30" title="">[30]</a>
+(with no fee and no effect on SA) to keep NAAR constant when it
+would otherwise increase beyond reinsurance capacity due to cash
+value growth.
+This is neither a taxable event under
+&sect;7702(f)(7)(B&ndash;E), nor an adjustment event, nor a
+material change.
+It&rsquo;s like the payout of a dividend: instead of putting the
+increment into the cash value, we mail it to the owner.
+</p>
+
+<p>
+6 When a withdrawal decreases the SA, that decrease is an
+adjustment event if the DB also changes.
+Any transaction fee charged on a withdrawal is deducted from the
+CVAT DCV, but is not included in the expense charges that enter
+the guideline premium calculation; however, to the extent that it
+decreases the SA, it flows into the adjustment event calculation.
+Insofar as such a fee is part of the withdrawal, it reduces
+basis, &sect;7702 premiums paid, and &sect;7702A amounts paid.
+</p>
+
+<p>
+7 The GPT always permits payment of the minimum premium
+required to keep a contract in force until the end of any
+contract year, even if it would exceed the guideline premium
+limit, as long as the CSV (ignoring any surrender charges or
+loans) will be zero at the end of that
+year<a href="#fn31" name="fr31" title="">[31]</a>.
+To obviate the
+premium solve this implies, admin systems ought instead to
+calculate each month the least amount that will prevent the
+contract from lapsing before the next
+monthiversary<a href="#fn32" name="fr32" title="">[32]</a>.
+</p>
+
+<h2>
+7 Interest
+</h2>
+
+<p>
+1 Product specifications must always state guideline premium
+interest assumptions.
+The remainder of this section
+describes how these assumptions are determined, and may be
+skipped by programmers.
+</p>
+
+<p>
+2 &sect;7702 prescribes the interest basis for all &sect;7702 and
+&sect;7702A calculations as the interest rate actually guaranteed
+in the contract, or a statutory rate if greater.
+The statutory rate is 4% for GLP and 6% for GSP.
+It is 4% for
+all CVAT and &sect;7702A calculations, except that the necessary
+premium for guideline contracts is defined in terms of the
+guideline limit.
+</p>
+
+<p>
+3 The &sect;7702 net rate is determined in two steps.
+First, the
+guaranteed interest rate is determined from the contract,
+and the statutory rate is used instead if it is greater.
+This operation is performed separately for all periods with
+different guaranteed
+rates<a href="#fn33" name="fr33" title="">[33]</a>.
+For example, if the guaranteed
+rate is 4.5% for five years and 3.5% thereafter, then the
+GLP interest rate is 4.5% for five years and 4.0%
+thereafter, while the GSP rate is always 6.0%.
+For products
+such as pure variable UL that offer no explicit guarantee,
+the statutory rate is used.
+For variable products that offer
+a general-account option, the guaranteed gross rate must be
+no less than the general-account guaranteed rate.
+</p>
+
+<p>
+4 Even short-term guarantees at issue must be reflected in
+the GSP, the CVAT NSP, and the &sect;7702A NSP, seven-pay
+premium, and DCV.
+They may be ignored as de minimis in calculating the &sect;7702
+GLP<a href="#fn34" name="fr34" title="">[34]</a>,
+but only as long as they last no longer than one year.
+Only guarantees that either last
+longer than one year or are present on the issue date are
+taken into account: a guarantee subsequently added for a
+future period lasting no longer than one year is a dividend,
+not an adjustment event.
+Here, &ldquo;issue&rdquo; excludes cases where
+the contract is merely deemed by statute to be
+reissued<a href="#fn35" name="fr35" title="">[35]</a>.
+</p>
+
+<p>
+5 Second, any current asset-based charges specified in the
+contract are deducted if we wish.
+The interest rate remains
+what it is; the net rate that results from subtracting
+asset-based charges is merely a computational convenience that
+simplifies the formulas.
+In fact, the full interest rate (never less than statutory) is
+credited, and then asset-based charges are subtracted from the
+account value.
+Therefore, this adjustment affects only the &sect;7702 guideline
+premiums and the &sect;7702 DCV, because those quantities reflect
+expenses.
+It must not be taken into account when calculating
+the &sect;7702 CVAT NSP or CVAT corridor factors, or the &sect;7702A
+NSP or seven-pay premium, because those quantities do not
+reflect expenses.
+</p>
+
+<p>
+6 Asset based charges can be deducted only if they are
+specified in the contract itself: charges imposed by
+separate accounts cannot be deducted unless they are
+specified in the life insurance contract proper, since any
+charge not so specified is deemed to be
+zero<a href="#fn36" name="fr36" title="">[36]</a>.
+They also must not exceed the charges reasonably expected to be
+actually
+imposed<a href="#fn37" name="fr37" title="">[37]</a>.
+If the schedule page announces a charge
+of &ldquo;up to 100 basis points&rdquo; and we actually charge 50 bp and
+expect to keep charging that, then we can use 50 bp; but if
+we ever charge less than 50 bp, an adjustment event results.
+</p>
+
+<p>
+7 It is critical that the result be rounded up if at all,
+and never rounded down or truncated.
+The GPT is a
+bright-line test, and truncation at, say, eight decimal places
+may have an effect of more than a dollar per
+thousand<a href="#fn38" name="fr38" title="">[38]</a>
+at a later duration.
+Special attention must be paid to the exact
+method the administration system uses (e.g. beginning of
+period versus end of period), to be sure that the resulting
+charge is what will actually be imposed.
+A &sect;7702(f)(8)
+waiver granted in one actual case that was pennies over the
+limit cost tens of thousands of dollars in filing and
+attorney&rsquo;s fees.
+</p>
+
+<p>
+8 Thus, an account value load that is deducted from the
+account value at the beginning of each month, before
+interest is credited, may be reflected in GPT calculations.
+We could calculate it as a monthly load in order to follow
+the precise contract mechanics, but that would require a
+significant modification of Eckley&rsquo;s formulas, which do not
+contemplate a load on AV.
+Instead, we net the account value
+load against the &sect;7702 interest rate; as explained in &para;7/5,
+this is a mere computational convenience that does not
+change the actual interest rate.
+A proof that this
+alternative is conservative is given in the Actuarial
+Addendum (&para;B/8).
+</p>
+
+<p>
+9 On the other hand, it is not clear that a classical mortality
+and expense charge (M&amp;E) can be reflected, because it is part
+of the daily unit
+value<a href="#fn39" name="fr39" title="">[39]</a>
+calculation.
+The effect of this M&amp;E on monthly interest is a function of
+the ratio of successive unit values, and the actual charge
+approaches zero when the unit values decrease quickly.
+If a definite charge were clearly and unconditionally deducted at
+the beginning of each day, before crediting interest, then we
+might take it into account by adding daily commutation functions
+to the Formulas section and extending the proof in &para;B/8
+accordingly; but <tt>lmi</tt> ignores such charges.
+</p>
+
+<p>
+10 Multiple guaranteed rates may result, for instance in the
+case of a variable contract with a general-account option
+and a distinct guarantee for loaned funds.
+The highest such rate is used, because that produces the most
+conservative guideline premium limits.
+</p>
+
+<p>
+11 A higher rate guaranteed in a side letter must be
+reflected as in &para;7/4, as though it were written in the
+contract.
+For products that guarantee a rate tied to an
+index, the &sect;7702 interest rates in the first guarantee
+period must be at least as high as the rate determined by
+the index when the contract is issued.
+Such guarantees must
+be taken into account even if they arise indirectly or
+contingently, for instance in the case of an unloaned
+credited rate that is guaranteed to be no less than 50 bp
+below an indexed loan rate.
+<tt>lmi</tt> performs no such initial-guarantee calculations.
+</p>
+
+<p>
+12 For calculating mortality charges, most UL products
+discount the NAAR for one month&rsquo;s interest at a rate
+specified in the contract.
+&sect;7702 and &sect;7702A calculations
+must use the &sect;7702 rate instead whenever that is higher than
+the contractual rate.
+This affects all premium rates and
+also the CVAT DCV and corridor factors.
+Whenever this rate
+is converted to a monthly equivalent, the result must be
+rounded up if at all.
+If the contract specifies no such
+discount and none is actually applied, then a discount rate
+of zero may be used.
+</p>
+
+<p>
+13 The interest rate guaranteed by the contract is the
+greater at each duration of the guaranteed loan credited
+rate or the rate otherwise guaranteed.
+If a fixed rate is
+elected, then the guaranteed loan credited rate, if not
+stated explicitly, is the fixed rate charged on loans minus
+the guaranteed loan spread if any.
+If the contract
+guarantees neither the loan credited rate nor the loan
+spread, then a fixed loan rate has no &sect;7702 or &sect;7702A
+effect.
+</p>
+
+<p>
+14 There is a concern if a variable loan rate (VLR) is elected.
+Section 3.D of the VLR model regulation provides
+that &ldquo;the maximum rate&hellip;must be determined at regular
+intervals at least once every twelve (12) months, but not
+more frequently than once in any three-month period&rdquo;. There
+is no rate guarantee after the first anniversary, because
+the VLR rate may change by that time.
+However, since the
+maximum VLR is fixed for at least three months at issue,
+there is a short-term guarantee that must be reflected as in
+&para;7/4 if the rate actually credited on loans is too high.
+The complications that ensue may be avoided by actually
+crediting a loan rate no higher than &sect;7702 otherwise
+requires during the first loan rate determination period, or
+simply by forbidding loans during that period.
+</p>
+
+<h2>
+8 Mortality
+</h2>
+
+<p>
+1 Product specifications must always state &sect;7702
+mortality assumptions.
+The remainder of this section
+describes how these assumptions are determined, and may be
+skipped by programmers.
+The Actuarial Addendum (&para;B/9) addresses the conversion of
+annual mortality rates to monthly.
+</p>
+
+<p>
+2 &sect;7702 prescribes the use of reasonable mortality that does
+not exceed the charges the insurer actually expects to
+impose, except for the safe harbor that IRS Notice 2006-95
+provides.
+The mortality tables specified in the safe harbor
+vary by gender (except that unisex rates may be used for
+females, but only where required by state
+law<a href="#fn40" name="fr40" title="">[40]</a>)
+and, if prescribed in the contract, by tobacco use.
+</p>
+
+<p>
+3 For insureds with no table rating, <tt>lmi</tt> uses guaranteed
+mortality, limited to 100% of safe-harbor mortality at each
+duration.
+The 100% limit applies even if the guaranteed
+mortality is greater (as for some guaranteed-issue and
+simplified-issue contracts).
+<tt>lmi</tt> does not support contracts
+that guarantee mortality lower than the safe
+harbor<a href="#fn41" name="fr41" title="">[41]</a>.
+</p>
+
+<p>
+4 For insureds with a substandard table rating, we may
+compare current mortality reflecting the rating to 100% of
+safe-harbor mortality, and use the greater of these two
+values in each year.
+We may choose to ignore ratings due to foreign residence.
+We may indeed choose to use 100% of
+safe-harbor mortality in all cases as an administrative
+simplification, in which case changes in table ratings or
+flat extras are not adjustment events; that is the only
+option <tt>lmi</tt> currently supports.
+As a consequence, a contract
+may lapse early even though the CVAT NSP is paid as a single
+premium, the seven-pay premium is paid annually for the
+first seven years, or the GLP is paid annually forever.
+</p>
+
+<p>
+5 Any flat extras may be added to the mortality rates for
+all applicable durations, provided that we actually expect
+to impose the total charge that results (as for table
+ratings, above).
+However, for the GLP, it may be better to
+add any temporary flat extra as an explicit charge in every
+applicable year, in order to avoid an adjustment event when
+the flat expires or is reduced or forgiven.
+This follows the
+Blue Book discussion of QABs; even though a flat extra
+doesn&rsquo;t otherwise look like a QAB, it&rsquo;s a reasonable thing
+to do for a temporary flat.
+But this approach gives no
+relief for flat extras that are permanent: an adjustment
+event occurs if they are later reduced or forgiven.
+</p>
+
+<p>
+6 At any rate, it is probably better to ignore flat extras
+altogether for calculating UL &sect;7702 and &sect;7702A limits;
+that is what <tt>lmi</tt> does.
+Flat extras normally flow through the AV,
+and IRS has expressed concern that they may therefore earn
+tax-advantaged interest.
+While we realize that flat extras
+increase the premiums necessary to achieve a given AV, it is
+not transparent to IRS that they make the contract less
+investment oriented.
+</p>
+
+<p>
+7 Some policy forms &ldquo;blend&rdquo; mortality by gender or tobacco
+use, specifying (at issue, and immutably unless there is a
+misstatement of age or gender) the applicable safe-harbor
+mortality tables.
+Their treatment of current mortality may
+pose daunting practical problems if it is desired to reflect
+substandard ratings in &sect;7702 and &sect;7702A calculations,
+for example if the blending percentages for current mortality
+are revised periodically to reflect case demographic changes.
+We have seen a contract that blends mortality by
+interpolating on q<sub><small>x</small></sub> instead of
+<sub><small>t</small></sub>p<sub><small>x</small></sub>,
+and IRS might assert
+that this departure from generally accepted actuarial
+practice ignores the expected improvement over time as the
+proportion of nonsmokers and females increases.
+At best, any use of blended current mortality could be expected
+to produce unwelcome adjustment events.
+It does not affect any
+&sect;7702 or &sect;7702A calculation unless substandard mortality is
+reflected, so substandard mortality should certainly be
+ignored for such contracts.
+</p>
+
+<h2>
+9 Expense charges
+</h2>
+
+<p>
+1 Current expense charges that the insurer actually expects
+to impose are reflected in guideline premiums and the CVAT DCV.
+Higher guaranteed charges are disregarded.
+Originally,
+guaranteed charges were allowed, but the statute was changed in
+1988<a href="#fn42" name="fr42" title="">[42]</a>
+due to perceived abuses.
+Expense charges are
+ignored for the CVAT net single premium and for the net
+single and seven-pay premiums used for MEC testing.
+However, they are always taken into account for necessary premium
+calculations.
+Furthermore, charges for
+QABs<a href="#fn43" name="fr43" title="">[43]</a>
+may always be reflected in all calculations.
+</p>
+
+<p>
+2 For products with charges that are tiered by premium or by
+total assets
+(which can change on every valuation date), it is convenient
+to select a charge amount low enough that it will never need
+to be changed, or conservatively to disregard the charge
+altogether<a href="#fn44" name="fr44" title="">[44]</a>.
+<tt>lmi</tt> applies the lowest current tiered rate (cf.
+&para;7/6) for all guideline premium calculations, but uses the
+actual current charge for the CVAT DCV.
+</p>
+
+<p>
+3 Some products pass the actual premium tax through as a
+load; it&rsquo;s treated like any other load.
+If the insurer
+adapts it to changes in premium-tax rates, that&rsquo;s
+treated like any other unilateral change (&para;5/13).
+</p>
+
+<p>
+4 To account for the possibility that current expense
+charges have changed, the admin system must provide the
+current GLP and GSP to the inforce illustration system.
+<!-- TODO ?? Move: this should refer to all assumptions,
+and should also include 7PP (unaffected by expense charges,
+but affected e.g. by smoker-to-nonsmoker changes).
+-->
+</p>
+
+<h2>
+10 Secondary cash value guarantees
+</h2>
+
+<p>
+1 For products with a secondary cash value guarantee, the
+&sect;7702 interest, mortality, and (if applicable) expense basis
+at each duration must be at least as conservative as the
+basis that actually determines the guaranteed value at each
+duration<a href="#fn45" name="fr45" title="">[45]</a>.
+An exact calculation must be done for each month
+and for each possible combination of issue age, underwriting
+class, and so
+on<a href="#fn46" name="fr46" title="">[46]</a>.
+The practical difficulty of these calculations might be mitigated
+by using the more conservative basis for all durations, and by
+using the CVAT instead of the
+GPT<a href="#fn47" name="fr47" title="">[47]</a>.
+</p>
+
+<p>
+2 Consider a product that is guaranteed to remain in force with a
+CSV of at least zero as long as the GLP is paid each year.
+This guarantee may be disregarded under &sect;7702 to the
+extent that the guarantee premium exactly equals the GLP;
+but if it is calculated in any other
+way<a href="#fn48" name="fr48" title="">[48]</a>,
+then &para;10/1
+applies, requiring potentially onerous calculations.
+</p>
+
+<h2>
+11 Riders
+</h2>
+
+<p>
+1 Riders and other additional benefits are either
+&ldquo;qualified&rdquo; or not.
+QABs receive more favorable treatment (&para;11/2&ndash;7), which
+extends to CVAT NSP and
+corridor factors, and to &sect;7702A NSP, DCV, and seven-pay
+premiums, as well as to guideline premiums, except where
+specifically noted otherwise.
+Currently, <tt>lmi</tt> does not treat
+any eligible additional benefit as a QAB, but it does
+support the term rider described in &para;11/8.
+</p>
+
+<p>
+2 QABs can be prefunded through the AV.
+A QAB&rsquo;s benefit is
+deemed to be the stream of current charges for the QAB, but
+only over the period during which such charges are payable
+as established in the
+contract<a href="#fn49" name="fr49" title="">[49]</a>.
+Thus, the QAB&rsquo;s charges
+create a level positive increment to the guideline premiums
+for that charge period, with appropriate effects on the
+other quantities in &para;11/1.
+At the end of that period, the
+increment goes away, even if the QAB&rsquo;s benefits continue;
+this is neither an adjustment event, nor a material change,
+nor a &sect;7702A(c)(2)(A) decrease in
+benefits<a href="#fn50" name="fr50" title="">[50]</a>.
+Thus, QABs may
+not be funded through contract maturity unless their charges
+continue through maturity.
+</p>
+
+<p>
+3 Both benefits and charges for non-qualified additional
+benefits are completely disregarded if their charges cannot
+flow through the AV, in which case the charges are paid in
+cash and do not count as
+premium<a href="#fn51" name="fr51" title="">[51]</a>.
+Otherwise, payments
+to support them count against the premium limit, and their
+charges decrease the AV (and, hence, the CSV and corridor
+DB) without directly increasing any payment limit&mdash;although
+they do decrease the
+DCV<a href="#fn52" name="fr52" title="">[52]</a>.
+That outcome can be avoided by
+stipulating that the charges must be paid in cash and cannot
+be deducted from the AV.
+At any rate, no change in a
+non-qualified additional benefit is an adjustment event, a
+material change, or a &sect;7702A(c)(2)(A)
+decrease<a href="#fn53" name="fr53" title="">[53]</a>.
+</p>
+
+<p>
+4 Only the following are QABs according to &sect;7702(f)(5)(A)
+(but see &para;11/5):
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>guaranteed insurability,
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>accidental death or disability benefit,
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>spouse and child term riders,
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>disability waiver benefit, or
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>other benefits prescribed under regulations (of which there are none).
+<br>
+The seven-pay premium calculation disregards any QAB whose
+benefits last fewer than seven years.
+Otherwise, that calculation can include a QAB&rsquo;s charges for
+the period those charges continue, even if that is less than
+seven years.
+</p>
+
+<p>
+5 A term rider on the main insured whose benefit terminates
+prior to age 95 is treated as a QAB for &sect;7702, but as death
+benefit for &sect;7702A unless it expires within the first seven
+contract years.
+If the benefit is guaranteed at least until
+age 95, then it is treated as death benefit for both &sect;7702
+and &sect;7702A.
+Death-benefit treatment is the most favorable
+outcome: it values the benefit using &sect;7702 mortality rather
+than current rider charges.
+For a term rider treated as
+death benefit, &sect;7702 calculations reflect the actual benefit
+duration, but &sect;7702A calculations deem the benefit to last until
+maturity<a href="#fn54" name="fr54" title="">[54]</a>.
+</p>
+
+<p>
+6 Increasing or decreasing the benefit amount of a QAB (such
+as a term rider) is an adjustment event.
+Terminating a QAB
+is an adjustment event and a &sect;7702A(c)(2)(A) decrease,
+whether the termination is elective or required by the terms
+of the contract; but expiry at a date set in the contract at
+issue is not (&para;11/2).
+In particular, there is an adjustment
+event when a spouse or child term rider terminates due to their
+death<a href="#fn55" name="fr55" title="">[55]</a>,
+but not when such a term rider terminates due
+to the family member&rsquo;s attainment of a specified expiry
+age<a href="#fn56" name="fr56" title="">[56]</a>.
+Revising or removing a rating on a QAB (for example, an
+occupational accidental death rating) is an adjustment event
+unless the rating was disregarded in &sect;7702 calculations.
+Neither disability, nor recovery therefrom, is an adjustment
+event for a waiver benefit.
+</p>
+
+<p>
+7 A rider that waives monthly deductions (as opposed to
+paying a stipulated premium), with a charge proportional to
+the actual monthly deduction, poses a definitional difficulty.
+The charge for the benefit is indeterminate
+because AV growth generally changes the NAAR and hence the
+mortality charges.
+In theory the waiver charge attributable
+to determinate amounts such as the policy fee or load per $1
+of SA could be reflected.
+But those amounts are probably
+almost negligible, so it is better to treat such a waiver
+benefit as a non-qualified additional benefit&mdash;which is what
+<tt>lmi</tt> does.
+</p>
+
+<p>
+8 Consider an &ldquo;integrated&rdquo; term rider that
+automatically adjusts to offset the corridor and automatically
+converts to the base contract at, say, age 70.
+While it is in force, its DB is the term SA minus the portion of
+the base policy DB due solely to the corridor, but never less
+than zero.
+This rider is appropriately treated as death
+benefit, &para;11/5 notwithstanding, and not as a QAB because the
+automatic conversion preserves the total DB with no action
+on the owner&rsquo;s part and a positive election is required to
+obtain any different
+outcome<a href="#fn57" name="fr57" title="">[57]</a>.
+Termination of this rider, e.g.
+because there is insufficient AV to pay its monthly cost,
+is an adjustment event and a &sect;7702A(c)(2)(A) decrease,
+unless its DB simultaneously converts to the base.
+</p>
+
+<h2>
+12 Product-design opportunities and pitfalls
+</h2>
+
+<p>
+1 Product designs that impute an addition to AV when
+calculating the corridor DB should address the concerns
+described in &para;4/1, preferably in such a way that the add-on
+amount does not change when an adjustment event, material
+change, or decrease occurs.
+</p>
+
+<p>
+2 Pursuant to the discussion of ROP above (&para;4/6), a modified
+ROP death benefit option might provide for the greater of
+the usual ROP death benefit and the option B death benefit.
+With this option, we could calculate GLP (but not GSP) on an
+option B basis, perhaps tripling the GLP that would
+otherwise apply.
+However, in durations where the option B
+death benefit governs, higher death benefits and COI charges
+would result.
+</p>
+
+<p>
+3 When interest rate guarantees are added after a contract
+is issued, it is preferable to limit them to one year.
+Otherwise, they adversely affect the interest rate used for
+calculating the GLP (&para;7/4).
+</p>
+
+<p>
+4 If it is desired to reflect account value loads (such as
+M&amp;E charges) in guideline premium calculations, then it is
+important to specify and implement them in such a way that
+they can legitimately increase the guideline premiums
+(&para;7/8&ndash;9).
+</p>
+
+<p>
+5 During the first VLR rate determination period, VLR
+contracts should avoid short-term guarantees by either
+forbidding loans or crediting loan interest at the &sect;7702
+rate (&para;7/14).
+</p>
+
+<p>
+6 Consideration might be given to moving flat extras outside
+the AV, by billing for them and requiring them to be paid
+directly on a current basis.
+This should remove any IRS
+concern that they could be prefunded, thus making it safe to
+reflect them in guideline premium calculations (&para;8/6).
+Flat extras are particularly important for certain survivorship
+product designs.
+</p>
+
+<p>
+7 &sect;7702 (f)(5)(C)(ii) allows us to exclude the charges for
+non-qualified additional benefits from premiums paid, so
+that they do not count against the guideline limit, if they
+are &ldquo;not prefunded&rdquo;.
+The only way to preclude prefunding is
+to prevent the charges for these benefits from flowing
+through the AV by requiring them to be paid in cash (&para;11/3).
+It may be beneficial to structure such benefits that way.
+</p>
+
+<p>
+8 Term riders that are not &ldquo;integrated&rdquo; with the base policy
+for &sect;7702 purposes (&para;11/8) receive more favorable treatment
+if they last at least until age 95.
+On the other hand, New
+York has non-extraterritorial rules that make it difficult
+to continue a term rider past age 70, and even more
+difficult past age 80, in that state.
+Consider extending term riders to the base contract&rsquo;s
+maturity age outside New York.
+</p>
+
+<h2>
+13 MEC testing
+</h2>
+
+<p>
+1 The choice of &sect;7702 test affects MEC testing under &sect;7702A.
+The latter section inherits definitions and calculation
+rules from the former; they ought to be consistent for each
+definitional test.
+An event-driven algorithm for MEC testing is given in Addendum A.
+</p>
+
+<p>
+2 MEC testing can be simpler for GPT than for CVAT contracts.
+It is advantageous to make the necessary-premium
+and guideline-premium limits identical so that the former
+need not be calculated separately: then no unnecessary
+premium can be paid without failing the definitional
+test<a href="#fn58" name="fr58" title="">[58]</a>.
+To this end, the server offers two different methods.
+In order to avoid certain difficulties that might otherwise
+occur<a href="#fn59" name="fr59" title="">[59]</a>,
+the first method
+treats every adjustment event as a material change, and
+therefore applies both the rollover rule and the reduction
+rule to decrease
+adjustments<a href="#fn60" name="fr60" title="">[60]</a>.
+The second method simply
+assumes that such difficulties do not arise; it treats
+adjustment events as reductions when they decrease benefits,
+and as material changes otherwise.
+</p>
+
+<p>
+3 Decreases are subject to retrospective seven-pay testing,
+whether or not an adjustment event has occurred.
+Premature
+termination<a href="#fn61" name="fr61" title="">[61]</a>
+of a QAB is treated as a decrease.
+</p>
+
+<p>
+4 A material change resets the &ldquo;contract year&rdquo; so that it
+might not coincide with any policy year.
+Underwriting procedures should guard against abuse such as a
+series of trivial changes on successive
+days<a href="#fn62" name="fr62" title="">[62]</a>.
+</p>
+
+<h2>
+14 Formulas
+</h2>
+
+<p>
+1 The determination of guideline premiums requires a
+considerable amount of floating point calculations.
+It is important to minimize the cost of these calculations in the
+case of systems that administer a great number of contracts,
+or illustration systems that are judged on their speed.
+</p>
+
+<p>
+2 Commutation functions as defined by Eckley [TSA XXXIX,
+page 19] are used in order to perform the calculations
+rapidly while following the actual mechanics of a UL contract.
+This implementation trades perfection for speed by
+conservatively ignoring the corridor.
+It appears that this
+affects only the GLP for DBO B, which could be increased
+somewhat at a significant expense in complexity and run time.
+</p>
+
+<h3>
+14.1 Product parameters
+</h3>
+
+<p>
+1 The following monthly effective rates must be specified in
+product-specific addenda; they are level within any policy
+year.
+<br>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;qc         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </tt> &sect;7702 mortality rate
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;ic         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </tt> &sect;7702 interest rate, less asset charge if applicable
+</p>
+
+<p>
+2 The following parameters are derived from the usual
+product specifications.
+<br>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;ig         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </tt> monthly effective death-benefit discount rate for NAAR
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;mChgPol    &nbsp;&nbsp;&nbsp;&nbsp;                               </tt> monthly charges per contract
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;aChgPol    &nbsp;&nbsp;&nbsp;&nbsp;                               </tt> annual charges per contract
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;mChgSA     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                         </tt> monthly charges per dollar of specified amount
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;ChgSALimit &nbsp;                                                 </tt> maximum specified amount to which mChgSA applies
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;LoadTgt    &nbsp;&nbsp;&nbsp;&nbsp;                               </tt> premium load up to target
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;LoadExc    &nbsp;&nbsp;&nbsp;&nbsp;                               </tt> premium load on excess over target
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;QabRate    &nbsp;&nbsp;&nbsp;&nbsp;                               </tt> total monthly rate for all QABs combined (ADD is the only QAB reflected today)
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;QabLimit   &nbsp;&nbsp;&nbsp;                                     </tt> maximum specified amount to which QabRate applies
+</p>
+
+<p>
+3 The following variables are already calculated by systems
+that use these specifications.
+<br>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;SpecAmt    &nbsp;&nbsp;&nbsp;&nbsp;                               </tt> specified amount
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;TgtPrem    &nbsp;&nbsp;&nbsp;&nbsp;                               </tt> target premium
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;DeathBft   &nbsp;&nbsp;&nbsp;                                     </tt> death benefit
+</p>
+
+<p>
+4 The formulas below handle the general case where all these
+parameters and variables vary by policy year.
+The duration subscripts may be disregarded for those that do not.
+</p>
+
+<h3>
+14.2 Commutation functions C and D for all years
+</h3>
+
+<p>
+1 Initialize:
+<tt>
+<br>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&mu; = maturity duration = maturity age minus issue age
+<br>&nbsp;&nbsp;&nbsp;&nbsp;<sup><small>a</small></sup>D<sub><small>0</small></sub> = 1.0
+</tt>
+</p>
+
+<p>
+2 For each annual duration <tt>t</tt> in <tt>[0,&hellip;&mu;&minus;1]</tt>:
+<tt>
+<br>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;f = qc<sub><small>t</small></sub> &times; (1.0 + ic<sub><small>t</small></sub>) &divide; (1.0 + ig<sub><small>t</small></sub>)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;g = 1.0 &divide; (1.0 + f)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;q = f &times; g
+<br>&nbsp;&nbsp;&nbsp;&nbsp;i = (ic<sub><small>t</small></sub> + ig<sub><small>t</small></sub> &times; f) &times; g
+<br>&nbsp;&nbsp;&nbsp;&nbsp;if(DBO<sub><small>t</small></sub> is B)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i = i &minus; q
+<br>&nbsp;&nbsp;&nbsp;&nbsp;end if
+<br>&nbsp;&nbsp;&nbsp;&nbsp;v = 1.0 &divide; (1.0 + i)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;p = 1.0 &minus; q
+<br>&nbsp;&nbsp;&nbsp;&nbsp;vp = v &times; p
+<br>&nbsp;&nbsp;&nbsp;&nbsp;vp12 = vp<sup><small>12</small></sup>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;<sup><small>m</small></sup>a = (1.0 &minus; vp12) &divide; (1.0 &minus; vp)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;<sup><small>m</small></sup>C<sub><small>t</small></sub> = <sup><small>m</small></sup>a &times; <sup><small>a</small></sup>D<sub><small>t</small></sub> &times; v &times; q
+<br>&nbsp;&nbsp;&nbsp;&nbsp;<sup><small>m</small></sup>D<sub><small>t</small></sub> = <sup><small>m</small></sup>a &times; <sup><small>a</small></sup>D<sub><small>t</small></sub>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;<sup><small>a</small></sup>D<sub><small>t+1</small></sub> = <sup><small>a</small></sup>D<sub><small>t</small></sub> &times; vp12
+</tt>
+</p>
+
+<p>
+3 Variables with no subscript need not be saved across
+iterations.
+The variable
+<tt><sup><small>a</small></sup>D<sub><small>t</small></sub></tt>
+has a value at the maturity duration so that it can be used to
+discount the endowment benefit payable at the end of that year;
+other vector variables are shorter by one.
+</p>
+
+<p>
+4 Recalculation after issue can be obviated by calculating
+<tt>C<sub><small>t</small></sub></tt> and
+<tt>D<sub><small>t</small></sub></tt>
+for all durations and storing the results for both DBO A and B.
+They cannot change after issue unless the mortality or interest
+basis changes.
+</p>
+
+<h3>
+14.3 Guideline premiums
+</h3>
+
+<p>
+1 GSP calculations always use DBO A commutation functions.
+GLP calculations use commutation functions for the DBO in
+effect (for ROP, see &para;4/6).
+</p>
+
+<p>
+2 Calculate trial values of
+<tt>GLP<sub><small>t</small></sub></tt> and
+<tt>GSP<sub><small>t</small></sub></tt>:
+<tt>
+<br>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Charges<sub><small>t</small></sub> =
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <sup><small>m</small></sup>D<sub><small>t</small></sub> &times; mChgPol<sub><small>t</small></sub>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+       <sup><small>a</small></sup>D<sub><small>t</small></sub> &times; aChgPol<sub><small>t</small></sub>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+       <sup><small>m</small></sup>D<sub><small>t</small></sub> &times; mChgSA<sub><small>t</small></sub> &times; min(SpecAmt<sub><small>t</small></sub>, ChgSALimit)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+       <sup><small>m</small></sup>D<sub><small>t</small></sub> &times; QabRate<sub><small>t</small></sub> &times; min(SpecAmt<sub><small>t</small></sub>, QabLimit)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+       <sup><small>m</small></sup>C<sub><small>t</small></sub> &times; DeathBft<sub><small>t</small></sub>
+<br>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;NetPaymentFactor<sub><small>t</small></sub> = <sup><small>a</small></sup>D<sub><small>t</small></sub> &times; (1.0 &minus; LoadTgt<sub><small>t</small></sub>)
+<br>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Endowment = <sup><small>a</small></sup>D<sub><small>&mu;</small></sub> &times; endowment benefit [&para;4/8]
+</tt>
+</p>
+
+<!--
+The zero-width space (&#8203;) subscript on terms that otherwise
+would lack a subscript improves alignment on some user agents.
+-->
+
+<table cellpadding=0 cellspacing=0>
+  <tr>
+    <td>
+      <tt>
+        &nbsp;&nbsp;&nbsp;&nbsp;GLP<sub><small>t</small></sub>&nbsp;=&nbsp;
+      </tt>
+    </td>
+    <td>
+      <tt>
+        <big><big><big>(</big></big></big>
+      </tt>
+    </td>
+    <td>
+      <tt>
+        Endowment<sub><small>&#8203;</small></sub>&nbsp;+&nbsp;
+      </tt>
+    </td>
+    <td align="center">
+      <tt>
+        <sub><small>&mu;</small></sub>
+        <br>
+        <big><big>&sum;</big></big>
+        <br>
+        <sup><small>i&nbsp;=&nbsp;t</small></sup>
+      </tt>
+    </td>
+    <td>
+      <tt>
+        Charges<sub><small>i</small></sub>
+      </tt>
+    </td>
+    <td>
+      <tt>
+        <big><big><big>)</big></big></big>
+      </tt>
+    </td>
+    <td>
+      <tt>
+        <big><big>&nbsp;&divide;&nbsp;</big></big>
+      </tt>
+    </td>
+    <td align="center">
+      <tt>
+        <sub><small>&mu;</small></sub>
+        <br>
+        <big><big>&sum;</big></big>
+        <br>
+        <sup><small>i&nbsp;=&nbsp;t</small></sup>
+      </tt>
+    </td>
+    <td>
+      <tt>
+        NetPaymentFactor<sub><small>i</small></sub>
+      </tt>
+    </td>
+  </tr>
+</table>
+
+<table cellpadding=0 cellspacing=0>
+  <tr>
+    <td>
+      <tt>
+        &nbsp;&nbsp;&nbsp;&nbsp;GSP<sub><small>t</small></sub>&nbsp;=&nbsp;
+      </tt>
+    </td>
+    <td>
+      <tt>
+        <big><big><big>(</big></big></big>
+      </tt>
+    </td>
+    <td>
+      <tt>
+        Endowment<sub><small>&#8203;</small></sub>&nbsp;+&nbsp;
+      </tt>
+    </td>
+    <td align="center">
+      <tt>
+        <sub><small>&mu;</small></sub>
+        <br>
+        <big><big>&sum;</big></big>
+        <br>
+        <sup><small>i&nbsp;=&nbsp;t</small></sup>
+      </tt>
+    </td>
+    <td>
+      <tt>
+        Charges<sub><small>i</small></sub>
+      </tt>
+    </td>
+    <td>
+      <tt>
+        <big><big><big>)</big></big></big>
+      </tt>
+    </td>
+    <td>
+      <tt>
+        <big><big>&nbsp;&divide;&nbsp;</big></big>
+      </tt>
+    </td>
+    <td>
+      <tt>
+        NetPaymentFactor<sub><small>t</small></sub>
+      </tt>
+    </td>
+  </tr>
+</table>
+
+<p>
+3 If
+<tt>GLP<sub><small>t</small></sub></tt> &le;
+<tt>TgtPrem<sub><small>t</small></sub></tt>,
+then accept the trial value.
+Otherwise, recalculate it using the same formula, but with the
+modified <tt>Charges</tt> and <tt>NetPaymentFactor</tt> that
+follow.
+</p>
+
+<p>
+4 If
+<tt>GSP<sub><small>t</small></sub></tt> &le;
+<tt>TgtPrem<sub><small>t</small></sub></tt>,
+then accept the trial value.
+Otherwise, recalculate it using the same formula, but with the
+modified <tt>Charges</tt> and <tt>NetPaymentFactor</tt> that
+follow.
+</p>
+
+<p>
+5 Modified values to be used only for premiums that exceed
+target:
+<tt>
+<br>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Charges<sub><small>t</small></sub> =
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Charges<sub><small>t</small></sub> [as calculated above]
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+       TgtPrem<sub><small>t</small></sub> &times; (LoadTgt<sub><small>t</small></sub> &minus; LoadExc<sub><small>t</small></sub>) &times; <sup><small>a</small></sup>D<sub><small>t</small></sub>
+<br>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;NetPaymentFactor<sub><small>t</small></sub> = (1.0 &minus; LoadExc<sub><small>t</small></sub>) &times; <sup><small>a</small></sup>D<sub><small>t</small></sub>
+</tt>
+</p>
+
+<p>
+6 The recalculation with modified values is performed only
+for premiums that exceed the target.
+For example, if
+<tt>GLP<sub><small>t</small></sub></tt> &lt;
+<tt>TgtPrem<sub><small>t</small></sub></tt> &lt;
+<tt>GSP<sub><small>t</small></sub></tt>, then only
+<tt>GSP<sub><small>t</small></sub></tt> is recalculated.
+</p>
+
+<h2>
+15 Terminology
+</h2>
+
+<p>
+1 Although the statute uses the term &ldquo;corridor&rdquo; only with
+respect to the GPT, I use it in a parallel sense to indicate
+the minimum death benefit on a CVAT contract.
+</p>
+
+<p>
+2 I use &ldquo;contract&rdquo; to refer to a policy or certificate of
+insurance.
+But I say &ldquo;policy year&rdquo; because &ldquo;contract year&rdquo;
+is a term of art in &sect;7702A that need not equal policy year.
+</p>
+
+<p>
+3 For ease of reference, acronyms are spelled out here
+unless they&rsquo;re obvious (e.g., IRS, FIFO, <tt>lmi</tt>).
+At its first occurrence, each is spelled out and, where
+necessary, defined.
+<br>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;ALB&nbsp;&nbsp;&nbsp;&nbsp;      </tt> age last birthday
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;ANB&nbsp;&nbsp;&nbsp;&nbsp;      </tt> age nearest birthday
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;AV&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </tt> account value
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;CSV&nbsp;&nbsp;&nbsp;&nbsp;      </tt> cash surrender value, defined to disregard loans and surrender charges
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;CVAT&nbsp;&nbsp;&nbsp;           </tt> cash value accumulation test
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;DB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </tt> death benefit: the amount payable by reason of death on the date of death
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;DBO&nbsp;&nbsp;&nbsp;&nbsp;      </tt> death benefit option: A (level), B (increasing), or ROP
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;DCV&nbsp;&nbsp;&nbsp;&nbsp;      </tt> deemed cash value for CVAT MEC testing
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;GLP&nbsp;&nbsp;&nbsp;&nbsp;      </tt> guideline level premium
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;GPT&nbsp;&nbsp;&nbsp;&nbsp;      </tt> guideline premium test
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;GSP&nbsp;&nbsp;&nbsp;&nbsp;      </tt> guideline single premium
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;LDB&nbsp;&nbsp;&nbsp;&nbsp;      </tt> least death benefit in the most recent seven-year test period
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;M&amp;E&nbsp;&nbsp;&nbsp;&nbsp;  </tt> mortality and expense charge (an interest spread on variable contracts)
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;MEC&nbsp;&nbsp;&nbsp;&nbsp;      </tt> modified endowment contract
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;NAAR&nbsp;&nbsp;&nbsp;           </tt> net amount at risk
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;NSP&nbsp;&nbsp;&nbsp;&nbsp;      </tt> net single premium used in MEC testing and in setting the CVAT corridor
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;QAB&nbsp;&nbsp;&nbsp;&nbsp;      </tt> qualified additional benefit
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;ROP&nbsp;&nbsp;&nbsp;&nbsp;      </tt> return of premium (death benefit option)
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;SA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </tt> specified amount
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;TSA&nbsp;&nbsp;&nbsp;&nbsp;      </tt> Transactions of the Society of Actuaries
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;VLR&nbsp;&nbsp;&nbsp;&nbsp;      </tt> variable loan rate
+</p>
+
+<h2>
+A Addendum: MEC testing
+</h2>
+
+<h3>
+Important definitions
+</h3>
+
+<p>
+&ldquo;Contract year&rdquo; does not always mean policy year.
+Policy year is one plus the number of full years since issue.
+Contract year is one plus the number of full years since the
+last material change, or since issue if there has been no
+material change.
+Contract year restarts at one on the date of any material change,
+which may not be a policy anniversary.
+</p>
+
+<p>
+Least death benefit (LDB) is the lowest death benefit
+(including any QABs) in the most recent seven-year test
+period<a href="#fn63" name="fr63" title="">[63]</a>.
+</p>
+
+<p>
+Other terms (e.g., CSV) are as defined in our GPT specifications.
+</p>
+
+<h3>
+When a contract is issued
+</h3>
+
+<p>
+Calculate the seven-pay premium as
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<sub><small>7</small></sub>P<sub><small>x</small></sub> &times; DB + amortized QAB charges<a href="#fn64" name="fr64" title="">[64]</a>
+<br>
+using the initial DB defined in our GPT
+specifications<a href="#fn65" name="fr65" title="">[65]</a>.
+Round it down if at all.
+</p>
+
+<p>
+Start a new seven-year test period on the day of issue.
+</p>
+
+<p>
+Record the initial death benefit as the LDB.
+</p>
+
+<p>
+For CVAT contracts, set DCV to zero before recognizing the
+initial premium or any &sect;1035 exchange.
+</p>
+
+<h3>
+When a &sect;1035 exchange occurs
+</h3>
+
+<p>
+A new life insurance contract is a MEC if it is issued as a
+&sect;1035 exchange from a MEC.
+</p>
+
+<p>
+A &sect;1035 exchange, while technically a material change,
+receives special handling.
+Process all &sect;1035 exchanges before any other payment.
+At issue, treat the anticipated
+exchange amount, net of all premium-based loads including
+any premium-tax load, as a non-premium increment to CSV.
+For CVAT contracts, increase DCV by this increment.
+Do not test this increment against the seven-pay premium.
+Recalculate the seven-pay premium with the formula
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<sub><small>7</small></sub>P<sub><small>x+t</small></sub> &times; (DB &minus; CSV &divide; A<sub><small>x+t</small></sub>) + amortized QAB charges
+<br>
+used for material changes, with t naturally equal to zero.
+Test for unnecessary
+premium<a href="#fn66" name="fr66" title="">[66]</a>.
+</p>
+
+<p>
+When the exchanged funds are ultimately received, reissue
+the policy reflecting the actual &sect;1035
+amount<a href="#fn67" name="fr67" title="">[67]</a>,
+and retest
+from the original issue date.
+</p>
+
+<h3>
+When a premium is paid
+</h3>
+
+<p>
+During every seven-year test period, test each
+&ldquo;amount paid&rdquo;<a href="#fn68" name="fr68" title="">[68]</a>
+(except any &sect;1035 amount) against the
+seven-pay premium limit.
+The limit, measured on each day
+during that period, is cumulative seven-pay premiums minus
+cumulative amounts paid.
+If any amount paid exceeds the limit, then the contract becomes a
+MEC.
+Otherwise, test for unnecessary premium.
+</p>
+
+<h3>
+Testing for unnecessary premium
+</h3>
+
+<p>
+Our GPT specifications ensure that no unnecessary premium can
+ever be paid.
+Skip the rest of this section for GPT contracts.
+But perform these calculations for CVAT contracts:
+</p>
+
+<p>
+NSP is the net single premium rate for the attained age
+times LDB, plus the present value of QAB charges, reflecting
+the benefit amount of each QAB in the first contract year.
+Round it down if at all.
+</p>
+
+<p>
+Necessary premium is NSP adjusted for the cash value.
+Normally the adjustment equals DCV.
+Whenever CSV is lower than DCV, use CSV
+instead<a href="#fn69" name="fr69" title="">[69]</a>,
+but don&rsquo;t change DCV.
+If the adjustment is less than zero, then use zero instead.
+Thus:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Adjustment = max[0, min(DCV, CSV)]
+</p>
+
+<p>
+Net necessary premium is NSP minus the adjustment for cash value.
+Round it down if at all.
+If the result is less than zero, then use zero instead.
+Thus:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Net = max(0, NSP - Adjustment)
+</p>
+
+<p>
+Gross necessary premium is net necessary premium adjusted
+for premium-based load (PL) including any premium-tax load.
+If PL is a scalar:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Gross = Net &divide; (1 &minus; PL)
+<br>
+Sometimes PL is tiered such that one load PLTarget applies up
+to target premium and a different load PLExcess on any excess.
+In that case:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Gross = [Net + Breakpoint &times; (PLTarget &minus; PLExcess)] &divide; (1 &minus; PLExcess)
+<br>
+In either case, round the result down if at all.
+</p>
+
+<p>
+Accept payments up to the gross necessary premium.
+Any remaining payment is unnecessary premium.
+If there is any unnecessary premium, process a material change
+before accepting it.
+The material change happens after the
+necessary premium was applied to CSV and DB was updated if
+necessary to reflect any corridor, ROP, or similar increase
+due to necessary premium.
+</p>
+
+<h3>
+When monthiversary processing is performed
+</h3>
+
+<p>
+Update DCV for CVAT contracts.
+Accumulate it like AV, but using &sect;7702 assumptions.
+Reflect the actual death benefit option.
+Use current charges and
+loads<a href="#fn70" name="fr70" title="">[70]</a>.
+Use &sect;7702 interest and mortality.
+Reflect all transactions, but ignore
+loans<a href="#fn71" name="fr71" title="">[71]</a>.
+Disregard charges for nonqualified additional
+benefits<a href="#fn72" name="fr72" title="">[72]</a>.
+Add any extra amounts payable on surrender such as refundable
+sales loads but do not accumulate those amounts at interest.
+Round it up if at all.
+Whenever it is negative, set it to zero.
+Ignore this step for GPT contracts, which have no DCV.
+</p>
+
+<h3>
+When a material change occurs
+</h3>
+
+<p>
+Process material changes as of the very day they take
+effect, and not as of any other
+date<a href="#fn73" name="fr73" title="">[73]</a>.
+</p>
+
+<p>
+Start a new seven-year test period on the day of the
+material change, even if that is not a monthiversary.
+&sect;7702A treats the contract as though it were issued on that
+day.
+</p>
+
+<p>
+For CVAT contracts, set DCV equal to CSV immediately prior
+to the material change.
+</p>
+
+<p>
+Calculate a new seven-pay
+premium<a href="#fn74" name="fr74" title="">[74]</a>
+as
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<sub><small>7</small></sub>P<sub><small>x+t</small></sub> &times; (DB &minus; CSV &divide; A<sub><small>x+t</small></sub>) + amortized QAB charges
+<br>
+where CSV reflects all necessary premium paid, but no
+unnecessary premium, and DB reflects the corridor factor
+times this CSV and any ROP increase due to necessary
+premium, as well as any increases.
+Round it down if at all.
+</p>
+
+<p>
+If the new seven-pay premium is negative, set it to zero.
+In this case, the contract does not become a MEC, but no
+premium can be paid for seven
+years<a href="#fn75" name="fr75" title="">[75]</a>.
+</p>
+
+<p>
+Record the values of CSV and DB for use in handling any
+later decrease.
+</p>
+
+<p>
+Test any unnecessary premium against the new seven-pay premium limit.
+If it exceeds the limit, then the contract becomes a MEC.
+</p>
+
+<h3>
+When benefits decrease
+</h3>
+
+<p>
+Examine the death benefit and every QAB benefit each day to
+see whether they decrease for any reason.
+If neither the
+death benefit nor any QAB benefit decreases below the level
+originally assumed at the beginning of the most recent
+seven-year test period, then skip this step.
+</p>
+
+<p>
+For individual life and first-to-die contracts, skip this
+step if the most recent seven-year test period has already ended.
+But for survivorship contracts, proceed even if that
+period has ended.
+</p>
+
+<p>
+Update LDB and each QAB&rsquo;s benefit amount to reflect
+decreases
+only<a href="#fn76" name="fr76" title="">[76]</a>.
+If one of these items increases while
+another one decreases, then process a material change and
+skip the rest of this
+step<a href="#fn77" name="fr77" title="">[77]</a>.
+</p>
+
+<!-- TODO ?? Don&rsquo;t permit SA to decrease below the current corridor DB? -->
+
+<p>
+Calculate a new seven-pay premium as
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<sub><small>7</small></sub>P<sub><small>x</small></sub> &times; (LDB &minus; CSV &divide; A<sub><small>x</small></sub>) + amortized QAB charges
+<br>
+LDB reflects the decrease.
+CSV is as of the beginning of the
+first contract year, and may often be zero.
+The stream of QAB charges begins in the first contract year, and
+its present value is as of the first contract year.
+If the decrease occurs within the first seven policy years, then
+CSV reflects any &sect;1035 exchange.
+If the new seven-pay premium is negative, set it to zero.
+Round it down if at all.
+</p>
+
+<p>
+Using the new seven-pay premium, retest each payment made
+throughout the most recent seven-year test period.
+Never look back before the latest material change.
+Stop testing at the end of the seven-year period, even for
+survivorship contracts.
+If premium exceeds the new seven-pay limit at any time during the
+retrospective seven-year test period, then the contract becomes a
+MEC as of the current
+date<a href="#fn78" name="fr78" title="">[78]</a>.
+</p>
+
+<h3>
+When a contract becomes a MEC
+</h3>
+
+<p>
+Notify all appropriate parties immediately.
+The admin system ought to have prevented an inadvertent MEC
+(&para;6/3).
+</p>
+
+<p>
+All or a portion of any payments can be returned within sixty
+days after the end of the contract year in which they were paid.
+It may be possible to return enough to prevent a MEC.
+Subtract the payments returned, without interest, from
+amounts paid, and redo the &sect;7702A calculations using the
+revised amount paid.
+Return the payments to the owner with taxable interest.
+</p>
+
+<p>
+Unless it is cured this way, once a contract is a MEC, it is
+always a MEC.
+IRS can cure it, but normally will not except
+under a formal remediation program.
+There is no other way to cure a MEC.
+For instance, a retroactive change in specified
+amount does not correct a MEC.
+</p>
+
+<p>
+Whenever a contract becomes a MEC, apply less-favorable MEC
+taxation to all distributions made within the preceding two
+years (&para;5/11), even though they were not so taxed when they
+occurred.
+</p>
+
+<h3>
+Other material changes
+</h3>
+
+<p>
+Correction of a misstatement of age or gender is a material
+change.
+Consult the actuarial department when this occurs.
+An irremediable MEC may
+result<a href="#fn79" name="fr79" title="">[79]</a>.
+</p>
+
+<p>
+Removing a substandard rating is a material change if the
+rating was reflected in &sect;7702A calculations.
+So is a change from smoker to nonsmoker, if that distinction was
+reflected in &sect;7702A
+calculations<a href="#fn80" name="fr80" title="">[80]</a>.
+</p>
+
+<p>
+Any fundamental modification such as a change in the &sect;7702
+mortality or interest basis is a material change.
+For substitution of insured, see &para;5/14.
+</p>
+
+<h3>
+Illustration strategies to avoid a MEC
+</h3>
+
+<p>
+Increasing SA whenever a MEC would otherwise occur is a feasible
+if somewhat impractical illustration strategy when every SA
+increase is recognized as a material change.
+But when payment of unnecessary premium is the only
+material-change trigger, that strategy no longer works very
+well<a href="#fn81" name="fr81" title="">[81]</a>.
+Unnecessary premium paid during a
+seven-year test period typically violates the seven-pay
+limit, producing a MEC.
+This strategy is inefficient anyway:
+it is generally much better to purchase a new policy.
+</p>
+
+<p>
+Another common strategy reduces each successive premium as
+required to satisfy the seven-pay test and avoid a MEC.
+But paying the full input premium might increase AV when the
+reduced premium would let AV decrease.
+Thus, reducing the
+premium on an option 2 contract can cause the DB to decrease
+and trigger retrospective retesting that could produce a MEC.
+That problem might be avoided by manually increasing SA
+whenever necessary to avoid a decrease that would produce a MEC.
+</p>
+
+<p>
+Furthermore, reducing each successive premium to the
+seven-pay limit still allows unnecessary premium to be paid
+outside a seven-year test period.
+The ensuing series of
+material changes might produce a stream of payments totaling
+less than could be paid by avoiding unnecessary premium.
+</p>
+
+<h3>
+Notation
+</h3>
+
+<p>
+<sub><small>n</small></sub>P<sub><small>x+t</small></sub>
+is the net n-pay premium per dollar of death benefit
+for a life issued at age x at duration t, reflecting actual
+monthiversary mechanics.
+</p>
+
+<p>
+A<sub><small>x+t</small></sub> is the net single premium per dollar of death benefit
+for a life issued at age x at duration t, reflecting actual
+monthiversary mechanics.
+</p>
+
+<p>
+x is the insurance age as of the beginning of the first
+contract year (which is not necessarily the first policy
+year).
+</p>
+
+<p>
+t is the number of full contract years since the
+beginning of the most recent seven-year test period.
+For example, if a contract was materially changed two years and
+three months ago, then t is two today.
+Wherever t occurs in this addendum&rsquo;s
+formulas, it always happens to have the value zero,
+because the contract is deemed to be reissued upon material
+change; it is written only to emphasize that the
+insurance age as of the first contract year is meant.
+</p>
+
+<h2>
+B Actuarial addendum
+</h2>
+
+<p>
+1 This section discusses some technical issues and is
+intended only for actuaries who desire a more detailed treatment.
+Others may skip it.
+</p>
+
+<p>
+2 The power of Eckley&rsquo;s UL commutation technique is
+inadequately appreciated.
+It permits the calculation of any
+isolated annual value without iteration in many important
+cases<a href="#fn82" name="fr82" title="">[82]</a>.
+Account values can be conveniently determined by
+applying the prospective formula for terminal reserves.
+</p>
+
+<p>
+3 I have calculated the account values associated with
+guideline premiums (akin to a guaranteed maturity fund) in
+<tt>lmi</tt>, computing values iteratively each month, and
+compared them to results from a spreadsheet that uses monthly
+commutation functions.
+I selected issue age 20 so that the calculations would span many
+years, and ran both systems to endowment at age 100 with the same
+assumptions and no rounding.
+The absolute value of the largest relative error
+in AV in any year was 0.00000000012, or one hundred twenty
+parts per trillion.
+This discrepancy arises because of the way floating point numbers
+are stored and manipulated by computer hardware.
+</p>
+
+<p>
+4 One much coarser method uses classic annual curtate commutation
+functions made approximately semicontinuous by an
+i &frasl; &delta; adjustment.
+It is not appropriate to apply such an adjustment to the formulas
+in this monograph, because they already reflect the monthiversary
+mechanics of a typical UL contract (but see &para;B/9 for an
+adjustment to q that is appropriate).
+At any rate, monthly functions are nearly equal to continuous:
+for i = 4%,
+</p>
+
+<table cellpadding=0 cellspacing=0 width="50%">
+  <tr>
+    <td align="right">
+      i &frasl; i<sup><small>(n)</small></sup>
+    </td>
+    <td align="center">
+      n
+    </td>
+    <td align="left">
+    </td>
+  </tr>
+  <tr>
+    <td align="right">
+      1.009901951
+    </td>
+    <td align="center">
+      2
+    </td>
+    <td align="left">
+      semiannual
+    </td>
+  </tr>
+  <tr>
+    <td align="right">
+      1.014877439
+    </td>
+    <td align="center">
+      4
+    </td>
+    <td align="left">
+      quarterly
+    </td>
+  </tr>
+  <tr>
+    <td align="right">
+      1.018203509
+    </td>
+    <td align="center">
+      12
+    </td>
+    <td align="left">
+      monthly
+    </td>
+  </tr>
+  <tr>
+    <td align="right">
+      1.019814474
+    </td>
+    <td align="center">
+      365
+    </td>
+    <td align="left">
+      daily
+    </td>
+  </tr>
+  <tr>
+    <td align="right">
+      1.019869268
+    </td>
+    <td align="center">
+      &infin;
+    </td>
+    <td align="left">
+      continuous
+    </td>
+  </tr>
+</table>
+
+<p>
+5 It would be a good idea to work the examples in
+Desrochers&rsquo;s paper (TSA XL) and compare and contrast our
+results with his.
+</p>
+
+<p>
+6 We ought to analyze the conservatism that results from
+ignoring the corridor in guideline premium calculations,
+particularly with respect to option B.
+</p>
+
+<p>
+7 When calculating guideline premiums two ways&mdash;above and
+below target premium&mdash;some practitioners always perform both
+calculations and assume that the lower is the one that
+should be used.
+It would be interesting to know whether this is always correct.
+But it does not seem to suggest any way to speed up our program.
+</p>
+
+<!-- &para;B/8 preserves the ASCII typography of Eckley&rsquo;s paper. -->
+
+<p>
+8 Here is a proof of the assertion (&para;7/8) that netting an
+account value load against the &sect;7702 interest rate is a
+conservative alternative to reflecting the AV load exactly.
+Assuming that the account value load is deducted before
+other monthly charges, we have two cases:
+</p>
+
+<p>
+Case 1: DBO A
+</p>
+
+<p>
+Eckley&rsquo;s equation (1):
+<tt>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;(1) [(0V+P)&minus;Q(1/(1+ig)&minus;(0V+P))](1+ic)=1V
+</tt>
+</p>
+
+<p>
+Eckley&rsquo;s equation rewritten with an AV load, r:
+<tt>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;(1a) [(0V+P)(1&minus;r)&minus;Q(1/(1+ig)&minus;(0V+P)(1&minus;r))](1+ic)=1V
+</tt>
+</p>
+
+<p>
+Eckley&rsquo;s equation rewritten with an interest decrement, r:
+<tt>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;(1b) [(0V+P)&minus;Q(1/(1+ig)&minus;(0V+P))](1+ic&minus;r)=1V
+</tt>
+</p>
+
+<p>
+Rewrite (1a) and (1b) in terms of (1):
+<tt>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;(1a) = (1) &minus; r(0V+P)(1+Q)(1+ic)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;(1b) = (1) &minus; r[(0V+P)(1+Q)&minus;Q/(1+ig)]
+</tt>
+</p>
+
+<p>
+AV Load &ge; interest decrement if Q &ge; 0, ig &gt; &minus;1, ic &ge; 0
+</p>
+
+<p>
+Case 2: DBO B
+</p>
+
+<p>
+Eckley&rsquo;s equation (14):
+<tt>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;(14) [(0V+P)&minus;Q((1+0V+P)/(1+ig)&minus;(0V+P))](1+ic)=1V
+</tt>
+</p>
+
+<p>
+Eckley&rsquo;s equation rewritten with an AV Load, r:
+<tt>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;(14a) [(0V+P)(1&minus;r)&minus;Q((1+(0V+P)(1&minus;r))/(1+ig)&minus;(0V+P)(1&minus;r))](1+ic)=1V
+</tt>
+</p>
+
+<p>
+Eckley&rsquo;s equation rewritten with an interest decrement, r:
+<tt>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;(14b) [(0V+P)&minus;Q((1+0V+P)/(1+ig)&minus;(0V+P))](1+ic&minus;r)=1V
+</tt>
+</p>
+
+<p>
+Rewrite (14a) and (14b) in terms of (14):
+<tt>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;(14a) = (14) &minus; r[(0V+P)&minus;Q(0V+P)/(1+ig)+Q(0V+P)](1+ic)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;(14b) = (14) &minus; r[(0V+P)&minus;Q(1+0V+P)/(1+ig)+Q(0V+P)]
+</tt>
+</p>
+
+<p>
+AV Load &ge; interest decrement if Q &ge; 0, ig &gt; &minus;1, ic &ge; 0
+<br>
+<br>Q &ge; 0 because cost of insurance rates are never negative.
+<br>ig &gt; &minus;1 because guaranteed interest always exceeds &minus;100%.
+<br>ic &ge; 0 because the &sect;7702 interest rate is never negative.
+</p>
+
+<p>
+It would of course be possible to generalize Eckley&rsquo;s work
+to reflect the load exactly, gaining a slight advantage at
+the cost of much extra work.
+The algebra would be complicated enough that questions might
+arise as to its rigorous validity.
+We prefer to use Eckley&rsquo;s work as he
+presents it, pointing out that we can accurately reproduce
+the numerical examples in his paper.
+</p>
+
+<p>
+If instead the account value load is deducted after other
+monthly charges, then the validity of the assertion can seen
+immediately: both Eckley&rsquo;s equations (1) and (14) are of the
+form
+<tt>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;(AV+P&minus;deductions)(1+ic)=1V
+<br>
+</tt>
+which, for a load s deducted after other charges, becomes
+<tt>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;(AV+P&minus;deductions)(1+ic)(1&minus;s)=1V
+<br>
+</tt>
+and it is conservative to apply the net rate (1+ic&minus;s)
+because
+<tt>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;1+ic&minus;s &lt; 1+ic&minus;s&minus;(s&times;ic) = (1+ic)(1&minus;s)
+<br>
+</tt>
+where s and ic are both necessarily positive.
+</p>
+
+<p>
+When the load (whether deducted before or after other
+monthly charges) is netted against the interest rate in this
+fashion, the annual effective rates are simply subtracted.
+It is important to understand that we are not deducting the
+spread from the statutory rate to produce a lower &sect;7702
+interest rate.
+Rather, the &sect;7702 interest rate remains what it is,
+and we are netting the AV load against it as a conservative
+mathematical simplification.
+</p>
+
+<p>
+9 Tabular annual safe-harbor (&para;8/2) mortality rates (q) may
+be converted as follows for use as monthly effective rates
+in &para;14.1/1.
+<br>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;DB&nbsp;&nbsp;= </tt>death benefit at beginning of month
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;E&nbsp;&nbsp;&nbsp;= </tt>expense charges deducted at beginning of month
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;COI&nbsp;= </tt>cost-of-insurance deduction
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;AV&nbsp;&nbsp;= </tt>account value at beginning of month, before deduction of E or COI
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;i&nbsp;&nbsp;&nbsp;= </tt>annual effective death-benefit discount rate for NAAR calculation (&para;7/12)
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;q&nbsp;&nbsp;&nbsp;= </tt>annual mortality rate to be converted to monthly
+<br>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;<sup><small>m</small></sup>q&nbsp;= 1 &minus; (1 &minus; q)<sup><small>1&frasl;12</small></sup></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;<sup><small>m</small></sup>v&nbsp;= 1 &divide; (1 + i)<sup><small>1&frasl;12</small></sup></tt>
+<br>
+<br>
+Deducting the COI charge at the beginning of the month increases
+the amount actually at risk, suggesting an equation that has the
+COI term on both sides:
+<br>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;COI = [DB &times; <sup><small>m</small></sup>v &minus; (AV &minus; E &minus; COI)] &times; <sup><small>m</small></sup>q</tt>
+<br>
+<br>
+Rearranging:
+<br>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;COI = [DB &times; <sup><small>m</small></sup>v &minus; (AV &minus; E)] &times; <sup><small>m</small></sup>q + COI &times; <sup><small>m</small></sup>q</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;COI &times; (1 &minus; <sup><small>m</small></sup>q) = [DB &times; <sup><small>m</small></sup>v &minus; (AV &minus; E)] &times; <sup><small>m</small></sup>q</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;COI = [DB &times; <sup><small>m</small></sup>v &minus; (AV &minus; E)] &times; <sup><small>m</small></sup>q &divide; (1 &minus; <sup><small>m</small></sup>q)</tt>
+<br>
+<br>
+suggests the definitions:
+<br>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;NAAR = DB &times; <sup><small>m</small></sup>v &minus; (AV &minus; E)</tt>
+<br>
+<br>
+which is what contracts normally specify, and:
+<br>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;mortality-charge rate&nbsp;=&nbsp;min[limit, <sup><small>m</small></sup>q &divide; (1 &minus; <sup><small>m</small></sup>q)]</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;min[limit, (1 &minus; (1 &minus; q)<sup><small>1&frasl;12</small></sup>) &divide; (1 &minus; q)]<sup><small>1&frasl;12</small></sup></tt>
+<br>
+<br>
+for some limiting value such as 1 &frasl; 12.
+</p>
+
+<h2>
+C Template for product-specific addenda
+</h2>
+
+<p>
+Parameters for <tt>lmi</tt>&rsquo;s &ldquo;sample&rdquo; product:
+</p>
+
+<pre>
+     qc   &sect;7702 mortality rate:
+               1980 CSO converted as described in &para;B/9,
+               limited to 1&frasl;12
+     ic   &sect;7702 interest rate:
+               0.00327373978219891 in all years for GLP
+               0.00486755056534305 in all years for GSP
+     ig   death-benefit discount rate: same as ic
+</pre>
+
+<hr>
+
+<p>
+[<a name="fn1" href="#fr1">1</a>]
+See, for example, Revenue Ruling 91-17.
+</p>
+<p>
+[<a name="fn2" href="#fr2">2</a>]
+The reasonableness of a termination dividend depends on
+historical practice.
+The legislative history cites New
+York&rsquo;s rules as an example and notes that termination
+dividends have historically been modest: DEFRA Blue Book,
+page 647.
+In the 1990s, one company marketed a survivorship product with
+a termination dividend on the order of $400 per thousand; that
+would obviously be part of CSV for &sect;7702 and &sect;7702A.
+</p>
+<p>
+[<a name="fn3" href="#fr3">3</a>]
+Because, for instance, interest on dividend accumulations
+is taxed when it accrues.
+But the cash value of paid-up additions is included in CSV.
+</p>
+<p>
+[<a name="fn4" href="#fr4">4</a>]
+&para;4/1.
+</p>
+<p>
+[<a name="fn5" href="#fr5">5</a>]
+Except that a GPT contract can switch to the CVAT when a
+nonforfeiture option is elected.
+This may make a reduced paid-up benefit easier to implement,
+although it may increase the amount of that benefit.
+</p>
+<p>
+[<a name="fn6" href="#fr6">6</a>]
+This is so even if the new contract is issued in exchange
+for several old contracts, only one of which is a MEC.
+</p>
+<p>
+[<a name="fn7" href="#fr7">7</a>]
+DEFRA Blue Book, page 651.
+But see footnote 57 on page
+655: &ldquo;The use of the date on the policy would not be
+considered the date of issue if the period between the date
+of application and the date on which the policy is actually
+placed in force is substantially longer than under the
+company&rsquo;s usual business practice.&rdquo;
+</p>
+<p>
+[<a name="fn8" href="#fr8">8</a>]
+While the legislative history refers to the end of the
+mortality table, the statute literally says age 100, so age
+100 applies even to the 2001 CSO table, which extends to age
+121.
+</p>
+<p>
+[<a name="fn9" href="#fr9">9</a>]
+See footnotes to &para;1/2.
+</p>
+<p>
+[<a name="fn10" href="#fr10">10</a>]
+With respect to MEC testing only; &sect;7702A(c)(2)(A) has no
+effect on the definitional test.
+For example, an experience-rated group policy might apportion its
+experience reserve across certificates according to their most
+recent yearly COI deductions, which affects the amount of the
+deductions; but a decrease does not change historical deductions.
+Or consider a contract with a sales load refund equal to some
+percentage of commissions.
+That calculation would be
+different if the policy were reissued, even though
+commissions aren&rsquo;t drawn back when &sect;7702A(c)(2)(A) deems the
+contract to be reissued at a lower benefit.
+Therefore, a reduction during the sales load refund period may
+create a retrospective MEC.
+</p>
+<p>
+[<a name="fn11" href="#fr11">11</a>]
+&sect;7702(d)(2).
+</p>
+<p>
+[<a name="fn12" href="#fr12">12</a>]
+Table-driven systems normally disregard this adjustment,
+as <tt>lmi</tt> currently does, yet it is explicitly permitted by
+the DEFRA Blue Book, page 649: &ldquo;Finally, the amount of any
+qualified additional benefits will not be taken into account
+in determining the net single premium.
+However, the charge
+stated in the contract for the qualified additional benefit
+will be treated as a future benefit, thereby increasing the
+cash value limitation by the discounted value of that
+charge.&rdquo;
+</p>
+<p>
+[<a name="fn13" href="#fr13">13</a>]
+&sect;7702(e)(1)(D) permits treating a UL contract&rsquo;s cash value
+at maturity as an endowment benefit, up to the &ldquo;least amount
+payable as a death benefit at any time under the contract&rdquo;.
+This means that NSP is not simply A<sub><small>x</small></sub>, but rather
+A<sub><small>x:angle(100&minus;x)</small></sub>: not M<sub><small>x</small></sub>&nbsp;&frasl;&nbsp;D<sub><small>x</small></sub>, but rather (M<sub><small>x</small></sub>&nbsp;+&nbsp;D<sub><small>100</small></sub>)&nbsp;&frasl;&nbsp;D<sub><small>x</small></sub>.
+The purpose of the computational rule is to forbid any
+coefficient higher than unity on the D<sub><small>100</small></sub> term.
+Thus, IRS
+Notice 2009-47, section 3.02(b), says that NSP calculations
+under the 2001 CSO &ldquo;would assume an endowment on the date
+the insured attains age 100&rdquo;. The DEFRA Blue Book, at page
+652, says that 7702(e)(1)(B) &ldquo;will generally prevent
+contracts endowing at face value before age 95 from
+qualifying as life insurance&rdquo;; it specifically does not rule
+out contracts that endow later for an amount no higher than
+&ldquo;face value&rdquo;.
+For contracts that have undergone benefit
+changes, this amount must be adjusted.
+Page 653 says that
+for CVAT contracts, it &ldquo;must be computed treating the date
+of change, in effect, as a new date of issue&rdquo;; for GPT
+contracts, &ldquo;the date of change for increased benefits should
+be treated as a new date only with respect to the changed
+portion of the contract&rdquo;&mdash;i.e., B in the
+A&nbsp;+&nbsp;B&nbsp;&minus;&nbsp;C
+formula&mdash;so
+that A, B, and C all apply their respective benefit amounts
+to D<sub><small>100</small></sub> as they do to M<sub><small>x</small></sub>.
+This is what DesRochers&rsquo;s paper in
+TSA XL does, e.g. on pages 240 and 262&ndash;263.
+The endowment
+amount is limited, as in &para;3/1, to the specified amount.
+(It&rsquo;s okay if &para;5/5 happens to overstate the endowment amount
+for C, because that is a subtractive term.)
+<!-- TODO ?? But at the moment <tt>lmi</tt> seems to track the lowest benefit since
+the issue date and use that value for the endowment benefit of A, B, and C.
+-->
+</p>
+<p>
+[<a name="fn14" href="#fr14">14</a>]
+Some contracts change the death benefit to what would have
+been purchased by the actual premiums paid at the correct age
+and gender: the intention is to satisfy the Code, although
+the required recalculation may be difficult.
+Other contracts
+take the ratio of what the most recent monthly deduction
+should have been to what it actually was, and multiply the
+death benefit by that; the intention is to simplify the
+calculation, and a likely result is an irremediably failed
+contract.
+Many contracts have an overriding provision empowering the
+company to do anything necessary to reform the contract so as to
+comply with &sect;7702 (but less often &sect;7702A).
+</p>
+<p>
+[<a name="fn15" href="#fr15">15</a>]
+This appears unlikely but is not impossible.
+For instance, a sufficiently large policy fee might cause the GSP
+to exceed the reciprocal of the corridor factor.
+Even so, we would ignore the corridor increase in determining old
+and new DB for purposes of this paragraph.
+</p>
+<p>
+[<a name="fn16" href="#fr16">16</a>]
+The legislative history supports not treating any such DB
+increase as an adjustment event anyway.
+DEFRA Blue Book,
+page 654: &ldquo;no adjustment shall be made if the change occurs
+automatically, for example, a change due to&hellip;the payment of
+guideline premiums or changes initiated by the company.&rdquo;
+</p>
+<p>
+[<a name="fn17" href="#fr17">17</a>]
+Forceouts are not limited to premiums paid: income can be
+forced out as well.
+</p>
+<p>
+[<a name="fn18" href="#fr18">18</a>]
+730 days; 731 if an intercalary day is comprised.
+Some would look back only to the beginning of the current
+calendar year, arguing that regulations implementing the
+two-year lookback of &sect;7702(f)(7)(E) and &sect;7702A(d)(2)
+have never been issued.
+</p>
+<p>
+[<a name="fn19" href="#fr19">19</a>]
+OBRA House Report, page 1438: &ldquo;an increase in the charge
+for a qualified additional benefit is not a material
+change&hellip;. An addition of, or an increase in, a qualified
+additional benefit, however, is a material change&rdquo;. The
+legislative history does not address decreases in a scale of
+QAB charges.
+Ignoring them is consonant with the apparent intent.
+</p>
+<p>
+[<a name="fn20" href="#fr20">20</a>]
+128 Cong. Rec. S10943, 1982-08-19: &ldquo;Such adjustments are
+only to be made in two situations: First, if the change
+represents a previously scheduled benefit increase that was
+not reflected in the guideline premiums because of the
+so-called computational rules; or second, if the change is
+initiated by the policy over [owner] to alter the amount or
+pattern of the benefits.&rdquo; See also OBRA House Report, page
+1438.
+<!-- TODO ?? merge later reference? -->
+</p>
+<p>
+[<a name="fn21" href="#fr21">21</a>]
+&ldquo;If a life insurance policy provides the policyholder with
+an option to change the insured, the exercise of the option
+is a sale or other disposition under section 1001 of the
+Code and section 1035 does not apply&hellip;.
+Section 1.1035-1 of
+the regulations expressly excludes from the application of
+section 1035 exchanges of policies that do not relate to the
+same insured and thus prevents policy owners from deferring
+indefinitely recognition of gain with respect to the policy
+value.&rdquo; Rev. Rul. 90-109.
+</p>
+<p>
+[<a name="fn22" href="#fr22">22</a>]
+Some might treat a substitution of insured as both an
+adjustment event and a material change, relying on the DEFRA
+Blue Book, page 656: &ldquo;A substitution of insured&hellip;pursuant to
+a binding obligation will not be considered to create a new
+contract&rdquo;.
+However, IRS would more likely enforce Rev. Rul. 90-109.
+</p>
+<p>
+[<a name="fn23" href="#fr23">23</a>]
+Withdrawals are generally nontaxable up to basis under
+&sect;72(e) unless the contract is a MEC.
+But see &sect;7702(f)(7)(B&ndash;E).
+The server assumes that its client
+distinguishes taxable from nontaxable withdrawals.
+</p>
+<p>
+[<a name="fn24" href="#fr24">24</a>]
+PLR 9106050: &ldquo;A waiver of the monthly deduction under the
+disability waiver rider does not affect Taxpayer&rsquo;s
+&lsquo;investment in the contract&rsquo; under section 72(e)(6) of the
+Code or the &lsquo;premiums paid&rsquo; under section 7702(f)(1)(A) for
+the Contract.&rdquo; Andrew Strelka&rsquo;s &ldquo;Taxing the Disabled&rdquo; in the
+Spring 2007 issue of Richmond Journal of Law and the Public
+Interest discusses this matter in depth.
+</p>
+<p>
+[<a name="fn25" href="#fr25">25</a>]
+&sect;7702(f)(1)(B).
+</p>
+<p>
+[<a name="fn26" href="#fr26">26</a>]
+&sect;7702A(e)(1)(B).
+</p>
+<p>
+[<a name="fn27" href="#fr27">27</a>]
+It may be impossible to avoid a MEC in extraordinary
+circumstances (e.g., misstatement of age) or pathological cases
+(e.g., an investment return approaching &minus;100% on a VUL
+contract with a negative seven-pay premium).
+</p>
+<p>
+[<a name="fn28" href="#fr28">28</a>]
+The DEFRA Blue Book, page 654, says that such a
+&ldquo;distribution will be taxable to the policyholder as
+ordinary income to the extent there is income in the
+contract.&rdquo; The 1986 statute changed that
+(&sect;7702(f)(7)(B&ndash;E)).
+Often, a forceout is a tax-free return of premium.
+</p>
+<p>
+[<a name="fn29" href="#fr29">29</a>]
+Convergence of the resulting series could be hastened by
+conservatively adding one cent to each forceout iterand.
+Alternatively, the geometric series theorem could be applied.
+The server does not do this because it is desired
+that the client perform the forceout calculation.
+</p>
+<p>
+[<a name="fn30" href="#fr30">30</a>]
+We call these &ldquo;involuntary withdrawals&rdquo; to
+distinguish them from the &ldquo;forceouts&rdquo; of &para;6/4.
+The concepts are somewhat similar, but their treatment under
+&sect;7702(f)(7)(B&ndash;E) differs.
+</p>
+<p>
+[<a name="fn31" href="#fr31">31</a>]
+&sect;7702(f)(6).
+</p>
+<p>
+[<a name="fn32" href="#fr32">32</a>]
+The monthly approach is recommended, since interest
+credited during the year cannot be known in advance.
+</p>
+<p>
+[<a name="fn33" href="#fr33">33</a>]
+DEFRA Blue Book, page 648.
+</p>
+<p>
+[<a name="fn34" href="#fr34">34</a>]
+DEFRA Blue Book, page 649.
+</p>
+<p>
+[<a name="fn35" href="#fr35">35</a>]
+For example, &sect;7702A(c)(3)(A)(i).
+</p>
+<p>
+[<a name="fn36" href="#fr36">36</a>]
+&sect;7702(c)(3)(D)(i).
+</p>
+<p>
+[<a name="fn37" href="#fr37">37</a>]
+&sect;7702(c)(3)(B)(ii).
+</p>
+<p>
+[<a name="fn38" href="#fr38">38</a>]
+This would not be a &ldquo;reasonable&rdquo; approximation: DEFRA Blue
+Book, page 653.
+</p>
+<p>
+[<a name="fn39" href="#fr39">39</a>]
+In all likelihood, unit values reflect quarterly fund expenses
+that are applied to average assets in a way that varies from one
+fund to the next, and such expenses aren&rsquo;t specified in the
+contract (&para;7/6).
+</p>
+<p>
+[<a name="fn40" href="#fr40">40</a>]
+And also in Norris cases, where state law must be read to
+conform to Title VII of the Civil Rights Act of 1964.
+</p>
+<p>
+[<a name="fn41" href="#fr41">41</a>]
+Guaranteed mortality lower than the safe harbor might
+raise state approval issues, for instance in the area of
+nonforfeiture.
+</p>
+<p>
+[<a name="fn42" href="#fr42">42</a>]
+Public Law 100-647 of 1988 (TAMRA) amended
+&sect;7702(c)(3)(B)(ii), which formerly permitted
+&ldquo;any charges&hellip;specified in the contract&rdquo;,
+to allow only &ldquo;reasonable charges&hellip;reasonably
+expected to be actually paid&rdquo;.
+</p>
+<p>
+[<a name="fn43" href="#fr43">43</a>]
+&sect;7702(b)(2)(B).
+</p>
+<p>
+[<a name="fn44" href="#fr44">44</a>]
+Asset-tiered charges could be reflected exactly at the
+cost of extra complexity.
+Ignoring them is safe even under
+the old-fashioned interpretation that any change in current
+charges is an adjustment event.
+</p>
+<p>
+[<a name="fn45" href="#fr45">45</a>]
+DEFRA Blue Book, page 649.
+</p>
+<p>
+[<a name="fn46" href="#fr46">46</a>]
+This exhaustive approach is not necessary if a formulaic
+approach suffices to cover every possible case.
+</p>
+<p>
+[<a name="fn47" href="#fr47">47</a>]
+Alternatively, Desrochers [Transactions of the Society of
+Actuaries (TSA) XL, page 209] suggests setting a load equal
+to the difference between the GLP and the nonforfeiture
+premium.
+But the rules on reasonable charges that came after
+that paper was published rendered this approach of little or
+no practical applicability.
+</p>
+<p>
+[<a name="fn48" href="#fr48">48</a>]
+For instance, by using an approximate calculation such as
+a table lookup, or by using a different mortality table.
+</p>
+<p>
+[<a name="fn49" href="#fr49">49</a>]
+A MEC testing server will need to know the maximum funding
+duration and maximum benefit duration for each QAB.
+</p>
+<p>
+[<a name="fn50" href="#fr50">50</a>]
+Neither is there any such consequence if a QAB is
+terminated, or its benefits increased or decreased, after
+the funding period, as long as the current charges remain
+zero.
+One could imagine a QAB term rider, fundable over a
+shorter term than its benefits last, whose benefit is
+conditionally reduced whenever poor investment performance
+would cause NAAR to increase beyond reinsurance capacity, in
+a context similar to &para;6/5.
+</p>
+<p>
+[<a name="fn51" href="#fr51">51</a>]
+&sect;7702(f)(5)(C)(ii).
+</p>
+<p>
+[<a name="fn52" href="#fr52">52</a>]
+Charges for a non-QAB are treated as any other amount
+deducted from a contract: they&rsquo;re potentially taxable.
+Consider a single-premium life contract with a long term
+care benefit funded by withdrawals.
+The withdrawals generate taxable income, just as if the base
+policy and the non-QAB were separate entities.
+</p>
+<p>
+[<a name="fn53" href="#fr53">53</a>]
+A non-qualified additional benefit is not a benefit at all
+under &sect;7702(f)(5)(C)(i).
+</p>
+<p>
+[<a name="fn54" href="#fr54">54</a>]
+Perhaps this means that the endowment benefit (&para;4/7) could
+include the term amount for &sect;7702A only, but we disregard
+that reading.
+</p>
+<p>
+[<a name="fn55" href="#fr55">55</a>]
+TEFRA Blue Book, page 371: &ldquo;the guideline premiums are to
+be adjusted&hellip;if a qualified additional benefit ceases for any
+reason, including the death of an individual (such as the
+insured&rsquo;s spouse) insured thereunder, this is considered a
+change in benefits requiring an adjustment of the guideline
+premiums.&rdquo; Thus, if a family member covered under a QAB dies
+within the first seven contract years, and the full
+seven-pay premium reflecting the QAB has been paid each year, then
+the death triggers a &sect;7702A(c)(2)(A) decrease and a
+retrospective MEC.
+</p>
+<p>
+[<a name="fn56" href="#fr56">56</a>]
+Presumably the QAB was not funded past its expiry date, so
+the quantities B and C would cancel.
+</p>
+<p>
+[<a name="fn57" href="#fr57">57</a>]
+PLR 9513015, PLR 9519023, PLR 9741046.
+</p>
+<p>
+[<a name="fn58" href="#fr58">58</a>]
+Thus, for instance, increases due to payments under the ROP death
+benefit option are not material changes because of the necessary
+premium exception.
+Cf. &para;5/8.
+</p>
+<p>
+[<a name="fn59" href="#fr59">59</a>]
+Treating as material changes only adjustment events that
+increase the guideline limit can allow payment of
+unnecessary premium under a GPT contract, for instance if
+endowment benefits are reflected, or if guideline premiums
+are not strictly nondecreasing by duration for a given issue
+age, as might occur with high expense charges applicable in
+the first year only.
+</p>
+<p>
+Furthermore, consider a change from an increasing to a level
+death benefit option that is not accompanied by any change
+in death benefit.
+The guideline limit decreases.
+Page 654 of
+the DEFRA Blue Book implies that this is as much a material
+change as any other &sect;1035 exchange.
+&ldquo;Further, under prior
+and present law, for the purpose of the adjustment rules,
+any change in the terms of a contract that reduces the
+future benefits under the contract will be treated as an
+exchange of contracts (under sec. 1035)&hellip;. This provision
+was intended to apply specifically to situations in which a
+policyholder changes from a future benefits pattern taken
+into account under the computational provision for policies
+with limited increases in death benefits to a future benefit
+of a level amount (even if at the time of change the amount
+of death benefit is not reduced).&rdquo; (The enactment of
+&sect;7702(f)(7)(B&ndash;E) superseded this part of the legislative
+history with respect only to certain changes during the
+first fifteen years.)
+</p>
+<p>
+[<a name="fn60" href="#fr60">60</a>]
+Applying both rules to decrease adjustments is conservatively
+less advantageous to the taxpayer, but seems so extraordinary
+on the face of it that some elaboration is in order.
+The rollover rule must be applied because that is the way this
+method keeps the necessary-premium and definitional guidelines
+synchronized.
+The reduction rule must be applied because recognizing a material
+change does not satisfy &sect;7702A(c)(2)(A).
+We handle the reduction first, using its seven-pay premium for
+retrospective testing; then process the material change, using
+its seven-pay premium for prospective testing.
+</p>
+<p>
+[<a name="fn61" href="#fr61">61</a>]
+Other than on the QAB&rsquo;s normal expiry date: see &para;11/6.
+</p>
+<p>
+[<a name="fn62" href="#fr62">62</a>]
+To prevent systematic abuse, a pro-rata portion of the amount
+paid in the old contract year could be deducted from the
+seven-pay limit in the first new contract year (cf. &para;5/10).
+For example, suppose a $1000 premium is paid on anniversary, and
+then the seven-pay premium becomes $2000 due to a material
+change nine months later.
+Only nine-twelfths of the $1000
+payment is attributable to the completed portion of the old
+contract year, so the other $250 = 1000 &times; [1 &minus; (9 &divide; 12)] must
+be attributed to the new contract year about to begin.
+Thus, for the twelve months following the material change,
+premiums are limited to $2000 &minus; 250 = 1750.
+If this adjusted limit is negative, then the premium limit for
+that year is zero, consistent with page 1439 of the OBRA House
+Report; but no forceout is required.
+Any such rule would be added to
+the procedures for CVAT MEC testing as well.
+</p>
+<p>
+[<a name="fn63" href="#fr63">63</a>]
+&sect;7702A(c)(3)(B)(i) says &ldquo;the lowest level of the death
+benefit and qualified additional benefits payable in the 1st
+7 contract years&rdquo;. But &sect;7702(c)(2)(A) forces that to equal
+the level in the first contract year.
+As long as the benefits are properly updated, LDB is always the
+benefit as of the beginning of the first contract year.
+</p>
+<p>
+[<a name="fn64" href="#fr64">64</a>]
+Amortized QAB charges means the present value of QAB
+charges divided by a seven-year annuity-due factor,
+with the annuity period duly reduced if it would otherwise
+extend past maturity.
+</p>
+<p>
+[<a name="fn65" href="#fr65">65</a>]
+&para;3/1&ndash;2
+</p>
+<p>
+[<a name="fn66" href="#fr66">66</a>]
+If the net 1035 amount exceeds the necessary premium, we
+declare the contract a MEC, though some might hold that it is
+not&mdash;reasoning, perhaps, that the CVAT corridor saves it.
+Cf. the general recommendation in &para;3/1.
+</p>
+<p>
+[<a name="fn67" href="#fr67">67</a>]
+&para;3/3
+</p>
+<p>
+[<a name="fn68" href="#fr68">68</a>]
+&para;6/1&ndash;2
+</p>
+<p>
+[<a name="fn69" href="#fr69">69</a>]
+TAMRA Conference Report, page 105, footnote 3.
+</p>
+<p>
+[<a name="fn70" href="#fr70">70</a>]
+&para;9/1
+</p>
+<p>
+[<a name="fn71" href="#fr71">71</a>]
+TAMRA Conference Report, footnote 3.
+Policy loans affect AV in that loaned and unloaned funds
+generally earn different rates of interest, but that has no
+effect because the DCV interest rate is prescribed by statute.
+</p>
+<p>
+[<a name="fn72" href="#fr72">72</a>]
+&para;11/3.
+</p>
+<p>
+[<a name="fn73" href="#fr73">73</a>]
+TAMRA Conference Report, page 98: &ldquo;as of the date that the
+material change takes effect&rdquo;. For instance, it is not
+permissible to delay recognition of a material change to the
+next monthiversary or anniversary.
+</p>
+<p>
+[<a name="fn74" href="#fr74">74</a>]
+If the restriction suggested in a footnote to &para;13/4 is
+desired, apply it here.
+I.e., in the first contract year only, reduce the new seven-pay
+premium by a pro-rata portion of the amount paid in the
+partially-completed former contract year.
+</p>
+<p>
+[<a name="fn75" href="#fr75">75</a>]
+OBRA House Report, page 1439.
+</p>
+<p>
+[<a name="fn76" href="#fr76">76</a>]
+This means that decreases occurring outside the seven-year
+test period on a CVAT contract are ignored.
+</p>
+<p>
+[<a name="fn77" href="#fr77">77</a>]
+It is unduly harsh to process the decrease while ignoring
+the increase, even though the necessary premium exception
+may permit that.
+In order to recognize the increase, a
+material change must be declared.
+</p>
+<p>
+[<a name="fn78" href="#fr78">78</a>]
+Another interpretation is that it becomes a retrospective
+MEC as of the (past) failure date, but [TODO ?? cite
+anticipation rules described elsewhere].
+At any rate, it is
+most likely too late to refund the offending premium.
+</p>
+<p>
+[<a name="fn79" href="#fr79">79</a>]
+If the misstatement is discovered prior to death, the
+premium or mortality charge might be adjusted instead of the
+benefits, and some would hold that this is not a material
+change.
+</p>
+<p>
+[<a name="fn80" href="#fr80">80</a>]
+Some would hold that underwriting liberalizations are not
+material changes.
+</p>
+<p>
+[<a name="fn81" href="#fr81">81</a>]
+Insurers could manually administer cases for which it behooves
+them to recognize a material change.
+</p>
+<p>
+[<a name="fn82" href="#fr82">82</a>]
+Irregular premium, withdrawal, and SA patterns are easily
+handled.
+Option changes and loans can be handled with more work.
+Calculations that depend on other calculated values,
+such as waiver of monthly deductions, corridor death
+benefits, banded COI rates, and tiered loads are
+considerably more difficult, but can be handled by iterating
+vector commutation-function equations.
+Exact rounding of intermediate values cannot be modeled at all.
+</p>
+
+<hr>
+
+<p>
+Copyright &copy; 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
+This program, including its documentation, is free software. Read the
+  <a href="COPYING.html">terms</a>
+under which you can redistribute and modify it.
+</p>
+
+<p>
+Maintained by
+<a href="mailto:&#103;&#99;&#104;&#105;&#99;&#97;&#114;&#101;&#115;@sbcglobal.net">
+Gregory W. Chicares</a>. The latest version of this file can be found
+at the <tt>lmi</tt>
+<a href="https://savannah.nongnu.org/projects/lmi/">website</a>.
+</p>
+
+</body>
+
+</html>
+

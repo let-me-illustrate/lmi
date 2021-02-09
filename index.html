@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "https://www.w3.org/TR/html4/strict.dtd">
+
+<!--
+    Let me illustrate... main webpage.
+
+    Copyright (C) 2002, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    https://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+-->
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Let me illustrate&hellip;</title>
+</head>
+
+<body>
+
+<h2>
+Let me illustrate&hellip;
+</h2>
+
+<p>
+<tt>lmi</tt> is a
+<a href="https://www.gnu.org/philosophy/free-sw.html">free</a>
+life-insurance illustration system designed to make product
+implementation quick and easy.
+</p>
+
+<p>
+Complicated products like variable UL have many moving parts, but the
+parts are almost always generic, and the way they work together is
+essentially identical across the industry. For example, one
+product&rsquo;s current policy fee may be higher or lower than
+another&rsquo;s. It might vary by duration, or even by issue state.
+But, even though its value varies, its behavior is standardized:
+it&rsquo;s highly likely to be deducted at the beginning of
+monthiversary processing. Specifying a UL product these days is pretty
+much a matter of specifying a large but finite set of parameters.
+</p>
+
+<p>
+Given that products are parametric variations on a few common themes,
+how should their differences be expressed in an illustration system?
+You may have worked with other programs that put product differences
+into their source code. The drawback is that implementing a new
+product or updating an old one requires programming. That&rsquo;s
+bound to take time and money. Specifications need to be written. Code
+needs to be tested. Misunderstandings can arise.
+</p>
+
+<p>
+<tt>lmi</tt>, on the other hand, segregates all product differences
+into external files that you don&rsquo;t have to be a programmer to
+change. Its source code doesn&rsquo;t need to be touched unless a
+product has some novel feature that hasn&rsquo;t been programmed yet,
+and even in that case the feature only has to be coded and tested
+once. Otherwise, implementing a product is simply a matter of
+specifying its rates and rules in <tt>lmi</tt>&rsquo;s product editor,
+without modifying the program.
+</p>
+
+<p>
+Here&rsquo;s an example&mdash;a guaranteed premium load of 5% in the
+first year, 3.5% for the next three years, and 2% thereafter:
+</p>
+
+<p>
+<img src="guar_prem_load.png" width="547" height="366" alt="[screenshot]">
+</p>
+
+<p>
+This particular load applies only up to the target premium. The next
+parameter in the tree on the left-hand side is the corresponding load
+on premium in excess of target. These guaranteed parameters have
+current analogs. There are <i>refundable</i> variants as well, to
+support products that refund a portion of premium loads upon early
+surrender.
+</p>
+
+<p>
+Some parameters are rates; others are rules. For example, suppose you
+offer a preferred class only to nonsmokers, and don&rsquo;t allow it
+for simplified or guaranteed issue. Here&rsquo;s how you enter that in
+the <tt>lmi</tt> product editor:
+</p>
+
+<p>
+<img src="allow_preferred.png" width="754" height="381" alt="[screenshot]">
+</p>
+
+<p>
+<i>[We&rsquo;ll widen the underwriting-basis field.]</i>
+</p>
+
+<p>
+That rule doesn&rsquo;t just prevent calculating preferred-smoker
+values. It also controls GUI input. If a user has selected the
+preferred class for a nonsmoker&hellip;
+</p>
+
+<p>
+<img src="preferred_nonsmoker.png" width="588" height="153" alt="[screenshot]">
+</p>
+
+<p>
+&hellip;and then chooses smoker instead&hellip;
+</p>
+
+<p>
+<img src="standard_smoker.png" width="588" height="153" alt="[screenshot]">
+</p>
+
+<p>
+&hellip;then preferred is grayed out, and the class is forced to standard.
+</p>
+
+<p>
+Everything that distinguishes one product from another is expressed in
+external product-database files with a couple hundred editable
+parameters. Other external files let you extensively customize the
+layout and contents of input screens and printed reports;
+documentation for these features will be added later.
+<!--
+Here&rsquo;s
+a detailed discussion of the
+<a href="architecture.html">architecture</a>.
+-->
+</p>
+
+<h2><a name="#OtherUses">Other uses</a></h2>
+
+<p>
+<tt>lmi</tt> has been used in production since 1998 as an illustration
+system, but it has other uses.
+</p>
+
+<p>
+<b>Illustrating a product while it&rsquo;s being developed.</b>
+Often it&rsquo;s useful to see how a sales concept works, without
+waiting for a vendor or a systems department to implement the product.
+But profit-testing systems usually provide only rudimentary ledgers.
+Product-development staff will probably find <tt>lmi</tt> comfortably
+similar to their profit-testing software&mdash;after all, it was
+designed by a product-development actuary. They can use <tt>lmi</tt>
+to test illustration scenarios at any stage of pricing. Once a product
+design is final, illustrations can be produced immediately.
+That&rsquo;s helpful when agents are clamoring for specimen
+illustrations before a system is rolled out.
+</p>
+
+<p>
+<b>Producing product specifications.</b>
+<tt>lmi</tt>&rsquo;s database files contain all the rates and rules
+needed for illustrations. These files can be printed as flat text.
+Using <tt>lmi</tt> as a specification engine is easier than writing
+narrative specifications. Parameters are presented in a uniform
+format, so if you want to see how two similar products differ, you can
+use a side-by-side file-comparison tool to compare the text output.
+</p>
+
+<p>
+<b>Validating another illustration system.</b>
+We&rsquo;ve used <tt>lmi</tt> to test several other systems. Usually,
+vendors won&rsquo;t show us their source code, so we send them
+<tt>lmi</tt>&rsquo;s monthly account-value rollforward report for
+every mismatching test case. That&rsquo;s easier than going back and
+forth with hand calculations.
+</p>
+
+<p>
+<b>Validating an administration system.</b>
+Illustration systems typically credit interest as though every month
+had the same number of days, so they can&rsquo;t match an
+administration system&rsquo;s values exactly. To address that problem,
+<tt>lmi</tt> optionally reflects the exact number of days in each month.
+</p>
+
+<h2><a name="Contributing">Contributing</a></h2>
+
+<p>
+Many people at many insurance companies have created ad-hoc systems
+to fill needs that <tt>lmi</tt> meets. These systems typically are
+written in haste, not peer reviewed, not rigorously tested, and often
+maintainable only by their authors. Why not combine our efforts, so we
+can all have something better at less cost? Contact the
+<a href="mailto:&#103;&#99;&#104;&#105;&#99;&#97;&#114;&#101;&#115;@sbcglobal.net">
+principal author</a> if you&rsquo;d like to help.
+</p>
+
+<h2><a name="Present">Present limitations</a></h2>
+
+<p>
+Today, <tt>lmi</tt> is used in production for numerous general- and
+separate-account UL products in the BOLI, high net worth, and
+group UL markets. Naturally, it&rsquo;s most complete and
+best tested in the areas where it&rsquo;s been deployed. But
+I&rsquo;ve developed other types of products in prior decades, and
+have taken care to design <tt>lmi</tt> for extensibility. For example,
+changing the program to illustrate an annuity product took only a few
+days.
+</p>
+
+<h2><a name="FurtherInformation">Further information</a></h2>
+
+<ul>
+  <li>
+    <a href="https://www.nongnu.org/lmi/user_manual.html">user manual</a>
+  </li>
+  <li>
+    <a href="https://www.nongnu.org/lmi/7702.html">&sect;7702 and &sect;7702A</a>
+  </li>
+  <li>
+    <a href="https://git.savannah.nongnu.org/cgit/lmi.git">source-code repository</a>
+  </li>
+  <li>
+    <a href="https://savannah.nongnu.org/bugs/?group=lmi">defect reports</a>
+  </li>
+  <li>
+    <a href="https://savannah.nongnu.org/support/?group=lmi">enhancement requests</a>
+  </li>
+  <li>
+    <a href="https://savannah.nongnu.org/task/?group=lmi">miscellaneous technical tasks</a>
+  </li>
+  <li>
+    <a href="https://savannah.nongnu.org/mail/?group=lmi">mailing list</a>
+  </li>
+</ul>
+
+<!--
+<ul>
+  <li><a href="working_with_source.html">Working with the source code</a></li>
+  <li><a href="coding_principles.html">Coding principles</a></li>
+</ul>
+-->
+
+<hr>
+
+<p>
+Copyright &copy; 2002, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
+This program, including its documentation, is free software. Read the
+  <a href="COPYING.html">terms</a>
+under which you can redistribute and modify it.
+</p>
+
+<p>
+Maintained by
+<a href="mailto:&#103;&#99;&#104;&#105;&#99;&#97;&#114;&#101;&#115;@sbcglobal.net">
+Gregory W. Chicares</a>. The latest version of this file can be found
+at the <tt>lmi</tt>
+<a href="https://savannah.nongnu.org/projects/lmi/">website</a>.
+</p>
+
+</body>
+
+</html>
+
