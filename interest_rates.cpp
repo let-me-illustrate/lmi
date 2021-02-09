@@ -882,16 +882,17 @@ void InterestRates::Initialize7702Rates()
 
 // §7702 prescribes the interest basis for all §7702 and §7702A
 // calculations as the interest rate actually guaranteed in the
-// contract, or a statutory rate if greater. The statutory rate is 4%
-// for GLP and 6% for GSP. It is 4% for all §7702A calculations,
-// except that the necessary premium for guideline contracts is
-// defined in terms of the guideline limit.
+// contract, or a statutory rate if greater. The statutory rate is
+// iglp() and igsp() for GLP and GSP, and iglp() for all §7702A
+// calculations except that the necessary premium for guideline
+// contracts is defined in terms of the guideline limit.
 
 // The §7702 net rate is determined in two steps. First, the
 // guaranteed interest rate is determined from the contract, and the
 // statutory rate is used instead if it is greater. This operation is
 // performed separately for all periods with different guaranteed
-// rates [DEFRA Blue Book, page 648]. For example, if the guaranteed
+// rates [DEFRA Blue Book, page 648]. For example, using the original
+// 1984 statutory rates (4% for GLP and 6% for GSP), if the guaranteed
 // rate is 4.5% for five years and 3.5% thereafter, then the GLP
 // interest rate is 4.5% for five years and 4.0% thereafter, while the
 // GSP rate is always 6.0%. For products such as pure variable UL that
@@ -1043,8 +1044,8 @@ void InterestRates::Initialize7702Rates()
 // really belongs here, not in class BasicValues. TAXATION !! Resolve this.
 
 {
-    // Monthly guar net int for 7702, with 4 or 6% min, is
-    //   greater of {4%, 6%} and annual guar int rate
+    // Monthly guar net int for 7702 is
+    //   greater of {iglp(), igsp()} and annual guar int rate
     //   less 7702 spread
     // TAXATION !! Resolve this:
     // TODO ?? We need to subtract other things too, e.g. comp (sometimes)...
@@ -1099,7 +1100,7 @@ void InterestRates::Initialize7702Rates()
         }
 */
 
-    // ET !! Mly7702iGlp = i_upper_12_over_12_from_i(max(.04, guar_int) - SpreadFor7702_);
+    // ET !! Mly7702iGlp = i_upper_12_over_12_from_i(max(iglp(), guar_int) - SpreadFor7702_);
     Mly7702iGlp.assign(Length, iglp());
     std::transform
         (guar_int.begin()
@@ -1122,7 +1123,7 @@ void InterestRates::Initialize7702Rates()
         ,i_upper_12_over_12_from_i<double>()
         );
 
-    // ET !! Mly7702iGlp = i_upper_12_over_12_from_i(max(.06, guar_int) - SpreadFor7702_);
+    // ET !! Mly7702iGlp = i_upper_12_over_12_from_i(max(igsp(), guar_int) - SpreadFor7702_);
     Mly7702iGsp.assign(Length, igsp());
     std::transform
         (guar_int.begin()

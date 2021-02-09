@@ -176,7 +176,7 @@ mec_state test_one_days_7702A_transactions
         ,stratified.minimum_tiered_spread_for_7702()
         );
 
-    // ET !! Mly7702iGlp = i_upper_12_over_12_from_i(max(.04, guar_int) - spread);
+    // ET !! Mly7702iGlp = i_upper_12_over_12_from_i(max(iglp(), guar_int) - spread);
     std::vector<double> Mly7702iGlp(input.years_to_maturity());
     assign
         (Mly7702iGlp

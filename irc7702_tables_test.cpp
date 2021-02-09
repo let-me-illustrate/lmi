@@ -454,9 +454,10 @@ static double const ss_ol_7pp[100] =
 
 void Test_Corridor_and_7PP()
 {
+    double constexpr iglp = 0.04;
     std::vector<double> const naar_discount
         (100
-        ,i_upper_12_over_12_from_i<double>()(0.04)
+        ,i_upper_12_over_12_from_i<double>()(iglp)
         );
     irc7702_tables z
         (mce_2001cso
@@ -476,11 +477,12 @@ void Test_Corridor_and_7PP()
 
     // In the last year, the OL formula reduces to:
     //   NSP[omega-1] = vq * (i/delta) + vp
-    //   (0.30285 / 1.04) * (0.04 / ln(1.04)) + (1 - 0.30285) / 1.04
+    //   =     (0.30285  / (1.0 + iglp)) * (iglp / ln((1.0 + iglp)))
+    //   + (1 - 0.30285) / (1.0 + iglp)
     BOOST_TEST(materially_equal(0.30285, z.q_[99], 0.0));
     double ol_nsp99 =
-          (       z.q_[99]  / 1.04) * (0.04 / std::log(1.04))
-        +  (1.0 - z.q_[99]) / 1.04
+          (       z.q_[99]  / (1.0 + iglp)) * (iglp / std::log((1.0 + iglp)))
+        +  (1.0 - z.q_[99]) / (1.0 + iglp)
         ;
     BOOST_TEST(materially_equal(ol_corr[99], 1.0 / ol_nsp99, DBL_EPSILON));
 

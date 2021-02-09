@@ -408,8 +408,8 @@ void BasicValues::Init7702()
     // (optionally) rounding monthly COI rates.
     MlyDcvqc = round_coi_rate()(Mly7702qc);
 
-    // Monthly guar net int for 7702, with 4 or 6% min, is
-    //   greater of {4%, 6%} and annual guar int rate
+    // Monthly guar net int for 7702 is
+    //   greater of {iglp(), igsp()} and annual guar int rate
     //   less 7702 spread
     // TODO ?? TAXATION !! We need to subtract other things too, e.g. comp (sometimes)...
     //   transformed to monthly (simple subtraction?).

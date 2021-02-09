@@ -237,14 +237,14 @@ class gpt_test
 
 void gpt_test::initialize(int issue_age)
 {
-    static double const i_m_4 = i_upper_12_over_12_from_i<double>()(iglp());
-    static double const i_m_6 = i_upper_12_over_12_from_i<double>()(igsp());
+    static double const i12glp = i_upper_12_over_12_from_i<double>()(iglp());
+    static double const i12gsp = i_upper_12_over_12_from_i<double>()(igsp());
     q_m = sample_q(issue_age);
     int const length = lmi::ssize(q_m);
-    glp_ic               .assign(length,     i_m_4);
-    glp_ig               .assign(length,     i_m_4);
-    gsp_ic               .assign(length,     i_m_6);
-    gsp_ig               .assign(length,     i_m_6);
+    glp_ic               .assign(length,     i12glp);
+    glp_ig               .assign(length,     i12glp);
+    gsp_ic               .assign(length,     i12gsp);
+    gsp_ig               .assign(length,     i12gsp);
     prem_load_target     .assign(length,  0.03    );
     prem_load_excess     .assign(length,  0.02    );
     policy_fee_monthly   .assign(length,  5.0     );

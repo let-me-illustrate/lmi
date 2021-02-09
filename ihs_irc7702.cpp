@@ -437,7 +437,7 @@ void Irc7702::InitCommFns()
         gsp_naar_disc_rate = GSPic;
         }
 
-    // Commutation functions using 4% min i: both options 1 and 2
+    // Commutation functions using min i = iglp(): both options 1 and 2
     CommFns[Opt1Int4Pct].reset
         (::new ULCommFns
             (Qc
@@ -460,7 +460,7 @@ void Irc7702::InitCommFns()
         );
     DEndt[Opt2Int4Pct] = CommFns[Opt2Int4Pct]->aDomega();
 
-    // Commutation functions using 6% min i: always option 1
+    // Commutation functions using min i = igsp(): always option 1
     CommFns[Opt1Int6Pct].reset
         (::new ULCommFns
             (Qc
