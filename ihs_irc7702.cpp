@@ -326,6 +326,10 @@ void Irc7702::ProcessAdjustableEvent
 // We changed our interpretation, but it'd be nice to preserve
 // the old functionality, conditional on a behavior flag. And
 // the name is poor: shouldn't it just be 'EndowmentBenefit'?
+//
+// TAXATION !! lmi seems to track the lowest benefit since the
+// issue date and use that value for the endowment benefit of
+// A, B, and C, which conflicts with '7702.html' [4/8].
     LeastBftAmtEver = std::min(LeastBftAmtEver, a_NewBftAmt);
 
     double b_level = CalculateGLP
