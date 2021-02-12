@@ -40,7 +40,7 @@
 // rates, and annual and monthly rates, are stored where needed.
 
 // Interest rates are generally stored as i (or, for different
-// periodicity, i upper 12, e.g.) rather than as (1 + i). It might
+// periodicity, N * i upper N) rather than as (1 + i). It might
 // seem better, at first blush, to store (1 + i), but monthiversary
 // calculations generally calculate an interest increment, round it,
 // and then add it to the principal.
