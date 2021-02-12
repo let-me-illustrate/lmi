@@ -31,10 +31,21 @@
 
 <!--
 
+Follow this uniform pattern for footnotes:
+
+  <a href="#fnN" name="frN" title="">[N]</a>
+  [<a name="fnN" href="#frN">N</a>]
+
+The first part is a forward reference; to avoid stray spaces, write
+it on one line, preceded by the word to its immediate left, and
+followed by any punctuation. The second part introduces the actual
+footnote; write it on a line of its own, and write all footnotes
+as separate paragraphs following the main narrative text.
+
 To renumber footnotes, paste the following into a shell:
 
 m=1
-while grep -q '#fn.*[^\]$' 7702.html; do \
+while grep -q '#fn[0-9].*[^\]$' 7702.html; do \
   sed -i 7702.html \
     -e"/RENU[M]BERED/,/#fn/s|<a.*#fn.*a>|<a href=\"@fn$m\" name=\"fr$m\" title=\"\">[$m]</a>|" \
     -e"/RENU[M]BERED/,/#fr/s|<a.*#fr.*a>|<a name=\"fn$m\" href=\"@fr$m\">$m</a>|" \
@@ -45,6 +56,20 @@ sed -i 7702.html \
   -e'/RENU[M]BERED/,$s|@fn|#fn|' \
   -e'/RENU[M]BERED/,$s|@fr|#fr|' \
   ;
+
+Explanation: Mark the line following this paragraph with a distinctive
+string that's unlikely to occur naturally elsewhere, so that all text
+above it can be skipped (and write it in mangled form in the commands
+above). While any footnote matching the uniform pattern prescribed
+above remains, do the following for each of the pattern's two parts:
+ - select lines from the distinctive marker through the first match
+ - replace the html anchor ('a') element with the corresponding part
+   of the prescribed pattern, substituting a progressive serial number
+   ($m) and changing the '#' temporarily to '@' to avoid matching the
+   altered line again
+Then replace the '@' with '#' throughout (assuming that /[@#]f[nr]/
+occurs only within the footnote pattern). This is neither rigorous nor
+efficient, but it does work. Here's that distinctive marker:
 
 # RENUMBERED
 
