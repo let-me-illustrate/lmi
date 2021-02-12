@@ -1096,9 +1096,31 @@ must use the &sect;7702 rate instead whenever that is higher than
 the contractual rate.
 This affects all premium rates and
 also the CVAT DCV and corridor factors.
+<!-- [draft of a new footnote] DCV discount:
+  (A) the death-benefit discount rate is an interest rate&mdash;i.e., a
+    "rate or rates guaranteed on issuance of the contract" as
+    7702(b)(2)(A) calls it&mdash;so it's subject to the statutory floor; or
+  (B) it's just an independent contractual constant that's used only
+    to define the NAAR, and thus outside the scope of 7702(b)(2)(A)
+    as it does not represent interest actually credited.
+Cf. SOA 7702 textbook, first edition, page 52:
+| because the death benefit discount rate is used only to determine the
+| net amount at risk and does not directly affect cash value growth, it
+| is typically considered to be a contractual element that is not an
+| interest rate guaranteed on issue of the contract
+-->
 Whenever this rate
 is converted to a monthly equivalent, the result must be
 rounded up if at all.
+<!-- [draft of a new footnote] Rounding up is proper, even though for
+the DCV discount rate it it not conservative. For example, if the 7702
+rate is 3%, then (i upper n) / n is approximately 0.0024662697723036864;
+if that is to be rounded to seven decimals, it becomes 0.0024663 .
+NAAR is conventionally DB * 1/(1 + (i upper n) / n) - AV, so rounding
+up decreases NAAR and COI charges, and increases cash values, whereas the
+opposite would seem conservative.
+But no approximation is uniformly conservative.
+-->
 If the contract specifies no such
 discount and none is actually applied, then a discount rate
 of zero may be used.
