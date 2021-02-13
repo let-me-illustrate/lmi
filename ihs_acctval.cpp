@@ -39,7 +39,6 @@
 #include "ledger_variant.hpp"
 #include "loads.hpp"
 #include "materially_equal.hpp"
-#include "math_functions.hpp"           // EXPUNGE
 #include "miscellany.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
@@ -1320,12 +1319,6 @@ void AccountValue::SetAnnualInvariants()
             )
             [Year]
             ;
-        // EXPUNGE
-        double YearsSepAcctGrossRate2 = i_upper_12_over_12_from_i<double>()
-            (InterestRates_->SepAcctGrossRate(SepBasis_, mce_annual_rate)[Year]
-            );
-        YearsSepAcctGrossRate2 = round_interest_rate()(YearsSepAcctGrossRate2);
-        LMI_ASSERT(materially_equal(YearsSepAcctGrossRate, YearsSepAcctGrossRate2));
         }
 
     YearsDcvIntRate         = GetMly7702iGlp()[Year];

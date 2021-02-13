@@ -891,14 +891,6 @@ void InterestRates::DynamicMlySepAcctRate
 // bases?
 
 // TODO ?? What if it's not 'full'--what if we want 'half' or 'zero'?
-            MonthlySepAcctGrossRate = i_upper_12_over_12_from_i<double>()
-                (SepAcctGrossRate_[mce_annual_rate][mce_sep_full][year]
-                );
-            LMI_ASSERT // EXPUNGE
-                (  MonthlySepAcctGrossRate
-                == SepAcctGrossRate_[mce_monthly_rate][mce_sep_full][year]
-                );
-            // Instead of the previous two statements, just do this:
             MonthlySepAcctGrossRate = SepAcctGrossRate_[mce_monthly_rate][mce_sep_full][year];
 
             convert_interest_rates
