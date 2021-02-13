@@ -95,19 +95,18 @@ void LedgerVariant::Init
     InitAnnGenAcctInt = bv.InterestRates_->GenAcctNetRate
         (GenBasis_
         ,mce_annual_rate
-        )
-        [0]
-        ;
+        )[0];
 
-    InitAnnSepAcctGrossInt = bv.InterestRates_->SepAcctGrossRate(SepBasis_)[0];
+    InitAnnSepAcctGrossInt = bv.InterestRates_->SepAcctGrossRate
+        (SepBasis_
+        ,mce_annual_rate
+        )[0];
 
     InitAnnSepAcctNetInt = bv.InterestRates_->SepAcctNetRate
         (SepBasis_
         ,GenBasis_
         ,mce_annual_rate
-        )
-        [0]
-        ;
+        )[0];
 
     InitTgtPremHiLoadRate = bv.Loads_->target_premium_load_maximum_premium_tax()[bv.yare_input_.InforceYear];
     InitMlyPolFee         = dblize(bv.Loads_->monthly_policy_fee(GenBasis_)     [bv.yare_input_.InforceYear]);

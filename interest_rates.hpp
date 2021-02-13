@@ -155,6 +155,7 @@ class InterestRates
 
     std::vector<double> const& SepAcctGrossRate
         (mcenum_sep_basis
+        ,mcenum_rate_period
         ) const;
     std::vector<double> const& SepAcctNetRate
         (mcenum_sep_basis
@@ -243,6 +244,7 @@ class InterestRates
     bool NeedSepAcctRates_;
     mcenum_sep_acct_rate_type SepAcctRateType_;
     std::vector<double> SepAcctGrossRate_
+        [mc_n_rate_periods]
         [mc_n_sep_bases]
         ;
     std::vector<double> SepAcctNetRate_
@@ -318,10 +320,11 @@ inline std::vector<double> const& InterestRates::GenAcctNetRate
 }
 
 inline std::vector<double> const& InterestRates::SepAcctGrossRate
-    (mcenum_sep_basis sep_basis
+    (mcenum_sep_basis   sep_basis
+    ,mcenum_rate_period rate_period
     ) const
 {
-    return SepAcctGrossRate_[sep_basis];
+    return SepAcctGrossRate_[rate_period][sep_basis];
 }
 
 inline std::vector<double> const& InterestRates::SepAcctNetRate

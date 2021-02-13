@@ -223,6 +223,34 @@ void convert_interest_rates
         }
 }
 
+// Transform vector of annual gross interest rates to monthly gross.
+// Often the rates are the same from one year to the next; when that
+// happens, we just replicate the previous value in order to avoid
+// costly floating point calculations.
+void convert_interest_rates
+    (std::vector<double> const& annual_gross_rate
+    ,std::vector<double>      & monthly_gross_rate
+    ,round_to<double>    const& round_interest_rate
+    )
+{
+    int const length = lmi::ssize(annual_gross_rate);
+    monthly_gross_rate.resize(length);
+
+    double cached_monthly_gross_rate  = 0.0;
+
+    double previous_annual_gross_rate = 0.0;
+    for(int j = 0; j < length; ++j)
+        {
+        if(previous_annual_gross_rate != annual_gross_rate[j])
+            {
+            previous_annual_gross_rate = annual_gross_rate[j];
+            cached_monthly_gross_rate = i_upper_12_over_12_from_i<double>()(annual_gross_rate[j]);
+            cached_monthly_gross_rate = round_interest_rate(cached_monthly_gross_rate);
+            }
+        monthly_gross_rate[j] = cached_monthly_gross_rate;
+        }
+}
+
 #if 0
 /// Determine whether loan rates are needed; else they can be zero.
 ///
@@ -328,11 +356,11 @@ void InterestRates::Initialize(BasicValues const& v)
     std::copy
         (v.yare_input_.SeparateAccountRate.begin()
         ,v.yare_input_.SeparateAccountRate.end()
-        ,std::back_inserter(SepAcctGrossRate_[mce_sep_full])
+        ,std::back_inserter(SepAcctGrossRate_[mce_annual_rate][mce_sep_full])
         );
     // TODO ?? At least for the antediluvian branch, the vector in
     // the input class has an inappropriate size.
-    SepAcctGrossRate_[mce_sep_full].resize(Length_);
+    SepAcctGrossRate_[mce_annual_rate][mce_sep_full].resize(Length_);
 
     v.database().query_into(DB_GuarMandE          , MAndERate_[mce_gen_guar]);
     v.database().query_into(DB_CurrMandE          , MAndERate_[mce_gen_curr]);
@@ -434,7 +462,7 @@ void InterestRates::Initialize(BasicValues const& v)
             LMI_ASSERT(Length_ == lmi::ssize(GenAcctNetRate_          [i][j]   ));
             for(int k = mce_sep_full; k < mc_n_sep_bases; ++k)
                 {
-                LMI_ASSERT(Length_ == lmi::ssize(SepAcctGrossRate_          [k]));
+                LMI_ASSERT(Length_ == lmi::ssize(SepAcctGrossRate_    [i]   [k]));
                 LMI_ASSERT(Length_ == lmi::ssize(SepAcctNetRate_      [i][j][k]));
                 }
             LMI_ASSERT(Length_ == lmi::ssize(RegLnCredRate_           [i][j]   ));
@@ -515,11 +543,16 @@ void InterestRates::InitializeSeparateAccountRates()
             {
             for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
                 {
-                SepAcctGrossRate_[mce_sep_zero] = Zero_;
-                SepAcctGrossRate_[mce_sep_half] = Zero_;
                 for(int k = mce_sep_full; k < mc_n_sep_bases; ++k)
                     {
-                    SepAcctNetRate_[i][j][k] = Zero_;
+                    SepAcctNetRate_  [i][j][k] = Zero_;
+                    // Don't zero out input (gross, annual, full).
+                    // SOMEDAY !! That seems senseless: in this
+                    //   if(!NeedSepAcctRates_)
+                    // block, it should be perfectly all right to
+                    // zero out rates that aren't needed.
+                    if(mce_annual_rate == i && mce_sep_full == k) continue;
+                    SepAcctGrossRate_[i]   [k] = Zero_;
                     }
                 }
             }
@@ -584,14 +617,23 @@ void InterestRates::InitializeSeparateAccountRates()
         LMI_ASSERT(mce_gross_rate == SepAcctRateType_);
         }
 
-    SepAcctGrossRate_[mce_sep_zero] = Zero_;
+    SepAcctGrossRate_[mce_annual_rate][mce_sep_zero] = Zero_;
     // ET !! SepAcctGrossRate_[mce_sep_half] = 0.5 * SepAcctGrossRate_[mce_sep_full];
     std::transform
-        (SepAcctGrossRate_[mce_sep_full].begin()
-        ,SepAcctGrossRate_[mce_sep_full].end()
-        ,std::back_inserter(SepAcctGrossRate_[mce_sep_half])
+        (SepAcctGrossRate_[mce_annual_rate][mce_sep_full].begin()
+        ,SepAcctGrossRate_[mce_annual_rate][mce_sep_full].end()
+        ,std::back_inserter(SepAcctGrossRate_[mce_annual_rate][mce_sep_half])
         ,[](double x) { return 0.5 * x; }
         );
+
+    for(int k = mce_sep_full; k < mc_n_sep_bases; ++k)
+        {
+        convert_interest_rates
+            (SepAcctGrossRate_[mce_annual_rate ][k]
+            ,SepAcctGrossRate_[mce_monthly_rate][k]
+            ,RoundIntRate_
+            );
+        }
 
     for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
         {
@@ -604,9 +646,9 @@ void InterestRates::InitializeSeparateAccountRates()
                 continue;
                 }
             convert_interest_rates
-                (SepAcctGrossRate_[k]
-                ,SepAcctNetRate_[mce_annual_rate ][j][k]
-                ,SepAcctNetRate_[mce_monthly_rate][j][k]
+                (SepAcctGrossRate_[mce_annual_rate ]   [k]
+                ,SepAcctNetRate_  [mce_annual_rate ][j][k]
+                ,SepAcctNetRate_  [mce_monthly_rate][j][k]
                 ,RoundIntRate_
                 ,total_charges[j]
                 ,SepAcctSpreadMethod_
@@ -850,11 +892,17 @@ void InterestRates::DynamicMlySepAcctRate
 
 // TODO ?? What if it's not 'full'--what if we want 'half' or 'zero'?
             MonthlySepAcctGrossRate = i_upper_12_over_12_from_i<double>()
-                (SepAcctGrossRate_[mce_sep_full][year]
+                (SepAcctGrossRate_[mce_annual_rate][mce_sep_full][year]
                 );
+            LMI_ASSERT // EXPUNGE
+                (  MonthlySepAcctGrossRate
+                == SepAcctGrossRate_[mce_monthly_rate][mce_sep_full][year]
+                );
+            // Instead of the previous two statements, just do this:
+            MonthlySepAcctGrossRate = SepAcctGrossRate_[mce_monthly_rate][mce_sep_full][year];
 
             convert_interest_rates
-                (SepAcctGrossRate_[sep_basis][year]
+                (SepAcctGrossRate_[mce_annual_rate][sep_basis][year]
                 ,SepAcctNetRate_[mce_annual_rate ][gen_basis][sep_basis][year]
                 ,SepAcctNetRate_[mce_monthly_rate][gen_basis][sep_basis][year]
                 ,RoundIntRate_
