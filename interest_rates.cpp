@@ -365,8 +365,6 @@ void InterestRates::Initialize(BasicValues const& v)
     v.database().query_into(DB_GuarMandE          , MAndERate_[mce_gen_guar]);
     v.database().query_into(DB_CurrMandE          , MAndERate_[mce_gen_curr]);
 
-    v.database().query_into(DB_StableValFundCharge, Stabilizer_             );
-
     // Deduct miscellaneous fund charges and input extra asset comp in
     // the same way as M&E, iff database entity DB_AssetChargeType has
     // the value 'oe_asset_charge_spread'; otherwise, reflect them
@@ -561,7 +559,7 @@ void InterestRates::InitializeSeparateAccountRates()
 
 // TODO ?? Are tiered M&E, IMF, comp treated correctly?
 
-    std::vector<double> miscellaneous_charges(Stabilizer_);
+    std::vector<double> miscellaneous_charges(Zero_);
 // TODO ?? Replace these long lines with PETE expressions.
     // ET !! miscellaneous_charges += AmortLoad_ + ExtraSepAcctCharge_;
     std::transform(miscellaneous_charges.begin(), miscellaneous_charges.end(), AmortLoad_         .begin(), miscellaneous_charges.begin(), std::plus<double>());
@@ -859,19 +857,16 @@ void InterestRates::DynamicMlySepAcctRate
     ,double&          AnnualSepAcctMandERate
     ,double&          AnnualSepAcctIMFRate
     ,double&          AnnualSepAcctMiscChargeRate
-    ,double&          AnnualSepAcctSVRate
     )
 {
 //    AnnualSepAcctIMFRate    += TieredInvestmentManagementFee_[year]; // TODO ?? BOGUS
     InvestmentManagementFee_[year] += AnnualSepAcctIMFRate;
     AnnualSepAcctMiscChargeRate    += ExtraSepAcctCharge_    [year];
-    AnnualSepAcctSVRate            += Stabilizer_            [year];
 // TODO ?? Reference argument 'AnnualSepAcctMandERate' is not modified.
 // Shouldn't it be?
 
     double dynamic_spread =
             AnnualSepAcctMandERate
-        +   AnnualSepAcctSVRate
         +   AmortLoad_[year]
         +   AnnualSepAcctMiscChargeRate
         ;

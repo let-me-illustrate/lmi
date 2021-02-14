@@ -171,7 +171,6 @@ class InterestRates
         ,double&          AnnualSepAcctMandERate
         ,double&          AnnualSepAcctIMFRate
         ,double&          AnnualSepAcctMiscChargeRate
-        ,double&          AnnualSepAcctSVRate
         );
 
     std::vector<double> const& RegLoanSpread
@@ -254,7 +253,6 @@ class InterestRates
         ;
     mcenum_spread_method SepAcctSpreadMethod_;
     std::vector<double> SepAcctFloor_;
-    std::vector<double> Stabilizer_; // TODO ?? Obsolete?
     std::vector<double> AmortLoad_;
     std::vector<double> ExtraSepAcctCharge_;
     std::vector<double> InvestmentManagementFee_;

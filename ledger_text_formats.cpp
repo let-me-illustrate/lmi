@@ -504,7 +504,6 @@ void PrintCellTabDelimited
         ,"DacTaxLoad"
 // SOMEDAY !! Also:
 //   M&E
-//   stable value
 //   DAC- and premium-tax charge
 //   comp
 //   IMF
