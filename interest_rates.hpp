@@ -211,7 +211,6 @@ class InterestRates
     InterestRates(InterestRates const&);
     InterestRates& operator=(InterestRates const&);
 
-    void Initialize(); // TODO ?? Implementation needs work.
     void Initialize(BasicValues const&);
     void InitializeGeneralAccountRates();
     void InitializeSeparateAccountRates();
