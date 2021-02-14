@@ -28,19 +28,16 @@
 #include "basic_values.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
+#include "et_vector.hpp"
 #include "irc7702_interest.hpp"         // iglp(), igsp()
 #include "math_functions.hpp"           // assign_midpoint()
 #include "miscellany.hpp"               // each_equal()
 #include "ssize_lmi.hpp"
 #include "yare_input.hpp"
 
-#include <algorithm>                    // max(), copy()
-#include <functional>
-#include <iterator>                     // back_inserter()
+#include <algorithm>                    // max()
 
 // TODO ?? Future enhancements:
-//
-// Use PETE instead of complex, slow std::transform() expressions.
 //
 // Permit input gross rates.
 //
@@ -326,19 +323,11 @@ void InterestRates::Initialize(BasicValues const& v)
     // interest bonus is not guaranteed.
     std::vector<double> general_account_interest_bonus;
     v.database().query_into(DB_GenAcctIntBonus, general_account_interest_bonus);
-    // ET !! GenAcctGrossRate_ += general_account_interest_bonus;
-    // ...and this might be further simplified by implementing e.g.
+    GenAcctGrossRate_[mce_gen_curr] += general_account_interest_bonus;
+    // DATABASE !! This might be further simplified by implementing e.g.
     //   std::vector<double> product_database::QueryVector(int k) const;
-    // and replacing 'general_account_interest_bonus' with a
-    // temporary:
-    //   GenAcctGrossRate_ += v.database().QueryVector(DB_GenAcctIntBonus);
-    std::transform
-        (GenAcctGrossRate_[mce_gen_curr].begin()
-        ,GenAcctGrossRate_[mce_gen_curr].end()
-        ,general_account_interest_bonus.begin()
-        ,GenAcctGrossRate_[mce_gen_curr].begin()
-        ,std::plus<double>()
-        );
+    // and replacing 'general_account_interest_bonus' with a temporary:
+    //   GenAcctGrossRate_[...] += v.database().QueryVector(DB_GenAcctIntBonus);
 
     v.database().query_into(DB_CurrIntSpread, GenAcctSpread_);
 
@@ -445,23 +434,12 @@ void InterestRates::InitializeGeneralAccountRates()
             << LMI_FLUSH
             ;
         spread[mce_gen_curr] = GenAcctSpread_;
-        // ET !! spread[mce_gen_curr] -= spread[mce_gen_curr][0];
-        std::transform
-            (spread[mce_gen_curr].begin()
-            ,spread[mce_gen_curr].end()
-            ,spread[mce_gen_curr].begin()
-            ,[&spread](double x) { return x - spread[mce_gen_curr].front(); }
-            );
-        // ET !! spread[mce_gen_mdpt] = 0.5 * spread[mce_gen_curr];
+        spread[mce_gen_curr] -= spread[mce_gen_curr][0];
+        spread[mce_gen_mdpt] = spread[mce_gen_curr];
+        spread[mce_gen_mdpt] *= 0.5;
         // (though it should be...
-        // ET !! spread[mce_gen_mdpt] = 0.5 * spread[mce_gen_curr] + 0.5 * spread[mce_gen_guar];
+        //   spread[mce_gen_mdpt] = 0.5 * spread[mce_gen_curr] + 0.5 * spread[mce_gen_guar];
         // ...if DB_GuarIntSpread is ever implemented)
-        std::transform
-            (spread[mce_gen_curr].begin()
-            ,spread[mce_gen_curr].end()
-            ,spread[mce_gen_mdpt].begin()
-            ,[](double x) { return 0.5 * x; }
-            );
         }
     else
         {
@@ -522,10 +500,7 @@ void InterestRates::InitializeSeparateAccountRates()
 // TODO ?? Are tiered M&E, IMF, comp treated correctly?
 
     std::vector<double> miscellaneous_charges(Zero_);
-// TODO ?? Replace these long lines with PETE expressions.
-    // ET !! miscellaneous_charges += AmortLoad_ + ExtraSepAcctCharge_;
-    std::transform(miscellaneous_charges.begin(), miscellaneous_charges.end(), AmortLoad_         .begin(), miscellaneous_charges.begin(), std::plus<double>());
-    std::transform(miscellaneous_charges.begin(), miscellaneous_charges.end(), ExtraSepAcctCharge_.begin(), miscellaneous_charges.begin(), std::plus<double>());
+    miscellaneous_charges += AmortLoad_ + ExtraSepAcctCharge_;
 
     std::vector<double> total_charges[mc_n_gen_bases];
     for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
@@ -534,15 +509,8 @@ void InterestRates::InitializeSeparateAccountRates()
             {
             continue;
             }
-        // ET !! total_charges[j] = MAndERate_[j] + miscellaneous_charges;
-        total_charges[j].reserve(Length_);
-        std::transform
-            (MAndERate_[j].begin()
-            ,MAndERate_[j].end()
-            ,miscellaneous_charges.begin()
-            ,std::back_inserter(total_charges[j])
-            ,std::plus<double>()
-            );
+        total_charges[j] = MAndERate_[j];
+        total_charges[j] += miscellaneous_charges;
         }
 
     double fee = InvestmentManagementFee_[0];
@@ -562,13 +530,7 @@ void InterestRates::InitializeSeparateAccountRates()
                 {
                 continue;
                 }
-            // ET !! total_charges[j] -= total_charges[j][0];
-            std::transform
-                (total_charges[j].begin()
-                ,total_charges[j].end()
-                ,total_charges[j].begin()
-                ,[&total_charges, j](double x) { return x - total_charges[j].front(); }
-                );
+            total_charges[j] -= total_charges[j][0];
             }
         fee = 0.0;
         }
@@ -578,13 +540,16 @@ void InterestRates::InitializeSeparateAccountRates()
         }
 
     SepAcctGrossRate_[mce_annual_rate][mce_sep_zero] = Zero_;
-    // ET !! SepAcctGrossRate_[mce_sep_half] = 0.5 * SepAcctGrossRate_[mce_sep_full];
-    std::transform
-        (SepAcctGrossRate_[mce_annual_rate][mce_sep_full].begin()
-        ,SepAcctGrossRate_[mce_annual_rate][mce_sep_full].end()
-        ,std::back_inserter(SepAcctGrossRate_[mce_annual_rate][mce_sep_half])
-        ,[](double x) { return 0.5 * x; }
-        );
+    // ET !! It would be most useful to have an assignment operator,
+    // so that this could be written as
+    //   X = 0.5 * Y;
+    // instead of
+    //   X = zero_vector_of_desired_length;
+    //   X += 0.5 * Y;
+    // but it's forbidden to add such an operator to std::vector.
+    SepAcctGrossRate_[mce_annual_rate][mce_sep_half] = Zero_;
+    SepAcctGrossRate_[mce_annual_rate][mce_sep_half] +=
+        0.5 * SepAcctGrossRate_[mce_annual_rate][mce_sep_full];
 
     for(int k = mce_sep_full; k < mc_n_sep_bases; ++k)
         {
@@ -643,14 +608,7 @@ void InterestRates::InitializeLoanRates()
         {
         RegLnDueRate_[mce_annual_rate][j] = PublishedLoanRate_;
         PrfLnDueRate_[mce_annual_rate][j] = PublishedLoanRate_;
-        // ET !! PrfLnDueRate_[...] = PublishedLoanRate_ - PrefLoanRateDecr_;
-        std::transform
-            (PrfLnDueRate_[mce_annual_rate][j].begin()
-            ,PrfLnDueRate_[mce_annual_rate][j].end()
-            ,PrefLoanRateDecr_.begin()
-            ,PrfLnDueRate_[mce_annual_rate][j].begin()
-            ,std::minus<double>()
-            );
+        PrfLnDueRate_[mce_annual_rate][j] -= PrefLoanRateDecr_;
         }
 
     RegLoanSpread_[mce_gen_mdpt] = Zero_;
@@ -993,19 +951,14 @@ void InterestRates::Initialize7702Rates()
 
     std::vector<double> const& annual_guar_rate = GenAcctGrossRate_[mce_gen_guar];
 
-    MlyGlpRate_.resize(Length_);
-    // ET !! MlyGlpRate_ = max(iglp(), annual_guar_rate);
-    std::transform
-        (annual_guar_rate.begin()
-        ,annual_guar_rate.end()
-        ,MlyGlpRate_.begin()
-        ,[](double x) { return std::max(iglp(), x); }
-        );
     // ET !! This ought to be implicit, at least in some 'safe' mode:
+    //   LMI_ASSERT_EQUAL(MlyGlpRate_.size(), SpreadFor7702_.size());
+    // _without_ assigning from Zero_ first; but it's not.
+    MlyGlpRate_ = Zero_;
+    assign(MlyGlpRate_, apply_binary(greater_of<double>(), iglp(), annual_guar_rate));
     LMI_ASSERT(MlyGlpRate_.size() == SpreadFor7702_.size());
-    // ET !! MlyGlpRate_ = i_upper_12_over_12_from_i(MlyGlpRate_ - SpreadFor7702_);
-    std::transform(MlyGlpRate_.begin(), MlyGlpRate_.end(), SpreadFor7702_.begin(), MlyGlpRate_.begin(), std::minus<double>());
-    std::transform(MlyGlpRate_.begin(), MlyGlpRate_.end(), MlyGlpRate_.begin(), i_upper_12_over_12_from_i<double>());
+    MlyGlpRate_ -= SpreadFor7702_;
+    assign(MlyGlpRate_, apply_unary(i_upper_12_over_12_from_i<double>(), MlyGlpRate_));
 }
 
 #if 0
