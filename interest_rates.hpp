@@ -226,7 +226,6 @@ class InterestRates
     std::vector<double> Zero_;
 
     // General account interest rates.
-//    bool NeedGenAcctRates_; // TODO ?? Would this be useful?
     bool NeedMidpointRates_;
     mcenum_gen_acct_rate_type GenAcctRateType_;
     std::vector<double> GenAcctGrossRate_
@@ -258,7 +257,6 @@ class InterestRates
     std::vector<double> MAndERate_[mc_n_gen_bases];
 
     // Loan interest rates.
-    bool NeedLoanRates_;
     mcenum_loan_rate_type LoanRateType_;
     std::vector<double> PublishedLoanRate_;
     std::vector<double> PrefLoanRateDecr_;

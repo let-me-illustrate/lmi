@@ -302,8 +302,6 @@ InterestRates::InterestRates(BasicValues const& v)
     ,SepAcctSpreadMethod_{v.database().query<mcenum_spread_method>(DB_SepAcctSpreadMethod)}
     ,AmortLoad_          {Zero_}
     ,ExtraSepAcctCharge_ {Zero_}
-//    ,NeedLoanRates_      {need_loan_rates(v.yare_input_)}
-    ,NeedLoanRates_      {true} // DEPRECATED
     ,LoanRateType_       {v.yare_input_.LoanRateType}
     ,NeedPrefLoanRates_  {v.database().query<bool>(DB_AllowPrefLoan)}
     ,NeedHoneymoonRates_ {v.yare_input_.HoneymoonEndorsement}
@@ -659,21 +657,6 @@ void InterestRates::InitializeSeparateAccountRates()
 
 void InterestRates::InitializeLoanRates()
 {
-    if(!NeedLoanRates_)
-        {
-        for(int i = mce_annual_rate; i < mc_n_rate_periods; ++i)
-            {
-            for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
-                {
-                RegLnCredRate_[i][j] = Zero_;
-                RegLnDueRate_ [i][j] = Zero_;
-                PrfLnCredRate_[i][j] = Zero_;
-                PrfLnDueRate_ [i][j] = Zero_;
-                }
-            }
-        return;
-        }
-
     // Historically, lmi has charged a singular published rate on all
     // loans, which necessarily differs for fixed vs. variable loans,
     // but was the same for both regular and preferred. In 2015, it
