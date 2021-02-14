@@ -323,6 +323,8 @@ void InterestRates::Initialize(BasicValues const& v)
         );
     // TODO ?? At least for the antediluvian branch, the vector in
     // the input class has an inappropriate size.
+    LMI_ASSERT_EQUAL(Length_, lmi::ssize(v.yare_input_.GeneralAccountRate));
+    LMI_ASSERT_EQUAL(Length_, lmi::ssize(GenAcctGrossRate_[mce_gen_curr]));
     GenAcctGrossRate_[mce_gen_curr].resize(Length_);
 
     // General-account interest bonus implemented only as a simple
@@ -358,6 +360,8 @@ void InterestRates::Initialize(BasicValues const& v)
         );
     // TODO ?? At least for the antediluvian branch, the vector in
     // the input class has an inappropriate size.
+    LMI_ASSERT_EQUAL(Length_, lmi::ssize(v.yare_input_.SeparateAccountRate));
+    LMI_ASSERT_EQUAL(Length_, lmi::ssize(SepAcctGrossRate_[mce_annual_rate][mce_sep_full]));
     SepAcctGrossRate_[mce_annual_rate][mce_sep_full].resize(Length_);
 
     v.database().query_into(DB_GuarMandE          , MAndERate_[mce_gen_guar]);
@@ -367,6 +371,8 @@ void InterestRates::Initialize(BasicValues const& v)
     // the same way as M&E, iff database entity DB_AssetChargeType has
     // the value 'oe_asset_charge_spread'; otherwise, reflect them
     // elsewhere as an account-value load.
+    LMI_ASSERT_EQUAL(Length_, lmi::ssize(v.yare_input_.ExtraCompensationOnAssets));
+    LMI_ASSERT_EQUAL(Length_, lmi::ssize(ExtraSepAcctCharge_));
     if(oe_asset_charge_spread == v.database().query<oenum_asset_charge_type>(DB_AssetChargeType))
         {
         // TODO ?? At least for the antediluvian branch, the vector in

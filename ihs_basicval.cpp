@@ -160,6 +160,19 @@ BasicValues::BasicValues
     yare_input_.CurrentCoiMultiplier      .assign(db_len, 1.0);
     yare_input_.FlatExtra                 .resize(db_len);
 
+    // Used by class InterestRates:
+    yare_input_.GeneralAccountRateType    = mce_credited_rate;
+    yare_input_.SeparateAccountRateType   = mce_gross_rate;
+    yare_input_.LoanRateType              = mce_fixed_loan_rate;
+    yare_input_.HoneymoonEndorsement      = false;
+    yare_input_.GeneralAccountRate        .assign(db_len, 1.0);
+    yare_input_.SeparateAccountRate       .assign(db_len, 1.0);
+    yare_input_.ExtraCompensationOnAssets .assign(db_len, 1.0);
+    yare_input_.AmortizePremiumLoad       = false;
+    yare_input_.LoanRate                  = 0.0;
+    yare_input_.HoneymoonValueSpread      .assign(db_len, 1.0);
+    yare_input_.PostHoneymoonSpread       = 0.0;
+
     Init();
 }
 
