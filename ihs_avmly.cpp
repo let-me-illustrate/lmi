@@ -2078,8 +2078,6 @@ void AccountValue::ApplyDynamicMandE(currency assets)
             break;
         }
 
-// TODO ?? Implement tiered comp and tiered management fee.
-
     // Annual separate-account rates.
 
     double m_and_e_rate = StratifiedCharges_->tiered_m_and_e(GenBasis_, dblize(assets));
