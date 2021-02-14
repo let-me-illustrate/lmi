@@ -364,12 +364,6 @@ void InterestRates::Initialize(BasicValues const& v)
         v.database().query_into(DB_LoadAmortFundCharge, AmortLoad_);
         }
 
-    // TODO ?? This was once initialized with 'DB_MgmtFeeFundCharge',
-    // which has been deprecated and is ignored. Is it still useful?
-    // useful? Here, this vector is simply initialized with a scalar,
-    // but later it adds rates passed to DynamicMlySepAcctRate(), which
-    // seems ugly. Is it ever accessed externally? Does it really need
-    // to be a vector?
     InvestmentManagementFee_.assign(Length_, v.InvestmentManagementFee());
 
     // Retrieve loan data from class BasicValues.
