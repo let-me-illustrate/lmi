@@ -754,7 +754,7 @@ void InterestRates::InitializeHoneymoonRates()
     // Honeymoon rates are taken as annual effective rates only,
     // because they are declared rates and therefore APRs.
     //
-    // TODO ?? Someday, after we've implemented and tested the
+    // SOMEDAY !! After we've implemented and tested the
     // alternative for the general account rate, we can aspire to
     // implement it for honeymoon rates too.
     LMI_ASSERT(mce_credited_rate == GenAcctRateType_);
