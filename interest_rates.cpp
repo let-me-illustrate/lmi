@@ -837,18 +837,15 @@ void InterestRates::InitializeHoneymoonRates()
         }
 }
 
-// TODO ?? Still needs a bit of work.
-//
-// When the M&E charge depends on monthly total case assets, the
-// separate-account rate is no longer an annual invariant and must be
-// recalculated here each month. There is no corresponding general-
-// account adjustment because we don't anticipate needing it, though
-// perhaps that is shortsighted.
-//
-// At entry, non-const reference inputs hold tiered annual values.
-// This function adds non-tiered complements to each of these values,
-// except that (bogusly) it adds the tiered IMF into the non-tiered
-// IMF held in this class and doesn't add non-tiered M&E to tiered M&E.
+/// Recalculate sepacct net rate if it depends on assets.
+///
+/// When separate-account charges depend on monthly total case assets,
+/// the separate-account rate is no longer an annual invariant and
+/// must be recalculated each month. No corresponding general-account
+/// adjustment has ever been wanted.
+///
+/// Non-tiered complements are added to each argument as needed.
+
 void InterestRates::DynamicMlySepAcctRate
     (mcenum_gen_basis gen_basis
     ,mcenum_sep_basis sep_basis
@@ -858,8 +855,9 @@ void InterestRates::DynamicMlySepAcctRate
     ,double           AnnualSepAcctMiscChargeRate
     )
 {
-    InvestmentManagementFee_[year] += AnnualSepAcctIMFRate;
-    AnnualSepAcctMiscChargeRate    += ExtraSepAcctCharge_    [year];
+    AnnualSepAcctMandERate      += MAndERate_[gen_basis]   [year];
+    AnnualSepAcctIMFRate        += InvestmentManagementFee_[year];
+    AnnualSepAcctMiscChargeRate += ExtraSepAcctCharge_     [year];
 
     double dynamic_spread =
             AnnualSepAcctMandERate
