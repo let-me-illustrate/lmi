@@ -316,16 +316,9 @@ void InterestRates::Initialize(BasicValues const& v)
 
     v.database().query_into(DB_GuarInt, GenAcctGrossRate_[mce_gen_guar]);
 
-    std::copy
-        (v.yare_input_.GeneralAccountRate.begin()
-        ,v.yare_input_.GeneralAccountRate.end()
-        ,std::back_inserter(GenAcctGrossRate_[mce_gen_curr])
-        );
-    // TODO ?? At least for the antediluvian branch, the vector in
-    // the input class has an inappropriate size.
-    LMI_ASSERT_EQUAL(Length_, lmi::ssize(v.yare_input_.GeneralAccountRate));
-    LMI_ASSERT_EQUAL(Length_, lmi::ssize(GenAcctGrossRate_[mce_gen_curr]));
-    GenAcctGrossRate_[mce_gen_curr].resize(Length_);
+    GenAcctGrossRate_[mce_gen_curr] = v.yare_input_.GeneralAccountRate;
+LMI_ASSERT_EQUAL(Length_, lmi::ssize(v.yare_input_.GeneralAccountRate));
+LMI_ASSERT_EQUAL(Length_, lmi::ssize(GenAcctGrossRate_[mce_gen_curr]));
 
     // General-account interest bonus implemented only as a simple
     // additive adjustment to the annual effective rate. It probably
@@ -353,16 +346,9 @@ void InterestRates::Initialize(BasicValues const& v)
 
     // Retrieve separate-account data from class BasicValues.
 
-    std::copy
-        (v.yare_input_.SeparateAccountRate.begin()
-        ,v.yare_input_.SeparateAccountRate.end()
-        ,std::back_inserter(SepAcctGrossRate_[mce_annual_rate][mce_sep_full])
-        );
-    // TODO ?? At least for the antediluvian branch, the vector in
-    // the input class has an inappropriate size.
-    LMI_ASSERT_EQUAL(Length_, lmi::ssize(v.yare_input_.SeparateAccountRate));
-    LMI_ASSERT_EQUAL(Length_, lmi::ssize(SepAcctGrossRate_[mce_annual_rate][mce_sep_full]));
-    SepAcctGrossRate_[mce_annual_rate][mce_sep_full].resize(Length_);
+    SepAcctGrossRate_[mce_annual_rate][mce_sep_full] = v.yare_input_.SeparateAccountRate;
+LMI_ASSERT_EQUAL(Length_, lmi::ssize(v.yare_input_.SeparateAccountRate));
+LMI_ASSERT_EQUAL(Length_, lmi::ssize(SepAcctGrossRate_[mce_annual_rate][mce_sep_full]));
 
     v.database().query_into(DB_GuarMandE          , MAndERate_[mce_gen_guar]);
     v.database().query_into(DB_CurrMandE          , MAndERate_[mce_gen_curr]);
@@ -371,28 +357,18 @@ void InterestRates::Initialize(BasicValues const& v)
     // the same way as M&E, iff database entity DB_AssetChargeType has
     // the value 'oe_asset_charge_spread'; otherwise, reflect them
     // elsewhere as an account-value load.
-    LMI_ASSERT_EQUAL(Length_, lmi::ssize(v.yare_input_.ExtraCompensationOnAssets));
-    LMI_ASSERT_EQUAL(Length_, lmi::ssize(ExtraSepAcctCharge_));
+LMI_ASSERT_EQUAL(Length_, lmi::ssize(v.yare_input_.ExtraCompensationOnAssets));
+LMI_ASSERT_EQUAL(Length_, lmi::ssize(ExtraSepAcctCharge_));
+LMI_ASSERT(std::operator==(Zero_, ExtraSepAcctCharge_));
+// Not reliably true:
+LMI_ASSERT
+            (   ExtraSepAcctCharge_.size()
+            ==  v.yare_input_.ExtraCompensationOnAssets.size()
+            );
     if(oe_asset_charge_spread == v.database().query<oenum_asset_charge_type>(DB_AssetChargeType))
         {
-        // TODO ?? At least for the antediluvian branch, the vector in
-        // the input class has an inappropriate size. Truncating it
-        // with std::transform() here is far too tricky.
+        ExtraSepAcctCharge_ = v.yare_input_.ExtraCompensationOnAssets;
         LMI_ASSERT(lmi::ssize(ExtraSepAcctCharge_) == v.database().length());
-// Not reliably true:
-//        LMI_ASSERT
-//            (   ExtraSepAcctCharge_.size()
-//            ==  v.yare_input_.ExtraCompensationOnAssets.size()
-//            );
-        // ET !! ExtraSepAcctCharge_ += v.yare_input_.ExtraCompensationOnAssets;
-        // ...but see the problem noted above.
-        std::transform
-            (ExtraSepAcctCharge_.begin()
-            ,ExtraSepAcctCharge_.end()
-            ,v.yare_input_.ExtraCompensationOnAssets.begin()
-            ,ExtraSepAcctCharge_.begin()
-            ,std::plus<double>()
-            );
         }
 
     if(v.yare_input_.AmortizePremiumLoad)
