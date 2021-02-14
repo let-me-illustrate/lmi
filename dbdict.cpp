@@ -226,7 +226,6 @@ void DBDictionary::ascribe_members()
     ascribe("LoadAmortFundCharge"       , &DBDictionary::LoadAmortFundCharge       );
     ascribe("AllowImfOverride"          , &DBDictionary::AllowImfOverride          );
     ascribe("AssetChargeType"           , &DBDictionary::AssetChargeType           );
-    ascribe("StableValFundCharge"       , &DBDictionary::StableValFundCharge       );
     ascribe("GuarFundAdminChg"          , &DBDictionary::GuarFundAdminChg          );
     ascribe("CurrFundAdminChg"          , &DBDictionary::CurrFundAdminChg          );
     ascribe("FundCharge"                , &DBDictionary::FundCharge                );
@@ -942,7 +941,6 @@ sample::sample()
     Add({DB_LoadAmortFundCharge , 0.0030});
     Add({DB_AllowImfOverride    , false});
     Add({DB_AssetChargeType     , oe_asset_charge_spread});
-    Add({DB_StableValFundCharge , 0.0});
     Add({DB_GuarFundAdminChg    , 0.0});
     Add({DB_CurrFundAdminChg    , 0.0});
     Add({DB_FundCharge          , 0.0});

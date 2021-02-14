@@ -150,7 +150,6 @@
 {DB_LoadAmortFundCharge,DB_Topic_AssetCharges,"LoadAmortFundCharge","Asset charge for amortized premium load",}, \
 {DB_AllowImfOverride,DB_Topic_AssetCharges,"AllowImfOverride","Allow custom fund with input investment management fee: 0=no, 1=yes",}, \
 {DB_AssetChargeType,DB_Topic_AssetCharges,"AssetChargeType","Treatment of input extra separate-account asset charge: 0=interest spread, 1=account-value load after monthly deduction",}, \
-{DB_StableValFundCharge,DB_Topic_AssetCharges,"StableValFundCharge","Stable value fund charge [obsolete]",}, \
 {DB_GuarFundAdminChg,DB_Topic_AssetCharges,"GuarFundAdminChg","Guaranteed fund administration charge [not used]",}, \
 {DB_CurrFundAdminChg,DB_Topic_AssetCharges,"CurrFundAdminChg","Current fund administration charge [not used]",}, \
 {DB_FundCharge,DB_Topic_AssetCharges,"FundCharge","[not used]",}, \

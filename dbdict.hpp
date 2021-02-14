@@ -207,7 +207,6 @@ class LMI_SO DBDictionary
     database_entity LoadAmortFundCharge       ;
     database_entity AllowImfOverride          ;
     database_entity AssetChargeType           ;
-    database_entity StableValFundCharge       ;
     database_entity GuarFundAdminChg          ;
     database_entity CurrFundAdminChg          ;
     database_entity FundCharge                ;

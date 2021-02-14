@@ -260,7 +260,6 @@ enum e_database_key
 
         ,DB_AllowImfOverride
         ,DB_AssetChargeType
-        ,DB_StableValFundCharge
 
         ,DB_GuarFundAdminChg
         ,DB_CurrFundAdminChg

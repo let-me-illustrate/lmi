@@ -144,10 +144,9 @@
 /DB_LoadAmortFundCharge\>/       s/^/E002/
 /DB_AllowImfOverride\>/          s/^/E003/
 /DB_AssetChargeType\>/           s/^/E004/
-/DB_StableValFundCharge\>/       s/^/E005/
-/DB_GuarFundAdminChg\>/          s/^/E006/
-/DB_CurrFundAdminChg\>/          s/^/E007/
-/DB_FundCharge\>/                s/^/E008/
+/DB_GuarFundAdminChg\>/          s/^/E005/
+/DB_CurrFundAdminChg\>/          s/^/E006/
+/DB_FundCharge\>/                s/^/E007/
 # DB_Topic_Loads
 /DB_GuarMonthlyPolFee\>/         s/^/F001/
 /DB_GuarAnnualPolFee\>/          s/^/F002/
