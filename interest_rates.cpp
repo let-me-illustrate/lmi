@@ -853,7 +853,6 @@ void InterestRates::DynamicMlySepAcctRate
     (mcenum_gen_basis gen_basis
     ,mcenum_sep_basis sep_basis
     ,int              year
-    ,double&          MonthlySepAcctGrossRate
     ,double&          AnnualSepAcctMandERate
     ,double&          AnnualSepAcctIMFRate
     ,double&          AnnualSepAcctMiscChargeRate
@@ -882,12 +881,6 @@ void InterestRates::DynamicMlySepAcctRate
                     << LMI_FLUSH
                     ;
                 }
-// TODO ?? Is what follows appropriate for both current and guaranteed
-// bases?
-
-// TODO ?? What if it's not 'full'--what if we want 'half' or 'zero'?
-            MonthlySepAcctGrossRate = SepAcctGrossRate_[mce_monthly_rate][mce_sep_full][year];
-
             convert_interest_rates
                 (SepAcctGrossRate_[mce_annual_rate][sep_basis][year]
                 ,SepAcctNetRate_[mce_annual_rate ][gen_basis][sep_basis][year]

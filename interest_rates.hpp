@@ -167,7 +167,6 @@ class InterestRates
         (mcenum_gen_basis gen_basis
         ,mcenum_sep_basis sep_basis
         ,int              year
-        ,double&          MonthlySepAcctGrossRate
         ,double&          AnnualSepAcctMandERate
         ,double&          AnnualSepAcctIMFRate
         ,double&          AnnualSepAcctMiscChargeRate

@@ -2104,15 +2104,10 @@ void AccountValue::ApplyDynamicMandE(currency assets)
             ;
         }
 
-    // TODO ?? Unused for the moment. At least the first must be
-    // implemented in order for reports to show components separately.
-    double gross_rate = 0.0;
-
     InterestRates_->DynamicMlySepAcctRate
         (GenBasis_
         ,SepBasis_
         ,Year
-        ,gross_rate
         ,m_and_e_rate
         ,imf_rate
         ,asset_comp_rate
