@@ -853,15 +853,13 @@ void InterestRates::DynamicMlySepAcctRate
     (mcenum_gen_basis gen_basis
     ,mcenum_sep_basis sep_basis
     ,int              year
-    ,double&          AnnualSepAcctMandERate
-    ,double&          AnnualSepAcctIMFRate
-    ,double&          AnnualSepAcctMiscChargeRate
+    ,double           AnnualSepAcctMandERate
+    ,double           AnnualSepAcctIMFRate
+    ,double           AnnualSepAcctMiscChargeRate
     )
 {
     InvestmentManagementFee_[year] += AnnualSepAcctIMFRate;
     AnnualSepAcctMiscChargeRate    += ExtraSepAcctCharge_    [year];
-// TODO ?? Reference argument 'AnnualSepAcctMandERate' is not modified.
-// Shouldn't it be?
 
     double dynamic_spread =
             AnnualSepAcctMandERate
