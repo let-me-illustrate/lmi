@@ -26,6 +26,7 @@
 
 #include "assert_lmi.hpp"
 #include "cso_table.hpp"
+#include "et_vector.hpp"
 #include "irc7702_interest.hpp"         // iglp(), igsp()
 #include "materially_equal.hpp"
 #include "math_functions.hpp"

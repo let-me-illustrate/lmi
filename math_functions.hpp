@@ -25,10 +25,9 @@
 #include "config.hpp"
 
 #include "assert_lmi.hpp"
-#include "et_vector.hpp"
 
-#include <algorithm>                    // max(), min()
-#include <cmath>                        // expm1(), log1p()
+#include <algorithm>                    // max(), min(), transform()
+#include <cmath>                        // expm1l(), log1pl()
 #include <limits>
 #include <stdexcept>
 #include <type_traits>
@@ -347,7 +346,13 @@ void assign_midpoint
 {
     LMI_ASSERT(in_0.size() == in_1.size());
     out.resize(in_0.size());
-    assign(out, apply_binary(mean<T>(), in_0, in_1));
+    std::transform
+        (in_0.begin()
+        ,in_0.end()
+        ,in_1.begin()
+        ,out.begin()
+        ,mean<double>()
+        );
 }
 
 #endif // math_functions_hpp

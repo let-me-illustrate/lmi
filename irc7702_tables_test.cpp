@@ -23,6 +23,7 @@
 
 #include "irc7702_tables.hpp"
 
+#include "et_vector.hpp"
 #include "materially_equal.hpp"
 #include "math_functions.hpp"
 #include "ssize_lmi.hpp"
