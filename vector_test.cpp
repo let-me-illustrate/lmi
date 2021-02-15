@@ -278,7 +278,7 @@ namespace
     // while lower values may yield measurements that are less than
     // a one-microsecond timer tick.
 
-    int const n_iter = 100;
+    int const n_iter = 1000;
 
     simple_array0 g_u(g_array_length);
     simple_array0 g_v(g_array_length);
