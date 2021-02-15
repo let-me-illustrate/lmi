@@ -317,14 +317,14 @@ int test_main(int, char*[])
 
     BOOST_TEST_THROW
         (outward_quotient(1, 0)
-        ,std::runtime_error
-        ,"Assertion '0 != denominator' failed."
+        ,std::domain_error
+        ,"Denominator is zero."
         );
 
     BOOST_TEST_THROW
         (outward_quotient(INT_MIN, -1)
-        ,std::runtime_error
-        ,lmi_test::what_regex("^Assertion.*failed")
+        ,std::domain_error
+        ,"Division might overflow."
         );
 
 // Appropriately fails to compile due to conflicting types:

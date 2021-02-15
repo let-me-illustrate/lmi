@@ -24,8 +24,6 @@
 
 #include "config.hpp"
 
-#include "assert_lmi.hpp"
-
 #include <algorithm>                    // max(), min(), transform()
 #include <cmath>                        // expm1l(), log1pl()
 #include <limits>
@@ -101,12 +99,18 @@ inline T outward_quotient(T numerator, T denominator)
 {
     static_assert(std::is_integral_v<T>);
 
-    LMI_ASSERT(0 != denominator);
+    if(0 == denominator)
+        {
+        throw std::domain_error("Denominator is zero.");
+        }
 
     // "INT_MIN / -1" would overflow; but "false/bool(-1)" would not,
     // hence the "T(-1) < 0" test.
     constexpr T min = std::numeric_limits<T>::min();
-    LMI_ASSERT(!(min == numerator && T(-1) < 0 && T(-1) == denominator));
+    if(min == numerator && T(-1) < 0 && T(-1) == denominator)
+        {
+        throw std::domain_error("Division might overflow.");
+        }
 
     T x = numerator / denominator;
     T y = 0 != numerator % denominator;
@@ -344,7 +348,10 @@ void assign_midpoint
     ,std::vector<T> const& in_1
     )
 {
-    LMI_ASSERT(in_0.size() == in_1.size());
+    if(in_0.size() != in_1.size())
+        {
+        throw std::runtime_error("Vector addends are of unequal length.");
+        }
     out.resize(in_0.size());
     std::transform
         (in_0.begin()
