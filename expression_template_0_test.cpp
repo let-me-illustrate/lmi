@@ -368,14 +368,6 @@ std::vector<T>& operator<<(std::vector<T>& t, V v)
 
 void mete_pete_typical()
 {
-// With the operator<<() above, this:
-//    std::vector<double> pv7a(pv0.size()); assign(pv7a, pv0 - pv1);
-// could be written thus:
-//    std::vector<double> pv7b(pv0.size()); pv7b << pv0 - pv1;
-// but these still wouldn't work:
-//    std::vector<double> pv7c << pv0 - pv1;
-//    std::vector<double> pv7d(pv0 - pv1);
-
     for(int i = 0; i < n_iter; ++i)
         {
         std::vector<double> pv8(pv0.size()); assign(pv8, pv0 - pv1);
@@ -483,6 +475,17 @@ void time_one_array_length(int length)
     std::cout << std::endl;
 }
 
+void test_pete_assignment()
+{
+// With the operator<<() above, this:
+//    std::vector<double> pv7a(pv0.size()); assign(pv7a, pv0 - pv1);
+// could be written thus:
+//    std::vector<double> pv7b(pv0.size()); pv7b << pv0 - pv1;
+// but these still wouldn't work:
+//    std::vector<double> pv7c << pv0 - pv1;
+//    std::vector<double> pv7d(pv0 - pv1);
+}
+
 int test_main(int, char*[])
 {
     time_one_array_length(1);
@@ -490,6 +493,8 @@ int test_main(int, char*[])
     time_one_array_length(100);
     time_one_array_length(1000);
     time_one_array_length(10000);
+
+    test_pete_assignment();
 
     return 0;
 }
