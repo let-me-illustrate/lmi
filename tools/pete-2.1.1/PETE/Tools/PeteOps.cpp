@@ -114,16 +114,6 @@ void peteOps(map<string,vector<OperatorDescriptor> > &m)
                                  "return (a >= b);",
                                  ""));
   m["binaryBoolOps"].push_back(
-              OperatorDescriptor("OpEQ",
-                                 "operator==",
-                                 "return (a == b);",
-                                 ""));
-  m["binaryBoolOps"].push_back(
-              OperatorDescriptor("OpNE",
-                                 "operator!=",
-                                 "return (a != b);",
-                                 ""));
-  m["binaryBoolOps"].push_back(
               OperatorDescriptor("OpAnd",
                                  "operator&&",
                                  "return (a && b);",

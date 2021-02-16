@@ -166,14 +166,6 @@ binaryBoolOps
   FUNCTION = "operator>="
   EXPR = "return (a >= b);"
 -----
-  TAG = "OpEQ"
-  FUNCTION = "operator=="
-  EXPR = "return (a == b);"
------
-  TAG = "OpNE"
-  FUNCTION = "operator!="
-  EXPR = "return (a != b);"
------
   TAG = "OpAnd"
   FUNCTION = "operator&&"
   EXPR = "return (a && b);"

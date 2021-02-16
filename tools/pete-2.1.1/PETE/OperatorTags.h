@@ -499,38 +499,6 @@ struct BinaryReturn<T1, T2, OpGE > {
   typedef bool Type_t;
 };
 
-struct OpEQ
-{
-  PETE_EMPTY_CONSTRUCTORS(OpEQ)
-  template<class T1, class T2>
-  inline typename BinaryReturn<T1, T2, OpEQ >::Type_t
-  operator()(const T1 &a, const T2 &b) const
-  {
-    return (a == b);
-  }
-};
-
-template<class T1, class T2 >
-struct BinaryReturn<T1, T2, OpEQ > {
-  typedef bool Type_t;
-};
-
-struct OpNE
-{
-  PETE_EMPTY_CONSTRUCTORS(OpNE)
-  template<class T1, class T2>
-  inline typename BinaryReturn<T1, T2, OpNE >::Type_t
-  operator()(const T1 &a, const T2 &b) const
-  {
-    return (a != b);
-  }
-};
-
-template<class T1, class T2 >
-struct BinaryReturn<T1, T2, OpNE > {
-  typedef bool Type_t;
-};
-
 struct OpAnd
 {
   PETE_EMPTY_CONSTRUCTORS(OpAnd)
