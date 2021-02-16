@@ -26,15 +26,14 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "commutation_functions.hpp"
+#include "et_vector.hpp"
 #include "materially_equal.hpp"
 #include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 
-#include <algorithm>
-#include <cmath>
-#include <functional>
-#include <limits>
-#include <numeric>
+#include <algorithm>                    // max(), min(), reverse()
+#include <numeric>                      // partial_sum()
+#include <string>
 
 // TAXATION !! Update this block comment, or simply delete it. The
 // client-server model is important, but not predominantly so. It is
@@ -480,27 +479,18 @@ void Irc7702::InitCommFns()
 //============================================================================
 void Irc7702::InitCorridor()
 {
-    // CVAT corridor
     // TODO ?? Substandard: set last NSP to 1.0? ignore flats? set NSP[omega] to 1?
     // TAXATION !! --better to ignore susbstandard
-    CvatCorridor.resize(Length);
-    // ET !! CvatCorridor = CommFns[Opt1Int4Pct]->aD() / (CommFns[Opt1Int4Pct]->kM() + DEndt[Opt1Int4Pct]);
-    std::vector<double> denominator(CommFns[Opt1Int4Pct]->kM());
-    std::transform
-        (denominator.begin()
-        ,denominator.end()
-        ,denominator.begin()
-        ,[this](double x) { return DEndt[Opt1Int4Pct] + x; }
-        );
-    std::transform
-        (CommFns[Opt1Int4Pct]->aD().begin()
-        ,CommFns[Opt1Int4Pct]->aD().end()
-        ,denominator.begin()
-        ,CvatCorridor.begin()
-        ,std::divides<double>()
-        );
+    // TAXATION !! Explain a- vs k- prefixes on aD and kM.
 
-    // GPT corridor
+    // CVAT corridor: 1 / NSP = D / (M + Domega)
+    CvatCorridor.resize(Length);
+    CvatCorridor +=
+           CommFns[Opt1Int4Pct]->aD()
+        / (CommFns[Opt1Int4Pct]->kM() + DEndt[Opt1Int4Pct])
+        ;
+
+    // GPT corridor: prescribed by statute
     GptCorridor.assign
         (CompleteGptCorridor().begin() + IssueAge
         ,CompleteGptCorridor().begin() + EndtAge
@@ -508,6 +498,13 @@ void Irc7702::InitCorridor()
 }
 
 //============================================================================
+// TAXATION !! Combine assertions and move to top for clarity.
+// TAXATION !! Combine locals like ann_chg_pol and mly_chg_pol.
+// TAXATION !! Eliminate aliasing references.
+// TAXATION !! Rename '[46]Pct' to 'g[ls]p'.
+// TAXATION !! Write a utility function for rotate-partial_sum_rotate.
+// TAXATION !! Eliminate PvLoadDiff{Sgl,Lvl} if unneeded.
+// TAXATION !! Add unit tests.
 void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 {
     // We may need to recalculate these every year for a
@@ -518,27 +515,12 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // Present value of charges per policy
 
-    // ET !! std::vector<double> ann_chg_pol = AnnChgPol * comm_fns.aD();
     std::vector<double> ann_chg_pol(Length);
     LMI_ASSERT(Length == lmi::ssize(ann_chg_pol));
     LMI_ASSERT(Length == lmi::ssize(AnnChgPol));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
-    std::transform
-        (AnnChgPol.begin()
-        ,AnnChgPol.end()
-        ,comm_fns.aD().begin()
-        ,ann_chg_pol.begin()
-        ,std::multiplies<double>()
-        );
+    ann_chg_pol += AnnChgPol * comm_fns.aD();
 
-    // ET !! std::vector<double> mly_chg_pol = MlyChgPol * drop(comm_fns.kD(), -1);
-    std::vector<double> mly_chg_pol(Length);
-    LMI_ASSERT(Length == lmi::ssize(mly_chg_pol));
-    LMI_ASSERT(Length == lmi::ssize(MlyChgPol));
-    LMI_ASSERT(Length <= lmi::ssize(comm_fns.kD()));
-    std::transform
-        (MlyChgPol.begin()
-        ,MlyChgPol.end()
 // kD * MlyChg implies k == mly; it would be more general to say
 // "modal" instead. But that's still not perfectly general, because
 // we may need commutation functions on more than one non-annual
@@ -547,24 +529,20 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 // are straightforward, but we don't want to spend time calculating
 // functions on every conceivable mode unless we're actually going
 // to use them.
-        ,comm_fns.kD().begin()
-        ,mly_chg_pol.begin()
-        ,std::multiplies<double>()
-        );
 
-    // ET !! PvChgPol[a_EIOBasis] = ann_chg_pol + mly_chg_pol;
+    std::vector<double> mly_chg_pol(Length);
+    LMI_ASSERT(Length == lmi::ssize(mly_chg_pol));
+    LMI_ASSERT(Length == lmi::ssize(MlyChgPol));
+    LMI_ASSERT(Length <= lmi::ssize(comm_fns.kD()));
+    mly_chg_pol += MlyChgPol * comm_fns.kD();
+
     std::vector<double>& chg_pol = PvChgPol[a_EIOBasis];
     chg_pol.resize(Length);
     LMI_ASSERT(Length == lmi::ssize(chg_pol));
     LMI_ASSERT(Length == lmi::ssize(ann_chg_pol));
     LMI_ASSERT(Length <= lmi::ssize(mly_chg_pol));
-    std::transform
-        (ann_chg_pol.begin()
-        ,ann_chg_pol.end()
-        ,mly_chg_pol.begin()
-        ,chg_pol.begin()
-        ,std::plus<double>()
-        );
+    chg_pol += ann_chg_pol + mly_chg_pol;
+
     // ET !! This is just APL written verbosely in a funny C++ syntax.
     // Perhaps we could hope for an expression-template library to do this:
     //   chg_pol = chg_pol.reverse().partial_sum().reverse();
@@ -577,37 +555,23 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     // Present value of charges per $1 specified amount
 
     // APL: chg_sa gets rotate plus scan rotate MlyChgSpecAmt times kD
-    // ET !! PvChgSpecAmt[a_EIOBasis] = MlyChgSpecAmt * comm_fns.kD();
     std::vector<double>& chg_sa = PvChgSpecAmt[a_EIOBasis];
     chg_sa.resize(Length);
     LMI_ASSERT(Length == lmi::ssize(chg_sa));
     LMI_ASSERT(Length == lmi::ssize(MlyChgSpecAmt));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
-    std::transform
-        (MlyChgSpecAmt.begin()
-        ,MlyChgSpecAmt.end()
-        ,comm_fns.kD().begin()
-        ,chg_sa.begin()
-        ,std::multiplies<double>()
-        );
+    chg_sa += MlyChgSpecAmt * comm_fns.kD();
     std::reverse(chg_sa.begin(), chg_sa.end());
     std::partial_sum(chg_sa.begin(), chg_sa.end(), chg_sa.begin());
     std::reverse(chg_sa.begin(), chg_sa.end());
 
     // APL: chg_add gets rotate plus scan rotate MlyChgADD times kD
-    // ET !! PvChgADD[a_EIOBasis] = MlyChgADD * comm_fns.kD();
     std::vector<double>& chg_add = PvChgADD[a_EIOBasis];
     chg_add.resize(Length);
     LMI_ASSERT(Length == lmi::ssize(chg_add));
     LMI_ASSERT(Length == lmi::ssize(MlyChgADD));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
-    std::transform
-        (MlyChgADD.begin()
-        ,MlyChgADD.end()
-        ,comm_fns.kD().begin()
-        ,chg_add.begin()
-        ,std::multiplies<double>()
-        );
+    chg_add += MlyChgADD * comm_fns.kD();
     std::reverse(chg_add.begin(), chg_add.end());
     std::partial_sum(chg_add.begin(), chg_add.end(), chg_add.begin());
     std::reverse(chg_add.begin(), chg_add.end());
@@ -616,32 +580,20 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     std::vector<double>& chg_mort = PvChgMort[a_EIOBasis];
     LMI_ASSERT(Length <= lmi::ssize(comm_fns.kC()));
     chg_mort = comm_fns.kC();
-    chg_mort.resize(Length);
     std::reverse(chg_mort.begin(), chg_mort.end());
     std::partial_sum(chg_mort.begin(), chg_mort.end(), chg_mort.begin());
     std::reverse(chg_mort.begin(), chg_mort.end());
 
     // Present value of 1 - target premium load
 
-    // ET !! PvNpfSglTgt[a_EIOBasis] = (1.0 - LoadTgt) * comm_fns.aD();
     std::vector<double>& npf_sgl_tgt = PvNpfSglTgt[a_EIOBasis];
-//  LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt)); // TAXATION !! Expunge if truly unwanted.
-    npf_sgl_tgt = LoadTgt;
+    npf_sgl_tgt.resize(Length);
     LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt));
-    std::transform(npf_sgl_tgt.begin(), npf_sgl_tgt.end(), npf_sgl_tgt.begin()
-        ,[](double x) { return 1.0 - x; }
-        );
-    LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt));
+    LMI_ASSERT(Length == lmi::ssize(LoadTgt));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
-    std::transform
-        (npf_sgl_tgt.begin()
-        ,npf_sgl_tgt.end()
-        ,comm_fns.aD().begin()
-        ,npf_sgl_tgt.begin()
-        ,std::multiplies<double>()
-        );
+    npf_sgl_tgt += (1.0 - LoadTgt) * comm_fns.aD();
+
     std::vector<double>& npf_lvl_tgt = PvNpfLvlTgt[a_EIOBasis];
-//  LMI_ASSERT(Length == lmi::ssize(npf_lvl_tgt)); // TAXATION !! Expunge if truly unwanted.
     npf_lvl_tgt = npf_sgl_tgt;
     LMI_ASSERT(Length == lmi::ssize(npf_lvl_tgt));
     std::reverse(npf_lvl_tgt.begin(), npf_lvl_tgt.end());
@@ -650,25 +602,14 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // Present value of 1 - excess premium load
 
-    // ET !! PvNpfSglExc[a_EIOBasis] = (1.0 - LoadExc) * comm_fns.aD();
     std::vector<double>& npf_sgl_exc = PvNpfSglExc[a_EIOBasis];
-//  LMI_ASSERT(Length == lmi::ssize(npf_sgl_exc)); // TAXATION !! Expunge if truly unwanted.
-    npf_sgl_exc = LoadExc;
+    npf_sgl_exc.resize(Length);
+    LMI_ASSERT(Length == lmi::ssize(LoadExc));
     LMI_ASSERT(Length == lmi::ssize(npf_sgl_exc));
-    std::transform(npf_sgl_exc.begin(), npf_sgl_exc.end(), npf_sgl_exc.begin()
-        ,[](double x) { return 1.0 - x; }
-        );
-    LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt)); // TAXATION !! Shouldn't this be npf_sgl_exc?
     LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
-    std::transform
-        (npf_sgl_exc.begin()
-        ,npf_sgl_exc.end()
-        ,comm_fns.aD().begin()
-        ,npf_sgl_exc.begin()
-        ,std::multiplies<double>()
-        );
+    npf_sgl_exc += (1.0 - LoadExc) * comm_fns.aD();
+
     std::vector<double>& npf_lvl_exc = PvNpfLvlExc[a_EIOBasis];
-//  LMI_ASSERT(Length == lmi::ssize(npf_lvl_exc)); // TAXATION !! Expunge if truly unwanted.
     npf_lvl_exc = npf_sgl_exc;
     LMI_ASSERT(Length == lmi::ssize(npf_lvl_exc));
     std::reverse(npf_lvl_exc.begin(), npf_lvl_exc.end());
@@ -677,22 +618,14 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // Present value of target premium load - excess premium load
 
-    // ET !! PvLoadDiffSgl[a_EIOBasis] = npf_sgl_exc - npf_sgl_tgt;
     std::vector<double>& diff_sgl = PvLoadDiffSgl[a_EIOBasis];
-//  LMI_ASSERT(Length == lmi::ssize(diff_sgl)); // TAXATION !! Expunge if truly unwanted.
     diff_sgl.resize(Length);
     LMI_ASSERT(Length == lmi::ssize(diff_sgl));
     LMI_ASSERT(Length == lmi::ssize(npf_sgl_exc));
     LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt));
-    std::transform
-        (npf_sgl_exc.begin()
-        ,npf_sgl_exc.end()
-        ,npf_sgl_tgt.begin()
-        ,diff_sgl.begin()
-        ,std::minus<double>()
-        );
+    diff_sgl += npf_sgl_exc - npf_sgl_tgt;
+
     std::vector<double>& diff_lvl = PvLoadDiffLvl[a_EIOBasis];
-//  LMI_ASSERT(Length == lmi::ssize(diff_lvl)); // TAXATION !! Expunge if truly unwanted.
     diff_lvl.resize(Length);
     LMI_ASSERT(Length == lmi::ssize(diff_lvl));
     std::reverse(diff_lvl.begin(), diff_lvl.end());
