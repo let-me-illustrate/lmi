@@ -36,19 +36,21 @@ submake_options := \
   EXEEXT='$(EXEEXT)' \
 
 et_vector_test$(EXEEXT): et_vector_test.cpp
-	$(MAKE) $(submake_options) clean
-	$(MAKE) $(submake_options) newpeteops
-	$(MAKE) $(submake_options) installheaders
 	$(CXX) -I. $^ -o $@
 
 et_vector_test.cpp: et_vector_operators.hpp
 
-et_vector_operators.hpp: et_vector.in
-	PETE/Tools/MakeOperators \
+et_vector_operators.hpp: et_vector.in PETE/Tools/MakeOperators$(EXEEXT)
+	PETE/Tools/MakeOperators$(EXEEXT) \
 	  --guard et_vector_operators_hpp \
 	  --classes et_vector.in \
 	  --assign-ops \
 	  --o $@
+
+PETE/Tools/MakeOperators$(EXEEXT):
+	$(MAKE) $(submake_options) clean
+	$(MAKE) $(submake_options) newpeteops
+	$(MAKE) $(submake_options) installheaders
 
 clean:
 	rm -f et_vector_test$(EXEEXT)
