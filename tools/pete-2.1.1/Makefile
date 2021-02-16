@@ -53,9 +53,8 @@ et_vector_operators.hpp: et_vector.in
 clean:
 	rm -f et_vector_test$(EXEEXT)
 
-distclean:
-	rm -f et_vector_test$(EXEEXT)
+distclean: clean
 	rm -f PETE/Tools/MakeOperators$(EXEEXT)
 
-maintainer-clean: clean
+maintainer-clean: distclean
 	rm -f et_vector_operators.hpp
