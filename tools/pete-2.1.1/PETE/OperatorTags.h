@@ -1,5 +1,3 @@
-// -*- C++ -*-
-//
 // Copyright (C) 1998, 1999, 2000, 2002  Los Alamos National Laboratory,
 // Copyright (C) 1998, 1999, 2000, 2002  CodeSourcery, LLC
 //
@@ -803,10 +801,3 @@ struct FnWhere
 };
 
 #endif // PETE_PETE_OPERATORTAGS_H
-
-// ACL:rcsinfo
-// ----------------------------------------------------------------------
-// $RCSfile: OperatorTags.h,v $   $Author: chicares $
-// $Revision: 1.4 $   $Date: 2008-09-08 12:59:25 $
-// ----------------------------------------------------------------------
-// ACL:rcsinfo
