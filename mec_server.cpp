@@ -193,8 +193,6 @@ mec_state test_one_days_7702A_transactions
     assign(DBDiscountRate, 1.0 / (1.0 + Mly7702ig));
 
     // Use zero if that's the guaranteed rate; else use the statutory rate.
-    // ET !! Use each_equal() here because PETE seems to interfere with
-    // the normal operator==(). Is that a PETE defect?
     std::vector<double> const zero(input.years_to_maturity(), 0.0);
     std::vector<double> const& naar_disc_rate =
           each_equal(Mly7702ig, 0.0)
