@@ -30,6 +30,7 @@
 #include "calendar_date.hpp"
 #include "configurable_settings.hpp"
 #include "contains.hpp"
+#include "et_vector.hpp"
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"        // report_exception()
 #include "ledger_invariant.hpp"
@@ -47,7 +48,6 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <algorithm>                    // transform()
 #include <functional>                   // minus
 #include <map>
 #include <numeric>                      // iota()
@@ -750,17 +750,8 @@ ledger_evaluator Ledger::make_evaluator() const
     mask_map  ["MiscCharges"] = "999,999,999";
     format_map["MiscCharges"] = f1;
 
-    // ET !! Easier to write as
-    //   std::vector<double> NetDeathBenefit =
-    //     curr.EOYDeathBft - curr.TotalLoanBalance;
     std::vector<double> NetDeathBenefit(curr.EOYDeathBft);
-    std::transform
-        (NetDeathBenefit.begin()
-        ,NetDeathBenefit.end()
-        ,curr.TotalLoanBalance.begin()
-        ,NetDeathBenefit.begin()
-        ,std::minus<double>()
-        );
+    NetDeathBenefit -= curr.TotalLoanBalance;
     vectors   ["NetDeathBenefit"] = &NetDeathBenefit;
     title_map ["NetDeathBenefit"] = "Net\nDeath\nBenefit";
     mask_map  ["NetDeathBenefit"] = "999,999,999";
