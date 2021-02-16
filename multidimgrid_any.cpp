@@ -326,7 +326,7 @@ bool MultiDimGrid::Create
         }
     dimension_ = table().GetDimension();
 
-    // pospone the table data refresh until we exit Create() function
+    // postpone the table data refresh until we exit Create() function
     // being sure that we are ready for a refresh
     GridRefreshTableDataGuard guard(*this);
 
