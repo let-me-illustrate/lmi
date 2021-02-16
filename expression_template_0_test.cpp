@@ -345,27 +345,6 @@ void mete_ublas_typical()
 }
 #endif // defined USE_UBLAS
 
-/// Syntactic sugar: "assignment" operator for expression templates.
-///
-/// PETE doesn't support this:
-///    std::vector<double> v2 = v0 - v1;
-/// because it's impossible to intrude a copy-assignment operator into
-/// the standard class template.
-///
-/// operator^=() or operator<<=() would probably be better, but would
-/// require changing the PETE sources, whereas the normally-undefined
-/// macro PETE_ALLOW_SCALAR_SHIFT leaves operator<<() available without
-/// any such change. But is this syntactic sugar sweet enough?
-
-template<typename T, typename V>
-std::vector<T>& operator<<(std::vector<T>& t, V v)
-{
-#if defined PETE_ALLOW_SCALAR_SHIFT
-#   error PETE_ALLOW_SCALAR_SHIFT must not be defined.
-#endif // defined PETE_ALLOW_SCALAR_SHIFT
-    return assign(t, v);
-}
-
 void mete_pete_typical()
 {
     for(int i = 0; i < n_iter; ++i)
@@ -475,15 +454,68 @@ void time_one_array_length(int length)
     std::cout << std::endl;
 }
 
+/// Syntactic sugar: "assignment" operator for expression templates.
+///
+/// PETE doesn't support this:
+///    std::vector<double> v2 = v0 - v1;
+/// because it's impossible to intrude a copy-assignment operator into
+/// the standard class template.
+///
+/// operator^=() or operator<<=() would probably be better, but would
+/// require changing the PETE sources, whereas the normally-undefined
+/// macro PETE_ALLOW_SCALAR_SHIFT leaves operator<<() available without
+/// any such change. But is this syntactic sugar sweet enough?
+
+template<typename T, typename V>
+std::vector<T>& operator<<(std::vector<T>& t, V v)
+{
+#if defined PETE_ALLOW_SCALAR_SHIFT
+#   error PETE_ALLOW_SCALAR_SHIFT must not be defined.
+#endif // defined PETE_ALLOW_SCALAR_SHIFT
+    return assign(t, v);
+}
+
+/// Assigning PETE expressions to a std::vector
+///
+/// std::vector<>::operator= is necessarily a member function, and
+/// cannot be overloaded. This function shows some alternatives,
+/// none of which seems ideal:
+///
+///   assign(v, expression);
+///   v = std::vector(intended_size); v << expression;
+///   v = std::vector(intended_size); v += expression;
+
 void test_pete_assignment()
 {
+    std::vector<double> const v0 = {1.1, 2.2, 3.3, 4.4, 5.5};
+    std::vector<double> const v1 = {0.1, 0.2, 0.3, 0.4, 0.5};
+    std::vector<double> const v2 = {1.0, 2.0, 3.0, 4.0, 5.0};
 // With the operator<<() above, this:
-//    std::vector<double> pv7a(pv0.size()); assign(pv7a, pv0 - pv1);
+    std::vector<double> v7a(v0.size());
+    assign(v7a, v0 - v1);
+    BOOST_TEST(std::operator==(v2, v7a));
 // could be written thus:
-//    std::vector<double> pv7b(pv0.size()); pv7b << pv0 - pv1;
-// but these still wouldn't work:
-//    std::vector<double> pv7c << pv0 - pv1;
-//    std::vector<double> pv7d(pv0 - pv1);
+    std::vector<double> v7b(v0.size());
+    v7b << v0 - v1;
+    BOOST_TEST(std::operator==(v2, v7b));
+// though these still wouldn't compile:
+//  std::vector<double> v7c << v0 - v1;
+//  std::vector<double> v7d(v0 - v1);
+// and, although this compiles:
+    std::vector<double> v7e; v7e << v0 - v1;
+// it doesn't do what one might hope--instead, the vector is empty:
+    BOOST_TEST(0 == v7e.size());
+
+// On the other hand, this syntax is almost natural, even though it's
+// silly to add zero to everything.
+    std::vector<double> v7f(v0.size());
+    v7f += v0 - v1;
+    BOOST_TEST(std::operator==(v2, v7f));
+// But that may be the best that can easily be done with PETE: where
+//  std::vector<double> v7f += v0 - v1;
+// is wanted, instead write
+//  std::vector<double> v7f(intended_size);
+//  v7f += v0 - v1;
 }
 
 int test_main(int, char*[])

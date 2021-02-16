@@ -547,6 +547,7 @@ void InterestRates::InitializeSeparateAccountRates()
     //   X = zero_vector_of_desired_length;
     //   X += 0.5 * Y;
     // but it's forbidden to add such an operator to std::vector.
+    // See test_pete_assignment() in 'expression_template_0_test.cpp'.
     SepAcctGrossRate_[mce_annual_rate][mce_sep_half] = Zero_;
     SepAcctGrossRate_[mce_annual_rate][mce_sep_half] +=
         0.5 * SepAcctGrossRate_[mce_annual_rate][mce_sep_full];
@@ -954,6 +955,7 @@ void InterestRates::Initialize7702Rates()
     // ET !! This ought to be implicit, at least in some 'safe' mode:
     //   LMI_ASSERT_EQUAL(MlyGlpRate_.size(), SpreadFor7702_.size());
     // _without_ assigning from Zero_ first; but it's not.
+    // See test_pete_assignment() in 'expression_template_0_test.cpp'.
     MlyGlpRate_ = Zero_;
     assign(MlyGlpRate_, apply_binary(greater_of<double>(), iglp(), annual_guar_rate));
     LMI_ASSERT(MlyGlpRate_.size() == SpreadFor7702_.size());
