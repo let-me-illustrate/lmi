@@ -67,6 +67,7 @@
 
 #include <algorithm>
 #include <cctype>                       // isupper()
+#include <cstddef>                      // size_t
 #include <fstream>
 #include <istream>                      // ws
 #include <iterator>                     // insert_iterator
@@ -646,10 +647,10 @@ class CensusViewGridTable
     wxString GetTypeName(int row, int col) override;
 
     // Override only used rows/cols handling functions.
-    bool AppendRows(size_t numRows) override;
-    bool DeleteRows(size_t pos, size_t numRows) override;
-    bool AppendCols(size_t numCols) override;
-    bool DeleteCols(size_t pos, size_t numCols) override;
+    bool AppendRows(std::size_t numRows) override;
+    bool DeleteRows(std::size_t pos, std::size_t numRows) override;
+    bool AppendCols(std::size_t numCols) override;
+    bool DeleteCols(std::size_t pos, std::size_t numCols) override;
 
     wxString GetColLabelValue(int col) override;
 
@@ -773,7 +774,7 @@ bool CensusViewGridTable::CanMeasureColUsingSameAttr(int) const
     return true;
 }
 
-bool CensusViewGridTable::AppendRows(size_t numRows)
+bool CensusViewGridTable::AppendRows(std::size_t numRows)
 {
     auto grid = GetView();
     LMI_ASSERT(grid != nullptr);
@@ -788,7 +789,7 @@ bool CensusViewGridTable::AppendRows(size_t numRows)
     return true;
 }
 
-bool CensusViewGridTable::DeleteRows(size_t pos, size_t num_rows)
+bool CensusViewGridTable::DeleteRows(std::size_t pos, std::size_t num_rows)
 {
     auto grid = GetView();
     LMI_ASSERT(grid != nullptr);
@@ -823,7 +824,7 @@ bool CensusViewGridTable::DeleteRows(size_t pos, size_t num_rows)
     return true;
 }
 
-bool CensusViewGridTable::AppendCols(size_t numCols)
+bool CensusViewGridTable::AppendCols(std::size_t numCols)
 {
     auto grid = GetView();
     LMI_ASSERT(grid != nullptr);
@@ -838,7 +839,7 @@ bool CensusViewGridTable::AppendCols(size_t numCols)
     return true;
 }
 
-bool CensusViewGridTable::DeleteCols(size_t pos, size_t num_cols)
+bool CensusViewGridTable::DeleteCols(std::size_t pos, std::size_t num_cols)
 {
     auto grid = GetView();
     LMI_ASSERT(grid != nullptr);
@@ -932,7 +933,7 @@ std::string const& col_name(wxGridTableBase const& table, int col)
 {
     return dynamic_cast<CensusViewGridTable const&>(table).col_name(col);
 }
-}
+} // Unnamed namespace.
 
 // class CensusView
 

@@ -27,6 +27,7 @@
 
 #define UNW_LOCAL_ONLY
 
+#include <cstddef>                      // size_t
 #include <cstdio>                       // fprintf()
 #include <cstdlib>                      // free()
 #include <cxxabi.h>
@@ -64,10 +65,10 @@ cxa_rethrow_t original_cxa_rethrow = (cxa_rethrow_t) dlsym(RTLD_NEXT, "__cxa_ret
 
 // ABI:
 extern "C" char* __cxa_demangle
-    (char const* mangled_name  // mangled name, NUL-terminated
-    ,char      * output_buffer // just use 0
-    ,size_t    * length        // just use 0
-    ,int       * status        // zero --> success
+    (char const * mangled_name  // mangled name, NUL-terminated
+    ,char       * output_buffer // just use 0
+    ,std::size_t* length        // just use 0
+    ,int        * status        // zero --> success
     );
 
 /// Print type of exception, and what() if it's a std::exception.
