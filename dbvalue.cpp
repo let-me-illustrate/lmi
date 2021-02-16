@@ -157,19 +157,10 @@ database_entity& database_entity::operator=(database_entity const& z)
 
 bool database_entity::operator==(database_entity const& z) const
 {
-#if 0
-// PETE causes an 'ambiguous overload' error for vector 'v0==v1'.
     return
            key_          == z.key_
         && axis_lengths_ == z.axis_lengths_
         && data_values_  == z.data_values_
-        && gloss_        == z.gloss_
-        ;
-#endif // 0
-    return
-           key_          == z.key_
-        && std::operator==(axis_lengths_, z.axis_lengths_)
-        && std::operator==(data_values_ , z.data_values_ )
         && gloss_        == z.gloss_
         ;
 }

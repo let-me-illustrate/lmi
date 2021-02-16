@@ -159,22 +159,22 @@ void Loads::Initialize(product_database const& database, load_details const& det
     database.query_into(DB_CurrPremLoadExcRfd, excess_sales_load_    [mce_gen_curr]);
 
     // Make sure database contents have no excess precision.
-    LMI_ASSERT(std::operator==
+    LMI_ASSERT
         (r.c(monthly_policy_fee_   [mce_gen_guar])
-        ,    monthly_policy_fee_   [mce_gen_guar]
-        ));
-    LMI_ASSERT(std::operator==
+        ==   monthly_policy_fee_   [mce_gen_guar]
+        );
+    LMI_ASSERT
         (r.c(annual_policy_fee_    [mce_gen_guar])
-        ,    annual_policy_fee_    [mce_gen_guar]
-        ));
-    LMI_ASSERT(std::operator==
+        ==   annual_policy_fee_    [mce_gen_guar]
+        );
+    LMI_ASSERT
         (r.c(monthly_policy_fee_   [mce_gen_curr])
-        ,    monthly_policy_fee_   [mce_gen_curr]
-        ));
-    LMI_ASSERT(std::operator==
+        ==   monthly_policy_fee_   [mce_gen_curr]
+        );
+    LMI_ASSERT
         (r.c(annual_policy_fee_    [mce_gen_curr])
-        ,    annual_policy_fee_    [mce_gen_curr]
-        ));
+        ==   annual_policy_fee_    [mce_gen_curr]
+        );
 }
 
 /// Transform raw input and database data into directly-useful rates.
@@ -398,14 +398,14 @@ Loads::Loads(product_database const& database, bool NeedMidpointRates)
     database.query_into(DB_CurrSpecAmtLoad   , specified_amount_load_[mce_gen_curr]);
 
     // Make sure database contents have no excess precision.
-    LMI_ASSERT(std::operator==
+    LMI_ASSERT
         (r.c(monthly_policy_fee_   [mce_gen_guar])
-        ,    monthly_policy_fee_   [mce_gen_guar]
-        ));
-    LMI_ASSERT(std::operator==
+        ==   monthly_policy_fee_   [mce_gen_guar]
+        );
+    LMI_ASSERT
         (r.c(monthly_policy_fee_   [mce_gen_curr])
-        ,    monthly_policy_fee_   [mce_gen_curr]
-        ));
+        ==   monthly_policy_fee_   [mce_gen_curr]
+        );
 
     // This ctor ignores tabular specified-amount loads.
 

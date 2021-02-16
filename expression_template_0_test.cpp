@@ -493,11 +493,11 @@ void test_pete_assignment()
 // With the operator<<() above, this:
     std::vector<double> v7a(v0.size());
     assign(v7a, v0 - v1);
-    BOOST_TEST(std::operator==(v2, v7a));
+    BOOST_TEST(v2 == v7a);
 // could be written thus:
     std::vector<double> v7b(v0.size());
     v7b << v0 - v1;
-    BOOST_TEST(std::operator==(v2, v7b));
+    BOOST_TEST(v2 == v7b);
 // though these still wouldn't compile:
 //  std::vector<double> v7c << v0 - v1;
 //  std::vector<double> v7d(v0 - v1);
@@ -510,7 +510,7 @@ void test_pete_assignment()
 // silly to add zero to everything.
     std::vector<double> v7f(v0.size());
     v7f += v0 - v1;
-    BOOST_TEST(std::operator==(v2, v7f));
+    BOOST_TEST(v2 == v7f);
 // But that may be the best that can easily be done with PETE: where
 //  std::vector<double> v7f += v0 - v1;
 // is wanted, instead write

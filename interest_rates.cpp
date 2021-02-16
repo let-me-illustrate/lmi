@@ -677,21 +677,14 @@ void InterestRates::InitializeLoanRates()
     // RegLnDueRate_ cannot vary by basis for fixed loan rate, but
     // may for VLR--in which case these assertions will fire,
     // indicating that this code should be reviewed.
-    //
-    // PETE causes an 'ambiguous overload' error for vector 'v0==v1',
-    // but not if std::operator==(v0,v1) is called explicitly.
 
     LMI_ASSERT
-        (std::operator==
-            (RegLnDueRate_[mce_annual_rate ][mce_gen_guar]
-            ,RegLnDueRate_[mce_annual_rate ][mce_gen_curr]
-            )
+        (  RegLnDueRate_[mce_annual_rate ][mce_gen_guar]
+        == RegLnDueRate_[mce_annual_rate ][mce_gen_curr]
         );
     LMI_ASSERT
-        (std::operator==
-            (RegLnDueRate_[mce_monthly_rate][mce_gen_guar]
-            ,RegLnDueRate_[mce_monthly_rate][mce_gen_curr]
-            )
+        (  RegLnDueRate_[mce_monthly_rate][mce_gen_guar]
+        == RegLnDueRate_[mce_monthly_rate][mce_gen_curr]
         );
 }
 
