@@ -27,7 +27,6 @@
 
 #define UNW_LOCAL_ONLY
 
-#include <cstddef>                      // size_t
 #include <cstdio>                       // fprintf()
 #include <cstdlib>                      // free()
 #include <cxxabi.h>
