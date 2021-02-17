@@ -504,14 +504,25 @@ void Irc7702::InitCorridor()
         );
 }
 
-//============================================================================
-// TAXATION !! Combine assertions and move to top for clarity.
-// TAXATION !! Combine locals like ann_chg_pol and mly_chg_pol.
-// TAXATION !! Eliminate aliasing references.
-// TAXATION !! Rename '[46]Pct' to 'g[ls]p'.
-// TAXATION !! Write a utility function for rotate-partial_sum_rotate.
-// TAXATION !! Eliminate PvLoadDiff{Sgl,Lvl} if unneeded.
-// TAXATION !! Add unit tests.
+/// Initialize present-value vectors: '7702.html' [14].
+///
+/// kD * MlyChg implies k == mly; it would be more general to say
+/// "modal" instead. But that's still not perfectly general, because
+/// we may need commutation functions on more than one non-annual
+/// mode. For instance, a policy might deduct the policy fee monthly
+/// but the account value load daily. Any specific changes like that
+/// are straightforward, but we don't want to spend time calculating
+/// functions on every conceivable mode unless we're actually going
+/// to use them.
+///
+/// TAXATION !! Combine assertions and move to top for clarity.
+/// TAXATION !! Combine locals like ann_chg_pol and mly_chg_pol.
+/// TAXATION !! Eliminate aliasing references.
+/// TAXATION !! Rename '[46]Pct' to 'g[ls]p'.
+/// TAXATION !! Write a utility function for rotate-partial_sum_rotate.
+/// TAXATION !! Eliminate PvLoadDiff{Sgl,Lvl} if unneeded.
+/// TAXATION !! Add unit tests.
+
 void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 {
     // We may need to recalculate these every year for a
@@ -527,15 +538,6 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     LMI_ASSERT(Length == lmi::ssize(AnnChgPol));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
     ann_chg_pol += AnnChgPol * comm_fns.aD();
-
-// kD * MlyChg implies k == mly; it would be more general to say
-// "modal" instead. But that's still not perfectly general, because
-// we may need commutation functions on more than one non-annual
-// mode. For instance, a policy might deduct the policy fee monthly
-// but the account value load daily. Any specific changes like that
-// are straightforward, but we don't want to spend time calculating
-// functions on every conceivable mode unless we're actually going
-// to use them.
 
     std::vector<double> mly_chg_pol(Length);
     LMI_ASSERT(Length == lmi::ssize(mly_chg_pol));
