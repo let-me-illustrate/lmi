@@ -49,12 +49,12 @@
 #   pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif // defined __GNUC__
 
-// ABI:
-extern "C" void __cxa_throw
-    (void*                  thrown_exception // exception address
-    ,struct std::type_info* tinfo            // exception type
-    ,void                 (*dest)(void*)     // exception destructor
-    );
+// For reference, the ABI specifies this prototype:
+// extern "C" void __cxa_throw
+//    (void*                  thrown_exception // exception address
+//    ,struct std::type_info* tinfo            // exception type
+//    ,void                 (*dest)(void*)     // exception destructor
+//    );
 
 using cxa_throw_t   = void (*)(void*, std::type_info*, void (*)(void*));
 using cxa_rethrow_t = void (*)();
@@ -63,13 +63,13 @@ cxa_throw_t   original_cxa_throw   = (cxa_throw_t)   dlsym(RTLD_NEXT, "__cxa_thr
 // Not yet used:
 cxa_rethrow_t original_cxa_rethrow = (cxa_rethrow_t) dlsym(RTLD_NEXT, "__cxa_rethrow");
 
-// ABI:
-extern "C" char* __cxa_demangle
-    (char const * mangled_name  // mangled name, NUL-terminated
-    ,char       * output_buffer // just use 0
-    ,std::size_t* length        // just use 0
-    ,int        * status        // zero --> success
-    );
+// For reference, the ABI specifies this prototype:
+// extern "C" char* __cxa_demangle
+//    (char const * mangled_name  // mangled name, NUL-terminated
+//    ,char       * output_buffer // just use 0
+//    ,std::size_t* length        // just use 0
+//    ,int        * status        // zero --> success
+//    );
 
 /// Print type of exception, and what() if it's a std::exception.
 ///
