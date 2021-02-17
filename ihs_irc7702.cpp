@@ -476,21 +476,28 @@ void Irc7702::InitCommFns()
     DEndt[Opt1Int6Pct] = CommFns[Opt1Int6Pct]->aDomega();
 }
 
-//============================================================================
+/// Set GPT and CVAT corridor factors respecting IssueAge.
+///
+/// The GPT corridor is prescribed by statute.
+///
+/// The CVAT corridor is calculated as the reciprocal of NSP:
+///   1 / NSP = Dx / (Mx + Domega)
+/// Consistent with '7702.html' [14.2] and Eckley's paper cited there,
+/// D is "annual", and M is "monthly", in the sense that "monthly"
+/// functions are "annual" times Eckley's "a''(12)" [his eq. 28]
+/// because UL mortality charges are assessed on a monthly basis.
+
 void Irc7702::InitCorridor()
 {
     // TODO ?? Substandard: set last NSP to 1.0? ignore flats? set NSP[omega] to 1?
     // TAXATION !! --better to ignore susbstandard
-    // TAXATION !! Explain a- vs k- prefixes on aD and kM.
 
-    // CVAT corridor: 1 / NSP = D / (M + Domega)
     CvatCorridor.resize(Length);
     CvatCorridor +=
            CommFns[Opt1Int4Pct]->aD()
         / (CommFns[Opt1Int4Pct]->kM() + DEndt[Opt1Int4Pct])
         ;
 
-    // GPT corridor: prescribed by statute
     GptCorridor.assign
         (CompleteGptCorridor().begin() + IssueAge
         ,CompleteGptCorridor().begin() + EndtAge
