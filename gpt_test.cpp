@@ -206,13 +206,13 @@ class gpt_test
   public:
     static void test()
         {
-        test_invariants();
+        test_preconditions();
         test_premium_calculations();
         assay_speed();
         }
 
   private:
-    static void test_invariants();
+    static void test_preconditions();
     static void test_premium_calculations();
     static void assay_speed();
 
@@ -326,7 +326,9 @@ gpt_cf_triad gpt_test::instantiate_cf()
     return gpt_cf_triad(q_m, glp_ic, glp_ig, gsp_ic, gsp_ig, v_parms());
 }
 
-void gpt_test::test_invariants()
+/// Test gpt_cf_triad::calculate_premium()'s asserted preconditions.
+
+void gpt_test::test_preconditions()
 {
     gpt_scalar_parms parms = s_parms();
     initialize(0);
