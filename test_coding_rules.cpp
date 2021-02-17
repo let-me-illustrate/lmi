@@ -605,6 +605,19 @@ void check_cxx(file const& f)
         }
     }
 
+    {
+    // See:
+    //   https://lists.nongnu.org/archive/html/lmi/2021-02/msg00023.html
+    static boost::regex const r(R"([^:s]size_t[^\n])");
+    if
+        (  boost::regex_search(f.data(), r)
+        && f.leaf_name() != "test_coding_rules.cpp"
+        )
+        {
+        complain(f, "contains unqualified 'size_t'.");
+        }
+    }
+
     // Tests above: C or C++. Tests below: C++ only.
     if(!f.is_of_phylum(e_cxx))
         {

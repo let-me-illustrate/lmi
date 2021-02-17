@@ -152,7 +152,7 @@ bool contains_regex0(std::string const& regex)
 /// TR1, there seem to be only two viable options:
 ///  - use a vectorized approach such as this; or
 ///  - write regexen with
-///    - "[^\\n]" instead of '.', and
+///    - "[^\\n]" or R"([^\n])" instead of '.', and
 ///    - "\n" instead of '^' and '$' anchors
 ///    and prepend a '\n' sentry to the string to be searched (and
 ///    assert that all files end in '\n').
