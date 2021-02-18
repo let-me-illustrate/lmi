@@ -516,7 +516,6 @@ void Irc7702::InitCorridor()
 /// to use them.
 ///
 /// TAXATION !! Combine assertions and move to top for clarity.
-/// TAXATION !! Combine locals like ann_chg_pol and mly_chg_pol.
 /// TAXATION !! Eliminate aliasing references.
 /// TAXATION !! Rename '[46]Pct' to 'g[ls]p'.
 /// TAXATION !! Write a utility function for rotate-partial_sum_rotate.
@@ -532,19 +531,15 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // Present value of charges per policy
 
-    std::vector<double> ann_chg_pol(Length);
     LMI_ASSERT(Length == lmi::ssize(AnnChgPol));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
-    ann_chg_pol += AnnChgPol * comm_fns.aD();
 
-    std::vector<double> mly_chg_pol(Length);
     LMI_ASSERT(Length == lmi::ssize(MlyChgPol));
     LMI_ASSERT(Length <= lmi::ssize(comm_fns.kD()));
-    mly_chg_pol += MlyChgPol * comm_fns.kD();
 
     std::vector<double>& chg_pol = PvChgPol[a_EIOBasis];
     chg_pol.resize(Length);
-    chg_pol += ann_chg_pol + mly_chg_pol;
+    chg_pol += AnnChgPol * comm_fns.aD() + MlyChgPol * comm_fns.kD();
 
     // ET !! This is just APL written verbosely in a funny C++ syntax.
     // Perhaps we could hope for an expression-template library to do this:
