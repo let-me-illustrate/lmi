@@ -533,9 +533,17 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     LMI_ASSERT(Length == lmi::ssize(AnnChgPol));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
-
     LMI_ASSERT(Length == lmi::ssize(MlyChgPol));
     LMI_ASSERT(Length <= lmi::ssize(comm_fns.kD()));
+    LMI_ASSERT(Length == lmi::ssize(MlyChgSpecAmt));
+    LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
+    LMI_ASSERT(Length == lmi::ssize(MlyChgADD));
+    LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
+    LMI_ASSERT(Length <= lmi::ssize(comm_fns.kC()));
+    LMI_ASSERT(Length == lmi::ssize(LoadTgt));
+    LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
+    LMI_ASSERT(Length == lmi::ssize(LoadExc));
+    LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
 
     std::vector<double>& chg_pol = PvChgPol[a_EIOBasis];
     chg_pol.resize(Length);
@@ -555,8 +563,6 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     // APL: chg_sa gets rotate plus scan rotate MlyChgSpecAmt times kD
     std::vector<double>& chg_sa = PvChgSpecAmt[a_EIOBasis];
     chg_sa.resize(Length);
-    LMI_ASSERT(Length == lmi::ssize(MlyChgSpecAmt));
-    LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
     chg_sa += MlyChgSpecAmt * comm_fns.kD();
     std::reverse(chg_sa.begin(), chg_sa.end());
     std::partial_sum(chg_sa.begin(), chg_sa.end(), chg_sa.begin());
@@ -565,8 +571,6 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     // APL: chg_add gets rotate plus scan rotate MlyChgADD times kD
     std::vector<double>& chg_add = PvChgADD[a_EIOBasis];
     chg_add.resize(Length);
-    LMI_ASSERT(Length == lmi::ssize(MlyChgADD));
-    LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
     chg_add += MlyChgADD * comm_fns.kD();
     std::reverse(chg_add.begin(), chg_add.end());
     std::partial_sum(chg_add.begin(), chg_add.end(), chg_add.begin());
@@ -574,7 +578,6 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // APL: chg_mort gets rotate plus scan rotate kC
     std::vector<double>& chg_mort = PvChgMort[a_EIOBasis];
-    LMI_ASSERT(Length <= lmi::ssize(comm_fns.kC()));
     chg_mort = comm_fns.kC();
     std::reverse(chg_mort.begin(), chg_mort.end());
     std::partial_sum(chg_mort.begin(), chg_mort.end(), chg_mort.begin());
@@ -584,8 +587,6 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     std::vector<double>& npf_sgl_tgt = PvNpfSglTgt[a_EIOBasis];
     npf_sgl_tgt.resize(Length);
-    LMI_ASSERT(Length == lmi::ssize(LoadTgt));
-    LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
     npf_sgl_tgt += (1.0 - LoadTgt) * comm_fns.aD();
 
     std::vector<double>& npf_lvl_tgt = PvNpfLvlTgt[a_EIOBasis];
@@ -598,8 +599,6 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     std::vector<double>& npf_sgl_exc = PvNpfSglExc[a_EIOBasis];
     npf_sgl_exc.resize(Length);
-    LMI_ASSERT(Length == lmi::ssize(LoadExc));
-    LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
     npf_sgl_exc += (1.0 - LoadExc) * comm_fns.aD();
 
     std::vector<double>& npf_lvl_exc = PvNpfLvlExc[a_EIOBasis];
