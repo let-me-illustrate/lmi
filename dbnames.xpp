@@ -69,7 +69,9 @@
 {DB_AllowGpt,DB_Topic_7702And7702A,"AllowGpt","Allow guideline premium test: 0=no, 1=yes",}, \
 {DB_AllowNo7702,DB_Topic_7702And7702A,"AllowNo7702","Allow 7702 to be ignored (foreign): 0=no, 1=yes",}, \
 {DB_AnnInterestRate7702,DB_Topic_7702And7702A,"AnnInterestRate7702","Annual statutory 7702 and 7702A interest rate (all but GSP), e.g. 0.04 for pre-2021 life-insurance contracts",}, \
-{DB_MlyDiscountRate7702,DB_Topic_7702And7702A,"MlyDiscountRate7702","Monthly rate (12 times i upper 12) for discounting NAAR for DCV only, e.g., 0.00246627 for a 3% annual rate",}, \
+{DB_IgnoreLoanRateFor7702,DB_Topic_7702And7702A,"IgnoreLoanRateFor7702","Riskily don't treat guaranteed net loan rate as a floor for 7702 interest: 0=no, 1=yes",}, \
+{DB_MlyDiscountRate7702Whence,DB_Topic_7702And7702A,"MlyDiscountRate7702Whence","Source of 7702 NAAR discount rate: 0=first principles, 1=table",}, \
+{DB_MlyDiscountRate7702,DB_Topic_7702And7702A,"MlyDiscountRate7702","Monthly rate (12 times i upper 12) for discounting NAAR for 7702 and 7702A only, e.g., 0.00246627 for a 3% annual rate",}, \
 {DB_Irc7702Obreption,DB_Topic_7702And7702A,"Irc7702Obreption","Prevent the product verifier from treating a frank error as such, due to some indult): 0=no [other values to be added later]",}, \
 {DB_CorridorWhence,DB_Topic_7702And7702A,"CorridorWhence","Source of CVAT 'corridor' factors: 0=first principles, 1=table",}, \
 {DB_Irc7702NspWhence,DB_Topic_7702And7702A,"Irc7702NspWhence","Source of 7702 and 7702A net single premium rates: 0=first principles, 1=table, 2=reciprocal of CVAT corridor",}, \
