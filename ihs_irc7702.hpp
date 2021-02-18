@@ -304,7 +304,7 @@ class Irc7702 final
 // *Rated* lives probably make this infeasible. We use about a dozen
 // different table ratings, and 150 MB isn't yet quite prohibitive; but
 // the potential number of different flat extra amounts and durations
-// is enormous.
+// is enormous. [However, lmi ('7702.html' [8/6]) ignores flat extras.]
 //
 // Caching is less attractive from the standpoint of uniformity. We want
 // all systems to use exactly the same path through the same code. A PC
@@ -321,7 +321,8 @@ class Irc7702 final
 // * 2700 for each combination of *nonrated* lives
 // = 35GB per second-to-die policy form, for *nonrated* lives only
 // But by the nature of the second-to-die market, one or both lives is
-// very commonly substandard. Ignoring flat extras (which we cannot do),
+// very commonly substandard. Ignoring flat extras, which we cannot do
+// for survivorship (yet lmi ('7702.html' [8/6]) ignores flat extras),
 // a dozen different table ratings on one or both lives gives rise to
 // 144 times as many possibilities, requiring
 //   35GB * 144 = 5TB

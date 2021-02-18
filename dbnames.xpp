@@ -81,7 +81,7 @@
 {DB_Irc7702QTable,DB_Topic_7702And7702A,"Irc7702QTable","7702 and 7702A annual mortality rates (index in mortality table database)",}, \
 {DB_Irc7702QAxisGender,DB_Topic_7702And7702A,"Irc7702QAxisGender","7702 and 7702A mortality varies by gender: 0=no, 1=yes",}, \
 {DB_Irc7702QAxisSmoking,DB_Topic_7702And7702A,"Irc7702QAxisSmoking","7702 and 7702A mortality varies by smoking: 0=no, 1=yes",}, \
-{DB_RatingsAffect7702,DB_Topic_7702And7702A,"RatingsAffect7702","Flat extras and table ratings affect 7702 and 7702A calculations: 0=no, 1=yes",}, \
+{DB_RatingsAffect7702,DB_Topic_7702And7702A,"RatingsAffect7702","Flat extras and table ratings affect 7702 and 7702A calculations: 0=no, 1=yes [not yet implemented]",}, \
 {DB_CvatMatChangeDefn,DB_Topic_7702And7702A,"CvatMatChangeDefn","Definition of 7702A material change for CVAT: 0=unnec prem, 1=increase, 2=increase after unnec prem [not implemented], 3=any unnec prem or increase",}, \
 {DB_GptMatChangeDefn,DB_Topic_7702And7702A,"GptMatChangeDefn","Definition of 7702A material change for GPT: 0=any adjustment event, 1=any adjustment event that increases the guideline limit",}, \
 {DB_Irc7702BftIsSpecAmt,DB_Topic_7702And7702A,"Irc7702BftIsSpecAmt","7702(f)(3) 'death benefit' is specamt rather than DB: 0=no, 1=yes",}, \

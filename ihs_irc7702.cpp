@@ -82,8 +82,6 @@ namespace
 
 // TAXATION !! General concerns
 //
-// TAXATION !! Explain why flat extras are generally ignored.
-//
 // TAXATION !! Support off-anniversary adjustment events, though not
 // in illustrations.
 //
@@ -489,7 +487,7 @@ void Irc7702::InitCommFns()
 
 void Irc7702::InitCorridor()
 {
-    // TODO ?? Substandard: set last NSP to 1.0? ignore flats? set NSP[omega] to 1?
+    // TODO ?? Substandard: set last NSP to 1.0? set NSP[omega] to 1?
     // TAXATION !! --better to ignore susbstandard
 
     CvatCorridor.resize(Length);
@@ -836,7 +834,6 @@ double Irc7702::CalculatePremium
 void Irc7702::InitSevenPayPrem()
 {
         // 7PP = MO / (N0-N7) (limit 7 to maturity year)
-        // TAXATION !! add flat extras to 7PP?
         double denom = CFFourPctMin->N()[j];
         if((7 + j) < lmi::ssize(q))
             {

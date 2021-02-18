@@ -87,8 +87,9 @@ void MortalityRates::initialize()
         unisex male proportion curr
         ANB/ALB
         bool use NY COI limits
-        TODO ?? TAXATION !! Use DB_RatingsAffect7702 (tables, flats separately?)
-        flat extras
+        TODO ?? TAXATION !! Use DB_RatingsAffect7702
+          split that, to treat tables and flats separately?
+          lmi ('7702.html' [8/6]) ignores flat extras
         substd table
         uninsurable
         cCOI, gCOI stored as annual/monthly

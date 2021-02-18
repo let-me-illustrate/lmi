@@ -245,6 +245,9 @@
                         </object>
                     </object>
                 </object>
+<!--
+TAXATION !! Flat extras are ignored ('7702.html' [8/6]), so remove this?
+-->
                 <object class="sizeritem">
                     <flag>wxGROW|wxALL</flag>
                     <object class="wxFlexGridSizer">
