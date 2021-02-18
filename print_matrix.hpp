@@ -28,10 +28,10 @@
 #include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 
-#include <algorithm>
-#include <functional>
+#include <algorithm>                    // remove_copy()
+#include <functional>                   // multiplies
 #include <iterator>                     // back_inserter()
-#include <numeric>
+#include <numeric>                      // partial_sum()
 #include <ostream>
 #include <string>
 #include <vector>

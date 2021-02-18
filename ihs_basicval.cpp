@@ -55,12 +55,12 @@
 #include "stratified_charges.hpp"
 #include "value_cast.hpp"
 
-#include <algorithm>
+#include <algorithm>                    // min(), transform()
 #include <cfenv>                        // fesetround()
 #include <cmath>                        // nearbyint(), pow()
-#include <functional>                   // multiplies
+#include <functional>                   // minus, multiplies
 #include <limits>
-#include <numeric>
+#include <numeric>                      // accumulate(), partial_sum()
 #include <stdexcept>
 
 //============================================================================

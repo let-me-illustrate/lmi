@@ -32,7 +32,7 @@
 
 #include <algorithm>                    // max()
 #include <cmath>                        // fabs()
-#include <functional>                   // bind()
+#include <functional>                   // bind(), ref()
 #include <iomanip>                      // setw() etc.
 #include <ios>                          // ios_base::fixed()
 #include <numeric>                      // partial_sum()
