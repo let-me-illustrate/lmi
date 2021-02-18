@@ -26,11 +26,11 @@
 #include "assert_lmi.hpp"
 #include "commutation_functions.hpp"
 #include "et_vector.hpp"
+#include "math_functions.hpp"           // back_sum()
 #include "miscellany.hpp"               // minmax
 #include "ssize_lmi.hpp"
 
 #include <algorithm>                    // min_element()
-#include <numeric>                      // partial_sum()
 #include <stdexcept>
 
 namespace
@@ -45,11 +45,10 @@ namespace
 /// exactly that, but the code is unpublished.
 
 template<typename T, typename E>
-std::vector<T>& back_sum(std::vector<T>& vt, E e)
+std::vector<T>& back_sum(std::vector<T>& v, E e)
 {
-    assign(vt, e);
-    std::partial_sum(vt.rbegin(), vt.rend(), vt.rbegin());
-    return vt;
+    assign(v, e);
+    return ::back_sum(v);
 }
 } // Unnamed namespace.
 

@@ -27,12 +27,22 @@
 #include <algorithm>                    // max(), min(), transform()
 #include <cmath>                        // expm1l(), log1pl()
 #include <limits>
+#include <numeric>                      // partial_sum()
 #include <stdexcept>
 #include <type_traits>
 #include <vector>
 
 // TODO ?? Write functions here for other refactorable uses of
 // std::pow() throughout lmi, to facilitate reuse and unit testing.
+
+/// Backward partial summation.
+
+template<typename T>
+std::vector<T>& back_sum(std::vector<T>& v)
+{
+    std::partial_sum(v.rbegin(), v.rend(), v.rbegin());
+    return v;
+}
 
 // Some of these provide the typedefs that std::unary_function or
 // std::binary_function would have provided, because they're still

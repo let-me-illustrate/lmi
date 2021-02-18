@@ -28,11 +28,11 @@
 #include "commutation_functions.hpp"
 #include "et_vector.hpp"
 #include "materially_equal.hpp"
+#include "math_functions.hpp"           // back_sum()
 #include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 
-#include <algorithm>                    // max(), min(), reverse()
-#include <numeric>                      // partial_sum()
+#include <algorithm>                    // max(), min()
 #include <string>
 
 // TAXATION !! Update this block comment, or simply delete it. The
@@ -517,7 +517,6 @@ void Irc7702::InitCorridor()
 ///
 /// TAXATION !! Eliminate aliasing references.
 /// TAXATION !! Rename '[46]Pct' to 'g[ls]p'.
-/// TAXATION !! Write a utility function for rotate-partial_sum_rotate.
 /// TAXATION !! Add unit tests.
 
 void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
@@ -543,40 +542,23 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     std::vector<double>& chg_pol = PvChgPol[a_EIOBasis];
     chg_pol.resize(Length);
     chg_pol += AnnChgPol * comm_fns.aD() + MlyChgPol * comm_fns.kD();
-
-    // ET !! This is just APL written verbosely in a funny C++ syntax.
-    // Perhaps we could hope for an expression-template library to do this:
-    //   chg_pol = chg_pol.reverse().partial_sum().reverse();
-    // but that would require a special type: 'chg_pol' couldn't be a
-    // std::vector anymore.
-    std::reverse(chg_pol.begin(), chg_pol.end());
-    std::partial_sum(chg_pol.begin(), chg_pol.end(), chg_pol.begin());
-    std::reverse(chg_pol.begin(), chg_pol.end());
+    chg_pol = back_sum(chg_pol);
 
     // Present value of charges per $1 specified amount
 
-    // APL: chg_sa gets rotate plus scan rotate MlyChgSpecAmt times kD
     std::vector<double>& chg_sa = PvChgSpecAmt[a_EIOBasis];
     chg_sa.resize(Length);
     chg_sa += MlyChgSpecAmt * comm_fns.kD();
-    std::reverse(chg_sa.begin(), chg_sa.end());
-    std::partial_sum(chg_sa.begin(), chg_sa.end(), chg_sa.begin());
-    std::reverse(chg_sa.begin(), chg_sa.end());
+    chg_sa = back_sum(chg_sa);
 
-    // APL: chg_add gets rotate plus scan rotate MlyChgADD times kD
     std::vector<double>& chg_add = PvChgADD[a_EIOBasis];
     chg_add.resize(Length);
     chg_add += MlyChgADD * comm_fns.kD();
-    std::reverse(chg_add.begin(), chg_add.end());
-    std::partial_sum(chg_add.begin(), chg_add.end(), chg_add.begin());
-    std::reverse(chg_add.begin(), chg_add.end());
+    chg_add = back_sum(chg_add);
 
-    // APL: chg_mort gets rotate plus scan rotate kC
     std::vector<double>& chg_mort = PvChgMort[a_EIOBasis];
     chg_mort = comm_fns.kC();
-    std::reverse(chg_mort.begin(), chg_mort.end());
-    std::partial_sum(chg_mort.begin(), chg_mort.end(), chg_mort.begin());
-    std::reverse(chg_mort.begin(), chg_mort.end());
+    chg_mort = back_sum(chg_mort);
 
     // Present value of 1 - target premium load
 
@@ -586,9 +568,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     std::vector<double>& npf_lvl_tgt = PvNpfLvlTgt[a_EIOBasis];
     npf_lvl_tgt = npf_sgl_tgt;
-    std::reverse(npf_lvl_tgt.begin(), npf_lvl_tgt.end());
-    std::partial_sum(npf_lvl_tgt.begin(), npf_lvl_tgt.end(), npf_lvl_tgt.begin());
-    std::reverse(npf_lvl_tgt.begin(), npf_lvl_tgt.end());
+    npf_lvl_tgt = back_sum(npf_lvl_tgt);
 
     // Present value of 1 - excess premium load
 
@@ -598,9 +578,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     std::vector<double>& npf_lvl_exc = PvNpfLvlExc[a_EIOBasis];
     npf_lvl_exc = npf_sgl_exc;
-    std::reverse(npf_lvl_exc.begin(), npf_lvl_exc.end());
-    std::partial_sum(npf_lvl_exc.begin(), npf_lvl_exc.end(), npf_lvl_exc.begin());
-    std::reverse(npf_lvl_exc.begin(), npf_lvl_exc.end());
+    npf_lvl_exc = back_sum(npf_lvl_exc);
 }
 
 /// For illustrations, we can't initialize everything in the ctor.
