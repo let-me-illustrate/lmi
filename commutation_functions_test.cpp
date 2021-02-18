@@ -35,7 +35,6 @@
 #include <functional>                   // bind(), ref()
 #include <iomanip>                      // setw() etc.
 #include <ios>                          // ios_base::fixed()
-#include <numeric>                      // partial_sum()
 #include <vector>
 
 namespace
@@ -79,8 +78,7 @@ void mete_reserve
 {
     double premium = (10.0 * ulcf.aDomega() + ulcf.kM()[0]) / ulcf.aN()[0];
     assign(reserve, premium * ulcf.aD() - ulcf.kC());
-    std::partial_sum(reserve.begin(), reserve.end(), reserve.begin());
-    reserve /= ulcf.EaD();
+    assign(reserve, fwd_sum(reserve) / ulcf.EaD());
 }
 
 /// Exactly reproduce Table 2 from Eckley's paper.
@@ -165,8 +163,7 @@ void TestEckleyTable2()
 
     std::vector<double> reserve(coi.size());
     reserve += premium[0] * CF.aD() - CF.kC();
-    std::partial_sum(reserve.begin(), reserve.end(), reserve.begin());
-    reserve /= CF.EaD();
+    assign(reserve, fwd_sum(reserve) / CF.EaD());
 
     {
     double tolerance = 0.0000005;
@@ -287,8 +284,7 @@ void TestEckleyTables3and4()
 
     std::vector<double> reserve(coi.size());
     reserve += premium[0] * CF.aD() - CF.kC();
-    std::partial_sum(reserve.begin(), reserve.end(), reserve.begin());
-    reserve /= CF.EaD();
+    assign(reserve, fwd_sum(reserve) / CF.EaD());
 
     double tolerance = 0.000005;
     double worst_discrepancy = 0.0;
@@ -638,8 +634,7 @@ void Test_1980_CSO_Male_ANB()
     double premium = (10.0 * ulcf.aDomega() + ulcf.kM()[0]) / ulcf.aN()[0];
     std::vector<double> reserve(q.size());
     assign(reserve, premium * ulcf.aD() - ulcf.kC());
-    std::partial_sum(reserve.begin(), reserve.end(), reserve.begin());
-    reserve /= ulcf.EaD();
+    assign(reserve, fwd_sum(reserve) / ulcf.EaD());
 
     double tolerance = 1.0e-13;
     double worst_discrepancy = 0.0;

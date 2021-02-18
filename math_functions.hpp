@@ -35,6 +35,15 @@
 // TODO ?? Write functions here for other refactorable uses of
 // std::pow() throughout lmi, to facilitate reuse and unit testing.
 
+/// Forward partial summation.
+
+template<typename T>
+std::vector<T>& fwd_sum(std::vector<T>& v)
+{
+    std::partial_sum(v.begin(), v.end(), v.begin());
+    return v;
+}
+
 /// Backward partial summation.
 
 template<typename T>
