@@ -515,7 +515,6 @@ void Irc7702::InitCorridor()
 /// functions on every conceivable mode unless we're actually going
 /// to use them.
 ///
-/// TAXATION !! Combine assertions and move to top for clarity.
 /// TAXATION !! Eliminate aliasing references.
 /// TAXATION !! Rename '[46]Pct' to 'g[ls]p'.
 /// TAXATION !! Write a utility function for rotate-partial_sum_rotate.
@@ -538,11 +537,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     LMI_ASSERT(Length == lmi::ssize(MlyChgPol));
     LMI_ASSERT(Length == lmi::ssize(MlyChgSpecAmt));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
-    LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
-    LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.kC()));
-    LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
-    LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
 
     std::vector<double>& chg_pol = PvChgPol[a_EIOBasis];
