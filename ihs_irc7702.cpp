@@ -534,12 +534,12 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     LMI_ASSERT(Length == lmi::ssize(AnnChgPol));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
     LMI_ASSERT(Length == lmi::ssize(MlyChgPol));
-    LMI_ASSERT(Length <= lmi::ssize(comm_fns.kD()));
+    LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
     LMI_ASSERT(Length == lmi::ssize(MlyChgSpecAmt));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
     LMI_ASSERT(Length == lmi::ssize(MlyChgADD));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
-    LMI_ASSERT(Length <= lmi::ssize(comm_fns.kC()));
+    LMI_ASSERT(Length == lmi::ssize(comm_fns.kC()));
     LMI_ASSERT(Length == lmi::ssize(LoadTgt));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
     LMI_ASSERT(Length == lmi::ssize(LoadExc));
