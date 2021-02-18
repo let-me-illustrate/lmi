@@ -162,7 +162,6 @@ void DBDictionary::ascribe_members()
     ascribe("Irc7702QTable"             , &DBDictionary::Irc7702QTable             );
     ascribe("Irc7702QAxisGender"        , &DBDictionary::Irc7702QAxisGender        );
     ascribe("Irc7702QAxisSmoking"       , &DBDictionary::Irc7702QAxisSmoking       );
-    ascribe("RatingsAffect7702"         , &DBDictionary::RatingsAffect7702         );
     ascribe("CvatMatChangeDefn"         , &DBDictionary::CvatMatChangeDefn         );
     ascribe("GptMatChangeDefn"          , &DBDictionary::GptMatChangeDefn          );
     ascribe("Irc7702BftIsSpecAmt"       , &DBDictionary::Irc7702BftIsSpecAmt       );

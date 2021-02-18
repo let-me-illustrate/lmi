@@ -175,7 +175,6 @@ enum e_database_key
         ,DB_Irc7702QAxisGender
         ,DB_Irc7702QAxisSmoking
 
-        ,DB_RatingsAffect7702
         ,DB_CvatMatChangeDefn
         ,DB_GptMatChangeDefn
         ,DB_Irc7702BftIsSpecAmt
