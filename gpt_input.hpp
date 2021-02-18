@@ -91,6 +91,7 @@ class LMI_SO gpt_input final
 
     std::vector<std::string> RealizeAllSequenceInput(bool report_errors = true);
 
+    // TAXATION !! Remove because flats and tables are ignored?
     std::vector<double> OldFlatExtraRealized  () const;
     std::vector<double> NewFlatExtraRealized  () const;
     std::vector<double> PaymentHistoryRealized() const;
@@ -130,6 +131,7 @@ class LMI_SO gpt_input final
     void DoHarmonize() override;
     void DoTransmogrify() override;
 
+    // TAXATION !! Remove because flats and tables are ignored?
     std::string RealizeOldFlatExtra  ();
     std::string RealizeNewFlatExtra  ();
     std::string RealizePaymentHistory();
@@ -159,6 +161,7 @@ class LMI_SO gpt_input final
     mce_smoking              NewSmoking                      ;
     mce_class                UnderwritingClass               ;
     tnr_date                 DateOfBirth                     ;
+    // TAXATION !! Remove because flats and tables are ignored?
     mce_table_rating         OldSubstandardTable             ;
     mce_table_rating         NewSubstandardTable             ;
     ce_product_name          ProductName                     ;
@@ -191,6 +194,7 @@ class LMI_SO gpt_input final
     numeric_sequence         BenefitHistory                  ;
     mce_state                StateOfJurisdiction             ;
     mce_state                PremiumTaxState                 ;
+    // TAXATION !! Remove because flats and tables are ignored?
     numeric_sequence         OldFlatExtra                    ;
     numeric_sequence         NewFlatExtra                    ;
     mce_yes_or_no            UseDOB                          ;
@@ -208,6 +212,7 @@ class LMI_SO gpt_input final
     tnr_nonnegative_double   NewQabTermAmt                   ;
     tnr_nonnegative_double   BenefitAmount                   ;
 
+    // TAXATION !! Remove because flats and tables are ignored?
     std::vector<tnr_unrestricted_double> OldFlatExtraRealized_  ;
     std::vector<tnr_unrestricted_double> NewFlatExtraRealized_  ;
     std::vector<tnr_unrestricted_double> PaymentHistoryRealized_;

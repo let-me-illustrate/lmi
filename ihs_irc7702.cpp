@@ -487,8 +487,7 @@ void Irc7702::InitCommFns()
 
 void Irc7702::InitCorridor()
 {
-    // TODO ?? Substandard: set last NSP to 1.0? set NSP[omega] to 1?
-    // TAXATION !! --better to ignore susbstandard
+    // TAXATION !! Must NSP[omega] equal unity? If not, corridor[omega] doesn't.
 
     CvatCorridor.resize(Length);
     CvatCorridor +=
@@ -820,8 +819,6 @@ double Irc7702::CalculatePremium
 //
 // track cum pmts less wds and forceouts TAXATION !! is it necessary
 // to add code here to accumulate those debits?
-//
-// current mort for substd TAXATION !! is that outside the scope of this code?
 //
 // set SA at issue to reflect dumpins and 1035s TAXATION !! That could be
 // done for option two, but is probably a mistake.

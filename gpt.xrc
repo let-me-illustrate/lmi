@@ -192,6 +192,9 @@
                 <cols>1</cols>
                 <growablecols>0</growablecols>
                 <growablerows>0,1</growablerows>
+<!--
+TAXATION !! Table ratings are ignored ('7702.html' [8/4]), so remove this?
+-->
                 <object class="sizeritem">
                     <flag>wxGROW|wxALL</flag>
                     <object class="wxFlexGridSizer">

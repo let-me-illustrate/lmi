@@ -82,6 +82,7 @@ class LMI_SO mec_input final
 
     std::vector<std::string> RealizeAllSequenceInput(bool report_errors = true);
 
+    // TAXATION !! Remove because flats and tables are ignored?
     std::vector<double> FlatExtraRealized     () const;
     std::vector<double> PaymentHistoryRealized() const;
     std::vector<double> BenefitHistoryRealized() const;
@@ -120,6 +121,7 @@ class LMI_SO mec_input final
     void DoHarmonize() override;
     void DoTransmogrify() override;
 
+    // TAXATION !! Remove because flats and tables are ignored?
     std::string RealizeFlatExtra     ();
     std::string RealizePaymentHistory();
     std::string RealizeBenefitHistory();
@@ -145,6 +147,7 @@ class LMI_SO mec_input final
     mce_smoking              Smoking                         ;
     mce_class                UnderwritingClass               ;
     tnr_date                 DateOfBirth                     ;
+    // TAXATION !! Remove because flats and tables are ignored?
     mce_table_rating         SubstandardTable                ;
     ce_product_name          ProductName                     ;
     tnr_nonnegative_double   External1035ExchangeAmount      ;
@@ -172,11 +175,13 @@ class LMI_SO mec_input final
     numeric_sequence         BenefitHistory                  ;
     mce_state                StateOfJurisdiction             ;
     mce_state                PremiumTaxState                 ;
+    // TAXATION !! Remove because flats and tables are ignored?
     numeric_sequence         FlatExtra                       ;
     mce_yes_or_no            UseDOB                          ;
     tnr_nonnegative_double   Payment                         ;
     tnr_nonnegative_double   BenefitAmount                   ;
 
+    // TAXATION !! Remove because flats and tables are ignored?
     std::vector<tnr_unrestricted_double> FlatExtraRealized_     ;
     std::vector<tnr_unrestricted_double> PaymentHistoryRealized_;
     std::vector<tnr_unrestricted_double> BenefitHistoryRealized_;
