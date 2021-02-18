@@ -533,22 +533,17 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     // Present value of charges per policy
 
     std::vector<double> ann_chg_pol(Length);
-    LMI_ASSERT(Length == lmi::ssize(ann_chg_pol));
     LMI_ASSERT(Length == lmi::ssize(AnnChgPol));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
     ann_chg_pol += AnnChgPol * comm_fns.aD();
 
     std::vector<double> mly_chg_pol(Length);
-    LMI_ASSERT(Length == lmi::ssize(mly_chg_pol));
     LMI_ASSERT(Length == lmi::ssize(MlyChgPol));
     LMI_ASSERT(Length <= lmi::ssize(comm_fns.kD()));
     mly_chg_pol += MlyChgPol * comm_fns.kD();
 
     std::vector<double>& chg_pol = PvChgPol[a_EIOBasis];
     chg_pol.resize(Length);
-    LMI_ASSERT(Length == lmi::ssize(chg_pol));
-    LMI_ASSERT(Length == lmi::ssize(ann_chg_pol));
-    LMI_ASSERT(Length <= lmi::ssize(mly_chg_pol));
     chg_pol += ann_chg_pol + mly_chg_pol;
 
     // ET !! This is just APL written verbosely in a funny C++ syntax.
@@ -565,7 +560,6 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     // APL: chg_sa gets rotate plus scan rotate MlyChgSpecAmt times kD
     std::vector<double>& chg_sa = PvChgSpecAmt[a_EIOBasis];
     chg_sa.resize(Length);
-    LMI_ASSERT(Length == lmi::ssize(chg_sa));
     LMI_ASSERT(Length == lmi::ssize(MlyChgSpecAmt));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
     chg_sa += MlyChgSpecAmt * comm_fns.kD();
@@ -576,7 +570,6 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     // APL: chg_add gets rotate plus scan rotate MlyChgADD times kD
     std::vector<double>& chg_add = PvChgADD[a_EIOBasis];
     chg_add.resize(Length);
-    LMI_ASSERT(Length == lmi::ssize(chg_add));
     LMI_ASSERT(Length == lmi::ssize(MlyChgADD));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
     chg_add += MlyChgADD * comm_fns.kD();
@@ -596,14 +589,12 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     std::vector<double>& npf_sgl_tgt = PvNpfSglTgt[a_EIOBasis];
     npf_sgl_tgt.resize(Length);
-    LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt));
     LMI_ASSERT(Length == lmi::ssize(LoadTgt));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
     npf_sgl_tgt += (1.0 - LoadTgt) * comm_fns.aD();
 
     std::vector<double>& npf_lvl_tgt = PvNpfLvlTgt[a_EIOBasis];
     npf_lvl_tgt = npf_sgl_tgt;
-    LMI_ASSERT(Length == lmi::ssize(npf_lvl_tgt));
     std::reverse(npf_lvl_tgt.begin(), npf_lvl_tgt.end());
     std::partial_sum(npf_lvl_tgt.begin(), npf_lvl_tgt.end(), npf_lvl_tgt.begin());
     std::reverse(npf_lvl_tgt.begin(), npf_lvl_tgt.end());
@@ -613,13 +604,11 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     std::vector<double>& npf_sgl_exc = PvNpfSglExc[a_EIOBasis];
     npf_sgl_exc.resize(Length);
     LMI_ASSERT(Length == lmi::ssize(LoadExc));
-    LMI_ASSERT(Length == lmi::ssize(npf_sgl_exc));
     LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
     npf_sgl_exc += (1.0 - LoadExc) * comm_fns.aD();
 
     std::vector<double>& npf_lvl_exc = PvNpfLvlExc[a_EIOBasis];
     npf_lvl_exc = npf_sgl_exc;
-    LMI_ASSERT(Length == lmi::ssize(npf_lvl_exc));
     std::reverse(npf_lvl_exc.begin(), npf_lvl_exc.end());
     std::partial_sum(npf_lvl_exc.begin(), npf_lvl_exc.end(), npf_lvl_exc.begin());
     std::reverse(npf_lvl_exc.begin(), npf_lvl_exc.end());
