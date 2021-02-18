@@ -520,7 +520,6 @@ void Irc7702::InitCorridor()
 /// TAXATION !! Eliminate aliasing references.
 /// TAXATION !! Rename '[46]Pct' to 'g[ls]p'.
 /// TAXATION !! Write a utility function for rotate-partial_sum_rotate.
-/// TAXATION !! Eliminate PvLoadDiff{Sgl,Lvl} if unneeded.
 /// TAXATION !! Add unit tests.
 
 void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
@@ -624,22 +623,6 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     std::reverse(npf_lvl_exc.begin(), npf_lvl_exc.end());
     std::partial_sum(npf_lvl_exc.begin(), npf_lvl_exc.end(), npf_lvl_exc.begin());
     std::reverse(npf_lvl_exc.begin(), npf_lvl_exc.end());
-
-    // Present value of target premium load - excess premium load
-
-    std::vector<double>& diff_sgl = PvLoadDiffSgl[a_EIOBasis];
-    diff_sgl.resize(Length);
-    LMI_ASSERT(Length == lmi::ssize(diff_sgl));
-    LMI_ASSERT(Length == lmi::ssize(npf_sgl_exc));
-    LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt));
-    diff_sgl += npf_sgl_exc - npf_sgl_tgt;
-
-    std::vector<double>& diff_lvl = PvLoadDiffLvl[a_EIOBasis];
-    diff_lvl.resize(Length);
-    LMI_ASSERT(Length == lmi::ssize(diff_lvl));
-    std::reverse(diff_lvl.begin(), diff_lvl.end());
-    std::partial_sum(diff_lvl.begin(), diff_lvl.end(), diff_lvl.begin());
-    std::reverse(diff_lvl.begin(), diff_lvl.end());
 }
 
 /// For illustrations, we can't initialize everything in the ctor.

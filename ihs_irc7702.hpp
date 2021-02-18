@@ -256,9 +256,6 @@ class Irc7702 final
     std::vector<double>        PvNpfLvlTgt     [NumIOBases];
     std::vector<double>        PvNpfSglExc     [NumIOBases];
     std::vector<double>        PvNpfLvlExc     [NumIOBases];
-// TODO ?? TAXATION !! Not necessary?
-    std::vector<double>        PvLoadDiffSgl   [NumIOBases];
-    std::vector<double>        PvLoadDiffLvl   [NumIOBases];
 };
 
 // TAXATION !! Update this, and move it to a better location.
