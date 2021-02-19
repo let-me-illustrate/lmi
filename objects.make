@@ -751,7 +751,6 @@ irc7702_tables_test$(EXEEXT): \
   commutation_functions.o \
   cso_table.o \
   global_settings.o \
-  irc7702_interest.o \
   irc7702_tables.o \
   irc7702_tables_test.o \
   miscellany.o \

@@ -872,7 +872,6 @@ test_irc7702_tables_SOURCES = \
   commutation_functions.cpp \
   cso_table.cpp \
   global_settings.cpp \
-  irc7702_interest.cpp \
   irc7702_tables.cpp \
   irc7702_tables_test.cpp \
   miscellany.cpp \

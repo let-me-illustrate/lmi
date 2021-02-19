@@ -456,17 +456,14 @@ static double const ss_ol_7pp[100] =
 void Test_Corridor_and_7PP()
 {
     double constexpr iglp = 0.04;
-    std::vector<double> const naar_discount
-        (100
-        ,i_upper_12_over_12_from_i<double>()(iglp)
-        );
+    std::vector<double> const operative_i(100, iglp);
     irc7702_tables z
         (mce_2001cso
         ,oe_orthodox
         ,oe_age_last_birthday
         ,mce_unisex
         ,mce_unismoke
-        ,naar_discount
+        ,operative_i
         ,1.0 / 12.0
         ,0
         ,100

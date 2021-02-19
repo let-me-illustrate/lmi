@@ -41,7 +41,7 @@ class LMI_SO irc7702_tables final
         ,oenum_alb_or_anb
         ,mcenum_gender
         ,mcenum_smoking
-        ,std::vector<double> const& naar_discount
+        ,std::vector<double> const& operative_i
         ,double                     max_coi_rate
         // Potentially defaultable.
         ,int                        min_age
@@ -54,6 +54,7 @@ class LMI_SO irc7702_tables final
 
   private:
     std::vector<double> const q_       {};
+    std::vector<double> const i_       {};
     int                 const length_  {};
     std::vector<double>       ul_corr_ {};
     std::vector<double>       ul_7pp_  {};

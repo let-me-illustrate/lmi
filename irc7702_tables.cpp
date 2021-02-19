@@ -27,11 +27,8 @@
 #include "commutation_functions.hpp"
 #include "cso_table.hpp"
 #include "et_vector.hpp"
-#include "irc7702_interest.hpp"         // iglp()
 #include "math_functions.hpp"
 #include "ssize_lmi.hpp"
-
-#include <cmath>                        // log()
 
 irc7702_tables::irc7702_tables
     (mcenum_cso_era             cso_era
@@ -39,12 +36,13 @@ irc7702_tables::irc7702_tables
     ,oenum_alb_or_anb           alb_or_anb
     ,mcenum_gender              gender
     ,mcenum_smoking             smoking
-    ,std::vector<double> const& naar_discount
+    ,std::vector<double> const& operative_i
     ,double                     max_coi_rate
     ,int                        min_age
     ,int                        max_age
     )
     :q_       {cso_table(cso_era, autopisty, alb_or_anb, gender, smoking, min_age, max_age)}
+    ,i_       {operative_i}
     ,length_  {lmi::ssize(q_)}
     // Initialize to proper length to support PETE usage below:
     ,ul_corr_ (length_)
@@ -53,22 +51,12 @@ irc7702_tables::irc7702_tables
     ,ol_7pp_  (length_)
 {
     std::vector<double> q12(length_);
-    assign(q12, apply_binary(coi_rate_from_q<double>(), q_, max_coi_rate));
+    q12 += apply_binary(coi_rate_from_q<double>(), q_, max_coi_rate);
 
-    // ic: iglp() is the statutory rate.
-    // ig: Argument 'naar_discount' corresponds to DB_NaarDiscount,
-    //   which is assumed to be rounded appropriately if at all.
-    std::vector<double> const ic
-        (length_
-        ,i_upper_12_over_12_from_i<double>()(iglp())
-        );
-    std::vector<double> const& ig(naar_discount);
+    std::vector<double> i12(length_);
+    i12 += apply_unary(i_upper_12_over_12_from_i<double>(), i_);
 
-    LMI_ASSERT(lmi::ssize(q12) == length_);
-    LMI_ASSERT(lmi::ssize(ic ) == length_);
-    LMI_ASSERT(lmi::ssize(ig ) == length_);
-
-    ULCommFns const ulcf(q12, ic, ig, mce_option1_for_7702, mce_monthly);
+    ULCommFns const ulcf(q12, i12, i12, mce_option1_for_7702, mce_monthly);
 
     ul_corr_ += ulcf.aD() / (ulcf.aDomega() + ulcf.kM());
 
@@ -78,9 +66,9 @@ irc7702_tables::irc7702_tables
     E7aN.erase(E7aN.begin(), 7 + E7aN.begin());
     ul_7pp_ += (ulcf.aDomega() + ulcf.kM()) / (ulcf.aN() - E7aN);
 
-    double const i_over_delta = iglp() / std::log(1 + iglp());
-    std::vector<double> const i(length_, iglp());
-    OLCommFns const olcf(q_, i);
+    std::vector<double> i_over_delta(length_);
+    i_over_delta += i_ / log(1 + i_); // PETE's log(), not std::log()
+    OLCommFns const olcf(q_, i_);
 
     // Alternative calculations that may be useful someday are given
     // in comments.
