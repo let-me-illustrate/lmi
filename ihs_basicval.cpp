@@ -434,49 +434,51 @@ void BasicValues::Init7702()
 
     std::vector<double> guar_int;
     database().query_into(DB_GuarInt, guar_int);
-// TAXATION !! Rework this. The intention is to make the 7702 interest
-// rate no less, at any duration, than the guaranteed loan rate--here,
-// the fixed rate charged on loans, minus the guaranteed loan spread
-// (if any).
-/*
-    switch(yare_input_.LoanRateType)
+
+    if(!database().query<bool>(DB_IgnoreLoanRateFor7702))
         {
-        case mce_fixed_loan_rate:
+    // TAXATION !! Rework this. The intention is to make the 7702 interest
+    // rate no less, at any duration, than the guaranteed loan rate--here,
+    // the fixed rate charged on loans, minus the guaranteed loan spread
+    // (if any).
+        switch(yare_input_.LoanRateType)
             {
-            std::vector<double> gross_loan_rate;
-            database().query_into(DB_FixedLoanRate    , gross_loan_rate);
-            std::vector<double> guar_loan_spread;
-            database().query_into(DB_GuarRegLoanSpread, guar_loan_spread);
-            // ET !! std::vector<double> guar_loan_rate = gross_loan_rate - guar_loan_spread;
-            std::vector<double> guar_loan_rate(Length);
-            std::transform
-                (gross_loan_rate.begin()
-                ,gross_loan_rate.end()
-                ,guar_loan_spread.begin()
-                ,guar_loan_rate.begin()
-                ,std::minus<double>()
-                );
-            // ET !! guar_int = max(guar_int, guar_loan_spread);
-            // TODO ?? But that looks incorrect when written clearly!
-            // Perhaps this old comment:
-            //   APL: guar_int gets guar_int max gross_loan_rate - guar_loan_spread
-            // suggests the actual intention.
-            std::transform
-                (guar_int.begin()
-                ,guar_int.end()
-                ,guar_loan_spread.begin()
-                ,guar_int.begin()
-                ,greater_of<double>()
-                );
+            case mce_fixed_loan_rate:
+                {
+                std::vector<double> gross_loan_rate;
+                database().query_into(DB_FixedLoanRate    , gross_loan_rate);
+                std::vector<double> guar_loan_spread;
+                database().query_into(DB_GuarRegLoanSpread, guar_loan_spread);
+                // ET !! std::vector<double> guar_loan_rate = gross_loan_rate - guar_loan_spread;
+                std::vector<double> guar_loan_rate(Length);
+                std::transform
+                    (gross_loan_rate.begin()
+                    ,gross_loan_rate.end()
+                    ,guar_loan_spread.begin()
+                    ,guar_loan_rate.begin()
+                    ,std::minus<double>()
+                    );
+                // ET !! guar_int = max(guar_int, guar_loan_spread);
+                // TODO ?? But that looks incorrect when written clearly!
+                // Perhaps this old comment:
+                //   APL: guar_int gets guar_int max gross_loan_rate - guar_loan_spread
+                // suggests the actual intention.
+                std::transform
+                    (guar_int.begin()
+                    ,guar_int.end()
+                    ,guar_loan_spread.begin()
+                    ,guar_int.begin()
+                    ,greater_of<double>()
+                    );
+                }
+                break;
+            case mce_variable_loan_rate:
+                {
+                // do nothing
+                }
+                break;
             }
-            break;
-        case mce_variable_loan_rate:
-            {
-            // do nothing
-            }
-            break;
         }
-*/
 
     Mly7702iGlp.assign(Length, 0.0);
     assign
