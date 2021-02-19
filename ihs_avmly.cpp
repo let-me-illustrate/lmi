@@ -1992,11 +1992,21 @@ void AccountValue::TxTestHoneymoonForExpiration()
         }
 }
 
-/// Subtract separate account load after monthly deductions: it is not
-/// regarded as part of monthly deductions per se.
+/// Subtract separate account load.
 ///
-/// When the sepacct load depends on each month's case total assets, the
-/// interest rate is no longer an annual invariant. Set it monthly here.
+/// Because it is debited before interest is credited, this load is
+/// appropriately reflected in guideline premium calculations: see
+/// '7702.html' [7/8].
+///
+/// This load is not regarded as part of monthly deductions per se.
+/// It is debited after monthly deductions, in accordance with common
+/// practice. (Long ago, lmi supported a product design that debited
+/// asset-based charges before the monthly deduction, but that quirky
+/// idea was abandoned).
+///
+/// When the sepacct load depends on each month's case total assets,
+/// the interest rate is no longer an annual invariant, so it must be
+/// dynamically determined here each month.
 
 void AccountValue::TxTakeSepAcctLoad()
 {
