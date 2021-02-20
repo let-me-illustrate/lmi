@@ -293,6 +293,7 @@ class InterestRates
     std::vector<double> PostHoneymoonSpread_;
 
     // GLP and GSP interest rates. DCV uses the GLP rate.
+    std::vector<double> Statutory7702i_;
     std::vector<double> SpreadFor7702_;
     std::vector<double> MlyGlpRate_;
     std::vector<double> MlyGspRate_;

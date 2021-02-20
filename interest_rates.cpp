@@ -29,7 +29,6 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "et_vector.hpp"
-#include "irc7702_interest.hpp"         // iglp(), igsp()
 #include "math_functions.hpp"           // assign_midpoint()
 #include "miscellany.hpp"               // each_equal()
 #include "ssize_lmi.hpp"
@@ -390,6 +389,8 @@ void InterestRates::Initialize(BasicValues const& v)
             ,v.yare_input_.PostHoneymoonSpread
             );
         }
+
+    v.database().query_into(DB_AnnInterestRate7702, Statutory7702i_);
 
     // Convert interest rates and test.
 
@@ -950,7 +951,7 @@ void InterestRates::Initialize7702Rates()
     // _without_ assigning from Zero_ first; but it's not.
     // See test_pete_assignment() in 'expression_template_0_test.cpp'.
     MlyGlpRate_ = Zero_;
-    assign(MlyGlpRate_, apply_binary(greater_of<double>(), iglp(), annual_guar_rate));
+    assign(MlyGlpRate_, apply_binary(greater_of<double>(), Statutory7702i_, annual_guar_rate));
     LMI_ASSERT(MlyGlpRate_.size() == SpreadFor7702_.size());
     MlyGlpRate_ -= SpreadFor7702_;
     assign(MlyGlpRate_, apply_unary(i_upper_12_over_12_from_i<double>(), MlyGlpRate_));

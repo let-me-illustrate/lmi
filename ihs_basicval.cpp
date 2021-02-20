@@ -41,7 +41,6 @@
 #include "ihs_irc7702a.hpp"
 #include "input.hpp"
 #include "interest_rates.hpp"
-#include "irc7702_interest.hpp"         // iglp(), igsp()
 #include "lingo.hpp"
 #include "loads.hpp"
 #include "math_functions.hpp"
@@ -430,6 +429,9 @@ void BasicValues::Init7702()
     // DCV calculations in the account value class as well as
     // GPT calculations in the 7702 class.
 
+    std::vector<double> statutory7702i;
+    database().query_into(DB_AnnInterestRate7702, statutory7702i);
+
     std::vector<double> guar_int;
     database().query_into(DB_GuarInt, guar_int);
 // TAXATION !! Rework this. The intention is to make the 7702 interest
@@ -481,7 +483,7 @@ void BasicValues::Init7702()
         (Mly7702iGlp
         ,apply_unary
             (i_upper_12_over_12_from_i<double>()
-            ,apply_binary(greater_of<double>(), iglp(), guar_int) - SpreadFor7702_
+            ,apply_binary(greater_of<double>(), statutory7702i, guar_int) - SpreadFor7702_
             )
         );
 
@@ -490,7 +492,7 @@ void BasicValues::Init7702()
         (Mly7702iGsp
         ,apply_unary
             (i_upper_12_over_12_from_i<double>()
-            ,apply_binary(greater_of<double>(), igsp(), guar_int) - SpreadFor7702_
+            ,apply_binary(greater_of<double>(), 0.02 + statutory7702i, guar_int) - SpreadFor7702_
             )
         );
 
