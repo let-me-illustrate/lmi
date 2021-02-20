@@ -449,26 +449,13 @@ void BasicValues::Init7702()
                 database().query_into(DB_FixedLoanRate    , gross_loan_rate);
                 std::vector<double> guar_loan_spread;
                 database().query_into(DB_GuarRegLoanSpread, guar_loan_spread);
-                // ET !! std::vector<double> guar_loan_rate = gross_loan_rate - guar_loan_spread;
-                std::vector<double> guar_loan_rate(Length);
-                std::transform
-                    (gross_loan_rate.begin()
-                    ,gross_loan_rate.end()
-                    ,guar_loan_spread.begin()
-                    ,guar_loan_rate.begin()
-                    ,std::minus<double>()
-                    );
-                // ET !! guar_int = max(guar_int, guar_loan_spread);
-                // TODO ?? But that looks incorrect when written clearly!
-                // Perhaps this old comment:
-                //   APL: guar_int gets guar_int max gross_loan_rate - guar_loan_spread
-                // suggests the actual intention.
-                std::transform
-                    (guar_int.begin()
-                    ,guar_int.end()
-                    ,guar_loan_spread.begin()
-                    ,guar_int.begin()
-                    ,greater_of<double>()
+                assign
+                    (guar_int
+                    ,apply_binary
+                        (greater_of<double>()
+                        ,guar_int
+                        ,gross_loan_rate - guar_loan_spread
+                        )
                     );
                 }
                 break;

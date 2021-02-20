@@ -1493,8 +1493,6 @@ sample2xyz::sample2xyz()
     // This is determined by law, in a way that varies by product;
     // 2021 products use this two-percent rate.
     Add({DB_AnnInterestRate7702 , 0.02});
-    // Temporary workaround to sidestep a defect in revived code:
-    Add({DB_IgnoreLoanRateFor7702, true});
     // Arguably the most complex ledger type.
     Add({DB_LedgerType          , mce_finra});
     // Certain group-quote columns are available only when these two
