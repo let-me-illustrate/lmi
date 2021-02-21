@@ -435,37 +435,39 @@ void BasicValues::Init7702()
     std::vector<double> guar_int;
     database().query_into(DB_GuarInt, guar_int);
 
+    // For 7702 purposes, the rate guaranteed by the contract is the
+    // highest rate on any potential path, at each duration; thus,
+    // it is no less than the guaranteed fixed loan rate, i.e.:
+    //   (fixed rate charged on loans) - (guaranteed loan spread)
     if(!database().query<bool>(DB_IgnoreLoanRateFor7702))
         {
-    // TAXATION !! Rework this. The intention is to make the 7702 interest
-    // rate no less, at any duration, than the guaranteed loan rate--here,
-    // the fixed rate charged on loans, minus the guaranteed loan spread
-    // (if any).
-        switch(yare_input_.LoanRateType)
+        std::vector<double> allow_fixed_loan;
+        database().query_into(DB_AllowFixedLoan, allow_fixed_loan);
+        if(!each_equal(allow_fixed_loan, false))
             {
-            case mce_fixed_loan_rate:
-                {
-                std::vector<double> gross_loan_rate;
-                database().query_into(DB_FixedLoanRate    , gross_loan_rate);
-                std::vector<double> guar_loan_spread;
-                database().query_into(DB_GuarRegLoanSpread, guar_loan_spread);
-                assign
-                    (guar_int
-                    ,apply_binary
-                        (greater_of<double>()
-                        ,guar_int
-                        ,gross_loan_rate - guar_loan_spread
-                        )
-                    );
-                }
-                break;
-            case mce_variable_loan_rate:
-                {
-                // do nothing
-                }
-                break;
+            std::vector<double> gross_loan_rate;
+            database().query_into(DB_FixedLoanRate    , gross_loan_rate);
+            std::vector<double> guar_loan_spread;
+            database().query_into(DB_GuarRegLoanSpread, guar_loan_spread);
+            assign
+                (guar_int
+                ,apply_binary
+                    (greater_of<double>()
+                    ,guar_int
+                    ,gross_loan_rate - guar_loan_spread
+                    )
+                );
             }
         }
+
+    // If lmi someday implements VLR, then the current VLR rate on
+    // the issue date constitutes a short-term guarantee that must
+    // be reflected here. Until then, assert that VLR is not used,
+    // or cannot be used:
+    LMI_ASSERT
+        (  false == database().query<bool>(DB_AllowVlr)
+        || mce_variable_loan_rate != yare_input_.LoanRateType
+        );
 
     Mly7702iGlp.assign(Length, 0.0);
     assign
