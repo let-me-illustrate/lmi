@@ -669,7 +669,6 @@ gpt_test$(EXEEXT): \
   gpt_commutation_functions.o \
   gpt_test.o \
   ihs_irc7702.o \
-  irc7702_interest.o \
   miscellany.o \
   null_stream.o \
   path_utility.o \

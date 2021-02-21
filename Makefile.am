@@ -780,7 +780,6 @@ test_gpt_SOURCES = \
   gpt_commutation_functions.cpp \
   gpt_test.cpp \
   ihs_irc7702.cpp \
-  irc7702_interest.cpp \
   miscellany.cpp \
   null_stream.cpp \
   path_utility.cpp \
