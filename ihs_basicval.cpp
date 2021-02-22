@@ -423,7 +423,6 @@ void BasicValues::Init7702()
     // Monthly guar net int for 7702 is
     //   greater of {iglp(), igsp()} and annual guar int rate
     //   less 7702 spread
-    // TODO ?? TAXATION !! We need to subtract other things too, e.g. comp (sometimes)...
     //   transformed to monthly (simple subtraction?).
     // These interest rates belong here because they're used by
     // DCV calculations in the account value class as well as
