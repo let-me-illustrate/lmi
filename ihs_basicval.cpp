@@ -420,6 +420,15 @@ void BasicValues::Init7702()
     // (optionally) rounding monthly COI rates.
     MlyDcvqc = round_coi_rate()(Mly7702qc);
 
+    // If lmi someday implements VLR, then the current VLR rate on
+    // the issue date constitutes a short-term guarantee that must be
+    // reflected in the 7702 interest rates (excluding the GLP rate).
+    // Until then, assert that VLR is not used, or cannot be used:
+    LMI_ASSERT
+        (  false == database().query<bool>(DB_AllowVlr)
+        || mce_variable_loan_rate != yare_input_.LoanRateType
+        );
+
     // Monthly guar net int for 7702 is
     //   greater of {iglp(), igsp()} and annual guar int rate
     //   less 7702 spread
@@ -460,13 +469,8 @@ void BasicValues::Init7702()
         }
 
     // If lmi someday implements VLR, then the current VLR rate on
-    // the issue date constitutes a short-term guarantee that must
-    // be reflected here. Until then, assert that VLR is not used,
-    // or cannot be used:
-    LMI_ASSERT
-        (  false == database().query<bool>(DB_AllowVlr)
-        || mce_variable_loan_rate != yare_input_.LoanRateType
-        );
+    // the issue date constitutes a short-term guarantee that must be
+    // reflected in the 7702 interest rates (excluding the GLP rate).
 
     Mly7702iGlp.assign(Length, 0.0);
     assign
