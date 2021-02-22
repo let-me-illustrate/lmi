@@ -26,7 +26,34 @@
 
 #include "so_attributes.hpp"
 
-LMI_SO double iglp();
-LMI_SO double igsp();
+#include <vector>
+
+class LMI_SO_FWD_DECL product_database;
+class LMI_SO_FWD_DECL stratified_charges;
+
+LMI_SO double iglp(); // 7702 !! obsolescent
+LMI_SO double igsp(); // 7702 !! obsolescent
+
+class LMI_SO i7702 final
+{
+  public:
+    i7702
+        (product_database   const&
+        ,stratified_charges const&
+        );
+    i7702(i7702 const&) = delete;
+    i7702& operator=(i7702 const&) = delete;
+    ~i7702() = default;
+
+  private:
+    product_database   const& database_;
+    stratified_charges const& stratified_;
+
+    std::vector<double> spread_;
+
+    std::vector<double> gross_;
+    std::vector<double> net_glp_;
+    std::vector<double> net_gsp_;
+};
 
 #endif // irc7702_interest_hpp

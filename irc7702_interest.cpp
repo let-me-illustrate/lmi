@@ -23,8 +23,10 @@
 
 #include "irc7702_interest.hpp"
 
-#include "contains.hpp"
-#include "global_settings.hpp"
+#include "contains.hpp"                 // 7702 !! obsolescent
+#include "database.hpp"
+#include "global_settings.hpp"          // 7702 !! obsolescent
+#include "stratified_charges.hpp"
 
 /// Statutory interest rate for 7702 and 7702A (except GSP).
 ///
@@ -47,4 +49,13 @@ double iglp()
 double igsp()
 {
     return 0.02 + iglp();
+}
+
+i7702::i7702
+    (product_database   const& database
+    ,stratified_charges const& stratified
+    )
+    :database_   {database}
+    ,stratified_ {stratified}
+{
 }
