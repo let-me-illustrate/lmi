@@ -538,10 +538,10 @@ void BasicValues::Init7702()
         ,yare_input_.IssueAge
         ,EndtAge
         ,Mly7702qc
-        ,Mly7702iGlp
-        ,Mly7702iGsp
-        ,Mly7702ig
-        ,SpreadFor7702_
+        ,i7702_->net_glp()
+        ,i7702_->net_gsp()
+        ,i7702_->gross() // 7702 !! incorrect: ig should equal ic
+        ,i7702_->spread()
         ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
         ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
         ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
