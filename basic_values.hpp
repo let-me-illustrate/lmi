@@ -448,10 +448,6 @@ class LMI_SO BasicValues
 
     void                Init7702();
     void                Init7702A();
-    std::vector<double> Mly7702iGlp;
-    std::vector<double> Mly7702iGsp;
-    std::vector<double> Mly7702ig;
-    std::vector<double> Mly7702qc;
     std::vector<double> MlyDcvqc;
     mutable std::vector<double> Non7702CompliantCorridor;
 

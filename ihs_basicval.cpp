@@ -416,7 +416,7 @@ double BasicValues::InvestmentManagementFee() const
 
 void BasicValues::Init7702()
 {
-    Mly7702qc = GetIrc7702QRates();
+    std::vector<double> Mly7702qc = GetIrc7702QRates();
     double max_coi_rate = database().query<double>(DB_MaxMonthlyCoiRate);
     LMI_ASSERT(0.0 != max_coi_rate);
     max_coi_rate = 1.0 / max_coi_rate;
@@ -485,6 +485,10 @@ void BasicValues::Init7702()
     // If lmi someday implements VLR, then the current VLR rate on
     // the issue date constitutes a short-term guarantee that must be
     // reflected in the 7702 interest rates (excluding the GLP rate).
+
+    std::vector<double> Mly7702iGlp;
+    std::vector<double> Mly7702iGsp;
+    std::vector<double> Mly7702ig;
 
     Mly7702iGlp.assign(Length, 0.0);
     assign
