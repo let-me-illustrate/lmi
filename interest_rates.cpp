@@ -42,8 +42,6 @@
 //
 // Permit variable loan rate.
 //
-// Calculate all 7702 and 7702A interest rates here.
-//
 // The InterestRates(BasicValues) ctor requires many headers; improve
 // physical design by replacing it with a ctor that takes all required
 // data as arguments. That redesign is more conducive to unit tests,
@@ -246,32 +244,6 @@ void convert_interest_rates
         monthly_gross_rate[j] = cached_monthly_gross_rate;
         }
 }
-
-#if 0
-/// Determine whether loan rates are needed; else they can be zero.
-///
-/// Loan rates can potentially affect GPT calculations.
-///
-/// SOMEDAY !! Is this function worthwhile, or should it be expunged?
-/// An error in its implementation could have severe consequences, and
-/// the benefit seems slight. At present, it's never called anyway,
-/// because BasicValues::Init7702() is called unconditionally--so the
-/// test for 'DefinitionOfLifeInsurance' is incorrect.
-
-bool need_loan_rates(yare_input const& yi)
-{
-    return
-            mce_gpt                == yi.DefinitionOfLifeInsurance
-        ||  mce_solve_loan         == yi.SolveType
-        ||  true                   == yi.WithdrawToBasisThenLoan
-        ||  0.0                    != yi.InforceRegularLoanValue
-        ||  0.0                    != yi.InforcePreferredLoanValue
-        ||  0.0                    != yi.InforceRegularLoanBalance
-        ||  0.0                    != yi.InforcePreferredLoanBalance
-        ||  !each_equal(yi.NewLoan, 0.0)
-        ;
-}
-#endif // 0
 } // Unnamed namespace.
 
 #if 0
@@ -281,14 +253,12 @@ instead of passing BasicValues, pass these requirements only:
     v.InvestmentManagementFee()
     v.GetLength()
     v.round_interest_rate()
-    v.round_interest_rate_7702()
     v.IsSubjectToIllustrationReg()
 #endif // 0
 
 InterestRates::InterestRates(BasicValues const& v)
     :Length_             {v.GetLength()}
     ,RoundIntRate_       {v.round_interest_rate()}
-    ,Round7702Rate_      {v.round_interest_rate_7702()}
     ,Zero_               (Length_)
     ,NeedMidpointRates_  {v.IsSubjectToIllustrationReg()}
     ,GenAcctRateType_    {v.yare_input_.GeneralAccountRateType}
@@ -394,7 +364,6 @@ void InterestRates::Initialize(BasicValues const& v)
     InitializeSeparateAccountRates();
     InitializeLoanRates();
     InitializeHoneymoonRates();
-    Initialize7702Rates();
 
     // Paranoid check.
     for(int i = mce_annual_rate; i < mc_n_rate_periods; ++i)
@@ -794,8 +763,4 @@ void InterestRates::DynamicMlySepAcctRate
             alarum() << "No " << SepAcctRateType_ << " case." << LMI_FLUSH;
             }
         }
-}
-
-void InterestRates::Initialize7702Rates()
-{
 }

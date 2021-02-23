@@ -213,11 +213,9 @@ class InterestRates
     void InitializeSeparateAccountRates();
     void InitializeLoanRates();
     void InitializeHoneymoonRates();
-    void Initialize7702Rates();
 
     int                Length_;
     round_to<double>   RoundIntRate_;
-    round_to<double>   Round7702Rate_;
 
     std::vector<double> Zero_;
 
