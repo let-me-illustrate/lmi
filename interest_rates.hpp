@@ -142,9 +142,6 @@ class InterestRates
     InterestRates(BasicValues const&);
     ~InterestRates() = default;
 
-    std::vector<double> const& MlyGlpRate() const;
-    std::vector<double> const& MlyGspRate() const;
-
     std::vector<double> const& GenAcctGrossRate
         (mcenum_gen_basis
         ) const;
@@ -291,12 +288,6 @@ class InterestRates
         ;
     std::vector<double> HoneymoonValueSpread_;
     std::vector<double> PostHoneymoonSpread_;
-
-    // GLP and GSP interest rates. DCV uses the GLP rate.
-    std::vector<double> Statutory7702i_;
-    std::vector<double> SpreadFor7702_;
-    std::vector<double> MlyGlpRate_;
-    std::vector<double> MlyGspRate_;
 };
 
 inline std::vector<double> const& InterestRates::GenAcctGrossRate
@@ -396,16 +387,6 @@ inline std::vector<double> const& InterestRates::PostHoneymoonGenAcctRate
     ) const
 {
     return PostHoneymoonGenAcctRate_[rate_period][gen_basis];
-}
-
-inline std::vector<double> const& InterestRates::MlyGlpRate() const
-{
-    return MlyGlpRate_;
-}
-
-inline std::vector<double> const& InterestRates::MlyGspRate() const
-{
-    return MlyGspRate_;
 }
 
 #endif // interest_rates_hpp

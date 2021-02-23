@@ -283,7 +283,6 @@ instead of passing BasicValues, pass these requirements only:
     v.round_interest_rate()
     v.round_interest_rate_7702()
     v.IsSubjectToIllustrationReg()
-    v.SpreadFor7702()
 #endif // 0
 
 InterestRates::InterestRates(BasicValues const& v)
@@ -301,7 +300,6 @@ InterestRates::InterestRates(BasicValues const& v)
     ,LoanRateType_       {v.yare_input_.LoanRateType}
     ,NeedPrefLoanRates_  {v.database().query<bool>(DB_AllowPrefLoan)}
     ,NeedHoneymoonRates_ {v.yare_input_.HoneymoonEndorsement}
-    ,SpreadFor7702_      {v.SpreadFor7702()}
 {
     Initialize(v);
 }
@@ -389,8 +387,6 @@ void InterestRates::Initialize(BasicValues const& v)
             ,v.yare_input_.PostHoneymoonSpread
             );
         }
-
-    v.database().query_into(DB_AnnInterestRate7702, Statutory7702i_);
 
     // Convert interest rates and test.
 
@@ -802,19 +798,4 @@ void InterestRates::DynamicMlySepAcctRate
 
 void InterestRates::Initialize7702Rates()
 {
-// TODO ?? TAXATION !! Calculate both:
-//    std::vector<double> MlyGlpRate_;
-//    std::vector<double> MlyGspRate_;
-
-    std::vector<double> const& annual_guar_rate = GenAcctGrossRate_[mce_gen_guar];
-
-    // ET !! This ought to be implicit, at least in some 'safe' mode:
-    //   LMI_ASSERT_EQUAL(MlyGlpRate_.size(), SpreadFor7702_.size());
-    // _without_ assigning from Zero_ first; but it's not.
-    // See test_pete_assignment() in 'expression_template_0_test.cpp'.
-    MlyGlpRate_ = Zero_;
-    assign(MlyGlpRate_, apply_binary(greater_of<double>(), Statutory7702i_, annual_guar_rate));
-    LMI_ASSERT(MlyGlpRate_.size() == SpreadFor7702_.size());
-    MlyGlpRate_ -= SpreadFor7702_;
-    assign(MlyGlpRate_, apply_unary(i_upper_12_over_12_from_i<double>(), MlyGlpRate_));
 }
