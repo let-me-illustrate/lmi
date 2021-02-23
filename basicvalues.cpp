@@ -119,9 +119,6 @@ void BasicValues::Init()
     no_can_issue_         = no_longer_issued && is_new_business;
     IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(ledger_type());
 
-    // IHS !! Just a dummy initialization here--implemented in lmi.
-    SpreadFor7702_.assign(Length, 0.0);
-
     // Multilife contracts will need a vector of mortality-rate objects.
     MortalityRates_ = std::make_unique<MortalityRates>(*this);
     InterestRates_  = std::make_unique<InterestRates >(*this);
@@ -313,12 +310,6 @@ currency BasicValues::GetModalTgtSpecAmt
     // IHS !! Parameterized in lmi.
     static round_to<double> const round_it(0, r_downward);
     return round_it.c(z);
-}
-
-//============================================================================
-std::vector<double> const& BasicValues::SpreadFor7702() const
-{
-    return SpreadFor7702_;
 }
 
 //============================================================================

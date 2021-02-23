@@ -261,13 +261,6 @@ void BasicValues::Init()
             ;
         }
 
-#if 1 // 7702 !! moved to class i7702
-    SpreadFor7702_.assign
-        (Length
-        ,StratifiedCharges_->minimum_tiered_spread_for_7702()
-        );
-#endif // 1 // 7702 !! moved to class i7702
-
     // Multilife contracts will need a vector of mortality-rate objects.
 
     // Mortality and interest rates require database and rounding.
@@ -436,6 +429,14 @@ void BasicValues::Init7702()
 
     // 7702 !! local with '_' suffix: should become a member
     i7702 i7702_(database(), *StratifiedCharges_);
+
+#if 1 // 7702 !! moved to class i7702
+    std::vector<double> const SpreadFor7702_
+        (Length
+        ,StratifiedCharges_->minimum_tiered_spread_for_7702()
+        );
+#endif // 1 // 7702 !! moved to class i7702
+
 #if 1 // 7702 !! moved to class i7702
     // Monthly guar net int for 7702 is
     //   greater of {iglp(), igsp()} and annual guar int rate
@@ -1951,11 +1952,6 @@ std::vector<double> const& BasicValues::GetCorridorFactor() const
 }
 
 // potential inlines
-
-std::vector<double> const& BasicValues::SpreadFor7702() const
-{
-    return SpreadFor7702_;
-}
 
 std::vector<double> const& BasicValues::GetMly7702iGlp() const
 {

@@ -141,7 +141,6 @@ class LMI_SO BasicValues
     currency GetAnnualTgtPrem(int a_year, currency a_specamt) const;
 
     std::vector<double> const& GetCorridorFactor() const;
-    std::vector<double> const& SpreadFor7702() const;
     std::vector<double> const& GetMly7702iGlp() const;
     std::vector<double> const& GetMly7702qc() const;
     std::vector<double> const& GetMlyDcvqc() const;
@@ -448,7 +447,6 @@ class LMI_SO BasicValues
 
     void                Init7702();
     void                Init7702A();
-    std::vector<double> SpreadFor7702_;
     std::vector<double> Mly7702iGlp;
     std::vector<double> Mly7702iGsp;
     std::vector<double> Mly7702ig;
