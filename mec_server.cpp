@@ -35,7 +35,7 @@
 #include "et_vector.hpp"
 #include "ieee754.hpp"                  // ldbl_eps_plus_one_times()
 #include "ihs_irc7702a.hpp"
-#include "irc7702_interest.hpp"         // iglp()
+#include "irc7702_interest.hpp"
 #include "materially_equal.hpp"         // material_difference()
 #include "math_functions.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_state_from_string()
@@ -168,6 +168,7 @@ mec_state test_one_days_7702A_transactions
     max_coi_rate = 1.0 / max_coi_rate;
     assign(Mly7702qc, apply_binary(coi_rate_from_q<double>(), Mly7702qc, max_coi_rate));
 
+#if 1
     std::vector<double> guar_int;
     database.query_into(DB_GuarInt, guar_int);
 
@@ -199,6 +200,12 @@ mec_state test_one_days_7702A_transactions
         ? zero
         : Mly7702iGlp
         ;
+#endif // 1
+    i7702 const i7702_(database, stratified);
+    LMI_ASSERT(i7702_.gross  () == Mly7702ig);
+    LMI_ASSERT(i7702_.net_glp() == Mly7702iGlp);
+//  LMI_ASSERT(i7702_.net_gsp() == Mly7702iGsp);
+    LMI_ASSERT(i7702_.spread () == spread);
     ULCommFns commfns
         (Mly7702qc
         ,Mly7702iGlp
