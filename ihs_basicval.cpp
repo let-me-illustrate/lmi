@@ -76,6 +76,7 @@ BasicValues::BasicValues(Input const& input)
         (AddDataDir(product().datum("RoundingFilename"))))
     ,StratifiedCharges_  (stratified_charges::read_via_cache
         (AddDataDir(product().datum("TierFilename"))))
+    ,i7702_              {std::make_unique<i7702>(database(), *StratifiedCharges_)}
     ,DefnLifeIns_        {mce_cvat}
     ,DefnMaterialChange_ {mce_unnecessary_premium}
     ,Effective7702DboRop {mce_option1_for_7702}
@@ -124,6 +125,7 @@ BasicValues::BasicValues
         (AddDataDir(product().datum("RoundingFilename"))))
     ,StratifiedCharges_  (stratified_charges::read_via_cache
         (AddDataDir(product().datum("TierFilename"))))
+    ,i7702_              {std::make_unique<i7702>(database(), *StratifiedCharges_)}
     ,DefnLifeIns_        {mce_cvat}
     ,DefnMaterialChange_ {mce_unnecessary_premium}
     ,Effective7702DboRop {a_DBOptFor7702}
@@ -300,8 +302,6 @@ void BasicValues::Init()
     SetMaxSurvivalDur();
     set_partial_mortality();
 
-    // 7702 !! should become a member, to be shared with 7702A:
-//  i7702_ = i7702(database(), *StratifiedCharges_);
     Init7702();
     Init7702A();
 }
@@ -435,9 +435,6 @@ void BasicValues::Init7702()
         || mce_variable_loan_rate != yare_input_.LoanRateType
         );
 
-    // 7702 !! local with '_' suffix: should become a member
-    i7702 i7702_(database(), *StratifiedCharges_);
-
 #if 1 // 7702 !! moved to class i7702
     std::vector<double> const SpreadFor7702_
         (Length
@@ -509,10 +506,10 @@ void BasicValues::Init7702()
 
     database().query_into(DB_NaarDiscount, Mly7702ig);
 #endif // 1 // 7702 !! moved to class i7702
-    LMI_ASSERT(i7702_.gross  () == Mly7702ig);
-    LMI_ASSERT(i7702_.net_glp() == Mly7702iGlp);
-    LMI_ASSERT(i7702_.net_gsp() == Mly7702iGsp);
-    LMI_ASSERT(i7702_.spread () == SpreadFor7702_);
+    LMI_ASSERT(i7702_->gross  () == Mly7702ig);
+    LMI_ASSERT(i7702_->net_glp() == Mly7702iGlp);
+    LMI_ASSERT(i7702_->net_gsp() == Mly7702iGsp);
+    LMI_ASSERT(i7702_->spread () == SpreadFor7702_);
 
     // TODO ?? We should avoid reading the rate file again; but
     // the GPT server doesn't initialize a MortalityRates object

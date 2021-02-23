@@ -47,6 +47,7 @@
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "interest_rates.hpp"
+#include "irc7702_interest.hpp"
 #include "loads.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"

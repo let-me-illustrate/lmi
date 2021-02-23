@@ -60,6 +60,7 @@ class Irc7702A;
 class Loads;
 class MortalityRates;
 class death_benefits;
+class i7702;
 class lingo;
 class modal_outlay;
 class premium_tax;
@@ -126,14 +127,16 @@ class LMI_SO BasicValues
     std::shared_ptr<rounding_rules     const> const RoundingRules_;
     std::shared_ptr<stratified_charges const> const StratifiedCharges_;
 
-    std::unique_ptr<MortalityRates>     MortalityRates_;
-    std::unique_ptr<InterestRates>      InterestRates_;
-    std::unique_ptr<death_benefits>     DeathBfts_;
-    std::unique_ptr<modal_outlay>       Outlay_;
-    std::unique_ptr<premium_tax>        PremiumTax_;
-    std::unique_ptr<Loads>              Loads_;
-    std::unique_ptr<Irc7702>            Irc7702_;
-    std::unique_ptr<Irc7702A>           Irc7702A_;
+    std::unique_ptr<i7702          const> i7702_;
+
+    std::unique_ptr<MortalityRates const> MortalityRates_;
+    std::unique_ptr<InterestRates       > InterestRates_;
+    std::unique_ptr<death_benefits      > DeathBfts_;
+    std::unique_ptr<modal_outlay        > Outlay_;
+    std::unique_ptr<premium_tax         > PremiumTax_;
+    std::unique_ptr<Loads          const> Loads_;
+    std::unique_ptr<Irc7702             > Irc7702_;
+    std::unique_ptr<Irc7702A            > Irc7702A_;
 
     product_data     const& product () const {return *product_;}
     product_database const& database() const {return database_;}
