@@ -68,6 +68,14 @@ BasicValues::BasicValues(Input const& input)
     :yare_input_         (input)
     ,product_            (product_data::read_via_cache(filename_from_product_name(yare_input_.ProductName)))
     ,database_           (yare_input_)
+    ,lingo_              (lingo::read_via_cache
+        (AddDataDir(product().datum("LingoFilename"))))
+    ,FundData_           (FundData::read_via_cache
+        (AddDataDir(product().datum("FundFilename"))))
+    ,RoundingRules_      (rounding_rules::read_via_cache
+        (AddDataDir(product().datum("RoundingFilename"))))
+    ,StratifiedCharges_  (stratified_charges::read_via_cache
+        (AddDataDir(product().datum("TierFilename"))))
     ,DefnLifeIns_        {mce_cvat}
     ,DefnMaterialChange_ {mce_unnecessary_premium}
     ,Effective7702DboRop {mce_option1_for_7702}
@@ -108,6 +116,14 @@ BasicValues::BasicValues
         ,a_UnderwritingBasis
         ,a_StateOfJurisdiction
         )
+    ,lingo_              (lingo::read_via_cache
+        (AddDataDir(product().datum("LingoFilename"))))
+    ,FundData_           (FundData::read_via_cache
+        (AddDataDir(product().datum("FundFilename"))))
+    ,RoundingRules_      (rounding_rules::read_via_cache
+        (AddDataDir(product().datum("RoundingFilename"))))
+    ,StratifiedCharges_  (stratified_charges::read_via_cache
+        (AddDataDir(product().datum("TierFilename"))))
     ,DefnLifeIns_        {mce_cvat}
     ,DefnMaterialChange_ {mce_unnecessary_premium}
     ,Effective7702DboRop {a_DBOptFor7702}
@@ -188,15 +204,7 @@ BasicValues::~BasicValues() = default;
 //============================================================================
 void BasicValues::Init()
 {
-    lingo_             = lingo::read_via_cache
-        (AddDataDir(product().datum("LingoFilename")));
-    FundData_          = FundData::read_via_cache
-        (AddDataDir(product().datum("FundFilename")));
-    RoundingRules_     = rounding_rules::read_via_cache
-        (AddDataDir(product().datum("RoundingFilename")));
     SetRoundingFunctors();
-    StratifiedCharges_ = stratified_charges::read_via_cache
-        (AddDataDir(product().datum("TierFilename")));
 
     SetPermanentInvariants();
 

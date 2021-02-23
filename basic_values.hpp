@@ -119,12 +119,12 @@ class LMI_SO BasicValues
 
     yare_input                                yare_input_;
 
-    std::shared_ptr<product_data       const> product_;
-    product_database                   const  database_;
-    std::shared_ptr<lingo              const> lingo_;
-    std::shared_ptr<FundData           const> FundData_;
-    std::shared_ptr<rounding_rules     const> RoundingRules_;
-    std::shared_ptr<stratified_charges const> StratifiedCharges_;
+    std::shared_ptr<product_data       const> const product_;
+    product_database                          const database_;
+    std::shared_ptr<lingo              const> const lingo_;
+    std::shared_ptr<FundData           const> const FundData_;
+    std::shared_ptr<rounding_rules     const> const RoundingRules_;
+    std::shared_ptr<stratified_charges const> const StratifiedCharges_;
 
     std::unique_ptr<MortalityRates>     MortalityRates_;
     std::unique_ptr<InterestRates>      InterestRates_;
