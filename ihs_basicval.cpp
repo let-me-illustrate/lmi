@@ -1958,16 +1958,6 @@ std::vector<double> const& BasicValues::GetCorridorFactor() const
 
 // potential inlines
 
-std::vector<double> const& BasicValues::GetMly7702iGlp() const
-{
-    return Mly7702iGlp;
-}
-
-std::vector<double> const& BasicValues::GetMly7702qc() const
-{
-    return Mly7702qc;
-}
-
 std::vector<double> const& BasicValues::GetMlyDcvqc() const
 {
     return MlyDcvqc;

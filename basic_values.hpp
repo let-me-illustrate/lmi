@@ -144,8 +144,6 @@ class LMI_SO BasicValues
     currency GetAnnualTgtPrem(int a_year, currency a_specamt) const;
 
     std::vector<double> const& GetCorridorFactor() const;
-    std::vector<double> const& GetMly7702iGlp() const;
-    std::vector<double> const& GetMly7702qc() const;
     std::vector<double> const& GetMlyDcvqc() const;
 
     // COI and term rates are blended on the current basis, but not
