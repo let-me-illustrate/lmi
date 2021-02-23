@@ -34,6 +34,7 @@
 #include "ihs_irc7702a.hpp"
 #include "input.hpp"                    // consummate()
 #include "interest_rates.hpp"
+#include "irc7702_interest.hpp"         // class i7702
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
@@ -1321,7 +1322,10 @@ void AccountValue::SetAnnualInvariants()
             ;
         }
 
-    YearsDcvIntRate         = GetMly7702iGlp()[Year];
+    // 7702 !! This is clearly wrong. This rate is net of certain
+    // asset-based charges, but those charges are explicitly
+    // deducted from DCV, so they must be ignored here.
+    YearsDcvIntRate         = i7702_->net_glp()[Year];
     YearsHoneymoonValueRate = InterestRates_->HoneymoonValueRate
         (GenBasis_
         ,mce_monthly_rate
