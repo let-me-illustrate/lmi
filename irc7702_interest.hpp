@@ -45,13 +45,20 @@ class LMI_SO i7702 final
     i7702& operator=(i7702 const&) = delete;
     ~i7702() = default;
 
+    std::vector<double> const& gross  () const {return gross_;  }
+    std::vector<double> const& net_glp() const {return net_glp_;}
+    std::vector<double> const& net_gsp() const {return net_gsp_;}
+
+    // 7702 !! ephemeral
+    std::vector<double> const& spread() const {return spread_;}
+
   private:
     product_database   const& database_;
     stratified_charges const& stratified_;
 
     std::vector<double> spread_;
 
-    std::vector<double> gross_;
+    std::vector<double> gross_  ;
     std::vector<double> net_glp_;
     std::vector<double> net_gsp_;
 };

@@ -25,7 +25,10 @@
 
 #include "contains.hpp"                 // 7702 !! obsolescent
 #include "database.hpp"
+#include "et_vector.hpp"
 #include "global_settings.hpp"          // 7702 !! obsolescent
+#include "math_functions.hpp"
+#include "miscellany.hpp"               // each_equal()
 #include "stratified_charges.hpp"
 
 /// Statutory interest rate for 7702 and 7702A (except GSP).
@@ -58,10 +61,9 @@ i7702::i7702
     :database_   {database}
     ,stratified_ {stratified}
 {
-#if 0
-    SpreadFor7702_.assign
-        (Length
-        ,StratifiedCharges_->minimum_tiered_spread_for_7702()
+    spread_.assign
+        (database_.length()
+        ,stratified_.minimum_tiered_spread_for_7702()
         );
 
     // Monthly guar net int for 7702 is
@@ -73,25 +75,25 @@ i7702::i7702
     // GPT calculations in the 7702 class.
 
     std::vector<double> statutory7702i;
-    database().query_into(DB_AnnInterestRate7702, statutory7702i);
+    database_.query_into(DB_AnnInterestRate7702, statutory7702i);
 
     std::vector<double> guar_int;
-    database().query_into(DB_GuarInt, guar_int);
+    database_.query_into(DB_GuarInt, guar_int);
 
     // For 7702 purposes, the rate guaranteed by the contract is the
     // highest rate on any potential path, at each duration; thus,
     // it is no less than the guaranteed fixed loan rate, i.e.:
     //   (fixed rate charged on loans) - (guaranteed loan spread)
-    if(!database().query<bool>(DB_IgnoreLoanRateFor7702))
+    if(!database_.query<bool>(DB_IgnoreLoanRateFor7702))
         {
         std::vector<double> allow_fixed_loan;
-        database().query_into(DB_AllowFixedLoan, allow_fixed_loan);
+        database_.query_into(DB_AllowFixedLoan, allow_fixed_loan);
         if(!each_equal(allow_fixed_loan, false))
             {
             std::vector<double> gross_loan_rate;
-            database().query_into(DB_FixedLoanRate    , gross_loan_rate);
+            database_.query_into(DB_FixedLoanRate    , gross_loan_rate);
             std::vector<double> guar_loan_spread;
-            database().query_into(DB_GuarRegLoanSpread, guar_loan_spread);
+            database_.query_into(DB_GuarRegLoanSpread, guar_loan_spread);
             assign
                 (guar_int
                 ,apply_binary
@@ -107,24 +109,33 @@ i7702::i7702
     // the issue date constitutes a short-term guarantee that must be
     // reflected in the 7702 interest rates (excluding the GLP rate).
 
-    Mly7702iGlp.assign(Length, 0.0);
+    gross_.assign(database_.length(), 0.0);
     assign
-        (Mly7702iGlp
+        (gross_
         ,apply_unary
             (i_upper_12_over_12_from_i<double>()
-            ,apply_binary(greater_of<double>(), statutory7702i, guar_int) - SpreadFor7702_
+            ,apply_binary(greater_of<double>(), statutory7702i, guar_int)
             )
         );
 
-    Mly7702iGsp.assign(Length, 0.0);
+    net_glp_.assign(database_.length(), 0.0);
     assign
-        (Mly7702iGsp
+        (net_glp_
         ,apply_unary
             (i_upper_12_over_12_from_i<double>()
-            ,apply_binary(greater_of<double>(), 0.02 + statutory7702i, guar_int) - SpreadFor7702_
+            ,apply_binary(greater_of<double>(), statutory7702i, guar_int) - spread_
             )
         );
 
-    database().query_into(DB_NaarDiscount, Mly7702ig);
-#endif // 0
+    net_gsp_.assign(database_.length(), 0.0);
+    assign
+        (net_gsp_
+        ,apply_unary
+            (i_upper_12_over_12_from_i<double>()
+            ,apply_binary(greater_of<double>(), 0.02 + statutory7702i, guar_int) - spread_
+            )
+        );
+
+    // 7702 !! WRONG: for 7702, Eckley's 'ig' must be 'gross_' as set above
+    database_.query_into(DB_NaarDiscount, gross_);
 }

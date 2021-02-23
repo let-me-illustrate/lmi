@@ -41,6 +41,7 @@
 #include "ihs_irc7702a.hpp"
 #include "input.hpp"
 #include "interest_rates.hpp"
+#include "irc7702_interest.hpp"         // class i7702
 #include "lingo.hpp"
 #include "loads.hpp"
 #include "math_functions.hpp"
@@ -298,6 +299,8 @@ void BasicValues::Init()
     SetMaxSurvivalDur();
     set_partial_mortality();
 
+    // 7702 !! should become a member, to be shared with 7702A:
+//  i7702_ = i7702(database(), *StratifiedCharges_);
     Init7702();
     Init7702A();
 }
@@ -431,6 +434,8 @@ void BasicValues::Init7702()
         || mce_variable_loan_rate != yare_input_.LoanRateType
         );
 
+    // 7702 !! local with '_' suffix: should become a member
+    i7702 i7702_(database(), *StratifiedCharges_);
 #if 1 // 7702 !! moved to class i7702
     // Monthly guar net int for 7702 is
     //   greater of {iglp(), igsp()} and annual guar int rate
@@ -495,6 +500,10 @@ void BasicValues::Init7702()
 
     database().query_into(DB_NaarDiscount, Mly7702ig);
 #endif // 1 // 7702 !! moved to class i7702
+    LMI_ASSERT(i7702_.gross  () == Mly7702ig);
+    LMI_ASSERT(i7702_.net_glp() == Mly7702iGlp);
+    LMI_ASSERT(i7702_.net_gsp() == Mly7702iGsp);
+    LMI_ASSERT(i7702_.spread () == SpreadFor7702_);
 
     // TODO ?? We should avoid reading the rate file again; but
     // the GPT server doesn't initialize a MortalityRates object
