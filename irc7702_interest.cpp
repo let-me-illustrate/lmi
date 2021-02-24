@@ -129,9 +129,4 @@ i7702::i7702
     std::vector<double> contractual_naar_discount;
     database_.query_into(DB_NaarDiscount, contractual_naar_discount);
     ig_ = (zero == contractual_naar_discount) ? zero : gross_;
-
-    // 7702 !! For the nonce, use this in place of 'ig_' even though
-    // that is wrong, because correcting it in certain old code causes
-    // regressions that will take some effort to resolve.
-    bogus_ = contractual_naar_discount;
 }
