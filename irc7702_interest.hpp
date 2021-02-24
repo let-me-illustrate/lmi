@@ -31,9 +31,6 @@
 class LMI_SO_FWD_DECL product_database;
 class LMI_SO_FWD_DECL stratified_charges;
 
-LMI_SO double iglp(); // 7702 !! obsolescent
-LMI_SO double igsp(); // 7702 !! obsolescent
-
 class LMI_SO i7702 final
 {
   public:

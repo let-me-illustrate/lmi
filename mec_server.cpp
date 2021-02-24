@@ -168,51 +168,11 @@ mec_state test_one_days_7702A_transactions
     max_coi_rate = 1.0 / max_coi_rate;
     assign(Mly7702qc, apply_binary(coi_rate_from_q<double>(), Mly7702qc, max_coi_rate));
 
-#if 1
-    std::vector<double> guar_int;
-    database.query_into(DB_GuarInt, guar_int);
-
-    std::vector<double> const spread
-        (input.years_to_maturity()
-        ,stratified.minimum_tiered_spread_for_7702()
-        );
-
-    // ET !! Mly7702iGlp = i_upper_12_over_12_from_i(max(iglp(), guar_int) - spread);
-    std::vector<double> Mly7702iGlp(input.years_to_maturity());
-    assign
-        (Mly7702iGlp
-        ,apply_unary
-            (i_upper_12_over_12_from_i<double>()
-            ,apply_binary(greater_of<double>(), iglp(), guar_int) - spread
-            )
-        );
-
-    std::vector<double> Mly7702ig;
-    database.query_into(DB_NaarDiscount, Mly7702ig);
-    LMI_ASSERT(!contains(Mly7702ig, -1.0));
-    std::vector<double> DBDiscountRate(input.years_to_maturity());
-    assign(DBDiscountRate, 1.0 / (1.0 + Mly7702ig));
-
-    // Use zero if that's the guaranteed rate; else use the statutory rate.
-    std::vector<double> const zero(input.years_to_maturity(), 0.0);
-    std::vector<double> const& naar_disc_rate =
-          each_equal(Mly7702ig, 0.0)
-        ? zero
-        : Mly7702iGlp
-        ;
-#endif // 1
     i7702 const i7702_(database, stratified);
-//  LMI_ASSERT(i7702_.gross  () == Mly7702ig); // should fail, and does fail
-//  LMI_ASSERT(i7702_.ig     () == Mly7702ig); // should succeed, but fails
-    LMI_ASSERT(i7702_.bogus  () == Mly7702ig); // succeeds, but bogusly
-    LMI_ASSERT(i7702_.gross  () == naar_disc_rate);
-    LMI_ASSERT(i7702_.net_glp() == Mly7702iGlp);
-//  LMI_ASSERT(i7702_.net_gsp() == Mly7702iGsp);
-    LMI_ASSERT(i7702_.spread () == spread);
     ULCommFns commfns
         (Mly7702qc
-        ,Mly7702iGlp
-        ,naar_disc_rate
+        ,i7702_.net_glp() // 7702 !! should be gross()
+        ,i7702_.gross()   // 7702 !! should be ig()
         ,mce_option1_for_7702
         ,mce_monthly
         );
@@ -458,8 +418,8 @@ mec_state test_one_days_7702A_transactions
         {
         ofs
             <<               j  << '\t'
-            << value_cast<std::string>(Mly7702iGlp    [j]) << '\t'
-            << value_cast<std::string>(naar_disc_rate [j]) << '\t'
+            << value_cast<std::string>(i7702_.net_glp() [j]) << '\t'
+            << value_cast<std::string>(i7702_.gross() [j]) << '\t'
             << value_cast<std::string>(Mly7702qc      [j]) << '\t'
             << value_cast<std::string>(commfns.aD()   [j]) << '\t'
             << value_cast<std::string>(commfns.kC()   [j]) << '\t'
