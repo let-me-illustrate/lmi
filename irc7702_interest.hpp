@@ -45,9 +45,11 @@ class LMI_SO i7702 final
     i7702& operator=(i7702 const&) = delete;
     ~i7702() = default;
 
+    std::vector<double> const& ig     () const {return ig_;  }
     std::vector<double> const& gross  () const {return gross_;  }
     std::vector<double> const& net_glp() const {return net_glp_;}
     std::vector<double> const& net_gsp() const {return net_gsp_;}
+    std::vector<double> const& bogus  () const {return bogus_;  }
 
     // 7702 !! ephemeral
     std::vector<double> const& spread() const {return spread_;}
@@ -58,9 +60,12 @@ class LMI_SO i7702 final
 
     std::vector<double> spread_;
 
+    std::vector<double> ig_     ;
     std::vector<double> gross_  ;
     std::vector<double> net_glp_;
     std::vector<double> net_gsp_;
+    // 7702 !! deprecated:
+    std::vector<double> bogus_  ;
 };
 
 #endif // irc7702_interest_hpp

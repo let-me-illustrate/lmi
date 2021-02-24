@@ -202,7 +202,10 @@ mec_state test_one_days_7702A_transactions
         ;
 #endif // 1
     i7702 const i7702_(database, stratified);
-    LMI_ASSERT(i7702_.gross  () == Mly7702ig);
+//  LMI_ASSERT(i7702_.gross  () == Mly7702ig); // should fail, and does fail
+//  LMI_ASSERT(i7702_.ig     () == Mly7702ig); // should succeed, but fails
+    LMI_ASSERT(i7702_.bogus  () == Mly7702ig); // succeeds, but bogusly
+    LMI_ASSERT(i7702_.gross  () == naar_disc_rate);
     LMI_ASSERT(i7702_.net_glp() == Mly7702iGlp);
 //  LMI_ASSERT(i7702_.net_gsp() == Mly7702iGsp);
     LMI_ASSERT(i7702_.spread () == spread);

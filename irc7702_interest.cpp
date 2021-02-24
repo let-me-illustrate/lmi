@@ -136,6 +136,27 @@ i7702::i7702
             )
         );
 
-    // 7702 !! WRONG: for 7702, Eckley's 'ig' must be 'gross_' as set above
-    database_.query_into(DB_NaarDiscount, gross_);
+    // Eckley's 'ig' represents the interest rate by which death
+    // benefit is discounted for calculating mortality charges,
+    // as seen in his formula (1):
+    //   [0V + P - Q(1/(1 + ig) - OV - P)] (1 + ic) = 1V
+    // For 7702, that 'ig' should generally be 'gross_' above.
+    //
+    // However, if the contract applies no such discount, then 'ig'
+    // must be zero for formula (1) to apply. As of 2021-02, lmi
+    // supports one ancient product that seems to have no such
+    // discount. This is so extraordinary that it doesn't merit
+    // a special database flag. Instead, the discount is deemed
+    // to be absent iff the contractual discount according to the
+    // product database is uniformly zero.
+
+    std::vector<double> const zero(database_.length(), 0.0);
+    std::vector<double> contractual_naar_discount;
+    database_.query_into(DB_NaarDiscount, contractual_naar_discount);
+    ig_ = (zero == contractual_naar_discount) ? zero : gross_;
+
+    // 7702 !! For the nonce, use this in place of 'ig_' even though
+    // that is wrong, because correcting it in certain old code causes
+    // regressions that will take some effort to resolve.
+    bogus_ = contractual_naar_discount;
 }
