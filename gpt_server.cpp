@@ -189,7 +189,7 @@ gpt_state test_one_days_gpt_transactions
     ULCommFns commfns
         (Mly7702qc
         ,i7702_.net_glp()
-        ,i7702_.gross()   // 7702 !! should be ig()
+        ,i7702_.ig()
         ,mce_option1_for_7702
         ,mce_monthly
         );
