@@ -419,7 +419,6 @@ Irc7702& gpt_test::instantiate_old(int issue_age)
     throw "Code that uses this obsolescent class segfaults with como.";
 #else // !defined LMI_COMO_WITH_MINGW
     int const length = lmi::ssize(q_m);
-    std::vector<double> const zero(length, 0.0);
     // The old class recognizes only one QAB: ADB. So that all QABs
     // can be exercised with the new class, use a linear combination
     // of all QAB rates as the ADB rate here. Copying literal values
@@ -447,7 +446,6 @@ Irc7702& gpt_test::instantiate_old(int issue_age)
             ,glp_ic                          // a_GLPic
             ,gsp_ic                          // a_GSPic
             ,glp_ic                          // a_Ig [ignored here, in effect]
-            ,zero                            // a_IntDed
             ,0.0                             // a_PresentBftAmt
             ,0.0                             // a_PresentSpecAmt
             ,0.0                             // a_LeastBftAmtEver

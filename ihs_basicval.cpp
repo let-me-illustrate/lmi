@@ -461,7 +461,6 @@ void BasicValues::Init7702()
         ,i7702_->net_glp()
         ,i7702_->net_gsp()
         ,i7702_->ig()
-        ,i7702_->spread()
         ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
         ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
         ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount

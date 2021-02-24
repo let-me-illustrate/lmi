@@ -47,9 +47,6 @@ class LMI_SO i7702 final
     std::vector<double> const& net_glp() const {return net_glp_;}
     std::vector<double> const& net_gsp() const {return net_gsp_;}
 
-    // 7702 !! ephemeral
-    std::vector<double> const& spread() const {return spread_;}
-
   private:
     product_database   const& database_;
     stratified_charges const& stratified_;

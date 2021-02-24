@@ -114,7 +114,6 @@ Irc7702::Irc7702
     ,std::vector<double> const& a_GLPic
     ,std::vector<double> const& a_GSPic
     ,std::vector<double> const& a_Ig
-    ,std::vector<double> const& a_IntDed
     ,double                     a_PresentBftAmt
     ,double                     a_PresentSpecAmt
     ,double                     a_LeastBftAmtEver
@@ -146,7 +145,6 @@ Irc7702::Irc7702
     ,GLPic              {a_GLPic}
     ,GSPic              {a_GSPic}
     ,Ig                 {a_Ig}
-    ,IntDed             {a_IntDed}
     ,PresentBftAmt      {a_PresentBftAmt}
     ,PriorBftAmt        {a_PresentBftAmt}
     ,PresentSpecAmt     {a_PresentSpecAmt}

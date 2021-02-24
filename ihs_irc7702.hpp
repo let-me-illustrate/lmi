@@ -63,7 +63,6 @@ class Irc7702 final
         ,std::vector<double> const& a_GLPic
         ,std::vector<double> const& a_GSPic
         ,std::vector<double> const& a_Ig
-        ,std::vector<double> const& a_IntDed
         ,double                     a_PresentBftAmt
         ,double                     a_PresentSpecAmt
         ,double                     a_LeastBftAmtEver
@@ -179,7 +178,6 @@ class Irc7702 final
     std::vector<double> const& GLPic;      // 7702 GLP interest rate
     std::vector<double> const& GSPic;      // 7702 GSP interest rate
     std::vector<double> const& Ig;         // Death benefit discount rate
-    std::vector<double> const& IntDed;     // Deduction from interest rate
 
     double                     PresentBftAmt;
     double                     PriorBftAmt;
