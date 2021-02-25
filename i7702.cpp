@@ -37,13 +37,6 @@ i7702::i7702
     ,stratified_ {stratified}
 {
     database_.query_into(DB_CurrAcctValLoad, spread_);
-    // For the nonce, zero out the effect of DB_CurrAcctValLoad in
-    // order to demonstrate that this commit has no effect on
-    // regression tests using real-world products, all of which
-    // either offer no general-account option or have no
-    // tiered separate-account loads--IOW, they obey the 'if'
-    // condition that is now made explicit below.
-    spread_ *= 0.0;
     if
         (   database_.query<bool>(DB_AllowSepAcct)
         && !database_.query<bool>(DB_AllowGenAcct)
