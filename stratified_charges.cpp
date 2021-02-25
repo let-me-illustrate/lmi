@@ -416,8 +416,7 @@ double stratified_charges::tiered_guar_sepacct_load(double assets, double) const
 ///
 /// TODO ?? TAXATION !! Missing "CurrSepAcctLoadBandedByAssets".
 /// But "CurrSepAcctLoadBandedByPrem" is deliberately excluded,
-/// because it's not based on assets. Elsewhere, "DB_CurrAcctValLoad"
-/// should be added to the result.
+/// because it's not based on assets.
 
 double stratified_charges::minimum_tiered_sepacct_load_for_7702() const
 {
