@@ -282,6 +282,7 @@ lmi_common_objects := \
   gpt_specamt.o \
   gpt_state.o \
   gpt_xml_document.o \
+  i7702.o \
   ihs_acctval.o \
   ihs_avdebug.o \
   ihs_avmly.o \
@@ -292,7 +293,6 @@ lmi_common_objects := \
   ihs_irc7702a.o \
   ihs_mortal.o \
   ihs_server7702.o \
-  irc7702_interest.o \
   irc7702_tables.o \
   lingo.o \
   lmi.o \

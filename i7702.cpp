@@ -21,7 +21,7 @@
 
 #include "pchfile.hpp"
 
-#include "irc7702_interest.hpp"
+#include "i7702.hpp"
 
 #include "database.hpp"
 #include "et_vector.hpp"

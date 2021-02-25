@@ -35,10 +35,10 @@
 #include "et_vector.hpp"
 #include "gpt_input.hpp"
 #include "gpt_xml_document.hpp"
+#include "i7702.hpp"
 #include "ieee754.hpp"                  // ldbl_eps_plus_one_times()
 #include "ihs_irc7702a.hpp"
 #include "ihs_server7702.hpp"           // RunServer7702FromStruct()
-#include "irc7702_interest.hpp"
 #include "materially_equal.hpp"         // material_difference()
 #include "math_functions.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_state_from_string()

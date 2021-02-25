@@ -415,6 +415,7 @@ liblmi_la_SOURCES = \
     gpt_specamt.cpp \
     gpt_state.cpp \
     gpt_xml_document.cpp \
+    i7702.cpp \
     ihs_acctval.cpp \
     ihs_avdebug.cpp \
     ihs_avmly.cpp \
@@ -425,7 +426,6 @@ liblmi_la_SOURCES = \
     ihs_irc7702a.cpp \
     ihs_mortal.cpp \
     ihs_server7702.cpp \
-    irc7702_interest.cpp \
     irc7702_tables.cpp \
     lingo.cpp \
     lmi.cpp \
@@ -1360,6 +1360,7 @@ noinst_HEADERS = \
     group_values.hpp \
     handle_exceptions.hpp \
     html.hpp \
+    i7702.hpp \
     icon_monger.hpp \
     ieee754.hpp \
     ihs_irc7702.hpp \
@@ -1376,7 +1377,6 @@ noinst_HEADERS = \
     input_sequence_parser.hpp \
     interest_rates.hpp \
     interpolate_string.hpp \
-    irc7702_interest.hpp \
     irc7702_tables.hpp \
     istream_to_string.hpp \
     ledger.hpp \

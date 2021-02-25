@@ -36,12 +36,12 @@
 #include "fund_data.hpp"
 #include "global_settings.hpp"
 #include "gpt_specamt.hpp"
+#include "i7702.hpp"
 #include "ieee754.hpp"                  // ldbl_eps_plus_one_times()
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "input.hpp"
 #include "interest_rates.hpp"
-#include "irc7702_interest.hpp"         // class i7702
 #include "lingo.hpp"
 #include "loads.hpp"
 #include "math_functions.hpp"

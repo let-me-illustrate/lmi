@@ -19,8 +19,8 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifndef irc7702_interest_hpp
-#define irc7702_interest_hpp
+#ifndef i7702_hpp
+#define i7702_hpp
 
 #include "config.hpp"
 
@@ -59,4 +59,4 @@ class LMI_SO i7702 final
     std::vector<double> net_gsp_;
 };
 
-#endif // irc7702_interest_hpp
+#endif // i7702_hpp

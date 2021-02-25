@@ -26,11 +26,11 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "death_benefits.hpp"
+#include "i7702.hpp"                    // dtor only, for (unused) unique_ptr
 #include "ihs_irc7702.hpp"              // dtor only, for (unused) unique_ptr
 #include "ihs_irc7702a.hpp"             // dtor only, for (unused) unique_ptr
 #include "input.hpp"
 #include "interest_rates.hpp"
-#include "irc7702_interest.hpp"         // dtor only, for (unused) unique_ptr
 #include "loads.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
