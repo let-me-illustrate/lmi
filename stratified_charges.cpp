@@ -413,16 +413,27 @@ double stratified_charges::tiered_guar_sepacct_load(double assets, double) const
 /// changed on a block of business to produce a more front-loaded
 /// pattern in general, with the inadvertent effect of reducing future
 /// compensation on a particular contract.
-///
-/// TODO ?? TAXATION !! Missing "CurrSepAcctLoadBandedByAssets".
-/// But "CurrSepAcctLoadBandedByPrem" is deliberately excluded,
-/// because it's not based on assets.
 
 double stratified_charges::minimum_tiered_sepacct_load_for_7702() const
 {
     stratified_entity const& z = datum("CurrSepAcctLoadTieredByAssets");
     LMI_ASSERT(!z.values().empty());
     return *std::min_element(z.values().begin(), z.values().end());
+
+    stratified_entity const& z0 = datum("CurrSepAcctLoadBandedByAssets");
+    stratified_entity const& z1 = datum("CurrSepAcctLoadBandedByPrem");
+    stratified_entity const& z2 = datum("CurrSepAcctLoadTieredByAssets");
+    // SOMEDAY !! Probably these assertions can never fire, but it
+    // would be better to make them ctor postconditions--which they
+    // already are, except for the default ctor.
+    LMI_ASSERT(!z0.values().empty());
+    LMI_ASSERT(!z1.values().empty());
+    LMI_ASSERT(!z2.values().empty());
+    return
+          *std::min_element(z0.values().begin(), z0.values().end())
+        + *std::min_element(z1.values().begin(), z1.values().end())
+        + *std::min_element(z2.values().begin(), z2.values().end())
+        ;
 }
 
 namespace
