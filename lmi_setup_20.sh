@@ -89,6 +89,7 @@ apt-get --assume-yes install \
   default-jre \
   g++-mingw-w64 \
   g++-multilib \
+  gdb \
   git \
   jing \
   libarchive-tools \
