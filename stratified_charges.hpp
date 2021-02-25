@@ -134,7 +134,7 @@ class LMI_SO stratified_charges final
     double tiered_asset_based_compensation  (double assets) const;
     double tiered_investment_management_fee (double assets) const;
 
-    double minimum_tiered_spread_for_7702() const;
+    double minimum_tiered_sepacct_load_for_7702() const;
 
     // Tiered premium tax in certain states.
     double tiered_premium_tax

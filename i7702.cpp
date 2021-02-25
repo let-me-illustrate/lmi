@@ -38,7 +38,7 @@ i7702::i7702
 {
     spread_.assign
         (database_.length()
-        ,stratified_.minimum_tiered_spread_for_7702()
+        ,stratified_.minimum_tiered_sepacct_load_for_7702()
         );
 
     // Monthly guar net int for 7702 is

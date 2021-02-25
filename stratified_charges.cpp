@@ -399,7 +399,12 @@ double stratified_charges::tiered_guar_sepacct_load(double assets, double) const
     return tiered_rate<double>() (assets, z.limits(), z.values());
 }
 
-/// Lowest tiered separate-account load.
+/// Lowest tiered separate-account load, for 7702 purposes.
+///
+/// All the tiered asset loads implemented by lmi apply only to the
+/// separate account, so their lowest values may be reflected in GLP
+/// and GSP calculations, but only for separate-account products that
+/// offer no general-account investment option.
 ///
 /// Tiered compensation is not reflected here in order to forestall
 /// an adjustment event if compensation decreases in the future.
@@ -414,7 +419,7 @@ double stratified_charges::tiered_guar_sepacct_load(double assets, double) const
 /// because it's not based on assets. Elsewhere, "DB_CurrAcctValLoad"
 /// should be added to the result.
 
-double stratified_charges::minimum_tiered_spread_for_7702() const
+double stratified_charges::minimum_tiered_sepacct_load_for_7702() const
 {
     stratified_entity const& z = datum("CurrSepAcctLoadTieredByAssets");
     LMI_ASSERT(!z.values().empty());
