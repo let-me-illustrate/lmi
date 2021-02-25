@@ -84,6 +84,7 @@ class LMI_SO LedgerInvariant final
     // EOY vectors.
     std::vector<double> TermSpecAmt;
     std::vector<double> SpecAmt;
+    std::vector<double> Dcv;
 
     // Forborne vectors.
     std::vector<double> Salary;
@@ -97,6 +98,10 @@ class LMI_SO LedgerInvariant final
     std::vector<double> AddonCompOnAssets;
     std::vector<double> AddonCompOnPremium;
     std::vector<double> CorridorFactor;
+    std::vector<double> Irc7702ig;
+    std::vector<double> Irc7702Gross;
+    std::vector<double> Irc7702NetGLP;
+    std::vector<double> Irc7702NetGSP;
     std::vector<double> AnnLoanDueRate;
     // TODO ?? M&E varies by basis (cf. 'GuarMaxMandE' below), so it
     // belongs in the variant ledger.

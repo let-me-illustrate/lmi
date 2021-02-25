@@ -193,6 +193,7 @@ title_map_t static_titles()
     ,{"DacTaxLoad_Guaranteed"           , "Guar DAC\nTax\nLoad"}
     ,{"DacTaxRsv_Current"               , "Curr DAC\nTax\nReserve"}
     ,{"DacTaxRsv_Guaranteed"            , "Guar DAC\nTax\nReserve"}
+    ,{"Dcv"                             , "Deemed\nCash\nValue"}
     ,{"DeathProceedsPaid_Current"       , "Curr Death\nProceeds\nPaid"}
     ,{"DeathProceedsPaid_Guaranteed"    , "Guar Death\nProceeds\nPaid"}
     ,{"Duration"                        , "Duration"}
@@ -213,6 +214,10 @@ title_map_t static_titles()
     ,{"HoneymoonValueSpread"            , "Honeymoon\nValue\nSpread"}
     ,{"IndvTaxBracket"                  , "EE Tax\nBracket"}
     ,{"InforceLives"                    , "BOY\nLives\nInforce"}
+    ,{"Irc7702ig"                       , "7702 i\nfor NAAR\nDiscount"}
+    ,{"Irc7702Gross"                    , "7702 i\nGross"}
+    ,{"Irc7702NetGLP"                   , "7702 i\nNet for\nGLP"}
+    ,{"Irc7702NetGSP"                   , "7702 i\nNet for\nGSP"}
     ,{"IrrCsv_Current"                  , "Curr IRR\non CSV"}
     ,{"IrrCsv_Guaranteed"               , "Guar IRR\non CSV"}
     ,{"IrrDb_Current"                   , "Curr IRR\non DB"}
@@ -325,6 +330,7 @@ mask_map_t static_masks()
     ,{"DacTaxLoad_Guaranteed"           , "999,999,999"}
     ,{"DacTaxRsv_Current"               , "999,999,999"}
     ,{"DacTaxRsv_Guaranteed"            , "999,999,999"}
+    ,{"Dcv"                             , "999,999,999"}
     ,{"DeathProceedsPaid_Current"       , "999,999,999"}
     ,{"DeathProceedsPaid_Guaranteed"    , "999,999,999"}
     ,{"Duration"                        ,         "999"}
@@ -345,6 +351,10 @@ mask_map_t static_masks()
     ,{"HoneymoonValueSpread"            ,      "99.99%"}
     ,{"IndvTaxBracket"                  ,      "99.99%"}
     ,{"InforceLives"                    , "999,999,999"}
+    ,{"Irc7702ig"                       ,      "99.99%"}
+    ,{"Irc7702Gross"                    ,      "99.99%"}
+    ,{"Irc7702NetGLP"                   ,      "99.99%"}
+    ,{"Irc7702NetGSP"                   ,      "99.99%"}
     ,{"IrrCsv_Current"                  ,  "100000.00%"}
     ,{"IrrCsv_Guaranteed"               ,  "100000.00%"}
     ,{"IrrDb_Current"                   ,  "100000.00%"}
@@ -558,6 +568,11 @@ format_map_t static_formats()
     ,{"IndvTaxBracket"                  , f4}
     ,{"InforceHMVector"                 , f4}
 
+    ,{"Irc7702ig"                       , f4}
+    ,{"Irc7702Gross"                    , f4}
+    ,{"Irc7702NetGLP"                   , f4}
+    ,{"Irc7702NetGSP"                   , f4}
+
     ,{"IrrCsv_Current"                  , f4}
     ,{"IrrCsv_CurrentZero"              , f4}
     ,{"IrrCsv_Guaranteed"               , f4}
@@ -608,6 +623,7 @@ format_map_t static_formats()
     ,{"Composite"                       , f1}
     ,{"DacTaxLoad"                      , f1}
     ,{"DacTaxRsv"                       , f1}
+    ,{"Dcv"                             , f1}
     ,{"DeathProceedsPaid"               , f1}
     ,{"EOYDeathBft"                     , f1}
     ,{"EeGrossPmt"                      , f1}

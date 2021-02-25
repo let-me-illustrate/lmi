@@ -96,6 +96,7 @@ void LedgerInvariant::Alloc(int len)
     // EOY vectors.
     EndYearVectors  ["TermSpecAmt"                ] = &TermSpecAmt                ;
     EndYearVectors  ["SpecAmt"                    ] = &SpecAmt                    ;
+    EndYearVectors  ["Dcv"                        ] = &Dcv                        ;
 
     // Forborne vectors.
     ForborneVectors ["Salary"                     ] = &Salary                     ;
@@ -109,6 +110,10 @@ void LedgerInvariant::Alloc(int len)
     OtherVectors    ["AddonCompOnAssets"          ] = &AddonCompOnAssets          ;
     OtherVectors    ["AddonCompOnPremium"         ] = &AddonCompOnPremium         ;
     OtherVectors    ["CorridorFactor"             ] = &CorridorFactor             ;
+    OtherVectors    ["Irc7702ig"                  ] = &Irc7702ig                  ;
+    OtherVectors    ["Irc7702Gross"               ] = &Irc7702Gross               ;
+    OtherVectors    ["Irc7702NetGLP"              ] = &Irc7702NetGLP              ;
+    OtherVectors    ["Irc7702NetGSP"              ] = &Irc7702NetGSP              ;
     OtherVectors    ["AnnLoanDueRate"             ] = &AnnLoanDueRate             ;
     OtherVectors    ["CurrMandE"                  ] = &CurrMandE                  ;
     OtherVectors    ["TotalIMF"                   ] = &TotalIMF                   ;

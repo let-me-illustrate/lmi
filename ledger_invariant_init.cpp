@@ -32,6 +32,7 @@
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
 #include "fund_data.hpp"
+#include "i7702.hpp"
 #include "interest_rates.hpp"
 #include "lingo.hpp"
 #include "lmi.hpp"                      // is_antediluvian_fork()
@@ -119,6 +120,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         TermSpecAmt            .assign(Length, 0.0);
         }
     SpecAmt                    = dblize(b->DeathBfts_->specamt());
+//  Dcv                        = DYNAMIC
 
     // Forborne vectors.
 
@@ -134,6 +136,13 @@ void LedgerInvariant::Init(BasicValues const* b)
     AddonCompOnAssets          = b->yare_input_.ExtraCompensationOnAssets ;
     AddonCompOnPremium         = b->yare_input_.ExtraCompensationOnPremium;
     CorridorFactor             = b->GetCorridorFactor();
+    if(!is_antediluvian_fork())
+        {
+        Irc7702ig                  = b->i7702_->ig();
+        Irc7702Gross               = b->i7702_->gross();
+        Irc7702NetGLP              = b->i7702_->net_glp();
+        Irc7702NetGSP              = b->i7702_->net_gsp();
+        }
 
     AnnLoanDueRate = b->InterestRates_->RegLnDueRate
         (mce_gen_curr

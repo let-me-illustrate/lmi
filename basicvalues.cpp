@@ -148,8 +148,13 @@ void BasicValues::Init()
     WDFee      = round_withdrawal().c(database().query<double>(DB_WdFee     ));
     database().query_into(DB_WdFeeRate , WDFeeRate );
 
-// The antediluvian branch leaves FundData_, StratifiedCharges_, and
-// ProductData initialized to null pointers.
+// The antediluvian branch leaves these members initialized to null pointers:
+//   product_
+//   lingo_
+//   FundData_
+//   RoundingRules_
+//   StratifiedCharges_
+//   i7702_
 }
 
 //============================================================================

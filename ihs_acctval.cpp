@@ -1171,6 +1171,8 @@ void AccountValue::FinalizeYear()
     VariantValues().CSVNet      [Year] = dblize(csv_net);
     VariantValues().CV7702      [Year] = dblize(cv_7702);
 
+    InvariantValues().Dcv       [Year] = Dcv;
+
     // Update death benefit. 'DBReflectingCorr' currently equals the
     // death benefit as of the beginning of the twelfth month, but its
     // end-of-year value (as of the end of the twelfth month) is
