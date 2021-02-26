@@ -518,7 +518,7 @@ class ifstream final
         }
 
     ifstream(ifstream const&) = delete;
-    ifstream(ifstream&&) = default;
+    ifstream(ifstream&&) = delete;
 
     void open
         (path const& p
@@ -547,7 +547,7 @@ class ofstream final
         }
 
     ofstream(ofstream const&) = delete;
-    ofstream(ofstream&&) = default;
+    ofstream(ofstream&&) = delete;
 
     void open
         (path const& p
