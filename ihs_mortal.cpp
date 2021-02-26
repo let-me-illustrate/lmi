@@ -254,9 +254,8 @@ void MortalityRates::MakeCoiRateSubstandard(std::vector<double>& coi_rates)
         {0.0, 0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 2.00, 2.50, 3.00, 4.00,};
     assign
         (coi_rates
-        ,apply_binary
-            (lesser_of<double>()
-            ,MaxMonthlyCoiRate_
+        ,Min
+            (MaxMonthlyCoiRate_
             ,   AnnualFlatExtra_ / 12000.0
               + coi_rates * (1.0 + SubstdTblMult_ * factors[SubstandardTable_])
             )

@@ -260,9 +260,6 @@ int test_main(int, char*[])
     long double smallnumL = std::numeric_limits<long double>::min();
     long double bignumL   = std::numeric_limits<long double>::max();
 
-    BOOST_TEST_EQUAL(2.0, greater_of<double>()(1.0, 2.0));
-    BOOST_TEST_EQUAL(1.0, lesser_of <double>()(1.0, 2.0));
-
     // Test mean<>().
 
     BOOST_TEST_EQUAL(1.5, mean<double>()(1.0, 2.0));

@@ -57,30 +57,6 @@ std::vector<T>& back_sum(std::vector<T>& v)
 // std::binary_function would have provided, because they're still
 // required for std::binder1st() or std::binder2nd(), or for PETE.
 
-template<typename T>
-struct greater_of
-{
-    using first_argument_type  = T;
-    using second_argument_type = T;
-    using result_type          = T;
-    T operator()(T const& x, T const& y) const
-        {
-        return std::max(x, y);
-        }
-};
-
-template<typename T>
-struct lesser_of
-{
-    using first_argument_type  = T;
-    using second_argument_type = T;
-    using result_type          = T;
-    T operator()(T const& x, T const& y) const
-        {
-        return std::min(x, y);
-        }
-};
-
 /// Arithmetic mean.
 ///
 /// Calculate mean as

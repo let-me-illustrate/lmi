@@ -29,7 +29,6 @@
 #include "dbnames.hpp"
 #include "et_vector.hpp"
 #include "handle_exceptions.hpp"        // report_exception()
-#include "math_functions.hpp"           // lesser_of()
 #include "print_matrix.hpp"
 #include "value_cast.hpp"
 #include "xml_serialize.hpp"
@@ -219,8 +218,8 @@ void database_entity::reshape(std::vector<int> const& new_dims)
         LMI_ASSERT(0 == z);
 
         // limit dst and source indexes to those that actually vary
-        assign(dst_idx, apply_binary(lesser_of<int>(), working_idx, dst_max_idx));
-        assign(src_idx, apply_binary(lesser_of<int>(), working_idx, src_max_idx));
+        assign(dst_idx, Min(working_idx, dst_max_idx));
+        assign(src_idx, Min(working_idx, src_max_idx));
         new_object[dst_idx] = operator[](src_idx);
         }
 

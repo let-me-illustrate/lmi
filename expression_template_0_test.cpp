@@ -76,15 +76,6 @@
 
 namespace
 {
-template<typename T>
-struct greater_of
-{
-    T operator()(T const& x, T const& y) const
-        {
-        return std::max(x, y);
-        }
-};
-
     // Global variables for timing tests. They could alternatively be
     // passed as arguments, e.g., by using std::bind, but that would
     // increase complexity in return for no real benefit.
@@ -362,7 +353,7 @@ void mete_pete_typical()
 
 // This works. It's commented out only for comparability to other
 // approaches.
-//    assign(pv0, apply_binary(greater_of<double>(), pv8, pv9));
+//    assign(pv0, Max(pv8, pv9));
 
         assign(pv9, (1.0 - pv8) * pv9);
         }

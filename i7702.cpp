@@ -75,11 +75,7 @@ i7702::i7702
             database_.query_into(DB_GuarRegLoanSpread, guar_loan_spread);
             assign
                 (guar_int
-                ,apply_binary
-                    (greater_of<double>()
-                    ,guar_int
-                    ,gross_loan_rate - guar_loan_spread
-                    )
+                ,Max(guar_int, gross_loan_rate - guar_loan_spread)
                 );
             }
         }
@@ -93,7 +89,7 @@ i7702::i7702
         (gross_
         ,apply_unary
             (i_upper_12_over_12_from_i<double>()
-            ,apply_binary(greater_of<double>(), statutory7702i, guar_int)
+            ,Max(statutory7702i, guar_int)
             )
         );
 
@@ -102,7 +98,7 @@ i7702::i7702
         (net_glp_
         ,apply_unary
             (i_upper_12_over_12_from_i<double>()
-            ,apply_binary(greater_of<double>(), statutory7702i, guar_int) - spread_
+            ,Max(statutory7702i, guar_int) - spread_
             )
         );
 
@@ -111,7 +107,7 @@ i7702::i7702
         (net_gsp_
         ,apply_unary
             (i_upper_12_over_12_from_i<double>()
-            ,apply_binary(greater_of<double>(), 0.02 + statutory7702i, guar_int) - spread_
+            ,Max(0.02 + statutory7702i, guar_int) - spread_
             )
         );
 
