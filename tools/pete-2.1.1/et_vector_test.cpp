@@ -1,6 +1,6 @@
-// PETE with std::vector: unit test.
+// PETE with std::vector: casual unit test--cf. 'et_vector_0_test.cpp'.
 //
-// Copyright (C) 2008 Gregory W. Chicares.
+// Copyright (C) 2008, 2010, 2016, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
