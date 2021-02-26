@@ -34,6 +34,7 @@
 #include <fstream>
 #include <iomanip>                      // setw(), setfill()
 #include <ios>
+#include <iterator>                     // next()
 #include <sstream>
 #include <stdexcept>
 #include <streambuf>
@@ -129,23 +130,23 @@ int const qx_cso_num_tables = 142;
 
 std::string const qx_ins_path("/opt/lmi/data/qx_ins");
 
-// NB: "1+" is used here just to allow formatting multiline strings in a
+// NB: std::next() is used here just to allow formatting multiline strings in a
 // natural way and strips the leading new line.
 
 /// Prefix used for the test tables.
-std::string const simple_table_header(1 + R"table(
+std::string const simple_table_header(std::next(R"table(
 Table number: 1
 Table type: Aggregate
 Minimum age: 0
 Maximum age: 1
 Number of decimal places: 5
 Table values:
-)table");
+)table"));
 
-std::string const simple_table_values(1 + R"table(
+std::string const simple_table_values(std::next(R"table(
   0  0.12345
   1  0.23456
-)table");
+)table"));
 
 /// Minimal valid SOA table in text format.
 std::string const simple_table_text(simple_table_header + simple_table_values);
@@ -154,7 +155,7 @@ std::string const simple_table_text(simple_table_header + simple_table_values);
 /// 'rate_table.cpp', both write these table values in a field of width
 /// four: two spaces between columns, plus one for the data, plus one
 /// for a nonexistent decimal point.
-std::string const integral_table(1 + R"table(
+std::string const integral_table(std::next(R"table(
 Table number: 1
 Table type: Aggregate
 Minimum age: 0
@@ -163,7 +164,7 @@ Number of decimal places: 0
 Table values:
   0   0
   1   1
-)table");
+)table"));
 } // Unnamed namespace.
 
 /// Test opening database files.
