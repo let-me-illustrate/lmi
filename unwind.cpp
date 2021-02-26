@@ -23,7 +23,7 @@
 
 #include "unwind.hpp"
 
-#if defined LMI_X86_64 && defined LMI_POSIX
+#if defined LMI_X86_64 && defined LMI_POSIX && defined __GLIBCXX__
 
 #define UNW_LOCAL_ONLY
 
@@ -194,4 +194,4 @@ void __cxa_throw(void* thrown_exception, std::type_info* tinfo, void (*dest)(voi
     original_cxa_throw(thrown_exception, tinfo, dest);
 }
 
-#endif // defined LMI_X86_64 && defined LMI_POSIX
+#endif // defined LMI_X86_64 && defined LMI_POSIX && defined __GLIBCXX__
