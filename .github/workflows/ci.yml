@@ -62,7 +62,7 @@ jobs:
               g++-mingw-w64-i686
           else
             sudo apt-get --assume-yes install \
-              libgtk-3-dev
+              libunwind-dev libdw-dev libgtk-3-dev
           fi
 
       - name: Fix up libtool
