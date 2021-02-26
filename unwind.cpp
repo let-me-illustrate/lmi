@@ -37,7 +37,6 @@
 #include <libunwind.h>
 #include <typeinfo>                     // type_info
 
-#pragma GCC diagnostic push
 // Calls to low-level C functions may as well use "0" for
 // terseness instead of "nullptr".
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
