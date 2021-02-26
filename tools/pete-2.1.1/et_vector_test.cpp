@@ -68,4 +68,15 @@ int main()
     assign(v0, apply_binary(std::plus<double>(), v0, 100.0));
     assign(v0, apply_binary(std::plus<double>(), 10000.0, v0));
     show_vector(v0);
+
+    // Test Min() and Max().
+    std::vector<double> v2 = {1.2, 2.3, 3.4, 7.7};
+    std::vector<double> v3 = {1.9, 2.9, 3.9, 0.0};
+    std::vector<double> v4(v2.size());
+    assign(v4, Max(v2, v3));
+    show_vector(v4);
+    assign(v4, Min(v2, v3));
+    show_vector(v4);
+
+    std::cout << "Completed." << std::endl;
 }

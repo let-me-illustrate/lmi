@@ -147,6 +147,14 @@ binaryOps
   TAG = "FnArcTan2"
   FUNCTION = "atan2"
   EXPR = "return (atan2(a,b));"
+-----
+  TAG = "FnMax"
+  FUNCTION = "Max"
+  EXPR = "return ((a < b) ? b : a);"
+-----
+  TAG = "FnMin"
+  FUNCTION = "Min"
+  EXPR = "return ((a < b) ? a : b);"
 
 binaryBoolOps
 -----

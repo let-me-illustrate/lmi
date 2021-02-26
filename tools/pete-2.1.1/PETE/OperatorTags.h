@@ -435,6 +435,28 @@ struct FnArcTan2
   }
 };
 
+struct FnMax
+{
+  PETE_EMPTY_CONSTRUCTORS(FnMax)
+  template<class T1, class T2>
+  inline typename BinaryReturn<T1, T2, FnMax >::Type_t
+  operator()(const T1 &a, const T2 &b) const
+  {
+    return ((a < b) ? b : a);
+  }
+};
+
+struct FnMin
+{
+  PETE_EMPTY_CONSTRUCTORS(FnMin)
+  template<class T1, class T2>
+  inline typename BinaryReturn<T1, T2, FnMin >::Type_t
+  operator()(const T1 &a, const T2 &b) const
+  {
+    return ((a < b) ? a : b);
+  }
+};
+
 struct OpLT
 {
   PETE_EMPTY_CONSTRUCTORS(OpLT)
