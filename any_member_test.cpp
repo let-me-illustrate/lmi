@@ -377,39 +377,12 @@ void any_member_test::test_any_member()
 //
 // Because the problem seems confined to borland tools, I will guess
 // that it's simply a compiler defect.
-
-    // Want to be able to unify a subobject with a pmf, e.g.
-//    s["s0"].size();
-    // no matching function for call to `any_member<S>::size()
-    std::string str("xyzzy");
-
-//    std::mem_fun(&std::string::size);
-//    str.string_size();
-
-//    str.(std::mem_fun(&std::string::size));
-
-//    std::mem_fun_t sizer;
-//    std::mem_fun_t sizer();
-//    std::const_mem_fun_t(std::string::size);
-    std::mem_fun(&std::string::size)(&str);
 }
 
 void any_member_test::supplemental_test0()
 {
     S s;
     X x;
-
-    {
-    std::cout << "Testing std::mem_fun family.\n";
-    s.x0.set_str("Test 0");
-    x.set_str("Test 0x");
-    std::mem_fun1_t<int, X, std::string> x_memfun(&X::foo);
-    X* px = &x;
-//    px->*x_memfun; // Error: it's a functor, not a pmf.
-    x_memfun(px, "example 0");
-    std::mem_fun(&X::foo)(px, "example 1");
-    std::cout << std::endl;
-    }
 
     {
     std::cout << "Testing plain pointers to member data and function.\n";
