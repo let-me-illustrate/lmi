@@ -42,7 +42,7 @@
 #include <bitset>
 #include <cfenv>
 #include <climits>                      // CHAR_BIT
-#include <math.h>                       // rint()
+#include <cmath>                        // rint()
 #include <stdexcept>
 
 std::bitset<CHAR_BIT * sizeof(std::uint32_t)> bits(std::uint32_t i)
