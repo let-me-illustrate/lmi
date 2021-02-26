@@ -159,11 +159,20 @@ void input_test::test_product_database()
 
     // Test query<enumerative type> with non-enumerative entities.
 
+#if defined __clang__
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wtautological-constant-out-of-range-compare"
+#endif // defined __clang__
+
     // This value corresponds to no enumerator, but C++ allows that.
     db.query_into(DB_ChildRiderMinAmt, a);
     LMI_TEST_EQUAL(25000, a);
     auto const b {db.query<oenum_alb_or_anb>(DB_ChildRiderMinAmt)};
     LMI_TEST_EQUAL(25000, b);
+
+#if defined __clang__
+#   pragma clang diagnostic pop
+#endif // defined __clang__
 
     // Redundant template argument is okay.
     db.query_into<oenum_alb_or_anb>(DB_ChildRiderMinAmt, a);
