@@ -37,16 +37,14 @@
 #include <libunwind.h>
 #include <typeinfo>                     // type_info
 
-#if defined __GNUC__
-#   pragma GCC diagnostic push
-    // Calls to low-level C functions may as well use "0" for
-    // terseness instead of "nullptr".
-#   pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
-    // Casting dlsym objects to function pointers is allowed
-    // only as a conditional extension.
-#   pragma GCC diagnostic ignored "-Wconditionally-supported"
-#   pragma GCC diagnostic ignored "-Wold-style-cast"
-#endif // defined __GNUC__
+#pragma GCC diagnostic push
+// Calls to low-level C functions may as well use "0" for
+// terseness instead of "nullptr".
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+// Casting dlsym objects to function pointers is allowed
+// only as a conditional extension.
+#pragma GCC diagnostic ignored "-Wconditionally-supported"
+#pragma GCC diagnostic ignored "-Wold-style-cast"
 
 // For reference, the ABI specifies this prototype:
 // extern "C" void __cxa_throw
