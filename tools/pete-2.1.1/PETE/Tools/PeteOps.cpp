@@ -196,12 +196,12 @@ void peteOps(map<string,vector<OperatorDescriptor> > &m)
   m["binaryOps"].push_back(
               OperatorDescriptor("FnMax",
                                  "Max",
-                                 "return ((a < b) ? b : a);",
+                                 "if(a < b) return b; else return a;",
                                  ""));
   m["binaryOps"].push_back(
               OperatorDescriptor("FnMin",
                                  "Min",
-                                 "return ((a < b) ? a : b);",
+                                 "if(b < a) return b; else return a;",
                                  ""));
   m["binaryStdOps"].push_back(
               OperatorDescriptor("ApplyBinary",

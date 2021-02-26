@@ -442,7 +442,7 @@ struct FnMax
   inline typename BinaryReturn<T1, T2, FnMax >::Type_t
   operator()(const T1 &a, const T2 &b) const
   {
-    return ((a < b) ? b : a);
+    if(a < b) return b; else return a;
   }
 };
 
@@ -453,7 +453,7 @@ struct FnMin
   inline typename BinaryReturn<T1, T2, FnMin >::Type_t
   operator()(const T1 &a, const T2 &b) const
   {
-    return ((a < b) ? a : b);
+    if(b < a) return b; else return a;
   }
 };
 

@@ -150,11 +150,11 @@ binaryOps
 -----
   TAG = "FnMax"
   FUNCTION = "Max"
-  EXPR = "return ((a < b) ? b : a);"
+  EXPR = "if(a < b) return b; else return a;"
 -----
   TAG = "FnMin"
   FUNCTION = "Min"
-  EXPR = "return ((a < b) ? a : b);"
+  EXPR = "if(b < a) return b; else return a;"
 
 binaryBoolOps
 -----
