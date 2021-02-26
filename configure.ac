@@ -447,6 +447,13 @@ AC_TRY_COMPILE([#include <xmlwrapp/xmlwrapp.h>],
 CXXFLAGS=$save_CXXFLAGS
 LIBS=$save_LIBS
 
+dnl --- libunwind and libdw, only used under Linux and only with gcc/libstdc++
+if test "$USE_LINUX" = "1" -a "$CLANG" != "yes"; then
+    PKG_CHECK_MODULES(UNWIND, libunwind libdw)
+    CXXFLAGS="$CXXFLAGS $UNWIND_CFLAGS"
+    LIBS="$LIBS $UNWIND_LIBS -ldl"
+fi
+
 dnl --- CGICC (optional) ----------------
 if test "x$lmi_cgicc_option" != "xno"; then
     lmi_found_cgicc=yes
