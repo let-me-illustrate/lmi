@@ -36,15 +36,6 @@ i7702::i7702
     :database_   {database}
     ,stratified_ {stratified}
 {
-    database_.query_into(DB_CurrAcctValLoad, spread_);
-    if
-        (   database_.query<bool>(DB_AllowSepAcct)
-        && !database_.query<bool>(DB_AllowGenAcct)
-        )
-        {
-        spread_ += stratified_.minimum_tiered_sepacct_load_for_7702();
-        }
-
     // Monthly guar net int for 7702 is
     //   greater of {iglp(), igsp()} and annual guar int rate
     //   less 7702 spread
@@ -83,6 +74,15 @@ i7702::i7702
     // If lmi someday implements VLR, then the current VLR rate on
     // the issue date constitutes a short-term guarantee that must be
     // reflected in the 7702 interest rates (excluding the GLP rate).
+
+    database_.query_into(DB_CurrAcctValLoad, spread_);
+    if
+        (   database_.query<bool>(DB_AllowSepAcct)
+        && !database_.query<bool>(DB_AllowGenAcct)
+        )
+        {
+        spread_ += stratified_.minimum_tiered_sepacct_load_for_7702();
+        }
 
     gross_.assign(database_.length(), 0.0);
     assign
