@@ -75,6 +75,8 @@ i7702::i7702
     // the issue date constitutes a short-term guarantee that must be
     // reflected in the 7702 interest rates (excluding the GLP rate).
 
+    // local with -'_': to be renamed
+    std::vector<double> spread_;
     database_.query_into(DB_CurrAcctValLoad, spread_);
     if
         (   database_.query<bool>(DB_AllowSepAcct)

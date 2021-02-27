@@ -51,8 +51,6 @@ class LMI_SO i7702 final
     product_database   const& database_;
     stratified_charges const& stratified_;
 
-    std::vector<double> spread_;
-
     std::vector<double> ig_     ;
     std::vector<double> gross_  ;
     std::vector<double> net_glp_;
