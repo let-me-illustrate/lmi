@@ -38,7 +38,7 @@ i7702::i7702
 {
     // Monthly guar net int for 7702 is
     //   greater of {iglp(), igsp()} and annual guar int rate
-    //   less 7702 spread
+    //   less AV load
     //   transformed to monthly (simple subtraction?).
     // These interest rates belong here because they're used by
     // DCV calculations in the account value class as well as
@@ -75,15 +75,14 @@ i7702::i7702
     // the issue date constitutes a short-term guarantee that must be
     // reflected in the 7702 interest rates (excluding the GLP rate).
 
-    // local with -'_': to be renamed
-    std::vector<double> spread_;
-    database_.query_into(DB_CurrAcctValLoad, spread_);
+    std::vector<double> av_load;
+    database_.query_into(DB_CurrAcctValLoad, av_load);
     if
         (   database_.query<bool>(DB_AllowSepAcct)
         && !database_.query<bool>(DB_AllowGenAcct)
         )
         {
-        spread_ += stratified_.minimum_tiered_sepacct_load_for_7702();
+        av_load += stratified_.minimum_tiered_sepacct_load_for_7702();
         }
 
     gross_.assign(database_.length(), 0.0);
@@ -100,7 +99,7 @@ i7702::i7702
         (net_glp_
         ,apply_unary
             (i_upper_12_over_12_from_i<double>()
-            ,Max(statutory7702i, guar_int) - spread_
+            ,Max(statutory7702i, guar_int) - av_load
             )
         );
 
@@ -109,7 +108,7 @@ i7702::i7702
         (net_gsp_
         ,apply_unary
             (i_upper_12_over_12_from_i<double>()
-            ,Max(0.02 + statutory7702i, guar_int) - spread_
+            ,Max(0.02 + statutory7702i, guar_int) - av_load
             )
         );
 
