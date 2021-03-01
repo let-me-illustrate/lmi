@@ -49,6 +49,7 @@ i7702::i7702
 
     std::vector<double> guar_int;
     database_.query_into(DB_GuarInt, guar_int);
+    std::vector<double> const contractual_guar_int = guar_int;
 
     // For 7702 purposes, the rate guaranteed by the contract is the
     // highest rate on any potential path, at each duration; thus,
@@ -117,8 +118,8 @@ i7702::i7702
     // as seen in his formula (1):
     //   [0V + P - Q(1/(1 + ig) - OV - P)] (1 + ic) = 1V
     // where it is the monthly (i upper 12 over 12) equivalent of
-    // the annual 'guar_int' rate above. Specifying a discount based
-    // on any other rate is presumably an error.
+    // the annual 'contractual_guar_int' rate above. Specifying a
+    // discount based on any other rate is presumably an error.
     //
     // In lmi's product database, DB_GuarInt is i. DB_NaarDiscount is
     // (i upper 12)/12, rounded iff the contract specifies a rounded
@@ -140,14 +141,21 @@ i7702::i7702
     std::vector<double> contractual_naar_discount;
     database_.query_into(DB_NaarDiscount, contractual_naar_discount);
     bool const no_naar_discount = zero == contractual_naar_discount;
+    std::vector<double> theoretical_naar_discount(database_.length(), 0.0);
+    theoretical_naar_discount +=
+        apply_unary(i_upper_12_over_12_from_i<double>(), contractual_guar_int);
 
     std::vector<double> diff(database_.length(), 0.0);
-    diff += fabs
-        ( contractual_naar_discount
-        - apply_unary(i_upper_12_over_12_from_i<double>(), guar_int)
-        );
+    diff += fabs(contractual_naar_discount - theoretical_naar_discount);
     minmax<double> const mm(diff);
     constexpr double tolerance {0.0000001};
     LMI_ASSERT(no_naar_discount || mm < tolerance);
-    ig_ = no_naar_discount ? zero : gross_;
+
+    std::vector<double> operative_naar_discount(database_.length(), 0.0);
+    operative_naar_discount +=
+        Max
+            (apply_unary(i_upper_12_over_12_from_i<double>(), statutory7702i)
+            ,Max(contractual_naar_discount, theoretical_naar_discount)
+            );
+    ig_ = no_naar_discount ? zero : operative_naar_discount;
 }
