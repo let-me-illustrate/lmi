@@ -21,7 +21,9 @@
 
 #include "pchfile.hpp"
 
-#define USE_UBLAS
+#if 202002L <= __cplusplus
+#   define USE_UBLAS
+#endif // 202002L < __cplusplus
 
 #if defined USE_UBLAS
 // BOOST !! Startlingly enough, boost uBLAS depends on this standard

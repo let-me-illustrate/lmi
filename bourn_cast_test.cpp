@@ -64,14 +64,14 @@ void test_same(char const* file, int line)
     using traits = std::numeric_limits<T>;
     T upper = traits::max();
     T lower = traits::lowest();
-    INVOKE_BOOST_TEST_EQUAL(upper, bourn_cast<T>(upper), file, line);
-    INVOKE_BOOST_TEST_EQUAL(T( 1), bourn_cast<T>(T( 1)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(T( 0), bourn_cast<T>(T( 0)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(lower, bourn_cast<T>(lower), file, line);
+    INVOKE_BOOST_TEST(upper == bourn_cast<T>(upper), file, line);
+    INVOKE_BOOST_TEST(T( 1) == bourn_cast<T>(T( 1)), file, line);
+    INVOKE_BOOST_TEST(T( 0) == bourn_cast<T>(T( 0)), file, line);
+    INVOKE_BOOST_TEST(lower == bourn_cast<T>(lower), file, line);
 
     if(traits::is_signed)
         {
-        INVOKE_BOOST_TEST_EQUAL(T(-1), bourn_cast<T>(T(-1)), file, line);
+        INVOKE_BOOST_TEST(T(-1) == bourn_cast<T>(T(-1)), file, line);
         }
 
     // Test whether integer limits are correctly calculated by this
@@ -86,12 +86,12 @@ void test_same(char const* file, int line)
         long double const x = std::scalbln(1.0l, traits::digits);
         long double const max = x - 1;
         long double const min = traits::is_signed ? -x : 0;
-        INVOKE_BOOST_TEST_EQUAL(traits::max(), max, file, line);
-        INVOKE_BOOST_TEST_EQUAL(traits::min(), min, file, line);
+        INVOKE_BOOST_TEST(traits::max() == max, file, line);
+        INVOKE_BOOST_TEST(traits::min() == min, file, line);
         T imax = bourn_cast<T>(max);
         T imin = bourn_cast<T>(min);
-        INVOKE_BOOST_TEST_EQUAL(traits::max(), imax, file, line);
-        INVOKE_BOOST_TEST_EQUAL(traits::min(), imin, file, line);
+        INVOKE_BOOST_TEST(traits::max() == imax, file, line);
+        INVOKE_BOOST_TEST(traits::min() == imin, file, line);
         }
 }
 
