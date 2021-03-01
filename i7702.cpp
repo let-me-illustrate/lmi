@@ -26,7 +26,7 @@
 #include "database.hpp"
 #include "et_vector.hpp"
 #include "math_functions.hpp"
-#include "miscellany.hpp"               // each_equal()
+#include "miscellany.hpp"               // each_equal(), minmax
 #include "stratified_charges.hpp"
 
 i7702::i7702
@@ -116,7 +116,15 @@ i7702::i7702
     // benefit is discounted for calculating mortality charges,
     // as seen in his formula (1):
     //   [0V + P - Q(1/(1 + ig) - OV - P)] (1 + ic) = 1V
-    // For 7702, that 'ig' should generally be 'gross_' above.
+    // where it is the monthly (i upper 12 over 12) equivalent of
+    // the annual 'guar_int' rate above. Specifying a discount based
+    // on any other rate is presumably an error.
+    //
+    // In lmi's product database, DB_GuarInt is i. DB_NaarDiscount is
+    // (i upper 12)/12, rounded iff the contract specifies a rounded
+    // numerical value. An exception is thrown if the absolute value
+    // of the quantization error exceeds a small (though arbitrary)
+    // tolerance.
     //
     // However, if the contract applies no such discount, then 'ig'
     // must be zero for formula (1) to apply. As of 2021-02, lmi
@@ -125,9 +133,21 @@ i7702::i7702
     // a special database flag. Instead, the discount is deemed
     // to be absent iff the contractual discount according to the
     // product database is uniformly zero.
+    //
+    // For 7702, 'ig' should generally equal Eckley's 'ic'.
 
     std::vector<double> const zero(database_.length(), 0.0);
     std::vector<double> contractual_naar_discount;
     database_.query_into(DB_NaarDiscount, contractual_naar_discount);
-    ig_ = (zero == contractual_naar_discount) ? zero : gross_;
+    bool const no_naar_discount = zero == contractual_naar_discount;
+
+    std::vector<double> diff(database_.length(), 0.0);
+    diff += fabs
+        ( contractual_naar_discount
+        - apply_unary(i_upper_12_over_12_from_i<double>(), guar_int)
+        );
+    minmax<double> const mm(diff);
+    constexpr double tolerance {0.0000001};
+    LMI_ASSERT(no_naar_discount || mm < tolerance);
+    ig_ = no_naar_discount ? zero : gross_;
 }
