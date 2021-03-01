@@ -600,6 +600,8 @@ void BasicValues::SetPermanentInvariants()
 // This would be more natural:
 //    assign(DBDiscountRate, 1.0 / (1.0 + DBDiscountRate));
 // but we avoid it for the nonce because it causes slight regression errors.
+// 7702 !! Use the more natural (and more accurate) version once DCV
+// has been changed from double to currency.
     assign(DBDiscountRate, 1.0 + DBDiscountRate);
     assign(DBDiscountRate, 1.0 / DBDiscountRate);
 
