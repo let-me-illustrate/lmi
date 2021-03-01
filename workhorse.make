@@ -395,7 +395,7 @@ tutelary_flag :=
 #   https://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
 
 c_standard   := -fno-ms-extensions -frounding-math -std=c99
-cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
+cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
 
 # Specify $(gcc_version_specific_warnings) last, in order to override
 # other options.
@@ -434,7 +434,7 @@ else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
   gcc_version_specific_warnings := \
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
-else ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0 9 9.3.0 10 10.0))
+else ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0 9 9.3.0))
   gcc_version_specific_warnings := \
 
   ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
@@ -445,11 +445,28 @@ else ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0 9 9.3.0 10 10.0))
     tutelary_flag := -fomit-frame-pointer
   endif
 
-  ifneq (,$(filter $(gcc_version), 10 10.0))
-    gcc_cxx_warnings += -Wredundant-tags -Wvolatile
+  cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
+else ifneq (,$(filter $(gcc_version), 10 10.0))
+  gcc_version_specific_warnings := \
+
+  ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
+# See:
+#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00026.html
+#   https://lists.nongnu.org/archive/html/lmi/2020-12/msg00000.html
+#   https://lists.nongnu.org/archive/html/lmi/2020-12/msg00002.html
+#   https://lists.nongnu.org/archive/html/lmi/2021-03/msg00000.html
+#   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99234
+# Fixed in gcc-10.2.1, but this makefile doesn't detect the last
+# component of major.minor.patchlevel reliably.
+    tutelary_flag := -fomit-frame-pointer
+    ifneq (,$(filter $(gcc_version), 10 10.2.1))
+      tutelary_flag := -fno-omit-frame-pointer
+    endif
   endif
 
-  cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
+  gcc_cxx_warnings += -Wredundant-tags -Wvolatile
+
+  cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
 endif
 
 treat_warnings_as_errors := -pedantic-errors -Werror
