@@ -68,14 +68,6 @@ int test_main(int, char*[])
     test_function(always_true , always_true, __FILE__, __LINE__);
     test_function(always_false, always_true, __FILE__, __LINE__);
 
-    try
-        {
-        BOOST_CRITICAL_TEST(always_true);
-        BOOST_CRITICAL_TEST(always_false);
-        }
-    catch(lmi_test::test::test_tools_exception const&)
-        {
-        }
 
     BOOST_TEST_THROW((void)(0), std::runtime_error, "arbitrary");
     BOOST_TEST_THROW(;, std::runtime_error, "arbitrary");

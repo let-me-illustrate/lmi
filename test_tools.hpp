@@ -284,10 +284,10 @@ namespace lmi_test
 #include "cpp_main.cpp"
 #include "test_main.cpp"
 
-// Deprecated macros.
+// Withdrawn macros.
 //
-// Macros BOOST_ERROR, BOOST_CRITICAL_ERROR, and BOOST_CRITICAL_TEST
-// are provided only for backward compatibility, not because they're
+// Macros BOOST_ERROR, BOOST_CRITICAL_ERROR, and BOOST_CRITICAL_TEST,
+// formerly provided, have been withdrawn because they were never
 // really useful. In boost-1.23.0, except for the testing framework's
 // own unit tests, BOOST_ERROR and BOOST_CRITICAL_ERROR are used only
 // once each and only in a single file, in the idiom
@@ -304,34 +304,5 @@ namespace lmi_test
 // be a precondition for success of all later tests, it's not clearly
 // a good idea to skip the later tests--if any of them succeed, that's
 // interesting.
-
-#define BOOST_CRITICAL_TEST(exp)                      \
-    if(exp)                                           \
-        {                                             \
-        lmi_test::record_success();                   \
-        }                                             \
-    else                                              \
-        {                                             \
-        lmi_test::record_error();                     \
-        lmi_test::error_stream()                      \
-            << (exp)                                  \
-            << BOOST_TEST_FLUSH                       \
-            ;                                         \
-        throw lmi_test::test::test_tools_exception(); \
-        }                                             \
-
-#define BOOST_ERROR(exp)          \
-        lmi_test::record_error(); \
-        lmi_test::error_stream()  \
-            << (exp)              \
-            << BOOST_TEST_FLUSH   \
-
-#define BOOST_CRITICAL_ERROR(exp)                    \
-        lmi_test::record_error();                    \
-        lmi_test::error_stream()                     \
-            << (exp)                                 \
-            << BOOST_TEST_FLUSH                      \
-            ;                                        \
-        throw lmi_test::test::test_tools_exception() \
 
 #endif // test_tools_hpp
