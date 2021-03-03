@@ -597,13 +597,7 @@ void BasicValues::SetPermanentInvariants()
 
     database().query_into(DB_NaarDiscount         , DBDiscountRate);
     LMI_ASSERT(!contains(DBDiscountRate, -1.0));
-// This would be more natural:
-//    assign(DBDiscountRate, 1.0 / (1.0 + DBDiscountRate));
-// but we avoid it for the nonce because it causes slight regression errors.
-// 7702 !! Use the more natural (and more accurate) version once DCV
-// has been changed from double to currency.
-    assign(DBDiscountRate, 1.0 + DBDiscountRate);
-    assign(DBDiscountRate, 1.0 / DBDiscountRate);
+    assign(DBDiscountRate, 1.0 / (1.0 + DBDiscountRate));
 
     database().query_into(DB_DynamicMandE         , MandEIsDynamic);
     database().query_into(DB_DynamicSepAcctLoad   , SepAcctLoadIsDynamic);
