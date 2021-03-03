@@ -632,12 +632,12 @@ void AccountValue::SetInitialValues()
 
     ItLapsed                    = false;
 
-    Dcv                         = yare_input_.InforceDcv;
-    DcvDeathBft                 = 0.0;
-    DcvNaar                     = 0.0;
-    DcvCoiCharge                = 0.0;
-    DcvTermCharge               = 0.0;
-    DcvWpCharge                 = 0.0;
+    Dcv                         = round_minutiae().c(yare_input_.InforceDcv);
+    DcvDeathBft                 = C0;
+    DcvNaar                     = C0;
+    DcvCoiCharge                = C0;
+    DcvTermCharge               = C0;
+    DcvWpCharge                 = C0;
 
     HoneymoonActive             = false;
     // Identity element for std::max(), disregarding -INF and NaN.
@@ -1171,7 +1171,7 @@ void AccountValue::FinalizeYear()
     VariantValues().CSVNet      [Year] = dblize(csv_net);
     VariantValues().CV7702      [Year] = dblize(cv_7702);
 
-    InvariantValues().Dcv       [Year] = Dcv;
+    InvariantValues().Dcv       [Year] = dblize(Dcv);
 
     // Update death benefit. 'DBReflectingCorr' currently equals the
     // death benefit as of the beginning of the twelfth month, but its

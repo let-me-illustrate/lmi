@@ -115,10 +115,10 @@ void AccountValue::DoMonthDR()
 
     TxTestGPT();
     // TODO ?? TAXATION !! Doesn't this mean dumpins and 1035s get ignored?
-    LMI_ASSERT(0.0 <= Dcv);
+    LMI_ASSERT(C0 <= Dcv);
     // TAXATION !! Is it really useful to comment the arguments here?
     Irc7702A_->UpdateBft7702A
-        (Dcv
+        (dblize(Dcv)
         ,dblize(DBReflectingCorr + TermDB) // DB7702A
         ,dblize(OldDB) // prior_db_7702A
         ,DBReflectingCorr == DBIgnoringCorr
@@ -141,7 +141,7 @@ void AccountValue::DoMonthDR()
         // exchanges, but now seems unnecessary because this
         // assertion never fires:
         //   LMI_ASSERT(kludge_account_value == Dcv);
-        kludge_account_value = round_minutiae().c(Dcv);
+        kludge_account_value = Dcv;
         }
     kludge_account_value = std::max
         (HoneymoonValue
@@ -150,7 +150,7 @@ void AccountValue::DoMonthDR()
         );
 // TODO ?? TAXATION !! Use CashValueFor7702() instead?
     double max_necessary_premium = Irc7702A_->MaxNecessaryPremium
-        (Dcv
+        (dblize(Dcv)
         ,dblize(AnnualTargetPrem)
         ,YearsTotLoadTgtLowestPremtax
         ,YearsTotLoadExcLowestPremtax
@@ -160,7 +160,7 @@ void AccountValue::DoMonthDR()
 //  max_necessary_premium = round_max_premium()(max_necessary_premium);
     // CURRENCY !! already rounded by class Irc7702A--appropriately?
     double max_non_mec_premium = Irc7702A_->MaxNonMecPremium
-        (Dcv
+        (dblize(Dcv)
         ,dblize(AnnualTargetPrem)
         ,YearsTotLoadTgtLowestPremtax
         ,YearsTotLoadExcLowestPremtax
@@ -187,7 +187,7 @@ void AccountValue::DoMonthDR()
     if(0 == Month)
         {
         Irc7702A_->UpdatePmt7702A
-            (Dcv
+            (dblize(Dcv)
             ,dblize(-NetWD) // TAXATION !! This should be gross, not net.
             ,false
             ,dblize(AnnualTargetPrem)
@@ -232,13 +232,18 @@ void AccountValue::DoMonthDR()
     // Material changes occurring on the same day (e.g. unnecessary
     // premium triggering a corridor DB increase, depending on the 7702A
     // interpretation chosen) are queued to be processed together.
+    {
+    // CURRENCY !! return modified value instead of altering argument
+    double z = dblize(Dcv);
     Irc7702A_->RedressMatChg
-        (Dcv // Potentially modified.
+        (z // Potentially modified.
         ,unnecessary_premium
         ,necessary_premium
         ,dblize(CashValueFor7702())
         );
-    LMI_ASSERT(0.0 <= Dcv);
+    Dcv = round_minutiae().c(z);
+    }
+    LMI_ASSERT(C0 <= Dcv);
 
     TxRecognizePaymentFor7702A(UnnecessaryPremium, true);
     TxAcceptPayment(UnnecessaryPremium);
@@ -600,15 +605,20 @@ void AccountValue::TxExch1035()
     TxSetDeathBft();
     TxSetTermAmt();
     // TODO ?? TAXATION !! Should 1035 exchanges be handled somewhere else?
-    LMI_ASSERT(0.0 == Dcv);
+    LMI_ASSERT(C0 == Dcv);
+    {
+    // CURRENCY !! return modified value instead of altering argument
+    double z = dblize(Dcv);
     Irc7702A_->Update1035Exch7702A
-        (Dcv
+        (z // Potentially modified.
         ,dblize(NetPmts[Month])
         // TAXATION !! This assumes the term rider can be treated as death benefit;
         // use 'TermIsDbFor7702A'.
         ,dblize(ActualSpecAmt + TermSpecAmt)
 //        ,DBReflectingCorr + TermDB // TAXATION !! Alternate if 7702A benefit is DB?
         );
+    Dcv = round_minutiae().c(z);
+    }
 
     if(HoneymoonActive)
         {
@@ -626,7 +636,7 @@ void AccountValue::TxExch1035()
         // Immediately after a 1035 exchange, DCV should be
         // the 1035 amount reduced by any premium-based loads,
         // but only for the current rate basis.
-        LMI_ASSERT(materially_equal(Dcv, dblize(NetPmts[Month])));
+        LMI_ASSERT(Dcv == NetPmts[Month]);
 
         // The initial seven-pay premium shown on the illustration
         // must be its value immediately after any 1035 exchange,
@@ -1358,14 +1368,14 @@ void AccountValue::TxRecognizePaymentFor7702A
         ,   kludge_account_value
           + GetRefundableSalesLoad()
         );
-    LMI_ASSERT(0.0 <= Dcv);
+    LMI_ASSERT(C0 <= Dcv);
 
     // TODO ?? TAXATION !! Not correct yet--need to test pmt less deductible WD; and
     // shouldn't we deduct the *gross* WD? [Yes, if any fee is part of the
     // WD, which it normally is.]
     currency amount_paid_7702A = a_pmt;
     Irc7702A_->UpdatePmt7702A
-        (Dcv
+        (dblize(Dcv)
         ,dblize(amount_paid_7702A)
         ,a_this_payment_is_unnecessary
         ,dblize(AnnualTargetPrem)
@@ -1399,8 +1409,8 @@ void AccountValue::TxAcceptPayment(currency a_pmt)
 
     process_payment(net_pmt);
 
-    Dcv += std::max(0.0, dblize(net_pmt));
-    LMI_ASSERT(0.0 <= Dcv);
+    Dcv += std::max(C0, net_pmt);
+    LMI_ASSERT(C0 <= Dcv);
 
     if(HoneymoonActive)
         {
@@ -1594,8 +1604,8 @@ void AccountValue::TxSetBOMAV()
 
     process_deduction(MonthsPolicyFees + SpecAmtLoad);
 
-    Dcv -= dblize(MonthsPolicyFees + SpecAmtLoad);
-    Dcv = std::max(0.0, Dcv);
+    Dcv -= MonthsPolicyFees + SpecAmtLoad;
+    Dcv = std::max(C0, Dcv);
 }
 
 /// Set death benefit reflecting corridor and death benefit option.
@@ -1626,7 +1636,7 @@ void AccountValue::TxSetBOMAV()
 ///    currency prior_sa_7702A = ActualSpecAmt;
 /// toward the beginning, and:
 ///    Irc7702A_->UpdateBft7702A(...);
-///    LMI_ASSERT(0.0 <= Dcv);
+///    LMI_ASSERT(C0 <= Dcv);
 /// toward the end.
 
 void AccountValue::TxSetDeathBft()
@@ -1691,12 +1701,13 @@ void AccountValue::TxSetDeathBft()
     DB7702A = DBReflectingCorr + TermDB;
 
     DcvDeathBft = std::max
-        (   dblize(DBIgnoringCorr)
-        ,   (
+        (   DBIgnoringCorr
+        ,   round_death_benefit().c
+            (
                 YearsCorridorFactor
             *   (   Dcv
-                -   dblize(std::min(C0, SurrChg()))
-                +   dblize(GetRefundableSalesLoad())
+                -   std::min(C0, SurrChg())
+                +   GetRefundableSalesLoad()
                 )
             )
         );
@@ -1784,7 +1795,7 @@ void AccountValue::TxSetCoiCharge()
     // the account value by deducting a negative mortality charge.
 #if defined USE_CURRENCY_CLASS
     NAAR = round_naar().c
-        (  DBReflectingCorr * DBDiscountRate[Year]
+        ( DBReflectingCorr * DBDiscountRate[Year]
         - dblize(std::max(C0, TotalAccountValue()))
         );
     NAAR = std::max(C0, NAAR);
@@ -1801,12 +1812,11 @@ void AccountValue::TxSetCoiCharge()
 //  process_distribution(naar_forceout);
 // TAXATION !! Should this be handled at the same time as GPT forceouts?
 
-    DcvNaar = material_difference
-        (std::max(DcvDeathBft, dblize(DBIgnoringCorr)) * DBDiscountRate[Year]
-        ,std::max(0.0, Dcv)
+    DcvNaar = round_naar().c
+        ( std::max(DcvDeathBft, DBIgnoringCorr) * DBDiscountRate[Year]
+        - dblize(std::max(C0, Dcv))
         );
-    // DCV need not be rounded.
-    DcvNaar = std::max(0.0, DcvNaar);
+    DcvNaar = std::max(C0, DcvNaar);
 
     double coi_rate = GetBandedCoiRates(GenBasis_, ActualSpecAmt)[Year];
     ActualCoiRate = coi_rate;
@@ -1814,8 +1824,7 @@ void AccountValue::TxSetCoiCharge()
     CoiCharge    = round_coi_charge().c(NAAR * ActualCoiRate);
     YearsTotalCoiCharge += CoiCharge;
 
-    // DCV need not be rounded.
-    DcvCoiCharge = DcvNaar * YearsDcvCoiRate;
+    DcvCoiCharge = round_coi_charge().c(DcvNaar * YearsDcvCoiRate);
 }
 
 /// Calculate rider charges.
@@ -1847,7 +1856,7 @@ void AccountValue::TxSetRiderDed()
         }
 
     TermCharge    = C0;
-    DcvTermCharge = 0.0;
+    DcvTermCharge = C0;
     if(TermRiderActive)
         {
         TermCharge    = round_rider_charges().c
@@ -1857,11 +1866,13 @@ void AccountValue::TxSetRiderDed()
         // it can't go into the corridor under tax assumptions.
         // TAXATION !! Use a distinct discount rate for taxation? Or
         // the policy's rate, as used for DcvNaar?
-        DcvTermCharge = YearsDcvCoiRate * TermDB * DBDiscountRate[Year];
+        DcvTermCharge = round_rider_charges().c
+            (YearsDcvCoiRate * TermDB * DBDiscountRate[Year]
+            );
         }
 
     WpCharge    = C0;
-    DcvWpCharge = 0.0;
+    DcvWpCharge = C0;
     if(yare_input_.WaiverOfPremiumBenefit)
         {
         switch(WaiverChargeMethod)
@@ -1871,7 +1882,7 @@ void AccountValue::TxSetRiderDed()
                 WpCharge = round_rider_charges().c
                     (YearsWpRate * std::min(ActualSpecAmt, WpLimit)
                     );
-                DcvWpCharge = dblize(WpCharge);
+                DcvWpCharge = WpCharge;
                 }
                 break;
             case oe_waiver_times_deductions:
@@ -1879,8 +1890,7 @@ void AccountValue::TxSetRiderDed()
                 // Premium load and M&E charges are not waived.
                 // The amount waived is subject to no maximum.
                 WpCharge = round_rider_charges().c
-                    (
-                    YearsWpRate
+                    (   YearsWpRate
                     *   (
                           CoiCharge
                         + MonthsPolicyFees
@@ -1891,19 +1901,18 @@ void AccountValue::TxSetRiderDed()
                         + TermCharge
                         )
                     );
-                DcvWpCharge =
-                    YearsWpRate
+                DcvWpCharge = round_rider_charges().c
+                    (   YearsWpRate
                     *   (
                           DcvCoiCharge
-                        + dblize
-                            ( MonthsPolicyFees
-                            + SpecAmtLoad
-                            + AdbCharge
-                            + SpouseRiderCharge
-                            + ChildRiderCharge
-                            )
+                        + MonthsPolicyFees
+                        + SpecAmtLoad
+                        + AdbCharge
+                        + SpouseRiderCharge
+                        + ChildRiderCharge
                         + DcvTermCharge
-                        );
+                        )
+                    );
                 }
                 break;
             }
@@ -1927,9 +1936,9 @@ void AccountValue::TxDoMlyDed()
         +   ChildRiderCharge
         ;
 
-    double dcv_mly_ded =
+    currency dcv_mly_ded =
             DcvCoiCharge
-        +   dblize(simple_rider_charges)
+        +   simple_rider_charges
         +   DcvTermCharge
         +   DcvWpCharge
         ;
@@ -1942,7 +1951,7 @@ void AccountValue::TxDoMlyDed()
 
     process_deduction(MlyDed);
     Dcv -= dcv_mly_ded;
-    Dcv = std::max(0.0, Dcv);
+    Dcv = std::max(C0, Dcv);
 
     // Policy and issue fees and the specified-amount load are really
     // part of the monthly deduction, yet they must be kept distinct
@@ -2051,8 +2060,8 @@ void AccountValue::TxTakeSepAcctLoad()
     // CURRENCY !! Does this seem right? Mightn't it take a sepacct load from the genacct?
     process_deduction(SepAcctLoad);
     YearsTotalSepAcctLoad += SepAcctLoad;
-    Dcv -= dblize(SepAcctLoad);
-    Dcv = std::max(0.0, Dcv);
+    Dcv -= SepAcctLoad;
+    Dcv = std::max(C0, Dcv);
 }
 
 //============================================================================
@@ -2202,10 +2211,10 @@ void AccountValue::TxCreditInt()
         GenAcctIntCred = C0;
         }
 
-    LMI_ASSERT(0.0 <= Dcv);
-    if(0.0 < Dcv)
+    LMI_ASSERT(C0 <= Dcv);
+    if(C0 < Dcv)
         {
-        Dcv *= 1.0 + YearsDcvIntRate;
+        Dcv += round_interest_credit().c(YearsDcvIntRate * Dcv);
         }
 
     if(HoneymoonActive)
@@ -2524,8 +2533,8 @@ void AccountValue::TxTakeWD()
     GrossWD += round_withdrawal().c(partial_surrchg);
 
     process_distribution(GrossWD);
-    Dcv -= dblize(GrossWD);
-    Dcv = std::max(0.0, Dcv);
+    Dcv -= GrossWD;
+    Dcv = std::max(C0, Dcv);
 
     switch(YearsDBOpt)
         {

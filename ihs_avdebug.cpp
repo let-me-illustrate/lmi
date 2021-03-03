@@ -476,7 +476,7 @@ void AccountValue::DebugPrint()
         SetMonthlyDetail
             (e7702ADeemedCv
             ,Irc7702A_->DebugGetIsMatChg()
-                ? Irc7702A_->DebugGetSavedDCV()
+                ? round_minutiae().c(Irc7702A_->DebugGetSavedDCV())
                 : Dcv
             );
         SetMonthlyDetail(e7702ANetMaxNecPm   ,NetMaxNecessaryPremium       );

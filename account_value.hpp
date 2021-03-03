@@ -423,13 +423,13 @@ class LMI_SO AccountValue final
     currency NecessaryPremium;
     currency UnnecessaryPremium;
 
-    // 7702A CVAT deemed cash value. CURRENCY !! not currency?
-    double   Dcv;
-    double   DcvDeathBft;
-    double   DcvNaar;
-    double   DcvCoiCharge;
-    double   DcvTermCharge;
-    double   DcvWpCharge;
+    // 7702A CVAT deemed cash value.
+    currency Dcv;
+    currency DcvDeathBft;
+    currency DcvNaar;
+    currency DcvCoiCharge;
+    currency DcvTermCharge;
+    currency DcvWpCharge;
     // For other riders like AD&D, charge for DCV = charge otherwise.
 
     // Honeymoon provision.
