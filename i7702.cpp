@@ -23,6 +23,7 @@
 
 #include "i7702.hpp"
 
+#include "assert_lmi.hpp"
 #include "database.hpp"
 #include "et_vector.hpp"
 #include "math_functions.hpp"
