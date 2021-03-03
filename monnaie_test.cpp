@@ -75,88 +75,88 @@ void monnaie_test::test()
 
 void monnaie_test::test_ctors()
 {
-    BOOST_TEST_EQUAL(monnaie(     ).total_cents(),   0);
-    BOOST_TEST_EQUAL(monnaie(0, 99).total_cents(),  99);
-    BOOST_TEST_EQUAL(monnaie(1, 99).total_cents(), 199);
+    LMI_TEST_EQUAL(monnaie(     ).total_cents(),   0);
+    LMI_TEST_EQUAL(monnaie(0, 99).total_cents(),  99);
+    LMI_TEST_EQUAL(monnaie(1, 99).total_cents(), 199);
 
     monnaie const c(4, 56);
-    BOOST_TEST_EQUAL(monnaie(c).total_cents(), 456);
+    LMI_TEST_EQUAL(monnaie(c).total_cents(), 456);
 
     static char const* const overflow_msg = "Currency amount out of range.";
-    BOOST_TEST_THROW(monnaie(-1,   0), std::overflow_error, overflow_msg);
-    BOOST_TEST_THROW(monnaie(-1,  99), std::overflow_error, overflow_msg);
-    BOOST_TEST_THROW(monnaie(-1, -99), std::overflow_error, overflow_msg);
-    BOOST_TEST_THROW
+    LMI_TEST_THROW(monnaie(-1,   0), std::overflow_error, overflow_msg);
+    LMI_TEST_THROW(monnaie(-1,  99), std::overflow_error, overflow_msg);
+    LMI_TEST_THROW(monnaie(-1, -99), std::overflow_error, overflow_msg);
+    LMI_TEST_THROW
         (monnaie(std::numeric_limits<monnaie::amount_type>::max(), 0)
         ,std::overflow_error
         ,overflow_msg
         );
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (monnaie(std::numeric_limits<monnaie::amount_type>::min(), 0)
         ,std::overflow_error
         ,overflow_msg
         );
 
     static char const* const cents_msg = "Invalid number of cents.";
-    BOOST_TEST_THROW(monnaie(1, 100), std::runtime_error, cents_msg);
-    BOOST_TEST_THROW(monnaie(1, 101), std::runtime_error, cents_msg);
-    BOOST_TEST_THROW(monnaie(1,  -1), std::runtime_error, cents_msg);
+    LMI_TEST_THROW(monnaie(1, 100), std::runtime_error, cents_msg);
+    LMI_TEST_THROW(monnaie(1, 101), std::runtime_error, cents_msg);
+    LMI_TEST_THROW(monnaie(1,  -1), std::runtime_error, cents_msg);
 }
 
 void monnaie_test::test_accessors()
 {
     auto c = monnaie(1234, 56);
-    BOOST_TEST_EQUAL(c.dollars(), 1234);
-    BOOST_TEST_EQUAL(c.cents()  , 56);
+    LMI_TEST_EQUAL(c.dollars(), 1234);
+    LMI_TEST_EQUAL(c.cents()  , 56);
 
     c = -monnaie(9876543, 21);
-    BOOST_TEST_EQUAL(c.dollars(), -9876543);
-    BOOST_TEST_EQUAL(c.cents()  , -21);
+    LMI_TEST_EQUAL(c.dollars(), -9876543);
+    LMI_TEST_EQUAL(c.cents()  , -21);
 
     c = -monnaie(0, 99);
-    BOOST_TEST_EQUAL(c.dollars(), 0);
-    BOOST_TEST_EQUAL(c.cents()  , -99);
+    LMI_TEST_EQUAL(c.dollars(), 0);
+    LMI_TEST_EQUAL(c.cents()  , -99);
 
     c = -c;
-    BOOST_TEST_EQUAL(c.dollars(), 0);
-    BOOST_TEST_EQUAL(c.cents()  , 99);
+    LMI_TEST_EQUAL(c.dollars(), 0);
+    LMI_TEST_EQUAL(c.cents()  , 99);
 }
 
 void monnaie_test::test_comparison()
 {
-    BOOST_TEST( monnaie(1, 23) <  monnaie(1, 24));
-    BOOST_TEST(-monnaie(1, 23) > -monnaie(1, 24));
+    LMI_TEST( monnaie(1, 23) <  monnaie(1, 24));
+    LMI_TEST(-monnaie(1, 23) > -monnaie(1, 24));
 
-    BOOST_TEST( monnaie(1, 23) <= monnaie(1, 23));
-    BOOST_TEST( monnaie(1, 23) == monnaie(1, 23));
-    BOOST_TEST( monnaie(1, 23) != monnaie(1, 24));
-    BOOST_TEST( monnaie(1, 23) >= monnaie(1, 23));
+    LMI_TEST( monnaie(1, 23) <= monnaie(1, 23));
+    LMI_TEST( monnaie(1, 23) == monnaie(1, 23));
+    LMI_TEST( monnaie(1, 23) != monnaie(1, 24));
+    LMI_TEST( monnaie(1, 23) >= monnaie(1, 23));
 }
 
 void monnaie_test::test_arithmetic()
 {
     auto c = monnaie(1, 23) + monnaie(4, 77);
-    BOOST_TEST_EQUAL(c.total_cents(), 600);
+    LMI_TEST_EQUAL(c.total_cents(), 600);
 
     c *= 12;
-    BOOST_TEST_EQUAL(c.total_cents(), 7200);
+    LMI_TEST_EQUAL(c.total_cents(), 7200);
 
     // $72.00 - $80.10 = $8.10
     auto d = c - monnaie(80, 10);
-    BOOST_TEST_EQUAL(d.total_cents(), -810);
+    LMI_TEST_EQUAL(d.total_cents(), -810);
 }
 
 void monnaie_test::test_double()
 {
-    BOOST_TEST_EQUAL(monnaie::from_value( 1.23).total_cents(),  123);
-    BOOST_TEST_EQUAL(monnaie::from_value(-1.23).total_cents(), -123);
+    LMI_TEST_EQUAL(monnaie::from_value( 1.23).total_cents(),  123);
+    LMI_TEST_EQUAL(monnaie::from_value(-1.23).total_cents(), -123);
 
-    BOOST_TEST_EQUAL(monnaie::from_value( 0.005).total_cents(),  1);
-    BOOST_TEST_EQUAL(monnaie::from_value(-0.005).total_cents(), -1);
+    LMI_TEST_EQUAL(monnaie::from_value( 0.005).total_cents(),  1);
+    LMI_TEST_EQUAL(monnaie::from_value(-0.005).total_cents(), -1);
 
     auto c = monnaie::from_value(          14857345.859999999404);
-    BOOST_TEST_EQUAL(c.total_cents()     , 1485734586);
-    BOOST_TEST(materially_equal(c.value(), 14857345.86));
+    LMI_TEST_EQUAL(c.total_cents()     , 1485734586);
+    LMI_TEST(materially_equal(c.value(), 14857345.86));
 }
 
 void test_stream_roundtrip
@@ -170,12 +170,12 @@ void test_stream_roundtrip
     monnaie c;
 
     ss << c0;
-    INVOKE_BOOST_TEST_EQUAL(ss.str(), str, file, line);
+    INVOKE_LMI_TEST_EQUAL(ss.str(), str, file, line);
     ss >> c;
-    INVOKE_BOOST_TEST( ss.eof (), file, line);
-    INVOKE_BOOST_TEST(!ss.fail(), file, line);
-    INVOKE_BOOST_TEST(!ss.bad (), file, line);
-    INVOKE_BOOST_TEST_EQUAL(c, c0, file, line);
+    INVOKE_LMI_TEST( ss.eof (), file, line);
+    INVOKE_LMI_TEST(!ss.fail(), file, line);
+    INVOKE_LMI_TEST(!ss.bad (), file, line);
+    INVOKE_LMI_TEST_EQUAL(c, c0, file, line);
 }
 
 void monnaie_test::test_streams()

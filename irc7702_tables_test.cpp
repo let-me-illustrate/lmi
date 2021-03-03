@@ -477,27 +477,27 @@ void Test_Corridor_and_7PP()
     //   NSP[omega-1] = vq * (i/delta) + vp
     //   =     (0.30285  / (1.0 + iglp)) * (iglp / ln((1.0 + iglp)))
     //   + (1 - 0.30285) / (1.0 + iglp)
-    BOOST_TEST(materially_equal(0.30285, z.q_[99], 0.0));
+    LMI_TEST(materially_equal(0.30285, z.q_[99], 0.0));
     double ol_nsp99 =
           (       z.q_[99]  / (1.0 + iglp)) * (iglp / std::log((1.0 + iglp)))
         +  (1.0 - z.q_[99]) / (1.0 + iglp)
         ;
-    BOOST_TEST(materially_equal(ol_corr[99], 1.0 / ol_nsp99, DBL_EPSILON));
+    LMI_TEST(materially_equal(ol_corr[99], 1.0 / ol_nsp99, DBL_EPSILON));
 
     for(int j = 0; j < lmi::ssize(ol_corr); ++j)
         {
         // Values calculated here must match spreadsheet values to
         // within a minuscule tolerance.
-        BOOST_TEST(materially_equal(ss_ul_corr[j], ul_corr[j]));
-        BOOST_TEST(materially_equal(ss_ul_7pp [j], ul_7pp [j]));
-        BOOST_TEST(materially_equal(ss_ol_corr[j], ol_corr[j]));
-        BOOST_TEST(materially_equal(ss_ol_7pp [j], ol_7pp [j]));
+        LMI_TEST(materially_equal(ss_ul_corr[j], ul_corr[j]));
+        LMI_TEST(materially_equal(ss_ul_7pp [j], ul_7pp [j]));
+        LMI_TEST(materially_equal(ss_ol_corr[j], ol_corr[j]));
+        LMI_TEST(materially_equal(ss_ol_7pp [j], ol_7pp [j]));
         // The 0.0015 tolerance was found experimentally, not by any
         // sort of mathematical law. It represents the inherent
         // discrepancy between the UL method on the one hand, and the
         // OL method (with the i/delta approximation) on the other.
-        BOOST_TEST(materially_equal(   ol_corr[j], ul_corr[j], 0.0015));
-        BOOST_TEST(materially_equal(   ol_7pp [j], ul_7pp [j], 0.0015));
+        LMI_TEST(materially_equal(   ol_corr[j], ul_corr[j], 0.0015));
+        LMI_TEST(materially_equal(   ol_7pp [j], ul_7pp [j], 0.0015));
         }
 
     // At least for now, display plenty of detail.

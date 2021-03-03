@@ -190,7 +190,7 @@ void TestEckleyTable2()
                 ;
             }
         }
-    BOOST_TEST_RELATION(worst_discrepancy,<,tolerance);
+    LMI_TEST_RELATION(worst_discrepancy,<,tolerance);
     std::cout
         << "Table 2; Ax and ax:\n"
         << std::setiosflags(std::ios_base::fixed)
@@ -225,7 +225,7 @@ void TestEckleyTable2()
                 ;
             }
         }
-    BOOST_TEST_RELATION(worst_discrepancy,<,tolerance);
+    LMI_TEST_RELATION(worst_discrepancy,<,tolerance);
     std::cout
         << "Table 2; Px and Vx:\n"
         << std::setiosflags(std::ios_base::fixed)
@@ -310,7 +310,7 @@ void TestEckleyTables3and4()
                 ;
             }
         }
-    BOOST_TEST_RELATION(worst_discrepancy,<,tolerance);
+    LMI_TEST_RELATION(worst_discrepancy,<,tolerance);
     std::cout
         << "Tables 3 and 4; Px and Vx:\n"
         << std::setiosflags(std::ios_base::fixed)
@@ -393,7 +393,7 @@ void TestEckleyTable5()
                 ;
             }
         }
-    BOOST_TEST_RELATION(worst_discrepancy,<,tolerance);
+    LMI_TEST_RELATION(worst_discrepancy,<,tolerance);
     std::cout
         << "Table 5; Dx, Dx12, and Cx12:\n"
         << std::setiosflags(std::ios_base::fixed)
@@ -554,7 +554,7 @@ void Test_1954_1958_IET_3pct()
                 ;
             }
         }
-    BOOST_TEST_RELATION(worst_discrepancy,<,tolerance);
+    LMI_TEST_RELATION(worst_discrepancy,<,tolerance);
     std::cout
         << "1954-1958 IET 3%; Dx, Nx, Cx, and Mx:\n"
         << std::setiosflags(std::ios_base::fixed)
@@ -656,7 +656,7 @@ void Test_1980_CSO_Male_ANB()
                 ;
             }
         }
-    BOOST_TEST_RELATION(worst_discrepancy,<,tolerance);
+    LMI_TEST_RELATION(worst_discrepancy,<,tolerance);
     std::cout
         << "Yearly account values:\n"
         << std::setiosflags(std::ios_base::fixed)
@@ -713,8 +713,8 @@ void TestLimits()
 {
     std::vector<double> zero(10, 0.0);
     ULCommFns ulcf(zero, zero, zero, mce_option1_for_7702, mce_monthly);
-    BOOST_TEST_EQUAL(1.0, ulcf.aDomega());
-    BOOST_TEST_EQUAL(0.0, ulcf.kC().back());
+    LMI_TEST_EQUAL(1.0, ulcf.aDomega());
+    LMI_TEST_EQUAL(0.0, ulcf.kC().back());
 }
 
 int test_main(int, char*[])

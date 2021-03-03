@@ -32,9 +32,9 @@ int test_main(int, char*[])
     polygons[4] = "square";
     polygons[6] = "hexagon";
 
-    BOOST_TEST_EQUAL("hexagon", map_lookup(polygons, 6));
+    LMI_TEST_EQUAL("hexagon", map_lookup(polygons, 6));
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (map_lookup(polygons, 5)
         ,std::runtime_error
         ,"map_lookup: key '5' not found."

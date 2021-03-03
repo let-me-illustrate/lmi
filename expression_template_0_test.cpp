@@ -411,24 +411,24 @@ void time_one_array_length(int length)
     double const value_omega = omega * value_alpha;
 
     mete_c();
-    BOOST_TEST(materially_equal(cv2 [omega], value_omega));
+    LMI_TEST(materially_equal(cv2 [omega], value_omega));
 
     mete_stl_plain();
-    BOOST_TEST(materially_equal(sv2a[omega], value_omega));
+    LMI_TEST(materially_equal(sv2a[omega], value_omega));
 
     mete_stl_fancy();
-    BOOST_TEST(materially_equal(sv2b[omega], value_omega));
+    LMI_TEST(materially_equal(sv2b[omega], value_omega));
 
     mete_valarray();
-    BOOST_TEST(materially_equal(va2 [omega], value_omega));
+    LMI_TEST(materially_equal(va2 [omega], value_omega));
 
 #if defined USE_UBLAS
     mete_ublas();
-    BOOST_TEST(materially_equal(ub2 [omega], value_omega));
+    LMI_TEST(materially_equal(ub2 [omega], value_omega));
 #endif // defined USE_UBLAS
 
     mete_pete();
-    BOOST_TEST(materially_equal(pv2[omega], value_omega));
+    LMI_TEST(materially_equal(pv2[omega], value_omega));
 
     run_one_test("C               ", mete_c        );
     run_one_test("STL plain       ", mete_stl_plain);
@@ -486,24 +486,24 @@ void test_pete_assignment()
 // With the operator<<() above, this:
     std::vector<double> v7a(v0.size());
     assign(v7a, v0 - v1);
-    BOOST_TEST(v2 == v7a);
+    LMI_TEST(v2 == v7a);
 // could be written thus:
     std::vector<double> v7b(v0.size());
     v7b << v0 - v1;
-    BOOST_TEST(v2 == v7b);
+    LMI_TEST(v2 == v7b);
 // though these still wouldn't compile:
 //  std::vector<double> v7c << v0 - v1;
 //  std::vector<double> v7d(v0 - v1);
 // and, although this compiles:
     std::vector<double> v7e; v7e << v0 - v1;
 // it doesn't do what one might hope--instead, the vector is empty:
-    BOOST_TEST(0 == v7e.size());
+    LMI_TEST(0 == v7e.size());
 
 // On the other hand, this syntax is almost natural, even though it's
 // silly to add zero to everything.
     std::vector<double> v7f(v0.size());
     v7f += v0 - v1;
-    BOOST_TEST(v2 == v7f);
+    LMI_TEST(v2 == v7f);
 // But that may be the best that can easily be done with PETE: where
 //  std::vector<double> v7f += v0 - v1;
 // is wanted, instead write

@@ -70,12 +70,12 @@ void test_contains()
 
     // Strings.
 
-    BOOST_TEST( contains(w, w));
-    BOOST_TEST(!contains(w, x));
-    BOOST_TEST( contains(w, "eta"));
-    BOOST_TEST(!contains(w, "zeta"));
-    BOOST_TEST( contains(w, 'e'));
-    BOOST_TEST(!contains(w, 'q'));
+    LMI_TEST( contains(w, w));
+    LMI_TEST(!contains(w, x));
+    LMI_TEST( contains(w, "eta"));
+    LMI_TEST(!contains(w, "zeta"));
+    LMI_TEST( contains(w, 'e'));
+    LMI_TEST(!contains(w, 'q'));
 
     // Associative containers.
 
@@ -85,29 +85,29 @@ void test_contains()
         ,"fortibus es"
         ,"in ero"
         };
-    BOOST_TEST( contains(s, "si ergo" ));
-    BOOST_TEST(!contains(s, "fortibus"));
+    LMI_TEST( contains(s, "si ergo" ));
+    LMI_TEST(!contains(s, "fortibus"));
 
     std::map<std::string,std::string> const m
         {{"O Nobili", "demis trux"}
         ,{"uatis inem", "causendux"}
         };
-    BOOST_TEST( contains(m, "uatis inem"    ));
-    BOOST_TEST(!contains(m, "cows and ducks"));
+    LMI_TEST( contains(m, "uatis inem"    ));
+    LMI_TEST(!contains(m, "cows and ducks"));
 
     // Sequences.
 
     std::deque<double> const d(1, 3.14);
-    BOOST_TEST( contains(d, 3.14));
-    BOOST_TEST(!contains(d, 0.00));
+    LMI_TEST( contains(d, 3.14));
+    LMI_TEST(!contains(d, 0.00));
 
     std::list<double> const t(1, 3.14);
-    BOOST_TEST( contains(t, 3.14));
-    BOOST_TEST(!contains(t, 0.00));
+    LMI_TEST( contains(t, 3.14));
+    LMI_TEST(!contains(t, 0.00));
 
     std::vector<double> const v(1, 3.14);
-    BOOST_TEST( contains(v, 3.14));
-    BOOST_TEST(!contains(v, 0.00));
+    LMI_TEST( contains(v, 3.14));
+    LMI_TEST(!contains(v, 0.00));
 }
 
 int test_main(int, char*[])

@@ -38,18 +38,18 @@ int test_main(int, char*[])
         };
 
     // Check that basic interpolation works.
-    BOOST_TEST_EQUAL( test_interpolate(""),               ""        );
-    BOOST_TEST_EQUAL( test_interpolate("literal"),        "literal" );
-    BOOST_TEST_EQUAL( test_interpolate("{{foo}}"),        "foo"     );
-    BOOST_TEST_EQUAL( test_interpolate("{{foo}}bar"),     "foobar"  );
-    BOOST_TEST_EQUAL( test_interpolate("foo{{}}bar"),     "foobar"  );
-    BOOST_TEST_EQUAL( test_interpolate("foo{{bar}}"),     "foobar"  );
-    BOOST_TEST_EQUAL( test_interpolate("{{foo}}{{bar}}"), "foobar"  );
+    LMI_TEST_EQUAL( test_interpolate(""),               ""        );
+    LMI_TEST_EQUAL( test_interpolate("literal"),        "literal" );
+    LMI_TEST_EQUAL( test_interpolate("{{foo}}"),        "foo"     );
+    LMI_TEST_EQUAL( test_interpolate("{{foo}}bar"),     "foobar"  );
+    LMI_TEST_EQUAL( test_interpolate("foo{{}}bar"),     "foobar"  );
+    LMI_TEST_EQUAL( test_interpolate("foo{{bar}}"),     "foobar"  );
+    LMI_TEST_EQUAL( test_interpolate("{{foo}}{{bar}}"), "foobar"  );
 
     // Comments should be just ignored.
-    BOOST_TEST_EQUAL( test_interpolate("{{! ignore me}}"), ""       );
-    BOOST_TEST_EQUAL( test_interpolate("{{! too}}{{x}}"),  "x"      );
-    BOOST_TEST_EQUAL( test_interpolate("{{x}}{{!also}}"),  "x"      );
+    LMI_TEST_EQUAL( test_interpolate("{{! ignore me}}"), ""       );
+    LMI_TEST_EQUAL( test_interpolate("{{! too}}{{x}}"),  "x"      );
+    LMI_TEST_EQUAL( test_interpolate("{{x}}{{!also}}"),  "x"      );
 
     // Recursive interpolation should work too.
     auto const test_recursive = [](char const* s)
@@ -70,17 +70,17 @@ int test_main(int, char*[])
             );
         };
 
-    BOOST_TEST_EQUAL( test_recursive("{{rec3}}"), "3"     );
-    BOOST_TEST_EQUAL( test_recursive("{{rec2}}"), "2 3"   );
-    BOOST_TEST_EQUAL( test_recursive("{{rec1}}"), "1 2 3" );
+    LMI_TEST_EQUAL( test_recursive("{{rec3}}"), "3"     );
+    LMI_TEST_EQUAL( test_recursive("{{rec2}}"), "2 3"   );
+    LMI_TEST_EQUAL( test_recursive("{{rec1}}"), "1 2 3" );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (test_recursive("error due to infinite recursion in {{inf}}")
         ,std::runtime_error
         ,lmi_test::what_regex("Nesting level too deep")
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (test_recursive("infinite co-recursion in {{infA}} is detected too")
         ,std::runtime_error
         ,lmi_test::what_regex("Nesting level too deep")
@@ -102,24 +102,24 @@ int test_main(int, char*[])
             );
         };
 
-    BOOST_TEST_EQUAL( section_test("x{{#var1}}y{{/var1}}z"),   "xyz"    );
-    BOOST_TEST_EQUAL( section_test("x{{#var0}}y{{/var0}}z"),   "xz"     );
-    BOOST_TEST_EQUAL( section_test("x{{^var0}}y{{/var0}}z"),   "xyz"    );
-    BOOST_TEST_EQUAL( section_test("x{{^var1}}y{{/var1}}z"),   "xz"     );
+    LMI_TEST_EQUAL( section_test("x{{#var1}}y{{/var1}}z"),   "xyz"    );
+    LMI_TEST_EQUAL( section_test("x{{#var0}}y{{/var0}}z"),   "xz"     );
+    LMI_TEST_EQUAL( section_test("x{{^var0}}y{{/var0}}z"),   "xyz"    );
+    LMI_TEST_EQUAL( section_test("x{{^var1}}y{{/var1}}z"),   "xz"     );
 
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (section_test("a{{#var1}}b{{#var1}}c{{/var1}}d{{/var1}}e")
         ,"abcde"
         );
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (section_test("a{{#var1}}b{{#var0}}c{{/var0}}d{{/var1}}e")
         ,"abde"
         );
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (section_test("a{{^var1}}b{{#var0}}c{{/var0}}d{{/var1}}e")
         ,"ae"
         );
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (section_test("a{{^var1}}b{{^var0}}c{{/var0}}d{{/var1}}e")
         ,"ae"
         );
@@ -143,44 +143,44 @@ int test_main(int, char*[])
             );
         };
 
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (partial_test("{{>header}}")
         ,"[header with variable]"
         );
 
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (partial_test("{{>header}}{{var}} in body{{>footer}}")
         ,"[header with variable]variable in body[footer with variable]"
         );
 
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (partial_test("{{#sec}}{{>header}}{{/sec}}")
         ,"[header with variable]"
         );
 
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (partial_test("only{{^sec}}{{>header}}{{/sec}}{{>footer}}")
         ,"only[footer with variable]"
         );
 
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (partial_test("{{>nested}}")
         ,"[header with [footer with variable]]"
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (partial_test("{{>recursive}}")
         ,std::runtime_error
         ,lmi_test::what_regex("Nesting level too deep")
         );
 
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (partial_test("no {{^sec}}{{>recursive}}{{/sec}} problem")
         ,"no  problem"
         );
 
     // Check that the kind of variable being expanded is correct.
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (interpolate_string
             ("{{>test}}"
              "{{#section1}}{{^section0}}{{variable}}{{/section0}}{{/section1}}"
@@ -206,39 +206,39 @@ int test_main(int, char*[])
         );
 
     // Should throw if the input syntax is invalid.
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (test_interpolate("{{x")
         ,std::runtime_error
         ,lmi_test::what_regex("Unmatched opening brace")
         );
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (test_interpolate("{{x{{y}}}}")
         ,std::runtime_error
         ,lmi_test::what_regex("Unexpected nested interpolation")
         );
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (section_test("{{#var1}}")
         ,std::runtime_error
         ,lmi_test::what_regex("Unclosed section 'var1'")
         );
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (section_test("{{^var0}}")
         ,std::runtime_error
         ,lmi_test::what_regex("Unclosed section 'var0'")
         );
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (section_test("{{/var1}}")
         ,std::runtime_error
         ,lmi_test::what_regex("Unexpected end of section")
         );
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (section_test("{{#var1}}{{/var0}}")
         ,std::runtime_error
         ,lmi_test::what_regex("Unexpected end of section")
         );
 
     // Or because the lookup function throws.
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (interpolate_string
             ("{{x}}"
             ,[](std::string const& s, interpolate_lookup_kind) -> std::string

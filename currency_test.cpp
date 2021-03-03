@@ -94,30 +94,30 @@ void currency_test::test_default_ctor()
 {
     // default ctor
     currency const a0;
-    BOOST_TEST(0.00 == a0.d());
-    BOOST_TEST(   0 == a0.m_);
+    LMI_TEST(0.00 == a0.d());
+    LMI_TEST(   0 == a0.m_);
     constexpr currency zero {};
-    BOOST_TEST(   0 == a0.m_);
+    LMI_TEST(   0 == a0.m_);
 }
 
 void currency_test::test_copy_ctor()
 {
     currency const a1(325, raw_cents{});
     currency const copy0 = a1;
-    BOOST_TEST_EQUAL( 325, copy0.m_);
+    LMI_TEST_EQUAL( 325, copy0.m_);
     currency const copy1 {a1};
-    BOOST_TEST_EQUAL( 325, copy1.m_);
+    LMI_TEST_EQUAL( 325, copy1.m_);
 }
 
 void currency_test::test_explicit_ctor()
 {
     currency const a1(325, raw_cents{});
-    BOOST_TEST_EQUAL( 325, a1.m_);
+    LMI_TEST_EQUAL( 325, a1.m_);
 #if defined DETECT_NONINTEGRAL_CENTS
     // 1/64 is an exact binary constant, so 100/64 cents could be
     // converted to 1/64 dollars and back without loss of precision;
     // but that's outside the intended scope of the currency class.
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         ((currency {1.5625, raw_cents {}})
         ,std::runtime_error
         ,"Nonintegral cents."
@@ -131,74 +131,74 @@ void currency_test::test_negation()
     -a1;
     // make sure that didn't mutate the object
     // (making negation a nonmember makes that mistake less likely)
-    BOOST_TEST_EQUAL( 321, a1.m_);
-    BOOST_TEST_EQUAL(-321, (-a1).m_);
+    LMI_TEST_EQUAL( 321, a1.m_);
+    LMI_TEST_EQUAL(-321, (-a1).m_);
 
     currency const a2 = -a1;
-    BOOST_TEST_EQUAL(-321, a2.m_);
+    LMI_TEST_EQUAL(-321, a2.m_);
 }
 
 void currency_test::test_plus_or_minus_eq()
 {
     currency a1(325, raw_cents{});
     a1 += a1;
-    BOOST_TEST_EQUAL( 650, a1.m_);
+    LMI_TEST_EQUAL( 650, a1.m_);
 
     a1 -= currency {123, raw_cents {}};
-    BOOST_TEST_EQUAL(527, a1.m_);
+    LMI_TEST_EQUAL(527, a1.m_);
 }
 
 void currency_test::test_plus_or_minus()
 {
     currency const a1(650, raw_cents{});
     currency a2 = currency() + a1 + a1;
-    BOOST_TEST_EQUAL(13.00, a2.d());
-    BOOST_TEST_EQUAL( 1300, a2.m_);
+    LMI_TEST_EQUAL(13.00, a2.d());
+    LMI_TEST_EQUAL( 1300, a2.m_);
 
     a2 = currency() - a1;
-    BOOST_TEST_EQUAL(-6.50, a2.d());
-    BOOST_TEST_EQUAL( -650, a2.m_);
+    LMI_TEST_EQUAL(-6.50, a2.d());
+    LMI_TEST_EQUAL( -650, a2.m_);
     a2 = C0 - a1;
-    BOOST_TEST_EQUAL(-6.50, a2.d());
-    BOOST_TEST_EQUAL( -650, a2.m_);
+    LMI_TEST_EQUAL(-6.50, a2.d());
+    LMI_TEST_EQUAL( -650, a2.m_);
 }
 
 void currency_test::test_multiply_by_int()
 {
     // currency * int returns currency
     currency const mult2 {3125, raw_cents {}};
-    BOOST_TEST_EQUAL(1000.0,  (32 * mult2).d());
-    BOOST_TEST_EQUAL(1000.0, dblize(32 * mult2));
-    BOOST_TEST_EQUAL(100000, (mult2 * 32).m_);
+    LMI_TEST_EQUAL(1000.0,  (32 * mult2).d());
+    LMI_TEST_EQUAL(1000.0, dblize(32 * mult2));
+    LMI_TEST_EQUAL(100000, (mult2 * 32).m_);
 }
 
 void currency_test::test_multiply_by_double()
 {
     currency const mult2 {3125, raw_cents {}};
     // currency * double returns double
-    BOOST_TEST_EQUAL(1000.0, 32.0 * mult2);
-    BOOST_TEST_EQUAL(1000.0, mult2 * 32.0);
+    LMI_TEST_EQUAL(1000.0, 32.0 * mult2);
+    LMI_TEST_EQUAL(1000.0, mult2 * 32.0);
 }
 
 void currency_test::test_divide_by_double()
 {
     // currency / double returns double
     currency const div2 {3300, raw_cents {}};
-    BOOST_TEST_EQUAL(1.0, div2 / 33);
+    LMI_TEST_EQUAL(1.0, div2 / 33);
 }
 
 void currency_test::test_relops()
 {
     currency const a0;
     currency const a1(1728, raw_cents{});
-    BOOST_TEST(  C0 == a0);
-    BOOST_TEST(  a1 == a1);
-    BOOST_TEST(  a0 <  a1);
-    BOOST_TEST(  a0 <= a1);
-    BOOST_TEST(  a1 <= a1);
-    BOOST_TEST(  a1 >  a0);
-    BOOST_TEST(  a1 >= a0);
-    BOOST_TEST(  a1 >= a1);
+    LMI_TEST(  C0 == a0);
+    LMI_TEST(  a1 == a1);
+    LMI_TEST(  a0 <  a1);
+    LMI_TEST(  a0 <= a1);
+    LMI_TEST(  a1 <= a1);
+    LMI_TEST(  a1 >  a0);
+    LMI_TEST(  a1 >= a0);
+    LMI_TEST(  a1 >= a1);
 }
 
 void currency_test::test_stream_inserter()
@@ -206,32 +206,32 @@ void currency_test::test_stream_inserter()
     currency const a3 {123456, raw_cents {}};
     std::ostringstream oss;
     oss << a3;
-    BOOST_TEST_EQUAL("1234.56", oss.str());
+    LMI_TEST_EQUAL("1234.56", oss.str());
 }
 
 void currency_test::test_dollars()
 {
     currency const a0;
-    BOOST_TEST(0.00 == a0.d());
+    LMI_TEST(0.00 == a0.d());
 
     currency const a1(325, raw_cents{});
-    BOOST_TEST_EQUAL( 325, a1.m_);
-    BOOST_TEST_EQUAL( 325, a1.cents());
+    LMI_TEST_EQUAL( 325, a1.m_);
+    LMI_TEST_EQUAL( 325, a1.cents());
     // 3.25 is an exact binary constant
-    BOOST_TEST_EQUAL(3.25, a1.d());
+    LMI_TEST_EQUAL(3.25, a1.d());
 }
 
 void currency_test::test_round_double()
 {
     double d0 = 123.99999999999;
     currency c0 = round_to_nearest_cent.c(d0);
-    BOOST_TEST_EQUAL(12400, c0.m_);
+    LMI_TEST_EQUAL(12400, c0.m_);
     double d1 = 1.0 + std::numeric_limits<double>::epsilon();
     currency c1 = round_to_nearest_cent.c(d1);
-    BOOST_TEST_EQUAL(100, c1.m_);
+    LMI_TEST_EQUAL(100, c1.m_);
     double d2 = 1.0 - std::numeric_limits<double>::epsilon();
     currency c2 = round_to_nearest_cent.c(d2);
-    BOOST_TEST_EQUAL(100, c2.m_);
+    LMI_TEST_EQUAL(100, c2.m_);
 }
 
 void currency_test::test_round_currency()
@@ -266,33 +266,33 @@ void currency_test::test_infinite()
 
     // Negative infinity.
     currency const c0(-d0, raw_cents{});
-    BOOST_TEST_EQUAL(-d0, c0.d());
-    BOOST_TEST_EQUAL(-d0, dblize(c0));
+    LMI_TEST_EQUAL(-d0, c0.d());
+    LMI_TEST_EQUAL(-d0, dblize(c0));
 
     // Test with from_cents(arg), which asserts that arg==rint(arg).
     // Pedantically speaking, that assertion depends on rint(INF),
     // which is implementation-defined, but what other result can
     // rint(INF) reasonably return than INF?
     currency const c1 = from_cents(-d0);
-    BOOST_TEST( c0 ==  c1);
-    BOOST_TEST(c1 < from_cents(1.0e100));
+    LMI_TEST( c0 ==  c1);
+    LMI_TEST(c1 < from_cents(1.0e100));
 
     // Positive infinity.
     currency const c2 = from_cents(d0);
-    BOOST_TEST_EQUAL(d0, c2.d());
-    BOOST_TEST_EQUAL(d0, dblize(c2));
+    LMI_TEST_EQUAL(d0, c2.d());
+    LMI_TEST_EQUAL(d0, dblize(c2));
 
-    BOOST_TEST(-c0 ==  c2);
-    BOOST_TEST( c0 == -c2);
-    BOOST_TEST(from_cents(1.0e100) < c2);
+    LMI_TEST(-c0 ==  c2);
+    LMI_TEST( c0 == -c2);
+    LMI_TEST(from_cents(1.0e100) < c2);
 
     std::ostringstream oss;
     oss << c1;
-    BOOST_TEST_EQUAL("-inf", oss.str());
+    LMI_TEST_EQUAL("-inf", oss.str());
     oss.str("");
     oss.clear();
     oss << c2;
-    BOOST_TEST_EQUAL("inf", oss.str());
+    LMI_TEST_EQUAL("inf", oss.str());
 
     // Often lmi uses an identity element for std::min or std::max.
     // For example, a monthly charge might apply only to amounts up
@@ -314,13 +314,13 @@ void currency_test::test_infinite()
 void currency_test::test_quodlibet()
 {
     currency const a0(325, raw_cents{});
-    BOOST_TEST_EQUAL(3.25, a0.d());
-    BOOST_TEST_EQUAL(3.25, dblize(a0));
+    LMI_TEST_EQUAL(3.25, a0.d());
+    LMI_TEST_EQUAL(3.25, dblize(a0));
     currency       a1(475, raw_cents{});
-    BOOST_TEST_EQUAL(4.75, a1.d());
-    BOOST_TEST_EQUAL(4.75, dblize(a1));
+    LMI_TEST_EQUAL(4.75, a1.d());
+    LMI_TEST_EQUAL(4.75, dblize(a1));
     currency const a2 = from_cents(125);
-    BOOST_TEST_EQUAL(1.25, dblize(a2));
+    LMI_TEST_EQUAL(1.25, dblize(a2));
 
     currency b0 = round_to_nearest_cent.c(464.180000000000006821);
     currency b1 = round_to_nearest_cent.c(263.01999999999998181);
@@ -328,8 +328,8 @@ void currency_test::test_quodlibet()
     b2 += b0;
     b2 += b1;
     currency b3 = b0 + b1;
-    BOOST_TEST_EQUAL(b2.cents(), b3.cents());
-    BOOST_TEST_EQUAL(b2, b3);
+    LMI_TEST_EQUAL(b2.cents(), b3.cents());
+    LMI_TEST_EQUAL(b2, b3);
 }
 
 // CURRENCY !! Ideas for testing overflow or underflow.
@@ -337,23 +337,23 @@ void currency_test::test_quodlibet()
 //  double big_num = nonstd::power(2.0, 53);
     double big_num = 1.0e100;
     currency::data_type big_int1 =   1.0 * big_num;
-    BOOST_TEST_EQUAL(1.0e100, big_int1);
+    LMI_TEST_EQUAL(1.0e100, big_int1);
     currency::data_type big_int2 =  10.0 * big_num;
-    BOOST_TEST_EQUAL(1.0e101, big_int2);
+    LMI_TEST_EQUAL(1.0e101, big_int2);
     currency::data_type big_int3 = 100.0 * big_num;
-    BOOST_TEST_EQUAL(1.0e102, big_int3);
+    LMI_TEST_EQUAL(1.0e102, big_int3);
     round_to_nearest_cent.c(d0);
     std::cout << std::fixed;
 std::cout << big_int3 << '\n' << 1.0e102 << '\n' << big_int3 - 1.0e102 << std::endl;
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (round_to_nearest_cent.c(big_num / 1000.0)
         ,std::runtime_error
         ,"Cast would transgress upper limit."
         );
 
     double too_big = std::numeric_limits<double>::max();
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (round_to_nearest_cent.c(too_big)
         ,std::runtime_error
 //      ,"Cast would transgress upper limit."

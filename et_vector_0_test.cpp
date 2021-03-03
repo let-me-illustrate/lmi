@@ -31,7 +31,7 @@ int test_main(int, char*[])
     std::vector<double> v0 = {0.0, 1.25, 2.5};
     v0 *= v0;
     std::vector<double> const r0 = {0.0, 1.5625, 6.25};
-    BOOST_TEST(r0 == v0);
+    LMI_TEST(r0 == v0);
     }
 
     // Test peteCast().
@@ -41,7 +41,7 @@ int test_main(int, char*[])
     peteCast(int{}, v0); // Legal, but feckless.
     assign(v1, peteCast(int{}, v0));
     std::vector<int> const r1 = {0, 1, 2};
-    BOOST_TEST(r1 == v1);
+    LMI_TEST(r1 == v1);
     }
 
     // Test what used to be called std::unary_function.
@@ -49,7 +49,7 @@ int test_main(int, char*[])
     std::vector<double> v0 = {-1.0, 0.0, 3.875};
     assign(v0, apply_unary(std::negate<double>(), v0));
     std::vector<double> const r0 = {1.0, 0.0, -3.875};
-    BOOST_TEST(r0 == v0);
+    LMI_TEST(r0 == v0);
     }
 
     // Test what used to be called std::binary_function.
@@ -57,26 +57,26 @@ int test_main(int, char*[])
     std::vector<double> v0 = {0.0, -1.5625, -6.25};
     assign(v0, apply_binary(std::multiplies<double>(), -1.0, v0));
     std::vector<double> const r0 = {0.0, 1.5625, 6.25};
-    BOOST_TEST(r0 == v0);
+    LMI_TEST(r0 == v0);
 
     assign(v0, sqrt(v0));
     std::vector<double> const r1 = {0.0, 1.25, 2.5};
-    BOOST_TEST(r1 == v0);
+    LMI_TEST(r1 == v0);
 
     // Above, scalar -1.0 was LHS; here, it's RHS.
     assign(v0, apply_binary(std::multiplies<double>(), v0, -1.0));
     std::vector<double> const r2 = {0.0, -1.25, -2.5};
-    BOOST_TEST(r2 == v0);
+    LMI_TEST(r2 == v0);
 
     assign(v0, apply_binary(std::multiplies<double>(), v0, v0));
     std::vector<double> const r3 = {0.0, 1.5625, 6.25};
-    BOOST_TEST(r3 == v0);
+    LMI_TEST(r3 == v0);
 
     // Right-add 100, left-add 10000 .
     assign(v0, apply_binary(std::plus<double>(), v0, 100.0));
     assign(v0, apply_binary(std::plus<double>(), 10000.0, v0));
     std::vector<double> const r4 = {10100.0, 10101.5625, 10106.25};
-    BOOST_TEST(r4 == v0);
+    LMI_TEST(r4 == v0);
     }
 
     // Test Min() and Max().
@@ -86,15 +86,15 @@ int test_main(int, char*[])
     std::vector<double> v4(v2.size());
     assign(v4, Max(v2, v3));
     std::vector<double> const r0 = {1.875, 2.875, 3.875, 7.75};
-    BOOST_TEST(r0 == v4);
+    LMI_TEST(r0 == v4);
 
     assign(v4, Min(v2, v3));
     std::vector<double> const r1 = {1.125, 2.25, 3.375, 0.0};
-    BOOST_TEST(r1 == v4);
+    LMI_TEST(r1 == v4);
 
     assign(v4, Min(Max(1.25, Min(v2, v3)), 3.125));
     std::vector<double> const r2 = {1.25, 2.25, 3.125, 1.25};
-    BOOST_TEST(r2 == v4);
+    LMI_TEST(r2 == v4);
     }
 
     return 0;

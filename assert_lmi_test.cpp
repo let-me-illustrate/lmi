@@ -30,7 +30,7 @@ int test_main(int, char*[])
     LMI_ASSERT(true);
 
     bool const volatile not_true = false;
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (LMI_ASSERT(not_true)
         ,std::runtime_error
         ,"Assertion 'not_true' failed."
@@ -45,13 +45,13 @@ int test_main(int, char*[])
 
     // This use-case demonstrates why LMI_ASSERT_WITH_MSG's second
     // parameter is not token-pasted.
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (LMI_ASSERT_WITH_MSG(not_true,"<" << not_true << ">")
         ,std::runtime_error
         ,"Assertion 'not_true' failed\n(<0>)."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (LMI_ASSERT_EQUAL(not_true,true)
         ,std::runtime_error
         ,"Assertion '(not_true) == (true)' failed\n(expected 1 vs observed 0)."

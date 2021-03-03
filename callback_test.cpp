@@ -90,7 +90,7 @@ int test_main(int, char*[])
     application::initialize_callback();
     shared_library::adder()(2, 3.0f, 5.0);
 
-    BOOST_TEST_EQUAL(10.0, shared_library::adder()(2, 3.0f, 5.0));
+    LMI_TEST_EQUAL(10.0, shared_library::adder()(2, 3.0f, 5.0));
 
     return EXIT_SUCCESS;
 }

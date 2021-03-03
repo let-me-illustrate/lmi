@@ -221,7 +221,7 @@ void test_80cso_erratum
     actuarial_table const a(qx_cso, table_number);
     // No smoker-nonsmoker distinction below age 15.
     std::vector<double> v1 = a.values(15, 85);
-    BOOST_TEST(v0 == v1);
+    LMI_TEST(v0 == v1);
 }
 } // Unnamed namespace.
 
@@ -251,13 +251,13 @@ void assay_speed()
 
 void test_precondition_failures()
 {
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (actuarial_table("nonexistent", 0)
         ,std::runtime_error
         ,"There is no table number 0 in file 'nonexistent'."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (actuarial_table("nonexistent", 1)
         ,std::runtime_error
         ,"File 'nonexistent.ndx' is required but could not be found."
@@ -268,16 +268,16 @@ void test_precondition_failures()
     std::ofstream ofs("eraseme.ndx", ios_out_trunc_binary());
     ofs << ifs.rdbuf();
     ofs.close();
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (actuarial_table("eraseme", 1)
         ,std::runtime_error
         ,"File 'eraseme.dat' is required but could not be found."
          " Try reinstalling."
         );
-    BOOST_TEST(0 == std::remove("eraseme.ndx"));
+    LMI_TEST(0 == std::remove("eraseme.ndx"));
 
     actuarial_table z(qx_ins, 256);
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (z.values_elaborated(80, 42, e_reenter_never, 0, 0)
         ,std::runtime_error
         ,"Cannot use 'e_reenter_never' here."
@@ -295,31 +295,31 @@ void test_lookup_errors()
     //   0 minimum age
     //  99 maximum age
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (actuarial_table(qx_cso, 42).values(  0,  -1)
         ,std::runtime_error
         ,"Assertion '0 <= length && length <= 1 + max_age_ - issue_age' failed."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (actuarial_table(qx_cso, 42).values(  0, 101)
         ,std::runtime_error
         ,"Assertion '0 <= length && length <= 1 + max_age_ - issue_age' failed."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (actuarial_table(qx_cso, 42).values(  1, 100)
         ,std::runtime_error
         ,"Assertion '0 <= length && length <= 1 + max_age_ - issue_age' failed."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (actuarial_table(qx_cso, 42).values( -1,  10)
         ,std::runtime_error
         ,"Assertion 'min_age_ <= issue_age && issue_age <= max_age_' failed."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (actuarial_table(qx_cso, 42).values(100,   1)
         ,std::runtime_error
         ,"Assertion 'min_age_ <= issue_age && issue_age <= max_age_' failed."
@@ -332,54 +332,54 @@ void test_e_reenter_never()
     std::vector<double> gauge;
 
     rates = actuarial_table(qx_ins, 750).values(1, 15);
-    BOOST_TEST(rates == table_750());
+    LMI_TEST(rates == table_750());
 
     rates = actuarial_table(qx_cso, 42).values( 0, 100);
-    BOOST_TEST(rates == table_42(0));
+    LMI_TEST(rates == table_42(0));
 
     rates = actuarial_table(qx_cso, 42).values(35,  65);
-    BOOST_TEST(rates == table_42(35));
+    LMI_TEST(rates == table_42(35));
 
     rates = actuarial_table(qx_ins, 256).values(10, 112);
     gauge = table_256(10, 0);
-    BOOST_TEST(rates == gauge);
+    LMI_TEST(rates == gauge);
 
     rates = actuarial_table(qx_ins, 256).values(80,  42);
     gauge = table_256(80, 0);
-    BOOST_TEST(rates == gauge);
+    LMI_TEST(rates == gauge);
 
     // Issue age exceeds maximum select age. Arguably, this ought to
     // signal an error; however, this behavior is reasonable, and the
     // 'e_reenter_at_inforce_duration' implementation relies on it.
     rates = actuarial_table(qx_ins, 256).values(81,  41);
-    BOOST_TEST_EQUAL(rates[0], 0.10486); // [81]+0 --> [80]+1
-    BOOST_TEST_EQUAL(rates[1], 0.13557); // [81]+1 --> [80]+2
-    BOOST_TEST_EQUAL(rates[2], 0.16221); // [81]+2 --> 83 ultimate
+    LMI_TEST_EQUAL(rates[0], 0.10486); // [81]+0 --> [80]+1
+    LMI_TEST_EQUAL(rates[1], 0.13557); // [81]+1 --> [80]+2
+    LMI_TEST_EQUAL(rates[2], 0.16221); // [81]+2 --> 83 ultimate
 
     gauge = table_256(80, 0);
     gauge.erase(gauge.begin(), 1 + gauge.begin());
-    BOOST_TEST(rates == gauge);
+    LMI_TEST(rates == gauge);
 
     gauge = table_256(80, 1);
-    BOOST_TEST(rates == gauge);
+    LMI_TEST(rates == gauge);
 
     rates = actuarial_table(qx_ins, 256).values(82,  40);
-    BOOST_TEST_EQUAL(rates[0], 0.13557); // [82]+0 --> [80]+2
-    BOOST_TEST_EQUAL(rates[1], 0.16221); // [82]+1 --> 83 ultimate
+    LMI_TEST_EQUAL(rates[0], 0.13557); // [82]+0 --> [80]+2
+    LMI_TEST_EQUAL(rates[1], 0.16221); // [82]+1 --> 83 ultimate
     gauge = table_256(80, 2);
-    BOOST_TEST(rates == gauge);
+    LMI_TEST(rates == gauge);
 
     rates = actuarial_table(qx_ins, 256).values(83,  39);
-    BOOST_TEST_EQUAL(rates[0], 0.16221); // [83]+0 --> 83 ultimate
-    BOOST_TEST_EQUAL(rates[1], 0.17425); // [83]+1 --> 84 ultimate
+    LMI_TEST_EQUAL(rates[0], 0.16221); // [83]+0 --> 83 ultimate
+    LMI_TEST_EQUAL(rates[1], 0.17425); // [83]+1 --> 84 ultimate
     gauge = table_256(80, 3);
-    BOOST_TEST(rates == gauge);
+    LMI_TEST(rates == gauge);
 
     rates = actuarial_table(qx_ins, 256).values(84,  38);
-    BOOST_TEST_EQUAL(rates[0], 0.17425); // [84]+0 --> 84 ultimate
+    LMI_TEST_EQUAL(rates[0], 0.17425); // [84]+0 --> 84 ultimate
     gauge = table_256(80, 0);
     gauge.erase(gauge.begin(), 4 + gauge.begin());
-    BOOST_TEST(rates == gauge);
+    LMI_TEST(rates == gauge);
 }
 
 void test_e_reenter_at_inforce_duration()
@@ -411,7 +411,7 @@ void test_e_reenter_at_inforce_duration()
         rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
         gauge = table_256(iss_age + pol_dur, 0);
         gauge.insert(gauge.begin(), pol_dur, 0.0);
-        BOOST_TEST(rates == gauge);
+        LMI_TEST(rates == gauge);
         }
 
     // Once age has been set ahead to maximum, can't push it farther.
@@ -421,27 +421,27 @@ void test_e_reenter_at_inforce_duration()
     rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
     gauge = table_256(iss_age, 0);
     gauge[0] = 0.0;
-    BOOST_TEST(rates == gauge);
+    LMI_TEST(rates == gauge);
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (table.values_elaborated(min_age - 1, 1, m, 0, 0)
         ,std::runtime_error
         ,"Assertion 'min_age_ <= issue_age && issue_age <= max_age_' failed."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (table.values_elaborated(min_age, 1, m, -1, 0)
         ,std::runtime_error
         ,"Assertion '0 <= inforce_duration' failed."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (table.values_elaborated(min_age, 1, m, 999, 0)
         ,std::runtime_error
         ,"Assertion 'inforce_duration < 1 + max_age_ - issue_age' failed."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (table.values_elaborated(min_age - 999, 1000, m, 999, 0)
         ,std::runtime_error
         ,"Assertion 'min_age_ <= issue_age && issue_age <= max_age_' failed."
@@ -481,18 +481,18 @@ void test_e_reenter_upon_rate_reset()
         rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
         gauge0 = table_256(effective_age, 0);
         gauge0.erase(gauge0.begin(), gauge0.begin() - reset_dur);
-        BOOST_TEST(rates == gauge0);
+        LMI_TEST(rates == gauge0);
         gauge1 = table.values(effective_age, 1 + max_age - effective_age);
         gauge1.erase(gauge1.begin(), gauge1.begin() - reset_dur);
-        BOOST_TEST(rates == gauge1);
+        LMI_TEST(rates == gauge1);
         }
 
     // Once age has been set back to minimum, can't push it farther.
-    BOOST_TEST(iss_age - select_period < min_age);
+    LMI_TEST(iss_age - select_period < min_age);
     reset_dur = -select_period;
     rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
-    BOOST_TEST(rates == gauge0);
-    BOOST_TEST(rates == gauge1);
+    LMI_TEST(rates == gauge0);
+    LMI_TEST(rates == gauge1);
 
     // A group's reset date can precede a new entrant's birthdate, so
     // the age-setback argument as such isn't limited. The algorithm
@@ -500,8 +500,8 @@ void test_e_reenter_upon_rate_reset()
     // table's minimum age.
     reset_dur = -999;
     rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
-    BOOST_TEST(rates == gauge0);
-    BOOST_TEST(rates == gauge1);
+    LMI_TEST(rates == gauge0);
+    LMI_TEST(rates == gauge1);
 
     // Positive reset duration (reset date follows contract date):
     // age is in effect set forward.
@@ -513,10 +513,10 @@ void test_e_reenter_upon_rate_reset()
         rates = table.values_elaborated(iss_age, length, m, pol_dur, reset_dur);
         gauge0 = table_256(effective_age, 0);
         gauge0.insert(gauge0.begin(), reset_dur, 0.0);
-        BOOST_TEST(rates == gauge0);
+        LMI_TEST(rates == gauge0);
         gauge1 = table.values(effective_age, 1 + max_age - effective_age);
         gauge1.insert(gauge1.begin(), reset_dur, 0.0);
-        BOOST_TEST(rates == gauge1);
+        LMI_TEST(rates == gauge1);
         }
 
     // 'e_reenter_upon_rate_reset' and 'e_reenter_at_inforce_duration'
@@ -542,15 +542,15 @@ void test_e_reenter_upon_rate_reset()
         ,reset_dur
         );
     rates1.erase(rates1.begin(), rates1.begin() + pol_dur);
-    BOOST_TEST(rates0 == rates1);
+    LMI_TEST(rates0 == rates1);
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (table.values_elaborated(min_age, 1, m, 0, 999)
         ,std::runtime_error
         ,"Assertion 'reset_duration <= inforce_duration' failed."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (table.values_elaborated(min_age - 1, 1, m, 0, 0)
         ,std::runtime_error
         ,"Assertion 'min_age_ <= issue_age && issue_age <= max_age_' failed."
@@ -561,7 +561,7 @@ void test_e_reenter_upon_rate_reset()
     // must be accepted.
     rates = table.values_elaborated(min_age, 1 + max_age - min_age, m, 0, -999);
     gauge0 = table_256(min_age, 0);
-    BOOST_TEST(rates == gauge0);
+    LMI_TEST(rates == gauge0);
 }
 
 /// The e_actuarial_table_method variants are designed for use with
@@ -574,7 +574,7 @@ void test_exotic_lookup_methods_with_attained_age_table()
     std::vector<double> rates;
 
     rates = table42.values(0, 100);
-    BOOST_TEST(rates == table_42(0));
+    LMI_TEST(rates == table_42(0));
 
     rates = table42.values_elaborated
         (0
@@ -583,7 +583,7 @@ void test_exotic_lookup_methods_with_attained_age_table()
         ,99   // inforce_duration
         ,0    // reset_duration
         );
-    BOOST_TEST(rates == table_42(0));
+    LMI_TEST(rates == table_42(0));
 
     rates = table42.values_elaborated
         (0
@@ -592,7 +592,7 @@ void test_exotic_lookup_methods_with_attained_age_table()
         ,0    // inforce_duration
         ,-999 // reset_duration
         );
-    BOOST_TEST(rates == table_42(0));
+    LMI_TEST(rates == table_42(0));
 
     rates = table42.values_elaborated
         (0
@@ -601,9 +601,9 @@ void test_exotic_lookup_methods_with_attained_age_table()
         ,99   // inforce_duration
         ,99   // reset_duration
         );
-    BOOST_TEST(rates == table_42(0));
+    LMI_TEST(rates == table_42(0));
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (table42.values_elaborated
             (0
             ,100

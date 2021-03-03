@@ -262,63 +262,63 @@ int test_main(int, char*[])
 
     // Test mean<>().
 
-    BOOST_TEST_EQUAL(1.5, mean<double>()(1.0, 2.0));
-    BOOST_TEST_EQUAL(smallnumD, mean<double>()(smallnumD, smallnumD));
-    BOOST_TEST_EQUAL(bignumD  , mean<double>()(bignumD  , bignumD  ));
+    LMI_TEST_EQUAL(1.5, mean<double>()(1.0, 2.0));
+    LMI_TEST_EQUAL(smallnumD, mean<double>()(smallnumD, smallnumD));
+    LMI_TEST_EQUAL(bignumD  , mean<double>()(bignumD  , bignumD  ));
 
-    BOOST_TEST_EQUAL(1.5, mean<long double>()(1.0, 2.0));
-    BOOST_TEST_EQUAL(smallnumL, mean<long double>()(smallnumL, smallnumL));
-    BOOST_TEST_EQUAL(bignumL  , mean<long double>()(bignumL  , bignumL  ));
+    LMI_TEST_EQUAL(1.5, mean<long double>()(1.0, 2.0));
+    LMI_TEST_EQUAL(smallnumL, mean<long double>()(smallnumL, smallnumL));
+    LMI_TEST_EQUAL(bignumL  , mean<long double>()(bignumL  , bignumL  ));
 
     // Test outward_quotient().
 
-    BOOST_TEST_EQUAL( 1, outward_quotient( 2,  2));
-    BOOST_TEST_EQUAL( 1, outward_quotient( 1,  2));
-    BOOST_TEST_EQUAL( 0, outward_quotient( 0,  2));
-    BOOST_TEST_EQUAL(-1, outward_quotient(-1,  2));
-    BOOST_TEST_EQUAL(-1, outward_quotient(-2,  2));
+    LMI_TEST_EQUAL( 1, outward_quotient( 2,  2));
+    LMI_TEST_EQUAL( 1, outward_quotient( 1,  2));
+    LMI_TEST_EQUAL( 0, outward_quotient( 0,  2));
+    LMI_TEST_EQUAL(-1, outward_quotient(-1,  2));
+    LMI_TEST_EQUAL(-1, outward_quotient(-2,  2));
 
-    BOOST_TEST_EQUAL(-1, outward_quotient( 2, -2));
-    BOOST_TEST_EQUAL(-1, outward_quotient( 1, -2));
-    BOOST_TEST_EQUAL( 0, outward_quotient( 0, -2));
-    BOOST_TEST_EQUAL( 1, outward_quotient(-1, -2));
-    BOOST_TEST_EQUAL( 1, outward_quotient(-2, -2));
+    LMI_TEST_EQUAL(-1, outward_quotient( 2, -2));
+    LMI_TEST_EQUAL(-1, outward_quotient( 1, -2));
+    LMI_TEST_EQUAL( 0, outward_quotient( 0, -2));
+    LMI_TEST_EQUAL( 1, outward_quotient(-1, -2));
+    LMI_TEST_EQUAL( 1, outward_quotient(-2, -2));
 
-    BOOST_TEST_EQUAL( 0ULL, outward_quotient( 0ULL,  2ULL));
-    BOOST_TEST_EQUAL( 1ULL, outward_quotient( 1ULL,  2ULL));
-    BOOST_TEST_EQUAL( 1ULL, outward_quotient( 2ULL,  2ULL));
+    LMI_TEST_EQUAL( 0ULL, outward_quotient( 0ULL,  2ULL));
+    LMI_TEST_EQUAL( 1ULL, outward_quotient( 1ULL,  2ULL));
+    LMI_TEST_EQUAL( 1ULL, outward_quotient( 2ULL,  2ULL));
 
-    BOOST_TEST_EQUAL( 0, outward_quotient( 0,  3));
-    BOOST_TEST_EQUAL( 1, outward_quotient( 1,  3));
-    BOOST_TEST_EQUAL( 1, outward_quotient( 2,  3));
-    BOOST_TEST_EQUAL( 1, outward_quotient( 3,  3));
-    BOOST_TEST_EQUAL( 2, outward_quotient( 4,  3));
-    BOOST_TEST_EQUAL( 2, outward_quotient( 5,  3));
-    BOOST_TEST_EQUAL( 2, outward_quotient( 6,  3));
-    BOOST_TEST_EQUAL( 3, outward_quotient( 7,  3));
+    LMI_TEST_EQUAL( 0, outward_quotient( 0,  3));
+    LMI_TEST_EQUAL( 1, outward_quotient( 1,  3));
+    LMI_TEST_EQUAL( 1, outward_quotient( 2,  3));
+    LMI_TEST_EQUAL( 1, outward_quotient( 3,  3));
+    LMI_TEST_EQUAL( 2, outward_quotient( 4,  3));
+    LMI_TEST_EQUAL( 2, outward_quotient( 5,  3));
+    LMI_TEST_EQUAL( 2, outward_quotient( 6,  3));
+    LMI_TEST_EQUAL( 3, outward_quotient( 7,  3));
 
-    BOOST_TEST_EQUAL(INT_MIN, outward_quotient(INT_MIN,       1));
-    BOOST_TEST_EQUAL(      1, outward_quotient(INT_MIN, INT_MIN));
-    BOOST_TEST_EQUAL(     -1, outward_quotient(      1, INT_MIN));
+    LMI_TEST_EQUAL(INT_MIN, outward_quotient(INT_MIN,       1));
+    LMI_TEST_EQUAL(      1, outward_quotient(INT_MIN, INT_MIN));
+    LMI_TEST_EQUAL(     -1, outward_quotient(      1, INT_MIN));
 
-    BOOST_TEST_EQUAL(INT_MAX, outward_quotient(INT_MAX,       1));
-    BOOST_TEST_EQUAL(      1, outward_quotient(INT_MAX, INT_MAX));
-    BOOST_TEST_EQUAL(      1, outward_quotient(      1, INT_MAX));
+    LMI_TEST_EQUAL(INT_MAX, outward_quotient(INT_MAX,       1));
+    LMI_TEST_EQUAL(      1, outward_quotient(INT_MAX, INT_MAX));
+    LMI_TEST_EQUAL(      1, outward_quotient(      1, INT_MAX));
 
-    BOOST_TEST_EQUAL(UINT_MAX, outward_quotient(UINT_MAX,       1u));
-    BOOST_TEST_EQUAL(      1u, outward_quotient(UINT_MAX, UINT_MAX));
-    BOOST_TEST_EQUAL(      1u, outward_quotient(      1u, UINT_MAX));
+    LMI_TEST_EQUAL(UINT_MAX, outward_quotient(UINT_MAX,       1u));
+    LMI_TEST_EQUAL(      1u, outward_quotient(UINT_MAX, UINT_MAX));
+    LMI_TEST_EQUAL(      1u, outward_quotient(      1u, UINT_MAX));
 
     // The language allows "false/true"; this is no sillier.
-    BOOST_TEST_EQUAL(false, outward_quotient(false, true));
+    LMI_TEST_EQUAL(false, outward_quotient(false, true));
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (outward_quotient(1, 0)
         ,std::domain_error
         ,"Denominator is zero."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (outward_quotient(INT_MIN, -1)
         ,std::domain_error
         ,"Division might overflow."
@@ -334,21 +334,21 @@ int test_main(int, char*[])
 
     // Test with 1 == 'n'.
 
-    BOOST_TEST
+    LMI_TEST
         (materially_equal
             (0.04
             ,i_upper_n_over_n_from_i<double,1>()(0.04)
             )
         );
 
-    BOOST_TEST
+    LMI_TEST
         (materially_equal
             (0.04
             ,i_from_i_upper_n_over_n<double,1>()(0.04)
             )
         );
 
-    BOOST_TEST
+    LMI_TEST
         (materially_equal
             (0.04 / 1.04
             ,d_upper_n_from_i<double,1>()(0.04)
@@ -357,9 +357,9 @@ int test_main(int, char*[])
 
     // Test interest rate of -100%.
 
-    BOOST_TEST_EQUAL(-1.0 , i_upper_12_over_12_from_i_naive<double>()(-1.0));
-    BOOST_TEST_EQUAL(-1.0 , i_upper_12_over_12_from_i      <double>()(-1.0));
-    BOOST_TEST_THROW
+    LMI_TEST_EQUAL(-1.0 , i_upper_12_over_12_from_i_naive<double>()(-1.0));
+    LMI_TEST_EQUAL(-1.0 , i_upper_12_over_12_from_i      <double>()(-1.0));
+    LMI_TEST_THROW
         (d_upper_12_from_i        <double>()(-1.0)
         ,std::range_error
         ,"i equals -100%."
@@ -367,13 +367,13 @@ int test_main(int, char*[])
 
     // Test nonsensical interest rate of -101%.
 
-    BOOST_TEST(std::isnan(i_upper_12_over_12_from_i_naive<double>()(-1.01)));
-    BOOST_TEST_THROW
+    LMI_TEST(std::isnan(i_upper_12_over_12_from_i_naive<double>()(-1.01)));
+    LMI_TEST_THROW
         (i_upper_12_over_12_from_i<double>()(-1.01)
         ,std::domain_error
         ,"i is less than -100%."
         );
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (d_upper_12_from_i        <double>()(-1.01)
         ,std::domain_error
         ,"i is less than -100%."
@@ -381,14 +381,14 @@ int test_main(int, char*[])
 
     // Gross should equal net if decrements are both zero.
 
-    BOOST_TEST
+    LMI_TEST
         (materially_equal
             (0.04
             ,net_i_from_gross_naive<double,365>()(0.04, 0.0, 0.0)
             )
         );
 
-    BOOST_TEST
+    LMI_TEST
         (materially_equal
             (0.04
             ,net_i_from_gross<double,365>()(0.04, 0.0, 0.0)
@@ -397,39 +397,39 @@ int test_main(int, char*[])
 
     // Test exponential and power methods for approximate accuracy.
 
-    BOOST_TEST
+    LMI_TEST
         (materially_equal
             (0.0032737397821988637 // Not very accurate.
             ,i_upper_12_over_12_from_i_naive<double>()(0.04)
             )
         );
-    BOOST_TEST
+    LMI_TEST
         (materially_equal
             (0.0032737397821988642
             ,i_upper_12_over_12_from_i<double>()(0.04)
             )
         );
 
-    BOOST_TEST
+    LMI_TEST
         (materially_equal
             (0.04
             ,i_from_i_upper_12_over_12_naive<double>()(0.0032737397821988642)
             )
         );
-    BOOST_TEST
+    LMI_TEST
         (materially_equal
             (0.04
             ,i_from_i_upper_12_over_12<double>()(0.0032737397821988642)
             )
         );
 
-    BOOST_TEST
+    LMI_TEST
         (materially_equal
             (0.039156688577251846
             ,d_upper_12_from_i_naive<double>()(0.04)
             )
         );
-    BOOST_TEST
+    LMI_TEST
         (materially_equal
             (0.039156688577251846
             ,d_upper_12_from_i<double>()(0.04)
@@ -441,14 +441,14 @@ int test_main(int, char*[])
     // method. In this example, the former has a relative error
     // on the order of 1e-15; the latter, only 1e-13 .
 
-    BOOST_TEST
+    LMI_TEST
         (materially_equal
             (0.001
             ,net_i_from_gross_naive<double,365>()(0.001, 0.0, 0.0)
             ,1.0e-13
             )
         );
-    BOOST_TEST
+    LMI_TEST
         (!materially_equal
             (0.001
             ,net_i_from_gross_naive<double,365>()(0.001, 0.0, 0.0)
@@ -456,7 +456,7 @@ int test_main(int, char*[])
             )
         );
 
-    BOOST_TEST
+    LMI_TEST
         (materially_equal
             (0.001
             ,net_i_from_gross<double,365>()(0.001, 0.0, 0.0)

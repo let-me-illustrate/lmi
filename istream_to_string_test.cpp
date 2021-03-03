@@ -132,10 +132,10 @@ void test_empty_file()
     std::ofstream ofs(empty_file, ios_out_trunc_binary());
     ofs.close();
 
-    BOOST_TEST(mete_0<empty_file>().empty());
-    BOOST_TEST(mete_1<empty_file>().empty());
-    BOOST_TEST(mete_2<empty_file>().empty());
-    BOOST_TEST(mete_3<empty_file>().empty());
+    LMI_TEST(mete_0<empty_file>().empty());
+    LMI_TEST(mete_1<empty_file>().empty());
+    LMI_TEST(mete_2<empty_file>().empty());
+    LMI_TEST(mete_3<empty_file>().empty());
 
     std::remove(empty_file);
 }
@@ -146,10 +146,10 @@ void test_nonempty_file()
     ofs << alphabet;
     ofs.close();
 
-    BOOST_TEST_EQUAL(alphabet, mete_0<nonempty_file>());
-    BOOST_TEST_EQUAL(alphabet, mete_1<nonempty_file>());
-    BOOST_TEST_EQUAL(alphabet, mete_2<nonempty_file>());
-    BOOST_TEST_EQUAL(alphabet, mete_3<nonempty_file>());
+    LMI_TEST_EQUAL(alphabet, mete_0<nonempty_file>());
+    LMI_TEST_EQUAL(alphabet, mete_1<nonempty_file>());
+    LMI_TEST_EQUAL(alphabet, mete_2<nonempty_file>());
+    LMI_TEST_EQUAL(alphabet, mete_3<nonempty_file>());
 
     std::remove(nonempty_file);
 }

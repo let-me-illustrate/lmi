@@ -91,11 +91,11 @@ void product_file_test::test_copying()
 
     // Test product_data copy ctor.
     product_data q(p);
-    BOOST_TEST(database_filename_   == AddDataDir(q.datum("DatabaseFilename")));
-    BOOST_TEST(fund_filename_       == AddDataDir(q.datum("FundFilename"    )));
-    BOOST_TEST(lingo_filename_      == AddDataDir(q.datum("LingoFilename"   )));
-    BOOST_TEST(rounding_filename_   == AddDataDir(q.datum("RoundingFilename")));
-    BOOST_TEST(stratified_filename_ == AddDataDir(q.datum("TierFilename"    )));
+    LMI_TEST(database_filename_   == AddDataDir(q.datum("DatabaseFilename")));
+    LMI_TEST(fund_filename_       == AddDataDir(q.datum("FundFilename"    )));
+    LMI_TEST(lingo_filename_      == AddDataDir(q.datum("LingoFilename"   )));
+    LMI_TEST(rounding_filename_   == AddDataDir(q.datum("RoundingFilename")));
+    LMI_TEST(stratified_filename_ == AddDataDir(q.datum("TierFilename"    )));
 
     // Test product_database move ctor.
     product_database d
@@ -107,13 +107,13 @@ void product_file_test::test_copying()
         ,mce_nonmedical
         ,mce_s_CT
         );
-    BOOST_TEST(mce_s_CT == d.index().state());
-    BOOST_TEST(      55 == d.length());
-    BOOST_TEST(      99 == d.query<int>(DB_MaxIncrAge));
+    LMI_TEST(mce_s_CT == d.index().state());
+    LMI_TEST(      55 == d.length());
+    LMI_TEST(      99 == d.query<int>(DB_MaxIncrAge));
     product_database e(std::move(d));
-    BOOST_TEST(mce_s_CT == e.index().state());
-    BOOST_TEST(      55 == e.length());
-    BOOST_TEST(      99 == e.query<int>(DB_MaxIncrAge));
+    LMI_TEST(mce_s_CT == e.index().state());
+    LMI_TEST(      55 == e.length());
+    LMI_TEST(      99 == e.query<int>(DB_MaxIncrAge));
 
     // Test product_database copy ctor.
     product_database f
@@ -126,12 +126,12 @@ void product_file_test::test_copying()
         ,mce_s_CT
         );
     product_database g(f);
-    BOOST_TEST(mce_s_CT == f.index().state());
-    BOOST_TEST(      41 == f.length());
-    BOOST_TEST(      99 == f.query<int>(DB_MaxIncrAge));
-    BOOST_TEST(mce_s_CT == g.index().state());
-    BOOST_TEST(      41 == g.length());
-    BOOST_TEST(      99 == g.query<int>(DB_MaxIncrAge));
+    LMI_TEST(mce_s_CT == f.index().state());
+    LMI_TEST(      41 == f.length());
+    LMI_TEST(      99 == f.query<int>(DB_MaxIncrAge));
+    LMI_TEST(mce_s_CT == g.index().state());
+    LMI_TEST(      41 == g.length());
+    LMI_TEST(      99 == g.query<int>(DB_MaxIncrAge));
 }
 
 void product_file_test::read_database_file()

@@ -115,7 +115,7 @@ database_entity::database_entity
 ///       ,dims_stat
 ///       ,stat
 ///       );
-///   BOOST_TEST_THROW
+///   LMI_TEST_THROW
 ///       (db.query(DB_MaturityAge)
 ///       ,std::runtime_error
 ///       ,"Assertion '1 == v.extent()' failed."

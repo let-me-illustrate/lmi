@@ -27,7 +27,7 @@
 
 int test_main(int, char*[])
 {
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (file_command()("", "")
         ,std::runtime_error
         ,"Class 'file_command' not implemented for command-line interface."

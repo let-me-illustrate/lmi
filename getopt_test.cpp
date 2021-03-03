@@ -206,14 +206,14 @@ int test_main(int, char*[])
     char* test_argv[] = {arg0, arg1, arg2, nullptr};
     int test_argc = -1 + lmi::ssize(test_argv);
     std::string s = getopt_test::test(test_argc, test_argv);
-    BOOST_TEST_EQUAL(s, "option verbose\nnon-option ARGV-elements: xyz\n");
+    LMI_TEST_EQUAL(s, "option verbose\nnon-option ARGV-elements: xyz\n");
     }
 
     {
     char* test_argv[] = {nullptr};
     int test_argc = -1 + lmi::ssize(test_argv);
     std::string s = getopt_test::test(test_argc, test_argv);
-    BOOST_TEST_EQUAL(s, "");
+    LMI_TEST_EQUAL(s, "");
     }
 
     {
@@ -223,7 +223,7 @@ int test_main(int, char*[])
     char* test_argv[] = {arg0, arg1, arg2, nullptr};
     int test_argc = -1 + lmi::ssize(test_argv);
     std::string s = getopt_test::test(test_argc, test_argv);
-    BOOST_TEST_EQUAL(s, "option o\noption d with value '1,2,3'\n");
+    LMI_TEST_EQUAL(s, "option o\noption d with value '1,2,3'\n");
     }
 
     return EXIT_SUCCESS;

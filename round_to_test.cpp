@@ -303,9 +303,9 @@ void round_to_test::test_various_float_types
     long double factor = detail::int_pow(10.0L, -decimals);
     long double u = unrounded * factor;
     long double e = expected  * factor;
-    BOOST_TEST((test_one_case(static_cast<float >(u), static_cast<float >(e), decimals, style)));
-    BOOST_TEST((test_one_case(static_cast<double>(u), static_cast<double>(e), decimals, style)));
-    BOOST_TEST((test_one_case(/* long double */  (u), /* long double */  (e), decimals, style)));
+    LMI_TEST((test_one_case(static_cast<float >(u), static_cast<float >(e), decimals, style)));
+    LMI_TEST((test_one_case(static_cast<double>(u), static_cast<double>(e), decimals, style)));
+    LMI_TEST((test_one_case(/* long double */  (u), /* long double */  (e), decimals, style)));
 }
 
 // Test rounding to various numbers of decimal places.
@@ -554,7 +554,7 @@ void round_to_test::test_fundamentals()
 
     // Test default constructor.
     round_to<double> const round_erroneously;
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (round_erroneously(2.7)
         ,std::logic_error
         ,"Erroneous rounding function."
@@ -562,41 +562,41 @@ void round_to_test::test_fundamentals()
 
     // Test copy constructor and copy assignment operator.
     round_to<double> const round0(2, r_to_nearest);
-    BOOST_TEST(2 == round0.decimals());
-    BOOST_TEST(r_to_nearest == round0.style());
+    LMI_TEST(2 == round0.decimals());
+    LMI_TEST(r_to_nearest == round0.style());
 
     round_to<double> round1(round0);
-    BOOST_TEST(2 == round1.decimals());
-    BOOST_TEST(r_to_nearest == round1.style());
+    LMI_TEST(2 == round1.decimals());
+    LMI_TEST(r_to_nearest == round1.style());
 
     round1 = round_to<double>(3, r_toward_zero);
-    BOOST_TEST(3 == round1.decimals());
-    BOOST_TEST(r_toward_zero == round1.style());
+    LMI_TEST(3 == round1.decimals());
+    LMI_TEST(r_toward_zero == round1.style());
 
     round1 = round0;
-    BOOST_TEST(2 == round1.decimals());
-    BOOST_TEST(r_to_nearest == round1.style());
+    LMI_TEST(2 == round1.decimals());
+    LMI_TEST(r_to_nearest == round1.style());
 
     // Test rounding double to currency.
     currency c = round0.c(1.61803398875);
-    BOOST_TEST((1.62 - dblize(c)) < 1e-14);
+    LMI_TEST((1.62 - dblize(c)) < 1e-14);
 #if defined USE_CURRENCY_CLASS
 #   if defined CURRENCY_UNIT_IS_CENTS
-    BOOST_TEST_EQUAL(162, c.cents());
+    LMI_TEST_EQUAL(162, c.cents());
 #   else  // !defined CURRENCY_UNIT_IS_CENTS
     // Arguably this isn't quite meaningful:
-    BOOST_TEST_EQUAL(1.62, c.cents());
+    LMI_TEST_EQUAL(1.62, c.cents());
 #   endif // !defined CURRENCY_UNIT_IS_CENTS
 #endif // defined USE_CURRENCY_CLASS
 //  c *= 0.61803398875;
-//  BOOST_TEST_EQUAL(1, c);
+//  LMI_TEST_EQUAL(1, c);
 
     // Test a vector.
     std::vector<double> const v0 {3.1415926535, 2.718281828};
     std::vector<double> const v1 {round0(v0)};
-    BOOST_TEST_EQUAL(v0.size(), v1.size());
-    BOOST_TEST((3.14 - v1[0]) < 1e-14);
-    BOOST_TEST((2.72 - v1[1]) < 1e-14);
+    LMI_TEST_EQUAL(v0.size(), v1.size());
+    LMI_TEST((3.14 - v1[0]) < 1e-14);
+    LMI_TEST((2.72 - v1[1]) < 1e-14);
 
 #if defined USE_CURRENCY_CLASS
     // Try to provoke division by zero in ctor-initializer.
@@ -604,7 +604,7 @@ void round_to_test::test_fundamentals()
     // nonstd::power() negates a negative exponent, but negating
     // INT_MIN constitutes UB, so add one, plus currency::cents_digits
     // because of the interplay between classes currency and round_to.
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (round_to<double>(1 + currency::cents_digits + INT_MIN, r_to_nearest)
         ,std::domain_error
         ,"Invalid number of decimals."

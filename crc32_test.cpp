@@ -36,7 +36,7 @@ int test_main(int, char*[])
 
     crc += std::string("pippo");
 
-    BOOST_TEST_EQUAL(0x0df1dc234, crc.value());
+    LMI_TEST_EQUAL(0x0df1dc234, crc.value());
 
     return EXIT_SUCCESS;
 }

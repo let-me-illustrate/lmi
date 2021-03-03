@@ -51,7 +51,7 @@ int test_main(int, char*[])
     catch(...)
         {
         report_exception();
-        BOOST_TEST(true);
+        LMI_TEST(true);
         }
 
     // Test the
@@ -68,12 +68,12 @@ int test_main(int, char*[])
         try
             {
             report_exception(); // Should rethrow.
-            BOOST_TEST(false);
+            LMI_TEST(false);
             }
         catch(...)
             {
             std::cout << "...Success: caught elusive exception." << std::endl;
-            BOOST_TEST(true);
+            LMI_TEST(true);
             }
         }
 

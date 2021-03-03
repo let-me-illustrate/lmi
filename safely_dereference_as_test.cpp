@@ -41,14 +41,14 @@ int test_main(int, char*[])
 
     // Motivating case.
     B* p = &d;
-    BOOST_TEST_EQUAL(&d, &safely_dereference_as<D>(p));
+    LMI_TEST_EQUAL(&d, &safely_dereference_as<D>(p));
 
     // Type need not be changed.
-    BOOST_TEST_EQUAL(&b, &safely_dereference_as<B>(&b));
-    BOOST_TEST_EQUAL(&d, &safely_dereference_as<D>(&d));
+    LMI_TEST_EQUAL(&b, &safely_dereference_as<B>(&b));
+    LMI_TEST_EQUAL(&d, &safely_dereference_as<D>(&d));
 
     // Upcasts are forbidden: this would be a compile-time error.
-//    BOOST_TEST_EQUAL( p, &safely_dereference_as<B>(&d));
+//    LMI_TEST_EQUAL( p, &safely_dereference_as<B>(&d));
 
     std::string diagnostic0;
     diagnostic0 = "Cannot dereference null pointer of type '";
@@ -56,7 +56,7 @@ int test_main(int, char*[])
     diagnostic0 += "'.";
 
     D* null_pointer = nullptr;
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (safely_dereference_as<D>(null_pointer)
         ,std::runtime_error
         ,diagnostic0
@@ -69,7 +69,7 @@ int test_main(int, char*[])
     diagnostic1 += lmi::TypeInfo(typeid(D*)).Name();
     diagnostic1 += "'.";
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (safely_dereference_as<D>(&b)
         ,std::runtime_error
         ,diagnostic1

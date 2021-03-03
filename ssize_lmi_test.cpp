@@ -185,24 +185,24 @@ void test_array_bound_deduction()
 void test_various_containers()
 {
     char const c[2] = {'0'};
-    BOOST_TEST_EQUAL(lmi::ssize(c), 2);
-    BOOST_TEST_EQUAL(lmi::ssize(c), bourn_cast<int>(std::size(c)));
+    LMI_TEST_EQUAL(lmi::ssize(c), 2);
+    LMI_TEST_EQUAL(lmi::ssize(c), bourn_cast<int>(std::size(c)));
 
     std::array<int,3> const a{1, 2};
-    BOOST_TEST_EQUAL(lmi::ssize(a), 3);
-    BOOST_TEST_EQUAL(lmi::ssize(a), bourn_cast<int>(std::size(a)));
+    LMI_TEST_EQUAL(lmi::ssize(a), 3);
+    LMI_TEST_EQUAL(lmi::ssize(a), bourn_cast<int>(std::size(a)));
 
     std::vector<int> const v(5);
-    BOOST_TEST_EQUAL(lmi::ssize(v), 5);
-    BOOST_TEST_EQUAL(lmi::ssize(v), bourn_cast<int>(std::size(v)));
+    LMI_TEST_EQUAL(lmi::ssize(v), 5);
+    LMI_TEST_EQUAL(lmi::ssize(v), bourn_cast<int>(std::size(v)));
 
     std::string const s("abcdefg");
-    BOOST_TEST_EQUAL(lmi::ssize(s), 7);
-    BOOST_TEST_EQUAL(lmi::ssize(s), bourn_cast<int>(std::size(s)));
+    LMI_TEST_EQUAL(lmi::ssize(s), 7);
+    LMI_TEST_EQUAL(lmi::ssize(s), bourn_cast<int>(std::size(s)));
 
     char const* p = "ABCDEFGHIJK";
-    BOOST_TEST_EQUAL(lmi::sstrlen(p), 11);
-    BOOST_TEST_EQUAL(lmi::sstrlen(p), bourn_cast<int>(std::strlen(p)));
+    LMI_TEST_EQUAL(lmi::sstrlen(p), 11);
+    LMI_TEST_EQUAL(lmi::sstrlen(p), bourn_cast<int>(std::strlen(p)));
 }
 
 int test_main(int, char*[])

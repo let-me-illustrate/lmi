@@ -238,113 +238,113 @@ void any_member_test::test_any_member()
 {
     S s;
     s["i0"] = "999";
-    BOOST_TEST_EQUAL(s.i0, 999);
+    LMI_TEST_EQUAL(s.i0, 999);
 
     s["i0"] = "077";   // Interpreted as decimal, not as octal.
-    BOOST_TEST_EQUAL(s.i0, 77);
+    LMI_TEST_EQUAL(s.i0, 77);
 
     s["i0"] = "09";    // Valid decimal, not invalid octal.
-    BOOST_TEST_EQUAL(s.i0, 9);
+    LMI_TEST_EQUAL(s.i0, 9);
 
     s["i1"] = "888000";
-    BOOST_TEST_EQUAL(s.i1, 888000);
+    LMI_TEST_EQUAL(s.i1, 888000);
 
 //  s["i0"] = "999.9"; // Invalid integer-literal.
 //  s["i1"] = "888e3"; // Invalid integer-literal.
 
     s["d0"] = "777";
-    BOOST_TEST_EQUAL(s.d0, 777);
+    LMI_TEST_EQUAL(s.d0, 777);
 
     s["d0"] = "777.";
-    BOOST_TEST_EQUAL(s.d0, 777);
+    LMI_TEST_EQUAL(s.d0, 777);
 
     s["d0"] = "777E3";
-    BOOST_TEST_EQUAL(s.d0, 777000);
+    LMI_TEST_EQUAL(s.d0, 777000);
 
     s["d0"] = ".777E3";
-    BOOST_TEST_EQUAL(s.d0, 777);
+    LMI_TEST_EQUAL(s.d0, 777);
 
     s["s0"] = "hello";
-    BOOST_TEST_EQUAL(s.s0, "hello");
+    LMI_TEST_EQUAL(s.s0, "hello");
 
     std::stringstream ss;
     s.write(ss);
-    BOOST_TEST_EQUAL(ss.str(), "9 888000 777 hello");
+    LMI_TEST_EQUAL(ss.str(), "9 888000 777 hello");
 
     // Test const operator[]().
 
     S const s_const;
-    BOOST_TEST_EQUAL("0", s_const["i0"].str());
+    LMI_TEST_EQUAL("0", s_const["i0"].str());
 
     // Test operator==() and operator!=().
 
     // operator==(): same objects, same members.
 
-    BOOST_TEST(s_const["i0"] == s_const["i0"]);
-    BOOST_TEST(s_const["d0"] == s_const["d0"]);
-    BOOST_TEST(s_const["s0"] == s_const["s0"]);
-    BOOST_TEST(s_const["x0"] == s_const["x0"]);
+    LMI_TEST(s_const["i0"] == s_const["i0"]);
+    LMI_TEST(s_const["d0"] == s_const["d0"]);
+    LMI_TEST(s_const["s0"] == s_const["s0"]);
+    LMI_TEST(s_const["x0"] == s_const["x0"]);
 
     // operator!=(): different objects.
 
-    BOOST_TEST(s["i0"] != s_const["i0"]);
-    BOOST_TEST(s["i1"] != s_const["i0"]);
+    LMI_TEST(s["i0"] != s_const["i0"]);
+    LMI_TEST(s["i1"] != s_const["i0"]);
 
     // operator==(): different members of same type.
 
-    BOOST_TEST(s_const["i0"] == s_const["i1"]);
+    LMI_TEST(s_const["i0"] == s_const["i1"]);
 
-    BOOST_TEST(s["i0"] != s["i1"]);
+    LMI_TEST(s["i0"] != s["i1"]);
 
     s["i0"] = s["i1"];
-    BOOST_TEST(s["i0"] == s["i1"]);
+    LMI_TEST(s["i0"] == s["i1"]);
 
     s["i0"] = s_const["i0"];
     s["i1"] = s_const["i0"];
-    BOOST_TEST(s["i0"] == s["i1"]);
+    LMI_TEST(s["i0"] == s["i1"]);
 
     // operator==(): different objects, same member.
 
-    BOOST_TEST(s["i0"] == s_const["i0"]);
+    LMI_TEST(s["i0"] == s_const["i0"]);
 
     // operator==(): different objects, different members of same type.
 
-    BOOST_TEST(s["i1"] == s_const["i0"]);
+    LMI_TEST(s["i1"] == s_const["i0"]);
 
     // operator==(): different objects, different member types.
 
-    BOOST_TEST(s_const["x0"] != s["i0"]);
-    BOOST_TEST(s_const["x0"] != s["d0"]);
-    BOOST_TEST(s_const["x0"] != s["s0"]);
+    LMI_TEST(s_const["x0"] != s["i0"]);
+    LMI_TEST(s_const["x0"] != s["d0"]);
+    LMI_TEST(s_const["x0"] != s["s0"]);
 
     // operator==(): same object, different member types.
 
-    BOOST_TEST(s_const["x0"] != s_const["i0"]);
+    LMI_TEST(s_const["x0"] != s_const["i0"]);
 
     // Make sure distinct object identity is preserved by assignment.
 
     s["i1"] = "909090";
-    BOOST_TEST(s["i1"] != s_const["i1"]);
+    LMI_TEST(s["i1"] != s_const["i1"]);
     s["i1"] = s_const["i1"];
-    BOOST_TEST(s["i1"] == s_const["i1"]);
+    LMI_TEST(s["i1"] == s_const["i1"]);
     s["i1"] = "909090";
-    BOOST_TEST(s["i1"] != s_const["i1"]);
+    LMI_TEST(s["i1"] != s_const["i1"]);
 
     s["i0"] = s["i1"];
-    BOOST_TEST(s["i0"] == s["i1"]);
+    LMI_TEST(s["i0"] == s["i1"]);
     s["i1"] = "9";
-    BOOST_TEST(s["i0"] != s["i1"]);
+    LMI_TEST(s["i0"] != s["i1"]);
 
     // Test MemberSymbolTable::equals().
 
-    BOOST_TEST(s_const == s_const);
-    BOOST_TEST(s_const != s      );
-    BOOST_TEST(s       == s      );
+    LMI_TEST(s_const == s_const);
+    LMI_TEST(s_const != s      );
+    LMI_TEST(s       == s      );
 
     // Test MemberSymbolTable::assign().
 
     s.MemberSymbolTable<S>::assign(s_const);
-    BOOST_TEST(s_const == s      );
+    LMI_TEST(s_const == s      );
 
     // Test no-such-member diagnostic for both const and non-const
     // subscripting operators.
@@ -353,8 +353,8 @@ void any_member_test::test_any_member()
     err += lmi::TypeInfo(typeid(S)).Name();
     err += " ascribes no member named 'nonexistent'.";
 
-    BOOST_TEST_THROW(s_const["nonexistent"], std::runtime_error, err);
-    BOOST_TEST_THROW(s      ["nonexistent"], std::runtime_error, err);
+    LMI_TEST_THROW(s_const["nonexistent"], std::runtime_error, err);
+    LMI_TEST_THROW(s      ["nonexistent"], std::runtime_error, err);
 
     // Make sure numeric_io_cast is used for writing arithmetic types
     // to std::string, for any compiler that has IEC 60559 doubles and
@@ -362,8 +362,8 @@ void any_member_test::test_any_member()
 
     s.d0 = std::exp(1.0);
     double d1 = *s["d0"].exact_cast<double>();
-    BOOST_TEST_EQUAL(numeric_io_cast<std::string>(d1), "2.718281828459045");
-    BOOST_TEST_EQUAL(s["d0"].str(), "2.718281828459045");
+    LMI_TEST_EQUAL(numeric_io_cast<std::string>(d1), "2.718281828459045");
+    LMI_TEST_EQUAL(s["d0"].str(), "2.718281828459045");
 
 // COMPILER !! The borland compiler can build the program with the
 // following line, but a run-time exception results.
@@ -458,25 +458,25 @@ void any_member_test::supplemental_test0()
     err += lmi::TypeInfo(typeid(base_datum)).Name();
     err += "'.";
 
-    BOOST_TEST_THROW(member_cast<base_datum>(s["i0"]), std::runtime_error, err);
+    LMI_TEST_THROW(member_cast<base_datum>(s["i0"]), std::runtime_error, err);
 
     base_datum* bp1 = member_cast<base_datum>(s["dd"]);
-    BOOST_TEST_EQUAL(1729, bp1->virtual_function());
+    LMI_TEST_EQUAL(1729, bp1->virtual_function());
 
     // This is appropriately forbidden: virtual_function() is not const.
 //    base_datum const* bp2 = member_cast<base_datum>(s["dd"]);
-//    BOOST_TEST_EQUAL(1729, bp2->virtual_function());
+//    LMI_TEST_EQUAL(1729, bp2->virtual_function());
 
     // COMPILER !! The borland compiler doesn't find the const overload;
     // presumably it is defective in this respect.
     S const& r = s;
     base_datum const* bp3 = member_cast<base_datum>(r["dd"]);
-    BOOST_TEST_EQUAL(7, bp3->sane);
+    LMI_TEST_EQUAL(7, bp3->sane);
     // This is appropriately forbidden: virtual_function() is not const.
-//    BOOST_TEST_EQUAL(1729, bp3->virtual_function());
+//    LMI_TEST_EQUAL(1729, bp3->virtual_function());
 
     // If the original type is known, an explicit exact_cast is possible.
-    BOOST_TEST_EQUAL(1729, s["dd"].exact_cast<derived_datum>()->virtual_function());
+    LMI_TEST_EQUAL(1729, s["dd"].exact_cast<derived_datum>()->virtual_function());
 
     // If the original type isn't precisely unknown, but is known to
     // derive from a particular base class, then function template
@@ -484,17 +484,17 @@ void any_member_test::supplemental_test0()
     // type and safely return a pointer to the base class, provided
     // that it has sufficient knowledge of the inheritance hierarchy.
     // This obviates writing the type of the member pointed to.
-    BOOST_TEST_EQUAL(1729, member_cast<base_datum>(s["dd"])->virtual_function());
+    LMI_TEST_EQUAL(1729, member_cast<base_datum>(s["dd"])->virtual_function());
 
     // Of course, member_cast() should work with the exact type, too.
-    BOOST_TEST_EQUAL(1729, member_cast<derived_datum>(s["dd"])->virtual_function());
+    LMI_TEST_EQUAL(1729, member_cast<derived_datum>(s["dd"])->virtual_function());
 
     // Function template is_reconstitutable_as() ascertains whether
     // the unknown original type is derived from a given base class.
-    BOOST_TEST(is_reconstitutable_as<base_datum>(s["dd"]));
+    LMI_TEST(is_reconstitutable_as<base_datum>(s["dd"]));
 
     // is_reconstitutable_as() should not work with the exact type.
-    BOOST_TEST(!is_reconstitutable_as<derived_datum>(s["dd"]));
+    LMI_TEST(!is_reconstitutable_as<derived_datum>(s["dd"]));
     }
 
     {
@@ -538,20 +538,20 @@ void any_member_test::supplemental_test0()
 void any_member_test::supplemental_test1()
 {
     T r0;
-    BOOST_TEST_EQUAL(0  , r0.i0);
-    BOOST_TEST_EQUAL(0  , r0.i1);
-    BOOST_TEST_EQUAL(0.0, r0.d0);
-    BOOST_TEST_EQUAL("" , r0.s0);
+    LMI_TEST_EQUAL(0  , r0.i0);
+    LMI_TEST_EQUAL(0  , r0.i1);
+    LMI_TEST_EQUAL(0.0, r0.d0);
+    LMI_TEST_EQUAL("" , r0.s0);
 
     // Test writing through a pointer to member.
     int T::*x = &T::i0;
     r0.*x = 5;
-    BOOST_TEST_EQUAL(5  , r0.i0);
-    BOOST_TEST_EQUAL(0  , r0.i1);
-    BOOST_TEST_EQUAL(0.0, r0.d0);
+    LMI_TEST_EQUAL(5  , r0.i0);
+    LMI_TEST_EQUAL(0  , r0.i1);
+    LMI_TEST_EQUAL(0.0, r0.d0);
     double T::*y = &T::d0;
     r0.*y = 3.14159;
-    BOOST_TEST_EQUAL(3.14159, r0.d0);
+    LMI_TEST_EQUAL(3.14159, r0.d0);
 
     // Test writing through the map of ascribed member names.
     r0["i0"] = "999";
@@ -559,75 +559,75 @@ void any_member_test::supplemental_test1()
     r0["d0"] = "777";
     r0["q0"] = "8.125";
     r0["s0"] = "hello";
-    BOOST_TEST_EQUAL(999    , r0.i0);
-    BOOST_TEST_EQUAL(888000 , r0.i1);
-    BOOST_TEST_EQUAL(777.0  , r0.d0);
-    BOOST_TEST_EQUAL(8.125f , r0.q0);
-    BOOST_TEST_EQUAL("hello", r0.s0);
+    LMI_TEST_EQUAL(999    , r0.i0);
+    LMI_TEST_EQUAL(888000 , r0.i1);
+    LMI_TEST_EQUAL(777.0  , r0.d0);
+    LMI_TEST_EQUAL(8.125f , r0.q0);
+    LMI_TEST_EQUAL("hello", r0.s0);
 
     T r1;
     r1["i0"] = "135";
     r1["i1"] = "246";
     r1["d0"] = "888";
     r1["s0"] = "world";
-    BOOST_TEST_EQUAL(135    , r1.i0);
-    BOOST_TEST_EQUAL(246    , r1.i1);
-    BOOST_TEST_EQUAL(888.0  , r1.d0);
-    BOOST_TEST_EQUAL("world", r1.s0);
+    LMI_TEST_EQUAL(135    , r1.i0);
+    LMI_TEST_EQUAL(246    , r1.i1);
+    LMI_TEST_EQUAL(888.0  , r1.d0);
+    LMI_TEST_EQUAL("world", r1.s0);
 
     // Make sure that didn't affect the other instance of class T.
-    BOOST_TEST_EQUAL(999    , r0.i0);
-    BOOST_TEST_EQUAL(888e3  , r0.i1);
-    BOOST_TEST_EQUAL(777.0  , r0.d0);
-    BOOST_TEST_EQUAL("hello", r0.s0);
+    LMI_TEST_EQUAL(999    , r0.i0);
+    LMI_TEST_EQUAL(888e3  , r0.i1);
+    LMI_TEST_EQUAL(777.0  , r0.d0);
+    LMI_TEST_EQUAL("hello", r0.s0);
 
     r0["i0"] = "1234567";
-    BOOST_TEST_EQUAL(1234567, r0.i0);
-    BOOST_TEST_EQUAL(888e3  , r0.i1);
-    BOOST_TEST_EQUAL(777.0  , r0.d0);
-    BOOST_TEST_EQUAL("hello", r0.s0);
+    LMI_TEST_EQUAL(1234567, r0.i0);
+    LMI_TEST_EQUAL(888e3  , r0.i1);
+    LMI_TEST_EQUAL(777.0  , r0.d0);
+    LMI_TEST_EQUAL("hello", r0.s0);
 
     // Make sure that didn't affect the other instance of class T.
-    BOOST_TEST_EQUAL(135    , r1.i0);
-    BOOST_TEST_EQUAL(246    , r1.i1);
-    BOOST_TEST_EQUAL(888.0  , r1.d0);
-    BOOST_TEST_EQUAL("world", r1.s0);
+    LMI_TEST_EQUAL(135    , r1.i0);
+    LMI_TEST_EQUAL(246    , r1.i1);
+    LMI_TEST_EQUAL(888.0  , r1.d0);
+    LMI_TEST_EQUAL("world", r1.s0);
 
     // Works for base class Q too.
     T r2;
-    BOOST_TEST_EQUAL(0.0f, r2.q0);
+    LMI_TEST_EQUAL(0.0f, r2.q0);
 
     r2["q0"] = "123.456";
-    BOOST_TEST_EQUAL(123.456f, r2.q0);
+    LMI_TEST_EQUAL(123.456f, r2.q0);
 
     // Test equality operator.
-    BOOST_TEST(  r1["i0"] == r1["i0"]);
-    BOOST_TEST(  r1["i0"] != r0["i0"]);
-    BOOST_TEST(!(r1["i0"] == r0["i0"]));
+    LMI_TEST(  r1["i0"] == r1["i0"]);
+    LMI_TEST(  r1["i0"] != r0["i0"]);
+    LMI_TEST(!(r1["i0"] == r0["i0"]));
 
-    BOOST_TEST(  r1["d0"] == r1["d0"]);
-    BOOST_TEST(  r1["d0"] != r0["d0"]);
-    BOOST_TEST(!(r1["d0"] == r0["d0"]));
+    LMI_TEST(  r1["d0"] == r1["d0"]);
+    LMI_TEST(  r1["d0"] != r0["d0"]);
+    LMI_TEST(!(r1["d0"] == r0["d0"]));
 
     r1["d0"] = r0["d0"];
-    BOOST_TEST(  r1["d0"] == r1["d0"]);
-    BOOST_TEST(  r1["d0"] == r0["d0"]);
-    BOOST_TEST(!(r1["d0"] != r0["d0"]));
+    LMI_TEST(  r1["d0"] == r1["d0"]);
+    LMI_TEST(  r1["d0"] == r0["d0"]);
+    LMI_TEST(!(r1["d0"] != r0["d0"]));
 
     // Test equality operator with empty strings--we once observed
     // a problem in that case.
     r1["s0"] = "";
-    BOOST_TEST(  r1["s0"] == r1["s0"]);
-    BOOST_TEST(  r1["s0"] != r0["s0"]);
-    BOOST_TEST(!(r1["s0"] != r1["s0"]));
-    BOOST_TEST(!(r1["s0"] == r0["s0"]));
+    LMI_TEST(  r1["s0"] == r1["s0"]);
+    LMI_TEST(  r1["s0"] != r0["s0"]);
+    LMI_TEST(!(r1["s0"] != r1["s0"]));
+    LMI_TEST(!(r1["s0"] == r0["s0"]));
 
-    BOOST_TEST_THROW(r2["unknown_member"], std::runtime_error, "");
+    LMI_TEST_THROW(r2["unknown_member"], std::runtime_error, "");
 
     // Assigning a decimal-literal value to an integer isn't type
     // safe, and might require truncation, so it's forbidden.
-    BOOST_TEST_THROW(r2["i0"] = "888e3", std::invalid_argument, "");
-    BOOST_TEST_THROW(r2["i1"] = "999.9", std::invalid_argument, "");
+    LMI_TEST_THROW(r2["i0"] = "888e3", std::invalid_argument, "");
+    LMI_TEST_THROW(r2["i1"] = "999.9", std::invalid_argument, "");
 }
 
 // This test detects a problem with the original distribution of
@@ -650,7 +650,7 @@ struct R : public Bar<R>
 void any_member_test::como_433_test()
 {
     R s;
-    BOOST_TEST_EQUAL(&(s.c), &(s.*&R::c)); // Succeeds.
-    BOOST_TEST_EQUAL(&(s.i), &(s.*&R::i)); // Succeeds.
-    BOOST_TEST_EQUAL(&(s.d), &(s.*&R::d)); // Fails with original como.
+    LMI_TEST_EQUAL(&(s.c), &(s.*&R::c)); // Succeeds.
+    LMI_TEST_EQUAL(&(s.i), &(s.*&R::i)); // Succeeds.
+    LMI_TEST_EQUAL(&(s.d), &(s.*&R::d)); // Fails with original como.
 }

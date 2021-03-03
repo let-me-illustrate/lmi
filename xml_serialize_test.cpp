@@ -182,38 +182,38 @@ int test_main(int, char*[])
     // Not every floating-point number would remain invariant through
     // serialization, but the base of natural logarithms does: see the
     // documentation for value_cast<>().
-    BOOST_TEST(d0 == d1);
-    BOOST_TEST_EQUAL(d0, d1);
+    LMI_TEST(d0 == d1);
+    LMI_TEST_EQUAL(d0, d1);
 
-    BOOST_TEST(s0 == s1);
-    BOOST_TEST_EQUAL(s0, s1);
+    LMI_TEST(s0 == s1);
+    LMI_TEST_EQUAL(s0, s1);
 
-    // BOOST_TEST_EQUAL() inserts unequal values into an ostream, so
+    // LMI_TEST_EQUAL() inserts unequal values into an ostream, so
     // it can only be used with streamable types (as above).
 
-    BOOST_TEST(p0 == p1);
+    LMI_TEST(p0 == p1);
 
     // For Containers, test both
     //   P: c0 == c1
     //   Q: c0.size() == c1.size()
     // even though P implies Q, because Q AND ~P is easy to detect.
 
-    BOOST_TEST(v0 == v1);
-    BOOST_TEST_EQUAL(v0.size(), v1.size());
+    LMI_TEST(v0 == v1);
+    LMI_TEST_EQUAL(v0.size(), v1.size());
 
-    BOOST_TEST(o0 == o1);
-    BOOST_TEST_EQUAL(o0.size(), o1.size());
+    LMI_TEST(o0 == o1);
+    LMI_TEST_EQUAL(o0.size(), o1.size());
 
-    BOOST_TEST(u0 == u1);
-    BOOST_TEST_EQUAL(u0.size(), u1.size());
+    LMI_TEST(u0 == u1);
+    LMI_TEST_EQUAL(u0.size(), u1.size());
 
     std::string found
         ("Assertion 'parent.end() == parent.find(name.c_str())' failed."
         );
-    BOOST_TEST_THROW(write_erroneous(), std::runtime_error, found);
+    LMI_TEST_THROW(write_erroneous(), std::runtime_error, found);
 
     std::string not_found("Required element 'f' not found.");
-    BOOST_TEST_THROW(read_erroneous(), std::runtime_error, not_found);
+    LMI_TEST_THROW(read_erroneous(), std::runtime_error, not_found);
 
     std::cout << "  Speed tests...\n";
     std::cout << "  Write empty : " << TimeAnAliquot(mete_write_0) << '\n';

@@ -75,13 +75,13 @@ void cache_file_reads_test::test_preconditions()
     X x0("sample.ill");
 
     // The cache is accessible with or without an object.
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (x0.read_via_cache("sample.ill")->s()
         ,X::read_via_cache("sample.ill")->s()
         );
 
     // The file must exist.
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (X::read_via_cache("no_such_file")
         ,boost::filesystem::filesystem_error
         ,lmi_test::what_regex("no_such_file")

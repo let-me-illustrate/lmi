@@ -54,17 +54,17 @@ void ledger_test::test_default_initialization()
 {
     Ledger ledger(100, mce_finra, false, false, false);
 
-    BOOST_TEST_EQUAL(mce_finra, ledger.ledger_type());
-    BOOST_TEST_EQUAL(false    , ledger.nonillustrated());
-    BOOST_TEST_EQUAL(false    , ledger.no_can_issue());
-    BOOST_TEST_EQUAL(false    , ledger.is_composite());
-    BOOST_TEST_EQUAL(100      , ledger.greatest_lapse_dur());
+    LMI_TEST_EQUAL(mce_finra, ledger.ledger_type());
+    LMI_TEST_EQUAL(false    , ledger.nonillustrated());
+    LMI_TEST_EQUAL(false    , ledger.no_can_issue());
+    LMI_TEST_EQUAL(false    , ledger.is_composite());
+    LMI_TEST_EQUAL(100      , ledger.greatest_lapse_dur());
 
     LedgerInvariant const& invar = ledger.GetLedgerInvariant();
 
-    BOOST_TEST_EQUAL(100      , invar.GetLength());
-    BOOST_TEST_EQUAL(0        , invar.Age);
-    BOOST_TEST_EQUAL(100      , invar.EndtAge);
+    LMI_TEST_EQUAL(100      , invar.GetLength());
+    LMI_TEST_EQUAL(0        , invar.Age);
+    LMI_TEST_EQUAL(100      , invar.EndtAge);
 }
 
 void ledger_test::test_evaluator()
@@ -73,7 +73,7 @@ void ledger_test::test_evaluator()
     ledger.ledger_invariant_->WriteTsvFile = true;
     ledger_evaluator z {ledger.make_evaluator()};
     z.write_tsv("tsv_eraseme");
-    BOOST_TEST(0 == std::remove("tsv_eraseme.values.tsv"));
+    LMI_TEST(0 == std::remove("tsv_eraseme.values.tsv"));
 }
 
 void ledger_test::test_speed()
@@ -92,7 +92,7 @@ void ledger_test::test_speed()
         << "\n  write_tsv()      : " << TimeAnAliquot(f2)
         << std::endl
         ;
-    BOOST_TEST(0 == std::remove("tsv_eraseme.values.tsv"));
+    LMI_TEST(0 == std::remove("tsv_eraseme.values.tsv"));
 }
 
 int test_main(int, char*[])

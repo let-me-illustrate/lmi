@@ -172,7 +172,7 @@ Table values:
 
 void test_database_open()
 {
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (database("nonexistent")
         ,std::runtime_error
         ,lmi_test::what_regex("Unable to open 'nonexistent\\.ndx'")
@@ -183,7 +183,7 @@ void test_database_open()
     std::ofstream ofs("eraseme.ndx", ios_out_trunc_binary());
     ofs << ifs.rdbuf();
     ofs.close();
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (database("eraseme")
         ,std::runtime_error
         ,lmi_test::what_regex("Unable to open 'eraseme\\.dat'")
@@ -193,26 +193,26 @@ void test_database_open()
 void test_table_access_by_index()
 {
     database qx_cso(qx_cso_path);
-    BOOST_TEST(qx_cso_num_tables == qx_cso.tables_count());
+    LMI_TEST(qx_cso_num_tables == qx_cso.tables_count());
 
     // Just check that using valid indices doesn't throw.
     qx_cso.get_nth_table(0);
     qx_cso.get_nth_table(1);
     qx_cso.get_nth_table(qx_cso_num_tables - 1);
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (qx_cso.get_nth_table(-1)
         ,std::runtime_error
         ,""
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (qx_cso.get_nth_table(qx_cso_num_tables)
         ,std::out_of_range
         ,""
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (qx_cso.get_nth_table(qx_cso_num_tables + 1)
         ,std::out_of_range
         ,""
@@ -224,15 +224,15 @@ void test_table_access_by_number()
     database qx_cso(qx_cso_path);
 
     table::Number const number(qx_cso.get_nth_table(0).number());
-    BOOST_TEST_EQUAL(qx_cso.find_table(number).number(), number);
+    LMI_TEST_EQUAL(qx_cso.find_table(number).number(), number);
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (qx_cso.find_table(table::Number(0))
         ,std::invalid_argument
         ,"table number 0 not found."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (qx_cso.find_table(table::Number(0xbadf00d))
         ,std::invalid_argument
         ,"table number 195948557 not found."
@@ -245,8 +245,8 @@ void do_test_table_to_from_text(table const& table_orig)
     table const table_copy = table::read_from_text(text_orig);
     std::string const text_copy = table_copy.save_as_text();
 
-    BOOST_TEST(text_orig == text_copy);
-    BOOST_TEST(table_orig == table_copy);
+    LMI_TEST(text_orig == text_copy);
+    LMI_TEST(table_orig == table_copy);
 }
 
 void test_to_from_text()
@@ -265,7 +265,7 @@ void test_from_text()
     // continuation of the previous line should fail.
     {
     std::cout << "Expect 'Possibly unknown field...':" << std::endl;
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (table::read_from_text("Bloordyblop: yes\n" + simple_table_text)
         ,std::runtime_error
         ,lmi_test::what_regex("expected a field name")
@@ -277,25 +277,25 @@ void test_from_text()
     {
     std_out_redirector std_out_redir;
     table::read_from_text("Comments: no\nBloordyblop: yes\n" + simple_table_text);
-    BOOST_TEST(std_out_redir.take_output().find("Bloordyblop") != std::string::npos);
+    LMI_TEST(std_out_redir.take_output().find("Bloordyblop") != std::string::npos);
     }
 
     // Using too many values should fail.
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (table::read_from_text(simple_table_text + "  2  0.34567\n")
         ,std::runtime_error
         ,lmi_test::what_regex("expected a field")
         );
 
     // And so should using too few of them: chop off the last line to test.
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (table::read_from_text(simple_table_header + "  0  0.12345")
         ,std::runtime_error
         ,lmi_test::what_regex("missing")
         );
 
     // Using bad hash value should fail.
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (table::read_from_text(simple_table_text + "Hash value: 1234567890\n")
         ,std::runtime_error
         ,lmi_test::what_regex("hash value 1234567890")
@@ -320,11 +320,11 @@ void test_save()
 
     bool okay_ndx0 = files_are_identical("eraseme0.ndx", qx_ins_path + ".ndx");
     bool okay_dat0 = files_are_identical("eraseme0.dat", qx_ins_path + ".dat");
-    BOOST_TEST(okay_ndx0);
-    BOOST_TEST(okay_dat0);
+    LMI_TEST(okay_ndx0);
+    LMI_TEST(okay_dat0);
 
     database db_tmp("eraseme0");
-    BOOST_TEST_EQUAL(qx_ins.tables_count(), db_tmp.tables_count());
+    LMI_TEST_EQUAL(qx_ins.tables_count(), db_tmp.tables_count());
 
     // File 'eraseme0.dat' is still open and cannot be removed yet.
     // Saving 'db_tmp' closes the file so that it can be removed.
@@ -333,19 +333,19 @@ void test_save()
     // Leave the files for analysis if they didn't match.
     if(okay_ndx0 && okay_dat0)
         {
-        BOOST_TEST(0 == std::remove("eraseme0.ndx"));
-        BOOST_TEST(0 == std::remove("eraseme0.dat"));
+        LMI_TEST(0 == std::remove("eraseme0.ndx"));
+        LMI_TEST(0 == std::remove("eraseme0.dat"));
         }
 
     bool okay_ndx1 = files_are_identical("eraseme1.ndx", qx_ins_path + ".ndx");
     bool okay_dat1 = files_are_identical("eraseme1.dat", qx_ins_path + ".dat");
-    BOOST_TEST(okay_ndx1);
-    BOOST_TEST(okay_dat1);
+    LMI_TEST(okay_ndx1);
+    LMI_TEST(okay_dat1);
     // Leave the files for analysis if they didn't match.
     if(okay_ndx1 && okay_dat1)
         {
-        BOOST_TEST(0 == std::remove("eraseme1.ndx"));
-        BOOST_TEST(0 == std::remove("eraseme1.dat"));
+        LMI_TEST(0 == std::remove("eraseme1.ndx"));
+        LMI_TEST(0 == std::remove("eraseme1.dat"));
         }
 }
 
@@ -357,16 +357,16 @@ void test_add_table()
     int const count = qx_ins.tables_count();
 
     qx_ins.append_table(t);
-    BOOST_TEST_EQUAL(qx_ins.tables_count(), count + 1);
+    LMI_TEST_EQUAL(qx_ins.tables_count(), count + 1);
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (qx_ins.append_table(t)
         ,std::invalid_argument
         ,"table number 1 already exists."
         );
 
     qx_ins.add_or_replace_table(t);
-    BOOST_TEST_EQUAL(qx_ins.tables_count(), count + 1);
+    LMI_TEST_EQUAL(qx_ins.tables_count(), count + 1);
 }
 
 void test_delete()
@@ -374,24 +374,24 @@ void test_delete()
     database qx_ins(qx_ins_path);
     int const initial_count = qx_ins.tables_count();
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (qx_ins.delete_table(table::Number(1))
         ,std::invalid_argument
         ,lmi_test::what_regex("not found")
         );
 
     qx_ins.delete_table(table::Number(250));
-    BOOST_TEST_EQUAL(qx_ins.tables_count(), initial_count - 1);
+    LMI_TEST_EQUAL(qx_ins.tables_count(), initial_count - 1);
 
     qx_ins.delete_table(table::Number(202));
-    BOOST_TEST_EQUAL(qx_ins.tables_count(), initial_count - 2);
+    LMI_TEST_EQUAL(qx_ins.tables_count(), initial_count - 2);
 
     test_file_eraser erase_ndx("eraseme.ndx");
     test_file_eraser erase_dat("eraseme.dat");
     qx_ins.save("eraseme");
 
     database db_tmp("eraseme");
-    BOOST_TEST_EQUAL(db_tmp.tables_count(), initial_count - 2);
+    LMI_TEST_EQUAL(db_tmp.tables_count(), initial_count - 2);
 }
 
 void do_test_copy(std::string const& path)
@@ -413,7 +413,7 @@ void do_test_copy(std::string const& path)
         auto const orig_text = orig_table.save_as_text();
         table const& new_table = table::read_from_text(orig_text);
         auto const new_text = new_table.save_as_text();
-        BOOST_TEST_EQUAL(new_text, orig_text);
+        LMI_TEST_EQUAL(new_text, orig_text);
 
         db_new.append_table(new_table);
         }
@@ -423,7 +423,7 @@ void do_test_copy(std::string const& path)
 
     // And read it back.
     database db_new(index_ss, data_ss);
-    BOOST_TEST_EQUAL(db_new.tables_count(), tables_count);
+    LMI_TEST_EQUAL(db_new.tables_count(), tables_count);
 
     // Compare binary rate-table files logically rather than literally.
     // These files are unlikely to be identical because the order of
@@ -431,7 +431,7 @@ void do_test_copy(std::string const& path)
     // same as the order in the index file.
     for(int i = 0; i != tables_count; ++i)
         {
-        BOOST_TEST_EQUAL
+        LMI_TEST_EQUAL
             (db_new.get_nth_table(i).save_as_text()
             ,db_orig.get_nth_table(i).save_as_text()
             );
@@ -456,26 +456,26 @@ void test_copy()
 void test_decimal_deduction()
 {
     //                                                 1 234567890123456
-    BOOST_TEST_EQUAL( 9, deduce_number_of_decimals("0002.123456789000001"));
-    BOOST_TEST_EQUAL( 8, deduce_number_of_decimals("0002.123456789999991"));
+    LMI_TEST_EQUAL( 9, deduce_number_of_decimals("0002.123456789000001"));
+    LMI_TEST_EQUAL( 8, deduce_number_of_decimals("0002.123456789999991"));
 
-    BOOST_TEST_EQUAL( 8, deduce_number_of_decimals("0002.12345678999999 "));
-    BOOST_TEST_EQUAL(13, deduce_number_of_decimals("0002.1234567899999  "));
+    LMI_TEST_EQUAL( 8, deduce_number_of_decimals("0002.12345678999999 "));
+    LMI_TEST_EQUAL(13, deduce_number_of_decimals("0002.1234567899999  "));
 
-    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   0.000000000000000"));
-    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   0.000000000000000000000000"));
+    LMI_TEST_EQUAL( 0, deduce_number_of_decimals("   0.000000000000000"));
+    LMI_TEST_EQUAL( 0, deduce_number_of_decimals("   0.000000000000000000000000"));
     // Fails, but value_cast can't return this.
-//  BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   0.0              "));
-    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   0.               "));
+//  LMI_TEST_EQUAL( 0, deduce_number_of_decimals("   0.0              "));
+    LMI_TEST_EQUAL( 0, deduce_number_of_decimals("   0.               "));
     // Fails, but value_cast can't return this.
-//  BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("    .0              "));
-    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("    .               "));
-    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   0                "));
-    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   1                "));
-    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   9                "));
+//  LMI_TEST_EQUAL( 0, deduce_number_of_decimals("    .0              "));
+    LMI_TEST_EQUAL( 0, deduce_number_of_decimals("    .               "));
+    LMI_TEST_EQUAL( 0, deduce_number_of_decimals("   0                "));
+    LMI_TEST_EQUAL( 0, deduce_number_of_decimals("   1                "));
+    LMI_TEST_EQUAL( 0, deduce_number_of_decimals("   9                "));
 
     //                                                123456789012345678
-    BOOST_TEST_EQUAL( 5, deduce_number_of_decimals("0.012830000000000001"));
+    LMI_TEST_EQUAL( 5, deduce_number_of_decimals("0.012830000000000001"));
 }
 
 int test_main(int, char*[])

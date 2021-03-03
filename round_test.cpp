@@ -148,7 +148,7 @@ bool test_one_case
     RealType observed = roundFDL(unrounded);
     // C++'s overloaded round should behave as if it calls C99's
     // round(), roundf(), or roundl() as appropriate.
-    BOOST_TEST_EQUAL(std::round(unrounded), observed);
+    LMI_TEST_EQUAL(std::round(unrounded), observed);
 
     max_prec_real abs_error = std::fabs(observed - expected);
     // Nonstandardly define relative error in terms of
@@ -256,9 +256,9 @@ void test_various_float_types
     ,long double expected
     )
 {
-    BOOST_TEST((test_one_case(static_cast<float >(unrounded), static_cast<float >(expected))));
-    BOOST_TEST((test_one_case(static_cast<double>(unrounded), static_cast<double>(expected))));
-    BOOST_TEST((test_one_case(/* long double */  (unrounded), /* long double */  (expected))));
+    LMI_TEST((test_one_case(static_cast<float >(unrounded), static_cast<float >(expected))));
+    LMI_TEST((test_one_case(static_cast<double>(unrounded), static_cast<double>(expected))));
+    LMI_TEST((test_one_case(/* long double */  (unrounded), /* long double */  (expected))));
 }
 
 // C99 7.12.9.6: round "to the nearest integer value in floating-point
@@ -392,9 +392,9 @@ void test_rounding()
     //   static_cast<float>(nextafter(0.5L, 0.0L))
     // need not be distinct from 0.0F.
 
-    BOOST_TEST((test_one_case(nextafterf(0.5F, 0.0F), 0.0F)));
-    BOOST_TEST((test_one_case(nextafter (0.5 , 0.0 ), 0.0 )));
-    BOOST_TEST((test_one_case(nextafterl(0.5L, 0.0L), 0.0L)));
+    LMI_TEST((test_one_case(nextafterf(0.5F, 0.0F), 0.0F)));
+    LMI_TEST((test_one_case(nextafter (0.5 , 0.0 ), 0.0 )));
+    LMI_TEST((test_one_case(nextafterl(0.5L, 0.0L), 0.0L)));
 }
 
 int test_all_modes(bool synchronize)

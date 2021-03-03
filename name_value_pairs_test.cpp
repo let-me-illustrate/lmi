@@ -44,7 +44,7 @@ int test_main(int, char*[])
 
     {
     std::ofstream os(filename0.c_str(), ios_out_trunc_binary());
-    BOOST_TEST(os.good());
+    LMI_TEST(os.good());
 
     os
         << "a=a\n"
@@ -69,42 +69,42 @@ int test_main(int, char*[])
 
     name_value_pairs nv_pairs_0(filename0);
     std::map<std::string, std::string> m0 = nv_pairs_0.map();
-    BOOST_TEST(0 == std::remove(filename0.c_str()));
+    LMI_TEST(0 == std::remove(filename0.c_str()));
 
-    BOOST_TEST_EQUAL(15, m0.size());
+    LMI_TEST_EQUAL(15, m0.size());
 
     // Test string_value().
 
-    BOOST_TEST_EQUAL("a"     , nv_pairs_0.string_value("a"));
-    BOOST_TEST_EQUAL("b"     , nv_pairs_0.string_value("b"));
-    BOOST_TEST_EQUAL(""      , nv_pairs_0.string_value("c"));
-    BOOST_TEST_EQUAL("="     , nv_pairs_0.string_value("d"));
-    BOOST_TEST_EQUAL("1=."   , nv_pairs_0.string_value("e"));
+    LMI_TEST_EQUAL("a"     , nv_pairs_0.string_value("a"));
+    LMI_TEST_EQUAL("b"     , nv_pairs_0.string_value("b"));
+    LMI_TEST_EQUAL(""      , nv_pairs_0.string_value("c"));
+    LMI_TEST_EQUAL("="     , nv_pairs_0.string_value("d"));
+    LMI_TEST_EQUAL("1=."   , nv_pairs_0.string_value("e"));
 #if !defined LMI_MSW
-    BOOST_TEST_EQUAL(" f \r" , nv_pairs_0.string_value("f"));
+    LMI_TEST_EQUAL(" f \r" , nv_pairs_0.string_value("f"));
 #else  // defined LMI_MSW
-    BOOST_TEST_EQUAL(" f "   , nv_pairs_0.string_value("f"));
+    LMI_TEST_EQUAL(" f "   , nv_pairs_0.string_value("f"));
 #endif // defined LMI_MSW
-    BOOST_TEST_EQUAL("a test", nv_pairs_0.string_value("this"));
+    LMI_TEST_EQUAL("a test", nv_pairs_0.string_value("this"));
 
     // Test numeric_value().
 
-    BOOST_TEST_EQUAL( 2.0    , nv_pairs_0.numeric_value("z"));
-    BOOST_TEST_EQUAL(-3.142  , nv_pairs_0.numeric_value("y"));
-    BOOST_TEST_EQUAL( 2.718  , nv_pairs_0.numeric_value("x"));
-    BOOST_TEST_EQUAL( 2.718  , nv_pairs_0.numeric_value("w"));
-    BOOST_TEST_EQUAL( 2.718  , nv_pairs_0.numeric_value("v"));
-    BOOST_TEST_EQUAL( 0.0    , nv_pairs_0.numeric_value("u"));
-    BOOST_TEST_EQUAL( 0.0    , nv_pairs_0.numeric_value("t"));
-    BOOST_TEST_EQUAL( 0.0    , nv_pairs_0.numeric_value("s"));
+    LMI_TEST_EQUAL( 2.0    , nv_pairs_0.numeric_value("z"));
+    LMI_TEST_EQUAL(-3.142  , nv_pairs_0.numeric_value("y"));
+    LMI_TEST_EQUAL( 2.718  , nv_pairs_0.numeric_value("x"));
+    LMI_TEST_EQUAL( 2.718  , nv_pairs_0.numeric_value("w"));
+    LMI_TEST_EQUAL( 2.718  , nv_pairs_0.numeric_value("v"));
+    LMI_TEST_EQUAL( 0.0    , nv_pairs_0.numeric_value("u"));
+    LMI_TEST_EQUAL( 0.0    , nv_pairs_0.numeric_value("t"));
+    LMI_TEST_EQUAL( 0.0    , nv_pairs_0.numeric_value("s"));
 
-    BOOST_TEST_EQUAL("2.718" , nv_pairs_0.string_numeric_value("v"));
-    BOOST_TEST_EQUAL("0"     , nv_pairs_0.string_numeric_value("s"));
+    LMI_TEST_EQUAL("2.718" , nv_pairs_0.string_numeric_value("v"));
+    LMI_TEST_EQUAL("0"     , nv_pairs_0.string_numeric_value("s"));
 
     std::string filename1(tmp + "/nonexistent_name_value_pairs_test_file");
     name_value_pairs nv_pairs_1(filename1);
     std::map<std::string, std::string> m1 = nv_pairs_1.map();
-    BOOST_TEST_EQUAL(0, m1.size());
+    LMI_TEST_EQUAL(0, m1.size());
 
     fs::remove(tmpdir);
 

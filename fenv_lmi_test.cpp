@@ -51,7 +51,7 @@ std::bitset<CHAR_BIT * sizeof(std::uint32_t)> bits(std::uint32_t i)
 }
 
 #if defined LMI_X87
-#   define BOOST_TEST_EQUAL_BITS(a,b)                     \
+#   define LMI_TEST_EQUAL_BITS(a,b)                       \
         if((a) == (b))                                    \
             lmi_test::record_success();                   \
         else                                              \
@@ -60,7 +60,7 @@ std::bitset<CHAR_BIT * sizeof(std::uint32_t)> bits(std::uint32_t i)
             lmi_test::error_stream() << "Unequal:";       \
             lmi_test::error_stream() << bits(a);          \
             lmi_test::error_stream() << bits(b);          \
-            lmi_test::error_stream() << BOOST_TEST_FLUSH; \
+            lmi_test::error_stream() << LMI_TEST_FLUSH;   \
             }                                             \
 
 #endif // defined LMI_X87
@@ -70,24 +70,24 @@ int test_main(int, char*[])
 #if defined LMI_X87
     std::uint16_t cw = 0x0000;
 
-    BOOST_TEST_EQUAL_BITS(0x037f, msvc_to_intel(0x0008001f));
+    LMI_TEST_EQUAL_BITS(0x037f, msvc_to_intel(0x0008001f));
 
-    BOOST_TEST_EQUAL_BITS(0x0008001f, intel_to_msvc(0x037f));
+    LMI_TEST_EQUAL_BITS(0x0008001f, intel_to_msvc(0x037f));
 
     cw = 0x037f;
-    BOOST_TEST_EQUAL_BITS(0x0008001f, intel_to_msvc(cw));
-    BOOST_TEST_EQUAL_BITS(cw, msvc_to_intel(0x0008001f));
-    BOOST_TEST_EQUAL_BITS(cw, msvc_to_intel(intel_to_msvc(cw)));
+    LMI_TEST_EQUAL_BITS(0x0008001f, intel_to_msvc(cw));
+    LMI_TEST_EQUAL_BITS(cw, msvc_to_intel(0x0008001f));
+    LMI_TEST_EQUAL_BITS(cw, msvc_to_intel(intel_to_msvc(cw)));
 
     cw = 0x027f;
-    BOOST_TEST_EQUAL_BITS(cw, msvc_to_intel(intel_to_msvc(cw)));
+    LMI_TEST_EQUAL_BITS(cw, msvc_to_intel(intel_to_msvc(cw)));
 
     cw = 0x037f;
-    BOOST_TEST_EQUAL_BITS(cw, msvc_to_intel(intel_to_msvc(cw)));
+    LMI_TEST_EQUAL_BITS(cw, msvc_to_intel(intel_to_msvc(cw)));
 
     // Most reserved bits should be left as initialized by FINIT...
     x87_control_word(0x0000);
-    BOOST_TEST_EQUAL_BITS(0x0040, x87_control_word());
+    LMI_TEST_EQUAL_BITS(0x0040, x87_control_word());
 
     // ...but bit 12, the deprecated IC, remains settable.
     x87_control_word
@@ -96,7 +96,7 @@ int test_main(int, char*[])
             )
         );
 
-    BOOST_TEST_EQUAL_BITS
+    LMI_TEST_EQUAL_BITS
         (intel_control_word_parameters::reserved_values
         ,~0x01000UL & x87_control_word()
         );
@@ -110,7 +110,7 @@ int test_main(int, char*[])
 
     intel_control_word invalid_intel_control_word(0);
     invalid_intel_control_word.pc(e_x87_precision (0x01));
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (msvc_control_word  msvc_error (invalid_intel_control_word)
         ,std::logic_error
         ,"Invalid fpu PC value."
@@ -118,34 +118,34 @@ int test_main(int, char*[])
 
     msvc_control_word  invalid_msvc_control_word (0);
     invalid_msvc_control_word.pc (e_msvc_precision(0x03));
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (intel_control_word intel_error(invalid_msvc_control_word )
         ,std::logic_error
         ,"Invalid fpu PC value."
         );
 
     x87_control_word(0x027f);
-    BOOST_TEST_EQUAL_BITS(0x027f, x87_control_word());
+    LMI_TEST_EQUAL_BITS(0x027f, x87_control_word());
 
     x87_control_word(0x037f);
-    BOOST_TEST_EQUAL_BITS(0x037f, x87_control_word());
+    LMI_TEST_EQUAL_BITS(0x037f, x87_control_word());
 
     x87_control_word(default_x87_control_word());
-    BOOST_TEST_EQUAL_BITS(0x037f, x87_control_word());
+    LMI_TEST_EQUAL_BITS(0x037f, x87_control_word());
 
     fenv_initialize();
-    BOOST_TEST_EQUAL_BITS(0x037f, x87_control_word());
+    LMI_TEST_EQUAL_BITS(0x037f, x87_control_word());
 
 #   if defined __MINGW32__
     // Test the C99 method, as extended by MinGW.
-    BOOST_TEST_EQUAL(0, std::fesetenv(FE_PC53_ENV));
-    BOOST_TEST_EQUAL_BITS(0x027f, x87_control_word());
+    LMI_TEST_EQUAL(0, std::fesetenv(FE_PC53_ENV));
+    LMI_TEST_EQUAL_BITS(0x027f, x87_control_word());
 
-    BOOST_TEST_EQUAL(0, std::fesetenv(FE_PC64_ENV));
-    BOOST_TEST_EQUAL_BITS(0x037f, x87_control_word());
+    LMI_TEST_EQUAL(0, std::fesetenv(FE_PC64_ENV));
+    LMI_TEST_EQUAL_BITS(0x037f, x87_control_word());
 
-    BOOST_TEST_EQUAL(0, std::fesetenv(FE_DFL_ENV));
-    BOOST_TEST_EQUAL_BITS(0x037f, x87_control_word());
+    LMI_TEST_EQUAL(0, std::fesetenv(FE_DFL_ENV));
+    LMI_TEST_EQUAL_BITS(0x037f, x87_control_word());
 #   endif // defined __MINGW32__
 
 #   if defined _MCW_EM
@@ -154,7 +154,7 @@ int test_main(int, char*[])
     _control87(_MCW_EM,  _MCW_EM);
     _control87(_RC_NEAR, _MCW_RC);
     _control87(_PC_64,   _MCW_PC);
-    BOOST_TEST_EQUAL_BITS(0x037f, x87_control_word());
+    LMI_TEST_EQUAL_BITS(0x037f, x87_control_word());
 #   endif // defined _MCW_EM
 
     // Test precision and rounding control. These spotchecks are
@@ -162,11 +162,11 @@ int test_main(int, char*[])
 
     fenv_initialize();
     fenv_precision(fe_dblprec);
-    BOOST_TEST_EQUAL_BITS(0x027f, x87_control_word());
+    LMI_TEST_EQUAL_BITS(0x027f, x87_control_word());
 
     fenv_initialize();
     fenv_rounding(fe_towardzero);
-    BOOST_TEST_EQUAL_BITS(0x0f7f, x87_control_word());
+    LMI_TEST_EQUAL_BITS(0x0f7f, x87_control_word());
 
 #endif // defined LMI_X87
 
@@ -174,13 +174,13 @@ int test_main(int, char*[])
 
 #if defined LMI_X87
     fenv_precision  (fe_fltprec);
-    BOOST_TEST_EQUAL(fe_fltprec , fenv_precision());
+    LMI_TEST_EQUAL(fe_fltprec , fenv_precision());
 
     fenv_precision  (fe_dblprec);
-    BOOST_TEST_EQUAL(fe_dblprec , fenv_precision());
+    LMI_TEST_EQUAL(fe_dblprec , fenv_precision());
 
     fenv_precision  (fe_ldblprec);
-    BOOST_TEST_EQUAL(fe_ldblprec, fenv_precision());
+    LMI_TEST_EQUAL(fe_ldblprec, fenv_precision());
 #endif // defined LMI_X87
 
     // Test rounding control.
@@ -189,35 +189,35 @@ int test_main(int, char*[])
 //    fenv_rounding   (99999);
 
     fenv_rounding   (fe_tonearest);
-    BOOST_TEST_EQUAL(fe_tonearest , fenv_rounding());
-    BOOST_TEST_EQUAL(-2, std::rint(-2.5));
-    BOOST_TEST_EQUAL(-2, std::rint(-1.5));
-    BOOST_TEST_EQUAL( 2, std::rint( 1.5));
-    BOOST_TEST_EQUAL( 2, std::rint( 2.5));
+    LMI_TEST_EQUAL(fe_tonearest , fenv_rounding());
+    LMI_TEST_EQUAL(-2, std::rint(-2.5));
+    LMI_TEST_EQUAL(-2, std::rint(-1.5));
+    LMI_TEST_EQUAL( 2, std::rint( 1.5));
+    LMI_TEST_EQUAL( 2, std::rint( 2.5));
 
     fenv_rounding   (fe_downward);
-    BOOST_TEST_EQUAL(fe_downward  , fenv_rounding());
-    BOOST_TEST_EQUAL(-3, std::rint(-2.5));
-    BOOST_TEST_EQUAL(-2, std::rint(-1.5));
-    BOOST_TEST_EQUAL( 1, std::rint( 1.5));
-    BOOST_TEST_EQUAL( 2, std::rint( 2.5));
+    LMI_TEST_EQUAL(fe_downward  , fenv_rounding());
+    LMI_TEST_EQUAL(-3, std::rint(-2.5));
+    LMI_TEST_EQUAL(-2, std::rint(-1.5));
+    LMI_TEST_EQUAL( 1, std::rint( 1.5));
+    LMI_TEST_EQUAL( 2, std::rint( 2.5));
 
     fenv_rounding   (fe_upward);
-    BOOST_TEST_EQUAL(fe_upward    , fenv_rounding());
-    BOOST_TEST_EQUAL(-2, std::rint(-2.5));
-    BOOST_TEST_EQUAL(-1, std::rint(-1.5));
-    BOOST_TEST_EQUAL( 2, std::rint( 1.5));
-    BOOST_TEST_EQUAL( 3, std::rint( 2.5));
+    LMI_TEST_EQUAL(fe_upward    , fenv_rounding());
+    LMI_TEST_EQUAL(-2, std::rint(-2.5));
+    LMI_TEST_EQUAL(-1, std::rint(-1.5));
+    LMI_TEST_EQUAL( 2, std::rint( 1.5));
+    LMI_TEST_EQUAL( 3, std::rint( 2.5));
 
     fenv_rounding   (fe_towardzero);
-    BOOST_TEST_EQUAL(fe_towardzero, fenv_rounding());
-    BOOST_TEST_EQUAL(-2, std::rint(-2.5));
-    BOOST_TEST_EQUAL(-1, std::rint(-1.5));
-    BOOST_TEST_EQUAL( 1, std::rint( 1.5));
-    BOOST_TEST_EQUAL( 2, std::rint( 2.5));
+    LMI_TEST_EQUAL(fe_towardzero, fenv_rounding());
+    LMI_TEST_EQUAL(-2, std::rint(-2.5));
+    LMI_TEST_EQUAL(-1, std::rint(-1.5));
+    LMI_TEST_EQUAL( 1, std::rint( 1.5));
+    LMI_TEST_EQUAL( 2, std::rint( 2.5));
 
     fenv_initialize();
-    BOOST_TEST(fenv_validate());
+    LMI_TEST(fenv_validate());
 
 #if defined LMI_X87
     std::cout
@@ -228,40 +228,40 @@ int test_main(int, char*[])
 
     fenv_initialize();
     fenv_precision(fe_dblprec);
-    BOOST_TEST(fenv_validate(e_fenv_indulge_0x027f));
-    BOOST_TEST(fenv_validate());
+    LMI_TEST(fenv_validate(e_fenv_indulge_0x027f));
+    LMI_TEST(fenv_validate());
 
     std::cout << "\n[Expect an induced '0x007f' warning...\n" << std::endl;
     fenv_precision(fe_fltprec);
-    BOOST_TEST(!fenv_validate());
+    LMI_TEST(!fenv_validate());
     std::cout << "...end of induced warning]." << std::endl;
-    BOOST_TEST(fenv_validate());
+    LMI_TEST(fenv_validate());
 
     std::cout << "\n[Expect an induced '0x007f' warning...\n" << std::endl;
     fenv_precision(fe_fltprec);
-    BOOST_TEST(!fenv_validate(e_fenv_indulge_0x027f));
+    LMI_TEST(!fenv_validate(e_fenv_indulge_0x027f));
     std::cout << "...end of induced warning]." << std::endl;
-    BOOST_TEST(fenv_validate());
+    LMI_TEST(fenv_validate());
 
-    BOOST_TEST(0 == fenv_guard::instance_count());
+    LMI_TEST(0 == fenv_guard::instance_count());
 
     fenv_precision(fe_fltprec);
     {
     fenv_guard fg;
-    BOOST_TEST(1 == fenv_guard::instance_count());
+    LMI_TEST(1 == fenv_guard::instance_count());
     }
-    BOOST_TEST(0 == fenv_guard::instance_count());
-    BOOST_TEST(fenv_validate());
+    LMI_TEST(0 == fenv_guard::instance_count());
+    LMI_TEST(fenv_validate());
 
     std::cout << "\n[Expect an induced '0x027f' warning...\n" << std::endl;
     {
     fenv_guard fg;
-    BOOST_TEST(1 == fenv_guard::instance_count());
+    LMI_TEST(1 == fenv_guard::instance_count());
     fenv_precision(fe_dblprec);
     }
-    BOOST_TEST(0 == fenv_guard::instance_count());
+    LMI_TEST(0 == fenv_guard::instance_count());
     std::cout << "...end of induced warning]." << std::endl;
-    BOOST_TEST(fenv_validate());
+    LMI_TEST(fenv_validate());
 #endif // defined LMI_X87
 
     return 0;

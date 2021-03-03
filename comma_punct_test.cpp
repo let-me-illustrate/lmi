@@ -41,7 +41,7 @@ int test_main(int, char*[])
     oss.setf(std::ios_base::fixed, std::ios_base::floatfield);
 
     oss << std::setprecision(2) << -999;
-    BOOST_TEST_EQUAL("-999", oss.str());
+    LMI_TEST_EQUAL("-999", oss.str());
 
     return EXIT_SUCCESS;
 }

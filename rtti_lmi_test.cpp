@@ -42,31 +42,31 @@ void RttiLmiTest::TestTypeInfo()
     lmi::TypeInfo ti0(typeid(double));
     lmi::TypeInfo ti1(typeid(int));
     ti0 = ti1;
-    BOOST_TEST(typeid(int) == *ti0.ti_);
+    LMI_TEST(typeid(int) == *ti0.ti_);
 
     // CopyConstructible.
 
     lmi::TypeInfo ti2(ti1);
-    BOOST_TEST(typeid(int) == *ti2.ti_);
+    LMI_TEST(typeid(int) == *ti2.ti_);
 
     // EqualityComparable.
 
-    BOOST_TEST(ti1 == ti2);
+    LMI_TEST(ti1 == ti2);
 
     // LessThanComparable.
 
-    BOOST_TEST(!(ti1 < ti2));
+    LMI_TEST(!(ti1 < ti2));
 
     // StreamInsertible.
 
     std::ostringstream oss;
     oss << ti1;
-    BOOST_TEST_EQUAL(oss.str(), lmi::detail::Demangle(typeid(int).name()));
+    LMI_TEST_EQUAL(oss.str(), lmi::detail::Demangle(typeid(int).name()));
 
     // Usable with UDTs.
 
     ti1 = typeid(X); // Converting ctor.
-    BOOST_TEST_EQUAL(ti1.Name(), lmi::detail::Demangle(typeid(X).name()));
+    LMI_TEST_EQUAL(ti1.Name(), lmi::detail::Demangle(typeid(X).name()));
 
     // Usable with containers.
 

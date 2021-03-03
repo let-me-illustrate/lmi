@@ -125,7 +125,7 @@ namespace lmi_test
     /// Preserve regex ctor argument so stream inserter can write it.
     ///
     /// The sole motivation for this simple std::regex wrapper is to
-    /// let BOOST_TEST_THROW print the regex in diagnostics like:
+    /// let LMI_TEST_THROW print the regex in diagnostics like:
     ///   "Caught 'XYZ' but expected '[0-9]*'."
 
     class what_regex

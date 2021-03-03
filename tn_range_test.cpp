@@ -137,19 +137,19 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
     T const maxT = std::numeric_limits<T>::max();
     T const minT = std::numeric_limits<T>::lowest();
 
-    INVOKE_BOOST_TEST(!is_strictly_between_extrema(maxT), file, line);
+    INVOKE_LMI_TEST(!is_strictly_between_extrema(maxT), file, line);
     if(!std::is_same_v<bool,typename std::remove_cv<T>::type>)
         {
-        INVOKE_BOOST_TEST( is_strictly_between_extrema<T>(1), file, line);
+        INVOKE_LMI_TEST( is_strictly_between_extrema<T>(1), file, line);
         }
 
-    INVOKE_BOOST_TEST_EQUAL( 0, signum(T( 0)), file, line);
-    INVOKE_BOOST_TEST_EQUAL( 1, signum(T( 1)), file, line);
+    INVOKE_LMI_TEST_EQUAL( 0, signum(T( 0)), file, line);
+    INVOKE_LMI_TEST_EQUAL( 1, signum(T( 1)), file, line);
 
-    INVOKE_BOOST_TEST_EQUAL( 1, signum(maxT), file, line);
+    INVOKE_LMI_TEST_EQUAL( 1, signum(maxT), file, line);
 
-    INVOKE_BOOST_TEST_EQUAL(true , is_exact_integer(T( 0)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(true , is_exact_integer(T( 1)), file, line);
+    INVOKE_LMI_TEST_EQUAL(true , is_exact_integer(T( 0)), file, line);
+    INVOKE_LMI_TEST_EQUAL(true , is_exact_integer(T( 1)), file, line);
 
     if(minT < 0)
         {
@@ -157,9 +157,9 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
         // diagnostics. An 'is_bool' conditional wouldn't prevent the
         // macros from being expanded. See:
         //   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00029.html
-        INVOKE_BOOST_TEST_EQUAL(T(-1), signum(T(-1)), file, line);
-        INVOKE_BOOST_TEST_EQUAL(T(-1), signum(minT ), file, line);
-        INVOKE_BOOST_TEST_EQUAL(true , is_exact_integer(T(-1)), file, line);
+        INVOKE_LMI_TEST_EQUAL(T(-1), signum(T(-1)), file, line);
+        INVOKE_LMI_TEST_EQUAL(T(-1), signum(minT ), file, line);
+        INVOKE_LMI_TEST_EQUAL(true , is_exact_integer(T(-1)), file, line);
         }
 
     // Integer types truncate the argument, always resulting in an
@@ -167,8 +167,8 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
     bool volatile exact = std::numeric_limits<T>::is_exact;
     if(!exact)
         {
-        INVOKE_BOOST_TEST_EQUAL(false, is_exact_integer(T( 0.5)), file, line);
-        INVOKE_BOOST_TEST_EQUAL(false, is_exact_integer(T(1.07)), file, line);
+        INVOKE_LMI_TEST_EQUAL(false, is_exact_integer(T( 0.5)), file, line);
+        INVOKE_LMI_TEST_EQUAL(false, is_exact_integer(T(1.07)), file, line);
         }
 
     bool volatile is_iec559 = std::numeric_limits<T>::is_iec559;
@@ -176,29 +176,29 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
     if(is_iec559 && has_infinity)
         {
         T const infT = std::numeric_limits<T>::infinity();
-        INVOKE_BOOST_TEST_EQUAL(-1, signum(-infT), file, line);
-        INVOKE_BOOST_TEST_EQUAL( 1, signum( infT), file, line);
+        INVOKE_LMI_TEST_EQUAL(-1, signum(-infT), file, line);
+        INVOKE_LMI_TEST_EQUAL( 1, signum( infT), file, line);
         }
 
     bool volatile has_quiet_NaN = std::numeric_limits<T>::has_quiet_NaN;
     if(is_iec559 && has_quiet_NaN)
         {
         T const qnanT = std::numeric_limits<T>::quiet_NaN();
-        INVOKE_BOOST_TEST_EQUAL(-1, signum(-qnanT), file, line);
-        INVOKE_BOOST_TEST_EQUAL( 1, signum( qnanT), file, line);
+        INVOKE_LMI_TEST_EQUAL(-1, signum(-qnanT), file, line);
+        INVOKE_LMI_TEST_EQUAL( 1, signum( qnanT), file, line);
         }
 }
 
 template<typename T>
 void tn_range_test::test_floating_auxiliary_functions(char const* file, int line)
 {
-    INVOKE_BOOST_TEST_EQUAL(-1, adjust_bound(T(-1),  std::numeric_limits<T>::max()), file, line);
-    INVOKE_BOOST_TEST_EQUAL( 0, adjust_bound(T( 0),  std::numeric_limits<T>::max()), file, line);
-    INVOKE_BOOST_TEST_EQUAL( 1, adjust_bound(T( 1),  std::numeric_limits<T>::max()), file, line);
+    INVOKE_LMI_TEST_EQUAL(-1, adjust_bound(T(-1),  std::numeric_limits<T>::max()), file, line);
+    INVOKE_LMI_TEST_EQUAL( 0, adjust_bound(T( 0),  std::numeric_limits<T>::max()), file, line);
+    INVOKE_LMI_TEST_EQUAL( 1, adjust_bound(T( 1),  std::numeric_limits<T>::max()), file, line);
 
-    INVOKE_BOOST_TEST_EQUAL(-1, adjust_bound(T(-1), -std::numeric_limits<T>::max()), file, line);
-    INVOKE_BOOST_TEST_EQUAL( 0, adjust_bound(T( 0), -std::numeric_limits<T>::max()), file, line);
-    INVOKE_BOOST_TEST_EQUAL( 1, adjust_bound(T( 1), -std::numeric_limits<T>::max()), file, line);
+    INVOKE_LMI_TEST_EQUAL(-1, adjust_bound(T(-1), -std::numeric_limits<T>::max()), file, line);
+    INVOKE_LMI_TEST_EQUAL( 0, adjust_bound(T( 0), -std::numeric_limits<T>::max()), file, line);
+    INVOKE_LMI_TEST_EQUAL( 1, adjust_bound(T( 1), -std::numeric_limits<T>::max()), file, line);
 
     bool volatile exact = std::numeric_limits<T>::is_exact;
     if(!exact)
@@ -210,19 +210,19 @@ void tn_range_test::test_floating_auxiliary_functions(char const* file, int line
 
         // Test direction of adjustment.
 
-        INVOKE_BOOST_TEST_RELATION(T(-1.07), <=, adjust_bound(T(-1.07),  std::numeric_limits<T>::max()), file, line);
-        INVOKE_BOOST_TEST_RELATION(T( 1.07), <=, adjust_bound(T( 1.07),  std::numeric_limits<T>::max()), file, line);
+        INVOKE_LMI_TEST_RELATION(T(-1.07), <=, adjust_bound(T(-1.07),  std::numeric_limits<T>::max()), file, line);
+        INVOKE_LMI_TEST_RELATION(T( 1.07), <=, adjust_bound(T( 1.07),  std::numeric_limits<T>::max()), file, line);
 
-        INVOKE_BOOST_TEST_RELATION(T(-1.07), >=, adjust_bound(T(-1.07), -std::numeric_limits<T>::max()), file, line);
-        INVOKE_BOOST_TEST_RELATION(T( 1.07), >=, adjust_bound(T( 1.07), -std::numeric_limits<T>::max()), file, line);
+        INVOKE_LMI_TEST_RELATION(T(-1.07), >=, adjust_bound(T(-1.07), -std::numeric_limits<T>::max()), file, line);
+        INVOKE_LMI_TEST_RELATION(T( 1.07), >=, adjust_bound(T( 1.07), -std::numeric_limits<T>::max()), file, line);
 
         // Test inequality of original and adjusted values.
 
-        INVOKE_BOOST_TEST_RELATION(T(-1.07), <,  adjust_bound(T(-1.07),  std::numeric_limits<T>::max()), file, line);
-        INVOKE_BOOST_TEST_RELATION(T( 1.07), <,  adjust_bound(T( 1.07),  std::numeric_limits<T>::max()), file, line);
+        INVOKE_LMI_TEST_RELATION(T(-1.07), <,  adjust_bound(T(-1.07),  std::numeric_limits<T>::max()), file, line);
+        INVOKE_LMI_TEST_RELATION(T( 1.07), <,  adjust_bound(T( 1.07),  std::numeric_limits<T>::max()), file, line);
 
-        INVOKE_BOOST_TEST_RELATION(T(-1.07), >,  adjust_bound(T(-1.07), -std::numeric_limits<T>::max()), file, line);
-        INVOKE_BOOST_TEST_RELATION(T( 1.07), >,  adjust_bound(T( 1.07), -std::numeric_limits<T>::max()), file, line);
+        INVOKE_LMI_TEST_RELATION(T(-1.07), >,  adjust_bound(T(-1.07), -std::numeric_limits<T>::max()), file, line);
+        INVOKE_LMI_TEST_RELATION(T( 1.07), >,  adjust_bound(T( 1.07), -std::numeric_limits<T>::max()), file, line);
         }
 
     bool volatile is_iec559 = std::numeric_limits<T>::is_iec559;
@@ -230,10 +230,10 @@ void tn_range_test::test_floating_auxiliary_functions(char const* file, int line
     if(is_iec559 && has_infinity)
         {
         T const infT = std::numeric_limits<T>::infinity();
-        INVOKE_BOOST_TEST_EQUAL(-infT, adjust_bound(T(-infT),  std::numeric_limits<T>::max()), file, line);
-        INVOKE_BOOST_TEST_EQUAL( infT, adjust_bound(T( infT),  std::numeric_limits<T>::max()), file, line);
-        INVOKE_BOOST_TEST_EQUAL(-infT, adjust_bound(T(-infT), -std::numeric_limits<T>::max()), file, line);
-        INVOKE_BOOST_TEST_EQUAL( infT, adjust_bound(T( infT), -std::numeric_limits<T>::max()), file, line);
+        INVOKE_LMI_TEST_EQUAL(-infT, adjust_bound(T(-infT),  std::numeric_limits<T>::max()), file, line);
+        INVOKE_LMI_TEST_EQUAL( infT, adjust_bound(T( infT),  std::numeric_limits<T>::max()), file, line);
+        INVOKE_LMI_TEST_EQUAL(-infT, adjust_bound(T(-infT), -std::numeric_limits<T>::max()), file, line);
+        INVOKE_LMI_TEST_EQUAL( infT, adjust_bound(T( infT), -std::numeric_limits<T>::max()), file, line);
         }
 }
 
@@ -250,50 +250,50 @@ void tn_range_test::test_percentages(char const* file, int line)
 
     T t_percentage;
     t_percentage = 50;
-    INVOKE_BOOST_TEST_EQUAL(N(50), t_percentage, file, line);
+    INVOKE_LMI_TEST_EQUAL(N(50), t_percentage, file, line);
 
-    INVOKE_BOOST_TEST(!t_percentage.is_valid( n1), file, line);
-    INVOKE_BOOST_TEST( t_percentage.is_valid(  0), file, line);
-    INVOKE_BOOST_TEST( t_percentage.is_valid(  1), file, line);
-    INVOKE_BOOST_TEST( t_percentage.is_valid(100), file, line);
-    INVOKE_BOOST_TEST(!t_percentage.is_valid(101), file, line);
+    INVOKE_LMI_TEST(!t_percentage.is_valid( n1), file, line);
+    INVOKE_LMI_TEST( t_percentage.is_valid(  0), file, line);
+    INVOKE_LMI_TEST( t_percentage.is_valid(  1), file, line);
+    INVOKE_LMI_TEST( t_percentage.is_valid(100), file, line);
+    INVOKE_LMI_TEST(!t_percentage.is_valid(101), file, line);
 
-    INVOKE_BOOST_TEST(!t_percentage.diagnose_invalidity(" -1").empty(), file, line);
-    INVOKE_BOOST_TEST( t_percentage.diagnose_invalidity("  0").empty(), file, line);
-    INVOKE_BOOST_TEST( t_percentage.diagnose_invalidity("  1").empty(), file, line);
-    INVOKE_BOOST_TEST( t_percentage.diagnose_invalidity("100").empty(), file, line);
-    INVOKE_BOOST_TEST(!t_percentage.diagnose_invalidity("101").empty(), file, line);
+    INVOKE_LMI_TEST(!t_percentage.diagnose_invalidity(" -1").empty(), file, line);
+    INVOKE_LMI_TEST( t_percentage.diagnose_invalidity("  0").empty(), file, line);
+    INVOKE_LMI_TEST( t_percentage.diagnose_invalidity("  1").empty(), file, line);
+    INVOKE_LMI_TEST( t_percentage.diagnose_invalidity("100").empty(), file, line);
+    INVOKE_LMI_TEST(!t_percentage.diagnose_invalidity("101").empty(), file, line);
 
-    INVOKE_BOOST_TEST_EQUAL(t_percentage.minimum(),   0, file, line);
-    INVOKE_BOOST_TEST_EQUAL(t_percentage.maximum(), 100, file, line);
+    INVOKE_LMI_TEST_EQUAL(t_percentage.minimum(),   0, file, line);
+    INVOKE_LMI_TEST_EQUAL(t_percentage.maximum(), 100, file, line);
 
-    INVOKE_BOOST_TEST_EQUAL(t_percentage.curb(n10),   0, file, line);
-    INVOKE_BOOST_TEST_EQUAL(t_percentage.curb(  0),   0, file, line);
-    INVOKE_BOOST_TEST_EQUAL(t_percentage.curb(  1),   1, file, line);
-    INVOKE_BOOST_TEST_EQUAL(t_percentage.curb(100), 100, file, line);
-    INVOKE_BOOST_TEST_EQUAL(t_percentage.curb(101), 100, file, line);
+    INVOKE_LMI_TEST_EQUAL(t_percentage.curb(n10),   0, file, line);
+    INVOKE_LMI_TEST_EQUAL(t_percentage.curb(  0),   0, file, line);
+    INVOKE_LMI_TEST_EQUAL(t_percentage.curb(  1),   1, file, line);
+    INVOKE_LMI_TEST_EQUAL(t_percentage.curb(100), 100, file, line);
+    INVOKE_LMI_TEST_EQUAL(t_percentage.curb(101), 100, file, line);
 
     T t0(n10);
-    INVOKE_BOOST_TEST_EQUAL(N(  0), t0, file, line);
+    INVOKE_LMI_TEST_EQUAL(N(  0), t0, file, line);
     T t1(  0);
-    INVOKE_BOOST_TEST_EQUAL(N(  0), t1, file, line);
+    INVOKE_LMI_TEST_EQUAL(N(  0), t1, file, line);
     T t2(  1);
-    INVOKE_BOOST_TEST_EQUAL(N(  1), t2, file, line);
+    INVOKE_LMI_TEST_EQUAL(N(  1), t2, file, line);
     T t3(100);
-    INVOKE_BOOST_TEST_EQUAL(N(100), t3, file, line);
+    INVOKE_LMI_TEST_EQUAL(N(100), t3, file, line);
     T t4(101);
-    INVOKE_BOOST_TEST_EQUAL(N(100), t4, file, line);
+    INVOKE_LMI_TEST_EQUAL(N(100), t4, file, line);
 
     t_percentage = n10;
-    INVOKE_BOOST_TEST_EQUAL(N(  0), t_percentage, file, line);
+    INVOKE_LMI_TEST_EQUAL(N(  0), t_percentage, file, line);
     t_percentage =   0;
-    INVOKE_BOOST_TEST_EQUAL(N(  0), t_percentage, file, line);
+    INVOKE_LMI_TEST_EQUAL(N(  0), t_percentage, file, line);
     t_percentage =   1;
-    INVOKE_BOOST_TEST_EQUAL(N(  1), t_percentage, file, line);
+    INVOKE_LMI_TEST_EQUAL(N(  1), t_percentage, file, line);
     t_percentage = 100;
-    INVOKE_BOOST_TEST_EQUAL(N(100), t_percentage, file, line);
+    INVOKE_LMI_TEST_EQUAL(N(100), t_percentage, file, line);
     t_percentage = 101;
-    INVOKE_BOOST_TEST_EQUAL(N(100), t_percentage, file, line);
+    INVOKE_LMI_TEST_EQUAL(N(100), t_percentage, file, line);
 }
 
 void tn_range_test::test()
@@ -322,99 +322,99 @@ void tn_range_test::test()
 
     // Default ctor.
     r_nonnegative range0;
-    BOOST_TEST_EQUAL(range0, r_one);
+    LMI_TEST_EQUAL(range0, r_one);
 
     // Copy ctor.
     r_nonnegative range1(range0);
-    BOOST_TEST_EQUAL(range1, r_one);
+    LMI_TEST_EQUAL(range1, r_one);
 
     // Construct from Number.
     r_nonnegative range2(3.14159);
-    BOOST_TEST_EQUAL(range2, r_pi);
+    LMI_TEST_EQUAL(range2, r_pi);
 
     // Construct from std::string.
     r_nonnegative range3(s_e);
-    BOOST_TEST_EQUAL(range3, r_e);
+    LMI_TEST_EQUAL(range3, r_e);
 
     // Construct from char const* implicitly converted to std::string.
     r_nonnegative range4("2.71828");
-    BOOST_TEST_EQUAL(range4, r_e);
+    LMI_TEST_EQUAL(range4, r_e);
 
     // *** Assignment.
 
     // Copy assignment operator.
     range1 = range3;
-    BOOST_TEST_EQUAL(range1, r_e);
+    LMI_TEST_EQUAL(range1, r_e);
 
     // Assign from Number.
     range1 = 0.0;
-    BOOST_TEST_EQUAL(range1, r_zero);
+    LMI_TEST_EQUAL(range1, r_zero);
 
     // Assign from std::string.
     range1 = s_e;
-    BOOST_TEST_EQUAL(range1, r_e);
+    LMI_TEST_EQUAL(range1, r_e);
 
     // Assign from char const* implicitly converted to std::string.
     range1 = "3.14159";
-    BOOST_TEST_EQUAL(range1, r_pi);
+    LMI_TEST_EQUAL(range1, r_pi);
 
     // *** Equivalence.
 
     // Equivalence to same type.
-    BOOST_TEST_EQUAL(range1, range2);
+    LMI_TEST_EQUAL(range1, range2);
 
     // Equivalence to Number.
-    BOOST_TEST_EQUAL(range1, 3.14159);
+    LMI_TEST_EQUAL(range1, 3.14159);
 
     // Equivalence to std::string.
-    BOOST_TEST_EQUAL(range1, s_pi);
+    LMI_TEST_EQUAL(range1, s_pi);
 
     // Equivalence to char const* implicitly converted to std::string.
-    BOOST_TEST_EQUAL(range1, "3.14159");
+    LMI_TEST_EQUAL(range1, "3.14159");
 
     // Because comparison to std::string is a matter of numerical
     // equivalence, test several equivalent representations.
-    BOOST_TEST_EQUAL(range1, "3.1415900");
-    BOOST_TEST_EQUAL(range1, "3.14159e0");
-    BOOST_TEST_EQUAL(range1, ".314159E1");
+    LMI_TEST_EQUAL(range1, "3.1415900");
+    LMI_TEST_EQUAL(range1, "3.14159e0");
+    LMI_TEST_EQUAL(range1, ".314159E1");
 
     // *** Operators added by boost::equality_comparable.
 
     // Inequivalence to same type.
-    BOOST_TEST_UNEQUAL(range4,  range1);
+    LMI_TEST_UNEQUAL(range4,  range1);
 
     // [In]equivalence to Number.
-    BOOST_TEST_EQUAL  (3.14159, range1);
-    BOOST_TEST_UNEQUAL(range1, 2.71828);
-    BOOST_TEST_UNEQUAL(2.71828, range1);
+    LMI_TEST_EQUAL  (3.14159, range1);
+    LMI_TEST_UNEQUAL(range1, 2.71828);
+    LMI_TEST_UNEQUAL(2.71828, range1);
 
     // [In]equivalence to std::string.
-    BOOST_TEST_EQUAL  (s_pi,    range1);
-    BOOST_TEST_UNEQUAL(range1,     s_e);
-    BOOST_TEST_UNEQUAL(s_e,     range1);
+    LMI_TEST_EQUAL  (s_pi,    range1);
+    LMI_TEST_UNEQUAL(range1,     s_e);
+    LMI_TEST_UNEQUAL(s_e,     range1);
 
     // *** Explicit conversions.
 
     // Explicit conversion to std::string.
-    BOOST_TEST_EQUAL(range1.str(), "3.14159");
+    LMI_TEST_EQUAL(range1.str(), "3.14159");
 
     // Explicit conversion to number.
-    BOOST_TEST_EQUAL(range1.value(), 3.14159);
+    LMI_TEST_EQUAL(range1.value(), 3.14159);
 
     // *** Type identification.
-    BOOST_TEST(typeid(double) == range1.value_type());
+    LMI_TEST(typeid(double) == range1.value_type());
 
     // *** Limits.
 
     // Floating-point limits having an exact binary representation.
 
-    BOOST_TEST_EQUAL(range1.minimum(), 0.0);
-    BOOST_TEST_EQUAL(range1.maximum(), std::numeric_limits<double>::max());
-    BOOST_TEST( range1.is_valid( 1.0));
-    BOOST_TEST( range1.is_valid( 0.0));
-    BOOST_TEST( range1.is_valid(-0.0));
-    BOOST_TEST(!range1.is_valid(-1.0));
-    BOOST_TEST_EQUAL(range1.curb( -1.0), 0.0);
+    LMI_TEST_EQUAL(range1.minimum(), 0.0);
+    LMI_TEST_EQUAL(range1.maximum(), std::numeric_limits<double>::max());
+    LMI_TEST( range1.is_valid( 1.0));
+    LMI_TEST( range1.is_valid( 0.0));
+    LMI_TEST( range1.is_valid(-0.0));
+    LMI_TEST(!range1.is_valid(-1.0));
+    LMI_TEST_EQUAL(range1.curb( -1.0), 0.0);
 
     // Floating-point limits having no exact binary representation.
 
@@ -436,53 +436,53 @@ void tn_range_test::test()
     double volatile hi = 0.070000000000000001;
     double volatile lo = 0.069999999999999999;
     double volatile z  = lo * (1.0 + epsilon);
-    BOOST_TEST(z == hi);
+    LMI_TEST(z == hi);
 
     r_surd surd0;
 
-    BOOST_TEST(!surd0.is_valid( 0.0699999999999999  ));
-    BOOST_TEST( surd0.is_valid( 0.069999999999999999));
-    BOOST_TEST( surd0.is_valid( 0.070000000000000000));
-    BOOST_TEST( surd0.is_valid( 0.070000000000000001));
-    BOOST_TEST(!surd0.is_valid( 0.0700000000000001  ));
+    LMI_TEST(!surd0.is_valid( 0.0699999999999999  ));
+    LMI_TEST( surd0.is_valid( 0.069999999999999999));
+    LMI_TEST( surd0.is_valid( 0.070000000000000000));
+    LMI_TEST( surd0.is_valid( 0.070000000000000001));
+    LMI_TEST(!surd0.is_valid( 0.0700000000000001  ));
 
-    BOOST_TEST( surd0.is_valid( 0.0700000000000000205391)); // 0.07 * (1+ε)
-    BOOST_TEST( surd0.is_valid( 0.0699999999999999927836)); // 0.07 / (1+ε)
+    LMI_TEST( surd0.is_valid( 0.0700000000000000205391)); // 0.07 * (1+ε)
+    LMI_TEST( surd0.is_valid( 0.0699999999999999927836)); // 0.07 / (1+ε)
 
     // If exactly four values are permissible, then exactly one of
     // these is permissible.
-    BOOST_TEST
+    LMI_TEST
         (   surd0.is_valid( 0.0700000000000000344169) // 0.07 * (1+2ε)
         ^   surd0.is_valid( 0.0699999999999999789058) // 0.07 / (1+2ε)
         );
 
-    BOOST_TEST(!surd0.is_valid( 0.07 * (1.0 + 3.0 * epsilon)));
-    BOOST_TEST(!surd0.is_valid( 0.07 / (1.0 + 3.0 * epsilon)));
+    LMI_TEST(!surd0.is_valid( 0.07 * (1.0 + 3.0 * epsilon)));
+    LMI_TEST(!surd0.is_valid( 0.07 / (1.0 + 3.0 * epsilon)));
 
     // Validation of strings representing floating-point values.
 
-    BOOST_TEST( range1.diagnose_invalidity("-0.0").empty());
-    BOOST_TEST( range1.diagnose_invalidity(" -0.").empty());
-    BOOST_TEST( range1.diagnose_invalidity(" -.0").empty());
-    BOOST_TEST( range1.diagnose_invalidity("-0e0").empty());
-    BOOST_TEST( range1.diagnose_invalidity("-0E0").empty());
-    BOOST_TEST(!range1.diagnose_invalidity("$123").empty());
+    LMI_TEST( range1.diagnose_invalidity("-0.0").empty());
+    LMI_TEST( range1.diagnose_invalidity(" -0.").empty());
+    LMI_TEST( range1.diagnose_invalidity(" -.0").empty());
+    LMI_TEST( range1.diagnose_invalidity("-0e0").empty());
+    LMI_TEST( range1.diagnose_invalidity("-0E0").empty());
+    LMI_TEST(!range1.diagnose_invalidity("$123").empty());
 
     // *** Stream operators.
     r_nonnegative const pi(r_pi);
     r_nonnegative range5;
-    BOOST_TEST_UNEQUAL(pi, range5);
+    LMI_TEST_UNEQUAL(pi, range5);
     std::stringstream ss;
     ss << pi;
     ss >> range5;
-    BOOST_TEST_EQUAL(pi, range5);
+    LMI_TEST_EQUAL(pi, range5);
 
-    BOOST_TEST_UNEQUAL(r_e, range5);
+    LMI_TEST_UNEQUAL(r_e, range5);
     ss.str("");
     ss.clear();
     ss << r_e;
     ss >> range5;
-    BOOST_TEST_EQUAL(r_e, range5);
+    LMI_TEST_EQUAL(r_e, range5);
 
     // Test a numeric-range class instantiated in a different
     // translation unit.
@@ -518,33 +518,33 @@ void tn_range_test::test_diagnostics()
     r.maximum( 1.07);
 
     v = r.diagnose_invalidity("  0.0");
-    BOOST_TEST_EQUAL("", v);
+    LMI_TEST_EQUAL("", v);
 
     v = r.diagnose_invalidity(" 1.07");
-    BOOST_TEST_EQUAL("", v);
+    LMI_TEST_EQUAL("", v);
 
     v = r.diagnose_invalidity("-1.07");
-    BOOST_TEST_EQUAL("", v);
+    LMI_TEST_EQUAL("", v);
 
     v = r.diagnose_invalidity(" 1.070000000000001");
     s = " 1.070000000000001 is too high: value must be between -1.07 and 1.07 inclusive.";
-    BOOST_TEST_EQUAL(s, v);
+    LMI_TEST_EQUAL(s, v);
 
     v = r.diagnose_invalidity("-1.070000000000001");
     s = "-1.070000000000001 is too low: value must be between -1.07 and 1.07 inclusive.";
-    BOOST_TEST_EQUAL(s, v);
+    LMI_TEST_EQUAL(s, v);
 
     v = r.diagnose_invalidity(" 1e999999");
     s = " 1e999999 is not normalized.";
-    BOOST_TEST_EQUAL(s, v);
+    LMI_TEST_EQUAL(s, v);
 
     v = r.diagnose_invalidity("-1e999999");
     s = "-1e999999 is not normalized.";
-    BOOST_TEST_EQUAL(s, v);
+    LMI_TEST_EQUAL(s, v);
 
     v = r.diagnose_invalidity("$123");
     s = "'$123' is ill formed.";
-    BOOST_TEST_EQUAL(s, v);
+    LMI_TEST_EQUAL(s, v);
 
     // Test range [2.0, DBL_MAX]. Changing first the minimum and then
     // the maximum would not work: the new minimum of 2.0 exceeds the
@@ -555,15 +555,15 @@ void tn_range_test::test_diagnostics()
 
     v = r.diagnose_invalidity(" 1.07");
     s = " 1.07 is too low: 2 is the lower limit.";
-    BOOST_TEST_EQUAL(s, v);
+    LMI_TEST_EQUAL(s, v);
 
     v = r.diagnose_invalidity("-1e999999");
     s = "-1e999999 is not normalized.";
-    BOOST_TEST_EQUAL(s, v);
+    LMI_TEST_EQUAL(s, v);
 
     v = r.diagnose_invalidity("1e999999");
     s = "1e999999 is not normalized.";
-    BOOST_TEST_EQUAL(s, v);
+    LMI_TEST_EQUAL(s, v);
 
     // Test range [-DBL_MAX, 2.0].
 
@@ -572,7 +572,7 @@ void tn_range_test::test_diagnostics()
 
     v = r.diagnose_invalidity(" 2.718281828");
     s = " 2.718281828 is too high: 2 is the upper limit.";
-    BOOST_TEST_EQUAL(s, v);
+    LMI_TEST_EQUAL(s, v);
 
     // Test range [-DBL_MAX, DBL_MAX].
 
@@ -581,20 +581,20 @@ void tn_range_test::test_diagnostics()
 
     v = r.diagnose_invalidity("1e999999");
     s = "1e999999 is not normalized.";
-    BOOST_TEST_EQUAL(s, v);
+    LMI_TEST_EQUAL(s, v);
 }
 
 void tn_range_test::test_absurd_limits()
 {
     absurd<int> a;
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (a.assert_sanity()
         ,std::runtime_error
         ,"Lower bound 1 exceeds upper bound 0 ."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (r_absurd b;
         ,std::runtime_error
         ,"Lower bound 1 exceeds upper bound 0 ."
@@ -606,28 +606,28 @@ void tn_range_test::test_absurd_limits()
     p0.minimum(1.0);
     p0.maximum(2.0);
 
-    BOOST_TEST_EQUAL(p0.minimum(),   1.0);
-    BOOST_TEST_EQUAL(p0.maximum(),   2.0);
+    LMI_TEST_EQUAL(p0.minimum(),   1.0);
+    LMI_TEST_EQUAL(p0.maximum(),   2.0);
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (p0.minimum(-1.0)
         ,std::runtime_error
         ,"Cannot change lower bound to -1, which is less than infimum 0 ."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (p0.minimum(3.0)
         ,std::runtime_error
         ,"Cannot change lower bound to 3, which is greater than upper bound 2 ."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (p0.maximum(0.0)
         ,std::runtime_error
         ,"Cannot change upper bound to 0, which is less than lower bound 1 ."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (p0.maximum(101.0)
         ,std::runtime_error
         ,"Cannot change upper bound to 101, which is greater than supremum 100 ."
@@ -635,8 +635,8 @@ void tn_range_test::test_absurd_limits()
 
     // Make sure p1's limits aren't affected by the change in p0's.
 
-    BOOST_TEST_EQUAL(p1.minimum(),   0.0);
-    BOOST_TEST_EQUAL(p1.maximum(), 100.0);
+    LMI_TEST_EQUAL(p1.minimum(),   0.0);
+    LMI_TEST_EQUAL(p1.maximum(), 100.0);
 }
 
 void tn_range_test::test_nonfundamental_number_type()

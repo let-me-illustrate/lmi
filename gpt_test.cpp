@@ -337,7 +337,7 @@ void gpt_test::test_preconditions()
 
     // Negative duration.
     parms.duration = -1;
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (z.calculate_premium(oe_gsp, mce_option1_for_7702, parms)
         ,std::runtime_error
         ,""
@@ -346,7 +346,7 @@ void gpt_test::test_preconditions()
 
     // Duration greater than omega minus one.
     parms.duration = lmi::ssize(q_m);
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (z.calculate_premium(oe_gsp, mce_option1_for_7702, parms)
         ,std::runtime_error
         ,""
@@ -356,7 +356,7 @@ void gpt_test::test_preconditions()
     // Negative target. (Identical preconditions for other scalar
     // parameters are not redundantly tested here.)
     parms.target = -0.01;
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (z.calculate_premium(oe_gsp, mce_option1_for_7702, parms)
         ,std::runtime_error
         ,""
@@ -365,7 +365,7 @@ void gpt_test::test_preconditions()
 
     // Monthly q shorter than other vector parameters.
     q_m.resize(99);
-    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
     // Monthly q equal to unity: probably a bad idea, but permitted.
@@ -375,27 +375,27 @@ void gpt_test::test_preconditions()
 
     // Monthly q greater than unity.
     q_m.back() = 1.001;
-    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
     // Negative monthly q.
     q_m[0] = -0.001;
-    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
     // Premium load equal to unity.
     prem_load_target[0] = 1.0;
-    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
     // Monthly specamt load equal to unity.
     specamt_load_monthly[0] = 1.0;
-    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
     // Monthly QAB rate equal to unity.
     qab_adb_rate[0] = 1.0;
-    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
     // Negative premium loads are trapped. They are known to have been
@@ -403,7 +403,7 @@ void gpt_test::test_preconditions()
     // it's not worth the trouble to validate premium calculations
     // in advance under rare and questionable circumstances.
     prem_load_excess[0] = -0.01;
-    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 }
 
@@ -514,7 +514,7 @@ void gpt_test::compare_premiums(int issue_age, double target)
             && materially_equal(r1, r1_old)
             && materially_equal(r2, r2_old)
             ;
-        BOOST_TEST(all_materially_equal);
+        LMI_TEST(all_materially_equal);
         if(!all_materially_equal)
             {
             std::cout
@@ -571,11 +571,11 @@ void gpt_test::test_premium_calculations()
                 && materially_equal(r1, touchstone[x_plus_t][1])
                 && materially_equal(r2, touchstone[x_plus_t][2])
                 ;
-            BOOST_TEST(all_materially_equal);
+            LMI_TEST(all_materially_equal);
             ++count;
             }
         }
-    BOOST_TEST(5050 == count);
+    LMI_TEST(5050 == count);
 }
 
 void gpt_test::mete_premiums()

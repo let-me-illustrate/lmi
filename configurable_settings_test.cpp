@@ -51,7 +51,7 @@ class configurable_settings_test
 void configurable_settings_test::test_normal_usage()
 {
     configurable_settings const& c = configurable_settings::instance();
-    BOOST_TEST(!c.skin_filename().empty());
+    LMI_TEST(!c.skin_filename().empty());
 }
 
 /// Save a copy of the file multiple times (because users might).
@@ -88,11 +88,11 @@ void configurable_settings_test::test_backward_compatibility()
 
     configurable_settings& c = configurable_settings::instance();
     c.xml_serializable<configurable_settings>::load(filename);
-    BOOST_TEST_EQUAL("[renamed]"   , c.custom_input_0_filename());
-    BOOST_TEST_EQUAL("custom.inix" , c.custom_input_1_filename());
-    BOOST_TEST_EQUAL("[renamed]"   , c.custom_output_0_filename());
-    BOOST_TEST_EQUAL("custom.out1" , c.custom_output_1_filename());
-    BOOST_TEST_EQUAL("skin.xrc"    , c.skin_filename());
+    LMI_TEST_EQUAL("[renamed]"   , c.custom_input_0_filename());
+    LMI_TEST_EQUAL("custom.inix" , c.custom_input_1_filename());
+    LMI_TEST_EQUAL("[renamed]"   , c.custom_output_0_filename());
+    LMI_TEST_EQUAL("custom.out1" , c.custom_output_1_filename());
+    LMI_TEST_EQUAL("skin.xrc"    , c.skin_filename());
 }
 
 int test_main(int, char*[])

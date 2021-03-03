@@ -49,7 +49,7 @@ void test00(Irc7702A z)
         ,bft_history // a_Bfts
         );
     z.UpdateEOM7702A();
-    BOOST_TEST(z.IsMecAlready());
+    LMI_TEST(z.IsMecAlready());
 }
 
 void test01(Irc7702A z)
@@ -97,7 +97,7 @@ void test01(Irc7702A z)
     // TODO ?? Is the second arg to UpdateBft7702A() really needed?
     // TODO ?? If it is, can we assert that it has the expected value?
     z.UpdateEOM7702A();
-    BOOST_TEST(!z.IsMecAlready());
+    LMI_TEST(!z.IsMecAlready());
     z.UpdateBft7702A
         (0.0
         ,0.0     // a_NewDB
@@ -109,7 +109,7 @@ void test01(Irc7702A z)
         );
 
     z.UpdateEOM7702A();
-    BOOST_TEST(z.IsMecAlready());
+    LMI_TEST(z.IsMecAlready());
 }
 
 // Pay premium almost equal to specamt: expect MEC.
@@ -135,7 +135,7 @@ void test02(Irc7702A z)
         ,100000.0 // a_OldSA
         ,0.0      // a_CashValue
         );
-    BOOST_TEST(!z.IsMecAlready());
+    LMI_TEST(!z.IsMecAlready());
     z.UpdateEOM7702A();
 
     // Second month.
@@ -151,7 +151,7 @@ void test02(Irc7702A z)
         ,0.0      // a_CashValue
         );
     z.UpdateEOM7702A();
-    BOOST_TEST(z.IsMecAlready());
+    LMI_TEST(z.IsMecAlready());
 }
 
 // Decrease Bfts then increase Bfts.
@@ -178,7 +178,7 @@ void test03(Irc7702A z)
         ,0.0     // a_CashValue
         );
     z.UpdateEOM7702A();
-    BOOST_TEST(!z.IsMecAlready()); // TODO ?? Fails?
+    LMI_TEST(!z.IsMecAlready()); // TODO ?? Fails?
 
     // Second year, second month.
     z.UpdateBOY7702A(1);
@@ -202,7 +202,7 @@ void test03(Irc7702A z)
         ,0.0      // a_CashValue
         );
     z.UpdateEOM7702A();
-    BOOST_TEST(!z.IsMecAlready()); // TODO ?? Fails?
+    LMI_TEST(!z.IsMecAlready()); // TODO ?? Fails?
 }
 
 int test_main(int, char*[])

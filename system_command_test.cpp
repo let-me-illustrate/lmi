@@ -41,7 +41,7 @@ int test_main(int, char*[])
 
     system_command("lmi_md5sum --check --status eraseme.md5");
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (system_command("lmi_md5sum --check --status eraseme")
         ,std::runtime_error
         ,lmi_test::what_regex
@@ -55,7 +55,7 @@ int test_main(int, char*[])
 #else  // defined LMI_MSW
     lmi_test::what_regex bad_cmd("Exit code 12345 from command 'xyzzy'.");
 #endif // defined LMI_MSW
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (system_command("xyzzy")
         ,std::runtime_error
         ,bad_cmd
