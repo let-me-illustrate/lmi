@@ -278,14 +278,11 @@ namespace lmi_test
     void record_error();
 } // namespace lmi_test
 
-// For convenience, include lower-level layers. The original boost
-// library did this only if BOOST_INCLUDE_MAIN had been defined; that
-// macro is retained here as documentation of this change.
-#define BOOST_INCLUDE_MAIN
-#if defined BOOST_INCLUDE_MAIN
-#   include "cpp_main.cpp"
-#   include "test_main.cpp"
-#endif // defined BOOST_INCLUDE_MAIN
+// For convenience, include lower-level layers. (The original boost
+// library did this only if BOOST_INCLUDE_MAIN had been defined.)
+
+#include "cpp_main.cpp"
+#include "test_main.cpp"
 
 // Deprecated macros.
 //
