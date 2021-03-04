@@ -296,9 +296,7 @@ class LMI_SO AccountValue final
 
     void   SetMonthlyDetail(int enumerator, std::string const&);
     void   SetMonthlyDetail(int enumerator, double);
-#if defined USE_CURRENCY_CLASS
     void   SetMonthlyDetail(int enumerator, currency);
-#endif // defined USE_CURRENCY_CLASS
     void   DebugPrintInit();
     void   DebugEndBasis();
 

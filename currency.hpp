@@ -29,27 +29,6 @@
 #include <stdexcept>                    // runtime_error
 #include <vector>
 
-// Macro USE_CURRENCY_CLASS is used
-// elsewhere. Eventually it'll be eliminated, along with
-// all code along paths where it isn't defined.
-
-#define USE_CURRENCY_CLASS
-
-#if !defined USE_CURRENCY_CLASS
-
-using currency = double;
-
-inline currency from_cents(double z) {return z / 100.0;}
-
-inline double dblize(currency z) {return z;}
-
-inline std::vector<double> dblize(std::vector<currency> const& z)
-{
-    return z;
-}
-
-#else // defined USE_CURRENCY_CLASS
-
 class raw_cents {}; // Tag class.
 
 class currency
@@ -150,8 +129,6 @@ inline std::vector<double> dblize(std::vector<currency> const& z)
         }
     return r;
 }
-
-#   endif // defined USE_CURRENCY_CLASS
 
 /// Zero cents--akin to a user-defined literal.
 ///

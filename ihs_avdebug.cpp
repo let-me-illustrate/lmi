@@ -257,12 +257,10 @@ inline void AccountValue::SetMonthlyDetail(int enumerator, double d)
 }
 
 //============================================================================
-#if defined USE_CURRENCY_CLASS
 inline void AccountValue::SetMonthlyDetail(int enumerator, currency c)
 {
     DebugRecord[enumerator] = value_cast<std::string>(dblize(c));
 }
-#endif // defined USE_CURRENCY_CLASS
 
 //============================================================================
 void AccountValue::SetDebugFilename(std::string const& s)

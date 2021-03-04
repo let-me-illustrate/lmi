@@ -64,7 +64,6 @@ class currency_test
 
 void currency_test::test()
 {
-#if defined USE_CURRENCY_CLASS
     test_default_ctor();
     test_copy_ctor();
     test_explicit_ctor();
@@ -81,10 +80,8 @@ void currency_test::test()
     test_round_currency();
     test_infinite();
     test_quodlibet();
-#endif // defined USE_CURRENCY_CLASS
 }
 
-#if defined USE_CURRENCY_CLASS
 void currency_test::test_default_ctor()
 {
     // default ctor
@@ -355,8 +352,6 @@ std::cout << big_int3 << '\n' << 1.0e102 << '\n' << big_int3 - 1.0e102 << std::e
         ,"Cannot cast infinite to integral."
         );
 #endif // 0
-
-#endif // defined USE_CURRENCY_CLASS
 
 int test_main(int, char*[])
 {

@@ -428,11 +428,7 @@ void AccountValue::DecrementAVProportionally(currency decrement)
 {
     decrement = round_minutiae().c(decrement); // CURRENCY !! already rounded?
 
-#if defined USE_CURRENCY_CLASS
     if(decrement == AVGenAcct + AVSepAcct)
-#else  // !defined USE_CURRENCY_CLASS
-    if(materially_equal(decrement, AVGenAcct + AVSepAcct))
-#endif // !defined USE_CURRENCY_CLASS
         {
         AVGenAcct = C0;
         AVSepAcct = C0;
@@ -495,11 +491,7 @@ void AccountValue::DecrementAVProgressively
     ,oenum_increment_account_preference preferred_account
     )
 {
-#if defined USE_CURRENCY_CLASS
     if(decrement == AVGenAcct + AVSepAcct)
-#else  // !defined USE_CURRENCY_CLASS
-    if(materially_equal(decrement, AVGenAcct + AVSepAcct))
-#endif // !defined USE_CURRENCY_CLASS
         {
         AVGenAcct = C0;
         AVSepAcct = C0;
@@ -1118,15 +1110,9 @@ void AccountValue::TxTestGPT()
     // TAXATION !! This assumes the term rider can be treated as death benefit;
     // use 'TermIsDbFor7702'.
     bool adj_event =
-#if defined USE_CURRENCY_CLASS
             (   OldSA != ActualSpecAmt + TermSpecAmt
             &&  OldDB != DBReflectingCorr + TermDB
             )
-#else  // !defined USE_CURRENCY_CLASS
-            (   !materially_equal(OldSA, ActualSpecAmt + TermSpecAmt)
-            &&  !materially_equal(OldDB, DBReflectingCorr + TermDB)
-            )
-#endif // !defined USE_CURRENCY_CLASS
         ||  old_dbopt != new_dbopt
         ;
     if(adj_event)
@@ -1785,19 +1771,11 @@ void AccountValue::TxSetCoiCharge()
     // than zero because the corridor factor can be as low as unity,
     // but it's constrained to be nonnegative to prevent increasing
     // the account value by deducting a negative mortality charge.
-#if defined USE_CURRENCY_CLASS
     NAAR = round_naar().c
         ( DBReflectingCorr * DBDiscountRate[Year]
         - dblize(std::max(C0, TotalAccountValue()))
         );
     NAAR = std::max(C0, NAAR);
-#else  // !defined USE_CURRENCY_CLASS
-    NAAR = material_difference
-        (DBReflectingCorr * DBDiscountRate[Year]
-        ,std::max(0.0, TotalAccountValue())
-        );
-    NAAR = std::max(0.0, round_naar()(NAAR));
-#endif // !defined USE_CURRENCY_CLASS
 
 // TODO ?? This doesn't work. We need to reconsider the basic transactions.
 //  currency naar_forceout = std::max(0.0, NAAR - MaxNAAR);
@@ -1984,12 +1962,8 @@ void AccountValue::TxTestHoneymoonForExpiration()
     if(HoneymoonValue <= C0 || HoneymoonValue < csv_ignoring_loan)
         {
         HoneymoonActive = false;
-#if defined USE_CURRENCY_CLASS
-        // CURRENCY !! support infinities?
+        // CURRENCY !! alternatively, use -INF
         HoneymoonValue = -from_cents(std::numeric_limits<currency::data_type>::max());
-#else  // !defined USE_CURRENCY_CLASS
-        HoneymoonValue = -std::numeric_limits<double>::max();
-#endif // !defined USE_CURRENCY_CLASS
         }
 }
 
@@ -2154,25 +2128,8 @@ void AccountValue::TxCreditInt()
         SepAcctIntCred = InterestCredited(AVSepAcct, YearsSepAcctIntRate);
         currency gross = InterestCredited(AVSepAcct, YearsSepAcctGrossRate);
         notional_sep_acct_charge = gross - SepAcctIntCred;
-#if defined USE_CURRENCY_CLASS
-        // CURRENCY !! Further simplify the local logic after
-        // expunging macro USE_CURRENCY_CLASS.
+        // CURRENCY !! Further simplify the local logic?
         AVSepAcct = std::max(C0, AVSepAcct + SepAcctIntCred);
-#else  // !defined USE_CURRENCY_CLASS
-        // Guard against catastrophic cancellation. Testing the
-        // absolute values of the addends for material equality is not
-        // sufficient, because the interest increment has already been
-        // rounded.
-        double result = AVSepAcct + SepAcctIntCred;
-        if(result < 0.0 && 0.0 <= AVSepAcct)
-            {
-            AVSepAcct = 0.0;
-            }
-        else
-            {
-            AVSepAcct = result;
-            }
-#endif // !defined USE_CURRENCY_CLASS
         }
     else
         {
@@ -2806,11 +2763,6 @@ void AccountValue::TxTestLapse()
             (       NoLapseMinAge <= Year + BasicValues::GetIssueAge()
                 &&  NoLapseMinDur <= Year
             ||      CumPmts < CumNoLapsePrem
-#if defined USE_CURRENCY_CLASS
-            // x<y --> x<>y for x,y integral
-#else  // !defined USE_CURRENCY_CLASS
-                &&  !materially_equal(CumPmts, CumNoLapsePrem)
-#endif // !defined USE_CURRENCY_CLASS
             )
             {
             NoLapseActive = false;

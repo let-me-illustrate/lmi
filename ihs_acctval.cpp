@@ -633,12 +633,8 @@ void AccountValue::SetInitialValues()
 
     HoneymoonActive             = false;
     // Identity element for std::max(), disregarding -INF and NaN.
-    // CURRENCY !! support infinities?
-#if defined USE_CURRENCY_CLASS
+    // CURRENCY !! alternatively, use -INF
     HoneymoonValue = -from_cents(std::numeric_limits<currency::data_type>::max());
-#else  // !defined USE_CURRENCY_CLASS
-    HoneymoonValue = -std::numeric_limits<double>::max();
-#endif // !defined USE_CURRENCY_CLASS
     if(mce_gen_curr == GenBasis_)
         {
         HoneymoonActive = yare_input_.HoneymoonEndorsement;

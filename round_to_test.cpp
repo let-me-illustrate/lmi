@@ -580,9 +580,7 @@ void round_to_test::test_fundamentals()
     // Test rounding double to currency.
     currency c = round0.c(1.61803398875);
     LMI_TEST((1.62 - dblize(c)) < 1e-14);
-#if defined USE_CURRENCY_CLASS
     LMI_TEST_EQUAL(162, c.cents());
-#endif // defined USE_CURRENCY_CLASS
 //  c *= 0.61803398875;
 //  LMI_TEST_EQUAL(1, c);
 
@@ -593,7 +591,6 @@ void round_to_test::test_fundamentals()
     LMI_TEST((3.14 - v1[0]) < 1e-14);
     LMI_TEST((2.72 - v1[1]) < 1e-14);
 
-#if defined USE_CURRENCY_CLASS
     // Try to provoke division by zero in ctor-initializer.
     //
     // nonstd::power() negates a negative exponent, but negating
@@ -604,7 +601,6 @@ void round_to_test::test_fundamentals()
         ,std::domain_error
         ,"Invalid number of decimals."
         );
-#endif // defined USE_CURRENCY_CLASS
 }
 
 void round_to_test::test()

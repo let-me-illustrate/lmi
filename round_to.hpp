@@ -270,10 +270,8 @@ class round_to
     currency c(RealType) const;
     std::vector<currency> c(std::vector<RealType> const&) const;
 
-#if defined USE_CURRENCY_CLASS
     currency c(currency) const;
     std::vector<currency> c(std::vector<currency> const&) const;
-#endif // defined USE_CURRENCY_CLASS
 
     int decimals() const;
     rounding_style style() const;
@@ -322,11 +320,7 @@ round_to<RealType>::round_to(int a_decimals, rounding_style a_style)
     ,style_             {a_style}
     ,scale_fwd_         {detail::int_pow(max_prec_real(10.0), decimals_)}
     ,scale_back_        {max_prec_real(1.0) / scale_fwd_}
-#if defined USE_CURRENCY_CLASS
     ,decimals_cents_    {decimals_ - currency::cents_digits}
-#else  // !defined USE_CURRENCY_CLASS
-    ,decimals_cents_    {decimals_ - 0}
-#endif // ! defined USE_CURRENCY_CLASS
     ,scale_fwd_cents_   {detail::int_pow(max_prec_real(10.0), decimals_cents_)}
     ,scale_back_cents_  {max_prec_real(1.0) / scale_fwd_cents_}
     ,rounding_function_ {select_rounding_function(style_)}
@@ -390,6 +384,30 @@ inline std::vector<RealType> round_to<RealType>::operator()
     return z;
 }
 
+/// Round a double explicitly; return currency.
+///
+/// As long as the explicit rounding was to cents, or to a power of 10
+/// times cents, the result is an exact integer. For example, to round
+/// 1.234 to the nearest cent:
+///   1.234 * 100.0 --> 123.400000000000005684342 // r * scale_fwd_ (=100.0)
+///   123.400000000000005684342 --> 123.0 // rounding_function_()
+///   123.0 --> 123.0 cents // * scale_back_cents_ (=1.0)
+/// or to the nearest dollar:
+///   1.234 * 1.0 --> 1.229999999999999982236 // r * scale_fwd_ (=1.0)
+///   1.229999999999999982236 --> 1.0 // rounding_function_()
+///   1.0 --> 100.0 cents // * scale_back_cents_ (=100.0)
+/// It is rounding_function_(), not static_cast<>(), that transforms
+/// the floating-point argument to an exact integer value.
+///
+/// The reason this function exists is to intercept that integer value
+/// and multiply it by a nonnegative power of ten. If operator() were
+/// used instead and its result multiplied by 100, it would no longer
+/// be integral--in the first example above:
+///   1.234 * 100.0 --> 123.400000000000005684342 // r * scale_fwd_ (=100.0)
+///   123.400000000000005684342 --> 123.0 // rounding_function_()
+///   123.0 --> 1.229999999999999982236 // * scale_back_ (=0.01)
+///   1.229999999999999982236 * 100.0 --> nonintegral
+
 template<typename RealType>
 inline currency round_to<RealType>::c(RealType r) const
 {
@@ -397,12 +415,8 @@ inline currency round_to<RealType>::c(RealType r) const
         ( rounding_function_(static_cast<RealType>(r * scale_fwd_))
         * scale_back_cents_
         );
-#if defined USE_CURRENCY_CLASS
     // CURRENCY !! static_cast: possible range error
     return currency(static_cast<currency::data_type>(z), raw_cents {});
-#else  // !defined USE_CURRENCY_CLASS
-    return currency(z);
-#endif // ! defined USE_CURRENCY_CLASS
 }
 
 template<typename RealType>
@@ -415,7 +429,6 @@ inline std::vector<currency> round_to<RealType>::c
     return z;
 }
 
-#if defined USE_CURRENCY_CLASS
 // CURRENCY !! need unit tests
 
 /// Round currency to a potentially different precision.
@@ -448,7 +461,6 @@ inline std::vector<currency> round_to<RealType>::c
     for(auto const& i : v) {z.push_back(c(i));}
     return z;
 }
-#endif // defined USE_CURRENCY_CLASS
 
 template<typename RealType>
 int round_to<RealType>::decimals() const
