@@ -945,6 +945,7 @@ bool check_reserved_name_exception(std::string const& s)
     // Compiler specific: gcc, clang.
         ,"__FLOAT_WORD_ORDER__"
         ,"__GLIBCPP__"
+        ,"__GLIBCXX__"
         ,"__GNUC_MINOR__"
         ,"__GNUC_PATCHLEVEL__"
         ,"__GNUC__"
