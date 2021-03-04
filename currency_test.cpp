@@ -69,10 +69,6 @@ void currency_test::test()
     test_copy_ctor();
     test_explicit_ctor();
     test_negation();
-// CURRENCY !! Most of these tests assume that the currency unit is
-// cents. It's not worth adapting them to any other case because
-// soon this macro will, in effect, always be defined.
-#   if defined CURRENCY_UNIT_IS_CENTS
     test_plus_or_minus_eq();
     test_plus_or_minus();
     test_multiply_by_int();
@@ -85,7 +81,6 @@ void currency_test::test()
     test_round_currency();
     test_infinite();
     test_quodlibet();
-#   endif // defined CURRENCY_UNIT_IS_CENTS
 #endif // defined USE_CURRENCY_CLASS
 }
 

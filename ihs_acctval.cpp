@@ -180,20 +180,12 @@ currency AccountValue::specamt_for_7702A(int year) const
 
 void AccountValue::assert_pmts_add_up(char const* file, int line, int month)
 {
-    // If the currency unit is cents (as it ultimately will be), then
-    // all currency amounts should be an exact integral number of
-    // cents, and payments should add up exactly. For the nonce, the
-    // currency unit might not be cents, in which case payments should
-    // add up within a tiny tolerance.
-    bool const okay =
-#if defined CURRENCY_UNIT_IS_CENTS
-                         GrossPmts[month] ==   EeGrossPmts[month]     + ErGrossPmts[month]
-#else  // !defined CURRENCY_UNIT_IS_CENTS
-        materially_equal(dblize(GrossPmts[month]), dblize(EeGrossPmts[month]) + dblize(ErGrossPmts[month]))
-#endif // !defined CURRENCY_UNIT_IS_CENTS
-        ;
-    if(okay)
+    // Payments, being currency amounts, should all be exact integral
+    // numbers of cents, and should add up exactly.
+    if(GrossPmts[month] == EeGrossPmts[month] + ErGrossPmts[month])
+        {
         return;
+        }
 
     alarum()
         << "Payments don't add up [file '" << file << "', line " << line << "]\n"

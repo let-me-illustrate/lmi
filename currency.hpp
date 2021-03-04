@@ -29,14 +29,13 @@
 #include <stdexcept>                    // runtime_error
 #include <vector>
 
-// Macros USE_CURRENCY_CLASS and CURRENCY_UNIT_IS_CENTS are used
-// elsewhere. Eventually they'll both be eliminated, along with
-// all code along paths where they aren't both defined.
+// Macro USE_CURRENCY_CLASS is used
+// elsewhere. Eventually it'll be eliminated, along with
+// all code along paths where it isn't defined.
 
 #define USE_CURRENCY_CLASS
 
 #if !defined USE_CURRENCY_CLASS
-#   undef CURRENCY_UNIT_IS_CENTS // Requires currency class.
 
 using currency = double;
 
@@ -51,8 +50,6 @@ inline std::vector<double> dblize(std::vector<currency> const& z)
 
 #else // defined USE_CURRENCY_CLASS
 
-#   define CURRENCY_UNIT_IS_CENTS
-
 class raw_cents {}; // Tag class.
 
 class currency
@@ -62,13 +59,8 @@ class currency
     template<typename> friend class round_to; // explicit ctor
     friend class round_to_test;               // currency::cents_digits
 
-#   if defined CURRENCY_UNIT_IS_CENTS
     static constexpr int    cents_digits     = 2;
     static constexpr double cents_per_dollar = 100.0;
-#   else  // !defined CURRENCY_UNIT_IS_CENTS
-    static constexpr int    cents_digits     = 0;
-    static constexpr double cents_per_dollar = 1.0;
-#   endif // !defined CURRENCY_UNIT_IS_CENTS
 
   public:
     using data_type = double;
@@ -131,19 +123,19 @@ inline double operator/(currency lhs, currency rhs)
 inline std::ostream& operator<<(std::ostream& os, currency z)
     {return os << z.d();}
 
-inline currency from_cents(double z)
+/// Convert from an integer-valued double to currency.
+///
+/// This function is intended to be called very seldom (and then
+/// almost always with a manifest-constant argument), so the cost
+/// of the runtime value-preservation test doesn't matter.
+
+inline currency from_cents(double cents)
     {
-#   if defined CURRENCY_UNIT_IS_CENTS
-    if(z != std::rint(z)) throw std::runtime_error("Nonintegral cents.");
-    return currency(z, raw_cents{});
-#   else  // !defined CURRENCY_UNIT_IS_CENTS
-    // If currency unit is dollars rather than cents, then:
-    //  - dividing by 100 is the only reasonable thing to do here, even
-    //    though 'cents_per_dollar' is unity; and
-    //  - a value such as $.01 cannot be integral, so the desired
-    //    invariant that the result is integral must be sacrificed.
-    return currency(z / 100.0, raw_cents{});
-#   endif // !defined CURRENCY_UNIT_IS_CENTS
+    if(cents != std::rint(cents))
+        {
+        throw std::runtime_error("Nonintegral cents.");
+        }
+    return currency(cents, raw_cents{});
     }
 
 inline double dblize(currency z) {return z.d();}

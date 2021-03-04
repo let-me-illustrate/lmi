@@ -417,14 +417,26 @@ inline std::vector<currency> round_to<RealType>::c
 
 #if defined USE_CURRENCY_CLASS
 // CURRENCY !! need unit tests
+
+/// Round currency to a potentially different precision.
+///
+/// In practice, lmi rounds almost all currency values to cents, and
+/// rounding again to cents appropriately does nothing. But it rounds
+/// some currency values to dollars (as configured in a '.rounding'
+/// file that can be edited); rounding eleven cents to the nearest
+/// dollar, e.g., must change the value.
+///
+/// This implementation does that as follows:
+///   11 cents --> 0.11 (double)
+///   0.11 --> 0 dollars (nearest)
+/// Roundoff error in the first step doesn't matter. The critical
+/// points for all rounding directions are some whole number plus
+/// zero or one-half, which involve no roundoff error.
+
 template<typename RealType>
 inline currency round_to<RealType>::c(currency z) const
 {
-#   if defined CURRENCY_UNIT_IS_CENTS
     return (decimals_ < currency::cents_digits) ? c(z.d()) : z;
-#   else  // !defined CURRENCY_UNIT_IS_CENTS
-    return c(z.d());
-#   endif // !defined CURRENCY_UNIT_IS_CENTS
 }
 
 template<typename RealType>

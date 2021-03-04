@@ -160,11 +160,7 @@ void LoadsTest::TestCalculations(char const* file, int line)
     INVOKE_LMI_TEST(materially_equal(0.500000, loads_.refundable_sales_load_proportion()[0]), file, line);
 
     // (8.00 + 5.25 + 0.50) / 2 = 13.75 / 2 = 6.875, rounded to cents
-#   if defined CURRENCY_UNIT_IS_CENTS
     INVOKE_LMI_TEST(from_cents(688) == loads_.monthly_policy_fee (mce_gen_mdpt)[0] , file, line);
-#   else  // !defined CURRENCY_UNIT_IS_CENTS
-    INVOKE_LMI_TEST(materially_equal(6.88, dblize(loads_.monthly_policy_fee (mce_gen_mdpt)[0])), file, line);
-#   endif // !defined CURRENCY_UNIT_IS_CENTS
     INVOKE_LMI_TEST(from_cents(150) == loads_.annual_policy_fee  (mce_gen_mdpt)[0] , file, line);
     INVOKE_LMI_TEST(materially_equal(0.000625, loads_.specified_amount_load (mce_gen_mdpt)[0]), file, line);
     // 12 bp and 19 bp, both converted to monthly, then added together.
