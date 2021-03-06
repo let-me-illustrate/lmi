@@ -25,6 +25,7 @@
 
 #include "test_tools.hpp"
 
+#include <cfloat>                       // DBL_MAX
 #include <cstdio>                       // remove()
 #include <fstream>
 #include <limits>
@@ -138,6 +139,11 @@ void test_minmax()
     std::vector<double> w;
     w.push_back(one );
     w.push_back(zero);
+
+    // Test default ctor.
+    minmax<double> const dbl_minmax {};
+    LMI_TEST( DBL_MAX == dbl_minmax.minimum());
+    LMI_TEST(-DBL_MAX == dbl_minmax.maximum());
 
     // Test const-correctness.
     std::vector<double> const v = w;
