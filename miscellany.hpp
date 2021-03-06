@@ -95,14 +95,9 @@ template<typename T>
 class minmax
 {
   public:
-    minmax()
-        :minimum_ {std::numeric_limits<T>::max()}
-        ,maximum_ {std::numeric_limits<T>::lowest()}
-        {
-        }
+    minmax() {}
 
     explicit minmax(std::vector<T> const& v)
-        :minmax {}
         {
         if(v.empty())
             {
@@ -124,8 +119,8 @@ class minmax
     T maximum() const {return maximum_;}
 
   private:
-    T minimum_;
-    T maximum_;
+    T minimum_ {std::numeric_limits<T>::max()};
+    T maximum_ {std::numeric_limits<T>::lowest()};
 };
 
 template<typename T> bool operator< (T t, minmax<T> m) {return t <  m.minimum();}
