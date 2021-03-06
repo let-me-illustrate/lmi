@@ -91,13 +91,8 @@ void monnaie_test::test_ctors()
         ,std::overflow_error
         ,overflow_msg
         );
-    // Make sure min() means lowest().
-    static_assert
-        (  std::numeric_limits<monnaie::amount_type>::min()
-        == std::numeric_limits<monnaie::amount_type>::lowest()
-        );
     LMI_TEST_THROW
-        (monnaie(std::numeric_limits<monnaie::amount_type>::min(), 0)
+        (monnaie(std::numeric_limits<monnaie::amount_type>::lowest(), 0)
         ,std::overflow_error
         ,overflow_msg
         );

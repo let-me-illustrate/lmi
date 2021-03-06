@@ -78,12 +78,7 @@ namespace
             {
             static_assert(std::numeric_limits<T>::is_bounded);
             static_assert(!std::is_floating_point_v<T>);
-            // Make sure min() means lowest().
-            static_assert
-                (  std::numeric_limits<T>::min()
-                == std::numeric_limits<T>::lowest()
-                );
-            static T const lower_limit = std::numeric_limits<T>::min();
+            static T const lower_limit = std::numeric_limits<T>::lowest();
             static T const upper_limit = std::numeric_limits<T>::max();
             return lower_limit < t && t < upper_limit;
             }
