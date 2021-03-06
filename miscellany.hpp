@@ -102,7 +102,13 @@ class minmax
         }
 
     explicit minmax(std::vector<T> const& v)
+        :minmax {}
         {
+        if(v.empty())
+            {
+            return;
+            }
+
         auto const& extrema = std::minmax_element(v.begin(), v.end());
         minimum_ = *extrema.first ;
         maximum_ = *extrema.second;

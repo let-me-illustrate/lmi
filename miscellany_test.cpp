@@ -145,6 +145,12 @@ void test_minmax()
     LMI_TEST( DBL_MAX == dbl_minmax.minimum());
     LMI_TEST(-DBL_MAX == dbl_minmax.maximum());
 
+    // Test explicit ctor with zero-element argument.
+    std::vector<int> const empty_vector {};
+    minmax<int> const empty_minmax(empty_vector);
+    LMI_TEST_EQUAL(empty_minmax.minimum(), std::numeric_limits<int>::max());
+    LMI_TEST_EQUAL(empty_minmax.maximum(), std::numeric_limits<int>::min());
+
     // Test const-correctness.
     std::vector<double> const v = w;
     minmax<double> const m(v);
