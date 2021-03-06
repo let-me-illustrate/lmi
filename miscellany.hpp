@@ -94,6 +94,8 @@ std::string floating_rep(T t)
 template<typename T>
 class minmax
 {
+    static_assert(std::numeric_limits<T>::is_bounded);
+
   public:
     minmax() {}
 

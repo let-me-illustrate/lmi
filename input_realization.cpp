@@ -32,7 +32,7 @@
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"        // report_exception()
 #include "input_sequence_aux.hpp"       // convert_vector()
-#include "miscellany.hpp"               // each_equal(), minmax
+#include "miscellany.hpp"               // each_equal()
 #include "round_to.hpp"
 #include "ssize_lmi.hpp"
 #include "value_cast.hpp"
@@ -418,15 +418,19 @@ std::string Input::RealizeCashValueEnhancementRate()
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
-    minmax<tnr_unrestricted_double> extrema(CashValueEnhancementRateRealized_);
-    if(!(0.0 <= extrema.minimum().value() && extrema.maximum().value() <= 1.0))
+    LMI_ASSERT(!CashValueEnhancementRateRealized_.empty());
+    auto const extrema = std::minmax_element
+        (CashValueEnhancementRateRealized_.begin()
+        ,CashValueEnhancementRateRealized_.end()
+        );
+    if(!(0.0 <= (*extrema.first).value() && (*extrema.second).value() <= 1.0))
         {
         std::ostringstream oss;
         oss
             << "Cash value enhancement rate as entered ranges from "
-            << extrema.minimum()
+            << *extrema.first
             << " to "
-            << extrema.maximum()
+            << *extrema.second
             << ", but must be between 0 and 1 inclusive."
             ;
         return oss.str();
@@ -451,15 +455,19 @@ std::string Input::RealizeCorporationTaxBracket()
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
-    minmax<tnr_unrestricted_double> extrema(CorporationTaxBracketRealized_);
-    if(!(0.0 <= extrema.minimum().value() && extrema.maximum().value() <= 1.0))
+    LMI_ASSERT(!CorporationTaxBracketRealized_.empty());
+    auto const extrema = std::minmax_element
+        (CorporationTaxBracketRealized_.begin()
+        ,CorporationTaxBracketRealized_.end()
+        );
+    if(!(0.0 <= (*extrema.first).value() && (*extrema.second).value() <= 1.0))
         {
         std::ostringstream oss;
         oss
             << "Corporate tax bracket as entered ranges from "
-            << extrema.minimum()
+            << *extrema.first
             << " to "
-            << extrema.maximum()
+            << *extrema.second
             << ", but must be between 0 and 1 inclusive."
             ;
         return oss.str();
@@ -484,15 +492,19 @@ std::string Input::RealizeTaxBracket()
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
-    minmax<tnr_unrestricted_double> extrema(TaxBracketRealized_);
-    if(!(0.0 <= extrema.minimum().value() && extrema.maximum().value() <= 1.0))
+    LMI_ASSERT(!TaxBracketRealized_.empty());
+    auto const extrema = std::minmax_element
+        (TaxBracketRealized_.begin()
+        ,TaxBracketRealized_.end()
+        );
+    if(!(0.0 <= (*extrema.first).value() && (*extrema.second).value() <= 1.0))
         {
         std::ostringstream oss;
         oss
             << "Individual tax bracket as entered ranges from "
-            << extrema.minimum()
+            << *extrema.first
             << " to "
-            << extrema.maximum()
+            << *extrema.second
             << ", but must be between 0 and 1 inclusive."
             ;
         return oss.str();
