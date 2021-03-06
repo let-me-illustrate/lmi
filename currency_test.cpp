@@ -105,16 +105,20 @@ void currency_test::test_explicit_ctor()
 {
     currency const a1(325, raw_cents{});
     LMI_TEST_EQUAL( 325, a1.m_);
-#if defined DETECT_NONINTEGRAL_CENTS
     // 1/64 is an exact binary constant, so 100/64 cents could be
-    // converted to 1/64 dollars and back without loss of precision;
+    // converted to 1/64 dollars and back without loss of precision,
     // but that's outside the intended scope of the currency class.
+    // Binary-fractional currency could be constructed by using the
+    // private interface to manipulate class internals...
+    currency abusive {1.5625, raw_cents {}};
+    LMI_TEST_EQUAL(1.5625, abusive.m_);
+    LMI_TEST_EQUAL(0.015625, abusive.d());
+    // ...but the public interface forbids it:
     LMI_TEST_THROW
-        ((currency {1.5625, raw_cents {}})
+        (from_cents(1.5625)
         ,std::runtime_error
         ,"Nonintegral cents."
         );
-#endif // defined DETECT_NONINTEGRAL_CENTS
 }
 
 void currency_test::test_negation()
