@@ -68,13 +68,21 @@ namespace
     };
 
     // Type is fundamental but not floating, and therefore integral
-    // (or void, which would naturally be improper).
+    // (or void, which would naturally be improper). The static
+    // assertions are at worst O(1) pleonasms.
 
     template<typename T>
     struct strictly_between_extrema_tester<T,true,false>
     {
         bool operator()(T t)
             {
+            static_assert(std::numeric_limits<T>::is_bounded);
+            static_assert(!std::is_floating_point_v<T>);
+            // Make sure min() means lowest().
+            static_assert
+                (  std::numeric_limits<T>::min()
+                == std::numeric_limits<T>::lowest()
+                );
             static T const lower_limit = std::numeric_limits<T>::min();
             static T const upper_limit = std::numeric_limits<T>::max();
             return lower_limit < t && t < upper_limit;

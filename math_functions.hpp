@@ -101,6 +101,11 @@ inline T outward_quotient(T numerator, T denominator)
 
     // "INT_MIN / -1" would overflow; but "false/bool(-1)" would not,
     // hence the "T(-1) < 0" test.
+    // Make sure min() means lowest().
+    static_assert
+        (  std::numeric_limits<T>::min()
+        == std::numeric_limits<T>::lowest()
+        );
     constexpr T min = std::numeric_limits<T>::min();
     if(min == numerator && T(-1) < 0 && T(-1) == denominator)
         {
