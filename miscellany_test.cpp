@@ -142,8 +142,8 @@ void test_minmax()
 
     // Test default ctor.
     minmax<double> const dbl_minmax {};
-    LMI_TEST( DBL_MAX == dbl_minmax.minimum());
-    LMI_TEST(-DBL_MAX == dbl_minmax.maximum());
+    LMI_TEST_EQUAL( DBL_MAX, dbl_minmax.minimum());
+    LMI_TEST_EQUAL(-DBL_MAX, dbl_minmax.maximum());
 
     // Test explicit ctor with zero-element argument.
     std::vector<int> const empty_vector {};
@@ -154,8 +154,8 @@ void test_minmax()
     // Test const-correctness.
     std::vector<double> const v = w;
     minmax<double> const m(v);
-    LMI_TEST(zero == m.minimum());
-    LMI_TEST(one  == m.maximum());
+    LMI_TEST_EQUAL(zero, m.minimum());
+    LMI_TEST_EQUAL(one , m.maximum());
 
     // Motivation for relational operators: to write this...
     LMI_TEST(zero <= m.minimum() && m.maximum() <= one);
