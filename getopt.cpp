@@ -735,19 +735,19 @@ GetOpt::operator()()
 
   {
     int c = *nextchar++;
-#if defined __GNUC__ && !defined __clang__
+#if defined LMI_GCC
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wuseless-cast"
-#endif // defined __GNUC__ && !defined __clang__
+#endif // defined LMI_GCC
     // i686-w64-mingw32-g++-7.3 flags this cast as "useless", but
     // that seems to be a defect: the first argument is const, so
     // the return value is also const. Perhaps the presence of C99's
     // 'char* strchr(char const*, int);' prototype confuses g++, but
     // it's still a defect.
     char* temp = const_cast<char*>(std::strchr(noptstring.c_str(), c));
-#if defined __GNUC__ && !defined __clang__
+#if defined LMI_GCC
 #   pragma GCC diagnostic pop
-#endif // defined __GNUC__ && !defined __clang__
+#endif // defined LMI_GCC
 
     // Increment 'optind' when we start to process its last character.
     if(*nextchar == 0)
