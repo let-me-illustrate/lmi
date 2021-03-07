@@ -117,12 +117,14 @@ vim -es -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
 #   https://lists.nongnu.org/archive/html/lmi/2016-03/msg00006.html
 git config --global color.ui auto
 git config --global commit.cleanup scissors
+git config --global commit.verbose true
 git config --global core.pager "less -+F -+X"
 git config --global diff.colormoved plain
 git config --global log.date iso8601-strict-local
 git config --global log.follow true
 git config --global pull.ff only
 git config --global push.default simple
+git config --global push.recurseSubmodules check
 
 # from lmi_setup_42.sh
 
