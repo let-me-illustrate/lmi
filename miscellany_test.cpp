@@ -26,6 +26,7 @@
 #include "test_tools.hpp"
 
 #include <cfloat>                       // DBL_MAX
+#include <cmath>                        // HUGE_VAL
 #include <cstdio>                       // remove()
 #include <fstream>
 #include <limits>
@@ -129,6 +130,18 @@ void test_files_are_identical()
 
     std::remove(f0);
     std::remove(f1);
+}
+
+void test_sup_inf()
+{
+    LMI_TEST_EQUAL( false   , infimum <bool  >());
+    LMI_TEST_EQUAL( true    , supremum<bool  >());
+    LMI_TEST_EQUAL( INT_MIN , infimum <int   >());
+    LMI_TEST_EQUAL( INT_MAX , supremum<int   >());
+    LMI_TEST_EQUAL(-HUGE_VAL, infimum <double>());
+    LMI_TEST_EQUAL( HUGE_VAL, supremum<double>());
+
+    LMI_TEST_EQUAL( 0       , infimum <unsigned int>());
 }
 
 void test_minmax()
@@ -412,6 +425,7 @@ int test_main(int, char*[])
 {
     test_each_equal();
     test_files_are_identical();
+    test_sup_inf();
     test_minmax();
     test_prefix_and_suffix();
     test_scale_power();

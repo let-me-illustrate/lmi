@@ -83,6 +83,28 @@ std::string floating_rep(T t)
     return oss.str();
 }
 
+template<typename T>
+constexpr T infimum()
+{
+    using limits = std::numeric_limits<T>;
+    static_assert(limits::is_bounded);
+    if constexpr(limits::has_infinity)
+        return -limits::infinity();
+    else
+        return limits::min();
+}
+
+template<typename T>
+constexpr T supremum()
+{
+    using limits = std::numeric_limits<T>;
+    static_assert(limits::is_bounded);
+    if constexpr(limits::has_infinity)
+        return limits::infinity();
+    else
+        return limits::max();
+}
+
 /// Ascertain vector minimum and maximum efficiently.
 ///
 /// Heterogeneous relational operators are necessarily free functions.
