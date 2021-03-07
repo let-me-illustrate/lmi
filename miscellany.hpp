@@ -143,8 +143,8 @@ class minmax
     T maximum() const {return maximum_;}
 
   private:
-    T minimum_ {std::numeric_limits<T>::max()};
-    T maximum_ {std::numeric_limits<T>::lowest()};
+    T minimum_ {supremum<T>()};
+    T maximum_ {infimum <T>()};
 };
 
 template<typename T> bool operator< (T t, minmax<T> m) {return t <  m.minimum();}

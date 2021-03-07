@@ -155,8 +155,8 @@ void test_minmax()
 
     // Test default ctor.
     minmax<double> const dbl_minmax {};
-    LMI_TEST_EQUAL( DBL_MAX, dbl_minmax.minimum());
-    LMI_TEST_EQUAL(-DBL_MAX, dbl_minmax.maximum());
+    LMI_TEST_EQUAL( HUGE_VAL, dbl_minmax.minimum());
+    LMI_TEST_EQUAL(-HUGE_VAL, dbl_minmax.maximum());
 
     // Test explicit ctor with zero-element argument.
     std::vector<int> const empty_vector {};
