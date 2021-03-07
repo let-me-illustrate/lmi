@@ -34,6 +34,8 @@
 // Even if precompiled headers are not really being used, use this header to
 // disable some warnings which are enabled for the rest of lmi code but have to
 // be disabled for the code using wxWidgets as they occur in wxWidgets headers.
+// Note carefully that 'config.hpp' has not been included yet, and therefore
+// the following conditionals must not use 'LMI_GCC'.
 #if defined __GNUC__ && !defined __clang__
 //#   pragma GCC diagnostic ignored "-Wcast-qual"
 //#   pragma GCC diagnostic ignored "-Wdouble-promotion"

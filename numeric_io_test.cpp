@@ -236,10 +236,10 @@ int test_main(int, char*[])
     LMI_TEST_EQUAL( "Z ", numeric_io_cast<std::string>( "Z "));
     LMI_TEST_EQUAL(" Z ", numeric_io_cast<std::string>(" Z "));
 
-#if defined __GNUC__ && !defined __clang__
+#if defined LMI_GCC
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wuseless-cast"
-#endif // defined __GNUC__ && !defined __clang__
+#endif // defined LMI_GCC
 
     test_interconvertibility(static_cast<         char>(   1), "1", __FILE__, __LINE__);
     test_interconvertibility(static_cast<         char>('\1'), "1", __FILE__, __LINE__);
@@ -297,9 +297,9 @@ int test_main(int, char*[])
     LMI_TEST_EQUAL(numeric_io_cast<long double>("3.36210314311209350626e-4932"), std::numeric_limits<long double>::min());
 #endif // !defined LMI_MSVCRT
 
-#if defined __GNUC__ && !defined __clang__
+#if defined LMI_GCC
 #   pragma GCC diagnostic pop
-#endif // defined __GNUC__ && !defined __clang__
+#endif // defined LMI_GCC
 
     test_interconvertibility(std::string("  as  df  "), "  as  df  ", __FILE__, __LINE__);
     // The converse

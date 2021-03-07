@@ -108,6 +108,15 @@ namespace fs = boost::filesystem;
 //
 #include "platform_dependent.hpp"
 
+// Testing for the predefined __GNUC__ is not always the right thing
+// to do, as it is also defined by mostly gcc-compatible compilers
+// such as clang or (not currently supported) icc, so define a symbol
+// which is only defined for gcc itself, but not any others, to be
+// used where the difference between them matters.
+#if defined __GNUC__ && !defined __clang__
+#   define LMI_GCC
+#endif // defined __GNUC__ && !defined __clang__
+
 // It is impossible to compile lmi with g++ prior to version 3, though
 // old versions of gcc would be adequate for C translation units.
 
