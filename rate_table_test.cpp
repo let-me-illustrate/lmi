@@ -452,7 +452,7 @@ void test_copy()
 
 void test_decimal_deduction()
 {
-    //                                                 1 234567890123456
+    //                                               1 234567890123456
     LMI_TEST_EQUAL( 9, deduce_number_of_decimals("0002.123456789000001"));
     LMI_TEST_EQUAL( 8, deduce_number_of_decimals("0002.123456789999991"));
 
@@ -471,7 +471,7 @@ void test_decimal_deduction()
     LMI_TEST_EQUAL( 0, deduce_number_of_decimals("   1                "));
     LMI_TEST_EQUAL( 0, deduce_number_of_decimals("   9                "));
 
-    //                                                123456789012345678
+    //                                              123456789012345678
     LMI_TEST_EQUAL( 5, deduce_number_of_decimals("0.012830000000000001"));
 }
 
