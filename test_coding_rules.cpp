@@ -625,6 +625,32 @@ void check_cxx(file const& f)
         }
 
     {
+    // See:
+    //   https://lists.nongnu.org/archive/html/lmi/2021-03/msg00032.html
+    static boost::regex const r(R"(\<R"([^(]*)[(])");
+    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
+    boost::sregex_iterator const omega;
+    for(; i != omega; ++i)
+        {
+        boost::smatch const& z(*i);
+        if
+            (   "test_coding_rules.cpp" != f.leaf_name()
+            &&  "--cut-here--" != z[1]
+            &&  ""             != z[1]
+            )
+            {
+            std::ostringstream oss;
+            oss
+                << "contains noncanonical d-char-seq: '"
+                << z[1]
+                << "'. Instead, use '--cut-here--'."
+                ;
+            complain(f, oss.str());
+            }
+        }
+    }
+
+    {
     static std::string const p(R"(\bfor\b[^\n]+[^:\n]:[^:\n][^)\n]+\))");
     static std::string const q(R"(\bfor\b\( *([:\w]+)( *[^ ]*) *\w+([ :]+))");
     // This is "p && q || p", so to speak. If 'p' doesn't match, then
@@ -818,6 +844,7 @@ void check_label_indentation(file const& f)
         boost::smatch const& z(*i);
         if
             (   "default" != z[2]
+            &&  "Usage"   != z[2]
             &&  "  "      != z[1]
             &&  "      "  != z[1]
             )

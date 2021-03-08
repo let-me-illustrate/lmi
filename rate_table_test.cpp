@@ -131,18 +131,20 @@ std::string const qx_ins_path("/opt/lmi/data/qx_ins");
 
 /// Prefix used for the test tables.
 std::string const simple_table_header =
-    "Table number: 1\n"
-    "Table type: Aggregate\n"
-    "Minimum age: 0\n"
-    "Maximum age: 1\n"
-    "Number of decimal places: 5\n"
-    "Table values:\n"
-    ;
+1 + R"--cut-here--(
+Table number: 1
+Table type: Aggregate
+Minimum age: 0
+Maximum age: 1
+Number of decimal places: 5
+Table values:
+)--cut-here--";
 
 std::string const simple_table_values =
-    "  0  0.12345\n"
-    "  1  0.23456\n"
-    ;
+1 + R"--cut-here--(
+  0  0.12345
+  1  0.23456
+)--cut-here--";
 
 /// Minimal valid SOA table in text format.
 std::string const simple_table_text(simple_table_header + simple_table_values);
@@ -152,15 +154,16 @@ std::string const simple_table_text(simple_table_header + simple_table_values);
 /// four: two spaces between columns, plus one for the data, plus one
 /// for a nonexistent decimal point.
 std::string const integral_table =
-    "Table number: 1\n"
-    "Table type: Aggregate\n"
-    "Minimum age: 0\n"
-    "Maximum age: 1\n"
-    "Number of decimal places: 0\n"
-    "Table values:\n"
-    "  0   0\n"
-    "  1   1\n"
-    ;
+1 + R"--cut-here--(
+Table number: 1
+Table type: Aggregate
+Minimum age: 0
+Maximum age: 1
+Number of decimal places: 0
+Table values:
+  0   0
+  1   1
+)--cut-here--";
 } // Unnamed namespace.
 
 /// Test opening database files.
