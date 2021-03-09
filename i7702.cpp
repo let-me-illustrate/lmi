@@ -30,6 +30,96 @@
 #include "miscellany.hpp"               // each_equal(), minmax
 #include "stratified_charges.hpp"
 
+/// Here's how lmi determines §7702 and §7702A interest rates.
+///
+/// All these variables are vectors that may vary by year, except
+/// statutory rates marked as scalar.
+///
+/// "max" means the year-by-year maximum: e.g.,
+///   max({1 2 3}, {0 2 4}) is {1 2 4}
+///
+/// A: statutory rates (always scalar)
+///   A0: all but GSP (e.g., 4% as of 1984)
+///   A1: GSP only (A0 + 2% in current statute)
+///
+/// B: contractual guarantees
+///   B0: unloaned gen acct (specified by contract)
+///   B1: loaned, fixed rate (max net = charged - credited)
+///   B2: loaned, variable rate (max net, ascertainable from contract)
+///   B3: sep acct (generally 0%, so no effect on Bmax)
+///   Bmax: max(B0, B1, B2, B3)
+///
+/// C: NAAR discount (given here as i, the annual rate of interest)
+///   almost always specified in contract as B0 upper 12 / 12
+///     which should be rounded up, if at all
+///     if it was rounded down, B0 governs instead
+///   but some policies do not discount NAAR, in which case
+///     but C uniformly equals zero
+///   therefore, assert that either C=0 or C materially equals B0
+///
+/// D: initial short-term guarantees
+///   good product design generally creates none
+///   therefore, always zero in practice for lmi
+///
+/// E: asset-based charges
+///   lowest value each year, if dependent on assets, premiums, etc.
+///
+/// ic_usual  max(A0, Bmax)  + D
+/// ig_usual  max(A0, B0, C) + D
+/// ic_glp    max(A0, Bmax)      - E
+/// ig_glp    max(A0, B0, C)     - E
+/// ic_gsp    max(A1, Bmax)  + D - E
+/// ig_gsp    max(A1, B0, C) + D - E
+///   but all ig* are zero if C uniformly equals zero
+///
+/// Exhaustive list of use cases:
+///   {GLP, GSP, CVAT NSP, §7702A NSP, 7PP, and DCV}
+/// All but {GLP, GSP} use "usual" rates.
+///
+/// Discussion
+///
+/// Interest rates should be rounded up, if at all; lmi doesn't
+/// round them at all.
+///
+/// ig may actually exceed ic; for example:
+///   ic = 4% guaranteed rate
+///   ig = 4.00000001% implied by contractual NAAR discount
+/// The contractual NAAR discount affects only ig. Effect:
+///   lower  ig --> higher guideline
+///   higher ig --> lower guideline
+/// so this could be considered "conservative", but really it just
+/// follows from §7702(b)(2)(A)'s "greater of" prescription.
+///
+/// Asset-based charges (E above) affect the interest rate only for
+/// calculation of guideline premiums. They're expense charges, which
+/// must be ignored for 7PP and for the §7702 as well as §7702A NSPs
+/// because those quantities are net premiums. DCV calculations deduct
+/// actual charges during monthly processing, and credit interest at
+/// the ic_usual rate, which ignores E, because those charges must not
+/// be double-counted; thus, DCV correctly reflects any dependence of
+/// such charges on asset or premium tiers, which E cannot do.
+///
+/// Idea not implemented: optionally set all ig* equal to C. The SOA
+/// textbook (page 52) supports treating it as "a contractual element
+/// that is not an interest rate guaranteed on issue of the contract"
+/// for §7702 purposes. Yet it's simple to follow lmi's more careful
+/// interpretation, which most often produces materially the same
+/// result. If a contract specifies C as the monthly equivalent of
+/// any rate other than B0, that's presumably just a mistake.
+///
+/// Present shortcomings of the code in this file:
+///   [first change names to follow scheme above, adding new ones]
+///   formulas are too simplistic:
+///     igross: max(A0, Bmax)
+///     iglp:   max(A0, Bmax) - E
+///     igsp:   max(A1, Bmax) - E
+///     ig:     max(A0, C)
+///   ig problems:
+///     A1 ignored: must reflect +2% for GSP
+///       and that 2% extra should be parameterized
+///     use contractual rates if greater
+///   separate-account-only charges: deduct only from B3?
+
 i7702::i7702
     (product_database   const& database
     ,stratified_charges const& stratified
