@@ -49,28 +49,28 @@
 ///   B3: sep acct (generally 0%, so no effect on Bmax)
 ///   Bmax: max(B0, B1, B2, B3)
 ///
-/// C: NAAR discount (given here as i, the annual rate of interest)
+/// C: initial short-term guarantees
+///   good product design generally creates none
+///   therefore, always zero in practice for lmi
+///
+/// D: asset-based charges
+///   lowest value each year, if dependent on assets, premiums, etc.
+///
+/// E: NAAR discount (given here as i, the annual rate of interest)
 ///   almost always specified in contract as B0 upper 12 / 12
 ///     which should be rounded up, if at all
 ///     if it was rounded down, B0 governs instead
 ///   but some policies do not discount NAAR, in which case
-///     but C uniformly equals zero
-///   therefore, assert that either C=0 or C materially equals B0
+///     but E uniformly equals zero
+///   therefore, assert that either E=0 or E materially equals B0
 ///
-/// D: initial short-term guarantees
-///   good product design generally creates none
-///   therefore, always zero in practice for lmi
-///
-/// E: asset-based charges
-///   lowest value each year, if dependent on assets, premiums, etc.
-///
-/// ic_usual  max(A0, Bmax)  + D
-/// ig_usual  max(A0, B0, C) + D
-/// ic_glp    max(A0, Bmax)      - E
-/// ig_glp    max(A0, B0, C)     - E
-/// ic_gsp    max(A1, Bmax)  + D - E
-/// ig_gsp    max(A1, B0, C) + D - E
-///   but all ig* are zero if C uniformly equals zero
+/// ic_usual  max(A0, Bmax, C   )
+/// ig_usual  max(A0, B0,   C, E)
+/// ic_glp    max(A0, Bmax      ) - D
+/// ig_glp    max(A0, B0,      E) - D
+/// ic_gsp    max(A1, Bmax, C   ) - D
+/// ig_gsp    max(A1, B0,   C, E) - D
+///   but all ig* are zero if E uniformly equals zero
 ///
 /// Exhaustive list of use cases:
 ///   {GLP, GSP, CVAT NSP, §7702A NSP, 7PP, and DCV}
@@ -90,30 +90,30 @@
 /// so this could be considered "conservative", but really it just
 /// follows from §7702(b)(2)(A)'s "greater of" prescription.
 ///
-/// Asset-based charges (E above) affect the interest rate only for
+/// Asset-based charges (D above) affect the interest rate only for
 /// calculation of guideline premiums. They're expense charges, which
 /// must be ignored for 7PP and for the §7702 as well as §7702A NSPs
 /// because those quantities are net premiums. DCV calculations deduct
 /// actual charges during monthly processing, and credit interest at
-/// the ic_usual rate, which ignores E, because those charges must not
+/// the ic_usual rate, which ignores D, because those charges must not
 /// be double-counted; thus, DCV correctly reflects any dependence of
-/// such charges on asset or premium tiers, which E cannot do.
+/// such charges on asset or premium tiers, which D cannot do.
 ///
-/// Idea not implemented: optionally set all ig* equal to C. The SOA
+/// Idea not implemented: optionally set all ig* equal to E. The SOA
 /// textbook (page 52) supports treating it as "a contractual element
 /// that is not an interest rate guaranteed on issue of the contract"
 /// for §7702 purposes. Yet it's simple to follow lmi's more careful
 /// interpretation, which most often produces materially the same
-/// result. If a contract specifies C as the monthly equivalent of
+/// result. If a contract specifies E as the monthly equivalent of
 /// any rate other than B0, that's presumably just a mistake.
 ///
 /// Present shortcomings of the code in this file:
 ///   [first change names to follow scheme above, adding new ones]
 ///   formulas are too simplistic:
 ///     igross: max(A0, Bmax)
-///     iglp:   max(A0, Bmax) - E
-///     igsp:   max(A1, Bmax) - E
-///     ig:     max(A0, C)
+///     iglp:   max(A0, Bmax) - D
+///     igsp:   max(A1, Bmax) - D
+///     ig:     max(A0, E)
 ///   ig problems:
 ///     A1 ignored: must reflect +2% for GSP
 ///       and that 2% extra should be parameterized
