@@ -67,7 +67,7 @@ class LMI_SO i7702 final
         ,std::vector<double> const& Dsep
         ,std::vector<double> const& Dflr
         ,std::vector<double> const& Dvlr
-        ,std::vector<double> const& E
+        ,std::vector<double> const& Em
         );
 
     void initialize();
@@ -89,7 +89,7 @@ class LMI_SO i7702 final
     std::vector<double> Dsep_ ;
     std::vector<double> Dflr_ ;
     std::vector<double> Dvlr_ ;
-    std::vector<double> E_    ;
+    std::vector<double> Em_   ;
 
     // Derived 7702 interest rates.
     std::vector<double> ig_     ;

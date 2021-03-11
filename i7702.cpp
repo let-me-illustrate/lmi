@@ -106,6 +106,24 @@
 ///     in which case E uniformly equals zero
 ///   an assertion checks that either E=0 or E materially equals Bgen
 ///
+/// Monthly and annual rates
+///
+/// For consistency, the formulas above are expressed in terms of
+/// annual rates only. Most of the calculations use only annual rates,
+/// transforming them (i --> i upper 12 / 12) to monthly as a final
+/// step for actual use with monthly UL commutation functions.
+///
+/// However, to preserve accuracy, the ig* calculations are performed
+/// on a monthly basis. The rate E above is normally expressed on a
+/// monthly basis, often with rounding; it makes no sense to convert
+/// it to annual in a formula like this:
+///   ig_usual  max(ic_usual, E)
+/// and then convert the result back to monthly, especially since the
+/// corresponding ic* rate must be converted to monthly anyway.
+///
+/// Therefore, lmi actually retrieves a monthly E (call it Em) from
+/// the product database, and returns only monthly ig* and ic* rates.
+///
 /// Discussion
 ///
 /// 7702 interest rates should be rounded up, if at all; lmi doesn't
@@ -168,7 +186,7 @@ i7702::i7702
     ,std::vector<double> const& Dsep
     ,std::vector<double> const& Dflr
     ,std::vector<double> const& Dvlr
-    ,std::vector<double> const& E
+    ,std::vector<double> const& Em
     )
     :A0_   {A0  }
     ,A1_   {A1  }
@@ -184,7 +202,7 @@ i7702::i7702
     ,Dsep_ {Dsep}
     ,Dflr_ {Dflr}
     ,Dvlr_ {Dvlr}
-    ,E_    {E   }
+    ,Em_   {Em  }
 {
     initialize();
 }
@@ -207,7 +225,7 @@ i7702::i7702
     ,Dsep_ (database.length())
     ,Dflr_ (database.length())
     ,Dvlr_ (database.length())
-    ,E_    (database.length())
+    ,Em_   (database.length())
 {
     // Monthly guar net int for 7702 is
     //   greater of {iglp(), igsp()} and annual guar int rate
@@ -305,15 +323,14 @@ i7702::i7702
     // For 7702, 'ig' should generally equal Eckley's 'ic'.
 
     std::vector<double> const zero(database.length(), 0.0);
-    std::vector<double> contractual_naar_discount;
-    database.query_into(DB_NaarDiscount, contractual_naar_discount);
-    bool const no_naar_discount = zero == contractual_naar_discount;
+    database.query_into(DB_NaarDiscount, Em_);
+    bool const no_naar_discount = zero == Em_;
     std::vector<double> theoretical_naar_discount(database.length(), 0.0);
     theoretical_naar_discount +=
         apply_unary(i_upper_12_over_12_from_i<double>(), Bgen_);
 
     std::vector<double> diff(database.length(), 0.0);
-    diff += fabs(contractual_naar_discount - theoretical_naar_discount);
+    diff += fabs(Em_ - theoretical_naar_discount);
     minmax<double> const mm(diff);
     constexpr double tolerance {0.0000001};
     LMI_ASSERT(no_naar_discount || mm < tolerance);
@@ -322,7 +339,7 @@ i7702::i7702
     operative_naar_discount +=
         Max
             (apply_unary(i_upper_12_over_12_from_i<double>(), A0_)
-            ,Max(contractual_naar_discount, theoretical_naar_discount)
+            ,Max(Em_, theoretical_naar_discount)
             );
     ig_ = no_naar_discount ? zero : operative_naar_discount;
 }
