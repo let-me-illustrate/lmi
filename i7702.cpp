@@ -268,36 +268,6 @@ i7702::i7702
     database.query_into(DB_CurrAcctValLoad, Dsep_);
     Dsep_ += stratified.minimum_tiered_sepacct_load_for_7702();
 
-    std::vector<double> guar_int = Bgen_;
-    assign(guar_int, Max(guar_int, Bflr_));
-
-    gross_.assign(database.length(), 0.0);
-    assign
-        (gross_
-        ,apply_unary
-            (i_upper_12_over_12_from_i<double>()
-            ,Max(A0_, guar_int)
-            )
-        );
-
-    net_glp_.assign(database.length(), 0.0);
-    assign
-        (net_glp_
-        ,apply_unary
-            (i_upper_12_over_12_from_i<double>()
-            ,Max(A0_, guar_int) - Dsep_
-            )
-        );
-
-    net_gsp_.assign(database.length(), 0.0);
-    assign
-        (net_gsp_
-        ,apply_unary
-            (i_upper_12_over_12_from_i<double>()
-            ,Max(0.02 + A0_, guar_int) - Dsep_
-            )
-        );
-
     // Eckley's 'ig' represents the interest rate by which death
     // benefit is discounted for calculating mortality charges,
     // as seen in his formula (1):
@@ -334,6 +304,37 @@ i7702::i7702
     minmax<double> const mm(diff);
     constexpr double tolerance {0.0000001};
     LMI_ASSERT(no_naar_discount || mm < tolerance);
+
+    // Here begin the dubious calculations that will be replaced.
+    std::vector<double> guar_int = Bgen_;
+    assign(guar_int, Max(guar_int, Bflr_));
+
+    gross_.assign(database.length(), 0.0);
+    assign
+        (gross_
+        ,apply_unary
+            (i_upper_12_over_12_from_i<double>()
+            ,Max(A0_, guar_int)
+            )
+        );
+
+    net_glp_.assign(database.length(), 0.0);
+    assign
+        (net_glp_
+        ,apply_unary
+            (i_upper_12_over_12_from_i<double>()
+            ,Max(A0_, guar_int) - Dsep_
+            )
+        );
+
+    net_gsp_.assign(database.length(), 0.0);
+    assign
+        (net_gsp_
+        ,apply_unary
+            (i_upper_12_over_12_from_i<double>()
+            ,Max(0.02 + A0_, guar_int) - Dsep_
+            )
+        );
 
     std::vector<double> operative_naar_discount(database.length(), 0.0);
     operative_naar_discount +=
