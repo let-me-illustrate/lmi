@@ -33,11 +33,14 @@ class LMI_SO_FWD_DECL stratified_charges;
 
 class LMI_SO i7702 final
 {
+    friend struct i7702_test;
+
   public:
     i7702
         (product_database   const&
         ,stratified_charges const&
         );
+
     i7702(i7702 const&) = delete;
     i7702& operator=(i7702 const&) = delete;
     ~i7702() = default;
@@ -48,6 +51,47 @@ class LMI_SO i7702 final
     std::vector<double> const& net_gsp() const {return net_gsp_;}
 
   private:
+    // Private ctor for unit test.
+    i7702
+        (std::vector<double> const& A0
+        ,std::vector<double> const& A1
+        ,std::vector<double> const& Bgen
+        ,std::vector<double> const& Bsep
+        ,std::vector<double> const& Bflr
+        ,std::vector<double> const& Bvlr
+        ,std::vector<double> const& Cgen
+        ,std::vector<double> const& Csep
+        ,std::vector<double> const& Cflr
+        ,std::vector<double> const& Cvlr
+        ,std::vector<double> const& Dgen
+        ,std::vector<double> const& Dsep
+        ,std::vector<double> const& Dflr
+        ,std::vector<double> const& Dvlr
+        ,std::vector<double> const& E
+        );
+
+    void initialize();
+
+    // Parameters from product database--member names are
+    // capitalized to match formulas in documentation, but
+    // suffixed to mark them as members.
+    std::vector<double> A0_   ;
+    std::vector<double> A1_   ;
+    std::vector<double> Bgen_ ;
+    std::vector<double> Bsep_ ;
+    std::vector<double> Bflr_ ;
+    std::vector<double> Bvlr_ ;
+    std::vector<double> Cgen_ ;
+    std::vector<double> Csep_ ;
+    std::vector<double> Cflr_ ;
+    std::vector<double> Cvlr_ ;
+    std::vector<double> Dgen_ ;
+    std::vector<double> Dsep_ ;
+    std::vector<double> Dflr_ ;
+    std::vector<double> Dvlr_ ;
+    std::vector<double> E_    ;
+
+    // Derived 7702 interest rates.
     std::vector<double> ig_     ;
     std::vector<double> gross_  ;
     std::vector<double> net_glp_;

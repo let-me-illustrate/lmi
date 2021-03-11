@@ -154,6 +154,42 @@
 ///     use contractual rates if greater
 
 i7702::i7702
+    (std::vector<double> const& A0
+    ,std::vector<double> const& A1
+    ,std::vector<double> const& Bgen
+    ,std::vector<double> const& Bsep
+    ,std::vector<double> const& Bflr
+    ,std::vector<double> const& Bvlr
+    ,std::vector<double> const& Cgen
+    ,std::vector<double> const& Csep
+    ,std::vector<double> const& Cflr
+    ,std::vector<double> const& Cvlr
+    ,std::vector<double> const& Dgen
+    ,std::vector<double> const& Dsep
+    ,std::vector<double> const& Dflr
+    ,std::vector<double> const& Dvlr
+    ,std::vector<double> const& E
+    )
+    :A0_   {A0  }
+    ,A1_   {A1  }
+    ,Bgen_ {Bgen}
+    ,Bsep_ {Bsep}
+    ,Bflr_ {Bflr}
+    ,Bvlr_ {Bvlr}
+    ,Cgen_ {Cgen}
+    ,Csep_ {Csep}
+    ,Cflr_ {Cflr}
+    ,Cvlr_ {Cvlr}
+    ,Dgen_ {Dgen}
+    ,Dsep_ {Dsep}
+    ,Dflr_ {Dflr}
+    ,Dvlr_ {Dvlr}
+    ,E_    {E   }
+{
+    initialize();
+}
+
+i7702::i7702
     (product_database   const& database
     ,stratified_charges const& stratified
     )
@@ -281,4 +317,8 @@ i7702::i7702
             ,Max(contractual_naar_discount, theoretical_naar_discount)
             );
     ig_ = no_naar_discount ? zero : operative_naar_discount;
+}
+
+void i7702::initialize()
+{
 }
