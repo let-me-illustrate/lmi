@@ -193,6 +193,21 @@ i7702::i7702
     (product_database   const& database
     ,stratified_charges const& stratified
     )
+    :A0_   (database.length())
+    ,A1_   (database.length())
+    ,Bgen_ (database.length())
+    ,Bsep_ (database.length())
+    ,Bflr_ (database.length())
+    ,Bvlr_ (database.length())
+    ,Cgen_ (database.length())
+    ,Csep_ (database.length())
+    ,Cflr_ (database.length())
+    ,Cvlr_ (database.length())
+    ,Dgen_ (database.length())
+    ,Dsep_ (database.length())
+    ,Dflr_ (database.length())
+    ,Dvlr_ (database.length())
+    ,E_    (database.length())
 {
     // Monthly guar net int for 7702 is
     //   greater of {iglp(), igsp()} and annual guar int rate
@@ -202,12 +217,10 @@ i7702::i7702
     // DCV calculations in the account value class as well as
     // GPT calculations in the 7702 class.
 
-    std::vector<double> statutory7702i;
-    database.query_into(DB_AnnInterestRate7702, statutory7702i);
+    database.query_into(DB_AnnInterestRate7702, A0_);
 
-    std::vector<double> guar_int;
-    database.query_into(DB_GuarInt, guar_int);
-    std::vector<double> const contractual_guar_int = guar_int;
+    database.query_into(DB_GuarInt, Bgen_);
+    std::vector<double> guar_int = Bgen_;
 
     // For 7702 purposes, the rate guaranteed by the contract is the
     // highest rate on any potential path, at each duration; thus,
@@ -223,10 +236,8 @@ i7702::i7702
             database.query_into(DB_FixedLoanRate    , gross_loan_rate);
             std::vector<double> guar_loan_spread;
             database.query_into(DB_GuarRegLoanSpread, guar_loan_spread);
-            assign
-                (guar_int
-                ,Max(guar_int, gross_loan_rate - guar_loan_spread)
-                );
+            assign(Bflr_, gross_loan_rate - guar_loan_spread);
+            assign(guar_int, Max(guar_int, Bflr_));
             }
         }
 
@@ -234,15 +245,14 @@ i7702::i7702
     // the issue date constitutes a short-term guarantee that must be
     // reflected in the 7702 interest rates (excluding the GLP rate).
 
-    std::vector<double> av_load;
     // 7702 !! DB_CurrAcctValLoad is sepacct only
-    database.query_into(DB_CurrAcctValLoad, av_load);
+    database.query_into(DB_CurrAcctValLoad, Dsep_);
     if
         (   database.query<bool>(DB_AllowSepAcct)
         && !database.query<bool>(DB_AllowGenAcct)
         )
         {
-        av_load += stratified.minimum_tiered_sepacct_load_for_7702();
+        Dsep_ += stratified.minimum_tiered_sepacct_load_for_7702();
         }
 
     gross_.assign(database.length(), 0.0);
@@ -250,7 +260,7 @@ i7702::i7702
         (gross_
         ,apply_unary
             (i_upper_12_over_12_from_i<double>()
-            ,Max(statutory7702i, guar_int)
+            ,Max(A0_, guar_int)
             )
         );
 
@@ -259,7 +269,7 @@ i7702::i7702
         (net_glp_
         ,apply_unary
             (i_upper_12_over_12_from_i<double>()
-            ,Max(statutory7702i, guar_int) - av_load
+            ,Max(A0_, guar_int) - Dsep_
             )
         );
 
@@ -268,7 +278,7 @@ i7702::i7702
         (net_gsp_
         ,apply_unary
             (i_upper_12_over_12_from_i<double>()
-            ,Max(0.02 + statutory7702i, guar_int) - av_load
+            ,Max(0.02 + A0_, guar_int) - Dsep_
             )
         );
 
@@ -277,8 +287,8 @@ i7702::i7702
     // as seen in his formula (1):
     //   [0V + P - Q(1/(1 + ig) - OV - P)] (1 + ic) = 1V
     // where it is the monthly (i upper 12 over 12) equivalent of
-    // the annual 'contractual_guar_int' rate above. Specifying a
-    // discount based on any other rate is presumably an error.
+    // the annual 'Bgen_' rate above. Specifying a discount based on
+    // any other rate is presumably an error.
     //
     // In lmi's product database, DB_GuarInt is i. DB_NaarDiscount is
     // (i upper 12)/12, rounded iff the contract specifies a rounded
@@ -302,7 +312,7 @@ i7702::i7702
     bool const no_naar_discount = zero == contractual_naar_discount;
     std::vector<double> theoretical_naar_discount(database.length(), 0.0);
     theoretical_naar_discount +=
-        apply_unary(i_upper_12_over_12_from_i<double>(), contractual_guar_int);
+        apply_unary(i_upper_12_over_12_from_i<double>(), Bgen_);
 
     std::vector<double> diff(database.length(), 0.0);
     diff += fabs(contractual_naar_discount - theoretical_naar_discount);
@@ -313,7 +323,7 @@ i7702::i7702
     std::vector<double> operative_naar_discount(database.length(), 0.0);
     operative_naar_discount +=
         Max
-            (apply_unary(i_upper_12_over_12_from_i<double>(), statutory7702i)
+            (apply_unary(i_upper_12_over_12_from_i<double>(), A0_)
             ,Max(contractual_naar_discount, theoretical_naar_discount)
             );
     ig_ = no_naar_discount ? zero : operative_naar_discount;
