@@ -245,15 +245,12 @@ i7702::i7702
     // the issue date constitutes a short-term guarantee that must be
     // reflected in the 7702 interest rates (excluding the GLP rate).
 
-    if
-        (   database.query<bool>(DB_AllowSepAcct)
-        && !database.query<bool>(DB_AllowGenAcct)
-        )
-        {
-        // 7702 !! DB_CurrAcctValLoad is sepacct only: change its name
-        database.query_into(DB_CurrAcctValLoad, Dsep_);
-        Dsep_ += stratified.minimum_tiered_sepacct_load_for_7702();
-        }
+    // It just so happens that these loads are zero for all products
+    // lmi supports, except for separate-account-only products. The
+    // logic will soon be reworked to make that irrelevant.
+    // 7702 !! DB_CurrAcctValLoad is sepacct only: change its name
+    database.query_into(DB_CurrAcctValLoad, Dsep_);
+    Dsep_ += stratified.minimum_tiered_sepacct_load_for_7702();
 
     gross_.assign(database.length(), 0.0);
     assign
