@@ -82,26 +82,25 @@
 ///   A1: GSP only (A0 + 2% in current statute)
 ///
 /// B: contractual guarantees
-///   Bgen: unloaned general acct (specified by contract)
-///   Bsep: separate acct (generally 0%, thus without effect)
-///   Bflr: loaned, fixed rate (max net = charged - credited)
-///   Bvlr: loaned, variable rate (max net, ascertainable from contract)
+///   for loans: charged - spread
+///   usually no guarantee for separate account, making Bsep zero
 ///
 /// C: initial short-term guarantees
-///   good product design usually avoids creating any
+///   usually altogether avoided by careful product design
 ///   variable loan rate may cause Cvlr to be nonzero
-///   always zero in practice for lmi (which doesn't yet implement VLR)
+///   always zero in practice for lmi, which doesn't yet implement VLR
 ///
 /// D: asset-based charges
 ///   lowest value each year, if dependent on assets, premiums, etc.
+///   separate-account-only charges affect only Dsep
 ///
 /// E: NAAR discount (given here as i, the annual rate of interest)
 ///   often specified in contract as Bgen upper 12 / 12
-///     for 7702, must be rounded up, if at all
-///     if it was rounded down, Bgen governs instead
+///     if monthly contract factor rounded down, Bgen governs instead
+///     (slightly better 7702 outcome in that case)
 ///   but some policies do not discount NAAR
 ///     in which case E uniformly equals zero
-///   lmi therefore asserts that either E=0 or E materially equals Bgen
+///   an assertion checks that either E=0 or E materially equals Bgen
 ///
 /// Exhaustive list of use cases:
 ///   {GLP; GSP; CVAT NSP and corridor; §7702A NSP; 7PP; DCV}
@@ -129,6 +128,10 @@
 /// the ic_usual rate, which ignores D because those charges must not
 /// be double-counted; thus, DCV correctly reflects any dependence of
 /// such charges on asset or premium tiers, which D cannot do.
+///
+/// For contracts that require an irrevocable choice, before delivery,
+/// between a fixed and a variable loan rate, the path not chosen need
+/// not be considered.
 ///
 /// Idea not implemented: optionally set all ig* equal to E. The SOA
 /// textbook (page 52) supports treating it as "a contractual element
@@ -198,6 +201,7 @@ i7702::i7702
     // reflected in the 7702 interest rates (excluding the GLP rate).
 
     std::vector<double> av_load;
+    // 7702 !! DB_CurrAcctValLoad is sepacct only
     database_.query_into(DB_CurrAcctValLoad, av_load);
     if
         (   database_.query<bool>(DB_AllowSepAcct)
