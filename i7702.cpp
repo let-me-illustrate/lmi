@@ -220,7 +220,6 @@ i7702::i7702
     database.query_into(DB_AnnInterestRate7702, A0_);
 
     database.query_into(DB_GuarInt, Bgen_);
-    std::vector<double> guar_int = Bgen_;
 
     // For 7702 purposes, the rate guaranteed by the contract is the
     // highest rate on any potential path, at each duration; thus,
@@ -237,7 +236,6 @@ i7702::i7702
             std::vector<double> guar_loan_spread;
             database.query_into(DB_GuarRegLoanSpread, guar_loan_spread);
             assign(Bflr_, gross_loan_rate - guar_loan_spread);
-            assign(guar_int, Max(guar_int, Bflr_));
             }
         }
 
@@ -251,6 +249,9 @@ i7702::i7702
     // 7702 !! DB_CurrAcctValLoad is sepacct only: change its name
     database.query_into(DB_CurrAcctValLoad, Dsep_);
     Dsep_ += stratified.minimum_tiered_sepacct_load_for_7702();
+
+    std::vector<double> guar_int = Bgen_;
+    assign(guar_int, Max(guar_int, Bflr_));
 
     gross_.assign(database.length(), 0.0);
     assign
