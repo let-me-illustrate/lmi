@@ -33,52 +33,83 @@
 /// Here's how lmi determines §7702 and §7702A interest rates.
 ///
 /// All these variables are vectors that may vary by year, except
-/// statutory rates marked as scalar.
+/// that statutory rates are always scalar.
 ///
-/// "max" means the year-by-year maximum: e.g.,
+/// Several rates must be considered:
+///
+/// A: statutory rates (concrete values A0 and A1 described below)
+/// B: contractual guarantees
+/// C: initial short-term guarantees
+/// D: asset-based charges
+/// E: NAAR discount
+///
+/// and several account-paths for each of {B,C,D}:
+///
+/// gen: general account  (unloaned)
+/// sep: separate account (unloaned)
+/// flr: fixed loan rate
+/// vlr: variable loan rate
+///
+/// Let "max" mean the year-by-year maximum of vectors: e.g.,
 ///   max({1 2 3}, {0 2 4}) is {1 2 4}
+///
+/// Then the general formula is the maximum of
+///   max(A, B, C) - D
+/// along each account-path, i.e.
+///   max
+///     (max(A, Bgen, Cgen) - Dgen
+///     ,max(A, Bsep, Csep) - Dsep
+///     ,max(A, Bflr, Cflr) - Dflr
+///     ,max(A, Bvlr, Cvlr) - Dvlr
+///     )
+/// where A is chosen from {A0, A1} as appropriate,
+/// and the particular formulas are
+///   ic_usual  max(A0, B, C)
+///   ic_glp    max(A0, B   ) - D
+///   ic_gsp    max(A1, B, C) - D
+/// where C and D are taken as zero if omitted.
+///
+/// All ig are zero iff E uniformly equals zero; otherwise each is
+/// the greater of its ic counterpart and E:
+///   ig_usual  max(ic_usual, E)
+///   ig_glp    max(ic_glp,   E)
+///   ig_gsp    max(ic_gsp,   E)
+///
+/// Notes on input rates
 ///
 /// A: statutory rates (always scalar)
 ///   A0: all but GSP (e.g., 4% as of 1984)
 ///   A1: GSP only (A0 + 2% in current statute)
 ///
 /// B: contractual guarantees
-///   B0: unloaned gen acct (specified by contract)
-///   B1: loaned, fixed rate (max net = charged - credited)
-///   B2: loaned, variable rate (max net, ascertainable from contract)
-///   B3: sep acct (generally 0%, so no effect on Bmax)
-///   Bmax: max(B0, B1, B2, B3)
+///   Bgen: unloaned general acct (specified by contract)
+///   Bsep: separate acct (generally 0%, thus without effect)
+///   Bflr: loaned, fixed rate (max net = charged - credited)
+///   Bvlr: loaned, variable rate (max net, ascertainable from contract)
 ///
 /// C: initial short-term guarantees
-///   good product design generally creates none
-///   therefore, always zero in practice for lmi
+///   good product design usually avoids creating any
+///   variable loan rate may cause Cvlr to be nonzero
+///   always zero in practice for lmi (which doesn't yet implement VLR)
 ///
 /// D: asset-based charges
 ///   lowest value each year, if dependent on assets, premiums, etc.
 ///
 /// E: NAAR discount (given here as i, the annual rate of interest)
-///   almost always specified in contract as B0 upper 12 / 12
-///     which should be rounded up, if at all
-///     if it was rounded down, B0 governs instead
-///   but some policies do not discount NAAR, in which case
-///     but E uniformly equals zero
-///   therefore, assert that either E=0 or E materially equals B0
-///
-/// ic_usual  max(A0, Bmax, C   )
-/// ig_usual  max(A0, B0,   C, E)
-/// ic_glp    max(A0, Bmax      ) - D
-/// ig_glp    max(A0, B0,      E) - D
-/// ic_gsp    max(A1, Bmax, C   ) - D
-/// ig_gsp    max(A1, B0,   C, E) - D
-///   but all ig* are zero if E uniformly equals zero
+///   often specified in contract as Bgen upper 12 / 12
+///     for 7702, must be rounded up, if at all
+///     if it was rounded down, Bgen governs instead
+///   but some policies do not discount NAAR
+///     in which case E uniformly equals zero
+///   lmi therefore asserts that either E=0 or E materially equals Bgen
 ///
 /// Exhaustive list of use cases:
-///   {GLP, GSP, CVAT NSP, §7702A NSP, 7PP, and DCV}
-/// All but {GLP, GSP} use "usual" rates.
+///   {GLP; GSP; CVAT NSP and corridor; §7702A NSP; 7PP; DCV}
+/// All but {GLP; GSP} use "usual" rates.
 ///
 /// Discussion
 ///
-/// Interest rates should be rounded up, if at all; lmi doesn't
+/// 7702 interest rates should be rounded up, if at all; lmi doesn't
 /// round them at all.
 ///
 /// ig may actually exceed ic; for example:
@@ -95,7 +126,7 @@
 /// must be ignored for 7PP and for the §7702 as well as §7702A NSPs
 /// because those quantities are net premiums. DCV calculations deduct
 /// actual charges during monthly processing, and credit interest at
-/// the ic_usual rate, which ignores D, because those charges must not
+/// the ic_usual rate, which ignores D because those charges must not
 /// be double-counted; thus, DCV correctly reflects any dependence of
 /// such charges on asset or premium tiers, which D cannot do.
 ///
@@ -105,11 +136,11 @@
 /// for §7702 purposes. Yet it's simple to follow lmi's more careful
 /// interpretation, which most often produces materially the same
 /// result. If a contract specifies E as the monthly equivalent of
-/// any rate other than B0, that's presumably just a mistake.
+/// any rate other than Bgen, that's presumably just a mistake.
 ///
 /// Present shortcomings of the code in this file:
 ///   [first change names to follow scheme above, adding new ones]
-///   formulas are too simplistic:
+///   implementation is too simplistic:
 ///     igross: max(A0, Bmax)
 ///     iglp:   max(A0, Bmax) - D
 ///     igsp:   max(A1, Bmax) - D
@@ -118,7 +149,6 @@
 ///     A1 ignored: must reflect +2% for GSP
 ///       and that 2% extra should be parameterized
 ///     use contractual rates if greater
-///   separate-account-only charges: deduct only from B3?
 
 i7702::i7702
     (product_database   const& database
