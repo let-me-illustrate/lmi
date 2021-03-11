@@ -75,6 +75,10 @@
 ///   ig_glp    max(ic_glp,   E)
 ///   ig_gsp    max(ic_gsp,   E)
 ///
+/// Exhaustive list of use cases:
+///   {GLP; GSP; CVAT NSP and corridor; §7702A NSP; 7PP; DCV}
+/// All but {GLP; GSP} use "usual" rates.
+///
 /// Notes on input rates
 ///
 /// A: statutory rates (always scalar)
@@ -101,10 +105,6 @@
 ///   but some policies do not discount NAAR
 ///     in which case E uniformly equals zero
 ///   an assertion checks that either E=0 or E materially equals Bgen
-///
-/// Exhaustive list of use cases:
-///   {GLP; GSP; CVAT NSP and corridor; §7702A NSP; 7PP; DCV}
-/// All but {GLP; GSP} use "usual" rates.
 ///
 /// Discussion
 ///
