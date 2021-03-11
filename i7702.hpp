@@ -48,9 +48,6 @@ class LMI_SO i7702 final
     std::vector<double> const& net_gsp() const {return net_gsp_;}
 
   private:
-    product_database   const& database_;
-    stratified_charges const& stratified_;
-
     std::vector<double> ig_     ;
     std::vector<double> gross_  ;
     std::vector<double> net_glp_;

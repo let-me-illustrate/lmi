@@ -157,8 +157,6 @@ i7702::i7702
     (product_database   const& database
     ,stratified_charges const& stratified
     )
-    :database_   {database}
-    ,stratified_ {stratified}
 {
     // Monthly guar net int for 7702 is
     //   greater of {iglp(), igsp()} and annual guar int rate
@@ -169,26 +167,26 @@ i7702::i7702
     // GPT calculations in the 7702 class.
 
     std::vector<double> statutory7702i;
-    database_.query_into(DB_AnnInterestRate7702, statutory7702i);
+    database.query_into(DB_AnnInterestRate7702, statutory7702i);
 
     std::vector<double> guar_int;
-    database_.query_into(DB_GuarInt, guar_int);
+    database.query_into(DB_GuarInt, guar_int);
     std::vector<double> const contractual_guar_int = guar_int;
 
     // For 7702 purposes, the rate guaranteed by the contract is the
     // highest rate on any potential path, at each duration; thus,
     // it is no less than the guaranteed fixed loan rate, i.e.:
     //   (fixed rate charged on loans) - (guaranteed loan spread)
-    if(!database_.query<bool>(DB_IgnoreLoanRateFor7702))
+    if(!database.query<bool>(DB_IgnoreLoanRateFor7702))
         {
         std::vector<double> allow_fixed_loan;
-        database_.query_into(DB_AllowFixedLoan, allow_fixed_loan);
+        database.query_into(DB_AllowFixedLoan, allow_fixed_loan);
         if(!each_equal(allow_fixed_loan, false))
             {
             std::vector<double> gross_loan_rate;
-            database_.query_into(DB_FixedLoanRate    , gross_loan_rate);
+            database.query_into(DB_FixedLoanRate    , gross_loan_rate);
             std::vector<double> guar_loan_spread;
-            database_.query_into(DB_GuarRegLoanSpread, guar_loan_spread);
+            database.query_into(DB_GuarRegLoanSpread, guar_loan_spread);
             assign
                 (guar_int
                 ,Max(guar_int, gross_loan_rate - guar_loan_spread)
@@ -202,16 +200,16 @@ i7702::i7702
 
     std::vector<double> av_load;
     // 7702 !! DB_CurrAcctValLoad is sepacct only
-    database_.query_into(DB_CurrAcctValLoad, av_load);
+    database.query_into(DB_CurrAcctValLoad, av_load);
     if
-        (   database_.query<bool>(DB_AllowSepAcct)
-        && !database_.query<bool>(DB_AllowGenAcct)
+        (   database.query<bool>(DB_AllowSepAcct)
+        && !database.query<bool>(DB_AllowGenAcct)
         )
         {
-        av_load += stratified_.minimum_tiered_sepacct_load_for_7702();
+        av_load += stratified.minimum_tiered_sepacct_load_for_7702();
         }
 
-    gross_.assign(database_.length(), 0.0);
+    gross_.assign(database.length(), 0.0);
     assign
         (gross_
         ,apply_unary
@@ -220,7 +218,7 @@ i7702::i7702
             )
         );
 
-    net_glp_.assign(database_.length(), 0.0);
+    net_glp_.assign(database.length(), 0.0);
     assign
         (net_glp_
         ,apply_unary
@@ -229,7 +227,7 @@ i7702::i7702
             )
         );
 
-    net_gsp_.assign(database_.length(), 0.0);
+    net_gsp_.assign(database.length(), 0.0);
     assign
         (net_gsp_
         ,apply_unary
@@ -262,21 +260,21 @@ i7702::i7702
     //
     // For 7702, 'ig' should generally equal Eckley's 'ic'.
 
-    std::vector<double> const zero(database_.length(), 0.0);
+    std::vector<double> const zero(database.length(), 0.0);
     std::vector<double> contractual_naar_discount;
-    database_.query_into(DB_NaarDiscount, contractual_naar_discount);
+    database.query_into(DB_NaarDiscount, contractual_naar_discount);
     bool const no_naar_discount = zero == contractual_naar_discount;
-    std::vector<double> theoretical_naar_discount(database_.length(), 0.0);
+    std::vector<double> theoretical_naar_discount(database.length(), 0.0);
     theoretical_naar_discount +=
         apply_unary(i_upper_12_over_12_from_i<double>(), contractual_guar_int);
 
-    std::vector<double> diff(database_.length(), 0.0);
+    std::vector<double> diff(database.length(), 0.0);
     diff += fabs(contractual_naar_discount - theoretical_naar_discount);
     minmax<double> const mm(diff);
     constexpr double tolerance {0.0000001};
     LMI_ASSERT(no_naar_discount || mm < tolerance);
 
-    std::vector<double> operative_naar_discount(database_.length(), 0.0);
+    std::vector<double> operative_naar_discount(database.length(), 0.0);
     operative_naar_discount +=
         Max
             (apply_unary(i_upper_12_over_12_from_i<double>(), statutory7702i)
