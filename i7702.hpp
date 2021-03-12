@@ -45,7 +45,14 @@ class LMI_SO i7702 final
     i7702& operator=(i7702 const&) = delete;
     ~i7702() = default;
 
-    std::vector<double> const& ig     () const {return ig_;  }
+    std::vector<double> const& ic_usual() const {return ic_usual_;}
+    std::vector<double> const& ic_glp  () const {return ic_glp_  ;}
+    std::vector<double> const& ic_gsp  () const {return ic_gsp_  ;}
+    std::vector<double> const& ig_usual() const {return ig_usual_;}
+    std::vector<double> const& ig_glp  () const {return ig_glp_  ;}
+    std::vector<double> const& ig_gsp  () const {return ig_gsp_  ;}
+    // 7702 !! Obsolescent.
+    std::vector<double> const& ig     () const {return ig_;     }
     std::vector<double> const& gross  () const {return gross_;  }
     std::vector<double> const& net_glp() const {return net_glp_;}
     std::vector<double> const& net_gsp() const {return net_gsp_;}
@@ -74,7 +81,8 @@ class LMI_SO i7702 final
 
     // Parameters from product database--member names are
     // capitalized to match formulas in documentation, but
-    // suffixed to mark them as members.
+    // suffixed to mark them as members. All are annual rates
+    // except 'Em_', which is monthly.
     double              A0_   ;
     double              A1_   ;
     std::vector<double> Bgen_ ;
@@ -91,7 +99,14 @@ class LMI_SO i7702 final
     std::vector<double> Dvlr_ ;
     std::vector<double> Em_   ;
 
-    // Derived 7702 interest rates.
+    // Derived 7702 interest rates--all monthly.
+    std::vector<double> ic_usual_;
+    std::vector<double> ic_glp_  ;
+    std::vector<double> ic_gsp_  ;
+    std::vector<double> ig_usual_;
+    std::vector<double> ig_glp_  ;
+    std::vector<double> ig_gsp_  ;
+    // 7702 !! Obsolescent.
     std::vector<double> ig_     ;
     std::vector<double> gross_  ;
     std::vector<double> net_glp_;
