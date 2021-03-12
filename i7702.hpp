@@ -60,7 +60,8 @@ class LMI_SO i7702 final
   private:
     // Private ctor for unit test.
     i7702
-        (double                     A0
+        (int                        length
+        ,double                     A0
         ,double                     A1
         ,std::vector<double> const& Bgen
         ,std::vector<double> const& Bsep
@@ -78,6 +79,8 @@ class LMI_SO i7702 final
         );
 
     void initialize();
+
+    int const length_;
 
     // Parameters from product database--member names are
     // capitalized to match formulas in documentation, but

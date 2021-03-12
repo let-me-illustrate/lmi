@@ -28,6 +28,7 @@
 #include "et_vector.hpp"
 #include "math_functions.hpp"
 #include "miscellany.hpp"               // each_equal(), minmax
+#include "ssize_lmi.hpp"
 #include "stratified_charges.hpp"
 
 /// Here's how lmi determines §7702 and §7702A interest rates.
@@ -172,7 +173,8 @@
 ///     use contractual rates if greater
 
 i7702::i7702
-    (double                     A0
+    (int                        length
+    ,double                     A0
     ,double                     A1
     ,std::vector<double> const& Bgen
     ,std::vector<double> const& Bsep
@@ -188,22 +190,43 @@ i7702::i7702
     ,std::vector<double> const& Dvlr
     ,std::vector<double> const& Em
     )
-    :A0_   {A0  }
-    ,A1_   {A1  }
-    ,Bgen_ {Bgen}
-    ,Bsep_ {Bsep}
-    ,Bflr_ {Bflr}
-    ,Bvlr_ {Bvlr}
-    ,Cgen_ {Cgen}
-    ,Csep_ {Csep}
-    ,Cflr_ {Cflr}
-    ,Cvlr_ {Cvlr}
-    ,Dgen_ {Dgen}
-    ,Dsep_ {Dsep}
-    ,Dflr_ {Dflr}
-    ,Dvlr_ {Dvlr}
-    ,Em_   {Em  }
+    :length_   {length}
+    ,A0_       {A0    }
+    ,A1_       {A1    }
+    ,Bgen_     {Bgen  }
+    ,Bsep_     {Bsep  }
+    ,Bflr_     {Bflr  }
+    ,Bvlr_     {Bvlr  }
+    ,Cgen_     {Cgen  }
+    ,Csep_     {Csep  }
+    ,Cflr_     {Cflr  }
+    ,Cvlr_     {Cvlr  }
+    ,Dgen_     {Dgen  }
+    ,Dsep_     {Dsep  }
+    ,Dflr_     {Dflr  }
+    ,Dvlr_     {Dvlr  }
+    ,Em_       {Em    }
+    ,ic_usual_ (length_)
+    ,ic_glp_   (length_)
+    ,ic_gsp_   (length_)
+    ,ig_usual_ (length_)
+    ,ig_glp_   (length_)
+    ,ig_gsp_   (length_)
 {
+    LMI_ASSERT(length_ == lmi::ssize(Bgen_));
+    LMI_ASSERT(length_ == lmi::ssize(Bsep_));
+    LMI_ASSERT(length_ == lmi::ssize(Bflr_));
+    LMI_ASSERT(length_ == lmi::ssize(Bvlr_));
+    LMI_ASSERT(length_ == lmi::ssize(Cgen_));
+    LMI_ASSERT(length_ == lmi::ssize(Csep_));
+    LMI_ASSERT(length_ == lmi::ssize(Cflr_));
+    LMI_ASSERT(length_ == lmi::ssize(Cvlr_));
+    LMI_ASSERT(length_ == lmi::ssize(Dgen_));
+    LMI_ASSERT(length_ == lmi::ssize(Dsep_));
+    LMI_ASSERT(length_ == lmi::ssize(Dflr_));
+    LMI_ASSERT(length_ == lmi::ssize(Dvlr_));
+    LMI_ASSERT(length_ == lmi::ssize(Em_  ));
+
     initialize();
 }
 
@@ -211,21 +234,33 @@ i7702::i7702
     (product_database   const& database
     ,stratified_charges const& stratified
     )
-    :A0_   {}
-    ,A1_   {}
-    ,Bgen_ (database.length())
-    ,Bsep_ (database.length())
-    ,Bflr_ (database.length())
-    ,Bvlr_ (database.length())
-    ,Cgen_ (database.length())
-    ,Csep_ (database.length())
-    ,Cflr_ (database.length())
-    ,Cvlr_ (database.length())
-    ,Dgen_ (database.length())
-    ,Dsep_ (database.length())
-    ,Dflr_ (database.length())
-    ,Dvlr_ (database.length())
-    ,Em_   (database.length())
+    :length_   {database.length()}
+    ,A0_       {}
+    ,A1_       {}
+    ,Bgen_     (length_)
+    ,Bsep_     (length_)
+    ,Bflr_     (length_)
+    ,Bvlr_     (length_)
+    ,Cgen_     (length_)
+    ,Csep_     (length_)
+    ,Cflr_     (length_)
+    ,Cvlr_     (length_)
+    ,Dgen_     (length_)
+    ,Dsep_     (length_)
+    ,Dflr_     (length_)
+    ,Dvlr_     (length_)
+    ,Em_       (length_)
+    ,ic_usual_ (length_)
+    ,ic_glp_   (length_)
+    ,ic_gsp_   (length_)
+    ,ig_usual_ (length_)
+    ,ig_glp_   (length_)
+    ,ig_gsp_   (length_)
+    // 7702 !! Obsolescent.
+    ,ig_       (length_)
+    ,gross_    (length_)
+    ,net_glp_  (length_)
+    ,net_gsp_  (length_)
 {
     // Monthly guar net int for 7702 is
     //   greater of {iglp(), igsp()} and annual guar int rate
@@ -292,14 +327,14 @@ i7702::i7702
     //
     // For 7702, 'ig' should generally equal Eckley's 'ic'.
 
-    std::vector<double> const zero(database.length(), 0.0);
+    std::vector<double> const zero(length_);
     database.query_into(DB_NaarDiscount, Em_);
     bool const no_naar_discount = zero == Em_;
-    std::vector<double> theoretical_naar_discount(database.length(), 0.0);
+    std::vector<double> theoretical_naar_discount(length_);
     theoretical_naar_discount +=
         apply_unary(i_upper_12_over_12_from_i<double>(), Bgen_);
 
-    std::vector<double> diff(database.length(), 0.0);
+    std::vector<double> diff(length_);
     diff += fabs(Em_ - theoretical_naar_discount);
     minmax<double> const mm(diff);
     constexpr double tolerance {0.0000001};
@@ -309,7 +344,6 @@ i7702::i7702
     std::vector<double> guar_int = Bgen_;
     assign(guar_int, Max(guar_int, Bflr_));
 
-    gross_.assign(database.length(), 0.0);
     assign
         (gross_
         ,apply_unary
@@ -318,7 +352,6 @@ i7702::i7702
             )
         );
 
-    net_glp_.assign(database.length(), 0.0);
     assign
         (net_glp_
         ,apply_unary
@@ -327,7 +360,6 @@ i7702::i7702
             )
         );
 
-    net_gsp_.assign(database.length(), 0.0);
     assign
         (net_gsp_
         ,apply_unary
@@ -336,7 +368,7 @@ i7702::i7702
             )
         );
 
-    std::vector<double> operative_naar_discount(database.length(), 0.0);
+    std::vector<double> operative_naar_discount(length_);
     operative_naar_discount +=
         Max
             (i_upper_12_over_12_from_i<double>()(A0_)
