@@ -172,8 +172,8 @@
 ///     use contractual rates if greater
 
 i7702::i7702
-    (std::vector<double> const& A0
-    ,std::vector<double> const& A1
+    (double                     A0
+    ,double                     A1
     ,std::vector<double> const& Bgen
     ,std::vector<double> const& Bsep
     ,std::vector<double> const& Bflr
@@ -211,8 +211,8 @@ i7702::i7702
     (product_database   const& database
     ,stratified_charges const& stratified
     )
-    :A0_   (database.length())
-    ,A1_   (database.length())
+    :A0_   {}
+    ,A1_   {}
     ,Bgen_ (database.length())
     ,Bsep_ (database.length())
     ,Bflr_ (database.length())
@@ -235,7 +235,7 @@ i7702::i7702
     // DCV calculations in the account value class as well as
     // GPT calculations in the 7702 class.
 
-    database.query_into(DB_AnnInterestRate7702, A0_);
+    A0_ = database.query<double>(DB_AnnInterestRate7702);
 
     database.query_into(DB_GuarInt, Bgen_);
 
@@ -339,7 +339,7 @@ i7702::i7702
     std::vector<double> operative_naar_discount(database.length(), 0.0);
     operative_naar_discount +=
         Max
-            (apply_unary(i_upper_12_over_12_from_i<double>(), A0_)
+            (i_upper_12_over_12_from_i<double>()(A0_)
             ,Max(Em_, theoretical_naar_discount)
             );
     ig_ = no_naar_discount ? zero : operative_naar_discount;
