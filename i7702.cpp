@@ -278,10 +278,18 @@ i7702::i7702
     ,net_glp_  (length_)
     ,net_gsp_  (length_)
 {
+    std::vector<double> const zero(length_);
+
     database.query_into(DB_AllowGenAcct  , use_gen_);
     database.query_into(DB_AllowSepAcct  , use_sep_);
     database.query_into(DB_AllowFixedLoan, use_flr_);
     database.query_into(DB_AllowVlr      , use_vlr_);
+
+    if(database.query<bool>(DB_IgnoreLoanRateFor7702))
+        {
+        use_flr_ = zero;
+        use_vlr_ = zero;
+        }
 
     // Monthly guar net int for 7702 is
     //   greater of {iglp(), igsp()} and annual guar int rate
@@ -346,7 +354,6 @@ i7702::i7702
     //
     // For 7702, 'ig' should generally equal Eckley's 'ic'.
 
-    std::vector<double> const zero(length_);
     database.query_into(DB_NaarDiscount, Em_);
     bool const no_naar_discount = zero == Em_;
     std::vector<double> theoretical_naar_discount(length_);
