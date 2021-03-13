@@ -189,23 +189,31 @@ i7702::i7702
     ,std::vector<double> const& Dflr
     ,std::vector<double> const& Dvlr
     ,std::vector<double> const& Em
+    ,std::vector<double> const& use_gen
+    ,std::vector<double> const& use_sep
+    ,std::vector<double> const& use_flr
+    ,std::vector<double> const& use_vlr
     )
-    :length_   {length}
-    ,A0_       {A0    }
-    ,A1_       {A1    }
-    ,Bgen_     {Bgen  }
-    ,Bsep_     {Bsep  }
-    ,Bflr_     {Bflr  }
-    ,Bvlr_     {Bvlr  }
-    ,Cgen_     {Cgen  }
-    ,Csep_     {Csep  }
-    ,Cflr_     {Cflr  }
-    ,Cvlr_     {Cvlr  }
-    ,Dgen_     {Dgen  }
-    ,Dsep_     {Dsep  }
-    ,Dflr_     {Dflr  }
-    ,Dvlr_     {Dvlr  }
-    ,Em_       {Em    }
+    :length_   {length }
+    ,A0_       {A0     }
+    ,A1_       {A1     }
+    ,Bgen_     {Bgen   }
+    ,Bsep_     {Bsep   }
+    ,Bflr_     {Bflr   }
+    ,Bvlr_     {Bvlr   }
+    ,Cgen_     {Cgen   }
+    ,Csep_     {Csep   }
+    ,Cflr_     {Cflr   }
+    ,Cvlr_     {Cvlr   }
+    ,Dgen_     {Dgen   }
+    ,Dsep_     {Dsep   }
+    ,Dflr_     {Dflr   }
+    ,Dvlr_     {Dvlr   }
+    ,Em_       {Em     }
+    ,use_gen_  {use_gen}
+    ,use_sep_  {use_sep}
+    ,use_flr_  {use_flr}
+    ,use_vlr_  {use_vlr}
     ,ic_usual_ (length_)
     ,ic_glp_   (length_)
     ,ic_gsp_   (length_)
@@ -213,19 +221,23 @@ i7702::i7702
     ,ig_glp_   (length_)
     ,ig_gsp_   (length_)
 {
-    LMI_ASSERT(length_ == lmi::ssize(Bgen_));
-    LMI_ASSERT(length_ == lmi::ssize(Bsep_));
-    LMI_ASSERT(length_ == lmi::ssize(Bflr_));
-    LMI_ASSERT(length_ == lmi::ssize(Bvlr_));
-    LMI_ASSERT(length_ == lmi::ssize(Cgen_));
-    LMI_ASSERT(length_ == lmi::ssize(Csep_));
-    LMI_ASSERT(length_ == lmi::ssize(Cflr_));
-    LMI_ASSERT(length_ == lmi::ssize(Cvlr_));
-    LMI_ASSERT(length_ == lmi::ssize(Dgen_));
-    LMI_ASSERT(length_ == lmi::ssize(Dsep_));
-    LMI_ASSERT(length_ == lmi::ssize(Dflr_));
-    LMI_ASSERT(length_ == lmi::ssize(Dvlr_));
-    LMI_ASSERT(length_ == lmi::ssize(Em_  ));
+    LMI_ASSERT(length_ == lmi::ssize(Bgen_   ));
+    LMI_ASSERT(length_ == lmi::ssize(Bsep_   ));
+    LMI_ASSERT(length_ == lmi::ssize(Bflr_   ));
+    LMI_ASSERT(length_ == lmi::ssize(Bvlr_   ));
+    LMI_ASSERT(length_ == lmi::ssize(Cgen_   ));
+    LMI_ASSERT(length_ == lmi::ssize(Csep_   ));
+    LMI_ASSERT(length_ == lmi::ssize(Cflr_   ));
+    LMI_ASSERT(length_ == lmi::ssize(Cvlr_   ));
+    LMI_ASSERT(length_ == lmi::ssize(Dgen_   ));
+    LMI_ASSERT(length_ == lmi::ssize(Dsep_   ));
+    LMI_ASSERT(length_ == lmi::ssize(Dflr_   ));
+    LMI_ASSERT(length_ == lmi::ssize(Dvlr_   ));
+    LMI_ASSERT(length_ == lmi::ssize(Em_     ));
+    LMI_ASSERT(length_ == lmi::ssize(use_gen_));
+    LMI_ASSERT(length_ == lmi::ssize(use_sep_));
+    LMI_ASSERT(length_ == lmi::ssize(use_flr_));
+    LMI_ASSERT(length_ == lmi::ssize(use_vlr_));
 
     initialize();
 }
@@ -250,6 +262,10 @@ i7702::i7702
     ,Dflr_     (length_)
     ,Dvlr_     (length_)
     ,Em_       (length_)
+    ,use_gen_  (length_)
+    ,use_sep_  (length_)
+    ,use_flr_  (length_)
+    ,use_vlr_  (length_)
     ,ic_usual_ (length_)
     ,ic_glp_   (length_)
     ,ic_gsp_   (length_)
@@ -262,6 +278,11 @@ i7702::i7702
     ,net_glp_  (length_)
     ,net_gsp_  (length_)
 {
+    database.query_into(DB_AllowGenAcct  , use_gen_);
+    database.query_into(DB_AllowSepAcct  , use_sep_);
+    database.query_into(DB_AllowFixedLoan, use_flr_);
+    database.query_into(DB_AllowVlr      , use_vlr_);
+
     // Monthly guar net int for 7702 is
     //   greater of {iglp(), igsp()} and annual guar int rate
     //   less AV load
@@ -280,9 +301,7 @@ i7702::i7702
     //   (fixed rate charged on loans) - (guaranteed loan spread)
     if(!database.query<bool>(DB_IgnoreLoanRateFor7702))
         {
-        std::vector<double> allow_fixed_loan;
-        database.query_into(DB_AllowFixedLoan, allow_fixed_loan);
-        if(!each_equal(allow_fixed_loan, false))
+        if(!each_equal(use_flr_, false))
             {
             std::vector<double> gross_loan_rate;
             database.query_into(DB_FixedLoanRate    , gross_loan_rate);

@@ -76,16 +76,19 @@ class LMI_SO i7702 final
         ,std::vector<double> const& Dflr
         ,std::vector<double> const& Dvlr
         ,std::vector<double> const& Em
+        ,std::vector<double> const& use_gen
+        ,std::vector<double> const& use_sep
+        ,std::vector<double> const& use_flr
+        ,std::vector<double> const& use_vlr
         );
 
     void initialize();
 
     int const length_;
 
-    // Parameters from product database--member names are
-    // capitalized to match formulas in documentation, but
-    // suffixed to mark them as members. All are annual rates
-    // except 'Em_', which is monthly.
+    // Rates from product database--member names are capitalized to
+    // match formulas in documentation, but suffixed to mark them as
+    // members. All are annual rates except 'Em_', which is monthly.
     double              A0_   ;
     double              A1_   ;
     std::vector<double> Bgen_ ;
@@ -101,6 +104,15 @@ class LMI_SO i7702 final
     std::vector<double> Dflr_ ;
     std::vector<double> Dvlr_ ;
     std::vector<double> Em_   ;
+
+    // Booleans from product database--stored as doubles because
+    // std::vector<bool> is not a container. They are vectors
+    // rather than scalars to allow durational enablement--e.g.,
+    // variable-rate loans might be forbidden in the issue year.
+    std::vector<double> use_gen_;
+    std::vector<double> use_sep_;
+    std::vector<double> use_flr_;
+    std::vector<double> use_vlr_;
 
     // Derived 7702 interest rates--all monthly.
     std::vector<double> ic_usual_;
