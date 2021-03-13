@@ -299,7 +299,9 @@ i7702::i7702
     // DCV calculations in the account value class as well as
     // GPT calculations in the 7702 class.
 
+    // 7702 !! Alternatively, specify A0_ and delta, then calculate A1_?
     A0_ = database.query<double>(DB_AnnInterestRate7702);
+    A1_ = 0.02 + A0_;
 
     database.query_into(DB_GuarInt, Bgen_);
 
@@ -390,7 +392,7 @@ i7702::i7702
         (net_gsp_
         ,apply_unary
             (i_upper_12_over_12_from_i<double>()
-            ,Max(0.02 + A0_, guar_int) - Dsep_
+            ,Max(A1_, guar_int) - Dsep_
             )
         );
 
