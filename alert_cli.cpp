@@ -23,9 +23,13 @@
 
 #include "alert.hpp"
 
+#include "force_linking.hpp"
+
 #include <cstdio>                       // getchar()
 #include <iostream>
 #include <stdexcept>
+
+LMI_FORCE_LINKING_IN_SITU(alert_cli)
 
 namespace
 {
