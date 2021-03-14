@@ -296,14 +296,6 @@ i7702::i7702
     // 7702 !! Assert that all use_* are boolean.
     // 7702 !! Assert (use_gen_ || use_sep_) for each duration.
 
-    // Monthly guar net int for 7702 is
-    //   greater of {iglp(), igsp()} and annual guar int rate
-    //   less AV load
-    //   transformed to monthly (simple subtraction?).
-    // These interest rates belong here because they're used by
-    // DCV calculations in the account value class as well as
-    // GPT calculations in the 7702 class.
-
     // 7702 !! Alternatively, specify A0_ and delta, then calculate A1_?
     A0_ = database.query<double>(DB_AnnInterestRate7702);
     A1_ = 0.02 + A0_;
@@ -311,9 +303,7 @@ i7702::i7702
     database.query_into(DB_GuarInt, Bgen_);
 
     // For 7702 purposes, the rate guaranteed by the contract is the
-    // highest rate on any potential path, at each duration; thus,
-    // it is no less than the guaranteed fixed loan rate, i.e.:
-    //   (fixed rate charged on loans) - (guaranteed loan spread)
+    // highest rate on any potential path, at each duration.
     if(!database.query<bool>(DB_IgnoreLoanRateFor7702))
         {
         if(!each_equal(use_flr_, false))
@@ -358,8 +348,6 @@ i7702::i7702
     // a special database flag. Instead, the discount is deemed
     // to be absent iff the contractual discount according to the
     // product database is uniformly zero.
-    //
-    // For 7702, 'ig' should generally equal Eckley's 'ic'.
 
     database.query_into(DB_NaarDiscount, Em_);
     bool const no_naar_discount = zero == Em_;
