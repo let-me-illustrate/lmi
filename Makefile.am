@@ -91,79 +91,79 @@ endif
 
 # tests
 TESTS = \
-    test_account_value \
-    test_actuarial_table \
-    test_alert \
-    test_any_member \
-    test_assert_lmi \
-    test_authenticity \
-    test_bourn_cast \
-    test_cache_file_reads \
-    test_calendar_date \
-    test_callback \
-    test_comma_punct \
-    test_commutation_functions \
-    test_configurable_settings \
-    test_contains \
-    test_crc32 \
-    test_currency \
-    test_dbo_rules \
-    test_et_vector \
-    test_expression_template_0 \
-    test_fenv_lmi \
-    test_file_command \
-    test_financial \
-    test_getopt \
-    test_global_settings \
-    test_gpt \
-    test_handle_exceptions \
-    test_i7702 \
-    test_ieee754 \
-    test_input_seq \
-    test_input \
-    test_interpolate_string \
-    test_irc7702_tables \
-    test_irc7702a \
-    test_istream_to_string \
-    test_ledger \
-    test_loads \
-    test_map_lookup \
-    test_materially_equal \
-    test_math_functions \
-    test_mc_enum \
-    test_md5sum \
-    test_miscellany \
-    test_monnaie \
-    test_mortality_rates \
-    test_name_value_pairs \
-    test_ncnnnpnn \
-    test_numeric_io \
-    test_path_utility \
-    test_premium_tax \
-    test_print_matrix \
-    test_product_file \
-    test_progress_meter \
-    test_rate_table \
-    test_regex \
-    test_report_table \
-    test_round \
-    test_round_to \
-    test_rtti_lmi \
-    test_safely_dereference_as \
-    test_sandbox \
-    test_snprintf \
-    test_ssize_lmi \
-    test_stratified_algorithms \
-    test_stream_cast \
-    test_system_command \
-    test_test_tools \
-    test_timer \
-    test_tn_range \
-    test_value_cast \
-    test_vector \
-    test_wx_new \
-    test_xml_serialize \
-    test_zero
+    account_value_test \
+    actuarial_table_test \
+    alert_test \
+    any_member_test \
+    assert_lmi_test \
+    authenticity_test \
+    bourn_cast_test \
+    cache_file_reads_test \
+    calendar_date_test \
+    callback_test \
+    comma_punct_test \
+    commutation_functions_test \
+    configurable_settings_test \
+    contains_test \
+    crc32_test \
+    currency_test \
+    dbo_rules_test \
+    et_vector_test \
+    expression_template_0_test \
+    fenv_lmi_test \
+    file_command_test \
+    financial_test \
+    getopt_test \
+    global_settings_test \
+    gpt_test \
+    handle_exceptions_test \
+    i7702_test \
+    ieee754_test \
+    input_seq_test \
+    input_test \
+    interpolate_string_test \
+    irc7702_tables_test \
+    irc7702a_test \
+    istream_to_string_test \
+    ledger_test \
+    loads_test \
+    map_lookup_test \
+    materially_equal_test \
+    math_functions_test \
+    mc_enum_test \
+    md5sum_test \
+    miscellany_test \
+    monnaie_test \
+    mortality_rates_test \
+    name_value_pairs_test \
+    ncnnnpnn_test \
+    numeric_io_test \
+    path_utility_test \
+    premium_tax_test \
+    print_matrix_test \
+    product_file_test \
+    progress_meter_test \
+    rate_table_test \
+    regex_test \
+    report_table_test \
+    round_test \
+    round_to_test \
+    rtti_lmi_test \
+    safely_dereference_as_test \
+    sandbox_test \
+    snprintf_test \
+    ssize_lmi_test \
+    stratified_algorithms_test \
+    stream_cast_test \
+    system_command_test \
+    test_tools_test \
+    timer_test \
+    tn_range_test \
+    value_cast_test \
+    vector_test \
+    wx_new_test \
+    xml_serialize_test \
+    zero_test
 
 check_PROGRAMS = $(TESTS)
 
@@ -590,94 +590,94 @@ libtest_common_la_SOURCES = \
   unwind.cpp
 libtest_common_la_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_account_value_SOURCES = \
+account_value_test_SOURCES = \
   account_value_test.cpp
-test_account_value_CXXFLAGS = $(AM_CXXFLAGS)
-test_account_value_LDADD = \
+account_value_test_CXXFLAGS = $(AM_CXXFLAGS)
+account_value_test_LDADD = \
   libtest_common.la
 
-test_actuarial_table_SOURCES = \
+actuarial_table_test_SOURCES = \
   actuarial_table.cpp \
   actuarial_table_test.cpp \
   cso_table.cpp \
   xml_lmi.cpp
-test_actuarial_table_CXXFLAGS = $(AM_CXXFLAGS)
-test_actuarial_table_LDADD = \
+actuarial_table_test_CXXFLAGS = $(AM_CXXFLAGS)
+actuarial_table_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
-test_alert_SOURCES = \
+alert_test_SOURCES = \
   alert_test.cpp
-test_alert_CXXFLAGS = $(AM_CXXFLAGS)
-test_alert_LDADD = \
+alert_test_CXXFLAGS = $(AM_CXXFLAGS)
+alert_test_LDADD = \
   libtest_common.la
 
-test_any_member_SOURCES = \
+any_member_test_SOURCES = \
   any_member_test.cpp
-test_any_member_CXXFLAGS = $(AM_CXXFLAGS)
-test_any_member_LDADD = \
+any_member_test_CXXFLAGS = $(AM_CXXFLAGS)
+any_member_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 
-test_assert_lmi_SOURCES = \
+assert_lmi_test_SOURCES = \
   assert_lmi_test.cpp
-test_assert_lmi_CXXFLAGS = $(AM_CXXFLAGS)
-test_assert_lmi_LDADD = \
+assert_lmi_test_CXXFLAGS = $(AM_CXXFLAGS)
+assert_lmi_test_LDADD = \
   libtest_common.la
 
-test_authenticity_SOURCES = \
+authenticity_test_SOURCES = \
   authenticity.cpp \
   authenticity_test.cpp \
   md5.cpp \
   md5sum.cpp \
   system_command.cpp \
   system_command_non_wx.cpp
-test_authenticity_CXXFLAGS = $(AM_CXXFLAGS)
-test_authenticity_LDADD = \
+authenticity_test_CXXFLAGS = $(AM_CXXFLAGS)
+authenticity_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 
-test_bourn_cast_SOURCES = \
+bourn_cast_test_SOURCES = \
   bourn_cast_test.cpp
-test_bourn_cast_CXXFLAGS = $(AM_CXXFLAGS)
-test_bourn_cast_LDADD = \
+bourn_cast_test_CXXFLAGS = $(AM_CXXFLAGS)
+bourn_cast_test_LDADD = \
   libtest_common.la
 
-test_cache_file_reads_SOURCES = \
+cache_file_reads_test_SOURCES = \
   cache_file_reads_test.cpp
-test_cache_file_reads_CXXFLAGS = $(AM_CXXFLAGS)
-test_cache_file_reads_LDADD = \
+cache_file_reads_test_CXXFLAGS = $(AM_CXXFLAGS)
+cache_file_reads_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 
-test_calendar_date_SOURCES = \
+calendar_date_test_SOURCES = \
   calendar_date_test.cpp
-test_calendar_date_CXXFLAGS = $(AM_CXXFLAGS)
-test_calendar_date_LDADD = \
+calendar_date_test_CXXFLAGS = $(AM_CXXFLAGS)
+calendar_date_test_LDADD = \
   libtest_common.la
 
-test_callback_SOURCES = \
+callback_test_SOURCES = \
   callback_test.cpp
-test_callback_CXXFLAGS = $(AM_CXXFLAGS)
-test_callback_LDADD = \
+callback_test_CXXFLAGS = $(AM_CXXFLAGS)
+callback_test_LDADD = \
   libtest_common.la
 
-test_comma_punct_SOURCES = \
+comma_punct_test_SOURCES = \
   comma_punct_test.cpp
-test_comma_punct_CXXFLAGS = $(AM_CXXFLAGS)
-test_comma_punct_LDADD = \
+comma_punct_test_CXXFLAGS = $(AM_CXXFLAGS)
+comma_punct_test_LDADD = \
   libtest_common.la
 
-test_commutation_functions_SOURCES = \
+commutation_functions_test_SOURCES = \
   commutation_functions.cpp \
   commutation_functions_test.cpp \
-  cso_table.cpp
-test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
-test_commutation_functions_LDADD = \
+  cso_table.cpp \
+commutation_functions_test_CXXFLAGS = $(AM_CXXFLAGS)
+commutation_functions_test_LDADD = \
   libtest_common.la
 
-test_configurable_settings_SOURCES = \
+configurable_settings_test_SOURCES = \
   configurable_settings.cpp \
   configurable_settings_test.cpp \
   data_directory.cpp \
@@ -685,129 +685,129 @@ test_configurable_settings_SOURCES = \
   mc_enum.cpp \
   mc_enum_types.cpp \
   xml_lmi.cpp
-test_configurable_settings_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
-test_configurable_settings_LDADD = \
+configurable_settings_test_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
+configurable_settings_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
-test_contains_SOURCES = \
+contains_test_SOURCES = \
   contains_test.cpp
-test_contains_CXXFLAGS = $(AM_CXXFLAGS)
-test_contains_LDADD = \
+contains_test_CXXFLAGS = $(AM_CXXFLAGS)
+contains_test_LDADD = \
   libtest_common.la
 
-test_crc32_SOURCES = \
+crc32_test_SOURCES = \
   crc32.cpp \
   crc32_test.cpp
-test_crc32_CXXFLAGS = $(AM_CXXFLAGS)
-test_crc32_LDADD = \
+crc32_test_CXXFLAGS = $(AM_CXXFLAGS)
+crc32_test_LDADD = \
   libtest_common.la
 
-test_currency_SOURCES = \
+currency_test_SOURCES = \
   currency_test.cpp
-test_currency_CXXFLAGS = $(AM_CXXFLAGS)
-test_currency_LDADD = \
+currency_test_CXXFLAGS = $(AM_CXXFLAGS)
+currency_test_LDADD = \
   libtest_common.la
 
-test_dbo_rules_SOURCES = \
+dbo_rules_test_SOURCES = \
   datum_base.cpp \
   dbo_rules.cpp \
   dbo_rules_test.cpp \
   mc_enum.cpp \
   mc_enum_types.cpp
-test_dbo_rules_CXXFLAGS = $(AM_CXXFLAGS)
-test_dbo_rules_LDADD = \
+dbo_rules_test_CXXFLAGS = $(AM_CXXFLAGS)
+dbo_rules_test_LDADD = \
   libtest_common.la
 
-test_et_vector_SOURCES = \
-  et_vector_test.cpp
-test_et_vector_CXXFLAGS = $(AM_CXXFLAGS)
-test_et_vector_LDADD = \
+et_vector_test_SOURCES = \
+  et_vector_test.cpp \
+et_vector_test_CXXFLAGS = $(AM_CXXFLAGS)
+et_vector_test_LDADD = \
   libtest_common.la
 
-test_expression_template_0_SOURCES = \
+expression_template_0_test_SOURCES = \
   expression_template_0_test.cpp
-test_expression_template_0_CXXFLAGS = $(AM_CXXFLAGS)
-test_expression_template_0_LDADD = \
+expression_template_0_test_CXXFLAGS = $(AM_CXXFLAGS)
+expression_template_0_test_LDADD = \
   libtest_common.la
 
-test_fenv_lmi_SOURCES = \
+fenv_lmi_test_SOURCES = \
   fenv_guard.cpp \
   fenv_lmi_test.cpp
-test_fenv_lmi_CXXFLAGS = $(AM_CXXFLAGS)
-test_fenv_lmi_LDADD = \
+fenv_lmi_test_CXXFLAGS = $(AM_CXXFLAGS)
+fenv_lmi_test_LDADD = \
   libtest_common.la
 
-test_file_command_SOURCES = \
+file_command_test_SOURCES = \
   file_command.cpp \
   file_command_cli.cpp \
   file_command_test.cpp
-test_file_command_CXXFLAGS = $(AM_CXXFLAGS)
-test_file_command_LDADD = \
+file_command_test_CXXFLAGS = $(AM_CXXFLAGS)
+file_command_test_LDADD = \
   libtest_common.la
 
-test_financial_SOURCES = \
+financial_test_SOURCES = \
   financial.cpp \
   financial_test.cpp \
   stratified_algorithms.cpp
-test_financial_CXXFLAGS = $(AM_CXXFLAGS)
-test_financial_LDADD = \
+financial_test_CXXFLAGS = $(AM_CXXFLAGS)
+financial_test_LDADD = \
   libtest_common.la
 
-test_getopt_SOURCES = \
+getopt_test_SOURCES = \
   getopt_test.cpp
-test_getopt_CXXFLAGS = $(AM_CXXFLAGS)
-test_getopt_LDADD = \
+getopt_test_CXXFLAGS = $(AM_CXXFLAGS)
+getopt_test_LDADD = \
   libtest_common.la
 
-test_global_settings_SOURCES = \
+global_settings_test_SOURCES = \
   global_settings_test.cpp
-test_global_settings_CXXFLAGS = $(AM_CXXFLAGS)
-test_global_settings_LDADD = \
+global_settings_test_CXXFLAGS = $(AM_CXXFLAGS)
+global_settings_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 
-test_gpt_SOURCES = \
+gpt_test_SOURCES = \
   commutation_functions.cpp \
   cso_table.cpp \
   gpt_commutation_functions.cpp \
   gpt_test.cpp \
   ihs_irc7702.cpp
-test_gpt_CXXFLAGS = $(AM_CXXFLAGS)
-test_gpt_LDADD = \
+gpt_test_CXXFLAGS = $(AM_CXXFLAGS)
+gpt_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 
-test_handle_exceptions_SOURCES = \
+handle_exceptions_test_SOURCES = \
   handle_exceptions_test.cpp
-test_handle_exceptions_CXXFLAGS = $(AM_CXXFLAGS)
-test_handle_exceptions_LDADD = \
+handle_exceptions_test_CXXFLAGS = $(AM_CXXFLAGS)
+handle_exceptions_test_LDADD = \
   libtest_common.la
 
-test_i7702_SOURCES = \
+i7702_test_SOURCES = \
   i7702.cpp \
   i7702_test.cpp
-test_i7702_CXXFLAGS = $(AM_CXXFLAGS)
-test_i7702_LDADD = \
+i7702_test_CXXFLAGS = $(AM_CXXFLAGS)
+i7702_test_LDADD = \
   libtest_common.la
 
-test_ieee754_SOURCES = \
+ieee754_test_SOURCES = \
   ieee754_test.cpp
-test_ieee754_CXXFLAGS = $(AM_CXXFLAGS)
-test_ieee754_LDADD = \
+ieee754_test_CXXFLAGS = $(AM_CXXFLAGS)
+ieee754_test_LDADD = \
   libtest_common.la
 
-test_input_seq_SOURCES = \
+input_seq_test_SOURCES = \
   input_sequence.cpp \
   input_sequence_parser.cpp \
   input_sequence_test.cpp
-test_input_seq_CXXFLAGS = $(AM_CXXFLAGS)
-test_input_seq_LDADD = \
+input_seq_test_CXXFLAGS = $(AM_CXXFLAGS)
+input_seq_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 
-test_input_SOURCES = \
+input_test_SOURCES = \
   ce_product_name.cpp \
   configurable_settings.cpp \
   data_directory.cpp \
@@ -841,48 +841,48 @@ test_input_SOURCES = \
   tn_range_types.cpp \
   xml_lmi.cpp \
   yare_input.cpp
-test_input_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
-test_input_LDADD = \
+input_test_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
+input_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
-test_interpolate_string_SOURCES = \
+interpolate_string_test_SOURCES = \
   interpolate_string.cpp \
   interpolate_string_test.cpp
-test_interpolate_string_CXXFLAGS = $(AM_CXXFLAGS)
-test_interpolate_string_LDADD = \
+interpolate_string_test_CXXFLAGS = $(AM_CXXFLAGS)
+interpolate_string_test_LDADD = \
   libtest_common.la
 
-test_irc7702_tables_SOURCES = \
+irc7702_tables_test_SOURCES = \
   commutation_functions.cpp \
   cso_table.cpp \
   irc7702_tables.cpp \
   irc7702_tables_test.cpp
-test_irc7702_tables_CXXFLAGS = $(AM_CXXFLAGS)
-test_irc7702_tables_LDADD = \
+irc7702_tables_test_CXXFLAGS = $(AM_CXXFLAGS)
+irc7702_tables_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 
-test_irc7702a_SOURCES = \
+irc7702a_test_SOURCES = \
   ihs_irc7702a.cpp \
   irc7702a_test.cpp \
   mec_state.cpp \
   stratified_algorithms.cpp \
   xml_lmi.cpp
-test_irc7702a_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
-test_irc7702a_LDADD = \
+irc7702a_test_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
+irc7702a_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
-test_istream_to_string_SOURCES = \
+istream_to_string_test_SOURCES = \
   istream_to_string_test.cpp
-test_istream_to_string_CXXFLAGS = $(AM_CXXFLAGS)
-test_istream_to_string_LDADD = \
+istream_to_string_test_CXXFLAGS = $(AM_CXXFLAGS)
+istream_to_string_test_LDADD = \
   libtest_common.la
 
-test_ledger_SOURCES = \
+ledger_test_SOURCES = \
   configurable_settings.cpp \
   crc32.cpp \
   data_directory.cpp \
@@ -898,105 +898,105 @@ test_ledger_SOURCES = \
   mc_enum_types.cpp \
   mc_enum_types_aux.cpp \
   xml_lmi.cpp
-test_ledger_CXXFLAGS = $(AM_CXXFLAGS)
-test_ledger_LDADD = \
+ledger_test_CXXFLAGS = $(AM_CXXFLAGS)
+ledger_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
-test_loads_SOURCES = \
+loads_test_SOURCES = \
   loads.cpp \
   loads_test.cpp
-test_loads_CXXFLAGS = $(AM_CXXFLAGS)
-test_loads_LDADD = \
+loads_test_CXXFLAGS = $(AM_CXXFLAGS)
+loads_test_LDADD = \
   libtest_common.la
 
-test_map_lookup_SOURCES = \
+map_lookup_test_SOURCES = \
   map_lookup_test.cpp
-test_map_lookup_CXXFLAGS = $(AM_CXXFLAGS)
-test_map_lookup_LDADD = \
+map_lookup_test_CXXFLAGS = $(AM_CXXFLAGS)
+map_lookup_test_LDADD = \
   libtest_common.la
 
-test_materially_equal_SOURCES = \
+materially_equal_test_SOURCES = \
   materially_equal_test.cpp
-test_materially_equal_CXXFLAGS = $(AM_CXXFLAGS)
-test_materially_equal_LDADD = \
+materially_equal_test_CXXFLAGS = $(AM_CXXFLAGS)
+materially_equal_test_LDADD = \
   libtest_common.la
 
-test_math_functions_SOURCES = \
+math_functions_test_SOURCES = \
   math_functions_test.cpp
-test_math_functions_CXXFLAGS = $(AM_CXXFLAGS)
-test_math_functions_LDADD = \
+math_functions_test_CXXFLAGS = $(AM_CXXFLAGS)
+math_functions_test_LDADD = \
   libtest_common.la
 
-test_mc_enum_SOURCES = \
+mc_enum_test_SOURCES = \
   ce_product_name.cpp \
   datum_base.cpp \
   mc_enum.cpp \
   mc_enum_test.cpp \
   mc_enum_test_aux.cpp
-test_mc_enum_CXXFLAGS = $(AM_CXXFLAGS)
-test_mc_enum_LDADD = \
+mc_enum_test_CXXFLAGS = $(AM_CXXFLAGS)
+mc_enum_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 
-test_md5sum_SOURCES = \
+md5sum_test_SOURCES = \
   md5.cpp \
   md5sum.cpp \
   md5sum_test.cpp
-test_md5sum_CXXFLAGS = $(AM_CXXFLAGS)
-test_md5sum_LDADD = \
+md5sum_test_CXXFLAGS = $(AM_CXXFLAGS)
+md5sum_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 
-test_miscellany_SOURCES = \
+miscellany_test_SOURCES = \
   miscellany_test.cpp
-test_miscellany_CXXFLAGS = $(AM_CXXFLAGS)
-test_miscellany_LDADD = \
+miscellany_test_CXXFLAGS = $(AM_CXXFLAGS)
+miscellany_test_LDADD = \
   libtest_common.la
 
-test_monnaie_SOURCES = \
+monnaie_test_SOURCES = \
   monnaie_test.cpp
-test_monnaie_CXXFLAGS = $(AM_CXXFLAGS)
-test_monnaie_LDADD = \
+monnaie_test_CXXFLAGS = $(AM_CXXFLAGS)
+monnaie_test_LDADD = \
   libtest_common.la
 
-test_mortality_rates_SOURCES = \
+mortality_rates_test_SOURCES = \
   ihs_mortal.cpp \
   mortality_rates_test.cpp
-test_mortality_rates_CXXFLAGS = $(AM_CXXFLAGS)
-test_mortality_rates_LDADD = \
+mortality_rates_test_CXXFLAGS = $(AM_CXXFLAGS)
+mortality_rates_test_LDADD = \
   libtest_common.la
 
-test_name_value_pairs_SOURCES = \
+name_value_pairs_test_SOURCES = \
   name_value_pairs.cpp \
   name_value_pairs_test.cpp
-test_name_value_pairs_CXXFLAGS = $(AM_CXXFLAGS)
-test_name_value_pairs_LDADD = \
+name_value_pairs_test_CXXFLAGS = $(AM_CXXFLAGS)
+name_value_pairs_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 
-test_ncnnnpnn_SOURCES = \
+ncnnnpnn_test_SOURCES = \
   ncnnnpnn_test.cpp
-test_ncnnnpnn_CXXFLAGS = $(AM_CXXFLAGS)
-test_ncnnnpnn_LDADD = \
+ncnnnpnn_test_CXXFLAGS = $(AM_CXXFLAGS)
+ncnnnpnn_test_LDADD = \
   libtest_common.la
 
-test_numeric_io_SOURCES = \
+numeric_io_test_SOURCES = \
   numeric_io_test.cpp
-test_numeric_io_CXXFLAGS = $(AM_CXXFLAGS)
-test_numeric_io_LDADD = \
+numeric_io_test_CXXFLAGS = $(AM_CXXFLAGS)
+numeric_io_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 
-test_path_utility_SOURCES = \
+path_utility_test_SOURCES = \
   path_utility_test.cpp
-test_path_utility_CXXFLAGS = $(AM_CXXFLAGS)
-test_path_utility_LDADD = \
+path_utility_test_CXXFLAGS = $(AM_CXXFLAGS)
+path_utility_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 
-test_premium_tax_SOURCES = \
+premium_tax_test_SOURCES = \
   data_directory.cpp \
   database.cpp \
   datum_base.cpp \
@@ -1013,21 +1013,21 @@ test_premium_tax_SOURCES = \
   product_data.cpp \
   stratified_charges.cpp \
   xml_lmi.cpp
-test_premium_tax_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
-test_premium_tax_LDADD = \
+premium_tax_test_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
+premium_tax_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
-test_print_matrix_SOURCES = \
+print_matrix_test_SOURCES = \
   cso_table.cpp \
   print_matrix_test.cpp
-test_print_matrix_CXXFLAGS = $(AM_CXXFLAGS)
-test_print_matrix_LDADD = \
+print_matrix_test_CXXFLAGS = $(AM_CXXFLAGS)
+print_matrix_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 
-test_product_file_SOURCES = \
+product_file_test_SOURCES = \
   data_directory.cpp \
   database.cpp \
   datum_base.cpp \
@@ -1047,160 +1047,160 @@ test_product_file_SOURCES = \
   rounding_rules.cpp \
   stratified_charges.cpp \
   xml_lmi.cpp
-test_product_file_CXXFLAGS = $(AM_CXXFLAGS)
-test_product_file_LDADD = \
+product_file_test_CXXFLAGS = $(AM_CXXFLAGS)
+product_file_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
-test_progress_meter_SOURCES = \
+progress_meter_test_SOURCES = \
   progress_meter.cpp \
   progress_meter_cli.cpp \
   progress_meter_test.cpp
-test_progress_meter_CXXFLAGS = $(AM_CXXFLAGS)
-test_progress_meter_LDADD = \
+progress_meter_test_CXXFLAGS = $(AM_CXXFLAGS)
+progress_meter_test_LDADD = \
   libtest_common.la
 
-test_rate_table_SOURCES = \
+rate_table_test_SOURCES = \
   crc32.cpp \
   rate_table.cpp \
   rate_table_test.cpp
-test_rate_table_CXXFLAGS = $(AM_CXXFLAGS)
-test_rate_table_LDADD = \
+rate_table_test_CXXFLAGS = $(AM_CXXFLAGS)
+rate_table_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
-test_regex_SOURCES = \
+regex_test_SOURCES = \
   regex_test.cpp
-test_regex_CXXFLAGS = $(AM_CXXFLAGS)
-test_regex_LDADD = \
+regex_test_CXXFLAGS = $(AM_CXXFLAGS)
+regex_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 
-test_report_table_SOURCES = \
+report_table_test_SOURCES = \
   report_table.cpp \
   report_table_test.cpp
-test_report_table_CXXFLAGS = $(AM_CXXFLAGS)
-test_report_table_LDADD = \
+report_table_test_CXXFLAGS = $(AM_CXXFLAGS)
+report_table_test_LDADD = \
   libtest_common.la
 
-test_round_SOURCES = \
+round_test_SOURCES = \
   round_glibc.c \
   round_test.cpp
-test_round_CXXFLAGS = $(AM_CXXFLAGS)
-test_round_LDADD = \
+round_test_CXXFLAGS = $(AM_CXXFLAGS)
+round_test_LDADD = \
   libtest_common.la
 
-test_round_to_SOURCES = \
+round_to_test_SOURCES = \
   round_to_test.cpp
-test_round_to_CXXFLAGS = $(AM_CXXFLAGS)
-test_round_to_LDADD = \
+round_to_test_CXXFLAGS = $(AM_CXXFLAGS)
+round_to_test_LDADD = \
   libtest_common.la
 
-test_rtti_lmi_SOURCES = \
+rtti_lmi_test_SOURCES = \
   rtti_lmi_test.cpp
-test_rtti_lmi_CXXFLAGS = $(AM_CXXFLAGS)
-test_rtti_lmi_LDADD = \
+rtti_lmi_test_CXXFLAGS = $(AM_CXXFLAGS)
+rtti_lmi_test_LDADD = \
   libtest_common.la
 
-test_safely_dereference_as_SOURCES = \
+safely_dereference_as_test_SOURCES = \
   safely_dereference_as_test.cpp
-test_safely_dereference_as_CXXFLAGS = $(AM_CXXFLAGS)
-test_safely_dereference_as_LDADD = \
+safely_dereference_as_test_CXXFLAGS = $(AM_CXXFLAGS)
+safely_dereference_as_test_LDADD = \
   libtest_common.la
 
-test_sandbox_SOURCES = \
+sandbox_test_SOURCES = \
   sandbox_test.cpp
-test_sandbox_CXXFLAGS = $(AM_CXXFLAGS)
-test_sandbox_LDADD = \
+sandbox_test_CXXFLAGS = $(AM_CXXFLAGS)
+sandbox_test_LDADD = \
   libtest_common.la
 
-test_snprintf_SOURCES = \
+snprintf_test_SOURCES = \
   snprintf_test.cpp
-test_snprintf_CXXFLAGS = $(AM_CXXFLAGS)
-test_snprintf_LDADD =\
+snprintf_test_CXXFLAGS = $(AM_CXXFLAGS)
+snprintf_test_LDADD =\
   libtest_common.la
 
-test_ssize_lmi_SOURCES = \
+ssize_lmi_test_SOURCES = \
   ssize_lmi_test.cpp
-test_ssize_lmi_CXXFLAGS = $(AM_CXXFLAGS)
-test_ssize_lmi_LDADD = \
+ssize_lmi_test_CXXFLAGS = $(AM_CXXFLAGS)
+ssize_lmi_test_LDADD = \
   libtest_common.la
 
-test_stratified_algorithms_SOURCES = \
+stratified_algorithms_test_SOURCES = \
   stratified_algorithms_test.cpp
-test_stratified_algorithms_CXXFLAGS = $(AM_CXXFLAGS)
-test_stratified_algorithms_LDADD = \
+stratified_algorithms_test_CXXFLAGS = $(AM_CXXFLAGS)
+stratified_algorithms_test_LDADD = \
   libtest_common.la
 
-test_stream_cast_SOURCES = \
+stream_cast_test_SOURCES = \
   stream_cast_test.cpp
-test_stream_cast_CXXFLAGS = $(AM_CXXFLAGS)
-test_stream_cast_LDADD = \
+stream_cast_test_CXXFLAGS = $(AM_CXXFLAGS)
+stream_cast_test_LDADD = \
   libtest_common.la
 
-test_system_command_SOURCES = \
+system_command_test_SOURCES = \
   system_command.cpp \
   system_command_non_wx.cpp \
   system_command_test.cpp
-test_system_command_CXXFLAGS = $(AM_CXXFLAGS)
-test_system_command_LDADD = \
+system_command_test_CXXFLAGS = $(AM_CXXFLAGS)
+system_command_test_LDADD = \
   libtest_common.la
 
-test_test_tools_SOURCES = \
+test_tools_test_SOURCES = \
   test_tools_test.cpp
-test_test_tools_CXXFLAGS = $(AM_CXXFLAGS)
-test_test_tools_LDADD = \
+test_tools_test_CXXFLAGS = $(AM_CXXFLAGS)
+test_tools_test_LDADD = \
   libtest_common.la
 
-test_timer_SOURCES = \
+timer_test_SOURCES = \
   timer_test.cpp
-test_timer_CXXFLAGS = $(AM_CXXFLAGS)
-test_timer_LDADD = \
+timer_test_CXXFLAGS = $(AM_CXXFLAGS)
+timer_test_LDADD = \
   libtest_common.la
 
-test_tn_range_SOURCES = \
+tn_range_test_SOURCES = \
   datum_base.cpp \
   tn_range_test.cpp \
   tn_range_test_aux.cpp
-test_tn_range_CXXFLAGS = $(AM_CXXFLAGS)
-test_tn_range_LDADD = \
+tn_range_test_CXXFLAGS = $(AM_CXXFLAGS)
+tn_range_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 
-test_value_cast_SOURCES = \
+value_cast_test_SOURCES = \
   value_cast_test.cpp
-test_value_cast_CXXFLAGS = $(AM_CXXFLAGS)
-test_value_cast_LDADD = \
+value_cast_test_CXXFLAGS = $(AM_CXXFLAGS)
+value_cast_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 
-test_vector_SOURCES = \
+vector_test_SOURCES = \
   vector_test.cpp
-test_vector_CXXFLAGS = $(AM_CXXFLAGS)
-test_vector_LDADD = \
+vector_test_CXXFLAGS = $(AM_CXXFLAGS)
+vector_test_LDADD = \
   libtest_common.la
 
-test_wx_new_SOURCES = \
+wx_new_test_SOURCES = \
   wx_new_test.cpp
-test_wx_new_CXXFLAGS = $(AM_CXXFLAGS)
-test_wx_new_LDADD = \
+wx_new_test_CXXFLAGS = $(AM_CXXFLAGS)
+wx_new_test_LDADD = \
   libtest_common.la
 
-test_xml_serialize_SOURCES = \
+xml_serialize_test_SOURCES = \
   xml_lmi.cpp \
   xml_serialize_test.cpp
-test_xml_serialize_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
-test_xml_serialize_LDADD = \
+xml_serialize_test_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
+xml_serialize_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
-test_zero_SOURCES = \
+zero_test_SOURCES = \
   zero_test.cpp
-test_zero_CXXFLAGS = $(AM_CXXFLAGS)
-test_zero_LDADD = \
+zero_test_CXXFLAGS = $(AM_CXXFLAGS)
+zero_test_LDADD = \
   libtest_common.la
 
 # headers: we need to include them or they wouldn't appear in the distribution
