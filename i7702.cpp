@@ -361,6 +361,7 @@ i7702::i7702
     constexpr double tolerance {0.0000001};
     LMI_ASSERT(no_naar_discount || mm < tolerance);
 
+#if 1 // 7702 !! remove
     // Here begin the dubious calculations that will be replaced.
     std::vector<double> guar_int = Bgen_;
     assign(guar_int, Max(guar_int, Bflr_));
@@ -396,13 +397,21 @@ i7702::i7702
             ,Max(Em_, theoretical_naar_discount)
             );
     ig_ = no_naar_discount ? zero : operative_naar_discount;
+#endif // 1 // 7702 !! remove
 
-    // Test old implementation against new.
     initialize();
+#if 1 // 7702 !! remove
+    // Test old implementation against new.
     LMI_ASSERT(ic_usual_ == gross_  );
     LMI_ASSERT(ic_glp_   == net_glp_);
     LMI_ASSERT(ic_gsp_   == net_gsp_);
     LMI_ASSERT(ig_usual_ == ig_     );
+#endif // 1 // 7702 !! remove
+    // 7702 !! Temporarily assign new results to old member variables.
+    gross_   = ic_usual_;
+    net_glp_ = ic_glp_  ;
+    net_gsp_ = ic_gsp_  ;
+    ig_      = ig_usual_;
 }
 
 void i7702::initialize()
