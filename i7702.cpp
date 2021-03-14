@@ -403,8 +403,59 @@ i7702::i7702
             ,Max(Em_, theoretical_naar_discount)
             );
     ig_ = no_naar_discount ? zero : operative_naar_discount;
+
+    // Test old implementation against new.
+    initialize();
+    LMI_ASSERT(ic_usual_ == gross_  );
+    LMI_ASSERT(ic_glp_   == net_glp_);
+    LMI_ASSERT(ic_gsp_   == net_gsp_);
+    LMI_ASSERT(ig_usual_ == ig_     );
 }
 
 void i7702::initialize()
 {
+    // max(A0, B, C)
+    ic_usual_ += Max
+        (Max
+            ((Max(A0_, Max(Bgen_, Cgen_))        ) * use_gen_
+            ,(Max(A0_, Max(Bsep_, Csep_))        ) * use_sep_
+            )
+        ,Max
+            ((Max(A0_, Max(Bflr_, Cflr_))        ) * use_flr_
+            ,(Max(A0_, Max(Bvlr_, Cvlr_))        ) * use_vlr_
+            )
+        );
+    // max(A0, B   ) - D
+    ic_glp_   += Max
+        (Max
+            ((Max(A0_,     Bgen_        ) - Dgen_) * use_gen_
+            ,(Max(A0_,     Bsep_        ) - Dsep_) * use_sep_
+            )
+        ,Max
+            ((Max(A0_,     Bflr_        ) - Dflr_) * use_flr_
+            ,(Max(A0_,     Bvlr_        ) - Dvlr_) * use_vlr_
+            )
+        );
+    // max(A1, B, C) - D
+    ic_gsp_   += Max
+        (Max
+            ((Max(A1_, Max(Bgen_, Cgen_)) - Dgen_) * use_gen_
+            ,(Max(A1_, Max(Bsep_, Csep_)) - Dsep_) * use_sep_
+            )
+        ,Max
+            ((Max(A1_, Max(Bflr_, Cflr_)) - Dflr_) * use_flr_
+            ,(Max(A1_, Max(Bvlr_, Cvlr_)) - Dvlr_) * use_vlr_
+            )
+        );
+    // Convert all to monthly.
+    assign(ic_usual_, apply_unary(i_upper_12_over_12_from_i<double>(), ic_usual_));
+    assign(ic_glp_  , apply_unary(i_upper_12_over_12_from_i<double>(), ic_glp_  ));
+    assign(ic_gsp_  , apply_unary(i_upper_12_over_12_from_i<double>(), ic_gsp_  ));
+
+    if(!each_equal(Em_, 0.0))
+        {
+        ig_usual_ += max(ic_usual_, Em_);
+        ig_glp_   += max(ic_glp_  , Em_);
+        ig_gsp_   += max(ic_gsp_  , Em_);
+        }
 }
