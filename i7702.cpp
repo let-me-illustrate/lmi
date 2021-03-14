@@ -24,12 +24,16 @@
 #include "i7702.hpp"
 
 #include "assert_lmi.hpp"
+#include "contains.hpp"                 // 7702 !! pyx
 #include "database.hpp"
 #include "et_vector.hpp"
+#include "global_settings.hpp"          // 7702 !! pyx
 #include "math_functions.hpp"
 #include "miscellany.hpp"               // each_equal(), minmax
 #include "ssize_lmi.hpp"
 #include "stratified_charges.hpp"
+
+#include <iostream>                     // 7702 !! pyx
 
 /// Here's how lmi determines §7702 and §7702A interest rates.
 ///
@@ -400,6 +404,39 @@ void i7702::initialize()
             ,(Max(A1_, Max(Bvlr_, Cvlr_)) - Dvlr_) * use_vlr_
             )
         );
+
+    // 7702 !! temporary--for acceptance testing
+    if(contains(global_settings::instance().pyx(), "show_7702i"))
+        {
+        std::cout
+            << "statutory rates {GLP,GSP}\n"
+            << A0_ << " A0_\n"
+            << A1_ << " A1_\n"
+            << Bgen_[0] << "\t"
+            << Cgen_[0] << "\t"
+            << Dgen_[0] << "\tif "
+            << use_gen_[0] << "  general account\n"
+            << Bsep_[0] << "\t"
+            << Csep_[0] << "\t"
+            << Dsep_[0] << "\tif "
+            << use_sep_[0] << "  separate account\n"
+            << Bflr_[0] << "\t"
+            << Cflr_[0] << "\t"
+            << Dflr_[0] << "\tif "
+            << use_flr_[0] << "  fixed loan rate\n"
+            << Bvlr_[0] << "\t"
+            << Cvlr_[0] << "\t"
+            << Dvlr_[0] << "\tif "
+            << use_vlr_[0] << "  variable loan rate\n"
+            << "monthly NAAR discount\n"
+            << Em_[0] << " Em_[0]\n"
+            << ic_usual_[0] << " ic_usual_[0]\n"
+            << ic_glp_  [0] << " ic_glp_  [0]\n"
+            << ic_gsp_  [0] << " ic_gsp_  [0]\n"
+            << std::endl
+            ;
+        }
+
     // Convert all to monthly.
     assign(ic_usual_, apply_unary(i_upper_12_over_12_from_i<double>(), ic_usual_));
     assign(ic_glp_  , apply_unary(i_upper_12_over_12_from_i<double>(), ic_glp_  ));
