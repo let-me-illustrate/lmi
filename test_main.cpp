@@ -60,6 +60,7 @@
 
 #include "exit_codes.hpp"
 #include "fenv_lmi.hpp"
+#include "force_linking.hpp"
 #include "miscellany.hpp"               // stifle_warning_for_unused_value()
 #include "test_tools.hpp"
 
@@ -69,6 +70,8 @@
 #include <regex>
 #include <stdexcept>
 #include <string>
+
+LMI_FORCE_LINKING_EX_SITU(alert_cli)
 
 // GWC changed namespace 'boost' to prevent any conflict with code in
 // a later version of boost.
