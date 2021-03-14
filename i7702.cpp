@@ -278,6 +278,8 @@ i7702::i7702
     ,net_glp_  (length_)
     ,net_gsp_  (length_)
 {
+    // 7702 !! Should 'C*' members be scalar--first year only?
+
     std::vector<double> const zero(length_);
 
     database.query_into(DB_AllowGenAcct  , use_gen_);
@@ -290,6 +292,9 @@ i7702::i7702
         use_flr_ = zero;
         use_vlr_ = zero;
         }
+
+    // 7702 !! Assert that all use_* are boolean.
+    // 7702 !! Assert (use_gen_ || use_sep_) for each duration.
 
     // Monthly guar net int for 7702 is
     //   greater of {iglp(), igsp()} and annual guar int rate
