@@ -302,19 +302,15 @@ i7702::i7702
 
     database.query_into(DB_GuarInt, Bgen_);
 
-    // For 7702 purposes, the rate guaranteed by the contract is the
-    // highest rate on any potential path, at each duration.
-    if(!database.query<bool>(DB_IgnoreLoanRateFor7702))
-        {
-        if(!each_equal(use_flr_, false))
-            {
-            std::vector<double> gross_loan_rate;
-            database.query_into(DB_FixedLoanRate    , gross_loan_rate);
-            std::vector<double> guar_loan_spread;
-            database.query_into(DB_GuarRegLoanSpread, guar_loan_spread);
-            assign(Bflr_, gross_loan_rate - guar_loan_spread);
-            }
-        }
+    std::vector<double> fixed_loan_rate;
+    database.query_into(DB_FixedLoanRate, fixed_loan_rate);
+    // This isn't the actual rate--lmi doesn't yet implement VLR.
+    std::vector<double> variable_loan_rate;
+    database.query_into(DB_MaxVlrRate, variable_loan_rate);
+    std::vector<double> guar_loan_spread;
+    database.query_into(DB_GuarRegLoanSpread, guar_loan_spread);
+    assign(Bflr_, fixed_loan_rate    - guar_loan_spread);
+    assign(Bvlr_, variable_loan_rate - guar_loan_spread);
 
     // If lmi someday implements VLR, then the current VLR rate on
     // the issue date constitutes a short-term guarantee that must be
