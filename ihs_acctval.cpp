@@ -1312,10 +1312,7 @@ void AccountValue::SetAnnualInvariants()
             ;
         }
 
-    // 7702 !! This is clearly wrong. This rate is net of certain
-    // asset-based charges, but those charges are explicitly
-    // deducted from DCV, so they must be ignored here.
-    YearsDcvIntRate         = i7702_->net_glp()[Year];
+    YearsDcvIntRate         = i7702_->ic_usual()[Year];
     YearsHoneymoonValueRate = InterestRates_->HoneymoonValueRate
         (GenBasis_
         ,mce_monthly_rate
