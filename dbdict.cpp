@@ -212,7 +212,6 @@ void DBDictionary::ascribe_members()
     ascribe("CurrIntSpread"             , &DBDictionary::CurrIntSpread             );
     ascribe("CurrMandE"                 , &DBDictionary::CurrMandE                 );
     ascribe("GenAcctIntBonus"           , &DBDictionary::GenAcctIntBonus           );
-    ascribe("BonusInt"                  , &DBDictionary::BonusInt                  );
     ascribe("IntFloor"                  , &DBDictionary::IntFloor                  );
     ascribe("AllowGenAcct"              , &DBDictionary::AllowGenAcct              );
     ascribe("AllowSepAcct"              , &DBDictionary::AllowSepAcct              );
@@ -930,7 +929,6 @@ sample::sample()
     Add({DB_CurrIntSpread       , 0.01});
     Add({DB_CurrMandE           , 0.009});
     Add({DB_GenAcctIntBonus     , 0.0});
-    Add({DB_BonusInt            , 0.0});
     Add({DB_IntFloor            , 0.0});
     Add({DB_AllowGenAcct        , true});
     Add({DB_AllowSepAcct        , true});

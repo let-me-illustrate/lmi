@@ -193,7 +193,6 @@ class LMI_SO DBDictionary
     database_entity CurrIntSpread             ;
     database_entity CurrMandE                 ;
     database_entity GenAcctIntBonus           ;
-    database_entity BonusInt                  ;
     database_entity IntFloor                  ;
     database_entity AllowGenAcct              ;
     database_entity AllowSepAcct              ;

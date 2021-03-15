@@ -241,7 +241,6 @@ enum e_database_key
         ,DB_CurrMandE
 
         ,DB_GenAcctIntBonus
-        ,DB_BonusInt
         ,DB_IntFloor
         ,DB_AllowGenAcct
         ,DB_AllowSepAcct

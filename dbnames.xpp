@@ -135,7 +135,6 @@
 {DB_CurrIntSpread,DB_Topic_Interest,"CurrIntSpread","Current interest spread, e.g. .01 = 100bp",}, \
 {DB_CurrMandE,DB_Topic_Interest,"CurrMandE","Current M&&E charge",}, \
 {DB_GenAcctIntBonus,DB_Topic_Interest,"GenAcctIntBonus","Interest bonus added to the general account rate",}, \
-{DB_BonusInt,DB_Topic_Interest,"BonusInt","Bonus interest [not yet implemented]",}, \
 {DB_IntFloor,DB_Topic_Interest,"IntFloor","[not used]",}, \
 {DB_AllowGenAcct,DB_Topic_Interest,"AllowGenAcct","Allow investment in general account: 0=no, 1=yes",}, \
 {DB_AllowSepAcct,DB_Topic_Interest,"AllowSepAcct","Allow investment in separate account: 0=no, 1=yes",}, \
