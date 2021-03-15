@@ -458,9 +458,10 @@ void BasicValues::Init7702()
         ,yare_input_.IssueAge
         ,EndtAge
         ,Mly7702qc
-        ,i7702_->net_glp()
-        ,i7702_->net_gsp()
-        ,i7702_->ig()
+        ,i7702_->ic_glp()
+        ,i7702_->ic_gsp()
+        ,i7702_->ig_glp()
+        ,i7702_->ig_gsp()
         ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
         ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
         ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount

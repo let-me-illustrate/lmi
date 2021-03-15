@@ -60,9 +60,10 @@ class Irc7702 final
         ,int                        a_IssueAge
         ,int                        a_EndtAge
         ,std::vector<double> const& a_Qc
-        ,std::vector<double> const& a_GLPic
-        ,std::vector<double> const& a_GSPic
-        ,std::vector<double> const& a_Ig
+        ,std::vector<double> const& ic_glp
+        ,std::vector<double> const& ic_gsp
+        ,std::vector<double> const& ig_glp
+        ,std::vector<double> const& ig_gsp
         ,double                     a_PresentBftAmt
         ,double                     a_PresentSpecAmt
         ,double                     a_LeastBftAmtEver
@@ -175,9 +176,10 @@ class Irc7702 final
     int const                  EndtAge;    // Endowment age
 
     std::vector<double> const& Qc;         // 7702 mortality rate
-    std::vector<double> const& GLPic;      // 7702 GLP interest rate
-    std::vector<double> const& GSPic;      // 7702 GSP interest rate
-    std::vector<double> const& Ig;         // Death benefit discount rate
+    std::vector<double> const& ic_glp_;
+    std::vector<double> const& ic_gsp_;
+    std::vector<double> const& ig_glp_;
+    std::vector<double> const& ig_gsp_;
 
     double                     PresentBftAmt;
     double                     PriorBftAmt;

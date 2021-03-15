@@ -74,10 +74,6 @@ namespace
         static std::vector<double> const v(d, d + n);
         return v;
         }
-
-    // Use 7702 int rate for DB discount in NAAR. TAXATION !! Does it
-    // make sense to retain this?
-    bool g_UseIcForIg = true;
 } // Unnamed namespace.
 
 // TAXATION !! General concerns
@@ -111,9 +107,10 @@ Irc7702::Irc7702
     ,int                        a_IssueAge
     ,int                        a_EndtAge
     ,std::vector<double> const& a_Qc
-    ,std::vector<double> const& a_GLPic
-    ,std::vector<double> const& a_GSPic
-    ,std::vector<double> const& a_Ig
+    ,std::vector<double> const& ic_glp
+    ,std::vector<double> const& ic_gsp
+    ,std::vector<double> const& ig_glp
+    ,std::vector<double> const& ig_gsp
     ,double                     a_PresentBftAmt
     ,double                     a_PresentSpecAmt
     ,double                     a_LeastBftAmtEver
@@ -142,9 +139,10 @@ Irc7702::Irc7702
     ,IssueAge           {a_IssueAge}
     ,EndtAge            {a_EndtAge}
     ,Qc                 {a_Qc}
-    ,GLPic              {a_GLPic}
-    ,GSPic              {a_GSPic}
-    ,Ig                 {a_Ig}
+    ,ic_glp_            {ic_glp}
+    ,ic_gsp_            {ic_gsp}
+    ,ig_glp_            {ig_glp}
+    ,ig_gsp_            {ig_gsp}
     ,PresentBftAmt      {a_PresentBftAmt}
     ,PriorBftAmt        {a_PresentBftAmt}
     ,PresentSpecAmt     {a_PresentSpecAmt}
@@ -408,40 +406,12 @@ void Irc7702::Init()
 //============================================================================
 void Irc7702::InitCommFns()
 {
-    std::vector<double> glp_naar_disc_rate;
-    std::vector<double> gsp_naar_disc_rate;
-    std::vector<double> const zero(Length, 0.0);
-
-    // g_UseIcForIg indicates whether the 7702 rates should be used for the NAAR
-    // discount factor. We interpret a guar rate (IG) of zero in all years as
-    // no NAAR discount factor.
-
-    if(!g_UseIcForIg)
-        {
-        // if the flag is not set, use guar rates for NAAR discount factor
-        glp_naar_disc_rate = Ig;
-        gsp_naar_disc_rate = Ig;
-        }
-    else if(zero == Ig)
-        {
-        // if guar rate is zero, we will always use it for the NAAR discount factor
-        glp_naar_disc_rate = Ig;
-        gsp_naar_disc_rate = Ig;
-        }
-    else
-        {
-        // if the flag is true, and the guar rate !=0, use the 7702 rates for
-        // the NAAR discount factor
-        glp_naar_disc_rate = GLPic;
-        gsp_naar_disc_rate = GSPic;
-        }
-
     // Commutation functions using min i = iglp(): both options 1 and 2
     CommFns[Opt1Int4Pct].reset
         (::new ULCommFns
             (Qc
-            ,GLPic
-            ,glp_naar_disc_rate
+            ,ic_glp_
+            ,ig_glp_
             ,mce_option1_for_7702
             ,mce_monthly
             )
@@ -451,8 +421,8 @@ void Irc7702::InitCommFns()
     CommFns[Opt2Int4Pct].reset
         (::new ULCommFns
             (Qc
-            ,GLPic
-            ,glp_naar_disc_rate
+            ,ic_glp_
+            ,ig_glp_
             ,mce_option2_for_7702
             ,mce_monthly
             )
@@ -463,8 +433,8 @@ void Irc7702::InitCommFns()
     CommFns[Opt1Int6Pct].reset
         (::new ULCommFns
             (Qc
-            ,GSPic
-            ,gsp_naar_disc_rate
+            ,ic_gsp_
+            ,ig_gsp_
             ,mce_option1_for_7702
             ,mce_monthly
             )

@@ -443,9 +443,10 @@ Irc7702& gpt_test::instantiate_old(int issue_age)
             ,issue_age                       // a_IssueAge
             ,issue_age + length              // a_EndtAge
             ,q_m                             // a_Qc
-            ,glp_ic                          // a_GLPic
-            ,gsp_ic                          // a_GSPic
-            ,glp_ic                          // a_Ig [ignored here, in effect]
+            ,glp_ic                          // ic_glp
+            ,gsp_ic                          // ic_gsp
+            ,glp_ig                          // ig_glp
+            ,gsp_ig                          // ig_gsp
             ,0.0                             // a_PresentBftAmt
             ,0.0                             // a_PresentSpecAmt
             ,0.0                             // a_LeastBftAmtEver
