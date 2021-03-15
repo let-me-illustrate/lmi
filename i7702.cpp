@@ -199,6 +199,7 @@ i7702::i7702
     ,std::vector<double> const& use_vlr
     )
     :length_   {length }
+    ,trace_    {false  }
     ,A0_       {A0     }
     ,A1_       {A1     }
     ,Bgen_     {Bgen   }
@@ -251,6 +252,7 @@ i7702::i7702
     ,stratified_charges const& stratified
     )
     :length_   {database.length()}
+    ,trace_    {contains(global_settings::instance().pyx(), "show_7702i")}
     ,A0_       {}
     ,A1_       {}
     ,Bgen_     (length_)
@@ -396,7 +398,7 @@ void i7702::initialize()
         );
 
     // 7702 !! temporary--for acceptance testing
-    if(contains(global_settings::instance().pyx(), "show_7702i"))
+    if(trace_)
         {
         std::cout
             << "statutory rates {GLP,GSP}\n"

@@ -79,7 +79,8 @@ class LMI_SO i7702 final
 
     void initialize();
 
-    int const length_;
+    int  const length_;
+    bool const trace_;
 
     // Rates from product database--member names are capitalized to
     // match formulas in documentation, but suffixed to mark them as
