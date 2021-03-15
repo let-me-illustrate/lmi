@@ -283,6 +283,7 @@ lmi_common_objects := \
   gpt_state.o \
   gpt_xml_document.o \
   i7702.o \
+  i7702_init.o \
   ihs_acctval.o \
   ihs_avdebug.o \
   ihs_avmly.o \
@@ -430,6 +431,7 @@ unit_test_targets := \
   global_settings_test \
   gpt_test \
   handle_exceptions_test \
+  i7702_test \
   ieee754_test \
   input_sequence_test \
   input_test \
@@ -683,6 +685,11 @@ gpt_test$(EXEEXT): \
 handle_exceptions_test$(EXEEXT): \
   $(common_test_objects) \
   handle_exceptions_test.o \
+
+i7702_test$(EXEEXT): \
+  $(common_test_objects) \
+  i7702.o \
+  i7702_test.o \
 
 ieee754_test$(EXEEXT): \
   $(common_test_objects) \

@@ -116,6 +116,7 @@ TESTS = \
     test_global_settings \
     test_gpt \
     test_handle_exceptions \
+    test_i7702 \
     test_ieee754 \
     test_input_seq \
     test_input \
@@ -417,6 +418,7 @@ liblmi_la_SOURCES = \
     gpt_state.cpp \
     gpt_xml_document.cpp \
     i7702.cpp \
+    i7702_init.cpp \
     ihs_acctval.cpp \
     ihs_avdebug.cpp \
     ihs_avmly.cpp \
@@ -799,6 +801,12 @@ test_handle_exceptions_SOURCES = \
   $(common_test_objects) \
   handle_exceptions_test.cpp
 test_handle_exceptions_CXXFLAGS = $(AM_CXXFLAGS)
+
+test_i7702_SOURCES = \
+  $(common_test_objects) \
+  i7702.cpp \
+  i7702_test.cpp
+test_i7702_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_ieee754_SOURCES = \
   $(common_test_objects) \
