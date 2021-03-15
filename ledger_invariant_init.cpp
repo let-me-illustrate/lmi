@@ -138,10 +138,12 @@ void LedgerInvariant::Init(BasicValues const* b)
     CorridorFactor             = b->GetCorridorFactor();
     if(!is_antediluvian_fork())
         {
-        Irc7702ig                  = b->i7702_->ig();
-        Irc7702Gross               = b->i7702_->gross();
-        Irc7702NetGLP              = b->i7702_->net_glp();
-        Irc7702NetGSP              = b->i7702_->net_gsp();
+        Irc7702ic_usual            = b->i7702_->ic_usual();
+        Irc7702ic_glp              = b->i7702_->ic_glp  ();
+        Irc7702ic_gsp              = b->i7702_->ic_gsp  ();
+        Irc7702ig_usual            = b->i7702_->ig_usual();
+        Irc7702ig_glp              = b->i7702_->ig_glp  ();
+        Irc7702ig_gsp              = b->i7702_->ig_gsp  ();
         }
 
     AnnLoanDueRate = b->InterestRates_->RegLnDueRate

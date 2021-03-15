@@ -110,10 +110,12 @@ void LedgerInvariant::Alloc(int len)
     OtherVectors    ["AddonCompOnAssets"          ] = &AddonCompOnAssets          ;
     OtherVectors    ["AddonCompOnPremium"         ] = &AddonCompOnPremium         ;
     OtherVectors    ["CorridorFactor"             ] = &CorridorFactor             ;
-    OtherVectors    ["Irc7702ig"                  ] = &Irc7702ig                  ;
-    OtherVectors    ["Irc7702Gross"               ] = &Irc7702Gross               ;
-    OtherVectors    ["Irc7702NetGLP"              ] = &Irc7702NetGLP              ;
-    OtherVectors    ["Irc7702NetGSP"              ] = &Irc7702NetGSP              ;
+    OtherVectors    ["Irc7702ic_usual"            ] = &Irc7702ic_usual            ;
+    OtherVectors    ["Irc7702ic_glp"              ] = &Irc7702ic_glp              ;
+    OtherVectors    ["Irc7702ic_gsp"              ] = &Irc7702ic_gsp              ;
+    OtherVectors    ["Irc7702ig_usual"            ] = &Irc7702ig_usual            ;
+    OtherVectors    ["Irc7702ig_glp"              ] = &Irc7702ig_glp              ;
+    OtherVectors    ["Irc7702ig_gsp"              ] = &Irc7702ig_gsp              ;
     OtherVectors    ["AnnLoanDueRate"             ] = &AnnLoanDueRate             ;
     OtherVectors    ["CurrMandE"                  ] = &CurrMandE                  ;
     OtherVectors    ["TotalIMF"                   ] = &TotalIMF                   ;

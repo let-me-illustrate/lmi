@@ -214,10 +214,12 @@ title_map_t static_titles()
     ,{"HoneymoonValueSpread"            , "Honeymoon\nValue\nSpread"}
     ,{"IndvTaxBracket"                  , "EE Tax\nBracket"}
     ,{"InforceLives"                    , "BOY\nLives\nInforce"}
-    ,{"Irc7702ig"                       , "7702 i\nfor NAAR\nDiscount"}
-    ,{"Irc7702Gross"                    , "7702 i\nGross"}
-    ,{"Irc7702NetGLP"                   , "7702 i\nNet for\nGLP"}
-    ,{"Irc7702NetGSP"                   , "7702 i\nNet for\nGSP"}
+    ,{"Irc7702ic_usual"                 , "7702 ic\nUsual"}
+    ,{"Irc7702ic_glp"                   , "7702 ic\nfor GLP"}
+    ,{"Irc7702ic_gsp"                   , "7702 ic\nfor GSP"}
+    ,{"Irc7702ig_usual"                 , "7702 ig\nUsual"}
+    ,{"Irc7702ig_glp"                   , "7702 ig\nfor GLP"}
+    ,{"Irc7702ig_gsp"                   , "7702 ig\nfor GSP"}
     ,{"IrrCsv_Current"                  , "Curr IRR\non CSV"}
     ,{"IrrCsv_Guaranteed"               , "Guar IRR\non CSV"}
     ,{"IrrDb_Current"                   , "Curr IRR\non DB"}
@@ -351,10 +353,12 @@ mask_map_t static_masks()
     ,{"HoneymoonValueSpread"            ,      "99.99%"}
     ,{"IndvTaxBracket"                  ,      "99.99%"}
     ,{"InforceLives"                    , "999,999,999"}
-    ,{"Irc7702ig"                       ,      "99.99%"}
-    ,{"Irc7702Gross"                    ,      "99.99%"}
-    ,{"Irc7702NetGLP"                   ,      "99.99%"}
-    ,{"Irc7702NetGSP"                   ,      "99.99%"}
+    ,{"Irc7702ic_usual"                 ,      "99.99%"}
+    ,{"Irc7702ic_glp"                   ,      "99.99%"}
+    ,{"Irc7702ic_gsp"                   ,      "99.99%"}
+    ,{"Irc7702ig_usual"                 ,      "99.99%"}
+    ,{"Irc7702ig_glp"                   ,      "99.99%"}
+    ,{"Irc7702ig_gsp"                   ,      "99.99%"}
     ,{"IrrCsv_Current"                  ,  "100000.00%"}
     ,{"IrrCsv_Guaranteed"               ,  "100000.00%"}
     ,{"IrrDb_Current"                   ,  "100000.00%"}
@@ -568,10 +572,12 @@ format_map_t static_formats()
     ,{"IndvTaxBracket"                  , f4}
     ,{"InforceHMVector"                 , f4}
 
-    ,{"Irc7702ig"                       , f4}
-    ,{"Irc7702Gross"                    , f4}
-    ,{"Irc7702NetGLP"                   , f4}
-    ,{"Irc7702NetGSP"                   , f4}
+    ,{"Irc7702ic_usual"                 , f4}
+    ,{"Irc7702ic_glp"                   , f4}
+    ,{"Irc7702ic_gsp"                   , f4}
+    ,{"Irc7702ig_usual"                 , f4}
+    ,{"Irc7702ig_glp"                   , f4}
+    ,{"Irc7702ig_gsp"                   , f4}
 
     ,{"IrrCsv_Current"                  , f4}
     ,{"IrrCsv_CurrentZero"              , f4}
