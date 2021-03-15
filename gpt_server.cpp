@@ -188,8 +188,8 @@ gpt_state test_one_days_gpt_transactions
     i7702 const i7702_(database, stratified);
     ULCommFns commfns
         (Mly7702qc
-        ,i7702_.net_glp()
-        ,i7702_.ig()
+        ,i7702_.ic_glp()
+        ,i7702_.ig_glp()
         ,mce_option1_for_7702
         ,mce_monthly
         );
@@ -435,8 +435,8 @@ gpt_state test_one_days_gpt_transactions
         {
         ofs
             <<               j  << '\t'
-            << value_cast<std::string>(i7702_.net_glp() [j]) << '\t'
-            << value_cast<std::string>(i7702_.gross() [j]) << '\t'
+            << value_cast<std::string>(i7702_.ic_glp() [j]) << '\t'
+            << value_cast<std::string>(i7702_.ig_glp() [j]) << '\t'
             << value_cast<std::string>(Mly7702qc      [j]) << '\t'
             << value_cast<std::string>(commfns.aD()   [j]) << '\t'
             << value_cast<std::string>(commfns.kC()   [j]) << '\t'

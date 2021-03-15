@@ -171,8 +171,8 @@ mec_state test_one_days_7702A_transactions
     i7702 const i7702_(database, stratified);
     ULCommFns commfns
         (Mly7702qc
-        ,i7702_.gross()
-        ,i7702_.ig()
+        ,i7702_.ic_usual()
+        ,i7702_.ig_usual()
         ,mce_option1_for_7702
         ,mce_monthly
         );
@@ -418,8 +418,8 @@ mec_state test_one_days_7702A_transactions
         {
         ofs
             <<               j  << '\t'
-            << value_cast<std::string>(i7702_.gross() [j]) << '\t'
-            << value_cast<std::string>(i7702_.ig()    [j]) << '\t'
+            << value_cast<std::string>(i7702_.ic_usual() [j]) << '\t'
+            << value_cast<std::string>(i7702_.ig_usual() [j]) << '\t'
             << value_cast<std::string>(Mly7702qc      [j]) << '\t'
             << value_cast<std::string>(commfns.aD()   [j]) << '\t'
             << value_cast<std::string>(commfns.kC()   [j]) << '\t'
