@@ -51,11 +51,6 @@ class LMI_SO i7702 final
     std::vector<double> const& ig_usual() const {return ig_usual_;}
     std::vector<double> const& ig_glp  () const {return ig_glp_  ;}
     std::vector<double> const& ig_gsp  () const {return ig_gsp_  ;}
-    // 7702 !! Obsolescent.
-    std::vector<double> const& ig     () const {return ig_;     }
-    std::vector<double> const& gross  () const {return gross_;  }
-    std::vector<double> const& net_glp() const {return net_glp_;}
-    std::vector<double> const& net_gsp() const {return net_gsp_;}
 
   private:
     // Private ctor for unit test.
@@ -121,11 +116,6 @@ class LMI_SO i7702 final
     std::vector<double> ig_usual_;
     std::vector<double> ig_glp_  ;
     std::vector<double> ig_gsp_  ;
-    // 7702 !! Obsolescent.
-    std::vector<double> ig_     ;
-    std::vector<double> gross_  ;
-    std::vector<double> net_glp_;
-    std::vector<double> net_gsp_;
 };
 
 #endif // i7702_hpp

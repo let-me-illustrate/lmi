@@ -276,11 +276,6 @@ i7702::i7702
     ,ig_usual_ (length_)
     ,ig_glp_   (length_)
     ,ig_gsp_   (length_)
-    // 7702 !! Obsolescent.
-    ,ig_       (length_)
-    ,gross_    (length_)
-    ,net_glp_  (length_)
-    ,net_gsp_  (length_)
 {
     // 7702 !! Should 'C*' members be scalar--first year only?
 
@@ -362,11 +357,6 @@ i7702::i7702
     LMI_ASSERT(no_naar_discount || mm < tolerance);
 
     initialize();
-    // 7702 !! Temporarily assign new results to old member variables.
-    gross_   = ic_usual_;
-    net_glp_ = ic_glp_  ;
-    net_gsp_ = ic_gsp_  ;
-    ig_      = ig_usual_;
 }
 
 void i7702::initialize()
