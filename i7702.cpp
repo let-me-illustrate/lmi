@@ -29,7 +29,9 @@
 #include "miscellany.hpp"               // each_equal()
 #include "ssize_lmi.hpp"
 
+#include <ios>                          // fixed, ios_base::precision() 7702 !! pyx
 #include <iostream>                     // 7702 !! pyx
+#include <sstream>                      // 7702 !! pyx
 
 /// Here's how lmi determines §7702 and §7702A interest rates.
 ///
@@ -280,35 +282,43 @@ void i7702::initialize()
         );
 
     // 7702 !! temporary--for acceptance testing
+    // Use a temporary stream to avoid changing std::cout's flags.
     if(trace_)
         {
-        std::cout
+        std::ostringstream oss;
+        oss.precision(10);
+        oss << std::fixed;
+        oss
             << "statutory rates {GLP,GSP}\n"
             << A0_ << " A0_\n"
             << A1_ << " A1_\n"
+            << "first-year {B,C,D} with row conditions\n"
+            << "  "
             << Bgen_[0] << "\t"
             << Cgen_[0] << "\t"
             << Dgen_[0] << "\tif "
-            << use_gen_[0] << "  general account\n"
+            << static_cast<bool>(use_gen_[0]) << "  general account\n"
+            << "  "
             << Bsep_[0] << "\t"
             << Csep_[0] << "\t"
             << Dsep_[0] << "\tif "
-            << use_sep_[0] << "  separate account\n"
+            << static_cast<bool>(use_sep_[0]) << "  separate account\n"
+            << "  "
             << Bflr_[0] << "\t"
             << Cflr_[0] << "\t"
             << Dflr_[0] << "\tif "
-            << use_flr_[0] << "  fixed loan rate\n"
+            << static_cast<bool>(use_flr_[0]) << "  fixed loan rate\n"
+            << "  "
             << Bvlr_[0] << "\t"
             << Cvlr_[0] << "\t"
             << Dvlr_[0] << "\tif "
-            << use_vlr_[0] << "  variable loan rate\n"
-            << "monthly NAAR discount\n"
-            << Em_[0] << " Em_[0]\n"
+            << static_cast<bool>(use_vlr_[0]) << "  variable loan rate\n"
+            << "annual rates\n"
             << ic_usual_[0] << " ic_usual_[0]\n"
             << ic_glp_  [0] << " ic_glp_  [0]\n"
             << ic_gsp_  [0] << " ic_gsp_  [0]\n"
-            << std::endl
             ;
+        std::cout << oss.str() << std::endl;
         }
 
     // Convert all to monthly.
@@ -321,5 +331,23 @@ void i7702::initialize()
         ig_usual_ += max(ic_usual_, Em_);
         ig_glp_   += max(ic_glp_  , Em_);
         ig_gsp_   += max(ic_gsp_  , Em_);
+        }
+
+    if(trace_)
+        {
+        std::ostringstream oss;
+        oss.precision(17);
+        oss << std::fixed;
+        oss
+            << "monthly rates\n"
+            << ic_usual_[0] << " ic_usual_[0]\n"
+            << ic_glp_  [0] << " ic_glp_  [0]\n"
+            << ic_gsp_  [0] << " ic_gsp_  [0]\n"
+            << Em_[0] << " Em_[0]\n"
+            << ig_usual_[0] << " ig_usual_[0]\n"
+            << ig_glp_  [0] << " ig_glp_  [0]\n"
+            << ig_gsp_  [0] << " ig_gsp_  [0]\n"
+            ;
+        std::cout << oss.str() << std::endl;
         }
 }
