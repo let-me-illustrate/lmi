@@ -369,6 +369,7 @@ class LMI_SO BasicValues
     bool                    AllowSAIncr;
     bool                    NoLapseAlwaysActive;
     std::vector<double>     DBDiscountRate;
+    std::vector<double>     DcvDBDiscountRate;
 
     bool                    UseUnusualCOIBanding;
 

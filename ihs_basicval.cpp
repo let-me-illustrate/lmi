@@ -600,6 +600,10 @@ void BasicValues::SetPermanentInvariants()
     LMI_ASSERT(!contains(DBDiscountRate, -1.0));
     assign(DBDiscountRate, 1.0 / (1.0 + DBDiscountRate));
 
+    DcvDBDiscountRate = i7702_->ig_usual();
+    LMI_ASSERT(!contains(DcvDBDiscountRate, -1.0));
+    assign(DcvDBDiscountRate, 1.0 / (1.0 + DcvDBDiscountRate));
+
     database().query_into(DB_DynamicMandE         , MandEIsDynamic);
     database().query_into(DB_DynamicSepAcctLoad   , SepAcctLoadIsDynamic);
 

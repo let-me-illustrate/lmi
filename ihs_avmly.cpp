@@ -1783,7 +1783,7 @@ void AccountValue::TxSetCoiCharge()
 // TAXATION !! Should this be handled at the same time as GPT forceouts?
 
     DcvNaar = round_naar().c
-        ( std::max(DcvDeathBft, DBIgnoringCorr) * DBDiscountRate[Year]
+        ( std::max(DcvDeathBft, DBIgnoringCorr) * DcvDBDiscountRate[Year]
         - dblize(std::max(C0, Dcv))
         );
     DcvNaar = std::max(C0, DcvNaar);
@@ -1837,7 +1837,7 @@ void AccountValue::TxSetRiderDed()
         // TAXATION !! Use a distinct discount rate for taxation? Or
         // the policy's rate, as used for DcvNaar?
         DcvTermCharge = round_rider_charges().c
-            (YearsDcvCoiRate * TermDB * DBDiscountRate[Year]
+            (YearsDcvCoiRate * TermDB * DcvDBDiscountRate[Year]
             );
         }
 
