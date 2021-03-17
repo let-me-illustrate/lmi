@@ -24,6 +24,7 @@
 #include "handle_exceptions.hpp"
 
 #include "test_tools.hpp"
+#include "unwind.hpp"                   // scoped_unwind_toggler
 
 #include <stdexcept>
 
@@ -46,6 +47,7 @@ int test_main(int, char*[])
 {
     try
         {
+        scoped_unwind_toggler meaningless_name;
         throw std::runtime_error("  This message should appear on stderr.");
         }
     catch(...)
@@ -60,6 +62,7 @@ int test_main(int, char*[])
     // exception derived from it.
     try
         {
+        scoped_unwind_toggler meaningless_name;
         std::cout << "Expect a success message..." << std::endl;
         throw sneaky_exception("ERROR");
         }

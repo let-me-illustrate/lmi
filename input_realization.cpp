@@ -35,6 +35,7 @@
 #include "miscellany.hpp"               // each_equal()
 #include "round_to.hpp"
 #include "ssize_lmi.hpp"
+#include "unwind.hpp"                   // scoped_unwind_toggler
 #include "value_cast.hpp"
 
 #include <algorithm>
@@ -54,6 +55,7 @@ std::string realize_sequence_string
 {
     try
         {
+        scoped_unwind_toggler meaningless_name;
         InputSequence s
             (sequence_string.value()
             ,input.years_to_maturity()

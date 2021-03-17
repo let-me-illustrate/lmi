@@ -23,6 +23,8 @@
 
 #include "unwind.hpp"
 
+bool g_unwind = true;
+
 #if defined LMI_X86_64 && defined LMI_POSIX && defined __GLIBCXX__
 
 #define UNW_LOCAL_ONLY
@@ -186,8 +188,11 @@ void print_backtrace()
 extern "C"
 void __cxa_throw(void* thrown_exception, std::type_info* tinfo, void (*dest)(void*))
 {
-    identify_exception(thrown_exception, tinfo);
-    print_backtrace();
+    if(g_unwind)
+        {
+        identify_exception(thrown_exception, tinfo);
+        print_backtrace();
+        }
     original_cxa_throw(thrown_exception, tinfo, dest);
 }
 

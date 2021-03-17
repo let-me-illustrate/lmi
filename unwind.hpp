@@ -24,8 +24,23 @@
 
 #include "config.hpp"
 
-// Deliberately empty. This header is just lmi's canonical place to
-// include "config.hpp". The exception unwinder exposes nothing to any
-// other lmi code.
+extern bool g_unwind;
+
+class scoped_unwind_toggler
+{
+  public:
+    scoped_unwind_toggler(bool z = false)
+        :original_g_unwind {g_unwind}
+        {
+        g_unwind = z;
+        }
+    ~scoped_unwind_toggler()
+        {
+        g_unwind = original_g_unwind;
+        }
+
+  private:
+    bool const original_g_unwind = g_unwind;
+};
 
 #endif // unwind_hpp

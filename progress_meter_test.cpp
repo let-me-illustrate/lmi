@@ -24,6 +24,7 @@
 #include "progress_meter.hpp"
 
 #include "test_tools.hpp"
+#include "unwind.hpp"                   // scoped_unwind_toggler
 
 #include <sstream>
 
@@ -187,6 +188,7 @@ void progress_meter_test::test_postcondition_failure()
             {
             if(1 == i)
                 {
+                scoped_unwind_toggler meaningless_name;
                 throw "Thrown and caught before meter incremented.";
                 }
             LMI_TEST(meter->reflect_progress());

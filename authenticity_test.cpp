@@ -30,6 +30,7 @@
 #include "miscellany.hpp"
 #include "system_command.hpp"
 #include "test_tools.hpp"
+#include "unwind.hpp"                   // scoped_unwind_toggler
 
 #include <boost/filesystem/convenience.hpp> // basename()
 #include <boost/filesystem/operations.hpp>
@@ -450,11 +451,14 @@ void PasskeyTest::TestDataFile() const
         << "\nto print:"
         << std::endl
         ;
+    {
+    scoped_unwind_toggler meaningless_name;
     LMI_TEST_EQUAL
         ("At least one required file is missing, altered, or invalid."
         " Try reinstalling."
         ,Authenticity::Assay(BeginDate_, Pwd_)
         );
+    }
 
     InitializeDataFile();
     CheckNominal(__FILE__, __LINE__);

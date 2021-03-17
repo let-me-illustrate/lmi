@@ -61,6 +61,8 @@
 
 #include "config.hpp"
 
+#include "unwind.hpp"                   // scoped_unwind_toggler
+
 #include <cstdlib>                      // EXIT_SUCCESS, EXIT_FAILURE
 #include <exception>
 #include <ostream>
@@ -147,8 +149,12 @@ bool whats_what(std::string const& observed, what_regex const& expected);
 ///  - their types match exactly, and
 ///  - lmi_test::whats_what() deems the observed what() equivalent to
 ///    macro argument WHAT.
+///
+/// Don't display a backtrace--it would be superfluous clutter here.
 
 #define LMI_TEST_THROW(expression,TYPE,WHAT)                  \
+    {                                                         \
+    scoped_unwind_toggler meaningless_name;                   \
     try                                                       \
         {                                                     \
         expression;                                           \
@@ -193,6 +199,7 @@ bool whats_what(std::string const& observed, what_regex const& expected);
             lmi_test::record_success();                       \
             }                                                 \
         }                                                     \
+    }                                                         \
 
 #define INVOKE_LMI_TEST(exp,file,line)      \
     if(!(exp))                              \

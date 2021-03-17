@@ -24,6 +24,7 @@
 #include "input_sequence.hpp"
 
 #include "test_tools.hpp"
+#include "unwind.hpp"                   // scoped_unwind_toggler
 
 #include <algorithm>
 #include <iterator>                     // ostream_iterator
@@ -65,6 +66,7 @@ void input_sequence_test::check
 {
     try
         {
+        scoped_unwind_toggler meaningless_name;
         InputSequence const seq(e, n, 90, 95, 0, 2002, k, o, w);
 
         std::vector<double> const& v(seq.seriatim_numbers());

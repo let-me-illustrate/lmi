@@ -22,6 +22,7 @@
 #include "tn_range.hpp"
 
 #include "alert.hpp"
+#include "unwind.hpp"                   // scoped_unwind_toggler
 #include "value_cast.hpp"
 
 #include <cmath>                        // pow(), signbit()
@@ -669,6 +670,7 @@ std::string tn_range<Number,Trammel>::diagnose_invalidity
     Number n;
     try
         {
+        scoped_unwind_toggler meaningless_name;
         n = value_cast<Number>(s);
         }
     catch(std::exception const&)
