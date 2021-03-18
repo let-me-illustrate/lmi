@@ -45,8 +45,11 @@
 #include "config.hpp"
 #endif // 0
 
+#include "ssize_lmi.hpp"
+
 #include "PETE/PETE.h"
 
+#include <stdexcept>
 #include <vector>
 
 // Include "et_vector_operators.hpp" last because it's generated
@@ -70,25 +73,106 @@
 #   pragma GCC diagnostic pop
 #endif // defined __GNUC__
 
-/// Create vector-iterator leaves.
+/// Create vector-reference leaves.
 
 template<class T>
 struct CreateLeaf<std::vector<T>>
 {
-    typedef typename std::vector<T>::const_iterator Leaf_t;
-    static Leaf_t make(std::vector<T> const& v) {return v.begin();}
+    typedef Reference<std::vector<T>> Leaf_t;
+    static Leaf_t make(std::vector<T> const& v) {return Leaf_t(v);}
+};
+
+/// Compare vector size with a stored value.
+
+class SizeLeaf
+{
+  public:
+    SizeLeaf(int s) : length_(s) {}
+    SizeLeaf(SizeLeaf const& model) : length_(model.length_) {}
+    bool operator()(int s) const {return length_ == s;}
+
+  private:
+    int length_;
+};
+
+template<class T>
+struct LeafFunctor<Scalar<T>, SizeLeaf>
+{
+    typedef bool Type_t;
+    static bool apply(Scalar<T> const&, SizeLeaf const&)
+    {
+        return true; // Scalars conform to any vector's length.
+    }
+};
+
+template<class T>
+struct LeafFunctor<std::vector<T>, SizeLeaf>
+{
+    typedef bool Type_t;
+    static bool apply(std::vector<T> const& v, SizeLeaf const& s)
+    {
+        return s(lmi::ssize(v));
+    }
+};
+
+template<class T>
+struct LeafFunctor<std::vector<T>, EvalLeaf1>
+{
+    typedef T Type_t;
+    static Type_t apply(std::vector<T> const& vec, EvalLeaf1 const& f)
+    {
+        return vec[f.val1()];
+    }
+};
+
+/// Compare vector size with a stored value.
+
+struct LengthLeaf {};
+
+template<class T, class Allocator>
+struct LeafFunctor<std::vector<T, Allocator>, LengthLeaf>
+{
+    typedef int Type_t;
+    static Type_t apply(std::vector<T, Allocator> const& v, LengthLeaf const&)
+        {return lmi::ssize(v);}
+};
+
+template<class T>
+struct LeafFunctor<T, LengthLeaf>
+{
+    typedef int Type_t;
+    static Type_t apply(T const& a, LengthLeaf const&)
+        {return 0;}
+};
+
+struct MaxCombine
+{
+    PETE_EMPTY_CONSTRUCTORS(MaxCombine)
+};
+
+template<class Op>
+struct Combine2<int, int, Op, MaxCombine>
+{
+    typedef int Type_t;
+    static Type_t combine(int a, int b, MaxCombine)
+    {
+        if(a < b) return b; else return a;
+    }
 };
 
 /// All PETE assignment operators call evaluate().
 
 template<class T, class Op, class U>
-inline void evaluate(std::vector<T>& t, Op const& op, U const& u)
+inline void evaluate(std::vector<T>& t, Op const& op, Expression<U> const& u)
 {
-    typedef typename std::vector<T>::iterator svi;
-    for(svi i = t.begin(); i != t.end(); ++i)
+    if(!forEach(u, SizeLeaf(lmi::ssize(t)), AndCombine()))
         {
-        op(*i, forEach(u, DereferenceLeaf(), OpCombine()));
-        forEach(u, IncrementLeaf(), NullCombine());
+        throw std::runtime_error("Error: LHS and RHS don't conform.");
+        }
+
+    for(int i = 0; i < lmi::ssize(t); ++i)
+        {
+        op(t[i], forEach(u, EvalLeaf1(i), OpCombine()));
         }
 }
 

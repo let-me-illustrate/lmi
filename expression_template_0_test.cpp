@@ -494,10 +494,14 @@ void test_pete_assignment()
 // though these still wouldn't compile:
 //  std::vector<double> v7c << v0 - v1;
 //  std::vector<double> v7d(v0 - v1);
-// and, although this compiles:
-    std::vector<double> v7e; v7e << v0 - v1;
-// it doesn't do what one might hope--instead, the vector is empty:
+// and,
+    std::vector<double> v7e;
+// although this would compile:
+//  v7e << v0 - v1;
+// it wouldn't do what one might hope--instead, the result would be
+// empty, as PETE diagnoses:
     LMI_TEST(0 == v7e.size());
+    LMI_TEST_THROW(v7e << v0 - v1, std::runtime_error, "");
 
 // On the other hand, this syntax is almost natural, even though it's
 // silly to add zero to everything.

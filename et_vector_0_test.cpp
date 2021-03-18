@@ -34,6 +34,21 @@ int test_main(int, char*[])
     LMI_TEST(r0 == v0);
     }
 
+    // Test length determination.
+    {
+    std::vector<double> v0 = {0.5, 1.5, 2.5};
+    std::vector<double> v1 = {2.0, 3.0, 4.0};
+    LMI_TEST_EQUAL(3, forEach(v0, LengthLeaf(), MaxCombine()));
+    LMI_TEST_EQUAL(3, forEach(v0 / v1 + v0 * v1, LengthLeaf(), MaxCombine()));
+    }
+
+    // Test non-conformable assignment.
+    {
+    std::vector<double> v0 = {0.0, 1.25, 2.5};
+    std::vector<double> v1 = {0.0, 1.25, 2.5, 3.75};
+    LMI_TEST_THROW(v0 *= v1, std::runtime_error, "");
+    }
+
     // Test peteCast().
     {
     std::vector<double> v0 = {0.0, 1.25, 2.5};
