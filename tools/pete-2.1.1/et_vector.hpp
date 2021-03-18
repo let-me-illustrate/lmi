@@ -45,11 +45,12 @@
 #include "config.hpp"
 #endif // 0
 
-// These headers must be included before "et_vector_operators.hpp"
-// because the latter doesn't include them.
 #include "PETE/PETE.h"
 
 #include <vector>
+
+// Include "et_vector_operators.hpp" last because it's generated
+// automatically and doesn't include all the headers it needs.
 
 // gcc's '-Weffc++' flags user-defined boolean AND and OR operators
 // because they cannot implement short-circuit evaluation. Although
