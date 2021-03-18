@@ -1,6 +1,25 @@
 // PETE with std::vector.
 //
-// Copyright (C) 2008 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2002  Los Alamos National Laboratory,
+// Copyright (C) 1998, 1999, 2000, 2002  CodeSourcery, LLC
+// Copyright (C) 2008, 2021 Gregory W. Chicares.
+//
+// Portions of this file were adapted from FreePOOMA.
+// Do not confuse this with any original version available from LANL.
+//
+// FreePOOMA is free software; you can redistribute it and/or modify it
+// under the terms of the Expat license.
+//
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Expat
+// license for more details.
+//
+// You should have received a copy of the Expat license along with
+// FreePOOMA; see the file LICENSE.
+//
+// Modified extensively by Gregory W. Chicares in 2008 and later years.
+// GWC modifications are licensed as follows:
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -29,6 +48,7 @@
 // These headers must be included before "et_vector_operators.hpp"
 // because the latter doesn't include them.
 #include "PETE/PETE.h"
+
 #include <vector>
 
 // gcc's '-Weffc++' flags user-defined boolean AND and OR operators
@@ -52,7 +72,7 @@
 /// Create vector-iterator leaves.
 
 template<class T>
-struct CreateLeaf<std::vector<T> >
+struct CreateLeaf<std::vector<T>>
 {
     typedef typename std::vector<T>::const_iterator Leaf_t;
     static Leaf_t make(std::vector<T> const& v) {return v.begin();}
