@@ -56,6 +56,7 @@
 
 #include "PETE/PETE.h"
 
+#include <sstream>
 #include <stdexcept>
 #include <vector>
 
@@ -148,7 +149,7 @@ template<typename T>
 struct LeafFunctor<T, LengthLeaf>
 {
     typedef int Type_t;
-    static Type_t apply(T const& a, LengthLeaf const&)
+    static Type_t apply(T const&, LengthLeaf const&)
         {return 0;}
 };
 
@@ -182,7 +183,13 @@ inline void evaluate(std::vector<T>& t, Op const& op, Expression<U> const& u)
 {
     if(!forEach(u, SizeLeaf(lmi::ssize(t)), AndCombine()))
         {
-        throw std::runtime_error("Error: LHS and RHS don't conform.");
+        std::ostringstream oss;
+        oss
+            << "Nonconformable lengths: "
+            << lmi::ssize(t) << " lhs vs. "
+            << Rho(u) << " rhs."
+            ;
+        throw std::runtime_error(oss.str());
         }
 
     for(int i = 0; i < lmi::ssize(t); ++i)

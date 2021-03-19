@@ -50,7 +50,8 @@ int test_main(int, char*[])
     {
     std::vector<double> v0 = {0.0, 1.25, 2.5};
     std::vector<double> v1 = {0.0, 1.25, 2.5, 3.75};
-    LMI_TEST_THROW(v0 *= v1, std::runtime_error, "");
+    char const* s {"Nonconformable lengths: 3 lhs vs. 4 rhs."};
+    LMI_TEST_THROW(v0 *= v1, std::runtime_error, s);
     }
 
     // Test peteCast().
