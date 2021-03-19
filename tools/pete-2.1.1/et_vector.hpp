@@ -38,6 +38,13 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+// This header would seem to belong in lmi's main source directory,
+// but instead it resides in a subdirectory due to the weird structure
+// of PETE. Study these old discussions:
+//    https://lists.nongnu.org/archive/html/lmi/2008-09/msg00021.html
+//    https://lists.nongnu.org/archive/html/lmi/2008-11/msg00008.html
+// before attempting to "fix" this.
+
 #ifndef et_vector_hpp
 #define et_vector_hpp
 
