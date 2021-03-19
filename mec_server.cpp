@@ -148,7 +148,6 @@ mec_state test_one_days_7702A_transactions
         LMI_ASSERT(0.0 < CvatCorridorFactors[j]);
         tabular_Ax.push_back(1.0 / CvatCorridorFactors[j]);
         }
-    tabular_Ax.push_back(1.0);
 
     std::vector<double> const tabular_7Px = irc_7702A_7pp
         (product_filenames
