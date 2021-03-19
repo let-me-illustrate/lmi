@@ -132,7 +132,7 @@ struct LeafFunctor<std::vector<T>, EvalLeaf1>
     }
 };
 
-/// Compare vector size with a stored value.
+/// Return vector length (zero for scalars).
 
 struct LengthLeaf {};
 
