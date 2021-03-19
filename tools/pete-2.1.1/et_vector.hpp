@@ -167,6 +167,14 @@ struct Combine2<int, int, Op, MaxCombine>
     }
 };
 
+/// Like APL's monadic 'rho': return argument's length.
+
+template<typename T>
+inline int Rho(Expression<T> const& t)
+{
+    return forEach(t, LengthLeaf(), MaxCombine());
+}
+
 /// All PETE assignment operators call evaluate().
 
 template<typename T, typename Op, typename U>

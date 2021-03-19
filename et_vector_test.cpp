@@ -40,6 +40,10 @@ int test_main(int, char*[])
     std::vector<double> v1 = {2.0, 3.0, 4.0};
     LMI_TEST_EQUAL(3, forEach(v0, LengthLeaf(), MaxCombine()));
     LMI_TEST_EQUAL(3, forEach(v0 / v1 + v0 * v1, LengthLeaf(), MaxCombine()));
+    // Rho(std::vector<T> const&) could be supported, of course, but
+    // it seems better to restrict Rho() to 'Expression' instances.
+//  LMI_TEST_EQUAL(3, Rho(v0));
+    LMI_TEST_EQUAL(3, Rho(v0 / v1 + v0 * v1));
     }
 
     // Test non-conformable assignment.
