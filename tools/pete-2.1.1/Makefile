@@ -28,17 +28,17 @@ ifeq (cygwin,$(findstring cygwin,$(lmi_build_type)))
   EXEEXT := .exe
 endif
 
-all: et_vector_test$(EXEEXT)
+all: pete_vector_test$(EXEEXT)
 
 submake_options := \
   --directory=PETE/Tools/ \
   --file=makefile \
   EXEEXT='$(EXEEXT)' \
 
-et_vector_test$(EXEEXT): et_vector_test.cpp
+pete_vector_test$(EXEEXT): pete_vector_test.cpp
 	$(CXX) -I. $^ -o $@
 
-et_vector_test.cpp: et_vector_operators.hpp
+pete_vector_test.cpp: et_vector_operators.hpp
 
 et_vector_operators.hpp: et_vector.in PETE/Tools/MakeOperators$(EXEEXT)
 	PETE/Tools/MakeOperators$(EXEEXT) \
@@ -53,7 +53,7 @@ PETE/Tools/MakeOperators$(EXEEXT):
 	$(MAKE) $(submake_options) installheaders
 
 clean:
-	rm -f et_vector_test$(EXEEXT)
+	rm -f pete_vector_test$(EXEEXT)
 
 distclean: clean
 	rm -f PETE/Tools/MakeOperators$(EXEEXT)
