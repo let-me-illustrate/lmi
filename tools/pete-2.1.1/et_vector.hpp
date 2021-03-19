@@ -136,11 +136,11 @@ struct LeafFunctor<std::vector<T>, EvalLeaf1>
 
 struct LengthLeaf {};
 
-template<class T, class Allocator>
-struct LeafFunctor<std::vector<T, Allocator>, LengthLeaf>
+template<class T>
+struct LeafFunctor<std::vector<T>, LengthLeaf>
 {
     typedef int Type_t;
-    static Type_t apply(std::vector<T, Allocator> const& v, LengthLeaf const&)
+    static Type_t apply(std::vector<T> const& v, LengthLeaf const&)
         {return lmi::ssize(v);}
 };
 
