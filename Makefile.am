@@ -107,7 +107,7 @@ TESTS = \
     test_crc32 \
     test_currency \
     test_dbo_rules \
-    test_et_vector_0 \
+    test_et_vector \
     test_expression_template_0 \
     test_fenv_lmi \
     test_file_command \
@@ -728,11 +728,11 @@ test_dbo_rules_SOURCES = \
   timer.cpp
 test_dbo_rules_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_et_vector_0_SOURCES = \
+test_et_vector_SOURCES = \
   $(common_test_objects) \
-  et_vector_0_test.cpp \
+  et_vector_test.cpp \
   timer.cpp
-test_et_vector_0_CXXFLAGS = $(AM_CXXFLAGS)
+test_et_vector_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_expression_template_0_SOURCES = \
   $(common_test_objects) \
