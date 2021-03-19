@@ -19,12 +19,86 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#include "et_vector.hpp"
+#include "PETE/PETE.h"
 
 #include <algorithm>
 #include <functional>
 #include <iostream>
 #include <iterator>
+#include <vector>
+
+// Include "et_vector_operators.hpp" last because it's generated
+// automatically and doesn't include all the headers it needs.
+
+#include "et_vector_operators.hpp"
+
+/// Create vector-reference leaves.
+
+template<class T>
+struct CreateLeaf<std::vector<T>>
+{
+    typedef Reference<std::vector<T>> Leaf_t;
+    static Leaf_t make(std::vector<T> const& v) {return Leaf_t(v);}
+};
+
+/// Compare vector size with a stored value.
+
+class SizeLeaf
+{
+  public:
+    SizeLeaf(int s) : length_(s) {}
+    SizeLeaf(SizeLeaf const& model) : length_(model.length_) {}
+    bool operator()(int s) const {return length_ == s;}
+
+  private:
+    int length_;
+};
+
+template<class T>
+struct LeafFunctor<Scalar<T>, SizeLeaf>
+{
+    typedef bool Type_t;
+    static bool apply(Scalar<T> const&, SizeLeaf const&)
+    {
+        return true; // Scalars conform to any vector's length.
+    }
+};
+
+template<class T>
+struct LeafFunctor<std::vector<T>, SizeLeaf>
+{
+    typedef bool Type_t;
+    static bool apply(std::vector<T> const& v, SizeLeaf const& s)
+    {
+        return s(v.size());
+    }
+};
+
+template<class T>
+struct LeafFunctor<std::vector<T>, EvalLeaf1>
+{
+    typedef T Type_t;
+    static Type_t apply(std::vector<T> const& vec, EvalLeaf1 const& f)
+    {
+        return vec[f.val1()];
+    }
+};
+
+/// All PETE assignment operators call evaluate().
+
+template<class T, class Op, class U>
+inline void evaluate(std::vector<T>& t, Op const& op, Expression<U> const& u)
+{
+    if(!forEach(u, SizeLeaf(t.size()), AndCombine()))
+        {
+        throw std::runtime_error("Error: LHS and RHS don't conform.");
+        }
+
+    for(int i = 0; i < t.size(); ++i)
+        {
+        op(t[i], forEach(u, EvalLeaf1(i), OpCombine()));
+        }
+}
 
 template <typename T>
 void show_vector(std::vector<T> const& v)
