@@ -133,6 +133,7 @@ nychthemeral_clutter='
 /^# test all valid emission types/d
 /^# schema tests/d
 /^# test mst --> xst conversion/d
+/^# test PETE rebuild/d
 /^$/d
 '
 
@@ -292,6 +293,16 @@ cmp eraseme.xst eraseme.touchstone
 # null_glob for a single expansion.)
 # shellcheck disable=SC2039
 for z in "$throwaway_dir"/*(N); do rm "$z"; done
+
+printf '\n# test PETE rebuild\n\n'
+
+# Automatically-generated PETE files are in the repository.
+# It is not actually necessary to rebuild them (except when PETE
+# is changed). Running this test routinely simply verifies that
+# the PETE rebuild script continues to work.
+
+cd /opt/lmi/src/lmi/tools/pete-2.1.1
+./rebuild_pete.sh >/dev/null
 
 # The automated GUI test simulates keyboard and mouse actions, so
 # no such actions must be performed manually while it is running.
