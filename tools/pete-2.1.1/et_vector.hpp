@@ -82,7 +82,7 @@
 
 /// Create vector-reference leaves.
 
-template<class T>
+template<typename T>
 struct CreateLeaf<std::vector<T>>
 {
     typedef Reference<std::vector<T>> Leaf_t;
@@ -102,7 +102,7 @@ class SizeLeaf
     int length_;
 };
 
-template<class T>
+template<typename T>
 struct LeafFunctor<Scalar<T>, SizeLeaf>
 {
     typedef bool Type_t;
@@ -112,7 +112,7 @@ struct LeafFunctor<Scalar<T>, SizeLeaf>
     }
 };
 
-template<class T>
+template<typename T>
 struct LeafFunctor<std::vector<T>, SizeLeaf>
 {
     typedef bool Type_t;
@@ -122,7 +122,7 @@ struct LeafFunctor<std::vector<T>, SizeLeaf>
     }
 };
 
-template<class T>
+template<typename T>
 struct LeafFunctor<std::vector<T>, EvalLeaf1>
 {
     typedef T Type_t;
@@ -136,7 +136,7 @@ struct LeafFunctor<std::vector<T>, EvalLeaf1>
 
 struct LengthLeaf {};
 
-template<class T>
+template<typename T>
 struct LeafFunctor<std::vector<T>, LengthLeaf>
 {
     typedef int Type_t;
@@ -144,7 +144,7 @@ struct LeafFunctor<std::vector<T>, LengthLeaf>
         {return lmi::ssize(v);}
 };
 
-template<class T>
+template<typename T>
 struct LeafFunctor<T, LengthLeaf>
 {
     typedef int Type_t;
@@ -157,7 +157,7 @@ struct MaxCombine
     PETE_EMPTY_CONSTRUCTORS(MaxCombine)
 };
 
-template<class Op>
+template<typename Op>
 struct Combine2<int, int, Op, MaxCombine>
 {
     typedef int Type_t;
@@ -169,7 +169,7 @@ struct Combine2<int, int, Op, MaxCombine>
 
 /// All PETE assignment operators call evaluate().
 
-template<class T, class Op, class U>
+template<typename T, typename Op, typename U>
 inline void evaluate(std::vector<T>& t, Op const& op, Expression<U> const& u)
 {
     if(!forEach(u, SizeLeaf(lmi::ssize(t)), AndCombine()))
