@@ -198,11 +198,12 @@ inline void evaluate(std::vector<T>& t, Op const& op, Expression<U> const& u)
         }
 }
 
-template<typename T, typename U>
-inline std::vector<T> Eval(Expression<U> const& u)
+template<typename U>
+inline auto Eval(Expression<U> const& u)
 {
     int const n {Rho(u)};
-    std::vector<T> z;
+    using Deduced = decltype(forEach(u, EvalLeaf1(0), OpCombine()));
+    std::vector<Deduced> z;
     z.reserve(n);
     for(int i = 0; i < n; ++i)
         {

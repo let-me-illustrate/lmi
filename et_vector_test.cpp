@@ -58,8 +58,8 @@ int test_main(int, char*[])
     {
     std::vector<double> v0 = {1.0, 1.25, 1.5};
     std::vector<double> v1 = {0.0, 0.25, 0.5};
-    std::vector<double> const x = Eval<double>(v0 + v1);
-    auto                const y = Eval<double>(v0 + v1 + x);
+    std::vector<double> const x = Eval(v0 + v1);
+    auto                const y = Eval(v0 + v1 + x);
     std::vector<double> const r0 = {1.0, 1.5, 2.0};
     LMI_TEST(r0 == x);
     std::vector<double> const r1 = {2.0, 3.0, 4.0};
