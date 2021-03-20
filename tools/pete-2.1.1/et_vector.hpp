@@ -198,4 +198,17 @@ inline void evaluate(std::vector<T>& t, Op const& op, Expression<U> const& u)
         }
 }
 
+template<typename T, typename U>
+inline std::vector<T> Eval(Expression<U> const& u)
+{
+    int const n {Rho(u)};
+    std::vector<T> z;
+    z.reserve(n);
+    for(int i = 0; i < n; ++i)
+        {
+        z.push_back(forEach(u, EvalLeaf1(i), OpCombine()));
+        }
+    return z;
+}
+
 #endif // et_vector_hpp
