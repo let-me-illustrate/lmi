@@ -25,8 +25,12 @@ jobs:
           - name: Linux using autotools
             mingw: false
             autotools: true
+          - name: Linux with clang
+            compiler: clang
+            mingw: false
+            autotools: true
     env:
-      LMI_COMPILER: gcc
+      LMI_COMPILER: ${{ matrix.compiler || 'gcc' }}
       LMI_TRIPLET: ${{ matrix.triplet || 'x86_64-pc-linux-gnu' }}
 
     steps:
@@ -66,6 +70,10 @@ jobs:
             packages="$packages libunwind-dev libdw-dev libgtk-3-dev"
           fi
 
+          if [ "${{ matrix.compiler }}" = clang ]; then
+            packages="$packages clang libc++abi-dev libc++-dev"
+          fi
+
           sudo apt-get -qq install $packages
 
       - name: Fix up libtool
@@ -81,6 +89,12 @@ jobs:
           else
             compiler=${LMI_COMPILER}
           fi
+
+          if [ "${{ matrix.compiler }}" = clang ]; then
+            echo "CC=clang" >> $GITHUB_ENV
+            echo "CXX=clang++ -stdlib=libc++" >> $GITHUB_ENV
+          fi
+
           gcc_version=$($compiler -dumpversion|tr -d '\r')
           echo "gcc_version=$gcc_version" >> $GITHUB_ENV
 
@@ -145,7 +159,7 @@ jobs:
         run: |
           for lib in regex filesystem; do
             cd /opt/lmi/third_party/src/boost/libs/${lib}/src
-            ${LMI_COMPILER} -std=c++17 -Wno-deprecated-declarations -DBOOST_NO_AUTO_PTR -Dregister='' -fPIC -I../../.. -c *.cpp
+            ${CXX-${LMI_COMPILER}} -std=c++17 -Wno-deprecated-declarations -DBOOST_NO_AUTO_PTR -Dregister='' -fPIC -I../../.. -c *.cpp
             ar rc /opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib/libboost_${lib}.a *.o
           done
 
