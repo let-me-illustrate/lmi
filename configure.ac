@@ -592,5 +592,21 @@ if test "x$GXX" == "xyes"; then
 fi
 
 dnl === Generate output files ===
+
+dnl These files are used by various tests and must be present in the build
+dnl directory. The configurable settings file contains just the bare minimum
+dnl required, but what little is there, is really needed for the tests to pass.
+AC_CONFIG_COMMANDS([configurable_settings.xml], [
+cat >configurable_settings.xml <<EOF
+<?xml version="1.0"?>
+<configurable_settings version="2">
+  <print_directory>.</print_directory>
+  <spreadsheet_file_extension>.tsv</spreadsheet_file_extension>
+</configurable_settings>
+EOF
+])
+AC_CONFIG_COMMANDS([sample.policy], [touch sample.policy])
+AC_CONFIG_LINKS([sample.cns:sample.cns sample.ill:sample.ill])
+
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
