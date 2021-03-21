@@ -55,20 +55,20 @@ jobs:
 
       - name: Install required packages
         run: |
-          sudo apt-get --assume-yes install \
+          packages="\
             automake bc bsdmainutils bzip2 curl cvs default-jre \
             g++-multilib git jing libarchive-tools \
             libtool libxml2-utils libxslt1-dev make patch pkg-config rsync \
-            shellcheck sudo trang unzip wget xsltproc xvfb zsh
+            shellcheck sudo trang unzip wget xsltproc xvfb zsh"
 
           if ${{ matrix.mingw }}
           then
-            sudo apt-get --assume-yes install \
-              g++-mingw-w64-i686
+            packages="$packages g++-mingw-w64-i686"
           else
-            sudo apt-get --assume-yes install \
-              libunwind-dev libdw-dev libgtk-3-dev
+            packages="$packages libunwind-dev libdw-dev libgtk-3-dev"
           fi
+
+          sudo apt-get --assume-yes install $packages
 
       - name: Fix up libtool
         run: sudo sed -i'' -e 's/^int _putenv/_CRTIMP int _putenv/' /usr/share/libtool/build-aux/ltmain.sh
