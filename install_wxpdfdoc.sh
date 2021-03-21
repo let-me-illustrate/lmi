@@ -85,7 +85,9 @@ fi
 cd "$wxpdfdoc_dir"
 autoreconf --verbose
 
-gcc_version=$(make --no-print-directory --directory="$srcdir" show_gcc_version)
+if [ -z "$gcc_version" ]; then
+    gcc_version=$(make --no-print-directory --directory="$srcdir" show_gcc_version)
+fi
 build_dir="$exec_prefix/wxpdfdoc-ad_hoc/lmi-$LMI_COMPILER-$gcc_version"
 
 if [ "$wxpdfdoc_skip_clean" != 1 ]
