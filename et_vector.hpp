@@ -141,44 +141,44 @@ struct Combine2<int, int, Op, MaxCombine>
 
 /// Like APL's monadic 'rho': return argument's length.
 
-template<typename T>
-inline int Rho(Expression<T> const& t)
+template<typename X>
+inline int Rho(Expression<X> const& x)
 {
-    return forEach(t, LengthLeaf(), MaxCombine());
+    return forEach(x, LengthLeaf(), MaxCombine());
 }
 
 /// All PETE assignment operators call evaluate().
 
-template<typename T, typename Op, typename U>
-inline void evaluate(std::vector<T>& t, Op const& op, Expression<U> const& u)
+template<typename T, typename Op, typename X>
+inline void evaluate(std::vector<T>& t, Op const& op, Expression<X> const& x)
 {
-    if(!forEach(u, SizeLeaf(lmi::ssize(t)), AndCombine()))
+    if(!forEach(x, SizeLeaf(lmi::ssize(t)), AndCombine()))
         {
         std::ostringstream oss;
         oss
             << "Nonconformable lengths: "
             << lmi::ssize(t) << " lhs vs. "
-            << Rho(u) << " rhs."
+            << Rho(x) << " rhs."
             ;
         throw std::runtime_error(oss.str());
         }
 
     for(int i = 0; i < lmi::ssize(t); ++i)
         {
-        op(t[i], forEach(u, EvalLeaf1(i), OpCombine()));
+        op(t[i], forEach(x, EvalLeaf1(i), OpCombine()));
         }
 }
 
-template<typename U>
-inline auto Eval(Expression<U> const& u)
+template<typename X>
+inline auto Eval(Expression<X> const& x)
 {
-    int const n {Rho(u)};
-    using Deduced = decltype(forEach(u, EvalLeaf1(0), OpCombine()));
+    int const n {Rho(x)};
+    using Deduced = decltype(forEach(x, EvalLeaf1(0), OpCombine()));
     std::vector<Deduced> z;
     z.reserve(n);
     for(int i = 0; i < n; ++i)
         {
-        z.push_back(forEach(u, EvalLeaf1(i), OpCombine()));
+        z.push_back(forEach(x, EvalLeaf1(i), OpCombine()));
         }
     return z;
 }
@@ -198,10 +198,10 @@ inline auto Eval(Expression<U> const& u)
 ///    from one place to another; but '=' clearly indicates that this
 ///    isn't a stream operation.
 
-template<typename T, typename U>
-inline std::vector<T>& operator<<=(std::vector<T>& t, Expression<U> const& u)
+template<typename T, typename X>
+inline std::vector<T>& operator<<=(std::vector<T>& t, Expression<X> const& x)
 {
-    return t = Eval(u);
+    return t = Eval(x);
 }
 
 #endif // et_vector_hpp
