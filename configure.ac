@@ -150,6 +150,12 @@ if test "$lmi_cv_cxx_std17" = "no"; then
     )
 fi
 
+dnl These options must be always used for lmi unit tests to pass.
+common_options="-fno-ms-extensions -frounding-math"
+
+CFLAGS="$CFLAGS $common_options"
+CXXFLAGS="$CXXFLAGS $common_options"
+
 AC_PROG_LD
 
 # This is a workaround for the harmless but annoying warning
