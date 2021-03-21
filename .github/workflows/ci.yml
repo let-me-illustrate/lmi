@@ -231,7 +231,11 @@ jobs:
 
       - name: Check concinnity
         if: matrix.autotools != true
-        run: make $coefficiency check_concinnity
+        run: |
+          # Somehow these files are executable and this triggers complaints
+          # from check_script.sh, so avoid them by fixing permissions.
+          chmod -x .git/info/exclude .git/description
+          make $coefficiency check_concinnity
 
       - name: Check physical closure
         if: matrix.autotools != true
