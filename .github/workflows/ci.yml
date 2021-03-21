@@ -23,6 +23,10 @@ jobs:
           - name: Native Linux build
             triplet: x86_64-pc-linux-gnu
             mingw: false
+          - name: Linux using autotools
+            triplet: x86_64-pc-linux-gnu
+            mingw: false
+            autotools: true
     env:
       LMI_COMPILER: gcc
       LMI_TRIPLET: ${{ matrix.triplet }}
@@ -138,10 +142,41 @@ jobs:
         if: steps.cache-local.outputs.cache-hit != 'true'
         run: ./install_wxpdfdoc.sh
 
+      - name: Build Boost libraries
+        if: matrix.autotools
+        run: |
+          for lib in regex filesystem; do
+            cd /opt/lmi/third_party/src/boost/libs/${lib}/src
+            ${LMI_COMPILER} -std=c++17 -Wno-deprecated-declarations -DBOOST_NO_AUTO_PTR -Dregister='' -fPIC -I../../.. -c *.cpp
+            ar rc /opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib/libboost_${lib}.a *.o
+          done
+
+      - name: Configure lmi
+        if: matrix.autotools
+        run: |
+          ./autogen.sh
+          lmi_build_dir='ci-build'
+          echo "lmi_build_dir=${lmi_build_dir}" >> $GITHUB_ENV
+          mkdir ${lmi_build_dir}
+          cd ${lmi_build_dir}
+
+          # Disable optimizations just to make the build faster.
+          ../configure --disable-optimize \
+            CPPFLAGS=-I/opt/lmi/local/include \
+            LDFLAGS=-L/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib \
+            PKG_CONFIG_PATH=/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib/pkgconfig \
+            --with-boost-headers=/opt/lmi/third_party/src/boost
+
+      - name: Build lmi (autotools)
+        if: matrix.autotools
+        run: make $coefficiency -C ${lmi_build_dir}
+
       - name: Build lmi
         run: make $coefficiency --output-sync=recurse
+        if: matrix.autotools != true
 
       - name: Build lmi with SO attributes
+        if: matrix.autotools != true
         run: make $coefficiency --output-sync=recurse build_type=so_test USE_SO_ATTRIBUTES=1 all
 
       - name: Setup lmi for tests
@@ -179,20 +214,38 @@ jobs:
           printf '391daa5cbc54e118c4737446bcb84eea'           >/opt/lmi/data/passkey
 
       - name: Install
+        if: matrix.autotools != true
         run: make install
 
       - name: Check concinnity
+        if: matrix.autotools != true
         run: make $coefficiency check_concinnity
 
       - name: Check physical closure
+        if: matrix.autotools != true
         run: make $coefficiency check_physical_closure
 
       - name: Run CLI tests
+        if: matrix.autotools != true
         run: make $coefficiency cli_tests
 
-      - name: Run unit tests
+      - name: Run unit tests (autotools)
+        if: matrix.autotools
         run: |
-          make $coefficiency unit_tests
+          # These files are used by input test from this hardcoded location.
+          cp \
+            cell.xsd \
+            multiple_cell_document.xsd \
+            single_cell_document.xsd \
+            sort_cell_subelements.xsl \
+            types.xsd \
+            /opt/lmi/data
+
+          make $coefficiency -C ${lmi_build_dir} check
+
+      - name: Run unit tests
+        if: matrix.autotools != true
+        run: make $coefficiency unit_tests
 
       - name: Run GUI tests
         if: matrix.mingw
