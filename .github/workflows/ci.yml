@@ -21,15 +21,13 @@ jobs:
             triplet: i686-w64-mingw32
             mingw: true
           - name: Native Linux build
-            triplet: x86_64-pc-linux-gnu
             mingw: false
           - name: Linux using autotools
-            triplet: x86_64-pc-linux-gnu
             mingw: false
             autotools: true
     env:
       LMI_COMPILER: gcc
-      LMI_TRIPLET: ${{ matrix.triplet }}
+      LMI_TRIPLET: ${{ matrix.triplet || 'x86_64-pc-linux-gnu' }}
 
     steps:
       - name: Checkout
