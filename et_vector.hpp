@@ -183,4 +183,25 @@ inline auto Eval(Expression<U> const& u)
     return z;
 }
 
+/// A (compound) assignment operator.
+///
+/// It is forbidden to intrude a copy-assignment operator into the
+/// std::vector template, but compound assignment operators need not
+/// be members.
+///
+/// Rationale for choosing operator<<=():
+///  - std::vector::operator<<=() is hardly ever used;
+///  - it's so rare that first-time users will realize they should
+///    look for the present documentation;
+///  - it's an assignment operator, with very low precedence; and
+///  - '<<' is reminiscent of stream inserters, which transfer values
+///    from one place to another; but '=' clearly indicates that this
+///    isn't a stream operation.
+
+template<typename T, typename U>
+inline std::vector<T>& operator<<=(std::vector<T>& t, Expression<U> const& u)
+{
+    return t = Eval(u);
+}
+
 #endif // et_vector_hpp

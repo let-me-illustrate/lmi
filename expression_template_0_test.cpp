@@ -447,27 +447,6 @@ void time_one_array_length(int length)
     std::cout << std::endl;
 }
 
-/// Syntactic sugar: "assignment" operator for expression templates.
-///
-/// PETE doesn't support this:
-///    std::vector<double> v2 = v0 - v1;
-/// because it's impossible to intrude a copy-assignment operator into
-/// the standard class template.
-///
-/// operator^=() or operator<<=() would probably be better, but would
-/// require changing the PETE sources, whereas the normally-undefined
-/// macro PETE_ALLOW_SCALAR_SHIFT leaves operator<<() available without
-/// any such change. But is this syntactic sugar sweet enough?
-
-template<typename T, typename V>
-std::vector<T>& operator<<(std::vector<T>& t, V v)
-{
-#if defined PETE_ALLOW_SCALAR_SHIFT
-#   error PETE_ALLOW_SCALAR_SHIFT must not be defined.
-#endif // defined PETE_ALLOW_SCALAR_SHIFT
-    return assign(t, v);
-}
-
 /// Assigning PETE expressions to a std::vector
 ///
 /// std::vector<>::operator= is necessarily a member function, and
@@ -483,25 +462,22 @@ void test_pete_assignment()
     std::vector<double> const v0 = {1.1, 2.2, 3.3, 4.4, 5.5};
     std::vector<double> const v1 = {0.1, 0.2, 0.3, 0.4, 0.5};
     std::vector<double> const v2 = {1.0, 2.0, 3.0, 4.0, 5.0};
-// With the operator<<() above, this:
+// With lmi's overload of operator<<=(), this assign() call:
     std::vector<double> v7a(v0.size());
     assign(v7a, v0 - v1);
     LMI_TEST(v2 == v7a);
-// could be written thus:
+// can be written as an operator instead:
     std::vector<double> v7b(v0.size());
-    v7b << v0 - v1;
+    v7b <<= v0 - v1;
     LMI_TEST(v2 == v7b);
 // though these still wouldn't compile:
-//  std::vector<double> v7c << v0 - v1;
+//  std::vector<double> v7c <<= v0 - v1;
 //  std::vector<double> v7d(v0 - v1);
-// and,
+// and, even though this default-constructed vector is of length zero:
     std::vector<double> v7e;
-// although this would compile:
-//  v7e << v0 - v1;
-// it wouldn't do what one might hope--instead, the result would be
-// empty, as PETE diagnoses:
-    LMI_TEST(0 == v7e.size());
-    LMI_TEST_THROW(v7e << v0 - v1, std::runtime_error, "");
+// this just works (the result has the intended size):
+    v7e <<= v0 - v1;
+    LMI_TEST(v0.size() == v7e.size());
 
 // On the other hand, this syntax is almost natural, even though it's
 // silly to add zero to everything.

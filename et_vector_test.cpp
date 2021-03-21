@@ -21,29 +21,10 @@
 
 #include "et_vector.hpp"
 
+#include "ssize_lmi.hpp"
 #include "test_tools.hpp"
 
 #include <functional>                   // multiplies(), negate(), plus()
-
-// Experimental operators.
-//
-// See 'expression_template_0_test.cpp' for an earlier implementation
-// of operator<<().
-
-template<typename T, typename U>
-inline std::vector<T>& operator<<(std::vector<T>& t, Expression<U> const& u)
-{
-#if defined PETE_ALLOW_SCALAR_SHIFT
-#   error PETE_ALLOW_SCALAR_SHIFT must not be defined.
-#endif // defined PETE_ALLOW_SCALAR_SHIFT
-    return assign(t, u);
-}
-
-template<typename T, typename U>
-inline std::vector<T>& operator<<=(std::vector<T>& t, Expression<U> const& u)
-{
-    return t = Eval(u);
-}
 
 int test_main(int, char*[])
 {
@@ -86,19 +67,25 @@ int test_main(int, char*[])
     LMI_TEST(r1 == y);
     }
 
-    // Test experimental operator<<() and operator<<=().
+    // Test "assignment" operator<<=().
     {
     std::vector<double> v0 = {1.0, 1.25, 1.5};
     std::vector<double> v1 = {0.0, 0.25, 0.5};
-    std::vector<double> x(3);
-//  assign(x, v0 + v1);
-    x << v0 + v1;
-    std::vector<double> y(3);
-    y <<= v0 + v1 + x;
+
+    std::vector<double> w(5); // Error: not of conformable length.
+    char const* s {"Nonconformable lengths: 5 lhs vs. 3 rhs."};
+    LMI_TEST_THROW(assign(w, v0 + v1), std::runtime_error, s);
+
+    std::vector<double> x(3); // Must be of conformable length.
+    assign(x, v0 + v1);
     std::vector<double> const r0 = {1.0, 1.5, 2.0};
     LMI_TEST(r0 == x);
+
+    std::vector<double> y(7); // Needn't be of conformable length.
+    y <<= v0 + v1 + x;
     std::vector<double> const r1 = {2.0, 3.0, 4.0};
     LMI_TEST(r1 == y);
+    LMI_TEST_EQUAL(3, lmi::ssize(y));
     }
 
     // Test peteCast().
