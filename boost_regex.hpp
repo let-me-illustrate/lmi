@@ -34,9 +34,9 @@
 #       pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #       pragma GCC diagnostic ignored "-Wregister"
 #   endif // 7 <= __GNUC__
-#   if 10 <= __GNUC__
+#   if 9 <= __GNUC__
 #       pragma GCC diagnostic ignored "-Wdeprecated-copy"
-#   endif // 10 <= __GNUC__
+#   endif // 9 <= __GNUC__
 #   pragma GCC diagnostic ignored "-Wshadow"
 #   pragma GCC diagnostic ignored "-Wswitch-enum"
 #   pragma GCC diagnostic ignored "-Wuseless-cast"
