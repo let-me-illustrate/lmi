@@ -157,9 +157,17 @@ jobs:
       - name: Build Boost libraries
         if: matrix.autotools
         run: |
+          # Define flags to avoid warnings in Boost code we don't care about.
+          boost_cxxflags="-Wno-deprecated-declarations -DBOOST_NO_AUTO_PTR -Dregister="
+          if [ "${{ matrix.compiler }}" = clang ]; then
+            boost_cxxflags="${boost_cxxflags} -Wno-parentheses-equality"
+          fi
+
           for lib in regex filesystem; do
             cd /opt/lmi/third_party/src/boost/libs/${lib}/src
-            ${LMI_COMPILER} -std=c++17 -Wno-deprecated-declarations -DBOOST_NO_AUTO_PTR -Dregister='' -fPIC -I../../.. -c *.cpp
+            echo "Compiling $lib sources"
+            ${LMI_COMPILER} -std=c++17 -fPIC $(echo ${boost_cxxflags}) -I../../.. -c *.cpp
+            echo "Creating libboost_${lib}.a from" *.o
             ar rc /opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib/libboost_${lib}.a *.o
           done
 
