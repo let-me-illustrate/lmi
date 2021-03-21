@@ -3220,15 +3220,6 @@ std::vector<T1>& operator^=(std::vector<T1>& lhs,const RHS& rhs)
 
 template<class T1,class RHS>
 inline
-std::vector<T1>& operator<<=(std::vector<T1>& lhs,const RHS& rhs)
-{
-  typedef typename CreateLeaf<RHS>::Leaf_t Leaf_t;
-  evaluate(lhs,OpLeftShiftAssign(),MakeReturn<Leaf_t>::make(CreateLeaf<RHS>::make(rhs)));
-  return lhs;
-}
-
-template<class T1,class RHS>
-inline
 std::vector<T1>& operator>>=(std::vector<T1>& lhs,const RHS& rhs)
 {
   typedef typename CreateLeaf<RHS>::Leaf_t Leaf_t;

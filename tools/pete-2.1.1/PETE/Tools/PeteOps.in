@@ -238,10 +238,6 @@ binaryAssignOps
   FUNCTION = "operator^="
   EXPR = "(const_cast<T1 &>(a) ^= b); return const_cast<T1 &>(a);"
 -----
-  TAG = "OpLeftShiftAssign"
-  FUNCTION = "operator<<="
-  EXPR = "(const_cast<T1 &>(a) <<= b); return const_cast<T1 &>(a);"
------
   TAG = "OpRightShiftAssign"
   FUNCTION = "operator>>="
   EXPR = "(const_cast<T1 &>(a) >>= b); return const_cast<T1 &>(a);"

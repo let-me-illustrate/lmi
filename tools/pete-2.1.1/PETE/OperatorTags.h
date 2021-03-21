@@ -730,22 +730,6 @@ struct BinaryReturn<T1, T2, OpBitwiseXorAssign > {
   typedef T1 &Type_t;
 };
 
-struct OpLeftShiftAssign
-{
-  PETE_EMPTY_CONSTRUCTORS(OpLeftShiftAssign)
-  template<class T1, class T2>
-  inline typename BinaryReturn<T1, T2, OpLeftShiftAssign >::Type_t
-  operator()(const T1 &a, const T2 &b) const
-  {
-    (const_cast<T1 &>(a) <<= b); return const_cast<T1 &>(a);
-  }
-};
-
-template<class T1, class T2 >
-struct BinaryReturn<T1, T2, OpLeftShiftAssign > {
-  typedef T1 &Type_t;
-};
-
 struct OpRightShiftAssign
 {
   PETE_EMPTY_CONSTRUCTORS(OpRightShiftAssign)

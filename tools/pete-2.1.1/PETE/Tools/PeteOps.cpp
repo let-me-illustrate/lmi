@@ -84,11 +84,6 @@ void peteOps(map<string,vector<OperatorDescriptor> > &m)
                                  "(const_cast<T1 &>(a) ^= b); return const_cast<T1 &>(a);",
                                  ""));
   m["binaryAssignOps"].push_back(
-              OperatorDescriptor("OpLeftShiftAssign",
-                                 "operator<<=",
-                                 "(const_cast<T1 &>(a) <<= b); return const_cast<T1 &>(a);",
-                                 ""));
-  m["binaryAssignOps"].push_back(
               OperatorDescriptor("OpRightShiftAssign",
                                  "operator>>=",
                                  "(const_cast<T1 &>(a) >>= b); return const_cast<T1 &>(a);",
