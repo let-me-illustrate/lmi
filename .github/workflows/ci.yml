@@ -192,12 +192,7 @@ jobs:
 
       - name: Run unit tests
         run: |
-          if [ !${{ matrix.mingw }} ]
-          then
-            # Currently failing tests.
-            exclude_args="excluded_unit_test_targets=path_utility_test"
-          fi
-          make $coefficiency unit_tests $exclude_args
+          make $coefficiency unit_tests
 
       - name: Run GUI tests
         if: matrix.mingw
