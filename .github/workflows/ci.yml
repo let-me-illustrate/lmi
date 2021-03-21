@@ -43,13 +43,13 @@ jobs:
           wget -qO - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
           sudo add-apt-repository "deb https://dl.winehq.org/wine-builds/ubuntu $(lsb_release -cs) main"
 
-          sudo apt-get update
+          sudo apt-get -qq update
 
           # Workaround the issue with Wine.
-          sudo apt-get install libasound2-plugins:i386 libgphoto2-6:i386
-          sudo apt-get install wine-stable-i386
-          sudo apt-get install wine-stable
-          sudo apt-get install --install-recommends winehq-stable
+          sudo apt-get -qq install libasound2-plugins:i386 libgphoto2-6:i386
+          sudo apt-get -qq install wine-stable-i386
+          sudo apt-get -qq install wine-stable
+          sudo apt-get -qq install --install-recommends winehq-stable
 
       - name: Install required packages
         run: |
@@ -66,7 +66,7 @@ jobs:
             packages="$packages libunwind-dev libdw-dev libgtk-3-dev"
           fi
 
-          sudo apt-get --assume-yes install $packages
+          sudo apt-get -qq install $packages
 
       - name: Fix up libtool
         run: sudo sed -i'' -e 's/^int _putenv/_CRTIMP int _putenv/' /usr/share/libtool/build-aux/ltmain.sh
