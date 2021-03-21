@@ -169,6 +169,11 @@ TESTS = \
 
 check_PROGRAMS = $(TESTS)
 
+# Some tests (at least authenticity_test) rely on finding lmi binaries in PATH,
+# but they're only present in the build directory by the time the test runs, so
+# ensure they can be found there.
+AM_TESTS_ENVIRONMENT = PATH=.:$$PATH
+
 ##############################################################################
 # Targets definitions
 ##############################################################################
