@@ -26,8 +26,12 @@
 
 #if defined __clang__
 #   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wchar-subscripts"
 #   pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #   pragma clang diagnostic ignored "-Wdeprecated-copy"
+#   pragma clang diagnostic ignored "-Wkeyword-macro"
+#   pragma clang diagnostic ignored "-Wparentheses-equality"
+#   pragma clang diagnostic ignored "-Wregister"
 #elif defined __GNUC__
 #   pragma GCC diagnostic push
 #   if 7 <= __GNUC__
