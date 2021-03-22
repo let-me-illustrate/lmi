@@ -29,7 +29,16 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
+#if defined __clang__
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wsometimes-uninitialized"
+#endif // defined __clang__
+
 #include <boost/lexical_cast.hpp>
+
+#if defined __clang__
+#   pragma clang diagnostic pop
+#endif // defined __clang__
 
 #include <cmath>                        // exp()
 #include <limits>
