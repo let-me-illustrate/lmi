@@ -48,6 +48,8 @@
 #include "et_vector_redirect.hpp"
 #include "ssize_lmi.hpp"
 
+#include <algorithm>                    // max(), min()
+#include <cmath>                        // INFINITY
 #include <sstream>
 #include <stdexcept>
 #include <vector>
@@ -202,6 +204,78 @@ template<typename T, typename X>
 inline std::vector<T>& operator<<=(std::vector<T>& t, Expression<X> const& x)
 {
     return t = Eval(x);
+}
+
+/// AND-reduction, like APL's "and slash". (Short-circuiting.)
+
+template<typename X>
+inline bool AllOf(Expression<X> const& x)
+{
+    for(int i = 0, n = Rho(x); i < n; ++i)
+        {
+        if(!forEach(x, EvalLeaf1(i), OpCombine())) {return false;}
+        }
+    return true;
+}
+
+/// OR-reduction, like APL's "or slash". (Short-circuiting.)
+
+template<typename X>
+inline bool AnyOf(Expression<X> const& x)
+{
+    for(int i = 0, n = Rho(x); i < n; ++i)
+        {
+        if(forEach(x, EvalLeaf1(i), OpCombine())) {return true;}
+        }
+    return false;
+}
+
+template<typename X>
+inline auto SumOf(Expression<X> const& x)
+{
+    using Deduced = decltype(forEach(x, EvalLeaf1(0), OpCombine()));
+    Deduced z(0);
+    for(int i = 0, n = Rho(x); i < n; ++i)
+        {
+        z += forEach(x, EvalLeaf1(i), OpCombine());
+        }
+    return z;
+}
+
+template<typename X>
+inline auto ProductOf(Expression<X> const& x)
+{
+    using Deduced = decltype(forEach(x, EvalLeaf1(0), OpCombine()));
+    Deduced z(1);
+    for(int i = 0, n = Rho(x); i < n; ++i)
+        {
+        z *= forEach(x, EvalLeaf1(i), OpCombine());
+        }
+    return z;
+}
+
+template<typename X>
+inline auto MaxOf(Expression<X> const& x)
+{
+    using Deduced = decltype(forEach(x, EvalLeaf1(0), OpCombine()));
+    Deduced z(-INFINITY);
+    for(int i = 0, n = Rho(x); i < n; ++i)
+        {
+        z = std::max(z, forEach(x, EvalLeaf1(i), OpCombine()));
+        }
+    return z;
+}
+
+template<typename X>
+inline auto MinOf(Expression<X> const& x)
+{
+    using Deduced = decltype(forEach(x, EvalLeaf1(0), OpCombine()));
+    Deduced z(INFINITY);
+    for(int i = 0, n = Rho(x); i < n; ++i)
+        {
+        z = std::min(z, forEach(x, EvalLeaf1(i), OpCombine()));
+        }
+    return z;
 }
 
 #endif // et_vector_hpp

@@ -151,5 +151,54 @@ int test_main(int, char*[])
     LMI_TEST(r2 == v4);
     }
 
+    // Test reductions.
+    //
+    // Unary '+' is not defined for std::vector, but it is for PETE
+    // expressions, so '+v' converts a std::vector 'v' into a PETE
+    // expression.
+    {
+    std::vector<double> v0 = { 0.0, 0.0, 0.0};
+    std::vector<double> v1 = { 0.0, 1.0, 0.0};
+    std::vector<double> v2 = { 1.0, 1.0, 1.0};
+    std::vector<double> v3 = {-1.0, 0.0, 6.5};
+    std::vector<double> v4 = {-1.0, 4.0, 6.5};
+
+    LMI_TEST(false == AllOf(+v0));
+    LMI_TEST(false == AllOf(+v1));
+    LMI_TEST(true  == AllOf(+v2));
+    LMI_TEST(false == AllOf(+v3));
+    LMI_TEST(true  == AllOf(+v4));
+
+    LMI_TEST(false == AnyOf(+v0));
+    LMI_TEST(true  == AnyOf(+v1));
+    LMI_TEST(true  == AnyOf(+v2));
+    LMI_TEST(true  == AnyOf(+v3));
+    LMI_TEST(true  == AnyOf(+v4));
+
+    LMI_TEST_EQUAL( 0.0, SumOf(+v0));
+    LMI_TEST_EQUAL( 1.0, SumOf(+v1));
+    LMI_TEST_EQUAL( 3.0, SumOf(+v2));
+    LMI_TEST_EQUAL( 5.5, SumOf(+v3));
+    LMI_TEST_EQUAL( 9.5, SumOf(+v4));
+
+    LMI_TEST_EQUAL(  0.0, ProductOf(+v0));
+    LMI_TEST_EQUAL(  0.0, ProductOf(+v1));
+    LMI_TEST_EQUAL(  1.0, ProductOf(+v2));
+    LMI_TEST_EQUAL(  0.0, ProductOf(+v3));
+    LMI_TEST_EQUAL(-26.0, ProductOf(+v4));
+
+    LMI_TEST_EQUAL( 0.0, MaxOf(+v0));
+    LMI_TEST_EQUAL( 1.0, MaxOf(+v1));
+    LMI_TEST_EQUAL( 1.0, MaxOf(+v2));
+    LMI_TEST_EQUAL( 6.5, MaxOf(+v3));
+    LMI_TEST_EQUAL( 6.5, MaxOf(+v4));
+
+    LMI_TEST_EQUAL( 0.0, MinOf(+v0));
+    LMI_TEST_EQUAL( 0.0, MinOf(+v1));
+    LMI_TEST_EQUAL( 1.0, MinOf(+v2));
+    LMI_TEST_EQUAL(-1.0, MinOf(+v3));
+    LMI_TEST_EQUAL(-1.0, MinOf(+v4));
+    }
+
     return 0;
 }
