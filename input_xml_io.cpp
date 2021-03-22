@@ -179,6 +179,15 @@ bool Input::is_detritus(std::string const& s) const
     return contains(v, s);
 }
 
+// INPUT !! In 'cell.{rnc,xsd}, elements
+//   ExperienceRatingInitialKFactor
+//   ExperienceReserveRate
+//   InforceNetExperienceReserve
+//   InforceYtdNetCoiCharge
+//   OverrideExperienceReserveRate
+//   UseExperienceRating
+// are obsolete and should be removed in a future version.
+
 void Input::redintegrate_ex_ante
     (int                file_version
     ,std::string const& name
