@@ -218,7 +218,14 @@ for lib in libxml2 libxslt; do
         LDFLAGS="$xmlsoft_common_ldflags" \
         CPPFLAGS='-w' \
         CFLAGS="-g -O2 $xmlsoft_common_cflags" \
-        $(eval "echo \$${lib}_options")
+        $(eval "echo \$${lib}_options") || err=$?
+    if [ -n "$err" ]; then
+        echo '*** Configuring failed, contents of config.log follows: ***'
+        echo '-----------------------------------------------------------'
+        cat config.log
+        echo '-----------------------------------------------------------'
+        exit $err
+    fi
     $MAKE install
 done
 
@@ -237,7 +244,14 @@ for lib in xmlwrapp; do
     # shellcheck disable=SC2086
     "$libdir/configure" \
         PKG_CONFIG_LIBDIR="$exec_prefix"/lib/pkgconfig \
-        $xmlwrapp_options
+        $xmlwrapp_options || err=$?
+    if [ -n "$err" ]; then
+        echo '*** Configuring failed, contents of config.log follows: ***'
+        echo '-----------------------------------------------------------'
+        cat config.log
+        echo '-----------------------------------------------------------'
+        exit $err
+    fi
     $MAKE install
 done
 
