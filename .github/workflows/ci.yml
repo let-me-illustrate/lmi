@@ -158,7 +158,7 @@ jobs:
           for lib in regex filesystem; do
             cd /opt/lmi/third_party/src/boost/libs/${lib}/src
             echo "Compiling $lib sources"
-            ${LMI_COMPILER} -std=c++17 -fPIC $(echo ${boost_cxxflags}) -I../../.. -c *.cpp
+            ${CXX-${LMI_COMPILER}} -std=c++17 -fPIC $(echo ${boost_cxxflags}) -I../../.. -c *.cpp
             echo "Creating libboost_${lib}.a from" *.o
             ar rc /opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib/libboost_${lib}.a *.o
           done
