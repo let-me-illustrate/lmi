@@ -245,6 +245,11 @@ jobs:
           printf '391daa5cbc54e118c4737446bcb84eea'           >/opt/lmi/data/passkey
 
       - name: Install
+        if: matrix.autotools
+        run: |
+          env -C /opt/lmi/data $(pwd)/${lmi_build_dir}/product_files
+
+      - name: Install
         if: matrix.autotools != true
         run: make install
 
