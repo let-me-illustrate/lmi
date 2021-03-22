@@ -93,6 +93,8 @@ jobs:
           echo "xml2_sha1=$(git rev-parse HEAD:third_party/libxml2)" >> $GITHUB_ENV
           echo "xmlwrapp_sha1=$(git rev-parse HEAD:third_party/xmlwrapp)" >> $GITHUB_ENV
           echo "xslt_sha1=$(git rev-parse HEAD:third_party/libxslt)" >> $GITHUB_ENV
+          echo "wx_sha1=$(git rev-parse HEAD:third_party/wx)" >> $GITHUB_ENV
+          echo "wxpdfdoc_sha1=$(git rev-parse HEAD:third_party/wxpdfdoc)" >> $GITHUB_ENV
 
           echo "PATH=$PATH:/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/bin" >> $GITHUB_ENV
 
@@ -132,7 +134,7 @@ jobs:
             /opt/lmi/local/${{ env.LMI_COMPILER }}_${{ env.LMI_TRIPLET }}
             /opt/lmi/local/include
             /opt/lmi/local/share
-          key: build-${{ env.LMI_COMPILER }}-${{ env.gcc_version }}-${{ env.LMI_TRIPLET }}-${{ hashFiles('install_xml_libraries.sh', 'install_wx.sh', 'install_wxpdfdoc.sh') }}-${{ env.xml2_sha1 }}-${{ env.xmlwrapp_sha1 }}-${{ env.xslt_sha1 }}
+          key: build-${{ env.LMI_COMPILER }}-${{ env.gcc_version }}-${{ env.LMI_TRIPLET }}-${{ hashFiles('install_xml_libraries.sh', 'install_wx.sh', 'install_wxpdfdoc.sh') }}-${{ env.xml2_sha1 }}-${{ env.xmlwrapp_sha1 }}-${{ env.xslt_sha1 }}-${{ env.wx_sha1 }}-${{ env.wxpdfdoc_sha1 }}
 
       - name: Build XML libraries
         if: steps.cache-local.outputs.cache-hit != 'true'
