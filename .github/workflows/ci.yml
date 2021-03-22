@@ -274,7 +274,15 @@ jobs:
             types.xsd \
             /opt/lmi/data
 
-          make $coefficiency -C ${lmi_build_dir} check
+          make $coefficiency -C ${lmi_build_dir} check || err=$?
+
+          if [ -n "$err" ]; then
+            echo '*** Tests failed, contents of test-suite.log follows: ***'
+            echo '-----------------------------------------------------------'
+            cat ${lmi_build_dir}/test-suite.log
+            echo '-----------------------------------------------------------'
+            exit $err
+          fi
 
       - name: Run unit tests
         if: matrix.autotools != true
