@@ -190,7 +190,7 @@ jobs:
 
       - name: Build lmi (autotools)
         if: matrix.autotools
-        run: make $coefficiency -C ${lmi_build_dir}
+        run: make $coefficiency -C ${lmi_build_dir} -k
 
       - name: Build lmi
         run: make $coefficiency --output-sync=recurse
@@ -266,7 +266,7 @@ jobs:
             types.xsd \
             /opt/lmi/data
 
-          make $coefficiency -C ${lmi_build_dir} check || err=$?
+          make $coefficiency -C ${lmi_build_dir} -k check || err=$?
 
           if [ -n "$err" ]; then
             echo '*** Tests failed, contents of test-suite.log follows: ***'
