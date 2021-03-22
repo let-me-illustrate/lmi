@@ -249,6 +249,15 @@ jobs:
         run: |
           env -C /opt/lmi/data $(pwd)/${lmi_build_dir}/product_files
 
+          # These files are used by input test from this hardcoded location.
+          cp \
+            cell.xsd \
+            multiple_cell_document.xsd \
+            single_cell_document.xsd \
+            sort_cell_subelements.xsl \
+            types.xsd \
+            /opt/lmi/data
+
       - name: Install
         if: matrix.autotools != true
         run: make install
@@ -272,15 +281,6 @@ jobs:
       - name: Run unit tests (autotools)
         if: matrix.autotools
         run: |
-          # These files are used by input test from this hardcoded location.
-          cp \
-            cell.xsd \
-            multiple_cell_document.xsd \
-            single_cell_document.xsd \
-            sort_cell_subelements.xsl \
-            types.xsd \
-            /opt/lmi/data
-
           make $coefficiency -C ${lmi_build_dir} check || err=$?
 
           if [ -n "$err" ]; then
