@@ -644,6 +644,12 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     int Max = std::min(Length, a_Addend.Length);
 
     // ET !! This is of the form 'x = (lengthof x) take y'.
+    // C++2x provides std::views::{drop,take}, which are somewhat
+    // similar to APL's take and drop; however, for
+    //   x = (1 + lengthof(y) take y
+    // std::views would not extend the data with zeros, as APL would
+    // (in APL circles, that's called "overtake").
+    //
     // Make sure total (this) has enough years to add all years of a_Addend to.
     LMI_ASSERT(a_Addend.Length <= Length);
     for(int j = 0; j < Max; ++j)
