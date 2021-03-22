@@ -356,6 +356,7 @@ boost_libsystem="boost_system$lmi_boost_toolkit"
 boost_libfs="boost_filesystem$lmi_boost_toolkit"
 boost_libregex="boost_regex$lmi_boost_toolkit"
 
+save_CPPFLAGS=$CPPFLAGS
 save_LIBS=$LIBS
 save_LDFLAGS=$LDFLAGS
 if test "x$lmi_boost_libs" != "x"; then
@@ -366,6 +367,11 @@ else
     errmsg="use --with-boost-libs=dir
 if it is installed in non default location"
 fi
+
+dnl Prevent warnings due to the use of "register" in Boost.Regex headers that
+dnl are actually fatal errors with clang in C++17 mode, and disable the use of
+dnl std::auto_ptr<> which is not available at all in this mode.
+CPPFLAGS="$save_CPPFLAGS -DBOOST_NO_AUTO_PTR -Dregister="
 
 dnl latest versions of boost extract some common functionality in
 dnl libboost_system which we must link when using any other Boost library, so
@@ -392,6 +398,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/regex.hpp>]],
 
 LDFLAGS=$save_LDFLAGS
 LIBS=$save_LIBS
+CPPFLAGS=$save_CPPFLAGS
 
 BOOST_LIBS="-l$boost_libfs -l$boost_libregex $BOOST_LIBS"
 
