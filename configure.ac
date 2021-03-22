@@ -340,6 +340,11 @@ else
 if they are installed in non default location"
 fi
 
+dnl Disable the use of std::auto_ptr<> which is not available in C++17 (and is
+dnl actually not available, rather than still being there and just generating
+dnl deprecation warnings, in clang libc++).
+CPPFLAGS="$CPPFLAGS -DBOOST_NO_AUTO_PTR"
+
 AC_CHECK_HEADER([boost/type_traits.hpp],
     [],
     [AC_MSG_FAILURE([Boost headers not found, $errmsg])],
@@ -369,9 +374,8 @@ if it is installed in non default location"
 fi
 
 dnl Prevent warnings due to the use of "register" in Boost.Regex headers that
-dnl are actually fatal errors with clang in C++17 mode, and disable the use of
-dnl std::auto_ptr<> which is not available at all in this mode.
-CPPFLAGS="$save_CPPFLAGS -DBOOST_NO_AUTO_PTR -Dregister="
+dnl are actually fatal errors with clang in C++17 mode.
+CPPFLAGS="$save_CPPFLAGS -Dregister="
 
 dnl latest versions of boost extract some common functionality in
 dnl libboost_system which we must link when using any other Boost library, so
