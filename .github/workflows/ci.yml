@@ -17,14 +17,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Cross-compile for MSW-32
-            triplet: i686-w64-mingw32
-            mingw: true
-          - name: Native Linux build
-            mingw: false
-          - name: Linux using autotools
-            mingw: false
-            autotools: true
           - name: Linux with clang
             compiler: clang
             mingw: false
