@@ -346,6 +346,11 @@ else
 if they are installed in non default location"
 fi
 
+dnl Disable the use of std::auto_ptr<> which is not available in C++17 (and is
+dnl actually not available, rather than still being there and just generating
+dnl deprecation warnings, in clang libc++).
+CPPFLAGS="$CPPFLAGS -DBOOST_NO_AUTO_PTR"
+
 AC_CHECK_HEADER([boost/type_traits.hpp],
     [],
     [AC_MSG_FAILURE([Boost headers not found, $errmsg])],
@@ -362,6 +367,7 @@ boost_libsystem="boost_system$lmi_boost_toolkit"
 boost_libfs="boost_filesystem$lmi_boost_toolkit"
 boost_libregex="boost_regex$lmi_boost_toolkit"
 
+save_CPPFLAGS=$CPPFLAGS
 save_LIBS=$LIBS
 save_LDFLAGS=$LDFLAGS
 if test "x$lmi_boost_libs" != "x"; then
@@ -372,6 +378,10 @@ else
     errmsg="use --with-boost-libs=dir
 if it is installed in non default location"
 fi
+
+dnl Prevent warnings due to the use of "register" in Boost.Regex headers that
+dnl are actually fatal errors with clang in C++17 mode.
+CPPFLAGS="$save_CPPFLAGS -Dregister="
 
 dnl latest versions of boost extract some common functionality in
 dnl libboost_system which we must link when using any other Boost library, so
@@ -398,6 +408,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/regex.hpp>]],
 
 LDFLAGS=$save_LDFLAGS
 LIBS=$save_LIBS
+CPPFLAGS=$save_CPPFLAGS
 
 BOOST_LIBS="-l$boost_libfs -l$boost_libregex $BOOST_LIBS"
 
