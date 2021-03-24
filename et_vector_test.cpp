@@ -198,6 +198,23 @@ int test_main(int, char*[])
     LMI_TEST_EQUAL( 1.0, MinOf(+v2));
     LMI_TEST_EQUAL(-1.0, MinOf(+v3));
     LMI_TEST_EQUAL(-1.0, MinOf(+v4));
+
+    // Combination example: test whether vector is all boolean-valued.
+    // In APL, one might write:
+    //   AND slash [ravel] V ElementOf 0 1
+    //   (using 'ravel' to flatten rank, which is irrelevant here)
+    // Lacking ElementOf, this example uses:
+    //   AND slash (v=0) OR v=1
+    // In APL, one might instead write:
+    //   AND slash V = NOT NOT V
+    // using NOT NOT to turn values into booleans, but, using PETE
+    // with std::vector, "!!V" returns a vector<bool>; ET !! perhaps
+    // boolean operators should therefore be amended to return 'int'.
+    LMI_TEST_EQUAL(true , AllOf(EqualTo(true, v0) ||  EqualTo(false, v0)));
+    LMI_TEST_EQUAL(true , AllOf(EqualTo(true, v1) ||  EqualTo(false, v1)));
+    LMI_TEST_EQUAL(true , AllOf(EqualTo(true, v2) ||  EqualTo(false, v2)));
+    LMI_TEST_EQUAL(false, AllOf(EqualTo(true, v3) ||  EqualTo(false, v3)));
+    LMI_TEST_EQUAL(false, AllOf(EqualTo(true, v4) ||  EqualTo(false, v4)));
     }
 
     return 0;
