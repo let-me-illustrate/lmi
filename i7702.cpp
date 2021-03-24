@@ -328,9 +328,9 @@ void i7702::initialize()
 
     if(!each_equal(Em_, 0.0))
         {
-        ig_usual_ += max(ic_usual_, Em_);
-        ig_glp_   += max(ic_glp_  , Em_);
-        ig_gsp_   += max(ic_gsp_  , Em_);
+        ig_usual_ += Max(ic_usual_, Em_);
+        ig_glp_   += Max(ic_glp_  , Em_);
+        ig_gsp_   += Max(ic_gsp_  , Em_);
         }
 
     if(trace_)

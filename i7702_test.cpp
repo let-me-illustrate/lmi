@@ -26,6 +26,9 @@
 #include "materially_equal.hpp"
 #include "test_tools.hpp"
 
+#include <cfloat>                       // DECIMAL_DIG
+#include <iomanip>                      // setprecision()
+
 class i7702_test
 {
   public:
@@ -65,10 +68,39 @@ void i7702_test::test0()
         ,{1.0}       // use_vlr
         };
     LMI_TEST(materially_equal(0.0032737, z.ig_usual()[0], 0.0000125));
+    LMI_TEST(materially_equal(0.00327373978219886374239, z.ig_usual()[0]));
+
+    std::cout<< std::setprecision(DECIMAL_DIG) << z.ig_usual()[0] << std::endl;
 }
 
 void i7702_test::test1()
 {
+    i7702 z
+        {2                      // length
+        ,0.04                   // A0
+        ,0.06                   // A1
+        ,{0.03     , 0.03     } // Bgen
+        ,{0.00     , 0.00     } // Bsep
+        ,{0.02     , 0.02     } // Bflr
+        ,{0.02     , 0.02     } // Bvlr
+        ,{0.05     , 0.00     } // Cgen
+        ,{0.00     , 0.00     } // Csep
+        ,{0.00     , 0.00     } // Cflr
+        ,{0.00     , 0.00     } // Cvlr
+        ,{0.00     , 0.00     } // Dgen
+        ,{0.00     , 0.00     } // Dsep
+        ,{0.00     , 0.00     } // Dflr
+        ,{0.00     , 0.00     } // Dvlr
+        ,{0.0032738, 0.0032738} // Em
+        ,{1.0      , 1.0      } // use_gen
+        ,{1.0      , 1.0      } // use_sep
+        ,{1.0      , 1.0      } // use_flr
+        ,{1.0      , 1.0      } // use_vlr
+        };
+    LMI_TEST(materially_equal(0.00407412378364830143895, z.ig_usual()[0]));
+    LMI_TEST(materially_equal(0.0032738                , z.ig_usual()[1]));
+    std::cout<< std::setprecision(DECIMAL_DIG) << z.ig_usual()[0] << std::endl;
+    std::cout<< std::setprecision(DECIMAL_DIG) << z.ig_usual()[1] << std::endl;
 }
 
 int test_main(int, char*[])
