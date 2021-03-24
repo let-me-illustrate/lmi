@@ -169,9 +169,10 @@ TESTS = \
 
 check_PROGRAMS = $(TESTS)
 
-# Some tests (at least authenticity_test) rely on finding lmi binaries in PATH,
-# but they're only present in the build directory by the time the test runs, so
-# ensure they can be found there.
+# MD5 !! Two unit tests, 'authenticity_test' and 'system_command_test',
+# rely on finding an 'lmi_md5sum' binary in PATH, where it's found only
+# by the time the test runs, so ensure it can be found there. But this
+# should be removed because lmi no longer uses that program.
 AM_TESTS_ENVIRONMENT = PATH=.:$$PATH
 
 ##############################################################################
