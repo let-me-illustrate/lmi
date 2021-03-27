@@ -23,8 +23,93 @@
 
 #include "ssize_lmi.hpp"
 #include "test_tools.hpp"
+#include "timer.hpp"
 
 #include <functional>                   // multiplies(), negate(), plus()
+
+// A vector of boolean values, represented as double, such as
+// might result from querying lmi's database.
+static std::vector<double> const bit_valued =
+    {0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0
+    ,1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0
+    ,0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0
+    ,1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0
+    ,0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0
+    ,1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0
+    ,0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0
+    ,1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0
+    ,0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0
+    ,1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0
+    };
+
+bool mete_eq0a()
+{
+    for(auto const& i : bit_valued)
+        {
+        if(false != i && true != i)
+            return false;
+        }
+    return true;
+}
+
+bool mete_eq0b()
+{
+    for(auto const& i : bit_valued)
+        {
+        if(0.0 != i && 1.0 != i)
+            return false;
+        }
+    return true;
+}
+
+bool mete_eq0c()
+{
+    for(auto const& i : bit_valued)
+        {
+        if(i != !!i)
+            return false;
+        }
+    return true;
+}
+
+bool mete_eq1a()
+{
+    return AllOf(EqualTo(true, bit_valued) || EqualTo(false, bit_valued));
+}
+
+bool mete_eq1b()
+{
+    return AllOf(EqualTo(1.0, bit_valued) || EqualTo(0.0, bit_valued));
+}
+
+bool mete_eq1c()
+{
+    return AllOf(EqualTo(bit_valued, !!bit_valued));
+}
+
+bool mete_eq1x()
+{
+    return !AnyOf(UnequalTo(true, bit_valued) && UnequalTo(false, bit_valued));
+}
+
+void assay_speed()
+{
+    LMI_TEST_EQUAL(true, mete_eq0a());
+    LMI_TEST_EQUAL(true, mete_eq0b());
+    LMI_TEST_EQUAL(true, mete_eq0c());
+    LMI_TEST_EQUAL(true, mete_eq1a());
+    LMI_TEST_EQUAL(true, mete_eq1b());
+    LMI_TEST_EQUAL(true, mete_eq1c());
+    LMI_TEST_EQUAL(true, mete_eq1x());
+    std::cout << "Speed tests:\n";
+    std::cout << "  mete_eq0a " << TimeAnAliquot(mete_eq0a) << '\n';
+    std::cout << "  mete_eq0b " << TimeAnAliquot(mete_eq0b) << '\n';
+    std::cout << "  mete_eq0c " << TimeAnAliquot(mete_eq0c) << '\n';
+    std::cout << "  mete_eq1a " << TimeAnAliquot(mete_eq1a) << '\n';
+    std::cout << "  mete_eq1b " << TimeAnAliquot(mete_eq1b) << '\n';
+    std::cout << "  mete_eq1c " << TimeAnAliquot(mete_eq1c) << '\n';
+    std::cout << "  mete_eq1x " << TimeAnAliquot(mete_eq1x) << '\n';
+}
 
 int test_main(int, char*[])
 {
@@ -210,12 +295,14 @@ int test_main(int, char*[])
     // using NOT NOT to turn values into booleans, but, using PETE
     // with std::vector, "!!V" returns a vector<bool>; ET !! perhaps
     // boolean operators should therefore be amended to return 'int'.
-    LMI_TEST_EQUAL(true , AllOf(EqualTo(true, v0) ||  EqualTo(false, v0)));
-    LMI_TEST_EQUAL(true , AllOf(EqualTo(true, v1) ||  EqualTo(false, v1)));
-    LMI_TEST_EQUAL(true , AllOf(EqualTo(true, v2) ||  EqualTo(false, v2)));
-    LMI_TEST_EQUAL(false, AllOf(EqualTo(true, v3) ||  EqualTo(false, v3)));
-    LMI_TEST_EQUAL(false, AllOf(EqualTo(true, v4) ||  EqualTo(false, v4)));
+    LMI_TEST_EQUAL(true , AllOf(EqualTo(true, v0) || EqualTo(false, v0)));
+    LMI_TEST_EQUAL(true , AllOf(EqualTo(true, v1) || EqualTo(false, v1)));
+    LMI_TEST_EQUAL(true , AllOf(EqualTo(true, v2) || EqualTo(false, v2)));
+    LMI_TEST_EQUAL(false, AllOf(EqualTo(true, v3) || EqualTo(false, v3)));
+    LMI_TEST_EQUAL(false, AllOf(EqualTo(true, v4) || EqualTo(false, v4)));
     }
+
+    assay_speed();
 
     return 0;
 }
