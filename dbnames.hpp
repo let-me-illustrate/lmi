@@ -158,7 +158,7 @@ enum e_database_key
         ,DB_AllowCvat
         ,DB_AllowGpt
         ,DB_AllowNo7702
-        ,DB_AnnInterestRate7702
+        ,DB_AnnIntRate7702
         ,DB_IgnoreLoanRateFor7702
         ,DB_MlyDiscountRate7702Whence
         ,DB_MlyDiscountRate7702

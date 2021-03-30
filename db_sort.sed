@@ -62,7 +62,7 @@
 /DB_AllowCvat\>/                 s/^/B001/
 /DB_AllowGpt\>/                  s/^/B002/
 /DB_AllowNo7702\>/               s/^/B003/
-/DB_AnnInterestRate7702\>/       s/^/B004/
+/DB_AnnIntRate7702\>/            s/^/B004/
 /DB_IgnoreLoanRateFor7702\>/     s/^/B005/
 /DB_MlyDiscountRate7702Whence\>/ s/^/B006/
 /DB_MlyDiscountRate7702\>/       s/^/B007/

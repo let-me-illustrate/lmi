@@ -128,7 +128,7 @@ class LMI_SO DBDictionary
     database_entity AllowCvat                 ;
     database_entity AllowGpt                  ;
     database_entity AllowNo7702               ;
-    database_entity AnnInterestRate7702       ;
+    database_entity AnnIntRate7702            ;
     database_entity IgnoreLoanRateFor7702     ;
     database_entity MlyDiscountRate7702Whence ;
     database_entity MlyDiscountRate7702       ;

@@ -147,7 +147,7 @@ void DBDictionary::ascribe_members()
     ascribe("AllowCvat"                 , &DBDictionary::AllowCvat                 );
     ascribe("AllowGpt"                  , &DBDictionary::AllowGpt                  );
     ascribe("AllowNo7702"               , &DBDictionary::AllowNo7702               );
-    ascribe("AnnInterestRate7702"       , &DBDictionary::AnnInterestRate7702       );
+    ascribe("AnnIntRate7702"            , &DBDictionary::AnnIntRate7702            );
     ascribe("IgnoreLoanRateFor7702"     , &DBDictionary::IgnoreLoanRateFor7702     );
     ascribe("MlyDiscountRate7702Whence" , &DBDictionary::MlyDiscountRate7702Whence );
     ascribe("MlyDiscountRate7702"       , &DBDictionary::MlyDiscountRate7702       );
@@ -776,7 +776,7 @@ void DBDictionary::InitDB()
 
     // This is determined by law, in a way that varies by product;
     // all pre-2021 products use this default.
-    Add({DB_AnnInterestRate7702 , 0.04});
+    Add({DB_AnnIntRate7702      , 0.04});
     // Should these be specified here?
     //   DB_IgnoreLoanRateFor7702
     //   DB_MlyDiscountRate7702Whence
@@ -1490,7 +1490,7 @@ sample2xyz::sample2xyz()
 #endif // 0
     // This is determined by law, in a way that varies by product;
     // 2021 products use this two-percent rate.
-    Add({DB_AnnInterestRate7702 , 0.02});
+    Add({DB_AnnIntRate7702      , 0.02});
     // Arguably the most complex ledger type.
     Add({DB_LedgerType          , mce_finra});
     // Certain group-quote columns are available only when these two
