@@ -148,9 +148,9 @@ void DBDictionary::ascribe_members()
     ascribe("AllowGpt"                  , &DBDictionary::AllowGpt                  );
     ascribe("AllowNo7702"               , &DBDictionary::AllowNo7702               );
     ascribe("AnnIntRate7702"            , &DBDictionary::AnnIntRate7702            );
+    ascribe("AnnIntRateGspDelta"        , &DBDictionary::AnnIntRateGspDelta        );
+    ascribe("ShortTermIntGuar7702"      , &DBDictionary::ShortTermIntGuar7702      );
     ascribe("IgnoreLoanRateFor7702"     , &DBDictionary::IgnoreLoanRateFor7702     );
-    ascribe("MlyDiscountRate7702Whence" , &DBDictionary::MlyDiscountRate7702Whence );
-    ascribe("MlyDiscountRate7702"       , &DBDictionary::MlyDiscountRate7702       );
     ascribe("Irc7702Obreption"          , &DBDictionary::Irc7702Obreption          );
     ascribe("CorridorWhence"            , &DBDictionary::CorridorWhence            );
     ascribe("Irc7702NspWhence"          , &DBDictionary::Irc7702NspWhence          );
@@ -777,11 +777,8 @@ void DBDictionary::InitDB()
     // This is determined by law, in a way that varies by product;
     // all pre-2021 products use this default.
     Add({DB_AnnIntRate7702      , 0.04});
-    // Should these be specified here?
-    //   DB_IgnoreLoanRateFor7702
-    //   DB_MlyDiscountRate7702Whence
-    // This probably should correspond to the annual 7702 rate.
-    Add({DB_MlyDiscountRate7702 , 0.0032737});
+    // All products use this default, but it could change someday.
+    Add({DB_AnnIntRateGspDelta  , 0.02});
 
     Add({DB_MaxIssSpecAmt       , dbl_inf});
     Add({DB_MaxRenlSpecAmt      , dbl_inf});
@@ -1491,6 +1488,7 @@ sample2xyz::sample2xyz()
     // This is determined by law, in a way that varies by product;
     // 2021 products use this two-percent rate.
     Add({DB_AnnIntRate7702      , 0.02});
+    Add({DB_ShortTermIntGuar7702, 0.00});
     // Arguably the most complex ledger type.
     Add({DB_LedgerType          , mce_finra});
     // Certain group-quote columns are available only when these two

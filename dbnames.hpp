@@ -67,6 +67,7 @@
 ///  - Gdb     Guaranteed death benefit
 ///  - Gen     General (as in 'general account')
 ///  - Gpt     Guideline premium test
+///  - Gsp     Guideline single premium
 ///  - Guar    Guaranteed
 ///  - Ibnr    Incurred but not reported (reserve)
 ///  - Imf     Investment management fee
@@ -159,9 +160,9 @@ enum e_database_key
         ,DB_AllowGpt
         ,DB_AllowNo7702
         ,DB_AnnIntRate7702
+        ,DB_AnnIntRateGspDelta
+        ,DB_ShortTermIntGuar7702
         ,DB_IgnoreLoanRateFor7702
-        ,DB_MlyDiscountRate7702Whence
-        ,DB_MlyDiscountRate7702
         ,DB_Irc7702Obreption
 
         ,DB_CorridorWhence

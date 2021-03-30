@@ -129,9 +129,9 @@ class LMI_SO DBDictionary
     database_entity AllowGpt                  ;
     database_entity AllowNo7702               ;
     database_entity AnnIntRate7702            ;
+    database_entity AnnIntRateGspDelta        ;
+    database_entity ShortTermIntGuar7702      ;
     database_entity IgnoreLoanRateFor7702     ;
-    database_entity MlyDiscountRate7702Whence ;
-    database_entity MlyDiscountRate7702       ;
     database_entity Irc7702Obreption          ;
     database_entity CorridorWhence            ;
     database_entity Irc7702NspWhence          ;

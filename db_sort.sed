@@ -63,9 +63,9 @@
 /DB_AllowGpt\>/                  s/^/B002/
 /DB_AllowNo7702\>/               s/^/B003/
 /DB_AnnIntRate7702\>/            s/^/B004/
-/DB_IgnoreLoanRateFor7702\>/     s/^/B005/
-/DB_MlyDiscountRate7702Whence\>/ s/^/B006/
-/DB_MlyDiscountRate7702\>/       s/^/B007/
+/DB_AnnIntRateGspDelta\>/        s/^/B005/
+/DB_ShortTermIntGuar7702\>/      s/^/B006/
+/DB_IgnoreLoanRateFor7702\>/     s/^/B007/
 /DB_Irc7702Obreption\>/          s/^/B008/
 /DB_CorridorWhence\>/            s/^/B009/
 /DB_Irc7702NspWhence\>/          s/^/B010/
