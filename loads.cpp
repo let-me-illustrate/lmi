@@ -152,7 +152,7 @@ void Loads::Initialize(product_database const& database, load_details const& det
     database.query_into(DB_CurrMonthlyPolFee , monthly_policy_fee_   [mce_gen_curr]);
     database.query_into(DB_CurrAnnualPolFee  , annual_policy_fee_    [mce_gen_curr]);
     database.query_into(DB_CurrSpecAmtLoad   , specified_amount_load_[mce_gen_curr]);
-    database.query_into(DB_CurrAcctValLoad   , separate_account_load_[mce_gen_curr]);
+    database.query_into(DB_CurrSepAcctLoad   , separate_account_load_[mce_gen_curr]);
     database.query_into(DB_CurrPremLoadTgt   , target_premium_load_  [mce_gen_curr]);
     database.query_into(DB_CurrPremLoadExc   , excess_premium_load_  [mce_gen_curr]);
     database.query_into(DB_CurrPremLoadTgtRfd, target_sales_load_    [mce_gen_curr]);

@@ -246,7 +246,7 @@ void DBDictionary::ascribe_members()
     ascribe("CurrPremLoadExcRfd"        , &DBDictionary::CurrPremLoadExcRfd        );
     ascribe("CurrSpecAmtLoad"           , &DBDictionary::CurrSpecAmtLoad           );
     ascribe("CurrSpecAmtLoadTable"      , &DBDictionary::CurrSpecAmtLoadTable      );
-    ascribe("CurrAcctValLoad"           , &DBDictionary::CurrAcctValLoad           );
+    ascribe("CurrSepAcctLoad"           , &DBDictionary::CurrSepAcctLoad           );
     ascribe("TgtPremMonthlyPolFee"      , &DBDictionary::TgtPremMonthlyPolFee      );
     ascribe("LoadRfdProportion"         , &DBDictionary::LoadRfdProportion         );
     ascribe("SpecAmtLoadLimit"          , &DBDictionary::SpecAmtLoadLimit          );
@@ -961,7 +961,7 @@ sample::sample()
     Add({DB_CurrPremLoadTgtRfd  , 0.00});
     Add({DB_CurrPremLoadExcRfd  , 0.00});
     Add({DB_CurrSpecAmtLoad     , 0.0});
-    Add({DB_CurrAcctValLoad     , 0.0});
+    Add({DB_CurrSepAcctLoad     , 0.0});
     Add({DB_TgtPremMonthlyPolFee, 0.0});
     Add({DB_LoadRfdProportion   , 0.0});
     Add({DB_SpecAmtLoadLimit    , 10000000.0});

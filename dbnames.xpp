@@ -171,7 +171,7 @@
 {DB_CurrPremLoadExcRfd,DB_Topic_Loads,"CurrPremLoadExcRfd","Current load on premium in excess of target, refundable on lapse",}, \
 {DB_CurrSpecAmtLoad,DB_Topic_Loads,"CurrSpecAmtLoad","Current charge per $1 of specified amount, in addition to 'CurrSpecAmtLoadTable'",}, \
 {DB_CurrSpecAmtLoadTable,DB_Topic_Loads,"CurrSpecAmtLoadTable","Current charge per $1 of specified amount (index in mortality table database)",}, \
-{DB_CurrAcctValLoad,DB_Topic_Loads,"CurrAcctValLoad","Expense charge as proportion of separate account value",}, \
+{DB_CurrSepAcctLoad,DB_Topic_Loads,"CurrSepAcctLoad","Expense charge as proportion of separate account value",}, \
 {DB_TgtPremMonthlyPolFee,DB_Topic_Loads,"TgtPremMonthlyPolFee","Target-premium monthly policy fee",}, \
 {DB_LoadRfdProportion,DB_Topic_Loads,"LoadRfdProportion","Proportion of sales load refundable on full surrender",}, \
 {DB_SpecAmtLoadLimit,DB_Topic_Loads,"SpecAmtLoadLimit","Maximum specified amount to which load per $1 of specified amount can apply",}, \

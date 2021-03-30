@@ -227,7 +227,7 @@ class LMI_SO DBDictionary
     database_entity CurrPremLoadExcRfd        ;
     database_entity CurrSpecAmtLoad           ;
     database_entity CurrSpecAmtLoadTable      ;
-    database_entity CurrAcctValLoad           ;
+    database_entity CurrSepAcctLoad           ;
     database_entity TgtPremMonthlyPolFee      ;
     database_entity LoadRfdProportion         ;
     database_entity SpecAmtLoadLimit          ;

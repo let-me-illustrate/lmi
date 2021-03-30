@@ -165,7 +165,7 @@
 /DB_CurrPremLoadExcRfd\>/        s/^/F015/
 /DB_CurrSpecAmtLoad\>/           s/^/F016/
 /DB_CurrSpecAmtLoadTable\>/      s/^/F017/
-/DB_CurrAcctValLoad\>/           s/^/F018/
+/DB_CurrSepAcctLoad\>/           s/^/F018/
 /DB_TgtPremMonthlyPolFee\>/      s/^/F019/
 /DB_LoadRfdProportion\>/         s/^/F020/
 /DB_SpecAmtLoadLimit\>/          s/^/F021/

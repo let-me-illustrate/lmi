@@ -291,7 +291,7 @@ enum e_database_key
         ,DB_CurrSpecAmtLoad
         ,DB_CurrSpecAmtLoadTable
 
-        ,DB_CurrAcctValLoad
+        ,DB_CurrSepAcctLoad
 
         ,DB_TgtPremMonthlyPolFee
         ,DB_LoadRfdProportion

@@ -102,8 +102,7 @@ i7702::i7702
     // the issue date constitutes a short-term guarantee that must be
     // reflected in the 7702 interest rates (excluding the GLP rate).
 
-    // 7702 !! DB_CurrAcctValLoad is sepacct only: change its name
-    database.query_into(DB_CurrAcctValLoad, Dsep_);
+    database.query_into(DB_CurrSepAcctLoad, Dsep_);
     Dsep_ += stratified.minimum_tiered_sepacct_load_for_7702();
 
     // Eckley's 'ig' represents the interest rate by which death
