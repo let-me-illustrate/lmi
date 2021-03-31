@@ -73,6 +73,7 @@ class LMI_SO i7702 final
         ,std::vector<double> const& use_vlr
         );
 
+    void assert_preconditions();
     void initialize();
 
     int  const length_;

@@ -224,6 +224,11 @@ i7702::i7702
     ,ig_glp_   (length_)
     ,ig_gsp_   (length_)
 {
+    initialize();
+}
+
+void i7702::assert_preconditions()
+{
     LMI_ASSERT(length_ == lmi::ssize(Bgen_   ));
     LMI_ASSERT(length_ == lmi::ssize(Bsep_   ));
     LMI_ASSERT(length_ == lmi::ssize(Bflr_   ));
@@ -241,12 +246,11 @@ i7702::i7702
     LMI_ASSERT(length_ == lmi::ssize(use_sep_));
     LMI_ASSERT(length_ == lmi::ssize(use_flr_));
     LMI_ASSERT(length_ == lmi::ssize(use_vlr_));
-
-    initialize();
 }
 
 void i7702::initialize()
 {
+    assert_preconditions();
     // max(A0, B, C)
     ic_usual_ += Max
         (Max
