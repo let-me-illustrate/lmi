@@ -41,10 +41,6 @@ class LMI_SO i7702 final
         ,stratified_charges const&
         );
 
-    i7702(i7702 const&) = delete;
-    i7702& operator=(i7702 const&) = delete;
-    ~i7702() = default;
-
     std::vector<double> const& ic_usual() const {return ic_usual_;}
     std::vector<double> const& ic_glp  () const {return ic_glp_  ;}
     std::vector<double> const& ic_gsp  () const {return ic_gsp_  ;}

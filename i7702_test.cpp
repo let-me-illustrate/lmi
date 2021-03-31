@@ -71,6 +71,13 @@ void i7702_test::test0()
     LMI_TEST(materially_equal(0.00327373978219886374239, z.ig_usual()[0]));
 
     std::cout<< std::setprecision(DECIMAL_DIG) << z.ig_usual()[0] << std::endl;
+
+    // Class i7702 is copy- and move-constructible, but not assignable
+    // because of const data members.
+    i7702 x = z;
+    i7702 y = std::move(z);
+//  x = y;            // operator=(i7702 const&) implicitly deleted
+//  x = std::move(y); // operator=(i7702&&)      implicitly deleted
 }
 
 void i7702_test::test1()
