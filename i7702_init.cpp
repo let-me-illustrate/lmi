@@ -29,7 +29,7 @@
 #include "et_vector.hpp"
 #include "global_settings.hpp"          // 7702 !! pyx
 #include "math_functions.hpp"
-#include "miscellany.hpp"               // each_equal(), minmax
+#include "miscellany.hpp"               // minmax
 #include "stratified_charges.hpp"
 
 i7702::i7702
@@ -64,8 +64,6 @@ i7702::i7702
     ,ig_glp_   (length_)
     ,ig_gsp_   (length_)
 {
-    // 7702 !! Should 'C*' members be scalar--first year only?
-
     std::vector<double> const zero(length_);
 
     database.query_into(DB_AllowGenAcct  , use_gen_);
@@ -98,12 +96,8 @@ i7702::i7702
     assign(Bflr_, fixed_loan_rate    - guar_loan_spread);
     assign(Bvlr_, variable_loan_rate - guar_loan_spread);
 
-    // According to the DEFRA Blue Book (page 649),
-    //   "short-term guarantees (extending no more than one year)"
-    // may be ignored for GLP only. Therefore, DB_ShortTermIntGuar7702
-    // must be zero after the first year. It is taken as pertaining to
-    // Cgen_ and Csep_, to cover every case that Cflr_ and Cvlr_ do
-    // not address.
+    // Take DB_ShortTermIntGuar7702 as pertaining to Cgen_ and Csep_,
+    // to cover every case that Cflr_ and Cvlr_ do not address.
     //
     // If lmi someday implements VLR, then the current VLR rate on
     // the issue date generally constitutes a short-term guarantee
@@ -113,8 +107,6 @@ i7702::i7702
     // so unlikely that lmi's database doesn't provide for it yet.
 
     database.query_into(DB_ShortTermIntGuar7702, Cgen_);
-    LMI_ASSERT(!Cgen_.empty());
-    LMI_ASSERT(each_equal(++Cgen_.begin(), Cgen_.end(), 0.0));
     Csep_ = Cgen_;
 
     database.query_into(DB_CurrSepAcctLoad, Dsep_);

@@ -92,10 +92,10 @@
 ///   for loans: charged - spread
 ///   usually no guarantee for separate account, making Bsep zero
 ///
-/// C: initial short-term guarantees
+/// C: initial short-term guarantees--ignored for GLP only
+///   "extending no more than one year" (DEFRA Blue Book, page 649)
+///   a vector for convenience, uniformly zero after the issue year
 ///   usually altogether avoided by careful product design
-///   variable loan rate may cause Cvlr to be nonzero
-///   always zero in practice for lmi, which doesn't yet implement VLR
 ///
 /// D: asset-based charges
 ///   lowest value each year, if dependent on assets, premiums, etc.
@@ -229,6 +229,8 @@ i7702::i7702
 
 void i7702::assert_preconditions()
 {
+    LMI_ASSERT(0 < length_);
+
     LMI_ASSERT(length_ == lmi::ssize(Bgen_   ));
     LMI_ASSERT(length_ == lmi::ssize(Bsep_   ));
     LMI_ASSERT(length_ == lmi::ssize(Bflr_   ));
@@ -246,6 +248,11 @@ void i7702::assert_preconditions()
     LMI_ASSERT(length_ == lmi::ssize(use_sep_));
     LMI_ASSERT(length_ == lmi::ssize(use_flr_));
     LMI_ASSERT(length_ == lmi::ssize(use_vlr_));
+
+    LMI_ASSERT(each_equal(++Cgen_.begin(), Cgen_.end(), 0.0));
+    LMI_ASSERT(each_equal(++Csep_.begin(), Csep_.end(), 0.0));
+    LMI_ASSERT(each_equal(++Cflr_.begin(), Cflr_.end(), 0.0));
+    LMI_ASSERT(each_equal(++Cvlr_.begin(), Cvlr_.end(), 0.0));
 }
 
 void i7702::initialize()
