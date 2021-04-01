@@ -85,8 +85,7 @@ i7702::i7702
     std::vector<double> fixed_loan_rate;
     database.query_into(DB_FixedLoanRate, fixed_loan_rate);
     // This isn't the actual rate--lmi doesn't yet implement VLR.
-    std::vector<double> variable_loan_rate;
-    database.query_into(DB_MaxVlrRate, variable_loan_rate);
+    std::vector<double> variable_loan_rate(length_, 0.03);
     std::vector<double> guar_loan_spread;
     database.query_into(DB_GuarRegLoanSpread, guar_loan_spread);
     assign(Bflr_, fixed_loan_rate    - guar_loan_spread);
