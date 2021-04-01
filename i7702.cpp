@@ -95,6 +95,7 @@
 /// C: initial short-term guarantees--ignored for GLP only
 ///   "extending no more than one year" (DEFRA Blue Book, page 649)
 ///   a vector for convenience, uniformly zero after the issue year
+///   expressed as the total floor rate, not as an increment
 ///   usually altogether avoided by careful product design
 ///
 /// D: asset-based charges

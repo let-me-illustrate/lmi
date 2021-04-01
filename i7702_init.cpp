@@ -104,6 +104,23 @@ i7702::i7702
     database.query_into(DB_ShortTermIntGuar7702, Cgen_);
     Csep_ = Cgen_;
 
+    // 'C' is a total, not an increment. Thus, a guarantee to credit
+    // at least 5% in the first year could be represented as 0.05 in
+    // DB_ShortTermIntGuar7702. But a first-year "bonus" of 1% that is
+    // guaranteed not to change before the first anniversary is an
+    // increment that must be added to 'B'; if 'B' is 3.5%, then 'C'
+    // would be 4.5% in the issue year and zero thereafter. A longer-
+    // duration guaranteed "bonus" would affect 'B' directly. Unique
+    // varieties of interest guarantees might require special coding.
+
+    std::vector<double> general_account_interest_bonus;
+    database.query_into(DB_GenAcctIntBonus, general_account_interest_bonus);
+    if(0.0 != general_account_interest_bonus[0])
+        {
+        double initial_floor = Bgen_[0] + general_account_interest_bonus[0];
+        Cgen_[0] = std::max(Cgen_[0], initial_floor);
+        }
+
     database.query_into(DB_CurrSepAcctLoad, Dsep_);
     Dsep_ += stratified.minimum_tiered_sepacct_load_for_7702();
 
