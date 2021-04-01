@@ -39,13 +39,18 @@ class i7702_test
         }
 
   private:
+    static i7702 bland0();
+    static i7702 bland1();
+
     static void test0();
     static void test1();
 };
 
-void i7702_test::test0()
+/// Bland initial values, not varying by duration; Em rounded down.
+
+i7702 i7702_test::bland0()
 {
-    i7702 z
+    return
         {1           // length
         ,0.04        // A0
         ,0.06        // A1
@@ -67,6 +72,11 @@ void i7702_test::test0()
         ,{1.0}       // use_flr
         ,{1.0}       // use_vlr
         };
+}
+
+void i7702_test::test0()
+{
+    i7702 z {bland0()};
     LMI_TEST(materially_equal(0.0032737, z.ig_usual()[0], 0.0000125));
     LMI_TEST(materially_equal(0.00327373978219886374239, z.ig_usual()[0]));
 
@@ -80,9 +90,12 @@ void i7702_test::test0()
 //  x = std::move(y); // operator=(i7702&&)      implicitly deleted
 }
 
-void i7702_test::test1()
+/// Bland initial values, varying by duration; Em rounded up.
+/// (Cgen[0] is not bland)
+
+i7702 i7702_test::bland1()
 {
-    i7702 z
+    return
         {2                      // length
         ,0.04                   // A0
         ,0.06                   // A1
@@ -104,6 +117,11 @@ void i7702_test::test1()
         ,{1.0      , 1.0      } // use_flr
         ,{1.0      , 1.0      } // use_vlr
         };
+}
+
+void i7702_test::test1()
+{
+    i7702 z {bland1()};
     LMI_TEST(materially_equal(0.00407412378364830143895, z.ig_usual()[0]));
     LMI_TEST(materially_equal(0.0032738                , z.ig_usual()[1]));
     std::cout<< std::setprecision(DECIMAL_DIG) << z.ig_usual()[0] << std::endl;
