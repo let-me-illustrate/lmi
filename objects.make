@@ -690,6 +690,7 @@ i7702_test$(EXEEXT): \
   $(common_test_objects) \
   i7702.o \
   i7702_test.o \
+  timer.o \
 
 ieee754_test$(EXEEXT): \
   $(common_test_objects) \

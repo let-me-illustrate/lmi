@@ -25,6 +25,7 @@
 
 #include "materially_equal.hpp"
 #include "test_tools.hpp"
+#include "timer.hpp"
 
 class i7702_test
 {
@@ -33,17 +34,24 @@ class i7702_test
         {
         test0();
         test1();
+        assay_speed();
         }
 
   private:
     static i7702 bland0();
     static i7702 bland1();
+    static i7702 bland99();
 
     static void test0();
     static void test1();
+    static void assay_speed();
+
+    static void mete_construct();
+    static void mete_initialize();
+    static void mete_assert();
 };
 
-/// Bland initial values, not varying by duration; Em rounded down.
+/// Bland initial values: a single duration; Em rounded down.
 
 i7702 i7702_test::bland0()
 {
@@ -71,7 +79,7 @@ i7702 i7702_test::bland0()
         };
 }
 
-/// Bland initial values, varying by duration; Em rounded up.
+/// Bland initial values: two durations; Em rounded up.
 
 i7702 i7702_test::bland1()
 {
@@ -97,6 +105,35 @@ i7702 i7702_test::bland1()
         ,{1.0      , 1.0      } // use_flr
         ,{1.0      , 1.0      } // use_vlr
         };
+}
+
+/// Bland initial values: ninety-nine durations; Em rounded up.
+
+i7702 i7702_test::bland99()
+{
+    constexpr int length {99};
+    return i7702
+        (length                // length
+        ,0.04                  // A0
+        ,0.06                  // A1
+        ,std::vector<double>(length, 0.03     ) // Bgen
+        ,std::vector<double>(length, 0.00     ) // Bsep
+        ,std::vector<double>(length, 0.02     ) // Bflr
+        ,std::vector<double>(length, 0.02     ) // Bvlr
+        ,std::vector<double>(length, 0.00     ) // Cgen
+        ,std::vector<double>(length, 0.00     ) // Csep
+        ,std::vector<double>(length, 0.00     ) // Cflr
+        ,std::vector<double>(length, 0.00     ) // Cvlr
+        ,std::vector<double>(length, 0.00     ) // Dgen
+        ,std::vector<double>(length, 0.00     ) // Dsep
+        ,std::vector<double>(length, 0.00     ) // Dflr
+        ,std::vector<double>(length, 0.00     ) // Dvlr
+        ,std::vector<double>(length, 0.0032738) // Em
+        ,std::vector<double>(length, 1.0      ) // use_gen
+        ,std::vector<double>(length, 1.0      ) // use_sep
+        ,std::vector<double>(length, 1.0      ) // use_flr
+        ,std::vector<double>(length, 1.0      ) // use_vlr
+        );
 }
 
 void i7702_test::test0()
@@ -125,6 +162,34 @@ void i7702_test::test1()
     z.initialize();
     LMI_TEST(materially_equal(0.00407412378364830143895, z.ig_usual()[0]));
     LMI_TEST(materially_equal(0.0032738                , z.ig_usual()[1]));
+}
+
+void i7702_test::assay_speed()
+{
+    std::cout
+        << "\n  Speed tests..."
+        << "\n  Construct : " << TimeAnAliquot(mete_construct)
+        << "\n  Initialize: " << TimeAnAliquot(mete_initialize)
+        << "\n  Assert    : " << TimeAnAliquot(mete_assert)
+        << std::endl
+        ;
+}
+
+void i7702_test::mete_construct()
+{
+    i7702 z {bland99()};
+}
+
+void i7702_test::mete_initialize()
+{
+    static i7702 z {bland99()};
+    z.initialize();
+}
+
+void i7702_test::mete_assert()
+{
+    static i7702 z {bland99()};
+    z.assert_preconditions();
 }
 
 int test_main(int, char*[])
