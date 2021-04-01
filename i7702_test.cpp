@@ -91,7 +91,6 @@ void i7702_test::test0()
 }
 
 /// Bland initial values, varying by duration; Em rounded up.
-/// (Cgen[0] is not bland)
 
 i7702 i7702_test::bland1()
 {
@@ -103,7 +102,7 @@ i7702 i7702_test::bland1()
         ,{0.00     , 0.00     } // Bsep
         ,{0.02     , 0.02     } // Bflr
         ,{0.02     , 0.02     } // Bvlr
-        ,{0.05     , 0.00     } // Cgen
+        ,{0.00     , 0.00     } // Cgen
         ,{0.00     , 0.00     } // Csep
         ,{0.00     , 0.00     } // Cflr
         ,{0.00     , 0.00     } // Cvlr
@@ -122,11 +121,14 @@ i7702 i7702_test::bland1()
 void i7702_test::test1()
 {
     i7702 z {bland1()};
+    z.Cgen_ = {0.05, 0.00};
+    z.initialize();
     LMI_TEST(materially_equal(0.00407412378364830143895, z.ig_usual()[0]));
     LMI_TEST(materially_equal(0.0032738                , z.ig_usual()[1]));
     std::cout<< std::setprecision(DECIMAL_DIG) << z.ig_usual()[0] << std::endl;
     std::cout<< std::setprecision(DECIMAL_DIG) << z.ig_usual()[1] << std::endl;
 
+    // Test idempotence.
     z.initialize();
     LMI_TEST(materially_equal(0.00407412378364830143895, z.ig_usual()[0]));
     LMI_TEST(materially_equal(0.0032738                , z.ig_usual()[1]));
