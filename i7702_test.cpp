@@ -26,9 +26,6 @@
 #include "materially_equal.hpp"
 #include "test_tools.hpp"
 
-#include <cfloat>                       // DECIMAL_DIG
-#include <iomanip>                      // setprecision()
-
 class i7702_test
 {
   public:
@@ -108,8 +105,6 @@ void i7702_test::test0()
     LMI_TEST(materially_equal(0.0032737, z.ig_usual()[0], 0.0000125));
     LMI_TEST(materially_equal(0.00327373978219886374239, z.ig_usual()[0]));
 
-    std::cout<< std::setprecision(DECIMAL_DIG) << z.ig_usual()[0] << std::endl;
-
     // Class i7702 is copy- and move-constructible, but not assignable
     // because of const data members.
     i7702 x = z;
@@ -125,8 +120,6 @@ void i7702_test::test1()
     z.initialize();
     LMI_TEST(materially_equal(0.00407412378364830143895, z.ig_usual()[0]));
     LMI_TEST(materially_equal(0.0032738                , z.ig_usual()[1]));
-    std::cout<< std::setprecision(DECIMAL_DIG) << z.ig_usual()[0] << std::endl;
-    std::cout<< std::setprecision(DECIMAL_DIG) << z.ig_usual()[1] << std::endl;
 
     // Test idempotence.
     z.initialize();
