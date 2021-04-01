@@ -267,7 +267,7 @@ void i7702::initialize()
 {
     assert_preconditions();
     // max(A0, B, C)
-    ic_usual_ += Max
+    ic_usual_ <<= Max
         (Max
             ((Max(A0_, Max(Bgen_, Cgen_))        ) * use_gen_
             ,(Max(A0_, Max(Bsep_, Csep_))        ) * use_sep_
@@ -278,7 +278,7 @@ void i7702::initialize()
             )
         );
     // max(A0, B   ) - D
-    ic_glp_   += Max
+    ic_glp_   <<= Max
         (Max
             ((Max(A0_,     Bgen_        ) - Dgen_) * use_gen_
             ,(Max(A0_,     Bsep_        ) - Dsep_) * use_sep_
@@ -289,7 +289,7 @@ void i7702::initialize()
             )
         );
     // max(A1, B, C) - D
-    ic_gsp_   += Max
+    ic_gsp_   <<= Max
         (Max
             ((Max(A1_, Max(Bgen_, Cgen_)) - Dgen_) * use_gen_
             ,(Max(A1_, Max(Bsep_, Csep_)) - Dsep_) * use_sep_
@@ -347,9 +347,9 @@ void i7702::initialize()
 
     if(!each_equal(Em_, 0.0))
         {
-        ig_usual_ += Max(ic_usual_, Em_);
-        ig_glp_   += Max(ic_glp_  , Em_);
-        ig_gsp_   += Max(ic_gsp_  , Em_);
+        ig_usual_ <<= Max(ic_usual_, Em_);
+        ig_glp_   <<= Max(ic_glp_  , Em_);
+        ig_gsp_   <<= Max(ic_gsp_  , Em_);
         }
 
     if(trace_)

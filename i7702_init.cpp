@@ -148,12 +148,12 @@ i7702::i7702
 
     database.query_into(DB_NaarDiscount, Em_);
     bool const no_naar_discount = zero == Em_;
-    std::vector<double> theoretical_naar_discount(length_);
-    theoretical_naar_discount +=
+    std::vector<double> theoretical_naar_discount {};
+    theoretical_naar_discount <<=
         apply_unary(i_upper_12_over_12_from_i<double>(), Bgen_);
 
-    std::vector<double> diff(length_);
-    diff += fabs(Em_ - theoretical_naar_discount);
+    std::vector<double> diff {};
+    diff <<= fabs(Em_ - theoretical_naar_discount);
     minmax<double> const mm(diff);
     constexpr double tolerance {0.0000001};
     LMI_ASSERT(no_naar_discount || mm < tolerance);

@@ -126,6 +126,10 @@ void i7702_test::test1()
     LMI_TEST(materially_equal(0.0032738                , z.ig_usual()[1]));
     std::cout<< std::setprecision(DECIMAL_DIG) << z.ig_usual()[0] << std::endl;
     std::cout<< std::setprecision(DECIMAL_DIG) << z.ig_usual()[1] << std::endl;
+
+    z.initialize();
+    LMI_TEST(materially_equal(0.00407412378364830143895, z.ig_usual()[0]));
+    LMI_TEST(materially_equal(0.0032738                , z.ig_usual()[1]));
 }
 
 int test_main(int, char*[])
