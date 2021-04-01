@@ -77,9 +77,8 @@ i7702::i7702
         use_vlr_ = zero;
         }
 
-    // 7702 !! Alternatively, specify A0_ and delta, then calculate A1_?
     A0_ = database.query<double>(DB_AnnIntRate7702);
-    A1_ = 0.02 + A0_;
+    A1_ = A0_ + database.query<double>(DB_AnnIntRateGspDelta);
 
     database.query_into(DB_GuarInt, Bgen_);
 
