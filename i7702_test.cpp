@@ -74,22 +74,6 @@ i7702 i7702_test::bland0()
         };
 }
 
-void i7702_test::test0()
-{
-    i7702 z {bland0()};
-    LMI_TEST(materially_equal(0.0032737, z.ig_usual()[0], 0.0000125));
-    LMI_TEST(materially_equal(0.00327373978219886374239, z.ig_usual()[0]));
-
-    std::cout<< std::setprecision(DECIMAL_DIG) << z.ig_usual()[0] << std::endl;
-
-    // Class i7702 is copy- and move-constructible, but not assignable
-    // because of const data members.
-    i7702 x = z;
-    i7702 y = std::move(z);
-//  x = y;            // operator=(i7702 const&) implicitly deleted
-//  x = std::move(y); // operator=(i7702&&)      implicitly deleted
-}
-
 /// Bland initial values, varying by duration; Em rounded up.
 
 i7702 i7702_test::bland1()
@@ -116,6 +100,22 @@ i7702 i7702_test::bland1()
         ,{1.0      , 1.0      } // use_flr
         ,{1.0      , 1.0      } // use_vlr
         };
+}
+
+void i7702_test::test0()
+{
+    i7702 z {bland0()};
+    LMI_TEST(materially_equal(0.0032737, z.ig_usual()[0], 0.0000125));
+    LMI_TEST(materially_equal(0.00327373978219886374239, z.ig_usual()[0]));
+
+    std::cout<< std::setprecision(DECIMAL_DIG) << z.ig_usual()[0] << std::endl;
+
+    // Class i7702 is copy- and move-constructible, but not assignable
+    // because of const data members.
+    i7702 x = z;
+    i7702 y = std::move(z);
+//  x = y;            // operator=(i7702 const&) implicitly deleted
+//  x = std::move(y); // operator=(i7702&&)      implicitly deleted
 }
 
 void i7702_test::test1()
