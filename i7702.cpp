@@ -249,6 +249,13 @@ void i7702::assert_preconditions()
     LMI_ASSERT(length_ == lmi::ssize(use_flr_));
     LMI_ASSERT(length_ == lmi::ssize(use_vlr_));
 
+    // These must all be boolean, and not all false in any year.
+    LMI_ASSERT(AllOf(EqualTo(true, use_gen_) || EqualTo(false, use_gen_)));
+    LMI_ASSERT(AllOf(EqualTo(true, use_sep_) || EqualTo(false, use_sep_)));
+    LMI_ASSERT(AllOf(EqualTo(true, use_flr_) || EqualTo(false, use_flr_)));
+    LMI_ASSERT(AllOf(EqualTo(true, use_vlr_) || EqualTo(false, use_vlr_)));
+    LMI_ASSERT(AllOf(use_gen_ || use_sep_ || use_flr_ || use_vlr_));
+
     LMI_ASSERT(each_equal(++Cgen_.begin(), Cgen_.end(), 0.0));
     LMI_ASSERT(each_equal(++Csep_.begin(), Csep_.end(), 0.0));
     LMI_ASSERT(each_equal(++Cflr_.begin(), Cflr_.end(), 0.0));

@@ -77,9 +77,6 @@ i7702::i7702
         use_vlr_ = zero;
         }
 
-    // 7702 !! Assert that all use_* are boolean.
-    // 7702 !! Assert (use_gen_ || use_sep_) for each duration.
-
     // 7702 !! Alternatively, specify A0_ and delta, then calculate A1_?
     A0_ = database.query<double>(DB_AnnIntRate7702);
     A1_ = 0.02 + A0_;
