@@ -625,24 +625,8 @@ void gpt_test::assay_speed()
 
 void gpt_test::test_ancient()
 {
-// TAXATION !! TODO ?? This should be a separate, standalone unit test.
-#if 0
-
-#include "ihs_timer.hpp"
-
-#include <iomanip>
-#include <iostream>
-
-int main()
-{
-// TAXATION !! Update or remove these timings.
-// timing to construct Irc7702:
-// RW: about 37 msec
-// OS: about 93 msec; about 41 if we disable index checking
-//   in std::vector operator[]()
-
 // SOA table 120: "1980 CSO 50% Male Age nearest"
-    std::vector<double>q
+    static std::vector<double> const q
         {
          .00354,.00097,.00091,.00089,.00085,.00083,.00079,.00077,.00073,.00072,
          .00071,.00072,.00078,.00087,.00097,.00110,.00121,.00131,.00139,.00144,
@@ -655,33 +639,69 @@ int main()
          .07907,.08680,.09568,.10581,.11702,.12911,.14191,.15541,.16955,.18445,
          .20023,.21723,.23591,.25743,.28381,.32074,.37793,.47661,.65644,1.0000,
         };
+    static std::vector<double> const q_m(a_to_m(q));
 
-    std::vector<double>i            (100, 0.07);
-    std::vector<double>LoadTgt      (100, 0.05);
-    std::vector<double>MlyChgSpecAmt(100, 0.00);
-    std::vector<double>MlyChgADD    (100, 0.00);
-    std::vector<double>PolFee       (100, 5.00);
+    int const issue_age = 0;
+    int const length = lmi::ssize(q_m);
+
+    double constexpr iglp = 0.04;
+    double constexpr igsp = 0.06;
+    static double const i12glp = i_upper_12_over_12_from_i<double>()(iglp);
+    static double const i12gsp = i_upper_12_over_12_from_i<double>()(igsp);
+    std::vector<double> glp_ic(length, i12glp);
+    std::vector<double> gsp_ic(length, i12gsp);
+    std::vector<double> glp_ig(length, i12glp);
+    std::vector<double> gsp_ig(length, i12gsp);
+
+    std::vector<double> policy_fee_annual    (length, 37.0     );
+    std::vector<double> policy_fee_monthly   (length,  5.0     );
+    std::vector<double> specamt_load_monthly (length,  0.000007);
+    std::vector<double> qab_adb_rate         (length,  0.000013);
+    std::vector<double> prem_load_target     (length,  0.03    );
+    std::vector<double> prem_load_excess     (length,  0.02    );
 
     Timer timer;
 
+  for(int i = 0; i < 1000; ++i)
+    {
     Irc7702* Irc7702_ = ::new Irc7702
-        (CVAT
-        ,45
-        ,100000.0
-        ,Option1
-        ,q
-        ,i
-        ,LoadTgt
-        ,MlyChgSpecAmt
-        ,10000000.0
-        ,MlyChgADD
-        ,10000000.0
-        ,PolFee
+        (mce_gpt                         // a_Test7702
+        ,issue_age                       // a_IssueAge
+        ,100                             // a_EndtAge
+        ,q_m                             // a_Qc
+        ,glp_ic                          // ic_glp
+        ,gsp_ic                          // ic_gsp
+        ,glp_ig                          // ig_glp
+        ,gsp_ig                          // ig_gsp
+        ,1000000.0                       // a_PresentBftAmt
+        ,1000000.0                       // a_PresentSpecAmt
+        ,1000000.0                       // a_LeastBftAmtEver
+        ,mce_option1_for_7702            // a_PresentDBOpt
+        ,policy_fee_annual               // a_AnnChgPol
+        ,policy_fee_monthly              // a_MlyChgPol
+        ,specamt_load_monthly            // a_MlyChgSpecAmt
+        ,1000000000.0                    // a_SpecAmtLoadLimit [in effect, no limit]
+        ,qab_adb_rate                    // a_MlyChgADD
+        ,1000000000.0                    // a_ADDLimit [in effect, no limit]
+        ,prem_load_target                // a_LoadTgt
+        ,prem_load_excess                // a_LoadExc
+        ,1000.0                          // a_TargetPremium
+        ,round_to<double>(2, r_upward)   // a_round_min_premium
+        ,round_to<double>(2, r_downward) // a_round_max_premium
+        ,round_to<double>(0, r_upward)   // a_round_min_specamt
+        ,round_to<double>(0, r_downward) // a_round_max_specamt
+        ,0                               // a_InforceYear
+        ,0                               // a_InforceMonth
+        ,0.0                             // a_InforceGLP
+        ,0.0                             // a_InforceCumGLP
+        ,0.0                             // a_InforceGSP
+        ,0.0                             // a_InforceCumPremsPaid
         );
-    std::cout << timer.stop().elapsed_msec_str();
+    Irc7702_->Initialize7702(1000000.0, 1000000.0, mce_option1_for_7702, 1000.0);
     delete Irc7702_;
-}
-#endif // 0
+    }
+
+    std::cout << timer.stop().elapsed_msec_str();
 }
 
 int test_main(int, char*[])
