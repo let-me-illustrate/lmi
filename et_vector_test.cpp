@@ -26,6 +26,68 @@
 #include "timer.hpp"
 
 #include <functional>                   // multiplies(), negate(), plus()
+#include <limits>
+#include <vector>
+
+// There can be no volatile standard container.
+static std::vector<int>        iv0
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    ,0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    ,0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    ,0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    ,0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    };
+static std::vector<int> const  iv1
+    {0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+    ,0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+    ,0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+    ,0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+    ,0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+    };
+
+// Copied from "miscellany.hpp", and renamed.
+template<typename RangeExpression, typename T>
+bool each_equal_cplusplus(RangeExpression const& range, T const& t)
+{
+    for(auto const& i : range)
+        {
+        if(t != i) return false;
+        }
+    return true;
+}
+
+template<typename T>
+bool each_equal_pete(std::vector<T> v, T t)
+{
+    return AllOf(EqualTo(v, t));
+}
+
+void test_each_equal()
+{
+    // Test with containers.
+
+    LMI_TEST( each_equal_cplusplus(iv0, 0));
+    LMI_TEST(!each_equal_cplusplus(iv1, 0));
+
+    LMI_TEST( each_equal_pete(iv0, 0));
+    LMI_TEST(!each_equal_pete(iv1, 0));
+
+    // By arbitrary definition, any value compares equal to an empty
+    // range.
+
+    std::vector<int> vi_empty;
+    LMI_TEST( each_equal_cplusplus(vi_empty, 23456));
+    LMI_TEST( each_equal_pete     (vi_empty, 23456));
+
+    // That arbitrary definition extends even to qNaN, which doesn't
+    // compare equal to anything--because these tests perform zero
+    // comparisons.
+
+    double const qnan = std::numeric_limits<double>::quiet_NaN();
+    std::vector<double> vd_empty;
+    LMI_TEST( each_equal_cplusplus(vd_empty, qnan));
+    LMI_TEST( each_equal_pete     (vd_empty, qnan));
+}
 
 // A vector of boolean values, represented as double, such as
 // might result from querying lmi's database.
@@ -92,6 +154,22 @@ bool mete_eq1x()
     return !AnyOf(UnequalTo(true, bit_valued) && UnequalTo(false, bit_valued));
 }
 
+bool mete_eq2s()
+{
+    return
+            each_equal_cplusplus(iv0, 0)
+        && !each_equal_cplusplus(iv1, 0)
+        ;
+}
+
+bool mete_eq2t()
+{
+    return
+            each_equal_pete(iv0, 0)
+        && !each_equal_pete(iv1, 0)
+        ;
+}
+
 void assay_speed()
 {
     LMI_TEST_EQUAL(true, mete_eq0a());
@@ -101,6 +179,8 @@ void assay_speed()
     LMI_TEST_EQUAL(true, mete_eq1b());
     LMI_TEST_EQUAL(true, mete_eq1c());
     LMI_TEST_EQUAL(true, mete_eq1x());
+    LMI_TEST_EQUAL(true, mete_eq2s());
+    LMI_TEST_EQUAL(true, mete_eq2t());
     std::cout << "Speed tests:\n";
     std::cout << "  mete_eq0a " << TimeAnAliquot(mete_eq0a) << '\n';
     std::cout << "  mete_eq0b " << TimeAnAliquot(mete_eq0b) << '\n';
@@ -109,6 +189,8 @@ void assay_speed()
     std::cout << "  mete_eq1b " << TimeAnAliquot(mete_eq1b) << '\n';
     std::cout << "  mete_eq1c " << TimeAnAliquot(mete_eq1c) << '\n';
     std::cout << "  mete_eq1x " << TimeAnAliquot(mete_eq1x) << '\n';
+    std::cout << "  mete_eq2s " << TimeAnAliquot(mete_eq2s) << '\n';
+    std::cout << "  mete_eq2t " << TimeAnAliquot(mete_eq2t) << '\n';
 }
 
 int test_main(int, char*[])
@@ -301,6 +383,8 @@ int test_main(int, char*[])
     LMI_TEST_EQUAL(false, AllOf(EqualTo(true, v3) || EqualTo(false, v3)));
     LMI_TEST_EQUAL(false, AllOf(EqualTo(true, v4) || EqualTo(false, v4)));
     }
+
+    test_each_equal();
 
     assay_speed();
 
