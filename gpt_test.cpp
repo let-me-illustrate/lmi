@@ -660,11 +660,7 @@ void gpt_test::test_ancient()
     std::vector<double> prem_load_target     (length,  0.03    );
     std::vector<double> prem_load_excess     (length,  0.02    );
 
-    Timer timer;
-
-  for(int i = 0; i < 1000; ++i)
-    {
-    Irc7702* Irc7702_ = ::new Irc7702
+    Irc7702 z
         (mce_gpt                         // a_Test7702
         ,issue_age                       // a_IssueAge
         ,100                             // a_EndtAge
@@ -697,11 +693,7 @@ void gpt_test::test_ancient()
         ,0.0                             // a_InforceGSP
         ,0.0                             // a_InforceCumPremsPaid
         );
-    Irc7702_->Initialize7702(1000000.0, 1000000.0, mce_option1_for_7702, 1000.0);
-    delete Irc7702_;
-    }
-
-    std::cout << timer.stop().elapsed_msec_str();
+    z.Initialize7702(1000000.0, 1000000.0, mce_option1_for_7702, 1000.0);
 }
 
 int test_main(int, char*[])
