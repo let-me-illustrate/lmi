@@ -768,9 +768,6 @@ double Irc7702::CalculatePremium
         +   std::min(ADDLimit, a_SpecAmt) * PvChgADD[a_EIOBasis][a_Year]
         +   a_BftAmt * PvChgMort[a_EIOBasis][a_Year]
         +       a_TargetPremium
-        // TAXATION !! Is this right? '7702.html' [14.3/5] says:
-        // + TgtPrem[t] * (LoadTgt[t] - LoadExc[t]) * aD[t]
-        // so perhaps the sign has been reversed.
             *   (a_NetPmtFactorExc - a_NetPmtFactorTgt)
         )
         /
