@@ -205,6 +205,7 @@ class gpt_test
         test_premium_calculations();
         assay_speed();
         test_spreadsheet_0();
+        test_spreadsheet_1();
         }
 
   private:
@@ -212,6 +213,7 @@ class gpt_test
     static void test_premium_calculations();
     static void assay_speed();
     static void test_spreadsheet_0();
+    static void test_spreadsheet_1();
 
     static void initialize(int issue_age);
     static gpt_vector_parms v_parms();
@@ -699,6 +701,104 @@ void gpt_test::test_spreadsheet_0()
     // Values from spreadsheet:
     LMI_TEST(materially_equal(z.glp(),  1904.493514901175558));
     LMI_TEST(materially_equal(z.gsp(), 28315.163540363901120));
+}
+
+/// Validate GLP and GSP with loads, using spreadsheet.
+///
+/// URL:
+///   https://download.savannah.gnu.org/releases/lmi/validate_commfns.xls
+///
+/// Change spreadsheet input to match parameters below.
+///
+/// Touchstone values hardcoded below are from 'gnumeric'.
+
+void gpt_test::test_spreadsheet_1()
+{
+    int const issue_age = 0;
+    // SOA table 00042 1980 CSO Ult ANB Male Unismoke
+    static std::vector<double> const q_m {sample_q(issue_age)};
+    int const length = lmi::ssize(q_m);
+
+    double constexpr iglp = 0.04;
+    double constexpr igsp = 0.06;
+    static double const i12glp = i_upper_12_over_12_from_i<double>()(iglp);
+    static double const i12gsp = i_upper_12_over_12_from_i<double>()(igsp);
+    std::vector<double> const glp_ic(length, i12glp);
+    std::vector<double> const gsp_ic(length, i12gsp);
+    std::vector<double> const glp_ig(length, i12glp);
+    std::vector<double> const gsp_ig(length, i12gsp);
+
+    std::vector<double> const policy_fee_annual    (length, 0.0);
+    std::vector<double> const policy_fee_monthly   (length, 0.0);
+    std::vector<double> const specamt_load_monthly (length, 0.0);
+    std::vector<double> const qab_adb_rate         (length, 0.0);
+    std::vector<double> const prem_load_target     (length, 0.03);
+    std::vector<double> const prem_load_excess     (length, 0.02);
+
+    Irc7702 z
+        (mce_gpt                         // a_Test7702
+        ,issue_age                       // a_IssueAge
+        ,100                             // a_EndtAge
+        ,q_m                             // a_Qc
+        ,glp_ic                          // ic_glp
+        ,gsp_ic                          // ic_gsp
+        ,glp_ig                          // ig_glp
+        ,gsp_ig                          // ig_gsp
+        ,1000000.0                       // a_PresentBftAmt
+        ,1000000.0                       // a_PresentSpecAmt
+        ,1000000.0                       // a_LeastBftAmtEver
+        ,mce_option1_for_7702            // a_PresentDBOpt
+        ,policy_fee_annual               // a_AnnChgPol
+        ,policy_fee_monthly              // a_MlyChgPol
+        ,specamt_load_monthly            // a_MlyChgSpecAmt
+        ,1000000000.0                    // a_SpecAmtLoadLimit [in effect, no limit]
+        ,qab_adb_rate                    // a_MlyChgADD
+        ,1000000000.0                    // a_ADDLimit [in effect, no limit]
+        ,prem_load_target                // a_LoadTgt
+        ,prem_load_excess                // a_LoadExc
+        ,1000000.0                       // a_TargetPremium
+        ,round_to<double>(2, r_upward)   // a_round_min_premium
+        ,round_to<double>(2, r_downward) // a_round_max_premium
+        ,round_to<double>(0, r_upward)   // a_round_min_specamt
+        ,round_to<double>(0, r_downward) // a_round_max_specamt
+        ,0                               // a_InforceYear
+        ,0                               // a_InforceMonth
+        ,0.0                             // a_InforceGLP
+        ,0.0                             // a_InforceCumGLP
+        ,0.0                             // a_InforceGSP
+        ,0.0                             // a_InforceCumPremsPaid
+        );
+
+    // Premiums are entirely below target
+
+    z.Initialize7702(1000000.0, 1000000.0, mce_option2_for_7702, 1000000.0);
+    LMI_TEST(materially_equal(z.glp(), 11955.413819459399747));
+
+    z.Initialize7702(1000000.0, 1000000.0, mce_option1_for_7702, 1000000.0);
+    LMI_TEST(materially_equal(z.glp(),  3764.225024952573222));
+    LMI_TEST(materially_equal(z.gsp(), 39318.938479289383395));
+
+    // Premiums are entirely above target
+
+    z.Initialize7702(1000000.0, 1000000.0, mce_option2_for_7702, 0.0);
+    LMI_TEST(materially_equal(z.glp(), 11833.419800893485444));
+
+    z.Initialize7702(1000000.0, 1000000.0, mce_option1_for_7702, 0.0);
+    LMI_TEST(materially_equal(z.glp(),  3725.814565514281639));
+    LMI_TEST(materially_equal(z.gsp(), 38917.724821337447793));
+
+    // Premiums are partly below target, and partly above
+    //
+    // The difference between the preceding and following sets of
+    // three premiums is a constant 10.204081632653, representing the
+    // value of the load difference on the first (constant) $1000.
+
+    z.Initialize7702(1000000.0, 1000000.0, mce_option2_for_7702, 1000.0);
+    LMI_TEST(materially_equal(z.glp(), 11843.623882526138914));
+
+    z.Initialize7702(1000000.0, 1000000.0, mce_option1_for_7702, 1000.0);
+    LMI_TEST(materially_equal(z.glp(),  3736.018647146934200));
+    LMI_TEST(materially_equal(z.gsp(), 38927.928902970103081));
 }
 
 int test_main(int, char*[])
