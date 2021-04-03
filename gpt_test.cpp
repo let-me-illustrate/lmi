@@ -176,10 +176,6 @@ double const touchstone[100][3] =
         ,{111221.7271446342 , 112671.1356520957  , 228328.2710683905   } // 99
     };
 
-// These could be made static members of class gpt_test, but this way
-// is more convenient; see also:
-//   https://www.securecoding.cert.org/confluence/display/cplusplus/MSC22-CPP.+Do+not+define+static+private+members
-
 std::vector<double> q_m                  ;
 std::vector<double> glp_ic               ;
 std::vector<double> glp_ig               ;
