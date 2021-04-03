@@ -204,14 +204,14 @@ class gpt_test
         test_preconditions();
         test_premium_calculations();
         assay_speed();
-        test_ancient();
+        test_spreadsheet_0();
         }
 
   private:
     static void test_preconditions();
     static void test_premium_calculations();
     static void assay_speed();
-    static void test_ancient();
+    static void test_spreadsheet_0();
 
     static void initialize(int issue_age);
     static gpt_vector_parms v_parms();
@@ -623,42 +623,38 @@ void gpt_test::assay_speed()
         ;
 }
 
-void gpt_test::test_ancient()
-{
-// SOA table 120: "1980 CSO 50% Male Age nearest"
-    static std::vector<double> const q
-        {
-         .00354,.00097,.00091,.00089,.00085,.00083,.00079,.00077,.00073,.00072,
-         .00071,.00072,.00078,.00087,.00097,.00110,.00121,.00131,.00139,.00144,
-         .00148,.00149,.00150,.00149,.00149,.00147,.00147,.00146,.00148,.00151,
-         .00154,.00158,.00164,.00170,.00179,.00188,.00200,.00214,.00231,.00251,
-         .00272,.00297,.00322,.00349,.00375,.00406,.00436,.00468,.00503,.00541,
-         .00583,.00630,.00682,.00742,.00807,.00877,.00950,.01023,.01099,.01181,
-         .01271,.01375,.01496,.01639,.01802,.01978,.02164,.02359,.02558,.02773,
-         .03016,.03296,.03629,.04020,.04466,.04955,.05480,.06031,.06606,.07223,
-         .07907,.08680,.09568,.10581,.11702,.12911,.14191,.15541,.16955,.18445,
-         .20023,.21723,.23591,.25743,.28381,.32074,.37793,.47661,.65644,1.0000,
-        };
-    static std::vector<double> const q_m(a_to_m(q));
+/// Validate GLP and GSP using spreadsheet 'validate_commfns.xls'.
+///
+/// URL:
+///   https://download.savannah.gnu.org/releases/lmi/validate_commfns.xls
+///
+/// Change spreadsheet input "EndtBft" in cell $C$6 to 1,000,000
+/// because the GPT class requires it not to exceed the spec amt.
+///
+/// Touchstone values hardcoded below are from 'gnumeric'.
 
+void gpt_test::test_spreadsheet_0()
+{
     int const issue_age = 0;
+    // SOA table 00042 1980 CSO Ult ANB Male Unismoke
+    static std::vector<double> const q_m {sample_q(issue_age)};
     int const length = lmi::ssize(q_m);
 
-    double constexpr iglp = 0.04;
-    double constexpr igsp = 0.06;
-    static double const i12glp = i_upper_12_over_12_from_i<double>()(iglp);
-    static double const i12gsp = i_upper_12_over_12_from_i<double>()(igsp);
-    std::vector<double> glp_ic(length, i12glp);
-    std::vector<double> gsp_ic(length, i12gsp);
-    std::vector<double> glp_ig(length, i12glp);
-    std::vector<double> gsp_ig(length, i12gsp);
+    double constexpr ic = 0.07;
+    double constexpr ig = 0.03;
+    static double const i12c = i_upper_12_over_12_from_i<double>()(ic);
+    static double const i12g = i_upper_12_over_12_from_i<double>()(ig);
+    std::vector<double> const glp_ic(length, i12c);
+    std::vector<double> const gsp_ic(length, i12c);
+    std::vector<double> const glp_ig(length, i12g);
+    std::vector<double> const gsp_ig(length, i12g);
 
-    std::vector<double> policy_fee_annual    (length, 37.0     );
-    std::vector<double> policy_fee_monthly   (length,  5.0     );
-    std::vector<double> specamt_load_monthly (length,  0.000007);
-    std::vector<double> qab_adb_rate         (length,  0.000013);
-    std::vector<double> prem_load_target     (length,  0.03    );
-    std::vector<double> prem_load_excess     (length,  0.02    );
+    std::vector<double> const policy_fee_annual    (length, 0.0);
+    std::vector<double> const policy_fee_monthly   (length, 0.0);
+    std::vector<double> const specamt_load_monthly (length, 0.0);
+    std::vector<double> const qab_adb_rate         (length, 0.0);
+    std::vector<double> const prem_load_target     (length, 0.0);
+    std::vector<double> const prem_load_excess     (length, 0.0);
 
     Irc7702 z
         (mce_gpt                         // a_Test7702
@@ -672,7 +668,7 @@ void gpt_test::test_ancient()
         ,1000000.0                       // a_PresentBftAmt
         ,1000000.0                       // a_PresentSpecAmt
         ,1000000.0                       // a_LeastBftAmtEver
-        ,mce_option1_for_7702            // a_PresentDBOpt
+        ,mce_option2_for_7702            // a_PresentDBOpt
         ,policy_fee_annual               // a_AnnChgPol
         ,policy_fee_monthly              // a_MlyChgPol
         ,specamt_load_monthly            // a_MlyChgSpecAmt
@@ -681,7 +677,7 @@ void gpt_test::test_ancient()
         ,1000000000.0                    // a_ADDLimit [in effect, no limit]
         ,prem_load_target                // a_LoadTgt
         ,prem_load_excess                // a_LoadExc
-        ,1000.0                          // a_TargetPremium
+        ,1000000.0                       // a_TargetPremium
         ,round_to<double>(2, r_upward)   // a_round_min_premium
         ,round_to<double>(2, r_downward) // a_round_max_premium
         ,round_to<double>(0, r_upward)   // a_round_min_specamt
@@ -693,7 +689,16 @@ void gpt_test::test_ancient()
         ,0.0                             // a_InforceGSP
         ,0.0                             // a_InforceCumPremsPaid
         );
-    z.Initialize7702(1000000.0, 1000000.0, mce_option1_for_7702, 1000.0);
+
+    z.Initialize7702(1000000.0, 1000000.0, mce_option2_for_7702, 1000000.0);
+    // Value from spreadsheet (GLP only because GSP always uses DBO 1):
+    LMI_TEST(materially_equal(z.glp(),  2943.454581820987187));
+
+    // Also test DBO 1 (change "DBO" in cell $C$3):
+    z.Initialize7702(1000000.0, 1000000.0, mce_option1_for_7702, 1000000.0);
+    // Values from spreadsheet:
+    LMI_TEST(materially_equal(z.glp(),  1904.493514901175558));
+    LMI_TEST(materially_equal(z.gsp(), 28315.163540363901120));
 }
 
 int test_main(int, char*[])
