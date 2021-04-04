@@ -130,7 +130,7 @@ i7702::i7702
     //   [0V + P - Q(1/(1 + ig) - OV - P)] (1 + ic) = 1V
     // where it is the monthly (i upper 12 over 12) equivalent of
     // the annual 'Bgen_' rate above. Specifying a discount based on
-    // any other rate is presumably an error.
+    // any other rate is presumably a product-design error.
     //
     // In lmi's product database, DB_GuarInt is i. DB_NaarDiscount is
     // (i upper 12)/12, rounded iff the contract specifies a rounded

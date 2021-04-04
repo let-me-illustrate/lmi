@@ -152,8 +152,8 @@
 /// such charges on asset or premium tiers, which D cannot do.
 ///
 /// For contracts that require an irrevocable choice, before delivery,
-/// between a fixed and a variable loan rate, the path not chosen need
-/// not be considered.
+/// between a fixed and a variable loan rate, the loan path not chosen
+/// need not be considered (but lmi doesn't yet implement VLR).
 ///
 /// Idea not implemented: optionally set all ig* equal to E. The SOA
 /// textbook (page 52) supports treating it as "a contractual element
@@ -162,18 +162,6 @@
 /// interpretation, which most often produces materially the same
 /// result. If a contract specifies E as the monthly equivalent of
 /// any rate other than Bgen, that's presumably just a mistake.
-///
-/// Present shortcomings of the code in this file:
-///   [first change names to follow scheme above, adding new ones]
-///   implementation is too simplistic:
-///     igross: max(A0, Bmax)
-///     iglp:   max(A0, Bmax) - D
-///     igsp:   max(A1, Bmax) - D
-///     ig:     max(A0, E)
-///   ig problems:
-///     A1 ignored: must reflect +2% for GSP
-///       and that 2% extra should be parameterized
-///     use contractual rates if greater
 
 i7702::i7702
     (int                        length
