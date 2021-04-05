@@ -413,9 +413,6 @@ void gpt_test::test_preconditions()
 
 Irc7702 gpt_test::instantiate_old(int issue_age)
 {
-#if defined LMI_COMO_WITH_MINGW
-    throw "Code that uses this obsolescent class segfaults with como.";
-#else // !defined LMI_COMO_WITH_MINGW
     int const length = lmi::ssize(q_m);
     // The old class recognizes only one QAB: ADB. So that all QABs
     // can be exercised with the new class, use a linear combination
@@ -469,7 +466,6 @@ Irc7702 gpt_test::instantiate_old(int issue_age)
         ,0.0                             // a_InforceGSP
         ,0.0                             // a_InforceCumPremsPaid
         );
-#endif // !defined LMI_COMO_WITH_MINGW
 }
 
 /// Compare {GSP, GLP opt 1, GLP opt 2} for old and new GPT classes.
@@ -483,14 +479,12 @@ void gpt_test::compare_premiums(int issue_age, double target)
 
     gpt_cf_triad const z = instantiate_cf();
 
-#if !defined LMI_COMO_WITH_MINGW
     double const f3bft    = parms.f3bft   ;
     double const endt_bft = parms.endt_bft;
     // This test of the obsolescent class segfaults with como.
     Irc7702 z_old = instantiate_old(issue_age);
     // Set target (the other arguments don't matter here).
     z_old.Initialize7702(f3bft, endt_bft, mce_option1_for_7702, target);
-#endif // !defined LMI_COMO_WITH_MINGW
 
     int const omega = lmi::ssize(sample_q(0));
     LMI_ASSERT(lmi::ssize(qab_waiver_rate) == omega - issue_age);
@@ -500,7 +494,6 @@ void gpt_test::compare_premiums(int issue_age, double target)
         double const r0 = z.calculate_premium(oe_gsp, mce_option1_for_7702, parms);
         double const r1 = z.calculate_premium(oe_glp, mce_option1_for_7702, parms);
         double const r2 = z.calculate_premium(oe_glp, mce_option2_for_7702, parms);
-#if !defined LMI_COMO_WITH_MINGW
         double const r0_old = z_old.CalculateGSP(duration, f3bft, endt_bft, endt_bft                      );
         double const r1_old = z_old.CalculateGLP(duration, f3bft, endt_bft, endt_bft, mce_option1_for_7702);
         double const r2_old = z_old.CalculateGLP(duration, f3bft, endt_bft, endt_bft, mce_option2_for_7702);
@@ -520,7 +513,6 @@ void gpt_test::compare_premiums(int issue_age, double target)
                 << std::endl
                 ;
             }
-#endif // !defined LMI_COMO_WITH_MINGW
         }
 }
 
@@ -611,10 +603,8 @@ void gpt_test::assay_speed()
         << "\n  Init parms: " << TimeAnAliquot(v_parms             )
         << "\n  Triad     : " << TimeAnAliquot(instantiate_cf      )
         << "\n  Prems     : " << TimeAnAliquot(mete_premiums       )
-#if !defined LMI_COMO_WITH_MINGW
         << "\n  Triad old : " << TimeAnAliquot(mete_instantiate_old)
         << "\n  Prems old : " << TimeAnAliquot(mete_premiums_old   )
-#endif // !defined LMI_COMO_WITH_MINGW
         << std::endl
         ;
 }
