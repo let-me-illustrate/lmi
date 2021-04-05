@@ -32,7 +32,6 @@
 
 #include <algorithm>                    // max()
 #include <cmath>                        // fabs()
-#include <functional>                   // bind(), ref()
 #include <iomanip>                      // setw() etc.
 #include <ios>                          // ios_base::fixed()
 #include <vector>
@@ -688,41 +687,15 @@ void assay_speed()
 
     std::vector<double> reserve(q.size());
 
+    auto f0 = [&q, &ic]         {mete_olcf(q, ic);};
+    auto f1 = [&q, &ic, ig]     {mete_ulcf(q, ic, ig);};
+    auto f2 = [&ulcf, &reserve] {mete_reserve(ulcf, reserve);};
     std::cout
-        << "  Speed test: generate ordinary-life commutation functions\n    "
-        << TimeAnAliquot
-            (std::bind
-                (mete_olcf
-                ,q
-                ,ic
-                )
-            )
-        << '\n'
-        ;
-
-    std::cout
-        << "  Speed test: generate UL commutation functions\n    "
-        << TimeAnAliquot
-            (std::bind
-                (mete_ulcf
-                ,q
-                ,ic
-                ,ig
-                )
-            )
-        << '\n'
-        ;
-
-    std::cout
-        << "  Speed test: calculate yearly account values\n    "
-        << TimeAnAliquot
-            (std::bind
-                (mete_reserve
-                ,std::ref(ulcf)
-                ,reserve
-                )
-            )
-        << '\n'
+        << "\n  Speed tests..."
+        << "\n  olcf construct: " << TimeAnAliquot(f0)
+        << "\n  ulcf construct: " << TimeAnAliquot(f1)
+        << "\n  ulcf reserve  : " << TimeAnAliquot(f2)
+        << std::endl
         ;
 }
 
