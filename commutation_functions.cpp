@@ -41,7 +41,8 @@
 ///
 /// SOMEDAY !! Revisit the 'VECTORIZE' alternative with gcc-4.x .
 /// With gcc-3.4.5, it's twenty-five percent slower as measured by the
-/// unit test's mete_olcf().
+/// unit test's mete_olcf(). Update 2021-04: now it's thirty-three
+/// percent slower for both i686 (gcc-8.3) and x86_64 (gcc-10.2).
 
 OLCommFns::OLCommFns
     (std::vector<double> const& q
