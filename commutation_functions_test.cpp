@@ -53,42 +53,6 @@ std::vector<double> const& sample_q()
 }
 } // Unnamed namespace.
 
-void mete_olcf
-    (std::vector<double> const& q
-    ,std::vector<double> const& i
-    )
-{
-    for(int j = 0; j < 100; ++j)
-        {
-        volatile auto z = OLCommFns(q, i);
-        }
-}
-
-void mete_ulcf
-    (std::vector<double> const& q
-    ,std::vector<double> const& ic
-    ,std::vector<double> const& ig
-    )
-{
-    for(int j = 0; j < 100; ++j)
-        {
-        volatile auto z = ULCommFns(q, ic, ig, mce_option1_for_7702, mce_monthly);
-        }
-}
-
-void mete_reserve
-    (ULCommFns const&     ulcf
-    ,std::vector<double>& reserve
-    )
-{
-    for(int j = 0; j < 100; ++j)
-        {
-        volatile double premium = (10.0 * ulcf.aDomega() + ulcf.kM()[0]) / ulcf.aN()[0];
-        reserve <<= premium * ulcf.aD() - ulcf.kC();
-        reserve <<= fwd_sum(reserve) / ulcf.EaD();
-        }
-}
-
 /// Exactly reproduce Table 2 from Eckley's paper.
 ///
 /// Table 2 on pages 25-26 of TSA XXIX uses annual functions, and
@@ -675,6 +639,55 @@ void Test_1980_CSO_Male_ANB()
         ;
 }
 
+/// Test UL commutation functions in extreme cases.
+///
+/// For example, ic and ig can both be zero, and qc may round to zero
+/// for a Frasierized survivorship contract.
+
+void TestLimits()
+{
+    std::vector<double> zero(10, 0.0);
+    ULCommFns ulcf(zero, zero, zero, mce_option1_for_7702, mce_monthly);
+    LMI_TEST_EQUAL(1.0, ulcf.aDomega());
+    LMI_TEST_EQUAL(0.0, ulcf.kC().back());
+}
+
+void mete_olcf
+    (std::vector<double> const& q
+    ,std::vector<double> const& i
+    )
+{
+    for(int j = 0; j < 100; ++j)
+        {
+        volatile auto z = OLCommFns(q, i);
+        }
+}
+
+void mete_ulcf
+    (std::vector<double> const& q
+    ,std::vector<double> const& ic
+    ,std::vector<double> const& ig
+    )
+{
+    for(int j = 0; j < 100; ++j)
+        {
+        volatile auto z = ULCommFns(q, ic, ig, mce_option1_for_7702, mce_monthly);
+        }
+}
+
+void mete_reserve
+    (ULCommFns const&     ulcf
+    ,std::vector<double>& reserve
+    )
+{
+    for(int j = 0; j < 100; ++j)
+        {
+        volatile double premium = (10.0 * ulcf.aDomega() + ulcf.kM()[0]) / ulcf.aN()[0];
+        reserve <<= premium * ulcf.aD() - ulcf.kC();
+        reserve <<= fwd_sum(reserve) / ulcf.EaD();
+        }
+}
+
 void assay_speed()
 {
     std::vector<double> q(sample_q());
@@ -698,19 +711,6 @@ void assay_speed()
         << "\n  ulcf reserve  : " << TimeAnAliquot(f2)
         << std::endl
         ;
-}
-
-/// Test UL commutation functions in extreme cases.
-///
-/// For example, ic and ig can both be zero, and qc may round to zero
-/// for a Frasierized survivorship contract.
-
-void TestLimits()
-{
-    std::vector<double> zero(10, 0.0);
-    ULCommFns ulcf(zero, zero, zero, mce_option1_for_7702, mce_monthly);
-    LMI_TEST_EQUAL(1.0, ulcf.aDomega());
-    LMI_TEST_EQUAL(0.0, ulcf.kC().back());
 }
 
 int test_main(int, char*[])
