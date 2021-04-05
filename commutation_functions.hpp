@@ -39,8 +39,6 @@ class LMI_SO OLCommFns final
         ,std::vector<double> const& a_i
         );
 
-    ~OLCommFns() = default;
-
     double                 Domega() const {return ed.back();}
     std::vector<double> const& ED() const {return ed;}
     std::vector<double> const&  D() const {return  d;}
@@ -49,9 +47,6 @@ class LMI_SO OLCommFns final
     std::vector<double> const&  M() const {return  m;}
 
   private:
-    OLCommFns(OLCommFns const&) = delete;
-    OLCommFns& operator=(OLCommFns const&) = delete;
-
     int Length;
 
     std::vector<double> const& q;
@@ -90,8 +85,6 @@ class LMI_SO ULCommFns final
         ,mcenum_mode                mode
         );
 
-    ~ULCommFns() = default;
-
     double                 aDomega() const {return ead.back();}
     std::vector<double> const& EaD() const {return ead;}
     std::vector<double> const&  aD() const {return  ad;}
@@ -101,9 +94,6 @@ class LMI_SO ULCommFns final
     std::vector<double> const&  kM() const {return  km;}
 
   private:
-    ULCommFns(ULCommFns const&) = delete;
-    ULCommFns& operator=(ULCommFns const&) = delete;
-
     std::vector<double> qc;
     std::vector<double> ic;
     std::vector<double> ig;
