@@ -59,7 +59,10 @@ void mete_olcf
     ,std::vector<double> const& i
     )
 {
-    OLCommFns(q, i);
+    for(int j = 0; j < 100; ++j)
+        {
+        volatile auto z = OLCommFns(q, i);
+        }
 }
 
 void mete_ulcf
@@ -68,7 +71,10 @@ void mete_ulcf
     ,std::vector<double> const& ig
     )
 {
-    ULCommFns(q, ic, ig, mce_option1_for_7702, mce_monthly);
+    for(int j = 0; j < 100; ++j)
+        {
+        volatile auto z = ULCommFns(q, ic, ig, mce_option1_for_7702, mce_monthly);
+        }
 }
 
 void mete_reserve
@@ -76,9 +82,12 @@ void mete_reserve
     ,std::vector<double>& reserve
     )
 {
-    double premium = (10.0 * ulcf.aDomega() + ulcf.kM()[0]) / ulcf.aN()[0];
-    assign(reserve, premium * ulcf.aD() - ulcf.kC());
-    assign(reserve, fwd_sum(reserve) / ulcf.EaD());
+    for(int j = 0; j < 100; ++j)
+        {
+        volatile double premium = (10.0 * ulcf.aDomega() + ulcf.kM()[0]) / ulcf.aN()[0];
+        assign(reserve, premium * ulcf.aD() - ulcf.kC());
+        assign(reserve, fwd_sum(reserve) / ulcf.EaD());
+        }
 }
 
 /// Exactly reproduce Table 2 from Eckley's paper.
