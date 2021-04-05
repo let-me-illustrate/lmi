@@ -85,7 +85,6 @@ class Irc7702 final
         ,double                     a_InforceCumGLP
         ,double                     a_InforceGSP
         ,double                     a_InforceCumPremsPaid
-        // TODO ?? TAXATION !! Perhaps other arguments are needed for inforce.
         );
 
     void Initialize7702
@@ -218,7 +217,6 @@ class Irc7702 final
     double                     CumPmts;    // Cumulative payments
 
     // Commutation functions
-// TODO ?? TAXATION !! Consider using std::vector instead of array members.
     ULCommFns CommFns                          [NumIOBases];
     double                     DEndt           [NumIOBases];
 
@@ -233,7 +231,6 @@ class Irc7702 final
     std::vector<double>        PvChgSpecAmt    [NumIOBases];
     std::vector<double>        PvChgADD        [NumIOBases];
     std::vector<double>        PvChgMort       [NumIOBases];
-    // TODO ?? TAXATION !! Perhaps -Sgl/Lvl and -Tgt/Exc should be dimensions.
     std::vector<double>        PvNpfSglTgt     [NumIOBases];
     std::vector<double>        PvNpfLvlTgt     [NumIOBases];
     std::vector<double>        PvNpfSglExc     [NumIOBases];
