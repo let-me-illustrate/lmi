@@ -25,7 +25,6 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "commutation_functions.hpp"
 #include "et_vector.hpp"
 #include "materially_equal.hpp"
 #include "math_functions.hpp"           // back_sum()
@@ -194,15 +193,6 @@ Irc7702::Irc7702
         }
     Init();
 }
-
-/// Destructor.
-///
-/// Although it is explicitly defaulted, this destructor is not
-/// implemented inside the class definition, because the header
-/// forward-declares one or more classes that are held by
-/// std::unique_ptr, so their destructors are visible only here.
-
-Irc7702::~Irc7702() = default;
 
 //============================================================================
 void Irc7702::ProcessGptPmt
@@ -398,48 +388,39 @@ void Irc7702::Init()
     InitPvVectors(Opt1Int4Pct);
     InitPvVectors(Opt2Int4Pct);
     InitPvVectors(Opt1Int6Pct);
-    // TODO ?? We can delete the commutation functions here, rather than in
-    // the dtor, to save some space. We defer doing so until the
-    // program is complete. TAXATION !! It would be better not to use pointers--see header.
 }
 
 //============================================================================
 void Irc7702::InitCommFns()
 {
     // Commutation functions using min i = iglp(): both options 1 and 2
-    CommFns[Opt1Int4Pct].reset
-        (::new ULCommFns
-            (Qc
-            ,ic_glp_
-            ,ig_glp_
-            ,mce_option1_for_7702
-            ,mce_monthly
-            )
+    CommFns[Opt1Int4Pct] = ULCommFns
+        (Qc
+        ,ic_glp_
+        ,ig_glp_
+        ,mce_option1_for_7702
+        ,mce_monthly
         );
-    DEndt[Opt1Int4Pct] = CommFns[Opt1Int4Pct]->aDomega();
+    DEndt[Opt1Int4Pct] = CommFns[Opt1Int4Pct].aDomega();
 
-    CommFns[Opt2Int4Pct].reset
-        (::new ULCommFns
-            (Qc
-            ,ic_glp_
-            ,ig_glp_
-            ,mce_option2_for_7702
-            ,mce_monthly
-            )
+    CommFns[Opt2Int4Pct] = ULCommFns
+        (Qc
+        ,ic_glp_
+        ,ig_glp_
+        ,mce_option2_for_7702
+        ,mce_monthly
         );
-    DEndt[Opt2Int4Pct] = CommFns[Opt2Int4Pct]->aDomega();
+    DEndt[Opt2Int4Pct] = CommFns[Opt2Int4Pct].aDomega();
 
     // Commutation functions using min i = igsp(): always option 1
-    CommFns[Opt1Int6Pct].reset
-        (::new ULCommFns
-            (Qc
-            ,ic_gsp_
-            ,ig_gsp_
-            ,mce_option1_for_7702
-            ,mce_monthly
-            )
+    CommFns[Opt1Int6Pct] = ULCommFns
+        (Qc
+        ,ic_gsp_
+        ,ig_gsp_
+        ,mce_option1_for_7702
+        ,mce_monthly
         );
-    DEndt[Opt1Int6Pct] = CommFns[Opt1Int6Pct]->aDomega();
+    DEndt[Opt1Int6Pct] = CommFns[Opt1Int6Pct].aDomega();
 }
 
 /// Set GPT and CVAT corridor factors respecting IssueAge.
@@ -459,8 +440,8 @@ void Irc7702::InitCorridor()
 
     CvatCorridor.resize(Length);
     CvatCorridor +=
-           CommFns[Opt1Int4Pct]->aD()
-        / (CommFns[Opt1Int4Pct]->kM() + DEndt[Opt1Int4Pct])
+           CommFns[Opt1Int4Pct].aD()
+        / (CommFns[Opt1Int4Pct].kM() + DEndt[Opt1Int4Pct])
         ;
 
     GptCorridor.assign
@@ -490,7 +471,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     // survivorship policy, depending on how its account
     // value accumulation is specified.
 
-    ULCommFns const& comm_fns = *CommFns[a_EIOBasis];
+    ULCommFns const& comm_fns = CommFns[a_EIOBasis];
 
     // Present value of charges per policy
 
@@ -796,14 +777,14 @@ double Irc7702::CalculatePremium
 void Irc7702::InitSevenPayPrem()
 {
         // 7PP = MO / (N0-N7) (limit 7 to maturity year)
-        double denom = CFFourPctMin->N()[j];
+        double denom = CFFourPctMin.N()[j];
         if((7 + j) < lmi::ssize(q))
             {
-            denom -= CFFourPctMin->N()[7 + j];
+            denom -= CFFourPctMin.N()[7 + j];
             }
         LMI_ASSERT(0.0 != denom);
         mep_rate[j] =
-            (   CFFourPctMin->M()[j]
+            (   CFFourPctMin.M()[j]
             /   denom
             );
         }

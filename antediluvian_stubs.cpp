@@ -69,8 +69,6 @@ int FundData::GetNumberOfFunds() const
     return 0;
 }
 
-Irc7702::~Irc7702() = default;
-
 gpt_server::gpt_server(mcenum_emission)
 {}
 

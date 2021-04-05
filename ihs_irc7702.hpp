@@ -24,13 +24,11 @@
 
 #include "config.hpp"
 
+#include "commutation_functions.hpp"
 #include "mc_enum_type_enums.hpp"
 #include "round_to.hpp"
 
-#include <memory>                       // unique_ptr
 #include <vector>
-
-class ULCommFns;
 
 // Specified amount (specamt) is carefully distinguished from benefit
 // amount (bftamt). The former is directly chosen by the owner, and
@@ -89,7 +87,6 @@ class Irc7702 final
         ,double                     a_InforceCumPremsPaid
         // TODO ?? TAXATION !! Perhaps other arguments are needed for inforce.
         );
-    ~Irc7702();
 
     void Initialize7702
         (double                     a_BftAmt
@@ -139,9 +136,6 @@ class Irc7702 final
     double premiums_paid() const;
 
   private:
-    Irc7702(Irc7702 const&) = delete;
-    Irc7702& operator=(Irc7702 const&) = delete;
-
     // Interest and DB Option basis
     enum EIOBasis
         {Opt1Int4Pct
@@ -224,20 +218,8 @@ class Irc7702 final
     double                     CumPmts;    // Cumulative payments
 
     // Commutation functions
-// TODO ?? Apparently the original reason for using smart pointers
-// was to minimize stack usage in a 16-bit environment; clearly that
-// doesn't matter anymore. TAXATION !! Don't do that then.
-//
 // TODO ?? TAXATION !! Consider using std::vector instead of array members.
-    std::unique_ptr<ULCommFns> CommFns         [NumIOBases];
-    // After the Init- functions have executed, we can delete the
-    // rather sizeable ULCommFns objects, as long as we keep the
-    // endowment-year value of D for each basis. TAXATION !! But
-    // not if they're created on the stack. And the meaning of
-    // "sizeable" has changed since that comment was written; the
-    // object contains nine vectors of double, each of potential
-    // length 100, and 9 * 8 * 100 = 7200 bytes is negligible in
-    // the twenty-first century.
+    ULCommFns CommFns                          [NumIOBases];
     double                     DEndt           [NumIOBases];
 
     // GPT corridor factors for attained ages [IssueAge, 100]
