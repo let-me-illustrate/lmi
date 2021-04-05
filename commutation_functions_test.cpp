@@ -579,7 +579,7 @@ void OLCommFnsTest()
     Test_1954_1958_IET_3pct();
 }
 
-/// Comprehensive UL example with speed tests.
+/// Comprehensive UL example.
 ///
 /// Calculate year-by-year option B account value for a no-load UL
 /// contract; compare to results imported from a spreadsheet, with
@@ -674,6 +674,19 @@ void Test_1980_CSO_Male_ANB()
         << "  " << std::setw(21) << worst_discrepancy << " worst_discrepancy\n"
         << std::endl
         ;
+}
+
+void assay_speed()
+{
+    std::vector<double> q(sample_q());
+    assign(q, apply_binary(coi_rate_from_q<double>(), q, 1.0 / 11.0));
+
+    std::vector<double>ic(q.size(), i_upper_12_over_12_from_i<double>()(0.07));
+    std::vector<double>ig(q.size(), i_upper_12_over_12_from_i<double>()(0.03));
+
+    ULCommFns ulcf(q, ic, ig, mce_option2_for_7702, mce_monthly);
+
+    std::vector<double> reserve(q.size());
 
     std::cout
         << "  Speed test: generate ordinary-life commutation functions\n    "
@@ -732,6 +745,7 @@ int test_main(int, char*[])
     OLCommFnsTest();
     Test_1980_CSO_Male_ANB();
     TestLimits();
+    assay_speed();
 
     return EXIT_SUCCESS;
 }
