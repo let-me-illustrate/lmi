@@ -34,9 +34,10 @@
 class LMI_SO OLCommFns final
 {
   public:
-    OLCommFns
-        (std::vector<double> const& a_q
-        ,std::vector<double> const& a_i
+    OLCommFns() = default;
+    explicit OLCommFns
+        (std::vector<double> const& q
+        ,std::vector<double> const& i
         );
 
     double                 Domega() const {return ed.back();}
@@ -47,11 +48,6 @@ class LMI_SO OLCommFns final
     std::vector<double> const&  M() const {return  m;}
 
   private:
-    int Length;
-
-    std::vector<double> const& q;
-    std::vector<double> const& i;
-
     std::vector<double> ed;
     std::vector<double>  d;
     std::vector<double>  c;
@@ -77,10 +73,11 @@ class LMI_SO OLCommFns final
 class LMI_SO ULCommFns final
 {
   public:
-    ULCommFns
-        (std::vector<double> const& a_qc
-        ,std::vector<double> const& a_ic
-        ,std::vector<double> const& a_ig
+    ULCommFns() = default;
+    explicit ULCommFns
+        (std::vector<double> const& qc
+        ,std::vector<double> const& ic
+        ,std::vector<double> const& ig
         ,mcenum_dbopt_7702          dbo
         ,mcenum_mode                mode
         );
@@ -94,16 +91,6 @@ class LMI_SO ULCommFns final
     std::vector<double> const&  kM() const {return  km;}
 
   private:
-    std::vector<double> qc;
-    std::vector<double> ic;
-    std::vector<double> ig;
-
-    // SOMEDAY !! It would be nice to let dbo_ vary by year.
-    mcenum_dbopt_7702   dbo_;
-    mcenum_mode         mode_;
-
-    int Length;
-
     std::vector<double> ead;
     std::vector<double>  ad;
     std::vector<double>  kd;

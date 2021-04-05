@@ -53,6 +53,13 @@ std::vector<double> const& sample_q()
 }
 } // Unnamed namespace.
 
+void test_fundamentals()
+{
+    // default ctors
+    OLCommFns();
+    ULCommFns();
+}
+
 /// Exactly reproduce Table 2 from Eckley's paper.
 ///
 /// Table 2 on pages 25-26 of TSA XXIX uses annual functions, and
@@ -715,6 +722,7 @@ void assay_speed()
 
 int test_main(int, char*[])
 {
+    test_fundamentals();
     ULCommFnsTest();
     OLCommFnsTest();
     Test_1980_CSO_Male_ANB();
