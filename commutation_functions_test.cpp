@@ -34,6 +34,7 @@
 #include <cmath>                        // fabs()
 #include <iomanip>                      // setw() etc.
 #include <ios>                          // ios_base::fixed()
+#include <utility>                      // move()
 #include <vector>
 
 namespace
@@ -56,8 +57,24 @@ std::vector<double> const& sample_q()
 void test_fundamentals()
 {
     // default ctors
-    OLCommFns();
-    ULCommFns();
+    OLCommFns olcf0;
+    ULCommFns ulcf0;
+
+    // copy
+    OLCommFns olcf1(olcf0);
+    ULCommFns ulcf1(ulcf0);
+
+    // copy-assign
+    olcf0 = olcf1;
+    ulcf0 = ulcf1;
+
+    // move
+    OLCommFns olcf2(std::move(olcf0));
+    ULCommFns ulcf2(std::move(ulcf0));
+
+    // move-assign
+    olcf2 = std::move(olcf1);
+    ulcf2 = std::move(ulcf1);
 }
 
 /// Exactly reproduce Table 2 from Eckley's paper.
