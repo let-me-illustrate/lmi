@@ -84,8 +84,8 @@ void mete_reserve
     for(int j = 0; j < 100; ++j)
         {
         volatile double premium = (10.0 * ulcf.aDomega() + ulcf.kM()[0]) / ulcf.aN()[0];
-        assign(reserve, premium * ulcf.aD() - ulcf.kC());
-        assign(reserve, fwd_sum(reserve) / ulcf.EaD());
+        reserve <<= premium * ulcf.aD() - ulcf.kC();
+        reserve <<= fwd_sum(reserve) / ulcf.EaD();
         }
 }
 
@@ -160,18 +160,18 @@ void TestEckleyTable2()
 
     ULCommFns CF(coi, ic, ig, mce_option1_for_7702, mce_annual);
 
-    std::vector<double> nsp    (coi.size());
-    nsp     += (CF.aDomega() + CF.kM()) / CF.aD();
+    std::vector<double> nsp;
+    nsp     <<= (CF.aDomega() + CF.kM()) / CF.aD();
 
-    std::vector<double> annuity(coi.size());
-    annuity += (               CF.aN()) / CF.aD();
+    std::vector<double> annuity;
+    annuity <<= (               CF.aN()) / CF.aD();
 
-    std::vector<double> premium(coi.size());
-    premium += (CF.aDomega() + CF.kM()) / CF.aN();
+    std::vector<double> premium;
+    premium <<= (CF.aDomega() + CF.kM()) / CF.aN();
 
-    std::vector<double> reserve(coi.size());
-    reserve += premium[0] * CF.aD() - CF.kC();
-    assign(reserve, fwd_sum(reserve) / CF.EaD());
+    std::vector<double> reserve;
+    reserve <<= premium[0] * CF.aD() - CF.kC();
+    reserve <<= fwd_sum(reserve) / CF.EaD();
 
     {
     double tolerance = 0.0000005;
@@ -287,12 +287,12 @@ void TestEckleyTables3and4()
 
     ULCommFns CF(coi, ic, ig, mce_option2_for_7702, mce_annual);
 
-    std::vector<double> premium(coi.size());
-    premium += (2.0 * CF.aDomega() + CF.kM()) / CF.aN();
+    std::vector<double> premium;
+    premium <<= (2.0 * CF.aDomega() + CF.kM()) / CF.aN();
 
-    std::vector<double> reserve(coi.size());
-    reserve += premium[0] * CF.aD() - CF.kC();
-    assign(reserve, fwd_sum(reserve) / CF.EaD());
+    std::vector<double> reserve;
+    reserve <<= premium[0] * CF.aD() - CF.kC();
+    reserve <<= fwd_sum(reserve) / CF.EaD();
 
     double tolerance = 0.000005;
     double worst_discrepancy = 0.0;
@@ -518,8 +518,8 @@ void Test_1954_1958_IET_3pct()
     std::vector<double> E_ell_ex(ell_ex);
     E_ell_ex.erase(E_ell_ex.begin());
     E_ell_ex.push_back(0.0);
-    std::vector<double> q(ell_ex.size());
-    q += (ell_ex - E_ell_ex) / ell_ex;
+    std::vector<double> q;
+    q <<= (ell_ex - E_ell_ex) / ell_ex;
 
     std::vector<double> i(q.size(), 0.03);
 
@@ -632,7 +632,7 @@ void Test_1980_CSO_Male_ANB()
         };
 
     std::vector<double> q(sample_q());
-    assign(q, apply_binary(coi_rate_from_q<double>(), q, 1.0 / 11.0));
+    q <<= apply_binary(coi_rate_from_q<double>(), q, 1.0 / 11.0);
 
     std::vector<double>ic(q.size(), i_upper_12_over_12_from_i<double>()(0.07));
     std::vector<double>ig(q.size(), i_upper_12_over_12_from_i<double>()(0.03));
@@ -640,9 +640,9 @@ void Test_1980_CSO_Male_ANB()
     ULCommFns ulcf(q, ic, ig, mce_option2_for_7702, mce_monthly);
 
     double premium = (10.0 * ulcf.aDomega() + ulcf.kM()[0]) / ulcf.aN()[0];
-    std::vector<double> reserve(q.size());
-    assign(reserve, premium * ulcf.aD() - ulcf.kC());
-    assign(reserve, fwd_sum(reserve) / ulcf.EaD());
+    std::vector<double> reserve;
+    reserve <<= premium * ulcf.aD() - ulcf.kC();
+    reserve <<= fwd_sum(reserve) / ulcf.EaD();
 
     double tolerance = 1.0e-13;
     double worst_discrepancy = 0.0;
@@ -678,14 +678,15 @@ void Test_1980_CSO_Male_ANB()
 void assay_speed()
 {
     std::vector<double> q(sample_q());
-    assign(q, apply_binary(coi_rate_from_q<double>(), q, 1.0 / 11.0));
+    q <<= apply_binary(coi_rate_from_q<double>(), q, 1.0 / 11.0);
 
     std::vector<double>ic(q.size(), i_upper_12_over_12_from_i<double>()(0.07));
     std::vector<double>ig(q.size(), i_upper_12_over_12_from_i<double>()(0.03));
 
     ULCommFns ulcf(q, ic, ig, mce_option2_for_7702, mce_monthly);
 
-    std::vector<double> reserve(q.size());
+    std::vector<double> reserve;
+    reserve.reserve(q.size());
 
     auto f0 = [&q, &ic]         {mete_olcf(q, ic);};
     auto f1 = [&q, &ic, ig]     {mete_ulcf(q, ic, ig);};
