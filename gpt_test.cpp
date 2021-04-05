@@ -221,7 +221,7 @@ class gpt_test
     static gpt_vector_parms v_parms();
     static gpt_scalar_parms s_parms();
     static gpt_cf_triad instantiate_cf();
-    static Irc7702& instantiate_old(int issue_age);
+    static Irc7702 instantiate_old(int issue_age);
     static void compare_premiums(int issue_age, double target);
     static void mete_premiums();
     static void mete_instantiate_old();
@@ -409,13 +409,9 @@ void gpt_test::test_preconditions()
     initialize(0); // Reset.
 }
 
-/// The obsolescent GPT class more or less requires this ugliness.
-
-Irc7702* ugliness = nullptr;
-
 /// Instantiate obsolescent GPT class.
 
-Irc7702& gpt_test::instantiate_old(int issue_age)
+Irc7702 gpt_test::instantiate_old(int issue_age)
 {
 #if defined LMI_COMO_WITH_MINGW
     throw "Code that uses this obsolescent class segfaults with como.";
@@ -438,45 +434,41 @@ Irc7702& gpt_test::instantiate_old(int issue_age)
         ;
     std::vector<double> adj_qab_adb_rate(length);
     assign(adj_qab_adb_rate, qab_adb_rate * adj);
-    delete ugliness;
-    ugliness =
-        (::new Irc7702
-            (mce_gpt                         // a_Test7702
-            ,issue_age                       // a_IssueAge
-            ,issue_age + length              // a_EndtAge
-            ,q_m                             // a_Qc
-            ,glp_ic                          // ic_glp
-            ,gsp_ic                          // ic_gsp
-            ,glp_ig                          // ig_glp
-            ,gsp_ig                          // ig_gsp
-            ,0.0                             // a_PresentBftAmt
-            ,0.0                             // a_PresentSpecAmt
-            ,0.0                             // a_LeastBftAmtEver
-            ,mce_option1_for_7702            // a_PresentDBOpt
-            ,policy_fee_annual               // a_AnnChgPol
-            ,policy_fee_monthly              // a_MlyChgPol
-            ,specamt_load_monthly            // a_MlyChgSpecAmt
-            ,1000000000.0                    // a_SpecAmtLoadLimit [in effect, no limit]
-            ,adj_qab_adb_rate                // a_MlyChgADD
-            ,1000000000.0                    // a_ADDLimit [in effect, no limit]
-            ,prem_load_target                // a_LoadTgt
-            ,prem_load_excess                // a_LoadExc
-            // Plausible low default target (overridden by compare_premiums()):
-            ,1000.0                          // a_TargetPremium
-            ,round_to<double>(2, r_upward)   // a_round_min_premium
-            ,round_to<double>(2, r_downward) // a_round_max_premium
-            ,round_to<double>(0, r_upward)   // a_round_min_specamt
-            ,round_to<double>(0, r_downward) // a_round_max_specamt
-            ,0                               // a_InforceYear
-            // Kludge to prevent Initialize7702() from calculating premiums:
-            ,1                               // a_InforceMonth
-            ,0.0                             // a_InforceGLP
-            ,0.0                             // a_InforceCumGLP
-            ,0.0                             // a_InforceGSP
-            ,0.0                             // a_InforceCumPremsPaid
-            )
+    return Irc7702
+        (mce_gpt                         // a_Test7702
+        ,issue_age                       // a_IssueAge
+        ,issue_age + length              // a_EndtAge
+        ,q_m                             // a_Qc
+        ,glp_ic                          // ic_glp
+        ,gsp_ic                          // ic_gsp
+        ,glp_ig                          // ig_glp
+        ,gsp_ig                          // ig_gsp
+        ,0.0                             // a_PresentBftAmt
+        ,0.0                             // a_PresentSpecAmt
+        ,0.0                             // a_LeastBftAmtEver
+        ,mce_option1_for_7702            // a_PresentDBOpt
+        ,policy_fee_annual               // a_AnnChgPol
+        ,policy_fee_monthly              // a_MlyChgPol
+        ,specamt_load_monthly            // a_MlyChgSpecAmt
+        ,1000000000.0                    // a_SpecAmtLoadLimit [in effect, no limit]
+        ,adj_qab_adb_rate                // a_MlyChgADD
+        ,1000000000.0                    // a_ADDLimit [in effect, no limit]
+        ,prem_load_target                // a_LoadTgt
+        ,prem_load_excess                // a_LoadExc
+        // Plausible low default target (overridden by compare_premiums()):
+        ,1000.0                          // a_TargetPremium
+        ,round_to<double>(2, r_upward)   // a_round_min_premium
+        ,round_to<double>(2, r_downward) // a_round_max_premium
+        ,round_to<double>(0, r_upward)   // a_round_min_specamt
+        ,round_to<double>(0, r_downward) // a_round_max_specamt
+        ,0                               // a_InforceYear
+        // Kludge to prevent Initialize7702() from calculating premiums:
+        ,1                               // a_InforceMonth
+        ,0.0                             // a_InforceGLP
+        ,0.0                             // a_InforceCumGLP
+        ,0.0                             // a_InforceGSP
+        ,0.0                             // a_InforceCumPremsPaid
         );
-    return *ugliness;
 #endif // !defined LMI_COMO_WITH_MINGW
 }
 
@@ -495,7 +487,7 @@ void gpt_test::compare_premiums(int issue_age, double target)
     double const f3bft    = parms.f3bft   ;
     double const endt_bft = parms.endt_bft;
     // This test of the obsolescent class segfaults with como.
-    Irc7702& z_old = instantiate_old(issue_age);
+    Irc7702 z_old = instantiate_old(issue_age);
     // Set target (the other arguments don't matter here).
     z_old.Initialize7702(f3bft, endt_bft, mce_option1_for_7702, target);
 #endif // !defined LMI_COMO_WITH_MINGW
@@ -602,10 +594,10 @@ void gpt_test::mete_instantiate_old()
 
 void gpt_test::mete_premiums_old()
 {
-    static int    const duration =      0  ;
-    static double const f3bft    = 120000.0;
-    static double const endt_bft = 100000.0;
-    static Irc7702 const& z = instantiate_old(duration);
+    static int     const duration =      0  ;
+    static double  const f3bft    = 120000.0;
+    static double  const endt_bft = 100000.0;
+    static Irc7702 const z = instantiate_old(duration);
     z.CalculateGSP(duration, f3bft, endt_bft, endt_bft                      );
     z.CalculateGLP(duration, f3bft, endt_bft, endt_bft, mce_option1_for_7702);
     z.CalculateGLP(duration, f3bft, endt_bft, endt_bft, mce_option2_for_7702);
