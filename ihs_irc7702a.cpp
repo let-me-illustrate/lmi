@@ -188,7 +188,7 @@ void Irc7702A::Initialize7702A
     LMI_ASSERT(a_ContractYear <= a_PolicyYear);
     state_.B0_deduced_policy_year   = a_PolicyYear;
     state_.B1_deduced_contract_year = a_ContractYear;
-    LMI_ASSERT(0 < a_Bfts.size());
+    LMI_ASSERT(!a_Bfts.empty());
     double lowest_bft = *std::min_element(a_Bfts.begin(), a_Bfts.end());
     // Allow Bfts to be zero for solves.
     LMI_ASSERT(0.0 <= lowest_bft);
@@ -1304,6 +1304,7 @@ double Irc7702A::DetermineLowestBft() const
         ,Bfts.begin() + std::min(TestPeriodLen, TestPeriodDur)
         );
     LMI_ASSERT(Bfts.begin() <= last_bft_in_test_period);
+    LMI_ASSERT(!Bfts.empty());
 // TAXATION !! This is harmful for inforce if inforce history is unreliable:
     LowestBft = *std::min_element(Bfts.begin(), last_bft_in_test_period);
     return LowestBft;
