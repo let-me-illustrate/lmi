@@ -280,14 +280,14 @@ class round_to
     using rounding_fn_t = RealType (*)(RealType);
     rounding_fn_t select_rounding_function(rounding_style) const;
 
-    int decimals_                    {0};
-    rounding_style style_            {r_indeterminate};
-    max_prec_real scale_fwd_         {1.0};
-    max_prec_real scale_back_        {1.0};
-    int decimals_cents_              {0};
-    max_prec_real scale_fwd_cents_   {1.0};
-    max_prec_real scale_back_cents_  {1.0};
-    rounding_fn_t rounding_function_ {detail::erroneous_rounding_function};
+    int            decimals_          {0};
+    rounding_style style_             {r_indeterminate};
+    max_prec_real  scale_fwd_         {1.0};
+    max_prec_real  scale_back_        {1.0};
+    int            decimals_cents_    {0};
+    max_prec_real  scale_fwd_cents_   {1.0};
+    max_prec_real  scale_back_cents_  {1.0};
+    rounding_fn_t  rounding_function_ {detail::erroneous_rounding_function};
 };
 
 // Naran used const data members, reasoning that a highly optimizing
