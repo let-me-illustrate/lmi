@@ -293,19 +293,8 @@ class round_to
 // Naran used const data members, reasoning that a highly optimizing
 // compiler could then calculate std::pow(10.0, n) at compile time.
 // Not all compilers do this. None available to the author do.
-//
-// Is this a design flaw? Const data members require initialization in
-// the initializer-list, so this test detects a domain error only after
-// it has produced the side effect of setting 'errno'. Thus, the strong
-// guarantee is lost, and only the basic guarantee is provided.
-//
-// The guarantee could be strengthened by not throwing at all. That
-// would be consistent with other math functions. But it's a shame to
-// write new code that forces the user to check 'errno'.
-//
-// TODO ?? The data members were made non-const after profiling showed
-// no penalty on four available compilers (not including Naran's).
-// The code should now be reworked to provide the strong guarantee.
+// The data members were made non-const after profiling showed no
+// penalty on four available compilers around the year 2000.
 
 // Division by an exact integer value should have slightly better
 // accuracy in some cases. But profiling shows that multiplication by
