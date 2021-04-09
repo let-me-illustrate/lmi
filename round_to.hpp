@@ -53,50 +53,6 @@
 // this alias-declaration to double.
 using max_prec_real = long double;
 
-namespace detail
-{
-/// Raise 'r' to the integer power 'n'.
-///
-/// Motivation: To raise an integer-valued real to a positive integer
-/// power without any roundoff error as long as the result is exactly
-/// representable. See:
-///   https://lists.nongnu.org/archive/html/lmi/2016-12/msg00049.html
-///
-/// For negative 'n', the most accurate result possible is obtained by
-/// calculating power(r, -n), and returning its reciprocal calculated
-/// with the maximum available precision.
-///
-/// Because this template function is called only by the round_to
-/// constructor, efficiency here is not crucial in the contemplated
-/// typical case where a round_to object is created once and used to
-/// round many numbers, whereas it is crucial to avoid roundoff error.
-/// However, that does not justify gratuitous inefficiency, and the
-/// use of power() here means that the number of multiplications is
-/// O(log n), so this should be as fast as a library function that
-/// has been optimized for accuracy.
-///
-/// Fails to check for overflow or undeflow, but the round_to ctor
-/// does compare 'n' to the minimum and maximum decimal exponents,
-/// which suffices there because its 'r' is always ten.
-
-template<typename RealType>
-RealType int_pow(RealType r, int n)
-{
-    if(0 == n)
-        {
-        return RealType(1.0);
-        }
-    if(n < 0)
-        {
-        return max_prec_real(1.0) / nonstd::power(r, -n);
-        }
-    else
-        {
-        return nonstd::power(r, n);
-        }
-}
-} // namespace detail
-
 inline rounding_style& default_rounding_style()
 {
     static rounding_style default_style = r_to_nearest;
@@ -251,12 +207,6 @@ class round_to
     rounding_fn_t  rounding_function_ {detail::erroneous_rounding_function};
 };
 
-// Naran used const data members, reasoning that a highly optimizing
-// compiler could then calculate std::pow(10.0, n) at compile time.
-// Not all compilers do this. None available to the author do.
-// The data members were made non-const after profiling showed no
-// penalty on four available compilers around the year 2000.
-
 // Division by an exact integer value should have slightly better
 // accuracy in some cases. But profiling shows that multiplication by
 // the reciprocal stored in scale_back_ makes a realistic application
@@ -268,27 +218,33 @@ template<typename RealType>
 round_to<RealType>::round_to(int a_decimals, rounding_style a_style)
     :decimals_          {a_decimals}
     ,style_             {a_style}
-    ,scale_fwd_         {detail::int_pow(max_prec_real(10.0), decimals_)}
-    ,scale_back_        {max_prec_real(1.0) / scale_fwd_}
     ,decimals_cents_    {decimals_ - currency::cents_digits}
-    ,scale_fwd_cents_   {detail::int_pow(max_prec_real(10.0), decimals_cents_)}
-    ,scale_back_cents_  {max_prec_real(1.0) / scale_fwd_cents_}
     ,rounding_function_ {select_rounding_function(style_)}
 {
-/*
-// TODO ?? This might improve accuracy slightly, but would prevent
-// the data members from being const.
-    if(0 <= a_decimals)
+    constexpr max_prec_real one( 1.0);
+    constexpr max_prec_real ten(10.0);
+
+    if(0 <= decimals_)
         {
-        scale_fwd_  = detail::int_pow(max_prec_real(10.0), a_decimals);
-        scale_back_ = max_prec_real(1.0) / scale_fwd_;
+        scale_fwd_        = nonstd::power(ten, decimals_);
+        scale_back_       = one / scale_fwd_;
         }
     else
         {
-        scale_back_ = detail::int_pow(max_prec_real(10.0), -a_decimals);
-        scale_fwd_  = max_prec_real(1.0) / scale_back_;
+        scale_back_       = nonstd::power(ten, -decimals_);
+        scale_fwd_        = one / scale_back_;
         }
-*/
+
+    if(0 <= decimals_cents_)
+        {
+        scale_fwd_cents_  = nonstd::power(ten, decimals_cents_);
+        scale_back_cents_ = one / scale_fwd_cents_;
+        }
+    else
+        {
+        scale_back_cents_ = nonstd::power(ten, -decimals_cents_);
+        scale_fwd_cents_  = one / scale_back_cents_;
+        }
 
     // This throws only if all use of the function object is invalid.
     // Even if it doesn't throw, there are numbers that it cannot round
@@ -298,8 +254,8 @@ round_to<RealType>::round_to(int a_decimals, rounding_style a_style)
     //    std::numeric_limits<RealType>::max_exponent10
     // decimals.
     if
-        (a_decimals < std::numeric_limits<RealType>::min_exponent10
-        ||            std::numeric_limits<RealType>::max_exponent10 < a_decimals
+        (decimals_ < std::numeric_limits<RealType>::min_exponent10
+        ||           std::numeric_limits<RealType>::max_exponent10 < decimals_
         )
         {
         throw std::domain_error("Invalid number of decimals.");

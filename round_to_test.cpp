@@ -26,6 +26,7 @@
 #include "currency.hpp"                 // currency::cents_digits
 #include "fenv_lmi.hpp"
 #include "miscellany.hpp"               // floating_rep()
+#include "stl_extensions.hpp"           // nonstd::power()
 #include "test_tools.hpp"
 
 #include <algorithm>                    // max()
@@ -299,7 +300,12 @@ void round_to_test::test_various_float_types
     ,long double    expected
     )
 {
-    long double factor = detail::int_pow(10.0L, -decimals);
+    int const inverse_decimals = -decimals;
+    long double factor =
+        (0 <= inverse_decimals)
+        ?        nonstd::power(10.0L,  inverse_decimals)
+        : 1.0L / nonstd::power(10.0L, -inverse_decimals)
+        ;
     long double u = unrounded * factor;
     long double e = expected  * factor;
     LMI_TEST((test_one_case(static_cast<float >(u), static_cast<float >(e), decimals, style)));
