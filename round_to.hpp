@@ -207,13 +207,6 @@ class round_to
     rounding_fn_t  rounding_function_ {detail::erroneous_rounding_function};
 };
 
-// Division by an exact integer value should have slightly better
-// accuracy in some cases. But profiling shows that multiplication by
-// the reciprocal stored in scale_back_ makes a realistic application
-// that performs a lot of rounding run about four percent faster with
-// all compilers tested. TODO ?? The best design decision would be
-// clearer if we quantified the effect on accuracy.
-
 template<typename RealType>
 round_to<RealType>::round_to(int a_decimals, rounding_style a_style)
     :decimals_          {a_decimals}
@@ -267,6 +260,21 @@ bool round_to<RealType>::operator==(round_to const& z) const
 {
     return decimals() == z.decimals() && style() == z.style();
 }
+
+/// Division by an exact integer value would afford a stronger
+/// guarantee of accuracy, particularly when the value to be rounded
+/// is already rounded--e.g., if 3.00 is to be rounded to hundredths,
+/// then
+///   (100.0 * 3.00) / 100
+/// is preferable to
+///   (100.0 * 3.00) * 0.01
+/// especially if the rounding style is anything but to-nearest.
+///
+/// However, reciprocal multiplication is faster than division--see:
+///   https://lists.nongnu.org/archive/html/lmi/2021-04/msg00010.html
+/// et seqq., which demonstrates an average three-percent speedup,
+/// with no observed difference in a comprehensive system test as
+/// long as the multiplications are performed in extended precision.
 
 template<typename RealType>
 inline RealType round_to<RealType>::operator()(RealType r) const
