@@ -31,9 +31,12 @@
 #include <algorithm>                    // max()
 #include <cfloat>                       // DECIMAL_DIG
 #include <climits>                      // INT_MIN
+#include <cmath>                        // fabs()
 #include <ios>
 #include <iostream>
+#include <limits>
 #include <ostream>
+#include <stdexcept>
 
 // Print name of software rounding style for diagnostics.
 char const* get_name_of_style(rounding_style style)

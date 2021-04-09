@@ -28,10 +28,10 @@
 #include "mc_enum_type_enums.hpp"       // enum rounding_style
 #include "stl_extensions.hpp"           // nonstd::power()
 
-#include <cmath>
+#include <cmath>                        // fabs(), floor(), rint()
 #include <limits>
 #include <stdexcept>
-#include <type_traits>
+#include <type_traits>                  // is_floating_point_v
 #include <vector>
 
 // Round a floating-point number to a given number of decimal places,
