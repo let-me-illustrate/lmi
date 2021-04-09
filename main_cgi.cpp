@@ -1,6 +1,6 @@
 // Common gateway interface using gnu cgicc: a simplistic demo.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -35,6 +35,7 @@
 
 #include "alert.hpp"
 #include "configurable_settings.hpp"
+#include "global_settings.hpp"
 #include "illustrator.hpp"
 #include "input.hpp"
 #include "lmi.hpp"                      // is_antediluvian_fork()
@@ -89,6 +90,8 @@ int try_main(int argc, char* argv[])
   try {
     initialize_filesystem();
 
+    global_settings::instance().set_data_directory("/opt/lmi/data");
+
     gLogFile.rdbuf()->open
         (configurable_settings::instance().cgi_bin_log_filename().c_str()
         ,ios_out_trunc_binary()
@@ -96,7 +99,16 @@ int try_main(int argc, char* argv[])
 
     if(argc == 2 && argv[1] == std::string("--capture"))
         {
-        std::system("set > settings");
+#       if defined LMI_POSIX
+        int exit_code = std::system("env > settings");
+#       else
+        int exit_code = std::system("set > settings");
+#       endif // defined LMI_POSIX
+        if(EXIT_SUCCESS != exit_code)
+            {
+            std::cerr << "Failed to execute 'set' command;";
+            return EXIT_FAILURE;
+            }
         std::ofstream os("stdin.txt", ios_out_trunc_binary());
         os << std::cin.rdbuf();
         std::cout

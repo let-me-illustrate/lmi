@@ -1,6 +1,6 @@
 // Path utilities.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -130,7 +130,7 @@ void initialize_filesystem()
 /// Notably, path("/bin/sh/") succeeds, silently discarding the
 /// trailing '/'.
 
-fs::path LMI_SO modify_directory
+fs::path modify_directory
     (fs::path const& original_filepath
     ,fs::path const& supplied_directory
     )
@@ -193,6 +193,31 @@ std::string orthodox_filename(std::string const& original_filename)
     return s;
 }
 
+/// Remove an msw root /^.*:/ from path iff system is not msw.
+///
+/// Motivation: Prevent the ghastly outcome demonstrated in the unit
+/// test when an msw-native path is used on a posix system.
+///
+/// On an msw system, return the path unaltered: it may contain a
+/// 'root-name', but that 'root-name' is native, not alien.
+
+fs::path remove_alien_msw_root(fs::path const& original_filepath)
+{
+#if defined LMI_POSIX
+    std::string s {original_filepath.string()};
+    std::string::size_type p = s.find_last_of(':');
+    if(std::string::npos != p)
+        {
+        s.erase(0, 1 + p);
+        }
+    return s;
+#elif defined LMI_MSW
+    return original_filepath;
+#else  // Unknown platform.
+    throw "Unrecognized platform."
+#endif // Unknown platform.
+}
+
 namespace
 {
 /// Prepend a serial number to a file extension. This is intended to
@@ -229,7 +254,7 @@ std::string serial_extension
 /// Create an output filename from census information.
 ///
 /// Motivation: see
-///   http://savannah.nongnu.org/support/?105907
+///   https://savannah.nongnu.org/support/?105907
 /// The output filename is composed of:
 ///  - the census input filename, which identifies the case;
 ///  - the insured's name, if nonempty, except in regression tests;

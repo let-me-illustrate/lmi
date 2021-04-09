@@ -2,7 +2,7 @@
 //
 // ChangeLog for "Let me illustrate...". See 'MAINTENANCE' after license.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -2900,7 +2900,7 @@ variable definitions when it passes them to submakefiles.
 
   wx_workarounds.hpp
 Conditionalize workarounds for older wx versions. See
-  http://lists.gnu.org/archive/html/lmi/2005-08/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2005-08/msg00000.html
 
 20050802T2108Z <chicares@cox.net> [1285]
 
@@ -5497,7 +5497,7 @@ running 'make regression_test' with MSYS. See
   http://article.gmane.org/gmane.comp.gnu.mingw.user/18633
     [2006-01-14T11:55:49Z from Greg Chicares]
 and
-  http://lists.gnu.org/archive/html/lmi/2006-01/msg00031.html
+  https://lists.nongnu.org/archive/html/lmi/2006-01/msg00031.html
 for details.
 
 20060115T1546Z <chicares@cox.net> [1204]
@@ -6356,7 +6356,7 @@ Avoid overflow and singularities.
   GNUmakefile
   local_options.sh [new file]
 Add script to set persistent options. This message
-  http://lists.gnu.org/archive/html/lmi/2006-02/msg00009.html
+  https://lists.nongnu.org/archive/html/lmi/2006-02/msg00009.html
 discusses the motivation.
 
 20060228T1335Z <chicares@cox.net> [1206]
@@ -6470,8 +6470,8 @@ Add a new test.
   xml_notebook.cpp
   xml_notebook.hpp
 Rename event handlers. As these messages:
-  http://lists.gnu.org/archive/html/lmi/2005-11/msg00036.html
-  http://lists.gnu.org/archive/html/lmi/2005-11/msg00037.html
+  https://lists.nongnu.org/archive/html/lmi/2005-11/msg00036.html
+  https://lists.nongnu.org/archive/html/lmi/2005-11/msg00037.html
 explain, this change prevents conflicts with wx names, even though
 it may be speculated that such conflicts are benign.
 
@@ -6514,7 +6514,7 @@ Reformat.
 
   xml_notebook.cpp
 Remember focused control across task switches. See:
-  http://lists.gnu.org/archive/html/lmi/2006-03/msg00006.html
+  https://lists.nongnu.org/archive/html/lmi/2006-03/msg00006.html
 
 20060313T2109Z <wboutin@massmutual.com> [1207]
 
@@ -6538,7 +6538,7 @@ Improve conformance.
 
   GNUmakefile
 Make 'checkout' target more robust. See:
-  http://sv.nongnu.org/task/index.php?func=detailitem&item_id=5228
+  https://sv.nongnu.org/task/index.php?func=detailitem&item_id=5228
 
 20060314T0248Z <chicares@cox.net> [1207]
 
@@ -6620,7 +6620,7 @@ Use more specific long types.
 
   configure.ac
 Remove '-Wendif-labels': see
-  http://lists.gnu.org/archive/html/lmi/2006-04/msg00003.html
+  https://lists.nongnu.org/archive/html/lmi/2006-04/msg00003.html
 and also the 20051106T1528Z 'ChangeLog' entry for 'workhorse.make'.
 
 20060602T1422Z <chicares@cox.net> [1205]
@@ -7372,7 +7372,7 @@ Fix an alphabetization defect.
   ledger_text_formats.cpp
   ledger_xml_io.cpp
 Work around this compiler defect:
-  http://sv.nongnu.org/bugs/index.php?func=detailitem&item_id=13856
+  https://sv.nongnu.org/bugs/index.php?func=detailitem&item_id=13856
 in one file, noting that the defect remains unaddressed in the other.
 
 20060904T1315Z <chicares@cox.net> [1201]
@@ -7585,7 +7585,7 @@ Improve vertical alignment.
   about_dialog.cpp
   about_dialog.hpp
 Remove reference to wxDialog::OnOK(), for wx-2.7 compatibility. See:
-  http://lists.gnu.org/archive/html/lmi/2006-09/msg00017.html
+  https://lists.nongnu.org/archive/html/lmi/2006-09/msg00017.html
 
 20061010T0012Z <chicares@cox.net> [1173]
 
@@ -7593,7 +7593,7 @@ Remove reference to wxDialog::OnOK(), for wx-2.7 compatibility. See:
   mvc_controller.hpp
 Remove unneeded wxID_OK handler and its reference to wxDialog::OnOK(),
 for wx-2.7 compatibility. See:
-  http://lists.gnu.org/archive/html/lmi/2006-09/msg00017.html
+  https://lists.nongnu.org/archive/html/lmi/2006-09/msg00017.html
 
 20061010T2323Z <chicares@cox.net> [1173]
 
@@ -8266,7 +8266,7 @@ Refactor attribute manipulation, making it library independent.
   ledger_xml_io2.cpp
 Refactor iteration across elements, making it library independent.
 See:
-  http://lists.gnu.org/archive/html/lmi/2006-11/msg00046.html
+  https://lists.nongnu.org/archive/html/lmi/2006-11/msg00046.html
 
 20061127T0554Z <chicares@cox.net> [1214]
 
@@ -8289,7 +8289,7 @@ Implement a missing feature.
 Simplify writing the configuration file--see
   "What have we done that should be undone?"
 here:
-  http://lists.gnu.org/archive/html/lmi/2006-11/msg00050.html
+  https://lists.nongnu.org/archive/html/lmi/2006-11/msg00050.html
 
 20061127T1651Z <chicares@cox.net> [1213]
 
@@ -8370,7 +8370,7 @@ is a scalar and couldn't be shown as a column.
   ledger_formats.xml
   ledger_xml_io.cpp
 Fix incorrect format for 'PremTaxLoad'. See:
-  http://lists.gnu.org/archive/html/lmi/2006-11/msg00063.html
+  https://lists.nongnu.org/archive/html/lmi/2006-11/msg00063.html
 
 20061129T1537Z <chicares@cox.net> [1222]
 
@@ -9345,7 +9345,7 @@ Improve unit testing.
 
   timer.cpp
 Correct a defect: see
-  http://lists.gnu.org/archive/html/lmi/2007-01/msg00010.html
+  https://lists.nongnu.org/archive/html/lmi/2007-01/msg00010.html
 
 20070113T0211Z <chicares@cox.net> [1240]
 
@@ -9404,7 +9404,7 @@ Improve documentation.
 
   timer.hpp
 Ratify spike solutions committed 20070114T1944Z: see
-  http://lists.nongnu.org/archive/html/lmi/2007-01/msg00011.html
+  https://lists.nongnu.org/archive/html/lmi/2007-01/msg00011.html
 
 20070118T1118Z <chicares@cox.net> [1243]
 
@@ -9496,7 +9496,7 @@ Include only appropriate headers.
 
   ledger_xml_io2.cpp
 Address defect #13856:
-  http://sv.nongnu.org/bugs/?13856
+  https://sv.nongnu.org/bugs/?13856
 
 20070125T1346Z <chicares@cox.net> [1245]
 
@@ -10260,7 +10260,7 @@ section 8.1 .
   multidimgrid_safe.hpp
   tier_view_editor.hpp
 Remove doxygen markup. See:
-  http://lists.gnu.org/archive/html/lmi/2007-02/msg00029.html
+  https://lists.nongnu.org/archive/html/lmi/2007-02/msg00029.html
 
 20070303T1747Z <chicares@cox.net> [1253]
 
@@ -10269,7 +10269,7 @@ Remove doxygen markup. See:
   view_ex.cpp
   view_ex.hpp
 Prevent potential crash due to defective installation. See:
-  http://lists.nongnu.org/archive/html/lmi/2007-03/msg00008.html
+  https://lists.nongnu.org/archive/html/lmi/2007-03/msg00008.html
 
 20070303T1942Z <chicares@cox.net> [1253]
 
@@ -10474,7 +10474,7 @@ Replace wxString with std::string.
 
   alert.hpp
 Improve documentation. See:
-  http://lists.nongnu.org/archive/html/lmi/2007-03/msg00008.html
+  https://lists.nongnu.org/archive/html/lmi/2007-03/msg00008.html
 
 20070309T1627Z <chicares@cox.net> [1254]
 
@@ -10947,7 +10947,7 @@ Fix a typo (s/optimize_profiling/profiling_option/).
   safely_dereference_as.hpp
   safely_dereference_as_test.cpp
 Guard type conversion with a static assertion. See:
-  http://lists.gnu.org/archive/html/lmi/2007-04/msg00011.html
+  https://lists.nongnu.org/archive/html/lmi/2007-04/msg00011.html
 
 20070420T2343Z <chicares@cox.net> [1259]
 
@@ -11253,7 +11253,7 @@ providing a checkpoint for instrumentation.
 
   census_view.cpp
 Refine the 20070515T1125Z change in light of testing. See:
-  http://sv.nongnu.org/bugs/?19858
+  https://sv.nongnu.org/bugs/?19858
 
 20070520T1506Z <chicares@cox.net> [1256]
 
@@ -11524,7 +11524,7 @@ Remove stray comment markers.
 
   menus.xrc
 Comment out empty menus, but don't expunge them. See:
-  http://lists.nongnu.org/archive/html/lmi/2007-03/msg00068.html
+  https://lists.nongnu.org/archive/html/lmi/2007-03/msg00068.html
 
 20070527T1530Z <chicares@cox.net> [1247]
 
@@ -11952,9 +11952,9 @@ Remove unneeded code that was used only by struct RunCensus.
   ledgervalues.cpp
 Reactivate testing scaffold for the problem exposed 20070603T0431Z.
 See:
-  http://cvs.sv.gnu.org/viewvc/lmi/lmi/main.cpp?r1=1.6&r2=1.7
+  https://cvs.sv.nongnu.org/viewvc/lmi/lmi/main.cpp?r1=1.6&r2=1.7
   revision 1.7, Sun Apr 10 21:49:58 2005 UTC
-  http://cvs.sv.gnu.org/viewvc/lmi/lmi/ledgervalues.cpp?r1=1.5&r2=1.6
+  https://cvs.sv.nongnu.org/viewvc/lmi/lmi/ledgervalues.cpp?r1=1.5&r2=1.6
   revision 1.6, Sun Apr 10 21:49:58 2005 UTC
 for a demonstration of the relationship.
 
@@ -12207,7 +12207,7 @@ Fix the rest of FOP-0.93 warnings/errors.
   sample.cns
   sample.cns.touchstone
 Specify GeneralAccountRate explicitly. See:
-  http://sv.nongnu.org/support/?105822
+  https://sv.nongnu.org/support/?105822
 
 20070606T1904Z <chicares@cox.net> [1230]
 
@@ -12500,7 +12500,7 @@ Generate pdf files more efficiently.
 
   system_command_wx.cpp
 Improve arrangement of output. See:
-  http://lists.nongnu.org/archive/html/lmi/2007-06/msg00010.html
+  https://lists.nongnu.org/archive/html/lmi/2007-06/msg00010.html
 
 20070620T1215Z <etarassov@tt-solutions.com> [1231]
 
@@ -15560,13 +15560,13 @@ Add a unit test for pasting to a textcontrol.
   wx-2.8.6.patch [new file]
   wx-2.8.7.patch [new file]
 Add local patches and upgrade to wx-2.8.7 . See:
-  http://lists.gnu.org/archive/html/lmi/2008-02/msg00011.html
+  https://lists.nongnu.org/archive/html/lmi/2008-02/msg00011.html
 
 20080206T0048Z <gchicares@sbcglobal.net> [1204]
 
   main_wx.cpp
 Reconstruct the unit test for pasting to a textcontrol. Crucial idea:
-  http://lists.nongnu.org/archive/html/lmi/2008-02/msg00010.html
+  https://lists.nongnu.org/archive/html/lmi/2008-02/msg00010.html
 
 20080206T0346Z <gchicares@sbcglobal.net> [1204]
 
@@ -15809,7 +15809,7 @@ Look up xsl filenames as changed 20080218T1743Z.
   transferor.cpp
   xml_lmi.cpp
 Suppress "unreachable" diagnostics uniformly. See:
-  http://lists.nongnu.org/archive/html/lmi/2007-03/msg00008.html
+  https://lists.nongnu.org/archive/html/lmi/2007-03/msg00008.html
 
 20080221T1936Z <wboutin@massmutual.com> [1197]
 
@@ -15849,7 +15849,7 @@ Return empty text from clipboard without complaint.
 
   main_wx.cpp
 Rewrite paste handler and its unit test. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-02/msg00033.html
+  https://lists.nongnu.org/archive/html/lmi/2008-02/msg00033.html
 
 20080225T2312Z <gchicares@sbcglobal.net> [1195]
 
@@ -15861,7 +15861,7 @@ Refactor.
   main_wx.cpp
 Add more tests, revealing a shortcoming: spreadsheet row vectors have
 not yet been addressed. See:
-  http://savannah.nongnu.org/task/?5224
+  https://savannah.nongnu.org/task/?5224
 
 20080226T0259Z <gchicares@sbcglobal.net> [1195]
 
@@ -15872,7 +15872,7 @@ Address the shortcoming revealed 20080226T0127Z.
 
   wx_utility.cpp
 Simplify--see:
-  http://lists.nongnu.org/archive/html/lmi/2008-02/msg00038.html
+  https://lists.nongnu.org/archive/html/lmi/2008-02/msg00038.html
 
 20080228T0339Z <gchicares@sbcglobal.net> [1195]
 
@@ -15885,7 +15885,7 @@ Simplify--see:
   skin_single_premium.xrc
   skin_variable_annuity.xrc
 Remove obsolete wxDIALOG_EX_CONTEXTHELP workaround. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-02/msg00052.html
+  https://lists.nongnu.org/archive/html/lmi/2008-02/msg00052.html
 
 20080228T0606Z <gchicares@sbcglobal.net> [1195]
 
@@ -15901,7 +15901,7 @@ Set help provider--for now, just wxSimpleHelpProvider.
 
   multidimgrid_tools.cpp
 Fix tree-control size (Vaclav). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-02/msg00064.html
+  https://lists.nongnu.org/archive/html/lmi/2008-02/msg00064.html
 
 20080229T0502Z <gchicares@sbcglobal.net> [1195]
 
@@ -15938,10 +15938,10 @@ Remove obsolete comment.
 
   wx-2.8.7.patch
 Add contextual-help patches--see:
-  http://lists.nongnu.org/archive/html/lmi/2008-02/msg00059.html
-  http://lists.nongnu.org/archive/html/lmi/2008-02/msg00070.html
-  http://lists.nongnu.org/archive/html/lmi/2008-03/msg00000.html
-  http://lists.nongnu.org/archive/html/lmi/2008-03/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2008-02/msg00059.html
+  https://lists.nongnu.org/archive/html/lmi/2008-02/msg00070.html
+  https://lists.nongnu.org/archive/html/lmi/2008-03/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2008-03/msg00004.html
 
 20080308T1711Z <gchicares@sbcglobal.net> [1195]
 
@@ -16039,8 +16039,8 @@ Deprecate or remove obsolete code for non-7702 corridor.
 
   main_wx.cpp
 Make html help accessible from XRC dialogs (Vaclav). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-03/msg00033.html
-  http://lists.nongnu.org/archive/html/lmi/2008-03/msg00036.html
+  https://lists.nongnu.org/archive/html/lmi/2008-03/msg00033.html
+  https://lists.nongnu.org/archive/html/lmi/2008-03/msg00036.html
 
 20080321T1213Z <gchicares@sbcglobal.net> [1189]
 
@@ -16048,7 +16048,7 @@ Make html help accessible from XRC dialogs (Vaclav). See:
   configure.ac
   main_wx.cpp
 Test pasting with wxGTK (Vaclav). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-03/msg00001.html
+  https://lists.nongnu.org/archive/html/lmi/2008-03/msg00001.html
 
 20080323T0053Z <gchicares@sbcglobal.net> [1189]
 
@@ -16104,7 +16104,7 @@ asserted YYYYMMDDTHHMM can't be violated elsewhere.
 
   ihs_acctval.cpp
 Fix defect introduced 20050415T2255Z (Vadim's fix). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-03/msg00051.html
+  https://lists.nongnu.org/archive/html/lmi/2008-03/msg00051.html
 
 20080325T1646Z <gchicares@sbcglobal.net> [1185]
 
@@ -16117,19 +16117,19 @@ Fix defect introduced 20050415T2255Z (Vadim's fix). See:
   text_view.hpp
   view_ex.hpp
 Update documentation in light of the 20080309T1213Z change. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-03/msg00054.html
+  https://lists.nongnu.org/archive/html/lmi/2008-03/msg00054.html
 
 20080327T0152Z <gchicares@sbcglobal.net> [1184]
 
   ihs_irc7702.cpp
 Fix defect introduced 20050114T1947Z: enum type mismatch (Vadim). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-03/msg00048.html
+  https://lists.nongnu.org/archive/html/lmi/2008-03/msg00048.html
 
 20080327T0153Z <gchicares@sbcglobal.net> [1184]
 
   stream_cast.hpp
 Suppress a spurious compiler diagnostic. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-03/msg00049.html
+  https://lists.nongnu.org/archive/html/lmi/2008-03/msg00049.html
 
 20080327T0257Z <gchicares@sbcglobal.net> [1183]
 
@@ -16617,7 +16617,7 @@ Mark release candidate.
   transferor.cpp
 Replace wxControlWithItems with wxItemContainer (Vaclav). This is
 required for wxGTK builds. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-04/msg00001.html
+  https://lists.nongnu.org/archive/html/lmi/2008-04/msg00001.html
 
 20080508T0409Z <gchicares@sbcglobal.net> [1170]
 
@@ -16744,7 +16744,7 @@ two results for comparison in a unit test.
 
   census_document.hpp
 Remove a defective defect marker. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-05/msg00008.html
+  https://lists.nongnu.org/archive/html/lmi/2008-05/msg00008.html
 
 20080521T1744Z <gchicares@sbcglobal.net> [1169]
 
@@ -16983,14 +16983,14 @@ Assert nondegeneracy of tables used for certain tests.
 
   authenticity_test.cpp
 Avert a (non-msw) warning (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00007.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00007.html
 
 20080602T0400Z <gchicares@sbcglobal.net> [1169]
 
   wx_utility.cpp
   wx_utility.hpp
 Don't require wxUSE_STL (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00003.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00003.html
 
 20080602T1348Z <gchicares@sbcglobal.net> [1169]
 
@@ -17001,7 +17001,7 @@ Count down toward zero on statusbar during lengthy unit test.
 
   round_to_test.cpp
 Fix a GNU/Linux problem (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00004.html
 
 20080603T0416Z <gchicares@sbcglobal.net> [1167]
 
@@ -17033,19 +17033,19 @@ Suppress 'round_test' for the nonce.
 
   round_test.cpp
 Use the stricter tolerance proposed 20080603T1435Z. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00020.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00020.html
 
 20080605T1241Z <gchicares@sbcglobal.net> [1167]
 
   obstruct_slicing.hpp
 Improve documentation. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00024.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00024.html
 
 20080605T1242Z <gchicares@sbcglobal.net> [1167]
 
   Makefile.am
 Remove 'ledger_test'. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00022.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00022.html
 
 20080606T1132Z <gchicares@sbcglobal.net> [1167]
 
@@ -17061,7 +17061,7 @@ Add example showing noncommutativity mentioned 20080528T1415Z.
 
   round_to_test.cpp
 Fix defect introduced 20080602T1804Z (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00032.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00032.html
 
 20080609T1629Z <gchicares@sbcglobal.net> [1167]
 
@@ -17158,10 +17158,10 @@ No longer include a disused header.
 Fix defect introduced 20080602T1804Z. Revert the 20080602T1804Z and
 20080606T2049Z changes, revising 'round_test.cpp' as though the former
 change had never been made, then proceed as recommended here:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00033.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00033.html
 writing 'LMI_IEC_559' instead of '(0 && defined __STDC_IEC_559__)' for
 the reasons given here:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00034.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00034.html
 
 20080618T0145Z <gchicares@sbcglobal.net> [1163]
 
@@ -17172,7 +17172,7 @@ Redisable html help, reverting the 20080501T1425Z reversion.
 
   input_harmonization.cpp
 Improve control enablement. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00038.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00038.html
 
 20080619T1339Z <gchicares@sbcglobal.net> [1162]
 
@@ -17245,21 +17245,21 @@ Improve portability (VZ). The original code was rejected by msvc.
 
   expm1.c
 Apply one last kludge before expunging this file (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00053.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00053.html
 
 20080624T0937Z <gchicares@sbcglobal.net> [1163]
 
   any_member.hpp
   config.hpp
 Work around an msvc defect (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00043.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00043.html
 
 20080624T1331Z <gchicares@sbcglobal.net> [1163]
 
   alert_cli.cpp
   platform_dependent.hpp
 Work around a 'curses' problem. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00045.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00045.html
 
 20080625T2351Z <gchicares@sbcglobal.net> [1163]
 
@@ -17272,7 +17272,7 @@ Disallow 'const std::T&' as well as 'const T&'.
   config_ming323.hpp
   numeric_io_traits.hpp
 Casually work around absence of C99 strtof(). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00046.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00046.html
 
 20080626T1123Z <gchicares@sbcglobal.net> [1163]
 
@@ -17289,14 +17289,14 @@ Clarify a boost::numeric_cast defect.
 
   value_cast.hpp
 Improve portability. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00061.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00061.html
 
 20080626T1709Z <gchicares@sbcglobal.net> [1163]
 
   datum_string.hpp
   value_cast.hpp
 Pass argument by const reference to value_cast() (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00044.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00044.html
 
 20080627T0338Z <gchicares@sbcglobal.net> [1163]
 
@@ -17313,7 +17313,7 @@ Use value-preserving numeric_value_cast(), not boost::numeric_cast().
 
   multidimgrid_any.cpp
 Resolve two marked issues. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00066.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00066.html
 
 20080628T0200Z <gchicares@sbcglobal.net> [1161]
 
@@ -17323,7 +17323,7 @@ Resolve two marked issues. See:
   main_wx.hpp
   menus.xrc
 Safely report failure safely to report failure. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00028.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00028.html
 
 20080628T1948Z <gchicares@sbcglobal.net> [1161]
 
@@ -17472,14 +17472,14 @@ Refactor to facilitate elimination of old 'xenum' class.
   any_member_test.cpp
   safely_dereference_as_test.cpp
 Improve portability: don't hardcode rtti names in unit tests. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00069.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00069.html
 
 20080703T1143Z <gchicares@sbcglobal.net> [1150]
 
   value_cast_test.cpp
 Fix defect introduced 20080626T1123Z. The wrong version of gcc was
 cited in a comment. Caught by VZ in review:
-  http://lists.nongnu.org/archive/html/lmi/2008-06/msg00069.html
+  https://lists.nongnu.org/archive/html/lmi/2008-06/msg00069.html
 
 20080703T1155Z <gchicares@sbcglobal.net> [1150]
 
@@ -18164,7 +18164,7 @@ Refactor for simplicity.
   ihs_acctval.cpp
 Make "SepAcctCharges" equal "load" + "M&E", completing the work begun
 20080713T0936Z by applying the patch given here:
-  http://lists.nongnu.org/archive/html/lmi/2008-07/msg00005.html
+  https://lists.nongnu.org/archive/html/lmi/2008-07/msg00005.html
 
 20080721T1831Z <gchicares@sbcglobal.net> [1120]
 
@@ -18362,14 +18362,14 @@ Refactor, using yare instead of obsolete fund allocations.
 
   input_harmonization.cpp
 Fix defect introduced 20060924T1428Z. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-07/msg00006.html
+  https://lists.nongnu.org/archive/html/lmi/2008-07/msg00006.html
 
 20080724T1639Z <gchicares@sbcglobal.net> [1115]
 
   basic_values.hpp
   ihs_basicval.cpp
 Remove an unnecessary member function. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-07/msg00006.html
+  https://lists.nongnu.org/archive/html/lmi/2008-07/msg00006.html
 
 20080724T1919Z <gchicares@sbcglobal.net> [1115]
 
@@ -18677,20 +18677,20 @@ Initialize new input class the same way the old one was initialized.
 
   loads.hpp
 Improve concinnity. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-08/msg00001.html
+  https://lists.nongnu.org/archive/html/lmi/2008-08/msg00001.html
 
 20080802T0347Z <gchicares@sbcglobal.net> [1100]
 
   main_wx.cpp
 Address defect report #20236. See:
-  http://savannah.nongnu.org/bugs/?20236
+  https://savannah.nongnu.org/bugs/?20236
 
 20080802T1159Z <gchicares@sbcglobal.net> [1099]
 
   input_harmonization.cpp
 Mark defect resolved: checkboxes will soon replace yes-no radioboxes.
 See:
-  http://lists.nongnu.org/archive/html/lmi/2008-07/msg00007.html
+  https://lists.nongnu.org/archive/html/lmi/2008-07/msg00007.html
 
 20080802T1258Z <gchicares@sbcglobal.net> [1097]
 
@@ -19179,7 +19179,7 @@ Improve solve GUI, tending to backward compatibility.
 
   mvc_controller.cpp
 Improve wx style (Vaclav). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-08/msg00021.html
+  https://lists.nongnu.org/archive/html/lmi/2008-08/msg00021.html
 
 20080814T1209Z <gchicares@sbcglobal.net> [984]
 
@@ -19365,7 +19365,7 @@ Move a defectively hardcoded number to the database.
   alert.cpp
   alert_wx.cpp
 Accommodate unicode for one msw system call (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-08/msg00030.html
+  https://lists.nongnu.org/archive/html/lmi/2008-08/msg00030.html
 
 20080822T2217Z <wboutin@massmutual.com> [978]
 
@@ -19495,13 +19495,13 @@ previously placed on the statusbar.
   input_harmonization.cpp
   skin.xrc
 Add a "use current declared rate" checkbox. See:
-  http://savannah.nongnu.org/support/?105822
+  https://savannah.nongnu.org/support/?105822
 
 20080901T1926Z <gchicares@sbcglobal.net> [978]
 
   Makefile.am
 Fix defect introduced 20080811T1956Z (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-09/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2008-09/msg00000.html
 
 20080901T1927Z <gchicares@sbcglobal.net> [978]
 
@@ -19512,7 +19512,7 @@ Note a support request inline.
 
   main_wx.cpp
 Remove an obsolete workaround (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-09/msg00001.html
+  https://lists.nongnu.org/archive/html/lmi/2008-09/msg00001.html
 
 20080901T2355Z <zeitlin> [978]
 
@@ -19715,7 +19715,7 @@ Compare performance to a C alternative.
 
   istream_to_string_test.cpp
 Test an alternative to in_avail() (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-09/msg00032.html
+  https://lists.nongnu.org/archive/html/lmi/2008-09/msg00032.html
 The production version is deliberately not changed yet, in order to
 avoid any risk of destabilizing an impending release.
 
@@ -19899,7 +19899,7 @@ Refactor.
 
   icon_monger.cpp
 Inhibit rescaling for the nonce. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-08/msg00008.html
+  https://lists.nongnu.org/archive/html/lmi/2008-08/msg00008.html
 
 20081002T1429Z <vslavik@fastmail.fm> [960]
 
@@ -20238,7 +20238,7 @@ Use stronger typing (VS).
 
   icon_monger.cpp
 Resolve a wx issue (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-10/msg00037.html
+  https://lists.nongnu.org/archive/html/lmi/2008-10/msg00037.html
 
 20081103T2133Z <gchicares@sbcglobal.net> [958]
 
@@ -20353,7 +20353,7 @@ Remove deprecated conditionals.
   ledger_xsl.hpp
   main_cli.cpp
 Remove experimental xsl-fo code. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-11/msg00005.html
+  https://lists.nongnu.org/archive/html/lmi/2008-11/msg00005.html
 
 20081118T2251Z <gchicares@sbcglobal.net> [949]
 
@@ -20403,7 +20403,7 @@ Reduce physical dependency by fixing 'build_type=so_test' erosion.
 Remove a broken workaround added 20070413T0107Z. We don't and won't
 use Cygwin's gcc-3.4.4-3; for msw, instead we use MinGW gcc, in a
 Cygwin environment, with an identity mount--see:
-  http://lists.nongnu.org/archive/html/lmi/2007-11/msg00007.html
+  https://lists.nongnu.org/archive/html/lmi/2007-11/msg00007.html
 
 20081120T1055Z <gchicares@sbcglobal.net> [911]
 
@@ -20527,7 +20527,7 @@ Expunge a misbegotten unit test.
   loads.cpp
   workhorse.make
 Simplify PETE usage (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-11/msg00008.html
+  https://lists.nongnu.org/archive/html/lmi/2008-11/msg00008.html
 
 20081123T1409Z <gchicares@sbcglobal.net> [904]
 
@@ -20566,7 +20566,7 @@ Rectify names.
   path_utility.hpp
   path_utility_test.cpp
 Add a function to make a filename portable. This is required for
-  http://savannah.nongnu.org/support/?105907
+  https://savannah.nongnu.org/support/?105907
 because 'CensusFilename.Firstname Lastname.000000001.pdf' is not
 portable, so write_ledger_as_pdf() would turn it into 'output.pdf';
 yet people's names, unlike portable filenames, do contain spaces.
@@ -20589,7 +20589,7 @@ Remove superannuated code; improve documentation.
   path_utility.hpp
   path_utility_test.cpp
 Add insured's name to census output filenames. See:
-  http://savannah.nongnu.org/support/?105907
+  https://savannah.nongnu.org/support/?105907
 
 20081126T1653Z <gchicares@sbcglobal.net> [902]
 
@@ -20691,8 +20691,8 @@ Round substandard COI rates.
 
   ihs_avsolve.cpp
 Experimentally solve for surrender value equal to tax basis. See:
-  http://savannah.nongnu.org/support/index.php?106573
-  http://lists.nongnu.org/archive/html/lmi/2008-12/msg00001.html
+  https://savannah.nongnu.org/support/index.php?106573
+  https://lists.nongnu.org/archive/html/lmi/2008-12/msg00001.html
 
 20081208T1241Z <gchicares@sbcglobal.net> [892]
 
@@ -20709,7 +20709,7 @@ so that each is globally unique and therefore independent of context.
   menus.xrc
   toolbar.xrc
 Add command to print all census cells and composite to disk. See:
-  http://savannah.nongnu.org/support/?105907
+  https://savannah.nongnu.org/support/?105907
 
 20081210T2247Z <vslavik@fastmail.fm> [892]
 
@@ -20731,7 +20731,7 @@ Optionally print xml before transformation to xsl-fo.
 
   ledger_xml_io.cpp
 Remove unneeded DOCTYPE etc. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-12/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2008-12/msg00004.html
 
 20081212T1240Z <gchicares@sbcglobal.net> [892]
 
@@ -20873,7 +20873,7 @@ Silently disregard elements removed 20081119T0233Z.
   timer.cpp
 Fix defect introduced 20050114T1947Z, from an original file predating
 the lmi epoch: integer overflow, detected by Vaclav. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-12/msg00011.html
+  https://lists.nongnu.org/archive/html/lmi/2008-12/msg00011.html
 
 20081217T0247Z <gchicares@sbcglobal.net> [887]
 
@@ -20928,7 +20928,7 @@ Refine the 20081207T0049Z tax-basis-solve calculation.
 
   input_xml_io.cpp
 Load input files faster (Vaclav). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-12/msg00014.html
+  https://lists.nongnu.org/archive/html/lmi/2008-12/msg00014.html
 
 20081220T1903Z <wboutin@massmutual.com> [878]
 
@@ -21451,7 +21451,7 @@ Improve documentation.
 
   illustration_view.cpp
 Trap an exception to prevent an unpleasant GUI consequence. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-12/msg00017.html
+  https://lists.nongnu.org/archive/html/lmi/2008-12/msg00017.html
 
 20081231T2153Z <gchicares@sbcglobal.net> [878]
 
@@ -21469,14 +21469,14 @@ Improve documentation.
   msw_workarounds.cpp
   system_command_non_wx.cpp
 Accommodate wx unicode builds (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-12/msg00029.html
+  https://lists.nongnu.org/archive/html/lmi/2008-12/msg00029.html
 
 20090104T0238Z <gchicares@sbcglobal.net> [878]
 
   mvc_controller.cpp
 Import recent changes from skeleton branch. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-12/msg00036.html
-  http://lists.nongnu.org/archive/html/lmi/2009-01/msg00001.html
+  https://lists.nongnu.org/archive/html/lmi/2008-12/msg00036.html
+  https://lists.nongnu.org/archive/html/lmi/2009-01/msg00001.html
 
 20090104T0239Z <gchicares@sbcglobal.net> [878]
 
@@ -21563,7 +21563,7 @@ builtin wx bitmap: it causes a theme clash.
 
   icon_monger.cpp
 Improve art-provider diagnostics. See, however:
-  http://lists.nongnu.org/archive/html/lmi/2009-01/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2009-01/msg00004.html
 
 20090115T1944Z <gchicares@sbcglobal.net> [878]
 
@@ -21574,7 +21574,7 @@ Summarize premium allocation for composites.
 
   icon_monger.cpp
 Set html-help frame icon (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2008-10/msg00022.html
+  https://lists.nongnu.org/archive/html/lmi/2008-10/msg00022.html
 
 20090117T2145Z <gchicares@sbcglobal.net> [878]
 
@@ -21697,7 +21697,7 @@ Improve documentation.
 
   ihs_avmly.cpp
 Experimentally change withdrawal solves. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2009-02/msg00000.html
 
 20090206T0153Z <gchicares@sbcglobal.net> [860]
 
@@ -21707,9 +21707,9 @@ that set the 'LapseIgnoresSurrChg' flag (which prevents lapse merely
 due to a surrender charge as long as account value is nonnegative),
 some solves were unsuccessful. Because of the precaution described in
 footnote [4] here:
-  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2009-02/msg00000.html
 an unsuccessful solve does not lead to an incorrect illustration. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00005.html
+  https://lists.nongnu.org/archive/html/lmi/2009-02/msg00005.html
 
 20090207T1257Z <gchicares@sbcglobal.net> [857]
 
@@ -21762,7 +21762,7 @@ been resolved in the production system are now marked 'IHS !! '.
   ihs_avsolve.cpp
 Experimentally change withdrawal solves, reverting the 20090202T0247Z
 experiment. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00010.html
+  https://lists.nongnu.org/archive/html/lmi/2009-02/msg00010.html
 
 20090213T1233Z <gchicares@sbcglobal.net> [814]
 
@@ -21773,14 +21773,14 @@ Alphabetize 'configure' options of comparable moment.
 
   install_wx.make
 Remove an unneeded 'configure' option. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00014.html
+  https://lists.nongnu.org/archive/html/lmi/2009-02/msg00014.html
 
 20090213T1253Z <gchicares@sbcglobal.net> [814]
 
   install_libxml2_libxslt.make
   install_wx.make
 Explicitly specify cross tools. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00014.html
+  https://lists.nongnu.org/archive/html/lmi/2009-02/msg00014.html
 
 20090214T2204Z <gchicares@sbcglobal.net> [814]
 
@@ -21813,7 +21813,7 @@ Limit maximum withdrawal to minimum.
 
   ihs_avsolve.cpp
 Experimentally implement non-MEC solves. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00028.html
+  https://lists.nongnu.org/archive/html/lmi/2009-02/msg00028.html
 
 20090218T2212Z <wboutin@massmutual.com> [813]
 
@@ -21861,7 +21861,7 @@ Improve documentation, noting a newly-discovered defect.
   yare_input.cpp
 Work around a defect (reliance on implementation-defined behavior).
 See:
-  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00074.html
+  https://lists.nongnu.org/archive/html/lmi/2009-02/msg00074.html
 
 20090228T0001Z <gchicares@sbcglobal.net> [814]
 
@@ -21880,7 +21880,7 @@ the lmi epoch, and noted 20090226T1556Z.
   actuarial_table.cpp
   actuarial_table_test.cpp
 Improve missing-file diagnostics. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00064.html
+  https://lists.nongnu.org/archive/html/lmi/2009-02/msg00064.html
 
 20090228T2333Z <gchicares@sbcglobal.net> [813]
 
@@ -21897,7 +21897,7 @@ Solve for non-MEC, adding GUI support to the 20090217T0223Z change.
 
   skin.xrc
 Remove invalid growable row and column indices. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00063.html
+  https://lists.nongnu.org/archive/html/lmi/2009-02/msg00063.html
 
 20090301T2125Z <gchicares@sbcglobal.net> [812]
 
@@ -21954,7 +21954,7 @@ Provide limited backward compatibility for an obsolete "feature".
 Avoiding a MEC by increasing the specified amount every seven years
 prn was a flawed concept, poorly implemented, and will soon be
 eradicated. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00002.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00002.html
 
 20090303T0010Z <wboutin@massmutual.com> [811]
 
@@ -22081,7 +22081,7 @@ Merge certain enumerations for [from, to) half-open intervals:
   mce_solve_tgt_at --> mce_to_point
   mce_solve_to     --> mce_to_point
 as a first step toward this goal:
-  http://savannah.nongnu.org/support/?104431
+  https://savannah.nongnu.org/support/?104431
 
 20090306T2235Z <gchicares@sbcglobal.net> [796]
 
@@ -22102,7 +22102,7 @@ Remove enumerations rendered obsolete 20090306T1839Z.
   sample.ill
   skin.xrc
 Rectify antic enumerative names. See:
-  http://savannah.nongnu.org/support/index.php?104431
+  https://savannah.nongnu.org/support/index.php?104431
 
 20090307T2343Z <gchicares@sbcglobal.net> [796]
 
@@ -22147,33 +22147,33 @@ Restrict reduce-premium-to-avoid-MEC option more carefully.
 
   ledger_text_formats.cpp
 Prevent boldface table headers in html calculation summary. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00010.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00010.html
 
 20090311T1551Z <gchicares@sbcglobal.net> [793]
 
   ledger_text_formats.cpp
 Adjust table header alignment in html calculation summary. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00016.html
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00021.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00016.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00021.html
 
 20090311T1559Z <gchicares@sbcglobal.net> [793]
 
   main_wx.cpp
 Replace a deprecated with a precated function (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00027.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00027.html
 
 20090313T1621Z <gchicares@sbcglobal.net> [793]
 
   illustration_document.cpp
   illustration_document.hpp
 Forestall an untimely save dialog (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00009.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00009.html
 
 20090314T0432Z <gchicares@sbcglobal.net> [793]
 
   illustration_view.cpp
 Prevent view-creation exceptions from escaping to wx. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00036.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00036.html
 
 20090314T1244Z <gchicares@sbcglobal.net> [793]
 
@@ -22211,7 +22211,7 @@ little sense; besides, as heretofore implemented, it failed.
 
   input_harmonization.cpp
 Limit solve ages. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00053.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00053.html
 
 20090316T2243Z <gchicares@sbcglobal.net> [791]
 
@@ -22245,14 +22245,14 @@ because of the 20090314T1609Z change.
   icon_monger.cpp
 Revert the 20090112T1910Z change. Soon, any msw theme clash will be
 diagnosed in a different way. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-01/msg00006.html
+  https://lists.nongnu.org/archive/html/lmi/2009-01/msg00006.html
 
 20090319T1019Z <gchicares@sbcglobal.net> [789]
 
   icon_monger.cpp
   icon_monger.hpp
 Improve diagnostics (using VS's ideas). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00061.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00061.html
 
 20090320T0449Z <gchicares@sbcglobal.net> [789]
 
@@ -22303,7 +22303,7 @@ Warn when 'TermAdjustmentMethod' would be problematic.
   census_document.cpp
   census_document.hpp
 Forestall an unwanted save dialog (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00063.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00063.html
 
 20090323T1609Z <gchicares@sbcglobal.net> [787]
 
@@ -22314,20 +22314,20 @@ Rearrange.
 
   install_wx.make
 Make $(vendor) unique; remove unused $(date). The "use case" here:
-  http://lists.nongnu.org/archive/html/lmi/2008-12/msg00033.html
+  https://lists.nongnu.org/archive/html/lmi/2008-12/msg00033.html
 shows why a unique $(vendor) is wanted.
 
 20090323T1619Z <gchicares@sbcglobal.net> [787]
 
   install_wx.make
 Modernize flags. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-12/msg00034.html
+  https://lists.nongnu.org/archive/html/lmi/2008-12/msg00034.html
 
 20090323T1623Z <gchicares@sbcglobal.net> [787]
 
   install_wx.make
 Upgrade to wx-2.8.10 . See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00065.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00065.html
 
 20090324T1234Z <gchicares@sbcglobal.net> [787]
 
@@ -22391,7 +22391,7 @@ Fix an obviously-erroneous default mem-initializer.
   global_settings.cpp
   global_settings_test.cpp
 Make crucial paths absolute (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00065.html
+  https://lists.nongnu.org/archive/html/lmi/2009-02/msg00065.html
 
 20090329T1507Z <gchicares@sbcglobal.net> [783]
 
@@ -22437,7 +22437,7 @@ Use filesystem::path inserter.
 
   main_wx.cpp
 Prefer wxXmlResource::LoadFile() to wxXmlResource::Load() (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00073.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00073.html
 
 20090331T0219Z <gchicares@sbcglobal.net> [782]
 
@@ -22445,38 +22445,38 @@ Prefer wxXmlResource::LoadFile() to wxXmlResource::Load() (VS). See:
   main_wx.cpp
   workhorse.make
 Rewrite InitIcon() (VS) and redesign lmi icon. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00070.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00070.html
 
 20090331T1701Z <gchicares@sbcglobal.net> [782]
 
   main_wx.cpp
 Further simplify InitIcon() (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00076.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00076.html
 
 20090331T1722Z <gchicares@sbcglobal.net> [782]
 
   file_command_wx.cpp
   previewframe_ex.hpp
 Remove obsolete 'WX' markers (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00077.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00077.html
 
 20090331T1933Z <gchicares@sbcglobal.net> [782]
 
   about_dialog.cpp
 Remove an obsolete 'WX' marker (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00077.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00077.html
 
 20090331T1934Z <gchicares@sbcglobal.net> [782]
 
   view_ex.cpp
 Improve documentation (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00077.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00077.html
 
 20090405T1033Z <gchicares@sbcglobal.net> [782]
 
   main_wx.cpp
 Fix defect introduced 20090330T1723Z. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-04/msg00005.html
+  https://lists.nongnu.org/archive/html/lmi/2009-04/msg00005.html
 
 20090405T1034Z <gchicares@sbcglobal.net> [782]
 
@@ -22487,7 +22487,7 @@ Improve documentation.
 
   alert_wx.cpp
 Prevent accidents with printf conversion specifiers (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00069.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00069.html
 
 20090406T1844Z <gchicares@sbcglobal.net> [782]
 
@@ -22512,7 +22512,7 @@ Resolve some defect markers.
 
   alert_wx.cpp
 Make it safe to call wx 'alert' functions at any time. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-03/msg00069.html
+  https://lists.nongnu.org/archive/html/lmi/2009-03/msg00069.html
 
 20090408T0126Z <gchicares@sbcglobal.net> [780]
 
@@ -22527,7 +22527,7 @@ Avoid using safely_show_message() where not imperative.
 
   alert_wx.cpp
 Avoid using wxLog in wx 'alert' implementation. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-04/msg00018.html
+  https://lists.nongnu.org/archive/html/lmi/2009-04/msg00018.html
 
 20090412T0101Z <gchicares@sbcglobal.net> [779]
 
@@ -22604,13 +22604,13 @@ Replace dead code.
 Remove a defunct defect marker. The problem it described is no longer
 reproducible; probably it was a defect of an old version of 'make'.
 Cf.:
-  http://cvs.savannah.gnu.org/viewvc/lmi/skeleton/workhorse.make?r1=1.40&r2=1.41
+  https://cvs.savannah.nongnu.org/viewvc/lmi/skeleton/workhorse.make?r1=1.40&r2=1.41
 
 20090418T1313Z <gchicares@sbcglobal.net> [778]
 
   workhorse.make
 Refine linker command: xmlwrapp uses libxml2 (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00048.html
+  https://lists.nongnu.org/archive/html/lmi/2009-02/msg00048.html
 
 20090418T1315Z <gchicares@sbcglobal.net> [778]
 
@@ -22620,14 +22620,14 @@ Refine linker command: xmlwrapp uses libxml2 (VS). See:
   xmlwrapp-0.5.0.patch   [expunged]
   xmlwrapp-0.6.0.md5sums [new file]
 Upgrade to xmlwrapp-0.6.0 (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00048.html
+  https://lists.nongnu.org/archive/html/lmi/2009-02/msg00048.html
 
 20090418T1339Z <gchicares@sbcglobal.net> [778]
 
   msw_common.make
   posix_fhs.make
 Prepare to use xsltwrapp (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00048.html
+  https://lists.nongnu.org/archive/html/lmi/2009-02/msg00048.html
 
 20090418T2049Z <gchicares@sbcglobal.net> [778]
 
@@ -22642,7 +22642,7 @@ Update documentation.
   xmlwrapp-0.6.0.md5sums
 Prepare to use xsltwrapp; rename 'src/libxslt/init.cxx' distinctively.
 See the last paragraph here:
-  http://lists.nongnu.org/archive/html/lmi/2009-04/msg00027.html
+  https://lists.nongnu.org/archive/html/lmi/2009-04/msg00027.html
 
 20090418T2259Z <gchicares@sbcglobal.net> [775]
 
@@ -22653,7 +22653,7 @@ See the last paragraph here:
   xslt_lmi.cpp [expunged]
   xslt_lmi.hpp [expunged]
 Use xsltwrapp (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00048.html
+  https://lists.nongnu.org/archive/html/lmi/2009-02/msg00048.html
 
 20090419T2033Z <gchicares@sbcglobal.net> [775]
 
@@ -22666,7 +22666,7 @@ Use xsltwrapp (VS). See:
   xml_lmi.hpp
   xml_lmi_fwd.hpp
 Use xmlwrapp nodes_view iterator (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00048.html
+  https://lists.nongnu.org/archive/html/lmi/2009-02/msg00048.html
 
 20090420T0543Z <gchicares@sbcglobal.net> [775]
 
@@ -22691,7 +22691,7 @@ Remove some variables that are no longer needed (VS).
   xml_xslt_wrapp.cpp [new file]
   xmlwrapp-0.6.0.md5sums
 Improve use of xmlwrapp and xsltwrapp. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-04/msg00030.html
+  https://lists.nongnu.org/archive/html/lmi/2009-04/msg00030.html
 
 20090424T1549Z <wboutin@massmutual.com> [775]
 
@@ -22773,7 +22773,7 @@ Refactor for simplicity.
   wx-2.8.10.patch [new file]
 Forestall a gcc-3.4.5 warning. See:
   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=22207
-  http://lists.nongnu.org/archive/html/lmi/2006-04/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2006-04/msg00000.html
 
 20090430T1540Z <gchicares@sbcglobal.net> [775]
 
@@ -22819,7 +22819,7 @@ Note an mpatrol issue.
   skin_single_premium.xrc
   skin_variable_annuity.xrc
 Fix various XRC defects (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-05/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2009-05/msg00000.html
 
 20090504T1906Z <gchicares@sbcglobal.net> [775]
 
@@ -22836,7 +22836,7 @@ Fix various XRC defects (VS). See:
   skin_variable_annuity.xrc
   toolbar.xrc
 Update XRC version and namespace (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-05/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2009-05/msg00000.html
 
 20090506T1451Z <gchicares@sbcglobal.net> [775]
 
@@ -22848,19 +22848,19 @@ Upgrade to fop-0.95 .
 
   fo_common.xsl
 Improve orphan control (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2009-04/msg00042.html
+  https://lists.nongnu.org/archive/html/lmi/2009-04/msg00042.html
 
 20090506T1453Z <gchicares@sbcglobal.net> [775]
 
   illustration_reg.xsl
 Remove a doubted 20070611T1337Z workaround for fop-0.20.5 . See:
-  http://lists.nongnu.org/archive/html/lmi/2009-05/msg00002.html
+  https://lists.nongnu.org/archive/html/lmi/2009-05/msg00002.html
 
 20090508T0233Z <gchicares@sbcglobal.net> [775]
 
   install_mingw.make
 Adapt to an unadvertised MinGW change. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-05/msg00008.html
+  https://lists.nongnu.org/archive/html/lmi/2009-05/msg00008.html
 
 20090509T2255Z <gchicares@sbcglobal.net> [775]
 
@@ -22880,7 +22880,7 @@ Revert an apparently-overzealous workaround committed 20090503T1313Z.
   install_msw.sh
 Revert recent xsl-fo changes, in order to test them on a branch: i.e.,
 the {20090506T1451Z, 20090506T1452Z, 20090506T1453Z} changes. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-05/msg00033.html
+  https://lists.nongnu.org/archive/html/lmi/2009-05/msg00033.html
 
 20090524T1404Z <gchicares@sbcglobal.net> [775]
 
@@ -22919,7 +22919,7 @@ Use dates instead of durations for inforce.
 
   input_harmonization.cpp
 Temporarily allow durations for inforce with '--pyx=old_inforce'. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-05/msg00037.html
+  https://lists.nongnu.org/archive/html/lmi/2009-05/msg00037.html
 
 20090614T1335Z <gchicares@sbcglobal.net> [775]
 
@@ -22947,7 +22947,7 @@ the native binary that lmi already builds.
   skin_reg_d.xrc
   yare_input.hpp
 Rename 'InforceDate' to 'InforceAsOfDate'. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-05/msg00037.html
+  https://lists.nongnu.org/archive/html/lmi/2009-05/msg00037.html
 
 20090624T2009Z <wboutin@massmutual.com> [775]
 
@@ -23271,7 +23271,7 @@ Refactor.
 
   mec_state.cpp
 Fix defect introduced 20090717T0252Z, and detected by VZ--see:
-  http://lists.nongnu.org/archive/html/lmi/2009-07/msg00015.html
+  https://lists.nongnu.org/archive/html/lmi/2009-07/msg00015.html
 
 20090728T1620Z <gchicares@sbcglobal.net> [770]
 
@@ -23436,7 +23436,7 @@ illuminated 20090928T0145Z.
   preferences_model.cpp
 Fix defect introduced 20090926T0137Z, while fixing the same defect.
 See:
-  http://lists.nongnu.org/archive/html/lmi/2009-09/msg00012.html
+  https://lists.nongnu.org/archive/html/lmi/2009-09/msg00012.html
 
 20090929T0121Z <gchicares@sbcglobal.net> [773]
 
@@ -24120,7 +24120,7 @@ Replace a defunct URL.
   about_dialog.cpp
 Fix defect introduced 20050311T0309Z, from an original file predating
 the lmi epoch. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-01/msg00001.html
+  https://lists.nongnu.org/archive/html/lmi/2010-01/msg00001.html
 
 20100114T1631Z <gchicares@sbcglobal.net> [762]
 
@@ -24128,7 +24128,7 @@ the lmi epoch. See:
   quoted_gpl_html
   text_to_html_strings.sed
 Improve license layout; accommodate wx-2.9 changes. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-01/msg00005.html
+  https://lists.nongnu.org/archive/html/lmi/2010-01/msg00005.html
 et seqq.
 
 20100114T1755Z <gchicares@sbcglobal.net> [762]
@@ -24140,25 +24140,25 @@ Add 'product_files' binary (if it exists) to fardel.
 
   about_dialog.cpp
 Refactor: prefer SetSizerAndFit() to multiple functions. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-01/msg00011.html
+  https://lists.nongnu.org/archive/html/lmi/2010-01/msg00011.html
 
 20100118T0004Z <gchicares@sbcglobal.net> [762]
 
   about_dialog.cpp
 Refactor: prefer wxBoxSizer to wxFlexGridSizer. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-01/msg00011.html
+  https://lists.nongnu.org/archive/html/lmi/2010-01/msg00011.html
 
 20100118T1431Z <gchicares@sbcglobal.net> [762]
 
   about_dialog.cpp
 Improve layout. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-01/msg00028.html
+  https://lists.nongnu.org/archive/html/lmi/2010-01/msg00028.html
 
 20100118T1748Z <gchicares@sbcglobal.net> [762]
 
   about_dialog.cpp
 Make "license" dialog resizable. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-01/msg00011.html
+  https://lists.nongnu.org/archive/html/lmi/2010-01/msg00011.html
 
 20100118T2036Z <wboutin@charter.net> [762]
 
@@ -24178,7 +24178,7 @@ Fix a defect introduced 20100118T2036Z.
 
   about_dialog.cpp
 Size the dialog, not its html window. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-01/msg00011.html
+  https://lists.nongnu.org/archive/html/lmi/2010-01/msg00011.html
 
 20100119T1525Z <gchicares@sbcglobal.net> [762]
 
@@ -24190,7 +24190,7 @@ Let "license" dialog be made narrower than its initial width.
   about_dialog.cpp
   license.cpp
 Use the same font on two related dialogs. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-01/msg00031.html
+  https://lists.nongnu.org/archive/html/lmi/2010-01/msg00031.html
 
 20100120T2030Z <wboutin@charter.net> [762]
 
@@ -24205,7 +24205,7 @@ Rename a variable.
 
   about_dialog.cpp
 Never use a scrollbar on the "Help | About" dialog. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-01/msg00032.html
+  https://lists.nongnu.org/archive/html/lmi/2010-01/msg00032.html
 
 20100123T0252Z <gchicares@sbcglobal.net> [762]
 
@@ -24388,7 +24388,7 @@ Make new header known to autotools.
 
   mc_enum_types.cpp
 Fix a gcc-4.x issue (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2010-02/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2010-02/msg00004.html
 
 20100225T1749Z <gchicares@sbcglobal.net> [762]
 
@@ -24434,13 +24434,13 @@ Refine xml-serialization unit test for other toolchains.
   xml_serialize.hpp
 Forbid xml serialization of plain enums: mc_enum<> types should be
 used instead (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00020.html
+  https://lists.nongnu.org/archive/html/lmi/2010-03/msg00020.html
 
 20100318T2316Z <gchicares@sbcglobal.net> [762]
 
   configure.ac
 Use '-std=c++0x' for gcc versions that understand it (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00040.html
+  https://lists.nongnu.org/archive/html/lmi/2010-03/msg00040.html
 
 20100319T0013Z <gchicares@sbcglobal.net> [762]
 
@@ -24597,7 +24597,7 @@ Facilitate further fardel fitting.
   xml_serialize.hpp
   xml_serialize_test.cpp
 Don't append duplicate xml elements (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00035.html
+  https://lists.nongnu.org/archive/html/lmi/2010-03/msg00035.html
 
 20100323T1209Z <gchicares@sbcglobal.net> [761]
 
@@ -24627,7 +24627,7 @@ Mark release candidate.
 
   fenv_lmi_test.cpp
 Include a required header, resolving a GNU/Linux issue (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00061.html
+  https://lists.nongnu.org/archive/html/lmi/2010-03/msg00061.html
 
 20100324T1207Z <gchicares@sbcglobal.net> [761]
 
@@ -24642,8 +24642,8 @@ Resolve unit-test build issues with an ancient compiler.
 
   numeric_io_cast.hpp
 Work around an msvc defect (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00060.html
-  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00067.html
+  https://lists.nongnu.org/archive/html/lmi/2010-03/msg00060.html
+  https://lists.nongnu.org/archive/html/lmi/2010-03/msg00067.html
 
 20100325T2028Z <zeitlin> [761]
 
@@ -24925,7 +24925,7 @@ Refactor, simplifying the xml_serializable API.
   xml_serializable.hpp
   xml_serializable.tpp
 Refactor, removing the speed penalty introduced 20100417T1245Z. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-04/msg00025.html
+  https://lists.nongnu.org/archive/html/lmi/2010-04/msg00025.html
 
 20100420T1327Z <gchicares@sbcglobal.net> [760]
 
@@ -25039,13 +25039,13 @@ Make 'sample' files independent of proprietary products.
 
   rounding_rules.cpp
 Fix defect introduced 20070221T0307Z. See (A) here:
-  http://lists.nongnu.org/archive/html/lmi/2010-04/msg00040.html
+  https://lists.nongnu.org/archive/html/lmi/2010-04/msg00040.html
 
 20100424T2350Z <gchicares@sbcglobal.net> [755]
 
   rounding_rules.cpp
 Fix defect introduced 20070221T0307Z. See (B) here:
-  http://lists.nongnu.org/archive/html/lmi/2010-04/msg00040.html
+  https://lists.nongnu.org/archive/html/lmi/2010-04/msg00040.html
 
 20100425T2129Z <gchicares@sbcglobal.net> [755]
 
@@ -25101,7 +25101,7 @@ Anticipate new database-file names.
   mec_server.cpp
   mortality_rates_fetch.cpp
 Redefine 'MaxMonthlyCoiRate' and 'NAARDiscount' as reciprocals. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-03/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2010-03/msg00000.html
 
 20100429T1910Z <gchicares@sbcglobal.net> [755]
 
@@ -25472,7 +25472,7 @@ shows that the oft-called product_database::Query(int) is inefficient.
 
   input_test.cpp
 Demonstrate a problem. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-05/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2010-05/msg00004.html
 
 20100506T1324Z <gchicares@sbcglobal.net> [718]
 
@@ -25512,7 +25512,7 @@ Make 'input_test' compile with como.
   config.hpp
 Make 'input_test' succeed with como. The msvc workaround added on
 20090226T1557Z and discussed here:
-  http://lists.nongnu.org/archive/html/lmi/2009-02/msg00074.html
+  https://lists.nongnu.org/archive/html/lmi/2009-02/msg00074.html
 unintentionally applied to como as well, presumably because como
 defines the macro used to identify msvc.
 
@@ -25731,7 +25731,7 @@ Recognize version macros for EDG compilers.
   objects.make
 Begin designing a generic contains() function template (VZ and GWC).
 See:
-  http://lists.nongnu.org/archive/html/lmi/2010-05/msg00008.html
+  https://lists.nongnu.org/archive/html/lmi/2010-05/msg00008.html
 
 20100513T2240Z <gchicares@sbcglobal.net> [706]
 
@@ -25801,8 +25801,8 @@ Prefer contains() and map_lookup() to std::find().
   wx_utility.cpp
   wx_utility.hpp
 Forbid multibyte characters in filenames. See:
-  http://lists.nongnu.org/archive/html/lmi/2009-12/msg00004.html
-  http://lists.nongnu.org/archive/html/lmi/2010-05/msg00023.html
+  https://lists.nongnu.org/archive/html/lmi/2009-12/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2010-05/msg00023.html
 et seqq.
 
 20100516T2125Z <gchicares@sbcglobal.net> [706]
@@ -25836,7 +25836,7 @@ Improve const-correctness.
   math_functors.hpp
   math_functors_test.cpp
 Improve treatment of extreme or invalid arguments. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-05/msg00038.html
+  https://lists.nongnu.org/archive/html/lmi/2010-05/msg00038.html
 
 20100524T1154Z <gchicares@sbcglobal.net> [704]
 
@@ -25908,7 +25908,7 @@ Clarify diagnostics.
 
   workhorse.make
 Fix date calculations. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-06/msg00001.html
+  https://lists.nongnu.org/archive/html/lmi/2010-06/msg00001.html
 
 20100604T1620Z <gchicares@sbcglobal.net> [704]
 
@@ -26253,7 +26253,7 @@ implementation of allowed_keywords() is provided.
   input_realization.cpp
   mec_input.hpp
 Refactor, exposing an ancient defect. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00006.html
+  https://lists.nongnu.org/archive/html/lmi/2010-07/msg00006.html
 
 20100704T1201Z <gchicares@sbcglobal.net> [697]
 
@@ -26280,14 +26280,14 @@ Expose pop-up input-sequence handler for testing only.
   census_view.hpp
   single_choice_popup_menu.cpp
 Improve pop-up menu handling (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00009.html
+  https://lists.nongnu.org/archive/html/lmi/2010-07/msg00009.html
 
 20100706T1427Z <gchicares@sbcglobal.net> [694]
 
   census_view.cpp
   menus.xrc
 Improve pop-up menu handling (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00010.html
+  https://lists.nongnu.org/archive/html/lmi/2010-07/msg00010.html
 
 20100706T1623Z <gchicares@sbcglobal.net> [694]
 
@@ -26298,7 +26298,7 @@ Add new state fields.
 
   main_wx.cpp
 Remove a defunct defect marker. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00013.html
+  https://lists.nongnu.org/archive/html/lmi/2010-07/msg00013.html
 
 20100708T1304Z <gchicares@sbcglobal.net> [693]
 
@@ -26309,19 +26309,19 @@ Optionally reverse the meaning of 'DB_PremTaxState', for testing.
 
   input_sequence_entry.cpp
 Fix defect introduced 20100704T1645Z. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00015.html
+  https://lists.nongnu.org/archive/html/lmi/2010-07/msg00015.html
 
 20100711T1421Z <gchicares@sbcglobal.net> [693]
 
   input_sequence_entry.cpp
 Fix defect introduced 20100704T1645Z. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00016.html
+  https://lists.nongnu.org/archive/html/lmi/2010-07/msg00016.html
 
 20100711T1422Z <gchicares@sbcglobal.net> [693]
 
   input_sequence_entry.cpp
 Fix defect introduced 20100704T1645Z. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00017.html
+  https://lists.nongnu.org/archive/html/lmi/2010-07/msg00017.html
 
 20100717T0644Z <gchicares@sbcglobal.net> [693]
 
@@ -26651,7 +26651,7 @@ Rectify names.
 
   datum_sequence.cpp
 Fix defect introduced 20100703T0055Z. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00035.html
+  https://lists.nongnu.org/archive/html/lmi/2010-07/msg00035.html
 
 20100728T1947Z <gchicares@sbcglobal.net> [658]
 
@@ -26677,13 +26677,13 @@ Resurrect documented behavior.
 
   census_view.cpp
 Improve error handling. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00036.html
+  https://lists.nongnu.org/archive/html/lmi/2010-07/msg00036.html
 
 20100729T0212Z <gchicares@sbcglobal.net> [656]
 
   census_view.cpp
 Explicitly assert certain postconditions. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-07/msg00037.html
+  https://lists.nongnu.org/archive/html/lmi/2010-07/msg00037.html
 
 20100801T1217Z <gchicares@sbcglobal.net> [656]
 
@@ -26717,7 +26717,7 @@ Query product database with nondefault index pro re nata.
   input_realization.cpp
   input_sequence_entry.cpp
 Fix defect introduced 20100704T1645Z. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-08/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2010-08/msg00000.html
 
 20100806T0943Z <gchicares@sbcglobal.net> [656]
 
@@ -27733,7 +27733,7 @@ Designate release candidate.
 
   input_sequence_entry.cpp
 Fix defect introduced 20100704T1645Z. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-08/msg00018.html
+  https://lists.nongnu.org/archive/html/lmi/2010-08/msg00018.html
 
 20110508T1832Z <gchicares@sbcglobal.net> [655]
 
@@ -28034,25 +28034,25 @@ Improve documentation.
 
   install_wx.make
 Use 2010-11-06 wx-2.9.2 snapshot. See:
-  http://lists.nongnu.org/archive/html/lmi/2011-03/msg00008.html
+  https://lists.nongnu.org/archive/html/lmi/2011-03/msg00008.html
 
 20110621T2141Z <gchicares@sbcglobal.net> [649]
 
   install_libxml2_libxslt.make
 Document a latent issue. See:
-  http://lists.nongnu.org/archive/html/lmi/2011-06/msg00025.html
+  https://lists.nongnu.org/archive/html/lmi/2011-06/msg00025.html
 
 20110622T1736Z <gchicares@sbcglobal.net> [649]
 
   main_common.cpp
 No longer follow documented advice that turned out to be wrong. See:
-  http://lists.nongnu.org/archive/html/lmi/2011-06/msg00040.html
+  https://lists.nongnu.org/archive/html/lmi/2011-06/msg00040.html
 
 20110622T1910Z <gchicares@sbcglobal.net> [649]
 
   cpp_main.cpp
 No longer follow documented advice that turned out to be wrong. See:
-  http://lists.nongnu.org/archive/html/lmi/2011-06/msg00040.html
+  https://lists.nongnu.org/archive/html/lmi/2011-06/msg00040.html
 
 20110623T1036Z <gchicares@sbcglobal.net> [649]
 
@@ -28061,7 +28061,7 @@ No longer follow documented advice that turned out to be wrong. See:
   objects.make
   workhorse.make
 Rename msw resource file. See:
-  http://lists.nongnu.org/archive/html/lmi/2011-06/msg00036.html
+  https://lists.nongnu.org/archive/html/lmi/2011-06/msg00036.html
 
 20110623T2147Z <zeitlin> [649]
 
@@ -28108,7 +28108,7 @@ Designate release candidate.
   input_sequence_entry.cpp
   wx_utility.hpp
 Show diagnostics in input-sequence editor (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2010-09/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2010-09/msg00000.html
 
 20110802T1517Z <gchicares@sbcglobal.net> [637]
 
@@ -28117,100 +28117,100 @@ Show diagnostics in input-sequence editor (VS). See:
   census_view.cpp
   census_view.hpp
 Replace wxListView with wxDataViewCtrl (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2011-02/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2011-02/msg00000.html
 
 20110802T1541Z <gchicares@sbcglobal.net> [637]
 
   input_sequence_entry.cpp
 Use spincontrols for durations (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2011-03/msg00002.html
+  https://lists.nongnu.org/archive/html/lmi/2011-03/msg00002.html
 
 20110803T2340Z <gchicares@sbcglobal.net> [637]
 
   census_view.cpp
 When a cell is added, select it (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00003.html
+  https://lists.nongnu.org/archive/html/lmi/2011-08/msg00003.html
 
 20110805T0028Z <gchicares@sbcglobal.net> [637]
 
   input.hpp
 Specialize reconstitutors more finely (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2011-03/msg00005.html
-  http://lists.nongnu.org/archive/html/lmi/2011-04/msg00002.html
+  https://lists.nongnu.org/archive/html/lmi/2011-03/msg00005.html
+  https://lists.nongnu.org/archive/html/lmi/2011-04/msg00002.html
 
 20110807T1202Z <gchicares@sbcglobal.net> [637]
 
   input_sequence_entry.cpp
   input_sequence_entry.hpp
 Prepare to embed InputSequenceEntry in wxDVC (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2011-07/msg00005.html
+  https://lists.nongnu.org/archive/html/lmi/2011-07/msg00005.html
 
 20110807T1215Z <gchicares@sbcglobal.net> [637]
 
   input_sequence_entry.cpp
 Make "..." button less obtrusive (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2011-06/msg00057.html
+  https://lists.nongnu.org/archive/html/lmi/2011-06/msg00057.html
 
 20110807T1609Z <gchicares@sbcglobal.net> [637]
 
   input_sequence_entry.cpp
 Improve pop-up dialog placement (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2011-07/msg00017.html
+  https://lists.nongnu.org/archive/html/lmi/2011-07/msg00017.html
 
 20110807T1618Z <gchicares@sbcglobal.net> [637]
 
   input_sequence_entry.cpp
 Set default pushbutton to improve keyboard navigation. See:
-  http://lists.nongnu.org/archive/html/lmi/2011-07/msg00013.html
+  https://lists.nongnu.org/archive/html/lmi/2011-07/msg00013.html
 
 20110807T2129Z <gchicares@sbcglobal.net> [637]
 
   input_sequence_entry.cpp
 Improve documentation (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2011-07/msg00030.html
+  https://lists.nongnu.org/archive/html/lmi/2011-07/msg00030.html
 
 20110807T2144Z <gchicares@sbcglobal.net> [637]
 
   census_view.cpp
 Adjust wxDVC row height (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2011-07/msg00041.html
+  https://lists.nongnu.org/archive/html/lmi/2011-07/msg00041.html
 
 20110807T2217Z <gchicares@sbcglobal.net> [637]
 
   census_view.cpp
 Select first cell upon view creation. See:
-  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00009.html
+  https://lists.nongnu.org/archive/html/lmi/2011-08/msg00009.html
 
 20110808T1204Z <gchicares@sbcglobal.net> [637]
 
   census_view.cpp
 Use fixed column width by default. See:
-  http://lists.nongnu.org/archive/html/lmi/2011-07/msg00029.html
+  https://lists.nongnu.org/archive/html/lmi/2011-07/msg00029.html
 
 20110811T0936Z <gchicares@sbcglobal.net> [637]
 
   census_view.cpp
 Fix model notifications in CensusView::UponDeleteCells() (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00039.html
+  https://lists.nongnu.org/archive/html/lmi/2011-08/msg00039.html
 
 20110811T0953Z <gchicares@sbcglobal.net> [637]
 
   census_view.cpp
 After deletion, select one cell (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00041.html
+  https://lists.nongnu.org/archive/html/lmi/2011-08/msg00041.html
 
 20110811T1222Z <gchicares@sbcglobal.net> [637]
 
   census_view.cpp
 After deletion, ensure selected cell is visible. See:
-  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00044.html
+  https://lists.nongnu.org/archive/html/lmi/2011-08/msg00044.html
 
 20110811T1238Z <gchicares@sbcglobal.net> [637]
 
   census_view.cpp
   census_view.hpp
 Disable deletion if no cell is selected. See:
-  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00044.html
+  https://lists.nongnu.org/archive/html/lmi/2011-08/msg00044.html
 
 20110811T2203Z <gchicares@sbcglobal.net> [637]
 
@@ -28282,7 +28282,7 @@ changed.
 
   mvc_controller.cpp
 Display busy cursor while preparing to edit input. See:
-  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00047.html
+  https://lists.nongnu.org/archive/html/lmi/2011-08/msg00047.html
 
 20110815T0049Z <gchicares@sbcglobal.net> [623]
 
@@ -28368,7 +28368,7 @@ to the default keyword. Now, it's diagnosed as "xyz" would be.
 
   census_view.cpp
 Work around a wx-2.9.2 defect (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2011-08/msg00052.html
+  https://lists.nongnu.org/archive/html/lmi/2011-08/msg00052.html
 
 20110820T2031Z <gchicares@sbcglobal.net> [622]
 
@@ -28580,7 +28580,7 @@ Add a virtual RTTI function.
   census_view.cpp
   census_view.hpp
 Allow direct drill-down editing in census manager (VS). See:
-  http://savannah.nongnu.org/support/?105977
+  https://savannah.nongnu.org/support/?105977
 
 20111018T1638Z <gchicares@sbcglobal.net> [607]
 
@@ -28813,19 +28813,19 @@ Improve documentation.
 
   census_view.cpp
 Revert row-height change of 20110807T2144Z (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2011-11/msg00001.html
+  https://lists.nongnu.org/archive/html/lmi/2011-11/msg00001.html
 
 20111214T0041Z <gchicares@sbcglobal.net> [597]
 
   census_view.cpp
 Use default control sizes only when necessary (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2011-11/msg00001.html
+  https://lists.nongnu.org/archive/html/lmi/2011-11/msg00001.html
 
 20111214T0047Z <gchicares@sbcglobal.net> [597]
 
   census_view.cpp
 Reconcile MVC Model when a value is modified (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2011-11/msg00003.html
+  https://lists.nongnu.org/archive/html/lmi/2011-11/msg00003.html
 
 20111220T0033Z <gchicares@sbcglobal.net> [597]
 
@@ -29336,7 +29336,7 @@ Update copyright notices.
 
   census_view.cpp
 Use textctrls rather than spinctrls for doubles (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2011-12/msg00015.html
+  https://lists.nongnu.org/archive/html/lmi/2011-12/msg00015.html
 
 20120106T0751Z <gchicares@sbcglobal.net> [597]
 
@@ -29707,7 +29707,7 @@ Assert certain invariants.
   multiple_cell_document.hpp
   sample.cns
 Write more-idiomatic xml. See:
-  http://lists.nongnu.org/archive/html/lmi/2010-08/msg00016.html
+  https://lists.nongnu.org/archive/html/lmi/2010-08/msg00016.html
 
 20120220T0201Z <gchicares@sbcglobal.net> [573]
 
@@ -29729,13 +29729,13 @@ Copy system-test md5sums to support a version-control system.
 
   wx-2.9.3.patch
 Apply wx changeset 70308. See:
-  http://lists.nongnu.org/archive/html/lmi/2012-01/msg00011.html
+  https://lists.nongnu.org/archive/html/lmi/2012-01/msg00011.html
 
 20120224T1223Z <gchicares@sbcglobal.net> [573]
 
   wx-2.9.3.patch
 Apply wx changeset 70318. See:
-  http://lists.nongnu.org/archive/html/lmi/2012-01/msg00012.html
+  https://lists.nongnu.org/archive/html/lmi/2012-01/msg00012.html
 
 20120228T0954Z <gchicares@sbcglobal.net> [573]
 
@@ -29757,7 +29757,7 @@ Make generated script executable.
   xmlwrapp-0.6.0.md5sums
   xmlwrapp-0.6.0.patch [new file]
 Prefer <X/> to <X></X> for empty elements. See:
-  http://lists.nongnu.org/archive/html/lmi/2012-02/msg00013.html
+  https://lists.nongnu.org/archive/html/lmi/2012-02/msg00013.html
 
 20120229T1043Z <gchicares@sbcglobal.net> [573]
 
@@ -29884,8 +29884,8 @@ Simplify.
   multiple_cell_document.cpp
   sample.cns
 Eradicate 'size_hint'. See:
-  http://lists.nongnu.org/archive/html/lmi/2012-02/msg00010.html
-  http://lists.nongnu.org/archive/html/lmi/2012-02/msg00012.html
+  https://lists.nongnu.org/archive/html/lmi/2012-02/msg00010.html
+  https://lists.nongnu.org/archive/html/lmi/2012-02/msg00012.html
 
 20120316T0753Z <gchicares@sbcglobal.net> [573]
 
@@ -29898,7 +29898,7 @@ Handle '.rnc' files.
   multiple_cell_document.rnc [new file]
   single_cell_document.rnc   [new file]
 Add RELAX NG schemata for input files from external systems (VS). See:
-  http://savannah.nongnu.org/support/?107981
+  https://savannah.nongnu.org/support/?107981
 
 20120316T1113Z <gchicares@sbcglobal.net> [573]
 
@@ -29906,7 +29906,7 @@ Add RELAX NG schemata for input files from external systems (VS). See:
   multiple_cell_document.rnc
   single_cell_document.rnc
 Prefer 'include' to 'external', to sidestep a 'trang' defect. See:
-  http://lists.nongnu.org/archive/html/lmi/2012-03/msg00015.html
+  https://lists.nongnu.org/archive/html/lmi/2012-03/msg00015.html
 
 20120322T1113Z <gchicares@sbcglobal.net> [573]
 
@@ -30035,7 +30035,7 @@ Require an additional copyright notice in html files.
 Increase color depth to avoid an msw7 backward-compatibility defect:
 monochrome icons, supported by msw for a quarter of a century, now
 fail bizarrely. See:
-  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00001.html
+  https://lists.nongnu.org/archive/html/lmi/2012-05/msg00001.html
 
 20120508T1347Z <gchicares@sbcglobal.net> [573]
 
@@ -30079,19 +30079,19 @@ Designate release candidate.
   types.rnc [new file]
   types.xsd [new file]
 Refactor, splitting types into a separate file to allow reuse. See:
-  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00006.html
+  https://lists.nongnu.org/archive/html/lmi/2012-05/msg00006.html
 
 20120526T1035Z <gchicares@sbcglobal.net> [578]
 
   actuarial_table.rnc [new file]
 Add RNG schema for xml tables (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00006.html
+  https://lists.nongnu.org/archive/html/lmi/2012-05/msg00006.html
 
 20120526T1117Z <gchicares@sbcglobal.net> [578]
 
   actuarial_table.hpp
 Remove an unused member function (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00007.html
+  https://lists.nongnu.org/archive/html/lmi/2012-05/msg00007.html
 
 20120526T1133Z <gchicares@sbcglobal.net> [578]
 
@@ -30104,7 +30104,7 @@ Allow a new marker for SOA-to-xml table-migration issues.
   actuarial_table.hpp
 Refactor to facilitate an impending change (VS), crucially adding a
 virtual dtor to the base class. See:
-  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00008.html
+  https://lists.nongnu.org/archive/html/lmi/2012-05/msg00008.html
 
 20120527T1604Z <gchicares@sbcglobal.net> [578]
 
@@ -30113,20 +30113,20 @@ virtual dtor to the base class. See:
   actuarial_table_test.cpp
   objects.make
 Experimentally implement loading of xml tables (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00009.html
+  https://lists.nongnu.org/archive/html/lmi/2012-05/msg00009.html
 
 20120527T1615Z <gchicares@sbcglobal.net> [578]
 
   soa2xml.cpp     [new file]
   soa_helpers.hpp [new file]
 Add binary-to-xml migration tool. See:
-  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00010.html
+  https://lists.nongnu.org/archive/html/lmi/2012-05/msg00010.html
 
 20120527T1616Z <gchicares@sbcglobal.net> [578]
 
   soa_stress_test.cpp [new file]
 Add binary-versus-xml test tool. See:
-  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00011.html
+  https://lists.nongnu.org/archive/html/lmi/2012-05/msg00011.html
 
 20120527T1636Z <gchicares@sbcglobal.net> [578]
 
@@ -30142,13 +30142,13 @@ Fix 'make check_concinnity' issues in files just added.
   soa_helpers.hpp
   soa_stress_test.cpp
 Compile table-migration tools; fix compiler diagnostics. See, e.g.:
-  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00013.html
+  https://lists.nongnu.org/archive/html/lmi/2012-05/msg00013.html
 
 20120528T0949Z <gchicares@sbcglobal.net> [578]
 
   actuarial_table.cpp
 Test binary and xml implementations against each other (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00015.html
+  https://lists.nongnu.org/archive/html/lmi/2012-05/msg00015.html
 
 20120528T1121Z <gchicares@sbcglobal.net> [578]
 
@@ -30158,7 +30158,7 @@ Permit switching between implementations, with binary as the default.
 This default shields production from temporary effects of the xml
 implementation (some small numerical differences in system testing,
 and a performance issue discussed here:
-  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00018.html
+  https://lists.nongnu.org/archive/html/lmi/2012-05/msg00018.html
 ) while xml development continues.
 
 20120528T1136Z <gchicares@sbcglobal.net> [578]
@@ -30171,20 +30171,20 @@ Improve concinnity.
 
   soa_stress_test.cpp
 Remove dependency on conditional introduced 20120528T1121Z (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00019.html
+  https://lists.nongnu.org/archive/html/lmi/2012-05/msg00019.html
 
 20120529T2028Z <gchicares@sbcglobal.net> [578]
 
   actuarial_table.cpp
   soa_stress_test.cpp
 Tighten tolerance on binary-versus-xml tests. See:
-  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00022.html
+  https://lists.nongnu.org/archive/html/lmi/2012-05/msg00022.html
 
 20120529T2059Z <gchicares@sbcglobal.net> [578]
 
   census_view.cpp
 Fix assorted warnings (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00016.html
+  https://lists.nongnu.org/archive/html/lmi/2012-05/msg00016.html
 
 20120531T1516Z <gchicares@sbcglobal.net> [578]
 
@@ -30192,7 +30192,7 @@ Fix assorted warnings (VS). See:
   numeric_io_traits.hpp
   numeric_io_test.cpp
 Work around strtod("inf") defect in msvcrt (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00021.html
+  https://lists.nongnu.org/archive/html/lmi/2012-05/msg00021.html
 
 20120531T1726Z <gchicares@sbcglobal.net> [578]
 
@@ -30221,7 +30221,7 @@ Restructure, extending "INF" treatment to long double.
 
   numeric_io_traits.hpp
 Improve treatment of infinities. See (VZ):
-  http://lists.nongnu.org/archive/html/lmi/2012-05/msg00030.html
+  https://lists.nongnu.org/archive/html/lmi/2012-05/msg00030.html
 
 20120603T2018Z <gchicares@sbcglobal.net> [578]
 
@@ -30269,7 +30269,7 @@ Untangle a variable formerly used for tracking numbers.
 
   numeric_io_traits.hpp
 Fix defect introduced 20120603T1917Z (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2012-06/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2012-06/msg00000.html
 
 20120612T1738Z <gchicares@sbcglobal.net> [578]
 
@@ -30364,7 +30364,7 @@ Measure speed of copy ctor and assignment and equality operators.
 
   input.cpp
 Improve copy ctor and assignment and equality operators (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2012-03/msg00014.html
+  https://lists.nongnu.org/archive/html/lmi/2012-03/msg00014.html
 
 20120624T0027Z <gchicares@sbcglobal.net> [573]
 
@@ -32411,7 +32411,7 @@ Use 2013-07-11 wx-2.9.5 snapshot.
 
   install_wx.make
 Don't use warning-ridden third-party code. See:
-  http://lists.nongnu.org/archive/html/lmi/2013-07/msg00010.html
+  https://lists.nongnu.org/archive/html/lmi/2013-07/msg00010.html
 
 20130715T0022Z <gchicares@sbcglobal.net> [541]
 
@@ -32422,7 +32422,7 @@ Use 2013-07-14 wx-2.9.5 snapshot.
 
   install_wx.make
 Use 2013-07-15 wx-2.9.5 snapshot, updating $(vendor). But see:
-  http://lists.nongnu.org/archive/html/lmi/2013-07/msg00030.html
+  https://lists.nongnu.org/archive/html/lmi/2013-07/msg00030.html
 
 20130715T1622Z <gchicares@sbcglobal.net> [541]
 
@@ -32480,19 +32480,19 @@ Designate release candidate 5752.
   install_wx.make
   wx-2.9.5.patch
 Upgrade to wx-2.9.5, enabling vararg macros. See:
-  http://lists.nongnu.org/archive/html/lmi/2013-07/msg00045.html
+  https://lists.nongnu.org/archive/html/lmi/2013-07/msg00045.html
 
 20130720T0121Z <gchicares@sbcglobal.net> [542]
 
   skin.xrc
 Remove or adjust impossibly low control widths. See:
-  http://lists.nongnu.org/archive/html/lmi/2013-07/msg00021.html
+  https://lists.nongnu.org/archive/html/lmi/2013-07/msg00021.html
 
 20130721T2352Z <gchicares@sbcglobal.net> [542]
 
   mvc_controller.cpp
 Recurse through children--e.g., group boxes. See:
-  http://lists.nongnu.org/archive/html/lmi/2013-07/msg00038.html
+  https://lists.nongnu.org/archive/html/lmi/2013-07/msg00038.html
 
 20130723T2241Z <gchicares@sbcglobal.net> [542]
 
@@ -32866,7 +32866,7 @@ Use the delay function just added.
 
   progress_meter_wx.cpp
 Sleep wakefully between printouts. See:
-  http://lists.nongnu.org/archive/html/lmi/2013-11/msg00005.html
+  https://lists.nongnu.org/archive/html/lmi/2013-11/msg00005.html
 
 20131109T0029Z <gchicares@sbcglobal.net> [542]
 
@@ -32874,7 +32874,7 @@ Sleep wakefully between printouts. See:
   progress_meter.hpp
   progress_meter_wx.cpp
 Process pending events more cautiously during a pause. See:
-  http://lists.nongnu.org/archive/html/lmi/2013-11/msg00006.html
+  https://lists.nongnu.org/archive/html/lmi/2013-11/msg00006.html
 
 20131110T1401Z <gchicares@sbcglobal.net> [542]
 
@@ -32937,13 +32937,13 @@ Make pause between printouts configurable.
 
   system_command_wx.cpp
 Abandon the 20131114T1431Z experiment. See:
-  http://lists.nongnu.org/archive/html/lmi/2013-11/msg00015.html
+  https://lists.nongnu.org/archive/html/lmi/2013-11/msg00015.html
 
 20131117T1403Z <gchicares@sbcglobal.net> [542]
 
   system_command_wx.cpp
 Make "Census | Print case to disk" cancellable. See:
-  http://lists.nongnu.org/archive/html/lmi/2013-11/msg00017.html
+  https://lists.nongnu.org/archive/html/lmi/2013-11/msg00017.html
 
 20131117T1453Z <gchicares@sbcglobal.net> [542]
 
@@ -32970,7 +32970,7 @@ Initialize all data members in ctor-initializer for safety.
 
   main_wx.cpp
 Call base class's OnExit() in override. See:
-  http://lists.nongnu.org/archive/html/lmi/2013-11/msg00020.html
+  https://lists.nongnu.org/archive/html/lmi/2013-11/msg00020.html
 
 20131120T1916Z <gchicares@sbcglobal.net> [542]
 
@@ -32981,19 +32981,19 @@ Handle and report exceptions in overridden OnExit().
 
   xml_lmi.cpp
 Replace deprecated get_error_message() (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2013-05/msg00002.html
+  https://lists.nongnu.org/archive/html/lmi/2013-05/msg00002.html
 
 20131121T0004Z <gchicares@sbcglobal.net> [542]
 
   xml_lmi.cpp
 Replace deprecated document(char const*) (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2013-05/msg00002.html
+  https://lists.nongnu.org/archive/html/lmi/2013-05/msg00002.html
 
 20131121T1319Z <gchicares@sbcglobal.net> [542]
 
   xml_lmi.cpp
 Remove otiose checks. See:
-  http://lists.nongnu.org/archive/html/lmi/2013-11/msg00020.html
+  https://lists.nongnu.org/archive/html/lmi/2013-11/msg00020.html
 
 20131121T1417Z <gchicares@sbcglobal.net> [542]
 
@@ -33006,7 +33006,7 @@ Upgrade to xmlwrapp-0.7.1 .
   multiple_cell_document.cpp
   single_cell_document.cpp
 Show all schema diagnostics, not just the first (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2013-05/msg00002.html
+  https://lists.nongnu.org/archive/html/lmi/2013-05/msg00002.html
 Identify problems this uncovers in old code.
 
 20131206T1811Z <gchicares@sbcglobal.net> [542]
@@ -33583,19 +33583,19 @@ Designate release candidate 5857.
   docmanager_ex.hpp
   multidimgrid_any.cpp
 Prepare for wx-3.0 (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2014-02/msg00000.html
 
 20140224T0202Z <gchicares@sbcglobal.net> [542]
 
   multidimgrid_any.cpp
 Refine wx-3.0 preparation. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00009.html
+  https://lists.nongnu.org/archive/html/lmi/2014-02/msg00009.html
 
 20140224T0209Z <gchicares@sbcglobal.net> [542]
 
   Makefile.am
 Fix defects introduced 20131010T1211Z (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00003.html
+  https://lists.nongnu.org/archive/html/lmi/2014-02/msg00003.html
 
 20140226T1537Z <gchicares@sbcglobal.net> [542]
 
@@ -33608,7 +33608,7 @@ Fix defects introduced 20131010T1211Z (VS). See:
   view_ex.cpp
   workhorse.make
 Split lmi_wx_shared into a DLL and a small executable (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00007.html
+  https://lists.nongnu.org/archive/html/lmi/2014-02/msg00007.html
 
 20140226T2103Z <gchicares@sbcglobal.net> [542]
 
@@ -33617,7 +33617,7 @@ Split lmi_wx_shared into a DLL and a small executable (VS). See:
   skeleton.hpp
   view_ex.cpp
 Move wxApp implementation (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2014-02/msg00004.html
 
 20140301T1416Z <gchicares@sbcglobal.net> [542]
 
@@ -33627,7 +33627,7 @@ Move wxApp implementation (VS). See:
   skeleton.hpp
   workhorse.make
 Add inchoate GUI test (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2014-02/msg00004.html
 
 20140306T2306Z <gchicares@sbcglobal.net> [542]
 
@@ -33712,7 +33712,7 @@ Improve documentation.
   test_coding_rules.cpp
   wx_checks.cpp
 Don't change html charset. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-03/msg00001.html
+  https://lists.nongnu.org/archive/html/lmi/2014-03/msg00001.html
 
 20140312T2337Z <gchicares@sbcglobal.net> [542]
 
@@ -33724,19 +33724,19 @@ Upgrade to wx-3.0.0 .
 
   wx-3.0.0.patch
 Install 'testing.h' header. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-03/msg00006.html
+  https://lists.nongnu.org/archive/html/lmi/2014-03/msg00006.html
 
 20140314T1341Z <gchicares@sbcglobal.net> [542]
 
   wx-3.0.0.patch
 Suppress an apparently bogus error message. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-03/msg00008.html
+  https://lists.nongnu.org/archive/html/lmi/2014-03/msg00008.html
 
 20140314T1345Z <gchicares@sbcglobal.net> [542]
 
   main_wx_test.cpp
 Test version shown in title of "about" dialog (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2014-03/msg00008.html
+  https://lists.nongnu.org/archive/html/lmi/2014-03/msg00008.html
 
 20140316T1540Z <gchicares@sbcglobal.net> [542]
 
@@ -33748,7 +33748,7 @@ included in archive.
 
   main_wx_test.cpp
 Separate GUI test from command-line unit-test framework. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-03/msg00012.html
+  https://lists.nongnu.org/archive/html/lmi/2014-03/msg00012.html
 
 20140422T2340Z <gchicares@sbcglobal.net> [542]
 
@@ -34172,21 +34172,21 @@ Recognize client system's values for table ratings.
   interest_rates.cpp
   istream_to_string.hpp
 Avoid g++-4.9.1 warnings about unused functions and typedefs. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-09/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2014-09/msg00000.html
 
 20141003T0020Z <gchicares@sbcglobal.net> [533]
 
   census_view.cpp
 Avoid certain g++-4.9.1 warnings about unused variables. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-09/msg00001.html
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00001.html
+  https://lists.nongnu.org/archive/html/lmi/2014-09/msg00001.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00001.html
 
 20141003T0021Z <gchicares@sbcglobal.net> [533]
 
   multidimgrid_tools.hpp
 Fix defect introduced 20070221T0307Z. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-09/msg00002.html
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2014-09/msg00002.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00004.html
 
 20141004T1318Z <gchicares@sbcglobal.net> [533]
 
@@ -34197,26 +34197,26 @@ Improve documentation.
 
   force_linking.hpp [new file]
 Force linking despite overly-aggressive linker "optimization". See:
-  http://lists.nongnu.org/archive/html/lmi/2014-08/msg00000.html
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00006.html
+  https://lists.nongnu.org/archive/html/lmi/2014-08/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00006.html
 
 20141005T1713Z <gchicares@sbcglobal.net> [533]
 
   force_linking.hpp
 Improve concinnity. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00007.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00007.html
 
 20141005T1742Z <gchicares@sbcglobal.net> [533]
 
   install_cygwin.bat
 Work around a Cygwin workaround for an msw snafu. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00013.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00013.html
 
 20141005T1955Z <gchicares@sbcglobal.net> [533]
 
   install_msw.sh
 Robustify. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00008.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00008.html
 
 20141005T2318Z <gchicares@sbcglobal.net> [533]
 
@@ -34228,7 +34228,7 @@ Demonstrate a latent problem.
   alert.hpp
   assert_lmi.hpp
 Remove the problem identified 20141005T2318Z, and a congener. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00009.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00009.html
 
 20141006T1350Z <gchicares@sbcglobal.net> [533]
 
@@ -34236,7 +34236,7 @@ Remove the problem identified 20141005T2318Z, and a congener. See:
   premium_tax_test.cpp
   workhorse.make
 Rectify data dependencies of certain test targets. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00018.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00018.html
 
 20141006T1728Z <gchicares@sbcglobal.net> [533]
 
@@ -34246,7 +34246,7 @@ Rectify data dependencies of certain test targets. See:
   progress_meter_wx.cpp
   system_command_wx.cpp
 Force linking despite overly-aggressive linker "optimization". See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00007.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00007.html
 
 20141006T1738Z <zeitlin> [533]
 
@@ -34267,7 +34267,7 @@ Prepare for forthcoming automated GUI-testing changes.
   progress_meter_wx.cpp
   system_command_wx.cpp
 Revert the 20141005T1713Z change; remove extraneous semicolons. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00027.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00027.html
 
 20141007T1457Z <gchicares@sbcglobal.net> [533]
 
@@ -34284,14 +34284,14 @@ Install a few more packages.
   skeleton.cpp
 Fix defect introduced 20050312T0301Z, from an original file predating
 the lmi epoch: messagebox title swapped with message. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00032.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00032.html
 
 20141010T1713Z <gchicares@sbcglobal.net> [533]
 
   assert_lmi.hpp
   assert_lmi_test.cpp
 Add some new macros, with a unit test that fails to compile. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00023.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00023.html
 
 20141010T1722Z <gchicares@sbcglobal.net> [533]
 
@@ -34303,13 +34303,13 @@ Resolve failure noted 20141010T1713Z.
 
   handle_exceptions.hpp
 Add a GUI-testing exception class. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00036.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00036.html
 
 20141012T0136Z <gchicares@sbcglobal.net> [533]
 
   handle_exceptions.hpp
 Improve exception class added 20141011T1234Z. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00043.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00043.html
 
 20141012T1509Z <gchicares@sbcglobal.net> [533]
 
@@ -34317,7 +34317,7 @@ Improve exception class added 20141011T1234Z. See:
   handle_exceptions_test.cpp
   main_wx.cpp
 Increase safety. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00041.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00041.html
 
 20141012T1525Z <gchicares@sbcglobal.net> [533]
 
@@ -34383,7 +34383,7 @@ Augment automated GUI test.
 
   main_wx_test.cpp
 Close "Help | About" dialog if initially open. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00059.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00059.html
 
 20141025T1534Z <gchicares@sbcglobal.net> [533]
 
@@ -34404,13 +34404,13 @@ Override OnAssertFailure().
   census_view.hpp
 Disable general print commands for censuses. See:
   https://savannah.nongnu.org/support/?104490
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00054.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00054.html
 
 20141027T1211Z <gchicares@sbcglobal.net> [532]
 
   skeleton.cpp
 Avoid unnecessary copying. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00086.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00086.html
 
 20141027T1434Z <gchicares@sbcglobal.net> [532]
 
@@ -34421,19 +34421,19 @@ Prefer not to call safe_message_alert() directly.
 
   main_wx_test.cpp
 Don't use base class handler for log frame menu. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00086.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00086.html
 
 20141028T1149Z <gchicares@sbcglobal.net> [532]
 
   main_wx_test.cpp
 Refactor, replacing std::pair with a test-results class. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00087.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00087.html
 
 20141028T1151Z <gchicares@sbcglobal.net> [532]
 
   wx_test_create_open.cpp
 Alphabetize headers. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00087.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00087.html
 
 20141028T1217Z <gchicares@sbcglobal.net> [532]
 
@@ -34442,40 +34442,40 @@ Alphabetize headers. See:
   wx_test_create_open.cpp
   wx_test_validate_output.cpp
 Skip tests for document types unsupported in context. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00087.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00087.html
 
 20141028T2246Z <gchicares@sbcglobal.net> [531]
 
   skeleton.cpp
 Fix defect introduced 20141027T1211Z. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00103.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00103.html
 
 20141029T1839Z <gchicares@sbcglobal.net> [531]
 
   skeleton.cpp
 Write wx debug messages to stderr. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00097.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00097.html
 
 20141029T1847Z <gchicares@sbcglobal.net> [529]
 
   skeleton.cpp
   view_ex.hpp
 wxView::OnUpdate(): just say "no". See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00105.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00105.html
 
 20141030T1210Z <gchicares@sbcglobal.net> [528]
 
   skeleton.cpp
 Remove a too-fleeting progress meter. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00103.html
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00112.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00103.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00112.html
 
 20141031T0141Z <gchicares@sbcglobal.net> [528]
 
   census_view.cpp
 Fix defect introduced 20050312T0301Z, from an original file predating
 the lmi epoch: unable to rename employee class. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00117.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00117.html
 
 20141031T1249Z <gchicares@sbcglobal.net> [528]
 
@@ -34508,7 +34508,7 @@ Refactor for concinnity.
 
   census_view.cpp
 Call Update() when a column-width style is chosen. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2014-11/msg00000.html
 
 20141101T2228Z <gchicares@sbcglobal.net> [522]
 
@@ -34524,7 +34524,7 @@ Remove markers deemed nugatory 20141101T2228Z.
 
   census_view.cpp
 Improve cell-deletion speed. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2014-11/msg00004.html
 
 20141105T1834Z <gchicares@sbcglobal.net> [519]
 
@@ -34542,7 +34542,7 @@ Reformat.
   mec_view.cpp
   skeleton.cpp
 Gray out inapplicable toolbar buttons when no view is open. See:
-  http://lists.nongnu.org/archive/html/lmi/2008-09/msg00036.html
+  https://lists.nongnu.org/archive/html/lmi/2008-09/msg00036.html
 
 20141105T2147Z <gchicares@sbcglobal.net> [517]
 
@@ -34564,7 +34564,7 @@ Add a new icon, reserving the old for another use.
   varying-width-16.png
   varying-width.png
 Make grayed icons less ugly (VZ). Cf.:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00071.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00071.html
 
 20141105T2353Z <gchicares@sbcglobal.net> [517]
 
@@ -34580,7 +34580,7 @@ Reformat.
 
   menus.xrc
 Use "platform" consistently. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00012.html
+  https://lists.nongnu.org/archive/html/lmi/2014-11/msg00012.html
 
 20141106T1624Z <gchicares@sbcglobal.net> [516]
 
@@ -34595,7 +34595,7 @@ Use "platform" consistently. See:
   skeleton.cpp
   toolbar.xrc
 Add a useful save-as-pdf command. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00005.html
+  https://lists.nongnu.org/archive/html/lmi/2014-11/msg00005.html
 
 20141106T1655Z <gchicares@sbcglobal.net> [516]
 
@@ -34609,20 +34609,20 @@ Improve concinnity; add shortcuts.
 
   wx_test_default_input.cpp
 Improve a variable name. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00118.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00118.html
 
 20141107T0122Z <gchicares@sbcglobal.net> [516]
 
   wx_test_default_input.cpp
 Fix a problem with 'USE_SO_ATTRIBUTES=1'. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00118.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00118.html
 
 20141107T1205Z <gchicares@sbcglobal.net> [516]
 
   skeleton.cpp
   skeleton.hpp
 Refactor to facilitate GUI-test automation. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00010.html
+  https://lists.nongnu.org/archive/html/lmi/2014-11/msg00010.html
 
 20141107T1252Z <gchicares@sbcglobal.net> [516]
 
@@ -34647,7 +34647,7 @@ Improve concinnity.
   soa_stress_test.cpp
 Fix defect introduced 20120527T1615Z: error using unnecessary library.
 See:
-  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00048.html
+  https://lists.nongnu.org/archive/html/lmi/2014-11/msg00048.html
 
 20141121T2252Z <gchicares@sbcglobal.net> [516]
 
@@ -34664,13 +34664,13 @@ Improve documentation.
   wx_test_benchmark_census.cpp
   wx_test_statusbar.hpp
 Clear statusbar before timing each "benchmark" census. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00058.html
+  https://lists.nongnu.org/archive/html/lmi/2014-11/msg00058.html
 
 20141123T2024Z <gchicares@sbcglobal.net> [516]
 
   wx_test_benchmark_census.cpp
 Conform to 20141106T1655Z accelerator change. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00058.html
+  https://lists.nongnu.org/archive/html/lmi/2014-11/msg00058.html
 
 20141202T1200Z <gchicares@sbcglobal.net> [516]
 
@@ -34694,31 +34694,31 @@ Document each automated GUI test (VZ).
 
   main_wx_test.cpp
 Improve '--help' output. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00050.html
+  https://lists.nongnu.org/archive/html/lmi/2014-11/msg00050.html
 
 20141204T0421Z <gchicares@sbcglobal.net> [516]
 
   main_wx_test.cpp
 Write all test output to stderr. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00061.html
+  https://lists.nongnu.org/archive/html/lmi/2014-11/msg00061.html
 
 20141204T0431Z <gchicares@sbcglobal.net> [516]
 
   main_wx_test.cpp
 Make test output more greppable. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00061.html
+  https://lists.nongnu.org/archive/html/lmi/2014-11/msg00061.html
 
 20141204T0436Z <gchicares@sbcglobal.net> [516]
 
   wx_test_benchmark_census.cpp
 Provide more information when a test fails. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00061.html
+  https://lists.nongnu.org/archive/html/lmi/2014-11/msg00061.html
 
 20141205T1720Z <gchicares@sbcglobal.net> [516]
 
   main_wx_test.cpp
 Write all test output to stdout, not stderr. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00004.html
 
 20141206T1140Z <gchicares@sbcglobal.net> [516]
 
@@ -34738,26 +34738,26 @@ Rectify test specification.
   wx_test_paste_census.cpp
   wx_test_validate_output.cpp
 Don't send wxEVT_UPDATE_UI events manually in GUI tests. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00014.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00014.html
 
 20141206T1847Z <gchicares@sbcglobal.net> [516]
 
   main_wx_test.cpp
 Eliminate log-message prefix. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00012.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00012.html
 
 20141206T1915Z <gchicares@sbcglobal.net> [516]
 
   main_wx_test.cpp
   skeleton.cpp
 Improve title of '--help' messagebox. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00013.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00013.html
 
 20141206T2004Z <gchicares@sbcglobal.net> [516]
 
   alert_wx.cpp
 Simplify thanks to a welcome wx enhancement. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00013.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00013.html
 
 20141207T0157Z <gchicares@sbcglobal.net> [516]
 
@@ -34765,20 +34765,20 @@ Simplify thanks to a welcome wx enhancement. See:
   workhorse.make
   wx_test_about_version.cpp
 Implement rectified test specification. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00030.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00030.html
 
 20141208T0048Z <gchicares@sbcglobal.net> [516]
 
   main_wx_test.cpp
   wx_test_case.hpp
 Add a '--distribution' flag for use in future test revisions. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00038.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00038.html
 
 20141208T0049Z <gchicares@sbcglobal.net> [516]
 
   wx_test_expiry_dates.cpp
 Implement rectified test specification. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00038.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00038.html
 
 20141210T1236Z <gchicares@sbcglobal.net> [516]
 
@@ -34786,13 +34786,13 @@ Implement rectified test specification. See:
   wx_test_input_sequences.cpp
   wx_test_validate_output.cpp
 Mark lines needing '--gui_test_path'. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00002.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00002.html
 
 20141210T1521Z <gchicares@sbcglobal.net> [516]
 
   wx_test_input_validation.cpp
 Mark another line needing '--gui_test_path'. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00040.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00040.html
 
 20141210T1525Z <gchicares@sbcglobal.net> [516]
 
@@ -34813,7 +34813,7 @@ Rectify test specification.
 
   main_wx_test.cpp
 Preserve file history. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00047.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00047.html
 
 20141212T1246Z <gchicares@sbcglobal.net> [516]
 
@@ -34851,7 +34851,7 @@ Rectify test specification.
   objects.make
   wx_test_extract.cpp [expunged]
 Expunge 'wx_test_extract.cpp' because it is no longer useful. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00055.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00055.html
 
 20141212T2107Z <gchicares@sbcglobal.net> [516]
 
@@ -34867,13 +34867,13 @@ Rectify test specification.
 
   alert_wx.cpp
 Further simplify in the spirit of the 20141206T2004Z change. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00029.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00029.html
 
 20141215T1220Z <gchicares@sbcglobal.net> [516]
 
   wx_test_validate_output.cpp
 Improve failure reporting. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00068.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00068.html
 
 20141215T1239Z <gchicares@sbcglobal.net> [516]
 
@@ -34885,39 +34885,39 @@ Improve failure reporting. See:
   wx_test_paste_census.cpp
   wx_test_validate_output.cpp
 Add '--gui_test_path'. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00068.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00068.html
 
 20141215T1250Z <gchicares@sbcglobal.net> [516]
 
   wx_test_benchmark_census.cpp
 Print only observed time, not relative error. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00073.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00073.html
 
 20141215T1255Z <gchicares@sbcglobal.net> [516]
 
   main_wx_test.cpp
   wx_test_case.hpp
 Remove configuration file. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00068.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00068.html
 
 20141215T1353Z <gchicares@sbcglobal.net> [516]
 
   wx_test_config_settings.cpp
 Run only with '--distribution' flag. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00074.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00074.html
 
 20141215T1400Z <gchicares@sbcglobal.net> [516]
 
   wx_test_date.hpp [new file]
   wx_test_expiry_dates.cpp
 Refactor. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00075.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00075.html
 
 20141215T1406Z <gchicares@sbcglobal.net> [516]
 
   wx_test_default_input.cpp
 Implement rectified test specification. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00075.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00075.html
 
 20141215T1416Z <gchicares@sbcglobal.net> [516]
 
@@ -34926,7 +34926,7 @@ Implement rectified test specification. See:
   wx_test_config_settings.cpp
   wx_test_default_input.cpp
 Skip distribution tests more elegantly. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00076.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00076.html
 
 20141215T1454Z <gchicares@sbcglobal.net> [516]
 
@@ -34935,13 +34935,13 @@ Skip distribution tests more elegantly. See:
   global_settings.hpp
   skeleton.cpp
 Add a deliberately obscure option. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00077.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00077.html
 
 20141215T1522Z <gchicares@sbcglobal.net> [516]
 
   main_wx_test.cpp
 Add a default 'gui_test_path'. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00079.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00079.html
 
 20150109T0037Z <gchicares@sbcglobal.net> [516]
 
@@ -35548,62 +35548,62 @@ Add an overlooked skin (KMM).
 
   skeleton.cpp
 Prefer calendar_date to wxDateTime. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00085.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00085.html
 
 20150123T0235Z <gchicares@sbcglobal.net> [516]
 
   wx_test_output.hpp [new file]
   wx_test_validate_output.cpp
 Extract output_file_existence_checker into a separate header. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00089.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00089.html
 
 20150123T0241Z <gchicares@sbcglobal.net> [516]
 
   wx_test_output.hpp
 Change output_file_existence_checker ctor to take fs::path. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00089.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00089.html
 
 20150123T0246Z <gchicares@sbcglobal.net> [516]
 
   wx_test_pdf_create.cpp
 Update PDF output tests to the revised specification. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00089.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00089.html
 
 20150123T0256Z <gchicares@sbcglobal.net> [516]
 
   wx_test_pdf_create.cpp
 Use output_pdf_existence_checker helper in PDF creation test. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00089.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00089.html
 
 20150123T0302Z <gchicares@sbcglobal.net> [516]
 
   wx_test_pdf_create.cpp
 Clean up .fo.xml files created during PDF generation. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00089.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00089.html
 
 20150123T1508Z <gchicares@sbcglobal.net> [516]
 
   wx_test_paste_census.cpp
 Implement rectified test specification. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00096.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00096.html
 
 20150123T1513Z <gchicares@sbcglobal.net> [516]
 
   wx_test_paste_census.cpp
 Refactor: use output_file_existence_checker. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00096.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00096.html
 
 20150123T1526Z <gchicares@sbcglobal.net> [516]
 
   main_wx_test.cpp
 Fail if an unexpected modal dialog is about to be shown. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00097.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00097.html
 
 20150123T1537Z <gchicares@sbcglobal.net> [516]
 
   wx_test_new.hpp
 Don't complain about unclosed documents during stack unwinding. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00097.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00097.html
 
 20150123T1613Z <gchicares@sbcglobal.net> [516]
 
@@ -35613,7 +35613,7 @@ Don't complain about unclosed documents during stack unwinding. See:
   skin_reg_d.xrc
   skin_variable_annuity.xrc
 Remove a bizarre zero-height workaround. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00099.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00099.html
 
 20150125T0053Z <gchicares@sbcglobal.net> [516]
 
@@ -35642,7 +35642,7 @@ Further rectify test specifications.
   Makefile.am
   objects.make
 Remove duplicative object file from makefiles. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-01/msg00033.html
+  https://lists.nongnu.org/archive/html/lmi/2015-01/msg00033.html
 
 20150131T0012Z <gchicares@sbcglobal.net> [516]
 
@@ -35664,7 +35664,7 @@ Exempt automatically generated input files from private taboos.
   wx_test_paste_census.cpp
   wx_test_validate_output.cpp
 Improve GUI-test diagnostics. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-01/msg00027.html
+  https://lists.nongnu.org/archive/html/lmi/2015-01/msg00027.html
 
 20150131T0124Z <gchicares@sbcglobal.net> [516]
 
@@ -35680,13 +35680,13 @@ Correct a typo in documentation.
 
   skeleton.cpp
 Remove platform-specific code that has become unnecessary. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00009.html
+  https://lists.nongnu.org/archive/html/lmi/2015-02/msg00009.html
 
 20150301T1729Z <gchicares@sbcglobal.net> [516]
 
   wx_test_validate_output.cpp
 Remove old code to make way for new. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+  https://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
 
 20150301T1747Z <gchicares@sbcglobal.net> [516]
 
@@ -35695,50 +35695,50 @@ Remove old code to make way for new. See:
   wx_test_paste_census.cpp
   wx_test_validate_output.cpp
 Add a helper for finding an MVC window by name. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+  https://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
 
 20150301T1755Z <gchicares@sbcglobal.net> [516]
 
   wx_test_validate_output.cpp
 Refactor to simplify planned reuse. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+  https://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
 
 20150301T2202Z <gchicares@sbcglobal.net> [516]
 
   wx_test_validate_output.cpp
 Add tests to verify existence of spreadsheet output. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+  https://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
 
 20150301T2325Z <gchicares@sbcglobal.net> [516]
 
   wx_test_output_pdf.hpp [new file]
   wx_test_pdf_create.cpp
 Refactor for reuse. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+  https://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
 
 20150301T2330Z <gchicares@sbcglobal.net> [516]
 
   wx_test_validate_output.cpp
 Refactor for reuse. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+  https://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
 
 20150301T2340Z <gchicares@sbcglobal.net> [516]
 
   wx_test_validate_output.cpp
 Add remaining census-output tests. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+  https://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
 
 20150301T2343Z <gchicares@sbcglobal.net> [516]
 
   wx_test_validate_output.cpp
 Clean up a leftover output file. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+  https://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
 
 20150306T1754Z <gchicares@sbcglobal.net> [516]
 
   install_wx.make
 Don't build wx components that lmi doesn't use. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00006.html
+  https://lists.nongnu.org/archive/html/lmi/2015-03/msg00006.html
 
 20150308T1823Z <gchicares@sbcglobal.net> [516]
 
@@ -35747,38 +35747,38 @@ Don't build wx components that lmi doesn't use. See:
   objects.make
   workhorse.make
 Work around a MinGW defect more tidily. See:
-  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00036.html
+  https://lists.nongnu.org/archive/html/lmi/2014-12/msg00036.html
 
 20150308T1908Z <gchicares@sbcglobal.net> [516]
 
   wx_test_default_update.cpp
 Implement rectified test specification. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00007.html
+  https://lists.nongnu.org/archive/html/lmi/2015-03/msg00007.html
 
 20150308T1918Z <gchicares@sbcglobal.net> [516]
 
   wx_test_default_update.cpp
 Run only with '--distribution' flag. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00007.html
+  https://lists.nongnu.org/archive/html/lmi/2015-03/msg00007.html
 
 20150308T2301Z <gchicares@sbcglobal.net> [516]
 
   wx_test_input_sequences.cpp
 Implement rectified test specification. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00009.html
+  https://lists.nongnu.org/archive/html/lmi/2015-03/msg00009.html
 
 20150308T2306Z <gchicares@sbcglobal.net> [516]
 
   wx_test_calculation_summary.cpp
 Implement rectified test specification. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00017.html
+  https://lists.nongnu.org/archive/html/lmi/2015-03/msg00017.html
 
 20150309T2300Z <gchicares@sbcglobal.net> [516]
 
   skeleton.cpp
   skeleton.hpp
 Accept input files as command-line arguments. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00022.html
+  https://lists.nongnu.org/archive/html/lmi/2015-03/msg00022.html
 
 20150315T1737Z <gchicares@sbcglobal.net> [516]
 
@@ -35914,13 +35914,13 @@ Use versioned schemata.
   wx_test_default_input.cpp
   wx_test_expiry_dates.cpp
 Use wxPrintf() instead of wxLogMessage() for GUI test. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
+  https://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
 
 20150326T2257Z <gchicares@sbcglobal.net> [516]
 
   skeleton.cpp
 Don't redirect all wxLog messages to stderr, just the debug ones. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
+  https://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
 
 20150326T2308Z <gchicares@sbcglobal.net> [516]
 
@@ -35928,19 +35928,19 @@ Don't redirect all wxLog messages to stderr, just the debug ones. See:
   objects.make
   wx_test_log_errors.cpp [new file]
 Add a unit test verifying that wxLog errors are shown. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
+  https://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
 
 20150326T2327Z <gchicares@sbcglobal.net> [516]
 
   main_wx_test.cpp
 Flush wxLog after each individual GUI test. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
+  https://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
 
 20150326T2349Z <gchicares@sbcglobal.net> [516]
 
   wx_test_input_sequences.cpp
 Guard against future changes in field names. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00032.html
+  https://lists.nongnu.org/archive/html/lmi/2015-03/msg00032.html
 
 20150327T0024Z <gchicares@sbcglobal.net> [516]
 
@@ -35952,26 +35952,26 @@ Forbid obscured email addresses.
   wx_test_document.hpp [new file]
   wx_test_new.hpp
 Move and rename class wx_test_new_document_base. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00043.html
+  https://lists.nongnu.org/archive/html/lmi/2015-03/msg00043.html
 
 20150327T0032Z <gchicares@sbcglobal.net> [516]
 
   wx_test_document.hpp
 Add wx_test_existing_illustration helper class. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00043.html
+  https://lists.nongnu.org/archive/html/lmi/2015-03/msg00043.html
 
 20150327T0041Z <gchicares@sbcglobal.net> [516]
 
   main_wx_test.cpp
   wx_test_input_validation.cpp
 Test all possible 'CurrentCoiMultiplier' validation errors. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00043.html
+  https://lists.nongnu.org/archive/html/lmi/2015-03/msg00043.html
 
 20150327T0252Z <gchicares@sbcglobal.net> [516]
 
   main_wx_test.cpp
 Reapply patches that were somehow misapplied. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00046.html
+  https://lists.nongnu.org/archive/html/lmi/2015-03/msg00046.html
 
 20150328T1252Z <gchicares@sbcglobal.net> [516]
 
@@ -36001,13 +36001,13 @@ Add a group-roster toolbar button.
 
   wx_test_validate_output.cpp
 Make sure "Comments" field was updated correctly. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00001.html
+  https://lists.nongnu.org/archive/html/lmi/2015-04/msg00001.html
 
 20150409T1759Z <gchicares@sbcglobal.net> [516]
 
   wx_test_paste_census.cpp
 Add spaces to make an error message more readable. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00001.html
+  https://lists.nongnu.org/archive/html/lmi/2015-04/msg00001.html
 
 20150409T1812Z <gchicares@sbcglobal.net> [516]
 
@@ -36046,14 +36046,14 @@ Add schema for XRC validation.
   skin_single_premium.xrc
   skin_variable_annuity.xrc
 Fix first tranche of XRC validation errors. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00002.html
+  https://lists.nongnu.org/archive/html/lmi/2015-04/msg00002.html
 
 20150417T2124Z <gchicares@sbcglobal.net> [516]
 
   policy_view.xrc
   rounding_view.xrc
 Use only one of a pair of synonymous constants. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
 
 20150417T2143Z <gchicares@sbcglobal.net> [516]
 
@@ -36065,13 +36065,13 @@ Use only one of a pair of synonymous constants. See:
   skin_single_premium.xrc
   skin_variable_annuity.xrc
 Forswear feckless flags. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
 
 20150417T2155Z <gchicares@sbcglobal.net> [516]
 
   policy_view.xrc
 Remove disregarded "option". See:
-  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
 
 20150417T2235Z <gchicares@sbcglobal.net> [516]
 
@@ -36087,7 +36087,7 @@ Remove disregarded "option". See:
   skin_single_premium.xrc
   skin_variable_annuity.xrc
 Remove alignment options that have been ignored due to wxGROW. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
 
 20150417T2245Z <gchicares@sbcglobal.net> [516]
 
@@ -36095,7 +36095,7 @@ Remove alignment options that have been ignored due to wxGROW. See:
   skin_group_carveout2.xrc
   skin_variable_annuity.xrc
 Add missing border flags. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
 
 20150417T2252Z <gchicares@sbcglobal.net> [516]
 
@@ -36110,7 +36110,7 @@ Add missing border flags. See:
   skin_single_premium.xrc
   skin_variable_annuity.xrc
 Fix incorrect uses of wxGROW. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
 
 20150417T2304Z <gchicares@sbcglobal.net> [516]
 
@@ -36124,7 +36124,7 @@ Fix incorrect uses of wxGROW. See:
   skin_single_premium.xrc
   skin_variable_annuity.xrc
 Let wx determine the size of date-picker controls. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
 
 20150417T2315Z <gchicares@sbcglobal.net> [516]
 
@@ -36135,19 +36135,19 @@ Let wx determine the size of date-picker controls. See:
   skin_group_carveout.xrc
   skin_reg_d.xrc
 Grow controls prn to align columns containing date pickers. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+  https://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
 
 20150417T2338Z <gchicares@sbcglobal.net> [516]
 
   about_dialog.cpp
 Improve "Help | About" layout with high DPI. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00006.html
+  https://lists.nongnu.org/archive/html/lmi/2015-04/msg00006.html
 
 20150418T0008Z <gchicares@sbcglobal.net> [516]
 
   rounding_view.xrc
 Remove redundant wxALIGN_LEFT flags from horizontal wxBoxSizer. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00012.html
+  https://lists.nongnu.org/archive/html/lmi/2015-04/msg00012.html
 
 20150501T2349Z <gchicares@sbcglobal.net> [516]
 
@@ -36243,7 +36243,7 @@ Add two new fields.
   rounding_view.xrc
   rounding_view_editor.cpp
 Fix XRC assertion failures. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-05/msg00009.html
+  https://lists.nongnu.org/archive/html/lmi/2015-05/msg00009.html
 
 20150527T1643Z <gchicares@sbcglobal.net> [512]
 
@@ -36406,7 +36406,7 @@ Make sample product's term parameters more plausible.
 
   install_cygwin.bat
 Replace mirror. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00018.html
+  https://lists.nongnu.org/archive/html/lmi/2015-07/msg00018.html
 
 20150724T2120Z <gchicares@sbcglobal.net> [508]
 
@@ -36435,7 +36435,7 @@ Eradicate references to expunged skins.
 
   test_coding_rules.cpp
 Silently ignore any 'tags' file. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00009.html
+  https://lists.nongnu.org/archive/html/lmi/2015-07/msg00009.html
 
 20150731T0013Z <gchicares@sbcglobal.net> [508]
 
@@ -36443,7 +36443,7 @@ Silently ignore any 'tags' file. See:
   mec_server.cpp
 Fix defect introduced 20090730T2312Z: logical operator on bitfield.
 See:
-  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00029.html
+  https://lists.nongnu.org/archive/html/lmi/2015-07/msg00029.html
 
 20150801T1412Z <gchicares@sbcglobal.net> [508]
 
@@ -36468,7 +36468,7 @@ Improve documentation.
   emit_ledger.cpp
   illustrator.cpp
 Don't overwrite input file. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2015-08/msg00000.html
 
 20150803T2343Z <gchicares@sbcglobal.net> [508]
 
@@ -36483,7 +36483,7 @@ Refactor.
   illustration_view.cpp
   illustrator.cpp
 Refactor. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00001.html
+  https://lists.nongnu.org/archive/html/lmi/2015-08/msg00001.html
 
 20150806T1443Z <gchicares@sbcglobal.net> [508]
 
@@ -36493,32 +36493,32 @@ Refactor. See:
   install_mpatrol.make
   install_wx.make
 Remove unused or needless wget flags. See the thread centered here:
-  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00010.html
+  https://lists.nongnu.org/archive/html/lmi/2015-08/msg00010.html
 
 20150806T1529Z <gchicares@sbcglobal.net> [508]
 
   install_wx.make
 Retrieve wx archives from github by sha1sum. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00019.html
+  https://lists.nongnu.org/archive/html/lmi/2015-07/msg00019.html
 
 20150807T0003Z <gchicares@sbcglobal.net> [508]
 
   install_wx.make
 Don't disable wxRegEx when building wx. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
+  https://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
 
 20150807T0007Z <gchicares@sbcglobal.net> [508]
 
   install_wx.make
 Handle more options in portable wx-config. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
+  https://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
 
 20150807T0025Z <gchicares@sbcglobal.net> [508]
 
   install_msw.sh
   install_wxpdfdoc.make [new file]
 Install wxPdfDocument library as part of lmi installation. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
+  https://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
 
 20150807T0037Z <gchicares@sbcglobal.net> [508]
 
@@ -36526,7 +36526,7 @@ Install wxPdfDocument library as part of lmi installation. See:
   workhorse.make
   wx_pdfdoc_test.cpp [new file]
 Add a simple unit test for wxPdfDocument. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
+  https://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
 
 20150810T1608Z <gchicares@sbcglobal.net> [508]
 
@@ -36543,7 +36543,7 @@ Improve documentation.
   objects.make
   workhorse.make
 Move 'wx_pdfdoc_test' out of $(unit_test_targets). See:
-  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
+  https://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
 
 20150810T1639Z <gchicares@sbcglobal.net> [508]
 
@@ -36704,19 +36704,19 @@ Exclude composite from participant count in summary.
 
   group_quote_pdf_gen_wx.cpp
 Simplify the way PDF file name is set (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00035.html
+  https://lists.nongnu.org/archive/html/lmi/2015-08/msg00035.html
 
 20150826T1702Z <gchicares@sbcglobal.net> [477]
 
   group_quote_pdf_gen_wx.cpp
 Refined formatting of totals. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00034.html
+  https://lists.nongnu.org/archive/html/lmi/2015-08/msg00034.html
 
 20150826T1714Z <gchicares@sbcglobal.net> [477]
 
   group_quote_pdf_gen_wx.cpp
 Attempt to widen columns. See thread beginning here:
-  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00034.html
+  https://lists.nongnu.org/archive/html/lmi/2015-08/msg00034.html
 
 20150826T1906Z <gchicares@sbcglobal.net> [477]
 
@@ -36727,25 +36727,25 @@ Add a footer, which will soon be augmented.
 
   wx_table_generator.cpp
 Fix defect introduced 20150819T1702Z: last header line missing. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00054.html
+  https://lists.nongnu.org/archive/html/lmi/2015-08/msg00054.html
 
 20150828T1541Z <gchicares@sbcglobal.net> [477]
 
   group_quote_pdf_gen_wx.cpp
 Improve divers names. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00055.html
+  https://lists.nongnu.org/archive/html/lmi/2015-08/msg00055.html
 
 20150828T1645Z <gchicares@sbcglobal.net> [477]
 
   group_quote_pdf_gen_wx.cpp
 Escape XML special characters. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00056.html
+  https://lists.nongnu.org/archive/html/lmi/2015-08/msg00056.html
 
 20150828T1704Z <gchicares@sbcglobal.net> [477]
 
   group_quote_pdf_gen_wx.cpp
 Improve comprehensibility. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00053.html
+  https://lists.nongnu.org/archive/html/lmi/2015-08/msg00053.html
 
 20150828T1717Z <gchicares@sbcglobal.net> [477]
 
@@ -36755,13 +36755,13 @@ Improve comprehensibility. See:
   mec_view.cpp
   skeleton.cpp
 Improve toolbar enablement. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00057.html
+  https://lists.nongnu.org/archive/html/lmi/2015-08/msg00057.html
 
 20150829T0005Z <gchicares@sbcglobal.net> [477]
 
   census_view.cpp
 Fix defect introduced 20110802T1517Z: wrong data-renderer type. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00064.html
+  https://lists.nongnu.org/archive/html/lmi/2015-08/msg00064.html
 
 20150916T2040Z <gchicares@sbcglobal.net> [477]
 
@@ -36784,7 +36784,7 @@ Keep the system usable even without proprietary graphics files.
   alert_cli.cpp
   alert_wx.cpp
 Resolve gcc-5 issues (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
 
 20150918T0044Z <gchicares@sbcglobal.net> [474]
 
@@ -36797,7 +36797,7 @@ Demote several not-so-important defect markers.
 
   tn_range_types.cpp
 Resolve gcc-5 issues (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
 
 20150918T2355Z <gchicares@sbcglobal.net> [474]
 
@@ -36824,7 +36824,7 @@ Use wxPdfDocument.
 
   md5.cpp
 Resolve gcc-5 issues (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
 
 20150920T1758Z <gchicares@sbcglobal.net> [474]
 
@@ -36833,25 +36833,25 @@ Resolve gcc-5 issues (VZ). See:
   deserialize_cast.hpp [new file]
   soa_helpers.hpp
 Resolve gcc-5 issues (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00010.html
+  https://lists.nongnu.org/archive/html/lmi/2015-09/msg00010.html
 
 20150921T0005Z <gchicares@sbcglobal.net> [474]
 
   group_quote_pdf_gen_wx.cpp
 Forestall an msvc warning (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00012.html
+  https://lists.nongnu.org/archive/html/lmi/2015-09/msg00012.html
 
 20150921T0035Z <gchicares@sbcglobal.net> [474]
 
   group_quote_pdf_gen_wx.cpp
 Adjust 20150826T1714Z fix (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00012.html
+  https://lists.nongnu.org/archive/html/lmi/2015-09/msg00012.html
 
 20150921T0051Z <gchicares@sbcglobal.net> [474]
 
   wx_table_generator.cpp
 Resolve column-width issue by adding margins unconditionally. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00012.html
+  https://lists.nongnu.org/archive/html/lmi/2015-09/msg00012.html
 
 20150924T2216Z <zeitlin> [474]
 
@@ -36869,7 +36869,7 @@ Provide an additional field.
   ihs_irc7702.cpp
   ledger_invariant.cpp
 Mark a defect: in force even one single day implies inforce. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00017.html
+  https://lists.nongnu.org/archive/html/lmi/2015-09/msg00017.html
 
 20150925T0221Z <gchicares@sbcglobal.net> [475]
 
@@ -37165,7 +37165,7 @@ Remove disused headers.
   emit_ledger.cpp
   emit_ledger.hpp
 Improve the 20151006T1517Z change. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-10/msg00029.html
+  https://lists.nongnu.org/archive/html/lmi/2015-10/msg00029.html
 
 20151010T1930Z <gchicares@sbcglobal.net> [472]
 
@@ -37463,7 +37463,7 @@ Improve documentation.
   ledger_invariant.hpp
   ledger_variant.hpp
 Refactor, temporarily preserving excessive composite length. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-10/msg00005.html
+  https://lists.nongnu.org/archive/html/lmi/2015-10/msg00005.html
 
 20151108T1257Z <gchicares@sbcglobal.net> [468]
 
@@ -37479,13 +37479,13 @@ Refine ideal composite length.
 
   ledger_invariant.cpp
 Set composite "age" to that of youngest included cell. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-11/msg00008.html
+  https://lists.nongnu.org/archive/html/lmi/2015-11/msg00008.html
 
 20151109T1410Z <gchicares@sbcglobal.net> [468]
 
   group_quote_pdf_gen_wx.cpp
 Avoid writing <br> before empty footnotes (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2015-11/msg00007.html
+  https://lists.nongnu.org/archive/html/lmi/2015-11/msg00007.html
 
 20151109T1424Z <gchicares@sbcglobal.net> [468]
 
@@ -37506,7 +37506,7 @@ Improve documentation; demote two not-so-important defect markers.
 
   ledger_text_formats.cpp
 Rename IRR columns, on one report only, to prevent confusion. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-11/msg00015.html
+  https://lists.nongnu.org/archive/html/lmi/2015-11/msg00015.html
 
 20151114T1226Z <gchicares@sbcglobal.net> [466]
 
@@ -37719,13 +37719,13 @@ Rework the 20151210T2226Z change for robustness.
 
   input.hpp
 Reconstitute 'ce_product_name' from 'mc_enum_base' (VS). See:
-  http://lists.nongnu.org/archive/html/lmi/2015-12/msg00010.html
+  https://lists.nongnu.org/archive/html/lmi/2015-12/msg00010.html
 
 20151212T1600Z <gchicares@sbcglobal.net> [456]
 
   census_view.cpp
 Revise the 20151210T2158Z change. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-12/msg00006.html
+  https://lists.nongnu.org/archive/html/lmi/2015-12/msg00006.html
 
 20151213T1344Z <gchicares@sbcglobal.net> [456]
 
@@ -38330,7 +38330,7 @@ Update unit test: use new user-manual census-paste example.
 
   boost_1_33_1.patch
 Improve boost standard conformance. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-12/msg00041.html
+  https://lists.nongnu.org/archive/html/lmi/2015-12/msg00041.html
 
 20151221T0120Z <gchicares@sbcglobal.net> [456]
 
@@ -38397,7 +38397,7 @@ Improve wrapping of copyright notice.
 
   install_wx.make
 Refine configuration. See:
-  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00002.html
+  https://lists.nongnu.org/archive/html/lmi/2016-01/msg00002.html
 
 20160107T1919Z <gchicares@sbcglobal.net> [456]
 
@@ -38435,7 +38435,7 @@ Designate release candidate 6468.
 
   install_wx.make
 Revert the PCH part of the 20160105T0146Z change--see:
-  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00007.html
+  https://lists.nongnu.org/archive/html/lmi/2016-01/msg00007.html
 
 20160118T0052Z <gchicares@sbcglobal.net> [455]
 
@@ -38504,26 +38504,26 @@ Replace mingw.org with MinGW-w64 toolchain.
   libxslt-1.1.17-lmi.patch
   test_coding_rules.cpp
 Don't use two-element mkdir() with msw (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
+  https://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
 
 20160120T1917Z <gchicares@sbcglobal.net> [455]
 
   install_libxml2_libxslt.make
 Disable threading to avoid a catastrophic problem (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
+  https://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
 
 20160120T1920Z <gchicares@sbcglobal.net> [455]
 
   install_libxml2_libxslt.make
 Disable zlib to avoid a catastrophic problem (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
+  https://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
 
 20160120T1924Z <gchicares@sbcglobal.net> [455]
 
   install_libxml2_libxslt.make
   install_mpatrol.make
 Specify --host consistently (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
+  https://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
 
 20160121T0032Z <gchicares@sbcglobal.net> [455]
 
@@ -38531,24 +38531,24 @@ Specify --host consistently (VZ). See:
   main_wx.cpp
   mc_enum_types_aux.cpp
 Force linking despite overly-aggressive linker "optimization". See:
-  http://lists.nongnu.org/archive/html/lmi/2014-08/msg00000.html
-  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00006.html
-  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00006.html
-  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00026.html
+  https://lists.nongnu.org/archive/html/lmi/2014-08/msg00000.html
+  https://lists.nongnu.org/archive/html/lmi/2014-10/msg00006.html
+  https://lists.nongnu.org/archive/html/lmi/2016-01/msg00006.html
+  https://lists.nongnu.org/archive/html/lmi/2016-01/msg00026.html
 
 20160121T0045Z <gchicares@sbcglobal.net> [455]
 
   configure.ac
 No longer add an "mgw" suffix, which interfered with cross compiling
 (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00006.html
+  https://lists.nongnu.org/archive/html/lmi/2016-01/msg00006.html
 
 20160122T1530Z <gchicares@sbcglobal.net> [455]
 
   skeleton.cpp
 Fix defect introduced 20060812T0053Z: dead code. The line removed was
 in 'main_wx.cpp' originally, and moved to the present file here:
-  http://svn.savannah.nongnu.org/viewvc?view=rev&root=lmi&revision=5861
+  https://svn.savannah.nongnu.org/viewvc?view=rev&root=lmi&revision=5861
 
 20160129T0231Z <zeitlin> [455]
 
@@ -38565,7 +38565,7 @@ Forestall attribute warnings for gcc-4.9.1 as for gcc-4.9.2 .
   main_wx.cpp
   mc_enum_types_aux.cpp
 Don't attempt to force linking a function that is not visible. See:
-  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00087.html
+  https://lists.nongnu.org/archive/html/lmi/2016-01/msg00087.html
 
 20160130T1257Z <gchicares@sbcglobal.net> [455]
 
@@ -38618,7 +38618,7 @@ Upgrade wx.
 
   install_wx.make
 Upgrade wx. See:
-  http://lists.nongnu.org/archive/html/lmi/2016-02/msg00036.html
+  https://lists.nongnu.org/archive/html/lmi/2016-02/msg00036.html
 
 20160212T2018Z <gchicares@sbcglobal.net> [454]
 
@@ -38729,7 +38729,7 @@ Add an extra specimen product for xsl-to-wxPdfDoc migration.
 
   tn_range_test.cpp
 Fix a unit test that failed with gcc-4.9.1 . See:
-  http://lists.nongnu.org/archive/html/lmi/2016-03/msg00032.html
+  https://lists.nongnu.org/archive/html/lmi/2016-03/msg00032.html
 
 20160325T1222Z <gchicares@sbcglobal.net> [454]
 
@@ -38811,7 +38811,7 @@ Fix defect introduced 20160325T1225Z: invalid warning (VZ).
   ledger_xml_io.cpp
   xml_lmi.cpp
 Avoid shadowing variable names (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2016-02/msg00017.html
+  https://lists.nongnu.org/archive/html/lmi/2016-02/msg00017.html
 
 20160327T2223Z <zeitlin> [454]
 
@@ -38822,7 +38822,7 @@ Recognize gcc cross-compilers.
 
   multidimgrid_any.cpp
 Further improve the 20160327T1021Z improvement (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2016-03/msg00042.html
+  https://lists.nongnu.org/archive/html/lmi/2016-03/msg00042.html
 
 20160330T2132Z <gchicares@sbcglobal.net> [454]
 
@@ -38844,8 +38844,8 @@ Remove unneeded statusbar workarounds (VZ).
   objects.make
   skeleton.cpp
 Expunge a module that no longer does anything. See:
-  http://lists.nongnu.org/archive/html/lmi/2016-03/msg00054.html
-  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00062.html
+  https://lists.nongnu.org/archive/html/lmi/2016-03/msg00054.html
+  https://lists.nongnu.org/archive/html/lmi/2014-11/msg00062.html
 
 20160330T2222Z <gchicares@sbcglobal.net> [454]
 
@@ -38857,7 +38857,7 @@ Allow long lines with 'https:' as well as 'http:'.
   skeleton.cpp
 Avoid crashing due to indiscriminate event handling (VZ). See:
   https://github.com/vadz/lmi/commit/6355bb270241826fa32e151eb197a4b1f5cd5c12.patch
-  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00062.html
+  https://lists.nongnu.org/archive/html/lmi/2014-11/msg00062.html
 
 20160330T2344Z <gchicares@sbcglobal.net> [454]
 
@@ -38868,7 +38868,7 @@ Don't count all children just to see if there are more than one (VZ).
 
   skeleton.cpp
 Remove a superfluous cast (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2016-03/msg00057.html
+  https://lists.nongnu.org/archive/html/lmi/2016-03/msg00057.html
 
 20160407T2310Z <gchicares@sbcglobal.net> [453]
 
@@ -39229,13 +39229,13 @@ Expunge an erroneous test.
   rate_table_tool.cpp [new file]
   workhorse.make
 Add rate-table reimplmentation for testing (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2016-05/msg00062.html
+  https://lists.nongnu.org/archive/html/lmi/2016-05/msg00062.html
 
 20160519T0112Z <gchicares@sbcglobal.net> [451]
 
   group_quote_pdf_gen_wx.cpp
 Refactor for clarity (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2016-05/msg00060.html
+  https://lists.nongnu.org/archive/html/lmi/2016-05/msg00060.html
 
 20160519T0119Z <gchicares@sbcglobal.net> [451]
 

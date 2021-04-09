@@ -1,6 +1,6 @@
 // Ledger data that do not vary by basis.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -96,6 +96,7 @@ void LedgerInvariant::Alloc(int len)
     // EOY vectors.
     EndYearVectors  ["TermSpecAmt"                ] = &TermSpecAmt                ;
     EndYearVectors  ["SpecAmt"                    ] = &SpecAmt                    ;
+    EndYearVectors  ["Dcv"                        ] = &Dcv                        ;
 
     // Forborne vectors.
     ForborneVectors ["Salary"                     ] = &Salary                     ;
@@ -109,6 +110,12 @@ void LedgerInvariant::Alloc(int len)
     OtherVectors    ["AddonCompOnAssets"          ] = &AddonCompOnAssets          ;
     OtherVectors    ["AddonCompOnPremium"         ] = &AddonCompOnPremium         ;
     OtherVectors    ["CorridorFactor"             ] = &CorridorFactor             ;
+    OtherVectors    ["Irc7702ic_usual"            ] = &Irc7702ic_usual            ;
+    OtherVectors    ["Irc7702ic_glp"              ] = &Irc7702ic_glp              ;
+    OtherVectors    ["Irc7702ic_gsp"              ] = &Irc7702ic_gsp              ;
+    OtherVectors    ["Irc7702ig_usual"            ] = &Irc7702ig_usual            ;
+    OtherVectors    ["Irc7702ig_glp"              ] = &Irc7702ig_glp              ;
+    OtherVectors    ["Irc7702ig_gsp"              ] = &Irc7702ig_gsp              ;
     OtherVectors    ["AnnLoanDueRate"             ] = &AnnLoanDueRate             ;
     OtherVectors    ["CurrMandE"                  ] = &CurrMandE                  ;
     OtherVectors    ["TotalIMF"                   ] = &TotalIMF                   ;
@@ -149,8 +156,6 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["NoLongerIssued"             ] = &NoLongerIssued             ;
     OtherScalars    ["AllowGroupQuote"            ] = &AllowGroupQuote            ;
     OtherScalars    ["TxCallsGuarUwSubstd"        ] = &TxCallsGuarUwSubstd        ;
-    OtherScalars    ["AllowExperienceRating"      ] = &AllowExperienceRating      ;
-    OtherScalars    ["UseExperienceRating"        ] = &UseExperienceRating        ;
     OtherScalars    ["UsePartialMort"             ] = &UsePartialMort             ;
 
     OtherScalars    ["SurviveToExpectancy"        ] = &SurviveToExpectancy        ;
@@ -302,7 +307,6 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["FlexiblePremiumFootnote"    ] = &FlexiblePremiumFootnote    ;
     Strings         ["GuaranteedValuesFootnote"   ] = &GuaranteedValuesFootnote   ;
     Strings         ["CreditingRateFootnote"      ] = &CreditingRateFootnote      ;
-    Strings         ["DefnGuarGenAcctRate"        ] = &DefnGuarGenAcctRate        ;
     Strings         ["GrossRateFootnote"          ] = &GrossRateFootnote          ;
     Strings         ["NetRateFootnote"            ] = &NetRateFootnote            ;
     Strings         ["MecFootnote"                ] = &MecFootnote                ;
@@ -357,6 +361,7 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["Fn1035Charge"               ] = &Fn1035Charge               ;
     Strings         ["FnMecExtraWarning"          ] = &FnMecExtraWarning          ;
     Strings         ["FnNotTaxAdvice"             ] = &FnNotTaxAdvice             ;
+    Strings         ["FnNotTaxAdvice2"            ] = &FnNotTaxAdvice2            ;
     Strings         ["FnImf"                      ] = &FnImf                      ;
     Strings         ["FnCensus"                   ] = &FnCensus                   ;
     Strings         ["FnDacTax"                   ] = &FnDacTax                   ;
@@ -371,6 +376,7 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["FnOmnibusDisclaimer"        ] = &FnOmnibusDisclaimer        ;
     Strings         ["FnInitialDbo"               ] = &FnInitialDbo               ;
 
+    Strings         ["DefnGuarGenAcctRate"        ] = &DefnGuarGenAcctRate        ;
     Strings         ["DefnAV"                     ] = &DefnAV                     ;
     Strings         ["DefnCSV"                    ] = &DefnCSV                    ;
     Strings         ["DefnMec"                    ] = &DefnMec                    ;
@@ -508,6 +514,7 @@ void LedgerInvariant::Init()
     SurvivalMaxAge             = 0;
     InforceYear                = Length;
     InforceMonth               = 11;
+    IsMec                      = false;
     MecYear                    = Length;
     MecMonth                   = 11;
     SpouseIssueAge             = 100;
@@ -637,6 +644,12 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     int Max = std::min(Length, a_Addend.Length);
 
     // ET !! This is of the form 'x = (lengthof x) take y'.
+    // C++2x provides std::views::{drop,take}, which are somewhat
+    // similar to APL's take and drop; however, for
+    //   x = (1 + lengthof(y) take y
+    // std::views would not extend the data with zeros, as APL would
+    // (in APL circles, that's called "overtake").
+    //
     // Make sure total (this) has enough years to add all years of a_Addend to.
     LMI_ASSERT(a_Addend.Length <= Length);
     for(int j = 0; j < Max; ++j)
@@ -670,8 +683,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     NoLongerIssued             = NoLongerIssued        || a_Addend.NoLongerIssued;
     AllowGroupQuote            = AllowGroupQuote       && a_Addend.AllowGroupQuote;
     TxCallsGuarUwSubstd        = TxCallsGuarUwSubstd   || a_Addend.TxCallsGuarUwSubstd;
-    AllowExperienceRating      = AllowExperienceRating || a_Addend.AllowExperienceRating;
-    UseExperienceRating        = UseExperienceRating   || a_Addend.UseExperienceRating;
     UsePartialMort             = a_Addend.UsePartialMort;
 
     SurviveToExpectancy        = a_Addend.SurviveToExpectancy;

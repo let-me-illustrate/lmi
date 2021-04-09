@@ -1,6 +1,6 @@
 // Product-database entity.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -28,8 +28,7 @@
 #include "contains.hpp"
 #include "dbnames.hpp"
 #include "et_vector.hpp"
-#include "handle_exceptions.hpp"
-#include "math_functions.hpp"           // lesser_of()
+#include "handle_exceptions.hpp"        // report_exception()
 #include "print_matrix.hpp"
 #include "value_cast.hpp"
 #include "xml_serialize.hpp"
@@ -116,7 +115,7 @@ database_entity::database_entity
 ///       ,dims_stat
 ///       ,stat
 ///       );
-///   BOOST_TEST_THROW
+///   LMI_TEST_THROW
 ///       (db.query(DB_MaturityAge)
 ///       ,std::runtime_error
 ///       ,"Assertion '1 == v.extent()' failed."
@@ -157,19 +156,10 @@ database_entity& database_entity::operator=(database_entity const& z)
 
 bool database_entity::operator==(database_entity const& z) const
 {
-#if 0
-// PETE causes an 'ambiguous overload' error for vector 'v0==v1'.
     return
            key_          == z.key_
         && axis_lengths_ == z.axis_lengths_
         && data_values_  == z.data_values_
-        && gloss_        == z.gloss_
-        ;
-#endif // 0
-    return
-           key_          == z.key_
-        && std::operator==(axis_lengths_, z.axis_lengths_)
-        && std::operator==(data_values_ , z.data_values_ )
         && gloss_        == z.gloss_
         ;
 }
@@ -228,8 +218,8 @@ void database_entity::reshape(std::vector<int> const& new_dims)
         LMI_ASSERT(0 == z);
 
         // limit dst and source indexes to those that actually vary
-        assign(dst_idx, apply_binary(lesser_of<int>(), working_idx, dst_max_idx));
-        assign(src_idx, apply_binary(lesser_of<int>(), working_idx, src_max_idx));
+        assign(dst_idx, Min(working_idx, dst_max_idx));
+        assign(src_idx, Min(working_idx, src_max_idx));
         new_object[dst_idx] = operator[](src_idx);
         }
 

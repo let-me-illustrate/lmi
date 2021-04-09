@@ -1,6 +1,6 @@
 // Platform-independent support for report tables.
 //
-// Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -94,9 +94,9 @@ class LMI_SO table_column_info
     bool          const is_elastic_;
 };
 
-std::vector<int> LMI_SO apportion(std::vector<int> const& votes, int seats);
+LMI_SO std::vector<int> apportion(std::vector<int> const& votes, int seats);
 
-std::vector<int> LMI_SO set_column_widths
+LMI_SO std::vector<int> set_column_widths
     (std::vector<table_column_info> const& all_columns
     ,int                                   max_table_width
     ,int                                   desired_margin

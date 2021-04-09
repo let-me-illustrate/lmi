@@ -1,6 +1,6 @@
 // Database entity names.
 //
-// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -68,6 +68,10 @@
 {DB_AllowCvat,DB_Topic_7702And7702A,"AllowCvat","Allow cash value accumulation test: 0=no, 1=yes",}, \
 {DB_AllowGpt,DB_Topic_7702And7702A,"AllowGpt","Allow guideline premium test: 0=no, 1=yes",}, \
 {DB_AllowNo7702,DB_Topic_7702And7702A,"AllowNo7702","Allow 7702 to be ignored (foreign): 0=no, 1=yes",}, \
+{DB_AnnIntRate7702,DB_Topic_7702And7702A,"AnnIntRate7702","7702(b)(3) 'applicable accumulation test minimum rate', e.g. 0.04 for pre-2021 contracts",}, \
+{DB_AnnIntRateGspDelta,DB_Topic_7702And7702A,"AnnIntRateGspDelta","7702(c)(3)(E) delta for GSP, e.g. 0.02 for 'plus 2 percentage points'",}, \
+{DB_ShortTermIntGuar7702,DB_Topic_7702And7702A,"ShortTermIntGuar7702","Total 'short-term guarantees' according to the DEFRA Blue Book, page 649, expressed as an annual interest rate; must be zero after first year",}, \
+{DB_IgnoreLoanRateFor7702,DB_Topic_7702And7702A,"IgnoreLoanRateFor7702","Riskily don't treat guaranteed net loan rate as a floor for 7702 interest: 0=no, 1=yes",}, \
 {DB_Irc7702Obreption,DB_Topic_7702And7702A,"Irc7702Obreption","Prevent the product verifier from treating a frank error as such, due to some indult): 0=no [other values to be added later]",}, \
 {DB_CorridorWhence,DB_Topic_7702And7702A,"CorridorWhence","Source of CVAT 'corridor' factors: 0=first principles, 1=table",}, \
 {DB_Irc7702NspWhence,DB_Topic_7702And7702A,"Irc7702NspWhence","Source of 7702 and 7702A net single premium rates: 0=first principles, 1=table, 2=reciprocal of CVAT corridor",}, \
@@ -79,7 +83,6 @@
 {DB_Irc7702QTable,DB_Topic_7702And7702A,"Irc7702QTable","7702 and 7702A annual mortality rates (index in mortality table database)",}, \
 {DB_Irc7702QAxisGender,DB_Topic_7702And7702A,"Irc7702QAxisGender","7702 and 7702A mortality varies by gender: 0=no, 1=yes",}, \
 {DB_Irc7702QAxisSmoking,DB_Topic_7702And7702A,"Irc7702QAxisSmoking","7702 and 7702A mortality varies by smoking: 0=no, 1=yes",}, \
-{DB_RatingsAffect7702,DB_Topic_7702And7702A,"RatingsAffect7702","Flat extras and table ratings affect 7702 and 7702A calculations: 0=no, 1=yes",}, \
 {DB_CvatMatChangeDefn,DB_Topic_7702And7702A,"CvatMatChangeDefn","Definition of 7702A material change for CVAT: 0=unnec prem, 1=increase, 2=increase after unnec prem [not implemented], 3=any unnec prem or increase",}, \
 {DB_GptMatChangeDefn,DB_Topic_7702And7702A,"GptMatChangeDefn","Definition of 7702A material change for GPT: 0=any adjustment event, 1=any adjustment event that increases the guideline limit",}, \
 {DB_Irc7702BftIsSpecAmt,DB_Topic_7702And7702A,"Irc7702BftIsSpecAmt","7702(f)(3) 'death benefit' is specamt rather than DB: 0=no, 1=yes",}, \
@@ -126,13 +129,12 @@
 {DB_AllowMortBlendSmoke,DB_Topic_MortalityCharges,"AllowMortBlendSmoke","Mortality rating can be blended by smoking/tobacco use: 0=no, 1=yes",}, \
 {DB_Topic_Interest,DB_FIRST,"Interest","Interest rates, limits, spreads, and bonuses",}, \
 {DB_GuarInt,DB_Topic_Interest,"GuarInt","Guaranteed interest rate",}, \
-{DB_NaarDiscount,DB_Topic_Interest,"NaarDiscount","Monthly rate (i over i upper 12) for discounting net amount at risk, e.g. 0.00246627 for 3% annual rate (because that's how it's often specified in contracts)",}, \
+{DB_NaarDiscount,DB_Topic_Interest,"NaarDiscount","Monthly rate (12 times i upper 12) for discounting net amount at risk, e.g., 0.00246627 for a 3% annual rate (because that's how it's often specified in contracts)",}, \
 {DB_GuarIntSpread,DB_Topic_Interest,"GuarIntSpread","Guaranteed interest spread, e.g. .02 = 200bp [not yet implemented]",}, \
 {DB_GuarMandE,DB_Topic_Interest,"GuarMandE","Guaranteed M&&E charge",}, \
 {DB_CurrIntSpread,DB_Topic_Interest,"CurrIntSpread","Current interest spread, e.g. .01 = 100bp",}, \
 {DB_CurrMandE,DB_Topic_Interest,"CurrMandE","Current M&&E charge",}, \
 {DB_GenAcctIntBonus,DB_Topic_Interest,"GenAcctIntBonus","Interest bonus added to the general account rate",}, \
-{DB_BonusInt,DB_Topic_Interest,"BonusInt","Bonus interest [not yet implemented]",}, \
 {DB_IntFloor,DB_Topic_Interest,"IntFloor","[not used]",}, \
 {DB_AllowGenAcct,DB_Topic_Interest,"AllowGenAcct","Allow investment in general account: 0=no, 1=yes",}, \
 {DB_AllowSepAcct,DB_Topic_Interest,"AllowSepAcct","Allow investment in separate account: 0=no, 1=yes",}, \
@@ -148,7 +150,6 @@
 {DB_LoadAmortFundCharge,DB_Topic_AssetCharges,"LoadAmortFundCharge","Asset charge for amortized premium load",}, \
 {DB_AllowImfOverride,DB_Topic_AssetCharges,"AllowImfOverride","Allow custom fund with input investment management fee: 0=no, 1=yes",}, \
 {DB_AssetChargeType,DB_Topic_AssetCharges,"AssetChargeType","Treatment of input extra separate-account asset charge: 0=interest spread, 1=account-value load after monthly deduction",}, \
-{DB_StableValFundCharge,DB_Topic_AssetCharges,"StableValFundCharge","Stable value fund charge",}, \
 {DB_GuarFundAdminChg,DB_Topic_AssetCharges,"GuarFundAdminChg","Guaranteed fund administration charge [not used]",}, \
 {DB_CurrFundAdminChg,DB_Topic_AssetCharges,"CurrFundAdminChg","Current fund administration charge [not used]",}, \
 {DB_FundCharge,DB_Topic_AssetCharges,"FundCharge","[not used]",}, \
@@ -170,10 +171,10 @@
 {DB_CurrPremLoadExcRfd,DB_Topic_Loads,"CurrPremLoadExcRfd","Current load on premium in excess of target, refundable on lapse",}, \
 {DB_CurrSpecAmtLoad,DB_Topic_Loads,"CurrSpecAmtLoad","Current charge per $1 of specified amount, in addition to 'CurrSpecAmtLoadTable'",}, \
 {DB_CurrSpecAmtLoadTable,DB_Topic_Loads,"CurrSpecAmtLoadTable","Current charge per $1 of specified amount (index in mortality table database)",}, \
-{DB_CurrAcctValLoad,DB_Topic_Loads,"CurrAcctValLoad","Expense charge as proportion of separate account value",}, \
+{DB_CurrSepAcctLoad,DB_Topic_Loads,"CurrSepAcctLoad","Expense charge as proportion of separate account value",}, \
 {DB_TgtPremMonthlyPolFee,DB_Topic_Loads,"TgtPremMonthlyPolFee","Target-premium monthly policy fee",}, \
 {DB_LoadRfdProportion,DB_Topic_Loads,"LoadRfdProportion","Proportion of sales load refundable on full surrender",}, \
-{DB_SpecAmtLoadLimit,DB_Topic_Loads,"SpecAmtLoadLimit","Limit up to which charge per $1 of specified amount applies",}, \
+{DB_SpecAmtLoadLimit,DB_Topic_Loads,"SpecAmtLoadLimit","Maximum specified amount to which load per $1 of specified amount can apply",}, \
 {DB_DynamicSepAcctLoad,DB_Topic_Loads,"DynamicSepAcctLoad","Separate account AV load dynamically determined based on total case assets: 0=no, 1=yes",}, \
 {DB_DynSepAcctLoadLimit,DB_Topic_Loads,"DynSepAcctLoadLimit","Highest separate-account balance subject to dynamic AV load",}, \
 {DB_Topic_DacAndPremiumTax,DB_FIRST,"DAC and premium tax","DAC and premium tax parameters and charges",}, \
@@ -336,26 +337,191 @@
 {DB_AssetComp,DB_Topic_Compensation,"AssetComp","Producer-only compensation on separate-account assets--not tiered by assets [not yet implemented]",}, \
 {DB_AllowExtraAssetComp,DB_Topic_Compensation,"AllowExtraAssetComp","Allow input extra asset-based compensation: 0=no, 1=yes",}, \
 {DB_AllowExtraPremComp,DB_Topic_Compensation,"AllowExtraPremComp","Allow input extra premium-based compensation: 0=no, 1=yes",}, \
-{DB_Topic_ExperienceRating,DB_FIRST,"Experience rating","Experience-rating parameters",}, \
-{DB_AllowExpRating,DB_Topic_ExperienceRating,"AllowExpRating","Allow experience rating: 0=no, 1=yes",}, \
-{DB_ExpRatStdDevMult,DB_Topic_ExperienceRating,"ExpRatStdDevMult","Experience rating reserve as multiple of standard deviation of expected claims net of account value released on death",}, \
-{DB_ExpRatIbnrMult,DB_Topic_ExperienceRating,"ExpRatIbnrMult","Experience rating IBNR as number of months of net cost of insurance charges",}, \
-{DB_ExpRatCoiRetention,DB_Topic_ExperienceRating,"ExpRatCoiRetention","Experience rating retention as proportion of net cost of insurance charges",}, \
-{DB_ExpRatRiskCoiMult,DB_Topic_ExperienceRating,"ExpRatRiskCoiMult","Maximum risk charge as a multiple of annual cost of insurance charges",}, \
-{DB_ExpRatAmortPeriod,DB_Topic_ExperienceRating,"ExpRatAmortPeriod","Experience rating amortization period",}, \
 {DB_Topic_Miscellanea,DB_FIRST,"Miscellanea","Parameters that don't fit tidily into other categories",}, \
 {DB_LedgerType,DB_Topic_Miscellanea,"LedgerType","Ledger type: 0=illustration reg, 1=FINRA, 3=group private placement, 6=individual private placement",}, \
 {DB_Nonillustrated,DB_Topic_Miscellanea,"Nonillustrated","Forbid all illustrations: 0=no, 1=yes",}, \
 {DB_NoLongerIssued,DB_Topic_Miscellanea,"NoLongerIssued","Forbid new-business illustrations: 0=no, 1=yes",}, \
-{DB_AgeLastOrNearest,DB_Topic_Miscellanea,"AgeLastOrNearest","Age calculated as of last or nearest birthday: 0=ALB, 1=ANB (ties --> older), 2=ANB (ties --> younger)",}, \
+{DB_AgeLastOrNearest,DB_Topic_Miscellanea,"AgeLastOrNearest","Age calculated as of last or nearest birthday: 0=ALB, 1=ANB (ties --> younger), 2=ANB (ties --> older)",}, \
 {DB_MaturityAge,DB_Topic_Miscellanea,"MaturityAge","Normal maturity age",}, \
+{DB_AllowCashValueEnh,DB_Topic_Miscellanea,"AllowCashValueEnh","Allow multiplicative cash value enhancement: 0=no, 1=yes",}, \
 {DB_CashValueEnhMult,DB_Topic_Miscellanea,"CashValueEnhMult","Cash value enhancement multiple: e.g. 0.03 to make cash value three percent higher than account value",}, \
 {DB_LapseIgnoresSurrChg,DB_Topic_Miscellanea,"LapseIgnoresSurrChg","Ignore tabular surrender charge for lapse processing",}, \
 {DB_DefaultProcessOrder,DB_Topic_Miscellanea,"DefaultProcessOrder","Default processing order: 0=life by life, 1=month by month [not yet implemented]",}, \
 {DB_GroupProxyRateTable,DB_Topic_Miscellanea,"GroupProxyRateTable","Group-term proxy rate (index in mortality table database)",}, \
 {DB_PartialMortTable,DB_Topic_Miscellanea,"PartialMortTable","Partial mortality table (index in mortality table database)",}, \
-{DB_UsePolicyFormAlt,DB_Topic_Miscellanea,"UsePolicyFormAlt","Use alternative policy-form name: 0=no, 1=yes",}, \
 {DB_AllowGroupQuote,DB_Topic_Miscellanea,"AllowGroupQuote","Allow group premium quotes: 0=no, 1=yes",}, \
+{DB_Topic_Lingo,DB_FIRST,"Lingo","Text to be dropped into report templates: index into lingo file",}, \
+{DB_PolicyForm,DB_Topic_Lingo,"PolicyForm","Policy form",}, \
+{DB_PolicyMktgName,DB_Topic_Lingo,"PolicyMktgName","PolicyMktgName [narrative descriptions desired]",}, \
+{DB_PolicyLegalName,DB_Topic_Lingo,"PolicyLegalName","PolicyLegalName",}, \
+{DB_InsCoShortName,DB_Topic_Lingo,"InsCoShortName","InsCoShortName",}, \
+{DB_InsCoName,DB_Topic_Lingo,"InsCoName","InsCoName",}, \
+{DB_InsCoAddr,DB_Topic_Lingo,"InsCoAddr","InsCoAddr",}, \
+{DB_InsCoStreet,DB_Topic_Lingo,"InsCoStreet","InsCoStreet",}, \
+{DB_InsCoPhone,DB_Topic_Lingo,"InsCoPhone","InsCoPhone",}, \
+{DB_MainUnderwriter,DB_Topic_Lingo,"MainUnderwriter","MainUnderwriter",}, \
+{DB_MainUnderwriterAddress,DB_Topic_Lingo,"MainUnderwriterAddress","MainUnderwriterAddress",}, \
+{DB_CoUnderwriter,DB_Topic_Lingo,"CoUnderwriter","CoUnderwriter",}, \
+{DB_CoUnderwriterAddress,DB_Topic_Lingo,"CoUnderwriterAddress","CoUnderwriterAddress",}, \
+{DB_AvName,DB_Topic_Lingo,"AvName","AvName",}, \
+{DB_CsvName,DB_Topic_Lingo,"CsvName","CsvName",}, \
+{DB_CsvHeaderName,DB_Topic_Lingo,"CsvHeaderName","CsvHeaderName",}, \
+{DB_NoLapseProvisionName,DB_Topic_Lingo,"NoLapseProvisionName","NoLapseProvisionName",}, \
+{DB_ContractName,DB_Topic_Lingo,"ContractName","ContractName",}, \
+{DB_DboName,DB_Topic_Lingo,"DboName","DboName",}, \
+{DB_DboNameLevel,DB_Topic_Lingo,"DboNameLevel","DboNameLevel",}, \
+{DB_DboNameIncreasing,DB_Topic_Lingo,"DboNameIncreasing","DboNameIncreasing",}, \
+{DB_DboNameReturnOfPremium,DB_Topic_Lingo,"DboNameReturnOfPremium","DboNameReturnOfPremium",}, \
+{DB_DboNameMinDeathBenefit,DB_Topic_Lingo,"DboNameMinDeathBenefit","DboNameMinDeathBenefit",}, \
+{DB_GenAcctName,DB_Topic_Lingo,"GenAcctName","GenAcctName",}, \
+{DB_GenAcctNameElaborated,DB_Topic_Lingo,"GenAcctNameElaborated","GenAcctNameElaborated",}, \
+{DB_SepAcctName,DB_Topic_Lingo,"SepAcctName","SepAcctName",}, \
+{DB_SpecAmtName,DB_Topic_Lingo,"SpecAmtName","SpecAmtName",}, \
+{DB_SpecAmtNameElaborated,DB_Topic_Lingo,"SpecAmtNameElaborated","SpecAmtNameElaborated",}, \
+{DB_UwBasisMedical,DB_Topic_Lingo,"UwBasisMedical","UwBasisMedical",}, \
+{DB_UwBasisParamedical,DB_Topic_Lingo,"UwBasisParamedical","UwBasisParamedical",}, \
+{DB_UwBasisNonmedical,DB_Topic_Lingo,"UwBasisNonmedical","UwBasisNonmedical",}, \
+{DB_UwBasisSimplified,DB_Topic_Lingo,"UwBasisSimplified","UwBasisSimplified",}, \
+{DB_UwBasisGuaranteed,DB_Topic_Lingo,"UwBasisGuaranteed","UwBasisGuaranteed",}, \
+{DB_UwClassPreferred,DB_Topic_Lingo,"UwClassPreferred","UwClassPreferred",}, \
+{DB_UwClassStandard,DB_Topic_Lingo,"UwClassStandard","UwClassStandard",}, \
+{DB_UwClassRated,DB_Topic_Lingo,"UwClassRated","UwClassRated",}, \
+{DB_UwClassUltra,DB_Topic_Lingo,"UwClassUltra","UwClassUltra",}, \
+{DB_AccountValueFootnote,DB_Topic_Lingo,"AccountValueFootnote","AccountValueFootnote",}, \
+{DB_AttainedAgeFootnote,DB_Topic_Lingo,"AttainedAgeFootnote","AttainedAgeFootnote",}, \
+{DB_CashSurrValueFootnote,DB_Topic_Lingo,"CashSurrValueFootnote","CashSurrValueFootnote",}, \
+{DB_DeathBenefitFootnote,DB_Topic_Lingo,"DeathBenefitFootnote","DeathBenefitFootnote",}, \
+{DB_InitialPremiumFootnote,DB_Topic_Lingo,"InitialPremiumFootnote","InitialPremiumFootnote",}, \
+{DB_NetPremiumFootnote,DB_Topic_Lingo,"NetPremiumFootnote","NetPremiumFootnote",}, \
+{DB_GrossPremiumFootnote,DB_Topic_Lingo,"GrossPremiumFootnote","GrossPremiumFootnote",}, \
+{DB_OutlayFootnote,DB_Topic_Lingo,"OutlayFootnote","OutlayFootnote",}, \
+{DB_PolicyYearFootnote,DB_Topic_Lingo,"PolicyYearFootnote","PolicyYearFootnote",}, \
+{DB_ADDTerseName,DB_Topic_Lingo,"ADDTerseName","ADDTerseName",}, \
+{DB_InsurabilityTerseName,DB_Topic_Lingo,"InsurabilityTerseName","InsurabilityTerseName",}, \
+{DB_ChildTerseName,DB_Topic_Lingo,"ChildTerseName","ChildTerseName",}, \
+{DB_SpouseTerseName,DB_Topic_Lingo,"SpouseTerseName","SpouseTerseName",}, \
+{DB_TermTerseName,DB_Topic_Lingo,"TermTerseName","TermTerseName",}, \
+{DB_WaiverTerseName,DB_Topic_Lingo,"WaiverTerseName","WaiverTerseName",}, \
+{DB_AccelBftRiderTerseName,DB_Topic_Lingo,"AccelBftRiderTerseName","AccelBftRiderTerseName",}, \
+{DB_OverloanRiderTerseName,DB_Topic_Lingo,"OverloanRiderTerseName","OverloanRiderTerseName",}, \
+{DB_ADDFootnote,DB_Topic_Lingo,"ADDFootnote","ADDFootnote",}, \
+{DB_ChildFootnote,DB_Topic_Lingo,"ChildFootnote","ChildFootnote",}, \
+{DB_SpouseFootnote,DB_Topic_Lingo,"SpouseFootnote","SpouseFootnote",}, \
+{DB_TermFootnote,DB_Topic_Lingo,"TermFootnote","TermFootnote",}, \
+{DB_WaiverFootnote,DB_Topic_Lingo,"WaiverFootnote","WaiverFootnote",}, \
+{DB_AccelBftRiderFootnote,DB_Topic_Lingo,"AccelBftRiderFootnote","AccelBftRiderFootnote",}, \
+{DB_OverloanRiderFootnote,DB_Topic_Lingo,"OverloanRiderFootnote","OverloanRiderFootnote",}, \
+{DB_GroupQuoteShortProductName,DB_Topic_Lingo,"GroupQuoteShortProductName","GroupQuoteShortProductName",}, \
+{DB_GroupQuoteIsNotAnOffer,DB_Topic_Lingo,"GroupQuoteIsNotAnOffer","GroupQuoteIsNotAnOffer",}, \
+{DB_GroupQuoteRidersFooter,DB_Topic_Lingo,"GroupQuoteRidersFooter","GroupQuoteRidersFooter",}, \
+{DB_GroupQuotePolicyFormId,DB_Topic_Lingo,"GroupQuotePolicyFormId","GroupQuotePolicyFormId",}, \
+{DB_GroupQuoteStateVariations,DB_Topic_Lingo,"GroupQuoteStateVariations","GroupQuoteStateVariations",}, \
+{DB_GroupQuoteProspectus,DB_Topic_Lingo,"GroupQuoteProspectus","GroupQuoteProspectus",}, \
+{DB_GroupQuoteUnderwriter,DB_Topic_Lingo,"GroupQuoteUnderwriter","GroupQuoteUnderwriter",}, \
+{DB_GroupQuoteBrokerDealer,DB_Topic_Lingo,"GroupQuoteBrokerDealer","GroupQuoteBrokerDealer",}, \
+{DB_GroupQuoteRubricMandatory,DB_Topic_Lingo,"GroupQuoteRubricMandatory","GroupQuoteRubricMandatory",}, \
+{DB_GroupQuoteRubricVoluntary,DB_Topic_Lingo,"GroupQuoteRubricVoluntary","GroupQuoteRubricVoluntary",}, \
+{DB_GroupQuoteRubricFusion,DB_Topic_Lingo,"GroupQuoteRubricFusion","GroupQuoteRubricFusion",}, \
+{DB_GroupQuoteFooterMandatory,DB_Topic_Lingo,"GroupQuoteFooterMandatory","GroupQuoteFooterMandatory",}, \
+{DB_GroupQuoteFooterVoluntary,DB_Topic_Lingo,"GroupQuoteFooterVoluntary","GroupQuoteFooterVoluntary",}, \
+{DB_GroupQuoteFooterFusion,DB_Topic_Lingo,"GroupQuoteFooterFusion","GroupQuoteFooterFusion",}, \
+{DB_MinimumPremiumFootnote,DB_Topic_Lingo,"MinimumPremiumFootnote","MinimumPremiumFootnote",}, \
+{DB_PremAllocationFootnote,DB_Topic_Lingo,"PremAllocationFootnote","PremAllocationFootnote",}, \
+{DB_InterestDisclaimer,DB_Topic_Lingo,"InterestDisclaimer","InterestDisclaimer",}, \
+{DB_GuarMortalityFootnote,DB_Topic_Lingo,"GuarMortalityFootnote","GuarMortalityFootnote",}, \
+{DB_ProductDescription,DB_Topic_Lingo,"ProductDescription","ProductDescription",}, \
+{DB_StableValueFootnote,DB_Topic_Lingo,"StableValueFootnote","StableValueFootnote",}, \
+{DB_NoVanishPremiumFootnote,DB_Topic_Lingo,"NoVanishPremiumFootnote","NoVanishPremiumFootnote",}, \
+{DB_RejectPremiumFootnote,DB_Topic_Lingo,"RejectPremiumFootnote","RejectPremiumFootnote",}, \
+{DB_ExpRatingFootnote,DB_Topic_Lingo,"ExpRatingFootnote","ExpRatingFootnote",}, \
+{DB_MortalityBlendFootnote,DB_Topic_Lingo,"MortalityBlendFootnote","MortalityBlendFootnote",}, \
+{DB_HypotheticalRatesFootnote,DB_Topic_Lingo,"HypotheticalRatesFootnote","HypotheticalRatesFootnote",}, \
+{DB_SalesLoadRefundFootnote,DB_Topic_Lingo,"SalesLoadRefundFootnote","SalesLoadRefundFootnote",}, \
+{DB_NoLapseEverFootnote,DB_Topic_Lingo,"NoLapseEverFootnote","NoLapseEverFootnote",}, \
+{DB_NoLapseFootnote,DB_Topic_Lingo,"NoLapseFootnote","NoLapseFootnote",}, \
+{DB_CurrentValuesFootnote,DB_Topic_Lingo,"CurrentValuesFootnote","CurrentValuesFootnote",}, \
+{DB_DBOption1Footnote,DB_Topic_Lingo,"DBOption1Footnote","DBOption1Footnote",}, \
+{DB_DBOption2Footnote,DB_Topic_Lingo,"DBOption2Footnote","DBOption2Footnote",}, \
+{DB_DBOption3Footnote,DB_Topic_Lingo,"DBOption3Footnote","DBOption3Footnote",}, \
+{DB_MinDeathBenefitFootnote,DB_Topic_Lingo,"MinDeathBenefitFootnote","MinDeathBenefitFootnote",}, \
+{DB_ExpRatRiskChargeFootnote,DB_Topic_Lingo,"ExpRatRiskChargeFootnote","ExpRatRiskChargeFootnote",}, \
+{DB_ExchangeChargeFootnote1,DB_Topic_Lingo,"ExchangeChargeFootnote1","ExchangeChargeFootnote1",}, \
+{DB_FlexiblePremiumFootnote,DB_Topic_Lingo,"FlexiblePremiumFootnote","FlexiblePremiumFootnote",}, \
+{DB_GuaranteedValuesFootnote,DB_Topic_Lingo,"GuaranteedValuesFootnote","GuaranteedValuesFootnote",}, \
+{DB_CreditingRateFootnote,DB_Topic_Lingo,"CreditingRateFootnote","CreditingRateFootnote",}, \
+{DB_GrossRateFootnote,DB_Topic_Lingo,"GrossRateFootnote","GrossRateFootnote",}, \
+{DB_NetRateFootnote,DB_Topic_Lingo,"NetRateFootnote","NetRateFootnote",}, \
+{DB_MecFootnote,DB_Topic_Lingo,"MecFootnote","MecFootnote",}, \
+{DB_GptFootnote,DB_Topic_Lingo,"GptFootnote","GptFootnote",}, \
+{DB_MidpointValuesFootnote,DB_Topic_Lingo,"MidpointValuesFootnote","MidpointValuesFootnote",}, \
+{DB_SinglePremiumFootnote,DB_Topic_Lingo,"SinglePremiumFootnote","SinglePremiumFootnote",}, \
+{DB_MonthlyChargesFootnote,DB_Topic_Lingo,"MonthlyChargesFootnote","MonthlyChargesFootnote",}, \
+{DB_UltCreditingRateFootnote,DB_Topic_Lingo,"UltCreditingRateFootnote","UltCreditingRateFootnote",}, \
+{DB_UltCreditingRateHeader,DB_Topic_Lingo,"UltCreditingRateHeader","UltCreditingRateHeader",}, \
+{DB_MaxNaarFootnote,DB_Topic_Lingo,"MaxNaarFootnote","MaxNaarFootnote",}, \
+{DB_PremTaxSurrChgFootnote,DB_Topic_Lingo,"PremTaxSurrChgFootnote","PremTaxSurrChgFootnote",}, \
+{DB_PolicyFeeFootnote,DB_Topic_Lingo,"PolicyFeeFootnote","PolicyFeeFootnote",}, \
+{DB_AssetChargeFootnote,DB_Topic_Lingo,"AssetChargeFootnote","AssetChargeFootnote",}, \
+{DB_InvestmentIncomeFootnote,DB_Topic_Lingo,"InvestmentIncomeFootnote","InvestmentIncomeFootnote",}, \
+{DB_IrrDbFootnote,DB_Topic_Lingo,"IrrDbFootnote","IrrDbFootnote",}, \
+{DB_IrrCsvFootnote,DB_Topic_Lingo,"IrrCsvFootnote","IrrCsvFootnote",}, \
+{DB_MortalityChargesFootnote,DB_Topic_Lingo,"MortalityChargesFootnote","MortalityChargesFootnote",}, \
+{DB_LoanAndWithdrawalFootnote,DB_Topic_Lingo,"LoanAndWithdrawalFootnote","LoanAndWithdrawalFootnote",}, \
+{DB_LoanFootnote,DB_Topic_Lingo,"LoanFootnote","LoanFootnote",}, \
+{DB_ImprimaturPresale,DB_Topic_Lingo,"ImprimaturPresale","ImprimaturPresale",}, \
+{DB_ImprimaturPresaleComposite,DB_Topic_Lingo,"ImprimaturPresaleComposite","ImprimaturPresaleComposite",}, \
+{DB_ImprimaturInforce,DB_Topic_Lingo,"ImprimaturInforce","ImprimaturInforce",}, \
+{DB_ImprimaturInforceComposite,DB_Topic_Lingo,"ImprimaturInforceComposite","ImprimaturInforceComposite",}, \
+{DB_StateMarketingImprimatur,DB_Topic_Lingo,"StateMarketingImprimatur","StateMarketingImprimatur",}, \
+{DB_NonGuaranteedFootnote,DB_Topic_Lingo,"NonGuaranteedFootnote","NonGuaranteedFootnote",}, \
+{DB_NonGuaranteedFootnote1,DB_Topic_Lingo,"NonGuaranteedFootnote1","NonGuaranteedFootnote1",}, \
+{DB_NonGuaranteedFootnote1Tx,DB_Topic_Lingo,"NonGuaranteedFootnote1Tx","NonGuaranteedFootnote1Tx",}, \
+{DB_FnMonthlyDeductions,DB_Topic_Lingo,"FnMonthlyDeductions","FnMonthlyDeductions",}, \
+{DB_SurrenderFootnote,DB_Topic_Lingo,"SurrenderFootnote","SurrenderFootnote",}, \
+{DB_PortabilityFootnote,DB_Topic_Lingo,"PortabilityFootnote","PortabilityFootnote",}, \
+{DB_FundRateFootnote,DB_Topic_Lingo,"FundRateFootnote","FundRateFootnote",}, \
+{DB_IssuingCompanyFootnote,DB_Topic_Lingo,"IssuingCompanyFootnote","IssuingCompanyFootnote",}, \
+{DB_SubsidiaryFootnote,DB_Topic_Lingo,"SubsidiaryFootnote","SubsidiaryFootnote",}, \
+{DB_PlacementAgentFootnote,DB_Topic_Lingo,"PlacementAgentFootnote","PlacementAgentFootnote",}, \
+{DB_MarketingNameFootnote,DB_Topic_Lingo,"MarketingNameFootnote","MarketingNameFootnote",}, \
+{DB_GuarIssueDisclaimerNcSc,DB_Topic_Lingo,"GuarIssueDisclaimerNcSc","GuarIssueDisclaimerNcSc",}, \
+{DB_GuarIssueDisclaimerMd,DB_Topic_Lingo,"GuarIssueDisclaimerMd","GuarIssueDisclaimerMd",}, \
+{DB_GuarIssueDisclaimerTx,DB_Topic_Lingo,"GuarIssueDisclaimerTx","GuarIssueDisclaimerTx",}, \
+{DB_IllRegCertAgent,DB_Topic_Lingo,"IllRegCertAgent","IllRegCertAgent",}, \
+{DB_IllRegCertAgentIl,DB_Topic_Lingo,"IllRegCertAgentIl","IllRegCertAgentIl",}, \
+{DB_IllRegCertAgentTx,DB_Topic_Lingo,"IllRegCertAgentTx","IllRegCertAgentTx",}, \
+{DB_IllRegCertClient,DB_Topic_Lingo,"IllRegCertClient","IllRegCertClient",}, \
+{DB_IllRegCertClientIl,DB_Topic_Lingo,"IllRegCertClientIl","IllRegCertClientIl",}, \
+{DB_IllRegCertClientTx,DB_Topic_Lingo,"IllRegCertClientTx","IllRegCertClientTx",}, \
+{DB_FnMaturityAge,DB_Topic_Lingo,"FnMaturityAge","FnMaturityAge",}, \
+{DB_FnPartialMortality,DB_Topic_Lingo,"FnPartialMortality","FnPartialMortality",}, \
+{DB_FnProspectus,DB_Topic_Lingo,"FnProspectus","FnProspectus",}, \
+{DB_FnInitialSpecAmt,DB_Topic_Lingo,"FnInitialSpecAmt","FnInitialSpecAmt",}, \
+{DB_FnInforceAcctVal,DB_Topic_Lingo,"FnInforceAcctVal","FnInforceAcctVal",}, \
+{DB_FnInforceTaxBasis,DB_Topic_Lingo,"FnInforceTaxBasis","FnInforceTaxBasis",}, \
+{DB_Fn1035Charge,DB_Topic_Lingo,"Fn1035Charge","Fn1035Charge",}, \
+{DB_FnMecExtraWarning,DB_Topic_Lingo,"FnMecExtraWarning","FnMecExtraWarning",}, \
+{DB_FnNotTaxAdvice,DB_Topic_Lingo,"FnNotTaxAdvice","FnNotTaxAdvice",}, \
+{DB_FnNotTaxAdvice2,DB_Topic_Lingo,"FnNotTaxAdvice2","FnNotTaxAdvice2",}, \
+{DB_FnImf,DB_Topic_Lingo,"FnImf","FnImf",}, \
+{DB_FnCensus,DB_Topic_Lingo,"FnCensus","FnCensus",}, \
+{DB_FnDacTax,DB_Topic_Lingo,"FnDacTax","FnDacTax",}, \
+{DB_FnDefnLifeIns,DB_Topic_Lingo,"FnDefnLifeIns","FnDefnLifeIns",}, \
+{DB_FnBoyEoy,DB_Topic_Lingo,"FnBoyEoy","FnBoyEoy",}, \
+{DB_FnGeneralAccount,DB_Topic_Lingo,"FnGeneralAccount","FnGeneralAccount",}, \
+{DB_FnPpMemorandum,DB_Topic_Lingo,"FnPpMemorandum","FnPpMemorandum",}, \
+{DB_FnPpAccreditedInvestor,DB_Topic_Lingo,"FnPpAccreditedInvestor","FnPpAccreditedInvestor",}, \
+{DB_FnPpLoads,DB_Topic_Lingo,"FnPpLoads","FnPpLoads",}, \
+{DB_FnProposalUnderwriting,DB_Topic_Lingo,"FnProposalUnderwriting","FnProposalUnderwriting",}, \
+{DB_FnGuaranteedPremium,DB_Topic_Lingo,"FnGuaranteedPremium","FnGuaranteedPremium",}, \
+{DB_FnOmnibusDisclaimer,DB_Topic_Lingo,"FnOmnibusDisclaimer","FnOmnibusDisclaimer",}, \
+{DB_FnInitialDbo,DB_Topic_Lingo,"FnInitialDbo","FnInitialDbo",}, \
+{DB_DefnGuarGenAcctRate,DB_Topic_Lingo,"DefnGuarGenAcctRate","DefnGuarGenAcctRate",}, \
+{DB_DefnAV,DB_Topic_Lingo,"DefnAV","DefnAV",}, \
+{DB_DefnCSV,DB_Topic_Lingo,"DefnCSV","DefnCSV",}, \
+{DB_DefnMec,DB_Topic_Lingo,"DefnMec","DefnMec",}, \
+{DB_DefnOutlay,DB_Topic_Lingo,"DefnOutlay","DefnOutlay",}, \
+{DB_DefnSpecAmt,DB_Topic_Lingo,"DefnSpecAmt","DefnSpecAmt",}, \
 {DB_Topic_Weights,DB_FIRST,"Weights","Weights for profit analysis cells [not yet implemented]",}, \
 {DB_WeightClass,DB_Topic_Weights,"WeightClass","Weight by underwriting class [not yet implemented]",}, \
 {DB_WeightGender,DB_Topic_Weights,"WeightGender","Weight by gender [not yet implemented]",}, \
@@ -372,7 +538,7 @@
 {DB_VarExpPrem,DB_Topic_Expenses,"VarExpPrem","Variable expense per $1 of premium [not yet implemented]",}, \
 {DB_VarExpDumpin,DB_Topic_Expenses,"VarExpDumpin","Variable expense per $1 of dumpin [not yet implemented]",}, \
 {DB_VarExpSpecAmt,DB_Topic_Expenses,"VarExpSpecAmt","Variable expense per $1 of specified amount [not yet implemented]",}, \
-{DB_ExpSpecAmtLimit,DB_Topic_Expenses,"ExpSpecAmtLimit","Maximum specified amount to which expense per $1 of specified amount applies [not yet implemented]",}, \
+{DB_ExpSpecAmtLimit,DB_Topic_Expenses,"ExpSpecAmtLimit","Maximum specified amount to which expense per $1 of specified amount can apply [not yet implemented]",}, \
 {DB_MedicalProportion,DB_Topic_Expenses,"MedicalProportion","Proportion requiring medical or paramedical underwriting [not yet implemented]",}, \
 {DB_UwTestCost,DB_Topic_Expenses,"UwTestCost","Expense per policy issue for underwriting tests [not yet implemented]",}, \
 {DB_Topic_Reserves,DB_FIRST,"Reserves","Reserves [not yet implemented]",}, \

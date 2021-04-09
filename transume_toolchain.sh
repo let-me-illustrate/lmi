@@ -2,7 +2,7 @@
 
 # Recast definitions from 'set_toolchain.sh' for use in makefiles.
 
-# Copyright (C) 2020 Gregory W. Chicares.
+# Copyright (C) 2020, 2021 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -17,16 +17,22 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 # See 'GNUmakefile' for suggested use.
 
-. ./set_toolchain.sh
+# Directory where this script resides.
 
-printf '%s\n' "export LMI_COMPILER := $LMI_COMPILER"
-printf '%s\n' "export LMI_TRIPLET  := $LMI_TRIPLET"
-printf '%s\n' "export PATH         := $PATH"
-printf '%s\n' "export WINEPATH     := $WINEPATH"
-printf '%s\n' "export PERFORM      := $PERFORM"
+srcdir=$(dirname "$(readlink --canonicalize "$0")")
+
+# shellcheck disable=SC1090
+. "$srcdir"/set_toolchain.sh
+
+printf '%s\n' "export LMI_COMPILER    := $LMI_COMPILER"
+printf '%s\n' "export LMI_TRIPLET     := $LMI_TRIPLET"
+printf '%s\n' "export PATH            := $PATH"
+printf '%s\n' "export WINEPATH        := $WINEPATH"
+printf '%s\n' "export PERFORM         := $PERFORM"
+printf '%s\n' "export LD_LIBRARY_PATH := $LD_LIBRARY_PATH"

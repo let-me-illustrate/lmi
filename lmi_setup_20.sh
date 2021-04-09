@@ -2,7 +2,7 @@
 
 # Create a chroot for cross-building "Let me illustrate...".
 #
-# Copyright (C) 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -17,11 +17,12 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 . ./lmi_setup_inc.sh
+# shellcheck disable=SC1091
 . /tmp/schroot_env
 
 set -evx
@@ -78,10 +79,42 @@ sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /etc/skel/.bash_logout
 logdir=/srv/cache_for_lmi/logs
 mkdir -p "${logdir}"
 apt-get update
-apt-get --assume-yes install wget g++-mingw-w64 automake libtool make \
- pkg-config git cvs zsh bzip2 unzip sudo wine default-jre jing trang \
- g++-multilib libxml2-utils libxslt1-dev vim-gtk vim-doc shellcheck \
- bc libarchive-tools xsltproc rsync curl bsdmainutils \
+apt-get --assume-yes install \
+  automake \
+  bc \
+  bsdmainutils \
+  bzip2 \
+  curl \
+  cvs \
+  default-jre \
+  g++-mingw-w64 \
+  g++-multilib \
+  gdb \
+  git \
+  jing \
+  libarchive-tools \
+  libc6-dbg \
+  libdw-dev \
+  libgtk-3-dev \
+  libtool \
+  libxml2-utils \
+  libunwind-dev \
+  libxslt1-dev \
+  make \
+  patch \
+  pkg-config \
+  rsync \
+  shellcheck \
+  sudo \
+  trang \
+  unzip \
+  vim-doc \
+  vim-fugitive \
+  vim-gtk \
+  wget \
+  wine \
+  xsltproc \
+  zsh \
  >"${logdir}/${CHRTNAME}"-apt-get-log 2>&1
 
 # This command should produce little output:

@@ -1,6 +1,6 @@
 // Rounding.
 //
-// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -24,13 +24,15 @@
 
 #include "config.hpp"
 
-#include "mc_enum_type_enums.hpp"
+#include "currency.hpp"
+#include "mc_enum_type_enums.hpp"       // enum rounding_style
 #include "stl_extensions.hpp"           // nonstd::power()
 
 #include <cmath>
 #include <limits>
 #include <stdexcept>
 #include <type_traits>
+#include <vector>
 
 // Round a floating-point number to a given number of decimal places,
 // following a given rounding style.
@@ -59,7 +61,7 @@ namespace detail
 /// Motivation: To raise an integer-valued real to a positive integer
 /// power without any roundoff error as long as the result is exactly
 /// representable. See:
-///   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00049.html
+///   https://lists.nongnu.org/archive/html/lmi/2016-12/msg00049.html
 ///
 /// For negative 'n', the most accurate result possible is obtained by
 /// calculating power(r, -n), and returning its reciprocal calculated
@@ -79,7 +81,7 @@ namespace detail
 /// which suffices there because its 'r' is always ten.
 
 template<typename RealType>
-RealType perform_pow(RealType r, int n)
+RealType int_pow(RealType r, int n)
 {
     if(0 == n)
         {
@@ -100,7 +102,7 @@ RealType perform_pow(RealType r, int n)
 /// Raise an integer-valued real to an integer power.
 ///
 /// Motivation: calculate accurate powers of ten. See:
-///   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00049.html
+///   https://lists.nongnu.org/archive/html/lmi/2016-12/msg00049.html
 /// Library authors often optimize pow() for integral exponents,
 /// using multiplication rather than a transcendental calculation.
 /// When 'r' is exactly representable, positive integral powers
@@ -115,7 +117,7 @@ RealType perform_pow(RealType r, int n)
 /// in the preceding example.
 
 template<typename RealType>
-RealType perform_pow(RealType r, int n)
+RealType int_pow(RealType r, int n)
 {
     if(0 == n)
         {
@@ -251,18 +253,25 @@ RealType erroneous_rounding_function(RealType)
 template<typename RealType>
 class round_to
 {
-    static_assert(std::is_floating_point<RealType>::value);
+    static_assert(std::is_floating_point_v<RealType>);
 
   public:
     /// The default ctor only makes the class DefaultConstructible;
     /// the object it creates throws on use.
     round_to() = default;
-    round_to(int decimals, rounding_style style);
+    round_to(int a_decimals, rounding_style);
     round_to(round_to const&) = default;
     round_to& operator=(round_to const&) = default;
 
     bool operator==(round_to const&) const;
-    RealType operator()(RealType r) const;
+    RealType operator()(RealType) const;
+    std::vector<RealType> operator()(std::vector<RealType> const&) const;
+
+    currency c(RealType) const;
+    std::vector<currency> c(std::vector<RealType> const&) const;
+
+    currency c(currency) const;
+    std::vector<currency> c(std::vector<currency> const&) const;
 
     int decimals() const;
     rounding_style style() const;
@@ -275,6 +284,9 @@ class round_to
     rounding_style style_            {r_indeterminate};
     max_prec_real scale_fwd_         {1.0};
     max_prec_real scale_back_        {1.0};
+    int decimals_cents_              {0};
+    max_prec_real scale_fwd_cents_   {1.0};
+    max_prec_real scale_back_cents_  {1.0};
     rounding_fn_t rounding_function_ {detail::erroneous_rounding_function};
 };
 
@@ -303,24 +315,27 @@ class round_to
 // clearer if we quantified the effect on accuracy.
 
 template<typename RealType>
-round_to<RealType>::round_to(int decimals, rounding_style a_style)
-    :decimals_          {decimals}
+round_to<RealType>::round_to(int a_decimals, rounding_style a_style)
+    :decimals_          {a_decimals}
     ,style_             {a_style}
-    ,scale_fwd_         {detail::perform_pow(max_prec_real(10.0), decimals)}
+    ,scale_fwd_         {detail::int_pow(max_prec_real(10.0), decimals_)}
     ,scale_back_        {max_prec_real(1.0) / scale_fwd_}
-    ,rounding_function_ {select_rounding_function(a_style)}
+    ,decimals_cents_    {decimals_ - currency::cents_digits}
+    ,scale_fwd_cents_   {detail::int_pow(max_prec_real(10.0), decimals_cents_)}
+    ,scale_back_cents_  {max_prec_real(1.0) / scale_fwd_cents_}
+    ,rounding_function_ {select_rounding_function(style_)}
 {
 /*
 // TODO ?? This might improve accuracy slightly, but would prevent
 // the data members from being const.
-    if(0 <= decimals)
+    if(0 <= a_decimals)
         {
-        scale_fwd_  = detail::perform_pow(max_prec_real(10.0), decimals);
+        scale_fwd_  = detail::int_pow(max_prec_real(10.0), a_decimals);
         scale_back_ = max_prec_real(1.0) / scale_fwd_;
         }
     else
         {
-        scale_back_ = detail::perform_pow(max_prec_real(10.0), -decimals);
+        scale_back_ = detail::int_pow(max_prec_real(10.0), -a_decimals);
         scale_fwd_  = max_prec_real(1.0) / scale_back_;
         }
 */
@@ -333,8 +348,8 @@ round_to<RealType>::round_to(int decimals, rounding_style a_style)
     //    std::numeric_limits<RealType>::max_exponent10
     // decimals.
     if
-        (  decimals < std::numeric_limits<RealType>::min_exponent10
-        ||            std::numeric_limits<RealType>::max_exponent10 < decimals
+        (a_decimals < std::numeric_limits<RealType>::min_exponent10
+        ||            std::numeric_limits<RealType>::max_exponent10 < a_decimals
         )
         {
         throw std::domain_error("Invalid number of decimals.");
@@ -354,8 +369,97 @@ template<typename RealType>
 inline RealType round_to<RealType>::operator()(RealType r) const
 {
     return static_cast<RealType>
-        (rounding_function_(static_cast<RealType>(r * scale_fwd_)) * scale_back_
+        ( rounding_function_(static_cast<RealType>(r * scale_fwd_))
+        * scale_back_
         );
+}
+
+template<typename RealType>
+inline std::vector<RealType> round_to<RealType>::operator()
+    (std::vector<RealType> const& v) const
+{
+    std::vector<RealType> z;
+    z.reserve(v.size());
+    for(auto const& i : v) {z.push_back(operator()(i));}
+    return z;
+}
+
+/// Round a double explicitly; return currency.
+///
+/// As long as the explicit rounding was to cents, or to a power of 10
+/// times cents, the result is an exact integer. For example, to round
+/// 1.234 to the nearest cent:
+///   1.234 * 100.0 --> 123.400000000000005684342 // r * scale_fwd_ (=100.0)
+///   123.400000000000005684342 --> 123.0 // rounding_function_()
+///   123.0 --> 123.0 cents // * scale_back_cents_ (=1.0)
+/// or to the nearest dollar:
+///   1.234 * 1.0 --> 1.229999999999999982236 // r * scale_fwd_ (=1.0)
+///   1.229999999999999982236 --> 1.0 // rounding_function_()
+///   1.0 --> 100.0 cents // * scale_back_cents_ (=100.0)
+/// It is rounding_function_(), not static_cast<>(), that transforms
+/// the floating-point argument to an exact integer value.
+///
+/// The reason this function exists is to intercept that integer value
+/// and multiply it by a nonnegative power of ten. If operator() were
+/// used instead and its result multiplied by 100, it would no longer
+/// be integral--in the first example above:
+///   1.234 * 100.0 --> 123.400000000000005684342 // r * scale_fwd_ (=100.0)
+///   123.400000000000005684342 --> 123.0 // rounding_function_()
+///   123.0 --> 1.229999999999999982236 // * scale_back_ (=0.01)
+///   1.229999999999999982236 * 100.0 --> nonintegral
+
+template<typename RealType>
+inline currency round_to<RealType>::c(RealType r) const
+{
+    RealType const z = static_cast<RealType>
+        ( rounding_function_(static_cast<RealType>(r * scale_fwd_))
+        * scale_back_cents_
+        );
+    // CURRENCY !! static_cast: possible range error
+    return currency(static_cast<currency::data_type>(z), raw_cents {});
+}
+
+template<typename RealType>
+inline std::vector<currency> round_to<RealType>::c
+    (std::vector<RealType> const& v) const
+{
+    std::vector<currency> z;
+    z.reserve(v.size());
+    for(auto const& i : v) {z.push_back(c(i));}
+    return z;
+}
+
+// CURRENCY !! need unit tests
+
+/// Round currency to a potentially different precision.
+///
+/// In practice, lmi rounds almost all currency values to cents, and
+/// rounding again to cents appropriately does nothing. But it rounds
+/// some currency values to dollars (as configured in a '.rounding'
+/// file that can be edited); rounding eleven cents to the nearest
+/// dollar, e.g., must change the value.
+///
+/// This implementation does that as follows:
+///   11 cents --> 0.11 (double)
+///   0.11 --> 0 dollars (nearest)
+/// Roundoff error in the first step doesn't matter. The critical
+/// points for all rounding directions are some whole number plus
+/// zero or one-half, which involve no roundoff error.
+
+template<typename RealType>
+inline currency round_to<RealType>::c(currency z) const
+{
+    return (decimals_ < currency::cents_digits) ? c(z.d()) : z;
+}
+
+template<typename RealType>
+inline std::vector<currency> round_to<RealType>::c
+    (std::vector<currency> const& v) const
+{
+    std::vector<currency> z;
+    z.reserve(v.size());
+    for(auto const& i : v) {z.push_back(c(i));}
+    return z;
 }
 
 template<typename RealType>

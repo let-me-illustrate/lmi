@@ -1,6 +1,6 @@
 // Ledger data that do not vary by basis--initialization.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -27,11 +27,14 @@
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
 #include "contains.hpp"
+#include "currency.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
 #include "fund_data.hpp"
+#include "i7702.hpp"
 #include "interest_rates.hpp"
+#include "lingo.hpp"
 #include "lmi.hpp"                      // is_antediluvian_fork()
 #include "loads.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_str()
@@ -74,7 +77,12 @@ void LedgerInvariant::Init(BasicValues const* b)
     // Zero-initialize almost everything.
     Init();
 
+    InforceLives = b->partial_mortality_lx();
+
     irr_precision_ = b->round_irr().decimals();
+
+    ProductName                = b->yare_input_.ProductName;
+    StateOfJurisdiction        = mc_str(b->GetStateOfJurisdiction());
 
     // BOY vectors.
 
@@ -101,7 +109,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         }
     else if(b->database().query<bool>(DB_TermIsNotRider))
         {
-        TermSpecAmt            = b->DeathBfts_->supplamt();
+        TermSpecAmt            = dblize(b->DeathBfts_->supplamt());
         if(!each_equal(TermSpecAmt, 0.0))
             {
             HasSupplSpecAmt    = true;
@@ -111,7 +119,8 @@ void LedgerInvariant::Init(BasicValues const* b)
         {
         TermSpecAmt            .assign(Length, 0.0);
         }
-    SpecAmt                    = b->DeathBfts_->specamt();
+    SpecAmt                    = dblize(b->DeathBfts_->specamt());
+//  Dcv                        = DYNAMIC
 
     // Forborne vectors.
 
@@ -127,6 +136,15 @@ void LedgerInvariant::Init(BasicValues const* b)
     AddonCompOnAssets          = b->yare_input_.ExtraCompensationOnAssets ;
     AddonCompOnPremium         = b->yare_input_.ExtraCompensationOnPremium;
     CorridorFactor             = b->GetCorridorFactor();
+    if(!is_antediluvian_fork())
+        {
+        Irc7702ic_usual            = b->i7702_->ic_usual();
+        Irc7702ic_glp              = b->i7702_->ic_glp  ();
+        Irc7702ic_gsp              = b->i7702_->ic_gsp  ();
+        Irc7702ig_usual            = b->i7702_->ig_usual();
+        Irc7702ig_glp              = b->i7702_->ig_glp  ();
+        Irc7702ig_gsp              = b->i7702_->ig_gsp  ();
+        }
 
     AnnLoanDueRate = b->InterestRates_->RegLnDueRate
         (mce_gen_curr
@@ -140,7 +158,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     // Scalable scalars.
 
     // SOMEDAY !! Things indexed with '[0]' should probably use inforce year instead.
-    InitBaseSpecAmt            = b->DeathBfts_->specamt()[0];
+    InitBaseSpecAmt            = dblize(b->DeathBfts_->specamt()[0]);
     InitTermSpecAmt            = TermSpecAmt[0];
     ChildRiderAmount           = b->yare_input_.ChildRiderAmount;
     SpouseRiderAmount          = b->yare_input_.SpouseRiderAmount;
@@ -191,8 +209,6 @@ void LedgerInvariant::Init(BasicValues const* b)
     NoLongerIssued             = b->database().query<bool>(DB_NoLongerIssued);
     AllowGroupQuote            = b->database().query<bool>(DB_AllowGroupQuote);
     b->database().query_into(DB_TxCallsGuarUwSubstd, TxCallsGuarUwSubstd);
-    AllowExperienceRating      = b->database().query<bool>(DB_AllowExpRating);
-    UseExperienceRating        = b->yare_input_.UseExperienceRating;
     UsePartialMort             = b->yare_input_.UsePartialMortality;
 
     SurviveToExpectancy        = false;
@@ -310,11 +326,9 @@ void LedgerInvariant::Init(BasicValues const* b)
     if(!is_antediluvian_fork())
         {
         product_data const& p = b->product();
-        // Accommodate one alternative policy-form name.
-        // DATABASE !! It would be much better, of course, to let all
+        // LINGO !! DATABASE !! It would be much better, of course, to let all
         // strings in class product_data vary across the same axes as
         // database_entity objects.
-        bool alt_form = b->database().query<bool>(DB_UsePolicyFormAlt);
         dbo_name_option1           = p.datum("DboNameLevel"                   );
         dbo_name_option2           = p.datum("DboNameIncreasing"              );
         dbo_name_rop               = p.datum("DboNameReturnOfPremium"         );
@@ -322,7 +336,9 @@ void LedgerInvariant::Init(BasicValues const* b)
 
         // Strings.
 
-        PolicyForm = p.datum(alt_form ? "PolicyFormAlternative" : "PolicyForm");
+        auto policy_form = b->database().query<int>(DB_PolicyForm);
+        PolicyForm = b->lingo_->lookup(policy_form);
+
         PolicyMktgName             = p.datum("PolicyMktgName"                 );
         PolicyLegalName            = p.datum("PolicyLegalName"                );
         CsoEra     = mc_str(b->database().query<mcenum_cso_era>(DB_CsoEra));
@@ -443,7 +459,6 @@ void LedgerInvariant::Init(BasicValues const* b)
         FlexiblePremiumFootnote    = p.datum("FlexiblePremiumFootnote"        );
         GuaranteedValuesFootnote   = p.datum("GuaranteedValuesFootnote"       );
         CreditingRateFootnote      = p.datum("CreditingRateFootnote"          );
-        DefnGuarGenAcctRate        = p.datum("DefnGuarGenAcctRate"            );
         GrossRateFootnote          = p.datum("GrossRateFootnote"              );
         NetRateFootnote            = p.datum("NetRateFootnote"                );
         MecFootnote                = p.datum("MecFootnote"                    );
@@ -497,6 +512,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         Fn1035Charge               = p.datum("Fn1035Charge"                   );
         FnMecExtraWarning          = p.datum("FnMecExtraWarning"              );
         FnNotTaxAdvice             = p.datum("FnNotTaxAdvice"                 );
+        FnNotTaxAdvice2            = p.datum("FnNotTaxAdvice2"                );
         FnImf                      = p.datum("FnImf"                          );
         FnCensus                   = p.datum("FnCensus"                       );
         FnDacTax                   = p.datum("FnDacTax"                       );
@@ -510,6 +526,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         FnGuaranteedPremium        = p.datum("FnGuaranteedPremium"            );
         FnOmnibusDisclaimer        = p.datum("FnOmnibusDisclaimer"            );
         FnInitialDbo               = p.datum("FnInitialDbo"                   );
+        DefnGuarGenAcctRate        = p.datum("DefnGuarGenAcctRate"            );
         DefnAV                     = p.datum("DefnAV"                         );
         DefnCSV                    = p.datum("DefnCSV"                        );
         DefnMec                    = p.datum("DefnMec"                        );
@@ -519,7 +536,6 @@ void LedgerInvariant::Init(BasicValues const* b)
 
     // Strings from class Input.
 
-    ProductName                = b->yare_input_.ProductName;
     ProducerName               = b->yare_input_.AgentName;
 
     std::string const agent_city     = b->yare_input_.AgentCity;
@@ -581,7 +597,6 @@ void LedgerInvariant::Init(BasicValues const* b)
     DefnLifeIns                = mc_str(b->yare_input_.DefinitionOfLifeInsurance);
     DefnMaterialChange         = mc_str(b->yare_input_.DefinitionOfMaterialChange);
     PartMortTableName          = "1983 GAM"; // TODO ?? Hardcoded.
-    StateOfJurisdiction        = mc_str(b->GetStateOfJurisdiction());
     PremiumTaxState            = mc_str(b->GetPremiumTaxState());
     CountryIso3166Abbrev       = mc_str(b->yare_input_.Country);
     Comments                   = b->yare_input_.Comments;
@@ -671,13 +686,6 @@ void LedgerInvariant::Init(BasicValues const* b)
         FundAllocations.push_back(0.01 * v[j]);
         }
 
-// EePmt and ErPmt are *input* values, used only as a kludge, e.g. in
-// premium-strategy calculations. Use E[er]GrossPmt for illustrations:
-// they're *output* values that result from transaction processing.
-
-    EePmt                      = b->Outlay_->ee_modal_premiums();
-    ErPmt                      = b->Outlay_->er_modal_premiums();
-
     // Special-case strings.
 
     EffDate                    = calendar_date(b->yare_input_.EffectiveDate     ).str();
@@ -689,4 +697,64 @@ void LedgerInvariant::Init(BasicValues const* b)
     // irr_initialized_ is deliberately not set here: it's not
     // encompassed by 'FullyInitialized'.
     FullyInitialized = true;
+}
+
+/// TODO ?? Temporary kludge.
+///
+/// Objects of this class should be used only to store final values
+/// that result from monthiversary processing, and to use those values
+/// to generate reports. Therefore, they should need to be initialized
+/// only once. However, they've been (ab)used to store intermediate
+/// values during monthiversary processing, and thus, defectively,
+/// some data members need to be reinitialized when calculations are
+/// to be performed again on a different basis.
+///
+/// Complete reinitialization is costly, so this function does it only
+/// for data members that actually require it. Each such member
+/// represents a defect. When the last such defect is resolved, this
+/// function will be empty and can itself be removed, along with the
+/// following commentary transplanted from the call site:
+///
+/// // Call Init() here. The solve routines can change parameters in
+/// // class BasicValues or objects it contains, parameters which
+/// // determine ledger values that are used by the solve routines.
+/// // It might be more appropriate to treat such parameters instead
+/// // as local state of class AccountValue itself, or of a contained
+/// // class smaller than the ledger hierarchy--which we need anyway
+/// // for 7702 and 7702A. Or perhaps the solve functions should
+/// // manipulate the state of just those elements of the ledgers
+/// // that it needs to, to avoid the massive overhead of
+/// // unconditionally reinitializing all elements.
+
+void LedgerInvariant::ReInit(BasicValues const* b)
+{
+    HasSupplSpecAmt            = false;
+    if(b->yare_input_.TermRider)
+        {
+        TermSpecAmt            .assign(Length, b->yare_input_.TermRiderAmount);
+        }
+    else if(b->database().query<bool>(DB_TermIsNotRider))
+        {
+        TermSpecAmt            = dblize(b->DeathBfts_->supplamt());
+        if(!each_equal(TermSpecAmt, 0.0))
+            {
+            HasSupplSpecAmt    = true;
+            }
+        }
+    else
+        {
+        TermSpecAmt            .assign(Length, 0.0);
+        }
+    SpecAmt                    = dblize(b->DeathBfts_->specamt());
+
+    InitBaseSpecAmt            = dblize(b->DeathBfts_->specamt()[0]);
+    InitTermSpecAmt            = TermSpecAmt[0];
+
+    IsMec                      = false;
+    MecMonth                   = 11;
+    MecYear                    = Length;
+
+    ModalMinimumPremium        .assign(Length, 0.0);
+    EeModalMinimumPremium      .assign(Length, 0.0);
+    ErModalMinimumPremium      .assign(Length, 0.0);
 }

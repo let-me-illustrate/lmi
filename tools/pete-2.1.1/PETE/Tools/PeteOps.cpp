@@ -1,5 +1,3 @@
-// -*- C++ -*-
-//
 // Copyright (C) 1998, 1999, 2000, 2002  Los Alamos National Laboratory,
 // Copyright (C) 1998, 1999, 2000, 2002  CodeSourcery, LLC
 //
@@ -86,11 +84,6 @@ void peteOps(map<string,vector<OperatorDescriptor> > &m)
                                  "(const_cast<T1 &>(a) ^= b); return const_cast<T1 &>(a);",
                                  ""));
   m["binaryAssignOps"].push_back(
-              OperatorDescriptor("OpLeftShiftAssign",
-                                 "operator<<=",
-                                 "(const_cast<T1 &>(a) <<= b); return const_cast<T1 &>(a);",
-                                 ""));
-  m["binaryAssignOps"].push_back(
               OperatorDescriptor("OpRightShiftAssign",
                                  "operator>>=",
                                  "(const_cast<T1 &>(a) >>= b); return const_cast<T1 &>(a);",
@@ -117,12 +110,12 @@ void peteOps(map<string,vector<OperatorDescriptor> > &m)
                                  ""));
   m["binaryBoolOps"].push_back(
               OperatorDescriptor("OpEQ",
-                                 "operator==",
+                                 "EqualTo",
                                  "return (a == b);",
                                  ""));
   m["binaryBoolOps"].push_back(
               OperatorDescriptor("OpNE",
-                                 "operator!=",
+                                 "UnequalTo",
                                  "return (a != b);",
                                  ""));
   m["binaryBoolOps"].push_back(
@@ -204,6 +197,16 @@ void peteOps(map<string,vector<OperatorDescriptor> > &m)
               OperatorDescriptor("FnArcTan2",
                                  "atan2",
                                  "return (atan2(a,b));",
+                                 ""));
+  m["binaryOps"].push_back(
+              OperatorDescriptor("FnMax",
+                                 "Max",
+                                 "if(a < b) return b; else return a;",
+                                 ""));
+  m["binaryOps"].push_back(
+              OperatorDescriptor("FnMin",
+                                 "Min",
+                                 "if(b < a) return b; else return a;",
                                  ""));
   m["binaryStdOps"].push_back(
               OperatorDescriptor("ApplyBinary",
@@ -331,10 +334,3 @@ void peteOps(map<string,vector<OperatorDescriptor> > &m)
                                  "return T1()(a);",
                                  ""));
 }
-
-// ACL:rcsinfo
-// ----------------------------------------------------------------------
-// $RCSfile: PeteOps.cpp,v $   $Author: chicares $
-// $Revision: 1.2 $   $Date: 2008-09-08 12:59:25 $
-// ----------------------------------------------------------------------
-// ACL:rcsinfo

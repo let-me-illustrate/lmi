@@ -51,7 +51,7 @@ int test_main(int argc, char* argv[])
     initialize_filesystem();
 
     wxInitializer init(argc, argv);
-    BOOST_TEST( init );
+    LMI_TEST( init );
 
     wxInitAllImageHandlers();
 

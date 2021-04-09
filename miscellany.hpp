@@ -1,6 +1,6 @@
 // Miscellaneous functions.
 //
-// Copyright (C) 2001, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2001, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -83,6 +83,28 @@ std::string floating_rep(T t)
     return oss.str();
 }
 
+template<typename T>
+constexpr T infimum()
+{
+    using limits = std::numeric_limits<T>;
+    static_assert(limits::is_bounded);
+    if constexpr(limits::has_infinity)
+        return -limits::infinity();
+    else
+        return limits::min();
+}
+
+template<typename T>
+constexpr T supremum()
+{
+    using limits = std::numeric_limits<T>;
+    static_assert(limits::is_bounded);
+    if constexpr(limits::has_infinity)
+        return limits::infinity();
+    else
+        return limits::max();
+}
+
 /// Ascertain vector minimum and maximum efficiently.
 ///
 /// Heterogeneous relational operators are necessarily free functions.
@@ -94,15 +116,18 @@ std::string floating_rep(T t)
 template<typename T>
 class minmax
 {
+    static_assert(std::numeric_limits<T>::is_bounded);
+
   public:
-    minmax()
-        :minimum_ {std::numeric_limits<T>::max()}
-        ,maximum_ {std::numeric_limits<T>::min()}
-        {
-        }
+    minmax() {}
 
     explicit minmax(std::vector<T> const& v)
         {
+        if(v.empty())
+            {
+            return;
+            }
+
         auto const& extrema = std::minmax_element(v.begin(), v.end());
         minimum_ = *extrema.first ;
         maximum_ = *extrema.second;
@@ -118,8 +143,8 @@ class minmax
     T maximum() const {return maximum_;}
 
   private:
-    T minimum_;
-    T maximum_;
+    T minimum_ {supremum<T>()};
+    T maximum_ {infimum <T>()};
 };
 
 template<typename T> bool operator< (T t, minmax<T> m) {return t <  m.minimum();}
@@ -127,21 +152,21 @@ template<typename T> bool operator<=(T t, minmax<T> m) {return t <= m.minimum();
 template<typename T> bool operator< (minmax<T> m, T t) {return m.maximum() <  t;}
 template<typename T> bool operator<=(minmax<T> m, T t) {return m.maximum() <= t;}
 
-int LMI_SO scale_power(int max_power, double min_value, double max_value);
+LMI_SO int scale_power(int max_power, double min_value, double max_value);
 
-int LMI_SO count_newlines(std::string const&);
+LMI_SO int count_newlines(std::string const&);
 
-std::vector<std::string> LMI_SO split_into_lines(std::string const&);
+LMI_SO std::vector<std::string> split_into_lines(std::string const&);
 
 std::string htmlize(std::string const&);
 
-bool LMI_SO begins_with(std::string const& s, std::string const& prefix);
+LMI_SO bool begins_with(std::string const& s, std::string const& prefix);
 
-bool LMI_SO ends_with(std::string const& s, std::string const& suffix);
+LMI_SO bool ends_with(std::string const& s, std::string const& suffix);
 
-void LMI_SO ltrim(std::string& s, char const* superfluous);
+LMI_SO void ltrim(std::string& s, char const* superfluous);
 
-void LMI_SO rtrim(std::string& s, char const* superfluous);
+LMI_SO void rtrim(std::string& s, char const* superfluous);
 
 inline std::ios_base::openmode ios_in_binary()
 {

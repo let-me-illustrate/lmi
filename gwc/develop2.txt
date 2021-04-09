@@ -1,7 +1,7 @@
   # Work with proprietary repository (prerequisite: 'develop0.txt')
   #
   # Discussed in detail here:
-  #   http://lists.nongnu.org/archive/html/lmi/2016-03/msg00031.html
+  #   https://lists.nongnu.org/archive/html/lmi/2016-03/msg00031.html
 
   # Initial setup: create a working copy, cloned from the
   # already-provided "blessed" repo...
@@ -32,9 +32,9 @@ git commit --all -m"Another set of changes"
   # When everything is ready to share...
 
 cd /opt/lmi/proprietary
-git bundle create YourBundleName origin/master..HEAD --branches
+git bundle create YourBundleName origin/master..HEAD
   # for example (substitute your own initials)
-git bundle create /opt/lmi/blessed/$(date -u +'%Y%m%dT%H%MZ')-gwc.bundle origin/master..HEAD --branches
+git bundle create /opt/lmi/blessed/$(date -u +'%Y%m%dT%H%MZ')-gwc.bundle origin/master..HEAD
 
   # Email that bundle, then push the changes to your "blessed" repository
 
@@ -44,11 +44,31 @@ git push
 
 cd /opt/lmi/proprietary
 git bundle verify /path/where/you/saved/TheirBundleName
-git pull /path/where/you/saved/TheirBundleName
+git pull /path/where/you/saved/TheirBundleName master
 
   # ...then synchronize your "blessed" repository with your correspondent's
 
 git push
+
+  # Synchronize remote from local proprietary repository
+
+  # determine the latest commit present on the remote machine
+
+cd /opt/lmi/proprietary
+git rev-parse master
+
+  # ...and paste that SHA1 into this command on the local machine
+
+cd /opt/lmi/proprietary
+git bundle create YourCatchupBundleName PASTED..master
+  # for example (assuming the remote's 'master' is e5094a5a820)
+git bundle create /srv/cache_for_lmi/blessed/$(date -u +'%Y%m%dT%H%MZ')-catchup.bundle e5094a5a820^..master
+
+  # ...and then, on the remote machine, verify and pull it as for
+  # "When you receive a bundle in email" above; finally, copy its
+  # source code into the directory used by the compiler:
+
+cp -ia src/* /opt/lmi/src/products/src
 
   # Whenever a rate table changes, regenerate the binary database
 

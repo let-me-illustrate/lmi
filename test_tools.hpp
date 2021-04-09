@@ -1,6 +1,6 @@
 // Unit-test framework based on Beman Dawes's boost library.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -61,6 +61,8 @@
 
 #include "config.hpp"
 
+#include "unwind.hpp"                   // scoped_unwind_toggler
+
 #include <cstdlib>                      // EXIT_SUCCESS, EXIT_FAILURE
 #include <exception>
 #include <ostream>
@@ -69,12 +71,12 @@
 
 // These are macros for the same reason that 'assert' is.
 
-#define BOOST_TEST_FLUSH              \
+#define LMI_TEST_FLUSH                \
        "\n[file "  << __FILE__        \
     << ", line " << __LINE__ << "]\n" \
     << std::flush                     \
 
-#define BOOST_TEST(exp)             \
+#define LMI_TEST(exp)               \
     if(exp)                         \
         {                           \
         lmi_test::record_success(); \
@@ -84,19 +86,19 @@
         lmi_test::record_error();   \
         lmi_test::error_stream()    \
             << (exp)                \
-            << BOOST_TEST_FLUSH     \
+            << LMI_TEST_FLUSH       \
             ;                       \
         }                           \
 
 // Relational macros require their arguments to be streamable.
 
-#define BOOST_TEST_EQUAL(a,b)   \
-    BOOST_TEST_RELATION(a,==,b) \
+#define LMI_TEST_EQUAL(a,b)   \
+    LMI_TEST_RELATION(a,==,b) \
 
-#define BOOST_TEST_UNEQUAL(a,b) \
-    BOOST_TEST_RELATION(a,!=,b) \
+#define LMI_TEST_UNEQUAL(a,b) \
+    LMI_TEST_RELATION(a,!=,b) \
 
-#define BOOST_TEST_RELATION(a,op,b)                      \
+#define LMI_TEST_RELATION(a,op,b)                        \
     if((a) op (b))                                       \
         lmi_test::record_success();                      \
     else                                                 \
@@ -104,7 +106,7 @@
         lmi_test::record_error();                        \
         lmi_test::error_stream()                         \
             << "  '" << (a) << "' "#op" '" << (b) << "'" \
-            << BOOST_TEST_FLUSH                          \
+            << LMI_TEST_FLUSH                            \
             ;                                            \
         }                                                \
 
@@ -112,7 +114,7 @@ namespace lmi_test
 {
 /// Judge whether what() matches macro argument WHAT acceptably.
 ///
-/// Intended to be called only by BOOST_TEST_THROW(). Arguments:
+/// Intended to be called only by LMI_TEST_THROW(). Arguments:
 ///   - observed: the what() string actually thrown;
 ///   - expected: macro argument 'WHAT', the string anticipated.
 ///
@@ -147,8 +149,12 @@ bool whats_what(std::string const& observed, what_regex const& expected);
 ///  - their types match exactly, and
 ///  - lmi_test::whats_what() deems the observed what() equivalent to
 ///    macro argument WHAT.
+///
+/// Don't display a backtrace--it would be superfluous clutter here.
 
-#define BOOST_TEST_THROW(expression,TYPE,WHAT)                \
+#define LMI_TEST_THROW(expression,TYPE,WHAT)                  \
+    {                                                         \
+    scoped_unwind_toggler meaningless_name;                   \
     try                                                       \
         {                                                     \
         expression;                                           \
@@ -158,7 +164,7 @@ bool whats_what(std::string const& observed, what_regex const& expected);
             << "' failed to throw expected exception '"       \
             << #TYPE                                          \
             << "'"                                            \
-            << BOOST_TEST_FLUSH                               \
+            << LMI_TEST_FLUSH                                 \
             ;                                                 \
         lmi_test::record_error();                             \
         }                                                     \
@@ -172,7 +178,7 @@ bool whats_what(std::string const& observed, what_regex const& expected);
                 << "'\n  when type\n    '"                    \
                 << typeid(TYPE).name()                        \
                 << "'\n  was expected."                       \
-                << BOOST_TEST_FLUSH                           \
+                << LMI_TEST_FLUSH                             \
                 ;                                             \
             lmi_test::record_error();                         \
             }                                                 \
@@ -184,7 +190,7 @@ bool whats_what(std::string const& observed, what_regex const& expected);
                 << "'\n  when\n    '"                         \
                 << (WHAT)                                     \
                 << "'\n  was expected."                       \
-                << BOOST_TEST_FLUSH                           \
+                << LMI_TEST_FLUSH                             \
                 ;                                             \
             lmi_test::record_error();                         \
             }                                                 \
@@ -193,8 +199,9 @@ bool whats_what(std::string const& observed, what_regex const& expected);
             lmi_test::record_success();                       \
             }                                                 \
         }                                                     \
+    }                                                         \
 
-#define INVOKE_BOOST_TEST(exp,file,line)    \
+#define INVOKE_LMI_TEST(exp,file,line)      \
     if(!(exp))                              \
         {                                   \
         lmi_test::record_error();           \
@@ -206,19 +213,19 @@ bool whats_what(std::string const& observed, what_regex const& expected);
             << "file " << (file) << ", "    \
             << "line: " << (line)           \
             << "]"                          \
-            << BOOST_TEST_FLUSH             \
+            << LMI_TEST_FLUSH               \
             ;                               \
         }                                   \
     else                                    \
         lmi_test::record_success();         \
 
-#define INVOKE_BOOST_TEST_EQUAL(a,b,file,line)   \
-    INVOKE_BOOST_TEST_RELATION(a,==,b,file,line) \
+#define INVOKE_LMI_TEST_EQUAL(a,b,file,line)   \
+    INVOKE_LMI_TEST_RELATION(a,==,b,file,line) \
 
-#define INVOKE_BOOST_TEST_UNEQUAL(a,b,file,line) \
-    INVOKE_BOOST_TEST_RELATION(a,!=,b,file,line) \
+#define INVOKE_LMI_TEST_UNEQUAL(a,b,file,line) \
+    INVOKE_LMI_TEST_RELATION(a,!=,b,file,line) \
 
-#define INVOKE_BOOST_TEST_RELATION(a,op,b,file,line)     \
+#define INVOKE_LMI_TEST_RELATION(a,op,b,file,line)       \
     if((a) op (b))                                       \
         lmi_test::record_success();                      \
     else                                                 \
@@ -230,7 +237,7 @@ bool whats_what(std::string const& observed, what_regex const& expected);
             << "file " << (file) << ", "                 \
             << "line: " << (line)                        \
             << "]"                                       \
-            << BOOST_TEST_FLUSH                          \
+            << LMI_TEST_FLUSH                            \
             ;                                            \
         }                                                \
 
@@ -250,7 +257,7 @@ namespace lmi_test
     // of adding more reporting functions, it presents a std::ostream
     // for versatility and clarity.
     //
-    // Rationale: An alternative implementation of BOOST_TEST_THROW
+    // Rationale: An alternative implementation of LMI_TEST_THROW
     // was written to determine how much work could be delegated to
     // functions without reporting less information. Because the
     // 'expression' parameter can be a simple semicolon, it must be a
@@ -278,19 +285,16 @@ namespace lmi_test
     void record_error();
 } // namespace lmi_test
 
-// For convenience, include lower-level layers. The original boost
-// library did this only if BOOST_INCLUDE_MAIN had been defined; that
-// macro is retained here as documentation of this change.
-#define BOOST_INCLUDE_MAIN
-#if defined BOOST_INCLUDE_MAIN
-#   include "cpp_main.cpp"
-#   include "test_main.cpp"
-#endif // defined BOOST_INCLUDE_MAIN
+// For convenience, include lower-level layers. (The original boost
+// library did this only if BOOST_INCLUDE_MAIN had been defined.)
 
-// Deprecated macros.
+#include "cpp_main.cpp"
+#include "test_main.cpp"
+
+// Withdrawn macros.
 //
-// Macros BOOST_ERROR, BOOST_CRITICAL_ERROR, and BOOST_CRITICAL_TEST
-// are provided only for backward compatibility, not because they're
+// Macros BOOST_ERROR, BOOST_CRITICAL_ERROR, and BOOST_CRITICAL_TEST,
+// formerly provided, have been withdrawn because they were never
 // really useful. In boost-1.23.0, except for the testing framework's
 // own unit tests, BOOST_ERROR and BOOST_CRITICAL_ERROR are used only
 // once each and only in a single file, in the idiom
@@ -307,34 +311,5 @@ namespace lmi_test
 // be a precondition for success of all later tests, it's not clearly
 // a good idea to skip the later tests--if any of them succeed, that's
 // interesting.
-
-#define BOOST_CRITICAL_TEST(exp)                      \
-    if(exp)                                           \
-        {                                             \
-        lmi_test::record_success();                   \
-        }                                             \
-    else                                              \
-        {                                             \
-        lmi_test::record_error();                     \
-        lmi_test::error_stream()                      \
-            << (exp)                                  \
-            << BOOST_TEST_FLUSH                       \
-            ;                                         \
-        throw lmi_test::test::test_tools_exception(); \
-        }                                             \
-
-#define BOOST_ERROR(exp)          \
-        lmi_test::record_error(); \
-        lmi_test::error_stream()  \
-            << (exp)              \
-            << BOOST_TEST_FLUSH   \
-
-#define BOOST_CRITICAL_ERROR(exp)                    \
-        lmi_test::record_error();                    \
-        lmi_test::error_stream()                     \
-            << (exp)                                 \
-            << BOOST_TEST_FLUSH                      \
-            ;                                        \
-        throw lmi_test::test::test_tools_exception() \
 
 #endif // test_tools_hpp

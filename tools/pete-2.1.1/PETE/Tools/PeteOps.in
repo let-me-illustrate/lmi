@@ -147,6 +147,14 @@ binaryOps
   TAG = "FnArcTan2"
   FUNCTION = "atan2"
   EXPR = "return (atan2(a,b));"
+-----
+  TAG = "FnMax"
+  FUNCTION = "Max"
+  EXPR = "if(a < b) return b; else return a;"
+-----
+  TAG = "FnMin"
+  FUNCTION = "Min"
+  EXPR = "if(b < a) return b; else return a;"
 
 binaryBoolOps
 -----
@@ -167,11 +175,11 @@ binaryBoolOps
   EXPR = "return (a >= b);"
 -----
   TAG = "OpEQ"
-  FUNCTION = "operator=="
+  FUNCTION = "EqualTo"
   EXPR = "return (a == b);"
 -----
   TAG = "OpNE"
-  FUNCTION = "operator!="
+  FUNCTION = "UnequalTo"
   EXPR = "return (a != b);"
 -----
   TAG = "OpAnd"
@@ -237,10 +245,6 @@ binaryAssignOps
   TAG = "OpBitwiseXorAssign"
   FUNCTION = "operator^="
   EXPR = "(const_cast<T1 &>(a) ^= b); return const_cast<T1 &>(a);"
------
-  TAG = "OpLeftShiftAssign"
-  FUNCTION = "operator<<="
-  EXPR = "(const_cast<T1 &>(a) <<= b); return const_cast<T1 &>(a);"
 -----
   TAG = "OpRightShiftAssign"
   FUNCTION = "operator>>="

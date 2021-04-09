@@ -1,6 +1,6 @@
 // Root finding by Brent's method--unit test.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -40,11 +40,11 @@ void test_zero(double bound0, double bound1, int dec, F f, double exact_root)
     root_type rl = decimal_root(bound0, bound1, bias_lower,  dec, f);
     root_type rh = decimal_root(bound0, bound1, bias_higher, dec, f);
 
-    BOOST_TEST(root_is_valid == rn.second);
-    BOOST_TEST(root_is_valid == rl.second);
-    BOOST_TEST(root_is_valid == rh.second);
+    LMI_TEST(root_is_valid == rn.second);
+    LMI_TEST(root_is_valid == rl.second);
+    LMI_TEST(root_is_valid == rh.second);
 
-    BOOST_TEST(rl.first <= rn.first && rn.first <= rh.first);
+    LMI_TEST(rl.first <= rn.first && rn.first <= rh.first);
 
     double tol =
             std::pow(10.0, -dec)
@@ -52,19 +52,19 @@ void test_zero(double bound0, double bound1, int dec, F f, double exact_root)
                 (std::fabs(rl.first), std::fabs(rh.first)
                 )
         ;
-    BOOST_TEST((rh.first - rl.first) <= tol);
+    LMI_TEST((rh.first - rl.first) <= tol);
 
     double toll =
             std::pow(10.0, -dec)
         +   6.0 * epsilon * std::fabs(rl.first)
         ;
-    BOOST_TEST((rl.first - exact_root) <= toll);
+    LMI_TEST((rl.first - exact_root) <= toll);
 
     double tolh =
             std::pow(10.0, -dec)
         +   6.0 * epsilon * std::fabs(rh.first)
         ;
-    BOOST_TEST((rh.first - exact_root) <= tolh);
+    LMI_TEST((rh.first - exact_root) <= tolh);
 }
 
 double e_function(double z)
@@ -112,18 +112,18 @@ int test_main(int, char*[])
     // Test use with function.
 
     root_type r = decimal_root(0.5, 5.0, bias_none, 9, e_function);
-    BOOST_TEST(root_is_valid == r.second);
+    LMI_TEST(root_is_valid == r.second);
 
     // Test use with function object.
 
     e_functor e;
     r = decimal_root(0.5, 5.0, bias_none, 9, e);
-    BOOST_TEST(root_is_valid == r.second);
+    LMI_TEST(root_is_valid == r.second);
 
     // Test failure with interval containing no root.
 
     r = decimal_root(0.1, 1.0, bias_none, 9, e);
-    BOOST_TEST(root_not_bracketed == r.second);
+    LMI_TEST(root_not_bracketed == r.second);
 
     // Test guaranteed side effects.
 
@@ -132,22 +132,22 @@ int test_main(int, char*[])
     // bounds.
 
     r = decimal_root(0.5, 5.0, bias_lower, 9, e, true);
-    BOOST_TEST(root_is_valid == r.second);
+    LMI_TEST(root_is_valid == r.second);
     double e_or_less = r.first;
     r = decimal_root(0.5, 5.0, bias_higher, 9, e, true);
-    BOOST_TEST(root_is_valid == r.second);
+    LMI_TEST(root_is_valid == r.second);
     double e_or_more = r.first;
-    BOOST_TEST(e_or_less < e_or_more);
+    LMI_TEST(e_or_less < e_or_more);
 
     r = decimal_root(0.5, 5.0, bias_lower, 9, e, true);
-    BOOST_TEST(root_is_valid == r.second);
-    BOOST_TEST(r.first < std::exp(1.0));
-    BOOST_TEST(e.value < std::exp(1.0));
+    LMI_TEST(root_is_valid == r.second);
+    LMI_TEST(r.first < std::exp(1.0));
+    LMI_TEST(e.value < std::exp(1.0));
 
     r = decimal_root(0.5, 5.0, bias_higher, 9, e, true);
-    BOOST_TEST(root_is_valid == r.second);
-    BOOST_TEST(std::exp(1.0) < r.first);
-    BOOST_TEST(std::exp(1.0) < e.value);
+    LMI_TEST(root_is_valid == r.second);
+    LMI_TEST(std::exp(1.0) < r.first);
+    LMI_TEST(std::exp(1.0) < e.value);
 
     // Various tests--see macro definition.
 
@@ -174,7 +174,7 @@ int test_main(int, char*[])
 
     e_nineteenth e_19;
     r = decimal_root(-1.0, 4.0, bias_none, -20, e_19);
-    BOOST_TEST(root_is_valid == r.second);
+    LMI_TEST(root_is_valid == r.second);
 
     test_zero(-1.0, 4.0, -100, e_19, std::exp(1.0));
     test_zero(-1.0, 4.0,    0, e_19, std::exp(1.0));
@@ -183,7 +183,7 @@ int test_main(int, char*[])
     e_former_rounding_problem e_frp;
     r = decimal_root(0.12609, 0.12611, bias_lower, 5, e_frp);
 #if !defined LMI_COMO_WITH_MINGW
-    BOOST_TEST(materially_equal(0.12610, r.first));
+    LMI_TEST(materially_equal(0.12610, r.first));
 #else // defined LMI_COMO_WITH_MINGW
     // One would naively expect 0.12610 to be the answer, but it's
     // necessary to inquire which of the two closest representations
@@ -194,13 +194,13 @@ int test_main(int, char*[])
     // (see documentation of the rounding library and its unit test)
     // resulting in a final iterand whose function value is slightly
     // different from zero, and in the "wrong" direction.
-    BOOST_TEST
+    LMI_TEST
         (   materially_equal(0.12609, r.first)
         ||  materially_equal(0.12610, r.first)
         );
 #endif // defined LMI_COMO_WITH_MINGW
 
-    BOOST_TEST(root_is_valid == r.second);
+    LMI_TEST(root_is_valid == r.second);
 
     return 0;
 }

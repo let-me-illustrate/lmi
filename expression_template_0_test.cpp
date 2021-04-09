@@ -1,6 +1,6 @@
 // Expression templates, investigation 0--unit test.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,13 +15,15 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 #include "pchfile.hpp"
 
-#define USE_UBLAS
+#if 202002L <= __cplusplus
+#   define USE_UBLAS
+#endif // 202002L < __cplusplus
 
 #if defined USE_UBLAS
 // BOOST !! Startlingly enough, boost uBLAS depends on this standard
@@ -76,15 +78,6 @@
 
 namespace
 {
-template<typename T>
-struct greater_of
-{
-    T operator()(T const& x, T const& y) const
-        {
-        return std::max(x, y);
-        }
-};
-
     // Global variables for timing tests. They could alternatively be
     // passed as arguments, e.g., by using std::bind, but that would
     // increase complexity in return for no real benefit.
@@ -345,37 +338,8 @@ void mete_ublas_typical()
 }
 #endif // defined USE_UBLAS
 
-/// Syntactic sugar: "assignment" operator for expression templates.
-///
-/// PETE doesn't support this:
-///    std::vector<double> v2 = v0 - v1;
-/// because it's impossible to intrude a copy-assignment operator into
-/// the standard class template.
-///
-/// operator^=() or operator<<=() would probably be better, but would
-/// require changing the PETE sources, whereas the normally-undefined
-/// macro PETE_ALLOW_SCALAR_SHIFT leaves operator<<() available without
-/// any such change. But is this syntactic sugar sweet enough?
-
-template<typename T, typename V>
-std::vector<T>& operator<<(std::vector<T>& t, V v)
-{
-#if defined PETE_ALLOW_SCALAR_SHIFT
-#   error PETE_ALLOW_SCALAR_SHIFT must not be defined.
-#endif // defined PETE_ALLOW_SCALAR_SHIFT
-    return assign(t, v);
-}
-
 void mete_pete_typical()
 {
-// With the operator<<() above, this:
-//    std::vector<double> pv7a(pv0.size()); assign(pv7a, pv0 - pv1);
-// could be written thus:
-//    std::vector<double> pv7b(pv0.size()); pv7b << pv0 - pv1;
-// but these still wouldn't work:
-//    std::vector<double> pv7c << pv0 - pv1;
-//    std::vector<double> pv7d(pv0 - pv1);
-
     for(int i = 0; i < n_iter; ++i)
         {
         std::vector<double> pv8(pv0.size()); assign(pv8, pv0 - pv1);
@@ -391,7 +355,7 @@ void mete_pete_typical()
 
 // This works. It's commented out only for comparability to other
 // approaches.
-//    assign(pv0, apply_binary(greater_of<double>(), pv8, pv9));
+//    assign(pv0, Max(pv8, pv9));
 
         assign(pv9, (1.0 - pv8) * pv9);
         }
@@ -447,24 +411,24 @@ void time_one_array_length(int length)
     double const value_omega = omega * value_alpha;
 
     mete_c();
-    BOOST_TEST(materially_equal(cv2 [omega], value_omega));
+    LMI_TEST(materially_equal(cv2 [omega], value_omega));
 
     mete_stl_plain();
-    BOOST_TEST(materially_equal(sv2a[omega], value_omega));
+    LMI_TEST(materially_equal(sv2a[omega], value_omega));
 
     mete_stl_fancy();
-    BOOST_TEST(materially_equal(sv2b[omega], value_omega));
+    LMI_TEST(materially_equal(sv2b[omega], value_omega));
 
     mete_valarray();
-    BOOST_TEST(materially_equal(va2 [omega], value_omega));
+    LMI_TEST(materially_equal(va2 [omega], value_omega));
 
 #if defined USE_UBLAS
     mete_ublas();
-    BOOST_TEST(materially_equal(ub2 [omega], value_omega));
+    LMI_TEST(materially_equal(ub2 [omega], value_omega));
 #endif // defined USE_UBLAS
 
     mete_pete();
-    BOOST_TEST(materially_equal(pv2[omega], value_omega));
+    LMI_TEST(materially_equal(pv2[omega], value_omega));
 
     run_one_test("C               ", mete_c        );
     run_one_test("STL plain       ", mete_stl_plain);
@@ -483,6 +447,50 @@ void time_one_array_length(int length)
     std::cout << std::endl;
 }
 
+/// Assigning PETE expressions to a std::vector
+///
+/// std::vector<>::operator= is necessarily a member function, and
+/// cannot be overloaded. This function shows some alternatives,
+/// none of which seems ideal:
+///
+///   assign(v, expression);
+///   v = std::vector(intended_size); v << expression;
+///   v = std::vector(intended_size); v += expression;
+
+void test_pete_assignment()
+{
+    std::vector<double> const v0 = {1.1, 2.2, 3.3, 4.4, 5.5};
+    std::vector<double> const v1 = {0.1, 0.2, 0.3, 0.4, 0.5};
+    std::vector<double> const v2 = {1.0, 2.0, 3.0, 4.0, 5.0};
+// With lmi's overload of operator<<=(), this assign() call:
+    std::vector<double> v7a(v0.size());
+    assign(v7a, v0 - v1);
+    LMI_TEST(v2 == v7a);
+// can be written as an operator instead:
+    std::vector<double> v7b(v0.size());
+    v7b <<= v0 - v1;
+    LMI_TEST(v2 == v7b);
+// though these still wouldn't compile:
+//  std::vector<double> v7c <<= v0 - v1;
+//  std::vector<double> v7d(v0 - v1);
+// and, even though this default-constructed vector is of length zero:
+    std::vector<double> v7e;
+// this just works (the result has the intended size):
+    v7e <<= v0 - v1;
+    LMI_TEST(v0.size() == v7e.size());
+
+// On the other hand, this syntax is almost natural, even though it's
+// silly to add zero to everything.
+    std::vector<double> v7f(v0.size());
+    v7f += v0 - v1;
+    LMI_TEST(v2 == v7f);
+// But that may be the best that can easily be done with PETE: where
+//  std::vector<double> v7f += v0 - v1;
+// is wanted, instead write
+//  std::vector<double> v7f(intended_size);
+//  v7f += v0 - v1;
+}
+
 int test_main(int, char*[])
 {
     time_one_array_length(1);
@@ -490,6 +498,8 @@ int test_main(int, char*[])
     time_one_array_length(100);
     time_one_array_length(1000);
     time_one_array_length(10000);
+
+    test_pete_assignment();
 
     return 0;
 }

@@ -1,6 +1,6 @@
 // Ascertain whether a "container" includes a given element--unit test.
 //
-// Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -46,6 +46,16 @@ void test_has_member_find()
     static_assert( has_member_find<std::map   <int,int>>::value);
     static_assert( has_member_find<std::set   <int    >>::value);
     static_assert(!has_member_find<std::vector<int    >>::value);
+
+    // same, with has_member_find_v
+    static_assert( has_member_find_v<HasFind  >);
+    static_assert(!has_member_find_v<LacksFind>);
+
+    static_assert( has_member_find_v<std::string>);
+
+    static_assert( has_member_find_v<std::map   <int,int>>);
+    static_assert( has_member_find_v<std::set   <int    >>);
+    static_assert(!has_member_find_v<std::vector<int    >>);
 }
 
 /// Test standard "containers" for which find() makes sense.
@@ -60,12 +70,12 @@ void test_contains()
 
     // Strings.
 
-    BOOST_TEST( contains(w, w));
-    BOOST_TEST(!contains(w, x));
-    BOOST_TEST( contains(w, "eta"));
-    BOOST_TEST(!contains(w, "zeta"));
-    BOOST_TEST( contains(w, 'e'));
-    BOOST_TEST(!contains(w, 'q'));
+    LMI_TEST( contains(w, w));
+    LMI_TEST(!contains(w, x));
+    LMI_TEST( contains(w, "eta"));
+    LMI_TEST(!contains(w, "zeta"));
+    LMI_TEST( contains(w, 'e'));
+    LMI_TEST(!contains(w, 'q'));
 
     // Associative containers.
 
@@ -75,29 +85,29 @@ void test_contains()
         ,"fortibus es"
         ,"in ero"
         };
-    BOOST_TEST( contains(s, "si ergo" ));
-    BOOST_TEST(!contains(s, "fortibus"));
+    LMI_TEST( contains(s, "si ergo" ));
+    LMI_TEST(!contains(s, "fortibus"));
 
     std::map<std::string,std::string> const m
         {{"O Nobili", "demis trux"}
         ,{"uatis inem", "causendux"}
         };
-    BOOST_TEST( contains(m, "uatis inem"    ));
-    BOOST_TEST(!contains(m, "cows and ducks"));
+    LMI_TEST( contains(m, "uatis inem"    ));
+    LMI_TEST(!contains(m, "cows and ducks"));
 
     // Sequences.
 
     std::deque<double> const d(1, 3.14);
-    BOOST_TEST( contains(d, 3.14));
-    BOOST_TEST(!contains(d, 0.00));
+    LMI_TEST( contains(d, 3.14));
+    LMI_TEST(!contains(d, 0.00));
 
     std::list<double> const t(1, 3.14);
-    BOOST_TEST( contains(t, 3.14));
-    BOOST_TEST(!contains(t, 0.00));
+    LMI_TEST( contains(t, 3.14));
+    LMI_TEST(!contains(t, 0.00));
 
     std::vector<double> const v(1, 3.14);
-    BOOST_TEST( contains(v, 3.14));
-    BOOST_TEST(!contains(v, 0.00));
+    LMI_TEST( contains(v, 3.14));
+    LMI_TEST(!contains(v, 0.00));
 }
 
 int test_main(int, char*[])

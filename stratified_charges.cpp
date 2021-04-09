@@ -1,6 +1,6 @@
 // Rates that depend on the amount they're muliplied by.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -168,7 +168,7 @@ stratified_charges::stratified_charges()
     ascribe_members();
 }
 
-stratified_charges::stratified_charges(std::string const& filename)
+stratified_charges::stratified_charges(fs::path const& filename)
 {
     ascribe_members();
     load(filename);
@@ -399,7 +399,12 @@ double stratified_charges::tiered_guar_sepacct_load(double assets, double) const
     return tiered_rate<double>() (assets, z.limits(), z.values());
 }
 
-/// Lowest tiered separate-account load.
+/// Lowest tiered separate-account load, for 7702 purposes.
+///
+/// All the tiered asset loads implemented by lmi apply only to the
+/// separate account, so their lowest values may be reflected in GLP
+/// and GSP calculations, but only for separate-account products that
+/// offer no general-account investment option.
 ///
 /// Tiered compensation is not reflected here in order to forestall
 /// an adjustment event if compensation decreases in the future.
@@ -408,17 +413,27 @@ double stratified_charges::tiered_guar_sepacct_load(double assets, double) const
 /// changed on a block of business to produce a more front-loaded
 /// pattern in general, with the inadvertent effect of reducing future
 /// compensation on a particular contract.
-///
-/// TODO ?? TAXATION !! Missing "CurrSepAcctLoadBandedByAssets".
-/// But "CurrSepAcctLoadBandedByPrem" is deliberately excluded,
-/// because it's not based on assets. Elsewhere, "DB_CurrAcctValLoad"
-/// should be added to the result.
 
-double stratified_charges::minimum_tiered_spread_for_7702() const
+double stratified_charges::minimum_tiered_sepacct_load_for_7702() const
 {
     stratified_entity const& z = datum("CurrSepAcctLoadTieredByAssets");
     LMI_ASSERT(!z.values().empty());
     return *std::min_element(z.values().begin(), z.values().end());
+
+    stratified_entity const& z0 = datum("CurrSepAcctLoadBandedByAssets");
+    stratified_entity const& z1 = datum("CurrSepAcctLoadBandedByPrem");
+    stratified_entity const& z2 = datum("CurrSepAcctLoadTieredByAssets");
+    // SOMEDAY !! Probably these assertions can never fire, but it
+    // would be better to make them ctor postconditions--which they
+    // already are, except for the default ctor.
+    LMI_ASSERT(!z0.values().empty());
+    LMI_ASSERT(!z1.values().empty());
+    LMI_ASSERT(!z2.values().empty());
+    return
+          *std::min_element(z0.values().begin(), z0.values().end())
+        + *std::min_element(z1.values().begin(), z1.values().end())
+        + *std::min_element(z2.values().begin(), z2.values().end())
+        ;
 }
 
 namespace
@@ -575,7 +590,7 @@ void stratified_charges::write_proem
 void stratified_charges::write_strata_files()
 {
     // Guard against recurrence of the problem described here:
-    //   http://lists.nongnu.org/archive/html/lmi/2008-02/msg00024.html
+    //   https://lists.nongnu.org/archive/html/lmi/2008-02/msg00024.html
     status() << "This line does nothing, but must not fail." << std::flush;
 
     static double const dbl_inf = infinity<double>();

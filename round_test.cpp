@@ -1,6 +1,6 @@
 // Rounding--unit test.
 //
-// Copyright (C) 2001, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2001, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -148,7 +148,7 @@ bool test_one_case
     RealType observed = roundFDL(unrounded);
     // C++'s overloaded round should behave as if it calls C99's
     // round(), roundf(), or roundl() as appropriate.
-    BOOST_TEST_EQUAL(std::round(unrounded), observed);
+    LMI_TEST_EQUAL(std::round(unrounded), observed);
 
     max_prec_real abs_error = std::fabs(observed - expected);
     // Nonstandardly define relative error in terms of
@@ -193,7 +193,7 @@ bool test_one_case
     // All tests pass even with a tolerance of zero, for
     //  - candidate libmingwex as 20080603Z, and
     //  - glibc for amd64, as reported here:
-    //    http://lists.nongnu.org/archive/html/lmi/2008-06/msg00019.html
+    //    https://lists.nongnu.org/archive/html/lmi/2008-06/msg00019.html
     // Code to support a more liberal tolerance is retained in case
     // it someday proves useful on some other platform.
 
@@ -256,9 +256,9 @@ void test_various_float_types
     ,long double expected
     )
 {
-    BOOST_TEST((test_one_case(static_cast<float >(unrounded), static_cast<float >(expected))));
-    BOOST_TEST((test_one_case(static_cast<double>(unrounded), static_cast<double>(expected))));
-    BOOST_TEST((test_one_case(/* long double */  (unrounded), /* long double */  (expected))));
+    LMI_TEST((test_one_case(static_cast<float >(unrounded), static_cast<float >(expected))));
+    LMI_TEST((test_one_case(static_cast<double>(unrounded), static_cast<double>(expected))));
+    LMI_TEST((test_one_case(/* long double */  (unrounded), /* long double */  (expected))));
 }
 
 // C99 7.12.9.6: round "to the nearest integer value in floating-point
@@ -392,9 +392,9 @@ void test_rounding()
     //   static_cast<float>(nextafter(0.5L, 0.0L))
     // need not be distinct from 0.0F.
 
-    BOOST_TEST((test_one_case(nextafterf(0.5F, 0.0F), 0.0F)));
-    BOOST_TEST((test_one_case(nextafter (0.5 , 0.0 ), 0.0 )));
-    BOOST_TEST((test_one_case(nextafterl(0.5L, 0.0L), 0.0L)));
+    LMI_TEST((test_one_case(nextafterf(0.5F, 0.0F), 0.0F)));
+    LMI_TEST((test_one_case(nextafter (0.5 , 0.0 ), 0.0 )));
+    LMI_TEST((test_one_case(nextafterl(0.5L, 0.0L), 0.0L)));
 }
 
 int test_all_modes(bool synchronize)

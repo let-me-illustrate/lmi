@@ -4,7 +4,7 @@
   <!--
     RELAX NG schema for a single cell (class Input).
 
-    Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+    Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
     along with this program; if not, write to the Free Software Foundation,
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 
-    http://savannah.nongnu.org/projects/lmi
+    https://savannah.nongnu.org/projects/lmi
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
   -->
@@ -80,8 +80,8 @@
         <xs:element ref="EffectiveDate"/>
         <xs:element ref="EffectiveDateToday"/>
         <xs:element ref="EmployeeClass"/>
-        <xs:element ref="ExperienceRatingInitialKFactor"/>
-        <xs:element ref="ExperienceReserveRate"/>
+        <xs:element minOccurs="0" ref="ExperienceRatingInitialKFactor"/>
+        <xs:element minOccurs="0" ref="ExperienceReserveRate"/>
         <xs:element ref="External1035ExchangeAmount"/>
         <xs:element ref="External1035ExchangeFromMec"/>
         <xs:element ref="External1035ExchangeTaxBasis"/>
@@ -121,7 +121,7 @@
         <xs:element ref="InforceLeastDeathBenefit"/>
         <xs:element ref="InforceMonth"/>
         <xs:element ref="InforceMonthlyNoLapsePremium"/>
-        <xs:element ref="InforceNetExperienceReserve"/>
+        <xs:element minOccurs="0" ref="InforceNetExperienceReserve"/>
         <xs:element ref="InforceNoLapseActive"/>
         <xs:element ref="InforcePreferredLoanBalance"/>
         <xs:element ref="InforcePreferredLoanValue"/>
@@ -133,7 +133,7 @@
         <xs:element ref="InforceTaxBasis"/>
         <xs:element ref="InforceYear"/>
         <xs:element ref="InforceYtdGrossPremium"/>
-        <xs:element ref="InforceYtdNetCoiCharge"/>
+        <xs:element minOccurs="0" ref="InforceYtdNetCoiCharge"/>
         <xs:element ref="InforceYtdTaxablePremium"/>
         <xs:element ref="InputFundManagementFee"/>
         <xs:element ref="InsuredName"/>
@@ -155,7 +155,7 @@
         <xs:element ref="NonsmokerProportion"/>
         <xs:element ref="NumberOfIdenticalLives"/>
         <xs:element ref="OverrideCoiMultiplier"/>
-        <xs:element ref="OverrideExperienceReserveRate"/>
+        <xs:element minOccurs="0" ref="OverrideExperienceReserveRate"/>
         <xs:element ref="OverrideFundManagementFee"/>
         <xs:element ref="PartialMortalityMultiplier"/>
         <xs:element ref="Payment"/>
@@ -228,7 +228,7 @@
         <xs:element ref="UseAverageOfAllFunds"/>
         <xs:element ref="UseCurrentDeclaredRate"/>
         <xs:element ref="UseDOB"/>
-        <xs:element ref="UseExperienceRating"/>
+        <xs:element minOccurs="0" ref="UseExperienceRating"/>
         <xs:element ref="UsePartialMortality"/>
         <xs:element ref="WaiverOfPremiumBenefit"/>
         <xs:element ref="WithdrawToBasisThenLoan"/>

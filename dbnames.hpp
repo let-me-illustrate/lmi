@@ -1,6 +1,6 @@
 // Product database entity names.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -67,6 +67,7 @@
 ///  - Gdb     Guaranteed death benefit
 ///  - Gen     General (as in 'general account')
 ///  - Gpt     Guideline premium test
+///  - Gsp     Guideline single premium
 ///  - Guar    Guaranteed
 ///  - Ibnr    Incurred but not reported (reserve)
 ///  - Imf     Investment management fee
@@ -158,6 +159,10 @@ enum e_database_key
         ,DB_AllowCvat
         ,DB_AllowGpt
         ,DB_AllowNo7702
+        ,DB_AnnIntRate7702
+        ,DB_AnnIntRateGspDelta
+        ,DB_ShortTermIntGuar7702
+        ,DB_IgnoreLoanRateFor7702
         ,DB_Irc7702Obreption
 
         ,DB_CorridorWhence
@@ -171,7 +176,6 @@ enum e_database_key
         ,DB_Irc7702QAxisGender
         ,DB_Irc7702QAxisSmoking
 
-        ,DB_RatingsAffect7702
         ,DB_CvatMatChangeDefn
         ,DB_GptMatChangeDefn
         ,DB_Irc7702BftIsSpecAmt
@@ -238,7 +242,6 @@ enum e_database_key
         ,DB_CurrMandE
 
         ,DB_GenAcctIntBonus
-        ,DB_BonusInt
         ,DB_IntFloor
         ,DB_AllowGenAcct
         ,DB_AllowSepAcct
@@ -258,7 +261,6 @@ enum e_database_key
 
         ,DB_AllowImfOverride
         ,DB_AssetChargeType
-        ,DB_StableValFundCharge
 
         ,DB_GuarFundAdminChg
         ,DB_CurrFundAdminChg
@@ -290,7 +292,7 @@ enum e_database_key
         ,DB_CurrSpecAmtLoad
         ,DB_CurrSpecAmtLoadTable
 
-        ,DB_CurrAcctValLoad
+        ,DB_CurrSepAcctLoad
 
         ,DB_TgtPremMonthlyPolFee
         ,DB_LoadRfdProportion
@@ -499,15 +501,6 @@ enum e_database_key
         ,DB_AllowExtraAssetComp
         ,DB_AllowExtraPremComp
 
-    ,DB_Topic_ExperienceRating
-
-        ,DB_AllowExpRating
-        ,DB_ExpRatStdDevMult
-        ,DB_ExpRatIbnrMult
-        ,DB_ExpRatCoiRetention
-        ,DB_ExpRatRiskCoiMult
-        ,DB_ExpRatAmortPeriod
-
     ,DB_Topic_Miscellanea
 
         ,DB_LedgerType
@@ -517,6 +510,7 @@ enum e_database_key
         ,DB_AgeLastOrNearest
         ,DB_MaturityAge
 
+        ,DB_AllowCashValueEnh
         ,DB_CashValueEnhMult
         ,DB_LapseIgnoresSurrChg
 
@@ -524,8 +518,181 @@ enum e_database_key
 
         ,DB_GroupProxyRateTable
         ,DB_PartialMortTable
-        ,DB_UsePolicyFormAlt
         ,DB_AllowGroupQuote
+
+    ,DB_Topic_Lingo
+
+        ,DB_PolicyForm
+        ,DB_PolicyMktgName
+        ,DB_PolicyLegalName
+        ,DB_InsCoShortName
+        ,DB_InsCoName
+        ,DB_InsCoAddr
+        ,DB_InsCoStreet
+        ,DB_InsCoPhone
+        ,DB_MainUnderwriter
+        ,DB_MainUnderwriterAddress
+        ,DB_CoUnderwriter
+        ,DB_CoUnderwriterAddress
+        ,DB_AvName
+        ,DB_CsvName
+        ,DB_CsvHeaderName
+        ,DB_NoLapseProvisionName
+        ,DB_ContractName
+        ,DB_DboName
+        ,DB_DboNameLevel
+        ,DB_DboNameIncreasing
+        ,DB_DboNameReturnOfPremium
+        ,DB_DboNameMinDeathBenefit
+        ,DB_GenAcctName
+        ,DB_GenAcctNameElaborated
+        ,DB_SepAcctName
+        ,DB_SpecAmtName
+        ,DB_SpecAmtNameElaborated
+        ,DB_UwBasisMedical
+        ,DB_UwBasisParamedical
+        ,DB_UwBasisNonmedical
+        ,DB_UwBasisSimplified
+        ,DB_UwBasisGuaranteed
+        ,DB_UwClassPreferred
+        ,DB_UwClassStandard
+        ,DB_UwClassRated
+        ,DB_UwClassUltra
+        ,DB_AccountValueFootnote
+        ,DB_AttainedAgeFootnote
+        ,DB_CashSurrValueFootnote
+        ,DB_DeathBenefitFootnote
+        ,DB_InitialPremiumFootnote
+        ,DB_NetPremiumFootnote
+        ,DB_GrossPremiumFootnote
+        ,DB_OutlayFootnote
+        ,DB_PolicyYearFootnote
+        ,DB_ADDTerseName
+        ,DB_InsurabilityTerseName
+        ,DB_ChildTerseName
+        ,DB_SpouseTerseName
+        ,DB_TermTerseName
+        ,DB_WaiverTerseName
+        ,DB_AccelBftRiderTerseName
+        ,DB_OverloanRiderTerseName
+        ,DB_ADDFootnote
+        ,DB_ChildFootnote
+        ,DB_SpouseFootnote
+        ,DB_TermFootnote
+        ,DB_WaiverFootnote
+        ,DB_AccelBftRiderFootnote
+        ,DB_OverloanRiderFootnote
+        ,DB_GroupQuoteShortProductName
+        ,DB_GroupQuoteIsNotAnOffer
+        ,DB_GroupQuoteRidersFooter
+        ,DB_GroupQuotePolicyFormId
+        ,DB_GroupQuoteStateVariations
+        ,DB_GroupQuoteProspectus
+        ,DB_GroupQuoteUnderwriter
+        ,DB_GroupQuoteBrokerDealer
+        ,DB_GroupQuoteRubricMandatory
+        ,DB_GroupQuoteRubricVoluntary
+        ,DB_GroupQuoteRubricFusion
+        ,DB_GroupQuoteFooterMandatory
+        ,DB_GroupQuoteFooterVoluntary
+        ,DB_GroupQuoteFooterFusion
+        ,DB_MinimumPremiumFootnote
+        ,DB_PremAllocationFootnote
+        ,DB_InterestDisclaimer
+        ,DB_GuarMortalityFootnote
+        ,DB_ProductDescription
+        ,DB_StableValueFootnote
+        ,DB_NoVanishPremiumFootnote
+        ,DB_RejectPremiumFootnote
+        ,DB_ExpRatingFootnote
+        ,DB_MortalityBlendFootnote
+        ,DB_HypotheticalRatesFootnote
+        ,DB_SalesLoadRefundFootnote
+        ,DB_NoLapseEverFootnote
+        ,DB_NoLapseFootnote
+        ,DB_CurrentValuesFootnote
+        ,DB_DBOption1Footnote
+        ,DB_DBOption2Footnote
+        ,DB_DBOption3Footnote
+        ,DB_MinDeathBenefitFootnote
+        ,DB_ExpRatRiskChargeFootnote
+        ,DB_ExchangeChargeFootnote1
+        ,DB_FlexiblePremiumFootnote
+        ,DB_GuaranteedValuesFootnote
+        ,DB_CreditingRateFootnote
+        ,DB_GrossRateFootnote
+        ,DB_NetRateFootnote
+        ,DB_MecFootnote
+        ,DB_GptFootnote
+        ,DB_MidpointValuesFootnote
+        ,DB_SinglePremiumFootnote
+        ,DB_MonthlyChargesFootnote
+        ,DB_UltCreditingRateFootnote
+        ,DB_UltCreditingRateHeader
+        ,DB_MaxNaarFootnote
+        ,DB_PremTaxSurrChgFootnote
+        ,DB_PolicyFeeFootnote
+        ,DB_AssetChargeFootnote
+        ,DB_InvestmentIncomeFootnote
+        ,DB_IrrDbFootnote
+        ,DB_IrrCsvFootnote
+        ,DB_MortalityChargesFootnote
+        ,DB_LoanAndWithdrawalFootnote
+        ,DB_LoanFootnote
+        ,DB_ImprimaturPresale
+        ,DB_ImprimaturPresaleComposite
+        ,DB_ImprimaturInforce
+        ,DB_ImprimaturInforceComposite
+        ,DB_StateMarketingImprimatur
+        ,DB_NonGuaranteedFootnote
+        ,DB_NonGuaranteedFootnote1
+        ,DB_NonGuaranteedFootnote1Tx
+        ,DB_FnMonthlyDeductions
+        ,DB_SurrenderFootnote
+        ,DB_PortabilityFootnote
+        ,DB_FundRateFootnote
+        ,DB_IssuingCompanyFootnote
+        ,DB_SubsidiaryFootnote
+        ,DB_PlacementAgentFootnote
+        ,DB_MarketingNameFootnote
+        ,DB_GuarIssueDisclaimerNcSc
+        ,DB_GuarIssueDisclaimerMd
+        ,DB_GuarIssueDisclaimerTx
+        ,DB_IllRegCertAgent
+        ,DB_IllRegCertAgentIl
+        ,DB_IllRegCertAgentTx
+        ,DB_IllRegCertClient
+        ,DB_IllRegCertClientIl
+        ,DB_IllRegCertClientTx
+        ,DB_FnMaturityAge
+        ,DB_FnPartialMortality
+        ,DB_FnProspectus
+        ,DB_FnInitialSpecAmt
+        ,DB_FnInforceAcctVal
+        ,DB_FnInforceTaxBasis
+        ,DB_Fn1035Charge
+        ,DB_FnMecExtraWarning
+        ,DB_FnNotTaxAdvice
+        ,DB_FnNotTaxAdvice2
+        ,DB_FnImf
+        ,DB_FnCensus
+        ,DB_FnDacTax
+        ,DB_FnDefnLifeIns
+        ,DB_FnBoyEoy
+        ,DB_FnGeneralAccount
+        ,DB_FnPpMemorandum
+        ,DB_FnPpAccreditedInvestor
+        ,DB_FnPpLoads
+        ,DB_FnProposalUnderwriting
+        ,DB_FnGuaranteedPremium
+        ,DB_FnOmnibusDisclaimer
+        ,DB_FnInitialDbo
+        ,DB_DefnGuarGenAcctRate
+        ,DB_DefnAV
+        ,DB_DefnCSV
+        ,DB_DefnMec
+        ,DB_DefnOutlay
+        ,DB_DefnSpecAmt
 
     ,DB_Topic_Weights
 
@@ -589,9 +756,9 @@ struct db_names
     char const*         LongName;
 };
 
-std::vector<db_names> const& LMI_SO GetDBNames();
+LMI_SO std::vector<db_names> const& GetDBNames();
 
-int         LMI_SO db_key_from_name(std::string const&);
-std::string LMI_SO db_name_from_key(int);
+LMI_SO int         db_key_from_name(std::string const&);
+LMI_SO std::string db_name_from_key(int);
 
 #endif // dbnames_hpp

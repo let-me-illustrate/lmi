@@ -1,6 +1,6 @@
 // Death benefit option (DBO) rules.
 //
-// Copyright (C) 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -96,7 +96,7 @@ bool dbo_transition_is_allowed(mce_dbopt from, mce_dbopt to)
 
 // The return value is fairly useless, and may later be removed.
 
-bool dbo_sequence_is_allowed(std::vector<mce_dbopt> v)
+bool dbo_sequence_is_allowed(std::vector<mce_dbopt> const& v)
 {
     if(0 == lmi::ssize(v))
         {

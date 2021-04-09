@@ -1,6 +1,6 @@
 // Ledger formatting as text.
 //
-// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -34,22 +34,22 @@
 
 class Ledger;
 
-std::string LMI_SO FormatSelectedValuesAsHtml(Ledger const&);
-std::string LMI_SO FormatSelectedValuesAsTsv (Ledger const&);
+LMI_SO std::string FormatSelectedValuesAsHtml(Ledger const&);
+LMI_SO std::string FormatSelectedValuesAsTsv (Ledger const&);
 
-void LMI_SO PrintCellTabDelimited  (Ledger const&, std::string const& file_name);
+LMI_SO void PrintCellTabDelimited  (Ledger const&, std::string const& file_name);
 
-void LMI_SO PrintRosterHeaders     (               std::string const& file_name);
-void LMI_SO PrintRosterTabDelimited(Ledger const&, std::string const& file_name);
+LMI_SO void PrintRosterHeaders     (               std::string const& file_name);
+LMI_SO void PrintRosterTabDelimited(Ledger const&, std::string const& file_name);
 
-void LMI_SO PrintLedgerFlatText    (Ledger const&, std::ostream&);
+LMI_SO void PrintLedgerFlatText    (Ledger const&, std::ostream&);
 
-std::string LMI_SO ledger_format
+LMI_SO std::string ledger_format
     (double                            d
     ,std::pair<int,oenum_format_style> f
     );
 
-std::vector<std::string> LMI_SO ledger_format
+LMI_SO std::vector<std::string> ledger_format
     (std::vector<double> const&        dv
     ,std::pair<int,oenum_format_style> f
     );

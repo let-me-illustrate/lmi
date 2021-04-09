@@ -1,5 +1,3 @@
-// -*- C++ -*-
-//
 // Copyright (C) 1998, 1999, 2000, 2002  Los Alamos National Laboratory,
 // Copyright (C) 1998, 1999, 2000, 2002  CodeSourcery, LLC
 //
@@ -437,6 +435,28 @@ struct FnArcTan2
   }
 };
 
+struct FnMax
+{
+  PETE_EMPTY_CONSTRUCTORS(FnMax)
+  template<class T1, class T2>
+  inline typename BinaryReturn<T1, T2, FnMax >::Type_t
+  operator()(const T1 &a, const T2 &b) const
+  {
+    if(a < b) return b; else return a;
+  }
+};
+
+struct FnMin
+{
+  PETE_EMPTY_CONSTRUCTORS(FnMin)
+  template<class T1, class T2>
+  inline typename BinaryReturn<T1, T2, FnMin >::Type_t
+  operator()(const T1 &a, const T2 &b) const
+  {
+    if(b < a) return b; else return a;
+  }
+};
+
 struct OpLT
 {
   PETE_EMPTY_CONSTRUCTORS(OpLT)
@@ -742,22 +762,6 @@ struct BinaryReturn<T1, T2, OpBitwiseXorAssign > {
   typedef T1 &Type_t;
 };
 
-struct OpLeftShiftAssign
-{
-  PETE_EMPTY_CONSTRUCTORS(OpLeftShiftAssign)
-  template<class T1, class T2>
-  inline typename BinaryReturn<T1, T2, OpLeftShiftAssign >::Type_t
-  operator()(const T1 &a, const T2 &b) const
-  {
-    (const_cast<T1 &>(a) <<= b); return const_cast<T1 &>(a);
-  }
-};
-
-template<class T1, class T2 >
-struct BinaryReturn<T1, T2, OpLeftShiftAssign > {
-  typedef T1 &Type_t;
-};
-
 struct OpRightShiftAssign
 {
   PETE_EMPTY_CONSTRUCTORS(OpRightShiftAssign)
@@ -803,10 +807,3 @@ struct FnWhere
 };
 
 #endif // PETE_PETE_OPERATORTAGS_H
-
-// ACL:rcsinfo
-// ----------------------------------------------------------------------
-// $RCSfile: OperatorTags.h,v $   $Author: chicares $
-// $Revision: 1.4 $   $Date: 2008-09-08 12:59:25 $
-// ----------------------------------------------------------------------
-// ACL:rcsinfo

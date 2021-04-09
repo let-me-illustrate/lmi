@@ -1,6 +1,6 @@
 // Account value: monthly detail.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -257,6 +257,12 @@ inline void AccountValue::SetMonthlyDetail(int enumerator, double d)
 }
 
 //============================================================================
+inline void AccountValue::SetMonthlyDetail(int enumerator, currency c)
+{
+    DebugRecord[enumerator] = value_cast<std::string>(dblize(c));
+}
+
+//============================================================================
 void AccountValue::SetDebugFilename(std::string const& s)
 {
     configurable_settings const& c = configurable_settings::instance();
@@ -310,7 +316,7 @@ void AccountValue::DebugPrint()
     SetMonthlyDetail(eYear               ,Year);
     SetMonthlyDetail(eMonth              ,Month);
     SetMonthlyDetail(eBasis              ,mc_str(RunBasis_));
-    SetMonthlyDetail(eAge                ,InvariantValues().Age + Year);
+    SetMonthlyDetail(eAge                ,BasicValues::GetIssueAge() + Year);
 
     // Initial values at beginning of run, reflecting inforce if applicable.
     if(InforceYear == Year && InforceMonth == Month)
@@ -413,12 +419,12 @@ void AccountValue::DebugPrint()
     SetMonthlyDetail(eCumNoLapsePrem     ,CumNoLapsePrem                   );
     SetMonthlyDetail(eNoLapseActive      ,NoLapseActive                    );
     SetMonthlyDetail(eEOMAV              ,TotalAccountValue()              );
-    SetMonthlyDetail(eHMValue            ,std::max(HoneymoonValue, 0.0)    );
+    SetMonthlyDetail(eHMValue            ,std::max(HoneymoonValue, C0)     );
     SetMonthlyDetail(eSurrChg            ,SurrChg()                        );
 
 // TODO ?? Unfortunately duplicated from AccountValue::FinalizeYear().
-    double total_av = TotalAccountValue();
-    double csv_net =
+    currency total_av = TotalAccountValue();
+    currency csv_net =
             total_av
         -   SurrChg()
         -   RegLnBal
@@ -433,9 +439,7 @@ void AccountValue::DebugPrint()
     LMI_ASSERT(0 != yare_input_.NumberOfIdenticalLives);
     SetMonthlyDetail
         (eInforceFactor
-        ,ItLapsed
-            ? 0.0
-            : InvariantValues().InforceLives[Year] / yare_input_.NumberOfIdenticalLives
+        ,ItLapsed ? 0.0 : partial_mortality_tpx()[Year]
         );
 
     // TODO ?? Claims appear as zero because SetClaims() is called not
@@ -470,7 +474,7 @@ void AccountValue::DebugPrint()
         SetMonthlyDetail
             (e7702ADeemedCv
             ,Irc7702A_->DebugGetIsMatChg()
-                ? Irc7702A_->DebugGetSavedDCV()
+                ? round_minutiae().c(Irc7702A_->DebugGetSavedDCV())
                 : Dcv
             );
         SetMonthlyDetail(e7702ANetMaxNecPm   ,NetMaxNecessaryPremium       );

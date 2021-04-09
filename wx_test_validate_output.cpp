@@ -1,6 +1,6 @@
 // Test creation and naming of spreadsheet output files.
 //
-// Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -23,7 +23,6 @@
 
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
-#include "contains.hpp"
 #include "mvc_controller.hpp"
 #include "path_utility.hpp"
 #include "wx_test_case.hpp"
@@ -345,21 +344,10 @@ void validate_run_cell_and_copy_output
 
     wxUIActionSimulator ui;
 
-    auto const use_grid =
-        contains(global_settings::instance().pyx(), "use_census_grid");
+    ui.Char(WXK_ESCAPE);              // Clear any selection.
+    ui.Char(WXK_HOME, wxMOD_CONTROL); // Move focus to top row.
 
-    if(use_grid)
-        {
-        ui.Char(WXK_UP);                  // Clear the current selection if any.
-        ui.Char(WXK_HOME, wxMOD_CONTROL); // Go to the left top cell.
-        ui.Char(WXK_RIGHT, wxMOD_SHIFT);  // Select the first row.
-        }
-    else
-        {
-        ui.Char(WXK_HOME);               // Select the first cell.
-        }
-
-    ui.Char('r', wxMOD_CONTROL);         // "Census|Run cell"
+    ui.Char('r', wxMOD_CONTROL);      // "Census|Run cell"
     wxYield();
 
     LMI_ASSERT_WITH_MSG

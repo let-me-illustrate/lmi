@@ -1,6 +1,6 @@
 # Top-level lmi makefile.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -352,7 +352,7 @@ define gpl_notices :=
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 endef
@@ -400,7 +400,9 @@ clobber: source_clean
 
 .PHONY: raze
 raze: source_clean
-	-$(RM) --force --recursive $(exec_prefix)
+	-$(RM) --force --recursive $(prefix)/gcc_i686-w64-mingw32/build
+	-$(RM) --force --recursive $(prefix)/gcc_x86_64-w64-mingw32/build
+	-$(RM) --force --recursive $(prefix)/gcc_x86_64-pc-linux-gnu/build
 
 .PHONY: eviscerate
 eviscerate: source_clean
@@ -411,6 +413,19 @@ eviscerate: source_clean
 	-$(RM) --force --recursive $(prefix)/gcc_i686-w64-mingw32
 	-$(RM) --force --recursive $(prefix)/gcc_x86_64-w64-mingw32
 	-$(RM) --force --recursive $(prefix)/gcc_x86_64-pc-linux-gnu
+
+# A simple '$(RM) --force --recursive $(bindir)' would remove the
+# directory as well as its contents. However, if $(bindir) is the
+# current working directory in another terminal, hilarity ensues:
+#   sh: 0: getcwd() failed: No such file or directory
+# While '-delete' is not POSIX, it's supported by GNU coreutils and
+# {Open,Free}BSD. The command might instead have been written thus:
+#   find $(bindir) -type f -print0 | xargs -0 rm -rf
+# but '-print0' isn't POSIX either.
+
+.PHONY: uninstall
+uninstall:
+	-find $(bindir) -type f -delete
 
 ################################################################################
 
@@ -464,9 +479,14 @@ check_concinnity: source_clean custom_tools
 	@for z in $(build_dir)/*.o; do [ -f $${z%%.o}.d ] || echo $$z; done;
 	@find $(prefascicle_dir) -maxdepth 1 -executable -type f \
 	  -not -name '*.sh' -not -name '*.sed' \
-	  -not -name 'commit-msg' -not -name 'pre-commit' \
+	  -not -name 'commit-msg' \
+	  -not -name 'pre-commit' \
+	  -not -name 'post-checkout' \
 	  | $(SED) -e's/^/Improperly executable: /'
-	@find $(prefascicle_dir) -executable -type f -print0 \
+	@find $(prefascicle_dir) \
+	  -not \( -path $(prefascicle_dir)/third_party -prune \) \
+	  -not \( -path $(prefascicle_dir)/.git/modules -prune \) \
+	  -executable -type f -print0 \
 	  | xargs --null --max-args=1 --max-procs="$(shell nproc)" ./check_script.sh
 	@$(ECHO) "  Problems detected by xmllint:"
 	@for z in $(xml_files); \
@@ -493,18 +513,23 @@ check_concinnity: source_clean custom_tools
 #
 # For rate tables etc., see 'gwc/develop2.txt'.
 
-old_year := 2019
-new_year := 2020
+old_year := 2020
+new_year := 2021
 
 backup_directory := ../saved_$(old_year)
 
 unutterable := Copyright
 
+# The first two commands in the recipe use 'mkdir' without '-p',
+# deliberately: if they fail, something is amiss (probably the
+# result of trying to update copyrights twice in the same year).
+
 .PHONY: happy_new_year
 happy_new_year: source_clean
 	$(MKDIR) $(backup_directory)
+	$(MKDIR) $(backup_directory)/hooks
 	$(TOUCH) --date=$(old_year)0101 BOY
-	for z in *; \
+	for z in * hooks/*; \
 	  do \
 	       [ $$z -nt BOY ] \
 	    && [ ! -d $$z ] \
@@ -520,12 +545,14 @@ happy_new_year: source_clean
 	$(GREP) --directories=skip '$(old_year)[, ]*$(old_year)' * || true
 	$(GREP) --directories=skip '$(new_year)[, ]*$(old_year)' * || true
 	$(GREP) --directories=skip '$(new_year)[, ]*$(new_year)' * || true
+	@$(ECHO) "...end first list of potential issues."
 	[ -z '$(wildcard *.?pp)' ] || $(GREP) '$(old_year)' *.?pp \
 	  | $(SED) \
 	    -e '/$(old_year)[, ]*$(new_year)/d' \
 	    -e'/https*:\/\/lists.nongnu.org\/archive\/html\/lmi\/$(old_year)/d' \
 	    -e'/\(VERSION\|version\).*$(old_year)[0-9]\{4\}T[0-9]\{4\}Z/d' \
 	  || true
+	@$(ECHO) "...end second list of potential issues."
 	$(GREP) --directories=skip $(unutterable) * \
 	  | $(SED) \
 	    -e '/$(unutterable).*$(new_year) Gregory W. Chicares/d' \
@@ -544,30 +571,24 @@ happy_new_year: source_clean
 	    -e '/$(unutterable) (C) &lt;year&gt;  &lt;name of author&gt;/d' \
 	    -e '/GNU cgicc $(unutterable) (C) 1996, 1997, 1998, 1999, 2000 Stephen F. Booth/d' \
 	    -e '/$(unutterable) and license notices for graphics files/d' \
-	    -e '/$(unutterable) (C) 1997-2002 Graeme S. Roy <graeme.roy@analog.com>/d' \
 	    -e '/(C) $(unutterable) Beman Dawes 1995-2001. Permission to copy, use, modify, sell/d' \
 	    -e '/(C) $(unutterable) Beman Dawes 2001. Permission to copy, use, modify, sell/d' \
 	    -e '/(C) $(unutterable) Beman Dawes 2000. Permission to copy, use, modify, sell/d' \
-	    -e '/$(unutterable) Jens Maurer 2000/d' \
 	    -e '/$(unutterable) Kevlin Henney, 2000, 2001. All rights reserved./d' \
 	    -e '/$(unutterable) Kevlin Henney, 2000-2003. All rights reserved./d' \
 	    -e '/$(unutterable) Terje Sletteb/d' \
 	    -e '/$(unutterable) (C) 1993 by Sun Microsystems, Inc./d' \
-	    -e '/Portions marked.*$(unutterable).*Gregory W. Chicares/d' \
-	    -e '/oss << "$(unutterable).*" << 1900 + t1->tm_year;/d' \
 	    -e '/$(unutterable) (C) 1994$$/d' \
 	    -e '/$(unutterable) (C) 1996-1998$$/d' \
-	    -e '/"$(unutterable)". That may become too strict in the future/d' \
-	    -e '/:..$(unutterable).d$$/d' \
 	    -e '/:good_copyright=/d' \
 	    -e '/:$(unutterable) (C)$$/d' \
-	    -e '/$(unutterable) (C) 1900/d' \
-	    -e '/$(unutterable).*`date -u +.%Y.`/d' \
+	    -e '/$(unutterable).*[$$](date -u +.%Y.)/d' \
 	    -e '/http:\/\/www.gnu.org\/prep\/maintain\/maintain.html#$(unutterable)-Notices/d' \
 	    -e '/year appears on the same line as the word "$(unutterable)"/d' \
 	    -e '/document.add_comment("$(unutterable) (C) " + y + " Gregory W. Chicares.");/d' \
-	    -e '/oss << "$(unutterable) .*" << year;/d' \
+	    -e '/oss << R*"$(unutterable) .*" << year;/d' \
 	  || true
+	@$(ECHO) "...end third list of potential issues."
 	@$(ECHO) "Done."
 
 ################################################################################
@@ -602,7 +623,7 @@ checkout:
 
 # SOMEDAY !! Add build types for gcov (-fprofile-arcs -ftest-coverage)
 # and for gprof. See:
-#   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00115.html
+#   https://lists.nongnu.org/archive/html/lmi/2014-10/msg00115.html
 
 .PHONY: test_various_build_types
 test_various_build_types: source_clean

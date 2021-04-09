@@ -1,6 +1,6 @@
 // Shared-object visibility (elf) and export-import (msw) attributes.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -108,27 +108,27 @@
 
 // Forward declaration macro.
 //
-// In general,
+// If a class defined with an attribute chosen by a macro:
 //   class ATTRIB foo {}
-// can be forward declared thus:
+// is to be forward declared, should the forward declaration specify
+// the attribute macro, or not? For some ancient msw compilers, this:
 //   class ATTRIB foo;
-// That worked for MinGW up to gcc-3.4.5; for MinGW-w64 gcc-4.9.1, it
-// elicits a warning, and ATTRIB must be dropped from the forward
-// declaration. No knowledge is claimed of the behavior of gcc
-// versions between these two, which lmi did not use. It is unknown
-// whether this difference represents deliberate evolution of gcc or
-// a MinGW-w64 regression, so both versions are preserved.
+// was apparently required, and it was accepted by mingw.org gcc up
+// to version 3.4.5 at least. However, for MinGW-w64 gcc since at
+// least version 4.9.1, it elicits a warning, and ATTRIB must be
+// dropped from the forward declaration, thus:
+//   class foo;
+// Here, the latter form is used by default, and the former form is
+// preserved in case it's ever needed again (below, with a jocular
+// conditional evoking ancient tools). See:
+//   https://lists.nongnu.org/archive/html/lmi/2020-10/msg00097.html
 
 #if defined LMI_USE_SO_ATTRIBUTES
-#   if defined __GNUC__
-#       if defined LMI_MINGW_W64
-#           define LMI_SO_FWD_DECL
-#       else  // !defined LMI_MINGW_W64
-#           define LMI_SO_FWD_DECL LMI_SO
-#       endif // !defined LMI_MINGW_W64
-#   else  // !defined __GNUC__
+#   if defined __BORLANDC__
 #       define LMI_SO_FWD_DECL LMI_SO
-#   endif // !defined __GNUC__
+#   else  // !defined __BORLANDC__
+#       define LMI_SO_FWD_DECL
+#   endif // !defined __BORLANDC__
 #else  // !defined LMI_USE_SO_ATTRIBUTES
 #   define LMI_SO_FWD_DECL
 #endif // !defined LMI_USE_SO_ATTRIBUTES

@@ -1,6 +1,6 @@
 // Life-insurance illustration input--control harmonization.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -82,7 +82,7 @@ void Input::DoAdaptExternalities()
     CachedStateOfJurisdiction_   = StateOfJurisdiction  .value();
 
     database_.reset
-        (new product_database
+        (::new product_database
             (CachedProductName_
             ,CachedGender_
             ,CachedUnderwritingClass_
@@ -195,7 +195,7 @@ void Input::DoHarmonize()
     PartialMortalityTable     .enable(part_mort_used);
     PartialMortalityMultiplier.enable(part_mort_used);
 
-    CashValueEnhancementRate  .enable(home_office_only);
+    CashValueEnhancementRate  .enable(home_office_only && database_->query<bool>(DB_AllowCashValueEnh));
 
     SurviveToType             .allow(mce_no_survival_limit    , part_mort_used);
     SurviveToType             .allow(mce_survive_to_age       , part_mort_used);
@@ -205,38 +205,6 @@ void Input::DoHarmonize()
 
     SurviveToYear             .enable(part_mort_used && mce_survive_to_year == SurviveToType);
     SurviveToAge              .enable(part_mort_used && mce_survive_to_age  == SurviveToType);
-
-    bool enable_experience_rating =
-            database_->query<bool>(DB_AllowExpRating)
-        &&  part_mort_used
-        &&  mce_month_by_month == RunOrder
-        ;
-    UseExperienceRating.enable(enable_experience_rating);
-
-    // TODO ?? These shouldn't need to depend on 'enable_experience_rating';
-    // instead, 'UseExperienceRating' should be transmogrified if it's not
-    // enabled.
-    OverrideExperienceReserveRate.enable
-        (   enable_experience_rating
-        &&  mce_yes == UseExperienceRating
-        );
-    ExperienceReserveRate.enable
-        (   enable_experience_rating
-        &&  mce_yes == UseExperienceRating
-        &&  mce_yes == OverrideExperienceReserveRate
-        );
-    ExperienceRatingInitialKFactor.enable
-        (   enable_experience_rating
-        &&  mce_yes == UseExperienceRating
-        );
-    InforceNetExperienceReserve.enable
-        (   enable_experience_rating
-        &&  mce_yes == UseExperienceRating
-        );
-    InforceYtdNetCoiCharge.enable
-        (   enable_experience_rating
-        &&  mce_yes == UseExperienceRating
-        );
 
     EffectiveDate.enable(mce_no == EffectiveDateToday);
 
@@ -602,7 +570,7 @@ false // Silly workaround for now.
 //
 // At any rate, keywords should not be blocked when the control is
 // disabled: see
-//   http://lists.nongnu.org/archive/html/lmi/2010-07/msg00006.html
+//   https://lists.nongnu.org/archive/html/lmi/2010-07/msg00006.html
 
     Payment           .enable(mce_solve_ee_prem != SolveType);
     CorporationPayment.enable(mce_solve_er_prem != SolveType);
@@ -671,7 +639,7 @@ false // Silly workaround for now.
 //
 // TODO ?? WX PORT !! But for now, use this workaround: products that have no
 // general account can't select non-custom funds--there's no GUI for
-// that anyway. INPUT !! See: http://savannah.nongnu.org/support/?104481
+// that anyway. INPUT !! See: https://savannah.nongnu.org/support/?104481
 // However, don't impose that restriction on regression tests that
 // cover the once and future ability to choose funds.
     if(!global_settings::instance().regression_testing())
@@ -763,7 +731,7 @@ false // Silly workaround for now.
     // INPUT !! The minimum 'SolveEndYear' and 'SolveTargetYear' set
     // here mean that a solve to or at retirement is a request, not a
     // command.
-#if 0 // http://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
+#if 0 // https://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
     SolveBeginYear .minimum_and_maximum(0                         , years_to_maturity());
     SolveEndYear   .minimum_and_maximum(    SolveBeginYear.value(), years_to_maturity());
     SolveTargetYear.minimum_and_maximum(1 + SolveBeginYear.value(), years_to_maturity());
@@ -773,7 +741,7 @@ false // Silly workaround for now.
     SolveEndAge   .enable(actually_solving && mce_to_age   == SolveToWhich);
     SolveTargetAge.enable(actually_solving && mce_to_age   == SolveTgtAtWhich && mce_solve_for_non_mec != SolveTarget);
 
-#if 0 // http://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
+#if 0 // https://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
     SolveBeginAge .minimum_and_maximum(issue_age()          , maturity_age());
     SolveEndAge   .minimum_and_maximum(SolveBeginAge.value(), maturity_age());
     SolveTargetAge.minimum_and_maximum(SolveBeginAge.value(), maturity_age());
@@ -885,7 +853,7 @@ void Input::DoTransmogrify()
         {
         // If DOB does not govern, adjust the birthdate appropriately,
         // with particular caution on February twenty-ninth. See:
-        //   http://lists.nongnu.org/archive/html/lmi/2008-07/msg00006.html
+        //   https://lists.nongnu.org/archive/html/lmi/2008-07/msg00006.html
         DateOfBirth = add_years
             (DateOfBirth.value()
             ,apparent_age - IssueAge.value()
@@ -987,7 +955,7 @@ void Input::set_solve_durations()
         }
 
     // Remove the following three lines (and <algorithm>) after fixing this:
-    //   http://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
+    //   https://lists.nongnu.org/archive/html/lmi/2008-08/msg00036.html
     SolveTargetYear = std::max(0, std::min(years_to_maturity(), SolveTargetYear.value()));
     SolveBeginYear  = std::max(0, std::min(years_to_maturity(), SolveBeginYear .value()));
     SolveEndYear    = std::max(0, std::min(years_to_maturity(), SolveEndYear   .value()));

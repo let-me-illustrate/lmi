@@ -2,7 +2,7 @@
 
 # Run the automated GUI test, filtering normal output.
 
-# Copyright (C) 2018, 2019, 2020 Gregory W. Chicares.
+# Copyright (C) 2018, 2019, 2020, 2021 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -25,10 +25,6 @@
 # way its inline documentation suggests; then run
 #   $./gui_test.sh
 # in a different session when prompted.
-
-# SOMEDAY !! 'wx_test$(EXEEXT)' doesn't return nonzero on failure,
-# so 'set -e' doesn't reliably exit after the first test failure.
-# That doesn't much matter as long as only one real command is run.
 
 set -e
 

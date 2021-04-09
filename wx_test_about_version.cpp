@@ -1,6 +1,6 @@
 // Version number test case for the GUI test suite.
 //
-// Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -56,7 +56,7 @@
 ///
 /// Press the pushbutton to read the license, and check that the
 /// license's dialog box is scrollable--to guard against this problem:
-///   http://lists.nongnu.org/archive/html/lmi/2010-01/msg00001.html
+///   https://lists.nongnu.org/archive/html/lmi/2010-01/msg00001.html
 
 namespace
 {
@@ -81,11 +81,15 @@ int year_from_string(wxString const& s)
 // May throw if the input doesn't conform to the expectations.
 int extract_last_copyright_year(wxString const& html)
 {
-    // Find the line starting with "Copyright".
+    // Uttering this word without obfuscation would confuse the
+    // 'make happy_new_year' copyright-update recipe.
+    static std::string const unutterable {"C""opyright"};
+
+    // Find the line starting with that unutterable word.
     wxString copyright_line;
     for(auto const& line : wxSplit(html ,'\n' ,'\0'))
         {
-        if(line.StartsWith("Copyright"))
+        if(line.StartsWith(unutterable.c_str()))
             {
             LMI_ASSERT_WITH_MSG
                 (copyright_line.empty()
@@ -99,7 +103,7 @@ int extract_last_copyright_year(wxString const& html)
 
     LMI_ASSERT_WITH_MSG
         (!copyright_line.empty()
-        ,"Copyright line not found in the license notices text"
+        ,unutterable + " line not found in the license notices text"
         );
 
     // We suppose that we have a sequence of comma-separated (4 digit, let
@@ -120,9 +124,10 @@ int extract_last_copyright_year(wxString const& html)
             ,m
             ,std::regex("(?:\\d{4}, )+(\\d{4})")
             )
-        , "Copyright line \""
+        , unutterable
+        + " line '"
         + copyright_line
-        + "\" doesn't contain copyright years"
+        + "' doesn't contain copyright years"
         );
 
     return year_from_string(wxString(m[1]));

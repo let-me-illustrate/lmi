@@ -1,5 +1,5 @@
 {{!
-    Copyright (C) 2017, 2018, 2019, 2020 Gregory W. Chicares.
+    Copyright (C) 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -14,7 +14,7 @@
     along with this program; if not, write to the Free Software Foundation,
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 
-    http://savannah.nongnu.org/projects/lmi
+    https://savannah.nongnu.org/projects/lmi
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 }}
@@ -32,59 +32,16 @@
 <font size="+1"><b><u>Important Tax Disclosures</u></b></font>
 </p>
 
-<!-- PDF !! FnDefnLifeIns -->
 <p>
-The definition of life insurance elected for this policy is
-{{#DefnLifeInsIsGPT}}
-    the guideline premium test. The guideline single premium
-    is ${{InitGSP}}
-    and the guideline level premium
-    is ${{InitGLP}}.
-{{/DefnLifeInsIsGPT}}
-{{^DefnLifeInsIsGPT}}
-    the cash value accumulation test.
-{{/DefnLifeInsIsGPT}}
+    {{FnDefnLifeIns}}
 </p>
 
-<!-- PDF !! MecFootnote -->
 <p>
-The initial 7-pay premium limit is ${{InitSevenPayPrem}}.
-As illustrated, this policy
-{{#IsMec}}
-    fails
-{{/IsMec}}
-{{^IsMec}}
-    passes
-{{/IsMec}}
-the seven-pay test defined in Section 7702A
-of the Internal Revenue Code and therefore
-{{#IsMec}}
-    becomes a Modified Endowment Contract (MEC)
-    in policy year {{MecYearPlus1}}.
-{{/IsMec}}
-{{^IsMec}}
-    is not a Modified Endowment Contract (MEC). Subsequent changes
-    to the policy, including but not limited to increases
-    and decreases in premiums or benefits, may cause the policy
-    to be retested and may result in the policy becoming a MEC.
-{{/IsMec}}
-</p>
-<p>
-If a policy is a MEC, withdrawals and policy loans are taxed to
-the extent of any gain in the policy, and an additional penalty
-tax may apply to the taxable portion of the distribution.
+    {{MecFootnote}}
 </p>
 
-<!-- PDF !! FnNotTaxAdvice -->
 <p>
-<b>
-The information contained in this illustration is not written
-or intended as tax or legal advice. Neither {{InsCoShortName}} its
-subsidiaries, employees or representatives are authorized to give tax
-or legal advice. For more information pertaining
-to the tax consequences of purchasing or owning this {{ContractName}},
-consult with your own independent tax or legal counsel.
-</b>
+    {{FnNotTaxAdvice}}
 </p>
 
 {{^IsInforce}}

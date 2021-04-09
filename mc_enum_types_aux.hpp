@@ -1,6 +1,6 @@
 // Auxiliary functions for specific mc_enum types.
 //
-// Copyright (C) 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -40,34 +40,34 @@ enum
     ,mc_n_rate_periods = 2
     };
 
-std::vector<std::string> const& LMI_SO all_strings_gender   ();
-std::vector<std::string> const& LMI_SO all_strings_class    ();
-std::vector<std::string> const& LMI_SO all_strings_smoking  ();
-std::vector<std::string> const& LMI_SO all_strings_uw_basis ();
-std::vector<std::string> const& LMI_SO all_strings_state    ();
+LMI_SO std::vector<std::string> const& all_strings_gender   ();
+LMI_SO std::vector<std::string> const& all_strings_class    ();
+LMI_SO std::vector<std::string> const& all_strings_smoking  ();
+LMI_SO std::vector<std::string> const& all_strings_uw_basis ();
+LMI_SO std::vector<std::string> const& all_strings_state    ();
 
-std::vector<std::string> LMI_SO allowed_strings_emission();
+LMI_SO std::vector<std::string> allowed_strings_emission();
 
 mcenum_dbopt_7702 effective_dbopt_7702
     (mcenum_dbopt      actual_dbopt
     ,mcenum_dbopt_7702 rop_equivalent
     );
 
-bool LMI_SO is_subject_to_ill_reg(mcenum_ledger_type);
+LMI_SO bool is_subject_to_ill_reg(mcenum_ledger_type);
 
 bool is_three_rate_finra(mcenum_ledger_type);
 
 /// Transform a plain enumerator to its string equivalent.
 ///
 /// This message:
-///   http://lists.nongnu.org/archive/html/lmi/2008-08/msg00022.html
+///   https://lists.nongnu.org/archive/html/lmi/2008-08/msg00022.html
 /// explains why this template is explicitly instantiated in the
 /// accompanying TU, and not defined here.
 
 template<typename T>
 std::string mc_str(T);
 
-mcenum_emission LMI_SO mc_emission_from_string(std::string const&);
+LMI_SO mcenum_emission mc_emission_from_string(std::string const&);
 
 mcenum_state mc_state_from_string(std::string const&);
 

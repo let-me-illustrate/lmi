@@ -1,6 +1,6 @@
 // Tools for working with SOA tables represented in binary format.
 //
-// Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -2996,13 +2996,13 @@ bool database::exists(fs::path const& path)
 }
 
 database::database()
-    :impl_ {new database_impl(fs::path())}
+    :impl_ {::new database_impl(fs::path())}
 {
 }
 
 database::database(fs::path const& path)
 try
-    :impl_ {new database_impl(path)}
+    :impl_ {::new database_impl(path)}
 {
 }
 catch(std::runtime_error const& e)
@@ -3020,7 +3020,7 @@ database::database
     ,std::shared_ptr<std::istream> data_is
     )
 try
-    :impl_ {new database_impl(index_is, data_is)}
+    :impl_ {::new database_impl(index_is, data_is)}
 {
 }
 catch(std::runtime_error const& e)

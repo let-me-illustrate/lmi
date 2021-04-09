@@ -1,6 +1,6 @@
 // Internal Revenue Code section 7702 (definition of life insurance).
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -25,16 +25,14 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "commutation_functions.hpp"
+#include "et_vector.hpp"
 #include "materially_equal.hpp"
+#include "math_functions.hpp"           // back_sum()
 #include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 
-#include <algorithm>
-#include <cmath>
-#include <functional>
-#include <limits>
-#include <numeric>
+#include <algorithm>                    // max(), min()
+#include <string>
 
 // TAXATION !! Update this block comment, or simply delete it. The
 // client-server model is important, but not predominantly so. It is
@@ -75,15 +73,9 @@ namespace
         static std::vector<double> const v(d, d + n);
         return v;
         }
-
-    // Use 7702 int rate for DB discount in NAAR. TAXATION !! Does it
-    // make sense to retain this?
-    bool g_UseIcForIg = true;
 } // Unnamed namespace.
 
 // TAXATION !! General concerns
-//
-// TAXATION !! Explain why flat extras are generally ignored.
 //
 // TAXATION !! Support off-anniversary adjustment events, though not
 // in illustrations.
@@ -114,10 +106,10 @@ Irc7702::Irc7702
     ,int                        a_IssueAge
     ,int                        a_EndtAge
     ,std::vector<double> const& a_Qc
-    ,std::vector<double> const& a_GLPic
-    ,std::vector<double> const& a_GSPic
-    ,std::vector<double> const& a_Ig
-    ,std::vector<double> const& a_IntDed
+    ,std::vector<double> const& ic_glp
+    ,std::vector<double> const& ic_gsp
+    ,std::vector<double> const& ig_glp
+    ,std::vector<double> const& ig_gsp
     ,double                     a_PresentBftAmt
     ,double                     a_PresentSpecAmt
     ,double                     a_LeastBftAmtEver
@@ -146,10 +138,10 @@ Irc7702::Irc7702
     ,IssueAge           {a_IssueAge}
     ,EndtAge            {a_EndtAge}
     ,Qc                 {a_Qc}
-    ,GLPic              {a_GLPic}
-    ,GSPic              {a_GSPic}
-    ,Ig                 {a_Ig}
-    ,IntDed             {a_IntDed}
+    ,ic_glp_            {ic_glp}
+    ,ic_gsp_            {ic_gsp}
+    ,ig_glp_            {ig_glp}
+    ,ig_gsp_            {ig_gsp}
     ,PresentBftAmt      {a_PresentBftAmt}
     ,PriorBftAmt        {a_PresentBftAmt}
     ,PresentSpecAmt     {a_PresentSpecAmt}
@@ -201,14 +193,6 @@ Irc7702::Irc7702
         }
     Init();
 }
-
-/// Destructor.
-///
-/// Although it is explicitly defaulted, this destructor cannot be
-/// implemented inside the class definition, where a class type that
-/// it depends upon is incomplete.
-
-Irc7702::~Irc7702() = default;
 
 //============================================================================
 void Irc7702::ProcessGptPmt
@@ -325,6 +309,10 @@ void Irc7702::ProcessAdjustableEvent
 // We changed our interpretation, but it'd be nice to preserve
 // the old functionality, conditional on a behavior flag. And
 // the name is poor: shouldn't it just be 'EndowmentBenefit'?
+//
+// TAXATION !! lmi seems to track the lowest benefit since the
+// issue date and use that value for the endowment benefit of
+// A, B, and C, which conflicts with '7702.html' [4/8].
     LeastBftAmtEver = std::min(LeastBftAmtEver, a_NewBftAmt);
 
     double b_level = CalculateGLP
@@ -400,299 +388,143 @@ void Irc7702::Init()
     InitPvVectors(Opt1Int4Pct);
     InitPvVectors(Opt2Int4Pct);
     InitPvVectors(Opt1Int6Pct);
-    // TODO ?? We can delete the commutation functions here, rather than in
-    // the dtor, to save some space. We defer doing so until the
-    // program is complete. TAXATION !! It would be better not to use pointers--see header.
 }
 
 //============================================================================
 void Irc7702::InitCommFns()
 {
-    std::vector<double> glp_naar_disc_rate;
-    std::vector<double> gsp_naar_disc_rate;
-    std::vector<double> const zero(Length, 0.0);
-
-    // g_UseIcForIg indicates whether the 7702 rates should be used for the NAAR
-    // discount factor. We interpret a guar rate (IG) of zero in all years as
-    // no NAAR discount factor.
-
-    if(!g_UseIcForIg)
-        {
-        // if the flag is not set, use guar rates for NAAR discount factor
-        glp_naar_disc_rate = Ig;
-        gsp_naar_disc_rate = Ig;
-        }
-    else if(zero == Ig)
-        {
-        // if guar rate is zero, we will always use it for the NAAR discount factor
-        glp_naar_disc_rate = Ig;
-        gsp_naar_disc_rate = Ig;
-        }
-    else
-        {
-        // if the flag is true, and the guar rate !=0, use the 7702 rates for
-        // the NAAR discount factor
-        glp_naar_disc_rate = GLPic;
-        gsp_naar_disc_rate = GSPic;
-        }
-
-    // Commutation functions using 4% min i: both options 1 and 2
-    CommFns[Opt1Int4Pct].reset
-        (new ULCommFns
-            (Qc
-            ,GLPic
-            ,glp_naar_disc_rate
-            ,mce_option1_for_7702
-            ,mce_monthly
-            )
+    // Commutation functions using min i = iglp(): both options 1 and 2
+    CommFns[Opt1Int4Pct] = ULCommFns
+        (Qc
+        ,ic_glp_
+        ,ig_glp_
+        ,mce_option1_for_7702
+        ,mce_monthly
         );
-    DEndt[Opt1Int4Pct] = CommFns[Opt1Int4Pct]->aDomega();
+    DEndt[Opt1Int4Pct] = CommFns[Opt1Int4Pct].aDomega();
 
-    CommFns[Opt2Int4Pct].reset
-        (new ULCommFns
-            (Qc
-            ,GLPic
-            ,glp_naar_disc_rate
-            ,mce_option2_for_7702
-            ,mce_monthly
-            )
+    CommFns[Opt2Int4Pct] = ULCommFns
+        (Qc
+        ,ic_glp_
+        ,ig_glp_
+        ,mce_option2_for_7702
+        ,mce_monthly
         );
-    DEndt[Opt2Int4Pct] = CommFns[Opt2Int4Pct]->aDomega();
+    DEndt[Opt2Int4Pct] = CommFns[Opt2Int4Pct].aDomega();
 
-    // Commutation functions using 6% min i: always option 1
-    CommFns[Opt1Int6Pct].reset
-        (new ULCommFns
-            (Qc
-            ,GSPic
-            ,gsp_naar_disc_rate
-            ,mce_option1_for_7702
-            ,mce_monthly
-            )
+    // Commutation functions using min i = igsp(): always option 1
+    CommFns[Opt1Int6Pct] = ULCommFns
+        (Qc
+        ,ic_gsp_
+        ,ig_gsp_
+        ,mce_option1_for_7702
+        ,mce_monthly
         );
-    DEndt[Opt1Int6Pct] = CommFns[Opt1Int6Pct]->aDomega();
+    DEndt[Opt1Int6Pct] = CommFns[Opt1Int6Pct].aDomega();
 }
 
-//============================================================================
+/// Set GPT and CVAT corridor factors respecting IssueAge.
+///
+/// The GPT corridor is prescribed by statute.
+///
+/// The CVAT corridor is calculated as the reciprocal of NSP:
+///   1 / NSP = Dx / (Mx + Domega)
+/// Consistent with '7702.html' [14.2] and Eckley's paper cited there,
+/// D is "annual", and M is "monthly", in the sense that "monthly"
+/// functions are "annual" times Eckley's "a''(12)" [his eq. 28]
+/// because UL mortality charges are assessed on a monthly basis.
+
 void Irc7702::InitCorridor()
 {
-    // CVAT corridor
-    // TODO ?? Substandard: set last NSP to 1.0? ignore flats? set NSP[omega] to 1?
-    // TAXATION !! --better to ignore susbstandard
-    CvatCorridor.resize(Length);
-    // ET !! CvatCorridor = CommFns[Opt1Int4Pct]->aD() / (CommFns[Opt1Int4Pct]->kM() + DEndt[Opt1Int4Pct]);
-    std::vector<double> denominator(CommFns[Opt1Int4Pct]->kM());
-    std::transform
-        (denominator.begin()
-        ,denominator.end()
-        ,denominator.begin()
-        ,[this](double x) { return DEndt[Opt1Int4Pct] + x; }
-        );
-    std::transform
-        (CommFns[Opt1Int4Pct]->aD().begin()
-        ,CommFns[Opt1Int4Pct]->aD().end()
-        ,denominator.begin()
-        ,CvatCorridor.begin()
-        ,std::divides<double>()
-        );
+    // TAXATION !! Must NSP[omega] equal unity? If not, corridor[omega] doesn't.
 
-    // GPT corridor
+    CvatCorridor.resize(Length);
+    CvatCorridor +=
+           CommFns[Opt1Int4Pct].aD()
+        / (CommFns[Opt1Int4Pct].kM() + DEndt[Opt1Int4Pct])
+        ;
+
     GptCorridor.assign
         (CompleteGptCorridor().begin() + IssueAge
         ,CompleteGptCorridor().begin() + EndtAge
         );
 }
 
-//============================================================================
+/// Initialize present-value vectors: '7702.html' [14].
+///
+/// kD * MlyChg implies k == mly; it would be more general to say
+/// "modal" instead. But that's still not perfectly general, because
+/// we may need commutation functions on more than one non-annual
+/// mode. For instance, a policy might deduct the policy fee monthly
+/// but the account value load daily. Any specific changes like that
+/// are straightforward, but we don't want to spend time calculating
+/// functions on every conceivable mode unless we're actually going
+/// to use them.
+///
+/// TAXATION !! Eliminate aliasing references.
+/// TAXATION !! Rename '[46]Pct' to 'g[ls]p'.
+/// TAXATION !! Add unit tests.
+
 void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 {
     // We may need to recalculate these every year for a
     // survivorship policy, depending on how its account
     // value accumulation is specified.
 
-    ULCommFns const& comm_fns = *CommFns[a_EIOBasis];
+    ULCommFns const& comm_fns = CommFns[a_EIOBasis];
 
     // Present value of charges per policy
 
-    // ET !! std::vector<double> ann_chg_pol = AnnChgPol * comm_fns.aD();
-    std::vector<double> ann_chg_pol(Length);
-    LMI_ASSERT(Length == lmi::ssize(ann_chg_pol));
     LMI_ASSERT(Length == lmi::ssize(AnnChgPol));
-    LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
-    std::transform
-        (AnnChgPol.begin()
-        ,AnnChgPol.end()
-        ,comm_fns.aD().begin()
-        ,ann_chg_pol.begin()
-        ,std::multiplies<double>()
-        );
-
-    // ET !! std::vector<double> mly_chg_pol = MlyChgPol * drop(comm_fns.kD(), -1);
-    std::vector<double> mly_chg_pol(Length);
-    LMI_ASSERT(Length == lmi::ssize(mly_chg_pol));
+    LMI_ASSERT(Length == lmi::ssize(LoadExc));
+    LMI_ASSERT(Length == lmi::ssize(LoadTgt));
+    LMI_ASSERT(Length == lmi::ssize(MlyChgADD));
     LMI_ASSERT(Length == lmi::ssize(MlyChgPol));
-    LMI_ASSERT(Length <= lmi::ssize(comm_fns.kD()));
-    std::transform
-        (MlyChgPol.begin()
-        ,MlyChgPol.end()
-// kD * MlyChg implies k == mly; it would be more general to say
-// "modal" instead. But that's still not perfectly general, because
-// we may need commutation functions on more than one non-annual
-// mode. For instance, a policy might deduct the policy fee monthly
-// but the account value load daily. Any specific changes like that
-// are straightforward, but we don't want to spend time calculating
-// functions on every conceivable mode unless we're actually going
-// to use them.
-        ,comm_fns.kD().begin()
-        ,mly_chg_pol.begin()
-        ,std::multiplies<double>()
-        );
+    LMI_ASSERT(Length == lmi::ssize(MlyChgSpecAmt));
+    LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
+    LMI_ASSERT(Length == lmi::ssize(comm_fns.kC()));
+    LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
 
-    // ET !! PvChgPol[a_EIOBasis] = ann_chg_pol + mly_chg_pol;
     std::vector<double>& chg_pol = PvChgPol[a_EIOBasis];
     chg_pol.resize(Length);
-    LMI_ASSERT(Length == lmi::ssize(chg_pol));
-    LMI_ASSERT(Length == lmi::ssize(ann_chg_pol));
-    LMI_ASSERT(Length <= lmi::ssize(mly_chg_pol));
-    std::transform
-        (ann_chg_pol.begin()
-        ,ann_chg_pol.end()
-        ,mly_chg_pol.begin()
-        ,chg_pol.begin()
-        ,std::plus<double>()
-        );
-    // ET !! This is just APL written verbosely in a funny C++ syntax.
-    // Perhaps we could hope for an expression-template library to do this:
-    //   chg_pol = chg_pol.reverse().partial_sum().reverse();
-    // but that would require a special type: 'chg_pol' couldn't be a
-    // std::vector anymore.
-    std::reverse(chg_pol.begin(), chg_pol.end());
-    std::partial_sum(chg_pol.begin(), chg_pol.end(), chg_pol.begin());
-    std::reverse(chg_pol.begin(), chg_pol.end());
+    chg_pol += AnnChgPol * comm_fns.aD() + MlyChgPol * comm_fns.kD();
+    chg_pol = back_sum(chg_pol);
 
     // Present value of charges per $1 specified amount
 
-    // APL: chg_sa gets rotate plus scan rotate MlyChgSpecAmt times kD
-    // ET !! PvChgSpecAmt[a_EIOBasis] = MlyChgSpecAmt * comm_fns.kD();
     std::vector<double>& chg_sa = PvChgSpecAmt[a_EIOBasis];
     chg_sa.resize(Length);
-    LMI_ASSERT(Length == lmi::ssize(chg_sa));
-    LMI_ASSERT(Length == lmi::ssize(MlyChgSpecAmt));
-    LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
-    std::transform
-        (MlyChgSpecAmt.begin()
-        ,MlyChgSpecAmt.end()
-        ,comm_fns.kD().begin()
-        ,chg_sa.begin()
-        ,std::multiplies<double>()
-        );
-    std::reverse(chg_sa.begin(), chg_sa.end());
-    std::partial_sum(chg_sa.begin(), chg_sa.end(), chg_sa.begin());
-    std::reverse(chg_sa.begin(), chg_sa.end());
+    chg_sa += MlyChgSpecAmt * comm_fns.kD();
+    chg_sa = back_sum(chg_sa);
 
-    // APL: chg_add gets rotate plus scan rotate MlyChgADD times kD
-    // ET !! PvChgADD[a_EIOBasis] = MlyChgADD * comm_fns.kD();
     std::vector<double>& chg_add = PvChgADD[a_EIOBasis];
     chg_add.resize(Length);
-    LMI_ASSERT(Length == lmi::ssize(chg_add));
-    LMI_ASSERT(Length == lmi::ssize(MlyChgADD));
-    LMI_ASSERT(Length == lmi::ssize(comm_fns.kD()));
-    std::transform
-        (MlyChgADD.begin()
-        ,MlyChgADD.end()
-        ,comm_fns.kD().begin()
-        ,chg_add.begin()
-        ,std::multiplies<double>()
-        );
-    std::reverse(chg_add.begin(), chg_add.end());
-    std::partial_sum(chg_add.begin(), chg_add.end(), chg_add.begin());
-    std::reverse(chg_add.begin(), chg_add.end());
+    chg_add += MlyChgADD * comm_fns.kD();
+    chg_add = back_sum(chg_add);
 
-    // APL: chg_mort gets rotate plus scan rotate kC
     std::vector<double>& chg_mort = PvChgMort[a_EIOBasis];
-    LMI_ASSERT(Length <= lmi::ssize(comm_fns.kC()));
     chg_mort = comm_fns.kC();
-    chg_mort.resize(Length);
-    std::reverse(chg_mort.begin(), chg_mort.end());
-    std::partial_sum(chg_mort.begin(), chg_mort.end(), chg_mort.begin());
-    std::reverse(chg_mort.begin(), chg_mort.end());
+    chg_mort = back_sum(chg_mort);
 
     // Present value of 1 - target premium load
 
-    // ET !! PvNpfSglTgt[a_EIOBasis] = (1.0 - LoadTgt) * comm_fns.aD();
     std::vector<double>& npf_sgl_tgt = PvNpfSglTgt[a_EIOBasis];
-//  LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt)); // TAXATION !! Expunge if truly unwanted.
-    npf_sgl_tgt = LoadTgt;
-    LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt));
-    std::transform(npf_sgl_tgt.begin(), npf_sgl_tgt.end(), npf_sgl_tgt.begin()
-        ,[](double x) { return 1.0 - x; }
-        );
-    LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt));
-    LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
-    std::transform
-        (npf_sgl_tgt.begin()
-        ,npf_sgl_tgt.end()
-        ,comm_fns.aD().begin()
-        ,npf_sgl_tgt.begin()
-        ,std::multiplies<double>()
-        );
+    npf_sgl_tgt.resize(Length);
+    npf_sgl_tgt += (1.0 - LoadTgt) * comm_fns.aD();
+
     std::vector<double>& npf_lvl_tgt = PvNpfLvlTgt[a_EIOBasis];
-//  LMI_ASSERT(Length == lmi::ssize(npf_lvl_tgt)); // TAXATION !! Expunge if truly unwanted.
     npf_lvl_tgt = npf_sgl_tgt;
-    LMI_ASSERT(Length == lmi::ssize(npf_lvl_tgt));
-    std::reverse(npf_lvl_tgt.begin(), npf_lvl_tgt.end());
-    std::partial_sum(npf_lvl_tgt.begin(), npf_lvl_tgt.end(), npf_lvl_tgt.begin());
-    std::reverse(npf_lvl_tgt.begin(), npf_lvl_tgt.end());
+    npf_lvl_tgt = back_sum(npf_lvl_tgt);
 
     // Present value of 1 - excess premium load
 
-    // ET !! PvNpfSglExc[a_EIOBasis] = (1.0 - LoadExc) * comm_fns.aD();
     std::vector<double>& npf_sgl_exc = PvNpfSglExc[a_EIOBasis];
-//  LMI_ASSERT(Length == lmi::ssize(npf_sgl_exc)); // TAXATION !! Expunge if truly unwanted.
-    npf_sgl_exc = LoadExc;
-    LMI_ASSERT(Length == lmi::ssize(npf_sgl_exc));
-    std::transform(npf_sgl_exc.begin(), npf_sgl_exc.end(), npf_sgl_exc.begin()
-        ,[](double x) { return 1.0 - x; }
-        );
-    LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt)); // TAXATION !! Shouldn't this be npf_sgl_exc?
-    LMI_ASSERT(Length == lmi::ssize(comm_fns.aD()));
-    std::transform
-        (npf_sgl_exc.begin()
-        ,npf_sgl_exc.end()
-        ,comm_fns.aD().begin()
-        ,npf_sgl_exc.begin()
-        ,std::multiplies<double>()
-        );
+    npf_sgl_exc.resize(Length);
+    npf_sgl_exc += (1.0 - LoadExc) * comm_fns.aD();
+
     std::vector<double>& npf_lvl_exc = PvNpfLvlExc[a_EIOBasis];
-//  LMI_ASSERT(Length == lmi::ssize(npf_lvl_exc)); // TAXATION !! Expunge if truly unwanted.
     npf_lvl_exc = npf_sgl_exc;
-    LMI_ASSERT(Length == lmi::ssize(npf_lvl_exc));
-    std::reverse(npf_lvl_exc.begin(), npf_lvl_exc.end());
-    std::partial_sum(npf_lvl_exc.begin(), npf_lvl_exc.end(), npf_lvl_exc.begin());
-    std::reverse(npf_lvl_exc.begin(), npf_lvl_exc.end());
-
-    // Present value of target premium load - excess premium load
-
-    // ET !! PvLoadDiffSgl[a_EIOBasis] = npf_sgl_exc - npf_sgl_tgt;
-    std::vector<double>& diff_sgl = PvLoadDiffSgl[a_EIOBasis];
-//  LMI_ASSERT(Length == lmi::ssize(diff_sgl)); // TAXATION !! Expunge if truly unwanted.
-    diff_sgl.resize(Length);
-    LMI_ASSERT(Length == lmi::ssize(diff_sgl));
-    LMI_ASSERT(Length == lmi::ssize(npf_sgl_exc));
-    LMI_ASSERT(Length == lmi::ssize(npf_sgl_tgt));
-    std::transform
-        (npf_sgl_exc.begin()
-        ,npf_sgl_exc.end()
-        ,npf_sgl_tgt.begin()
-        ,diff_sgl.begin()
-        ,std::minus<double>()
-        );
-    std::vector<double>& diff_lvl = PvLoadDiffLvl[a_EIOBasis];
-//  LMI_ASSERT(Length == lmi::ssize(diff_lvl)); // TAXATION !! Expunge if truly unwanted.
-    diff_lvl.resize(Length);
-    LMI_ASSERT(Length == lmi::ssize(diff_lvl));
-    std::reverse(diff_lvl.begin(), diff_lvl.end());
-    std::partial_sum(diff_lvl.begin(), diff_lvl.end(), diff_lvl.begin());
-    std::reverse(diff_lvl.begin(), diff_lvl.end());
+    npf_lvl_exc = back_sum(npf_lvl_exc);
 }
 
 /// For illustrations, we can't initialize everything in the ctor.
@@ -934,8 +766,6 @@ double Irc7702::CalculatePremium
 // track cum pmts less wds and forceouts TAXATION !! is it necessary
 // to add code here to accumulate those debits?
 //
-// current mort for substd TAXATION !! is that outside the scope of this code?
-//
 // set SA at issue to reflect dumpins and 1035s TAXATION !! That could be
 // done for option two, but is probably a mistake.
 //
@@ -947,15 +777,14 @@ double Irc7702::CalculatePremium
 void Irc7702::InitSevenPayPrem()
 {
         // 7PP = MO / (N0-N7) (limit 7 to maturity year)
-        // TAXATION !! add flat extras to 7PP?
-        double denom = CFFourPctMin->N()[j];
+        double denom = CFFourPctMin.N()[j];
         if((7 + j) < lmi::ssize(q))
             {
-            denom -= CFFourPctMin->N()[7 + j];
+            denom -= CFFourPctMin.N()[7 + j];
             }
         LMI_ASSERT(0.0 != denom);
         mep_rate[j] =
-            (   CFFourPctMin->M()[j]
+            (   CFFourPctMin.M()[j]
             /   denom
             );
         }
@@ -1007,61 +836,3 @@ double Irc7702::premiums_paid() const
 {
     return CumPmts;
 }
-
-// TAXATION !! TODO ?? This should be a separate, standalone unit test.
-#if 0
-
-#include "ihs_timer.hpp"
-
-#include <iomanip>
-#include <iostream>
-
-int main()
-{
-// TAXATION !! Update or remove these timings.
-// timing to construct Irc7702:
-// RW: about 37 msec
-// OS: about 93 msec; about 41 if we disable index checking
-//   in std::vector operator[]()
-
-// SOA table 120: "1980 CSO 50% Male Age nearest"
-    std::vector<double>q
-        {
-         .00354,.00097,.00091,.00089,.00085,.00083,.00079,.00077,.00073,.00072,
-         .00071,.00072,.00078,.00087,.00097,.00110,.00121,.00131,.00139,.00144,
-         .00148,.00149,.00150,.00149,.00149,.00147,.00147,.00146,.00148,.00151,
-         .00154,.00158,.00164,.00170,.00179,.00188,.00200,.00214,.00231,.00251,
-         .00272,.00297,.00322,.00349,.00375,.00406,.00436,.00468,.00503,.00541,
-         .00583,.00630,.00682,.00742,.00807,.00877,.00950,.01023,.01099,.01181,
-         .01271,.01375,.01496,.01639,.01802,.01978,.02164,.02359,.02558,.02773,
-         .03016,.03296,.03629,.04020,.04466,.04955,.05480,.06031,.06606,.07223,
-         .07907,.08680,.09568,.10581,.11702,.12911,.14191,.15541,.16955,.18445,
-         .20023,.21723,.23591,.25743,.28381,.32074,.37793,.47661,.65644,1.0000,
-        };
-
-    std::vector<double>i            (100, 0.07);
-    std::vector<double>LoadTgt      (100, 0.05);
-    std::vector<double>MlyChgSpecAmt(100, 0.00);
-    std::vector<double>MlyChgADD    (100, 0.00);
-    std::vector<double>PolFee       (100, 5.00);
-
-    Timer timer;
-
-    Irc7702* Irc7702_ = new Irc7702
-        (CVAT
-        ,45
-        ,100000.0
-        ,Option1
-        ,q
-        ,i
-        ,LoadTgt
-        ,MlyChgSpecAmt
-        ,10000000.0
-        ,MlyChgADD
-        ,10000000.0
-        ,PolFee
-        );
-    std::cout << timer.stop().elapsed_msec_str();
-    delete Irc7702_;
-}
-#endif // 0

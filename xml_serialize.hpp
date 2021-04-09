@@ -1,6 +1,6 @@
 // Serialization to and from xml.
 //
-// Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -25,13 +25,17 @@
 #include "config.hpp"
 
 #include "assert_lmi.hpp"
+#include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 
 #include <xmlwrapp/nodes_view.h>
 
+#include <map>
 #include <string>
 #include <type_traits>
+#include <unordered_map>
+#include <utility>                      // pair
 #include <vector>
 
 /// Serialization to and from xml.
@@ -56,8 +60,6 @@ namespace xml_serialize
 template<typename T>
 struct xml_io
 {
-    static_assert(!std::is_enum<T>::value); // Prefer mc_enum.
-
     static void to_xml(xml::element& e, T const& t)
     {
         e.set_text_content(value_cast<std::string>(t).c_str());
@@ -69,7 +71,49 @@ struct xml_io
     }
 };
 
-/// Serialization for sequences [23.1.1].
+/// Serialization for std::pair.
+
+template<typename P>
+struct xml_pair_io
+{
+    using T1 = typename P::first_type;
+    using T2 = typename P::second_type;
+
+    static_assert(std::is_same_v<P,std::pair<T1,T2>>);
+
+    static void to_xml(xml::element& parent, P const& p)
+    {
+        parent.clear();
+
+        // This is equivalent to calling set_element(), except that
+        // the parent element has imperatively been cleared.
+        xml::element e1("first");
+        xml_io<T1>::to_xml(e1, p.first);
+        parent.push_back(e1);
+
+        xml::element e2("second");
+        xml_io<T2>::to_xml(e2, p.second);
+        parent.push_back(e2);
+    }
+
+    static void from_xml(xml::element const& parent, P& p)
+    {
+        auto const& view_first {parent.elements("first")};
+        LMI_ASSERT(1 == lmi::ssize(view_first));
+        xml_io<T1>::from_xml(*view_first.begin(), p.first);
+
+        auto const& view_second {parent.elements("second")};
+        LMI_ASSERT(1 == lmi::ssize(view_second));
+        xml_io<T2>::from_xml(*view_second.begin(), p.second);
+    }
+};
+
+template<typename T1, typename T2>
+struct xml_io<std::pair<T1,T2>>
+  :public xml_pair_io<std::pair<T1,T2>>
+{};
+
+/// Serialization for sequence containers.
 ///
 /// Derive publicly from this to use its implementation when
 /// specializing class template xml_io for a particular sequence.
@@ -78,36 +122,37 @@ struct xml_io
 /// (and non-element nodes) that might have been added manually,
 /// e.g., as documentation.
 ///
-/// C++11 has no way to assert that T is a Sequence; for the nonce,
-/// no other Sequence being used, assert that it's a vector.
+/// C++17 has no assertable "SequenceContainer" concept; for the
+/// nonce, no other Sequence being used, assert that C is a vector.
 
-template<typename T>
+template<typename C>
 struct xml_sequence_io
 {
-    typedef typename T::value_type item_t;
-    static_assert(std::is_same<T,std::vector<item_t>>::value);
+    using T = typename C::value_type;
 
-    static void to_xml(xml::element& e, T const& t)
+    static_assert(std::is_same_v<C,std::vector<T>>);
+
+    static void to_xml(xml::element& parent, C const& c)
     {
-        e.clear();
-        for(auto const& i : t)
+        parent.clear();
+        for(auto const& i : c)
             {
             // This is not equivalent to calling set_element():
             // multiple <item> elements are expressly permitted.
-            xml::element z("item");
-            xml_io<item_t>::to_xml(z, i);
-            e.push_back(z);
+            xml::element e("item");
+            xml_io<T>::to_xml(e, i);
+            parent.push_back(e);
             }
     }
 
-    static void from_xml(xml::element const& e, T& t)
+    static void from_xml(xml::element const& parent, C& c)
     {
-        t.clear();
-        for(auto const& i : e.elements("item"))
+        c.clear();
+        for(auto const& i : parent.elements("item"))
             {
-            item_t z;
-            xml_io<item_t>::from_xml(i, z);
-            t.push_back(z);
+            T t;
+            xml_io<T>::from_xml(i, t);
+            c.push_back(t);
             }
     }
 };
@@ -115,6 +160,73 @@ struct xml_sequence_io
 template<typename T>
 struct xml_io<std::vector<T>>
   :public xml_sequence_io<std::vector<T>>
+{};
+
+/// Serialization for associative-pair containers.
+///
+/// Derive publicly from this to use its implementation when
+/// specializing class template xml_io for a particular sequence.
+///
+/// from_xml() reads only <item> elements, ignoring other elements
+/// (and non-element nodes) that might have been added manually,
+/// e.g., as documentation.
+///
+/// C++ calls std::set and its brethren "associative", even though
+/// they associate a key with...nothing. This implementation is for
+/// containers that associate a key with something. C++20 has no
+/// Concept for this; for the nonce, assert that it's a std::map or
+/// a std::unordered_map.
+
+template<typename C>
+struct xml_pair_container_io
+{
+    using K = typename C::key_type;
+    using T = typename C::mapped_type;
+    // A key value cannot be read into 'K const'; therefore,
+    // 'V' is not the same as 'C::value_type', which is:
+    //        std::pair<K const, T>
+    using V = std::pair<K,T>;
+
+    static_assert
+        (  std::is_same_v<C,std::map<K,T>>
+        || std::is_same_v<C,std::unordered_map<K,T>>
+        );
+
+    static void to_xml(xml::element& parent, C const& c)
+    {
+        parent.clear();
+        for(auto const& i : c)
+            {
+            // This is not equivalent to calling set_element():
+            // multiple <item> elements are expressly permitted.
+            xml::element e("item");
+            xml_io<V>::to_xml(e, i);
+            parent.push_back(e);
+            }
+    }
+
+    static void from_xml(xml::element const& parent, C& c)
+    {
+        c.clear();
+        // It would be good to call std::unordered_map::reserve()
+        // upstream if the number of elements is known.
+        for(auto const& i : parent.elements("item"))
+            {
+            V v;
+            xml_io<V>::from_xml(i, v);
+            c.insert(v);
+            }
+    }
+};
+
+template<typename K, typename T>
+struct xml_io<std::map<K,T>>
+  :public xml_pair_container_io<std::map<K,T>>
+{};
+
+template<typename K, typename T>
+struct xml_io<std::unordered_map<K,T>>
+  :public xml_pair_container_io<std::unordered_map<K,T>>
 {};
 
 /// Serialize a datum into a subelement of the given xml element.
@@ -126,9 +238,9 @@ template<typename T>
 void set_element(xml::element& parent, std::string const& name, T const& t)
 {
     LMI_ASSERT(parent.end() == parent.find(name.c_str()));
-    xml::element z(name.c_str());
-    xml_io<T>::to_xml(z, t);
-    parent.push_back(z);
+    xml::element e(name.c_str());
+    xml_io<T>::to_xml(e, t);
+    parent.push_back(e);
 }
 
 /// Deserialize a datum from a subelement of the given xml element.

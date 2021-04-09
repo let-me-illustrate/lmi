@@ -1,6 +1,6 @@
 // Ledger data that vary by basis.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -93,10 +93,6 @@ void LedgerVariant::Alloc(int len)
     BegYearVectors  ["GrossIntCredited"       ] = &GrossIntCredited       ;
     BegYearVectors  ["LoanIntAccrued"         ] = &LoanIntAccrued         ;
 
-    BegYearVectors  ["NetCOICharge"           ] = &NetCOICharge           ;
-
-    ForborneVectors ["ExperienceReserve"      ] = &ExperienceReserve      ;
-
     BegYearVectors  ["PolicyFee"              ] = &PolicyFee              ;
     BegYearVectors  ["PremTaxLoad"            ] = &PremTaxLoad            ;
     BegYearVectors  ["DacTaxLoad"             ] = &DacTaxLoad             ;
@@ -123,7 +119,6 @@ void LedgerVariant::Alloc(int len)
     EndYearVectors  ["SurrChg"                ] = &SurrChg                ;
     EndYearVectors  ["TermPurchased"          ] = &TermPurchased          ;
     EndYearVectors  ["BaseDeathBft"           ] = &BaseDeathBft           ;
-    EndYearVectors  ["ProjectedCoiCharge"     ] = &ProjectedCoiCharge     ;
 
     OtherVectors    ["MlySAIntRate"           ] = &MlySAIntRate           ;
     OtherVectors    ["MlyGAIntRate"           ] = &MlyGAIntRate           ;
@@ -133,7 +128,6 @@ void LedgerVariant::Alloc(int len)
     OtherVectors    ["AnnGAIntRate"           ] = &AnnGAIntRate           ;
     OtherVectors    ["AnnHoneymoonValueRate"  ] = &AnnHoneymoonValueRate  ;
     OtherVectors    ["AnnPostHoneymoonRate"   ] = &AnnPostHoneymoonRate   ;
-    OtherVectors    ["KFactor"                ] = &KFactor                ;
 
     OtherScalars    ["LapseMonth"             ] = &LapseMonth             ;
     OtherScalars    ["LapseYear"              ] = &LapseYear              ;

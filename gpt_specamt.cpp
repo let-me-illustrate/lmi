@@ -1,6 +1,6 @@
 // Determine specamt from GLP or GSP.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -28,7 +28,7 @@
 #include "safely_dereference_as.hpp"
 #include "zero.hpp"
 
-double gpt_specamt::CalculateGLPSpecAmt
+currency gpt_specamt::CalculateGLPSpecAmt
     (BasicValues const& a_Values
     ,int                a_Duration
     ,double             a_Premium
@@ -46,7 +46,7 @@ double gpt_specamt::CalculateGLPSpecAmt
         );
 }
 
-double gpt_specamt::CalculateGSPSpecAmt
+currency gpt_specamt::CalculateGSPSpecAmt
     (BasicValues const& a_Values
     ,int                a_Duration
     ,double             a_Premium
@@ -73,7 +73,7 @@ class FindSpecAmt
     double      const  Premium;
     double      const  NetPmtFactorTgt;
     double      const  NetPmtFactorExc;
-    double             SpecAmt;
+    currency           SpecAmt;
 
   public:
     FindSpecAmt
@@ -92,12 +92,13 @@ class FindSpecAmt
         ,Premium         {a_Premium}
         ,NetPmtFactorTgt {a_NetPmtFactorTgt}
         ,NetPmtFactorExc {a_NetPmtFactorExc}
-        ,SpecAmt         {0.0}
+        ,SpecAmt         {C0}
         {
         }
+    // CURRENCY !! decimal_root() expects this; but see 'ihs_avsolve.cpp'.
     double operator()(double a_Trial)
         {
-        SpecAmt = a_Trial;
+        SpecAmt = Values_.round_min_specamt().c(a_Trial);
         return
                 Irc7702_.CalculatePremium
                     (EIOBasis_
@@ -107,12 +108,12 @@ class FindSpecAmt
                     ,a_Trial
                     ,NetPmtFactorTgt
                     ,NetPmtFactorExc
-                    ,Values_.GetAnnualTgtPrem(Duration, SpecAmt)
+                    ,dblize(Values_.GetAnnualTgtPrem(Duration, SpecAmt))
                     )
             -   Premium
             ;
         }
-    double Get()
+    currency Get()
         {
         return SpecAmt;
         }
@@ -130,7 +131,7 @@ class FindSpecAmt
 /// because it is typically used to set an input parameter, and
 /// specamt is such a parameter whereas DB is not.
 
-double gpt_specamt::CalculateSpecAmt
+currency gpt_specamt::CalculateSpecAmt
     (BasicValues const& a_Values
     ,EIOBasis           a_EIOBasis
     ,int                a_Duration

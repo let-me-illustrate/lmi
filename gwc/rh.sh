@@ -27,7 +27,7 @@
 # on this server, which is good enough.
 
 # Needed to do this:
-# %s,https://git.savannah.nongnu.org/cgit/lmi.git/plain,https://github.com/vadz/lmi/raw/master,
+# %s,https://git.savannah.nongnu.org/cgit/lmi.git/plain,https://github.com/let-me-illustrate/lmi/raw/master,
 # for a corporate server that enables github but, incomprehensibly, blocks nongnu.org
 
 # * Multi-user access
@@ -73,12 +73,11 @@ patch --dry-run --strip=0 </home/${USER}/ltmain.sh.patch \
 # See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00035.html
 
-sudo cp -a /usr/share/libtool/config/config.guess /usr/share/libtool/build-aux/config.guess
+sudo cp -a /usr/share/libtool/config/config.guess /usr/share/misc/config.guess
 
 # Configure zsh, for root as well as the user configured above.
 
-https://github.com/vadz/lmi/raw/master/gwc/.zshrc
-wget -N -nv 'https://github.com/vadz/lmi/raw/master/gwc/.zshrc'
+wget -N -nv 'https://github.com/let-me-illustrate/lmi/raw/master/gwc/.zshrc'
 mv .zshrc ~
 cp -a ~/.zshrc /home/${USER}/.zshrc
 chown ${USER}:${USER} /home/${USER}/.zshrc
@@ -87,7 +86,7 @@ chown ${USER}:${USER} /home/${USER}/.zshrc
 # '~/.vimrc' and '/etc/vim/vimrc.local', use '~/.vimrc' for all
 # customizations and copy that file for the normal user too.
 
-wget -N -nv 'https://github.com/vadz/lmi/raw/master/gwc/.vimrc'
+wget -N -nv 'https://github.com/let-me-illustrate/lmi/raw/master/gwc/.vimrc'
 mv .vimrc ~
 cp -a ~/.vimrc /home/${USER}/.vimrc
 chown ${USER}:${USER} /home/${USER}/.vimrc
@@ -98,7 +97,7 @@ mkdir ~/.vim
 mkdir /home/${USER}/.vim
 chown ${USER}:${USER} /home/${USER}/.vim
 # It's a much better idea to copy a mature spellfile hither:
-wget -N -nv 'https://github.com/vadz/lmi/raw/master/gwc/.vim/spell/en.utf-8.add'
+wget -N -nv 'https://github.com/let-me-illustrate/lmi/raw/master/gwc/.vim/spell/en.utf-8.add'
 mkdir ~/.vim/spell
 mv en.utf-8.add ~/.vim/spell/en.utf-8.add
 mkdir /home/${USER}/.vim/spell
@@ -118,18 +117,20 @@ vim -es -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q'
 #   https://lists.nongnu.org/archive/html/lmi/2016-03/msg00006.html
 git config --global color.ui auto
 git config --global commit.cleanup scissors
+git config --global commit.verbose true
 git config --global core.pager "less -+F -+X"
 git config --global diff.colormoved plain
 git config --global log.date iso8601-strict-local
 git config --global log.follow true
 git config --global pull.ff only
 git config --global push.default simple
+git config --global push.recurseSubmodules check
 
 # from lmi_setup_42.sh
 
 # Install lmi for wine.
 
-wget -N -nv 'https://github.com/vadz/lmi/raw/master/install_msw.sh'
+wget -N -nv 'https://github.com/let-me-illustrate/lmi/raw/master/install_msw.sh'
 chmod +x install_msw.sh
 ./install_msw.sh >log 2>&1
 

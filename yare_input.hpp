@@ -1,6 +1,6 @@
 // Illustration input ready for use in calculations.
 //
-// Copyright (C) 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -94,9 +94,6 @@ class yare_input final
     mcenum_sep_acct_rate_type         SeparateAccountRateType         ;
     double                            LoanRate                        ;
     mcenum_loan_rate_type             LoanRateType                    ;
-    bool                              OverrideExperienceReserveRate   ;
-    double                            ExperienceReserveRate           ;
-    double                            ExperienceRatingInitialKFactor  ;
     bool                              WithdrawToBasisThenLoan         ;
     bool                              UseAverageOfAllFunds            ;
     bool                              OverrideFundManagementFee       ;
@@ -104,7 +101,6 @@ class yare_input final
     double                            InputFundManagementFee          ;
     mcenum_run_order                  RunOrder                        ;
     int                               NumberOfIdenticalLives          ;
-    bool                              UseExperienceRating             ;
     bool                              UsePartialMortality             ;
 //    mcenum_part_mort_table            PartialMortalityTable           ;
     std::string                       InsuredName                     ;
@@ -167,8 +163,6 @@ class yare_input final
     double                            InforceCumulativeSalesLoad      ;
     double                            InforceSpecAmtLoadBase          ;
     double                            InforceHoneymoonValue           ;
-    double                            InforceNetExperienceReserve     ;
-    double                            InforceYtdNetCoiCharge          ;
     double                            InforceTaxBasis                 ;
     double                            InforceGlp                      ;
     double                            InforceCumulativeGlp            ;

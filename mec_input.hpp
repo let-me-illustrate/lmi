@@ -1,6 +1,6 @@
 // MVC Model for MEC testing.
 //
-// Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -82,6 +82,7 @@ class LMI_SO mec_input final
 
     std::vector<std::string> RealizeAllSequenceInput(bool report_errors = true);
 
+    // TAXATION !! Remove because flats and tables are ignored?
     std::vector<double> FlatExtraRealized     () const;
     std::vector<double> PaymentHistoryRealized() const;
     std::vector<double> BenefitHistoryRealized() const;
@@ -120,6 +121,7 @@ class LMI_SO mec_input final
     void DoHarmonize() override;
     void DoTransmogrify() override;
 
+    // TAXATION !! Remove because flats and tables are ignored?
     std::string RealizeFlatExtra     ();
     std::string RealizePaymentHistory();
     std::string RealizeBenefitHistory();
@@ -145,6 +147,7 @@ class LMI_SO mec_input final
     mce_smoking              Smoking                         ;
     mce_class                UnderwritingClass               ;
     tnr_date                 DateOfBirth                     ;
+    // TAXATION !! Remove because flats and tables are ignored?
     mce_table_rating         SubstandardTable                ;
     ce_product_name          ProductName                     ;
     tnr_nonnegative_double   External1035ExchangeAmount      ;
@@ -172,11 +175,13 @@ class LMI_SO mec_input final
     numeric_sequence         BenefitHistory                  ;
     mce_state                StateOfJurisdiction             ;
     mce_state                PremiumTaxState                 ;
+    // TAXATION !! Remove because flats and tables are ignored?
     numeric_sequence         FlatExtra                       ;
     mce_yes_or_no            UseDOB                          ;
     tnr_nonnegative_double   Payment                         ;
     tnr_nonnegative_double   BenefitAmount                   ;
 
+    // TAXATION !! Remove because flats and tables are ignored?
     std::vector<tnr_unrestricted_double> FlatExtraRealized_     ;
     std::vector<tnr_unrestricted_double> PaymentHistoryRealized_;
     std::vector<tnr_unrestricted_double> BenefitHistoryRealized_;

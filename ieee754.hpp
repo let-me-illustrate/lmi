@@ -1,6 +1,6 @@
 // IEEE 754 esoterica.
 //
-// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -43,7 +43,7 @@
 template<typename T>
 T implausible_value(T const& t = -9.99999e35f)
 {
-    static_assert(::std::is_floating_point<T>::value);
+    static_assert(::std::is_floating_point_v<T>);
 
     if(std::numeric_limits<T>::has_quiet_NaN)
         {
@@ -71,7 +71,7 @@ T implausible_value(T const& t = -9.99999e35f)
 template<typename T>
 inline T infinity()
 {
-    static_assert(::std::is_floating_point<T>::value);
+    static_assert(::std::is_floating_point_v<T>);
     static_assert(std::numeric_limits<T>::has_infinity);
     static T const volatile z = std::numeric_limits<T>::infinity();
     return z;
@@ -103,7 +103,7 @@ inline T infinity()
 template<typename T>
 inline bool is_infinite(T t)
 {
-    static_assert(::std::is_floating_point<T>::value);
+    static_assert(::std::is_floating_point_v<T>);
     static T const volatile pos_inf =  std::numeric_limits<T>::infinity();
     static T const volatile neg_inf = -std::numeric_limits<T>::infinity();
     static bool const has_inf = std::numeric_limits<T>::has_infinity;

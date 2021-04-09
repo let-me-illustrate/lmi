@@ -1,6 +1,6 @@
 // Extensions to C++ run-time type information--unit test.
 //
-// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -42,31 +42,31 @@ void RttiLmiTest::TestTypeInfo()
     lmi::TypeInfo ti0(typeid(double));
     lmi::TypeInfo ti1(typeid(int));
     ti0 = ti1;
-    BOOST_TEST(typeid(int) == *ti0.ti_);
+    LMI_TEST(typeid(int) == *ti0.ti_);
 
     // CopyConstructible.
 
     lmi::TypeInfo ti2(ti1);
-    BOOST_TEST(typeid(int) == *ti2.ti_);
+    LMI_TEST(typeid(int) == *ti2.ti_);
 
     // EqualityComparable.
 
-    BOOST_TEST(ti1 == ti2);
+    LMI_TEST(ti1 == ti2);
 
     // LessThanComparable.
 
-    BOOST_TEST(!(ti1 < ti2));
+    LMI_TEST(!(ti1 < ti2));
 
     // StreamInsertible.
 
     std::ostringstream oss;
     oss << ti1;
-    BOOST_TEST_EQUAL(oss.str(), lmi::detail::Demangle(typeid(int).name()));
+    LMI_TEST_EQUAL(oss.str(), lmi::detail::Demangle(typeid(int).name()));
 
     // Usable with UDTs.
 
     ti1 = typeid(X); // Converting ctor.
-    BOOST_TEST_EQUAL(ti1.Name(), lmi::detail::Demangle(typeid(X).name()));
+    LMI_TEST_EQUAL(ti1.Name(), lmi::detail::Demangle(typeid(X).name()));
 
     // Usable with containers.
 

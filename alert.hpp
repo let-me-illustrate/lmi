@@ -1,6 +1,6 @@
 // Alert messages.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -107,7 +107,7 @@
 /// always works, is self documenting, and adds no header dependency.
 /// Writing it the same way everywhere requires no invention and
 /// increases global comprehensibility; see:
-///   http://lists.nongnu.org/archive/html/lmi/2007-03/msg00008.html
+///   https://lists.nongnu.org/archive/html/lmi/2007-03/msg00008.html
 ///
 /// Design decisions, and paths not taken.
 ///
@@ -158,15 +158,15 @@
 
 namespace alert_classes{} // doxygen workaround.
 
-std::ostream& LMI_SO status();
-std::ostream& LMI_SO warning();
-std::ostream& LMI_SO hobsons_choice();
-std::ostream& LMI_SO alarum();
+LMI_SO std::ostream& status();
+LMI_SO std::ostream& warning();
+LMI_SO std::ostream& hobsons_choice();
+LMI_SO std::ostream& alarum();
 
-void LMI_SO safely_show_on_stderr(char const*);
+LMI_SO void safely_show_on_stderr(char const*);
 
-void LMI_SO safely_show_message(char const*);
-void LMI_SO safely_show_message(std::string const&);
+LMI_SO void safely_show_message(char const*);
+LMI_SO void safely_show_message(std::string const&);
 
 // Implement these functions for each platform. Any might throw an
 // exception, which normally would be caught by the standard library
@@ -198,9 +198,9 @@ void safe_message_alert   (char const*);
 ///   http://groups.google.com/groups?selm=d6651fb6.0111221034.42e78b95@posting.google.com
 /// The technique and its documentation could be improved as discussed
 /// here:
-///   http://lists.nongnu.org/archive/html/lmi/2005-11/msg00016.html
+///   https://lists.nongnu.org/archive/html/lmi/2005-11/msg00016.html
 
-bool LMI_SO set_alert_functions
+LMI_SO bool set_alert_functions
     (void(*status_alert_function_pointer        )(std::string const&)
     ,void(*warning_alert_function_pointer       )(std::string const&)
     ,void(*hobsons_choice_alert_function_pointer)(std::string const&)
@@ -220,7 +220,7 @@ bool LMI_SO set_alert_functions
 /// stderr and signals an exception. A server application probably
 /// should fail and write a message in a log file.
 
-std::string const& LMI_SO hobsons_prompt();
+LMI_SO std::string const& hobsons_prompt();
 
 /// Rejecting Hobson's Choice throws a distinctive exception. Design
 /// intention: a user interface can catch this and take appropriate
@@ -243,15 +243,15 @@ class hobsons_choice_exception
 /// library to demonstrate that alerts can be raised there and
 /// processed in the main application.
 
-void LMI_SO test_status();
-void LMI_SO test_warning();
-void LMI_SO test_hobsons_choice();
-void LMI_SO test_alarum();
+LMI_SO void test_status();
+LMI_SO void test_warning();
+LMI_SO void test_hobsons_choice();
+LMI_SO void test_alarum();
 [[noreturn]]
-void LMI_SO test_standard_exception();
+LMI_SO void test_standard_exception();
 [[noreturn]]
-void LMI_SO test_arbitrary_exception();
-void LMI_SO test_catastrophe_report();
+LMI_SO void test_arbitrary_exception();
+LMI_SO void test_catastrophe_report();
 
 /// Write file name and line number to diagnostic stream, and flush.
 

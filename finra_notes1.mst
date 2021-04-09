@@ -1,5 +1,5 @@
 {{!
-    Copyright (C) 2017, 2018, 2019, 2020 Gregory W. Chicares.
+    Copyright (C) 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -14,7 +14,7 @@
     along with this program; if not, write to the Free Software Foundation,
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 
-    http://savannah.nongnu.org/projects/lmi
+    https://savannah.nongnu.org/projects/lmi
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 }}
@@ -25,51 +25,17 @@
 
 <font size="-1">
 
-<!-- PDF !! MecFootnote -->
 <p align="center"><b>IMPORTANT TAX DISCLOSURE</b></p>
 <p>
-As illustrated, this {{ContractName}}
-{{#IsMec}}
-    becomes
-{{/IsMec}}
-{{^IsMec}}
-    would not become
-{{/IsMec}}
-a Modified Endowment Contract (MEC)
-{{#IsMec}}
-    under the Internal Revenue Code in year {{MecYearPlus1}}.
-{{/IsMec}}
-{{^IsMec}}
-    under the Internal Revenue Code.
-{{/IsMec}}
-To the extent of gain in the {{ContractName}}, loans, distributions
-and withdrawals from a MEC are subject to income tax
-and may also trigger a penalty tax.
+    {{MecFootnote}}
 </p>
 
-{{^IsInforce}}
-    <p>
-    The initial 7-pay premium limit is ${{InitSevenPayPrem}}.
-    </p>
-{{/IsInforce}}
-
-<!-- PDF !! FnDacTax -->
-<!-- The phrase "tax charge" is unclear. Probably the DAC tax is meant. -->
 <p>
-No tax charge is made to the Separate Account. However,
-such a charge may be made in the future.
+    {{FnDacTax}}
 </p>
 
-<!-- PDF !! FnNotTaxAdvice -->
 <p>
-<b>
-The information contained in this illustration is not written
-or intended as tax or legal advice. Neither {{InsCoShortName}} its
-subsidiaries, employees or representatives are authorized to give tax
-or legal advice. For more information pertaining
-to the tax consequences of purchasing or owning this {{ContractName}},
-consult with your own independent tax or legal counsel.
-</b>
+    {{FnNotTaxAdvice}}
 </p>
 
 <br></br>
@@ -99,18 +65,8 @@ in an illustration-reg template, if anywhere.
     <p>{{NoLapseEverFootnote}}</p>
 {{/NoLapseAlwaysActive}}
 
-<!-- PDF !! FnDefnLifeIns -->
 <p>
-The definition of life insurance elected for this
-{{ContractName}} is the
-{{#DefnLifeInsIsGPT}}
-    guideline premium test. The guideline single premium is
-    ${{InitGSP}} and the guideline
-    level premium is ${{InitGLP}}.
-{{/DefnLifeInsIsGPT}}
-{{^DefnLifeInsIsGPT}}
-    cash value accumulation test.
-{{/DefnLifeInsIsGPT}}
+    {{FnDefnLifeIns}}
 </p>
 
 {{#DefnLifeInsIsGPT}}
@@ -119,18 +75,12 @@ The definition of life insurance elected for this
 </p>
 {{/DefnLifeInsIsGPT}}
 
-<!-- PDF !! RejectPremiumFootnote -->
 <p>
-{{InsCoName}} has the right to promptly refund any amount of premium paid if it
-will increase the net amount at risk (referred to in the {{ContractName}} as
-the Amount of Insurance that Requires a Charge).
+    {{RejectPremiumFootnote}}
 </p>
 
-<!-- PDF !! FnBoyEoy -->
 <p>
-Premium payments are assumed to be made at the beginning of the year. Account
-values, cash surrender values, and death benefits are illustrated as of the end
-of the year. {{MinimumPremiumFootnote}}
+    {{FnBoyEoy}}
 </p>
 
 </font>

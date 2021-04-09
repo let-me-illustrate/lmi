@@ -1,6 +1,6 @@
 // Main file for life insurance illustrations with wx interface.
 //
-// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -54,7 +54,7 @@
 #include "global_settings.hpp"
 #include "gpt_document.hpp"
 #include "gpt_view.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "icon_monger.hpp"
 #include "illustration_document.hpp"
 #include "illustration_view.hpp"
@@ -223,7 +223,7 @@ wxMDIChildFrame* Skeleton::CreateChildFrame
             frame_->GetActiveChild()
         &&  frame_->GetActiveChild()->IsMaximized()
         ;
-    wxDocMDIChildFrame* child_frame = new wxDocMDIChildFrame
+    wxDocMDIChildFrame* child_frame = new(wx) wxDocMDIChildFrame
         (doc
         ,view
         ,frame_
@@ -280,12 +280,12 @@ wxMenuBar* Skeleton::AdjustMenus(wxMenuBar* argument)
 
 /// Create the MDI document manager.
 ///
-/// This uses 'new' rather than 'new(wx)' because the object is
+/// This uses '::new' rather than 'new(wx)' because the object is
 /// explicitly deleted in OnExit().
 
 DocManagerEx* Skeleton::CreateDocManager()
 {
-    return new DocManagerEx;
+    return ::new DocManagerEx;
 }
 
 void Skeleton::InitDocManager()
@@ -298,8 +298,6 @@ void Skeleton::InitDocManager()
     doc_manager_ = CreateDocManager();
     doc_manager_->FileHistoryLoad(*config_);
 
-    auto const use_grid =
-        contains(global_settings::instance().pyx(), "use_census_grid");
     new(wx) wxDocTemplate
         (doc_manager_
         ,"Census"
@@ -308,8 +306,8 @@ void Skeleton::InitDocManager()
         ,"cns"
         ,"Census document"
         ,"Census view"
-        ,use_grid ? CLASSINFO(CensusGridDocument) : CLASSINFO(CensusDVCDocument)
-        ,use_grid ? CLASSINFO(CensusGridView)     : CLASSINFO(CensusDVCView)
+        ,CLASSINFO(CensusDocument)
+        ,CLASSINFO(CensusView)
         );
 
     new(wx) wxDocTemplate
@@ -341,7 +339,8 @@ void Skeleton::InitDocManager()
         ,CLASSINFO(DatabaseView)
         );
 
-    // Apparently there's no way to edit a '.funds' file.
+    // There is intentionally no GUI editor for '.lingo' files.
+    // There's no GUI editor for '.funds' files either.
 
     new(wx) wxDocTemplate
         (doc_manager_
@@ -508,13 +507,13 @@ void Skeleton::UponEditDefaultCell(wxCommandEvent&)
 ///
 /// If wxLaunchDefaultBrowser() fails, then it normally displays an
 /// error message of its own, which is suppressed here. See:
-///   http://lists.nongnu.org/archive/html/lmi/2009-03/msg00039.html
+///   https://lists.nongnu.org/archive/html/lmi/2009-03/msg00039.html
 
 void Skeleton::UponHelp(wxCommandEvent&)
 {
     fenv_guard fg;
 
-    std::string const canonical_url("http://lmi.nongnu.org/user_manual.html");
+    std::string const canonical_url("https://lmi.nongnu.org/user_manual.html");
 
     std::string s(AddDataDir("user_manual.html"));
     fs::path p(fs::system_complete(fs::path(s)));
@@ -629,7 +628,7 @@ bool Skeleton::OnExceptionInMainLoop()
 /// wxApp::OnExit() override.
 ///
 /// Call the base class's implementation--see:
-///   http://lists.nongnu.org/archive/html/lmi/2013-11/msg00020.html
+///   https://lists.nongnu.org/archive/html/lmi/2013-11/msg00020.html
 
 int Skeleton::OnExit()
 {
@@ -685,7 +684,7 @@ bool Skeleton::OnInit()
                 }
         };
 
-        wxLog::SetActiveTarget(new DebugStderrLog);
+        wxLog::SetActiveTarget(new(wx) DebugStderrLog);
 #endif // defined __WXMSW__
 
         if(false == ProcessCommandLine())
@@ -797,7 +796,7 @@ bool Skeleton::OnInit()
         {
         report_exception();
         // Orderly termination: see
-        //   http://lists.gnu.org/archive/html/lmi/2005-12/msg00020.html
+        //   https://lists.nongnu.org/archive/html/lmi/2005-12/msg00020.html
         // Returning 'true' here without creating a frame would leave
         // the application running as an apparent zombie.
         if(GetTopWindow())
@@ -1079,12 +1078,15 @@ void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
 /// Test custom handler UponPaste().
 ///
 /// See:
-///   http://savannah.nongnu.org/task/?5224
+///   https://savannah.nongnu.org/task/?5224
 
 void Skeleton::UponTestPasting(wxCommandEvent&)
 {
-    InputSequenceEntry* z = new InputSequenceEntry(frame_, wxID_ANY, "Testing...");
-    LMI_ASSERT(z);
+    auto const z = std::make_unique<InputSequenceEntry>
+        (frame_
+        ,wxID_ANY
+        ,"Testing..."
+        );
     wxTextCtrl& t = z->text_ctrl();
 
     ClipboardEx::SetText("1\r\n2\r\n3\r\n");
@@ -1103,7 +1105,6 @@ void Skeleton::UponTestPasting(wxCommandEvent&)
         warning() << "'X;Y;Z;' != '" << t.GetValue() << "'" << LMI_FLUSH;
         }
 
-    z->Destroy();
     status() << "Pasting test finished." << std::flush;
 }
 

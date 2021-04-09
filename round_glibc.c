@@ -1,6 +1,6 @@
 // Standard C round*() from glibc to fix MinGW-w64 defects.
 //
-// Copyright (C) 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -32,7 +32,7 @@
 // but the MinGW-w64 implementation as of 2016-12 returns one instead
 // (unless the rounding mode, which should be irrelevant, is toward
 // infinity). See:
-//   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00042.html
+//   https://lists.nongnu.org/archive/html/lmi/2016-12/msg00042.html
 //   https://sourceforge.net/p/mingw-w64/bugs/573/
 
 // Normally 'config.hpp' would be used to detect MinGW-w64. However,

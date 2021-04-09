@@ -280,6 +280,8 @@
     <ClCompile Include="group_quote_pdf_gen.cpp" />
     <ClCompile Include="group_values.cpp" />
     <ClCompile Include="html.cpp" />
+    <ClCompile Include="i7702.cpp" />
+    <ClCompile Include="i7702_init.cpp" />
     <ClCompile Include="ihs_acctval.cpp" />
     <ClCompile Include="ihs_avdebug.cpp" />
     <ClCompile Include="ihs_avmly.cpp" />
@@ -311,6 +313,7 @@
     <ClCompile Include="ledger_variant_init.cpp" />
     <ClCompile Include="ledgervalues.cpp" />
     <ClCompile Include="license.cpp" />
+    <ClCompile Include="lingo.cpp" />
     <ClCompile Include="lmi.cpp" />
     <ClCompile Include="loads.cpp" />
     <ClCompile Include="main_common.cpp" />
@@ -355,6 +358,7 @@
     <ClCompile Include="system_command.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="tn_range_types.cpp" />
+    <ClCompile Include="unwind.cpp" />
     <ClCompile Include="verify_products.cpp" />
     <ClCompile Include="xml_lmi.cpp" />
     <ClCompile Include="yare_input.cpp" />

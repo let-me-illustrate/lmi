@@ -2,7 +2,7 @@
 
 # Create a chroot for cross-building "Let me illustrate...".
 #
-# Copyright (C) 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -17,11 +17,12 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 . ./lmi_setup_inc.sh
+# shellcheck disable=SC1091
 . /tmp/schroot_env
 
 set -evx
@@ -104,10 +105,12 @@ cat >/etc/schroot/lmi_profile/fstab <<EOF
 /proc                   /proc                   none    rw,bind    0       0
 /srv/cache_for_lmi      /srv/cache_for_lmi      none    rw,bind    0       0
 /var/cache/lmi_schroots /var/cache/apt/archives none    rw,bind    0       0
-# It is convenient to bind a redhat cache mountpoint as well:
+# If a debian-within-centos-within-debian intermediate chroot is used,
+# then it is convenient to bind a redhat cache mountpoint as well:
 /var/cache/lmi_schroots /var/cache/yum          none    rw,bind    0       0
 # ...and also a pass-through mount for an intermediate chroot:
 /var/cache/lmi_schroots /var/cache/lmi_schroots none    rw,bind    0       0
+# ...and setting up those extra mounts in simpler cases costs nothing.
 #
 # schroot creates a mountpoint if it does not already exist:
 # /tmp                  /nonexistent/mountpoint none    rw,bind    0       0

@@ -1,6 +1,6 @@
 // Numeric stinted cast, across whose bourn no value is returned.
 //
-// Copyright (C) 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -257,8 +257,8 @@ constexpr inline To bourn_cast(From from, std::true_type, std::true_type)
 ///
 /// bourn_cast<>() is intended as a simple and correct replacement for
 /// boost::numeric_cast<>(), which does the wrong thing in some cases:
-///   http://lists.nongnu.org/archive/html/lmi/2017-03/msg00127.html
-///   http://lists.nongnu.org/archive/html/lmi/2017-03/msg00128.html
+///   https://lists.nongnu.org/archive/html/lmi/2017-03/msg00127.html
+///   https://lists.nongnu.org/archive/html/lmi/2017-03/msg00128.html
 /// It behaves the same way as boost::numeric_cast<>() except that,
 /// instead of quietly truncating, it throws on floating-to-integral
 /// conversions that would not preserve value.

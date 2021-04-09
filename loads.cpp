@@ -1,6 +1,6 @@
 // Loads and expense charges.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -34,6 +34,24 @@
 #include "mc_enum_types_aux.hpp"        // mc_n_ enumerators
 #include "oecumenic_enumerations.hpp"
 #include "premium_tax.hpp"
+#include "round_to.hpp"
+
+namespace
+{
+void assign_midpoint
+    (std::vector<currency>      & out
+    ,std::vector<currency> const& in_0
+    ,std::vector<currency> const& in_1
+    ,round_to<double>      const& round_minutiae
+    )
+{
+    std::vector<double> const v0 = dblize(in_0);
+    std::vector<double> const v1 = dblize(in_1);
+    std::vector<double>       z;
+    ::assign_midpoint(z, v0, v1);
+    out = round_minutiae.c(z);
+}
+} // Unnamed namespace.
 
 /// Ctor for production branch.
 
@@ -54,14 +72,15 @@ Loads::Loads(BasicValues& V)
         ,V.database().query<oenum_asset_charge_type>(DB_AssetChargeType)
         ,V.IsSubjectToIllustrationReg()
         ,V.round_interest_rate()
+        ,V.round_minutiae()
         ,V.yare_input_.ExtraCompensationOnPremium
         ,V.yare_input_.ExtraCompensationOnAssets
-        ,V.yare_input_.ExtraMonthlyCustodialFee
+        ,V.round_minutiae().c(V.yare_input_.ExtraMonthlyCustodialFee)
         ,V.GetGuarSpecAmtLoadTable()
         ,V.GetCurrSpecAmtLoadTable()
         );
     Allocate(length);
-    Initialize(V.database());
+    Initialize(V.database(), details);
     Calculate(details);
 }
 
@@ -114,8 +133,10 @@ void Loads::Allocate(int length)
 
 /// Set various data members from product database.
 
-void Loads::Initialize(product_database const& database)
+void Loads::Initialize(product_database const& database, load_details const& details)
 {
+    round_to<double> const& r = details.round_minutiae_;
+
     database.query_into(DB_LoadRfdProportion , refundable_sales_load_proportion_   );
     database.query_into(DB_DacTaxPremLoad    , dac_tax_load_                       );
 
@@ -131,17 +152,37 @@ void Loads::Initialize(product_database const& database)
     database.query_into(DB_CurrMonthlyPolFee , monthly_policy_fee_   [mce_gen_curr]);
     database.query_into(DB_CurrAnnualPolFee  , annual_policy_fee_    [mce_gen_curr]);
     database.query_into(DB_CurrSpecAmtLoad   , specified_amount_load_[mce_gen_curr]);
-    database.query_into(DB_CurrAcctValLoad   , separate_account_load_[mce_gen_curr]);
+    database.query_into(DB_CurrSepAcctLoad   , separate_account_load_[mce_gen_curr]);
     database.query_into(DB_CurrPremLoadTgt   , target_premium_load_  [mce_gen_curr]);
     database.query_into(DB_CurrPremLoadExc   , excess_premium_load_  [mce_gen_curr]);
     database.query_into(DB_CurrPremLoadTgtRfd, target_sales_load_    [mce_gen_curr]);
     database.query_into(DB_CurrPremLoadExcRfd, excess_sales_load_    [mce_gen_curr]);
+
+    // Make sure database contents have no excess precision.
+    LMI_ASSERT
+        (r.c(monthly_policy_fee_   [mce_gen_guar])
+        ==   monthly_policy_fee_   [mce_gen_guar]
+        );
+    LMI_ASSERT
+        (r.c(annual_policy_fee_    [mce_gen_guar])
+        ==   annual_policy_fee_    [mce_gen_guar]
+        );
+    LMI_ASSERT
+        (r.c(monthly_policy_fee_   [mce_gen_curr])
+        ==   monthly_policy_fee_   [mce_gen_curr]
+        );
+    LMI_ASSERT
+        (r.c(annual_policy_fee_    [mce_gen_curr])
+        ==   annual_policy_fee_    [mce_gen_curr]
+        );
 }
 
 /// Transform raw input and database data into directly-useful rates.
 
 void Loads::Calculate(load_details const& details)
 {
+    round_to<double> const& r = details.round_minutiae_;
+
     premium_tax_load_.assign(details.length_, details.premium_tax_load_);
 
     for(int j = mce_gen_curr; j != mc_n_gen_bases; ++j)
@@ -185,7 +226,7 @@ void Loads::Calculate(load_details const& details)
 // However, this throws an "Erroneous rounding function" exception,
 // because apply_unary() and apply_binary() use a default-constructed
 // function object:
-//   http://svn.savannah.nongnu.org/viewvc/lmi/trunk/tools/pete-2.1.1/PETE/Tools/PeteOps.in?root=lmi&r1=4151&r2=4150&pathrev=4151
+//   https://svn.savannah.nongnu.org/viewvc/lmi/trunk/tools/pete-2.1.1/PETE/Tools/PeteOps.in?root=lmi&r1=4151&r2=4150&pathrev=4151
 // but round_to<> is stateful, and deliberately throws that exception
 // when a default-constructed object is used.
             assign
@@ -274,6 +315,7 @@ void Loads::Calculate(load_details const& details)
     // consistent with this constraint.
 
     monthly_policy_fee_[mce_gen_curr] += details.VectorExtraPolFee_;
+
     for(int j = 0; j < details.length_; ++j)
         {
         if
@@ -298,8 +340,8 @@ void Loads::Calculate(load_details const& details)
 
     if(details.NeedMidpointRates_)
         {
-        assign_midpoint(monthly_policy_fee_   [mce_gen_mdpt], monthly_policy_fee_   [mce_gen_guar], monthly_policy_fee_   [mce_gen_curr]);
-        assign_midpoint(annual_policy_fee_    [mce_gen_mdpt], annual_policy_fee_    [mce_gen_guar], annual_policy_fee_    [mce_gen_curr]);
+        assign_midpoint(monthly_policy_fee_   [mce_gen_mdpt], monthly_policy_fee_   [mce_gen_guar], monthly_policy_fee_   [mce_gen_curr], r);
+        assign_midpoint(annual_policy_fee_    [mce_gen_mdpt], annual_policy_fee_    [mce_gen_guar], annual_policy_fee_    [mce_gen_curr], r);
         assign_midpoint(specified_amount_load_[mce_gen_mdpt], specified_amount_load_[mce_gen_guar], specified_amount_load_[mce_gen_curr]);
         assign_midpoint(separate_account_load_[mce_gen_mdpt], separate_account_load_[mce_gen_guar], separate_account_load_[mce_gen_curr]);
         assign_midpoint(target_premium_load_  [mce_gen_mdpt], target_premium_load_  [mce_gen_guar], target_premium_load_  [mce_gen_curr]);
@@ -338,26 +380,38 @@ void Loads::AmortizePremiumTax(load_details const&)
 
 Loads::Loads(product_database const& database, bool NeedMidpointRates)
 {
+    round_to<double> const& r {2, r_to_nearest};
+
     monthly_policy_fee_   .resize(mc_n_gen_bases);
     target_premium_load_  .resize(mc_n_gen_bases);
     excess_premium_load_  .resize(mc_n_gen_bases);
     specified_amount_load_.resize(mc_n_gen_bases);
 
-    database.query_into(DB_GuarMonthlyPolFee, monthly_policy_fee_   [mce_gen_guar]);
-    database.query_into(DB_GuarPremLoadTgt  , target_premium_load_  [mce_gen_guar]);
-    database.query_into(DB_GuarPremLoadExc  , excess_premium_load_  [mce_gen_guar]);
-    database.query_into(DB_GuarSpecAmtLoad  , specified_amount_load_[mce_gen_guar]);
+    database.query_into(DB_GuarMonthlyPolFee , monthly_policy_fee_   [mce_gen_guar]);
+    database.query_into(DB_GuarPremLoadTgt   , target_premium_load_  [mce_gen_guar]);
+    database.query_into(DB_GuarPremLoadExc   , excess_premium_load_  [mce_gen_guar]);
+    database.query_into(DB_GuarSpecAmtLoad   , specified_amount_load_[mce_gen_guar]);
 
-    database.query_into(DB_CurrMonthlyPolFee, monthly_policy_fee_   [mce_gen_curr]);
-    database.query_into(DB_CurrPremLoadTgt  , target_premium_load_  [mce_gen_curr]);
-    database.query_into(DB_CurrPremLoadExc  , excess_premium_load_  [mce_gen_curr]);
-    database.query_into(DB_CurrSpecAmtLoad  , specified_amount_load_[mce_gen_curr]);
+    database.query_into(DB_CurrMonthlyPolFee , monthly_policy_fee_   [mce_gen_curr]);
+    database.query_into(DB_CurrPremLoadTgt   , target_premium_load_  [mce_gen_curr]);
+    database.query_into(DB_CurrPremLoadExc   , excess_premium_load_  [mce_gen_curr]);
+    database.query_into(DB_CurrSpecAmtLoad   , specified_amount_load_[mce_gen_curr]);
+
+    // Make sure database contents have no excess precision.
+    LMI_ASSERT
+        (r.c(monthly_policy_fee_   [mce_gen_guar])
+        ==   monthly_policy_fee_   [mce_gen_guar]
+        );
+    LMI_ASSERT
+        (r.c(monthly_policy_fee_   [mce_gen_curr])
+        ==   monthly_policy_fee_   [mce_gen_curr]
+        );
 
     // This ctor ignores tabular specified-amount loads.
 
     if(NeedMidpointRates)
         {
-        assign_midpoint(monthly_policy_fee_   [mce_gen_mdpt], monthly_policy_fee_   [mce_gen_guar], monthly_policy_fee_   [mce_gen_curr]);
+        assign_midpoint(monthly_policy_fee_   [mce_gen_mdpt], monthly_policy_fee_   [mce_gen_guar], monthly_policy_fee_   [mce_gen_curr], r);
         assign_midpoint(target_premium_load_  [mce_gen_mdpt], target_premium_load_  [mce_gen_guar], target_premium_load_  [mce_gen_curr]);
         assign_midpoint(excess_premium_load_  [mce_gen_mdpt], excess_premium_load_  [mce_gen_guar], excess_premium_load_  [mce_gen_curr]);
         assign_midpoint(specified_amount_load_[mce_gen_mdpt], specified_amount_load_[mce_gen_guar], specified_amount_load_[mce_gen_curr]);

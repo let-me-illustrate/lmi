@@ -1,6 +1,6 @@
 // Data-file and date validation--unit test.
 //
-// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -30,6 +30,7 @@
 #include "miscellany.hpp"
 #include "system_command.hpp"
 #include "test_tools.hpp"
+#include "unwind.hpp"                   // scoped_unwind_toggler
 
 #include <boost/filesystem/convenience.hpp> // basename()
 #include <boost/filesystem/operations.hpp>
@@ -130,7 +131,7 @@ void PasskeyTest::RemoveTestFiles(char const* file, int line) const
     for(auto const& i : filenames)
         {
         std::remove(i.c_str());
-        INVOKE_BOOST_TEST(!fs::exists(i), file, line);
+        INVOKE_LMI_TEST(!fs::exists(i), file, line);
         }
 }
 
@@ -159,13 +160,13 @@ void PasskeyTest::InitializeDataFile() const
         ;
 
     std::ofstream os("coleridge", ios_out_trunc_binary());
-    BOOST_TEST(os.good());
+    LMI_TEST(os.good());
     os << rime;
     os.close();
 
     unsigned char sum[md5len];
     md5_buffer(rime, std::strlen(rime), sum);
-    BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(sum));
+    LMI_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(sum));
 }
 
 /// Write a data file to be passed to the 'lmi_md5sum' program.
@@ -188,10 +189,10 @@ void PasskeyTest::InitializeMd5sumFile() const
     std::FILE* in = std::fopen("coleridge", "rb");
     md5_stream(in, sum);
     std::fclose(in);
-    BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(sum));
+    LMI_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(sum));
 
     std::ofstream os(md5sum_file(), ios_out_trunc_binary());
-    BOOST_TEST(os.good());
+    LMI_TEST(os.good());
     os << md5_hex_string(std::vector<unsigned char>(sum, sum + md5len));
     os << "  coleridge\n";
     os.close();
@@ -211,21 +212,21 @@ void PasskeyTest::InitializePasskeyFile() const
     md5_stream(md5, sum);
     std::fclose(md5);
 
-    BOOST_TEST_EQUAL("efb7a0a972b88bb5b9ac6f60390d61bf", md5_str(sum));
+    LMI_TEST_EQUAL("efb7a0a972b88bb5b9ac6f60390d61bf", md5_str(sum));
 
     char c_passkey[md5len];
     unsigned char u_passkey[md5len];
     std::memcpy(c_passkey, sum, md5len);
-    BOOST_TEST_EQUAL("efb7a0a972b88bb5b9ac6f60390d61bf", md5_str(c_passkey));
+    LMI_TEST_EQUAL("efb7a0a972b88bb5b9ac6f60390d61bf", md5_str(c_passkey));
     md5_buffer(c_passkey, md5len, u_passkey);
-    BOOST_TEST_EQUAL("8a4829bf31de9437c95aedaeead398d7", md5_str(u_passkey));
+    LMI_TEST_EQUAL("8a4829bf31de9437c95aedaeead398d7", md5_str(u_passkey));
     std::memcpy(c_passkey, u_passkey, md5len);
-    BOOST_TEST_EQUAL("8a4829bf31de9437c95aedaeead398d7", md5_str(c_passkey));
+    LMI_TEST_EQUAL("8a4829bf31de9437c95aedaeead398d7", md5_str(c_passkey));
     md5_buffer(c_passkey, md5len, u_passkey);
-    BOOST_TEST_EQUAL("3ff4953dbddf009634922fa52a342bfe", md5_str(u_passkey));
+    LMI_TEST_EQUAL("3ff4953dbddf009634922fa52a342bfe", md5_str(u_passkey));
 
     std::ofstream os("passkey", ios_out_trunc_binary());
-    BOOST_TEST(os.good());
+    LMI_TEST(os.good());
     os << md5_hex_string
         (std::vector<unsigned char>(u_passkey, u_passkey + md5len)
         );
@@ -234,7 +235,7 @@ void PasskeyTest::InitializePasskeyFile() const
 void PasskeyTest::InitializeExpiryFile() const
 {
     std::ofstream os("expiry");
-    BOOST_TEST(os.good());
+    LMI_TEST(os.good());
     os << BeginDate_ << ' ' << EndDate_;
     os.close();
 }
@@ -255,7 +256,7 @@ void PasskeyTest::InitializeExpiryFile() const
 void PasskeyTest::CheckNominal(char const* file, int line) const
 {
     Authenticity::ResetCache();
-    INVOKE_BOOST_TEST_EQUAL
+    INVOKE_LMI_TEST_EQUAL
         ("validated"
         ,Authenticity::Assay(BeginDate_, Pwd_)
         ,file
@@ -263,13 +264,21 @@ void PasskeyTest::CheckNominal(char const* file, int line) const
         );
 }
 
-/// Authenticate from a remote directory. The current directory should
-/// be the same after authentication as it was before.
+/// Authenticate from afar, to ensure non-dependence on ${PWD}.
+///
+/// By default, lmi authenticates itself at startup. Its executable
+/// and data files shouldn't need to be in any particular directory;
+/// an invocation like this:
+///   wine /opt/lmi/bin/lmi_wx_shared --data_path=/opt/lmi/data
+/// should just work. This test checks that invariant, as follows.
+///
+/// First, change ${PWD}; authenticate; and restore ${PWD}, verifying
+/// that the restoration succeeded.
 ///
 /// Authenticate also from the root directory on a different drive, on
 /// a multiple-root system. This is perforce platform specific; msw is
-/// used because it happens to be common. This test assumes that an
-/// 'F:' drive exists and is not the "current" drive; it is skipped
+/// tested because it's common and problematic. This test assumes that
+/// an 'F:' drive exists and is not the "current" drive; it is skipped
 /// if no 'F:' drive exists.
 ///
 /// BOOST !! This test traps an exception that boost-1.33.1 can throw
@@ -286,14 +295,15 @@ void PasskeyTest::TestFromAfar() const
     std::string const tmp = "/tmp/" + fs::basename(__FILE__);
     fs::path const remote_dir_0(fs::complete(tmp));
     fs::create_directory(remote_dir_0);
-    BOOST_TEST(fs::exists(remote_dir_0) && fs::is_directory(remote_dir_0));
-    BOOST_TEST_EQUAL(0, chdir(remote_dir_0.string().c_str()));
-    BOOST_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
+    LMI_TEST(fs::exists(remote_dir_0) && fs::is_directory(remote_dir_0));
+    LMI_TEST_EQUAL(0, chdir(remote_dir_0.string().c_str()));
+    LMI_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
     Authenticity::ResetCache();
-    BOOST_TEST_EQUAL("validated", Authenticity::Assay(BeginDate_, Pwd_));
-    BOOST_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
-    BOOST_TEST_EQUAL(0, chdir(Pwd_.string().c_str()));
-    BOOST_TEST_EQUAL(Pwd_.string(), fs::current_path().string());
+    LMI_TEST_EQUAL("validated", Authenticity::Assay(BeginDate_, Pwd_));
+    LMI_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
+    LMI_TEST_EQUAL(0, chdir(Pwd_.string().c_str()));
+    LMI_TEST_EQUAL(Pwd_.string(), fs::current_path().string());
+    fs::remove(remote_dir_0);
 
 #if defined LMI_MSW
     CheckNominal(__FILE__, __LINE__);
@@ -306,26 +316,26 @@ void PasskeyTest::TestFromAfar() const
 
     try
         {
-        BOOST_TEST(fs::is_directory(remote_dir_1));
+        LMI_TEST(fs::is_directory(remote_dir_1));
         }
     catch(std::exception const& e)
         {
         std::string s(e.what());
         if(contains(s, "boost::filesystem::is_directory"))
             {
-            BOOST_TEST(false);
+            LMI_TEST(false);
             goto done;
             }
         throw;
         }
 
-    BOOST_TEST_EQUAL(0, chdir(remote_dir_1.string().c_str()));
-    BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
+    LMI_TEST_EQUAL(0, chdir(remote_dir_1.string().c_str()));
+    LMI_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
     Authenticity::ResetCache();
-    BOOST_TEST_EQUAL("validated", Authenticity::Assay(BeginDate_, Pwd_));
-    BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
-    BOOST_TEST_EQUAL(0, chdir(Pwd_.string().c_str()));
-    BOOST_TEST_EQUAL(Pwd_.string(), fs::current_path().string());
+    LMI_TEST_EQUAL("validated", Authenticity::Assay(BeginDate_, Pwd_));
+    LMI_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
+    LMI_TEST_EQUAL(0, chdir(Pwd_.string().c_str()));
+    LMI_TEST_EQUAL(Pwd_.string(), fs::current_path().string());
 
   done:
 #endif // defined LMI_MSW
@@ -344,34 +354,34 @@ void PasskeyTest::TestDate() const
     CheckNominal(__FILE__, __LINE__);
 
     Authenticity::ResetCache();
-    BOOST_TEST_EQUAL("validated", Authenticity::Assay(BeginDate_, Pwd_));
-    BOOST_TEST_EQUAL("cached"   , Authenticity::Assay(BeginDate_, Pwd_));
+    LMI_TEST_EQUAL("validated", Authenticity::Assay(BeginDate_, Pwd_));
+    LMI_TEST_EQUAL("cached"   , Authenticity::Assay(BeginDate_, Pwd_));
 
     calendar_date const last_date = EndDate_ - 1;
-    BOOST_TEST_EQUAL("validated", Authenticity::Assay(last_date, Pwd_));
-    BOOST_TEST_EQUAL("cached"   , Authenticity::Assay(last_date, Pwd_));
+    LMI_TEST_EQUAL("validated", Authenticity::Assay(last_date, Pwd_));
+    LMI_TEST_EQUAL("cached"   , Authenticity::Assay(last_date, Pwd_));
 
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         ("Current date 2000-12-31 is invalid:"
         " this system cannot be used before 2001-01-01."
         " Contact the home office."
         ,Authenticity::Assay(BeginDate_ - 1, Pwd_)
         );
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         ("Current date 2001-01-03 is invalid:"
         " this system cannot be used after 2001-01-02."
         " Contact the home office."
         ,Authenticity::Assay(EndDate_, Pwd_)
         );
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         ("Current date 2001-01-13 is invalid:"
         " this system cannot be used after 2001-01-02."
         " Contact the home office."
         ,Authenticity::Assay(EndDate_ + 10, Pwd_)
         );
 
-    BOOST_TEST_UNEQUAL("cached", Authenticity::Assay(last_date, Pwd_));
-    BOOST_TEST_EQUAL  ("cached", Authenticity::Assay(last_date, Pwd_));
+    LMI_TEST_UNEQUAL("cached", Authenticity::Assay(last_date, Pwd_));
+    LMI_TEST_EQUAL  ("cached", Authenticity::Assay(last_date, Pwd_));
 
     CheckNominal(__FILE__, __LINE__);
 }
@@ -389,34 +399,34 @@ void PasskeyTest::TestPasskey() const
     CheckNominal(__FILE__, __LINE__);
 
     calendar_date const last_date = EndDate_ - 1;
-    BOOST_TEST_EQUAL("validated", Authenticity::Assay(last_date, Pwd_));
+    LMI_TEST_EQUAL("validated", Authenticity::Assay(last_date, Pwd_));
 
     std::ofstream os0("passkey", ios_out_trunc_binary());
-    BOOST_TEST(os0.good());
+    LMI_TEST(os0.good());
     std::vector<unsigned char> const wrong(md5len);
     os0 << md5_hex_string(wrong);
     os0.close();
-    BOOST_TEST_EQUAL("cached"   , Authenticity::Assay(last_date, Pwd_));
-    BOOST_TEST(last_date != BeginDate_);
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL("cached"   , Authenticity::Assay(last_date, Pwd_));
+    LMI_TEST(last_date != BeginDate_);
+    LMI_TEST_EQUAL
         ("Passkey is incorrect for this version. Contact the home office."
         ,Authenticity::Assay(BeginDate_, Pwd_)
         );
 
     std::remove("passkey");
-    BOOST_TEST(!fs::exists("passkey"));
+    LMI_TEST(!fs::exists("passkey"));
     Authenticity::ResetCache();
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         ("Unable to read passkey file 'passkey'. Try reinstalling."
         ,Authenticity::Assay(BeginDate_, ".")
         );
 
     std::ofstream os1("passkey", ios_out_trunc_binary());
     os1 << "wrong";
-    BOOST_TEST(os1.good());
+    LMI_TEST(os1.good());
     os1.close();
     Authenticity::ResetCache();
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         ("Length of passkey 'wrong' is 5 but should be 32. Try reinstalling."
         ,Authenticity::Assay(BeginDate_, Pwd_)
         );
@@ -430,7 +440,7 @@ void PasskeyTest::TestDataFile() const
     CheckNominal(__FILE__, __LINE__);
 
     std::ofstream os("coleridge", ios_out_trunc_binary());
-    BOOST_TEST(os.good());
+    LMI_TEST(os.good());
     os << "This file has the wrong md5sum.";
     os.close();
 
@@ -441,11 +451,14 @@ void PasskeyTest::TestDataFile() const
         << "\nto print:"
         << std::endl
         ;
-    BOOST_TEST_EQUAL
+    {
+    scoped_unwind_toggler meaningless_name;
+    LMI_TEST_EQUAL
         ("At least one required file is missing, altered, or invalid."
         " Try reinstalling."
         ,Authenticity::Assay(BeginDate_, Pwd_)
         );
+    }
 
     InitializeDataFile();
     CheckNominal(__FILE__, __LINE__);
@@ -456,19 +469,19 @@ void PasskeyTest::TestExpiry() const
     CheckNominal(__FILE__, __LINE__);
 
     std::remove("expiry");
-    BOOST_TEST(!fs::exists("expiry"));
+    LMI_TEST(!fs::exists("expiry"));
     Authenticity::ResetCache();
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         ("Unable to read expiry file 'expiry'. Try reinstalling."
         ,Authenticity::Assay(BeginDate_, ".")
         );
 
     {
     std::ofstream os("expiry");
-    BOOST_TEST(os.good());
+    LMI_TEST(os.good());
     os.close();
     Authenticity::ResetCache();
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         ("Error reading expiry file 'expiry'. Try reinstalling."
         ,Authenticity::Assay(BeginDate_, ".")
         );
@@ -477,10 +490,10 @@ void PasskeyTest::TestExpiry() const
     {
     std::ofstream os("expiry");
     os << "2400000";
-    BOOST_TEST(os.good());
+    LMI_TEST(os.good());
     os.close();
     Authenticity::ResetCache();
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         ("Error reading expiry file 'expiry'. Try reinstalling."
         ,Authenticity::Assay(BeginDate_, ".")
         );
@@ -489,10 +502,10 @@ void PasskeyTest::TestExpiry() const
     {
     std::ofstream os("expiry");
     os << "bogus dates";
-    BOOST_TEST(os.good());
+    LMI_TEST(os.good());
     os.close();
     Authenticity::ResetCache();
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         ("Error reading expiry file 'expiry'. Try reinstalling."
         ,Authenticity::Assay(BeginDate_, ".")
         );

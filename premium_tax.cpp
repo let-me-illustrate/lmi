@@ -1,6 +1,6 @@
 // Premium tax.
 //
-// Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -358,32 +358,6 @@ double premium_tax::calculate_load(double payment, stratified_charges const& str
     return z;
 }
 
-/// Suggest updating rates each year.
-///
-/// AZ rates vary by calendar year:
-///   https://insurance.az.gov/sites/default/files/documents/files/RegulatoryBulletin2016-02_20160705.pdf
-///   2017 0.0190
-///   2018 0.0185
-///   2019 0.0180
-///   2020 0.0175
-///   2021 0.0170
-///
-/// Without this assertion, it's too easy to forget to update this
-/// rate when building lmi in December for release in January. Each
-/// year, expunge the particular assertion that failed, after updating
-/// the AZ rate manually. It is better not to make the rate update
-/// itself automatically because the schedule of future rates may have
-/// changed in the meantime (and actually did, in the 20170508T1544Z
-/// commit). Expunge this block comment when the last assertion is
-/// expunged.
-///
-/// Implementation notes:
-///  - __DATE__[0] is month-name's first letter; D = December
-///  - __DATE__[10] is last digit of a four-digit year
-
-static_assert('D' != __DATE__[0] || '0' != __DATE__[10]);
-static_assert('D' != __DATE__[0] || '1' != __DATE__[10]);
-
 /// Premium-tax rates for life insurance without retaliation.
 ///
 /// A single table suffices for every domicile, because retaliation is
@@ -403,7 +377,7 @@ std::vector<double> const& premium_tax_rates_for_life_insurance()
     static int const n = 53;
     static double const d[n] =
         //   AL       AK       AZ       AR       CA       CO       CT
-        {0.0230,  tiered,  0.0175,  0.0250,  0.0235,  0.0200,  0.0175
+        {0.0230,  tiered,  0.0170,  0.0250,  0.0235,  0.0200,  0.0175
         //   DE       DC       FL       GA       HI       ID
         ,0.0200,  0.0175,  0.0175,  0.0225,  0.0275,  0.0150
         //   IL       IN       IA       KS       KY       LA       ME

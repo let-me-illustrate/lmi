@@ -1,6 +1,6 @@
 // MVC Model for life-insurance illustrations.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -271,9 +271,6 @@ class LMI_SO Input final
     mce_sep_acct_rate_type   SeparateAccountRateType         ;
     tnr_proportion           LoanRate                        ;
     mce_loan_rate_type       LoanRateType                    ;
-    mce_yes_or_no            OverrideExperienceReserveRate   ;
-    tnr_proportion           ExperienceReserveRate           ;
-    tnr_nonnegative_double   ExperienceRatingInitialKFactor  ;
     mce_yes_or_no            WithdrawToBasisThenLoan         ;
     mce_yes_or_no            UseAverageOfAllFunds            ;
     mce_yes_or_no            OverrideFundManagementFee       ;
@@ -281,7 +278,6 @@ class LMI_SO Input final
     tnr_proportion           InputFundManagementFee          ;
     mce_run_order            RunOrder                        ;
     tnr_nonnegative_integer  NumberOfIdenticalLives          ;
-    mce_yes_or_no            UseExperienceRating             ;
     mce_yes_or_no            UsePartialMortality             ;
     mce_part_mort_table      PartialMortalityTable           ;
     datum_string             InsuredName                     ;
@@ -346,8 +342,6 @@ class LMI_SO Input final
     tnr_nonnegative_double   InforceSpecAmtLoadBase          ;
     tnr_nonnegative_double   InforceHoneymoonValue           ;
     tnr_nonnegative_double   InforceCorporationStake         ;
-    tnr_unrestricted_double  InforceNetExperienceReserve     ;
-    tnr_nonnegative_double   InforceYtdNetCoiCharge          ;
     tnr_unrestricted_double  InforceTaxBasis                 ;
     tnr_unrestricted_double  InforceGlp                      ;
     tnr_unrestricted_double  InforceCumulativeGlp            ;
@@ -403,7 +397,7 @@ class LMI_SO Input final
     numeric_sequence         FlatExtra                       ;
     numeric_sequence         PolicyLevelFlatExtra            ;
     numeric_sequence         HoneymoonValueSpread            ;
-    datum_string             FundAllocations                 ; // INPUT !! http://savannah.nongnu.org/support/?104481
+    datum_string             FundAllocations                 ; // INPUT !! https://savannah.nongnu.org/support/?104481
     numeric_sequence         CashValueEnhancementRate        ;
     datum_string             AdditionalReports               ;
     mce_suppl_illus_type     SupplementalIllustrationType    ;

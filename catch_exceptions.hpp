@@ -1,6 +1,6 @@
 // Unit-test framework based on Beman Dawes's boost library.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -73,7 +73,7 @@ namespace lmi_test
   namespace detail
   {
     // A separate reporting function was requested during formal review.
-    inline void report_exception
+    inline void herald_exception
         (std::ostream& os
         ,char const*   name
         ,char const*   info
@@ -117,42 +117,42 @@ namespace lmi_test
     // required, but it doesn't hurt and some programmers ask for it.
 
         catch(char const*& e)
-            {detail::report_exception(out, ""                      , e);}
+            {detail::herald_exception(out, ""                      , e);}
         catch(std::string const& e)
-            {detail::report_exception(out, ""                      , e.c_str());}
+            {detail::herald_exception(out, ""                      ,e.c_str());}
 
         // std:: exceptions
         catch(std::bad_alloc const& e)
-            {detail::report_exception(out, "std::bad_alloc:"       , e.what());}
+            {detail::herald_exception(out, "std::bad_alloc:"       , e.what());}
         catch(std::bad_cast const& e)
-            {detail::report_exception(out, "std::bad_cast:"        , e.what());}
+            {detail::herald_exception(out, "std::bad_cast:"        , e.what());}
         catch(std::bad_typeid const& e)
-            {detail::report_exception(out, "std::bad_typeid:"      , e.what());}
+            {detail::herald_exception(out, "std::bad_typeid:"      , e.what());}
         catch(std::bad_exception const& e)
-            {detail::report_exception(out, "std::bad_exception:"   , e.what());}
+            {detail::herald_exception(out, "std::bad_exception:"   , e.what());}
         catch(std::domain_error const& e)
-            {detail::report_exception(out, "std::domain_error:"    , e.what());}
+            {detail::herald_exception(out, "std::domain_error:"    , e.what());}
         catch(std::invalid_argument const& e)
-            {detail::report_exception(out, "std::invalid_argument:", e.what());}
+            {detail::herald_exception(out, "std::invalid_argument:", e.what());}
         catch(std::length_error const& e)
-            {detail::report_exception(out, "std::length_error:"    , e.what());}
+            {detail::herald_exception(out, "std::length_error:"    , e.what());}
         catch(std::out_of_range const& e)
-            {detail::report_exception(out, "std::out_of_range:"    , e.what());}
+            {detail::herald_exception(out, "std::out_of_range:"    , e.what());}
         catch(std::range_error const& e)
-            {detail::report_exception(out, "std::range_error:"     , e.what());}
+            {detail::herald_exception(out, "std::range_error:"     , e.what());}
         catch(std::overflow_error const& e)
-            {detail::report_exception(out, "std::overflow_error:"  , e.what());}
+            {detail::herald_exception(out, "std::overflow_error:"  , e.what());}
         catch(std::underflow_error const& e)
-            {detail::report_exception(out, "std::underflow_error:" , e.what());}
+            {detail::herald_exception(out, "std::underflow_error:" , e.what());}
         catch(std::logic_error const& e)
-            {detail::report_exception(out, "std::logic_error:"     , e.what());}
+            {detail::herald_exception(out, "std::logic_error:"     , e.what());}
         catch(std::runtime_error const& e)
-            {detail::report_exception(out, "std::runtime_error:"   , e.what());}
+            {detail::herald_exception(out, "std::runtime_error:"   , e.what());}
         catch(std::exception const& e)
-            {detail::report_exception(out, "std::exception:"       , e.what());}
+            {detail::herald_exception(out, "std::exception:"       , e.what());}
 
         catch(...)
-            {detail::report_exception(out, "unknown exception"     , "");}
+            {detail::herald_exception(out, "unknown exception"     , "");}
 
         if(exception_thrown) result = lmi_test::exit_exception_failure;
 

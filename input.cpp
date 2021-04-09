@@ -1,6 +1,6 @@
 // MVC Model for life-insurance illustrations.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -71,9 +71,6 @@ Input::Input()
     ,SeparateAccountRateType          {"Gross rate"}
     ,LoanRate                         {"0.06"}
 //    ,LoanRateType                     {""}
-    ,OverrideExperienceReserveRate    {"Yes"}
-    ,ExperienceReserveRate            {"0.02"}
-    ,ExperienceRatingInitialKFactor   {"1"}
 //    ,WithdrawToBasisThenLoan          {""}
 //    ,UseAverageOfAllFunds             {""}
 //    ,OverrideFundManagementFee        {""}
@@ -81,7 +78,6 @@ Input::Input()
 //    ,InputFundManagementFee           {""}
 //    ,RunOrder                         {""}
     ,NumberOfIdenticalLives           {"1"}
-//    ,UseExperienceRating              {""}
 //    ,UsePartialMortality              {""}
 //    ,PartialMortalityTable            {""}
 //    ,InsuredName                      {""}
@@ -146,8 +142,6 @@ Input::Input()
 //    ,InforceSpecAmtLoadBase           {""}
 //    ,InforceHoneymoonValue            {""}
 //    ,InforceCorporationStake          {""}
-//    ,InforceNetExperienceReserve      {""}
-//    ,InforceYtdNetCoiCharge           {""}
 //    ,InforceTaxBasis                  {""}
 //    ,InforceGlp                       {""}
 //    ,InforceCumulativeGlp             {""}
@@ -318,9 +312,6 @@ void Input::AscribeMembers()
     ascribe("SeparateAccountRateType"         , &Input::SeparateAccountRateType         );
     ascribe("LoanRate"                        , &Input::LoanRate                        );
     ascribe("LoanRateType"                    , &Input::LoanRateType                    );
-    ascribe("OverrideExperienceReserveRate"   , &Input::OverrideExperienceReserveRate   );
-    ascribe("ExperienceReserveRate"           , &Input::ExperienceReserveRate           );
-    ascribe("ExperienceRatingInitialKFactor"  , &Input::ExperienceRatingInitialKFactor  );
     ascribe("WithdrawToBasisThenLoan"         , &Input::WithdrawToBasisThenLoan         );
     ascribe("UseAverageOfAllFunds"            , &Input::UseAverageOfAllFunds            );
     ascribe("OverrideFundManagementFee"       , &Input::OverrideFundManagementFee       );
@@ -328,7 +319,6 @@ void Input::AscribeMembers()
     ascribe("InputFundManagementFee"          , &Input::InputFundManagementFee          );
     ascribe("RunOrder"                        , &Input::RunOrder                        );
     ascribe("NumberOfIdenticalLives"          , &Input::NumberOfIdenticalLives          );
-    ascribe("UseExperienceRating"             , &Input::UseExperienceRating             );
     ascribe("UsePartialMortality"             , &Input::UsePartialMortality             );
 ////    ascribe("PartialMortalityTable"           , &Input::PartialMortalityTable           ); // INPUT !! Not yet implemented.
     ascribe("InsuredName"                     , &Input::InsuredName                     );
@@ -393,8 +383,6 @@ void Input::AscribeMembers()
     ascribe("InforceSpecAmtLoadBase"          , &Input::InforceSpecAmtLoadBase          );
     ascribe("InforceHoneymoonValue"           , &Input::InforceHoneymoonValue           );
     ascribe("InforceCorporationStake"         , &Input::InforceCorporationStake         );
-    ascribe("InforceNetExperienceReserve"     , &Input::InforceNetExperienceReserve     );
-    ascribe("InforceYtdNetCoiCharge"          , &Input::InforceYtdNetCoiCharge          );
     ascribe("InforceTaxBasis"                 , &Input::InforceTaxBasis                 );
     ascribe("InforceGlp"                      , &Input::InforceGlp                      );
     ascribe("InforceCumulativeGlp"            , &Input::InforceCumulativeGlp            );

@@ -1,6 +1,6 @@
 // Create a PDF file from a ledger--wx interface.
 //
-// Copyright (C) 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -42,6 +42,7 @@
 #include "report_table.hpp"             // paginator
 #include "safely_dereference_as.hpp"
 #include "ssize_lmi.hpp"
+#include "wx_new.hpp"
 #include "wx_table_generator.hpp"
 
 #include <wx/pdfdc.h>
@@ -723,7 +724,7 @@ TAG_HANDLER_BEGIN(scaled_image, "IMG")
         if(image.IsOk())
             {
             m_WParser->GetContainer()->InsertCell
-                (new scaled_image_cell(image, src, scale_factor)
+                (new(wx) scaled_image_cell(image, src, scale_factor)
                 );
             }
 
@@ -1716,7 +1717,7 @@ TAG_HANDLER_BEGIN(numeric_summary_table, "NUMERIC_SUMMARY_TABLE")
         // the compiler from admonishing us.
         (void)&(tag);
 
-        m_WParser->GetContainer()->InsertCell(new numeric_summary_table_cell());
+        m_WParser->GetContainer()->InsertCell(new(wx) numeric_summary_table_cell());
 
         // This tag isn't supposed to have any inner contents, so return true
         // to not even try parsing it.
@@ -1831,7 +1832,7 @@ class page_with_tabular_report
 
     void pre_render() override
     {
-        table_gen_.reset(new wx_table_generator {create_table_generator()});
+        table_gen_.reset(new(wx) wx_table_generator {create_table_generator()});
         numbered_page::pre_render();
     }
 
@@ -2920,11 +2921,6 @@ class pdf_illustration_reg_d_group : public pdf_illustration
         // Define variables specific to this illustration.
 
         auto const& invar = ledger.GetLedgerInvariant();
-
-        add_variable
-            ("MecYearIs0"
-            ,invar.MecYear == 0
-            );
 
         // Add all the pages.
         numbered_page::start_numbering();

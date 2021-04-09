@@ -1,6 +1,6 @@
 // Death benefits.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -29,8 +29,13 @@
 #include <algorithm>                    // min()
 
 //============================================================================
-death_benefits::death_benefits(int length, yare_input const& yi)
-    :length_ {length}
+death_benefits::death_benefits
+    (int                     length
+    ,yare_input       const& yi
+    ,round_to<double> const& round_specamt
+    )
+    :length_        {length}
+    ,round_specamt_ {round_specamt}
 {
     // In the antediluvian branch, the vector in the input class
     // is padded to a greater length.
@@ -44,14 +49,14 @@ death_benefits::death_benefits(int length, yare_input const& yi)
     supplamt_.resize(length_);
     for(int j = 0; j < length_; ++j)
         {
-        dbopt_   [j] = yi.DeathBenefitOption[j];
-        specamt_ [j] = yi.SpecifiedAmount   [j];
-        supplamt_[j] = yi.SupplementalAmount[j];
+        dbopt_   [j] =                  yi.DeathBenefitOption[j];
+        specamt_ [j] = round_specamt_.c(yi.SpecifiedAmount   [j]);
+        supplamt_[j] = round_specamt_.c(yi.SupplementalAmount[j]);
         }
 }
 
 //============================================================================
-void death_benefits::set_specamt(double z, int from_year, int to_year)
+void death_benefits::set_specamt(currency z, int from_year, int to_year)
 {
 #if 0
     // Something like this would seem preferable, but it gives
@@ -62,6 +67,7 @@ void death_benefits::set_specamt(double z, int from_year, int to_year)
     LMI_ASSERT(                  to_year < length_);
     std::fill_n(specamt_.begin() + from_year, to_year - from_year, z);
 #endif // 0
+    z = round_specamt_.c(z);
     for(int j = from_year; j < std::min(length_, to_year); ++j)
         {
         specamt_[j] = z;
@@ -69,7 +75,7 @@ void death_benefits::set_specamt(double z, int from_year, int to_year)
 }
 
 //============================================================================
-void death_benefits::set_supplamt(double z, int from_year, int to_year)
+void death_benefits::set_supplamt(currency z, int from_year, int to_year)
 {
 #if 0
     // Something like this would seem preferable, but it gives
@@ -80,6 +86,7 @@ void death_benefits::set_supplamt(double z, int from_year, int to_year)
     LMI_ASSERT(                  to_year < length_);
     std::fill_n(supplamt_.begin() + from_year, to_year - from_year, z);
 #endif // 0
+    z = round_specamt_.c(z);
     for(int j = from_year; j < std::min(length_, to_year); ++j)
         {
         supplamt_[j] = z;

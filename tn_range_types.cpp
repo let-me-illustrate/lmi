@@ -1,6 +1,6 @@
 // Instantiation of specific tn_range types.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -46,7 +46,7 @@ template class tn_range<calendar_date, date_trammel           <calendar_date>>;
 // Explicitly instantiate trammel_base for every type actually used.
 // Otherwise, its specialized members (minimum_minimorum(), e.g.)
 // cause linker problems with gcc-5. See:
-//   http://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
+//   https://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
 
 template class trammel_base<calendar_date>;
 template class trammel_base<double       >;

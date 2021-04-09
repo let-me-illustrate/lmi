@@ -1,6 +1,6 @@
 // Interface to xmlwrapp.
 //
-// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -62,7 +62,7 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
             {
             throw std::runtime_error("File does not exist.");
             }
-        parser_.reset(new DomParser(filename.c_str()));
+        parser_.reset(::new DomParser(filename.c_str()));
         }
     catch(std::exception const& e)
         {
@@ -85,7 +85,7 @@ xml_lmi::dom_parser::dom_parser(char const* data, std::size_t length)
     try
         {
         error_context_ = "Unable to parse xml data: ";
-        parser_.reset(new DomParser(data, length));
+        parser_.reset(::new DomParser(data, length));
         }
     catch(std::exception const& e)
         {
@@ -120,7 +120,7 @@ xml_lmi::dom_parser::dom_parser(std::istream const& is)
             }
         std::string s;
         istream_to_string(is, s);
-        parser_.reset(new DomParser(s.c_str(), 1 + s.size()));
+        parser_.reset(::new DomParser(s.c_str(), 1 + s.size()));
         }
     catch(std::exception const& e)
         {
@@ -202,7 +202,7 @@ xml::element const& xml_lmi::dom_parser::root_node
 }
 
 xml_lmi::xml_document::xml_document(std::string const& root_node_name)
-    :document_ {new xml_lmi::Document(xml::element(root_node_name.c_str()))}
+    :document_ {::new xml_lmi::Document(xml::element(root_node_name.c_str()))}
 {
 }
 

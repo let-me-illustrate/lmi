@@ -2,7 +2,7 @@
 
 # For msw, download and build lmi and required libraries.
 
-# Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+# Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -25,7 +25,7 @@ set -vx
 
 # To get the latest version of this script:
 #
-# wget -N 'https://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
+# wget -N 'https://git.savannah.nongnu.org/cgit/lmi.git/plain/install_msw.sh'
 
 # To remove lmi prior to reinstalling with this script:
 #
@@ -34,7 +34,26 @@ set -vx
 stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
 
-lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+# Ensure that '/usr/share/misc/config.guess' is available for all
+# lmi scripts and makefiles. That's the closest thing to a canonical
+# location for it. If it's not there, then try to copy it from other
+# places where installing 'libtool' would have placed it on various
+# debian and redhat systems.
+
+config_guess_0=/usr/share/misc/config.guess
+config_guess_1=/usr/share/libtool/build-aux/config.guess
+config_guess_2=/usr/share/libtool/config/config.guess
+if   [ -f "$config_guess_0" ]
+  then printf '"config.guess" found in canonical location.\n'
+elif [ -f "$config_guess_1" ]
+  then cp -a "$config_guess_1" "$config_guess_0"
+elif [ -f "$config_guess_2" ]
+  then cp -a "$config_guess_2" "$config_guess_0"
+else
+  printf '"config.guess" not found: cannot continue.\n'; exit 3;
+fi
+
+lmi_build_type=$(/usr/share/misc/config.guess)
 
 # This should work with a rather minimal path.
 
@@ -42,8 +61,11 @@ minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
 
 case "$lmi_build_type" in
     (*-*-cygwin*)
-        java_path='/cygdrive/c/Program\ Files\ \(x86\)/Common\ Files/Oracle/Java/javapath'
-        minimal_path="$minimal_path:$(cygpath --sysdir):$java_path"
+        minimal_path="$minimal_path:$(cygpath --sysdir)"
+        java -version
+        ;;
+    (*)
+        java -version
         ;;
 esac
 
@@ -137,9 +159,9 @@ fi
 
 if [ "WSL" = "$platform" ]
 then
-    # Install/update packages.
+    # Install and upgrade all packages if any is missing.
     packages_list='autoconf automake bsdtar curl dos2unix doxygen
-      gdb git libtool make patch pkg-config rsync unzip wget
+      gdb git libgtk-3-dev libtool make patch pkg-config rsync unzip wget
       zip zsh g++-mingw-w64-i686'
 
     # Disable shellcheck warning about the need to double quote $packages_list:
@@ -174,8 +196,6 @@ then
     fi
 fi
 
-java -version
-
 if [ "/opt/lmi/src/lmi" = "$PWD" ]
 then
     inhibit_git_clone=1
@@ -200,15 +220,20 @@ then
     # by a corporate firewall, fall back on https. In case a firewall
     # inexplicably blocks the gnu.org domain, try Vadim's github clone
     # as a last resort.
-
-    git clone git://git.savannah.nongnu.org/lmi.git \
-      || git clone https://git.savannah.nongnu.org/r/lmi.git \
-      || git clone https://github.com/vadz/lmi.git
+    clone_opts="$coefficiency --recurse-submodules"
+    # 'git clone' options must not be double-quoted
+    # shellcheck disable=SC2086
+    git clone      $clone_opts git://git.savannah.nongnu.org/lmi.git \
+      || git clone $clone_opts https://git.savannah.nongnu.org/r/lmi.git \
+      || git clone $clone_opts https://github.com/let-me-illustrate/lmi.git
 fi
 
 cd /opt/lmi/src/lmi || printf 'Cannot cd\n'
 
 ./check_git_setup.sh
+
+# Get any new submodules that may have been added, even if nested.
+git submodule update "$coefficiency" --recursive --init
 
 if [ "Cygwin" = "$platform" ]
 then
@@ -241,11 +266,16 @@ make "$coefficiency" --output-sync=recurse -f install_miscellanea.make
 # This for-loop can iterate over as many toolchains as desired.
 # Make sure the current production architecture is built last, so that
 # it's the one installed to /opt/lmi/bin/ when this script ends.
+triplets="x86_64-w64-mingw32 i686-w64-mingw32"
+if [ "Cygwin" != "$platform" ] && [ "WSL" != "$platform" ]
+then
+    triplets="x86_64-pc-linux-gnu x86_64-w64-mingw32 i686-w64-mingw32"
+fi
 export LMI_COMPILER=gcc
 export LMI_TRIPLET
 # shellcheck disable=SC2043
 #for LMI_TRIPLET in i686-w64-mingw32 ;
-for LMI_TRIPLET in x86_64-w64-mingw32 i686-w64-mingw32 ;
+for LMI_TRIPLET in ${triplets} ;
 do
     # Set a minimal path for makefiles and scripts that are
     # designed to be independent of lmi's runtime path.
@@ -264,7 +294,7 @@ do
       printf 'No MinGW compiler for this triplet.\n'
     fi
 
-    make "$coefficiency" --output-sync=recurse -f install_libxml2_libxslt.make
+    ./install_xml_libraries.sh
 
     ./install_wx.sh
     ./install_wxpdfdoc.sh
@@ -277,6 +307,7 @@ do
     make "$coefficiency" --output-sync=recurse wx_config_check
     make "$coefficiency" --output-sync=recurse show_flags
     make "$coefficiency" --output-sync=recurse clean
+    make "$coefficiency" --output-sync=recurse uninstall
     make "$coefficiency" --output-sync=recurse install
 
     if [ "Cygwin" = "$platform" ]
@@ -337,10 +368,22 @@ for z in company_logo.png group_quote_banner.png ; do
 done
 
 # Configurable settings.
-#
-# Tailored to msw; for POSIX, s|C:|| and s|CMD /c|/bin/sh| (e.g.).
 
 mkdir --parents /opt/lmi/print
+
+# Like std::filesystem::root_name().
+root_name=C:
+
+# Don't use "C:" for wine: it designates the "wine prefix" directory.
+# "Z:" could be used instead, because that's where wine maps the
+# apparent root, but that wouldn't work with posix builds. Instead,
+# therefore, symlink the directories lmi uses as described in
+# 'README.schroot'.
+
+if [ "Cygwin" != "$platform" ] && [ "WSL" != "$platform" ]
+then
+    root_name=
+fi
 
 cat >/opt/lmi/data/configurable_settings.xml <<EOF
 <?xml version="1.0"?>
@@ -352,27 +395,16 @@ cat >/opt/lmi/data/configurable_settings.xml <<EOF
   <custom_input_1_filename>custom.inix</custom_input_1_filename>
   <custom_output_0_filename>custom.out0</custom_output_0_filename>
   <custom_output_1_filename>custom.out1</custom_output_1_filename>
-  <default_input_filename>C:/etc/opt/lmi/default.ill</default_input_filename>
+  <default_input_filename>${root_name}/etc/opt/lmi/default.ill</default_input_filename>
   <libraries_to_preload/>
   <offer_hobsons_choice>0</offer_hobsons_choice>
-  <print_directory>C:/opt/lmi/print</print_directory>
+  <print_directory>${root_name}/opt/lmi/print</print_directory>
   <seconds_to_pause_between_printouts>10</seconds_to_pause_between_printouts>
   <skin_filename>skin.xrc</skin_filename>
   <spreadsheet_file_extension>.tsv</spreadsheet_file_extension>
   <use_builtin_calculation_summary>1</use_builtin_calculation_summary>
 </configurable_settings>
 EOF
-
-# Remove "C:" for wine: it designates the "wine prefix" directory.
-# "Z:" could be used instead, because that's where wine maps the
-# apparent root, but that wouldn't work with posix builds. Instead,
-# therefore, symlink the directories lmi uses as described in
-# 'README.schroot'.
-
-if [ "Cygwin" != "$platform" ] && [ "WSL" != "$platform" ]
-then
-    sed -i /opt/lmi/data/configurable_settings.xml -e's/C://g'
-fi
 
 # Restore any preexisting source directory that had been preserved
 # above, renaming the pristine checkout that had replaced it.

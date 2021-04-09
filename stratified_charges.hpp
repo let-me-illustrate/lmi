@@ -1,6 +1,6 @@
 // Rates that depend on the amount they're multiplied by.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -25,9 +25,12 @@
 #include "config.hpp"
 
 #include "any_member.hpp"
+#include "cache_file_reads.hpp"
 #include "mc_enum_type_enums.hpp"
 #include "so_attributes.hpp"
 #include "xml_serializable.hpp"
+
+#include <boost/filesystem/path.hpp>
 
 #include <string>
 #include <vector>
@@ -97,13 +100,14 @@ class LMI_SO stratified_entity final
 /// Rates that depend upon the amount they're multiplied by.
 
 class LMI_SO stratified_charges final
-    :public  xml_serializable  <stratified_charges>
-    ,public  MemberSymbolTable <stratified_charges>
+    :public xml_serializable  <stratified_charges>
+    ,public MemberSymbolTable <stratified_charges>
+    ,public cache_file_reads  <stratified_charges>
 {
     friend class TierDocument;
 
   public:
-    stratified_charges(std::string const& filename);
+    explicit stratified_charges(fs::path const& filename);
     stratified_charges(stratified_charges const&);
     ~stratified_charges() override = default;
 
@@ -130,7 +134,7 @@ class LMI_SO stratified_charges final
     double tiered_asset_based_compensation  (double assets) const;
     double tiered_investment_management_fee (double assets) const;
 
-    double minimum_tiered_spread_for_7702() const;
+    double minimum_tiered_sepacct_load_for_7702() const;
 
     // Tiered premium tax in certain states.
     double tiered_premium_tax
@@ -208,11 +212,11 @@ class LMI_SO stratified_charges final
     stratified_entity TieredSDPremTax;
 };
 
-void LMI_SO load(stratified_charges      &, fs::path const&);
-void LMI_SO save(stratified_charges const&, fs::path const&);
+LMI_SO void load(stratified_charges      &, fs::path const&);
+LMI_SO void save(stratified_charges const&, fs::path const&);
 
-stratified_entity const& LMI_SO StatutoryAKPremTax();
-stratified_entity const& LMI_SO StatutoryDEPremTax();
-stratified_entity const& LMI_SO StatutorySDPremTax();
+LMI_SO stratified_entity const& StatutoryAKPremTax();
+LMI_SO stratified_entity const& StatutoryDEPremTax();
+LMI_SO stratified_entity const& StatutorySDPremTax();
 
 #endif // stratified_charges_hpp

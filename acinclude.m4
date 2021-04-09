@@ -1,6 +1,6 @@
 dnl configure.ac script for lmi, process with autoconf to create configure
 dnl
-dnl Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Vadim Zeitlin.
+dnl Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Vadim Zeitlin.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with this program; if not, write to the Free Software Foundation,
 dnl Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 dnl
-dnl http://savannah.nongnu.org/projects/lmi
+dnl https://savannah.nongnu.org/projects/lmi
 dnl email: <gchicares@sbcglobal.net>
 dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 

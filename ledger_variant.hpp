@@ -1,6 +1,6 @@
 // Ledger data that vary by basis.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -94,7 +94,6 @@ class LMI_SO LedgerVariant final
     std::vector<double> NetIntCredited;
     std::vector<double> GrossIntCredited;
     std::vector<double> LoanIntAccrued;
-    std::vector<double> NetCOICharge;
     std::vector<double> PolicyFee;
     std::vector<double> PremTaxLoad;
     std::vector<double> DacTaxLoad;
@@ -120,10 +119,8 @@ class LMI_SO LedgerVariant final
     std::vector<double> SurrChg;         // Not used yet.
     std::vector<double> TermPurchased;
     std::vector<double> BaseDeathBft;
-    std::vector<double> ProjectedCoiCharge;
 
-    // Forborne vectors.
-    std::vector<double> ExperienceReserve;
+    // Forborne vectors [none presently].
 
     // Nonscalable vectors.
     std::vector<double> MlySAIntRate;
@@ -134,7 +131,6 @@ class LMI_SO LedgerVariant final
     std::vector<double> AnnGAIntRate;
     std::vector<double> AnnHoneymoonValueRate;
     std::vector<double> AnnPostHoneymoonRate;
-    std::vector<double> KFactor;
 
     // Nonscalable scalars.
     double LapseMonth;

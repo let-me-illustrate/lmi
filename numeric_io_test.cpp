@@ -1,6 +1,6 @@
 // Decimal conversion between std::string and arithmetic types--unit test.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -23,13 +23,22 @@
 
 #include "numeric_io_cast.hpp"
 
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "ieee754.hpp"                  // infinity<>()
 #include "miscellany.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
+#if defined __clang__
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wsometimes-uninitialized"
+#endif // defined __clang__
+
 #include <boost/lexical_cast.hpp>
+
+#if defined __clang__
+#   pragma clang diagnostic pop
+#endif // defined __clang__
 
 #include <cmath>                        // exp()
 #include <limits>
@@ -57,28 +66,28 @@ void test_interconvertibility
     bool volatile is_exact = std::numeric_limits<T>::is_exact;
     if(is_exact)
         {
-        INVOKE_BOOST_TEST_EQUAL(v, t, file, line);
+        INVOKE_LMI_TEST_EQUAL(v, t, file, line);
         }
 
-    INVOKE_BOOST_TEST_EQUAL(v, numeric_io_cast<T>(s), file, line);
+    INVOKE_LMI_TEST_EQUAL(v, numeric_io_cast<T>(s), file, line);
 
     T t0 = t;
-    INVOKE_BOOST_TEST_EQUAL(s, numeric_io_cast<std::string>(t0   ), file, line);
-    INVOKE_BOOST_TEST_EQUAL(s, numeric_io_cast<std::string>(t0, s), file, line);
-    INVOKE_BOOST_TEST_EQUAL(v, numeric_io_cast             (s, t0), file, line);
+    INVOKE_LMI_TEST_EQUAL(s, numeric_io_cast<std::string>(t0   ), file, line);
+    INVOKE_LMI_TEST_EQUAL(s, numeric_io_cast<std::string>(t0, s), file, line);
+    INVOKE_LMI_TEST_EQUAL(v, numeric_io_cast             (s, t0), file, line);
 
     T const t1 = t;
-    INVOKE_BOOST_TEST_EQUAL(s, numeric_io_cast<std::string>(t1   ), file, line);
-    INVOKE_BOOST_TEST_EQUAL(s, numeric_io_cast<std::string>(t1, s), file, line);
-    INVOKE_BOOST_TEST_EQUAL(v, numeric_io_cast             (s, t1), file, line);
+    INVOKE_LMI_TEST_EQUAL(s, numeric_io_cast<std::string>(t1   ), file, line);
+    INVOKE_LMI_TEST_EQUAL(s, numeric_io_cast<std::string>(t1, s), file, line);
+    INVOKE_LMI_TEST_EQUAL(v, numeric_io_cast             (s, t1), file, line);
 
     T const& t2 = t;
-    INVOKE_BOOST_TEST_EQUAL(s, numeric_io_cast<std::string>(t2   ), file, line);
-    INVOKE_BOOST_TEST_EQUAL(s, numeric_io_cast<std::string>(t2, s), file, line);
-    INVOKE_BOOST_TEST_EQUAL(v, numeric_io_cast             (s, t2), file, line);
+    INVOKE_LMI_TEST_EQUAL(s, numeric_io_cast<std::string>(t2   ), file, line);
+    INVOKE_LMI_TEST_EQUAL(s, numeric_io_cast<std::string>(t2, s), file, line);
+    INVOKE_LMI_TEST_EQUAL(v, numeric_io_cast             (s, t2), file, line);
 
     std::string const s0 = s;
-    INVOKE_BOOST_TEST_EQUAL(v, numeric_io_cast(s0, t), file, line);
+    INVOKE_LMI_TEST_EQUAL(v, numeric_io_cast(s0, t), file, line);
 }
 
 void mete_two_thirds()
@@ -111,24 +120,24 @@ static_assert(std::numeric_limits<double>::is_iec559);
 int test_main(int, char*[])
 {
     int volatile z = 0; // Avoid "condition always true/false" warnings.
-    BOOST_TEST_EQUAL( z, floating_point_decimals( 0.0));
-    BOOST_TEST_EQUAL( z, floating_point_decimals(-0.0));
-    BOOST_TEST_EQUAL(15, floating_point_decimals( 1.0));
-    BOOST_TEST_EQUAL(15, floating_point_decimals(-1.0));
-    BOOST_TEST_EQUAL(12, floating_point_decimals( 1000.0));
-    BOOST_TEST_EQUAL(12, floating_point_decimals(-1000.0));
-    BOOST_TEST_EQUAL( 0, floating_point_decimals( 1000000000000000.0));
-    BOOST_TEST_EQUAL( 0, floating_point_decimals(-1000000000000000.0));
-    BOOST_TEST_EQUAL( 0, floating_point_decimals( 10000000000000000000.0));
-    BOOST_TEST_EQUAL( 0, floating_point_decimals(-10000000000000000000.0));
-    BOOST_TEST_EQUAL(35, floating_point_decimals( 0.00000000000000000001));
-    BOOST_TEST_EQUAL(35, floating_point_decimals(-0.00000000000000000001));
+    LMI_TEST_EQUAL( z, floating_point_decimals( 0.0));
+    LMI_TEST_EQUAL( z, floating_point_decimals(-0.0));
+    LMI_TEST_EQUAL(15, floating_point_decimals( 1.0));
+    LMI_TEST_EQUAL(15, floating_point_decimals(-1.0));
+    LMI_TEST_EQUAL(12, floating_point_decimals( 1000.0));
+    LMI_TEST_EQUAL(12, floating_point_decimals(-1000.0));
+    LMI_TEST_EQUAL( 0, floating_point_decimals( 1000000000000000.0));
+    LMI_TEST_EQUAL( 0, floating_point_decimals(-1000000000000000.0));
+    LMI_TEST_EQUAL( 0, floating_point_decimals( 10000000000000000000.0));
+    LMI_TEST_EQUAL( 0, floating_point_decimals(-10000000000000000000.0));
+    LMI_TEST_EQUAL(35, floating_point_decimals( 0.00000000000000000001));
+    LMI_TEST_EQUAL(35, floating_point_decimals(-0.00000000000000000001));
 
-    BOOST_TEST_EQUAL( 3, floating_point_decimals(-1000.0f));
-    BOOST_TEST_EQUAL(15, floating_point_decimals(-1000.0L));
+    LMI_TEST_EQUAL( 3, floating_point_decimals(-1000.0f));
+    LMI_TEST_EQUAL(15, floating_point_decimals(-1000.0L));
 
 #if !defined LMI_MSVCRT
-    BOOST_TEST_EQUAL( 0, floating_point_decimals(infinity<double>()));
+    LMI_TEST_EQUAL( 0, floating_point_decimals(infinity<double>()));
 #endif // !defined LMI_MSVCRT
 
     // Consider the number of exact decimal digits in the neighborhood
@@ -144,9 +153,9 @@ int test_main(int, char*[])
     // fewer exact (fractional) digit.
     //                                             000000000111111111
     //                                             123456789012345678
-    BOOST_TEST_EQUAL(16, floating_point_decimals(0.450359962737049596));
-    BOOST_TEST_EQUAL(16, floating_point_decimals(0.4503599627370495));
-    BOOST_TEST_EQUAL(16, floating_point_decimals(0.4503599627370496));
+    LMI_TEST_EQUAL(16, floating_point_decimals(0.450359962737049596));
+    LMI_TEST_EQUAL(16, floating_point_decimals(0.4503599627370495));
+    LMI_TEST_EQUAL(16, floating_point_decimals(0.4503599627370496));
     // The following test failed for como with mingw (although with a
     // value of 0.45036 it unsurprisingly succeeded). It was observed
     // to fail also with x86_64-linux-gnu, but only because of a
@@ -158,22 +167,22 @@ int test_main(int, char*[])
     // bit precision of x87 FPU.
     if(!RUNNING_ON_VALGRIND)
         {
-        BOOST_TEST_EQUAL(15, floating_point_decimals(0.4503599627370497));
+        LMI_TEST_EQUAL(15, floating_point_decimals(0.4503599627370497));
         }
 
-    BOOST_TEST_EQUAL(   "3.14", simplify_floating_point(    "3.14"));
-    BOOST_TEST_EQUAL(   "3.14", simplify_floating_point( "3.14000"));
-    BOOST_TEST_EQUAL(    "100", simplify_floating_point(    "100."));
-    BOOST_TEST_EQUAL(    "100", simplify_floating_point( "100.000"));
-    BOOST_TEST_EQUAL( "0.0001", simplify_floating_point(  "0.0001"));
-    BOOST_TEST_EQUAL( "0.0001", simplify_floating_point( "0.00010"));
-    BOOST_TEST_EQUAL(      "0", simplify_floating_point(     "0.0"));
-    BOOST_TEST_EQUAL(      "0", simplify_floating_point(      "0."));
-    BOOST_TEST_EQUAL(     "-0", simplify_floating_point(    "-0.0"));
-    BOOST_TEST_EQUAL(     "-0", simplify_floating_point(     "-0."));
-    BOOST_TEST_EQUAL(    "nan", simplify_floating_point(     "nan"));
-    BOOST_TEST_EQUAL(    "inf", simplify_floating_point(     "inf"));
-    BOOST_TEST_EQUAL(   "-inf", simplify_floating_point(    "-inf"));
+    LMI_TEST_EQUAL(   "3.14", simplify_floating_point(    "3.14"));
+    LMI_TEST_EQUAL(   "3.14", simplify_floating_point( "3.14000"));
+    LMI_TEST_EQUAL(    "100", simplify_floating_point(    "100."));
+    LMI_TEST_EQUAL(    "100", simplify_floating_point( "100.000"));
+    LMI_TEST_EQUAL( "0.0001", simplify_floating_point(  "0.0001"));
+    LMI_TEST_EQUAL( "0.0001", simplify_floating_point( "0.00010"));
+    LMI_TEST_EQUAL(      "0", simplify_floating_point(     "0.0"));
+    LMI_TEST_EQUAL(      "0", simplify_floating_point(      "0."));
+    LMI_TEST_EQUAL(     "-0", simplify_floating_point(    "-0.0"));
+    LMI_TEST_EQUAL(     "-0", simplify_floating_point(     "-0."));
+    LMI_TEST_EQUAL(    "nan", simplify_floating_point(     "nan"));
+    LMI_TEST_EQUAL(    "inf", simplify_floating_point(     "inf"));
+    LMI_TEST_EQUAL(   "-inf", simplify_floating_point(    "-inf"));
 
     // Also test strings that violate preconditions, just to make sure
     // they don't cause abrupt termination.
@@ -195,42 +204,42 @@ int test_main(int, char*[])
     double const volatile inf_dbl = std::numeric_limits<double>::infinity();
     std::string const inf_str = numeric_io_cast<std::string>(inf_dbl);
 
-    BOOST_TEST_EQUAL(inf_dbl, numeric_io_cast<double>(inf_str));
+    LMI_TEST_EQUAL(inf_dbl, numeric_io_cast<double>(inf_str));
 
     // These conversions fail for borland (FWIW), which prints
     // infinity as "+INF".
     try
         {
-        BOOST_TEST_EQUAL( inf_dbl, numeric_io_cast<double>( "inf"));
-        BOOST_TEST_EQUAL( inf_dbl, numeric_io_cast<double>( "INF"));
-        BOOST_TEST_EQUAL( inf_dbl, numeric_io_cast<double>( "infinity"));
-        BOOST_TEST_EQUAL( inf_dbl, numeric_io_cast<double>( "INFINITY"));
-        BOOST_TEST_EQUAL(-inf_dbl, numeric_io_cast<double>("-inf"));
-        BOOST_TEST_EQUAL(-inf_dbl, numeric_io_cast<double>("-INF"));
-        BOOST_TEST_EQUAL(-inf_dbl, numeric_io_cast<double>("-infinity"));
-        BOOST_TEST_EQUAL(-inf_dbl, numeric_io_cast<double>("-INFINITY"));
+        LMI_TEST_EQUAL( inf_dbl, numeric_io_cast<double>( "inf"));
+        LMI_TEST_EQUAL( inf_dbl, numeric_io_cast<double>( "INF"));
+        LMI_TEST_EQUAL( inf_dbl, numeric_io_cast<double>( "infinity"));
+        LMI_TEST_EQUAL( inf_dbl, numeric_io_cast<double>( "INFINITY"));
+        LMI_TEST_EQUAL(-inf_dbl, numeric_io_cast<double>("-inf"));
+        LMI_TEST_EQUAL(-inf_dbl, numeric_io_cast<double>("-INF"));
+        LMI_TEST_EQUAL(-inf_dbl, numeric_io_cast<double>("-infinity"));
+        LMI_TEST_EQUAL(-inf_dbl, numeric_io_cast<double>("-INFINITY"));
         }
     catch(...)
         {
         report_exception();
-        BOOST_TEST(false);
+        LMI_TEST(false);
         }
 
     // Interpreted as decimal, not as octal.
-    BOOST_TEST_EQUAL(77, numeric_io_cast<int>( "077"));
+    LMI_TEST_EQUAL(77, numeric_io_cast<int>( "077"));
 
     // Interpreted as valid decimal, not as invalid octal.
-    BOOST_TEST_EQUAL(99, numeric_io_cast<int>("0099"));
+    LMI_TEST_EQUAL(99, numeric_io_cast<int>("0099"));
 
-    BOOST_TEST_EQUAL( "Z" , numeric_io_cast<std::string>( "Z" ));
-    BOOST_TEST_EQUAL(" Z" , numeric_io_cast<std::string>(" Z" ));
-    BOOST_TEST_EQUAL( "Z ", numeric_io_cast<std::string>( "Z "));
-    BOOST_TEST_EQUAL(" Z ", numeric_io_cast<std::string>(" Z "));
+    LMI_TEST_EQUAL( "Z" , numeric_io_cast<std::string>( "Z" ));
+    LMI_TEST_EQUAL(" Z" , numeric_io_cast<std::string>(" Z" ));
+    LMI_TEST_EQUAL( "Z ", numeric_io_cast<std::string>( "Z "));
+    LMI_TEST_EQUAL(" Z ", numeric_io_cast<std::string>(" Z "));
 
-#if defined __GNUC__
+#if defined __GNUC__ && !defined __clang__
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wuseless-cast"
-#endif // defined __GNUC__
+#endif // defined __GNUC__ && !defined __clang__
 
     test_interconvertibility(static_cast<         char>(   1), "1", __FILE__, __LINE__);
     test_interconvertibility(static_cast<         char>('\1'), "1", __FILE__, __LINE__);
@@ -251,14 +260,14 @@ int test_main(int, char*[])
     // correspond to the string literal "32", but never to a blank
     // string.
     //
-    BOOST_TEST_UNEQUAL(" ", numeric_io_cast<std::string>(' '));
+    LMI_TEST_UNEQUAL(" ", numeric_io_cast<std::string>(' '));
     //
     // Furthermore, these expressions should throw because strtol
     // doesn't consider "A" valid.
     //
-    BOOST_TEST_THROW(numeric_io_cast<char  >("A"), std::invalid_argument, "");
-    BOOST_TEST_THROW(numeric_io_cast<int   >("A"), std::invalid_argument, "");
-    BOOST_TEST_THROW(numeric_io_cast<double>("A"), std::invalid_argument, "");
+    LMI_TEST_THROW(numeric_io_cast<char  >("A"), std::invalid_argument, "");
+    LMI_TEST_THROW(numeric_io_cast<int   >("A"), std::invalid_argument, "");
+    LMI_TEST_THROW(numeric_io_cast<double>("A"), std::invalid_argument, "");
 
     test_interconvertibility(bool(1), "1", __FILE__, __LINE__);
     test_interconvertibility(bool(0), "0", __FILE__, __LINE__);
@@ -285,41 +294,41 @@ int test_main(int, char*[])
     test_interconvertibility(      0.0L,    "0", __FILE__, __LINE__);
     test_interconvertibility(      1.5L,  "1.5", __FILE__, __LINE__);
     test_interconvertibility(     -2.5L, "-2.5", __FILE__, __LINE__);
-    BOOST_TEST_EQUAL(numeric_io_cast<long double>("3.36210314311209350626e-4932"), std::numeric_limits<long double>::min());
+    LMI_TEST_EQUAL(numeric_io_cast<long double>("3.36210314311209350626e-4932"), std::numeric_limits<long double>::min());
 #endif // !defined LMI_MSVCRT
 
-#if defined __GNUC__
+#if defined __GNUC__ && !defined __clang__
 #   pragma GCC diagnostic pop
-#endif // defined __GNUC__
+#endif // defined __GNUC__ && !defined __clang__
 
     test_interconvertibility(std::string("  as  df  "), "  as  df  ", __FILE__, __LINE__);
     // The converse
     //   test_interconvertibility("  as  df  ", std::string("  as  df  "),...
     // is not supported: it seems fraudulent.
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (numeric_io_cast<double>(std::string("0.333 "))
         ,std::invalid_argument
         ,""
         );
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (numeric_io_cast<double>(std::string("0.333.777#3"))
         ,std::invalid_argument
         ,""
         );
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (numeric_io_cast<double>(std::string("xxx"))
         ,std::invalid_argument
         ,""
         );
-    BOOST_TEST_THROW(numeric_io_cast<int>   ( "1.1"), std::invalid_argument, "");
-    BOOST_TEST_THROW(numeric_io_cast<int>   ( "1e1"), std::invalid_argument, "");
-    BOOST_TEST_THROW(numeric_io_cast<bool>  ("true"), std::invalid_argument, "");
-    BOOST_TEST_THROW(numeric_io_cast<int>   (    ""), std::invalid_argument, "");
-    BOOST_TEST_THROW(numeric_io_cast<double>(    ""), std::invalid_argument, "");
-    BOOST_TEST_THROW(numeric_io_cast<double>(  "1e"), std::invalid_argument, "");
+    LMI_TEST_THROW(numeric_io_cast<int>   ( "1.1"), std::invalid_argument, "");
+    LMI_TEST_THROW(numeric_io_cast<int>   ( "1e1"), std::invalid_argument, "");
+    LMI_TEST_THROW(numeric_io_cast<bool>  ("true"), std::invalid_argument, "");
+    LMI_TEST_THROW(numeric_io_cast<int>   (    ""), std::invalid_argument, "");
+    LMI_TEST_THROW(numeric_io_cast<double>(    ""), std::invalid_argument, "");
+    LMI_TEST_THROW(numeric_io_cast<double>(  "1e"), std::invalid_argument, "");
 
-    BOOST_TEST_THROW(numeric_io_cast<long double>(""), std::invalid_argument, "");
+    LMI_TEST_THROW(numeric_io_cast<long double>(""), std::invalid_argument, "");
 
 #if defined __MINGW32__ && defined __GNUC__ && LMI_GCC_VERSION < 30404
     std::cerr
@@ -329,38 +338,38 @@ int test_main(int, char*[])
         ;
 #endif // MinGW gcc version prior to 3.4.4 .
 
-    BOOST_TEST_THROW(numeric_io_cast<long double>(  "1e"), std::invalid_argument, "");
+    LMI_TEST_THROW(numeric_io_cast<long double>(  "1e"), std::invalid_argument, "");
 
     // This shouldn't even throw, because adequate compilers detect
     // the error at compile time:
-//    BOOST_TEST_THROW(numeric_io_cast<double*>("0"), std::invalid_argument, "");
+//    LMI_TEST_THROW(numeric_io_cast<double*>("0"), std::invalid_argument, "");
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (numeric_io_cast<std::string>(static_cast<char const*>(nullptr))
         ,std::runtime_error
         ,"Cannot convert (char const*)(0) to std::string."
         );
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (numeric_io_cast<unsigned int>(static_cast<char const*>(nullptr))
         ,std::runtime_error
         ,"Cannot convert (char const*)(0) to number."
         );
 
-    BOOST_TEST_EQUAL("1", numeric_io_cast<std::string>(true));
-    BOOST_TEST_EQUAL("0", numeric_io_cast<std::string>(false));
-    BOOST_TEST_EQUAL(  0, numeric_io_cast<double>("0"));
-    BOOST_TEST_EQUAL( "", numeric_io_cast<std::string>(""));
-    BOOST_TEST_EQUAL(" ", numeric_io_cast<std::string>(" "));
+    LMI_TEST_EQUAL("1", numeric_io_cast<std::string>(true));
+    LMI_TEST_EQUAL("0", numeric_io_cast<std::string>(false));
+    LMI_TEST_EQUAL(  0, numeric_io_cast<double>("0"));
+    LMI_TEST_EQUAL( "", numeric_io_cast<std::string>(""));
+    LMI_TEST_EQUAL(" ", numeric_io_cast<std::string>(" "));
 
-    BOOST_TEST_EQUAL(  0, numeric_io_cast<double>("0."));
-    BOOST_TEST_EQUAL(  1, numeric_io_cast<double>("1."));
-    BOOST_TEST_EQUAL(  0, numeric_io_cast<double>(".0"));
-    BOOST_TEST_EQUAL(  1, numeric_io_cast<double>("1"));
-    BOOST_TEST_EQUAL(  1, numeric_io_cast<double>("1e0"));
-    BOOST_TEST_EQUAL(  1, numeric_io_cast<double>("1.e0"));
-    BOOST_TEST_EQUAL(  1, numeric_io_cast<double>("1.0e0"));
-    BOOST_TEST_EQUAL(  1, numeric_io_cast<double>("0.1e1"));
-    BOOST_TEST_EQUAL(  1, numeric_io_cast<double>(".1e1"));
+    LMI_TEST_EQUAL(  0, numeric_io_cast<double>("0."));
+    LMI_TEST_EQUAL(  1, numeric_io_cast<double>("1."));
+    LMI_TEST_EQUAL(  0, numeric_io_cast<double>(".0"));
+    LMI_TEST_EQUAL(  1, numeric_io_cast<double>("1"));
+    LMI_TEST_EQUAL(  1, numeric_io_cast<double>("1e0"));
+    LMI_TEST_EQUAL(  1, numeric_io_cast<double>("1.e0"));
+    LMI_TEST_EQUAL(  1, numeric_io_cast<double>("1.0e0"));
+    LMI_TEST_EQUAL(  1, numeric_io_cast<double>("0.1e1"));
+    LMI_TEST_EQUAL(  1, numeric_io_cast<double>(".1e1"));
 
     test_interconvertibility(std::exp(1.0), "2.718281828459045", __FILE__, __LINE__);
 
@@ -385,15 +394,15 @@ int test_main(int, char*[])
     test_interconvertibility((1.0 / 3.0), "0.3333333333333333", __FILE__, __LINE__);
     test_interconvertibility((2.0 / 3.0), "0.666666666666667" , __FILE__, __LINE__);
 
-    BOOST_TEST_EQUAL  ("1"  , numeric_io_cast<std::string>(1.0 + 2.2204460492503131e-16));
-    BOOST_TEST_EQUAL  ("0.5", numeric_io_cast<std::string>(0.5 + 2.2204460492503131e-16));
-    BOOST_TEST_UNEQUAL("0.4", numeric_io_cast<std::string>(0.4 + 2.2204460492503131e-16));
-    BOOST_TEST_UNEQUAL("0.1", numeric_io_cast<std::string>(0.1 + 2.2204460492503131e-16));
+    LMI_TEST_EQUAL  ("1"  , numeric_io_cast<std::string>(1.0 + 2.2204460492503131e-16));
+    LMI_TEST_EQUAL  ("0.5", numeric_io_cast<std::string>(0.5 + 2.2204460492503131e-16));
+    LMI_TEST_UNEQUAL("0.4", numeric_io_cast<std::string>(0.4 + 2.2204460492503131e-16));
+    LMI_TEST_UNEQUAL("0.1", numeric_io_cast<std::string>(0.1 + 2.2204460492503131e-16));
 
     // 1 +/- epsilon must be formatted as apparent unity.
     bool volatile eq = (1.0 + 2.2204460492503131e-16 == 1.00000000000000022204460492503131);
-    BOOST_TEST(eq);
-    BOOST_TEST_EQUAL("1", numeric_io_cast<std::string>(1.00000000000000022204460492503131));
+    LMI_TEST(eq);
+    LMI_TEST_EQUAL("1", numeric_io_cast<std::string>(1.00000000000000022204460492503131));
     // Consider:
     //             1111111
     //   1 234567890123456
@@ -408,12 +417,12 @@ int test_main(int, char*[])
     // Adding three times epsilon would change the sixteenth digit,
     // however. Therefore, in the neighborhood of unity, we have a
     // resolution of two ulps but not three.
-    BOOST_TEST_EQUAL  ("1", numeric_io_cast<std::string>(1.0 + 1.0 * 2.2204460492503131e-16));
-    BOOST_TEST_EQUAL  ("1", numeric_io_cast<std::string>(1.0 + 2.0 * 2.2204460492503131e-16));
-    BOOST_TEST_UNEQUAL("1", numeric_io_cast<std::string>(1.0 + 3.0 * 2.2204460492503131e-16));
-    BOOST_TEST_UNEQUAL("1", numeric_io_cast<std::string>(1.0 - 3.0 * 2.2204460492503131e-16));
-    BOOST_TEST_EQUAL  ("1", numeric_io_cast<std::string>(1.0 - 2.0 * 2.2204460492503131e-16));
-    BOOST_TEST_EQUAL  ("1", numeric_io_cast<std::string>(1.0 - 1.0 * 2.2204460492503131e-16));
+    LMI_TEST_EQUAL  ("1", numeric_io_cast<std::string>(1.0 + 1.0 * 2.2204460492503131e-16));
+    LMI_TEST_EQUAL  ("1", numeric_io_cast<std::string>(1.0 + 2.0 * 2.2204460492503131e-16));
+    LMI_TEST_UNEQUAL("1", numeric_io_cast<std::string>(1.0 + 3.0 * 2.2204460492503131e-16));
+    LMI_TEST_UNEQUAL("1", numeric_io_cast<std::string>(1.0 - 3.0 * 2.2204460492503131e-16));
+    LMI_TEST_EQUAL  ("1", numeric_io_cast<std::string>(1.0 - 2.0 * 2.2204460492503131e-16));
+    LMI_TEST_EQUAL  ("1", numeric_io_cast<std::string>(1.0 - 1.0 * 2.2204460492503131e-16));
 
     return 0;
 }

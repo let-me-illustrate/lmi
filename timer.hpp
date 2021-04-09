@@ -1,6 +1,6 @@
 // Measure elapsed time to high resolution.
 //
-// Copyright (C) 1998, 2000, 2001, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2000, 2001, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -47,7 +47,7 @@ void lmi_sleep(int seconds);
 class LMI_SO Timer
 {
     friend class TimerTest;
-    template<typename F> friend class AliquotTimer;
+    template<typename> friend class AliquotTimer;
 
   public:
     Timer();
@@ -94,7 +94,7 @@ class LMI_SO Timer
 /// due, e.g., to cache effects); execute the operation repeatedly,
 /// until the stopping criterion is satisfied; and then record the
 /// minimum measured time, which is more useful than the mean--see:
-///   http://lists.nongnu.org/archive/html/lmi/2017-05/msg00005.html
+///   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00005.html
 /// The stopping criterion is that both:
 ///  - at least one percent of the allotted time has been spent; and
 ///  - either all allotted time has been used, or the repetition count

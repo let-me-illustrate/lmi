@@ -1,6 +1,6 @@
 // Life insurance illustrations: command-line interface.
 //
-// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -29,6 +29,7 @@
 #include "getopt.hpp"
 #include "global_settings.hpp"
 #include "gpt_server.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "illustrator.hpp"
 #include "input.hpp"
 #include "ledger.hpp"
@@ -51,13 +52,14 @@
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <algorithm>
-#include <cmath>
+#include <algorithm>                    // for_each()
+#include <cmath>                        // fabs()
 #include <cstdio>                       // printf()
 #include <functional>                   // bind()
 #include <ios>
 #include <iostream>
 #include <ostream>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -74,21 +76,23 @@ void self_test()
 
     illustrator z(mce_emit_nothing);
 
-    Input IP;
-    IP["Gender"            ] = "Male";
-    IP["Smoking"           ] = "Nonsmoker";
-    IP["UnderwritingClass" ] = "Standard";
-    IP["GeneralAccountRate"] = "0.06";
-    IP["Payment"           ] = "20000.0";
-    IP["SpecifiedAmount"   ] = "1000000.0";
-    IP.RealizeAllSequenceInput();
+    Input naic_no_solve;
+    naic_no_solve["ProductName"       ] = "sample2naic";
+    naic_no_solve["SolveType"         ] = "No solve";
+    naic_no_solve["Gender"            ] = "Male";
+    naic_no_solve["Smoking"           ] = "Nonsmoker";
+    naic_no_solve["UnderwritingClass" ] = "Standard";
+    naic_no_solve["GeneralAccountRate"] = "0.06";
+    naic_no_solve["Payment"           ] = "20000.0";
+    naic_no_solve["SpecifiedAmount"   ] = "1000000.0";
+    naic_no_solve["SolveToWhich"      ] = "Maturity";
+    naic_no_solve.RealizeAllSequenceInput();
 
     double expected_value = 0.0;
     double observed_value = 0.0;
 
-    IP["SolveType"] = "No solve";
     expected_value = 6305652.52;
-    z("CLI_selftest", IP);
+    z("CLI_selftest", naic_no_solve);
     observed_value = z.principal_ledger()->GetCurrFull().AcctVal.back();
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
@@ -102,11 +106,10 @@ void self_test()
             ;
         }
 
-    IP["SolveToWhich"] = "Maturity";
-
-    IP["SolveType"] = "Specified amount";
+    Input naic_solve_specamt {naic_no_solve};
+    naic_solve_specamt["SolveType"] = "Specified amount";
     expected_value = 1879139.14;
-    z("CLI_selftest", IP);
+    z("CLI_selftest", naic_solve_specamt);
     observed_value = z.principal_ledger()->GetCurrFull().AcctVal.back();
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
@@ -120,9 +123,10 @@ void self_test()
             ;
         }
 
-    IP["SolveType"] = "Employee premium";
+    Input naic_solve_ee_prem {naic_no_solve};
+    naic_solve_ee_prem["SolveType"] = "Employee premium";
     expected_value = 10673.51;
-    z("CLI_selftest", IP);
+    z("CLI_selftest", naic_solve_ee_prem);
     observed_value = z.principal_ledger()->GetLedgerInvariant().EeGrossPmt.front();
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
@@ -136,24 +140,74 @@ void self_test()
             ;
         }
 
+    Input finra_no_solve      {naic_no_solve};
+    Input finra_solve_specamt {naic_solve_specamt};
+    Input finra_solve_ee_prem {naic_solve_ee_prem};
+    finra_no_solve     ["ProductName"] = "sample2finra";
+    finra_solve_specamt["ProductName"] = "sample2finra";
+    finra_solve_ee_prem["ProductName"] = "sample2finra";
+
 #if defined _GLIBCXX_DEBUG
     std::cout << "Timing test skipped: takes too long in debug mode" << std::endl;
 #else  // !defined _GLIBCXX_DEBUG
     std::cout
-        << "Test solve speed: "
-        << TimeAnAliquot(std::bind(z, "CLI_selftest", IP), 0.1)
-        << '\n'
+        << "Test speed:"
+        << "\n  naic, no solve      : "
+        << TimeAnAliquot(std::bind(z, "CLI_selftest", naic_no_solve))
+        << "\n  naic, specamt solve : "
+        << TimeAnAliquot(std::bind(z, "CLI_selftest", naic_solve_specamt))
+        << "\n  naic, ee prem solve : "
+        << TimeAnAliquot(std::bind(z, "CLI_selftest", naic_solve_ee_prem))
+        << "\n  finra, no solve     : "
+        << TimeAnAliquot(std::bind(z, "CLI_selftest", finra_no_solve))
+        << "\n  finra, specamt solve: "
+        << TimeAnAliquot(std::bind(z, "CLI_selftest", finra_solve_specamt))
+        << "\n  finra, ee prem solve: "
+        << TimeAnAliquot(std::bind(z, "CLI_selftest", finra_solve_ee_prem))
+        << std::endl
         ;
 #endif // !defined _GLIBCXX_DEBUG
 }
 
-/// Run self-test repeatedly (intended for use with 'gprof').
+/// Validate products.
+///
+/// Run an illustration for every product in every state (whether
+/// approved there or not), reporting any conflict in parameters
+/// that would make that impossible. See:
+///   https://lists.nongnu.org/archive/html/lmi/2020-11/msg00020.html
 
-void profile()
+void product_test()
 {
-    for(int j = 0; j < 10; ++j)
+    // Allow unapproved states.
+    global_settings::instance().set_regression_testing(true);
+
+    // Pay zero and don't solve, to make this test go faster.
+    Input input;
+    input["Payment"           ] = "0.0";
+    input["SolveType"         ] = "No solve";
+
+    illustrator z(mce_emit_nothing);
+
+    ce_product_name c;
+    std::vector<std::string> const& p = c.all_strings();
+    std::vector<std::string> const& s = all_strings_state();
+    for(auto const& i : p)
         {
-        self_test();
+        std::cout << "Testing product " << i << std::endl;
+        input["ProductName"        ] = i;
+        for(auto const& j : s)
+            {
+            input["StateOfJurisdiction"] = j;
+            try
+                {
+                z("eraseme", input);
+                }
+            catch(...)
+                {
+                std::cout << i << ", " << j << ":" << std::endl;
+                report_exception();
+                }
+            }
         }
 }
 
@@ -173,7 +227,7 @@ void process_command_line(int argc, char* argv[])
         {"file"         ,REQD_ARG ,nullptr ,'f' ,nullptr ,"input file to run"},
         {"help"         ,NO_ARG   ,nullptr ,'h' ,nullptr ,"display this help and exit"},
         {"license"      ,NO_ARG   ,nullptr ,'l' ,nullptr ,"display license and exit"},
-        {"profile"      ,NO_ARG   ,nullptr ,'o' ,nullptr ,"set up for profiling and exit"},
+        {"product_test" ,NO_ARG   ,nullptr ,'o' ,nullptr ,"validate products and exit"},
         {"print_db"     ,NO_ARG   ,nullptr ,'p' ,nullptr ,"print products and exit"},
         {"selftest"     ,NO_ARG   ,nullptr ,'s' ,nullptr ,"perform self test and exit"},
         {"test_db"      ,NO_ARG   ,nullptr ,'t' ,nullptr ,"test products and exit"},
@@ -368,7 +422,7 @@ void process_command_line(int argc, char* argv[])
 
             case 'o':
                 {
-                profile();
+                product_test();
                 return;
                 }
                 break;

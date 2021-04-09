@@ -1,5 +1,5 @@
 {{!
-    Copyright (C) 2017, 2018, 2019, 2020 Gregory W. Chicares.
+    Copyright (C) 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -14,7 +14,7 @@
     along with this program; if not, write to the Free Software Foundation,
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 
-    http://savannah.nongnu.org/projects/lmi
+    https://savannah.nongnu.org/projects/lmi
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 }}
@@ -29,37 +29,16 @@
 {{GuarMortalityFootnote}}
 </p>
 
-<!-- PDF !! LoanFootnote -->
 <p>
-The loan interest rate may be fixed or adjustable as elected
-by the policy owner.
+    {{LoanFootnote}}
 </p>
 
 <p>
-{{#UseExperienceRating}}
     {{ExpRatingFootnote}}
-{{/UseExperienceRating}}
-{{^UseExperienceRating}}
-    The illustration does not assume any mortality
-    experience rating.
-{{/UseExperienceRating}}
 </p>
 
-<!-- PDF !! FnPpMemorandum -->
 <p>
-<b>
-This illustration may only be used when preceded or accompanied
-by the offering memorandum for {{PolicyLegalName}} ({{PolicyMktgName}})
-insurance contract and its underlying investment choices.
-For a complete listing of the underlying investment choices,
-please refer to the offering memorandum. Before purchasing
-a variable life insurance contract, investors should
-carefully consider the investment objectives, risks, charges
-and expenses of the variable life insurance contract
-and its underlying investment choices. Please read
-the offering memorandum carefully before investing
-or sending money.
-</b>
+    <b>{{FnPpMemorandum}}</b>
 </p>
 
 {{#HasTerm}}
@@ -78,35 +57,7 @@ or sending money.
 
 {{FnPartialMortality}}
 
-<!-- PDF !! MortalityBlendFootnote -->
-{{#GenderBlended}}
-    <p>
-    {{MortalityBlendFootnote}}
-    Custom blend assumptions:
-    {{#SmokerBlended}}
-        nontobacco = {{NonsmokerProportion}};
-    {{/SmokerBlended}}
-    {{^SmokerBlended}}
-        no blending by tobacco use;
-    {{/SmokerBlended}}
-    male = {{MaleProportion}}.
-    </p>
-{{/GenderBlended}}
-{{^GenderBlended}}
-    {{#SmokerBlended}}
-        <p>
-        {{MortalityBlendFootnote}}
-        Custom blend assumptions:
-        nontobacco = {{NonsmokerProportion}};
-        {{#GenderBlended}}
-            male = {{MaleProportion}}.
-        {{/GenderBlended}}
-        {{^GenderBlended}}
-            no blending by gender.
-        {{/GenderBlended}}
-      </p>
-    {{/SmokerBlended}}
-{{/GenderBlended}}
+{{MortalityBlendFootnote}}
 
 <p>
 The state of issue is {{StateOfJurisdiction}}.
@@ -120,39 +71,14 @@ SEPARATE ACCOUNT
 {{HypotheticalRatesFootnote}}
 </p>
 
-<!-- PDF !! FnImf -->
 <p>
-This illustration is based on total Separate Account fund expenses
-of {{TotalIMF[0]}}.
+    {{FnImf}}
 </p>
 
-<!-- PDF !! FnNotTaxAdvice -->
 <p>
-<b>
-This illustration may not reflect your actual tax
-and accounting consequences and is not intended as tax advice
-nor may it be relied on for purposes of avoiding any federal
-tax penalties. Consult professional tax advisors for tax advice.
-</b>
+    {{FnNotTaxAdvice2}}
 </p>
 
-<!-- PDF !! PlacementAgentFootnote -->
 <p>
-Placement Agents:
-{{CoUnderwriter}} serves as the
-placement agent for contracts sold by its registered
-representatives.
-&nbsp;{{MainUnderwriter}}
-serves as the placement agent for contracts sold by registered
-representatives of other broker-dealers that have entered into
-distribution agreements with
-&nbsp;{{MainUnderwriter}}.
-</p>
-<p>
-{{CoUnderwriter}} and
-&nbsp;{{MainUnderwriter}} are
-subsidiaries of {{InsCoName}}
-({{InsCoShortName}}) and are
-located at {{InsCoStreet}}.
-</p>
+    {{PlacementAgentFootnote}}
 </p>

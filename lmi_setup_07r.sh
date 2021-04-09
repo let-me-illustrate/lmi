@@ -2,7 +2,7 @@
 
 # Create a chroot for cross-building "Let me illustrate...".
 #
-# Copyright (C) 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -17,11 +17,12 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 . ./lmi_setup_inc.sh
+# shellcheck disable=SC1091
 . /tmp/schroot_env
 
 set -evx
@@ -48,12 +49,14 @@ sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /etc/zlogout
 yum --assumeyes update  ca-certificates curl nss-pem wget
 yum --assumeyes install ca-certificates curl nss-pem wget
 
-# Install "EPEL" by using 'rpm' directly [historical]. See:
+# Install "EPEL", which is required to install 'debootstrap' and
+# 'schroot' later on RHEL--see:
 #   https://lists.nongnu.org/archive/html/lmi/2019-09/msg00037.html
-#rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-# Instead, use 'yum' to install "EPEL". Both of the following lines
-# are required to install 'debootstrap' and 'schroot' later on RHEL:
 yum --assumeyes install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm || true
+# This command is recommended for RHEL-7, as EPEL packages may depend
+# on it; but it's allowed to fail, because of a corporate server that
+# allows access only to its own customized RHEL stuff:
+subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extras-rpms"  --enable "rhel-ha-for-rhel-*-server-rpms" || true
 yum --assumeyes install epel-release
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')

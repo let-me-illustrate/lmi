@@ -1,6 +1,6 @@
 // Product data representable as strings.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -25,8 +25,11 @@
 #include "config.hpp"
 
 #include "any_member.hpp"
+#include "cache_file_reads.hpp"
 #include "so_attributes.hpp"
 #include "xml_serializable.hpp"
+
+#include <boost/filesystem/path.hpp>
 
 #include <string>
 
@@ -79,6 +82,7 @@ template<> struct deserialized<product_data>
 class LMI_SO product_data
     :public xml_serializable  <product_data>
     ,public MemberSymbolTable <product_data>
+    ,public cache_file_reads  <product_data>
 {
     friend class BasicValues; // For antediluvian fork only.
     friend class PolicyDocument;
@@ -87,6 +91,7 @@ class LMI_SO product_data
     typedef deserialized<product_data>::value_type value_type;
 
   public:
+    explicit product_data(fs::path const& product_filename);
     explicit product_data(std::string const& product_name);
     ~product_data() override;
 
@@ -142,6 +147,7 @@ class LMI_SO product_data
     // Names of files that contain other product data.
     glossed_string DatabaseFilename;
     glossed_string FundFilename;
+    glossed_string LingoFilename;
     glossed_string RoundingFilename;
     glossed_string TierFilename;
 
@@ -168,8 +174,6 @@ class LMI_SO product_data
     glossed_string GuarSpecAmtLoadFilename;
 
     // Essential strings describing the policy and company.
-    glossed_string PolicyForm;
-    glossed_string PolicyFormAlternative;
     glossed_string PolicyMktgName;
     glossed_string PolicyLegalName;
     glossed_string InsCoShortName;
@@ -211,8 +215,6 @@ class LMI_SO product_data
     glossed_string UwClassStandard;
     glossed_string UwClassRated;
     glossed_string UwClassUltra;
-
-    // TODO ?? Most of the following are missing from the GUI.
 
     // Ledger column definitions.
     glossed_string AccountValueFootnote;
@@ -295,7 +297,6 @@ class LMI_SO product_data
     glossed_string FlexiblePremiumFootnote;
     glossed_string GuaranteedValuesFootnote;
     glossed_string CreditingRateFootnote;
-    glossed_string DefnGuarGenAcctRate;
     glossed_string GrossRateFootnote;
     glossed_string NetRateFootnote;
     glossed_string MecFootnote;
@@ -349,6 +350,7 @@ class LMI_SO product_data
     glossed_string Fn1035Charge;
     glossed_string FnMecExtraWarning;
     glossed_string FnNotTaxAdvice;
+    glossed_string FnNotTaxAdvice2;
     glossed_string FnImf;
     glossed_string FnCensus;
     glossed_string FnDacTax;
@@ -362,6 +364,7 @@ class LMI_SO product_data
     glossed_string FnGuaranteedPremium;
     glossed_string FnOmnibusDisclaimer;
     glossed_string FnInitialDbo;
+    glossed_string DefnGuarGenAcctRate;
     glossed_string DefnAV;
     glossed_string DefnCSV;
     glossed_string DefnMec;
@@ -369,7 +372,9 @@ class LMI_SO product_data
     glossed_string DefnSpecAmt;
 };
 
-void LMI_SO load(product_data      &, fs::path const&);
-void LMI_SO save(product_data const&, fs::path const&);
+LMI_SO std::string filename_from_product_name(std::string const&);
+
+LMI_SO void load(product_data      &, fs::path const&);
+LMI_SO void save(product_data const&, fs::path const&);
 
 #endif // product_data_hpp

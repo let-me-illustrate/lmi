@@ -1,6 +1,6 @@
 // Rounding--unit test.
 //
-// Copyright (C) 2001, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2001, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -23,6 +23,7 @@
 
 #include "round_to.hpp"
 
+#include "currency.hpp"                 // currency::cents_digits
 #include "fenv_lmi.hpp"
 #include "miscellany.hpp"               // floating_rep()
 #include "test_tools.hpp"
@@ -110,8 +111,42 @@ void set_hardware_rounding_mode(e_ieee754_rounding mode, bool synchronize)
         }
 }
 
+class round_to_test
+{
+  public:
+    static void test();
+
+  private:
+    static void test_fundamentals();
+    static void test_all_modes(bool synchronize);
+    static void test_rounding();
+    static void test_various_styles
+        (long double    unrounded
+        ,long double    expected
+        );
+    static void test_various_decimals
+        (rounding_style style
+        ,long double    unrounded
+        ,long double    expected
+        );
+    static void test_various_float_types
+        (int            decimals
+        ,rounding_style style
+        ,long double    unrounded
+        ,long double    expected
+        );
+
+    template<typename RealType>
+    static bool test_one_case
+        (RealType       unrounded
+        ,RealType       expected
+        ,int            decimals
+        ,rounding_style style
+        );
+};
+
 template<typename RealType>
-bool test_one_case
+bool round_to_test::test_one_case
     (RealType       unrounded
     ,RealType       expected
     ,int            decimals
@@ -258,23 +293,23 @@ bool test_one_case
     return error_is_within_tolerance;
 }
 
-void test_various_float_types
+void round_to_test::test_various_float_types
     (int            decimals
     ,rounding_style style
     ,long double    unrounded
     ,long double    expected
     )
 {
-    long double factor = detail::perform_pow(10.0L, -decimals);
+    long double factor = detail::int_pow(10.0L, -decimals);
     long double u = unrounded * factor;
     long double e = expected  * factor;
-    BOOST_TEST((test_one_case(static_cast<float >(u), static_cast<float >(e), decimals, style)));
-    BOOST_TEST((test_one_case(static_cast<double>(u), static_cast<double>(e), decimals, style)));
-    BOOST_TEST((test_one_case(/* long double */  (u), /* long double */  (e), decimals, style)));
+    LMI_TEST((test_one_case(static_cast<float >(u), static_cast<float >(e), decimals, style)));
+    LMI_TEST((test_one_case(static_cast<double>(u), static_cast<double>(e), decimals, style)));
+    LMI_TEST((test_one_case(/* long double */  (u), /* long double */  (e), decimals, style)));
 }
 
 // Test rounding to various numbers of decimal places.
-void test_various_decimals
+void round_to_test::test_various_decimals
     (rounding_style style
     ,long double    unrounded
     ,long double    expected
@@ -288,7 +323,7 @@ void test_various_decimals
 }
 
 // Test rounding to zero decimals with each rounding style.
-void test_various_styles
+void round_to_test::test_various_styles
     (long double    unrounded
     ,long double    expected
     )
@@ -300,7 +335,7 @@ void test_various_styles
     test_various_float_types(0, r_not_at_all,  unrounded, expected);
 }
 
-void test_rounding()
+void round_to_test::test_rounding()
 {
     // The first several blocks of tests use values with no more than
     // six significant decimal digits, six being a natural value for
@@ -453,7 +488,7 @@ void test_rounding()
     // rigorous bounds, both overall and for each step.
 }
 
-int test_all_modes(bool synchronize)
+void round_to_test::test_all_modes(bool synchronize)
 {
     // As stated above, we'd like this to be true for all
     // floating-point types:
@@ -511,17 +546,15 @@ int test_all_modes(bool synchronize)
         << std::endl
         ;
     test_rounding();
-
-    return 0;
 }
 
-int test_main(int, char*[])
+void round_to_test::test_fundamentals()
 {
     default_rounding_style() = r_indeterminate;
 
     // Test default constructor.
     round_to<double> const round_erroneously;
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (round_erroneously(2.7)
         ,std::logic_error
         ,"Erroneous rounding function."
@@ -529,39 +562,62 @@ int test_main(int, char*[])
 
     // Test copy constructor and copy assignment operator.
     round_to<double> const round0(2, r_to_nearest);
-    BOOST_TEST(2 == round0.decimals());
-    BOOST_TEST(r_to_nearest == round0.style());
+    LMI_TEST(2 == round0.decimals());
+    LMI_TEST(r_to_nearest == round0.style());
 
     round_to<double> round1(round0);
-    BOOST_TEST(2 == round1.decimals());
-    BOOST_TEST(r_to_nearest == round1.style());
+    LMI_TEST(2 == round1.decimals());
+    LMI_TEST(r_to_nearest == round1.style());
 
     round1 = round_to<double>(3, r_toward_zero);
-    BOOST_TEST(3 == round1.decimals());
-    BOOST_TEST(r_toward_zero == round1.style());
+    LMI_TEST(3 == round1.decimals());
+    LMI_TEST(r_toward_zero == round1.style());
 
     round1 = round0;
-    BOOST_TEST(2 == round1.decimals());
-    BOOST_TEST(r_to_nearest == round1.style());
+    LMI_TEST(2 == round1.decimals());
+    LMI_TEST(r_to_nearest == round1.style());
+
+    // Test rounding double to currency.
+    currency c = round0.c(1.61803398875);
+    LMI_TEST((1.62 - dblize(c)) < 1e-14);
+    LMI_TEST_EQUAL(162, c.cents());
+//  c *= 0.61803398875;
+//  LMI_TEST_EQUAL(1, c);
+
+    // Test a vector.
+    std::vector<double> const v0 {3.1415926535, 2.718281828};
+    std::vector<double> const v1 {round0(v0)};
+    LMI_TEST_EQUAL(v0.size(), v1.size());
+    LMI_TEST((3.14 - v1[0]) < 1e-14);
+    LMI_TEST((2.72 - v1[1]) < 1e-14);
 
     // Try to provoke division by zero in ctor-initializer.
     //
     // nonstd::power() negates a negative exponent, but negating
-    // INT_MIN constitutes UB, so use 1 + INT_MIN.
-    BOOST_TEST_THROW
-        (round_to<double>(1 + INT_MIN, r_to_nearest)
+    // INT_MIN constitutes UB, so add one, plus currency::cents_digits
+    // because of the interplay between classes currency and round_to.
+    LMI_TEST_THROW
+        (round_to<double>(1 + currency::cents_digits + INT_MIN, r_to_nearest)
         ,std::domain_error
         ,"Invalid number of decimals."
         );
+}
+
+void round_to_test::test()
+{
+    test_fundamentals();
 
     // The software default rounding style and the hardware rounding
     // mode may be either synchronized or not, so test both ways.
     std::cout << "  Default style synchronized to hardware mode:\n";
-    bool rc = test_all_modes(true);
+    test_all_modes(true);
     std::cout << "  Default style NOT synchronized to hardware mode:\n";
-    // Use '+' rather than '||' to avoid short-circuit evaluation,
-    // so that failure on one test doesn't prevent downstream tests
-    // from being run.
-    rc = rc + test_all_modes(false);
-    return rc;
+    test_all_modes(false);
+}
+
+int test_main(int, char*[])
+{
+    round_to_test::test();
+
+    return EXIT_SUCCESS;
 }

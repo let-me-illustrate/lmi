@@ -5,7 +5,7 @@
 <!--
     Let me illustrate...: wxWindows xml input-notebook resources.
 
-    Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+    Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -20,7 +20,7 @@
     along with this program; if not, write to the Free Software Foundation,
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 
-    http://savannah.nongnu.org/projects/lmi
+    https://savannah.nongnu.org/projects/lmi
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -76,7 +76,7 @@
                         <growablecols>0</growablecols>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
-                            <border>4</border>
+                            <border>2</border>
                             <object class="wxRadioBox" name="GroupUnderwritingType">
                                 <help>Group underwriting</help>
                                 <style>wxRA_SPECIFY_COLS</style>
@@ -124,10 +124,10 @@
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW|wxALL</flag>
-                    <border>4</border>
+                    <border>2</border>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
-                        <growablerows>1,2,3</growablerows>
+                        <growablerows>0,1,2,3,4,5,6,7</growablerows>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
                             <border>2</border>
@@ -136,13 +136,13 @@
                                 <label>Cell</label>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT</flag>
-                                    <border>4</border>
+                                    <border>2</border>
                                     <object class="wxFlexGridSizer">
                                         <cols>0</cols>
                                         <rows>1</rows>
                                         <object class="sizeritem">
                                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM</flag>
-                                            <border>4</border>
+                                            <border>2</border>
                                             <object class="wxStaticText">
                                                 <label># identical lives</label>
                                             </object>
@@ -170,7 +170,7 @@
                         </object>
                         <object class="sizeritem">
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                            <border>4</border>
+                            <border>2</border>
                             <object class="wxCheckBox" name="RetireesCanEnroll">
                                 <help>Let individuals enroll after their retirement</help>
                                 <label>Retirees eligible to enroll</label>
@@ -179,7 +179,7 @@
                         </object>
                         <object class="sizeritem">
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                            <border>4</border>
+                            <border>2</border>
                             <object class="wxCheckBox" name="EffectiveDateToday">
                                 <help>Set effective date to current date</help>
                                 <label>Effective today</label>
@@ -187,7 +187,7 @@
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
-                            <border>4</border>
+                            <border>2</border>
                             <object class="wxFlexGridSizer">
                                 <rows>1</rows>
                                 <object class="sizeritem">
@@ -199,7 +199,7 @@
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
-                                    <border>4</border>
+                                    <border>2</border>
                                     <object class="wxDatePickerCtrl" name="EffectiveDate">
                                         <help>Effective date</help>
                                         <size>90,-1</size>
@@ -209,7 +209,7 @@
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
-                            <border>4</border>
+                            <border>2</border>
                             <object class="wxFlexGridSizer">
                                 <rows>1</rows>
                                 <object class="sizeritem">
@@ -231,7 +231,7 @@
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
-                            <border>4</border>
+                            <border>2</border>
                             <object class="wxFlexGridSizer">
                                 <rows>1</rows>
                                 <object class="sizeritem">
@@ -257,7 +257,7 @@
                                 <rows>1</rows>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
-                                    <border>4</border>
+                                    <border>2</border>
                                     <object class="wxStaticText">
                                         <label>State of jurisdiction</label>
                                     </object>
@@ -279,14 +279,14 @@
                                 <rows>1</rows>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</flag>
-                                    <border>4</border>
+                                    <border>2</border>
                                     <object class="wxStaticText">
                                         <label>Premium tax state</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxLEFT</flag>
-                                    <border>4</border>
+                                    <border>2</border>
                                     <object class="wxComboBox" name="PremiumTaxState">
                                         <help>State to which premium tax is paid--affects premium load if the tax is passed through</help>
                                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
@@ -792,7 +792,7 @@ here, but it looks weird if we don't make this look like its siblings.
                             <object class="wxFlexGridSizer">
                                 <cols>2</cols>
                                 <growablecols>1</growablecols>
-                                <growablerows>0,1,2,3,4,5,6,7,8,9,10</growablerows>
+                                <growablerows>0,1,2,3,4,5,6,7,8</growablerows>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
@@ -924,36 +924,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceHoneymoonValue">
                                         <help>Inforce honeymoon value</help>
-                                        <size>80,-1</size>
-                                        <value>0</value>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <border>4</border>
-                                    <object class="wxStaticText">
-                                        <label>Case experience reserve</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxTextCtrl" name="InforceNetExperienceReserve">
-                                        <help>Inforce case net experience reserve</help>
-                                        <size>80,-1</size>
-                                        <value>0</value>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <border>4</border>
-                                    <object class="wxStaticText">
-                                        <label>Case YTD net COI charges</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxTextCtrl" name="InforceYtdNetCoiCharge">
-                                        <help>Inforce case year-to-date net COI charges</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1416,7 +1386,7 @@ here, but it looks weird if we don't make this look like its siblings.
                         <growablerows>0,1</growablerows>
                         <object class="sizeritem">
                             <flag>wxGROW|wxLEFT|wxRIGHT</flag>
-                            <border>2</border>
+                            <border>4</border>
                             <object class="wxRadioBox" name="SolveTarget">
                                 <help>Target to solve for</help>
                                 <style>wxRA_SPECIFY_COLS</style>
@@ -1430,7 +1400,7 @@ here, but it looks weird if we don't make this look like its siblings.
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW</flag>
+                            <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="wxFlexGridSizer">
                                 <cols>1</cols>
@@ -1446,14 +1416,14 @@ here, but it looks weird if we don't make this look like its siblings.
                                         <growablerows>0</growablerows>
                                         <object class="sizeritem">
                                             <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxALL</flag>
-                                            <border>4</border>
+                                            <border>2</border>
                                             <object class="wxStaticText">
                                                 <label>Target amount</label>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
                                             <flag>wxGROW|wxTOP</flag>
-                                            <border>4</border>
+                                            <border>2</border>
                                             <object class="wxTextCtrl" name="SolveTargetValue">
                                                 <help>Target amount</help>
                                             </object>
@@ -1468,7 +1438,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                         <rows>2</rows>
                                         <object class="sizeritem">
                                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                            <border>4</border>
+                                            <border>2</border>
                                             <object class="wxRadioBox" name="SolveTgtAtWhich">
                                                 <help>When solve target is to be achieved</help>
                                                 <label>At</label>
@@ -1505,7 +1475,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                         </object>
                                                         <object class="sizeritem">
                                                             <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxALL</flag>
-                                                            <border>4</border>
+                                                            <border>2</border>
                                                             <object class="wxStaticText">
                                                                 <label>Year</label>
                                                             </object>
@@ -1514,13 +1484,13 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxBOTTOM</flag>
-                                                    <border>4</border>
+                                                    <border>2</border>
                                                     <object class="wxFlexGridSizer">
                                                         <cols>2</cols>
                                                         <rows>1</rows>
                                                         <object class="sizeritem">
                                                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                                            <border>4</border>
+                                                            <border>2</border>
                                                             <object class="wxSpinCtrl" name="SolveTargetAge">
                                                                 <help>Attained age to achieve target surrender value</help>
                                                                 <size>50,-1</size>
@@ -1529,7 +1499,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                         </object>
                                                         <object class="sizeritem">
                                                             <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxALL</flag>
-                                                            <border>4</border>
+                                                            <border>2</border>
                                                             <object class="wxStaticText">
                                                                 <label>Age</label>
                                                             </object>
@@ -2274,7 +2244,7 @@ here, but it looks weird if we don't make this look like its siblings.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <border>4</border>
             <object class="wxCheckBox" name="WaiverOfPremiumBenefit">
                 <help>Waiver</help>
@@ -2283,7 +2253,7 @@ here, but it looks weird if we don't make this look like its siblings.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT|wxALL</flag>
+            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <border>2</border>
             <object class="wxFlexGridSizer">
                 <rows>1</rows>
@@ -2298,14 +2268,14 @@ here, but it looks weird if we don't make this look like its siblings.
                 </object>
                 <object class="sizeritem">
                     <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                    <border>4</border>
+                    <border>2</border>
                     <object class="wxStaticText">
                         <label>Amount</label>
                     </object>
                 </object>
                 <object class="sizeritem">
                     <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                    <border>4</border>
+                    <border>2</border>
                     <object class="wxTextCtrl" name="ChildRiderAmount">
                         <help>Child rider amount</help>
                         <size>100,-1</size>
@@ -2314,7 +2284,7 @@ here, but it looks weird if we don't make this look like its siblings.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT|wxLEFT|wxRIGHT|wxBOTTOM</flag>
+            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <border>2</border>
             <object class="wxFlexGridSizer">
                 <rows>1</rows>
@@ -2329,14 +2299,14 @@ here, but it looks weird if we don't make this look like its siblings.
                 </object>
                 <object class="sizeritem">
                     <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                    <border>4</border>
+                    <border>2</border>
                     <object class="wxStaticText">
                         <label>Amount</label>
                     </object>
                 </object>
                 <object class="sizeritem">
                     <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                    <border>4</border>
+                    <border>2</border>
                     <object class="wxTextCtrl" name="SpouseRiderAmount">
                         <help>Spouse rider amount</help>
                         <size>100,-1</size>
@@ -2351,10 +2321,9 @@ here, but it looks weird if we don't make this look like its siblings.
                 </object>
                 <object class="sizeritem">
                     <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                    <border>4</border>
+                    <border>2</border>
                     <object class="wxSpinCtrl" name="SpouseIssueAge">
                         <help>Spouse insurance age on date of issue</help>
-                        <size>45,-1</size>
                         <style>wxSP_ARROW_KEYS</style>
                     </object>
                 </object>

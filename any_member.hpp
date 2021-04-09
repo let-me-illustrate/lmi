@@ -1,6 +1,6 @@
 // Symbolic member names.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -105,6 +105,11 @@ class placeholder
 
 inline placeholder::~placeholder() = default;
 
+// Forward declaration of class any_member.
+
+template<typename ClassType>
+class any_member;
+
 // Definition of class holder.
 
 template<typename ClassType, typename ValueType>
@@ -113,7 +118,7 @@ class holder final
 {
     // Friendship is extended to class any_member only to support its
     // cast operations.
-    template<typename T> friend class any_member;
+    friend class any_member<ClassType>;
 
   public:
     holder(ClassType*, ValueType const&);
@@ -176,7 +181,7 @@ holder<ClassType,ValueType>& holder<ClassType,ValueType>::assign
 template<typename ClassType, typename ValueType>
 placeholder* holder<ClassType,ValueType>::clone() const
 {
-    return new holder(object_, held_);
+    return ::new holder(object_, held_);
 }
 
 template<typename ClassType, typename ValueType>
@@ -214,13 +219,6 @@ void* holder<ClassType,ValueType>::defraud() const
 }
 #endif // defined LMI_MSC
 
-// Definition of class any_member.
-
-// This class is necessarily Assignable, so that a std::map can hold it.
-
-template<typename ClassType>
-class any_member;
-
 template<typename MemberType, typename ClassType>
 MemberType* exact_cast(any_member<ClassType>&);
 
@@ -228,6 +226,10 @@ template<typename MemberType, typename ClassType>
 MemberType* member_cast(any_member<ClassType>&);
 
 struct any_member_test;
+
+// Definition of class any_member.
+
+// This class is necessarily Assignable, so that a std::map can hold it.
 
 template<typename ClassType>
 class any_member final
@@ -295,7 +297,7 @@ template<typename ClassType>
 template<typename ValueType>
 any_member<ClassType>::any_member(ClassType* object, ValueType const& value)
     :object_  {object}
-    ,content_ {new holder<ClassType,ValueType>(object, value)}
+    ,content_ {::new holder<ClassType,ValueType>(object, value)}
 {}
 
 template<typename ClassType>

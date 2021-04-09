@@ -1,6 +1,6 @@
 // MD5 sum--unit test.
 //
-// Copyright (C) 2020 Gregory W. Chicares.
+// Copyright (C) 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -153,42 +153,42 @@ void MD5SumTest::TestMD5Calculation() const
 {
     // Test md5_calculate_stream_checksum function.
     std::ifstream is_text{test_filename, std::ios_base::in};
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (test_text_checksum
         ,md5_calculate_stream_checksum(is_text, test_filename)
         );
 
     std::ifstream is_bin{test_filename, ios_in_binary()};
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (test_bin_checksum
         ,md5_calculate_stream_checksum(is_bin, test_filename)
         );
 
     std::istringstream is_fail{test_text, std::ios_base::in};
     is_fail.setstate(std::ios_base::failbit);
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (md5_calculate_stream_checksum(is_fail, test_filename)
         ,std::runtime_error
         ,"'md5_file': failed to read data while computing md5sum"
         );
 
     // Test md5_calculate_file_checksum function.
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (test_text_checksum
         ,md5_calculate_file_checksum(test_filename, md5_file_mode::text)
         );
 
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (test_bin_checksum
         ,md5_calculate_file_checksum(test_filename, md5_file_mode::binary)
         );
 
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (md5_calculate_file_checksum(md5sums_filename, md5_file_mode::text)
         ,md5_calculate_file_checksum(md5sums_filename, md5_file_mode::binary)
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (md5_calculate_file_checksum("_ghost_")
         ,std::runtime_error
         ,"'_ghost_': no such file or directory"
@@ -207,43 +207,43 @@ void MD5SumTest::TestMD5Reading() const
 
     // Test md5_read_checksum_stream function.
     std::istringstream is_sums{md5sums_text};
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (md5sums
         ,md5_read_checksum_stream(is_sums, md5sums_filename)
         );
 
     std::istringstream is_throw1{"00112233445566778899aabbccddeeff  \n"};
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (md5_read_checksum_stream(is_throw1, "test1")
         ,std::runtime_error
         ,"'test1': line too short at line 1"
         );
 
     std::istringstream is_throw2{"00112233445566778899aabbccddeeff_test\n"};
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (md5_read_checksum_stream(is_throw2, "test2")
         ,std::runtime_error
         ,"'test2': incorrect checksum line format at line 1"
         );
 
     std::istringstream is_throw3{"00112233445566778899aabbccddeeff test\n"};
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (md5_read_checksum_stream(is_throw3, "test3")
         ,std::runtime_error
         ,"'test3': incorrect checksum line format at line 1"
         );
 
     std::istringstream is_throw4{"00112233445566778899aabbccddee  test\n"};
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (md5_read_checksum_stream(is_throw4, "test4")
         ,std::runtime_error
         ,"'test4': incorrect MD5 sum format at line 1"
         );
 
     // Test md5_read_checksum_file function.
-    BOOST_TEST_EQUAL(md5sums, md5_read_checksum_file(md5sums_filename));
+    LMI_TEST_EQUAL(md5sums, md5_read_checksum_file(md5sums_filename));
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (md5_read_checksum_file("_ghost_")
         ,std::runtime_error
         ,"'_ghost_': no such file or directory"
@@ -258,7 +258,7 @@ void MD5SumTest::TestMD5ToHexString() const
         {0x0f, 0x1e, 0x2d, 0x3c, 0x4b, 0x5a, 0x69, 0x78
         ,0x87, 0x96, 0xa5, 0xb4, 0xc3, 0xd2, 0xe1, 0xf0
         };
-    BOOST_TEST_EQUAL("0f1e2d3c4b5a69788796a5b4c3d2e1f0", md5_hex_string(v));
+    LMI_TEST_EQUAL("0f1e2d3c4b5a69788796a5b4c3d2e1f0", md5_hex_string(v));
 }
 
 void MD5SumTest::RemoveTestFilesIfNecessary(char const* file, int line) const
@@ -267,7 +267,7 @@ void MD5SumTest::RemoveTestFilesIfNecessary(char const* file, int line) const
         {
         if(fs::exists(filename))
             {
-            INVOKE_BOOST_TEST(std::remove(filename) == 0, file, line);
+            INVOKE_LMI_TEST(std::remove(filename) == 0, file, line);
             }
         };
 
@@ -287,18 +287,18 @@ void MD5SumTest::WriteAndCheckFile
     ) const
 {
     std::ofstream os{filename, ios_out_trunc_binary()};
-    INVOKE_BOOST_TEST(os.good(), file, line);
+    INVOKE_LMI_TEST(os.good(), file, line);
     os << text;
     os.close();
 
     // Read the file back.
     std::ifstream is{filename, ios_in_binary()};
-    INVOKE_BOOST_TEST(is.good(), file, line);
+    INVOKE_LMI_TEST(is.good(), file, line);
     std::ostringstream oss;
     oss << is.rdbuf();
     is.close();
 
-    INVOKE_BOOST_TEST_EQUAL(text, oss.str(), file, line);
+    INVOKE_LMI_TEST_EQUAL(text, oss.str(), file, line);
 }
 
 /// Write a text file for testing.

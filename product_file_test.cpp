@@ -1,6 +1,6 @@
 // Product files--unit test.
 //
-// Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -25,6 +25,7 @@
 #include "database.hpp"
 #include "dbdict.hpp"
 #include "fund_data.hpp"
+#include "lingo.hpp"
 #include "product_data.hpp"
 #include "rounding_rules.hpp"
 #include "stratified_charges.hpp"
@@ -35,6 +36,8 @@
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "test_tools.hpp"
 #include "timer.hpp"                    // TimeAnAliquot()
+
+#include <boost/filesystem/path.hpp>
 
 #include <string>
 #include <utility>                      // move()
@@ -57,29 +60,27 @@ class product_file_test
     static void assay_speed();
     static void read_database_file()   ;
     static void read_fund_file()       ;
+    static void read_lingo_file()      ;
     static void read_policy_file()     ;
     static void read_rounding_file()   ;
     static void read_stratified_file() ;
+    static void read_cached_files()    ;
 
-    static std::string database_filename_   ;
-    static std::string fund_filename_       ;
-    static std::string policy_filename_     ;
-    static std::string rounding_filename_   ;
-    static std::string stratified_filename_ ;
+    inline static fs::path database_filename_   ;
+    inline static fs::path fund_filename_       ;
+    inline static fs::path lingo_filename_      ;
+    inline static fs::path policy_filename_     ;
+    inline static fs::path rounding_filename_   ;
+    inline static fs::path stratified_filename_ ;
 };
-
-std::string product_file_test::database_filename_   ;
-std::string product_file_test::fund_filename_       ;
-std::string product_file_test::policy_filename_     ;
-std::string product_file_test::rounding_filename_   ;
-std::string product_file_test::stratified_filename_ ;
 
 void product_file_test::get_filenames()
 {
-    policy_filename_     = "sample";
+    policy_filename_     = filename_from_product_name("sample");
     product_data p(policy_filename_);
     database_filename_   = AddDataDir(p.datum("DatabaseFilename"));
     fund_filename_       = AddDataDir(p.datum("FundFilename"    ));
+    lingo_filename_      = AddDataDir(p.datum("LingoFilename"   ));
     rounding_filename_   = AddDataDir(p.datum("RoundingFilename"));
     stratified_filename_ = AddDataDir(p.datum("TierFilename"    ));
 }
@@ -90,10 +91,11 @@ void product_file_test::test_copying()
 
     // Test product_data copy ctor.
     product_data q(p);
-    BOOST_TEST(database_filename_   == AddDataDir(q.datum("DatabaseFilename")));
-    BOOST_TEST(fund_filename_       == AddDataDir(q.datum("FundFilename"    )));
-    BOOST_TEST(rounding_filename_   == AddDataDir(q.datum("RoundingFilename")));
-    BOOST_TEST(stratified_filename_ == AddDataDir(q.datum("TierFilename"    )));
+    LMI_TEST(database_filename_   == AddDataDir(q.datum("DatabaseFilename")));
+    LMI_TEST(fund_filename_       == AddDataDir(q.datum("FundFilename"    )));
+    LMI_TEST(lingo_filename_      == AddDataDir(q.datum("LingoFilename"   )));
+    LMI_TEST(rounding_filename_   == AddDataDir(q.datum("RoundingFilename")));
+    LMI_TEST(stratified_filename_ == AddDataDir(q.datum("TierFilename"    )));
 
     // Test product_database move ctor.
     product_database d
@@ -105,13 +107,13 @@ void product_file_test::test_copying()
         ,mce_nonmedical
         ,mce_s_CT
         );
-    BOOST_TEST(mce_s_CT == d.index().state());
-    BOOST_TEST(      55 == d.length());
-    BOOST_TEST(      99 == d.query<int>(DB_MaxIncrAge));
+    LMI_TEST(mce_s_CT == d.index().state());
+    LMI_TEST(      55 == d.length());
+    LMI_TEST(      99 == d.query<int>(DB_MaxIncrAge));
     product_database e(std::move(d));
-    BOOST_TEST(mce_s_CT == e.index().state());
-    BOOST_TEST(      55 == e.length());
-    BOOST_TEST(      99 == e.query<int>(DB_MaxIncrAge));
+    LMI_TEST(mce_s_CT == e.index().state());
+    LMI_TEST(      55 == e.length());
+    LMI_TEST(      99 == e.query<int>(DB_MaxIncrAge));
 
     // Test product_database copy ctor.
     product_database f
@@ -124,42 +126,52 @@ void product_file_test::test_copying()
         ,mce_s_CT
         );
     product_database g(f);
-    BOOST_TEST(mce_s_CT == f.index().state());
-    BOOST_TEST(      41 == f.length());
-    BOOST_TEST(      99 == f.query<int>(DB_MaxIncrAge));
-    BOOST_TEST(mce_s_CT == g.index().state());
-    BOOST_TEST(      41 == g.length());
-    BOOST_TEST(      99 == g.query<int>(DB_MaxIncrAge));
+    LMI_TEST(mce_s_CT == f.index().state());
+    LMI_TEST(      41 == f.length());
+    LMI_TEST(      99 == f.query<int>(DB_MaxIncrAge));
+    LMI_TEST(mce_s_CT == g.index().state());
+    LMI_TEST(      41 == g.length());
+    LMI_TEST(      99 == g.query<int>(DB_MaxIncrAge));
 }
-
-// This implementation:
-//   auto d = DBDictionary::read_via_cache(database_filename_);
-// would cause assay_speed() to report a much faster run time,
-// yet such a timing would have little significance.
 
 void product_file_test::read_database_file()
 {
-    DBDictionary d(database_filename_);
+    DBDictionary z(database_filename_);
 }
 
 void product_file_test::read_fund_file()
 {
-    FundData f(fund_filename_);
+    FundData z(fund_filename_);
+}
+
+void product_file_test::read_lingo_file()
+{
+    lingo z(lingo_filename_);
 }
 
 void product_file_test::read_policy_file()
 {
-    product_data p(policy_filename_);
+    product_data z(policy_filename_);
 }
 
 void product_file_test::read_rounding_file()
 {
-    rounding_rules r(rounding_filename_);
+    rounding_rules z(rounding_filename_);
 }
 
 void product_file_test::read_stratified_file()
 {
-    stratified_charges s(stratified_filename_);
+    stratified_charges z(stratified_filename_);
+}
+
+void product_file_test::read_cached_files()
+{
+    DBDictionary       ::read_via_cache(database_filename_);
+    FundData           ::read_via_cache(fund_filename_);
+    lingo              ::read_via_cache(lingo_filename_);
+    product_data       ::read_via_cache(policy_filename_);
+    rounding_rules     ::read_via_cache(rounding_filename_);
+    stratified_charges ::read_via_cache(stratified_filename_);
 }
 
 void product_file_test::assay_speed()
@@ -168,9 +180,11 @@ void product_file_test::assay_speed()
         << "  Speed tests..."
         << "\n  Read 'database'   : " << TimeAnAliquot(read_database_file  )
         << "\n  Read 'fund'       : " << TimeAnAliquot(read_fund_file      )
+        << "\n  Read 'lingo'      : " << TimeAnAliquot(read_lingo_file     )
         << "\n  Read 'policy'     : " << TimeAnAliquot(read_policy_file    )
         << "\n  Read 'rounding'   : " << TimeAnAliquot(read_rounding_file  )
         << "\n  Read 'stratified' : " << TimeAnAliquot(read_stratified_file)
+        << "\n  Read all, cached' : " << TimeAnAliquot(read_cached_files   )
         << '\n'
         ;
 }

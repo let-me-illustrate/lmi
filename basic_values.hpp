@@ -1,6 +1,6 @@
 // Rates and unprojected values.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include "actuarial_table.hpp"          // e_actuarial_table_method
+#include "currency.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"                  // e_database_key
 #include "mc_enum_type_enums.hpp"
@@ -34,7 +35,7 @@
 #include "so_attributes.hpp"
 #include "yare_input.hpp"
 
-#include <memory>                       // shared_ptr
+#include <memory>                       // shared_ptr, unique_ptr
 #include <string>
 #include <utility>                      // pair
 #include <vector>
@@ -59,6 +60,8 @@ class Irc7702A;
 class Loads;
 class MortalityRates;
 class death_benefits;
+class i7702;
+class lingo;
 class modal_outlay;
 class premium_tax;
 class rounding_rules;
@@ -94,10 +97,9 @@ class LMI_SO BasicValues
         ,double             a_TargetPremium
         );
     BasicValues(BasicValues&&) = default;
-    virtual ~BasicValues() = default;
+    virtual ~BasicValues();
 
     void Init();
-    void GPTServerInit();
 
     int                   GetLength()                  const;
     int                   GetIssueAge()                const;
@@ -109,32 +111,39 @@ class LMI_SO BasicValues
     mcenum_state          GetStateOfJurisdiction()     const;
     mcenum_state          GetStateOfDomicile()         const;
     mcenum_state          GetPremiumTaxState()         const;
+
+    auto const& partial_mortality_qx () const {return partial_mortality_qx_ ;}
+    auto const& partial_mortality_tpx() const {return partial_mortality_tpx_;}
+    auto const& partial_mortality_lx () const {return partial_mortality_lx_ ;}
+
     double                InvestmentManagementFee()    const;
 
-    yare_input                          yare_input_;
-    product_data     const              product_;
-    product_database const              database_;
-    std::shared_ptr<FundData>           FundData_;
-    std::shared_ptr<rounding_rules>     RoundingRules_;
-    std::shared_ptr<stratified_charges> StratifiedCharges_;
-    std::shared_ptr<MortalityRates>     MortalityRates_;
-    std::shared_ptr<InterestRates>      InterestRates_;
-    std::shared_ptr<death_benefits>     DeathBfts_;
-    std::shared_ptr<modal_outlay>       Outlay_;
-    std::shared_ptr<premium_tax>        PremiumTax_;
-    std::shared_ptr<Loads>              Loads_;
-    std::shared_ptr<Irc7702>            Irc7702_;
-    std::shared_ptr<Irc7702A>           Irc7702A_;
+    yare_input                                yare_input_;
 
-    product_data     const& product () const {return product_;}
+    std::shared_ptr<product_data       const> const product_;
+    product_database                          const database_;
+    std::shared_ptr<lingo              const> const lingo_;
+    std::shared_ptr<FundData           const> const FundData_;
+    std::shared_ptr<rounding_rules     const> const RoundingRules_;
+    std::shared_ptr<stratified_charges const> const StratifiedCharges_;
+
+    std::unique_ptr<i7702          const> i7702_;
+
+    std::unique_ptr<MortalityRates const> MortalityRates_;
+    std::unique_ptr<InterestRates       > InterestRates_;
+    std::unique_ptr<death_benefits      > DeathBfts_;
+    std::unique_ptr<modal_outlay        > Outlay_;
+    std::unique_ptr<premium_tax         > PremiumTax_;
+    std::unique_ptr<Loads          const> Loads_;
+    std::unique_ptr<Irc7702             > Irc7702_;
+    std::unique_ptr<Irc7702A            > Irc7702A_;
+
+    product_data     const& product () const {return *product_;}
     product_database const& database() const {return database_;}
 
-    double GetAnnualTgtPrem(int a_year, double a_specamt) const;
+    currency GetAnnualTgtPrem(int a_year, currency a_specamt) const;
 
     std::vector<double> const& GetCorridorFactor() const;
-    std::vector<double> const& SpreadFor7702() const;
-    std::vector<double> const& GetMly7702iGlp() const;
-    std::vector<double> const& GetMly7702qc() const;
     std::vector<double> const& GetMlyDcvqc() const;
 
     // COI and term rates are blended on the current basis, but not
@@ -174,6 +183,7 @@ class LMI_SO BasicValues
     round_to<double> const& round_naar              () const {return round_naar_              ;}
     round_to<double> const& round_coi_rate          () const {return round_coi_rate_          ;}
     round_to<double> const& round_coi_charge        () const {return round_coi_charge_        ;}
+    round_to<double> const& round_rider_charges     () const {return round_rider_charges_     ;}
     round_to<double> const& round_gross_premium     () const {return round_gross_premium_     ;}
     round_to<double> const& round_net_premium       () const {return round_net_premium_       ;}
     round_to<double> const& round_interest_rate     () const {return round_interest_rate_     ;}
@@ -190,85 +200,92 @@ class LMI_SO BasicValues
     round_to<double> const& round_max_specamt       () const {return round_max_specamt_       ;}
     round_to<double> const& round_min_premium       () const {return round_min_premium_       ;}
     round_to<double> const& round_max_premium       () const {return round_max_premium_       ;}
+    round_to<double> const& round_minutiae          () const {return round_minutiae_          ;}
 
   protected:
-    double GetModalMinPrem
+    currency GetModalMinPrem
         (int         a_year
         ,mcenum_mode a_mode
-        ,double      a_specamt
+        ,currency    a_specamt
         ) const;
-    double GetModalTgtPrem
+    currency GetModalTgtPrem
         (int         a_year
         ,mcenum_mode a_mode
-        ,double      a_specamt
+        ,currency    a_specamt
         ) const;
-    double GetModalPremMaxNonMec
+    currency GetModalPremMaxNonMec
         (int         a_year
         ,mcenum_mode a_mode
-        ,double      a_specamt
+        ,currency    a_specamt
         ) const;
-    double GetModalPremMinFromTable
+    currency GetModalPremMinFromTable
         (int         a_year
         ,mcenum_mode a_mode
-        ,double      a_specamt
+        ,currency    a_specamt
         ) const;
-    double GetModalPremTgtFromTable
+    currency GetModalPremTgtFromTable
         (int         a_year
         ,mcenum_mode a_mode
-        ,double      a_specamt
+        ,currency    a_specamt
         ) const;
-    double GetModalPremCorridor
+    currency GetModalPremProxyTable
         (int         a_year
         ,mcenum_mode a_mode
-        ,double      a_specamt
+        ,currency    a_specamt
+        ,double      a_table_multiplier
         ) const;
-    double GetModalPremGLP
+    currency GetModalPremCorridor
+        (int         a_year
+        ,mcenum_mode a_mode
+        ,currency    a_specamt
+        ) const;
+    currency GetModalPremGLP
         (int         a_duration
         ,mcenum_mode a_mode
-        ,double      a_bft_amt
-        ,double      a_specamt
+        ,currency    a_bft_amt
+        ,currency    a_specamt
         ) const;
-    double GetModalPremGSP
+    currency GetModalPremGSP
         (int         a_duration
         ,mcenum_mode a_mode
-        ,double      a_bft_amt
-        ,double      a_specamt
+        ,currency    a_bft_amt
+        ,currency    a_specamt
         ) const;
-    std::pair<double,double> GetModalPremMlyDedEx
+    std::pair<currency,currency> GetModalPremMlyDedEx
         (int         year
         ,mcenum_mode mode
-        ,double      specamt
-        ,double      termamt
+        ,currency    specamt
+        ,currency    termamt
         ) const;
-    double GetListBillPremMlyDed
+    currency GetListBillPremMlyDed
         (int         year
         ,mcenum_mode mode
-        ,double      specamt
+        ,currency    specamt
         ) const;
-    std::pair<double,double> GetListBillPremMlyDedEx
+    std::pair<currency,currency> GetListBillPremMlyDedEx
         (int         year
         ,mcenum_mode mode
-        ,double      specamt
-        ,double      termamt
+        ,currency    specamt
+        ,currency    termamt
         ) const;
-    double GetModalSpecAmtMax      (double annualized_pmt) const;
-    double GetModalSpecAmtTgt      (double annualized_pmt) const;
-    double GetModalSpecAmtMinNonMec(double annualized_pmt) const;
-    double GetModalSpecAmtGLP      (double annualized_pmt) const;
-    double GetModalSpecAmtGSP      (double annualized_pmt) const;
-    double GetModalSpecAmtCorridor (double annualized_pmt) const;
-    double GetModalSpecAmtSalary   (int a_year) const;
+    currency GetModalSpecAmtMax      (currency annualized_pmt) const;
+    currency GetModalSpecAmtTgt      (currency annualized_pmt) const;
+    currency GetModalSpecAmtMinNonMec(currency annualized_pmt) const;
+    currency GetModalSpecAmtGLP      (currency annualized_pmt) const;
+    currency GetModalSpecAmtGSP      (currency annualized_pmt) const;
+    currency GetModalSpecAmtCorridor (currency annualized_pmt) const;
+    currency GetModalSpecAmtSalary   (int a_year) const;
     // Deprecated--used only by the antediluvian branch, which does
     // not distinguish ee from er premium.
-    double GetModalMaxSpecAmt
+    currency GetModalMaxSpecAmt
         (mcenum_mode a_mode
-        ,double      a_pmt
+        ,currency    a_pmt
         ) const;
     // Deprecated--used only by the antediluvian branch, which does
     // not distinguish ee from er premium.
-    double GetModalTgtSpecAmt
+    currency GetModalTgtSpecAmt
         (mcenum_mode a_mode
-        ,double      a_pmt
+        ,currency    a_pmt
         ) const;
     std::vector<double> GetTable
         (std::string const& TableFile
@@ -280,7 +297,7 @@ class LMI_SO BasicValues
 
     std::vector<double> const& GetBandedCoiRates
         (mcenum_gen_basis rate_basis
-        ,double           a_specamt
+        ,currency         a_specamt
         ) const;
 
     // TODO ?? A priori, protected data is a defect.
@@ -296,13 +313,13 @@ class LMI_SO BasicValues
     mcenum_defn_life_ins         DefnLifeIns_;
     mcenum_defn_material_change  DefnMaterialChange_;
     mcenum_dbopt_7702            Effective7702DboRop;
-    double                       MaxNAAR;
+    currency                     MaxNAAR;
     int                          EndtAge;
-    double                       MinSpecAmt; // Antediluvian.
-    double                       MinIssSpecAmt;
-    double                       MinIssBaseSpecAmt;
-    double                       MinRenlSpecAmt;
-    double                       MinRenlBaseSpecAmt;
+    currency                     MinSpecAmt; // Antediluvian.
+    currency                     MinIssSpecAmt;
+    currency                     MinIssBaseSpecAmt;
+    currency                     MinRenlSpecAmt;
+    currency                     MinRenlBaseSpecAmt;
     bool                         NoLapseDboLvlOnly;
     bool                         NoLapseUnratedOnly;
     bool                         OptChgCanIncrSA;
@@ -317,13 +334,12 @@ class LMI_SO BasicValues
     int                          TermForcedConvDur;
     bool                         TermIsDbFor7702;
     bool                         TermIsDbFor7702A;
-    double                       ExpPerKLimit;
     oenum_modal_prem_type        MinPremType;
     oenum_modal_prem_type        TgtPremType;
     bool                         TgtPremFixedAtIssue;
-    double                       TgtPremMonthlyPolFee;
-    double                       CurrCoiTable0Limit;
-    double                       CurrCoiTable1Limit;
+    currency                     TgtPremMonthlyPolFee;
+    currency                     CurrCoiTable0Limit;
+    currency                     CurrCoiTable1Limit;
     e_actuarial_table_method     CoiInforceReentry;
     mcenum_anticipated_deduction MaxWDDed_;
     double                       MaxWdGenAcctValMult;
@@ -335,23 +351,25 @@ class LMI_SO BasicValues
     int                          NoLapseMinDur;
     int                          NoLapseMinAge;
     oenum_waiver_charge_method   WaiverChargeMethod;
+    bool                         AllowCashValueEnh;
     std::vector<double>          CashValueEnhMult;
     bool                         LapseIgnoresSurrChg;
     bool                         SurrChgOnIncr;
     bool                         SurrChgOnDecr;
     std::vector<double>          FreeWDProportion;
 
-    double                  AdbLimit;
-    double                  WpLimit;
-    double                  SpecAmtLoadLimit;
-    double                  MinWD;
-    double                  WDFee;
+    currency                AdbLimit;
+    currency                WpLimit;
+    currency                SpecAmtLoadLimit;
+    currency                MinWD;
+    currency                WDFee;
     double                  WDFeeRate;
 
     bool                    AllowChangeToDBO2;
     bool                    AllowSAIncr;
     bool                    NoLapseAlwaysActive;
     std::vector<double>     DBDiscountRate;
+    std::vector<double>     DcvDBDiscountRate;
 
     bool                    UseUnusualCOIBanding;
 
@@ -367,29 +385,32 @@ class LMI_SO BasicValues
 
     std::vector<double>     MinPremIntSpread_;
 
-    std::vector<double>     TieredMEBands;
+    std::vector<currency>   TieredMEBands;
     std::vector<double>     TieredMECharges;
 
   private:
     BasicValues(BasicValues const&) = delete;
     BasicValues& operator=(BasicValues const&) = delete;
 
+    void set_partial_mortality();
+    double GetPartMortQ(int year) const;
+
     double mly_ded_discount_factor(int year, mcenum_mode mode) const;
     std::pair<double,double> approx_mly_ded
-        (int    year
-        ,double specamt
+        (int      year
+        ,currency specamt
         ) const;
     std::pair<double,double> approx_mly_ded_ex
-        (int    year
-        ,double specamt
-        ,double termamt
+        (int      year
+        ,currency specamt
+        ,currency termamt
         ) const;
-    double GetModalPremMlyDed
+    currency GetModalPremMlyDed
         (int         year
         ,mcenum_mode mode
-        ,double      specamt
+        ,currency    specamt
         ) const;
-    double GetModalSpecAmtMlyDed(double annualized_pmt, mcenum_mode) const;
+    currency GetModalSpecAmtMlyDed(currency annualized_pmt, mcenum_mode) const;
 
     std::vector<double> GetActuarialTable
         (std::string const& TableFile
@@ -416,15 +437,18 @@ class LMI_SO BasicValues
     mcenum_state        StateOfJurisdiction_;
     mcenum_state        StateOfDomicile_;
     mcenum_state        PremiumTaxState_;
-    mutable double      InitialTargetPremium;
+
+    std::vector<double> partial_mortality_qx_;
+    std::vector<double> partial_mortality_tpx_;
+    std::vector<double> partial_mortality_lx_;
+
+    // This data member is not of type 'currency' because it merely
+    // stores an input parameter for the GPT server, and is used for
+    // no other purpose.
+    double              InitialTargetPremium;
 
     void                Init7702();
     void                Init7702A();
-    std::vector<double> SpreadFor7702_;
-    std::vector<double> Mly7702iGlp;
-    std::vector<double> Mly7702iGsp;
-    std::vector<double> Mly7702ig;
-    std::vector<double> Mly7702qc;
     std::vector<double> MlyDcvqc;
     mutable std::vector<double> Non7702CompliantCorridor;
 
@@ -434,6 +458,7 @@ class LMI_SO BasicValues
     round_to<double> round_naar_              ;
     round_to<double> round_coi_rate_          ;
     round_to<double> round_coi_charge_        ;
+    round_to<double> round_rider_charges_     ;
     round_to<double> round_gross_premium_     ;
     round_to<double> round_net_premium_       ;
     round_to<double> round_interest_rate_     ;
@@ -450,6 +475,7 @@ class LMI_SO BasicValues
     round_to<double> round_max_specamt_       ;
     round_to<double> round_min_premium_       ;
     round_to<double> round_max_premium_       ;
+    round_to<double> round_minutiae_          ;
 };
 
 inline int BasicValues::GetLength() const

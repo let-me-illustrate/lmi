@@ -1,8 +1,8 @@
 #!/bin/sh this-script-must-be-sourced-not-run
 
-# Set $PATH, $WINEPATH, and $PERFORM based on $LMI_COMPILER and $LMI_TRIPLET.
+# Set $PATH variants and $PERFORM based on $LMI_COMPILER and $LMI_TRIPLET.
 
-# Copyright (C) 2019, 2020 Gregory W. Chicares.
+# Copyright (C) 2019, 2020, 2021 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -27,8 +27,9 @@
 # used in production if they were unset or null beforehand. They can
 # be overridden at the command line, e.g.:
 #
-#   LMI_COMPILER=gcc ; LMI_TRIPLET=i686-w64-mingw32   ; . /opt/lmi/src/lmi/set_toolchain.sh
-#   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-w64-mingw32 ; . /opt/lmi/src/lmi/set_toolchain.sh
+#   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-pc-linux-gnu ; . /opt/lmi/src/lmi/set_toolchain.sh
+#   LMI_COMPILER=gcc ; LMI_TRIPLET=i686-w64-mingw32    ; . /opt/lmi/src/lmi/set_toolchain.sh
+#   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-w64-mingw32  ; . /opt/lmi/src/lmi/set_toolchain.sh
 #
 # Implemented as a function that runs and then erases itself, so that
 # sourcing this script changes the environment only as intended. This
@@ -60,8 +61,8 @@
 #
 # Supported values:
 #   LMI_COMPILER : gcc, clang
-#   LMI_TRIPLET  : i686-w64-mingw32, x86_64-w64-mingw32, x86_64-pc-linux-gnu
-# (clang and pc-linux-gnu are not yet tested).
+#   LMI_TRIPLET  : x86_64-pc-linux-gnu, i686-w64-mingw32, x86_64-w64-mingw32
+# (clang not yet tested).
 #
 # Examples:
 #
@@ -85,9 +86,10 @@
 foo()
 {
 local   lmi_build_type
-        lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+        lmi_build_type=$(/usr/share/misc/config.guess)
 
 local      prefix="/opt/lmi"
+local      bindir="$prefix/bin"
 local localbindir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/bin"
 local locallibdir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib"
 
@@ -102,10 +104,11 @@ local locallibdir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib"
 minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
 export PATH="$localbindir":"$locallibdir":"$minimal_path"
 
-# It is okay to export these two variables unconditionally.
+# It is okay to export these variables unconditionally.
 
-export WINEPATH
+export LD_LIBRARY_PATH
 export PERFORM
+export WINEPATH
 
 # Are double quotes inside double quotes inside $() dubious? I.e.,
 #  " $( "is this string quoted?" ) "
@@ -123,10 +126,24 @@ export PERFORM
 #
 case "$lmi_build_type" in
     (*-*-linux*)
-        w0="$(winepath -w "$localbindir" | sed -e's/\\/\\\\/g')"
-        w1="$(winepath -w "$locallibdir" | sed -e's/\\/\\\\/g')"
-        export WINEPATH="$w0;$w1"
-        export  PERFORM="wine"
+        case "$LMI_TRIPLET" in
+            (x86_64-pc-linux-gnu)
+                # Using LD_LIBRARY_PATH is not ideal, but it does work.
+                LD_LIBRARY_PATH=.
+                LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$locallibdir"
+                LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$bindir"
+                # Nullify any leftover "wine" value.
+                PERFORM=
+                ;;
+            (*-*-mingw32)
+                # Nullify any leftover value from the native case above.
+                LD_LIBRARY_PATH=
+                PERFORM="wine"
+                w0="$(winepath -w "$localbindir" | sed -e's/\\/\\\\/g')"
+                w1="$(winepath -w "$locallibdir" | sed -e's/\\/\\\\/g')"
+                WINEPATH="$w0;$w1"
+                ;;
+        esac
         ;;
     (*) ;;
 esac
@@ -149,8 +166,9 @@ case "$LMI_COMPILER" in
 esac
 
 case "$LMI_TRIPLET" in
-    (i686-w64-mingw32)   ;;
-    (x86_64-w64-mingw32) ;;
+    (x86_64-pc-linux-gnu) ;;
+    (i686-w64-mingw32)    ;;
+    (x86_64-w64-mingw32)  ;;
     (*)
         printf '%s\n' "Changed nothing because host triplet '$LMI_TRIPLET' is untested."
         return 3;

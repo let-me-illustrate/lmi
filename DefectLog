@@ -1,6 +1,6 @@
 // DefectLog for "Let me illustrate...". See 'MAINTENANCE' after license.
 //
-// Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -169,7 +169,7 @@ Occurrence is random; moving focus among controls makes it likelier.
 Discovered: By local user, while running a production case.
 
 Location: Rate lookup for select and ultimate tables:
-  http://cvs.sv.gnu.org/viewvc/lmi/lmi/actuarial_table.cpp?annotate=1.37
+  https://cvs.sv.nongnu.org/viewvc/lmi/lmi/actuarial_table.cpp?annotate=1.37
 lines 497-500:
 
 |            int k =
@@ -185,7 +185,7 @@ instead of
 unit test used a table with just such an infelicitous min_age_.
 
 The intermittent runtime error arises here:
-  http://cvs.sv.gnu.org/viewvc/lmi/lmi/ihs_avmly.cpp?annotate=1.71
+  https://cvs.sv.nongnu.org/viewvc/lmi/lmi/ihs_avmly.cpp?annotate=1.71
 line 1659:
 
 |    HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
@@ -241,7 +241,7 @@ that the most obvious edge conditions cannot have been tested at all.
 
 The issue could have been localized with far less effort by using
 libstdc++'s debug mode, which became unusable in lmi a year ago:
-  http://lists.nongnu.org/archive/html/lmi/2007-04/msg00021.html
+  https://lists.nongnu.org/archive/html/lmi/2007-04/msg00021.html
 It could almost certainly be made usable again by adding an extra
 build of wx, which would take less time to implement than it would
 have saved in this single instance--and of course it would be useful
@@ -456,7 +456,7 @@ error received an already-serialized argument. This case requires the
 same (non-serialized) filepath for all cells in a group, so that all
 are printed to a single file.
 
-| http://cvs.savannah.gnu.org/viewvc/lmi/lmi/emit_ledger.cpp?r1=1.14&r2=1.15&diff_format=s
+| https://cvs.savannah.nongnu.org/viewvc/lmi/lmi/emit_ledger.cpp?r1=1.14&r2=1.15&diff_format=s
 
 |   --------------------------- 1.14 ---------------------------     ----------------- 1.15 ----------------
 
@@ -513,7 +513,7 @@ were built as follows, then tested:
 | mkdir 20081121T0200; pushd 20081121T0200; cvs -z3 checkout -D "2008-11-21 02:00" lmi 2>&1 |less; popd
 
 This patch:
-  http://lists.nongnu.org/archive/html/lmi/2008-11/msg00008.html
+  https://lists.nongnu.org/archive/html/lmi/2008-11/msg00008.html
 had to be applied in both snapshot directories. Patching failed for
 'install_miscellanea.make', but that file can be disregarded because
 it is not used in a normal build.
@@ -622,7 +622,7 @@ Reported 20151120T1938Z; symptom suppressed 20151123T1647Z, before
 release, so users were not exposed to the reported symptom.
 
 Location: Diagnostics added 20151106T1911Z...
-  http://svn.savannah.nongnu.org/viewvc/lmi/trunk/input_harmonization.cpp?root=lmi&r1=6354&r2=6388&diff_format=u
+  https://svn.savannah.nongnu.org/viewvc/lmi/trunk/input_harmonization.cpp?root=lmi&r1=6354&r2=6388&diff_format=u
 
 |    if
 |        (  EffectiveDate.value() != InforceAsOfDate.value()
@@ -636,14 +636,14 @@ Location: Diagnostics added 20151106T1911Z...
 |        }
 
 ...and 20151107T1344Z:
-  http://svn.savannah.nongnu.org/viewvc/lmi/trunk/ledger_invariant.cpp?root=lmi&r1=6317&r2=6394&diff_format=u
+  https://svn.savannah.nongnu.org/viewvc/lmi/trunk/ledger_invariant.cpp?root=lmi&r1=6317&r2=6394&diff_format=u
 
 Premonitory defect markers: A "code smell" was noted weeks earlier and
 discussed on the mailing list (q.v.):
 
-  http://svn.savannah.nongnu.org/viewvc/lmi/trunk/ledger_invariant.cpp?revision=6394&root=lmi&view=markup
+  https://svn.savannah.nongnu.org/viewvc/lmi/trunk/ledger_invariant.cpp?revision=6394&root=lmi&view=markup
 |    // Dubious--see:
-|    //   http://lists.nongnu.org/archive/html/lmi/2015-09/msg00017.html
+|    //   https://lists.nongnu.org/archive/html/lmi/2015-09/msg00017.html
 |    IsInforce = 0 != b->yare_input_.InforceYear || 0 != b->yare_input_.InforceMonth;
 
 Cause: The proximate cause is that new diagnostics trapped a latent

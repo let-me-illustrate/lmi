@@ -1,5 +1,5 @@
 {{!
-    Copyright (C) 2017, 2018, 2019, 2020 Gregory W. Chicares.
+    Copyright (C) 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -14,7 +14,7 @@
     along with this program; if not, write to the Free Software Foundation,
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 
-    http://savannah.nongnu.org/projects/lmi
+    https://savannah.nongnu.org/projects/lmi
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 }}
@@ -31,15 +31,9 @@
 {{ProductDescription}}
 </p>
 
-<!-- PDF !! FnProposalUnderwriting -->
 {{^IsInforce}}
     <p>
-    Coverage may be available on a Guaranteed Standard Issue basis.
-    All proposals are based on case characteristics and must
-    be approved by the {{InsCoShortName}}
-    Home Office. For details regarding underwriting
-    and coverage limitations refer to your offer letter
-    or contact your {{InsCoShortName}} representative.
+    {{FnProposalUnderwriting}}
     </p>
 {{/IsInforce}}
 
@@ -48,49 +42,17 @@
 </p>
 
 <p>
-{{!
-    PDF !! This premium-mode footnote is misleading:
-      - mode may vary by year, but only initial mode is shown
-      - ee and er modes may differ, but only er mode is shown
-}}
-
-<!-- PDF !! FnBoyEoy -->
-{{^SinglePremium}}
-    Premiums are assumed to be paid on
-    {{InitErModeWithIndefiniteArticle}}
-    basis and received at the beginning of the premium paying period.
-{{/SinglePremium}}
-{{#SinglePremium}}
-    The single premium is assumed to be paid at the beginning
-    of the {{ContractName}} year.
-{{/SinglePremium}}
-
-{{AvName}} Values, {{CsvName}} Values,
-and death benefits are illustrated as of the end
-of the {{ContractName}} year. The method we use to allocate
-overhead expenses is the fully allocated expense method.
+    {{FnBoyEoy}}
 </p>
 
-<!-- PDF !! FnGuaranteedPremium -->
 {{^SinglePremium}}
-    <p>
-    In order to guarantee coverage to age {{EndtAge}},
-    {{InitEeModeWithIndefiniteArticle}}
-    premium of ${{GuarPrem}} must be paid.
-    This amount is based on the guaranteed monthly charges
-    and the guaranteed interest crediting rate.
-    {{#DefnLifeInsIsGPT}}
-    This premium may be in excess of the maximum premium allowable
-    in order to qualify this {{ContractName}} as life insurance.
-    {{/DefnLifeInsIsGPT}}
-    </p>
+<p>
+    {{FnGuaranteedPremium}}
+</p>
 {{/SinglePremium}}
 
-<!-- PDF !! LoanFootnote -->
 <p>
-Loaned amounts of the {{AvName}}
-Value will be credited a rate equal to the loan interest rate less
-a spread, guaranteed not to exceed {{MaxAnnGuarLoanSpread}}.
+    {{LoanFootnote}}
 </p>
 
 {{#HasTerm}}
@@ -132,25 +94,12 @@ a spread, guaranteed not to exceed {{MaxAnnGuarLoanSpread}}.
     </p>
 {{/HasADD}}
 
-<!-- PDF !! FnDefnLifeIns -->
 <p>
-The definition of life insurance for this {{ContractName}} is the
-{{#DefnLifeInsIsGPT}}
-    guideline premium test. The guideline single premium
-    is ${{InitGSP}}
-    and the guideline level premium
-    is ${{InitGLP}}
-{{/DefnLifeInsIsGPT}}
-{{^DefnLifeInsIsGPT}}
-    cash value accumulation test.
-{{/DefnLifeInsIsGPT}}
+    {{FnDefnLifeIns}}
 </p>
 
-<!-- PDF !! FnOmnibusDisclaimer -->
 <p>
-This is an illustration only. An illustration is not intended
-to predict actual performance. Interest rates
-and values set forth in the illustration are not guaranteed.
+    {{FnOmnibusDisclaimer}}
 </p>
 
 <p>

@@ -1,6 +1,6 @@
 // Product database.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -23,13 +23,17 @@
 
 #include "database.hpp"
 
+#include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "currency.hpp"
 #include "data_directory.hpp"
 #include "dbdict.hpp"
 #include "dbvalue.hpp"
 #include "lmi.hpp"                      // is_antediluvian_fork()
 #include "oecumenic_enumerations.hpp"   // methuselah
 #include "product_data.hpp"
+#include "round_to.hpp"
+#include "ssize_lmi.hpp"
 #include "yare_input.hpp"
 
 #include <algorithm>                    // min()
@@ -115,11 +119,61 @@ void product_database::query_into
         }
 }
 
-/// Query database, using default index; write result into vector argument.
+/// Query database, using default index; write to vector<double> argument.
 
 void product_database::query_into(e_database_key k, std::vector<double>& dst) const
 {
     return query_into(k, dst, index_);
+}
+
+/// Query database, using default index; write to currency& argument.
+///
+/// Throws if conversion from double to currency (nearest cent)
+/// does not preserve value.
+
+void product_database::query_into(e_database_key k, currency& dst) const
+{
+    static round_to<double> const round_to_cents(2, r_to_nearest);
+    double z;
+    query_into(k, z);
+    dst = round_to_cents.c(z);
+    if(dblize(dst) != z)
+        {
+        alarum()
+            << "Database key '" << db_name_from_key(k)
+            << ": value " << z
+            << " not preserved in conversion"
+            << " to " << dst.cents() << " cents."
+            << LMI_FLUSH
+            ;
+        }
+}
+
+/// Query database, using default index; write to vector<currency> argument.
+///
+/// Throws if conversion from double to currency (nearest cent)
+/// does not preserve value for all elements.
+
+void product_database::query_into(e_database_key k, std::vector<currency>& dst) const
+{
+    static round_to<double> const round_to_cents(2, r_to_nearest);
+    std::vector<double> z;
+    query_into(k, z);
+    dst = round_to_cents.c(z);
+    for(int j = 0; j < lmi::ssize(z); ++j)
+        {
+        if(dblize(dst[j]) != z[j])
+            {
+            alarum()
+                << "Database key '" << db_name_from_key(k)
+                << "', duration " << j
+                << ": value " << z[j]
+                << " not preserved in conversion"
+                << " to " << dst[j].cents() << " cents."
+                << LMI_FLUSH
+                ;
+            }
+        }
 }
 
 /// Query database; return a scalar.
@@ -170,9 +224,9 @@ namespace
 ///
 /// Postcondition: returned pointer is not null; throws otherwise.
 
-std::shared_ptr<DBDictionary> antediluvian_db()
+std::shared_ptr<DBDictionary const> antediluvian_db()
 {
-    std::shared_ptr<DBDictionary> z(new DBDictionary);
+    auto z = std::make_shared<DBDictionary>();
     z->InitAntediluvian();
     LMI_ASSERT(z);
     return z;
@@ -187,12 +241,13 @@ void product_database::initialize(std::string const& product_name)
 {
     if(is_antediluvian_fork())
         {
-        static std::shared_ptr<DBDictionary> z(antediluvian_db());
+        static std::shared_ptr<DBDictionary const> z(antediluvian_db());
         db_ = z;
         }
     else
         {
-        product_data const p(product_name);
+        std::string const f = filename_from_product_name(product_name);
+        product_data const& p(*product_data::read_via_cache(f));
         std::string const filename(p.datum("DatabaseFilename"));
         LMI_ASSERT(!filename.empty());
         db_ = DBDictionary::read_via_cache(AddDataDir(filename));

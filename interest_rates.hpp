@@ -1,6 +1,6 @@
 // Interest rates.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -40,7 +40,7 @@
 // rates, and annual and monthly rates, are stored where needed.
 
 // Interest rates are generally stored as i (or, for different
-// periodicity, i upper 12, e.g.) rather than as (1 + i). It might
+// periodicity, N * i upper N) rather than as (1 + i). It might
 // seem better, at first blush, to store (1 + i), but monthiversary
 // calculations generally calculate an interest increment, round it,
 // and then add it to the principal.
@@ -142,9 +142,6 @@ class InterestRates
     InterestRates(BasicValues const&);
     ~InterestRates() = default;
 
-    std::vector<double> const& MlyGlpRate() const;
-    std::vector<double> const& MlyGspRate() const;
-
     std::vector<double> const& GenAcctGrossRate
         (mcenum_gen_basis
         ) const;
@@ -155,6 +152,7 @@ class InterestRates
 
     std::vector<double> const& SepAcctGrossRate
         (mcenum_sep_basis
+        ,mcenum_rate_period
         ) const;
     std::vector<double> const& SepAcctNetRate
         (mcenum_sep_basis
@@ -166,11 +164,9 @@ class InterestRates
         (mcenum_gen_basis gen_basis
         ,mcenum_sep_basis sep_basis
         ,int              year
-        ,double&          MonthlySepAcctGrossRate
-        ,double&          AnnualSepAcctMandERate
-        ,double&          AnnualSepAcctIMFRate
-        ,double&          AnnualSepAcctMiscChargeRate
-        ,double&          AnnualSepAcctSVRate
+        ,double           AnnualSepAcctMandERate
+        ,double           AnnualSepAcctIMFRate
+        ,double           AnnualSepAcctMiscChargeRate
         );
 
     std::vector<double> const& RegLoanSpread
@@ -212,22 +208,18 @@ class InterestRates
     InterestRates(InterestRates const&);
     InterestRates& operator=(InterestRates const&);
 
-    void Initialize(); // TODO ?? Implementation needs work.
     void Initialize(BasicValues const&);
     void InitializeGeneralAccountRates();
     void InitializeSeparateAccountRates();
     void InitializeLoanRates();
     void InitializeHoneymoonRates();
-    void Initialize7702Rates();
 
     int                Length_;
     round_to<double>   RoundIntRate_;
-    round_to<double>   Round7702Rate_;
 
     std::vector<double> Zero_;
 
     // General account interest rates.
-//    bool NeedGenAcctRates_; // TODO ?? Would this be useful?
     bool NeedMidpointRates_;
     mcenum_gen_acct_rate_type GenAcctRateType_;
     std::vector<double> GenAcctGrossRate_
@@ -243,6 +235,7 @@ class InterestRates
     bool NeedSepAcctRates_;
     mcenum_sep_acct_rate_type SepAcctRateType_;
     std::vector<double> SepAcctGrossRate_
+        [mc_n_rate_periods]
         [mc_n_sep_bases]
         ;
     std::vector<double> SepAcctNetRate_
@@ -252,14 +245,12 @@ class InterestRates
         ;
     mcenum_spread_method SepAcctSpreadMethod_;
     std::vector<double> SepAcctFloor_;
-    std::vector<double> Stabilizer_; // TODO ?? Obsolete?
     std::vector<double> AmortLoad_;
     std::vector<double> ExtraSepAcctCharge_;
     std::vector<double> InvestmentManagementFee_;
     std::vector<double> MAndERate_[mc_n_gen_bases];
 
     // Loan interest rates.
-    bool NeedLoanRates_;
     mcenum_loan_rate_type LoanRateType_;
     std::vector<double> PublishedLoanRate_;
     std::vector<double> PrefLoanRateDecr_;
@@ -295,11 +286,6 @@ class InterestRates
         ;
     std::vector<double> HoneymoonValueSpread_;
     std::vector<double> PostHoneymoonSpread_;
-
-    // GLP and GSP interest rates. DCV uses the GLP rate.
-    std::vector<double> SpreadFor7702_;
-    std::vector<double> MlyGlpRate_;
-    std::vector<double> MlyGspRate_;
 };
 
 inline std::vector<double> const& InterestRates::GenAcctGrossRate
@@ -318,10 +304,11 @@ inline std::vector<double> const& InterestRates::GenAcctNetRate
 }
 
 inline std::vector<double> const& InterestRates::SepAcctGrossRate
-    (mcenum_sep_basis sep_basis
+    (mcenum_sep_basis   sep_basis
+    ,mcenum_rate_period rate_period
     ) const
 {
-    return SepAcctGrossRate_[sep_basis];
+    return SepAcctGrossRate_[rate_period][sep_basis];
 }
 
 inline std::vector<double> const& InterestRates::SepAcctNetRate
@@ -398,16 +385,6 @@ inline std::vector<double> const& InterestRates::PostHoneymoonGenAcctRate
     ) const
 {
     return PostHoneymoonGenAcctRate_[rate_period][gen_basis];
-}
-
-inline std::vector<double> const& InterestRates::MlyGlpRate() const
-{
-    return MlyGlpRate_;
-}
-
-inline std::vector<double> const& InterestRates::MlyGspRate() const
-{
-    return MlyGspRate_;
 }
 
 #endif // interest_rates_hpp

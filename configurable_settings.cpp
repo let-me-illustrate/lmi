@@ -1,6 +1,6 @@
 // Configurable settings.
 //
-// Copyright (C) 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -27,7 +27,7 @@
 #include "alert.hpp"
 #include "contains.hpp"
 #include "data_directory.hpp"           // AddDataDir()
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "map_lookup.hpp"
 #include "mc_enum.hpp"                  // all_strings<>()
 #include "mc_enum_type_enums.hpp"       // mcenum_report_column
@@ -152,19 +152,34 @@ configurable_settings::configurable_settings()
     ascribe_members();
     load();
 
-    default_input_filename_ = fs::system_complete(default_input_filename_).string();
-    print_directory_        = fs::system_complete(print_directory_       ).string();
+    try
+        {
+        default_input_filename_ = fs::system_complete(default_input_filename_).string();
+// Performing this test seems like a good idea, but it would flag
+// an empty path as an error.
+//      validate_filepath(default_input_filename_, "Default input file");
+        }
+    catch(...)
+        {
+        report_exception();
+        // Silently replace invalid path with an empty string,
+        // which will produce an informative diagnostic when
+        // a default is needed.
+        default_input_filename_ = {};
+        }
 
     try
         {
+        print_directory_ = remove_alien_msw_root(print_directory_).string();
+        print_directory_ = fs::system_complete(print_directory_).string();
         validate_directory(print_directory_, "Print directory");
         }
     catch(...)
         {
         report_exception();
-        print_directory_ = fs::system_complete(".").string();
+        print_directory_ = fs::system_complete(AddDataDir(".")).string();
         warning()
-            << "If possible, current directory '"
+            << "If possible, data directory '"
             << print_directory_
             << "' will be used for print files instead."
             << LMI_FLUSH

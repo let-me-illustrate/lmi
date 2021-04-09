@@ -1,5 +1,5 @@
 {{!
-    Copyright (C) 2017, 2018, 2019, 2020 Gregory W. Chicares.
+    Copyright (C) 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -14,7 +14,7 @@
     along with this program; if not, write to the Free Software Foundation,
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 
-    http://savannah.nongnu.org/projects/lmi
+    https://savannah.nongnu.org/projects/lmi
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 }}
@@ -30,26 +30,9 @@
 
 <font size="-1">
 
-<!-- PDF !! DefnAV -->
-<p>
-<b>{{AvName}} Value:</b>
-The accumulation at interest of the net premiums paid,
-{{^SinglePremium}}
-less any withdrawals, less any monthly charges deducted.
-{{/SinglePremium}}
-{{#SinglePremium}}
-less any monthly charges deducted.
-{{/SinglePremium}}
-</p>
+{{DefnAV}}
 
-<!-- PDF !! DefnCSV -->
-<p>
-<b>{{CsvName}} Value:</b>
-{{AvName}} Value less {{ContractName}} debt.
-{{#Has1035ExchCharge}}
-  {{CashSurrValueFootnote}}
-{{/Has1035ExchCharge}}
-</p>
+{{DefnCSV}}
 
 {{^IsInforce}}
   <p>
@@ -97,17 +80,7 @@ less any monthly charges deducted.
 {{GuaranteedValuesFootnote}}
 </p>
 
-<!-- PDF !! DefnMec -->
-<p>
-<b>MEC:</b>
-Modified Endowment Contract - this classification is given
-to a {{ContractName}} in violation of TAMRA
-(Technical and Miscellaneous Revenue Act), which limits
-the amount of premium that can be paid into a life
-insurance {{ContractName}}. To the extent of gain in the {{ContractName}}, loans,
-distributions and withdrawals from a MEC are subject
-to income tax and may also trigger a tax penalty.
-</p>
+{{DefnMec}}
 
 {{^IsInforce}}
 <p>
@@ -128,22 +101,9 @@ to income tax and may also trigger a tax penalty.
 {{PolicyYearFootnote}}
 </p>
 
-<!-- PDF !! DefnOutlay -->
-<p>
-<b>Premium Outlay:</b>
-The amount of premium assumed to be paid by the {{ContractName}} owner
-or other premium payor.
-</p>
+{{DefnOutlay}}
 
-<!-- PDF !! DefnSpecAmt -->
-<p>
-<b>Selected Face Amount:</b>
-The Selected Face Amount may be decreased upon written application
-satisfactory to {{InsCoName}}. A
-requested decrease is allowed only once per Policy Year, and the
-resulting Selected Face Amount after decrease must meet the
-minimum defined in your {{ContractName}}.
-</p>
+{{DefnSpecAmt}}
 
 {{SinglePremiumFootnote}}
 

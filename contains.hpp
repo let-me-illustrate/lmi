@@ -1,6 +1,6 @@
 // Ascertain whether a "container" includes a given element.
 //
-// Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -30,7 +30,7 @@
 /// Determine whether a class has a find() member.
 ///
 /// See:
-///   http://lists.nongnu.org/archive/html/lmi/2010-05/msg00008.html
+///   https://lists.nongnu.org/archive/html/lmi/2010-05/msg00008.html
 /// I don't know who invented the technique. This implementation
 /// largely follows this pseudonymous posting:
 ///   http://www.rsdn.ru/forum/cpp/2720363.aspx
@@ -56,6 +56,9 @@ struct has_member_find
     static bool const value = sizeof(yea_t) == sizeof deduce(static_cast<Derived*>(nullptr));
 };
 
+template<typename T>
+inline constexpr bool has_member_find_v = has_member_find<T>::value;
+
 /// Ascertain whether a "container" includes a given element.
 ///
 /// Here, std::basic_string is considered a "container", this:
@@ -69,7 +72,7 @@ template<typename T>
 bool contains
     (T const& t
     ,typename T::value_type const& element
-    ,typename std::enable_if<!has_member_find<T>::value>::type* = nullptr
+    ,typename std::enable_if<!has_member_find_v<T>>::type* = nullptr
     )
 {
     return t.end() != std::find(t.begin(), t.end(), element);

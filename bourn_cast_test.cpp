@@ -1,6 +1,6 @@
 // Numeric stinted cast, across whose bourn no value is returned--unit test.
 //
-// Copyright (C) 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -64,14 +64,14 @@ void test_same(char const* file, int line)
     using traits = std::numeric_limits<T>;
     T upper = traits::max();
     T lower = traits::lowest();
-    INVOKE_BOOST_TEST_EQUAL(upper, bourn_cast<T>(upper), file, line);
-    INVOKE_BOOST_TEST_EQUAL(T( 1), bourn_cast<T>(T( 1)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(T( 0), bourn_cast<T>(T( 0)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(lower, bourn_cast<T>(lower), file, line);
+    INVOKE_LMI_TEST(upper == bourn_cast<T>(upper), file, line);
+    INVOKE_LMI_TEST(T( 1) == bourn_cast<T>(T( 1)), file, line);
+    INVOKE_LMI_TEST(T( 0) == bourn_cast<T>(T( 0)), file, line);
+    INVOKE_LMI_TEST(lower == bourn_cast<T>(lower), file, line);
 
     if(traits::is_signed)
         {
-        INVOKE_BOOST_TEST_EQUAL(T(-1), bourn_cast<T>(T(-1)), file, line);
+        INVOKE_LMI_TEST(T(-1) == bourn_cast<T>(T(-1)), file, line);
         }
 
     // Test whether integer limits are correctly calculated by this
@@ -86,12 +86,12 @@ void test_same(char const* file, int line)
         long double const x = std::scalbln(1.0l, traits::digits);
         long double const max = x - 1;
         long double const min = traits::is_signed ? -x : 0;
-        INVOKE_BOOST_TEST_EQUAL(traits::max(), max, file, line);
-        INVOKE_BOOST_TEST_EQUAL(traits::min(), min, file, line);
+        INVOKE_LMI_TEST(traits::max() == max, file, line);
+        INVOKE_LMI_TEST(traits::min() == min, file, line);
         T imax = bourn_cast<T>(max);
         T imin = bourn_cast<T>(min);
-        INVOKE_BOOST_TEST_EQUAL(traits::max(), imax, file, line);
-        INVOKE_BOOST_TEST_EQUAL(traits::min(), imin, file, line);
+        INVOKE_LMI_TEST(traits::max() == imax, file, line);
+        INVOKE_LMI_TEST(traits::min() == imin, file, line);
         }
 }
 
@@ -133,32 +133,32 @@ void test_signednesses(char const* file, int line)
     // SCHAR_MAX must be at least 127, so 99 must be representable.
 
     // Both char.
-    INVOKE_BOOST_TEST_EQUAL(CTo( 0), bourn_cast<CTo>(CFrom( 0)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(CTo( 1), bourn_cast<CTo>(CFrom( 1)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(CTo(99), bourn_cast<CTo>(CFrom(99)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(CTo_max, bourn_cast<CTo>(CFrom_max), file, line);
+    INVOKE_LMI_TEST_EQUAL(CTo( 0), bourn_cast<CTo>(CFrom( 0)), file, line);
+    INVOKE_LMI_TEST_EQUAL(CTo( 1), bourn_cast<CTo>(CFrom( 1)), file, line);
+    INVOKE_LMI_TEST_EQUAL(CTo(99), bourn_cast<CTo>(CFrom(99)), file, line);
+    INVOKE_LMI_TEST_EQUAL(CTo_max, bourn_cast<CTo>(CFrom_max), file, line);
 
     // Both int.
-    INVOKE_BOOST_TEST_EQUAL(ITo( 0), bourn_cast<ITo>(IFrom( 0)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(ITo( 1), bourn_cast<ITo>(IFrom( 1)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(ITo(99), bourn_cast<ITo>(IFrom(99)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(ITo_max, bourn_cast<ITo>(IFrom_max), file, line);
+    INVOKE_LMI_TEST_EQUAL(ITo( 0), bourn_cast<ITo>(IFrom( 0)), file, line);
+    INVOKE_LMI_TEST_EQUAL(ITo( 1), bourn_cast<ITo>(IFrom( 1)), file, line);
+    INVOKE_LMI_TEST_EQUAL(ITo(99), bourn_cast<ITo>(IFrom(99)), file, line);
+    INVOKE_LMI_TEST_EQUAL(ITo_max, bourn_cast<ITo>(IFrom_max), file, line);
 
     // Both long long.
-    INVOKE_BOOST_TEST_EQUAL(LTo( 0), bourn_cast<LTo>(LFrom( 0)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(LTo( 1), bourn_cast<LTo>(LFrom( 1)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(LTo(99), bourn_cast<LTo>(LFrom(99)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(LTo_max, bourn_cast<LTo>(LFrom_max), file, line);
+    INVOKE_LMI_TEST_EQUAL(LTo( 0), bourn_cast<LTo>(LFrom( 0)), file, line);
+    INVOKE_LMI_TEST_EQUAL(LTo( 1), bourn_cast<LTo>(LFrom( 1)), file, line);
+    INVOKE_LMI_TEST_EQUAL(LTo(99), bourn_cast<LTo>(LFrom(99)), file, line);
+    INVOKE_LMI_TEST_EQUAL(LTo_max, bourn_cast<LTo>(LFrom_max), file, line);
 
     // To wider than From.
-    INVOKE_BOOST_TEST_EQUAL(CTo_max, bourn_cast<ITo>(CFrom_max), file, line);
-    INVOKE_BOOST_TEST_EQUAL(CTo_max, bourn_cast<ITo>(CFrom_max), file, line);
-    INVOKE_BOOST_TEST_EQUAL(ITo_max, bourn_cast<LTo>(IFrom_max), file, line);
+    INVOKE_LMI_TEST_EQUAL(CTo_max, bourn_cast<ITo>(CFrom_max), file, line);
+    INVOKE_LMI_TEST_EQUAL(CTo_max, bourn_cast<ITo>(CFrom_max), file, line);
+    INVOKE_LMI_TEST_EQUAL(ITo_max, bourn_cast<LTo>(IFrom_max), file, line);
 
     // From wider than To.
-    INVOKE_BOOST_TEST_EQUAL(CTo( 0), bourn_cast<CTo>(IFrom( 0)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(CTo( 1), bourn_cast<CTo>(LFrom( 1)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(CTo(99), bourn_cast<CTo>(LFrom(99)), file, line);
+    INVOKE_LMI_TEST_EQUAL(CTo( 0), bourn_cast<CTo>(IFrom( 0)), file, line);
+    INVOKE_LMI_TEST_EQUAL(CTo( 1), bourn_cast<CTo>(LFrom( 1)), file, line);
+    INVOKE_LMI_TEST_EQUAL(CTo(99), bourn_cast<CTo>(LFrom(99)), file, line);
 
     if(!SignedFrom || !SignedTo) return;
 
@@ -173,29 +173,29 @@ void test_signednesses(char const* file, int line)
     // SCHAR_MIN must be <= -127, so -9 must be representable.
 
     // Both char.
-    INVOKE_BOOST_TEST_EQUAL(CTo(-1), bourn_cast<CTo>(CFrom(-1)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(CTo(-9), bourn_cast<CTo>(CFrom(-9)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(CTo_min, bourn_cast<CTo>(CFrom_min), file, line);
+    INVOKE_LMI_TEST_EQUAL(CTo(-1), bourn_cast<CTo>(CFrom(-1)), file, line);
+    INVOKE_LMI_TEST_EQUAL(CTo(-9), bourn_cast<CTo>(CFrom(-9)), file, line);
+    INVOKE_LMI_TEST_EQUAL(CTo_min, bourn_cast<CTo>(CFrom_min), file, line);
 
     // Both int.
-    INVOKE_BOOST_TEST_EQUAL(ITo(-1), bourn_cast<ITo>(IFrom(-1)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(ITo(-9), bourn_cast<ITo>(IFrom(-9)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(ITo_min, bourn_cast<ITo>(IFrom_min), file, line);
+    INVOKE_LMI_TEST_EQUAL(ITo(-1), bourn_cast<ITo>(IFrom(-1)), file, line);
+    INVOKE_LMI_TEST_EQUAL(ITo(-9), bourn_cast<ITo>(IFrom(-9)), file, line);
+    INVOKE_LMI_TEST_EQUAL(ITo_min, bourn_cast<ITo>(IFrom_min), file, line);
 
     // Both long long.
-    INVOKE_BOOST_TEST_EQUAL(LTo(-1), bourn_cast<LTo>(LFrom(-1)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(LTo(-9), bourn_cast<LTo>(LFrom(-9)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(LTo_min, bourn_cast<LTo>(LFrom_min), file, line);
+    INVOKE_LMI_TEST_EQUAL(LTo(-1), bourn_cast<LTo>(LFrom(-1)), file, line);
+    INVOKE_LMI_TEST_EQUAL(LTo(-9), bourn_cast<LTo>(LFrom(-9)), file, line);
+    INVOKE_LMI_TEST_EQUAL(LTo_min, bourn_cast<LTo>(LFrom_min), file, line);
 
     // To wider than From.
-    INVOKE_BOOST_TEST_EQUAL(CTo_min, bourn_cast<ITo>(CFrom_min), file, line);
-    INVOKE_BOOST_TEST_EQUAL(CTo_min, bourn_cast<ITo>(CFrom_min), file, line);
-    INVOKE_BOOST_TEST_EQUAL(ITo_min, bourn_cast<LTo>(IFrom_min), file, line);
+    INVOKE_LMI_TEST_EQUAL(CTo_min, bourn_cast<ITo>(CFrom_min), file, line);
+    INVOKE_LMI_TEST_EQUAL(CTo_min, bourn_cast<ITo>(CFrom_min), file, line);
+    INVOKE_LMI_TEST_EQUAL(ITo_min, bourn_cast<LTo>(IFrom_min), file, line);
 
     // From wider than To.
-    INVOKE_BOOST_TEST_EQUAL(CTo(-9), bourn_cast<CTo>(IFrom(-9)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(CTo(-9), bourn_cast<CTo>(LFrom(-9)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(ITo(-9), bourn_cast<ITo>(LFrom(-9)), file, line);
+    INVOKE_LMI_TEST_EQUAL(CTo(-9), bourn_cast<CTo>(IFrom(-9)), file, line);
+    INVOKE_LMI_TEST_EQUAL(CTo(-9), bourn_cast<CTo>(LFrom(-9)), file, line);
+    INVOKE_LMI_TEST_EQUAL(ITo(-9), bourn_cast<ITo>(LFrom(-9)), file, line);
 }
 
 /// Test floating-point conversions [conv.double].
@@ -219,8 +219,8 @@ void test_floating_conversions(char const* file, int line)
 
     From const largenum = nonstd::power(From(2), 100);
     From const smallnum = From(1) / largenum;
-    INVOKE_BOOST_TEST_EQUAL(largenum, bourn_cast<To>(largenum), file, line);
-    INVOKE_BOOST_TEST_EQUAL(smallnum, bourn_cast<To>(smallnum), file, line);
+    INVOKE_LMI_TEST_EQUAL(largenum, bourn_cast<To>(largenum), file, line);
+    INVOKE_LMI_TEST_EQUAL(smallnum, bourn_cast<To>(smallnum), file, line);
 
     // Normal min, max, and lowest.
 
@@ -230,19 +230,19 @@ void test_floating_conversions(char const* file, int line)
 
     if(from_traits::digits10 <= to_traits::digits10) // Widening or same.
         {
-        INVOKE_BOOST_TEST_EQUAL(from_min, bourn_cast<To>(from_min), file, line);
-        INVOKE_BOOST_TEST_EQUAL(from_max, bourn_cast<To>(from_max), file, line);
-        INVOKE_BOOST_TEST_EQUAL(from_low, bourn_cast<To>(from_low), file, line);
+        INVOKE_LMI_TEST_EQUAL(from_min, bourn_cast<To>(from_min), file, line);
+        INVOKE_LMI_TEST_EQUAL(from_max, bourn_cast<To>(from_max), file, line);
+        INVOKE_LMI_TEST_EQUAL(from_low, bourn_cast<To>(from_low), file, line);
         }
     else // Narrowing.
         {
-        INVOKE_BOOST_TEST_EQUAL(To(0), bourn_cast<To>(from_min), file, line);
-        BOOST_TEST_THROW
+        INVOKE_LMI_TEST_EQUAL(To(0), bourn_cast<To>(from_min), file, line);
+        LMI_TEST_THROW
             (bourn_cast<To>(from_max)
             ,std::runtime_error
             ,"Cast would transgress upper limit."
             );
-        BOOST_TEST_THROW
+        LMI_TEST_THROW
             (bourn_cast<To>(from_low)
             ,std::runtime_error
             ,"Cast would transgress lower limit."
@@ -251,22 +251,22 @@ void test_floating_conversions(char const* file, int line)
 
     // Signed zeros.
 
-    INVOKE_BOOST_TEST_EQUAL(0.0, bourn_cast<To>( From(0)), file, line);
-    INVOKE_BOOST_TEST_EQUAL(0.0, bourn_cast<To>(-From(0)), file, line);
-    INVOKE_BOOST_TEST(!std::signbit(bourn_cast<To>( From(0))), file, line);
-    INVOKE_BOOST_TEST( std::signbit(bourn_cast<To>(-From(0))), file, line);
+    INVOKE_LMI_TEST_EQUAL(0.0, bourn_cast<To>( From(0)), file, line);
+    INVOKE_LMI_TEST_EQUAL(0.0, bourn_cast<To>(-From(0)), file, line);
+    INVOKE_LMI_TEST(!std::signbit(bourn_cast<To>( From(0))), file, line);
+    INVOKE_LMI_TEST( std::signbit(bourn_cast<To>(-From(0))), file, line);
 
     // Infinities.
 
     To   const   to_inf =   to_traits::infinity();
     From const from_inf = from_traits::infinity();
 #if !defined TEST_BOOST_CAST_INSTEAD
-    INVOKE_BOOST_TEST( std::isinf(bourn_cast<To>( from_inf)), file, line);
-    INVOKE_BOOST_TEST( std::isinf(bourn_cast<To>(-from_inf)), file, line);
-    INVOKE_BOOST_TEST(!std::signbit(bourn_cast<To>( from_inf)), file, line);
-    INVOKE_BOOST_TEST( std::signbit(bourn_cast<To>(-from_inf)), file, line);
-    INVOKE_BOOST_TEST_EQUAL( to_inf, bourn_cast<To>( from_inf), file, line);
-    INVOKE_BOOST_TEST_EQUAL(-to_inf, bourn_cast<To>(-from_inf), file, line);
+    INVOKE_LMI_TEST( std::isinf(bourn_cast<To>( from_inf)), file, line);
+    INVOKE_LMI_TEST( std::isinf(bourn_cast<To>(-from_inf)), file, line);
+    INVOKE_LMI_TEST(!std::signbit(bourn_cast<To>( from_inf)), file, line);
+    INVOKE_LMI_TEST( std::signbit(bourn_cast<To>(-from_inf)), file, line);
+    INVOKE_LMI_TEST_EQUAL( to_inf, bourn_cast<To>( from_inf), file, line);
+    INVOKE_LMI_TEST_EQUAL(-to_inf, bourn_cast<To>(-from_inf), file, line);
 #else  // defined TEST_BOOST_CAST_INSTEAD
     // Boost allows conversion of infinities to the same type or a
     // wider floating type, but not to a narrower type--presumably
@@ -275,17 +275,17 @@ void test_floating_conversions(char const* file, int line)
     // of value.
     if(from_traits::digits10 <= to_traits::digits10) // Widening or same.
         {
-        INVOKE_BOOST_TEST_EQUAL( to_inf, bourn_cast<To>( from_inf), file, line);
-        INVOKE_BOOST_TEST_EQUAL(-to_inf, bourn_cast<To>(-from_inf), file, line);
+        INVOKE_LMI_TEST_EQUAL( to_inf, bourn_cast<To>( from_inf), file, line);
+        INVOKE_LMI_TEST_EQUAL(-to_inf, bourn_cast<To>(-from_inf), file, line);
         }
     else
         {
-        BOOST_TEST_THROW
+        LMI_TEST_THROW
             (bourn_cast<To>( from_traits::infinity())
             ,std::runtime_error
             ,"This cast should have succeeded."
             );
-        BOOST_TEST_THROW
+        LMI_TEST_THROW
             (bourn_cast<To>(-from_traits::infinity())
             ,std::runtime_error
             ,"This cast should have succeeded."
@@ -296,7 +296,7 @@ void test_floating_conversions(char const* file, int line)
     // NaNs.
 
     From const from_qnan = from_traits::quiet_NaN();
-    INVOKE_BOOST_TEST(std::isnan(bourn_cast<To>(from_qnan)), file, line);
+    INVOKE_LMI_TEST(std::isnan(bourn_cast<To>(from_qnan)), file, line);
 }
 
 /// Test conversions between integral and floating types [conv.fpint].
@@ -321,11 +321,11 @@ void test_conv_fpint(char const* file, int line)
 
     if(i_traits::digits <= f_traits::digits)
         {
-        INVOKE_BOOST_TEST_EQUAL(i_hi, bourn_cast<I>(f_i_hi), file, line);
+        INVOKE_LMI_TEST_EQUAL(i_hi, bourn_cast<I>(f_i_hi), file, line);
         }
     else
         {
-        BOOST_TEST_THROW
+        LMI_TEST_THROW
             (bourn_cast<I>(f_i_hi)
             ,std::runtime_error
             ,"Cast would transgress upper limit."
@@ -336,7 +336,7 @@ void test_conv_fpint(char const* file, int line)
     F const f_i_lo = bourn_cast<F>(i_lo);
 
 #if !defined TEST_BOOST_CAST_INSTEAD
-    INVOKE_BOOST_TEST_EQUAL(i_lo, bourn_cast<I>(f_i_lo), file, line);
+    INVOKE_LMI_TEST_EQUAL(i_lo, bourn_cast<I>(f_i_lo), file, line);
 #else  // defined TEST_BOOST_CAST_INSTEAD
     // boost::numeric_cast throws on conversions:
     // -9223372036854775808.0f --> 64-bit signed int
@@ -344,11 +344,11 @@ void test_conv_fpint(char const* file, int line)
     // -9223372036854775808.0  --> 64-bit signed int
     if(!i_traits::is_signed || i_traits::digits <= f_traits::digits)
         {
-        INVOKE_BOOST_TEST_EQUAL(i_lo, bourn_cast<I>(f_i_lo), file, line);
+        INVOKE_LMI_TEST_EQUAL(i_lo, bourn_cast<I>(f_i_lo), file, line);
         }
     else
         {
-        BOOST_TEST_THROW
+        LMI_TEST_THROW
             (bourn_cast<I>(f_i_lo)
             ,std::runtime_error
             ,"This cast should have succeeded."
@@ -367,26 +367,26 @@ void test_conv_fpint(char const* file, int line)
     // An integer-valued floating-point number has no fractional part
     // to truncate, so converting it to an integral type wide enough
     // to represent it preserves value.
-    INVOKE_BOOST_TEST_EQUAL(I(3), bourn_cast<I>(F(3)), file, line);
+    INVOKE_LMI_TEST_EQUAL(I(3), bourn_cast<I>(F(3)), file, line);
 
     // From positive zero.
-    INVOKE_BOOST_TEST_EQUAL(I(0), bourn_cast<I>(+F(0)), file, line);
+    INVOKE_LMI_TEST_EQUAL(I(0), bourn_cast<I>(+F(0)), file, line);
 
     // From negative zero. Interestingly, this negative value is
     // properly convertible to an unsigned integral type.
-    INVOKE_BOOST_TEST_EQUAL(I(0), bourn_cast<I>(-F(0)), file, line);
+    INVOKE_LMI_TEST_EQUAL(I(0), bourn_cast<I>(-F(0)), file, line);
 
     // Out of bounds.
 
     // Floating-point lowest and highest values are not necessarily
     // outside the range of all integral types, but they almost
     // certainly are for standard types.
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<I>(f_traits::max())
         ,std::runtime_error
         ,"Cast would transgress upper limit."
         );
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<I>(f_traits::lowest())
         ,std::runtime_error
         ,   (i_traits::is_signed
@@ -396,14 +396,14 @@ void test_conv_fpint(char const* file, int line)
         );
 
     // From +inf.
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<I>(+f_traits::infinity())
         ,std::runtime_error
         ,"Cannot cast infinite to integral."
         );
 
     // From -inf.
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<I>(-f_traits::infinity())
         ,std::runtime_error
         ,"Cannot cast infinite to integral."
@@ -414,7 +414,7 @@ void test_conv_fpint(char const* file, int line)
     // Truncating.
 
 #if !defined TEST_BOOST_CAST_INSTEAD
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<I>(F(3.14))
         ,std::runtime_error
         ,lmi_test::what_regex("^Cast.*would not preserve value\\.$")
@@ -422,11 +422,11 @@ void test_conv_fpint(char const* file, int line)
 #else  // defined TEST_BOOST_CAST_INSTEAD
     // boost::numeric cast truncates whereas bourn_cast throws; both
     // are deliberate design decisions.
-    INVOKE_BOOST_TEST_EQUAL(3, bourn_cast<I>(F(3.14)), file, line);
+    INVOKE_LMI_TEST_EQUAL(3, bourn_cast<I>(F(3.14)), file, line);
 #endif // defined TEST_BOOST_CAST_INSTEAD
 
     // From NaN.
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<I>(f_traits::quiet_NaN())
         ,std::runtime_error
         ,"Cannot cast NaN to integral."
@@ -474,16 +474,16 @@ void test_m64_neighborhood()
 #if defined __GNUC__
 #   pragma GCC diagnostic pop
 #endif // defined __GNUC__
-    BOOST_TEST(f_ull_max == static_cast<float>(ull_max));
+    LMI_TEST(f_ull_max == static_cast<float>(ull_max));
     // Suppressed because behavior is undefined:
-    // BOOST_TEST(ull_max == static_cast<unsigned long long int>(f_ull_max));
+    // LMI_TEST(ull_max == static_cast<unsigned long long int>(f_ull_max));
 
     // However, unlike static_cast, bourn_cast refuses to cast 2^64
     // to a 64-bit integer, because it is out of range and therefore
     // would constitute UB.
 
-    BOOST_TEST_EQUAL(f_ull_max, bourn_cast<float>(ull_max));
-    BOOST_TEST_THROW
+    LMI_TEST_EQUAL(f_ull_max, bourn_cast<float>(ull_max));
+    LMI_TEST_THROW
         (bourn_cast<unsigned long long int>(f_ull_max)
         ,std::runtime_error
         ,"Cast would transgress upper limit."
@@ -495,7 +495,7 @@ void test_m64_neighborhood()
     unsigned long long int const ull_hi = ull_traits::max() - 2; // 2^64 - 3
 
     float const f_ull_hi = bourn_cast<float>(ull_hi);
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<unsigned long long int>(f_ull_hi)
         ,std::runtime_error
         ,"Cast would transgress upper limit."
@@ -515,7 +515,7 @@ void test_m64_neighborhood()
 #   pragma GCC diagnostic pop
 #endif // defined __GNUC__
     float const f_interesting = bourn_cast<float>(ull_interesting);
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<unsigned long long int>(f_interesting)
         ,std::runtime_error
         ,"Cast would transgress upper limit."
@@ -527,7 +527,7 @@ void test_m64_neighborhood()
     // mantissa bits cannot represent a value this close to 2^64.
 
     double const d_ull_hi = bourn_cast<double>(ull_hi);
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<unsigned long long int>(d_ull_hi)
         ,std::runtime_error
         ,"Cast would transgress upper limit."
@@ -540,7 +540,7 @@ void test_m64_neighborhood()
     if(ull_traits::digits <= ld_traits::digits)
         {
         long double const ld_ull_hi = bourn_cast<long double>(ull_hi);
-        BOOST_TEST_EQUAL(ull_hi, bourn_cast<unsigned long long int>(ld_ull_hi));
+        LMI_TEST_EQUAL(ull_hi, bourn_cast<unsigned long long int>(ld_ull_hi));
         }
 
     // These circumstances for gcc on i686 or x86_64:
@@ -565,10 +565,10 @@ void test_m64_neighborhood()
         signed long long int const sll_max = sll_traits::max();
 
         long double const ld_sll_max = bourn_cast<long double>(sll_max);
-        BOOST_TEST_EQUAL(sll_max, bourn_cast<signed long long int>(ld_sll_max));
+        LMI_TEST_EQUAL(sll_max, bourn_cast<signed long long int>(ld_sll_max));
 
         long double const ld_sll_too_high = ld_sll_max + 1;
-        BOOST_TEST_THROW
+        LMI_TEST_THROW
             (bourn_cast<signed long long int>(ld_sll_too_high)
             ,std::runtime_error
             ,"Cast would transgress upper limit."
@@ -577,10 +577,10 @@ void test_m64_neighborhood()
         signed long long int const sll_min = sll_traits::min();
 
         long double const ld_sll_min = bourn_cast<long double>(sll_min);
-        BOOST_TEST_EQUAL(sll_min, bourn_cast<signed long long int>(ld_sll_min));
+        LMI_TEST_EQUAL(sll_min, bourn_cast<signed long long int>(ld_sll_min));
 
         long double const ld_sll_too_low = ld_sll_min - 1;
-        BOOST_TEST_THROW
+        LMI_TEST_THROW
             (bourn_cast<signed long long int>(ld_sll_too_low)
             ,std::runtime_error
             ,"Cast would transgress lower limit."
@@ -589,13 +589,13 @@ void test_m64_neighborhood()
 }
 
 /// Test boost::numeric_cast anomalies reported here:
-///   http://lists.nongnu.org/archive/html/lmi/2017-03/msg00127.html
+///   https://lists.nongnu.org/archive/html/lmi/2017-03/msg00127.html
 /// All these tests fail with boost-1.33.1 and gcc-4.9 '-O2' on
 ///   x86_64-linux-gnu
 ///   i686-linux-gnu
 ///   i686-w64-mingw32
 /// and also with boost-1.62 and x86_64-linux-gnu as confirmed here:
-///   http://lists.nongnu.org/archive/html/lmi/2017-03/msg00128.html
+///   https://lists.nongnu.org/archive/html/lmi/2017-03/msg00128.html
 
 void test_boost_anomalies()
 {
@@ -605,7 +605,7 @@ void test_boost_anomalies()
     // operand cannot be represented in the destination format and this
     // cannot otherwise be indicated, the invalid operation exception shall
     // be signaled."
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<int>(double_traits::quiet_NaN())
         ,std::runtime_error
         ,"Cannot cast NaN to integral."
@@ -620,9 +620,9 @@ void test_boost_anomalies()
         // That worked, so this should too...
         bourn_cast<float>(double_traits::infinity());
         // ...because all infinities are convertible.
-        BOOST_TEST(true);
+        LMI_TEST(true);
         }
-    catch(...) {BOOST_TEST(false);}
+    catch(...) {LMI_TEST(false);}
 
     try
         {
@@ -631,9 +631,9 @@ void test_boost_anomalies()
         // That worked, so this should too...
         bourn_cast<int>((float)INT_MIN);
         // ...because INT_MIN = an exact power of 2.
-        BOOST_TEST(true);
+        LMI_TEST(true);
         }
-    catch(...) {BOOST_TEST(false);}
+    catch(...) {LMI_TEST(false);}
 
     try
         {
@@ -641,9 +641,9 @@ void test_boost_anomalies()
         // That worked, so this should too...
         bourn_cast<long long int>((float)LLONG_MIN);
         // ...because LLONG_MIN = an exact power of 2.
-        BOOST_TEST(true);
+        LMI_TEST(true);
         }
-    catch(...) {BOOST_TEST(false);}
+    catch(...) {LMI_TEST(false);}
 
     try
         {
@@ -651,9 +651,9 @@ void test_boost_anomalies()
         // That worked, so this should too...
         bourn_cast<long long int>((double)LLONG_MIN);
         // ...because LLONG_MIN = an exact power of 2.
-        BOOST_TEST(true);
+        LMI_TEST(true);
         }
-    catch(...) {BOOST_TEST(false);}
+    catch(...) {LMI_TEST(false);}
 }
 
 /// Speed test: convert one million times, using static_cast.
@@ -721,12 +721,12 @@ int test_main(int, char*[])
 {
     // Motivating case. This test fails: -1 really isn't less than 1U.
     // (The test is suppressed to avoid a compiler warning.)
-//  BOOST_TEST(-1 < 1U);
+//  LMI_TEST(-1 < 1U);
     // This test succeeds: -1 is less than 1, as expected.
-    BOOST_TEST(-1 < bourn_cast<int>(1U));
+    LMI_TEST(-1 < bourn_cast<int>(1U));
     // This test throws: instead of converting a negative value to
     // unsigned, bourn_cast throws an exception.
-//  BOOST_TEST(bourn_cast<unsigned int>(-1) < 1U);
+//  LMI_TEST(bourn_cast<unsigned int>(-1) < 1U);
 
     // Trivially cast to same type.
 
@@ -756,16 +756,16 @@ int test_main(int, char*[])
     // are guaranteed to cover such diversity, even on a machine where
     // unsigned char and unsigned long long int are synonyms.
 
-    BOOST_TEST_EQUAL(true , bourn_cast<bool>(static_cast<signed char>(1)));
-    BOOST_TEST_EQUAL(false, bourn_cast<bool>(static_cast<signed char>(0)));
+    LMI_TEST_EQUAL(true , bourn_cast<bool>(static_cast<signed char>(1)));
+    LMI_TEST_EQUAL(false, bourn_cast<bool>(static_cast<signed char>(0)));
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<bool>(static_cast<signed char>(2))
         ,std::runtime_error
         ,"Cast would transgress upper limit."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<bool>(static_cast<signed char>(-1))
         ,std::runtime_error
         ,"Cannot cast negative to unsigned."
@@ -828,27 +828,27 @@ int test_main(int, char*[])
 
     // Attempt forbidden conversion from negative to unsigned.
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<unsigned char>(std::numeric_limits<signed char>::lowest())
         ,std::runtime_error
         ,"Cannot cast negative to unsigned."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<unsigned int >(std::numeric_limits<signed int >::lowest())
         ,std::runtime_error
         ,"Cannot cast negative to unsigned."
         );
 
     // Still forbidden even if unsigned type is wider than signed type.
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<unsigned long int>(std::numeric_limits<signed char>::lowest())
         ,std::runtime_error
         ,"Cannot cast negative to unsigned."
         );
 
     // Still forbidden even if value is only "slightly" negative.
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<unsigned long int>(-1)
         ,std::runtime_error
         ,"Cannot cast negative to unsigned."
@@ -860,7 +860,7 @@ int test_main(int, char*[])
     // attempted conversion of a negative value to an unsigned type.
 
 #if LLONG_MIN < SCHAR_MIN
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<signed char>(LLONG_MIN)
         ,std::runtime_error
         ,"Cast would transgress lower limit."
@@ -870,20 +870,20 @@ int test_main(int, char*[])
     // Transgress upper limit.
 
 #if UCHAR_MAX < ULLONG_MAX
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<unsigned char>(ULLONG_MAX)
         ,std::runtime_error
         ,"Cast would transgress upper limit."
         );
 #endif // UCHAR_MAX < ULLONG_MAX
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<signed char>(std::numeric_limits<unsigned char>::max())
         ,std::runtime_error
         ,"Cast would transgress upper limit."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (bourn_cast<signed int >(std::numeric_limits<unsigned int >::max())
         ,std::runtime_error
         ,"Cast would transgress upper limit."

@@ -1,6 +1,6 @@
 // Database dictionary manager.
 //
-// Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -61,7 +61,7 @@ namespace
 ///    char const*         ShortName;
 /// The fields not included are of course accessed by indexing a
 /// db_names object from the vector returned by this function:
-///   std::vector<db_names> const& LMI_SO GetDBNames();
+///   LMI_SO std::vector<db_names> const& GetDBNames();
 /// Even db_names::Idx is accessed that way, and I think our
 /// discussions have raised the issue of whether that member's value
 /// should be asserted to equal the value of the loop counter in
@@ -76,7 +76,7 @@ namespace
 ///
 /// (1) This class holds only an e_database_key enum. That's enough to
 /// find the corresponding struct db_names in the vector returned by
-///   std::vector<db_names> const& LMI_SO GetDBNames();
+///   LMI_SO std::vector<db_names> const& GetDBNames();
 /// and we can then access that struct's members directly. And we
 /// don't have to know that description() here is 'LongName' there.
 /// Then the only thing we have to worry about is mapping between

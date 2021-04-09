@@ -1,6 +1,6 @@
 // Ordinary- and universal-life commutation functions.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -41,26 +41,25 @@
 ///
 /// SOMEDAY !! Revisit the 'VECTORIZE' alternative with gcc-4.x .
 /// With gcc-3.4.5, it's twenty-five percent slower as measured by the
-/// unit test's mete_olcf().
+/// unit test's mete_olcf(). Update 2021-04: now it's thirty-three
+/// percent slower for both i686 (gcc-8.3) and x86_64 (gcc-10.2).
 
 OLCommFns::OLCommFns
-    (std::vector<double> const& a_q
-    ,std::vector<double> const& a_i
+    (std::vector<double> const& q
+    ,std::vector<double> const& i
     )
-    :q {a_q}
-    ,i {a_i}
 {
-    Length = lmi::ssize(q);
+    int length = lmi::ssize(q);
     LMI_ASSERT(lmi::ssize(i) == lmi::ssize(q));
 
 #if defined VECTORIZE
-    ed.resize(Length);
-    d .resize(Length);
-    c .resize(Length);
-    n .resize(Length);
-    m .resize(Length);
+    ed.resize(length);
+    d .resize(length);
+    c .resize(length);
+    n .resize(length);
+    m .resize(length);
 
-    std::vector<double> v(Length);
+    std::vector<double> v(length);
     v += 1.0 / (1.0 + i);
 
     ed += v * (1.0 - q);
@@ -71,13 +70,13 @@ OLCommFns::OLCommFns
 
     c += d * v * q;
 #else  // !defined VECTORIZE
-    d.resize(1 + Length);
-    c.resize(    Length);
-    n.resize(    Length);
-    m.resize(    Length);
+    d.resize(1 + length);
+    c.resize(    length);
+    n.resize(    length);
+    m.resize(    length);
 
     d[0] = 1.0;
-    for(int j = 0; j < Length; ++j)
+    for(int j = 0; j < length; ++j)
         {
         LMI_ASSERT(-1.0 != i[j]);
         double v = 1.0 / (1.0 + i[j]);
@@ -115,33 +114,28 @@ OLCommFns::OLCommFns
 /// processing. This is most often monthly, but need not be.
 
 ULCommFns::ULCommFns
-    (std::vector<double> const& a_qc
-    ,std::vector<double> const& a_ic
-    ,std::vector<double> const& a_ig
+    (std::vector<double> const& qc
+    ,std::vector<double> const& ic
+    ,std::vector<double> const& ig
     ,mcenum_dbopt_7702          dbo
     ,mcenum_mode                mode
     )
-    :qc    {a_qc}
-    ,ic    {a_ic}
-    ,ig    {a_ig}
-    ,dbo_  {dbo}
-    ,mode_ {mode}
 {
-    Length = lmi::ssize(qc);
+    int length = lmi::ssize(qc);
     LMI_ASSERT(lmi::ssize(ic) == lmi::ssize(qc));
     LMI_ASSERT(lmi::ssize(ig) == lmi::ssize(qc));
 
-    ad.resize(1 + Length);
-    kd.resize(    Length);
-    kc.resize(    Length);
-    an.resize(    Length);
-    km.resize(    Length);
+    ad.resize(1 + length);
+    kd.resize(    length);
+    kc.resize(    length);
+    an.resize(    length);
+    km.resize(    length);
 
-    int periods_per_year = mode_;
+    int periods_per_year = mode;
     int months_per_period = 12 / periods_per_year;
 
     ad[0] = 1.0;
-    for(int j = 0; j < Length; ++j)
+    for(int j = 0; j < length; ++j)
         {
         LMI_ASSERT( 0.0 <= qc[j] && qc[j] <= 1.0);
         LMI_ASSERT(-1.0 <  ic[j]);
@@ -155,7 +149,8 @@ ULCommFns::ULCommFns
         // Eckley equation (12).
         double q = f * g;
         // Eckley equation (19).
-        if(mce_option2_for_7702 == dbo_)
+        // SOMEDAY !! It would be nice to let dbo vary by year.
+        if(mce_option2_for_7702 == dbo)
             {
             i = i - q;
             }

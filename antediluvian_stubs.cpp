@@ -1,6 +1,6 @@
 // Stubs for the antediluvian branch.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,14 +15,17 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 #include "pchfile.hpp"
 
+#include "commutation_functions.hpp"
 #include "fund_data.hpp"
 #include "gpt_server.hpp"
+#include "ihs_irc7702.hpp"
+#include "lingo.hpp"
 #include "lmi.hpp"                      // is_antediluvian_fork()
 #include "mec_server.hpp"
 #include "product_data.hpp"
@@ -40,6 +43,16 @@ namespace
 
 void authenticate_system()
 {}
+
+double iglp()
+{
+    return 0.04;
+}
+
+double igsp()
+{
+    return 0.02 + iglp();
+}
 
 bool is_antediluvian_fork()
 {
@@ -88,6 +101,11 @@ bool gpt_state::is_detritus(std::string const&) const
     return false;
 }
 
+std::string const& lingo::lookup(int) const
+{
+    return empty_string;
+}
+
 mec_server::mec_server(mcenum_emission)
 {}
 
@@ -126,11 +144,19 @@ product_data::product_data()
 product_data::product_data(std::string const&)
 {}
 
+product_data::product_data(fs::path const&)
+{}
+
 product_data::~product_data() = default;
 
 product_data::product_data(product_data const&)
     :MemberSymbolTable <product_data> {}
 {}
+
+std::string filename_from_product_name(std::string const&)
+{
+    return empty_string;
+}
 
 int product_data::class_version() const
 {

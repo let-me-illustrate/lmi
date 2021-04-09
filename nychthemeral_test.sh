@@ -2,7 +2,7 @@
 
 # Run a comprehensive set of tests (excluding the automated GUI test).
 
-# Copyright (C) 2018, 2019, 2020 Gregory W. Chicares.
+# Copyright (C) 2018, 2019, 2020, 2021 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -17,14 +17,14 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 # Suggested use:
-#   $make clobber; ./nychthemeral_test.sh
-# Omitting the 'clobber' step when it's known to be unnecessary makes
-# that command take two minutes instead of five on a dual E5-2630 v3
+#   $make raze; ./nychthemeral_test.sh
+# Omitting the 'raze' step when it's known to be unnecessary makes the
+# tests take three minutes instead of thirteen on a dual E5-2630 v3
 # machine. What's difficult is knowing when it's truly unnecessary.
 
 # SOMEDAY !! Not all tests return nonzero on failure, so 'set -e'
@@ -39,11 +39,6 @@ setopt PIPE_FAIL
 # Directory where this script resides.
 
 srcdir=$(dirname "$(readlink --canonicalize "$0")")
-
-# Cannot recursively check script on path determined at runtime, so
-# a directive like 'source="$srcdir"' doesn't work.
-# shellcheck disable=SC1090
-. "$srcdir"/set_toolchain.sh
 
 coefficiency=${coefficiency:-"--jobs=$(nproc)"}
 
@@ -60,6 +55,10 @@ build_clutter='
 /^[^ ]*windres -o /d
 '
 
+uninstall_clutter='
+/^find \/opt\/lmi\/bin -type f -delete$/d
+'
+
 concinnity_clutter='
 /.*\/test_coding_rules_test\.sh$/d
 /^Testing .test_coding_rules.\.$/d
@@ -72,8 +71,11 @@ install_clutter='
 '
 
 cli_cgi_clutter='
-/^Test solve speed: /d
+/^Test speed:/d
 /^Timing test skipped: takes too long in debug mode$/d
+/^  naic.*solve *: [0123456789.e-]* s mean; *[0123456789]* us.*runs/d
+/^  finra.*solve *: [0123456789.e-]* s mean; *[0123456789]* us.*runs/d
+/^    Input:        [0-9]* milliseconds$/d
 /^    Input:        [0-9]* milliseconds$/d
 /^    Calculations: [0-9]* milliseconds$/d
 /^    Output:       [0-9]* milliseconds$/d
@@ -126,13 +128,41 @@ nychthemeral_clutter='
 /^  *[1-9][0-9]* source files/d
 /^  *[1-9][0-9]* source lines/d
 /^  *[1-9][0-9]* marked defects/d
+/^# speed test/d
 /^# xrc tests/d
 /^# test all valid emission types/d
 /^# schema tests/d
 /^# test mst --> xst conversion/d
+/^# test PETE rebuild/d
 /^$/d
 '
 
+lmi_build_type=$(/usr/share/misc/config.guess)
+
+case "$lmi_build_type" in
+    (*-*-cygwin*)
+        platform=Cygwin
+        ;;
+esac
+
+# This for-loop can iterate over as many toolchains as desired.
+# Make sure the current production architecture is built last, so that
+# it's the one installed to /opt/lmi/bin/ when this script ends.
+triplets="x86_64-w64-mingw32 i686-w64-mingw32"
+if [ "Cygwin" != "$platform" ] && [ "WSL" != "$platform" ]
+then
+# 'triplets' really is used, but in a zsh-specific way
+# shellcheck disable=SC2034
+  triplets="x86_64-pc-linux-gnu x86_64-w64-mingw32 i686-w64-mingw32"
+fi
+export LMI_COMPILER=gcc
+export LMI_TRIPLET
+# shellcheck disable=SC2043
+#for LMI_TRIPLET in i686-w64-mingw32 ;
+# "${=...} expansion--see zsh faq 3.1:
+#  "Why does $var where var="foo bar" not do what I expect?"
+for LMI_TRIPLET in ${=triplets} ;
+do
 # Directory for test logs.
 #
 # It seems redundant to construct yet another $prefix and $exec_prefix here;
@@ -141,9 +171,18 @@ prefix=/opt/lmi
 exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
 log_dir="$exec_prefix"/logs
 mkdir --parents "$log_dir"
-
 {
+printf 'LMI_TRIPLET = "%s"\n' "$LMI_TRIPLET" > /dev/tty
+
+# Cannot recursively check script on path determined at runtime, so
+# a directive like 'source="$srcdir"' doesn't work.
+# shellcheck disable=SC1090
+. "$srcdir"/set_toolchain.sh
+
 cd /opt/lmi/src/lmi
+
+make "$coefficiency" uninstall 2>&1 \
+  | tee "$log_dir"/uninstall | sed -e "$build_clutter" -e "$uninstall_clutter"
 
 printf '\n# test concinnity\n\n'
 make "$coefficiency" check_concinnity 2>&1 \
@@ -153,7 +192,7 @@ printf '# install; check physical closure\n\n'
 make "$coefficiency" install check_physical_closure 2>&1 \
   | tee "$log_dir"/install | sed -e "$build_clutter" -e "$install_clutter"
 
-printf 'Production system built--ready to start GUI test in another session.\n' > /dev/tty
+printf '  Production system built--ready to start GUI test in another session.\n' > /dev/tty
 
 printf '\n# cgi and cli tests\n\n'
 make "$coefficiency" --output-sync=recurse cgi_tests cli_tests 2>&1 \
@@ -189,6 +228,12 @@ printf '\n# unit tests in libstdc++ debug mode\n\n'
 # shellcheck disable=SC2039
 make "$coefficiency" --output-sync=recurse unit_tests build_type=safestdlib 2>&1 \
   | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests_safestdlib
+
+if [ "greg" = "$(whoami)" ]
+then
+  printf '\n# speed test\n\n'
+  make cli_timing
+fi
 
 printf '\n# xrc tests\n\n'
 java -jar /opt/lmi/third_party/rng/jing.jar -c xrc.rnc ./*.xrc 2>&1 \
@@ -249,8 +294,19 @@ cmp eraseme.xst eraseme.touchstone
 # shellcheck disable=SC2039
 for z in "$throwaway_dir"/*(N); do rm "$z"; done
 
+printf '\n# test PETE rebuild\n\n'
+
+# Automatically-generated PETE files are in the repository.
+# It is not actually necessary to rebuild them (except when PETE
+# is changed). Running this test routinely simply verifies that
+# the PETE rebuild script continues to work.
+
+cd /opt/lmi/src/lmi/tools/pete-2.1.1
+./rebuild_pete.sh >/dev/null
+
 # The automated GUI test simulates keyboard and mouse actions, so
 # no such actions must be performed manually while it is running.
 # Therefore, it is deliberately excluded from this script.
-printf "\nDo not forget to run the 'gui_test.sh' script.\n"
+printf "\n  Do not forget to run the 'gui_test.sh' script.\n"
 } 2>&1 | tee "$log_dir"/nychthemeral_test | sed -e "$nychthemeral_clutter"
+done

@@ -1,6 +1,6 @@
 // Show progress on lengthy operations--unit test.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -24,6 +24,7 @@
 #include "progress_meter.hpp"
 
 #include "test_tools.hpp"
+#include "unwind.hpp"                   // scoped_unwind_toggler
 
 #include <sstream>
 
@@ -64,12 +65,12 @@ void progress_meter_test::test_normal_usage()
         {
         // Intended use: do some work, then call reflect_progress() at
         // end of block, then call culminate() right after block ends.
-        BOOST_TEST(meter->reflect_progress());
+        LMI_TEST(meter->reflect_progress());
         // Of course, you could do more work here, too, if you like,
         // but that's generally not the best idea.
         }
     meter->culminate();
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         ("Some title...\n"
         ,progress_meter_unit_test_stream().str()
         );
@@ -87,7 +88,7 @@ void progress_meter_test::test_quiet_display_mode()
         );
     for(int i = 0; i < max_count; ++i)
         {
-        BOOST_TEST(meter->reflect_progress());
+        LMI_TEST(meter->reflect_progress());
         }
     meter->culminate();
 }
@@ -106,7 +107,7 @@ void progress_meter_test::test_distinct_metered_operations()
         );
     for(int i = 0; i < max_count; ++i)
         {
-        BOOST_TEST(meter0->reflect_progress());
+        LMI_TEST(meter0->reflect_progress());
         }
     meter0->culminate();
 
@@ -120,7 +121,7 @@ void progress_meter_test::test_distinct_metered_operations()
         );
     for(int i = 0; i < max_count; ++i)
         {
-        BOOST_TEST(meter1->reflect_progress());
+        LMI_TEST(meter1->reflect_progress());
         }
     meter1->culminate();
 
@@ -132,11 +133,11 @@ void progress_meter_test::test_distinct_metered_operations()
         );
     for(int i = 0; i < max_count; ++i)
         {
-        BOOST_TEST(meter0->reflect_progress());
+        LMI_TEST(meter0->reflect_progress());
         }
     meter0->culminate();
 
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         ("Operation 0...\nOperation 1...\nOperation 2...\n"
         ,progress_meter_unit_test_stream().str()
         );
@@ -155,10 +156,10 @@ void progress_meter_test::test_empty_title_and_zero_max_count()
         );
     for(int i = 0; i < max_count; ++i)
         {
-        BOOST_TEST(meter->reflect_progress());
+        LMI_TEST(meter->reflect_progress());
         }
     meter->culminate();
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         ("\n"
         ,progress_meter_unit_test_stream().str()
         );
@@ -175,7 +176,7 @@ void progress_meter_test::test_postcondition_failure()
             ,progress_meter::e_unit_test_mode
             )
         );
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (meter->culminate()
         ,std::runtime_error
         ,"3 iterations expected, but only 0 completed."
@@ -187,22 +188,23 @@ void progress_meter_test::test_postcondition_failure()
             {
             if(1 == i)
                 {
+                scoped_unwind_toggler meaningless_name;
                 throw "Thrown and caught before meter incremented.";
                 }
-            BOOST_TEST(meter->reflect_progress());
+            LMI_TEST(meter->reflect_progress());
             }
         catch(...)
             {
             }
         }
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (meter->culminate()
         ,std::runtime_error
         ,"3 iterations expected, but only 2 completed."
         );
 
     meter->reflect_progress();
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (meter->reflect_progress()
         ,std::runtime_error
         ,"Progress meter maximum count exceeded."

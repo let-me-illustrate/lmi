@@ -1,6 +1,6 @@
 // Decimal conversion between std::string and arithmetic types.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -117,8 +117,8 @@ To numeric_io_cast(From from, To = To())
 template<typename To, typename From>
 struct numeric_converter
 {
-    static_assert(std::is_void<To  >::value);
-    static_assert(std::is_void<From>::value);
+    static_assert(std::is_void_v<To  >);
+    static_assert(std::is_void_v<From>);
 
     To operator()(From const&) const
         {
@@ -132,7 +132,7 @@ struct numeric_converter
 template<typename To>
 struct numeric_converter<To, std::string>
 {
-    static_assert(std::is_arithmetic<To>::value);
+    static_assert(std::is_arithmetic_v<To>);
 
     typedef std::string From;
     To operator()(From const& from) const
@@ -201,7 +201,7 @@ struct numeric_converter<To, char const*>
 template<typename From>
 struct numeric_converter<std::string, From>
 {
-    static_assert(std::is_arithmetic<From>::value);
+    static_assert(std::is_arithmetic_v<From>);
 
     typedef std::string To;
     To operator()(From const& from) const

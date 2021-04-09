@@ -1,7 +1,7 @@
 #!/bin/sh
 
 cd /srv/cache_for_lmi/logs || printf 'Cannot cd\n'
-wget -N -nv https://github.com/vadz/lmi/raw/master/lmi_setup_00.sh
+wget -N -nv https://github.com/let-me-illustrate/lmi/raw/master/lmi_setup_00.sh
 chmod +x lmi_setup_00.sh
 # It would be undesirable for root to own the output file:
 # shellcheck disable=SC2024

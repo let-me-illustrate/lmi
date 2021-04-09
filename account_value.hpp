@@ -1,6 +1,6 @@
 // Account value.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include "basic_values.hpp"
+#include "currency.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "so_attributes.hpp"
 
@@ -50,7 +51,7 @@ class LMI_SO AccountValue final
 {
     friend class SolveHelper;
     friend class run_census_in_parallel;
-    friend double SolveTest();
+    friend currency SolveTest(); // Antediluvian.
 
   public:
     enum {months_per_year = 12};
@@ -59,34 +60,34 @@ class LMI_SO AccountValue final
     AccountValue(AccountValue&&) = default;
     ~AccountValue() override = default;
 
-    double RunAV                ();
+    void RunAV();
 
     void SetDebugFilename    (std::string const&);
 
     void SolveSetPmts // Antediluvian.
-        (double a_Pmt
-        ,int    ThatSolveBegYear
-        ,int    ThatSolveEndYear
+        (currency a_Pmt
+        ,int      ThatSolveBegYear
+        ,int      ThatSolveEndYear
         );
     void SolveSetSpecAmt // Antediluvian.
-        (double a_Bft
-        ,int    ThatSolveBegYear
-        ,int    ThatSolveEndYear
+        (currency a_Bft
+        ,int      ThatSolveBegYear
+        ,int      ThatSolveEndYear
         );
     void SolveSetLoans // Antediluvian.
-        (double a_Loan
-        ,int    ThatSolveBegYear
-        ,int    ThatSolveEndYear
+        (currency a_Loan
+        ,int      ThatSolveBegYear
+        ,int      ThatSolveEndYear
         );
     void SolveSetWDs // Antediluvian.
-        (double a_WD
-        ,int    ThatSolveBegYear
-        ,int    ThatSolveEndYear
+        (currency a_WD
+        ,int      ThatSolveBegYear
+        ,int      ThatSolveEndYear
         );
     void SolveSetLoanThenWD // Antediluvian.
-        (double a_Amt
-        ,int    ThatSolveBegYear
-        ,int    ThatSolveEndYear
+        (currency a_Amt
+        ,int      ThatSolveBegYear
+        ,int      ThatSolveEndYear
         );
 
     std::shared_ptr<Ledger const> ledger_from_av() const;
@@ -100,20 +101,27 @@ class LMI_SO AccountValue final
 
     int                    GetLength     () const;
 
-    double InforceLivesBoy         () const;
-    double InforceLivesEoy         () const;
-    double GetSepAcctAssetsInforce () const;
+    double   InforceLivesBoy        () const;
+    double   InforceLivesEoy        () const;
+    currency GetSepAcctAssetsInforce() const;
 
-    void process_payment          (double);
-    void IncrementAVProportionally(double);
-    void IncrementAVPreferentially(double, oenum_increment_account_preference);
-    void process_deduction        (double);
-    void process_distribution     (double);
-    void DecrementAVProportionally(double);
-    void DecrementAVProgressively (double, oenum_increment_account_preference);
+    void process_payment          (currency);
+    void IncrementAVProportionally(currency);
+    void IncrementAVPreferentially(currency, oenum_increment_account_preference);
+    void process_deduction        (currency);
+    void process_distribution     (currency);
+    void DecrementAVProportionally(currency);
+    void DecrementAVProgressively (currency, oenum_increment_account_preference);
 
-    double TotalAccountValue() const;
-    double CashValueFor7702() const;
+    currency TotalAccountValue() const;
+    currency CashValueFor7702() const;
+
+    currency base_specamt(int year) const;
+    currency term_specamt(int year) const;
+    currency specamt_for_7702(int year) const;
+    currency specamt_for_7702A(int year) const;
+
+    void assert_pmts_add_up(char const* file, int line, int month);
 
     // We're not yet entirely sure how to handle ledger values. Right now,
     // we have pointers to a Ledger and also to its variant and invariant
@@ -125,9 +133,9 @@ class LMI_SO AccountValue final
     LedgerInvariant& InvariantValues();
     LedgerVariant  & VariantValues  ();
 
-    double RunOneCell              (mcenum_run_basis);
-    double RunOneBasis             (mcenum_run_basis);
-    double RunAllApplicableBases   ();
+    void   RunOneCell              (mcenum_run_basis);
+    void   RunOneBasis             (mcenum_run_basis);
+    void   RunAllApplicableBases   ();
     void   InitializeLife          (mcenum_run_basis);
     void   FinalizeLife            (mcenum_run_basis);
     void   FinalizeLifeAllBases    ();
@@ -147,22 +155,15 @@ class LMI_SO AccountValue final
         ,int              a_InforceMonth = 0
         );
 
-    void   SolveSetSpecAmt      (double a_CandidateValue);
-    void   SolveSetEePrem       (double a_CandidateValue);
-    void   SolveSetErPrem       (double a_CandidateValue);
-    void   SolveSetLoan         (double a_CandidateValue);
-    void   SolveSetWD           (double a_CandidateValue);
+    void   SolveSetSpecAmt      (currency a_CandidateValue);
+    void   SolveSetEePrem       (currency a_CandidateValue);
+    void   SolveSetErPrem       (currency a_CandidateValue);
+    void   SolveSetLoan         (currency a_CandidateValue);
+    void   SolveSetWD           (currency a_CandidateValue);
 
     void   DebugPrint           ();
 
     void   SetClaims();
-    double GetCurtateNetClaimsInforce    () const;
-    double GetCurtateNetCoiChargeInforce () const;
-    void   SetProjectedCoiCharge         ();
-    double GetProjectedCoiChargeInforce  () const;
-    double ApportionNetMortalityReserve(double reserve_per_life_inforce);
-    double experience_rating_amortization_years() const;
-    double ibnr_as_months_of_mortality_charges() const;
 
     // To support the notion of an M&E charge that depends on total case
     // assets, we provide these functions, which are designed to be
@@ -172,59 +173,56 @@ class LMI_SO AccountValue final
     // to the point where interest is credited.
 
     // Process monthly transactions up to but excluding interest credit
-    double IncrementBOM
-        (int year
-        ,int month
-        ,double a_case_k_factor
+    currency IncrementBOM
+        (int    year
+        ,int    month
         );
     // Credit interest and process all subsequent monthly transactions
     void IncrementEOM
-        (int    year
-        ,int    month
-        ,double assets_post_bom
-        ,double cum_pmts_post_bom
+        (int      year
+        ,int      month
+        ,currency assets_post_bom
+        ,currency cum_pmts_post_bom
         );
 
     void IncrementEOY(int year);
 
     bool PrecedesInforceDuration(int year, int month);
 
-    double Solve(); // Antediluvian.
-    double Solve
+    currency Solve(); // Antediluvian.
+    currency Solve
         (mcenum_solve_type   a_SolveType
         ,int                 a_SolveBeginYear
         ,int                 a_SolveEndYear
         ,mcenum_solve_target a_SolveTarget
-        ,double              a_SolveTargetCsv
+        ,currency            a_SolveTargetCsv
         ,int                 a_SolveTargetYear
         ,mcenum_gen_basis    a_SolveGenBasis
         ,mcenum_sep_basis    a_SolveSepBasis
         );
 
-    double SolveTest               (double a_CandidateValue);
+    currency SolveTest               (currency a_CandidateValue);
 
-    double SolveGuarPremium        ();
-
-    double GetPartMortQ            (int year) const;
+    currency SolveGuarPremium        ();
 
     void PerformSpecAmtStrategy();
     void PerformSupplAmtStrategy();
-    double CalculateSpecAmtFromStrategy
+    currency CalculateSpecAmtFromStrategy
         (int                actual_year
         ,int                reference_year
-        ,double             explicit_value
+        ,currency           explicit_value
         ,mcenum_sa_strategy strategy
         ) const;
 
-    void PerformPmtStrategy(double* a_Pmt); // Antediluvian.
-    double PerformEePmtStrategy       () const;
-    double PerformErPmtStrategy       () const;
-    double DoPerformPmtStrategy
+    void PerformPmtStrategy(currency* a_Pmt); // Antediluvian.
+    currency PerformEePmtStrategy       () const;
+    currency PerformErPmtStrategy       () const;
+    currency DoPerformPmtStrategy
         (mcenum_solve_type                       a_SolveForWhichPrem
         ,mcenum_mode                             a_CurrentMode
         ,mcenum_mode                             a_InitialMode
         ,double                                  a_TblMult
-        ,std::vector<double> const&              a_PmtVector
+        ,std::vector<currency> const&            a_PmtVector
         ,std::vector<mcenum_pmt_strategy> const& a_StrategyVector
         ) const;
 
@@ -235,15 +233,15 @@ class LMI_SO AccountValue final
     void TxTestGPT                  ();
     void TxPmt(); // Antediluvian.
     void TxAscertainDesiredPayment  ();
-    void TxLimitPayment             (double a_maxpmt);
+    void TxLimitPayment             (double a_maxpmt); // CURRENCY !! not currency?
     void TxRecognizePaymentFor7702A
-        (double a_pmt
-        ,bool   a_this_payment_is_unnecessary
+        (currency a_pmt
+        ,bool     a_this_payment_is_unnecessary
         );
-    void TxAcceptPayment            (double payment);
-    double GetPremLoad
-        (double a_pmt
-        ,double a_portion_exempt_from_premium_tax
+    void TxAcceptPayment            (currency payment);
+    currency GetPremLoad
+        (currency a_pmt
+        ,currency a_portion_exempt_from_premium_tax
         );
     void TxLoanRepay             ();
 
@@ -269,34 +267,36 @@ class LMI_SO AccountValue final
 
     // Reflects optional daily interest accounting.
     double ActualMonthlyRate    (double monthly_rate) const;
-    double InterestCredited
-        (double principal
-        ,double monthly_rate
+    currency InterestCredited
+        (currency principal
+        ,double   monthly_rate
         ) const;
 
-    bool   IsModalPmtDate          (mcenum_mode) const;
-    bool   IsModalPmtDate          (); // Antediluvian.
-    int    MonthsToNextModalPmtDate() const;
-    double anticipated_deduction   (mcenum_anticipated_deduction);
+    bool     IsModalPmtDate          (mcenum_mode) const;
+    bool     IsModalPmtDate          (); // Antediluvian.
+    int      MonthsToNextModalPmtDate() const;
+    currency anticipated_deduction   (mcenum_anticipated_deduction);
 
-    double minimum_specified_amount(bool issuing_now, bool term_rider) const;
-    void   ChangeSpecAmtBy         (double delta);
-    void   ChangeSupplAmtBy        (double delta);
+    currency minimum_specified_amount(bool issuing_now, bool term_rider) const;
+    void     ChangeSpecAmtBy         (currency delta);
+    void     ChangeSupplAmtBy        (currency delta);
 
-    double SurrChg                 () const;
-    double CSVBoost                () const;
+    currency SurrChg                 () const;
+    currency CSVBoost                () const;
 
-    void   set_list_bill_year_and_month();
-    void   set_list_bill_premium();
+    void     set_list_bill_year_and_month();
+    void     set_list_bill_premium();
+    void     set_modal_min_premium();
 
-    void   SetMaxLoan              ();
-    void   SetMaxWD                ();
-    double GetRefundableSalesLoad  () const;
+    void     SetMaxLoan              ();
+    void     SetMaxWD                ();
+    currency GetRefundableSalesLoad() const;
 
-    void   ApplyDynamicMandE       (double assets);
+    void   ApplyDynamicMandE       (currency assets);
 
-    void   SetMonthlyDetail(int enumerator, std::string const& s);
-    void   SetMonthlyDetail(int enumerator, double d);
+    void   SetMonthlyDetail(int enumerator, std::string const&);
+    void   SetMonthlyDetail(int enumerator, double);
+    void   SetMonthlyDetail(int enumerator, currency);
     void   DebugPrintInit();
     void   DebugEndBasis();
 
@@ -309,12 +309,12 @@ class LMI_SO AccountValue final
     std::ofstream   DebugStream;
     std::vector<std::string> DebugRecord;
 
-    double          PriorAVGenAcct;
-    double          PriorAVSepAcct;
-    double          PriorAVRegLn;
-    double          PriorAVPrfLn;
-    double          PriorRegLnBal;
-    double          PriorPrfLnBal;
+    currency        PriorAVGenAcct;
+    currency        PriorAVSepAcct;
+    currency        PriorAVRegLn;
+    currency        PriorAVPrfLn;
+    currency        PriorRegLnBal;
+    currency        PriorPrfLnBal;
 
     // Mode flags.
     bool            Debugging;
@@ -335,13 +335,13 @@ class LMI_SO AccountValue final
     oenum_allocation_method            er_premium_allocation_method;
     oenum_increment_account_preference er_premium_preferred_account;
 
-    double GuarPremium;
+    currency GuarPremium;
 
     // These data members make Solve() arguments available to SolveTest().
     int                 SolveBeginYear_;
     int                 SolveEndYear_;
     mcenum_solve_target SolveTarget_;
-    double              SolveTargetCsv_;
+    currency            SolveTargetCsv_;
     int                 SolveTargetDuration_;
     mcenum_gen_basis    SolveGenBasis_;
     mcenum_sep_basis    SolveSepBasis_;
@@ -350,135 +350,132 @@ class LMI_SO AccountValue final
     mcenum_gen_basis GenBasis_;
     mcenum_sep_basis SepBasis_;
 
-    int         LapseMonth; // Antediluvian.
-    int         LapseYear;  // Antediluvian.
+    int      LapseMonth; // Antediluvian.
+    int      LapseYear;  // Antediluvian.
 
-    double External1035Amount;
-    double Internal1035Amount;
-    double Dumpin;
+    currency External1035Amount;
+    currency Internal1035Amount;
+    currency Dumpin;
 
-    double MlyNoLapsePrem;
-    double CumNoLapsePrem;
-    bool   NoLapseActive;
+    currency MlyNoLapsePrem;
+    currency CumNoLapsePrem;
+    bool     NoLapseActive;
 
     // Solves need to know when a no-lapse guarantee is active.
     // Prefer int here because vector<bool> is not a container.
     std::vector<int> YearlyNoLapseActive;
 
     // Ullage is any positive excess of amount requested over amount available.
-    std::vector<double> loan_ullage_;
-    std::vector<double> withdrawal_ullage_;
+    std::vector<currency> loan_ullage_;
+    std::vector<currency> withdrawal_ullage_;
 
-    double CumPmts;
-    double TaxBasis;
+    currency CumPmts;
+    currency TaxBasis;
     // This supports solves for tax basis. Eventually it should be
     // moved into the invariant-ledger class.
-    std::vector<double> YearlyTaxBasis;
+    std::vector<currency> YearlyTaxBasis;
 
     // Ee- and Er-GrossPmts aren't used directly in the AV calculations.
     // They must be kept separate for ledger output, and also for
     // tax basis calculations (when we fix that).
-    std::vector<double> GrossPmts;
-    std::vector<double> EeGrossPmts;
-    std::vector<double> ErGrossPmts;
-    std::vector<double> NetPmts;
+    std::vector<currency> GrossPmts;
+    std::vector<currency> EeGrossPmts;
+    std::vector<currency> ErGrossPmts;
+    std::vector<currency> NetPmts;
 
     // Reproposal input.
-    int     InforceYear;
-    int     InforceMonth;
-    double  InforceAVGenAcct;
-    double  InforceAVSepAcct;
-    double  InforceAVRegLn;
-    double  InforceAVPrfLn;
-    double  InforceRegLnBal;
-    double  InforcePrfLnBal;
-    double  InforceCumNoLapsePrem;
-    double  InforceBasis;
-    double  InforceCumPmts;
-    double  InforceTaxBasis;
-    double  InforceLoanBalance;
+    int      InforceYear;
+    int      InforceMonth;
+    currency InforceAVGenAcct;
+    currency InforceAVSepAcct;
+    currency InforceAVRegLn;
+    currency InforceAVPrfLn;
+    currency InforceRegLnBal;
+    currency InforcePrfLnBal;
+    currency InforceCumNoLapsePrem;
+    currency InforceCumPmts;
+    currency InforceTaxBasis;
 
     // Intermediate values.
-    int     Year;
-    int     Month;
-    int     MonthsSinceIssue;
-    bool    daily_interest_accounting;
-    int     days_in_policy_month;
-    int     days_in_policy_year;
-    double  AVGenAcct;
-    double  AVSepAcct;
-    double  SepAcctValueAfterDeduction;
-    double  GenAcctPaymentAllocation;
-    double  SepAcctPaymentAllocation;
-    double  NAAR;
-    double  CoiCharge;
-    double  RiderCharges;
-    double  NetCoiCharge;
-    double  SpecAmtLoadBase;
-    double  DacTaxRsv;
+    int      Year;
+    int      Month;
+    int      MonthsSinceIssue;
+    bool     daily_interest_accounting;
+    int      days_in_policy_month;
+    int      days_in_policy_year;
+    currency AVGenAcct;
+    currency AVSepAcct;
+    currency SepAcctValueAfterDeduction;
+    double   GenAcctPaymentAllocation;
+    double   SepAcctPaymentAllocation;
+    currency NAAR;
+    currency CoiCharge;
+    currency RiderCharges;
+    currency SpecAmtLoadBase;
+    double   DacTaxRsv; // CURRENCY !! obsolete--always zero
 
-    double  AVUnloaned; // Antediluvian.
+    currency AVUnloaned; // Antediluvian.
 
-    double  NetMaxNecessaryPremium;
-    double  GrossMaxNecessaryPremium;
-    double  NecessaryPremium;
-    double  UnnecessaryPremium;
+    currency NetMaxNecessaryPremium;
+    currency GrossMaxNecessaryPremium;
+    currency NecessaryPremium;
+    currency UnnecessaryPremium;
 
     // 7702A CVAT deemed cash value.
-    double  Dcv;
-    double  DcvDeathBft;
-    double  DcvNaar;
-    double  DcvCoiCharge;
-    double  DcvTermCharge;
-    double  DcvWpCharge;
+    currency Dcv;
+    currency DcvDeathBft;
+    currency DcvNaar;
+    currency DcvCoiCharge;
+    currency DcvTermCharge;
+    currency DcvWpCharge;
     // For other riders like AD&D, charge for DCV = charge otherwise.
 
     // Honeymoon provision.
-    bool    HoneymoonActive;
-    double  HoneymoonValue;
+    bool     HoneymoonActive;
+    currency HoneymoonValue;
 
     // 7702 GPT
-    double  GptForceout;
-    double  YearsTotalGptForceout;
+    currency GptForceout;
+    currency YearsTotalGptForceout;
 
     // Intermediate values within annual or monthly loop only.
-    double      pmt;       // Antediluvian.
+    currency    pmt;       // Antediluvian.
     mcenum_mode pmt_mode;  // Antediluvian.
     int         ModeIndex; // Antediluvian.
 
-    double  GenAcctIntCred;
-    double  SepAcctIntCred;
-    double  RegLnIntCred;
-    double  PrfLnIntCred;
-    double  AVRegLn;
-    double  AVPrfLn;
-    double  RegLnBal;
-    double  PrfLnBal;
-    double  MaxLoan;
-    double  UnusedTargetPrem;
-    double  AnnualTargetPrem;
-    double  MaxWD;
-    double  GrossWD;
-    double  NetWD;
-    double  CumWD;
+    currency GenAcctIntCred;
+    currency SepAcctIntCred;
+    currency RegLnIntCred;
+    currency PrfLnIntCred;
+    currency AVRegLn;
+    currency AVPrfLn;
+    currency RegLnBal;
+    currency PrfLnBal;
+    currency MaxLoan;
+    currency UnusedTargetPrem;
+    currency AnnualTargetPrem;
+    currency MaxWD;
+    currency GrossWD;
+    currency NetWD;
+    currency CumWD;
 
-    double      wd;           // Antediluvian.
-    double      mlyguarv;     // Antediluvian.
+    currency wd;           // Antediluvian.
+    double   mlyguarv;     // Antediluvian.
 
     // For GPT: SA, DB, and DBOpt before the day's transactions are applied.
-    double       OldSA;
-    double       OldDB;
+    currency     OldSA;
+    currency     OldDB;
     mcenum_dbopt OldDBOpt;
 
     // Permanent invariants are in class BasicValues; these are
     // annual invariants.
     double       YearsCorridorFactor;
     mcenum_dbopt YearsDBOpt;
-    double       YearsSpecAmt;
-    double       YearsAnnualPolicyFee;
-    double       YearsMonthlyPolicyFee;
+    currency     YearsAnnualPolicyFee;
+    currency     YearsMonthlyPolicyFee;
     double       YearsGenAcctIntRate;
-    double       YearsSepAcctIntRate;
+    double       YearsSepAcctIntRate; // Rename: "Net"
+    double       YearsSepAcctGrossRate;
 
     double       YearsDcvIntRate;
 
@@ -512,106 +509,98 @@ class LMI_SO AccountValue final
     double       YearsSalesLoadRefundRate;
     double       YearsDacTaxLoadRate;
 
-    double  MonthsPolicyFees;
-    double  SpecAmtLoad;
-    double  premium_load_;
-    double  sales_load_;
-    double  premium_tax_load_;
-    double  dac_tax_load_;
+    currency MonthsPolicyFees;
+    currency SpecAmtLoad;
+    // Premium load is (rounded) currency; its components are not.
+    double   premium_load_;
+    double   sales_load_;
+    double   premium_tax_load_;
+    double   dac_tax_load_;
 
     // Stratified loads are determined by assets and cumulative
     // payments immediately after the monthly deduction. Both are
     // stored at the proper moment, where they're constrained to be
     // nonnegative. Stratified loads happen to be used only for the
     // separate account.
-    double  AssetsPostBom;
-    double  CumPmtsPostBom;
-    double  SepAcctLoad;
+    currency AssetsPostBom;
+    currency CumPmtsPostBom;
+    currency SepAcctLoad;
 
-    double  case_k_factor;
-    double  ActualCoiRate;
+    double   ActualCoiRate;
 
-    bool    SplitMinPrem;
-    bool    UnsplitSplitMinPrem;
+    bool     SplitMinPrem;
+    bool     UnsplitSplitMinPrem;
 
-    int     list_bill_year_  {methuselah};
-    int     list_bill_month_ {13};
+    int      list_bill_year_  {methuselah};
+    int      list_bill_month_ {13};
 
-    bool    TermCanLapse;
-    bool    TermRiderActive;
-    double  ActualSpecAmt;
-    double  TermSpecAmt;
-    double  TermDB;
-    double  DB7702A;
-    double  DBIgnoringCorr;
-    double  DBReflectingCorr;
+    bool     TermCanLapse;
+    bool     TermRiderActive;
+    currency ActualSpecAmt;
+    currency TermSpecAmt;
+    currency TermDB;
+    currency DB7702A;
+    currency DBIgnoringCorr;
+    currency DBReflectingCorr;
 
-    double      deathbft; // Antediluvian.
-    bool        haswp;    // Antediluvian.
-    bool        hasadb;   // Antediluvian.
+    currency deathbft; // Antediluvian.
+    bool     haswp;    // Antediluvian.
+    bool     hasadb;   // Antediluvian.
 
-    double  ActualLoan;
-    double  RequestedLoan;
-    double  RequestedWD;
+    currency ActualLoan;
+    currency RequestedLoan;
+    currency RequestedWD;
 
-    double  AdbCharge;
-    double  SpouseRiderCharge;
-    double  ChildRiderCharge;
-    double  WpCharge;
-    double  TermCharge;
+    currency AdbCharge;
+    currency SpouseRiderCharge;
+    currency ChildRiderCharge;
+    currency WpCharge;
+    currency TermCharge;
 
-    double  MlyDed;
-    double  mlydedtonextmodalpmtdate; // Antediluvian.
+    currency MlyDed;
+    currency mlydedtonextmodalpmtdate; // Antediluvian.
 
-    double  YearsTotalCoiCharge;
-    double  YearsTotalRiderCharges;
-    double  YearsAVRelOnDeath;
-    double  YearsLoanRepaidOnDeath;
-    double  YearsGrossClaims;
-    double  YearsDeathProceeds;
-    double  YearsNetClaims;
-    double  YearsTotalNetIntCredited;
-    double  YearsTotalGrossIntCredited;
-    double  YearsTotalLoanIntAccrued;
-    double  YearsTotalPolicyFee;
-    double  YearsTotalDacTaxLoad;
-    double  YearsTotalSpecAmtLoad;
-    double  YearsTotalSepAcctLoad;
+    currency YearsTotalCoiCharge;
+    currency YearsTotalRiderCharges;
+    double   YearsAVRelOnDeath;
+    double   YearsLoanRepaidOnDeath;
+    double   YearsGrossClaims;
+    double   YearsDeathProceeds;
+    double   YearsNetClaims;
+    currency YearsTotalNetIntCredited;
+    currency YearsTotalGrossIntCredited;
+    currency YearsTotalLoanIntAccrued;
+    currency YearsTotalPolicyFee;
+    double   YearsTotalDacTaxLoad; // cumulative (unrounded) 'dac_tax_load_'
+    currency YearsTotalSpecAmtLoad;
+    currency YearsTotalSepAcctLoad;
 
-    std::vector<double> partial_mortality_q;
-
-    // For experience rating.
-    double  CoiRetentionRate;
-    double  ExperienceRatingAmortizationYears;
-    double  IbnrAsMonthsOfMortalityCharges;
-    double  NextYearsProjectedCoiCharge;
-    double  YearsTotalNetCoiCharge;
-
-    double  CumulativeSalesLoad;
+    currency CumulativeSalesLoad;
 
     // Illustrated outlay must be the same for current, guaranteed,
     // and all other bases. Outlay components are set on whichever
     // basis governs, usually current, then stored for use with all
     // other bases.
 
-    std::vector<double> OverridingPmts; // Antediluvian.
+    std::vector<currency> OverridingPmts; // Antediluvian.
+    std::vector<currency> stored_pmts;    // Antediluvian.
 
-    std::vector<double> OverridingEePmts;
-    std::vector<double> OverridingErPmts;
+    std::vector<currency> OverridingEePmts;
+    std::vector<currency> OverridingErPmts;
 
     // We need no 'OverridingDumpin' because we simply treat dumpin as
     // employee premium.
-    double OverridingExternal1035Amount;
-    double OverridingInternal1035Amount;
+    currency OverridingExternal1035Amount;
+    currency OverridingInternal1035Amount;
 
-    std::vector<double> OverridingLoan;
-    std::vector<double> OverridingWD;
+    std::vector<currency> OverridingLoan;
+    std::vector<currency> OverridingWD;
 
-    std::vector<double> SurrChg_; // Of uncertain utility.
+    std::vector<currency> SurrChg_; // Of uncertain utility.
 };
 
 //============================================================================
-inline double AccountValue::TotalAccountValue() const
+inline currency AccountValue::TotalAccountValue() const
 {
     return AVGenAcct + AVSepAcct + AVRegLn + AVPrfLn;
 }
@@ -644,18 +633,6 @@ inline LedgerInvariant const& AccountValue::InvariantValues() const
 inline int AccountValue::GetLength() const
 {
     return BasicValues::GetLength();
-}
-
-//============================================================================
-inline double AccountValue::experience_rating_amortization_years() const
-{
-    return ExperienceRatingAmortizationYears;
-}
-
-//============================================================================
-inline double AccountValue::ibnr_as_months_of_mortality_charges() const
-{
-    return IbnrAsMonthsOfMortalityCharges;
 }
 
 #endif // account_value_hpp

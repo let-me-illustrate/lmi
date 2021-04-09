@@ -1,6 +1,6 @@
 // GPT server.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -32,9 +32,20 @@
 #include "fenv_lmi.hpp"
 #include "gpt_input.hpp"
 #include "ihs_irc7702.hpp"
-#include "ihs_x_type.hpp"
 
 #include <exception>
+
+enum
+    {unknown_error                          = 0x0001
+    ,precision_changed                      = 0x0002
+    ,implausible_input                      = 0x0004
+    ,inconsistent_input                     = 0x0008
+    ,adjustable_event_forbidden_at_issue    = 0x0010
+    ,guideline_negative                     = 0x0020
+    ,misstatement_of_age_or_gender          = 0x0040
+    ,range_error                            = 0x0080
+    ,runtime_error                          = 0x0100
+    };
 
 //============================================================================
 void EnterServer()
@@ -90,8 +101,9 @@ void Server7702::Process()
         }
     catch(server7702_precision_changed const& e)
         {
-        // TODO ?? Perhaps the control word should be changed and
-        // processing restarted.
+        // If an x87 build of a GPT server were to be released, then
+        // perhaps the control word should be changed and processing
+        // restarted.
         Output.Status |= precision_changed;
         warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
@@ -103,11 +115,6 @@ void Server7702::Process()
     catch(server7702_inconsistent_input const& e)
         {
         Output.Status |= inconsistent_input;
-        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
-        }
-    catch(x_product_rule_violated const& e)
-        {
-        Output.Status |= product_rule_violated;
         warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
     catch(server7702_adjustable_event_forbidden_at_issue const& e)
@@ -127,7 +134,12 @@ void Server7702::Process()
         }
     catch(std::range_error const& e)
         {
-        Output.Status |= implausible_input; // TODO ?? can we be more specific?
+        Output.Status |= range_error;
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
+        }
+    catch(std::runtime_error const& e)
+        {
+        Output.Status |= runtime_error;
         warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
 
@@ -174,7 +186,6 @@ void Server7702::PerformProcessing()
 
 //============================================================================
 // Other conditions are tested elsewhere.
-// TODO ?? We can add many similar conditions here.
 void Server7702::VerifyPlausibilityOfInput() const
 {
     if(Input.IssueAge.value() < 0)
@@ -204,7 +215,7 @@ void Server7702::VerifyPlausibilityOfInput() const
 //============================================================================
 void Server7702::DecideWhatToCalculate()
 {
-    // TODO ?? Is this not superfluous?
+    // TAXATION !! Is this not superfluous?
     if
         (
 //          Input.NewIssueAge               != Input.OldIssueAge // Not differentiated.
@@ -221,16 +232,16 @@ void Server7702::DecideWhatToCalculate()
     IsIssuedToday = Input.EffectiveDate == Input.InforceAsOfDate;
 
     IsPossibleAdjustableEvent =
-// TODO ?? Why treat a taxable withdrawal as an adjustment event?
+// TAXATION !! Why treat a taxable withdrawal as an adjustment event?
 //            0.0                             != Input.PremsPaidDecrement
             Input.NewDbo                    != Input.OldDbo
         ||  (   Input.NewSpecAmt            != Input.OldSpecAmt
             &&  Input.NewDeathBft           != Input.OldDeathBft
             )
-// TODO ?? NEED DECISION whether it's a SA or DB change that causes adj event
+// TAXATION !! NEED DECISION whether it's a SA or DB change that causes adj event
         ||  Input.NewQabTermAmt             != Input.OldQabTermAmt
-// TODO ?? No adj event if term and SA change but DB remains constant, but
-// TODO ?? NEED DECISION whether it's a SA or DB change that causes adj event
+// TAXATION !! No adj event if term and SA change but DB remains constant, but
+// TAXATION !! NEED DECISION whether it's a SA or DB change that causes adj event
         ||  Input.NewSmoking                != Input.OldSmoking
 // 7702 mortality basis is the same for preferred vs. standard
 // Assume nothing else (e.g. loads) varies by that either
@@ -274,7 +285,6 @@ void Server7702::ProcessNewIssue()
         &&  Input.OldDbo                    == Input.NewDbo
         ;
 
-    // TODO ?? It would be better to spell them all out.
     if(!okay)
         {
         throw server7702_inconsistent_input
@@ -285,7 +295,7 @@ void Server7702::ProcessNewIssue()
     SetDoleBentsenValuesA();
     Output.GuidelineLevelPremium    = Output.GuidelineLevelPremiumPolicyA;
     Output.GuidelineSinglePremium   = Output.GuidelineSinglePremiumPolicyA;
-// TODO ?? NEED DECISION Only if an adj event really occurred, as defined.
+// TAXATION !! NEED DECISION Only if an adj event really occurred, as defined.
     LMI_ASSERT(false == Output.AdjustableEventOccurred);
 }
 
@@ -293,7 +303,7 @@ void Server7702::ProcessNewIssue()
 // Set new GLP and GSP following an adjustable event, after validating input.
 void Server7702::ProcessAdjustableEvent()
 {
-// TODO ??  Input.OldDeathBft = ?;
+// TAXATION !!  Input.OldDeathBft = ?;
 //  GuidelineLevelPremium
 //  GuidelineSinglePremium
 

@@ -1,6 +1,6 @@
 // MVC Model for life-insurance illustrations: xml I/O.
 //
-// Copyright (C) 1998, 2001, 2002, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -117,6 +117,8 @@ bool Input::is_detritus(std::string const& s) const
         ,"DeprecatedSolveToWhich"           // Renamed (without 'Deprecated'-).
         ,"DeprecatedUseDOB"                 // Renamed (without 'Deprecated'-).
         ,"DeprecatedUseDOR"                 // Withdrawn.
+        ,"ExperienceRatingInitialKFactor"   // Withdrawn.
+        ,"ExperienceReserveRate"            // Withdrawn.
         ,"External1035ExchangeBasis"        // Renamed to 'External1035ExchangeTaxBasis'.
         ,"FilingApprovalState"              // Alias for 'StateOfJurisdiction'.
         ,"FirstName"                        // Single name instead.
@@ -130,6 +132,8 @@ bool Input::is_detritus(std::string const& s) const
         ,"InforceDataSource"                // Supplanted by 'data_source' attribute.
         ,"InforceDcvDeathBenefit"           // Misbegotten.
         ,"InforceExperienceReserve"         // Renamed before implementation.
+        ,"InforceNetExperienceReserve"      // Withdrawn.
+        ,"InforceYtdNetCoiCharge"           // Withdrawn.
         ,"InsuredPremiumTableNumber"        // Never implemented.
         ,"Internal1035ExchangeBasis"        // Renamed to 'Internal1035ExchangeTaxBasis'.
         ,"LastName"                         // Single name instead.
@@ -143,6 +147,7 @@ bool Input::is_detritus(std::string const& s) const
         ,"MiddleName"                       // Single name instead.
         ,"NetMortalityChargeHistory"        // Renamed before implementation.
         ,"OffshoreCorridorFactor"           // Withdrawn.
+        ,"OverrideExperienceReserveRate"    // Withdrawn.
         ,"PartialMortalityTable"            // Never implemented.
         ,"PayLoanInterestInCash"            // Never implemented.
         ,"PolicyDate"                       // Never implemented.
@@ -160,6 +165,7 @@ bool Input::is_detritus(std::string const& s) const
         ,"SpecifiedAmountFromIssue"         // Withdrawn.
         ,"SpecifiedAmountFromRetirement"    // Withdrawn.
         ,"TermProportion"                   // Disused: cf. 'TermRiderProportion'.
+        ,"UseExperienceRating"              // Withdrawn.
         ,"UseOffshoreCorridorFactor"        // Withdrawn.
         ,"WithdrawalAmount"                 // Withdrawn.
         ,"WithdrawalFromAge"                // Withdrawn.
@@ -172,6 +178,15 @@ bool Input::is_detritus(std::string const& s) const
         };
     return contains(v, s);
 }
+
+// INPUT !! In 'cell.{rnc,xsd}, elements
+//   ExperienceRatingInitialKFactor
+//   ExperienceReserveRate
+//   InforceNetExperienceReserve
+//   InforceYtdNetCoiCharge
+//   OverrideExperienceReserveRate
+//   UseExperienceRating
+// are obsolete and should be removed in a future version.
 
 void Input::redintegrate_ex_ante
     (int                file_version
@@ -356,6 +371,22 @@ void Input::redintegrate_ex_ante
         if
             (  contains(name, "SupplementalReportColumn")
             && contains(value, "Zero")
+            )
+            {
+            value = "[none]";
+            }
+        // Prior to 2021-01-31, experience-rating columns were offered
+        // for some supplemental reports, but have been withdrawn. For
+        // backward compatibility, they're silently ignored wherever
+        // they occurred in old input files.
+        if
+            (   contains(name, "SupplementalReportColumn")
+            &&
+                (  contains(value, "ExperienceReserve")
+                || contains(value, "NetCOICharge")
+                || contains(value, "ProjectedCoiCharge")
+                || contains(value, "KFactor")
+                )
             )
             {
             value = "[none]";

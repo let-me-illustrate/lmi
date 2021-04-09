@@ -7,3 +7,23 @@
 [submodule "3rdparty/xmlwrapp"]
 	path = 3rdparty/xmlwrapp
 	url = https://github.com/vadz/xmlwrapp.git
+[submodule "third_party/libxml2"]
+	path = third_party/libxml2
+	url = https://github.com/let-me-illustrate/libxml2.git
+	branch = lmi
+[submodule "third_party/libxslt"]
+	path = third_party/libxslt
+	url = https://github.com/let-me-illustrate/libxslt.git
+	branch = lmi
+[submodule "third_party/xmlwrapp"]
+	path = third_party/xmlwrapp
+	url = https://github.com/let-me-illustrate/xmlwrapp.git
+	branch = lmi
+[submodule "third_party/wx"]
+	path = third_party/wx
+	url = https://github.com/let-me-illustrate/wx.git
+	branch = lmi
+[submodule "third_party/wxpdfdoc"]
+	path = third_party/wxpdfdoc
+	url = https://github.com/let-me-illustrate/wxpdfdoc.git
+	branch = lmi

@@ -1,6 +1,6 @@
 // Test pasting spreadsheet data into a census.
 //
-// Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -23,9 +23,7 @@
 
 #include "assert_lmi.hpp"
 #include "bourn_cast.hpp"
-#include "contains.hpp"
 #include "data_directory.hpp"
-#include "global_settings.hpp"
 #include "mvc_controller.hpp"
 #include "ssize_lmi.hpp"
 #include "wx_test_case.hpp"
@@ -34,7 +32,6 @@
 #include "wx_utility.hpp"
 
 #include <wx/app.h>
-#include <wx/dataview.h>
 #include <wx/dialog.h>
 #include <wx/grid.h>
 #include <wx/mdi.h>
@@ -50,127 +47,6 @@
 
 namespace
 {
-
-// wxDataViewCtrl functions.
-
-// Helper function to find the wxDataViewCtrl used for the census display.
-//
-// Precondition: the currently active window must be a CensusView.
-wxDataViewCtrl* find_census_list_window()
-{
-    wxWindow* const top_window = wxTheApp->GetTopWindow();
-    LMI_ASSERT(top_window);
-
-    wxMDIParentFrame* const
-        parent_frame = dynamic_cast<wxMDIParentFrame*>(top_window);
-    LMI_ASSERT(parent_frame);
-
-    wxMDIChildFrame* const child_frame = parent_frame->GetActiveChild();
-    LMI_ASSERT(child_frame);
-
-    wxWindowList const& census_children = child_frame->GetChildren();
-    wxWindowList::const_iterator z = census_children.begin();
-    LMI_ASSERT(z != census_children.end());
-
-    wxDataViewCtrl* const dvc = dynamic_cast<wxDataViewCtrl*>(*z);
-    LMI_ASSERT(dvc);
-
-    return dvc;
-}
-
-// Retrieve the list model from list window.
-//
-// Precondition: this wxDataViewCtrl must actually use a list model.
-wxDataViewListModel* get_census_list_model(wxDataViewCtrl* dvc)
-{
-    wxDataViewModel* const model = dvc->GetModel();
-    LMI_ASSERT(model);
-
-    wxDataViewListModel* const
-        list_model = dynamic_cast<wxDataViewListModel*>(model);
-    LMI_ASSERT(list_model);
-
-    return list_model;
-}
-
-// Helper for building the diagnostic message.
-std::string build_not_found_message(std::set<std::string> const& remaining)
-{
-    std::ostringstream message;
-    bool const only_one = remaining.size() == 1;
-    message << (only_one ? "column" : "columns");
-
-    bool first = true;
-    for(auto const& i : remaining)
-        {
-        if(!first)
-            {
-            message << ",";
-            first = false;
-            }
-
-        message << " '" << i << "'";
-        }
-
-    message << " " << (only_one ? "was" : "were") << " not found" << " ";
-
-    return message.str();
-}
-
-// Check for the presence of all columns with the given name and, if specified,
-// for the absence of the given one.
-//
-// The 'when' parameter is used solely for the diagnostic messages in case of
-// the check failure.
-void check_list_columns
-    (wxDataViewCtrl* dvc
-    ,char const* when
-    ,std::set<std::string> const& expected
-    ,std::string const& unexpected = std::string()
-    )
-{
-    std::set<std::string> remaining(expected.begin(), expected.end());
-
-    for(int n = 0; n < bourn_cast<int>(dvc->GetColumnCount()); ++n)
-        {
-        std::string const title = dvc->GetColumn(n)->GetTitle().ToStdString();
-        LMI_ASSERT_WITH_MSG
-            (title != unexpected
-            ,"column '" << title << "' unexpectedly found " << when
-            );
-
-        // Notice that it is not an error if the column is not in the expected
-        // columns set, it is not exhaustive.
-        remaining.erase(title);
-        }
-
-    LMI_ASSERT_WITH_MSG
-        (remaining.empty()
-        ,build_not_found_message(remaining) << when
-        );
-}
-
-// Find the index of the column with the given title.
-//
-// Throws an exception if the column is not found.
-int find_model_column_by_title
-    (wxDataViewCtrl* dvc
-    ,std::string const& title
-    )
-{
-    for(int n = 0; n < bourn_cast<int>(dvc->GetColumnCount()); ++n)
-        {
-        wxDataViewColumn const* column = dvc->GetColumn(n);
-        if(column->GetTitle().ToStdString() == title)
-            {
-            return column->GetModelColumn();
-            }
-        }
-
-    throw std::runtime_error("column " + title + " not found");
-}
-
-// wxGrid functions.
 
 // Helper function to find the wxGrid used for the census display.
 //
@@ -195,6 +71,30 @@ wxGrid* find_census_grid_window()
     LMI_ASSERT(grid);
 
     return grid;
+}
+
+// Helper for building the diagnostic message.
+std::string build_not_found_message(std::set<std::string> const& remaining)
+{
+    std::ostringstream message;
+    bool const only_one = remaining.size() == 1;
+    message << (only_one ? "column" : "columns");
+
+    bool first = true;
+    for(auto const& i : remaining)
+        {
+        if(!first)
+            {
+            message << ",";
+            first = false;
+            }
+
+        message << " '" << i << "'";
+        }
+
+    message << " " << (only_one ? "was" : "were") << " not found" << " ";
+
+    return message.str();
 }
 
 // Check for the presence of all columns with the given name and, if specified,
@@ -255,7 +155,7 @@ int find_table_column_by_title
 ///
 /// Create a set of data that might reasonably be copied from a
 /// spreadsheet. Initially at least, use the data in the user manual:
-///   http://www.nongnu.org/lmi/pasting_to_a_census.html
+///   https://www.nongnu.org/lmi/pasting_to_a_census.html
 /// Hardcode the data here; don't read them from the user manual.
 /// (That didactic example was designed mainly to fit on a web page
 /// and to make sense to end users. Some day we might want to make
@@ -332,9 +232,6 @@ LMI_WX_TEST_CASE(paste_census)
     // Put the data to paste on clipboard.
     ClipboardEx::SetText(census_data);
 
-    auto const use_grid =
-        contains(global_settings::instance().pyx(), "use_census_grid");
-
     // Create a new census.
     wx_test_new_census census;
 
@@ -343,70 +240,33 @@ LMI_WX_TEST_CASE(paste_census)
     ui.Char('s', wxMOD_CONTROL | wxMOD_SHIFT); // "Census | Paste census"
     wxYield();
 
-    wxGrid* grid_window = nullptr;
-    wxGridTableBase* table = nullptr;
-    wxDataViewCtrl* list_window = nullptr;
-    wxDataViewListModel* list_model = nullptr;
+    // Find the model containing the cells and check that it was filled in
+    // correctly.
+    wxGrid* const grid_window = find_census_grid_window();
+    wxGridTableBase* const table = grid_window->GetTable();
+    LMI_ASSERT(table);
+    LMI_ASSERT_EQUAL(table->GetNumberRows(), number_of_rows);
 
-    if (use_grid)
-        {
-        // Find the model containing the cells and check that it was filled in
-        // correctly.
-        grid_window = find_census_grid_window();
-        table = grid_window->GetTable();
-        LMI_ASSERT(table);
-        LMI_ASSERT_EQUAL(table->GetNumberRows(), number_of_rows);
+    check_grid_columns
+        (grid_window
+        ,"after pasting initial census data"
+        ,column_titles
+        );
 
-        check_grid_columns
-            (grid_window
-            ,"after pasting initial census data"
-            ,column_titles
-            );
-
-        // Change class defaults: this requires a selection, so ensure we have one
-        // by clicking somewhere inside the control.
-        ui.MouseMove
-            (grid_window->ClientToScreen
-                (wxPoint
-                    (10 * grid_window->GetCharWidth()
-                    , 3 * grid_window->GetCharHeight()
-                    )
+    // Change class defaults: this requires a selection, so ensure we have one
+    // by clicking somewhere inside the control.
+    ui.MouseMove
+        (grid_window->ClientToScreen
+            (wxPoint
+                (10 * grid_window->GetCharWidth()
+                , 3 * grid_window->GetCharHeight()
                 )
-            );
-        ui.MouseClick();
-        wxYield();
+            )
+        );
+    ui.MouseClick();
+    wxYield();
 
-        LMI_ASSERT_EQUAL(lmi::ssize(grid_window->GetSelectedRows()), 1);
-        }
-    else
-        {
-        // Find the model containing the cells and check that it was filled in
-        // correctly.
-        list_window = find_census_list_window();
-        list_model = get_census_list_model(list_window);
-        LMI_ASSERT_EQUAL(bourn_cast<int>(list_model->GetCount()), number_of_rows);
-
-        check_list_columns
-            (list_window
-            ,"after pasting initial census data"
-            ,column_titles
-            );
-
-        // Change class defaults: this requires a selection, so ensure we have one
-        // by clicking somewhere inside the control.
-        ui.MouseMove
-            (list_window->ClientToScreen
-                (wxPoint
-                    (10 * list_window->GetCharWidth()
-                    , 3 * list_window->GetCharHeight()
-                    )
-                )
-            );
-        ui.MouseClick();
-        wxYield();
-
-        LMI_ASSERT_EQUAL(list_window->GetSelectedItemsCount(), 1);
-        }
+    LMI_ASSERT_EQUAL(lmi::ssize(grid_window->GetSelectedRows()), 1);
 
     ui.Char('e', wxMOD_CONTROL | wxMOD_ALT); // "Census|Edit class defaults"
 
@@ -460,45 +320,21 @@ LMI_WX_TEST_CASE(paste_census)
             Describe("message box asking whether to apply gender changes to all")
         );
 
-    if (use_grid)
-        {
-        // Check that all columns, including the "Gender" one, are still shown.
-        check_grid_columns
-            (grid_window
-            ,"after changing gender in class defaults"
-            ,column_titles
-            );
+    // Check that all columns, including the "Gender" one, are still shown.
+    check_grid_columns
+        (grid_window
+        ,"after changing gender in class defaults"
+        ,column_titles
+        );
 
-        // Verify that the "Gender" column value is "Unisex" in every row now.
-        int const gender_column = find_table_column_by_title(grid_window, "Gender");
-        LMI_ASSERT_EQUAL(table->GetNumberRows(), number_of_rows);
-        // Only the first two rows are affected, because only they belong
-        // to the first employee class.
-        for(int row = 0; row < 2; ++row)
-            {
-            LMI_ASSERT_EQUAL(table->GetValue(row, gender_column), "Unisex");
-            }
-        }
-    else
+    // Verify that the "Gender" column value is "Unisex" in every row now.
+    int const gender_column = find_table_column_by_title(grid_window, "Gender");
+    LMI_ASSERT_EQUAL(table->GetNumberRows(), number_of_rows);
+    // Only the first two rows are affected, because only they belong
+    // to the first employee class.
+    for(int row = 0; row < 2; ++row)
         {
-        // Check that all columns, including the "Gender" one, are still shown.
-        check_list_columns
-            (list_window
-            ,"after changing gender in class defaults"
-            ,column_titles
-            );
-
-        // Verify that the "Gender" column value is "Unisex" in every row now.
-        int const gender_column = find_model_column_by_title(list_window, "Gender");
-        LMI_ASSERT_EQUAL(bourn_cast<int>(list_model->GetCount()), number_of_rows);
-        // Only the first two rows are affected, because only they belong
-        // to the first employee class.
-        for(int row = 0; row < 2; ++row)
-            {
-            wxVariant value;
-            list_model->GetValueByRow(value, row, gender_column);
-            LMI_ASSERT_EQUAL(value.GetString(), "Unisex");
-            }
+        LMI_ASSERT_EQUAL(table->GetValue(row, gender_column), "Unisex");
         }
 
     // Change the case defaults to get rid of the underwriting class.
@@ -550,34 +386,17 @@ LMI_WX_TEST_CASE(paste_census)
             Describe("message box asking whether to apply class changes to all")
         );
 
-    if (use_grid)
-        {
-        // Check that we still have the same cells but that now the underwriting
-        // class column has disappeared as its value has been fixed.
-        LMI_ASSERT_EQUAL(table->GetNumberRows(), number_of_rows);
+    // Check that we still have the same cells but that now the underwriting
+    // class column has disappeared as its value has been fixed.
+    LMI_ASSERT_EQUAL(table->GetNumberRows(), number_of_rows);
 
-        column_titles.erase("Underwriting Class");
-        check_grid_columns
-            (grid_window
-            ,"after changing class in case defaults"
-            ,column_titles
-            ,"Underwriting Class"
-            );
-        }
-    else
-        {
-        // Check that we still have the same cells but that now the underwriting
-        // class column has disappeared as its value has been fixed.
-        LMI_ASSERT_EQUAL(bourn_cast<int>(list_model->GetCount()), number_of_rows);
-
-        column_titles.erase("Underwriting Class");
-        check_list_columns
-            (list_window
-            ,"after changing class in case defaults"
-            ,column_titles
-            ,"Underwriting Class"
-            );
-        }
+    column_titles.erase("Underwriting Class");
+    check_grid_columns
+        (grid_window
+        ,"after changing class in case defaults"
+        ,column_titles
+        ,"Underwriting Class"
+        );
 
     // Finally save the census with the pasted data for later inspection.
     std::string const census_file_name = get_test_file_path_for("PasteCensus.cns");

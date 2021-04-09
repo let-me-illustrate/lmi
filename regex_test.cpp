@@ -1,6 +1,6 @@
 // Regular expressions--unit test.
 //
-// Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -152,7 +152,7 @@ bool contains_regex0(std::string const& regex)
 /// TR1, there seem to be only two viable options:
 ///  - use a vectorized approach such as this; or
 ///  - write regexen with
-///    - "[^\\n]" instead of '.', and
+///    - "[^\\n]" or R"([^\n])" instead of '.', and
 ///    - "\n" instead of '^' and '$' anchors
 ///    and prepend a '\n' sentry to the string to be searched (and
 ///    assert that all files end in '\n').
@@ -237,20 +237,20 @@ void test_psalm_37()
     std::cout << "Size of searched text: " << text    .size() << '\n';
     std::cout << '\n';
 
-    BOOST_TEST( contains_regex0(early));
-    BOOST_TEST( contains_regex1(early));
-    BOOST_TEST( contains_regex2(early));
-    BOOST_TEST( contains_regex3(early));
+    LMI_TEST( contains_regex0(early));
+    LMI_TEST( contains_regex1(early));
+    LMI_TEST( contains_regex2(early));
+    LMI_TEST( contains_regex3(early));
 
-    BOOST_TEST( contains_regex0(late ));
-    BOOST_TEST( contains_regex1(late ));
-    BOOST_TEST( contains_regex2(late ));
-    BOOST_TEST( contains_regex3(late ));
+    LMI_TEST( contains_regex0(late ));
+    LMI_TEST( contains_regex1(late ));
+    LMI_TEST( contains_regex2(late ));
+    LMI_TEST( contains_regex3(late ));
 
-    BOOST_TEST(!contains_regex0(never));
-    BOOST_TEST(!contains_regex1(never));
-    BOOST_TEST(!contains_regex2(never));
-    BOOST_TEST(!contains_regex3(never));
+    LMI_TEST(!contains_regex0(never));
+    LMI_TEST(!contains_regex1(never));
+    LMI_TEST(!contains_regex2(never));
+    LMI_TEST(!contains_regex3(never));
 
     std::cout << "  early 0:   " << TimeAnAliquot(mete<0,early>) << '\n';
     std::cout << "  early 1:   " << TimeAnAliquot(mete<1,early>) << '\n';
@@ -322,83 +322,83 @@ void test_input_sequence_regex()
     // Tests that are designed to succeed.
 
     // Simple scalars.
-    BOOST_TEST( boost::regex_match("1234"                                                       , r));
-    BOOST_TEST( boost::regex_match("glp"                                                        , r));
+    LMI_TEST( boost::regex_match("1234"                                                       , r));
+    LMI_TEST( boost::regex_match("glp"                                                        , r));
     // Semicolon-delimited values, as expected in inforce extracts.
-    BOOST_TEST( boost::regex_match("123;456;0"                                                  , r));
+    LMI_TEST( boost::regex_match("123;456;0"                                                  , r));
     // Same, with whitespace.
-    BOOST_TEST( boost::regex_match("123; 456; 0"                                                , r));
-    BOOST_TEST( boost::regex_match("123 ;456 ;0"                                                , r));
-    BOOST_TEST( boost::regex_match("123;  456;  0"                                              , r));
-    BOOST_TEST( boost::regex_match("123  ;456  ;0"                                              , r));
-    BOOST_TEST( boost::regex_match(" 123  ;  456  ;  0 "                                        , r));
-    BOOST_TEST( boost::regex_match("  123  ;  456  ;  0  "                                      , r));
+    LMI_TEST( boost::regex_match("123; 456; 0"                                                , r));
+    LMI_TEST( boost::regex_match("123 ;456 ;0"                                                , r));
+    LMI_TEST( boost::regex_match("123;  456;  0"                                              , r));
+    LMI_TEST( boost::regex_match("123  ;456  ;0"                                              , r));
+    LMI_TEST( boost::regex_match(" 123  ;  456  ;  0 "                                        , r));
+    LMI_TEST( boost::regex_match("  123  ;  456  ;  0  "                                      , r));
     // Same, with optional terminal semicolon.
-    BOOST_TEST( boost::regex_match("  123  ;  456  ;  0  ;"                                     , r));
-    BOOST_TEST( boost::regex_match("  123  ;  456  ;  0  ;  "                                   , r));
+    LMI_TEST( boost::regex_match("  123  ;  456  ;  0  ;"                                     , r));
+    LMI_TEST( boost::regex_match("  123  ;  456  ;  0  ;  "                                   , r));
     // Single scalar with terminal semicolon and various whitespace.
-    BOOST_TEST( boost::regex_match("123;"                                                       , r));
-    BOOST_TEST( boost::regex_match("123 ;"                                                      , r));
-    BOOST_TEST( boost::regex_match("123; "                                                      , r));
-    BOOST_TEST( boost::regex_match(" 123 ; "                                                    , r));
+    LMI_TEST( boost::regex_match("123;"                                                       , r));
+    LMI_TEST( boost::regex_match("123 ;"                                                      , r));
+    LMI_TEST( boost::regex_match("123; "                                                      , r));
+    LMI_TEST( boost::regex_match(" 123 ; "                                                    , r));
     // Negatives (e.g., "negative" loans representing repayments).
-    BOOST_TEST( boost::regex_match("-987; -654"                                                 , r));
+    LMI_TEST( boost::regex_match("-987; -654"                                                 , r));
     // Decimals.
-    BOOST_TEST( boost::regex_match("0.;.0;0.0;1234.5678"                                        , r));
+    LMI_TEST( boost::regex_match("0.;.0;0.0;1234.5678"                                        , r));
     // Decimals, along with '#' and '@'.
-    BOOST_TEST( boost::regex_match("0.,2;.0,#3;0.0,@75;1234.5678"                               , r));
+    LMI_TEST( boost::regex_match("0.,2;.0,#3;0.0,@75;1234.5678"                               , r));
     // Same, with whitespace.
-    BOOST_TEST( boost::regex_match(" 0. , 2 ; .0 , # 3 ; 0.0 , @ 75 ; 1234.5678 "               , r));
+    LMI_TEST( boost::regex_match(" 0. , 2 ; .0 , # 3 ; 0.0 , @ 75 ; 1234.5678 "               , r));
     // No numbers--only keywords.
-    BOOST_TEST( boost::regex_match("salary,retirement;corridor,maturity"                        , r));
+    LMI_TEST( boost::regex_match("salary,retirement;corridor,maturity"                        , r));
     // Same, with whitespace.
-    BOOST_TEST( boost::regex_match("  salary  ,  retirement;  corridor  ,  maturity"            , r));
-    BOOST_TEST( boost::regex_match("  salary  ,  retirement;  corridor  ,  maturity  "          , r));
-    BOOST_TEST( boost::regex_match("  salary  ,  retirement  ;  corridor  ,  maturity"          , r));
-    BOOST_TEST( boost::regex_match("  salary  ,  retirement  ;  corridor  ,  maturity  "        , r));
+    LMI_TEST( boost::regex_match("  salary  ,  retirement;  corridor  ,  maturity"            , r));
+    LMI_TEST( boost::regex_match("  salary  ,  retirement;  corridor  ,  maturity  "          , r));
+    LMI_TEST( boost::regex_match("  salary  ,  retirement  ;  corridor  ,  maturity"          , r));
+    LMI_TEST( boost::regex_match("  salary  ,  retirement  ;  corridor  ,  maturity  "        , r));
     // Empty except for zero or more blanks.
-    BOOST_TEST( boost::regex_match(""                                                           , r));
-    BOOST_TEST( boost::regex_match(" "                                                          , r));
-    BOOST_TEST( boost::regex_match("  "                                                         , r));
+    LMI_TEST( boost::regex_match(""                                                           , r));
+    LMI_TEST( boost::regex_match(" "                                                          , r));
+    LMI_TEST( boost::regex_match("  "                                                         , r));
     // Interval notation.
-    BOOST_TEST( boost::regex_match("1 [2,3);4 (5,6]"                                            , r));
-    // User-manual examples. See: http://www.nongnu.org/lmi/sequence_input.html
-    BOOST_TEST( boost::regex_match("sevenpay 7; 250000 retirement; 100000 #10; 75000 @95; 50000", r));
-    BOOST_TEST( boost::regex_match("100000; 110000; 120000; 130000; 140000; 150000"             , r));
-    BOOST_TEST( boost::regex_match("target; maximum"                                            , r)); // [Modified example.]
-    BOOST_TEST( boost::regex_match("10000 20; 0"                                                , r));
-    BOOST_TEST( boost::regex_match("10000 10; 5000 15; 0"                                       , r));
-    BOOST_TEST( boost::regex_match("10000 @70; 0"                                               , r));
-    BOOST_TEST( boost::regex_match("10000 retirement; 0"                                        , r));
-    BOOST_TEST( boost::regex_match("0 retirement; 5000"                                         , r));
-    BOOST_TEST( boost::regex_match("0 retirement; 5000 maturity"                                , r));
-    BOOST_TEST( boost::regex_match("0 retirement; 5000 #10; 0"                                  , r));
-    BOOST_TEST( boost::regex_match("0,[0,retirement);10000,[retirement,#10);0"                  , r));
+    LMI_TEST( boost::regex_match("1 [2,3);4 (5,6]"                                            , r));
+    // User-manual examples. See: https://www.nongnu.org/lmi/sequence_input.html
+    LMI_TEST( boost::regex_match("sevenpay 7; 250000 retirement; 100000 #10; 75000 @95; 50000", r));
+    LMI_TEST( boost::regex_match("100000; 110000; 120000; 130000; 140000; 150000"             , r));
+    LMI_TEST( boost::regex_match("target; maximum"                                            , r)); // [Modified example.]
+    LMI_TEST( boost::regex_match("10000 20; 0"                                                , r));
+    LMI_TEST( boost::regex_match("10000 10; 5000 15; 0"                                       , r));
+    LMI_TEST( boost::regex_match("10000 @70; 0"                                               , r));
+    LMI_TEST( boost::regex_match("10000 retirement; 0"                                        , r));
+    LMI_TEST( boost::regex_match("0 retirement; 5000"                                         , r));
+    LMI_TEST( boost::regex_match("0 retirement; 5000 maturity"                                , r));
+    LMI_TEST( boost::regex_match("0 retirement; 5000 #10; 0"                                  , r));
+    LMI_TEST( boost::regex_match("0,[0,retirement);10000,[retirement,#10);0"                  , r));
 
     // Tests that are designed to fail.
 
     // Naked semicolon.
-    BOOST_TEST(!boost::regex_match(";"                                                          , r));
-    BOOST_TEST(!boost::regex_match(" ; "                                                        , r));
+    LMI_TEST(!boost::regex_match(";"                                                          , r));
+    LMI_TEST(!boost::regex_match(" ; "                                                        , r));
     // Missing required semicolon.
-    BOOST_TEST(!boost::regex_match("7 24 25"                                                    , r));
-    BOOST_TEST(!boost::regex_match("7,24,25"                                                    , r));
-    BOOST_TEST(!boost::regex_match("7, 24, 25"                                                  , r));
-    BOOST_TEST(!boost::regex_match("7 , 24 , 25"                                                , r));
+    LMI_TEST(!boost::regex_match("7 24 25"                                                    , r));
+    LMI_TEST(!boost::regex_match("7,24,25"                                                    , r));
+    LMI_TEST(!boost::regex_match("7, 24, 25"                                                  , r));
+    LMI_TEST(!boost::regex_match("7 , 24 , 25"                                                , r));
     // Extraneous commas.
-    BOOST_TEST(!boost::regex_match(",1"                                                         , r));
-    BOOST_TEST(!boost::regex_match("1,"                                                         , r));
-    BOOST_TEST(!boost::regex_match("1,2,"                                                       , r));
-    BOOST_TEST(!boost::regex_match("1,,2"                                                       , r));
+    LMI_TEST(!boost::regex_match(",1"                                                         , r));
+    LMI_TEST(!boost::regex_match("1,"                                                         , r));
+    LMI_TEST(!boost::regex_match("1,2,"                                                       , r));
+    LMI_TEST(!boost::regex_match("1,,2"                                                       , r));
     // Impermissible character.
-    BOOST_TEST(!boost::regex_match("%"                                                          , r));
+    LMI_TEST(!boost::regex_match("%"                                                          , r));
     // Uppercase in keywords.
-    BOOST_TEST(!boost::regex_match("Glp"                                                        , r));
-    BOOST_TEST(!boost::regex_match("GLP"                                                        , r));
+    LMI_TEST(!boost::regex_match("Glp"                                                        , r));
+    LMI_TEST(!boost::regex_match("GLP"                                                        , r));
     // Misppellings.
-    BOOST_TEST(!boost::regex_match("gdp"                                                        , r));
-    BOOST_TEST(!boost::regex_match("glpp"                                                       , r));
-    BOOST_TEST(!boost::regex_match("gglp"                                                       , r));
+    LMI_TEST(!boost::regex_match("gdp"                                                        , r));
+    LMI_TEST(!boost::regex_match("glpp"                                                       , r));
+    LMI_TEST(!boost::regex_match("gglp"                                                       , r));
 
     X = "(\\-?[0-9.]+)";
     R = " *| *" + X + Y + "? *(; *" + X + Y + "? *)*;? *";

@@ -1,6 +1,6 @@
 // Ledger data that do not vary by basis.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -50,6 +50,7 @@ class LMI_SO LedgerInvariant final
     ~LedgerInvariant() override;
 
     void Init(BasicValues const*);
+    void ReInit(BasicValues const*);
 
     LedgerInvariant& PlusEq(LedgerInvariant const& a_Addend);
 
@@ -83,6 +84,7 @@ class LMI_SO LedgerInvariant final
     // EOY vectors.
     std::vector<double> TermSpecAmt;
     std::vector<double> SpecAmt;
+    std::vector<double> Dcv;
 
     // Forborne vectors.
     std::vector<double> Salary;
@@ -96,6 +98,12 @@ class LMI_SO LedgerInvariant final
     std::vector<double> AddonCompOnAssets;
     std::vector<double> AddonCompOnPremium;
     std::vector<double> CorridorFactor;
+    std::vector<double> Irc7702ic_usual;
+    std::vector<double> Irc7702ic_glp;
+    std::vector<double> Irc7702ic_gsp;
+    std::vector<double> Irc7702ig_usual;
+    std::vector<double> Irc7702ig_glp;
+    std::vector<double> Irc7702ig_gsp;
     std::vector<double> AnnLoanDueRate;
     // TODO ?? M&E varies by basis (cf. 'GuarMaxMandE' below), so it
     // belongs in the variant ledger.
@@ -140,8 +148,6 @@ class LMI_SO LedgerInvariant final
     double      NoLongerIssued;
     double      AllowGroupQuote;
     double      TxCallsGuarUwSubstd;
-    double      AllowExperienceRating;
-    double      UseExperienceRating;
     double      UsePartialMort;
     double      SurviveToExpectancy;
     double      SurviveToYear;
@@ -190,7 +196,6 @@ class LMI_SO LedgerInvariant final
 
     // Essential strings describing the policy and company.
     std::string PolicyForm;
-    // Ledger needs no member like product_data::PolicyFormAlternative;
     std::string PolicyMktgName;
     std::string PolicyLegalName;
     std::string CsoEra;
@@ -312,7 +317,6 @@ class LMI_SO LedgerInvariant final
     std::string FlexiblePremiumFootnote;
     std::string GuaranteedValuesFootnote;
     std::string CreditingRateFootnote;
-    std::string DefnGuarGenAcctRate;
     std::string GrossRateFootnote;
     std::string NetRateFootnote;
     std::string MecFootnote;
@@ -366,6 +370,7 @@ class LMI_SO LedgerInvariant final
     std::string Fn1035Charge;
     std::string FnMecExtraWarning;
     std::string FnNotTaxAdvice;
+    std::string FnNotTaxAdvice2;
     std::string FnImf;
     std::string FnCensus;
     std::string FnDacTax;
@@ -379,6 +384,7 @@ class LMI_SO LedgerInvariant final
     std::string FnGuaranteedPremium;
     std::string FnOmnibusDisclaimer;
     std::string FnInitialDbo;
+    std::string DefnGuarGenAcctRate;
     std::string DefnAV;
     std::string DefnCSV;
     std::string DefnMec;
@@ -450,10 +456,6 @@ class LMI_SO LedgerInvariant final
     std::vector<std::string> FundNames;
     std::vector<int>         FundAllocs; // Obsolete--spreadsheet only.
     std::vector<double>      FundAllocations;
-
-    // These two are used only for a payment-strategy kludge:
-    std::vector<double> EePmt;
-    std::vector<double> ErPmt;
 
     // IRRs that we need to think about some more before deciding
     // where to put them.

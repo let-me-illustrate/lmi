@@ -1,6 +1,6 @@
 // Internal Revenue Code section 7702A (MEC testing).
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -1241,9 +1241,9 @@ void Irc7702A::Determine7PP
             }
 /* TODO ?? TAXATION !! Expunge this perhaps. Not sure what we should do if someone
 tries running an inforce case as of month 0, year 0. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00017.html
+  https://lists.nongnu.org/archive/html/lmi/2015-09/msg00017.html
 and
-  http://svn.savannah.nongnu.org/viewvc/lmi/trunk/input_harmonization.cpp?root=lmi&r1=6354&r2=6391&diff_format=c
+  https://svn.savannah.nongnu.org/viewvc/lmi/trunk/input_harmonization.cpp?root=lmi&r1=6354&r2=6391&diff_format=c
         // In either of these two cases--initialization or Bfts reduction--the
         // a_AVBeforeMatChg and a_NecPrem arguments are not used, so give a
         // warning if they were nonzero.

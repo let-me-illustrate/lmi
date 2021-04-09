@@ -1,6 +1,6 @@
 // Show progress on lengthy operations, optionally letting users cancel them.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -133,7 +133,7 @@
 /// the motivating use case involves a progress meter--so, for the wx
 /// interface, do_dawdle() should call wxProgressDialog::Update(),
 /// for the reasons explained here:
-///   http://lists.nongnu.org/archive/html/lmi/2013-11/msg00006.html
+///   https://lists.nongnu.org/archive/html/lmi/2013-11/msg00006.html
 /// and also so that pressing Cancel interrupts the delay. Because
 /// wxProgressDialog::Update() is not const, do_dawdle() and dawdle()
 /// cannot be const.
@@ -198,7 +198,7 @@
 #include <memory>                       // unique_ptr
 #include <string>
 
-std::ostringstream& LMI_SO progress_meter_unit_test_stream();
+LMI_SO std::ostringstream& progress_meter_unit_test_stream();
 
 class LMI_SO progress_meter
 {
@@ -228,7 +228,7 @@ class LMI_SO progress_meter
     // This accessor is not actually used today; it serves only to
     // prevent Clang from complaining that the member it accesses is
     // otherwise unused. See:
-    //   http://lists.nongnu.org/archive/html/lmi/2016-03/msg00035.html
+    //   https://lists.nongnu.org/archive/html/lmi/2016-03/msg00035.html
     enum_display_mode display_mode() const {return display_mode_;}
 
     virtual void        do_dawdle            (int seconds);
@@ -249,7 +249,7 @@ class LMI_SO progress_meter
     bool              was_cancelled_;
 };
 
-std::unique_ptr<progress_meter> LMI_SO create_progress_meter
+LMI_SO std::unique_ptr<progress_meter> create_progress_meter
     (int                               max_count
     ,std::string const&                title = std::string()
     ,progress_meter::enum_display_mode       = progress_meter::e_normal_display
@@ -261,6 +261,6 @@ typedef std::unique_ptr<progress_meter> (*progress_meter_creator_type)
     ,progress_meter::enum_display_mode
     );
 
-bool LMI_SO set_progress_meter_creator(progress_meter_creator_type);
+LMI_SO bool set_progress_meter_creator(progress_meter_creator_type);
 
 #endif // progress_meter_hpp

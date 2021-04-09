@@ -1,6 +1,6 @@
 // Dereference a non-null pointer, optionally downcasting it--unit test.
 //
-// Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -41,14 +41,14 @@ int test_main(int, char*[])
 
     // Motivating case.
     B* p = &d;
-    BOOST_TEST_EQUAL(&d, &safely_dereference_as<D>(p));
+    LMI_TEST_EQUAL(&d, &safely_dereference_as<D>(p));
 
     // Type need not be changed.
-    BOOST_TEST_EQUAL(&b, &safely_dereference_as<B>(&b));
-    BOOST_TEST_EQUAL(&d, &safely_dereference_as<D>(&d));
+    LMI_TEST_EQUAL(&b, &safely_dereference_as<B>(&b));
+    LMI_TEST_EQUAL(&d, &safely_dereference_as<D>(&d));
 
     // Upcasts are forbidden: this would be a compile-time error.
-//    BOOST_TEST_EQUAL( p, &safely_dereference_as<B>(&d));
+//    LMI_TEST_EQUAL( p, &safely_dereference_as<B>(&d));
 
     std::string diagnostic0;
     diagnostic0 = "Cannot dereference null pointer of type '";
@@ -56,7 +56,7 @@ int test_main(int, char*[])
     diagnostic0 += "'.";
 
     D* null_pointer = nullptr;
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (safely_dereference_as<D>(null_pointer)
         ,std::runtime_error
         ,diagnostic0
@@ -69,7 +69,7 @@ int test_main(int, char*[])
     diagnostic1 += lmi::TypeInfo(typeid(D*)).Name();
     diagnostic1 += "'.";
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (safely_dereference_as<D>(&b)
         ,std::runtime_error
         ,diagnostic1

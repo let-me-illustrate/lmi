@@ -1,6 +1,6 @@
 // Measure elapsed time to high resolution--unit test.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -79,27 +79,27 @@ void TimerTest::TestExceptions()
 {
     Timer timer;
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (timer.start()
         ,std::logic_error
         ,"Timer::start() called, but timer was already running."
         );
 
     timer.stop();
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (timer.stop()
         ,std::logic_error
         ,"Timer::stop() called, but timer was not running."
         );
 
     timer.restart();
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (timer.restart()
         ,std::logic_error
         ,"Timer::start() called, but timer was already running."
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (timer.elapsed_seconds()
         ,std::logic_error
         ,"Timer::elapsed_seconds() called, but timer is still running."
@@ -116,15 +116,15 @@ void TimerTest::TestAliquotTimer()
     std::cout << "  " << TimeAnAliquot(std::bind(goo, 10, x, x, &x), 0.1) << '\n';
 
     std::string takes_too_long = TimeAnAliquot(WaitTenMsec, 0.0099999).str();
-    BOOST_TEST(contains(takes_too_long, "took longer"));
+    LMI_TEST(contains(takes_too_long, "took longer"));
     std::cout << "  " << takes_too_long << '\n';
 
     std::cout << "  " << TimeAnAliquot(WaitTenMsec, 0.099) << '\n';
     std::cout << "  " << TimeAnAliquot(WaitTenMsec, 0.101) << '\n';
 
-    BOOST_TEST_THROW(TimeAnAliquot(WaitTenMsec,  1.0e-100), std::invalid_argument, "");
-    BOOST_TEST_THROW(TimeAnAliquot(WaitTenMsec,  0.0     ), std::invalid_argument, "");
-    BOOST_TEST_THROW(TimeAnAliquot(WaitTenMsec, -1.0     ), std::invalid_argument, "");
+    LMI_TEST_THROW(TimeAnAliquot(WaitTenMsec,  1.0e-100), std::invalid_argument, "");
+    LMI_TEST_THROW(TimeAnAliquot(WaitTenMsec,  0.0     ), std::invalid_argument, "");
+    LMI_TEST_THROW(TimeAnAliquot(WaitTenMsec, -1.0     ), std::invalid_argument, "");
 
     std::cout << "  " << TimeAnAliquot(SleepOneSec, 2.000) << '\n';
 }

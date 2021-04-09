@@ -1,6 +1,6 @@
 // Product data representable as strings.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -33,7 +33,6 @@
 #include "xml_serialize.hpp"
 
 #include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <vector>
 
@@ -124,27 +123,15 @@ product_data::product_data()
     ascribe_members();
 }
 
-/// Construct from product name.
-///
-/// The argument is a string (typically Input::ProductName) such as
-/// 'sample'. The appropriate extension and path are added here to
-/// produce a filepath.
-///
-/// Somewhat arbitrarily, forbid '.' in product names. There's no real
-/// need to allow that, and it would complicate the code. A product
-/// name like "ul.with.variable.funds" could too easily be mistaken
-/// for a '.funds' file. The boost filesystem portability guidelines
-/// suggest "Do not use more that one period in a file name", and
-/// extensions are added to product names to create file names.
-
-product_data::product_data(std::string const& product_name)
+product_data::product_data(fs::path const& product_filename)
 {
     ascribe_members();
+    load(product_filename);
+}
 
-    fs::path path(product_name);
-    LMI_ASSERT(product_name == fs::basename(path));
-    path = fs::change_extension(path, ".policy");
-    load(AddDataDir(path.string()));
+product_data::product_data(std::string const& product_name)
+    :product_data(fs::path(filename_from_product_name(product_name)))
+{
 }
 
 product_data::product_data(product_data const& z)
@@ -183,6 +170,7 @@ void product_data::ascribe_members()
 {
     ascribe("DatabaseFilename"           , &product_data::DatabaseFilename              );
     ascribe("FundFilename"               , &product_data::FundFilename                  );
+    ascribe("LingoFilename"              , &product_data::LingoFilename                 );
     ascribe("RoundingFilename"           , &product_data::RoundingFilename              );
     ascribe("TierFilename"               , &product_data::TierFilename                  );
     ascribe("CvatCorridorFilename"       , &product_data::CvatCorridorFilename          );
@@ -205,8 +193,6 @@ void product_data::ascribe_members()
     ascribe("SubstdTblMultFilename"      , &product_data::SubstdTblMultFilename         );
     ascribe("CurrSpecAmtLoadFilename"    , &product_data::CurrSpecAmtLoadFilename       );
     ascribe("GuarSpecAmtLoadFilename"    , &product_data::GuarSpecAmtLoadFilename       );
-    ascribe("PolicyForm"                 , &product_data::PolicyForm                    );
-    ascribe("PolicyFormAlternative"      , &product_data::PolicyFormAlternative         );
     ascribe("PolicyMktgName"             , &product_data::PolicyMktgName                );
     ascribe("PolicyLegalName"            , &product_data::PolicyLegalName               );
     ascribe("InsCoShortName"             , &product_data::InsCoShortName                );
@@ -305,7 +291,6 @@ void product_data::ascribe_members()
     ascribe("FlexiblePremiumFootnote"    , &product_data::FlexiblePremiumFootnote       );
     ascribe("GuaranteedValuesFootnote"   , &product_data::GuaranteedValuesFootnote      );
     ascribe("CreditingRateFootnote"      , &product_data::CreditingRateFootnote         );
-    ascribe("DefnGuarGenAcctRate"        , &product_data::DefnGuarGenAcctRate           );
     ascribe("GrossRateFootnote"          , &product_data::GrossRateFootnote             );
     ascribe("NetRateFootnote"            , &product_data::NetRateFootnote               );
     ascribe("MecFootnote"                , &product_data::MecFootnote                   );
@@ -359,6 +344,7 @@ void product_data::ascribe_members()
     ascribe("Fn1035Charge"               , &product_data::Fn1035Charge                  );
     ascribe("FnMecExtraWarning"          , &product_data::FnMecExtraWarning             );
     ascribe("FnNotTaxAdvice"             , &product_data::FnNotTaxAdvice                );
+    ascribe("FnNotTaxAdvice2"            , &product_data::FnNotTaxAdvice2               );
     ascribe("FnImf"                      , &product_data::FnImf                         );
     ascribe("FnCensus"                   , &product_data::FnCensus                      );
     ascribe("FnDacTax"                   , &product_data::FnDacTax                      );
@@ -372,6 +358,7 @@ void product_data::ascribe_members()
     ascribe("FnGuaranteedPremium"        , &product_data::FnGuaranteedPremium           );
     ascribe("FnOmnibusDisclaimer"        , &product_data::FnOmnibusDisclaimer           );
     ascribe("FnInitialDbo"               , &product_data::FnInitialDbo                  );
+    ascribe("DefnGuarGenAcctRate"        , &product_data::DefnGuarGenAcctRate           );
     ascribe("DefnAV"                     , &product_data::DefnAV                        );
     ascribe("DefnCSV"                    , &product_data::DefnCSV                       );
     ascribe("DefnMec"                    , &product_data::DefnMec                       );
@@ -615,6 +602,7 @@ sample::sample()
     // Names of lmi product files.
     item("DatabaseFilename")           = glossed_string("sample.database");
     item("FundFilename")               = glossed_string("sample.funds");
+    item("LingoFilename")              = glossed_string("sample.lingo");
     item("RoundingFilename")           = glossed_string("sample.rounding");
     item("TierFilename")               = glossed_string("sample.strata");
 
@@ -644,8 +632,6 @@ sample::sample()
     item("InsCoDomicile")              = glossed_string("WI");
 
     // Substitutable strings.
-    item("PolicyForm")                 = glossed_string("UL32768-NY");
-    item("PolicyFormAlternative")      = glossed_string("UL32768-X");
     item("PolicyMktgName")             = glossed_string("UL Supreme");
     item("PolicyLegalName")            = glossed_string("Flexible Premium Adjustable Life Insurance Policy");
     item("InsCoShortName")             = glossed_string("Superior Life");
@@ -697,6 +683,7 @@ sample::sample()
     item("Fn1035Charge")               = S_Fn1035Charge;
     item("FnMecExtraWarning")          = S_FnMecExtraWarning;
     item("FnNotTaxAdvice")             = S_FnNotTaxAdvice;
+    item("FnNotTaxAdvice2")            = ""; // Deliberately empty: shouldn't even exist.
     item("FnImf")                      = S_FnImf;
     item("FnCensus")                   = S_FnCensus;
     item("FnDacTax")                   = S_FnDacTax;
@@ -778,6 +765,7 @@ sample2::sample2()
     // Names of lmi product files.
     item("DatabaseFilename")           = glossed_string("sample.database");
     item("FundFilename")               = glossed_string("sample.funds");
+    item("LingoFilename")              = glossed_string("sample.lingo");
     item("RoundingFilename")           = glossed_string("sample.rounding");
     item("TierFilename")               = glossed_string("sample.strata");
 
@@ -809,6 +797,7 @@ sample2::sample2()
 
 sample2naic::sample2naic()
 {
+    item("DatabaseFilename")           = glossed_string("sample2naic.database");
 }
 
 sample2finra::sample2finra()
@@ -826,6 +815,80 @@ sample2gpp::sample2gpp()
     item("DatabaseFilename")           = glossed_string("sample2gpp.database");
 }
 
+static std::string const S_Poe0 =
+  "The \"Red Death\" had long devastated the country. No pestilence"
+  " had ever been so fatal, or so hideous. Blood was its Avatar and"
+  " its seal--the redness and the horror of blood. There were sharp"
+  " pains, and sudden dizziness, and then profuse bleeding at the"
+  " pores, with dissolution. The scarlet stains upon the body and"
+  " especially upon the face of the victim, were the pest ban which"
+  " shut him out from the aid and from the sympathy of his fellow-men."
+  " And the whole seizure, progress and termination of the disease,"
+  " were the incidents of half an hour.";
+static std::string const S_Poe1 =
+  "But the Prince Prospero was happy and dauntless and sagacious. When"
+  " his dominions were half depopulated, he summoned to his presence a"
+  " thousand hale and light-hearted friends from among the knights and"
+  " dames of his court, and with these retired to the deep seclusion"
+  " of one of his castellated abbeys. This was an extensive and"
+  " magnificent structure, the creation of the prince's own eccentric"
+  " yet august taste. A strong and lofty wall girdled it in. This wall"
+  " had gates of iron. The courtiers, having entered, brought furnaces"
+  " and massy hammers and welded the bolts. They resolved to leave"
+  " means neither of ingress nor egress to the sudden impulses of"
+  " despair or of frenzy from within. The abbey was amply provisioned."
+  " With such precautions the courtiers might bid defiance to contagion."
+  " The external world could take care of itself. In the meantime it"
+  " was folly to grieve, or to think. The prince had provided all the"
+  " appliances of pleasure. There were buffoons, there were"
+  " improvisatori, there were ballet-dancers, there were musicians,"
+  " there was Beauty, there was wine. All these and security were"
+  " within. Without was the \"Red Death\".";
+static std::string const S_Poe2 =
+  "It was towards the close of the fifth or sixth month of his"
+  " seclusion, and while the pestilence raged most furiously abroad,"
+  " that the Prince Prospero entertained his thousand friends at a"
+  " masked ball of the most unusual magnificence.";
+static std::string const S_Poe3 =
+  "It was a voluptuous scene, that masquerade. But first let me tell"
+  " of the rooms in which it was held. These were seven--an imperial"
+  " suite. In many palaces, however, such suites form a long and"
+  " straight vista, while the folding doors slide back nearly to the"
+  " walls on either hand, so that the view of the whole extent is"
+  " scarcely impeded. Here the case was very different, as might have"
+  " been expected from the duke's love of the _bizarre_. The apartments"
+  " were so irregularly disposed that the vision embraced but little"
+  " more than one at a time. There was a sharp turn at every twenty or"
+  " thirty yards, and at each turn a novel effect. To the right and"
+  " left, in the middle of each wall, a tall and narrow Gothic window"
+  " looked out upon a closed corridor which pursued the windings of the"
+  " suite. These windows were of stained glass whose color varied in"
+  " accordance with the prevailing hue of the decorations of the"
+  " chamber into which it opened. That at the eastern extremity was"
+  " hung, for example in blue--and vividly blue were its windows. The"
+  " second chamber was purple in its ornaments and tapestries, and here"
+  " the panes were purple. The third was green throughout, and so were"
+  " the casements. The fourth was furnished and lighted with orange--the"
+  " fifth with white--the sixth with violet. The seventh apartment was"
+  " closely shrouded in black velvet tapestries that hung all over the"
+  " ceiling and down the walls, falling in heavy folds upon a carpet of"
+  " the same material and hue. But in this chamber only, the color of"
+  " the windows failed to correspond with the decorations. The panes"
+  " here were scarlet--a deep blood color. Now in no one of the seven"
+  " apartments was there any lamp or candelabrum, amid the profusion of"
+  " golden ornaments that lay scattered to and fro or depended from the"
+  " roof. There was no light of any kind emanating from lamp or candle"
+  " within the suite of chambers. But in the corridors that followed the"
+  " suite, there stood, opposite to each window, a heavy tripod, bearing"
+  " a brazier of fire, that projected its rays through the tinted glass"
+  " and so glaringly illumined the room. And thus were produced a"
+  " multitude of gaudy and fantastic appearances. But in the western or"
+  " black chamber the effect of the fire-light that streamed upon the"
+  " dark hangings through the blood-tinted panes, was ghastly in the"
+  " extreme, and produced so wild a look upon the countenances of those"
+  " who entered, that there were few of the company bold enough to set"
+  " foot within its precincts at all.";
+
 /// This specimen product
 ///   https://lists.nongnu.org/archive/html/lmi/2018-09/msg00039.html
 /// | has deliberately overlong footnotes
@@ -834,83 +897,10 @@ sample2gpp::sample2gpp()
 sample2ipp::sample2ipp()
 {
     item("DatabaseFilename")           = glossed_string("sample2ipp.database");
-    item("IrrDbFootnote") = glossed_string
-        ("The \"Red Death\" had long devastated the country. No pestilence"
-         " had ever been so fatal, or so hideous. Blood was its Avatar and"
-         " its seal--the redness and the horror of blood. There were sharp"
-         " pains, and sudden dizziness, and then profuse bleeding at the"
-         " pores, with dissolution. The scarlet stains upon the body and"
-         " especially upon the face of the victim, were the pest ban which"
-         " shut him out from the aid and from the sympathy of his fellow-men."
-         " And the whole seizure, progress and termination of the disease,"
-         " were the incidents of half an hour."
-        );
-    item("IrrCsvFootnote") = glossed_string
-        ("But the Prince Prospero was happy and dauntless and sagacious. When"
-         " his dominions were half depopulated, he summoned to his presence a"
-         " thousand hale and light-hearted friends from among the knights and"
-         " dames of his court, and with these retired to the deep seclusion"
-         " of one of his castellated abbeys. This was an extensive and"
-         " magnificent structure, the creation of the prince's own eccentric"
-         " yet august taste. A strong and lofty wall girdled it in. This wall"
-         " had gates of iron. The courtiers, having entered, brought furnaces"
-         " and massy hammers and welded the bolts. They resolved to leave"
-         " means neither of ingress nor egress to the sudden impulses of"
-         " despair or of frenzy from within. The abbey was amply provisioned."
-         " With such precautions the courtiers might bid defiance to contagion."
-         " The external world could take care of itself. In the meantime it"
-         " was folly to grieve, or to think. The prince had provided all the"
-         " appliances of pleasure. There were buffoons, there were"
-         " improvisatori, there were ballet-dancers, there were musicians,"
-         " there was Beauty, there was wine. All these and security were"
-         " within. Without was the \"Red Death\"."
-        );
-    item("MortalityChargesFootnote") = glossed_string
-        ("It was towards the close of the fifth or sixth month of his"
-         " seclusion, and while the pestilence raged most furiously abroad,"
-         " that the Prince Prospero entertained his thousand friends at a"
-         " masked ball of the most unusual magnificence."
-        );
-    item("PolicyYearFootnote") = glossed_string
-        ("It was a voluptuous scene, that masquerade. But first let me tell"
-         " of the rooms in which it was held. These were seven--an imperial"
-         " suite. In many palaces, however, such suites form a long and"
-         " straight vista, while the folding doors slide back nearly to the"
-         " walls on either hand, so that the view of the whole extent is"
-         " scarcely impeded. Here the case was very different, as might have"
-         " been expected from the duke's love of the _bizarre_. The apartments"
-         " were so irregularly disposed that the vision embraced but little"
-         " more than one at a time. There was a sharp turn at every twenty or"
-         " thirty yards, and at each turn a novel effect. To the right and"
-         " left, in the middle of each wall, a tall and narrow Gothic window"
-         " looked out upon a closed corridor which pursued the windings of the"
-         " suite. These windows were of stained glass whose color varied in"
-         " accordance with the prevailing hue of the decorations of the"
-         " chamber into which it opened. That at the eastern extremity was"
-         " hung, for example in blue--and vividly blue were its windows. The"
-         " second chamber was purple in its ornaments and tapestries, and here"
-         " the panes were purple. The third was green throughout, and so were"
-         " the casements. The fourth was furnished and lighted with orange--the"
-         " fifth with white--the sixth with violet. The seventh apartment was"
-         " closely shrouded in black velvet tapestries that hung all over the"
-         " ceiling and down the walls, falling in heavy folds upon a carpet of"
-         " the same material and hue. But in this chamber only, the color of"
-         " the windows failed to correspond with the decorations. The panes"
-         " here were scarlet--a deep blood color. Now in no one of the seven"
-         " apartments was there any lamp or candelabrum, amid the profusion of"
-         " golden ornaments that lay scattered to and fro or depended from the"
-         " roof. There was no light of any kind emanating from lamp or candle"
-         " within the suite of chambers. But in the corridors that followed the"
-         " suite, there stood, opposite to each window, a heavy tripod, bearing"
-         " a brazier of fire, that projected its rays through the tinted glass"
-         " and so glaringly illumined the room. And thus were produced a"
-         " multitude of gaudy and fantastic appearances. But in the western or"
-         " black chamber the effect of the fire-light that streamed upon the"
-         " dark hangings through the blood-tinted panes, was ghastly in the"
-         " extreme, and produced so wild a look upon the countenances of those"
-         " who entered, that there were few of the company bold enough to set"
-         " foot within its precincts at all."
-        );
+    item("IrrDbFootnote")              = S_Poe0;
+    item("IrrCsvFootnote")             = S_Poe1;
+    item("MortalityChargesFootnote")   = S_Poe2;
+    item("PolicyYearFootnote")         = S_Poe3;
 }
 
 sample2xyz::sample2xyz()
@@ -933,6 +923,36 @@ void product_data::write_policy_files()
     sample2gpp  ().save(AddDataDir("sample2gpp.policy"));
     sample2ipp  ().save(AddDataDir("sample2ipp.policy"));
     sample2xyz  ().save(AddDataDir("sample2xyz.policy"));
+}
+
+/// Convert a product name to the name of its '.product' file.
+///
+/// For example: 'sample' --> '/opt/lmi/data/sample.product'.
+///
+/// The argument is a string (typically Input::ProductName) such as
+/// 'sample'. The appropriate extension and path are added here to
+/// produce a filepath.
+///
+/// Somewhat arbitrarily, forbid '.' in product names. There's no real
+/// need to allow that, and it would complicate the code. A product
+/// name like "ul.with.variable.funds" could too easily be mistaken
+/// for a '.funds' file. The boost filesystem portability guidelines
+/// suggest "Do not use more that [sic] one period in a file name",
+/// and extensions are added to product names to create file names.
+///
+/// Rejected alternative: take a 'ce_product_name' argument instead.
+/// That would constrain the argument in a natural way, but would
+/// force coupling between class ce_product_name and client code
+/// that has no other need to know about it; furthermore, the range
+/// of 'ce_product_name' values is determined only at run time, and
+/// it would be strange to propagate a run-time dependency.
+
+std::string filename_from_product_name(std::string const& product_name)
+{
+    fs::path path(product_name);
+    LMI_ASSERT(product_name == fs::basename(path));
+    path = fs::change_extension(path, ".policy");
+    return AddDataDir(path.string());
 }
 
 /// Load from file. This free function can be invoked across dll

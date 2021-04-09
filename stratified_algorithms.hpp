@@ -1,6 +1,6 @@
 // Numerical algorithms for stratified rates.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -74,6 +74,15 @@
 /// so it's in the second bracket. The second rate is applied to the
 /// entire amount of 1500. The function is not monotone except in the
 /// degenerate case of uniformly equal rates.
+///
+/// Implementation note: Many function templates in this header
+/// require a zero of the appropriate type T, and accordingly define
+/// a local variable
+///   static constexpr T zero {};
+/// in case this zero is expensive to construct. It is constructed
+/// as "T{}" rather than "T(0)" because the latter uses an explicit
+/// integer argument, which may require a converting constructor
+/// (for example, with class currency).
 
 namespace tiered_and_banded_rates{} // doxygen workaround.
 
@@ -159,8 +168,7 @@ T tiered_product<T>::operator()
     ,std::vector<T> const& rates
     ) const
 {
-    // Cache T(0) in case it's expensive to construct.
-    T const zero = T(0);
+    static constexpr T zero {};
 
     LMI_ASSERT(zero <= new_incremental_amount);
     LMI_ASSERT(zero <= prior_total_amount);
@@ -225,8 +233,7 @@ T tiered_rate<T>::operator()
     ,std::vector<T> const& rates
     ) const
 {
-    // Cache T(0) in case it's expensive to construct.
-    T const zero = T(0);
+    static constexpr T zero {};
 
     T product = tiered_product<T>()(amount, zero, incremental_limits, rates);
     T result = rates.at(0);
@@ -279,8 +286,7 @@ T banded_rate<T>::operator()
     ,std::vector<T> const& rates
     ) const
 {
-    // Cache T(0) in case it's expensive to construct.
-    T const zero = T(0);
+    static constexpr T zero {};
 
     LMI_ASSERT(zero <= total_amount);
     LMI_ASSERT(!cumulative_limits.empty());
@@ -343,8 +349,7 @@ T banded_product<T>::operator()
 template<typename T>
 void progressively_limit(T& a, T& b, T const& limit)
 {
-    // Cache T(0) in case it's expensive to construct.
-    T const zero = T(0);
+    static constexpr T zero {};
 
     LMI_ASSERT(zero <= limit);
     if(a <= zero && b <= zero)
@@ -464,7 +469,7 @@ void progressively_limit(T& a, T& b, T const& limit)
 template<typename T>
 T progressively_reduce(T& a, T& b, T const& delta)
 {
-    T const zero = T(0); // Cache T(0) in case it's expensive to construct.
+    static constexpr T zero {};
     T r(delta);          // Return value.
     if(zero == r)
         {

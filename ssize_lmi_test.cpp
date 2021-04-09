@@ -1,6 +1,6 @@
 // Reformed std::size() returning a signed integer: unit test.
 //
-// Copyright (C) 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -126,6 +126,11 @@ constexpr char f0c(T(&)[n])
     return bourn_cast<char>(n);
 }
 
+#if defined __clang__
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wbraced-scalar-init"
+#endif // defined __clang__
+
 // deduce int, return char; braced-init-list
 template<typename T, int n>
 char f0d(T(&)[n])
@@ -146,6 +151,10 @@ char f0f(T(&)[n])
 {
     return {n}; // error: narrowing conversion of '128' from 'unsigned int'
 }
+
+#if defined __clang__
+#   pragma clang diagnostic pop
+#endif // defined __clang__
 
 // deduce auto, return char; braced-init-list
 // auto is deduced to int, not to std::size_t
@@ -185,24 +194,24 @@ void test_array_bound_deduction()
 void test_various_containers()
 {
     char const c[2] = {'0'};
-    BOOST_TEST_EQUAL(lmi::ssize(c), 2);
-    BOOST_TEST_EQUAL(lmi::ssize(c), bourn_cast<int>(std::size(c)));
+    LMI_TEST_EQUAL(lmi::ssize(c), 2);
+    LMI_TEST_EQUAL(lmi::ssize(c), bourn_cast<int>(std::size(c)));
 
     std::array<int,3> const a{1, 2};
-    BOOST_TEST_EQUAL(lmi::ssize(a), 3);
-    BOOST_TEST_EQUAL(lmi::ssize(a), bourn_cast<int>(std::size(a)));
+    LMI_TEST_EQUAL(lmi::ssize(a), 3);
+    LMI_TEST_EQUAL(lmi::ssize(a), bourn_cast<int>(std::size(a)));
 
     std::vector<int> const v(5);
-    BOOST_TEST_EQUAL(lmi::ssize(v), 5);
-    BOOST_TEST_EQUAL(lmi::ssize(v), bourn_cast<int>(std::size(v)));
+    LMI_TEST_EQUAL(lmi::ssize(v), 5);
+    LMI_TEST_EQUAL(lmi::ssize(v), bourn_cast<int>(std::size(v)));
 
     std::string const s("abcdefg");
-    BOOST_TEST_EQUAL(lmi::ssize(s), 7);
-    BOOST_TEST_EQUAL(lmi::ssize(s), bourn_cast<int>(std::size(s)));
+    LMI_TEST_EQUAL(lmi::ssize(s), 7);
+    LMI_TEST_EQUAL(lmi::ssize(s), bourn_cast<int>(std::size(s)));
 
     char const* p = "ABCDEFGHIJK";
-    BOOST_TEST_EQUAL(lmi::sstrlen(p), 11);
-    BOOST_TEST_EQUAL(lmi::sstrlen(p), bourn_cast<int>(std::strlen(p)));
+    LMI_TEST_EQUAL(lmi::sstrlen(p), 11);
+    LMI_TEST_EQUAL(lmi::sstrlen(p), bourn_cast<int>(std::strlen(p)));
 }
 
 int test_main(int, char*[])

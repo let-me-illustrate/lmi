@@ -2,7 +2,7 @@
 
 # Install msw-native wx with options suitable for lmi.
 #
-# Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+# Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -17,23 +17,13 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 set -vxe
 
-# A repository is cached in /srv/cache_for_lmi/vcs/, where it can be
-# kept up to date and reused cheaply--whereas cloning it from a remote
-# host takes considerable time and bandwidth, and fails if internet
-# connectivity is lost, or the host is temporarily unavailable, or
-# it is blocked by a corporate firewall.
-
 # Configurable settings ########################################################
-
-remote_host_url=${remote_host_url:-"https://github.com/wxWidgets/wxWidgets.git"}
-
-wx_commit_sha=${wx_commit_sha:-"3c259eb56d924a4aa9b6d32e33367976eab919b6"}
 
 wx_skip_clean=${wx_skip_clean:-"0"}
 
@@ -51,36 +41,12 @@ mingw_dir=/opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/gcc_msw
 prefix=/opt/lmi/local
 exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
 
-repo_name="wxWidgets"
+srcdir=$(dirname "$(readlink --canonicalize "$0")")
+wx_dir="$srcdir/third_party/wx"
+
+build_type=$(/usr/share/misc/config.guess)
 
 # Script commands ##############################################################
-
-proxy_parent_dir="/srv/cache_for_lmi/vcs"
-mkdir --parents "$proxy_parent_dir"
-
-proxy_wx_dir="$proxy_parent_dir"/$repo_name
-
-# Create a local mirror if it doesn't already exist.
-if [ ! -d "$proxy_wx_dir" ]
-then
-    cd "$proxy_parent_dir"
-    git clone "$coefficiency" --recurse-submodules "$remote_host_url" $repo_name
-fi
-
-cd "$proxy_wx_dir"
-
-# Fetch desired commit from remote host if missing.
-if ! git rev-parse --quiet --verify "$wx_commit_sha^{commit}" >/dev/null
-then
-    git fetch origin
-fi
-
-git checkout "$wx_commit_sha"
-
-# Get any new submodules that may have been added, even if nested.
-git submodule update "$coefficiency" --recursive --init
-
-build_type=$("$proxy_wx_dir"/config.guess)
 
 case "$build_type" in
     (*-*-cygwin*)
@@ -89,11 +55,13 @@ case "$build_type" in
 esac
 
 # Distinguish wx dll by host type, compiler version, and wx SHA1.
-gcc_version=$("${mingw_bin_dir}${LMI_TRIPLET}-$LMI_COMPILER" -dumpversion|tr -d '\r')
-vendor=${LMI_TRIPLET}-$gcc_version-$wx_commit_sha
+if [ -z "$gcc_version" ]; then
+    gcc_version=$(make --no-print-directory --directory="$srcdir" show_gcc_version)
+fi
+vendor=${LMI_TRIPLET}-$gcc_version-$(git rev-parse --short HEAD:third_party/wx)
 
 # Configuration reference:
-#   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
+#   https://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
 
 wx_cc_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math'
 wx_cxx_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math'
@@ -115,6 +83,7 @@ config_options="
   --disable-ribbon
   --disable-richtext
   --disable-stc
+  --disable-sys-libs
   --disable-webview
   --enable-monolithic
   --enable-option-checking
@@ -122,9 +91,6 @@ config_options="
   --enable-stl
   --enable-vendor=$vendor
   --with-cxx=11
-  --with-expat=builtin
-  --with-libpng=builtin
-  --with-zlib=builtin
   --without-opengl
   --without-subdirs
   CPPFLAGS=-I$prefix/include
@@ -151,7 +117,7 @@ mkdir --parents "$build_dir"
 cd "$build_dir"
 # 'configure' options must not be double-quoted
 # shellcheck disable=SC2086
-"$proxy_wx_dir"/configure $config_options CFLAGS="$wx_cc_flags" CXXFLAGS="$wx_cxx_flags"
+"$wx_dir"/configure $config_options CFLAGS="$wx_cc_flags" CXXFLAGS="$wx_cxx_flags"
 $MAKE
 $MAKE install
 # autotools: 'make install' doesn't respect group permissions--see:

@@ -2,7 +2,7 @@
 
 # Ensure sound git configuration.
 
-# Copyright (C) 2017, 2018, 2019, 2020 Gregory W. Chicares.
+# Copyright (C) 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -17,14 +17,15 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 # Navigate to the directory where this script resides, and make sure
 # it's a git "toplevel" directory.
 
-cd "$(dirname "$(readlink -f "$0")")" || printf 'Cannot cd\n'
+srcdir=$(dirname "$(readlink --canonicalize "$0")")
+cd "$srcdir" || printf 'Cannot cd\n'
 toplevel=$(git rev-parse --show-toplevel)
 printf '"%s" is current directory\n' "$PWD"
 printf '"%s" is git toplevel directory\n' "$toplevel"
@@ -35,7 +36,7 @@ printf '"%s" is git toplevel directory\n' "$toplevel"
 # 'core.filemode' is "false". See:
 #   https://lists.nongnu.org/archive/html/lmi/2017-11/msg00018.html
 
-lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+lmi_build_type=$(/usr/share/misc/config.guess)
 case "$lmi_build_type" in
   (*-*-cygwin*)
     printf 'cygwin detected\n'

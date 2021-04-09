@@ -1,6 +1,6 @@
 // Document class for censuses.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -29,7 +29,6 @@
 
 #include <wx/docview.h>
 
-class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
 class WXDLLIMPEXP_FWD_ADV wxGrid;
 
 class CensusDocument
@@ -45,44 +44,16 @@ class CensusDocument
     CensusDocument(CensusDocument const&) = delete;
     CensusDocument& operator=(CensusDocument const&) = delete;
 
+    wxGrid& PredominantViewWindow() const;
+
     // wxDocument overrides.
     bool OnCreate(wxString const& filename, long int flags) override;
     bool DoOpenDocument(wxString const& filename) override;
     bool DoSaveDocument(wxString const& filename) override;
 
     multiple_cell_document doc_;
-};
 
-class CensusDVCDocument final
-    :public CensusDocument
-{
-  public:
-    CensusDVCDocument() = default;
-    ~CensusDVCDocument() override = default;
-
-  private:
-    CensusDVCDocument(CensusDVCDocument const&) = delete;
-    CensusDVCDocument& operator=(CensusDVCDocument const&) = delete;
-
-    wxDataViewCtrl& PredominantViewWindow() const;
-
-    DECLARE_DYNAMIC_CLASS(CensusDVCDocument)
-};
-
-class CensusGridDocument final
-    :public CensusDocument
-{
-  public:
-    CensusGridDocument() = default;
-    ~CensusGridDocument() override = default;
-
-  private:
-    CensusGridDocument(CensusGridDocument const&) = delete;
-    CensusGridDocument& operator=(CensusGridDocument const&) = delete;
-
-    wxGrid& PredominantViewWindow() const;
-
-    DECLARE_DYNAMIC_CLASS(CensusGridDocument)
+    DECLARE_DYNAMIC_CLASS(CensusDocument)
 };
 
 #endif // census_document_hpp

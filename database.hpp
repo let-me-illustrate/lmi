@@ -1,6 +1,6 @@
 // Product database.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -35,6 +35,7 @@
 #include <type_traits>                  // is_integral_v, underlying_type_t
 #include <vector>
 
+class currency;
 class database_entity;
 class DBDictionary;
 class yare_input;
@@ -72,6 +73,9 @@ class LMI_SO product_database final
         ) const;
     void query_into(e_database_key, std::vector<double>&) const;
 
+    void query_into(e_database_key, currency&) const;
+    void query_into(e_database_key, std::vector<currency>&) const;
+
     double query(e_database_key, database_index const&) const;
 
     template<typename T>
@@ -101,7 +105,7 @@ class LMI_SO product_database final
     int                  length_;
     int                  maturity_age_;
 
-    std::shared_ptr<DBDictionary> db_;
+    std::shared_ptr<DBDictionary const> db_;
 };
 
 /// Query database, using default index; return a scalar.

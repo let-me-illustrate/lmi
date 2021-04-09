@@ -1,6 +1,6 @@
 // Main file for automated testing of wx interface.
 //
-// Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -175,6 +175,9 @@ class application_test final
     // Used to check if distribution tests should be enabled.
     bool is_distribution_test() const { return is_distribution_test_; }
 
+    // Returns the exit code based of tests results.
+    int get_exit_code() const { return exit_code_; }
+
   private:
     application_test() = default;
     application_test(application_test const&) = delete;
@@ -231,6 +234,8 @@ class application_test final
     bool run_all_              {true};
 
     bool is_distribution_test_ {false};
+
+    int  exit_code_            {EXIT_FAILURE};
 };
 
 application_test& application_test::instance()
@@ -509,6 +514,8 @@ TestsResults application_test::run()
             }
         }
 
+    exit_code_ = results.failed == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
+
     return results;
 }
 
@@ -645,6 +652,7 @@ class SkeletonTest final : public Skeleton
 
     // wxApp overrides.
     bool OnInit                 () override;
+    int  OnRun                  () override;
     bool OnExceptionInMainLoop  () override;
     bool StoreCurrentException  () override;
     void RethrowStoredException () override;
@@ -694,7 +702,7 @@ DocManagerEx* SkeletonTest::CreateDocManager()
 
     // As in the base class version, notice that we must not use 'new(wx)' here
     // as this object is deleted by wxWidgets itself.
-    return new DocManagerTest;
+    return ::new DocManagerTest;
 }
 
 bool SkeletonTest::OnInit()
@@ -709,6 +717,20 @@ bool SkeletonTest::OnInit()
     CallAfter(&SkeletonTest::RunTheTests);
 
     return true;
+}
+
+int SkeletonTest::OnRun()
+{
+    int exit_code = Skeleton::OnRun();
+
+    // If the application exited successfully then return the exit code
+    // based on test results.
+    if(exit_code == 0)
+        {
+        exit_code = application_test::instance().get_exit_code();
+        }
+
+    return exit_code;
 }
 
 bool SkeletonTest::StoreCurrentException()

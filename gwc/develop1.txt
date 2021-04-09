@@ -29,6 +29,11 @@ git commit one_file another_file -m"One set of changes"
 git commit --all -m"Another set of changes"
 git push
 
+  # ...commit only up to {second-to-last; a specific} commit
+
+git push origin HEAD^1:master
+git push origin SHA1:master
+
   # ...commit a change to cvs repository
 
 export CVS_RSH="ssh"
@@ -40,6 +45,14 @@ cvs commit -m "Modify foo webpage" bar.html
   # [for cvs, add the new and delete the old]
 
 git mv lmi.rc lmi_msw_res.rc
+
+  # Reuse commit message when commit originally failed
+
+git commit --edit --file=.git/COMMIT_EDITMSG -- [files]
+
+  # Regex for conflict markers
+
+^[<=>]\{7\}\( \|$\)
 
   # Make a patch against repository from local tree
 
@@ -87,15 +100,38 @@ git cherry-pick 8e247c13
   # ...for pure divagations
 
 git branch odd/foo
-git checkout odd/foo
+git switch odd/foo
+  or
+git switch --create odd/foo
+  (instead of separate git-branch and git-switch commands)
 git commit sandbox_test.cpp
-git checkout master
+git switch master
 git push origin odd/foo
 
-  # to transplant already-pushed commits to a new branch
+  # to transplant unpushed commits to a new branch--see:
+  #   https://lists.nongnu.org/archive/html/lmi/2020-09/msg00034.html
+  # this git-branch command creates a new branch with the given name,
+  # which points to HEAD; but it does not switch to that branch...
 git branch odd/foo
+  # ...and therefore this git-reset command affects the current
+  # branch (e.g., 'master'), but does not affect the new branch:
 git reset --keep origin/master
-  # ...and don't ever rebase that new branch
+  # specify upstream on the first push (ignore if it's never pushed)
+git push --set-upstream origin odd/foo
+  # ...and, if that branch is (later) to be rebased on 'master', be
+  # sure to use either '--no-fork-point' or an explicit branch name.
+  #
+  # Alternatively, instead of the above commands, use the following:
+  # ...create and switch to a new branch (for unpushed commits)...
+git switch --create odd/foo
+  # ...add any further commits...
+git commit whatever.cpp
+  # ...specify upstream on first push, as above...
+git push --set-upstream origin odd/foo
+  # ...then awaken from the dream...
+git switch master
+  # ...and forget it, if desired, as above...
+git reset --keep origin/master
 
   # (to copy to a subdir before deletion, so it's in permanent history)
   # (this works only if all modified files are unique to the branch)
@@ -109,12 +145,12 @@ git push origin --delete odd/foo
   # ...for failing unit tests that are to be...
 
 git branch odd/foo
-git checkout odd/foo
+git switch odd/foo
 git commit miscellany_test.cpp -m"Add a failing unit test"
   # ...corrected later (see:
   #   https://lists.nongnu.org/archive/html/lmi/2018-03/msg00084.html
   # for a git-merge alternative)
-git checkout master
+git switch master
 git cherry-pick --no-commit ..odd/foo
 git commit miscellany.cpp miscellany_test.cpp -m"Enhance to pass new unit test"
 git push origin odd/foo
@@ -131,6 +167,14 @@ git checkout HEAD^ census_view.cpp
   # Obliterate unstaged changes
 
 git checkout .
+
+  # Switch locally to a particular SHA1
+
+git switch --detach [sha1sum]
+
+  # ...and undo that switch (after stashing any changes)
+
+git switch -
 
   # Obliterate unpushed commits
 
@@ -152,6 +196,15 @@ git pull --rebase
 
 git add --chmod=+x some-file-name
 git add --chmod=-x some-file-name
+
+  # Show branch topology (last 200 commits, e.g.)
+
+git log -200 --graph --oneline --all --full-history
+git log -200 --graph --oneline --all --simplify-by-decoration
+
+  # Show git's file permissions
+
+git ls-files --stage -- gwc/*.sh |less
 
   # Second screen: only for updating local shadow copy of repository
   #
@@ -269,6 +322,23 @@ popd
   # Miscellany (no particular screen)
 
 cd /opt/lmi/src/lmi
+
+  # Useful vim commands that are not readily remembered
+
+  # Find long lines
+
+/\%>80v.\+
+
+  # Change column 41 to a comma, for non-matching lines in a range
+  # ('|41' seems incompatible with '|' separator, so use 'cursor')
+
+:'<,'>g!/xyzzy/call cursor (0,41) | norm r,
+
+  # In a range, copy each matching line, appending "_term" to the copy
+
+:'<,'>g/^    ,/ copy . | s/^    ,[^ ]*/&_term
+
+  # All other...
 
   # Identify source files not encoded compatibly with UTF-8
 

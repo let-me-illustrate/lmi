@@ -1,6 +1,6 @@
 // Miscellaneous mathematical operations as function objects.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -24,12 +24,10 @@
 
 #include "config.hpp"
 
-#include "assert_lmi.hpp"
-#include "et_vector.hpp"
-
-#include <algorithm>                    // max(), min()
-#include <cmath>                        // expm1(), log1p()
+#include <algorithm>                    // max(), min(), transform()
+#include <cmath>                        // expm1l(), log1pl()
 #include <limits>
+#include <numeric>                      // partial_sum()
 #include <stdexcept>
 #include <type_traits>
 #include <vector>
@@ -37,33 +35,27 @@
 // TODO ?? Write functions here for other refactorable uses of
 // std::pow() throughout lmi, to facilitate reuse and unit testing.
 
+/// Forward partial summation.
+
+template<typename T>
+std::vector<T>& fwd_sum(std::vector<T>& v)
+{
+    std::partial_sum(v.begin(), v.end(), v.begin());
+    return v;
+}
+
+/// Backward partial summation.
+
+template<typename T>
+std::vector<T>& back_sum(std::vector<T>& v)
+{
+    std::partial_sum(v.rbegin(), v.rend(), v.rbegin());
+    return v;
+}
+
 // Some of these provide the typedefs that std::unary_function or
 // std::binary_function would have provided, because they're still
 // required for std::binder1st() or std::binder2nd(), or for PETE.
-
-template<typename T>
-struct greater_of
-{
-    using first_argument_type  = T;
-    using second_argument_type = T;
-    using result_type          = T;
-    T operator()(T const& x, T const& y) const
-        {
-        return std::max(x, y);
-        }
-};
-
-template<typename T>
-struct lesser_of
-{
-    using first_argument_type  = T;
-    using second_argument_type = T;
-    using result_type          = T;
-    T operator()(T const& x, T const& y) const
-        {
-        return std::min(x, y);
-        }
-};
 
 /// Arithmetic mean.
 ///
@@ -86,7 +78,7 @@ struct mean
     using first_argument_type  = T;
     using second_argument_type = T;
     using result_type          = T;
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     T operator()(T const& x, T const& y) const
         {return 0.5 * x + 0.5 * y;}
 };
@@ -100,14 +92,20 @@ struct mean
 template<typename T>
 inline T outward_quotient(T numerator, T denominator)
 {
-    static_assert(std::is_integral<T>::value);
+    static_assert(std::is_integral_v<T>);
 
-    LMI_ASSERT(0 != denominator);
+    if(0 == denominator)
+        {
+        throw std::domain_error("Denominator is zero.");
+        }
 
     // "INT_MIN / -1" would overflow; but "false/bool(-1)" would not,
     // hence the "T(-1) < 0" test.
-    constexpr T min = std::numeric_limits<T>::min();
-    LMI_ASSERT(!(min == numerator && T(-1) < 0 && T(-1) == denominator));
+    constexpr T min = std::numeric_limits<T>::lowest();
+    if(min == numerator && T(-1) < 0 && T(-1) == denominator)
+        {
+        throw std::domain_error("Division might overflow.");
+        }
 
     T x = numerator / denominator;
     T y = 0 != numerator % denominator;
@@ -138,7 +136,7 @@ inline T outward_quotient(T numerator, T denominator)
 template<typename T, int n>
 struct i_upper_n_over_n_from_i
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     static_assert(0 < n);
     T operator()(T const& i) const
         {
@@ -165,7 +163,7 @@ struct i_upper_12_over_12_from_i
 {
     using argument_type = T;
     using result_type   = T;
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     T operator()(T const& i) const
         {
         return i_upper_n_over_n_from_i<T,12>()(i);
@@ -175,7 +173,7 @@ struct i_upper_12_over_12_from_i
 template<typename T, int n>
 struct i_from_i_upper_n_over_n
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     static_assert(0 < n);
     T operator()(T const& i) const
         {
@@ -189,7 +187,7 @@ struct i_from_i_upper_n_over_n
 template<typename T>
 struct i_from_i_upper_12_over_12
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     T operator()(T const& i) const
         {
         return i_from_i_upper_n_over_n<T,12>()(i);
@@ -199,7 +197,7 @@ struct i_from_i_upper_12_over_12
 template<typename T, int n>
 struct d_upper_n_from_i
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     static_assert(0 < n);
     T operator()(T const& i) const
         {
@@ -224,7 +222,7 @@ struct d_upper_n_from_i
 template<typename T>
 struct d_upper_12_from_i
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     T operator()(T const& i) const
         {
         return d_upper_n_from_i<T,12>()(i);
@@ -240,7 +238,7 @@ struct d_upper_12_from_i
 template<typename T, int n>
 struct net_i_from_gross
 {
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     static_assert(0 < n);
     T operator()(T const& i, T const& spread, T const& fee) const
         {
@@ -269,7 +267,7 @@ struct net_i_from_gross
 /// The COI rate is the monthly equivalent of q divided by one minus
 /// itself, because deducting the COI charge at the beginning of the
 /// month increases the amount actually at risk--see:
-///   http://lists.nongnu.org/archive/html/lmi/2009-09/msg00001.html
+///   https://lists.nongnu.org/archive/html/lmi/2009-09/msg00001.html
 ///
 /// The value of 'q' might exceed unity, for example if guaranteed COI
 /// rates for simplified issue are 125% of 1980 CSO, so that case is
@@ -293,7 +291,7 @@ struct coi_rate_from_q
     using first_argument_type  = T;
     using second_argument_type = T;
     using result_type          = T;
-    static_assert(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point_v<T>);
     T operator()(T const& q, T const& max_coi) const
         {
         if(!(0.0 <= max_coi && max_coi <= 1.0))
@@ -345,9 +343,18 @@ void assign_midpoint
     ,std::vector<T> const& in_1
     )
 {
-    LMI_ASSERT(in_0.size() == in_1.size());
+    if(in_0.size() != in_1.size())
+        {
+        throw std::runtime_error("Vector addends are of unequal length.");
+        }
     out.resize(in_0.size());
-    assign(out, apply_binary(mean<T>(), in_0, in_1));
+    std::transform
+        (in_0.begin()
+        ,in_0.end()
+        ,in_1.begin()
+        ,out.begin()
+        ,mean<double>()
+        );
 }
 
 #endif // math_functions_hpp

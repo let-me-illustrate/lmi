@@ -1,6 +1,6 @@
 // Basic values.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -36,11 +36,13 @@
 #include "fund_data.hpp"
 #include "global_settings.hpp"
 #include "gpt_specamt.hpp"
+#include "i7702.hpp"
 #include "ieee754.hpp"                  // ldbl_eps_plus_one_times()
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "input.hpp"
 #include "interest_rates.hpp"
+#include "lingo.hpp"
 #include "loads.hpp"
 #include "math_functions.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_str()
@@ -49,21 +51,32 @@
 #include "outlay.hpp"
 #include "premium_tax.hpp"
 #include "rounding_rules.hpp"
+#include "stl_extensions.hpp"           // nonstd::power()
 #include "stratified_charges.hpp"
 #include "value_cast.hpp"
 
-#include <algorithm>
-#include <cmath>                        // pow()
-#include <functional>                   // multiplies
+#include <algorithm>                    // min(), transform()
+#include <cfenv>                        // fesetround()
+#include <cmath>                        // nearbyint(), pow()
+#include <functional>                   // minus, multiplies
 #include <limits>
-#include <numeric>
+#include <numeric>                      // accumulate(), partial_sum()
 #include <stdexcept>
 
 //============================================================================
 BasicValues::BasicValues(Input const& input)
     :yare_input_         (input)
-    ,product_            (yare_input_.ProductName)
+    ,product_            (product_data::read_via_cache(filename_from_product_name(yare_input_.ProductName)))
     ,database_           (yare_input_)
+    ,lingo_              (lingo::read_via_cache
+        (AddDataDir(product().datum("LingoFilename"))))
+    ,FundData_           (FundData::read_via_cache
+        (AddDataDir(product().datum("FundFilename"))))
+    ,RoundingRules_      (rounding_rules::read_via_cache
+        (AddDataDir(product().datum("RoundingFilename"))))
+    ,StratifiedCharges_  (stratified_charges::read_via_cache
+        (AddDataDir(product().datum("TierFilename"))))
+    ,i7702_              {std::make_unique<i7702>(database(), *StratifiedCharges_)}
     ,DefnLifeIns_        {mce_cvat}
     ,DefnMaterialChange_ {mce_unnecessary_premium}
     ,Effective7702DboRop {mce_option1_for_7702}
@@ -72,12 +85,13 @@ BasicValues::BasicValues(Input const& input)
     ,StateOfJurisdiction_{mce_s_CT}
     ,StateOfDomicile_    {mce_s_CT}
     ,PremiumTaxState_    {mce_s_CT}
+    ,InitialTargetPremium{0.0}
 {
     Init();
 }
 
 //============================================================================
-// TODO ?? Not for general use--use for GPT server only. This is bad design. TAXATION !! Eliminate this.
+// Designed for GPT server, but available for general use.
 BasicValues::BasicValues
     (std::string  const& a_ProductName
     ,mcenum_gender       a_Gender
@@ -93,7 +107,7 @@ BasicValues::BasicValues
     // TODO ?? Need loan rate type here?
     )
     :yare_input_         (Input{})
-    ,product_            (a_ProductName)
+    ,product_            (product_data::read_via_cache(filename_from_product_name(a_ProductName)))
     ,database_
         (a_ProductName
         ,a_Gender
@@ -103,6 +117,15 @@ BasicValues::BasicValues
         ,a_UnderwritingBasis
         ,a_StateOfJurisdiction
         )
+    ,lingo_              (lingo::read_via_cache
+        (AddDataDir(product().datum("LingoFilename"))))
+    ,FundData_           (FundData::read_via_cache
+        (AddDataDir(product().datum("FundFilename"))))
+    ,RoundingRules_      (rounding_rules::read_via_cache
+        (AddDataDir(product().datum("RoundingFilename"))))
+    ,StratifiedCharges_  (stratified_charges::read_via_cache
+        (AddDataDir(product().datum("TierFilename"))))
+    ,i7702_              {std::make_unique<i7702>(database(), *StratifiedCharges_)}
     ,DefnLifeIns_        {mce_cvat}
     ,DefnMaterialChange_ {mce_unnecessary_premium}
     ,Effective7702DboRop {a_DBOptFor7702}
@@ -129,24 +152,62 @@ BasicValues::BasicValues
     yare_input_.GroupUnderwritingType      = a_UnderwritingBasis  ;
     yare_input_.ProductName                = a_ProductName        ;
     yare_input_.PremiumTaxState            = a_StateOfJurisdiction;
+    yare_input_.StateOfJurisdiction        = a_StateOfJurisdiction;
     yare_input_.DefinitionOfLifeInsurance  = mce_gpt              ;
     yare_input_.DefinitionOfMaterialChange = mce_adjustment_event ;
 
-    yare_input_.SpecifiedAmount            .assign(1, a_FaceAmount);
+    int const db_len = database().length();
 
+    yare_input_.SpecifiedAmount           .assign(db_len, a_FaceAmount);
+    // The tax law recognizes no "supplemental" amount, but
+    // class death_benefits expects SupplementalAmount to have
+    // the same length as SpecifiedAmount.
+    yare_input_.SupplementalAmount        .assign(db_len, 0.0);
+
+    // Cf. effective_dbopt_7702()
     mce_dbopt const z
         (mce_option1_for_7702 == a_DBOptFor7702 ? mce_option1
         :mce_option2_for_7702 == a_DBOptFor7702 ? mce_option2
         :throw std::runtime_error("Unexpected DB option.")
         );
-    yare_input_.DeathBenefitOption         .assign(1, z.value());
+    yare_input_.DeathBenefitOption        .assign(db_len, z.value());
 
-    GPTServerInit();
+    yare_input_.ExtraMonthlyCustodialFee  .resize(db_len);
+    yare_input_.ExtraCompensationOnAssets .resize(db_len);
+    yare_input_.ExtraCompensationOnPremium.resize(db_len);
+    yare_input_.CurrentCoiMultiplier      .assign(db_len, 1.0);
+    yare_input_.FlatExtra                 .resize(db_len);
+
+    // Used by class InterestRates:
+    yare_input_.GeneralAccountRateType    = mce_credited_rate;
+    yare_input_.SeparateAccountRateType   = mce_gross_rate;
+    yare_input_.LoanRateType              = mce_fixed_loan_rate;
+    yare_input_.HoneymoonEndorsement      = false;
+    yare_input_.GeneralAccountRate        .assign(db_len, 0.0);
+    yare_input_.SeparateAccountRate       .assign(db_len, 0.0);
+    yare_input_.ExtraCompensationOnAssets .assign(db_len, 0.0);
+    yare_input_.AmortizePremiumLoad       = false;
+    yare_input_.LoanRate                  = 0.0;
+    yare_input_.HoneymoonValueSpread      .assign(db_len, 0.0);
+    yare_input_.PostHoneymoonSpread       = 0.0;
+
+    Init();
 }
+
+/// Destructor.
+///
+/// Although it is explicitly defaulted, this destructor is not
+/// implemented inside the class definition, because the header
+/// forward-declares one or more classes that are held by
+/// std::unique_ptr, so their destructors are visible only here.
+
+BasicValues::~BasicValues() = default;
 
 //============================================================================
 void BasicValues::Init()
 {
+    SetRoundingFunctors();
+
     SetPermanentInvariants();
 
     StateOfDomicile_ = mc_state_from_string(product().datum("InsCoDomicile"));
@@ -177,6 +238,7 @@ void BasicValues::Init()
 
     database().query_into(DB_MaturityAge   , EndtAge);
     Length = EndtAge - IssueAge;
+    LMI_ASSERT(database().length() == Length);
 
     database().query_into(DB_LedgerType    , ledger_type_);
     database().query_into(DB_Nonillustrated, nonillustrated_);
@@ -196,6 +258,7 @@ void BasicValues::Init()
             << LMI_FLUSH
             ;
         }
+
     if(database().query<int>(DB_MaxIssAge) < IssueAge)
         {
         alarum()
@@ -207,121 +270,40 @@ void BasicValues::Init()
             << LMI_FLUSH
             ;
         }
-    FundData_.reset(new FundData(AddDataDir(product().datum("FundFilename"))));
-    RoundingRules_.reset
-        (new rounding_rules(AddDataDir(product().datum("RoundingFilename")))
-        );
-    SetRoundingFunctors();
-    StratifiedCharges_.reset
-        (new stratified_charges(AddDataDir(product().datum("TierFilename")))
-        );
-    SpreadFor7702_.assign
-        (Length
-        ,StratifiedCharges_->minimum_tiered_spread_for_7702()
-        );
 
     // Multilife contracts will need a vector of mortality-rate objects.
 
     // Mortality and interest rates require database and rounding.
     // Interest rates require tiered data and 7702 spread.
-    MortalityRates_.reset(new MortalityRates (*this));
-    InterestRates_ .reset(new InterestRates  (*this));
-    DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
-    // Outlay requires only input; it might someday use interest rates.
-    Outlay_        .reset(new modal_outlay   (yare_input_));
-    PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, StateOfDomicile_, yare_input_.AmortizePremiumLoad, database(), *StratifiedCharges_));
-    Loads_         .reset(new Loads          (*this));
-
-    // The target premium can't be ascertained yet if specamt is
-    // determined by a strategy. This data member is used only by
-    // Init7702(), and is meaningful only when that function is called
-    // by GPTServerInit(); the value assigned here is overridden by a
-    // downstream call to Irc7702::Initialize7702(). TAXATION !! So
-    // eliminate the member when it becomes unnecessary.
-    InitialTargetPremium = 0.0;
+    MortalityRates_ = std::make_unique<MortalityRates>(*this);
+    InterestRates_  = std::make_unique<InterestRates >(*this);
+    DeathBfts_      = std::make_unique<death_benefits>
+        (GetLength()
+        ,yare_input_
+        ,round_specamt_
+        );
+    // Outlay requires only input and rounding; it might someday use
+    // interest rates.
+    Outlay_         = std::make_unique<modal_outlay>
+        (yare_input_
+        ,round_gross_premium_
+        ,round_withdrawal_
+        ,round_loan_
+        );
+    PremiumTax_     = std::make_unique<premium_tax>
+        (PremiumTaxState_
+        ,StateOfDomicile_
+        ,yare_input_.AmortizePremiumLoad
+        ,database()
+        ,*StratifiedCharges_
+        );
+    Loads_          = std::make_unique<Loads>(*this);
 
     SetMaxSurvivalDur();
+    set_partial_mortality();
 
     Init7702();
     Init7702A();
-}
-
-//============================================================================
-#include "ihs_x_type.hpp"               // x_product_rule_violated TAXATION !! remove later
-// TODO ??  Not for general use--use for GPT server only, for now. TAXATION !! refactor later
-void BasicValues::GPTServerInit()
-{
-    SetPermanentInvariants();
-
-    IssueAge = yare_input_.IssueAge;
-    RetAge   = yare_input_.RetirementAge;
-    LMI_ASSERT(IssueAge < 100);
-    LMI_ASSERT(RetAge <= 100);
-    LMI_ASSERT(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
-
-    StateOfDomicile_ = mc_state_from_string(product().datum("InsCoDomicile"));
-    StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
-    PremiumTaxState_     = yare_input_.PremiumTaxState    ;
-
-    database().query_into(DB_MaturityAge   , EndtAge);
-    Length = EndtAge - IssueAge;
-
-    yare_input_.ExtraMonthlyCustodialFee  .resize(Length);
-    yare_input_.ExtraCompensationOnAssets .resize(Length);
-    yare_input_.ExtraCompensationOnPremium.resize(Length);
-    yare_input_.CurrentCoiMultiplier      .assign(Length, 1.0);
-    yare_input_.SpecifiedAmount           .assign(Length, yare_input_.SpecifiedAmount   [0]);
-    yare_input_.DeathBenefitOption        .assign(Length, yare_input_.DeathBenefitOption[0]);
-    yare_input_.FlatExtra                 .resize(Length);
-
-    database().query_into(DB_LedgerType    , ledger_type_);
-    database().query_into(DB_Nonillustrated, nonillustrated_);
-    bool no_longer_issued = database().query<bool>(DB_NoLongerIssued);
-    bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;
-    no_can_issue_         = no_longer_issued && is_new_business;
-    IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(ledger_type());
-
-    if(IssueAge < database().query<int>(DB_MinIssAge))
-        {
-        throw x_product_rule_violated
-            (
-            std::string("Issue age less than minimum")
-            );
-        }
-    if(database().query<int>(DB_MaxIssAge) < IssueAge)
-        {
-        throw x_product_rule_violated
-            (
-            std::string("Issue age greater than maximum")
-            );
-        }
-//  FundData_       = new FundData
-//      (AddDataDir(product().datum("FundFilename"))
-//      );
-    RoundingRules_.reset
-        (new rounding_rules(AddDataDir(product().datum("RoundingFilename")))
-        );
-    SetRoundingFunctors();
-    StratifiedCharges_.reset
-        (new stratified_charges(AddDataDir(product().datum("TierFilename")))
-        );
-    SpreadFor7702_.assign
-        (Length
-        ,StratifiedCharges_->minimum_tiered_spread_for_7702()
-        );
-
-    // Requires database.
-    MortalityRates_.reset(new MortalityRates (*this)); // Used by certain target-premium calculations.
-//  InterestRates_ .reset(new InterestRates  (*this));
-//  DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
-    // Outlay requires only input; it might someday use interest rates.
-//  Outlay_        .reset(new modal_outlay   (yare_input_));
-    PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, StateOfDomicile_, yare_input_.AmortizePremiumLoad, database(), *StratifiedCharges_));
-    Loads_         .reset(new Loads          (*this));
-
-    SetMaxSurvivalDur();
-
-    Init7702();
 }
 
 //============================================================================
@@ -434,94 +416,24 @@ double BasicValues::InvestmentManagementFee() const
 
 void BasicValues::Init7702()
 {
-    Mly7702qc = GetIrc7702QRates();
+    std::vector<double> Mly7702qc = GetIrc7702QRates();
     double max_coi_rate = database().query<double>(DB_MaxMonthlyCoiRate);
     LMI_ASSERT(0.0 != max_coi_rate);
     max_coi_rate = 1.0 / max_coi_rate;
     assign(Mly7702qc, apply_binary(coi_rate_from_q<double>(), Mly7702qc, max_coi_rate));
 
-    MlyDcvqc = Mly7702qc;
-    std::transform
-        (MlyDcvqc.begin()
-        ,MlyDcvqc.end()
-        ,MlyDcvqc.begin()
-        ,round_coi_rate()
+    // DCV follows the usual monthiversary mechanics, which involve
+    // (optionally) rounding monthly COI rates.
+    MlyDcvqc = round_coi_rate()(Mly7702qc);
+
+    // If lmi someday implements VLR, then the current VLR rate on
+    // the issue date constitutes a short-term guarantee that must be
+    // reflected in the 7702 interest rates (excluding the GLP rate).
+    // Until then, assert that VLR is not used, or cannot be used:
+    LMI_ASSERT
+        (  false == database().query<bool>(DB_AllowVlr)
+        || mce_variable_loan_rate != yare_input_.LoanRateType
         );
-
-    // Monthly guar net int for 7702, with 4 or 6% min, is
-    //   greater of {4%, 6%} and annual guar int rate
-    //   less 7702 spread
-    // TODO ?? TAXATION !! We need to subtract other things too, e.g. comp (sometimes)...
-    //   transformed to monthly (simple subtraction?).
-    // These interest rates belong here because they're used by
-    // DCV calculations in the account value class as well as
-    // GPT calculations in the 7702 class.
-
-    std::vector<double> guar_int;
-    database().query_into(DB_GuarInt, guar_int);
-// TAXATION !! Rework this. The intention is to make the 7702 interest
-// rate no less, at any duration, than the guaranteed loan rate--here,
-// the fixed rate charged on loans, minus the guaranteed loan spread
-// (if any).
-/*
-    switch(yare_input_.LoanRateType)
-        {
-        case mce_fixed_loan_rate:
-            {
-            std::vector<double> gross_loan_rate;
-            database().query_into(DB_FixedLoanRate    , gross_loan_rate);
-            std::vector<double> guar_loan_spread;
-            database().query_into(DB_GuarRegLoanSpread, guar_loan_spread);
-            // ET !! std::vector<double> guar_loan_rate = gross_loan_rate - guar_loan_spread;
-            std::vector<double> guar_loan_rate(Length);
-            std::transform
-                (gross_loan_rate.begin()
-                ,gross_loan_rate.end()
-                ,guar_loan_spread.begin()
-                ,guar_loan_rate.begin()
-                ,std::minus<double>()
-                );
-            // ET !! guar_int = max(guar_int, guar_loan_spread);
-            // TODO ?? But that looks incorrect when written clearly!
-            // Perhaps this old comment:
-            //   APL: guar_int gets guar_int max gross_loan_rate - guar_loan_spread
-            // suggests the actual intention.
-            std::transform
-                (guar_int.begin()
-                ,guar_int.end()
-                ,guar_loan_spread.begin()
-                ,guar_int.begin()
-                ,greater_of<double>()
-                );
-            }
-            break;
-        case mce_variable_loan_rate:
-            {
-            // do nothing
-            }
-            break;
-        }
-*/
-
-    Mly7702iGlp.assign(Length, 0.0);
-    assign
-        (Mly7702iGlp
-        ,apply_unary
-            (i_upper_12_over_12_from_i<double>()
-            ,apply_binary(greater_of<double>(), 0.04, guar_int) - SpreadFor7702_
-            )
-        );
-
-    Mly7702iGsp.assign(Length, 0.0);
-    assign
-        (Mly7702iGsp
-        ,apply_unary
-            (i_upper_12_over_12_from_i<double>()
-            ,apply_binary(greater_of<double>(), 0.06, guar_int) - SpreadFor7702_
-            )
-        );
-
-    database().query_into(DB_NaarDiscount, Mly7702ig);
 
     // TODO ?? We should avoid reading the rate file again; but
     // the GPT server doesn't initialize a MortalityRates object
@@ -532,70 +444,73 @@ void BasicValues::Init7702()
         local_mly_charge_add = GetAdbRates();
         }
 
-    double local_adb_limit = database().query<bool>(DB_AdbIsQAB) ? AdbLimit : 0.0;
+    double local_adb_limit = database().query<bool>(DB_AdbIsQAB) ? dblize(AdbLimit) : 0.0;
 
-    Irc7702_.reset
-        (new Irc7702
-            (yare_input_.DefinitionOfLifeInsurance
-            ,yare_input_.IssueAge
-            ,EndtAge
-            ,Mly7702qc
-            ,Mly7702iGlp
-            ,Mly7702iGsp
-            ,Mly7702ig
-            ,SpreadFor7702_
-            ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
-            ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
-            ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
-            ,effective_dbopt_7702(yare_input_.DeathBenefitOption[0], Effective7702DboRop)
-            ,Loads_->annual_policy_fee    (mce_gen_curr)
-            ,Loads_->monthly_policy_fee   (mce_gen_curr)
-            ,Loads_->specified_amount_load(mce_gen_curr)
-            ,SpecAmtLoadLimit
-            ,local_mly_charge_add
-            ,local_adb_limit
+    // BasicValues::InitialTargetPremium is used only here. For
+    // standalone GPT calculations, it's an input field. For
+    // illustrations, it's simply initialized to zero: the target
+    // premium can't be ascertained yet if the specified amount is
+    // to be determined by a strategy, but a downstream call to
+    // Irc7702::Initialize7702() takes care of that.
+
+    Irc7702_= std::make_unique<Irc7702>
+        (yare_input_.DefinitionOfLifeInsurance
+        ,yare_input_.IssueAge
+        ,EndtAge
+        ,Mly7702qc
+        ,i7702_->ic_glp()
+        ,i7702_->ic_gsp()
+        ,i7702_->ig_glp()
+        ,i7702_->ig_gsp()
+        ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
+        ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
+        ,yare_input_.SpecifiedAmount[0] + yare_input_.TermRiderAmount
+        ,effective_dbopt_7702(yare_input_.DeathBenefitOption[0], Effective7702DboRop)
+        ,dblize(Loads_->annual_policy_fee  (mce_gen_curr))
+        ,dblize(Loads_->monthly_policy_fee (mce_gen_curr))
+        ,Loads_->specified_amount_load     (mce_gen_curr)
+        ,dblize(SpecAmtLoadLimit)
+        ,local_mly_charge_add
+        ,local_adb_limit
 /// TAXATION !! No contemporary authority seems to believe that a
 /// change in the premium-tax rate, even if passed through to the
 /// policyowner, is a 7702A material change or a GPT adjustment event.
 /// These loads should instead reflect the lowest premium-tax rate.
-            ,Loads_->target_premium_load_excluding_premium_tax()
-            ,Loads_->excess_premium_load_excluding_premium_tax()
-            ,InitialTargetPremium
-            ,round_min_premium()
-            ,round_max_premium()
-            ,round_min_specamt()
-            ,round_max_specamt()
-            ,yare_input_.InforceYear
-            ,yare_input_.InforceMonth
-            ,yare_input_.InforceGlp
-            ,yare_input_.InforceCumulativeGlp
-            ,yare_input_.InforceGsp
-            ,yare_input_.InforceCumulativeGptPremiumsPaid
-            )
+        ,Loads_->target_premium_load_excluding_premium_tax()
+        ,Loads_->excess_premium_load_excluding_premium_tax()
+        ,InitialTargetPremium
+        ,round_min_premium()
+        ,round_max_premium()
+        ,round_min_specamt()
+        ,round_max_specamt()
+        ,yare_input_.InforceYear
+        ,yare_input_.InforceMonth
+        ,yare_input_.InforceGlp
+        ,yare_input_.InforceCumulativeGlp
+        ,yare_input_.InforceGsp
+        ,yare_input_.InforceCumulativeGptPremiumsPaid
         );
 }
 
 //============================================================================
 void BasicValues::Init7702A()
 {
-    Irc7702A_.reset
-        (new Irc7702A
-            (DefnLifeIns_
-            ,DefnMaterialChange_
-            ,false // TODO ?? TAXATION !! Joint life: hardcoded for now.
-            ,yare_input_.AvoidMecMethod
-            ,true  // TODO ?? TAXATION !! Use table for 7pp: hardcoded for now.
-            ,true  // TODO ?? TAXATION !! Use table for NSP: hardcoded for now.
-            ,MortalityRates_->SevenPayRates()
-            ,MortalityRates_->CvatNspRates()
-            ,round_max_premium()
-            )
+    Irc7702A_= std::make_unique<Irc7702A>
+        (DefnLifeIns_
+        ,DefnMaterialChange_
+        ,false // TODO ?? TAXATION !! Joint life: hardcoded for now.
+        ,yare_input_.AvoidMecMethod
+        ,true  // TODO ?? TAXATION !! Use table for 7pp: hardcoded for now.
+        ,true  // TODO ?? TAXATION !! Use table for NSP: hardcoded for now.
+        ,MortalityRates_->SevenPayRates()
+        ,MortalityRates_->CvatNspRates()
+        ,round_max_premium()
         );
 }
 
 /// Public function used for GPT specamt calculation.
 
-double BasicValues::GetAnnualTgtPrem(int a_year, double a_specamt) const
+currency BasicValues::GetAnnualTgtPrem(int a_year, currency a_specamt) const
 {
     return GetModalTgtPrem(a_year, mce_annual, a_specamt);
 }
@@ -612,6 +527,11 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_MinIssBaseSpecAmt    , MinIssBaseSpecAmt);
     database().query_into(DB_MinRenlSpecAmt       , MinRenlSpecAmt);
     database().query_into(DB_MinRenlBaseSpecAmt   , MinRenlBaseSpecAmt);
+    // Make sure database contents have no excess precision.
+    LMI_ASSERT(round_specamt().c(MinIssSpecAmt     ) == MinIssSpecAmt     );
+    LMI_ASSERT(round_specamt().c(MinIssBaseSpecAmt ) == MinIssBaseSpecAmt );
+    LMI_ASSERT(round_specamt().c(MinRenlSpecAmt    ) == MinRenlSpecAmt    );
+    LMI_ASSERT(round_specamt().c(MinRenlBaseSpecAmt) == MinRenlBaseSpecAmt);
     database().query_into(DB_NoLapseDboLvlOnly    , NoLapseDboLvlOnly);
     database().query_into(DB_NoLapseUnratedOnly   , NoLapseUnratedOnly);
     database().query_into(DB_DboChgCanIncrSpecAmt , OptChgCanIncrSA);
@@ -624,17 +544,21 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_TermIsNotRider       , TermIsNotRider);
     database().query_into(DB_TermForcedConvAge    , TermForcedConvAge);
     database().query_into(DB_TermForcedConvDur    , TermForcedConvDur);
-    database().query_into(DB_ExpSpecAmtLimit      , ExpPerKLimit);
     database().query_into(DB_MinPremType          , MinPremType);
     database().query_into(DB_TgtPremType          , TgtPremType);
     database().query_into(DB_TgtPremFixedAtIssue  , TgtPremFixedAtIssue);
     database().query_into(DB_TgtPremMonthlyPolFee , TgtPremMonthlyPolFee);
+    // Make sure database contents have no excess precision.
+    LMI_ASSERT(round_gross_premium().c(TgtPremMonthlyPolFee) == TgtPremMonthlyPolFee);
     // Assertion: see comments on GetModalPremTgtFromTable().
-    LMI_ASSERT(0.0 == TgtPremMonthlyPolFee || oe_modal_table == TgtPremType);
+    LMI_ASSERT(C0 == TgtPremMonthlyPolFee || oe_modal_table == TgtPremType);
     database().query_into(DB_CurrCoiTable0Limit   , CurrCoiTable0Limit);
     database().query_into(DB_CurrCoiTable1Limit   , CurrCoiTable1Limit);
-    LMI_ASSERT(0.0                <= CurrCoiTable0Limit);
+    LMI_ASSERT(C0                 <= CurrCoiTable0Limit);
     LMI_ASSERT(CurrCoiTable0Limit <= CurrCoiTable1Limit);
+    // Make sure database contents have no excess precision.
+    LMI_ASSERT(round_specamt().c(CurrCoiTable0Limit) == CurrCoiTable0Limit);
+    LMI_ASSERT(round_specamt().c(CurrCoiTable1Limit) == CurrCoiTable1Limit);
     database().query_into(DB_CoiInforceReentry    , CoiInforceReentry);
     database().query_into(DB_MaxWdDed             , MaxWDDed_);
     database().query_into(DB_MaxWdGenAcctValMult  , MaxWdGenAcctValMult);
@@ -648,13 +572,21 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_AdbLimit             , AdbLimit);
     database().query_into(DB_WpLimit              , WpLimit);
     database().query_into(DB_SpecAmtLoadLimit     , SpecAmtLoadLimit);
+    // Make sure database contents have no excess precision.
+    LMI_ASSERT(round_specamt().c(AdbLimit)         == AdbLimit);
+    LMI_ASSERT(round_specamt().c(WpLimit)          == WpLimit);
+    LMI_ASSERT(round_specamt().c(SpecAmtLoadLimit) == SpecAmtLoadLimit);
     database().query_into(DB_MinWd                , MinWD);
     database().query_into(DB_WdFee                , WDFee);
+    // Make sure database contents have no excess precision.
+    LMI_ASSERT(round_withdrawal().c(MinWD) == MinWD);
+    LMI_ASSERT(round_withdrawal().c(WDFee) == WDFee);
     database().query_into(DB_WdFeeRate            , WDFeeRate);
     database().query_into(DB_AllowChangeToDbo2    , AllowChangeToDBO2);
     database().query_into(DB_AllowSpecAmtIncr     , AllowSAIncr);
     database().query_into(DB_NoLapseAlwaysActive  , NoLapseAlwaysActive);
     database().query_into(DB_WpChargeMethod       , WaiverChargeMethod);
+    database().query_into(DB_AllowCashValueEnh    , AllowCashValueEnh);
     database().query_into(DB_CashValueEnhMult     , CashValueEnhMult);
     database().query_into(DB_LapseIgnoresSurrChg  , LapseIgnoresSurrChg);
     database().query_into(DB_SurrChgOnIncr        , SurrChgOnIncr);
@@ -666,11 +598,11 @@ void BasicValues::SetPermanentInvariants()
 
     database().query_into(DB_NaarDiscount         , DBDiscountRate);
     LMI_ASSERT(!contains(DBDiscountRate, -1.0));
-// This would be more natural:
-//    assign(DBDiscountRate, 1.0 / (1.0 + DBDiscountRate));
-// but we avoid it for the nonce because it causes slight regression errors.
-    assign(DBDiscountRate, 1.0 + DBDiscountRate);
-    assign(DBDiscountRate, 1.0 / DBDiscountRate);
+    assign(DBDiscountRate, 1.0 / (1.0 + DBDiscountRate));
+
+    DcvDBDiscountRate = i7702_->ig_usual();
+    LMI_ASSERT(!contains(DcvDBDiscountRate, -1.0));
+    assign(DcvDBDiscountRate, 1.0 / (1.0 + DcvDBDiscountRate));
 
     database().query_into(DB_DynamicMandE         , MandEIsDynamic);
     database().query_into(DB_DynamicSepAcctLoad   , SepAcctLoadIsDynamic);
@@ -678,10 +610,9 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_UnusualCoiBanding    , UseUnusualCOIBanding);
 
     // 'Unusual' COI banding accommodates a particular idiosyncratic
-    // product which has no term rider and doesn't permit experience
-    // rating, so we assert those preconditions and write simple code
-    // for 'unusual' COI banding that ignores those features.
-    LMI_ASSERT(!(UseUnusualCOIBanding && yare_input_.UseExperienceRating));
+    // product which has no term rider, so assert the absence of term
+    // as a precondition and write simple code for 'unusual' COI
+    // banding that ignores term.
     LMI_ASSERT(!(UseUnusualCOIBanding && database().query<bool>(DB_AllowTerm)));
 
     // Flat extras can be used even with guaranteed issue, e.g., for
@@ -757,7 +688,7 @@ void BasicValues::SetPermanentInvariants()
     database().query_into(DB_Effective7702DboRop, Effective7702DboRop);
     TermIsDbFor7702     = oe_7702_term_is_db == database().query<oenum_7702_term>(DB_TermIsQABOrDb7702 );
     TermIsDbFor7702A    = oe_7702_term_is_db == database().query<oenum_7702_term>(DB_TermIsQABOrDb7702A);
-    MaxNAAR             = yare_input_.MaximumNaar;
+    MaxNAAR             = round_naar().c(yare_input_.MaximumNaar);
 
     database().query_into(DB_MinPremIntSpread, MinPremIntSpread_);
 }
@@ -777,6 +708,7 @@ void BasicValues::SetRoundingFunctors()
     set_rounding_rule(round_naar_              , RoundingRules_->datum("RoundNaar"        ));
     set_rounding_rule(round_coi_rate_          , RoundingRules_->datum("RoundCoiRate"     ));
     set_rounding_rule(round_coi_charge_        , RoundingRules_->datum("RoundCoiCharge"   ));
+    set_rounding_rule(round_rider_charges_     , RoundingRules_->datum("RoundRiderCharges"));
     set_rounding_rule(round_gross_premium_     , RoundingRules_->datum("RoundGrossPrem"   ));
     set_rounding_rule(round_net_premium_       , RoundingRules_->datum("RoundNetPrem"     ));
     set_rounding_rule(round_interest_rate_     , RoundingRules_->datum("RoundIntRate"     ));
@@ -793,6 +725,7 @@ void BasicValues::SetRoundingFunctors()
     set_rounding_rule(round_max_specamt_       , RoundingRules_->datum("RoundMaxSpecamt"  ));
     set_rounding_rule(round_min_premium_       , RoundingRules_->datum("RoundMinPrem"     ));
     set_rounding_rule(round_max_premium_       , RoundingRules_->datum("RoundMaxPrem"     ));
+    set_rounding_rule(round_minutiae_          , RoundingRules_->datum("RoundMinutiae"    ));
 }
 
 /// Establish maximum survivorship duration.
@@ -833,6 +766,68 @@ void BasicValues::SetMaxSurvivalDur()
     LMI_ASSERT(MaxSurvivalDur <= EndtAge);
 }
 
+/// Calculate and store actuarial functions for partial mortality.
+///
+/// Iff partial mortality is used, save qx, tpx, and lx in vectors
+/// for use elsewhere in this class and for compositing ledgers.
+/// The radix for lx is the number of identical lives that an input
+/// cell represents, and qx is forced to unity at the survivorship
+/// limit (if any). If partial mortality is not used, then qx is
+/// uniformly zero, tpx is one, and lx is the radix.
+///
+/// tpx and lx both have one more element than qx; dropping the first
+/// or last element gives EOY and BOY vectors, respectively.
+///
+/// Whether a contract continues after its normal maturity date does
+/// not matter. It is treated as not expiring on that date because
+/// year-end composite values are multiplied by this lx.
+///
+/// These actuarial functions reflect survivorship only, not lapses.
+/// Use AccountValue::InforceLives{E,B}oy() where lapses should be
+/// taken into account; cf. Ledger::ZeroInforceAfterLapse().
+
+void BasicValues::set_partial_mortality()
+{
+    double const inforce_lives = yare_input_.NumberOfIdenticalLives;
+    partial_mortality_qx_ .resize(    BasicValues::GetLength());
+    partial_mortality_tpx_.resize(1 + BasicValues::GetLength(), 1.0);
+    partial_mortality_lx_ .resize(1 + BasicValues::GetLength(), inforce_lives);
+    if(yare_input_.UsePartialMortality)
+        {
+        // The first elements of lx and tpx were set above.
+        for(int j = 0; j < BasicValues::GetLength(); ++j)
+            {
+            partial_mortality_qx_[j] = GetPartMortQ(j);
+            double const px = 1.0 - partial_mortality_qx_[j];
+            partial_mortality_tpx_[1 + j] = px * partial_mortality_tpx_[j];
+            partial_mortality_lx_ [1 + j] = px * partial_mortality_lx_ [j];
+            }
+        }
+}
+
+//============================================================================
+double BasicValues::GetPartMortQ(int a_year) const
+{
+    LMI_ASSERT(a_year <= BasicValues::GetLength());
+    if(!yare_input_.UsePartialMortality)
+        {
+        return 0.0;
+        }
+    if
+        (   MaxSurvivalDur <= a_year
+        ||  a_year == BasicValues::GetLength()
+        )
+        {
+        return 1.0;
+        }
+
+    double z =
+          MortalityRates_->PartialMortalityQ()[a_year]
+        * yare_input_.PartialMortalityMultiplier[a_year]
+        ;
+    return std::max(0.0, std::min(1.0, z));
+}
+
 /// Ascertain modal payment for a minimum-premium strategy.
 ///
 /// The term "minimum premium" is overloaded. It may mean the lowest
@@ -841,10 +836,10 @@ void BasicValues::SetMaxSurvivalDur()
 ///    value would otherwise be negative), or
 ///  - keeps account value nonnegative (preventing lapse directly).
 
-double BasicValues::GetModalMinPrem
+currency BasicValues::GetModalMinPrem
     (int         a_year
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ) const
 {
     switch(MinPremType)
@@ -861,10 +856,10 @@ double BasicValues::GetModalMinPrem
 
 /// Ascertain modal payment for a target-premium strategy.
 
-double BasicValues::GetModalTgtPrem
+currency BasicValues::GetModalTgtPrem
     (int         a_year
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ) const
 {
     int const target_year = TgtPremFixedAtIssue ? 0 : a_year;
@@ -887,15 +882,15 @@ double BasicValues::GetModalTgtPrem
 /// and specified amount. Thus, arguments should represent initial
 /// premium and mode.
 
-double BasicValues::GetModalPremMaxNonMec
+currency BasicValues::GetModalPremMaxNonMec
     (int      // a_year // Unused.
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ) const
 {
     // TAXATION !! No table available if 7PP calculated from first principles.
     double temp = MortalityRates_->SevenPayRates()[0];
-    return round_max_premium()(ldbl_eps_plus_one_times(temp * a_specamt / a_mode));
+    return round_max_premium().c(ldbl_eps_plus_one_times(temp * a_specamt / a_mode));
 }
 
 /// Calculate premium using a minimum-premium ratio.
@@ -905,13 +900,13 @@ double BasicValues::GetModalPremMaxNonMec
 /// the initial specified amount may also be fixed at issue, but that
 /// choice is left to the caller.
 
-double BasicValues::GetModalPremMinFromTable
+currency BasicValues::GetModalPremMinFromTable
     (int      // a_year // Unused.
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ) const
 {
-    return round_max_premium()
+    return round_max_premium().c
         (ldbl_eps_plus_one_times
             (
                 a_specamt * MortalityRates_->MinimumPremiumRates()[0]
@@ -943,20 +938,38 @@ double BasicValues::GetModalPremMinFromTable
 /// asserted to be zero--upstream, so that it'll signal an error even
 /// if a target strategy isn't used.
 
-double BasicValues::GetModalPremTgtFromTable
+currency BasicValues::GetModalPremTgtFromTable
     (int      // a_year // Unused.
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ) const
 {
-    return round_max_premium()
+    return round_max_premium().c
         (ldbl_eps_plus_one_times
             (
-                ( TgtPremMonthlyPolFee * 12
+                ( TgtPremMonthlyPolFee * 12.0
                 + (a_specamt * MortalityRates_->TargetPremiumRates()[0])
                 )
             /   a_mode
             )
+        );
+}
+
+/// Calculate premium using a tabular proxy for group insurance.
+
+currency BasicValues::GetModalPremProxyTable
+    (int         a_year
+    ,mcenum_mode a_mode
+    ,currency    a_specamt
+    ,double      a_table_multiplier
+    ) const
+{
+    return round_gross_premium().c
+        (
+          a_specamt
+        * MortalityRates_->GroupProxyRates()[a_year]
+        * a_table_multiplier
+        / a_mode
         );
 }
 
@@ -966,30 +979,30 @@ double BasicValues::GetModalPremTgtFromTable
 /// strategy makes sense only at issue. Thus, arguments should
 /// represent initial specified amount and mode.
 
-double BasicValues::GetModalPremCorridor
+currency BasicValues::GetModalPremCorridor
     (int      // a_year // Unused.
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ) const
 {
     double temp = GetCorridorFactor()[0];
-    return round_max_premium()(ldbl_eps_plus_one_times((a_specamt / temp) / a_mode));
+    return round_max_premium().c(ldbl_eps_plus_one_times((a_specamt / temp) / a_mode));
 }
 
 //============================================================================
-double BasicValues::GetModalPremGLP
+currency BasicValues::GetModalPremGLP
     (int         a_duration
     ,mcenum_mode a_mode
-    ,double      a_bft_amt
-    ,double      a_specamt
+    ,currency    a_bft_amt
+    ,currency    a_specamt
     ) const
 {
     // TAXATION !! Use GetAnnualTgtPrem() to get target here if needed
     // for GPT reimplementation.
     double z = Irc7702_->CalculateGLP
         (a_duration
-        ,a_bft_amt
-        ,a_specamt
+        ,dblize(a_bft_amt)
+        ,dblize(a_specamt)
         ,Irc7702_->GetLeastBftAmtEver()
         ,effective_dbopt_7702(DeathBfts_->dbopt()[0], Effective7702DboRop)
         );
@@ -999,21 +1012,21 @@ double BasicValues::GetModalPremGLP
 // term rider, dumpin
 
     z /= a_mode;
-    return round_max_premium()(ldbl_eps_plus_one_times(z));
+    return round_max_premium().c(ldbl_eps_plus_one_times(z));
 }
 
 //============================================================================
-double BasicValues::GetModalPremGSP
+currency BasicValues::GetModalPremGSP
     (int         a_duration
     ,mcenum_mode a_mode
-    ,double      a_bft_amt
-    ,double      a_specamt
+    ,currency    a_bft_amt
+    ,currency    a_specamt
     ) const
 {
     double z = Irc7702_->CalculateGSP
         (a_duration
-        ,a_bft_amt
-        ,a_specamt
+        ,dblize(a_bft_amt)
+        ,dblize(a_specamt)
         ,Irc7702_->GetLeastBftAmtEver()
         );
 
@@ -1022,7 +1035,7 @@ double BasicValues::GetModalPremGSP
 // term rider, dumpin
 
     z /= a_mode;
-    return round_max_premium()(ldbl_eps_plus_one_times(z));
+    return round_max_premium().c(ldbl_eps_plus_one_times(z));
 }
 
 /// Calculate a monthly-deduction discount factor on the fly.
@@ -1094,10 +1107,12 @@ double BasicValues::mly_ded_discount_factor(int year, mcenum_mode mode) const
 /// employer typically pays the approximate monthly deductions, but
 /// may also be used with any UL product when such a payment pattern
 /// is desired.
+///
+/// Returns a pair of deliberately unrounded doubles.
 
 std::pair<double,double> BasicValues::approx_mly_ded
-    (int    year
-    ,double specamt
+    (int      year
+    ,currency specamt
     ) const
 {
     double mly_ded = specamt * DBDiscountRate[year];
@@ -1127,9 +1142,9 @@ std::pair<double,double> BasicValues::approx_mly_ded
         mly_ded += r * std::min(specamt, SpecAmtLoadLimit);
         }
 
-    mly_ded += Loads_->monthly_policy_fee(mce_gen_curr)[year];
+    mly_ded += dblize(Loads_->monthly_policy_fee(mce_gen_curr)[year]);
 
-    double ann_ded = Loads_->annual_policy_fee(mce_gen_curr)[year];
+    double ann_ded = dblize(Loads_->annual_policy_fee(mce_gen_curr)[year]);
 
     if(yare_input_.WaiverOfPremiumBenefit)
         {
@@ -1172,14 +1187,16 @@ std::pair<double,double> BasicValues::approx_mly_ded
 /// (e.g., a fee to offset underwriting costs for private placements)
 /// are extraordinary, and occur only on products for which a split
 /// between ee and er would not be wanted.
+///
+/// Returns a pair of deliberately unrounded doubles.
 
 std::pair<double,double> BasicValues::approx_mly_ded_ex
-    (int    year
-    ,double specamt
-    ,double termamt
+    (int      year
+    ,currency specamt
+    ,currency termamt
     ) const
 {
-    if(0.0 != Loads_->annual_policy_fee(mce_gen_curr)[year])
+    if(C0 != Loads_->annual_policy_fee(mce_gen_curr)[year])
         {
         return {0.0, 0.0};
         }
@@ -1219,7 +1236,7 @@ std::pair<double,double> BasicValues::approx_mly_ded_ex
         }
 
     // Paid by er.
-    er_ded += Loads_->monthly_policy_fee(mce_gen_curr)[year];
+    er_ded += dblize(Loads_->monthly_policy_fee(mce_gen_curr)[year]);
 
     if(yare_input_.WaiverOfPremiumBenefit)
         {
@@ -1251,10 +1268,10 @@ std::pair<double,double> BasicValues::approx_mly_ded_ex
 
 /// Determine an approximate "pay as you go" modal premium.
 
-double BasicValues::GetModalPremMlyDed
+currency BasicValues::GetModalPremMlyDed
     (int         year
     ,mcenum_mode mode
-    ,double      specamt
+    ,currency    specamt
     ) const
 {
     auto const deductions = approx_mly_ded(year, specamt);
@@ -1262,16 +1279,16 @@ double BasicValues::GetModalPremMlyDed
     double const mly_ded = deductions.second;
     double const v12 = mly_ded_discount_factor(year, mode);
     double const annuity = (1.0 - std::pow(v12, 12.0 / mode)) / (1.0 - v12);
-    return round_min_premium()(ann_ded + mly_ded * annuity);
+    return round_min_premium().c(ann_ded + mly_ded * annuity);
 }
 
 /// Determine approximate ee and er "pay as you go" modal premiums.
 
-std::pair<double,double> BasicValues::GetModalPremMlyDedEx
+std::pair<currency,currency> BasicValues::GetModalPremMlyDedEx
     (int         year
     ,mcenum_mode mode
-    ,double      specamt
-    ,double      termamt
+    ,currency    specamt
+    ,currency    termamt
     ) const
 {
     auto const deductions = approx_mly_ded_ex(year, specamt, termamt);
@@ -1280,8 +1297,8 @@ std::pair<double,double> BasicValues::GetModalPremMlyDedEx
     double const v12 = DBDiscountRate[year];
     double const annuity = (1.0 - std::pow(v12, 12.0 / mode)) / (1.0 - v12);
     return std::make_pair
-        (round_min_premium()(ee_ded * annuity)
-        ,round_min_premium()(er_ded * annuity)
+        (round_min_premium().c(ee_ded * annuity)
+        ,round_min_premium().c(er_ded * annuity)
         );
 }
 
@@ -1302,10 +1319,10 @@ std::pair<double,double> BasicValues::GetModalPremMlyDedEx
 /// are extraordinary, and occur only on products for which list bills
 /// would not be wanted.
 
-double BasicValues::GetListBillPremMlyDed
+currency BasicValues::GetListBillPremMlyDed
     (int         year
     ,mcenum_mode mode
-    ,double      specamt
+    ,currency    specamt
     ) const
 {
     double const p0 = approx_mly_ded(year, specamt).second;
@@ -1323,14 +1340,14 @@ double BasicValues::GetListBillPremMlyDed
         ,yare_input_.ListBillDate
         ,mly_ded_discount_factor(year, mode)
         );
-    return round_min_premium()(z);
+    return round_min_premium().c(z);
 }
 
-std::pair<double,double> BasicValues::GetListBillPremMlyDedEx
+std::pair<currency,currency> BasicValues::GetListBillPremMlyDedEx
     (int         year
     ,mcenum_mode mode
-    ,double      specamt
-    ,double      termamt
+    ,currency    specamt
+    ,currency    termamt
     ) const
 {
     auto const p0 = approx_mly_ded_ex(year, specamt, termamt);
@@ -1357,12 +1374,12 @@ std::pair<double,double> BasicValues::GetListBillPremMlyDedEx
         ,DBDiscountRate[year]
         );
     return std::make_pair
-        (round_min_premium()(ee_prem)
-        ,round_min_premium()(er_prem)
+        (round_min_premium().c(ee_prem)
+        ,round_min_premium().c(er_prem)
         );
 }
 
-double BasicValues::GetModalSpecAmtMax(double annualized_pmt) const
+currency BasicValues::GetModalSpecAmtMax(currency annualized_pmt) const
 {
     switch(MinPremType)
         {
@@ -1371,7 +1388,7 @@ double BasicValues::GetModalSpecAmtMax(double annualized_pmt) const
         case oe_modal_nonmec:
             return GetModalSpecAmtMinNonMec(annualized_pmt);
         case oe_modal_table:
-            return round_min_specamt()
+            return round_specamt().c
                 (
                     annualized_pmt
                 /   MortalityRates_->MinimumPremiumRates()[0]
@@ -1386,7 +1403,7 @@ double BasicValues::GetModalSpecAmtMax(double annualized_pmt) const
 /// duration. It's taken to include 'TgtPremMonthlyPolFee', to make
 /// this function the inverse of GetModalPremTgtFromTable(), q.v.
 
-double BasicValues::GetModalSpecAmtTgt(double annualized_pmt) const
+currency BasicValues::GetModalSpecAmtTgt(currency annualized_pmt) const
 {
     switch(TgtPremType)
         {
@@ -1395,7 +1412,7 @@ double BasicValues::GetModalSpecAmtTgt(double annualized_pmt) const
         case oe_modal_nonmec:
             return GetModalSpecAmtMinNonMec(annualized_pmt);
         case oe_modal_table:
-            return round_min_specamt()
+            return round_specamt().c
                 (
                     (annualized_pmt - TgtPremMonthlyPolFee * 12)
                 /   MortalityRates_->TargetPremiumRates()[0]
@@ -1410,23 +1427,23 @@ double BasicValues::GetModalSpecAmtTgt(double annualized_pmt) const
 /// changes dramatically complicate the relationship between premium
 /// and specified amount.
 
-double BasicValues::GetModalSpecAmtMinNonMec(double annualized_pmt) const
+currency BasicValues::GetModalSpecAmtMinNonMec(currency annualized_pmt) const
 {
     // TAXATION !! No table available if 7PP calculated from first principles.
-    return round_min_specamt()(annualized_pmt / MortalityRates_->SevenPayRates()[0]);
+    return round_min_specamt().c(annualized_pmt / MortalityRates_->SevenPayRates()[0]);
 }
 
 //============================================================================
-double BasicValues::GetModalSpecAmtGLP(double annualized_pmt) const
+currency BasicValues::GetModalSpecAmtGLP(currency annualized_pmt) const
 {
     mcenum_dbopt_7702 const z = effective_dbopt_7702(DeathBfts_->dbopt()[0], Effective7702DboRop);
-    return gpt_specamt::CalculateGLPSpecAmt(*this, 0, annualized_pmt, z);
+    return gpt_specamt::CalculateGLPSpecAmt(*this, 0, dblize(annualized_pmt), z);
 }
 
 //============================================================================
-double BasicValues::GetModalSpecAmtGSP(double annualized_pmt) const
+currency BasicValues::GetModalSpecAmtGSP(currency annualized_pmt) const
 {
-    return gpt_specamt::CalculateGSPSpecAmt(*this, 0, annualized_pmt);
+    return gpt_specamt::CalculateGSPSpecAmt(*this, 0, dblize(annualized_pmt));
 }
 
 /// Calculate specified amount using a corridor ratio.
@@ -1434,10 +1451,43 @@ double BasicValues::GetModalSpecAmtGSP(double annualized_pmt) const
 /// Only the initial corridor factor is used here, because this
 /// strategy makes sense only at issue. Thus, arguments should
 /// represent initial premium and mode.
+///
+/// Corridor factors are stored as double-precision values, but in
+/// practice they usually represent whole-number percentages, which
+/// are typically printed for each year on policy schedule pages.
+/// For GPT, they're defined that way by statute; for CVAT, by
+/// convention. Accordingly, round_corridor_factor() rounds to the
+/// nearest two decimals for all known products, although it would
+/// not be inconceivable to round to three, for example.
+///
+/// Extra care must be taken in this function, because the specified
+/// amount is often rounded to whole dollars (a finer granularity such
+/// as cents being used for all other values). Consider this case:
+///   $100000 initial payment
+///   490% corridor
+/// Using 'gnumeric' to view lmi's monthly detail, 4.9 is stored as:
+///   4.9000000000000003552713679
+///   0 0000000011111111
+///   1 2345678901234567 <-- differs in seventeenth significant digit
+/// which is presumably the closest representable value. Multiplying
+/// that value by 100000 and rounding up to the next dollar gives
+/// 490001, but 490000 is desired. To that end, the corridor factor is
+/// first scaled by the appropriate power of ten (by one hundred in
+/// typical practice) and rounded to integer to recapture the intended
+/// value.
+///
+/// This cannot be implemented as a single call to round_to() because
+/// it rounds twice: once to convert a floating-point corridor factor
+/// to an exact integer (4.9 --> 490 in the example above), and again
+/// after multiplying that integral factor by premium.
 
-double BasicValues::GetModalSpecAmtCorridor(double annualized_pmt) const
+currency BasicValues::GetModalSpecAmtCorridor(currency annualized_pmt) const
 {
-    return round_min_specamt()(annualized_pmt * GetCorridorFactor()[0]);
+    int const k = round_corridor_factor().decimals();
+    double const s = nonstd::power(10, k);
+    std::fesetround(FE_TONEAREST);
+    double const z = std::nearbyint(s * GetCorridorFactor()[0]);
+    return round_min_specamt().c((z * annualized_pmt) / s);
 }
 
 /// Calculate specified amount based on salary.
@@ -1447,7 +1497,7 @@ double BasicValues::GetModalSpecAmtCorridor(double annualized_pmt) const
 /// sufficiently large, then specamt would be negative, which cannot
 /// make any sense.
 
-double BasicValues::GetModalSpecAmtSalary(int a_year) const
+currency BasicValues::GetModalSpecAmtSalary(int a_year) const
 {
     double z =
           yare_input_.ProjectedSalary[a_year]
@@ -1458,7 +1508,7 @@ double BasicValues::GetModalSpecAmtSalary(int a_year) const
         z = std::min(z, yare_input_.SalarySpecifiedAmountCap);
         }
     z -= yare_input_.SalarySpecifiedAmountOffset;
-    return round_min_specamt()(std::max(0.0, z));
+    return round_specamt().c(std::max(0.0, z));
 }
 
 /// In general, strategies linking specamt and premium commute. The
@@ -1468,13 +1518,13 @@ double BasicValues::GetModalSpecAmtSalary(int a_year) const
 /// calling this function elicits an error message. SOMEDAY !! It
 /// would be better to disable this strategy in the GUI.
 
-double BasicValues::GetModalSpecAmtMlyDed(double, mcenum_mode) const
+currency BasicValues::GetModalSpecAmtMlyDed(currency, mcenum_mode) const
 {
     alarum()
         << "No maximum specified amount is defined for this product."
         << LMI_FLUSH
         ;
-    return 0.0;
+    return C0;
 }
 
 /// 'Unusual' banding is one particular approach we needed to model.
@@ -1485,7 +1535,7 @@ double BasicValues::GetModalSpecAmtMlyDed(double, mcenum_mode) const
 
 std::vector<double> const& BasicValues::GetBandedCoiRates
     (mcenum_gen_basis rate_basis
-    ,double           a_specamt
+    ,currency         a_specamt
     ) const
 {
     if(UseUnusualCOIBanding && mce_gen_guar != rate_basis)
@@ -1832,21 +1882,6 @@ std::vector<double> const& BasicValues::GetCorridorFactor() const
 
 // potential inlines
 
-std::vector<double> const& BasicValues::SpreadFor7702() const
-{
-    return SpreadFor7702_;
-}
-
-std::vector<double> const& BasicValues::GetMly7702iGlp() const
-{
-    return Mly7702iGlp;
-}
-
-std::vector<double> const& BasicValues::GetMly7702qc() const
-{
-    return Mly7702qc;
-}
-
 std::vector<double> const& BasicValues::GetMlyDcvqc() const
 {
     return MlyDcvqc;
@@ -1877,10 +1912,12 @@ std::vector<double> BasicValues::GetCurrCOIRates0() const
 
 std::vector<double> BasicValues::GetCurrCOIRates1() const
 {
+    static constexpr double dbl_inf = std::numeric_limits<double>::infinity();
+    static const currency inf = from_cents(dbl_inf);
     return GetTable
         (product().datum("CurrCOIFilename")
         ,DB_CurrCoiTable1
-        ,CurrCoiTable0Limit < std::numeric_limits<double>::max()
+        ,CurrCoiTable0Limit < inf
         ,CanBlend
         ,CanBlend
         );
@@ -1888,10 +1925,12 @@ std::vector<double> BasicValues::GetCurrCOIRates1() const
 
 std::vector<double> BasicValues::GetCurrCOIRates2() const
 {
+    static constexpr double dbl_inf = std::numeric_limits<double>::infinity();
+    static const currency inf = from_cents(dbl_inf);
     return GetTable
         (product().datum("CurrCOIFilename")
         ,DB_CurrCoiTable2
-        ,CurrCoiTable1Limit < std::numeric_limits<double>::max()
+        ,CurrCoiTable1Limit < inf
         ,CanBlend
         ,CanBlend
         );

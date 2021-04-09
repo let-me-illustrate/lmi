@@ -1,6 +1,6 @@
 // Generate group premium quote PDF file.
 //
-// Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -888,6 +888,9 @@ void group_quote_pdf_generator_wx::output_image_header
 
     wxDCFontChanger set_bigger_font(pdf_dc, pdf_dc.GetFont().Scaled(1.5));
     wxDCTextColorChanger set_white_text(pdf_dc, *wxWHITE);
+    // PDF !! This should not be necessary--see:
+    //   https://lists.nongnu.org/archive/html/lmi/2020-08/msg00003.html
+    wxDCTextBgModeChanger set_transparent_background(pdf_dc, wxPENSTYLE_TRANSPARENT);
 
     // Don't use html::text::from() here: instead, call
     // wxString::FromUTF8() directly, e.g., to preserve literal '&'.

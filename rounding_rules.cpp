@@ -1,6 +1,6 @@
 // Rounding rules.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -31,7 +31,6 @@
 #include "xml_serialize.hpp"
 
 #include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
 
 template class xml_serializable<rounding_rules>;
 
@@ -136,6 +135,7 @@ rounding_rules::rounding_rules()
     ,round_naar_              (2, r_to_nearest, "")
     ,round_coi_rate_          (8, r_downward  , "")
     ,round_coi_charge_        (2, r_to_nearest, "")
+    ,round_rider_charges_     (2, r_to_nearest, "")
     ,round_gross_premium_     (2, r_to_nearest, "")
     ,round_net_premium_       (2, r_to_nearest, "")
     ,round_interest_rate_     (0, r_not_at_all, "")
@@ -152,6 +152,7 @@ rounding_rules::rounding_rules()
     ,round_max_specamt_       (0, r_downward  , "")
     ,round_min_premium_       (2, r_upward    , "")
     ,round_max_premium_       (2, r_downward  , "")
+    ,round_minutiae_          (2, r_to_nearest, "")
 {
     ascribe_members();
 }
@@ -165,7 +166,7 @@ rounding_rules::rounding_rules()
 /// that violate this precondition, but this ctor prevents them from
 /// being used to produce illustrations.
 
-rounding_rules::rounding_rules(std::string const& filename)
+rounding_rules::rounding_rules(fs::path const& filename)
 {
     ascribe_members();
 
@@ -206,6 +207,7 @@ void rounding_rules::ascribe_members()
     ascribe("RoundNaar"        , &rounding_rules::round_naar_              );
     ascribe("RoundCoiRate"     , &rounding_rules::round_coi_rate_          );
     ascribe("RoundCoiCharge"   , &rounding_rules::round_coi_charge_        );
+    ascribe("RoundRiderCharges", &rounding_rules::round_rider_charges_     );
     ascribe("RoundGrossPrem"   , &rounding_rules::round_gross_premium_     );
     ascribe("RoundNetPrem"     , &rounding_rules::round_net_premium_       );
     ascribe("RoundIntRate"     , &rounding_rules::round_interest_rate_     );
@@ -222,6 +224,7 @@ void rounding_rules::ascribe_members()
     ascribe("RoundMaxSpecamt"  , &rounding_rules::round_max_specamt_       );
     ascribe("RoundMinPrem"     , &rounding_rules::round_min_premium_       );
     ascribe("RoundMaxPrem"     , &rounding_rules::round_max_premium_       );
+    ascribe("RoundMinutiae"    , &rounding_rules::round_minutiae_          );
 }
 
 /// Backward-compatibility serial number of this class's xml version.

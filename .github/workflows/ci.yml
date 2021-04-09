@@ -1,0 +1,300 @@
+# Continuous integration workflow for lmi: build Linux and MSW binaries.
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-msw32-cross:
+    runs-on: ubuntu-20.04
+    name: ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Cross-compile for MSW-32
+            triplet: i686-w64-mingw32
+            mingw: true
+          - name: Native Linux build
+            mingw: false
+          - name: Linux using autotools
+            mingw: false
+            autotools: true
+          - name: Linux with clang
+            compiler: clang
+            mingw: false
+            autotools: true
+    env:
+      LMI_COMPILER: ${{ matrix.compiler || 'gcc' }}
+      LMI_TRIPLET: ${{ matrix.triplet || 'x86_64-pc-linux-gnu' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Install Wine
+        if: matrix.mingw
+        run: |
+          sudo dpkg --add-architecture i386
+
+          wget -qO - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
+          sudo add-apt-repository "deb https://dl.winehq.org/wine-builds/ubuntu $(lsb_release -cs) main"
+
+          sudo apt-get -qq update
+
+          # Workaround the issue with Wine.
+          sudo apt-get -qq install libasound2-plugins:i386 libgphoto2-6:i386
+          sudo apt-get -qq install wine-stable-i386
+          sudo apt-get -qq install wine-stable
+          sudo apt-get -qq install --install-recommends winehq-stable
+
+      - name: Install required packages
+        run: |
+          packages="\
+            automake bc bsdmainutils bzip2 curl cvs default-jre \
+            g++-multilib git jing libarchive-tools \
+            libtool libxml2-utils libxslt1-dev make patch pkg-config rsync \
+            shellcheck sudo trang unzip wget xsltproc xvfb zsh"
+
+          if ${{ matrix.mingw }}
+          then
+            packages="$packages g++-mingw-w64-i686"
+          else
+            packages="$packages libunwind-dev libdw-dev libgtk-3-dev"
+          fi
+
+          if [ "${{ matrix.compiler }}" = clang ]; then
+            packages="$packages clang libc++abi-dev libc++-dev"
+          fi
+
+          sudo apt-get -qq install $packages
+
+      - name: Fix up libtool
+        run: sudo sed -i'' -e 's/^int _putenv/_CRTIMP int _putenv/' /usr/share/libtool/build-aux/ltmain.sh
+
+      - name: Set environment variables
+        run: |
+          echo "NORMAL_UID=`id --user`" >> $GITHUB_ENV
+          echo "coefficiency=--jobs=`nproc`" >> $GITHUB_ENV
+          if ${{ matrix.mingw }}
+          then
+            compiler=${LMI_TRIPLET}-${LMI_COMPILER}
+          else
+            compiler=${LMI_COMPILER}
+          fi
+
+          if [ "${{ matrix.compiler }}" = clang ]; then
+            echo "CC=clang" >> $GITHUB_ENV
+            echo "CXX=clang++ -stdlib=libc++" >> $GITHUB_ENV
+          fi
+
+          gcc_version=$($compiler -dumpversion|tr -d '\r')
+          echo "gcc_version=$gcc_version" >> $GITHUB_ENV
+
+          echo "xml2_sha1=$(git rev-parse HEAD:third_party/libxml2)" >> $GITHUB_ENV
+          echo "xmlwrapp_sha1=$(git rev-parse HEAD:third_party/xmlwrapp)" >> $GITHUB_ENV
+          echo "xslt_sha1=$(git rev-parse HEAD:third_party/libxslt)" >> $GITHUB_ENV
+          echo "wx_sha1=$(git rev-parse HEAD:third_party/wx)" >> $GITHUB_ENV
+          echo "wxpdfdoc_sha1=$(git rev-parse HEAD:third_party/wxpdfdoc)" >> $GITHUB_ENV
+
+          echo "PATH=$PATH:/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/bin" >> $GITHUB_ENV
+
+          LD_LIBRARY_PATH=/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib
+          LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/build/ship
+          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> $GITHUB_ENV
+
+      - name: Create lmi directories
+        run: |
+          for d in /opt/lmi /opt/lmi/print /etc/opt/lmi /srv/cache_for_lmi; do
+            sudo mkdir --parents $d
+            sudo --preserve-env chown $NORMAL_UID $d
+          done
+          mkdir /srv/cache_for_lmi/downloads
+          mkdir /opt/lmi/gui_test
+          mkdir /opt/lmi/src
+
+      - name: Cache downloaded archives
+        uses: actions/cache@v2
+        with:
+          # Using the hash of the makefile means that we're going to have
+          # false negatives, i.e. re-download the files unnecessarily if the
+          # makefile changes but the MD5 checksums of the files in it do not,
+          # but this is much simpler than extracting those MD5s from it and it
+          # changes rarely enough that this shouldn't be a problem in practice.
+          path: /srv/cache_for_lmi/downloads
+          key: downloads-${{ hashFiles('install_miscellanea.make') }}
+
+      - name: Build miscellanea
+        run: make $coefficiency --output-sync=recurse -f install_miscellanea.make
+
+      - name: Cache third-party libraries
+        id: cache-local
+        uses: actions/cache@v2
+        with:
+          path: |
+            /opt/lmi/local/${{ env.LMI_COMPILER }}_${{ env.LMI_TRIPLET }}
+            /opt/lmi/local/include
+            /opt/lmi/local/share
+          key: build-${{ env.LMI_COMPILER }}-${{ env.gcc_version }}-${{ env.LMI_TRIPLET }}-${{ hashFiles('install_xml_libraries.sh', 'install_wx.sh', 'install_wxpdfdoc.sh') }}-${{ env.xml2_sha1 }}-${{ env.xmlwrapp_sha1 }}-${{ env.xslt_sha1 }}-${{ env.wx_sha1 }}-${{ env.wxpdfdoc_sha1 }}
+
+      - name: Build XML libraries
+        if: steps.cache-local.outputs.cache-hit != 'true'
+        run: ./install_xml_libraries.sh
+
+      - name: Build wxWidgets
+        if: steps.cache-local.outputs.cache-hit != 'true'
+        run: ./install_wx.sh
+
+      - name: Build wxPdfDoc
+        if: steps.cache-local.outputs.cache-hit != 'true'
+        run: ./install_wxpdfdoc.sh
+
+      - name: Build Boost libraries
+        if: matrix.autotools
+        run: |
+          # Define flags to avoid warnings in Boost code we don't care about.
+          boost_cxxflags="-Wno-deprecated-declarations -DBOOST_NO_AUTO_PTR -Dregister="
+          if [ "${{ matrix.compiler }}" = clang ]; then
+            boost_cxxflags="${boost_cxxflags} -Wno-parentheses-equality"
+          fi
+
+          for lib in regex filesystem; do
+            cd /opt/lmi/third_party/src/boost/libs/${lib}/src
+            echo "Compiling $lib sources"
+            ${CXX-${LMI_COMPILER}} -std=c++17 -fPIC $(echo ${boost_cxxflags}) -I../../.. -c *.cpp
+            echo "Creating libboost_${lib}.a from" *.o
+            ar rc /opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib/libboost_${lib}.a *.o
+          done
+
+      - name: Configure lmi
+        if: matrix.autotools
+        run: |
+          ./autogen.sh
+          lmi_build_dir='ci-build'
+          echo "lmi_build_dir=${lmi_build_dir}" >> $GITHUB_ENV
+          mkdir ${lmi_build_dir}
+          cd ${lmi_build_dir}
+
+          # Disable optimizations just to make the build faster.
+          ../configure --disable-optimize \
+            CPPFLAGS=-I/opt/lmi/local/include \
+            LDFLAGS=-L/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib \
+            PKG_CONFIG_PATH=/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib/pkgconfig \
+            --with-boost-headers=/opt/lmi/third_party/src/boost \
+              || err=$?
+
+          if [ -n "$err" ]; then
+            echo '*** Configuring failed, contents of config.log follows: ***'
+            echo '-----------------------------------------------------------'
+            cat config.log
+            echo '-----------------------------------------------------------'
+            exit $err
+          fi
+
+      - name: Build lmi (autotools)
+        if: matrix.autotools
+        run: make $coefficiency -C ${lmi_build_dir}
+
+      - name: Build lmi
+        run: make $coefficiency --output-sync=recurse
+        if: matrix.autotools != true
+
+      - name: Build lmi with SO attributes
+        if: matrix.autotools != true
+        run: make $coefficiency --output-sync=recurse build_type=so_test USE_SO_ATTRIBUTES=1 all
+
+      - name: Setup lmi for tests
+        run: |
+          cat >/opt/lmi/data/configurable_settings.xml <<EOF
+          <?xml version="1.0"?>
+          <configurable_settings version="2">
+            <calculation_summary_columns/>
+            <census_paste_palimpsestically>1</census_paste_palimpsestically>
+            <cgi_bin_log_filename>cgi_bin.log</cgi_bin_log_filename>
+            <custom_input_0_filename>custom.ini</custom_input_0_filename>
+            <custom_input_1_filename>custom.inix</custom_input_1_filename>
+            <custom_output_0_filename>custom.out0</custom_output_0_filename>
+            <custom_output_1_filename>custom.out1</custom_output_1_filename>
+            <default_input_filename>/etc/opt/lmi/default.ill</default_input_filename>
+            <libraries_to_preload/>
+            <offer_hobsons_choice>0</offer_hobsons_choice>
+            <print_directory>/opt/lmi/print</print_directory>
+            <seconds_to_pause_between_printouts>10</seconds_to_pause_between_printouts>
+            <skin_filename>skin.xrc</skin_filename>
+            <spreadsheet_file_extension>.tsv</spreadsheet_file_extension>
+            <use_builtin_calculation_summary>1</use_builtin_calculation_summary>
+          </configurable_settings>
+          EOF
+
+          # Tests rely on the symlinks set up by this script, so run it.
+          ./check_git_setup.sh
+
+          # Copy a placeholder logo image.
+          cp ./gwc/company_logo.png /opt/lmi/data/
+
+          # Create authentication files.
+          printf '2450449 2472011'                            >/opt/lmi/data/expiry
+          printf '5fc68a795c9c60da1b32be989efc299a  expiry\n' >/opt/lmi/data/validated.md5
+          printf '391daa5cbc54e118c4737446bcb84eea'           >/opt/lmi/data/passkey
+
+      - name: Install
+        if: matrix.autotools
+        run: |
+          env -C /opt/lmi/data $(pwd)/${lmi_build_dir}/product_files
+
+          # These files are used by input test from this hardcoded location.
+          cp \
+            cell.xsd \
+            multiple_cell_document.xsd \
+            single_cell_document.xsd \
+            sort_cell_subelements.xsl \
+            types.xsd \
+            /opt/lmi/data
+
+      - name: Install
+        if: matrix.autotools != true
+        run: make install
+
+      - name: Check concinnity
+        if: matrix.autotools != true
+        run: |
+          # Somehow these files are executable and this triggers complaints
+          # from check_script.sh, so avoid them by fixing permissions.
+          chmod -x .git/info/exclude .git/description
+          make $coefficiency check_concinnity
+
+      - name: Check physical closure
+        if: matrix.autotools != true
+        run: make $coefficiency check_physical_closure
+
+      - name: Run CLI tests
+        if: matrix.autotools != true
+        run: make $coefficiency cli_tests
+
+      - name: Run unit tests (autotools)
+        if: matrix.autotools
+        run: |
+          make $coefficiency -C ${lmi_build_dir} check || err=$?
+
+          if [ -n "$err" ]; then
+            echo '*** Tests failed, contents of test-suite.log follows: ***'
+            echo '-----------------------------------------------------------'
+            cat ${lmi_build_dir}/test-suite.log
+            echo '-----------------------------------------------------------'
+            exit $err
+          fi
+
+      - name: Run unit tests
+        if: matrix.autotools != true
+        run: make $coefficiency unit_tests
+
+      - name: Run GUI tests
+        if: matrix.mingw
+        run: xvfb-run ./gui_test.sh

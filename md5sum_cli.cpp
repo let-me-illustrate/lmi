@@ -1,6 +1,6 @@
 // Limited functionality variant of GNU 'md5sum' program.
 //
-// Copyright (C) 2020 Gregory W. Chicares.
+// Copyright (C) 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -40,7 +40,8 @@ int usage(int status)
         {
         std::cout
             <<
-R"(Usage: lmi_md5sum [OPTION]... [FILE]...
+1 + R"--cut-here--(
+Usage: lmi_md5sum [OPTION]... [FILE]...
 Print or check MD5 (128-bit) checksums.
 
   -b, --binary   read in binary mode (default)
@@ -61,8 +62,7 @@ line with checksum, a space, a character indicating input mode ('*' for binary
 
 This program is a limited functionality variant of GNU 'md5sum' utility
 and is part of the 'Let Me Illustrate' project.
-)"
-        ;
+)--cut-here--";
         }
     return status;
 }
@@ -71,12 +71,12 @@ void version()
 {
     std::cout
         <<
-R"(lmi_md5sum 0.9
+1 + R"--cut-here--(
+lmi_md5sum 0.9
 
 This program is a limited functionality variant of GNU 'md5sum' utility
 and is part of the 'Let Me Illustrate' project.
-)"
-        ;
+)--cut-here--";
 }
 
 // For long options that have no equivalent short option, use a

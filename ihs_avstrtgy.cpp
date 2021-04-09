@@ -1,6 +1,6 @@
 // Account value: strategy implementation.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -27,6 +27,7 @@
 #include "death_benefits.hpp"
 #include "ledger_invariant.hpp"
 #include "mortality_rates.hpp"
+#include "outlay.hpp"
 
 #include <algorithm>
 #include <utility>
@@ -55,18 +56,18 @@
 ///
 /// No minimum is imposed here; see PerformSpecAmtStrategy().
 
-double AccountValue::CalculateSpecAmtFromStrategy
+currency AccountValue::CalculateSpecAmtFromStrategy
     (int                actual_year
     ,int                reference_year
-    ,double             explicit_value
+    ,currency           explicit_value
     ,mcenum_sa_strategy strategy
     ) const
 {
-    double annualized_pmt =
-            InvariantValues().EeMode[reference_year].value()
-          * InvariantValues().EePmt [reference_year]
-        +   InvariantValues().ErMode[reference_year].value()
-          * InvariantValues().ErPmt [reference_year]
+    currency annualized_pmt =
+            Outlay_->ee_premium_modes ()[reference_year]
+          * Outlay_->ee_modal_premiums()[reference_year]
+        +   Outlay_->er_premium_modes ()[reference_year]
+          * Outlay_->er_modal_premiums()[reference_year]
         ;
     switch(strategy)
         {
@@ -126,12 +127,12 @@ void AccountValue::PerformSpecAmtStrategy()
     // yare_input_.SpecifiedAmount means that the inforce warning
     // appears only once, because the former is overwritten but the
     // latter is not.
-    double const inforce_specamt = DeathBfts_->specamt().at(InforceYear);
+    currency const inforce_specamt = DeathBfts_->specamt().at(InforceYear);
     for(int j = 0; j < BasicValues::Length; ++j)
         {
         bool t = yare_input_.TermRider && 0.0 != yare_input_.TermRiderAmount;
-        double m = minimum_specified_amount(0 == j, t);
-        double explicit_value = DeathBfts_->specamt()[j];
+        currency m = minimum_specified_amount(0 == j, t);
+        currency explicit_value = DeathBfts_->specamt()[j];
         mcenum_sa_strategy strategy = yare_input_.SpecifiedAmountStrategy[j];
         // Don't override a specamt that's being solved for.
         if
@@ -143,8 +144,8 @@ void AccountValue::PerformSpecAmtStrategy()
             {
             strategy = mce_sa_input_scalar;
             }
-        double z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
-        DeathBfts_->set_specamt(round_specamt()(std::max(m, z)), j, 1 + j);
+        currency z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
+        DeathBfts_->set_specamt(std::max(m, z), j, 1 + j);
         if
             (  j == InforceYear
             && yare_input_.EffectiveDate != yare_input_.InforceAsOfDate
@@ -171,22 +172,22 @@ void AccountValue::PerformSupplAmtStrategy()
 {
     for(int j = 0; j < BasicValues::Length; ++j)
         {
-        double m = 0.0; // No minimum other than zero is defined.
-        double explicit_value = DeathBfts_->supplamt()[j];
+        currency m = C0; // No minimum other than zero is defined.
+        currency explicit_value = DeathBfts_->supplamt()[j];
         mcenum_sa_strategy strategy = yare_input_.SupplementalAmountStrategy[j];
-        double z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
-        DeathBfts_->set_supplamt(round_specamt()(std::max(m, z)), j, 1 + j);
+        currency z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
+        DeathBfts_->set_supplamt(std::max(m, z), j, 1 + j);
         }
 }
 
 /// Set payment according to selected strategy in a non-solve year.
 
-double AccountValue::DoPerformPmtStrategy
+currency AccountValue::DoPerformPmtStrategy
     (mcenum_solve_type                       a_SolveForWhichPrem
     ,mcenum_mode                             a_CurrentMode
     ,mcenum_mode                             a_InitialMode
     ,double                                  a_TblMult
-    ,std::vector<double> const&              a_PmtVector
+    ,std::vector<currency> const&            a_PmtVector
     ,std::vector<mcenum_pmt_strategy> const& a_StrategyVector
     ) const
 {
@@ -257,7 +258,7 @@ double AccountValue::DoPerformPmtStrategy
                 }
             else
                 {
-                double sa = ActualSpecAmt + TermSpecAmt;
+                currency sa = ActualSpecAmt + TermSpecAmt;
                 return GetModalMinPrem(Year, a_CurrentMode, sa);
                 }
             }
@@ -265,47 +266,37 @@ double AccountValue::DoPerformPmtStrategy
         case mce_pmt_target:
             {
             int const target_year = TgtPremFixedAtIssue ? 0 : Year;
-            double sa = InvariantValues().SpecAmt[target_year];
+            currency sa = base_specamt(target_year);
             return GetModalTgtPrem(Year, a_CurrentMode, sa);
             }
         case mce_pmt_mep:
             {
-            double sa =
-                                      InvariantValues().SpecAmt    [0]
-                + (TermIsDbFor7702A ? InvariantValues().TermSpecAmt[0] : 0.0)
-                ;
+            currency sa = specamt_for_7702A(0);
             return GetModalPremMaxNonMec(0, a_InitialMode, sa);
             }
         case mce_pmt_glp:
             {
-            double sa =
-                                     InvariantValues().SpecAmt    [0]
-                + (TermIsDbFor7702 ? InvariantValues().TermSpecAmt[0] : 0.0)
-                ;
+            currency sa = specamt_for_7702(0);
             return GetModalPremGLP(0, a_InitialMode, sa, sa);
             }
         case mce_pmt_gsp:
             {
-            double sa =
-                                     InvariantValues().SpecAmt    [0]
-                + (TermIsDbFor7702 ? InvariantValues().TermSpecAmt[0] : 0.0)
-                ;
+            currency sa = specamt_for_7702(0);
             return GetModalPremGSP(0, a_InitialMode, sa, sa);
             }
         case mce_pmt_corridor:
             {
-// TODO ?? Shouldn't this be initial specified amount?
-            double sa = ActualSpecAmt + (TermIsDbFor7702 ? TermSpecAmt : 0.0);
+            currency sa = specamt_for_7702(0);
             return GetModalPremCorridor(0, a_InitialMode, sa);
             }
         case mce_pmt_table:
             {
-            return
-                  ActualSpecAmt
-                * MortalityRates_->GroupProxyRates()[Year]
-                * a_TblMult
-                / a_CurrentMode
-                ;
+            return GetModalPremProxyTable
+                (Year
+                ,a_CurrentMode
+                ,ActualSpecAmt
+                ,a_TblMult
+                );
             }
         }
     throw "Unreachable--silences a compiler diagnostic.";
@@ -313,28 +304,28 @@ double AccountValue::DoPerformPmtStrategy
 
 /// Set employee payment according to selected strategy.
 
-double AccountValue::PerformEePmtStrategy() const
+currency AccountValue::PerformEePmtStrategy() const
 {
     return DoPerformPmtStrategy
         (mce_solve_ee_prem
-        ,InvariantValues().EeMode[Year].value()
-        ,InvariantValues().EeMode[0]   .value()
+        ,Outlay_->ee_premium_modes()[Year]
+        ,Outlay_->ee_premium_modes()[0]
         ,yare_input_.InsuredPremiumTableFactor
-        ,InvariantValues().EePmt
+        ,Outlay_->ee_modal_premiums()
         ,yare_input_.PaymentStrategy
         );
 }
 
 /// Set employer payment according to selected strategy.
 
-double AccountValue::PerformErPmtStrategy() const
+currency AccountValue::PerformErPmtStrategy() const
 {
     return DoPerformPmtStrategy
         (mce_solve_er_prem
-        ,InvariantValues().ErMode[Year].value()
-        ,InvariantValues().ErMode[0]   .value()
+        ,Outlay_->er_premium_modes()[Year]
+        ,Outlay_->er_premium_modes()[0]
         ,yare_input_.CorporationPremiumTableFactor
-        ,InvariantValues().ErPmt
+        ,Outlay_->er_modal_premiums()
         ,yare_input_.CorporationPaymentStrategy
         );
 }

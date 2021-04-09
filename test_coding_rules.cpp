@@ -1,6 +1,6 @@
 // Test files for consistency with various rules.
 //
-// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,14 +15,14 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 #include "assert_lmi.hpp"
 #include "boost_regex.hpp"
 #include "contains.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
 #include "miscellany.hpp"               // begins_with(), split_into_lines()
@@ -194,6 +194,7 @@ file::file(std::string const& file_path)
         : ".inix"       == extension() ? e_xml_input
         : ".database"   == extension() ? e_xml_other
         : ".funds"      == extension() ? e_xml_other
+        : ".lingo"      == extension() ? e_xml_other
         : ".policy"     == extension() ? e_xml_other
         : ".rounding"   == extension() ? e_xml_other
         : ".strata"     == extension() ? e_xml_other
@@ -201,8 +202,9 @@ file::file(std::string const& file_path)
         : ".xrc"        == extension() ? e_xml_other
         : ".xsd"        == extension() ? e_xml_other
         : ".xsl"        == extension() ? e_xml_other
-        // phyloanalyze() tests inspect only file name
+        // phyloanalyze() tests inspect only file name [sort by enumerator]
         : phyloanalyze("^ChangeLog-")  ? e_binary
+        : phyloanalyze("^Speed_")      ? e_binary
         : phyloanalyze("^tags$")       ? e_expungible
         : phyloanalyze("^COPYING$")    ? e_gpl
         : phyloanalyze("^quoted_gpl")  ? e_gpl
@@ -505,16 +507,20 @@ void check_copyright(file const& f)
     LMI_ASSERT(nullptr != t1);
     int const year = 1900 + t1->tm_year;
 
+    // Uttering this word without obfuscation would confuse the
+    // 'make happy_new_year' copyright-update recipe.
+    static std::string const unutterable {"C""opyright"};
+
     { // Scope to avoid unwanted '-Wshadow' diagnostic.
     std::ostringstream oss;
-    oss << R"(Copyright \(C\)[^\n]*)" << year;
+    oss << unutterable << R"( \(C\)[^\n]*)" << year;
     require(f, oss.str(), "lacks current copyright.");
     }
 
     if(f.is_of_phylum(e_html) && !f.phyloanalyze("^COPYING"))
         {
         std::ostringstream oss;
-        oss << R"(Copyright &copy;[^\n]*)" << year;
+        oss << unutterable << R"( &copy;[^\n]*)" << year;
         require(f, oss.str(), "lacks current secondary copyright.");
         }
 }
@@ -599,11 +605,50 @@ void check_cxx(file const& f)
         }
     }
 
+    {
+    // See:
+    //   https://lists.nongnu.org/archive/html/lmi/2021-02/msg00023.html
+    static boost::regex const r(R"([^:s]size_t[^\n])");
+    if
+        (  boost::regex_search(f.data(), r)
+        && f.leaf_name() != "test_coding_rules.cpp"
+        )
+        {
+        complain(f, "contains unqualified 'size_t'.");
+        }
+    }
+
     // Tests above: C or C++. Tests below: C++ only.
     if(!f.is_of_phylum(e_cxx))
         {
         return;
         }
+
+    {
+    // See:
+    //   https://lists.nongnu.org/archive/html/lmi/2021-03/msg00032.html
+    static boost::regex const r(R"(\<R"([^(]*)[(])");
+    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
+    boost::sregex_iterator const omega;
+    for(; i != omega; ++i)
+        {
+        boost::smatch const& z(*i);
+        if
+            (   "test_coding_rules.cpp" != f.leaf_name()
+            &&  "--cut-here--" != z[1]
+            &&  ""             != z[1]
+            )
+            {
+            std::ostringstream oss;
+            oss
+                << "contains noncanonical d-char-seq: '"
+                << z[1]
+                << "'. Instead, use '--cut-here--'."
+                ;
+            complain(f, oss.str());
+            }
+        }
+    }
 
     {
     static std::string const p(R"(\bfor\b[^\n]+[^:\n]:[^:\n][^)\n]+\))");
@@ -704,6 +749,7 @@ void check_defect_markers(file const& f)
         boost::smatch const& z(*i);
         bool const error_preceding =
                 true
+            &&  "7702 "        != z[1]
             &&  "BOOST "       != z[1]
             &&  "COMPILER "    != z[1]
             &&  "CURRENCY "    != z[1]
@@ -714,6 +760,7 @@ void check_defect_markers(file const& f)
             &&  "IHS "         != z[1]
             &&  "INELEGANT "   != z[1]
             &&  "INPUT "       != z[1]
+            &&  "LINGO "       != z[1]
             &&  "MD5 "         != z[1]
             &&  "PDF "         != z[1]
             &&  "PORT "        != z[1]
@@ -797,6 +844,7 @@ void check_label_indentation(file const& f)
         boost::smatch const& z(*i);
         if
             (   "default" != z[2]
+            &&  "Usage"   != z[2]
             &&  "  "      != z[1]
             &&  "      "  != z[1]
             )
@@ -874,7 +922,7 @@ void check_preamble(file const& f)
         return;
         }
 
-    static std::string const url("http://savannah.nongnu.org/projects/lmi");
+    static std::string const url("https://savannah.nongnu.org/projects/lmi");
     require(f, url, "lacks lmi URL.");
 }
 
@@ -921,9 +969,10 @@ bool check_reserved_name_exception(std::string const& s)
         ,"_snprintf"
         ,"_vsnprintf"
         ,"_wcsdup"
-    // Compiler specific: gcc.
+    // Compiler specific: gcc, clang.
         ,"__FLOAT_WORD_ORDER__"
         ,"__GLIBCPP__"
+        ,"__GLIBCXX__"
         ,"__GNUC_MINOR__"
         ,"__GNUC_PATCHLEVEL__"
         ,"__GNUC__"
@@ -936,7 +985,11 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__asm__"
         ,"__attribute__"
         ,"__clang__"
+        ,"__class_type_info"
         ,"__cxa_demangle"
+        ,"__cxa_rethrow"
+        ,"__cxa_throw"
+        ,"__dynamic_cast"
     // Compiler specific: gcc, Cygwin.
         ,"__CYGWIN__"
     // Compiler specific: gcc, MinGW.

@@ -1,6 +1,6 @@
 // INSTALL for "Let me illustrate...".
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -45,7 +45,7 @@ Copy and paste the following lines into the "Command Prompt" window:
 Save the following files into the 'C:\srv\cache_for_lmi' directory:
 
   https://cygwin.com/setup-x86_64.exe
-  https://git.savannah.gnu.org/cgit/lmi.git/plain/install_cygwin.bat
+  https://git.savannah.nongnu.org/cgit/lmi.git/plain/install_cygwin.bat
 
 Copy and paste the following lines into the "Command prompt" window:
 
@@ -68,7 +68,7 @@ Copy and paste the following lines into the "Windows PowerShell" window:
 
   New-Item -ItemType Directory -Force -Path C:\srv\cache_for_lmi
   Set-Location -Path C:\srv\cache_for_lmi
-  Invoke-WebRequest -Uri https://git.savannah.gnu.org/cgit/lmi.git/plain/install_wsl.ps1 -OutFile install_wsl.ps1 -UseBasicParsing
+  Invoke-WebRequest -Uri https://git.savannah.nongnu.org/cgit/lmi.git/plain/install_wsl.ps1 -OutFile install_wsl.ps1 -UseBasicParsing
   Set-ExecutionPolicy Unrestricted
   Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
 
@@ -117,7 +117,7 @@ Copy the following, and paste it (Shift-Insert) into the shell:
 
   mkdir -p /tmp
   export TMP=/tmp
-  install_script='https://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
+  install_script='https://git.savannah.nongnu.org/cgit/lmi.git/plain/install_msw.sh'
   cd /tmp
   wget -N $install_script
   chmod +x install_msw.sh

@@ -1,6 +1,6 @@
 // Manage floating-point environment.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -50,11 +50,11 @@
 /// fe[gs]etprecision(). At least for now, they are meaningfully
 /// implemented for x87 only.
 ///
-///   bool LMI_SO fenv_is_valid()
+///   LMI_SO bool fenv_is_valid()
 /// If current floating-point environment matches lmi default, then
 /// return 'true'; else return 'false'.
 ///
-///   bool LMI_SO fenv_validate();
+///   LMI_SO bool fenv_validate();
 /// Make sure current floating-point environment matches lmi default.
 /// If it doesn't, then reset it to lmi default, display a message,
 /// and return 'false'; else return 'true'.
@@ -91,15 +91,15 @@ enum enum_fenv_indulgence
     ,e_fenv_indulge_0x027f  = 0x027f
     };
 
-void LMI_SO fenv_initialize();
+LMI_SO void fenv_initialize();
 
-e_ieee754_precision LMI_SO fenv_precision();
-void                LMI_SO fenv_precision(e_ieee754_precision);
+LMI_SO e_ieee754_precision fenv_precision();
+LMI_SO void                fenv_precision(e_ieee754_precision);
 
-e_ieee754_rounding LMI_SO fenv_rounding();
-void               LMI_SO fenv_rounding(e_ieee754_rounding);
+LMI_SO e_ieee754_rounding fenv_rounding();
+LMI_SO void               fenv_rounding(e_ieee754_rounding);
 
-bool LMI_SO fenv_is_valid();
-bool LMI_SO fenv_validate(enum_fenv_indulgence = e_fenv_indulge_nothing);
+LMI_SO bool fenv_is_valid();
+LMI_SO bool fenv_validate(enum_fenv_indulgence = e_fenv_indulge_nothing);
 
 #endif // fenv_lmi_hpp

@@ -2,7 +2,7 @@
 
 # Use 'shellcheck' to test a shell script.
 
-# Copyright (C) 2019, 2020 Gregory W. Chicares.
+# Copyright (C) 2019, 2020, 2021 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -17,13 +17,13 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 # Do nothing for cygwin, which has no 'shellcheck' package.
 
-lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
+lmi_build_type=$(/usr/share/misc/config.guess)
 case "$lmi_build_type" in
   (*-*-cygwin*) exit 0 ;;
 esac
@@ -63,5 +63,12 @@ case $shebang  in
     ;;
     ("#!/usr/bin/make") ;;
     ("#!/bin/sed") ;;
-    (*) printf '%s\n' "unknown shebang $shebang in file $1" ;;
+    (*)
+        printf '%s\n' "file $1 is executable, but should it be?"
+        printf '%s\n' "if it's a script, then its shebang"
+        printf '%s\n' "  $shebang"
+        printf '%s\n' "is unknown; otherwise, consider running"
+        printf '%s\n' "  chmod -x $1"
+        printf '%s\n' "to remove the executable bit"
+    ;;
 esac

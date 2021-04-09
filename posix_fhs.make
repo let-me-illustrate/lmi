@@ -1,7 +1,7 @@
 # Platform specifics: GNU/Linux and systems that equivalently comply
 # with POSIX and the Filesystem Hierarchy Standard.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -16,7 +16,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -28,25 +28,14 @@ SHREXT := .so
 
 PERFORM :=
 
+EXTRA_LIBS := -ldw -lunwind -ldl
+
 platform_boost_libraries := \
   -lboost_filesystem-gcc \
-
-platform_xmlwrapp_libraries := \
-  -lxsltwrapp \
-  -lxmlwrapp \
 
 # The libraries referenced above may be used if desired, but are not
 # necessary because lmi compiles their source code to object files.
 platform_boost_libraries :=
-platform_xmlwrapp_libraries :=
-
-# '-lexslt'--see:
-#   http://mail.gnome.org/archives/xslt/2001-October/msg00133.html
-
-platform_gnome_xml_libraries := \
-  -lexslt \
-  $(shell xslt-config --libs) \
-  $(shell xml2-config --libs) \
 
 AR      := ar
 CC      := gcc

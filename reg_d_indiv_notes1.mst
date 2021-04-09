@@ -1,5 +1,5 @@
 {{!
-    Copyright (C) 2017, 2018, 2019, 2020 Gregory W. Chicares.
+    Copyright (C) 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -14,7 +14,7 @@
     along with this program; if not, write to the Free Software Foundation,
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 
-    http://savannah.nongnu.org/projects/lmi
+    https://savannah.nongnu.org/projects/lmi
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 }}
@@ -32,19 +32,11 @@
 <font size="+1"><b><u>The Illustration</u></b></font>
 </p>
 
-<!-- PDF !! FnPpMemorandum -->
 <p>
-This illustration is not a policy or an offer or solicitation
-to purchase a policy. Offers are made only through the
-Confidential Private Placement Memorandum ("the PPM") for {{PolicyMktgName}}.
+    {{FnPpMemorandum}}
 </p>
 
 <p>
-  {{! PDF !! Multiline text wanted here--see:
-        http://lists.nongnu.org/archive/html/lmi/2018-02/msg00118.html
-      Similarly, 'HypotheticalRatesFootnote' should be split into four
-      paragraphs, and 'LoanAndWithdrawalFootnote' into two.
-  }}
   {{ProductDescription}}
 </p>
 
@@ -55,16 +47,8 @@ Confidential Private Placement Memorandum ("the PPM") for {{PolicyMktgName}}.
 <font size="+1"><b><u>The Policy</u></b></font>
 </p>
 
-<!-- PDF !! FnPpAccreditedInvestor -->
 <p>
-<b>Policy Requirements:</b>
-This policy is only available to persons who are deemed
-accredited investors and qualified purchasers under applicable
-federal securities laws. The policy owner must be able to bear
-the risk of loss of the entire investment in the policy. The
-policy owner must be familiar with and understand the fundamental
-risks and financial hazards of investing in the policy, and be
-willing to represent as such to {{InsCoShortName}}.
+    {{FnPpAccreditedInvestor}}
 </p>
 
 <p>
@@ -135,12 +119,8 @@ willing to represent as such to {{InsCoShortName}}.
 <b>Policy Year:</b> &nbsp; {{PolicyYearFootnote}}
 </p>
 
-<!-- PDF !! FnPpLoads -->
 <p>
-<b>Premium Loads:</b> The applicable state premium tax, deferred acquisition
-cost tax charge, sales load (if any), separate account administrative charge
-(if any), and other charges incurred as a result of retaining an unaffiliated
-money manager (if any).
+<b>Premium Loads:</b> &nbsp; {{FnPpLoads}}
 </p>
 
 <p>
@@ -167,20 +147,6 @@ money manager (if any).
 
 <p>
 <font size="+1"><b><u>Withdrawals and Policy Loans</u></b></font>
-</p>
-
-<!-- PDF !! subsume the next paragraph into LoanAndWithdrawalFootnote -->
-{{!
-    PDF !! 'MaxAnnCurrLoanDueRate': loan rate actually can vary by year,
-    so text should say that the fixed loan rate is "guaranteed never
-    to exceed" this value.
-}}
-<p>
-If applicable, withdrawals and policy loans will appear on a
-supplemental report at the end of the illustration. Withdrawals
-and policy loans are assumed to be taken at the beginning of the
-applicable policy year. The illustration and supplemental report
-reflect a fixed policy loan interest rate of {{MaxAnnCurrLoanDueRate}}.
 </p>
 
 <p>

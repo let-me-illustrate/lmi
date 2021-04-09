@@ -1,6 +1,6 @@
 // Server for guideline premium test.
 //
-// Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -35,6 +35,7 @@
 #include "et_vector.hpp"
 #include "gpt_input.hpp"
 #include "gpt_xml_document.hpp"
+#include "i7702.hpp"
 #include "ieee754.hpp"                  // ldbl_eps_plus_one_times()
 #include "ihs_irc7702a.hpp"
 #include "ihs_server7702.hpp"           // RunServer7702FromStruct()
@@ -122,6 +123,7 @@ gpt_state test_one_days_gpt_transactions
     double                      Payment                      = exact_cast<tnr_nonnegative_double  >(input["Payment"                     ])->value();
     double                      BenefitAmount                = exact_cast<tnr_nonnegative_double  >(input["BenefitAmount"               ])->value();
 
+    // DATABASE !! consider caching these product files
     product_data product_filenames(ProductName);
 
     product_database database
@@ -183,43 +185,11 @@ gpt_state test_one_days_gpt_transactions
     max_coi_rate = 1.0 / max_coi_rate;
     assign(Mly7702qc, apply_binary(coi_rate_from_q<double>(), Mly7702qc, max_coi_rate));
 
-    std::vector<double> guar_int;
-    database.query_into(DB_GuarInt, guar_int);
-
-    std::vector<double> const spread
-        (input.years_to_maturity()
-        ,stratified.minimum_tiered_spread_for_7702()
-        );
-
-    // ET !! Mly7702iGlp = i_upper_12_over_12_from_i(max(.04, guar_int) - spread);
-    std::vector<double> Mly7702iGlp(input.years_to_maturity());
-    assign
-        (Mly7702iGlp
-        ,apply_unary
-            (i_upper_12_over_12_from_i<double>()
-            ,apply_binary(greater_of<double>(), 0.04, guar_int) - spread
-            )
-        );
-
-    std::vector<double> Mly7702ig;
-    database.query_into(DB_NaarDiscount, Mly7702ig);
-    LMI_ASSERT(!contains(Mly7702ig, -1.0));
-    std::vector<double> DBDiscountRate(input.years_to_maturity());
-    assign(DBDiscountRate, 1.0 / (1.0 + Mly7702ig));
-
-    // Use zero if that's the guaranteed rate; else use the statutory rate.
-    // ET !! Use each_equal() here because PETE seems to interfere with
-    // the normal operator==(). Is that a PETE defect?
-    std::vector<double> const zero(input.years_to_maturity(), 0.0);
-    std::vector<double> const& naar_disc_rate =
-          each_equal(Mly7702ig, 0.0)
-        ? zero
-        : Mly7702iGlp
-        ;
+    i7702 const i7702_(database, stratified);
     ULCommFns commfns
         (Mly7702qc
-        ,Mly7702iGlp
-        ,naar_disc_rate
+        ,i7702_.ic_glp()
+        ,i7702_.ig_glp()
         ,mce_option1_for_7702
         ,mce_monthly
         );
@@ -465,8 +435,8 @@ gpt_state test_one_days_gpt_transactions
         {
         ofs
             <<               j  << '\t'
-            << value_cast<std::string>(Mly7702iGlp    [j]) << '\t'
-            << value_cast<std::string>(naar_disc_rate [j]) << '\t'
+            << value_cast<std::string>(i7702_.ic_glp() [j]) << '\t'
+            << value_cast<std::string>(i7702_.ig_glp() [j]) << '\t'
             << value_cast<std::string>(Mly7702qc      [j]) << '\t'
             << value_cast<std::string>(commfns.aD()   [j]) << '\t'
             << value_cast<std::string>(commfns.kC()   [j]) << '\t'

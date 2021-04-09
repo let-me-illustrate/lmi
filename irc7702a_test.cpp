@@ -1,6 +1,6 @@
 // 7702A--unit test.
 //
-// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -49,7 +49,7 @@ void test00(Irc7702A z)
         ,bft_history // a_Bfts
         );
     z.UpdateEOM7702A();
-    BOOST_TEST(z.IsMecAlready());
+    LMI_TEST(z.IsMecAlready());
 }
 
 void test01(Irc7702A z)
@@ -97,7 +97,7 @@ void test01(Irc7702A z)
     // TODO ?? Is the second arg to UpdateBft7702A() really needed?
     // TODO ?? If it is, can we assert that it has the expected value?
     z.UpdateEOM7702A();
-    BOOST_TEST(!z.IsMecAlready());
+    LMI_TEST(!z.IsMecAlready());
     z.UpdateBft7702A
         (0.0
         ,0.0     // a_NewDB
@@ -109,7 +109,7 @@ void test01(Irc7702A z)
         );
 
     z.UpdateEOM7702A();
-    BOOST_TEST(z.IsMecAlready());
+    LMI_TEST(z.IsMecAlready());
 }
 
 // Pay premium almost equal to specamt: expect MEC.
@@ -135,7 +135,7 @@ void test02(Irc7702A z)
         ,100000.0 // a_OldSA
         ,0.0      // a_CashValue
         );
-    BOOST_TEST(!z.IsMecAlready());
+    LMI_TEST(!z.IsMecAlready());
     z.UpdateEOM7702A();
 
     // Second month.
@@ -151,7 +151,7 @@ void test02(Irc7702A z)
         ,0.0      // a_CashValue
         );
     z.UpdateEOM7702A();
-    BOOST_TEST(z.IsMecAlready());
+    LMI_TEST(z.IsMecAlready());
 }
 
 // Decrease Bfts then increase Bfts.
@@ -178,7 +178,7 @@ void test03(Irc7702A z)
         ,0.0     // a_CashValue
         );
     z.UpdateEOM7702A();
-    BOOST_TEST(!z.IsMecAlready()); // TODO ?? Fails?
+    LMI_TEST(!z.IsMecAlready()); // TODO ?? Fails?
 
     // Second year, second month.
     z.UpdateBOY7702A(1);
@@ -202,7 +202,7 @@ void test03(Irc7702A z)
         ,0.0      // a_CashValue
         );
     z.UpdateEOM7702A();
-    BOOST_TEST(!z.IsMecAlready()); // TODO ?? Fails?
+    LMI_TEST(!z.IsMecAlready()); // TODO ?? Fails?
 }
 
 int test_main(int, char*[])

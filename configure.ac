@@ -1,6 +1,6 @@
 dnl configure.ac script for lmi, process with autoconf to create configure
 dnl
-dnl Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Vadim Zeitlin.
+dnl Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Vadim Zeitlin.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with this program; if not, write to the Free Software Foundation,
 dnl Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 dnl
-dnl http://savannah.nongnu.org/projects/lmi
+dnl https://savannah.nongnu.org/projects/lmi
 dnl email: <gchicares@sbcglobal.net>
 dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -173,6 +173,12 @@ if test "$lmi_cv_cxx_std17" = "no"; then
         AC_MSG_ERROR([Can't enable C++17 support required for building lmi.])
     )
 fi
+
+dnl These options must be always used for lmi unit tests to pass.
+common_options="-fno-ms-extensions -frounding-math"
+
+CFLAGS="$CFLAGS $common_options"
+CXXFLAGS="$CXXFLAGS $common_options"
 
 AC_PROG_LD
 
@@ -364,6 +370,11 @@ else
 if they are installed in non default location"
 fi
 
+dnl Disable the use of std::auto_ptr<> which is not available in C++17 (and is
+dnl actually not available, rather than still being there and just generating
+dnl deprecation warnings, in clang libc++).
+CPPFLAGS="$CPPFLAGS -DBOOST_NO_AUTO_PTR"
+
 AC_CHECK_HEADER([boost/type_traits.hpp],
     [],
     [AC_MSG_FAILURE([Boost headers not found, $errmsg])],
@@ -380,6 +391,7 @@ boost_libsystem="boost_system$lmi_boost_toolkit"
 boost_libfs="boost_filesystem$lmi_boost_toolkit"
 boost_libregex="boost_regex$lmi_boost_toolkit"
 
+save_CPPFLAGS=$CPPFLAGS
 save_LIBS=$LIBS
 save_LDFLAGS=$LDFLAGS
 if test "x$lmi_boost_libs" != "x"; then
@@ -390,6 +402,10 @@ else
     errmsg="use --with-boost-libs=dir
 if it is installed in non default location"
 fi
+
+dnl Prevent warnings due to the use of "register" in Boost.Regex headers that
+dnl are actually fatal errors with clang in C++17 mode.
+CPPFLAGS="$save_CPPFLAGS -Dregister="
 
 dnl latest versions of boost extract some common functionality in
 dnl libboost_system which we must link when using any other Boost library, so
@@ -416,6 +432,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/regex.hpp>]],
 
 LDFLAGS=$save_LDFLAGS
 LIBS=$save_LIBS
+CPPFLAGS=$save_CPPFLAGS
 
 BOOST_LIBS="-l$boost_libfs -l$boost_libregex $BOOST_LIBS"
 
@@ -470,6 +487,13 @@ AC_TRY_COMPILE([#include <xmlwrapp/xmlwrapp.h>],
 
 CXXFLAGS=$save_CXXFLAGS
 LIBS=$save_LIBS
+
+dnl --- libunwind and libdw, only used under Linux and only with gcc/libstdc++
+if test "$USE_LINUX" = "1" -a "$CLANG" != "yes"; then
+    PKG_CHECK_MODULES(UNWIND, libunwind libdw)
+    CXXFLAGS="$CXXFLAGS $UNWIND_CFLAGS"
+    LIBS="$LIBS $UNWIND_LIBS -ldl"
+fi
 
 dnl --- CGICC (optional) ----------------
 if test "x$lmi_cgicc_option" != "xno"; then
@@ -560,6 +584,7 @@ fi
 if test "x$GXX" == "xyes"; then
     if test "$CLANG" = "yes"; then
         cxx_warnings_flags="$cxx_warnings_flags \
+            -Wno-string-plus-int \
             -Wno-mismatched-tags"
     else
         cxx_warnings_flags="$cxx_warnings_flags \
@@ -603,5 +628,21 @@ if test "x$GXX" == "xyes"; then
 fi
 
 dnl === Generate output files ===
+
+dnl These files are used by various tests and must be present in the build
+dnl directory. The configurable settings file contains just the bare minimum
+dnl required, but what little is there, is really needed for the tests to pass.
+AC_CONFIG_COMMANDS([configurable_settings.xml], [
+cat >configurable_settings.xml <<EOF
+<?xml version="1.0"?>
+<configurable_settings version="2">
+  <print_directory>.</print_directory>
+  <spreadsheet_file_extension>.tsv</spreadsheet_file_extension>
+</configurable_settings>
+EOF
+])
+AC_CONFIG_COMMANDS([sample.policy], [touch sample.policy])
+AC_CONFIG_LINKS([sample.cns:sample.cns sample.ill:sample.ill])
+
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

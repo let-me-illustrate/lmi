@@ -262,6 +262,7 @@
     <ClCompile Include="main_common_non_wx.cpp" />
     <ClCompile Include="my_db.cpp" />
     <ClCompile Include="my_fund.cpp" />
+    <ClCompile Include="my_lingo.cpp" />
     <ClCompile Include="my_prod.cpp" />
     <ClCompile Include="my_rnd.cpp" />
     <ClCompile Include="my_tier.cpp" />

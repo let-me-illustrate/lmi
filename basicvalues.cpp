@@ -1,6 +1,6 @@
 // Basic values.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -26,6 +26,9 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "death_benefits.hpp"
+#include "i7702.hpp"                    // dtor only, for (unused) unique_ptr
+#include "ihs_irc7702.hpp"              // dtor only, for (unused) unique_ptr
+#include "ihs_irc7702a.hpp"             // dtor only, for (unused) unique_ptr
 #include "input.hpp"
 #include "interest_rates.hpp"
 #include "loads.hpp"
@@ -65,6 +68,7 @@ BasicValues::BasicValues(Input const& input)
     ,round_naar_              {2, r_to_nearest}
     ,round_coi_rate_          {8, r_downward  }
     ,round_coi_charge_        {2, r_to_nearest}
+    ,round_rider_charges_     {2, r_to_nearest}
     ,round_gross_premium_     {2, r_to_nearest}
     ,round_net_premium_       {2, r_to_nearest}
     ,round_interest_rate_     {0, r_not_at_all}
@@ -79,9 +83,19 @@ BasicValues::BasicValues(Input const& input)
     ,round_max_specamt_       {0, r_downward  }
     ,round_min_premium_       {2, r_upward    }
     ,round_max_premium_       {2, r_downward  }
+    ,round_minutiae_          {2, r_to_nearest}
 {
     Init();
 }
+
+/// Destructor.
+///
+/// Although it is explicitly defaulted, this destructor is not
+/// implemented inside the class definition, because the header
+/// forward-declares one or more classes that are held by
+/// std::unique_ptr, so their destructors are visible only here.
+
+BasicValues::~BasicValues() = default;
 
 //============================================================================
 void BasicValues::Init()
@@ -106,24 +120,41 @@ void BasicValues::Init()
     no_can_issue_         = no_longer_issued && is_new_business;
     IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(ledger_type());
 
-    // IHS !! Just a dummy initialization here--implemented in lmi.
-    SpreadFor7702_.assign(Length, 0.0);
-
     // Multilife contracts will need a vector of mortality-rate objects.
-    MortalityRates_.reset(new MortalityRates (*this));
-    InterestRates_ .reset(new InterestRates  (*this));
-    DeathBfts_     .reset(new death_benefits (GetLength(), yare_input_));
-    Outlay_        .reset(new modal_outlay   (yare_input_));
-    PremiumTax_    .reset(new premium_tax    (PremiumTaxState_, database()));
-    Loads_         .reset(new Loads(database(), IsSubjectToIllustrationReg()));
+    MortalityRates_ = std::make_unique<MortalityRates>(*this);
+    InterestRates_  = std::make_unique<InterestRates >(*this);
+    DeathBfts_      = std::make_unique<death_benefits>
+        (GetLength()
+        ,yare_input_
+        ,round_specamt_
+        );
+    Outlay_         = std::make_unique<modal_outlay>
+        (yare_input_
+        ,round_gross_premium_
+        ,round_withdrawal_
+        ,round_loan_
+        );
+    PremiumTax_     = std::make_unique<premium_tax>
+        (PremiumTaxState_
+        ,database()
+        );
+    Loads_          = std::make_unique<Loads>
+        (database()
+        ,IsSubjectToIllustrationReg()
+        );
 
-    database().query_into(DB_MinSpecAmt, MinSpecAmt);
-    database().query_into(DB_MinWd     , MinWD     );
-    database().query_into(DB_WdFee     , WDFee     );
+    MinSpecAmt = round_specamt   ().c(database().query<double>(DB_MinSpecAmt));
+    MinWD      = round_withdrawal().c(database().query<double>(DB_MinWd     ));
+    WDFee      = round_withdrawal().c(database().query<double>(DB_WdFee     ));
     database().query_into(DB_WdFeeRate , WDFeeRate );
 
-// The antediluvian branch leaves FundData_, StratifiedCharges_, and
-// ProductData initialized to null pointers.
+// The antediluvian branch leaves these members initialized to null pointers:
+//   product_
+//   lingo_
+//   FundData_
+//   RoundingRules_
+//   StratifiedCharges_
+//   i7702_
 }
 
 //============================================================================
@@ -135,20 +166,20 @@ double BasicValues::InvestmentManagementFee() const
 
 //============================================================================
 // IHS !! Simply calls the target-premium routine for now--see lmi.
-double BasicValues::GetModalMinPrem
+currency BasicValues::GetModalMinPrem
     (int         a_year
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ) const
 {
     return GetModalTgtPrem(a_year, a_mode, a_specamt);
 }
 
 //============================================================================
-double BasicValues::GetModalTgtPrem
+currency BasicValues::GetModalTgtPrem
     (int         a_year
     ,mcenum_mode a_mode
-    ,double      a_specamt
+    ,currency    a_specamt
     ) const
 {
     // IHS !! Simplistic. Ignores table ratings, flat extras, and
@@ -193,7 +224,7 @@ double BasicValues::GetModalTgtPrem
     // IHS !! Implemented better in lmi.
     double Annuity = (1.0 - std::pow(u, 12 / a_mode)) / (1.0 - u);
 
-    double z = a_specamt;
+    double z = dblize(a_specamt);
     z /=
         (   1.0
         +   InterestRates_->GenAcctNetRate
@@ -202,7 +233,7 @@ double BasicValues::GetModalTgtPrem
                 )[a_year]
         );
     z *= MortalityRates_->MonthlyCoiRates(mce_gen_curr)[a_year];
-    z += Loads_->monthly_policy_fee(mce_gen_curr)[a_year];
+    z += dblize(Loads_->monthly_policy_fee(mce_gen_curr)[a_year]);
 //    z += AdbRate;
 //    z *= 1.0 + WpRate;
     z /= 1.0 - Loads_->target_premium_load(mce_gen_curr)[a_year];
@@ -210,23 +241,23 @@ double BasicValues::GetModalTgtPrem
 
     // IHS !! Parameterized in lmi.
     static round_to<double> const round_it(2, r_upward);
-    return round_it(z);
+    return round_it.c(z);
 }
 
 //============================================================================
 // Simply calls the target-specamt routine for now.
-double BasicValues::GetModalMaxSpecAmt
+currency BasicValues::GetModalMaxSpecAmt
     (mcenum_mode a_mode
-    ,double      a_pmt
+    ,currency    a_pmt
     ) const
 {
     return GetModalTgtSpecAmt(a_mode, a_pmt);
 }
 
 //============================================================================
-double BasicValues::GetModalTgtSpecAmt
+currency BasicValues::GetModalTgtSpecAmt
     (mcenum_mode a_mode
-    ,double      a_pmt
+    ,currency    a_pmt
     ) const
 {
     // IHS !! Factor out the (defectively simplistic) code this
@@ -267,12 +298,12 @@ double BasicValues::GetModalTgtSpecAmt
         );
     double Annuity = (1.0 - std::pow(u, 12 / a_mode)) / (1.0 - u);
 
-    double z = a_pmt;
+    double z = dblize(a_pmt);
     z /= Annuity;
     z *= 1.0 - Loads_->target_premium_load(mce_gen_curr)[0];
 //    z /= WpRate;
 //    z -= AdbRate;
-    z -= Loads_->monthly_policy_fee(mce_gen_curr)[0];
+    z -= dblize(Loads_->monthly_policy_fee(mce_gen_curr)[0]);
     z /= MortalityRates_->MonthlyCoiRates(mce_gen_curr)[0];
     z *=
         (   1.0
@@ -284,13 +315,7 @@ double BasicValues::GetModalTgtSpecAmt
 
     // IHS !! Parameterized in lmi.
     static round_to<double> const round_it(0, r_downward);
-    return round_it(z);
-}
-
-//============================================================================
-std::vector<double> const& BasicValues::SpreadFor7702() const
-{
-    return SpreadFor7702_;
+    return round_it.c(z);
 }
 
 //============================================================================

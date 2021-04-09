@@ -1,6 +1,6 @@
 // Ledger evaluator returning values of all ledger fields.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -30,8 +30,9 @@
 #include "calendar_date.hpp"
 #include "configurable_settings.hpp"
 #include "contains.hpp"
+#include "et_vector.hpp"
 #include "global_settings.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "ledger_invariant.hpp"
 #include "ledger_text_formats.hpp"      // ledger_format()
 #include "ledger_variant.hpp"
@@ -47,7 +48,6 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <algorithm>                    // transform()
 #include <functional>                   // minus
 #include <map>
 #include <numeric>                      // iota()
@@ -193,6 +193,7 @@ title_map_t static_titles()
     ,{"DacTaxLoad_Guaranteed"           , "Guar DAC\nTax\nLoad"}
     ,{"DacTaxRsv_Current"               , "Curr DAC\nTax\nReserve"}
     ,{"DacTaxRsv_Guaranteed"            , "Guar DAC\nTax\nReserve"}
+    ,{"Dcv"                             , "Deemed\nCash\nValue"}
     ,{"DeathProceedsPaid_Current"       , "Curr Death\nProceeds\nPaid"}
     ,{"DeathProceedsPaid_Guaranteed"    , "Guar Death\nProceeds\nPaid"}
     ,{"Duration"                        , "Duration"}
@@ -206,7 +207,6 @@ title_map_t static_titles()
     ,{"ErMode"                          , "ER\nPayment\nMode"}
     ,{"ExpenseCharges_Current"          , "Curr\nExpense\nCharge"}
     ,{"ExpenseCharges_Guaranteed"       , "Guar\nExpense\nCharge"}
-    ,{"ExperienceReserve_Current"       , "Experience\nRating\nReserve"}
     ,{"GptForceout"                     , "Forceout"}
     ,{"GrossIntCredited_Current"        , "Curr Gross\nInt\nCredited"}
     ,{"GrossIntCredited_Guaranteed"     , "Guar Gross\nInt\nCredited"}
@@ -214,11 +214,16 @@ title_map_t static_titles()
     ,{"HoneymoonValueSpread"            , "Honeymoon\nValue\nSpread"}
     ,{"IndvTaxBracket"                  , "EE Tax\nBracket"}
     ,{"InforceLives"                    , "BOY\nLives\nInforce"}
+    ,{"Irc7702ic_usual"                 , "7702 ic\nUsual"}
+    ,{"Irc7702ic_glp"                   , "7702 ic\nfor GLP"}
+    ,{"Irc7702ic_gsp"                   , "7702 ic\nfor GSP"}
+    ,{"Irc7702ig_usual"                 , "7702 ig\nUsual"}
+    ,{"Irc7702ig_glp"                   , "7702 ig\nfor GLP"}
+    ,{"Irc7702ig_gsp"                   , "7702 ig\nfor GSP"}
     ,{"IrrCsv_Current"                  , "Curr IRR\non CSV"}
     ,{"IrrCsv_Guaranteed"               , "Guar IRR\non CSV"}
     ,{"IrrDb_Current"                   , "Curr IRR\non DB"}
     ,{"IrrDb_Guaranteed"                , "Guar IRR\non DB"}
-    ,{"KFactor_Current"                 , "Experience\nRating\nK Factor"}
     ,{"LoanIntAccrued_Current"          , "Curr Loan\nInt\nAccrued"}
     ,{"LoanIntAccrued_Guaranteed"       , "Guar Loan\nInt\nAccrued"}
     ,{"MlyGAIntRate_Current"            , "Curr Monthly\nGen Acct\nInt Rate"}
@@ -231,7 +236,6 @@ title_map_t static_titles()
     ,{"MlySAIntRate_Guaranteed"         , "Guar Monthly\nSep Acct\nInt Rate"}
     ,{"ModalMinimumPremium"             , "Modal\nMinimum\nPremium"}
 //  ,{"NaarForceout"                    , "Forced\nWithdrawal\ndue to\nNAAR Limit"}
-    ,{"NetCOICharge_Current"            , "Experience\nRating\nNet COI\nCharge"}
     ,{"NetClaims_Current"               , "Curr Net\nClaims"}
     ,{"NetClaims_Guaranteed"            , "Guar Net\nClaims"}
     ,{"NetIntCredited_Current"          , "Curr Net\nInt\nCredited"}
@@ -249,7 +253,6 @@ title_map_t static_titles()
     ,{"PrefLoanBalance_Guaranteed"      , "Guar\nPreferred\nLoan Bal"}
     ,{"PremTaxLoad_Current"             , "Curr\nPremium\nTax Load"}
     ,{"PremTaxLoad_Guaranteed"          , "Guar\nPremium\nTax Load"}
-    ,{"ProjectedCoiCharge_Current"      , "Experience\nRating\nProjected\nCOI Charge"}
     ,{"RefundableSalesLoad"             , "Refundable\nSales\nLoad"}
     ,{"RiderCharges_Current"            , "Curr Rider\nCharges"}
     ,{"Salary"                          , "Salary"}
@@ -329,6 +332,7 @@ mask_map_t static_masks()
     ,{"DacTaxLoad_Guaranteed"           , "999,999,999"}
     ,{"DacTaxRsv_Current"               , "999,999,999"}
     ,{"DacTaxRsv_Guaranteed"            , "999,999,999"}
+    ,{"Dcv"                             , "999,999,999"}
     ,{"DeathProceedsPaid_Current"       , "999,999,999"}
     ,{"DeathProceedsPaid_Guaranteed"    , "999,999,999"}
     ,{"Duration"                        ,         "999"}
@@ -342,7 +346,6 @@ mask_map_t static_masks()
     ,{"ErMode"                          ,  "Semiannual"}
     ,{"ExpenseCharges_Current"          , "999,999,999"}
     ,{"ExpenseCharges_Guaranteed"       , "999,999,999"}
-    ,{"ExperienceReserve_Current"       , "999,999,999"}
     ,{"GptForceout"                     , "999,999,999"}
     ,{"GrossIntCredited_Current"        , "999,999,999"}
     ,{"GrossIntCredited_Guaranteed"     , "999,999,999"}
@@ -350,11 +353,16 @@ mask_map_t static_masks()
     ,{"HoneymoonValueSpread"            ,      "99.99%"}
     ,{"IndvTaxBracket"                  ,      "99.99%"}
     ,{"InforceLives"                    , "999,999,999"}
+    ,{"Irc7702ic_usual"                 ,      "99.99%"}
+    ,{"Irc7702ic_glp"                   ,      "99.99%"}
+    ,{"Irc7702ic_gsp"                   ,      "99.99%"}
+    ,{"Irc7702ig_usual"                 ,      "99.99%"}
+    ,{"Irc7702ig_glp"                   ,      "99.99%"}
+    ,{"Irc7702ig_gsp"                   ,      "99.99%"}
     ,{"IrrCsv_Current"                  ,  "100000.00%"}
     ,{"IrrCsv_Guaranteed"               ,  "100000.00%"}
     ,{"IrrDb_Current"                   ,  "100000.00%"}
     ,{"IrrDb_Guaranteed"                ,  "100000.00%"}
-    ,{"KFactor_Current"                 ,    "9,999.99"}
     ,{"LoanIntAccrued_Current"          , "999,999,999"}
     ,{"LoanIntAccrued_Guaranteed"       , "999,999,999"}
     ,{"MlyGAIntRate_Current"            ,      "99.99%"}
@@ -367,7 +375,6 @@ mask_map_t static_masks()
     ,{"MlySAIntRate_Guaranteed"         ,      "99.99%"}
     ,{"ModalMinimumPremium"             , "999,999,999"}
 //  ,{"NaarForceout"                    , "999,999,999"}
-    ,{"NetCOICharge_Current"            , "999,999,999"}
     ,{"NetClaims_Current"               , "999,999,999"}
     ,{"NetClaims_Guaranteed"            , "999,999,999"}
     ,{"NetIntCredited_Current"          , "999,999,999"}
@@ -385,7 +392,6 @@ mask_map_t static_masks()
     ,{"PrefLoanBalance_Guaranteed"      , "999,999,999"}
     ,{"PremTaxLoad_Current"             , "999,999,999"}
     ,{"PremTaxLoad_Guaranteed"          , "999,999,999"}
-    ,{"ProjectedCoiCharge_Current"      , "999,999,999"}
     ,{"RefundableSalesLoad"             , "999,999,999"}
     ,{"RiderCharges_Current"            , "999,999,999"}
     ,{"Salary"                          , "999,999,999"}
@@ -484,7 +490,6 @@ format_map_t static_formats()
 // > Format as a number with thousand separators and no decimal places (#,###,###)
 // >
     ,{"Age"                             , f1}
-    ,{"AllowExperienceRating"           , f1}
     ,{"AllowGroupQuote"                 , f1}
     ,{"AvgFund"                         , f1}
     ,{"ChildRiderAmount"                , f1}
@@ -536,7 +541,6 @@ format_map_t static_formats()
     ,{"SurviveToExpectancy"             , f1}
     ,{"SurviveToYear"                   , f1}
     ,{"TxCallsGuarUwSubstd"             , f1}
-    ,{"UseExperienceRating"             , f1}
     ,{"UsePartialMort"                  , f1}
     ,{"WriteTsvFile"                    , f1}
 
@@ -568,6 +572,13 @@ format_map_t static_formats()
     ,{"IndvTaxBracket"                  , f4}
     ,{"InforceHMVector"                 , f4}
 
+    ,{"Irc7702ic_usual"                 , f4}
+    ,{"Irc7702ic_glp"                   , f4}
+    ,{"Irc7702ic_gsp"                   , f4}
+    ,{"Irc7702ig_usual"                 , f4}
+    ,{"Irc7702ig_glp"                   , f4}
+    ,{"Irc7702ig_gsp"                   , f4}
+
     ,{"IrrCsv_Current"                  , f4}
     ,{"IrrCsv_CurrentZero"              , f4}
     ,{"IrrCsv_Guaranteed"               , f4}
@@ -595,10 +606,8 @@ format_map_t static_formats()
 // >
     ,{"AddonMonthlyFee"                 , f2}
     ,{"AnnualFlatExtra"                 , f2}
-// TODO ?? The precision of 'InforceLives' and 'KFactor' is inadequate.
-// Is every other format OK?
+// TODO ?? The precision of 'InforceLives' is inadequate. Is every other format OK?
     ,{"InforceLives"                    , f2}
-    ,{"KFactor"                         , f2}
 // >
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
@@ -620,6 +629,7 @@ format_map_t static_formats()
     ,{"Composite"                       , f1}
     ,{"DacTaxLoad"                      , f1}
     ,{"DacTaxRsv"                       , f1}
+    ,{"Dcv"                             , f1}
     ,{"DeathProceedsPaid"               , f1}
     ,{"EOYDeathBft"                     , f1}
     ,{"EeGrossPmt"                      , f1}
@@ -629,7 +639,6 @@ format_map_t static_formats()
     ,{"ErModalMinimumPremium"           , f1}
 //  ,{"ErMode"                          , f1} // Not numeric.
     ,{"ExpenseCharges"                  , f1}
-    ,{"ExperienceReserve"               , f1}
     ,{"FundNumbers"                     , f1}
     ,{"GptForceout"                     , f1}
     ,{"GrossIntCredited"                , f1}
@@ -639,7 +648,6 @@ format_map_t static_formats()
     ,{"LoanIntAccrued"                  , f1}
     ,{"ModalMinimumPremium"             , f1}
     ,{"NaarForceout"                    , f1}
-    ,{"NetCOICharge"                    , f1}
     ,{"NetClaims"                       , f1}
     ,{"NetIntCredited"                  , f1}
     ,{"NetPmt"                          , f1}
@@ -649,7 +657,6 @@ format_map_t static_formats()
     ,{"PolicyFee"                       , f1}
     ,{"PrefLoanBalance"                 , f1}
     ,{"PremTaxLoad"                     , f1}
-    ,{"ProjectedCoiCharge"              , f1}
     ,{"RefundableSalesLoad"             , f1}
     ,{"RiderCharges"                    , f1}
     ,{"Salary"                          , f1}
@@ -765,17 +772,8 @@ ledger_evaluator Ledger::make_evaluator() const
     mask_map  ["MiscCharges"] = "999,999,999";
     format_map["MiscCharges"] = f1;
 
-    // ET !! Easier to write as
-    //   std::vector<double> NetDeathBenefit =
-    //     curr.EOYDeathBft - curr.TotalLoanBalance;
     std::vector<double> NetDeathBenefit(curr.EOYDeathBft);
-    std::transform
-        (NetDeathBenefit.begin()
-        ,NetDeathBenefit.end()
-        ,curr.TotalLoanBalance.begin()
-        ,NetDeathBenefit.begin()
-        ,std::minus<double>()
-        );
+    NetDeathBenefit -= curr.TotalLoanBalance;
     vectors   ["NetDeathBenefit"] = &NetDeathBenefit;
     title_map ["NetDeathBenefit"] = "Net\nDeath\nBenefit";
     mask_map  ["NetDeathBenefit"] = "999,999,999";

@@ -1,5 +1,5 @@
 {{!
-    Copyright (C) 2017, 2018, 2019, 2020 Gregory W. Chicares.
+    Copyright (C) 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -14,7 +14,7 @@
     along with this program; if not, write to the Free Software Foundation,
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 
-    http://savannah.nongnu.org/projects/lmi
+    https://savannah.nongnu.org/projects/lmi
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 }}
@@ -83,13 +83,13 @@
 
 {{#HasChildRider}}
     <p>
-    The ${{ChildRiderAmount}}&nbsp; {{ChildFootnote}}
+    {{ChildFootnote}}
     </p>
 {{/HasChildRider}}
 
 {{#HasSpouseRider}}
     <p>
-    The ${{SpouseRiderAmount}}&nbsp; {{SpouseFootnote}}
+    {{SpouseFootnote}}
     </p>
 {{/HasSpouseRider}}
 
@@ -97,77 +97,16 @@
 
 {{FnPartialMortality}}
 
-<!-- PDF !! MortalityBlendFootnote -->
-{{#GenderBlended}}
-    <p>
-    Custom blending of cost of insurance charges is based
-    on the plan's assumed distribution of initial selected
-    face amount by gender and tobacco use. This illustration
-    assumes that the distribution remains constant
-    in future years. Custom blending is available only on plans
-    of 100 or more lives. Custom blend assumptions:
-    {{#SmokerBlended}}
-        nontobacco = {{NonsmokerProportion}};
-    {{/SmokerBlended}}
-    {{^SmokerBlended}}
-        no blending by tobacco use;
-    {{/SmokerBlended}}
-    male = {{MaleProportion}}.
-    </p>
-{{/GenderBlended}}
-{{#SmokerBlended}}
-    <p>
-    Custom blending of cost of insurance charges is based
-    on the plan's assumed distribution of initial selected
-    face amount by gender and tobacco use. This illustration
-    assumes that the distribution remains constant
-    in future years. Custom blending is available only on plans
-    of 100 or more lives. Custom blend assumptions:
-    nontobacco = {{NonsmokerProportion}};
-    {{#GenderBlended}}
-        male = {{MaleProportion}}.
-    {{/GenderBlended}}
-    {{^GenderBlended}}
-        no blending by gender.
-    {{/GenderBlended}}
-    </p>
-{{/SmokerBlended}}
+{{MortalityBlendFootnote}}
 
 <p>
 The state of issue is {{StateOfJurisdiction}}.
 </p>
 
 {{#IsInforce}}
-<!-- PDF !! Combine FnInforceAcctVal and FnInforceTaxBasis -->
     <p>
-    This illustration assumes a beginning account value of
-    ${{InforceTotalAV}},
-    and a beginning cost basis of
-    ${{InforceTaxBasis}},
-    based on the last monthly calculation date,
-    {{InforceAsOfDate}}.
-    The current account value and cost basis may be higher or lower.
-    Consult the Home Office if you require further information.
+    {{FnInforceAcctVal}}
     </p>
-<!--
-  PDF !! THESE ARE TO BE COMBINED:
-  PDF !! FnInforceAcctVal
-    <p>
-    This illustration assumes a beginning account value of
-    ${{InforceTotalAV}}
-    as of {{InforceAsOfDate}},
-    the end of the last completed {{ContractName}} month.
-    </p>
-  PDF !! FnInforceTaxBasis
-    <p>
-    This illustration assumes a beginning cost basis of
-    ${{InforceTaxBasis}}
-    as of {{InforceAsOfDate}},
-    the end of the last completed {{ContractName}} month;
-    the actual cost basis may be higher or lower.
-    Consult the Home Office for cost basis information.
-    </p>
--->
 {{/IsInforce}}
 
 {{#CallGuarUwSubstd}}
@@ -176,13 +115,8 @@ The state of issue is {{StateOfJurisdiction}}.
 
 <p align="center"><b>GUARANTEED PRINCIPAL ACCOUNT</b></p>
 
-<!-- PDF !! FnGeneralAccount -->
 <p>
-The Guaranteed Principal Account (GPA) has a guaranteed
-minimum annual interest rate of
-{{InitAnnGenAcctInt_Guaranteed}}.
-Guarantees are based on the claims-paying ability of the
-issuing company or companies.
+    {{FnGeneralAccount}}
 </p>
 
 <p align="center"><b>SEPARATE ACCOUNT</b></p>
@@ -192,43 +126,18 @@ issuing company or companies.
 </p>
 
 {{^Composite}}
-<!-- PDF !! FnImf -->
-    <p>
-    This illustration is based on total Separate Account
-    fund expenses of {{TotalIMF[0]}}.
-    </p>
-    {{#AvgFund}}
-        <p>
-        Investment management fees are based on equal
-        initial allocations among the available funds.
-        </p>
-    {{/AvgFund}}
-    {{#CustomFund}}
-        <p>
-        Investment management fees are based on an initial allocation
-        of 100% to a custom fund selected by the purchaser.
-        </p>
-    {{/CustomFund}}
+    {{FnImf}}
 {{/Composite}}
 
-<!-- PDF !! FnProspectus -->
 <p>
-<b>
-This material must be preceded or accompanied by the current prospectus for the
-{{PolicyMktgName}} Insurance {{ContractName}} and the prospectuses (or summary
-prospectuses, if available) for its underlying investment choices. Before
-purchasing a {{ContractName}}, you should carefully consider the investment
-objectives, risks, charges and expenses of the {{ContractName}} and its
-underlying investment choices. Please read the prospectuses carefully before
-investing or sending money.
-</b>
+    <b>{{FnProspectus}}</b>
 </p>
 
 <p>
 {{SubsidiaryFootnote}}
 </p>
 
-<!-- PDF !! PlacementAgentFootnote -->
+<!-- PDF !! This should be something like BrokerDealerFootnote -->
 <p>
 Securities offered through registered representatives of
 {{CoUnderwriter}}&nbsp;

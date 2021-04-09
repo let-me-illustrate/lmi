@@ -1,6 +1,6 @@
 // Mortality rates--unit test.
 //
-// Copyright (C) 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -143,15 +143,15 @@ class mortality_rates_test
 void mortality_rates_test::test_4095_4096ths()
 {
     static double const q = static_cast<double>(1.0L - 1.0L / 4096.0L);
-    BOOST_TEST_EQUAL(0.999755859375, q);
-    BOOST_TEST_EQUAL(1.0, coi_rate_from_q<double>()(q, 1.0));
+    LMI_TEST_EQUAL(0.999755859375, q);
+    LMI_TEST_EQUAL(1.0, coi_rate_from_q<double>()(q, 1.0));
 }
 
 void mortality_rates_test::test_annual_to_monthly_conversion()
 {
     for(int j = 0; j < lmi::ssize(annual_rates()); ++j)
         {
-        BOOST_TEST
+        LMI_TEST
             (materially_equal
                 (                          monthly_rates()[j]
                 ,coi_rate_from_q<double>()(annual_rates ()[j], 1.0)
@@ -203,10 +203,10 @@ void mortality_rates_test::test_guaranteed_rates
         y = coi_rate_from_q<double>()(y, z.MaxMonthlyCoiRate_);
         y = rounder(y);
 
-        BOOST_TEST(materially_equal(y, v0[j]));
-        BOOST_TEST(materially_equal(x, v1[j]));
+        LMI_TEST(materially_equal(y, v0[j]));
+        LMI_TEST(materially_equal(x, v1[j]));
 // This needn't necessarily hold:
-//        BOOST_TEST(materially_equal(x, y));
+//        LMI_TEST(materially_equal(x, y));
 // To compare values:
 //        std::cout << j << '\t' << x << '\t' << y << std::endl;
         }

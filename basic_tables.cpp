@@ -1,6 +1,6 @@
 // Basic tables.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -34,7 +34,7 @@
 
 #if 0 // For debugging only.
 #include "alert.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #endif // 0
 
 #include <string>
@@ -90,7 +90,7 @@ std::vector<double> basic_table_rates
 #endif // 0
 }
 
-std::vector<double> LMI_SO irc_7702_q_builtin
+std::vector<double> irc_7702_q_builtin
     (product_database const& db
     ,int                     issue_age
     ,int                     years_to_maturity
@@ -117,7 +117,7 @@ std::vector<double> LMI_SO irc_7702_q_builtin
 }
 } // Unnamed namespace.
 
-std::vector<double> LMI_SO irc_7702_q
+std::vector<double> irc_7702_q
     (product_data     const& product
     ,product_database const& database
     ,int                     issue_age
@@ -149,7 +149,7 @@ std::vector<double> LMI_SO irc_7702_q
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
-std::vector<double> LMI_SO irc_7702A_7pp
+std::vector<double> irc_7702A_7pp
     (product_data     const& product
     ,product_database const& database
     ,int                     issue_age
@@ -177,7 +177,7 @@ std::vector<double> LMI_SO irc_7702A_7pp
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
-std::vector<double> LMI_SO irc_7702_nsp
+std::vector<double> irc_7702_nsp
     (product_data     const& product
     ,product_database const& database
     ,int                     issue_age
@@ -209,7 +209,7 @@ std::vector<double> LMI_SO irc_7702_nsp
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
-std::vector<double> LMI_SO cvat_corridor_factors
+std::vector<double> cvat_corridor_factors
     (product_data     const& product
     ,product_database const& database
     ,int                     issue_age
@@ -237,7 +237,7 @@ std::vector<double> LMI_SO cvat_corridor_factors
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
-std::vector<double> LMI_SO target_premium_rates
+std::vector<double> target_premium_rates
     (product_data     const& product
     ,product_database const& database
     ,int                     issue_age

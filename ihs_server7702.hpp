@@ -1,6 +1,6 @@
 // Guideline-premium-test server.
 //
-// Copyright (C) 1998, 2001, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -46,7 +46,7 @@ struct Server7702Output
     double           GuidelineSinglePremiumPolicyC; // the GSP for notional policy C; 0.0 at issue or if there has been no adjustable event.
 };
 
-Server7702Output LMI_SO RunServer7702FromStruct(gpt_input a_Input);
+LMI_SO Server7702Output RunServer7702FromStruct(gpt_input a_Input);
 
 class Server7702
 {
@@ -86,17 +86,6 @@ class Server7702
     bool IsIssuedToday;
     bool IsPossibleAdjustableEvent;
 };
-
-enum
-    {unknown_error                          = 0x0001
-    ,precision_changed                      = 0x0002
-    ,implausible_input                      = 0x0004
-    ,inconsistent_input                     = 0x0008
-    ,product_rule_violated                  = 0x0010
-    ,adjustable_event_forbidden_at_issue    = 0x0020
-    ,guideline_negative                     = 0x0040
-    ,misstatement_of_age_or_gender          = 0x0080
-    };
 
 // We have no specific exception class for unknown_error
 // precisely because it's unknown. We return it when we

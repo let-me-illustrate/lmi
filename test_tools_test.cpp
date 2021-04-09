@@ -1,6 +1,6 @@
 // Test the testing framework.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -31,9 +31,9 @@ bool volatile always_false = false;
 
 void test_function(bool a, bool b, char const* file, int line)
 {
-    INVOKE_BOOST_TEST(a, file, line);
-    INVOKE_BOOST_TEST_EQUAL(a, b, file, line);
-    INVOKE_BOOST_TEST_UNEQUAL(a, b, file, line);
+    INVOKE_LMI_TEST(a, file, line);
+    INVOKE_LMI_TEST_EQUAL(a, b, file, line);
+    INVOKE_LMI_TEST_UNEQUAL(a, b, file, line);
 }
 
 // Throw an exception unconditionally, while preventing compilers from
@@ -56,37 +56,28 @@ int test_main(int, char*[])
 
     lmi_test::error_prefix = "\n#### ";
 
-    BOOST_TEST(always_true);
-    BOOST_TEST(always_false);
+    LMI_TEST(always_true);
+    LMI_TEST(always_false);
 
-    BOOST_TEST_EQUAL(always_true, always_true );
-    BOOST_TEST_EQUAL(always_true, always_false);
+    LMI_TEST_EQUAL(always_true, always_true );
+    LMI_TEST_EQUAL(always_true, always_false);
 
-    BOOST_TEST_UNEQUAL(always_true, always_true );
-    BOOST_TEST_UNEQUAL(always_true, always_false);
+    LMI_TEST_UNEQUAL(always_true, always_true );
+    LMI_TEST_UNEQUAL(always_true, always_false);
 
     test_function(always_true , always_true, __FILE__, __LINE__);
     test_function(always_false, always_true, __FILE__, __LINE__);
 
-    try
-        {
-        BOOST_CRITICAL_TEST(always_true);
-        BOOST_CRITICAL_TEST(always_false);
-        }
-    catch(lmi_test::test::test_tools_exception const&)
-        {
-        }
+    LMI_TEST_THROW((void)(0), std::runtime_error, "arbitrary");
+    LMI_TEST_THROW(;, std::runtime_error, "arbitrary");
 
-    BOOST_TEST_THROW((void)(0), std::runtime_error, "arbitrary");
-    BOOST_TEST_THROW(;, std::runtime_error, "arbitrary");
-
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (throw_exception(std::runtime_error("arbitrary"))
         ,std::logic_error
         ,"arbitrary"
         );
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (throw_exception(std::runtime_error("wrong what_arg"))
         ,std::runtime_error
         ,"right what_arg"
@@ -112,7 +103,7 @@ int test_main(int, char*[])
     // terminal substring beginning with "\n[file ", which some lmi
     // exceptions add.
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (throw_exception
             (std::runtime_error
                 ("arbitrary"
@@ -125,7 +116,7 @@ int test_main(int, char*[])
 
     // Test exception::what() against a regular expression.
 
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (throw_exception(std::runtime_error("Iteration 31: failure."))
         ,std::runtime_error
         ,lmi_test::what_regex("^Iteration [0-9]*: failure\\.$")
@@ -140,21 +131,21 @@ int test_main(int, char*[])
     // unimportant to specify an actual expectation when the test was
     // written. It doesn't mean that an empty what-string is expected;
     // it only means that any what-string is accepted.
-    BOOST_TEST( lmi_test::whats_what(observed, ""));
+    LMI_TEST( lmi_test::whats_what(observed, ""));
     // A full exact match is accepted [and here '.*$' is no regex]:
-    BOOST_TEST( lmi_test::whats_what(observed, "xyzzy\n[file .*$"));
+    LMI_TEST( lmi_test::whats_what(observed, "xyzzy\n[file .*$"));
     // Alternatively, discard any portion of the what-string that
     // begins with "\n[file " (presumably appended by LMI_FLUSH) and
     // test that truncated what-string. An exact match is accepted:
-    BOOST_TEST( lmi_test::whats_what(observed, "xyzzy"));
+    LMI_TEST( lmi_test::whats_what(observed, "xyzzy"));
     // However, partial matches are rejected:
-    BOOST_TEST(!lmi_test::whats_what(observed, "xyzz"));
-    BOOST_TEST(!lmi_test::whats_what(observed, "xyzzy!"));
+    LMI_TEST(!lmi_test::whats_what(observed, "xyzz"));
+    LMI_TEST(!lmi_test::whats_what(observed, "xyzzy!"));
     // The expectation must exactly equal either the untruncated or
     // the truncated what-string; an exact match to a "partially
     // truncated" what-string is rejected:
-    BOOST_TEST(!lmi_test::whats_what(observed, "xyzzy\n"));
-    BOOST_TEST(!lmi_test::whats_what(observed, "xyzzy\n[file .*"));
+    LMI_TEST(!lmi_test::whats_what(observed, "xyzzy\n"));
+    LMI_TEST(!lmi_test::whats_what(observed, "xyzzy\n[file .*"));
 
     return 0;
 }

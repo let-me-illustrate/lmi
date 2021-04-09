@@ -2,7 +2,7 @@
 
 # Test files for consistency with various rules: unit test.
 
-# Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+# Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -29,6 +29,15 @@
 
 echo "Testing 'test_coding_rules'."
 
+# Directory where this script resides.
+
+srcdir=$(dirname "$(readlink --canonicalize "$0")")
+
+# Cannot recursively check script on path determined at runtime, so
+# a directive like 'source="$srcdir"' doesn't work.
+# shellcheck disable=SC1090
+. "$srcdir"/set_toolchain.sh
+
 rm --force eraseme*
 
 # Boilerplate required in most files.
@@ -38,7 +47,7 @@ good_copyright="...Copyright (C)...$(date -u +'%Y')..."
 # Dollar signs must be escaped with '\' in here-documents; writing
 # them on different lines prevents RCS substitution here.
 
-good_url="...http://savannah.nongnu.org/projects/lmi..."
+good_url="...https://savannah.nongnu.org/projects/lmi..."
 
 boilerplate=$(printf '%s\n%s' "$good_copyright" "$good_url")
 
@@ -129,7 +138,7 @@ EOF
 
 cat >eraseme_url_000 <<EOF
 $good_copyright
-<http://savannah.nongnu.org/projects/lmi>
+<https://savannah.nongnu.org/projects/lmi>
 EOF
 
 cat >eraseme_url_001 <<EOF
@@ -370,16 +379,6 @@ touch an_unexpected_file
 touch another.unexpected.file
 
 # Compare observed to expected. Note that directory '.' is ignored.
-
-lmi_build_type=$(/usr/share/libtool/build-aux/config.guess)
-case "$lmi_build_type" in
-    (*-*-linux*)
-        PERFORM=wine
-        ;;
-    (*)
-        PERFORM=
-        ;;
-esac
 
 2>&1 $PERFORM ./test_coding_rules \
   . \

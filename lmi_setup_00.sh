@@ -2,7 +2,7 @@
 
 # Create a chroot for cross-building "Let me illustrate...".
 #
-# Copyright (C) 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -31,7 +31,7 @@ echo "Started: $stamp0"
 if curl https://git.savannah.nongnu.org:443 >/dev/null 2>&1 ; then
   GIT_URL_BASE=https://git.savannah.nongnu.org/cgit/lmi.git/plain
 else
-  GIT_URL_BASE=https://github.com/vadz/lmi/raw/master
+  GIT_URL_BASE=https://github.com/let-me-illustrate/lmi/raw/master
 fi
 
 # Store dynamic configuration in a temporary file. This method is
@@ -90,8 +90,6 @@ wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10c.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_10r.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_11.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_13.sh
-wget -N -nv "${GIT_URL_BASE}"/lmi_setup_13c.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_20.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_21.sh
 wget -N -nv "${GIT_URL_BASE}"/lmi_setup_24.sh

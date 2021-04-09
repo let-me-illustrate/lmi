@@ -1,6 +1,6 @@
 // Path utilities.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -31,35 +31,39 @@
 #include <ostream>
 #include <string>
 
-void LMI_SO initialize_filesystem(); // Listed first because of its importance.
+LMI_SO void initialize_filesystem(); // Listed first because of its importance.
 
-fs::path LMI_SO modify_directory
+LMI_SO fs::path modify_directory
     (fs::path const& original_filepath
     ,fs::path const& supplied_directory
     );
 
-std::string LMI_SO orthodox_filename
+LMI_SO std::string orthodox_filename
     (std::string const& original_filename
     );
 
-fs::path LMI_SO serial_file_path
+LMI_SO fs::path remove_alien_msw_root
+    (fs::path    const& original_filepath
+    );
+
+LMI_SO fs::path serial_file_path
     (fs::path    const& exemplar
     ,std::string const& personal_name
     ,int                serial_number
     ,std::string const& extension
     );
 
-fs::path LMI_SO unique_filepath
+LMI_SO fs::path unique_filepath
     (fs::path    const& original_filepath
     ,std::string const& supplied_extension
     );
 
-void LMI_SO validate_directory
+LMI_SO void validate_directory
     (std::string const& directory
     ,std::string const& context
     );
 
-void LMI_SO validate_filepath
+LMI_SO void validate_filepath
     (std::string const& filepath
     ,std::string const& context
     );

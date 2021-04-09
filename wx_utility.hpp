@@ -1,6 +1,6 @@
 // Utilities for use with wxWidgets.
 //
-// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -95,10 +95,10 @@ void Connect
     ,wxEvtHandler*   event_sink = nullptr
     )
 {
-    static_assert(std::is_same<void,Return>::value);
-    static_assert(std::is_base_of<wxEvtHandler,Class>::value);
+    static_assert(std::is_same_v<void,Return>);
+    static_assert(std::is_base_of_v<wxEvtHandler,Class>);
     typedef typename std::remove_reference<Argument>::type argument_type;
-    static_assert(std::is_base_of<wxEvent,argument_type>::value);
+    static_assert(std::is_base_of_v<wxEvent,argument_type>);
 
     if(!object)
         {

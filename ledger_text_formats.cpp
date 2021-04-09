@@ -1,6 +1,6 @@
 // Ledger formatting as text.
 //
-// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -107,11 +107,7 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
         m["IrrCsv_Guaranteed"          ] = ledger_metadata(2, oe_format_percentage, "Guar IRR on CSV"                       ); // "Guaranteed Cash Value IRR"
         m["IrrDb_Current"              ] = ledger_metadata(2, oe_format_percentage, "Curr IRR on DB"                        ); // "Current Death Benefit IRR"
         m["IrrDb_Guaranteed"           ] = ledger_metadata(2, oe_format_percentage, "Guar IRR on DB"                        ); // "Guaranteed Death Benefit IRR"
-        m["ExperienceReserve_Current"  ] = ledger_metadata(0, oe_format_normal    , "Experience Rating Reserve"             ); // "Net Mortality Reserve"
         m["NetClaims_Current"          ] = ledger_metadata(0, oe_format_normal    , "Curr Net Claims"                       ); // "Experience Rating Current Net Claims"
-        m["NetCOICharge_Current"       ] = ledger_metadata(0, oe_format_normal    , "Experience Rating Net COI Charge"      ); // "Net Mortality Charge"
-        m["ProjectedCoiCharge_Current" ] = ledger_metadata(0, oe_format_normal    , "Experience Rating Projected COI Charge"); // "Projected Mortality Charge"
-        m["KFactor_Current"            ] = ledger_metadata(4, oe_format_normal    , "Experience Rating K Factor"            );
         m["GrossPmt"                   ] = ledger_metadata(0, oe_format_normal    , "Premium Outlay"                        ); // "Total Payment"
         m["LoanIntAccrued_Current"     ] = ledger_metadata(0, oe_format_normal    , "Curr Loan Int Accrued"                 ); // "Current Accrued Loan Interest"
         m["NetDeathBenefit"            ] = ledger_metadata(0, oe_format_normal    , "Net Death Benefit"                     ); // "Current Net Death Benefit"
@@ -231,7 +227,7 @@ std::string calculation_summary_formatter::format_as_html() const
     std::ostringstream oss;
 
     std::locale loc;
-    std::locale new_loc(loc, new comma_punct);
+    std::locale new_loc(loc, ::new comma_punct);
     oss.imbue(new_loc);
     oss.setf(std::ios_base::fixed, std::ios_base::floatfield);
 
@@ -344,7 +340,7 @@ std::string calculation_summary_formatter::format_as_tsv() const
     std::ostringstream oss;
 
     std::locale loc;
-    std::locale new_loc(loc, new comma_punct);
+    std::locale new_loc(loc, ::new comma_punct);
     oss.imbue(new_loc);
     oss.setf(std::ios_base::fixed, std::ios_base::floatfield);
 
@@ -508,7 +504,6 @@ void PrintCellTabDelimited
         ,"DacTaxLoad"
 // SOMEDAY !! Also:
 //   M&E
-//   stable value
 //   DAC- and premium-tax charge
 //   comp
 //   IMF
@@ -536,14 +531,14 @@ void PrintCellTabDelimited
         ,"YearEndInforceLives"
         ,"ClaimsPaid"
         ,"NetClaims"
-        ,"ExperienceReserve"
-        ,"ProjectedMortalityCharge"
-        ,"KFactor"
-        ,"NetMortalityCharge0Int"
-        ,"NetClaims0Int"
-        ,"ExperienceReserve0Int"
-        ,"ProjectedMortalityCharge0Int"
-        ,"KFactor0Int"
+        ,"[obsolete]"
+        ,"[obsolete]"
+        ,"[obsolete]"
+        ,"[obsolete]"
+        ,"[obsolete]"
+        ,"[obsolete]"
+        ,"[obsolete]"
+        ,"[obsolete]"
         };
 
     for(auto const& i : sheaders)
@@ -583,7 +578,7 @@ void PrintCellTabDelimited
         os << Invar.value_str("AnnualFlatExtra"       ,j) << '\t';
         os << Curr_.value_str("COICharge"             ,j) << '\t';
         os << Curr_.value_str("RiderCharges"          ,j) << '\t';
-        os << Curr_.value_str("NetCOICharge"          ,j) << '\t';
+        os << "0\t"; // obsolete
         os << Curr_.value_str("SepAcctCharges"        ,j) << '\t';
 
         os << Curr_.value_str("AnnSAIntRate"          ,j) << '\t';
@@ -614,35 +609,14 @@ void PrintCellTabDelimited
 
         os << Curr_.value_str("ClaimsPaid"            ,j) << '\t';
         os << Curr_.value_str("NetClaims"             ,j) << '\t';
-        os << Curr_.value_str("ExperienceReserve"     ,j) << '\t';
-        os << Curr_.value_str("ProjectedCoiCharge"    ,j) << '\t';
-        os << Curr_.value_str("KFactor"               ,j) << '\t';
-
-        // Show experience-rating columns for current-expense, zero-
-        // interest basis if used, to support testing.
-        std::vector<mcenum_run_basis> const& bases(ledger_values.GetRunBases());
-        if(contains(bases, mce_run_gen_curr_sep_zero))
-            {
-            LedgerVariant const& Curr0 = ledger_values.GetCurrZero();
-            os << Curr0.value_str("NetCOICharge"          ,j) << '\t';
-            os << Curr0.value_str("NetClaims"             ,j) << '\t';
-            os << Curr0.value_str("ExperienceReserve"     ,j) << '\t';
-            os << Curr0.value_str("ProjectedCoiCharge"    ,j) << '\t';
-            os << Curr0.value_str("KFactor"               ,j) << '\t';
-            }
-        else
-            {
-            os << "0\t";
-            os << "0\t";
-            os << "0\t";
-            os << "0\t";
-            os << "0\t";
-            }
-
-        if(contains(bases, mce_run_gen_curr_sep_half))
-            {
-            alarum() << "Three-rate illustrations not supported." << LMI_FLUSH;
-            }
+        os << "0\t"; // obsolete
+        os << "0\t"; // obsolete
+        os << "0\t"; // obsolete
+        os << "0\t"; // obsolete
+        os << "0\t"; // obsolete
+        os << "0\t"; // obsolete
+        os << "0\t"; // obsolete
+        os << "0\t"; // obsolete
 
         os << '\n';
         }
@@ -1182,7 +1156,7 @@ inline LedgerVariant   const& FlatTextLedgerPrinter::mdpt_() const
 // F4: scaled by 100, two decimals, with '%' at end:
 //
 // As discussed on the mailing list, e.g.:
-//   http://lists.nongnu.org/archive/html/lmi/2006-10/msg00066.html
+//   https://lists.nongnu.org/archive/html/lmi/2006-10/msg00066.html
 // the appropriate abstraction is
 //   {number of decimals [0, DECIMAL_DIG], style}
 // where for now percentage is the only nondefault 'style', but others
@@ -1202,7 +1176,7 @@ std::string ledger_format
         {
         std::stringstream ss {};
         std::locale loc;
-        std::locale new_loc(loc, new comma_punct);
+        std::locale new_loc(loc, ::new comma_punct);
         ss.imbue(new_loc);
         ss.setf(std::ios_base::fixed, std::ios_base::floatfield);
         return ss;

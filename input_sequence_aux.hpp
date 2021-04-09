@@ -1,6 +1,6 @@
 // Interpret sequence strings containing mc_enum and tn_range types.
 //
-// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -45,7 +45,7 @@ namespace detail
 {
     typedef std::map<std::string,std::string> stringmap;
 
-    std::vector<std::string> LMI_SO extract_keys_from_string_map
+    LMI_SO std::vector<std::string> extract_keys_from_string_map
         (stringmap const& keyword_dictionary
         );
 
@@ -105,7 +105,7 @@ namespace detail
 template<typename T>
 std::vector<T> convert_vector_type
     (std::vector<mc_enum<T>> const& ve
-    ,typename std::enable_if<std::is_enum<T>::value>::type* = nullptr
+    ,typename std::enable_if<std::is_enum_v<T>>::type* = nullptr
     )
 {
     std::vector<T> z;

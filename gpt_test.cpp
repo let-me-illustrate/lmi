@@ -1,6 +1,6 @@
 // Internal Revenue Code section 7702 guideline premium--unit test.
 //
-// Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -26,6 +26,7 @@
 
 #include "assert_lmi.hpp"
 #include "cso_table.hpp"
+#include "et_vector.hpp"
 #include "materially_equal.hpp"
 #include "math_functions.hpp"
 #include "ssize_lmi.hpp"
@@ -175,10 +176,6 @@ double const touchstone[100][3] =
         ,{111221.7271446342 , 112671.1356520957  , 228328.2710683905   } // 99
     };
 
-// These could be made static members of class gpt_test, but this way
-// is more convenient; see also:
-//   https://www.securecoding.cert.org/confluence/display/cplusplus/MSC22-CPP.+Do+not+define+static+private+members
-
 std::vector<double> q_m                  ;
 std::vector<double> glp_ic               ;
 std::vector<double> glp_ig               ;
@@ -204,21 +201,27 @@ class gpt_test
   public:
     static void test()
         {
-        test_invariants();
+        test_preconditions();
         test_premium_calculations();
         assay_speed();
+        test_spreadsheet_0();
+        test_spreadsheet_1();
+        test_spreadsheet_2();
         }
 
   private:
-    static void test_invariants();
+    static void test_preconditions();
     static void test_premium_calculations();
     static void assay_speed();
+    static void test_spreadsheet_0();
+    static void test_spreadsheet_1();
+    static void test_spreadsheet_2();
 
     static void initialize(int issue_age);
     static gpt_vector_parms v_parms();
     static gpt_scalar_parms s_parms();
     static gpt_cf_triad instantiate_cf();
-    static Irc7702& instantiate_old(int issue_age);
+    static Irc7702 instantiate_old(int issue_age);
     static void compare_premiums(int issue_age, double target);
     static void mete_premiums();
     static void mete_instantiate_old();
@@ -236,14 +239,16 @@ class gpt_test
 
 void gpt_test::initialize(int issue_age)
 {
-    static double const i_m_4 = i_upper_12_over_12_from_i<double>()(0.04);
-    static double const i_m_6 = i_upper_12_over_12_from_i<double>()(0.06);
+    double constexpr iglp = 0.04;
+    double constexpr igsp = 0.06;
+    static double const i12glp = i_upper_12_over_12_from_i<double>()(iglp);
+    static double const i12gsp = i_upper_12_over_12_from_i<double>()(igsp);
     q_m = sample_q(issue_age);
     int const length = lmi::ssize(q_m);
-    glp_ic               .assign(length,     i_m_4);
-    glp_ig               .assign(length,     i_m_4);
-    gsp_ic               .assign(length,     i_m_6);
-    gsp_ig               .assign(length,     i_m_6);
+    glp_ic               .assign(length,     i12glp);
+    glp_ig               .assign(length,     i12glp);
+    gsp_ic               .assign(length,     i12gsp);
+    gsp_ig               .assign(length,     i12gsp);
     prem_load_target     .assign(length,  0.03    );
     prem_load_excess     .assign(length,  0.02    );
     policy_fee_monthly   .assign(length,  5.0     );
@@ -324,7 +329,9 @@ gpt_cf_triad gpt_test::instantiate_cf()
     return gpt_cf_triad(q_m, glp_ic, glp_ig, gsp_ic, gsp_ig, v_parms());
 }
 
-void gpt_test::test_invariants()
+/// Test gpt_cf_triad::calculate_premium()'s asserted preconditions.
+
+void gpt_test::test_preconditions()
 {
     gpt_scalar_parms parms = s_parms();
     initialize(0);
@@ -332,7 +339,7 @@ void gpt_test::test_invariants()
 
     // Negative duration.
     parms.duration = -1;
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (z.calculate_premium(oe_gsp, mce_option1_for_7702, parms)
         ,std::runtime_error
         ,""
@@ -341,7 +348,7 @@ void gpt_test::test_invariants()
 
     // Duration greater than omega minus one.
     parms.duration = lmi::ssize(q_m);
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (z.calculate_premium(oe_gsp, mce_option1_for_7702, parms)
         ,std::runtime_error
         ,""
@@ -351,7 +358,7 @@ void gpt_test::test_invariants()
     // Negative target. (Identical preconditions for other scalar
     // parameters are not redundantly tested here.)
     parms.target = -0.01;
-    BOOST_TEST_THROW
+    LMI_TEST_THROW
         (z.calculate_premium(oe_gsp, mce_option1_for_7702, parms)
         ,std::runtime_error
         ,""
@@ -360,7 +367,7 @@ void gpt_test::test_invariants()
 
     // Monthly q shorter than other vector parameters.
     q_m.resize(99);
-    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
     // Monthly q equal to unity: probably a bad idea, but permitted.
@@ -370,27 +377,27 @@ void gpt_test::test_invariants()
 
     // Monthly q greater than unity.
     q_m.back() = 1.001;
-    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
     // Negative monthly q.
     q_m[0] = -0.001;
-    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
     // Premium load equal to unity.
     prem_load_target[0] = 1.0;
-    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
     // Monthly specamt load equal to unity.
     specamt_load_monthly[0] = 1.0;
-    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
     // Monthly QAB rate equal to unity.
     qab_adb_rate[0] = 1.0;
-    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
     // Negative premium loads are trapped. They are known to have been
@@ -398,23 +405,15 @@ void gpt_test::test_invariants()
     // it's not worth the trouble to validate premium calculations
     // in advance under rare and questionable circumstances.
     prem_load_excess[0] = -0.01;
-    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 }
 
-/// The obsolescent GPT class more or less requires this ugliness.
-
-Irc7702* ugliness = nullptr;
-
 /// Instantiate obsolescent GPT class.
 
-Irc7702& gpt_test::instantiate_old(int issue_age)
+Irc7702 gpt_test::instantiate_old(int issue_age)
 {
-#if defined LMI_COMO_WITH_MINGW
-    throw "Code that uses this obsolescent class segfaults with como.";
-#else // !defined LMI_COMO_WITH_MINGW
     int const length = lmi::ssize(q_m);
-    std::vector<double> const zero(length, 0.0);
     // The old class recognizes only one QAB: ADB. So that all QABs
     // can be exercised with the new class, use a linear combination
     // of all QAB rates as the ADB rate here. Copying literal values
@@ -432,46 +431,41 @@ Irc7702& gpt_test::instantiate_old(int issue_age)
         ;
     std::vector<double> adj_qab_adb_rate(length);
     assign(adj_qab_adb_rate, qab_adb_rate * adj);
-    delete ugliness;
-    ugliness =
-        (new Irc7702
-            (mce_gpt                         // a_Test7702
-            ,issue_age                       // a_IssueAge
-            ,issue_age + length              // a_EndtAge
-            ,q_m                             // a_Qc
-            ,glp_ic                          // a_GLPic
-            ,gsp_ic                          // a_GSPic
-            ,glp_ic                          // a_Ig [ignored here, in effect]
-            ,zero                            // a_IntDed
-            ,0.0                             // a_PresentBftAmt
-            ,0.0                             // a_PresentSpecAmt
-            ,0.0                             // a_LeastBftAmtEver
-            ,mce_option1_for_7702            // a_PresentDBOpt
-            ,policy_fee_annual               // a_AnnChgPol
-            ,policy_fee_monthly              // a_MlyChgPol
-            ,specamt_load_monthly            // a_MlyChgSpecAmt
-            ,1000000000.0                    // a_SpecAmtLoadLimit [in effect, no limit]
-            ,adj_qab_adb_rate                // a_MlyChgADD
-            ,1000000000.0                    // a_ADDLimit [in effect, no limit]
-            ,prem_load_target                // a_LoadTgt
-            ,prem_load_excess                // a_LoadExc
-            // Plausible low default target (overridden by compare_premiums()):
-            ,1000.0                          // a_TargetPremium
-            ,round_to<double>(2, r_upward)   // a_round_min_premium
-            ,round_to<double>(2, r_downward) // a_round_max_premium
-            ,round_to<double>(0, r_upward)   // a_round_min_specamt
-            ,round_to<double>(0, r_downward) // a_round_max_specamt
-            ,0                               // a_InforceYear
-            // Kludge to prevent Initialize7702() from calculating premiums:
-            ,1                               // a_InforceMonth
-            ,0.0                             // a_InforceGLP
-            ,0.0                             // a_InforceCumGLP
-            ,0.0                             // a_InforceGSP
-            ,0.0                             // a_InforceCumPremsPaid
-            )
+    return Irc7702
+        (mce_gpt                         // a_Test7702
+        ,issue_age                       // a_IssueAge
+        ,issue_age + length              // a_EndtAge
+        ,q_m                             // a_Qc
+        ,glp_ic                          // ic_glp
+        ,gsp_ic                          // ic_gsp
+        ,glp_ig                          // ig_glp
+        ,gsp_ig                          // ig_gsp
+        ,0.0                             // a_PresentBftAmt
+        ,0.0                             // a_PresentSpecAmt
+        ,0.0                             // a_LeastBftAmtEver
+        ,mce_option1_for_7702            // a_PresentDBOpt
+        ,policy_fee_annual               // a_AnnChgPol
+        ,policy_fee_monthly              // a_MlyChgPol
+        ,specamt_load_monthly            // a_MlyChgSpecAmt
+        ,1000000000.0                    // a_SpecAmtLoadLimit [in effect, no limit]
+        ,adj_qab_adb_rate                // a_MlyChgADD
+        ,1000000000.0                    // a_ADDLimit [in effect, no limit]
+        ,prem_load_target                // a_LoadTgt
+        ,prem_load_excess                // a_LoadExc
+        // Plausible low default target (overridden by compare_premiums()):
+        ,1000.0                          // a_TargetPremium
+        ,round_to<double>(2, r_upward)   // a_round_min_premium
+        ,round_to<double>(2, r_downward) // a_round_max_premium
+        ,round_to<double>(0, r_upward)   // a_round_min_specamt
+        ,round_to<double>(0, r_downward) // a_round_max_specamt
+        ,0                               // a_InforceYear
+        // Kludge to prevent Initialize7702() from calculating premiums:
+        ,1                               // a_InforceMonth
+        ,0.0                             // a_InforceGLP
+        ,0.0                             // a_InforceCumGLP
+        ,0.0                             // a_InforceGSP
+        ,0.0                             // a_InforceCumPremsPaid
         );
-    return *ugliness;
-#endif // !defined LMI_COMO_WITH_MINGW
 }
 
 /// Compare {GSP, GLP opt 1, GLP opt 2} for old and new GPT classes.
@@ -485,14 +479,12 @@ void gpt_test::compare_premiums(int issue_age, double target)
 
     gpt_cf_triad const z = instantiate_cf();
 
-#if !defined LMI_COMO_WITH_MINGW
     double const f3bft    = parms.f3bft   ;
     double const endt_bft = parms.endt_bft;
     // This test of the obsolescent class segfaults with como.
-    Irc7702& z_old = instantiate_old(issue_age);
+    Irc7702 z_old = instantiate_old(issue_age);
     // Set target (the other arguments don't matter here).
     z_old.Initialize7702(f3bft, endt_bft, mce_option1_for_7702, target);
-#endif // !defined LMI_COMO_WITH_MINGW
 
     int const omega = lmi::ssize(sample_q(0));
     LMI_ASSERT(lmi::ssize(qab_waiver_rate) == omega - issue_age);
@@ -502,7 +494,6 @@ void gpt_test::compare_premiums(int issue_age, double target)
         double const r0 = z.calculate_premium(oe_gsp, mce_option1_for_7702, parms);
         double const r1 = z.calculate_premium(oe_glp, mce_option1_for_7702, parms);
         double const r2 = z.calculate_premium(oe_glp, mce_option2_for_7702, parms);
-#if !defined LMI_COMO_WITH_MINGW
         double const r0_old = z_old.CalculateGSP(duration, f3bft, endt_bft, endt_bft                      );
         double const r1_old = z_old.CalculateGLP(duration, f3bft, endt_bft, endt_bft, mce_option1_for_7702);
         double const r2_old = z_old.CalculateGLP(duration, f3bft, endt_bft, endt_bft, mce_option2_for_7702);
@@ -511,7 +502,7 @@ void gpt_test::compare_premiums(int issue_age, double target)
             && materially_equal(r1, r1_old)
             && materially_equal(r2, r2_old)
             ;
-        BOOST_TEST(all_materially_equal);
+        LMI_TEST(all_materially_equal);
         if(!all_materially_equal)
             {
             std::cout
@@ -522,7 +513,6 @@ void gpt_test::compare_premiums(int issue_age, double target)
                 << std::endl
                 ;
             }
-#endif // !defined LMI_COMO_WITH_MINGW
         }
 }
 
@@ -568,11 +558,11 @@ void gpt_test::test_premium_calculations()
                 && materially_equal(r1, touchstone[x_plus_t][1])
                 && materially_equal(r2, touchstone[x_plus_t][2])
                 ;
-            BOOST_TEST(all_materially_equal);
+            LMI_TEST(all_materially_equal);
             ++count;
             }
         }
-    BOOST_TEST(5050 == count);
+    LMI_TEST(5050 == count);
 }
 
 void gpt_test::mete_premiums()
@@ -596,10 +586,10 @@ void gpt_test::mete_instantiate_old()
 
 void gpt_test::mete_premiums_old()
 {
-    static int    const duration =      0  ;
-    static double const f3bft    = 120000.0;
-    static double const endt_bft = 100000.0;
-    static Irc7702 const& z = instantiate_old(duration);
+    static int     const duration =      0  ;
+    static double  const f3bft    = 120000.0;
+    static double  const endt_bft = 100000.0;
+    static Irc7702 const z = instantiate_old(duration);
     z.CalculateGSP(duration, f3bft, endt_bft, endt_bft                      );
     z.CalculateGLP(duration, f3bft, endt_bft, endt_bft, mce_option1_for_7702);
     z.CalculateGLP(duration, f3bft, endt_bft, endt_bft, mce_option2_for_7702);
@@ -613,12 +603,263 @@ void gpt_test::assay_speed()
         << "\n  Init parms: " << TimeAnAliquot(v_parms             )
         << "\n  Triad     : " << TimeAnAliquot(instantiate_cf      )
         << "\n  Prems     : " << TimeAnAliquot(mete_premiums       )
-#if !defined LMI_COMO_WITH_MINGW
         << "\n  Triad old : " << TimeAnAliquot(mete_instantiate_old)
         << "\n  Prems old : " << TimeAnAliquot(mete_premiums_old   )
-#endif // !defined LMI_COMO_WITH_MINGW
         << std::endl
         ;
+}
+
+/// Validate GLP and GSP using spreadsheet 'validate_commfns.xls'.
+///
+/// URL:
+///   https://download.savannah.gnu.org/releases/lmi/validate_commfns.xls
+///
+/// Change spreadsheet input "EndtBft" in cell $C$6 to 1,000,000
+/// because the GPT class requires it not to exceed the spec amt.
+///
+/// Touchstone values hardcoded below are from 'gnumeric'.
+
+void gpt_test::test_spreadsheet_0()
+{
+    int const issue_age = 0;
+    // SOA table 00042 1980 CSO Ult ANB Male Unismoke
+    static std::vector<double> const q_m {sample_q(issue_age)};
+    int const length = lmi::ssize(q_m);
+
+    double constexpr ic = 0.07;
+    double constexpr ig = 0.03;
+    static double const i12c = i_upper_12_over_12_from_i<double>()(ic);
+    static double const i12g = i_upper_12_over_12_from_i<double>()(ig);
+    std::vector<double> const glp_ic(length, i12c);
+    std::vector<double> const gsp_ic(length, i12c);
+    std::vector<double> const glp_ig(length, i12g);
+    std::vector<double> const gsp_ig(length, i12g);
+
+    std::vector<double> const policy_fee_annual    (length, 0.0);
+    std::vector<double> const policy_fee_monthly   (length, 0.0);
+    std::vector<double> const specamt_load_monthly (length, 0.0);
+    std::vector<double> const qab_adb_rate         (length, 0.0);
+    std::vector<double> const prem_load_target     (length, 0.0);
+    std::vector<double> const prem_load_excess     (length, 0.0);
+
+    Irc7702 z
+        (mce_gpt                         // a_Test7702
+        ,issue_age                       // a_IssueAge
+        ,100                             // a_EndtAge
+        ,q_m                             // a_Qc
+        ,glp_ic                          // ic_glp
+        ,gsp_ic                          // ic_gsp
+        ,glp_ig                          // ig_glp
+        ,gsp_ig                          // ig_gsp
+        ,1000000.0                       // a_PresentBftAmt
+        ,1000000.0                       // a_PresentSpecAmt
+        ,1000000.0                       // a_LeastBftAmtEver
+        ,mce_option2_for_7702            // a_PresentDBOpt
+        ,policy_fee_annual               // a_AnnChgPol
+        ,policy_fee_monthly              // a_MlyChgPol
+        ,specamt_load_monthly            // a_MlyChgSpecAmt
+        ,1000000000.0                    // a_SpecAmtLoadLimit [in effect, no limit]
+        ,qab_adb_rate                    // a_MlyChgADD
+        ,1000000000.0                    // a_ADDLimit [in effect, no limit]
+        ,prem_load_target                // a_LoadTgt
+        ,prem_load_excess                // a_LoadExc
+        ,1000000.0                       // a_TargetPremium
+        ,round_to<double>(2, r_upward)   // a_round_min_premium
+        ,round_to<double>(2, r_downward) // a_round_max_premium
+        ,round_to<double>(0, r_upward)   // a_round_min_specamt
+        ,round_to<double>(0, r_downward) // a_round_max_specamt
+        ,0                               // a_InforceYear
+        ,0                               // a_InforceMonth
+        ,0.0                             // a_InforceGLP
+        ,0.0                             // a_InforceCumGLP
+        ,0.0                             // a_InforceGSP
+        ,0.0                             // a_InforceCumPremsPaid
+        );
+
+    z.Initialize7702(1000000.0, 1000000.0, mce_option2_for_7702, 1000000.0);
+    // Value from spreadsheet (GLP only because GSP always uses DBO 1):
+    LMI_TEST(materially_equal(z.glp(),  2943.454581820987187));
+
+    // Also test DBO 1 (change "DBO" in cell $C$3):
+    z.Initialize7702(1000000.0, 1000000.0, mce_option1_for_7702, 1000000.0);
+    // Values from spreadsheet:
+    LMI_TEST(materially_equal(z.glp(),  1904.493514901175558));
+    LMI_TEST(materially_equal(z.gsp(), 28315.163540363901120));
+}
+
+/// Validate GLP and GSP with loads, using spreadsheet.
+///
+/// URL:
+///   https://download.savannah.gnu.org/releases/lmi/validate_commfns.xls
+///
+/// Change spreadsheet input to match parameters below.
+///
+/// Touchstone values hardcoded below are from 'gnumeric'.
+
+void gpt_test::test_spreadsheet_1()
+{
+    int const issue_age = 0;
+    // SOA table 00042 1980 CSO Ult ANB Male Unismoke
+    static std::vector<double> const q_m {sample_q(issue_age)};
+    int const length = lmi::ssize(q_m);
+
+    double constexpr iglp = 0.04;
+    double constexpr igsp = 0.06;
+    static double const i12glp = i_upper_12_over_12_from_i<double>()(iglp);
+    static double const i12gsp = i_upper_12_over_12_from_i<double>()(igsp);
+    std::vector<double> const glp_ic(length, i12glp);
+    std::vector<double> const gsp_ic(length, i12gsp);
+    std::vector<double> const glp_ig(length, i12glp);
+    std::vector<double> const gsp_ig(length, i12gsp);
+
+    std::vector<double> const policy_fee_annual    (length, 0.0);
+    std::vector<double> const policy_fee_monthly   (length, 0.0);
+    std::vector<double> const specamt_load_monthly (length, 0.0);
+    std::vector<double> const qab_adb_rate         (length, 0.0);
+    std::vector<double> const prem_load_target     (length, 0.03);
+    std::vector<double> const prem_load_excess     (length, 0.02);
+
+    Irc7702 z
+        (mce_gpt                         // a_Test7702
+        ,issue_age                       // a_IssueAge
+        ,100                             // a_EndtAge
+        ,q_m                             // a_Qc
+        ,glp_ic                          // ic_glp
+        ,gsp_ic                          // ic_gsp
+        ,glp_ig                          // ig_glp
+        ,gsp_ig                          // ig_gsp
+        ,1000000.0                       // a_PresentBftAmt
+        ,1000000.0                       // a_PresentSpecAmt
+        ,1000000.0                       // a_LeastBftAmtEver
+        ,mce_option1_for_7702            // a_PresentDBOpt
+        ,policy_fee_annual               // a_AnnChgPol
+        ,policy_fee_monthly              // a_MlyChgPol
+        ,specamt_load_monthly            // a_MlyChgSpecAmt
+        ,1000000000.0                    // a_SpecAmtLoadLimit [in effect, no limit]
+        ,qab_adb_rate                    // a_MlyChgADD
+        ,1000000000.0                    // a_ADDLimit [in effect, no limit]
+        ,prem_load_target                // a_LoadTgt
+        ,prem_load_excess                // a_LoadExc
+        ,1000000.0                       // a_TargetPremium
+        ,round_to<double>(2, r_upward)   // a_round_min_premium
+        ,round_to<double>(2, r_downward) // a_round_max_premium
+        ,round_to<double>(0, r_upward)   // a_round_min_specamt
+        ,round_to<double>(0, r_downward) // a_round_max_specamt
+        ,0                               // a_InforceYear
+        ,0                               // a_InforceMonth
+        ,0.0                             // a_InforceGLP
+        ,0.0                             // a_InforceCumGLP
+        ,0.0                             // a_InforceGSP
+        ,0.0                             // a_InforceCumPremsPaid
+        );
+
+    // Premiums are entirely below target
+
+    z.Initialize7702(1000000.0, 1000000.0, mce_option2_for_7702, 1000000.0);
+    LMI_TEST(materially_equal(z.glp(), 11955.413819459399747));
+
+    z.Initialize7702(1000000.0, 1000000.0, mce_option1_for_7702, 1000000.0);
+    LMI_TEST(materially_equal(z.glp(),  3764.225024952573222));
+    LMI_TEST(materially_equal(z.gsp(), 39318.938479289383395));
+
+    // Premiums are entirely above target
+
+    z.Initialize7702(1000000.0, 1000000.0, mce_option2_for_7702, 0.0);
+    LMI_TEST(materially_equal(z.glp(), 11833.419800893485444));
+
+    z.Initialize7702(1000000.0, 1000000.0, mce_option1_for_7702, 0.0);
+    LMI_TEST(materially_equal(z.glp(),  3725.814565514281639));
+    LMI_TEST(materially_equal(z.gsp(), 38917.724821337447793));
+
+    // Premiums are partly below target, and partly above
+    //
+    // The difference between the preceding and following sets of
+    // three premiums is a constant 10.204081632653, representing the
+    // value of the load difference on the first (constant) $1000.
+
+    z.Initialize7702(1000000.0, 1000000.0, mce_option2_for_7702, 1000.0);
+    LMI_TEST(materially_equal(z.glp(), 11843.623882526138914));
+
+    z.Initialize7702(1000000.0, 1000000.0, mce_option1_for_7702, 1000.0);
+    LMI_TEST(materially_equal(z.glp(),  3736.018647146934200));
+    LMI_TEST(materially_equal(z.gsp(), 38927.928902970103081));
+}
+
+/// Validate GLP and GSP using spreadsheet--exercise all parameters.
+///
+/// URL:
+///   https://download.savannah.gnu.org/releases/lmi/validate_commfns.xls
+///
+/// Change spreadsheet input to match parameters below. As above,
+/// loads and charges are initialized with decimal-power multiples of
+/// distinct primes, to make it easier to track down any discrepancy.
+/// No QABs are used because the spreadsheet doesn't support any.
+///
+/// Touchstone values hardcoded below are from 'gnumeric'.
+
+void gpt_test::test_spreadsheet_2()
+{
+    int const issue_age = 0;
+    // SOA table 00042 1980 CSO Ult ANB Male Unismoke
+    static std::vector<double> const q_m {sample_q(issue_age)};
+    int const length = lmi::ssize(q_m);
+
+    double constexpr iglp = 0.02;
+    double constexpr igsp = 0.04;
+    static double const i12glp = i_upper_12_over_12_from_i<double>()(iglp);
+    static double const i12gsp = i_upper_12_over_12_from_i<double>()(igsp);
+    std::vector<double> const glp_ic(length, i12glp);
+    std::vector<double> const gsp_ic(length, i12gsp);
+    std::vector<double> const glp_ig(length, i12glp);
+    std::vector<double> const gsp_ig(length, i12gsp);
+
+    std::vector<double> const policy_fee_annual    (length, 37.0);
+    std::vector<double> const policy_fee_monthly   (length,  5.0);
+    std::vector<double> const specamt_load_monthly (length,  0.000007);
+    std::vector<double> const qab_adb_rate         (length,  0.0);
+    std::vector<double> const prem_load_target     (length,  0.03);
+    std::vector<double> const prem_load_excess     (length,  0.02);
+
+    Irc7702 z
+        (mce_gpt                         // a_Test7702
+        ,issue_age                       // a_IssueAge
+        ,100                             // a_EndtAge
+        ,q_m                             // a_Qc
+        ,glp_ic                          // ic_glp
+        ,gsp_ic                          // ic_gsp
+        ,glp_ig                          // ig_glp
+        ,gsp_ig                          // ig_gsp
+        ,1000000.0                       // a_PresentBftAmt
+        ,1000000.0                       // a_PresentSpecAmt
+        ,1000000.0                       // a_LeastBftAmtEver
+        ,mce_option1_for_7702            // a_PresentDBOpt
+        ,policy_fee_annual               // a_AnnChgPol
+        ,policy_fee_monthly              // a_MlyChgPol
+        ,specamt_load_monthly            // a_MlyChgSpecAmt
+        ,1000000000.0                    // a_SpecAmtLoadLimit [in effect, no limit]
+        ,qab_adb_rate                    // a_MlyChgADD
+        ,1000000000.0                    // a_ADDLimit [in effect, no limit]
+        ,prem_load_target                // a_LoadTgt
+        ,prem_load_excess                // a_LoadExc
+        ,1000000.0                       // a_TargetPremium
+        ,round_to<double>(2, r_upward)   // a_round_min_premium
+        ,round_to<double>(2, r_downward) // a_round_max_premium
+        ,round_to<double>(0, r_upward)   // a_round_min_specamt
+        ,round_to<double>(0, r_downward) // a_round_max_specamt
+        ,0                               // a_InforceYear
+        ,0                               // a_InforceMonth
+        ,0.0                             // a_InforceGLP
+        ,0.0                             // a_InforceCumGLP
+        ,0.0                             // a_InforceGSP
+        ,0.0                             // a_InforceCumPremsPaid
+        );
+
+    z.Initialize7702(1000000.0, 1000000.0, mce_option2_for_7702, 1000.0);
+    LMI_TEST(materially_equal(z.glp(), 35393.654429660360620));
+
+    z.Initialize7702(1000000.0, 1000000.0, mce_option1_for_7702, 1000.0);
+    LMI_TEST(materially_equal(z.glp(),  7340.887403839152284));
+    LMI_TEST(materially_equal(z.gsp(), 92945.378758702529012));
 }
 
 int test_main(int, char*[])

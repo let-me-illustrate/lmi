@@ -1,6 +1,6 @@
 // Expression templates for arithmetic.
 //
-// Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -137,23 +137,23 @@ void demo0()
     // We can use it to add just one pair if we like.
     double r;
     std::transform(u, 1 + u, v, &r, std::plus<double>());
-    BOOST_TEST(materially_equal(6.8, r));
+    LMI_TEST(materially_equal(6.8, r));
 
     // Here's an equivalent using our new code.
     r = *binary_expression<double const*,double const*,plus>(u, v);
-    BOOST_TEST(materially_equal(6.8, r));
+    LMI_TEST(materially_equal(6.8, r));
 
     // This type embodies everything we need to know to add pairs of
     // values during iteration.
     typedef binary_expression<double const*,double const*,plus> Add;
-    BOOST_TEST(materially_equal(6.8, *Add(u, v)));
+    LMI_TEST(materially_equal(6.8, *Add(u, v)));
 
     // Since 'Add' is a class type, we can construct an instance and
     // exercise its operator*() and operator++() separately.
     Add a(u, v);
-    BOOST_TEST(materially_equal(6.8, *a));
+    LMI_TEST(materially_equal(6.8, *a));
     ++a;
-    BOOST_TEST(materially_equal(11.2, *a));
+    LMI_TEST(materially_equal(11.2, *a));
 }
 
 // As this example shows, we have something equivalent to std::plus
@@ -172,7 +172,7 @@ class simple_array0
     simple_array0(int n, double d = 0.0)
         :length_ {n}
         {
-        data_ = new double[length_];
+        data_ = ::new double[length_];
         for(int j = 0; j < length_; ++j) data_[j] = d;
         }
 
@@ -198,7 +198,7 @@ class simple_array0
         {
         delete[] data_;
         length_ = new_size;
-        data_ = new double[length_];
+        data_ = ::new double[length_];
         for(int j = 0; j < length_; ++j) data_[j] = j;
         }
 
@@ -237,16 +237,16 @@ void demo1()
 
     w = u + v;
 
-    BOOST_TEST(materially_equal(w[0],  0.0));
-    BOOST_TEST(materially_equal(w[1],  4.6));
-    BOOST_TEST(materially_equal(w[2],  9.2));
-    BOOST_TEST(materially_equal(w[3], 13.8));
-    BOOST_TEST(materially_equal(w[4], 18.4));
-    BOOST_TEST(materially_equal(w[5], 23.0));
-    BOOST_TEST(materially_equal(w[6], 27.6));
-    BOOST_TEST(materially_equal(w[7], 32.2));
-    BOOST_TEST(materially_equal(w[8], 36.8));
-    BOOST_TEST(materially_equal(w[9], 41.4));
+    LMI_TEST(materially_equal(w[0],  0.0));
+    LMI_TEST(materially_equal(w[1],  4.6));
+    LMI_TEST(materially_equal(w[2],  9.2));
+    LMI_TEST(materially_equal(w[3], 13.8));
+    LMI_TEST(materially_equal(w[4], 18.4));
+    LMI_TEST(materially_equal(w[5], 23.0));
+    LMI_TEST(materially_equal(w[6], 27.6));
+    LMI_TEST(materially_equal(w[7], 32.2));
+    LMI_TEST(materially_equal(w[8], 36.8));
+    LMI_TEST(materially_equal(w[9], 41.4));
 }
 
 // Obviously class simple_array0 is very limited: for instance, this:
@@ -278,7 +278,7 @@ namespace
     // while lower values may yield measurements that are less than
     // a one-microsecond timer tick.
 
-    int const n_iter = 100;
+    int const n_iter = 1000;
 
     simple_array0 g_u(g_array_length);
     simple_array0 g_v(g_array_length);
@@ -337,11 +337,11 @@ void time_one_array_length(int length)
     int const n = -1 + g_array_length;
     int const max_seconds = 1;
     double const c  = TimeAnAliquot(mete_c , max_seconds).unit_time();
-    BOOST_TEST_EQUAL(g_w   [n], 2.0 * n);
+    LMI_TEST_EQUAL(g_w   [n], 2.0 * n);
     double const et = TimeAnAliquot(mete_et, max_seconds).unit_time();
-    BOOST_TEST_EQUAL(g_w   [n], 2.0 * n);
+    LMI_TEST_EQUAL(g_w   [n], 2.0 * n);
     double const va = TimeAnAliquot(mete_va, max_seconds).unit_time();
-    BOOST_TEST_EQUAL(g_va_w[n], 2.0 * n);
+    LMI_TEST_EQUAL(g_va_w[n], 2.0 * n);
     std::cout
         << std::setw( 7) << g_array_length
         << std::setw(15) << std::setprecision(3) << std::scientific << c

@@ -1,6 +1,6 @@
 // Instruct the operating system to execute a command.
 //
-// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -30,7 +30,7 @@
 
 typedef void (*system_command_fp_type)(std::string const&);
 
-bool LMI_SO system_command_initialize(system_command_fp_type);
+LMI_SO bool system_command_initialize(system_command_fp_type);
 
 /// Wrapper for std::system() that throws on failure.
 ///
@@ -66,6 +66,6 @@ bool LMI_SO system_command_initialize(system_command_fp_type);
 /// that platform: it just makes it do what a posix platform would do
 /// without such complicated workarounds.
 
-void LMI_SO system_command(std::string const& command_line);
+LMI_SO void system_command(std::string const& command_line);
 
 #endif // system_command_hpp

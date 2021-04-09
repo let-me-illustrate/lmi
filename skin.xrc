@@ -5,7 +5,7 @@
 <!--
     Let me illustrate...: wxWindows xml input-notebook resources.
 
-    Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+    Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -20,7 +20,7 @@
     along with this program; if not, write to the Free Software Foundation,
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 
-    http://savannah.nongnu.org/projects/lmi
+    https://savannah.nongnu.org/projects/lmi
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -390,7 +390,7 @@
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
                         <growablecols>0</growablecols>
-                        <growablerows>0,1,2,3,4,5,6,7,8,9,10</growablerows>
+                        <growablerows>0,1,2,3,4,5,6,7</growablerows>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
                             <object class="wxFlexGridSizer">
@@ -499,65 +499,6 @@
                                         <content>
                                             <item>83GAM</item>
                                         </content>
-                                    </object>
-                                </object>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
-                            <object class="wxCheckBox" name="UseExperienceRating">
-                                <help>Use experience rating (composite only)--available only with both partial mortality and month-by-month</help>
-                                <label>Experience rating</label>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
-                            <object class="wxFlexGridSizer">
-                                <rows>1</rows>
-                                <growablecols>1</growablecols>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                    <object class="wxStaticText">
-                                        <label>Experience-rating initial k factor </label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW</flag>
-                                    <object class="wxTextCtrl" name="ExperienceRatingInitialKFactor">
-                                        <help>Initial k factor for experience rating</help>
-                                        <size>10,-1</size>
-                                    </object>
-                                </object>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
-                            <object class="wxFlexGridSizer">
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxALL</flag>
-                                    <object class="wxCheckBox" name="OverrideExperienceReserveRate">
-                                        <help>Override experience-rating reserve rate</help>
-                                        <label>Override experience-rating reserve rate</label>
-                                    </object>
-                                </object>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
-                            <object class="wxFlexGridSizer">
-                                <rows>1</rows>
-                                <growablecols>1</growablecols>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                    <object class="wxStaticText">
-                                        <label>Experience-rating reserve rate </label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxALL</flag>
-                                    <object class="wxTextCtrl" name="ExperienceReserveRate">
-                                        <help>Experience-rating reserve rate</help>
-                                        <size>10,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -1495,7 +1436,7 @@ here, but it looks weird if we don't make this look like its siblings.
                             <object class="wxFlexGridSizer">
                                 <cols>2</cols>
                                 <growablecols>1</growablecols>
-                                <growablerows>0,1,2,3,4,5,6,7,8,9,10</growablerows>
+                                <growablerows>0,1,2,3,4,5,6,7,8</growablerows>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
@@ -1627,36 +1568,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="InforceHoneymoonValue">
                                         <help>Inforce honeymoon value</help>
-                                        <size>80,-1</size>
-                                        <value>0</value>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <border>4</border>
-                                    <object class="wxStaticText">
-                                        <label>Case experience reserve</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxTextCtrl" name="InforceNetExperienceReserve">
-                                        <help>Inforce case net experience reserve</help>
-                                        <size>80,-1</size>
-                                        <value>0</value>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <border>4</border>
-                                    <object class="wxStaticText">
-                                        <label>Case YTD net COI charges</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxTextCtrl" name="InforceYtdNetCoiCharge">
-                                        <help>Inforce case year-to-date net COI charges</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -2008,7 +1919,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveBeginYear">
                                                         <help>Solve beginning duration</help>
-                                                        <size>20,-1</size>
                                                         <style>wxSP_ARROW_KEYS</style>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -2024,7 +1934,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveBeginAge">
                                                         <help>Solve beginning age</help>
-                                                        <size>20,-1</size>
                                                         <style>wxSP_ARROW_KEYS</style>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -2069,7 +1978,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveEndYear">
                                                         <help>Solve ending duration</help>
-                                                        <size>20,-1</size>
                                                         <style>wxSP_ARROW_KEYS</style>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -2085,7 +1993,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveEndAge">
                                                         <help>Solve ending age</help>
-                                                        <size>20,-1</size>
                                                         <style>wxSP_ARROW_KEYS</style>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -2130,7 +2037,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveTargetYear">
                                                         <help>Duration to achieve target surrender value</help>
-                                                        <size>20,-1</size>
                                                         <style>wxSP_ARROW_KEYS</style>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -2146,7 +2052,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveTargetAge">
                                                         <help>Attained age to achieve target surrender value</help>
-                                                        <size>20,-1</size>
                                                         <style>wxSP_ARROW_KEYS</style>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -2629,6 +2534,8 @@ the other is perforce ignored.
                 <orient>wxVERTICAL</orient>
                 <label>Funds</label>
                 <object class="sizeritem">
+                    <flag>wxGROW|wxALL</flag>
+                    <border>2</border>
                     <object class="wxRadioBox" name="FundChoiceType">
                         <help>Fund allocation: for 100% general account, pick "Choose funds"; for 100% separate account, pick "Average fund"</help>
                         <style>wxRA_SPECIFY_COLS</style>
@@ -2640,12 +2547,13 @@ the other is perforce ignored.
                     </object>
                 </object>
                 <object class="sizeritem">
+                    <flag>wxGROW|wxALL</flag>
+                    <border>2</border>
                     <object class="wxFlexGridSizer">
                         <rows>1</rows>
                         <growablecols>1</growablecols>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                            <border>4</border>
                             <object class="wxStaticText">
                                 <label>fee</label>
                             </object>

@@ -1,6 +1,6 @@
 // Life insurance illustrations: SOA mortality table utility.
 //
-// Copyright (C) 2003, 2004, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -116,7 +116,7 @@ void list_tables(fs::path const& database_filename)
 /// If 'path_to_merge' names a file, then merge that file. If it names
 /// a directory, then merge all '*.rates' files in that directory.
 /// Rationale:
-///   http://lists.nongnu.org/archive/html/lmi/2016-11/msg00025.html
+///   https://lists.nongnu.org/archive/html/lmi/2016-11/msg00025.html
 
 void merge
     (fs::path const& database_filename
@@ -126,11 +126,11 @@ void merge
     std::unique_ptr<database> table_file;
     if(database::exists(database_filename))
         {
-        table_file.reset(new database(database_filename));
+        table_file.reset(::new database(database_filename));
         }
     else
         {
-        table_file.reset(new database);
+        table_file.reset(::new database);
         }
 
     int count = 0;

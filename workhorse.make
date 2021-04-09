@@ -1,6 +1,6 @@
 # Main lmi makefile, invoked by 'GNUmakefile'.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -153,10 +153,13 @@ else ifeq (4.9.2,$(gnu_cpp_version))
 else ifeq (6.3.0,$(gnu_cpp_version))
 else ifeq (7.2.0,$(gnu_cpp_version))
 else ifeq (7.3.0,$(gnu_cpp_version))
+else ifeq (8,$(gnu_cpp_version))
 else ifeq (8.1.0,$(gnu_cpp_version))
 else ifeq (8.2.0,$(gnu_cpp_version))
 else ifeq (8.3.0,$(gnu_cpp_version))
+else ifeq (9,$(gnu_cpp_version))
 else ifeq (9.3.0,$(gnu_cpp_version))
+else ifeq (10,$(gnu_cpp_version))
 else ifeq (10.0,$(gnu_cpp_version))
 else
   $(warning Untested $(GNU_CPP) version '$(gnu_cpp_version)')
@@ -169,14 +172,32 @@ else ifeq (4.9.2,$(gnu_cxx_version))
 else ifeq (6.3.0,$(gnu_cxx_version))
 else ifeq (7.2.0,$(gnu_cxx_version))
 else ifeq (7.3.0,$(gnu_cxx_version))
+else ifeq (8,$(gnu_cxx_version))
 else ifeq (8.1.0,$(gnu_cxx_version))
 else ifeq (8.2.0,$(gnu_cxx_version))
 else ifeq (8.3.0,$(gnu_cxx_version))
+else ifeq (9,$(gnu_cxx_version))
 else ifeq (9.3.0,$(gnu_cxx_version))
+else ifeq (10,$(gnu_cxx_version))
 else ifeq (10.0,$(gnu_cxx_version))
 else
   $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
 endif
+
+################################################################################
+
+# xml library settings.
+
+# Flags for all other xml libraries are provided by *-config scripts,
+# but '-lexslt' is a special case--see:
+#   https://mail.gnome.org/archives/xslt/2001-October/msg00133.html
+#   https://lists.nongnu.org/archive/html/lmi/2020-10/msg00066.html
+
+xml_libraries := \
+  $(shell xmlwrapp-config --libs) \
+  -lexslt \
+  $(shell xslt-config --libs) \
+  $(shell xml2-config --libs) \
 
 ################################################################################
 
@@ -292,14 +313,13 @@ wx_config_check:
 #   /opt/lmi/third_party/
 # while properly autotoolized libraries are installed in
 # $(locallibdir) and $(localbindir); see:
-#   http://lists.gnu.org/archive/html/lmi/2006-10/msg00046.html
+#   https://lists.nongnu.org/archive/html/lmi/2006-10/msg00046.html
 # for some discussion.
 
 lmi_include_directories := \
   $(srcdir) \
   $(srcdir)/tools/pete-2.1.1 \
   $(overriding_include_directories) \
-  /opt/lmi/third_party/src \
 
 sys_include_directories := \
   $(compiler_include_directory) \
@@ -312,7 +332,6 @@ all_source_directories := \
   $(srcdir) \
   /opt/lmi/third_party/src/boost/libs/filesystem/src \
   /opt/lmi/third_party/src/boost/libs/regex/src \
-  /opt/lmi/third_party/src/boost/libs/system/src \
   /opt/lmi/third_party/src/cgicc \
 
 vpath lib%.a          $(CURDIR)
@@ -373,10 +392,10 @@ tutelary_flag :=
 # The default '-fno-rounding-math' means something like
 #   #pragma STDC FENV ACCESS OFF
 # which causes harm while bringing no countervailing benefit--see:
-#   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
+#   https://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
 
 c_standard   := -fno-ms-extensions -frounding-math -std=c99
-cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
+cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
 
 # Specify $(gcc_version_specific_warnings) last, in order to override
 # other options.
@@ -398,8 +417,8 @@ else ifeq (3.4.5,$(gcc_version))
   cxx_standard += -posix
 else ifneq (,$(filter $(gcc_version), 4.9.1 4.9.2))
   # See:
-  #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00028.html
-  #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
+  #   https://lists.nongnu.org/archive/html/lmi/2015-12/msg00028.html
+  #   https://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
   gcc_version_specific_warnings := \
     -Wno-conversion \
     -Wno-unused-local-typedefs \
@@ -415,20 +434,39 @@ else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
   gcc_version_specific_warnings := \
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
-else ifneq (,$(filter $(gcc_version), 8.1.0 8.2.0 8.3.0 9.3.0 10.0))
+else ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0 9 9.3.0))
   gcc_version_specific_warnings := \
 
   ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
 # See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00026.html
+#   https://lists.nongnu.org/archive/html/lmi/2020-12/msg00000.html
+#   https://lists.nongnu.org/archive/html/lmi/2020-12/msg00002.html
     tutelary_flag := -fomit-frame-pointer
   endif
 
-  ifneq (,$(filter $(gcc_version), 10.0))
-    gcc_cxx_warnings += -Wredundant-tags -Wvolatile
+  cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
+else ifneq (,$(filter $(gcc_version), 10 10.0))
+  gcc_version_specific_warnings := \
+
+  ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
+# See:
+#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00026.html
+#   https://lists.nongnu.org/archive/html/lmi/2020-12/msg00000.html
+#   https://lists.nongnu.org/archive/html/lmi/2020-12/msg00002.html
+#   https://lists.nongnu.org/archive/html/lmi/2021-03/msg00000.html
+#   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99234
+# Fixed in gcc-10.2.1, but this makefile doesn't detect the last
+# component of major.minor.patchlevel reliably.
+    tutelary_flag := -fomit-frame-pointer
+    ifneq (,$(filter $(gcc_version), 10 10.2.1))
+      tutelary_flag := -fno-omit-frame-pointer
+    endif
   endif
 
-  cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
+  gcc_cxx_warnings += -Wredundant-tags -Wvolatile
+
+  cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
 endif
 
 treat_warnings_as_errors := -pedantic-errors -Werror
@@ -458,7 +496,6 @@ gcc_common_warnings := \
   -Wformat-signedness \
   -Wformat-y2k \
   -Wimport \
-  -Winit-self \
   -Winvalid-pch \
   -Wlogical-op \
   -Wmissing-include-dirs \
@@ -477,7 +514,6 @@ gcc_common_warnings := \
   -Wunreachable-code \
   -Wunused-macros \
   -Wvector-operation-performance \
-  -Wwrite-strings \
   -Wno-parentheses \
 
 # Warnings that are not generally useful.
@@ -495,6 +531,7 @@ gcc_c_warnings := \
   $(gcc_common_warnings) \
   -Wbad-function-cast \
   -Wc++-compat \
+  -Winit-self \
   -Wjump-misses-init \
   -Wmissing-prototypes \
   -Wnested-externs \
@@ -502,6 +539,7 @@ gcc_c_warnings := \
   -Wstrict-prototypes \
   -Wtraditional-conversion \
   -Wunsuffixed-float-constants \
+  -Wwrite-strings \
 
 gcc_cxx_warnings := \
   $(cxx_standard) \
@@ -523,7 +561,6 @@ gcc_cxx_warnings := \
   -Woverloaded-virtual \
   -Wplacement-new=2 \
   -Wpmf-conversions \
-  -Winvalid-pch \
   -Wregister \
   -Wreorder \
   -Wstrict-null-sentinel \
@@ -553,9 +590,6 @@ gcc_common_extra_warnings := \
 bourn_cast_test.o: gcc_common_extra_warnings += \
   -Wno-double-promotion \
 
-currency_test.o: gcc_common_extra_warnings += \
-  -Wno-useless-cast \
-
 # Some boost-1.33.1 libraries are incompatible with many warnings.
 
 $(boost_filesystem_objects): gcc_common_extra_warnings += \
@@ -563,6 +597,7 @@ $(boost_filesystem_objects): gcc_common_extra_warnings += \
   -Wno-old-style-cast \
   -Wno-unused-macros \
   -Wno-unused-parameter \
+  -Wno-useless-cast \
   -Wno-zero-as-null-pointer-constant \
 
 $(boost_regex_objects): gcc_common_extra_warnings += \
@@ -574,6 +609,7 @@ $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-shadow \
   -Wno-switch-enum \
   -Wno-unused-macros \
+  -Wno-unused-result \
   -Wno-useless-cast \
   -Wno-zero-as-null-pointer-constant \
 
@@ -618,12 +654,10 @@ $(xmlwrapp_objects): gcc_common_extra_warnings += \
 # SOMEDAY !! Address some of these '-Wconversion' issues.
 
 wno_conv_objects := \
-  currency_test.o \
   rate_table.o \
   round_glibc.o \
 
 $(wno_conv_objects): gcc_common_extra_warnings += -Wno-conversion -Wfloat-conversion
-currency_test.o: gcc_common_extra_warnings += -Wno-float-conversion
 
 wno_sign_conv_objects := \
   $(boost_dependent_objects) \
@@ -651,22 +685,6 @@ CXX_WARNINGS = \
   $(gcc_cxx_warnings) \
   $(gcc_common_extra_warnings) \
   $(gcc_version_specific_warnings) \
-
-################################################################################
-
-# Flags for tuning gcc.
-
-# As this is written in 2012, lmi is often built on machines with less
-# RAM per core than gcc wants. Experiments show that these flags cut
-# gcc's RAM appetite by fifty percent, in return for a ten-percent
-# speed penalty that can be overcome by increasing parallelism. There
-# seems to be no need for them with gcc-4.x, which uses less RAM.
-
-ifeq (gcc,$(LMI_COMPILER))
-  ifeq (3.4.5,$(gcc_version))
-    ggc_flags := --param ggc-min-expand=25 --param ggc-min-heapsize=32768
-  endif
-endif
 
 ################################################################################
 
@@ -758,8 +776,7 @@ $(product_file_sources): tutelary_flag += $(product_file_flags)
 
 REQUIRED_LIBS := \
   $(platform_boost_libraries) \
-  $(platform_xmlwrapp_libraries) \
-  $(platform_gnome_xml_libraries) \
+  $(xml_libraries) \
 
 wx_ldflags = \
   $(wx_library_paths) $(wx_libraries) \
@@ -772,9 +789,9 @@ wx_pdfdoc_ldflags := \
 
 # Flags.
 
-# Define FLAGS variables recursively for greater flexibility: e.g., so
-# that they reflect downstream conditional changes to the variables
-# they're composed from.
+# Define uppercase FLAGS recursively for greater flexibility: e.g., so
+# that they reflect downstream conditional changes to the lowercase
+# (and often immediately-expanded) variables they're composed from.
 
 debug_flag := -ggdb
 
@@ -786,53 +803,37 @@ ifeq (3.4.2,$(gcc_version))
   gcc_version_specific_warnings := -Wno-uninitialized
 endif
 
-pch_header := "<pchfile.hpp>"
-$(wx_dependent_objects): pch_header := "<pchfile_wx.hpp>"
+# 'c_l_flags' are to be used in both compiler and linker commands.
+# The gprof '-pg' flag is one example. Another is '-fPIC', which
+# pc-linux-gnu requires for '-shared':
+#   https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html#DOCF1
+# Yet another is 'debug_flag'.
 
+c_l_flags := $(debug_flag) $(gprof_flag)
 
-all:
+ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
+  c_l_flags += -fPIC
+endif
 
-ifneq (,$(USE_PCH))
+# As this is written in 2012, lmi is often built on machines with less
+# RAM per core than gcc wants. Experiments show that these flags cut
+# gcc's RAM appetite by fifty percent, in return for a ten-percent
+# speed penalty that can be overcome by increasing parallelism. There
+# seems to be no need for them with gcc-4.x, which uses less RAM.
 
-.PHONY: pch
-pch: pchfile.hpp.gch pchfile_wx.hpp.gch
-
-%.hpp.gch: %.hpp
-	$(CXX) -x c++-header -c $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $< -o$@
-
-# Files are deemed to depend on wx iff they contain 'include *<wx/'.
-# This heuristic isn't foolproof because wx headers might be included
-# indirectly. Include an innocuous header like <wx/version.h> in files
-# for which it fails.
-
-pch_using_objects := \
-  $(addsuffix .o,\
-    $(basename \
-      $(notdir \
-        $(shell $(GREP) \
-          --files-with-matches \
-          'include "pchfile' \
-          $(src_dir)/*.?pp \
-        ) \
-      ) \
-    ) \
-  )
-
-$(pch_using_objects): pch
-
-actually_used_pch_flags := -DLMI_COMPILER_USES_PCH
-
-endif # USE_PCH
+ifeq (gcc,$(LMI_COMPILER))
+  ifeq (3.4.5,$(gcc_version))
+    ggc_flags := --param ggc-min-expand=25 --param ggc-min-heapsize=32768
+  endif
+endif
 
 CFLAGS = \
-  $(ggc_flags) $(debug_flag) $(optimization_flag) $(gprof_flag) \
+  $(ggc_flags) $(optimization_flag) $(c_l_flags) \
 
 CXXFLAGS = \
-  $(ggc_flags) $(debug_flag) $(optimization_flag) $(gprof_flag) \
+  $(ggc_flags) $(optimization_flag) $(c_l_flags) \
 
-LDFLAGS = \
-  $(gprof_flag) \
-  -Wl,-Map,$@.map \
+LDFLAGS = $(c_l_flags) -Wl,-Map,$@.map \
 
 # Explicitly disable the infelicitous auto-import default. See:
 #   http://article.gmane.org/gmane.comp.gnu.mingw.user/19758
@@ -844,7 +845,9 @@ ifeq (3.4.5,$(gcc_version))
 endif
 
 ifneq (,$(USE_SO_ATTRIBUTES))
-  LDFLAGS += -Wl,--disable-auto-import -static-libstdc++
+  ifeq (mingw32,$(findstring mingw32,$(LMI_TRIPLET)))
+    LDFLAGS += -Wl,--disable-auto-import -static-libstdc++
+  endif
   actually_used_lmi_so_attributes = -DLMI_USE_SO_ATTRIBUTES $(lmi_so_attributes)
 endif
 
@@ -874,7 +877,6 @@ REQUIRED_CPPFLAGS = \
   -DBOOST_NO_STD_ALLOCATOR \
   -DBOOST_STRICT_CONFIG \
   -DBOOST_STATIC_ASSERT_HPP \
-  $(actually_used_pch_flags) \
 
 REQUIRED_CFLAGS = \
   $(C_WARNINGS) \
@@ -885,11 +887,6 @@ REQUIRED_CXXFLAGS = \
 
 REQUIRED_ARFLAGS = \
   -rus
-
-# Boost filesystem library #includes additional file. Furthermore, there's
-# a warning while compiling it.
-$(boost_filesystem_objects): REQUIRED_CPPFLAGS += -I/opt/lmi/third_party/src/boost
-$(boost_filesystem_objects): REQUIRED_CXXFLAGS += -Wno-error
 
 # Prefer to invoke GNU 'ld' through the compiler frontends 'gcc' and
 # 'g++' because that takes care of linking the required libraries for
@@ -936,6 +933,7 @@ REQUIRED_LDFLAGS = \
   $(addprefix -L , $(all_library_directories)) \
   $(EXTRA_LDFLAGS) \
   $(REQUIRED_LIBS) \
+  $(EXTRA_LIBS) \
 
 # The '--use-temp-file' windres option seems to be often helpful and
 # never harmful.
@@ -1116,12 +1114,13 @@ shared_data_files = \
   qx_ins.dat \
   qx_ins.ndx \
   sample.dat \
-  sample.database \
-  sample.funds \
+  sample*.database \
+  sample*.funds \
+  sample*.lingo \
   sample.ndx \
-  sample.policy \
-  sample.rounding \
-  sample.strata \
+  sample*.policy \
+  sample*.rounding \
+  sample*.strata \
 
 .PHONY: archive_shared_data_files
 archive_shared_data_files:
@@ -1228,7 +1227,7 @@ extra_fardel_checksummed_files = \
 
 fardel_checksummed_files = \
   $(extra_fardel_checksummed_files) \
-  *.dat *.database *.funds *.ndx *.policy *.rounding *.strata *.xst \
+  *.dat *.database *.funds *.lingo *.ndx *.policy *.rounding *.strata *.xst \
   expiry \
   lmi_md5sum$(EXEEXT) \
 
@@ -1370,6 +1369,11 @@ cli_selftest:
 	@$(PERFORM) ./lmi_cli_shared$(EXEEXT) $(self_test_options) > /dev/null
 	@$(PERFORM) ./lmi_cli_shared$(EXEEXT) $(self_test_options)
 
+.PHONY: cli_timing
+cli_timing: lmi_cli_shared$(EXEEXT)
+	@$(PERFORM) ./lmi_cli_shared$(EXEEXT) $(self_test_options) \
+	  >$(srcdir)/Speed_$(LMI_COMPILER)_$(LMI_TRIPLET)
+
 cli_test-sample.ill: special_emission :=
 cli_test-sample.cns: special_emission := emit_composite_only
 
@@ -1455,12 +1459,15 @@ test_result_suffixes := test test0 test1 monthly_trace.* mec.tsv mec.xml gpt.tsv
 # names to accumulate history in $(test_dir), which permits comparison
 # across several versions. An undatestamped copy of the md5sums is
 # made for storage in a version-control system (which naturally keeps
-# historical versions in its own way).
+# historical versions in its own way). An undatestamped copy of the
+# analysis, stripped of descriptive text and sorted in descending
+# order, is saved as 'regressions.tsv'.
 
-system_test_analysis := $(test_dir)/analysis-$(yyyymmddhhmm)
-system_test_diffs    := $(test_dir)/diffs-$(yyyymmddhhmm)
-system_test_md5sums  := $(test_dir)/md5sums-$(yyyymmddhhmm)
-system_test_md5sums2 := $(test_dir)/md5sums
+system_test_analysis    := $(test_dir)/analysis-$(yyyymmddhhmm)
+system_test_regressions := $(test_dir)/regressions.tsv
+system_test_diffs       := $(test_dir)/diffs-$(yyyymmddhhmm)
+system_test_md5sums     := $(test_dir)/md5sums-$(yyyymmddhhmm)
+system_test_md5sums2    := $(test_dir)/md5sums
 
 %.cns:  test_emission := emit_quietly,emit_test_data
 %.ill:  test_emission := emit_quietly,emit_test_data
@@ -1520,6 +1527,11 @@ system_test: $(datadir)/configurable_settings.xml $(touchstone_md5sums) install
 	  -e '/rel err.*e-0*1[5-9]/d' \
 	  -e '/abs.*0\.00.*rel/d' \
 	  -e '/abs diff: 0 /d'
+	@-< $(system_test_analysis) $(SED) \
+	  -e 's/   Summary: max abs diff: /\t/' \
+	  -e 's/ max rel err:  /\t/' \
+	  | $(SORT) --key=2gr --key=3gr \
+	  > $(system_test_regressions)
 	@$(DIFF) --brief $(system_test_md5sums) $(touchstone_md5sums) \
 	  && $(ECHO) "All `<$(touchstone_md5sums) $(WC) -l` files match." \
 	  || $(MAKE) --file=$(this_makefile) system_test_discrepancies
@@ -1610,6 +1622,16 @@ clean_edg:
 	@-$(RM) --force $(edg_prelinker_files)
 
 ################################################################################
+
+# Report gcc version.
+#
+# Intended for use in shell scripts thus:
+#   gcc_version=$(make show_gcc_version)
+# so no newline is printed.
+
+.PHONY: show_gcc_version
+show_gcc_version:
+	@printf "$(gcc_version)"
 
 # Display selected variables.
 

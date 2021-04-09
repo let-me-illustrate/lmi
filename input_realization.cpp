@@ -1,6 +1,6 @@
 // Realize sequence-string input as vectors.
 //
-// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -30,11 +30,12 @@
 #include "dbnames.hpp"
 #include "dbo_rules.hpp"
 #include "global_settings.hpp"
-#include "handle_exceptions.hpp"
+#include "handle_exceptions.hpp"        // report_exception()
 #include "input_sequence_aux.hpp"       // convert_vector()
-#include "miscellany.hpp"               // each_equal(), minmax
+#include "miscellany.hpp"               // each_equal()
 #include "round_to.hpp"
 #include "ssize_lmi.hpp"
+#include "unwind.hpp"                   // scoped_unwind_toggler
 #include "value_cast.hpp"
 
 #include <algorithm>
@@ -54,6 +55,7 @@ std::string realize_sequence_string
 {
     try
         {
+        scoped_unwind_toggler meaningless_name;
         InputSequence s
             (sequence_string.value()
             ,input.years_to_maturity()
@@ -193,7 +195,7 @@ std::vector<std::string> Input::RealizeAllSequenceInput(bool report_errors)
 {
     LMI_ASSERT(years_to_maturity() == database_->length());
 
-    // INPUT !! http://savannah.nongnu.org/support/?104481
+    // INPUT !! https://savannah.nongnu.org/support/?104481
     // This needs to be reimplemented.
     {
     enum{NumberOfFunds = 30}; // DEPRECATED
@@ -418,15 +420,19 @@ std::string Input::RealizeCashValueEnhancementRate()
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
-    minmax<tnr_unrestricted_double> extrema(CashValueEnhancementRateRealized_);
-    if(!(0.0 <= extrema.minimum().value() && extrema.maximum().value() <= 1.0))
+    LMI_ASSERT(!CashValueEnhancementRateRealized_.empty());
+    auto const extrema = std::minmax_element
+        (CashValueEnhancementRateRealized_.begin()
+        ,CashValueEnhancementRateRealized_.end()
+        );
+    if(!(0.0 <= (*extrema.first).value() && (*extrema.second).value() <= 1.0))
         {
         std::ostringstream oss;
         oss
             << "Cash value enhancement rate as entered ranges from "
-            << extrema.minimum()
+            << *extrema.first
             << " to "
-            << extrema.maximum()
+            << *extrema.second
             << ", but must be between 0 and 1 inclusive."
             ;
         return oss.str();
@@ -451,15 +457,19 @@ std::string Input::RealizeCorporationTaxBracket()
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
-    minmax<tnr_unrestricted_double> extrema(CorporationTaxBracketRealized_);
-    if(!(0.0 <= extrema.minimum().value() && extrema.maximum().value() <= 1.0))
+    LMI_ASSERT(!CorporationTaxBracketRealized_.empty());
+    auto const extrema = std::minmax_element
+        (CorporationTaxBracketRealized_.begin()
+        ,CorporationTaxBracketRealized_.end()
+        );
+    if(!(0.0 <= (*extrema.first).value() && (*extrema.second).value() <= 1.0))
         {
         std::ostringstream oss;
         oss
             << "Corporate tax bracket as entered ranges from "
-            << extrema.minimum()
+            << *extrema.first
             << " to "
-            << extrema.maximum()
+            << *extrema.second
             << ", but must be between 0 and 1 inclusive."
             ;
         return oss.str();
@@ -484,15 +494,19 @@ std::string Input::RealizeTaxBracket()
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
-    minmax<tnr_unrestricted_double> extrema(TaxBracketRealized_);
-    if(!(0.0 <= extrema.minimum().value() && extrema.maximum().value() <= 1.0))
+    LMI_ASSERT(!TaxBracketRealized_.empty());
+    auto const extrema = std::minmax_element
+        (TaxBracketRealized_.begin()
+        ,TaxBracketRealized_.end()
+        );
+    if(!(0.0 <= (*extrema.first).value() && (*extrema.second).value() <= 1.0))
         {
         std::ostringstream oss;
         oss
             << "Individual tax bracket as entered ranges from "
-            << extrema.minimum()
+            << *extrema.first
             << " to "
-            << extrema.maximum()
+            << *extrema.second
             << ", but must be between 0 and 1 inclusive."
             ;
         return oss.str();

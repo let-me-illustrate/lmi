@@ -1,6 +1,6 @@
 // Ordinary- and universal-life commutation functions.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -34,12 +34,11 @@
 class LMI_SO OLCommFns final
 {
   public:
-    OLCommFns
-        (std::vector<double> const& a_q
-        ,std::vector<double> const& a_i
+    OLCommFns() = default;
+    explicit OLCommFns
+        (std::vector<double> const& q
+        ,std::vector<double> const& i
         );
-
-    ~OLCommFns() = default;
 
     double                 Domega() const {return ed.back();}
     std::vector<double> const& ED() const {return ed;}
@@ -49,14 +48,6 @@ class LMI_SO OLCommFns final
     std::vector<double> const&  M() const {return  m;}
 
   private:
-    OLCommFns(OLCommFns const&) = delete;
-    OLCommFns& operator=(OLCommFns const&) = delete;
-
-    int Length;
-
-    std::vector<double> const& q;
-    std::vector<double> const& i;
-
     std::vector<double> ed;
     std::vector<double>  d;
     std::vector<double>  c;
@@ -82,15 +73,14 @@ class LMI_SO OLCommFns final
 class LMI_SO ULCommFns final
 {
   public:
-    ULCommFns
-        (std::vector<double> const& a_qc
-        ,std::vector<double> const& a_ic
-        ,std::vector<double> const& a_ig
+    ULCommFns() = default;
+    explicit ULCommFns
+        (std::vector<double> const& qc
+        ,std::vector<double> const& ic
+        ,std::vector<double> const& ig
         ,mcenum_dbopt_7702          dbo
         ,mcenum_mode                mode
         );
-
-    ~ULCommFns() = default;
 
     double                 aDomega() const {return ead.back();}
     std::vector<double> const& EaD() const {return ead;}
@@ -101,19 +91,6 @@ class LMI_SO ULCommFns final
     std::vector<double> const&  kM() const {return  km;}
 
   private:
-    ULCommFns(ULCommFns const&) = delete;
-    ULCommFns& operator=(ULCommFns const&) = delete;
-
-    std::vector<double> qc;
-    std::vector<double> ic;
-    std::vector<double> ig;
-
-    // SOMEDAY !! It would be nice to let dbo_ vary by year.
-    mcenum_dbopt_7702   dbo_;
-    mcenum_mode         mode_;
-
-    int Length;
-
     std::vector<double> ead;
     std::vector<double>  ad;
     std::vector<double>  kd;

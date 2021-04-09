@@ -1,6 +1,6 @@
 // Verify product files.
 //
-// Copyright (C) 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -52,21 +52,21 @@ class product_verifier
   private:
     void verify_7702q();
 
-    std::string      const product_name_;
-    std::string      const gender_str_  ;
-    std::string      const smoking_str_ ;
-    product_data     const p_           ;
-    mcenum_gender    const gender_      ;
-    mcenum_smoking   const smoking_     ;
-    product_database const db0_         ;
-    int              const min_age_     ;
-    product_database const db_          ;
-    mcenum_cso_era   const era_         ;
-    oenum_alb_or_anb const a_b_         ;
-    int              const t_           ;
-    bool             const axis_g_      ;
-    bool             const axis_s_      ;
-    int              const omega_       ;
+    std::string      const  product_name_;
+    std::string      const  gender_str_  ;
+    std::string      const  smoking_str_ ;
+    product_data     const& p_           ;
+    mcenum_gender    const  gender_      ;
+    mcenum_smoking   const  smoking_     ;
+    product_database const  db0_         ;
+    int              const  min_age_     ;
+    product_database const  db_          ;
+    mcenum_cso_era   const  era_         ;
+    oenum_alb_or_anb const  a_b_         ;
+    int              const  t_           ;
+    bool             const  axis_g_      ;
+    bool             const  axis_s_      ;
+    int              const  omega_       ;
 };
 
 product_verifier::product_verifier
@@ -77,7 +77,7 @@ product_verifier::product_verifier
     :product_name_ {product_name}
     ,gender_str_   {gender_str}
     ,smoking_str_  {smoking_str}
-    ,p_            (product_name)
+    ,p_            (*product_data::read_via_cache(filename_from_product_name(product_name)))
     ,gender_       {mce_gender (gender_str ).value()}
     ,smoking_      {mce_smoking(smoking_str).value()}
     ,db0_

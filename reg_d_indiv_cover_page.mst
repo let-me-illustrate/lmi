@@ -1,5 +1,5 @@
 {{!
-    Copyright (C) 2017, 2018, 2019, 2020 Gregory W. Chicares.
+    Copyright (C) 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -14,7 +14,7 @@
     along with this program; if not, write to the Free Software Foundation,
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 
-    http://savannah.nongnu.org/projects/lmi
+    https://savannah.nongnu.org/projects/lmi
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 }}
@@ -84,7 +84,7 @@ Date Prepared: {{DatePrepared}}
 
 <font size="-1">
 
-<!-- PDF !! HypotheticalRatesFootnote -->
+<!-- PDF !! HypotheticalRatesHeader2 -->
 <p>
 The purpose of this illustration is to show how hypothetical rates
 of return will affect policy account value. These hypothetical
@@ -94,19 +94,8 @@ than the hypothetical rates and in all likelihood will vary from
 year to year.
 </p>
 
-<!-- PDF !! FnProspectus -->
 <p>
-<b>
-This material must be preceded or accompanied by the current
-Confidential Private Placement Memorandum for {{PolicyMktgName}}
-and the current prospectuses (or summary prospectuses,
-if available) and private placement memoranda
-for its underlying investment choices. Investors should
-carefully consider the investment objectives, risks,
-charges and expenses of the policy and its underlying investment
-choices. Please read the prospectuses and private placement
-memoranda carefully before investing or sending money.
-</b>
+    <b>{{FnProspectus}}</b>
 </p>
 
 <p>
@@ -114,7 +103,7 @@ memoranda carefully before investing or sending money.
 </p>
 
 <p>
-Placement Agents: &nbsp; {{PlacementAgentFootnote}}
+    {{PlacementAgentFootnote}}
 </p>
 
 <p>

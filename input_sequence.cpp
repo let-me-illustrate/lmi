@@ -1,6 +1,6 @@
 // Input sequences (e.g. 1 3; 7 5;0; --> 1 1 1 7 7 0...)
 //
-// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -173,7 +173,7 @@ namespace
 {
 // Naturally {value_number, value_keyword} constitute a discriminated
 // union: perhaps std::variant when lmi someday requires C++17. See:
-//   http://lists.nongnu.org/archive/html/lmi/2017-02/msg00025.html
+//   https://lists.nongnu.org/archive/html/lmi/2017-02/msg00025.html
 // Until then...
 
 void set_value(ValueInterval& v, double d)
@@ -212,8 +212,8 @@ void set_value(ValueInterval& v, std::string const& s)
 template<typename T>
 void InputSequence::initialize_from_vector(std::vector<T> const& v)
 {
-    bool const T_is_double = std::is_same<T,double     >::value;
-    bool const T_is_string = std::is_same<T,std::string>::value;
+    bool const T_is_double = std::is_same_v<T,double     >;
+    bool const T_is_string = std::is_same_v<T,std::string>;
     static_assert(T_is_double || T_is_string);
 
     ValueInterval default_interval;

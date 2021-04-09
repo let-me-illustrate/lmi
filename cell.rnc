@@ -1,6 +1,6 @@
 # RELAX NG schema for a single cell (class Input).
 #
-# Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+# Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
-# http://savannah.nongnu.org/projects/lmi
+# https://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -117,9 +117,9 @@ cell_element = element cell
      element EmployeeClass                    {text}
     ,## Factor for amortizing mortality profit into future charges.
      ## Default: '1'.
-     element ExperienceRatingInitialKFactor   {nonnegative_double}
+     element ExperienceRatingInitialKFactor   {nonnegative_double}?
     ,## Overridden reserve rate for experience rating.
-     element ExperienceReserveRate            {proportion_double}
+     element ExperienceReserveRate            {proportion_double}?
     ,## * Amount of 1035 exchange from a different insurer.
      element External1035ExchangeAmount       {nonnegative_double}
     ,## * MEC status of 1035 exchange from a different insurer.
@@ -234,7 +234,7 @@ cell_element = element cell
     ,## Monthly premium required to maintain no-lapse guarantee.
      element InforceMonthlyNoLapsePremium     {nonnegative_double}
     ,## Inforce net reserve for experience rating.
-     element InforceNetExperienceReserve      {xsd:double}
+     element InforceNetExperienceReserve      {xsd:double}?
     ,## No-lapse guarantee is in effect.
      element InforceNoLapseActive             {yes_or_no}
     ,## Inforce balance (total indebtedness) for preferred loans:
@@ -267,7 +267,7 @@ cell_element = element cell
     ,## Policy-year-to-date payments counted toward target premium.
      element InforceYtdGrossPremium           {nonnegative_double}
     ,## Policy-year-to-date "net" COI charge for experience rating.
-     element InforceYtdNetCoiCharge           {nonnegative_double}
+     element InforceYtdNetCoiCharge           {nonnegative_double}?
     ,## Policy-year-to-date payments subject to premium tax.
      element InforceYtdTaxablePremium         {nonnegative_double}
     ,## * Investment management fee of a custom fund.
@@ -328,7 +328,7 @@ cell_element = element cell
     ,## * Override country COI multiplier. Default: 'Yes'.
      element OverrideCoiMultiplier            {yes_or_no}
     ,## Override reserve rate for experience rating. Default: 'Yes'.
-     element OverrideExperienceReserveRate    {yes_or_no}
+     element OverrideExperienceReserveRate    {yes_or_no}?
     ,## * Override investment management fee: used only with custom funds.
      element OverrideFundManagementFee        {yes_or_no}
     ,## * Multiplier applied to partial-mortality table. Default: '1'.
@@ -493,7 +493,7 @@ cell_element = element cell
     ,## * Let date of birth override issue age. Default: 'Yes'.
      element UseDOB                           {yes_or_no}
     ,## Use experience rating, on the few contracts that offer it.
-     element UseExperienceRating              {yes_or_no}
+     element UseExperienceRating              {yes_or_no}?
     ,## * Illustrate "partial mortality": i.e., reflect assumed deaths
      ## in a composite illustration.
      element UsePartialMortality              {yes_or_no}

@@ -1,5 +1,5 @@
 {{!
-    Copyright (C) 2017, 2018, 2019, 2020 Gregory W. Chicares.
+    Copyright (C) 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -14,7 +14,7 @@
     along with this program; if not, write to the Free Software Foundation,
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 
-    http://savannah.nongnu.org/projects/lmi
+    https://savannah.nongnu.org/projects/lmi
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 }}
@@ -30,18 +30,9 @@
 
 <font size="-1">
 
-<!-- PDF !! SalesLoadRefundFootnote -->
 {{#SalesLoadRefundAvailable}}
     <p>
-    Sales Load Refund: We will refund a portion of the sales load
-    to you, as part of your {{CsvName}}
-    Value, if you surrender your {{ContractName}} within the first two
-    {{ContractName}} years. In {{ContractName}} year 1, we will refund
-    {{SalesLoadRefundRate0}}
-    of the first {{ContractName}} year sales load collected
-    and in {{ContractName}} year 2, we will refund
-    {{SalesLoadRefundRate1}}
-    of the first {{ContractName}} year sales load collected.
+    {{SalesLoadRefundFootnote}}
     </p>
 {{/SalesLoadRefundAvailable}}
 
@@ -61,67 +52,23 @@
 
 {{FnPartialMortality}}
 
-<!-- PDF !! LoanFootnote -->
-{{!
-    PDF !! 'MaxAnnCurrLoanDueRate': loan rate actually can vary by year,
-    so text should say that the fixed loan rate is "guaranteed never
-    to exceed" this value.
-}}
-<p>
-The loan interest rate is fixed at {{MaxAnnCurrLoanDueRate}} per year.
-</p>
-
 <p>
 The state of issue is {{StateOfJurisdiction}}.
 </p>
 
-<!-- PDF !! FnInitialSpecAmt -->
 <p>
-This illustration assumes an initial Selected Face Amount of
-${{InitBaseSpecAmt}}. Selected Face
-Amount reductions assumed in this illustration (if any) are shown
-in the Tabular Detail.
+    {{FnInitialSpecAmt}}
 </p>
 
 {{#IsInforce}}
-<!-- PDF !! Combine FnInforceAcctVal and FnInforceTaxBasis -->
     <p>
-    This illustration assumes a beginning account value of
-    ${{InforceTotalAV}},
-    and a beginning cost basis of
-    ${{InforceTaxBasis}},
-    based on the last monthly calculation date,
-    {{InforceAsOfDate}}.
-    The current account value and cost basis may be higher or lower.
-    Consult the Home Office if you require further information.
+    {{FnInforceAcctVal}}
     </p>
-<!--
-  PDF !! THESE ARE TO BE COMBINED:
-  PDF !! FnInforceAcctVal
-    <p>
-    This illustration assumes a beginning account value of
-    ${{InforceTotalAV}}
-    as of {{InforceAsOfDate}},
-    the end of the last completed {{ContractName}} month.
-    </p>
-  PDF !! FnInforceTaxBasis
-    <p>
-    This illustration assumes a beginning cost basis of
-    ${{InforceTaxBasis}}
-    as of {{InforceAsOfDate}},
-    the end of the last completed {{ContractName}} month;
-    the actual cost basis may be higher or lower.
-    Consult the Home Office for cost basis information.
-    </p>
--->
 {{/IsInforce}}
 
-<!-- PDF !! FnCensus -->
-<!-- There is no "attached census". -->
 {{#Composite}}
     <p>
-    Please see the attached census, listing the face amounts,
-    underwriting classes and issue ages for individual participants.
+    {{FnCensus}}
     </p>
 {{/Composite}}
 
@@ -133,60 +80,21 @@ in the Tabular Detail.
     <p>{{GuarIssueDisclaimerMd}}</p>
 {{/StateIsMaryland}}
 
-<!-- PDF !! Fn1035Charge -->
 {{#Has1035ExchCharge}}
     <p>
-    {{^SinglePremium}}
-        Upon surrender of this {{ContractName}}, where the surrender
-        proceeds are intended to be applied to an insurance policy
-        or certificate issued in conjunction with an intent
-        to qualify the exchange as a tax free exchange
-        under Section 1035 of the Internal Revenue Code,
-        we may assess an Exchange Charge. The Exchange Charge
-        is the greater of the Market Value Adjustment Charge
-        and the Percentage of Premium Charge. In the states
-        of Florida or Indiana, the Exchange charge
-        (referred to as Assignment Charge in Florida)
-        will be the Percentage of Premium Charge only.
-        The Exchange Charge will potentially reduce
-        the surrender proceeds, but will never increase
-        the surrender proceeds. Please refer to your {{ContractName}}
-        for details.
-    {{/SinglePremium}}
-    {{#SinglePremium}}
-        Upon surrender of this {{ContractName}}, where the surrender proceeds
-        are intended to be applied to an insurance policy
-        or certificate issued in conjunction with an intent
-        to qualify the exchange as a tax free exchange
-        under Section 1035 of the Internal Revenue Code (1035
-        Exchange), we may assess an Exchange Charge. The Exchange
-        Charge will potentially reduce the surrender proceeds,
-        but will never increase the surrender proceeds.
-        Please refer to your {{ContractName}} for details.
-    {{/SinglePremium}}
+    {{Fn1035Charge}}
     </p>
 {{/Has1035ExchCharge}}
 
-<!-- PDF !! SpouseFootnote -->
 {{#HasSpouseRider}}
     <p>
-    The ${{SpouseRiderAmount}} Spouse
-    rider provides term life insurance on the spouse
-    (issue age {{SpouseIssueAge}})
-    for a limited duration, for an extra charge.
-    Please refer to your {{ContractName}} for specific provisions
-    and a detailed schedule of charges.
+    {{SpouseFootnote}}
     </p>
 {{/HasSpouseRider}}
 
-<!-- PDF !! ChildFootnote -->
 {{#HasChildRider}}
     <p>
-    The ${{ChildRiderAmount}} Child
-    rider provides term life insurance on the insured's children
-    for a limited duration, for an extra charge. Please refer
-    to your {{ContractName}} for specific provisions
-    and a detailed schedule of charges.
+    {{ChildFootnote}}
     </p>
 {{/HasChildRider}}
 
@@ -200,46 +108,12 @@ in the Tabular Detail.
 
 <font size="-1">
 
-<!-- PDF !! MecFootnote -->
-<!-- This is not appropriate for composites. -->
 <p>
-As illustrated, this {{ContractName}}
-{{#IsMec}}
-    becomes
-{{/IsMec}}
-{{^IsMec}}
-    would not become
-{{/IsMec}}
-a Modified Endowment Contract (MEC)
-{{#IsMec}}
-    under the Internal Revenue Code in year {{MecYearPlus1}}.
-{{/IsMec}}
-{{^IsMec}}
-    under the Internal Revenue Code.
-{{/IsMec}}
-To the extent of gain in the {{ContractName}}, loans, distributions
-and withdrawals from a MEC are subject to income tax
-and may also trigger a penalty tax.
+    {{MecFootnote}}
 </p>
 
-{{^SinglePremium}}
-    {{^IsInforce}}
-        <p>
-        The initial 7-pay premium limit is ${{InitSevenPayPrem}}.
-        </p>
-    {{/IsInforce}}
-{{/SinglePremium}}
-
-<!-- PDF !! FnNotTaxAdvice -->
 <p>
-<b>
-The information contained in this illustration is not written
-or intended as tax or legal advice. Neither {{InsCoShortName}} its
-subsidiaries, employees or representatives are authorized to give tax
-or legal advice. For more information pertaining
-to the tax consequences of purchasing or owning this {{ContractName}},
-consult with your own independent tax or legal counsel.
-</b>
+    {{FnNotTaxAdvice}}
 </p>
 
 </font>

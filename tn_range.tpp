@@ -1,6 +1,6 @@
 // Trammeled Numeric range type: class template implementation.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,13 +15,14 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 #include "tn_range.hpp"
 
 #include "alert.hpp"
+#include "unwind.hpp"                   // scoped_unwind_toggler
 #include "value_cast.hpp"
 
 #include <cmath>                        // pow(), signbit()
@@ -30,6 +31,7 @@
 #include <limits>
 #include <ostream>
 #include <sstream>
+#include <type_traits>
 
 namespace
 {
@@ -53,7 +55,7 @@ namespace
     template
         <typename T
         ,bool=std::numeric_limits<T>::is_specialized
-        ,bool=std::is_floating_point<T>::value
+        ,bool=std::is_floating_point_v<T>
         >
     struct strictly_between_extrema_tester
     {};
@@ -67,14 +69,17 @@ namespace
     };
 
     // Type is fundamental but not floating, and therefore integral
-    // (or void, which would naturally be improper).
+    // (or void, which would naturally be improper). The static
+    // assertions are at worst O(1) pleonasms.
 
     template<typename T>
     struct strictly_between_extrema_tester<T,true,false>
     {
         bool operator()(T t)
             {
-            static T const lower_limit = std::numeric_limits<T>::min();
+            static_assert(std::numeric_limits<T>::is_bounded);
+            static_assert(!std::is_floating_point_v<T>);
+            static T const lower_limit = std::numeric_limits<T>::lowest();
             static T const upper_limit = std::numeric_limits<T>::max();
             return lower_limit < t && t < upper_limit;
             }
@@ -108,7 +113,7 @@ namespace
     template<typename T>
     T signum(T t)
     {
-        static_assert(std::is_arithmetic<T>::value);
+        static_assert(std::is_arithmetic_v<T>);
         return (0 == t) ? 0 : std::signbit(t) ? -1 : 1;
     }
 
@@ -166,7 +171,7 @@ namespace
     ///   http://groups.google.com/groups?th=1b868327b241fb74
     ///   http://groups.google.com/groups?selm=3DF66B8D.F1C3D2C0%40sun.com
 
-    template<typename T, bool=std::is_floating_point<T>::value>
+    template<typename T, bool=std::is_floating_point_v<T>>
     struct is_exact_integer_tester
     {};
 
@@ -179,7 +184,7 @@ namespace
     template<typename T>
     struct is_exact_integer_tester<T,true>
     {
-        static_assert(std::is_floating_point<T>::value);
+        static_assert(std::is_floating_point_v<T>);
         bool operator()(T t)
             {
             // SOMEDAY !! nonstd::power() [SGI extension] may be
@@ -218,7 +223,7 @@ namespace
     template<typename T>
     T adjust_bound(T t, T direction)
     {
-        static_assert(std::is_floating_point<T>::value);
+        static_assert(std::is_floating_point_v<T>);
         if(is_exact_integer(t))
             {
             return t;
@@ -261,7 +266,7 @@ namespace
     template<typename T>
     struct bound_adjuster<T,-1>
     {
-        static_assert(std::is_floating_point<T>::value);
+        static_assert(std::is_floating_point_v<T>);
         T operator()(T t)
             {
             static T const extremum = -std::numeric_limits<T>::max();
@@ -272,7 +277,7 @@ namespace
     template<typename T>
     struct bound_adjuster<T,1>
     {
-        static_assert(std::is_floating_point<T>::value);
+        static_assert(std::is_floating_point_v<T>);
         T operator()(T t)
             {
             static T const extremum = std::numeric_limits<T>::max();
@@ -283,13 +288,13 @@ namespace
     template<typename T>
     T adjust_minimum(T t)
     {
-        return bound_adjuster<T,std::is_floating_point<T>::value ? -1 : 0>()(t);
+        return bound_adjuster<T,std::is_floating_point_v<T> ? -1 : 0>()(t);
     }
 
     template<typename T>
     T adjust_maximum(T t)
     {
-        return bound_adjuster<T,std::is_floating_point<T>::value ? 1 : 0>()(t);
+        return bound_adjuster<T,std::is_floating_point_v<T> ? 1 : 0>()(t);
     }
 } // Unnamed namespace.
 
@@ -665,6 +670,7 @@ std::string tn_range<Number,Trammel>::diagnose_invalidity
     Number n;
     try
         {
+        scoped_unwind_toggler meaningless_name;
         n = value_cast<Number>(s);
         }
     catch(std::exception const&)

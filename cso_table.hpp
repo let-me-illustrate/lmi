@@ -1,6 +1,6 @@
 // 1980, 2001, and 2017 CSO tables.
 //
-// Copyright (C) 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -30,7 +30,7 @@
 
 #include <vector>
 
-std::vector<double> LMI_SO cso_table
+LMI_SO std::vector<double> cso_table
     (mcenum_cso_era
     ,oenum_autopisty
     ,oenum_alb_or_anb
@@ -40,7 +40,7 @@ std::vector<double> LMI_SO cso_table
     ,int              max_age
     );
 
-std::vector<double> LMI_SO cso_table
+LMI_SO std::vector<double> cso_table
     (mcenum_cso_era
     ,oenum_autopisty
     ,oenum_alb_or_anb

@@ -41,10 +41,30 @@ void printHeader(OSTR& ostr,const string& includeGuard,
     }
   if (lanlBoilerplate)
     {
+#if 0
       ostr
 	<< "// -*- C++ -*-" << endl
 	<< "// ACL:license" << endl
 	<< "// ACL:license" << endl
+	<< endl;
+#endif // 0
+      ostr
+	<< "// Copyright (C) 1998, 1999, 2000, 2002  Los Alamos National Laboratory," << endl
+	<< "// Copyright (C) 1998, 1999, 2000, 2002  CodeSourcery, LLC" << endl
+	<< "//" << endl
+	<< "// This file is part of FreePOOMA." << endl
+	<< "//" << endl
+	<< "// FreePOOMA is free software; you can redistribute it and/or modify it" << endl
+	<< "// under the terms of the Expat license." << endl
+	<< "//" << endl
+	<< "// This program is distributed in the hope that it will be useful, but" << endl
+	<< "// WITHOUT ANY WARRANTY; without even the implied warranty of" << endl
+	<< "// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Expat" << endl
+	<< "// license for more details." << endl
+	<< "//" << endl
+	<< "// You should have received a copy of the Expat license along with" << endl
+	<< "// FreePOOMA; see the file LICENSE." << endl
+	<< "//" << endl
 	<< endl;
     }
   if (includeGuard != string(""))
@@ -78,19 +98,20 @@ template<class OSTR>
 void printFooter(OSTR& ostr,const string& includeGuard,
 		 bool lanlBoilerplate,const string& suffix)
 {
-  ostr
-    << endl;
   if (suffix.size() != 0)
-    ostr << suffix << endl << endl;
+    ostr << endl << suffix << endl;
   if (includeGuard != string(""))
     {
       ostr
-	<< "#endif // " << includeGuard << endl
+	<< endl
+	<< "#endif // " << includeGuard
 	<< endl;
     }
   if (lanlBoilerplate)
     {
+#if 0
       ostr
+	<< endl
 	<< "// ACL:rcsinfo" << endl
 	<< "// ----------------------------------------------------------------------"
 	<< endl
@@ -99,6 +120,7 @@ void printFooter(OSTR& ostr,const string& includeGuard,
 	<< "// ----------------------------------------------------------------------"
 	<< endl
 	<< "// ACL:rcsinfo" << endl;
+#endif // 0
     }
 }
 

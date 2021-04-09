@@ -1,6 +1,6 @@
 // Rounding rules.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -25,10 +25,13 @@
 #include "config.hpp"
 
 #include "any_member.hpp"
+#include "cache_file_reads.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
 #include "so_attributes.hpp"
 #include "xml_serializable.hpp"
+
+#include <boost/filesystem/path.hpp>
 
 #include <string>
 
@@ -91,11 +94,12 @@ class LMI_SO rounding_parameters final
 class LMI_SO rounding_rules final
     :public xml_serializable  <rounding_rules>
     ,public MemberSymbolTable <rounding_rules>
+    ,public cache_file_reads  <rounding_rules>
 {
     friend class RoundingDocument;
 
   public:
-    explicit rounding_rules(std::string const& filename);
+    explicit rounding_rules(fs::path const& filename);
     ~rounding_rules() override = default;
 
     rounding_parameters const& datum(std::string const& name) const;
@@ -135,6 +139,7 @@ class LMI_SO rounding_rules final
     rounding_parameters round_naar_              ;
     rounding_parameters round_coi_rate_          ;
     rounding_parameters round_coi_charge_        ;
+    rounding_parameters round_rider_charges_     ;
     rounding_parameters round_gross_premium_     ;
     rounding_parameters round_net_premium_       ;
     rounding_parameters round_interest_rate_     ;
@@ -151,9 +156,10 @@ class LMI_SO rounding_rules final
     rounding_parameters round_max_specamt_       ;
     rounding_parameters round_min_premium_       ;
     rounding_parameters round_max_premium_       ;
+    rounding_parameters round_minutiae_          ;
 };
 
-void LMI_SO load(rounding_rules      &, fs::path const&);
-void LMI_SO save(rounding_rules const&, fs::path const&);
+LMI_SO void load(rounding_rules      &, fs::path const&);
+LMI_SO void save(rounding_rules const&, fs::path const&);
 
 #endif // rounding_rules_hpp

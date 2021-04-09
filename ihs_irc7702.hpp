@@ -1,6 +1,6 @@
 // Internal Revenue Code section 7702 (definition of life insurance).
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -24,13 +24,11 @@
 
 #include "config.hpp"
 
+#include "commutation_functions.hpp"
 #include "mc_enum_type_enums.hpp"
 #include "round_to.hpp"
 
-#include <memory>                       // unique_ptr
 #include <vector>
-
-class ULCommFns;
 
 // Specified amount (specamt) is carefully distinguished from benefit
 // amount (bftamt). The former is directly chosen by the owner, and
@@ -60,10 +58,10 @@ class Irc7702 final
         ,int                        a_IssueAge
         ,int                        a_EndtAge
         ,std::vector<double> const& a_Qc
-        ,std::vector<double> const& a_GLPic
-        ,std::vector<double> const& a_GSPic
-        ,std::vector<double> const& a_Ig
-        ,std::vector<double> const& a_IntDed
+        ,std::vector<double> const& ic_glp
+        ,std::vector<double> const& ic_gsp
+        ,std::vector<double> const& ig_glp
+        ,std::vector<double> const& ig_gsp
         ,double                     a_PresentBftAmt
         ,double                     a_PresentSpecAmt
         ,double                     a_LeastBftAmtEver
@@ -87,9 +85,7 @@ class Irc7702 final
         ,double                     a_InforceCumGLP
         ,double                     a_InforceGSP
         ,double                     a_InforceCumPremsPaid
-        // TODO ?? TAXATION !! Perhaps other arguments are needed for inforce.
         );
-    ~Irc7702();
 
     void Initialize7702
         (double                     a_BftAmt
@@ -139,9 +135,6 @@ class Irc7702 final
     double premiums_paid() const;
 
   private:
-    Irc7702(Irc7702 const&) = delete;
-    Irc7702& operator=(Irc7702 const&) = delete;
-
     // Interest and DB Option basis
     enum EIOBasis
         {Opt1Int4Pct
@@ -176,10 +169,10 @@ class Irc7702 final
     int const                  EndtAge;    // Endowment age
 
     std::vector<double> const& Qc;         // 7702 mortality rate
-    std::vector<double> const& GLPic;      // 7702 GLP interest rate
-    std::vector<double> const& GSPic;      // 7702 GSP interest rate
-    std::vector<double> const& Ig;         // Death benefit discount rate
-    std::vector<double> const& IntDed;     // Deduction from interest rate
+    std::vector<double> const& ic_glp_;
+    std::vector<double> const& ic_gsp_;
+    std::vector<double> const& ig_glp_;
+    std::vector<double> const& ig_gsp_;
 
     double                     PresentBftAmt;
     double                     PriorBftAmt;
@@ -224,20 +217,7 @@ class Irc7702 final
     double                     CumPmts;    // Cumulative payments
 
     // Commutation functions
-// TODO ?? Apparently the original reason for using smart pointers
-// was to minimize stack usage in a 16-bit environment; clearly that
-// doesn't matter anymore. TAXATION !! Don't do that then.
-//
-// TODO ?? TAXATION !! Consider using std::vector instead of array members.
-    std::unique_ptr<ULCommFns> CommFns         [NumIOBases];
-    // After the Init- functions have executed, we can delete the
-    // rather sizeable ULCommFns objects, as long as we keep the
-    // endowment-year value of D for each basis. TAXATION !! But
-    // not if they're created on the stack. And the meaning of
-    // "sizeable" has changed since that comment was written; the
-    // object contains nine vectors of double, each of potential
-    // length 100, and 9 * 8 * 100 = 7200 bytes is negligible in
-    // the twenty-first century.
+    ULCommFns CommFns                          [NumIOBases];
     double                     DEndt           [NumIOBases];
 
     // GPT corridor factors for attained ages [IssueAge, 100]
@@ -251,14 +231,10 @@ class Irc7702 final
     std::vector<double>        PvChgSpecAmt    [NumIOBases];
     std::vector<double>        PvChgADD        [NumIOBases];
     std::vector<double>        PvChgMort       [NumIOBases];
-    // TODO ?? TAXATION !! Perhaps -Sgl/Lvl and -Tgt/Exc should be dimensions.
     std::vector<double>        PvNpfSglTgt     [NumIOBases];
     std::vector<double>        PvNpfLvlTgt     [NumIOBases];
     std::vector<double>        PvNpfSglExc     [NumIOBases];
     std::vector<double>        PvNpfLvlExc     [NumIOBases];
-// TODO ?? TAXATION !! Not necessary?
-    std::vector<double>        PvLoadDiffSgl   [NumIOBases];
-    std::vector<double>        PvLoadDiffLvl   [NumIOBases];
 };
 
 // TAXATION !! Update this, and move it to a better location.
@@ -307,7 +283,7 @@ class Irc7702 final
 // *Rated* lives probably make this infeasible. We use about a dozen
 // different table ratings, and 150 MB isn't yet quite prohibitive; but
 // the potential number of different flat extra amounts and durations
-// is enormous.
+// is enormous. [However, lmi ('7702.html' [8/6]) ignores flat extras.]
 //
 // Caching is less attractive from the standpoint of uniformity. We want
 // all systems to use exactly the same path through the same code. A PC
@@ -324,7 +300,8 @@ class Irc7702 final
 // * 2700 for each combination of *nonrated* lives
 // = 35GB per second-to-die policy form, for *nonrated* lives only
 // But by the nature of the second-to-die market, one or both lives is
-// very commonly substandard. Ignoring flat extras (which we cannot do),
+// very commonly substandard. Ignoring flat extras, which we cannot do
+// for survivorship (yet lmi ('7702.html' [8/6]) ignores flat extras),
 // a dozen different table ratings on one or both lives gives rise to
 // 144 times as many possibilities, requiring
 //   35GB * 144 = 5TB

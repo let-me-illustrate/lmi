@@ -1,6 +1,6 @@
 // Input sequences (e.g. 1 3; 7 5;0; --> 1 1 1 7 7 0...): unit test
 //
-// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://savannah.nongnu.org/projects/lmi
+// https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
@@ -24,6 +24,7 @@
 #include "input_sequence.hpp"
 
 #include "test_tools.hpp"
+#include "unwind.hpp"                   // scoped_unwind_toggler
 
 #include <algorithm>
 #include <iterator>                     // ostream_iterator
@@ -65,6 +66,7 @@ void input_sequence_test::check
 {
     try
         {
+        scoped_unwind_toggler meaningless_name;
         InputSequence const seq(e, n, 90, 95, 0, 2002, k, o, w);
 
         std::vector<double> const& v(seq.seriatim_numbers());
@@ -119,7 +121,7 @@ void input_sequence_test::check
             std::cout << std::endl;
             }
 
-        INVOKE_BOOST_TEST(bv && bs && bf && bh, file, line);
+        INVOKE_LMI_TEST(bv && bs && bf && bh, file, line);
         }
     catch(std::exception const& x)
         {
@@ -137,7 +139,7 @@ void input_sequence_test::check
                 << std::endl
                 ;
             }
-        INVOKE_BOOST_TEST(b, file, line);
+        INVOKE_LMI_TEST(b, file, line);
         }
     catch(...)
         {
@@ -309,7 +311,7 @@ void input_sequence_test::test()
         " Current token ';' at position 29.\n"
         ;
     check(__FILE__, __LINE__, n, d, e, g, m);
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         ("Interval [ 0, 0 ) is improper: it ends before it begins."
         ,abridge_diagnostics(m)
         );
@@ -331,7 +333,7 @@ void input_sequence_test::test()
         " Current token ';' at position 32.\n"
         ;
     check(__FILE__, __LINE__, n, d, e, g, m);
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         ("Interval [ 3, 1 ) is improper: it ends before it begins."
         ,abridge_diagnostics(m)
         );
@@ -373,7 +375,7 @@ void input_sequence_test::test()
         " current interval [ 2, 5 ) would begin before that."
         ;
     check(__FILE__, __LINE__, n, d, e, g, m);
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (std::string(m)
         ,abridge_diagnostics(m)
         );
@@ -405,16 +407,16 @@ void input_sequence_test::test()
     {
     std::vector<double> const v{1, 1, 1, 2, 2};
     InputSequence const seq(v);
-    BOOST_TEST(v == seq.seriatim_numbers());
-    BOOST_TEST_EQUAL("1 3; 2", canonicalized_input_sequence(v));
+    LMI_TEST(v == seq.seriatim_numbers());
+    LMI_TEST_EQUAL("1 3; 2", canonicalized_input_sequence(v));
     }
 
     // Test construction from string (keyword) vector.
     {
     std::vector<std::string> const v{"alpha", "beta", "beta", "gamma", "eta"};
     InputSequence const seq(v);
-    BOOST_TEST(v == seq.seriatim_keywords());
-    BOOST_TEST_EQUAL
+    LMI_TEST(v == seq.seriatim_keywords());
+    LMI_TEST_EQUAL
         ("alpha; beta 3; gamma; eta"
         ,canonicalized_input_sequence(v)
         );
@@ -424,16 +426,16 @@ void input_sequence_test::test()
     {
     std::vector<double> const v{3};
     InputSequence const seq(v);
-    BOOST_TEST(v == seq.seriatim_numbers());
-    BOOST_TEST_EQUAL("3", canonicalized_input_sequence(v));
+    LMI_TEST(v == seq.seriatim_numbers());
+    LMI_TEST_EQUAL("3", canonicalized_input_sequence(v));
     }
 
     // Test construction from empty vector.
     {
     std::vector<double> const v;
     InputSequence const seq(v);
-    BOOST_TEST(v == seq.seriatim_numbers());
-    BOOST_TEST_EQUAL("0", canonicalized_input_sequence(v));
+    LMI_TEST(v == seq.seriatim_numbers());
+    LMI_TEST_EQUAL("0", canonicalized_input_sequence(v));
     }
 
     // Test (enumerative) allowed keywords, and keywords-only switch
@@ -486,7 +488,7 @@ void input_sequence_test::test()
     strvec const k{"p", "q", "z"};
     std::string w("z");
     check(__FILE__, __LINE__, n, d, e, g, m, k, c, false, w);
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (std::string(m)
         ,abridge_diagnostics(m)
         );
@@ -510,7 +512,7 @@ void input_sequence_test::test()
     bool const o = true;
     std::string w("z");
     check(__FILE__, __LINE__, n, d, e, g, m, k, c, o, w);
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         ("Expected keyword chosen from { p q z }."
         ,abridge_diagnostics(m)
         );
@@ -552,7 +554,7 @@ void input_sequence_test::test()
     bool const o = true;
     std::string w("u");
     check(__FILE__, __LINE__, n, d, e, g, m, k, c, o, w);
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         (std::string(m)
         ,abridge_diagnostics(m)
         );
@@ -599,10 +601,10 @@ void input_sequence_test::test()
     check(__FILE__, __LINE__, n, d, e, g);
     InputSequence const seq(e, 10, 90, 95, 0, 2002);
     std::vector<ValueInterval> const& i(seq.intervals());
-    BOOST_TEST_EQUAL(e_inception , i[0].begin_mode);
-    BOOST_TEST_EQUAL(e_retirement, i[0].end_mode  );
-    BOOST_TEST_EQUAL(e_retirement, i[1].begin_mode);
-    BOOST_TEST_EQUAL(e_maturity  , i[1].end_mode  );
+    LMI_TEST_EQUAL(e_inception , i[0].begin_mode);
+    LMI_TEST_EQUAL(e_retirement, i[0].end_mode  );
+    LMI_TEST_EQUAL(e_retirement, i[1].begin_mode);
+    LMI_TEST_EQUAL(e_maturity  , i[1].end_mode  );
     }
 
     // Duration keywords, with a one-time-only event at retirement.
@@ -615,12 +617,12 @@ void input_sequence_test::test()
     check(__FILE__, __LINE__, n, d, e, g);
     InputSequence const seq(e, 10, 90, 95, 0, 2002);
     std::vector<ValueInterval> const& i(seq.intervals());
-    BOOST_TEST_EQUAL(e_inception , i[0].begin_mode);
-    BOOST_TEST_EQUAL(e_retirement, i[0].end_mode  );
-    BOOST_TEST_EQUAL(e_retirement, i[1].begin_mode);
-    BOOST_TEST_EQUAL(e_duration  , i[1].end_mode  );
-    BOOST_TEST_EQUAL(e_retirement, i[2].begin_mode);
-    BOOST_TEST_EQUAL(e_maturity  , i[2].end_mode  );
+    LMI_TEST_EQUAL(e_inception , i[0].begin_mode);
+    LMI_TEST_EQUAL(e_retirement, i[0].end_mode  );
+    LMI_TEST_EQUAL(e_retirement, i[1].begin_mode);
+    LMI_TEST_EQUAL(e_duration  , i[1].end_mode  );
+    LMI_TEST_EQUAL(e_retirement, i[2].begin_mode);
+    LMI_TEST_EQUAL(e_maturity  , i[2].end_mode  );
     }
 
     // Duration keywords, with a one-year-long event at retirement.
@@ -643,12 +645,12 @@ void input_sequence_test::test()
     check(__FILE__, __LINE__, n, d, e, g);
     InputSequence const seq(e, 10, 90, 95, 0, 2002);
     std::vector<ValueInterval> const& i(seq.intervals());
-    BOOST_TEST_EQUAL(e_inception      , i[0].begin_mode);
-    BOOST_TEST_EQUAL(e_retirement     , i[0].end_mode  );
-    BOOST_TEST_EQUAL(e_retirement     , i[1].begin_mode);
-    BOOST_TEST_EQUAL(e_number_of_years, i[1].end_mode  );
-    BOOST_TEST_EQUAL(e_number_of_years, i[2].begin_mode);
-    BOOST_TEST_EQUAL(e_maturity       , i[2].end_mode  );
+    LMI_TEST_EQUAL(e_inception      , i[0].begin_mode);
+    LMI_TEST_EQUAL(e_retirement     , i[0].end_mode  );
+    LMI_TEST_EQUAL(e_retirement     , i[1].begin_mode);
+    LMI_TEST_EQUAL(e_number_of_years, i[1].end_mode  );
+    LMI_TEST_EQUAL(e_number_of_years, i[2].begin_mode);
+    LMI_TEST_EQUAL(e_maturity       , i[2].end_mode  );
     }
 
     // Test a simple parser error.
@@ -663,14 +665,14 @@ void input_sequence_test::test()
         " Current token '[' at position 1.\n"
         ;
     check(__FILE__, __LINE__, n, d, e, g, m);
-    BOOST_TEST_EQUAL
+    LMI_TEST_EQUAL
         ("Expected number or keyword."
         ,abridge_diagnostics(m)
         );
     }
 
     // Test all examples in the user manual:
-    //   http://www.nongnu.org/lmi/sequence_input.html
+    //   https://www.nongnu.org/lmi/sequence_input.html
     // Each example is quoted unmodified as a comment before its test.
     // Some examples have been superficially changed to work with
     // check(), e.g. because check() uses issue age 90. Others scale
