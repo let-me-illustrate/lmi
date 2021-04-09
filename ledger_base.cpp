@@ -417,9 +417,10 @@ void LedgerBase::apply_scale_factor(int decimal_power)
         return;
         }
 
+    double const scale_factor = 1.0 / nonstd::power(10.0, scale_power_);
     for(auto& i : ScalableVectors)
         {
-        *i.second *= 1.0 / nonstd::power(10.0, scale_power_);
+        *i.second *= scale_factor;
         }
 }
 
