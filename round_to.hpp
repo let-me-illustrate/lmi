@@ -268,9 +268,6 @@ bool round_to<RealType>::operator==(round_to const& z) const
     return decimals() == z.decimals() && style() == z.style();
 }
 
-// Profiling shows that inlining this member function makes a
-// realistic application that performs a lot of rounding run about
-// five percent faster with gcc.
 template<typename RealType>
 inline RealType round_to<RealType>::operator()(RealType r) const
 {
