@@ -298,6 +298,7 @@ std::string Input::RealizeExtraCompensationOnAssets()
         return s;
         }
 
+    LMI_ASSERT(!ExtraCompensationOnAssetsRealized_.empty());
     double highest = std::max_element
         (ExtraCompensationOnAssetsRealized_.begin()
         ,ExtraCompensationOnAssetsRealized_.end()
@@ -329,6 +330,7 @@ std::string Input::RealizeExtraCompensationOnPremium()
         return s;
         }
 
+    LMI_ASSERT(!ExtraCompensationOnPremiumRealized_.empty());
     double highest = std::max_element
         (ExtraCompensationOnPremiumRealized_.begin()
         ,ExtraCompensationOnPremiumRealized_.end()
@@ -384,6 +386,7 @@ std::string Input::RealizeCurrentCoiMultiplier()
         }
 
     double const z = database_->query<double>(DB_MinInputCoiMult);
+    LMI_ASSERT(!CurrentCoiMultiplierRealized_.empty());
     double lowest = std::min_element
         (CurrentCoiMultiplierRealized_.begin()
         ,CurrentCoiMultiplierRealized_.end()
@@ -790,6 +793,7 @@ std::string Input::RealizeSeparateAccountRate()
         // than twelve percent.
         max_sep_acct_rate = 1.0;
         }
+    LMI_ASSERT(!SeparateAccountRateRealized_.empty());
     double highest = std::max_element
         (SeparateAccountRateRealized_.begin()
         ,SeparateAccountRateRealized_.end()

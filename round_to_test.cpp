@@ -26,13 +26,18 @@
 #include "currency.hpp"                 // currency::cents_digits
 #include "fenv_lmi.hpp"
 #include "miscellany.hpp"               // floating_rep()
+#include "stl_extensions.hpp"           // nonstd::power()
 #include "test_tools.hpp"
 
 #include <algorithm>                    // max()
+#include <cfloat>                       // DECIMAL_DIG
 #include <climits>                      // INT_MIN
+#include <cmath>                        // fabs()
 #include <ios>
 #include <iostream>
+#include <limits>
 #include <ostream>
+#include <stdexcept>
 
 // Print name of software rounding style for diagnostics.
 char const* get_name_of_style(rounding_style style)
@@ -117,6 +122,7 @@ class round_to_test
     static void test();
 
   private:
+    static void test_scaling();
     static void test_fundamentals();
     static void test_all_modes(bool synchronize);
     static void test_rounding();
@@ -243,13 +249,7 @@ bool round_to_test::test_one_case
     if(!error_is_within_tolerance)
         {
         std::cout << '\n';
-        // Use enough precision to map the base-ten scientific
-        // representation back to binary without loss of accuracy.
-        // Cf. C99 5.2.4.2.2/8 (DECIMAL_DIG).
-        int nbits = std::numeric_limits<RealType>::digits;
-        std::streamsize old_precision = std::cout.precision
-            (1 + static_cast<int>(std::ceil(std::log10(std::pow(2.0, nbits))))
-            );
+        std::streamsize old_precision = std::cout.precision(DECIMAL_DIG);
         std::ios_base::fmtflags old_flags = std::cout.flags();
 
         std::cout
@@ -300,7 +300,12 @@ void round_to_test::test_various_float_types
     ,long double    expected
     )
 {
-    long double factor = detail::int_pow(10.0L, -decimals);
+    int const inverse_decimals = -decimals;
+    long double factor =
+        (0 <= inverse_decimals)
+        ?        nonstd::power(10.0L,  inverse_decimals)
+        : 1.0L / nonstd::power(10.0L, -inverse_decimals)
+        ;
     long double u = unrounded * factor;
     long double e = expected  * factor;
     LMI_TEST((test_one_case(static_cast<float >(u), static_cast<float >(e), decimals, style)));
@@ -548,6 +553,38 @@ void round_to_test::test_all_modes(bool synchronize)
     test_rounding();
 }
 
+void round_to_test::test_scaling()
+{
+    double const volatile d0 = 2.71828'18284'59045'23536;
+    double const lo = nextafter(d0, -INFINITY);
+    double const hi = nextafter(d0,  INFINITY);
+
+    double const volatile d1 = (d0 * 1.0e8) / 1.0e8;
+    double const volatile dreciprocal = 1.0 / 1.0e8;
+    double const volatile d2 = (d0 * 1.0e8) * dreciprocal;
+
+    double const volatile d3 = static_cast<double>((d0 * 1.0e8L) / 1.0e8L);
+    long double const volatile lreciprocal = 1.0L / 1.0e8L;
+    double const volatile d4 = static_cast<double>((d0 * 1.0e8L) * lreciprocal);
+
+    std::streamsize old_precision = std::cout.precision(DECIMAL_DIG);
+    std::ios_base::fmtflags old_flags = std::cout.flags();
+
+    std::cout
+        << lo << std::hexfloat << '\t' << lo << std::defaultfloat << " lo\n"
+        << d0 << std::hexfloat << '\t' << d0 << std::defaultfloat << " d0\n"
+        << hi << std::hexfloat << '\t' << hi << std::defaultfloat << " hi\n"
+        << d1 << std::hexfloat << '\t' << d1 << std::defaultfloat << " d1\n"
+        << d2 << std::hexfloat << '\t' << d2 << std::defaultfloat << " d2\n"
+        << d3 << std::hexfloat << '\t' << d3 << std::defaultfloat << " d3\n"
+        << d4 << std::hexfloat << '\t' << d4 << std::defaultfloat << " d4\n"
+        ;
+
+    std::cout.setf(old_flags);
+    std::cout.precision(old_precision);
+    std::cout << std::endl;
+}
+
 void round_to_test::test_fundamentals()
 {
     default_rounding_style() = r_indeterminate;
@@ -605,6 +642,7 @@ void round_to_test::test_fundamentals()
 
 void round_to_test::test()
 {
+    test_scaling();
     test_fundamentals();
 
     // The software default rounding style and the hardware rounding

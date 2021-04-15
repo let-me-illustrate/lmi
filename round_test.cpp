@@ -39,6 +39,7 @@
 #include "test_tools.hpp"
 
 #include <algorithm>                    // max()
+#include <cfloat>                       // DECIMAL_DIG
 #include <cmath>                        // round()
 #include <ios>
 #include <iostream>
@@ -203,13 +204,7 @@ bool test_one_case
     if(!error_is_within_tolerance)
         {
         std::cout << '\n';
-        // Use enough precision to map the base-ten scientific
-        // representation back to binary without loss of accuracy.
-        // Cf. C99 5.2.4.2.2/8 (DECIMAL_DIG).
-        int nbits = std::numeric_limits<RealType>::digits;
-        std::streamsize old_precision = std::cout.precision
-            (1 + static_cast<int>(std::ceil(std::log10(std::pow(2.0, nbits))))
-            );
+        std::streamsize old_precision = std::cout.precision(DECIMAL_DIG);
         std::ios_base::fmtflags old_flags = std::cout.flags();
 
         std::cout

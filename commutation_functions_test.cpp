@@ -57,24 +57,40 @@ std::vector<double> const& sample_q()
 void test_fundamentals()
 {
     // default ctors
-    OLCommFns olcf0;
-    ULCommFns ulcf0;
+    OLCommFns olcf_empty;
+    ULCommFns ulcf_empty;
+    LMI_TEST(olcf_empty. D().empty());
+    LMI_TEST(ulcf_empty.aD().empty());
+
+    // explicit ctors
+    OLCommFns olcf0 {{0.01}, {0.01}};
+    ULCommFns ulcf0 {{0.01}, {0.01}, {0.01}, mce_option1_for_7702, mce_monthly};
+    LMI_TEST(!olcf0. D().empty());
+    LMI_TEST(!ulcf0.aD().empty());
 
     // copy
     OLCommFns olcf1(olcf0);
     ULCommFns ulcf1(ulcf0);
+    LMI_TEST(!olcf1. D().empty());
+    LMI_TEST(!ulcf1.aD().empty());
 
     // copy-assign
     olcf0 = olcf1;
     ulcf0 = ulcf1;
+    LMI_TEST(!olcf0. D().empty());
+    LMI_TEST(!ulcf0.aD().empty());
 
     // move
     OLCommFns olcf2(std::move(olcf0));
     ULCommFns ulcf2(std::move(ulcf0));
+    LMI_TEST(!olcf2. D().empty());
+    LMI_TEST(!ulcf2.aD().empty());
 
     // move-assign
     olcf2 = std::move(olcf1);
     ulcf2 = std::move(ulcf1);
+    LMI_TEST(!olcf2. D().empty());
+    LMI_TEST(!ulcf2.aD().empty());
 }
 
 /// Exactly reproduce Table 2 from Eckley's paper.

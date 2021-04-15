@@ -26,6 +26,7 @@
 #include "fenv_lmi.hpp"
 #include "materially_equal.hpp"
 #include "miscellany.hpp"               // stifle_warning_for_unused_value()
+#include "stl_extensions.hpp"           // nonstd::power()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -191,7 +192,7 @@ void sample_results()
     fenv_initialize();
 }
 
-// These 'meteN' functions perform the same set of operations using
+// These 'mete[0123]' functions perform the same set of operations using
 // different implementations.
 
 // This implementation naively uses std::pow(); it is both slower and
@@ -243,6 +244,37 @@ void mete3()
         }
 }
 
+// These 'mete[45]' functions calculate 10^-9 in different ways.
+// The SGI extension is about eight times as fast as calling a
+// transcendental function; that outcome is not surprising, but
+// quantifying it is useful. Of course, it would not be surprising
+// to find that a table lookup would be even faster for "reasonable"
+// powers of ten.
+
+void mete4()
+{
+    double volatile base = 10.0;
+    int    volatile exp  = 9;
+    double volatile x;
+    stifle_warning_for_unused_value(x);
+    for(int j = 0; j < 100000; ++j)
+        {
+        x = 1.0 / nonstd::power(base, exp);
+        }
+}
+
+void mete5()
+{
+    double volatile base = 10.0;
+    int    volatile exp  = -9;
+    double volatile x;
+    stifle_warning_for_unused_value(x);
+    for(int j = 0; j < 100000; ++j)
+        {
+        x = std::pow(base, exp);
+        }
+}
+
 void assay_speed()
 {
     std::cout << "Speed tests:\n";
@@ -250,6 +282,8 @@ void assay_speed()
     std::cout << "  std::expm1       " << TimeAnAliquot(mete1) << '\n';
     std::cout << "  double      i365 " << TimeAnAliquot(mete2) << '\n';
     std::cout << "  long double i365 " << TimeAnAliquot(mete3) << '\n';
+    std::cout << "  10^-9 nonstd     " << TimeAnAliquot(mete4) << '\n';
+    std::cout << "  10^-9 std        " << TimeAnAliquot(mete5) << '\n';
 }
 
 int test_main(int, char*[])

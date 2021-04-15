@@ -28,10 +28,10 @@
 #include "mc_enum_type_enums.hpp"       // enum rounding_style
 #include "stl_extensions.hpp"           // nonstd::power()
 
-#include <cmath>
+#include <cmath>                        // fabs(), floor(), rint()
 #include <limits>
 #include <stdexcept>
-#include <type_traits>
+#include <type_traits>                  // is_floating_point_v
 #include <vector>
 
 // Round a floating-point number to a given number of decimal places,
@@ -52,89 +52,6 @@
 // convert between those types. You could prevent that by changing
 // this alias-declaration to double.
 using max_prec_real = long double;
-
-namespace detail
-{
-#if 1
-/// Raise 'r' to the integer power 'n'.
-///
-/// Motivation: To raise an integer-valued real to a positive integer
-/// power without any roundoff error as long as the result is exactly
-/// representable. See:
-///   https://lists.nongnu.org/archive/html/lmi/2016-12/msg00049.html
-///
-/// For negative 'n', the most accurate result possible is obtained by
-/// calculating power(r, -n), and returning its reciprocal calculated
-/// with the maximum available precision.
-///
-/// Because this template function is called only by the round_to
-/// constructor, efficiency here is not crucial in the contemplated
-/// typical case where a round_to object is created once and used to
-/// round many numbers, whereas it is crucial to avoid roundoff error.
-/// However, that does not justify gratuitous inefficiency, and the
-/// use of power() here means that the number of multiplications is
-/// O(log n), so this should be as fast as a library function that
-/// has been optimized for accuracy.
-///
-/// Fails to check for overflow or undeflow, but the round_to ctor
-/// does compare 'n' to the minimum and maximum decimal exponents,
-/// which suffices there because its 'r' is always ten.
-
-template<typename RealType>
-RealType int_pow(RealType r, int n)
-{
-    if(0 == n)
-        {
-        return RealType(1.0);
-        }
-    if(n < 0)
-        {
-        return max_prec_real(1.0) / nonstd::power(r, -n);
-        }
-    else
-        {
-        return nonstd::power(r, n);
-        }
-}
-
-#else  // 0
-
-/// Raise an integer-valued real to an integer power.
-///
-/// Motivation: calculate accurate powers of ten. See:
-///   https://lists.nongnu.org/archive/html/lmi/2016-12/msg00049.html
-/// Library authors often optimize pow() for integral exponents,
-/// using multiplication rather than a transcendental calculation.
-/// When 'r' is exactly representable, positive integral powers
-/// returned by a high-quality std::pow() are likely to be exact if
-/// they are exactly representable, or otherwise as accurate as they
-/// can be; but for negative integral powers this integral-exponent
-/// "optimization" may very well reduce accuracy, e.g., if 10^-3 is
-/// calculated as (0.1 * 0.1 * 0.1). Because the positive-exponent
-/// case is likely to be treated ideally by the library author, when
-/// 'n' is negative this function calls std::pow() to calculate the
-/// positive power and returns the reciprocal: 1 / (10 * 10 * 10)
-/// in the preceding example.
-
-template<typename RealType>
-RealType int_pow(RealType r, int n)
-{
-    if(0 == n)
-        {
-        return RealType(1.0);
-        }
-    else if(n < 0)
-        {
-        return RealType(1.0) / std::pow(r, -n);
-        }
-    else
-        {
-        return std::pow(r, n);
-        }
-}
-
-#endif // 0
-} // namespace detail
 
 inline rounding_style& default_rounding_style()
 {
@@ -280,65 +197,47 @@ class round_to
     using rounding_fn_t = RealType (*)(RealType);
     rounding_fn_t select_rounding_function(rounding_style) const;
 
-    int decimals_                    {0};
-    rounding_style style_            {r_indeterminate};
-    max_prec_real scale_fwd_         {1.0};
-    max_prec_real scale_back_        {1.0};
-    int decimals_cents_              {0};
-    max_prec_real scale_fwd_cents_   {1.0};
-    max_prec_real scale_back_cents_  {1.0};
-    rounding_fn_t rounding_function_ {detail::erroneous_rounding_function};
+    int            decimals_          {0};
+    rounding_style style_             {r_indeterminate};
+    max_prec_real  scale_fwd_         {1.0};
+    max_prec_real  scale_back_        {1.0};
+    int            decimals_cents_    {0};
+    max_prec_real  scale_fwd_cents_   {1.0};
+    max_prec_real  scale_back_cents_  {1.0};
+    rounding_fn_t  rounding_function_ {detail::erroneous_rounding_function};
 };
-
-// Naran used const data members, reasoning that a highly optimizing
-// compiler could then calculate std::pow(10.0, n) at compile time.
-// Not all compilers do this. None available to the author do.
-//
-// Is this a design flaw? Const data members require initialization in
-// the initializer-list, so this test detects a domain error only after
-// it has produced the side effect of setting 'errno'. Thus, the strong
-// guarantee is lost, and only the basic guarantee is provided.
-//
-// The guarantee could be strengthened by not throwing at all. That
-// would be consistent with other math functions. But it's a shame to
-// write new code that forces the user to check 'errno'.
-//
-// TODO ?? The data members were made non-const after profiling showed
-// no penalty on four available compilers (not including Naran's).
-// The code should now be reworked to provide the strong guarantee.
-
-// Division by an exact integer value should have slightly better
-// accuracy in some cases. But profiling shows that multiplication by
-// the reciprocal stored in scale_back_ makes a realistic application
-// that performs a lot of rounding run about four percent faster with
-// all compilers tested. TODO ?? The best design decision would be
-// clearer if we quantified the effect on accuracy.
 
 template<typename RealType>
 round_to<RealType>::round_to(int a_decimals, rounding_style a_style)
     :decimals_          {a_decimals}
     ,style_             {a_style}
-    ,scale_fwd_         {detail::int_pow(max_prec_real(10.0), decimals_)}
-    ,scale_back_        {max_prec_real(1.0) / scale_fwd_}
     ,decimals_cents_    {decimals_ - currency::cents_digits}
-    ,scale_fwd_cents_   {detail::int_pow(max_prec_real(10.0), decimals_cents_)}
-    ,scale_back_cents_  {max_prec_real(1.0) / scale_fwd_cents_}
     ,rounding_function_ {select_rounding_function(style_)}
 {
-/*
-// TODO ?? This might improve accuracy slightly, but would prevent
-// the data members from being const.
-    if(0 <= a_decimals)
+    constexpr max_prec_real one( 1.0);
+    constexpr max_prec_real ten(10.0);
+
+    if(0 <= decimals_)
         {
-        scale_fwd_  = detail::int_pow(max_prec_real(10.0), a_decimals);
-        scale_back_ = max_prec_real(1.0) / scale_fwd_;
+        scale_fwd_        = nonstd::power(ten, decimals_);
+        scale_back_       = one / scale_fwd_;
         }
     else
         {
-        scale_back_ = detail::int_pow(max_prec_real(10.0), -a_decimals);
-        scale_fwd_  = max_prec_real(1.0) / scale_back_;
+        scale_back_       = nonstd::power(ten, -decimals_);
+        scale_fwd_        = one / scale_back_;
         }
-*/
+
+    if(0 <= decimals_cents_)
+        {
+        scale_fwd_cents_  = nonstd::power(ten, decimals_cents_);
+        scale_back_cents_ = one / scale_fwd_cents_;
+        }
+    else
+        {
+        scale_back_cents_ = nonstd::power(ten, -decimals_cents_);
+        scale_fwd_cents_  = one / scale_back_cents_;
+        }
 
     // This throws only if all use of the function object is invalid.
     // Even if it doesn't throw, there are numbers that it cannot round
@@ -348,8 +247,8 @@ round_to<RealType>::round_to(int a_decimals, rounding_style a_style)
     //    std::numeric_limits<RealType>::max_exponent10
     // decimals.
     if
-        (a_decimals < std::numeric_limits<RealType>::min_exponent10
-        ||            std::numeric_limits<RealType>::max_exponent10 < a_decimals
+        (decimals_ < std::numeric_limits<RealType>::min_exponent10
+        ||           std::numeric_limits<RealType>::max_exponent10 < decimals_
         )
         {
         throw std::domain_error("Invalid number of decimals.");
@@ -362,9 +261,21 @@ bool round_to<RealType>::operator==(round_to const& z) const
     return decimals() == z.decimals() && style() == z.style();
 }
 
-// Profiling shows that inlining this member function makes a
-// realistic application that performs a lot of rounding run about
-// five percent faster with gcc.
+/// Division by an exact integer value would afford a stronger
+/// guarantee of accuracy, particularly when the value to be rounded
+/// is already rounded--e.g., if 3.00 is to be rounded to hundredths,
+/// then
+///   (100.0 * 3.00) / 100
+/// is preferable to
+///   (100.0 * 3.00) * 0.01
+/// especially if the rounding style is anything but to-nearest.
+///
+/// However, reciprocal multiplication is faster than division--see:
+///   https://lists.nongnu.org/archive/html/lmi/2021-04/msg00010.html
+/// et seqq., which demonstrates an average three-percent speedup,
+/// with no observed difference in a comprehensive system test as
+/// long as the multiplications are performed in extended precision.
+
 template<typename RealType>
 inline RealType round_to<RealType>::operator()(RealType r) const
 {
