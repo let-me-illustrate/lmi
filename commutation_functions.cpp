@@ -129,6 +129,7 @@ ULCommFns::ULCommFns
     kd.resize(    length);
     kc.resize(    length);
     an.resize(    length);
+    kn.resize(    length);
     km.resize(    length);
 
     int periods_per_year = mode;
@@ -187,5 +188,6 @@ ULCommFns::ULCommFns
     ad.pop_back();
 
     std::partial_sum(ad.rbegin(), ad.rend(), an.rbegin());
+    std::partial_sum(kd.rbegin(), kd.rend(), kn.rbegin());
     std::partial_sum(kc.rbegin(), kc.rend(), km.rbegin());
 }

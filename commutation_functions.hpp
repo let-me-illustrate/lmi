@@ -88,6 +88,7 @@ class LMI_SO ULCommFns final
     std::vector<double> const&  kD() const {return  kd;}
     std::vector<double> const&  kC() const {return  kc;}
     std::vector<double> const&  aN() const {return  an;}
+    std::vector<double> const&  kN() const {return  kn;}
     std::vector<double> const&  kM() const {return  km;}
 
   private:
@@ -96,6 +97,7 @@ class LMI_SO ULCommFns final
     std::vector<double>  kd;
     std::vector<double>  kc;
     std::vector<double>  an;
+    std::vector<double>  kn;
     std::vector<double>  km;
 };
 

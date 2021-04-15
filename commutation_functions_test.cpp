@@ -679,6 +679,112 @@ void Test_1980_CSO_Male_ANB()
         ;
 }
 
+/// Premiums for tables II-8 and V-4 from the SOA 7702 textbook.
+///
+/// The textbook uses OL rather than UL commutation functions.
+/// The OL touchstone values below are taken from the textbook,
+/// with corrections as noted.
+
+void test_7702_textbook_example()
+{
+    std::vector<double> q(sample_q());
+
+    // OL GLP
+    {
+    std::vector<double> i(q.size(), 0.045);
+    OLCommFns CF(q, i);
+    LMI_TEST(std::fabs( 0.3031861 - CF.M()[45] / CF.D()[45]) < 0.00000005);
+    LMI_TEST(std::fabs(16.1815675 - CF.N()[45] / CF.D()[45]) < 0.00000005);
+    double glp45  = (100000.0 * CF.M()[45] / CF.N()[45] + 60.0) / 0.95;
+    LMI_TEST(std::fabs( 2035.42 - glp45 ) < 0.005);
+    double glp70B = ( 50000.0 * CF.M()[70] / CF.N()[70] + 60.0) / 0.95;
+    LMI_TEST(std::fabs( 3903.43 - glp70B) < 0.005);
+    double glp70C = (100000.0 * CF.M()[70] / CF.N()[70] + 60.0) / 0.95;
+    // Here, Table V-4 has "3903.42", apparently a typo for "3903.43"
+    // (rounded from 3903.43398588527088577):
+    LMI_TEST(std::fabs( 7743.71 - glp70C) < 0.005);
+    // ...and thus here "-1804.87" should be "-1804.86":
+    LMI_TEST(std::fabs(-1804.86 - (glp45 + glp70B - glp70C)) < 0.01);
+#if 0 // optionally display results for confirmation:
+    std::cout
+        << glp45 << " glp45\n"
+        << glp70B << " glp70B\n"
+        << glp70C << " glp70C\n"
+        << glp45 + glp70B - glp70C << " glp45 + glp70B - glp70C\n"
+        << std::endl
+        ;
+#endif // 0
+    }
+
+    // GLP formulas above are written to follow the text more closely;
+    // GSP formulas below are written in such a way that replacing
+    // D by N in the denominator would give GLP.
+
+    // OL GSP
+    {
+    std::vector<double> i(q.size(), 0.060);
+    OLCommFns CF(q, i);
+    double gsp45  = (100000.0 * CF.M()[45] + 60.0 * CF.N()[45]) / (CF.D()[45] * 0.95);
+    LMI_TEST(std::fabs(23883.74 - gsp45 ) < 0.005);
+    double gsp70B = ( 50000.0 * CF.M()[70] + 60.0 * CF.N()[70]) / (CF.D()[70] * 0.95);
+    LMI_TEST(std::fabs(29453.12 - gsp70B) < 0.005);
+    double gsp70C = (100000.0 * CF.M()[70] + 60.0 * CF.N()[70]) / (CF.D()[70] * 0.95);
+    LMI_TEST(std::fabs(58404.21 - gsp70C) < 0.005);
+    LMI_TEST(std::fabs(-5067.35 - (gsp45 + gsp70B - gsp70C)) < 0.01);
+    }
+
+    // UL commutation functions for the same assumptions
+
+    std::vector<double> q12;
+    q12 <<= apply_binary(coi_rate_from_q<double>(), q, 1.0 / 11.0);
+
+    // UL GLP
+    {
+    std::vector<double>ic(q.size(), i_upper_12_over_12_from_i<double>()(0.045));
+    std::vector<double>ig(q.size(), i_upper_12_over_12_from_i<double>()(0.045));
+    ULCommFns CF(q12, ic, ig, mce_option1_for_7702, mce_monthly);
+    double glp45 =
+          (100000.0 * (CF.kM()[45] + CF.aDomega()) + 5.0 * CF.kN()[45])
+        / (CF.aN()[45] * 0.95)
+        ;
+    LMI_TEST(std::fabs( 2074.40288 - glp45 ) < 0.01);
+    double glp70B =
+          ( 50000.0 * (CF.kM()[70] + CF.aDomega()) + 5.0 * CF.kN()[70])
+        / (CF.aN()[70] * 0.95)
+        ;
+    LMI_TEST(std::fabs( 3980.10414 - glp70B) < 0.01);
+    double glp70C =
+          (100000.0 * (CF.kM()[70] + CF.aDomega()) + 5.0 * CF.kN()[70])
+        / (CF.aN()[70] * 0.95)
+        ;
+    LMI_TEST(std::fabs( 7900.49522 - glp70C) < 0.01);
+    LMI_TEST(std::fabs(-1845.98820 - (glp45 + glp70B - glp70C)) < 0.01);
+    }
+
+    // UL GSP
+    {
+    std::vector<double>ic(q.size(), i_upper_12_over_12_from_i<double>()(0.060));
+    std::vector<double>ig(q.size(), i_upper_12_over_12_from_i<double>()(0.060));
+    ULCommFns CF(q12, ic, ig, mce_option1_for_7702, mce_monthly);
+    double gsp45 =
+          (100000.0 * (CF.kM()[45] + CF.aDomega()) + 5.0 * CF.kN()[45])
+        / (CF.aD()[45] * 0.95)
+        ;
+    LMI_TEST(std::fabs(24486.3207 - gsp45 ) < 0.01);
+    double gsp70B =
+          ( 50000.0 * (CF.kM()[70] + CF.aDomega()) + 5.0 * CF.kN()[70])
+        / (CF.aD()[70] * 0.95)
+        ;
+    LMI_TEST(std::fabs(30225.8816 - gsp70B) < 0.01);
+    double gsp70C =
+          (100000.0 * (CF.kM()[70] + CF.aDomega()) + 5.0 * CF.kN()[70])
+        / (CF.aD()[70] * 0.95)
+        ;
+    LMI_TEST(std::fabs(59979.4650 - gsp70C) < 0.01);
+    LMI_TEST(std::fabs(-5267.2627 - (gsp45 + gsp70B - gsp70C)) < 0.01);
+    }
+}
+
 /// Test UL commutation functions in extreme cases.
 ///
 /// For example, ic and ig can both be zero, and qc may round to zero
@@ -759,6 +865,7 @@ int test_main(int, char*[])
     ULCommFnsTest();
     OLCommFnsTest();
     Test_1980_CSO_Male_ANB();
+    test_7702_textbook_example();
     TestLimits();
     assay_speed();
 
