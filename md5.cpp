@@ -89,6 +89,7 @@
 #endif // !defined WORDS_BIGENDIAN
 
 #if defined LMI_GCC
+#   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wold-style-cast"
 #   pragma GCC diagnostic ignored "-Wuseless-cast"
 #endif // defined LMI_GCC
@@ -506,3 +507,7 @@ md5_process_block (void const* buffer, std::size_t a_len, struct md5_ctx* ctx)
   ctx->C = C;
   ctx->D = D;
 }
+
+#if defined LMI_GCC
+#   pragma GCC diagnostic pop
+#endif // defined LMI_GCC
