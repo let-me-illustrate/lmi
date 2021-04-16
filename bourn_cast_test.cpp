@@ -459,10 +459,10 @@ void test_m64_neighborhood()
     // unsigned integer is UB.
 
     unsigned long long int const ull_max = ull_traits::max();
-#if defined __clang__
+#if defined LMI_CLANG
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wimplicit-int-float-conversion"
-#endif // defined __clang__
+#endif // defined LMI_CLANG
 #if defined __GNUC__
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wfloat-conversion"
@@ -471,9 +471,9 @@ void test_m64_neighborhood()
 #if defined __GNUC__
 #   pragma GCC diagnostic pop
 #endif // defined __GNUC__
-#if defined __clang__
+#if defined LMI_CLANG
 #   pragma clang diagnostic pop
-#endif // defined __clang__
+#endif // defined LMI_CLANG
     LMI_TEST(f_ull_max == static_cast<float>(ull_max));
     // Suppressed because behavior is undefined:
     // LMI_TEST(ull_max == static_cast<unsigned long long int>(f_ull_max));

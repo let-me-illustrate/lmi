@@ -24,7 +24,7 @@
 
 #include "config.hpp"
 
-#if defined __clang__
+#if defined LMI_CLANG
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wchar-subscripts"
 #   pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -32,7 +32,7 @@
 #   pragma clang diagnostic ignored "-Wkeyword-macro"
 #   pragma clang diagnostic ignored "-Wparentheses-equality"
 #   pragma clang diagnostic ignored "-Wregister"
-#elif defined __GNUC__
+#elif defined LMI_GCC
 #   pragma GCC diagnostic push
 #   if 7 <= __GNUC__
 #       pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
@@ -44,12 +44,12 @@
 #   pragma GCC diagnostic ignored "-Wshadow"
 #   pragma GCC diagnostic ignored "-Wswitch-enum"
 #   pragma GCC diagnostic ignored "-Wuseless-cast"
-#endif // defined __GNUC__
+#endif // defined LMI_GCC
 #include <boost/regex.hpp>
-#if defined __clang__
+#if defined LMI_CLANG
 #   pragma clang diagnostic pop
-#elif defined __GNUC__
+#elif defined LMI_GCC
 #   pragma GCC diagnostic pop
-#endif // defined __GNUC__
+#endif // defined LMI_GCC
 
 #endif // boost_regex_hpp
