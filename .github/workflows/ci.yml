@@ -20,15 +20,6 @@ jobs:
           - name: Cross-compile for MSW-32
             triplet: i686-w64-mingw32
             mingw: true
-          - name: Native Linux build
-            mingw: false
-          - name: Linux using autotools
-            mingw: false
-            autotools: true
-          - name: Linux with clang
-            compiler: clang
-            mingw: false
-            autotools: true
     env:
       LMI_COMPILER: ${{ matrix.compiler || 'gcc' }}
       LMI_TRIPLET: ${{ matrix.triplet || 'x86_64-pc-linux-gnu' }}
@@ -206,10 +197,6 @@ jobs:
         run: make $coefficiency --output-sync=recurse
         if: matrix.autotools != true
 
-      - name: Build lmi with SO attributes
-        if: matrix.autotools != true
-        run: make $coefficiency --output-sync=recurse build_type=so_test USE_SO_ATTRIBUTES=1 all
-
       - name: Setup lmi for tests
         run: |
           cat >/opt/lmi/data/configurable_settings.xml <<EOF
@@ -262,22 +249,6 @@ jobs:
         if: matrix.autotools != true
         run: make install
 
-      - name: Check concinnity
-        if: matrix.autotools != true
-        run: |
-          # Somehow these files are executable and this triggers complaints
-          # from check_script.sh, so avoid them by fixing permissions.
-          chmod -x .git/info/exclude .git/description
-          make $coefficiency check_concinnity
-
-      - name: Check physical closure
-        if: matrix.autotools != true
-        run: make $coefficiency check_physical_closure
-
-      - name: Run CLI tests
-        if: matrix.autotools != true
-        run: make $coefficiency cli_tests
-
       - name: Run unit tests (autotools)
         if: matrix.autotools
         run: |
@@ -290,10 +261,6 @@ jobs:
             echo '-----------------------------------------------------------'
             exit $err
           fi
-
-      - name: Run unit tests
-        if: matrix.autotools != true
-        run: make $coefficiency unit_tests
 
       - name: Run GUI tests
         if: matrix.mingw
