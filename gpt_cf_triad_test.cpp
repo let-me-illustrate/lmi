@@ -287,17 +287,17 @@ void gpt_cf_triad_test::initialize(int issue_age)
 gpt_vector_parms gpt_cf_triad_test::v_parms()
 {
     gpt_vector_parms z =
-        {prem_load_target
-        ,prem_load_excess
-        ,policy_fee_monthly
-        ,policy_fee_annual
-        ,specamt_load_monthly
-        ,qab_gio_rate
-        ,qab_adb_rate
-        ,qab_term_rate
-        ,qab_spouse_rate
-        ,qab_child_rate
-        ,qab_waiver_rate
+        {.prem_load_target     = prem_load_target
+        ,.prem_load_excess     = prem_load_excess
+        ,.policy_fee_monthly   = policy_fee_monthly
+        ,.policy_fee_annual    = policy_fee_annual
+        ,.specamt_load_monthly = specamt_load_monthly
+        ,.qab_gio_rate         = qab_gio_rate
+        ,.qab_adb_rate         = qab_adb_rate
+        ,.qab_term_rate        = qab_term_rate
+        ,.qab_spouse_rate      = qab_spouse_rate
+        ,.qab_child_rate       = qab_child_rate
+        ,.qab_waiver_rate      = qab_waiver_rate
         };
     return z;
 }
@@ -307,17 +307,17 @@ gpt_vector_parms gpt_cf_triad_test::v_parms()
 gpt_scalar_parms gpt_cf_triad_test::s_parms()
 {
     gpt_scalar_parms z =
-        {     0   // duration
-        ,  1000.0 // target
-        ,120000.0 // f3bft
-        ,100000.0 // endt_bft
-        ,100000.0 // chg_sa_amt
-        , 20000.0 // qab_gio_amt
-        ,100000.0 // qab_adb_amt
-        , 25000.0 // qab_term_amt
-        , 10000.0 // qab_spouse_amt
-        ,  5000.0 // qab_child_amt
-        , 50000.0 // qab_waiver_amt
+        {.duration       =      0
+        ,.target         =   1000.0
+        ,.f3bft          = 120000.0
+        ,.endt_bft       = 100000.0
+        ,.chg_sa_amt     = 100000.0
+        ,.qab_gio_amt    =  20000.0
+        ,.qab_adb_amt    = 100000.0
+        ,.qab_term_amt   =  25000.0
+        ,.qab_spouse_amt =  10000.0
+        ,.qab_child_amt  =   5000.0
+        ,.qab_waiver_amt =  50000.0
         };
     return z;
 }
