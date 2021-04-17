@@ -1,4 +1,4 @@
-// Internal Revenue Code section 7702 guideline premium--unit test.
+// GPT commutation functions--unit test.
 //
 // Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
 //
@@ -196,7 +196,7 @@ std::vector<double> qab_waiver_rate      ;
 
 /// Implicitly-declared special member functions do the right thing.
 
-class gpt_test
+class gpt_cf_triad_test
 {
   public:
     static void test()
@@ -237,7 +237,7 @@ class gpt_test
 /// vector is altered if necessary--such that v[x]+t == v[x+t], so
 /// that the same invariant may be tested for premiums.
 
-void gpt_test::initialize(int issue_age)
+void gpt_cf_triad_test::initialize(int issue_age)
 {
     double constexpr iglp = 0.04;
     double constexpr igsp = 0.06;
@@ -284,7 +284,7 @@ void gpt_test::initialize(int issue_age)
 
 /// Instantiate vector parameters from globals set by initialize().
 
-gpt_vector_parms gpt_test::v_parms()
+gpt_vector_parms gpt_cf_triad_test::v_parms()
 {
     gpt_vector_parms z =
         {prem_load_target
@@ -304,7 +304,7 @@ gpt_vector_parms gpt_test::v_parms()
 
 /// Instantiate plausible specimen scalar parameters.
 
-gpt_scalar_parms gpt_test::s_parms()
+gpt_scalar_parms gpt_cf_triad_test::s_parms()
 {
     gpt_scalar_parms z =
         {     0   // duration
@@ -324,14 +324,14 @@ gpt_scalar_parms gpt_test::s_parms()
 
 /// Instantiate GPT commutation functions.
 
-gpt_cf_triad gpt_test::instantiate_cf()
+gpt_cf_triad gpt_cf_triad_test::instantiate_cf()
 {
     return gpt_cf_triad(q_m, glp_ic, glp_ig, gsp_ic, gsp_ig, v_parms());
 }
 
 /// Test gpt_cf_triad::calculate_premium()'s asserted preconditions.
 
-void gpt_test::test_preconditions()
+void gpt_cf_triad_test::test_preconditions()
 {
     gpt_scalar_parms parms = s_parms();
     initialize(0);
@@ -411,7 +411,7 @@ void gpt_test::test_preconditions()
 
 /// Instantiate obsolescent GPT class.
 
-Irc7702 gpt_test::instantiate_old(int issue_age)
+Irc7702 gpt_cf_triad_test::instantiate_old(int issue_age)
 {
     int const length = lmi::ssize(q_m);
     // The old class recognizes only one QAB: ADB. So that all QABs
@@ -470,7 +470,7 @@ Irc7702 gpt_test::instantiate_old(int issue_age)
 
 /// Compare {GSP, GLP opt 1, GLP opt 2} for old and new GPT classes.
 
-void gpt_test::compare_premiums(int issue_age, double target)
+void gpt_cf_triad_test::compare_premiums(int issue_age, double target)
 {
     gpt_scalar_parms parms = s_parms();
     parms.target = target;
@@ -527,7 +527,7 @@ void gpt_test::compare_premiums(int issue_age, double target)
 ///
 /// For the nonce, similarly compare new to obsolescent GPT class.
 
-void gpt_test::test_premium_calculations()
+void gpt_cf_triad_test::test_premium_calculations()
 {
     int const omega = lmi::ssize(sample_q(0));
 
@@ -565,7 +565,7 @@ void gpt_test::test_premium_calculations()
     LMI_TEST(5050 == count);
 }
 
-void gpt_test::mete_premiums()
+void gpt_cf_triad_test::mete_premiums()
 {
     static gpt_scalar_parms const parms = s_parms();
     static gpt_cf_triad const z = instantiate_cf();
@@ -579,12 +579,12 @@ void gpt_test::mete_premiums()
 /// This simple pass-through function could have been written inline
 /// with std::bind, but it's preferable not to drag that in.
 
-void gpt_test::mete_instantiate_old()
+void gpt_cf_triad_test::mete_instantiate_old()
 {
     instantiate_old(0);
 }
 
-void gpt_test::mete_premiums_old()
+void gpt_cf_triad_test::mete_premiums_old()
 {
     static int     const duration =      0  ;
     static double  const f3bft    = 120000.0;
@@ -595,7 +595,7 @@ void gpt_test::mete_premiums_old()
     z.CalculateGLP(duration, f3bft, endt_bft, endt_bft, mce_option2_for_7702);
 }
 
-void gpt_test::assay_speed()
+void gpt_cf_triad_test::assay_speed()
 {
     initialize(0);
     std::cout
@@ -619,7 +619,7 @@ void gpt_test::assay_speed()
 ///
 /// Touchstone values hardcoded below are from 'gnumeric'.
 
-void gpt_test::test_spreadsheet_0()
+void gpt_cf_triad_test::test_spreadsheet_0()
 {
     int const issue_age = 0;
     // SOA table 00042 1980 CSO Ult ANB Male Unismoke
@@ -696,7 +696,7 @@ void gpt_test::test_spreadsheet_0()
 ///
 /// Touchstone values hardcoded below are from 'gnumeric'.
 
-void gpt_test::test_spreadsheet_1()
+void gpt_cf_triad_test::test_spreadsheet_1()
 {
     int const issue_age = 0;
     // SOA table 00042 1980 CSO Ult ANB Male Unismoke
@@ -797,7 +797,7 @@ void gpt_test::test_spreadsheet_1()
 ///
 /// Touchstone values hardcoded below are from 'gnumeric'.
 
-void gpt_test::test_spreadsheet_2()
+void gpt_cf_triad_test::test_spreadsheet_2()
 {
     int const issue_age = 0;
     // SOA table 00042 1980 CSO Ult ANB Male Unismoke
@@ -864,6 +864,6 @@ void gpt_test::test_spreadsheet_2()
 
 int test_main(int, char*[])
 {
-    gpt_test::test();
+    gpt_cf_triad_test::test();
     return EXIT_SUCCESS;
 }
