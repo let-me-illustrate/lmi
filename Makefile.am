@@ -117,7 +117,7 @@ TESTS = \
     financial_test \
     getopt_test \
     global_settings_test \
-    gpt_test \
+    gpt_cf_triad_test \
     handle_exceptions_test \
     i7702_test \
     ieee754_test \
@@ -736,14 +736,14 @@ global_settings_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 
-gpt_test_SOURCES = \
+gpt_cf_triad_test_SOURCES = \
   commutation_functions.cpp \
   cso_table.cpp \
+  gpt_cf_triad_test.cpp \
   gpt_commutation_functions.cpp \
-  gpt_test.cpp \
   ihs_irc7702.cpp
-gpt_test_CXXFLAGS = $(AM_CXXFLAGS)
-gpt_test_LDADD = \
+gpt_cf_triad_test_CXXFLAGS = $(AM_CXXFLAGS)
+gpt_cf_triad_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 

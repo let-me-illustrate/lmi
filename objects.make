@@ -429,7 +429,7 @@ unit_test_targets := \
   financial_test \
   getopt_test \
   global_settings_test \
-  gpt_test \
+  gpt_cf_triad_test \
   handle_exceptions_test \
   i7702_test \
   ieee754_test \
@@ -667,15 +667,15 @@ global_settings_test$(EXEEXT): \
   null_stream.o \
   path_utility.o \
 
-gpt_test$(EXEEXT): \
+gpt_cf_triad_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   commutation_functions.o \
   cso_table.o \
   global_settings.o \
+  gpt_cf_triad_test.o \
   gpt_commutation_functions.o \
-  gpt_test.o \
   ihs_irc7702.o \
   miscellany.o \
   null_stream.o \
