@@ -277,6 +277,7 @@ lmi_common_objects := \
   cso_table.o \
   financial.o \
   fund_data.o \
+  gpt_commutation_functions.o \
   gpt_input.o \
   gpt_server.o \
   gpt_specamt.o \
@@ -294,6 +295,7 @@ lmi_common_objects := \
   ihs_irc7702a.o \
   ihs_mortal.o \
   ihs_server7702.o \
+  irc7702.o \
   irc7702_tables.o \
   lingo.o \
   lmi.o \
@@ -430,6 +432,7 @@ unit_test_targets := \
   getopt_test \
   global_settings_test \
   gpt_cf_triad_test \
+  gpt_test \
   handle_exceptions_test \
   i7702_test \
   ieee754_test \
@@ -681,6 +684,14 @@ gpt_cf_triad_test$(EXEEXT): \
   null_stream.o \
   path_utility.o \
   timer.o \
+
+gpt_test$(EXEEXT): \
+  $(common_test_objects) \
+  commutation_functions.o \
+  cso_table.o \
+  gpt_commutation_functions.o \
+  gpt_test.o \
+  irc7702.o \
 
 handle_exceptions_test$(EXEEXT): \
   $(common_test_objects) \
