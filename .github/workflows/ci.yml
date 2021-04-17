@@ -303,6 +303,11 @@ jobs:
             num_tries=1
             while true; do
                 if xset -d :10 -q >/dev/null 2>&1; then
+                    echo 'Xvfb has become available.'
+                    # Trying to use it immediately can still result in errors
+                    # when creating the windows, somehow, so give it some time
+                    # to settle.
+                    sleep 3
                     break
                 fi
 
@@ -315,5 +320,5 @@ jobs:
                 echo "Still waiting for Xvfb (attempt #$num_tries)"
                 sleep 3
             done
-            echo 'Xvfb seems to be available, launching the test.'
+            echo 'Launching the GUI test:'
             DISPLAY=:10 ./gui_test.sh
