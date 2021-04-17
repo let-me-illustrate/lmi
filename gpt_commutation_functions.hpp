@@ -75,17 +75,17 @@ struct gpt_vector_parms
 /// differs between GLP and GSP. The 'mcenum_dbopt_7702' argument
 /// is excluded here because it's irrelevant for GSP.
 ///
-/// 'chg_sa_amt' is the base for any specified-amount load. It may
+/// 'chg_sa_base' is the base for any specified-amount load. It may
 /// differ from 'specamt', e.g., by being limited to a scalar maximum,
 /// by including a term amount, or by being set immutably at issue.
 
 struct gpt_scalar_parms
 {
     int    duration       ;
-    double f3bft          ;
+    double f3_bft         ;
     double endt_bft       ;
-    double target         ;
-    double chg_sa_amt     ;
+    double target_prem    ;
+    double chg_sa_base    ;
     double qab_gio_amt    ;
     double qab_adb_amt    ;
     double qab_term_amt   ;

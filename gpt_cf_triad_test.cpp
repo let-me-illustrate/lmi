@@ -308,10 +308,10 @@ gpt_scalar_parms gpt_cf_triad_test::s_parms()
 {
     gpt_scalar_parms z =
         {.duration       =      0
-        ,.f3bft          = 120000.0
+        ,.f3_bft         = 120000.0
         ,.endt_bft       = 100000.0
-        ,.target         =   1000.0
-        ,.chg_sa_amt     = 100000.0
+        ,.target_prem    =   1000.0
+        ,.chg_sa_base    = 100000.0
         ,.qab_gio_amt    =  20000.0
         ,.qab_adb_amt    = 100000.0
         ,.qab_term_amt   =  25000.0
@@ -357,7 +357,7 @@ void gpt_cf_triad_test::test_preconditions()
 
     // Negative target. (Identical preconditions for other scalar
     // parameters are not redundantly tested here.)
-    parms.target = -0.01;
+    parms.target_prem = -0.01;
     LMI_TEST_THROW
         (z.calculate_premium(oe_gsp, mce_option1_for_7702, parms)
         ,std::runtime_error
@@ -473,18 +473,18 @@ Irc7702 gpt_cf_triad_test::instantiate_old(int issue_age)
 void gpt_cf_triad_test::compare_premiums(int issue_age, double target)
 {
     gpt_scalar_parms parms = s_parms();
-    parms.target = target;
+    parms.target_prem = target;
 
     initialize(issue_age);
 
     gpt_cf_triad const z = instantiate_cf();
 
-    double const f3bft    = parms.f3bft   ;
+    double const f3_bft   = parms.f3_bft  ;
     double const endt_bft = parms.endt_bft;
     // This test of the obsolescent class segfaults with como.
     Irc7702 z_old = instantiate_old(issue_age);
     // Set target (the other arguments don't matter here).
-    z_old.Initialize7702(f3bft, endt_bft, mce_option1_for_7702, target);
+    z_old.Initialize7702(f3_bft, endt_bft, mce_option1_for_7702, target);
 
     int const omega = lmi::ssize(sample_q(0));
     LMI_ASSERT(lmi::ssize(qab_waiver_rate) == omega - issue_age);
@@ -494,9 +494,9 @@ void gpt_cf_triad_test::compare_premiums(int issue_age, double target)
         double const r0 = z.calculate_premium(oe_gsp, mce_option1_for_7702, parms);
         double const r1 = z.calculate_premium(oe_glp, mce_option1_for_7702, parms);
         double const r2 = z.calculate_premium(oe_glp, mce_option2_for_7702, parms);
-        double const r0_old = z_old.CalculateGSP(duration, f3bft, endt_bft, endt_bft                      );
-        double const r1_old = z_old.CalculateGLP(duration, f3bft, endt_bft, endt_bft, mce_option1_for_7702);
-        double const r2_old = z_old.CalculateGLP(duration, f3bft, endt_bft, endt_bft, mce_option2_for_7702);
+        double const r0_old = z_old.CalculateGSP(duration, f3_bft, endt_bft, endt_bft                      );
+        double const r1_old = z_old.CalculateGLP(duration, f3_bft, endt_bft, endt_bft, mce_option1_for_7702);
+        double const r2_old = z_old.CalculateGLP(duration, f3_bft, endt_bft, endt_bft, mce_option2_for_7702);
         bool const all_materially_equal =
                materially_equal(r0, r0_old)
             && materially_equal(r1, r1_old)
@@ -539,7 +539,7 @@ void gpt_cf_triad_test::test_premium_calculations()
         }
 
     gpt_scalar_parms parms = s_parms();
-    parms.target = touchstone_target;
+    parms.target_prem = touchstone_target;
     int count = 0;
     for(int issue_age = 0; issue_age < omega; ++issue_age)
         {
@@ -587,12 +587,12 @@ void gpt_cf_triad_test::mete_instantiate_old()
 void gpt_cf_triad_test::mete_premiums_old()
 {
     static int     const duration =      0  ;
-    static double  const f3bft    = 120000.0;
+    static double  const f3_bft   = 120000.0;
     static double  const endt_bft = 100000.0;
     static Irc7702 const z = instantiate_old(duration);
-    z.CalculateGSP(duration, f3bft, endt_bft, endt_bft                      );
-    z.CalculateGLP(duration, f3bft, endt_bft, endt_bft, mce_option1_for_7702);
-    z.CalculateGLP(duration, f3bft, endt_bft, endt_bft, mce_option2_for_7702);
+    z.CalculateGSP(duration, f3_bft, endt_bft, endt_bft                      );
+    z.CalculateGLP(duration, f3_bft, endt_bft, endt_bft, mce_option1_for_7702);
+    z.CalculateGLP(duration, f3_bft, endt_bft, endt_bft, mce_option2_for_7702);
 }
 
 void gpt_cf_triad_test::assay_speed()
