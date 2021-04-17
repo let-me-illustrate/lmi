@@ -82,9 +82,9 @@ struct gpt_vector_parms
 struct gpt_scalar_parms
 {
     int    duration       ;
-    double target         ;
     double f3bft          ;
     double endt_bft       ;
+    double target         ;
     double chg_sa_amt     ;
     double qab_gio_amt    ;
     double qab_adb_amt    ;

@@ -236,9 +236,9 @@ double gpt_cf_triad::calculate_premium
 {
     LMI_ASSERT(0 <= args.duration        );
     LMI_ASSERT(args.duration < length_   );
-    LMI_ASSERT(0.0 <= args.target        );
     LMI_ASSERT(0.0 <= args.f3bft         );
     LMI_ASSERT(0.0 <= args.endt_bft      );
+    LMI_ASSERT(0.0 <= args.target        );
     LMI_ASSERT(0.0 <= args.chg_sa_amt    );
     LMI_ASSERT(0.0 <= args.qab_gio_amt   );
     LMI_ASSERT(0.0 <= args.qab_adb_amt   );

@@ -308,9 +308,9 @@ gpt_scalar_parms gpt_cf_triad_test::s_parms()
 {
     gpt_scalar_parms z =
         {.duration       =      0
-        ,.target         =   1000.0
         ,.f3bft          = 120000.0
         ,.endt_bft       = 100000.0
+        ,.target         =   1000.0
         ,.chg_sa_amt     = 100000.0
         ,.qab_gio_amt    =  20000.0
         ,.qab_adb_amt    = 100000.0
