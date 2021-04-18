@@ -445,7 +445,7 @@ else ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0 9 9.3.0))
     tutelary_flag := -fomit-frame-pointer
   endif
 
-  cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
+  cxx_standard := -fno-ms-extensions -frounding-math -std=c++2a
 else ifneq (,$(filter $(gcc_version), 10 10.0))
   gcc_version_specific_warnings := \
 
