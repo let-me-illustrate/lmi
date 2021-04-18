@@ -24,7 +24,7 @@
 
 #include "config.hpp"
 
-#include "mc_enum_type_enums.hpp"       // mcenum_dbopt_7702
+#include "mc_enum_type_enums.hpp"       // mcenum_dbopt_7702, mcenum_defn_life_ins
 #include "oecumenic_enumerations.hpp"   // oenum_glp_or_gsp
 
 #include <vector>
@@ -69,29 +69,65 @@ struct gpt_vector_parms
     std::vector<double> qab_waiver_rate      ;
 };
 
-/// Arguments used identically for calculating both GLP and GSP.
+/// Scalar parameters for various GPT purposes.
 ///
-/// The 'oenum_glp_or_gsp' argument is excluded here because it
-/// differs between GLP and GSP. The 'mcenum_dbopt_7702' argument
-/// is excluded here because it's irrelevant for GSP.
+/// Includes all scalar parameters that are
+///   - used identically for calculating both GLP and GSP; or
+///   - required to initialize an object of class irc7702; or
+///   - otherwise useful for GPT processing.
 ///
-/// 'chg_sa_amt' is the base for any specified-amount load. It may
+/// The 'oenum_glp_or_gsp' calculate_premium() argument is excluded
+/// here so that the same set of scalar parameters can be used for
+/// both GLP and GSP.
+///
+/// 'mcenum_dbopt_7702' is included here even though it's irrelevant
+/// for GSP. 7702 !! Therefore the gpt_cf_triad::calculate_premium()
+/// 'mcenum_dbopt_7702' argument seems redundant; should it be
+/// eradicated, or be retained as an optional argument for unit
+/// testing only?
+///
+/// 'chg_sa_base' is the base for any specified-amount load. It may
 /// differ from 'specamt', e.g., by being limited to a scalar maximum,
 /// by including a term amount, or by being set immutably at issue.
+///
+/// GLP and GSP may be wanted even for CVAT contracts, e.g. so that
+/// a premium pattern such as "GSP for one year, then nothing" can be
+/// illustrated for both GPT and CVAT. 'defn_life_ins' facilitates
+/// skipping GPT restrictions for CVAT contracts in such a case.
+///
+/// Default member initializers are a good idea in general, and allow
+/// code such as:
+///   gpt_scalar_parms z = {.target_prem = 2, .gross_1035 = 7};
+/// to compile without gcc's "missing-field-initializers" warning.
+/// On the other hand, they prevent this struct from being fully
+/// "trivial"--without them, it has all four of these properties:
+///   is_trivially_constructible_v
+///   is_trivially_default_constructible_v
+///   is_trivially_copy_constructible_v
+///   is_trivially_move_constructible_v
+/// but with them, it has only the last two.
 
 struct gpt_scalar_parms
 {
-    int    duration       ;
-    double target         ;
-    double f3bft          ;
-    double endt_bft       ;
-    double chg_sa_amt     ;
-    double qab_gio_amt    ;
-    double qab_adb_amt    ;
-    double qab_term_amt   ;
-    double qab_spouse_amt ;
-    double qab_child_amt  ;
-    double qab_waiver_amt ;
+    int                  duration        {                 0  };
+    double               f3_bft          {                 0.0};
+    double               endt_bft        {                 0.0};
+    double               target_prem     {                 0.0};
+    double               chg_sa_base     {                 0.0};
+    mcenum_defn_life_ins defn_life_ins   {             mce_gpt};
+    mcenum_dbopt_7702    dbopt_7702      {mce_option1_for_7702};
+    double               gross_1035      {                 0.0};
+    bool                 is_inforce      {               false};
+    double               inforce_glp     {                 0.0};
+    double               inforce_cum_glp {                 0.0};
+    double               inforce_gsp     {                 0.0};
+    double               inforce_cum_pmt {                 0.0};
+    double               qab_gio_amt     {                 0.0};
+    double               qab_adb_amt     {            100000.0};
+    double               qab_term_amt    {                 0.0};
+    double               qab_spouse_amt  {                 0.0};
+    double               qab_child_amt   {                 0.0};
+    double               qab_waiver_amt  {                 0.0};
 };
 
 /// Commutation functions specialized for GPT calculations.
@@ -147,7 +183,6 @@ class gpt_commfns
         ,mcenum_dbopt_7702   const  dbo
         ,gpt_vector_parms    const& charges
         );
-    ~gpt_commfns() = default;
 
     double calculate_premium(oenum_glp_or_gsp, gpt_scalar_parms const&) const;
 
@@ -190,7 +225,6 @@ class gpt_cf_triad
         ,std::vector<double> const& gsp_ig
         ,gpt_vector_parms    const& charges
         );
-    ~gpt_cf_triad() = default;
 
     double calculate_premium
         (oenum_glp_or_gsp

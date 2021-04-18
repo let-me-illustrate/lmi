@@ -349,5 +349,11 @@
     <ClCompile Include="i7702_init.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="gpt_commutation_functions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="irc7702.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

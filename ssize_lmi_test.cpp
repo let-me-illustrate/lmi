@@ -126,10 +126,10 @@ constexpr char f0c(T(&)[n])
     return bourn_cast<char>(n);
 }
 
-#if defined __clang__
+#if defined LMI_CLANG
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wbraced-scalar-init"
-#endif // defined __clang__
+#endif // defined LMI_CLANG
 
 // deduce int, return char; braced-init-list
 template<typename T, int n>
@@ -152,9 +152,9 @@ char f0f(T(&)[n])
     return {n}; // error: narrowing conversion of '128' from 'unsigned int'
 }
 
-#if defined __clang__
+#if defined LMI_CLANG
 #   pragma clang diagnostic pop
-#endif // defined __clang__
+#endif // defined LMI_CLANG
 
 // deduce auto, return char; braced-init-list
 // auto is deduced to int, not to std::size_t

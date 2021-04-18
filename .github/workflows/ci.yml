@@ -297,4 +297,28 @@ jobs:
 
       - name: Run GUI tests
         if: matrix.mingw
-        run: xvfb-run ./gui_test.sh
+        run: |
+            echo 'Launching Xvfb...'
+            Xvfb :10 -screen 0 1600x1200x24 &
+            num_tries=1
+            while true; do
+                if xset -d :10 -q >/dev/null 2>&1; then
+                    echo 'Xvfb has become available.'
+                    # Trying to use it immediately can still result in errors
+                    # when creating the windows, somehow, so give it some time
+                    # to settle.
+                    sleep 3
+                    break
+                fi
+
+                if [[ $num_tries -gt 10 ]]; then
+                    echo 'Timed out waiting for Xvfb'
+                    exit 1
+                fi
+
+                ((num_tries++))
+                echo "Still waiting for Xvfb (attempt #$num_tries)"
+                sleep 3
+            done
+            echo 'Launching the GUI test:'
+            DISPLAY=:10 ./gui_test.sh

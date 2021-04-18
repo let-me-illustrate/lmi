@@ -115,14 +115,14 @@ void CalendarDateTest::TestFundamentals()
     LMI_TEST_EQUAL(gregorian_epoch(), date1);
 
     // Assign from self.
-#if defined __clang__
+#if defined LMI_CLANG
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wself-assign-overloaded"
-#endif // defined __clang__
+#endif // defined LMI_CLANG
     date1 = date1;
-#if defined __clang__
+#if defined LMI_CLANG
 #   pragma clang diagnostic pop
-#endif // defined __clang__
+#endif // defined LMI_CLANG
     LMI_TEST_EQUAL(gregorian_epoch(), date1);
 
     // Assign from jdn_t.

@@ -45,14 +45,14 @@
 #include "timer.hpp"
 
 #if defined USE_UBLAS
-#   if defined __clang__
+#   if defined LMI_CLANG
 #       pragma clang diagnostic push
 #       pragma clang diagnostic ignored "-Wdeprecated-copy"
-#   endif
+#   endif // defined LMI_CLANG
 #   include <boost/numeric/ublas/vector.hpp>
-#   if defined __clang__
+#   if defined LMI_CLANG
 #       pragma clang diagnostic pop
-#   endif
+#   endif // defined LMI_CLANG
 #endif // defined USE_UBLAS
 
 #include <algorithm>

@@ -88,10 +88,11 @@
 # define SWAP(n) (n)
 #endif // !defined WORDS_BIGENDIAN
 
-#if defined __GNUC__ && !defined __clang__
+#if defined LMI_GCC
+#   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wold-style-cast"
 #   pragma GCC diagnostic ignored "-Wuseless-cast"
-#endif // defined __GNUC__ && !defined __clang__
+#endif // defined LMI_GCC
 
 /* This array contains the bytes used to pad the buffer to the next
  * 64-byte boundary. (RFC 1321, 3.1: Step 1)
@@ -506,3 +507,7 @@ md5_process_block (void const* buffer, std::size_t a_len, struct md5_ctx* ctx)
   ctx->C = C;
   ctx->D = D;
 }
+
+#if defined LMI_GCC
+#   pragma GCC diagnostic pop
+#endif // defined LMI_GCC

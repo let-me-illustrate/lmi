@@ -174,9 +174,9 @@ double gpt_commfns::calculate_premium
     int const j = args.duration;
     double numerator =
           D_endt_          * args.endt_bft
-        + M_           [j] * args.f3bft
+        + M_           [j] * args.f3_bft
         + N_chg_pol_   [j]
-        + N_chg_sa_    [j] * args.chg_sa_amt
+        + N_chg_sa_    [j] * args.chg_sa_base
         + N_qab_gio_   [j] * args.qab_gio_amt
         + N_qab_adb_   [j] * args.qab_adb_amt
         + N_qab_term_  [j] * args.qab_term_amt
@@ -186,13 +186,13 @@ double gpt_commfns::calculate_premium
         ;
     double denom_tgt = glp_or_gsp ? D_net_tgt_[j] : N_net_tgt_[j];
     double z = numerator / denom_tgt;
-    if(z <= args.target)
+    if(z <= args.target_prem)
         {
         return z;
         }
 
     double denom_exc = glp_or_gsp ? D_net_exc_[j] : N_net_exc_[j];
-    return (numerator + args.target * (denom_exc - denom_tgt)) / denom_exc;
+    return (numerator + args.target_prem * (denom_exc - denom_tgt)) / denom_exc;
 }
 
 gpt_cf_triad::gpt_cf_triad
@@ -221,12 +221,6 @@ gpt_cf_triad::gpt_cf_triad
 /// but then sometimes one would need to be thrown away (as when
 /// specified amount is determined by a GLP or GSP strategy).
 ///
-/// It would seem more natural to use a reference as in revision 5778,
-/// instead of a pointer. However, that alternative is more than an
-/// order of magnitude slower with both gcc-3.4.5 and como-4.3.10.1,
-/// as though they invoke the gpt_commfns copy ctor due to the throw-
-/// expression in the conditional-expression.
-///
 /// Asserted preconditions: Duration is within its natural bounds, and
 /// other members of 'args' are nonnegative.
 ///
@@ -242,10 +236,10 @@ double gpt_cf_triad::calculate_premium
 {
     LMI_ASSERT(0 <= args.duration        );
     LMI_ASSERT(args.duration < length_   );
-    LMI_ASSERT(0.0 <= args.target        );
-    LMI_ASSERT(0.0 <= args.f3bft         );
+    LMI_ASSERT(0.0 <= args.f3_bft        );
     LMI_ASSERT(0.0 <= args.endt_bft      );
-    LMI_ASSERT(0.0 <= args.chg_sa_amt    );
+    LMI_ASSERT(0.0 <= args.target_prem   );
+    LMI_ASSERT(0.0 <= args.chg_sa_base   );
     LMI_ASSERT(0.0 <= args.qab_gio_amt   );
     LMI_ASSERT(0.0 <= args.qab_adb_amt   );
     LMI_ASSERT(0.0 <= args.qab_term_amt  );
@@ -253,14 +247,13 @@ double gpt_cf_triad::calculate_premium
     LMI_ASSERT(0.0 <= args.qab_child_amt );
     LMI_ASSERT(0.0 <= args.qab_waiver_amt);
 
-    gpt_commfns const*const pcf =
-          (oe_glp == glp_or_gsp && mce_option1_for_7702 == dbo) ? &cf_glp_dbo_1
-        : (oe_glp == glp_or_gsp && mce_option2_for_7702 == dbo) ? &cf_glp_dbo_2
-        : (oe_gsp == glp_or_gsp                               ) ? &cf_gsp
+    gpt_commfns const& cf =
+          (oe_glp == glp_or_gsp && mce_option1_for_7702 == dbo) ? cf_glp_dbo_1
+        : (oe_glp == glp_or_gsp && mce_option2_for_7702 == dbo) ? cf_glp_dbo_2
+        : (oe_gsp == glp_or_gsp                               ) ? cf_gsp
         : throw std::runtime_error("Cannot determine GPT assumptions.")
         ;
-    LMI_ASSERT(nullptr != pcf); // Redundant: demonstrably cannot fail.
-    double const z = pcf->calculate_premium(glp_or_gsp, args);
+    double const z = cf.calculate_premium(glp_or_gsp, args);
     LMI_ASSERT(0.0 <= z);
     return z;
 }

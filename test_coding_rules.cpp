@@ -618,6 +618,16 @@ void check_cxx(file const& f)
         }
     }
 
+    {
+    static boost::regex const r(R"(# *endif\n)");
+    if
+        (  boost::regex_search(f.data(), r)
+        )
+        {
+        complain(f, "contains unlabelled '#endif' directive.");
+        }
+    }
+
     // Tests above: C or C++. Tests below: C++ only.
     if(!f.is_of_phylum(e_cxx))
         {

@@ -272,6 +272,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="gpt_commutation_functions.cpp" />
     <ClCompile Include="gpt_input.cpp" />
     <ClCompile Include="gpt_server.cpp" />
     <ClCompile Include="gpt_specamt.cpp" />
@@ -302,6 +303,7 @@
     <ClCompile Include="input_xml_io.cpp" />
     <ClCompile Include="interest_rates.cpp" />
     <ClCompile Include="interpolate_string.cpp" />
+    <ClCompile Include="irc7702.cpp" />
     <ClCompile Include="ledger.cpp" />
     <ClCompile Include="ledger_base.cpp" />
     <ClCompile Include="ledger_evaluator.cpp" />
