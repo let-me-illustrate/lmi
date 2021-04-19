@@ -200,7 +200,7 @@ jobs:
 
       - name: Build lmi (autotools)
         if: matrix.autotools
-        run: make V=1 $coefficiency -C ${lmi_build_dir}
+        run: make --keep-going V=1 $coefficiency -C ${lmi_build_dir}
 
       - name: Build lmi
         run: make $coefficiency --output-sync=recurse
@@ -281,7 +281,7 @@ jobs:
       - name: Run unit tests (autotools)
         if: matrix.autotools
         run: |
-          make V=1 $coefficiency -C ${lmi_build_dir} check || err=$?
+          make --keep-going V=1 $coefficiency -C ${lmi_build_dir} check || err=$?
 
           if [ -n "$err" ]; then
             if [ -f ${lmi_build_dir}/test-suite.log ]; then
