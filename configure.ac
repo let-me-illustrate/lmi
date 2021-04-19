@@ -607,6 +607,14 @@ if test "x$GXX" == "xyes"; then
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-parentheses)
     fi
 
+    dnl These warnings are given by clang in C++20 mode and can't be easily
+    dnl avoided, so disable them for now.
+    if test "$CLANG" = "yes"; then
+        LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-anon-enum-enum-conversion)
+        LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-enum-enum-conversion)
+        LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-enum-float-conversion)
+    fi
+
     dnl Many instances of these warnings are given in Boost 1.33.1 headers, so
     dnl we unfortunately have to disable them even if they're potentially
     dnl useful, especially the latter one.
