@@ -613,6 +613,7 @@ if test "x$GXX" == "xyes"; then
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-anon-enum-enum-conversion)
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-enum-enum-conversion)
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-enum-float-conversion)
+        LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-volatile)
     fi
 
     dnl Many instances of these warnings are given in Boost 1.33.1 headers, so
