@@ -37,12 +37,14 @@
 #include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // max(), min()
+#if 202002 <= __cplusplus
+#   include <bit>                       // endian
+#endif //  202002 <= __cplusplus
 #include <cctype>                       // toupper()
 #include <cstdint>
 #include <ios>
 #include <istream>
 #include <limits>
-#include <type_traits>                  // endian
 
 namespace
 {
@@ -92,10 +94,9 @@ actuarial_table::actuarial_table(std::string const& filename, int table_number)
 {
     // Binary tables in the SOA format are not portable; this code
     // presumably works only on little-endian hardware.
-#if 201900L < __cplusplus
-    #error Use the proper C++20 value, which was unknown when this was written.
+#if 202002 <= __cplusplus
     static_assert(std::endian::native == std::endian::little);
-#endif // 201900L < __cplusplus
+#endif // 202002 <= __cplusplus
 
     if(table_number_ <= 0)
         {

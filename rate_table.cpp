@@ -35,6 +35,9 @@
 #include <boost/filesystem/fstream.hpp>
 
 #include <algorithm>                    // count()
+#if 202002 <= __cplusplus
+#   include <bit>                       // endian
+#endif //  202002 <= __cplusplus
 #include <climits>                      // ULLONG_MAX
 #include <cstdlib>                      // strtoull()
 #include <cstring>                      // memcpy(), strncmp()
@@ -68,9 +71,17 @@
 // different from their in memory representation.
 static_assert(std::numeric_limits<double>::is_iec559);
 
-#if 201900L < __cplusplus
-    #error Use std::endian instead when it becomes available.
-#endif // 201900L < __cplusplus
+// Check that WORDS_BIGENDIAN, which is supposed to be defined in makefile/at
+// the compiler command line if necessary, is consistent with the actual
+// endianness used.
+#if 202002 <= __cplusplus
+#   if defined WORDS_BIGENDIAN
+static_assert(std::endian::native == std::endian::big);
+#   else  // !defined WORDS_BIGENDIAN
+static_assert(std::endian::native == std::endian::little);
+#   endif // !defined WORDS_BIGENDIAN
+#endif // !(202002 <= __cplusplus)
+
 // Helper functions used to swap bytes on big endian platforms.
 namespace
 {
@@ -83,9 +94,6 @@ std::uint8_t swap_bytes_if_big_endian(std::uint8_t val)
     return val;
 }
 
-// We rely on makefile defining WORDS_BIGENDIAN on big endian architectures,
-// conversions from little endian format are only needed there and are trivial
-// on little endian machines.
 #if defined WORDS_BIGENDIAN
 inline
 std::uint16_t swap_bytes_if_big_endian(std::uint16_t val)
