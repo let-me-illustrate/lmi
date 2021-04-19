@@ -123,7 +123,7 @@ struct gpt_scalar_parms
     double               inforce_gsp     {                 0.0};
     double               inforce_cum_pmt {                 0.0};
     double               qab_gio_amt     {                 0.0};
-    double               qab_adb_amt     {            100000.0};
+    double               qab_adb_amt     {                 0.0};
     double               qab_term_amt    {                 0.0};
     double               qab_spouse_amt  {                 0.0};
     double               qab_child_amt   {                 0.0};
