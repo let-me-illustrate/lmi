@@ -94,18 +94,6 @@ struct gpt_vector_parms
 /// a premium pattern such as "GSP for one year, then nothing" can be
 /// illustrated for both GPT and CVAT. 'defn_life_ins' facilitates
 /// skipping GPT restrictions for CVAT contracts in such a case.
-///
-/// Default member initializers are a good idea in general, and allow
-/// code such as:
-///   gpt_scalar_parms z = {.target_prem = 2, .gross_1035 = 7};
-/// to compile without gcc's "missing-field-initializers" warning.
-/// On the other hand, they prevent this struct from being fully
-/// "trivial"--without them, it has all four of these properties:
-///   is_trivially_constructible_v
-///   is_trivially_default_constructible_v
-///   is_trivially_copy_constructible_v
-///   is_trivially_move_constructible_v
-/// but with them, it has only the last two.
 
 struct gpt_scalar_parms
 {
