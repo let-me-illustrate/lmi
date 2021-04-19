@@ -35,9 +35,9 @@
 // The gnu libc md5 implementation seems to assume this:
 static_assert(8 == CHAR_BIT || 16 == CHAR_BIT);
 // so md5 output is 128 bits == 16 8-bit bytes or 8 16-bit bytes:
-enum {md5len = 128 / CHAR_BIT};
+constexpr int md5len = 128 / CHAR_BIT;
 
-enum {chars_per_formatted_hex_byte = CHAR_BIT / 4};
+constexpr int chars_per_formatted_hex_byte = CHAR_BIT / 4;
 
 enum class md5_file_mode
 {
