@@ -118,35 +118,50 @@ AC_PROG_CC
 CXXFLAGS=${CXXFLAGS:=}
 AC_PROG_CXX
 
-dnl Check if the compiler supports C++17: this is a rather ad hoc test as it
-dnl doesn't check for full C++17 support, but it's enough for the subset of it
-dnl that is currently used in lmi and this check passes with with g++ 6, which
-dnl can be used for compiling lmi even though it doesn't implement C++17 fully.
-m4_define([lmi_cxx_std17_test], [[
+dnl Check if the compiler supports C++20 subset that we need: this is a rather
+dnl ad hoc test as it doesn't check for full C++20 or even C++17 support, but
+dnl it's enough for the subset of it that is currently used in lmi and passes
+dnl with with g++ 8, which can be used for compiling lmi even though it doesn't
+dnl define __cpp_designated_initializers.
+dnl
+dnl Also note that we need to explicitly enable -Wpedantic for gcc and clang,
+dnl as without it gcc would compile designated initializers using any C++
+dnl standard version, even C++98, but building lmi code using them later would
+dnl fail.
+m4_define([lmi_cxx_feature_test], [[
+#ifdef __GNUC__
+#pragma GCC diagnostic error "-Wpedantic"
+#pragma GCC diagnostic error "-Wall"
+#pragma GCC diagnostic error "-Wextra"
+#endif
 #ifndef __cplusplus
 #error Not C++ compiler.
 #elif __cplusplus <= 201402L
-#error Only C++14.
+#error At least C++17 is required.
 #else
+struct S { int x = 0; double y = 0.0; };
+S s = {.x = 1, .y = 2.0};
 static_assert(true);
 #endif
 ]])
 
-AC_CACHE_CHECK([whether compiler supports C++17 without any options],
-    lmi_cv_cxx_std17,
+AC_CACHE_CHECK([whether compiler supports required C++ features without any options],
+    lmi_cv_cxx_features,
     [
         AC_LANG_PUSH([C++])
-        AC_COMPILE_IFELSE([AC_LANG_SOURCE([lmi_cxx_std17_test])],
-            lmi_cv_cxx_std17=yes,
-            lmi_cv_cxx_std17=no
+        AC_COMPILE_IFELSE([AC_LANG_SOURCE([lmi_cxx_feature_test])],
+            lmi_cv_cxx_features=yes,
+            lmi_cv_cxx_features=no
             )
         AC_LANG_POP([C++])
     ]
 )
 
-if test "$lmi_cv_cxx_std17" = "no"; then
-    AX_CXX_CHECK_FLAG([-std=c++17],,,[CXXFLAGS="$CXXFLAGS -std=c++17"],
-        AC_MSG_ERROR([Can't enable C++17 support required for building lmi.])
+if test "$lmi_cv_cxx_features" = "no"; then
+    AX_CXX_CHECK_FLAG([-std=c++20],,,[CXXFLAGS="$CXXFLAGS -std=c++20"],
+        [AX_CXX_CHECK_FLAG([-std=c++2a],,,[CXXFLAGS="$CXXFLAGS -std=c++2a"],
+            AC_MSG_ERROR([Can't enable C++20 support required for building lmi.])
+        )]
     )
 fi
 
