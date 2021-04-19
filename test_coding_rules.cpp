@@ -1070,8 +1070,7 @@ bool check_reserved_name_exception(std::string const& s)
 
 void check_reserved_names(file const& f)
 {
-    // Remove this exception once this file has been reworked.
-    if(f.phyloanalyze("^ledger_xml_io.cpp$"))
+    if(f.phyloanalyze("^configure.ac$"))
         {
         return;
         }
