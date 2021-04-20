@@ -25,6 +25,7 @@ set -e
 
 check_concinnity()
 {
+    make custom_tools --directory=/opt/lmi/src/lmi >/dev/null 2>&1
     output=$( \
         make \
           prefascicle_dir="$1" \
