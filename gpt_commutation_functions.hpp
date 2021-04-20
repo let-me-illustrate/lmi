@@ -216,8 +216,8 @@ class gpt_cf_triad
 
     double calculate_premium
         (oenum_glp_or_gsp
-        ,mcenum_dbopt_7702
         ,gpt_scalar_parms const&
+        ,mcenum_dbopt_7702
         ) const;
 
   private:

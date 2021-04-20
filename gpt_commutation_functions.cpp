@@ -233,8 +233,8 @@ gpt_cf_triad::gpt_cf_triad
 
 double gpt_cf_triad::calculate_premium
     (oenum_glp_or_gsp        glp_or_gsp
-    ,mcenum_dbopt_7702       dbo
     ,gpt_scalar_parms const& args
+    ,mcenum_dbopt_7702       dbo
     ) const
 {
     LMI_ASSERT(0 <= args.duration        );
