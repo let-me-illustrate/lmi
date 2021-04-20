@@ -340,7 +340,7 @@ void gpt_cf_triad_test::test_preconditions()
     // Negative duration.
     parms.duration = -1;
     LMI_TEST_THROW
-        (z.calculate_premium(oe_gsp, parms, mce_option1_for_7702)
+        (z.calculate_premium(oe_gsp, parms)
         ,std::runtime_error
         ,""
         );
@@ -349,7 +349,7 @@ void gpt_cf_triad_test::test_preconditions()
     // Duration greater than omega minus one.
     parms.duration = lmi::ssize(q_m);
     LMI_TEST_THROW
-        (z.calculate_premium(oe_gsp, parms, mce_option1_for_7702)
+        (z.calculate_premium(oe_gsp, parms)
         ,std::runtime_error
         ,""
         );
@@ -359,7 +359,7 @@ void gpt_cf_triad_test::test_preconditions()
     // parameters are not redundantly tested here.)
     parms.target_prem = -0.01;
     LMI_TEST_THROW
-        (z.calculate_premium(oe_gsp, parms, mce_option1_for_7702)
+        (z.calculate_premium(oe_gsp, parms)
         ,std::runtime_error
         ,""
         );
@@ -369,7 +369,7 @@ void gpt_cf_triad_test::test_preconditions()
     parms.endt_bft = 100000.0;
     parms.f3_bft   =  90000.0;
     LMI_TEST_THROW
-        (z.calculate_premium(oe_gsp, parms, mce_option1_for_7702)
+        (z.calculate_premium(oe_gsp, parms)
         ,std::runtime_error
         ,""
         );

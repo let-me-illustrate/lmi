@@ -81,10 +81,7 @@ struct gpt_vector_parms
 /// both GLP and GSP.
 ///
 /// 'mcenum_dbopt_7702' is included here even though it's irrelevant
-/// for GSP. 7702 !! Therefore the gpt_cf_triad::calculate_premium()
-/// 'mcenum_dbopt_7702' argument seems redundant; should it be
-/// eradicated, or be retained as an optional argument for unit
-/// testing only?
+/// for GSP.
 ///
 /// 'chg_sa_base' is the base for any specified-amount load. It may
 /// differ from 'specamt', e.g., by being limited to a scalar maximum,
@@ -204,6 +201,8 @@ class gpt_commfns
 
 class gpt_cf_triad
 {
+    friend class gpt_cf_triad_test;
+
   public:
     gpt_cf_triad
         (std::vector<double> const& qc
@@ -214,13 +213,15 @@ class gpt_cf_triad
         ,gpt_vector_parms    const& charges
         );
 
+    double calculate_premium(oenum_glp_or_gsp, gpt_scalar_parms const&) const;
+
+  private:
     double calculate_premium
         (oenum_glp_or_gsp
         ,gpt_scalar_parms const&
         ,mcenum_dbopt_7702
         ) const;
 
-  private:
     int const   length_;
     gpt_commfns cf_glp_dbo_1;
     gpt_commfns cf_glp_dbo_2;

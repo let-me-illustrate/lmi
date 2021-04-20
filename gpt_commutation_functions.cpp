@@ -230,6 +230,10 @@ gpt_cf_triad::gpt_cf_triad
 /// Asserted postcondition: Returned GLP or GSP is nonnegative; thus,
 /// while adjusted premium 'A+B-C' may be negative, {A,B,C} are all
 /// individually nonnegative.
+///
+/// This overload accepts a 'dbo' argument, specifying a death benefit
+/// option that may differ from 'args.dbopt_7702'; it is intended only
+/// for unit testing.
 
 double gpt_cf_triad::calculate_premium
     (oenum_glp_or_gsp        glp_or_gsp
@@ -261,4 +265,12 @@ double gpt_cf_triad::calculate_premium
     double const z = cf.calculate_premium(glp_or_gsp, args);
     LMI_ASSERT(0.0 <= z);
     return z;
+}
+
+double gpt_cf_triad::calculate_premium
+    (oenum_glp_or_gsp        glp_or_gsp
+    ,gpt_scalar_parms const& args
+    ) const
+{
+    return calculate_premium(glp_or_gsp, args, args.dbopt_7702);
 }
