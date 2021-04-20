@@ -365,6 +365,16 @@ void gpt_cf_triad_test::test_preconditions()
         );
     parms = s_parms(); // Reset.
 
+    // Endowment benefit greater than (f)(3) benefit.
+    parms.endt_bft = 100000.0;
+    parms.f3_bft   =  90000.0;
+    LMI_TEST_THROW
+        (z.calculate_premium(oe_gsp, mce_option1_for_7702, parms)
+        ,std::runtime_error
+        ,""
+        );
+    parms = s_parms(); // Reset.
+
     // Monthly q shorter than other vector parameters.
     q_m.resize(99);
     LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");

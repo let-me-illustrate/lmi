@@ -221,8 +221,11 @@ gpt_cf_triad::gpt_cf_triad
 /// but then sometimes one would need to be thrown away (as when
 /// specified amount is determined by a GLP or GSP strategy).
 ///
-/// Asserted preconditions: Duration is within its natural bounds, and
-/// other members of 'args' are nonnegative.
+/// Asserted preconditions: 'duration' is within its natural bounds;
+/// other members of 'args' are nonnegative, including 'gross_1035'
+/// even though it isn't used here (because it's so easy to test),
+/// but excluding inforce amounts (which can be negative); and the
+/// endowment benefit does not exceed the (f)(3) benefit.
 ///
 /// Asserted postcondition: Returned GLP or GSP is nonnegative; thus,
 /// while adjusted premium 'A+B-C' may be negative, {A,B,C} are all
@@ -240,12 +243,14 @@ double gpt_cf_triad::calculate_premium
     LMI_ASSERT(0.0 <= args.endt_bft      );
     LMI_ASSERT(0.0 <= args.target_prem   );
     LMI_ASSERT(0.0 <= args.chg_sa_base   );
+    LMI_ASSERT(0.0 <= args.gross_1035    );
     LMI_ASSERT(0.0 <= args.qab_gio_amt   );
     LMI_ASSERT(0.0 <= args.qab_adb_amt   );
     LMI_ASSERT(0.0 <= args.qab_term_amt  );
     LMI_ASSERT(0.0 <= args.qab_spouse_amt);
     LMI_ASSERT(0.0 <= args.qab_child_amt );
     LMI_ASSERT(0.0 <= args.qab_waiver_amt);
+    LMI_ASSERT(args.endt_bft <= args.f3_bft);
 
     gpt_commfns const& cf =
           (oe_glp == glp_or_gsp && mce_option1_for_7702 == dbo) ? cf_glp_dbo_1
