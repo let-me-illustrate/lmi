@@ -313,6 +313,8 @@
 {DB_TgtPremIgnoreSubstd,DB_Topic_Premiums,"TgtPremIgnoreSubstd","Target premium ignores substandard rating: 0=no, 1=yes",}, \
 {DB_MinPmt,DB_Topic_Premiums,"MinPmt","Minimum initial payment [not implemented]",}, \
 {DB_IsSinglePremium,DB_Topic_Premiums,"IsSinglePremium","Premium flexibility: 0=flexible, 1=single, 2=modified single premium, 3=limited flexible premium",}, \
+{DB_MinSinglePremiumType,DB_Topic_Premiums,"MinSinglePremiumType","Minimum single premium: 0=none, 1=multiple of corridor AV",}, \
+{DB_MinSinglePremiumMult,DB_Topic_Premiums,"MinSinglePremiumMult","Minimum single premium as a multiple of corridor: e.g., 1.0 for 100% of corridor AV",}, \
 {DB_Topic_SecondaryGuarantees,DB_FIRST,"Secondary guarantees","Secondary-guarantee options and parameters",}, \
 {DB_NoLapseMinDur,DB_Topic_SecondaryGuarantees,"NoLapseMinDur","Minimum number of years no-lapse guarantee remains in effect if premium requirement satisfied",}, \
 {DB_NoLapseMinAge,DB_Topic_SecondaryGuarantees,"NoLapseMinAge","Minimum age to which no-lapse guarantee remains in effect if premium requirement satisfied",}, \

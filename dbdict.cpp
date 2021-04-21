@@ -381,6 +381,8 @@ void DBDictionary::ascribe_members()
     ascribe("TgtPremIgnoreSubstd"       , &DBDictionary::TgtPremIgnoreSubstd       );
     ascribe("MinPmt"                    , &DBDictionary::MinPmt                    );
     ascribe("IsSinglePremium"           , &DBDictionary::IsSinglePremium           );
+    ascribe("MinSinglePremiumType"      , &DBDictionary::MinSinglePremiumType      );
+    ascribe("MinSinglePremiumMult"      , &DBDictionary::MinSinglePremiumMult      );
     ascribe("NoLapseMinDur"             , &DBDictionary::NoLapseMinDur             );
     ascribe("NoLapseMinAge"             , &DBDictionary::NoLapseMinAge             );
     ascribe("NoLapseUnratedOnly"        , &DBDictionary::NoLapseUnratedOnly        );
@@ -733,6 +735,7 @@ void DBDictionary::InitDB()
     Add({DB_MinPremType         , oe_monthly_deduction});
     Add({DB_TgtPremType         , oe_monthly_deduction});
     Add({DB_IsSinglePremium     , oe_flexible_premium});
+    Add({DB_MinSinglePremiumType, oe_no_min_single_premium});
     Add({DB_DeductionMethod     , oe_proportional});
     Add({DB_DeductionAcct       , oe_prefer_general_account});
     Add({DB_DistributionMethod  , oe_proportional});

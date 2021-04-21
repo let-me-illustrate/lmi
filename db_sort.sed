@@ -307,6 +307,8 @@
 /DB_TgtPremIgnoreSubstd\>/       s/^/M010/
 /DB_MinPmt\>/                    s/^/M011/
 /DB_IsSinglePremium\>/           s/^/M012/
+/DB_MinSinglePremiumType\>/      s/^/M013/
+/DB_MinSinglePremiumMult\>/      s/^/M014/
 # DB_Topic_SecondaryGuarantees
 /DB_NoLapseMinDur\>/             s/^/N001/
 /DB_NoLapseMinAge\>/             s/^/N002/
