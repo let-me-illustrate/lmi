@@ -1256,6 +1256,40 @@ void AccountValue::TxAscertainDesiredPayment()
             }
         EeGrossPmts[Month] += Dumpin;
         GrossPmts  [Month] += Dumpin;
+
+        if
+            (  !Solving
+            && oe_min_single_premium_corr_mult == MinSinglePremiumType
+            && !global_settings::instance().regression_testing()
+            )
+            {
+            double special_min_prem =
+                MinSinglePremiumMult
+                * ActualSpecAmt
+                / GetCorridorFactor()[0]
+                ;
+            if(dblize(GrossPmts[Month]) < special_min_prem)
+                {
+                alarum()
+                    << std::fixed
+                    << "Premium "
+                    << std::setprecision(2)
+                    << GrossPmts[Month]
+                    << " is less than "
+                    << std::setprecision(7)
+                    << special_min_prem
+                    << std::setprecision(2)
+                    << " minimum for "
+                    << ActualSpecAmt
+                    << " specified amount with "
+                    << GetCorridorFactor()[0]
+                    << " corridor factor for insured '"
+                    << yare_input_.InsuredName
+                    << "'."
+                    << std::flush
+                    ;
+                }
+            }
         }
 
     assert_pmts_add_up(__FILE__, __LINE__, Month);
