@@ -30,6 +30,8 @@
 #include "outlay.hpp"
 
 #include <algorithm>
+#include <cmath>                        // ceil()
+#include <iomanip>
 #include <utility>
 
 /// Set specamt according to selected strategy in a non-solve year.
@@ -145,6 +147,59 @@ void AccountValue::PerformSpecAmtStrategy()
             strategy = mce_sa_input_scalar;
             }
         currency z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
+        if
+            (  0 == j
+            && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
+            && oe_min_single_premium_corr_mult == MinSinglePremiumType
+            && mce_sa_corridor == strategy
+            && !Solving
+            )
+            {
+            // SOMEDAY !! Duplicated above--refactor.
+            currency annualized_pmt =
+                    Outlay_->ee_premium_modes ()[0]
+                  * Outlay_->ee_modal_premiums()[0]
+                +   Outlay_->er_premium_modes ()[0]
+                  * Outlay_->er_modal_premiums()[0]
+                ;
+            double special_spec_amt =
+                  annualized_pmt
+                * GetCorridorFactor()[0]
+                / MinSinglePremiumMult
+                ;
+            // "0.01 + ": err on the conservative side for finicky users
+            double special_min_prem = std::ceil
+                (0.01 + MinSinglePremiumMult * m / (GetCorridorFactor()[0])
+                );
+            if(special_spec_amt < dblize(m))
+                {
+                alarum()
+                    << std::fixed << std::setprecision(2)
+                    << "For insured '"
+                    << yare_input_.InsuredName
+                    << "', premium "
+                    << annualized_pmt
+                    << " would correspond to a specified amount of "
+                    << std::setprecision(12)
+                    << special_spec_amt
+                    << std::setprecision(2)
+                    << ", which is premium "
+                    << annualized_pmt
+                    << " times corridor factor "
+                    << GetCorridorFactor()[0]
+                    << " divided by "
+                    << MinSinglePremiumMult
+                    << ", but "
+                    << m
+                    << " is the product's minimum specified amount."
+                    << " If the client is willing to pay more, a premium of "
+                    << std::setprecision(0)
+                    << special_min_prem
+                    << " would satisfy that product rule."
+                    << std::flush
+                    ;
+                }
+            }
         DeathBfts_->set_specamt(std::max(m, z), j, 1 + j);
         if
             (  j == InforceYear
@@ -159,7 +214,7 @@ void AccountValue::PerformSpecAmtStrategy()
                 << inforce_specamt
                 << " increased to the "
                 << m
-                << " minimum for '"
+                << " minimum for insured '"
                 << yare_input_.InsuredName
                 << "'."
                 << std::flush
