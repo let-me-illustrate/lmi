@@ -259,8 +259,11 @@ bool file::phyloanalyze(std::string const& s) const
     return boost::regex_search(file_name(), boost::regex(s));
 }
 
+bool error_flag = false;
+
 void complain(file const& f, std::string const& complaint)
 {
+    error_flag = true;
     std::cout << "File '" << f.full_name() << "' " << complaint << std::endl;
 }
 
@@ -1294,7 +1297,6 @@ statistics process_file(std::string const& file_path)
 
 int try_main(int argc, char* argv[])
 {
-    bool error_flag = false;
     statistics z;
     for(int j = 1; j < argc; ++j)
         {
