@@ -157,6 +157,7 @@ enum oenum_min_single_prem_type
     {oe_no_min_single_premium
     ,oe_min_single_premium_corr_mult
     };
+
 /// Used only for backward compatibility with old versions that didn't
 /// distinguish state of jurisdiction from premium-tax state.
 
