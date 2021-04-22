@@ -1256,7 +1256,6 @@ void AccountValue::TxAscertainDesiredPayment()
             }
         EeGrossPmts[Month] += Dumpin;
         GrossPmts  [Month] += Dumpin;
-
         if
             (  !Solving
             && oe_min_single_premium_corr_mult == MinSinglePremiumType
@@ -1272,18 +1271,22 @@ void AccountValue::TxAscertainDesiredPayment()
                 {
                 alarum()
                     << std::fixed
-                    << "Premium "
                     << std::setprecision(2)
+                    << "Premium "
                     << GrossPmts[Month]
                     << " is less than "
                     << std::setprecision(7)
                     << special_min_prem
                     << std::setprecision(2)
-                    << " minimum for "
+                    << " minimum ("
+                    << std::defaultfloat
+                    << 100.0 * MinSinglePremiumMult
+                    << std::fixed
+                    << "% * "
                     << ActualSpecAmt
-                    << " specified amount with "
+                    << " specified amount / "
                     << GetCorridorFactor()[0]
-                    << " corridor factor for insured '"
+                    << " corridor factor) for insured '"
                     << yare_input_.InsuredName
                     << "'."
                     << std::flush
