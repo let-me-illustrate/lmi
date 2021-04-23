@@ -113,6 +113,35 @@ struct gpt_scalar_parms
     double               qab_spouse_amt  {                 0.0};
     double               qab_child_amt   {                 0.0};
     double               qab_waiver_amt  {                 0.0};
+
+#if defined __cpp_impl_three_way_comparison && __cpp_impl_three_way_comparison
+    bool operator==(gpt_scalar_parms const&) const = default;
+#else  // no operator<=>
+    bool operator==(gpt_scalar_parms const& z) const
+        {
+        return
+               z.duration        == duration
+            && z.f3_bft          == f3_bft
+            && z.endt_bft        == endt_bft
+            && z.target_prem     == target_prem
+            && z.chg_sa_base     == chg_sa_base
+            && z.defn_life_ins   == defn_life_ins
+            && z.dbopt_7702      == dbopt_7702
+            && z.gross_1035      == gross_1035
+            && z.is_inforce      == is_inforce
+            && z.inforce_glp     == inforce_glp
+            && z.inforce_cum_glp == inforce_cum_glp
+            && z.inforce_gsp     == inforce_gsp
+            && z.inforce_cum_pmt == inforce_cum_pmt
+            && z.qab_gio_amt     == qab_gio_amt
+            && z.qab_adb_amt     == qab_adb_amt
+            && z.qab_term_amt    == qab_term_amt
+            && z.qab_spouse_amt  == qab_spouse_amt
+            && z.qab_child_amt   == qab_child_amt
+            && z.qab_waiver_amt  == qab_waiver_amt
+            ;
+        }
+#endif // no operator<=>
 };
 
 /// Commutation functions specialized for GPT calculations.
