@@ -102,7 +102,7 @@ struct gpt_scalar_parms
     mcenum_defn_life_ins defn_life_ins   {             mce_gpt};
     mcenum_dbopt_7702    dbopt_7702      {mce_option1_for_7702};
     double               gross_1035      {                 0.0};
-    bool                 is_inforce      {               false};
+    bool                 issued_today    {               false};
     double               inforce_glp     {                 0.0};
     double               inforce_cum_glp {                 0.0};
     double               inforce_gsp     {                 0.0};
@@ -128,7 +128,7 @@ struct gpt_scalar_parms
             && z.defn_life_ins   == defn_life_ins
             && z.dbopt_7702      == dbopt_7702
             && z.gross_1035      == gross_1035
-            && z.is_inforce      == is_inforce
+            && z.issued_today    == issued_today
             && z.inforce_glp     == inforce_glp
             && z.inforce_cum_glp == inforce_cum_glp
             && z.inforce_gsp     == inforce_gsp
