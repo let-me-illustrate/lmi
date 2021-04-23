@@ -945,7 +945,7 @@ bool check_reserved_name_exception(std::string const& s)
         {"D""__""W""IN32""__"
         ,"_""W""IN32"
         ,"__""W""IN32""__"
-    // Standard (including TR1).
+    // Standard.
         ,"_1"
         ,"_2"
         ,"_IOFBF"
@@ -1053,7 +1053,7 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__XSLT_LIBXSLT_H__"
         ,"__mp_copymem"
         };
-    return contains(z, s);
+    return contains(z, s) || begins_with(s, "__cpp_");
 }
 
 /// Check names reserved by C++2003 [17.4.3.1.2].
