@@ -144,6 +144,8 @@ struct gpt_scalar_parms
 #endif // no operator<=>
 };
 
+void assert_sanity(gpt_scalar_parms const&);
+
 /// Commutation functions specialized for GPT calculations.
 ///
 /// All members are private: only its one friend can use this class.

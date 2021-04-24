@@ -319,6 +319,7 @@ gpt_scalar_parms gpt_cf_triad_test::s_parms()
         ,.qab_child_amt  =   5000.0
         ,.qab_waiver_amt =  50000.0
         };
+    assert_sanity(z);
     return z;
 }
 
