@@ -121,11 +121,6 @@ LDFLAGS := \
   -L$(bcc_lib_dir) /ap /c /E0 /m /Tpe /V4.0 /w /w-dup /w-dpl \
   --startup-file $(bcc_lib_dir)/c0x32.obj import32.lib cw32i.lib \
 
-# The borland compiler can't handle the boost filesystem code, but it
-# can limp through some tests by pretending that code doesn't exist.
-
-boost_filesystem_objects :=
-
 # The borland compiler rejects some conforming code, generating many
 # spurious and distracting diagnostics; it fails utterly to build
 # these tests:
@@ -255,7 +250,6 @@ bcc_5_5_1.make:: ;
 	                           CXXFLAGS='$(CXXFLAGS)' \
 	                                 LD='$(LD)' \
 	                            LDFLAGS='$(LDFLAGS)' \
-	           boost_filesystem_objects='$(boost_filesystem_objects)' \
 	         excluded_unit_test_targets='$(excluded_unit_test_targets)' \
 	                            GNU_CPP='$(GNU_CPP)' \
 	                            GNU_CXX='$(GNU_CXX)' \

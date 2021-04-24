@@ -25,18 +25,12 @@
 # is reached through 'vpath' directives. See the rationale in
 # 'workhorse.make'.
 
-# Boost filesystem and regex libraries. The other boost libraries that
+# Boost regex library. The other boost libraries that
 # lmi requires are implemented entirely in headers.
 #
 # As for listing the object files here, the regex author says:
 #   http://groups.google.com/group/boost-list/msg/7f925ca50d69384b
 # | add the libs/regex/src/*.cpp files to your project
-
-boost_filesystem_objects := \
-  convenience.o \
-  exception.o \
-  path_posix_windows.o \
-  operations_posix_windows.o \
 
 boost_regex_objects := \
   c_regex_traits.o \
@@ -65,7 +59,7 @@ boost_regex_objects := \
 # run correctly.
 
 ifneq (,$(USE_SO_ATTRIBUTES))
-  duplicated_objects = $(boost_filesystem_objects)
+  duplicated_objects =
 endif
 
 # GNU cgicc.
@@ -118,7 +112,6 @@ cgicc_3_1_4_objects = \
 # have them as libraries.
 
 ifdef HAVE_THIRD_PARTY_LIBRARIES
-  boost_filesystem_objects :=
   boost_regex_objects :=
   cgicc_objects :=
 endif
@@ -170,7 +163,6 @@ cli_objects := \
 # Illustrations: files shared by the antediluvian and production branches.
 
 common_common_objects := \
-  $(boost_filesystem_objects) \
   actuarial_table.o \
   alert.o \
   calendar_date.o \
@@ -508,7 +500,6 @@ account_value_test$(EXEEXT): \
   account_value_test.o \
 
 actuarial_table_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   actuarial_table.o \
   actuarial_table_test.o \
@@ -521,7 +512,6 @@ alert_test$(EXEEXT): \
   alert_test.o \
 
 any_member_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   any_member_test.o \
   calendar_date.o \
@@ -537,7 +527,6 @@ assert_lmi_test$(EXEEXT): \
 
 # MD5 !! Remove "timer.o" below.
 authenticity_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   authenticity.o \
   authenticity_test.o \
@@ -558,7 +547,6 @@ bourn_cast_test$(EXEEXT): \
   timer.o \
 
 cache_file_reads_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   cache_file_reads_test.o \
   timer.o \
@@ -586,7 +574,6 @@ commutation_functions_test$(EXEEXT): \
   timer.o \
 
 configurable_settings_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   configurable_settings.o \
@@ -661,7 +648,6 @@ getopt_test$(EXEEXT): \
   getopt_test.o \
 
 global_settings_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   global_settings.o \
@@ -671,7 +657,6 @@ global_settings_test$(EXEEXT): \
   path_utility.o \
 
 gpt_cf_triad_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   commutation_functions.o \
@@ -708,7 +693,6 @@ ieee754_test$(EXEEXT): \
   ieee754_test.o \
 
 input_sequence_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   global_settings.o \
@@ -720,7 +704,6 @@ input_sequence_test$(EXEEXT): \
   path_utility.o \
 
 input_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   ce_product_name.o \
@@ -769,7 +752,6 @@ interpolate_string_test$(EXEEXT): \
   interpolate_string_test.o \
 
 irc7702_tables_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   commutation_functions.o \
@@ -782,7 +764,6 @@ irc7702_tables_test$(EXEEXT): \
   path_utility.o \
 
 irc7702a_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   global_settings.o \
@@ -801,7 +782,6 @@ istream_to_string_test$(EXEEXT): \
   timer.o \
 
 ledger_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   configurable_settings.o \
@@ -846,7 +826,6 @@ math_functions_test$(EXEEXT): \
   timer.o \
 
 mc_enum_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   ce_product_name.o \
@@ -861,7 +840,6 @@ mc_enum_test$(EXEEXT): \
   path_utility.o \
 
 md5sum_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   md5.o \
   md5sum.o \
@@ -883,7 +861,6 @@ mortality_rates_test$(EXEEXT): \
   mortality_rates_test.o \
 
 name_value_pairs_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   global_settings.o \
@@ -898,7 +875,6 @@ ncnnnpnn_test$(EXEEXT): \
   ncnnnpnn_test.o \
 
 numeric_io_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   global_settings.o \
@@ -909,7 +885,6 @@ numeric_io_test$(EXEEXT): \
   timer.o \
 
 path_utility_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   global_settings.o \
@@ -919,7 +894,6 @@ path_utility_test$(EXEEXT): \
   path_utility_test.o \
 
 premium_tax_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   data_directory.o \
@@ -945,7 +919,6 @@ premium_tax_test$(EXEEXT): \
   xml_lmi.o \
 
 print_matrix_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   cso_table.o \
@@ -956,7 +929,6 @@ print_matrix_test$(EXEEXT): \
   print_matrix_test.o \
 
 product_file_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   data_directory.o \
@@ -994,7 +966,6 @@ progress_meter_test$(EXEEXT): \
   timer.o \
 
 rate_table_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   crc32.o \
@@ -1071,7 +1042,6 @@ timer_test$(EXEEXT): \
   timer_test.o \
 
 tn_range_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   datum_base.o \
@@ -1084,7 +1054,6 @@ tn_range_test$(EXEEXT): \
   tn_range_test_aux.o \
 
 value_cast_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   facets.o \
@@ -1104,7 +1073,6 @@ wx_new_test$(EXEEXT): \
   wx_new_test.o \
 
 xml_serialize_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(common_test_objects) \
   calendar_date.o \
   global_settings.o \
@@ -1136,7 +1104,6 @@ elapsed_time$(EXEEXT): \
 # MD5 !! Obviate this by rewriting those unit tests.
 lmi_md5sum$(EXEEXT): POST_LINK_COMMAND = $(INSTALL) -m 0775 $@ $(localbindir)
 lmi_md5sum$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(main_auxiliary_common_objects) \
   getopt.o \
   md5.o \
@@ -1145,7 +1112,6 @@ lmi_md5sum$(EXEEXT): \
 
 # MD5 !! Remove "timer.o" below.
 generate_passkey$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(main_auxiliary_common_objects) \
   authenticity.o \
   calendar_date.o \
@@ -1165,7 +1131,6 @@ ihs_crc_comp$(EXEEXT): \
   ihs_crc_comp.o \
 
 rate_table_tool$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(main_auxiliary_common_objects) \
   calendar_date.o \
   crc32.o \
@@ -1181,7 +1146,6 @@ rate_table_tool$(EXEEXT): \
 test_coding_rules_test := PERFORM=$(PERFORM) $(srcdir)/test_coding_rules_test.sh
 test_coding_rules$(EXEEXT): POST_LINK_COMMAND = $(test_coding_rules_test)
 test_coding_rules$(EXEEXT): \
-  $(boost_filesystem_objects) \
   $(boost_regex_objects) \
   $(main_auxiliary_common_objects) \
   miscellany.o \
