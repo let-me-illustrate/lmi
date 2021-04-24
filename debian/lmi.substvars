@@ -1,1 +1,1 @@
-shlibs:Depends=libboost-filesystem1.32.0, libc6 (>= 2.3.5-1), libgcc1 (>= 1:4.0.1), libncurses5 (>= 5.4-5), libstdc++6 (>= 4.0.2), libxml2 (>= 2.6.21), zlib1g (>= 1:1.2.1)
+shlibs:Depends=libc6 (>= 2.3.5-1), libgcc1 (>= 1:4.0.1), libncurses5 (>= 5.4-5), libstdc++6 (>= 4.0.2), libxml2 (>= 2.6.21), zlib1g (>= 1:1.2.1)
