@@ -24,35 +24,6 @@
 
 #include "config.hpp"
 
-// When compiling with '-ansi' or certain '-std=' options, gcc defines
-// macro __STRICT_ANSI__. Standard headers like <stdlib.h> may provide
-// prototypes for nonstandard functions like putenv() only if that
-// macro is not defined, in order to conform to C99 4/7. [Consider
-// the following strictly-conforming program (C99 4/6):
-//
-//   #include <stdlib.h>
-//   void foo(void);
-//   int main() {foo(); return 0;}
-//
-// and replace 'foo' with 'putenv', which latter name the language
-// standard clearly does not reserve.]
-//
-// However, ISO 9945:2002 (POSIX) declares putenv() in <stdlib.h>. In
-// light of the present header's raison d'être, it is sensible to
-// suspend the operation of the __STRICT_ANSI__ mechanism, taking care
-// to restore it after including other headers here.
-//
-// Some of the functions made accessible here provide capabilities
-// that are useful but absent from the standard language: for example,
-// it is difficult to implement cgi-bin without putenv(). Some others:
-//   _wcsdup(), fileno(), strcasecmp(), strdup()
-// should be avoided in general, but are required by wx.
-
-#if defined __GNUC__ && defined __STRICT_ANSI__
-#   define LMI_GNUC_STRICT_ANSI
-#   undef __STRICT_ANSI__
-#endif // defined __GNUC__ && defined __STRICT_ANSI__
-
 #if defined LMI_POSIX
 #   include <stdio.h>                   // fileno()
 #   include <stdlib.h>                  // putenv()
@@ -90,16 +61,5 @@
 // and therefore a prototype for getch() is instead provided by other
 // means, locally, wherever it's needed. As of 2017-04, getch() is no
 // longer used; this paragraph is kept lest it be reintroduced.
-
-// Although gcc may once have defined __STRICT_ANSI__ differently:
-//   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=3199
-// its intended value now is 1:
-//   http://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html
-
-#if defined LMI_GNUC_STRICT_ANSI
-#   define __STRICT_ANSI__ 1
-#endif // defined LMI_GNUC_STRICT_ANSI
-
-#undef LMI_GNUC_STRICT_ANSI
 
 #endif // platform_dependent_hpp
