@@ -775,7 +775,6 @@ $(product_file_sources): tutelary_flag += $(product_file_flags)
 #   http://boost.org/more/faq.htm
 
 REQUIRED_LIBS := \
-  $(platform_boost_libraries) \
   $(xml_libraries) \
 
 wx_ldflags = \
