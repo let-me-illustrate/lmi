@@ -243,7 +243,7 @@ inline void stifle_warning_for_unused_variable(T const&)
 /// for volatile types.
 
 template<typename T>
-inline void stifle_warning_for_unused_value(T const& t)
+inline void stifle_warning_for_unused_value(T& t)
 {
     (void)&t;
 }
