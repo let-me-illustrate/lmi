@@ -97,12 +97,12 @@ class path
         }
 
     path(std::string const& source)
-        :path_{std::filesystem::u8path(source)}
+        :path_{from_u8path(source)}
         {
         }
 
     path(char const* source)
-        :path_{std::filesystem::u8path(source)}
+        :path_{from_u8path(source)}
         {
         }
 
@@ -136,13 +136,13 @@ class path
 
     path& operator=(std::string const& source)
         {
-        path_ = std::filesystem::u8path(source);
+        path_ = from_u8path(source);
         return *this;
         }
 
     path& operator=(char const* source)
         {
-        path_ = std::filesystem::u8path(source);
+        path_ = from_u8path(source);
         return *this;
         }
 
@@ -374,6 +374,33 @@ class path
     static std::string u8string_as_string(std::string const& s8)
         {
         return s8;
+        }
+
+    // Provide wrapper for u8path() C++17 function deprecated in C++20:
+    // normally we should just use std::filesystem::path ctor from char8_t
+    // string here, but not all implementations provide it right now (notably
+    // libc++ used by clang 10 in the CI builds does not), so keep using
+    // u8path() for now, and just disable the deprecation warning for it.
+    template<typename T>
+    static std::filesystem::path from_u8path(T arg)
+        {
+#if defined LMI_CLANG
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif // defined LMI_CLANG
+#if defined LMI_MSC
+#   pragma warning(push)
+#   pragma warning(disable : 4996)
+#endif // defined LMI_MSC
+
+        return std::filesystem::u8path(arg);
+
+#if defined LMI_MSC
+#   pragma warning(pop)
+#endif // defined LMI_MSC
+#if defined LMI_CLANG
+#   pragma clang diagnostic pop
+#endif // defined LMI_CLANG
         }
 
     friend bool operator==(path const& lhs, path const& rhs) noexcept;
