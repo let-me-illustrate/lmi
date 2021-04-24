@@ -935,9 +935,7 @@ void product_data::write_policy_files()
 /// Somewhat arbitrarily, forbid '.' in product names. There's no real
 /// need to allow that, and it would complicate the code. A product
 /// name like "ul.with.variable.funds" could too easily be mistaken
-/// for a '.funds' file. The boost filesystem portability guidelines
-/// suggest "Do not use more that [sic] one period in a file name",
-/// and extensions are added to product names to create file names.
+/// for a '.funds' file.
 ///
 /// Rejected alternative: take a 'ce_product_name' argument instead.
 /// That would constrain the argument in a natural way, but would

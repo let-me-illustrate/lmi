@@ -33,8 +33,7 @@ void test_directory_exceptions()
     // reported.
 
     // String values assigned to 'directory' data members must be
-    // valid "directory paths" as defined in the boost filesystem
-    // documentation. In particular:
+    // valid "directory paths". In particular:
 
     // Such string values must not be empty.
 

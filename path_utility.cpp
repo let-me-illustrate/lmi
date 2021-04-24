@@ -101,14 +101,6 @@ fs::path modify_directory
 /// in case an end user types something like
 ///   Crime and/or Punishment
 /// with no intention of denoting a path.
-///
-/// Although portable_filename() would be a better name, that would be
-/// confusing because the boost filesystem library already provides
-/// boolean predicates like portable_file_name(), where Myers
-///   http://www.cantrip.org/coding-standard2.html
-/// would prefer a predicate phrase like is_portable_file_name():
-/// cf. std::isalnum(), std::numeric_limits::is_signed(), and even
-/// boost::filesystem::is_complete().
 
 std::string orthodox_filename(std::string const& original_filename)
 {
@@ -213,7 +205,7 @@ std::string serial_extension
 ///
 /// It is necessary to call orthodox_filename() on the insured's name
 /// in case it contains a character (probably whitespace) that might
-/// fail a boost::filesystem name check.
+/// fail a std::filesystem name check.
 
 fs::path serial_file_path
     (fs::path    const& exemplar
@@ -260,8 +252,7 @@ fs::path serial_file_path
 ///
 /// A try-block is necessary because fs::remove() can throw. The
 /// postcondition is asserted explicitly at the end of the try-block
-/// because that boost function's semantics have changed between
-/// versions, and its documentation is still unclear in boost-1.34:
+/// because that fs::remove() documentation is still unclear:
 /// apparently it mustn't fail without throwing, yet it doesn't throw
 /// on an operation that must fail, like removing a file that's locked
 /// by another process as in the motivating example above.

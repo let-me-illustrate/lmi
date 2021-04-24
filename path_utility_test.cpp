@@ -267,9 +267,7 @@ void test_unique_filepath_with_normal_filenames()
     // They return nonzero, and do not remove the directory. The
     // reason is that the msw C library's remove() function doesn't
     // delete directories; it sets errno to 13, which means EACCESS,
-    // and _doserrno to 5, which might mean EIO. The boost:filesystem
-    // msw implementation calls RemoveDirectoryA() instead of the C
-    // remove() function in this case. The std::filesystem::remove()
+    // and _doserrno to 5, which might mean EIO. The std::filesystem::remove()
     // specification in C++17 (N4659) [30.10.15.30] says:
     //   "the file p is removed as if by POSIX remove()".
     // Therefore, use the filesystem function to remove the directory:
