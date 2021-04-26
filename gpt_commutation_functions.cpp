@@ -61,7 +61,6 @@ std::vector<T>& back_sum(std::vector<T>& v, E e)
 ///  - 'issued_today' and 'duration' are mutually consistent:
 ///    - if the policy was issued today, its duration must be zero
 ///    - if duration != 0, the policy cannot have been issued today
-///    thus: NOT ('true == issued_today' AND '0 != duration')
 ///  - a 1035 exchange can occur only on the issue date
 ///
 /// 7702 !! Reconsider this:
@@ -94,8 +93,19 @@ void assert_sanity(gpt_scalar_parms const& args)
 
     LMI_ASSERT(args.endt_bft <= args.f3_bft);
 
-    LMI_ASSERT(!(args.issued_today && 0 != args.duration));
-    LMI_ASSERT( args.issued_today || 0.0 == args.gross_1035);
+    if(args.issued_today)
+        {
+        LMI_ASSERT(0 == args.duration);
+        }
+    if(0 != args.duration)
+        {
+        LMI_ASSERT(!args.issued_today);
+        }
+
+    if(0.0 != args.gross_1035)
+        {
+        LMI_ASSERT(args.issued_today);
+        }
 }
 
 /// Constructor.
