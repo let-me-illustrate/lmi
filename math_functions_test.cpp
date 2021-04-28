@@ -200,7 +200,6 @@ void sample_results()
 void mete0()
 {
     double volatile x;
-    stifle_warning_for_unused_value(x);
     for(int j = 0; j < 100000; ++j)
         {
         x = i_upper_12_over_12_from_i_naive<double>()(0.04);
@@ -208,13 +207,13 @@ void mete0()
         x = d_upper_12_from_i_naive        <double>()(0.04);
         x = net_i_from_gross_naive<double,365>()(0.04, 0.007, 0.003);
         }
+    stifle_warning_for_unused_value(x);
 }
 
 // This implementation uses production functors.
 void mete1()
 {
     double volatile x;
-    stifle_warning_for_unused_value(x);
     for(int j = 0; j < 100000; ++j)
         {
         x = i_upper_12_over_12_from_i<double>()(0.04);
@@ -222,26 +221,27 @@ void mete1()
         x = d_upper_12_from_i        <double>()(0.04);
         x = net_i_from_gross<double,365>()(0.04, 0.007, 0.003);
         }
+    stifle_warning_for_unused_value(x);
 }
 
 void mete2()
 {
     double volatile x;
-    stifle_warning_for_unused_value(x);
     for(int j = 0; j < 100000; ++j)
         {
         x = i_upper_n_over_n_from_i_T<double,365>()(0.01);
         }
+    stifle_warning_for_unused_value(x);
 }
 
 void mete3()
 {
     long double volatile x;
-    stifle_warning_for_unused_value(x);
     for(int j = 0; j < 100000; ++j)
         {
         x = i_upper_n_over_n_from_i_T<long double,365>()(0.01);
         }
+    stifle_warning_for_unused_value(x);
 }
 
 // These 'mete[45]' functions calculate 10^-9 in different ways.
@@ -256,11 +256,11 @@ void mete4()
     double volatile base = 10.0;
     int    volatile exp  = 9;
     double volatile x;
-    stifle_warning_for_unused_value(x);
     for(int j = 0; j < 100000; ++j)
         {
         x = 1.0 / nonstd::power(base, exp);
         }
+    stifle_warning_for_unused_value(x);
 }
 
 void mete5()
@@ -268,11 +268,11 @@ void mete5()
     double volatile base = 10.0;
     int    volatile exp  = -9;
     double volatile x;
-    stifle_warning_for_unused_value(x);
     for(int j = 0; j < 100000; ++j)
         {
         x = std::pow(base, exp);
         }
+    stifle_warning_for_unused_value(x);
 }
 
 void assay_speed()
