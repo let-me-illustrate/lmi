@@ -917,6 +917,7 @@ path_utility_test$(EXEEXT): \
   null_stream.o \
   path_utility.o \
   path_utility_test.o \
+  wine_workarounds.o \
 
 premium_tax_test$(EXEEXT): \
   $(boost_filesystem_objects) \

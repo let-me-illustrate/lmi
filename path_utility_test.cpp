@@ -26,6 +26,7 @@
 #include "miscellany.hpp"
 #include "platform_dependent.hpp"       // access()
 #include "test_tools.hpp"
+#include "wine_workarounds.hpp"         // running_under_wine()
 
 #include <boost/filesystem/convenience.hpp> // basename()
 #include <boost/filesystem/exception.hpp>
@@ -301,11 +302,18 @@ void test_unique_filepath_with_ludicrous_filenames()
     // called by unique_filepath() here, adding that extension to ".."
     // yields "...", which is forbidden by msw, but allowed (although
     // of course discouraged) by posix.
-    LMI_TEST_THROW
-        (unique_filepath(fs::path(".."), "..")
-        ,fs::filesystem_error
-        ,""
-        );
+    if(running_under_wine())
+        {
+        std::cout << "TEST SKIPPED DUE TO wine-5.0.3 DEFECT" << std::endl;
+        }
+    else
+        {
+        LMI_TEST_THROW
+            (unique_filepath(fs::path(".."), "..")
+            ,fs::filesystem_error
+            ,""
+            );
+        }
 #endif // defined LMI_MSW
 }
 
