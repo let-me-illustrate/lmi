@@ -27,10 +27,9 @@
 #include "any_member.hpp"
 #include "cache_file_reads.hpp"
 #include "dbvalue.hpp"
+#include "path.hpp"
 #include "so_attributes.hpp"
 #include "xml_serializable.hpp"
-
-#include <boost/filesystem/path.hpp>
 
 #include <string>
 

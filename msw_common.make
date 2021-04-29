@@ -42,16 +42,6 @@ platform_defines := \
 
 platform_gui_ldflags := -mwindows
 
-# In addition to other reasons for treating these libraries as mere
-# collections of source files, there's a specific problem with boost.
-# The build system provided by boost produces library names such as
-# 'libboost_filesystem-mgw.a', which violates the rule here
-#   http://www.boost.org/more/lib_guide.htm#Directory_structure
-# because it contains a hyphen, which causes problems with borland
-# tools, apparently because it looks like an option prefix.
-
-platform_boost_libraries :=
-
 platform_cgicc_libraries :=
 
 ################################################################################

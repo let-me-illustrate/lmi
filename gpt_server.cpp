@@ -44,6 +44,7 @@
 #include "mc_enum_types_aux.hpp"        // mc_state_from_string()
 #include "miscellany.hpp"               // each_equal(), ios_out_trunc_binary()
 #include "oecumenic_enumerations.hpp"
+#include "path.hpp"
 #include "path_utility.hpp"             // unique_filepath(), fs::path inserter
 #include "premium_tax.hpp"
 #include "product_data.hpp"
@@ -53,9 +54,6 @@
 #include "stratified_charges.hpp"
 #include "timer.hpp"
 #include "value_cast.hpp"
-
-#include <boost/filesystem/convenience.hpp> // extension(), change_extension()
-#include <boost/filesystem/fstream.hpp>
 
 #include <algorithm>                    // min()
 #include <iostream>
@@ -480,7 +478,7 @@ gpt_server::gpt_server(mcenum_emission emission) : emission_(emission)
 
 bool gpt_server::operator()(fs::path const& file_path)
 {
-    std::string const extension = fs::extension(file_path);
+    std::string const extension = file_path.extension().string();
     if(".gpt" == extension)
         {
         Timer timer;
@@ -510,7 +508,7 @@ bool gpt_server::operator()(fs::path const& file_path, gpt_input const& z)
     timer.restart();
     if(mce_emit_test_data & emission_)
         {
-        state_.save(fs::change_extension(file_path, ".gpt.xml"));
+        state_.save(fs::path{file_path}.replace_extension(".gpt.xml"));
         }
     seconds_for_output_       = timer.stop().elapsed_seconds();
     conditionally_show_timings_on_stdout();

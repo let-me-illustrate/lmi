@@ -25,9 +25,8 @@
 #include "config.hpp"
 
 #include "cache_file_reads.hpp"
+#include "path.hpp"
 #include "so_attributes.hpp"
-
-#include <boost/filesystem/path.hpp>
 
 #include <string>
 #include <vector>

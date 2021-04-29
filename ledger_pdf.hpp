@@ -23,8 +23,7 @@
 #define ledger_pdf_hpp
 
 #include "config.hpp"
-
-#include <boost/filesystem/path.hpp>
+#include "path.hpp"
 
 #include <string>
 

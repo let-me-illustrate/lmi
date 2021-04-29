@@ -22,13 +22,9 @@
 #include "pchfile.hpp"
 
 #include "global_settings.hpp"
+#include "path.hpp"
 
-#include "path_utility.hpp"             // initialize_filesystem()
 #include "test_tools.hpp"
-
-#include <boost/filesystem/exception.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 void test_directory_exceptions()
 {
@@ -37,8 +33,7 @@ void test_directory_exceptions()
     // reported.
 
     // String values assigned to 'directory' data members must be
-    // valid "directory paths" as defined in the boost filesystem
-    // documentation. In particular:
+    // valid "directory paths". In particular:
 
     // Such string values must not be empty.
 
@@ -78,10 +73,6 @@ void test_directory_exceptions()
 
 int test_main(int, char*[])
 {
-    // Absolute paths require "native" name-checking policy for msw.
-
-    initialize_filesystem();
-
     // Initial values of 'directory' data members must be valid: the
     // operations tested here are required not to throw.
 
@@ -91,23 +82,13 @@ int test_main(int, char*[])
 
     fs::path path(global_settings::instance().data_directory());
 
-    fs::directory_iterator i(path);
+    fs::directory_iterator const i(path);
 
-    LMI_TEST(exists(*i));
+    LMI_TEST(i->exists());
 
     // Certain other operations are required to throw.
 
     test_directory_exceptions();
-
-    // Attempting to set a default name-checking policy after creating
-    // an instance of class global_settings should throw. Test this in
-    // order to guard against changes to the boost filesystem library.
-
-    LMI_TEST_THROW
-        (fs::path::default_name_check(fs::native)
-        ,fs::filesystem_error
-        ,""
-        );
 
     // 'ash_nazg' implies 'mellon'.
     global_settings::instance().set_mellon(false);

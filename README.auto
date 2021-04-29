@@ -59,21 +59,6 @@ a) wxWidgets: create any directory (it will be called wx-build below),
         wxWidgets with debugging enabled (highly recommended during
         development!).
 
-b) boost: static boost_filesystem library is available as a standard cygwin
-        package but if you want to use shared libraries or use mingw32, you
-        need to build this library yourself (the rest of boost classes used by
-        lmi are headers only and don't have to be built at all) using the
-        standard instruction from http://www.boost.org/
-
-        Notice that if you don't have shared boost libraries, libtool won't be
-        able to build shared liblmi and so using it will be just a waste of a
-        couple of dozens of megabytes.
-
-        Under Unix, at the time of this writing (2005-11-01) Debian has boost
-        packages built with g++ 3.3 but they are not binary compatible with g++
-        3.4/4.0 so if you use the latter you *must* build from source or you
-        get mysterious run-time crashes.
-
 2. Build system setup
 ---------------------
 
@@ -105,8 +90,6 @@ useful ones are:
 
     --prefix=/opt/lmi           to install /opt and not default /usr/local
     --with-wxdir=$wx-build      to use uninstalled wx version from $wx-build
-    --with-boost-filesystem-src to compile a custom boost_filesystem library
-                                using boost sources
     --enable-debug              to enable debugging (asserts...)
     --disable-shared            to build static libraries only (for deployment)
 

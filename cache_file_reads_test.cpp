@@ -25,11 +25,9 @@
 
 #include "istream_to_string.hpp"
 #include "miscellany.hpp"               // ios_in_binary()
+#include "path.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
-
-#include <boost/filesystem/exception.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <fstream>
 
@@ -83,7 +81,7 @@ void cache_file_reads_test::test_preconditions()
     // The file must exist.
     LMI_TEST_THROW
         (X::read_via_cache("no_such_file")
-        ,boost::filesystem::filesystem_error
+        ,std::filesystem::filesystem_error
         ,lmi_test::what_regex("no_such_file")
         );
 }

@@ -22,6 +22,7 @@
 #include "pchfile_wx.hpp"
 
 #include "assert_lmi.hpp"
+#include "path.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_statusbar.hpp"
 
@@ -30,8 +31,6 @@
 #include <wx/scopeguard.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
-
-#include <boost/filesystem/operations.hpp>
 
 #include <cmath>                        // fabs()
 #include <iostream>
@@ -44,13 +43,13 @@ class census_benchmark
   public:
     explicit census_benchmark(fs::path const& path)
         :status_ {get_main_window_statusbar()}
-        ,name_   {path.leaf()}
+        ,name_   {wxString::FromUTF8(path.filename().string())}
         {
         wxUIActionSimulator z;
         z.Char('o', wxMOD_CONTROL); // "File|Open"
         wxTEST_DIALOG
             (wxYield()
-            ,wxExpectModal<wxFileDialog>(path.native_file_string())
+            ,wxExpectModal<wxFileDialog>(wxString::FromUTF8(path.string()))
             );
         wxYield();
         }
@@ -136,15 +135,14 @@ class census_benchmark
 
 LMI_WX_TEST_CASE(benchmark_census)
 {
-    fs::directory_iterator const end_i;
-    for(fs::directory_iterator i(get_test_files_path()); i != end_i; ++i)
+    for(auto const& de : fs::directory_iterator(get_test_files_path()))
         {
-        if(!wxString(i->leaf()).Matches("MSEC*.cns"))
+        if(!wxString::FromUTF8(de.path().filename().string()).Matches("MSEC*.cns"))
             {
             continue;
             }
 
-        census_benchmark b(*i);
+        census_benchmark b(de.path());
 
         {
         // Ensure that the window doesn't stay opened (and possibly affects

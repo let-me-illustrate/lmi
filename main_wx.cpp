@@ -36,7 +36,6 @@
 #include "force_linking.hpp"
 #include "handle_exceptions.hpp"        // report_exception()
 #include "main_common.hpp"              // initialize_application()
-#include "path_utility.hpp"             // initialize_filesystem()
 #include "skeleton.hpp"
 
 #include <wx/init.h>                    // wxEntry()
@@ -88,7 +87,6 @@ int WINAPI WinMain
     try
         {
         initialize_application();
-        initialize_filesystem();
 #if !defined LMI_MSW
         result = wxEntry(argc, argv);
 #else  // defined LMI_MSW

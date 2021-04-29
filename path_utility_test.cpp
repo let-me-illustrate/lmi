@@ -24,15 +24,10 @@
 #include "path_utility.hpp"
 
 #include "miscellany.hpp"
+#include "path.hpp"
 #include "platform_dependent.hpp"       // access()
 #include "test_tools.hpp"
 #include "wine_workarounds.hpp"         // running_under_wine()
-
-#include <boost/filesystem/convenience.hpp> // basename()
-#include <boost/filesystem/exception.hpp>
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <cstdio>                       // remove()
 #include <fstream>
@@ -76,15 +71,20 @@ void test_modify_directory()
     LMI_TEST_EQUAL("sh"           , modify_directory("sh"     , ""        ).string());
     LMI_TEST_EQUAL("sh"           , modify_directory("/bin/sh", ""        ).string());
 
-    // Arguably this should be forbidden:
+    // This is forbidden, consistently with the observed behaviour:
     //   $ls /bin/sh/
     //   ls: cannot access '/bin/sh/': Not a directory
-    LMI_TEST_EQUAL("/bin/sh"      , modify_directory("sh/"    , "/bin/"   ).string());
+    // because "sh/" doesn't have the filename.
+    LMI_TEST_THROW
+        (modify_directory("sh/", "/bin/")
+        ,std::runtime_error
+        ,"Assertion 'original_filepath.has_filename()' failed."
+        );
 
     LMI_TEST_THROW
         (modify_directory("", "/bin")
         ,std::runtime_error
-        ,"Assertion 'original_filepath.has_leaf()' failed."
+        ,"Assertion 'original_filepath.has_filename()' failed."
         );
 }
 
@@ -173,9 +173,9 @@ void test_unique_filepath_with_normal_filenames()
     // as a substitute for the nonstandard mkstemp() is a bad idea.
     // See:
     //   https://lists.nongnu.org/archive/html/lmi/2020-08/msg00015.html
-    fs::path const u = unique_filepath("/tmp/" + fs::basename(__FILE__), "");
+    fs::path const u = unique_filepath("/tmp/" + fs::path{__FILE__}.stem().string(), "");
     std::string const tmp = u.string();
-    fs::path const tmpdir(fs::complete(tmp));
+    fs::path const tmpdir(fs::absolute(tmp));
     fs::create_directory(tmpdir);
 
     // These tests would fail if read-only files with the following
@@ -268,9 +268,7 @@ void test_unique_filepath_with_normal_filenames()
     // They return nonzero, and do not remove the directory. The
     // reason is that the msw C library's remove() function doesn't
     // delete directories; it sets errno to 13, which means EACCESS,
-    // and _doserrno to 5, which might mean EIO. The boost:filesystem
-    // msw implementation calls RemoveDirectoryA() instead of the C
-    // remove() function in this case. The std::filesystem::remove()
+    // and _doserrno to 5, which might mean EIO. The std::filesystem::remove()
     // specification in C++17 (N4659) [30.10.15.30] says:
     //   "the file p is removed as if by POSIX remove()".
     // Therefore, use the filesystem function to remove the directory:
@@ -295,19 +293,14 @@ void test_unique_filepath_with_ludicrous_filenames()
     fs::path path2 = unique_filepath(fs::path(""), "");
     LMI_TEST_EQUAL(path2.string(), "");
 
-#if defined LMI_MSW
-    // fs::change_extension()'s argument is ".[extension]", so ".."
+    // fs::replace_extension()'s argument is ".[extension]", so ".."
     // represents a '.' extension-delimiter followed by an extension
-    // consisting of a single '.'. When fs::change_extension() is
+    // consisting of a single '.'. When fs::replace_extension() is
     // called by unique_filepath() here, adding that extension to ".."
-    // yields "...", which is forbidden by msw, but allowed (although
-    // of course discouraged) by posix.
-    LMI_TEST_THROW
-        (unique_filepath(fs::path(".."), "..")
-        ,fs::filesystem_error
-        ,""
-        );
-#endif // defined LMI_MSW
+    // yields "...." path, which won't work if it is actually used by msw,
+    // but is still allowed (although of course discouraged).
+    fs::path path3 = unique_filepath(fs::path(".."), "..");
+    LMI_TEST_EQUAL(path3.string(), "....");
 }
 
 void test_path_inserter()
@@ -337,7 +330,7 @@ void test_path_validation()
     // Create a file and a directory to test.
     //
     // Another test that calls fs::create_directory() uses an absolute
-    // path that's uniquified and canonicalized with fs::complete().
+    // path that's uniquified and canonicalized with fs::absolute().
     // This call uses a relative path, with no such safeguards; this
     // being a unit test, it is appropriate to retain some fragility.
     // If one user runs this test, and the directory created here
@@ -371,7 +364,7 @@ void test_path_validation()
     LMI_TEST_THROW
         (validate_filepath("<|>", context)
         ,std::runtime_error
-        ,lmi_test::what_regex("invalid name \"<|>\" in path")
+        ,"Unit test file '<|>' not found."
         );
 #endif // defined LMI_MSW
 
@@ -408,35 +401,49 @@ void test_path_validation()
     fs::remove("path_utility_test_dir");
 }
 
-/// Demonstrate a boost::filesystem oddity.
+/// Demonstrate that "root name" part is handled differently by std::filesystem
+/// library under different platforms.
 ///
 /// A print directory is specified in 'configurable_settings.xml', and
 /// managed by 'preferences_model.cpp'. Using an msw build of lmi to
 /// change its value endues it with a 'root-name'. Subsequently using
 /// a posix build of lmi does not remove the 'root-name'; instead, it
 /// does something bizarre, viz.:
-///   fs::system_complete(/opt/lmi/data) returns:
+///   fs::absolute(/opt/lmi/data) returns:
 ///   /opt/lmi/data
 /// as expected, but
-///   fs::system_complete(Z:/opt/lmi/data) bizarrely returns:
+///   fs::absolute(Z:/opt/lmi/data) bizarrely returns:
 ///   /opt/lmi/gcc_x86_64-pc-linux-gnu/build/ship/Z:/opt/lmi/data
 /// or something like that, depending on the build directory.
 
 void test_oddities()
 {
+    // The exact value of the root name doesn't matter under POSIX systems but
+    // under MSW we must use the actual root name, and not the hard-coded "Z:",
+    // as this is what absolute() uses for completing the path and comparisons
+    // below would fail under this platform unless the root name actually
+    // happens to be "Z:".
+    std::string root_name = fs::current_path().root_name().string();
+    if(root_name.empty())
+        {
+        // Root name not used under this platform, just use something non-empty.
+        root_name = "Z:";
+        }
+    LMI_TEST_EQUAL  (root_name.size(), 2);
+
     std::string const z0 = "/opt/lmi/data";
-    std::string const z1 = "Z:/opt/lmi/data";
+    std::string const z1 = root_name + "/opt/lmi/data";
     std::string const z2 = remove_alien_msw_root(z1).string();
 #if defined LMI_POSIX
-    LMI_TEST_EQUAL  (z0, fs::system_complete(z0).string());
-    LMI_TEST_UNEQUAL(z0, fs::system_complete(z1).string());
+    LMI_TEST_EQUAL  (z0, fs::absolute(z0).string());
+    LMI_TEST_UNEQUAL(z0, fs::absolute(z1).string());
     LMI_TEST_EQUAL  (z0, z2);
-    LMI_TEST_EQUAL  (z0, fs::system_complete(z2).string());
+    LMI_TEST_EQUAL  (z0, fs::absolute(z2).string());
 #elif defined LMI_MSW
-    LMI_TEST_EQUAL  (z1, fs::system_complete(z0).string());
-    LMI_TEST_EQUAL  (z1, fs::system_complete(z1).string());
+    LMI_TEST_EQUAL  (z1, fs::absolute(z0).string());
+    LMI_TEST_EQUAL  (z1, fs::absolute(z1).string());
     LMI_TEST_EQUAL  (z1, z2);
-    LMI_TEST_EQUAL  (z1, fs::system_complete(z2).string());
+    LMI_TEST_EQUAL  (z1, fs::absolute(z2).string());
 #else  // Unknown platform.
     throw "Unrecognized platform."
 #endif // Unknown platform.
@@ -444,8 +451,6 @@ void test_oddities()
 
 int test_main(int, char*[])
 {
-    initialize_filesystem();
-
     test_modify_directory();
     test_orthodox_filename();
     test_serial_file_path();

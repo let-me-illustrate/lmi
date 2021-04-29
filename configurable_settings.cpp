@@ -34,10 +34,6 @@
 #include "path_utility.hpp"             // validate_directory(), validate_filepath()
 #include "platform_dependent.hpp"       // access()
 
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
-
 #include <iterator>                     // istream_iterator
 #include <sstream>
 #include <stdexcept>
@@ -122,7 +118,7 @@ std::string const& configuration_filepath()
         }
 
     validate_filepath(filename, "Configurable-settings file");
-    complete_path = fs::system_complete(filename).string();
+    complete_path = fs::absolute(filename).string();
     return complete_path;
 }
 
@@ -146,32 +142,18 @@ configurable_settings::configurable_settings()
     ascribe_members();
     load();
 
-    try
-        {
-        default_input_filename_ = fs::system_complete(default_input_filename_).string();
-// Performing this test seems like a good idea, but it would flag
-// an empty path as an error.
-//      validate_filepath(default_input_filename_, "Default input file");
-        }
-    catch(...)
-        {
-        report_exception();
-        // Silently replace invalid path with an empty string,
-        // which will produce an informative diagnostic when
-        // a default is needed.
-        default_input_filename_ = {};
-        }
+    default_input_filename_ = fs::absolute(default_input_filename_  ).string();
+    print_directory_        = remove_alien_msw_root(print_directory_).string();
+    print_directory_        = fs::absolute(print_directory_         ).string();
 
     try
         {
-        print_directory_ = remove_alien_msw_root(print_directory_).string();
-        print_directory_ = fs::system_complete(print_directory_).string();
         validate_directory(print_directory_, "Print directory");
         }
     catch(...)
         {
         report_exception();
-        print_directory_ = fs::system_complete(AddDataDir(".")).string();
+        print_directory_ = fs::absolute(AddDataDir(".")).string();
         warning()
             << "If possible, data directory '"
             << print_directory_

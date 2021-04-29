@@ -25,10 +25,8 @@
 #include "config.hpp"
 
 #include "calendar_date.hpp"
+#include "path.hpp"
 #include "so_attributes.hpp"
-
-#include <boost/filesystem/operations.hpp> // fs::system_complete()
-#include <boost/filesystem/path.hpp>
 
 #include <string>
 
@@ -57,7 +55,7 @@
 /// products before approval.
 ///
 /// data_directory_: Path to data files, initialized to ".", not an
-/// empty string. Reason: objects of the boost filesystem library's
+/// empty string. Reason: objects of the std::filesystem library's
 /// path class are created from these strings, which, if the strings
 /// were empty, would trigger exceptions when passed to that library's
 /// directory_iterator ctor.
@@ -101,7 +99,7 @@ class LMI_SO global_settings final
     std::string pyx_                 {};
     bool custom_io_0_                {false};
     bool regression_testing_         {false};
-    fs::path data_directory_         {fs::system_complete(".")};
+    fs::path data_directory_         {fs::absolute(".")};
     calendar_date prospicience_date_ {last_yyyy_date()};
 };
 

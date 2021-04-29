@@ -37,14 +37,11 @@
 #include "miscellany.hpp"
 #include "my_proem.hpp"                 // ::write_proem()
 #include "oecumenic_enumerations.hpp"
+#include "path.hpp"
 #include "premium_tax.hpp"              // premium_tax_rates_for_life_insurance()
 #include "sample.hpp"                   // superior::lingo
 #include "xml_lmi.hpp"
 #include "xml_serialize.hpp"
-
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>
 
 #include <vector>
 
@@ -1615,19 +1612,18 @@ void DBDictionary::InitAntediluvian()
 void print_databases()
 {
     fs::path path(global_settings::instance().data_directory());
-    fs::directory_iterator i(path);
-    fs::directory_iterator end_i;
-    for(; i != end_i; ++i)
+    for(auto const& e : fs::directory_iterator(path))
         {
-        if(is_directory(*i) || ".database" != fs::extension(*i))
+        if(e.is_directory() || ".database" != e.path().extension())
             {
             continue;
             }
         try
             {
-            DBDictionary const z(i->string());
+            DBDictionary const z(e.path().string());
 
-            fs::path out_file = fs::change_extension(*i, ".dbt");
+            fs::path out_file{e.path()};
+            out_file.replace_extension(".dbt");
             fs::ofstream os(out_file, ios_out_trunc_binary());
             for(auto const& j : z.member_names())
                 {

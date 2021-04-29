@@ -24,10 +24,9 @@
 
 #include "config.hpp"
 
+#include "path.hpp"
 #include "so_attributes.hpp"
 #include "xml_lmi_fwd.hpp"
-
-#include <boost/filesystem/path.hpp>
 
 #include <list>
 #include <map>

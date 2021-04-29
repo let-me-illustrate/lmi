@@ -25,15 +25,13 @@
 
 #include "assert_lmi.hpp"
 #include "global_settings.hpp"
-
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
+#include "path.hpp"
 
 //============================================================================
 std::string AddDataDir(std::string const& a_filename)
 {
     fs::path path(a_filename);
-    LMI_ASSERT(a_filename == path.leaf());
+    LMI_ASSERT(a_filename == path.filename());
 
     path = global_settings::instance().data_directory() / path;
     return path.string();

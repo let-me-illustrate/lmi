@@ -26,12 +26,8 @@
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
 #include "miscellany.hpp"               // begins_with(), split_into_lines()
+#include "path.hpp"
 #include "ssize_lmi.hpp"
-
-#include <boost/filesystem/convenience.hpp> // fs::extension()
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>  // fs::exists(), fs::is_directory()
-#include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // is_sorted()
 #include <ctime>
@@ -136,8 +132,8 @@ class file final
 file::file(std::string const& file_path)
     :path_      {file_path}
     ,full_name_ {file_path}
-    ,leaf_name_ {path_.leaf()}
-    ,extension_ {fs::extension(path_)}
+    ,leaf_name_ {path_.filename().string()}
+    ,extension_ {path_.extension().string()}
     ,phylum_    {e_no_phylum}
 {
     if(!fs::exists(path_))

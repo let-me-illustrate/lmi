@@ -28,10 +28,9 @@
 #include "cache_file_reads.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
+#include "path.hpp"
 #include "so_attributes.hpp"
 #include "xml_serializable.hpp"
-
-#include <boost/filesystem/path.hpp>
 
 #include <string>
 

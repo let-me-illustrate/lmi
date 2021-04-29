@@ -27,86 +27,27 @@
 #include "assert_lmi.hpp"
 #include "global_settings.hpp"
 #include "miscellany.hpp"               // iso_8601_datestamp_terse()
-
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/exception.hpp>
-#include <boost/filesystem/operations.hpp>
+#include "path.hpp"
 
 #include <cctype>                       // isalnum()
 #include <exception>
 #include <iomanip>
 #include <sstream>
 
-/// Preserve initial path and set "native" name-checking policy for
-/// boost filesystem library.
-///
-/// Applications that end users would normally run should call this
-/// function during initialization--before using this boost library
-/// in any other way, to ensure uniform name checking (which enables
-/// them to use nonportable paths, as some demand), and to make it
-/// potentially possible to protect them somewhat from the strange
-/// effects of inadvertent changes to the current working directory.
-/// As boost's documentation notes, msw may resolve relative paths as
-///   "complete( path, kinky ), where kinky is the current directory
-///   for the [path's] drive. This will be the current directory of
-///   that drive the last time it was set, and thus may well be
-///   residue left over from some prior program run by the command
-///   processor! Although these semantics are often useful, they are
-///   also very error-prone, and certainly deserve to be called
-///   'kinky'."
-/// although it's unclear whether there's any way to get msw to do
-/// this exactly when end users desire it and not otherwise.
-///
-/// Call this function during initialization for any program that
-/// could be passed a path argument, even if the argument is a
-/// portable path. Motivating case: MSYS's bash translated it to a
-/// nonportable path; e.g., if this function wasn't called, then
-///   --data_path='/opt/lmi/data'
-/// engendered this diagnostic:
-///   boost::filesystem::path: [line split for readability]
-///     invalid name "C:" in path: "C:/msys/1.0/opt/lmi/data"
-/// Keep doing this for future-proofing even though MSYS is no longer
-/// supported.
-///
-/// This function is not called in the initialization routine used by
-/// all programs, because simple command-line tools should not be
-/// forced to depend on this boost library.
-///
-/// Resist the urge to write its simple implementation inline because
-/// that may fail with gcc on msw--see:
-///   http://article.gmane.org/gmane.comp.gnu.mingw.user/18633
-///     [2006-01-14T11:55:49Z from Greg Chicares]
-///
-/// The boost documentation says:
-///   "The preferred implementation would be to call initial_path()
-///   during program initialization, before the call to main().
-///   This is, however, not possible with changing the C++ runtime
-///   library."
-/// One could wish that they had expressed that in code instead of
-/// commentary: std::cout manages to work this way by using the
-/// so-called "nifty counter" technique, which perhaps ought to be
-/// used here.
-
-void initialize_filesystem()
-{
-    fs::path::default_name_check(fs::native);
-    fs::initial_path();
-}
-
 /// Change '/path/to/file' to '/some/other/place/file'.
 ///
-/// Motivation: It is anomalous that boost permits this:
+/// Motivation: It is anomalous that std::filesystem permits this:
 ///   path file("/bin/sh";
 ///   path dir ("/usr/bin");
-///   dir / path; // returns "/usr/bin/bin/sh"
-/// where true == file.is_complete().
+///   dir / path; // returns "/bin/sh"
+/// where true == file.is_absolute().
 ///
 /// Arguably the arguments should be given in the opposite order:
 ///   modify_directory("sh", "/usr/bin") // present order
 ///   modify_directory("/usr/bin", "sh") // opposite order
-/// because the path precedes the leaf in canonical form. However,
-/// fs::change_extension() uses the present argument order:
-///   function(original, new_part)
+/// because the path precedes the filename in canonical form. However,
+/// fs::path::replace_extension() uses the present argument order:
+///   original.replace_extension(new_part)
 /// and in a nondegenerate case such as:
 ///   modify_directory("/bin/sh", "/usr/bin") // present order
 /// simply means "change the directory of /bin/sh to /usr/bin", while
@@ -117,26 +58,25 @@ void initialize_filesystem()
 /// evokes chdir(2) and cd(1).
 ///
 /// Asserted precondition:
-///   - 'original_filepath' is not empty (i.e., true == has_leaf())
+///   - 'original_filepath' is not empty (i.e., true == has_filename())
 /// It is notably not required that 'supplied_directory' name an
 /// actual existing directory.
 ///
-/// Boost provides no way to test whether a path has the form of a
-/// directory. Its fs::is_directory() asks the operating system:
+/// std::filesystem provides no way to test whether a path has the form
+/// of a directory. Its fs::is_directory() asks the operating system:
 ///   is_directory("/usr/lib")
 /// returns 'true' iff the OS reports that such a directory exists;
 /// but the same function call would return 'false' after
 ///   rm -rf /usr/lib ; touch /usr/lib
-/// Notably, path("/bin/sh/") succeeds, silently discarding the
-/// trailing '/'.
+/// Notably, path("/bin/sh/") fails because it hasn't the filename.
 
 fs::path modify_directory
     (fs::path const& original_filepath
     ,fs::path const& supplied_directory
     )
 {
-    LMI_ASSERT(original_filepath.has_leaf());
-    return supplied_directory / fs::path(original_filepath.leaf());
+    LMI_ASSERT(original_filepath.has_filename());
+    return supplied_directory / original_filepath.filename();
 }
 
 /// Return a filename appropriate for posix as well as msw.
@@ -161,14 +101,6 @@ fs::path modify_directory
 /// in case an end user types something like
 ///   Crime and/or Punishment
 /// with no intention of denoting a path.
-///
-/// Although portable_filename() would be a better name, that would be
-/// confusing because the boost filesystem library already provides
-/// boolean predicates like portable_file_name(), where Myers
-///   http://www.cantrip.org/coding-standard2.html
-/// would prefer a predicate phrase like is_portable_file_name():
-/// cf. std::isalnum(), std::numeric_limits::is_signed(), and even
-/// boost::filesystem::is_complete().
 
 std::string orthodox_filename(std::string const& original_filename)
 {
@@ -265,16 +197,15 @@ std::string serial_extension
 /// output filenames simpler and more regular, yet doesn't suppress
 /// any information that would actually be useful.
 ///
-/// Preconditions: census input filepath is nonempty and has a leaf.
-/// It's not apparent how a nonempty path could fail to have a leaf,
-/// but presumably boost has some undocumented reason.
+/// Preconditions: census input filepath is nonempty and has a filename.
+/// For example `path/without/name/` is nonempty but hasn't the filename.
 ///
 /// Any extension or path is discarded from the input census filepath;
-/// only the filename leaf is used.
+/// only the filename is used.
 ///
 /// It is necessary to call orthodox_filename() on the insured's name
 /// in case it contains a character (probably whitespace) that might
-/// fail a boost::filesystem name check.
+/// fail a std::filesystem name check.
 
 fs::path serial_file_path
     (fs::path    const& exemplar
@@ -284,7 +215,7 @@ fs::path serial_file_path
     )
 {
     LMI_ASSERT(!exemplar.empty());
-    LMI_ASSERT(exemplar.has_leaf());
+    LMI_ASSERT(exemplar.has_filename());
     std::string s(serial_extension(serial_number, extension));
     if
         (  !personal_name.empty()
@@ -293,7 +224,7 @@ fs::path serial_file_path
         {
         s = '.' + orthodox_filename(personal_name) + s;
         }
-    return fs::change_extension(exemplar.leaf(), s);
+    return fs::path{exemplar}.filename().replace_extension(s);
 }
 
 /// Create a unique file path, following input as closely as possible.
@@ -321,8 +252,7 @@ fs::path serial_file_path
 ///
 /// A try-block is necessary because fs::remove() can throw. The
 /// postcondition is asserted explicitly at the end of the try-block
-/// because that boost function's semantics have changed between
-/// versions, and its documentation is still unclear in boost-1.34:
+/// because that fs::remove() documentation is still unclear:
 /// apparently it mustn't fail without throwing, yet it doesn't throw
 /// on an operation that must fail, like removing a file that's locked
 /// by another process as in the motivating example above.
@@ -338,7 +268,7 @@ fs::path unique_filepath
     )
 {
     fs::path filepath(original_filepath);
-    filepath = fs::change_extension(filepath, supplied_extension);
+    filepath.replace_extension(supplied_extension);
     if(!fs::exists(filepath))
         {
         return filepath;
@@ -351,10 +281,10 @@ fs::path unique_filepath
         }
     catch(std::exception const&)
         {
-        std::string basename  = fs::basename (filepath);
-        std::string extension = fs::extension(filepath);
+        std::string basename  = filepath.stem().string();
+        std::string const extension = filepath.extension().string();
         basename += '-' + iso_8601_datestamp_terse() + extension;
-        filepath = filepath.branch_path() / basename;
+        filepath = filepath.parent_path() / basename;
         if(fs::exists(filepath))
             {
             alarum()
@@ -386,10 +316,6 @@ namespace
 /// appropriate here, std::runtime_error (via alarum()) is chosen
 /// because the 'a_path' argument may be specified by users.
 ///
-/// Exceptions thrown from the boost filesystem library on path
-/// assignment are caught in order to rethrow with 'context'
-/// prepended.
-///
 /// Design alternative: instead of calling this function from
 /// validate_directory() and validate_filepath(), eliminate those
 /// functions and call this directly with an 'is_directory' argument.
@@ -401,15 +327,7 @@ void validate_path
     ,std::string const& context
     )
 {
-    fs::path path;
-    try
-        {
-        path = a_path;
-        }
-    catch(fs::filesystem_error const& e)
-        {
-        alarum() << context << ": " << e.what() << LMI_FLUSH;
-        }
+    fs::path const path{a_path};
 
     if(path.empty())
         {

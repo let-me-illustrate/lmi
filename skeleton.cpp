@@ -65,6 +65,7 @@
 #include "miscellany.hpp"
 #include "msw_workarounds.hpp"          // PreloadDesignatedDlls()
 #include "mvc_controller.hpp"
+#include "path.hpp"
 #include "path_utility.hpp"             // fs::path inserter
 #include "policy_document.hpp"
 #include "policy_view.hpp"
@@ -81,9 +82,6 @@
 #include "verify_products.hpp"
 #include "wx_new.hpp"
 #include "wx_utility.hpp"               // class ClipboardEx
-
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <wx/artprov.h>
 #include <wx/config.h>
@@ -515,16 +513,16 @@ void Skeleton::UponHelp(wxCommandEvent&)
     std::string const canonical_url("https://lmi.nongnu.org/user_manual.html");
 
     std::string s(AddDataDir("user_manual.html"));
-    fs::path p(fs::system_complete(fs::path(s)));
+    fs::path p(fs::absolute(fs::path(s)));
     if(fs::exists(p))
         {
-        s = "file://" + p.native_file_string();
+        s = "file://" + p.string();
         }
     else
         {
         warning()
             << "A local copy of the user manual should have been placed here:"
-            << "\n    " << p.native_file_string()
+            << "\n    " << p
             << "\nbut was not. Try reinstalling."
             << '\n'
             << "\nMeanwhile, the online user manual will be used if possible."
@@ -536,7 +534,7 @@ void Skeleton::UponHelp(wxCommandEvent&)
     bool r = false;
     {
     wxLogNull x;
-    r = wxLaunchDefaultBrowser(s);
+    r = wxLaunchDefaultBrowser(wxString::FromUTF8(s));
     }
     if(!r)
         {

@@ -30,9 +30,8 @@
 #include "data_directory.hpp"           // AddDataDir()
 #include "map_lookup.hpp"
 #include "my_proem.hpp"                 // ::write_proem()
+#include "path.hpp"
 #include "xml_serialize.hpp"
-
-#include <boost/filesystem/convenience.hpp>
 
 #include <vector>
 
@@ -936,9 +935,7 @@ void product_data::write_policy_files()
 /// Somewhat arbitrarily, forbid '.' in product names. There's no real
 /// need to allow that, and it would complicate the code. A product
 /// name like "ul.with.variable.funds" could too easily be mistaken
-/// for a '.funds' file. The boost filesystem portability guidelines
-/// suggest "Do not use more that [sic] one period in a file name",
-/// and extensions are added to product names to create file names.
+/// for a '.funds' file.
 ///
 /// Rejected alternative: take a 'ce_product_name' argument instead.
 /// That would constrain the argument in a natural way, but would
@@ -950,8 +947,8 @@ void product_data::write_policy_files()
 std::string filename_from_product_name(std::string const& product_name)
 {
     fs::path path(product_name);
-    LMI_ASSERT(product_name == fs::basename(path));
-    path = fs::change_extension(path, ".policy");
+    LMI_ASSERT(product_name == path.stem());
+    path.replace_extension(".policy");
     return AddDataDir(path.string());
 }
 

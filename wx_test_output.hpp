@@ -23,8 +23,7 @@
 #define wx_test_output_hpp
 
 #include "config.hpp"
-
-#include <boost/filesystem/operations.hpp>
+#include "path.hpp"
 
 /// Class helping to check for the expected output file existence.
 ///
@@ -57,7 +56,7 @@ class output_file_existence_checker
         return fs::exists(path_);
         }
 
-    std::string const& path() const
+    std::string path() const
         {
         return path_.string();
         }
