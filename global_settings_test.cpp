@@ -22,8 +22,8 @@
 #include "pchfile.hpp"
 
 #include "global_settings.hpp"
-#include "path.hpp"
 
+#include "path.hpp"
 #include "test_tools.hpp"
 
 void test_directory_exceptions()

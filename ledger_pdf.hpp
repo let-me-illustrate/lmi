@@ -23,6 +23,7 @@
 #define ledger_pdf_hpp
 
 #include "config.hpp"
+
 #include "path.hpp"
 
 #include <string>
