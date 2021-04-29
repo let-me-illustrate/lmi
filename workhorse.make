@@ -592,14 +592,6 @@ bourn_cast_test.o: gcc_common_extra_warnings += \
 
 # Some boost-1.33.1 libraries are incompatible with many warnings.
 
-$(boost_filesystem_objects): gcc_common_extra_warnings += \
-  -Wno-deprecated-declarations \
-  -Wno-old-style-cast \
-  -Wno-unused-macros \
-  -Wno-unused-parameter \
-  -Wno-useless-cast \
-  -Wno-zero-as-null-pointer-constant \
-
 $(boost_regex_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
   -Wno-duplicated-branches \
@@ -661,7 +653,6 @@ $(wno_conv_objects): gcc_common_extra_warnings += -Wno-conversion -Wfloat-conver
 
 wno_sign_conv_objects := \
   $(boost_dependent_objects) \
-  $(boost_filesystem_objects) \
   $(boost_regex_objects) \
   $(wx_dependent_objects) \
   crc32.o \
@@ -775,7 +766,6 @@ $(product_file_sources): tutelary_flag += $(product_file_flags)
 #   http://boost.org/more/faq.htm
 
 REQUIRED_LIBS := \
-  $(platform_boost_libraries) \
   $(xml_libraries) \
 
 wx_ldflags = \

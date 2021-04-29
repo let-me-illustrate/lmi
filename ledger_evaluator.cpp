@@ -40,13 +40,11 @@
 #include "mc_enum_aux.hpp"              // mc_e_vector_to_string_vector()
 #include "miscellany.hpp"               // each_equal(), ios_out_trunc_binary()
 #include "oecumenic_enumerations.hpp"
+#include "path.hpp"
 #include "path_utility.hpp"             // fs::path inserter
 #include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 #include "version.hpp"
-
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <functional>                   // minus
 #include <map>

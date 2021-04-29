@@ -43,14 +43,12 @@
 #include "mc_enum_types_aux.hpp"        // allowed_strings_emission(), mc_emission_from_string()
 #include "mec_server.hpp"
 #include "miscellany.hpp"
+#include "path.hpp"
 #include "path_utility.hpp"
 #include "so_attributes.hpp"
 #include "timer.hpp"
 #include "value_cast.hpp"
 #include "verify_products.hpp"
-
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // for_each()
 #include <cmath>                        // fabs()
@@ -376,7 +374,7 @@ void process_command_line(int argc, char* argv[])
                 {
                 LMI_ASSERT(nullptr != getopt_long.optarg);
                 std::string const s(getopt_long.optarg);
-                std::string const e = fs::extension(s);
+                std::string const e = fs::path{s}.extension().string();
                 if(".cns" == e || ".ill" == e || ".ini" == e || ".inix" == e)
                     {
                     illustrator_names.push_back(getopt_long.optarg);
@@ -506,7 +504,6 @@ void process_command_line(int argc, char* argv[])
 
 int try_main(int argc, char* argv[])
 {
-    initialize_filesystem();
     process_command_line(argc, argv);
     return EXIT_SUCCESS;
 }

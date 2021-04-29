@@ -29,20 +29,19 @@
 #include "deserialize_cast.hpp"
 #include "miscellany.hpp"
 #include "oecumenic_enumerations.hpp"   // methuselah
+#include "path.hpp"
 #include "path_utility.hpp"             // fs::path inserter
 #include "ssize_lmi.hpp"
 
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/path.hpp>
-
 #include <algorithm>                    // max(), min()
+#if 202002 <= __cplusplus
+#   include <bit>                       // endian
+#endif //  202002 <= __cplusplus
 #include <cctype>                       // toupper()
 #include <cstdint>
 #include <ios>
 #include <istream>
 #include <limits>
-#include <type_traits>                  // endian
 
 namespace
 {
@@ -92,10 +91,9 @@ actuarial_table::actuarial_table(std::string const& filename, int table_number)
 {
     // Binary tables in the SOA format are not portable; this code
     // presumably works only on little-endian hardware.
-#if 201900L < __cplusplus
-    #error Use the proper C++20 value, which was unknown when this was written.
+#if 202002 <= __cplusplus
     static_assert(std::endian::native == std::endian::little);
-#endif // 201900L < __cplusplus
+#endif // 202002 <= __cplusplus
 
     if(table_number_ <= 0)
         {
@@ -206,7 +204,7 @@ void actuarial_table::find_table()
     LMI_ASSERT(0 != table_number_);
 
     fs::path index_path(filename_);
-    index_path = fs::change_extension(index_path, ".ndx");
+    index_path.replace_extension(".ndx");
     fs::ifstream index_ifs(index_path, ios_in_binary());
     if(!index_ifs)
         {
@@ -296,7 +294,7 @@ void actuarial_table::parse_table()
     LMI_ASSERT(-1 == max_select_age_);
 
     fs::path data_path(filename_);
-    data_path = fs::change_extension(data_path, ".dat");
+    data_path.replace_extension(".dat");
     fs::ifstream data_ifs(data_path, ios_in_binary());
     if(!data_ifs)
         {

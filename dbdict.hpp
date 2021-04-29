@@ -27,10 +27,9 @@
 #include "any_member.hpp"
 #include "cache_file_reads.hpp"
 #include "dbvalue.hpp"
+#include "path.hpp"
 #include "so_attributes.hpp"
 #include "xml_serializable.hpp"
-
-#include <boost/filesystem/path.hpp>
 
 #include <string>
 
@@ -362,6 +361,8 @@ class LMI_SO DBDictionary
     database_entity TgtPremIgnoreSubstd       ;
     database_entity MinPmt                    ;
     database_entity IsSinglePremium           ;
+    database_entity MinSinglePremiumType      ;
+    database_entity MinSinglePremiumMult      ;
     database_entity NoLapseMinDur             ;
     database_entity NoLapseMinAge             ;
     database_entity NoLapseUnratedOnly        ;

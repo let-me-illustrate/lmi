@@ -25,11 +25,9 @@
 #include "getopt.hpp"
 #include "license.hpp"
 #include "main_common.hpp"
+#include "path.hpp"
 #include "path_utility.hpp"
 #include "rate_table.hpp"
-
-#include <boost/filesystem/convenience.hpp> // extension()
-#include <boost/filesystem/operations.hpp>  // is_directory(), directory_iterator
 
 #include <algorithm>                    // sort()
 #include <cstdio>                       // fflush()
@@ -145,13 +143,11 @@ void merge
         // to verify than equivalence: databases created this way from
         // the same data on different machines have identical md5sums.
         std::vector<fs::path> table_names;
-        fs::directory_iterator i(path_to_merge);
-        fs::directory_iterator const eod;
-        for(; i != eod; ++i)
+        for(auto const& de : fs::directory_iterator(path_to_merge))
             {
-            if(".rates" == fs::extension(*i))
+            if(".rates" == de.path().extension())
                 {
-                table_names.push_back(*i);
+                table_names.push_back(de.path());
                 }
             }
         std::sort(table_names.begin(), table_names.end());

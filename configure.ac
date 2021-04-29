@@ -142,35 +142,50 @@ AC_PROG_CC
 CXXFLAGS=${CXXFLAGS:=}
 AC_PROG_CXX
 
-dnl Check if the compiler supports C++17: this is a rather ad hoc test as it
-dnl doesn't check for full C++17 support, but it's enough for the subset of it
-dnl that is currently used in lmi and this check passes with with g++ 6, which
-dnl can be used for compiling lmi even though it doesn't implement C++17 fully.
-m4_define([lmi_cxx_std17_test], [[
+dnl Check if the compiler supports C++20 subset that we need: this is a rather
+dnl ad hoc test as it doesn't check for full C++20 or even C++17 support, but
+dnl it's enough for the subset of it that is currently used in lmi and passes
+dnl with with g++ 8, which can be used for compiling lmi even though it doesn't
+dnl define __cpp_designated_initializers.
+dnl
+dnl Also note that we need to explicitly enable -Wpedantic for gcc and clang,
+dnl as without it gcc would compile designated initializers using any C++
+dnl standard version, even C++98, but building lmi code using them later would
+dnl fail.
+m4_define([lmi_cxx_feature_test], [[
+#ifdef __GNUC__
+#pragma GCC diagnostic error "-Wpedantic"
+#pragma GCC diagnostic error "-Wall"
+#pragma GCC diagnostic error "-Wextra"
+#endif
 #ifndef __cplusplus
 #error Not C++ compiler.
 #elif __cplusplus <= 201402L
-#error Only C++14.
+#error At least C++17 is required.
 #else
+struct S { int x = 0; double y = 0.0; };
+S s = {.x = 1, .y = 2.0};
 static_assert(true);
 #endif
 ]])
 
-AC_CACHE_CHECK([whether compiler supports C++17 without any options],
-    lmi_cv_cxx_std17,
+AC_CACHE_CHECK([whether compiler supports required C++ features without any options],
+    lmi_cv_cxx_features,
     [
         AC_LANG_PUSH([C++])
-        AC_COMPILE_IFELSE([AC_LANG_SOURCE([lmi_cxx_std17_test])],
-            lmi_cv_cxx_std17=yes,
-            lmi_cv_cxx_std17=no
+        AC_COMPILE_IFELSE([AC_LANG_SOURCE([lmi_cxx_feature_test])],
+            lmi_cv_cxx_features=yes,
+            lmi_cv_cxx_features=no
             )
         AC_LANG_POP([C++])
     ]
 )
 
-if test "$lmi_cv_cxx_std17" = "no"; then
-    AX_CXX_CHECK_FLAG([-std=c++17],,,[CXXFLAGS="$CXXFLAGS -std=c++17"],
-        AC_MSG_ERROR([Can't enable C++17 support required for building lmi.])
+if test "$lmi_cv_cxx_features" = "no"; then
+    AX_CXX_CHECK_FLAG([-std=c++20],,,[CXXFLAGS="$CXXFLAGS -std=c++20"],
+        [AX_CXX_CHECK_FLAG([-std=c++2a],,,[CXXFLAGS="$CXXFLAGS -std=c++2a"],
+            AC_MSG_ERROR([Can't enable C++20 support required for building lmi.])
+        )]
     )
 fi
 
@@ -370,10 +385,9 @@ else
 if they are installed in non default location"
 fi
 
-dnl Disable the use of std::auto_ptr<> which is not available in C++17 (and is
-dnl actually not available, rather than still being there and just generating
-dnl deprecation warnings, in clang libc++).
-CPPFLAGS="$CPPFLAGS -DBOOST_NO_AUTO_PTR"
+dnl Disable the use of std::auto_ptr<> and std::allocator::const_reference,
+dnl that don't exist in C++ 20 and that we don't need anyhow, in Boost code.
+CPPFLAGS="$CPPFLAGS -DBOOST_NO_AUTO_PTR -DBOOST_NO_STD_ALLOCATOR"
 
 AC_CHECK_HEADER([boost/type_traits.hpp],
     [],
@@ -383,12 +397,11 @@ AC_CHECK_HEADER([boost/type_traits.hpp],
 
 dnl The default boost library name should be used unless otherwise specified
 dnl via --with-boost-tookit options, in which case we need to add
-dnl toolkit suffix to the library name (example -lboost_filesystem-gcc-mt).
+dnl toolkit suffix to the library name (example -lboost_regex-gcc-mt).
 if test "x$lmi_boost_toolkit" != "x"; then
     lmi_boost_toolkit="-$lmi_boost_toolkit"
 fi
 boost_libsystem="boost_system$lmi_boost_toolkit"
-boost_libfs="boost_filesystem$lmi_boost_toolkit"
 boost_libregex="boost_regex$lmi_boost_toolkit"
 
 save_CPPFLAGS=$CPPFLAGS
@@ -416,13 +429,6 @@ dnl usually when we want to check for a library we use AC_CHECK_LIB and main()
 dnl but since under mingw with -pedantic and -std= options test does not pass
 dnl we are forced to use a bit more sophisticated construct
 
-LIBS="$LIBS $BOOST_LIBS -l$boost_libfs"
-AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/filesystem/operations.hpp>]],
-    [[boost::filesystem::current_path()]])],
-    [],
-    [AC_MSG_FAILURE([Boost filesystem library $boost_libfs not found, $errmsg])]
-)
-
 LIBS="$save_LIBS -l$boost_libregex"
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/regex.hpp>]],
     [[boost::regex *r]])],
@@ -434,7 +440,7 @@ LDFLAGS=$save_LDFLAGS
 LIBS=$save_LIBS
 CPPFLAGS=$save_CPPFLAGS
 
-BOOST_LIBS="-l$boost_libfs -l$boost_libregex $BOOST_LIBS"
+BOOST_LIBS="-l$boost_libregex $BOOST_LIBS"
 
 dnl contains flags needed to link to externally or internally built
 dnl boost libraries
@@ -614,6 +620,15 @@ if test "x$GXX" == "xyes"; then
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-bitwise-op-parentheses)
     else
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-parentheses)
+    fi
+
+    dnl These warnings are given by clang in C++20 mode and can't be easily
+    dnl avoided, so disable them for now.
+    if test "$CLANG" = "yes"; then
+        LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-anon-enum-enum-conversion)
+        LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-enum-enum-conversion)
+        LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-enum-float-conversion)
+        LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-volatile)
     fi
 
     dnl Many instances of these warnings are given in Boost 1.33.1 headers, so

@@ -25,9 +25,8 @@
 #include "config.hpp"
 
 #include "calendar_date.hpp"
+#include "path.hpp"
 #include "so_attributes.hpp"
-
-#include <boost/filesystem/path.hpp>
 
 #include <string>
 

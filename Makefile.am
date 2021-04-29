@@ -940,6 +940,9 @@ numeric_io_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
 
+path_utility_test_SOURCES = \
+    path_utility_test.cpp \
+    wine_workarounds.cpp
 path_utility_test_LDADD = \
   libtest_common.la \
   $(BOOST_LIBS)
@@ -1323,6 +1326,7 @@ noinst_HEADERS = \
     version.hpp \
     view_ex.hpp \
     view_ex.tpp \
+    wine_workarounds.hpp \
     wx_checks.hpp \
     wx_new.hpp \
     wx_table_generator.hpp \

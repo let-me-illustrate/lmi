@@ -78,13 +78,15 @@ int AboutDialog::ShowModal()
         ,"Let me illustrate"
         );
 
+    auto const borderFlags = wxSizerFlags().Border(wxALL, 3);
+
     wxBoxSizer* sizer1 = new(wx) wxBoxSizer(wxHORIZONTAL);
-    sizer1->Add(license_button, 0, wxALL, 3);
-    sizer1->Add(cancel_button , 0, wxALL, 3);
+    sizer1->Add(license_button, borderFlags);
+    sizer1->Add(cancel_button , borderFlags);
 
     wxBoxSizer* sizer0 = new(wx) wxBoxSizer(wxVERTICAL);
-    sizer0->Add(html_window, 1, wxALL                , 0);
-    sizer0->Add(sizer1     , 0, wxALL | wxALIGN_RIGHT, 3);
+    sizer0->Add(html_window, wxSizerFlags().Proportion(1)     );
+    sizer0->Add(sizer1     , wxSizerFlags(borderFlags).Right());
 
     SetSizerAndFit(sizer0);
     Center();
@@ -115,8 +117,8 @@ void AboutDialog::UponReadLicense(wxCommandEvent&)
     button->SetDefault();
 
     wxBoxSizer* sizer = new(wx) wxBoxSizer(wxVERTICAL);
-    sizer->Add(html_window, 1, wxALL | wxEXPAND     , 0);
-    sizer->Add(button     , 0, wxALL | wxALIGN_RIGHT, 6);
+    sizer->Add(html_window, wxSizerFlags().Proportion(1).Expand()  );
+    sizer->Add(button     , wxSizerFlags().Right().Border(wxALL, 6));
     dialog.SetSizerAndFit(sizer);
 
     wxRect r = wxDisplay(wxDisplay::GetFromWindow(this)).GetClientArea();

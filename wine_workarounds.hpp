@@ -1,6 +1,6 @@
-// Ledger PDF generation.
+// Work around 'wine' defects.
 //
-// Copyright (C) 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
+// Copyright (C) 2021 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,16 +19,13 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifndef ledger_pdf_hpp
-#define ledger_pdf_hpp
+#ifndef wine_workarounds_hpp
+#define wine_workarounds_hpp
 
 #include "config.hpp"
-#include "path.hpp"
 
-#include <string>
+#include "so_attributes.hpp"
 
-class Ledger;
+LMI_SO bool running_under_wine();
 
-std::string write_ledger_as_pdf(Ledger const&, fs::path const&);
-
-#endif // ledger_pdf_hpp
+#endif // wine_workarounds_hpp

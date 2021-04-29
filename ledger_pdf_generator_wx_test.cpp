@@ -48,8 +48,6 @@ wxIMPLEMENT_APP_NO_MAIN(wxApp);
 
 int test_main(int argc, char* argv[])
 {
-    initialize_filesystem();
-
     wxInitializer init(argc, argv);
     LMI_TEST( init );
 

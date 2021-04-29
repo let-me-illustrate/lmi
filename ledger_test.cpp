@@ -26,7 +26,6 @@
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 
-#include "path_utility.hpp"             // initialize_filesystem()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -97,9 +96,6 @@ void ledger_test::test_speed()
 
 int test_main(int, char*[])
 {
-    // Absolute paths require "native" name-checking policy for msw.
-    initialize_filesystem();
-
     ledger_test::test();
 
     return EXIT_SUCCESS;

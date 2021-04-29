@@ -24,11 +24,8 @@
 #include "name_value_pairs.hpp"
 
 #include "miscellany.hpp"
+#include "path.hpp"
 #include "test_tools.hpp"
-
-#include <boost/filesystem/convenience.hpp> // basename()
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <cstdio>                       // remove()
 #include <fstream>
@@ -36,8 +33,8 @@
 
 int test_main(int, char*[])
 {
-    std::string const tmp = "/tmp/" + fs::basename(__FILE__);
-    fs::path const tmpdir(fs::complete(tmp));
+    std::string const tmp = "/tmp/" + fs::path{__FILE__}.stem().string();
+    fs::path const tmpdir(fs::absolute(tmp));
     fs::create_directory(tmpdir);
 
     std::string filename0(tmp + "/eraseme");

@@ -28,7 +28,7 @@
 #include "force_linking.hpp"
 #include "handle_exceptions.hpp"        // stealth_exception
 #include "main_common.hpp"              // initialize_application()
-#include "path_utility.hpp"             // initialize_filesystem()
+#include "path.hpp"
 #include "skeleton.hpp"
 #include "ssize_lmi.hpp"                // sstrlen()
 #include "wx_test_case.hpp"
@@ -43,9 +43,6 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 #include <wx/wfstream.h>
-
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // sort()
 #include <cstring>                      // strcmp()
@@ -422,7 +419,7 @@ bool application_test::process_command_line(int& argc, char* argv[])
         {
         warning()
             << "Test files path '"
-            << test_files_path_.native_file_string()
+            << test_files_path_
             << "' doesn't exist."
             << std::flush
             ;
@@ -430,7 +427,7 @@ bool application_test::process_command_line(int& argc, char* argv[])
         }
     else
         {
-        test_files_path_ = fs::system_complete(test_files_path_);
+        test_files_path_ = fs::absolute(test_files_path_);
         }
 
     return true;
@@ -573,7 +570,7 @@ fs::path wx_base_test_case::get_test_files_path() const
 std::string
 wx_base_test_case::get_test_file_path_for(std::string const& basename) const
 {
-    return (get_test_files_path() / basename).native_file_string();
+    return (get_test_files_path() / basename).string();
 }
 
 bool wx_base_test_case::is_distribution_test() const
@@ -947,7 +944,6 @@ void SkeletonTest::RunTheTests()
 int main(int argc, char* argv[])
 {
     initialize_application();
-    initialize_filesystem();
 
     if(!application_test::instance().process_command_line(argc, argv))
         {

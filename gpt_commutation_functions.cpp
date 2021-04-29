@@ -52,6 +52,62 @@ std::vector<T>& back_sum(std::vector<T>& v, E e)
 }
 } // Unnamed namespace.
 
+/// Assert sanity of a 'gpt_scalar_parms' object.
+///
+/// Asserted invariants:
+///  - all members not named /inforce_.*/ are nonnegative
+///      (inforce amounts are unrestricted)
+///  - the endowment benefit does not exceed the (f)(3) benefit
+///  - 'issued_today' and 'duration' are mutually consistent:
+///    - if the policy was issued today, its duration must be zero
+///    - if duration != 0, the policy cannot have been issued today
+///  - a 1035 exchange can occur only on the issue date
+///
+/// 7702 !! Reconsider this:
+/// Both 'gpt_scalar_parms' and 'gpt_vector_parms' were designed as
+/// simple parameter objects, and each was originally intended to be
+/// passed to one function only, so it was okay to assert invariants
+/// only where they were passed in. For 'gpt_vector_parms', that's
+/// still true. But 'gpt_scalar_parms' has acquired more members and
+/// more uses, and more invariants, so arguably it is no longer a
+/// "behaviorless aggregate".
+
+void assert_sanity(gpt_scalar_parms const& args)
+{
+    LMI_ASSERT(0 <= args.duration        );
+    LMI_ASSERT(0.0 <= args.f3_bft        );
+    LMI_ASSERT(0.0 <= args.endt_bft      );
+    LMI_ASSERT(0.0 <= args.target_prem   );
+    LMI_ASSERT(0.0 <= args.chg_sa_base   );
+    LMI_ASSERT(0.0 <= args.gross_1035    );
+    // inforce_glp     unrestricted
+    // inforce_cum_glp unrestricted
+    // inforce_gsp     unrestricted
+    // inforce_cum_pmt unrestricted
+    LMI_ASSERT(0.0 <= args.qab_gio_amt   );
+    LMI_ASSERT(0.0 <= args.qab_adb_amt   );
+    LMI_ASSERT(0.0 <= args.qab_term_amt  );
+    LMI_ASSERT(0.0 <= args.qab_spouse_amt);
+    LMI_ASSERT(0.0 <= args.qab_child_amt );
+    LMI_ASSERT(0.0 <= args.qab_waiver_amt);
+
+    LMI_ASSERT(args.endt_bft <= args.f3_bft);
+
+    if(args.issued_today)
+        {
+        LMI_ASSERT(0 == args.duration);
+        }
+    if(0 != args.duration)
+        {
+        LMI_ASSERT(!args.issued_today);
+        }
+
+    if(0.0 != args.gross_1035)
+        {
+        LMI_ASSERT(args.issued_today);
+        }
+}
+
 /// Constructor.
 ///
 /// Asserted preconditions: All argument vectors, including those in
@@ -221,31 +277,25 @@ gpt_cf_triad::gpt_cf_triad
 /// but then sometimes one would need to be thrown away (as when
 /// specified amount is determined by a GLP or GSP strategy).
 ///
-/// Asserted preconditions: Duration is within its natural bounds, and
-/// other members of 'args' are nonnegative.
+/// Asserted preconditions: Parameter object 'args' is sane, and
+/// 'args.duration' is a valid index.
 ///
 /// Asserted postcondition: Returned GLP or GSP is nonnegative; thus,
 /// while adjusted premium 'A+B-C' may be negative, {A,B,C} are all
 /// individually nonnegative.
+///
+/// This overload accepts a 'dbo' argument, specifying a death benefit
+/// option that may differ from 'args.dbopt_7702'; it is intended only
+/// for unit testing.
 
 double gpt_cf_triad::calculate_premium
     (oenum_glp_or_gsp        glp_or_gsp
-    ,mcenum_dbopt_7702       dbo
     ,gpt_scalar_parms const& args
+    ,mcenum_dbopt_7702       dbo
     ) const
 {
-    LMI_ASSERT(0 <= args.duration        );
-    LMI_ASSERT(args.duration < length_   );
-    LMI_ASSERT(0.0 <= args.f3_bft        );
-    LMI_ASSERT(0.0 <= args.endt_bft      );
-    LMI_ASSERT(0.0 <= args.target_prem   );
-    LMI_ASSERT(0.0 <= args.chg_sa_base   );
-    LMI_ASSERT(0.0 <= args.qab_gio_amt   );
-    LMI_ASSERT(0.0 <= args.qab_adb_amt   );
-    LMI_ASSERT(0.0 <= args.qab_term_amt  );
-    LMI_ASSERT(0.0 <= args.qab_spouse_amt);
-    LMI_ASSERT(0.0 <= args.qab_child_amt );
-    LMI_ASSERT(0.0 <= args.qab_waiver_amt);
+    assert_sanity(args);
+    LMI_ASSERT(args.duration < length_);
 
     gpt_commfns const& cf =
           (oe_glp == glp_or_gsp && mce_option1_for_7702 == dbo) ? cf_glp_dbo_1
@@ -256,4 +306,12 @@ double gpt_cf_triad::calculate_premium
     double const z = cf.calculate_premium(glp_or_gsp, args);
     LMI_ASSERT(0.0 <= z);
     return z;
+}
+
+double gpt_cf_triad::calculate_premium
+    (oenum_glp_or_gsp        glp_or_gsp
+    ,gpt_scalar_parms const& args
+    ) const
+{
+    return calculate_premium(glp_or_gsp, args, args.dbopt_7702);
 }

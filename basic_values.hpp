@@ -338,6 +338,8 @@ class LMI_SO BasicValues
     oenum_modal_prem_type        TgtPremType;
     bool                         TgtPremFixedAtIssue;
     currency                     TgtPremMonthlyPolFee;
+    oenum_min_single_prem_type   MinSinglePremiumType;
+    double                       MinSinglePremiumMult;
     currency                     CurrCoiTable0Limit;
     currency                     CurrCoiTable1Limit;
     e_actuarial_table_method     CoiInforceReentry;

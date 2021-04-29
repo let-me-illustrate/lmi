@@ -319,6 +319,7 @@ gpt_scalar_parms gpt_cf_triad_test::s_parms()
         ,.qab_child_amt  =   5000.0
         ,.qab_waiver_amt =  50000.0
         };
+    assert_sanity(z);
     return z;
 }
 
@@ -340,7 +341,7 @@ void gpt_cf_triad_test::test_preconditions()
     // Negative duration.
     parms.duration = -1;
     LMI_TEST_THROW
-        (z.calculate_premium(oe_gsp, mce_option1_for_7702, parms)
+        (z.calculate_premium(oe_gsp, parms)
         ,std::runtime_error
         ,""
         );
@@ -349,7 +350,7 @@ void gpt_cf_triad_test::test_preconditions()
     // Duration greater than omega minus one.
     parms.duration = lmi::ssize(q_m);
     LMI_TEST_THROW
-        (z.calculate_premium(oe_gsp, mce_option1_for_7702, parms)
+        (z.calculate_premium(oe_gsp, parms)
         ,std::runtime_error
         ,""
         );
@@ -359,7 +360,17 @@ void gpt_cf_triad_test::test_preconditions()
     // parameters are not redundantly tested here.)
     parms.target_prem = -0.01;
     LMI_TEST_THROW
-        (z.calculate_premium(oe_gsp, mce_option1_for_7702, parms)
+        (z.calculate_premium(oe_gsp, parms)
+        ,std::runtime_error
+        ,""
+        );
+    parms = s_parms(); // Reset.
+
+    // Endowment benefit greater than (f)(3) benefit.
+    parms.endt_bft = 100000.0;
+    parms.f3_bft   =  90000.0;
+    LMI_TEST_THROW
+        (z.calculate_premium(oe_gsp, parms)
         ,std::runtime_error
         ,""
         );
@@ -491,9 +502,9 @@ void gpt_cf_triad_test::compare_premiums(int issue_age, double target)
     for(int duration = 0; duration < omega - issue_age; ++duration)
         {
         parms.duration = duration;
-        double const r0 = z.calculate_premium(oe_gsp, mce_option1_for_7702, parms);
-        double const r1 = z.calculate_premium(oe_glp, mce_option1_for_7702, parms);
-        double const r2 = z.calculate_premium(oe_glp, mce_option2_for_7702, parms);
+        double const r0 = z.calculate_premium(oe_gsp, parms, mce_option1_for_7702);
+        double const r1 = z.calculate_premium(oe_glp, parms, mce_option1_for_7702);
+        double const r2 = z.calculate_premium(oe_glp, parms, mce_option2_for_7702);
         double const r0_old = z_old.CalculateGSP(duration, f3_bft, endt_bft, endt_bft                      );
         double const r1_old = z_old.CalculateGLP(duration, f3_bft, endt_bft, endt_bft, mce_option1_for_7702);
         double const r2_old = z_old.CalculateGLP(duration, f3_bft, endt_bft, endt_bft, mce_option2_for_7702);
@@ -548,9 +559,9 @@ void gpt_cf_triad_test::test_premium_calculations()
         for(int duration = 0; duration < omega - issue_age; ++duration)
             {
             parms.duration = duration;
-            double const r0 = z.calculate_premium(oe_gsp, mce_option1_for_7702, parms);
-            double const r1 = z.calculate_premium(oe_glp, mce_option1_for_7702, parms);
-            double const r2 = z.calculate_premium(oe_glp, mce_option2_for_7702, parms);
+            double const r0 = z.calculate_premium(oe_gsp, parms, mce_option1_for_7702);
+            double const r1 = z.calculate_premium(oe_glp, parms, mce_option1_for_7702);
+            double const r2 = z.calculate_premium(oe_glp, parms, mce_option2_for_7702);
             int const x_plus_t = issue_age + duration;
             LMI_ASSERT(0 <= x_plus_t && x_plus_t < omega);
             bool const all_materially_equal =
@@ -569,9 +580,9 @@ void gpt_cf_triad_test::mete_premiums()
 {
     static gpt_scalar_parms const parms = s_parms();
     static gpt_cf_triad const z = instantiate_cf();
-    z.calculate_premium(oe_gsp, mce_option1_for_7702, parms);
-    z.calculate_premium(oe_glp, mce_option1_for_7702, parms);
-    z.calculate_premium(oe_glp, mce_option2_for_7702, parms);
+    z.calculate_premium(oe_gsp, parms, mce_option1_for_7702);
+    z.calculate_premium(oe_glp, parms, mce_option1_for_7702);
+    z.calculate_premium(oe_glp, parms, mce_option2_for_7702);
 }
 
 /// Measure instantiation speed of old GPT class.

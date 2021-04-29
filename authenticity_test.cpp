@@ -28,13 +28,10 @@
 #include "md5.hpp"
 #include "md5sum.hpp"
 #include "miscellany.hpp"
+#include "path.hpp"
 #include "system_command.hpp"
 #include "test_tools.hpp"
 #include "unwind.hpp"                   // scoped_unwind_toggler
-
-#include <boost/filesystem/convenience.hpp> // basename()
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <cstdio>                       // remove()
 #include <cstring>                      // memcpy(), strlen()
@@ -280,20 +277,12 @@ void PasskeyTest::CheckNominal(char const* file, int line) const
 /// tested because it's common and problematic. This test assumes that
 /// an 'F:' drive exists and is not the "current" drive; it is skipped
 /// if no 'F:' drive exists.
-///
-/// BOOST !! This test traps an exception that boost-1.33.1 can throw
-/// if exists("F:/") returns true but ::GetFileAttributesA() fails.
-/// That's supposed to be impossible because the is_directory()
-/// documentation says:
-///   "Throws: if !exists(ph)"
-/// but it can be reproduced by placing an unformatted disk in "F:".
-
 void PasskeyTest::TestFromAfar() const
 {
     CheckNominal(__FILE__, __LINE__);
 
-    std::string const tmp = "/tmp/" + fs::basename(__FILE__);
-    fs::path const remote_dir_0(fs::complete(tmp));
+    fs::path const tmp = "/tmp" / fs::path{__FILE__}.stem();
+    fs::path const remote_dir_0(fs::absolute(tmp));
     fs::create_directory(remote_dir_0);
     LMI_TEST(fs::exists(remote_dir_0) && fs::is_directory(remote_dir_0));
     LMI_TEST_EQUAL(0, chdir(remote_dir_0.string().c_str()));
@@ -308,26 +297,13 @@ void PasskeyTest::TestFromAfar() const
 #if defined LMI_MSW
     CheckNominal(__FILE__, __LINE__);
 
-    fs::path const remote_dir_1(fs::complete(fs::path("F:/", fs::native)));
+    fs::path const remote_dir_1(fs::absolute("F:/"));
     if(!fs::exists(remote_dir_1))
         {
         goto done;
         }
 
-    try
-        {
-        LMI_TEST(fs::is_directory(remote_dir_1));
-        }
-    catch(std::exception const& e)
-        {
-        std::string s(e.what());
-        if(contains(s, "boost::filesystem::is_directory"))
-            {
-            LMI_TEST(false);
-            goto done;
-            }
-        throw;
-        }
+    LMI_TEST(fs::is_directory(remote_dir_1));
 
     LMI_TEST_EQUAL(0, chdir(remote_dir_1.string().c_str()));
     LMI_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());

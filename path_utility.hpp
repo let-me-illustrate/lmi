@@ -24,14 +24,11 @@
 
 #include "config.hpp"
 
+#include "path.hpp"
 #include "so_attributes.hpp"
-
-#include <boost/filesystem/path.hpp>
 
 #include <ostream>
 #include <string>
-
-LMI_SO void initialize_filesystem(); // Listed first because of its importance.
 
 LMI_SO fs::path modify_directory
     (fs::path const& original_filepath
@@ -67,18 +64,5 @@ LMI_SO void validate_filepath
     (std::string const& filepath
     ,std::string const& context
     );
-
-namespace boost
-{
-namespace filesystem
-{
-
-inline std::ostream& operator<<(std::ostream& os, fs::path const& z)
-{
-    return os << z.string();
-}
-
-} // namespace filesystem
-} // namespace boost
 
 #endif // path_utility_hpp

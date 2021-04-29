@@ -55,7 +55,6 @@
     <Import Project="3rdparty\wxWidgets\wxwidgets.props" />
     <Import Project="wxpdfdoc.props" />
     <Import Project="xmlwrapp.props" />
-    <Import Project="3rdparty\boost\boost.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />

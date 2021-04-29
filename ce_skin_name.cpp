@@ -29,12 +29,9 @@
 #include "facets.hpp"
 #include "global_settings.hpp"
 #include "miscellany.hpp"               // begins_with()
+#include "path.hpp"
 #include "path_utility.hpp"             // fs::path inserter
 #include "ssize_lmi.hpp"
-
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // find()
 
@@ -44,15 +41,13 @@ std::vector<std::string> fetch_skin_names()
 {
     fs::path path(global_settings::instance().data_directory());
     std::vector<std::string> names;
-    fs::directory_iterator i(path);
-    fs::directory_iterator end_i;
-    for(; i != end_i; ++i)
+    for(auto const& de : fs::directory_iterator(path))
         {
-        if(is_directory(*i) || ".xrc" != fs::extension(*i))
+        if(de.is_directory() || ".xrc" != de.path().extension())
             {
             continue;
             }
-        std::string const name(i->leaf());
+        std::string const name(de.path().filename().string());
         if(!begins_with(name, "skin"))
             {
             continue;

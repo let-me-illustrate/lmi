@@ -28,12 +28,9 @@
 #include "contains.hpp"
 #include "facets.hpp"
 #include "global_settings.hpp"
+#include "path.hpp"
 #include "path_utility.hpp"             // fs::path inserter
 #include "ssize_lmi.hpp"
-
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // find()
 #include <istream>
@@ -45,15 +42,13 @@ std::vector<std::string> fetch_product_names()
 {
     fs::path path(global_settings::instance().data_directory());
     std::vector<std::string> names;
-    fs::directory_iterator i(path);
-    fs::directory_iterator end_i;
-    for(; i != end_i; ++i)
+    for(auto const& de : fs::directory_iterator(path))
         {
-        if(".policy" != fs::extension(*i) || is_directory(*i))
+        if(".policy" != de.path().extension() || de.is_directory())
             {
             continue;
             }
-        names.push_back(basename(*i));
+        names.push_back(de.path().stem().string());
         }
 
     if(names.empty())

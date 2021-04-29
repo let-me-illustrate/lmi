@@ -25,10 +25,9 @@
 #include "config.hpp"
 
 #include "cache_file_reads.hpp"
+#include "path.hpp"
 #include "so_attributes.hpp"
 #include "xml_lmi_fwd.hpp"
-
-#include <boost/filesystem/path.hpp>
 
 #include <string>
 #include <unordered_map>

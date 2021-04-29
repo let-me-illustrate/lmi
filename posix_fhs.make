@@ -30,13 +30,6 @@ PERFORM :=
 
 EXTRA_LIBS := -ldw -lunwind -ldl
 
-platform_boost_libraries := \
-  -lboost_filesystem-gcc \
-
-# The libraries referenced above may be used if desired, but are not
-# necessary because lmi compiles their source code to object files.
-platform_boost_libraries :=
-
 AR      := ar
 CC      := gcc
 CPP     := cpp

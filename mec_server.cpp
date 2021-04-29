@@ -43,6 +43,7 @@
 #include "mec_xml_document.hpp"
 #include "miscellany.hpp"               // each_equal(), ios_out_trunc_binary()
 #include "oecumenic_enumerations.hpp"
+#include "path.hpp"
 #include "path_utility.hpp"             // unique_filepath(), fs::path inserter
 #include "premium_tax.hpp"
 #include "product_data.hpp"
@@ -52,9 +53,6 @@
 #include "stratified_charges.hpp"
 #include "timer.hpp"
 #include "value_cast.hpp"
-
-#include <boost/filesystem/convenience.hpp> // extension(), change_extension()
-#include <boost/filesystem/fstream.hpp>
 
 #include <algorithm>                    // min()
 #include <iostream>
@@ -461,7 +459,7 @@ mec_server::mec_server(mcenum_emission emission) : emission_(emission)
 
 bool mec_server::operator()(fs::path const& file_path)
 {
-    std::string const extension = fs::extension(file_path);
+    std::string const extension = file_path.extension().string();
     if(".mec" == extension)
         {
         Timer timer;
@@ -491,7 +489,7 @@ bool mec_server::operator()(fs::path const& file_path, mec_input const& z)
     timer.restart();
     if(mce_emit_test_data & emission_)
         {
-        state_.save(fs::change_extension(file_path, ".mec.xml"));
+        state_.save(fs::path{file_path}.replace_extension(".mec.xml"));
         }
     seconds_for_output_       = timer.stop().elapsed_seconds();
     conditionally_show_timings_on_stdout();

@@ -78,6 +78,7 @@
 #   include "numeric_io_traits.hpp"
 #   include "oecumenic_enumerations.hpp"
 #   include "outlay.hpp"
+#   include "path.hpp"
 #   include "path_utility.hpp"
 #   include "platform_dependent.hpp"
 #   include "round_to.hpp"
@@ -96,10 +97,6 @@
 #   include "xml_serializable.hpp"
 #   include "yare_input.hpp"
 #   include "zero.hpp"
-
-#   include <boost/filesystem/convenience.hpp>
-#   include <boost/filesystem/operations.hpp>
-#   include <boost/filesystem/path.hpp>
 
 #   include <cstddef>
 #   include <cstdlib>

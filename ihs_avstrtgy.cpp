@@ -159,7 +159,7 @@ void AccountValue::PerformSpecAmtStrategy()
                 << inforce_specamt
                 << " increased to the "
                 << m
-                << " minimum for '"
+                << " minimum for insured '"
                 << yare_input_.InsuredName
                 << "'."
                 << std::flush

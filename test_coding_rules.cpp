@@ -26,12 +26,8 @@
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
 #include "miscellany.hpp"               // begins_with(), split_into_lines()
+#include "path.hpp"
 #include "ssize_lmi.hpp"
-
-#include <boost/filesystem/convenience.hpp> // fs::extension()
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>  // fs::exists(), fs::is_directory()
-#include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // is_sorted()
 #include <ctime>
@@ -136,8 +132,8 @@ class file final
 file::file(std::string const& file_path)
     :path_      {file_path}
     ,full_name_ {file_path}
-    ,leaf_name_ {path_.leaf()}
-    ,extension_ {fs::extension(path_)}
+    ,leaf_name_ {path_.filename().string()}
+    ,extension_ {path_.extension().string()}
     ,phylum_    {e_no_phylum}
 {
     if(!fs::exists(path_))
@@ -945,7 +941,7 @@ bool check_reserved_name_exception(std::string const& s)
         {"D""__""W""IN32""__"
         ,"_""W""IN32"
         ,"__""W""IN32""__"
-    // Standard (including TR1).
+    // Standard.
         ,"_1"
         ,"_2"
         ,"_IOFBF"
@@ -1053,7 +1049,7 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__XSLT_LIBXSLT_H__"
         ,"__mp_copymem"
         };
-    return contains(z, s);
+    return contains(z, s) || begins_with(s, "__cpp_");
 }
 
 /// Check names reserved by C++2003 [17.4.3.1.2].
@@ -1070,8 +1066,7 @@ bool check_reserved_name_exception(std::string const& s)
 
 void check_reserved_names(file const& f)
 {
-    // Remove this exception once this file has been reworked.
-    if(f.phyloanalyze("^ledger_xml_io.cpp$"))
+    if(f.phyloanalyze("^configure.ac$"))
         {
         return;
         }

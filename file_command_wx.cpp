@@ -25,9 +25,7 @@
 
 #include "alert.hpp"
 #include "force_linking.hpp"
-
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
+#include "path.hpp"
 
 #include <wx/mimetype.h>
 #include <wx/utils.h>                   // wxExecute()
@@ -47,7 +45,7 @@ void concrete_file_command
     )
 {
     fs::path path(file);
-    std::string extension = fs::extension(path);
+    std::string const extension = path.extension().string();
 
     std::unique_ptr<wxFileType> const ft
         (wxTheMimeTypesManager->GetFileTypeFromExtension(extension)
@@ -65,7 +63,7 @@ void concrete_file_command
         okay = ft->GetOpenCommand
             (&cmd
             ,wxFileType::MessageParameters
-                (path.native_file_string()
+                (wxString::FromUTF8(path.string())
                 ,""
                 )
             );
@@ -75,7 +73,7 @@ void concrete_file_command
         okay = ft->GetPrintCommand
             (&cmd
             ,wxFileType::MessageParameters
-                (path.native_file_string()
+                (wxString::FromUTF8(path.string())
                 ,""
                 )
             );
@@ -92,7 +90,7 @@ void concrete_file_command
             << "Unable to determine command to '"
             << action
             << "' file '"
-            << path.native_file_string()
+            << path
             << "'."
             << LMI_FLUSH
             ;
@@ -104,7 +102,7 @@ void concrete_file_command
             << "Unable to '"
             << action
             << "' file '"
-            << path.native_file_string()
+            << path
             << "'. Return code: '"
             << okay
             << "'."

@@ -6,6 +6,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>xmlwrapp.lib;libxml2.lib;xsltwrapp.lib;libexslt.lib;libxslt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
 </Project>

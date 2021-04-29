@@ -552,6 +552,8 @@ void BasicValues::SetPermanentInvariants()
     LMI_ASSERT(round_gross_premium().c(TgtPremMonthlyPolFee) == TgtPremMonthlyPolFee);
     // Assertion: see comments on GetModalPremTgtFromTable().
     LMI_ASSERT(C0 == TgtPremMonthlyPolFee || oe_modal_table == TgtPremType);
+    database().query_into(DB_MinSinglePremiumType , MinSinglePremiumType);
+    database().query_into(DB_MinSinglePremiumMult , MinSinglePremiumMult);
     database().query_into(DB_CurrCoiTable0Limit   , CurrCoiTable0Limit);
     database().query_into(DB_CurrCoiTable1Limit   , CurrCoiTable1Limit);
     LMI_ASSERT(C0                 <= CurrCoiTable0Limit);
