@@ -299,8 +299,15 @@ void test_unique_filepath_with_ludicrous_filenames()
     // called by unique_filepath() here, adding that extension to ".."
     // yields "...." path, which won't work if it is actually used by msw,
     // but is still allowed (although of course discouraged).
-    fs::path path3 = unique_filepath(fs::path(".."), "..");
-    LMI_TEST_EQUAL(path3.string(), "....");
+    if(running_under_wine())
+        {
+        std::cout << "TEST SKIPPED DUE TO A PRESUMED WINE DEFECT" << std::endl;
+        }
+    else
+        {
+        fs::path path3 = unique_filepath(fs::path(".."), "..");
+        LMI_TEST_EQUAL(path3.string(), "....");
+        }
 }
 
 void test_path_inserter()
