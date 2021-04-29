@@ -74,6 +74,7 @@ jobs:
             packages="$packages clang libc++abi-dev libc++-dev"
           fi
 
+          sudo apt-get -q -o=Dpkg::Use-Pty=0 update
           sudo apt-get -qq install $packages
 
       - name: Fix up libtool
