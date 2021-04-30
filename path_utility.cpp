@@ -102,7 +102,7 @@ fs::path modify_directory
 ///   Crime and/or Punishment
 /// with no intention of denoting a path.
 
-std::string orthodox_filename(std::string const& original_filename)
+std::string portable_filename(std::string const& original_filename)
 {
     LMI_ASSERT(!original_filename.empty());
     std::string s(original_filename);
@@ -203,7 +203,7 @@ std::string serial_extension
 /// Any extension or path is discarded from the input census filepath;
 /// only the filename is used.
 ///
-/// It is necessary to call orthodox_filename() on the insured's name
+/// It is necessary to call portable_filename() on the insured's name
 /// in case it contains a character (probably whitespace) that might
 /// fail a std::filesystem name check.
 
@@ -222,7 +222,7 @@ fs::path serial_file_path
         && !global_settings::instance().regression_testing()
         )
         {
-        s = '.' + orthodox_filename(personal_name) + s;
+        s = '.' + portable_filename(personal_name) + s;
         }
     return fs::path{exemplar}.filename().replace_extension(s);
 }

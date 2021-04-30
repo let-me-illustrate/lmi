@@ -509,13 +509,13 @@ LMI_WX_TEST_CASE(validate_output_census)
 
     // A variant of the insured name used to construct the file names.
     //
-    // It's not really clear whether we should be using orthodox_filename()
+    // It's not really clear whether we should be using portable_filename()
     // here or just hardcode its result corresponding to the insured_name
     // value: the latter would have the advantage of catching any bugs in
-    // orthodox_filename() itself, but arguably we're not testing this function
+    // portable_filename() itself, but arguably we're not testing this function
     // here and using it has the advantage of avoiding test breakages if this
     // function behaviour is intentionally changed in the future.
-    std::string const insured_filename = orthodox_filename(insured_name);
+    std::string const insured_filename = portable_filename(insured_name);
 
     // Create, initialize and save the test census.
     wx_test_new_census census;

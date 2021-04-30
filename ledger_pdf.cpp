@@ -46,7 +46,7 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
     throw_if_interdicted(ledger);
 
     fs::path print_dir(configurable_settings::instance().print_directory());
-    // PDF !! Either orthodox_filename() should be used here, or its
+    // PDF !! Either portable_filename() should be used here, or its
     // use should be reconsidered everywhere else.
     fs::path pdf_out_file = unique_filepath(print_dir / filepath, ".pdf");
 

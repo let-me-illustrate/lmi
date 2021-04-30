@@ -88,40 +88,40 @@ void test_modify_directory()
         );
 }
 
-void test_orthodox_filename()
+void test_portable_filename()
 {
     LMI_TEST_THROW
-        (orthodox_filename("")
+        (portable_filename("")
         ,std::runtime_error
         ,"Assertion '!original_filename.empty()' failed."
         );
 
-    LMI_TEST_EQUAL("Z"     , orthodox_filename("Z"));
-    LMI_TEST_EQUAL("_"     , orthodox_filename("."));
-    LMI_TEST_EQUAL("_"     , orthodox_filename("#"));
+    LMI_TEST_EQUAL("Z"     , portable_filename("Z"));
+    LMI_TEST_EQUAL("_"     , portable_filename("."));
+    LMI_TEST_EQUAL("_"     , portable_filename("#"));
 
-    LMI_TEST_EQUAL("AZ"    , orthodox_filename("AZ"));
-    LMI_TEST_EQUAL("A_"    , orthodox_filename("A."));
-    LMI_TEST_EQUAL("_Z"    , orthodox_filename(".Z"));
-    LMI_TEST_EQUAL("__"    , orthodox_filename(".."));
-    LMI_TEST_EQUAL("__"    , orthodox_filename("##"));
+    LMI_TEST_EQUAL("AZ"    , portable_filename("AZ"));
+    LMI_TEST_EQUAL("A_"    , portable_filename("A."));
+    LMI_TEST_EQUAL("_Z"    , portable_filename(".Z"));
+    LMI_TEST_EQUAL("__"    , portable_filename(".."));
+    LMI_TEST_EQUAL("__"    , portable_filename("##"));
 
-    LMI_TEST_EQUAL("A.Z"   , orthodox_filename("A.Z"));
-    LMI_TEST_EQUAL("A-Z"   , orthodox_filename("A-Z"));
+    LMI_TEST_EQUAL("A.Z"   , portable_filename("A.Z"));
+    LMI_TEST_EQUAL("A-Z"   , portable_filename("A-Z"));
 
-    LMI_TEST_EQUAL("_xyz_" , orthodox_filename(".xyz."));
-    LMI_TEST_EQUAL("_xyz_" , orthodox_filename("-xyz-"));
+    LMI_TEST_EQUAL("_xyz_" , portable_filename(".xyz."));
+    LMI_TEST_EQUAL("_xyz_" , portable_filename("-xyz-"));
 
-    LMI_TEST_EQUAL("and_or", orthodox_filename("and/or"));
+    LMI_TEST_EQUAL("and_or", portable_filename("and/or"));
 
     LMI_TEST_EQUAL
         (                  "Crime_and_or_Punishment.text"
-        ,orthodox_filename("Crime and/or Punishment.text")
+        ,portable_filename("Crime and/or Punishment.text")
         );
 
     LMI_TEST_EQUAL
         (                  "_Fyodor_Dostoyevskiy_Crime_and_Punishment.text"
-        ,orthodox_filename("/Fyodor Dostoyevskiy/Crime and Punishment.text")
+        ,portable_filename("/Fyodor Dostoyevskiy/Crime and Punishment.text")
         );
 }
 
@@ -459,7 +459,7 @@ void test_oddities()
 int test_main(int, char*[])
 {
     test_modify_directory();
-    test_orthodox_filename();
+    test_portable_filename();
     test_serial_file_path();
     test_unique_filepath_with_normal_filenames();
     test_unique_filepath_with_ludicrous_filenames();
