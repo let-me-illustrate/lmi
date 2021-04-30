@@ -166,6 +166,16 @@ void test_serial_file_path()
         (                                 "x.000012346.y"
         ,serial_file_path("/path/to/x", "",      12345, "y").string()
         );
+
+    // Make both census and personal names portable.
+    LMI_TEST_EQUAL
+        (                         "My_Employer.My_Name.text.1000000000.tsv"
+        ,serial_file_path("My Employer.cns", "My Name.text", 999999999, "tsv").string()
+        );
+    LMI_TEST_EQUAL
+        (                 "Fyodor_Dostoyevskiy.Crime_and_Punishment.text.000001867.xyz"
+        ,serial_file_path("Fyodor Dostoyevskiy", "Crime and Punishment.text", 1866, "xyz").string()
+        );
 }
 
 void test_unique_filepath_with_normal_filenames()

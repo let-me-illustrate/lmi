@@ -101,6 +101,10 @@ fs::path modify_directory
 /// in case an end user types something like
 ///   Crime and/or Punishment
 /// with no intention of denoting a path.
+///
+/// Even though lmi no longer uses fop, it is still good to impose
+/// some rationality on output filenames that reflect end-user input,
+/// and the rules above are reasonable.
 
 std::string portable_filename(std::string const& original_filename)
 {
@@ -203,9 +207,9 @@ std::string serial_extension
 /// Any extension or path is discarded from the input census filepath;
 /// only the filename is used.
 ///
-/// It is necessary to call portable_filename() on the insured's name
-/// in case it contains a character (probably whitespace) that might
-/// fail a std::filesystem name check.
+/// Apply portable_filename() to the census filename and the insured's
+/// name: because they're under end-user control, they may contain
+/// characters that would render the resulting filename nonportable.
 
 fs::path serial_file_path
     (fs::path    const& exemplar
@@ -216,6 +220,7 @@ fs::path serial_file_path
 {
     LMI_ASSERT(!exemplar.empty());
     LMI_ASSERT(exemplar.has_filename());
+    fs::path f(portable_filename(exemplar.filename().string()));
     std::string s(serial_extension(serial_number, extension));
     if
         (  !personal_name.empty()
@@ -224,7 +229,7 @@ fs::path serial_file_path
         {
         s = '.' + portable_filename(personal_name) + s;
         }
-    return fs::path{exemplar}.filename().replace_extension(s);
+    return f.replace_extension(s);
 }
 
 /// Create a unique file path, following input as closely as possible.
