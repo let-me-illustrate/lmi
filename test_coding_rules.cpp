@@ -30,7 +30,7 @@
 #include "ssize_lmi.hpp"
 
 #include <algorithm>                    // is_sorted()
-#include <ctime>
+#include <ctime>                        // time_t
 #include <iomanip>
 #include <ios>
 #include <iostream>

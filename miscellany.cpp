@@ -32,7 +32,7 @@
 #include <cmath>                        // ceil(), floor()
 #include <cstddef>                      // size_t
 #include <cstdio>                       // snprintf()
-#include <ctime>
+#include <ctime>                        // time_t
 #include <fstream>
 #include <istream>
 #include <iterator>                     // istreambuf_iterator

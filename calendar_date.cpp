@@ -29,7 +29,7 @@
 #include "zero.hpp"
 
 #include <algorithm>                    // max(), min()
-#include <ctime>
+#include <ctime>                        // time_t
 #include <iomanip>
 #include <ios>
 #include <istream>

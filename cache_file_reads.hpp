@@ -27,10 +27,8 @@
 #include "assert_lmi.hpp"
 #include "path.hpp"
 
-#include <ctime>                        // time_t
 #include <map>
 #include <memory>                       // shared_ptr
-#include <string>
 #include <utility>                      // make_pair()
 
 namespace detail
