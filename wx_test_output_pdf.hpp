@@ -63,12 +63,12 @@ class output_pdf_existence_checker :public output_file_existence_checker
         }
 
   private:
-    // Return the full path in the print directory for the file with the given
-    // leaf name.
-    static fs::path make_full_print_path(std::string const& leaf)
+    // Return the full path in the print directory for the file with
+    // the given basename.
+    static fs::path make_full_print_path(std::string const& basename)
         {
         fs::path p(configurable_settings::instance().print_directory());
-        p /= leaf;
+        p /= basename;
         return p;
         }
 

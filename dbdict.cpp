@@ -680,10 +680,10 @@ void DBDictionary::write_element
 
 void DBDictionary::write_proem
     (xml_lmi::xml_document& document
-    ,std::string const&     file_leaf_name
+    ,std::string const&     file_basename
     ) const
 {
-    ::write_proem(document, file_leaf_name);
+    ::write_proem(document, file_basename);
 }
 
 /// Set a value. (The historical name "Add" is now misleading.)

@@ -156,7 +156,7 @@ void test_serial_file_path()
         ,serial_file_path("x.ignored", "",      12345, "y").string()
         );
 
-    // Discard path from input census filepath; use only leaf.
+    // Discard path from input census filepath; use its basename only.
     LMI_TEST_EQUAL
         (serial_file_path("/path/to/x", "",      12345, "y").string()
         ,serial_file_path("x"         , "",      12345, "y").string()

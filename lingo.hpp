@@ -54,7 +54,7 @@ class LMI_SO lingo final
     static std::string const& xml_root_name();
     static void write_proem
         (xml_lmi::xml_document& document
-        ,std::string const&     file_leaf_name
+        ,std::string const&     file_basename
         );
 
     std::unordered_map<int,std::string> map_;

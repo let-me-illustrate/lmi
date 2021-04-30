@@ -273,7 +273,7 @@ void xml_serializable<T>::write_element
 template<typename T>
 void xml_serializable<T>::write_proem
     (xml_lmi::xml_document& // document
-    ,std::string const&     // file_leaf_name
+    ,std::string const&     // file_basename
     ) const
 {
 }
