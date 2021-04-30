@@ -223,7 +223,7 @@ void test_unique_filepath_with_normal_filenames()
     keep_open.close();
 
     // Verify that the first function call here is redundant:
-    //   path_b = change_extension(path_a, ext)
+    //   path_b = fs::replace_extension(path_a, ext)
     //   path_c = unique_filepath (path_b, ext)
     // and this single function call has the same effect:
     //   path_c = unique_filepath (path_a, ext)
