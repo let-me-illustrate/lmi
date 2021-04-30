@@ -51,17 +51,6 @@ boost_regex_objects := \
   wide_posix_api.o \
   winstances.o \
 
-# These object files are used in both an application and a shared
-# library that it links to, only for builds that use shared-library
-# 'attributes'. This workaround is used merely because we don't yet
-# build these objects as a library. TODO ?? The duplication is not
-# correct: it validates linking, but the linked applications don't
-# run correctly.
-
-ifneq (,$(USE_SO_ATTRIBUTES))
-  duplicated_objects =
-endif
-
 # GNU cgicc.
 
 # TODO ?? Track down the problems in cgicc-3.2.3 that make it
@@ -139,7 +128,6 @@ main_auxiliary_common_objects := \
 
 cgi_objects := \
   $(cgicc_objects) \
-  $(duplicated_objects) \
   alert_cgi.o \
   file_command_cgi.o \
   main_cgi.o \
@@ -149,7 +137,6 @@ cgi_objects := \
   system_command_non_wx.o \
 
 cli_objects := \
-  $(duplicated_objects) \
   alert_cli.o \
   file_command_cli.o \
   main_cli.o \
@@ -307,7 +294,6 @@ lmi_common_objects := \
   verify_products.o \
 
 skeleton_objects := \
-  $(duplicated_objects) \
   about_dialog.o \
   alert_wx.o \
   census_document.o \
