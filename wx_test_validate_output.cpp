@@ -24,6 +24,7 @@
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
 #include "mvc_controller.hpp"
+#include "path.hpp"
 #include "path_utility.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_new.hpp"

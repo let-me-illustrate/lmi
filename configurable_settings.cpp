@@ -31,6 +31,7 @@
 #include "map_lookup.hpp"
 #include "mc_enum.hpp"                  // all_strings<>()
 #include "mc_enum_type_enums.hpp"       // mcenum_report_column
+#include "path.hpp"
 #include "path_utility.hpp"             // validate_directory(), validate_filepath()
 #include "platform_dependent.hpp"       // access()
 

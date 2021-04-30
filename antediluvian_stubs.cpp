@@ -28,6 +28,7 @@
 #include "lingo.hpp"
 #include "lmi.hpp"                      // is_antediluvian_fork()
 #include "mec_server.hpp"
+#include "path.hpp"
 #include "product_data.hpp"
 #include "stratified_charges.hpp"
 #include "verify_products.hpp"
