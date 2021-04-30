@@ -146,7 +146,8 @@ void test_serial_file_path()
         ,serial_file_path("x.cns", "", 1234567890, "y").string()
         );
 
-    // Input census filepath needn't have any extension.
+    // Input census filepath needn't have any extension;
+    // any extension it has is discarded.
     LMI_TEST_EQUAL
         (serial_file_path("x.ignored", "",      12345, "y").string()
         ,serial_file_path("x"        , "",      12345, "y").string()
