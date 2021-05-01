@@ -46,11 +46,10 @@
 ///   modify_directory("sh", "/usr/bin") // present order
 ///   modify_directory("/usr/bin", "sh") // opposite order
 /// because the path precedes the filename in canonical form. However,
-/// fs::path::replace_extension() uses the present argument order:
-///   original.replace_extension(new_part)
-/// and in a nondegenerate case such as:
+/// consider a nondegenerate case--this:
 ///   modify_directory("/bin/sh", "/usr/bin") // present order
-/// simply means "change the directory of /bin/sh to /usr/bin", while
+/// naturally means "change the directory of /bin/sh to /usr/bin"
+/// (yielding "/usr/bin/sh"), whereas this:
 ///   modify_directory("/usr/bin", "/bin/sh") // opposite order
 /// seems less natural.
 ///
