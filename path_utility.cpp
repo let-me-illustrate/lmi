@@ -37,9 +37,9 @@
 /// Change '/path/to/file' to '/some/other/place/file'.
 ///
 /// Motivation: It is anomalous that std::filesystem permits this:
-///   path file("/bin/sh";
-///   path dir ("/usr/bin");
-///   dir / path; // returns "/bin/sh"
+///   fs::path file("/bin/sh";
+///   fs::path dir ("/usr/bin");
+///   dir / file; // returns "/bin/sh"
 /// where true == file.is_absolute().
 ///
 /// Arguably the arguments should be given in the opposite order:
