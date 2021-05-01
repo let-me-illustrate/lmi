@@ -419,8 +419,7 @@ void test_path_validation()
     fs::remove("path_utility_test_dir");
 }
 
-/// Demonstrate that "root name" part is handled differently by std::filesystem
-/// library under different platforms.
+/// Demonstrate a filepath nonportability concern.
 ///
 /// A print directory is specified in 'configurable_settings.xml', and
 /// managed by 'preferences_model.cpp'. Using an msw build of lmi to
@@ -433,35 +432,61 @@ void test_path_validation()
 ///   fs::absolute(Z:/opt/lmi/data) bizarrely returns:
 ///   /opt/lmi/gcc_x86_64-pc-linux-gnu/build/ship/Z:/opt/lmi/data
 /// or something like that, depending on the build directory.
+/// Use remove_alien_msw_root() to prevent this.
+///
+/// The effects of loading a stored directory path using an msw build
+/// of lmi are also tested, for completeness only, though they're
+/// beside the point. The purpose of this function is to demonstrate
+/// the anomaly that arises when a posix build loads an msw directory
+/// path without removing the msw 'root-name'.
 
 void test_oddities()
 {
-    // The exact value of the root name doesn't matter under POSIX systems but
-    // under MSW we must use the actual root name, and not the hard-coded "Z:",
-    // as this is what absolute() uses for completing the path and comparisons
-    // below would fail under this platform unless the root name actually
-    // happens to be "Z:".
-    std::string root_name = fs::current_path().root_name().string();
-    if(root_name.empty())
-        {
-        // Root name not used under this platform, just use something non-empty.
-        root_name = "Z:";
-        }
-    LMI_TEST_EQUAL  (root_name.size(), 2);
-
     std::string const z0 = "/opt/lmi/data";
-    std::string const z1 = root_name + "/opt/lmi/data";
+    std::string const z1 = "Z:/opt/lmi/data";
     std::string const z2 = remove_alien_msw_root(z1).string();
 #if defined LMI_POSIX
+    LMI_TEST(!fs::path{z1}.has_root_name());
     LMI_TEST_EQUAL  (z0, fs::absolute(z0).string());
     LMI_TEST_UNEQUAL(z0, fs::absolute(z1).string());
+    std::cout
+        << "This test demonstrates that a bad filename such as:"
+        << "\n  " << fs::absolute(z1).string()
+        << "\nmay result from failure to call"
+        << " remove_alien_msw_root() where needed."
+        << std::endl
+        ;
     LMI_TEST_EQUAL  (z0, z2);
     LMI_TEST_EQUAL  (z0, fs::absolute(z2).string());
 #elif defined LMI_MSW
-    LMI_TEST_EQUAL  (z1, fs::absolute(z0).string());
-    LMI_TEST_EQUAL  (z1, fs::absolute(z1).string());
-    LMI_TEST_EQUAL  (z1, z2);
-    LMI_TEST_EQUAL  (z1, fs::absolute(z2).string());
+    LMI_TEST( fs::path{z1}.has_root_name());
+    std::string const current_drive = fs::current_path().root_name().string();
+    if(current_drive == fs::path{z1}.root_name())
+        {
+        LMI_TEST_EQUAL  (z1, fs::absolute(z0).string());
+        LMI_TEST_EQUAL  (z1, fs::absolute(z1).string());
+        LMI_TEST_EQUAL  (z1, z2);
+        LMI_TEST_EQUAL  (z1, fs::absolute(z2).string());
+        }
+    else
+        {
+        LMI_TEST_UNEQUAL(z1, fs::absolute(z0).string());
+        std::cout
+            << "This test demonstrates that if an msw directory path such as:"
+            << "\n  " << z1
+            << "\nis saved as a posix directory path:"
+            << "\n  " << z0
+            << "\nand subsequently reloaded when the msw current drive is:"
+            << "\n  " << current_drive
+            << "\nthen a possibly nonexistent:"
+            << "\n  " << fs::absolute(z0).string()
+            << "\ndirectory path might be addressed."
+            << std::endl
+            ;
+        LMI_TEST_EQUAL  (z1, fs::absolute(z1).string());
+        LMI_TEST_EQUAL  (z1, z2);
+        LMI_TEST_EQUAL  (z1, fs::absolute(z2).string());
+        }
 #else  // Unknown platform.
     throw "Unrecognized platform."
 #endif // Unknown platform.
