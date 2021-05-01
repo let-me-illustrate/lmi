@@ -36,11 +36,17 @@
 
 /// Change '/path/to/file' to '/some/other/place/file'.
 ///
-/// Motivation: It is anomalous that std::filesystem permits this:
+/// Motivation: It was anomalous that boost did this:
 ///   fs::path file("/bin/sh";
 ///   fs::path dir ("/usr/bin");
-///   dir / file; // returns "/bin/sh"
-/// where true == file.is_absolute().
+///   dir / file; // boost returned "/usr/bin/bin/sh"
+/// even on posix, where
+///   true == file.is_complete() // boost
+/// It is at least weird that std::filesystem does this:
+///   dir / file; // C++20 std::filesystem returns "/bin/sh"
+/// BOOST !! Rewrite the next two lines:
+/// even on posix, where
+///   true == file.is_absolute() // std::filesystem
 ///
 /// Arguably the arguments should be given in the opposite order:
 ///   modify_directory("sh", "/usr/bin") // present order
@@ -68,6 +74,10 @@
 /// but the same function call would return 'false' after
 ///   rm -rf /usr/lib ; touch /usr/lib
 /// Notably, path("/bin/sh/") fails because it hasn't the filename.
+/// [original comment for boost:
+/// Notably, path("/bin/sh/") succeeds, silently discarding the
+/// trailing '/'.
+/// ...end boost comment]
 
 fs::path modify_directory
     (fs::path const& original_filepath
