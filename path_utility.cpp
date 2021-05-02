@@ -54,8 +54,8 @@
 /// Arguably the arguments should be given in the opposite order:
 ///   modify_directory("sh", "/usr/bin") // present order
 ///   modify_directory("/usr/bin", "sh") // opposite order
-/// because the path precedes the filename in canonical form. However,
-/// consider a nondegenerate case--this:
+/// because the dirname precedes the basename in canonical form.
+/// However, consider a nondegenerate case--this:
 ///   modify_directory("/bin/sh", "/usr/bin") // present order
 /// naturally means "change the directory of /bin/sh to /usr/bin"
 /// (yielding "/usr/bin/sh"), whereas this:
@@ -71,7 +71,8 @@
 /// actual existing directory.
 ///
 /// std::filesystem provides no way to test whether a path has the form
-/// of a directory. Its fs::is_directory() asks the operating system:
+/// of a directory. Its fs::is_directory() asks the operating system
+/// whether or not a directory exists, so
 ///   is_directory("/usr/lib")
 /// returns 'true' iff the OS reports that such a directory exists;
 /// but the same function call would return 'false' after
