@@ -336,16 +336,31 @@ void test_unique_filepath_with_ludicrous_filenames()
     // represents a '.' extension-delimiter followed by an extension
     // consisting of a single '.'. When fs::replace_extension() is
     // called by unique_filepath() here, adding that extension to ".."
-    // yields "...." path, which won't work if it is actually used by msw,
-    // but is still allowed (although of course discouraged).
-    if(running_under_wine())
+    // yields "....".
+
+    fs::path pathx = {".."};
+    LMI_TEST_EQUAL("..", pathx.string());
+    LMI_TEST_EQUAL(""  , pathx.extension().string());
+    pathx.replace_extension(pathx);
+    LMI_TEST_EQUAL("....", pathx.string());
+
+    // Such a pathname is forbidden by msw, yet allowed (although of
+    // course discouraged) by posix; but those are semantic rules,
+    // which std::filesystem doesn't try to enforce. However, if
+    // unique_filepath() decides that such a file exists, then it
+    // tries to remove it; and if that fails, then it appends a
+    // timestamp to render it unique. That exceptional behavior is
+    // observed only with (certain versions of) 'wine'.
+
+    fs::path path3 = unique_filepath(fs::path(".."), "..");
+
+    if(running_under_wine() && "...." != path3.string())
         {
-        std::cout << "TEST SKIPPED DUE TO A PRESUMED WINE DEFECT" << std::endl;
+        std::cout << "\n'wine' did something extraordinary" << std::endl;
         }
     else
         {
-        fs::path path3 = unique_filepath(fs::path(".."), "..");
-        LMI_TEST_EQUAL(path3.string(), "....");
+        LMI_TEST_EQUAL("....", path3.string());
         }
 }
 
