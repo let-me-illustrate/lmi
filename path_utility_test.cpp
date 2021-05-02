@@ -89,10 +89,20 @@ void test_modify_directory()
     LMI_TEST_EQUAL("sh"           , modify_directory("sh"     , ""        ).string());
     LMI_TEST_EQUAL("sh"           , modify_directory("/bin/sh", ""        ).string());
 
-    // This is forbidden, consistently with the observed behaviour:
+    // A dirname can have a trailing slash, but a basename cannot:
     //   $ls /bin/sh/
     //   ls: cannot access '/bin/sh/': Not a directory
-    // because "sh/" doesn't have the filename.
+    //
+    // The original boost implementation nevertheless allowed this:
+    //   modify_directory("sh/", "/bin/")
+    // even though 'has_leaf()' was asserted for its first argument,
+    // because its path ctor silently discarded the trailing slash.
+    //
+    // Appropriately, std::filesystem doesn't discard a trailing '/':
+    LMI_TEST_EQUAL('/', fs::path("sh/").string().back());
+    // so 'has_filename()' returns false:
+    LMI_TEST(!fs::path("sh/").has_filename());
+    // and the assertion fires as intended:
     LMI_TEST_THROW
         (modify_directory("sh/", "/bin/")
         ,std::runtime_error

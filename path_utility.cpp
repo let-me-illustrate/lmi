@@ -77,11 +77,9 @@
 /// returns 'true' iff the OS reports that such a directory exists;
 /// but the same function call would return 'false' after
 ///   rm -rf /usr/lib ; touch /usr/lib
-/// Notably, path("/bin/sh/") fails because it hasn't the filename.
-/// [original comment for boost:
-/// Notably, path("/bin/sh/") succeeds, silently discarding the
-/// trailing '/'.
-/// ...end boost comment]
+/// It allows both fs::path("/bin/") and fs::path("/bin"): posix
+/// would say the first must be a dirname, while the second could be
+/// a basename, but fs::path includes both those concepts.
 
 fs::path modify_directory
     (fs::path const& original_filepath
