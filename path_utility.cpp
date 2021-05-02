@@ -347,6 +347,9 @@ void validate_path
 {
     fs::path const path{a_path};
 
+    // BOOST !! This is where well-formedness with respect to OS rules
+    // ought to be tested.
+
     if(path.empty())
         {
         alarum() << context << " must not be empty." << LMI_FLUSH;

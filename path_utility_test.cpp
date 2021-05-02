@@ -406,28 +406,27 @@ void test_path_validation()
     validate_filepath("path_utility_test_file", context);
     validate_filepath("./path_utility_test_file", context);
 
-    // Not well formed.
-#if 0
-    // Neither posix nor msw allows NUL in paths. However, the boost
-    // filesystem library doesn't throw an explicit exception here;
-    // instead, it aborts with:
-    //   "Assertion `src.size() == std::strlen( src.c_str() )' failed."
-    // Perhaps std::filesystem will trap this and throw an exception.
+    // BOOST !! With boost::filesystem, a path was not well-formed
+    // if it contained forbidden characters. With std::filesystem,
+    // semantic validity is not considered, and any syntactically
+    // valid path is well formed. Therefore, shouldn't the lmi
+    // 'validate_*' functions test semantic validity? If not, the
+    // next two tests are senseless.
+
+    // Neither posix nor msw allows NUL in paths.
     std::string nulls = {'\0', '\0'};
     LMI_TEST_THROW
         (validate_filepath(nulls, context)
         ,std::runtime_error
-        ,lmi_test::what_regex("invalid name \"<|>\" in path")
+        ,"Unit test file '' not found."
         );
-#endif // 0
 
-#if defined LMI_MSW
+    // Posix doesn't forbid these characters, though msw does.
     LMI_TEST_THROW
         (validate_filepath("<|>", context)
         ,std::runtime_error
         ,"Unit test file '<|>' not found."
         );
-#endif // defined LMI_MSW
 
     // Not empty.
     LMI_TEST_THROW
