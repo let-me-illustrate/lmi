@@ -66,13 +66,14 @@
 /// evokes chdir(2) and cd(1).
 ///
 /// Asserted precondition:
-///   - 'original_filepath' is not empty (i.e., true == has_filename())
+///   - argument 'original_filepath' has a nonempty basename
+///     (i.e., true == has_filename())
 /// It is notably not required that 'supplied_directory' name an
 /// actual existing directory.
 ///
-/// std::filesystem provides no way to test whether a path has the form
-/// of a directory. Its fs::is_directory() asks the operating system
-/// whether or not a directory exists, so
+/// std::filesystem provides no way to test whether a path has the
+/// form of a directory. Its fs::is_directory() asks the operating
+/// system whether or not a directory exists, so
 ///   is_directory("/usr/lib")
 /// returns 'true' iff the OS reports that such a directory exists;
 /// but the same function call would return 'false' after
