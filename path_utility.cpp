@@ -36,17 +36,20 @@
 
 /// Change '/path/to/file' to '/some/other/place/file'.
 ///
-/// Motivation: It was anomalous that boost did this:
+/// Motivation: lmi must provide this function because the standard
+/// library doesn't.
+///
+/// Given
 ///   fs::path file("/bin/sh";
 ///   fs::path dir ("/usr/bin");
-///   dir / file; // boost returned "/usr/bin/bin/sh"
+/// what should 'dir / file' yield? Oddly, boost returned:
+///   /usr/bin/bin/sh
 /// even on posix, where
-///   true == file.is_complete() // boost
-/// It is at least weird that std::filesystem does this:
-///   dir / file; // C++20 std::filesystem returns "/bin/sh"
-/// BOOST !! Rewrite the next two lines:
-/// even on posix, where
-///   true == file.is_absolute() // std::filesystem
+///   true == file.is_complete() // old boost function name
+/// It is odd, in a different way, that std::filesystem returns:
+///   /bin/sh
+/// both on posix (where true == file.is_absolute()), and also on
+/// msw (where, without a 'root-name', it isn't "absolute").
 ///
 /// Arguably the arguments should be given in the opposite order:
 ///   modify_directory("sh", "/usr/bin") // present order

@@ -58,6 +58,24 @@ void test_modify_directory()
     // Motivating case:
     LMI_TEST_EQUAL("/usr/bin/sh"  , modify_directory("/bin/sh", "/usr/bin").string());
 
+    // First argument: "/bin/sh"
+
+    fs::path old_path ("/bin/sh");
+    fs::path newdir   ("/usr/bin");
+    fs::path expected ("/usr/bin/sh");
+
+    fs::path f = fs::absolute(old_path);
+    fs::path d = fs::absolute(newdir);
+    fs::path x = fs::absolute(expected);
+
+    // this result is expected...
+    LMI_TEST_EQUAL(x, modify_directory(f, d).string());
+    // ...but these are surprising:
+    LMI_TEST_EQUAL(f, (d / f).string());
+    LMI_TEST_EQUAL(old_path, (newdir / old_path).string());
+
+    // First argument: just "sh"
+
     fs::path const file("sh");
     fs::path const dir0("/bin");
     fs::path const dir1("/usr/bin/");
