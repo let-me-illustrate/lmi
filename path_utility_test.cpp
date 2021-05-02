@@ -428,6 +428,34 @@ void test_path_validation()
         ,"Unit test file '<|>' not found."
         );
 
+    // Posix doesn't forbid filenames with more than two consecutive
+    // dots; msw-nt forbids them; and, worse, msw-95 allows them and
+    // defines them to mean the {grandparent, great grandparent, ...}
+    // of a directory.
+    //
+    // This conditional block of tests is pointless today, but if
+    // semantic validity in the OS context is to be enforced by lmi's
+    // 'validate_' functions, they will become valuable.
+#if defined LMI_POSIX
+    LMI_TEST_THROW
+        (validate_filepath("...", context)
+        ,std::runtime_error
+        ,"Unit test file '...' not found."
+        );
+#elif defined LMI_MSW
+    if(!running_under_wine())
+        {
+        // At least some versions of 'wine' don't throw here.
+        LMI_TEST_THROW
+            (validate_directory("...", context)
+            ,std::runtime_error
+            ,"Unit test file '...' not found."
+            );
+        }
+#else  // Unknown platform.
+    throw "Unrecognized platform."
+#endif // Unknown platform.
+
     // Not empty.
     LMI_TEST_THROW
         (validate_filepath("", context)
