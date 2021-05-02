@@ -520,7 +520,7 @@ void test_oddities()
     LMI_TEST_EQUAL  (z0, fs::absolute(z0).string());
     LMI_TEST_UNEQUAL(z0, fs::absolute(z1).string());
     std::cout
-        << "This test demonstrates that a bad filename such as:"
+        << "\nThis test demonstrates that a bad filename such as:"
         << "\n  " << fs::absolute(z1).string()
         << "\nmay result from failure to call"
         << " remove_alien_msw_root() where needed."
