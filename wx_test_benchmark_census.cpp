@@ -137,7 +137,8 @@ LMI_WX_TEST_CASE(benchmark_census)
 {
     for(auto const& i : fs::directory_iterator(get_test_files_path()))
         {
-        if(!wxString::FromUTF8(i.path().filename().string()).Matches("MSEC*.cns"))
+        std::string const s {i.path().filename().string()};
+        if(!wxString::FromUTF8(s).Matches("MSEC*.cns"))
             {
             continue;
             }

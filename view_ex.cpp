@@ -208,5 +208,9 @@ std::string ViewEx::base_filename() const
 {
     std::string t(GetDocument()->GetUserReadableName().ToStdString(wxConvUTF8));
     fs::path path(t);
-    return path.has_filename() ? path.filename().string() : std::string("Hastur");
+// Allowed by
+//   http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0980r0.pdf
+//  static constexpr std::string unnameable{"Hastur"};
+    static std::string const unnameable{"Hastur"};
+    return path.has_filename() ? path.filename().string() : unnameable;
 }
