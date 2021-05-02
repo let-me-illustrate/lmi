@@ -199,7 +199,7 @@ void ViewEx::OnDraw(wxDC*)
 ///
 /// Using wxDocument::GetUserReadableName() means the name can be
 /// altered by calling wxDocument::SetTitle(). By default, the title
-/// is the filename with no path. The call to filename() guarantees that
+/// is the filename with no path. Calling filename() guarantees that
 /// the result is pathless, even if e.g. the title has been set to the
 /// document's full filepath. If filename() is empty, then a name that
 /// recognizably should never be uttered is returned.

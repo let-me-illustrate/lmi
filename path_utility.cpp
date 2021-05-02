@@ -204,7 +204,7 @@ std::string serial_extension
 /// Motivation: see
 ///   https://savannah.nongnu.org/support/?105907
 /// The output filename is composed of:
-///  - the census input filename, which identifies the case;
+///  - the census input basename, which identifies the case;
 ///  - the insured's name, if nonempty, except in regression tests;
 ///  - the serial number of the insured within the census; and
 ///  - an extension appropriate to the output type.
@@ -213,11 +213,11 @@ std::string serial_extension
 /// output filenames simpler and more regular, yet doesn't suppress
 /// any information that would actually be useful.
 ///
-/// Preconditions: census input filepath is nonempty and has a filename.
-/// For example `path/without/name/` is nonempty but hasn't the filename.
+/// Preconditions: census input filepath is nonempty and has a
+/// nonempty basename.
 ///
 /// Any extension or path is discarded from the input census filepath;
-/// only the filename is used.
+/// only the basename is used.
 ///
 /// Apply portable_filename() to the census filename and the insured's
 /// name: because they're under end-user control, they may contain
