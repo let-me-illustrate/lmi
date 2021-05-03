@@ -216,7 +216,9 @@ std::string serial_extension
 /// Precondition: census input filepath has a nonempty basename.
 ///
 /// Any extension or path is discarded from the input census filepath;
-/// only the basename is used.
+/// only the basename is used. In std::filesystem terms, that would
+/// seem to suggest calling stem(), but stem() is not called; instead,
+/// filename() is extracted, and then replace_extension() is called.
 ///
 /// Apply portable_filename() to the census filename and the insured's
 /// name: because they're under end-user control, they may contain
