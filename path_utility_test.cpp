@@ -261,11 +261,14 @@ void test_unique_filepath_with_normal_filenames()
 
     keep_open.close();
 
-    // Verify that the first function call here is redundant:
-    //   path_b = fs::replace_extension(path_a, ext)
-    //   path_c = unique_filepath (path_b, ext)
+    // Verify that the first function call here is redundant
+    // (for a hypothetical free function
+    //   fs::path alter_extension(fs::path const&, fs::path const&)
+    // that doesn't alter its arguments):
+    //   path_b = alter_extension(path_a, ext)
+    //   path_c = unique_filepath(path_b, ext)
     // and this single function call has the same effect:
-    //   path_c = unique_filepath (path_a, ext)
+    //   path_c = unique_filepath(path_a, ext)
     // notably without reduplicating any part of 'ext' if 'ext'
     // contains a noninitial '.'.
     //
