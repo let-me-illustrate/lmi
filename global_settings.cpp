@@ -31,10 +31,6 @@
 /// first statement of main(); however, that is actually not permitted
 /// because it wouldn't meet the conditions of 3.6.2/2; cf.
 ///   http://groups.google.com/group/comp.lang.c++.moderated/msg/f322587e93ce83fb
-/// Even if that were permitted, or if instance() is negligently
-/// called too early, then setting a default policy later with
-/// default_name_check() will throw an exception, so there's no need
-/// to guard against such things here in any event.
 
 global_settings& global_settings::instance()
 {
