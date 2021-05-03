@@ -213,8 +213,7 @@ std::string serial_extension
 /// output filenames simpler and more regular, yet doesn't suppress
 /// any information that would actually be useful.
 ///
-/// Preconditions: census input filepath is nonempty and has a
-/// nonempty basename.
+/// Precondition: census input filepath has a nonempty basename.
 ///
 /// Any extension or path is discarded from the input census filepath;
 /// only the basename is used.
@@ -230,7 +229,6 @@ fs::path serial_file_path
     ,std::string const& extension
     )
 {
-    LMI_ASSERT(!exemplar.empty());
     LMI_ASSERT(exemplar.has_filename());
     fs::path f(portable_filename(exemplar.filename().string()));
     std::string s(serial_extension(serial_number, extension));
