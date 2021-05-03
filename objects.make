@@ -25,8 +25,8 @@
 # is reached through 'vpath' directives. See the rationale in
 # 'workhorse.make'.
 
-# Boost regex library. The other boost libraries that
-# lmi requires are implemented entirely in headers.
+# Boost regex library. The other boost libraries that lmi optionally
+# uses are implemented entirely in headers.
 #
 # As for listing the object files here, the regex author says:
 #   http://groups.google.com/group/boost-list/msg/7f925ca50d69384b
