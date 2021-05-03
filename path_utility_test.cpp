@@ -304,11 +304,12 @@ void test_unique_filepath_with_normal_filenames()
     // These calls to std::remove() fail, at least with 'wine':
 //  LMI_TEST(0 == std::remove(tmp.c_str()));
 //  LMI_TEST(0 == std::remove(tmpdir.string().c_str()));
-    // They return nonzero, and do not remove the directory. The
+    // They return nonzero, and do not remove the directory. (The
     // reason is that the msw C library's remove() function doesn't
     // delete directories; it sets errno to 13, which means EACCESS,
-    // and _doserrno to 5, which might mean EIO. The std::filesystem::remove()
-    // specification in C++17 (N4659) [30.10.15.30] says:
+    // and _doserrno to 5, which might mean EIO.) Therefore,
+    // instead of std::remove(), use std::filesystem::remove(),
+    // whose effect in C++20 (N4861) [fs.op.remove] is that
     //   "the file p is removed as if by POSIX remove()".
     // Therefore, use the filesystem function to remove the directory:
     fs::remove(tmpdir);

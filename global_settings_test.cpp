@@ -37,37 +37,39 @@ void test_directory_exceptions()
 
     // Such string values must not be empty.
 
-    // "Data directory must not be empty."
     LMI_TEST_THROW
         (global_settings::instance().set_data_directory("")
         ,std::runtime_error
-        ,""
+        ,"Data directory must not be empty."
         );
 
     // Such string values must be validly-formed paths.
+    // BOOST !! Originally, this test detected that "?" is not a
+    // valid directory name, at least for msw. Should that useful
+    // validation be regained by adding code to lmi, now that
+    // std::filesystem doesn't validate paths semantically? If not,
+    // then this test adds no value.
 
     LMI_TEST_THROW
         (global_settings::instance().set_data_directory("?")
         ,std::runtime_error
-        ,""
+        ,"Data directory '?' not found."
         );
 
     // Such string values must name paths that exist in the filesystem.
 
-    // "Data directory 'UnLiKeLyNaMe' not found."
     LMI_TEST_THROW
         (global_settings::instance().set_data_directory("UnLiKeLyNaMe")
         ,std::runtime_error
-        ,""
+        ,"Data directory 'UnLiKeLyNaMe' not found."
         );
 
     // Such string values must name directories, not normal files.
 
-    // "Data directory 'global_settings.o' is not a directory."
     LMI_TEST_THROW
         (global_settings::instance().set_data_directory("global_settings.o")
         ,std::runtime_error
-        ,""
+        ,"Data directory 'global_settings.o' is not a directory."
         );
 }
 
