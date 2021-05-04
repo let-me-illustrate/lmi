@@ -24,7 +24,7 @@
 
 #include "config.hpp"
 
-#include "mc_enum_type_enums.hpp"       // mcenum_dbopt_7702, mcenum_defn_life_ins
+#include "mc_enum_type_enums.hpp"       // mcenum_dbopt_7702
 #include "oecumenic_enumerations.hpp"   // oenum_glp_or_gsp
 
 #include <vector>
@@ -86,11 +86,6 @@ struct gpt_vector_parms
 /// 'chg_sa_base' is the base for any specified-amount load. It may
 /// differ from 'specamt', e.g., by being limited to a scalar maximum,
 /// by including a term amount, or by being set immutably at issue.
-///
-/// GLP and GSP may be wanted even for CVAT contracts, e.g. so that
-/// a premium pattern such as "GSP for one year, then nothing" can be
-/// illustrated for both GPT and CVAT. 'defn_life_ins' facilitates
-/// skipping GPT restrictions for CVAT contracts in such a case.
 
 struct gpt_scalar_parms
 {
@@ -99,14 +94,7 @@ struct gpt_scalar_parms
     double               endt_bft        {                 0.0};
     double               target_prem     {                 0.0};
     double               chg_sa_base     {                 0.0};
-    mcenum_defn_life_ins defn_life_ins   {             mce_gpt};
     mcenum_dbopt_7702    dbopt_7702      {mce_option1_for_7702};
-    double               gross_1035      {                 0.0};
-    bool                 issued_today    {               false};
-    double               inforce_glp     {                 0.0};
-    double               inforce_cum_glp {                 0.0};
-    double               inforce_gsp     {                 0.0};
-    double               inforce_cum_pmt {                 0.0};
     double               qab_gio_amt     {                 0.0};
     double               qab_adb_amt     {                 0.0};
     double               qab_term_amt    {                 0.0};
@@ -116,8 +104,6 @@ struct gpt_scalar_parms
 
     bool operator==(gpt_scalar_parms const&) const = default;
 };
-
-void assert_sanity(gpt_scalar_parms const&);
 
 /// Commutation functions specialized for GPT calculations.
 ///
