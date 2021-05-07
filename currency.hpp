@@ -25,8 +25,10 @@
 #include "config.hpp"
 
 #include <cmath>                        // rint()
+#include <limits>
 #include <ostream>
 #include <stdexcept>                    // runtime_error
+#include <string>                       // to_string()
 #include <vector>
 
 class raw_cents {}; // Tag class.
@@ -34,9 +36,10 @@ class raw_cents {}; // Tag class.
 class currency
 {
     friend class currency_test;
-    friend currency from_cents(double);       // explicit ctor
-    template<typename> friend class round_to; // explicit ctor
+    friend currency from_cents(double);       // private ctor
+    template<typename> friend class round_to; // private ctor
     friend class round_to_test;               // currency::cents_digits
+    friend constexpr currency operator"" _cents(unsigned long long int);
 
     static constexpr int    cents_digits     = 2;
     static constexpr double cents_per_dollar = 100.0;
@@ -54,18 +57,30 @@ class currency
 
     currency& operator*=(int      z) {m_ *= z   ; return *this;}
 
-    currency operator-() const {return currency(-cents(), raw_cents {});}
+    constexpr currency operator-() const {return currency(-m_, raw_cents {});}
 
-    data_type cents() const {return m_;}
+    constexpr data_type cents() const {return m_;}
     // CURRENCY !! add a unit test for possible underflow
     // CURRENCY !! is multiplication by reciprocal faster or more accurate?
     double d() const {return m_ / cents_per_dollar;}
 
   private:
-    explicit currency(data_type z, raw_cents) : m_ {z} {}
+    constexpr explicit currency(data_type z, raw_cents) : m_ {z} {}
 
     data_type m_ = {};
 };
+
+constexpr currency operator"" _cents(unsigned long long int cents)
+{
+    constexpr auto mant_dig = std::numeric_limits<currency::data_type>::digits;
+    constexpr unsigned long long int limit = 1ULL << mant_dig;
+    return
+          cents <= limit
+        ? currency(static_cast<currency::data_type>(cents), raw_cents{})
+        : throw std::runtime_error
+            ("currency: " + std::to_string(cents) + " out of bounds");
+        ;
+}
 
 inline bool operator==(currency lhs, currency rhs)
     {return lhs.cents() == rhs.cents();}
