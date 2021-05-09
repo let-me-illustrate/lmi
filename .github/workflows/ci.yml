@@ -5,9 +5,19 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - 'gwc/*'
+      - 'tabs/*'
+      - 'vz/*'
+      - 'lmi_setup*.sh'
   pull_request:
     branches:
       - master
+    paths-ignore:
+      - 'gwc/*'
+      - 'tabs/*'
+      - 'vz/*'
+      - 'lmi_setup*.sh'
 
 jobs:
   build-msw32-cross:
