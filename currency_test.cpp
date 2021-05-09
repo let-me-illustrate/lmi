@@ -44,7 +44,8 @@ class currency_test
   private:
     static void test_default_ctor();
     static void test_copy_ctor();
-    static void test_explicit_ctor();
+    static void test_private_ctor();
+    static void test_literals();
     static void test_negation();
     static void test_plus_or_minus_eq();
     static void test_plus_or_minus();
@@ -66,7 +67,8 @@ void currency_test::test()
 {
     test_default_ctor();
     test_copy_ctor();
-    test_explicit_ctor();
+    test_private_ctor();
+    test_literals();
     test_negation();
     test_plus_or_minus_eq();
     test_plus_or_minus();
@@ -101,7 +103,7 @@ void currency_test::test_copy_ctor()
     LMI_TEST_EQUAL( 325, copy1.m_);
 }
 
-void currency_test::test_explicit_ctor()
+void currency_test::test_private_ctor()
 {
     currency const a1(325, raw_cents{});
     LMI_TEST_EQUAL( 325, a1.m_);
@@ -119,6 +121,68 @@ void currency_test::test_explicit_ctor()
         ,std::runtime_error
         ,"Nonintegral cents."
         );
+}
+
+void currency_test::test_literals()
+{
+    currency const c0(0_cents);
+    LMI_TEST_EQUAL(0, c0.m_);
+
+    // For an integer argument, these are equivalent:
+    //   from_cents(237)
+    //   237_cents
+    // but the latter is terser and faster.
+    currency const  a237 = from_cents(237);
+    LMI_TEST_EQUAL(  237,  a237.m_);
+    currency const  c237(   237_cents);
+    LMI_TEST_EQUAL(  237,  c237.m_);
+    LMI_TEST_EQUAL( a237,  c237);
+
+    // There is no such thing as a negative literal.
+    // This is the negation of a positive literal.
+    currency const nc237(  -237_cents);
+    LMI_TEST_EQUAL( -237, nc237.m_);
+
+    // Separators may make dollars-and-cents literals easier to read:
+    //                          $-1,234,567.89
+    currency const qc123456789(  -1'234'567'89_cents);
+    LMI_TEST_EQUAL( -123456789, qc123456789.m_);
+
+    // C macros such as ULLONG_MAX expand to constant expressions that
+    // are not necessarily literals, so attempting to concatenate "_c"
+    // isn't guaranteed to work. Instead of trying that, just assert
+    // that IEEE754 double-precision arithmetic is used.
+    constexpr auto mant_dig = std::numeric_limits<currency::data_type>::digits;
+    constexpr unsigned long long int limit = 1ULL << mant_dig;
+    LMI_TEST_EQUAL(53, mant_dig);
+    LMI_TEST_EQUAL(9007199254740992, limit);
+
+    // These are okay:
+    currency const  c9007199254740992(   9007199254740992_cents);
+    LMI_TEST_EQUAL(  9007199254740992,  c9007199254740992.m_);
+    currency const nc9007199254740992(  -9007199254740992_cents);
+    LMI_TEST_EQUAL( -9007199254740992, nc9007199254740992.m_);
+
+    // These are run-time errors:
+    LMI_TEST_THROW
+        (9007199254740993_cents
+        ,std::runtime_error
+        ,"currency: 9007199254740993 out of bounds"
+        );
+    // In this error message, the positive literal is invalid, so
+    // an exception is thrown before the return value can be negated.
+    LMI_TEST_THROW
+        (-9007199254740993_cents
+        ,std::runtime_error
+        ,"currency: 9007199254740993 out of bounds"
+        );
+
+    // These are evaluated at compile time:
+    constexpr currency compile_time_constant_pos( 9007199254740992_cents);
+    constexpr currency compile_time_constant_neg(-9007199254740992_cents);
+    // These would be compile-time errors:
+//  constexpr currency error_at_compile_time_pos( 9007199254740993_cents);
+//  constexpr currency error_at_compile_time_neg(-9007199254740993_cents);
 }
 
 void currency_test::test_negation()

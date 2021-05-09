@@ -31,6 +31,7 @@
 #include "map_lookup.hpp"
 #include "mc_enum.hpp"                  // all_strings<>()
 #include "mc_enum_type_enums.hpp"       // mcenum_report_column
+#include "path.hpp"
 #include "path_utility.hpp"             // validate_directory(), validate_filepath()
 #include "platform_dependent.hpp"       // access()
 
@@ -148,12 +149,26 @@ configurable_settings::configurable_settings()
     ascribe_members();
     load();
 
-    default_input_filename_ = fs::absolute(default_input_filename_  ).string();
-    print_directory_        = remove_alien_msw_root(print_directory_).string();
-    print_directory_        = fs::absolute(print_directory_         ).string();
+    try
+        {
+        default_input_filename_ = fs::absolute(default_input_filename_).string();
+// Performing this test seems like a good idea, but it would flag
+// an empty path as an error.
+//      validate_filepath(default_input_filename_, "Default input file");
+        }
+    catch(...)
+        {
+        report_exception();
+        // Silently replace invalid path with an empty string,
+        // which will produce an informative diagnostic when
+        // a default is needed.
+        default_input_filename_ = {};
+        }
 
     try
         {
+        print_directory_ = remove_alien_msw_root(print_directory_).string();
+        print_directory_ = fs::absolute(print_directory_).string();
         validate_directory(print_directory_, "Print directory");
         }
     catch(...)

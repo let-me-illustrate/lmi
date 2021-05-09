@@ -175,7 +175,7 @@ class LMI_SO stratified_charges final
         ) const override;
     void write_proem
         (xml_lmi::xml_document& document
-        ,std::string const&     file_leaf_name
+        ,std::string const&     file_basename
         ) const override;
 
     double banded_curr_sepacct_load

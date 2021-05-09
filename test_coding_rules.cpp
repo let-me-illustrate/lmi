@@ -30,7 +30,7 @@
 #include "ssize_lmi.hpp"
 
 #include <algorithm>                    // is_sorted()
-#include <ctime>
+#include <ctime>                        // time_t
 #include <iomanip>
 #include <ios>
 #include <iostream>
@@ -90,7 +90,7 @@ class file final
 
     fs::path    const& path     () const {return path_;     }
     std::string const& full_name() const {return full_name_;}
-    std::string const& leaf_name() const {return leaf_name_;}
+    std::string const& file_name() const {return file_name_;}
     std::string const& extension() const {return extension_;}
     enum_phylum        phylum   () const {return phylum_;   }
     std::string const& data     () const {return data_;     }
@@ -101,7 +101,7 @@ class file final
 
     fs::path    path_;
     std::string full_name_;
-    std::string leaf_name_;
+    std::string file_name_;
     std::string extension_;
     enum_phylum phylum_;
     std::string data_;
@@ -132,7 +132,7 @@ class file final
 file::file(std::string const& file_path)
     :path_      {file_path}
     ,full_name_ {file_path}
-    ,leaf_name_ {path_.filename().string()}
+    ,file_name_ {path_.filename().string()}
     ,extension_ {path_.extension().string()}
     ,phylum_    {e_no_phylum}
 {
@@ -256,7 +256,7 @@ bool file::is_of_phylum(enum_kingdom z) const
 
 bool file::phyloanalyze(std::string const& s) const
 {
-    return boost::regex_search(leaf_name(), boost::regex(s));
+    return boost::regex_search(file_name(), boost::regex(s));
 }
 
 void complain(file const& f, std::string const& complaint)
@@ -607,7 +607,7 @@ void check_cxx(file const& f)
     static boost::regex const r(R"([^:s]size_t[^\n])");
     if
         (  boost::regex_search(f.data(), r)
-        && f.leaf_name() != "test_coding_rules.cpp"
+        && f.file_name() != "test_coding_rules.cpp"
         )
         {
         complain(f, "contains unqualified 'size_t'.");
@@ -640,7 +640,7 @@ void check_cxx(file const& f)
         {
         boost::smatch const& z(*i);
         if
-            (   "test_coding_rules.cpp" != f.leaf_name()
+            (   "test_coding_rules.cpp" != f.file_name()
             &&  "--cut-here--" != z[1]
             &&  ""             != z[1]
             )
@@ -797,7 +797,7 @@ void check_include_guards(file const& f)
         }
 
     std::string const guard = boost::regex_replace
-        (f.leaf_name()
+        (f.file_name()
         ,boost::regex(R"(\.hpp$)")
         ,"_hpp"
         );
@@ -1257,7 +1257,7 @@ void statistics::print_summary() const
 statistics process_file(std::string const& file_path)
 {
     file f(file_path);
-    if(31 < lmi::ssize(f.leaf_name()))
+    if(31 < lmi::ssize(f.file_name()))
         {
         complain(f, "exceeds 31-character file-name limit.");
         }

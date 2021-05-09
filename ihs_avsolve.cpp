@@ -249,8 +249,7 @@ currency AccountValue::SolveTest(currency a_CandidateValue)
 
     if(mce_solve_for_non_mec == SolveTarget_)
         {
-        static const currency C100 = from_cents(100); // one dollar
-        return InvariantValues().IsMec ? -C100 : C100;
+        return InvariantValues().IsMec ? -100_cents : 100_cents;
         }
 
     return value - SolveTargetCsv_;

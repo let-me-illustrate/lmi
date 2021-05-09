@@ -31,6 +31,7 @@
 #include "ledger_invariant.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_str()
 #include "miscellany.hpp"
+#include "path.hpp"
 #include "path_utility.hpp"
 #include "value_cast.hpp"
 

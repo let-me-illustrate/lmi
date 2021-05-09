@@ -58,6 +58,24 @@ void test_modify_directory()
     // Motivating case:
     LMI_TEST_EQUAL("/usr/bin/sh"  , modify_directory("/bin/sh", "/usr/bin").string());
 
+    // First argument: "/bin/sh"
+
+    fs::path old_path ("/bin/sh");
+    fs::path newdir   ("/usr/bin");
+    fs::path expected ("/usr/bin/sh");
+
+    fs::path f = fs::absolute(old_path);
+    fs::path d = fs::absolute(newdir);
+    fs::path x = fs::absolute(expected);
+
+    // this result is expected...
+    LMI_TEST_EQUAL(x, modify_directory(f, d).string());
+    // ...but these are surprising:
+    LMI_TEST_EQUAL(f, (d / f).string());
+    LMI_TEST_EQUAL(old_path, (newdir / old_path).string());
+
+    // First argument: just "sh"
+
     fs::path const file("sh");
     fs::path const dir0("/bin");
     fs::path const dir1("/usr/bin/");
@@ -71,10 +89,20 @@ void test_modify_directory()
     LMI_TEST_EQUAL("sh"           , modify_directory("sh"     , ""        ).string());
     LMI_TEST_EQUAL("sh"           , modify_directory("/bin/sh", ""        ).string());
 
-    // This is forbidden, consistently with the observed behaviour:
+    // A dirname can have a trailing slash, but a basename cannot:
     //   $ls /bin/sh/
     //   ls: cannot access '/bin/sh/': Not a directory
-    // because "sh/" doesn't have the filename.
+    //
+    // The original boost implementation nevertheless allowed this:
+    //   modify_directory("sh/", "/bin/")
+    // even though 'has_leaf()' was asserted for its first argument,
+    // because its path ctor silently discarded the trailing slash.
+    //
+    // Appropriately, std::filesystem doesn't discard a trailing '/':
+    LMI_TEST_EQUAL('/', fs::path("sh/").string().back());
+    // so 'has_filename()' returns false:
+    LMI_TEST(!fs::path("sh/").has_filename());
+    // and the assertion fires as intended:
     LMI_TEST_THROW
         (modify_directory("sh/", "/bin/")
         ,std::runtime_error
@@ -88,40 +116,40 @@ void test_modify_directory()
         );
 }
 
-void test_orthodox_filename()
+void test_portable_filename()
 {
     LMI_TEST_THROW
-        (orthodox_filename("")
+        (portable_filename("")
         ,std::runtime_error
         ,"Assertion '!original_filename.empty()' failed."
         );
 
-    LMI_TEST_EQUAL("Z"     , orthodox_filename("Z"));
-    LMI_TEST_EQUAL("_"     , orthodox_filename("."));
-    LMI_TEST_EQUAL("_"     , orthodox_filename("#"));
+    LMI_TEST_EQUAL("Z"     , portable_filename("Z"));
+    LMI_TEST_EQUAL("_"     , portable_filename("."));
+    LMI_TEST_EQUAL("_"     , portable_filename("#"));
 
-    LMI_TEST_EQUAL("AZ"    , orthodox_filename("AZ"));
-    LMI_TEST_EQUAL("A_"    , orthodox_filename("A."));
-    LMI_TEST_EQUAL("_Z"    , orthodox_filename(".Z"));
-    LMI_TEST_EQUAL("__"    , orthodox_filename(".."));
-    LMI_TEST_EQUAL("__"    , orthodox_filename("##"));
+    LMI_TEST_EQUAL("AZ"    , portable_filename("AZ"));
+    LMI_TEST_EQUAL("A_"    , portable_filename("A."));
+    LMI_TEST_EQUAL("_Z"    , portable_filename(".Z"));
+    LMI_TEST_EQUAL("__"    , portable_filename(".."));
+    LMI_TEST_EQUAL("__"    , portable_filename("##"));
 
-    LMI_TEST_EQUAL("A.Z"   , orthodox_filename("A.Z"));
-    LMI_TEST_EQUAL("A-Z"   , orthodox_filename("A-Z"));
+    LMI_TEST_EQUAL("A.Z"   , portable_filename("A.Z"));
+    LMI_TEST_EQUAL("A-Z"   , portable_filename("A-Z"));
 
-    LMI_TEST_EQUAL("_xyz_" , orthodox_filename(".xyz."));
-    LMI_TEST_EQUAL("_xyz_" , orthodox_filename("-xyz-"));
+    LMI_TEST_EQUAL("_xyz_" , portable_filename(".xyz."));
+    LMI_TEST_EQUAL("_xyz_" , portable_filename("-xyz-"));
 
-    LMI_TEST_EQUAL("and_or", orthodox_filename("and/or"));
+    LMI_TEST_EQUAL("and_or", portable_filename("and/or"));
 
     LMI_TEST_EQUAL
         (                  "Crime_and_or_Punishment.text"
-        ,orthodox_filename("Crime and/or Punishment.text")
+        ,portable_filename("Crime and/or Punishment.text")
         );
 
     LMI_TEST_EQUAL
         (                  "_Fyodor_Dostoyevskiy_Crime_and_Punishment.text"
-        ,orthodox_filename("/Fyodor Dostoyevskiy/Crime and Punishment.text")
+        ,portable_filename("/Fyodor Dostoyevskiy/Crime and Punishment.text")
         );
 }
 
@@ -146,7 +174,8 @@ void test_serial_file_path()
         ,serial_file_path("x.cns", "", 1234567890, "y").string()
         );
 
-    // Input census filepath needn't have any extension.
+    // Input census filepath needn't have any extension;
+    // any extension it has is discarded.
     LMI_TEST_EQUAL
         (serial_file_path("x.ignored", "",      12345, "y").string()
         ,serial_file_path("x"        , "",      12345, "y").string()
@@ -156,7 +185,7 @@ void test_serial_file_path()
         ,serial_file_path("x.ignored", "",      12345, "y").string()
         );
 
-    // Discard path from input census filepath; use only leaf.
+    // Discard path from input census filepath; use its basename only.
     LMI_TEST_EQUAL
         (serial_file_path("/path/to/x", "",      12345, "y").string()
         ,serial_file_path("x"         , "",      12345, "y").string()
@@ -164,6 +193,16 @@ void test_serial_file_path()
     LMI_TEST_EQUAL
         (                                 "x.000012346.y"
         ,serial_file_path("/path/to/x", "",      12345, "y").string()
+        );
+
+    // Make both census and personal names portable.
+    LMI_TEST_EQUAL
+        (                         "My_Employer.My_Name.text.1000000000.tsv"
+        ,serial_file_path("My Employer.cns", "My Name.text", 999999999, "tsv").string()
+        );
+    LMI_TEST_EQUAL
+        (                 "Fyodor_Dostoyevskiy.Crime_and_Punishment.text.000001867.xyz"
+        ,serial_file_path("Fyodor Dostoyevskiy", "Crime and Punishment.text", 1866, "xyz").string()
         );
 }
 
@@ -222,11 +261,14 @@ void test_unique_filepath_with_normal_filenames()
 
     keep_open.close();
 
-    // Verify that the first function call here is redundant:
-    //   path_b = change_extension(path_a, ext)
-    //   path_c = unique_filepath (path_b, ext)
+    // Verify that the first function call here is redundant
+    // (for a hypothetical free function
+    //   fs::path alter_extension(fs::path const&, fs::path const&)
+    // that doesn't alter its arguments):
+    //   path_b = alter_extension(path_a, ext)
+    //   path_c = unique_filepath(path_b, ext)
     // and this single function call has the same effect:
-    //   path_c = unique_filepath (path_a, ext)
+    //   path_c = unique_filepath(path_a, ext)
     // notably without reduplicating any part of 'ext' if 'ext'
     // contains a noninitial '.'.
     //
@@ -265,11 +307,12 @@ void test_unique_filepath_with_normal_filenames()
     // These calls to std::remove() fail, at least with 'wine':
 //  LMI_TEST(0 == std::remove(tmp.c_str()));
 //  LMI_TEST(0 == std::remove(tmpdir.string().c_str()));
-    // They return nonzero, and do not remove the directory. The
+    // They return nonzero, and do not remove the directory. (The
     // reason is that the msw C library's remove() function doesn't
     // delete directories; it sets errno to 13, which means EACCESS,
-    // and _doserrno to 5, which might mean EIO. The std::filesystem::remove()
-    // specification in C++17 (N4659) [30.10.15.30] says:
+    // and _doserrno to 5, which might mean EIO.) Therefore,
+    // instead of std::remove(), use std::filesystem::remove(),
+    // whose effect in C++20 (N4861) [fs.op.remove] is that
     //   "the file p is removed as if by POSIX remove()".
     // Therefore, use the filesystem function to remove the directory:
     fs::remove(tmpdir);
@@ -297,16 +340,31 @@ void test_unique_filepath_with_ludicrous_filenames()
     // represents a '.' extension-delimiter followed by an extension
     // consisting of a single '.'. When fs::replace_extension() is
     // called by unique_filepath() here, adding that extension to ".."
-    // yields "...." path, which won't work if it is actually used by msw,
-    // but is still allowed (although of course discouraged).
-    if(running_under_wine())
+    // yields "....".
+
+    fs::path pathx = {".."};
+    LMI_TEST_EQUAL("..", pathx.string());
+    LMI_TEST_EQUAL(""  , pathx.extension().string());
+    pathx.replace_extension(pathx);
+    LMI_TEST_EQUAL("....", pathx.string());
+
+    // Such a pathname is forbidden by msw, yet allowed (although of
+    // course discouraged) by posix; but those are semantic rules,
+    // which std::filesystem doesn't try to enforce. However, if
+    // unique_filepath() decides that such a file exists, then it
+    // tries to remove it; and if that fails, then it appends a
+    // timestamp to render it unique. That exceptional behavior is
+    // observed only with (certain versions of) 'wine'.
+
+    fs::path path3 = unique_filepath(fs::path(".."), "..");
+
+    if(running_under_wine() && "...." != path3.string())
         {
-        std::cout << "TEST SKIPPED DUE TO A PRESUMED WINE DEFECT" << std::endl;
+        std::cout << "\n'wine' did something extraordinary" << std::endl;
         }
     else
         {
-        fs::path path3 = unique_filepath(fs::path(".."), "..");
-        LMI_TEST_EQUAL(path3.string(), "....");
+        LMI_TEST_EQUAL("....", path3.string());
         }
 }
 
@@ -352,28 +410,55 @@ void test_path_validation()
     validate_filepath("path_utility_test_file", context);
     validate_filepath("./path_utility_test_file", context);
 
-    // Not well formed.
-#if 0
-    // Neither posix nor msw allows NUL in paths. However, the boost
-    // filesystem library doesn't throw an explicit exception here;
-    // instead, it aborts with:
-    //   "Assertion `src.size() == std::strlen( src.c_str() )' failed."
-    // Perhaps std::filesystem will trap this and throw an exception.
+    // BOOST !! With boost::filesystem, a path was not well-formed
+    // if it contained forbidden characters. With std::filesystem,
+    // semantic validity is not considered, and any syntactically
+    // valid path is well formed. Therefore, shouldn't the lmi
+    // 'validate_*' functions test semantic validity? If not, the
+    // next two tests are senseless.
+
+    // Neither posix nor msw allows NUL in paths.
     std::string nulls = {'\0', '\0'};
     LMI_TEST_THROW
         (validate_filepath(nulls, context)
         ,std::runtime_error
-        ,lmi_test::what_regex("invalid name \"<|>\" in path")
+        ,"Unit test file '' not found."
         );
-#endif // 0
 
-#if defined LMI_MSW
+    // Posix doesn't forbid these characters, though msw does.
     LMI_TEST_THROW
         (validate_filepath("<|>", context)
         ,std::runtime_error
         ,"Unit test file '<|>' not found."
         );
-#endif // defined LMI_MSW
+
+    // Posix doesn't forbid filenames with more than two consecutive
+    // dots; msw-nt forbids them; and, worse, msw-95 allows them and
+    // defines them to mean the {grandparent, great grandparent, ...}
+    // of a directory.
+    //
+    // This conditional block of tests is pointless today, but if
+    // semantic validity in the OS context is to be enforced by lmi's
+    // 'validate_' functions, they will become valuable.
+#if defined LMI_POSIX
+    LMI_TEST_THROW
+        (validate_filepath("...", context)
+        ,std::runtime_error
+        ,"Unit test file '...' not found."
+        );
+#elif defined LMI_MSW
+    if(!running_under_wine())
+        {
+        // At least some versions of 'wine' don't throw here.
+        LMI_TEST_THROW
+            (validate_directory("...", context)
+            ,std::runtime_error
+            ,"Unit test file '...' not found."
+            );
+        }
+#else  // Unknown platform.
+    throw "Unrecognized platform."
+#endif // Unknown platform.
 
     // Not empty.
     LMI_TEST_THROW
@@ -408,8 +493,7 @@ void test_path_validation()
     fs::remove("path_utility_test_dir");
 }
 
-/// Demonstrate that "root name" part is handled differently by std::filesystem
-/// library under different platforms.
+/// Demonstrate a filepath nonportability concern.
 ///
 /// A print directory is specified in 'configurable_settings.xml', and
 /// managed by 'preferences_model.cpp'. Using an msw build of lmi to
@@ -422,35 +506,61 @@ void test_path_validation()
 ///   fs::absolute(Z:/opt/lmi/data) bizarrely returns:
 ///   /opt/lmi/gcc_x86_64-pc-linux-gnu/build/ship/Z:/opt/lmi/data
 /// or something like that, depending on the build directory.
+/// Use remove_alien_msw_root() to prevent this.
+///
+/// The effects of loading a stored directory path using an msw build
+/// of lmi are also tested, for completeness only, though they're
+/// beside the point. The purpose of this function is to demonstrate
+/// the anomaly that arises when a posix build loads an msw directory
+/// path without removing the msw 'root-name'.
 
 void test_oddities()
 {
-    // The exact value of the root name doesn't matter under POSIX systems but
-    // under MSW we must use the actual root name, and not the hard-coded "Z:",
-    // as this is what absolute() uses for completing the path and comparisons
-    // below would fail under this platform unless the root name actually
-    // happens to be "Z:".
-    std::string root_name = fs::current_path().root_name().string();
-    if(root_name.empty())
-        {
-        // Root name not used under this platform, just use something non-empty.
-        root_name = "Z:";
-        }
-    LMI_TEST_EQUAL  (root_name.size(), 2);
-
     std::string const z0 = "/opt/lmi/data";
-    std::string const z1 = root_name + "/opt/lmi/data";
+    std::string const z1 = "Z:/opt/lmi/data";
     std::string const z2 = remove_alien_msw_root(z1).string();
 #if defined LMI_POSIX
+    LMI_TEST(!fs::path{z1}.has_root_name());
     LMI_TEST_EQUAL  (z0, fs::absolute(z0).string());
     LMI_TEST_UNEQUAL(z0, fs::absolute(z1).string());
+    std::cout
+        << "\nThis test demonstrates that a bad filename such as:"
+        << "\n  " << fs::absolute(z1).string()
+        << "\nmay result from failure to call"
+        << " remove_alien_msw_root() where needed."
+        << std::endl
+        ;
     LMI_TEST_EQUAL  (z0, z2);
     LMI_TEST_EQUAL  (z0, fs::absolute(z2).string());
 #elif defined LMI_MSW
-    LMI_TEST_EQUAL  (z1, fs::absolute(z0).string());
-    LMI_TEST_EQUAL  (z1, fs::absolute(z1).string());
-    LMI_TEST_EQUAL  (z1, z2);
-    LMI_TEST_EQUAL  (z1, fs::absolute(z2).string());
+    LMI_TEST( fs::path{z1}.has_root_name());
+    std::string const current_drive = fs::current_path().root_name().string();
+    if(current_drive == fs::path{z1}.root_name())
+        {
+        LMI_TEST_EQUAL  (z1, fs::absolute(z0).string());
+        LMI_TEST_EQUAL  (z1, fs::absolute(z1).string());
+        LMI_TEST_EQUAL  (z1, z2);
+        LMI_TEST_EQUAL  (z1, fs::absolute(z2).string());
+        }
+    else
+        {
+        LMI_TEST_UNEQUAL(z1, fs::absolute(z0).string());
+        std::cout
+            << "This test demonstrates that if an msw directory path such as:"
+            << "\n  " << z1
+            << "\nis saved as a posix directory path:"
+            << "\n  " << z0
+            << "\nand subsequently reloaded when the msw current drive is:"
+            << "\n  " << current_drive
+            << "\nthen a possibly nonexistent:"
+            << "\n  " << fs::absolute(z0).string()
+            << "\ndirectory path might be addressed."
+            << std::endl
+            ;
+        LMI_TEST_EQUAL  (z1, fs::absolute(z1).string());
+        LMI_TEST_EQUAL  (z1, z2);
+        LMI_TEST_EQUAL  (z1, fs::absolute(z2).string());
+        }
 #else  // Unknown platform.
     throw "Unrecognized platform."
 #endif // Unknown platform.
@@ -459,7 +569,7 @@ void test_oddities()
 int test_main(int, char*[])
 {
     test_modify_directory();
-    test_orthodox_filename();
+    test_portable_filename();
     test_serial_file_path();
     test_unique_filepath_with_normal_filenames();
     test_unique_filepath_with_ludicrous_filenames();

@@ -24,7 +24,7 @@
 
 #include "config.hpp"
 
-#include "mc_enum_type_enums.hpp"       // mcenum_dbopt_7702, mcenum_defn_life_ins
+#include "mc_enum_type_enums.hpp"       // mcenum_dbopt_7702
 #include "oecumenic_enumerations.hpp"   // oenum_glp_or_gsp
 
 #include <vector>
@@ -86,11 +86,6 @@ struct gpt_vector_parms
 /// 'chg_sa_base' is the base for any specified-amount load. It may
 /// differ from 'specamt', e.g., by being limited to a scalar maximum,
 /// by including a term amount, or by being set immutably at issue.
-///
-/// GLP and GSP may be wanted even for CVAT contracts, e.g. so that
-/// a premium pattern such as "GSP for one year, then nothing" can be
-/// illustrated for both GPT and CVAT. 'defn_life_ins' facilitates
-/// skipping GPT restrictions for CVAT contracts in such a case.
 
 struct gpt_scalar_parms
 {
@@ -99,14 +94,7 @@ struct gpt_scalar_parms
     double               endt_bft        {                 0.0};
     double               target_prem     {                 0.0};
     double               chg_sa_base     {                 0.0};
-    mcenum_defn_life_ins defn_life_ins   {             mce_gpt};
     mcenum_dbopt_7702    dbopt_7702      {mce_option1_for_7702};
-    double               gross_1035      {                 0.0};
-    bool                 issued_today    {               false};
-    double               inforce_glp     {                 0.0};
-    double               inforce_cum_glp {                 0.0};
-    double               inforce_gsp     {                 0.0};
-    double               inforce_cum_pmt {                 0.0};
     double               qab_gio_amt     {                 0.0};
     double               qab_adb_amt     {                 0.0};
     double               qab_term_amt    {                 0.0};
@@ -114,37 +102,8 @@ struct gpt_scalar_parms
     double               qab_child_amt   {                 0.0};
     double               qab_waiver_amt  {                 0.0};
 
-#if defined __cpp_impl_three_way_comparison && __cpp_impl_three_way_comparison
     bool operator==(gpt_scalar_parms const&) const = default;
-#else  // no operator<=>
-    bool operator==(gpt_scalar_parms const& z) const
-        {
-        return
-               z.duration        == duration
-            && z.f3_bft          == f3_bft
-            && z.endt_bft        == endt_bft
-            && z.target_prem     == target_prem
-            && z.chg_sa_base     == chg_sa_base
-            && z.defn_life_ins   == defn_life_ins
-            && z.dbopt_7702      == dbopt_7702
-            && z.gross_1035      == gross_1035
-            && z.issued_today    == issued_today
-            && z.inforce_glp     == inforce_glp
-            && z.inforce_cum_glp == inforce_cum_glp
-            && z.inforce_gsp     == inforce_gsp
-            && z.inforce_cum_pmt == inforce_cum_pmt
-            && z.qab_gio_amt     == qab_gio_amt
-            && z.qab_adb_amt     == qab_adb_amt
-            && z.qab_term_amt    == qab_term_amt
-            && z.qab_spouse_amt  == qab_spouse_amt
-            && z.qab_child_amt   == qab_child_amt
-            && z.qab_waiver_amt  == qab_waiver_amt
-            ;
-        }
-#endif // no operator<=>
 };
-
-void assert_sanity(gpt_scalar_parms const&);
 
 /// Commutation functions specialized for GPT calculations.
 ///

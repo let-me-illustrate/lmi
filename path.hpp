@@ -28,7 +28,7 @@
 #include <fstream>
 #include <ostream>
 #include <string>
-#include <system_error> // std::error_code
+#include <system_error>                 // std::error_code
 
 namespace fs
 {

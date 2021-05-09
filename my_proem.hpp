@@ -30,7 +30,7 @@
 
 void write_proem
     (xml_lmi::xml_document& document
-    ,std::string const&     file_leaf_name
+    ,std::string const&     file_basename
     );
 
 #endif // my_proem_hpp

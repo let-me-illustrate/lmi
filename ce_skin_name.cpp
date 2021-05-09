@@ -41,13 +41,13 @@ std::vector<std::string> fetch_skin_names()
 {
     fs::path path(global_settings::instance().data_directory());
     std::vector<std::string> names;
-    for(auto const& de : fs::directory_iterator(path))
+    for(auto const& i : fs::directory_iterator(path))
         {
-        if(de.is_directory() || ".xrc" != de.path().extension())
+        if(i.is_directory() || ".xrc" != i.path().extension())
             {
             continue;
             }
-        std::string const name(de.path().filename().string());
+        std::string const name(i.path().filename().string());
         if(!begins_with(name, "skin"))
             {
             continue;

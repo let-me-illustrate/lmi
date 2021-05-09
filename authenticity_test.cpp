@@ -277,6 +277,7 @@ void PasskeyTest::CheckNominal(char const* file, int line) const
 /// tested because it's common and problematic. This test assumes that
 /// an 'F:' drive exists and is not the "current" drive; it is skipped
 /// if no 'F:' drive exists.
+
 void PasskeyTest::TestFromAfar() const
 {
     CheckNominal(__FILE__, __LINE__);

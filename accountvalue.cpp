@@ -803,7 +803,7 @@ void AccountValue::TxSetRiderDed()
         AdbCharge = round_rider_charges().c
             ( YearsAdbRate
             // IHS !! Icky manifest constant--lmi uses a database entity.
-            * std::min(from_cents(50000000), ActualSpecAmt)
+            * std::min(500'000'00_cents, ActualSpecAmt)
             );
         }
 }

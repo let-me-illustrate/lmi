@@ -36,21 +36,29 @@
 
 /// Change '/path/to/file' to '/some/other/place/file'.
 ///
-/// Motivation: It is anomalous that std::filesystem permits this:
-///   path file("/bin/sh";
-///   path dir ("/usr/bin");
-///   dir / path; // returns "/bin/sh"
-/// where true == file.is_absolute().
+/// Motivation: lmi must provide this function because the standard
+/// library doesn't.
+///
+/// Given
+///   fs::path file("/bin/sh";
+///   fs::path dir ("/usr/bin");
+/// what should 'dir / file' yield? Oddly, boost returned:
+///   /usr/bin/bin/sh
+/// even on posix, where
+///   true == file.is_complete() // old boost function name
+/// It is odd, in a different way, that std::filesystem returns:
+///   /bin/sh
+/// both on posix (where true == file.is_absolute()), and also on
+/// msw (where, without a 'root-name', it isn't "absolute").
 ///
 /// Arguably the arguments should be given in the opposite order:
 ///   modify_directory("sh", "/usr/bin") // present order
 ///   modify_directory("/usr/bin", "sh") // opposite order
-/// because the path precedes the filename in canonical form. However,
-/// fs::path::replace_extension() uses the present argument order:
-///   original.replace_extension(new_part)
-/// and in a nondegenerate case such as:
+/// because the dirname precedes the basename in canonical form.
+/// However, consider a nondegenerate case--this:
 ///   modify_directory("/bin/sh", "/usr/bin") // present order
-/// simply means "change the directory of /bin/sh to /usr/bin", while
+/// naturally means "change the directory of /bin/sh to /usr/bin"
+/// (yielding "/usr/bin/sh"), whereas this:
 ///   modify_directory("/usr/bin", "/bin/sh") // opposite order
 /// seems less natural.
 ///
@@ -58,17 +66,21 @@
 /// evokes chdir(2) and cd(1).
 ///
 /// Asserted precondition:
-///   - 'original_filepath' is not empty (i.e., true == has_filename())
+///   - argument 'original_filepath' has a nonempty basename
+///     (i.e., true == has_filename())
 /// It is notably not required that 'supplied_directory' name an
 /// actual existing directory.
 ///
-/// std::filesystem provides no way to test whether a path has the form
-/// of a directory. Its fs::is_directory() asks the operating system:
+/// std::filesystem provides no way to test whether a path has the
+/// form of a directory. Its fs::is_directory() asks the operating
+/// system whether or not a directory exists, so
 ///   is_directory("/usr/lib")
 /// returns 'true' iff the OS reports that such a directory exists;
 /// but the same function call would return 'false' after
 ///   rm -rf /usr/lib ; touch /usr/lib
-/// Notably, path("/bin/sh/") fails because it hasn't the filename.
+/// It allows both fs::path("/bin/") and fs::path("/bin"): posix
+/// would say the first must be a dirname, while the second could be
+/// a basename, but fs::path includes both those concepts.
 
 fs::path modify_directory
     (fs::path const& original_filepath
@@ -101,8 +113,12 @@ fs::path modify_directory
 /// in case an end user types something like
 ///   Crime and/or Punishment
 /// with no intention of denoting a path.
+///
+/// Even though lmi no longer uses fop, it is still good to impose
+/// some rationality on output filenames that reflect end-user input,
+/// and the rules above are reasonable.
 
-std::string orthodox_filename(std::string const& original_filename)
+std::string portable_filename(std::string const& original_filename)
 {
     LMI_ASSERT(!original_filename.empty());
     std::string s(original_filename);
@@ -188,7 +204,7 @@ std::string serial_extension
 /// Motivation: see
 ///   https://savannah.nongnu.org/support/?105907
 /// The output filename is composed of:
-///  - the census input filename, which identifies the case;
+///  - the census input basename, which identifies the case;
 ///  - the insured's name, if nonempty, except in regression tests;
 ///  - the serial number of the insured within the census; and
 ///  - an extension appropriate to the output type.
@@ -197,15 +213,16 @@ std::string serial_extension
 /// output filenames simpler and more regular, yet doesn't suppress
 /// any information that would actually be useful.
 ///
-/// Preconditions: census input filepath is nonempty and has a filename.
-/// For example `path/without/name/` is nonempty but hasn't the filename.
+/// Precondition: census input filepath has a nonempty basename.
 ///
 /// Any extension or path is discarded from the input census filepath;
-/// only the filename is used.
+/// only the basename is used. In std::filesystem terms, that would
+/// seem to suggest calling stem(), but stem() is not called; instead,
+/// filename() is extracted, and then replace_extension() is called.
 ///
-/// It is necessary to call orthodox_filename() on the insured's name
-/// in case it contains a character (probably whitespace) that might
-/// fail a std::filesystem name check.
+/// Apply portable_filename() to the census filename and the insured's
+/// name: because they're under end-user control, they may contain
+/// characters that would render the resulting filename nonportable.
 
 fs::path serial_file_path
     (fs::path    const& exemplar
@@ -214,17 +231,17 @@ fs::path serial_file_path
     ,std::string const& extension
     )
 {
-    LMI_ASSERT(!exemplar.empty());
     LMI_ASSERT(exemplar.has_filename());
+    fs::path f(portable_filename(exemplar.filename().string()));
     std::string s(serial_extension(serial_number, extension));
     if
         (  !personal_name.empty()
         && !global_settings::instance().regression_testing()
         )
         {
-        s = '.' + orthodox_filename(personal_name) + s;
+        s = '.' + portable_filename(personal_name) + s;
         }
-    return fs::path{exemplar}.filename().replace_extension(s);
+    return f.replace_extension(s);
 }
 
 /// Create a unique file path, following input as closely as possible.
@@ -252,7 +269,8 @@ fs::path serial_file_path
 ///
 /// A try-block is necessary because fs::remove() can throw. The
 /// postcondition is asserted explicitly at the end of the try-block
-/// because that fs::remove() documentation is still unclear:
+/// because the fs::remove() documentation is still unclear:
+///   BOOST !! Is this still true of std::filesystem?
 /// apparently it mustn't fail without throwing, yet it doesn't throw
 /// on an operation that must fail, like removing a file that's locked
 /// by another process as in the motivating example above.
@@ -328,6 +346,9 @@ void validate_path
     )
 {
     fs::path const path{a_path};
+
+    // BOOST !! This is where well-formedness with respect to OS rules
+    // ought to be tested.
 
     if(path.empty())
         {

@@ -31,11 +31,11 @@
 #include <string>
 
 LMI_SO fs::path modify_directory
-    (fs::path const& original_filepath
-    ,fs::path const& supplied_directory
+    (fs::path const&    original_filepath
+    ,fs::path const&    supplied_directory
     );
 
-LMI_SO std::string orthodox_filename
+LMI_SO std::string portable_filename
     (std::string const& original_filename
     );
 

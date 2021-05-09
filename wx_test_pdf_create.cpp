@@ -62,6 +62,18 @@ std::string serial_suffix(int n)
 ///     OK
 ///   File | Print to PDF
 /// and verify that the PDF file was created; then erase it.
+///
+/// Design modified 2021-05-05: Formerly, lmi's default inputs
+///   1,000,000 specamt
+///      20,000 pmts
+/// were simply multiplied by one thousand, to test ledger scaling
+/// for enormous amounts. Due to a recent lmi change, the ratio of
+/// those numbers would raise an alarum when used with a default
+/// product for which
+///   oe_min_single_premium_corr_mult == MinSinglePremiumType
+/// To prevent that, changed the payment from $20M to $950M. Paying
+/// $950M every year is of course absurd, but it's a good test of
+/// ledger scaling.
 
 LMI_WX_TEST_CASE(pdf_illustration)
 {
@@ -81,7 +93,7 @@ LMI_WX_TEST_CASE(pdf_illustration)
 
             wx_test_focus_controller_child(*dialog, "Payment");
 
-            ui.Text("20000000");
+            ui.Text(" 950000000");
             wxYield();
 
             return wxID_OK;

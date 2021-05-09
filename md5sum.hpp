@@ -23,6 +23,7 @@
 #define md5sum_hpp
 
 #include "config.hpp"
+
 #include "path.hpp"
 
 #include <climits>                      // CHAR_BIT

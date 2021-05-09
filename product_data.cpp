@@ -415,10 +415,10 @@ void product_data::write_element
 
 void product_data::write_proem
     (xml_lmi::xml_document& document
-    ,std::string const&     file_leaf_name
+    ,std::string const&     file_basename
     ) const
 {
-    ::write_proem(document, file_leaf_name);
+    ::write_proem(document, file_basename);
 }
 
 bool product_data::is_detritus(std::string const& s) const
@@ -947,7 +947,7 @@ void product_data::write_policy_files()
 std::string filename_from_product_name(std::string const& product_name)
 {
     fs::path path(product_name);
-    LMI_ASSERT(product_name == path.stem());
+    LMI_ASSERT(product_name == path.stem().string());
     path.replace_extension(".policy");
     return AddDataDir(path.string());
 }

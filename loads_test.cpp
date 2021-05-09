@@ -87,8 +87,8 @@ void LoadsTest::Reinitialize()
     loads_.refundable_sales_load_proportion_    = std::vector<double>  (length, 0.50000);
     loads_.dac_tax_load_                        = std::vector<double>  (length, 0.00500);
 
-    loads_.monthly_policy_fee_   [mce_gen_guar] = std::vector<currency>(length, from_cents(800));
-    loads_.annual_policy_fee_    [mce_gen_guar] = std::vector<currency>(length, from_cents(200));
+    loads_.monthly_policy_fee_   [mce_gen_guar] = std::vector<currency>(length, 800_cents);
+    loads_.annual_policy_fee_    [mce_gen_guar] = std::vector<currency>(length, 200_cents);
     loads_.specified_amount_load_[mce_gen_guar] = std::vector<double>  (length, 0.00003);
     loads_.separate_account_load_[mce_gen_guar] = std::vector<double>  (length, 0.00130);
     loads_.target_premium_load_  [mce_gen_guar] = std::vector<double>  (length, 0.04000);
@@ -96,8 +96,8 @@ void LoadsTest::Reinitialize()
     loads_.target_sales_load_    [mce_gen_guar] = std::vector<double>  (length, 0.30000);
     loads_.excess_sales_load_    [mce_gen_guar] = std::vector<double>  (length, 0.15000);
 
-    loads_.monthly_policy_fee_   [mce_gen_curr] = std::vector<currency>(length, from_cents(525));
-    loads_.annual_policy_fee_    [mce_gen_curr] = std::vector<currency>(length, from_cents(100));
+    loads_.monthly_policy_fee_   [mce_gen_curr] = std::vector<currency>(length, 525_cents);
+    loads_.annual_policy_fee_    [mce_gen_curr] = std::vector<currency>(length, 100_cents);
     loads_.specified_amount_load_[mce_gen_curr] = std::vector<double>  (length, 0.00002);
     loads_.separate_account_load_[mce_gen_curr] = std::vector<double>  (length, 0.00110);
     loads_.target_premium_load_  [mce_gen_curr] = std::vector<double>  (length, 0.02000);
@@ -160,8 +160,8 @@ void LoadsTest::TestCalculations(char const* file, int line)
     INVOKE_LMI_TEST(materially_equal(0.500000, loads_.refundable_sales_load_proportion()[0]), file, line);
 
     // (8.00 + 5.25 + 0.50) / 2 = 13.75 / 2 = 6.875, rounded to cents
-    INVOKE_LMI_TEST(from_cents(688) == loads_.monthly_policy_fee (mce_gen_mdpt)[0] , file, line);
-    INVOKE_LMI_TEST(from_cents(150) == loads_.annual_policy_fee  (mce_gen_mdpt)[0] , file, line);
+    INVOKE_LMI_TEST(688_cents == loads_.monthly_policy_fee (mce_gen_mdpt)[0] , file, line);
+    INVOKE_LMI_TEST(150_cents == loads_.annual_policy_fee  (mce_gen_mdpt)[0] , file, line);
     INVOKE_LMI_TEST(materially_equal(0.000625, loads_.specified_amount_load (mce_gen_mdpt)[0]), file, line);
     // 12 bp and 19 bp, both converted to monthly, then added together.
     INVOKE_LMI_TEST(materially_equal(0.0002581402795930, loads_.separate_account_load (mce_gen_mdpt)[0]), file, line);
@@ -197,7 +197,7 @@ int test_main(int, char*[])
     round_to<double> round_minutiae     (2, r_to_nearest);
     std::vector<double>   extra_comp_load  (length, 0.0170);
     std::vector<double>   extra_asset_comp (length, 0.0019);
-    std::vector<currency> extra_policy_fee (length, from_cents(50));
+    std::vector<currency> extra_policy_fee (length, 50_cents);
     std::vector<double>   guar_specamt_load(length, 0.0007);
     std::vector<double>   curr_specamt_load(length, 0.0005);
 

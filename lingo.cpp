@@ -675,8 +675,8 @@ std::string const& lingo::xml_root_name()
 
 void lingo::write_proem
     (xml_lmi::xml_document& document
-    ,std::string const&     file_leaf_name
+    ,std::string const&     file_basename
     )
 {
-    ::write_proem(document, file_leaf_name);
+    ::write_proem(document, file_basename);
 }

@@ -680,10 +680,10 @@ void DBDictionary::write_element
 
 void DBDictionary::write_proem
     (xml_lmi::xml_document& document
-    ,std::string const&     file_leaf_name
+    ,std::string const&     file_basename
     ) const
 {
-    ::write_proem(document, file_leaf_name);
+    ::write_proem(document, file_basename);
 }
 
 /// Set a value. (The historical name "Add" is now misleading.)
@@ -1612,17 +1612,17 @@ void DBDictionary::InitAntediluvian()
 void print_databases()
 {
     fs::path path(global_settings::instance().data_directory());
-    for(auto const& e : fs::directory_iterator(path))
+    for(auto const& i : fs::directory_iterator(path))
         {
-        if(e.is_directory() || ".database" != e.path().extension())
+        if(i.is_directory() || ".database" != i.path().extension())
             {
             continue;
             }
         try
             {
-            DBDictionary const z(e.path().string());
+            DBDictionary const z(i.path().string());
 
-            fs::path out_file{e.path()};
+            fs::path out_file{i.path()};
             out_file.replace_extension(".dbt");
             fs::ofstream os(out_file, ios_out_trunc_binary());
             for(auto const& j : z.member_names())

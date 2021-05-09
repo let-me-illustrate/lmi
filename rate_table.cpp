@@ -194,9 +194,8 @@ inline bool stream_read(std::istream& is, void* data, std::size_t length)
 // propagate.
 void remove_nothrow(fs::path const& path)
 {
-    std::error_code ec;
-    fs::remove(path, ec);
-    // Intentionally ignore the error code value.
+    std::error_code deliberately_ignored;
+    fs::remove(path, deliberately_ignored);
 }
 
 // Helper function wrapping std::strtoull() and hiding its peculiarities:

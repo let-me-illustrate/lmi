@@ -32,12 +32,12 @@
 /// Copy this file to '../products/src' and edit the copy to specify
 /// a proprietary proem, such as a specific copyright notice.
 ///
-/// Argument 'file_leaf_name', unused in this specimen implementation,
+/// Argument 'file_basename', unused in this specimen implementation,
 /// permits the proem to vary by file name.
 
 void write_proem
     (xml_lmi::xml_document& document
-    ,std::string const&     // file_leaf_name
+    ,std::string const&     // file_basename
     )
 {
     std::string const y(value_cast<std::string>(today().year()));
