@@ -167,7 +167,7 @@ jobs:
         if: steps.cache-local.outputs.cache-hit != 'true'
         run: ./install_wxpdfdoc.sh
 
-      - name: Build Boost libraries
+      - name: Build Boost.Regex
         if: matrix.autotools
         run: |
           # Define flags to avoid warnings in Boost code we don't care about.
@@ -176,7 +176,7 @@ jobs:
             boost_cxxflags="${boost_cxxflags} -Wno-parentheses-equality"
           fi
 
-          for lib in regex filesystem; do
+          for lib in regex; do
             cd /opt/lmi/third_party/src/boost/libs/${lib}/src
             echo "Compiling $lib sources"
             ${CXX-${LMI_COMPILER}} -std=c++17 -fPIC $(echo ${boost_cxxflags}) -I../../.. -c *.cpp
