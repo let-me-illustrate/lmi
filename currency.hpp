@@ -145,13 +145,10 @@ inline std::vector<double> dblize(std::vector<currency> const& z)
     return r;
 }
 
-/// Zero cents--akin to a user-defined literal.
+/// Zero cents as a terse compile-time constant.
 ///
-/// UDLs seem less convenient because the obvious "0_c" is likely to
-/// collide with some other UDL, and "currency::0_c" is too verbose.
-/// "0_cents" may avoid both those problems, but "C0" is terser.
-/// "C0" is chosen instead of "c0" only for the pixilated reason that
-/// the capital letter looks kind of like a "0".
+/// This particular value occurs so often that it merits a name
+/// no wider than '0.0' (unlike the equivalent '0_cents').
 
 inline constexpr currency C0 = {};
 
