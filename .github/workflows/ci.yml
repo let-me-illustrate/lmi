@@ -45,27 +45,6 @@ jobs:
       LMI_TRIPLET: ${{ matrix.triplet || 'x86_64-pc-linux-gnu' }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: 'recursive'
-
-      - name: Install Wine
-        if: matrix.mingw
-        run: |
-          sudo dpkg --add-architecture i386
-
-          wget -qO - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
-          sudo add-apt-repository "deb https://dl.winehq.org/wine-builds/debian $(lsb_release -cs) main"
-
-          sudo apt-get -qq update
-
-          # Workaround the issue with Wine.
-          sudo apt-get -qq install libasound2-plugins:i386 libgphoto2-6:i386
-          sudo apt-get -qq install wine-stable-i386
-          sudo apt-get -qq install wine-stable
-          sudo apt-get -qq install --install-recommends winehq-stable
-
       - name: Install required packages
         run: |
           export DEBIAN_FRONTEND=noninteractive
@@ -88,6 +67,27 @@ jobs:
 
           sudo apt-get -q -o=Dpkg::Use-Pty=0 update
           sudo apt-get -qq install $packages
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Install Wine
+        if: matrix.mingw
+        run: |
+          sudo dpkg --add-architecture i386
+
+          wget -qO - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
+          sudo add-apt-repository "deb https://dl.winehq.org/wine-builds/debian $(lsb_release -cs) main"
+
+          sudo apt-get -qq update
+
+          # Workaround the issue with Wine.
+          sudo apt-get -qq install libasound2-plugins:i386 libgphoto2-6:i386
+          sudo apt-get -qq install wine-stable-i386
+          sudo apt-get -qq install wine-stable
+          sudo apt-get -qq install --install-recommends winehq-stable
 
       - name: System and environment setup
         run: |
