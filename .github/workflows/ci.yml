@@ -21,7 +21,8 @@ on:
 
 jobs:
   build-msw32-cross:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+    container: debian:sid-slim
     name: ${{ matrix.name }}
     strategy:
       fail-fast: false
@@ -55,7 +56,7 @@ jobs:
           sudo dpkg --add-architecture i386
 
           wget -qO - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
-          sudo add-apt-repository "deb https://dl.winehq.org/wine-builds/ubuntu $(lsb_release -cs) main"
+          sudo add-apt-repository "deb https://dl.winehq.org/wine-builds/debian $(lsb_release -cs) main"
 
           sudo apt-get -qq update
 
@@ -67,6 +68,7 @@ jobs:
 
       - name: Install required packages
         run: |
+          export DEBIAN_FRONTEND=noninteractive
           packages="\
             automake bc bsdmainutils bzip2 curl cvs default-jre \
             g++-multilib git jing libarchive-tools \
