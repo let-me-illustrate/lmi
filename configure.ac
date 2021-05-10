@@ -139,7 +139,12 @@ m4_define([lmi_cxx_feature_test], [[
 #elif __cplusplus <= 201402L
 #error At least C++17 is required.
 #else
-struct S { int x = 0; double y = 0.0; };
+#include <compare>
+struct S {
+    int x = 0;
+    double y = 0.0;
+    auto operator<=>(S const&) const = default;
+};
 S s = {.x = 1, .y = 2.0};
 static_assert(true);
 #endif
@@ -163,6 +168,14 @@ if test "$lmi_cv_cxx_features" = "no"; then
             AC_MSG_ERROR([Can't enable C++20 support required for building lmi.])
         )]
     )
+
+    dnl Final sanity check: our test code must compile in C++20.
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([lmi_cxx_feature_test])],
+        [],
+        [AC_MSG_ERROR([Compiler ($CXX $CXXFLAGS) doesn't support required C++20 features.])]
+        )
+    AC_LANG_POP([C++])
 fi
 
 dnl These options must be always used for lmi unit tests to pass.
