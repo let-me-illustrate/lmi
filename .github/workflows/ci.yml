@@ -84,6 +84,11 @@ jobs:
             packages="$packages clang libc++abi-dev libc++-dev"
           fi
 
+          # Work around for an apparent bug in either Debian slim Docker image
+          # or JRE installation script: it tries to use this directory, which
+          # doesn't exist, so create it preemptively.
+          sudo mkdir -p /usr/share/man/man1
+
           sudo apt-get -qq install $packages
 
       - name: Checkout
