@@ -68,7 +68,14 @@ jobs:
 
           if ${{ matrix.mingw }}
           then
-            packages="$packages g++-mingw-w64-i686"
+            packages="$packages g++-mingw-w64-i686 wine"
+
+            # This is additionally required when using 32-bit builds, currently
+            # do it unconditionally because our only MinGW build is 32 bits.
+            sudo dpkg --add-architecture i386
+            sudo apt-get -q -o=Dpkg::Use-Pty=0 update
+
+            packages="$packages wine32"
           else
             packages="$packages libunwind-dev libdw-dev libgtk-3-dev"
           fi
@@ -83,22 +90,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: 'recursive'
-
-      - name: Install Wine
-        if: matrix.mingw
-        run: |
-          sudo dpkg --add-architecture i386
-
-          wget -qO - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
-          sudo add-apt-repository "deb https://dl.winehq.org/wine-builds/debian $(lsb_release -cs) main"
-
-          sudo apt-get -qq update
-
-          # Workaround the issue with Wine.
-          sudo apt-get -qq install libasound2-plugins:i386 libgphoto2-6:i386
-          sudo apt-get -qq install wine-stable-i386
-          sudo apt-get -qq install wine-stable
-          sudo apt-get -qq install --install-recommends winehq-stable
 
       - name: System and environment setup
         run: |
