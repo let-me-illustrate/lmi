@@ -392,10 +392,6 @@ else
 if it is installed in non default location"
 fi
 
-dnl Prevent warnings due to the use of "register" in Boost.Regex headers that
-dnl are actually fatal errors with clang in C++17 mode.
-CPPFLAGS="$save_CPPFLAGS -Dregister="
-
 dnl latest versions of boost extract some common functionality in
 dnl libboost_system which we must link when using any other Boost library, so
 dnl check for it first
@@ -403,10 +399,12 @@ AC_CHECK_LIB($boost_libsystem,main,BOOST_LIBS="-l$boost_libsystem")
 
 dnl usually when we want to check for a library we use AC_CHECK_LIB and main()
 dnl but since under mingw with -pedantic and -std= options test does not pass
-dnl we are forced to use a bit more sophisticated construct
+dnl we are forced to use a bit more sophisticated construct and include our own
+dnl wrapper header which disables various warnings that occur in Boost headers
 
+CPPFLAGS="$save_CPPFLAGS -I$srcdir"
 LIBS="$save_LIBS -l$boost_libregex"
-AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/regex.hpp>]],
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include "boost_regex.hpp"]],
     [[boost::regex *r]])],
     [],
     [AC_MSG_FAILURE([Boost regex library $boost_libregex not found, $errmsg])]
