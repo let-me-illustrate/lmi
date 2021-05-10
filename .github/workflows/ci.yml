@@ -89,11 +89,10 @@ jobs:
           sudo apt-get -q -o=Dpkg::Use-Pty=0 update
           sudo apt-get -qq install $packages
 
-      - name: Fix up libtool
-        run: sudo sed -i'' -e 's/^int _putenv/_CRTIMP int _putenv/' /usr/share/libtool/build-aux/ltmain.sh
-
-      - name: Set environment variables
+      - name: System and environment setup
         run: |
+          sudo sed -i'' -e 's/^int _putenv/_CRTIMP int _putenv/' /usr/share/libtool/build-aux/ltmain.sh
+
           echo "NORMAL_UID=`id --user`" >> $GITHUB_ENV
           echo "coefficiency=--jobs=`nproc`" >> $GITHUB_ENV
           if ${{ matrix.mingw }}
