@@ -122,6 +122,24 @@ jobs:
           LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/build/ship
           echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
+          echo "User information:"
+          id
+          echo
+
+          echo "Environment:"
+          env | sort
+          echo
+
+          echo "Compiler version:"
+          $compiler --version
+          echo
+
+          if ${{ matrix.mingw }}; then
+            echo "Wine version:"
+            wine --version
+            echo
+          fi
+
       - name: Create lmi directories
         run: |
           for d in /opt/lmi /opt/lmi/print /etc/opt/lmi /srv/cache_for_lmi; do
