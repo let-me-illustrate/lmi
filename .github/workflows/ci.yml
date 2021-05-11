@@ -20,7 +20,7 @@ on:
       - 'lmi_setup*.sh'
 
 jobs:
-  build-msw32-cross:
+  build-linux:
     runs-on: ubuntu-latest
     container: debian:sid-slim
     name: ${{ matrix.name }}
@@ -28,15 +28,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Cross-compile for MSW-32
+          - name: MSW/make/mingw32
             triplet: i686-w64-mingw32
             mingw: true
-          - name: Native Linux build
+          - name: Linux/make/gcc
             mingw: false
-          - name: Linux using autotools
+          - name: Linux/autotools/gcc
             mingw: false
             autotools: true
-          - name: Linux with clang
+          - name: Linux/autotools/clang
             compiler: clang
             mingw: false
             autotools: true
