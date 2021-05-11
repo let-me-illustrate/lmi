@@ -138,6 +138,16 @@ jobs:
           LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/build/ship
           echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
+          # Create directories required by lmi.
+          normal_uid=`id --user`
+          for d in /opt/lmi /opt/lmi/print /etc/opt/lmi /srv/cache_for_lmi; do
+            sudo mkdir --parents $d
+            sudo --preserve-env chown $normal_uid $d
+          done
+          mkdir /srv/cache_for_lmi/downloads
+          mkdir /opt/lmi/gui_test
+          mkdir /opt/lmi/src
+
           echo "User information:"
           id
           echo
@@ -155,17 +165,6 @@ jobs:
             wine --version
             echo
           fi
-
-      - name: Create lmi directories
-        run: |
-          normal_uid=`id --user`
-          for d in /opt/lmi /opt/lmi/print /etc/opt/lmi /srv/cache_for_lmi; do
-            sudo mkdir --parents $d
-            sudo --preserve-env chown $normal_uid $d
-          done
-          mkdir /srv/cache_for_lmi/downloads
-          mkdir /opt/lmi/gui_test
-          mkdir /opt/lmi/src
 
       - name: Cache downloaded archives
         uses: actions/cache@v2
