@@ -163,26 +163,13 @@ void currency_test::test_literals()
     currency const nc9007199254740992(  -9007199254740992_cents);
     LMI_TEST_EQUAL( -9007199254740992, nc9007199254740992.m_);
 
-    // These are run-time errors:
-    LMI_TEST_THROW
-        (9007199254740993_cents
-        ,std::runtime_error
-        ,"currency: 9007199254740993 out of bounds"
-        );
-    // In this error message, the positive literal is invalid, so
-    // an exception is thrown before the return value can be negated.
-    LMI_TEST_THROW
-        (-9007199254740993_cents
-        ,std::runtime_error
-        ,"currency: 9007199254740993 out of bounds"
-        );
-
-    // These are evaluated at compile time:
-    constexpr currency compile_time_constant_pos( 9007199254740992_cents);
-    constexpr currency compile_time_constant_neg(-9007199254740992_cents);
+    // These are evaluated at compile time, even though this is not
+    // a constexpr context:
+    auto compile_time_constant_pos( 9007199254740992_cents);
+    auto compile_time_constant_neg(-9007199254740992_cents);
     // These would be compile-time errors:
-//  constexpr currency error_at_compile_time_pos( 9007199254740993_cents);
-//  constexpr currency error_at_compile_time_neg(-9007199254740993_cents);
+//  auto error_at_compile_time_pos( 9007199254740993_cents);
+//  auto error_at_compile_time_neg(-9007199254740993_cents);
 }
 
 void currency_test::test_negation()

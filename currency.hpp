@@ -28,7 +28,6 @@
 #include <limits>
 #include <ostream>
 #include <stdexcept>                    // runtime_error
-#include <string>                       // to_string()
 #include <vector>
 
 class raw_cents {}; // Tag class.
@@ -39,7 +38,7 @@ class currency
     friend currency from_cents(double);       // private ctor
     template<typename> friend class round_to; // private ctor
     friend class round_to_test;               // currency::cents_digits
-    friend constexpr currency operator""_cents(unsigned long long int);
+    friend consteval currency operator""_cents(unsigned long long int);
 
     static constexpr int    cents_digits     = 2;
     static constexpr double cents_per_dollar = 100.0;
@@ -70,15 +69,14 @@ class currency
     data_type m_ = {};
 };
 
-inline constexpr currency operator""_cents(unsigned long long int cents)
+consteval currency operator""_cents(unsigned long long int cents)
 {
     constexpr auto mant_dig = std::numeric_limits<currency::data_type>::digits;
     constexpr unsigned long long int limit = 1ULL << mant_dig;
     return
           cents <= limit
         ? currency(static_cast<currency::data_type>(cents), raw_cents{})
-        : throw std::runtime_error
-            ("currency: " + std::to_string(cents) + " out of bounds");
+        : throw std::domain_error("outside currency domain")
         ;
 }
 
