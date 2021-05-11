@@ -108,6 +108,12 @@ jobs:
 
       - name: System and environment setup
         run: |
+          normal_uid=`id --user`
+
+          # The checkout actions runs as root and there doesn't seem to be any
+          # way to change this, so just adjust the owner after checkout.
+          sudo chown -R $normal_uid $GITHUB_WORKSPACE
+
           sudo sed -i'' -e 's/^int _putenv/_CRTIMP int _putenv/' /usr/share/libtool/build-aux/ltmain.sh
 
           echo "coefficiency=--jobs=`nproc`" >> $GITHUB_ENV
@@ -139,7 +145,6 @@ jobs:
           echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
           # Create directories required by lmi.
-          normal_uid=`id --user`
           for d in /opt/lmi /opt/lmi/print /etc/opt/lmi /srv/cache_for_lmi; do
             sudo mkdir --parents $d
             sudo --preserve-env chown $normal_uid $d
