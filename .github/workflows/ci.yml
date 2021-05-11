@@ -197,7 +197,7 @@ jobs:
         if: matrix.autotools
         run: |
           # Define flags to avoid warnings in Boost code we don't care about.
-          boost_cxxflags="-Wno-deprecated-declarations -DBOOST_NO_AUTO_PTR -Dregister="
+          boost_cxxflags="-Wno-deprecated-declarations -Wno-register -DBOOST_NO_AUTO_PTR -DBOOST_NO_STD_ALLOCATOR"
           if [ "${{ matrix.compiler }}" = clang ]; then
             boost_cxxflags="${boost_cxxflags} -Wno-parentheses-equality"
           fi
