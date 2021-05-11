@@ -100,7 +100,6 @@ jobs:
         run: |
           sudo sed -i'' -e 's/^int _putenv/_CRTIMP int _putenv/' /usr/share/libtool/build-aux/ltmain.sh
 
-          echo "NORMAL_UID=`id --user`" >> $GITHUB_ENV
           echo "coefficiency=--jobs=`nproc`" >> $GITHUB_ENV
           if ${{ matrix.mingw }}
           then
@@ -149,9 +148,10 @@ jobs:
 
       - name: Create lmi directories
         run: |
+          normal_uid=`id --user`
           for d in /opt/lmi /opt/lmi/print /etc/opt/lmi /srv/cache_for_lmi; do
             sudo mkdir --parents $d
-            sudo --preserve-env chown $NORMAL_UID $d
+            sudo --preserve-env chown $normal_uid $d
           done
           mkdir /srv/cache_for_lmi/downloads
           mkdir /opt/lmi/gui_test
