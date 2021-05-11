@@ -365,6 +365,36 @@ dnl Restore pre-wx CPPFLAGS value only now, we needed wx flags for
 dnl wxPdfDocument checks.
 CPPFLAGS=$save_CPPFLAGS
 
+dnl Add clang-specific workaround before checking for Boost, as its headers use
+dnl std::allocator::size_type.
+dnl
+dnl This is necessary because libc++ used by clang 11 mistakenly removed
+dnl std::allocator::size_type, which is finally not removed by C++20. Luckily,
+dnl we still can predefine _LIBCPP_ENABLE_CXX20_REMOVED_ALLOCATOR_MEMBERS to
+dnl get its declaration, but we don't want to do this unconditionally because
+dnl this also reintroduces other, really removed, members in later clang
+dnl versions, so only do it if we need it.
+if test "$CLANG" = "yes"; then
+    m4_define([lmi_cxx_alloc_test], [[
+#include <memory>
+std::allocator<char*>::size_type s = 17;
+    ]])
+    AC_CACHE_CHECK([whether clang requires workaround for std::allocator::size_type],
+        lmi_cv_cxx_alloc_workaround_needed,
+        [
+            AC_LANG_PUSH([C++])
+            AC_COMPILE_IFELSE([AC_LANG_SOURCE([lmi_cxx_alloc_test])],
+                lmi_cv_cxx_alloc_workaround_needed=no,
+                [CXXFLAGS="$CXXFLAGS -D_LIBCPP_ENABLE_CXX20_REMOVED_ALLOCATOR_MEMBERS"
+                 AC_COMPILE_IFELSE([AC_LANG_SOURCE([lmi_cxx_alloc_test])],
+                    lmi_cv_cxx_alloc_workaround_needed=yes,
+                    AC_MSG_ERROR([std::allocator::size_type unavailable]))]
+            )
+            AC_LANG_POP([C++])
+        ]
+    )
+fi
+
 dnl --- Boost (required) ---
 if test "x$lmi_boost_headers" != "x"; then
     CPPFLAGS="$CPPFLAGS -I$lmi_boost_headers"
