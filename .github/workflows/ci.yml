@@ -44,21 +44,31 @@ jobs:
       LMI_COMPILER: ${{ matrix.compiler || 'gcc' }}
       LMI_TRIPLET: ${{ matrix.triplet || 'x86_64-pc-linux-gnu' }}
 
+    # Run all commands as the normal user, created by the first step below.
+    #
+    # Note that the Bash options used here are the same as for the default
+    # shell used by GitHub Actions to minimize any surprises.
+    defaults:
+      run:
+        shell: /usr/bin/setpriv --reuid=runner --regid=adm --clear-groups --inh-caps=-all bash --noprofile --norc -eo pipefail {0}
+
     steps:
+      - name: Set up container user
+        # Specify the default shell explicitly to override the default value above.
+        shell: bash
+        run: |
+          apt-get -q -o=Dpkg::Use-Pty=0 update
+          apt-get -qq install sudo
+
+          # Create a user with the same UID/GID and name as the existing user
+          # outside of the container and allow it using sudo without password.
+          useradd --home-dir $HOME --no-create-home --gid adm --uid 1001 runner
+
+          echo 'runner ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/runner
+
       - name: Install required packages
         run: |
           export DEBIAN_FRONTEND=noninteractive
-
-          # We don't really need it with the currently used container, as we're
-          # running as root inside it anyhow, but this allows to keep using the
-          # same commands as before, with the standard Ubuntu container where
-          # using sudo is required.
-          if ! command -v sudo > /dev/null; then
-            apt-get -q -o=Dpkg::Use-Pty=0 update
-            apt-get -qq install sudo
-          else
-            sudo apt-get -q -o=Dpkg::Use-Pty=0 update
-          fi
 
           packages="\
             automake bc bsdmainutils bzip2 curl cvs default-jre \
