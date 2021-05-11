@@ -84,9 +84,8 @@ int test_main(int, char*[])
 
     fs::path path(global_settings::instance().data_directory());
 
-    fs::directory_iterator const i(path);
-
-    LMI_TEST(i->exists());
+    // The data directory is supposed to exist.
+    LMI_TEST(fs::is_directory(path));
 
     // Certain other operations are required to throw.
 
