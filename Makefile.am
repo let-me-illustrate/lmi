@@ -706,6 +706,10 @@ dbo_rules_test_LDADD = \
 et_vector_test_LDADD = \
   libtest_common.la
 
+# This test uses uBLAS which requires std::allocator members removed in C++20,
+# so ask to explicitly re-enable them when using libc++ (defining this symbol
+# should be harmless otherwise, so don't bother making it conditional).
+expression_template_0_test_CXXFLAGS = $(AM_CXXFLAGS) -D_LIBCPP_ENABLE_CXX20_REMOVED_ALLOCATOR_MEMBERS
 expression_template_0_test_LDADD = \
   libtest_common.la
 
