@@ -357,6 +357,8 @@ jobs:
         if: matrix.mingw
         run: |
             echo 'Launching Xvfb...'
+            sudo mkdir /tmp/.X11-unix
+            sudo chmod 1777 /tmp/.X11-unix
             Xvfb :10 -screen 0 1600x1200x24 &
             num_tries=1
             while true; do
