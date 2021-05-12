@@ -355,11 +355,7 @@ class path
         // of char pointers that can be used to iterate over any buffer and
         // that u8string contents can always be stored in string (unlike vice
         // versa).
-        //
-        // Also note that the input string can't contain embedded NULs here, as
-        // they're not allowed in file paths, hence there is no need to use
-        // size.
-        return reinterpret_cast<char const*>(s8.c_str());
+        return std::string{reinterpret_cast<char const*>(s8.c_str()), s8.size()};
         }
 #endif // defined __cpp_char8_t
 
