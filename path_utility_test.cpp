@@ -418,11 +418,17 @@ void test_path_validation()
     // next two tests are senseless.
 
     // Neither posix nor msw allows NUL in paths.
-    std::string nulls = {'\0', '\0'};
+    std::string with_nulls = {'x', '\0', 'y', '\0', 'z'};
+
+    // Note that we can't test for the full error message here because it is
+    // truncated at the first NUL, due to using std::runtime_error::what(),
+    // which returns "char*" string terminated by the first NUL occurring in
+    // it, when constructing this message, so just check that it starts with
+    // the expected part.
     LMI_TEST_THROW
-        (validate_filepath(nulls, context)
+        (validate_filepath(with_nulls, context)
         ,std::runtime_error
-        ,"Unit test file '' not found."
+        ,lmi_test::what_regex("^Unit test file 'x")
         );
 
     // Posix doesn't forbid these characters, though msw does.
