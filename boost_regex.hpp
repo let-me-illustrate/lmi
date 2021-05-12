@@ -32,14 +32,6 @@
 #   pragma clang diagnostic ignored "-Wkeyword-macro"
 #   pragma clang diagnostic ignored "-Wparentheses-equality"
 #   pragma clang diagnostic ignored "-Wregister"
-
-    // libc++ used by clang 11 requires defining this symbol in order to define
-    // std::allocator::size_type, which is still used by Boost code even when
-    // BOOST_NO_STD_ALLOCATOR is defined. Surprisingly, this type definition is
-    // unconditional in libc++ 12, so this might have been a mistake in this
-    // particular libc++ version, but it's still simpler to work around it
-    // unconditionally rather than try to detect the exact libc++ version.
-#   define _LIBCPP_ENABLE_CXX20_REMOVED_ALLOCATOR_MEMBERS
 #endif // defined LMI_CLANG
 #if defined LMI_GCC
 #   pragma GCC diagnostic push
