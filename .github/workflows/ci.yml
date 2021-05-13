@@ -310,7 +310,7 @@ jobs:
         if: matrix.autotools != true
         run: make install
 
-      - name: Check concinnity
+      - name: Check concinnity and physical closure
         if: matrix.autotools != true
         run: |
           # Somehow these files are executable and this triggers complaints
@@ -318,9 +318,7 @@ jobs:
           chmod -x .git/info/exclude .git/description
           make $coefficiency check_concinnity
 
-      - name: Check physical closure
-        if: matrix.autotools != true
-        run: make $coefficiency check_physical_closure
+          make $coefficiency check_physical_closure
 
       - name: Run CLI tests
         if: matrix.autotools != true
