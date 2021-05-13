@@ -32,13 +32,10 @@ jobs:
             triplet: i686-w64-mingw32
             mingw: true
           - name: Linux/make/gcc
-            mingw: false
           - name: Linux/autotools/gcc
-            mingw: false
             autotools: true
           - name: Linux/autotools/clang
             compiler: clang
-            mingw: false
             autotools: true
     env:
       LMI_COMPILER: ${{ matrix.compiler || 'gcc' }}
@@ -76,7 +73,7 @@ jobs:
             libtool libxml2-utils libxslt1-dev make patch pkg-config rsync \
             shellcheck trang unzip wget xsltproc x11-xserver-utils xvfb zsh"
 
-          if ${{ matrix.mingw }}
+          if [ ${{ matrix.mingw }} ]
           then
             packages="$packages g++-mingw-w64-i686 wine"
 
@@ -117,7 +114,7 @@ jobs:
           sudo sed -i'' -e 's/^int _putenv/_CRTIMP int _putenv/' /usr/share/libtool/build-aux/ltmain.sh
 
           echo "coefficiency=--jobs=`nproc`" >> $GITHUB_ENV
-          if ${{ matrix.mingw }}
+          if [ ${{ matrix.mingw }} ]
           then
             compiler=${LMI_TRIPLET}-${LMI_COMPILER}
           else
@@ -165,7 +162,7 @@ jobs:
           $compiler --version
           echo
 
-          if ${{ matrix.mingw }}; then
+          if [ ${{ matrix.mingw }} ]; then
             echo "Wine version:"
             wine --version
             echo
