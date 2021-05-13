@@ -21,7 +21,7 @@
 
 #include "pchfile.hpp"
 
-#include "irc7702.hpp"
+#include "gpt7702.hpp"
 
 #include "assert_lmi.hpp"
 #include "cso_table.hpp"

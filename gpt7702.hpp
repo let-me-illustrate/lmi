@@ -19,13 +19,13 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifndef irc7702_hpp
-#define irc7702_hpp
+#ifndef gpt7702_hpp
+#define gpt7702_hpp
 
 #include "config.hpp"
 
-class irc7702
+class gpt7702
 {
 };
 
-#endif // irc7702_hpp
+#endif // gpt7702_hpp

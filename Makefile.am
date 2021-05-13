@@ -427,6 +427,7 @@ liblmi_la_SOURCES = \
     cso_table.cpp \
     financial.cpp \
     fund_data.cpp \
+    gpt7702.cpp \
     gpt_commutation_functions.cpp \
     gpt_input.cpp \
     gpt_server.cpp \
@@ -445,7 +446,6 @@ liblmi_la_SOURCES = \
     ihs_irc7702a.cpp \
     ihs_mortal.cpp \
     ihs_server7702.cpp \
-    irc7702.cpp \
     irc7702_tables.cpp \
     lingo.cpp \
     lmi.cpp \
@@ -757,9 +757,9 @@ gpt_cf_triad_test_LDADD = \
 gpt_test_SOURCES = \
   commutation_functions.cpp \
   cso_table.cpp \
+  gpt7702.cpp \
   gpt_commutation_functions.cpp \
-  gpt_test.cpp \
-  irc7702.cpp
+  gpt_test.cpp
 gpt_test_CXXFLAGS = $(AM_CXXFLAGS)
 gpt_test_LDADD = \
   libtest_common.la
@@ -1186,6 +1186,7 @@ noinst_HEADERS = \
     fund_data.hpp \
     getopt.hpp \
     global_settings.hpp \
+    gpt7702.hpp \
     gpt_commutation_functions.hpp \
     gpt_document.hpp \
     gpt_input.hpp \
@@ -1215,7 +1216,6 @@ noinst_HEADERS = \
     input_sequence_parser.hpp \
     interest_rates.hpp \
     interpolate_string.hpp \
-    irc7702.hpp \
     irc7702_tables.hpp \
     istream_to_string.hpp \
     ledger.hpp \
