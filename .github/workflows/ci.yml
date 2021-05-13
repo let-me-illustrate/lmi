@@ -332,11 +332,6 @@ jobs:
       - name: Run unit tests (autotools)
         if: matrix.autotools
         run: |
-          # Prepare for running tests.
-
-          # global_settings_test relies on this file existence in the current directory
-          touch ${lmi_build_dir}/global_settings.o
-
           make --keep-going V=1 $coefficiency -C ${lmi_build_dir} check || err=$?
 
           if [ -n "$err" ]; then
