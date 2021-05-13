@@ -246,13 +246,13 @@ jobs:
             exit $err
           fi
 
-      - name: Build lmi (autotools)
-        if: matrix.autotools
-        run: make --keep-going V=1 $coefficiency -C ${lmi_build_dir}
-
       - name: Build lmi
-        run: make $coefficiency --output-sync=recurse
-        if: matrix.autotools != true
+        run: |
+          if [ ${{ matrix.autotools }} ]; then
+            make --keep-going V=1 $coefficiency -C ${lmi_build_dir}
+          else
+            make $coefficiency --output-sync=recurse
+          fi
 
       - name: Build lmi with SO attributes
         if: matrix.autotools != true
@@ -293,22 +293,21 @@ jobs:
           printf '391daa5cbc54e118c4737446bcb84eea'           >/opt/lmi/data/passkey
 
       - name: Install
-        if: matrix.autotools
         run: |
-          env -C /opt/lmi/data $(pwd)/${lmi_build_dir}/product_files
+          if [ ${{ matrix.autotools }} ]; then
+            env -C /opt/lmi/data $(pwd)/${lmi_build_dir}/product_files
 
-          # These files are used by input test from this hardcoded location.
-          cp \
-            cell.xsd \
-            multiple_cell_document.xsd \
-            single_cell_document.xsd \
-            sort_cell_subelements.xsl \
-            types.xsd \
-            /opt/lmi/data
-
-      - name: Install
-        if: matrix.autotools != true
-        run: make install
+            # These files are used by input test from this hardcoded location.
+            cp \
+              cell.xsd \
+              multiple_cell_document.xsd \
+              single_cell_document.xsd \
+              sort_cell_subelements.xsl \
+              types.xsd \
+              /opt/lmi/data
+          else
+            make install
+          fi
 
       - name: Check concinnity and physical closure
         if: matrix.autotools != true
@@ -324,24 +323,23 @@ jobs:
         if: matrix.autotools != true
         run: make $coefficiency cli_tests
 
-      - name: Run unit tests (autotools)
-        if: matrix.autotools
-        run: |
-          make --keep-going V=1 $coefficiency -C ${lmi_build_dir} check || err=$?
-
-          if [ -n "$err" ]; then
-            if [ -f ${lmi_build_dir}/test-suite.log ]; then
-                echo '*** Tests failed, contents of test-suite.log follows: ***'
-                echo '-----------------------------------------------------------'
-                cat ${lmi_build_dir}/test-suite.log
-                echo '-----------------------------------------------------------'
-            fi
-            exit $err
-          fi
-
       - name: Run unit tests
-        if: matrix.autotools != true
-        run: make $coefficiency unit_tests
+        run: |
+          if [ ${{ matrix.autotools }} ]; then
+            make --keep-going V=1 $coefficiency -C ${lmi_build_dir} check || err=$?
+
+            if [ -n "$err" ]; then
+              if [ -f ${lmi_build_dir}/test-suite.log ]; then
+                  echo '*** Tests failed, contents of test-suite.log follows: ***'
+                  echo '-----------------------------------------------------------'
+                  cat ${lmi_build_dir}/test-suite.log
+                  echo '-----------------------------------------------------------'
+              fi
+              exit $err
+            fi
+          else
+            make $coefficiency unit_tests
+          fi
 
       - name: Run GUI tests
         if: matrix.mingw
