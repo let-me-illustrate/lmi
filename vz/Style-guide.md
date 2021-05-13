@@ -118,6 +118,26 @@ for(;;)
 E.g. `(x + y) * z` instead of `(x+y)*z`.
 
 
+### Headers conventions
+
+- One blank line below `config.hpp` because it's so special.
+- Comments on `#include` line begin in column 41.
+
+In `*_test.cpp` unit tests:
+
+    #include "pchfile.hpp"
+    [blank line]
+    #include "whatever_class_is_tested_here.hpp"
+    [blank line]
+    #include [other_headers_needed_here]
+
+Surround the middle line with blank lines, to distinguish the header
+that is to be tested from headers used by the tests. That emphasis
+makes the purpose of the test clearer, and that order ensures that
+the incidental headers that follow do not mask a defect in the
+physical design of the tested header.
+
+
 Naming Conventions
 ------------------
 
