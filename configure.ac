@@ -641,10 +641,10 @@ if test "x$GXX" == "xyes"; then
 
     dnl These warnings are given by clang in C++20 mode and can't be easily
     dnl avoided, so disable them for now.
+    LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-enum-float-conversion)
     if test "$CLANG" = "yes"; then
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-anon-enum-enum-conversion)
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-enum-enum-conversion)
-        LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-enum-float-conversion)
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-volatile)
     fi
 
