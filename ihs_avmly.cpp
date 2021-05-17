@@ -549,6 +549,13 @@ void AccountValue::TxExch1035()
             // CURRENCY !! return modified value instead of altering argument
             double z = dblize(GrossPmts[Month]);
             Irc7702_->ProcessGptPmt(Year, z);
+            // If a 1035 exchange would violate the GPT, it must be
+            // declined: it is improper to bring the full amount into
+            // a new policy and then (implicitly) return some of it.
+            // 7702 !! Adding one cent to z here is bogus; premiums
+            // are inherently currency amounts, and should be tested
+            // as such.
+            LMI_ASSERT(dblize(GrossPmts[Month]) <= 0.01 + z);
             GrossPmts[Month] = round_gross_premium().c(z);
             }
         // Limit external 1035 first, then internal, as necessary to avoid
