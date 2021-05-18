@@ -73,7 +73,7 @@ struct gpt_vector_parms
 ///
 /// Includes all scalar parameters that are
 ///   - used identically for calculating both GLP and GSP; or
-///   - required to initialize an object of class irc7702; or
+///   - required to initialize an object of class gpt7702; or
 ///   - otherwise useful for GPT processing.
 ///
 /// The 'oenum_glp_or_gsp' calculate_premium() argument is excluded

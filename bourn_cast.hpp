@@ -70,7 +70,7 @@
 /// case of a signaling NaN [C99 F.2.1].
 
 template<typename To, typename From>
-constexpr inline To bourn_cast(From from, std::false_type, std::false_type)
+constexpr To bourn_cast(From from, std::false_type, std::false_type)
 {
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
@@ -103,7 +103,7 @@ constexpr inline To bourn_cast(From from, std::false_type, std::false_type)
 /// with pragmata.
 
 template<typename To, typename From>
-constexpr inline To bourn_cast(From from, std::false_type, std::true_type)
+constexpr To bourn_cast(From from, std::false_type, std::true_type)
 {
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
@@ -168,7 +168,7 @@ constexpr inline To bourn_cast(From from, std::false_type, std::true_type)
 /// no need here for scalbln().
 
 template<typename To, typename From>
-constexpr inline To bourn_cast(From from, std::true_type, std::false_type)
+constexpr To bourn_cast(From from, std::true_type, std::false_type)
 {
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
@@ -210,7 +210,7 @@ constexpr inline To bourn_cast(From from, std::true_type, std::false_type)
 /// distributed under the GPL-compatible Boost Software License.
 
 template<typename To, typename From>
-constexpr inline To bourn_cast(From from, std::true_type, std::true_type)
+constexpr To bourn_cast(From from, std::true_type, std::true_type)
 {
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
@@ -292,7 +292,7 @@ constexpr inline To bourn_cast(From from, std::true_type, std::true_type)
 /// order to avoid undefined behavior.
 
 template<typename To, typename From>
-constexpr inline To bourn_cast(From from)
+constexpr To bourn_cast(From from)
 {
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;

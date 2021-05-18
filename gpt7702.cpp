@@ -21,6 +21,6 @@
 
 #include "pchfile.hpp"
 
-#include "irc7702.hpp"
+#include "gpt7702.hpp"
 
-// implementation of class irc7702
+// implementation of class gpt7702

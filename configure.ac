@@ -163,7 +163,12 @@ m4_define([lmi_cxx_feature_test], [[
 #elif __cplusplus <= 201402L
 #error At least C++17 is required.
 #else
-struct S { int x = 0; double y = 0.0; };
+#include <compare>
+struct S {
+    int x = 0;
+    double y = 0.0;
+    auto operator<=>(S const&) const = default;
+};
 S s = {.x = 1, .y = 2.0};
 static_assert(true);
 #endif
@@ -187,6 +192,14 @@ if test "$lmi_cv_cxx_features" = "no"; then
             AC_MSG_ERROR([Can't enable C++20 support required for building lmi.])
         )]
     )
+
+    dnl Final sanity check: our test code must compile in C++20.
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([lmi_cxx_feature_test])],
+        [],
+        [AC_MSG_ERROR([Compiler ($CXX $CXXFLAGS) doesn't support required C++20 features.])]
+        )
+    AC_LANG_POP([C++])
 fi
 
 dnl These options must be always used for lmi unit tests to pass.
@@ -376,6 +389,36 @@ dnl Restore pre-wx CPPFLAGS value only now, we needed wx flags for
 dnl wxPdfDocument checks.
 CPPFLAGS=$save_CPPFLAGS
 
+dnl Add clang-specific workaround before checking for Boost, as its headers use
+dnl std::allocator::size_type.
+dnl
+dnl This is necessary because libc++ used by clang 11 mistakenly removed
+dnl std::allocator::size_type, which is finally not removed by C++20. Luckily,
+dnl we still can predefine _LIBCPP_ENABLE_CXX20_REMOVED_ALLOCATOR_MEMBERS to
+dnl get its declaration, but we don't want to do this unconditionally because
+dnl this also reintroduces other, really removed, members in later clang
+dnl versions, so only do it if we need it.
+if test "$CLANG" = "yes"; then
+    m4_define([lmi_cxx_alloc_test], [[
+#include <memory>
+std::allocator<char*>::size_type s = 17;
+    ]])
+    AC_CACHE_CHECK([whether clang requires workaround for std::allocator::size_type],
+        lmi_cv_cxx_alloc_workaround_needed,
+        [
+            AC_LANG_PUSH([C++])
+            AC_COMPILE_IFELSE([AC_LANG_SOURCE([lmi_cxx_alloc_test])],
+                lmi_cv_cxx_alloc_workaround_needed=no,
+                [CXXFLAGS="$CXXFLAGS -D_LIBCPP_ENABLE_CXX20_REMOVED_ALLOCATOR_MEMBERS"
+                 AC_COMPILE_IFELSE([AC_LANG_SOURCE([lmi_cxx_alloc_test])],
+                    lmi_cv_cxx_alloc_workaround_needed=yes,
+                    AC_MSG_ERROR([std::allocator::size_type unavailable]))]
+            )
+            AC_LANG_POP([C++])
+        ]
+    )
+fi
+
 dnl --- Boost (required) ---
 if test "x$lmi_boost_headers" != "x"; then
     CPPFLAGS="$CPPFLAGS -I$lmi_boost_headers"
@@ -416,10 +459,6 @@ else
 if it is installed in non default location"
 fi
 
-dnl Prevent warnings due to the use of "register" in Boost.Regex headers that
-dnl are actually fatal errors with clang in C++17 mode.
-CPPFLAGS="$save_CPPFLAGS -Dregister="
-
 dnl latest versions of boost extract some common functionality in
 dnl libboost_system which we must link when using any other Boost library, so
 dnl check for it first
@@ -427,10 +466,12 @@ AC_CHECK_LIB($boost_libsystem,main,BOOST_LIBS="-l$boost_libsystem")
 
 dnl usually when we want to check for a library we use AC_CHECK_LIB and main()
 dnl but since under mingw with -pedantic and -std= options test does not pass
-dnl we are forced to use a bit more sophisticated construct
+dnl we are forced to use a bit more sophisticated construct and include our own
+dnl wrapper header which disables various warnings that occur in Boost headers
 
+CPPFLAGS="$save_CPPFLAGS -I$srcdir"
 LIBS="$save_LIBS -l$boost_libregex"
-AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/regex.hpp>]],
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include "boost_regex.hpp"]],
     [[boost::regex *r]])],
     [],
     [AC_MSG_FAILURE([Boost regex library $boost_libregex not found, $errmsg])]
@@ -624,10 +665,10 @@ if test "x$GXX" == "xyes"; then
 
     dnl These warnings are given by clang in C++20 mode and can't be easily
     dnl avoided, so disable them for now.
+    LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-enum-enum-conversion)
+    LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-enum-float-conversion)
     if test "$CLANG" = "yes"; then
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-anon-enum-enum-conversion)
-        LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-enum-enum-conversion)
-        LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-enum-float-conversion)
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-volatile)
     fi
 

@@ -352,7 +352,7 @@
     <ClCompile Include="gpt_commutation_functions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="irc7702.cpp">
+    <ClCompile Include="gpt7702.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

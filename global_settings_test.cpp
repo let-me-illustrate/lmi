@@ -66,11 +66,16 @@ void test_directory_exceptions()
 
     // Such string values must name directories, not normal files.
 
+    fs::path const p(__FILE__"_test_file");
+    fs::ofstream ofs(p);
+    ofs << p.string() << std::endl;
+    ofs.close();
     LMI_TEST_THROW
-        (global_settings::instance().set_data_directory("global_settings.o")
+        (global_settings::instance().set_data_directory(p.string())
         ,std::runtime_error
-        ,"Data directory 'global_settings.o' is not a directory."
+        ,"Data directory '" + p.string() + "' is not a directory."
         );
+    fs::remove(p);
 }
 
 int test_main(int, char*[])
@@ -84,9 +89,8 @@ int test_main(int, char*[])
 
     fs::path path(global_settings::instance().data_directory());
 
-    fs::directory_iterator const i(path);
-
-    LMI_TEST(i->exists());
+    // The data directory is supposed to exist.
+    LMI_TEST(fs::is_directory(path));
 
     // Certain other operations are required to throw.
 

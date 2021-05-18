@@ -285,7 +285,7 @@ void PasskeyTest::TestFromAfar() const
     fs::path const tmp = "/tmp" / fs::path{__FILE__}.stem();
     fs::path const remote_dir_0(fs::absolute(tmp));
     fs::create_directory(remote_dir_0);
-    LMI_TEST(fs::exists(remote_dir_0) && fs::is_directory(remote_dir_0));
+    LMI_TEST(fs::is_directory(remote_dir_0));
     LMI_TEST_EQUAL(0, chdir(remote_dir_0.string().c_str()));
     LMI_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
     Authenticity::ResetCache();

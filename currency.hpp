@@ -28,7 +28,6 @@
 #include <limits>
 #include <ostream>
 #include <stdexcept>                    // runtime_error
-#include <string>                       // to_string()
 #include <vector>
 
 class raw_cents {}; // Tag class.
@@ -39,7 +38,7 @@ class currency
     friend currency from_cents(double);       // private ctor
     template<typename> friend class round_to; // private ctor
     friend class round_to_test;               // currency::cents_digits
-    friend constexpr currency operator""_cents(unsigned long long int);
+    friend consteval currency operator""_cents(unsigned long long int);
 
     static constexpr int    cents_digits     = 2;
     static constexpr double cents_per_dollar = 100.0;
@@ -70,15 +69,14 @@ class currency
     data_type m_ = {};
 };
 
-inline constexpr currency operator""_cents(unsigned long long int cents)
+consteval currency operator""_cents(unsigned long long int cents)
 {
     constexpr auto mant_dig = std::numeric_limits<currency::data_type>::digits;
     constexpr unsigned long long int limit = 1ULL << mant_dig;
     return
           cents <= limit
         ? currency(static_cast<currency::data_type>(cents), raw_cents{})
-        : throw std::runtime_error
-            ("currency: " + std::to_string(cents) + " out of bounds");
+        : throw std::domain_error("outside currency domain")
         ;
 }
 
@@ -145,13 +143,10 @@ inline std::vector<double> dblize(std::vector<currency> const& z)
     return r;
 }
 
-/// Zero cents--akin to a user-defined literal.
+/// Zero cents as a terse compile-time constant.
 ///
-/// UDLs seem less convenient because the obvious "0_c" is likely to
-/// collide with some other UDL, and "currency::0_c" is too verbose.
-/// "0_cents" may avoid both those problems, but "C0" is terser.
-/// "C0" is chosen instead of "c0" only for the pixilated reason that
-/// the capital letter looks kind of like a "0".
+/// This particular value occurs so often that it merits a name
+/// no wider than '0.0' (unlike the equivalent '0_cents').
 
 inline constexpr currency C0 = {};
 

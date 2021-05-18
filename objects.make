@@ -256,6 +256,7 @@ lmi_common_objects := \
   cso_table.o \
   financial.o \
   fund_data.o \
+  gpt7702.o \
   gpt_commutation_functions.o \
   gpt_input.o \
   gpt_server.o \
@@ -274,7 +275,6 @@ lmi_common_objects := \
   ihs_irc7702a.o \
   ihs_mortal.o \
   ihs_server7702.o \
-  irc7702.o \
   irc7702_tables.o \
   lingo.o \
   lmi.o \
@@ -660,9 +660,9 @@ gpt_test$(EXEEXT): \
   $(common_test_objects) \
   commutation_functions.o \
   cso_table.o \
+  gpt7702.o \
   gpt_commutation_functions.o \
   gpt_test.o \
-  irc7702.o \
 
 handle_exceptions_test$(EXEEXT): \
   $(common_test_objects) \
