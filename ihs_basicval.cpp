@@ -453,7 +453,7 @@ void BasicValues::Init7702()
     // to be determined by a strategy, but a downstream call to
     // Irc7702::Initialize7702() takes care of that.
 
-    Irc7702_= std::make_unique<Irc7702>
+    Irc7702_ = std::make_unique<Irc7702>
         (yare_input_.DefinitionOfLifeInsurance
         ,yare_input_.IssueAge
         ,EndtAge
@@ -495,7 +495,7 @@ void BasicValues::Init7702()
 //============================================================================
 void BasicValues::Init7702A()
 {
-    Irc7702A_= std::make_unique<Irc7702A>
+    Irc7702A_ = std::make_unique<Irc7702A>
         (DefnLifeIns_
         ,DefnMaterialChange_
         ,false // TODO ?? TAXATION !! Joint life: hardcoded for now.

@@ -1368,14 +1368,14 @@ void AccountValue::SetAnnualInvariants()
     // current tax rates.
     YearsTotLoadTgtLowestPremtax = Loads_->target_premium_load_minimum_premium_tax()[Year];
     YearsTotLoadExcLowestPremtax = Loads_->excess_premium_load_minimum_premium_tax()[Year];
-    YearsPremLoadTgt        = Loads_->target_premium_load   (GenBasis_)[Year];
-    YearsPremLoadExc        = Loads_->excess_premium_load   (GenBasis_)[Year];
-    YearsSalesLoadTgt       = Loads_->target_sales_load     (GenBasis_)[Year];
-    YearsSalesLoadExc       = Loads_->excess_sales_load     (GenBasis_)[Year];
-    YearsSpecAmtLoadRate    = Loads_->specified_amount_load (GenBasis_)[Year];
-    YearsSepAcctLoadRate    = Loads_->separate_account_load (GenBasis_)[Year];
-    YearsSalesLoadRefundRate= Loads_->refundable_sales_load_proportion()[Year];
-    YearsDacTaxLoadRate     = Loads_->dac_tax_load                    ()[Year];
+    YearsPremLoadTgt         = Loads_->target_premium_load    (GenBasis_)[Year];
+    YearsPremLoadExc         = Loads_->excess_premium_load    (GenBasis_)[Year];
+    YearsSalesLoadTgt        = Loads_->target_sales_load      (GenBasis_)[Year];
+    YearsSalesLoadExc        = Loads_->excess_sales_load      (GenBasis_)[Year];
+    YearsSpecAmtLoadRate     = Loads_->specified_amount_load  (GenBasis_)[Year];
+    YearsSepAcctLoadRate     = Loads_->separate_account_load  (GenBasis_)[Year];
+    YearsSalesLoadRefundRate = Loads_->refundable_sales_load_proportion()[Year];
+    YearsDacTaxLoadRate      = Loads_->dac_tax_load                    ()[Year];
 }
 
 /// Separate-account assets, after deductions, times survivorship.
