@@ -420,6 +420,26 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         );
     currency sa = specamt_for_7702(0);
 
+    // Base for specified-amount load, for GPT only.
+    //
+    // Unlike 'SpecAmtLoadBase', this ignores the corridor. Reasons:
+    //  - initial payment is not yet known--e.g., it may be determined
+    //    by a strategy or a solve, perhaps with a non-MEC limit; and
+    //  - it shouldn't matter, because a GPT contract should be issued
+    //    at a spec amt no lower than its initial corridor DB.
+    // Initial guideline premiums are calculated based on the (f)(3)
+    // benefit before any payment or 1035 exchange is accepted, which
+    // by definition cannot exceed the spec amt. If that's less than
+    // the initial corridor DB, then the guideline limit is already
+    // lower than it needs to be, regardless of any spec amt load;
+    // in that case, a warning is given downstream.
+    gpt_chg_sa_base_ =
+        (yare_input_.EffectiveDate == yare_input_.InforceAsOfDate)
+        ? term_specamt(0) + base_specamt(0)
+        : round_specamt().c(yare_input_.InforceSpecAmtLoadBase)
+        ;
+    gpt_chg_sa_base_ = std::min(gpt_chg_sa_base_, SpecAmtLoadLimit);
+
     // It is at best superfluous to do this for every basis.
     // TAXATION !! Don't do that then.
     Irc7702_->Initialize7702
@@ -650,6 +670,8 @@ void AccountValue::SetInitialValues()
             HoneymoonValue = round_minutiae().c(yare_input_.InforceHoneymoonValue);
             }
         }
+
+    gpt_chg_sa_base_            = C0;
 
     CoiCharge                   = C0;
     RiderCharges                = C0;

@@ -1601,15 +1601,29 @@ void AccountValue::TxSetBOMAV()
         // CURRENCY !! Should yare_input convert currency inputs to
         // type currency, which is more yare than double?
         LMI_ASSERT(yare_input_.InforceSpecAmtLoadBase <= dblize(SpecAmtLoadLimit));
+        currency const x = term_specamt(0) + base_specamt(0);
+        currency const y = round_specamt().c(NetPmts[0] * YearsCorridorFactor);
         SpecAmtLoadBase =
             (0 == Year && 0 == Month)
-            ? std::max
-                (term_specamt(0) + base_specamt(0)
-                ,round_specamt().c(NetPmts[0] * YearsCorridorFactor)
-                )
+            ? std::max(x, y)
             : round_specamt().c(yare_input_.InforceSpecAmtLoadBase)
             ;
         SpecAmtLoadBase = std::min(SpecAmtLoadBase, SpecAmtLoadLimit);
+
+        if(!Solving && mce_gpt == DefnLifeIns_ && x < y)
+            {
+            // Assert that the basis for guideline premiums is
+            // identical to the initial specified amount.
+            LMI_ASSERT(gpt_chg_sa_base_ == SpecAmtLoadBase);
+            warning()
+                << "Initial specified amount is " << x
+                << " but initial corridor death benefit is " << y
+                << ". To achieve the most favorable guideline premiums,"
+                << " consider increasing initial specified amount to " << y
+                << "."
+                << LMI_FLUSH
+                ;
+            }
         }
 
     // These assignments must happen every month.

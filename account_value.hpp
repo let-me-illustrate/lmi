@@ -435,6 +435,7 @@ class LMI_SO AccountValue final
     currency HoneymoonValue;
 
     // 7702 GPT
+    currency gpt_chg_sa_base_; // Cf. SpecAmtLoadBase
     currency GptForceout;
     currency YearsTotalGptForceout;
 
