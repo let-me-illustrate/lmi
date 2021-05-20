@@ -2338,8 +2338,12 @@ void AccountValue::SetMaxWD()
 
 void AccountValue::TxTakeWD()
 {
-    // Illustrations allow withdrawals only on anniversary.
-    if(0 != Month)
+    // Illustrations allow withdrawals only on anniversary; products
+    // may forbid them altogether, or for the first N months. On the
+    // issue date, the maximum withdrawal is zero anyway, because not
+    // even 1035 funds have been credited when this function is first
+    // called; arguably 1035 processing should occur earlier.
+    if(0 != Month || !AllowWd || (Month + 12 * Year) < FirstWdMonth)
         {
         return;
         }

@@ -584,6 +584,8 @@ void BasicValues::SetPermanentInvariants()
     LMI_ASSERT(round_withdrawal().c(MinWD) == MinWD);
     LMI_ASSERT(round_withdrawal().c(WDFee) == WDFee);
     database().query_into(DB_WdFeeRate            , WDFeeRate);
+    database().query_into(DB_AllowWd              , AllowWd);
+    database().query_into(DB_FirstWdMonth         , FirstWdMonth);
     database().query_into(DB_AllowChangeToDbo2    , AllowChangeToDBO2);
     database().query_into(DB_AllowSpecAmtIncr     , AllowSAIncr);
     database().query_into(DB_NoLapseAlwaysActive  , NoLapseAlwaysActive);

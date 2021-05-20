@@ -366,6 +366,8 @@ class LMI_SO BasicValues
     currency                MinWD;
     currency                WDFee;
     double                  WDFeeRate;
+    bool                    AllowWd;
+    int                     FirstWdMonth;
 
     bool                    AllowChangeToDBO2;
     bool                    AllowSAIncr;
