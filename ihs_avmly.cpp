@@ -555,7 +555,17 @@ void AccountValue::TxExch1035()
             // 7702 !! Adding one cent to z here is bogus; premiums
             // are inherently currency amounts, and should be tested
             // as such.
-            LMI_ASSERT(dblize(GrossPmts[Month]) <= 0.01 + z);
+            if((0.01 + z) < dblize(GrossPmts[Month]))
+                {
+                alarum()
+                    << "1035 exchange exceeds guideline limit."
+                    << " Increase specified amount to at least "
+                    << std::fixed
+                    << GetModalSpecAmtGSP(GrossPmts[Month])
+                    << "."
+                    << LMI_FLUSH
+                    ;
+                }
             GrossPmts[Month] = round_gross_premium().c(z);
             }
         // Limit external 1035 first, then internal, as necessary to avoid
