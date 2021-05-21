@@ -1078,19 +1078,6 @@ void AccountValue::TxTestGPT()
         return;
         }
 
-    // Adjustable events are not restricted to anniversary, even for
-    // illustrations: for instance, payment of premium with an ROP
-    // DB option.
-    //
-    // Illustrations allow no adjustable events at issue.
-    // TODO ?? TAXATION !! If this assumption is not valid, then OldSA, OldDB, and
-    // OldDBOpt need to be initialized more carefully. It's not valid as long as
-    // withdrawals are not forbidden in the first year.
-    if(0 == Year && 0 == Month)
-        {
-        return;
-        }
-
     // Guideline premium must be determined before premium is processed.
     // Before doing that, we have to determine DB; usually, that will
     // have been done already, because ChangeSpecAmtBy() is called for
@@ -1134,6 +1121,8 @@ void AccountValue::TxTestGPT()
         ;
     if(adj_event)
         {
+        // No adjustment event can occur on the issue date.
+        LMI_ASSERT(!(0 == Year && 0 == Month));
         // TODO ?? TAXATION !! Perhaps we should pass 'A' of 'A+B-C' for validation.
         // Or maybe not, because we can't match it if there was a plan change.
         Irc7702_->ProcessAdjustableEvent
