@@ -29,6 +29,7 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
+#include "gpt7702.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "interest_rates.hpp"
@@ -113,6 +114,15 @@ void AccountValue::DoMonthDR()
     TxSpecAmtChange();
     TxTakeWD();
 
+    if(!SolvingForGuarPremium && Solving || mce_run_gen_curr_sep_full == RunBasis_)
+        {
+        // Illustration-reg guaranteed premium ignores GPT limit.
+        if(0 == Year && 0 == Month)
+            {
+            currency const z {External1035Amount + Internal1035Amount};
+            gpt7702_->enqueue_exch_1035(z);
+            }
+        }
     TxTestGPT();
     // TODO ?? TAXATION !! Doesn't this mean dumpins and 1035s get ignored?
     LMI_ASSERT(C0 <= Dcv);
@@ -1137,10 +1147,27 @@ void AccountValue::TxTestGPT()
             ,old_dbopt
             ,dblize(AnnualTargetPrem)
             );
+        gpt7702_->enqueue_adj_event();
         }
 
+    // 7702 !! call this only to maintain internal consistency
     // CURRENCY !! already rounded by class Irc7702--appropriately?
-    GptForceout = round_minutiae().c(Irc7702_->Forceout());
+    round_minutiae().c(Irc7702_->Forceout());
+
+    gpt_scalar_parms s_parms =
+        {.duration       = Year
+        ,.f3_bft         = dblize(DBReflectingCorr + TermDB)
+        ,.endt_bft       = dblize(specamt_for_7702(Year))
+        ,.target_prem    = dblize(AnnualTargetPrem)
+        ,.chg_sa_base    = dblize(gpt_chg_sa_base_)
+        ,.dbopt_7702     = new_dbopt
+        };
+    GptForceout = gpt7702_->update_gpt
+        (s_parms
+        ,Month / 12.0
+        ,TotalAccountValue()
+        );
+
     // TODO ?? TAXATION !! On other bases, nothing is forced out, and payments aren't limited.
     process_distribution(GptForceout);
     YearsTotalGptForceout += GptForceout;
@@ -1222,7 +1249,8 @@ void AccountValue::TxAscertainDesiredPayment()
             // CURRENCY !! return modified value instead of altering argument
             double z = dblize(eepmt);
             Irc7702_->ProcessGptPmt(Year, z);
-            eepmt = round_gross_premium().c(z);
+//          eepmt = round_gross_premium().c(z);
+            eepmt = gpt7702_->accept_payment(eepmt);
             }
         EeGrossPmts[Month] += eepmt;
         GrossPmts  [Month] += eepmt;
@@ -1238,7 +1266,8 @@ void AccountValue::TxAscertainDesiredPayment()
             // CURRENCY !! return modified value instead of altering argument
             double z = dblize(erpmt);
             Irc7702_->ProcessGptPmt(Year, z);
-            erpmt = round_gross_premium().c(z);
+//          erpmt = round_gross_premium().c(z);
+            erpmt = gpt7702_->accept_payment(erpmt);
             }
         ErGrossPmts[Month] += erpmt;
         GrossPmts  [Month] += erpmt;
@@ -1258,7 +1287,8 @@ void AccountValue::TxAscertainDesiredPayment()
             // CURRENCY !! return modified value instead of altering argument
             double z = dblize(Dumpin);
             Irc7702_->ProcessGptPmt(Year, z);
-            Dumpin = round_gross_premium().c(z);
+//          Dumpin = round_gross_premium().c(z);
+            Dumpin = gpt7702_->accept_payment(Dumpin);
             }
         EeGrossPmts[Month] += Dumpin;
         GrossPmts  [Month] += Dumpin;
@@ -2627,6 +2657,11 @@ void AccountValue::TxTakeWD()
             // 'premiums_paid_increment' is modified?
             double premiums_paid_increment = -dblize(GrossWD);
             Irc7702_->ProcessGptPmt(Year, premiums_paid_increment);
+            gpt7702_->enqueue_f1A_decrease(GrossWD);
+            // A withdrawal might trigger a GPT adjustment, or it
+            // might not. If it does, that'll be detected at the
+            // appropriate moment, elsewhere, so don't call
+            // enqueue_adj_event() here.
             }
         }
 

@@ -30,6 +30,7 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
+#include "gpt7702.hpp"
 #include "i7702.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
@@ -440,6 +441,26 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         ;
     gpt_chg_sa_base_ = std::min(gpt_chg_sa_base_, SpecAmtLoadLimit);
 
+    // Normally 'f3_bft' is death benefit, not specified amount; but
+    // on the issue date, it is defined as specified amount.
+    gpt_scalar_parms s_parms =
+        {.duration       = yare_input_.InforceYear
+        ,.f3_bft         = dblize(specamt_for_7702(0))
+        ,.endt_bft       = dblize(specamt_for_7702(0))
+        ,.target_prem    = dblize(annual_target_premium)
+        ,.chg_sa_base    = dblize(gpt_chg_sa_base_)
+        ,.dbopt_7702     = effective_dbopt_7702(DeathBfts_->dbopt()[0], Effective7702DboRop)
+        };
+    gpt7702_->initialize_gpt
+        (yare_input_.DefinitionOfLifeInsurance // defn_life_ins
+        ,yare_input_.InforceMonth / 12.0       // fractional_duration
+        ,yare_input_.InforceGlp                // inforce_glp
+        ,yare_input_.InforceCumulativeGlp      // inforce_cum_glp
+        ,yare_input_.InforceGsp                // inforce_gsp
+        ,round_minutiae().c(yare_input_.InforceCumulativeGptPremiumsPaid) // inforce_cum_f1A
+        ,s_parms
+        );
+
     // It is at best superfluous to do this for every basis.
     // TAXATION !! Don't do that then.
     Irc7702_->Initialize7702
@@ -449,8 +470,11 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         ,dblize(annual_target_premium)
         );
 
-    InvariantValues().InitGLP = Irc7702_->RoundedGLP();
-    InvariantValues().InitGSP = Irc7702_->RoundedGSP();
+    LMI_ASSERT(materially_equal(gpt7702_->raw_glp(), Irc7702_->glp()));
+    LMI_ASSERT(materially_equal(gpt7702_->raw_gsp(), Irc7702_->gsp()));
+
+    InvariantValues().InitGLP = dblize(gpt7702_->rounded_glp());
+    InvariantValues().InitGSP = dblize(gpt7702_->rounded_gsp());
 
     // This is notionally called once per *current*-basis run
     // and actually called once per run, with calculations suppressed

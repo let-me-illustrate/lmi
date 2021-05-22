@@ -60,6 +60,7 @@ class Irc7702A;
 class Loads;
 class MortalityRates;
 class death_benefits;
+class gpt7702;
 class i7702;
 class lingo;
 class modal_outlay;
@@ -128,6 +129,7 @@ class LMI_SO BasicValues
     std::shared_ptr<stratified_charges const> const StratifiedCharges_;
 
     std::unique_ptr<i7702          const> i7702_;
+    std::shared_ptr<gpt7702             > gpt7702_;
 
     std::unique_ptr<MortalityRates const> MortalityRates_;
     std::unique_ptr<InterestRates       > InterestRates_;
