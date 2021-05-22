@@ -1284,6 +1284,13 @@ void AccountValue::FinalizeYear()
 
     if(mce_run_gen_curr_sep_full == RunBasis_)
         {
+        // This is just a temporary kludge. Apparently /Init*/ members
+        // exist only as an XSL-FO legacy, and the whole
+        //   $git grep -h '\<Init[A-Z]' ledger_invariant.hpp
+        // family should be eliminated.
+        InvariantValues().InitBaseSpecAmt = InvariantValues().SpecAmt[0];
+        InvariantValues().InitTermSpecAmt = InvariantValues().TermSpecAmt[0];
+
         InvariantValues().GrossPmt  [Year]  = 0.0;
         InvariantValues().EeGrossPmt[Year]  = 0.0;
         InvariantValues().ErGrossPmt[Year]  = 0.0;
