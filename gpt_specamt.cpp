@@ -156,8 +156,7 @@ currency gpt_specamt::CalculateSpecAmt
         ,a_NetPmtFactorExc
         );
 
-    // TODO ?? The upper bound ideally wouldn't be hard coded; but if
-    // it must be, then it can't plausibly reach one billion dollars.
+    // No amount solved for can plausibly reach one billion dollars.
     decimal_root
         (0.0
         ,999999999.99
