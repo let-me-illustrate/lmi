@@ -122,6 +122,12 @@ int test_main(int, char*[])
     root_type r = decimal_root(0.5, 5.0, bias_none, 9, e_function);
     LMI_TEST(root_is_valid == r.second);
 
+    // Same, with expatiation.
+
+    std::ostringstream oss;
+    r = decimal_root(0.5, 5.0, bias_none, 9, e_function, oss);
+    std::cout << oss.str() << std::endl;
+
     // Test use with function object.
 
     e_functor e;
