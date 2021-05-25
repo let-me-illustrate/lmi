@@ -150,7 +150,7 @@ typedef std::pair<double,root_validity> root_type;
 ///   !(0.0 != fb && std::fabs(m) <= tol)
 /// is satisfied. But b might not have the desired bias. In that case,
 /// 0.5 * (b + c) is not necessarily correct either, because its bias
-/// is unknown; yet is it appropriate to return c instead?
+/// is unknown; yet is it appropriate to return c instead? Sometimes.
 ///
 /// The bias of c must be correct because f(b) and f(c) are known to
 /// have different signs. And c is within Brent's tolerance in the weak
@@ -296,6 +296,10 @@ root_type decimal_root
             else if(std::fabs(m) <= 2.0 * epsilon * std::fabs(c) + t)
                 {
                 return std::make_pair(c, root_is_valid);
+                }
+            else
+                {
+                ; // Do nothing.
                 }
             }
         if(std::fabs(e) < tol || std::fabs(fa) <= std::fabs(fb))
