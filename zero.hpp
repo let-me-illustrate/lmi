@@ -134,7 +134,11 @@ typedef std::pair<double,root_validity> root_type;
 ///
 /// Notes referred to in the source code
 ///
-/// Note 0. For abscissae a, b, c:
+/// Note 0. If one of the bounds is a zero, it is returned as soon as
+/// that is known. This optimization is justified because it costs so
+/// little, even if it happens rarely.
+///
+/// Note 1. For abscissae a, b, c:
 ///   a and b are a priori bounds;
 ///   b is the best approximation so far to the true root r;
 ///   a is the previous value of b, or, initially, equal to c;
@@ -144,7 +148,7 @@ typedef std::pair<double,root_validity> root_type;
 /// the main loop is executed on the first pass, so that the branches
 /// in the algol original can be rewritten in a structured way.
 ///
-/// Note 1. Here, Brent observes that one might return 0.5 * (b + c),
+/// Note 2. Here, Brent observes that one might return 0.5 * (b + c),
 /// equivalent to b + m, but that b is probably a much better
 /// approximation, so he returns b as soon as the condition
 ///   !(0.0 != fb && std::fabs(m) <= tol)
@@ -193,11 +197,11 @@ typedef std::pair<double,root_validity> root_type;
 /// original implementation in the bias_none case; to do otherwise
 /// would violate the principle of least astonishment.
 ///
-/// Note 2. Brent points out that this division is safe because
+/// Note 3. Brent points out that this division is safe because
 ///   0 < |f(b)| <= |f(a)|
 /// whenever this line is executed.
 ///
-/// Note 3. Each iterand is rounded, so it might equal an iterand that
+/// Note 4. Each iterand is rounded, so it might equal an iterand that
 /// has already been evaluated. In that case, the known value is used,
 /// because evaluation is assumed to be costly, and in practice one
 /// bound stays fixed to within rounding (for instance, at the edge of
@@ -237,7 +241,7 @@ root_type decimal_root
             << std::endl
             ;
         }
-    if(0.0 == fa)
+    if(0.0 == fa) // Note 0.
         {
         return std::make_pair(a, root_is_valid);
         }
@@ -252,7 +256,7 @@ root_type decimal_root
             << std::endl
             ;
         }
-    if(0.0 == fb)
+    if(0.0 == fb) // Note 0 [bis].
         {
         return std::make_pair(b, root_is_valid);
         }
@@ -263,7 +267,7 @@ root_type decimal_root
         return std::make_pair(0.0, root_not_bracketed);
         }
 
-    double fc = fb; // Note 0.
+    double fc = fb; // Note 1.
     double c = b;
     double d = b - a;
     double e = d;
@@ -283,7 +287,7 @@ root_type decimal_root
             }
         double tol = 2.0 * epsilon * std::fabs(b) + t;
         double m = 0.5 * (c - b);
-        if(0.0 == fb || std::fabs(m) <= tol) // Note 1.
+        if(0.0 == fb || std::fabs(m) <= tol) // Note 2.
             {
             if
                 (   bias_none   == bias
@@ -310,7 +314,7 @@ root_type decimal_root
         else
             {
             double p, q;
-            double s = fb / fa; // Note 2.
+            double s = fb / fa; // Note 3.
             if(a == c)
                 {
                 // Linear interpolation.
@@ -363,7 +367,7 @@ root_type decimal_root
             }
         b = round_(b);
 
-        if(b == a) // Note 3.
+        if(b == a) // Note 4.
             {
             fb = fa;
             }
