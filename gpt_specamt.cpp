@@ -157,8 +157,16 @@ currency gpt_specamt::CalculateSpecAmt
         );
 
     // No amount solved for can plausibly reach one billion dollars.
+    // No amount lower than the product's minimum should be used.
+    //
+    // AccountValue::Solve() case 'mce_solve_specamt' solves for the
+    // base specified amount, whereas this function sets the total;
+    // their minimums deliberately differ. Using the lower minimum
+    // might violate the "total" minimum for a product with a term
+    // rider; that's okay when the user requests a solve, but not for
+    // the strategy implemented here, which should work more robustly.
     decimal_root
-        (0.0
+        (dblize(a_Values.min_issue_spec_amt())
         ,999999999.99
         ,bias_higher
         ,z.round_min_specamt.decimals()

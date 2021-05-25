@@ -145,6 +145,8 @@ class LMI_SO BasicValues
 
     currency GetAnnualTgtPrem(int a_year, currency a_specamt) const;
 
+    currency min_issue_spec_amt() const;
+
     std::vector<double> const& GetCorridorFactor() const;
     std::vector<double> const& GetMlyDcvqc() const;
 
@@ -532,6 +534,11 @@ inline mcenum_state BasicValues::GetStateOfDomicile() const
 inline mcenum_state BasicValues::GetPremiumTaxState() const
 {
     return PremiumTaxState_;
+}
+
+inline currency BasicValues::min_issue_spec_amt() const
+{
+    return MinIssSpecAmt;
 }
 
 // IHS !! Use a configuration file instead. These deprecated
