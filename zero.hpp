@@ -126,22 +126,6 @@ typedef std::pair<double,root_validity> root_type;
 /// hypothetical unrounded return value r, f(r) and f(round(r)) might
 /// easily have different signs.
 ///
-/// Often the function f is expensive to evaluate and has important
-/// side effects. For instance, solving for level premium to endow
-/// produces yearly account values as a side effect. With the original
-/// algorithm, those values may correspond either to the upper or the
-/// lower bound, and thus not necessarily to the zero returned. To
-/// obtain the correct side effects, the caller would have to evaluate
-/// the function again--unconditionally, because it doesn't know which
-/// final bound was returned. Whenever guarantee_side_effects is set to
-/// a non-default value of true, this implementation guarantees correct
-/// side effects by reevaluating the function iff necessary.
-///
-/// TODO ?? Expunge this feature?
-/// However, at least with our current implementation of iterative
-/// solves, 'guaranteed' side effects are invalidated by our use of the
-/// 'Solving' mode flag.
-///
 /// Brent states a requirement that the ordinates corresponding to the
 /// a priori bounds (abscissa arguments) have different signs, but his
 /// algorithm does not test that requirement. This implementation does
@@ -160,17 +144,7 @@ typedef std::pair<double,root_validity> root_type;
 /// the main loop is executed on the first pass, so that the branches
 /// in the algol original can be rewritten in a structured way.
 ///
-/// Note 1. In order to guarantee side effects, the value of the last
-/// evaluated iterand is stored. It must equal either b or c, depending
-/// on whether b and c were swapped. It might be triflingly faster to
-/// maintain a 'swapped' flag, but that would make it harder to see at
-/// a glance whether the code is correct because the initialization
-/// logic would have to be considered as well as the evaluation at the
-/// end of the loop. Alternatively, one might preserve distinct copies
-/// of external state embodying side effects for each of b and c, but
-/// that seems wasteful of space and wouldn't work with singletons.
-///
-/// Note 2. Here, Brent observes that one might return 0.5 * (b + c),
+/// Note 1. Here, Brent observes that one might return 0.5 * (b + c),
 /// equivalent to b + m, but that b is probably a much better
 /// approximation, so he returns b as soon as the condition
 ///   !(0.0 != fb && std::fabs(m) <= tol)
@@ -219,11 +193,11 @@ typedef std::pair<double,root_validity> root_type;
 /// original implementation in the bias_none case; to do otherwise
 /// would violate the principle of least astonishment.
 ///
-/// Note 3. Brent points out that this division is safe because
+/// Note 2. Brent points out that this division is safe because
 ///   0 < |f(b)| <= |f(a)|
 /// whenever this line is executed.
 ///
-/// Note 4. Each iterand is rounded, so it might equal an iterand that
+/// Note 3. Each iterand is rounded, so it might equal an iterand that
 /// has already been evaluated. In that case, the known value is used,
 /// because evaluation is assumed to be costly, and in practice one
 /// bound stays fixed to within rounding (for instance, at the edge of
@@ -237,7 +211,6 @@ root_type decimal_root
     ,root_bias       bias
     ,int             decimals
     ,FunctionalType& f
-    ,bool            guarantee_side_effects = false
     ,std::ostream&   iteration_stream       = null_stream()
     )
 {
@@ -279,7 +252,6 @@ root_type decimal_root
             << std::endl
             ;
         }
-    double last_evaluated_iterand = b; // Note 1.
     if(0.0 == fb)
         {
         return std::make_pair(b, root_is_valid);
@@ -311,7 +283,7 @@ root_type decimal_root
             }
         double tol = 2.0 * epsilon * std::fabs(b) + t;
         double m = 0.5 * (c - b);
-        if(0.0 == fb || std::fabs(m) <= tol) // Note 2.
+        if(0.0 == fb || std::fabs(m) <= tol) // Note 1.
             {
             if
                 (   bias_none   == bias
@@ -319,18 +291,10 @@ root_type decimal_root
                 ||  bias_higher == bias && 0.0 <= fb
                 )
                 {
-                if(guarantee_side_effects && last_evaluated_iterand != b)
-                    {
-                    f(b);
-                    }
                 return std::make_pair(b, root_is_valid);
                 }
             else if(std::fabs(m) <= 2.0 * epsilon * std::fabs(c) + t)
                 {
-                if(guarantee_side_effects && last_evaluated_iterand != c)
-                    {
-                    f(c);
-                    }
                 return std::make_pair(c, root_is_valid);
                 }
             }
@@ -342,7 +306,7 @@ root_type decimal_root
         else
             {
             double p, q;
-            double s = fb / fa; // Note 3.
+            double s = fb / fa; // Note 2.
             if(a == c)
                 {
                 // Linear interpolation.
@@ -395,7 +359,7 @@ root_type decimal_root
             }
         b = round_(b);
 
-        if(b == a) // Note 4.
+        if(b == a) // Note 3.
             {
             fb = fa;
             }
@@ -406,7 +370,6 @@ root_type decimal_root
         else
             {
             fb = static_cast<double>(f(b));
-            last_evaluated_iterand = b;
             if(iteration_stream.good())
                 {
                 iteration_stream

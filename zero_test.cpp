@@ -72,14 +72,22 @@ double e_function(double z)
     return std::log(z) - 1.0;
 }
 
+// A stateful function object.
+//
+// Commented-out tests below would require that the final state equal
+// the root returned by decimal_root(). Those two tests are unlikely
+// both to succeed, because decimal_root() returns an iterand chosen
+// according to its enum root_bias argument rather than the last
+// iterand tested. They exist only for this didactic purpose.
+
 struct e_functor
 {
     double operator()(double z)
         {
-        value = z;
+        e_state = z;
         return std::log(z) - 1.0;
         }
-    double value;
+    double e_state;
 };
 
 struct e_nineteenth
@@ -125,29 +133,31 @@ int test_main(int, char*[])
     r = decimal_root(0.1, 1.0, bias_none, 9, e);
     LMI_TEST(root_not_bracketed == r.second);
 
-    // Test guaranteed side effects.
+    // Test different biases.
 
     // Because the base of natural logarithms is transcendental,
     // Brent's algorithm must terminate with distinct upper and lower
-    // bounds.
+    // bounds: neither can equal the unrepresentable true value.
 
-    r = decimal_root(0.5, 5.0, bias_lower, 9, e, true);
+    r = decimal_root(0.5, 5.0, bias_lower, 9, e);
     LMI_TEST(root_is_valid == r.second);
     double e_or_less = r.first;
-    r = decimal_root(0.5, 5.0, bias_higher, 9, e, true);
+    LMI_TEST(e_or_less < std::exp(1.0));
+//  LMI_TEST(e.e_state < std::exp(1.0)); // Not necessarily true.
+
+    r = decimal_root(0.5, 5.0, bias_higher, 9, e);
     LMI_TEST(root_is_valid == r.second);
     double e_or_more = r.first;
+    LMI_TEST(std::exp(1.0) < e_or_more);
+//  LMI_TEST(std::exp(1.0) < e.e_state); // Not necessarily true.
+
     LMI_TEST(e_or_less < e_or_more);
 
-    r = decimal_root(0.5, 5.0, bias_lower, 9, e, true);
+    r = decimal_root(0.5, 5.0, bias_none, 9, e);
     LMI_TEST(root_is_valid == r.second);
-    LMI_TEST(r.first < std::exp(1.0));
-    LMI_TEST(e.value < std::exp(1.0));
+    double e_more_or_less = r.first;
 
-    r = decimal_root(0.5, 5.0, bias_higher, 9, e, true);
-    LMI_TEST(root_is_valid == r.second);
-    LMI_TEST(std::exp(1.0) < r.first);
-    LMI_TEST(std::exp(1.0) < e.value);
+    LMI_TEST(e_more_or_less == e_or_less || e_more_or_less == e_or_more);
 
     // Various tests--see macro definition.
 

@@ -439,7 +439,6 @@ currency AccountValue::Solve
         ,bias
         ,decimals
         ,solve_helper
-        ,false
         ,os_trace
         );
 
@@ -455,12 +454,10 @@ currency AccountValue::Solve
         }
 
     // The account and ledger values set as a side effect of solving
-    // aren't necessarily what we need, for two reasons:
-    //   - find_root() need not return the last iterand tested; and
-    //   - the 'Solving' flag has side effects.
-    // The first issue could be overcome easily enough in find_root(),
-    // but the second cannot. Therefore, the final solve parameters
-    // are stored now, and values are regenerated downstream.
+    // aren't generally the same as those shown on the illustration
+    // because the 'Solving' flag has side effects. Therefore, the
+    // final solve parameters are stored now, and actual values are
+    // freshly generated downstream.
 
     Solving = false;
     currency const solution_cents = round_minutiae().c(solution.first);
