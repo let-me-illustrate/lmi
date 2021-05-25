@@ -73,7 +73,6 @@ class FindSpecAmt
     double      const  Premium;
     double      const  NetPmtFactorTgt;
     double      const  NetPmtFactorExc;
-    currency           SpecAmt;
 
   public:
     FindSpecAmt
@@ -92,13 +91,12 @@ class FindSpecAmt
         ,Premium         {a_Premium}
         ,NetPmtFactorTgt {a_NetPmtFactorTgt}
         ,NetPmtFactorExc {a_NetPmtFactorExc}
-        ,SpecAmt         {C0}
         {
         }
     // CURRENCY !! decimal_root() expects this; but see 'ihs_avsolve.cpp'.
-    double operator()(double a_Trial)
+    double operator()(double a_Trial) const
         {
-        SpecAmt = Values_.round_min_specamt().c(a_Trial);
+        currency const SpecAmt = Values_.round_min_specamt().c(a_Trial);
         return
                 Irc7702_.CalculatePremium
                     (EIOBasis_
@@ -112,10 +110,6 @@ class FindSpecAmt
                     )
             -   Premium
             ;
-        }
-    currency Get()
-        {
-        return SpecAmt;
         }
 };
 
@@ -146,7 +140,7 @@ currency gpt_specamt::CalculateSpecAmt
 
     Irc7702 const& z(safely_dereference_as<Irc7702>(a_Values.Irc7702_.get()));
 
-    FindSpecAmt fsa
+    FindSpecAmt const fsa
         (a_Values
         ,z
         ,a_EIOBasis
@@ -165,14 +159,23 @@ currency gpt_specamt::CalculateSpecAmt
     // might violate the "total" minimum for a product with a term
     // rider; that's okay when the user requests a solve, but not for
     // the strategy implemented here, which should work more robustly.
-    decimal_root
+    root_type const solution = decimal_root
         (dblize(a_Values.min_issue_spec_amt())
         ,999999999.99
         ,bias_higher
         ,z.round_min_specamt.decimals()
         ,fsa
-        ,true
         );
 
-    return fsa.Get();
+    // Because it is implausible that the upper bound is too low,
+    // failure in practice implies that the solution would be lower
+    // than the product minimum--in which case, return that minimum.
+    switch(solution.second)
+        {
+        case root_is_valid:
+            {return a_Values.round_specamt().c(solution.first);}
+        case root_not_bracketed:
+            {return a_Values.min_issue_spec_amt();}
+        }
+    throw "Unreachable--silences a compiler diagnostic.";
 }
