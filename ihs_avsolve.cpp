@@ -54,10 +54,9 @@ namespace
 
 class SolveHelper
 {
-    AccountValue& av;
   public:
-    SolveHelper(AccountValue& a_av)
-        :av {a_av}
+    SolveHelper(AccountValue& av)
+        :av_ {av}
         {
         }
     // CURRENCY !! decimal_root() invokes this thus:
@@ -69,8 +68,11 @@ class SolveHelper
     // or at least to make this function take a 'currency' argument.
     double operator()(double a_CandidateValue)
         {
-        return dblize(av.SolveTest(av.round_minutiae().c(a_CandidateValue)));
+        return dblize(av_.SolveTest(av_.round_minutiae().c(a_CandidateValue)));
         }
+
+  private:
+    AccountValue& av_;
 };
 
 /// Return outcome of a trial with a given input value.
