@@ -418,7 +418,6 @@ currency AccountValue::Solve
             break;
         case mce_solve_wd:
             {
-            // TODO ?? Is minimum wd respected?
             solve_set_fn = &AccountValue::SolveSetWD;
             decimals     = round_withdrawal().decimals();
             if(yare_input_.WithdrawToBasisThenLoan)
@@ -432,6 +431,7 @@ currency AccountValue::Solve
                     ,round_loan      ().decimals()
                     );
                 }
+            lower_bound = dblize(MinWD);
             }
             break;
         }
