@@ -270,9 +270,13 @@ currency AccountValue::SolveTest
     return value - SolveTargetCsv_;
 }
 
+/// Set specified amount for a solve iteration.
+///
+/// Anything dependent on specified amount (e.g., surrender charges,
+/// which are currently unsupported) should be changed accordingly.
+
 void AccountValue::SolveSetSpecAmt(currency a_CandidateValue)
 {
-// TODO ?? Does this change the surrchg when specamt changes?
     DeathBfts_->set_specamt
         (a_CandidateValue
         ,SolveBeginYear_
