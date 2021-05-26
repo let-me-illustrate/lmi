@@ -270,7 +270,6 @@ currency AccountValue::SolveTest
     return value - SolveTargetCsv_;
 }
 
-//============================================================================
 void AccountValue::SolveSetSpecAmt(currency a_CandidateValue)
 {
 // TODO ?? Does this change the surrchg when specamt changes?
@@ -281,31 +280,26 @@ void AccountValue::SolveSetSpecAmt(currency a_CandidateValue)
         );
 }
 
-//============================================================================
 void AccountValue::SolveSetEePrem(currency a_CandidateValue)
 {
     Outlay_->set_ee_modal_premiums(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
-//============================================================================
 void AccountValue::SolveSetErPrem(currency a_CandidateValue)
 {
     Outlay_->set_er_modal_premiums(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
-//============================================================================
 void AccountValue::SolveSetLoan(currency a_CandidateValue)
 {
     Outlay_->set_new_cash_loans(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
-//============================================================================
 void AccountValue::SolveSetWD(currency a_CandidateValue)
 {
     Outlay_->set_withdrawals(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
-//============================================================================
 currency AccountValue::SolveGuarPremium()
 {
     // Store original er premiums for later restoration.
@@ -337,7 +331,6 @@ currency AccountValue::SolveGuarPremium()
     return guar_premium;
 }
 
-//============================================================================
 currency AccountValue::Solve
     (mcenum_solve_type   a_SolveType
     ,int                 a_SolveBeginYear
