@@ -201,7 +201,10 @@ class LMI_SO AccountValue final
         ,mcenum_sep_basis    a_SolveSepBasis
         );
 
-    currency SolveTest               (currency a_CandidateValue);
+    currency SolveTest
+        (currency a_CandidateValue
+        ,void (AccountValue::*solve_set_fn)(currency)
+        );
 
     currency SolveGuarPremium        ();
 

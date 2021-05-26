@@ -45,20 +45,16 @@
 #include <functional>
 #include <numeric>                      // accumulate()
 
-namespace
-{
-    // TODO ?? Shouldn't this be a typedef for a SolveHelper member?
-    // As it stands, this would seem not to be reentrant.
-    void (AccountValue::*solve_set_fn)(currency);
-} // Unnamed namespace.
-
 class SolveHelper
 {
   public:
-    SolveHelper(AccountValue& av)
-        :av_ {av}
-        {
-        }
+    SolveHelper
+        (AccountValue& av
+        ,void (AccountValue::*solve_set_fn)(currency)
+        )
+        :av_           {av}
+        ,solve_set_fn_ {solve_set_fn}
+        {}
     // CURRENCY !! decimal_root() invokes this thus:
     //   static_cast<double>(function(double));
     // so
@@ -68,11 +64,13 @@ class SolveHelper
     // or at least to make this function take a 'currency' argument.
     double operator()(double a_CandidateValue)
         {
-        return dblize(av_.SolveTest(av_.round_minutiae().c(a_CandidateValue)));
+        currency candidate = av_.round_minutiae().c(a_CandidateValue);
+        return dblize(av_.SolveTest(candidate, solve_set_fn_));
         }
 
   private:
     AccountValue& av_;
+    void (AccountValue::*solve_set_fn_)(currency);
 };
 
 /// Return outcome of a trial with a given input value.
@@ -169,7 +167,10 @@ class SolveHelper
 ///   "Section 7B(2) does not preclude the illustrating of premiums
 ///   that exceed the guideline premiums in Section 7702 of the IRC."
 
-currency AccountValue::SolveTest(currency a_CandidateValue)
+currency AccountValue::SolveTest
+    (currency a_CandidateValue
+    ,void (AccountValue::*solve_set_fn)(currency)
+    )
 {
     (this->*solve_set_fn)(a_CandidateValue);
 
@@ -365,6 +366,7 @@ currency AccountValue::Solve
         ;
     int decimals = 0;
 
+    void (AccountValue::*solve_set_fn)(currency) {nullptr};
     switch(a_SolveType)
         {
         case mce_solve_none:
@@ -425,6 +427,7 @@ currency AccountValue::Solve
             }
             break;
         }
+    LMI_ASSERT(nullptr != solve_set_fn);
 
     std::ostream os_trace(status().rdbuf());
     std::ofstream ofs_trace;
@@ -434,7 +437,7 @@ currency AccountValue::Solve
         os_trace.rdbuf(ofs_trace.rdbuf());
         }
 
-    SolveHelper solve_helper(*this);
+    SolveHelper solve_helper(*this, solve_set_fn);
     root_type solution = decimal_root
         (lower_bound
         ,upper_bound
