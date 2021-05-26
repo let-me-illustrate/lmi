@@ -45,6 +45,24 @@
 #include <functional>
 #include <numeric>                      // accumulate()
 
+/// Helper class to provide a free function for solves.
+///
+/// decimal_root() wants a free function; operator() provides that.
+///
+/// This free function must have a signature compatible with
+///   double f(double x)
+/// because both 'x' and 'f(x)' are used internally by decimal_root()
+/// in interpolation formulas that require floating-point numbers.
+///
+/// Alternatives not pursued: Writing a decimal_root() variant in
+/// terms of class currency is hopeless, because interpolation does
+/// not yield integral values. Writing an "adapter" to transform
+///   currency f(currency x)
+/// to
+///   double f(double x)
+/// might be a good idea if there were several use cases, but today
+/// there are not.
+
 class SolveHelper
 {
   public:
@@ -55,13 +73,6 @@ class SolveHelper
         :av_           {av}
         ,solve_set_fn_ {solve_set_fn}
         {}
-    // CURRENCY !! decimal_root() invokes this thus:
-    //   static_cast<double>(function(double));
-    // so
-    //   double function(double)
-    // is the appropriate signature here. Someday it might make sense
-    // to modify decimal_root to work with currency types directly,
-    // or at least to make this function take a 'currency' argument.
     double operator()(double a_CandidateValue)
         {
         currency candidate = av_.round_minutiae().c(a_CandidateValue);
