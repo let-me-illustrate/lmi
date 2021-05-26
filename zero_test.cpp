@@ -165,7 +165,7 @@ int test_main(int, char*[])
 
     LMI_TEST(e_more_or_less == e_or_less || e_more_or_less == e_or_more);
 
-    // Various tests--see macro definition.
+    // Various tests--see function-template definition.
 
     test_zero(0.5, 5.0, 1, e, std::exp(1.0));
     test_zero(0.5, 5.0, 2, e, std::exp(1.0));
