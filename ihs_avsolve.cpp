@@ -361,11 +361,25 @@ currency AccountValue::Solve
     LMI_ASSERT(0 < SolveTargetDuration_);
     LMI_ASSERT(    SolveTargetDuration_ <= BasicValues::GetLength());
 
-    // Default bounds (may be overridden in some cases).
+    // Default bounds.
+    //
+    // These are 'const' to discourage replacing them when narrower
+    // bounds can be determined in context (as is often the case for
+    // mce_solve_specamt and mce_solve_wd). The objective function,
+    // AccountValue::SolveTest(), must already embody such knowledge,
+    // and returns a value that is carefully crafted to facilitate
+    // solves--in particular, for iterations that violate certain
+    // product rules (e.g., see "ullage" above). Imposing a product
+    // minimum here can vitiate such optimizations; it is unlikely to
+    // make solves faster (finding a zero of x^2-1e8 in (0,1e9] is
+    // not materially harder than in [500,1e9], e.g.); it is certain
+    // to entail non-negligible coding and maintenance costs; and it
+    // introduces new opportunities for mistkaes.
+    //
     // Solve results are constrained to be nonnegative.
-    double lower_bound = 0.0;
+    double const lower_bound = 0.0;
     // No amount solved for can plausibly reach one billion dollars.
-    double upper_bound = 999999999.99;
+    double const upper_bound = 999999999.99;
 
     root_bias bias =
         mce_solve_for_tax_basis == SolveTarget_
@@ -386,16 +400,6 @@ currency AccountValue::Solve
             {
             solve_set_fn = &AccountValue::SolveSetSpecAmt;
             decimals     = round_specamt().decimals();
-            // Generally, base and term are independent, and it is
-            // the base specamt that's being solved for here, so set
-            // the minimum as though there were no term.
-            lower_bound = dblize
-                (minimum_specified_amount
-                    (  0 == SolveBeginYear_
-                    && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
-                    ,false
-                    )
-                );
             }
             break;
         case mce_solve_ee_prem:
@@ -431,7 +435,6 @@ currency AccountValue::Solve
                     ,round_loan      ().decimals()
                     );
                 }
-            lower_bound = dblize(MinWD);
             }
             break;
         }
