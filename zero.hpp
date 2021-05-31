@@ -34,15 +34,23 @@
 #include <string>
 #include <utility>
 
-enum root_validity
-    {root_is_valid
-    ,root_not_bracketed
-    };
-
 enum root_bias
     {bias_none   // Return root z with f(z) closest to 0.0 .
     ,bias_lower  // Require f(z) <= 0.0 .
     ,bias_higher // Require  0.0 <= f(z).
+    };
+
+enum interpolation_technique
+    {interpolate_initialization
+    ,interpolate_bisection0
+    ,interpolate_linear
+    ,interpolate_inverse_quadratic
+    ,interpolate_bisection1 // bisection when quadratic rejected
+    };
+
+enum root_validity
+    {root_is_valid
+    ,root_not_bracketed
     };
 
 typedef std::pair<double,root_validity> root_type;
@@ -50,16 +58,18 @@ typedef std::pair<double,root_validity> root_type;
 namespace detail
 {
 inline void expatiate
-    (int         & number_of_iterations
-    ,std::ostream& os_trace
-    ,double        x
-    ,double        fx
+    (int                    & number_of_iterations
+    ,std::ostream           & os_trace
+    ,interpolation_technique  technique
+    ,double                   x
+    ,double                   fx
     )
 {
     if(os_trace.good())
         {
         os_trace
             << "iteration " << number_of_iterations++
+            << " "          << "IBLQb"[technique]
             << " iterand "  << x
             << " value "    << fx
             << std::endl
@@ -252,7 +262,8 @@ root_type decimal_root
 
     static double const epsilon = std::numeric_limits<double>::epsilon();
 
-    int number_of_iterations = 0;
+    int number_of_iterations          {0};
+    interpolation_technique technique {interpolate_initialization};
 
     double t = 0.5 * std::pow(10.0, -decimals);
 
@@ -262,14 +273,14 @@ root_type decimal_root
     double b = round_(bound1);
 
     double fa = static_cast<double>(f(a));
-    detail::expatiate(number_of_iterations, os_trace, a, fa);
+    detail::expatiate(number_of_iterations, os_trace, technique, a, fa);
     if(0.0 == fa) // Note 0.
         {
         return std::make_pair(a, root_is_valid);
         }
 
     double fb = static_cast<double>(f(b));
-    detail::expatiate(number_of_iterations, os_trace, b, fb);
+    detail::expatiate(number_of_iterations, os_trace, technique, b, fb);
     if(0.0 == fb) // Note 0 [bis].
         {
         return std::make_pair(b, root_is_valid);
@@ -322,7 +333,7 @@ root_type decimal_root
             }
         if(std::fabs(e) < tol || std::fabs(fa) <= std::fabs(fb))
             {
-            // Bisection.
+            technique = interpolate_bisection0;
             d = e = m;
             }
         else
@@ -331,13 +342,13 @@ root_type decimal_root
             double s = fb / fa; // Note 3.
             if(a == c)
                 {
-                // Linear interpolation.
+                technique = interpolate_linear;
                 p = 2.0 * m * s;
                 q = 1.0 - s;
                 }
             else
                 {
-                // Inverse quadratic interpolation.
+                technique = interpolate_inverse_quadratic;
                 q = fa / fc;
                 double r = fb / fc;
                 p = s * (2.0 * m * q * (q - r) - (b - a) * (r - 1.0));
@@ -362,6 +373,7 @@ root_type decimal_root
                 }
             else
                 {
+                technique = interpolate_bisection1;
                 d = e = m;
                 }
             }
@@ -392,7 +404,7 @@ root_type decimal_root
         else
             {
             fb = static_cast<double>(f(b));
-            detail::expatiate(number_of_iterations, os_trace, b, fb);
+            detail::expatiate(number_of_iterations, os_trace, technique, b, fb);
             }
         }
 }
