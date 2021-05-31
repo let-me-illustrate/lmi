@@ -85,7 +85,16 @@ inline void expatiate(int& n_iter, double x, double fx, std::ostream& os)
 /// of a higher-order method when appropriate. We recommend it as the
 /// method of choice for general one-dimensional root finding where a
 /// function's values only (and not its derivative or functional form)
-/// are available." --Press et al., _Numerical Recipes_
+/// are available." --Press et al., _Numerical Recipes_ (3rd ed. 2007)
+///
+/// Numerous papers claim to improve on Brent's method. Perhaps the
+/// best is ACM Algorithm 748 (Transactions on Mathematical Software):
+///   https://na.math.kit.edu/alefeld/download/1995_Algorithm_748_Enclosing_Zeros_of_Continuous_Functions.pdf
+/// whose Table II compares Brent's algorithm to TOMS748 for fifteen
+/// test problems, claiming an advantage of 4-6%. A typical lmi solve
+/// takes ten or twenty iterations, so that would represent saving
+/// less than one iteration on average. It would be interesting to
+/// test TOMS758 with lmi, but there's little hope of any real gain.
 ///
 /// Newton's method has quadratic convergence, in the vicinity of a
 /// root, for well-behaved functions (though its performance in the
