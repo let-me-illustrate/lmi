@@ -49,7 +49,7 @@ typedef std::pair<double,root_validity> root_type;
 
 namespace detail
 {
-inline void expatiate(int& n_iter, double x, double fx, std::ostream& os)
+inline void expatiate(int& n_iter, std::ostream& os, double x, double fx)
 {
     if(os.good())
         {
@@ -257,14 +257,14 @@ root_type decimal_root
     double b = round_(bound1);
 
     double fa = static_cast<double>(f(a));
-    detail::expatiate(number_of_iterations, a, fa, iteration_stream);
+    detail::expatiate(number_of_iterations, iteration_stream, a, fa);
     if(0.0 == fa) // Note 0.
         {
         return std::make_pair(a, root_is_valid);
         }
 
     double fb = static_cast<double>(f(b));
-    detail::expatiate(number_of_iterations, b, fb, iteration_stream);
+    detail::expatiate(number_of_iterations, iteration_stream, b, fb);
     if(0.0 == fb) // Note 0 [bis].
         {
         return std::make_pair(b, root_is_valid);
@@ -387,7 +387,7 @@ root_type decimal_root
         else
             {
             fb = static_cast<double>(f(b));
-            detail::expatiate(number_of_iterations, b, fb, iteration_stream);
+            detail::expatiate(number_of_iterations, iteration_stream, b, fb);
             }
         }
 }
