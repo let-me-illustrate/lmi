@@ -95,6 +95,42 @@ struct e_nineteenth
     double operator()(double z) {return std::pow(z, 19);}
 };
 
+/// A function that's unfriendly to the secant method.
+///
+/// This function is based on eq. 2.1 in Brent's fourth chapter, and
+/// is designed so that successive secant steps in Dekker's algorithm
+/// each move by only the input tolerance.
+///
+/// Following section 3 of that chapter, define
+///   k = [log2((b-a)/t)], [x] being the greatest-integer function
+/// Then bisection takes exactly k+1 iterations unless it finds a root
+/// earlier by serendipity; and the number of function evaluations
+/// required by Brent's method (counting the endpoint evaluations) is
+///   (k+1)^2 - 2 [Brent's eq. 3.4]
+///
+/// For this function, k = [log2(200/1)] = 8, so Brent's method should
+/// take no more than 9^2-2 = 79 function evaluations.
+///
+/// The parameters hardcoded here were chosen to prevent overflow.
+/// This is not a dramatic illustration of the superiority to Dekker's
+/// method, which would move by a step of 1.0 at each iteration, thus
+/// taking about 200 iterations. Brent provides an extended-exponent
+/// version for which he says the difference would be 1600 evaluations
+/// versus 1.0e12.
+
+double eq_2_1(double x)
+{
+    double a = -100.0;
+    double b =  100.0;
+    double t =    1.0; // lowercase delta = Brent's 'tol'
+    return
+          (x == a)               ? -((b - a - t) / t) * std::pow(2.0, b / t)
+        : (x < a + t)            ? 1.0
+        : (a + t <= x && x <= b) ? std::pow(2.0, x / t)
+        : throw "eq_2_1() out of bounds"
+        ;
+}
+
 // This problem once arose in a unit test for irr calculations.
 // Minimal test case:
 //
@@ -199,6 +235,13 @@ int test_main(int, char*[])
     test_zero(-1.0, 4.0, -100, e_19, std::exp(1.0));
     test_zero(-1.0, 4.0,    0, e_19, std::exp(1.0));
     test_zero(-1.0, 4.0,  100, e_19, std::exp(1.0));
+
+    d = brent_zero(-100.0, 100.0, 1.0e-20, eq_2_1);
+    LMI_TEST(-100.0 <= d && d <= -100.0 * (1.0 - 6.0 * epsilon));
+
+    r = decimal_root(-100.0, 100.0, bias_none, 20, eq_2_1);
+    LMI_TEST(root_is_valid == r.second);
+    LMI_TEST(-100.0 <= r.first && r.first <= -100.0 * (1.0 - 6.0 * epsilon));
 
     e_former_rounding_problem e_frp;
     r = decimal_root(0.12609, 0.12611, bias_lower, 5, e_frp);
