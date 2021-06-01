@@ -189,8 +189,9 @@ int test_main(int, char*[])
     // chasing after wind that costs many iterations.
 
     e_nineteenth e_19;
-    r = decimal_root(-1.0, 4.0, bias_none, -20, e_19);
+    r = decimal_root(-1.0, 4.0, bias_none, 20, e_19);
     LMI_TEST(root_is_valid == r.second);
+    LMI_TEST(std::fabs(r.first) <= epsilon);
 
     test_zero(-1.0, 4.0, -100, e_19, std::exp(1.0));
     test_zero(-1.0, 4.0,    0, e_19, std::exp(1.0));
