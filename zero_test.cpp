@@ -193,6 +193,9 @@ int test_main(int, char*[])
     LMI_TEST(root_is_valid == r.second);
     LMI_TEST(std::fabs(r.first) <= epsilon);
 
+    double d = brent_zero(-1.0, 4.0, 1.0e-20, e_19);
+    LMI_TEST(std::fabs(d) <= epsilon);
+
     test_zero(-1.0, 4.0, -100, e_19, std::exp(1.0));
     test_zero(-1.0, 4.0,    0, e_19, std::exp(1.0));
     test_zero(-1.0, 4.0,  100, e_19, std::exp(1.0));

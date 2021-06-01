@@ -427,10 +427,12 @@ double brent_zero
     double fa = f(a);
     double fb = f(b);
     double fc = fb;
+    double c = b;
+    double d = b - a;
+    double e = d;
 
     for(;;)
         {
-        double c, d, e;
         if((0.0 < fb) == (0.0 < fc))
             {
             c = a;
