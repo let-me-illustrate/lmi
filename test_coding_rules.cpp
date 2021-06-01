@@ -1177,87 +1177,7 @@ void enforce_taboos(file const& f)
         }
 }
 
-/// Implicitly-declared special member functions do the right thing.
-
-class statistics
-{
-  public:
-    statistics() = default;
-    ~statistics() = default;
-
-    statistics& operator+=(statistics const&);
-
-    static statistics analyze_file(file const&);
-
-    void print_summary() const;
-
-  private:
-    int files_   {0};
-    int lines_   {0};
-    int defects_ {0};
-};
-
-statistics& statistics::operator+=(statistics const& z)
-{
-    files_   += z.files_  ;
-    lines_   += z.lines_  ;
-    defects_ += z.defects_;
-
-    return *this;
-}
-
-/// Calculate summary statistics.
-///
-/// The loop counter starts at one, not zero, to disregard the leading
-/// '\n' sentry.
-
-statistics statistics::analyze_file(file const& f)
-{
-    statistics z;
-    if
-        (   f.is_of_phylum(e_binary)
-        ||  f.is_of_phylum(e_expungible)
-        ||  f.is_of_phylum(e_gpl)
-        ||  f.is_of_phylum(e_log)
-        ||  f.is_of_phylum(e_md5)
-        ||  f.is_of_phylum(e_patch)
-        ||  f.is_of_phylum(e_touchstone)
-        ||  f.is_of_phylum(e_xml_input)
-        ||  f.is_of_phylum(e_synopsis)
-        )
-        {
-        return z;
-        }
-
-    ++z.files_;
-
-    std::string const& s = f.data();
-    for(int i = 1; i < lmi::ssize(s); ++i)
-        {
-        if('\n' == s[i])
-            {
-            ++z.lines_;
-            }
-        if('?' == s[i - 1] && '?' == s[i])
-            {
-            ++z.defects_;
-            }
-        }
-
-    return z;
-}
-
-void statistics::print_summary() const
-{
-    std::cout
-        << std::setw(9) << files_   << " source files\n"
-        << std::setw(9) << lines_   << " source lines\n"
-        << std::setw(9) << defects_ << " marked defects\n"
-        << std::flush
-        ;
-}
-
-statistics process_file(std::string const& file_path)
+void process_file(std::string const& file_path)
 {
     file f(file_path);
     if(31 < lmi::ssize(f.file_name()))
@@ -1268,12 +1188,12 @@ statistics process_file(std::string const& file_path)
     if(f.is_of_phylum(e_expungible))
         {
         complain(f, "ignored as being expungible.");
-        return statistics();
+        return;
         }
 
     if(f.is_of_phylum(e_binary) || fs::is_directory(f.path()))
         {
-        return statistics();
+        return;
         }
 
     assay_non_latin         (f);
@@ -1291,18 +1211,15 @@ statistics process_file(std::string const& file_path)
     check_reserved_names    (f);
 
     enforce_taboos          (f);
-
-    return statistics::analyze_file(f);
 }
 
 int try_main(int argc, char* argv[])
 {
-    statistics z;
     for(int j = 1; j < argc; ++j)
         {
         try
             {
-            z += process_file(argv[j]);
+            process_file(argv[j]);
             }
         catch(...)
             {
@@ -1311,6 +1228,5 @@ int try_main(int argc, char* argv[])
             report_exception();
             }
         }
-    z.print_summary();
     return error_flag ? EXIT_FAILURE : EXIT_SUCCESS;
 }

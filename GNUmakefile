@@ -502,6 +502,12 @@ check_concinnity: source_clean custom_tools
 	  done;
 	@$(ECHO) "  Miscellaneous problems:"
 	@-cd $(prefascicle_dir) && $(PERFORM) $(TEST_CODING_RULES) *
+	@significant_files=$$(find . -type f | sed 's@^./@@' | grep --extended-regexp --invert-match \
+	    '^\.|^COPYING$$|^quoted_gpl|^ChangeLog-|Log$$|^Speed_|(^|\.)md5sums$$|\.(ico|ini|png|xpm|txt|patch|touchstone|cns|ill|gpt|mec|inix)$$|^INSTALL$$|^README' \
+	    ); \
+	printf '%9d source files\n' $$(echo $${significant_files} | wc --lines); \
+	printf '%9d lines\n' $$(cat $$(echo $${significant_files}) | wc --lines); \
+	printf '%9d defects\n' $$(cat $$(echo $${significant_files}) | grep --fixed-strings --count '?''?')
 
 ################################################################################
 
