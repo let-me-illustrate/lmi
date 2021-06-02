@@ -409,10 +409,10 @@ File 'eraseme_cpp_003.cpp' should fuse '&' with type: 'foo &bar(); // bar() is a
 File 'eraseme_cpp_003.cpp' should fuse '*' with type: 'int *x;     // x is a 'pointer variable of type int'?'.
 File 'eraseme_cpp_004.cpp' should write 'const' after the type it modifies: 'const T&'.
 File 'eraseme_cpp_004.cpp' should write 'const' after the type it modifies: 'const std::string&'.
-File 'eraseme_hpp_001.hpp' lacks canonical header guards.
-File 'eraseme_hpp_002.hpp' lacks canonical header guards.
-File 'eraseme_hpp_003.hpp' lacks canonical header guards.
-File 'eraseme_hpp_004.hpp' lacks canonical header guards.
+File 'eraseme_hpp_001.hpp' lacks end part of the canonical header guard.
+File 'eraseme_hpp_002.hpp' lacks start part of the canonical header guard.
+File 'eraseme_hpp_003.hpp' lacks start part of the canonical header guard.
+File 'eraseme_hpp_004.hpp' lacks end part of the canonical header guard.
 File 'eraseme_hpp_005.hpp' must include 'config.hpp' first.
 File 'eraseme_hpp_006.hpp' must include 'config.hpp'.
 File 'eraseme_hpp_006.hpp' lacks line '#include "config.hpp"'.
