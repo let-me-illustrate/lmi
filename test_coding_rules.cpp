@@ -614,7 +614,7 @@ void check_cxx(file const& f)
     {
     // See:
     //   https://lists.nongnu.org/archive/html/lmi/2021-03/msg00032.html
-    static boost::regex const r(R"(\<R"([^(]*)[(])");
+    static boost::regex const r(R"(\bR"([^(]*)[(])");
     boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
     boost::sregex_iterator const omega;
     for(; i != omega; ++i)

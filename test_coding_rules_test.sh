@@ -229,6 +229,14 @@ Write a cv-qualifier after the type it modifies:
   void goo(const std::string&); // No.
 EOF
 
+cat >eraseme_cpp_005.cpp <<EOF
+$boilerplate
+auto const ok = R"--cut-here--(
+Uses the only allowed non-empty d-char-seq.
+)--cut-here--";
+auto const not_ok = R"==(disallowed)==";
+EOF
+
 # Headers.
 
 cat >eraseme_hpp_000.hpp <<EOF
@@ -409,6 +417,7 @@ File 'eraseme_cpp_003.cpp' should fuse '&' with type: 'foo &bar(); // bar() is a
 File 'eraseme_cpp_003.cpp' should fuse '*' with type: 'int *x;     // x is a 'pointer variable of type int'?'.
 File 'eraseme_cpp_004.cpp' should write 'const' after the type it modifies: 'const T&'.
 File 'eraseme_cpp_004.cpp' should write 'const' after the type it modifies: 'const std::string&'.
+File 'eraseme_cpp_005.cpp' contains noncanonical d-char-seq: '=='. Instead, use '--cut-here--'.
 File 'eraseme_hpp_001.hpp' lacks end part of the canonical header guard.
 File 'eraseme_hpp_002.hpp' lacks start part of the canonical header guard.
 File 'eraseme_hpp_003.hpp' lacks start part of the canonical header guard.
