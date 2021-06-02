@@ -306,28 +306,6 @@ void taboo
         }
 }
 
-/// Validate characters, allowing only Latin-9 and whitespace.
-///
-/// Throw if the file contains a character outside the union of
-/// ISO-8859-15 and the minimal POSIX whitespace set " \f\n\r\t\v".
-///
-/// To locate violations:
-///   LC_ALL=C grep -P '[\x00-\x08\x0e-\x1f\x7f-\x9f]' list-of-files
-
-void assay_non_latin(file const& f)
-{
-    if(f.phyloanalyze("^README.schroot$"))
-        {
-        return;
-        }
-
-    static boost::regex const forbidden(R"([\x00-\x08\x0e-\x1f\x7f-\x9f])");
-    if(boost::regex_search(f.data(), forbidden))
-        {
-        throw std::runtime_error("File contains a forbidden character.");
-        }
-}
-
 /// Validate whitespace.
 ///
 /// Throw if the file contains '\f', '\r', '\t', or '\v', except in
@@ -1196,7 +1174,6 @@ void process_file(std::string const& file_path)
         return;
         }
 
-    assay_non_latin         (f);
     assay_whitespace        (f);
 
     check_config_hpp        (f);
