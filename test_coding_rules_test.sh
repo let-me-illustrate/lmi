@@ -237,6 +237,15 @@ Uses the only allowed non-empty d-char-seq.
 auto const not_ok = R"==(disallowed)==";
 EOF
 
+cat >eraseme_cpp_006.cpp <<EOF
+$boilerplate
+
+#include "foo.hpp"
+#include "bar.hpp"
+
+#include <baz>
+EOF
+
 # Headers.
 
 cat >eraseme_hpp_000.hpp <<EOF
@@ -418,6 +427,9 @@ File 'eraseme_cpp_003.cpp' should fuse '*' with type: 'int *x;     // x is a 'po
 File 'eraseme_cpp_004.cpp' should write 'const' after the type it modifies: 'const T&'.
 File 'eraseme_cpp_004.cpp' should write 'const' after the type it modifies: 'const std::string&'.
 File 'eraseme_cpp_005.cpp' contains noncanonical d-char-seq: '=='. Instead, use '--cut-here--'.
+File 'eraseme_cpp_006.cpp' has missorted #include directives:
+#include "foo.hpp"
+#include "bar.hpp"
 File 'eraseme_hpp_001.hpp' lacks end part of the canonical header guard.
 File 'eraseme_hpp_002.hpp' lacks start part of the canonical header guard.
 File 'eraseme_hpp_003.hpp' lacks start part of the canonical header guard.
