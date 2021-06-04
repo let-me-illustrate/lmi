@@ -449,7 +449,7 @@ currency AccountValue::Solve
         }
 
     SolveHelper solve_helper(*this, solve_set_fn);
-    root_type solution = decimal_root
+    root_type const solution = decimal_root
         (lower_bound
         ,upper_bound
         ,bias

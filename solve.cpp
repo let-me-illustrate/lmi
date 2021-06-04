@@ -322,7 +322,7 @@ currency AccountValue::Solve()
             }
         }
 
-    root_type Solution = decimal_root
+    root_type const Solution = decimal_root
         (LowerBound
         ,UpperBound
         ,Bias
