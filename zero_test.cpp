@@ -131,6 +131,18 @@ double eq_2_1(double x)
         ;
 }
 
+/// A function for which bisection is optimal.
+///
+/// Return signum(argument + 1/3). Adding the constant makes it less
+/// likely that the root will be found by accident, e.g. between
+/// bounds such as (0,k) or (-k,k).
+
+double signum_offset(double d)
+{
+    double z = d + 1.0 / 3.0;
+    return (0.0 == z) ? 0.0 : std::signbit(z) ? -1.0 : 1.0;
+}
+
 // This problem once arose in a unit test for irr calculations.
 // Minimal test case:
 //
@@ -242,6 +254,10 @@ int test_main(int, char*[])
     r = decimal_root(-100.0, 100.0, bias_none, 20, eq_2_1);
     LMI_TEST(root_is_valid == r.second);
     LMI_TEST(-100.0 <= r.first && r.first <= -100.0 * (1.0 - 6.0 * epsilon));
+
+    r = decimal_root(-1.0, 1.0, bias_none, 13, signum_offset);
+    LMI_TEST(root_is_valid == r.second);
+    LMI_TEST(materially_equal(-1.0 / 3.0, r.first));
 
     e_former_rounding_problem e_frp;
     r = decimal_root(0.12609, 0.12611, bias_lower, 5, e_frp);
