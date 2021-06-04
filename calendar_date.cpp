@@ -751,7 +751,7 @@ class birthdate_limit
             ,0
             ,*this
             );
-        LMI_ASSERT(root_not_bracketed != z.second);
+        LMI_ASSERT(root_is_valid == z.second);
         int j = bourn_cast<int>(z.first);
         j = std::min(j, as_of_date_.julian_day_number());
         j = std::max(j, a_priori_minimum_);

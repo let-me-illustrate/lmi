@@ -122,12 +122,15 @@ class irr_helper
             ,decimals_
             ,*this
             );
-        if(root_not_bracketed == z.second)
+        switch(z.second)
             {
+            case root_is_valid:
+                {return z.first;}
             // Return -100% if NPVs of a priori bounds have same sign.
-            z.first = -1.0L;
+            case root_not_bracketed:
+                {return -1.0L;}
             }
-        return z.first;
+        throw "Unreachable--silences a compiler diagnostic.";
         }
 
   private:
