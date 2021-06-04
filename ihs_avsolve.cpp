@@ -484,6 +484,11 @@ currency AccountValue::Solve
                 }
             }
             break;
+        case improper_bounds:
+            {
+            alarum() << "Improper bounds." << LMI_FLUSH;
+            }
+            break;
         }
     return solution_cents;
 }

@@ -51,6 +51,7 @@ enum interpolation_technique
 enum root_validity
     {root_is_valid
     ,root_not_bracketed
+    ,improper_bounds
     };
 
 typedef std::pair<double,root_validity> root_type;
@@ -80,7 +81,7 @@ inline void expatiate
 
 /// Return a zero z of a function f within input bounds [a,b].
 ///
-/// Precondition: either
+/// Preconditions: bounds are distinct after rounding; and either
 ///   0.0 == f(a), or
 ///   0.0 == f(b), or
 ///   f(a) and f(b) have opposite signs;
@@ -271,6 +272,11 @@ root_type decimal_root
 
     double a = round_dec(bound0);
     double b = round_dec(bound1);
+
+    if(a == b)
+        {
+        return std::make_pair(a, improper_bounds);
+        }
 
     double fa = static_cast<double>(f(a));
     detail::expatiate(number_of_iterations, os_trace, technique, a, fa);

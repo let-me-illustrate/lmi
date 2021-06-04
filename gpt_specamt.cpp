@@ -176,6 +176,8 @@ currency gpt_specamt::CalculateSpecAmt
             {return a_Values.round_specamt().c(solution.first);}
         case root_not_bracketed:
             {return a_Values.min_issue_spec_amt();}
+        case improper_bounds:
+            {throw "CalculateSpecAmt: improper bounds.";}
         }
     throw "Unreachable--silences a compiler diagnostic.";
 }

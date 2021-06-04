@@ -129,6 +129,8 @@ class irr_helper
             // Return -100% if NPVs of a priori bounds have same sign.
             case root_not_bracketed:
                 {return -1.0L;}
+            case improper_bounds:
+                {throw "IRR: improper bounds.";}
             }
         throw "Unreachable--silences a compiler diagnostic.";
         }

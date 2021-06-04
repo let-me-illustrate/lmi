@@ -182,6 +182,11 @@ int test_main(int, char*[])
     r = decimal_root(0.5, 5.0, bias_none, 9, e);
     LMI_TEST(root_is_valid == r.second);
 
+    // Test failure with improper interval.
+
+    r = decimal_root(1.0, 1.0, bias_none, 9, e);
+    LMI_TEST(improper_bounds == r.second);
+
     // Test failure with interval containing no root.
 
     r = decimal_root(0.1, 1.0, bias_none, 9, e);
@@ -244,7 +249,7 @@ int test_main(int, char*[])
     double d = brent_zero(-1.0, 4.0, 1.0e-20, e_19);
     LMI_TEST(std::fabs(d) <= epsilon);
 
-    test_zero(-1.0, 4.0, -100, e_19, std::exp(1.0));
+//  test_zero(-1.0, 4.0, -100, e_19, std::exp(1.0));
     test_zero(-1.0, 4.0,    0, e_19, std::exp(1.0));
     test_zero(-1.0, 4.0,  100, e_19, std::exp(1.0));
 

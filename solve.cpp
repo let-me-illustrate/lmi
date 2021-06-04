@@ -358,6 +358,11 @@ currency AccountValue::Solve()
             warning() << "solution not found. Using zero instead." << LMI_FLUSH;
             }
             break;
+        case improper_bounds:
+            {
+            alarum() << "Improper bounds." << LMI_FLUSH;
+            }
+            break;
         }
     return solution_cents;
 }
