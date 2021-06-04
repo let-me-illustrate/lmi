@@ -330,11 +330,6 @@ currency AccountValue::Solve()
         ,SolveFn
         ,status()
         );
-    if(root_not_bracketed == solution.second)
-        {
-        LMI_ASSERT(0.0 == solution.first);
-        warning() << "solution not found. Using zero instead." << LMI_FLUSH;
-        }
     currency const solution_cents = round_to_cents.c(solution.first);
 
     Solving = false;
@@ -352,5 +347,10 @@ currency AccountValue::Solve()
     // now, and actual values are freshly generated downstream.
     SolveFn(dblize(solution_cents));
 
+    if(root_not_bracketed == solution.second)
+        {
+        LMI_ASSERT(0.0 == solution.first);
+        warning() << "solution not found. Using zero instead." << LMI_FLUSH;
+        }
     return solution_cents;
 }

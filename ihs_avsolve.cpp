@@ -457,17 +457,6 @@ currency AccountValue::Solve
         ,solve_helper
         ,os_trace
         );
-
-    if(root_not_bracketed == solution.second)
-        {
-        LMI_ASSERT(0.0 == solution.first);
-        // Don't want this firing continually in census runs.
-        if(!SolvingForGuarPremium)
-            {
-            warning() << "Solution not found: using zero instead." << LMI_FLUSH;
-            // TODO ?? What can we do when no solution exists for guar prem?
-            }
-        }
     currency const solution_cents = round_minutiae().c(solution.first);
 
     Solving = false;
@@ -479,5 +468,15 @@ currency AccountValue::Solve
     // now, and actual values are freshly generated downstream.
     (this->*solve_set_fn)(solution_cents);
 
+    if(root_not_bracketed == solution.second)
+        {
+        LMI_ASSERT(0.0 == solution.first);
+        // Don't want this firing continually in census runs.
+        if(!SolvingForGuarPremium)
+            {
+            warning() << "Solution not found: using zero instead." << LMI_FLUSH;
+            // TODO ?? What can we do when no solution exists for guar prem?
+            }
+        }
     return solution_cents;
 }
