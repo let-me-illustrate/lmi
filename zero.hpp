@@ -258,19 +258,19 @@ root_type decimal_root
     ,std::ostream&   os_trace = null_stream()
     )
 {
-    os_trace.precision(DECIMAL_DIG);
+    static constexpr double epsilon   {std::numeric_limits<double>::epsilon()};
 
-    static double const epsilon = std::numeric_limits<double>::epsilon();
+    round_to<double> const round_dec  {decimals, r_to_nearest};
 
     int number_of_iterations          {0};
     interpolation_technique technique {interpolate_initialization};
 
+    os_trace.precision(DECIMAL_DIG);
+
     double t = 0.5 * std::pow(10.0, -decimals);
 
-    round_to<double> const round_(decimals, r_to_nearest);
-
-    double a = round_(bound0);
-    double b = round_(bound1);
+    double a = round_dec(bound0);
+    double b = round_dec(bound1);
 
     double fa = static_cast<double>(f(a));
     detail::expatiate(number_of_iterations, os_trace, technique, a, fa);
@@ -391,7 +391,7 @@ root_type decimal_root
             {
             b -= tol;
             }
-        b = round_(b);
+        b = round_dec(b);
 
         if(b == a) // Note 4.
             {
