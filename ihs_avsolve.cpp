@@ -468,15 +468,16 @@ currency AccountValue::Solve
             // TODO ?? What can we do when no solution exists for guar prem?
             }
         }
+    currency const solution_cents = round_minutiae().c(solution.first);
+
+    Solving = false;
 
     // The account and ledger values set as a side effect of solving
     // aren't generally the same as those shown on the illustration
     // because the 'Solving' flag has side effects. Therefore, the
-    // final solve parameters are stored now, and actual values are
-    // freshly generated downstream.
-
-    Solving = false;
-    currency const solution_cents = round_minutiae().c(solution.first);
+    // final solve parameters are stored by calling 'solve_set_fn'
+    // now, and actual values are freshly generated downstream.
     (this->*solve_set_fn)(solution_cents);
+
     return solution_cents;
 }

@@ -335,12 +335,7 @@ currency AccountValue::Solve()
         LMI_ASSERT(0.0 == Solution.first);
         warning() << "Solution not found. Using zero instead." << LMI_FLUSH;
         }
-
-    // The account and ledger values set as a side effect of solving
-    // aren't generally the same as those shown on the illustration
-    // because the 'Solving' flag has side effects. Therefore, the
-    // final solve parameters are stored now, and actual values are
-    // freshly generated downstream.
+    currency const solution_cents = round_to_cents.c(Solution.first);
 
     Solving = false;
 
@@ -350,7 +345,12 @@ currency AccountValue::Solve()
     // kludge, but so is 'That'; a function object is wanted instead.
     only_set_values = !Solving;
 
-    currency const solution_cents = round_to_cents.c(Solution.first);
+    // The account and ledger values set as a side effect of solving
+    // aren't generally the same as those shown on the illustration
+    // because the 'Solving' flag has side effects. Therefore, the
+    // final solve parameters are stored by calling 'SolveFn'
+    // now, and actual values are freshly generated downstream.
     SolveFn(dblize(solution_cents));
+
     return solution_cents;
 }
