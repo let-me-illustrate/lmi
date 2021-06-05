@@ -59,7 +59,7 @@ typedef std::pair<double,root_validity> root_type;
 namespace detail
 {
 inline void expatiate
-    (int                    & number_of_iterations
+    (int                    & n_iter
     ,std::ostream           & os_trace
     ,interpolation_technique  technique
     ,double                   x
@@ -69,7 +69,7 @@ inline void expatiate
     if(os_trace.good())
         {
         os_trace
-            << "iteration " << number_of_iterations++
+            << "iteration " << n_iter++
             << " "          << "IBLQb"[technique]
             << " iterand "  << x
             << " value "    << fx
@@ -261,9 +261,9 @@ root_type decimal_root
 {
     static constexpr double epsilon   {std::numeric_limits<double>::epsilon()};
 
-    round_to<double> const round_dec  {decimals, r_to_nearest};
+    round_to<double> const  round_dec {decimals, r_to_nearest};
 
-    int number_of_iterations          {0};
+    int                     n_iter    {0};
     interpolation_technique technique {interpolate_initialization};
 
     os_trace.precision(DECIMAL_DIG);
@@ -279,14 +279,14 @@ root_type decimal_root
         }
 
     double fa = static_cast<double>(f(a));
-    detail::expatiate(number_of_iterations, os_trace, technique, a, fa);
+    detail::expatiate(n_iter, os_trace, technique, a, fa);
     if(0.0 == fa) // Note 0.
         {
         return std::make_pair(a, root_is_valid);
         }
 
     double fb = static_cast<double>(f(b));
-    detail::expatiate(number_of_iterations, os_trace, technique, b, fb);
+    detail::expatiate(n_iter, os_trace, technique, b, fb);
     if(0.0 == fb) // Note 0 [bis].
         {
         return std::make_pair(b, root_is_valid);
@@ -410,7 +410,7 @@ root_type decimal_root
         else
             {
             fb = static_cast<double>(f(b));
-            detail::expatiate(number_of_iterations, os_trace, technique, b, fb);
+            detail::expatiate(n_iter, os_trace, technique, b, fb);
             }
         }
 }
