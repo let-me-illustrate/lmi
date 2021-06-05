@@ -910,8 +910,10 @@ void check_preamble(file const& f)
         return;
         }
 
-    static std::string const url("https://savannah.nongnu.org/projects/lmi");
-    require(f, url, "lacks lmi URL.");
+    if(!contains(f.data(), "https://savannah.nongnu.org/projects/lmi"))
+        {
+        complain(f, "lacks lmi URL.");
+        }
 }
 
 /// Deem a reserved name permissible or not.
