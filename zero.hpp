@@ -60,7 +60,7 @@ namespace detail
 {
 inline void expatiate
     (std::ostream           & os_trace
-    ,int                    & n_iter
+    ,int                      n_iter
     ,interpolation_technique  technique
     ,double                   x
     ,double                   fx
@@ -69,7 +69,7 @@ inline void expatiate
     if(os_trace.good())
         {
         os_trace
-            << "iteration " << n_iter++
+            << "iteration " << n_iter
             << " "          << "IBLQb"[technique]
             << " iterand "  << x
             << " value "    << fx
@@ -279,14 +279,14 @@ root_type decimal_root
         }
 
     double fa = static_cast<double>(f(a));
-    detail::expatiate(os_trace, n_iter, technique, a, fa);
+    detail::expatiate(os_trace, n_iter++, technique, a, fa);
     if(0.0 == fa) // Note 0.
         {
         return std::make_pair(a, root_is_valid);
         }
 
     double fb = static_cast<double>(f(b));
-    detail::expatiate(os_trace, n_iter, technique, b, fb);
+    detail::expatiate(os_trace, n_iter++, technique, b, fb);
     if(0.0 == fb) // Note 0 [bis].
         {
         return std::make_pair(b, root_is_valid);
@@ -410,7 +410,7 @@ root_type decimal_root
         else
             {
             fb = static_cast<double>(f(b));
-            detail::expatiate(os_trace, n_iter, technique, b, fb);
+            detail::expatiate(os_trace, n_iter++, technique, b, fb);
             }
         }
 }
