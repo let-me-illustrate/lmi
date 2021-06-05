@@ -222,14 +222,17 @@ int test_main(int, char*[])
 
     // Various tests--see function-template definition.
 
-    test_zero(0.5, 5.0, 1, e, std::exp(1.0));
-    test_zero(0.5, 5.0, 2, e, std::exp(1.0));
-    test_zero(0.5, 5.0, 3, e, std::exp(1.0));
-    test_zero(0.5, 5.0, 4, e, std::exp(1.0));
-    test_zero(0.5, 5.0, 5, e, std::exp(1.0));
-    test_zero(0.5, 5.0, 6, e, std::exp(1.0));
-    test_zero(0.5, 5.0, 7, e, std::exp(1.0));
-    test_zero(0.5, 5.0, 8, e, std::exp(1.0));
+    test_zero(-1.0e100, 4.0e100, -100, e, std::exp(1.0));
+    test_zero(-1.0    , 4.0    ,    0, e, std::exp(1.0));
+    test_zero( 0.5    , 5.0    ,    1, e, std::exp(1.0));
+    test_zero( 0.5    , 5.0    ,    2, e, std::exp(1.0));
+    test_zero( 0.5    , 5.0    ,    3, e, std::exp(1.0));
+    test_zero( 0.5    , 5.0    ,    4, e, std::exp(1.0));
+    test_zero( 0.5    , 5.0    ,    5, e, std::exp(1.0));
+    test_zero( 0.5    , 5.0    ,    6, e, std::exp(1.0));
+    test_zero( 0.5    , 5.0    ,    7, e, std::exp(1.0));
+    test_zero( 0.5    , 5.0    ,    8, e, std::exp(1.0));
+    test_zero(-1.0    , 4.0    ,  100, e, std::exp(1.0));
 
     // Brent's book uses the nineteenth-power function in examples.
     // His example using a tolerance of 1e-20 is subject to underflow
@@ -250,10 +253,6 @@ int test_main(int, char*[])
 
     double d = brent_zero(-1.0, 4.0, 1.0e-20, e_19);
     LMI_TEST(std::fabs(d) <= epsilon);
-
-    test_zero(-1.0e100, 4.0e100, -100, e, std::exp(1.0));
-    test_zero(-1.0    , 4.0    ,    0, e, std::exp(1.0));
-    test_zero(-1.0    , 4.0    ,  100, e, std::exp(1.0));
 
     d = brent_zero(-100.0, 100.0, 1.0e-20, eq_2_1);
     LMI_TEST(-100.0 <= d && d <= -100.0 * (1.0 - 6.0 * epsilon));
