@@ -26,7 +26,9 @@
 #include "materially_equal.hpp"
 #include "test_tools.hpp"
 
-#include <algorithm>
+#include <algorithm>                    // max()
+#include <cmath>                        // exp(), fabs(), log(), pow(), signbit()
+#include <limits>
 
 namespace
 {
@@ -52,19 +54,19 @@ void test_zero(double bound0, double bound1, int dec, F f, double exact_root)
                 (std::fabs(rl.first), std::fabs(rh.first)
                 )
         ;
-    LMI_TEST((rh.first - rl.first) <= tol);
+    LMI_TEST(std::fabs(rh.first - rl.first) <= tol);
 
     double toll =
             std::pow(10.0, -dec)
         +   6.0 * epsilon * std::fabs(rl.first)
         ;
-    LMI_TEST((rl.first - exact_root) <= toll);
+    LMI_TEST(std::fabs(rl.first - exact_root) <= toll);
 
     double tolh =
             std::pow(10.0, -dec)
         +   6.0 * epsilon * std::fabs(rh.first)
         ;
-    LMI_TEST((rh.first - exact_root) <= tolh);
+    LMI_TEST(std::fabs(rh.first - exact_root) <= tolh);
 }
 
 double e_function(double z)
@@ -249,9 +251,9 @@ int test_main(int, char*[])
     double d = brent_zero(-1.0, 4.0, 1.0e-20, e_19);
     LMI_TEST(std::fabs(d) <= epsilon);
 
-//  test_zero(-1.0, 4.0, -100, e_19, std::exp(1.0));
-    test_zero(-1.0, 4.0,    0, e_19, std::exp(1.0));
-    test_zero(-1.0, 4.0,  100, e_19, std::exp(1.0));
+    test_zero(-1.0e100, 4.0e100, -100, e, std::exp(1.0));
+    test_zero(-1.0    , 4.0    ,    0, e, std::exp(1.0));
+    test_zero(-1.0    , 4.0    ,  100, e, std::exp(1.0));
 
     d = brent_zero(-100.0, 100.0, 1.0e-20, eq_2_1);
     LMI_TEST(-100.0 <= d && d <= -100.0 * (1.0 - 6.0 * epsilon));
