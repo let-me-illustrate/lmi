@@ -246,6 +246,15 @@ $boilerplate
 #include <baz>
 EOF
 
+cat >eraseme_cpp_007.cpp <<EOF
+$boilerplate
+for(auto const& i : good())
+for (auto& i : bad_syntax())
+for(auto& i: bad_space())
+for(int& i : bad_type())
+for(auto i : bad_ref())
+EOF
+
 # Headers.
 
 cat >eraseme_hpp_000.hpp <<EOF
@@ -430,6 +439,10 @@ File 'eraseme_cpp_005.cpp' contains noncanonical d-char-seq: '=='. Instead, use 
 File 'eraseme_cpp_006.cpp' has missorted #include directives:
 #include "foo.hpp"
 #include "bar.hpp"
+File 'eraseme_cpp_007.cpp' spurious or malformed for-range-declaration: 'for (auto& i : bad_syntax()'.
+File 'eraseme_cpp_007.cpp' should have a space on both sides of the colon following the for-range-declaration, instead of ': '.
+File 'eraseme_cpp_007.cpp' for-range-declaration should deduce type rather than specify 'int'.
+File 'eraseme_cpp_007.cpp' for-range-declaration should use 'auto&' or 'auto const&' instead of 'auto '.
 File 'eraseme_hpp_001.hpp' lacks end part of the canonical header guard.
 File 'eraseme_hpp_002.hpp' lacks start part of the canonical header guard.
 File 'eraseme_hpp_003.hpp' lacks start part of the canonical header guard.
