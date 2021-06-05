@@ -751,8 +751,8 @@ class birthdate_limit
             ,0
             ,*this
             );
-        LMI_ASSERT(root_is_valid == z.second);
-        int j = bourn_cast<int>(z.first);
+        LMI_ASSERT(root_is_valid == z.validity);
+        int j = bourn_cast<int>(z.root);
         j = std::min(j, as_of_date_.julian_day_number());
         j = std::max(j, a_priori_minimum_);
         j = std::min(j, a_priori_maximum_);

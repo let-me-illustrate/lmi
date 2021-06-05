@@ -42,31 +42,31 @@ void test_zero(double bound0, double bound1, int dec, F f, double exact_root)
     root_type rl = decimal_root(bound0, bound1, bias_lower,  dec, f);
     root_type rh = decimal_root(bound0, bound1, bias_higher, dec, f);
 
-    LMI_TEST(root_is_valid == rn.second);
-    LMI_TEST(root_is_valid == rl.second);
-    LMI_TEST(root_is_valid == rh.second);
+    LMI_TEST(root_is_valid == rn.validity);
+    LMI_TEST(root_is_valid == rl.validity);
+    LMI_TEST(root_is_valid == rh.validity);
 
-    LMI_TEST(rl.first <= rn.first && rn.first <= rh.first);
+    LMI_TEST(rl.root <= rn.root && rn.root <= rh.root);
 
     double tol =
             std::pow(10.0, -dec)
         +   6.0 * epsilon * std::max
-                (std::fabs(rl.first), std::fabs(rh.first)
+                (std::fabs(rl.root), std::fabs(rh.root)
                 )
         ;
-    LMI_TEST(std::fabs(rh.first - rl.first) <= tol);
+    LMI_TEST(std::fabs(rh.root - rl.root) <= tol);
 
     double toll =
             std::pow(10.0, -dec)
-        +   6.0 * epsilon * std::fabs(rl.first)
+        +   6.0 * epsilon * std::fabs(rl.root)
         ;
-    LMI_TEST(std::fabs(rl.first - exact_root) <= toll);
+    LMI_TEST(std::fabs(rl.root - exact_root) <= toll);
 
     double tolh =
             std::pow(10.0, -dec)
-        +   6.0 * epsilon * std::fabs(rh.first)
+        +   6.0 * epsilon * std::fabs(rh.root)
         ;
-    LMI_TEST(std::fabs(rh.first - exact_root) <= tolh);
+    LMI_TEST(std::fabs(rh.root - exact_root) <= tolh);
 }
 
 double e_function(double z)
@@ -170,7 +170,7 @@ int test_main(int, char*[])
     // Test use with function.
 
     root_type r = decimal_root(0.5, 5.0, bias_none, 9, e_function);
-    LMI_TEST(root_is_valid == r.second);
+    LMI_TEST(root_is_valid == r.validity);
 
     // Same, with expatiation.
 
@@ -182,17 +182,17 @@ int test_main(int, char*[])
 
     e_functor e;
     r = decimal_root(0.5, 5.0, bias_none, 9, e);
-    LMI_TEST(root_is_valid == r.second);
+    LMI_TEST(root_is_valid == r.validity);
 
     // Test failure with improper interval.
 
     r = decimal_root(1.0, 1.0, bias_none, 9, e);
-    LMI_TEST(improper_bounds == r.second);
+    LMI_TEST(improper_bounds == r.validity);
 
     // Test failure with interval containing no root.
 
     r = decimal_root(0.1, 1.0, bias_none, 9, e);
-    LMI_TEST(root_not_bracketed == r.second);
+    LMI_TEST(root_not_bracketed == r.validity);
 
     // Test different biases.
 
@@ -201,22 +201,22 @@ int test_main(int, char*[])
     // bounds: neither can equal the unrepresentable true value.
 
     r = decimal_root(0.5, 5.0, bias_lower, 9, e);
-    LMI_TEST(root_is_valid == r.second);
-    double e_or_less = r.first;
+    LMI_TEST(root_is_valid == r.validity);
+    double e_or_less = r.root;
     LMI_TEST(e_or_less < std::exp(1.0));
 //  LMI_TEST(e.e_state < std::exp(1.0)); // Not necessarily true.
 
     r = decimal_root(0.5, 5.0, bias_higher, 9, e);
-    LMI_TEST(root_is_valid == r.second);
-    double e_or_more = r.first;
+    LMI_TEST(root_is_valid == r.validity);
+    double e_or_more = r.root;
     LMI_TEST(std::exp(1.0) < e_or_more);
 //  LMI_TEST(std::exp(1.0) < e.e_state); // Not necessarily true.
 
     LMI_TEST(e_or_less < e_or_more);
 
     r = decimal_root(0.5, 5.0, bias_none, 9, e);
-    LMI_TEST(root_is_valid == r.second);
-    double e_more_or_less = r.first;
+    LMI_TEST(root_is_valid == r.validity);
+    double e_more_or_less = r.root;
 
     LMI_TEST(e_more_or_less == e_or_less || e_more_or_less == e_or_more);
 
@@ -248,8 +248,8 @@ int test_main(int, char*[])
 
     e_nineteenth e_19;
     r = decimal_root(-1.0, 4.0, bias_none, 20, e_19);
-    LMI_TEST(root_is_valid == r.second);
-    LMI_TEST(std::fabs(r.first) <= epsilon);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST(std::fabs(r.root) <= epsilon);
 
     double d = brent_zero(-1.0, 4.0, 1.0e-20, e_19);
     LMI_TEST(std::fabs(d) <= epsilon);
@@ -258,17 +258,17 @@ int test_main(int, char*[])
     LMI_TEST(-100.0 <= d && d <= -100.0 * (1.0 - 6.0 * epsilon));
 
     r = decimal_root(-100.0, 100.0, bias_none, 20, eq_2_1);
-    LMI_TEST(root_is_valid == r.second);
-    LMI_TEST(-100.0 <= r.first && r.first <= -100.0 * (1.0 - 6.0 * epsilon));
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST(-100.0 <= r.root && r.root <= -100.0 * (1.0 - 6.0 * epsilon));
 
     r = decimal_root(-1.0, 1.0, bias_none, 13, signum_offset);
-    LMI_TEST(root_is_valid == r.second);
-    LMI_TEST(materially_equal(-1.0 / 3.0, r.first));
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST(materially_equal(-1.0 / 3.0, r.root));
 
     e_former_rounding_problem e_frp;
     r = decimal_root(0.12609, 0.12611, bias_lower, 5, e_frp);
 #if !defined LMI_COMO_WITH_MINGW
-    LMI_TEST(materially_equal(0.12610, r.first));
+    LMI_TEST(materially_equal(0.12610, r.root));
 #else // defined LMI_COMO_WITH_MINGW
     // One would naively expect 0.12610 to be the answer, but it's
     // necessary to inquire which of the two closest representations
@@ -280,12 +280,12 @@ int test_main(int, char*[])
     // resulting in a final iterand whose function value is slightly
     // different from zero, and in the "wrong" direction.
     LMI_TEST
-        (   materially_equal(0.12609, r.first)
-        ||  materially_equal(0.12610, r.first)
+        (   materially_equal(0.12609, r.root)
+        ||  materially_equal(0.12610, r.root)
         );
 #endif // defined LMI_COMO_WITH_MINGW
 
-    LMI_TEST(root_is_valid == r.second);
+    LMI_TEST(root_is_valid == r.validity);
 
     return 0;
 }

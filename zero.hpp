@@ -31,7 +31,6 @@
 #include <cmath>                        // fabs(), pow()
 #include <limits>
 #include <ostream>
-#include <utility>                      // pair
 
 enum root_bias
     {bias_none   // Return root z with f(z) closest to 0.0 .
@@ -53,7 +52,11 @@ enum root_validity
     ,improper_bounds
     };
 
-typedef std::pair<double,root_validity> root_type;
+struct root_type
+{
+    double        root     {0.0};
+    root_validity validity {improper_bounds};
+};
 
 namespace detail
 {
@@ -274,27 +277,27 @@ root_type decimal_root
 
     if(a == b)
         {
-        return std::make_pair(a, improper_bounds);
+        return {a, improper_bounds};
         }
 
     double fa = static_cast<double>(f(a));
     detail::expatiate(os_trace, n_iter++, technique, a, fa);
     if(0.0 == fa) // Note 0.
         {
-        return std::make_pair(a, root_is_valid);
+        return {a, root_is_valid};
         }
 
     double fb = static_cast<double>(f(b));
     detail::expatiate(os_trace, n_iter++, technique, b, fb);
     if(0.0 == fb) // Note 0 [bis].
         {
-        return std::make_pair(b, root_is_valid);
+        return {b, root_is_valid};
         }
 
     // f(a) and f(b) must have different signs.
     if((0.0 < fa) == (0.0 < fb))
         {
-        return std::make_pair(0.0, root_not_bracketed);
+        return {0.0, root_not_bracketed};
         }
 
     double fc = fb; // Note 1.
@@ -325,11 +328,11 @@ root_type decimal_root
                 ||  bias_higher == bias && 0.0 <= fb
                 )
                 {
-                return std::make_pair(b, root_is_valid);
+                return {b, root_is_valid};
                 }
             else if(std::fabs(m) <= 2.0 * epsilon * std::fabs(c) + t)
                 {
-                return std::make_pair(c, root_is_valid);
+                return {c, root_is_valid};
                 }
             else
                 {

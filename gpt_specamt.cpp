@@ -170,10 +170,10 @@ currency gpt_specamt::CalculateSpecAmt
     // Because it is implausible that the upper bound is too low,
     // failure in practice implies that the solution would be lower
     // than the product minimum--in which case, return that minimum.
-    switch(solution.second)
+    switch(solution.validity)
         {
         case root_is_valid:
-            {return a_Values.round_specamt().c(solution.first);}
+            {return a_Values.round_specamt().c(solution.root);}
         case root_not_bracketed:
             {return a_Values.min_issue_spec_amt();}
         case improper_bounds:

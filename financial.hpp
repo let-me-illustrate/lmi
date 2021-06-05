@@ -122,10 +122,10 @@ class irr_helper
             ,decimals_
             ,*this
             );
-        switch(z.second)
+        switch(z.validity)
             {
             case root_is_valid:
-                {return z.first;}
+                {return z.root;}
             // Return -100% if NPVs of a priori bounds have same sign.
             case root_not_bracketed:
                 {return -1.0L;}

@@ -457,7 +457,7 @@ currency AccountValue::Solve
         ,solve_helper
         ,os_trace
         );
-    currency const solution_cents = round_minutiae().c(solution.first);
+    currency const solution_cents = round_minutiae().c(solution.root);
 
     Solving = false;
 
@@ -468,14 +468,14 @@ currency AccountValue::Solve
     // now, and actual values are freshly generated downstream.
     (this->*solve_set_fn)(solution_cents);
 
-    switch(solution.second)
+    switch(solution.validity)
         {
         case root_is_valid:
             {} // Do nothing.
             break;
         case root_not_bracketed:
             {
-            LMI_ASSERT(0.0 == solution.first);
+            LMI_ASSERT(0.0 == solution.root);
             // Don't want this firing continually in census runs.
             if(!SolvingForGuarPremium)
                 {
