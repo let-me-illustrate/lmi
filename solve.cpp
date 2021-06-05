@@ -354,7 +354,7 @@ currency AccountValue::Solve()
             break;
         case root_not_bracketed:
             {
-            LMI_ASSERT(0.0 == solution.root);
+            LMI_ASSERT(C0 == solution_cents);
             warning() << "solution not found. Using zero instead." << LMI_FLUSH;
             }
             break;
