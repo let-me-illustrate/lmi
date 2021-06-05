@@ -28,11 +28,10 @@
 #include "round_to.hpp"
 
 #include <cfloat>                       // DECIMAL_DIG
-#include <cmath>
+#include <cmath>                        // fabs(), pow()
 #include <limits>
 #include <ostream>
-#include <string>
-#include <utility>
+#include <utility>                      // pair
 
 enum root_bias
     {bias_none   // Return root z with f(z) closest to 0.0 .
