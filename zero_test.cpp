@@ -110,8 +110,8 @@ struct e_nineteenth
 /// required by Brent's method (counting the endpoint evaluations) is
 ///   (k+1)^2 - 2 [Brent's eq. 3.4]
 ///
-/// For this function, k = [log2(200/1)] = 8, so Brent's method should
-/// take no more than 9^2-2 = 79 function evaluations.
+/// For this function, k = [log2(200/0.5)] = 9, so Brent's method
+/// should take no more than 10^2-2 = 98 function evaluations.
 ///
 /// The parameters hardcoded here were chosen to prevent overflow.
 /// This is not a dramatic illustration of the superiority to Dekker's
@@ -124,7 +124,7 @@ double eq_2_1(double x)
 {
     double a = -100.0;
     double b =  100.0;
-    double t =    1.0; // lowercase delta = Brent's 'tol'
+    double t =    0.5; // lowercase delta = Brent's 'tol'
     return
           (x == a)               ? -((b - a - t) / t) * std::pow(2.0, b / t)
         : (x < a + t)            ? 1.0
@@ -254,8 +254,13 @@ int test_main(int, char*[])
     double d = brent_zero(-1.0, 4.0, 1.0e-20, e_19);
     LMI_TEST(std::fabs(d) <= epsilon);
 
-    d = brent_zero(-100.0, 100.0, 1.0e-20, eq_2_1);
-    LMI_TEST(-100.0 <= d && d <= -100.0 * (1.0 - 6.0 * epsilon));
+    d = brent_zero(-100.0, 100.0, 0.5, eq_2_1);
+    double eq_2_1_upper = (2.0 * 0.5) + -100.0 * (1.0 - 6.0 * epsilon);
+    LMI_TEST(-100.0 <= d && d <= eq_2_1_upper);
+
+    r = decimal_root(-100.0, 100.0, bias_none, 0, eq_2_1);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST(-100.0 <= r.root && r.root <= eq_2_1_upper);
 
     r = decimal_root(-100.0, 100.0, bias_none, 20, eq_2_1);
     LMI_TEST(root_is_valid == r.validity);
