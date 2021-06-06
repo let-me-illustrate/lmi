@@ -118,7 +118,7 @@ struct e_nineteenth
 /// method, which would move by a step of 1.0 at each iteration, thus
 /// taking about 200 iterations. Brent provides an extended-exponent
 /// version for which he says the difference would be 1600 evaluations
-/// versus 1.0e12.
+/// versus 1.0e12 for a tolerance of 1.0e-12.
 
 double eq_2_1(double x)
 {
