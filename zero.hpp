@@ -56,6 +56,7 @@ struct root_type
 {
     double        root     {0.0};
     root_validity validity {improper_bounds};
+    int           n_iter   {0};
 };
 
 namespace detail
@@ -277,27 +278,27 @@ root_type decimal_root
 
     if(a == b)
         {
-        return {a, improper_bounds};
+        return {a, improper_bounds, n_iter};
         }
 
     double fa = static_cast<double>(f(a));
     detail::expatiate(os_trace, n_iter++, technique, a, fa);
     if(0.0 == fa) // Note 0.
         {
-        return {a, root_is_valid};
+        return {a, root_is_valid, n_iter};
         }
 
     double fb = static_cast<double>(f(b));
     detail::expatiate(os_trace, n_iter++, technique, b, fb);
     if(0.0 == fb) // Note 0 [bis].
         {
-        return {b, root_is_valid};
+        return {b, root_is_valid, n_iter};
         }
 
     // f(a) and f(b) must have different signs.
     if((0.0 < fa) == (0.0 < fb))
         {
-        return {0.0, root_not_bracketed};
+        return {0.0, root_not_bracketed, n_iter};
         }
 
     double fc = fb; // Note 1.
@@ -328,11 +329,11 @@ root_type decimal_root
                 ||  bias_higher == bias && 0.0 <= fb
                 )
                 {
-                return {b, root_is_valid};
+                return {b, root_is_valid, n_iter};
                 }
             else if(std::fabs(m) <= 2.0 * epsilon * std::fabs(c) + t)
                 {
-                return {c, root_is_valid};
+                return {c, root_is_valid, n_iter};
                 }
             else
                 {
