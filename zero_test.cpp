@@ -32,12 +32,21 @@
 
 namespace
 {
-    static double const epsilon = std::numeric_limits<double>::epsilon();
+static double const epsilon = std::numeric_limits<double>::epsilon();
+
+/// AfMWD eq. 2.18: maximum error
+
+double max_err(double zeta, double tol)
+{
+    return 6.0 * epsilon * std::fabs(zeta) + 2.0 * tol;
+}
 } // Unnamed namespace.
 
 template<typename F>
 void test_zero(double bound0, double bound1, int dec, F f, double exact_root)
 {
+    double maximum_error = max_err(exact_root, 0.5 * std::pow(10.0, -dec));
+
     root_type rn = decimal_root(bound0, bound1, bias_none,   dec, f);
     root_type rl = decimal_root(bound0, bound1, bias_lower,  dec, f);
     root_type rh = decimal_root(bound0, bound1, bias_higher, dec, f);
@@ -48,25 +57,9 @@ void test_zero(double bound0, double bound1, int dec, F f, double exact_root)
 
     LMI_TEST(rl.root <= rn.root && rn.root <= rh.root);
 
-    double tol =
-            std::pow(10.0, -dec)
-        +   6.0 * epsilon * std::max
-                (std::fabs(rl.root), std::fabs(rh.root)
-                )
-        ;
-    LMI_TEST(std::fabs(rh.root - rl.root) <= tol);
-
-    double toll =
-            std::pow(10.0, -dec)
-        +   6.0 * epsilon * std::fabs(rl.root)
-        ;
-    LMI_TEST(std::fabs(rl.root - exact_root) <= toll);
-
-    double tolh =
-            std::pow(10.0, -dec)
-        +   6.0 * epsilon * std::fabs(rh.root)
-        ;
-    LMI_TEST(std::fabs(rh.root - exact_root) <= tolh);
+    LMI_TEST(std::fabs(rh.root - rl.root) <= maximum_error);
+    LMI_TEST(std::fabs(rl.root - exact_root) <= maximum_error);
+    LMI_TEST(std::fabs(rh.root - exact_root) <= maximum_error);
 }
 
 double e_function(double z)
@@ -255,7 +248,8 @@ int test_main(int, char*[])
     LMI_TEST(std::fabs(d) <= epsilon);
 
     d = brent_zero(-100.0, 100.0, 0.5, eq_2_1);
-    double eq_2_1_upper = (2.0 * 0.5) + -100.0 * (1.0 - 6.0 * epsilon);
+    double zeta = -100.0;
+    double eq_2_1_upper = zeta + max_err(zeta, 0.5);
     LMI_TEST(-100.0 <= d && d <= eq_2_1_upper);
 
     r = decimal_root(-100.0, 100.0, bias_none, 0, eq_2_1);
@@ -264,7 +258,8 @@ int test_main(int, char*[])
 
     r = decimal_root(-100.0, 100.0, bias_none, 20, eq_2_1);
     LMI_TEST(root_is_valid == r.validity);
-    LMI_TEST(-100.0 <= r.root && r.root <= -100.0 * (1.0 - 6.0 * epsilon));
+    // Twenty-decimal rounding makes the epsilon term vanish.
+    LMI_TEST(-100.0 <= r.root && r.root <= zeta + max_err(zeta, 0.0));
 
     r = decimal_root(-1.0, 1.0, bias_none, 13, signum_offset);
     LMI_TEST(root_is_valid == r.validity);
