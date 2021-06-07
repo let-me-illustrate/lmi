@@ -240,12 +240,13 @@ int test_main(int, char*[])
     // chasing after wind that costs many iterations.
 
     e_nineteenth e_19;
-    r = decimal_root(-1.0, 4.0, bias_none, 20, e_19);
-    LMI_TEST(root_is_valid == r.validity);
-    LMI_TEST(std::fabs(r.root) <= epsilon);
 
     double d = brent_zero(-1.0, 4.0, 1.0e-20, e_19);
     LMI_TEST(std::fabs(d) <= epsilon);
+
+    r = decimal_root(-1.0, 4.0, bias_none, 20, e_19);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST(std::fabs(r.root) <= epsilon);
 
     d = brent_zero(-100.0, 100.0, 0.5, eq_2_1);
     double zeta = -100.0;
