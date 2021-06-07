@@ -40,6 +40,30 @@ double max_err(double zeta, double tol)
 {
     return 6.0 * epsilon * std::fabs(zeta) + 2.0 * tol;
 }
+
+/// AfMWD eq. 3.3: maximum number of iterations for bisection.
+///
+/// The return value, k+1, is the exact number of function
+/// evaluations unless f vanishes early, as Brent explains in the
+/// paragraph following eq. 3.3 .
+///
+/// static_cast<int> is exact for any number of iterations that
+/// can be counted by an 'int'.
+
+int max_n_iter_bolzano(double a, double b, double tol, double zeta)
+{
+    double delta = 2.0 * epsilon * std::fabs(zeta) + tol;
+    double k = std::ceil(std::log2(std::fabs(b - a) / delta));
+    return 1 + static_cast<int>(k);
+}
+
+/// AfMWD eq. 3.3: maximum number of iterations for Brent's method.
+
+int max_n_iter_brent(double a, double b, double tol, double zeta)
+{
+    int k_plus_one = max_n_iter_bolzano(a, b, tol, zeta);
+    return k_plus_one * k_plus_one - 2;
+}
 } // Unnamed namespace.
 
 template<typename F>
@@ -241,12 +265,22 @@ int test_main(int, char*[])
 
     e_nineteenth e_19;
 
+    // Number of iterations:
+    //   195 Brent's table 4.1 (IBM 360)
+    //   171 x86_64 brent_zero (IEEE 754)
+    //   169 x86_64 decimal_root (differs slightly due to rounding)
     double d = brent_zero(-1.0, 4.0, 1.0e-20, e_19);
     LMI_TEST(std::fabs(d) <= epsilon);
 
     r = decimal_root(-1.0, 4.0, bias_none, 20, e_19);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST(std::fabs(r.root) <= epsilon);
+    // Assertions labelled 'weak' test the number of iterations
+    // against empirical measurements (with various architectures)
+    // rather than a theoretical maximum. Perhaps they'll always
+    // succeed, because floating-point behavior is determinate;
+    // but small variations betoken no catastrophe.
+    LMI_TEST(169 <= r.n_iter && r.n_iter <= 173); // weak
 
     d = brent_zero(-100.0, 100.0, 0.5, eq_2_1);
     double zeta = -100.0;
@@ -256,15 +290,44 @@ int test_main(int, char*[])
     r = decimal_root(-100.0, 100.0, bias_none, 0, eq_2_1);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST(-100.0 <= r.root && r.root <= eq_2_1_upper);
+    LMI_TEST(10 == max_n_iter_bolzano(-100.0, 100.0, 0.5, -100.0));
+    LMI_TEST(98 == max_n_iter_brent  (-100.0, 100.0, 0.5, -100.0));
+    LMI_TEST(r.n_iter <= 98);
+    LMI_TEST_EQUAL(20, r.n_iter); // weak
+    // Number of iterations required:
+    //   23 for brent_zero() [above]
+    //   20 for decimal_root()
+    // Presumably the difference is due to rounding.
 
     r = decimal_root(-100.0, 100.0, bias_none, 20, eq_2_1);
     LMI_TEST(root_is_valid == r.validity);
     // Twenty-decimal rounding makes the epsilon term vanish.
     LMI_TEST(-100.0 <= r.root && r.root <= zeta + max_err(zeta, 0.0));
+    LMI_TEST(  53 == max_n_iter_bolzano(-100.0, 100.0, 0.0, -100.0));
+    LMI_TEST(2807 == max_n_iter_brent  (-100.0, 100.0, 0.0, -100.0));
+    LMI_TEST(r.n_iter <= 2807);
+    LMI_TEST_EQUAL(66, r.n_iter); // weak
 
     r = decimal_root(-1.0, 1.0, bias_none, 13, signum_offset);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST(materially_equal(-1.0 / 3.0, r.root));
+    zeta = 1.0 / 3.0;
+    double tol = 0.5 * 1.0e-13;
+    LMI_TEST_EQUAL(  47, max_n_iter_bolzano(-1.0, 1.0, tol, zeta));
+    LMI_TEST_EQUAL(2207, max_n_iter_brent  (-1.0, 1.0, tol, zeta));
+    LMI_TEST(r.n_iter <= 2207);
+    // Here, decimal_root() always chooses the bisection technique.
+    LMI_TEST(46 <= r.n_iter && r.n_iter <= 47); // weak
+
+    r = decimal_root(-1.0, 1.0, bias_none, 16, signum_offset);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST(materially_equal(-1.0 / 3.0, r.root));
+    tol = 0.5 * 1.0e-16;
+    LMI_TEST_EQUAL(  55, max_n_iter_bolzano(-1.0, 1.0, tol, zeta));
+    LMI_TEST_EQUAL(3023, max_n_iter_brent  (-1.0, 1.0, tol, zeta));
+    LMI_TEST(r.n_iter <= 3023);
+    // Here, decimal_root() always chooses the bisection technique.
+    LMI_TEST_EQUAL(55, r.n_iter); // weak
 
     e_former_rounding_problem e_frp;
     r = decimal_root(0.12609, 0.12611, bias_lower, 5, e_frp);
