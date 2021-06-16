@@ -263,7 +263,7 @@ currency AccountValue::SolveTest
 
     if(mce_solve_for_non_mec == SolveTarget_)
         {
-        static constexpr currency C100 = 100_cents;
+        constexpr currency C100 {100_cents};
         return InvariantValues().IsMec ? -C100 : C100;
         }
 

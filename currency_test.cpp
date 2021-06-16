@@ -287,7 +287,7 @@ void currency_test::test_round_currency()
 
 void currency_test::mete_humongous()
 {
-    static constexpr double d0 = std::numeric_limits<double>::max();
+    constexpr double d0 {std::numeric_limits<double>::max()};
     static currency const extreme = from_cents(d0);
     static currency const value   = from_cents(1234567);
     for(int i = 0; i < 100000; ++i)
@@ -298,7 +298,7 @@ void currency_test::mete_humongous()
 
 void currency_test::mete_infinite()
 {
-    static constexpr double d0 = std::numeric_limits<double>::infinity();
+    constexpr double d0 {std::numeric_limits<double>::infinity()};
     static currency const extreme = from_cents(d0);
     static currency const value   = from_cents(1234567);
     for(int i = 0; i < 100000; ++i)

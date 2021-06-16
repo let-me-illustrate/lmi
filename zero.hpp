@@ -262,7 +262,7 @@ root_type decimal_root
     ,std::ostream&   os_trace = null_stream()
     )
 {
-    static constexpr double epsilon   {std::numeric_limits<double>::epsilon()};
+    constexpr double        epsilon   {std::numeric_limits<double>::epsilon()};
 
     round_to<double> const  round_dec {decimals, r_to_nearest};
 
@@ -428,7 +428,7 @@ double brent_zero
     ,FunctionalType& f
     )
 {
-    double const epsilon = std::numeric_limits<double>::epsilon();
+    constexpr double epsilon {std::numeric_limits<double>::epsilon()};
 
     // Returns a zero of the function f in [a,b] to within a tolerance
     //   6 * epsilon * |z| + 2 * t

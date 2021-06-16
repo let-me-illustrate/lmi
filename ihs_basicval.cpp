@@ -1939,7 +1939,7 @@ std::vector<double> BasicValues::GetCurrCOIRates0() const
 
 std::vector<double> BasicValues::GetCurrCOIRates1() const
 {
-    static constexpr double dbl_inf = std::numeric_limits<double>::infinity();
+    constexpr double dbl_inf {std::numeric_limits<double>::infinity()};
     static const currency inf = from_cents(dbl_inf);
     return GetTable
         (product().datum("CurrCOIFilename")
@@ -1952,7 +1952,7 @@ std::vector<double> BasicValues::GetCurrCOIRates1() const
 
 std::vector<double> BasicValues::GetCurrCOIRates2() const
 {
-    static constexpr double dbl_inf = std::numeric_limits<double>::infinity();
+    constexpr double dbl_inf {std::numeric_limits<double>::infinity()};
     static const currency inf = from_cents(dbl_inf);
     return GetTable
         (product().datum("CurrCOIFilename")
