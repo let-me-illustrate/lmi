@@ -314,6 +314,8 @@ root_type decimal_root
             fc = fa;
             d = e = b - a;
             }
+        // If 'c' is a closer approximant than 'b', then swap them,
+        // discarding the old value of 'a'.
         if(std::fabs(fc) < std::fabs(fb))
             {
              a =  b;  b =  c;  c =  a;
