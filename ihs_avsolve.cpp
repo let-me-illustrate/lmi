@@ -306,9 +306,17 @@ void AccountValue::SolveSetWD(currency a_CandidateValue)
 
 /// Ascertain guaranteed premium for NAIC illustration reg.
 ///
-/// Zero out all payments [not yet], and solve for level ee premium
+/// Zero out all payments, even 1035s, and solve for level ee premium
 /// to keep the contract in force until normal maturity. (It would be
 /// equally good to solve for er premium--the choice is arbitrary.)
+///
+/// A large dumpin or 1035 exchange might suffice to keep the contract
+/// in force until normal maturity. However, showing the guaranteed
+/// premium as zero on a new-business illustration could be construed
+/// as implying that no premium at all is required, not even the lump
+/// sum (which has not been received prior to issue); yet for inforce
+/// contracts, the lump sum has been booked, and may result in a
+/// guaranteed (future) premium of zero.
 ///
 /// This is necessarily the last step in producing an illustration,
 /// so that the guaranteed premium reflects any parameters that have
@@ -319,7 +327,9 @@ void AccountValue::SolveSetWD(currency a_CandidateValue)
 currency AccountValue::SolveGuarPremium()
 {
     Outlay_->set_er_modal_premiums(C0, 0, BasicValues::GetLength());
-    // other payments, like 1035 exchanges, to be zeroed out soon
+    Outlay_->block_dumpin              ();
+    Outlay_->block_external_1035_amount();
+    Outlay_->block_internal_1035_amount();
 
     Solving               = true;
     SolvingForGuarPremium = true;
