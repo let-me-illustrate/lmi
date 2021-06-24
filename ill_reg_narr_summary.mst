@@ -45,11 +45,13 @@
     {{FnBoyEoy}}
 </p>
 
+{{#DuringFirstYear}}
 {{^SinglePremium}}
 <p>
     {{FnGuaranteedPremium}}
 </p>
 {{/SinglePremium}}
+{{/DuringFirstYear}}
 
 <p>
     {{LoanFootnote}}

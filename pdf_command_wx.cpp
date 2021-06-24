@@ -2271,6 +2271,11 @@ class pdf_illustration_naic : public pdf_illustration
             );
 
         add_variable
+            ("DuringFirstYear"
+            ,0 == inforce_year
+            );
+
+        add_variable
             ("InforceYearLT5"
             ,inforce_year < 5
             );
@@ -2316,7 +2321,12 @@ class pdf_illustration_naic : public pdf_illustration
         add<standard_page>("ill_reg_narr_summary");
         add<standard_page>("ill_reg_narr_summary2");
         add<standard_page>("ill_reg_column_headings");
-        if(!invar.IsInforce)
+        // The condition is not '!invar.IsInforce': the question is
+        // whether the first anniversary has been reached, not whether
+        // the issue date has been passed. See the documentation for
+        // AccountValue::SetGuarPrem(). In MST files, the variable
+        // "DuringFirstYear" represents this same condition.
+        if(0 == inforce_year)
             {
             add<ill_reg_numeric_summary_page>();
             }
@@ -2330,7 +2340,7 @@ class pdf_illustration_naic : public pdf_illustration
         // Notionally, the purchaser detaches this duplicate paper
         // page and mails it physically to the insurer. Someday a
         // more modern alternative might be chosen.
-        if(!invar.IsInforce)
+        if(0 == inforce_year)
             {
             add<ill_reg_numeric_summary_page>();
             }
