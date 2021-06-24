@@ -61,7 +61,6 @@ class modal_outlay final
 
     void set_ee_modal_premiums(currency z, int from_year, int to_year);
     void set_er_modal_premiums(currency z, int from_year, int to_year);
-    void set_er_modal_premiums(std::vector<currency> const&);
     void set_withdrawals      (currency z, int from_year, int to_year);
     void set_new_cash_loans   (currency z, int from_year, int to_year);
 

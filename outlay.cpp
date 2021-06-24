@@ -61,12 +61,6 @@ void modal_outlay::set_er_modal_premiums(currency z, int from_year, int to_year)
     std::fill_n(er_modal_premiums_.begin() + from_year, to_year - from_year, z);
 }
 
-void modal_outlay::set_er_modal_premiums(std::vector<currency> const& z)
-{
-    LMI_ASSERT(z.size() == er_modal_premiums_.size());
-    er_modal_premiums_ = round_gross_premium_.c(z); // CURRENCY !! already rounded?
-}
-
 void modal_outlay::set_withdrawals(currency z, int from_year, int to_year)
 {
     z = round_withdrawal_.c(z); // CURRENCY !! already rounded?
