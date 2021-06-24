@@ -239,13 +239,33 @@ Then run other bases.
     FinalizeLifeAllBases();
 }
 
-//============================================================================
-// TODO ?? Perhaps commutation functions could be used to speed up
-// this rather expensive function.
+/// Guaranteed premium for NAIC illustration reg, section 7B(2).
+///
+/// Section 7B(2) requires "basic" illustrations to show "the premium
+/// outlay that must be paid to guarantee coverage for the term of the
+/// contract".
+///
+/// Section 4H(1) distinguishes "basic" from "in force" illustrations;
+/// the latter category applies when the contract has been "in force
+/// for one year or more". Thus, an illustration depicting values six
+/// months after issue is still "basic"; in normal industry parlance,
+/// it's an inforce illustration, but it's not "in force" for the
+/// purpose of complying with this regulation.
+///
+/// Section 10C says "in force" illustrations must comply with
+///   "Section 6A, 6B, 7A and 7E"
+/// which excludes 7B.
+///
+/// Therefore, this premium must be calculated only during the first
+/// year, and of course only for contracts subject to this regulation.
+///
+/// TODO ?? Perhaps commutation functions could be used to speed up
+/// this rather expensive function.
+
 void AccountValue::SetGuarPrem()
 {
     GuarPremium = C0;
-    if(BasicValues::IsSubjectToIllustrationReg())
+    if(BasicValues::IsSubjectToIllustrationReg() && 0 == InforceYear)
         {
         GuarPremium = SolveGuarPremium();
         }

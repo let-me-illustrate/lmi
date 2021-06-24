@@ -334,8 +334,7 @@ currency AccountValue::SolveGuarPremium()
     Solving               = true;
     SolvingForGuarPremium = true;
 
-    // Run the solve using guaranteed assumptions.
-    currency guar_premium = Solve
+    return Solve
         (mce_solve_ee_prem
         ,0
         ,BasicValues::GetLength()
@@ -345,8 +344,6 @@ currency AccountValue::SolveGuarPremium()
         ,mce_gen_guar
         ,mce_sep_full
         );
-
-    return guar_premium;
 }
 
 currency AccountValue::Solve
@@ -490,11 +487,18 @@ currency AccountValue::Solve
         case root_not_bracketed:
             {
             LMI_ASSERT(C0 == solution_cents);
-            // Don't want this firing continually in census runs.
-            if(!SolvingForGuarPremium)
+            if(SolvingForGuarPremium)
+                {
+                // This solve should be done only in the first year.
+                LMI_ASSERT(0 == InforceYear);
+                // A solve for guaranteed premium can legitimately
+                // yield zero, when the contract is at least one day
+                // old and a large-enough initial premium has already
+                // been booked. No warning is wanted in this case.
+                }
+            else
                 {
                 warning() << "Solution not found: using zero instead." << LMI_FLUSH;
-                // TODO ?? What can we do when no solution exists for guar prem?
                 }
             }
             break;
