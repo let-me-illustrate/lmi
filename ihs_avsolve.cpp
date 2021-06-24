@@ -304,14 +304,23 @@ void AccountValue::SolveSetWD(currency a_CandidateValue)
     Outlay_->set_withdrawals(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
+/// Ascertain guaranteed premium for NAIC illustration reg.
+///
+/// Zero out all payments [not yet], and solve for level ee premium
+/// to keep the contract in force until normal maturity. (It would be
+/// equally good to solve for er premium--the choice is arbitrary.)
+///
+/// This is necessarily the last step in producing an illustration,
+/// so that the guaranteed premium reflects any parameters that have
+/// been adjusted dynamically. It's okay that it overwrites payments
+/// and indeed most other values, because the overwritten values are
+/// not posted to the ledger.
+
 currency AccountValue::SolveGuarPremium()
 {
-    // Store original er premiums for later restoration.
-    std::vector<currency> stored = Outlay_->er_modal_premiums();
-    // Zero out er premiums and solve for ee premiums only.
     Outlay_->set_er_modal_premiums(C0, 0, BasicValues::GetLength());
+    // other payments, like 1035 exchanges, to be zeroed out soon
 
-    bool temp_solving     = Solving;
     Solving               = true;
     SolvingForGuarPremium = true;
 
@@ -326,11 +335,6 @@ currency AccountValue::SolveGuarPremium()
         ,mce_gen_guar
         ,mce_sep_full
         );
-
-    // Restore original values.
-    Outlay_->set_er_modal_premiums(stored);
-    Solving               = temp_solving;
-    SolvingForGuarPremium = false;
 
     return guar_premium;
 }

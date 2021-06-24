@@ -541,7 +541,11 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         );
 }
 
-//============================================================================
+/// Post results to ledger for a single basis.
+///
+/// However, exit early, posting nothing, when performing a solve
+/// for NAIC illustration reg guaranteed premium.
+
 void AccountValue::FinalizeLife(mcenum_run_basis a_Basis)
 {
     LMI_ASSERT(RunBasis_ == a_Basis);

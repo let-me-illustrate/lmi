@@ -126,8 +126,12 @@ class LMI_SO AccountValue final
     // We're not yet entirely sure how to handle ledger values. Right now,
     // we have pointers to a Ledger and also to its variant and invariant
     // parts. We put data into the parts, and then insert the parts into
-    // the Ledger. At this moment it seems best to work not through these
-    // "parts" but rather through references to components of the Ledger.
+    // the Ledger. It might seem better to work not through these distinct
+    // "parts" but rather through references to components of the Ledger;
+    // however, the present design permits a solve for NAIC illustration
+    // reg guaranteed premium that (as desired) has no side effects--the
+    // ledger "parts" it affects are simply thrown away.
+    //
     // While we gather more information and consider this, all access comes
     // through the following functions.
     LedgerInvariant& InvariantValues();
