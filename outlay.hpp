@@ -59,10 +59,6 @@ class modal_outlay final
     modal_outlay(modal_outlay const&) = delete;
     modal_outlay& operator=(modal_outlay const&) = delete;
 
-    // Not yet used, but needed for MEC avoidance.
-    void set_external_1035_amount(currency z);
-    void set_internal_1035_amount(currency z);
-
     void set_ee_modal_premiums(currency z, int from_year, int to_year);
     void set_er_modal_premiums(currency z, int from_year, int to_year);
     void set_er_modal_premiums(std::vector<currency> const&);

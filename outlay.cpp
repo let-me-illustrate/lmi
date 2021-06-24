@@ -49,16 +49,6 @@ modal_outlay::modal_outlay
 {
 }
 
-void modal_outlay::set_external_1035_amount(currency z)
-{
-    external_1035_amount_ = round_gross_premium_.c(z);
-}
-
-void modal_outlay::set_internal_1035_amount(currency z)
-{
-    internal_1035_amount_ = round_gross_premium_.c(z);
-}
-
 void modal_outlay::set_ee_modal_premiums(currency z, int from_year, int to_year)
 {
     z = round_gross_premium_.c(z); // CURRENCY !! already rounded?
