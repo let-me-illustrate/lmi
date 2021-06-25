@@ -322,7 +322,7 @@ void AccountValue::SolveSetWD(currency a_CandidateValue)
 /// so that the guaranteed premium reflects any parameters that have
 /// been adjusted dynamically. It's okay that it overwrites payments
 /// and indeed most other values, because the overwritten values are
-/// not posted to the ledger.
+/// discarded.
 
 currency AccountValue::SolveGuarPremium()
 {
