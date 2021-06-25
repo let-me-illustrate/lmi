@@ -216,6 +216,12 @@ int test_main(int, char*[])
     // Because the base of natural logarithms is transcendental,
     // Brent's algorithm must terminate with distinct upper and lower
     // bounds: neither can equal the unrepresentable true value.
+    //
+    // The last iterate evaluated is retained in member 'e.state'.
+    // It is one endpoint of the final bounding interval, but not
+    // necessarily the endpoint that is returned according to the
+    // "bias" argument; the commented-out 'e.state' tests below serve
+    // to suggest this.
 
     r = decimal_root(0.5, 5.0, bias_lower, 9, e);
     LMI_TEST(root_is_valid == r.validity);
