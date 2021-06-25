@@ -376,7 +376,7 @@ root_type decimal_root
             s = e;
             e = d;
             if
-                (   p < 1.5 * m * q - std::fabs(tol * q)
+                (   2.0 * p < 3.0 * m * q - std::fabs(tol * q)
                 &&  p < std::fabs(0.5 * s * q)
                 )
                 {
@@ -495,7 +495,7 @@ double brent_zero
             s = e;
             e = d;
             if
-                (   p < 1.5 * m * q - std::fabs(tol * q)
+                (   2.0 * p < 3.0 * m * q - std::fabs(tol * q)
                 &&  p < std::fabs(0.5 * s * q)
                 )
                 {
