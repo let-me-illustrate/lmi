@@ -309,6 +309,10 @@ void AccountValue::SolveSetWD(currency a_CandidateValue)
 /// Zero out all payments, even 1035s, and solve for level ee premium
 /// to keep the contract in force until normal maturity. (It would be
 /// equally good to solve for er premium--the choice is arbitrary.)
+/// This premium results in a final CSV of at least zero, as opposed
+/// to endowment, because section 7B(2) of the regulation describes
+/// is as "the premium outlay that must be paid to guarantee coverage
+/// for the term of the contract".
 ///
 /// A large dumpin or 1035 exchange might suffice to keep the contract
 /// in force until normal maturity. However, showing the guaranteed
@@ -338,7 +342,7 @@ currency AccountValue::SolveGuarPremium()
         (mce_solve_ee_prem
         ,0
         ,BasicValues::GetLength()
-        ,mce_solve_for_endt
+        ,mce_solve_for_target_csv
         ,C0
         ,BasicValues::GetLength()
         ,mce_gen_guar
