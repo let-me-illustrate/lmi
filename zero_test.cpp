@@ -66,8 +66,10 @@ int max_n_iter_brent(double a, double b, double tol, double zeta)
 }
 } // Unnamed namespace.
 
+/// Test with all biases, asserting obvious invariants.
+
 template<typename F>
-void test_zero(double bound0, double bound1, int dec, F f, double exact_root)
+void test_bias(double bound0, double bound1, int dec, F f, double exact_root)
 {
     double maximum_error = max_err(exact_root, 0.5 * std::pow(10.0, -dec));
 
@@ -245,17 +247,17 @@ int test_main(int, char*[])
 
     // Various tests--see function-template definition.
 
-    test_zero(-1.0e100, 4.0e100, -100, e, std::exp(1.0));
-    test_zero(-1.0    , 4.0    ,    0, e, std::exp(1.0));
-    test_zero( 0.5    , 5.0    ,    1, e, std::exp(1.0));
-    test_zero( 0.5    , 5.0    ,    2, e, std::exp(1.0));
-    test_zero( 0.5    , 5.0    ,    3, e, std::exp(1.0));
-    test_zero( 0.5    , 5.0    ,    4, e, std::exp(1.0));
-    test_zero( 0.5    , 5.0    ,    5, e, std::exp(1.0));
-    test_zero( 0.5    , 5.0    ,    6, e, std::exp(1.0));
-    test_zero( 0.5    , 5.0    ,    7, e, std::exp(1.0));
-    test_zero( 0.5    , 5.0    ,    8, e, std::exp(1.0));
-    test_zero(-1.0    , 4.0    ,  100, e, std::exp(1.0));
+    test_bias(-1.0e100, 4.0e100, -100, e, std::exp(1.0));
+    test_bias(-1.0    , 4.0    ,    0, e, std::exp(1.0));
+    test_bias( 0.5    , 5.0    ,    1, e, std::exp(1.0));
+    test_bias( 0.5    , 5.0    ,    2, e, std::exp(1.0));
+    test_bias( 0.5    , 5.0    ,    3, e, std::exp(1.0));
+    test_bias( 0.5    , 5.0    ,    4, e, std::exp(1.0));
+    test_bias( 0.5    , 5.0    ,    5, e, std::exp(1.0));
+    test_bias( 0.5    , 5.0    ,    6, e, std::exp(1.0));
+    test_bias( 0.5    , 5.0    ,    7, e, std::exp(1.0));
+    test_bias( 0.5    , 5.0    ,    8, e, std::exp(1.0));
+    test_bias(-1.0    , 4.0    ,  100, e, std::exp(1.0));
 
     // Brent's book uses the nineteenth-power function in examples.
     // His example using a tolerance of 1e-20 is subject to underflow
