@@ -184,7 +184,7 @@ struct e_former_rounding_problem
     double operator()(double z) {return z - 0.12610;}
 };
 
-int test_main(int, char*[])
+void test_fundamentals()
 {
     // Test use with function.
 
@@ -212,20 +212,24 @@ int test_main(int, char*[])
 
     r = decimal_root(0.1, 1.0, bias_none, 9, e);
     LMI_TEST(root_not_bracketed == r.validity);
+}
 
+void test_biases()
+{
     // Test different biases.
 
     // Because the base of natural logarithms is transcendental,
     // Brent's algorithm must terminate with distinct upper and lower
     // bounds: neither can equal the unrepresentable true value.
-    //
+    e_functor e;
+
     // The last iterate evaluated is retained in member 'e.state'.
     // It is one endpoint of the final bounding interval, but not
     // necessarily the endpoint that is returned according to the
     // "bias" argument; the commented-out 'e.state' tests below serve
     // to suggest this.
 
-    r = decimal_root(0.5, 5.0, bias_lower, 9, e);
+    root_type r = decimal_root(0.5, 5.0, bias_lower, 9, e);
     LMI_TEST(root_is_valid == r.validity);
     double e_or_less = r.root;
     LMI_TEST(e_or_less < std::exp(1.0));
@@ -258,7 +262,10 @@ int test_main(int, char*[])
     test_bias( 0.5    , 5.0    ,    7, e, std::exp(1.0));
     test_bias( 0.5    , 5.0    ,    8, e, std::exp(1.0));
     test_bias(-1.0    , 4.0    ,  100, e, std::exp(1.0));
+}
 
+void test_various_functions()
+{
     // Brent's book uses the nineteenth-power function in examples.
     // His example using a tolerance of 1e-20 is subject to underflow
     // on IEEE 754 hardware: distinct bounds can't be that close
@@ -280,7 +287,7 @@ int test_main(int, char*[])
     double d = brent_zero(-1.0, 4.0, 1.0e-20, e_19);
     LMI_TEST(std::fabs(d) <= epsilon);
 
-    r = decimal_root(-1.0, 4.0, bias_none, 20, e_19);
+    root_type r = decimal_root(-1.0, 4.0, bias_none, 20, e_19);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST(std::fabs(r.root) <= epsilon);
     // Assertions labelled 'weak' test the number of iterations
@@ -336,9 +343,12 @@ int test_main(int, char*[])
     LMI_TEST(r.n_iter <= 3023);
     // Here, decimal_root() always chooses the bisection technique.
     LMI_TEST_EQUAL(55, r.n_iter); // weak
+}
 
+void test_former_rounding_problem()
+{
     e_former_rounding_problem e_frp;
-    r = decimal_root(0.12609, 0.12611, bias_lower, 5, e_frp);
+    root_type r = decimal_root(0.12609, 0.12611, bias_lower, 5, e_frp);
 #if !defined LMI_COMO_WITH_MINGW
     LMI_TEST(materially_equal(0.12610, r.root));
 #else // defined LMI_COMO_WITH_MINGW
@@ -358,6 +368,14 @@ int test_main(int, char*[])
 #endif // defined LMI_COMO_WITH_MINGW
 
     LMI_TEST(root_is_valid == r.validity);
+}
+
+int test_main(int, char*[])
+{
+    test_fundamentals();
+    test_biases();
+    test_various_functions();
+    test_former_rounding_problem();
 
     return 0;
 }
