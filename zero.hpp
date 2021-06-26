@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+#include "assert_lmi.hpp"
 #include "null_stream.hpp"
 #include "round_to.hpp"
 
@@ -430,6 +431,7 @@ double brent_zero
     ,FunctionalType& f
     )
 {
+    LMI_ASSERT(0.0 <= t);
     constexpr double epsilon {std::numeric_limits<double>::epsilon()};
 
     // Returns a zero of the function f in [a,b] to within a tolerance
