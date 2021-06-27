@@ -316,8 +316,21 @@ void test_various_functions()
 
     r = decimal_root(-100.0, 100.0, bias_none, 20, eq_2_1);
     LMI_TEST(root_is_valid == r.validity);
-    // Twenty-decimal rounding makes the epsilon term vanish.
-    LMI_TEST(-100.0 <= r.root && r.root <= zeta + max_err(zeta, 0.0));
+    // Rounding 'x' (of type 'double') to twenty decimals doesn't
+    // affect its value near -100.0; the final bracketing values
+    // (for x86_64-pc-linux-gnu) are
+    //      x                       f(x)
+    //    -99.9999999999999147349   1
+    //   -100                      -6.41168279659337119941e+62
+    // in whose vicinity the error term in Brent's equation 2.18
+    //   6.0 * epsilon * std::fabs(zeta) + 2.0 * t;
+    // with t=0.5*10^-20 becomes
+    //   600e 1.33226762955018784851e-13
+    //   + 2t 0.00000010000000000000e-13 (same as 1.0e-20)
+    // where the 'epsilon' term overwhelms the 't' term.
+    double t = 0.5 * std::pow(10.0, -20.0);
+    LMI_TEST(-100.0 <= r.root && r.root <= zeta + max_err(zeta, t));
+
     LMI_TEST(  53 == max_n_iter_bolzano(-100.0, 100.0, 0.0, -100.0));
     LMI_TEST(2807 == max_n_iter_brent  (-100.0, 100.0, 0.0, -100.0));
     LMI_TEST(r.n_iter <= 2807);
