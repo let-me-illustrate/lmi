@@ -24,6 +24,7 @@
 #include "zero.hpp"
 
 #include "materially_equal.hpp"
+#include "miscellany.hpp"               // stifle_warning_for_unused_variable()
 #include "test_tools.hpp"
 
 #include <algorithm>                    // max()
@@ -72,6 +73,56 @@ int max_n_iter_brent(double a, double b, double tol, double zeta)
     return k_plus_one * k_plus_one - 2;
 }
 } // Unnamed namespace.
+
+/// Test root-finding accuracy and speed.
+///
+/// Find a root using
+///  - a plain translation of Brent's ALGOL procedure 'zero'
+///  - lmi's customized version thereof
+///
+/// Verify that
+///  - the result is within the max_err() tolerance (ignoring Brent's
+///      warning about roundoff in the computed function)
+///  - the number of iterations doesn't exceed max_n_iter_brent()
+///
+/// Also verify that the number of iterations matches the 'n_iter'
+/// argument, to make it easier to detect mistaken refactorings.
+/// Do this only if 'n_iter' is not zero (the default), and only for
+/// a single architecture (here, x86_64-pc-linux-gnu), because the
+/// outcome depends on architecture.
+
+template<typename F>
+void test_a_function
+    (F           f
+    ,double      exact_root
+    ,double      bound0
+    ,double      bound1
+    ,int         decimals
+    ,int         line
+    ,int         n_iter = 0
+    ,char const* file   = __FILE__
+    )
+{
+    double const tol = 0.5 * std::pow(10.0, -decimals);
+    double const maximum_error = max_err(exact_root, tol);
+    int const max_n_iter = max_n_iter_brent(bound0, bound1, tol, exact_root);
+
+    double d = brent_zero(bound0, bound1, tol, f);
+    INVOKE_LMI_TEST_RELATION(std::fabs(d),<=,maximum_error,file,line);
+
+    root_type r = decimal_root(bound0, bound1, bias_none, decimals, f);
+    INVOKE_LMI_TEST(root_is_valid == r.validity, file, line);
+    INVOKE_LMI_TEST_RELATION(std::fabs(r.root),<=,maximum_error,file,line);
+    INVOKE_LMI_TEST_RELATION(r.n_iter,<=,max_n_iter,file,line);
+
+#if defined LMI_X86_64 && defined LMI_POSIX
+    if(0 != n_iter)
+        {
+        INVOKE_LMI_TEST_EQUAL(n_iter, r.n_iter, file, line);
+        }
+#endif // defined LMI_X86_64 && defined LMI_POSIX
+    stifle_warning_for_unused_variable(n_iter);
+}
 
 /// Test with all biases, asserting obvious invariants.
 
@@ -319,6 +370,21 @@ void test_various_functions()
     // succeed, because floating-point behavior is determinate;
     // but small variations betoken no catastrophe.
     LMI_TEST(169 <= r.n_iter && r.n_iter <= 173); // weak
+
+    // Similar, using unit-test function template.
+    //
+    // For now at least, test_a_function() tests that the error is
+    // within tolerance, ignoring roundoff in the computed function.
+    // That may very often be useful, but it can produce spurious
+    // failures, as in these three commented-out lines:
+//  test_a_function(e_19, 0.0, -1.0, 4.0, 20, __LINE__, 169);
+//  test_a_function(e_19, 0.0, -1.0, 4.0, 19, __LINE__, 171);
+//  test_a_function(e_19, 0.0, -1.0, 4.0, 18, __LINE__, 168);
+    test_a_function(e_19, 0.0, -1.0, 4.0, 17, __LINE__, 163);
+    test_a_function(e_19, 0.0, -1.0, 4.0, 16, __LINE__, 156);
+    test_a_function(e_19, 0.0, -1.0, 4.0, 15, __LINE__, 142);
+    test_a_function(e_19, 0.0, -1.0, 4.0, 14, __LINE__, 128);
+    test_a_function(e_19, 0.0, -1.0, 4.0, 12, __LINE__, 112);
 
     d = brent_zero(-100.0, 100.0, 0.5, eq_2_1);
     zeta = -100.0;
