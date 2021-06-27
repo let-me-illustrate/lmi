@@ -35,6 +35,13 @@ namespace
 static double const epsilon = std::numeric_limits<double>::epsilon();
 
 /// AfMWD eq. 2.18: maximum error
+///
+/// As the paragraph following that equation emphasizes, "the effect
+/// of rounding errors in the computation of f" must be considered,
+/// as Brent's method can "only guarantee to find a zero 'zeta' of the
+/// computed function f to an accuracy given by (2.18), and 'zeta' may be
+/// nowhere near a root of the mathematically defined function that
+/// the user is really interested in!".
 
 double max_err(double zeta, double tol)
 {
@@ -290,6 +297,22 @@ void test_various_functions()
     root_type r = decimal_root(-1.0, 4.0, bias_none, 20, e_19);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST(std::fabs(r.root) <= epsilon);
+    double t = 0.5 * std::pow(10.0, -20.0);
+    double zeta = 0.0;
+    // (This isn't quite true:
+//  LMI_TEST(1.0e-20 == max_err(zeta, t));
+    // because the RHS might be 9.99999999999999945153e-21, e.g.)
+    //
+    // Brent's equation 2.18 gives the guaranteed maximum error as
+    //   6.0 * epsilon * std::fabs(zeta) + 2.0 * t;
+    // where, because 'zeta' is exactly zero, the epsilon term
+    // vanishes. However, the result (for x86_64-pc-linux-gnu) is
+    // 5.89e-18, which exceeds that guaranteed maximum error. Why?
+//  LMI_TEST(std::fabs(r.root) <= max_err(zeta, t)); // fails
+    // Because 5.89e-18^19 is just slightly less than DBL_TRUE_MIN,
+    // so the computed function becomes zero: see the documentation
+    // for max_err().
+
     // Assertions labelled 'weak' test the number of iterations
     // against empirical measurements (with various architectures)
     // rather than a theoretical maximum. Perhaps they'll always
@@ -298,7 +321,7 @@ void test_various_functions()
     LMI_TEST(169 <= r.n_iter && r.n_iter <= 173); // weak
 
     d = brent_zero(-100.0, 100.0, 0.5, eq_2_1);
-    double zeta = -100.0;
+    zeta = -100.0;
     double eq_2_1_upper = zeta + max_err(zeta, 0.5);
     LMI_TEST(-100.0 <= d && d <= eq_2_1_upper);
 
@@ -328,7 +351,7 @@ void test_various_functions()
     //   600e 1.33226762955018784851e-13
     //   + 2t 0.00000010000000000000e-13 (same as 1.0e-20)
     // where the 'epsilon' term overwhelms the 't' term.
-    double t = 0.5 * std::pow(10.0, -20.0);
+    t = 0.5 * std::pow(10.0, -20.0);
     LMI_TEST(-100.0 <= r.root && r.root <= zeta + max_err(zeta, t));
 
     LMI_TEST(  53 == max_n_iter_bolzano(-100.0, 100.0, 0.0, -100.0));
