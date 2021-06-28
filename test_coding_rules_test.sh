@@ -231,9 +231,18 @@ EOF
 
 cat >eraseme_cpp_005.cpp <<EOF
 $boilerplate
-auto const ok = R"--cut-here--(
-Uses the only allowed non-empty d-char-seq.
+// See:
+//   https://lists.nongnu.org/archive/html/lmi/2021-03/msg00032.html
+// and commit fec9d6d9b3375750:
+//   Establish the One True nonempty d-char-sequence
+
+// "1 + " skips the newline:
+std::string const okay =
+1 + R"--cut-here--(
+  0  0.12345
+  1  0.23456
 )--cut-here--";
+
 auto const not_ok = R"==(disallowed)==";
 EOF
 
