@@ -248,11 +248,20 @@ EOF
 
 cat >eraseme_cpp_006.cpp <<EOF
 $boilerplate
+// Allowed: "bar_0" alphabetizes before "foo_0" and "quux_0",
+// but they're in different blocks separated by an empty line.
 
+#include "foo_0.hpp"
+#include "quux_0.hpp"
+
+#include <bar_0>
+
+// Forbidden: "quux.hpp" and "foo.hpp" are out of order.
+
+#include "quux.hpp"
 #include "foo.hpp"
-#include "bar.hpp"
 
-#include <baz>
+#include <bar>
 EOF
 
 cat >eraseme_cpp_007.cpp <<EOF
@@ -446,8 +455,8 @@ File 'eraseme_cpp_004.cpp' should write 'const' after the type it modifies: 'con
 File 'eraseme_cpp_004.cpp' should write 'const' after the type it modifies: 'const std::string&'.
 File 'eraseme_cpp_005.cpp' contains noncanonical d-char-seq: '=='. Instead, use '--cut-here--'.
 File 'eraseme_cpp_006.cpp' has missorted #include directives:
+#include "quux.hpp"
 #include "foo.hpp"
-#include "bar.hpp"
 File 'eraseme_cpp_007.cpp' spurious or malformed for-range-declaration: 'for (auto& i : bad_syntax()'.
 File 'eraseme_cpp_007.cpp' should have a space on both sides of the colon following the for-range-declaration, instead of ': '.
 File 'eraseme_cpp_007.cpp' for-range-declaration should deduce type rather than specify 'int'.
