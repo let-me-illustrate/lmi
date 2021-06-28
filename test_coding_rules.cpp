@@ -41,6 +41,9 @@
 #include <stdexcept>                    // runtime_error
 #include <string>
 
+// Count complaints that are not so severe as to halt processing a file.
+int complaint_count {0};
+
 std::string my_taboo_indulgence();       // See 'my_test_coding_rules.cpp'.
 
 std::map<std::string, bool> my_taboos(); // See 'my_test_coding_rules.cpp'.
@@ -259,11 +262,9 @@ bool file::phyloanalyze(std::string const& s) const
     return boost::regex_search(file_name(), boost::regex(s));
 }
 
-bool error_flag = false;
-
 void complain(file const& f, std::string const& complaint)
 {
-    error_flag = true;
+    ++complaint_count;
     std::cout << "File '" << f.full_name() << "' " << complaint << std::endl;
 }
 
@@ -1277,6 +1278,8 @@ statistics process_file(std::string const& file_path)
 
 int try_main(int argc, char* argv[])
 {
+    complaint_count = 0;
+    bool error_flag = false;
     statistics z;
     for(int j = 1; j < argc; ++j)
         {
@@ -1292,5 +1295,5 @@ int try_main(int argc, char* argv[])
             }
         }
     z.print_summary();
-    return error_flag ? EXIT_FAILURE : EXIT_SUCCESS;
+    return (error_flag || complaint_count) ? EXIT_FAILURE : EXIT_SUCCESS;
 }
