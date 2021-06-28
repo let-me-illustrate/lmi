@@ -443,10 +443,10 @@ File 'eraseme_cpp_007.cpp' spurious or malformed for-range-declaration: 'for (au
 File 'eraseme_cpp_007.cpp' should have a space on both sides of the colon following the for-range-declaration, instead of ': '.
 File 'eraseme_cpp_007.cpp' for-range-declaration should deduce type rather than specify 'int'.
 File 'eraseme_cpp_007.cpp' for-range-declaration should use 'auto&' or 'auto const&' instead of 'auto '.
-File 'eraseme_hpp_001.hpp' lacks end part of the canonical header guard.
-File 'eraseme_hpp_002.hpp' lacks start part of the canonical header guard.
-File 'eraseme_hpp_003.hpp' lacks start part of the canonical header guard.
-File 'eraseme_hpp_004.hpp' lacks end part of the canonical header guard.
+File 'eraseme_hpp_001.hpp' lacks canonical closing header guard.
+File 'eraseme_hpp_002.hpp' lacks canonical opening header guard.
+File 'eraseme_hpp_003.hpp' lacks canonical opening header guard.
+File 'eraseme_hpp_004.hpp' lacks canonical closing header guard.
 File 'eraseme_hpp_005.hpp' must include 'config.hpp' first.
 File 'eraseme_hpp_006.hpp' must include 'config.hpp'.
 File 'eraseme_hpp_006.hpp' lacks line '#include "config.hpp"'.

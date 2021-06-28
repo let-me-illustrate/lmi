@@ -783,14 +783,14 @@ void check_include_guards(file const& f)
         ,boost::regex(R"(\.hpp$)")
         ,"_hpp"
         );
-    std::string const guard_start =
+    std::string const opening_guard =
             R"(\n#ifndef )"   + guard
         +   R"(\n#define )"   + guard + R"(\n)"
         ;
-    std::string const guard_end = R"(\n#endif // )" + guard + R"(\n+$)";
+    std::string const closing_guard = R"(\n#endif // )" + guard + R"(\n+$)";
 
-    require(f, guard_start, "lacks start part of the canonical header guard.");
-    require(f, guard_end, "lacks end part of the canonical header guard.");
+    require(f, opening_guard, "lacks canonical opening header guard.");
+    require(f, closing_guard, "lacks canonical closing header guard.");
 }
 
 void check_inclusion_order(file const& f)
