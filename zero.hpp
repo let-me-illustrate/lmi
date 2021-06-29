@@ -60,26 +60,6 @@ struct root_type
     int           n_iter   {0};
 };
 
-namespace detail
-{
-inline void expatiate
-    (std::ostream           & os_trace
-    ,int                      n_iter
-    ,interpolation_technique  technique
-    ,double                   x
-    ,double                   fx
-    )
-{
-    os_trace
-        << "iteration " << n_iter
-        << " "          << "IBLQb"[technique]
-        << " iterand "  << x
-        << " value "    << fx
-        << std::endl
-        ;
-}
-} // namespace detail
-
 /// Return a zero z of a function f within input bounds [a,b].
 ///
 /// Preconditions: bounds are distinct after rounding; and either
@@ -269,6 +249,17 @@ root_type decimal_root
 
     os_trace.precision(DECIMAL_DIG);
 
+    auto expatiate = [&](double x, double fx)
+        {
+        os_trace
+            << "iteration " << n_iter
+            << " "          << "IBLQb"[technique]
+            << " iterand "  << x
+            << " value "    << fx
+            << std::endl
+            ;
+        };
+
     double t = 0.5 * std::pow(10.0, -decimals);
 
     double a = round_dec(bound0);
@@ -280,7 +271,7 @@ root_type decimal_root
         }
 
     double fa = static_cast<double>(f(a));
-    detail::expatiate(os_trace, n_iter, technique, a, fa);
+    expatiate(a, fa);
     ++n_iter;
     if(0.0 == fa) // Note 0.
         {
@@ -288,7 +279,7 @@ root_type decimal_root
         }
 
     double fb = static_cast<double>(f(b));
-    detail::expatiate(os_trace, n_iter, technique, b, fb);
+    expatiate(b, fb);
     ++n_iter;
     if(0.0 == fb) // Note 0 [bis].
         {
@@ -415,7 +406,7 @@ root_type decimal_root
         else
             {
             fb = static_cast<double>(f(b));
-            detail::expatiate(os_trace, n_iter, technique, b, fb);
+            expatiate(b, fb);
             ++n_iter;
             }
         }
