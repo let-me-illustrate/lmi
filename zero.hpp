@@ -70,16 +70,13 @@ inline void expatiate
     ,double                   fx
     )
 {
-    if(os_trace.good())
-        {
-        os_trace
-            << "iteration " << n_iter
-            << " "          << "IBLQb"[technique]
-            << " iterand "  << x
-            << " value "    << fx
-            << std::endl
-            ;
-        }
+    os_trace
+        << "iteration " << n_iter
+        << " "          << "IBLQb"[technique]
+        << " iterand "  << x
+        << " value "    << fx
+        << std::endl
+        ;
 }
 } // namespace detail
 
