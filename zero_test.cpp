@@ -27,9 +27,9 @@
 #include "miscellany.hpp"               // stifle_warning_for_unused_variable()
 #include "test_tools.hpp"
 
-#include <algorithm>                    // max()
 #include <cmath>                        // exp(), fabs(), log(), pow(), signbit()
 #include <limits>
+#include <sstream>
 
 namespace
 {
