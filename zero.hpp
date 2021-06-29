@@ -92,7 +92,7 @@ inline void expatiate
 /// that is, the input bounds include or bracket a root.
 ///
 /// Postcondition: z is within a tolerance
-///   6 * epsilon * |z| + 10^-decimals
+///   6ϵ|z| + 10^(-decimals)
 /// of a true zero.
 ///
 /// Brent's algorithm with GWC modifications described below. See:
@@ -155,14 +155,14 @@ inline void expatiate
 /// The original algorithm returns a zero z of the function f in
 ///   [bound0 bound1]
 /// (a,b) to within a tolerance
-///   6 * epsilon * |z| + 2 * t
+///   6ϵ|z| + 2t
 /// where t is an argument. For life insurance illustrations, the
 /// tolerance is often one-sided, so that f(z) must be strictly greater
 /// than or less than zero, and the tolerance is more conveniently
 /// expressed as a number of decimals. An adjustment is made for the
 /// constant factor in Brent's t term, so that this implementation's
 /// tolerance becomes
-///   6 * epsilon * |z| + 10^-decimals
+///   6ϵ|z| + 10^(-decimals)
 ///
 /// The original algorithm returns unrounded values. For life insurance
 /// illustrations, rounded values are more often wanted, so iterands
@@ -220,16 +220,16 @@ inline void expatiate
 ///
 /// However, Brent calculates tol in terms of b, guaranteeing a maximum
 /// error of
-///   6 * epsilon * |b| + 2 * t
+///   6ϵ|b| + 2t
 /// when returning b. Unconditionally returning c would give an error
 /// bound in terms of the local variable b, whose value is unknown to
 /// the caller, and |b| might exceed |c|. It is irrelevant that the
-/// return value is multiplied by epsilon, which might often be so
-/// small as to make the first part of the error term vanish, because
-/// the return value might far exceed the reciprocal of epsilon. To
-/// preserve the algorithm's rigorous guarantees, c is returned, when
-/// bias so dictates, only if Brent's termination criterion is still
-/// met when reevaluated in terms of c instead of b.
+/// return value is multiplied by ϵ, which might often be so small as
+/// to make the first part of the error term vanish, because the
+/// return value might far exceed the reciprocal of ϵ. To preserve
+/// the algorithm's rigorous guarantees, c is returned, when bias so
+/// dictates, only if Brent's termination criterion is still met when
+/// reevaluated in terms of c instead of b.
 ///
 /// It might appear that the code could be simplified, say, by defining
 /// tol in terms of max(|b|,|c|), but that would be dangerous: tol is
@@ -435,8 +435,8 @@ double brent_zero
     constexpr double epsilon {std::numeric_limits<double>::epsilon()};
 
     // Returns a zero of the function f in [a,b] to within a tolerance
-    //   6 * epsilon * |z| + 2 * t
-    // f(a) and f(b) must have different signs.
+    //   6ϵ|ζ| + 2t
+    // Precondition: f(a) and f(b) have different signs.
     double fa = f(a);
     double fb = f(b);
     double fc = fb;

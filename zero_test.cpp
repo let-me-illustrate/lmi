@@ -39,8 +39,8 @@ static double const epsilon = std::numeric_limits<double>::epsilon();
 ///
 /// As the paragraph following that equation emphasizes, "the effect
 /// of rounding errors in the computation of f" must be considered,
-/// as Brent's method can "only guarantee to find a zero 'zeta' of the
-/// computed function f to an accuracy given by (2.18), and 'zeta' may be
+/// as Brent's method can "only guarantee to find a zero ζ of the
+/// computed function f to an accuracy given by (2.18), and ζ may be
 /// nowhere near a root of the mathematically defined function that
 /// the user is really interested in!".
 
@@ -331,7 +331,7 @@ void test_various_functions()
     // that doesn't matter, because a term involving machine epsilon
     // is always added to the effective tolerance. An excessively
     // low input tolerance makes the effective tolerance simply
-    //   6 * epsilon * |iterand|
+    //   6ϵ|iterand|
     // because the other term vanishes--it does not give more
     // precision than the hardware is capable of, though it's a
     // chasing after wind that costs many iterations.
@@ -355,10 +355,10 @@ void test_various_functions()
     // because the RHS might be 9.99999999999999945153e-21, e.g.)
     //
     // Brent's equation 2.18 gives the guaranteed maximum error as
-    //   6.0 * epsilon * std::fabs(zeta) + 2.0 * t;
-    // where, because 'zeta' is exactly zero, the epsilon term
-    // vanishes. However, the result (for x86_64-pc-linux-gnu) is
-    // 5.89e-18, which exceeds that guaranteed maximum error. Why?
+    //   6ϵ|ζ| + 2t
+    // where, because ζ is exactly zero, the ϵ term vanishes.
+    // However, the result (for x86_64-pc-linux-gnu) is 5.89e-18,
+    // which exceeds that guaranteed maximum error. Why?
 //  LMI_TEST(std::fabs(r.root) <= max_err(zeta, t)); // fails
     // Because 5.89e-18^19 is just slightly less than DBL_TRUE_MIN,
     // so the computed function becomes zero: see the documentation
@@ -412,11 +412,11 @@ void test_various_functions()
     //    -99.9999999999999147349   1
     //   -100                      -6.41168279659337119941e+62
     // in whose vicinity the error term in Brent's equation 2.18
-    //   6.0 * epsilon * std::fabs(zeta) + 2.0 * t;
+    //   |ζ′-ζ| ≤ 6ϵ|ζ| + 2t
     // with t=0.5*10^-20 becomes
     //   600e 1.33226762955018784851e-13
     //   + 2t 0.00000010000000000000e-13 (same as 1.0e-20)
-    // where the 'epsilon' term overwhelms the 't' term.
+    // where the ϵ term overwhelms the t term.
     t = 0.5 * std::pow(10.0, -20.0);
     LMI_TEST(-100.0 <= r.root && r.root <= zeta + max_err(zeta, t));
 
