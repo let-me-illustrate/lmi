@@ -280,14 +280,16 @@ root_type decimal_root
         }
 
     double fa = static_cast<double>(f(a));
-    detail::expatiate(os_trace, n_iter++, technique, a, fa);
+    detail::expatiate(os_trace, n_iter, technique, a, fa);
+    ++n_iter;
     if(0.0 == fa) // Note 0.
         {
         return {a, root_is_valid, n_iter};
         }
 
     double fb = static_cast<double>(f(b));
-    detail::expatiate(os_trace, n_iter++, technique, b, fb);
+    detail::expatiate(os_trace, n_iter, technique, b, fb);
+    ++n_iter;
     if(0.0 == fb) // Note 0 [bis].
         {
         return {b, root_is_valid, n_iter};
@@ -413,7 +415,8 @@ root_type decimal_root
         else
             {
             fb = static_cast<double>(f(b));
-            detail::expatiate(os_trace, n_iter++, technique, b, fb);
+            detail::expatiate(os_trace, n_iter, technique, b, fb);
+            ++n_iter;
             }
         }
 }
