@@ -249,13 +249,15 @@ root_type decimal_root
 
     os_trace.precision(DECIMAL_DIG);
 
+    os_trace << "iteration, technique, x, fx\n";
+
     auto expatiate = [&](double x, double fx)
         {
         os_trace
-            << "iteration " << n_iter
-            << " "          << "IBLQb"[technique]
-            << " iterand "  << x
-            << " value "    << fx
+            << n_iter
+            << ' ' << "IBLQb"[technique]
+            << ' ' << x
+            << ' ' << fx
             << std::endl
             ;
         };
