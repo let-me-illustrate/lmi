@@ -322,6 +322,102 @@ void test_biases()
     test_bias(-1.0    , 4.0    ,  100, e, std::exp(1.0));
 }
 
+/// Test the worked-out example given here:
+///   https://blogs.mathworks.com/cleve/2016/01/04/testing-zero-finders/
+/// All iterates are identical for x86_64-pc-linux-gnu except where
+/// marked with absolute difference as a multiple of ϵ=DBL_EPSILON:
+///
+///    i686-w64-mingw32     x86_64-pc-linux-gnu
+///   --------lmi-------     --------lmi-------     -----mathworks----
+///   2.5600000000000001     2.5600000000000001     2.5600000000000001
+///   1.0980323260716796  +ϵ 1.0980323260716793     1.0980323260716793
+///   1.783216881610604   +ϵ 1.783216881610604   +ϵ 1.7832168816106038
+///   2.2478393639958036     2.2478393639958036     2.2478393639958036
+///   2.0660057758331045     2.0660057758331045     2.0660057758331045
+///   2.0922079131171945     2.0922079131171945     2.0922079131171945
+///   2.0945566700001774 -2ϵ 2.0945566700001779     2.0945566700001779
+///   2.0945514746903111     2.0945514746903111     2.0945514746903111
+///   2.0945514815423065     2.0945514815423065     2.0945514815423065
+///   2.0945514815423265     2.0945514815423265     2.0945514815423265
+///   2.0945514815423274     2.0945514815423274     2.0945514815423274
+///
+/// "The reason I call x^3-2x-5=0 a celebrated equation is because it
+/// was the one on which Wallis chanced to exhibit Newton's method
+/// when he first published it; in consequence of which every numerical
+/// solver has felt bound in duty to make it one of his examples."
+///   -- De Morgan, letter to Whewell, 1861-01-20
+
+void test_celebrated_equation()
+{
+    auto f = [](double x) {return x * x * x - 2.0 * x - 5.0;};
+    std::ostringstream oss;
+    oss.precision(17);
+    root_type r = decimal_root(-2.56, 2.56, bias_none, 21, f, oss);
+    LMI_TEST(root_is_valid == r.validity);
+    // This constant is from the cited blog; lmi yields this,
+    // which agrees to sixteen significant digits:
+    //                 2.09455148154232650981
+    LMI_TEST(std::fabs(2.094551481542327 - r.root) <= 1.0e-15);
+
+#if defined LMI_X86_64 && defined LMI_POSIX
+    // This is fragile, but serviceable for now.
+
+    // "1 + " skips the newline:
+    std::string const verified = 1 + R"--cut-here--(
+#eval            a           fa            b           fb            c           fc
+  2 I -2.5600000000000001 -16.657216000000002 2.5600000000000001 6.6572160000000018            0            0
+  3 L 2.5600000000000001 6.6572160000000018 1.0980323260716793 -5.8721945393772152 -2.5600000000000001 -16.657216000000002
+  4 L 1.0980323260716793 -5.8721945393772152 1.783216881610604 -2.8960493667789873 2.5600000000000001 6.6572160000000018
+  5 Q 1.783216881610604 -2.8960493667789873 2.2478393639958036 1.8621631139566732 2.5600000000000001 6.6572160000000018
+  6 L 2.2478393639958036 1.8621631139566732 2.0660057758331045 -0.3135140955237814 1.783216881610604 -2.8960493667789873
+  7 L 2.0660057758331045 -0.3135140955237814 2.0922079131171945 -0.026123094109737011 2.2478393639958036 1.8621631139566732
+  8 Q 2.0922079131171945 -0.026123094109737011 2.0945566700001779 5.7910818359374616e-05 2.2478393639958036 1.8621631139566732
+  9 L 2.0945566700001779 5.7910818359374616e-05 2.0945514746903111 -7.6478343657981895e-08 2.0922079131171945 -0.026123094109737011
+ 10 L 2.0945514746903111 -7.6478343657981895e-08 2.0945514815423065 -2.2382096176443156e-13 2.0945566700001779 5.7910818359374616e-05
+ 11 Q 2.0945514815423065 -2.2382096176443156e-13 2.0945514815423265 -8.8817841970012523e-16 2.0945566700001779 5.7910818359374616e-05
+ 12 Q 2.0945514815423265 -8.8817841970012523e-16 2.0945514815423274 9.7699626167013776e-15 2.0945566700001779 5.7910818359374616e-05
+)--cut-here--";
+
+    LMI_TEST(verified == oss.str());
+#endif // defined LMI_X86_64 && defined LMI_POSIX
+}
+
+/// Test the worked-out example given here:
+///   https://en.wikipedia.org/wiki/Brent%27s_method#Example
+/// which seems correct up to here:
+///   "In the fourth iteration [sixth evaluation], we use inverse
+///   quadratic interpolation between
+///       (a3, f(a3)) = (−4, −25)           [Brent's 'c']
+///   and (b2, f(b2)) = (1.14205, 0.083582) [Brent's 'a']
+///   and (b3, f(b3)) = (−1.42897, 9.26891) [Brent's 'b'].
+///   This yields 1.15448 [which is rejected]"
+/// But |fa| <= |fb|, so a secant would transgress the bounding
+/// interval, and the IQI parabola would not be single-valued in that
+/// interval; therefore, Brent immediately bisects without considering
+/// whether that IQI iterate is three-quarters of the way from b to c.
+/// That may seem unimportant because bisection is chosen either way;
+/// but later...
+///   "In the sixth iteration [eight evaluation] ...
+///   linear interpolation ... −2.95064"
+/// ...it goes astray:
+///   "But since the iterate did not change in the previous step,
+///   we reject this result and fall back to bisection."
+/// Brent's algorithm has no such rejection rule; it performs a linear
+/// interpolation and accepts the -2.95064 result.
+///
+/// The last several steps have parenthetical "corrections" that are
+/// invalid; they seem to have been added by another author.
+
+void test_wikipedia_example()
+{
+    auto f = [](double x) {return (x + 3.0) * (x - 1.0) * (x - 1.0);};
+    std::ostringstream oss;
+    root_type r = decimal_root(-4.0, 4.0 / 3.0, bias_none, 15, f, oss);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST(std::fabs(-3.0 - r.root) <= 1.0e-15);
+    std::cout << oss.str() << std::endl;
+}
+
 void test_various_functions()
 {
     // Brent's book uses the nineteenth-power function in examples.
@@ -476,6 +572,8 @@ int test_main(int, char*[])
 {
     test_fundamentals();
     test_biases();
+    test_celebrated_equation();
+    test_wikipedia_example();
     test_various_functions();
     test_former_rounding_problem();
 
