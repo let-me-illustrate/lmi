@@ -28,8 +28,8 @@
 #include "null_stream.hpp"
 #include "round_to.hpp"
 
-#include <cfloat>                       // DECIMAL_DIG
 #include <cmath>                        // fabs(), pow()
+#include <iomanip>                      // setw()
 #include <limits>
 #include <ostream>
 
@@ -247,42 +247,54 @@ root_type decimal_root
     int                     n_iter    {0};
     interpolation_technique technique {interpolate_initialization};
 
-    os_trace.precision(DECIMAL_DIG);
+    os_trace
+        << "#eval"
+        << "            a           fa"
+        << "            b           fb"
+        << "            c           fc"
+        << '\n'
+        ;
 
-    os_trace << "iteration, technique, x, fx\n";
+    // Declarations must precede lambda.
+    double a  {};
+    double fa {};
+    double b  {};
+    double fb {};
+    double c  {};
+    double fc {};
 
-    auto expatiate = [&](double x, double fx)
+    auto expatiate = [&]()
         {
         os_trace
-            << n_iter
-            << ' ' << "IBLQb"[technique]
-            << ' ' << x
-            << ' ' << fx
+            <<        std::setw(3)  << n_iter
+            << ' '                  << "IBLQb"[technique]
+            << ' ' << std::setw(12) << a << ' ' << std::setw(12) << fa
+            << ' ' << std::setw(12) << b << ' ' << std::setw(12) << fb
+            << ' ' << std::setw(12) << c << ' ' << std::setw(12) << fc
             << std::endl
             ;
         };
 
     double t = 0.5 * std::pow(10.0, -decimals);
 
-    double a = round_dec(bound0);
-    double b = round_dec(bound1);
+    a = round_dec(bound0);
+    b = round_dec(bound1);
 
     if(a == b)
         {
         return {a, improper_bounds, n_iter};
         }
 
-    double fa = static_cast<double>(f(a));
-    expatiate(a, fa);
+    fa = static_cast<double>(f(a));
     ++n_iter;
     if(0.0 == fa) // Note 0.
         {
         return {a, root_is_valid, n_iter};
         }
 
-    double fb = static_cast<double>(f(b));
-    expatiate(b, fb);
+    fb = static_cast<double>(f(b));
     ++n_iter;
+    expatiate();
     if(0.0 == fb) // Note 0 [bis].
         {
         return {b, root_is_valid, n_iter};
@@ -294,8 +306,8 @@ root_type decimal_root
         return {0.0, root_not_bracketed, n_iter};
         }
 
-    double fc = fb; // Note 1.
-    double c = b;
+    fc = fb; // Note 1.
+    c = b;
     double d = b - a;
     double e = d;
 
@@ -408,8 +420,8 @@ root_type decimal_root
         else
             {
             fb = static_cast<double>(f(b));
-            expatiate(b, fb);
             ++n_iter;
+            expatiate();
             }
         }
 }
