@@ -415,7 +415,8 @@ void test_wikipedia_example()
     root_type r = decimal_root(-4.0, 4.0 / 3.0, bias_none, 15, f, oss);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST(std::fabs(-3.0 - r.root) <= 1.0e-15);
-    std::cout << oss.str() << std::endl;
+    // Display this to investigate further:
+//  std::cout << oss.str() << std::endl;
 }
 
 void test_various_functions()
