@@ -423,6 +423,33 @@ void test_wikipedia_example()
 
 void test_various_functions()
 {
+    auto f00 = [](double x) {return x * x * x - 2.0 * x - 5.0;};
+    auto root_00 = 2.09455148154232650981;
+    test_a_function(f00, root_00, -2.56, 2.56, 17, __LINE__, 12);
+
+    auto f01 = [](double x) {return std::pow(x, 19);};
+    auto root_01 = 0.0;
+    test_a_function(f01, root_01, -1.0 , 4.0, 17, __LINE__, 163);
+
+    auto f02 = [](double x) {return std::pow(x - 1.7, 17.0);};
+    auto root_02 = 1.7;
+    test_a_function(f02, root_02, 0.0, 2.0, 17, __LINE__, 145);
+
+    auto f03 = [](double x) {return std::cos(x) - 0.999;};
+    auto root_03 = 0.044725087168733454;
+    test_a_function(f03, root_03, -0.01, 0.8, 17, __LINE__, 16);
+
+    auto f04 = [](double x) {return std::pow((x - 1.0), 3);};
+    auto root_04 = 1.0;
+    test_a_function(f04, root_04, 0.0 , 1.8, 17, __LINE__, 130);
+
+    auto f05 = [](double x) {return std::pow(x, 2.0) - 2.0;};
+    auto root_05 = 1.4142135623730951;
+    test_a_function(f05, root_05, 0.0 , 2.0, 17, __LINE__, 10);
+}
+
+void test_hodgepodge()
+{
     // Brent's book uses the nineteenth-power function in examples.
     // His example using a tolerance of 1e-20 is subject to underflow
     // on IEEE 754 hardware: distinct bounds can't be that close
@@ -578,6 +605,7 @@ int test_main(int, char*[])
     test_celebrated_equation();
     test_wikipedia_example();
     test_various_functions();
+    test_hodgepodge();
     test_former_rounding_problem();
 
     return 0;
