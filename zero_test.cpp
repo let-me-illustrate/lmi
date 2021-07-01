@@ -108,11 +108,13 @@ void test_a_function
     int const max_n_iter = max_n_iter_brent(bound0, bound1, tol, exact_root);
 
     double d = brent_zero(bound0, bound1, tol, f);
-    INVOKE_LMI_TEST_RELATION(std::fabs(d),<=,maximum_error,file,line);
+    double error = d - exact_root;
+    INVOKE_LMI_TEST_RELATION(std::fabs(error),<=,maximum_error,file,line);
 
     root_type r = decimal_root(bound0, bound1, bias_none, decimals, f);
     INVOKE_LMI_TEST(root_is_valid == r.validity, file, line);
-    INVOKE_LMI_TEST_RELATION(std::fabs(r.root),<=,maximum_error,file,line);
+    error = r.root - exact_root;
+    INVOKE_LMI_TEST_RELATION(std::fabs(error),<=,maximum_error,file,line);
     INVOKE_LMI_TEST_RELATION(r.n_iter,<=,max_n_iter,file,line);
 
 #if defined LMI_X86_64 && defined LMI_POSIX
