@@ -160,11 +160,11 @@ currency gpt_specamt::CalculateSpecAmt
     // rider; that's okay when the user requests a solve, but not for
     // the strategy implemented here, which should work more robustly.
     root_type const solution = decimal_root
-        (dblize(a_Values.min_issue_spec_amt())
+        (fsa
+        ,dblize(a_Values.min_issue_spec_amt())
         ,999999999.99
         ,bias_higher
         ,z.round_min_specamt.decimals()
-        ,fsa
         );
 
     // Because it is implausible that the upper bound is too low,

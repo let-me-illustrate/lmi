@@ -116,11 +116,11 @@ class irr_helper
     long double operator()()
         {
         root_type const z = decimal_root
-            (-1.0       // A priori lower bound.
+            (*this
+            ,-1.0       // A priori lower bound.
             ,1000.0     // Assumed upper bound.
             ,bias_lower // Return the final bound with the lower fv.
             ,decimals_
-            ,*this
             );
         switch(z.validity)
             {

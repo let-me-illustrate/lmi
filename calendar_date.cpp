@@ -745,11 +745,11 @@ class birthdate_limit
     calendar_date operator()()
         {
         root_type z = decimal_root
-            (-366 + a_priori_minimum_
+            (*this
+            ,-366 + a_priori_minimum_
             , 366 + a_priori_maximum_
             ,bias_
             ,0
-            ,*this
             );
         LMI_ASSERT(root_is_valid == z.validity);
         int j = bourn_cast<int>(z.root);

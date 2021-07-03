@@ -107,11 +107,11 @@ void test_a_function
     double const maximum_error = max_err(exact_root, tol);
     int const max_n_iter = max_n_iter_brent(bound0, bound1, tol, exact_root);
 
-    double d = brent_zero(bound0, bound1, tol, f);
+    double d = brent_zero(f, bound0, bound1, tol);
     double error = d - exact_root;
     INVOKE_LMI_TEST_RELATION(std::fabs(error),<=,maximum_error,file,line);
 
-    root_type r = decimal_root(bound0, bound1, bias_none, decimals, f);
+    root_type r = decimal_root(f, bound0, bound1, bias_none, decimals);
     INVOKE_LMI_TEST(root_is_valid == r.validity, file, line);
     error = r.root - exact_root;
     INVOKE_LMI_TEST_RELATION(std::fabs(error),<=,maximum_error,file,line);
@@ -133,9 +133,9 @@ void test_bias(double bound0, double bound1, int dec, F f, double exact_root)
 {
     double maximum_error = max_err(exact_root, 0.5 * std::pow(10.0, -dec));
 
-    root_type rn = decimal_root(bound0, bound1, bias_none,   dec, f);
-    root_type rl = decimal_root(bound0, bound1, bias_lower,  dec, f);
-    root_type rh = decimal_root(bound0, bound1, bias_higher, dec, f);
+    root_type rn = decimal_root(f, bound0, bound1, bias_none,   dec);
+    root_type rl = decimal_root(f, bound0, bound1, bias_lower,  dec);
+    root_type rh = decimal_root(f, bound0, bound1, bias_higher, dec);
 
     LMI_TEST(root_is_valid == rn.validity);
     LMI_TEST(root_is_valid == rl.validity);
@@ -248,29 +248,29 @@ void test_fundamentals()
 {
     // Test use with function.
 
-    root_type r = decimal_root(0.5, 5.0, bias_none, 9, e_function);
+    root_type r = decimal_root(e_function, 0.5, 5.0, bias_none, 9);
     LMI_TEST(root_is_valid == r.validity);
 
     // Same, with expatiation.
 
     std::ostringstream oss;
-    r = decimal_root(0.5, 5.0, bias_none, 9, e_function, oss);
+    r = decimal_root(e_function, 0.5, 5.0, bias_none, 9, oss);
     std::cout << oss.str() << std::endl;
 
     // Test use with function object.
 
     e_functor e;
-    r = decimal_root(0.5, 5.0, bias_none, 9, e);
+    r = decimal_root(e, 0.5, 5.0, bias_none, 9);
     LMI_TEST(root_is_valid == r.validity);
 
     // Test failure with improper interval.
 
-    r = decimal_root(1.0, 1.0, bias_none, 9, e);
+    r = decimal_root(e, 1.0, 1.0, bias_none, 9);
     LMI_TEST(improper_bounds == r.validity);
 
     // Test failure with interval containing no root.
 
-    r = decimal_root(0.1, 1.0, bias_none, 9, e);
+    r = decimal_root(e, 0.1, 1.0, bias_none, 9);
     LMI_TEST(root_not_bracketed == r.validity);
 }
 
@@ -289,13 +289,13 @@ void test_biases()
     // "bias" argument; the commented-out 'e.state' tests below serve
     // to suggest this.
 
-    root_type r = decimal_root(0.5, 5.0, bias_lower, 9, e);
+    root_type r = decimal_root(e, 0.5, 5.0, bias_lower, 9);
     LMI_TEST(root_is_valid == r.validity);
     double e_or_less = r.root;
     LMI_TEST(e_or_less < std::exp(1.0));
 //  LMI_TEST(e.e_state < std::exp(1.0)); // Not necessarily true.
 
-    r = decimal_root(0.5, 5.0, bias_higher, 9, e);
+    r = decimal_root(e, 0.5, 5.0, bias_higher, 9);
     LMI_TEST(root_is_valid == r.validity);
     double e_or_more = r.root;
     LMI_TEST(std::exp(1.0) < e_or_more);
@@ -303,7 +303,7 @@ void test_biases()
 
     LMI_TEST(e_or_less < e_or_more);
 
-    r = decimal_root(0.5, 5.0, bias_none, 9, e);
+    r = decimal_root(e, 0.5, 5.0, bias_none, 9);
     LMI_TEST(root_is_valid == r.validity);
     double e_more_or_less = r.root;
 
@@ -354,7 +354,7 @@ void test_celebrated_equation()
     auto f = [](double x) {return x * x * x - 2.0 * x - 5.0;};
     std::ostringstream oss;
     oss.precision(17);
-    root_type r = decimal_root(-2.56, 2.56, bias_none, 21, f, oss);
+    root_type r = decimal_root(f, -2.56, 2.56, bias_none, 21, oss);
     LMI_TEST(root_is_valid == r.validity);
     // This constant is from the cited blog; lmi yields this,
     // which agrees to sixteen significant digits:
@@ -414,7 +414,7 @@ void test_wikipedia_example()
 {
     auto f = [](double x) {return (x + 3.0) * (x - 1.0) * (x - 1.0);};
     std::ostringstream oss;
-    root_type r = decimal_root(-4.0, 4.0 / 3.0, bias_none, 15, f, oss);
+    root_type r = decimal_root(f, -4.0, 4.0 / 3.0, bias_none, 15, oss);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST(std::fabs(-3.0 - r.root) <= 1.0e-15);
     // Display this to investigate further:
@@ -468,10 +468,10 @@ void test_hodgepodge()
     //   195 Brent's table 4.1 (IBM 360)
     //   171 x86_64 brent_zero (IEEE 754)
     //   169 x86_64 decimal_root (differs slightly due to rounding)
-    double d = brent_zero(-1.0, 4.0, 1.0e-20, e_19);
+    double d = brent_zero(e_19, -1.0, 4.0, 1.0e-20);
     LMI_TEST(std::fabs(d) <= epsilon);
 
-    root_type r = decimal_root(-1.0, 4.0, bias_none, 20, e_19);
+    root_type r = decimal_root(e_19, -1.0, 4.0, bias_none, 20);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST(std::fabs(r.root) <= epsilon);
     double t = 0.5 * std::pow(10.0, -20.0);
@@ -512,12 +512,12 @@ void test_hodgepodge()
     test_a_function(e_19, 0.0, -1.0, 4.0, 14, __LINE__, 128);
     test_a_function(e_19, 0.0, -1.0, 4.0, 12, __LINE__, 112);
 
-    d = brent_zero(-100.0, 100.0, 0.5, eq_2_1);
+    d = brent_zero(eq_2_1, -100.0, 100.0, 0.5);
     zeta = -100.0;
     double eq_2_1_upper = zeta + max_err(zeta, 0.5);
     LMI_TEST(-100.0 <= d && d <= eq_2_1_upper);
 
-    r = decimal_root(-100.0, 100.0, bias_none, 0, eq_2_1);
+    r = decimal_root(eq_2_1, -100.0, 100.0, bias_none, 0);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST(-100.0 <= r.root && r.root <= eq_2_1_upper);
     LMI_TEST(10 == max_n_iter_bolzano(-100.0, 100.0, 0.5, -100.0));
@@ -529,7 +529,7 @@ void test_hodgepodge()
     //   20 for decimal_root()
     // Presumably the difference is due to rounding.
 
-    r = decimal_root(-100.0, 100.0, bias_none, 20, eq_2_1);
+    r = decimal_root(eq_2_1, -100.0, 100.0, bias_none, 20);
     LMI_TEST(root_is_valid == r.validity);
     // Rounding 'x' (of type 'double') to twenty decimals doesn't
     // affect its value near -100.0; the final bracketing values
@@ -551,7 +551,7 @@ void test_hodgepodge()
     LMI_TEST(r.n_iter <= 2807);
     LMI_TEST_EQUAL(66, r.n_iter); // weak
 
-    r = decimal_root(-1.0, 1.0, bias_none, 13, signum_offset);
+    r = decimal_root(signum_offset, -1.0, 1.0, bias_none, 13);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST(materially_equal(-1.0 / 3.0, r.root));
     zeta = 1.0 / 3.0;
@@ -562,7 +562,7 @@ void test_hodgepodge()
     // Here, decimal_root() always chooses the bisection technique.
     LMI_TEST(46 <= r.n_iter && r.n_iter <= 47); // weak
 
-    r = decimal_root(-1.0, 1.0, bias_none, 16, signum_offset);
+    r = decimal_root(signum_offset, -1.0, 1.0, bias_none, 16);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST(materially_equal(-1.0 / 3.0, r.root));
     tol = 0.5 * 1.0e-16;
@@ -576,7 +576,7 @@ void test_hodgepodge()
 void test_former_rounding_problem()
 {
     e_former_rounding_problem e_frp;
-    root_type r = decimal_root(0.12609, 0.12611, bias_lower, 5, e_frp);
+    root_type r = decimal_root(e_frp, 0.12609, 0.12611, bias_lower, 5);
 #if !defined LMI_COMO_WITH_MINGW
     LMI_TEST(materially_equal(0.12610, r.root));
 #else // defined LMI_COMO_WITH_MINGW

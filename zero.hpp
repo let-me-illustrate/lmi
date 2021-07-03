@@ -236,13 +236,13 @@ using RoundT = std::function<double(double)>;
 
 template<typename FunctionalType>
 root_type lmi_root
-    (double          bound0
+    (FunctionalType& f
+    ,double          bound0
     ,double          bound1
     ,double          tolerance
-    ,root_bias       bias
-    ,FunctionalType& f
+    ,std::ostream&   os_trace  = null_stream()
+    ,root_bias       bias      = bias_none
     ,detail::RoundT  round_dec = std::identity()
-    ,std::ostream&   os_trace = null_stream()
     )
 {
     constexpr double        epsilon   {std::numeric_limits<double>::epsilon()};
@@ -446,24 +446,24 @@ root_type lmi_root
 
 template<typename FunctionalType>
 root_type decimal_root
-    (double          bound0
+    (FunctionalType& f
+    ,double          bound0
     ,double          bound1
     ,root_bias       bias
     ,int             decimals
-    ,FunctionalType& f
     ,std::ostream&   os_trace = null_stream()
     )
 {
     round_to<double> const round_dec {decimals, r_to_nearest};
 
     return lmi_root
-        (bound0
+        (f
+        ,bound0
         ,bound1
         ,0.5 * std::pow(10.0, -decimals)
-        ,bias
-        ,f
-        ,detail::RoundT(round_dec)
         ,os_trace
+        ,bias
+        ,detail::RoundT(round_dec)
         );
 }
 
@@ -471,10 +471,10 @@ root_type decimal_root
 
 template<typename FunctionalType>
 double brent_zero
-    (double          a
+    (FunctionalType& f
+    ,double          a
     ,double          b
     ,double          t
-    ,FunctionalType& f
     )
 {
     LMI_ASSERT(0.0 <= t);

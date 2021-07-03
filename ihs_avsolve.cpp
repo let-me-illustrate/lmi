@@ -465,11 +465,11 @@ currency AccountValue::Solve
 
     SolveHelper solve_helper(*this, solve_set_fn);
     root_type const solution = decimal_root
-        (lower_bound
+        (solve_helper
+        ,lower_bound
         ,upper_bound
         ,bias
         ,decimals
-        ,solve_helper
         ,os_trace
         );
     currency const solution_cents = round_minutiae().c(solution.root);

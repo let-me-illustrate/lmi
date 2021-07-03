@@ -323,11 +323,11 @@ currency AccountValue::Solve()
         }
 
     root_type const solution = decimal_root
-        (LowerBound
+        (SolveFn
+        ,LowerBound
         ,UpperBound
         ,Bias
         ,Decimals
-        ,SolveFn
         ,status()
         );
     currency const solution_cents = round_to_cents.c(solution.root);
