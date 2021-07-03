@@ -135,24 +135,22 @@ using RoundT = std::function<double(double)>;
 ///
 /// GWC modifications
 ///
-/// The original algorithm returns a zero z of the function f in
-///   [bound0 bound1]
-/// (a,b) to within a tolerance
-///   6ϵ|z| + 2t
-/// where t is an argument. For life insurance illustrations, the
-/// tolerance is often one-sided, so that f(z) must be strictly greater
-/// than or less than zero, and the tolerance is more conveniently
-/// expressed as a number of decimals. An adjustment is made for the
-/// constant factor in Brent's t term, so that this implementation's
-/// tolerance becomes
-///   6ϵ|z| + 10^(-decimals)
+/// Brent's original algorithm returns unrounded values. To support
+/// financial applications that traffic in rounded currency values,
+/// iterands are optionally rounded before each function evaluation.
+/// Rounding must be performed within the root-finding algorithm: for
+/// an unrounded return value r, f(r) and f(round(r)) might easily
+/// have different signs. The default rounding function returns its
+/// argument unchanged, so this implementation remains suitable for
+/// the unrounded case.
 ///
-/// The original algorithm returns unrounded values. For life insurance
-/// illustrations, rounded values are more often wanted, so iterands
-/// are rounded before each function evaluation. Rounding downstream,
-/// outside the root-finding algorithm, would not be appropriate: for a
-/// hypothetical unrounded return value r, f(r) and f(round(r)) might
-/// easily have different signs.
+/// Brent's original algorithm strives to return the closest value to
+/// a true root (within a given tolerance). Especially for currency
+/// values, it may be necessary to find the least or greatest value
+/// r such that f(r) is nonnegative. Those options are governed by a
+/// "bias" argument. With 'bias_none', this implementation returns the
+/// same result Brent would, so it remains suitable for the "unbiased"
+/// case.
 ///
 /// Brent states a requirement that the ordinates corresponding to the
 /// a priori bounds (abscissa arguments) have different signs, but his
@@ -430,6 +428,21 @@ root_type decimal_root
             }
         }
 }
+
+/// Return a rounded zero z of a function f within input bounds [a,b].
+///
+/// Brent's original algorithm returns a zero z of the function f in
+///   [bound0 bound1]
+/// (a,b) to within a tolerance
+///   6ϵ|z| + 2t
+/// where t is an argument. For financial applications, the tolerance
+/// is often one-sided, so that f(z) must be strictly greater than or
+/// less than zero, and the tolerance is more conveniently expressed
+/// as a number of decimals. An adjustment is made for the constant
+/// factor in Brent's t term, so that this implementation's tolerance
+/// becomes
+///   6ϵ|z| + 10^(-decimals)
+/// instead.
 
 template<typename FunctionalType>
 root_type decimal_root
