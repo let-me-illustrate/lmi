@@ -29,6 +29,7 @@
 #include "round_to.hpp"
 
 #include <cmath>                        // fabs(), pow()
+#include <functional>                   // function(), identity()
 #include <iomanip>                      // setw()
 #include <limits>
 #include <ostream>
@@ -59,6 +60,11 @@ struct root_type
     root_validity validity {improper_bounds};
     int           n_iter   {0};
 };
+
+namespace detail
+{
+using RoundT = std::function<double(double)>;
+} // namespace detail
 
 /// Return a zero z of a function f within input bounds [a,b].
 ///
@@ -234,15 +240,14 @@ template<typename FunctionalType>
 root_type decimal_root
     (double          bound0
     ,double          bound1
+    ,double          tolerance
     ,root_bias       bias
-    ,int             decimals
     ,FunctionalType& f
+    ,detail::RoundT  round_dec = std::identity()
     ,std::ostream&   os_trace = null_stream()
     )
 {
     constexpr double        epsilon   {std::numeric_limits<double>::epsilon()};
-
-    round_to<double> const  round_dec {decimals, r_to_nearest};
 
     int                     n_iter    {0};
     interpolation_technique technique {interpolate_initialization};
@@ -275,7 +280,7 @@ root_type decimal_root
             ;
         };
 
-    double t = 0.5 * std::pow(10.0, -decimals);
+    double t = tolerance;
 
     a = round_dec(bound0);
     b = round_dec(bound1);
@@ -424,6 +429,29 @@ root_type decimal_root
             expatiate();
             }
         }
+}
+
+template<typename FunctionalType>
+root_type decimal_root
+    (double          bound0
+    ,double          bound1
+    ,root_bias       bias
+    ,int             decimals
+    ,FunctionalType& f
+    ,std::ostream&   os_trace = null_stream()
+    )
+{
+    round_to<double> const round_dec {decimals, r_to_nearest};
+
+    return decimal_root
+        (bound0
+        ,bound1
+        ,0.5 * std::pow(10.0, -decimals)
+        ,bias
+        ,f
+        ,detail::RoundT(round_dec)
+        ,os_trace
+        );
 }
 
 /// A C++ equivalent of Brent's algol60 original, for reference only.
