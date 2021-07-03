@@ -235,7 +235,7 @@ using RoundT = std::function<double(double)>;
 /// superfluous reevaluation.
 
 template<typename FunctionalType>
-root_type decimal_root
+root_type lmi_root
     (double          bound0
     ,double          bound1
     ,double          tolerance
@@ -456,7 +456,7 @@ root_type decimal_root
 {
     round_to<double> const round_dec {decimals, r_to_nearest};
 
-    return decimal_root
+    return lmi_root
         (bound0
         ,bound1
         ,0.5 * std::pow(10.0, -decimals)
