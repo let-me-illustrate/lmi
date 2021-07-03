@@ -27,6 +27,7 @@
 #include "miscellany.hpp"               // stifle_warning_for_unused_variable()
 #include "test_tools.hpp"
 
+#include <cfloat>                       // DECIMAL_DIG
 #include <cmath>                        // exp(), fabs(), log(), pow(), signbit()
 #include <limits>
 #include <sstream>
@@ -74,11 +75,75 @@ int max_n_iter_brent(double a, double b, double tol, double zeta)
 }
 } // Unnamed namespace.
 
-/// Test root-finding accuracy and speed.
+/// Test (unrounded) root-finding accuracy and speed.
 ///
 /// Find a root using
 ///  - a plain translation of Brent's ALGOL procedure 'zero'
-///  - lmi's customized version thereof
+///  - lmi's customized version thereof, with default {bias,rounding}
+///
+/// Verify that
+///  - the result is within the max_err() tolerance (ignoring Brent's
+///      warning about roundoff in the computed function)
+///  - the number of iterations doesn't exceed max_n_iter_brent()
+///  - maximum-precision instrumented traces are identical
+/// Identical traces are strong architecture-independent evidence
+/// that both implementations behave the same way at every step.
+/// This probabilistically approaches a proof that iterates and
+/// function evaluations are identical, with a sufficiently
+/// comprehensive test suite, though it cannot reliably detect
+/// discrepancies such as comparing doubles with '<' rather than '<='
+/// when exact equality is extremely unlikely. The alternative of
+/// storing a reference dataset (instead of a maintaining a reference
+/// implementation) is no more powerful and much balkier.
+///
+/// Unfortunately, gcc results with x87 are not reproducible because
+/// spills from 80- to 64-bit registers are unpredictable: e.g., when
+/// solving x^2=2, the first linear interpolation yields
+///     1.33333333333333325932  x
+///    -0.222222222222222265398 x^2, on one path
+///    -0.222222222222222431931 x^2, on another path
+/// so this comparison is not made for x87.
+
+template<typename F>
+void test_a_function
+    (F           f
+    ,double      exact_root
+    ,double      bound0
+    ,double      bound1
+    ,double      tolerance
+    ,int         line
+    ,char const* file   = __FILE__
+    )
+{
+    // Otherwise silly alias for compatibility with test_a_decimal_function().
+    double const tol = tolerance;
+    double const maximum_error = max_err(exact_root, tol);
+    int const max_n_iter = max_n_iter_brent(bound0, bound1, tol, exact_root);
+
+    std::ostringstream os0;
+    os0.precision(DECIMAL_DIG);
+    double d = brent_zero(f, bound0, bound1, tol, os0);
+    double error = d - exact_root;
+    INVOKE_LMI_TEST_RELATION(std::fabs(error),<=,maximum_error,file,line);
+
+    std::ostringstream os1;
+    os1.precision(DECIMAL_DIG);
+    root_type r = lmi_root(f, bound0, bound1, tol, os1);
+    INVOKE_LMI_TEST(root_is_valid == r.validity, file, line);
+    error = r.root - exact_root;
+    INVOKE_LMI_TEST_RELATION(std::fabs(error),<=,maximum_error,file,line);
+    INVOKE_LMI_TEST_RELATION(r.n_iter,<=,max_n_iter,file,line);
+
+#if !defined LMI_X87
+    INVOKE_LMI_TEST_EQUAL(os0.str(),os1.str(),file,line);
+#endif // !defined LMI_X87
+}
+
+/// Test decimal root-finding accuracy and speed.
+///
+/// Find a root using
+///  - a plain translation of Brent's ALGOL procedure 'zero'
+///  - lmi's customized version thereof, specifying {bias,rounding}
 ///
 /// Verify that
 ///  - the result is within the max_err() tolerance (ignoring Brent's
@@ -92,7 +157,7 @@ int max_n_iter_brent(double a, double b, double tol, double zeta)
 /// outcome depends on architecture.
 
 template<typename F>
-void test_a_function
+void test_a_decimal_function
     (F           f
     ,double      exact_root
     ,double      bound0
@@ -425,27 +490,33 @@ void test_various_functions()
 {
     auto f00 = [](double x) {return x * x * x - 2.0 * x - 5.0;};
     auto root_00 = 2.09455148154232650981;
-    test_a_function(f00, root_00, -2.56, 2.56, 17, __LINE__, 12);
+    test_a_decimal_function(f00, root_00, -2.56, 2.56, 17     , __LINE__, 12);
+    test_a_function        (f00, root_00, -2.56, 2.56, 1.0e-15, __LINE__);
 
     auto f01 = [](double x) {return std::pow(x, 19);};
     auto root_01 = 0.0;
-    test_a_function(f01, root_01, -1.0 , 4.0, 17, __LINE__, 163);
+    test_a_decimal_function(f01, root_01, -1.0 , 4.0, 17     , __LINE__, 163);
+    test_a_function        (f01, root_01, -1.0 , 4.0, 1.0e-15, __LINE__);
 
     auto f02 = [](double x) {return std::pow(x - 1.7, 17.0);};
     auto root_02 = 1.7;
-    test_a_function(f02, root_02, 0.0, 2.0, 17, __LINE__, 145);
+    test_a_decimal_function(f02, root_02, 0.0, 2.0, 17     , __LINE__, 145);
+    test_a_function        (f02, root_02, 0.0, 2.0, 1.0e-15, __LINE__);
 
     auto f03 = [](double x) {return std::cos(x) - 0.999;};
     auto root_03 = 0.044725087168733454;
-    test_a_function(f03, root_03, -0.01, 0.8, 17, __LINE__, 16);
+    test_a_decimal_function(f03, root_03, -0.01, 0.8, 17     , __LINE__, 16);
+    test_a_function        (f03, root_03, -0.01, 0.8, 1.0e-15, __LINE__);
 
     auto f04 = [](double x) {return std::pow((x - 1.0), 3);};
     auto root_04 = 1.0;
-    test_a_function(f04, root_04, 0.0 , 1.8, 17, __LINE__, 130);
+    test_a_decimal_function(f04, root_04, 0.0 , 1.8, 17     , __LINE__, 130);
+    test_a_function        (f04, root_04, 0.0 , 1.8, 1.0e-15, __LINE__);
 
     auto f05 = [](double x) {return std::pow(x, 2.0) - 2.0;};
     auto root_05 = 1.4142135623730951;
-    test_a_function(f05, root_05, 0.0 , 2.0, 17, __LINE__, 10);
+    test_a_decimal_function(f05, root_05, 0.0 , 2.0, 17     , __LINE__, 10);
+    test_a_function        (f05, root_05, 0.0 , 2.0, 1.0e-15, __LINE__);
 }
 
 void test_hodgepodge()
@@ -499,18 +570,18 @@ void test_hodgepodge()
 
     // Similar, using unit-test function template.
     //
-    // For now at least, test_a_function() tests that the error is
+    // For now, test_a_decimal_function() tests that the error is
     // within tolerance, ignoring roundoff in the computed function.
     // That may very often be useful, but it can produce spurious
     // failures, as in these three commented-out lines:
-//  test_a_function(e_19, 0.0, -1.0, 4.0, 20, __LINE__, 169);
-//  test_a_function(e_19, 0.0, -1.0, 4.0, 19, __LINE__, 171);
-//  test_a_function(e_19, 0.0, -1.0, 4.0, 18, __LINE__, 168);
-    test_a_function(e_19, 0.0, -1.0, 4.0, 17, __LINE__, 163);
-    test_a_function(e_19, 0.0, -1.0, 4.0, 16, __LINE__, 156);
-    test_a_function(e_19, 0.0, -1.0, 4.0, 15, __LINE__, 142);
-    test_a_function(e_19, 0.0, -1.0, 4.0, 14, __LINE__, 128);
-    test_a_function(e_19, 0.0, -1.0, 4.0, 12, __LINE__, 112);
+//  test_a_decimal_function(e_19, 0.0, -1.0, 4.0, 20, __LINE__, 169);
+//  test_a_decimal_function(e_19, 0.0, -1.0, 4.0, 19, __LINE__, 171);
+//  test_a_decimal_function(e_19, 0.0, -1.0, 4.0, 18, __LINE__, 168);
+    test_a_decimal_function(e_19, 0.0, -1.0, 4.0, 17, __LINE__, 163);
+    test_a_decimal_function(e_19, 0.0, -1.0, 4.0, 16, __LINE__, 156);
+    test_a_decimal_function(e_19, 0.0, -1.0, 4.0, 15, __LINE__, 142);
+    test_a_decimal_function(e_19, 0.0, -1.0, 4.0, 14, __LINE__, 128);
+    test_a_decimal_function(e_19, 0.0, -1.0, 4.0, 12, __LINE__, 112);
 
     d = brent_zero(eq_2_1, -100.0, 100.0, 0.5);
     zeta = -100.0;
