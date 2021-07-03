@@ -467,10 +467,141 @@ root_type decimal_root
         );
 }
 
-/// A C++ translation of Brent's algol60 reference implementation.
+/// An instrumented translation of Brent's reference implementation.
 
 template<typename FunctionalType>
 double brent_zero
+    (FunctionalType& f
+    ,double          a
+    ,double          b
+    ,double          t
+    ,std::ostream&   os_trace = null_stream()
+    )
+{
+    // Returns a zero of the function f in the given interval [a,b],
+    // to within a tolerance 6ϵ|ζ| + 2t, where ϵ is the relative
+    // machine precision and t is a positive tolerance. Assumes
+    // that f(a) and f(b) have different signs.
+
+    int                     n_iter    {0};
+    interpolation_technique technique {interpolate_initialization};
+
+    os_trace
+        << "#eval"
+        << "            a           fa"
+        << "            b           fb"
+        << "            c           fc"
+        << '\n'
+        ;
+
+    double c, d, e, fa, fb, fc, tol, m, p, q, r, s;
+
+    auto expatiate = [&]()
+        {
+        os_trace
+            <<        std::setw(3)  << n_iter
+            << ' '                  << "IBLQb"[technique]
+            << ' ' << std::setw(12) << a << ' ' << std::setw(12) << fa
+            << ' ' << std::setw(12) << b << ' ' << std::setw(12) << fb
+            << ' ' << std::setw(12) << c << ' ' << std::setw(12) << fc
+            << std::endl
+            ;
+        };
+
+    fa = f(a);
+    ++n_iter;
+    fb = f(b);
+    ++n_iter;
+    c = fc = 0.0; // Zero-initialize before calling expatiate().
+    expatiate();
+  interpolate:
+    c = a; fc = fa; d = e = b - a;
+  extrapolate:
+    if(std::fabs(fc) < std::fabs(fb))
+       {
+        a =  b;  b =  c;  c =  a;
+       fa = fb; fb = fc; fc = fa;
+       }
+    tol = 2.0 * DBL_EPSILON * std::fabs(b) + t;
+    m = 0.5 * (c - b);
+    if(tol < std::fabs(m) && 0.0 != fb)
+        {
+        // See if a bisection is forced.
+        if(std::fabs(e) < tol || std::fabs(fa) <= std::fabs(fb))
+            {
+            technique = interpolate_bisection0;
+            d = e = m;
+            }
+        else
+            {
+            s = fb / fa;
+            if(a == c)
+                {
+                // Linear interpolation.
+                technique = interpolate_linear;
+                p = 2.0 * m * s;
+                q = 1.0 - s;
+                }
+            else
+                {
+                // Inverse quadratic interpolation.
+                technique = interpolate_inverse_quadratic;
+                q = fa / fc;
+                r = fb / fc;
+                p = s * (2.0 * m * q * (q - r) - (b - a) * (r - 1.0));
+                q = (q - 1.0) * (r - 1.0) * (s - 1.0);
+                }
+            if(0.0 < p)
+                {
+                q = -q;
+                }
+            else
+                {
+                p = -p;
+                }
+            s = e;
+            e = d;
+            if
+                (  2.0 * p < 3.0 * m * q - std::fabs(tol * q)
+                && p < std::fabs(0.5 * s * q)
+                )
+                {
+                d = p / q;
+                }
+            else
+                {
+                technique = interpolate_bisection1;
+                d = e = m;
+                }
+            }
+        a = b; fa = fb;
+        if(tol < std::fabs(d))
+            {
+            b += d;
+            }
+        else if(0.0 < m)
+            {
+            b += tol;
+            }
+        else
+            {
+            b -= tol;
+            }
+        fb = f(b);
+        ++n_iter;
+        expatiate();
+        if((0.0 < fb) == (0.0 < fc))
+            {goto interpolate;}
+        else
+            {goto extrapolate;}
+        }
+    return b;
+}
+
+/// A C++ translation of Brent's algol60 reference implementation.
+
+template<typename FunctionalType>
+double brent_zero_reference
     (FunctionalType& f
     ,double          a
     ,double          b
@@ -482,7 +613,8 @@ double brent_zero
     // machine precision and t is a positive tolerance. Assumes
     // that f(a) and f(b) have different signs.
     double c, d, e, fa, fb, fc, tol, m, p, q, r, s;
-    fa = f(a); fb = f(b);
+    fa = f(a);
+    fb = f(b);
   interpolate:
     c = a; fc = fa; d = e = b - a;
   extrapolate:
