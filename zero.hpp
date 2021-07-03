@@ -24,10 +24,10 @@
 
 #include "config.hpp"
 
-#include "assert_lmi.hpp"
 #include "null_stream.hpp"
 #include "round_to.hpp"
 
+#include <cfloat>                       // DBL_EPSILON
 #include <cmath>                        // fabs(), pow()
 #include <functional>                   // function(), identity()
 #include <iomanip>                      // setw()
@@ -467,7 +467,7 @@ root_type decimal_root
         );
 }
 
-/// A C++ equivalent of Brent's algol60 original, for reference only.
+/// A C++ translation of Brent's algol60 reference implementation.
 
 template<typename FunctionalType>
 double brent_zero
@@ -477,47 +477,32 @@ double brent_zero
     ,double          t
     )
 {
-    LMI_ASSERT(0.0 <= t);
-    constexpr double epsilon {std::numeric_limits<double>::epsilon()};
-
-    // Returns a zero of the function f in [a,b] to within a tolerance
-    //   6ϵ|ζ| + 2t
-    // Precondition: f(a) and f(b) have different signs.
-    double fa = f(a);
-    double fb = f(b);
-    double fc = fb;
-    double c = b;
-    double d = b - a;
-    double e = d;
-
-    for(;;)
+    // Returns a zero of the function f in the given interval [a,b],
+    // to within a tolerance 6ϵ|ζ| + 2t, where ϵ is the relative
+    // machine precision and t is a positive tolerance. Assumes
+    // that f(a) and f(b) have different signs.
+    double c, d, e, fa, fb, fc, tol, m, p, q, r, s;
+    fa = f(a); fb = f(b);
+  interpolate:
+    c = a; fc = fa; d = e = b - a;
+  extrapolate:
+    if(std::fabs(fc) < std::fabs(fb))
+       {
+        a =  b;  b =  c;  c =  a;
+       fa = fb; fb = fc; fc = fa;
+       }
+    tol = 2.0 * DBL_EPSILON * std::fabs(b) + t;
+    m = 0.5 * (c - b);
+    if(tol < std::fabs(m) && 0.0 != fb)
         {
-        if((0.0 < fb) == (0.0 < fc))
-            {
-            c = a;
-            fc = fa;
-            d = e = b - a;
-            }
-        if(std::fabs(fc) < std::fabs(fb))
-            {
-             a =  b;  b =  c;  c =  a;
-            fa = fb; fb = fc; fc = fa;
-            }
-        double tol = 2.0 * epsilon * std::fabs(b) + t;
-        double m = 0.5 * (c - b);
-        if(0.0 == fb || std::fabs(m) <= tol)
-            {
-            return b;
-            }
+        // See if a bisection is forced.
         if(std::fabs(e) < tol || std::fabs(fa) <= std::fabs(fb))
             {
-            // Bisection.
             d = e = m;
             }
         else
             {
-            double p, q;
-            double s = fb / fa;
+            s = fb / fa;
             if(a == c)
                 {
                 // Linear interpolation.
@@ -528,7 +513,7 @@ double brent_zero
                 {
                 // Inverse quadratic interpolation.
                 q = fa / fc;
-                double r = fb / fc;
+                r = fb / fc;
                 p = s * (2.0 * m * q * (q - r) - (b - a) * (r - 1.0));
                 q = (q - 1.0) * (r - 1.0) * (s - 1.0);
                 }
@@ -543,8 +528,8 @@ double brent_zero
             s = e;
             e = d;
             if
-                (   2.0 * p < 3.0 * m * q - std::fabs(tol * q)
-                &&  p < std::fabs(0.5 * s * q)
+                (  2.0 * p < 3.0 * m * q - std::fabs(tol * q)
+                && p < std::fabs(0.5 * s * q)
                 )
                 {
                 d = p / q;
@@ -554,8 +539,7 @@ double brent_zero
                 d = e = m;
                 }
             }
-        a = b;
-        fa = fb;
+        a = b; fa = fb;
         if(tol < std::fabs(d))
             {
             b += d;
@@ -569,7 +553,12 @@ double brent_zero
             b -= tol;
             }
         fb = f(b);
+        if((0.0 < fb) == (0.0 < fc))
+            {goto interpolate;}
+        else
+            {goto extrapolate;}
         }
+    return b;
 }
 
 #endif // zero_hpp
