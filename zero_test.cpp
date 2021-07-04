@@ -495,9 +495,6 @@ void test_various_functions()
 
     auto f01 = [](double x) {return std::pow(x, 19);};
     auto root_01 = 0.0;
-    test_a_decimal_function(f01, root_01, -1.0 , 4.0, 17     , __LINE__, 163);
-    test_a_function        (f01, root_01, -1.0 , 4.0, 1.0e-15, __LINE__);
-
     // For now, test_a_[decimal_]function() tests that the error is
     // within tolerance, ignoring roundoff in the computed function.
     // That may very often be useful, but it can produce spurious
