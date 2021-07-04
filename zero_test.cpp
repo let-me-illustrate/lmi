@@ -502,22 +502,22 @@ void test_various_functions()
     // within tolerance, ignoring roundoff in the computed function.
     // That may very often be useful, but it can produce spurious
     // failures, as in these three commented-out lines:
-//  test_a_decimal_function(f01, 0.0, -1.0, 4.0, 20, __LINE__, 169);
-//  test_a_function        (f01, 0.0, -1.0, 4.0, 0.5 * 1.0e-20, __LINE__);
-//  test_a_decimal_function(f01, 0.0, -1.0, 4.0, 19, __LINE__, 171);
-//  test_a_function        (f01, 0.0, -1.0, 4.0, 0.5 * 1.0e-19, __LINE__);
-//  test_a_decimal_function(f01, 0.0, -1.0, 4.0, 18, __LINE__, 168);
-//  test_a_function        (f01, 0.0, -1.0, 4.0, 0.5 * 1.0e-18, __LINE__);
-    test_a_decimal_function(f01, 0.0, -1.0, 4.0, 17, __LINE__, 163);
-    test_a_function        (f01, 0.0, -1.0, 4.0, 0.5 * 1.0e-17, __LINE__);
-    test_a_decimal_function(f01, 0.0, -1.0, 4.0, 16, __LINE__, 156);
-    test_a_function        (f01, 0.0, -1.0, 4.0, 0.5 * 1.0e-16, __LINE__);
-    test_a_decimal_function(f01, 0.0, -1.0, 4.0, 15, __LINE__, 142);
-    test_a_function        (f01, 0.0, -1.0, 4.0, 0.5 * 1.0e-15, __LINE__);
-    test_a_decimal_function(f01, 0.0, -1.0, 4.0, 14, __LINE__, 128);
-    test_a_function        (f01, 0.0, -1.0, 4.0, 0.5 * 1.0e-14, __LINE__);
-    test_a_decimal_function(f01, 0.0, -1.0, 4.0, 12, __LINE__, 112);
-    test_a_function        (f01, 0.0, -1.0, 4.0, 0.5 * 1.0e-12, __LINE__);
+//  test_a_decimal_function(f01, root_01, -1.0, 4.0, 20, __LINE__, 169);
+//  test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-20, __LINE__);
+//  test_a_decimal_function(f01, root_01, -1.0, 4.0, 19, __LINE__, 171);
+//  test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-19, __LINE__);
+//  test_a_decimal_function(f01, root_01, -1.0, 4.0, 18, __LINE__, 168);
+//  test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-18, __LINE__);
+    test_a_decimal_function(f01, root_01, -1.0, 4.0, 17, __LINE__, 163);
+    test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-17, __LINE__);
+    test_a_decimal_function(f01, root_01, -1.0, 4.0, 16, __LINE__, 156);
+    test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-16, __LINE__);
+    test_a_decimal_function(f01, root_01, -1.0, 4.0, 15, __LINE__, 142);
+    test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-15, __LINE__);
+    test_a_decimal_function(f01, root_01, -1.0, 4.0, 14, __LINE__, 128);
+    test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-14, __LINE__);
+    test_a_decimal_function(f01, root_01, -1.0, 4.0, 12, __LINE__, 112);
+    test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-12, __LINE__);
 
     auto f02 = [](double x) {return std::pow(x - 1.7, 17.0);};
     auto root_02 = 1.7;
