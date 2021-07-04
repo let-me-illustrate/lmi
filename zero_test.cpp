@@ -535,6 +535,21 @@ void test_various_functions()
     auto root_05 = 1.4142135623730951;
     test_a_decimal_function(f05, root_05, 0.0 , 2.0, 17     , __LINE__, 10);
     test_a_function        (f05, root_05, 0.0 , 2.0, 1.0e-15, __LINE__);
+
+    // Despite its apparent insipidity, this is actually a very
+    // interesting test: after the first iterate has been calculated
+    // as -0.05 by linear interpolation, the values are:
+    //   a, fa   1.9   -0.39
+    //   b, fb  -0.05  -3.9975
+    //   c, fc  -2.1    0.41
+    // so fb and fc have the same sign while |fc| < |fb|, which is
+    // an uncommon conjunction of circumstances that this unit test
+    // contrives to engender. Usually the second test is met only if
+    // the first is, too.
+    auto f06 = [](double x) {return x * x - 4.0;};
+    auto root_06 = -2.0;
+    test_a_function        (f06, root_06 , 1.9, -2.1, 1.0e-15, __LINE__);
+    test_a_function        (f06, root_06, -2.1 , 1.9, 1.0e-15, __LINE__);
 }
 
 void test_hodgepodge()
