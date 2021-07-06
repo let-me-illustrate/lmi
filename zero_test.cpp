@@ -395,6 +395,107 @@ void test_NaNs()
     LMI_TEST(materially_equal(1.0e100, std::fabs(r.root)));
 }
 
+/// Find a root that coincides with one or both bounds.
+///
+/// In this special case, lmi_root() returns the root as soon as
+/// possible. The reference implementation does not.
+
+void test_root_at_a_bound()
+{
+    auto f = [](double x) {return x;};
+    double tol = 1.0e-15;
+    double zeta = 0.0;
+    root_type r;
+
+    // No root in bounding interval.
+    r = lmi_root(f, -1.0, -1.0, tol);
+    LMI_TEST(improper_bounds == r.validity);
+
+    // Root is second bound: found on second evaluation.
+    r = lmi_root(f, -1.0,  0.0, tol);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST_EQUAL(r.root, zeta);
+    LMI_TEST_EQUAL(r.n_iter, 2);
+
+    // Root found on third evaluation of a monomial.
+    r = lmi_root(f, -1.0,  1.0, tol);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST_EQUAL(r.root, zeta);
+    LMI_TEST_EQUAL(r.n_iter, 3);
+
+    // Root is first bound: found on first evaluation.
+    r = lmi_root(f,  0.0, -1.0, tol);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST_EQUAL(r.root, zeta);
+    LMI_TEST_EQUAL(r.n_iter, 1);
+
+    // Returns an error status, even though the root coincides with
+    // both bounds. Attempting to find a root between identical bounds
+    // is presumably an error, which should be reported immediately
+    // without evaluating the objective function even once.
+    r = lmi_root(f,  0.0,  0.0, tol);
+    LMI_TEST(improper_bounds == r.validity);
+    LMI_TEST_EQUAL(r.n_iter, 0);
+
+    r = lmi_root(f,  0.0,  1.0, tol);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST_EQUAL(r.root, zeta);
+    LMI_TEST_EQUAL(r.n_iter, 1);
+
+    r = lmi_root(f,  1.0, -1.0, tol);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST_EQUAL(r.root, zeta);
+    LMI_TEST_EQUAL(r.n_iter, 3);
+
+    r = lmi_root(f,  1.0,  0.0, tol);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST_EQUAL(r.root, zeta);
+    LMI_TEST_EQUAL(r.n_iter, 2);
+
+    r = lmi_root(f,  1.0,  1.0, tol);
+    LMI_TEST(improper_bounds == r.validity);
+
+    // Repeat representative cases with decimal rounding.
+
+    // No root in bounding interval.
+    r = decimal_root(f, -0.96, -1.04, bias_none, 1);
+    LMI_TEST(improper_bounds == r.validity);
+
+    // Root is rounded second bound: found on second evaluation.
+    r = decimal_root(f, -1.03,  0.04, bias_none, 1);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST_EQUAL(r.root, zeta);
+    LMI_TEST_EQUAL(r.n_iter, 2);
+
+    // Root found on third evaluation of a monomial.
+    r = decimal_root(f, -1.04,  0.96, bias_none, 1);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST_EQUAL(r.root, zeta);
+    LMI_TEST_EQUAL(r.n_iter, 3);
+
+    // Root is rounded first bound: found on first evaluation.
+    r = decimal_root(f,  0.04, -1.01, bias_none, 1);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST_EQUAL(r.root, zeta);
+    LMI_TEST_EQUAL(r.n_iter, 1);
+
+    // Bounds identical after rounding: presumptive error.
+    r = decimal_root(f, -0.04,  0.04, bias_none, 1);
+    LMI_TEST(improper_bounds == r.validity);
+    LMI_TEST_EQUAL(r.n_iter, 0);
+
+    // A curious effect of rounding the input bounds.
+
+    // Literal   bounds [0.04, 0.09] bracket no root.
+    // Effective bounds [0.0 , 0.1 ] bracket a root.
+    // The exact true root, 0.0, is returned, because the literal
+    // input bounds are replaced by the rounded effective bounds.
+    r = decimal_root(f,  0.04,  0.09, bias_none, 1);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST_EQUAL(r.root, zeta);
+    LMI_TEST_EQUAL(r.n_iter, 1);
+}
+
 void test_biases()
 {
     // Test different biases.
@@ -755,6 +856,7 @@ int test_main(int, char*[])
 {
     test_fundamentals();
     test_NaNs();
+    test_root_at_a_bound();
     test_biases();
     test_celebrated_equation();
     test_wikipedia_example();
