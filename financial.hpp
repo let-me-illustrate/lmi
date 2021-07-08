@@ -59,14 +59,17 @@ long double fv
         {
         return 0.0L;
         }
-    long double const v = 1.0L / (1.0L + i);
-    long double vn = 1.0L;
+
+    // Symbol v, meaning 1/(1+i), is standard. A corresponding
+    // symbol u, meaning (1+i), is not standard, but should be.
+    long double const u = 1.0L + i;
     long double z = 0.0L;
     for(InputIterator j = first; j != last; ++j)
         {
-        z += *j * (vn *= v);
+        z += *j;
+        z *= u;
         }
-    return z / (vn * v);
+    return z;
 }
 
 template<typename InputIterator>
@@ -96,7 +99,7 @@ class irr_helper
             (*this
             ,-1.0       // A priori lower bound.
             ,1000.0     // Assumed upper bound.
-            ,bias_lower // Return the final bound with the lower fv.
+            ,bias_lower // Return the final bound with the lower FV.
             ,decimals_
             );
         switch(z.validity)

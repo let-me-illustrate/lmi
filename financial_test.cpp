@@ -132,24 +132,29 @@ int test_main(int, char*[])
     LMI_TEST_EQUAL(-1.0, irr_helper<double*>(pmts, pmts + 3, 0.0    , 5)());
 
     // Test with arrays.
-    double cash_flows[4] = {pmts[0], pmts[1], pmts[2], -bfts[2]};
-    LMI_TEST_EQUAL(2.0, irr(cash_flows, 4 + cash_flows, 5));
 
+    LMI_TEST_EQUAL(2.0, irr(pmts, 3 + pmts, bfts[2], 5));
+
+    double cash_flows[4] = {pmts[0], pmts[1], pmts[2], -bfts[2]};
     LMI_TEST_EQUAL(  882.8125, fv(cash_flows + 0, cash_flows + 3,  0.25));
     LMI_TEST_EQUAL( 2200.0   , fv(cash_flows + 0, cash_flows + 3,  1.0 ));
     // Consequently:
     LMI_TEST_EQUAL(0.25, irr(cash_flows, 3 + cash_flows,  882.8125, 5));
     LMI_TEST_EQUAL(1.0 , irr(cash_flows, 3 + cash_flows, 2200.0   , 5));
 
-// For the nonce, this fails: "test failed:   '0' == '-nan'"
-//  LMI_TEST_EQUAL(    0.0   , fv(cash_flows + 0, cash_flows + 4, -1.0 ));
+    LMI_TEST_EQUAL(    0.0   , fv(cash_flows + 0, cash_flows + 4, -1.0 ));
     LMI_TEST_EQUAL(-4800.0   , fv(cash_flows + 0, cash_flows + 4,  0.0 ));
     LMI_TEST_EQUAL(-6400.0   , fv(cash_flows + 0, cash_flows + 4,  1.0 ));
 
     // Test with vectors.
+#if 0
+    // For the nonce, these tests fail. The first one in particular
+    // is just asking for trouble: it's designed to have a root of
+    // 200%, but appending "0.0" ensures that -100% is also a root.
     std::vector<double> v(cash_flows, 4 + cash_flows);
     LMI_TEST_EQUAL(2.0, irr(v.begin(), v.end(), 0.0, 5));
     LMI_TEST_EQUAL(2.0, irr(v.begin(), v.end(), 5));
+#endif // 0
 
     std::vector<double> p; // Payments.
     std::vector<double> b; // Benefits.
@@ -270,10 +275,9 @@ int test_main(int, char*[])
     LMI_TEST_EQUAL(r0[3], 3.14);
 
     // SOMEDAY !! The zero polynomial has an infinitude of roots,
-    // but, given that we must return only one, wouldn't some
-    // value like 0% or -100% be more suitable?
+    // but, given that we must return only one, -100% is suitable.
     irr(p0, b0, r0, p0.size(), p0.size(), decimals);
-    LMI_TEST_EQUAL(r0[3], 1000);
+    LMI_TEST_EQUAL(r0[3], -1);
 
     // Test fv().
 
