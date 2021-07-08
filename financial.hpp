@@ -27,8 +27,10 @@
 #include "assert_lmi.hpp"
 #include "bourn_cast.hpp"
 #include "mc_enum_type_enums.hpp"       // mcenum_mode
+#include "miscellany.hpp"               // ios_out_app_binary()
 #include "zero.hpp"
 
+#include <fstream>
 #include <iterator>                     // iterator_traits
 
 class calendar_date;
@@ -95,12 +97,17 @@ class irr_helper
 
     long double operator()()
         {
+// Uncomment to trace iterations:
+//      std::ofstream ofs_trace;
+//      ofs_trace.open("trace_irr.txt", ios_out_app_binary());
+//      std::ostream os_trace(ofs_trace.rdbuf());
         root_type const z = decimal_root
             (*this
             ,-1.0       // A priori lower bound.
             ,1000.0     // Assumed upper bound.
             ,bias_lower // Return the final bound with the lower FV.
             ,decimals_
+//          ,os_trace
             );
         switch(z.validity)
             {
