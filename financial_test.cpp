@@ -33,6 +33,36 @@
 #include <iostream>
 #include <vector>
 
+/// Present value, for local use only--beware division by zero.
+///
+/// This could be reimplemented in terms of i rather than v for
+/// general use. The problem with using v is that i can easily
+/// be -100%, in which case v=1/(1+i)=1/0, but it is preferable
+/// to avoid division by zero.
+
+template<typename InputIterator>
+long double pv
+    (InputIterator first
+    ,InputIterator last
+    ,long double i
+    )
+{
+    if(first == last)
+        {
+        return 0.0L;
+        }
+    long double const v = 1.0L / (1.0L + i);
+    long double vn = 1.0L;
+    long double z = *first;
+    InputIterator j = first;
+    while(++j != last)
+        {
+        vn *= v;
+        z += *j * vn;
+        }
+    return z;
+}
+
 void mete_0
     (std::vector<double> const& payments
     ,std::vector<double> const& benefits
@@ -145,10 +175,10 @@ int test_main(int, char*[])
     // This NPV is -9.777068044058979E-12 in a gnumeric spreadsheet,
     // versus -9.86988e-014 with MinGW-w64 gcc-6.3.0; the 1e-13
     // tolerance is simply the materially_equal() default.
-    LMI_TEST(std::fabs(npv(q.begin(), q.end(), results.back())) <= 1e-13);
+    LMI_TEST(std::fabs(pv(q.begin(), q.end(), results.back())) <= 1e-13);
 
     // Trivially, NPV at 0% interest is summation.
-    LMI_TEST(materially_equal(-4950.0L, npv(q.begin(), q.end(), 0.0)));
+    LMI_TEST(materially_equal(-4950.0L, pv(q.begin(), q.end(), 0.0)));
 
     // Test const vectors.
     std::vector<double> const cp(p);

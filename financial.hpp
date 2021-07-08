@@ -70,29 +70,6 @@ long double fv
 }
 
 template<typename InputIterator>
-long double npv
-    (InputIterator first
-    ,InputIterator last
-    ,long double i
-    )
-{
-    if(first == last)
-        {
-        return 0.0L;
-        }
-    long double const v = 1.0L / (1.0L + i);
-    long double vn = 1.0L;
-    long double z = *first;
-    InputIterator j = first;
-    while(++j != last)
-        {
-        vn *= v;
-        z += *j * vn;
-        }
-    return z;
-}
-
-template<typename InputIterator>
 class irr_helper
 {
   public:
