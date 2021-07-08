@@ -113,6 +113,10 @@ int test_main(int, char*[])
     double pmts[3] = {100.0,  200.0,  300.0};
     double bfts[3] = {300.0, 1500.0, 5400.0};
 
+    LMI_TEST(materially_equal(104.0000L, fv(pmts + 0, pmts + 1, 0.04)));
+    LMI_TEST(materially_equal(316.1600L, fv(pmts + 0, pmts + 2, 0.04)));
+    LMI_TEST(materially_equal(640.8064L, fv(pmts + 0, pmts + 3, 0.04)));
+
     // The next few tests compare floating-point quantities for exact
     // equality. Often that's inappropriate; however, the quantities
     // are integer-valued and the algorithm is designed to round them
@@ -130,6 +134,17 @@ int test_main(int, char*[])
     // Test with arrays.
     double cash_flows[4] = {pmts[0], pmts[1], pmts[2], -bfts[2]};
     LMI_TEST_EQUAL(2.0, irr(cash_flows, 4 + cash_flows, 5));
+
+    LMI_TEST_EQUAL(  882.8125, fv(cash_flows + 0, cash_flows + 3,  0.25));
+    LMI_TEST_EQUAL( 2200.0   , fv(cash_flows + 0, cash_flows + 3,  1.0 ));
+    // Consequently:
+    LMI_TEST_EQUAL(0.25, irr(cash_flows, 3 + cash_flows,  882.8125, 5));
+    LMI_TEST_EQUAL(1.0 , irr(cash_flows, 3 + cash_flows, 2200.0   , 5));
+
+// For the nonce, this fails: "test failed:   '0' == '-nan'"
+//  LMI_TEST_EQUAL(    0.0   , fv(cash_flows + 0, cash_flows + 4, -1.0 ));
+    LMI_TEST_EQUAL(-4800.0   , fv(cash_flows + 0, cash_flows + 4,  0.0 ));
+    LMI_TEST_EQUAL(-6400.0   , fv(cash_flows + 0, cash_flows + 4,  1.0 ));
 
     // Test with vectors.
     std::vector<double> v(cash_flows, 4 + cash_flows);
