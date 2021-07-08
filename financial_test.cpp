@@ -147,14 +147,8 @@ int test_main(int, char*[])
     LMI_TEST_EQUAL(-6400.0   , fv(cash_flows + 0, cash_flows + 4,  1.0 ));
 
     // Test with vectors.
-#if 0
-    // For the nonce, these tests fail. The first one in particular
-    // is just asking for trouble: it's designed to have a root of
-    // 200%, but appending "0.0" ensures that -100% is also a root.
-    std::vector<double> v(cash_flows, 4 + cash_flows);
-    LMI_TEST_EQUAL(2.0, irr(v.begin(), v.end(), 0.0, 5));
-    LMI_TEST_EQUAL(2.0, irr(v.begin(), v.end(), 5));
-#endif // 0
+    std::vector<double> v(pmts, 3 + pmts);
+    LMI_TEST_EQUAL(2.0, irr(v.begin(), v.end(), bfts[2], 5));
 
     std::vector<double> p; // Payments.
     std::vector<double> b; // Benefits.

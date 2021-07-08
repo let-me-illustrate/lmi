@@ -133,16 +133,6 @@ long double irr
     return irr_helper<InputIterator>(first, last, x, decimals)();
 }
 
-template<typename InputIterator>
-long double irr
-    (InputIterator first
-    ,InputIterator last
-    ,int decimals
-    )
-{
-    return irr_helper<InputIterator>(first, last, 0.0L, decimals)();
-}
-
 template
     <typename InputIterator0
     ,typename InputIterator1
