@@ -24,15 +24,59 @@
 #include "financial.hpp"
 
 #include "materially_equal.hpp"
+#include "miscellany.hpp"               // stifle_warning_for_unused_value()
 #include "ssize_lmi.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
 #include <cmath>                        // fabs()
-#include <functional>                   // bind()
-#include <iomanip>                      // Formatting of optional detail.
 #include <iostream>
 #include <vector>
+
+void mete_0
+    (std::vector<double> const& payments
+    ,std::vector<double> const& benefits
+    )
+{
+    constexpr int decimals {5};
+    static std::vector<double> results(payments.size());
+    volatile double unoptimizable;
+    stifle_warning_for_unused_value(unoptimizable);
+    for(int i = 0; i < 10; ++i)
+        {
+        irr
+            (payments.begin()
+            ,payments.end()
+            ,benefits.begin()
+            ,results.begin()
+            ,decimals
+            );
+        unoptimizable = results.front();
+        }
+}
+
+void mete_1
+    (std::vector<double> const& payments
+    ,std::vector<double> const& benefits
+    )
+{
+    constexpr int decimals {5};
+    static std::vector<double> results(payments.size());
+    volatile double unoptimizable;
+    stifle_warning_for_unused_value(unoptimizable);
+    for(int i = 0; i < 10; ++i)
+        {
+        irr
+            (payments
+            ,benefits
+            ,results
+            ,payments.size()
+            ,payments.size()
+            ,decimals
+            );
+        unoptimizable = results.front();
+        }
+}
 
 int test_main(int, char*[])
 {
@@ -211,24 +255,13 @@ int test_main(int, char*[])
         <= tolerance
         );
 
-    typedef std::vector<double>::iterator VI;
+    auto f0 = [&p, &b] {mete_0(p, b);};
+    auto f1 = [&p, &b] {mete_1(p, b);};
     std::cout
-        << "  Speed test: vector of irrs, length "
-        << p.size()
-        << ", "
-        << decimals
-        << " decimals\n    "
-        << TimeAnAliquot
-            (std::bind
-                (irr<VI,VI,VI>
-                ,p.begin()
-                ,p.end()
-                ,b.begin()
-                ,results.begin()
-                ,decimals
-                )
-            )
-        << '\n'
+        << "\n  Speed tests..."
+        << "\n  iterator  form: " << TimeAnAliquot(f0)
+        << "\n  container form: " << TimeAnAliquot(f1)
+        << std::endl
         ;
 
     return 0;
