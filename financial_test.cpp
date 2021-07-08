@@ -119,22 +119,22 @@ int test_main(int, char*[])
     // exactly.
 
     irr_helper<double*> xxx(pmts, pmts + 1, bfts[0], 5);
-    LMI_TEST(2.0 == xxx());
+    LMI_TEST_EQUAL(2.0, xxx());
 
-    LMI_TEST(( 2.0 == irr_helper<double*>(pmts, pmts + 1, bfts[0], 5)()));
+    LMI_TEST_EQUAL( 2.0, irr_helper<double*>(pmts, pmts + 1, bfts[0], 5)());
 
-    LMI_TEST(( 2.0 == irr_helper<double*>(pmts, pmts + 3, bfts[2], 5)()));
+    LMI_TEST_EQUAL( 2.0, irr_helper<double*>(pmts, pmts + 3, bfts[2], 5)());
 
-    LMI_TEST((-1.0 == irr_helper<double*>(pmts, pmts + 3, 0.0    , 5)()));
+    LMI_TEST_EQUAL(-1.0, irr_helper<double*>(pmts, pmts + 3, 0.0    , 5)());
 
     // Test with arrays.
     double cash_flows[4] = {pmts[0], pmts[1], pmts[2], -bfts[2]};
-    LMI_TEST(2.0 == irr(cash_flows, 4 + cash_flows, 5));
+    LMI_TEST_EQUAL(2.0, irr(cash_flows, 4 + cash_flows, 5));
 
     // Test with vectors.
     std::vector<double> v(cash_flows, 4 + cash_flows);
-    LMI_TEST(2.0 == irr(v.begin(), v.end(), 0.0, 5));
-    LMI_TEST(2.0 == irr(v.begin(), v.end(), 5));
+    LMI_TEST_EQUAL(2.0, irr(v.begin(), v.end(), 0.0, 5));
+    LMI_TEST_EQUAL(2.0, irr(v.begin(), v.end(), 5));
 
     std::vector<double> p; // Payments.
     std::vector<double> b; // Benefits.
