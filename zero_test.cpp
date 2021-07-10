@@ -31,6 +31,7 @@
 #include <cmath>                        // exp(), fabs(), log(), pow(), signbit()
 #include <limits>
 #include <sstream>
+#include <type_traits>                  // is_arithmetic_v
 
 namespace
 {
@@ -337,6 +338,69 @@ void test_fundamentals()
 
     r = decimal_root(e, 0.1, 1.0, bias_none, 9);
     LMI_TEST(root_not_bracketed == r.validity);
+}
+
+template<typename T>
+inline T signum(T t)
+{
+    static_assert(std::is_arithmetic_v<T>);
+    return (0 == t) ? 0 : std::signbit(t) ? -1 : 1;
+}
+
+/// A function whose value almost everywhere in (-1.0e100, 1.0e100)
+/// is a "signed" NaN. It's dubious to think of NaNs as possessing
+/// signedness, yet they do have a sign bit.
+///
+///   f(x) =
+///     -1.0,             x <= -1.0e100
+///     -NaN, -1.0e100 <  x <  π
+///      0.0,             x =  π
+///     +NaN,        π <  x <  +1.0e100
+///     +1.0, +1.0e100 <= x
+
+double NaN_signed(double z)
+{
+    static_assert(std::numeric_limits<double>::has_quiet_NaN);
+    // SOMEDAY !! Use std::numbers::pi when it becomes available.
+    constexpr double pi {3.14159265358979323851};
+    constexpr double qnan = std::numeric_limits<double>::quiet_NaN();
+    if(z <= -1.0e100)
+        {return -1.0;}
+    else if(pi == z)
+        {return  0.0;}
+    else if(1.0e100 <= z)
+        {return  1.0;}
+    else if(pi < z)
+        {return qnan;}
+    else
+        {return -qnan;}
+}
+
+/// Test NaN-valued functions.
+///
+/// On the IBM 360 hardware Brent used, there is no NaN (see Goldberg,
+/// "What Every Computer Scientist Should Know...":
+///  | On some floating-point hardware every bit pattern represents a
+///  | valid floating-point number. The IBM System/370 is an example
+/// ), so it's important to test worst-case convergence for functions
+/// that may return a NaN.
+///
+/// The "root" found is one of the endpoints. Reason: as of 2021-07
+/// at least, the bracketing interval is narrowed to [1.0e100, NaN].
+
+void test_NaNs()
+{
+    constexpr double pi {3.14159265358979323851};
+
+    LMI_TEST_EQUAL( 1, signum(NaN_signed(4.0)));
+    LMI_TEST_EQUAL(-1, signum(NaN_signed(3.0)));
+
+    root_type r = lmi_root(NaN_signed, -1.0e100, 1.0e100, 5.0e-1);
+    LMI_TEST_EQUAL(root_is_valid, r.validity);
+
+    int const max_n_iter = max_n_iter_brent(-1.0e100, 1.0e100, 5.0e-1, pi);
+    LMI_TEST_RELATION(r.n_iter,<=,max_n_iter);
+    LMI_TEST(materially_equal(1.0e100, std::fabs(r.root)));
 }
 
 void test_biases()
@@ -690,6 +754,7 @@ void test_former_rounding_problem()
 int test_main(int, char*[])
 {
     test_fundamentals();
+    test_NaNs();
     test_biases();
     test_celebrated_equation();
     test_wikipedia_example();
