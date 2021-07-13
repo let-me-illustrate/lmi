@@ -33,6 +33,7 @@
 #include <iomanip>                      // setw()
 #include <limits>
 #include <ostream>
+#include <utility>                      // forward()
 
 enum root_bias
     {bias_none   // Return root z with f(z) closest to 0.0 .
@@ -65,6 +66,19 @@ namespace detail
 {
 using RoundT = std::function<double(double)>;
 } // namespace detail
+
+/// Workaround for clang--see:
+///    https://lists.nongnu.org/archive/html/lmi/2021-07/msg00001.html
+/// It is hoped that this can be replaced by std::identity soon.
+
+struct lmi_identity
+{
+    using is_transparent = void;
+
+    template<typename T>
+    constexpr T&& operator()(T&& t) const noexcept
+        {return std::forward<T>(t);}
+};
 
 /// Return a zero z of a function f within input bounds [a,b].
 ///
@@ -242,7 +256,8 @@ root_type lmi_root
     ,double          tolerance
     ,std::ostream&   os_trace  = null_stream()
     ,root_bias       bias      = bias_none
-    ,detail::RoundT  round_dec = std::identity()
+//  ,detail::RoundT  round_dec = std::identity()
+    ,detail::RoundT  round_dec = lmi_identity()
     )
 {
     constexpr double        epsilon   {std::numeric_limits<double>::epsilon()};
