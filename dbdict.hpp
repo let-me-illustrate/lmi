@@ -145,8 +145,6 @@ class LMI_SO DBDictionary
     database_entity CvatMatChangeDefn         ;
     database_entity GptMatChangeDefn          ;
     database_entity Irc7702BftIsSpecAmt       ;
-    database_entity RiskyInitial7702Db        ;
-    database_entity Irc7702Endowment          ;
     database_entity Effective7702DboRop       ;
     database_entity TermIsQABOrDb7702         ;
     database_entity TermIsQABOrDb7702A        ;

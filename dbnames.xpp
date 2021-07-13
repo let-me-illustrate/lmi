@@ -86,8 +86,6 @@
 {DB_CvatMatChangeDefn,DB_Topic_7702And7702A,"CvatMatChangeDefn","Definition of 7702A material change for CVAT: 0=unnec prem, 1=increase, 2=increase after unnec prem [not implemented], 3=any unnec prem or increase",}, \
 {DB_GptMatChangeDefn,DB_Topic_7702And7702A,"GptMatChangeDefn","Definition of 7702A material change for GPT: 0=any adjustment event, 1=any adjustment event that increases the guideline limit",}, \
 {DB_Irc7702BftIsSpecAmt,DB_Topic_7702And7702A,"Irc7702BftIsSpecAmt","7702(f)(3) 'death benefit' is specamt rather than DB: 0=no, 1=yes",}, \
-{DB_RiskyInitial7702Db,DB_Topic_7702And7702A,"RiskyInitial7702Db","For increasing (and ROP?) death benefit option, riskily reflect 1035 and initial payment in initial 7702(f)(3) 'death benefit': 0=no, 1=yes [not yet implemented]",}, \
-{DB_Irc7702Endowment,DB_Topic_7702And7702A,"Irc7702Endowment","7702(e)(1)(D) endowment amount for 7702 and 7702A calculations: 0=specamt, 1=none",}, \
 {DB_Effective7702DboRop,DB_Topic_7702And7702A,"Effective7702DboRop","For 7702, treat return of premium death benefit option same as: 0=level 1=increasing",}, \
 {DB_TermIsQABOrDb7702,DB_Topic_7702And7702A,"TermIsQABOrDb7702","Treat term rider as QAB or death benefit for 7702: 0=neither, 1=DB, 2=QAB",}, \
 {DB_TermIsQABOrDb7702A,DB_Topic_7702And7702A,"TermIsQABOrDb7702A","Treat term rider as QAB or death benefit for 7702A: 0=neither, 1=DB, 2=QAB",}, \
