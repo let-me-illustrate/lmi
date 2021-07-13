@@ -411,6 +411,7 @@ void DBDictionary::ascribe_members()
     ascribe("GroupProxyRateTable"       , &DBDictionary::GroupProxyRateTable       );
     ascribe("PartialMortTable"          , &DBDictionary::PartialMortTable          );
     ascribe("AllowGroupQuote"           , &DBDictionary::AllowGroupQuote           );
+    ascribe("OmitGuarPremSolve"         , &DBDictionary::OmitGuarPremSolve         );
     ascribe("PolicyForm"                , &DBDictionary::PolicyForm                );
     ascribe("PolicyMktgName"            , &DBDictionary::PolicyMktgName            );
     ascribe("PolicyLegalName"           , &DBDictionary::PolicyLegalName           );

@@ -519,6 +519,7 @@ enum e_database_key
         ,DB_GroupProxyRateTable
         ,DB_PartialMortTable
         ,DB_AllowGroupQuote
+        ,DB_OmitGuarPremSolve
 
     ,DB_Topic_Lingo
 

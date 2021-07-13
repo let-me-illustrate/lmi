@@ -399,6 +399,7 @@ class LMI_SO DBDictionary
     // treated the same way.
     database_entity PartialMortTable          ;
     database_entity AllowGroupQuote           ;
+    database_entity OmitGuarPremSolve         ;
     database_entity PolicyForm                ;
     database_entity PolicyMktgName            ;
     database_entity PolicyLegalName           ;

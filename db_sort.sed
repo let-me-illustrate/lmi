@@ -344,6 +344,7 @@
 /DB_GroupProxyRateTable\>/       s/^/Q010/
 /DB_PartialMortTable\>/          s/^/Q011/
 /DB_AllowGroupQuote\>/           s/^/Q012/
+/DB_OmitGuarPremSolve\>/         s/^/Q013/
 # DB_Topic_Lingo
 /DB_PolicyForm\>/                s/^/R001/
 /DB_PolicyForm\>/                s/^/R002/

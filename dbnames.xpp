@@ -350,6 +350,7 @@
 {DB_GroupProxyRateTable,DB_Topic_Miscellanea,"GroupProxyRateTable","Group-term proxy rate (index in mortality table database)",}, \
 {DB_PartialMortTable,DB_Topic_Miscellanea,"PartialMortTable","Partial mortality table (index in mortality table database)",}, \
 {DB_AllowGroupQuote,DB_Topic_Miscellanea,"AllowGroupQuote","Allow group premium quotes: 0=no, 1=yes",}, \
+{DB_OmitGuarPremSolve,DB_Topic_Miscellanea,"OmitGuarPremSolve","Do not solve for guaranteed premium even though the NAIC illustration reg requires it (compliance officials may deem it inapplicable for single premium contracts, e.g.): 0=no, 1=yes",}, \
 {DB_Topic_Lingo,DB_FIRST,"Lingo","Text to be dropped into report templates: index into lingo file",}, \
 {DB_PolicyForm,DB_Topic_Lingo,"PolicyForm","Policy form",}, \
 {DB_PolicyMktgName,DB_Topic_Lingo,"PolicyMktgName","PolicyMktgName [narrative descriptions desired]",}, \
