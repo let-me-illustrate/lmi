@@ -265,7 +265,11 @@ Then run other bases.
 void AccountValue::SetGuarPrem()
 {
     GuarPremium = C0;
-    if(BasicValues::IsSubjectToIllustrationReg() && 0 == InforceYear)
+    if
+        (  BasicValues::IsSubjectToIllustrationReg()
+        && 0 == InforceYear
+        && !database().query<bool>(DB_OmitGuarPremSolve)
+        )
         {
         GuarPremium = SolveGuarPremium();
         }
