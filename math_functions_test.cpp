@@ -329,7 +329,7 @@ int test_main(int, char*[])
 {
     // Test assign_midpoint().
 
-    constexpr double smallnum = std::numeric_limits<double>::min();
+    constexpr double smallnum = std::numeric_limits<double>::denorm_min();
     constexpr double bignum   = std::numeric_limits<double>::max();
 
     std::vector<double> v0 {smallnum, bignum, 0.0, 0.0, 1.0, 100.0};
