@@ -57,21 +57,6 @@ std::vector<T>& back_sum(std::vector<T>& v)
 // std::binary_function would have provided, because they're still
 // required for std::binder1st() or std::binder2nd(), or for PETE.
 
-namespace detail
-{
-/// Arithmetic mean; used only by assign_midpoint().
-
-template<typename T>
-struct mean
-{
-    using first_argument_type  = T;
-    using second_argument_type = T;
-    using result_type          = T;
-    T operator()(T const& x, T const& y) const
-        {return std::midpoint(x, y);}
-};
-} // namespace detail
-
 /// Divide integers, rounding away from zero.
 ///
 /// This floating-point analogue may be useful for cross checking:
@@ -355,7 +340,7 @@ void assign_midpoint
         ,in_0.end()
         ,in_1.begin()
         ,out.begin()
-        ,detail::mean<double>()
+        ,[=](T t0, T t1) {return std::midpoint(t0, t1);}
         );
 }
 

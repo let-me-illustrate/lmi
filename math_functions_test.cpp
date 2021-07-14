@@ -327,23 +327,6 @@ void test_signum(char const* file, int line)
 
 int test_main(int, char*[])
 {
-    double      smallnumD = std::numeric_limits<double     >::min();
-    double      bignumD   = std::numeric_limits<double     >::max();
-
-    long double smallnumL = std::numeric_limits<long double>::min();
-    long double bignumL   = std::numeric_limits<long double>::max();
-
-    // Test detail::mean<>(). This is pointless as long as
-    // std::midpoint() is correctly implemented.
-
-    LMI_TEST_EQUAL(1.5, detail::mean<double>()(1.0, 2.0));
-    LMI_TEST_EQUAL(smallnumD, detail::mean<double>()(smallnumD, smallnumD));
-    LMI_TEST_EQUAL(bignumD  , detail::mean<double>()(bignumD  , bignumD  ));
-
-    LMI_TEST_EQUAL(1.5, detail::mean<long double>()(1.0, 2.0));
-    LMI_TEST_EQUAL(smallnumL, detail::mean<long double>()(smallnumL,smallnumL));
-    LMI_TEST_EQUAL(bignumL  , detail::mean<long double>()(bignumL  ,bignumL  ));
-
     // Test assign_midpoint().
 
     constexpr double smallnum = std::numeric_limits<double>::min();
