@@ -365,7 +365,12 @@ root_type lmi_root
                 ; // Do nothing.
                 }
             }
-        if(std::fabs(e) < tol || std::fabs(fa) <= std::fabs(fb))
+        if(std::fabs(e) < tol)
+            {
+            technique = interpolate_bisection0;
+            d = e = m;
+            }
+        else if(std::fabs(fa) <= std::fabs(fb))
             {
             technique = interpolate_bisection0;
             d = e = m;
@@ -398,10 +403,26 @@ root_type lmi_root
                 }
             s = e;
             e = d;
-            if
-                (   2.0 * p < 3.0 * m * q - std::fabs(tol * q)
-                &&  p < std::fabs(0.5 * s * q)
-                )
+            // Use the criteria in Brent's ALGOL, which differ
+            // slightly from their descriptions in his text.
+            //
+            // AfMWD says on page 51:
+            //   "we reject i [i.e., b + p/q] if 2|p| ≥ 3|mq|"
+            // Difference: the ALGOL subtracts tol×|q| [i.e., δ|q|]
+            bool const k0 = 2.0 * p < 3.0 * m * q - std::fabs(tol * q);
+            // AfMWD says on page 50:
+            //   "Let e be the value of p/q at the step before the
+            //   last one."
+            // (That value is 's', both above and in the ALGOL.)
+            //   "If |e| < δ or |p/q| ≥ ½|e| then we do a bisection"
+            // Difference: the ALGOL tests |e| < δ elsewhere
+            bool const k1 = p < std::fabs(0.5 * s * q);
+            // Do not attempt to invert these conditions, e.g.
+            // - if(a <  b) x() else y();
+            // + if(b <= a) y() else x();
+            // because NaNs break such reasoning; instead, make sure
+            // the 'else' clause performs bisection.
+            if(k0 && k1)
                 {
                 d = p / q;
                 }
