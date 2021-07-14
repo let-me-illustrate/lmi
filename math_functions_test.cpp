@@ -333,15 +333,16 @@ int test_main(int, char*[])
     long double smallnumL = std::numeric_limits<long double>::min();
     long double bignumL   = std::numeric_limits<long double>::max();
 
-    // Test mean<>().
+    // Test detail::mean<>(). This is pointless as long as
+    // std::midpoint() is correctly implemented.
 
-    LMI_TEST_EQUAL(1.5, mean<double>()(1.0, 2.0));
-    LMI_TEST_EQUAL(smallnumD, mean<double>()(smallnumD, smallnumD));
-    LMI_TEST_EQUAL(bignumD  , mean<double>()(bignumD  , bignumD  ));
+    LMI_TEST_EQUAL(1.5, detail::mean<double>()(1.0, 2.0));
+    LMI_TEST_EQUAL(smallnumD, detail::mean<double>()(smallnumD, smallnumD));
+    LMI_TEST_EQUAL(bignumD  , detail::mean<double>()(bignumD  , bignumD  ));
 
-    LMI_TEST_EQUAL(1.5, mean<long double>()(1.0, 2.0));
-    LMI_TEST_EQUAL(smallnumL, mean<long double>()(smallnumL, smallnumL));
-    LMI_TEST_EQUAL(bignumL  , mean<long double>()(bignumL  , bignumL  ));
+    LMI_TEST_EQUAL(1.5, detail::mean<long double>()(1.0, 2.0));
+    LMI_TEST_EQUAL(smallnumL, detail::mean<long double>()(smallnumL,smallnumL));
+    LMI_TEST_EQUAL(bignumL  , detail::mean<long double>()(bignumL  ,bignumL  ));
 
     // Test outward_quotient().
 

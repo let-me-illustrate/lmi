@@ -27,7 +27,7 @@
 #include <algorithm>                    // max(), min(), transform()
 #include <cmath>                        // expm1l(), log1pl(), signbit()
 #include <limits>
-#include <numeric>                      // partial_sum()
+#include <numeric>                      // midpoint(), partial_sum()
 #include <stdexcept>
 #include <type_traits>                  // /is_.*_v/
 #include <vector>
@@ -57,20 +57,9 @@ std::vector<T>& back_sum(std::vector<T>& v)
 // std::binary_function would have provided, because they're still
 // required for std::binder1st() or std::binder2nd(), or for PETE.
 
-/// Arithmetic mean.
-///
-/// Calculate mean as
-///   (half of x) plus (half of y)
-/// instead of
-///   half of (x plus y)
-/// because the addition in the latter can overflow. Generally,
-/// hardware deals better with underflow than with overflow.
-///
-/// The domain is restricted to floating point because integers would
-/// give surprising results. For instance, the integer mean of one and
-/// two would be truncated to one upon either returning an integer or
-/// assigning the result to one. Returning a long double in all cases
-/// is the best that could be done, but that seems unnatural.
+namespace detail
+{
+/// Arithmetic mean; used only by assign_midpoint().
 
 template<typename T>
 struct mean
@@ -78,10 +67,10 @@ struct mean
     using first_argument_type  = T;
     using second_argument_type = T;
     using result_type          = T;
-    static_assert(std::is_floating_point_v<T>);
     T operator()(T const& x, T const& y) const
-        {return 0.5 * x + 0.5 * y;}
+        {return std::midpoint(x, y);}
 };
+} // namespace detail
 
 /// Divide integers, rounding away from zero.
 ///
@@ -366,7 +355,7 @@ void assign_midpoint
         ,in_0.end()
         ,in_1.begin()
         ,out.begin()
-        ,mean<double>()
+        ,detail::mean<double>()
         );
 }
 
