@@ -71,7 +71,6 @@ void mete_0
     constexpr int decimals {5};
     static std::vector<double> results(payments.size());
     volatile double unoptimizable;
-    stifle_warning_for_unused_value(unoptimizable);
     for(int i = 0; i < 10; ++i)
         {
         irr
@@ -83,6 +82,7 @@ void mete_0
             );
         unoptimizable = results.front();
         }
+    stifle_warning_for_unused_value(unoptimizable);
 }
 
 void mete_1
@@ -93,7 +93,6 @@ void mete_1
     constexpr int decimals {5};
     static std::vector<double> results(payments.size());
     volatile double unoptimizable;
-    stifle_warning_for_unused_value(unoptimizable);
     for(int i = 0; i < 10; ++i)
         {
         irr
@@ -106,6 +105,7 @@ void mete_1
             );
         unoptimizable = results.front();
         }
+    stifle_warning_for_unused_value(unoptimizable);
 }
 
 int test_main(int, char*[])
