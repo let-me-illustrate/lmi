@@ -41,7 +41,7 @@ enum root_bias
     ,bias_higher // Require  0.0 <= f(z).
     };
 
-enum interpolation_technique
+enum root_impetus
     {interpolate_initialization
     ,interpolate_bisection0
     ,interpolate_linear
@@ -260,10 +260,10 @@ root_type lmi_root
     ,detail::RoundT  round_dec = lmi_identity()
     )
 {
-    constexpr double        epsilon   {std::numeric_limits<double>::epsilon()};
+    constexpr double epsilon {std::numeric_limits<double>::epsilon()};
 
-    int                     n_iter    {0};
-    interpolation_technique technique {interpolate_initialization};
+    int              n_iter  {0};
+    root_impetus     impetus {interpolate_initialization};
 
     os_trace
         << "#eval"
@@ -285,7 +285,7 @@ root_type lmi_root
         {
         os_trace
             <<        std::setw(3)  << n_iter
-            << ' '                  << "IBLQb"[technique]
+            << ' '                  << "IBLQb"[impetus]
             << ' ' << std::setw(12) << a << ' ' << std::setw(12) << fa
             << ' ' << std::setw(12) << b << ' ' << std::setw(12) << fb
             << ' ' << std::setw(12) << c << ' ' << std::setw(12) << fc
@@ -367,12 +367,12 @@ root_type lmi_root
             }
         if(std::fabs(e) < tol)
             {
-            technique = interpolate_bisection0;
+            impetus = interpolate_bisection0;
             d = e = m;
             }
         else if(std::fabs(fa) <= std::fabs(fb))
             {
-            technique = interpolate_bisection0;
+            impetus = interpolate_bisection0;
             d = e = m;
             }
         else
@@ -381,13 +381,13 @@ root_type lmi_root
             double s = fb / fa; // Note 3.
             if(a == c)
                 {
-                technique = interpolate_linear;
+                impetus = interpolate_linear;
                 p = 2.0 * m * s;
                 q = 1.0 - s;
                 }
             else
                 {
-                technique = interpolate_inverse_quadratic;
+                impetus = interpolate_inverse_quadratic;
                 q = fa / fc;
                 double r = fb / fc;
                 p = s * (2.0 * m * q * (q - r) - (b - a) * (r - 1.0));
@@ -428,7 +428,7 @@ root_type lmi_root
                 }
             else
                 {
-                technique = interpolate_bisection1;
+                impetus = interpolate_bisection1;
                 d = e = m;
                 }
             }
@@ -519,8 +519,8 @@ double brent_zero
     // machine precision and t is a positive tolerance. Assumes
     // that f(a) and f(b) have different signs.
 
-    int                     n_iter    {0};
-    interpolation_technique technique {interpolate_initialization};
+    int          n_iter  {0};
+    root_impetus impetus {interpolate_initialization};
 
     os_trace
         << "#eval"
@@ -536,7 +536,7 @@ double brent_zero
         {
         os_trace
             <<        std::setw(3)  << n_iter
-            << ' '                  << "IBLQb"[technique]
+            << ' '                  << "IBLQb"[impetus]
             << ' ' << std::setw(12) << a << ' ' << std::setw(12) << fa
             << ' ' << std::setw(12) << b << ' ' << std::setw(12) << fb
             << ' ' << std::setw(12) << c << ' ' << std::setw(12) << fc
@@ -565,12 +565,12 @@ double brent_zero
         // See if a bisection is forced.
         if(std::fabs(e) < tol)
             {
-            technique = interpolate_bisection0;
+            impetus = interpolate_bisection0;
             d = e = m;
             }
         else if(std::fabs(fa) <= std::fabs(fb))
             {
-            technique = interpolate_bisection0;
+            impetus = interpolate_bisection0;
             d = e = m;
             }
         else
@@ -579,14 +579,14 @@ double brent_zero
             if(a == c)
                 {
                 // Linear interpolation.
-                technique = interpolate_linear;
+                impetus = interpolate_linear;
                 p = 2.0 * m * s;
                 q = 1.0 - s;
                 }
             else
                 {
                 // Inverse quadratic interpolation.
-                technique = interpolate_inverse_quadratic;
+                impetus = interpolate_inverse_quadratic;
                 q = fa / fc;
                 r = fb / fc;
                 p = s * (2.0 * m * q * (q - r) - (b - a) * (r - 1.0));
@@ -610,7 +610,7 @@ double brent_zero
                 }
             else
                 {
-                technique = interpolate_bisection1;
+                impetus = interpolate_bisection1;
                 d = e = m;
                 }
             }
