@@ -41,12 +41,24 @@ enum root_bias
     ,bias_higher // Require  0.0 <= f(z).
     };
 
-enum root_impetus
-    {interpolate_initialization
-    ,interpolate_bisection0
-    ,interpolate_linear
-    ,interpolate_inverse_quadratic
-    ,interpolate_bisection1 // bisection when quadratic rejected
+/// Reason for having been dispatched to a particular "activity".
+///
+/// This is deliberately defined with enum-key 'enum' rather than
+/// 'enum class' or 'enum struct'. It's the same as an 'enum class'
+/// except that its enumerators usefully decay to char for printing.
+/// Feature comparison:
+///
+///   this enum  enum class   desirable properties
+///   ---------  ----------   --------------------
+///      yes        yes       specifies underlying type
+///      yes         no       implicitly converts to char
+
+enum root_impetus : char
+    {interpolate_initialization    = 'I'
+    ,interpolate_bisection0        = 'B'
+    ,interpolate_linear            = 'L'
+    ,interpolate_inverse_quadratic = 'Q'
+    ,interpolate_bisection1        = 'b' // bisection when quadratic rejected
     };
 
 enum root_validity
@@ -285,7 +297,7 @@ root_type lmi_root
         {
         os_trace
             <<        std::setw(3)  << n_iter
-            << ' '                  << "IBLQb"[impetus]
+            << ' '                  << impetus
             << ' ' << std::setw(12) << a << ' ' << std::setw(12) << fa
             << ' ' << std::setw(12) << b << ' ' << std::setw(12) << fb
             << ' ' << std::setw(12) << c << ' ' << std::setw(12) << fc
@@ -536,7 +548,7 @@ double brent_zero
         {
         os_trace
             <<        std::setw(3)  << n_iter
-            << ' '                  << "IBLQb"[impetus]
+            << ' '                  << impetus
             << ' ' << std::setw(12) << a << ' ' << std::setw(12) << fa
             << ' ' << std::setw(12) << b << ' ' << std::setw(12) << fb
             << ' ' << std::setw(12) << c << ' ' << std::setw(12) << fc
