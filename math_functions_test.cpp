@@ -344,6 +344,24 @@ int test_main(int, char*[])
     LMI_TEST_EQUAL(smallnumL, detail::mean<long double>()(smallnumL,smallnumL));
     LMI_TEST_EQUAL(bignumL  , detail::mean<long double>()(bignumL  ,bignumL  ));
 
+    // Test assign_midpoint().
+
+    constexpr double smallnum = std::numeric_limits<double>::min();
+    constexpr double bignum   = std::numeric_limits<double>::max();
+
+    std::vector<double> v0 {smallnum, bignum, 0.0, 0.0, 1.0, 100.0};
+    std::vector<double> v1 {smallnum, bignum, 0.0, 7.0, 2.0, 257.0};
+    std::vector<double> v2(v0.size());
+    assign_midpoint(v2, v0, v1);
+    std::vector<double> v3 {smallnum, bignum, 0.0, 3.5, 1.5, 178.5};
+    LMI_TEST_EQUAL(v3[0], v2[0]);
+    LMI_TEST_EQUAL(v3[1], v2[1]);
+    LMI_TEST_EQUAL(v3[2], v2[2]);
+    LMI_TEST_EQUAL(v3[3], v2[3]);
+    LMI_TEST_EQUAL(v3[4], v2[4]);
+    LMI_TEST_EQUAL(v3[5], v2[5]);
+    LMI_TEST_EQUAL(6, v0.size());
+
     // Test outward_quotient().
 
     LMI_TEST_EQUAL( 1, outward_quotient( 2,  2));
