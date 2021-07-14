@@ -566,10 +566,10 @@ double brent_zero
     c = a; fc = fa; d = e = b - a;
   extrapolate:
     if(std::fabs(fc) < std::fabs(fb))
-       {
-        a =  b;  b =  c;  c =  a;
-       fa = fb; fb = fc; fc = fa;
-       }
+        {
+         a =  b;  b =  c;  c =  a;
+        fa = fb; fb = fc; fc = fa;
+        }
     tol = 2.0 * DBL_EPSILON * std::fabs(b) + t;
     m = 0.5 * (c - b);
     if(tol < std::fabs(m) && 0.0 != fb)
@@ -671,10 +671,10 @@ double brent_zero_reference
     c = a; fc = fa; d = e = b - a;
   extrapolate:
     if(std::fabs(fc) < std::fabs(fb))
-       {
-        a =  b;  b =  c;  c =  a;
-       fa = fb; fb = fc; fc = fa;
-       }
+        {
+         a =  b;  b =  c;  c =  a;
+        fa = fb; fb = fc; fc = fa;
+        }
     tol = 2.0 * DBL_EPSILON * std::fabs(b) + t;
     m = 0.5 * (c - b);
     if(tol < std::fabs(m) && 0.0 != fb)
