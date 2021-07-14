@@ -563,7 +563,12 @@ double brent_zero
     if(tol < std::fabs(m) && 0.0 != fb)
         {
         // See if a bisection is forced.
-        if(std::fabs(e) < tol || std::fabs(fa) <= std::fabs(fb))
+        if(std::fabs(e) < tol)
+            {
+            technique = interpolate_bisection0;
+            d = e = m;
+            }
+        else if(std::fabs(fa) <= std::fabs(fb))
             {
             technique = interpolate_bisection0;
             d = e = m;
@@ -597,10 +602,9 @@ double brent_zero
                 }
             s = e;
             e = d;
-            if
-                (  2.0 * p < 3.0 * m * q - std::fabs(tol * q)
-                && p < std::fabs(0.5 * s * q)
-                )
+            bool const k0 = 2.0 * p < 3.0 * m * q - std::fabs(tol * q);
+            bool const k1 = p < std::fabs(0.5 * s * q);
+            if(k0 && k1)
                 {
                 d = p / q;
                 }
