@@ -143,11 +143,6 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
         INVOKE_LMI_TEST( is_strictly_between_extrema<T>(1), file, line);
         }
 
-    INVOKE_LMI_TEST_EQUAL( 0, signum(T( 0)), file, line);
-    INVOKE_LMI_TEST_EQUAL( 1, signum(T( 1)), file, line);
-
-    INVOKE_LMI_TEST_EQUAL( 1, signum(maxT), file, line);
-
     INVOKE_LMI_TEST_EQUAL(true , is_exact_integer(T( 0)), file, line);
     INVOKE_LMI_TEST_EQUAL(true , is_exact_integer(T( 1)), file, line);
 
@@ -157,8 +152,6 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
         // diagnostics. An 'is_bool' conditional wouldn't prevent the
         // macros from being expanded. See:
         //   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00029.html
-        INVOKE_LMI_TEST_EQUAL(T(-1), signum(T(-1)), file, line);
-        INVOKE_LMI_TEST_EQUAL(T(-1), signum(minT ), file, line);
         INVOKE_LMI_TEST_EQUAL(true , is_exact_integer(T(-1)), file, line);
         }
 
@@ -169,23 +162,6 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
         {
         INVOKE_LMI_TEST_EQUAL(false, is_exact_integer(T( 0.5)), file, line);
         INVOKE_LMI_TEST_EQUAL(false, is_exact_integer(T(1.07)), file, line);
-        }
-
-    bool volatile is_iec559 = std::numeric_limits<T>::is_iec559;
-    bool volatile has_infinity = std::numeric_limits<T>::has_infinity;
-    if(is_iec559 && has_infinity)
-        {
-        T const infT = std::numeric_limits<T>::infinity();
-        INVOKE_LMI_TEST_EQUAL(-1, signum(-infT), file, line);
-        INVOKE_LMI_TEST_EQUAL( 1, signum( infT), file, line);
-        }
-
-    bool volatile has_quiet_NaN = std::numeric_limits<T>::has_quiet_NaN;
-    if(is_iec559 && has_quiet_NaN)
-        {
-        T const qnanT = std::numeric_limits<T>::quiet_NaN();
-        INVOKE_LMI_TEST_EQUAL(-1, signum(-qnanT), file, line);
-        INVOKE_LMI_TEST_EQUAL( 1, signum( qnanT), file, line);
         }
 }
 

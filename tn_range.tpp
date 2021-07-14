@@ -22,6 +22,7 @@
 #include "tn_range.hpp"
 
 #include "alert.hpp"
+#include "math_functions.hpp"           // signum()
 #include "unwind.hpp"                   // scoped_unwind_toggler
 #include "value_cast.hpp"
 
@@ -102,19 +103,6 @@ namespace
     bool is_strictly_between_extrema(T t)
     {
         return strictly_between_extrema_tester<T>()(t);
-    }
-
-    /// Algebraic sign of argument.
-    ///
-    /// Return value is of same type as argument, as for many members
-    /// of std::numeric_limits. Thus, (t * signum(t)) is of type T,
-    /// which would not always be the case if an int were returned.
-
-    template<typename T>
-    T signum(T t)
-    {
-        static_assert(std::is_arithmetic_v<T>);
-        return (0 == t) ? 0 : std::signbit(t) ? -1 : 1;
     }
 
     /// Exact-integer determination for floating types.

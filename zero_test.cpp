@@ -24,14 +24,14 @@
 #include "zero.hpp"
 
 #include "materially_equal.hpp"
+#include "math_functions.hpp"           // signum()
 #include "miscellany.hpp"               // stifle_warning_for_unused_variable()
 #include "test_tools.hpp"
 
 #include <cfloat>                       // DECIMAL_DIG
-#include <cmath>                        // exp(), fabs(), log(), pow(), signbit()
+#include <cmath>                        // exp(), fabs(), log(), pow()
 #include <limits>
 #include <sstream>
-#include <type_traits>                  // is_arithmetic_v
 
 namespace
 {
@@ -286,8 +286,7 @@ double eq_2_1(double x)
 
 double signum_offset(double d)
 {
-    double z = d + 1.0 / 3.0;
-    return (0.0 == z) ? 0.0 : std::signbit(z) ? -1.0 : 1.0;
+    return signum(d + 1.0 / 3.0);
 }
 
 // This problem once arose in a unit test for irr calculations.
@@ -338,13 +337,6 @@ void test_fundamentals()
 
     r = decimal_root(e, 0.1, 1.0, bias_none, 9);
     LMI_TEST(root_not_bracketed == r.validity);
-}
-
-template<typename T>
-inline T signum(T t)
-{
-    static_assert(std::is_arithmetic_v<T>);
-    return (0 == t) ? 0 : std::signbit(t) ? -1 : 1;
 }
 
 /// A function whose value almost everywhere in (-1.0e100, 1.0e100)

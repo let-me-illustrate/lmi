@@ -286,6 +286,45 @@ void assay_speed()
     std::cout << "  10^-9 std        " << TimeAnAliquot(mete5) << '\n';
 }
 
+template<typename T>
+void test_signum(char const* file, int line)
+{
+    T const maxT = std::numeric_limits<T>::max();
+    T const minT = std::numeric_limits<T>::lowest();
+
+    INVOKE_LMI_TEST_EQUAL( 0, signum(T( 0)), file, line);
+    INVOKE_LMI_TEST_EQUAL( 1, signum(T( 1)), file, line);
+
+    INVOKE_LMI_TEST_EQUAL( 1, signum(maxT), file, line);
+
+    if(minT < 0)
+        {
+        // The left-hand side is cast to T to avoid gcc 'bool-compare'
+        // diagnostics. An 'is_bool' conditional wouldn't prevent the
+        // macros from being expanded. See:
+        //   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00029.html
+        INVOKE_LMI_TEST_EQUAL(T(-1), signum(T(-1)), file, line);
+        INVOKE_LMI_TEST_EQUAL(T(-1), signum(minT ), file, line);
+        }
+
+    bool volatile is_iec559 = std::numeric_limits<T>::is_iec559;
+    bool volatile has_infinity = std::numeric_limits<T>::has_infinity;
+    if(is_iec559 && has_infinity)
+        {
+        T const infT = std::numeric_limits<T>::infinity();
+        INVOKE_LMI_TEST_EQUAL(-1, signum(-infT), file, line);
+        INVOKE_LMI_TEST_EQUAL( 1, signum( infT), file, line);
+        }
+
+    bool volatile has_quiet_NaN = std::numeric_limits<T>::has_quiet_NaN;
+    if(is_iec559 && has_quiet_NaN)
+        {
+        T const qnanT = std::numeric_limits<T>::quiet_NaN();
+        INVOKE_LMI_TEST_EQUAL(-1, signum(-qnanT), file, line);
+        INVOKE_LMI_TEST_EQUAL( 1, signum( qnanT), file, line);
+        }
+}
+
 int test_main(int, char*[])
 {
     double      smallnumD = std::numeric_limits<double     >::min();
@@ -363,6 +402,14 @@ int test_main(int, char*[])
 
 // Appropriately fails to compile due to static assertion:
 //  outward_quotient(1.0, 1.0);
+
+    test_signum<bool         >(__FILE__, __LINE__);
+    test_signum<signed char  >(__FILE__, __LINE__);
+    test_signum<unsigned char>(__FILE__, __LINE__);
+    test_signum<int          >(__FILE__, __LINE__);
+    test_signum<float        >(__FILE__, __LINE__);
+    test_signum<double       >(__FILE__, __LINE__);
+    test_signum<long double  >(__FILE__, __LINE__);
 
     // Actuarial functions.
 

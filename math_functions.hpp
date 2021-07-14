@@ -25,11 +25,11 @@
 #include "config.hpp"
 
 #include <algorithm>                    // max(), min(), transform()
-#include <cmath>                        // expm1l(), log1pl()
+#include <cmath>                        // expm1l(), log1pl(), signbit()
 #include <limits>
 #include <numeric>                      // partial_sum()
 #include <stdexcept>
-#include <type_traits>
+#include <type_traits>                  // /is_.*_v/
 #include <vector>
 
 // TODO ?? Write functions here for other refactorable uses of
@@ -110,6 +110,19 @@ inline T outward_quotient(T numerator, T denominator)
     T x = numerator / denominator;
     T y = 0 != numerator % denominator;
     return (0 < numerator == 0 < denominator) ? x + y : x - y;
+}
+
+/// Algebraic sign of argument.
+///
+/// Return value is of same type as argument, as for many members
+/// of std::numeric_limits. Thus, (t * signum(t)) is of type T,
+/// which would not always be the case if an int were returned.
+
+template<typename T>
+T signum(T t)
+{
+    static_assert(std::is_arithmetic_v<T>);
+    return (0 == t) ? 0 : std::signbit(t) ? -1 : 1;
 }
 
 // Actuarial functions.
