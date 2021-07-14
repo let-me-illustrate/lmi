@@ -501,7 +501,7 @@ void test_celebrated_equation()
  12 Q 2.0945514815423265 -8.8817841970012523e-16 2.0945514815423274 9.7699626167013776e-15 2.0945566700001779 5.7910818359374616e-05
 )--cut-here--";
 
-    LMI_TEST(verified == oss.str());
+    LMI_TEST_EQUAL(verified, oss.str());
 #endif // defined LMI_X86_64 && defined LMI_POSIX
 }
 
