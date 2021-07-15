@@ -354,6 +354,7 @@ root_type lmi_root
             fc = fa;
             d = e = b - a;
             impetus = force_b_and_c_to_bracket_root;
+            expatiate();
             }
         // If 'c' is a closer approximant than 'b', then swap them,
         // discarding the old value of 'a'.
@@ -362,6 +363,7 @@ root_type lmi_root
              a =  b;  b =  c;  c =  a;
             fa = fb; fb = fc; fc = fa;
             impetus = force_b_to_be_best_approximation;
+            expatiate();
             }
         double tol = 2.0 * epsilon * std::fabs(b) + t;
         double m = 0.5 * (c - b);
@@ -576,12 +578,14 @@ double brent_zero
   interpolate:
     c = a; fc = fa; d = e = b - a;
     impetus = force_b_and_c_to_bracket_root;
+    expatiate();
   extrapolate:
     if(std::fabs(fc) < std::fabs(fb))
         {
          a =  b;  b =  c;  c =  a;
         fa = fb; fb = fc; fc = fa;
         impetus = force_b_to_be_best_approximation;
+        expatiate();
         }
     tol = 2.0 * DBL_EPSILON * std::fabs(b) + t;
     m = 0.5 * (c - b);
