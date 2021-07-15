@@ -713,7 +713,7 @@ void test_various_functions()
     // the first is, too.
     auto f06 = [](double x) {return x * x - 4.0;};
     auto root_06 = -2.0;
-    test_a_function        (f06, root_06 , 1.9, -2.1, 1.0e-15, __LINE__);
+    test_a_function        (f06, root_06,  1.9, -2.1, 1.0e-15, __LINE__);
     test_a_function        (f06, root_06, -2.1 , 1.9, 1.0e-15, __LINE__);
 }
 
