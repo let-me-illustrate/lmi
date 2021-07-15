@@ -54,11 +54,16 @@ enum root_bias
 ///      yes         no       implicitly converts to char
 
 enum root_impetus : char
-    {interpolate_initialization    = 'I'
-    ,interpolate_bisection0        = 'B'
-    ,interpolate_linear            = 'L'
-    ,interpolate_inverse_quadratic = 'Q'
-    ,interpolate_bisection1        = 'b' // bisection when quadratic rejected
+    {evaluate_bounds                  = 'i'
+    ,force_b_and_c_to_bracket_root    = 'j'
+    ,force_b_to_be_best_approximation = 'k'
+    ,interpolate_linear               = 'L'
+    ,interpolate_inverse_quadratic    = 'Q'
+    ,dithering_near_root              = '0'
+    ,secant_out_of_bounds             = '1'
+    ,parabola_not_single_valued       = '2'
+    ,guarantee_linear_convergence     = '3'
+    ,pis_aller                        = '4'
     };
 
 enum root_validity
@@ -275,7 +280,7 @@ root_type lmi_root
     constexpr double epsilon {std::numeric_limits<double>::epsilon()};
 
     int              n_iter  {0};
-    root_impetus     impetus {interpolate_initialization};
+    root_impetus     impetus {evaluate_bounds};
 
     os_trace
         << "#eval"
@@ -348,6 +353,7 @@ root_type lmi_root
             c = a;
             fc = fa;
             d = e = b - a;
+            impetus = force_b_and_c_to_bracket_root;
             }
         // If 'c' is a closer approximant than 'b', then swap them,
         // discarding the old value of 'a'.
@@ -355,6 +361,7 @@ root_type lmi_root
             {
              a =  b;  b =  c;  c =  a;
             fa = fb; fb = fc; fc = fa;
+            impetus = force_b_to_be_best_approximation;
             }
         double tol = 2.0 * epsilon * std::fabs(b) + t;
         double m = 0.5 * (c - b);
@@ -379,12 +386,12 @@ root_type lmi_root
             }
         if(std::fabs(e) < tol)
             {
-            impetus = interpolate_bisection0;
+            impetus = dithering_near_root;
             d = e = m;
             }
         else if(std::fabs(fa) <= std::fabs(fb))
             {
-            impetus = interpolate_bisection0;
+            impetus = secant_out_of_bounds;
             d = e = m;
             }
         else
@@ -440,7 +447,11 @@ root_type lmi_root
                 }
             else
                 {
-                impetus = interpolate_bisection1;
+                impetus =
+                      k0 ? parabola_not_single_valued
+                    : k1 ? guarantee_linear_convergence
+                    :      pis_aller
+                    ;
                 d = e = m;
                 }
             }
@@ -532,7 +543,7 @@ double brent_zero
     // that f(a) and f(b) have different signs.
 
     int          n_iter  {0};
-    root_impetus impetus {interpolate_initialization};
+    root_impetus impetus {evaluate_bounds};
 
     os_trace
         << "#eval"
@@ -564,11 +575,13 @@ double brent_zero
     expatiate();
   interpolate:
     c = a; fc = fa; d = e = b - a;
+    impetus = force_b_and_c_to_bracket_root;
   extrapolate:
     if(std::fabs(fc) < std::fabs(fb))
         {
          a =  b;  b =  c;  c =  a;
         fa = fb; fb = fc; fc = fa;
+        impetus = force_b_to_be_best_approximation;
         }
     tol = 2.0 * DBL_EPSILON * std::fabs(b) + t;
     m = 0.5 * (c - b);
@@ -577,12 +590,12 @@ double brent_zero
         // See if a bisection is forced.
         if(std::fabs(e) < tol)
             {
-            impetus = interpolate_bisection0;
+            impetus = dithering_near_root;
             d = e = m;
             }
         else if(std::fabs(fa) <= std::fabs(fb))
             {
-            impetus = interpolate_bisection0;
+            impetus = secant_out_of_bounds;
             d = e = m;
             }
         else
@@ -622,7 +635,11 @@ double brent_zero
                 }
             else
                 {
-                impetus = interpolate_bisection1;
+                impetus =
+                      k0 ? parabola_not_single_valued
+                    : k1 ? guarantee_linear_convergence
+                    :      pis_aller
+                    ;
                 d = e = m;
                 }
             }
