@@ -28,6 +28,7 @@
 #include "miscellany.hpp"               // begins_with(), split_into_lines()
 #include "path.hpp"
 #include "ssize_lmi.hpp"
+#include "unwind.hpp"                   // scoped_unwind_toggler
 
 #include <algorithm>                    // is_sorted()
 #include <ctime>                        // time_t
@@ -1278,6 +1279,8 @@ statistics process_file(std::string const& file_path)
 
 int try_main(int argc, char* argv[])
 {
+    scoped_unwind_toggler meaningless_name;
+
     complaint_count = 0;
     bool error_flag = false;
     statistics z;

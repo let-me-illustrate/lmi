@@ -120,6 +120,7 @@ main_auxiliary_common_objects := \
   main_common.o \
   main_common_non_wx.o \
   sigfpe.o \
+  unwind.o \
 
 ################################################################################
 
