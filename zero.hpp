@@ -27,10 +27,10 @@
 #include "null_stream.hpp"
 #include "round_to.hpp"
 
-#include <cfloat>                       // DBL_EPSILON
+#include <cfloat>                       // DBL_EPSILON, DECIMAL_DIG
 #include <cmath>                        // fabs(), pow()
 #include <functional>                   // function(), identity()
-#include <iomanip>                      // setw()
+#include <iomanip>                      // setprecision(), setw()
 #include <limits>
 #include <ostream>
 #include <utility>                      // forward()
@@ -310,6 +310,21 @@ root_type lmi_root
             ;
         };
 
+    auto recapitulate = [&]()
+        {
+        os_trace
+            << n_iter
+            << " iterations; final interval:\n"
+            << std::setprecision(DECIMAL_DIG)
+            << std::showpos
+            << " b "  << std::setw(12) << b
+            << " fb " << std::setw(12) << fb << "\n"
+            << " c "  << std::setw(12) << c
+            << " fc " << std::setw(12) << fc
+            << std::endl
+            ;
+        };
+
     double t = tolerance;
 
     a = round_dec(bound0);
@@ -317,6 +332,7 @@ root_type lmi_root
 
     if(a == b)
         {
+        recapitulate();
         return {a, improper_bounds, n_iter};
         }
 
@@ -324,6 +340,7 @@ root_type lmi_root
     ++n_iter;
     if(0.0 == fa) // Note 0.
         {
+        recapitulate();
         return {a, root_is_valid, n_iter};
         }
 
@@ -332,12 +349,14 @@ root_type lmi_root
     expatiate();
     if(0.0 == fb) // Note 0 [bis].
         {
+        recapitulate();
         return {b, root_is_valid, n_iter};
         }
 
     // f(a) and f(b) must have different signs.
     if((0.0 < fa) == (0.0 < fb))
         {
+        recapitulate();
         return {0.0, root_not_bracketed, n_iter};
         }
 
@@ -375,10 +394,12 @@ root_type lmi_root
                 ||  bias_higher == bias && 0.0 <= fb
                 )
                 {
+                recapitulate();
                 return {b, root_is_valid, n_iter};
                 }
             else if(std::fabs(m) <= 2.0 * epsilon * std::fabs(c) + t)
                 {
+                recapitulate();
                 return {c, root_is_valid, n_iter};
                 }
             else
@@ -569,6 +590,21 @@ double brent_zero
             ;
         };
 
+    auto recapitulate = [&]()
+        {
+        os_trace
+            << n_iter
+            << " iterations; final interval:\n"
+            << std::setprecision(DECIMAL_DIG)
+            << std::showpos
+            << " b "  << std::setw(12) << b
+            << " fb " << std::setw(12) << fb << "\n"
+            << " c "  << std::setw(12) << c
+            << " fc " << std::setw(12) << fc
+            << std::endl
+            ;
+        };
+
     fa = f(a);
     ++n_iter;
     fb = f(b);
@@ -668,6 +704,7 @@ double brent_zero
         else
             {goto extrapolate;}
         }
+    recapitulate();
     return b;
 }
 
