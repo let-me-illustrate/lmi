@@ -457,10 +457,21 @@ currency AccountValue::Solve
 
     std::ostream os_trace(status().rdbuf());
     std::ofstream ofs_trace;
-    if(contains(yare_input_.Comments, "idiosyncrasyT") && !SolvingForGuarPremium)
+    if(contains(yare_input_.Comments, "idiosyncrasyT"))
         {
         ofs_trace.open("trace.txt", ios_out_app_binary());
         os_trace.rdbuf(ofs_trace.rdbuf());
+        os_trace << InputFilename << std::endl;
+        os_trace << "Solving for";
+        if(SolvingForGuarPremium)
+            {
+            os_trace << " guaranteed premium:";
+            }
+        os_trace
+            << " " << mc_str(a_SolveType)
+            << ", target " << mc_str(SolveTarget_)
+            << std::endl
+            ;
         }
 
     SolveHelper solve_helper(*this, solve_set_fn);
