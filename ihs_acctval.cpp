@@ -89,6 +89,7 @@ showing {accesses, modifies current year, modifies future years}
 //============================================================================
 AccountValue::AccountValue(Input const& input)
     :BasicValues           (Input::consummate(input))
+    ,InputFilename         {"anonymous"}
     ,DebugFilename         {"anonymous.monthly_trace"}
     ,Debugging             {false}
     ,Solving               {mce_solve_none != BasicValues::yare_input_.SolveType}

@@ -312,6 +312,7 @@ class LMI_SO AccountValue final
     void   CoordinateCounters();
 
     // Detailed monthly trace.
+    std::string     InputFilename;
     std::string     DebugFilename;
     std::ofstream   DebugStream;
     std::vector<std::string> DebugRecord;

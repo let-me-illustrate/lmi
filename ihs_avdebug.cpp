@@ -271,6 +271,7 @@ void AccountValue::SetDebugFilename(std::string const& s)
     bool const regr_testing = global_settings::instance().regression_testing();
     std::string const& print_dir = c.print_directory();
     fs::path const f = regr_testing ? s : modify_directory(s, print_dir);
+    InputFilename = f.string();
     DebugFilename = unique_filepath(f, ".monthly_trace" + tsv_ext).string();
 }
 
