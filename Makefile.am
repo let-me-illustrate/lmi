@@ -399,7 +399,8 @@ libmain_auxiliary_common_la_SOURCES = \
     fenv_lmi.cpp \
     main_common.cpp \
     main_common_non_wx.cpp \
-    sigfpe.cpp
+    sigfpe.cpp \
+    unwind.cpp
 
 # Note: apparently useless setting of target_CXXFLAGS to its default value of
 # AM_CXXFLAGS is required for its side effect, as doing this forces automake to
