@@ -59,6 +59,14 @@ double max_err(double zeta, double tol)
 ///
 /// static_cast<int> is exact for any number of iterations that
 /// can be counted by an 'int'.
+///
+/// The greatest possible number of bisection steps (where [x] is
+/// the greatest integer function) is:
+///   log2(DBL_MAX - -DBL_MAX) / DBL_TRUE_MIN
+///   = 1 + 1024 + 1074 = 2099
+/// Yet an IEEE 754 binary64 entity can have no more than 2^64
+/// distinct values; with an appropriate definition of "bisection",
+/// about 64 steps should suffice.
 
 int max_n_iter_bolzano(double a, double b, double tol, double zeta)
 {
@@ -68,6 +76,8 @@ int max_n_iter_bolzano(double a, double b, double tol, double zeta)
 }
 
 /// AfMWD eq. 3.3: maximum number of iterations for Brent's method.
+///
+/// The greatest possible number of steps is 2099^2 = 4405801.
 
 int max_n_iter_brent(double a, double b, double tol, double zeta)
 {
@@ -337,6 +347,23 @@ void test_fundamentals()
 
     r = decimal_root(e, 0.1, 1.0, bias_none, 9);
     LMI_TEST(root_not_bracketed == r.validity);
+
+    // Calculate maximum possible number of iterations according to
+    // the documentation for max_n_iter_bolzano(). This calculation
+    // would overflow in double precision.
+    //
+    // log2(DBL_MAX) is 1024, so log2(DBL_MAX - -DBL_MAX) is 1025;
+    // and log2(DBL_TRUE_MIN) is 1074; so the maximum number of
+    // iterations is
+    //   log2(DBL_MAX - -DBL_MAX) / DBL_TRUE_MIN
+    //   = 1 + 1024 + 1074 = 2099
+    // for bisection, and 2099^2 = 4405801 for Brent's method with
+    // IEEE 754 binary64.
+    long double max = DBL_MAX;
+    long double min = DBL_TRUE_MIN;
+    int max_iter = static_cast<int>(std::ceil(std::log2((max - -max) / min)));
+    LMI_TEST_EQUAL(1 + 1024 + 1074, max_iter);
+    LMI_TEST_EQUAL(2099, max_iter);
 }
 
 /// A function whose value almost everywhere in (-1.0e100, 1.0e100)
