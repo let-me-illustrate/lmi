@@ -67,6 +67,15 @@ double max_err(double zeta, double tol)
 /// Yet an IEEE 754 binary64 entity can have no more than 2^64
 /// distinct values; with an appropriate definition of "bisection",
 /// about 64 steps should suffice.
+///
+/// Known defects:
+///  - std::fabs(DBL_MAX - -DBL_MAX) overflows.
+///  - The denominator can be zero when ζ = 0, because the
+///    implementation allows 'tol' to be zero as a shorthand
+///    for the hardware minimum. (Specifying DBL_TRUE_MIN would
+///    entail a likely speed penalty even on platforms that support
+///    denormals, so this shorthand isn't merely a convenience).
+/// Such defects in a unit-testing TU needn't be fixed.
 
 int max_n_iter_bolzano(double a, double b, double tol, double zeta)
 {
