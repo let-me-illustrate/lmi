@@ -721,6 +721,15 @@ void test_various_functions()
     test_a_decimal_function(f06, root_06, -2.1 , 1.9, 15     , __LINE__);
     test_a_function        (f06, root_06,  1.9, -2.1, 1.0e-15, __LINE__);
     test_a_function        (f06, root_06, -2.1 , 1.9, 1.0e-15, __LINE__);
+
+    // Here, the input tolerance is legitimately much smaller than ϵ.
+    // Brent describes 'tol' as positive, so it shouldn't be zero, yet
+    // it has no absolute minimum (other than DBL_TRUE_MIN) because
+    // it is a relative error. Thus, when ζ = 0, δ has no minimum at
+    // all (other than DBL_TRUE_MIN).
+    auto f07 = [](double x) {return 1.23 * (x - 1.0e-100);};
+    auto root_07 = 1.0e-100;
+    test_a_function(f07, root_07, 1.0e-10, 1.0e-200, 1.0e-150, __LINE__);
 }
 
 void test_hodgepodge()
