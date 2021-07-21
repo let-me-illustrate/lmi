@@ -24,14 +24,18 @@
 
 #include "config.hpp"
 
+#include "math_functions.hpp"           // signum()
 #include "null_stream.hpp"
 #include "round_to.hpp"
 
 #include <cfloat>                       // DBL_EPSILON, DECIMAL_DIG
-#include <cmath>                        // fabs(), pow()
+#include <cmath>                        // fabs(), isfinite(), pow()
+#include <cstdint>                      // uint64_t
+#include <cstring>                      // memcpy()
 #include <functional>                   // function(), identity()
 #include <iomanip>                      // setprecision(), setw()
 #include <limits>
+#include <numeric>                      // midpoint()
 #include <ostream>
 #include <utility>                      // forward()
 
@@ -78,6 +82,114 @@ struct root_type
     root_validity validity {improper_bounds};
     int           n_iter   {0};
 };
+
+/// Specialized binary64 midpoint for root finding.
+///
+/// A 64-bit double can represent no more than 2^64 distinct values.
+/// Disregarding NaNs, they form (a permutation of) an ordered set,
+/// any of whose members can be found in 64 binary-search steps.
+/// However, bisection using the conventional arithmetic mean takes
+///   log2(DBL_MAX - -DBL_MAX) / DBL_TRUE_MIN
+///   = 1 + 1024 + 1074 = 2099
+/// instead of 64 steps to explore that range fully; and the maximum
+/// for Brent's method is the square of that number.
+///
+/// Consider:
+///   DBL_MAX       7fefffffffffffff
+///   DBL_MAX/2     7fdfffffffffffff
+///   DBL_TRUE_MIN  1000000000000000
+///   0.0           0000000000000000
+///  -DBL_MAX       ffefffffffffffff
+///  -DBL_MAX/2     ffdfffffffffffff
+///  -DBL_TRUE_MIN  8000000000000001
+///  -0.0           8000000000000000
+/// If a root is bounded by [0.0, DBL_MAX], then evaluating the
+/// objective function at the arithmetic mean chooses between two
+/// partitions
+///   [0000000000000000, 7fdfffffffffffff]
+///   [7fdfffffffffffff, 7fefffffffffffff]
+/// the larger of which contains about 99.95% of the elements.
+/// This function instead chooses a pivot that separates half
+/// the elements from the other half.
+///
+/// Precondition: neither argument is an infinity or a NaN;
+/// throw if violated.
+///
+/// The range [0x0, 0xffffffffffffffff] with infinities and NaNs
+/// removed is wellordered with respect to only one of the comparisons
+/// <(double) and <(uint64_t), but it can be split into two subranges
+///   [ DBL_MAX ≡ 0x7fefffffffffffff,  0.0 ≡ 0x0000000000000000]
+///   [-DBL_MAX ≡ 0xffefffffffffffff, -0.0 ≡ 0x8000000000000000]
+/// that are both wellordered, isomorphically, by those comparisons.
+/// Therefore, if the arguments are of opposite sign (both nonzero,
+/// one +, the other -) then return +0.0. This can happen only on the
+/// first iteration.
+///
+/// If both arguments are zero, then return +0.0. This case is not
+/// expected to arise in practice; treating is specially removes the
+/// only violation of the invariant that the result doesn't depend on
+/// the order of the arguments.
+///
+/// Otherwise, calculate and return a binary midpoint. If one argument
+/// is a zero, then first change its signbit, if needed, to match the
+/// other argument's. Finally, interpret both as unsigned integers,
+/// and return their arithmetic mean interpreted as binary64.
+
+inline double binary64_midpoint(double d0, double d1)
+{
+    static_assert(std::numeric_limits<double>::is_iec559);
+
+    using u_dbl_int_t = std::uint64_t;
+    static_assert(sizeof(u_dbl_int_t) == sizeof(double));
+
+    if(!std::isfinite(d0) || !std::isfinite(d1))
+        {throw "binary64_midpoint: non-finite argument";}
+
+    double const s0 = signum(d0);
+    double const s1 = signum(d1);
+    if(-1.0 == s0 * s1)
+        {return 0.0;}
+    else if(0.0 == s0 && 0.0 == s1)
+        {return 0.0;}
+    else if(0.0 == s0)
+        {d0 = std::copysign(d0, d1);}
+    else if(0.0 == s1)
+        {d1 = std::copysign(d1, d0);}
+    else {;} // Do nothing.
+
+    u_dbl_int_t u0;
+    u_dbl_int_t u1;
+    std::memcpy(&u0, &d0, sizeof d0);
+    std::memcpy(&u1, &d1, sizeof d1);
+    u_dbl_int_t um = std::midpoint(u0, u1);
+    double z;
+    std::memcpy(&z, &um, sizeof z);
+#if 0 // Temporarily useful for acceptance testing.
+        std::cout
+            << std::dec
+            << std::defaultfloat
+            << u0 << " u0\n"
+            << u1 << " u1\n"
+            << um << " um\n"
+            << std::hex
+            << u0 << " u0\n"
+            << u1 << " u1\n"
+            << um << " um\n"
+            << d0 << " d0\n"
+            << d1 << " d1\n"
+            << z  << " z\n"
+            << std::hexfloat
+            << d0 << " d0\n"
+            << d1 << " d1\n"
+            << z  << " z\n"
+            << std::dec
+            << std::defaultfloat
+            << std::endl
+            << std::endl
+            ;
+#endif // 0
+    return z;
+}
 
 namespace detail
 {

@@ -60,8 +60,7 @@ double max_err(double zeta, double tol)
 /// static_cast<int> is exact for any number of iterations that
 /// can be counted by an 'int'.
 ///
-/// The greatest possible number of bisection steps (where [x] is
-/// the greatest integer function) is:
+/// The greatest possible number of bisection steps is:
 ///   log2(DBL_MAX - -DBL_MAX) / DBL_TRUE_MIN
 ///   = 1 + 1024 + 1074 = 2099
 /// Yet an IEEE 754 binary64 entity can have no more than 2^64
@@ -373,6 +372,95 @@ void test_fundamentals()
     int max_iter = static_cast<int>(std::ceil(std::log2((max - -max) / min)));
     LMI_TEST_EQUAL(1 + 1024 + 1074, max_iter);
     LMI_TEST_EQUAL(2099, max_iter);
+}
+
+void test_binary64_midpoint()
+{
+    // Make sure double is binary64.
+    static_assert(std::numeric_limits<double>::is_iec559);
+
+    // Make doubly sure it has infinity...
+    static_assert(std::numeric_limits<double>::has_infinity);
+    constexpr double inf = std::numeric_limits<double>::infinity();
+
+    // ...and qNaN.
+    static_assert(std::numeric_limits<double>::has_quiet_NaN);
+    constexpr double qnan = std::numeric_limits<double>::quiet_NaN();
+
+    // Make sure the signs of non-finite values are detected correctly.
+
+    LMI_TEST_EQUAL( 0.0, signum( 0.0));
+    LMI_TEST_EQUAL( 0.0, signum(-0.0));
+
+    LMI_TEST_EQUAL( 1.0, signum( inf));
+    LMI_TEST_EQUAL(-1.0, signum(-inf));
+
+    LMI_TEST_EQUAL( 1.0, signum( qnan));
+    LMI_TEST_EQUAL(-1.0, signum(-qnan));
+
+    // Both zero: return positive zero, regardless of signbit.
+    // Thus, the midpoint of two zeros doesn't depend on the order
+    // in which they're given.
+
+    double const zpp = binary64_midpoint( 0.0,  0.0);
+    double const zpn = binary64_midpoint( 0.0, -0.0);
+    double const znp = binary64_midpoint(-0.0,  0.0);
+    double const znn = binary64_midpoint(-0.0, -0.0);
+
+    LMI_TEST_EQUAL(0.0, zpp);
+    LMI_TEST_EQUAL(0.0, zpn);
+    LMI_TEST_EQUAL(0.0, znp);
+    LMI_TEST_EQUAL(0.0, znn);
+
+    LMI_TEST_EQUAL(false, std::signbit(zpp));
+    LMI_TEST_EQUAL(false, std::signbit(zpn));
+    LMI_TEST_EQUAL(false, std::signbit(znp));
+    LMI_TEST_EQUAL(false, std::signbit(znn));
+
+    // One argument >0, the other <0: return zero.
+
+    LMI_TEST_EQUAL(0.0, binary64_midpoint( 3.1416, -2.718));
+    LMI_TEST_EQUAL(0.0, binary64_midpoint(-3.1416,  2.718));
+
+    // Do not return zero when one argument is zero and the other
+    // has an opposite signbit. Note the "UN" in "UNEQUAL" here.
+
+    LMI_TEST_UNEQUAL(0.0, binary64_midpoint( 3.1416, -0.0)); // "UN"!
+    LMI_TEST_UNEQUAL(0.0, binary64_midpoint(-3.1416,  0.0)); // "UN"!
+
+    // One argument zero, the other nonzero:  binary midpoint, i.e.,
+    //   std::midpoint(*(std::uint64_t)(&x), *(std::uint64_t)(&y))
+    // after forcing the zero to match the other argument's signbit.
+
+    // 0000000000000000 <-> 0.0
+    // 3ff0000000000000 <-> 1.0
+    // 1ff8000000000000 <-> 1.11875e-154 <-> 0x1.8p-512
+    LMI_TEST(materially_equal(1.11875e-154, binary64_midpoint(0.0,  1.00), 1.0e-5));
+
+    LMI_TEST(materially_equal(5.59376e-155, binary64_midpoint(0.0,  0.25), 1.0e-5));
+
+    LMI_TEST(materially_equal( 2.65703e-154, binary64_midpoint( 0.0,  6.25), 1.0e-5));
+    LMI_TEST(materially_equal( 2.65703e-154, binary64_midpoint(-0.0,  6.25), 1.0e-5));
+    LMI_TEST(materially_equal(-2.65703e-154, binary64_midpoint( 0.0, -6.25), 1.0e-5));
+    LMI_TEST(materially_equal(-2.65703e-154, binary64_midpoint(-0.0, -6.25), 1.0e-5));
+
+    // Both arguments nonzero and same sign: binary midpoint, i.e.,
+    //   std::midpoint((std::uint64_t)x, (std::uint64_t)y)
+
+    LMI_TEST(materially_equal( 3.75, binary64_midpoint( 3.0,  5.0)));
+    LMI_TEST(materially_equal(-3.75, binary64_midpoint(-3.0, -5.0)));
+
+    LMI_TEST(materially_equal( 1.00028e3  , binary64_midpoint( 1.0e0  ,  1.0e6  ), 1.0e-5));
+
+    LMI_TEST(materially_equal( 1.00223e50 , binary64_midpoint( 1.0e0  ,  1.0e100), 1.0e-5));
+    LMI_TEST(materially_equal( 1.00894e200, binary64_midpoint( 1.0e100,  1.0e300), 1.0e-5));
+
+    LMI_TEST(materially_equal( 0.973197   , binary64_midpoint( 1.0e-100, 1.0e100), 1.0e-5));
+
+    // Identical arguments: return value equals both.
+
+    LMI_TEST_EQUAL( 1.0e100, binary64_midpoint( 1.0e100,  1.0e100));
+    LMI_TEST_EQUAL(-1.0e100, binary64_midpoint(-1.0e100, -1.0e100));
 }
 
 /// A function whose value almost everywhere in (-1.0e100, 1.0e100)
@@ -906,6 +994,7 @@ void test_former_rounding_problem()
 int test_main(int, char*[])
 {
     test_fundamentals();
+    test_binary64_midpoint();
     test_NaNs();
     test_root_at_a_bound();
     test_biases();
