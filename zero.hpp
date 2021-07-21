@@ -469,7 +469,8 @@ root_type lmi_root
         }
 
     // f(a) and f(b) must have different signs; neither may be a NaN.
-    if(std::isnan(fa) || std::isnan(fb) || (0.0 < fa) == (0.0 < fb))
+    // Cases where either is zero were already handled above.
+    if(std::isnan(fa) || std::isnan(fb) || signum(fa) == signum(fb))
         {
         recapitulate();
         return {0.0, root_not_bracketed, n_iter, n_eval};
