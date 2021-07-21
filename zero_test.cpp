@@ -517,6 +517,15 @@ void test_NaNs()
     int const max_n_iter = max_n_iter_brent(-1.0e100, 1.0e100, 5.0e-1, pi);
     LMI_TEST_RELATION(r.n_iter,<=,max_n_iter);
     LMI_TEST(materially_equal(1.0e100, std::fabs(r.root)));
+
+    // If the function's value is a NaN at either input bound, then
+    // no root is bracketed.
+    r = lmi_root(NaN_signed,  -1.0e100, 2.0 * pi, 5.0e-1);
+    LMI_TEST_EQUAL(root_not_bracketed, r.validity);
+    r = lmi_root(NaN_signed, -2.0 * pi,  1.0e100, 5.0e-1);
+    LMI_TEST_EQUAL(root_not_bracketed, r.validity);
+    r = lmi_root(NaN_signed, -2.0 * pi, 2.0 * pi, 5.0e-1);
+    LMI_TEST_EQUAL(root_not_bracketed, r.validity);
 }
 
 /// Find a root that coincides with one or both bounds.
@@ -658,17 +667,21 @@ void test_biases()
 
     // Various tests--see function-template definition.
 
-    test_bias(-1.0e100, 4.0e100, -100, e, std::exp(1.0));
-    test_bias(-1.0    , 4.0    ,    0, e, std::exp(1.0));
-    test_bias( 0.5    , 5.0    ,    1, e, std::exp(1.0));
-    test_bias( 0.5    , 5.0    ,    2, e, std::exp(1.0));
-    test_bias( 0.5    , 5.0    ,    3, e, std::exp(1.0));
-    test_bias( 0.5    , 5.0    ,    4, e, std::exp(1.0));
-    test_bias( 0.5    , 5.0    ,    5, e, std::exp(1.0));
-    test_bias( 0.5    , 5.0    ,    6, e, std::exp(1.0));
-    test_bias( 0.5    , 5.0    ,    7, e, std::exp(1.0));
-    test_bias( 0.5    , 5.0    ,    8, e, std::exp(1.0));
-    test_bias(-1.0    , 4.0    ,  100, e, std::exp(1.0));
+    // Rounding to -100 decimals makes the maximum error 1e+100,
+    // which probably isn't useful in practice.
+    test_bias(0.0, 4.0e100, -100, e, std::exp(1.0));
+    test_bias(0.0, 4.0    ,    0, e, std::exp(1.0));
+    test_bias(0.5, 5.0    ,    1, e, std::exp(1.0));
+    test_bias(0.5, 5.0    ,    2, e, std::exp(1.0));
+    test_bias(0.5, 5.0    ,    3, e, std::exp(1.0));
+    test_bias(0.5, 5.0    ,    4, e, std::exp(1.0));
+    test_bias(0.5, 5.0    ,    5, e, std::exp(1.0));
+    test_bias(0.5, 5.0    ,    6, e, std::exp(1.0));
+    test_bias(0.5, 5.0    ,    7, e, std::exp(1.0));
+    test_bias(0.5, 5.0    ,    8, e, std::exp(1.0));
+    // Rounding to 100 decimals shouldn't round at all; the
+    // effective maximum error is 6ϵ × e = 3.62148e-15 .
+    test_bias(0.0, 4.0    ,  100, e, std::exp(1.0));
 }
 
 /// Test the worked-out example given here:

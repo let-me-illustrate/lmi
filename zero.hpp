@@ -29,7 +29,7 @@
 #include "round_to.hpp"
 
 #include <cfloat>                       // DBL_EPSILON, DECIMAL_DIG
-#include <cmath>                        // fabs(), isfinite(), pow()
+#include <cmath>                        // fabs(), isfinite(), isnan(), pow()
 #include <cstdint>                      // uint64_t
 #include <cstring>                      // memcpy()
 #include <functional>                   // function(), identity()
@@ -465,8 +465,8 @@ root_type lmi_root
         return {b, root_is_valid, n_iter};
         }
 
-    // f(a) and f(b) must have different signs.
-    if((0.0 < fa) == (0.0 < fb))
+    // f(a) and f(b) must have different signs; neither may be a NaN.
+    if(std::isnan(fa) || std::isnan(fb) || (0.0 < fa) == (0.0 < fb))
         {
         recapitulate();
         return {0.0, root_not_bracketed, n_iter};
