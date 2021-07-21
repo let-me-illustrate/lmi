@@ -81,6 +81,7 @@ struct root_type
     double        root     {0.0};
     root_validity validity {improper_bounds};
     int           n_iter   {0};
+    int           n_eval   {0};
 };
 
 /// Specialized binary64 midpoint for root finding.
@@ -392,10 +393,11 @@ root_type lmi_root
     constexpr double epsilon {std::numeric_limits<double>::epsilon()};
 
     int              n_iter  {0};
+    int              n_eval  {0};
     root_impetus     impetus {evaluate_bounds};
 
     os_trace
-        << "#eval"
+        << "#it #eval"
         << "            a           fa"
         << "            b           fb"
         << "            c           fc"
@@ -414,6 +416,7 @@ root_type lmi_root
         {
         os_trace
             <<        std::setw(3)  << n_iter
+            << ' ' << std::setw(3)  << n_eval
             << ' '                  << impetus
             << ' ' << std::setw(12) << a << ' ' << std::setw(12) << fa
             << ' ' << std::setw(12) << b << ' ' << std::setw(12) << fb
@@ -425,8 +428,8 @@ root_type lmi_root
     auto recapitulate = [&]()
         {
         os_trace
-            << n_iter
-            << " iterations; final interval:\n"
+            << n_iter << " iterations, "
+            << n_eval << " evaluations; final interval:\n"
             << std::setprecision(DECIMAL_DIG)
             << std::showpos
             << " b "  << std::setw(12) << b
@@ -445,31 +448,31 @@ root_type lmi_root
     if(a == b)
         {
         recapitulate();
-        return {a, improper_bounds, n_iter};
+        return {a, improper_bounds, n_iter, n_eval};
         }
 
     fa = static_cast<double>(f(a));
-    ++n_iter;
+    ++n_eval;
     if(0.0 == fa) // Note 0.
         {
         recapitulate();
-        return {a, root_is_valid, n_iter};
+        return {a, root_is_valid, n_iter, n_eval};
         }
 
     fb = static_cast<double>(f(b));
-    ++n_iter;
+    ++n_eval;
     expatiate();
     if(0.0 == fb) // Note 0 [bis].
         {
         recapitulate();
-        return {b, root_is_valid, n_iter};
+        return {b, root_is_valid, n_iter, n_eval};
         }
 
     // f(a) and f(b) must have different signs; neither may be a NaN.
     if(std::isnan(fa) || std::isnan(fb) || (0.0 < fa) == (0.0 < fb))
         {
         recapitulate();
-        return {0.0, root_not_bracketed, n_iter};
+        return {0.0, root_not_bracketed, n_iter, n_eval};
         }
 
     fc = fb; // Note 1.
@@ -477,7 +480,7 @@ root_type lmi_root
     double d = b - a;
     double e = d;
 
-    for(;;)
+    for(;; ++n_iter)
         {
         if((0.0 < fb) == (0.0 < fc))
             {
@@ -507,12 +510,12 @@ root_type lmi_root
                 )
                 {
                 recapitulate();
-                return {b, root_is_valid, n_iter};
+                return {b, root_is_valid, n_iter, n_eval};
                 }
             else if(std::fabs(m) <= 2.0 * epsilon * std::fabs(c) + t)
                 {
                 recapitulate();
-                return {c, root_is_valid, n_iter};
+                return {c, root_is_valid, n_iter, n_eval};
                 }
             else
                 {
@@ -617,7 +620,7 @@ root_type lmi_root
         else
             {
             fb = static_cast<double>(f(b));
-            ++n_iter;
+            ++n_eval;
             expatiate();
             }
         }
@@ -678,10 +681,11 @@ double brent_zero
     // that f(a) and f(b) have different signs.
 
     int          n_iter  {0};
+    int          n_eval  {0};
     root_impetus impetus {evaluate_bounds};
 
     os_trace
-        << "#eval"
+        << "#it #eval"
         << "            a           fa"
         << "            b           fb"
         << "            c           fc"
@@ -694,6 +698,7 @@ double brent_zero
         {
         os_trace
             <<        std::setw(3)  << n_iter
+            << ' ' << std::setw(3)  << n_eval
             << ' '                  << impetus
             << ' ' << std::setw(12) << a << ' ' << std::setw(12) << fa
             << ' ' << std::setw(12) << b << ' ' << std::setw(12) << fb
@@ -705,8 +710,8 @@ double brent_zero
     auto recapitulate = [&]()
         {
         os_trace
-            << n_iter
-            << " iterations; final interval:\n"
+            << n_iter << " iterations, "
+            << n_eval << " evaluations; final interval:\n"
             << std::setprecision(DECIMAL_DIG)
             << std::showpos
             << " b "  << std::setw(12) << b
@@ -718,9 +723,9 @@ double brent_zero
         };
 
     fa = f(a);
-    ++n_iter;
+    ++n_eval;
     fb = f(b);
-    ++n_iter;
+    ++n_eval;
     c = fc = 0.0; // Zero-initialize before calling expatiate().
     expatiate();
   interpolate:
@@ -809,8 +814,9 @@ double brent_zero
             b -= tol;
             }
         fb = f(b);
-        ++n_iter;
+        ++n_eval;
         expatiate();
+        ++n_iter;
         if((0.0 < fb) == (0.0 < fc))
             {goto interpolate;}
         else

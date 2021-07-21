@@ -51,13 +51,13 @@ double max_err(double zeta, double tol)
     return 6.0 * epsilon * std::fabs(zeta) + 2.0 * tol;
 }
 
-/// AfMWD eq. 3.3: maximum number of iterations for bisection.
+/// AfMWD eq. 3.3: maximum number of evaluations for bisection.
 ///
 /// The return value, k+1, is the exact number of function
 /// evaluations unless f vanishes early, as Brent explains in the
 /// paragraph following eq. 3.3 .
 ///
-/// static_cast<int> is exact for any number of iterations that
+/// static_cast<int> is exact for any number of evaluations that
 /// can be counted by an 'int'.
 ///
 /// The greatest possible number of bisection steps is:
@@ -76,20 +76,20 @@ double max_err(double zeta, double tol)
 ///    denormals, so this shorthand isn't merely a convenience).
 /// Such defects in a unit-testing TU needn't be fixed.
 
-int max_n_iter_bolzano(double a, double b, double tol, double zeta)
+int max_n_eval_bolzano(double a, double b, double tol, double zeta)
 {
     double delta = 2.0 * epsilon * std::fabs(zeta) + tol;
     double k = std::ceil(std::log2(std::fabs(b - a) / delta));
     return 1 + static_cast<int>(k);
 }
 
-/// AfMWD eq. 3.3: maximum number of iterations for Brent's method.
+/// AfMWD eq. 3.3: maximum number of evaluations for Brent's method.
 ///
 /// The greatest possible number of steps is 2099^2 = 4405801.
 
-int max_n_iter_brent(double a, double b, double tol, double zeta)
+int max_n_eval_brent(double a, double b, double tol, double zeta)
 {
-    int k_plus_one = max_n_iter_bolzano(a, b, tol, zeta);
+    int k_plus_one = max_n_eval_bolzano(a, b, tol, zeta);
     return k_plus_one * k_plus_one - 2;
 }
 } // Unnamed namespace.
@@ -103,7 +103,7 @@ int max_n_iter_brent(double a, double b, double tol, double zeta)
 /// Verify that
 ///  - the result is within the max_err() tolerance (ignoring Brent's
 ///      warning about roundoff in the computed function)
-///  - the number of iterations doesn't exceed max_n_iter_brent()
+///  - the number of evaluations doesn't exceed max_n_eval_brent()
 ///  - maximum-precision instrumented traces are identical
 /// Identical traces are strong architecture-independent evidence
 /// that both implementations behave the same way at every step.
@@ -137,7 +137,7 @@ void test_a_function
     // Otherwise silly alias for compatibility with test_a_decimal_function().
     double const tol = tolerance;
     double const maximum_error = max_err(exact_root, tol);
-    int const max_n_iter = max_n_iter_brent(bound0, bound1, tol, exact_root);
+    int const max_n_eval = max_n_eval_brent(bound0, bound1, tol, exact_root);
 
     std::ostringstream os0;
     os0.precision(DECIMAL_DIG);
@@ -151,7 +151,7 @@ void test_a_function
     INVOKE_LMI_TEST(root_is_valid == r.validity, file, line);
     error = r.root - exact_root;
     INVOKE_LMI_TEST_RELATION(std::fabs(error),<=,maximum_error,file,line);
-    INVOKE_LMI_TEST_RELATION(r.n_iter,<=,max_n_iter,file,line);
+    INVOKE_LMI_TEST_RELATION(r.n_eval,<=,max_n_eval,file,line);
 
 #if !defined LMI_X87
     INVOKE_LMI_TEST_EQUAL(os0.str(),os1.str(),file,line);
@@ -167,11 +167,11 @@ void test_a_function
 /// Verify that
 ///  - the result is within the max_err() tolerance (ignoring Brent's
 ///      warning about roundoff in the computed function)
-///  - the number of iterations doesn't exceed max_n_iter_brent()
+///  - the number of evaluations doesn't exceed max_n_eval_brent()
 ///
-/// Also verify that the number of iterations matches the 'n_iter'
+/// Also verify that the number of evaluations matches the 'n_eval'
 /// argument, to make it easier to detect mistaken refactorings.
-/// Do this only if 'n_iter' is not zero (the default), and only for
+/// Do this only if 'n_eval' is not zero (the default), and only for
 /// a single architecture (here, x86_64-pc-linux-gnu), because the
 /// outcome depends on architecture.
 
@@ -183,13 +183,13 @@ void test_a_decimal_function
     ,double      bound1
     ,int         decimals
     ,int         line
-    ,int         n_iter = 0
+    ,int         n_eval = 0
     ,char const* file   = __FILE__
     )
 {
     double const tol = 0.5 * std::pow(10.0, -decimals);
     double const maximum_error = max_err(exact_root, tol);
-    int const max_n_iter = max_n_iter_brent(bound0, bound1, tol, exact_root);
+    int const max_n_eval = max_n_eval_brent(bound0, bound1, tol, exact_root);
 
     double d = brent_zero(f, bound0, bound1, tol);
     double error = d - exact_root;
@@ -199,15 +199,15 @@ void test_a_decimal_function
     INVOKE_LMI_TEST(root_is_valid == r.validity, file, line);
     error = r.root - exact_root;
     INVOKE_LMI_TEST_RELATION(std::fabs(error),<=,maximum_error,file,line);
-    INVOKE_LMI_TEST_RELATION(r.n_iter,<=,max_n_iter,file,line);
+    INVOKE_LMI_TEST_RELATION(r.n_eval,<=,max_n_eval,file,line);
 
 #if defined LMI_X86_64 && defined LMI_POSIX
-    if(0 != n_iter)
+    if(0 != n_eval)
         {
-        INVOKE_LMI_TEST_EQUAL(n_iter, r.n_iter, file, line);
+        INVOKE_LMI_TEST_EQUAL(n_eval, r.n_eval, file, line);
         }
 #endif // defined LMI_X86_64 && defined LMI_POSIX
-    stifle_warning_for_unused_variable(n_iter);
+    stifle_warning_for_unused_variable(n_eval);
 }
 
 /// Test with all biases, asserting obvious invariants.
@@ -268,7 +268,7 @@ struct e_nineteenth
 ///
 /// Following section 3 of that chapter, define
 ///   k = [log2((b-a)/t)], [x] being the greatest-integer function
-/// Then bisection takes exactly k+1 iterations unless it finds a root
+/// Bisection takes exactly k+1 evaluations unless it finds a root
 /// earlier by serendipity; and the number of function evaluations
 /// required by Brent's method (counting the endpoint evaluations) is
 ///   (k+1)^2 - 2 [Brent's eq. 3.4]
@@ -278,8 +278,8 @@ struct e_nineteenth
 ///
 /// The parameters hardcoded here were chosen to prevent overflow.
 /// This is not a dramatic illustration of the superiority to Dekker's
-/// method, which would move by a step of 1.0 at each iteration, thus
-/// taking about 200 iterations. Brent provides an extended-exponent
+/// method, which would move by a step of 1.0 at each evaluation, thus
+/// taking about 200 evaluations. Brent provides an extended-exponent
 /// version for which he says the difference would be 1600 evaluations
 /// versus 1.0e12 for a tolerance of 1.0e-12.
 
@@ -356,13 +356,13 @@ void test_fundamentals()
     r = decimal_root(e, 0.1, 1.0, bias_none, 9);
     LMI_TEST(root_not_bracketed == r.validity);
 
-    // Calculate maximum possible number of iterations according to
-    // the documentation for max_n_iter_bolzano(). This calculation
+    // Calculate maximum possible number of evaluations according to
+    // the documentation for max_n_eval_bolzano(). This calculation
     // would overflow in double precision.
     //
     // log2(DBL_MAX) is 1024, so log2(DBL_MAX - -DBL_MAX) is 1025;
     // and log2(DBL_TRUE_MIN) is 1074; so the maximum number of
-    // iterations is
+    // evaluations is
     //   log2(DBL_MAX - -DBL_MAX) / DBL_TRUE_MIN
     //   = 1 + 1024 + 1074 = 2099
     // for bisection, and 2099^2 = 4405801 for Brent's method with
@@ -514,8 +514,8 @@ void test_NaNs()
     root_type r = lmi_root(NaN_signed, -1.0e100, 1.0e100, 5.0e-1);
     LMI_TEST_EQUAL(root_is_valid, r.validity);
 
-    int const max_n_iter = max_n_iter_brent(-1.0e100, 1.0e100, 5.0e-1, pi);
-    LMI_TEST_RELATION(r.n_iter,<=,max_n_iter);
+    int const max_n_eval = max_n_eval_brent(-1.0e100, 1.0e100, 5.0e-1, pi);
+    LMI_TEST_RELATION(r.n_eval,<=,max_n_eval);
     LMI_TEST(materially_equal(1.0e100, std::fabs(r.root)));
 
     // If the function's value is a NaN at either input bound, then
@@ -548,19 +548,19 @@ void test_root_at_a_bound()
     r = lmi_root(f, -1.0,  0.0, tol);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST_EQUAL(r.root, zeta);
-    LMI_TEST_EQUAL(r.n_iter, 2);
+    LMI_TEST_EQUAL(r.n_eval, 2);
 
     // Root found on third evaluation of a monomial.
     r = lmi_root(f, -1.0,  1.0, tol);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST_EQUAL(r.root, zeta);
-    LMI_TEST_EQUAL(r.n_iter, 3);
+    LMI_TEST_EQUAL(r.n_eval, 3);
 
     // Root is first bound: found on first evaluation.
     r = lmi_root(f,  0.0, -1.0, tol);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST_EQUAL(r.root, zeta);
-    LMI_TEST_EQUAL(r.n_iter, 1);
+    LMI_TEST_EQUAL(r.n_eval, 1);
 
     // Returns an error status, even though the root coincides with
     // both bounds. Attempting to find a root between identical bounds
@@ -568,22 +568,22 @@ void test_root_at_a_bound()
     // without evaluating the objective function even once.
     r = lmi_root(f,  0.0,  0.0, tol);
     LMI_TEST(improper_bounds == r.validity);
-    LMI_TEST_EQUAL(r.n_iter, 0);
+    LMI_TEST_EQUAL(r.n_eval, 0);
 
     r = lmi_root(f,  0.0,  1.0, tol);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST_EQUAL(r.root, zeta);
-    LMI_TEST_EQUAL(r.n_iter, 1);
+    LMI_TEST_EQUAL(r.n_eval, 1);
 
     r = lmi_root(f,  1.0, -1.0, tol);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST_EQUAL(r.root, zeta);
-    LMI_TEST_EQUAL(r.n_iter, 3);
+    LMI_TEST_EQUAL(r.n_eval, 3);
 
     r = lmi_root(f,  1.0,  0.0, tol);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST_EQUAL(r.root, zeta);
-    LMI_TEST_EQUAL(r.n_iter, 2);
+    LMI_TEST_EQUAL(r.n_eval, 2);
 
     r = lmi_root(f,  1.0,  1.0, tol);
     LMI_TEST(improper_bounds == r.validity);
@@ -598,24 +598,24 @@ void test_root_at_a_bound()
     r = decimal_root(f, -1.03,  0.04, bias_none, 1);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST_EQUAL(r.root, zeta);
-    LMI_TEST_EQUAL(r.n_iter, 2);
+    LMI_TEST_EQUAL(r.n_eval, 2);
 
     // Root found on third evaluation of a monomial.
     r = decimal_root(f, -1.04,  0.96, bias_none, 1);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST_EQUAL(r.root, zeta);
-    LMI_TEST_EQUAL(r.n_iter, 3);
+    LMI_TEST_EQUAL(r.n_eval, 3);
 
     // Root is rounded first bound: found on first evaluation.
     r = decimal_root(f,  0.04, -1.01, bias_none, 1);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST_EQUAL(r.root, zeta);
-    LMI_TEST_EQUAL(r.n_iter, 1);
+    LMI_TEST_EQUAL(r.n_eval, 1);
 
     // Bounds identical after rounding: presumptive error.
     r = decimal_root(f, -0.04,  0.04, bias_none, 1);
     LMI_TEST(improper_bounds == r.validity);
-    LMI_TEST_EQUAL(r.n_iter, 0);
+    LMI_TEST_EQUAL(r.n_eval, 0);
 
     // A curious effect of rounding the input bounds.
 
@@ -626,7 +626,7 @@ void test_root_at_a_bound()
     r = decimal_root(f,  0.04,  0.09, bias_none, 1);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST_EQUAL(r.root, zeta);
-    LMI_TEST_EQUAL(r.n_iter, 1);
+    LMI_TEST_EQUAL(r.n_eval, 1);
 }
 
 void test_biases()
@@ -726,27 +726,27 @@ void test_celebrated_equation()
 
     // "1 + " skips the newline:
     std::string const verified = 1 + R"--cut-here--(
-#eval            a           fa            b           fb            c           fc
-  2 i -2.5600000000000001 -16.657216000000002 2.5600000000000001 6.6572160000000018            0            0
-  2 j -2.5600000000000001 -16.657216000000002 2.5600000000000001 6.6572160000000018 -2.5600000000000001 -16.657216000000002
-  3 L 2.5600000000000001 6.6572160000000018 1.0980323260716793 -5.8721945393772152 -2.5600000000000001 -16.657216000000002
-  3 j 2.5600000000000001 6.6572160000000018 1.0980323260716793 -5.8721945393772152 2.5600000000000001 6.6572160000000018
-  4 L 1.0980323260716793 -5.8721945393772152 1.783216881610604 -2.8960493667789873 2.5600000000000001 6.6572160000000018
-  5 Q 1.783216881610604 -2.8960493667789873 2.2478393639958036 1.8621631139566732 2.5600000000000001 6.6572160000000018
-  5 j 1.783216881610604 -2.8960493667789873 2.2478393639958036 1.8621631139566732 1.783216881610604 -2.8960493667789873
-  6 L 2.2478393639958036 1.8621631139566732 2.0660057758331045 -0.3135140955237814 1.783216881610604 -2.8960493667789873
-  6 j 2.2478393639958036 1.8621631139566732 2.0660057758331045 -0.3135140955237814 2.2478393639958036 1.8621631139566732
-  7 L 2.0660057758331045 -0.3135140955237814 2.0922079131171945 -0.026123094109737011 2.2478393639958036 1.8621631139566732
-  8 Q 2.0922079131171945 -0.026123094109737011 2.0945566700001779 5.7910818359374616e-05 2.2478393639958036 1.8621631139566732
-  8 j 2.0922079131171945 -0.026123094109737011 2.0945566700001779 5.7910818359374616e-05 2.0922079131171945 -0.026123094109737011
-  9 L 2.0945566700001779 5.7910818359374616e-05 2.0945514746903111 -7.6478343657981895e-08 2.0922079131171945 -0.026123094109737011
-  9 j 2.0945566700001779 5.7910818359374616e-05 2.0945514746903111 -7.6478343657981895e-08 2.0945566700001779 5.7910818359374616e-05
- 10 L 2.0945514746903111 -7.6478343657981895e-08 2.0945514815423065 -2.2382096176443156e-13 2.0945566700001779 5.7910818359374616e-05
- 11 Q 2.0945514815423065 -2.2382096176443156e-13 2.0945514815423265 -8.8817841970012523e-16 2.0945566700001779 5.7910818359374616e-05
- 12 Q 2.0945514815423265 -8.8817841970012523e-16 2.0945514815423274 9.7699626167013776e-15 2.0945566700001779 5.7910818359374616e-05
- 12 j 2.0945514815423265 -8.8817841970012523e-16 2.0945514815423274 9.7699626167013776e-15 2.0945514815423265 -8.8817841970012523e-16
- 12 k 2.0945514815423274 9.7699626167013776e-15 2.0945514815423265 -8.8817841970012523e-16 2.0945514815423274 9.7699626167013776e-15
-12 iterations; final interval:
+#it #eval            a           fa            b           fb            c           fc
+  0   2 i -2.5600000000000001 -16.657216000000002 2.5600000000000001 6.6572160000000018            0            0
+  0   2 j -2.5600000000000001 -16.657216000000002 2.5600000000000001 6.6572160000000018 -2.5600000000000001 -16.657216000000002
+  0   3 L 2.5600000000000001 6.6572160000000018 1.0980323260716793 -5.8721945393772152 -2.5600000000000001 -16.657216000000002
+  1   3 j 2.5600000000000001 6.6572160000000018 1.0980323260716793 -5.8721945393772152 2.5600000000000001 6.6572160000000018
+  1   4 L 1.0980323260716793 -5.8721945393772152 1.783216881610604 -2.8960493667789873 2.5600000000000001 6.6572160000000018
+  2   5 Q 1.783216881610604 -2.8960493667789873 2.2478393639958036 1.8621631139566732 2.5600000000000001 6.6572160000000018
+  3   5 j 1.783216881610604 -2.8960493667789873 2.2478393639958036 1.8621631139566732 1.783216881610604 -2.8960493667789873
+  3   6 L 2.2478393639958036 1.8621631139566732 2.0660057758331045 -0.3135140955237814 1.783216881610604 -2.8960493667789873
+  4   6 j 2.2478393639958036 1.8621631139566732 2.0660057758331045 -0.3135140955237814 2.2478393639958036 1.8621631139566732
+  4   7 L 2.0660057758331045 -0.3135140955237814 2.0922079131171945 -0.026123094109737011 2.2478393639958036 1.8621631139566732
+  5   8 Q 2.0922079131171945 -0.026123094109737011 2.0945566700001779 5.7910818359374616e-05 2.2478393639958036 1.8621631139566732
+  6   8 j 2.0922079131171945 -0.026123094109737011 2.0945566700001779 5.7910818359374616e-05 2.0922079131171945 -0.026123094109737011
+  6   9 L 2.0945566700001779 5.7910818359374616e-05 2.0945514746903111 -7.6478343657981895e-08 2.0922079131171945 -0.026123094109737011
+  7   9 j 2.0945566700001779 5.7910818359374616e-05 2.0945514746903111 -7.6478343657981895e-08 2.0945566700001779 5.7910818359374616e-05
+  7  10 L 2.0945514746903111 -7.6478343657981895e-08 2.0945514815423065 -2.2382096176443156e-13 2.0945566700001779 5.7910818359374616e-05
+  8  11 Q 2.0945514815423065 -2.2382096176443156e-13 2.0945514815423265 -8.8817841970012523e-16 2.0945566700001779 5.7910818359374616e-05
+  9  12 Q 2.0945514815423265 -8.8817841970012523e-16 2.0945514815423274 9.7699626167013776e-15 2.0945566700001779 5.7910818359374616e-05
+ 10  12 j 2.0945514815423265 -8.8817841970012523e-16 2.0945514815423274 9.7699626167013776e-15 2.0945514815423265 -8.8817841970012523e-16
+ 10  12 k 2.0945514815423274 9.7699626167013776e-15 2.0945514815423265 -8.8817841970012523e-16 2.0945514815423274 9.7699626167013776e-15
+10 iterations, 12 evaluations; final interval:
  b +2.09455148154232650981 fb -8.88178419700125232339e-16
  c +2.09455148154232739799 fc +9.76996261670137755573e-15
 )--cut-here--";
@@ -881,11 +881,11 @@ void test_hodgepodge()
     //   6ϵ|iterand|
     // because the other term vanishes--it does not give more
     // precision than the hardware is capable of, though it's a
-    // chasing after wind that costs many iterations.
+    // chasing after wind that costs many evaluations.
 
     e_nineteenth e_19;
 
-    // Number of iterations:
+    // Number of evaluations:
     //   195 Brent's table 4.1 (IBM 360)
     //   171 x86_64 brent_zero (IEEE 754)
     //   169 x86_64 decimal_root (differs slightly due to rounding)
@@ -911,12 +911,12 @@ void test_hodgepodge()
     // so the computed function becomes zero: see the documentation
     // for max_err().
 
-    // Assertions labelled 'weak' test the number of iterations
+    // Assertions labelled 'weak' test the number of evaluations
     // against empirical measurements (with various architectures)
     // rather than a theoretical maximum. Perhaps they'll always
     // succeed, because floating-point behavior is determinate;
     // but small variations betoken no catastrophe.
-    LMI_TEST(169 <= r.n_iter && r.n_iter <= 173); // weak
+    LMI_TEST(169 <= r.n_eval && r.n_eval <= 173); // weak
 
     d = brent_zero(eq_2_1, -100.0, 100.0, 0.5);
     zeta = -100.0;
@@ -926,11 +926,11 @@ void test_hodgepodge()
     r = decimal_root(eq_2_1, -100.0, 100.0, bias_none, 0);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST(-100.0 <= r.root && r.root <= eq_2_1_upper);
-    LMI_TEST(10 == max_n_iter_bolzano(-100.0, 100.0, 0.5, -100.0));
-    LMI_TEST(98 == max_n_iter_brent  (-100.0, 100.0, 0.5, -100.0));
-    LMI_TEST(r.n_iter <= 98);
-    LMI_TEST_EQUAL(20, r.n_iter); // weak
-    // Number of iterations required:
+    LMI_TEST(10 == max_n_eval_bolzano(-100.0, 100.0, 0.5, -100.0));
+    LMI_TEST(98 == max_n_eval_brent  (-100.0, 100.0, 0.5, -100.0));
+    LMI_TEST(r.n_eval <= 98);
+    LMI_TEST_EQUAL(20, r.n_eval); // weak
+    // Number of evaluations required:
     //   23 for brent_zero() [above]
     //   20 for decimal_root()
     // Presumably the difference is due to rounding.
@@ -952,31 +952,31 @@ void test_hodgepodge()
     t = 0.5 * std::pow(10.0, -20.0);
     LMI_TEST(-100.0 <= r.root && r.root <= zeta + max_err(zeta, t));
 
-    LMI_TEST(  53 == max_n_iter_bolzano(-100.0, 100.0, 0.0, -100.0));
-    LMI_TEST(2807 == max_n_iter_brent  (-100.0, 100.0, 0.0, -100.0));
-    LMI_TEST(r.n_iter <= 2807);
-    LMI_TEST_EQUAL(66, r.n_iter); // weak
+    LMI_TEST(  53 == max_n_eval_bolzano(-100.0, 100.0, 0.0, -100.0));
+    LMI_TEST(2807 == max_n_eval_brent  (-100.0, 100.0, 0.0, -100.0));
+    LMI_TEST(r.n_eval <= 2807);
+    LMI_TEST_EQUAL(66, r.n_eval); // weak
 
     r = decimal_root(signum_offset, -1.0, 1.0, bias_none, 13);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST(materially_equal(-1.0 / 3.0, r.root));
     zeta = 1.0 / 3.0;
     double tol = 0.5 * 1.0e-13;
-    LMI_TEST_EQUAL(  47, max_n_iter_bolzano(-1.0, 1.0, tol, zeta));
-    LMI_TEST_EQUAL(2207, max_n_iter_brent  (-1.0, 1.0, tol, zeta));
-    LMI_TEST(r.n_iter <= 2207);
+    LMI_TEST_EQUAL(  47, max_n_eval_bolzano(-1.0, 1.0, tol, zeta));
+    LMI_TEST_EQUAL(2207, max_n_eval_brent  (-1.0, 1.0, tol, zeta));
+    LMI_TEST(r.n_eval <= 2207);
     // Here, decimal_root() always chooses the bisection technique.
-    LMI_TEST(46 <= r.n_iter && r.n_iter <= 47); // weak
+    LMI_TEST(46 <= r.n_eval && r.n_eval <= 47); // weak
 
     r = decimal_root(signum_offset, -1.0, 1.0, bias_none, 16);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST(materially_equal(-1.0 / 3.0, r.root));
     tol = 0.5 * 1.0e-16;
-    LMI_TEST_EQUAL(  55, max_n_iter_bolzano(-1.0, 1.0, tol, zeta));
-    LMI_TEST_EQUAL(3023, max_n_iter_brent  (-1.0, 1.0, tol, zeta));
-    LMI_TEST(r.n_iter <= 3023);
+    LMI_TEST_EQUAL(  55, max_n_eval_bolzano(-1.0, 1.0, tol, zeta));
+    LMI_TEST_EQUAL(3023, max_n_eval_brent  (-1.0, 1.0, tol, zeta));
+    LMI_TEST(r.n_eval <= 3023);
     // Here, decimal_root() always chooses the bisection technique.
-    LMI_TEST_EQUAL(55, r.n_iter); // weak
+    LMI_TEST_EQUAL(55, r.n_eval); // weak
 }
 
 void test_former_rounding_problem()
