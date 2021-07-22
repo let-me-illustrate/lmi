@@ -439,6 +439,10 @@ void test_binary64_midpoint()
 
     LMI_TEST(materially_equal(5.59376e-155, binary64_midpoint(0.0,  0.25), 1.0e-5));
 
+    LMI_TEST(materially_equal(1.09631e-104, binary64_midpoint(0.0, 1.0e100), 1.0e-5));
+    LMI_TEST(materially_equal(1.09631e-104, binary64_midpoint(1.0e100, 0.0), 1.0e-5));
+    LMI_TEST(materially_equal(0.000106605 , binary64_midpoint(0.0, 1.0e300), 1.0e-5));
+
     LMI_TEST(materially_equal( 2.65703e-154, binary64_midpoint( 0.0,  6.25), 1.0e-5));
     LMI_TEST(materially_equal( 2.65703e-154, binary64_midpoint(-0.0,  6.25), 1.0e-5));
     LMI_TEST(materially_equal(-2.65703e-154, binary64_midpoint( 0.0, -6.25), 1.0e-5));
