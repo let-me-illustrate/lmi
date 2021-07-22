@@ -502,6 +502,7 @@ root_type lmi_root
             }
         double tol = 2.0 * epsilon * std::fabs(b) + t;
         double m = 0.5 * (c - b);
+        double n = std::midpoint(b, c); // "next" iterate
         if(0.0 == fb || std::fabs(m) <= tol) // Note 2.
             {
             if
@@ -526,12 +527,12 @@ root_type lmi_root
         if(std::fabs(e) < tol)
             {
             impetus = dithering_near_root;
-            d = e = m;
+            d = e = n - b;
             }
         else if(std::fabs(fa) <= std::fabs(fb))
             {
             impetus = secant_out_of_bounds;
-            d = e = m;
+            d = e = n - b;
             }
         else
             {
@@ -583,6 +584,7 @@ root_type lmi_root
             if(k0 && k1)
                 {
                 d = p / q;
+                n = b + p / q;
                 }
             else
                 {
@@ -591,14 +593,14 @@ root_type lmi_root
                     : k1 ? guarantee_linear_convergence
                     :      pis_aller
                     ;
-                d = e = m;
+                d = e = n - b;
                 }
             }
         a = b;
         fa = fb;
         if(tol < std::fabs(d))
             {
-            b += d;
+            b = n;
             }
         else if(0.0 < m)
             {
@@ -666,6 +668,26 @@ root_type decimal_root
 }
 
 /// An instrumented translation of Brent's reference implementation.
+///
+/// Deviation from the original ALGOL:
+///
+/// The ALGOL original calculates and stores a correction term (called
+/// 'i' on page 49 of AfMWD, but 'd' in the ALGOL) for bisection as
+/// well as for other interpolation techniques, then adds it to 'b'
+/// when appropriate. This can lead to a catastrophic cancellation,
+/// as in this actual example:
+///   -1.02311777153193876348e+49 b
+///   -0.0106034417457945805141   c
+///   -3.18454409903526645858e+23 binary64_midpoint(c, b)
+///    1.02311777153193876348e+49 binary64_midpoint(c, b) - b
+///    0.0                   b + (binary64_midpoint(c, b) - b)
+/// which iterates to a new point outside the known [c,b] bounds. Even
+/// though no such drastic example has been seen with the arithmetic
+/// mean that Brent uses, less drastic examples occur in unit tests.
+/// The catastrophic cancellation is conditionally avoided by storing
+/// the next iterate in new variable 'n' (for "next") whenever 'd' is
+/// calculated, and then assigning it directly to 'b' instead of
+/// incrementing 'b' by 'd'.
 
 template<typename FunctionalType>
 double brent_zero
@@ -693,7 +715,7 @@ double brent_zero
         << '\n'
         ;
 
-    double c, d, e, fa, fb, fc, tol, m, p, q, r, s;
+    double c, d, e, fa, fb, fc, tol, m, n, p, q, r, s;
 
     auto expatiate = [&]()
         {
@@ -743,18 +765,19 @@ double brent_zero
         }
     tol = 2.0 * DBL_EPSILON * std::fabs(b) + t;
     m = 0.5 * (c - b);
+    n = std::midpoint(b, c);
     if(tol < std::fabs(m) && 0.0 != fb)
         {
         // See if a bisection is forced.
         if(std::fabs(e) < tol)
             {
             impetus = dithering_near_root;
-            d = e = m;
+            d = e = n - b;
             }
         else if(std::fabs(fa) <= std::fabs(fb))
             {
             impetus = secant_out_of_bounds;
-            d = e = m;
+            d = e = n - b;
             }
         else
             {
@@ -790,6 +813,7 @@ double brent_zero
             if(k0 && k1)
                 {
                 d = p / q;
+                n = b + p / q;
                 }
             else
                 {
@@ -798,13 +822,17 @@ double brent_zero
                     : k1 ? guarantee_linear_convergence
                     :      pis_aller
                     ;
-                d = e = m;
+                d = e = n - b;
                 }
             }
         a = b; fa = fb;
         if(tol < std::fabs(d))
             {
+#if 0  // See "catastrophic cancellation" above.
             b += d;
+#else  // 1
+            b = n;
+#endif // 1
             }
         else if(0.0 < m)
             {

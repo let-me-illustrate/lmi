@@ -824,15 +824,15 @@ void test_various_functions()
 //  test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-19, __LINE__);
 //  test_a_decimal_function(f01, root_01, -1.0, 4.0, 18, __LINE__, 168);
 //  test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-18, __LINE__);
-    test_a_decimal_function(f01, root_01, -1.0, 4.0, 17, __LINE__, 163);
+    test_a_decimal_function(f01, root_01, -1.0, 4.0, 17, __LINE__, 167);
     test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-17, __LINE__);
-    test_a_decimal_function(f01, root_01, -1.0, 4.0, 16, __LINE__, 156);
+    test_a_decimal_function(f01, root_01, -1.0, 4.0, 16, __LINE__, 155);
     test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-16, __LINE__);
-    test_a_decimal_function(f01, root_01, -1.0, 4.0, 15, __LINE__, 142);
+    test_a_decimal_function(f01, root_01, -1.0, 4.0, 15, __LINE__, 143);
     test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-15, __LINE__);
     test_a_decimal_function(f01, root_01, -1.0, 4.0, 14, __LINE__, 128);
     test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-14, __LINE__);
-    test_a_decimal_function(f01, root_01, -1.0, 4.0, 12, __LINE__, 112);
+    test_a_decimal_function(f01, root_01, -1.0, 4.0, 12, __LINE__, 117);
     test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-12, __LINE__);
 
     auto f02 = [](double x) {return std::pow(x - 1.7, 17.0);};
@@ -929,7 +929,7 @@ void test_hodgepodge()
     // rather than a theoretical maximum. Perhaps they'll always
     // succeed, because floating-point behavior is determinate;
     // but small variations betoken no catastrophe.
-    LMI_TEST(169 <= r.n_eval && r.n_eval <= 173); // weak
+    LMI_TEST(168 <= r.n_eval && r.n_eval <= 172); // weak
 
     d = brent_zero(eq_2_1, -100.0, 100.0, 0.5);
     zeta = -100.0;
@@ -990,6 +990,15 @@ void test_hodgepodge()
     LMI_TEST(r.n_eval <= 3023);
     // Here, decimal_root() always chooses the bisection technique.
     LMI_TEST_EQUAL(55, r.n_eval); // weak
+
+    std::ostringstream oss;
+    r = lmi_root(signum_offset, -1.0e300, 1.0e300, 5.0e-19, oss);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST(materially_equal(-1.0 / 3.0, r.root));
+    LMI_TEST(r.n_eval <= 3023);
+    LMI_TEST_EQUAL(1052, r.n_eval); // weak
+    // Display this to investigate further:
+//  std::cout << oss.str() << std::endl;
 }
 
 void test_former_rounding_problem()
