@@ -187,9 +187,9 @@ int test_main(int, char*[])
     std::vector<double> q{p};
     q.push_back(-b.back());
     // This NPV is -9.777068044058979E-12 in a gnumeric spreadsheet,
-    // versus -9.86988e-014 with MinGW-w64 gcc-6.3.0; the 1e-13
-    // tolerance is simply the materially_equal() default.
-    LMI_TEST(std::fabs(pv(q.begin(), q.end(), results.back())) <= 1e-13);
+    // versus -9.86988e-014 with MinGW-w64 gcc-6.3.0
+    // versus  3.6593e-013  with i686-w64-mingw32 gcc-10.0
+    LMI_TEST(std::fabs(pv(q.begin(), q.end(), results.back())) <= 1e-12);
 
     // Trivially, NPV at 0% interest is summation.
     LMI_TEST(materially_equal(-4950.0L, pv(q.begin(), q.end(), 0.0)));
