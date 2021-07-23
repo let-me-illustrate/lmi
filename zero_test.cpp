@@ -501,8 +501,9 @@ void test_biases()
     // Test different biases.
 
     // Because the base of natural logarithms is transcendental,
-    // Brent's algorithm must terminate with distinct upper and lower
-    // bounds: neither can equal the unrepresentable true value.
+    // Brent's algorithm terminates with distinct upper and lower
+    // bounds: neither can equal the unrepresentable true value
+    // (though perhaps zero is returned for some argument).
     e_functor e;
 
     // The last iterate evaluated is retained in member 'e.state'.
