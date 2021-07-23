@@ -32,7 +32,6 @@
 #include <cmath>                        // fabs(), isfinite(), isnan(), pow()
 #include <cstdint>                      // uint64_t
 #include <cstring>                      // memcpy()
-#include <functional>                   // function(), identity()
 #include <iomanip>                      // setprecision(), setw()
 #include <limits>
 #include <numeric>                      // midpoint()
@@ -191,24 +190,6 @@ inline double binary64_midpoint(double d0, double d1)
 #endif // 0
     return z;
 }
-
-namespace detail
-{
-using RoundT = std::function<double(double)>;
-} // namespace detail
-
-/// Workaround for clang--see:
-///    https://lists.nongnu.org/archive/html/lmi/2021-07/msg00001.html
-/// It is hoped that this can be replaced by std::identity soon.
-
-struct lmi_identity
-{
-    using is_transparent = void;
-
-    template<typename T>
-    constexpr T&& operator()(T&& t) const noexcept
-        {return std::forward<T>(t);}
-};
 
 /// Return a zero z of a function f within input bounds [a,b].
 ///
@@ -386,8 +367,6 @@ root_type lmi_root
     ,double          tolerance
     ,std::ostream&   os_trace  = null_stream()
     ,root_bias       bias      = bias_none
-//  ,detail::RoundT  round_dec = std::identity()
-    ,detail::RoundT  round_dec = lmi_identity()
     )
 {
     constexpr double epsilon {std::numeric_limits<double>::epsilon()};
@@ -405,9 +384,9 @@ root_type lmi_root
         ;
 
     // Declarations must precede lambda.
-    double a  {};
+    double a  {bound0};
     double fa {};
-    double b  {};
+    double b  {bound1};
     double fb {};
     double c  {};
     double fc {};
@@ -442,12 +421,10 @@ root_type lmi_root
 
     double t = tolerance;
 
-    a = round_dec(bound0);
-    b = round_dec(bound1);
-
     if(a == b)
         {
         recapitulate();
+        os_trace << " return value: " << a << " = a" << std::endl;
         return {a, improper_bounds, n_iter, n_eval};
         }
 
@@ -456,6 +433,7 @@ root_type lmi_root
     if(0.0 == fa) // Note 0.
         {
         recapitulate();
+        os_trace << " return value: " << a << " = a" << std::endl;
         return {a, root_is_valid, n_iter, n_eval};
         }
 
@@ -465,6 +443,7 @@ root_type lmi_root
     if(0.0 == fb) // Note 0 [bis].
         {
         recapitulate();
+        os_trace << " return value: " << b << " = b" << std::endl;
         return {b, root_is_valid, n_iter, n_eval};
         }
 
@@ -473,6 +452,7 @@ root_type lmi_root
     if(std::isnan(fa) || std::isnan(fb) || signum(fa) == signum(fb))
         {
         recapitulate();
+        os_trace << " return value: " << 0.0 << " = zero" << std::endl;
         return {0.0, root_not_bracketed, n_iter, n_eval};
         }
 
@@ -512,11 +492,13 @@ root_type lmi_root
                 )
                 {
                 recapitulate();
+                os_trace << " return value: " << b << " = b" << std::endl;
                 return {b, root_is_valid, n_iter, n_eval};
                 }
             else if(std::fabs(m) <= 2.0 * epsilon * std::fabs(c) + t)
                 {
                 recapitulate();
+                os_trace << " return value: " << c << " = c" << std::endl;
                 return {c, root_is_valid, n_iter, n_eval};
                 }
             else
@@ -610,7 +592,6 @@ root_type lmi_root
             {
             b -= tol;
             }
-        b = round_dec(b);
 
         if(b == a) // Note 4.
             {
@@ -655,16 +636,19 @@ root_type decimal_root
     )
 {
     round_to<double> const round_dec {decimals, r_to_nearest};
+    auto fr = [&](double x) {return f(round_dec(x));};
 
-    return lmi_root
-        (f
-        ,bound0
-        ,bound1
+    auto z = lmi_root
+        (fr
+        ,round_dec(bound0)
+        ,round_dec(bound1)
         ,0.5 * std::pow(10.0, -decimals)
         ,os_trace
         ,bias
-        ,detail::RoundT(round_dec)
         );
+    z.root = round_dec(z.root);
+    os_trace << " return value: " << z.root << " (rounded)" << std::endl;
+    return z;
 }
 
 /// An instrumented translation of Brent's reference implementation.
@@ -852,6 +836,7 @@ double brent_zero
             {goto extrapolate;}
         }
     recapitulate();
+    os_trace << " return value: " << b << " = b" << std::endl;
     return b;
 }
 
