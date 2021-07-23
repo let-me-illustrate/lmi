@@ -193,7 +193,7 @@ inline double binary64_midpoint(double d0, double d1)
 
 /// Return a zero z of a function f within input bounds [a,b].
 ///
-/// Preconditions: bounds are distinct after rounding; and either
+/// Preconditions: bounds are distinct; and either
 ///   0.0 == f(a), or
 ///   0.0 == f(b), or
 ///   f(a) and f(b) have opposite signs;
@@ -259,15 +259,6 @@ inline double binary64_midpoint(double d0, double d1)
 /// for an unspecified C in that interval.)
 ///
 /// GWC modifications
-///
-/// Brent's original algorithm returns unrounded values. To support
-/// financial applications that traffic in rounded currency values,
-/// iterands are optionally rounded before each function evaluation.
-/// Rounding must be performed within the root-finding algorithm: for
-/// an unrounded return value r, f(r) and f(round(r)) might easily
-/// have different signs. The default rounding function returns its
-/// argument unchanged, so this implementation remains suitable for
-/// the unrounded case.
 ///
 /// Brent's original algorithm strives to return the closest value to
 /// a true root (within a given tolerance). Especially for currency
@@ -351,13 +342,6 @@ inline double binary64_midpoint(double d0, double d1)
 /// Note 3. Brent points out that this division is safe because
 ///   0 < |f(b)| <= |f(a)|
 /// whenever this line is executed.
-///
-/// Note 4. Each iterand is rounded, so it might equal an iterand that
-/// has already been evaluated. In that case, the known value is used,
-/// because evaluation is assumed to be costly, and in practice one
-/// bound stays fixed to within rounding (for instance, at the edge of
-/// a discontinuity) often enough that it is worthwhile to avoid
-/// superfluous reevaluation.
 
 template<typename FunctionalType>
 root_type lmi_root
@@ -593,37 +577,25 @@ root_type lmi_root
             b -= tol;
             }
 
-        if(b == a) // Note 4.
-            {
-            fb = fa;
-            }
-        else if(b == c)
-            {
-            fb = fc;
-            }
-        else
-            {
-            fb = static_cast<double>(f(b));
-            ++n_eval;
-            expatiate();
-            }
+        fb = static_cast<double>(f(b));
+        ++n_eval;
+        expatiate();
         }
 }
 
 /// Return a rounded zero z of a function f within input bounds [a,b].
 ///
-/// Brent's original algorithm returns a zero z of the function f in
+/// Brent's algorithm returns a zero z of the function f in
 ///   [bound0 bound1]
 /// (a,b) to within a tolerance
 ///   6ϵ|z| + 2t
-/// where t is an argument. For financial applications, the tolerance
-/// is often one-sided, so that f(z) must be strictly greater than or
-/// less than zero, and the tolerance is more conveniently expressed
-/// as a number of decimals. An adjustment is made for the constant
-/// factor in Brent's t term, so that this implementation's tolerance
-/// becomes
+/// where t is an argument. For financial applications that traffic in
+/// rounded currency values, the tolerance is often one-sided, so that
+/// f(z) must be strictly greater than or less than zero; and the
+/// tolerance is a function of the number of decimals to which values
+/// are rounded. Thus, the tolerance becomes
 ///   6ϵ|z| + 10^(-decimals)
-/// instead.
+/// for this overload.
 
 template<typename FunctionalType>
 root_type decimal_root
