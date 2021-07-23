@@ -213,7 +213,15 @@ void test_a_decimal_function
 /// Test with all biases, asserting obvious invariants.
 
 template<typename F>
-void test_bias(double bound0, double bound1, int dec, F f, double exact_root)
+void test_bias
+    (double bound0
+    ,double bound1
+    ,int dec
+    ,F f
+    ,double exact_root
+    ,int         line
+    ,char const* file   = __FILE__
+   )
 {
     double maximum_error = max_err(exact_root, 0.5 * std::pow(10.0, -dec));
 
@@ -221,15 +229,16 @@ void test_bias(double bound0, double bound1, int dec, F f, double exact_root)
     root_type rl = decimal_root(f, bound0, bound1, bias_lower,  dec);
     root_type rh = decimal_root(f, bound0, bound1, bias_higher, dec);
 
-    LMI_TEST(root_is_valid == rn.validity);
-    LMI_TEST(root_is_valid == rl.validity);
-    LMI_TEST(root_is_valid == rh.validity);
+    INVOKE_LMI_TEST_RELATION(root_is_valid,==,rn.validity,file,line);
+    INVOKE_LMI_TEST_RELATION(root_is_valid,==,rl.validity,file,line);
+    INVOKE_LMI_TEST_RELATION(root_is_valid,==,rh.validity,file,line);
 
-    LMI_TEST(rl.root <= rn.root && rn.root <= rh.root);
+    INVOKE_LMI_TEST_RELATION(rl.root,<=,rn.root,file,line);
+    INVOKE_LMI_TEST_RELATION(rn.root,<=,rh.root,file,line);
 
-    LMI_TEST(std::fabs(rh.root - rl.root) <= maximum_error);
-    LMI_TEST(std::fabs(rl.root - exact_root) <= maximum_error);
-    LMI_TEST(std::fabs(rh.root - exact_root) <= maximum_error);
+    INVOKE_LMI_TEST_RELATION(std::fabs(rh.root - rl.root),<=,maximum_error,file,line);
+    INVOKE_LMI_TEST_RELATION(std::fabs(rl.root - exact_root),<=,maximum_error,file,line);
+    INVOKE_LMI_TEST_RELATION(std::fabs(rh.root - exact_root),<=,maximum_error,file,line);
 }
 
 double e_function(double z)
@@ -673,19 +682,19 @@ void test_biases()
 
     // Rounding to -100 decimals makes the maximum error 1e+100,
     // which probably isn't useful in practice.
-    test_bias(0.0, 4.0e100, -100, e, std::exp(1.0));
-    test_bias(0.0, 4.0    ,    0, e, std::exp(1.0));
-    test_bias(0.5, 5.0    ,    1, e, std::exp(1.0));
-    test_bias(0.5, 5.0    ,    2, e, std::exp(1.0));
-    test_bias(0.5, 5.0    ,    3, e, std::exp(1.0));
-    test_bias(0.5, 5.0    ,    4, e, std::exp(1.0));
-    test_bias(0.5, 5.0    ,    5, e, std::exp(1.0));
-    test_bias(0.5, 5.0    ,    6, e, std::exp(1.0));
-    test_bias(0.5, 5.0    ,    7, e, std::exp(1.0));
-    test_bias(0.5, 5.0    ,    8, e, std::exp(1.0));
+    test_bias(0.0, 4.0e100, -100, e, std::exp(1.0), __LINE__);
+    test_bias(0.0, 4.0    ,    0, e, std::exp(1.0), __LINE__);
+    test_bias(0.5, 5.0    ,    1, e, std::exp(1.0), __LINE__);
+    test_bias(0.5, 5.0    ,    2, e, std::exp(1.0), __LINE__);
+    test_bias(0.5, 5.0    ,    3, e, std::exp(1.0), __LINE__);
+    test_bias(0.5, 5.0    ,    4, e, std::exp(1.0), __LINE__);
+    test_bias(0.5, 5.0    ,    5, e, std::exp(1.0), __LINE__);
+    test_bias(0.5, 5.0    ,    6, e, std::exp(1.0), __LINE__);
+    test_bias(0.5, 5.0    ,    7, e, std::exp(1.0), __LINE__);
+    test_bias(0.5, 5.0    ,    8, e, std::exp(1.0), __LINE__);
     // Rounding to 100 decimals shouldn't round at all; the
     // effective maximum error is 6ϵ × e = 3.62148e-15 .
-    test_bias(0.0, 4.0    ,  100, e, std::exp(1.0));
+    test_bias(0.0, 4.0    ,  100, e, std::exp(1.0), __LINE__);
 }
 
 /// Test the worked-out example given here:
