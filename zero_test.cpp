@@ -204,7 +204,7 @@ void test_a_decimal_function
 #if defined LMI_X86_64 && defined LMI_POSIX
     if(0 != n_eval)
         {
-////    INVOKE_LMI_TEST_EQUAL(n_eval, r.n_eval, file, line);
+        INVOKE_LMI_TEST_EQUAL(n_eval, r.n_eval, file, line);
         }
 #endif // defined LMI_X86_64 && defined LMI_POSIX
     stifle_warning_for_unused_variable(n_eval);
@@ -767,7 +767,7 @@ void test_celebrated_equation()
  return value: +2.09455148154232650981 (rounded)
 )--cut-here--";
 
-////LMI_TEST_EQUAL(verified, oss.str());
+    LMI_TEST_EQUAL(verified, oss.str());
 #endif // defined LMI_X86_64 && defined LMI_POSIX
 }
 
@@ -933,7 +933,7 @@ void test_hodgepodge()
     // succeed, because floating-point behavior is determinate;
     // but small variations betoken no catastrophe.
     LMI_TEST_RELATION(159,<=,r.n_eval); // weak
-////LMI_TEST_RELATION(r.n_eval,<=,166); // weak
+    LMI_TEST_RELATION(r.n_eval,<=,166); // weak
 
     d = brent_zero(eq_2_1, -100.0, 100.0, 0.5);
     zeta = -100.0;
@@ -946,7 +946,7 @@ void test_hodgepodge()
     LMI_TEST(10 == max_n_eval_bolzano(-100.0, 100.0, 0.5, -100.0));
     LMI_TEST(98 == max_n_eval_brent  (-100.0, 100.0, 0.5, -100.0));
     LMI_TEST(r.n_eval <= 98);
-////LMI_TEST_EQUAL(11, r.n_eval); // weak
+    LMI_TEST_EQUAL(11, r.n_eval); // weak
     // Number of evaluations required:
     //   23 for brent_zero() [above]
     //   20 for decimal_root()
@@ -972,7 +972,7 @@ void test_hodgepodge()
     LMI_TEST(  53 == max_n_eval_bolzano(-100.0, 100.0, 0.0, -100.0));
     LMI_TEST(2807 == max_n_eval_brent  (-100.0, 100.0, 0.0, -100.0));
     LMI_TEST(r.n_eval <= 2807);
-////LMI_TEST_EQUAL(67, r.n_eval); // weak
+    LMI_TEST_EQUAL(67, r.n_eval); // weak
 
     r = decimal_root(signum_offset, -1.0, 1.0, bias_none, 13);
     LMI_TEST(root_is_valid == r.validity);

@@ -613,10 +613,9 @@ root_type decimal_root
 
     std::unordered_map<double,double> m;
 
-    auto fr = [&](double& x) // f(), rounded
+    auto fr = [&](double x) // f(), rounded
         {
         double const r = round_dec(x);
-        x = r; // Change the reference argument--demonstration only
         auto const i = m.find(r);
         if(m.end() != i)
             {
