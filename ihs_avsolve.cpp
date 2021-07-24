@@ -34,6 +34,7 @@
 #include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "death_benefits.hpp"
+#include "global_settings.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "mc_enum_types_aux.hpp"        // set_run_basis_from_cloven_bases()
@@ -457,7 +458,10 @@ currency AccountValue::Solve
 
     std::ostream os_trace(status().rdbuf());
     std::ofstream ofs_trace;
-    if(contains(yare_input_.Comments, "idiosyncrasyT"))
+    if
+        (  global_settings::instance().regression_testing()
+        || contains(yare_input_.Comments, "idiosyncrasyT")
+        )
         {
         ofs_trace.open("trace.txt", ios_out_app_binary());
         os_trace.rdbuf(ofs_trace.rdbuf());
@@ -472,6 +476,7 @@ currency AccountValue::Solve
             << ", target " << mc_str(SolveTarget_)
             << std::endl
             ;
+        os_trace << std::fixed << std::setprecision(std::max(2, decimals));
         }
 
     SolveHelper solve_helper(*this, solve_set_fn);
