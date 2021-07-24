@@ -763,6 +763,7 @@ void test_celebrated_equation()
  b +2.09455148154232650981 fb -8.88178419700125232339e-16
  c +2.09455148154232739799 fc +9.76996261670137755573e-15
  return value: +2.09455148154232650981 = b
+ function evaluations: +12 +12 nominal, actual
  return value: +2.09455148154232650981 (rounded)
 )--cut-here--";
 
@@ -826,15 +827,15 @@ void test_various_functions()
 //  test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-19, __LINE__);
 //  test_a_decimal_function(f01, root_01, -1.0, 4.0, 18, __LINE__, 168);
 //  test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-18, __LINE__);
-    test_a_decimal_function(f01, root_01, -1.0, 4.0, 17, __LINE__, 158);
+    test_a_decimal_function(f01, root_01, -1.0, 4.0, 17, __LINE__, 149);
     test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-17, __LINE__);
-    test_a_decimal_function(f01, root_01, -1.0, 4.0, 16, __LINE__, 152);
+    test_a_decimal_function(f01, root_01, -1.0, 4.0, 16, __LINE__, 140);
     test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-16, __LINE__);
-    test_a_decimal_function(f01, root_01, -1.0, 4.0, 15, __LINE__, 138);
+    test_a_decimal_function(f01, root_01, -1.0, 4.0, 15, __LINE__, 127);
     test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-15, __LINE__);
-    test_a_decimal_function(f01, root_01, -1.0, 4.0, 14, __LINE__, 135);
+    test_a_decimal_function(f01, root_01, -1.0, 4.0, 14, __LINE__, 125);
     test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-14, __LINE__);
-    test_a_decimal_function(f01, root_01, -1.0, 4.0, 12, __LINE__, 107);
+    test_a_decimal_function(f01, root_01, -1.0, 4.0, 12, __LINE__,  93);
     test_a_function        (f01, root_01, -1.0, 4.0, 0.5 * 1.0e-12, __LINE__);
 
     auto f02 = [](double x) {return std::pow(x - 1.7, 17.0);};
@@ -931,7 +932,7 @@ void test_hodgepodge()
     // rather than a theoretical maximum. Perhaps they'll always
     // succeed, because floating-point behavior is determinate;
     // but small variations betoken no catastrophe.
-    LMI_TEST_RELATION(163,<=,r.n_eval); // weak
+    LMI_TEST_RELATION(159,<=,r.n_eval); // weak
     LMI_TEST_RELATION(r.n_eval,<=,166); // weak
 
     d = brent_zero(eq_2_1, -100.0, 100.0, 0.5);
@@ -945,7 +946,7 @@ void test_hodgepodge()
     LMI_TEST(10 == max_n_eval_bolzano(-100.0, 100.0, 0.5, -100.0));
     LMI_TEST(98 == max_n_eval_brent  (-100.0, 100.0, 0.5, -100.0));
     LMI_TEST(r.n_eval <= 98);
-    LMI_TEST_EQUAL(18, r.n_eval); // weak
+    LMI_TEST_EQUAL(11, r.n_eval); // weak
     // Number of evaluations required:
     //   23 for brent_zero() [above]
     //   20 for decimal_root()

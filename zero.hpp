@@ -27,6 +27,7 @@
 #include "math_functions.hpp"           // signum()
 #include "null_stream.hpp"
 #include "round_to.hpp"
+#include "ssize_lmi.hpp"
 
 #include <cfloat>                       // DBL_EPSILON, DECIMAL_DIG
 #include <cmath>                        // fabs(), isfinite(), isnan(), pow()
@@ -36,6 +37,7 @@
 #include <limits>
 #include <numeric>                      // midpoint()
 #include <ostream>
+#include <unordered_map>
 #include <utility>                      // forward()
 
 enum root_bias
@@ -608,7 +610,23 @@ root_type decimal_root
     )
 {
     round_to<double> const round_dec {decimals, r_to_nearest};
-    auto fr = [&](double x) {return f(round_dec(x));};
+
+    std::unordered_map<double,double> m;
+
+    auto fr = [&](double x) // f(), rounded
+        {
+        double const r = round_dec(x);
+        auto const i = m.find(r);
+        if(m.end() != i)
+            {
+            os_trace << "Superfluous evaluation avoided" << std::endl;
+            return i->second;
+            }
+        else
+            {
+            return m[r] = static_cast<double>(f(r));
+            }
+        };
 
     auto z = lmi_root
         (fr
@@ -619,6 +637,9 @@ root_type decimal_root
         ,bias
         );
     z.root = round_dec(z.root);
+    os_trace << " function evaluations: " << z.n_eval;
+    z.n_eval = lmi::ssize(m);
+    os_trace << " " << z.n_eval << " nominal, actual" << std::endl;
     os_trace << " return value: " << z.root << " (rounded)" << std::endl;
     return z;
 }
