@@ -474,6 +474,32 @@ void test_binary64_midpoint()
 
     LMI_TEST_EQUAL( 1.0e100, binary64_midpoint( 1.0e100,  1.0e100));
     LMI_TEST_EQUAL(-1.0e100, binary64_midpoint(-1.0e100, -1.0e100));
+
+    // Illustration solves typically search in [0, 1.0e9]. For
+    // binary64 bisection (only):
+    //  - using 1.0e9 instead of DBL_MAX saves only about one function
+    //    evaluation (but risks overflow), so an even more implausible
+    //    upper limit like 1.0e18 would cost little;
+    //  - sometimes 0.0 is the correct answer, but the next higher
+    //    currency amount is $0.01, which is very far from zero: the
+    //    interval [1.0e-2, 1.0e9] can be searched exhaustively in
+    //    about fifty-seven function evaluations.
+    std::uint64_t bignum        = 0x7FEFFFFFFFFFFFFF;
+    std::uint64_t one_e_300     = 0x7E37E43C8800759C;
+    std::uint64_t one_billion   = 0x41CDCD6500000000;
+    std::uint64_t one_hundredth = 0x3F847AE147AE147B;
+    LMI_TEST_EQUAL(4741671816366391296, one_billion);
+    LMI_TEST_EQUAL(4576918229304087675, one_hundredth);
+    LMI_TEST(materially_equal(62.9993, std::log2(bignum       ), 1.0e-4));
+    LMI_TEST(materially_equal(62.9798, std::log2(one_e_300    ), 1.0e-4));
+    LMI_TEST(materially_equal(62.0401, std::log2(one_billion  ), 1.0e-4));
+    LMI_TEST(materially_equal(61.9891, std::log2(one_hundredth), 1.0e-4));
+    LMI_TEST(materially_equal(57.1931, std::log2(one_billion - one_hundredth), 1.0e-4));
+    // The same [0, 1.0e9] interval could be searched exhaustively for
+    // integral cents in fewer iterations using the arithmetic mean:
+    LMI_TEST(materially_equal(3.49808e-150, binary64_midpoint(0.0, 1.0e9), 1.0e-5));
+    LMI_TEST_EQUAL(39, max_n_eval_bolzano(0.0, 1.0e9, 0.005, 1.0e9));
+    LMI_TEST_EQUAL(39, max_n_eval_bolzano(0.0, 1.0e9, 0.005, 0.0));
 }
 
 /// A function whose value almost everywhere in (-1.0e100, 1.0e100)
