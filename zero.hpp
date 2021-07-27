@@ -355,8 +355,6 @@ root_type lmi_root
     ,root_bias       bias      = bias_none
     )
 {
-    constexpr double epsilon {std::numeric_limits<double>::epsilon()};
-
     int              n_iter  {0};
     int              n_eval  {0};
     root_impetus     impetus {evaluate_bounds};
@@ -466,7 +464,7 @@ root_type lmi_root
             impetus = force_b_to_be_best_approximation;
             expatiate();
             }
-        double tol = 2.0 * epsilon * std::fabs(b) + t;
+        double tol = 2.0 * DBL_EPSILON * std::fabs(b) + t;
         double m = 0.5 * (c - b);
         double n = std::midpoint(b, c); // "next" iterate
         if(0.0 == fb || std::fabs(m) <= tol) // Note 2.
@@ -481,7 +479,7 @@ root_type lmi_root
                 os_trace << " return value: " << b << " = b" << std::endl;
                 return {b, root_is_valid, n_iter, n_eval};
                 }
-            else if(std::fabs(m) <= 2.0 * epsilon * std::fabs(c) + t)
+            else if(std::fabs(m) <= 2.0 * DBL_EPSILON * std::fabs(c) + t)
                 {
                 recapitulate();
                 os_trace << " return value: " << c << " = c" << std::endl;
