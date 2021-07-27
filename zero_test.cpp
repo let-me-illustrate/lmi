@@ -870,8 +870,15 @@ void test_various_functions()
     test_a_function        (f02, root_02, 0.0, 2.0, 1.0e-15, __LINE__);
 
     auto f03 = [](double x) {return std::cos(x) - 0.999;};
-    auto root_03 = 0.044725087168733454;
-    test_a_decimal_function(f03, root_03, -0.01, 0.8, 17     , __LINE__, 16);
+// This would seem preferable:
+//  auto root_03 = std::acosl(0.999L);
+// but gcc-10.2.0 (x86_64-pc-linux-gnu) rejects it:
+//    error: ‘acosl’ is not a member of ‘std’
+// despite C++20 [cmath.syn], so use this instead:
+    auto root_03 = std::acos(0.999);
+// Regardless of that theoretical ζ, the computed ζ′ is not exact
+// to more than about fifteen decimals.
+    test_a_decimal_function(f03, root_03, -0.01, 0.8, 15     , __LINE__, 16);
     test_a_function        (f03, root_03, -0.01, 0.8, 1.0e-15, __LINE__);
 
     auto f04 = [](double x) {return std::pow((x - 1.0), 3);};
