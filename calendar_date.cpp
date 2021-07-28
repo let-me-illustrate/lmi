@@ -750,6 +750,7 @@ class birthdate_limit
             , 366 + a_priori_maximum_
             ,bias_
             ,0
+            ,64
             );
         LMI_ASSERT(root_is_valid == z.validity);
         int j = bourn_cast<int>(z.root);

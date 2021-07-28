@@ -30,6 +30,7 @@
 #include "ssize_lmi.hpp"
 
 #include <cfloat>                       // DBL_EPSILON, DECIMAL_DIG
+#include <climits>                      // INT_MAX
 #include <cmath>                        // fabs(), isfinite(), isnan(), pow()
 #include <cstdint>                      // uint64_t
 #include <cstring>                      // memcpy()
@@ -64,6 +65,7 @@ enum root_impetus : char
     ,force_b_to_be_best_approximation = 'k'
     ,interpolate_linear               = 'L'
     ,interpolate_inverse_quadratic    = 'Q'
+    ,interpolate_guaranteed_64_evals  = 'G'
     ,dithering_near_root              = '0'
     ,secant_out_of_bounds             = '1'
     ,parabola_not_single_valued       = '2'
@@ -276,6 +278,13 @@ inline double binary64_midpoint(double d0, double d1)
 /// enforce it, and also handles the special case where both ordinates
 /// are zero.
 ///
+/// For Brent's method, the worst-case number of iterations is the
+/// square of the number required by naive bisection, so it may take
+/// an unreasonable amount of time for ill-conditioned problems. The
+/// optional 'sprauchling_limit' argument specifies the maximum number
+/// of evaluations to allow before switching to binary64 bisection,
+/// which is guaranteed to converge in 64 further evaluations.
+///
 /// Notes referred to in the source code
 ///
 /// Note 0. If one of the bounds is a zero, it is returned as soon as
@@ -351,8 +360,9 @@ root_type lmi_root
     ,double          bound0
     ,double          bound1
     ,double          tolerance
-    ,std::ostream&   os_trace  = null_stream()
-    ,root_bias       bias      = bias_none
+    ,int             sprauchling_limit = INT_MAX
+    ,std::ostream&   os_trace          = null_stream()
+    ,root_bias       bias              = bias_none
     )
 {
     int              n_iter  {0};
@@ -490,7 +500,13 @@ root_type lmi_root
                 ; // Do nothing.
                 }
             }
-        if(std::fabs(e) < tol)
+        if(sprauchling_limit < n_eval)
+            {
+            impetus = interpolate_guaranteed_64_evals;
+            n = binary64_midpoint(b, c); // "next" iterate
+            d = e = n - b;
+            }
+        else if(std::fabs(e) < tol)
             {
             impetus = dithering_near_root;
             d = e = n - b;
@@ -604,7 +620,8 @@ root_type decimal_root
     ,double          bound1
     ,root_bias       bias
     ,int             decimals
-    ,std::ostream&   os_trace = null_stream()
+    ,int             sprauchling_limit = INT_MAX
+    ,std::ostream&   os_trace          = null_stream()
     )
 {
     round_to<double> const round_dec {decimals, r_to_nearest};
@@ -631,6 +648,7 @@ root_type decimal_root
         ,round_dec(bound0)
         ,round_dec(bound1)
         ,0.5 * std::pow(10.0, -decimals)
+        ,sprauchling_limit
         ,os_trace
         ,bias
         );

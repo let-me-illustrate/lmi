@@ -147,7 +147,7 @@ void test_a_function
 
     std::ostringstream os1;
     os1.precision(DECIMAL_DIG);
-    root_type r = lmi_root(f, bound0, bound1, tol, os1);
+    root_type r = lmi_root(f, bound0, bound1, tol, INT_MAX, os1);
     INVOKE_LMI_TEST(root_is_valid == r.validity, file, line);
     error = r.root - exact_root;
     INVOKE_LMI_TEST_RELATION(std::fabs(error),<=,maximum_error,file,line);
@@ -346,7 +346,7 @@ void test_fundamentals()
     // Same, with expatiation.
 
     std::ostringstream oss;
-    r = decimal_root(e_function, 0.5, 5.0, bias_none, 9, oss);
+    r = decimal_root(e_function, 0.5, 5.0, bias_none, 9, INT_MAX, oss);
     std::cout << oss.str() << std::endl;
 
     // Test use with function object.
@@ -753,7 +753,7 @@ void test_celebrated_equation()
     auto f = [](double x) {return x * x * x - 2.0 * x - 5.0;};
     std::ostringstream oss;
     oss.precision(17);
-    root_type r = decimal_root(f, -2.56, 2.56, bias_none, 21, oss);
+    root_type r = decimal_root(f, -2.56, 2.56, bias_none, 21, INT_MAX, oss);
     LMI_TEST(root_is_valid == r.validity);
     // This constant is from the cited blog; lmi yields this,
     // which agrees to sixteen significant digits:
@@ -827,7 +827,7 @@ void test_wikipedia_example()
 {
     auto f = [](double x) {return (x + 3.0) * (x - 1.0) * (x - 1.0);};
     std::ostringstream oss;
-    root_type r = decimal_root(f, -4.0, 4.0 / 3.0, bias_none, 15, oss);
+    root_type r = decimal_root(f, -4.0, 4.0 / 3.0, bias_none, 15, INT_MAX, oss);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST(std::fabs(-3.0 - r.root) <= 1.0e-15);
     // Display this to investigate further:
@@ -965,7 +965,7 @@ void test_hodgepodge()
     // rather than a theoretical maximum. Perhaps they'll always
     // succeed, because floating-point behavior is determinate;
     // but small variations betoken no catastrophe.
-    LMI_TEST_RELATION(159,<=,r.n_eval); // weak
+    LMI_TEST_RELATION(156,<=,r.n_eval); // weak
     LMI_TEST_RELATION(r.n_eval,<=,166); // weak
 
     d = brent_zero(eq_2_1, -100.0, 100.0, 0.5);
@@ -1029,13 +1029,20 @@ void test_hodgepodge()
     LMI_TEST_EQUAL(55, r.n_eval); // weak
 
     std::ostringstream oss;
-    r = lmi_root(signum_offset, -1.0e300, 1.0e300, 5.0e-19, oss);
+    r = lmi_root(signum_offset, -1.0e300, 1.0e300, 5.0e-19, INT_MAX, oss);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST(materially_equal(-1.0 / 3.0, r.root));
     LMI_TEST(r.n_eval <= 3023);
     LMI_TEST_EQUAL(1052, r.n_eval); // weak
     // Display this to investigate further:
 //  std::cout << oss.str() << std::endl;
+
+    // Find a root of this irksome function in 64 evaluations,
+    // to maximal precision, in an enormous interval.
+    r = lmi_root(signum_offset, -1.0e300, 1.0e300, 5.0e-19, 0);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST(materially_equal(-1.0 / 3.0, r.root));
+    LMI_TEST_RELATION(64,<=,r.n_eval);
 }
 
 void test_former_rounding_problem()

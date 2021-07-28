@@ -165,6 +165,7 @@ currency gpt_specamt::CalculateSpecAmt
         ,999999999.99
         ,bias_higher
         ,z.round_min_specamt.decimals()
+        ,64
         );
 
     // Because it is implausible that the upper bound is too low,

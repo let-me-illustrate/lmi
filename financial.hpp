@@ -107,6 +107,7 @@ class irr_helper
             ,1000.0     // Assumed upper bound.
             ,bias_lower // Return the final bound with the lower FV.
             ,decimals_
+            ,64
 //          ,os_trace
             );
         switch(z.validity)

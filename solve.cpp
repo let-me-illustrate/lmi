@@ -328,6 +328,7 @@ currency AccountValue::Solve()
         ,UpperBound
         ,Bias
         ,Decimals
+        ,64
         ,status()
         );
     currency const solution_cents = round_to_cents.c(solution.root);
