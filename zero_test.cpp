@@ -881,15 +881,17 @@ void test_various_functions()
     test_a_decimal_function(f03, root_03, -0.01, 0.8, 15     , __LINE__, 16);
     test_a_function        (f03, root_03, -0.01, 0.8, 1.0e-15, __LINE__);
 
-    auto f04 = [](double x) {return std::pow((x - 1.0), 3);};
-    auto root_04 = 1.0;
-    test_a_decimal_function(f04, root_04, 0.0 , 1.8, 17     , __LINE__, 130);
-    test_a_function        (f04, root_04, 0.0 , 1.8, 1.0e-15, __LINE__);
+    auto f04 = [](double x) {return std::pow(x, 2.0) - 2.0;};
+    auto root_04 = 1.4142135623730951;
+    test_a_decimal_function(f04, root_04, 0.0 , 2.0, 17     , __LINE__, 10);
+    test_a_function        (f04, root_04, 0.0 , 2.0, 1.0e-15, __LINE__);
 
-    auto f05 = [](double x) {return std::pow(x, 2.0) - 2.0;};
-    auto root_05 = 1.4142135623730951;
-    test_a_decimal_function(f05, root_05, 0.0 , 2.0, 17     , __LINE__, 10);
-    test_a_function        (f05, root_05, 0.0 , 2.0, 1.0e-15, __LINE__);
+    auto f05 = [](double x) {return std::pow((x - 1.0), 3);};
+    auto root_05 = 1.0;
+    test_a_decimal_function(f05, root_05, 0.0 , 1.8, 17     , __LINE__, 130);
+    test_a_function        (f05, root_05, 0.0 , 1.8, 1.0e-15, __LINE__);
+
+    // f06 coming soon
 
     // Despite its apparent insipidity, this is actually a very
     // interesting test: after the first iterate has been calculated
@@ -901,21 +903,21 @@ void test_various_functions()
     // an uncommon conjunction of circumstances that this unit test
     // contrives to engender. Usually the second test is met only if
     // the first is, too.
-    auto f06 = [](double x) {return x * x - 4.0;};
-    auto root_06 = -2.0;
-    test_a_decimal_function(f06, root_06,  1.9, -2.1, 15     , __LINE__);
-    test_a_decimal_function(f06, root_06, -2.1 , 1.9, 15     , __LINE__);
-    test_a_function        (f06, root_06,  1.9, -2.1, 1.0e-15, __LINE__);
-    test_a_function        (f06, root_06, -2.1 , 1.9, 1.0e-15, __LINE__);
+    auto f07 = [](double x) {return x * x - 4.0;};
+    auto root_07 = -2.0;
+    test_a_decimal_function(f07, root_07,  1.9, -2.1, 15     , __LINE__);
+    test_a_decimal_function(f07, root_07, -2.1 , 1.9, 15     , __LINE__);
+    test_a_function        (f07, root_07,  1.9, -2.1, 1.0e-15, __LINE__);
+    test_a_function        (f07, root_07, -2.1 , 1.9, 1.0e-15, __LINE__);
 
     // Here, the input tolerance is legitimately much smaller than ϵ.
     // Brent describes 'tol' as positive, so it shouldn't be zero, yet
     // it has no absolute minimum (other than DBL_TRUE_MIN) because
     // it is a relative error. Thus, when ζ = 0, δ has no minimum at
     // all (other than DBL_TRUE_MIN).
-    auto f07 = [](double x) {return 1.23 * (x - 1.0e-100);};
-    auto root_07 = 1.0e-100;
-    test_a_function(f07, root_07, 1.0e-10, 1.0e-200, 1.0e-150, __LINE__);
+    auto f08 = [](double x) {return 1.23 * (x - 1.0e-100);};
+    auto root_08 = 1.0e-100;
+    test_a_function(f08, root_08, 1.0e-10, 1.0e-200, 1.0e-150, __LINE__);
 }
 
 void test_hodgepodge()
