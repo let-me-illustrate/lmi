@@ -886,20 +886,20 @@ void test_various_functions()
     // page 96; number of iterations estimated from graphs.
 
     // Scherer, Fig. 6.10, iteration counts for 2ϵ tolerance:
-    //   10 vs. 10 here (Brent)
+    //   10 vs. 11 here (Brent)
     //    7             (Chandrupatla)
     auto f04 = [](double x) {return std::pow(x, 2.0) - 2.0;};
     auto root_04 = std::sqrt(2.0);
-    test_a_decimal_function(f04, root_04, 0.0 , 2.0, 17     , __LINE__, 10);
-    test_a_function        (f04, root_04, 0.0 , 2.0, 1.0e-15, __LINE__);
+    test_a_decimal_function(f04, root_04,  -1.0, 2.0, 17     , __LINE__, 11);
+    test_a_function        (f04, root_04,  -1.0, 2.0, 0.0    , __LINE__);
 
     // Scherer, Fig. 6.11, iteration counts for 2ϵ tolerance:
     //   126 vs. 130 here (Brent)
     //    59              (Chandrupatla)
-    auto f05 = [](double x) {return std::pow((x - 1.0), 3);};
+    auto f05 = [](double x) {return std::pow((x - 1.0), 3.0);};
     auto root_05 = 1.0;
-    test_a_decimal_function(f05, root_05, 0.0 , 1.8, 17     , __LINE__, 130);
-    test_a_function        (f05, root_05, 0.0 , 1.8, 1.0e-15, __LINE__);
+    test_a_decimal_function(f05, root_05,   0.0, 1.8, 17     , __LINE__, 130);
+    test_a_function        (f05, root_05,   0.0, 1.8, 0.0    , __LINE__);
 
     // Scherer, Fig. 6.12, iteration counts for 1.0e-12 tolerance
     // (roundoff error in the computed function precludes 2ϵ):
@@ -907,8 +907,8 @@ void test_various_functions()
     //    31              (Chandrupatla)
     auto f06 = [](double x) {return std::pow(x, 25.0);};
     auto root_06 = 0.0;
-    test_a_decimal_function(f06, root_06, -1.0 , 2.0, 12     , __LINE__, 107);
-    test_a_function        (f06, root_06, -1.0 , 2.0, 5.0e-13, __LINE__);
+    test_a_decimal_function(f06, root_06,  -1.0, 2.0, 12     , __LINE__, 107);
+    test_a_function        (f06, root_06,  -1.0, 2.0, 5.0e-13, __LINE__);
 
     // Despite its apparent insipidity, this is actually a very
     // interesting test: after the first iterate has been calculated
