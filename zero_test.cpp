@@ -29,7 +29,7 @@
 #include "test_tools.hpp"
 
 #include <cfloat>                       // DECIMAL_DIG
-#include <cmath>                        // exp(), fabs(), log(), pow()
+#include <cmath>                        // exp(), fabs(), log(), pow(), sqrt()
 #include <limits>
 #include <sstream>
 
@@ -882,7 +882,7 @@ void test_various_functions()
     test_a_function        (f03, root_03, -0.01, 0.8, 1.0e-15, __LINE__);
 
     auto f04 = [](double x) {return std::pow(x, 2.0) - 2.0;};
-    auto root_04 = 1.4142135623730951;
+    auto root_04 = std::sqrt(2.0);
     test_a_decimal_function(f04, root_04, 0.0 , 2.0, 17     , __LINE__, 10);
     test_a_function        (f04, root_04, 0.0 , 2.0, 1.0e-15, __LINE__);
 
