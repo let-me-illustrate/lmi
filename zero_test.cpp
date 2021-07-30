@@ -883,32 +883,93 @@ void test_various_functions()
 
     // The next three examples are from _Computational Physics_,
     // Philipp O. J. Scherer, 2nd ed., ISBN 978-3-319-00400-6,
-    // page 96; number of iterations estimated from graphs.
+    // page 96; number of evaluations estimated from graphs as two
+    // plus apparent number of iterations, to account for required
+    // evaluation of both initial bounds; and separately measured
+    // by writing functions based on Scherer's pseudocode (with
+    // numerous corrections for his faulty Brent algorithm).
+    //
+    // (The LMI_* conditionals for evaluation counts may seem
+    // haphazard; by design, they're just adequate to prevent error
+    // messages for secondary (msw) platforms, where they probably
+    // indicate either x87 discrepancies or msw library defects).
 
-    // Scherer, Fig. 6.10, iteration counts for 2ϵ tolerance:
-    //   10 vs. 11 here (Brent)
-    //    7             (Chandrupatla)
+    root_type r {};
+
+    // Scherer, Fig. 6.10, iteration counts for a 2ϵ tolerance:
+    //    10              Scherer's Chandrupatla algorithm
+    //    (9)             Chandrupatla estimated from Scherer's graph
+    //    11 [22, x87]    Scherer's (not quite) Brent algorithm
+    //   (12)             Brent estimated from Scherer's graph
+    //    11              lmi_root(): Brent's method, validated
+    //    63              binary64_midpoint() bisection
     auto f04 = [](double x) {return std::pow(x, 2.0) - 2.0;};
     auto root_04 = std::sqrt(2.0);
-    test_a_decimal_function(f04, root_04,  -1.0, 2.0, 17     , __LINE__, 11);
-    test_a_function        (f04, root_04,  -1.0, 2.0, 0.0    , __LINE__);
+    test_a_decimal_function (f04, root_04,  -1.0, 2.0, 17     , __LINE__, 11);
+    test_a_function         (f04, root_04,  -1.0, 2.0, 0.0    , __LINE__);
+    r = scherer_chandrupatla(f04,           -1.0, 2.0, 0.0              );
+    LMI_TEST_EQUAL(10, r.n_eval);
+    r = scherer_brent       (f04,           -1.0, 2.0, 0.0              );
+#if !defined LMI_X87
+    LMI_TEST_EQUAL(11, r.n_eval);
+#else  // defined LMI_X87
+    LMI_TEST_EQUAL(22, r.n_eval);
+#endif // defined LMI_X87
+    r = lmi_root            (f04,           -1.0, 2.0, 0.0              );
+    LMI_TEST_EQUAL(11, r.n_eval);
+    r = lmi_root            (f04,           -1.0, 2.0, 0.0, 0           );
+    LMI_TEST_EQUAL(63, r.n_eval); // sprauchling_limit 0
 
-    // Scherer, Fig. 6.11, iteration counts for 2ϵ tolerance:
-    //   126 vs. 130 here (Brent)
-    //    59              (Chandrupatla)
+    // Scherer, Fig. 6.11, iteration counts for a 2ϵ tolerance:
+    //    62              Scherer's Chandrupatla algorithm
+    //   (61)             Chandrupatla estimated from Scherer's graph
+    //   130              Scherer's (not quite) Brent algorithm
+    //  (128)             Brent estimated from Scherer's graph
+    //   130              lmi_root(): Brent's method, validated
+    //    62              binary64_midpoint() bisection
     auto f05 = [](double x) {return std::pow((x - 1.0), 3.0);};
     auto root_05 = 1.0;
-    test_a_decimal_function(f05, root_05,   0.0, 1.8, 17     , __LINE__, 130);
-    test_a_function        (f05, root_05,   0.0, 1.8, 0.0    , __LINE__);
+    test_a_decimal_function (f05, root_05,   0.0, 1.8, 17     , __LINE__, 130);
+    test_a_function         (f05, root_05,   0.0, 1.8, 0.0    , __LINE__);
+    r = scherer_chandrupatla(f05,            0.0, 1.8, 0.0              );
+    LMI_TEST_EQUAL(62, r.n_eval);
+    r = scherer_brent       (f05,            0.0, 1.8, 0.0              );
+    LMI_TEST_EQUAL(130, r.n_eval);
+    r = lmi_root            (f05,            0.0, 1.8, 0.0              );
+    LMI_TEST_EQUAL(130, r.n_eval);
+    r = lmi_root            (f05,            0.0, 1.8, 0.0, 0           );
+    LMI_TEST_EQUAL(62, r.n_eval); // sprauchling_limit 0
 
-    // Scherer, Fig. 6.12, iteration counts for 1.0e-12 tolerance
-    // (roundoff error in the computed function precludes 2ϵ):
-    //   124 vs. 107 here (Brent)
-    //    31              (Chandrupatla)
+    // Scherer, Fig. 6.12, iteration counts for a 1.0e-12 tolerance
+    // (roundoff error in the computed function precludes using 2ϵ):
+    //    44 [45, x87]    Scherer's Chandrupatla algorithm
+    //   (33)             Chandrupatla estimated from Scherer's graph
+    //   105 [119, x87]   Scherer's (not quite) Brent algorithm
+    //  (126)             Brent estimated from Scherer's graph
+    //   117              lmi_root(): Brent's method, validated
+    //     3              binary64_midpoint() bisection
     auto f06 = [](double x) {return std::pow(x, 25.0);};
     auto root_06 = 0.0;
-    test_a_decimal_function(f06, root_06,  -1.0, 2.0, 12     , __LINE__, 107);
-    test_a_function        (f06, root_06,  -1.0, 2.0, 5.0e-13, __LINE__);
+    test_a_decimal_function (f06, root_06,  -1.0, 2.0, 12     , __LINE__, 107);
+    test_a_function         (f06, root_06,  -1.0, 2.0, 5.0e-13, __LINE__);
+    r = scherer_chandrupatla(f06,           -1.0, 2.0, 5.0e-13          );
+#if !defined LMI_X87
+    LMI_TEST_EQUAL(44, r.n_eval);
+#else  // defined LMI_X87
+    LMI_TEST_EQUAL(45, r.n_eval);
+#endif // defined LMI_X87
+    r = scherer_brent       (f06,           -1.0, 2.0, 5.0e-13          );
+#if defined LMI_X86_64 && defined LMI_POSIX
+    LMI_TEST_EQUAL(105, r.n_eval);
+#endif // defined LMI_X86_64 && defined LMI_POSIX
+    r = lmi_root            (f06,           -1.0, 2.0, 5.0e-13          );
+#if defined LMI_X86_64 && defined LMI_POSIX
+    LMI_TEST_EQUAL(117, r.n_eval);
+#endif // defined LMI_X86_64 && defined LMI_POSIX
+    r = lmi_root            (f06,           -1.0, 2.0, 5.0e-13, 0       );
+    // This is not a fair test: 0.0, an exact root, is the
+    // first iterate with binary64_midpoint().
+    LMI_TEST_EQUAL(3, r.n_eval); // sprauchling_limit 0
 
     // Despite its apparent insipidity, this is actually a very
     // interesting test: after the first iterate has been calculated
