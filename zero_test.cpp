@@ -887,7 +887,9 @@ void test_various_functions()
     // plus apparent number of iterations, to account for required
     // evaluation of both initial bounds; and separately measured
     // by writing functions based on Scherer's pseudocode (with
-    // numerous corrections for his faulty Brent algorithm).
+    // numerous corrections for his faulty Brent algorithm; use
+    //   git switch --detach ac5731f52
+    // to reproduce the tests with that code).
     //
     // (The LMI_* conditionals for evaluation counts may seem
     // haphazard; by design, they're just adequate to prevent error
@@ -907,14 +909,16 @@ void test_various_functions()
     auto root_04 = std::sqrt(2.0);
     test_a_decimal_function (f04, root_04,  -1.0, 2.0, 17     , __LINE__, 11);
     test_a_function         (f04, root_04,  -1.0, 2.0, 0.0    , __LINE__);
+#if defined ac5731f52
     r = scherer_chandrupatla(f04,           -1.0, 2.0, 0.0              );
     LMI_TEST_EQUAL(10, r.n_eval);
     r = scherer_brent       (f04,           -1.0, 2.0, 0.0              );
-#if !defined LMI_X87
+#   if !defined LMI_X87
     LMI_TEST_EQUAL(11, r.n_eval);
-#else  // defined LMI_X87
+#   else  // defined LMI_X87
     LMI_TEST_EQUAL(22, r.n_eval);
-#endif // defined LMI_X87
+#   endif // defined LMI_X87
+#endif // defined ac5731f52
     r = lmi_root            (f04,           -1.0, 2.0, 0.0              );
     LMI_TEST_EQUAL(11, r.n_eval);
     r = lmi_root            (f04,           -1.0, 2.0, 0.0, 0           );
@@ -931,10 +935,12 @@ void test_various_functions()
     auto root_05 = 1.0;
     test_a_decimal_function (f05, root_05,   0.0, 1.8, 17     , __LINE__, 130);
     test_a_function         (f05, root_05,   0.0, 1.8, 0.0    , __LINE__);
+#if defined ac5731f52
     r = scherer_chandrupatla(f05,            0.0, 1.8, 0.0              );
     LMI_TEST_EQUAL(62, r.n_eval);
     r = scherer_brent       (f05,            0.0, 1.8, 0.0              );
     LMI_TEST_EQUAL(130, r.n_eval);
+#endif // defined ac5731f52
     r = lmi_root            (f05,            0.0, 1.8, 0.0              );
     LMI_TEST_EQUAL(130, r.n_eval);
     r = lmi_root            (f05,            0.0, 1.8, 0.0, 0           );
@@ -952,16 +958,18 @@ void test_various_functions()
     auto root_06 = 0.0;
     test_a_decimal_function (f06, root_06,  -1.0, 2.0, 12     , __LINE__, 107);
     test_a_function         (f06, root_06,  -1.0, 2.0, 5.0e-13, __LINE__);
+#if defined ac5731f52
     r = scherer_chandrupatla(f06,           -1.0, 2.0, 5.0e-13          );
-#if !defined LMI_X87
+#   if !defined LMI_X87
     LMI_TEST_EQUAL(44, r.n_eval);
-#else  // defined LMI_X87
+#   else  // defined LMI_X87
     LMI_TEST_EQUAL(45, r.n_eval);
-#endif // defined LMI_X87
+#   endif // defined LMI_X87
     r = scherer_brent       (f06,           -1.0, 2.0, 5.0e-13          );
-#if defined LMI_X86_64 && defined LMI_POSIX
+#   if defined LMI_X86_64 && defined LMI_POSIX
     LMI_TEST_EQUAL(105, r.n_eval);
-#endif // defined LMI_X86_64 && defined LMI_POSIX
+#   endif // defined LMI_X86_64 && defined LMI_POSIX
+#endif // defined ac5731f52
     r = lmi_root            (f06,           -1.0, 2.0, 5.0e-13          );
 #if defined LMI_X86_64 && defined LMI_POSIX
     LMI_TEST_EQUAL(117, r.n_eval);

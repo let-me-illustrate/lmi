@@ -544,22 +544,6 @@ root_type lmi_root
                 }
             s = e;
             e = d;
-//#define     USE_CHANDRUPATLA_IQI_CRITERION
-// evaluations  max   mean  sample-std-dev
-//     7332      65   18.9       7.13        HEAD (brent)
-//     8545      66   22.0      12.90        this (IQI more stringent)
-#if defined USE_CHANDRUPATLA_IQI_CRITERION
-            double xi  = ( b -  c) / ( a -  c);
-            double phi = (fb - fc) / (fa - fc);
-            // Chandrupatla acceptance criterion
-            bool const k0 =
-                    interpolate_inverse_quadratic != impetus
-                ||  (
-                        (phi * phi) < xi
-                        && ((1.0 - phi) * (1.0 - phi)) < (1.0 - xi)
-                    )
-                ;
-#else  // !defined USE_CHANDRUPATLA_IQI_CRITERION
             // Use the criteria in Brent's ALGOL, which differ
             // slightly from their descriptions in his text.
             //
@@ -567,7 +551,6 @@ root_type lmi_root
             //   "we reject i [i.e., b + p/q] if 2|p| ≥ 3|mq|"
             // Difference: the ALGOL subtracts tol×|q| [i.e., δ|q|]
             bool const k0 = 2.0 * p < 3.0 * m * q - std::fabs(tol * q);
-#endif // !defined USE_CHANDRUPATLA_IQI_CRITERION
             // AfMWD says on page 50:
             //   "Let e be the value of p/q at the step before the
             //   last one."
@@ -660,20 +643,6 @@ root_type decimal_root
             }
         };
 
-//#define     USE_CHANDRUPATLA_ALGORITHM
-#if defined USE_CHANDRUPATLA_ALGORITHM
-// evaluations  max   mean  sample-std-dev
-//     7332      65   18.9       7.13        HEAD (brent)
-//     9149      59   23.6      11.13        this (chandrupatla)
-    (void)&bias;
-    (void)&sprauchling_limit;
-    auto z = scherer_chandrupatla
-        (fr
-        ,round_dec(bound0)
-        ,round_dec(bound1)
-        ,3.14159 // disregarded
-        );
-#else  // !defined USE_CHANDRUPATLA_ALGORITHM
     auto z = lmi_root
         (fr
         ,round_dec(bound0)
@@ -683,261 +652,12 @@ root_type decimal_root
         ,os_trace
         ,bias
         );
-#endif // !defined USE_CHANDRUPATLA_ALGORITHM
     z.root = round_dec(z.root);
     os_trace << " function evaluations: " << z.n_eval;
     z.n_eval = lmi::ssize(m);
     os_trace << " " << z.n_eval << " nominal, actual" << std::endl;
     os_trace << " return value: " << z.root << " (rounded)" << std::endl;
     return z;
-}
-
-//#include <iostream>
-
-// The next two function templates are adapted from the pseudocode here:
-//    Philipp O. J. Scherer
-//    Computational Physics (2nd ed.)
-//    ISBN 978-3-319-00400-6
-// with numerous corrections.
-
-template<typename FunctionalType>
-root_type scherer_brent
-    (FunctionalType& f
-    ,double          a
-    ,double          b
-    ,double          t
-    )
-{
-    constexpr double epsilon {std::numeric_limits<double>::epsilon()};
-    root_impetus     impetus {evaluate_bounds};
-    (void)&impetus;
-//std::cout.precision(21);
-
-    double fa = f(a);
-    double fb = f(b);
-#if 0 // RECTIFIED
-    // Brent: at top of loop (not bottom, as here):
-    //   if fb and fc have the same sign, then swap a and c
-    // this code seems to do something equivalent
-    double fc = fa;   // Brent: = fb
-    double c = a;     // likewise
-#endif // 0
-#if 1 // RECTIFIED
-    double fc = fb;
-    double c = b;
-#endif // 1
-
-    double d = b - a;
-    double e = d;
-
-//std::cout << " br " << ' ' << a << ' ' << b << ' ' << c << ' ' << fa << ' ' << fb << ' ' << fc << std::endl;
-
-int j = 0;
-    for(;; ++j)
-        {
-#if 1 // RECTIFIED
-        // Brent does this at the top
-        if((0.0 < fb) == (0.0 < fc))
-//          if(signum(fb) == signum(fc)) // should be equivalent
-            {
-            c = a;
-            fc = fa;
-            d = e = b - a;
-            }
-#endif // 1
-        // if c is a better approximant than b, then exchange
-        // Brent does the same, but it's confusing:
-        //   it looks like a three-way shift
-        //   but it actually wipes out the old 'a'
-        if(std::fabs(fc) < std::fabs(fb))
-            {
-             a =  b;  b =  c;  c =  a;
-            fa = fb; fb = fc; fc = fa;
-            }
-        // Brent: set 'tol' carefully--not just epsilon
-//      double tol = epsilon; // RECTIFIED
-        double tol = 2.0 * epsilon * std::fabs(b) + t;
-        double m = 0.5 * (c - b);
-        // Brent: '<=' rather than '<'
-//      if(0.0 == fb || std::fabs(m) < tol) // RECTIFIED
-        if(0.0 == fb || std::fabs(m) <= tol)
-            {
-            return {b, root_is_valid, j, 2 + j};
-            }
-        // bisect if previous iteration took too small a step or
-        // produced no improvement
-        // Brent: '<=' rather than '<' in second condition
-//      if(std::fabs(e) < tol || std::fabs(fa) < std::fabs(fb)) // RECTIFIED
-        if(std::fabs(e) < tol || std::fabs(fa) <= std::fabs(fb))
-            {
-            impetus = pis_aller;
-            d = e = m;
-            }
-        // else try interpolating
-        else
-            {
-            double p, q;
-            // Brent: store fb/fa for later use--avoid numerical problems?
-            if(a == c)
-            // linear
-                {
-                impetus = interpolate_linear;
-                p = 2.0 * m * fb / fa;
-                // Brent: opposite sign
-//              q = (fb - fa) / fa; // PARTLY RECTIFIED
-                q = (fa - fb) / fa;
-                }
-            else
-            // inverse quadratic
-                {
-                impetus = interpolate_inverse_quadratic;
-                // Brent: arrange differently--avoid numerical problems?
-                p = 2.0 * m * fb * (fa - fb) / (fc * fc) - (b - a) * fb * (fb - fc) / (fa * fc);
-                q = (fa / fc - 1.0) * (fb / fc - 1.0) * (fb / fa - 1.0);
-                }
-            // force 'p' to be positive
-            // Brent: '<' rather than '<='
-            if(0.0 <= p)
-                {q = -q;}
-            else
-                {p = -p;}
-            // store previous step
-            double s = e;
-            e = d;
-            if
-                // Brent: absolute value |tol * q|
-                (  2.0 * p < 3.0 * m * q - tol * q
-                && p < std::fabs(0.5 * s * q)
-                )
-                {
-                d = p / q;
-                }
-            else
-                {
-                d = e = m;
-                }
-            } // closing brace not evident in textbook
-
-        a = b;
-        fa = fb;
-        if(tol < std::fabs(d))
-            {
-            b += d;
-            }
-        else
-            {
-            // Brent: adds 'tol' if 0==m
-            b += tol * signum(m);
-            }
-        fb = f(b);
-//std::cout << j << " br " << ' ' << a << ' ' << b << ' ' << c << ' ' << impetus << std::endl;
-//std::cout << j << " br " << impetus << ' ' << b << std::endl;
-#if 0 // RECTIFIED
-        // Brent does this at the top
-        if((0.0 < fb) == (0.0 < fc))
-//          if(signum(fb) == signum(fc)) // should be equivalent
-            {
-            c = a;
-            fc = fa;
-            e = d = b - a;
-            }
-#endif // 0
-        }
-}
-
-template<typename FunctionalType>
-root_type scherer_chandrupatla
-    (FunctionalType& f
-    ,double          a
-    ,double          b
-    ,double          // t
-    )
-{
-    constexpr double epsilon   {std::numeric_limits<double>::epsilon()};
-    root_impetus     impetus {evaluate_bounds};
-    (void)&impetus;
-//std::cout.precision(21);
-
-    // textbook swaps 'a' and 'b' here compared to its "brent" routine
-    //   but that probably doesn't matter
-    double fa = f(a);
-    double fb = f(b);
-    double c  = a;
-    double fc = fa;
-    double t = 0.5;
-
-int j = 0;
-    for(;; ++j)
-        {
-        // 't' is coefficient for interpolating (linearly) by any technique
-        double x = a + t * (b - a);
-        double fx = f(x);
-//std::cout << j << " ch " << impetus << ' ' << x << std::endl;
-//std::cout << j << " ch " << impetus << ' ' << t << ' ' << x << ' ' << fx << ' ' << a << ' ' << b << ' ' << c << std::endl;
-        if(signum(fx) == signum(fa))
-            {
-            c = a;
-            fc = fa;
-            a = x;
-            fa = fx; // textbook has weird capitalization on RHS
-            }
-        else
-            {
-            c = b;
-            b = a;
-            a = x;
-            fc = fb;
-            fb = fa;
-            fa = fx;
-            }
-        double xm = a;
-        double fm = fa;
-        if(std::fabs(fb) < std::fabs(fa))
-            {
-            xm = b;
-            fm = fb;
-            }
-        // textbook: 'epsM' and 'epsA' not defined
-        double epsM = epsilon;
-        double epsA = epsilon;
-        double tol = 2.0 * epsM * std::fabs(xm) + epsA;
-// Brent uses this:
-//      double tol = 2.0 * epsilon * std::fabs(b) + t;
-        double tl = tol / std::fabs(b - c);
-        if(0.5 < tl || 0.0 == fm)
-            {
-            return {xm, root_is_valid, j, 2 + j};
-            }
-// specimen observed values:
-// 0.0659374999999999961142 a
-// 0.0406250000000000013878 b this is one end of the bracket
-// 0.0912499999999999977796 c so this is the other end of the bracket
-// 0.0447250871687336973292 true value
-        double xi = (a - b) / (c - b);
-        double phi = (fa - fb) / (fc - fb);
-        if
-            (  1.0 - std::sqrt(1.0 - xi) < phi
-            && phi < std::sqrt(xi)
-            )
-            {
-            impetus = interpolate_inverse_quadratic;
-            // textbook: really use 't'?
-            t =
-                  (fa / (fb - fa)) * (fc / (fb - fc))
-                + ((c - a) / (b - a)) * (fa / (fc - fa)) * (fb / (fc - fb))
-                ;
-            }
-        else
-            {
-            impetus = pis_aller;
-            t = 0.5;
-            }
-        // constrain t to (tl, 1-tl)
-        if(t < tl)
-            {t = tl;}
-        if(1.0 - tl < t)
-            {t = 1.0 - tl;}
-        }
 }
 
 /// An instrumented translation of Brent's reference implementation.
