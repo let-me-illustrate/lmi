@@ -1140,7 +1140,14 @@ void test_hodgepodge()
     r = lmi_root(signum_offset, -1.0e300, 1.0e300, 5.0e-19, 0);
     LMI_TEST(root_is_valid == r.validity);
     LMI_TEST(materially_equal(-1.0 / 3.0, r.root));
-    LMI_TEST_RELATION(64,<=,r.n_eval);
+    LMI_TEST_RELATION(r.n_eval,==,64);
+
+    // Similarly test decimal_root, using a narrower interval because
+    // round_to() cannot handle 1.0e300 (defectively, perhaps).
+    r = decimal_root(signum_offset, -1.0e30, 1.0e30, bias_none, 16, 0);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST(materially_equal(-1.0 / 3.0, r.root));
+    LMI_TEST_RELATION(r.n_eval,<=,64);
 }
 
 void test_former_rounding_problem()
