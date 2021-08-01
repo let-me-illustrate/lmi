@@ -634,7 +634,14 @@ root_type decimal_root
         auto const i = m.find(r);
         if(m.end() != i)
             {
-            os_trace << "Superfluous evaluation avoided" << std::endl;
+            os_trace
+                << "Superfluous evaluation at "
+                << x
+                << ", which rounds to "
+                << r
+                << ", avoided."
+                << std::endl
+                ;
             return i->second;
             }
         else

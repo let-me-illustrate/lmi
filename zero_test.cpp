@@ -1063,7 +1063,7 @@ void test_hodgepodge()
     // rather than a theoretical maximum. Perhaps they'll always
     // succeed, because floating-point behavior is determinate;
     // but small variations betoken no catastrophe.
-    LMI_TEST_RELATION(156,<=,r.n_eval); // weak
+    LMI_TEST_RELATION(153,<=,r.n_eval); // weak
     LMI_TEST_RELATION(r.n_eval,<=,166); // weak
 
     d = brent_zero(eq_2_1, -100.0, 100.0, 0.5);
