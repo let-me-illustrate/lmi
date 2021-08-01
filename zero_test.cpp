@@ -432,10 +432,20 @@ void test_binary64_midpoint()
     LMI_TEST_EQUAL(0.0, binary64_midpoint(-3.1416,  2.718));
 
     // Do not return zero when one argument is zero and the other
-    // has an opposite signbit. Note the "UN" in "UNEQUAL" here.
+    // has an opposite signbit.
 
-    LMI_TEST_UNEQUAL(0.0, binary64_midpoint( 3.1416, -0.0)); // "UN"!
-    LMI_TEST_UNEQUAL(0.0, binary64_midpoint(-3.1416,  0.0)); // "UN"!
+    double const d0 = binary64_midpoint( 3.1416, -0.0);
+    double const d1 = binary64_midpoint(-3.1416,  0.0);
+    LMI_TEST_UNEQUAL(0.0, d0); // do not return zero
+    LMI_TEST_UNEQUAL(0.0, d1); // do not return zero
+    // Actual values are calculated...
+    LMI_TEST(materially_equal( 1.91739e-154, d0, 1.0e-5));
+    LMI_TEST(materially_equal(-1.91739e-154, d1, 1.0e-5));
+    // ...as though the zero's signbit matched the other argument's:
+    double const e0 = binary64_midpoint( 3.1416,  0.0);
+    double const e1 = binary64_midpoint(-3.1416, -0.0);
+    LMI_TEST_EQUAL(d0, e0);
+    LMI_TEST_EQUAL(d1, e1);
 
     // One argument zero, the other nonzero:  binary midpoint, i.e.,
     //   std::midpoint(*(std::uint64_t)(&x), *(std::uint64_t)(&y))
