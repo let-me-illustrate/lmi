@@ -798,9 +798,9 @@ void test_celebrated_equation()
 10 iterations, 12 evaluations; final interval:
  b +2.09455148154232650981 fb -8.88178419700125232339e-16
  c +2.09455148154232739799 fc +9.76996261670137755573e-15
- return value: +2.09455148154232650981 = b
- function evaluations: +12 +12 nominal, actual
- return value: +2.09455148154232650981 (rounded)
+ return value: 2.0945514815423265 = b
+ function evaluations: 12 12 nominal, actual
+ return value: 2.0945514815423265 (rounded)
 )--cut-here--";
 
     LMI_TEST_EQUAL(verified, oss.str());

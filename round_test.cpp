@@ -35,7 +35,7 @@
 #include "round_to.hpp"
 
 #include "fenv_lmi.hpp"
-#include "miscellany.hpp"               // floating_rep()
+#include "miscellany.hpp"               // floating_rep(), scoped_ios_format
 #include "test_tools.hpp"
 
 #include <algorithm>                    // max()
@@ -203,9 +203,9 @@ bool test_one_case
 
     if(!error_is_within_tolerance)
         {
+        scoped_ios_format meaningless_name(std::cout);
         std::cout << '\n';
-        std::streamsize old_precision = std::cout.precision(DECIMAL_DIG);
-        std::ios_base::fmtflags old_flags = std::cout.flags();
+        std::cout.precision(DECIMAL_DIG);
 
         std::cout
             << "Rounding   " << get_name_of_float_type<RealType>()
@@ -239,8 +239,6 @@ bool test_one_case
             << "\n  tolerance " << tolerance
             ;
 
-        std::cout.setf(old_flags);
-        std::cout.precision(old_precision);
         std::cout << std::endl;
         }
     return error_is_within_tolerance;

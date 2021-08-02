@@ -25,7 +25,7 @@
 
 #include "currency.hpp"                 // currency::cents_digits
 #include "fenv_lmi.hpp"
-#include "miscellany.hpp"               // floating_rep()
+#include "miscellany.hpp"               // floating_rep(), scoped_ios_format
 #include "stl_extensions.hpp"           // nonstd::power()
 #include "test_tools.hpp"
 
@@ -248,9 +248,9 @@ bool round_to_test::test_one_case
 
     if(!error_is_within_tolerance)
         {
+        scoped_ios_format meaningless_name(std::cout);
         std::cout << '\n';
-        std::streamsize old_precision = std::cout.precision(DECIMAL_DIG);
-        std::ios_base::fmtflags old_flags = std::cout.flags();
+        std::cout.precision(DECIMAL_DIG);
 
         std::cout
             << "Rounding   "     << get_name_of_float_type<RealType>()
@@ -286,8 +286,6 @@ bool round_to_test::test_one_case
             << "\n  tolerance " << tolerance
             ;
 
-        std::cout.setf(old_flags);
-        std::cout.precision(old_precision);
         std::cout << std::endl;
         }
     return error_is_within_tolerance;
@@ -555,6 +553,7 @@ void round_to_test::test_all_modes(bool synchronize)
 
 void round_to_test::test_scaling()
 {
+    scoped_ios_format meaningless_name(std::cout);
     double const volatile d0 = 2.71828'18284'59045'23536;
     double const lo = nextafter(d0, -INFINITY);
     double const hi = nextafter(d0,  INFINITY);
@@ -567,8 +566,7 @@ void round_to_test::test_scaling()
     long double const volatile lreciprocal = 1.0L / 1.0e8L;
     double const volatile d4 = static_cast<double>((d0 * 1.0e8L) * lreciprocal);
 
-    std::streamsize old_precision = std::cout.precision(DECIMAL_DIG);
-    std::ios_base::fmtflags old_flags = std::cout.flags();
+    std::cout.precision(DECIMAL_DIG);
 
     std::cout
         << lo << std::hexfloat << '\t' << lo << std::defaultfloat << " lo\n"
@@ -580,8 +578,6 @@ void round_to_test::test_scaling()
         << d4 << std::hexfloat << '\t' << d4 << std::defaultfloat << " d4\n"
         ;
 
-    std::cout.setf(old_flags);
-    std::cout.precision(old_precision);
     std::cout << std::endl;
 }
 

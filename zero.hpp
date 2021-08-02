@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include "math_functions.hpp"           // signum()
+#include "miscellany.hpp"               // scoped_ios_format
 #include "null_stream.hpp"
 #include "round_to.hpp"
 #include "ssize_lmi.hpp"
@@ -169,6 +170,7 @@ inline double binary64_midpoint(double d0, double d1)
     double z;
     std::memcpy(&z, &um, sizeof z);
 #if 0 // Temporarily useful for acceptance testing.
+        scoped_ios_format meaningless_name(std::cout);
         std::cout
             << std::dec
             << std::defaultfloat
@@ -400,6 +402,7 @@ root_type lmi_root
 
     auto recapitulate = [&]()
         {
+        scoped_ios_format meaningless_name(os_trace);
         os_trace
             << n_iter << " iterations, "
             << n_eval << " evaluations; final interval:\n"
@@ -732,6 +735,7 @@ double brent_zero
 
     auto recapitulate = [&]()
         {
+        scoped_ios_format meaningless_name(os_trace);
         os_trace
             << n_iter << " iterations, "
             << n_eval << " evaluations; final interval:\n"
