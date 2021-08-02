@@ -29,7 +29,9 @@
 #include <cmath>                        // HUGE_VAL
 #include <cstdio>                       // remove()
 #include <fstream>
+#include <iomanip>
 #include <limits>
+#include <sstream>
 
 void test_each_equal()
 {
@@ -421,6 +423,32 @@ void test_trimming()
     LMI_TEST_EQUAL(s, "a ; a");
 }
 
+void test_scoped_ios_format()
+{
+    std::ostringstream oss;
+    oss << -2.71828 << ' ' << 3.14159 << std::endl;
+    std::string const s(oss.str());
+
+    {
+    scoped_ios_format meaningless_name(oss);
+    oss << std::setfill('0');
+    oss << std::setprecision(3);
+    oss << std::setw(12);
+    oss << std::fixed;
+    oss << std::hex;
+    oss << std::hexfloat;
+    oss << std::left;
+    oss << std::showpos;
+    oss << -2.71828 << ' ' << 3.14159 << std::endl;
+    }
+
+    oss.str("");
+    oss.clear();
+
+    oss << -2.71828 << ' ' << 3.14159 << std::endl;
+    LMI_TEST_EQUAL(oss.str(), s);
+}
+
 int test_main(int, char*[])
 {
     test_each_equal();
@@ -430,6 +458,7 @@ int test_main(int, char*[])
     test_prefix_and_suffix();
     test_scale_power();
     test_trimming();
+    test_scoped_ios_format();
 
     return 0;
 }
