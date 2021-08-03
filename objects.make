@@ -433,6 +433,7 @@ unit_test_targets := \
   mortality_rates_test \
   name_value_pairs_test \
   ncnnnpnn_test \
+  null_stream_test \
   numeric_io_test \
   path_utility_test \
   premium_tax_test \
@@ -860,6 +861,12 @@ name_value_pairs_test$(EXEEXT): \
 ncnnnpnn_test$(EXEEXT): \
   $(common_test_objects) \
   ncnnnpnn_test.o \
+
+null_stream_test$(EXEEXT): \
+  $(common_test_objects) \
+  null_stream.o \
+  null_stream_test.o \
+  timer.o \
 
 numeric_io_test$(EXEEXT): \
   $(common_test_objects) \

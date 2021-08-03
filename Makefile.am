@@ -140,6 +140,7 @@ TESTS = \
     mortality_rates_test \
     name_value_pairs_test \
     ncnnnpnn_test \
+    null_stream_test \
     numeric_io_test \
     path_utility_test \
     premium_tax_test \
@@ -939,6 +940,9 @@ name_value_pairs_test_LDADD = \
   $(BOOST_LIBS)
 
 ncnnnpnn_test_LDADD = \
+  libtest_common.la
+
+null_stream_test_LDADD = \
   libtest_common.la
 
 numeric_io_test_LDADD = \
