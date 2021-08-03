@@ -39,6 +39,7 @@
 #include "ledger_variant.hpp"
 #include "mc_enum_types_aux.hpp"        // set_run_basis_from_cloven_bases()
 #include "miscellany.hpp"               // ios_out_app_binary()
+#include "null_stream.hpp"
 #include "outlay.hpp"
 #include "zero.hpp"
 
@@ -456,7 +457,7 @@ currency AccountValue::Solve
         }
     LMI_ASSERT(nullptr != solve_set_fn);
 
-    std::ostream os_trace(status().rdbuf());
+    std::ostream os_trace(&null_streambuf());
     std::ofstream ofs_trace;
     if
         (  global_settings::instance().regression_testing()
