@@ -79,6 +79,18 @@ void mete_kuehl()
         }
 }
 
+// Test writing to null stream with 'badbit' set.
+
+void mete_badbit_kuehl()
+{
+    for(int i = 0; i < 1e4; ++i)
+        {
+        std::ostream os(&null_streambuf());
+        os.setstate(std::ios_base::badbit);
+        emit_text_to_stream(os);
+        }
+}
+
 // Test writing to static null stream.
 
 void mete_kuehl_static()
@@ -155,6 +167,7 @@ void assay_speed()
         << "\n  Speed tests..."
         << "\n  /dev/null        : " << TimeAnAliquot(mete_dev_null)
         << "\n  Kühl             : " << TimeAnAliquot(mete_kuehl)
+        << "\n  Kühl, badbit     : " << TimeAnAliquot(mete_badbit_kuehl)
         << "\n  Kühl, static     : " << TimeAnAliquot(mete_kuehl_static)
         << "\n  unopened fstream : " << TimeAnAliquot(mete_unopened_fstream)
         << "\n  fstream, badbit  : " << TimeAnAliquot(mete_badbit_fstream)
