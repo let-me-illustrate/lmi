@@ -159,6 +159,44 @@ void test_fundamentals()
         << "  And the notion I cannot endure!\n"
         << std::flush
         ;
+
+    // Demonstrate a peril.
+    {
+    LMI_TEST_EQUAL(&null_streambuf(), os0.rdbuf());
+    LMI_TEST_EQUAL(&null_streambuf(), os1.rdbuf());
+    // First stream: substitute a non-discarding streambuf.
+    std::ostringstream oss0;
+    os0.rdbuf(oss0.rdbuf());
+    os0 << "This text is not to be discarded." << std::endl;
+    // Second stream: likewise.
+    std::ostringstream oss1;
+    os1.rdbuf(oss1.rdbuf());
+    os1 << "Neither is this." << std::endl;
+    LMI_TEST_UNEQUAL(&null_streambuf(), os0.rdbuf());
+    LMI_TEST_UNEQUAL(&null_streambuf(), os1.rdbuf());
+    }
+
+    // Now rdbuf() would return a dangling pointer for each stream.
+    LMI_TEST_UNEQUAL(&null_streambuf(), os0.rdbuf());
+    LMI_TEST_UNEQUAL(&null_streambuf(), os1.rdbuf());
+
+    // This would be okay:
+    std::ostream new_os1(&null_streambuf());
+    LMI_TEST_EQUAL(&null_streambuf(), new_os1.rdbuf());
+    // But this would not:
+    std::ostream& new_os0 = null_stream();
+    LMI_TEST_UNEQUAL(&null_streambuf(), new_os0.rdbuf());
+
+    // This would segfault:
+//  os0 << "But while he was seeking with thimbles and care" << std::endl;
+    // As would this:
+//  os1 << "A Bandersnatch swiftly drew nigh" << std::endl;
+    // These do not segfault, but remembering to reset the
+    // streambuf manually requires too much smiles and soap:
+    os0.rdbuf(&null_streambuf());
+    os0 << "Segfault avoided with thimbles and care." << std::endl;
+    os1.rdbuf(&null_streambuf());
+    os1 << "Segfault avoided with forks and hope." << std::endl;
 }
 
 void assay_speed()
