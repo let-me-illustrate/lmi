@@ -101,6 +101,28 @@ void mete_kuehl_static()
         }
 }
 
+// Test writing to local std::ostream(nullptr).
+
+void mete_local_ostream_0()
+{
+    for(int i = 0; i < 1e4; ++i)
+        {
+        std::ostream os(nullptr);
+        emit_text_to_stream(os);
+        }
+}
+
+// Test writing to "global" std::ostream(nullptr).
+
+void mete_global_ostream_0()
+{
+    std::ostream os(nullptr); // as if global
+    for(int i = 0; i < 1e4; ++i)
+        {
+        emit_text_to_stream(os);
+        }
+}
+
 /// Test writing to an unopened ofstream.
 
 void mete_unopened_fstream()
@@ -207,6 +229,8 @@ void assay_speed()
         << "\n  Kühl             : " << TimeAnAliquot(mete_kuehl)
         << "\n  Kühl, badbit     : " << TimeAnAliquot(mete_badbit_kuehl)
         << "\n  Kühl, static     : " << TimeAnAliquot(mete_kuehl_static)
+        << "\n  global ostream(0): " << TimeAnAliquot(mete_global_ostream_0)
+        << "\n  local ostream(0) : " << TimeAnAliquot(mete_local_ostream_0)
         << "\n  unopened fstream : " << TimeAnAliquot(mete_unopened_fstream)
         << "\n  fstream, badbit  : " << TimeAnAliquot(mete_badbit_fstream)
         << "\n  sstream, badbit  : " << TimeAnAliquot(mete_badbit_sstream)
