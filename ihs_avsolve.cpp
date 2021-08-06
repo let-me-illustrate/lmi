@@ -458,6 +458,7 @@ currency AccountValue::Solve
     LMI_ASSERT(nullptr != solve_set_fn);
 
     std::ostream os_trace(&null_streambuf());
+    os_trace.setstate(std::ios::badbit);
     std::ofstream ofs_trace;
     if
         (  global_settings::instance().regression_testing()

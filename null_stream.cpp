@@ -76,6 +76,7 @@ std::streambuf& null_streambuf()
 /// therefore has a global effect that is probably unwanted.
 /// Therefore, prefer to create a local object instead, e.g.:
 ///   std::ostream local_os(&null_streambuf());
+///   local_os.setstate(std::ios::badbit);
 ///   local_os << "written to oblivion";
 ///   local_os.rdbuf(std::cout.rdbuf); // effect is only local
 ///   local_os << "written to stdout";
