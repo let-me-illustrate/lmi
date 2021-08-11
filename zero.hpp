@@ -604,17 +604,71 @@ root_type lmi_root
 
 /// Return a rounded zero z of a function f within input bounds [a,b].
 ///
+/// Intended to be used where f would round its argument anyway.
+///
 /// Brent's algorithm returns a zero z of the function f in
 ///   [bound0 bound1]
 /// (a,b) to within a tolerance
 ///   6ϵ|z| + 2t
 /// where t is an argument. For financial applications that traffic in
-/// rounded currency values, the tolerance is often one-sided, so that
-/// f(z) must be strictly greater than or less than zero; and the
-/// tolerance is a function of the number of decimals to which values
-/// are rounded. Thus, the tolerance becomes
+/// rounded currency values, the tolerance is a function of the number
+/// of decimals to which values are rounded, thus:
 ///   6ϵ|z| + 10^(-decimals)
-/// for this overload.
+/// For such applications, this tolerance is often one-sided (governed
+/// by the 'bias' argument), so that f(z) must be strictly greater
+/// than or less than zero for return value z.
+///
+/// Design consideration: where should rounding be performed?
+///
+/// An earlier version of lmi_root() rounded each iterate 'b' just
+/// before calling f to evaluate the function at that value, so no
+/// separate decimal_root() was required. (Instead, a function object
+/// to perform appropriate rounding was passed as an argument, which
+/// defaulted to std::identity() if rounding was not wanted.) This
+/// version provides a separate decimal_root() which interposes that
+/// rounding in the fr lambda that it passes to lmi_root(), so that
+/// when lmi_root() evaluates f(b), what it actually calls is:
+///   fr(b) ≡ f(rounding_function(b))
+/// Thus, lmi_root()'s internal 'b' (the point of departure for the
+/// next succeeding iterate) is not identical to the value at which
+/// f is evaluated. In theory, the relationship between 'b' and 'fb'
+/// is thereby vitiated, which may slow convergence in the vicinity
+/// of a root; but it doesn't matter at all in the intended use case,
+/// where
+///   f(b) ≡ fr(b) ≡ f(rounding_function(b))
+/// because the external f rounds its argument in exactly the same
+/// (idempotent) manner anyway.
+///
+/// Consequently, lmi_root() may call this modified f with successive
+/// approximations that round to the same value. To avoid superfluous
+/// evaluations, a map of {b, f(b)} is stored; when f is costly to
+/// evaluate and the number of evaluations is not too large, the map's
+/// overhead is negligible.
+///
+/// Another reason to avoid rounding each iteration inside lmi_root()
+/// is that it is incompatible with offering binary64_midpoint() as an
+/// alternative to the arithmetic mean. Suppose that the unrounded
+/// true root is a small number close to zero, the a priori bounds are
+/// [0,1.0e100], and iterates are to be rounded to a reasonable number
+/// of decimals (say, |decimals| ≤ DBL_DIG). Then the lower bound, if
+/// rounded, would tend to stay fixed at zero, because
+///   1.09631e-104 ≈ binary64_midpoint(0.0, 1.0e100) [rounds to zero]
+///   1.11875e-154 ≈ binary64_midpoint(0.0, 1.0e0)   [rounds to zero]
+/// and convergence would (slowly) proceed by reducing the (remote)
+/// upper bound. A smallest possible nonzero value exists:
+///   double const least_positive = std::pow(10.0, -decimals);
+///   (here, equal to two times the tolerance passed to lmi_root())
+/// but it can't be approached from the bottom. This raises the
+/// question whether a (not yet rounded) iterate x such that
+///   0.0 < x < least_positive
+/// should be forced to 'least_positive'. The answer is "no". With no
+/// such deliberate forcing, Brent's method increments 'b' by ±'tol',
+/// thus updating the lower bound, and evaluates the function at that
+/// new point (which is exactly 'tol' if 'b' was zero). If this new
+/// iterate rounds to 'least_positive', then that outcome arose
+/// naturally without writing any code to force it. Otherwise, it
+/// rounds to zero, so the lower bound was adjusted without the cost
+/// of another function evaluation (because of caching here).
 
 template<typename FunctionalType>
 root_type decimal_root
