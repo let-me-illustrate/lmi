@@ -90,6 +90,18 @@ struct root_type
 
 /// Specialized binary64 midpoint for root finding.
 ///
+/// [Author's note: I thought this might be a brand-new discovery, as
+/// it's mentioned (almost) nowhere in the literature, although it's
+/// obvious once you think of it. It turns out to be an independent
+/// rediscovery--see Don Clugston's talk:
+///   https://dconf.org/2016/talks/clugston.pdf
+/// in particular the parts with the following titles:
+///   "The Binary Chop That Isn't"
+///   "Binary Chop For Real"
+/// which I found only after I had implemented this. Clugston (DConf
+/// video) remarks: "this is a couple of orders of magnitude better
+/// than the industry state of the art...and nobody knows about it."]
+///
 /// A 64-bit double can represent no more than 2^64 distinct values.
 /// Disregarding NaNs, they form (a permutation of) an ordered set,
 /// any of whose members can be found in 64 binary-search steps.
@@ -139,6 +151,16 @@ struct root_type
 /// is a zero, then first change its signbit, if needed, to match the
 /// other argument's. Finally, interpret both as unsigned integers,
 /// and return their arithmetic mean interpreted as binary64.
+///
+/// A related idea for possible future investigation
+///
+/// Clugston's comparable discussion of a binary mean for root finding
+///   https://dconf.org/2016/talks/clugston.pdf
+/// states that
+///   "TOMS 748 has a similar problem with linear interpolation"
+/// That remark would apply to Brent's method as well. It would be
+/// interesting to replace linear interpolation in lmi_root() with
+/// std::lerp(), and then write and experiment with a binary64_lerp().
 
 inline double binary64_midpoint(double d0, double d1)
 {

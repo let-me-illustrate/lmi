@@ -510,6 +510,64 @@ void test_binary64_midpoint()
     LMI_TEST(materially_equal(3.49808e-150, binary64_midpoint(0.0, 1.0e9), 1.0e-5));
     LMI_TEST_EQUAL(39, max_n_eval_bolzano(0.0, 1.0e9, 0.005, 1.0e9));
     LMI_TEST_EQUAL(39, max_n_eval_bolzano(0.0, 1.0e9, 0.005, 0.0));
+
+    // Examples from Don Clugston:
+    //   https://dconf.org/2016/talks/clugston.pdf
+
+    // Reproduce results for arithmetic mean:
+    double x0 = 1e-100;
+    double x1 = 1e100;
+    double x2 = std::midpoint(x0, x1);
+    double x3 = std::midpoint(x0, x2);
+    double x4 = std::midpoint(x0, x3);
+    double x5 = std::midpoint(x0, x4);
+    LMI_TEST_EQUAL( 5.0e99, x2);
+    LMI_TEST_EQUAL( 2.5e99, x3);
+    LMI_TEST_EQUAL(1.25e99, x4);
+    LMI_TEST_EQUAL(6.25e98, x5);
+
+    // Clugston's "midpoint in implementation space" in D is:
+    //   ulong x0_raw = reinterpret!ulong(x0);
+    //   ulong x1_raw = reinterpret!ulong(x1);
+    //   auto midpoint = reinterpret!double( x0_raw + x1_raw ) / 2;
+    // and this would seem to be a faithful translation from D to C
+    // that avoids "pun-and-alias" issues:
+    auto binary_chop_for_real = [](double d00, double d01)
+        {
+        std::uint64_t u00, u01, um;
+        std::memcpy(&u00, &d00, sizeof d00);
+        std::memcpy(&u01, &d01, sizeof d01);
+        um = std::midpoint(u00, u01);
+        double z;
+        std::memcpy(&z, &um, sizeof z);
+        return z;
+        };
+
+    // Clugston reports that
+    //   "Midpoints are 5e0, 2.5e-50, 1.2e-75, 6e-88, 3e-94"
+    // but the observed values here don't quite agree...
+    double y0 = 1e-100;
+    double y1 = 1e100;
+    double y2 = binary_chop_for_real(y0, y1);
+    double y3 = binary_chop_for_real(y0, y2);
+    double y4 = binary_chop_for_real(y0, y3);
+    double y5 = binary_chop_for_real(y0, y4);
+    LMI_TEST(materially_equal(0.973197   , y2, 1.0e-5));
+    LMI_TEST(materially_equal(9.87906e-51, y3, 1.0e-5));
+    LMI_TEST(materially_equal(9.94306e-76, y4, 1.0e-5));
+    LMI_TEST(materially_equal(3.20308e-88, y5, 1.0e-5));
+
+    // ...Instead, they agree with lmi's binary64_midpoint():
+    double z0 = 1e-100;
+    double z1 = 1e100;
+    double z2 = binary64_midpoint(z0, z1);
+    double z3 = binary64_midpoint(z0, z2);
+    double z4 = binary64_midpoint(z0, z3);
+    double z5 = binary64_midpoint(z0, z4);
+    LMI_TEST(materially_equal(0.973197   , z2, 1.0e-5));
+    LMI_TEST(materially_equal(9.87906e-51, z3, 1.0e-5));
+    LMI_TEST(materially_equal(9.94306e-76, z4, 1.0e-5));
+    LMI_TEST(materially_equal(3.20308e-88, z5, 1.0e-5));
 }
 
 /// A function whose value almost everywhere in (-1.0e100, 1.0e100)
