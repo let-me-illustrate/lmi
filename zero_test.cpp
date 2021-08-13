@@ -1284,6 +1284,122 @@ void test_former_rounding_problem()
     LMI_TEST(root_is_valid == r.validity);
 }
 
+void test_toms748()
+{
+    // begin test adapted from 'driver.f'
+    // (scoped to sequester an oddly imprecise 'pi')
+    {
+    auto f = [](double x) {return std::sin(x) - x / 2.0;};
+    /* Local variables */
+    double a, b, eps;
+    int neps;
+    double root;
+    int nprob;
+
+    int    n_eval {0};
+
+/* THIS PROGRAM CALCULATES A ROOT OF A CONTINUOUS FUNCTION F(X) */
+/* IN AN INTERVAL I=[A, B] PROVIDED THAT F(A)F(B)<0. THE FUNCTION F(X) */
+/* AND THE INITIAL INTERVAL [A, B] ARE TO BE SUPPLIED BY THE USER IN */
+/* THE SUBROUTINES "FUNC" AND "INIT". THE OUTPUT "ROOT" EITHER SATISFIES */
+/* THAT F(ROOT)=0 OR IS AN APPROXIMATE SOLUTION OF THE EQUATION F(X)=0 */
+/* SUCH THAT "ROOT" IS INCLUDED IN AN INTERVAL [AC, BC] WITH */
+/*      F(AC)F(BC)<0, */
+/* AND */
+/*      BC-AC <= TOL = 2*TOLE(AC,BC). */
+/* PRECISION CHOSEN AS THE RELATIVE MACHINE PRECISION, */
+/* AND "UC" IS EQUAL TO EITHER "AC" OR "BC" WITH THE CONDITION */
+/*      |F(UC)| = MIN{ |F(AC)|, |F(BC)| }. */
+
+/* INPUT OF THE PROGRAM: */
+/*  NPROB -- INTEGER. POSITIVE INTEGER STANDING FOR "NUMBER OF PROBLEM", */
+/*           INDICATING THE PROBLEM TO BE SOLVED. */
+/*  N     -- PROBLEM DEPENDENT PARAMETER */
+/* OUTPUT OF THE PROGRAM: */
+/*  ROOT  -- DOUBLE PRECISION. EXACT OR APPROXIMATE SOLUTION OF THE */
+/*           EQUATION F(X)=0. */
+
+nprob = 1;
+a = 0;
+b = 1;
+
+/* USE MACHINE PRECISION */
+
+    rmp_(&eps);
+    neps = 1000;
+// TOMS748 calculation matches DBL_EPSILON:
+//std::cout << eps << " = calculated ϵ" << std::endl;
+//std::cout << DBL_EPSILON << " = DBL_EPSILON" << std::endl;
+
+/* CALL SUBROUTINE "INIT" TO GET THE INITIAL INTERVAL. */
+
+// test problem #1 bounds (hardcoded)
+    double pi;
+    pi = 3.1416; // How very odd to use such a coarse approximation!
+    a = pi / 2.;
+    b = pi;
+
+/* CALL SUBROUTINE "RROOT" TO HAVE THE PROBLEM SOLVED. */
+
+    rroot_(f, &nprob, &neps, &eps, &a, &b, &root, &n_eval);
+
+/* PRINT OUT THE RESULT ON THE SCREEN. */
+
+//  s_stop("", (ftnlen)0);
+//std::cout << "Number of evaluations = " << n_eval << std::endl;
+//std::cout.precision(21);
+//std::cout << "Computed root = " << root << std::endl;
+    } // end test adapted from 'driver.f'
+
+    constexpr double pi {3.14159265358979323851};
+
+    double bound0   {pi / 2.0};
+    double bound1   {pi};
+    int    decimals {7};
+
+    double const tol = 0.5 * std::pow(10.0, -decimals);
+
+    auto f = [](double x) {return std::sin(x) - x / 2.0;};
+
+    std::cout.precision(21);
+
+    root_type r = lmi_root(f, bound0, bound1, 0.0);
+    double const validated = r.root;
+    std::cout
+        << "high-precision value " << validated
+        << "; observed error " << f(validated)
+        << std::endl
+        ;
+
+    r = lmi_root(f, bound0, bound1, tol);
+    std::cout
+        << "lmi_root()    : root " << r.root
+        << " #eval " << r.n_eval
+        << std::endl
+        ;
+
+    r = decimal_root(f, bound0, bound1, bias_none, decimals);
+    std::cout
+        << "decimal_root(): root " << r.root
+        << " #eval " << r.n_eval
+        << std::endl
+        ;
+
+    r = toms748_root(f, bound0, bound1, bias_none, decimals);
+    std::cout
+        << "TOMS748       : root " << r.root
+        << " #eval " << r.n_eval
+        << "\n                             ^"
+        << "\n    doesn't round to 1.8954943,"
+        << "\n  but within        ±0.00000005 of true root:"
+        << "\n      TOMS748   " << r.root
+        << "\n    - validated " << validated
+        << "\n    = error     " << std::fixed << std::fabs(r.root - validated)
+        << "\n              < 0.00000005"
+        << std::endl
+        ;
+}
+
 /// TOMS 748 test suite.
 ///
 /// Alefeld et al. present fifteen numbered problems in Table I,
@@ -2333,6 +2449,7 @@ int test_main(int, char*[])
     test_various_functions();
     test_hodgepodge();
     test_former_rounding_problem();
+    test_toms748();
 
     std::cout << "TOMS 748 tests: " << std::endl;
     test_alefeld_examples(2804, 1.0e-7);

@@ -1144,4 +1144,538 @@ double brent_zero_reference
     return b;
 }
 
+// Source:
+//  https://www.netlib.org/toms-2014-06-10/748
+// separated into '.f' files manually, and translated thus:
+//   f2c -a *.f
+// Compiled thus, with minimal editing, for validation:
+//   gcc driver.c enclofx.c -lf2c -lm 2>&1 |less
+// excluding 'exdrive.c' because it is apparently an alternative
+// to 'driver.c'. The code here is a combination of 'driver.c'
+// and 'enclofx.c', edited extensively to make it work with lmi.
+
+/* Table of constant values */
+
+static int c2 = 2;
+static int c3 = 3;
+
+int tole_(double* b, double* tol, int* neps, double* eps);
+int func_(int* /* nprob */, double* x, double* fx);
+template<typename FunctionalType>
+int rroot_(FunctionalType& f, int* nprob, int* neps, double* eps,
+        double* a, double* b, double* root, int* n_eval);
+template<typename FunctionalType>
+int brackt_(FunctionalType& f, int* nprob, double* a, double* b,
+        double* c0, double* fa, double* fb, double* tol,
+        int* neps, double* eps, double* d_0, double* fd);
+int isign_(double* x);
+int newqua_(double* a, double* b, double* d_0,
+        double* fa, double* fb, double* fd, double* c0,
+        int* k);
+int pzero_(double* a, double* b, double* d_0,
+        double* e, double* fa, double* fb, double* fd,
+        double* fe, double* c0);
+int rmp_(double* rel);
+
+inline int tole_(double* b, double* tol, int* neps, double* eps)
+{
+    /* System generated locals */
+    int i1;
+
+    /* Local variables */
+    int i0;
+
+/* DETERMINES THE TERMINATION CRITERION. */
+/*  B    -- DOUBLE PRECISION. */
+/*  NEPS -- INTEGER. */
+/*  EPS  -- DOUBLE PRECISION. */
+/*  TOL  -- DOUBLE PRECISION. OUTPUT AS THE TERMINATION CRITERION. */
+/*           TOL =2*(2*EPS*|B| + 10D-{NEPS}),  IF NEPS IS NOT 1000; */
+/*    AND    TOL =2*(2*EPS*|B|),               IF NEPS = 1000. */
+    if (*neps == 1000) {
+        *tol = 0.;
+    } else {
+//      *tol = 1.;
+// Changed by GWC: same tolerance as decimal_root()
+        *tol = 0.5;
+        i1 = *neps;
+        for (i0 = 1; i0 <= i1; ++i0) {
+            *tol /= 10.;
+/* L10: */
+        }
+    double const tolx = 0.5 * std::pow(10.0, -*neps);
+//  std::cout << "tolerance " << *tol << " should equal " << tolx << std::endl;
+    // Use the calculation copied from decimal_root() instead:
+    // it differs slightly, and is probably more exact than
+    // dividing repeatedly by ten.
+    *tol = tolx;
+    }
+    *tol += abs(*b) * 2. * *eps;
+    *tol *= 2.;
+//  std::cout << "actual tolerance " << *tol << std::endl;
+    return 0;
+}
+
+inline int func_(int* /* nprob */, double* x, double* fx)
+{
+    *fx = std::sin(*x) - *x / 2.;
+    return 0;
+}
+
+/* *** enclofx.f */
+template<typename FunctionalType>
+int rroot_(FunctionalType& f, int* nprob, int* neps, double* eps,
+        double* a, double* b, double* root, int* n_eval)
+{
+    /* System generated locals */
+    double d_1;
+
+    /* Local variables */
+    double c0, d_0, e, u, a0, b0, fa, fb, fd, fe, fu, tol;
+    double prof;
+    int itnum;
+
+/* FINDS EITHER AN EXACT SOLUTION OR AN APPROXIMATE SOLUTION OF THE */
+/* EQUATION F(X)=0 IN THE INTERVAL [A,B]. AT THE BEGINING OF EACH */
+/* ITERATION, THE CURRENT ENCLOSING INTERVAL IS RECORDED AS [A0,B0]. */
+/* THE FIRST ITERATION IS SIMPLY A SECANT STEP. STARTING WITH THE */
+/* SECOND ITERATION, THREE STEPS ARE TAKEN IN EACH ITERATION. FIRST */
+/* TWO STEPS ARE EITHER QUADRATIC INTERPOLATION OR CUBIC INVERSE */
+/* INTERPOLATION. THE THIRD STEP IS A DOUBLE-SIZE SECANT STEP. IF THE */
+/* DIAMETER OF THE ENCLOSING INTERVAL OBTAINED AFTER THOSE THREE STEPS */
+/* IS LARGER THAN 0.5*(B0-A0), THEN AN ADDITIONAL BISECTION STEP WILL */
+/* BE TAKEN. */
+/*  NPROB -- INTEGER. INDICATING THE PROBLEM TO BE SOLVED; */
+/*  NEPS  -- INTEGER. USED TO DETERMINE THE TERMINATION CRITERION; */
+/*  EPS   -- DOUBLE PRECISION. USED IN THE TERMINATION CRITERION; */
+/*  A,B   -- DOUBLE PRECISION. INPUT AS THE INITIAL INTERVAL AND */
+/*           OUTPUT AS THE ENCLOSING INTERVAL AT THE TERMINATION; */
+/*  ROOT  -- DOUBLE PRECISION. OUTPUT SOLUTION OF THE EQUATION. */
+
+/* INITIALIZATION. SET THE NUMBER OF ITERATION AS 0. CALL SUBROUTINE */
+/* "FUNC" TO OBTAIN THE INITIAL FUNCTION VALUES F(A) AND F(B). SET */
+/* DUMB VALUES FOR THE VARIABLES "E" AND "FE". */
+
+    itnum = 0;
+    fa = f(*a); // f(a, fa);
+    fb = f(*b); // f(b, fb);
+    *n_eval = 2; // Two evaluations have now been performed.
+    e = 1e5;
+    fe = 1e5;
+
+/* ITERATION STARTS. THE ENCLOSING INTERVAL BEFORE EXECUTING THE */
+/* ITERATION IS RECORDED AS [A0, B0]. */
+
+  L10:
+    a0 = *a;
+    b0 = *b;
+
+/* UPDATES THE NUMBER OF ITERATION. */
+
+    ++itnum;
+
+/* CALCULATES THE TERMINATION CRITERION. STOPS THE PROCEDURE IF THE */
+/* CRITERION IS SATISFIED. */
+
+    if (abs(fb) <= abs(fa)) {
+        tole_(b, &tol, neps, eps);
+    } else {
+        tole_(a, &tol, neps, eps);
+    }
+    if (*b - *a <= tol) {
+        goto L400;
+    }
+
+/* FOR THE FIRST ITERATION, SECANT STEP IS TAKEN. */
+
+    if (itnum == 1) {
+        c0 = *a - fa / (fb - fa) * (*b - *a);
+
+/* CALL SUBROUTINE "BRACKT" TO GET A SHRINKED ENCLOSING INTERVAL AS */
+/* WELL AS TO UPDATE THE TERMINATION CRITERION. STOP THE PROCEDURE */
+/* IF THE CRITERION IS SATISFIED OR THE EXACT SOLUTION IS OBTAINED. */
+
+        brackt_(f, nprob, a, b, &c0, &fa, &fb, &tol, neps, eps, &d_0, &fd);
+        ++*n_eval;
+        if (fa == 0. || *b - *a <= tol) {
+            goto L400;
+        }
+        goto L10;
+    }
+
+/* STARTING WITH THE SECOND ITERATION, IN THE FIRST TWO STEPS, EITHER */
+/* QUADRATIC INTERPOLATION IS USED BY CALLING THE SUBROUTINE "NEWQUA" */
+/* OR THE CUBIC INVERSE INTERPOLATION IS USED BY CALLING THE SUBROUTINE */
+/* "PZERO". IN THE FOLLOWING, IF "PROF" IS NOT EQUAL TO 0, THEN THE */
+/* FOUR FUNCTION VALUES "FA", "FB", "FD", AND "FE" ARE DISTINCT, AND */
+/* HENCE "PZERO" WILL BE CALLED. */
+
+    prof = (fa - fb) * (fa - fd) * (fa - fe) * (fb - fd) * (fb - fe) * (fd -
+            fe);
+    if (itnum == 2 || prof == 0.) {
+        newqua_(a, b, &d_0, &fa, &fb, &fd, &c0, &c2);
+    } else {
+        pzero_(a, b, &d_0, &e, &fa, &fb, &fd, &fe, &c0);
+        if ((c0 - *a) * (c0 - *b) >= 0.) {
+            newqua_(a, b, &d_0, &fa, &fb, &fd, &c0, &c2);
+        }
+    }
+    e = d_0;
+    fe = fd;
+
+/* CALL SUBROUTINE "BRACKT" TO GET A SHRINKED ENCLOSING INTERVAL AS */
+/* WELL AS TO UPDATE THE TERMINATION CRITERION. STOP THE PROCEDURE */
+/* IF THE CRITERION IS SATISFIED OR THE EXACT SOLUTION IS OBTAINED. */
+
+    brackt_(f, nprob, a, b, &c0, &fa, &fb, &tol, neps, eps, &d_0, &fd);
+    ++*n_eval;
+    if (fa == 0. || *b - *a <= tol) {
+        goto L400;
+    }
+    prof = (fa - fb) * (fa - fd) * (fa - fe) * (fb - fd) * (fb - fe) * (fd -
+            fe);
+    if (prof == 0.) {
+        newqua_(a, b, &d_0, &fa, &fb, &fd, &c0, &c3);
+    } else {
+        pzero_(a, b, &d_0, &e, &fa, &fb, &fd, &fe, &c0);
+        if ((c0 - *a) * (c0 - *b) >= 0.) {
+            newqua_(a, b, &d_0, &fa, &fb, &fd, &c0, &c3);
+        }
+    }
+
+/* CALL SUBROUTINE "BRACKT" TO GET A SHRINKED ENCLOSING INTERVAL AS */
+/* WELL AS TO UPDATE THE TERMINATION CRITERION. STOP THE PROCEDURE */
+/* IF THE CRITERION IS SATISFIED OR THE EXACT SOLUTION IS OBTAINED. */
+
+    brackt_(f, nprob, a, b, &c0, &fa, &fb, &tol, neps, eps, &d_0, &fd);
+    ++*n_eval;
+    if (fa == 0. || *b - *a <= tol) {
+        goto L400;
+    }
+    e = d_0;
+    fe = fd;
+
+/* TAKES THE DOUBLE-SIZE SECANT STEP. */
+
+    if (abs(fa) < abs(fb)) {
+        u = *a;
+        fu = fa;
+    } else {
+        u = *b;
+        fu = fb;
+    }
+    c0 = u - fu / (fb - fa) * 2. * (*b - *a);
+    if ((d_1 = c0 - u, abs(d_1)) > (*b - *a) * .5) {
+        c0 = *a + (*b - *a) * .5;
+    }
+
+/* CALL SUBROUTINE "BRACKT" TO GET A SHRINKED ENCLOSING INTERVAL AS */
+/* WELL AS TO UPDATE THE TERMINATION CRITERION. STOP THE PROCEDURE */
+/* IF THE CRITERION IS SATISFIED OR THE EXACT SOLUTION IS OBTAINED. */
+
+    brackt_(f, nprob, a, b, &c0, &fa, &fb, &tol, neps, eps, &d_0, &fd);
+    ++*n_eval;
+    if (fa == 0. || *b - *a <= tol) {
+        goto L400;
+    }
+
+/* DETERMINES WHETHER AN ADDITIONAL BISECTION STEP IS NEEDED. AND TAKES */
+/* IT IF NECESSARY. */
+
+    if (*b - *a < (b0 - a0) * .5) {
+        goto L10;
+    }
+    e = d_0;
+    fe = fd;
+
+/* CALL SUBROUTINE "BRACKT" TO GET A SHRINKED ENCLOSING INTERVAL AS */
+/* WELL AS TO UPDATE THE TERMINATION CRITERION. STOP THE PROCEDURE */
+/* IF THE CRITERION IS SATISFIED OR THE EXACT SOLUTION IS OBTAINED. */
+
+    d_1 = *a + (*b - *a) * .5;
+    brackt_(f, nprob, a, b, &d_1, &fa, &fb, &tol, neps, eps, &d_0, &fd);
+    ++*n_eval;
+    if (fa == 0. || *b - *a <= tol) {
+        goto L400;
+    }
+    goto L10;
+
+/* TERMINATES THE PROCEDURE AND RETURN THE "ROOT". */
+
+  L400:
+    *root = *a;
+    return 0;
+}
+
+template<typename FunctionalType>
+int brackt_(FunctionalType& f, int* nprob, double* a, double* b,
+        double* c0, double* fa, double* fb, double* tol,
+        int* neps, double* eps, double* d_0, double* fd)
+{
+    (void)&nprob;
+    double fc;
+
+/* GIVEN CURRENT ENCLOSING INTERVAL [A,B] AND A NUMBER C IN (A,B), IF */
+/* F(C)=0 THEN SETS THE OUTPUT A=C. OTHERWISE DETERMINES THE NEW */
+/* ENCLOSING INTERVAL: [A,B]=[A,C] OR [A,B]=[C,B]. ALSO UPDATES THE */
+/* TERMINATION CRITERION CORRESPONDING TO THE NEW ENCLOSING INTERVAL. */
+/*  NPROB   -- INTEGER. INDICATING THE PROBLEM TO BE SOLVED; */
+/*  A,B     -- DOUBLE PRECISION. [A,B] IS INPUT AS THE CURRENT */
+/*             ENCLOSING INTERVAL AND OUTPUT AS THE SHRINKED NEW */
+/*             ENCLOSING INTERVAL; */
+/*  C       -- DOUBLE PRECISION. USED TO DETERMINE THE NEW ENCLOSING */
+/*             INTERVAL; */
+/*  D       -- DOUBLE PRECISION. OUTPUT: IF THE NEW ENCLOSING INTERVAL */
+/*             IS [A,C] THEN D=B, OTHERWISE D=A; */
+/*  FA,FB,FD-- DOUBLE PRECISION. FA=F(A), FB=F(B), AND FD=F(D); */
+/*  TOL     -- DOUBLE PRECISION. INPUT AS THE CURRENT TERMINATION */
+/*             CRITERION AND OUTPUT AS THE UPDATED TERMINATION */
+/*             CRITERION ACCORDING TO THE NEW ENCLOSING INTERVAL; */
+/*  NEPS    -- INTEGER. USED TO DETERMINE THE TERMINATION CRITERION; */
+/*  EPS     -- DOUBLE PRECISION. USED IN THE TERMINATION CRITERION. */
+
+/* ADJUST C IF (B-A) IS VERY SMALL OR IF C IS VERY CLOSE TO A OR B. */
+
+    *tol *= .7;
+    if (*b - *a <= *tol * 2.) {
+        *c0 = *a + (*b - *a) * .5;
+    } else if (*c0 <= *a + *tol) {
+        *c0 = *a + *tol;
+    } else {
+        if (*c0 >= *b - *tol) {
+            *c0 = *b - *tol;
+        }
+    }
+
+/* CALL SUBROUTINE "FUNC" TO OBTAIN F(C) */
+
+    fc = f(*c0); // f(c0, fc);
+
+/* IF F(C)=0, THEN SET A=C AND RETURN. THIS WILL TERMINATE THE */
+/* PROCEDURE IN SUBROUTINE "RROOT" AND GIVE THE EXACT SOLUTION OF */
+/* THE EQUATION F(X)=0. */
+
+    if (fc == 0.) {
+        *a = *c0;
+        *fa = 0.;
+        *d_0 = 0.;
+        *fd = 0.;
+        return 0;
+    }
+
+/* IF F(C) IS NOT ZERO, THEN DETERMINE THE NEW ENCLOSING INTERVAL. */
+
+    if (isign_(fa) * isign_(&fc) < 0) {
+        *d_0 = *b;
+        *fd = *fb;
+        *b = *c0;
+        *fb = fc;
+    } else {
+        *d_0 = *a;
+        *fd = *fa;
+        *a = *c0;
+        *fa = fc;
+    }
+
+/* UPDATE THE TERMINATION CRITERION ACCORDING TO THE NEW ENCLOSING */
+/* INTERVAL. */
+
+    if (abs(*fb) <= abs(*fa)) {
+        tole_(b, tol, neps, eps);
+    } else {
+        tole_(a, tol, neps, eps);
+    }
+
+/* END OF THE SUBROUTINE. */
+
+    return 0;
+} /* brackt_ */
+
+inline int isign_(double* x)
+{
+    /* System generated locals */
+    int ret_val;
+
+/* INDICATES THE SIGN OF THE VARIABLE "X". */
+/*  X     -- DOUBLE PRECISION. */
+/*  ISIGN -- INTEGER. */
+    if (*x > 0.) {
+        ret_val = 1;
+    } else if (*x == 0.) {
+        ret_val = 0;
+    } else {
+        ret_val = -1;
+    }
+    return ret_val;
+} /* isign_ */
+
+inline int newqua_(double* a, double* b, double* d_0,
+        double* fa, double* fb, double* fd, double* c0,
+        int* k)
+{
+    /* System generated locals */
+    int i1;
+
+    /* Local variables */
+    int i0;
+    double a0, a1, a2, pc, pdc;
+    int ierror;
+
+/* USES K NEWTON STEPS TO APPROXIMATE THE ZERO IN (A,B) OF THE */
+/* QUADRATIC POLYNOMIAL INTERPOLATING F(X) AT A, B, AND D. SAFEGUARD */
+/* IS USED TO AVOID OVERFLOW. */
+/*  A,B,D,FA,FB,FD -- DOUBLE PRECISION. D LIES OUTSIDE THE INTERVAL */
+/*                    [A,B]. FA=F(A), FB=F(B), AND FD=F(D). F(A)F(B)<0. */
+/*  C              -- DOUBLE PRECISION. OUTPUT AS THE APPROXIMATE ZERO */
+/*                    IN (A,B) OF THE QUADRATIC POLYNOMIAL. */
+/*  K              -- INTEGER. INPUT INDICATING THE NUMBER OF NEWTON */
+/*                    STEPS TO TAKE. */
+
+/* INITIALIZATION. FIND THE COEFFICIENTS OF THE QUADRATIC POLYNOMIAL. */
+
+    ierror = 0;
+    a0 = *fa;
+    a1 = (*fb - *fa) / (*b - *a);
+    a2 = ((*fd - *fb) / (*d_0 - *b) - a1) / (*d_0 - *a);
+
+/* SAFEGUARD TO AVOID OVERFLOW. */
+
+  L10:
+    if (a2 == 0. || ierror == 1) {
+        *c0 = *a - a0 / a1;
+        return 0;
+    }
+
+/* DETERMINE THE STARTING POINT OF NEWTON STEPS. */
+
+    if (isign_(&a2) * isign_(fa) > 0) {
+        *c0 = *a;
+    } else {
+        *c0 = *b;
+    }
+
+/* START THE SAFEGUARDED NEWTON STEPS. */
+
+    i1 = *k;
+    for (i0 = 1; i0 <= i1; ++i0) {
+        if (ierror == 0) {
+            pc = a0 + (a1 + a2 * (*c0 - *b)) * (*c0 - *a);
+            pdc = a1 + a2 * (*c0 * 2. - (*a + *b));
+            if (pdc == 0.) {
+                ierror = 1;
+            } else {
+                *c0 -= pc / pdc;
+            }
+        }
+/* L20: */
+    }
+    if (ierror == 1) {
+        goto L10;
+    }
+    return 0;
+} /* newqua_ */
+
+inline int pzero_(double* a, double* b, double* d_0,
+        double* e, double* fa, double* fb, double* fd,
+        double* fe, double* c0)
+{
+    double d21, d31, d32, q11, q21, q31, q22, q32, q33;
+
+/* USES CUBIC INVERSE INTERPOLATION OF F(X) AT A, B, D, AND E TO */
+/* GET AN APPROXIMATE ROOT OF F(X). THIS PROCEDURE IS A SLIGHT */
+/* MODIFICATION OF AITKEN-NEVILLE ALGORITHM FOR INTERPOLATION */
+/* DESCRIBED BY STOER AND BULIRSCH IN "INTRO. TO NUMERICAL ANALYSIS" */
+/* SPRINGER-VERLAG. NEW YORK (1980). */
+/*  A,B,D,E,FA,FB,FD,FE -- DOUBLE PRECISION. D AND E LIE OUTSIDE */
+/*                         THE INTERVAL [A,B]. FA=F(A), FB=F(B), */
+/*                         FD=F(D), AND FE=F(E). */
+/*  C                   -- DOUBLE PRECISION. OUTPUT OF THE SUBROUTINE. */
+
+    q11 = (*d_0 - *e) * *fd / (*fe - *fd);
+    q21 = (*b - *d_0) * *fb / (*fd - *fb);
+    q31 = (*a - *b) * *fa / (*fb - *fa);
+    d21 = (*b - *d_0) * *fd / (*fd - *fb);
+    d31 = (*a - *b) * *fb / (*fb - *fa);
+    q22 = (d21 - q11) * *fb / (*fe - *fb);
+    q32 = (d31 - q21) * *fa / (*fd - *fa);
+    d32 = (d31 - q21) * *fd / (*fd - *fa);
+    q33 = (d32 - q22) * *fa / (*fe - *fa);
+
+/* CALCULATE THE OUTPUT C. */
+
+    *c0 = q31 + q32 + q33;
+    *c0 = *a + *c0;
+    return 0;
+} /* pzero_ */
+
+inline int rmp_(double* rel)
+{
+    double a, b, beta;
+
+/* CALCULATES THE RELATIVE MACHINE PRECISION (RMP). */
+/*  REL -- DOUBLE PRECISION. OUTPUT OF RMP. */
+
+    beta = 2.;
+    a = 1.;
+  L10:
+    b = a + 1.;
+    if (b > 1.) {
+        a /= beta;
+        goto L10;
+    }
+    *rel = a * beta;
+    return 0;
+} /* rmp_ */
+
+template<typename FunctionalType>
+root_type toms748_root
+    (FunctionalType& f
+    ,double          bound0
+    ,double          bound1
+    ,root_bias       bias
+    ,int             decimals
+    ,std::ostream&   os_trace
+    ,int             sprauchling_limit = INT_MAX
+    )
+{
+    // Arguments that are unused, for now at least:
+    (void)&bias;
+    (void)&sprauchling_limit;
+
+    int    nprob  {1};    // has no actual meaning
+//  int    neps   {1000}; // like setting Brent's 'tol' to zero
+    int    neps   {decimals};
+    int    n_eval {0};
+    double eps    {DBL_EPSILON};
+    double a      {bound0};
+    double b      {bound1};
+    double root   {0.0};
+    rroot_(f, &nprob, &neps, &eps, &a, &b, &root, &n_eval);
+    os_trace << " " << n_eval << "    evaluations" << std::endl;
+    return {root, root_is_valid, n_eval - 2, n_eval};
+}
+
+template<typename FunctionalType>
+root_type toms748_root
+    (FunctionalType& f
+    ,double          bound0
+    ,double          bound1
+    ,root_bias       bias
+    ,int             decimals
+    ,int             sprauchling_limit = INT_MAX
+    )
+{
+    std::ostream null_ostream(&null_streambuf());
+    null_ostream.setstate(std::ios::badbit);
+    return toms748_root
+        (f
+        ,bound0
+        ,bound1
+        ,bias
+        ,decimals
+        ,null_ostream
+        ,sprauchling_limit
+        );
+}
+
 #endif // zero_hpp
