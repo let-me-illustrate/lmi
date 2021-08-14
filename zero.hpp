@@ -59,6 +59,9 @@ enum root_bias
 ///   ---------  ----------   --------------------
 ///      yes        yes       specifies underlying type
 ///      yes         no       implicitly converts to char
+///
+/// For the evocative term "dithering", see:
+///   https://people.eecs.berkeley.edu/~wkahan/Math128/RealRoots.pdf
 
 enum root_impetus : char
     {evaluate_bounds                  = 'i'
@@ -243,21 +246,15 @@ inline double binary64_midpoint(double d0, double d1)
 /// function's values only (and not its derivative or functional form)
 /// are available." --Press et al., _Numerical Recipes_ (3rd ed. 2007)
 ///
-/// Numerous papers claim to improve on Brent's method. Perhaps the
-/// best is ACM Algorithm 748 (Transactions on Mathematical Software):
+/// Numerous papers claim to improve on Brent's method. The best is
+/// ACM Algorithm 748 (Transactions on Mathematical Software):
 ///   https://na.math.kit.edu/alefeld/download/1995_Algorithm_748_Enclosing_Zeros_of_Continuous_Functions.pdf
 /// whose Table II compares Brent's algorithm to TOMS748 for fifteen
 /// test problems, claiming an advantage of 4-6%. Chandrupatla
 /// proposed a more stringent criterion for accepting IQI iterates,
 /// and a simplified root-finding method that uses it. However, actual
-/// measurements show that, for the 388 solves in lmi's regression
-/// test, the number of evaluations (i.e., account-value projections)
-/// required is:
-///   7332 Brent
-///   7622 TOMS748
-///   9149 Chandrupatla's method
-///   8545 Brent, with Chandrupatla's IQI acceptance criterion
-/// so Brent's method is favored for lmi.
+/// measurements (tabulated in Note 4) show that, for the 388 solves
+/// in lmi's regression test, Brent's method is best for lmi.
 ///
 /// Newton's method has quadratic convergence, in the vicinity of a
 /// root, for well-behaved functions (though its performance in the
@@ -384,6 +381,50 @@ inline double binary64_midpoint(double d0, double d1)
 /// Note 3. Brent points out that this division is safe because
 ///   0 < |f(b)| <= |f(a)|
 /// whenever this line is executed.
+///
+/// Note 4. Brent (AfMWD, page 51) says:
+/// | When inverse quadratic interpolation is used the interpolating
+/// | parabola cannot be a good approximation to f unless it is
+/// | single-valued between (b, f(b)) and (c, f(c)). Thus, it is
+/// | natural to accept the point i if it lies between b and c, and
+/// | up to three-quarters of the way from b to c: consider the
+/// | limiting case where the interpolating parabola has a vertical
+/// | tangent at c and f(b) = -f(c). Hence, we reject i [i.e. b + p/q]
+/// | if 2|p| ≥ 3|mq|.
+/// (That's a 3/4 rule even if it looks like 2/3, because, omitting
+/// '±' and '∓' for clarity:
+///     i = b + p/q
+///     m = (c-b)/2  // half the distance (not the midpoint)
+///     p/q < 3(c-b)/4 ⇒ p/q < 3m/2 ⇒ 2p < 3mq
+/// .) Brent's method simply uses that "three-quarters" heuristic; the
+/// other words serve only to establish its plausibility.
+///
+/// Instead of casually considering a vertical tangent at a single
+/// endpoint, Chandrupatla formulated a rigorous two-sided criterion
+/// to reject an IQI iterate outside a region defined by vertical
+/// tangents at both endpoints--see the analysis and graph here:
+///   https://github.com/SimpleArt/solver/wiki/Methods#chandrupatla
+/// which is simple and compelling, and seems to realize Brent's
+/// declared intention better. However, for the 388 solves in lmi's
+/// regression tests, Brent's heuristic outperforms Chandrupatla's
+/// criterion (TOMS 748 is included to complete the table):
+///
+///   evaluations  max   mean  sample-std-dev    commit     algorithm
+///       7332      65   18.9       7.13       028b4541c      Brent
+///       7622      76   19.6       7.65       fc8b1a900    TOMS 748
+///       9149      59   23.6      11.13       ac5731f52  Chandrupatla
+///       8545      66   22.0      12.90   (Brent-Chandrupatla hybrid)
+///
+/// Chandrupatla's simplified root-finding algorithm (third row)
+/// always uses his IQI criterion but never takes a secant step.
+/// The last row's "hybrid" is Brent's method with Chandrupatla's
+/// criterion for rejecting IQI (see commit ac5731f52). Evidently the
+/// "three-quarters" heuristic performs well in many cases where the
+/// mathematical rationalization for it does not actually hold true.
+/// That is, the heuristic is "unreasonably effective", at least
+/// during the initial "flailing" stage described by Kahan:
+///   https://people.eecs.berkeley.edu/~wkahan/Math128/RealRoots.pdf
+/// so the word "cannot" in the AfMWD quote above is too strong.
 
 template<typename FunctionalType>
 root_type lmi_root
@@ -579,7 +620,7 @@ root_type lmi_root
             // Use the criteria in Brent's ALGOL, which differ
             // slightly from their descriptions in his text.
             //
-            // AfMWD says on page 51:
+            // AfMWD says on page 51 [see Note 4]:
             //   "we reject i [i.e., b + p/q] if 2|p| ≥ 3|mq|"
             // Difference: the ALGOL subtracts tol×|q| [i.e., δ|q|]
             bool const k0 = 2.0 * p < 3.0 * m * q - std::fabs(tol * q);
