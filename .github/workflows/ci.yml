@@ -162,6 +162,10 @@ jobs:
           $compiler --version
           echo
 
+          echo "ShellCheck version:"
+          shellcheck --version
+          echo
+
           if [ ${{ matrix.mingw }} ]; then
             echo "Wine version:"
             wine --version
