@@ -38,7 +38,7 @@
 #   http://austingroupbugs.net/view.php?id=767
 # 'dash' and 'ash' already have 'local', so, while it's not yet POSIX,
 # it's used here, and its 'shellcheck' warning is disabled:
-# shellcheck disable=SC2039
+# shellcheck disable=SC2039,SC3043
 
 # Unimplemented alternative: Variables such as $prefix could be made
 # similarly overridable, along with other directories--perhaps even
