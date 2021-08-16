@@ -43,7 +43,8 @@ esac
 shebang="$(sed -e'1!d' -e's/ .*$//' "$1")"
 
 # For scripts beginning with '#!/bin/zsh', a pipeline changes that
-# hashbang to '#!/bin/sh' and feeds the result into shellcheck.
+# hashbang to '#!/bin/ksh' and feeds the result into shellcheck
+# because shellcheck doesn't support zsh but does support ksh.
 # In that case, any errors are reported as occurring in file '-',
 # so the command below writes the name of the zsh script after any
 # error messages.
@@ -58,7 +59,7 @@ case $shebang  in
         shellcheck --external-sources "$1"
     ;;
     ("#!/bin/zsh")
-        sed -e'1s/zsh/sh/' "$1" | shellcheck --external-sources - \
+        sed -e'1s/zsh/ksh/' "$1" | shellcheck --external-sources - \
           || { printf '%s\n' "...in file $1"; exit 0; }
     ;;
     ("#!/usr/bin/make") ;;
