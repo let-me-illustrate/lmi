@@ -182,10 +182,15 @@ void test_fundamentals()
         << std::flush
         ;
 
+    // LMI_TEST_[UN]EQUAL macros insert arguments into output stream
+    // upon failure, so cast pointer arguments to void* where default
+    // insertion as char* could have astonishing effects.
+    void* p = static_cast<void*>(&null_streambuf());
+
     // Demonstrate a peril.
     {
-    LMI_TEST_EQUAL(&null_streambuf(), os0.rdbuf());
-    LMI_TEST_EQUAL(&null_streambuf(), os1.rdbuf());
+    LMI_TEST_EQUAL(p, static_cast<void*>(os0.rdbuf()));
+    LMI_TEST_EQUAL(p, static_cast<void*>(os1.rdbuf()));
     // First stream: substitute a non-discarding streambuf.
     std::ostringstream oss0;
     os0.rdbuf(oss0.rdbuf());
@@ -194,20 +199,20 @@ void test_fundamentals()
     std::ostringstream oss1;
     os1.rdbuf(oss1.rdbuf());
     os1 << "Neither is this." << std::endl;
-    LMI_TEST_UNEQUAL(&null_streambuf(), os0.rdbuf());
-    LMI_TEST_UNEQUAL(&null_streambuf(), os1.rdbuf());
+    LMI_TEST_UNEQUAL(p, static_cast<void*>(os0.rdbuf()));
+    LMI_TEST_UNEQUAL(p, static_cast<void*>(os1.rdbuf()));
     }
 
     // Now rdbuf() would return a dangling pointer for each stream.
-    LMI_TEST_UNEQUAL(&null_streambuf(), os0.rdbuf());
-    LMI_TEST_UNEQUAL(&null_streambuf(), os1.rdbuf());
+    LMI_TEST_UNEQUAL(p, static_cast<void*>(os0.rdbuf()));
+    LMI_TEST_UNEQUAL(p, static_cast<void*>(os1.rdbuf()));
 
     // This would be okay:
     std::ostream new_os1(&null_streambuf());
-    LMI_TEST_EQUAL(&null_streambuf(), new_os1.rdbuf());
+    LMI_TEST_EQUAL(p, static_cast<void*>(new_os1.rdbuf()));
     // But this would not:
     std::ostream& new_os0 = null_stream();
-    LMI_TEST_UNEQUAL(&null_streambuf(), new_os0.rdbuf());
+    LMI_TEST_UNEQUAL(p, static_cast<void*>(new_os0.rdbuf()));
 
     // This would segfault:
 //  os0 << "But while he was seeking with thimbles and care" << std::endl;
