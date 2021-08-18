@@ -208,7 +208,7 @@ else
 fi
 
 printf '\n# unit tests\n\n'
-# shellcheck disable=SC2039
+# shellcheck disable=SC2039,SC3001
 make "$coefficiency" --output-sync=recurse unit_tests 2>&1 \
   | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests
 
@@ -225,7 +225,7 @@ make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=safest
   | tee "$log_dir"/cgi_cli_safestdlib | sed -e "$build_clutter" -e "$cli_cgi_clutter"
 
 printf '\n# unit tests in libstdc++ debug mode\n\n'
-# shellcheck disable=SC2039
+# shellcheck disable=SC2039,SC3001
 make "$coefficiency" --output-sync=recurse unit_tests build_type=safestdlib 2>&1 \
   | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests_safestdlib
 
@@ -291,7 +291,7 @@ cmp eraseme.xst eraseme.touchstone
 
 # Clean up stray output. (The zsh '(N)' glob qualifier turns on
 # null_glob for a single expansion.)
-# shellcheck disable=SC2039
+# shellcheck disable=SC2039,SC3002
 for z in "$throwaway_dir"/*(N); do rm "$z"; done
 
 printf '\n# test PETE rebuild\n\n'

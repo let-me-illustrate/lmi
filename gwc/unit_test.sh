@@ -13,8 +13,7 @@ exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
 log_dir="$exec_prefix"/logs
 {
 printf 'LMI_TRIPLET = "%s"\n' "$LMI_TRIPLET" > /dev/tty
-# shellcheck disable=SC2154
-# shellcheck disable=SC2039
+# shellcheck disable=SC2039,SC2154,SC3001
   make "$coefficiency" --output-sync=recurse unit_tests 2>&1 \
     | tee \
     >(grep '\*\*\*') \
