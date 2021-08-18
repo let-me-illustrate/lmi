@@ -488,8 +488,8 @@ currency AccountValue::Solve
         ,upper_bound
         ,bias
         ,decimals
-        ,64
         ,os_trace
+        ,64
         );
     currency const solution_cents = round_minutiae().c(solution.root);
 

@@ -432,8 +432,8 @@ root_type lmi_root
     ,double          bound0
     ,double          bound1
     ,double          tolerance
+    ,std::ostream&   os_trace
     ,int             sprauchling_limit = INT_MAX
-    ,std::ostream&   os_trace          = null_stream()
     ,root_bias       bias              = bias_none
     )
 {
@@ -672,6 +672,29 @@ root_type lmi_root
         }
 }
 
+template<typename FunctionalType>
+root_type lmi_root
+    (FunctionalType& f
+    ,double          bound0
+    ,double          bound1
+    ,double          tolerance
+    ,int             sprauchling_limit = INT_MAX
+    ,root_bias       bias              = bias_none
+    )
+{
+    std::ostream null_ostream(&null_streambuf());
+    null_ostream.setstate(std::ios::badbit);
+    return lmi_root
+        (f
+        ,bound0
+        ,bound1
+        ,tolerance
+        ,null_ostream
+        ,sprauchling_limit
+        ,bias
+        );
+}
+
 /// Return a rounded zero z of a function f within input bounds [a,b].
 ///
 /// Intended to be used where f would round its argument anyway.
@@ -747,8 +770,8 @@ root_type decimal_root
     ,double          bound1
     ,root_bias       bias
     ,int             decimals
+    ,std::ostream&   os_trace
     ,int             sprauchling_limit = INT_MAX
-    ,std::ostream&   os_trace          = null_stream()
     )
 {
     round_to<double> const round_dec {decimals, r_to_nearest};
@@ -782,8 +805,8 @@ root_type decimal_root
         ,round_dec(bound0)
         ,round_dec(bound1)
         ,0.5 * std::pow(10.0, -decimals)
-        ,sprauchling_limit
         ,os_trace
+        ,sprauchling_limit
         ,bias
         );
     z.root = round_dec(z.root);
@@ -792,6 +815,29 @@ root_type decimal_root
     os_trace << " " << z.n_eval << " nominal, actual" << std::endl;
     os_trace << " return value: " << z.root << " (rounded)" << std::endl;
     return z;
+}
+
+template<typename FunctionalType>
+root_type decimal_root
+    (FunctionalType& f
+    ,double          bound0
+    ,double          bound1
+    ,root_bias       bias
+    ,int             decimals
+    ,int             sprauchling_limit = INT_MAX
+    )
+{
+    std::ostream null_ostream(&null_streambuf());
+    null_ostream.setstate(std::ios::badbit);
+    return decimal_root
+        (f
+        ,bound0
+        ,bound1
+        ,bias
+        ,decimals
+        ,null_ostream
+        ,sprauchling_limit
+        );
 }
 
 /// An instrumented translation of Brent's reference implementation.
@@ -822,7 +868,7 @@ double brent_zero
     ,double          a
     ,double          b
     ,double          t
-    ,std::ostream&   os_trace = null_stream()
+    ,std::ostream&   os_trace
     )
 {
     // Returns a zero of the function f in the given interval [a,b],
@@ -982,6 +1028,25 @@ double brent_zero
     recapitulate();
     os_trace << " return value: " << b << " = b" << std::endl;
     return b;
+}
+
+template<typename FunctionalType>
+double brent_zero
+    (FunctionalType& f
+    ,double          a
+    ,double          b
+    ,double          t
+    )
+{
+    std::ostream null_ostream(&null_streambuf());
+    null_ostream.setstate(std::ios::badbit);
+    return brent_zero
+        (f
+        ,a
+        ,b
+        ,t
+        ,null_ostream
+        );
 }
 
 /// A C++ translation of Brent's algol60 reference implementation.
