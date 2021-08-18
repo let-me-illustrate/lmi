@@ -31,6 +31,31 @@
 #include <iomanip>
 #include <sstream>
 
+/// Reference to a static null stream--not for general use.
+///
+/// This was originally a public facility, intended to be used as a
+/// default ostream& argument:
+///   void foo(std::ostream& os = null_stream());
+/// for functions that never change the streambuf. Now it is
+/// sequestered in this unit-test TU, where it serves only to show
+/// what could go wrong if it were used elsewhere. The essential
+/// problem is that the static object is in effect a global variable.
+/// Replacing its streambuf by calling rdbuf(another_streambuf)
+/// therefore has a global effect that is probably unwanted.
+/// Prefer to create a local object instead, e.g.:
+///   std::ostream local_os(&null_streambuf());
+///   local_os.setstate(std::ios::badbit);
+///   local_os << "written to oblivion";
+///   local_os.rdbuf(std::cout.rdbuf); // effect is only local
+///   local_os << "written to stdout";
+
+std::ostream& null_stream()
+{
+    static std::ostream z(&null_streambuf());
+    z.setstate(std::ios::badbit);
+    return z;
+}
+
 void emit_text_to_stream(std::ostream& os)
 {
     for(int i = 0; i < 10; ++i)
@@ -95,9 +120,11 @@ void mete_badbit_kuehl()
 
 void mete_kuehl_static()
 {
+    static std::ostream z(&null_streambuf());
+    z.setstate(std::ios::badbit);
     for(int i = 0; i < 1e4; ++i)
         {
-        emit_text_to_stream(null_stream());
+        emit_text_to_stream(z);
         }
 }
 
@@ -172,7 +199,7 @@ void test_fundamentals()
         ;
 
     // This alternative explicitly constructs a std::ostream each time
-    // it's used, which is costlier.
+    // it's used, which is costlier but avoids the peril shown below.
     std::ostream os1(&null_streambuf());
     os1
         << "But if ever I meet with a Boojum, that day,\n"
@@ -210,8 +237,9 @@ void test_fundamentals()
     // This would be okay:
     std::ostream new_os1(&null_streambuf());
     LMI_TEST_EQUAL(p, static_cast<void*>(new_os1.rdbuf()));
-    // But this would not:
+    // But this would not...
     std::ostream& new_os0 = null_stream();
+    // ...as demonstrated here:
     LMI_TEST_UNEQUAL(p, static_cast<void*>(new_os0.rdbuf()));
 
     // This would segfault:
@@ -219,11 +247,12 @@ void test_fundamentals()
     // As would this:
 //  os1 << "A Bandersnatch swiftly drew nigh" << std::endl;
     // These do not segfault, but remembering to reset the
-    // streambuf manually requires too much smiles and soap:
+    // streambuf manually requires too much smiles and soap...
     os0.rdbuf(&null_streambuf());
     os0 << "Segfault avoided with thimbles and care." << std::endl;
     os1.rdbuf(&null_streambuf());
     os1 << "Segfault avoided with forks and hope." << std::endl;
+    // ...so prefer to create a local std::ostream instead.
 }
 
 void assay_speed()
