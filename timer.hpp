@@ -37,12 +37,10 @@ void lmi_sleep(int seconds);
 
 /// Why another timer class?
 ///
-/// Boost provides a timer class, but they deliberately chose to use
-/// only a low-resolution timer. Their rationale is apparently that
-/// high-resolution timers may be more precise than they are accurate,
-/// and that latency is a significant concern. This class uses a high-
-/// resolution timer if available; it's a sharp tool that lets you
-/// make your own decision about that rationale.
+/// Since C++11, std::chrono::high_resolution_clock ought to make this
+/// redundant. However, MinGW-w64's implementation is defective--see:
+///   https://lists.nongnu.org/archive/html/lmi/2021-08/msg00007.html
+///   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63400
 
 class LMI_SO Timer
 {
