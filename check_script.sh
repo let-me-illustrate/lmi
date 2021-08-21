@@ -42,24 +42,17 @@ esac
 # First line, truncated at its first blank:
 shebang="$(sed -e'1!d' -e's/ .*$//' "$1")"
 
-# For scripts beginning with '#!/bin/zsh', a pipeline changes that
-# hashbang to '#!/bin/sh' and feeds the result into shellcheck.
-# In that case, any errors are reported as occurring in file '-',
-# so the command below writes the name of the zsh script after any
-# error messages.
-#
-# A fancier alternative might postprocess shellcheck output thus:
-#  | sed -e"/^In - line [0-9]*:$/s/-/$1"
-# but that would be harder to maintain, and more fragile because
-# the format of shellcheck's output might change in future.
+# Treat scripts beginning with '#!/bin/zsh' as though the shebang
+# were '#!/bin/sh', writing shellcheck directives wherever
+# zsh-specific features are used. See:
+#   https://lists.nongnu.org/archive/html/lmi/2021-08/msg00011.html
 
 case $shebang  in
     ("#!/bin/sh")
         shellcheck --external-sources "$1"
     ;;
     ("#!/bin/zsh")
-        sed -e'1s/zsh/sh/' "$1" | shellcheck --external-sources - \
-          || { printf '%s\n' "...in file $1"; exit 0; }
+        shellcheck --external-sources --shell="sh" "$1"
     ;;
     ("#!/usr/bin/make") ;;
     ("#!/bin/sed") ;;
