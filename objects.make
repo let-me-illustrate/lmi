@@ -1109,8 +1109,12 @@ rate_table_tool$(EXEEXT): \
   rate_table.o \
   rate_table_tool.o \
 
+# Skip testing test_coding_rules under non-POSIX platforms where only a stub
+# version of it is built currently.
+ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
 test_coding_rules_test := PERFORM=$(PERFORM) $(srcdir)/test_coding_rules_test.sh
 test_coding_rules$(EXEEXT): POST_LINK_COMMAND = $(test_coding_rules_test)
+endif
 test_coding_rules$(EXEEXT): \
   $(main_auxiliary_common_objects) \
   miscellany.o \
