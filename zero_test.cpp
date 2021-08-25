@@ -23,6 +23,7 @@
 
 #include "zero.hpp"
 
+#include "assert_lmi.hpp"
 #include "materially_equal.hpp"
 #include "math_functions.hpp"           // signum()
 #include "miscellany.hpp"               // stifle_warning_for_unused_variable()
@@ -48,6 +49,7 @@ static double const epsilon = std::numeric_limits<double>::epsilon();
 
 double max_err(double zeta, double tol)
 {
+    LMI_ASSERT(0.0 <= tol);
     return 6.0 * epsilon * std::fabs(zeta) + 2.0 * tol;
 }
 
@@ -78,6 +80,7 @@ double max_err(double zeta, double tol)
 
 int max_n_eval_bolzano(double a, double b, double tol, double zeta)
 {
+    LMI_ASSERT(0.0 <= tol);
     double delta = 2.0 * epsilon * std::fabs(zeta) + tol;
     double k = std::ceil(std::log2(std::fabs(b - a) / delta));
     return 1 + static_cast<int>(k);
