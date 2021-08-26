@@ -31,7 +31,7 @@
 
 #include <algorithm>                    // max()
 #include <cfloat>                       // DECIMAL_DIG
-#include <cmath>                        // exp(), fabs(), log(), pow(), sqrt()
+#include <cmath>                        // exp(), fabs(), log(), pow(), sin(), sqrt()
 #include <limits>
 #include <sstream>
 
@@ -1284,6 +1284,1043 @@ void test_former_rounding_problem()
     LMI_TEST(root_is_valid == r.validity);
 }
 
+/// TOMS 748 test suite.
+///
+/// Alefeld et al. present fifteen numbered problems in Table I,
+/// which expand to twenty-eight numbered problems indexed by 'NPROB'
+/// in their FORTRAN. A total of 154 tests results from the outer
+/// product of these problems and a variable parameter 'n'.
+///
+/// They ran their tests on an "AT&T 3B2-1000 Model 80". The WE32000
+/// doesn't have hardware floating point. They don't say what kind of
+/// coprocessor was used, if any; most likely it would have been a
+/// WE32106, which was designed to conform to a contemporary draft of
+/// IEEE 754 and seems to have been similar to x87, notably performing
+/// all floating-point calculations in 96-bit extended precision.
+/// However, they say "macheps is the relative machine precision which
+/// in our case is 1.9073486328 x 10[e]-16", as opposed to 2.22e-16
+/// for IEEE 754 binary64, so presumably they had no floating-point
+/// hardware. (But their "macheps" isn't even an integral power of
+/// two, so maybe that's just an error from which no conclusion can
+/// be drawn.)
+///
+/// The number of evaluations in Table II ("BR" column = Brent) is
+/// nearly reproduced:
+///
+///    tol    x87  Alefeld  x86_64
+///   1e-07  2809    2804    2807
+///   1e-10  2909    2905    2907
+///   1e-15  3015    2975    2974
+///   0      3038    3008    2991
+///
+/// especially for x86_64. This would seem to suggest that Alefeld
+/// et al. used a machine without a WE32106 coprocessor, which should
+/// have been closer to the x87 values above.
+///
+/// The roots presented in their 'testout' file are limited to
+/// fourteen significant decimals. Those limited-precision roots are
+/// given as comments below, next to more precise values that are
+/// given to DECIMAL_DIG figures for reproducibility although of
+/// course only DBL_DIG are accurate.
+
+void test_alefeld_examples(int alefeld_count, double tol)
+{
+    double pi_alefeld {3.1416e0}; // This is the value Alefeld uses.
+
+    double bound0 {};
+    double bound1 {};
+
+    double n {0.0};
+
+    int n_eval {};
+
+    // Table I #1 = FORTRAN #1
+    auto f01n01 = [](double x) {return std::sin(x) - x / 2.0;};
+    // Alefeld:     1.8954942670340;
+    double r01n01 = 1.89549426703398093963;
+    bound0 = pi_alefeld / 2.0e0;
+    bound1 = pi_alefeld;
+    n_eval += test_a_function(f01n01, r01n01, bound0, bound1, tol, __LINE__);
+
+    // Table I #2 = FORTRAN #2-11
+    auto f02 = [](double x)
+        {
+        double sum = 0.0;
+        for(int i = 1; i <= 20; ++i)
+            {
+            sum += std::pow(2.0 * i - 5.0, 2.0) / std::pow(x - i * i, 3.0);
+            }
+        return -2.0 * sum;
+        };
+    // Alefeld:     3.0229153472731;
+    double r02n02 = 3.0229153472730572183;
+    bound0 =  1.0e0 *  1.0e0 + 1.0e-9;
+    bound1 =  2.0e0 *  2.0e0 - 1.0e-9;
+    n_eval += test_a_function(f02, r02n02, bound0, bound1, tol, __LINE__);
+
+    // Test the same function with different intervals.
+
+    // Alefeld:     6.6837535608081
+    double r02n03 = 6.68375356080807847547;
+    bound0 =  2.0e0 *  2.0e0 + 1.0e-9;
+    bound1 =  3.0e0 *  3.0e0 - 1.0e-9;
+    n_eval += test_a_function(f02, r02n03, bound0, bound1, tol, __LINE__);
+
+    // Alefeld:     11.238701655002
+    double r02n04 = 11.2387016550022114103;
+    bound0 =  3.0e0 *  3.0e0 + 1.0e-9;
+    bound1 =  4.0e0 *  4.0e0 - 1.0e-9;
+    n_eval += test_a_function(f02, r02n04, bound0, bound1, tol, __LINE__);
+
+    // Alefeld:     19.676000080623
+    double r02n05 = 19.6760000806234103266;
+    bound0 =  4.0e0 *  4.0e0 + 1.0e-9;
+    bound1 =  5.0e0 *  5.0e0 - 1.0e-9;
+    n_eval += test_a_function(f02, r02n05, bound0, bound1, tol, __LINE__);
+
+    // Alefeld:     29.828227326505
+    double r02n06 = 29.8282273265047557231;
+    bound0 =  5.0e0 *  5.0e0 + 1.0e-9;
+    bound1 =  6.0e0 *  6.0e0 - 1.0e-9;
+    n_eval += test_a_function(f02, r02n06, bound0, bound1, tol, __LINE__);
+
+    // Alefeld:     41.906116195289
+    double r02n07 = 41.9061161952894138949;
+    bound0 =  6.0e0 *  6.0e0 + 1.0e-9;
+    bound1 =  7.0e0 *  7.0e0 - 1.0e-9;
+    n_eval += test_a_function(f02, r02n07, bound0, bound1, tol, __LINE__);
+
+    // Alefeld:     55.953595800143
+    double r02n08 = 55.95359580014309131;
+    bound0 =  7.0e0 *  7.0e0 + 1.0e-9;
+    bound1 =  8.0e0 *  8.0e0 - 1.0e-9;
+    n_eval += test_a_function(f02, r02n08, bound0, bound1, tol, __LINE__);
+
+    // Alefeld:     71.985665586588
+    double r02n09 = 71.9856655865877996803;
+    bound0 =  8.0e0 *  8.0e0 + 1.0e-9;
+    bound1 =  9.0e0 *  9.0e0 - 1.0e-9;
+    n_eval += test_a_function(f02, r02n09, bound0, bound1, tol, __LINE__);
+
+    // Alefeld:     90.008868539167
+    double r02n10 = 90.0088685391666700752;
+    bound0 =  9.0e0 *  9.0e0 + 1.0e-9;
+    bound1 = 10.0e0 * 10.0e0 - 1.0e-9;
+    n_eval += test_a_function(f02, r02n10, bound0, bound1, tol, __LINE__);
+
+    // Alefeld:     110.02653274833
+    double r02n11 = 110.026532748330197364;
+    bound0 = 10.0e0 * 10.0e0 + 1.0e-9;
+    bound1 = 11.0e0 * 11.0e0 - 1.0e-9;
+    n_eval += test_a_function(f02, r02n11, bound0, bound1, tol, __LINE__);
+
+    // Table I #3 = FORTRAN #12-14
+    auto f03n12 = [](double x) {return  -40.0 * x * std::exp(-1.0 * x);};
+    // Alefeld:  0.0;
+    double r03 = 0.0;
+    bound0 = -9.0e0;
+    bound1 = 31.0e0;
+    n_eval += test_a_function(f03n12, r03, bound0, bound1, tol, __LINE__);
+
+    auto f03n13 = [](double x) {return -100.0 * x * std::exp(-2.0 * x);};
+    n_eval += test_a_function(f03n13, r03, bound0, bound1, tol, __LINE__);
+
+    auto f03n14 = [](double x) {return -200.0 * x * std::exp(-3.0 * x);};
+    n_eval += test_a_function(f03n14, r03, bound0, bound1, tol, __LINE__);
+
+    // Table I #4 = FORTRAN #15-17
+    //
+    // For the set of problems identified as #4 in Alefeld's table I,
+    // there are really two variable parameters, 'n' and 'a'. The urge
+    // to treat 'a' as a variable is resisted to avoid confusion, as
+    // 'a' is both a parameter and a bound in the "[a,b]" column.
+    auto f04n15 = [&n](double x) {return std::pow(x, n) - 0.2;};
+    n = 4.0;
+    // Alefeld:      0.66874030497642
+    double r04n15a = 0.668740304976422006433;
+    bound0 = 0.0e0;
+    bound1 = 5.0e0;
+    n_eval += test_a_function(f04n15, r04n15a, bound0, bound1, tol, __LINE__);
+
+    n = 6.0;
+    // Alefeld:      0.76472449133173
+    double r04n15b = 0.764724491331730038546;
+    bound0 = 0.0e0;
+    bound1 = 5.0e0;
+    n_eval += test_a_function(f04n15, r04n15b, bound0, bound1, tol, __LINE__);
+
+    n = 8.0;
+    // Alefeld:      0.81776543395794
+    double r04n15c = 0.817765433957942544652;
+    bound0 = 0.0e0;
+    bound1 = 5.0e0;
+    n_eval += test_a_function(f04n15, r04n15c, bound0, bound1, tol, __LINE__);
+
+    n = 10.0;
+    // Alefeld:      0.85133992252078
+    double r04n15d = 0.851339922520784608828;
+    bound0 = 0.0e0;
+    bound1 = 5.0e0;
+    n_eval += test_a_function(f04n15, r04n15d, bound0, bound1, tol, __LINE__);
+
+    n = 12.0;
+    // Alefeld:      0.87448527222117
+    double r04n15e = 0.874485272221167897477;
+    bound0 = 0.0e0;
+    bound1 = 5.0e0;
+    n_eval += test_a_function(f04n15, r04n15e, bound0, bound1, tol, __LINE__);
+
+    auto f04n16 = [n](double x) {return std::pow(x, n) - 1.0;};
+    n = 4.0;
+    // Alefeld:      1.0000000000000
+    double r04n16a = 1.0;
+    bound0 = 0.0e0;
+    bound1 = 5.0e0;
+    n_eval += test_a_function(f04n16, r04n16a, bound0, bound1, tol, __LINE__);
+
+    n = 6.0;
+    // Alefeld:      1.0000000000000
+    double r04n16b = 1.0;
+    bound0 = 0.0e0;
+    bound1 = 5.0e0;
+    n_eval += test_a_function(f04n16, r04n16b, bound0, bound1, tol, __LINE__);
+
+    n = 8.0;
+    // Alefeld:      1.0000000000000
+    double r04n16c = 1.0;
+    bound0 = 0.0e0;
+    bound1 = 5.0e0;
+    n_eval += test_a_function(f04n16, r04n16c, bound0, bound1, tol, __LINE__);
+
+    n = 10.0;
+    // Alefeld:      1.0000000000000
+    double r04n16d = 1.0;
+    bound0 = 0.0e0;
+    bound1 = 5.0e0;
+    n_eval += test_a_function(f04n16, r04n16d, bound0, bound1, tol, __LINE__);
+
+    n = 12.0;
+    // Alefeld:      1.0000000000000
+    double r04n16e = 1.0;
+    bound0 = 0.0e0;
+    bound1 = 5.0e0;
+    n_eval += test_a_function(f04n16, r04n16e, bound0, bound1, tol, __LINE__);
+
+    auto f04n17 = [n](double x) {return std::pow(x, n) - 1.0;};
+    n = 8.0;
+    // Alefeld:      1.0000000000000
+    double r04n17a = 1.0;
+    bound0 = -0.95e0;
+    bound1 =  4.05e0;
+    n_eval += test_a_function(f04n17, r04n17a, bound0, bound1, tol, __LINE__);
+
+    n = 10.0;
+    // Alefeld:      1.0000000000000
+    double r04n17b = 1.0;
+    bound0 = -0.95e0;
+    bound1 =  4.05e0;
+    n_eval += test_a_function(f04n17, r04n17b, bound0, bound1, tol, __LINE__);
+
+    n = 12.0;
+    // Alefeld:      1.0000000000000
+    double r04n17c = 1.0;
+    bound0 = -0.95e0;
+    bound1 =  4.05e0;
+    n_eval += test_a_function(f04n17, r04n17c, bound0, bound1, tol, __LINE__);
+
+    n = 14.0;
+    // Alefeld:      1.0000000000000
+    double r04n17d = 1.0;
+    bound0 = -0.95e0;
+    bound1 =  4.05e0;
+    n_eval += test_a_function(f04n17, r04n17d, bound0, bound1, tol, __LINE__);
+
+    // Table I #5 = FORTRAN #18
+    auto f05n18 = [](double x) {return std::sin(x) - 0.5;};
+    // Alefeld:     0.52359877559830;
+    double r05n18 = 0.523598775598298815659;
+    bound0 = 0.0e0;
+    bound1 = 1.5e0;
+    n_eval += test_a_function(f05n18, r05n18, bound0, bound1, tol, __LINE__);
+
+    // Table I #6 = FORTRAN #19
+    auto f06n19 = [&n](double x)
+        {
+        return 2.0 * x * std::exp(-n) - 2.0 * std::exp(-n * x) + 1.0;
+        };
+    n = 1.0;
+    // Alefeld:      0.42247770964124
+    double r06n19a = 0.422477709641236709448;
+    bound0 = 0.0e0;
+    bound1 = 1.0e0;
+    n_eval += test_a_function(f06n19, r06n19a, bound0, bound1, tol, __LINE__);
+
+    n = 2.0;
+    // Alefeld:      0.30669941048320
+    double r06n19b = 0.306699410483203704914;
+    n_eval += test_a_function(f06n19, r06n19b, bound0, bound1, tol, __LINE__);
+
+    n = 3.0;
+    // Alefeld:      0.22370545765466
+    double r06n19c = 0.223705457654662959177;
+    n_eval += test_a_function(f06n19, r06n19c, bound0, bound1, tol, __LINE__);
+
+    n = 4.0;
+    // Alefeld:      0.17171914751951
+    double r06n19d = 0.171719147519508369415;
+    n_eval += test_a_function(f06n19, r06n19d, bound0, bound1, tol, __LINE__);
+
+    n = 5.0;
+    // Alefeld:      0.13825715505682
+    double r06n19e = 0.13825715505682406592;
+    n_eval += test_a_function(f06n19, r06n19e, bound0, bound1, tol, __LINE__);
+
+    n = 20.0;
+    // Alefeld:        3.4657359020854e-02
+    double r06n19f = 0.0346573590208538451218;
+    n_eval += test_a_function(f06n19, r06n19f, bound0, bound1, tol, __LINE__);
+
+    n = 40.0;
+    // Alefeld:        1.7328679513999e-02
+    double r06n19g = 0.0173286795139986349312;
+    n_eval += test_a_function(f06n19, r06n19g, bound0, bound1, tol, __LINE__);
+
+    n = 60.0;
+    // Alefeld:        1.1552453009332e-02
+    double r06n19h = 0.0115524530093324209745;
+    n_eval += test_a_function(f06n19, r06n19h, bound0, bound1, tol, __LINE__);
+
+    n = 80.0;
+    // Alefeld:         8.6643397569993e-03
+    double r06n19i = 0.00866433975699931746561;
+    n_eval += test_a_function(f06n19, r06n19i, bound0, bound1, tol, __LINE__);
+
+    n = 100.0;
+    // Alefeld:         6.9314718055995e-03
+    double r06n19j = 0.00693147180559945241124;
+    n_eval += test_a_function(f06n19, r06n19j, bound0, bound1, tol, __LINE__);
+
+    // Table I #7 = FORTRAN #20
+    auto f07n20 = [&n](double x)
+        {
+        return
+              (1.0 + std::pow(1.0 - n, 2.0)) * x
+            - std::pow((1.0 - n * x), 2.0)
+            ;
+        };
+    n = 5.0;
+    // Alefeld:        3.8402551840622e-02
+    double r07n20a = 0.0384025518406218985268;
+    bound0 = 0.0e0;
+    bound1 = 1.0e0;
+    n_eval += test_a_function(f07n20, r07n20a, bound0, bound1, tol, __LINE__);
+
+    n = 10.0;
+    // Alefeld:         9.9000099980005e-03
+    double r07n20b = 0.00990000999800050122956;
+    bound0 = 0.0e0;
+    bound1 = 1.0e0;
+    n_eval += test_a_function(f07n20, r07n20b, bound0, bound1, tol, __LINE__);
+
+    n = 20.0;
+    // Alefeld:         2.4937500390620e-03
+    double r07n20c = 0.00249375003906201174464;
+    bound0 = 0.0e0;
+    bound1 = 1.0e0;
+    n_eval += test_a_function(f07n20, r07n20c, bound0, bound1, tol, __LINE__);
+
+    // Table I #8 = FORTRAN #21
+    auto f08n21 = [&n](double x)
+        {
+        return std::pow(x, 2.0) - std::pow(1.0 - x, n);
+        };
+    n =  2.0;
+    // Alefeld:      0.50000000000000
+    double r08n21a = 0.5;
+    bound0 = 0.0e0;
+    bound1 = 1.0e0;
+    n_eval += test_a_function(f08n21, r08n21a, bound0, bound1, tol, __LINE__);
+
+    n =  5.0;
+    // Alefeld:      0.34595481584824
+    double r08n21b = 0.345954815848241947762;
+    bound0 = 0.0e0;
+    bound1 = 1.0e0;
+    n_eval += test_a_function(f08n21, r08n21b, bound0, bound1, tol, __LINE__);
+
+    n = 10.0;
+    // Alefeld:      0.24512233375331
+    double r08n21c = 0.245122333753307247717;
+    bound0 = 0.0e0;
+    bound1 = 1.0e0;
+    n_eval += test_a_function(f08n21, r08n21c, bound0, bound1, tol, __LINE__);
+
+    n = 15.0;
+    // Alefeld:      0.19554762353657
+    double r08n21d = 0.19554762353656562901;
+    bound0 = 0.0e0;
+    bound1 = 1.0e0;
+    n_eval += test_a_function(f08n21, r08n21d, bound0, bound1, tol, __LINE__);
+
+    n = 20.0;
+    // Alefeld:      0.16492095727644
+    double r08n21e = 0.164920957276440960371;
+    bound0 = 0.0e0;
+    bound1 = 1.0e0;
+    n_eval += test_a_function(f08n21, r08n21e, bound0, bound1, tol, __LINE__);
+
+    // Table I #9 = FORTRAN #22
+    auto f09n22 = [&n](double x)
+        {
+        return (1.0 + std::pow(1.0 - n, 4.0)) * x - std::pow(1.0 - n * x, 4.0);
+        };
+    n =  1.0;
+    // Alefeld:      0.27550804099948
+    double r09n22a = 0.27550804099948439374;
+    bound0 = 0.0e0;
+    bound1 = 1.0e0;
+    n_eval += test_a_function(f09n22, r09n22a, bound0, bound1, tol, __LINE__);
+
+    n =  2.0;
+    // Alefeld:      0.13775402049974
+    double r09n22b = 0.13775402049974219687;
+    n_eval += test_a_function(f09n22, r09n22b, bound0, bound1, tol, __LINE__);
+
+    n =  4.0;
+    // Alefeld:        1.0305283778156e-02
+    double r09n22c = 0.0103052837781564439468;
+    n_eval += test_a_function(f09n22, r09n22c, bound0, bound1, tol, __LINE__);
+
+    n =  5.0;
+    // Alefeld:         3.6171081789041e-03
+    double r09n22d = 0.00361710817890406339387;
+    n_eval += test_a_function(f09n22, r09n22d, bound0, bound1, tol, __LINE__);
+
+    n =  8.0;
+    // Alefeld:          4.1087291849640e-04
+    double r09n22e = 0.000410872918496395320848;
+    n_eval += test_a_function(f09n22, r09n22e, bound0, bound1, tol, __LINE__);
+
+    n = 15.0;
+    // Alefeld:      2.5989575892908e-05
+    double r09n22f = 2.59895758929076292133e-05;
+    n_eval += test_a_function(f09n22, r09n22f, bound0, bound1, tol, __LINE__);
+
+    n = 20.0;
+    // Alefeld:      7.6685951221853e-06
+    double r09n22g = 7.66859512218533888794e-06;
+    n_eval += test_a_function(f09n22, r09n22g, bound0, bound1, tol, __LINE__);
+
+    // Table I #10 = FORTRAN #23
+    auto f10n23 = [&n](double x)
+        {
+        return std::exp(-n * x) * (x - 1.0) + std::pow(x, n);
+        };
+    n =  1.0;
+    // Alefeld:      0.40105813754155
+    double r10n23a = 0.401058137541547010674;
+    bound0 = 0.0e0;
+    bound1 = 1.0e0;
+    n_eval += test_a_function(f10n23, r10n23a, bound0, bound1, tol, __LINE__);
+
+    n =  5.0;
+    // Alefeld:      0.51615351875793
+    double r10n23b = 0.516153518757933582606;
+    n_eval += test_a_function(f10n23, r10n23b, bound0, bound1, tol, __LINE__);
+
+    n = 10.0;
+    // Alefeld:      0.53952222690842
+    double r10n23c = 0.539522226908415780677;
+    n_eval += test_a_function(f10n23, r10n23c, bound0, bound1, tol, __LINE__);
+
+    n = 15.0;
+    // Alefeld:      0.54818229434066
+    double r10n23d = 0.548182294340655240639;
+    n_eval += test_a_function(f10n23, r10n23d, bound0, bound1, tol, __LINE__);
+
+    n = 20.0;
+    // Alefeld:      0.55270466667849
+    double r10n23e = 0.552704666678487832598;
+    n_eval += test_a_function(f10n23, r10n23e, bound0, bound1, tol, __LINE__);
+
+    // Table I #11 = FORTRAN #24
+    auto f11n24 = [&n](double x)
+        {
+        return (n * x - 1.0) / ((n - 1.0) * x);
+        };
+    n =  2.0;
+    // Alefeld:      0.50000000000000
+    double r11n24a = 0.5;
+    bound0 = 1.0e-2;
+    bound1 = 1.0e0;
+    n_eval += test_a_function(f11n24, r11n24a, bound0, bound1, tol, __LINE__);
+
+    n =  5.0;
+    // Alefeld:      0.20000000000000
+    double r11n24b = 0.2;
+    n_eval += test_a_function(f11n24, r11n24b, bound0, bound1, tol, __LINE__);
+
+    n = 15.0;
+    // Alefeld:        6.6666666666667e-02
+    double r11n24c = 0.066666666666666667;
+    n_eval += test_a_function(f11n24, r11n24c, bound0, bound1, tol, __LINE__);
+
+    n = 20.0;
+    // Alefeld:         5.0000000000000e-02
+    double r11n24d = 0.05;
+    n_eval += test_a_function(f11n24, r11n24d, bound0, bound1, tol, __LINE__);
+
+    // Table I #12 = FORTRAN #25
+    //
+    // Presumably due to inaccuracy in std::pow(), the calculated
+    // zero differs from the theoretical one (equal to 'n') by at
+    // least one ulp for some values of 'n'.
+    auto f12n25 = [&n](double x)
+        {
+        return std::pow(x, 1.0 / n) - std::pow(n, 1.0 / n);
+        };
+    n =  2.0;
+    // Alefeld:       2.0000000000000
+    double r12n25a =  2.0;
+    bound0 =   1.0e0;
+    bound1 = 100.0e0;
+    n_eval += test_a_function(f12n25, r12n25a, bound0, bound1, tol, __LINE__);
+
+    n =   3.0;
+    // Alefeld:       3.0000000000000
+    double r12n25b =  3.0;
+    n_eval += test_a_function(f12n25, r12n25b, bound0, bound1, tol, __LINE__);
+
+    n =   4.0;
+    // Alefeld:       4.0000000000000
+    double r12n25c =  4.0;
+    n_eval += test_a_function(f12n25, r12n25c, bound0, bound1, tol, __LINE__);
+
+    n =   5.0;
+    // Alefeld:       5.0000000000000
+    double r12n25d =  5.0;
+    n_eval += test_a_function(f12n25, r12n25d, bound0, bound1, tol, __LINE__);
+
+    n =   6.0;
+    // Alefeld:       6.0000000000000
+    double r12n25e =  6.0;
+    n_eval += test_a_function(f12n25, r12n25e, bound0, bound1, tol, __LINE__);
+
+    n =   7.0;
+    // Alefeld:       7.0000000000000
+    double r12n25f =  7.0;
+    n_eval += test_a_function(f12n25, r12n25f, bound0, bound1, tol, __LINE__);
+
+    n =   9.0;
+    // Alefeld:       9.0000000000000
+    double r12n25g =  9.0;
+    n_eval += test_a_function(f12n25, r12n25g, bound0, bound1, tol, __LINE__);
+
+    n =  11.0;
+    // Alefeld:      11.000000000000
+    double r12n25h = 11.0;
+    n_eval += test_a_function(f12n25, r12n25h, bound0, bound1, tol, __LINE__);
+
+    n =  13.0;
+    // Alefeld:      13.000000000000
+    double r12n25i = 13.0;
+    n_eval += test_a_function(f12n25, r12n25i, bound0, bound1, tol, __LINE__);
+
+    n =  15.0;
+    // Alefeld:      15.000000000000
+    double r12n25j = 15.0;
+    n_eval += test_a_function(f12n25, r12n25j, bound0, bound1, tol, __LINE__);
+
+    n =  17.0;
+    // Alefeld:      17.000000000000
+    double r12n25k = 16.9999999999999715783;
+    n_eval += test_a_function(f12n25, r12n25k, bound0, bound1, tol, __LINE__);
+
+    n =  19.0;
+    // Alefeld:      19.000000000000
+    double r12n25l = 19.0;
+    n_eval += test_a_function(f12n25, r12n25l, bound0, bound1, tol, __LINE__);
+
+    n =  21.0;
+    // Alefeld:      21.000000000000
+    double r12n25m = 21.0000000000000355271;
+    n_eval += test_a_function(f12n25, r12n25m, bound0, bound1, tol, __LINE__);
+
+    n =  23.0;
+    // Alefeld:      23.000000000000
+    double r12n25n = 23.0000000000000568434;
+    n_eval += test_a_function(f12n25, r12n25n, bound0, bound1, tol, __LINE__);
+
+    n =  25.0;
+    // Alefeld:      25.000000000000
+    double r12n25o = 25.000000000000024869;
+    n_eval += test_a_function(f12n25, r12n25o, bound0, bound1, tol, __LINE__);
+
+    n =  27.0;
+    // Alefeld:      27.000000000000
+    double r12n25p = 26.9999999999999573674;
+    n_eval += test_a_function(f12n25, r12n25p, bound0, bound1, tol, __LINE__);
+
+    n =  29.0;
+    // Alefeld:      29.000000000000
+    double r12n25q = 28.9999999999999076294;
+    n_eval += test_a_function(f12n25, r12n25q, bound0, bound1, tol, __LINE__);
+
+    n =  31.0;
+    // Alefeld:      31.000000000000
+    double r12n25r = 31.0000000000000568434;
+    n_eval += test_a_function(f12n25, r12n25r, bound0, bound1, tol, __LINE__);
+
+    n =  33.0;
+    // Alefeld:      33.000000000000
+    double r12n25s = 33.0000000000000852651;
+    n_eval += test_a_function(f12n25, r12n25s, bound0, bound1, tol, __LINE__);
+
+    // Table I #13 = FORTRAN #26
+    //
+    // This is a dodgy test that requires special handling.
+    //
+    // Alefeld says: "If we code xe^-x^-2 in Fortran 77 as x(e^-1/x^2)
+    // then all algorithms that solve this problem within 1000 itera-
+    // tions deliver values around 0.02 as the exact solution, because
+    // the result of the computation of 0.02(e^-1/0.02^2) on our
+    // machine is equal to 0. However, when we code xe^-x^-2 as
+    // x/e^(1/x^2), all algorithms give correct solutions." However,
+    // while the FORTRAN code that accompanies the paper uses the
+    // recommended formula:
+    //   FX=X/DEXP(1.0D0/(X*X))
+    // the accompanying 'testout' file gives the root as
+    //   COMPUTED ROOT =    2.2317679157465D-02
+    // which demonstrates exactly the difficulty that was to be
+    // avoided. A similar outcome is seen with a 'long double'
+    // calculation (which of course varies by architecture).
+    //
+    // Therefore, whereas all the other TOMS 748 tests here invoke
+    // test_a_function(), this one merely invokes lmi_root(). It
+    // records the number of evaluations, without which Alefeld's
+    // totals in Table I could not be (approximately) reproduced,
+    // and ignores the meaningless false root.
+    auto f13n26 = [](double x)
+        {
+        return
+              (0.0 == x)
+            ? 0.0
+            // Alefeld recommends against this:
+        //  : x * std::exp(-std::pow(x, -2.0))
+            //   which returns 0.0154471909812447585897
+            // Instead, Alefeld recommends:
+            : x / std::exp(1.0 / (x * x))
+            //   which returns 0.0151677361684193559577
+            // Even this:
+        //  : static_cast<double>(x / std::exp(1.0L / (x * x)))
+            //   which returns 0.0152105118173455761132
+            // returns an artifact of underflow rather than a
+            // true root.
+            ;
+        };
+    // Alefeld:     2.2317679157465e-02 [not a true root]
+#if 0
+#   if !defined LMI_X87
+    double r13n26 = 0.0151677361684193559577;
+#   else  // defined LMI_X87
+    double r13n26 = 0.0156404232768098810924;
+#   endif // defined LMI_X87
+#endif // 0
+    bound0 = -1.0e0;
+    bound1 =  4.0e0;
+#if 0
+    n_eval += test_a_function(f13n26, r13n26, bound0, bound1, tol, __LINE__);
+#endif // 0
+    root_type r = lmi_root(f13n26, bound0, bound1, tol);
+    n_eval += r.n_eval;
+
+    // Table I #14 = FORTRAN #27
+    auto f14n27 = [&n](double x)
+        {
+        return
+              (0.0 <= x)
+            ? (n / 20.0) * (x / 1.5 + std::sin(x) - 1.0)
+            : -n / 20.0
+            ;
+        };
+    n =  1.0;
+    // Alefeld:      0.62380651896161
+    double r14n27a = 0.623806518961612321839;
+    bound0 = -10000;
+    bound1 = pi_alefeld / 2.0e0;
+    n_eval += test_a_function(f14n27, r14n27a, bound0, bound1, tol, __LINE__);
+
+    n =  2.0;
+    // Alefeld:      0.62380651896161
+    double r14n27b = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27b, bound0, bound1, tol, __LINE__);
+
+    n =  3.0;
+    // Alefeld:      0.62380651896161
+    double r14n27c = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27c, bound0, bound1, tol, __LINE__);
+
+    n =  4.0;
+    // Alefeld:      0.62380651896161
+    double r14n27d = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27d, bound0, bound1, tol, __LINE__);
+
+    n =  5.0;
+    // Alefeld:      0.62380651896161
+    double r14n27e = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27e, bound0, bound1, tol, __LINE__);
+
+    n =  6.0;
+    // Alefeld:      0.62380651896161
+    double r14n27f = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27f, bound0, bound1, tol, __LINE__);
+
+    n =  7.0;
+    // Alefeld:      0.62380651896161
+    double r14n27g = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27g, bound0, bound1, tol, __LINE__);
+
+    n =  8.0;
+    // Alefeld:      0.62380651896161
+    double r14n27h = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27h, bound0, bound1, tol, __LINE__);
+
+    n =  9.0;
+    // Alefeld:      0.62380651896161
+    double r14n27i = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27i, bound0, bound1, tol, __LINE__);
+
+    n = 10.0;
+    // Alefeld:      0.62380651896161
+    double r14n27j = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27j, bound0, bound1, tol, __LINE__);
+
+    n = 11.0;
+    // Alefeld:      0.62380651896161
+    double r14n27k = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27k, bound0, bound1, tol, __LINE__);
+
+    n = 12.0;
+    // Alefeld:      0.62380651896161
+    double r14n27l = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27l, bound0, bound1, tol, __LINE__);
+
+    n = 13.0;
+    // Alefeld:      0.62380651896161
+    double r14n27m = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27m, bound0, bound1, tol, __LINE__);
+
+    n = 14.0;
+    // Alefeld:      0.62380651896161
+    double r14n27n = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27n, bound0, bound1, tol, __LINE__);
+
+    n = 15.0;
+    // Alefeld:      0.62380651896161
+    double r14n27o = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27o, bound0, bound1, tol, __LINE__);
+
+    n = 16.0;
+    // Alefeld:      0.62380651896161
+    double r14n27p = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27p, bound0, bound1, tol, __LINE__);
+
+    n = 17.0;
+    // Alefeld:      0.62380651896161
+    double r14n27q = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27q, bound0, bound1, tol, __LINE__);
+
+    n = 18.0;
+    // Alefeld:      0.62380651896161
+    double r14n27r = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27r, bound0, bound1, tol, __LINE__);
+
+    n = 19.0;
+    // Alefeld:      0.62380651896161
+    double r14n27s = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27s, bound0, bound1, tol, __LINE__);
+
+    n = 20.0;
+    // Alefeld:      0.62380651896161
+    double r14n27t = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27t, bound0, bound1, tol, __LINE__);
+
+    n = 21.0;
+    // Alefeld:      0.62380651896161
+    double r14n27u = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27u, bound0, bound1, tol, __LINE__);
+
+    n = 22.0;
+    // Alefeld:      0.62380651896161
+    double r14n27v = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27v, bound0, bound1, tol, __LINE__);
+
+    n = 23.0;
+    // Alefeld:      0.62380651896161
+    double r14n27w = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27w, bound0, bound1, tol, __LINE__);
+
+    n = 24.0;
+    // Alefeld:      0.62380651896161
+    double r14n27x = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27x, bound0, bound1, tol, __LINE__);
+
+    n = 25.0;
+    // Alefeld:      0.62380651896161
+    double r14n27y = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27y, bound0, bound1, tol, __LINE__);
+
+    n = 26.0;
+    // Alefeld:      0.62380651896161
+    double r14n27z = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27z, bound0, bound1, tol, __LINE__);
+
+    n = 27.0;
+    // Alefeld:      0.62380651896161
+    double r14n27A = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27A, bound0, bound1, tol, __LINE__);
+
+    n = 28.0;
+    // Alefeld:      0.62380651896161
+    double r14n27B = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27B, bound0, bound1, tol, __LINE__);
+
+    n = 29.0;
+    // Alefeld:      0.62380651896161
+    double r14n27C = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27C, bound0, bound1, tol, __LINE__);
+
+    n = 30.0;
+    // Alefeld:      0.62380651896161
+    double r14n27D = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27D, bound0, bound1, tol, __LINE__);
+
+    n = 31.0;
+    // Alefeld:      0.62380651896161
+    double r14n27E = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27E, bound0, bound1, tol, __LINE__);
+
+    n = 32.0;
+    // Alefeld:      0.62380651896161
+    double r14n27F = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27F, bound0, bound1, tol, __LINE__);
+
+    n = 33.0;
+    // Alefeld:      0.62380651896161
+    double r14n27G = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27G, bound0, bound1, tol, __LINE__);
+
+    n = 34.0;
+    // Alefeld:      0.62380651896161
+    double r14n27H = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27H, bound0, bound1, tol, __LINE__);
+
+    n = 35.0;
+    // Alefeld:      0.62380651896161
+    double r14n27I = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27I, bound0, bound1, tol, __LINE__);
+
+    n = 36.0;
+    // Alefeld:      0.62380651896161
+    double r14n27J = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27J, bound0, bound1, tol, __LINE__);
+
+    n = 37.0;
+    // Alefeld:      0.62380651896161
+    double r14n27K = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27K, bound0, bound1, tol, __LINE__);
+
+    n = 38.0;
+    // Alefeld:      0.62380651896161
+    double r14n27L = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27L, bound0, bound1, tol, __LINE__);
+
+    n = 39.0;
+    // Alefeld:      0.62380651896161
+    double r14n27M = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27M, bound0, bound1, tol, __LINE__);
+
+    n = 40.0;
+    // Alefeld:      0.62380651896161
+    double r14n27N = 0.623806518961612321839;
+    n_eval += test_a_function(f14n27, r14n27N, bound0, bound1, tol, __LINE__);
+
+    // Table I #15 = FORTRAN #28
+    auto f15n28 = [&n](double x)
+        {
+        double const k = 0.002 / (1.0 + n);
+        return
+            // FORTRAN says 'k<x', but Alefeld says 'k<=x'
+              (k < x  ) ? std::exp(1.0) - 1.859
+            : (x < 0.0) ?                -0.859
+            :             std::exp((n + 1.0) * x / .002) - 1.859
+            ;
+        };
+    n =   20.0;
+    // Alefeld:      5.9051305594220e-05
+    double r15n28a = 5.90513055942197166237e-05;
+    bound0 = -10000;
+    bound1 = 1.0e-4;
+    n_eval += test_a_function(f15n28, r15n28a, bound0, bound1, tol, __LINE__);
+
+    n =  21.0;
+    // Alefeld:      5.6367155339937e-05
+    double r15n28b = 5.63671553399369966875e-05;
+    n_eval += test_a_function(f15n28, r15n28b, bound0, bound1, tol, __LINE__);
+
+    n =  22.0;
+    // Alefeld:      5.3916409455592e-05
+    double r15n28c = 5.39164094555919128212e-05;
+    n_eval += test_a_function(f15n28, r15n28c, bound0, bound1, tol, __LINE__);
+
+    n =  23.0;
+    // Alefeld:      5.1669892394942e-05
+    double r15n28d = 5.16698923949422605161e-05;
+    n_eval += test_a_function(f15n28, r15n28d, bound0, bound1, tol, __LINE__);
+
+    n =  24.0;
+    // Alefeld:      4.9603096699145e-05
+    double r15n28e = 4.9603096699144567656e-05;
+    n_eval += test_a_function(f15n28, r15n28e, bound0, bound1, tol, __LINE__);
+
+    n =  25.0;
+    // Alefeld:      4.7695285287639e-05
+    double r15n28f = 4.76952852876390018884e-05;
+    n_eval += test_a_function(f15n28, r15n28f, bound0, bound1, tol, __LINE__);
+
+    n =  26.0;
+    // Alefeld:      4.5928793239949e-05
+    double r15n28g = 4.59287932399486594501e-05;
+    n_eval += test_a_function(f15n28, r15n28g, bound0, bound1, tol, __LINE__);
+
+    n =  27.0;
+    // Alefeld:      4.4288479195665e-05
+    double r15n28h = 4.42884791956647908559e-05;
+    n_eval += test_a_function(f15n28, r15n28h, bound0, bound1, tol, __LINE__);
+
+    n =  28.0;
+    // Alefeld:      4.2761290257883e-05
+    double r15n28i = 4.27612902578832391001e-05;
+    n_eval += test_a_function(f15n28, r15n28i, bound0, bound1, tol, __LINE__);
+
+    n =  29.0;
+    // Alefeld:      4.1335913915954e-05
+    double r15n28j = 4.13359139159538029919e-05;
+    n_eval += test_a_function(f15n28, r15n28j, bound0, bound1, tol, __LINE__);
+
+    n =  30.0;
+    // Alefeld:      4.0002497338020e-05
+    double r15n28k = 4.00024973380198143745e-05;
+    n_eval += test_a_function(f15n28, r15n28k, bound0, bound1, tol, __LINE__);
+
+    n =  31.0;
+    // Alefeld:      3.8752419296207e-05
+    double r15n28l = 3.8752419296206693693e-05;
+    n_eval += test_a_function(f15n28, r15n28l, bound0, bound1, tol, __LINE__);
+
+    n =  32.0;
+    // Alefeld:      3.7578103559958e-05
+    double r15n28m = 3.75781035599579977917e-05;
+    n_eval += test_a_function(f15n28, r15n28m, bound0, bound1, tol, __LINE__);
+
+    n =  33.0;
+    // Alefeld:      3.6472865219959e-05
+    double r15n28n = 3.64728652199592355424e-05;
+    n_eval += test_a_function(f15n28, r15n28n, bound0, bound1, tol, __LINE__);
+
+    n =  34.0;
+    // Alefeld:      3.5430783356532e-05
+    double r15n28o = 3.54307833565318272637e-05;
+    n_eval += test_a_function(f15n28, r15n28o, bound0, bound1, tol, __LINE__);
+
+    n =  35.0;
+    // Alefeld:      3.4446594929961e-05
+    double r15n28p = 3.44465949299614979757e-05;
+    n_eval += test_a_function(f15n28, r15n28p, bound0, bound1, tol, __LINE__);
+
+    n =  36.0;
+    // Alefeld:      3.3515605877800e-05
+    double r15n28q = 3.35156058778003841008e-05;
+    n_eval += test_a_function(f15n28, r15n28q, bound0, bound1, tol, __LINE__);
+
+    n =  37.0;
+    // Alefeld:      3.2633616249437e-05
+    double r15n28r = 3.26336162494372057554e-05;
+    n_eval += test_a_function(f15n28, r15n28r, bound0, bound1, tol, __LINE__);
+
+    n =  38.0;
+    // Alefeld:      3.1796856858426e-05
+    double r15n28s = 3.17968568584259944827e-05;
+    n_eval += test_a_function(f15n28, r15n28s, bound0, bound1, tol, __LINE__);
+
+    n =  39.0;
+    // Alefeld:      3.1001935436965e-05
+    double r15n28t = 3.10019354369653454676e-05;
+    n_eval += test_a_function(f15n28, r15n28t, bound0, bound1, tol, __LINE__);
+
+    n =  40.0;
+    // Alefeld:      3.0245790670210e-05
+    double r15n28u = 3.02457906702100933871e-05;
+    n_eval += test_a_function(f15n28, r15n28u, bound0, bound1, tol, __LINE__);
+
+    n =  100.0;
+    // Alefeld:      1.2277994232462e-05
+    double r15n28v = 1.22779942324615231084e-05;
+    n_eval += test_a_function(f15n28, r15n28v, bound0, bound1, tol, __LINE__);
+
+    n =  200.0;
+    // Alefeld:      6.1695393904409e-06
+    double r15n28w = 6.16953939044086532173e-06;
+    n_eval += test_a_function(f15n28, r15n28w, bound0, bound1, tol, __LINE__);
+
+    n =  300.0;
+    // Alefeld:      4.1198585298293e-06
+    double r15n28x = 4.11985852982928247635e-06;
+    n_eval += test_a_function(f15n28, r15n28x, bound0, bound1, tol, __LINE__);
+
+    n =  400.0;
+    // Alefeld:      3.0924623877272e-06
+    double r15n28y = 3.09246238772721767043e-06;
+    n_eval += test_a_function(f15n28, r15n28y, bound0, bound1, tol, __LINE__);
+
+    n =  500.0;
+    // Alefeld:      2.4752044261050e-06
+    double r15n28z = 2.4752044261050178947e-06;
+    n_eval += test_a_function(f15n28, r15n28z, bound0, bound1, tol, __LINE__);
+
+    n =  600.0;
+    // Alefeld:      2.0633567678513e-06
+    double r15n28A = 2.06335676785127107013e-06;
+    n_eval += test_a_function(f15n28, r15n28A, bound0, bound1, tol, __LINE__);
+
+    n =  700.0;
+    // Alefeld:      1.7690120078154e-06
+    double r15n28B = 1.76901200781542650599e-06;
+    n_eval += test_a_function(f15n28, r15n28B, bound0, bound1, tol, __LINE__);
+
+    n =  800.0;
+    // Alefeld:      1.5481615698859e-06
+    double r15n28C = 1.54816156988591015938e-06;
+    n_eval += test_a_function(f15n28, r15n28C, bound0, bound1, tol, __LINE__);
+
+    n =  900.0;
+    // Alefeld:      1.3763345366022e-06
+    double r15n28D = 1.37633453660223511171e-06;
+    n_eval += test_a_function(f15n28, r15n28D, bound0, bound1, tol, __LINE__);
+
+    n = 1000.0;
+    // Alefeld:      1.2388385788997e-06
+    double r15n28E = 1.23883857889971445027e-06;
+    n_eval += test_a_function(f15n28, r15n28E, bound0, bound1, tol, __LINE__);
+
+    std::cout
+        << "  evaluations: " << n_eval
+        << " (vs. " << alefeld_count << " Alefeld Table II)"
+        << "; tol " << tol
+        << std::endl
+        ;
+}
+
 int test_main(int, char*[])
 {
     test_fundamentals();
@@ -1296,6 +2333,12 @@ int test_main(int, char*[])
     test_various_functions();
     test_hodgepodge();
     test_former_rounding_problem();
+
+    std::cout << "TOMS 748 tests: " << std::endl;
+    test_alefeld_examples(2804, 1.0e-7);
+    test_alefeld_examples(2905, 1.0e-10);
+    test_alefeld_examples(2975, 1.0e-15);
+    test_alefeld_examples(3008, 0.0);
 
     return 0;
 }
