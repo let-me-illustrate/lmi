@@ -54,7 +54,7 @@ double max_err(double zeta, double tol)
     return 6.0 * epsilon * std::fabs(zeta) + 2.0 * tol;
 }
 
-/// AfMWD eq. 3.3: maximum number of evaluations for bisection.
+/// AfMWD eq. 3.2: maximum number of evaluations for bisection.
 ///
 /// The return value, k+1, is the exact number of function
 /// evaluations unless f vanishes early, as Brent explains in the
@@ -64,25 +64,42 @@ double max_err(double zeta, double tol)
 /// prevent 'delta' from being zero (which Brent wouldn't allow
 /// anyway: he says "t is a positive absolute tolerance" in the
 /// paragraph following equation 2.9). Why ϵ/2 instead of ϵ?
-/// Two reasons:
-///  - Brent multiplies 'tol' by two.
-///  - Using ϵ/2 gives the correct number of iterations for an
-///    input tolerance of zero; using ϵ does not, as one of the
-///    unit tests below demonstrates.
+/// Because using ϵ/2 gives the correct number of iterations for an
+/// input tolerance of zero; using ϵ does not, as is demonstrated
+/// by some unit tests below. But why is the correct answer obtained
+/// only by using ϵ/2 where ϵ seems natural? Most authors give the
+/// number of steps (disregarding two initial endpoint evaluations)
+/// as
+///   ⌈log2((b-a)/tol)⌉
+/// so that the total number of evaluations is
+///   2 + ⌈log2((b-a)/tol)⌉
+/// whereas Brent gives an answer one lower, presumably because he
+/// regards the tolerance as '2t'.
 ///
 /// static_cast<int> is exact for any number of evaluations that
 /// can be counted by an 'int'.
 ///
-/// The greatest possible number of bisection steps is:
-///   log2(DBL_MAX - -DBL_MAX) / DBL_TRUE_MIN
-///   = 1 + 1024 + 1074 = 2099
+/// The greatest possible number of bisection steps (i.e., of extra
+/// evaluations in addition to the initial two, one at each endpoint)
+/// with the lowest possible positive 'tol' is:
+///     log2((DBL_MAX - -DBL_MAX) /      DBL_TRUE_MIN)
+///   = log2 (DBL_MAX - -DBL_MAX) - log2(DBL_TRUE_MIN)
+///   = (1 + 1024) - -1074 = 2099
+///   =      1025 +   1074 = 2099
 /// Yet an IEEE 754 binary64 entity can have no more than 2^64
 /// distinct values; with an appropriate definition of "bisection",
 /// about 64 steps should suffice.
 ///
-/// Known defect:
+/// Known defects:
 ///  - std::fabs(DBL_MAX - -DBL_MAX) overflows.
-/// Such a defect in a unit-testing TU needn't be fixed.
+///  - Brent's eq. 3.2 with the strange ϵ/2 adjustment is shown to
+///    give a correct result in certain cases, but a more canonical
+///    version would probably be better.
+///  - What is the lowest positive value of 'tol' that makes sense?
+///    The ϵ/2 adjustment assumes that it is ϵ/2, so that ϵ=2t; but
+///    the log2((DBL_MAX - -DBL_MAX) / DBL_TRUE_MIN) calculation
+///    conflictingly assumes that it is DBL_TRUE_MIN.
+/// Such defects in a unit-testing TU needn't be fixed.
 
 int max_n_eval_bolzano(double a, double b, double tol, double zeta)
 {
@@ -93,7 +110,7 @@ int max_n_eval_bolzano(double a, double b, double tol, double zeta)
     return 1 + static_cast<int>(k);
 }
 
-/// AfMWD eq. 3.3: maximum number of evaluations for Brent's method.
+/// AfMWD eq. 3.2: maximum number of evaluations for Brent's method.
 ///
 /// The greatest possible number of steps is 2099^2 = 4405801.
 
@@ -381,11 +398,9 @@ void test_fundamentals()
     //
     // log2(DBL_MAX) is 1024, so log2(DBL_MAX - -DBL_MAX) is 1025;
     // and log2(DBL_TRUE_MIN) is 1074; so the maximum number of
-    // evaluations is
-    //   log2(DBL_MAX - -DBL_MAX) / DBL_TRUE_MIN
-    //   = 1 + 1024 + 1074 = 2099
-    // for bisection, and 2099^2 = 4405801 for Brent's method with
-    // IEEE 754 binary64.
+    // evaluations with IEEE 754 binary64 is
+    //   1025 + 1074 = 2099 for bisection, and
+    //   2099^2 = 4405801 for Brent's method
     long double max = DBL_MAX;
     long double min = DBL_TRUE_MIN;
     int max_iter = static_cast<int>(std::ceil(std::log2((max - -max) / min)));
@@ -1208,6 +1223,15 @@ void test_hodgepodge()
     // "maximum" number of iterations would be 54, anomalously
     // less than the actual 55 here.
     LMI_TEST_EQUAL(55, r.n_eval); // weak
+
+    // Here is an easier way to see that the ϵ/2 minimum is correct.
+    // Consider nine equally-spaced point centered around zero:
+    //   a=-4ϵ -3ϵ -2ϵ -1ϵ 0ϵ 1ϵ 2ϵ 3ϵ 4ϵ=b
+    // Bisection in [a,b] requires evaluating f(a) and f(b), so there
+    // are two initial evaluations. To find a root requires evaluating
+    // f at 0, then at -2ϵ or 2ϵ, then at one of the odd multiples of
+    // ϵ; that's three more evaluations, for a total of five.
+    LMI_TEST_EQUAL(5, max_n_eval_bolzano(-4.0 * epsilon, 4.0 * epsilon, 0.0, 0.0));
 
     std::ostringstream oss;
     r = lmi_root(signum_offset, -1.0e300, 1.0e300, 5.0e-19, oss);
