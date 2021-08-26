@@ -151,7 +151,7 @@ int max_n_eval_brent(double a, double b, double tol, double zeta)
 /// so this comparison is not made for x87.
 
 template<typename F>
-void test_a_function
+int test_a_function
     (F           f
     ,double      exact_root
     ,double      bound0
@@ -183,6 +183,8 @@ void test_a_function
 #if !defined LMI_X87
     INVOKE_LMI_TEST_EQUAL(os0.str(),os1.str(),file,line);
 #endif // !defined LMI_X87
+
+    return r.n_eval;
 }
 
 /// Test decimal root-finding accuracy and speed.
