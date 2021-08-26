@@ -29,6 +29,7 @@
 #include "miscellany.hpp"               // stifle_warning_for_unused_variable()
 #include "test_tools.hpp"
 
+#include <algorithm>                    // max()
 #include <cfloat>                       // DECIMAL_DIG
 #include <cmath>                        // exp(), fabs(), log(), pow(), sqrt()
 #include <limits>
@@ -59,6 +60,16 @@ double max_err(double zeta, double tol)
 /// evaluations unless f vanishes early, as Brent explains in the
 /// paragraph following eq. 3.3 .
 ///
+/// GWC modification: Constrain δ to be no less than ϵ/2, to
+/// prevent 'delta' from being zero (which Brent wouldn't allow
+/// anyway: he says "t is a positive absolute tolerance" in the
+/// paragraph following equation 2.9). Why ϵ/2 instead of ϵ?
+/// Two reasons:
+///  - Brent multiplies 'tol' by two.
+///  - Using ϵ/2 gives the correct number of iterations for an
+///    input tolerance of zero; using ϵ does not, as one of the
+///    unit tests below demonstrates.
+///
 /// static_cast<int> is exact for any number of evaluations that
 /// can be counted by an 'int'.
 ///
@@ -69,19 +80,15 @@ double max_err(double zeta, double tol)
 /// distinct values; with an appropriate definition of "bisection",
 /// about 64 steps should suffice.
 ///
-/// Known defects:
+/// Known defect:
 ///  - std::fabs(DBL_MAX - -DBL_MAX) overflows.
-///  - The denominator can be zero when ζ = 0, because the
-///    implementation allows 'tol' to be zero as a shorthand
-///    for the hardware minimum. (Specifying DBL_TRUE_MIN would
-///    entail a likely speed penalty even on platforms that support
-///    denormals, so this shorthand isn't merely a convenience).
-/// Such defects in a unit-testing TU needn't be fixed.
+/// Such a defect in a unit-testing TU needn't be fixed.
 
 int max_n_eval_bolzano(double a, double b, double tol, double zeta)
 {
     LMI_ASSERT(0.0 <= tol);
     double delta = 2.0 * epsilon * std::fabs(zeta) + tol;
+    delta = std::max(delta, 0.5 * epsilon);
     double k = std::ceil(std::log2(std::fabs(b - a) / delta));
     return 1 + static_cast<int>(k);
 }
@@ -1185,6 +1192,21 @@ void test_hodgepodge()
     LMI_TEST_EQUAL(3023, max_n_eval_brent  (-1.0, 1.0, tol, zeta));
     LMI_TEST(r.n_eval <= 3023);
     // Here, decimal_root() always chooses the bisection technique.
+    LMI_TEST_EQUAL(55, r.n_eval); // weak
+
+    r = lmi_root(signum_offset, -1.0, 1.0, 0.0);
+    LMI_TEST(root_is_valid == r.validity);
+    LMI_TEST(materially_equal(-1.0 / 3.0, r.root));
+    tol = 0.0;
+    LMI_TEST_EQUAL(  55, max_n_eval_bolzano(-1.0, 1.0, tol, zeta));
+    LMI_TEST_EQUAL(3023, max_n_eval_brent  (-1.0, 1.0, tol, zeta));
+    LMI_TEST(r.n_eval <= 3023);
+    // Here, lmi_root() always chooses the bisection technique,
+    // as a secant step would transgress the bounds. This example
+    // demonstrates that the ϵ/2 minimum in max_n_eval_bolzano()
+    // is correct: if ϵ were not divided by two there, then the
+    // "maximum" number of iterations would be 54, anomalously
+    // less than the actual 55 here.
     LMI_TEST_EQUAL(55, r.n_eval); // weak
 
     std::ostringstream oss;
