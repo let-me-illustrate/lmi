@@ -1195,9 +1195,10 @@ inline int tole_(double* b, double* tol, int* neps, double* eps)
     if (*neps == 1000) {
         *tol = 0.;
     } else {
-//      *tol = 1.;
-// Changed by GWC: same tolerance as decimal_root()
-        *tol = 0.5;
+        *tol = 1.;
+// GWC modification: change this from 1 to 1/2 iff the same
+// tolerance as decimal_root() is wanted.
+//      *tol = 0.5;
         i1 = *neps;
         for (i0 = 1; i0 <= i1; ++i0) {
             *tol /= 10.;
