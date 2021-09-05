@@ -501,7 +501,7 @@ check_concinnity: source_clean custom_tools
 	      || $(ECHO) "... in file $$z"; \
 	  done;
 	@$(ECHO) "  Miscellaneous problems:"
-	@-cd $(prefascicle_dir) && $(PERFORM) $(TEST_CODING_RULES) *
+	@cd $(prefascicle_dir) && $(PERFORM) $(TEST_CODING_RULES) *
 
 ################################################################################
 
