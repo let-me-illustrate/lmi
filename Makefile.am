@@ -1003,7 +1003,8 @@ rate_table_test_LDADD = \
   $(XMLWRAPP_LIBS)
 
 regex_test_LDADD = \
-  libtest_common.la
+  libtest_common.la \
+  $(PCRE2_LIBS)
 
 report_table_test_SOURCES = \
   report_table.cpp \
