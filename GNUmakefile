@@ -431,12 +431,23 @@ uninstall:
 
 # Custom tools built from source.
 
-TEST_CODING_RULES := $(build_dir)/test_coding_rules$(EXEEXT)
+# Always build host (i.e. Linux) version of this tool, as it depends on PCRE
+# library only available on POSIX systems and it is preferable to run it on
+# the host, rather than the target, system in any case.
+#
+# Note that this implies that the tool binary doesn't need to use EXEEXT and
+# that PERFORM should _not_ be used when running it.
+host_triplet     := x86_64-pc-linux-gnu
+host_exec_prefix := $(prefix)/$(LMI_COMPILER)_$(host_triplet)
+host_build_dir   := $(host_exec_prefix)/build/$(build_type)
+host_localbindir := $(prefix)/local/$(LMI_COMPILER)_$(host_triplet)/bin
+
+TEST_CODING_RULES := $(host_build_dir)/test_coding_rules
 
 .PHONY: custom_tools
 custom_tools:
-	@$(MAKE) test_coding_rules$(EXEEXT)
-	@$(INSTALL) -c -m 0775 $(TEST_CODING_RULES) $(localbindir)
+	@$(MAKE) LMI_TRIPLET=$(host_triplet) test_coding_rules
+	@$(INSTALL) -c -m 0775 $(TEST_CODING_RULES) $(host_localbindir)
 
 ################################################################################
 
@@ -501,7 +512,7 @@ check_concinnity: source_clean custom_tools
 	      || $(ECHO) "... in file $$z"; \
 	  done;
 	@$(ECHO) "  Miscellaneous problems:"
-	@cd $(prefascicle_dir) && $(PERFORM) $(TEST_CODING_RULES) *
+	@cd $(prefascicle_dir) && $(TEST_CODING_RULES) *
 
 ################################################################################
 
