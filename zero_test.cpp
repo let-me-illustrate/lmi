@@ -2355,6 +2355,14 @@ void test_alefeld_examples(int alefeld_count, double tol)
     ++g;
     show_details();
 
+#if 0
+#   if defined TEST_ALEFELD
+    // Result is 0.022317679157464680173 for x86_64-pc-linux-gnu:
+    r = toms748_root(f13n26, bound0, bound1, bias_none, 1000);
+    std::cout << "#13: " << r.root << std::endl;
+#   endif // defined TEST_ALEFELD
+#endif // 0
+
     // Table I #14 = FORTRAN #27
     e = 14; f = 27;
     auto f14n27 = [&n](double x)
