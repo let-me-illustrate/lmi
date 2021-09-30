@@ -193,7 +193,7 @@ endif
 #   https://mail.gnome.org/archives/xslt/2001-October/msg00133.html
 #   https://lists.nongnu.org/archive/html/lmi/2020-10/msg00066.html
 
-xml_libraries := \
+xml_ldflags := \
   $(shell xmlwrapp-config --libs) \
   -lexslt \
   $(shell xslt-config --libs) \
@@ -772,7 +772,7 @@ $(product_file_sources): tutelary_flag += $(product_file_flags)
 #   http://boost.org/more/faq.htm
 
 REQUIRED_LIBS := \
-  $(xml_libraries) \
+  $(xml_ldflags) \
 
 ################################################################################
 
