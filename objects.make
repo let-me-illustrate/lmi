@@ -487,6 +487,7 @@ account_value_test$(EXEEXT): \
   $(common_test_objects) \
   account_value_test.o \
 
+actuarial_table_test$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
 actuarial_table_test$(EXEEXT): \
   $(common_test_objects) \
   actuarial_table.o \
@@ -561,6 +562,7 @@ commutation_functions_test$(EXEEXT): \
   cso_table.o \
   timer.o \
 
+configurable_settings_test$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
 configurable_settings_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
@@ -691,6 +693,7 @@ input_sequence_test$(EXEEXT): \
   null_stream.o \
   path_utility.o \
 
+input_test$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
 input_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
@@ -751,6 +754,7 @@ irc7702_tables_test$(EXEEXT): \
   null_stream.o \
   path_utility.o \
 
+irc7702a_test$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
 irc7702a_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
@@ -769,6 +773,7 @@ istream_to_string_test$(EXEEXT): \
   istream_to_string_test.o \
   timer.o \
 
+ledger_test$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
 ledger_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
@@ -888,6 +893,7 @@ path_utility_test$(EXEEXT): \
   path_utility_test.o \
   wine_workarounds.o \
 
+premium_tax_test$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
 premium_tax_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
@@ -923,6 +929,7 @@ print_matrix_test$(EXEEXT): \
   path_utility.o \
   print_matrix_test.o \
 
+product_file_test$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
 product_file_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
@@ -1067,6 +1074,7 @@ wx_new_test$(EXEEXT): \
   $(common_test_objects) \
   wx_new_test.o \
 
+xml_serialize_test$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
 xml_serialize_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
@@ -1190,6 +1198,7 @@ bcc_rc$(EXEEXT): \
 # variable definitions here. If that works well, use the technique
 # elsewhere.
 
+product_files$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
 product_files$(EXEEXT): \
   alert_cli.o \
   generate_product_files.o \

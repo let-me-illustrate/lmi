@@ -772,7 +772,6 @@ $(product_file_sources): tutelary_flag += $(product_file_flags)
 #   http://boost.org/more/faq.htm
 
 REQUIRED_LIBS := \
-  $(xml_ldflags) \
 
 ################################################################################
 
@@ -1001,8 +1000,10 @@ wx_new$(SHREXT)     : EXTRA_LDFLAGS :=
                       lmi_wx_new_so_attributes := -DLMI_WX_NEW_USE_SO
 wx_new$(SHREXT)     : lmi_wx_new_so_attributes := -DLMI_WX_NEW_BUILD_SO
 
-liblmi.a liblmi$(SHREXT): EXTRA_LDFLAGS :=
+liblmi.a liblmi$(SHREXT): EXTRA_LDFLAGS := $(xml_ldflags)
 liblmi.a liblmi$(SHREXT): $(lmi_common_objects)
+
+libantediluvian.a libantediluvian$(SHREXT): EXTRA_LDFLAGS := $(xml_ldflags)
 libantediluvian.a libantediluvian$(SHREXT): $(antediluvian_common_objects)
 
 # TODO ?? 'lmi*' targets can be built either with a shared or a static
@@ -1016,7 +1017,7 @@ lmi_wx_monolithic$(EXEEXT): $(lmi_wx_objects) $(lmi_common_objects) wx_new$(SHRE
 # source files that are unrelated to wx, and that are therefore not
 # part of $(skeleton_objects).
 skeleton$(SHREXT): lmi_so_attributes := -DLMI_USE_SO
-skeleton$(SHREXT): EXTRA_LDFLAGS := $(wx_pdfdoc_ldflags) $(wx_ldflags)
+skeleton$(SHREXT): EXTRA_LDFLAGS := $(wx_pdfdoc_ldflags) $(wx_ldflags) $(xml_ldflags)
 skeleton$(SHREXT): $(skeleton_objects) liblmi$(SHREXT) wx_new$(SHREXT)
 
 lmi_wx_shared$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
@@ -1026,19 +1027,25 @@ lmi_wx_shared$(EXEEXT): $(lmi_wx_objects) skeleton$(SHREXT) liblmi$(SHREXT)
 lmi_wx_static$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
 lmi_wx_static$(EXEEXT): $(lmi_wx_objects) $(skeleton_objects) liblmi.a wx_new$(SHREXT)
 
+lmi_cli_monolithic$(EXEEXT): EXTRA_LDFLAGS := $(xml_ldflags)
 lmi_cli_monolithic$(EXEEXT): $(cli_objects) $(lmi_common_objects)
 
+lmi_cli_shared$(EXEEXT): EXTRA_LDFLAGS := $(xml_ldflags)
 lmi_cli_shared$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
 lmi_cli_shared$(EXEEXT): $(cli_objects) liblmi$(SHREXT)
 
+lmi_cli_static$(EXEEXT): EXTRA_LDFLAGS := $(xml_ldflags)
 lmi_cli_static$(EXEEXT): $(cli_objects) liblmi.a
 
+antediluvian_cgi$(EXEEXT): EXTRA_LDFLAGS := $(xml_ldflags)
 antediluvian_cgi$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
 antediluvian_cgi$(EXEEXT): $(cgi_objects) libantediluvian$(SHREXT)
 
+antediluvian_cli$(EXEEXT): EXTRA_LDFLAGS := $(xml_ldflags)
 antediluvian_cli$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
 antediluvian_cli$(EXEEXT): $(cli_objects) libantediluvian$(SHREXT)
 
+antediluvian_cli_monolithic$(EXEEXT): EXTRA_LDFLAGS := $(xml_ldflags)
 antediluvian_cli_monolithic$(EXEEXT): $(cli_objects) $(antediluvian_common_objects)
 
 wx_new$(SHREXT): wx_new.o
@@ -1048,6 +1055,7 @@ wx_test$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
 wx_test$(EXEEXT): $(wx_test_objects) skeleton$(SHREXT) liblmi$(SHREXT)
 
 # TODO ?? This needs a corresponding test target.
+lmi_cgi$(EXEEXT): EXTRA_LDFLAGS := $(xml_ldflags)
 lmi_cgi$(EXEEXT): $(cgi_objects) $(lmi_common_objects)
 
 lmi_msw_res.o: lmi.ico
