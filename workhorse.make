@@ -251,6 +251,13 @@ wx_libraries := \
       -e 's/ -[^l][^ ]*//g' \
   )
 
+wx_ldflags = \
+  $(wx_library_paths) $(wx_libraries) \
+  $(platform_gui_ldflags) \
+
+wx_pdfdoc_ldflags := \
+  -l$(wxcode_basename)_pdfdoc-$(wxcode_version)
+
 # Target 'wx_config_check', and the variables that it alone uses,
 # are experimental and may disappear in a future release.
 
@@ -766,13 +773,6 @@ $(product_file_sources): tutelary_flag += $(product_file_flags)
 
 REQUIRED_LIBS := \
   $(xml_libraries) \
-
-wx_ldflags = \
-  $(wx_library_paths) $(wx_libraries) \
-  $(platform_gui_ldflags) \
-
-wx_pdfdoc_ldflags := \
-  -l$(wxcode_basename)_pdfdoc-$(wxcode_version)
 
 ################################################################################
 
