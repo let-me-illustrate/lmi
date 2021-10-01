@@ -978,6 +978,7 @@ rate_table_test$(EXEEXT): \
   rate_table.o \
   rate_table_test.o \
 
+regex_test$(EXEEXT): EXTRA_LDFLAGS = $(pcre_ldflags)
 regex_test$(EXEEXT): \
   $(boost_regex_objects) \
   $(common_test_objects) \

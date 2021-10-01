@@ -186,6 +186,14 @@ endif
 
 ################################################################################
 
+# pcre2 library settings (x86_64-pc-linux-gnu only).
+
+ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
+  pcre_ldflags := $(shell pcre2-config --libs-posix)
+endif
+
+################################################################################
+
 # xml library settings.
 
 # Flags for all other xml libraries are provided by *-config scripts,

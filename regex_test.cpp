@@ -25,6 +25,11 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
+#if defined LMI_POSIX
+#   include "pcre_regex.hpp"
+#   define TEST_PCRE
+#endif // defined LMI_POSIX
+
 #include <regex>
 #include <sstream>
 #include <string>
@@ -201,6 +206,15 @@ bool contains_regex3(std::string const& regex)
         );
 }
 
+#if defined TEST_PCRE
+/// Match a regex using PCRE2 (with "DOT ALL", like perl's '-s').
+
+bool contains_regex4(std::string const& regex)
+{
+    return pcre::search(text, pcre::regex(regex)) ? true : false;
+}
+#endif // defined TEST_PCRE
+
 void mete_vectorize()
 {
     lines = vectorize(text);
@@ -214,6 +228,9 @@ void mete()
         :1 == Function ? contains_regex1
         :2 == Function ? contains_regex2
         :3 == Function ? contains_regex3
+#if defined TEST_PCRE
+        :4 == Function ? contains_regex4
+#endif // defined TEST_PCRE
         :nullptr
         ;
     f(Regex);
@@ -256,33 +273,51 @@ void test_psalm_37()
     LMI_TEST( contains_regex1(early));
     LMI_TEST( contains_regex2(early));
     LMI_TEST( contains_regex3(early));
+#if defined TEST_PCRE
+    LMI_TEST( contains_regex4(early));
+#endif // defined TEST_PCRE
 
     LMI_TEST( contains_regex0(late ));
     LMI_TEST( contains_regex1(late ));
     LMI_TEST( contains_regex2(late ));
     LMI_TEST( contains_regex3(late ));
+#if defined TEST_PCRE
+    LMI_TEST( contains_regex4(late ));
+#endif // defined TEST_PCRE
 
     LMI_TEST(!contains_regex0(never));
     LMI_TEST(!contains_regex1(never));
     LMI_TEST(!contains_regex2(never));
     LMI_TEST(!contains_regex3(never));
+#if defined TEST_PCRE
+    LMI_TEST(!contains_regex4(never));
+#endif // defined TEST_PCRE
 
     std::cout << "  early 0:   " << TimeAnAliquot(mete<0,early>) << '\n';
     std::cout << "  early 1:   " << TimeAnAliquot(mete<1,early>) << '\n';
     std::cout << "  early 2:   " << TimeAnAliquot(mete<2,early>) << '\n';
     std::cout << "  early 3:   " << TimeAnAliquot(mete<3,early>) << '\n';
+#if defined TEST_PCRE
+    std::cout << "  early 4:   " << TimeAnAliquot(mete<4,early>) << '\n';
+#endif // defined TEST_PCRE
     std::cout << '\n';
 
     std::cout << "  late  0:   " << TimeAnAliquot(mete<0,late >) << '\n';
     std::cout << "  late  1:   " << TimeAnAliquot(mete<1,late >) << '\n';
     std::cout << "  late  2:   " << TimeAnAliquot(mete<2,late >) << '\n';
     std::cout << "  late  3:   " << TimeAnAliquot(mete<3,late >) << '\n';
+#if defined TEST_PCRE
+    std::cout << "  late  4:   " << TimeAnAliquot(mete<4,late >) << '\n';
+#endif // defined TEST_PCRE
     std::cout << '\n';
 
     std::cout << "  never 0:   " << TimeAnAliquot(mete<0,never>) << '\n';
     std::cout << "  never 1:   " << TimeAnAliquot(mete<1,never>) << '\n';
     std::cout << "  never 2:   " << TimeAnAliquot(mete<2,never>) << '\n';
     std::cout << "  never 3:   " << TimeAnAliquot(mete<3,never>) << '\n';
+#if defined TEST_PCRE
+    std::cout << "  never 4:   " << TimeAnAliquot(mete<4,never>) << '\n';
+#endif // defined TEST_PCRE
     std::cout << '\n';
 }
 
