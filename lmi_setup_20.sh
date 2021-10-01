@@ -96,6 +96,7 @@ apt-get --assume-yes install \
   libc6-dbg \
   libdw-dev \
   libgtk-3-dev \
+  libpcre2-dev \
   libtool \
   libxml2-utils \
   libunwind-dev \

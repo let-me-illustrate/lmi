@@ -511,6 +511,13 @@ AC_TRY_COMPILE([#include <xmlwrapp/xmlwrapp.h>],
 CXXFLAGS=$save_CXXFLAGS
 LIBS=$save_LIBS
 
+dnl --- libpcre2-8 is used by test_coding_rules which is only built under Linux
+if test "$USE_LINUX" = "1"; then
+    PKG_CHECK_MODULES(PCRE2, libpcre2-8)
+    AC_SUBST(PCRE2_CFLAGS)
+    AC_SUBST(PCRE2_LIBS)
+fi
+
 dnl --- libunwind and libdw, only used under Linux and only with gcc/libstdc++
 if test "$USE_LINUX" = "1" -a "$CLANG" != "yes"; then
     PKG_CHECK_MODULES(UNWIND, libunwind libdw)

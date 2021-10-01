@@ -84,7 +84,7 @@ jobs:
 
             packages="$packages wine32"
           else
-            packages="$packages libunwind-dev libdw-dev libgtk-3-dev"
+            packages="$packages libunwind-dev libdw-dev libpcre2-dev libgtk-3-dev"
           fi
 
           if [ "${{ matrix.compiler }}" = clang ]; then
