@@ -755,26 +755,6 @@ $(product_file_sources): tutelary_flag += $(product_file_flags)
 
 ################################################################################
 
-# Libraries and associated options.
-#
-# The link command promiscuously mentions libxml2 for all targets.
-# Measurements show that this costs one-tenth of a second on
-# reasonable hardware, and it saves the trouble of maintaining a list
-# of which targets require which libraries.
-#
-# TODO ?? Consider refining it anyway, because it's unclean: libxml2
-# isn't actually required for all targets.
-#
-# Rationale for freezing particular versions of third-party libraries:
-# see topic:
-#   "How can the Boost libraries be used successfully for important projects?"
-# in this faq:
-#   http://boost.org/more/faq.htm
-
-REQUIRED_LIBS := \
-
-################################################################################
-
 # Flags.
 
 # Define uppercase FLAGS recursively for greater flexibility: e.g., so
@@ -920,7 +900,6 @@ EXTRA_LDFLAGS :=
 REQUIRED_LDFLAGS = \
   $(addprefix -L , $(all_library_directories)) \
   $(EXTRA_LDFLAGS) \
-  $(REQUIRED_LIBS) \
   $(EXTRA_LIBS) \
 
 # The '--use-temp-file' windres option seems to be often helpful and
@@ -1643,7 +1622,6 @@ show_flags:
 	@printf 'ALL_ARFLAGS             = "%s"\n' "$(ALL_ARFLAGS)"
 	@printf 'REQUIRED_LDFLAGS        = "%s"\n' "$(REQUIRED_LDFLAGS)"
 	@printf 'EXTRA_LDFLAGS           = "%s"\n' "$(EXTRA_LDFLAGS)"
-	@printf 'REQUIRED_LIBS           = "%s"\n' "$(REQUIRED_LIBS)"
 	@printf 'EXTRA_LIBS              = "%s"\n' "$(EXTRA_LIBS)"
 	@printf 'ALL_LDFLAGS             = "%s"\n' "$(ALL_LDFLAGS)"
 	@printf 'ALL_RCFLAGS             = "%s"\n' "$(ALL_RCFLAGS)"
