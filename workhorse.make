@@ -120,7 +120,12 @@ ifeq (,$(USE_SO_ATTRIBUTES))
     ihs_crc_comp$(EXEEXT) \
     lmi_md5sum$(EXEEXT) \
     rate_table_tool$(EXEEXT) \
-    test_coding_rules$(EXEEXT) \
+
+  ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
+    default_targets += \
+      test_coding_rules$(EXEEXT) \
+
+  endif
 
   ifneq (so_test,$(findstring so_test,$(build_type)))
     default_targets += \

@@ -20,13 +20,13 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 #include "assert_lmi.hpp"
-#include "boost_regex.hpp"
 #include "contains.hpp"
 #include "handle_exceptions.hpp"        // report_exception()
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
 #include "miscellany.hpp"               // begins_with(), split_into_lines()
 #include "path.hpp"
+#include "pcre_regex.hpp"
 #include "ssize_lmi.hpp"
 #include "unwind.hpp"                   // scoped_unwind_toggler
 
@@ -41,6 +41,14 @@
 #include <sstream>
 #include <stdexcept>                    // runtime_error
 #include <string>
+
+#if !defined LMI_POSIX
+int try_main(int, char*[])
+{
+    std::cout << "Unsupported architecture" << std::endl;
+    return EXIT_FAILURE;
+}
+#else  // defined LMI_POSIX
 
 // Count complaints that are not so severe as to halt processing a file.
 int complaint_count {0};
@@ -260,7 +268,7 @@ bool file::is_of_phylum(enum_kingdom z) const
 
 bool file::phyloanalyze(std::string const& s) const
 {
-    return boost::regex_search(file_name(), boost::regex(s));
+    return !pcre::search(file_name(), pcre::regex(s)).empty();
 }
 
 void complain(file const& f, std::string const& complaint)
@@ -275,7 +283,7 @@ void require
     ,std::string const& complaint
     )
 {
-    if(!boost::regex_search(f.data(), boost::regex(regex)))
+    if(!pcre::search(f.data(), pcre::regex(regex)))
         {
         complain(f, complaint);
         }
@@ -287,7 +295,7 @@ void forbid
     ,std::string const& complaint
     )
 {
-    if(boost::regex_search(f.data(), boost::regex(regex)))
+    if(pcre::search(f.data(), pcre::regex(regex)))
         {
         complain(f, complaint);
         }
@@ -296,11 +304,11 @@ void forbid
 void taboo
     (file const&             f
     ,std::string const&      regex
-    ,boost::regex::flag_type flags = boost::regex::ECMAScript
+    ,pcre::regex::flag_type flags = pcre::regex::ECMAScript
     )
 {
-    boost::regex::flag_type syntax = flags | boost::regex::ECMAScript;
-    if(boost::regex_search(f.data(), boost::regex(regex, syntax)))
+    pcre::regex::flag_type syntax = flags | pcre::regex::ECMAScript;
+    if(pcre::search(f.data(), pcre::regex(regex, syntax)))
         {
         std::ostringstream oss;
         oss << "breaks taboo '" << regex << "'.";
@@ -349,8 +357,8 @@ void assay_whitespace(file const& f)
         throw std::runtime_error(R"(File contains '\t'.)");
         }
 
-    static boost::regex const postinitial_tab(R"([^\n]\t)");
-    if(f.is_of_phylum(e_make) && boost::regex_search(f.data(), postinitial_tab))
+    static pcre::regex const postinitial_tab(R"([^\n]\t)");
+    if(f.is_of_phylum(e_make) && pcre::search(f.data(), postinitial_tab))
         {
         throw std::runtime_error(R"(File contains postinitial '\t'.)");
         }
@@ -408,9 +416,8 @@ void check_config_hpp(file const& f)
         {
         require(f, loose , "must include 'config.hpp'.");
         require(f, indent, R"(lacks line '#   include "config.hpp"'.)");
-        boost::smatch match;
-        static boost::regex const first_include(R"((# *include[^\n]*))");
-        boost::regex_search(f.data(), match, first_include);
+        static pcre::regex const first_include(R"((# *include[^\n]*))");
+        auto const& match = pcre::search(f.data(), first_include);
         if(R"(#   include "config.hpp")" != match[1])
             {
             complain(f, "must include 'config.hpp' first.");
@@ -420,9 +427,8 @@ void check_config_hpp(file const& f)
         {
         require(f, loose , "must include 'config.hpp'.");
         require(f, strict, R"(lacks line '#include "config.hpp"'.)");
-        boost::smatch match;
-        static boost::regex const first_include(R"((# *include[^\n]*))");
-        boost::regex_search(f.data(), match, first_include);
+        static pcre::regex const first_include(R"((# *include[^\n]*))");
+        auto const& match = pcre::search(f.data(), first_include);
         if(R"(#include "config.hpp")" != match[1])
             {
             complain(f, "must include 'config.hpp' first.");
@@ -518,12 +524,9 @@ void check_cxx(file const& f)
         }
 
     {
-    static boost::regex const r(R"((\w+)( +)([*&])(\w+\b)([*;]?)([^\n]*))");
-    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator const omega;
-    for(; i != omega; ++i)
+    static pcre::regex const r(R"((\w+)( +)([*&])(\w+\b)([*;]?)([^\n]*))");
+    for(auto const& z : pcre::search_all(f.data(), r))
         {
-        boost::smatch const& z(*i);
         if
             (   "return"    != z[1]           // 'return *p'
             &&  "nix"       != z[4]           // '*nix'
@@ -539,12 +542,9 @@ void check_cxx(file const& f)
     }
 
     {
-    static boost::regex const r(R"(\bconst +([A-Za-z][A-Za-z0-9_:]*) *[*&])");
-    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator const omega;
-    for(; i != omega; ++i)
+    static pcre::regex const r(R"(\bconst +([A-Za-z][A-Za-z0-9_:]*) *[*&])");
+    for(auto const& z : pcre::search_all(f.data(), r))
         {
-        boost::smatch const& z(*i);
         if
             (   "volatile"  != z[1]           // 'const volatile'
             )
@@ -561,15 +561,12 @@ void check_cxx(file const& f)
     }
 
     {
-    static boost::regex const r(R"(\n# *ifn*def[^\n]+\n)");
-    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator const omega;
-    for(; i != omega; ++i)
+    static pcre::regex const r(R"(\n# *ifn*def[^\n]+\n)");
+    for(auto const& z : pcre::search_all(f.data(), r))
         {
-        boost::smatch const& z(*i);
         std::string s = z[0];
-        static boost::regex const include_guard(R"(# *ifndef *\l[_\d\l]*_hpp\W)");
-        if(!boost::regex_search(s, include_guard))
+        static pcre::regex const include_guard(R"(# *ifndef *[[:lower:]][_\d[:lower:]]*_hpp\W)");
+        if(!pcre::search(s, include_guard))
             {
             ltrim(s, "\n");
             rtrim(s, "\n");
@@ -587,9 +584,9 @@ void check_cxx(file const& f)
     {
     // See:
     //   https://lists.nongnu.org/archive/html/lmi/2021-02/msg00023.html
-    static boost::regex const r(R"([^:s]size_t[^\n])");
+    static pcre::regex const r(R"([^:s]size_t[^\n])");
     if
-        (  boost::regex_search(f.data(), r)
+        (  pcre::search(f.data(), r)
         && f.file_name() != "test_coding_rules.cpp"
         )
         {
@@ -598,9 +595,9 @@ void check_cxx(file const& f)
     }
 
     {
-    static boost::regex const r(R"(# *endif\n)");
+    static pcre::regex const r(R"(# *endif\n)");
     if
-        (  boost::regex_search(f.data(), r)
+        (  pcre::search(f.data(), r)
         )
         {
         complain(f, "contains unlabelled '#endif' directive.");
@@ -616,12 +613,9 @@ void check_cxx(file const& f)
     {
     // See:
     //   https://lists.nongnu.org/archive/html/lmi/2021-03/msg00032.html
-    static boost::regex const r(R"(\bR"([^(]*)[(])");
-    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator const omega;
-    for(; i != omega; ++i)
+    static pcre::regex const r(R"(\bR"([^(]*)[(])");
+    for(auto const& z : pcre::search_all(f.data(), r))
         {
-        boost::smatch const& z(*i);
         if
             (   "test_coding_rules.cpp" != f.file_name()
             &&  "--cut-here--" != z[1]
@@ -645,12 +639,9 @@ void check_cxx(file const& f)
     // This is "p && q || p", so to speak. If 'p' doesn't match, then
     // ignore this occurrence. Else if 'q' matches, then diagnose the
     // problem. Otherwise, match p again and show a diagnostic.
-    static boost::regex const r("(?=" + p + ")(?:" + q + ")|(" + p + ")");
-    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator const omega;
-    for(; i != omega; ++i)
+    static pcre::regex const r("(?=" + p + ")(?:" + q + ")|(" + p + ")");
+    for(auto const& z : pcre::search_all(f.data(), r))
         {
-        boost::smatch const& z(*i);
         if("" == z[1] && "" == z[2] && "" == z[3])
             {
             std::ostringstream oss;
@@ -712,12 +703,9 @@ void check_defect_markers(file const& f)
         }
 
     {
-    static boost::regex const r(R"((\b\w+\b\W*)\?\?(.))");
-    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator const omega;
-    for(; i != omega; ++i)
+    static pcre::regex const r(R"((\b\w+\b\W*)\?\?(.))");
+    for(auto const& z : pcre::search_all(f.data(), r))
         {
-        boost::smatch const& z(*i);
         bool const error_preceding = "TODO " != z[1];
         bool const error_following = " " != z[2] && "\n" != z[2];
         if(error_preceding || error_following)
@@ -730,12 +718,9 @@ void check_defect_markers(file const& f)
     }
 
     {
-    static boost::regex const r(R"((\b\w+\b\W?)!!(.))");
-    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator const omega;
-    for(; i != omega; ++i)
+    static pcre::regex const r(R"((\b\w+\b\W?)!!(.))");
+    for(auto const& z : pcre::search_all(f.data(), r))
         {
-        boost::smatch const& z(*i);
         bool const error_preceding =
                 true
             &&  "7702 "        != z[1]
@@ -779,9 +764,9 @@ void check_include_guards(file const& f)
         return;
         }
 
-    std::string const guard = boost::regex_replace
+    std::string const guard = pcre::replace
         (f.file_name()
-        ,boost::regex(R"(\.hpp$)")
+        ,pcre::regex(R"(\.hpp$)")
         ,"_hpp"
         );
     std::string const opening_guard =
@@ -801,12 +786,9 @@ void check_inclusion_order(file const& f)
         return;
         }
 
-    static boost::regex const r(R"((?<=\n\n)(# *include *[<"][^\n]*\n)+\n)");
-    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator const omega;
-    for(; i != omega; ++i)
+    static pcre::regex const r(R"((?<=\n\n)(# *include *[<"][^\n]*\n)+\n)");
+    for(auto const& z : pcre::search_all(f.data(), r))
         {
-        boost::smatch const& z(*i);
         std::string s = z[0];
         rtrim(s, "\n");
         std::vector<std::string> v = split_into_lines(s);
@@ -826,12 +808,9 @@ void check_label_indentation(file const& f)
         return;
         }
 
-    static boost::regex const r(R"(\n( *)([A-Za-z][A-Za-z0-9_]*)( *:)(?!:))");
-    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator const omega;
-    for(; i != omega; ++i)
+    static pcre::regex const r(R"(\n( *)([A-Za-z][A-Za-z0-9_]*)( *:)(?!:))");
+    for(auto const& z : pcre::search_all(f.data(), r))
         {
-        boost::smatch const& z(*i);
         if
             (   "default" != z[2]
             &&  "Usage"   != z[2]
@@ -871,10 +850,14 @@ void check_logs(file const& f)
         entries = f.data();
         }
 
-    static boost::regex const r(R"(\n(?!\|)(?! *https?:)([^\n]{71,})(?=\n))");
-    boost::sregex_iterator i(entries.begin(), entries.end(), r);
-    boost::sregex_iterator const omega;
-    if(omega == i)
+    std::vector<std::string> long_lines;
+    static pcre::regex const r(R"(\n(?!\|)(?! *https?:)([^\n]{71,})(?=\n))");
+    for(auto const& z : pcre::search_all(entries, r))
+        {
+        long_lines.push_back(z[1]);
+        }
+
+    if(long_lines.empty())
         {
         return;
         }
@@ -885,10 +868,9 @@ void check_logs(file const& f)
         << "0000000001111111111222222222233333333334444444444555555555566666666667\n"
         << "1234567890123456789012345678901234567890123456789012345678901234567890"
         ;
-    for(; i != omega; ++i)
+    for(auto const& line : long_lines)
         {
-        boost::smatch const& z(*i);
-        oss << '\n' << z[1];
+        oss << '\n' << line;
         }
     complain(f, oss.str());
 }
@@ -1062,17 +1044,14 @@ void check_reserved_names(file const& f)
         return;
         }
 
-    static boost::regex const r(R"((\b\w*__\w*\b))");
-    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator const omega;
-    for(; i != omega; ++i)
+    static pcre::regex const r(R"((\b\w*__\w*\b))");
+    for(auto const& z : pcre::search_all(f.data(), r))
         {
-        boost::smatch const& z(*i);
         std::string const s = z[0];
-        static boost::regex const not_all_underscore("[A-Za-z0-9]");
+        static pcre::regex const not_all_underscore("[A-Za-z0-9]");
         if
             (   !check_reserved_name_exception(s)
-            &&  boost::regex_search(s, not_all_underscore)
+            &&  pcre::search(s, not_all_underscore)
             )
             {
             std::ostringstream oss;
@@ -1098,14 +1077,14 @@ void enforce_taboos(file const& f)
     taboo(f, "Cambridge");
     taboo(f, "Temple P");
     // Patented.
-    taboo(f, R"(\.gif)", boost::regex::icase);
+    taboo(f, R"(\.gif)", pcre::regex::icase);
     // Obsolete email address.
     taboo(f, "chicares@mindspring.com");
     // Obscured email address.
     taboo(f, "address@hidden");
     // Certain proprietary libraries.
-    taboo(f, R"(\bowl\b)", boost::regex::icase);
-    taboo(f, "vtss", boost::regex::icase);
+    taboo(f, R"(\bowl\b)", pcre::regex::icase);
+    taboo(f, "vtss", pcre::regex::icase);
     // Suspiciously specific to msw (although the string "Microsoft"
     // is okay for identifying a GNU/Linux re-distribution).
     taboo(f, "Visual [A-Z]");
@@ -1129,7 +1108,7 @@ void enforce_taboos(file const& f)
         &&  !f.is_of_phylum(e_synopsis)
         )
         {
-        taboo(f, R"(\bexe\b)", boost::regex::icase);
+        taboo(f, R"(\bexe\b)", pcre::regex::icase);
         }
 
     if
@@ -1139,21 +1118,21 @@ void enforce_taboos(file const& f)
         &&  !f.phyloanalyze("configure.ac") // GNU libtool uses 'win32-dll'.
         )
         {
-        taboo(f, "WIN32", boost::regex::icase);
+        taboo(f, "WIN32", pcre::regex::icase);
         }
 
     if
-        (  !boost::regex_search(f.data(), boost::regex(my_taboo_indulgence()))
+        (  !pcre::search(f.data(), pcre::regex(my_taboo_indulgence()))
         && !contains(f.data(), "Automatically generated from custom input.")
         )
         {
         // Unspeakable private taboos.
         for(auto const& i : my_taboos())
             {
-            boost::regex::flag_type syntax =
+            pcre::regex::flag_type syntax =
                 i.second
-                ? boost::regex::ECMAScript | boost::regex::icase
-                : boost::regex::ECMAScript
+                ? pcre::regex::ECMAScript | pcre::regex::icase
+                : pcre::regex::ECMAScript
                 ;
             taboo(f, i.first, syntax);
             }
@@ -1300,3 +1279,5 @@ int try_main(int argc, char* argv[])
     z.print_summary();
     return (error_flag || complaint_count) ? EXIT_FAILURE : EXIT_SUCCESS;
 }
+
+#endif // defined LMI_POSIX
