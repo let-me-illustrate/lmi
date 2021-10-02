@@ -25,32 +25,6 @@
 # is reached through 'vpath' directives. See the rationale in
 # 'workhorse.make'.
 
-# Boost regex library. The other boost libraries that lmi optionally
-# uses are implemented entirely in headers.
-#
-# As for listing the object files here, the regex author says:
-#   http://groups.google.com/group/boost-list/msg/7f925ca50d69384b
-# | add the libs/regex/src/*.cpp files to your project
-
-boost_regex_objects := \
-  c_regex_traits.o \
-  cpp_regex_traits.o \
-  cregex.o \
-  fileiter.o \
-  icu.o \
-  instances.o \
-  posix_api.o \
-  regex.o \
-  regex_debug.o \
-  regex_raw_buffer.o \
-  regex_traits_defaults.o \
-  static_mutex.o \
-  usinstances.o \
-  w32_regex_traits.o \
-  wc_regex_traits.o \
-  wide_posix_api.o \
-  winstances.o \
-
 # GNU cgicc.
 
 # TODO ?? Track down the problems in cgicc-3.2.3 that make it
@@ -101,7 +75,6 @@ cgicc_3_1_4_objects = \
 # have them as libraries.
 
 ifdef HAVE_THIRD_PARTY_LIBRARIES
-  boost_regex_objects :=
   cgicc_objects :=
 endif
 
@@ -349,7 +322,6 @@ lmi_wx_objects := \
   main_wx.o \
 
 wx_test_objects := \
-  $(boost_regex_objects) \
   main_wx_test.o \
   wx_test_about_version.o \
   wx_test_benchmark_census.o \
@@ -980,7 +952,6 @@ rate_table_test$(EXEEXT): \
 
 regex_test$(EXEEXT): EXTRA_LDFLAGS = $(pcre_ldflags)
 regex_test$(EXEEXT): \
-  $(boost_regex_objects) \
   $(common_test_objects) \
   regex_test.o \
   timer.o \
@@ -1151,7 +1122,6 @@ test_coding_rules_test := PERFORM=$(PERFORM) $(srcdir)/test_coding_rules_test.sh
 test_coding_rules$(EXEEXT): EXTRA_LDFLAGS = $(pcre_ldflags)
 test_coding_rules$(EXEEXT): POST_LINK_COMMAND = $(test_coding_rules_test)
 test_coding_rules$(EXEEXT): \
-  $(boost_regex_objects) \
   $(main_auxiliary_common_objects) \
   miscellany.o \
   my_test_coding_rules.o \
