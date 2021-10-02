@@ -315,7 +315,7 @@ jobs:
           # Somehow these files are executable and this triggers complaints
           # from check_script.sh, so avoid them by fixing permissions.
           chmod -x .git/info/exclude .git/description
-          make $coefficiency check_concinnity
+          make $coefficiency LMI_COMPILER=gcc LMI_TRIPLET=x86_64-pc-linux-gnu check_concinnity
 
           make $coefficiency check_physical_closure
 

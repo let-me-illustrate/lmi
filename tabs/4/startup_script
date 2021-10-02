@@ -3,7 +3,7 @@
 a='schroot --chroot=lmi'
 
 b='cd /opt/lmi/src/lmi'
-d='make $coefficiency check_concinnity 2>&1 |less -S -N'
+d='make $coefficiency LMI_COMPILER=gcc LMI_TRIPLET=x86_64-pc-linux-gnu check_concinnity 2>&1 |less -S -N'
 e='sed -f diagnostics.sed ../log 2>&1 |less -S'
 f='pushd /tmp; /opt/lmi/src/lmi/test_schemata.sh 2>&1 |less; popd'
 

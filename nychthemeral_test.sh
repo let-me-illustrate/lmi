@@ -128,6 +128,7 @@ nychthemeral_clutter='
 /^  *[1-9][0-9]* source files/d
 /^  *[1-9][0-9]* source lines/d
 /^  *[1-9][0-9]* marked defects/d
+/^# concinnity test skipped--it uses POSIX only/d
 /^# speed test/d
 /^# xrc tests/d
 /^# test all valid emission types/d
@@ -184,9 +185,14 @@ cd /opt/lmi/src/lmi
 make "$coefficiency" uninstall 2>&1 \
   | tee "$log_dir"/uninstall | sed -e "$build_clutter" -e "$uninstall_clutter"
 
-printf '\n# test concinnity\n\n'
-make "$coefficiency" check_concinnity 2>&1 \
-  | tee "$log_dir"/concinnity | sed -e "$build_clutter" -e "$concinnity_clutter"
+if [ "x86_64-pc-linux-gnu" = "$LMI_TRIPLET" ]
+then
+  printf '\n# test concinnity\n\n'
+  make "$coefficiency" check_concinnity 2>&1 \
+    | tee "$log_dir"/concinnity | sed -e "$build_clutter" -e "$concinnity_clutter"
+else
+  printf '\n# concinnity test skipped--it uses POSIX only\n\n'
+fi
 
 printf '# install; check physical closure\n\n'
 make "$coefficiency" install check_physical_closure 2>&1 \
