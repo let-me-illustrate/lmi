@@ -112,6 +112,11 @@ jobs:
         with:
           submodules: 'recursive'
 
+      - name: Install CCache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: ${{ matrix.triplet || 'x86_64-pc-linux-gnu' }}
+
       - name: System and environment setup
         run: |
           normal_uid=`id --user`
@@ -123,19 +128,36 @@ jobs:
           sudo sed -i'' -e 's/^int _putenv/_CRTIMP int _putenv/' /usr/share/libtool/build-aux/ltmain.sh
 
           echo "coefficiency=--jobs=`nproc`" >> $GITHUB_ENV
+
+          CC=${LMI_COMPILER}
+          case "$CC" in
+            clang)
+              CXX="clang++ -stdlib=libc++"
+              ;;
+
+            gcc)
+              CXX="g++"
+              ;;
+
+            *)
+              echo 'Unknown compiler specified.'
+              exit 1
+          esac
+
           if [ ${{ matrix.mingw }} ]
           then
-            compiler=${LMI_TRIPLET}-${LMI_COMPILER}
-          else
-            compiler=${LMI_COMPILER}
+            CC=${LMI_TRIPLET}-${CC}
+            CXX=${LMI_TRIPLET}-${CXX}
           fi
 
-          if [ "${{ matrix.compiler }}" = clang ]; then
-            echo "CC=clang" >> $GITHUB_ENV
-            echo "CXX=clang++ -stdlib=libc++" >> $GITHUB_ENV
-          fi
+          # Ensure that ccache can be found and use it for all builds: this is
+          # needed because ccache doesn't replace the the cross-compilers.
+          PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
 
-          gcc_version=$($compiler -dumpversion|tr -d '\r')
+          echo "CC=ccache $CC" >> $GITHUB_ENV
+          echo "CXX=ccache $CXX" >> $GITHUB_ENV
+
+          gcc_version=$($CC -dumpversion|tr -d '\r')
           echo "gcc_version=$gcc_version" >> $GITHUB_ENV
 
           echo "xml2_sha1=$(git rev-parse HEAD:third_party/libxml2)" >> $GITHUB_ENV
@@ -168,7 +190,12 @@ jobs:
           echo
 
           echo "Compiler version:"
-          $compiler --version
+          $CC --version
+          $CXX --version
+          echo
+
+          echo "Ccache version:"
+          ccache --version
           echo
 
           if [ ${{ matrix.mingw }} ]; then
