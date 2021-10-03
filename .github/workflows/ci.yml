@@ -112,6 +112,11 @@ jobs:
         with:
           submodules: 'recursive'
 
+      - name: Install CCache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: ${{ matrix.name }}
+
       - name: System and environment setup
         run: |
           normal_uid=`id --user`
@@ -123,19 +128,32 @@ jobs:
           sudo sed -i'' -e 's/^int _putenv/_CRTIMP int _putenv/' /usr/share/libtool/build-aux/ltmain.sh
 
           echo "coefficiency=--jobs=`nproc`" >> $GITHUB_ENV
+
+          CC=${LMI_COMPILER}
+          case "$CC" in
+            clang)
+              CXX="clang++ -stdlib=libc++"
+              ;;
+
+            gcc)
+              CXX="g++"
+              ;;
+
+            *)
+              echo 'Unknown compiler specified.'
+              exit 1
+          esac
+
           if [ ${{ matrix.mingw }} ]
           then
-            compiler=${LMI_TRIPLET}-${LMI_COMPILER}
-          else
-            compiler=${LMI_COMPILER}
+            CC=${LMI_TRIPLET}-${CC}
+            CXX=${LMI_TRIPLET}-${CXX}
           fi
 
-          if [ "${{ matrix.compiler }}" = clang ]; then
-            echo "CC=clang" >> $GITHUB_ENV
-            echo "CXX=clang++ -stdlib=libc++" >> $GITHUB_ENV
-          fi
+          echo "CC=$CC" >> $GITHUB_ENV
+          echo "CXX=$CXX" >> $GITHUB_ENV
 
-          gcc_version=$($compiler -dumpversion|tr -d '\r')
+          gcc_version=$($CC -dumpversion|tr -d '\r')
           echo "gcc_version=$gcc_version" >> $GITHUB_ENV
 
           echo "xml2_sha1=$(git rev-parse HEAD:third_party/libxml2)" >> $GITHUB_ENV
@@ -144,7 +162,12 @@ jobs:
           echo "wx_sha1=$(git rev-parse HEAD:third_party/wx)" >> $GITHUB_ENV
           echo "wxpdfdoc_sha1=$(git rev-parse HEAD:third_party/wxpdfdoc)" >> $GITHUB_ENV
 
-          echo "PATH=$PATH:/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/bin" >> $GITHUB_ENV
+          # Prepend the directory containing symlinks to the PATH: this allows
+          # makefiles to work unchnaged and without defining CXX on the command
+          # line. Note that MINIMAL_PATH is used in lmi makefiles to replace
+          # the PATH, so we need to define it too.
+          echo "PATH=/usr/lib/ccache:/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/bin:$PATH" >> $GITHUB_ENV
+          echo "MINIMAL_PATH=/usr/lib/ccache:/usr/bin:/bin" >> $GITHUB_ENV
 
           LD_LIBRARY_PATH=/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib
           LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/build/ship
@@ -168,7 +191,11 @@ jobs:
           echo
 
           echo "Compiler version:"
-          $compiler --version
+          $CXX --version
+          echo
+
+          echo "Ccache version:"
+          ccache --version
           echo
 
           if [ ${{ matrix.mingw }} ]; then
