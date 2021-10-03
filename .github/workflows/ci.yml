@@ -204,23 +204,6 @@ jobs:
         if: steps.cache-local.outputs.cache-hit != 'true'
         run: ./install_wxpdfdoc.sh
 
-      - name: Build Boost.Regex
-        if: matrix.autotools
-        run: |
-          # Define flags to avoid warnings in Boost code we don't care about.
-          boost_cxxflags="-Wno-deprecated-declarations -Wno-register -DBOOST_NO_AUTO_PTR -DBOOST_NO_STD_ALLOCATOR"
-          if [ "${{ matrix.compiler }}" = clang ]; then
-            boost_cxxflags="${boost_cxxflags} -Wno-parentheses-equality"
-          fi
-
-          for lib in regex; do
-            cd /opt/lmi/third_party/src/boost/libs/${lib}/src
-            echo "Compiling $lib sources"
-            ${CXX-${LMI_COMPILER}} -std=c++17 -fPIC $(echo ${boost_cxxflags}) -I../../.. -c *.cpp
-            echo "Creating libboost_${lib}.a from" *.o
-            ar rc /opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib/libboost_${lib}.a *.o
-          done
-
       - name: Configure lmi
         if: matrix.autotools
         run: |
