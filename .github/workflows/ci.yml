@@ -227,7 +227,6 @@ jobs:
             CPPFLAGS=-I/opt/lmi/local/include \
             LDFLAGS=-L/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib \
             PKG_CONFIG_PATH=/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib/pkgconfig \
-            --with-boost-headers=/opt/lmi/third_party/src/boost \
               || err=$?
 
           if [ -n "$err" ]; then
