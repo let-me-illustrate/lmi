@@ -478,7 +478,7 @@ libcgi_la_SOURCES = \
     progress_meter_cgi.cpp \
     system_command_non_wx.cpp
 
-libcgi_la_CXXFLAGS = $(BOOST_INCLUDE_FLAGS) $(CGICC_INCLUDE_FLAGS) $(AM_CXXFLAGS)
+libcgi_la_CXXFLAGS = $(CGICC_INCLUDE_FLAGS) $(AM_CXXFLAGS)
 libcgi_la_LIBADD = $(CGICC_LIBS)
 
 libwx_new_la_SOURCES = wx_new.cpp
@@ -492,7 +492,7 @@ lmi_md5sum_SOURCES = \
     md5.cpp \
     md5sum.cpp \
     md5sum_cli.cpp
-lmi_md5sum_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS)
+lmi_md5sum_CXXFLAGS = $(AM_CXXFLAGS)
 lmi_md5sum_LDADD = \
     libmain_auxiliary_common.la
 
@@ -523,7 +523,7 @@ elapsed_time_CXXFLAGS = $(AM_CXXFLAGS)
 elapsed_time_LDADD = \
     libmain_auxiliary_common.la
 
-antediluvian_cgi_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS)
+antediluvian_cgi_CXXFLAGS = $(AM_CXXFLAGS)
 antediluvian_cgi_LDADD = \
     libcgi.la \
     libantediluvian.la \
@@ -576,7 +576,7 @@ test_coding_rules_SOURCES = \
   my_test_coding_rules.cpp \
   sigfpe.cpp \
   test_coding_rules.cpp
-test_coding_rules_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS) $(PCRE2_CFLAGS)
+test_coding_rules_CXXFLAGS = $(AM_CXXFLAGS) $(PCRE2_CFLAGS)
 test_coding_rules_LDADD = \
   libmain_auxiliary_common.la \
   $(PCRE2_LIBS)
