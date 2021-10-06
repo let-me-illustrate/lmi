@@ -330,7 +330,7 @@ void test_unique_filepath_with_ludicrous_filenames()
     LMI_TEST_EQUAL(path1.string(), "eraseme2");
 
     // "" isn't likely to be a valid filename, but as a path, it's
-    // valid: the boost library's default path ctor constructs an
+    // valid: the boost library's default path ctor constructed an
     // empty path.
 
     fs::path path2 = unique_filepath(fs::path(""), "");
@@ -410,7 +410,7 @@ void test_path_validation()
     validate_filepath("path_utility_test_file", context);
     validate_filepath("./path_utility_test_file", context);
 
-    // BOOST !! With boost::filesystem, a path was not well-formed
+    // SOMEDAY !! With boost::filesystem, a path was not well-formed
     // if it contained forbidden characters. With std::filesystem,
     // semantic validity is not considered, and any syntactically
     // valid path is well formed. Therefore, shouldn't the lmi
@@ -420,7 +420,7 @@ void test_path_validation()
 
 #if 0
     // Neither posix nor msw allows a path to consist solely of NUL.
-    // BOOST !! Fix the 'alarum' problem.
+    // SOMEDAY !! 'alarum' truncates, treating arguments as ASCIIZ.
     std::string nulls = {'\0', '\0'};
     LMI_TEST_THROW
         (validate_filepath(nulls, context)
@@ -436,8 +436,8 @@ void test_path_validation()
     // truncated at the first NUL, due to using std::runtime_error::what(),
     // which returns "char*" string terminated by the first NUL occurring in
     // it, when constructing this message, so just check that it starts with
-    // the expected part. BOOST !! Of course, that's just an expedient
-    // workaround; the defect in 'alarum' needs to be fixed.
+    // the expected part. SOMEDAY !! Of course, that's just an expedient
+    // workaround; the ASCIIZ defect (above) in 'alarum' needs to be fixed.
     LMI_TEST_THROW
         (validate_filepath(with_nulls, context)
         ,std::runtime_error

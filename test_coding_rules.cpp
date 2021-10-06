@@ -724,7 +724,6 @@ void check_defect_markers(file const& f)
         bool const error_preceding =
                 true
             &&  "7702 "        != z[1]
-            &&  "BOOST "       != z[1]
             &&  "COMPILER "    != z[1]
             &&  "CURRENCY "    != z[1]
             &&  "DATABASE "    != z[1]

@@ -270,7 +270,7 @@ fs::path serial_file_path
 /// A try-block is necessary because fs::remove() can throw. The
 /// postcondition is asserted explicitly at the end of the try-block
 /// because the fs::remove() documentation is still unclear:
-///   BOOST !! Is this still true of std::filesystem?
+///   SOMEDAY !! Is this true of std::filesystem as it was of boost?
 /// apparently it mustn't fail without throwing, yet it doesn't throw
 /// on an operation that must fail, like removing a file that's locked
 /// by another process as in the motivating example above.
@@ -347,8 +347,8 @@ void validate_path
 {
     fs::path const path{a_path};
 
-    // BOOST !! This is where well-formedness with respect to OS rules
-    // ought to be tested.
+    // SOMEDAY !! This is where well-formedness with respect to OS
+    // rules ought to be tested, if that is indeed desirable.
 
     if(path.empty())
         {

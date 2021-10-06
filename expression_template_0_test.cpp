@@ -22,8 +22,8 @@
 #include "pchfile.hpp"
 
 #if defined TEST_BOOST_UBLAS_TOO
-// BOOST !! Startlingly enough, boost uBLAS depends on this standard
-// macro. If it's not defined, then expression templates aren't used,
+// Startlingly enough, boost uBLAS depends on this standard macro.
+// If it's not defined, then expression templates aren't used,
 // which impairs performance significantly and removes an essential
 // reason for using this library. However, if it is defined, then it
 // must be defined consistently everywhere to avoid ODR problems; but

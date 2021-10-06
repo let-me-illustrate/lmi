@@ -44,7 +44,8 @@ void test_directory_exceptions()
         );
 
     // Such string values must be validly-formed paths.
-    // BOOST !! Originally, this test detected that "?" is not a
+    //
+    // SOMEDAY !! boost::filesystem detected that "?" is not a
     // valid directory name, at least for msw. Should that useful
     // validation be regained by adding code to lmi, now that
     // std::filesystem doesn't validate paths semantically? If not,
