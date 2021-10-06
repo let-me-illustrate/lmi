@@ -321,8 +321,6 @@ wx_config_check:
 # be compiled and linked explicitly here, instead of building them
 # separately and linking them as normal libraries. Rationale:
 #
-# boost: the build system provided is outlandish.
-#
 # cgicc: './configure && make' failed in the MSYS environment (though
 # MSYS is no longer supported).
 #
@@ -350,7 +348,6 @@ sys_include_directories := \
 
 all_source_directories := \
   $(srcdir) \
-  /opt/lmi/third_party/src/boost/libs/filesystem/src \
   /opt/lmi/third_party/src/cgicc \
 
 vpath lib%.a          $(CURDIR)
@@ -619,17 +616,6 @@ ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
   endif
 endif
 
-# Boost normally makes '-Wundef' give spurious warnings:
-#   http://aspn.activestate.com/ASPN/Mail/Message/boost/1822550
-# but defining BOOST_STRICT_CONFIG:
-#   http://www.boost.org/libs/config/config.htm#user_settable
-# makes '-Wundef' usable, because boost-1.31.0 doesn't seem to need
-# any workarounds for gcc-3.3+ . However, it gives a number of
-# warnings with wx-2.5.4 (that have been fixed in a later version).
-
-# Too many warnings for wx and various boost libraries:
-#  -Wold-style-cast \
-
 # XMLWRAPP !! Remove these workarounds after updating xmlwrapp. See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00018.html
 # et seqq.:
@@ -808,14 +794,6 @@ endif
 # repeated below to make assurance doubly sure--see:
 #   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00039.html
 # et seq.
-#
-# The BOOST_STATIC_ASSERT definition seems to belong in CPPFLAGS with
-# the other macro definitions. However, writing it there elicits:
-#   warning: ISO C99 requires whitespace after the macro name
-# which may simply be a gnu CPP defect--the documentation:
-#   https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html
-# says "-D'name(args...)=definition' works", and adding a blank either
-# before or after '=' is an error.
 
 REQUIRED_CPPFLAGS = \
   $(addprefix -I , $(lmi_include_directories)) \
@@ -826,17 +804,12 @@ REQUIRED_CPPFLAGS = \
   $(libstdcxx_warning_macros) \
   $(wx_predefinitions) \
   -D_FILE_OFFSET_BITS=64 \
-  -DBOOST_NO_AUTO_PTR \
-  -DBOOST_NO_STD_ALLOCATOR \
-  -DBOOST_STRICT_CONFIG \
-  -DBOOST_STATIC_ASSERT_HPP \
 
 REQUIRED_CFLAGS = \
   $(C_WARNINGS) \
 
 REQUIRED_CXXFLAGS = \
   $(CXX_WARNINGS) \
-  -D'BOOST_STATIC_ASSERT(A)=static_assert((A))' \
 
 REQUIRED_ARFLAGS = \
   -rus
