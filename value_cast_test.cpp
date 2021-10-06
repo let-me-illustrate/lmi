@@ -26,7 +26,9 @@
 #include "miscellany.hpp"
 #include "test_tools.hpp"
 
-#include <boost/lexical_cast.hpp>
+#if defined TEST_BOOST_IMPLEMENTATION_TOO
+#   include <boost/lexical_cast.hpp>
+#endif // defined TEST_BOOST_IMPLEMENTATION_TOO
 
 #include <cmath>                        // scalbn()
 #include <cstring>                      // strcpy(), strcmp()

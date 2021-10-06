@@ -34,7 +34,9 @@
 #   pragma clang diagnostic ignored "-Wsometimes-uninitialized"
 #endif // defined LMI_CLANG
 
-#include <boost/lexical_cast.hpp>
+#if defined TEST_BOOST_IMPLEMENTATION_TOO
+#   include <boost/lexical_cast.hpp>
+#endif // defined TEST_BOOST_IMPLEMENTATION_TOO
 
 #if defined LMI_CLANG
 #   pragma clang diagnostic pop
@@ -97,12 +99,14 @@ void mete_two_thirds()
     stifle_warning_for_unused_value(d);
 }
 
+#if defined TEST_BOOST_IMPLEMENTATION_TOO
 void mete_two_thirds_boost()
 {
     std::string s = boost::lexical_cast<std::string>(2.0 / 3.0);
     double d = boost::lexical_cast<double>(s);
     stifle_warning_for_unused_value(d);
 }
+#endif // defined TEST_BOOST_IMPLEMENTATION_TOO
 
 void mete_infinity()
 {
@@ -194,7 +198,9 @@ int test_main(int, char*[])
     std::cout
         << "Conversions:"
         << "\n  2/3, lmi  : " << TimeAnAliquot(mete_two_thirds      )
+#if defined TEST_BOOST_IMPLEMENTATION_TOO
         << "\n  2/3, boost: " << TimeAnAliquot(mete_two_thirds_boost)
+#endif // defined TEST_BOOST_IMPLEMENTATION_TOO
         << "\n  inf, lmi  : " << TimeAnAliquot(mete_infinity        )
         << std::endl
         ;
