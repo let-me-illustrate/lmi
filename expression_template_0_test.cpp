@@ -21,7 +21,7 @@
 
 #include "pchfile.hpp"
 
-#if defined USE_UBLAS
+#if defined TEST_BOOST_UBLAS_TOO
 // BOOST !! Startlingly enough, boost uBLAS depends on this standard
 // macro. If it's not defined, then expression templates aren't used,
 // which impairs performance significantly and removes an essential
@@ -33,14 +33,14 @@
 // using a library-specific macro instead. Cf.:
 //   http://lists.boost.org/Archives/boost/2003/10/55518.php
 #   define NDEBUG 1
-#endif // defined USE_UBLAS
+#endif // defined TEST_BOOST_UBLAS_TOO
 
 #include "et_vector.hpp"
 #include "materially_equal.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#if defined USE_UBLAS
+#if defined TEST_BOOST_UBLAS_TOO
 #   if defined LMI_CLANG
 #       pragma clang diagnostic push
 #       pragma clang diagnostic ignored "-Wdeprecated-copy"
@@ -51,7 +51,7 @@
 #   if defined LMI_CLANG
 #       pragma clang diagnostic pop
 #   endif // defined LMI_CLANG
-#endif // defined USE_UBLAS
+#endif // defined TEST_BOOST_UBLAS_TOO
 
 #include <algorithm>
 #include <functional>                   // bind() et al.
@@ -112,11 +112,11 @@ namespace
     std::valarray<double> va2;
 
     // ub*: boost uBLAS.
-#if defined USE_UBLAS
+#if defined TEST_BOOST_UBLAS_TOO
     boost::numeric::ublas::vector<double> ub0;
     boost::numeric::ublas::vector<double> ub1;
     boost::numeric::ublas::vector<double> ub2;
-#endif // defined USE_UBLAS
+#endif // defined TEST_BOOST_UBLAS_TOO
 
     // pv*: PETE standard vectors.
     std::vector<double> pv0;
@@ -247,7 +247,7 @@ void mete_valarray()
 
 /// This implementation uses boost::numeric::ublas::vector.
 
-#if defined USE_UBLAS
+#if defined TEST_BOOST_UBLAS_TOO
 void mete_ublas()
 {
     for(int i = 0; i < n_iter; ++i)
@@ -255,7 +255,7 @@ void mete_ublas()
         ub2 += ub0 - 2.1 * ub1;
         }
 }
-#endif // defined USE_UBLAS
+#endif // defined TEST_BOOST_UBLAS_TOO
 
 void mete_pete()
 {
@@ -304,7 +304,7 @@ void mete_valarray_typical()
         }
 }
 
-#if defined USE_UBLAS
+#if defined TEST_BOOST_UBLAS_TOO
 // This is never actually called. It is incomplete: it is not known
 // whether the operations measured by other /mete.*typical/ functions
 // can even be expressed with this library; and that doesn't matter,
@@ -334,7 +334,7 @@ void mete_ublas_typical()
         // "error: no match for 'operator-' in '1.0e+0 - ub8'":
 //        ub9 = (1.0 - ub8) * ub9;
 }
-#endif // defined USE_UBLAS
+#endif // defined TEST_BOOST_UBLAS_TOO
 
 void mete_pete_typical()
 {
@@ -389,7 +389,7 @@ void time_one_array_length(int length)
     va1 = std::valarray<double>(cv1, g_length);
     va2 = std::valarray<double>(cv2, g_length);
 
-#if defined USE_UBLAS
+#if defined TEST_BOOST_UBLAS_TOO
     ub0.resize(g_length);
     ub1.resize(g_length);
     ub2.resize(g_length);
@@ -397,7 +397,7 @@ void time_one_array_length(int length)
     std::copy(cv0, cv0 + g_length, ub0.begin());
     std::copy(cv1, cv1 + g_length, ub1.begin());
     std::copy(cv2, cv2 + g_length, ub2.begin());
-#endif // defined USE_UBLAS
+#endif // defined TEST_BOOST_UBLAS_TOO
 
     pv0 = std::vector<double>(cv0, cv0 + g_length);
     pv1 = std::vector<double>(cv1, cv1 + g_length);
@@ -420,10 +420,10 @@ void time_one_array_length(int length)
     mete_valarray();
     LMI_TEST(materially_equal(va2 [omega], value_omega));
 
-#if defined USE_UBLAS
+#if defined TEST_BOOST_UBLAS_TOO
     mete_ublas();
     LMI_TEST(materially_equal(ub2 [omega], value_omega));
-#endif // defined USE_UBLAS
+#endif // defined TEST_BOOST_UBLAS_TOO
 
     mete_pete();
     LMI_TEST(materially_equal(pv2[omega], value_omega));
@@ -432,9 +432,9 @@ void time_one_array_length(int length)
     run_one_test("STL plain       ", mete_stl_plain);
     run_one_test("STL fancy       ", mete_stl_fancy);
     run_one_test("valarray        ", mete_valarray );
-#if defined USE_UBLAS
+#if defined TEST_BOOST_UBLAS_TOO
     run_one_test("uBLAS           ", mete_ublas    );
-#endif // defined USE_UBLAS
+#endif // defined TEST_BOOST_UBLAS_TOO
     run_one_test("PETE            ", mete_pete     );
 
     std::cout << std::endl;
