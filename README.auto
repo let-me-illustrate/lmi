@@ -32,7 +32,7 @@ a) we can use standard "configure && make && make install" invocation and
    can be used
 
 b) configure does run-time checks which allows to find 3rd party libraries
-   (boost, wxWidgets, ...) and adapt to other systems/compilers more easily
+   (wxWidgets, xmlwrapp, ...) and adapt to other systems/compilers more easily
 
 c) makefiles are much simpler and we get install, dist and check targets
    for free
