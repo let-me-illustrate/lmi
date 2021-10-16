@@ -30,8 +30,8 @@
 
 set -evx
 
-CODENAME=bullseye
-CHRTVER=3
+CODENAME=bookworm
+CHRTVER=4
 CHRTNAME=lmi_${CODENAME}_${CHRTVER}
 
 umask
