@@ -117,6 +117,8 @@ make "$coefficiency" system_test 2>&1 |sed -e'/^Cannot open.*test/d'
 rm --force /opt/lmi/test/analysis-* /opt/lmi/test/diffs-* /opt/lmi/test/md5sums-*
 # ...copy the results just generated...
 cp -a /opt/lmi/test/* /opt/lmi/touchstone
+# ...discarding unwanted files...
+rm /opt/lmi/touchstone/regressions.tsv /opt/lmi/touchstone/trace.txt
 # ...and rerun the test, which should now succeed:
 make "$coefficiency" system_test
 
