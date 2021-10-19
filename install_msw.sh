@@ -334,7 +334,7 @@ find /opt/lmi -perm -200 -not -perm -020 -print0 | xargs --no-run-if-empty -0 ls
 #   00777 symbolic link
 #   02775 directory
 # User and group permissions differ (multi-user-ness is impaired)
-# if the digits in the fourth and fifth columns differ. The second
+# if the digits in the third and fourth columns differ. The second
 # column should contain '2' for all directories.
 find /opt/lmi/ -print0 | xargs -0 stat -c "%05a %F" | sort -u
 # Ad hoc repairs--see:
