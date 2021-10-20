@@ -322,8 +322,17 @@ done
 
 # GID should be the same for all files.
 find /opt/lmi/ -not -group "$(id -gn "$(logname)")" -print
-# User and group write permissions should be the same.
-find /opt/lmi -perm -200 -not -perm -020 -print0 | xargs --no-run-if-empty -0 ls -ld
+# User and group permissions should be the same throughout $(prefix).
+# For each file that doesn't conform to that rule, list its name (to
+# make any systematic pattern clearer--for example, files generated
+# by autotools seem to ignore their directories' GIDs), and fix the
+# problem:
+find . \
+  -type f \
+  \( -perm -u+r ! -perm -g+r \
+  -o -perm -u+w ! -perm -g+w \
+  -o -perm -u+x ! -perm -g+x \
+  \) -print0 | xargs --null --verbose --no-run-if-empty chmod g=u
 # Show all distinct file modes. Expect something like:
 #   00444 regular file
 #   00555 regular file
