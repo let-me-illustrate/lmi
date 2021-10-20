@@ -165,6 +165,13 @@ find . \
   -o -perm -u+w ! -perm -g+w \
   -o -perm -u+x ! -perm -g+x \
   \) -print0 | xargs --null --verbose --no-run-if-empty chmod g=u
+# Do the same for directories, also setting the set-group-id bit:
+find . \
+  -type d \
+  \( -perm -u+r ! -perm -g+r \
+  -o -perm -u+w ! -perm -g+w \
+  -o -perm -u+x ! -perm -g+x \
+  \) -print0 | xargs --null --verbose --no-run-if-empty chmod g=u+s
 # Show all distinct file modes. Expect something like:
 #   00444 regular file
 #   00555 regular file
