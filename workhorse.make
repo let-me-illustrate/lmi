@@ -488,6 +488,9 @@ else ifneq (,$(filter $(gcc_version), 10 10.0))
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
 else ifneq (,$(filter $(gcc_version), 11 11.0))
+  gxx_version_specific_warnings := \
+    -Wno-deprecated-enum-float-conversion \
+
   gcc_cxx_warnings += -Wredundant-tags -Wvolatile
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
@@ -568,6 +571,7 @@ gcc_c_warnings := \
 gcc_cxx_warnings := \
   $(cxx_standard) \
   $(gcc_common_warnings) \
+  $(gxx_version_specific_warnings) \
   -Wc++11-compat \
   -Wc++14-compat \
   -Wc++1z-compat \
