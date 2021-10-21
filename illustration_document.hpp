@@ -40,7 +40,7 @@
 /// word. This is brittle, but then again it seems unlikely that
 /// anyone will change this aspect of wx.
 
-enum {LMI_WX_CHILD_DOCUMENT = 8};
+constexpr long LMI_WX_CHILD_DOCUMENT = 8;
 
 class IllustrationView;
 class WXDLLIMPEXP_FWD_CORE wxHtmlWindow;
