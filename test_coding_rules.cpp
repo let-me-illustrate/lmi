@@ -41,6 +41,7 @@
 #include <sstream>
 #include <stdexcept>                    // runtime_error
 #include <string>
+#include <type_traits>                  // underlying_type_t
 
 #if !defined LMI_POSIX
 int try_main(int, char*[])
@@ -261,7 +262,11 @@ bool file::is_of_phylum(enum_phylum z) const
 
 bool file::is_of_phylum(enum_kingdom z) const
 {
-    return z & phylum();
+    // C++20 forbids bit operations between enums of different types, even
+    // though this is safe here because enum_kingdom only contains combinations
+    // of primitive phyla from enum_phylum, so cast to the underlying type to
+    // avoid warnings/errors about this generally unsafe operation.
+    return static_cast<std::underlying_type_t<enum_kingdom>>(z) & phylum();
 }
 
 /// Analyze a file's name to determine its phylum.
