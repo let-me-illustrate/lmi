@@ -166,6 +166,8 @@ else ifeq (9,$(gnu_cpp_version))
 else ifeq (9.3.0,$(gnu_cpp_version))
 else ifeq (10,$(gnu_cpp_version))
 else ifeq (10.0,$(gnu_cpp_version))
+else ifeq (11,$(gnu_cpp_version))
+else ifeq (11.0,$(gnu_cpp_version))
 else
   $(warning Untested $(GNU_CPP) version '$(gnu_cpp_version)')
 endif
@@ -185,6 +187,8 @@ else ifeq (9,$(gnu_cxx_version))
 else ifeq (9.3.0,$(gnu_cxx_version))
 else ifeq (10,$(gnu_cxx_version))
 else ifeq (10.0,$(gnu_cxx_version))
+else ifeq (11,$(gnu_cxx_version))
+else ifeq (11.0,$(gnu_cxx_version))
 else
   $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
 endif
@@ -480,6 +484,10 @@ else ifneq (,$(filter $(gcc_version), 10 10.0))
     endif
   endif
 
+  gcc_cxx_warnings += -Wredundant-tags -Wvolatile
+
+  cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
+else ifneq (,$(filter $(gcc_version), 11 11.0))
   gcc_cxx_warnings += -Wredundant-tags -Wvolatile
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
