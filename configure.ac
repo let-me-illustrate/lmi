@@ -538,11 +538,11 @@ if test "x$GXX" == "xyes"; then
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-parentheses)
     fi
 
-    dnl These warnings are given by clang in C++20 mode and can't be easily
-    dnl avoided, so disable them for now.
-    LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-enum-enum-conversion)
+    dnl This warning is given by both gcc and clang in C++20 mode and can't be
+    dnl easily avoided, so disable it for now.
     LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-enum-float-conversion)
     if test "$CLANG" = "yes"; then
+        dnl These warnings are clang-specific but also can't be easily fixed.
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-anon-enum-enum-conversion)
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-volatile)
     fi
