@@ -255,6 +255,14 @@ bool file::is_of_phylum(enum_phylum z) const
     return z & phylum();
 }
 
+/// Helper, to be deprecated for C++23.
+
+template<typename E>
+constexpr std::underlying_type_t<E> to_underlying(E e) noexcept
+{
+    return static_cast<std::underlying_type_t<E>>(e);
+}
+
 /// Ascertain whether a file appertains to the given category.
 ///
 /// This relation may be read as "has the X-nature". For example,
@@ -266,7 +274,7 @@ bool file::is_of_phylum(enum_kingdom z) const
     // though this is safe here because enum_kingdom only contains combinations
     // of primitive phyla from enum_phylum, so cast to the underlying type to
     // avoid warnings/errors about this generally unsafe operation.
-    return static_cast<std::underlying_type_t<enum_kingdom>>(z) & phylum();
+    return to_underlying(z) & phylum();
 }
 
 /// Analyze a file's name to determine its phylum.
