@@ -478,8 +478,11 @@ else ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0 9 9.3.0))
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++2a
 else ifneq (,$(filter $(gcc_version), 10 10.0))
-  gcc_version_specific_c_warnings   :=
-  gcc_version_specific_cxx_warnings :=
+  gcc_version_specific_c_warnings :=
+
+  gcc_version_specific_cxx_warnings := \
+    -Wredundant-tags \
+    -Wvolatile \
 
   ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
 # See:
@@ -496,14 +499,11 @@ else ifneq (,$(filter $(gcc_version), 10 10.0))
     endif
   endif
 
-  gcc_cxx_warnings += -Wredundant-tags -Wvolatile
-
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
 else ifneq (,$(filter $(gcc_version), 11 11.0))
-  gcc_version_specific_c_warnings   :=
-  gcc_version_specific_cxx_warnings :=
+  gcc_version_specific_c_warnings :=
 
-  gcc_cxx_warnings += \
+  gcc_version_specific_cxx_warnings := \
     -Wno-deprecated-enum-float-conversion \
     -Wredundant-tags \
     -Wvolatile \
