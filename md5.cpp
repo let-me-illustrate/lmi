@@ -108,7 +108,7 @@ static const unsigned char fillbuf[64] = { 0x80, 0 /* , 0, 0, ... */ };
  *      struct md5_ctx *ctx;
  */
 void
-md5_init_ctx (struct md5_ctx* ctx)
+md5_init_ctx (md5_ctx* ctx)
 {
   ctx->A = (md5_uint32) 0x67452301;
   ctx->B = (md5_uint32) 0xefcdab89;
@@ -131,7 +131,7 @@ md5_init_ctx (struct md5_ctx* ctx)
  *      const struct md5_ctx *ctx;
  *      void *resbuf;
  */
-void* md5_read_ctx (struct md5_ctx const* ctx, void* resbuf)
+void* md5_read_ctx (md5_ctx const* ctx, void* resbuf)
 {
   ((md5_uint32 *) resbuf)[0] = SWAP (ctx->A);
   ((md5_uint32 *) resbuf)[1] = SWAP (ctx->B);
@@ -154,7 +154,7 @@ void* md5_read_ctx (struct md5_ctx const* ctx, void* resbuf)
  *      void *resbuf;
  */
 void *
-md5_finish_ctx (struct md5_ctx* ctx, void* resbuf)
+md5_finish_ctx (md5_ctx* ctx, void* resbuf)
 {
   /* Take yet unprocessed bytes into account. */
   md5_uint32 bytes = ctx->buflen;
@@ -195,7 +195,7 @@ md5_stream (std::FILE* stream, void* resblock)
 {
   /* Important: BLOCKSIZE must be a multiple of 64. */
 #define BLOCKSIZE 4096
-  struct md5_ctx ctx;
+  md5_ctx ctx;
   char buffer[BLOCKSIZE + 72];
   std::size_t sum;
 
@@ -257,7 +257,7 @@ md5_stream (std::FILE* stream, void* resblock)
 void *
 md5_buffer (char const* buffer, std::size_t len, void* resblock)
 {
-  struct md5_ctx ctx;
+  md5_ctx ctx;
 
   /* Initialize the computation context. */
   md5_init_ctx (&ctx);
@@ -277,7 +277,7 @@ md5_buffer (char const* buffer, std::size_t len, void* resblock)
  *      struct md5_ctx *ctx;
  */
 void
-md5_process_bytes (void const* buffer, std::size_t a_len, struct md5_ctx* ctx)
+md5_process_bytes (void const* buffer, std::size_t a_len, md5_ctx* ctx)
 {
   md5_uint32 len = bourn_cast<md5_uint32>(a_len);
   /* When we already have some bits in our internal buffer concatenate
@@ -342,7 +342,7 @@ md5_process_bytes (void const* buffer, std::size_t a_len, struct md5_ctx* ctx)
  *      struct md5_ctx *ctx;
  */
 void
-md5_process_block (void const* buffer, std::size_t a_len, struct md5_ctx* ctx)
+md5_process_block (void const* buffer, std::size_t a_len, md5_ctx* ctx)
 {
   md5_uint32 len = bourn_cast<md5_uint32>(a_len);
   md5_uint32 correct_words[16];
