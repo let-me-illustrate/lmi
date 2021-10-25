@@ -417,18 +417,22 @@ tutelary_flag :=
 c_standard   := -fno-ms-extensions -frounding-math -std=c99
 cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
 
-# Specify $(gcc_version_specific_warnings) last, in order to override
-# other options.
+# Specify these:
+#   $(gcc_version_specific_c_warnings)
+#   $(gcc_version_specific_cxx_warnings)
+# last, in order to override other options.
 
 ifeq (3.4.4,$(gcc_version))
   # Suppress spurious gcc-3.4.4 warnings:
   #   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=22207
-  gcc_version_specific_warnings := -Wno-uninitialized
+  gcc_version_specific_c_warnings   := -Wno-uninitialized
+  gcc_version_specific_cxx_warnings := -Wno-uninitialized
   cxx_standard := -std=c++98
 else ifeq (3.4.5,$(gcc_version))
   # Suppress spurious gcc-3.4.5 warnings:
   #   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=22207
-  gcc_version_specific_warnings := -Wno-uninitialized
+  gcc_version_specific_c_warnings   := -Wno-uninitialized
+  gcc_version_specific_cxx_warnings := -Wno-uninitialized
   # Fix "hello world":
   #   http://sourceforge.net/tracker/index.php?func=detail&aid=2373234&group_id=2435&atid=102435
   cxx_standard := -std=gnu++98
@@ -439,22 +443,30 @@ else ifneq (,$(filter $(gcc_version), 4.9.1 4.9.2))
   # See:
   #   https://lists.nongnu.org/archive/html/lmi/2015-12/msg00028.html
   #   https://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
-  gcc_version_specific_warnings := \
+  gcc_version_specific_c_warnings := \
+    -Wno-conversion \
+    -Wno-unused-local-typedefs \
+    -Wno-unused-variable \
+
+  gcc_version_specific_cxx_warnings := \
     -Wno-conversion \
     -Wno-unused-local-typedefs \
     -Wno-unused-variable \
 
   cxx_standard := -std=c++11
 else ifneq (,$(filter $(gcc_version), 6.3.0))
-  gcc_version_specific_warnings := -Wno-conversion
+  gcc_version_specific_c_warnings   := -Wno-conversion
+  gcc_version_specific_cxx_warnings := -Wno-conversion
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
 else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
-  gcc_version_specific_warnings :=
+  gcc_version_specific_c_warnings   :=
+  gcc_version_specific_cxx_warnings :=
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
 else ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0 9 9.3.0))
-  gcc_version_specific_warnings :=
+  gcc_version_specific_c_warnings   :=
+  gcc_version_specific_cxx_warnings :=
 
   ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
 # See:
@@ -466,7 +478,8 @@ else ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0 9 9.3.0))
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++2a
 else ifneq (,$(filter $(gcc_version), 10 10.0))
-  gcc_version_specific_warnings :=
+  gcc_version_specific_c_warnings   :=
+  gcc_version_specific_cxx_warnings :=
 
   ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
 # See:
@@ -487,7 +500,8 @@ else ifneq (,$(filter $(gcc_version), 10 10.0))
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
 else ifneq (,$(filter $(gcc_version), 11 11.0))
-  gcc_version_specific_warnings :=
+  gcc_version_specific_c_warnings   :=
+  gcc_version_specific_cxx_warnings :=
 
   gcc_cxx_warnings += \
     -Wno-deprecated-enum-float-conversion \
@@ -659,12 +673,12 @@ $(wno_sign_conv_objects): gcc_common_extra_warnings += -Wno-sign-conversion
 C_WARNINGS = \
   $(gcc_c_warnings) \
   $(gcc_common_extra_warnings) \
-  $(gcc_version_specific_warnings) \
+  $(gcc_version_specific_c_warnings) \
 
 CXX_WARNINGS = \
   $(gcc_cxx_warnings) \
   $(gcc_common_extra_warnings) \
-  $(gcc_version_specific_warnings) \
+  $(gcc_version_specific_cxx_warnings) \
 
 ################################################################################
 
@@ -751,7 +765,8 @@ debug_flag := -ggdb
 #
 ifeq (3.4.2,$(gcc_version))
   debug_flag := -g
-  gcc_version_specific_warnings := -Wno-uninitialized
+  gcc_version_specific_c_warnings   := -Wno-uninitialized
+  gcc_version_specific_cxx_warnings := -Wno-uninitialized
 endif
 
 # 'c_l_flags' are to be used in both compiler and linker commands.
