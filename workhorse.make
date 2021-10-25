@@ -446,16 +446,15 @@ else ifneq (,$(filter $(gcc_version), 4.9.1 4.9.2))
 
   cxx_standard := -std=c++11
 else ifneq (,$(filter $(gcc_version), 6.3.0))
-  gcc_version_specific_warnings := \
-    -Wno-conversion \
+  gcc_version_specific_warnings := -Wno-conversion
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
 else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
-  gcc_version_specific_warnings := \
+  gcc_version_specific_warnings :=
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
 else ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0 9 9.3.0))
-  gcc_version_specific_warnings := \
+  gcc_version_specific_warnings :=
 
   ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
 # See:
@@ -467,7 +466,7 @@ else ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0 9 9.3.0))
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++2a
 else ifneq (,$(filter $(gcc_version), 10 10.0))
-  gcc_version_specific_warnings := \
+  gcc_version_specific_warnings :=
 
   ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
 # See:
@@ -488,7 +487,7 @@ else ifneq (,$(filter $(gcc_version), 10 10.0))
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
 else ifneq (,$(filter $(gcc_version), 11 11.0))
-  gcc_version_specific_warnings := \
+  gcc_version_specific_warnings :=
 
   gcc_cxx_warnings += \
     -Wno-deprecated-enum-float-conversion \
