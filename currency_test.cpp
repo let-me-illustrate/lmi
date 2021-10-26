@@ -23,6 +23,7 @@
 
 #include "currency.hpp"
 
+#include "miscellany.hpp"               // stifle_warning_for_unused_variable()
 #include "round_to.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -86,7 +87,6 @@ void currency_test::test()
 
 void currency_test::test_default_ctor()
 {
-    // default ctor
     currency const a0;
     LMI_TEST(0.00 == a0.d());
     LMI_TEST(   0 == a0.m_);
