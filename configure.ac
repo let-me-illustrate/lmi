@@ -546,10 +546,6 @@ if test "x$GXX" == "xyes"; then
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-anon-enum-enum-conversion)
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-volatile)
     fi
-
-    dnl This warning is now only given for 2 variables in ledger_evaluator.cpp
-    dnl and should be fixed there and reenabled.
-    LMI_CXX_ADD_IF_SUPPORTED(-Wno-unused-variable)
 fi
 
 dnl === Generate output files ===
