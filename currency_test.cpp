@@ -91,7 +91,7 @@ void currency_test::test_default_ctor()
     LMI_TEST(0.00 == a0.d());
     LMI_TEST(   0 == a0.m_);
     constexpr currency zero {};
-    LMI_TEST(   0 == a0.m_);
+    LMI_TEST(   0 == zero.m_);
 }
 
 void currency_test::test_copy_ctor()
@@ -166,7 +166,11 @@ void currency_test::test_literals()
     // These are evaluated at compile time, even though this is not
     // a constexpr context:
     auto compile_time_constant_pos( 9007199254740992_cents);
+    stifle_warning_for_unused_variable(compile_time_constant_pos);
+
     auto compile_time_constant_neg(-9007199254740992_cents);
+    stifle_warning_for_unused_variable(compile_time_constant_neg);
+
     // These would be compile-time errors:
 //  auto error_at_compile_time_pos( 9007199254740993_cents);
 //  auto error_at_compile_time_neg(-9007199254740993_cents);
@@ -293,6 +297,7 @@ void currency_test::mete_humongous()
     for(int i = 0; i < 100000; ++i)
         {
         currency volatile z = std::min(extreme, value);
+        stifle_warning_for_unused_variable(z);
         }
 }
 
@@ -304,6 +309,7 @@ void currency_test::mete_infinite()
     for(int i = 0; i < 100000; ++i)
         {
         currency volatile z = std::min(extreme, value);
+        stifle_warning_for_unused_variable(z);
         }
 }
 
