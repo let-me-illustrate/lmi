@@ -28,6 +28,7 @@
 #include <cfloat>                       // DBL_MAX
 #include <cmath>                        // HUGE_VAL
 #include <cstdio>                       // remove()
+#include <ctime>                        // clock()
 #include <fstream>
 #include <iomanip>
 #include <limits>
@@ -449,6 +450,61 @@ void test_scoped_ios_format()
     LMI_TEST_EQUAL(oss.str(), s);
 }
 
+class partly_unused
+{
+  public:
+    partly_unused
+        (int used
+        ,int unused
+        )
+        :used_   {used}
+        ,unused_ {unused}
+        {
+        // Suppress clang '-Wunused-private-field' warnings:
+        stifle_unused_warning(unused_);
+        }
+    int used() {return used_;}
+
+  private:
+    int used_;
+    int unused_;
+};
+
+void test_stifle_unused_warning()
+{
+    // Variable neither initialized nor used.
+    int a;
+    stifle_unused_warning(a);
+
+    // Variable initialized but not used.
+    int b {2};
+    stifle_unused_warning(b);
+
+    // Variable initialized and used, but only conditionally.
+    int c;
+#if defined some_undefined_condition
+    c = 3;
+    std::cout << c << " This should not print" << std::endl;
+#endif // defined some_undefined_condition
+    stifle_unused_warning(c);
+
+    // Variable initialized and later used...
+    int volatile d {4};
+//  stifle_unused_warning(d); // [see below]
+    // ...but last value assigned...
+    for(int i = 0; i < 7; ++i)
+        {
+        d = static_cast<int>(std::clock());
+        }
+    // ...is not subsequently used. In this case, for clang at least,
+    // it is necessary to stifle the warning here:
+    stifle_unused_warning(d);
+    // rather than in the commented-out location above. See:
+    //   https://lists.nongnu.org/archive/html/lmi/2021-04/msg00058.html
+
+    partly_unused {0, 1};
+}
+
 int test_main(int, char*[])
 {
     test_each_equal();
@@ -459,6 +515,7 @@ int test_main(int, char*[])
     test_scale_power();
     test_trimming();
     test_scoped_ios_format();
+    test_stifle_unused_warning();
 
     return 0;
 }
