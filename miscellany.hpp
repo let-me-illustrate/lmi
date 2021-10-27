@@ -290,28 +290,10 @@ inline unsigned char lmi_toupper(unsigned char c)
     return static_cast<unsigned char>(std::toupper(c));
 }
 
-/// DWISOTT
-///
-/// Perhaps this function template's only legitimate use is within a
-/// conditional-inclusion [16.1] block.
+/// Avoid compiler warning for unused variable or unused value.
 
 template<typename T>
-inline void stifle_warning_for_unused_variable(T const&)
+inline void stifle_unused_warning(T const&)
 {}
-
-/// DWISOTT
-///
-/// Casting to void is always permitted by 5.2.9/4 via 5.4/5 (cf. C99
-/// 6.3.2.2).
-///
-/// Taking the argument's address prevents this gcc warning:
-///   "object of type [X] will not be accessed in void context"
-/// for volatile types.
-
-template<typename T>
-inline void stifle_warning_for_unused_value(T const& t)
-{
-    (void)&t;
-}
 
 #endif // miscellany_hpp

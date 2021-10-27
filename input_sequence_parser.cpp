@@ -25,7 +25,7 @@
 
 #include "assert_lmi.hpp"
 #include "contains.hpp"
-#include "miscellany.hpp"               // is_ok_for_cctype(), rtrim()
+#include "miscellany.hpp"               // is_ok_for_cctype(), rtrim(), stifle_unused_warning()
 
 #include <algorithm>                    // copy()
 #include <cctype>                       // isalnum(), isspace()
@@ -51,8 +51,8 @@ SequenceParser::SequenceParser
     ,keywords_only_                 {a_keywords_only}
 {
     // Suppress clang '-Wunused-private-field' warnings:
-    stifle_warning_for_unused_value(inforce_duration_);
-    stifle_warning_for_unused_value(effective_year_);
+    stifle_unused_warning(inforce_duration_);
+    stifle_unused_warning(effective_year_);
     sequence();
     diagnostic_messages_ = diagnostics_.str();
 }

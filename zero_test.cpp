@@ -26,7 +26,7 @@
 #include "assert_lmi.hpp"
 #include "materially_equal.hpp"
 #include "math_functions.hpp"           // signum()
-#include "miscellany.hpp"               // stifle_warning_for_unused_variable()
+#include "miscellany.hpp"               // stifle_unused_warning()
 #include "test_tools.hpp"
 
 #include <algorithm>                    // max()
@@ -249,7 +249,7 @@ void test_a_decimal_function
         INVOKE_LMI_TEST_EQUAL(n_eval, r.n_eval, file, line);
         }
 #endif // defined LMI_X86_64 && defined LMI_POSIX
-    stifle_warning_for_unused_variable(n_eval);
+    stifle_unused_warning(n_eval);
 }
 
 /// Test with all biases, asserting obvious invariants.

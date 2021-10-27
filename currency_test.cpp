@@ -23,7 +23,7 @@
 
 #include "currency.hpp"
 
-#include "miscellany.hpp"               // stifle_warning_for_unused_variable()
+#include "miscellany.hpp"               // stifle_unused_warning()
 #include "round_to.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -166,10 +166,10 @@ void currency_test::test_literals()
     // These are evaluated at compile time, even though this is not
     // a constexpr context:
     auto compile_time_constant_pos( 9007199254740992_cents);
-    stifle_warning_for_unused_variable(compile_time_constant_pos);
+    stifle_unused_warning(compile_time_constant_pos);
 
     auto compile_time_constant_neg(-9007199254740992_cents);
-    stifle_warning_for_unused_variable(compile_time_constant_neg);
+    stifle_unused_warning(compile_time_constant_neg);
 
     // These would be compile-time errors:
 //  auto error_at_compile_time_pos( 9007199254740993_cents);
@@ -297,7 +297,7 @@ void currency_test::mete_humongous()
     for(int i = 0; i < 100000; ++i)
         {
         currency volatile z = std::min(extreme, value);
-        stifle_warning_for_unused_variable(z);
+        stifle_unused_warning(z);
         }
 }
 
@@ -309,7 +309,7 @@ void currency_test::mete_infinite()
     for(int i = 0; i < 100000; ++i)
         {
         currency volatile z = std::min(extreme, value);
-        stifle_warning_for_unused_variable(z);
+        stifle_unused_warning(z);
         }
 }
 

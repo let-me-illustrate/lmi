@@ -24,7 +24,7 @@
 #include "financial.hpp"
 
 #include "materially_equal.hpp"
-#include "miscellany.hpp"               // stifle_warning_for_unused_value()
+#include "miscellany.hpp"               // stifle_unused_warning()
 #include "ssize_lmi.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -82,7 +82,7 @@ void mete_0
             );
         unoptimizable = results.front();
         }
-    stifle_warning_for_unused_value(unoptimizable);
+    stifle_unused_warning(unoptimizable);
 }
 
 void mete_1
@@ -105,7 +105,7 @@ void mete_1
             );
         unoptimizable = results.front();
         }
-    stifle_warning_for_unused_value(unoptimizable);
+    stifle_unused_warning(unoptimizable);
 }
 
 int test_main(int, char*[])

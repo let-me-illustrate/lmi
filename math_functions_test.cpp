@@ -25,7 +25,7 @@
 
 #include "fenv_lmi.hpp"
 #include "materially_equal.hpp"
-#include "miscellany.hpp"               // stifle_warning_for_unused_value()
+#include "miscellany.hpp"               // stifle_unused_warning()
 #include "stl_extensions.hpp"           // nonstd::power()
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -207,7 +207,7 @@ void mete0()
         x = d_upper_12_from_i_naive        <double>()(0.04);
         x = net_i_from_gross_naive<double,365>()(0.04, 0.007, 0.003);
         }
-    stifle_warning_for_unused_value(x);
+    stifle_unused_warning(x);
 }
 
 // This implementation uses production functors.
@@ -221,7 +221,7 @@ void mete1()
         x = d_upper_12_from_i        <double>()(0.04);
         x = net_i_from_gross<double,365>()(0.04, 0.007, 0.003);
         }
-    stifle_warning_for_unused_value(x);
+    stifle_unused_warning(x);
 }
 
 void mete2()
@@ -231,7 +231,7 @@ void mete2()
         {
         x = i_upper_n_over_n_from_i_T<double,365>()(0.01);
         }
-    stifle_warning_for_unused_value(x);
+    stifle_unused_warning(x);
 }
 
 void mete3()
@@ -241,7 +241,7 @@ void mete3()
         {
         x = i_upper_n_over_n_from_i_T<long double,365>()(0.01);
         }
-    stifle_warning_for_unused_value(x);
+    stifle_unused_warning(x);
 }
 
 // These 'mete[45]' functions calculate 10^-9 in different ways.
@@ -260,7 +260,7 @@ void mete4()
         {
         x = 1.0 / nonstd::power(base, exponent);
         }
-    stifle_warning_for_unused_value(x);
+    stifle_unused_warning(x);
 }
 
 void mete5()
@@ -272,7 +272,7 @@ void mete5()
         {
         x = std::pow(base, exponent);
         }
-    stifle_warning_for_unused_value(x);
+    stifle_unused_warning(x);
 }
 
 void assay_speed()

@@ -25,7 +25,7 @@
 
 #include "handle_exceptions.hpp"        // report_exception()
 #include "ieee754.hpp"                  // infinity<>()
-#include "miscellany.hpp"
+#include "miscellany.hpp"               // stifle_unused_warning()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -96,7 +96,7 @@ void mete_two_thirds()
 {
     std::string s = numeric_io_cast<std::string>(2.0 / 3.0);
     double d = numeric_io_cast<double>(s);
-    stifle_warning_for_unused_value(d);
+    stifle_unused_warning(d);
 }
 
 #if defined TEST_BOOST_IMPLEMENTATION_TOO
@@ -104,7 +104,7 @@ void mete_two_thirds_boost()
 {
     std::string s = boost::lexical_cast<std::string>(2.0 / 3.0);
     double d = boost::lexical_cast<double>(s);
-    stifle_warning_for_unused_value(d);
+    stifle_unused_warning(d);
 }
 #endif // defined TEST_BOOST_IMPLEMENTATION_TOO
 
@@ -112,7 +112,7 @@ void mete_infinity()
 {
     std::string s = numeric_io_cast<std::string>(infinity<double>());
     double d = numeric_io_cast<double>(s);
-    stifle_warning_for_unused_value(d);
+    stifle_unused_warning(d);
 }
 
 // These tests generally assume IEC 60559 floating point. Hardware

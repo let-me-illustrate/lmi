@@ -49,7 +49,7 @@ inline To bourn_cast(From from)
 #   include "bourn_cast.hpp"
 #endif // !defined TEST_BOOST_CAST_INSTEAD
 
-#include "miscellany.hpp"               // stifle_warning_for_unused_variable()
+#include "miscellany.hpp"               // stifle_unused_warning()
 #include "stl_extensions.hpp"           // nonstd::power()
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -670,7 +670,7 @@ void mete_static()
         {
         z = static_cast<To>(j);
         }
-    stifle_warning_for_unused_variable(z);
+    stifle_unused_warning(z);
 }
 
 /// Speed test: convert one million times, using bourn_cast.
@@ -687,7 +687,7 @@ void mete_bourn()
         {
         z = bourn_cast<To>(j);
         }
-    stifle_warning_for_unused_variable(z);
+    stifle_unused_warning(z);
 }
 
 void assay_speed()

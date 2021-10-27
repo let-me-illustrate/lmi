@@ -23,7 +23,7 @@
 
 #include "xml_serialize.hpp"
 
-#include "miscellany.hpp"               // stifle_warning_for_unused_variable()
+#include "miscellany.hpp"               // stifle_unused_warning()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -118,7 +118,7 @@ void mete_write_0()
 {
     xml_lmi::xml_document document("eraseme");
     xml::element& root = document.root_node();
-    stifle_warning_for_unused_variable(root);
+    stifle_unused_warning(root);
     dom_string = document.str();
 }
 
@@ -126,7 +126,7 @@ void mete_read_0()
 {
     xml_lmi::dom_parser parser(dom_string.c_str(), dom_string.size());
     xml::element const& root = parser.root_node("eraseme");
-    stifle_warning_for_unused_variable(root);
+    stifle_unused_warning(root);
 }
 
 // These /mete_._[write|read]/ functions are like write() and read()

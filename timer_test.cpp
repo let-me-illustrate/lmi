@@ -24,7 +24,7 @@
 #include "timer.hpp"
 
 #include "contains.hpp"
-#include "miscellany.hpp"
+#include "miscellany.hpp"               // stifle_unused_warning()
 #include "test_tools.hpp"
 
 #include <cmath>                        // log10()
@@ -39,7 +39,7 @@ void foo()
     for(int j = 0; j < 100; ++j)
         {
         d = std::log10(1 + j * j);
-        stifle_warning_for_unused_value(d);
+        stifle_unused_warning(d);
         }
 }
 
