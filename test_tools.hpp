@@ -76,8 +76,8 @@
     << ", line " << __LINE__ << "]\n" \
     << std::flush                     \
 
-#define LMI_TEST(exp)               \
-    if(exp)                         \
+#define LMI_TEST(expr)              \
+    if(expr)                        \
         {                           \
         lmi_test::record_success(); \
         }                           \
@@ -85,7 +85,7 @@
         {                           \
         lmi_test::record_error();   \
         lmi_test::error_stream()    \
-            << (exp)                \
+            << (expr)               \
             << LMI_TEST_FLUSH       \
             ;                       \
         }                           \
@@ -201,14 +201,14 @@ bool whats_what(std::string const& observed, what_regex const& expected);
         }                                                     \
     }                                                         \
 
-#define INVOKE_LMI_TEST(exp,file,line)      \
-    if(!(exp))                              \
+#define INVOKE_LMI_TEST(expr,file,line)     \
+    if(!(expr))                             \
         {                                   \
         lmi_test::record_error();           \
         lmi_test::error_stream()            \
             << lmi_test::error_prefix       \
             << "test failed: "              \
-            << (exp)                        \
+            << (expr)                       \
             << "\n[invoked from "           \
             << "file " << (file) << ", "    \
             << "line: " << (line)           \

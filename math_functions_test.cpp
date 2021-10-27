@@ -253,24 +253,24 @@ void mete3()
 
 void mete4()
 {
-    double volatile base = 10.0;
-    int    volatile exp  = 9;
+    double volatile base     = 10.0;
+    int    volatile exponent = 9;
     double volatile x;
     for(int j = 0; j < 100000; ++j)
         {
-        x = 1.0 / nonstd::power(base, exp);
+        x = 1.0 / nonstd::power(base, exponent);
         }
     stifle_warning_for_unused_value(x);
 }
 
 void mete5()
 {
-    double volatile base = 10.0;
-    int    volatile exp  = -9;
+    double volatile base     = 10.0;
+    int    volatile exponent = -9;
     double volatile x;
     for(int j = 0; j < 100000; ++j)
         {
-        x = std::pow(base, exp);
+        x = std::pow(base, exponent);
         }
     stifle_warning_for_unused_value(x);
 }
