@@ -293,7 +293,7 @@ inline unsigned char lmi_toupper(unsigned char c)
 /// Avoid compiler warning for unused variable or unused value.
 
 template<typename T>
-inline void stifle_unused_warning(T const&)
+constexpr void stifle_unused_warning(T const&)
 {}
 
 #endif // miscellany_hpp
