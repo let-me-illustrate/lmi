@@ -153,6 +153,7 @@ i7702::i7702
         apply_unary(i_upper_12_over_12_from_i<double>(), Bgen_);
 
     std::vector<double> diff {};
+    // PETE's fabs(), not std::fabs():
     diff <<= fabs(Em_ - theoretical_naar_discount);
     minmax<double> const mm(diff);
     constexpr double tolerance {0.0000001};
