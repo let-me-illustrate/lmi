@@ -259,7 +259,7 @@ jobs:
               || err=$?
 
           if [ -n "$err" ]; then
-            echo '*** Configuring failed, contents of config.log follows: ***'
+            echo '*''** Configuring failed, contents of config.log follows: *''**'
             echo '-----------------------------------------------------------'
             cat config.log
             echo '-----------------------------------------------------------'
@@ -350,7 +350,7 @@ jobs:
 
             if [ -n "$err" ]; then
               if [ -f ${lmi_build_dir}/test-suite.log ]; then
-                  echo '*** Tests failed, contents of test-suite.log follows: ***'
+                  echo '*''** Tests failed, contents of test-suite.log follows: *''**'
                   echo '-----------------------------------------------------------'
                   cat ${lmi_build_dir}/test-suite.log
                   echo '-----------------------------------------------------------'
