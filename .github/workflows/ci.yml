@@ -116,6 +116,7 @@ jobs:
         uses: hendrikmuhs/ccache-action@v1
         with:
           key: ${{ matrix.name }}
+          max-size: 900M
 
       - name: Set up build environment
         run: |
