@@ -1211,7 +1211,7 @@ inline int tole_(double* b, double* tol, int* neps, double* eps)
     // dividing repeatedly by ten.
     *tol = tolx;
     }
-    *tol += abs(*b) * 2. * *eps;
+    *tol += std::fabs(*b) * 2. * *eps;
     *tol *= 2.;
 //  std::cout << "actual tolerance " << *tol << std::endl;
     return 0;
@@ -1278,7 +1278,7 @@ int rroot_(FunctionalType& f, int* nprob, int* neps, double* eps,
 /* CALCULATES THE TERMINATION CRITERION. STOPS THE PROCEDURE IF THE */
 /* CRITERION IS SATISFIED. */
 
-    if (abs(fb) <= abs(fa)) {
+    if (std::fabs(fb) <= std::fabs(fa)) {
         tole_(b, &tol, neps, eps);
     } else {
         tole_(a, &tol, neps, eps);
@@ -1358,7 +1358,7 @@ int rroot_(FunctionalType& f, int* nprob, int* neps, double* eps,
 
 /* TAKES THE DOUBLE-SIZE SECANT STEP. */
 
-    if (abs(fa) < abs(fb)) {
+    if (std::fabs(fa) < std::fabs(fb)) {
         u = *a;
         fu = fa;
     } else {
@@ -1366,7 +1366,7 @@ int rroot_(FunctionalType& f, int* nprob, int* neps, double* eps,
         fu = fb;
     }
     c0 = u - fu / (fb - fa) * 2. * (*b - *a);
-    if ((d_1 = c0 - u, abs(d_1)) > (*b - *a) * .5) {
+    if ((d_1 = c0 - u, std::fabs(d_1)) > (*b - *a) * .5) {
         c0 = *a + (*b - *a) * .5;
     }
 
@@ -1481,7 +1481,7 @@ int brackt_(FunctionalType& f, int* nprob, double* a, double* b,
 /* UPDATE THE TERMINATION CRITERION ACCORDING TO THE NEW ENCLOSING */
 /* INTERVAL. */
 
-    if (abs(*fb) <= abs(*fa)) {
+    if (std::fabs(*fb) <= std::fabs(*fa)) {
         tole_(b, tol, neps, eps);
     } else {
         tole_(a, tol, neps, eps);
