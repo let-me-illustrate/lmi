@@ -291,9 +291,12 @@ inline unsigned char lmi_toupper(unsigned char c)
 }
 
 /// Avoid compiler warning for unused variable or unused value.
+///
+/// Rationale for this universal-reference implementation:
+///   https://lists.nongnu.org/archive/html/lmi/2021-10/msg00050.html
 
 template<typename T>
-constexpr void stifle_unused_warning(T const&)
+constexpr void stifle_unused_warning(T&&)
 {}
 
 #endif // miscellany_hpp
