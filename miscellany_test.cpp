@@ -491,10 +491,10 @@ void test_stifle_unused_warning()
 #endif // defined some_undefined_condition
     stifle_unused_warning(c);
 
-    // Variable initialized and later used...
-    int volatile d {4};
+    // Variable uninitialized at first...
+    int volatile d;
 //  stifle_unused_warning(d); // [see below]
-    // ...but last value assigned...
+    // ...though set later, but last value assigned...
     for(int i = 0; i < 7; ++i)
         {
         d = static_cast<int>(std::clock());
