@@ -113,10 +113,11 @@ jobs:
           submodules: 'recursive'
 
       - name: Install CCache
-        uses: hendrikmuhs/ccache-action@v1
+        uses: vadz/ccache-action@51a14bafac785236dfc551c76c779429eaf85a13
         with:
           key: ${{ matrix.name }}
           max-size: 900M
+          verbose: 2
 
       - name: Set up build environment
         run: |
