@@ -470,6 +470,9 @@ class partly_unused
     int unused_;
 };
 
+int         return_temporary_0() {return {};}
+std::string return_temporary_1() {return {};}
+
 void test_stifle_unused_warning()
 {
     // Variable neither initialized nor used.
@@ -503,6 +506,9 @@ void test_stifle_unused_warning()
     //   https://lists.nongnu.org/archive/html/lmi/2021-04/msg00058.html
 
     partly_unused {0, 1};
+
+    stifle_unused_warning(return_temporary_0());
+    stifle_unused_warning(return_temporary_1());
 }
 
 int test_main(int, char*[])
