@@ -73,7 +73,7 @@ grep --invert-match '^I:' "${CHRTNAME}"-debootstrap-log || true
 # Installing 'schroot' creates this 'chroot.d' directory.
 cat >/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
 [${CHRTNAME}]
-aliases=lmi
+# aliases=lmi
 description=debian ${CODENAME} cross build ${CHRTVER}
 directory=/srv/chroot/${CHRTNAME}
 users=${CHROOT_USERS}
