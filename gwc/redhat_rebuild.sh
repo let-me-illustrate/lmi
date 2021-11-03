@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -evx
+
             echo 'check_certificate = off' >> ~/.wgetrc
 sudo sh -c "echo 'check_certificate = off' >> ~/.wgetrc"
 

@@ -71,6 +71,10 @@ findmnt -ro SOURCE,TARGET \
   | sed -e's,^[/A-Za-z0-9_-]*[[]\([^]]*\)[]],\1,' \
   | column -t
 
+# If the next command fails due to unwanted dormant sessions, then
+# a command such as
+#   sudo schroot -e -c `schroot -l --all-sessions`
+# may be used to terminate them.
 findmnt | grep "${CHRTNAME}" && exit 9
 
 # Use '--one-file-system' because it was designed for this use case:
