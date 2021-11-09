@@ -24,9 +24,9 @@
 
 #include "config.hpp"
 
-/// Genesis 5:27.
+/// Genesis 5:27. Oecumenic, though not an enum.
 
-enum {methuselah = 969};
+constexpr int methuselah {969};
 
 enum oenum_7702_7pp_whence
     {oe_7702_7pp_first_principles

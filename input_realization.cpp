@@ -199,7 +199,7 @@ std::vector<std::string> Input::RealizeAllSequenceInput(bool report_errors)
     // INPUT !! https://savannah.nongnu.org/support/?104481
     // This needs to be reimplemented.
     {
-    enum{NumberOfFunds = 30}; // DEPRECATED
+    constexpr int NumberOfFunds {30}; // DEPRECATED
     std::istringstream iss(FundAllocations.value());
     std::vector<tnr_unrestricted_double> v;
     for(;;)

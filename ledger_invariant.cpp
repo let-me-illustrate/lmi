@@ -527,8 +527,8 @@ void LedgerInvariant::Init()
     WriteTsvFile               = false;
     SupplementalReport         = true;
 
-    // Probably this should be an "oecumenic" enumeration.
-    enum {gregorian_epoch_jdn = 2361222};
+    // Probably this should be an "oecumenic" constant.
+    constexpr int gregorian_epoch_jdn {2361222};
     EffDateJdn                 = gregorian_epoch_jdn;
     DateOfBirthJdn             = gregorian_epoch_jdn;
     LastCoiReentryDateJdn      = gregorian_epoch_jdn;

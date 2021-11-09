@@ -661,7 +661,7 @@ void test_boost_anomalies()
 template<typename To, typename From>
 void mete_static()
 {
-    enum {N = 1000000};
+    constexpr int N {1000000};
     using from_traits = std::numeric_limits<From>;
     static_assert(from_traits::is_specialized);
     static_assert(N < from_traits::max());
@@ -678,7 +678,7 @@ void mete_static()
 template<typename To, typename From>
 void mete_bourn()
 {
-    enum {N = 1000000};
+    constexpr int N {1000000};
     using from_traits = std::numeric_limits<From>;
     static_assert(from_traits::is_specialized);
     static_assert(N < from_traits::max());
