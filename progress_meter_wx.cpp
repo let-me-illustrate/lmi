@@ -45,15 +45,14 @@ namespace
 class concrete_progress_meter
     :public progress_meter
 {
-    enum
-        {progress_dialog_style =
-                wxPD_APP_MODAL
-            |   wxPD_AUTO_HIDE
-            |   wxPD_CAN_ABORT
-            |   wxPD_ELAPSED_TIME
-            |   wxPD_ESTIMATED_TIME
-            |   wxPD_REMAINING_TIME
-            |   wxPD_SMOOTH
+    static constexpr int progress_dialog_style
+        {   wxPD_APP_MODAL
+        |   wxPD_AUTO_HIDE
+        |   wxPD_CAN_ABORT
+        |   wxPD_ELAPSED_TIME
+        |   wxPD_ESTIMATED_TIME
+        |   wxPD_REMAINING_TIME
+        |   wxPD_SMOOTH
         };
 
   public:

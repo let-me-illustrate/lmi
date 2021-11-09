@@ -31,36 +31,30 @@
 
 /// Number of database axes, excluding the special duration axis.
 
-enum
-    {number_of_indices = 6
-    };
+constexpr int number_of_indices {6};
 
 /// Ordered database axes.
 
-enum
-    {e_axis_gender    = 0
-    ,e_axis_uw_class  = 1
-    ,e_axis_smoking   = 2
-    ,e_axis_issue_age = 3
-    ,e_axis_uw_basis  = 4
-    ,e_axis_state     = 5
-    ,e_axis_duration  = 6
-    };
+constexpr int e_axis_gender    {0};
+constexpr int e_axis_uw_class  {1};
+constexpr int e_axis_smoking   {2};
+constexpr int e_axis_issue_age {3};
+constexpr int e_axis_uw_basis  {4};
+constexpr int e_axis_state     {5};
+constexpr int e_axis_duration  {6};
 
-/// These enumerators facilitate compile-time assertions in the
+/// These constants facilitate compile-time assertions in the
 /// product-database GUI, q.v.: an array cannot be indexed to
 /// produce an arithmetic constant expression [5.19/3].
 
-enum enum_database_dimensions
-    {e_number_of_axes    = 1 + number_of_indices
-    ,e_max_dim_gender    =   3
-    ,e_max_dim_uw_class  =   4
-    ,e_max_dim_smoking   =   3
-    ,e_max_dim_issue_age = 100
-    ,e_max_dim_uw_basis  =   5
-    ,e_max_dim_state     =  53
-    ,e_max_dim_duration  = 100
-    };
+constexpr int e_number_of_axes    {1 + number_of_indices};
+constexpr int e_max_dim_gender    {  3};
+constexpr int e_max_dim_uw_class  {  4};
+constexpr int e_max_dim_smoking   {  3};
+constexpr int e_max_dim_issue_age {100};
+constexpr int e_max_dim_uw_basis  {  5};
+constexpr int e_max_dim_state     { 53};
+constexpr int e_max_dim_duration  {100};
 
 /// Product-database lookup index.
 ///

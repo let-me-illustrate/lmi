@@ -25,6 +25,7 @@
 
 #include "assert_lmi.hpp"
 #include "bourn_cast.hpp"
+#include "calendar_date.hpp"            // gregorian_epoch_jdn
 #include "contains.hpp"
 #include "crc32.hpp"
 #include "financial.hpp"                // for CalculateIrrs()
@@ -527,13 +528,11 @@ void LedgerInvariant::Init()
     WriteTsvFile               = false;
     SupplementalReport         = true;
 
-    // Probably this should be an "oecumenic" constant.
-    constexpr int gregorian_epoch_jdn {2361222};
-    EffDateJdn                 = gregorian_epoch_jdn;
-    DateOfBirthJdn             = gregorian_epoch_jdn;
-    LastCoiReentryDateJdn      = gregorian_epoch_jdn;
-    ListBillDateJdn            = gregorian_epoch_jdn;
-    InforceAsOfDateJdn         = gregorian_epoch_jdn;
+    EffDateJdn                 = calendar_date::gregorian_epoch_jdn;
+    DateOfBirthJdn             = calendar_date::gregorian_epoch_jdn;
+    LastCoiReentryDateJdn      = calendar_date::gregorian_epoch_jdn;
+    ListBillDateJdn            = calendar_date::gregorian_epoch_jdn;
+    InforceAsOfDateJdn         = calendar_date::gregorian_epoch_jdn;
 
     // Private internals.
 
