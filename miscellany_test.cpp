@@ -491,19 +491,31 @@ void test_stifle_unused_warning()
 #endif // defined some_undefined_condition
     stifle_unused_warning(c);
 
-    // Variable uninitialized at first...
+    // Leaving a variable uninitialized at declaration...
     int volatile d;
-//  stifle_unused_warning(d); // [see below]
-    // ...though set later, but last value assigned...
+    // ...would not elicit an unused-value warning here--it has
+    // no unused value because it has no value at all yet:
+//  stifle_unused_warning(d);
+    // ...so an unused-value warning must be stifled later...
     for(int i = 0; i < 7; ++i)
         {
         d = static_cast<int>(std::clock());
         }
-    // ...is not subsequently used. In this case, for clang at least,
-    // it is necessary to stifle the warning here:
-    stifle_unused_warning(d);
-    // rather than in the commented-out location above. See:
+    // ...e.g., here (for clang at least)--see:
     //   https://lists.nongnu.org/archive/html/lmi/2021-04/msg00058.html
+    // and
+    //   https://lists.nongnu.org/archive/html/lmi/2021-10/msg00050.html
+    stifle_unused_warning(d);
+
+    // Same as immediately preceding case, except that the variable
+    // is initialized at declaration...
+    int volatile e {};
+    // ...so the warning can be stifled before the loop:
+    stifle_unused_warning(e);
+    for(int i = 0; i < 7; ++i)
+        {
+        e = static_cast<int>(std::clock());
+        }
 
     partly_unused {0, 1};
 
