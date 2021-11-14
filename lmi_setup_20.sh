@@ -84,6 +84,7 @@ apt-get --assume-yes install \
   bc \
   bsdmainutils \
   bzip2 \
+  clang \
   curl \
   cvs \
   default-jre \
@@ -114,7 +115,9 @@ apt-get --assume-yes install \
   vim-gtk \
   wget \
   wine \
+  x11-apps \
   xsltproc \
+  xvfb \
   zsh \
  >"${logdir}/${CHRTNAME}"-apt-get-log 2>&1
 
