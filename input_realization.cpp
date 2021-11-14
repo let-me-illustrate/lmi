@@ -32,6 +32,7 @@
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"        // report_exception()
 #include "input_sequence_aux.hpp"       // convert_vector()
+#include "math_functions.hpp"           // outward_quotient()
 #include "miscellany.hpp"               // each_equal()
 #include "round_to.hpp"
 #include "ssize_lmi.hpp"
@@ -198,7 +199,7 @@ std::vector<std::string> Input::RealizeAllSequenceInput(bool report_errors)
     // INPUT !! https://savannah.nongnu.org/support/?104481
     // This needs to be reimplemented.
     {
-    enum{NumberOfFunds = 30}; // DEPRECATED
+    constexpr int NumberOfFunds {30}; // DEPRECATED
     std::istringstream iss(FundAllocations.value());
     std::vector<tnr_unrestricted_double> v;
     for(;;)
@@ -869,11 +870,30 @@ std::string Input::RealizeWithdrawal()
         return s;
         }
 
+    int FirstWdMonth;
+    database_->query_into(DB_FirstWdMonth, FirstWdMonth);
+
     if(!database_->query<bool>(DB_AllowWd))
         {
         if(!each_equal(WithdrawalRealized_, 0.0))
             {
             return "Withdrawals may not be illustrated on this policy form.";
+            }
+        }
+    else if(0 != FirstWdMonth)
+        {
+        int const first_wd_year = outward_quotient(FirstWdMonth, 12);
+        auto const first = WithdrawalRealized_.begin();
+        auto const nth = first + first_wd_year;
+        if(!each_equal(first, nth, 0.0))
+            {
+            std::ostringstream oss;
+            oss
+                << "This policy form does not allow withdrawals for the first "
+                << FirstWdMonth
+                << " months."
+                ;
+            return oss.str();
             }
         }
     else

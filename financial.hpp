@@ -27,8 +27,10 @@
 #include "assert_lmi.hpp"
 #include "bourn_cast.hpp"
 #include "mc_enum_type_enums.hpp"       // mcenum_mode
+#include "miscellany.hpp"               // ios_out_app_binary()
 #include "zero.hpp"
 
+#include <fstream>
 #include <iterator>                     // iterator_traits
 
 class calendar_date;
@@ -59,35 +61,15 @@ long double fv
         {
         return 0.0L;
         }
-    long double const v = 1.0L / (1.0L + i);
-    long double vn = 1.0L;
+
+    // Symbol v, meaning 1/(1+i), is standard. A corresponding
+    // symbol u, meaning (1+i), is not standard, but should be.
+    long double const u = 1.0L + i;
     long double z = 0.0L;
     for(InputIterator j = first; j != last; ++j)
         {
-        z += *j * (vn *= v);
-        }
-    return z / (vn * v);
-}
-
-template<typename InputIterator>
-long double npv
-    (InputIterator first
-    ,InputIterator last
-    ,long double i
-    )
-{
-    if(first == last)
-        {
-        return 0.0L;
-        }
-    long double const v = 1.0L / (1.0L + i);
-    long double vn = 1.0L;
-    long double z = *first;
-    InputIterator j = first;
-    while(++j != last)
-        {
-        vn *= v;
-        z += *j * vn;
+        z += *j;
+        z *= u;
         }
     return z;
 }
@@ -115,19 +97,30 @@ class irr_helper
 
     long double operator()()
         {
-        root_type z = decimal_root
-            (-1.0       // A priori lower bound.
+// Uncomment to trace iterations:
+//      std::ofstream ofs_trace;
+//      ofs_trace.open("trace_irr.txt", ios_out_app_binary());
+//      std::ostream os_trace(ofs_trace.rdbuf());
+        root_type const z = decimal_root
+            (*this
+            ,-1.0       // A priori lower bound.
             ,1000.0     // Assumed upper bound.
-            ,bias_lower // Return the final bound with the lower fv.
+            ,bias_lower // Return the final bound with the lower FV.
             ,decimals_
-            ,*this
+            ,64
+//          ,os_trace
             );
-        if(root_not_bracketed == z.second)
+        switch(z.validity)
             {
+            case root_is_valid:
+                {return z.root;}
             // Return -100% if NPVs of a priori bounds have same sign.
-            z.first = -1.0L;
+            case root_not_bracketed:
+                {return -1.0L;}
+            case improper_bounds:
+                {throw "IRR: improper bounds.";}
             }
-        return z.first;
+        throw "Unreachable--silences a compiler diagnostic.";
         }
 
   private:
@@ -146,16 +139,6 @@ long double irr
     )
 {
     return irr_helper<InputIterator>(first, last, x, decimals)();
-}
-
-template<typename InputIterator>
-long double irr
-    (InputIterator first
-    ,InputIterator last
-    ,int decimals
-    )
-{
-    return irr_helper<InputIterator>(first, last, 0.0L, decimals)();
 }
 
 template

@@ -24,7 +24,7 @@
 
 #include "config.hpp"
 
-#include "mc_enum_type_enums.hpp"       // enum mcenum_emission
+#include "mc_enum_type_enums.hpp"       // mcenum_emission
 #include "path.hpp"
 #include "so_attributes.hpp"
 

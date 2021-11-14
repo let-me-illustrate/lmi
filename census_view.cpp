@@ -1853,8 +1853,8 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
             {
             if(exact_cast<tnr_date>(current_cell[headers[j]]))
                 {
-                static int const jdn_min = calendar_date::gregorian_epoch_jdn;
-                static int const jdn_max = calendar_date::last_yyyy_date_jdn;
+                int constexpr jdn_min = calendar_date::gregorian_epoch_jdn;
+                int constexpr jdn_max = calendar_date::last_yyyy_date_jdn;
                 static int const ymd_min = JdnToYmd(jdn_t(jdn_min)).value();
                 static int const ymd_max = JdnToYmd(jdn_t(jdn_max)).value();
                 int z = value_cast<int>(values[j]);

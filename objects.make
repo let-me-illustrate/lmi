@@ -25,32 +25,6 @@
 # is reached through 'vpath' directives. See the rationale in
 # 'workhorse.make'.
 
-# Boost regex library. The other boost libraries that lmi optionally
-# uses are implemented entirely in headers.
-#
-# As for listing the object files here, the regex author says:
-#   http://groups.google.com/group/boost-list/msg/7f925ca50d69384b
-# | add the libs/regex/src/*.cpp files to your project
-
-boost_regex_objects := \
-  c_regex_traits.o \
-  cpp_regex_traits.o \
-  cregex.o \
-  fileiter.o \
-  icu.o \
-  instances.o \
-  posix_api.o \
-  regex.o \
-  regex_debug.o \
-  regex_raw_buffer.o \
-  regex_traits_defaults.o \
-  static_mutex.o \
-  usinstances.o \
-  w32_regex_traits.o \
-  wc_regex_traits.o \
-  wide_posix_api.o \
-  winstances.o \
-
 # GNU cgicc.
 
 # TODO ?? Track down the problems in cgicc-3.2.3 that make it
@@ -101,7 +75,6 @@ cgicc_3_1_4_objects = \
 # have them as libraries.
 
 ifdef HAVE_THIRD_PARTY_LIBRARIES
-  boost_regex_objects :=
   cgicc_objects :=
 endif
 
@@ -120,6 +93,7 @@ main_auxiliary_common_objects := \
   main_common.o \
   main_common_non_wx.o \
   sigfpe.o \
+  unwind.o \
 
 ################################################################################
 
@@ -348,7 +322,6 @@ lmi_wx_objects := \
   main_wx.o \
 
 wx_test_objects := \
-  $(boost_regex_objects) \
   main_wx_test.o \
   wx_test_about_version.o \
   wx_test_benchmark_census.o \
@@ -432,6 +405,7 @@ unit_test_targets := \
   mortality_rates_test \
   name_value_pairs_test \
   ncnnnpnn_test \
+  null_stream_test \
   numeric_io_test \
   path_utility_test \
   premium_tax_test \
@@ -485,6 +459,7 @@ account_value_test$(EXEEXT): \
   $(common_test_objects) \
   account_value_test.o \
 
+actuarial_table_test$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
 actuarial_table_test$(EXEEXT): \
   $(common_test_objects) \
   actuarial_table.o \
@@ -559,6 +534,7 @@ commutation_functions_test$(EXEEXT): \
   cso_table.o \
   timer.o \
 
+configurable_settings_test$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
 configurable_settings_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
@@ -689,6 +665,7 @@ input_sequence_test$(EXEEXT): \
   null_stream.o \
   path_utility.o \
 
+input_test$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
 input_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
@@ -749,6 +726,7 @@ irc7702_tables_test$(EXEEXT): \
   null_stream.o \
   path_utility.o \
 
+irc7702a_test$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
 irc7702a_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
@@ -767,6 +745,7 @@ istream_to_string_test$(EXEEXT): \
   istream_to_string_test.o \
   timer.o \
 
+ledger_test$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
 ledger_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
@@ -860,6 +839,12 @@ ncnnnpnn_test$(EXEEXT): \
   $(common_test_objects) \
   ncnnnpnn_test.o \
 
+null_stream_test$(EXEEXT): \
+  $(common_test_objects) \
+  null_stream.o \
+  null_stream_test.o \
+  timer.o \
+
 numeric_io_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
@@ -880,6 +865,7 @@ path_utility_test$(EXEEXT): \
   path_utility_test.o \
   wine_workarounds.o \
 
+premium_tax_test$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
 premium_tax_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
@@ -915,6 +901,7 @@ print_matrix_test$(EXEEXT): \
   path_utility.o \
   print_matrix_test.o \
 
+product_file_test$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
 product_file_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
@@ -963,8 +950,8 @@ rate_table_test$(EXEEXT): \
   rate_table.o \
   rate_table_test.o \
 
+regex_test$(EXEEXT): EXTRA_LDFLAGS = $(pcre_ldflags)
 regex_test$(EXEEXT): \
-  $(boost_regex_objects) \
   $(common_test_objects) \
   regex_test.o \
   timer.o \
@@ -1059,6 +1046,7 @@ wx_new_test$(EXEEXT): \
   $(common_test_objects) \
   wx_new_test.o \
 
+xml_serialize_test$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
 xml_serialize_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
@@ -1131,9 +1119,9 @@ rate_table_tool$(EXEEXT): \
   rate_table_tool.o \
 
 test_coding_rules_test := PERFORM=$(PERFORM) $(srcdir)/test_coding_rules_test.sh
+test_coding_rules$(EXEEXT): EXTRA_LDFLAGS = $(pcre_ldflags)
 test_coding_rules$(EXEEXT): POST_LINK_COMMAND = $(test_coding_rules_test)
 test_coding_rules$(EXEEXT): \
-  $(boost_regex_objects) \
   $(main_auxiliary_common_objects) \
   miscellany.o \
   my_test_coding_rules.o \
@@ -1182,6 +1170,7 @@ bcc_rc$(EXEEXT): \
 # variable definitions here. If that works well, use the technique
 # elsewhere.
 
+product_files$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
 product_files$(EXEEXT): \
   alert_cli.o \
   generate_product_files.o \

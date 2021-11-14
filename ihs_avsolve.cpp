@@ -34,10 +34,12 @@
 #include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "death_benefits.hpp"
+#include "global_settings.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "mc_enum_types_aux.hpp"        // set_run_basis_from_cloven_bases()
 #include "miscellany.hpp"               // ios_out_app_binary()
+#include "null_stream.hpp"
 #include "outlay.hpp"
 #include "zero.hpp"
 
@@ -45,32 +47,43 @@
 #include <functional>
 #include <numeric>                      // accumulate()
 
-namespace
-{
-    // TODO ?? Shouldn't this be a typedef for a SolveHelper member?
-    // As it stands, this would seem not to be reentrant.
-    void (AccountValue::*solve_set_fn)(currency);
-} // Unnamed namespace.
+/// Helper class to provide a free function for solves.
+///
+/// decimal_root() wants a free function; operator() provides that.
+///
+/// This free function must have a signature compatible with
+///   double f(double x)
+/// because both 'x' and 'f(x)' are used internally by decimal_root()
+/// in interpolation formulas that require floating-point numbers.
+///
+/// Alternatives not pursued: Writing a decimal_root() variant in
+/// terms of class currency is hopeless, because interpolation does
+/// not yield integral values. Writing an "adapter" to transform
+///   currency f(currency x)
+/// to
+///   double f(double x)
+/// might be a good idea if there were several use cases, but today
+/// there are not.
 
 class SolveHelper
 {
-    AccountValue& av;
   public:
-    SolveHelper(AccountValue& a_av)
-        :av {a_av}
-        {
-        }
-    // CURRENCY !! decimal_root() invokes this thus:
-    //   static_cast<double>(function(double));
-    // so
-    //   double function(double)
-    // is the appropriate signature here. Someday it might make sense
-    // to modify decimal_root to work with currency types directly,
-    // or at least to make this function take a 'currency' argument.
+    SolveHelper
+        (AccountValue& av
+        ,void (AccountValue::*solve_set_fn)(currency)
+        )
+        :av_           {av}
+        ,solve_set_fn_ {solve_set_fn}
+        {}
     double operator()(double a_CandidateValue)
         {
-        return dblize(av.SolveTest(av.round_minutiae().c(a_CandidateValue)));
+        currency candidate = av_.round_minutiae().c(a_CandidateValue);
+        return dblize(av_.SolveTest(candidate, solve_set_fn_));
         }
+
+  private:
+    AccountValue& av_;
+    void (AccountValue::*solve_set_fn_)(currency);
 };
 
 /// Return outcome of a trial with a given input value.
@@ -167,7 +180,10 @@ class SolveHelper
 ///   "Section 7B(2) does not preclude the illustrating of premiums
 ///   that exceed the guideline premiums in Section 7702 of the IRC."
 
-currency AccountValue::SolveTest(currency a_CandidateValue)
+currency AccountValue::SolveTest
+    (currency a_CandidateValue
+    ,void (AccountValue::*solve_set_fn)(currency)
+    )
 {
     (this->*solve_set_fn)(a_CandidateValue);
 
@@ -249,16 +265,20 @@ currency AccountValue::SolveTest(currency a_CandidateValue)
 
     if(mce_solve_for_non_mec == SolveTarget_)
         {
-        return InvariantValues().IsMec ? -100_cents : 100_cents;
+        constexpr currency C100 {100_cents};
+        return InvariantValues().IsMec ? -C100 : C100;
         }
 
     return value - SolveTargetCsv_;
 }
 
-//============================================================================
+/// Set specified amount for a solve iteration.
+///
+/// Anything dependent on specified amount (e.g., surrender charges,
+/// which are currently unsupported) should be changed accordingly.
+
 void AccountValue::SolveSetSpecAmt(currency a_CandidateValue)
 {
-// TODO ?? Does this change the surrchg when specamt changes?
     DeathBfts_->set_specamt
         (a_CandidateValue
         ,SolveBeginYear_
@@ -266,63 +286,72 @@ void AccountValue::SolveSetSpecAmt(currency a_CandidateValue)
         );
 }
 
-//============================================================================
 void AccountValue::SolveSetEePrem(currency a_CandidateValue)
 {
     Outlay_->set_ee_modal_premiums(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
-//============================================================================
 void AccountValue::SolveSetErPrem(currency a_CandidateValue)
 {
     Outlay_->set_er_modal_premiums(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
-//============================================================================
 void AccountValue::SolveSetLoan(currency a_CandidateValue)
 {
     Outlay_->set_new_cash_loans(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
-//============================================================================
 void AccountValue::SolveSetWD(currency a_CandidateValue)
 {
     Outlay_->set_withdrawals(a_CandidateValue, SolveBeginYear_, SolveEndYear_);
 }
 
-//============================================================================
+/// Ascertain guaranteed premium for NAIC illustration reg.
+///
+/// Zero out all payments, even 1035s, and solve for level ee premium
+/// to keep the contract in force until normal maturity. (It would be
+/// equally good to solve for er premium--the choice is arbitrary.)
+/// This premium results in a final CSV of at least zero, as opposed
+/// to endowment, because section 7B(2) of the regulation describes
+/// is as "the premium outlay that must be paid to guarantee coverage
+/// for the term of the contract".
+///
+/// A large dumpin or 1035 exchange might suffice to keep the contract
+/// in force until normal maturity. However, showing the guaranteed
+/// premium as zero on a new-business illustration could be construed
+/// as implying that no premium at all is required, not even the lump
+/// sum (which has not been received prior to issue); yet for inforce
+/// contracts, the lump sum has been booked, and may result in a
+/// guaranteed (future) premium of zero.
+///
+/// This is necessarily the last step in producing an illustration,
+/// so that the guaranteed premium reflects any parameters that have
+/// been adjusted dynamically. It's okay that it overwrites payments
+/// and indeed most other values, because the overwritten values are
+/// discarded.
+
 currency AccountValue::SolveGuarPremium()
 {
-    // Store original er premiums for later restoration.
-    std::vector<currency> stored = Outlay_->er_modal_premiums();
-    // Zero out er premiums and solve for ee premiums only.
     Outlay_->set_er_modal_premiums(C0, 0, BasicValues::GetLength());
+    Outlay_->block_dumpin              ();
+    Outlay_->block_external_1035_amount();
+    Outlay_->block_internal_1035_amount();
 
-    bool temp_solving     = Solving;
     Solving               = true;
     SolvingForGuarPremium = true;
 
-    // Run the solve using guaranteed assumptions.
-    currency guar_premium = Solve
+    return Solve
         (mce_solve_ee_prem
         ,0
         ,BasicValues::GetLength()
-        ,mce_solve_for_endt
+        ,mce_solve_for_target_csv
         ,C0
         ,BasicValues::GetLength()
         ,mce_gen_guar
         ,mce_sep_full
         );
-
-    // Restore original values.
-    Outlay_->set_er_modal_premiums(stored);
-    Solving               = temp_solving;
-    SolvingForGuarPremium = false;
-
-    return guar_premium;
 }
 
-//============================================================================
 currency AccountValue::Solve
     (mcenum_solve_type   a_SolveType
     ,int                 a_SolveBeginYear
@@ -349,11 +378,25 @@ currency AccountValue::Solve
     LMI_ASSERT(0 < SolveTargetDuration_);
     LMI_ASSERT(    SolveTargetDuration_ <= BasicValues::GetLength());
 
-    // Default bounds (may be overridden in some cases).
+    // Default bounds.
+    //
+    // These are 'const' to discourage replacing them when narrower
+    // bounds can be determined in context (as is often the case for
+    // mce_solve_specamt and mce_solve_wd). The objective function,
+    // AccountValue::SolveTest(), must already embody such knowledge,
+    // and returns a value that is carefully crafted to facilitate
+    // solves--in particular, for iterations that violate certain
+    // product rules (e.g., see "ullage" above). Imposing a product
+    // minimum here can vitiate such optimizations; it is unlikely to
+    // make solves faster (finding a zero of x^2-1e8 in (0,1e9] is
+    // not materially harder than in [500,1e9], e.g.); it is certain
+    // to entail non-negligible coding and maintenance costs; and it
+    // introduces new opportunities for mistkaes.
+    //
     // Solve results are constrained to be nonnegative.
-    double lower_bound = 0.0;
+    double const lower_bound = 0.0;
     // No amount solved for can plausibly reach one billion dollars.
-    double upper_bound = 999999999.99;
+    double const upper_bound = 999999999.99;
 
     root_bias bias =
         mce_solve_for_tax_basis == SolveTarget_
@@ -362,6 +405,7 @@ currency AccountValue::Solve
         ;
     int decimals = 0;
 
+    void (AccountValue::*solve_set_fn)(currency) {nullptr};
     switch(a_SolveType)
         {
         case mce_solve_none:
@@ -373,16 +417,6 @@ currency AccountValue::Solve
             {
             solve_set_fn = &AccountValue::SolveSetSpecAmt;
             decimals     = round_specamt().decimals();
-            // Generally, base and term are independent, and it is
-            // the base specamt that's being solved for here, so set
-            // the minimum as though there were no term.
-            lower_bound = dblize
-                (minimum_specified_amount
-                    (  0 == SolveBeginYear_
-                    && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
-                    ,false
-                    )
-                );
             }
             break;
         case mce_solve_ee_prem:
@@ -405,7 +439,6 @@ currency AccountValue::Solve
             break;
         case mce_solve_wd:
             {
-            // TODO ?? Is minimum wd respected?
             solve_set_fn = &AccountValue::SolveSetWD;
             decimals     = round_withdrawal().decimals();
             if(yare_input_.WithdrawToBasisThenLoan)
@@ -422,47 +455,81 @@ currency AccountValue::Solve
             }
             break;
         }
+    LMI_ASSERT(nullptr != solve_set_fn);
 
-    std::ostream os_trace(status().rdbuf());
+    std::ostream os_trace(&null_streambuf());
+    os_trace.setstate(std::ios::badbit);
     std::ofstream ofs_trace;
-    if(contains(yare_input_.Comments, "idiosyncrasyT") && !SolvingForGuarPremium)
+    if
+        (  global_settings::instance().regression_testing()
+        || contains(yare_input_.Comments, "idiosyncrasyT")
+        )
         {
         ofs_trace.open("trace.txt", ios_out_app_binary());
         os_trace.rdbuf(ofs_trace.rdbuf());
+        os_trace << InputFilename << std::endl;
+        os_trace << "Solving for";
+        if(SolvingForGuarPremium)
+            {
+            os_trace << " guaranteed premium:";
+            }
+        os_trace
+            << " " << mc_str(a_SolveType)
+            << ", target " << mc_str(SolveTarget_)
+            << std::endl
+            ;
+        os_trace << std::fixed << std::setprecision(std::max(2, decimals));
         }
 
-    SolveHelper solve_helper(*this);
-    root_type solution = decimal_root
-        (lower_bound
+    SolveHelper solve_helper(*this, solve_set_fn);
+    root_type const solution = decimal_root
+        (solve_helper
+        ,lower_bound
         ,upper_bound
         ,bias
         ,decimals
-        ,solve_helper
-        ,false
         ,os_trace
+        ,64
         );
-
-    if(root_not_bracketed == solution.second)
-        {
-        LMI_ASSERT(0.0 == solution.first);
-        // Don't want this firing continually in census runs.
-        if(!SolvingForGuarPremium)
-            {
-            warning() << "Solution not found: using zero instead." << LMI_FLUSH;
-            // TODO ?? What can we do when no solution exists for guar prem?
-            }
-        }
-
-    // The account and ledger values set as a side effect of solving
-    // aren't necessarily what we need, for two reasons:
-    //   - find_root() need not return the last iterand tested; and
-    //   - the 'Solving' flag has side effects.
-    // The first issue could be overcome easily enough in find_root(),
-    // but the second cannot. Therefore, the final solve parameters
-    // are stored now, and values are regenerated downstream.
+    currency const solution_cents = round_minutiae().c(solution.root);
 
     Solving = false;
-    currency const solution_cents = round_minutiae().c(solution.first);
+
+    // The account and ledger values set as a side effect of solving
+    // aren't generally the same as those shown on the illustration
+    // because the 'Solving' flag has side effects. Therefore, the
+    // final solve parameters are stored by calling 'solve_set_fn'
+    // now, and actual values are freshly generated downstream.
     (this->*solve_set_fn)(solution_cents);
+
+    switch(solution.validity)
+        {
+        case root_is_valid:
+            {} // Do nothing.
+            break;
+        case root_not_bracketed:
+            {
+            LMI_ASSERT(C0 == solution_cents);
+            if(SolvingForGuarPremium)
+                {
+                // This solve should be done only in the first year.
+                LMI_ASSERT(0 == InforceYear);
+                // A solve for guaranteed premium can legitimately
+                // yield zero, when the contract is at least one day
+                // old and a large-enough initial premium has already
+                // been booked. No warning is wanted in this case.
+                }
+            else
+                {
+                warning() << "Solution not found: using zero instead." << LMI_FLUSH;
+                }
+            }
+            break;
+        case improper_bounds:
+            {
+            alarum() << "Improper bounds." << LMI_FLUSH;
+            }
+            break;
+        }
     return solution_cents;
 }

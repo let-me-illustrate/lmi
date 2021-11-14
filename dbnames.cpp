@@ -27,7 +27,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "map_lookup.hpp"
-#include "miscellany.hpp"
+#include "miscellany.hpp"               // stifle_unused_warning()
 
 #include <map>
 
@@ -80,7 +80,7 @@ std::vector<db_names> const& static_get_db_names()
     static std::vector<db_names> const v(static_DBNames, static_DBNames + n);
 
     static bool volatile b = check_order(v);
-    stifle_warning_for_unused_variable(b);
+    stifle_unused_warning(b);
 
     return v;
 }

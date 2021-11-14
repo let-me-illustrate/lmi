@@ -23,6 +23,7 @@
 
 #include "currency.hpp"
 
+#include "miscellany.hpp"               // stifle_unused_warning()
 #include "round_to.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -86,12 +87,11 @@ void currency_test::test()
 
 void currency_test::test_default_ctor()
 {
-    // default ctor
     currency const a0;
     LMI_TEST(0.00 == a0.d());
     LMI_TEST(   0 == a0.m_);
     constexpr currency zero {};
-    LMI_TEST(   0 == a0.m_);
+    LMI_TEST(   0 == zero.m_);
 }
 
 void currency_test::test_copy_ctor()
@@ -166,7 +166,11 @@ void currency_test::test_literals()
     // These are evaluated at compile time, even though this is not
     // a constexpr context:
     auto compile_time_constant_pos( 9007199254740992_cents);
+    stifle_unused_warning(compile_time_constant_pos);
+
     auto compile_time_constant_neg(-9007199254740992_cents);
+    stifle_unused_warning(compile_time_constant_neg);
+
     // These would be compile-time errors:
 //  auto error_at_compile_time_pos( 9007199254740993_cents);
 //  auto error_at_compile_time_neg(-9007199254740993_cents);
@@ -287,23 +291,25 @@ void currency_test::test_round_currency()
 
 void currency_test::mete_humongous()
 {
-    static constexpr double d0 = std::numeric_limits<double>::max();
+    constexpr double d0 {std::numeric_limits<double>::max()};
     static currency const extreme = from_cents(d0);
     static currency const value   = from_cents(1234567);
     for(int i = 0; i < 100000; ++i)
         {
         currency volatile z = std::min(extreme, value);
+        stifle_unused_warning(z);
         }
 }
 
 void currency_test::mete_infinite()
 {
-    static constexpr double d0 = std::numeric_limits<double>::infinity();
+    constexpr double d0 {std::numeric_limits<double>::infinity()};
     static currency const extreme = from_cents(d0);
     static currency const value   = from_cents(1234567);
     for(int i = 0; i < 100000; ++i)
         {
         currency volatile z = std::min(extreme, value);
+        stifle_unused_warning(z);
         }
 }
 

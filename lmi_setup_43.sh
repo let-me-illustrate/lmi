@@ -117,6 +117,8 @@ make "$coefficiency" system_test 2>&1 |sed -e'/^Cannot open.*test/d'
 rm --force /opt/lmi/test/analysis-* /opt/lmi/test/diffs-* /opt/lmi/test/md5sums-*
 # ...copy the results just generated...
 cp -a /opt/lmi/test/* /opt/lmi/touchstone
+# ...discarding unwanted files...
+rm --force /opt/lmi/touchstone/regressions.tsv /opt/lmi/touchstone/trace.txt
 # ...and rerun the test, which should now succeed:
 make "$coefficiency" system_test
 
@@ -137,7 +139,7 @@ git clone git://git.savannah.nongnu.org/lmi.git \
 
 cd lmi || { printf 'failed: cd\n'; exit 3; }
 find . -path ./.git -prune -o -type f -print0 \
-  | xargs --null --max-args=1 --max-procs="$(nproc)" --replace='{}' touch '--reference=/opt/lmi/src/lmi/{}' '{}'
+  | xargs --null --max-procs="$(nproc)" --replace='{}' touch '--reference=/opt/lmi/src/lmi/{}' '{}'
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
 echo "$stamp $0: Ran system test for '$(whoami)'."  | tee /dev/tty

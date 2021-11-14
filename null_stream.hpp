@@ -29,6 +29,5 @@
 #include <iosfwd>
 
 LMI_SO std::streambuf& null_streambuf();
-LMI_SO std::ostream&   null_stream();
 
 #endif // null_stream_hpp

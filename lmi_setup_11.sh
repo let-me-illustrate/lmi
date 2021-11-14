@@ -57,7 +57,15 @@ mkdir -p "${CACHEDIR}"
 # should not exist--debootstrapping into a nonempty directory can
 # fail in mysterious ways.
 if [ -e /srv/chroot/"${CHRTNAME}" ] ; then echo "Oops."; exit 9; fi
-mkdir -p /srv/chroot/"${CHRTNAME}"
+
+# Make the root directory of the about-to-be-created chroot, and files
+# and directories created under it, accessible to the "lmi" group--see:
+#   https://lists.nongnu.org/archive/html/lmi/2020-02/msg00007.html
+# et seqq.
+mkdir -p   /srv/chroot/"${CHRTNAME}"
+chgrp lmi  /srv/chroot/"${CHRTNAME}"
+chmod 2770 /srv/chroot/"${CHRTNAME}"
+umask 0007
 
 # Bootstrap a minimal debian system. Options:
 #   --include=zsh, because of "shell=/bin/zsh" below
@@ -73,7 +81,7 @@ grep --invert-match '^I:' "${CHRTNAME}"-debootstrap-log || true
 # Installing 'schroot' creates this 'chroot.d' directory.
 cat >/etc/schroot/chroot.d/"${CHRTNAME}".conf <<EOF
 [${CHRTNAME}]
-aliases=lmi
+# aliases=lmi
 description=debian ${CODENAME} cross build ${CHRTVER}
 directory=/srv/chroot/${CHRTNAME}
 users=${CHROOT_USERS}

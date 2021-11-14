@@ -25,7 +25,6 @@
 
 #include "alert.hpp"
 #include "force_linking.hpp"
-#include "null_stream.hpp"
 #include "timer.hpp"
 
 #include <wx/app.h>                     // wxTheApp
@@ -88,7 +87,8 @@ void concrete_system_command(std::string const& cmd_line)
         : nullptr;
         ;
     bool const b = f && f->GetStatusBar();
-    std::ostream& statusbar_if_available = b ? status() : null_stream();
+    std::ostream null_output(0);
+    std::ostream& statusbar_if_available = b ? status() : null_output;
 
     statusbar_if_available << "Running..." << std::flush;
     wxArrayString output;

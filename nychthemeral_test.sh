@@ -128,6 +128,7 @@ nychthemeral_clutter='
 /^  *[1-9][0-9]* source files/d
 /^  *[1-9][0-9]* source lines/d
 /^  *[1-9][0-9]* marked defects/d
+/^# concinnity test skipped--it uses POSIX only/d
 /^# speed test/d
 /^# xrc tests/d
 /^# test all valid emission types/d
@@ -184,9 +185,14 @@ cd /opt/lmi/src/lmi
 make "$coefficiency" uninstall 2>&1 \
   | tee "$log_dir"/uninstall | sed -e "$build_clutter" -e "$uninstall_clutter"
 
-printf '\n# test concinnity\n\n'
-make "$coefficiency" check_concinnity 2>&1 \
-  | tee "$log_dir"/concinnity | sed -e "$build_clutter" -e "$concinnity_clutter"
+if [ "x86_64-pc-linux-gnu" = "$LMI_TRIPLET" ]
+then
+  printf '\n# test concinnity\n\n'
+  make "$coefficiency" check_concinnity 2>&1 \
+    | tee "$log_dir"/concinnity | sed -e "$build_clutter" -e "$concinnity_clutter"
+else
+  printf '\n# concinnity test skipped--it uses POSIX only\n\n'
+fi
 
 printf '# install; check physical closure\n\n'
 make "$coefficiency" install check_physical_closure 2>&1 \
@@ -208,7 +214,7 @@ else
 fi
 
 printf '\n# unit tests\n\n'
-# shellcheck disable=SC2039
+# shellcheck disable=SC2039,SC3001
 make "$coefficiency" --output-sync=recurse unit_tests 2>&1 \
   | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests
 
@@ -225,7 +231,7 @@ make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=safest
   | tee "$log_dir"/cgi_cli_safestdlib | sed -e "$build_clutter" -e "$cli_cgi_clutter"
 
 printf '\n# unit tests in libstdc++ debug mode\n\n'
-# shellcheck disable=SC2039
+# shellcheck disable=SC2039,SC3001
 make "$coefficiency" --output-sync=recurse unit_tests build_type=safestdlib 2>&1 \
   | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests_safestdlib
 
@@ -291,7 +297,7 @@ cmp eraseme.xst eraseme.touchstone
 
 # Clean up stray output. (The zsh '(N)' glob qualifier turns on
 # null_glob for a single expansion.)
-# shellcheck disable=SC2039
+# shellcheck disable=SC2039,SC3002
 for z in "$throwaway_dir"/*(N); do rm "$z"; done
 
 printf '\n# test PETE rebuild\n\n'

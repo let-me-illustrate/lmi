@@ -25,7 +25,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "miscellany.hpp"               // stifle_warning_for_unused_variable()
+#include "miscellany.hpp"               // stifle_unused_warning()
 
 #include <cfenv>
 #include <iomanip>
@@ -103,7 +103,7 @@ void fenv_precision(e_ieee754_precision precision_mode)
     control_word.pc(pc);
     x87_control_word(control_word.cw());
 #else  // !defined LMI_X87
-    stifle_warning_for_unused_variable(precision_mode);
+    stifle_unused_warning(precision_mode);
     throw std::logic_error("Unable to set hardware precision.");
 #endif // !defined LMI_X87
 }
@@ -237,7 +237,7 @@ bool fenv_validate(enum_fenv_indulgence indulgence)
         fenv_initialize();
         }
 #else  // !defined LMI_X87
-    stifle_warning_for_unused_variable(indulgence);
+    stifle_unused_warning(indulgence);
 #endif // !defined LMI_X87
 
     bool okay = fenv_is_valid();

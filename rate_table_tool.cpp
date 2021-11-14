@@ -439,7 +439,7 @@ int try_main(int argc, char* argv[])
 {
     int c;
     int option_index = 0;
-    static struct Option long_options[] =
+    static Option long_options[] =
       {
         {"help"        ,NO_ARG   ,nullptr ,'h' ,nullptr ,"display this help and exit"},
         {"delete"      ,REQD_ARG ,nullptr ,'d' ,nullptr ,"delete table #n from database"},

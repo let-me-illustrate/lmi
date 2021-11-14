@@ -30,6 +30,7 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
+#include "gpt7702.hpp"
 #include "i7702.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
@@ -88,6 +89,7 @@ showing {accesses, modifies current year, modifies future years}
 //============================================================================
 AccountValue::AccountValue(Input const& input)
     :BasicValues           (Input::consummate(input))
+    ,InputFilename         {"anonymous"}
     ,DebugFilename         {"anonymous.monthly_trace"}
     ,Debugging             {false}
     ,Solving               {mce_solve_none != BasicValues::yare_input_.SolveType}
@@ -238,13 +240,37 @@ Then run other bases.
     FinalizeLifeAllBases();
 }
 
-//============================================================================
-// TODO ?? Perhaps commutation functions could be used to speed up
-// this rather expensive function.
+/// Guaranteed premium for NAIC illustration reg, section 7B(2).
+///
+/// Section 7B(2) requires "basic" illustrations to show "the premium
+/// outlay that must be paid to guarantee coverage for the term of the
+/// contract".
+///
+/// Section 4H(1) distinguishes "basic" from "in force" illustrations;
+/// the latter category applies when the contract has been "in force
+/// for one year or more". Thus, an illustration depicting values six
+/// months after issue is still "basic"; in normal industry parlance,
+/// it's an inforce illustration, but it's not "in force" for the
+/// purpose of complying with this regulation.
+///
+/// Section 10C says "in force" illustrations must comply with
+///   "Section 6A, 6B, 7A and 7E"
+/// which excludes 7B.
+///
+/// Therefore, this premium must be calculated only during the first
+/// year, and of course only for contracts subject to this regulation.
+///
+/// TODO ?? Perhaps commutation functions could be used to speed up
+/// this rather expensive function.
+
 void AccountValue::SetGuarPrem()
 {
     GuarPremium = C0;
-    if(BasicValues::IsSubjectToIllustrationReg())
+    if
+        (  BasicValues::IsSubjectToIllustrationReg()
+        && 0 == InforceYear
+        && !database().query<bool>(DB_OmitGuarPremSolve)
+        )
         {
         GuarPremium = SolveGuarPremium();
         }
@@ -420,6 +446,46 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         );
     currency sa = specamt_for_7702(0);
 
+    // Base for specified-amount load, for GPT only.
+    //
+    // Unlike 'SpecAmtLoadBase', this ignores the corridor. Reasons:
+    //  - initial payment is not yet known--e.g., it may be determined
+    //    by a strategy or a solve, perhaps with a non-MEC limit; and
+    //  - it shouldn't matter, because a GPT contract should be issued
+    //    at a spec amt no lower than its initial corridor DB.
+    // Initial guideline premiums are calculated based on the (f)(3)
+    // benefit before any payment or 1035 exchange is accepted, which
+    // by definition cannot exceed the spec amt. If that's less than
+    // the initial corridor DB, then the guideline limit is already
+    // lower than it needs to be, regardless of any spec amt load;
+    // in that case, a warning is given downstream.
+    gpt_chg_sa_base_ =
+        (yare_input_.EffectiveDate == yare_input_.InforceAsOfDate)
+        ? term_specamt(0) + base_specamt(0)
+        : round_specamt().c(yare_input_.InforceSpecAmtLoadBase)
+        ;
+    gpt_chg_sa_base_ = std::min(gpt_chg_sa_base_, SpecAmtLoadLimit);
+
+    // Normally 'f3_bft' is death benefit, not specified amount; but
+    // on the issue date, it is defined as specified amount.
+    gpt_scalar_parms s_parms =
+        {.duration       = yare_input_.InforceYear
+        ,.f3_bft         = dblize(specamt_for_7702(0))
+        ,.endt_bft       = dblize(specamt_for_7702(0))
+        ,.target_prem    = dblize(annual_target_premium)
+        ,.chg_sa_base    = dblize(gpt_chg_sa_base_)
+        ,.dbopt_7702     = effective_dbopt_7702(DeathBfts_->dbopt()[0], Effective7702DboRop)
+        };
+    gpt7702_->initialize_gpt
+        (yare_input_.DefinitionOfLifeInsurance // defn_life_ins
+        ,yare_input_.InforceMonth / 12.0       // fractional_duration
+        ,yare_input_.InforceGlp                // inforce_glp
+        ,yare_input_.InforceCumulativeGlp      // inforce_cum_glp
+        ,yare_input_.InforceGsp                // inforce_gsp
+        ,round_minutiae().c(yare_input_.InforceCumulativeGptPremiumsPaid) // inforce_cum_f1A
+        ,s_parms
+        );
+
     // It is at best superfluous to do this for every basis.
     // TAXATION !! Don't do that then.
     Irc7702_->Initialize7702
@@ -429,8 +495,11 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         ,dblize(annual_target_premium)
         );
 
-    InvariantValues().InitGLP = Irc7702_->RoundedGLP();
-    InvariantValues().InitGSP = Irc7702_->RoundedGSP();
+    LMI_ASSERT(materially_equal(gpt7702_->raw_glp(), Irc7702_->glp()));
+    LMI_ASSERT(materially_equal(gpt7702_->raw_gsp(), Irc7702_->gsp()));
+
+    InvariantValues().InitGLP = dblize(gpt7702_->rounded_glp());
+    InvariantValues().InitGSP = dblize(gpt7702_->rounded_gsp());
 
     // This is notionally called once per *current*-basis run
     // and actually called once per run, with calculations suppressed
@@ -497,7 +566,11 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         );
 }
 
-//============================================================================
+/// Post results to ledger for a single basis.
+///
+/// However, exit early, posting nothing, when performing a solve
+/// for NAIC illustration reg guaranteed premium.
+
 void AccountValue::FinalizeLife(mcenum_run_basis a_Basis)
 {
     LMI_ASSERT(RunBasis_ == a_Basis);
@@ -650,6 +723,8 @@ void AccountValue::SetInitialValues()
             HoneymoonValue = round_minutiae().c(yare_input_.InforceHoneymoonValue);
             }
         }
+
+    gpt_chg_sa_base_            = C0;
 
     CoiCharge                   = C0;
     RiderCharges                = C0;
@@ -1238,6 +1313,13 @@ void AccountValue::FinalizeYear()
 
     if(mce_run_gen_curr_sep_full == RunBasis_)
         {
+        // This is just a temporary kludge. Apparently /Init*/ members
+        // exist only as an XSL-FO legacy, and the whole
+        //   $git grep -h '\<Init[A-Z]' ledger_invariant.hpp
+        // family should be eliminated.
+        InvariantValues().InitBaseSpecAmt = InvariantValues().SpecAmt[0];
+        InvariantValues().InitTermSpecAmt = InvariantValues().TermSpecAmt[0];
+
         InvariantValues().GrossPmt  [Year]  = 0.0;
         InvariantValues().EeGrossPmt[Year]  = 0.0;
         InvariantValues().ErGrossPmt[Year]  = 0.0;
@@ -1368,14 +1450,14 @@ void AccountValue::SetAnnualInvariants()
     // current tax rates.
     YearsTotLoadTgtLowestPremtax = Loads_->target_premium_load_minimum_premium_tax()[Year];
     YearsTotLoadExcLowestPremtax = Loads_->excess_premium_load_minimum_premium_tax()[Year];
-    YearsPremLoadTgt        = Loads_->target_premium_load   (GenBasis_)[Year];
-    YearsPremLoadExc        = Loads_->excess_premium_load   (GenBasis_)[Year];
-    YearsSalesLoadTgt       = Loads_->target_sales_load     (GenBasis_)[Year];
-    YearsSalesLoadExc       = Loads_->excess_sales_load     (GenBasis_)[Year];
-    YearsSpecAmtLoadRate    = Loads_->specified_amount_load (GenBasis_)[Year];
-    YearsSepAcctLoadRate    = Loads_->separate_account_load (GenBasis_)[Year];
-    YearsSalesLoadRefundRate= Loads_->refundable_sales_load_proportion()[Year];
-    YearsDacTaxLoadRate     = Loads_->dac_tax_load                    ()[Year];
+    YearsPremLoadTgt         = Loads_->target_premium_load    (GenBasis_)[Year];
+    YearsPremLoadExc         = Loads_->excess_premium_load    (GenBasis_)[Year];
+    YearsSalesLoadTgt        = Loads_->target_sales_load      (GenBasis_)[Year];
+    YearsSalesLoadExc        = Loads_->excess_sales_load      (GenBasis_)[Year];
+    YearsSpecAmtLoadRate     = Loads_->specified_amount_load  (GenBasis_)[Year];
+    YearsSepAcctLoadRate     = Loads_->separate_account_load  (GenBasis_)[Year];
+    YearsSalesLoadRefundRate = Loads_->refundable_sales_load_proportion()[Year];
+    YearsDacTaxLoadRate      = Loads_->dac_tax_load                    ()[Year];
 }
 
 /// Separate-account assets, after deductions, times survivorship.

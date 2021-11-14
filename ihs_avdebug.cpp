@@ -26,7 +26,7 @@
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
 #include "global_settings.hpp"
-#include "ihs_irc7702.hpp"
+#include "gpt7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "ledger_invariant.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_str()
@@ -271,6 +271,7 @@ void AccountValue::SetDebugFilename(std::string const& s)
     bool const regr_testing = global_settings::instance().regression_testing();
     std::string const& print_dir = c.print_directory();
     fs::path const f = regr_testing ? s : modify_directory(s, print_dir);
+    InputFilename = f.string();
     DebugFilename = unique_filepath(f, ".monthly_trace" + tsv_ext).string();
 }
 
@@ -510,10 +511,10 @@ void AccountValue::DebugPrint()
 
     if(!irc7702_data_irrelevant)
         {
-        SetMonthlyDetail(eGLP                ,Irc7702_->glp              ());
-        SetMonthlyDetail(eCumGLP             ,Irc7702_->cum_glp          ());
-        SetMonthlyDetail(eGSP                ,Irc7702_->gsp              ());
-        SetMonthlyDetail(e7702PremiumsPaid   ,Irc7702_->premiums_paid    ());
+        SetMonthlyDetail(eGLP                ,gpt7702_->raw_glp          ());
+        SetMonthlyDetail(eCumGLP             ,gpt7702_->raw_cum_glp      ());
+        SetMonthlyDetail(eGSP                ,gpt7702_->raw_gsp          ());
+        SetMonthlyDetail(e7702PremiumsPaid   ,gpt7702_->cum_f1A          ());
         }
     else
         {

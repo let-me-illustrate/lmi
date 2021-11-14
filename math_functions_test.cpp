@@ -25,7 +25,7 @@
 
 #include "fenv_lmi.hpp"
 #include "materially_equal.hpp"
-#include "miscellany.hpp"               // stifle_warning_for_unused_value()
+#include "miscellany.hpp"               // stifle_unused_warning()
 #include "stl_extensions.hpp"           // nonstd::power()
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -207,7 +207,7 @@ void mete0()
         x = d_upper_12_from_i_naive        <double>()(0.04);
         x = net_i_from_gross_naive<double,365>()(0.04, 0.007, 0.003);
         }
-    stifle_warning_for_unused_value(x);
+    stifle_unused_warning(x);
 }
 
 // This implementation uses production functors.
@@ -221,7 +221,7 @@ void mete1()
         x = d_upper_12_from_i        <double>()(0.04);
         x = net_i_from_gross<double,365>()(0.04, 0.007, 0.003);
         }
-    stifle_warning_for_unused_value(x);
+    stifle_unused_warning(x);
 }
 
 void mete2()
@@ -231,7 +231,7 @@ void mete2()
         {
         x = i_upper_n_over_n_from_i_T<double,365>()(0.01);
         }
-    stifle_warning_for_unused_value(x);
+    stifle_unused_warning(x);
 }
 
 void mete3()
@@ -241,7 +241,7 @@ void mete3()
         {
         x = i_upper_n_over_n_from_i_T<long double,365>()(0.01);
         }
-    stifle_warning_for_unused_value(x);
+    stifle_unused_warning(x);
 }
 
 // These 'mete[45]' functions calculate 10^-9 in different ways.
@@ -253,26 +253,26 @@ void mete3()
 
 void mete4()
 {
-    double volatile base = 10.0;
-    int    volatile exp  = 9;
+    double volatile base     = 10.0;
+    int    volatile exponent = 9;
     double volatile x;
     for(int j = 0; j < 100000; ++j)
         {
-        x = 1.0 / nonstd::power(base, exp);
+        x = 1.0 / nonstd::power(base, exponent);
         }
-    stifle_warning_for_unused_value(x);
+    stifle_unused_warning(x);
 }
 
 void mete5()
 {
-    double volatile base = 10.0;
-    int    volatile exp  = -9;
+    double volatile base     = 10.0;
+    int    volatile exponent = -9;
     double volatile x;
     for(int j = 0; j < 100000; ++j)
         {
-        x = std::pow(base, exp);
+        x = std::pow(base, exponent);
         }
-    stifle_warning_for_unused_value(x);
+    stifle_unused_warning(x);
 }
 
 void assay_speed()
@@ -286,23 +286,64 @@ void assay_speed()
     std::cout << "  10^-9 std        " << TimeAnAliquot(mete5) << '\n';
 }
 
+template<typename T>
+void test_signum(char const* file, int line)
+{
+    T const maxT = std::numeric_limits<T>::max();
+    T const minT = std::numeric_limits<T>::lowest();
+
+    INVOKE_LMI_TEST_EQUAL( 0, signum(T( 0)), file, line);
+    INVOKE_LMI_TEST_EQUAL( 1, signum(T( 1)), file, line);
+
+    INVOKE_LMI_TEST_EQUAL( 1, signum(maxT), file, line);
+
+    if(minT < 0)
+        {
+        // The left-hand side is cast to T to avoid gcc 'bool-compare'
+        // diagnostics. An 'is_bool' conditional wouldn't prevent the
+        // macros from being expanded. See:
+        //   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00029.html
+        INVOKE_LMI_TEST_EQUAL(T(-1), signum(T(-1)), file, line);
+        INVOKE_LMI_TEST_EQUAL(T(-1), signum(minT ), file, line);
+        }
+
+    bool volatile is_iec559 = std::numeric_limits<T>::is_iec559;
+    bool volatile has_infinity = std::numeric_limits<T>::has_infinity;
+    if(is_iec559 && has_infinity)
+        {
+        T const infT = std::numeric_limits<T>::infinity();
+        INVOKE_LMI_TEST_EQUAL(-1, signum(-infT), file, line);
+        INVOKE_LMI_TEST_EQUAL( 1, signum( infT), file, line);
+        }
+
+    bool volatile has_quiet_NaN = std::numeric_limits<T>::has_quiet_NaN;
+    if(is_iec559 && has_quiet_NaN)
+        {
+        T const qnanT = std::numeric_limits<T>::quiet_NaN();
+        INVOKE_LMI_TEST_EQUAL(-1, signum(-qnanT), file, line);
+        INVOKE_LMI_TEST_EQUAL( 1, signum( qnanT), file, line);
+        }
+}
+
 int test_main(int, char*[])
 {
-    double      smallnumD = std::numeric_limits<double     >::min();
-    double      bignumD   = std::numeric_limits<double     >::max();
+    // Test assign_midpoint().
 
-    long double smallnumL = std::numeric_limits<long double>::min();
-    long double bignumL   = std::numeric_limits<long double>::max();
+    constexpr double smallnum = std::numeric_limits<double>::denorm_min();
+    constexpr double bignum   = std::numeric_limits<double>::max();
 
-    // Test mean<>().
-
-    LMI_TEST_EQUAL(1.5, mean<double>()(1.0, 2.0));
-    LMI_TEST_EQUAL(smallnumD, mean<double>()(smallnumD, smallnumD));
-    LMI_TEST_EQUAL(bignumD  , mean<double>()(bignumD  , bignumD  ));
-
-    LMI_TEST_EQUAL(1.5, mean<long double>()(1.0, 2.0));
-    LMI_TEST_EQUAL(smallnumL, mean<long double>()(smallnumL, smallnumL));
-    LMI_TEST_EQUAL(bignumL  , mean<long double>()(bignumL  , bignumL  ));
+    std::vector<double> v0 {smallnum, bignum, 0.0, 0.0, 1.0, 100.0};
+    std::vector<double> v1 {smallnum, bignum, 0.0, 7.0, 2.0, 257.0};
+    std::vector<double> v2(v0.size());
+    assign_midpoint(v2, v0, v1);
+    std::vector<double> v3 {smallnum, bignum, 0.0, 3.5, 1.5, 178.5};
+    LMI_TEST_EQUAL(v3[0], v2[0]);
+    LMI_TEST_EQUAL(v3[1], v2[1]);
+    LMI_TEST_EQUAL(v3[2], v2[2]);
+    LMI_TEST_EQUAL(v3[3], v2[3]);
+    LMI_TEST_EQUAL(v3[4], v2[4]);
+    LMI_TEST_EQUAL(v3[5], v2[5]);
+    LMI_TEST_EQUAL(6, v0.size());
 
     // Test outward_quotient().
 
@@ -363,6 +404,14 @@ int test_main(int, char*[])
 
 // Appropriately fails to compile due to static assertion:
 //  outward_quotient(1.0, 1.0);
+
+    test_signum<bool         >(__FILE__, __LINE__);
+    test_signum<signed char  >(__FILE__, __LINE__);
+    test_signum<unsigned char>(__FILE__, __LINE__);
+    test_signum<int          >(__FILE__, __LINE__);
+    test_signum<float        >(__FILE__, __LINE__);
+    test_signum<double       >(__FILE__, __LINE__);
+    test_signum<long double  >(__FILE__, __LINE__);
 
     // Actuarial functions.
 

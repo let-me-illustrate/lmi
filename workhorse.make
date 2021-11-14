@@ -120,7 +120,12 @@ ifeq (,$(USE_SO_ATTRIBUTES))
     ihs_crc_comp$(EXEEXT) \
     lmi_md5sum$(EXEEXT) \
     rate_table_tool$(EXEEXT) \
-    test_coding_rules$(EXEEXT) \
+
+  ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
+    default_targets += \
+      test_coding_rules$(EXEEXT) \
+
+  endif
 
   ifneq (so_test,$(findstring so_test,$(build_type)))
     default_targets += \
@@ -161,6 +166,8 @@ else ifeq (9,$(gnu_cpp_version))
 else ifeq (9.3.0,$(gnu_cpp_version))
 else ifeq (10,$(gnu_cpp_version))
 else ifeq (10.0,$(gnu_cpp_version))
+else ifeq (11,$(gnu_cpp_version))
+else ifeq (11.0,$(gnu_cpp_version))
 else
   $(warning Untested $(GNU_CPP) version '$(gnu_cpp_version)')
 endif
@@ -180,8 +187,18 @@ else ifeq (9,$(gnu_cxx_version))
 else ifeq (9.3.0,$(gnu_cxx_version))
 else ifeq (10,$(gnu_cxx_version))
 else ifeq (10.0,$(gnu_cxx_version))
+else ifeq (11,$(gnu_cxx_version))
+else ifeq (11.0,$(gnu_cxx_version))
 else
   $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
+endif
+
+################################################################################
+
+# pcre2 library settings (x86_64-pc-linux-gnu only).
+
+ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
+  pcre_ldflags := $(shell pcre2-config --libs-posix)
 endif
 
 ################################################################################
@@ -193,7 +210,7 @@ endif
 #   https://mail.gnome.org/archives/xslt/2001-October/msg00133.html
 #   https://lists.nongnu.org/archive/html/lmi/2020-10/msg00066.html
 
-xml_libraries := \
+xml_ldflags := \
   $(shell xmlwrapp-config --libs) \
   -lexslt \
   $(shell xslt-config --libs) \
@@ -251,6 +268,13 @@ wx_libraries := \
       -e 's/ -[^l][^ ]*//g' \
   )
 
+wx_ldflags = \
+  $(wx_library_paths) $(wx_libraries) \
+  $(platform_gui_ldflags) \
+
+wx_pdfdoc_ldflags := \
+  -l$(wxcode_basename)_pdfdoc-$(wxcode_version)
+
 # Target 'wx_config_check', and the variables that it alone uses,
 # are experimental and may disappear in a future release.
 
@@ -301,8 +325,6 @@ wx_config_check:
 # be compiled and linked explicitly here, instead of building them
 # separately and linking them as normal libraries. Rationale:
 #
-# boost: the build system provided is outlandish.
-#
 # cgicc: './configure && make' failed in the MSYS environment (though
 # MSYS is no longer supported).
 #
@@ -330,8 +352,6 @@ sys_include_directories := \
 
 all_source_directories := \
   $(srcdir) \
-  /opt/lmi/third_party/src/boost/libs/filesystem/src \
-  /opt/lmi/third_party/src/boost/libs/regex/src \
   /opt/lmi/third_party/src/cgicc \
 
 vpath lib%.a          $(CURDIR)
@@ -397,18 +417,22 @@ tutelary_flag :=
 c_standard   := -fno-ms-extensions -frounding-math -std=c99
 cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
 
-# Specify $(gcc_version_specific_warnings) last, in order to override
-# other options.
+# Specify these:
+#   $(gcc_version_specific_c_warnings)
+#   $(gcc_version_specific_cxx_warnings)
+# last, in order to override other options.
 
 ifeq (3.4.4,$(gcc_version))
   # Suppress spurious gcc-3.4.4 warnings:
   #   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=22207
-  gcc_version_specific_warnings := -Wno-uninitialized
+  gcc_version_specific_c_warnings   := -Wno-uninitialized
+  gcc_version_specific_cxx_warnings := -Wno-uninitialized
   cxx_standard := -std=c++98
 else ifeq (3.4.5,$(gcc_version))
   # Suppress spurious gcc-3.4.5 warnings:
   #   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=22207
-  gcc_version_specific_warnings := -Wno-uninitialized
+  gcc_version_specific_c_warnings   := -Wno-uninitialized
+  gcc_version_specific_cxx_warnings := -Wno-uninitialized
   # Fix "hello world":
   #   http://sourceforge.net/tracker/index.php?func=detail&aid=2373234&group_id=2435&atid=102435
   cxx_standard := -std=gnu++98
@@ -419,23 +443,30 @@ else ifneq (,$(filter $(gcc_version), 4.9.1 4.9.2))
   # See:
   #   https://lists.nongnu.org/archive/html/lmi/2015-12/msg00028.html
   #   https://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
-  gcc_version_specific_warnings := \
+  gcc_version_specific_c_warnings := \
+    -Wno-conversion \
+    -Wno-unused-local-typedefs \
+    -Wno-unused-variable \
+
+  gcc_version_specific_cxx_warnings := \
     -Wno-conversion \
     -Wno-unused-local-typedefs \
     -Wno-unused-variable \
 
   cxx_standard := -std=c++11
 else ifneq (,$(filter $(gcc_version), 6.3.0))
-  gcc_version_specific_warnings := \
-    -Wno-conversion \
+  gcc_version_specific_c_warnings   := -Wno-conversion
+  gcc_version_specific_cxx_warnings := -Wno-conversion
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
 else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
-  gcc_version_specific_warnings := \
+  gcc_version_specific_c_warnings   :=
+  gcc_version_specific_cxx_warnings :=
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
 else ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0 9 9.3.0))
-  gcc_version_specific_warnings := \
+  gcc_version_specific_c_warnings   :=
+  gcc_version_specific_cxx_warnings :=
 
   ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
 # See:
@@ -447,7 +478,11 @@ else ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0 9 9.3.0))
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++2a
 else ifneq (,$(filter $(gcc_version), 10 10.0))
-  gcc_version_specific_warnings := \
+  gcc_version_specific_c_warnings :=
+
+  gcc_version_specific_cxx_warnings := \
+    -Wredundant-tags \
+    -Wvolatile \
 
   ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
 # See:
@@ -464,7 +499,14 @@ else ifneq (,$(filter $(gcc_version), 10 10.0))
     endif
   endif
 
-  gcc_cxx_warnings += -Wredundant-tags -Wvolatile
+  cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
+else ifneq (,$(filter $(gcc_version), 11 11.0))
+  gcc_version_specific_c_warnings :=
+
+  gcc_version_specific_cxx_warnings := \
+    -Wno-deprecated-enum-float-conversion \
+    -Wredundant-tags \
+    -Wvolatile \
 
   cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
 endif
@@ -590,52 +632,15 @@ gcc_common_extra_warnings := \
 bourn_cast_test.o: gcc_common_extra_warnings += \
   -Wno-double-promotion \
 
-# Some boost-1.33.1 libraries are incompatible with many warnings.
-
-$(boost_regex_objects): gcc_common_extra_warnings += \
-  -Wno-conversion \
-  -Wno-duplicated-branches \
-  -Wno-implicit-fallthrough \
-  -Wno-old-style-cast \
-  -Wno-register \
-  -Wno-shadow \
-  -Wno-switch-enum \
-  -Wno-unused-macros \
-  -Wno-unused-result \
-  -Wno-useless-cast \
-  -Wno-zero-as-null-pointer-constant \
-
 $(cgicc_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
   -Wno-zero-as-null-pointer-constant \
-
-# The boost regex library improperly defines "NOMINMAX":
-#   http://lists.boost.org/Archives/boost/2006/03/102189.php
-# at least in version 1.33.1, and there seems to be no easy workaround
-# except to blow away all warning options and let a warning appear.
-# This problem seems not to occur with gcc-4.x .
-
-ifeq (3.4.5,$(gcc_version))
-  static_mutex.o: gcc_common_extra_warnings :=
-  static_mutex.o:          gcc_cxx_warnings :=
-endif
 
 ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
   ifeq (3.4.5,$(gcc_version))
     expression_template_0_test.o: gcc_common_extra_warnings += -Wno-unused-parameter
   endif
 endif
-
-# Boost normally makes '-Wundef' give spurious warnings:
-#   http://aspn.activestate.com/ASPN/Mail/Message/boost/1822550
-# but defining BOOST_STRICT_CONFIG:
-#   http://www.boost.org/libs/config/config.htm#user_settable
-# makes '-Wundef' usable, because boost-1.31.0 doesn't seem to need
-# any workarounds for gcc-3.3+ . However, it gives a number of
-# warnings with wx-2.5.4 (that have been fixed in a later version).
-
-# Too many warnings for wx and various boost libraries:
-#  -Wold-style-cast \
 
 # XMLWRAPP !! Remove these workarounds after updating xmlwrapp. See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00018.html
@@ -652,7 +657,6 @@ wno_conv_objects := \
 $(wno_conv_objects): gcc_common_extra_warnings += -Wno-conversion -Wfloat-conversion
 
 wno_sign_conv_objects := \
-  $(boost_regex_objects) \
   $(wx_dependent_objects) \
   crc32.o \
   getopt.o \
@@ -669,12 +673,12 @@ $(wno_sign_conv_objects): gcc_common_extra_warnings += -Wno-sign-conversion
 C_WARNINGS = \
   $(gcc_c_warnings) \
   $(gcc_common_extra_warnings) \
-  $(gcc_version_specific_warnings) \
+  $(gcc_version_specific_c_warnings) \
 
 CXX_WARNINGS = \
   $(gcc_cxx_warnings) \
   $(gcc_common_extra_warnings) \
-  $(gcc_version_specific_warnings) \
+  $(gcc_version_specific_cxx_warnings) \
 
 ################################################################################
 
@@ -748,34 +752,6 @@ $(product_file_sources): tutelary_flag += $(product_file_flags)
 
 ################################################################################
 
-# Libraries and associated options.
-#
-# The link command promiscuously mentions libxml2 for all targets.
-# Measurements show that this costs one-tenth of a second on
-# reasonable hardware, and it saves the trouble of maintaining a list
-# of which targets require which libraries.
-#
-# TODO ?? Consider refining it anyway, because it's unclean: libxml2
-# isn't actually required for all targets.
-#
-# Rationale for freezing particular versions of third-party libraries:
-# see topic:
-#   "How can the Boost libraries be used successfully for important projects?"
-# in this faq:
-#   http://boost.org/more/faq.htm
-
-REQUIRED_LIBS := \
-  $(xml_libraries) \
-
-wx_ldflags = \
-  $(wx_library_paths) $(wx_libraries) \
-  $(platform_gui_ldflags) \
-
-wx_pdfdoc_ldflags := \
-  -l$(wxcode_basename)_pdfdoc-$(wxcode_version)
-
-################################################################################
-
 # Flags.
 
 # Define uppercase FLAGS recursively for greater flexibility: e.g., so
@@ -789,7 +765,8 @@ debug_flag := -ggdb
 #
 ifeq (3.4.2,$(gcc_version))
   debug_flag := -g
-  gcc_version_specific_warnings := -Wno-uninitialized
+  gcc_version_specific_c_warnings   := -Wno-uninitialized
+  gcc_version_specific_cxx_warnings := -Wno-uninitialized
 endif
 
 # 'c_l_flags' are to be used in both compiler and linker commands.
@@ -844,14 +821,6 @@ endif
 # repeated below to make assurance doubly sure--see:
 #   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00039.html
 # et seq.
-#
-# The BOOST_STATIC_ASSERT definition seems to belong in CPPFLAGS with
-# the other macro definitions. However, writing it there elicits:
-#   warning: ISO C99 requires whitespace after the macro name
-# which may simply be a gnu CPP defect--the documentation:
-#   https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html
-# says "-D'name(args...)=definition' works", and adding a blank either
-# before or after '=' is an error.
 
 REQUIRED_CPPFLAGS = \
   $(addprefix -I , $(lmi_include_directories)) \
@@ -862,17 +831,12 @@ REQUIRED_CPPFLAGS = \
   $(libstdcxx_warning_macros) \
   $(wx_predefinitions) \
   -D_FILE_OFFSET_BITS=64 \
-  -DBOOST_NO_AUTO_PTR \
-  -DBOOST_NO_STD_ALLOCATOR \
-  -DBOOST_STRICT_CONFIG \
-  -DBOOST_STATIC_ASSERT_HPP \
 
 REQUIRED_CFLAGS = \
   $(C_WARNINGS) \
 
 REQUIRED_CXXFLAGS = \
   $(CXX_WARNINGS) \
-  -D'BOOST_STATIC_ASSERT(A)=static_assert((A))' \
 
 REQUIRED_ARFLAGS = \
   -rus
@@ -921,7 +885,6 @@ EXTRA_LDFLAGS :=
 REQUIRED_LDFLAGS = \
   $(addprefix -L , $(all_library_directories)) \
   $(EXTRA_LDFLAGS) \
-  $(REQUIRED_LIBS) \
   $(EXTRA_LIBS) \
 
 # The '--use-temp-file' windres option seems to be often helpful and
@@ -1001,8 +964,10 @@ wx_new$(SHREXT)     : EXTRA_LDFLAGS :=
                       lmi_wx_new_so_attributes := -DLMI_WX_NEW_USE_SO
 wx_new$(SHREXT)     : lmi_wx_new_so_attributes := -DLMI_WX_NEW_BUILD_SO
 
-liblmi.a liblmi$(SHREXT): EXTRA_LDFLAGS :=
+liblmi.a liblmi$(SHREXT): EXTRA_LDFLAGS := $(xml_ldflags)
 liblmi.a liblmi$(SHREXT): $(lmi_common_objects)
+
+libantediluvian.a libantediluvian$(SHREXT): EXTRA_LDFLAGS := $(xml_ldflags)
 libantediluvian.a libantediluvian$(SHREXT): $(antediluvian_common_objects)
 
 # TODO ?? 'lmi*' targets can be built either with a shared or a static
@@ -1016,7 +981,7 @@ lmi_wx_monolithic$(EXEEXT): $(lmi_wx_objects) $(lmi_common_objects) wx_new$(SHRE
 # source files that are unrelated to wx, and that are therefore not
 # part of $(skeleton_objects).
 skeleton$(SHREXT): lmi_so_attributes := -DLMI_USE_SO
-skeleton$(SHREXT): EXTRA_LDFLAGS := $(wx_pdfdoc_ldflags) $(wx_ldflags)
+skeleton$(SHREXT): EXTRA_LDFLAGS := $(wx_pdfdoc_ldflags) $(wx_ldflags) $(xml_ldflags)
 skeleton$(SHREXT): $(skeleton_objects) liblmi$(SHREXT) wx_new$(SHREXT)
 
 lmi_wx_shared$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
@@ -1026,19 +991,25 @@ lmi_wx_shared$(EXEEXT): $(lmi_wx_objects) skeleton$(SHREXT) liblmi$(SHREXT)
 lmi_wx_static$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
 lmi_wx_static$(EXEEXT): $(lmi_wx_objects) $(skeleton_objects) liblmi.a wx_new$(SHREXT)
 
+lmi_cli_monolithic$(EXEEXT): EXTRA_LDFLAGS := $(xml_ldflags)
 lmi_cli_monolithic$(EXEEXT): $(cli_objects) $(lmi_common_objects)
 
+lmi_cli_shared$(EXEEXT): EXTRA_LDFLAGS := $(xml_ldflags)
 lmi_cli_shared$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
 lmi_cli_shared$(EXEEXT): $(cli_objects) liblmi$(SHREXT)
 
+lmi_cli_static$(EXEEXT): EXTRA_LDFLAGS := $(xml_ldflags)
 lmi_cli_static$(EXEEXT): $(cli_objects) liblmi.a
 
+antediluvian_cgi$(EXEEXT): EXTRA_LDFLAGS := $(xml_ldflags)
 antediluvian_cgi$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
 antediluvian_cgi$(EXEEXT): $(cgi_objects) libantediluvian$(SHREXT)
 
+antediluvian_cli$(EXEEXT): EXTRA_LDFLAGS := $(xml_ldflags)
 antediluvian_cli$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
 antediluvian_cli$(EXEEXT): $(cli_objects) libantediluvian$(SHREXT)
 
+antediluvian_cli_monolithic$(EXEEXT): EXTRA_LDFLAGS := $(xml_ldflags)
 antediluvian_cli_monolithic$(EXEEXT): $(cli_objects) $(antediluvian_common_objects)
 
 wx_new$(SHREXT): wx_new.o
@@ -1048,6 +1019,7 @@ wx_test$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
 wx_test$(EXEEXT): $(wx_test_objects) skeleton$(SHREXT) liblmi$(SHREXT)
 
 # TODO ?? This needs a corresponding test target.
+lmi_cgi$(EXEEXT): EXTRA_LDFLAGS := $(xml_ldflags)
 lmi_cgi$(EXEEXT): $(cgi_objects) $(lmi_common_objects)
 
 lmi_msw_res.o: lmi.ico
@@ -1633,6 +1605,9 @@ show_flags:
 	@printf 'ALL_CFLAGS              = "%s"\n' "$(ALL_CFLAGS)"
 	@printf 'ALL_CXXFLAGS            = "%s"\n' "$(ALL_CXXFLAGS)"
 	@printf 'ALL_ARFLAGS             = "%s"\n' "$(ALL_ARFLAGS)"
+	@printf 'REQUIRED_LDFLAGS        = "%s"\n' "$(REQUIRED_LDFLAGS)"
+	@printf 'EXTRA_LDFLAGS           = "%s"\n' "$(EXTRA_LDFLAGS)"
+	@printf 'EXTRA_LIBS              = "%s"\n' "$(EXTRA_LIBS)"
 	@printf 'ALL_LDFLAGS             = "%s"\n' "$(ALL_LDFLAGS)"
 	@printf 'ALL_RCFLAGS             = "%s"\n' "$(ALL_RCFLAGS)"
 	@printf 'srcdir                  = "%s"\n' "$(srcdir)"

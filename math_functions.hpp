@@ -25,11 +25,11 @@
 #include "config.hpp"
 
 #include <algorithm>                    // max(), min(), transform()
-#include <cmath>                        // expm1l(), log1pl()
+#include <cmath>                        // expm1l(), log1pl(), signbit()
 #include <limits>
-#include <numeric>                      // partial_sum()
+#include <numeric>                      // midpoint(), partial_sum()
 #include <stdexcept>
-#include <type_traits>
+#include <type_traits>                  // /is_.*_v/
 #include <vector>
 
 // TODO ?? Write functions here for other refactorable uses of
@@ -56,32 +56,6 @@ std::vector<T>& back_sum(std::vector<T>& v)
 // Some of these provide the typedefs that std::unary_function or
 // std::binary_function would have provided, because they're still
 // required for std::binder1st() or std::binder2nd(), or for PETE.
-
-/// Arithmetic mean.
-///
-/// Calculate mean as
-///   (half of x) plus (half of y)
-/// instead of
-///   half of (x plus y)
-/// because the addition in the latter can overflow. Generally,
-/// hardware deals better with underflow than with overflow.
-///
-/// The domain is restricted to floating point because integers would
-/// give surprising results. For instance, the integer mean of one and
-/// two would be truncated to one upon either returning an integer or
-/// assigning the result to one. Returning a long double in all cases
-/// is the best that could be done, but that seems unnatural.
-
-template<typename T>
-struct mean
-{
-    using first_argument_type  = T;
-    using second_argument_type = T;
-    using result_type          = T;
-    static_assert(std::is_floating_point_v<T>);
-    T operator()(T const& x, T const& y) const
-        {return 0.5 * x + 0.5 * y;}
-};
 
 /// Divide integers, rounding away from zero.
 ///
@@ -110,6 +84,19 @@ inline T outward_quotient(T numerator, T denominator)
     T x = numerator / denominator;
     T y = 0 != numerator % denominator;
     return (0 < numerator == 0 < denominator) ? x + y : x - y;
+}
+
+/// Algebraic sign of argument.
+///
+/// Return value is of same type as argument, as for many members
+/// of std::numeric_limits. Thus, (t * signum(t)) is of type T,
+/// which would not always be the case if an int were returned.
+
+template<typename T>
+T signum(T t)
+{
+    static_assert(std::is_arithmetic_v<T>);
+    return (0 == t) ? 0 : std::signbit(t) ? -1 : 1;
 }
 
 // Actuarial functions.
@@ -353,7 +340,7 @@ void assign_midpoint
         ,in_0.end()
         ,in_1.begin()
         ,out.begin()
-        ,mean<double>()
+        ,[=](T t0, T t1) {return std::midpoint(t0, t1);}
         );
 }
 

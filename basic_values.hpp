@@ -60,6 +60,7 @@ class Irc7702A;
 class Loads;
 class MortalityRates;
 class death_benefits;
+class gpt7702;
 class i7702;
 class lingo;
 class modal_outlay;
@@ -128,6 +129,7 @@ class LMI_SO BasicValues
     std::shared_ptr<stratified_charges const> const StratifiedCharges_;
 
     std::unique_ptr<i7702          const> i7702_;
+    std::shared_ptr<gpt7702             > gpt7702_;
 
     std::unique_ptr<MortalityRates const> MortalityRates_;
     std::unique_ptr<InterestRates       > InterestRates_;
@@ -142,6 +144,8 @@ class LMI_SO BasicValues
     product_database const& database() const {return database_;}
 
     currency GetAnnualTgtPrem(int a_year, currency a_specamt) const;
+
+    currency min_issue_spec_amt() const;
 
     std::vector<double> const& GetCorridorFactor() const;
     std::vector<double> const& GetMlyDcvqc() const;
@@ -366,6 +370,8 @@ class LMI_SO BasicValues
     currency                MinWD;
     currency                WDFee;
     double                  WDFeeRate;
+    bool                    AllowWd;
+    int                     FirstWdMonth;
 
     bool                    AllowChangeToDBO2;
     bool                    AllowSAIncr;
@@ -528,6 +534,11 @@ inline mcenum_state BasicValues::GetStateOfDomicile() const
 inline mcenum_state BasicValues::GetPremiumTaxState() const
 {
     return PremiumTaxState_;
+}
+
+inline currency BasicValues::min_issue_spec_amt() const
+{
+    return MinIssSpecAmt;
 }
 
 // IHS !! Use a configuration file instead. These deprecated

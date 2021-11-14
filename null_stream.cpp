@@ -68,10 +68,3 @@ std::streambuf& null_streambuf()
     static dev_null_stream_buffer<char> z;
     return z;
 }
-
-std::ostream& null_stream()
-{
-    static std::ostream z(&null_streambuf());
-    z.setstate(std::ios::badbit);
-    return z;
-}

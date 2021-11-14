@@ -28,8 +28,11 @@
 #include <cfloat>                       // DBL_MAX
 #include <cmath>                        // HUGE_VAL
 #include <cstdio>                       // remove()
+#include <ctime>                        // clock()
 #include <fstream>
+#include <iomanip>
 #include <limits>
+#include <sstream>
 
 void test_each_equal()
 {
@@ -421,6 +424,105 @@ void test_trimming()
     LMI_TEST_EQUAL(s, "a ; a");
 }
 
+void test_scoped_ios_format()
+{
+    std::ostringstream oss;
+    oss << -2.71828 << ' ' << 3.14159 << std::endl;
+    std::string const s(oss.str());
+
+    {
+    scoped_ios_format meaningless_name(oss);
+    oss << std::setfill('0');
+    oss << std::setprecision(3);
+    oss << std::setw(12);
+    oss << std::fixed;
+    oss << std::hex;
+    oss << std::hexfloat;
+    oss << std::left;
+    oss << std::showpos;
+    oss << -2.71828 << ' ' << 3.14159 << std::endl;
+    }
+
+    oss.str("");
+    oss.clear();
+
+    oss << -2.71828 << ' ' << 3.14159 << std::endl;
+    LMI_TEST_EQUAL(oss.str(), s);
+}
+
+class partly_unused
+{
+  public:
+    partly_unused
+        (int used
+        ,int unused
+        )
+        :used_   {used}
+        ,unused_ {unused}
+        {
+        // Suppress clang '-Wunused-private-field' warnings:
+        stifle_unused_warning(unused_);
+        }
+    int used() {return used_;}
+
+  private:
+    int used_;
+    int unused_;
+};
+
+int         return_temporary_0() {return {};}
+std::string return_temporary_1() {return {};}
+
+void test_stifle_unused_warning()
+{
+    // Variable neither initialized nor used.
+    int a;
+    stifle_unused_warning(a);
+
+    // Variable initialized but not used.
+    int b {2};
+    stifle_unused_warning(b);
+
+    // Variable initialized and used, but only conditionally.
+    int c;
+#if defined some_undefined_condition
+    c = 3;
+    std::cout << c << " This should not print" << std::endl;
+#endif // defined some_undefined_condition
+    stifle_unused_warning(c);
+
+    // Leaving a variable uninitialized at declaration...
+    int volatile d;
+    // ...would not elicit an unused-value warning here--it has
+    // no unused value because it has no value at all yet:
+//  stifle_unused_warning(d);
+    // ...so an unused-value warning must be stifled later...
+    for(int i = 0; i < 7; ++i)
+        {
+        d = static_cast<int>(std::clock());
+        }
+    // ...e.g., here (for clang at least)--see:
+    //   https://lists.nongnu.org/archive/html/lmi/2021-04/msg00058.html
+    // and
+    //   https://lists.nongnu.org/archive/html/lmi/2021-10/msg00050.html
+    stifle_unused_warning(d);
+
+    // Same as immediately preceding case, except that the variable
+    // is initialized at declaration...
+    int volatile e {};
+    // ...so the warning can be stifled before the loop:
+    stifle_unused_warning(e);
+    for(int i = 0; i < 7; ++i)
+        {
+        e = static_cast<int>(std::clock());
+        }
+
+    partly_unused {0, 1};
+
+    stifle_unused_warning(return_temporary_0());
+    stifle_unused_warning(return_temporary_1());
+}
+
 int test_main(int, char*[])
 {
     test_each_equal();
@@ -430,6 +532,8 @@ int test_main(int, char*[])
     test_prefix_and_suffix();
     test_scale_power();
     test_trimming();
+    test_scoped_ios_format();
+    test_stifle_unused_warning();
 
     return 0;
 }

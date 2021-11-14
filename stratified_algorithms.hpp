@@ -78,11 +78,18 @@
 /// Implementation note: Many function templates in this header
 /// require a zero of the appropriate type T, and accordingly define
 /// a local variable
-///   static constexpr T zero {};
-/// in case this zero is expensive to construct. It is constructed
-/// as "T{}" rather than "T(0)" because the latter uses an explicit
-/// integer argument, which may require a converting constructor
-/// (for example, with class currency).
+///   constexpr T zero {};
+/// which is constructed as "T{}" rather than as "T(0)" because an
+/// explicit integer argument may require a converting constructor
+/// (currency(0), for example). Don't use 'static constexpr', for
+/// reasons discussed in the thread beginning here:
+///   https://lists.nongnu.org/archive/html/lmi/2021-06/msg00019.html
+///
+/// If a future type T does not allow constexpr construction and is
+/// expensive to construct, consider restoring a historical revision
+/// that used
+///   static T zero ...
+/// instead.
 
 namespace tiered_and_banded_rates{} // doxygen workaround.
 
@@ -168,7 +175,7 @@ T tiered_product<T>::operator()
     ,std::vector<T> const& rates
     ) const
 {
-    static constexpr T zero {};
+    constexpr T zero {};
 
     LMI_ASSERT(zero <= new_incremental_amount);
     LMI_ASSERT(zero <= prior_total_amount);
@@ -233,7 +240,7 @@ T tiered_rate<T>::operator()
     ,std::vector<T> const& rates
     ) const
 {
-    static constexpr T zero {};
+    constexpr T zero {};
 
     T product = tiered_product<T>()(amount, zero, incremental_limits, rates);
     T result = rates.at(0);
@@ -286,7 +293,7 @@ T banded_rate<T>::operator()
     ,std::vector<T> const& rates
     ) const
 {
-    static constexpr T zero {};
+    constexpr T zero {};
 
     LMI_ASSERT(zero <= total_amount);
     LMI_ASSERT(!cumulative_limits.empty());
@@ -349,7 +356,7 @@ T banded_product<T>::operator()
 template<typename T>
 void progressively_limit(T& a, T& b, T const& limit)
 {
-    static constexpr T zero {};
+    constexpr T zero {};
 
     LMI_ASSERT(zero <= limit);
     if(a <= zero && b <= zero)
@@ -469,7 +476,7 @@ void progressively_limit(T& a, T& b, T const& limit)
 template<typename T>
 T progressively_reduce(T& a, T& b, T const& delta)
 {
-    static constexpr T zero {};
+    constexpr T zero {};
     T r(delta);          // Return value.
     if(zero == r)
         {

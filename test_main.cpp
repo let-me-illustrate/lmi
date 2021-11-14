@@ -61,7 +61,7 @@
 #include "exit_codes.hpp"
 #include "fenv_lmi.hpp"
 #include "force_linking.hpp"
-#include "miscellany.hpp"               // stifle_warning_for_unused_value()
+#include "miscellany.hpp"               // stifle_unused_warning()
 #include "test_tools.hpp"
 
 #include <atomic>
@@ -164,7 +164,7 @@ int cpp_main(int argc, char* argv[])
     fenv_initialize();
 
     int result = 0;
-    stifle_warning_for_unused_value(result);
+    stifle_unused_warning(result);
 
     try
         {

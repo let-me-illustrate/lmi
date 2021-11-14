@@ -229,6 +229,51 @@ Write a cv-qualifier after the type it modifies:
   void goo(const std::string&); // No.
 EOF
 
+cat >eraseme_cpp_005.cpp <<EOF
+$boilerplate
+// See:
+//   https://lists.nongnu.org/archive/html/lmi/2021-03/msg00032.html
+// and commit fec9d6d9b3375750:
+//   Establish the One True nonempty d-char-sequence
+
+// "1 + " skips the newline:
+std::string const okay =
+1 + R"--cut-here--(
+  0  0.12345
+  1  0.23456
+)--cut-here--";
+
+auto const not_ok = R"==(disallowed)==";
+EOF
+
+cat >eraseme_cpp_006.cpp <<EOF
+$boilerplate
+// Allowed: "bar_0" alphabetizes before "foo_0" and "quux_0",
+// but they're in different blocks separated by an empty line.
+
+#include "foo_0.hpp"
+#include "quux_0.hpp"
+
+#include <bar_0>
+
+// Forbidden: "quux.hpp" and "foo.hpp" are out of order.
+
+#include "quux.hpp"
+#include "foo.hpp"
+
+#include <bar>
+EOF
+
+cat >eraseme_cpp_007.cpp <<EOF
+$boilerplate
+for(auto const& i : good())
+for (auto& i : forbidden_space_after_for())
+for(auto& i :missing_right_space())
+for(auto& i: missing_left_space())
+for(int& i : bad_type())
+for(auto i : bad_ref())
+EOF
+
 # Headers.
 
 cat >eraseme_hpp_000.hpp <<EOF
@@ -409,10 +454,19 @@ File 'eraseme_cpp_003.cpp' should fuse '&' with type: 'foo &bar(); // bar() is a
 File 'eraseme_cpp_003.cpp' should fuse '*' with type: 'int *x;     // x is a 'pointer variable of type int'?'.
 File 'eraseme_cpp_004.cpp' should write 'const' after the type it modifies: 'const T&'.
 File 'eraseme_cpp_004.cpp' should write 'const' after the type it modifies: 'const std::string&'.
-File 'eraseme_hpp_001.hpp' lacks canonical header guards.
-File 'eraseme_hpp_002.hpp' lacks canonical header guards.
-File 'eraseme_hpp_003.hpp' lacks canonical header guards.
-File 'eraseme_hpp_004.hpp' lacks canonical header guards.
+File 'eraseme_cpp_005.cpp' contains noncanonical d-char-seq: '=='. Instead, use '--cut-here--'.
+File 'eraseme_cpp_006.cpp' has missorted #include directives:
+#include "quux.hpp"
+#include "foo.hpp"
+File 'eraseme_cpp_007.cpp' spurious or malformed for-range-declaration: 'for (auto& i : forbidden_space_after_for()'.
+File 'eraseme_cpp_007.cpp' should have a space on both sides of the colon following the for-range-declaration, instead of ' :'.
+File 'eraseme_cpp_007.cpp' should have a space on both sides of the colon following the for-range-declaration, instead of ': '.
+File 'eraseme_cpp_007.cpp' for-range-declaration should deduce type rather than specify 'int'.
+File 'eraseme_cpp_007.cpp' for-range-declaration should use 'auto&' or 'auto const&' instead of 'auto '.
+File 'eraseme_hpp_001.hpp' lacks canonical closing header guard.
+File 'eraseme_hpp_002.hpp' lacks canonical opening header guard.
+File 'eraseme_hpp_003.hpp' lacks canonical opening header guard.
+File 'eraseme_hpp_004.hpp' lacks canonical closing header guard.
 File 'eraseme_hpp_005.hpp' must include 'config.hpp' first.
 File 'eraseme_hpp_006.hpp' must include 'config.hpp'.
 File 'eraseme_hpp_006.hpp' lacks line '#include "config.hpp"'.

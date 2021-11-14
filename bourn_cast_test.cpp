@@ -49,7 +49,7 @@ inline To bourn_cast(From from)
 #   include "bourn_cast.hpp"
 #endif // !defined TEST_BOOST_CAST_INSTEAD
 
-#include "miscellany.hpp"               // stifle_warning_for_unused_variable()
+#include "miscellany.hpp"               // stifle_unused_warning()
 #include "stl_extensions.hpp"           // nonstd::power()
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -661,7 +661,7 @@ void test_boost_anomalies()
 template<typename To, typename From>
 void mete_static()
 {
-    enum {N = 1000000};
+    constexpr int N {1000000};
     using from_traits = std::numeric_limits<From>;
     static_assert(from_traits::is_specialized);
     static_assert(N < from_traits::max());
@@ -670,7 +670,7 @@ void mete_static()
         {
         z = static_cast<To>(j);
         }
-    stifle_warning_for_unused_variable(z);
+    stifle_unused_warning(z);
 }
 
 /// Speed test: convert one million times, using bourn_cast.
@@ -678,7 +678,7 @@ void mete_static()
 template<typename To, typename From>
 void mete_bourn()
 {
-    enum {N = 1000000};
+    constexpr int N {1000000};
     using from_traits = std::numeric_limits<From>;
     static_assert(from_traits::is_specialized);
     static_assert(N < from_traits::max());
@@ -687,7 +687,7 @@ void mete_bourn()
         {
         z = bourn_cast<To>(j);
         }
-    stifle_warning_for_unused_variable(z);
+    stifle_unused_warning(z);
 }
 
 void assay_speed()

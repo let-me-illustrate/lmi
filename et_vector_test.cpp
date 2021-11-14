@@ -280,7 +280,7 @@ int test_main(int, char*[])
     std::vector<double> const r0 = {0.0, 1.5625, 6.25};
     LMI_TEST(r0 == v0);
 
-    assign(v0, sqrt(v0));
+    assign(v0, sqrt(v0)); // PETE's sqrt(), not std::sqrt()
     std::vector<double> const r1 = {0.0, 1.25, 2.5};
     LMI_TEST(r1 == v0);
 

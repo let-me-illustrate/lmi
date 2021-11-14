@@ -35,7 +35,7 @@
 #include "dbdict.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
-#include "miscellany.hpp"
+#include "miscellany.hpp"               // stifle_unused_warning()
 #include "oecumenic_enumerations.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -43,9 +43,6 @@
 
 #include <xmlwrapp/document.h>
 
-#if defined BOOST_MSVC || defined __BORLANDC__
-#   include <cfloat>                    // floating-point hardware control
-#endif // defined BOOST_MSVC || defined __BORLANDC__
 #include <cstdio>                       // remove()
 #include <fstream>
 #include <functional>                   // bind()
@@ -523,14 +520,14 @@ void input_test::mete_equal_op()
     static Input const x;
     static Input const y(x);
     bool volatile b(x == y);
-    stifle_warning_for_unused_value(b);
+    stifle_unused_warning(b);
 }
 
 void input_test::mete_overhead()
 {
     xml_lmi::xml_document document("root");
     xml::element& root = document.root_node();
-    stifle_warning_for_unused_value(root);
+    stifle_unused_warning(root);
 }
 
 void input_test::mete_read(xml::element& xml_data)

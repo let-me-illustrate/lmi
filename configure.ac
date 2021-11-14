@@ -54,16 +54,6 @@ AM_CONDITIONAL(LMI_MSW, [test "$USE_WINDOWS" = 1])
 
 dnl === Command line options ===
 
-AC_ARG_WITH(boost-headers,
-            [AC_HELP_STRING([--with-boost-headers=dir], [Boost headers directory])],
-            lmi_boost_headers=$withval)
-AC_ARG_WITH(boost-libs,
-            [AC_HELP_STRING([--with-boost-libs=dir], [Boost libs installation directory])],
-            lmi_boost_libs=$withval)
-AC_ARG_WITH(boost-toolkit,
-            [AC_HELP_STRING([--with-boost-toolkit=dir], [Boost installation toolkit (gcc, mgw, etc.)])],
-            lmi_boost_toolkit=$withval)
-
 dnl add support for --wxdir, --wx-config, --wx-prefix, ----wx-exec-prefix
 WX_CONFIG_OPTIONS
 
@@ -389,104 +379,6 @@ dnl Restore pre-wx CPPFLAGS value only now, we needed wx flags for
 dnl wxPdfDocument checks.
 CPPFLAGS=$save_CPPFLAGS
 
-dnl Add clang-specific workaround before checking for Boost, as its headers use
-dnl std::allocator::size_type.
-dnl
-dnl This is necessary because libc++ used by clang 11 mistakenly removed
-dnl std::allocator::size_type, which is finally not removed by C++20. Luckily,
-dnl we still can predefine _LIBCPP_ENABLE_CXX20_REMOVED_ALLOCATOR_MEMBERS to
-dnl get its declaration, but we don't want to do this unconditionally because
-dnl this also reintroduces other, really removed, members in later clang
-dnl versions, so only do it if we need it.
-if test "$CLANG" = "yes"; then
-    m4_define([lmi_cxx_alloc_test], [[
-#include <memory>
-std::allocator<char*>::size_type s = 17;
-    ]])
-    AC_CACHE_CHECK([whether clang requires workaround for std::allocator::size_type],
-        lmi_cv_cxx_alloc_workaround_needed,
-        [
-            AC_LANG_PUSH([C++])
-            AC_COMPILE_IFELSE([AC_LANG_SOURCE([lmi_cxx_alloc_test])],
-                lmi_cv_cxx_alloc_workaround_needed=no,
-                [CXXFLAGS="$CXXFLAGS -D_LIBCPP_ENABLE_CXX20_REMOVED_ALLOCATOR_MEMBERS"
-                 AC_COMPILE_IFELSE([AC_LANG_SOURCE([lmi_cxx_alloc_test])],
-                    lmi_cv_cxx_alloc_workaround_needed=yes,
-                    AC_MSG_ERROR([std::allocator::size_type unavailable]))]
-            )
-            AC_LANG_POP([C++])
-        ]
-    )
-fi
-
-dnl --- Boost (required) ---
-if test "x$lmi_boost_headers" != "x"; then
-    CPPFLAGS="$CPPFLAGS -I$lmi_boost_headers"
-    errmsg="even in $lmi_boost_headers"
-else
-    errmsg="use --with-boost-headers=dir
-if they are installed in non default location"
-fi
-
-dnl Disable the use of std::auto_ptr<> and std::allocator::const_reference,
-dnl that don't exist in C++ 20 and that we don't need anyhow, in Boost code.
-CPPFLAGS="$CPPFLAGS -DBOOST_NO_AUTO_PTR -DBOOST_NO_STD_ALLOCATOR"
-
-AC_CHECK_HEADER([boost/type_traits.hpp],
-    [],
-    [AC_MSG_FAILURE([Boost headers not found, $errmsg])],
-    [AC_INCLUDES_DEFAULT()]
-)
-
-dnl The default boost library name should be used unless otherwise specified
-dnl via --with-boost-tookit options, in which case we need to add
-dnl toolkit suffix to the library name (example -lboost_regex-gcc-mt).
-if test "x$lmi_boost_toolkit" != "x"; then
-    lmi_boost_toolkit="-$lmi_boost_toolkit"
-fi
-boost_libsystem="boost_system$lmi_boost_toolkit"
-boost_libregex="boost_regex$lmi_boost_toolkit"
-
-save_CPPFLAGS=$CPPFLAGS
-save_LIBS=$LIBS
-save_LDFLAGS=$LDFLAGS
-if test "x$lmi_boost_libs" != "x"; then
-    BOOST_LDFLAGS="$BOOST_LDFLAGS -L$lmi_boost_libs "
-    LDFLAGS="$LDFLAGS $BOOST_LDFLAGS"
-    errmsg="even in $lmi_boost_libs"
-else
-    errmsg="use --with-boost-libs=dir
-if it is installed in non default location"
-fi
-
-dnl latest versions of boost extract some common functionality in
-dnl libboost_system which we must link when using any other Boost library, so
-dnl check for it first
-AC_CHECK_LIB($boost_libsystem,main,BOOST_LIBS="-l$boost_libsystem")
-
-dnl usually when we want to check for a library we use AC_CHECK_LIB and main()
-dnl but since under mingw with -pedantic and -std= options test does not pass
-dnl we are forced to use a bit more sophisticated construct and include our own
-dnl wrapper header which disables various warnings that occur in Boost headers
-
-CPPFLAGS="$save_CPPFLAGS -I$srcdir"
-LIBS="$save_LIBS -l$boost_libregex"
-AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include "boost_regex.hpp"]],
-    [[boost::regex *r]])],
-    [],
-    [AC_MSG_FAILURE([Boost regex library $boost_libregex not found, $errmsg])]
-)
-
-LDFLAGS=$save_LDFLAGS
-LIBS=$save_LIBS
-CPPFLAGS=$save_CPPFLAGS
-
-BOOST_LIBS="-l$boost_libregex $BOOST_LIBS"
-
-dnl contains flags needed to link to externally or internally built
-dnl boost libraries
-AC_SUBST(BOOST_LIBS)
-
 dnl check for the other required libraries: under Unix we use pkg-config which
 dnl is easily available for (and often already installed under) any Linux
 dnl system but when using Cygwin we do the checks manually as installing
@@ -534,6 +426,13 @@ AC_TRY_COMPILE([#include <xmlwrapp/xmlwrapp.h>],
 
 CXXFLAGS=$save_CXXFLAGS
 LIBS=$save_LIBS
+
+dnl --- libpcre2-8 is used by test_coding_rules which is only built under Linux
+if test "$USE_LINUX" = "1"; then
+    PKG_CHECK_MODULES(PCRE2, libpcre2-8)
+    AC_SUBST(PCRE2_CFLAGS)
+    AC_SUBST(PCRE2_LIBS)
+fi
 
 dnl --- libunwind and libdw, only used under Linux and only with gcc/libstdc++
 if test "$USE_LINUX" = "1" -a "$CLANG" != "yes"; then
@@ -663,24 +562,14 @@ if test "x$GXX" == "xyes"; then
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-parentheses)
     fi
 
-    dnl These warnings are given by clang in C++20 mode and can't be easily
-    dnl avoided, so disable them for now.
-    LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-enum-enum-conversion)
+    dnl This warning is given by both gcc and clang in C++20 mode and can't be
+    dnl easily avoided, so disable it for now.
     LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-enum-float-conversion)
     if test "$CLANG" = "yes"; then
+        dnl These warnings are clang-specific but also can't be easily fixed.
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-anon-enum-enum-conversion)
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-volatile)
     fi
-
-    dnl Many instances of these warnings are given in Boost 1.33.1 headers, so
-    dnl we unfortunately have to disable them even if they're potentially
-    dnl useful, especially the latter one.
-    LMI_CXX_ADD_IF_SUPPORTED(-Wno-unused-local-typedefs)
-    LMI_CXX_ADD_IF_SUPPORTED(-Wno-unused-variable)
-
-    dnl This makes Boost compile with -Wundef; see workhorse.make for
-    dnl more detailed explanation.
-    CXXFLAGS="$CXXFLAGS -DBOOST_STRICT_CONFIG"
 fi
 
 dnl === Generate output files ===

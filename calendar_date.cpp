@@ -745,14 +745,15 @@ class birthdate_limit
     calendar_date operator()()
         {
         root_type z = decimal_root
-            (-366 + a_priori_minimum_
+            (*this
+            ,-366 + a_priori_minimum_
             , 366 + a_priori_maximum_
             ,bias_
             ,0
-            ,*this
+            ,64
             );
-        LMI_ASSERT(root_not_bracketed != z.second);
-        int j = bourn_cast<int>(z.first);
+        LMI_ASSERT(root_is_valid == z.validity);
+        int j = bourn_cast<int>(z.root);
         j = std::min(j, as_of_date_.julian_day_number());
         j = std::max(j, a_priori_minimum_);
         j = std::min(j, a_priori_maximum_);

@@ -34,7 +34,7 @@
 
 #include "view_ex.hpp"
 
-#include "mc_enum_type_enums.hpp"       // enum mcenum_emission
+#include "mc_enum_type_enums.hpp"       // mcenum_emission
 #include "oecumenic_enumerations.hpp"
 
 #include <wx/event.h>

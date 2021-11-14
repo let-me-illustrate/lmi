@@ -78,8 +78,8 @@ rm proprietary.dat proprietary.ndx
 /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
 /opt/lmi/bin/rate_table_tool --accept --file=proprietary --verify
   # msw cross build:
-wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
-wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --verify
+wine /opt/lmi/bin/rate_table_tool.exe --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
+wine /opt/lmi/bin/rate_table_tool.exe --accept --file=proprietary --verify
 
   # To recover from errors
 

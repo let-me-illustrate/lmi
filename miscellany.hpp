@@ -168,6 +168,72 @@ LMI_SO void ltrim(std::string& s, char const* superfluous);
 
 LMI_SO void rtrim(std::string& s, char const* superfluous);
 
+/// Restore std::ios state on scope exit.
+///
+/// This is a blunt and simple tool that saves and restores many
+/// things that are not often wanted, and may be unwanted, such as
+/// tied streams and the exception mask.
+///
+/// If no use is found for this, it may be expunged someday.
+///
+/// Cannot be implemented in terms of std::ios_base, which lacks
+/// copyfmt(). Could be templated if std::wios support is wanted.
+
+class scoped_ios_fmt
+{
+  public:
+    explicit scoped_ios_fmt(std::ios& ios)
+        :ios_   {ios}
+        ,saved_ (nullptr)
+        {
+        saved_.copyfmt(ios_);
+        }
+
+    ~scoped_ios_fmt()
+        {
+        ios_.copyfmt(saved_);
+        }
+
+  private:
+    std::ios& ios_;
+    std::ios  saved_;
+};
+
+/// Restore std::ios formatting state on scope exit.
+///
+/// Restores only formatting members, not the full stream state
+/// (which includes tied streams and the exception mask, e.g.).
+///
+/// Cannot be implemented in terms of std::ios_base, which lacks
+/// fill(). Could be templated if std::wios support is wanted.
+
+class scoped_ios_format
+{
+  public:
+    explicit scoped_ios_format(std::ios& ios)
+        :ios_           {ios}
+        ,old_fill_      {ios.fill()}
+        ,old_flags_     {ios.flags()}
+        ,old_precision_ {ios.precision()}
+        ,old_width_     {ios.width()}
+        {}
+
+    ~scoped_ios_format()
+        {
+        ios_.fill     (old_fill_);
+        ios_.flags    (old_flags_);
+        ios_.precision(old_precision_);
+        ios_.width    (old_width_);
+        }
+
+  private:
+    std::ios&                 ios_;
+    std::ios::char_type const old_fill_;
+    std::ios::fmtflags  const old_flags_;
+    std::streamsize     const old_precision_;
+    std::streamsize     const old_width_;
+};
+
 inline std::ios_base::openmode ios_in_binary()
 {
     return
@@ -224,28 +290,13 @@ inline unsigned char lmi_toupper(unsigned char c)
     return static_cast<unsigned char>(std::toupper(c));
 }
 
-/// DWISOTT
+/// Avoid compiler warning for unused variable or unused value.
 ///
-/// Perhaps this function template's only legitimate use is within a
-/// conditional-inclusion [16.1] block.
+/// Rationale for this universal-reference implementation:
+///   https://lists.nongnu.org/archive/html/lmi/2021-10/msg00050.html
 
 template<typename T>
-inline void stifle_warning_for_unused_variable(T const&)
+constexpr void stifle_unused_warning(T&&)
 {}
-
-/// DWISOTT
-///
-/// Casting to void is always permitted by 5.2.9/4 via 5.4/5 (cf. C99
-/// 6.3.2.2).
-///
-/// Taking the argument's address prevents this gcc warning:
-///   "object of type [X] will not be accessed in void context"
-/// for volatile types.
-
-template<typename T>
-inline void stifle_warning_for_unused_value(T const& t)
-{
-    (void)&t;
-}
 
 #endif // miscellany_hpp

@@ -24,20 +24,98 @@
 #include "financial.hpp"
 
 #include "materially_equal.hpp"
+#include "miscellany.hpp"               // stifle_unused_warning()
 #include "ssize_lmi.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
 #include <cmath>                        // fabs()
-#include <functional>                   // bind()
-#include <iomanip>                      // Formatting of optional detail.
 #include <iostream>
 #include <vector>
+
+/// Present value, for local use only--beware division by zero.
+///
+/// This could be reimplemented in terms of i rather than v for
+/// general use. The problem with using v is that i can easily
+/// be -100%, in which case v=1/(1+i)=1/0, but it is preferable
+/// to avoid division by zero.
+
+template<typename InputIterator>
+long double pv
+    (InputIterator first
+    ,InputIterator last
+    ,long double i
+    )
+{
+    if(first == last)
+        {
+        return 0.0L;
+        }
+    long double const v = 1.0L / (1.0L + i);
+    long double vn = 1.0L;
+    long double z = *first;
+    InputIterator j = first;
+    while(++j != last)
+        {
+        vn *= v;
+        z += *j * vn;
+        }
+    return z;
+}
+
+void mete_0
+    (std::vector<double> const& payments
+    ,std::vector<double> const& benefits
+    )
+{
+    constexpr int decimals {5};
+    static std::vector<double> results(payments.size());
+    volatile double unoptimizable;
+    for(int i = 0; i < 10; ++i)
+        {
+        irr
+            (payments.begin()
+            ,payments.end()
+            ,benefits.begin()
+            ,results.begin()
+            ,decimals
+            );
+        unoptimizable = results.front();
+        }
+    stifle_unused_warning(unoptimizable);
+}
+
+void mete_1
+    (std::vector<double> const& payments
+    ,std::vector<double> const& benefits
+    )
+{
+    constexpr int decimals {5};
+    static std::vector<double> results(payments.size());
+    volatile double unoptimizable;
+    for(int i = 0; i < 10; ++i)
+        {
+        irr
+            (payments
+            ,benefits
+            ,results
+            ,payments.size()
+            ,payments.size()
+            ,decimals
+            );
+        unoptimizable = results.front();
+        }
+    stifle_unused_warning(unoptimizable);
+}
 
 int test_main(int, char*[])
 {
     double pmts[3] = {100.0,  200.0,  300.0};
     double bfts[3] = {300.0, 1500.0, 5400.0};
+
+    LMI_TEST(materially_equal(104.0000L, fv(pmts + 0, pmts + 1, 0.04)));
+    LMI_TEST(materially_equal(316.1600L, fv(pmts + 0, pmts + 2, 0.04)));
+    LMI_TEST(materially_equal(640.8064L, fv(pmts + 0, pmts + 3, 0.04)));
 
     // The next few tests compare floating-point quantities for exact
     // equality. Often that's inappropriate; however, the quantities
@@ -45,22 +123,32 @@ int test_main(int, char*[])
     // exactly.
 
     irr_helper<double*> xxx(pmts, pmts + 1, bfts[0], 5);
-    LMI_TEST(2.0 == xxx());
+    LMI_TEST_EQUAL(2.0, xxx());
 
-    LMI_TEST(( 2.0 == irr_helper<double*>(pmts, pmts + 1, bfts[0], 5)()));
+    LMI_TEST_EQUAL( 2.0, irr_helper<double*>(pmts, pmts + 1, bfts[0], 5)());
 
-    LMI_TEST(( 2.0 == irr_helper<double*>(pmts, pmts + 3, bfts[2], 5)()));
+    LMI_TEST_EQUAL( 2.0, irr_helper<double*>(pmts, pmts + 3, bfts[2], 5)());
 
-    LMI_TEST((-1.0 == irr_helper<double*>(pmts, pmts + 3, 0.0    , 5)()));
+    LMI_TEST_EQUAL(-1.0, irr_helper<double*>(pmts, pmts + 3, 0.0    , 5)());
 
     // Test with arrays.
+
+    LMI_TEST_EQUAL(2.0, irr(pmts, 3 + pmts, bfts[2], 5));
+
     double cash_flows[4] = {pmts[0], pmts[1], pmts[2], -bfts[2]};
-    LMI_TEST(2.0 == irr(cash_flows, 4 + cash_flows, 5));
+    LMI_TEST_EQUAL(  882.8125, fv(cash_flows + 0, cash_flows + 3,  0.25));
+    LMI_TEST_EQUAL( 2200.0   , fv(cash_flows + 0, cash_flows + 3,  1.0 ));
+    // Consequently:
+    LMI_TEST_EQUAL(0.25, irr(cash_flows, 3 + cash_flows,  882.8125, 5));
+    LMI_TEST_EQUAL(1.0 , irr(cash_flows, 3 + cash_flows, 2200.0   , 5));
+
+    LMI_TEST_EQUAL(    0.0   , fv(cash_flows + 0, cash_flows + 4, -1.0 ));
+    LMI_TEST_EQUAL(-4800.0   , fv(cash_flows + 0, cash_flows + 4,  0.0 ));
+    LMI_TEST_EQUAL(-6400.0   , fv(cash_flows + 0, cash_flows + 4,  1.0 ));
 
     // Test with vectors.
-    std::vector<double> v(cash_flows, 4 + cash_flows);
-    LMI_TEST(2.0 == irr(v.begin(), v.end(), 0.0, 5));
-    LMI_TEST(2.0 == irr(v.begin(), v.end(), 5));
+    std::vector<double> v(pmts, 3 + pmts);
+    LMI_TEST_EQUAL(2.0, irr(v.begin(), v.end(), bfts[2], 5));
 
     std::vector<double> p; // Payments.
     std::vector<double> b; // Benefits.
@@ -99,12 +187,12 @@ int test_main(int, char*[])
     std::vector<double> q{p};
     q.push_back(-b.back());
     // This NPV is -9.777068044058979E-12 in a gnumeric spreadsheet,
-    // versus -9.86988e-014 with MinGW-w64 gcc-6.3.0; the 1e-13
-    // tolerance is simply the materially_equal() default.
-    LMI_TEST(std::fabs(npv(q.begin(), q.end(), results.back())) <= 1e-13);
+    // versus -9.86988e-014 with MinGW-w64 gcc-6.3.0
+    // versus  3.6593e-013  with i686-w64-mingw32 gcc-10.0
+    LMI_TEST(std::fabs(pv(q.begin(), q.end(), results.back())) <= 1e-12);
 
     // Trivially, NPV at 0% interest is summation.
-    LMI_TEST(materially_equal(-4950.0L, npv(q.begin(), q.end(), 0.0)));
+    LMI_TEST(materially_equal(-4950.0L, pv(q.begin(), q.end(), 0.0)));
 
     // Test const vectors.
     std::vector<double> const cp(p);
@@ -181,10 +269,9 @@ int test_main(int, char*[])
     LMI_TEST_EQUAL(r0[3], 3.14);
 
     // SOMEDAY !! The zero polynomial has an infinitude of roots,
-    // but, given that we must return only one, wouldn't some
-    // value like 0% or -100% be more suitable?
+    // but, given that we must return only one, -100% is suitable.
     irr(p0, b0, r0, p0.size(), p0.size(), decimals);
-    LMI_TEST_EQUAL(r0[3], 1000);
+    LMI_TEST_EQUAL(r0[3], -1);
 
     // Test fv().
 
@@ -211,24 +298,13 @@ int test_main(int, char*[])
         <= tolerance
         );
 
-    typedef std::vector<double>::iterator VI;
+    auto f0 = [&p, &b] {mete_0(p, b);};
+    auto f1 = [&p, &b] {mete_1(p, b);};
     std::cout
-        << "  Speed test: vector of irrs, length "
-        << p.size()
-        << ", "
-        << decimals
-        << " decimals\n    "
-        << TimeAnAliquot
-            (std::bind
-                (irr<VI,VI,VI>
-                ,p.begin()
-                ,p.end()
-                ,b.begin()
-                ,results.begin()
-                ,decimals
-                )
-            )
-        << '\n'
+        << "\n  Speed tests..."
+        << "\n  iterator  form: " << TimeAnAliquot(f0)
+        << "\n  container form: " << TimeAnAliquot(f1)
+        << std::endl
         ;
 
     return 0;

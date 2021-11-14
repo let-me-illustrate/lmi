@@ -43,32 +43,28 @@ third_party_source_dir  := $(dest_dir)/src
 
 # File lists ###################################################################
 
-boost_archive    := boost_1_38_0.tar.bz2
 cgicc_archive    := cgicc-3.1.4.tar.bz2
 jing_archive     := jing-20091111.zip
 sample_archive   := lmi-data-20050618T1440Z.tar.bz2
 trang_archive    := trang-20091111.zip
 
 file_list := \
-  $(boost_archive) \
   $(cgicc_archive) \
   $(jing_archive) \
   $(sample_archive) \
   $(trang_archive) \
 
-boost cgicc:          stem = $(basename $(basename $($@_archive)))
-jing trang:           stem =            $(basename $($@_archive))
-sample:               stem = data
+cgicc:      stem = $(basename $(basename $($@_archive)))
+jing trang: stem =            $(basename $($@_archive))
+sample:     stem = data
 
 # URLs and archive md5sums #####################################################
 
-$(boost_archive)-url    := $(sf_mirror)/boost/$(boost_archive)
 $(cgicc_archive)-url    := ftp://ftp.gnu.org/pub/gnu/cgicc/$(cgicc_archive)
 $(jing_archive)-url     := https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jing-trang/$(jing_archive)
 $(sample_archive)-url   := https://download.savannah.gnu.org/releases/lmi/$(sample_archive)
 $(trang_archive)-url    := https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jing-trang/$(trang_archive)
 
-$(boost_archive)-md5    := 5eca2116d39d61382b8f8235915cb267
 $(cgicc_archive)-md5    := 6cb5153fc9fa64b4e50c7962aa557bbe
 $(jing_archive)-md5     := 13eef193921409a1636377d1efbf9843
 $(sample_archive)-md5   := e7f07133abfc3b9c2252dfa3b61191bc
@@ -111,7 +107,7 @@ ad_hoc_dir_exists = \
 # Targets ######################################################################
 
 .PHONY: all
-all: boost cgicc jing sample trang
+all: cgicc jing sample trang
 
 # Patches were generated according to this advice:
 #
@@ -151,15 +147,6 @@ all: boost cgicc jing sample trang
 # differ, and also because it guides regeneration of the saved md5sums
 # in case a library is updated. The second step is not removed because
 # it is idiomatic, and its absence would be remarkable.
-
-.PHONY: boost
-boost: $(file_list)
-	-[ -e $(stem).patch ] && $(PATCH) --directory=$(ad_hoc_dir) --strip=1 < $(stem).patch
-	$(CHMOD) -R g=u $(ad_hoc_dir)/$(stem)
-	$(MKDIR) $(third_party_include_dir)/boost/
-	$(CP) --force --preserve --recursive $(ad_hoc_dir)/$(stem)/boost/* $(third_party_include_dir)/boost/
-	$(MKDIR) $(third_party_source_dir)/boost/
-	$(MV)                                $(ad_hoc_dir)/$(stem)/*       $(third_party_source_dir)/boost/
 
 .PHONY: cgicc
 cgicc: $(file_list)

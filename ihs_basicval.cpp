@@ -35,6 +35,7 @@
 #include "financial.hpp"                // list_bill_premium()
 #include "fund_data.hpp"
 #include "global_settings.hpp"
+#include "gpt7702.hpp"
 #include "gpt_specamt.hpp"
 #include "i7702.hpp"
 #include "ieee754.hpp"                  // ldbl_eps_plus_one_times()
@@ -435,6 +436,32 @@ void BasicValues::Init7702()
         || mce_variable_loan_rate != yare_input_.LoanRateType
         );
 
+/// TAXATION !! No contemporary authority seems to believe that a
+/// change in the premium-tax rate, even if passed through to the
+/// policyowner, is a 7702A material change or a GPT adjustment event.
+/// Premium loads should instead reflect the lowest premium-tax rate.
+    gpt_vector_parms charges =
+        {.prem_load_target     = Loads_->target_premium_load_excluding_premium_tax()
+        ,.prem_load_excess     = Loads_->excess_premium_load_excluding_premium_tax()
+        ,.policy_fee_monthly   = dblize(Loads_->monthly_policy_fee (mce_gen_curr))
+        ,.policy_fee_annual    = dblize(Loads_->annual_policy_fee  (mce_gen_curr))
+        ,.specamt_load_monthly = Loads_->specified_amount_load     (mce_gen_curr)
+        ,.qab_gio_rate         = std::vector<double>(Length, 0.00)
+        ,.qab_adb_rate         = std::vector<double>(Length, 0.00)
+        ,.qab_term_rate        = std::vector<double>(Length, 0.00)
+        ,.qab_spouse_rate      = std::vector<double>(Length, 0.00)
+        ,.qab_child_rate       = std::vector<double>(Length, 0.00)
+        ,.qab_waiver_rate      = std::vector<double>(Length, 0.00)
+        };
+    gpt7702_ = std::make_shared<gpt7702>
+        (Mly7702qc
+        ,i7702_->ic_glp()
+        ,i7702_->ig_glp()
+        ,i7702_->ic_gsp()
+        ,i7702_->ig_gsp()
+        ,charges
+        );
+
     // TODO ?? We should avoid reading the rate file again; but
     // the GPT server doesn't initialize a MortalityRates object
     // that would hold those rates. TAXATION !! Rework this.
@@ -453,7 +480,7 @@ void BasicValues::Init7702()
     // to be determined by a strategy, but a downstream call to
     // Irc7702::Initialize7702() takes care of that.
 
-    Irc7702_= std::make_unique<Irc7702>
+    Irc7702_ = std::make_unique<Irc7702>
         (yare_input_.DefinitionOfLifeInsurance
         ,yare_input_.IssueAge
         ,EndtAge
@@ -472,10 +499,6 @@ void BasicValues::Init7702()
         ,dblize(SpecAmtLoadLimit)
         ,local_mly_charge_add
         ,local_adb_limit
-/// TAXATION !! No contemporary authority seems to believe that a
-/// change in the premium-tax rate, even if passed through to the
-/// policyowner, is a 7702A material change or a GPT adjustment event.
-/// These loads should instead reflect the lowest premium-tax rate.
         ,Loads_->target_premium_load_excluding_premium_tax()
         ,Loads_->excess_premium_load_excluding_premium_tax()
         ,InitialTargetPremium
@@ -495,7 +518,7 @@ void BasicValues::Init7702()
 //============================================================================
 void BasicValues::Init7702A()
 {
-    Irc7702A_= std::make_unique<Irc7702A>
+    Irc7702A_ = std::make_unique<Irc7702A>
         (DefnLifeIns_
         ,DefnMaterialChange_
         ,false // TODO ?? TAXATION !! Joint life: hardcoded for now.
@@ -584,6 +607,8 @@ void BasicValues::SetPermanentInvariants()
     LMI_ASSERT(round_withdrawal().c(MinWD) == MinWD);
     LMI_ASSERT(round_withdrawal().c(WDFee) == WDFee);
     database().query_into(DB_WdFeeRate            , WDFeeRate);
+    database().query_into(DB_AllowWd              , AllowWd);
+    database().query_into(DB_FirstWdMonth         , FirstWdMonth);
     database().query_into(DB_AllowChangeToDbo2    , AllowChangeToDBO2);
     database().query_into(DB_AllowSpecAmtIncr     , AllowSAIncr);
     database().query_into(DB_NoLapseAlwaysActive  , NoLapseAlwaysActive);
@@ -1914,7 +1939,7 @@ std::vector<double> BasicValues::GetCurrCOIRates0() const
 
 std::vector<double> BasicValues::GetCurrCOIRates1() const
 {
-    static constexpr double dbl_inf = std::numeric_limits<double>::infinity();
+    constexpr double dbl_inf {std::numeric_limits<double>::infinity()};
     static const currency inf = from_cents(dbl_inf);
     return GetTable
         (product().datum("CurrCOIFilename")
@@ -1927,7 +1952,7 @@ std::vector<double> BasicValues::GetCurrCOIRates1() const
 
 std::vector<double> BasicValues::GetCurrCOIRates2() const
 {
-    static constexpr double dbl_inf = std::numeric_limits<double>::infinity();
+    constexpr double dbl_inf {std::numeric_limits<double>::infinity()};
     static const currency inf = from_cents(dbl_inf);
     return GetTable
         (product().datum("CurrCOIFilename")

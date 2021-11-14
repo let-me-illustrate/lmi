@@ -31,7 +31,7 @@
 
 # This script requires zsh because brace expansion is more convenient
 # than 'seq', and especially because zsh offers glob qualifiers.
-# shellcheck disable=SC1036,SC2039
+# shellcheck disable=SC1036,SC2039,SC3009,SC3030
 
 X=$(printf '\%03o' {255..0})
 Y=$(printf '\%03o' {0..255})

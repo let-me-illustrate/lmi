@@ -84,7 +84,16 @@ jobs:
 
             packages="$packages wine32"
           else
-            packages="$packages libunwind-dev libdw-dev libgtk-3-dev"
+            packages="$packages libgtk-3-dev"
+          fi
+
+          # These packages are always installed when using the official
+          # makefiles because they're required by the Linux version of
+          # test_coding_rules used by make check_physical_closure target even
+          # when building for MSW, but with autotools build we can avoid
+          # installing them in the latter case.
+          if [ -z "${{ matrix.autotools }}" -o -z "${{ matrix.mingw }}" ]; then
+            packages="$packages libunwind-dev libdw-dev libpcre2-dev"
           fi
 
           if [ "${{ matrix.compiler }}" = clang ]; then
@@ -103,7 +112,14 @@ jobs:
         with:
           submodules: 'recursive'
 
-      - name: System and environment setup
+      - name: Install CCache
+        uses: vadz/ccache-action@51a14bafac785236dfc551c76c779429eaf85a13
+        with:
+          key: ${{ matrix.name }}
+          max-size: 900M
+          verbose: 2
+
+      - name: Set up build environment
         run: |
           normal_uid=`id --user`
 
@@ -114,19 +130,32 @@ jobs:
           sudo sed -i'' -e 's/^int _putenv/_CRTIMP int _putenv/' /usr/share/libtool/build-aux/ltmain.sh
 
           echo "coefficiency=--jobs=`nproc`" >> $GITHUB_ENV
+
+          CC=${LMI_COMPILER}
+          case "$CC" in
+            clang)
+              CXX="clang++ -stdlib=libc++"
+              ;;
+
+            gcc)
+              CXX="g++"
+              ;;
+
+            *)
+              echo 'Unknown compiler specified.'
+              exit 1
+          esac
+
           if [ ${{ matrix.mingw }} ]
           then
-            compiler=${LMI_TRIPLET}-${LMI_COMPILER}
-          else
-            compiler=${LMI_COMPILER}
+            CC=${LMI_TRIPLET}-${CC}
+            CXX=${LMI_TRIPLET}-${CXX}
           fi
 
-          if [ "${{ matrix.compiler }}" = clang ]; then
-            echo "CC=clang" >> $GITHUB_ENV
-            echo "CXX=clang++ -stdlib=libc++" >> $GITHUB_ENV
-          fi
+          echo "CC=$CC" >> $GITHUB_ENV
+          echo "CXX=$CXX" >> $GITHUB_ENV
 
-          gcc_version=$($compiler -dumpversion|tr -d '\r')
+          gcc_version=$($CC -dumpversion|tr -d '\r')
           echo "gcc_version=$gcc_version" >> $GITHUB_ENV
 
           echo "xml2_sha1=$(git rev-parse HEAD:third_party/libxml2)" >> $GITHUB_ENV
@@ -135,14 +164,19 @@ jobs:
           echo "wx_sha1=$(git rev-parse HEAD:third_party/wx)" >> $GITHUB_ENV
           echo "wxpdfdoc_sha1=$(git rev-parse HEAD:third_party/wxpdfdoc)" >> $GITHUB_ENV
 
-          echo "PATH=$PATH:/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/bin" >> $GITHUB_ENV
+          # Prepend the directory containing symlinks to the PATH: this allows
+          # makefiles to work unchnaged and without defining CXX on the command
+          # line. Note that MINIMAL_PATH is used in lmi makefiles to replace
+          # the PATH, so we need to define it too.
+          echo "PATH=/usr/lib/ccache:/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/bin:$PATH" >> $GITHUB_ENV
+          echo "MINIMAL_PATH=/usr/lib/ccache:/usr/bin:/bin" >> $GITHUB_ENV
 
           LD_LIBRARY_PATH=/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib
           LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/build/ship
           echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
           # Create directories required by lmi.
-          for d in /opt/lmi /opt/lmi/print /etc/opt/lmi /srv/cache_for_lmi; do
+          for d in /opt/lmi /opt/lmi/local /opt/lmi/print /etc/opt/lmi /srv/cache_for_lmi; do
             sudo mkdir --parents $d
             sudo --preserve-env chown $normal_uid $d
           done
@@ -150,6 +184,8 @@ jobs:
           mkdir /opt/lmi/gui_test
           mkdir /opt/lmi/src
 
+      - name: Show build environment
+        run: |
           echo "User information:"
           id
           echo
@@ -159,7 +195,11 @@ jobs:
           echo
 
           echo "Compiler version:"
-          $compiler --version
+          $CXX --version
+          echo
+
+          echo "Ccache version:"
+          ccache --version
           echo
 
           if [ ${{ matrix.mingw }} ]; then
@@ -204,23 +244,6 @@ jobs:
         if: steps.cache-local.outputs.cache-hit != 'true'
         run: ./install_wxpdfdoc.sh
 
-      - name: Build Boost.Regex
-        if: matrix.autotools
-        run: |
-          # Define flags to avoid warnings in Boost code we don't care about.
-          boost_cxxflags="-Wno-deprecated-declarations -Wno-register -DBOOST_NO_AUTO_PTR -DBOOST_NO_STD_ALLOCATOR"
-          if [ "${{ matrix.compiler }}" = clang ]; then
-            boost_cxxflags="${boost_cxxflags} -Wno-parentheses-equality"
-          fi
-
-          for lib in regex; do
-            cd /opt/lmi/third_party/src/boost/libs/${lib}/src
-            echo "Compiling $lib sources"
-            ${CXX-${LMI_COMPILER}} -std=c++17 -fPIC $(echo ${boost_cxxflags}) -I../../.. -c *.cpp
-            echo "Creating libboost_${lib}.a from" *.o
-            ar rc /opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib/libboost_${lib}.a *.o
-          done
-
       - name: Configure lmi
         if: matrix.autotools
         run: |
@@ -235,11 +258,10 @@ jobs:
             CPPFLAGS=-I/opt/lmi/local/include \
             LDFLAGS=-L/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib \
             PKG_CONFIG_PATH=/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib/pkgconfig \
-            --with-boost-headers=/opt/lmi/third_party/src/boost \
               || err=$?
 
           if [ -n "$err" ]; then
-            echo '*** Configuring failed, contents of config.log follows: ***'
+            echo '*''** Configuring failed, contents of config.log follows: *''**'
             echo '-----------------------------------------------------------'
             cat config.log
             echo '-----------------------------------------------------------'
@@ -315,7 +337,7 @@ jobs:
           # Somehow these files are executable and this triggers complaints
           # from check_script.sh, so avoid them by fixing permissions.
           chmod -x .git/info/exclude .git/description
-          make $coefficiency check_concinnity
+          make $coefficiency LMI_COMPILER=gcc LMI_TRIPLET=x86_64-pc-linux-gnu check_concinnity
 
           make $coefficiency check_physical_closure
 
@@ -330,7 +352,7 @@ jobs:
 
             if [ -n "$err" ]; then
               if [ -f ${lmi_build_dir}/test-suite.log ]; then
-                  echo '*** Tests failed, contents of test-suite.log follows: ***'
+                  echo '*''** Tests failed, contents of test-suite.log follows: *''**'
                   echo '-----------------------------------------------------------'
                   cat ${lmi_build_dir}/test-suite.log
                   echo '-----------------------------------------------------------'

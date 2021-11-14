@@ -124,12 +124,10 @@ LMI_SO jdn_t YmdToJdn(ymd_t);
 class LMI_SO calendar_date
 {
   public:
-    enum
-        {gregorian_epoch_jdn = 2361222
-        ,last_yyyy_date_jdn  = 5373484
-        ,min_verified_jdn    = 1721120
-        ,max_verified_jdn    = 9999999
-        };
+    static constexpr int gregorian_epoch_jdn {2361222};
+    static constexpr int last_yyyy_date_jdn  {5373484};
+    static constexpr int min_verified_jdn    {1721120};
+    static constexpr int max_verified_jdn    {9999999};
 
     calendar_date();
     explicit calendar_date(jdn_t);

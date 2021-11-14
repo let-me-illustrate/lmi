@@ -179,8 +179,6 @@ enum e_database_key
         ,DB_CvatMatChangeDefn
         ,DB_GptMatChangeDefn
         ,DB_Irc7702BftIsSpecAmt
-        ,DB_RiskyInitial7702Db
-        ,DB_Irc7702Endowment
         ,DB_Effective7702DboRop
 
         ,DB_TermIsQABOrDb7702
@@ -521,6 +519,7 @@ enum e_database_key
         ,DB_GroupProxyRateTable
         ,DB_PartialMortTable
         ,DB_AllowGroupQuote
+        ,DB_OmitGuarPremSolve
 
     ,DB_Topic_Lingo
 

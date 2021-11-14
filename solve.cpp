@@ -322,28 +322,15 @@ currency AccountValue::Solve()
             }
         }
 
-    root_type Solution = decimal_root
-        (LowerBound
+    root_type const solution = decimal_root
+        (SolveFn
+        ,LowerBound
         ,UpperBound
         ,Bias
         ,Decimals
-        ,SolveFn
-        ,false
-        ,status()
+        ,64
         );
-    if(root_not_bracketed == Solution.second)
-        {
-        LMI_ASSERT(0.0 == Solution.first);
-        warning() << "Solution not found. Using zero instead." << LMI_FLUSH;
-        }
-
-    // The account and ledger values set as a side effect of solving
-    // aren't necessarily what we need, for two reasons:
-    //   - find_root() need not return the last iterand tested; and
-    //   - the 'Solving' flag has side effects.
-    // The first issue could be overcome easily enough in find_root(),
-    // but the second cannot. Therefore, the final solve parameters
-    // are stored now, and values are regenerated downstream.
+    currency const solution_cents = round_to_cents.c(solution.root);
 
     Solving = false;
 
@@ -353,7 +340,29 @@ currency AccountValue::Solve()
     // kludge, but so is 'That'; a function object is wanted instead.
     only_set_values = !Solving;
 
-    currency const solution_cents = round_to_cents.c(Solution.first);
+    // The account and ledger values set as a side effect of solving
+    // aren't generally the same as those shown on the illustration
+    // because the 'Solving' flag has side effects. Therefore, the
+    // final solve parameters are stored by calling 'SolveFn'
+    // now, and actual values are freshly generated downstream.
     SolveFn(dblize(solution_cents));
+
+    switch(solution.validity)
+        {
+        case root_is_valid:
+            {} // Do nothing.
+            break;
+        case root_not_bracketed:
+            {
+            LMI_ASSERT(C0 == solution_cents);
+            warning() << "solution not found. Using zero instead." << LMI_FLUSH;
+            }
+            break;
+        case improper_bounds:
+            {
+            alarum() << "Improper bounds." << LMI_FLUSH;
+            }
+            break;
+        }
     return solution_cents;
 }

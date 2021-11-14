@@ -25,7 +25,7 @@
 
 #include "handle_exceptions.hpp"        // report_exception()
 #include "ieee754.hpp"                  // infinity<>()
-#include "miscellany.hpp"
+#include "miscellany.hpp"               // stifle_unused_warning()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -34,7 +34,9 @@
 #   pragma clang diagnostic ignored "-Wsometimes-uninitialized"
 #endif // defined LMI_CLANG
 
-#include <boost/lexical_cast.hpp>
+#if defined TEST_BOOST_IMPLEMENTATION_TOO
+#   include <boost/lexical_cast.hpp>
+#endif // defined TEST_BOOST_IMPLEMENTATION_TOO
 
 #if defined LMI_CLANG
 #   pragma clang diagnostic pop
@@ -94,21 +96,23 @@ void mete_two_thirds()
 {
     std::string s = numeric_io_cast<std::string>(2.0 / 3.0);
     double d = numeric_io_cast<double>(s);
-    stifle_warning_for_unused_value(d);
+    stifle_unused_warning(d);
 }
 
+#if defined TEST_BOOST_IMPLEMENTATION_TOO
 void mete_two_thirds_boost()
 {
     std::string s = boost::lexical_cast<std::string>(2.0 / 3.0);
     double d = boost::lexical_cast<double>(s);
-    stifle_warning_for_unused_value(d);
+    stifle_unused_warning(d);
 }
+#endif // defined TEST_BOOST_IMPLEMENTATION_TOO
 
 void mete_infinity()
 {
     std::string s = numeric_io_cast<std::string>(infinity<double>());
     double d = numeric_io_cast<double>(s);
-    stifle_warning_for_unused_value(d);
+    stifle_unused_warning(d);
 }
 
 // These tests generally assume IEC 60559 floating point. Hardware
@@ -194,7 +198,9 @@ int test_main(int, char*[])
     std::cout
         << "Conversions:"
         << "\n  2/3, lmi  : " << TimeAnAliquot(mete_two_thirds      )
+#if defined TEST_BOOST_IMPLEMENTATION_TOO
         << "\n  2/3, boost: " << TimeAnAliquot(mete_two_thirds_boost)
+#endif // defined TEST_BOOST_IMPLEMENTATION_TOO
         << "\n  inf, lmi  : " << TimeAnAliquot(mete_infinity        )
         << std::endl
         ;

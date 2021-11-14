@@ -94,7 +94,7 @@ int try_main(int argc, char* argv[])
     bool all_ok = true;
     int c;
     int option_index = 0;
-    struct Option long_options[] =
+    Option long_options[] =
         {
             {"binary"      ,NO_ARG   ,nullptr ,'b'            ,nullptr ,""},
             {"check"       ,NO_ARG   ,nullptr ,'c'            ,nullptr ,""},

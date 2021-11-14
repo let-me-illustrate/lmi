@@ -162,8 +162,6 @@ void DBDictionary::ascribe_members()
     ascribe("CvatMatChangeDefn"         , &DBDictionary::CvatMatChangeDefn         );
     ascribe("GptMatChangeDefn"          , &DBDictionary::GptMatChangeDefn          );
     ascribe("Irc7702BftIsSpecAmt"       , &DBDictionary::Irc7702BftIsSpecAmt       );
-    ascribe("RiskyInitial7702Db"        , &DBDictionary::RiskyInitial7702Db        );
-    ascribe("Irc7702Endowment"          , &DBDictionary::Irc7702Endowment          );
     ascribe("Effective7702DboRop"       , &DBDictionary::Effective7702DboRop       );
     ascribe("TermIsQABOrDb7702"         , &DBDictionary::TermIsQABOrDb7702         );
     ascribe("TermIsQABOrDb7702A"        , &DBDictionary::TermIsQABOrDb7702A        );
@@ -413,6 +411,7 @@ void DBDictionary::ascribe_members()
     ascribe("GroupProxyRateTable"       , &DBDictionary::GroupProxyRateTable       );
     ascribe("PartialMortTable"          , &DBDictionary::PartialMortTable          );
     ascribe("AllowGroupQuote"           , &DBDictionary::AllowGroupQuote           );
+    ascribe("OmitGuarPremSolve"         , &DBDictionary::OmitGuarPremSolve         );
     ascribe("PolicyForm"                , &DBDictionary::PolicyForm                );
     ascribe("PolicyMktgName"            , &DBDictionary::PolicyMktgName            );
     ascribe("PolicyLegalName"           , &DBDictionary::PolicyLegalName           );

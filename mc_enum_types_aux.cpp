@@ -139,6 +139,8 @@ template std::string mc_str(mcenum_mode                );
 template std::string mc_str(mcenum_report_column       );
 template std::string mc_str(mcenum_run_basis           );
 template std::string mc_str(mcenum_smoking             );
+template std::string mc_str(mcenum_solve_target        );
+template std::string mc_str(mcenum_solve_type          );
 template std::string mc_str(mcenum_state               );
 template std::string mc_str(mcenum_table_rating        );
 template std::string mc_str(mcenum_uw_basis            );

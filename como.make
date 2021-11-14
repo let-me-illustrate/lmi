@@ -177,7 +177,7 @@ LDFLAGS :=
 # are changed here to doubled backslashes. SOMEDAY !! A 'como_ld'
 # program could accept gcc syntax.
 
-REQUIRED_LIBS := \
+LDFLAGS := \
   \\opt/lmi/local/lib/libexslt.dll.a \
   \\opt/lmi/local/lib/libxslt.dll.a \
   \\opt/lmi/local/lib/libxml2.dll.a \
@@ -236,7 +236,6 @@ CXX := \
 	                           CXXFLAGS='$(CXXFLAGS)' \
 	                                 LD='$(LD)' \
 	                            LDFLAGS='$(LDFLAGS)' \
-	                      REQUIRED_LIBS='$(REQUIRED_LIBS)' \
 	                   platform_defines='' \
 	         excluded_unit_test_targets='$(excluded_unit_test_targets)' \
 	                            GNU_CPP='$(GNU_CPP)' \

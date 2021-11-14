@@ -29,6 +29,7 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
+#include "gpt7702.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "interest_rates.hpp"
@@ -113,6 +114,15 @@ void AccountValue::DoMonthDR()
     TxSpecAmtChange();
     TxTakeWD();
 
+    if(!SolvingForGuarPremium && Solving || mce_run_gen_curr_sep_full == RunBasis_)
+        {
+        // Illustration-reg guaranteed premium ignores GPT limit.
+        if(0 == Year && 0 == Month)
+            {
+            currency const z {External1035Amount + Internal1035Amount};
+            gpt7702_->enqueue_exch_1035(z);
+            }
+        }
     TxTestGPT();
     // TODO ?? TAXATION !! Doesn't this mean dumpins and 1035s get ignored?
     LMI_ASSERT(C0 <= Dcv);
@@ -555,7 +565,17 @@ void AccountValue::TxExch1035()
             // 7702 !! Adding one cent to z here is bogus; premiums
             // are inherently currency amounts, and should be tested
             // as such.
-            LMI_ASSERT(dblize(GrossPmts[Month]) <= 0.01 + z);
+            if((0.01 + z) < dblize(GrossPmts[Month]))
+                {
+                alarum()
+                    << "1035 exchange exceeds guideline limit."
+                    << " Increase specified amount to at least "
+                    << std::fixed
+                    << GetModalSpecAmtGSP(GrossPmts[Month])
+                    << "."
+                    << LMI_FLUSH
+                    ;
+                }
             GrossPmts[Month] = round_gross_premium().c(z);
             }
         // Limit external 1035 first, then internal, as necessary to avoid
@@ -1068,19 +1088,6 @@ void AccountValue::TxTestGPT()
         return;
         }
 
-    // Adjustable events are not restricted to anniversary, even for
-    // illustrations: for instance, payment of premium with an ROP
-    // DB option.
-    //
-    // Illustrations allow no adjustable events at issue.
-    // TODO ?? TAXATION !! If this assumption is not valid, then OldSA, OldDB, and
-    // OldDBOpt need to be initialized more carefully. It's not valid as long as
-    // withdrawals are not forbidden in the first year.
-    if(0 == Year && 0 == Month)
-        {
-        return;
-        }
-
     // Guideline premium must be determined before premium is processed.
     // Before doing that, we have to determine DB; usually, that will
     // have been done already, because ChangeSpecAmtBy() is called for
@@ -1124,6 +1131,8 @@ void AccountValue::TxTestGPT()
         ;
     if(adj_event)
         {
+        // No adjustment event can occur on the issue date.
+        LMI_ASSERT(!(0 == Year && 0 == Month));
         // TODO ?? TAXATION !! Perhaps we should pass 'A' of 'A+B-C' for validation.
         // Or maybe not, because we can't match it if there was a plan change.
         Irc7702_->ProcessAdjustableEvent
@@ -1138,10 +1147,27 @@ void AccountValue::TxTestGPT()
             ,old_dbopt
             ,dblize(AnnualTargetPrem)
             );
+        gpt7702_->enqueue_adj_event();
         }
 
+    // 7702 !! call this only to maintain internal consistency
     // CURRENCY !! already rounded by class Irc7702--appropriately?
-    GptForceout = round_minutiae().c(Irc7702_->Forceout());
+    round_minutiae().c(Irc7702_->Forceout());
+
+    gpt_scalar_parms s_parms =
+        {.duration       = Year
+        ,.f3_bft         = dblize(DBReflectingCorr + TermDB)
+        ,.endt_bft       = dblize(specamt_for_7702(Year))
+        ,.target_prem    = dblize(AnnualTargetPrem)
+        ,.chg_sa_base    = dblize(gpt_chg_sa_base_)
+        ,.dbopt_7702     = new_dbopt
+        };
+    GptForceout = gpt7702_->update_gpt
+        (s_parms
+        ,Month / 12.0
+        ,TotalAccountValue()
+        );
+
     // TODO ?? TAXATION !! On other bases, nothing is forced out, and payments aren't limited.
     process_distribution(GptForceout);
     YearsTotalGptForceout += GptForceout;
@@ -1223,7 +1249,8 @@ void AccountValue::TxAscertainDesiredPayment()
             // CURRENCY !! return modified value instead of altering argument
             double z = dblize(eepmt);
             Irc7702_->ProcessGptPmt(Year, z);
-            eepmt = round_gross_premium().c(z);
+//          eepmt = round_gross_premium().c(z);
+            eepmt = gpt7702_->accept_payment(eepmt);
             }
         EeGrossPmts[Month] += eepmt;
         GrossPmts  [Month] += eepmt;
@@ -1239,7 +1266,8 @@ void AccountValue::TxAscertainDesiredPayment()
             // CURRENCY !! return modified value instead of altering argument
             double z = dblize(erpmt);
             Irc7702_->ProcessGptPmt(Year, z);
-            erpmt = round_gross_premium().c(z);
+//          erpmt = round_gross_premium().c(z);
+            erpmt = gpt7702_->accept_payment(erpmt);
             }
         ErGrossPmts[Month] += erpmt;
         GrossPmts  [Month] += erpmt;
@@ -1259,7 +1287,8 @@ void AccountValue::TxAscertainDesiredPayment()
             // CURRENCY !! return modified value instead of altering argument
             double z = dblize(Dumpin);
             Irc7702_->ProcessGptPmt(Year, z);
-            Dumpin = round_gross_premium().c(z);
+//          Dumpin = round_gross_premium().c(z);
+            Dumpin = gpt7702_->accept_payment(Dumpin);
             }
         EeGrossPmts[Month] += Dumpin;
         GrossPmts  [Month] += Dumpin;
@@ -1601,15 +1630,29 @@ void AccountValue::TxSetBOMAV()
         // CURRENCY !! Should yare_input convert currency inputs to
         // type currency, which is more yare than double?
         LMI_ASSERT(yare_input_.InforceSpecAmtLoadBase <= dblize(SpecAmtLoadLimit));
+        currency const x = term_specamt(0) + base_specamt(0);
+        currency const y = round_specamt().c(NetPmts[0] * YearsCorridorFactor);
         SpecAmtLoadBase =
             (0 == Year && 0 == Month)
-            ? std::max
-                (term_specamt(0) + base_specamt(0)
-                ,round_specamt().c(NetPmts[0] * YearsCorridorFactor)
-                )
+            ? std::max(x, y)
             : round_specamt().c(yare_input_.InforceSpecAmtLoadBase)
             ;
         SpecAmtLoadBase = std::min(SpecAmtLoadBase, SpecAmtLoadLimit);
+
+        if(!Solving && mce_gpt == DefnLifeIns_ && x < y)
+            {
+            // Assert that the basis for guideline premiums is
+            // identical to the initial specified amount.
+            LMI_ASSERT(gpt_chg_sa_base_ == SpecAmtLoadBase);
+            warning()
+                << "Initial specified amount is " << x
+                << " but initial corridor death benefit is " << y
+                << ". To achieve the most favorable guideline premiums,"
+                << " consider increasing initial specified amount to " << y
+                << "."
+                << LMI_FLUSH
+                ;
+            }
         }
 
     // These assignments must happen every month.
@@ -2338,8 +2381,12 @@ void AccountValue::SetMaxWD()
 
 void AccountValue::TxTakeWD()
 {
-    // Illustrations allow withdrawals only on anniversary.
-    if(0 != Month)
+    // Illustrations allow withdrawals only on anniversary; products
+    // may forbid them altogether, or for the first N months. On the
+    // issue date, the maximum withdrawal is zero anyway, because not
+    // even 1035 funds have been credited when this function is first
+    // called; arguably 1035 processing should occur earlier.
+    if(0 != Month || !AllowWd || (Month + 12 * Year) < FirstWdMonth)
         {
         return;
         }
@@ -2610,6 +2657,11 @@ void AccountValue::TxTakeWD()
             // 'premiums_paid_increment' is modified?
             double premiums_paid_increment = -dblize(GrossWD);
             Irc7702_->ProcessGptPmt(Year, premiums_paid_increment);
+            gpt7702_->enqueue_f1A_decrease(GrossWD);
+            // A withdrawal might trigger a GPT adjustment, or it
+            // might not. If it does, that'll be detected at the
+            // appropriate moment, elsewhere, so don't call
+            // enqueue_adj_event() here.
             }
         }
 

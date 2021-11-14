@@ -435,6 +435,8 @@ TEST_CODING_RULES := $(build_dir)/test_coding_rules$(EXEEXT)
 
 .PHONY: custom_tools
 custom_tools:
+	@[ "$$LMI_TRIPLET" = "x86_64-pc-linux-gnu" ] \
+	  || ($(ECHO) "'$@' requires x86_64-pc-linux-gnu." && false)
 	@$(MAKE) test_coding_rules$(EXEEXT)
 	@$(INSTALL) -c -m 0775 $(TEST_CODING_RULES) $(localbindir)
 

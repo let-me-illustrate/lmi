@@ -236,7 +236,7 @@ for z in $(git diff HEAD@{1} --name-only) ; do touch --reference=/opt/lmi/src/lm
 for z in *(m-1) ; do touch --reference=$z /opt/lmi/free/src/lmi/$z; done
 
   # Alternatively:
-find . -path ./.git -prune -o -type f -print0 | xargs --null --max-args=1 --max-procs="$(nproc)" --replace='{}' touch '--reference=/opt/lmi/src/lmi/{}' '{}'
+find . -path ./.git -prune -o -type f -print0 | xargs --null --max-procs="$(nproc)" --replace='{}' touch '--reference=/opt/lmi/src/lmi/{}' '{}'
 
   # Third screen: only for building and testing
 
@@ -289,7 +289,7 @@ pushd /tmp; /opt/lmi/src/lmi/test_schemata.sh >/opt/lmi/src/log 2>&1; popd
 
 cd /opt/lmi/src/lmi
 
-make $coefficiency check_concinnity >../log 2>&1
+make $coefficiency LMI_COMPILER=gcc LMI_TRIPLET=x86_64-pc-linux-gnu check_concinnity >../log 2>&1
 sed -f diagnostics.sed ../log 2>&1 |less -S
 
   # Fifth screen: only for running lmi and its GUI tests

@@ -28,17 +28,15 @@
 
 #include <algorithm>                    // count()
 
-enum
-    {cso_n_alb_or_anb =   2
-    ,cso_n_gender     =   3
-    ,cso_n_smoking    =   3
-    ,cso_omega_1980   = 100
-    ,cso_omega_2001   = 121
-    ,cso_omega_2017   = 121
-    ,cso_sns_age_1980 =  15
-    ,cso_sns_age_2001 =  16
-    ,cso_sns_age_2017 =  18
-    };
+constexpr int cso_n_alb_or_anb {  2};
+constexpr int cso_n_gender     {  3};
+constexpr int cso_n_smoking    {  3};
+constexpr int cso_omega_1980   {100};
+constexpr int cso_omega_2001   {121};
+constexpr int cso_omega_2017   {121};
+constexpr int cso_sns_age_1980 { 15};
+constexpr int cso_sns_age_2001 { 16};
+constexpr int cso_sns_age_2017 { 18};
 
 /// 1980 CSO
 
