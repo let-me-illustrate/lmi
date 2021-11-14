@@ -816,32 +816,6 @@ void SkeletonTest::RunTheTests()
         return;
         }
 
-    // Whatever happens, ensure that the main window is closed and thus the
-    // main loop terminated and the application exits at the end of the tests.
-    class ensure_top_window_closed
-    {
-      public:
-        explicit ensure_top_window_closed(wxApp* app)
-            :app_ {app}
-        {
-        }
-
-        ensure_top_window_closed(ensure_top_window_closed const&) = delete;
-        ensure_top_window_closed& operator=(ensure_top_window_closed const&) = delete;
-
-        ~ensure_top_window_closed()
-        {
-        wxWindow* const top = app_->GetTopWindow();
-        if(top)
-            {
-            top->Close(true); // force close
-            }
-        }
-
-      private:
-        wxApp const* const app_;
-    } close_top_window_on_scope_exit(this);
-
     // Close any initially opened dialogs (e.g. "About" dialog shown unless a
     // special command line option is specified).
     for(;;)
@@ -870,6 +844,32 @@ void SkeletonTest::RunTheTests()
     // prevents any unexpected modal dialogs from being shown if they do
     // happen, this is important for the test to really run unattended.
     wxTestingModalHook expect_no_dialogs;
+
+    // Whatever happens, ensure that the main window is closed and thus the
+    // main loop terminated and the application exits at the end of the tests.
+    class ensure_top_window_closed
+    {
+      public:
+        explicit ensure_top_window_closed(wxApp* app)
+            :app_ {app}
+        {
+        }
+
+        ensure_top_window_closed(ensure_top_window_closed const&) = delete;
+        ensure_top_window_closed& operator=(ensure_top_window_closed const&) = delete;
+
+        ~ensure_top_window_closed()
+        {
+        wxWindow* const top = app_->GetTopWindow();
+        if(top)
+            {
+            top->Close(true); // force close
+            }
+        }
+
+      private:
+        wxApp const* const app_;
+    } close_top_window_on_scope_exit(this);
 
     MainWin->SetFocus();
 
