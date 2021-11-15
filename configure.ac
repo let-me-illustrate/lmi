@@ -21,14 +21,15 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_PREREQ(2.56)
-AC_INIT(lmi, 1.0.0, [gchicares@sbcglobal.net])
+AC_PREREQ([2.69])
+AC_INIT([lmi],[1.0.0],[gchicares@sbcglobal.net])
 AM_INIT_AUTOMAKE([foreign])
 AM_MAINTAINER_MODE
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
+AC_CONFIG_MACRO_DIRS([aclocal])
 AC_CONFIG_SRCDIR([lmi.png])
-AC_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADERS([config.h])
 
 dnl remember, "build" is where we compile, "host" is where the resulting
 dnl program runs (which may be different from "build" for cross-compilation)
@@ -58,7 +59,7 @@ dnl add support for --wxdir, --wx-config, --wx-prefix, ----wx-exec-prefix
 WX_CONFIG_OPTIONS
 
 AC_ARG_ENABLE(debug,
-             [AC_HELP_STRING([--enable-debug],
+             [AS_HELP_STRING([--enable-debug],
                              [compile with debug information])],
              [case "x${enableval}" in
                    x) debug_option=yes ;;
@@ -67,7 +68,7 @@ AC_ARG_ENABLE(debug,
                    *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug) ;;
              esac], [debug_option=yes])
 AC_ARG_ENABLE(optimize,
-             [AC_HELP_STRING([--disable-optimize],
+             [AS_HELP_STRING([--disable-optimize],
                              [generate non-optimized code])],
              [case "x${enableval}" in
                    x) optimize_option=no ;;
@@ -77,7 +78,7 @@ AC_ARG_ENABLE(optimize,
              esac], [optimize_option=default])
 
 AC_ARG_ENABLE(profiling,
-             [AC_HELP_STRING([--enable-profiling],
+             [AS_HELP_STRING([--enable-profiling],
                              [generate a code suitable for profiling (note: linux only, using gprof)])],
              [case "x${enableval}" in
                    x) profiling_option=no ;;
@@ -87,7 +88,7 @@ AC_ARG_ENABLE(profiling,
              esac], [profiling_option=default])
 
 AC_ARG_ENABLE(cgicc,
-             [AC_HELP_STRING([--enable-cgicc],
+             [AS_HELP_STRING([--enable-cgicc],
                              [build cgi targets using installed cgicc.])],
              [case "x${enableval}" in
                    x) lmi_cgicc_option=yes;;
@@ -174,7 +175,7 @@ common_options="-fno-ms-extensions -frounding-math"
 CFLAGS="$CFLAGS $common_options"
 CXXFLAGS="$CXXFLAGS $common_options"
 
-AC_PROG_LD
+LT_PATH_LD
 
 # This is a workaround for the harmless but annoying warning
 #
@@ -283,7 +284,7 @@ fi
 
 dnl We can't do this at the end because we need the correct values
 dnl for enable_shared/static variables which appears to be defined
-dnl by AC_PROG_LIBTOOL (for ex. with --disable-shared you get only
+dnl by LT_INIT (for ex. with --disable-shared you get only
 dnl enable_shared=no before this point and enable_static=yes only after)
 dnl Wx configuration part needs exactly that feature to understand
 dnl what library type build we're using.
@@ -303,23 +304,21 @@ save_CPPFLAGS=$CPPFLAGS
 CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
 
 dnl check that the library options allow to build lmi
-AC_TRY_COMPILE([#include <wx/setup.h>],
-    [
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <wx/setup.h>]], [[
     #if !wxUSE_DOC_VIEW_ARCHITECTURE || \
         !wxUSE_MDI_ARCHITECTURE || \
         !wxUSE_PRINTING_ARCHITECTURE || \
         !(wxUSE_STL || wxUSE_STD_STRING)
         wrong wx library options
     #endif
-    ],
+    ]])],
     [],
     AC_MSG_FAILURE([Please configure wxWidgets using --enable-std_string.])
 )
 
 dnl these options are not fatal but it's better not to use them for various
 dnl (mostly licensing) reasons
-AC_TRY_COMPILE([#include <wx/setup.h>],
-    [
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <wx/setup.h>]], [[
     #if wxUSE_APPLE_IEEE || \
         wxUSE_LIBJPEG || \
         wxUSE_LIBTIFF || \
@@ -327,7 +326,7 @@ AC_TRY_COMPILE([#include <wx/setup.h>],
         wxUSE_THREADS
         inappropriate wx library options
     #endif
-    ],
+    ]])],
     [],
     AC_MSG_WARN([Inappropriate wxWidgets build options detected but continuing.])
 )
@@ -394,8 +393,8 @@ CXXFLAGS="$CXXFLAGS $XMLWRAPP_CFLAGS"
 LIBS="$LIBS $XMLWRAPP_LIBS"
 
 dnl check that the library options allow to build lmi
-AC_TRY_COMPILE([#include <xmlwrapp/xmlwrapp.h>],
-    [xml::document doc("dummy");],
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xmlwrapp/xmlwrapp.h>]],
+    [xml::document doc("dummy");])],
     [],
     AC_MSG_FAILURE([Unable to find appropriate xmlwrapp configuration. Use --with-xmlwrapp-config to specify the location of xmlwrapp-config.])
 )
