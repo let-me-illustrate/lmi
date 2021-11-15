@@ -316,12 +316,12 @@
         <help>Edit selected cell</help>
     </object>
     <object class="wxMenuItem" name="edit_class">
-        <label>Edit class defaults...\tCtrl-Alt-E</label>
+        <label>Edit class de_faults...\tCtrl-Alt-E</label>
         <bitmap platform="win" stock_id="edit-class"/>
         <help>Edit selected cell's class defaults</help>
     </object>
     <object class="wxMenuItem" name="edit_case">
-        <label>Edit case defaults...\tCtrl-Shift-E</label>
+        <label>Edit case defau_lts...\tCtrl-Shift-E</label>
         <bitmap platform="win" stock_id="edit-case"/>
         <help>Edit case defaults</help>
     </object>
@@ -331,7 +331,7 @@
         <bitmap platform="win" stock_id="run-cell"/>
         <help>Run selected cell</help>
     </object>
-<!-- SOMEDAY !! This may be useful for large cases.
+<!-- SOMEDAY !! This may be useful for large cases; add a acc_elerator.
     <object class="wxMenuItem" name="run_class">
         <label>Run class\tCtrl-Alt-R</label>
         <bitmap platform="win" stock_id="run-class"/>
@@ -339,13 +339,13 @@
     </object>
 -->
     <object class="wxMenuItem" name="run_case">
-        <label>Run case\tCtrl-Shift-R</label>
+        <label>Ru_n case\tCtrl-Shift-R</label>
         <bitmap platform="win" stock_id="run-case"/>
         <help>Run all cells</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="print_case">
-        <label>Print case\tCtrl-Shift-P</label>
+        <label>_Print case\tCtrl-Shift-P</label>
         <bitmap platform="win" stock_id="print-case"/>
         <help>Run and print all cells</help>
     </object>
