@@ -151,3 +151,15 @@ cd "$srcdir"
 
 $PERFORM "$prefix"/bin/wx_test "$@" --ash_nazg --data_path="$prefix"/data 2>&1 \
   | tee "$log_dir"/gui_test | sed -e "$gui_test_clutter"
+
+# Wait an arbitrary five seconds for 'wineserver' to end, to avoid an
+#   "X connection to [...] broken"
+# message when run by 'xvfb-run'--see [reformatted]:
+#   https://lists.nongnu.org/archive/html/lmi/2020-10/msg00077.html
+#   [...] I believe that the X server connection is actually opened
+#   not by wine itself, but by wineserver which [it] launches. But
+#   xvfb-run exits once wine command itself does, while wineserver
+#   exits slightly later, so it loses its connection to the server
+#   because it [exits] earlier.
+printf 'waiting five seconds for wineserver to terminate...'
+sleep 5
