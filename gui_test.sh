@@ -161,5 +161,5 @@ $PERFORM "$prefix"/bin/wx_test "$@" --ash_nazg --data_path="$prefix"/data 2>&1 \
 #   xvfb-run exits once wine command itself does, while wineserver
 #   exits slightly later, so it loses its connection to the server
 #   because it [exits] earlier.
-printf 'waiting five seconds for wineserver to terminate...'
+printf 'waiting five seconds for wineserver to terminate...\n'
 sleep 5
