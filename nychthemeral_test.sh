@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-# Run a comprehensive set of tests (excluding the automated GUI test).
+# Run a comprehensive set of tests.
 
 # Copyright (C) 2018, 2019, 2020, 2021 Gregory W. Chicares.
 #
@@ -70,6 +70,111 @@ install_clutter='
 /^$/d
 '
 
+# GUI-test output containing the substring
+#   'not running distribution tests'
+# is filtered out because it results from running 'wx_test' without
+# any proprietary input subdirectory. SOMEDAY !! It would be good to
+# filter out whatever normal output is seen when such a subdirectory
+# is used.
+#
+# The "X connection to [...] broken" message might be avoided by
+# techniques such as are mentioned here [reformatted]:
+#   https://lists.nongnu.org/archive/html/lmi/2020-10/msg00077.html
+#   [...] I believe that the X server connection is actually opened
+#   not by wine itself, but by wineserver which [it] launches. But
+#   xvfb-run exits once wine command itself does, while wineserver
+#   exits slightly later, so it loses its connection to the server
+#   because it [exits] earlier.
+# but it is more expedient simply to filter it out (with a regex
+# that, for some unknown reason, mustn't end in '$').
+
+gui_test_clutter='
+/^about_dialog_version: started$/d
+/^About dialog version string is .[[:digit:]]\+T[[:digit:]]\+Z.\.$/d
+/^time=[[:digit:]]\+ms (for about_dialog_version)$/d
+/^about_dialog_version: ok$/d
+/^benchmark_census: started$/d
+/^Run case for [_[:alnum:]]\+\.cns: [[:digit:]]\+ms elapsed$/d
+/^Print case to PDF for [_[:alnum:]]\+\.cns: [[:digit:]]\+ms elapsed$/d
+/^Print case to spreadsheet for [_[:alnum:]]\+\.cns: [[:digit:]]\+ms elapsed$/d
+/^time=[[:digit:]]\+ms (for benchmark_census)$/d
+/^benchmark_census: ok$/d
+/^calculation_summary: started$/d
+/^time=[[:digit:]]\+ms (for calculation_summary)$/d
+/^calculation_summary: ok$/d
+/^configurable_settings: started$/d
+/^configurable_settings: skipped (not running distribution tests)$/d
+/^create_open_census: started$/d
+/^time=[[:digit:]]\+ms (for create_open_census)$/d
+/^create_open_census: ok$/d
+/^create_open_database: started$/d
+/^time=[[:digit:]]\+ms (for create_open_database)$/d
+/^create_open_database: ok$/d
+/^create_open_gpt: started$/d
+/^time=[[:digit:]]\+ms (for create_open_gpt)$/d
+/^create_open_gpt: ok$/d
+/^create_open_illustration: started$/d
+/^time=[[:digit:]]\+ms (for create_open_illustration)$/d
+/^create_open_illustration: ok$/d
+/^create_open_mec: started$/d
+/^time=[[:digit:]]\+ms (for create_open_mec)$/d
+/^create_open_mec: ok$/d
+/^create_open_policy: started$/d
+/^time=[[:digit:]]\+ms (for create_open_policy)$/d
+/^create_open_policy: ok$/d
+/^create_open_rounding: started$/d
+/^time=[[:digit:]]\+ms (for create_open_rounding)$/d
+/^create_open_rounding: ok$/d
+/^create_open_strata: started$/d
+/^time=[[:digit:]]\+ms (for create_open_strata)$/d
+/^create_open_strata: ok$/d
+/^create_open_text: started$/d
+/^time=[[:digit:]]\+ms (for create_open_text)$/d
+/^create_open_text: ok$/d
+/^default_input: started$/d
+/^default_input: skipped (not running distribution tests)$/d
+/^time=[[:digit:]]\+ms (for default_input)$/d
+/^default_input: ok$/d
+/^default_update: started$/d
+/^default_update: skipped (not running distribution tests)$/d
+/^expiry_dates: started$/d
+/^Expiry dates: begin=[[:digit:]]\+ ([[:digit:]]\+-[[:digit:]]\+-[[:digit:]]\+), end=[[:digit:]]\+ ([[:digit:]]\+-[[:digit:]]\+-[[:digit:]]\+)$/d
+/^time=[[:digit:]]\+ms (for expiry_dates)$/d
+/^expiry_dates: ok$/d
+/^input_sequences: started$/d
+/^time=[[:digit:]]\+ms (for input_sequences)$/d
+/^input_sequences: ok$/d
+/^input_validation: started$/d
+/^input_validation: skipped (not running distribution tests)$/d
+/^log_error: started$/d
+/^time=[[:digit:]]\+ms (for log_error)$/d
+/^log_error: ok$/d
+/^paste_census: started$/d
+/^time=[[:digit:]]\+ms (for paste_census)$/d
+/^paste_census: ok$/d
+/^pdf_census: started$/d
+/^time=[[:digit:]]\+ms (for pdf_census)$/d
+/^pdf_census: ok$/d
+/^pdf_illustration: started$/d
+/^time=[[:digit:]]\+ms (for pdf_illustration)$/d
+/^pdf_illustration: ok$/d
+/^validate_output_census: started$/d
+/^time=[[:digit:]]\+ms (for validate_output_census)$/d
+/^validate_output_census: ok$/d
+/^validate_output_illustration: started$/d
+/^time=[[:digit:]]\+ms (for validate_output_illustration)$/d
+/^validate_output_illustration: ok$/d
+/^validate_output_mec: started$/d
+/^time=[[:digit:]]\+ms (for validate_output_mec)$/d
+/^validate_output_mec: ok$/d
+/^time=[[:digit:]]\+ms (for all tests)$/d
+/^Warning: Test files path ..opt.lmi.gui_test. doesn.t exist\.$/d
+/^NOTE: starting the test suite$/d
+/^SUCCESS: [[:digit:]]\+ tests successfully completed\.$/d
+/^NOTE: [[:digit:]]\+ tests were skipped$/d
+/^X connection to .* broken (explicit kill or server shutdown)\./d
+'
+
 cli_cgi_clutter='
 /^Test speed:/d
 /^Timing test skipped: takes too long in debug mode$/d
@@ -104,6 +209,7 @@ schemata_clutter='
 
 nychthemeral_clutter='
 /^# install; check physical closure/d
+/^# GUI test/d
 /^# cgi and cli tests/d
 /^Test common gateway interface:/d
 /^Test command line interface:/d
@@ -198,7 +304,17 @@ printf '# install; check physical closure\n\n'
 make "$coefficiency" install check_physical_closure 2>&1 \
   | tee "$log_dir"/install | sed -e "$build_clutter" -e "$install_clutter"
 
-printf '  Production system built--ready to start GUI test in another session.\n' > /dev/tty
+# The automated GUI test simulates keyboard and mouse actions, so
+# no such actions must be performed manually while it is running
+# (unless it is run in a virtual frame buffer, as with Xvfb here).
+if [ "x86_64-pc-linux-gnu" != "$LMI_TRIPLET" ]
+then
+  printf '\n# GUI test\n\n'
+  xvfb-run "$PERFORM" "$prefix"/bin/wx_test --ash_nazg --data_path="$prefix"/data 2>&1 \
+    | tee "$log_dir"/gui_test | sed -e "$build_clutter" -e "$gui_test_clutter"
+else
+  printf '\n# GUI test skipped--it does not work properly with GTK\n'
+fi
 
 printf '\n# cgi and cli tests\n\n'
 make "$coefficiency" --output-sync=recurse cgi_tests cli_tests 2>&1 \
@@ -309,10 +425,5 @@ printf '\n# test PETE rebuild\n\n'
 
 cd /opt/lmi/src/lmi/tools/pete-2.1.1
 ./rebuild_pete.sh >/dev/null
-
-# The automated GUI test simulates keyboard and mouse actions, so
-# no such actions must be performed manually while it is running.
-# Therefore, it is deliberately excluded from this script.
-printf "\n  Do not forget to run the 'gui_test.sh' script.\n"
 } 2>&1 | tee "$log_dir"/nychthemeral_test | sed -e "$nychthemeral_clutter"
 done
