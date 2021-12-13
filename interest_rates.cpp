@@ -749,7 +749,7 @@ void InterestRates::DynamicMlySepAcctRate
                 ,dynamic_spread
                 ,SepAcctSpreadMethod_
                 ,SepAcctFloor_[year]
-                ,InvestmentManagementFee_[year]
+                ,AnnualSepAcctIMFRate
                 );
             }
             break;
