@@ -1060,8 +1060,6 @@ void   AccountValue::IncrementEOY(int)
     {return;}
 double AccountValue::InforceLivesBoy() const
     {return 0.0;}
-double AccountValue::InforceLivesEoy() const
-    {return 0.0;}
 void   AccountValue::InitializeLife(mcenum_run_basis)
     {return;}
 void   AccountValue::InitializeYear()

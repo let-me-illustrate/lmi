@@ -363,7 +363,6 @@ census_run_result run_census_in_parallel::operator()
             // year's claims, which is consistent with curtate
             // mortality.
 
-            double eoy_inforce_lives      = 0.0;
             for(auto& i : cell_values)
                 {
                 if(i.PrecedesInforceDuration(year, 11))
@@ -371,7 +370,6 @@ census_run_result run_census_in_parallel::operator()
                     continue;
                     }
                 i.SetClaims();
-                eoy_inforce_lives      += i.InforceLivesEoy();
                 i.IncrementEOY(year);
                 }
 

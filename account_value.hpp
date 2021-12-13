@@ -100,7 +100,6 @@ class LMI_SO AccountValue final
     int                    GetLength     () const;
 
     double   InforceLivesBoy        () const;
-    double   InforceLivesEoy        () const;
     currency GetSepAcctAssetsInforce() const;
 
     void process_payment          (currency);

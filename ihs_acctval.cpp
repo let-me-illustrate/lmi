@@ -1482,14 +1482,8 @@ double AccountValue::InforceLivesBoy() const
 {
     bool const b {ItLapsed || BasicValues::GetLength() <= Year};
     return b ? 0.0 : partial_mortality_lx().at(Year);
-}
-
-/// End of year inforce lives, reflecting lapses and survivorship.
-
-double AccountValue::InforceLivesEoy() const
-{
-    bool const b {ItLapsed || BasicValues::GetLength() <= Year};
-    return b ? 0.0 : partial_mortality_lx().at(1 + Year);
+    // If EOY rather than BOY is wanted, add one to 'Year':
+//  return b ? 0.0 : partial_mortality_lx().at(1 + Year);
 }
 
 //============================================================================
