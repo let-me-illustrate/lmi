@@ -545,6 +545,10 @@ if test "x$GXX" == "xyes"; then
         dnl These warnings are clang-specific but also can't be easily fixed.
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-anon-enum-enum-conversion)
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-volatile)
+
+        dnl This one currently occurs in wx headers and should be re-enabled
+        dnl after updating to the wx version in which it is fixed.
+        LMI_CXX_ADD_IF_SUPPORTED(-Wno-deprecated-copy)
     fi
 fi
 
