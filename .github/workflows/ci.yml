@@ -395,4 +395,6 @@ jobs:
                 sleep 3
             done
             echo 'Launching the GUI test:'
-            DISPLAY=:10 ./gui_test.sh
+            . ./set_toolchain.sh
+            export DISPLAY=:10
+            $PERFORM /opt/lmi/bin/wx_test --ash_nazg --data_path=/opt/lmi/data
