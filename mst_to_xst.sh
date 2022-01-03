@@ -2,7 +2,7 @@
 
 # Copy MST files, obfuscating them for distribution.
 
-# Copyright (C) 2018, 2019, 2020, 2021 Gregory W. Chicares.
+# Copyright (C) 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
