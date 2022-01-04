@@ -71,10 +71,18 @@ findmnt -ro SOURCE,TARGET \
   | sed -e's,^[/A-Za-z0-9_-]*[[]\([^]]*\)[]],\1,' \
   | column -t
 
-# If the next command fails due to unwanted dormant sessions, then
+# If the next command fails due to an unwanted dormant session, then
 # a command such as
-#   sudo schroot -e -c `schroot -l --all-sessions`
-# may be used to terminate them.
+#   sudo schroot -e -c session:[name of session]
+# may be used to terminate it. If that fails with
+#   E: 10mount: umount: /run/schroot/mount/[name of session]: target is busy.
+#   E: 10mount: rmdir: failed to remove '/var/run/schroot/mount/[...]:
+#      Device or resource busy
+# then
+#   sudo umount -l /run/schroot/mount/[name of session]
+# may be necessary, where '-f' for "force" would seem too severe, and
+# '-l' for "lazy" seems sufficient.
+
 findmnt | grep "${CHRTNAME}" && exit 9
 
 # Use '--one-file-system' because it was designed for this use case:
