@@ -417,11 +417,11 @@ bool application_test::process_command_line(int& argc, char* argv[])
 
     if(!fs::exists(test_files_path_))
         {
-        warning()
+        std::cout
             << "Test files path '"
             << test_files_path_
-            << "' doesn't exist."
-            << std::flush
+            << "' doesn't exist--using current path instead."
+            << std::endl
             ;
         test_files_path_ = fs::current_path();
         }
