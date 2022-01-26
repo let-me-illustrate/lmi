@@ -33,6 +33,9 @@
 class LMI_SO irc7702_tables final
 {
     friend void Test_Corridor_and_7PP();
+    friend void Test_1980_CSO();
+    friend void Test_2001_CSO();
+    friend void Test_2017_CSO();
 
   public:
     irc7702_tables
