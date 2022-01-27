@@ -103,8 +103,8 @@ function zle-line-init zle-keymap-select {
 zle -N zle-line-init
 zle -N zle-keymap-select
 
-HISTSIZE=1000
-SAVEHIST=1000
+HISTSIZE=1000000
+SAVEHIST=$HISTSIZE
 HISTFILE=~/.history
 setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_SPACE
