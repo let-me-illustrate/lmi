@@ -34,6 +34,24 @@
 #include <cmath>                        // log()
 #include <vector>
 
+class irc7702_tables_test
+{
+  public:
+    static void test()
+        {
+        test_corridor_and_7pp();
+        test_1980_cso();
+        test_2001_cso();
+        test_2017_cso();
+        }
+
+  private:
+    static void test_corridor_and_7pp();
+    static void test_1980_cso();
+    static void test_2001_cso();
+    static void test_2017_cso();
+};
+
 // These two arrays are pasted from the "corridor mult" and "7Pt"
 // columns of 'validate_2001cso', after loading that spreadsheet
 // in 'gnumeric' and formatting those columns to twenty decimals.
@@ -454,7 +472,7 @@ static double const ss_ol_7pp[100] =
 
 /// Test CVAT corridor and seven-pay premium.
 
-void Test_Corridor_and_7PP()
+void irc7702_tables_test::test_corridor_and_7pp()
 {
     double constexpr iglp = 0.04;
     std::vector<double> const operative_i(100, iglp);
@@ -990,7 +1008,7 @@ static std::vector<cf_data> const olcf_2017_cso_endt_95 =
 // OL commutation functions. They match the 'OLCF_CSO' spreadsheet's
 // values very closely.
 
-void Test_1980_CSO()
+void irc7702_tables_test::test_1980_cso()
 {
     int constexpr endt_age = 100;
     double constexpr iglp = 0.04;
@@ -1034,7 +1052,7 @@ void Test_1980_CSO()
         ;
 }
 
-void Test_2001_CSO()
+void irc7702_tables_test::test_2001_cso()
 {
     int constexpr endt_age = 100;
     double constexpr iglp = 0.04;
@@ -1078,7 +1096,7 @@ void Test_2001_CSO()
         ;
 }
 
-void Test_2017_CSO()
+void irc7702_tables_test::test_2017_cso()
 {
     int constexpr endt_age = 95;
     double constexpr iglp = 0.02;
@@ -1124,10 +1142,7 @@ void Test_2017_CSO()
 
 int test_main(int, char*[])
 {
-    Test_Corridor_and_7PP();
-    Test_1980_CSO();
-    Test_2001_CSO();
-    Test_2017_CSO();
+    irc7702_tables_test::test();
 
     return EXIT_SUCCESS;
 }
