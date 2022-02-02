@@ -41,7 +41,23 @@ WINEDLLOVERRIDES=mscoree=d wine wineboot
 #   0014:err:ole:get_local_server_stream Failed: 80004002
 #   Could not load wine-gecko. HTML rendering will be disabled.
 
-# Configure wine:
+# Configure wine.
+#
+# In theory, these changes are scriptable, using this guide:
+#   https://wiki.winehq.org/index.php?title=Useful_Registry_Keys
+# which is sometimes reliable--for example, this command:
+#   wine reg query "HKCU\Control Panel\International" /v "sShortDate"
+# does seem to work, whereas this one:
+#   wine reg query "HKLM\Hardware Profiles\Current\Software\Fonts" /v "LogPixels"
+# does not. A 'wine regedit' search finds "LogPixels" under
+#   HKCU\Control Panel\Desktop
+#   HKCU\Software\Wine\Fonts
+# and several other keys (with the default value of 96 in some and a
+# custom value of 192 in others), but not under
+#   HKLM\Hardware Profiles\Current\Software\Fonts
+# as the official documentation suggests. It is expeditious to use
+# the 'winecfg' GUI, which, although inconvenient, has the virtue of
+# actually working.
 
 # First, to make it usable in general ("Default Settings"):
 #   on "Applications" tab, set "Windows Version" to "XP"
