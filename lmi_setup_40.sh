@@ -64,9 +64,14 @@ WINEDLLOVERRIDES=mscoree=d wine wineboot
 #   on "Graphics" tab, set DPI to 192
 winecfg
 
-# HKCU\Control Panel\International:
-#   set sShortDate and sLongDate to "yyyy-MM-dd"
+# Second, fix date formats (which are not exposed in 'winecfg'):
+#   HKCU\Control Panel\International:
+#     set sShortDate and sLongDate to "yyyy-MM-dd"
+# using either the 'regedit' GUI:
 wine regedit
+# or the command-line registry editor:
+#   wine reg add "HKCU\Control Panel\International" /v "sLongDate"  /d "yyyy-MM-dd" /f
+#   wine reg add "HKCU\Control Panel\International" /v "sShortDate" /d "yyyy-MM-dd" /f
 
 # Troubleshoot wine:
 #
