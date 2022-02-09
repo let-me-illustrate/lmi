@@ -700,7 +700,12 @@ bool Skeleton::OnInit()
 
         authenticate_system();
 
-        wxInitAllImageHandlers();
+#if wxUSE_LIBPNG
+        wxImage::AddHandler(new(wx) wxPNGHandler);
+#endif
+#if wxUSE_ICO_CUR
+        wxImage::AddHandler(new(wx) wxICOHandler);
+#endif
 
         // For GTK+, native theme takes precedence over local icons.
         // For other platforms, local icons take precedence.
