@@ -132,6 +132,9 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>Release\lmi_wx.bsc</OutputFile>
     </Bscmake>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -172,6 +175,9 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>Debug\lmi_wx.bsc</OutputFile>
     </Bscmake>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">
     <Midl>
@@ -207,6 +213,9 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>Release_DLL\lmi_wx.bsc</OutputFile>
     </Bscmake>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">
     <Midl>
@@ -245,6 +254,9 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>Debug_DLL\lmi_wx.bsc</OutputFile>
     </Bscmake>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="alert_wx.cpp">
