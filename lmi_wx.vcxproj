@@ -132,8 +132,9 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>Release\lmi_wx.bsc</OutputFile>
     </Bscmake>
+    <Manifest />
     <Manifest>
-      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+      <AdditionalManifestFiles>3rdparty/wxWidgets/include/wx/msw/wx_dpi_aware_pmv2.manifest</AdditionalManifestFiles>
     </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -175,8 +176,9 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>Debug\lmi_wx.bsc</OutputFile>
     </Bscmake>
+    <Manifest />
     <Manifest>
-      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+      <AdditionalManifestFiles>3rdparty/wxWidgets/include/wx/msw/wx_dpi_aware_pmv2.manifest</AdditionalManifestFiles>
     </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">
@@ -213,8 +215,9 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>Release_DLL\lmi_wx.bsc</OutputFile>
     </Bscmake>
+    <Manifest />
     <Manifest>
-      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+      <AdditionalManifestFiles>3rdparty/wxWidgets/include/wx/msw/wx_dpi_aware_pmv2.manifest</AdditionalManifestFiles>
     </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">
@@ -254,8 +257,9 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>Debug_DLL\lmi_wx.bsc</OutputFile>
     </Bscmake>
+    <Manifest />
     <Manifest>
-      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+      <AdditionalManifestFiles>3rdparty/wxWidgets/include/wx/msw/wx_dpi_aware_pmv2.manifest</AdditionalManifestFiles>
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
