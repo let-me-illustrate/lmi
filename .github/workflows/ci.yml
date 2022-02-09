@@ -31,6 +31,9 @@ jobs:
           - name: MSW/make/mingw32
             triplet: i686-w64-mingw32
             mingw: true
+          - name: MSW/make/mingw64
+            triplet: x86_64-w64-mingw32
+            mingw: true
           - name: Linux/make/gcc
           - name: Linux/autotools/gcc
             autotools: true
@@ -75,14 +78,25 @@ jobs:
 
           if [ ${{ matrix.mingw }} ]
           then
-            packages="$packages g++-mingw-w64-i686 wine"
+            case "$LMI_TRIPLET" in
+              i686-*)
+                # This is additionally required when using 32-bit builds for
+                # installing 32 bit Wine which, in turn, is required for
+                # running 32 bit lmi binaries.
+                sudo dpkg --add-architecture i386
+                sudo apt-get -q -o=Dpkg::Use-Pty=0 update
 
-            # This is additionally required when using 32-bit builds, currently
-            # do it unconditionally because our only MinGW build is 32 bits.
-            sudo dpkg --add-architecture i386
-            sudo apt-get -q -o=Dpkg::Use-Pty=0 update
+                packages="$packages g++-mingw-w64-i686 wine wine32"
+                ;;
 
-            packages="$packages wine32"
+              x86_64-*)
+                packages="$packages g++-mingw-w64-x86-64 wine wine64"
+                ;;
+
+              *)
+                echo 'Unknown MinGW platform.'
+                exit 1
+            esac
           else
             packages="$packages libgtk-3-dev"
           fi
