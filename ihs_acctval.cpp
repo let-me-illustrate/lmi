@@ -1,6 +1,6 @@
 // Account value.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -1482,14 +1482,8 @@ double AccountValue::InforceLivesBoy() const
 {
     bool const b {ItLapsed || BasicValues::GetLength() <= Year};
     return b ? 0.0 : partial_mortality_lx().at(Year);
-}
-
-/// End of year inforce lives, reflecting lapses and survivorship.
-
-double AccountValue::InforceLivesEoy() const
-{
-    bool const b {ItLapsed || BasicValues::GetLength() <= Year};
-    return b ? 0.0 : partial_mortality_lx().at(1 + Year);
+    // If EOY rather than BOY is wanted, add one to 'Year':
+//  return b ? 0.0 : partial_mortality_lx().at(1 + Year);
 }
 
 //============================================================================

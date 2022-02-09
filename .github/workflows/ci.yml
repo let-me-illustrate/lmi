@@ -93,7 +93,11 @@ jobs:
           # when building for MSW, but with autotools build we can avoid
           # installing them in the latter case.
           if [ -z "${{ matrix.autotools }}" -o -z "${{ matrix.mingw }}" ]; then
-            packages="$packages libunwind-dev libdw-dev libpcre2-dev"
+            # Those are never used with clang currently.
+            if [ "${{ matrix.compiler }}" != clang ]; then
+              packages="$packages libunwind-dev libdw-dev"
+            fi
+            packages="$packages libpcre2-dev"
           fi
 
           if [ "${{ matrix.compiler }}" = clang ]; then

@@ -2,7 +2,7 @@
 
 # Create a chroot for cross-building "Let me illustrate...".
 #
-# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
+# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -84,6 +84,7 @@ apt-get --assume-yes install \
   bc \
   bsdmainutils \
   bzip2 \
+  clang \
   curl \
   cvs \
   default-jre \
@@ -114,7 +115,9 @@ apt-get --assume-yes install \
   vim-gtk \
   wget \
   wine \
+  x11-apps \
   xsltproc \
+  xvfb \
   zsh \
  >"${logdir}/${CHRTNAME}"-apt-get-log 2>&1
 

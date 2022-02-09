@@ -1,6 +1,6 @@
 // Distinct and composite values for cells in a group.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -363,7 +363,6 @@ census_run_result run_census_in_parallel::operator()
             // year's claims, which is consistent with curtate
             // mortality.
 
-            double eoy_inforce_lives      = 0.0;
             for(auto& i : cell_values)
                 {
                 if(i.PrecedesInforceDuration(year, 11))
@@ -371,7 +370,6 @@ census_run_result run_census_in_parallel::operator()
                     continue;
                     }
                 i.SetClaims();
-                eoy_inforce_lives      += i.InforceLivesEoy();
                 i.IncrementEOY(year);
                 }
 

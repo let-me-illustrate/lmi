@@ -70,6 +70,11 @@ git bundle create /srv/cache_for_lmi/blessed/$(date -u +'%Y%m%dT%H%MZ')-catchup.
 
 cp -ia src/* /opt/lmi/src/products/src
 
+  # Update local blessed repository from specially-mounted host dir
+
+cd /opt/lmi/blessed/proprietary
+git fetch /srv/cache_for_lmi/blessed/proprietary master:master
+
   # Whenever a rate table changes, regenerate the binary database
 
 cd /opt/lmi/data
