@@ -91,6 +91,13 @@ jobs:
 
               x86_64-*)
                 packages="$packages g++-mingw-w64-x86-64 wine wine64"
+
+                # Set WINEDEBUG to avoid annoying warnings about wine32 being
+                # missing: this is not a problem in our case, we want to only
+                # run 64-bit programs in this build, so set WINEDEBUG to a
+                # value equivalent to its default/unset value but recognized
+                # as disabling error output by Debian /usr/bin/wine script.
+                export 'WINEDEBUG=-all,err+all,fixme+all' >> $GITHUB_ENV
                 ;;
 
               *)
