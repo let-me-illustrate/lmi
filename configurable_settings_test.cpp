@@ -79,7 +79,7 @@ void configurable_settings_test::test_backward_compatibility()
     fs::path const filename("eraseme");
     fs::ofstream ofs(filename, ios_out_trunc_binary());
     ofs
-//      << "<?xml version=\"1.0\"?>\n"
+        << "<?xml version=\"1.0\"?>\n"
         << "<configurable_settings>\n"
         << "<custom_input_filename>[renamed]</custom_input_filename>\n"
         << "<custom_output_filename>[renamed]</custom_output_filename>\n"

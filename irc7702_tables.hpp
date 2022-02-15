@@ -32,7 +32,7 @@
 
 class LMI_SO irc7702_tables final
 {
-    friend void Test_Corridor_and_7PP();
+    friend class irc7702_tables_test;
 
   public:
     irc7702_tables
