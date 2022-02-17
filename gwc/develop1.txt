@@ -255,7 +255,7 @@ make $coefficiency unit_tests build_type=safestdlib 2>&1 | tee >(grep '\*\*\*') 
 
   # Run a single unit test
 
-make $coefficiency unit_tests unit_test_targets=regex_test.exe >../log 2>&1
+make $coefficiency unit_tests unit_test_targets=regex_test >../log 2>&1
 
   # Build with a compiler other than gcc
 

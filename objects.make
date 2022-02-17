@@ -435,10 +435,11 @@ unit_test_targets := \
   zero_test \
 
 unit_test_targets := \
-  $(addsuffix $(EXEEXT), \
-    $(filter-out $(excluded_unit_test_targets), $(unit_test_targets) \
-    ) \
-  )
+  $(filter-out $(excluded_unit_test_targets), $(unit_test_targets) \
+  ) \
+
+# Append $(EXEEXT) p.r.n. to produce full names of binary targets.
+unit_test_binaries := $(addsuffix $(EXEEXT), $(unit_test_targets))
 
 # Link these objects for all tests:
 common_test_objects := \
