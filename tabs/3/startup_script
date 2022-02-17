@@ -13,6 +13,7 @@ i="make \$coefficiency --output-sync=recurse unit_tests build_type=safestdlib 2>
 j='./nychthemeral_test.sh'
 k='make $coefficiency install check_physical_closure 2>&1 | less -S'
 l='make $coefficiency unit_tests unit_test_targets=regex_test.exe 2>&1 | less -S'
+m='make $coefficiency LMI_COMPILER=gcc LMI_TRIPLET=x86_64-pc-linux-gnu check_concinnity 2>&1 |less -S -N'
 
 print -rs $b ; echo $b ; eval $b
 print -rs $c ; echo $c
@@ -25,6 +26,7 @@ print -rs $i ; echo $i
 print -rs $j ; echo $j
 print -rs $k ; echo $k
 print -rs $l ; echo $l
+print -rs $m ; echo $m
 
 unset a
 unset b
@@ -38,3 +40,4 @@ unset i
 unset j
 unset k
 unset l
+unset m
