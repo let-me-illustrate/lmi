@@ -57,7 +57,7 @@ assert_not_chrooted
 # created by these scripts (which mount that directory).
 
 # Also copy any desired msw software into the chroot now, e.g.:
-#   cp -a /srv/chroot/some-prior-chroot/opt/xyzzy /srv/chroot/${CHRTNAME}/opt/xyzzy
+#   cp -a /srv/chroot/some-prior-chroot/opt/xyzzy /srv/chroot/"${CHRTNAME}"/opt/xyzzy
 # unless it requires running an "install" program, which must be
 # postponed until wine has been installed (in a later script). For
 # example, to copy all software installed in subdirectories of /opt/
@@ -68,7 +68,7 @@ assert_not_chrooted
 
 # Configure ssh, iff this chroot needs write access to savannah.
 # The easiest way is to copy existing credentials, e.g.:
-cp -a ~/.ssh/ /srv/chroot/${CHRTNAME}/home/"${NORMAL_USER}" || true
+cp -a ~/.ssh/ /srv/chroot/"${CHRTNAME}"/home/"${NORMAL_USER}" || true
 # Make sure the .ssh/config file contains:
 #   Protocol 2
 #   HashKnownHosts no
