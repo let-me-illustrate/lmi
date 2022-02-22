@@ -24,7 +24,6 @@
 # CODENAME: debian release wanted in chroot (like `lsb_release --codename`)
 # CHRTVER : local serial number (nothing to do with /etc/debian_version)
 # CHRTNAME: physical name of chroot (SCHROOT_CHROOT_NAME)
-# ALLONGE:  an optional global uniquifier
 
 # Variables defined but unused here: this file should only be sourced.
 # shellcheck disable=SC2034
@@ -32,7 +31,7 @@
 set -evx
 
 CODENAME=bookworm
-CHRTVER=4${ALLONGE}
+CHRTVER=4
 CHRTNAME=lmi_${CODENAME}_${CHRTVER}
 
 umask
