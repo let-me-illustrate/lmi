@@ -131,7 +131,10 @@ cd free/src || { printf 'failed: cd\n'; exit 3; }
 # Use git's own protocol wherever possible. In case that's blocked
 # by a corporate firewall, fall back on https. In case a firewall
 # inexplicably blocks the gnu.org domain, try Vadim's github clone
-# as a last resort.
+# as a last resort. Any messages like
+#   fatal: read error: Connection timed out
+# can be ignored as long as one of the subsequent git-clone commands
+# succeeds.
 
 git clone git://git.savannah.nongnu.org/lmi.git \
   || git clone https://git.savannah.nongnu.org/r/lmi.git \

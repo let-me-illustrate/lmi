@@ -69,6 +69,9 @@ assert_not_chrooted
 # Configure ssh, iff this chroot needs write access to savannah.
 # The easiest way is to copy existing credentials, e.g.:
 cp -a ~/.ssh/ /srv/chroot/"${CHRTNAME}"/home/"${NORMAL_USER}" || true
+# ignoring any message like
+#   cannot stat ‘/home/[some_user_name]/.ssh/’: No such file or directory
+#
 # Make sure the .ssh/config file contains:
 #   Protocol 2
 #   HashKnownHosts no
