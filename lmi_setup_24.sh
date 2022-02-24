@@ -33,6 +33,9 @@ assert_chrooted
 groupadd --gid="${NORMAL_GROUP_GID}" "${NORMAL_GROUP}"
 
 # Add an 'lmi' group, which may be useful in a multi-user chroot.
+# This message:
+#   groupadd: group 'lmi' already exists
+# can safely be ignored.
 getent group 1001 || groupadd --gid=1001 lmi || echo "Oops."
 
 i=1
@@ -59,6 +62,11 @@ do
   # Hardcode the salt so that repeated openssl invocations yield
   # identical results, to avoid gratuitous regressions when comparing
   # successive logs.
+  #
+  # Don't worry about this:
+  #   useradd warning: ... uid ... outside of the
+  #   UID_MIN 1000 and UID_MAX 60000 range.
+  # which is normal and expected for "system" users.
 
   useradd \
     --gid="${NORMAL_GROUP_GID}" \
