@@ -4,10 +4,11 @@
   #   https://lists.nongnu.org/archive/html/lmi/2016-03/msg00031.html
 
   # Initial setup: create a working copy, cloned from the
-  # already-provided "blessed" repo...
+  # already-provided "blessed" repo (only if necessary--this
+  # should already have been done automatically in any chroot) ...
 
 cd /opt/lmi
-git clone file:///opt/lmi/blessed/proprietary
+git clone file:///srv/cache_for_lmi/blessed/proprietary
 
   # ...then make sure it's set up as intended:
 
@@ -34,7 +35,7 @@ git commit --all -m"Another set of changes"
 cd /opt/lmi/proprietary
 git bundle create YourBundleName origin/master..HEAD
   # for example (substitute your own initials)
-git bundle create /opt/lmi/blessed/$(date -u +'%Y%m%dT%H%MZ')-gwc.bundle origin/master..HEAD
+git bundle create /srv/cache_for_lmi/blessed/$(date -u +'%Y%m%dT%H%MZ')-gwc.bundle origin/master..HEAD
 
   # Email that bundle, then push the changes to your "blessed" repository
 
@@ -69,11 +70,6 @@ git bundle create /srv/cache_for_lmi/blessed/$(date -u +'%Y%m%dT%H%MZ')-catchup.
   # source code into the directory used by the compiler:
 
 cp -ia src/* /opt/lmi/src/products/src
-
-  # Update local blessed repository from specially-mounted host dir
-
-cd /opt/lmi/blessed/proprietary
-git fetch /srv/cache_for_lmi/blessed/proprietary master:master
 
   # Whenever a rate table changes, regenerate the binary database
 

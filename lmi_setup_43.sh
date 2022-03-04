@@ -41,11 +41,12 @@ if [ "greg" = "$(whoami)" ]; then
   git remote set-url --push origin chicares@git.sv.gnu.org:/srv/git/lmi.git
 fi
 
-# Duplicate proprietary repository (if available).
-# First, copy "blessed" repository (here, 'cp' is sufficient: this
-# bare repository has no references that need to be resolved):
 cd /opt/lmi || { printf 'failed: cd\n'; exit 3; }
-cp --dereference --preserve --recursive /srv/cache_for_lmi/blessed .
+# Duplicate proprietary repository (if available) from another
+# machine to the host's /srv/cache_for_lmi/ , which has been
+# identity-mounted in the chroot. Here, 'cp' is sufficient (this
+# bare repository has no references that need to be resolved):
+# cp --dereference --preserve --recursive WHENCEVER/blessed /srv/cache_for_lmi/blessed
 #
 # Fix ownership and permissions of bare repository, just in case.
 chgrp -R "$NORMAL_GROUP" blessed
@@ -62,7 +63,7 @@ chmod -R g=u blessed
 #
 # Apparently '--config core.SharedRepository=group' would have little
 # or no benefit here.
-git clone -b master file:///opt/lmi/blessed/proprietary
+git clone -b master file:///srv/cache_for_lmi/blessed/proprietary
 #
 # Fix ownership and permissions of working copy.
 chgrp -R "$NORMAL_GROUP" proprietary

@@ -49,12 +49,13 @@ assert_not_chrooted
 # conserves bandwidth. Directory /srv/cache_for_lmi/ in a native msw
 # installation also contains cygwin files, which are not wanted in a
 # chroot. For convenience, add a bare repository of proprietary files
-# to this directory (after making sure it's up to date), e.g.:
+# (after making sure it's up to date) to this directory, e.g.:
 #   rm -rf /srv/cache_for_lmi/blessed/proprietary
 #   cp --dereference --preserve --recursive \
-#     /srv/chroot/some-prior-chroot/opt/lmi/blessed/ /srv/cache_for_lmi
+#     /srv/chroot/some-prior-chroot/WHENCEVER/blessed/ /srv/cache_for_lmi
 # to update the host; then those files will be accessible in chroots
-# created by these scripts (which mount that directory).
+# created by these scripts (which identity-mount that directory),
+# and 'git push' will update that bare repository in all chroots.
 
 # Also copy any desired msw software into the chroot now, e.g.:
 #   cp -a /srv/chroot/some-prior-chroot/opt/xyzzy /srv/chroot/"${CHRTNAME}"/opt/xyzzy
