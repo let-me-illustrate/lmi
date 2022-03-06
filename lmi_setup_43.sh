@@ -41,7 +41,6 @@ if [ "greg" = "$(whoami)" ]; then
   git remote set-url --push origin chicares@git.sv.gnu.org:/srv/git/lmi.git
 fi
 
-cd /opt/lmi || { printf 'failed: cd\n'; exit 3; }
 # Duplicate proprietary repository (if available) from another
 # machine to the host's /srv/cache_for_lmi/ , which has been
 # identity-mounted in the chroot. Here, 'cp' is sufficient (this
@@ -49,20 +48,21 @@ cd /opt/lmi || { printf 'failed: cd\n'; exit 3; }
 # cp --dereference --preserve --recursive WHENCEVER/blessed /srv/cache_for_lmi/blessed
 #
 # Fix ownership and permissions of bare repository, just in case.
-chgrp -R "$NORMAL_GROUP" blessed
+chgrp -R "$NORMAL_GROUP" /srv/cache_for_lmi/blessed
 # This is better than 'chmod -R g+s' (it affects only directories):
-find blessed -type d -exec chmod g+s {} +
+find /srv/cache_for_lmi/blessed -type d -exec chmod g+s {} +
 # Specifying 's' here would cause many 'S' occurrences in 'ls' output;
 # specifying 'g+w' here would cause pack files to be group writable:
-#   chmod -R g+swX blessed
+#   chmod -R g+swX /srv/cache_for_lmi/blessed
 # Instead, use 'g=u', which doesn't override the earlier 'g+s'--see:
 #   https://lists.nongnu.org/archive/html/lmi/2020-03/msg00019.html
-chmod -R g=u blessed
+chmod -R g=u /srv/cache_for_lmi/blessed
 #
 # Then create a working copy by cloning the bare repository...
 #
 # Apparently '--config core.SharedRepository=group' would have little
 # or no benefit here.
+cd /opt/lmi || { printf 'failed: cd\n'; exit 3; }
 git clone -b master file:///srv/cache_for_lmi/blessed/proprietary
 #
 # Fix ownership and permissions of working copy.
