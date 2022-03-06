@@ -30,7 +30,7 @@ set -evx
 assert_su
 assert_not_chrooted
 
-umount /srv/chroot
+umount /srv
 
 # On a server with tiny 4G partitions for /usr, /var, /tmp, /opt,
 # etc., no partition had room for a chroot. Using RAM:
@@ -52,11 +52,11 @@ umount /srv/chroot
 #   /dev/sdb2: LABEL="lmi" ... TYPE="xfs"
 # Then do:
 #   echo "LABEL=lmi /srv xfs defaults 0 0" >> /etc/fstab
-# removing any former /srv/chroot line.
+# removing any former /srv line.
 #
-# Here, explicitly remount /srv/chroot because it was umounted above:
-mount LABEL=lmi /srv/chroot
-findmnt /srv/chroot
+# Here, explicitly remount /srv because it was umounted above:
+mount LABEL=lmi /srv
+findmnt /srv
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
 echo "$stamp $0: Reconfigured redhat chroot."  | tee /dev/tty
