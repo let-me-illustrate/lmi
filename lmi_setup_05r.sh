@@ -30,7 +30,12 @@ set -evx
 assert_su
 assert_not_chrooted
 
-umount /srv
+# The intention here was to un-mount and re-mount, in the hope of
+# making the server work more reliably across reboots. However,
+# now it fails with a message like:
+#   umount: /srv: target is busy.
+# so maybe it's not such a good idea.
+#umount /srv
 
 # On a server with tiny 4G partitions for /usr, /var, /tmp, /opt,
 # etc., no partition had room for a chroot. Using RAM:
@@ -54,8 +59,8 @@ umount /srv
 #   echo "LABEL=lmi /srv xfs defaults 0 0" >> /etc/fstab
 # removing any former /srv line.
 #
-# Here, explicitly remount /srv because it was umounted above:
-mount LABEL=lmi /srv
+# Here, explicitly remount /srv if it was umounted above:
+# mount LABEL=lmi /srv
 findmnt /srv
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
