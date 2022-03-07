@@ -412,3 +412,7 @@ jobs:
         run: |
             . ./set_toolchain.sh
             $PERFORM /opt/lmi/bin/wx_test --ash_nazg --data_path=/opt/lmi/data
+
+      - name: Setup tmate session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
