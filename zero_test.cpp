@@ -2979,18 +2979,28 @@ int test_main(int, char*[])
     test_former_rounding_problem();
     test_toms748();
 
-    std::cout << "TOMS 748 tests:" << std::endl;
+    std::cout << "--8<----8<--" << std::endl;
+    std::cout << LMI_CONTEXT << std::endl;
 #if defined TEST_ALEFELD
+    std::cout << "TOMS 748 tests: Alefeld, tol 1.0e-7" << std::endl;
     test_alefeld_examples(2650, 1.0e-7);
+    std::cout << "TOMS 748 tests: Alefeld, tol 1.0e-10" << std::endl;
     test_alefeld_examples(2786, 1.0e-10);
+    std::cout << "TOMS 748 tests: Alefeld, tol 1.0e-15" << std::endl;
     test_alefeld_examples(2859, 1.0e-15);
+    std::cout << "TOMS 748 tests: Alefeld, tol 0.0" << std::endl;
     test_alefeld_examples(2884, 0.0);
 #else  // !defined TEST_ALEFELD
+    std::cout << "TOMS 748 tests: Brent, tol 1.0e-7" << std::endl;
     test_alefeld_examples(2804, 1.0e-7);
+    std::cout << "TOMS 748 tests: Brent, tol 1.0e-10" << std::endl;
     test_alefeld_examples(2905, 1.0e-10);
+    std::cout << "TOMS 748 tests: Brent, tol 1.0e-15" << std::endl;
     test_alefeld_examples(2975, 1.0e-15);
+    std::cout << "TOMS 748 tests: Brent, tol 0.0" << std::endl;
     test_alefeld_examples(3008, 0.0);
 #endif // !defined TEST_ALEFELD
+    std::cout << "--8<----8<--" << std::endl;
 
     return 0;
 }

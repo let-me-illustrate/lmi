@@ -43,8 +43,10 @@
 
 #if defined unix || defined __unix__ || defined __unix // Detected POSIX.
 #   define LMI_POSIX
+#   define LMI_OSTYPE "posix"
 #elif defined __WIN32__ || defined _WIN32 || defined WIN32 // Detected msw.
 #   define LMI_MSW
+#   define LMI_OSTYPE "msw"
 #else  // Unknown OS.
 #   error Unknown operating system. Consider contributing support.
 #endif // Unknown OS.
@@ -54,10 +56,12 @@
 #if defined __x86_64 || defined __x86_64__ || defined __amd64 || defined __amd64__ || defined _M_X64
 #   define LMI_X86
 #   define LMI_X86_64
+#   define LMI_MACHINE "x86_64"
 #elif defined _X86_ || defined _M_IX86 || defined i386 || defined __i386
     // Not amd64, so presumably x86-32.
 #   define LMI_X86
 #   define LMI_X86_32
+#   define LMI_MACHINE "x86_32"
 #else  // Unknown hardware.
 #   error Unknown hardware. Consider contributing support.
 #endif // Unknown hardware.
@@ -86,6 +90,11 @@
 #   else   // Unknown compiler.
 #       error Unknown compiler--cannot detect SSE. Consider contributing support.
 #   endif  // Unknown compiler.
+#   if defined LMI_X87
+#       define LMI_FPTYPE "x87"
+#   else   // !defined LMI_X87
+#       define LMI_FPTYPE "sse"
+#   endif  // !defined LMI_X87
 #endif // defined LMI_X86
 
 // This selects a correct snprintf() for MinGW-w64.
@@ -114,8 +123,10 @@
 // Order of tests is important here: real gcc must be tested last.
 #if defined __clang__
 #   define LMI_CLANG
+#   define LMI_COMPILER "clang"
 #elif defined __GNUC__
 #   define LMI_GCC
+#   define LMI_COMPILER "gcc"
 #endif // defined __GNUC__
 
 // It is impossible to compile lmi with g++ prior to version 3, though
@@ -187,6 +198,8 @@
 #if defined LMI_COMO_WITH_MINGW || defined LMI_MSC || defined __MINGW32__ && defined LMI_GCC_VERSION && LMI_GCC_VERSION < 30405
 #   define LMI_MSVCRT
 #endif // Compilers that use the msvc C runtime, without corrections such as libmingwex.
+
+#define LMI_CONTEXT LMI_MACHINE ", " LMI_FPTYPE ", " LMI_COMPILER ", " LMI_OSTYPE
 
 #if defined HAVE_CONFIG_H // Using autoconf.
 #   include "config.h"
