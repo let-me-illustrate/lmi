@@ -44,6 +44,13 @@ assert_not_chrooted
 #   sudo chown greg:greg ${dst} &&
 #   cp --dereference --preserve --recursive ${src}/* ${dst}
 
+# DUPLICATES FOLLOWING PARAGRAPH--RESOLVE IMMINENTLY
+# To duplicate proprietary repository (if available) from another
+# machine to the host's /srv/cache_for_lmi/ , which has been
+# identity-mounted in the chroot (here, 'cp' is sufficient--this
+# bare repository has no references that need to be resolved):
+# cp --dereference --preserve --recursive WHENCEVER/blessed /srv/cache_for_lmi/blessed
+
 # If cached lmi downloads are available elsewhere, copy them now.
 # Copying cache_for_lmi/downloads/ is an optional step that merely
 # conserves bandwidth. Directory /srv/cache_for_lmi/ in a native msw

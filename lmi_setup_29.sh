@@ -46,12 +46,6 @@ mkdir --parents /srv/cache_for_lmi
 chmod g=u+s     /srv/cache_for_lmi
 chown "${NORMAL_USER}":"${NORMAL_GROUP}" /srv/cache_for_lmi
 
-# To duplicate proprietary repository (if available) from another
-# machine to the host's /srv/cache_for_lmi/ , which has been
-# identity-mounted in the chroot (here, 'cp' is sufficient--this
-# bare repository has no references that need to be resolved):
-# cp --dereference --preserve --recursive WHENCEVER/blessed /srv/cache_for_lmi/blessed
-
 # Fix ownership and permissions of bare repository, just in case.
 chgrp -R "$NORMAL_GROUP" /srv/cache_for_lmi/blessed
 # This is better than 'chmod -R g+s' (it affects only directories):
