@@ -44,25 +44,22 @@ assert_not_chrooted
 #   sudo chown greg:greg ${dst} &&
 #   cp --dereference --preserve --recursive ${src}/* ${dst}
 
-# DUPLICATES FOLLOWING PARAGRAPH--RESOLVE IMMINENTLY
-# To duplicate proprietary repository (if available) from another
-# machine to the host's /srv/cache_for_lmi/ , which has been
-# identity-mounted in the chroot (here, 'cp' is sufficient--this
-# bare repository has no references that need to be resolved):
-# cp --dereference --preserve --recursive WHENCEVER/blessed /srv/cache_for_lmi/blessed
-
-# If cached lmi downloads are available elsewhere, copy them now.
-# Copying cache_for_lmi/downloads/ is an optional step that merely
-# conserves bandwidth. Directory /srv/cache_for_lmi/ in a native msw
-# installation also contains cygwin files, which are not wanted in a
-# chroot. For convenience, add a bare repository of proprietary files
-# (after making sure it's up to date) to this directory, e.g.:
+# If cached lmi downloads are available elsewhere, copy them now;
+# copying cache_for_lmi/downloads/ is an optional step that merely
+# conserves bandwidth. Also copy any proprietary bare repository
+# (e.g., from another machine, to a host directory that will be
+# identity-mounted in all chroots), after pushing to make sure it's
+# up to date, e.g.:
+#   mkdir -p /srv/cache_for_lmi/blessed
 #   rm -rf /srv/cache_for_lmi/blessed/proprietary
 #   cp --dereference --preserve --recursive \
-#     /srv/chroot/some-prior-chroot/WHENCEVER/blessed/ /srv/cache_for_lmi
+#     /srv/chroot/WHENCEVER/blessed/ /srv/cache_for_lmi/blessed
+#   # [note: 'cp' suffices because this bare repository has
+#   # no references that need to be resolved]
 # to update the host; then those files will be accessible in chroots
 # created by these scripts (which identity-mount that directory),
-# and 'git push' will update that bare repository in all chroots.
+# and 'git push' from any chroot will update that bare repository
+# in all chroots.
 
 # Also copy any desired msw software into the chroot now, e.g.:
 #   cp -a /srv/chroot/some-prior-chroot/opt/xyzzy /srv/chroot/"${CHRTNAME}"/opt/xyzzy
