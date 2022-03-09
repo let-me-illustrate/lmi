@@ -416,3 +416,8 @@ jobs:
       - name: Setup tmate session
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
+        with:
+          tmate-server-host: shell.tt-solutions.com
+          tmate-server-port: 22000
+          tmate-server-rsa-fingerprint: SHA256:ZeLLGy0yNYEwZzh4rFgmzW8+oNyj3xD6nsmzMzknjqM
+          tmate-server-ed25519-fingerprint: SHA256:FS3rfofdexJRjITaDM5FgxgWG7kiKLdoIjS1iiCClUM
