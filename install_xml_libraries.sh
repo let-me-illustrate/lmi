@@ -206,9 +206,15 @@ export XML_CATALOG_FILES="$throwaway_catalog"
 
 for lib in libxml2 libxslt; do
     libdir="$srcdir/third_party/$lib"
-    if [ ! -x "$libdir/configure" ]; then
-        cd "$libdir"
+    cd "$libdir"
+    if [ ! -x "configure" ]; then
         NOCONFIGURE=1 ./autogen.sh
+    else
+        # Just refresh the existing build files if necessary: we don't use
+        # autogen.sh in this case because it forces recreating them, which is
+        # usually unnecessary, but we do want to do it if any of configure
+        # dependencies (e.g. configure.ac) changes.
+        autoreconf --install
     fi
     mkdir --parents "$build_dir/$lib"
     cd "$build_dir/$lib"
@@ -235,10 +241,10 @@ done
 # shellcheck disable=SC2043
 for lib in xmlwrapp; do
     libdir="$srcdir/third_party/$lib"
-    if [ ! -x "$libdir/configure" ]; then
-        cd "$libdir"
-        autoreconf --install
-    fi
+    # As this library doesn't have any special autogen.sh script, we can just
+    # always run autoreconf unconditionally (without "--force").
+    cd "$libdir"
+    autoreconf --install
     mkdir --parents "$build_dir/$lib"
     cd "$build_dir/$lib"
     # shellcheck disable=SC2086
