@@ -190,6 +190,11 @@ git pull
 
 git pull --rebase
 
+  # Update local submodules that have been changed on a remote origin.
+
+git pull
+git submodule update
+
   # If msw sets an incorrect executable bit, and you accidentally
   # commit it (without first running 'make check_concinnity', which
   # would catch the error), fix it thus:
