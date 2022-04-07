@@ -1,3 +1,16 @@
+Raw files:
+   gwc/zero_a_x86_64-pc-linux-gnu [Alefeld's algorithm]
+   gwc/zero_b_x86_64-pc-linux-gnu [Brent's]
+have manually been combined here. The first header row indicates
+the tolerance used for the paired {A,B} data columns underneath.
+The second header row contains:
+  N: number of the problem, as given in Alefeld's Table I
+  F: number of the problem, as given in Alefeld's FORTRAN
+  S: serial number for all 154 problems, recognizing that many
+       are repeated with various sets of parameters
+  A or B: algorithm: [A]lefeld or [B]rent
+
+              1.0e-7 1.0e-10 1.0e-15   zero
    N   F   S   A   B   A   B   A   B   A   B
    1   1   1   8   8   9   9  10   9  10   9
    2   2   2  15  14  15  15  16  15  16  15
@@ -153,4 +166,3 @@
   15  28 152  32  37  35  38  36  40  37  40
   15  28 153  35  37  35  39  37  41  37  41
   15  28 154  35  37  35  39  37  40  37  42
-
