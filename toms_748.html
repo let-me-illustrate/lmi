@@ -1,0 +1,1570 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd">
+
+<!--
+    TOMS 748 analysis.
+
+    Copyright (C) 2022 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    https://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+-->
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Let me illustrate&hellip; Brent&rsquo;s method vs. TOMS 748</title>
+</head>
+
+<body>
+
+<h2>Brent&rsquo;s method outperforms TOMS 748</h2>
+
+<h3>Abstract</h3>
+
+<p>
+<a href="#Alefeld1995">Alefeld (1995)</a>
+proposes the TOMS 748 root-finding algorithm and claims (page 327)
+that it &ldquo;has the best behavior of all 12 methods&rdquo;
+compared, including
+<a href="#Brent1973">Brent&rsquo;s (1973)</a>.
+This claim has been endorsed by credible authorities.
+However, it depends on questionable tabulations of test results,
+although that is not readily evident because the underlying data are
+not provided.
+Reconstructing the missing raw dataset, and tabulating it more
+reasonably, shows that Brent&rsquo;s method generally performs better
+than TOMS 748.
+</p>
+
+<h3>Introduction</h3>
+
+<p>
+The classic algorithm for finding a root of a univariate equation is
+<a href="#Brent1973">Brent</a>&rsquo;s method, which
+<a href="#Press2007">Press (2007, p. 455)</a>
+names the &ldquo;method of choice&rdquo;:
+</p>
+
+<blockquote>
+<p>
+Brent&rsquo;s method combines the sureness of bisection with the speed
+of a higher-order method when appropriate. We recommend it as the
+method of choice for general one-dimensional root finding where a
+function&rsquo;s values only (and not its derivative or functional
+form) are available.
+</p>
+</blockquote>
+
+<p>
+Many authors have advanced intriguing alternatives to Brent&rsquo;s
+method, and they necessarily strive to demonstrate some improvement
+in performance. The usual criterion&mdash;the only one Alefeld uses,
+and the only one considered here&mdash;is the number of function
+evaluations required to find a root within a given
+tolerance<a href="#fn1" name="fr1" title="">[1]</a>.
+Whatever theoretical innovations a new algorithm may present
+(e.g., Brent favors inverse quadratic interpolation (IQI) where
+ Alefeld prefers cubic (ICI)&mdash;see Appendix I), we want the
+algorithm that performs best in practice.
+</p>
+
+<p>
+Only comparison to the reigning method of choice really matters,
+although Alefeld measures performance for twelve algorithms.
+Of those twelve, seven are progressive refinements of
+its authors&rsquo; own work, culminating in Algorithm 4.2
+(&ldquo;TOMS 748&rdquo; hereinafter for ease of reference).
+Of the other five methods, one is Brent&rsquo;s, three are by Dekker
+(upon whose work Brent&rsquo;s is based), and the last, by
+<a href="#Le1985">Le (1985)</a>,
+is of the same
+Dekker&ndash;Brent family. Here, Brent&rsquo;s
+method is taken as the standard of comparison, and only it and
+TOMS 748 are compared.
+</p>
+
+<p>
+Alefeld presents its case in six tables.
+Table I lays out the test suite (15 distinct formulas,
+with a total of 154 sets of parameters).
+Tables II&ndash;VI summarize the number of function evaluations
+for various groups of problems, and are recapitulated below.
+Excepting only Table IV (which turns out to be pathological),
+TOMS 748 appears to demonstrate a strikingly consistent
+4&ndash;6% advantage over Brent&rsquo;s method:
+</p>
+
+<!-- "ins" is the new "u" -->
+<pre>
+       <ins>Exhibit 1: Recapitulation of Alefeld&rsquo;s data tables</ins>
+
+    table  tolerance  Alefeld  Brent    (B&minus;A)/B   tests
+
+      II     1E&minus;07      2650    2804      5.5%    all {1&ndash;15}
+             1E&minus;10      2786    2905      4.1%
+             1E&minus;15      2859    2975      3.9%
+             0          2884    3008      4.1%
+      III    1E&minus;07      2347    2501      6.2%    all {1&ndash;15}, but
+             1E&minus;10      2469    2589      4.6%      only if solvable by
+             1E&minus;15      2535    2651      4.4%      Dekker (see below)
+             0          2554    2674      4.5%
+      IV     1E&minus;15        29      23    &minus;26.1%    pathological {13} only
+      V      1E&minus;15       128     136      5.9%    {3, 14, 15} only
+      VI     1E&minus;15       114     120      5.0%    all but {3, 13&ndash;15}
+
+    totals are much lower for IV&ndash;VI because those tables are limited
+      to selected test problems and use only one set of parameters
+
+    [in headers here and elsewhere, <b>A</b> means Alefeld and <b>B</b> means Brent]
+</pre>
+
+<p>
+Tables II and VI are analyzed in depth below. As for the others:
+</p>
+
+<ul>
+  <li>
+    Table III is the same as Table II, except that it omits problems
+    for which any of Dekker&rsquo;s methods fails to converge within
+    1000 iterations. Such failures are the reason why Brent&rsquo;s
+    method has completely supplanted Dekker&rsquo;s in practice.
+  </li>
+  <li>
+    Table IV is limited to problem #13, which is pathological, as
+    explained below.
+  </li>
+  <li>
+    Table V considers a small subset&mdash;problems #3, #14, #15 only.
+    It demonstrates only that TOMS 748 performs well on the last
+    two problems, which constitute 80% of the data it summarizes
+    because those two are tested with two sets of parameters each.
+  </li>
+</ul>
+
+<p>
+</p>
+
+<p>
+These tables appear to make a prima facie case that TOMS 748
+is quite consistently better than Brent&rsquo;s method, and should
+therefore become the new algorithm of choice. Furthermore, it was
+published in <i>Transactions on Mathematical Software</i> (TOMS),
+a leading peer-reviewed journal, and has been included in
+the prestigious <i>Collected Algorithms of the ACM</i> (CACM), whose
+<a href="https://dl.acm.org/journal/toms/algorithms-policy">policy</a>
+states:
+</p>
+
+<blockquote>
+<p>
+An algorithm must either provide a capability not readily available
+or perform a task better in some way than has been done before.
+&hellip; In the case where the new algorithm is claimed to be an
+improvement over currently available codes supporting evidence must
+be included in the submission. Efficiency claims need to be supported
+on a wide range of practical problems.
+</p>
+</blockquote>
+
+<p>
+Others have endorsed it, presumably because they trust the ACM to
+have reviewed the evidence rigorously. For example, one
+<a href="https://dconf.org/2016/talks/clugston.pdf">DConf 2016</a>
+paper calls it the &ldquo;State Of The Art&rdquo;, and the influential
+<a href="https://www.boost.org/doc/libs/1_78_0/libs/math/doc/html/math_toolkit/roots_noderiv/brent.html">C++ boost</a> library says
+&ldquo;the Brent&ndash;Dekker algorithm, although very well know[n],
+is not provided by this library as TOMS 748 algorithm &hellip; [is]
+superior&rdquo;.
+</p>
+
+<p>
+On the strength of such recommendations, the TOMS 748 algorithm was
+experimentally tried in our principal work, the
+<a href="https://lmi.nongnu.org/"><tt>lmi</tt></a>
+life-insurance illustration system, by translating the original
+FORTRAN to C using <code>f2c</code>. However, Brent&rsquo;s method
+performs much better in <tt>lmi</tt>, as shown in this
+<a href="https://git.savannah.nongnu.org/cgit/lmi.git/commit/?id=fc8b1a900e4c96a0d6764fa33989ed48c7637fe9">commit</a>
+that reports the number of function evaluations for the 388 test
+cases in <tt>lmi</tt>&rsquo;s regression tests:
+</p>
+
+<pre>
+               evaluations  max   mean  sample-std-dev
+    Brent          7332      65   18.9       7.13
+    Alefeld        7622      76   19.6       7.65
+</pre>
+
+<p>
+This unexpected result might suggest that <tt>lmi</tt>&rsquo;s
+use cases are atypical, but they are simply polynomials.
+Could the <code>f2c</code> translation be incorrect?
+Or is the TOMS 748 algorithm not as &ldquo;superior&rdquo;
+as Tables II&ndash;VI depict?
+These questions can be addressed only after reconstructing
+the missing raw data, but a few preliminary comments must
+be made first.
+</p>
+
+<h3>Anomalies noted in initial inspection</h3>
+
+<p>
+A careful reading of
+<a href="#Alefeld1995">Alefeld (1995)</a>
+reveals several anomalies. There is a mistake in the
+code<a href="#fn2" name="fr2" title="">[2]</a>
+for one formula, though it&rsquo;s apparently
+an inconsequential typo.
+And the value given for machine epsilon is
+implausible<a href="#fn3" name="fr3" title="">[3]</a>,
+evidencing a lack of rigorous review.
+But superficial flaws like those would be easy to fix.
+</p>
+
+<p>
+An internal contradiction for problem #13 is of greater concern.
+The unit-test benchmark file (<code>testout</code> in
+<a href="https://calgo.acm.org/748.gz">the CACM archive</a>)
+gives the root as &ldquo;2.2317679157465D-02&rdquo;, but
+<a href="#Alefeld1995">Alefeld (1995, p. 343)</a>
+declares that values in that vicinity are incorrect:
+</p>
+
+<blockquote>
+<p>
+If we code
+<i>xe<sup><small>&minus;x<sup><small>&minus;2</small></sup></small></sup></i>
+in Fortran 77 as
+<i>x &sdot; (e<sup><small>&minus;1&thinsp;&frasl;&thinsp;x<sup><small>2</small></sup></small></sup>)</i>
+then all algorithms that solve this problem within 1000 iterations deliver
+values around 0.02 as the exact solution, because the result of
+the computation of
+<i>0.02 &sdot; (e<sup><small>&minus;1&thinsp;&frasl;&thinsp;(0.02)<sup><small>2</small></sup></small></sup>)</i>
+on our machine is equal to 0. However,
+when we code
+<i>xe<sup><small>&minus;x<sup><small>&minus;2</small></sup></small></sup></i>
+as
+<i>x&thinsp;&frasl;&thinsp;e<sup><small>1&thinsp;&frasl;&thinsp;x<sup><small>2</small></sup></small></sup></i>,
+all algorithms give correct solutions.
+</p>
+</blockquote>
+
+<p>
+According to
+<a href="https://www.wolframalpha.com/input?i=derivative+of+xe^(-x^-2)">Wolfram</a>,
+the roots of
+<i>xe<sup><small>&minus;x<sup><small>&minus;2</small></sup></small></sup></i>
+are &plusmn;<i>i</i>&sdot;&radic;2; but
+the actual problem defines the value as zero at <code>x=0</code>, so
+the correct solution is <code>x=0</code>. Due to inevitable
+underflow, no iterative algorithm that uses customary
+floating-point numbers can find that solution unless by
+chance<a href="#fn4" name="fr4" title="">[4]</a>.
+</p>
+
+<p>
+Problem #13 is nevertheless included in the analysis of Table II
+below for comparison with Alefeld&rsquo;s published totals.
+This favors neither of the algorithms compared here, because the
+number of function evaluations is 18 for both in our reconstructed
+data. (Curiously, Table IV says that Brent&rsquo;s method takes
+23 evaluations and Alefeld&rsquo;s takes 29, but that&rsquo;s
+meaningless when the correct root cannot be found.)
+</p>
+
+<h3>Reproduction of data</h3>
+
+<p>
+To verify the performance claims that depend on
+<a href="#Alefeld1995">Alefeld (1995)</a>&rsquo;s
+Tables II&ndash;VI, it is necessary to reconstruct the underlying
+raw data that were not provided. This could be done directly, using
+the FORTRAN code that they do provide. Lacking FORTRAN expertise,
+we chose instead to use the <code>f2c</code> translation that would
+be needed for <tt>lmi</tt> anyway, on an x86_64-pc-linux-gnu platform.
+(Appendix II gives links to the reconstructed data.)
+This indirect approach usefully validates
+the translation, using the <code>testout</code> file in
+Alefeld&rsquo;s code archive, which gives (only) the roots found by
+TOMS 748. Those roots were all reproduced
+accurately<a href="#fn5" name="fr5" title="">[5]</a> (except
+for problem #13, discussed above), and the numbers of function
+evaluations agree closely with published Tables II and VI,
+so the <code>f2c</code> translation seems to be correct.
+</p>
+
+<p>
+Relative error, defined as the
+<code>(reconstructed&ndash;published)/published</code>
+number of function evaluations,
+is a fraction of a percent in the reconstruction of
+Table II&rsquo;s &ldquo;BR&rdquo; and &ldquo;4.2&rdquo; columns:
+</p>
+
+<pre>
+       <ins>Exhibit 2: Table II, reconstructed vs. published</ins>
+</pre>
+
+<table cellpadding=0 cellspacing=0 border=1>
+  <tr>
+    <td align="left"   style="width:15%;">tolerance</td>
+    <td align="center" style="width:10%;" colspan="2">1E&minus;07</td>
+    <td align="center" style="width:10%;" colspan="2">1E&minus;10</td>
+    <td align="center" style="width:10%;" colspan="2">1E&minus;15</td>
+    <td align="center" style="width:10%;" colspan="2">zero</td>
+    <td align="center" style="width:10%;" colspan="2">totals</td>
+  </tr>
+  <tr>
+    <td align="left"></td>
+    <td align="right"><small>Alefeld</small></td>
+    <td align="right"><small>Brent</small></td>
+    <td align="right"><small>Alefeld</small></td>
+    <td align="right"><small>Brent</small></td>
+    <td align="right"><small>Alefeld</small></td>
+    <td align="right"><small>Brent</small></td>
+    <td align="right"><small>Alefeld</small></td>
+    <td align="right"><small>Brent</small></td>
+    <td align="right"><small>Alefeld</small></td>
+    <td align="right"><small>Brent</small></td>
+  </tr>
+  <tr>
+    <td align="left"><small>reconstructed</small></td>
+    <td align="right">2658</td>
+    <td align="right">2807</td>
+    <td align="right">2787</td>
+    <td align="right">2907</td>
+    <td align="right">2854</td>
+    <td align="right">2974</td>
+    <td align="right">2875</td>
+    <td align="right">2991</td>
+    <td align="right">11174</td>
+    <td align="right">11679</td>
+  </tr>
+  <tr>
+    <td align="left"><small>published</small></td>
+    <td align="right">2650</td>
+    <td align="right">2804</td>
+    <td align="right">2786</td>
+    <td align="right">2905</td>
+    <td align="right">2859</td>
+    <td align="right">2975</td>
+    <td align="right">2884</td>
+    <td align="right">3008</td>
+    <td align="right">11179</td>
+    <td align="right">11692</td>
+  </tr>
+  <tr>
+    <td align="left"><small>discrepancy</small></td>
+    <td align="right">        8</td>
+    <td align="right">        3</td>
+    <td align="right">        1</td>
+    <td align="right">        2</td>
+    <td align="right"> &minus;5</td>
+    <td align="right"> &minus;1</td>
+    <td align="right"> &minus;9</td>
+    <td align="right">&minus;17</td>
+    <td align="right"> &minus;5</td>
+    <td align="right">&minus;13</td>
+  </tr>
+  <tr>
+    <td align="left"><small>relative error</small></td>
+    <td align="right"><small>       0.30%</small></td>
+    <td align="right"><small>       0.11%</small></td>
+    <td align="right"><small>       0.04%</small></td>
+    <td align="right"><small>       0.07%</small></td>
+    <td align="right"><small>&minus;0.17%</small></td>
+    <td align="right"><small>&minus;0.03%</small></td>
+    <td align="right"><small>&minus;0.31%</small></td>
+    <td align="right"><small>&minus;0.57%</small></td>
+    <td align="right"><small>&minus;0.04%</small></td>
+    <td align="right"><small>&minus;0.11%</small></td>
+  </tr>
+</table>
+
+<p>
+Table VI&rsquo;s &ldquo;BR&rdquo; and &ldquo;4.2&rdquo; columns
+are reproduced as follows:
+</p>
+
+<pre>
+       <ins>Exhibit 3: Table VI, reconstructed vs. published</ins>
+</pre>
+
+<table cellpadding=0 cellspacing=0 border=1>
+  <tr>
+    <td align="left"   style="width:25%;">problem</td>
+    <td align="right"> 1</td>
+    <td align="right"> 2</td>
+    <td align="right"> 4</td>
+    <td align="right"> 5</td>
+    <td align="right"> 6</td>
+    <td align="right"> 7</td>
+    <td align="right"> 8</td>
+    <td align="right"> 9</td>
+    <td align="right">10</td>
+    <td align="right">11</td>
+    <td align="right">12</td>
+    <td align="right">total</td>
+  </tr>
+  <tr>
+    <td align="left"   style="width:25%;">A, published</td>
+    <td align="right">10</td>
+    <td align="right">11</td>
+    <td align="right">13</td>
+    <td align="right">10</td>
+    <td align="right">11</td>
+    <td align="right"> 7</td>
+    <td align="right">11</td>
+    <td align="right"> 9</td>
+    <td align="right"> 9</td>
+    <td align="right">18</td>
+    <td align="right"> 5</td>
+    <td align="right">114</td>
+  </tr>
+  <tr>
+    <td align="left"   style="width:25%;">A, reconstructed</td>
+    <td align="right">10</td>
+    <td align="right">12</td>
+    <td align="right">18</td>
+    <td align="right">10</td>
+    <td align="right">11</td>
+    <td align="right"> 7</td>
+    <td align="right">11</td>
+    <td align="right"> 9</td>
+    <td align="right"> 9</td>
+    <td align="right">18</td>
+    <td align="right"> 5</td>
+    <td align="right">120</td>
+  </tr>
+  <tr>
+    <td align="left"   style="width:25%;">A, diff</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right"> 1</td>
+    <td align="right"> 5</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right">  6</td>
+  </tr>
+  <tr>
+    <td align="left"   style="width:25%;">B, published</td>
+    <td align="right"> 9</td>
+    <td align="right">10</td>
+    <td align="right">15</td>
+    <td align="right">10</td>
+    <td align="right">13</td>
+    <td align="right"> 9</td>
+    <td align="right">11</td>
+    <td align="right">10</td>
+    <td align="right"> 9</td>
+    <td align="right">14</td>
+    <td align="right">10</td>
+    <td align="right">120</td>
+  </tr>
+  <tr>
+    <td align="left"   style="width:25%;">B, reconstructed</td>
+    <td align="right"> 9</td>
+    <td align="right">10</td>
+    <td align="right">17</td>
+    <td align="right">10</td>
+    <td align="right">13</td>
+    <td align="right"> 9</td>
+    <td align="right">11</td>
+    <td align="right">10</td>
+    <td align="right"> 9</td>
+    <td align="right">14</td>
+    <td align="right">10</td>
+    <td align="right">122</td>
+  </tr>
+  <tr>
+    <td align="left"   style="width:25%;">B, diff</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right"> 2</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right">&ndash;&nbsp;</td>
+    <td align="right">  2</td>
+  </tr>
+</table>
+
+<p>
+It may be all right to disregard the one-unit difference for problem
+#2, but the discrepancies for problem #4 require some discussion.
+Formula #4 is
+<i>x<sup><small>n</small></sup> &minus; a</i>,
+with parameters <code>a=1</code> and <code>n=4</code> here, i.e.,
+<i>x<sup><small>4</small></sup> &minus; 1</i>, and it is curious that
+the only significant discrepancy occurs with such a simple formula.
+Presumably the code (as translated by <code>f2c</code>) is correct,
+because the other data in Table VI, and especially in
+the much more comprehensive Table II, are reproduced so closely.
+The reconstructed data for problem #4 with other parameters are
+generally consistent with those shown here,
+so perhaps the power function&rsquo;s implementation on the
+authors&rsquo; machine behaved strangely in the neighborhood of unity,
+in a way that somehow favored their algorithm.
+Or maybe this is just an error in transcription from the raw data
+to the published tables.
+Our analysis proceeds on the assumption that this is an
+isolated aberration whose ultimate cause may never be known.
+</p>
+
+<h3>Analysis of Alefeld&rsquo;s Table II</h3>
+
+<p>
+Appending a measure of relative performance to Exhibit 2 shows that
+Table II creates an impression that TOMS 748 outperforms Brent by
+about four or five percent:
+</p>
+
+<pre>
+       <ins>Exhibit 4a: Table II, relative performance</ins>
+</pre>
+
+<table cellpadding=0 cellspacing=0 border=1>
+  <tr>
+    <td align="left"   style="width:20%;">tolerance</td>
+    <td align="center" style="width:10%;" colspan="2">1E&minus;07</td>
+    <td align="center" style="width:10%;" colspan="2">1E&minus;10</td>
+    <td align="center" style="width:10%;" colspan="2">1E&minus;15</td>
+    <td align="center" style="width:10%;" colspan="2">zero</td>
+  </tr>
+  <tr>
+    <td align="left"></td>
+    <td align="right">Alefeld</td>
+    <td align="right">Brent</td>
+    <td align="right">Alefeld</td>
+    <td align="right">Brent</td>
+    <td align="right">Alefeld</td>
+    <td align="right">Brent</td>
+    <td align="right">Alefeld</td>
+    <td align="right">Brent</td>
+  </tr>
+  <tr>
+    <td align="left">reconstructed</td>
+    <td align="right">2658</td>
+    <td align="right">2807</td>
+    <td align="right">2787</td>
+    <td align="right">2907</td>
+    <td align="right">2854</td>
+    <td align="right">2974</td>
+    <td align="right">2875</td>
+    <td align="right">2991</td>
+  </tr>
+  <tr>
+    <td align="left">published</td>
+    <td align="right">2650</td>
+    <td align="right">2804</td>
+    <td align="right">2786</td>
+    <td align="right">2905</td>
+    <td align="right">2859</td>
+    <td align="right">2975</td>
+    <td align="right">2884</td>
+    <td align="right">3008</td>
+  </tr>
+  <tr>
+    <td align="left">discrepancy</td>
+    <td align="right">        8</td>
+    <td align="right">        3</td>
+    <td align="right">        1</td>
+    <td align="right">        2</td>
+    <td align="right"> &minus;5</td>
+    <td align="right"> &minus;1</td>
+    <td align="right"> &minus;9</td>
+    <td align="right">&minus;17</td>
+  </tr>
+  <tr>
+    <td align="left">relative error</td>
+    <td align="right">       0.3%</td>
+    <td align="right">       0.1%</td>
+    <td align="right">       0.0%</td>
+    <td align="right">       0.1%</td>
+    <td align="right">&minus;0.2%</td>
+    <td align="right">       0.0%</td>
+    <td align="right">&minus;0.3%</td>
+    <td align="right">&minus;0.6%</td>
+  </tr>
+  <tr>
+    <td align="left">(B&minus;A)/B, reconstructed totals</td>
+    <td align="center" colspan="2">5.3%</td>
+    <td align="center" colspan="2">4.1%</td>
+    <td align="center" colspan="2">4.0%</td>
+    <td align="center" colspan="2">3.9%</td>
+  </tr>
+  <tr>
+    <td align="left">(B&minus;A)/B, published totals</td>
+    <td align="center" colspan="2">5.5%</td>
+    <td align="center" colspan="2">4.1%</td>
+    <td align="center" colspan="2">3.9%</td>
+    <td align="center" colspan="2">4.1%</td>
+  </tr>
+</table>
+
+<p>
+However, taking the mean number of evaluations for each problem
+separately, and tabulating the sum of those means, leads to the
+opposite conclusion&mdash;that
+Brent outperforms TOMS 748 by about four percent:
+</p>
+
+<pre>
+       <ins>Exhibit 4b: Table II, sum of means</ins>
+</pre>
+
+<table cellpadding=0 cellspacing=0 border=1>
+  <tr>
+    <td align="left"   style="width:20%;">tolerance</td>
+    <td align="center" style="width:10%;" colspan="2">1E&minus;07</td>
+    <td align="center" style="width:10%;" colspan="2">1E&minus;10</td>
+    <td align="center" style="width:10%;" colspan="2">1E&minus;15</td>
+    <td align="center" style="width:10%;" colspan="2">zero</td>
+  </tr>
+  <tr>
+    <td align="left"></td>
+    <td align="right">Alefeld</td>
+    <td align="right">Brent</td>
+    <td align="right">Alefeld</td>
+    <td align="right">Brent</td>
+    <td align="right">Alefeld</td>
+    <td align="right">Brent</td>
+    <td align="right">Alefeld</td>
+    <td align="right">Brent</td>
+  </tr>
+  <tr>
+    <td align="left">averages</td>
+    <td align="right">204.528</td>
+    <td align="right">196.346</td>
+    <td align="right">214.405</td>
+    <td align="right">206.387</td>
+    <td align="right">222.480</td>
+    <td align="right">213.069</td>
+    <td align="right">225.400</td>
+    <td align="right">216.014</td>
+  </tr>
+  <tr>
+    <td align="left">(B&minus;A)/B, means</td>
+    <td align="center" colspan="2">&minus;4.2%</td>
+    <td align="center" colspan="2">&minus;3.9%</td>
+    <td align="center" colspan="2">&minus;4.4%</td>
+    <td align="center" colspan="2">&minus;4.3%</td>
+  </tr>
+</table>
+
+<p>
+How can summarizing the same data in two different ways lead to two
+opposite conclusions? The reason is that most problems are tested
+with multiple sets of parameters, and the multiplicity varies greatly.
+For example, problem #14 finds a zero of
+  <i>
+    (N&thinsp;&frasl;&thinsp;20) *
+    (x&thinsp;&frasl;&thinsp;1.5 + sin(x) &minus; 1),
+  </i>
+for each of <code>N=1,2,3,&hellip;40</code>.
+Alefeld&rsquo;s <code>testout</code> file gives the same root for this
+problem forty separate times, as expected because <code>N</code>
+doesn&rsquo;t affect the root; unsurprisingly, <code>N</code>
+doesn&rsquo;t affect the number of evaluations either. Thus,
+problem #14 is really only one test, whose ostensible forty-fold
+multiplicity is clearly degenerate.
+</p>
+
+<p>
+It may be useful to multiply both sides of an equation by a variety
+of constants, but only as an ancillary experiment to determine whether
+that affects the performance of one algorithm or another. Yet when no
+effect is found, as in this case, the result should be counted only
+once in a summary intended to compare overall performance. With forty
+times the weight of some other problems, problem #14 constitutes more
+than one-quarter of the Table II totals.
+</p>
+
+<p>
+It is illuminating to tabulate the problems, and their weights,
+in their original order:
+</p>
+
+<pre>
+       <ins>Exhibit 5a: Number of parameters per problem</ins>
+</pre>
+
+<table cellpadding=0 cellspacing=0 border=1>
+  <tr>
+    <td align="left"   style="width:15%;">problem</td>
+    <td align="right"> 1</td>
+    <td align="right"> 2</td>
+    <td align="right"> 3</td>
+    <td align="right"> 4</td>
+    <td align="right"> 5</td>
+    <td align="right"> 6</td>
+    <td align="right"> 7</td>
+    <td align="right"> 8</td>
+    <td align="right"> 9</td>
+    <td align="right">10</td>
+    <td align="right">11</td>
+    <td align="right">12</td>
+    <td align="right">13</td>
+    <td align="right">14</td>
+    <td align="right">15</td>
+    <td align="right">total</td>
+  </tr>
+  <tr>
+    <td align="left"   style="width:15%;">multiplicity</td>
+    <td align="right"> 1</td>
+    <td align="right">10</td>
+    <td align="right"> 3</td>
+    <td align="right">14</td>
+    <td align="right"> 1</td>
+    <td align="right">10</td>
+    <td align="right"> 3</td>
+    <td align="right"> 5</td>
+    <td align="right"> 7</td>
+    <td align="right"> 5</td>
+    <td align="right"> 4</td>
+    <td align="right">19</td>
+    <td align="right"> 1</td>
+    <td align="right">40</td>
+    <td align="right">31</td>
+    <td align="right">154</td>
+  </tr>
+  <tr>
+    <td align="left"   style="width:15%;">proportion</td>
+    <td align="right"> 1%</td>
+    <td align="right"> 6%</td>
+    <td align="right"> 2%</td>
+    <td align="right"> 9%</td>
+    <td align="right"> 1%</td>
+    <td align="right"> 6%</td>
+    <td align="right"> 2%</td>
+    <td align="right"> 3%</td>
+    <td align="right"> 5%</td>
+    <td align="right"> 3%</td>
+    <td align="right"> 3%</td>
+    <td align="right">12%</td>
+    <td align="right"> 1%</td>
+    <td align="right">26%</td>
+    <td align="right">20%</td>
+  </tr>
+</table>
+
+<p>
+and also by decreasing multiplicity, indicating which algorithm is
+faster (by totalling the number of evaluations for each problem
+across all four tolerances):
+</p>
+
+<pre>
+       <ins>Exhibit 5b: Number of parameters per problem, sorted</ins>
+</pre>
+
+<table cellpadding=0 cellspacing=0 border=1>
+  <tr>
+    <td align="left"   style="width:15%;">problem</td>
+    <td align="right">14</td>
+    <td align="right">15</td>
+    <td align="right">12</td>
+    <td align="right"> 4</td>
+    <td align="right"> 2</td>
+    <td align="right"> 6</td>
+    <td align="right"> 9</td>
+    <td align="right"> 8</td>
+    <td align="right">10</td>
+    <td align="right">11</td>
+    <td align="right"> 3</td>
+    <td align="right"> 7</td>
+    <td align="right"> 1</td>
+    <td align="right"> 5</td>
+    <td align="right">13</td>
+    <td align="right">total</td>
+  </tr>
+  <tr>
+    <td align="left"   style="width:15%;">multiplicity</td>
+    <td align="right">40</td>
+    <td align="right">31</td>
+    <td align="right">19</td>
+    <td align="right">14</td>
+    <td align="right">10</td>
+    <td align="right">10</td>
+    <td align="right"> 7</td>
+    <td align="right"> 5</td>
+    <td align="right"> 5</td>
+    <td align="right"> 4</td>
+    <td align="right"> 3</td>
+    <td align="right"> 3</td>
+    <td align="right"> 1</td>
+    <td align="right"> 1</td>
+    <td align="right"> 1</td>
+    <td align="right">154</td>
+  </tr>
+  <tr>
+    <td align="left"   style="width:15%;">proportion</td>
+    <td align="right">26%</td>
+    <td align="right">20%</td>
+    <td align="right">12%</td>
+    <td align="right"> 9%</td>
+    <td align="right"> 6%</td>
+    <td align="right"> 6%</td>
+    <td align="right"> 5%</td>
+    <td align="right"> 3%</td>
+    <td align="right"> 3%</td>
+    <td align="right"> 3%</td>
+    <td align="right"> 2%</td>
+    <td align="right"> 2%</td>
+    <td align="right"> 1%</td>
+    <td align="right"> 1%</td>
+    <td align="right"> 1%</td>
+  </tr>
+  <tr>
+    <td align="left"   style="width:15%;">cumulative</td>
+    <td align="right"> 26%</td>
+    <td align="right"> 46%</td>
+    <td align="right"> 58%</td>
+    <td align="right"> 68%</td>
+    <td align="right"> 74%</td>
+    <td align="right"> 81%</td>
+    <td align="right"> 85%</td>
+    <td align="right"> 88%</td>
+    <td align="right"> 92%</td>
+    <td align="right"> 94%</td>
+    <td align="right"> 96%</td>
+    <td align="right"> 98%</td>
+    <td align="right"> 99%</td>
+    <td align="right"> 99%</td>
+    <td align="right">100%</td>
+  </tr>
+  <tr>
+    <td align="left"   style="width:15%;">faster</td>
+    <td align="right"> A </td>
+    <td align="right"> A </td>
+    <td align="right"> B </td>
+    <td align="right"> B </td>
+    <td align="right"> B </td>
+    <td align="right"> A </td>
+    <td align="right"> B </td>
+    <td align="right"> B </td>
+    <td align="right"> B </td>
+    <td align="right"> B </td>
+    <td align="right"> B </td>
+    <td align="right"> A </td>
+    <td align="right"> B </td>
+    <td align="right">tie</td>
+    <td align="right">tie</td>
+  </tr>
+</table>
+
+<p>
+TOMS 748 outperforms Brent&rsquo;s method on four problems, but
+Brent&rsquo;s method is better on nine (the other two being ties).
+The two problems for which TOMS 748 performs relatively best, #14 and
+#15, account for 71 out of the total 154 cases (46.1%). Assigning
+inordinate weights to those two problems distorts the outcome.
+Using the per-problem means, rather than the sums, yields a more
+robust summation, with exactly the opposite outcome.
+</p>
+
+<h3>Analysis of Alefeld&rsquo;s Table VI</h3>
+
+<p>
+Unlike Table II, Table VI considers only eleven of the fifteen problems,
+and selects a single set of parameters for each.
+Selecting one set is not as robust as taking the mean across all
+parameters, but would be expected to avoid the bias introduced
+by the multiplicity issue, because problems #14 and #15 are
+omitted&mdash;as long as the selection is unbiased. However, the
+published Table VI gives the impression that TOMS 748 performs about
+five percent better than Brent&rsquo;s method, whereas the mean performance
+is actually nine percent worse on average across all parameters:
+</p>
+
+<pre>
+       <ins>Exhibit 6: Table VI, subsets vs. means</ins>
+
+   data match the &ldquo;reconstructed&rdquo; rows of Exhibit 3,
+     except where explicitly marked &ldquo;published&rdquo; here
+</pre>
+
+<table cellpadding=0 cellspacing=0 border=1>
+  <tr>
+    <td align="left"   style="width:15%;"></td>
+    <td align="left"   style="width:10%;"></td>
+    <td align="center" colspan="3">Alefeld&rsquo;s<br>selections</td>
+    <td align="center" colspan="3">mean rather than<br>just one selection</td>
+  </tr>
+  <tr>
+    <td align="left">problem</td>
+    <td align="left">parameter</td>
+    <td align="right" colspan="3"></td>
+    <td align="right" colspan="3"></td>
+  </tr>
+  <tr>
+    <td align="left"></td>
+    <td align="left"></td>
+    <td align="right">Alefeld</td>
+    <td align="right">Brent</td>
+    <td align="right">diff</td>
+    <td align="right">Alefeld</td>
+    <td align="right">Brent</td>
+    <td align="right">diff</td>
+  </tr>
+  <tr>
+    <td align="left" >         1</td>
+    <td align="right">          </td>
+    <td align="right">        10</td>
+    <td align="right">         9</td>
+    <td align="right">         1</td>
+    <td align="right">      10.0</td>
+    <td align="right">       9.0</td>
+    <td align="right">       1.0</td>
+  </tr>
+  <tr>
+    <td align="left" >         2</td>
+    <td align="right">         2</td>
+    <td align="right">        12</td>
+    <td align="right">        10</td>
+    <td align="right">         2</td>
+    <td align="right">      14.0</td>
+    <td align="right">      12.7</td>
+    <td align="right">       1.3</td>
+  </tr>
+  <tr>
+    <td align="left" >         4</td>
+    <td align="right">1,4, [0,5]</td>
+    <td align="right">        18</td>
+    <td align="right">        17</td>
+    <td align="right">         1</td>
+    <td align="right">      19.0</td>
+    <td align="right">      16.7</td>
+    <td align="right">       2.3</td>
+  </tr>
+  <tr>
+    <td align="left" >         5</td>
+    <td align="right">          </td>
+    <td align="right">        10</td>
+    <td align="right">        10</td>
+    <td align="right">         0</td>
+    <td align="right">        10</td>
+    <td align="right">        10</td>
+    <td align="right">       0.0</td>
+  </tr>
+  <tr>
+    <td align="left" >         6</td>
+    <td align="right">        20</td>
+    <td align="right">        11</td>
+    <td align="right">        13</td>
+    <td align="right">  &minus;2</td>
+    <td align="right">      11.1</td>
+    <td align="right">      11.8</td>
+    <td align="right">&minus;0.7</td>
+  </tr>
+  <tr>
+    <td align="left" >         7</td>
+    <td align="right">        10</td>
+    <td align="right">         7</td>
+    <td align="right">         9</td>
+    <td align="right">  &minus;2</td>
+    <td align="right">       7.7</td>
+    <td align="right">       9.0</td>
+    <td align="right">&minus;1.3</td>
+  </tr>
+  <tr>
+    <td align="left" >         8</td>
+    <td align="right">        10</td>
+    <td align="right">        11</td>
+    <td align="right">        11</td>
+    <td align="right">         0</td>
+    <td align="right">       9.6</td>
+    <td align="right">       9.6</td>
+    <td align="right">       0.0</td>
+  </tr>
+  <tr>
+    <td align="left" >         9</td>
+    <td align="right">         1</td>
+    <td align="right">         9</td>
+    <td align="right">        10</td>
+    <td align="right">  &minus;1</td>
+    <td align="right">       9.9</td>
+    <td align="right">       8.3</td>
+    <td align="right">       1.6</td>
+  </tr>
+  <tr>
+    <td align="left" >        10</td>
+    <td align="right">         5</td>
+    <td align="right">         9</td>
+    <td align="right">         9</td>
+    <td align="right">         0</td>
+    <td align="right">      10.6</td>
+    <td align="right">      10.6</td>
+    <td align="right">       0.0</td>
+  </tr>
+  <tr>
+    <td align="left" >        11</td>
+    <td align="right">        20</td>
+    <td align="right">        18</td>
+    <td align="right">        14</td>
+    <td align="right">         4</td>
+    <td align="right">      17.0</td>
+    <td align="right">      10.8</td>
+    <td align="right">       6.3</td>
+  </tr>
+  <tr>
+    <td align="left" >        12</td>
+    <td align="right">         3</td>
+    <td align="right">         5</td>
+    <td align="right">        10</td>
+    <td align="right">  &minus;5</td>
+    <td align="right">      10.5</td>
+    <td align="right">      10.2</td>
+    <td align="right">       0.3</td>
+  </tr>
+  <tr>
+    <td align="left" colspan="2">totals</td>
+    <td align="right">       120</td>
+    <td align="right">       122</td>
+    <td align="right">  &minus;2</td>
+    <td align="right">     129.3</td>
+    <td align="right">     118.7</td>
+    <td align="right">      10.6</td>
+  </tr>
+  <tr>
+    <td align="left" colspan="2">published</td>
+    <td align="right">       114</td>
+    <td align="right">       120</td>
+    <td align="right">  &minus;6</td>
+    <td align="center" colspan="3" rowspan="4">[raw data not published]</td>
+  </tr>
+  <tr>
+    <td align="left" colspan="2">discrepancy</td>
+    <td align="right">         6</td>
+    <td align="right">         2</td>
+    <td align="right"></td>
+  </tr>
+  <tr>
+    <td align="left" colspan="2">relative error</td>
+    <td align="right">      5.3%</td>
+    <td align="right">      1.7%</td>
+    <td align="right"></td>
+  </tr>
+  <tr>
+    <td align="left"   colspan="2">(B&minus;A)/B, published data</td>
+    <td align="center" colspan="3">       5.0%</td>
+  </tr>
+  <tr>
+    <td align="left"   colspan="2">(B&minus;A)/B, reconstructed data</td>
+    <td align="center" colspan="3">       1.6%</td>
+    <td align="center" colspan="3">&minus;9.0%</td>
+  </tr>
+</table>
+
+<p>
+Comparing the grand totals of function evaluations for Table
+VI&rsquo;s eleven problems yields a similar result:
+</p>
+
+<pre>
+  Alefeld  Brent  B&minus;A  (B&minus;A)/B
+    997     921   &minus;76    &minus;8.3%
+</pre>
+
+<p>
+It would seem that the parameter selections are not representative.
+Problem #12, for example, exhibits the following differences in the
+(reconstructed) number of function evaluations for its nineteen parameter
+values, lower numbers indicating better performance for TOMS 748 as above:
+<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  {&minus;1, &minus;5, 0, &minus;1, &minus;1, &minus;1, &minus;1,
+  1, 1, 2, 1, 0, 1, 1, 2, 1, 1, 2, 2}
+<br>
+of which only the second&mdash;the most favorable for TOMS 748 by
+far&mdash;was chosen for Table VI. No rationale is given for this
+choice; replacing &minus;5 with the mode, +1, for this problem alone,
+would change the (published) totals to 120 for both algorithms in the
+published table, nullifying the portrayed TOMS 748 advantage.
+</p>
+
+<p>
+Using the mean for each problem, instead of choosing a single
+parameter for each, shows that
+Brent&rsquo;s method outperforms TOMS 748 by nine percent.
+<p>
+
+<h3>Alternative summaries</h3>
+
+<p>
+Alefeld&rsquo;s Tables II&ndash;VI summarize the same data in several
+different ways, all of which
+(except Table IV, comprising only the pathological problem #13)
+consistently depict TOMS 748 as
+performing better than Brent&rsquo;s method. This consistency is
+unexpected, for example because of problems #14 and #15, which favor
+TOMS 748 and constitute 46% of the tests in Table II, and 80% in
+Table V, but none in Table VI. And Tables IV&ndash;VI form a
+partition of Table II, so they would be expected to show symmetric
+variations in relative performance. The expected pattern emerges when
+all are tabulated comparably from reconstructed data:
+</p>
+
+<pre>
+  <ins>Exhibit 7: Published vs. reconstructed data, tol=1E&minus;15 only</ins>
+
+    table  Alefeld  Brent    (B&minus;A)/B   tests
+
+           ------published---------------
+      II     2859    2975      3.9%    all {1&ndash;15}
+      IV       29      23    &minus;26.1%    pathological {13} only
+      V       128     136      5.9%    {3, 14, 15} only
+      VI      114     120      5.0%    all but {3, 13&ndash;15}
+
+           ----reconstructed-----------
+      II     2854    2974      4.0%    all {1&ndash;15}
+      IV       18      18      0.0%    pathological {13} only
+      V      1839    2035      9.6%    {3, 14, 15} only
+      VI      997     921     &minus;8.3%    all but {3, 13&ndash;15}
+
+    published Tables V and VI summarize only selected data,
+      whereas reconstructed portion uses all data
+        and therefore II &equiv; IV &cup; V &cup; VI
+</pre>
+
+<p>
+Although our analysis so far has taken the test suite as a given,
+other suites might be used. For example,
+eleven of the problems in
+<a href="#Alefeld1995">Alefeld&rsquo;s (1995, p. 341)</a>
+test suite match
+<a href="#Le1985">Le&rsquo;s (1985, pp. 257&ndash;258)</a>
+closely or exactly<a href="#fn6" name="fr6" title="">[6]</a>.
+Considering only those problems
+(i.e., excluding #1, #12, #14, and #15),
+the total number of evaluations, as in Table II, are:
+</p>
+
+<pre>
+  <ins>Exhibit 8: All tests common to both Alefeld and Le</ins>
+
+    tolerance  Alefeld  Brent    (B&minus;A)/B
+      1E&minus;07       808     719     &minus;12.4%
+      1E&minus;10       846     761     &minus;11.2%
+      1E&minus;15       877     792     &minus;10.7%
+      0           888     802     &minus;10.7%
+      totals     3419    3074     &minus;11.2%
+</pre>
+
+<p>
+From that point of view, Brent&rsquo;s method performs better.
+</p>
+
+<h3>Conclusions</h3>
+
+<p>
+The tables in <a href="#Alefeld1995">Alefeld (1995)</a> seem to
+establish that their TOMS 748 algorithm consistently performs about
+5% better than
+<a href="#Brent1973">Brent&rsquo;s (1973)</a>. This conclusion
+depends delicately on the various ways the test problems were
+selected and weighted.
+Inordinate weight was given to two problems that favor TOMS 748.
+The appearance of consistency across tables disappears
+under careful examination.
+Reasonable analysis of the same data (once reconstructed) supports
+the opposite conclusion:
+that Brent&rsquo;s method generally outperforms Alefeld&rsquo;s.
+</p>
+
+<p>
+Inclusion in CACM is a strong endorsement of an algorithm&rsquo;s
+general superiority.
+<a href="#Alefeld1995">Alefeld (1995)</a> doesn&rsquo;t meet that
+standard, so CACM should reconsider its endorsement of TOMS 748.
+To prevent its readers from drawing conclusions that are
+not supported by the evidence provided, the editors of TOMS should
+carefully review the paper de novo, publish the raw data underlying
+its tables, and address the defects documented above.
+</p>
+
+<p>
+<a href="#Varah1996">Varah</a>&rsquo;s brief review said:
+&ldquo;Although the new algorithms are marginally more economical in
+terms of function evaluations, it is striking how well Brent&rsquo;s
+method compares in practice, 25 years after its introduction.&rdquo;
+The first clause seems to rest on insufficient skepticism, but the
+rest remains true even half a century after Brent devised his
+method&mdash;which remains the algorithm of choice.
+</p>
+
+<h3>Footnotes</h3>
+
+<p>
+[<a name="fn1" href="#fr1">1</a>]
+Others may try to improve worst-case performance: for instance,
+<a href="#Le1985">Le (1985)</a>
+trades away some performance in order to establish a tight upper
+bound on the number of evaluations.
+</p>
+
+<p>
+[<a name="fn2" href="#fr2">2</a>]
+In <code>testout</code>, <code>driver.f</code> codes problem #15
+thus, in relevant part:
+</p>
+
+<pre>
+280      CONTINUE
+         IF(X .GE. (1.0D-3)*2.0D0/(DN+1.0D0)) THEN
+           FX=DEXP(1.0D0)-1.859D0
+</pre>
+
+<p>
+where &ldquo;.GE.&rdquo; means &lsquo;&ge;&rsquo;,
+but the formula in Table I uses &lsquo;&gt;&rsquo; here.
+Probably this is just a proofreading error.
+</p>
+
+<p>
+[<a name="fn3" href="#fr3">3</a>]
+<a href="#Alefeld1995">Alefeld (1995, p. 340)</a> gives
+&ldquo;1.9073486328 &times; 10&minus;16&rdquo;
+as the machine precision for the authors&rsquo; AT&amp;T 3B2-1000
+hardware. But that is a binary machine, so its machine precision
+must be a negative-integer power of two, which this number is not.
+Curiously, CACM&rsquo;s
+<a href="https://dl.acm.org/journal/toms/algorithms-policy">policy</a>:
+</p>
+
+<blockquote>
+<p>
+standard conforming enquiry functions should be used to obtain values
+for any machine dependent constants (for example, the machine epsilon,
+the largest positive real number, etc.) required by the software.
+</p>
+</blockquote>
+
+<p>
+has been complied with literally: the subroutine
+<code>RMP</code> in
+<code>enclofx.f</code>,
+as translated by
+<code>f2c</code>,
+correctly gives a value of
+2<sup><small>&minus;52</small></sup> &asymp; 2.220446e&minus;16
+on contemporary IEEE 754 hardware.
+</p>
+
+<p>
+[<a name="fn4" href="#fr4">4</a>]
+This pathological problem is the same as eq. 2.7 in the fourth
+chapter of <a href="#Brent1973">Brent (1973, p. 50)</a>, who uses
+it only to demonstrate that the secant method may take an excessive
+number of iterations.
+</p>
+
+<p>
+[<a name="fn5" href="#fr5">5</a>]
+See this
+<a href="https://git.savannah.nongnu.org/cgit/lmi.git/commit/?id=9e68ef8e0d4f53eff73b333cf31d58a">commit</a>,
+which shows the roots for all 154 tests.
+For example, the first problem&rsquo;s root is hard-coded for unit
+testing, with Alefeld&rsquo;s <code>testout</code> value pasted
+into a comment:
+</p>
+
+<pre>
++    auto f01n01 = [](double x) {return std::sin(x) - x / 2.0;};
++    // Alefeld:     1.8954942670340;
++    double r01n01 = 1.89549426703398093963;
+</pre>
+
+<p>
+[<a name="fn6" href="#fr6">6</a>]
+Corresponding test problems in both papers:
+</p>
+
+<pre>
+  Le  Alefeld
+   &ndash;     1
+   1  &asymp;  2
+   2  &equiv;  3
+   3  &equiv;  4
+   4  &equiv;  5
+   5  &asymp;  6
+   6  &asymp;  7
+   7  &asymp;  8
+   8  &equiv;  9
+   9  &equiv; 10
+  10  &equiv; 11
+  11     &ndash;
+   &ndash;    12
+  12  &equiv; 13
+  13     &ndash;
+  14     &ndash;
+  15     &ndash;
+  16     &ndash;
+  17     &ndash;
+   &ndash;    14
+   &ndash;    15
+</pre>
+
+<h3>References</h3>
+
+<p>
+Where available, permanent URLs are given as &ldquo;[PURL]&rdquo;
+alternatives, in case the primary ones go stale.
+</p>
+
+<p>
+<a name="Alefeld1995"></a>
+Alefeld G.; Potra, F.; Shi, Yixun: &ldquo;Algorithm 748: Enclosing Zeros
+of Continuous Functions&rdquo;, ACM Trans. Math. Softw., Vol. 21, No. 3,
+September 1995, Pages 327&ndash;344. Reviewed by Varah, J., ACM Computing
+Reviews, Review #: CR119678 (9605-0371). Available online:
+<a href="https://dl.acm.org/doi/abs/10.1145/210089.210111">citation</a>;
+<a href="https://na.math.kit.edu/alefeld/download/1995_Algorithm_748_Enclosing_Zeros_of_Continuous_Functions.pdf">PDF</a>
+<a href="https://web.archive.org/web/20220412114137/https://na.math.kit.edu/alefeld/download/1995_Algorithm_748_Enclosing_Zeros_of_Continuous_Functions.pdf">[PURL]</a>;
+<a href="https://calgo.acm.org/748.gz">code</a>
+<a href="https://web.archive.org/web/20220412114617/https://calgo.acm.org/748.gz">[PURL]</a>.
+The code archive includes a <code>testout</code> file containing
+the roots computed for all 154 test cases, by Algorithm 4.2 only.
+</p>
+
+<p>
+<a name="Brent1973"></a>
+Brent, R. P.: &ldquo;Algorithms for Minimization without Derivatives&rdquo;,
+Prentice-Hall, Englewood Cliffs, New Jersey, 1973.
+<a href="https://maths-people.anu.edu.au/~brent/pub/pub011.html">Online copy provided by Brent</a>
+<a href="https://web.archive.org/web/20220320155343/https://maths-people.anu.edu.au/~brent/pub/pub011.html">[PURL]</a>;
+<a href="https://maths-people.anu.edu.au/~brent/pd/rpb011i.pdf">PDF</a>
+<a href="https://web.archive.org/web/20220323225414/https://maths-people.anu.edu.au/~brent/pd/rpb011i.pdf">[PURL]</a>.
+</p>
+
+<p>
+<a name="Kahan2016"></a>
+Kahan, W.: &ldquo;Lecture Notes on Real Root-Finding&rdquo;,
+University of California at Berkeley, Berkeley, California, 2016.
+<a href="https://people.eecs.berkeley.edu/~wkahan/Math128/RealRoots.pdf">Online copy provided by Kahan</a>
+<a href="https://web.archive.org/web/20220412122716/https://people.eecs.berkeley.edu/~wkahan/Math128/RealRoots.pdf">[PURL]</a>.
+</p>
+
+<p>
+<a name="Le1985"></a>
+Le, D.: &ldquo;An Efficient Derivative-Free Method for Solving Nonlinear
+Equations&rdquo;, ACM Trans. Math. Softw., Vol. 11, No. 3, September 1985,
+Pages 250&minus;262. Available online:
+<a href="https://dl.acm.org/doi/pdf/10.1145/214408.214416">citation</a>;
+<a href="http://www.dsc.ufcg.edu.br/~rangel/msn/downloads/p250-le.pdf">PDF</a>.
+<a href="https://web.archive.org/web/20170829071314/http://www.dsc.ufcg.edu.br/~rangel/msn/downloads/p250-le.pdf">[PURL]</a>.
+Le uses a third-order Newton method with numerical approximations of
+derivatives, and achieves a tight upper bound of no more than four
+times the number of evaluations required by pure bisection.
+</p>
+
+<p>
+<a name="Press2007"></a>
+Press, W. H., et al.: Numerical Recipes (3rd ed.), Cambridge University Press,
+Cambridge, 2007
+<a href="https://www.google.com/books/edition/Numerical_Recipes_with_Source_Code_CD_RO/cOP4KzHMSTcC?hl=en&amp;gbpv=1&amp;dq=%22Brent%27s+method+combines+the+sureness%22&amp;pg=PA455">snippet including quoted passage</a>
+</p>
+
+<p>
+<a name="Varah1996"></a>
+Varah, James Martin: [Review of Alefeld et. al (1995)],
+Computing Reviews, Association for Computing Machinery, New York, New York, 1996. Available online:
+<a href="https://www.computingreviews.com/review/review_review.cfm?review_id=119678">HTML</a>
+<a href="https://web.archive.org/web/20220412133130/https://www.computingreviews.com/review/review_review.cfm?review_id=119678">[PURL]</a>.
+</p>
+
+<h3>Appendix I: theoretical considerations</h3>
+
+<p>
+Evolving from earlier algorithms, TOMS 748 introduces three innovations.
+</p>
+
+<p>
+First, <a href="#Alefeld1995">Alefeld (1995, p. 328)</a>
+says that in most earlier work, including Brent&rsquo;s,
+  &ldquo;only the convergence rate of
+  {|x<sub>n</sub>&nbsp;&minus;&nbsp;x<sub>*</sub>|}<sup>x</sup><sub>n=1</sub>,
+  where x<sub>n</sub> is the current estimate of x<sub>*</sub>, has
+  been studied and not the convergence rate of the diameters
+  (b<sub>n</sub>&nbsp;&minus;&nbsp;a<sub>n</sub>)&rdquo;.
+For TOMS 748, a proof of superlinear convergence of the diameters is
+given. While this is academically interesting, it isn&rsquo;t shown
+to confer any practical advantage.
+</p>
+
+<p>
+Second, <a href="#Alefeld1995">Alefeld (1995, p. 329)</a>
+says TOMS 748&rsquo;s
+  &ldquo;improvements are achieved by employing inverse cubic
+  interpolation instead of quadratic interpolation&rdquo;
+(increasing the asymptotic order of convergence of the
+<i>diameters</i> from
+<i>&frac12;&sdot;(1&nbsp;+&nbsp;5<sup><small>&frac12;</small></sup>)</i>
+&asymp; 1.6180&hellip; to
+<!-- write &#8531; because HTML4 lacks &frac13; -->
+<i>(2&nbsp;+&nbsp;7<sup><small>&frac12;</small></sup>)<sup><small>&#8531;</small></sup></i>
+&asymp; 1.6686&hellip;),
+and that this
+  &ldquo;is optimal in a certain class of algorithms&rdquo;.
+<a href="#Kahan2016">Kahan&rsquo;s (2016, p. 6)</a>
+general counterpoint discusses three phases:
+</p>
+
+<blockquote>
+<p>
+Phase 1 : Flailing [:]
+Initial iterates x approximate the desired root z poorly. They may move towards
+it, or wander, or jump about as if at random, but they do not converge rapidly.
+</p>
+
+<p>
+Phase 2 : Converging [:]
+Differences between successive iterates x dwindle,&mdash; rapidly, we hope.
+</p>
+
+<p>
+Phase 3 : Dithering [:]
+Indistinguishable from Flailing except that different iterates x differ much
+less from a root and may (very nearly) repeat. Dithering is due entirely to
+roundoff.
+</p>
+
+<p>
+&hellip;
+Converging is what we hope the chosen iteration does
+quickly, and usually it does; and when it
+does, the search for a zero can spend relatively
+little time in Phase 2. Why then is so much of the
+literature about numerical methods concerned with
+this phase? Perhaps because it is the easiest
+phase to analyze. Ultimately superlinear ( fast )
+convergence is rarely difficult to accomplish, as
+we shall see; Newton’s iteration usually converges
+quadratically. Convergence faster than that is
+an interesting topic omitted from these notes
+because it reduces only the time spent in Phase 2
+</p>
+</blockquote>
+
+<p>
+<a href="#Brent1973">Brent (1973, p. 51)</a> experimentally found that
+favoring IQI over the secant method saved about
+half of one function evaluation per root. If the average is 20, then
+that improvement is only 0.5&nbsp;&frasl;&nbsp;20 = 2.5%.
+Progressively higher-order methods yield diminishing returns:
+the <i>roots</i> converge with order
+ 1.618&hellip; (secant),
+ 1.839&hellip; (IQI: tribonacci constant),
+ 1.928&hellip; (ICI: tetrabonacci),
+and so on.
+Thus, <a href="#Brent1973">Brent (1973, p. 57)</a> felt that
+  &ldquo;nothing much can be gained by going beyond linear or
+  quadratic interpolation&rdquo;.
+It should also be noted that higher-order methods are more susceptible
+to numerical errors such as roundoff, overflow, underflow, and
+catastrophic cancellation, especially in Phase 3.
+</p>
+
+<p>
+Third, <a href="#Alefeld1995">Alefeld (1995, p. 329)</a>
+uses "double-length secant steps". The secant method often converges
+slowly from one side of the bounding interval, and doubling the size
+of a step is a heuristic that hopes to overshoot the root, leading to
+faster two-sided convergence. However, the secant method already has
+asymptotic order of convergence &asymp; 1.618&hellip;, and this
+heuristic sacrifices that theoretically-proven property: when
+convergence would otherwise proceed rapidly, this technique spoils it.
+</p>
+
+<p>
+Only experiment can determine whether this set of innovations is
+profitable.
+</p>
+
+<h3>Appendix II: raw data</h3>
+
+<p>
+The replication crisis shows that publication of raw data is crucial
+to upholding scientific integrity. As one journal editor says:
+<a href="https://molecularbrain.biomedcentral.com/articles/10.1186/s13041-020-0552-2">&ldquo;No raw data, no science&rdquo;</a>.
+<a href="https://journals.plos.org/plosone/s/data-availability">PLOS</a>
+requires authors to submit
+&ldquo;The values behind the means, standard deviations and other
+measures reported&rdquo;. This appendix shows where to find the data
+that underlie our findings, and (assuming proficiency with common
+tools) how to regenerate them.
+</p>
+
+<p>
+Our data files are published in
+<a href="https://savannah.nongnu.org/projects/lmi/"><tt>lmi</tt></a>&rsquo;s
+git repository. The raw files used in our reconstructions are:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="https://git.savannah.nongnu.org/cgit/lmi.git/tree/gwc/zero_a_x86_64-pc-linux-gnu">zero_a_x86_64-pc-linux-gnu</a>, for Alefeld&rsquo;s algorithm, and
+<br>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="https://git.savannah.nongnu.org/cgit/lmi.git/tree/gwc/zero_b_x86_64-pc-linux-gnu">zero_b_x86_64-pc-linux-gnu</a>, for Brent&rsquo;s.
+<br>
+Optionally running this command:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;<code>gwc/toms_vs_brent.sh</code><br>
+in a working copy recreates them from scratch (verified with
+HEAD = 5b3f63f7720a51 of 2022-03-21). Thus, everything in this
+article can be reproduced from our published code alone (with the
+sole exception of an incidental comment about <tt>lmi</tt>&rsquo;s
+regression tests, some of which depend on proprietary data).
+</p>
+
+<p>
+The
+<a href="https://git.savannah.nongnu.org/cgit/lmi.git/tree/gwc/zero_consolidated">zero_consolidated</a>
+file results from manually combining, reformatting, and labelling
+the raw data for easier reference. A
+<a href="https://download-mirror.savannah.gnu.org/releases/lmi/toms748.xls">spreadsheet</a>
+<a href="https://download-mirror.savannah.gnu.org/releases/lmi/toms748.xls.sig">(cryptographically signed)</a>
+shows how the consolidated data have been analyzed and tabulated.
+</p>
+
+<hr>
+
+<p>
+Copyright &copy; 2022 Gregory W. Chicares.
+This program, including its documentation, is free software. Read the
+<a href="COPYING.html">terms</a>
+under which you can redistribute and modify it.
+</p>
+
+<p>
+Maintained by
+<a href="mailto:&#103;&#99;&#104;&#105;&#99;&#97;&#114;&#101;&#115;@sbcglobal.net">
+Gregory W. Chicares</a>. The latest version of this file can be found
+at the <tt>lmi</tt>
+<a href="https://savannah.nongnu.org/projects/lmi/">website</a>.
+</p>
+
+</body>
+
+</html>
