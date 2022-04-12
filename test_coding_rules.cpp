@@ -1086,8 +1086,8 @@ void enforce_taboos(file const& f)
     // ASCII copyright symbol requires upper-case 'C'.
     taboo(f, R"(\(c\) *[0-9])");
     // Former addresses of the Free Software Foundation.
-    taboo(f, "Cambridge");
-    taboo(f, "Temple P");
+    taboo(f, "Mass Ave, Cambridge");
+    taboo(f, "Temple Place");
     // Patented.
     taboo(f, R"(\.gif)", pcre::regex::icase);
     // Obsolete email address.

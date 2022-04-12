@@ -496,8 +496,8 @@ File 'eraseme_marker_001' has irregular defect marker 'INELEGANT !!B'.
 File 'eraseme_marker_001' has irregular defect marker 'INELEGANT !!!'.
 File 'eraseme_marker_001' has irregular defect marker 'ELEGANT !! '.
 File 'eraseme_png_003-dot.dash-dot.png' exceeds 31-character file-name limit.
-File 'eraseme_taboo_001' breaks taboo 'Cambridge'.
-File 'eraseme_taboo_001' breaks taboo 'Temple P'.
+File 'eraseme_taboo_001' breaks taboo 'Mass Ave, Cambridge'.
+File 'eraseme_taboo_001' breaks taboo 'Temple Place'.
 File 'eraseme_taboo_001' breaks taboo 'Shibboleth'.
 File 'eraseme_taboo_001' breaks taboo 'sibboleth'.
 File 'eraseme_url_001' lacks lmi URL.
