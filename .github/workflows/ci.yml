@@ -123,6 +123,9 @@ jobs:
 
           sudo apt-get -qq install $packages
 
+          # Bypass check for insecure directory in Git 2.35.2+ (CVE-2022-24765).
+          git config --global --add safe.directory ${GITHUB_WORKSPACE}
+
       - name: Checkout
         uses: actions/checkout@v2
         with:
