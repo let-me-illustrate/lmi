@@ -188,6 +188,17 @@ cd /lmi/src
 git clone chicares@git.sv.gnu.org:/srv/git/lmi.git
   # [anticipate a "fingerprint" message here the first time]
 
+  # Alternatively, and more simply...see
+  #   https://lists.nongnu.org/archive/html/lmi/2019-01/msg00003.html
+
+mkdir -p /tmp/web-cvs
+pushd /tmp/web-cvs
+cvs -z3 -d "chicares@cvs.sv.gnu.org:/web/lmi" checkout lmi
+cd lmi
+cp -aiv /opt/lmi/src/lmi/toms_748.html .
+cvs -z3 -d "chicares@cvs.sv.gnu.org:/web/lmi" commit -m'Refresh from git' toms_748.html
+popd
+
   # Copy proprietary test data
 
   # contents: most recent archive, or proprietary repo
