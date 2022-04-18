@@ -130,6 +130,19 @@ inline currency from_cents(double cents)
     return currency(cents, raw_cents{});
     }
 
+inline double centize(currency z) {return z.cents();}
+
+inline std::vector<double> centize(std::vector<currency> const& z)
+{
+    std::vector<double> r;
+    r.reserve(z.size());
+    for(auto const& i : z)
+        {
+        r.emplace_back(i.cents());
+        }
+    return r;
+}
+
 inline double dblize(currency z) {return z.d();}
 
 inline std::vector<double> dblize(std::vector<currency> const& z)
