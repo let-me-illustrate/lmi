@@ -1018,10 +1018,10 @@ void AccountValue::TxSpecAmtChange()
                 ,minimum_specified_amount(0 == Year && 0 == Month, TermRiderActive)
                 );
             ActualSpecAmt = round_specamt().c(ActualSpecAmt); // CURRENCY !! already rounded?
-            InvariantValues().SpecAmt[j] = ActualSpecAmt;
+            InvariantValues().SpecAmt[j] = dblize(ActualSpecAmt);
             if(!TermIsNotRider)
                 {
-                InvariantValues().TermSpecAmt[j] = TermSpecAmt;
+                InvariantValues().TermSpecAmt[j] = dblize(TermSpecAmt);
                 }
             }
         // Set BOM DB for 7702 and 7702A.
