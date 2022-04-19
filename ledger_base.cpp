@@ -140,7 +140,10 @@ void LedgerBase::Copy(LedgerBase const& obj)
 }
 
 //============================================================================
-std::string LedgerBase::value_str(std::string const& map_key, int index) const
+std::string LedgerBase::value_str
+    (std::string const& map_key
+    ,int                index
+    ) const
 {
     double_vector_map::const_iterator found = AllVectors.find(map_key);
     if(AllVectors.end() != found)
@@ -153,7 +156,9 @@ std::string LedgerBase::value_str(std::string const& map_key, int index) const
 }
 
 //============================================================================
-std::string LedgerBase::value_str(std::string const& map_key) const
+std::string LedgerBase::value_str
+    (std::string const& map_key
+    ) const
 {
     string_map::const_iterator found_string = Strings.find(map_key);
     if(Strings.end() != found_string)

@@ -179,8 +179,13 @@ class LMI_SO LedgerBase
 
     minmax<double>     scalable_extrema() const;
     std::string const& scale_unit() const;
-    std::string        value_str(std::string const& map_key, int index) const;
-    std::string        value_str(std::string const& map_key) const;
+    std::string value_str
+        (std::string const& map_key
+        ,int                index
+        ) const;
+    std::string value_str
+        (std::string const& map_key
+        ) const;
 
     double_vector_map const& all_vectors() const;
 
