@@ -205,11 +205,13 @@ currency AccountValue::SolveTest
     if(no_lapse_dur < SolveTargetDuration_)
         {
         // CURRENCY !! Cents in ledger will make rounding unnecessary.
+        // But is that true? Ledger contains cents as double, not as currency.
         most_negative_csv = round_minutiae().c
             (*std::min_element
                 (VariantValues().CSVNet.begin() + no_lapse_dur
                 ,VariantValues().CSVNet.begin() + SolveTargetDuration_
                 )
+            / 100.0
             );
         }
 
@@ -236,14 +238,18 @@ currency AccountValue::SolveTest
     // counters and iterators--it's one past the end--but indexing
     // must decrement it.
     // CURRENCY !! Cents in ledger will make rounding unnecessary.
-    currency value = round_minutiae().c(VariantValues().CSVNet[SolveTargetDuration_ - 1]);
+    // But is that true? Ledger contains cents as double, not as currency.
+    currency value = round_minutiae().c(VariantValues().CSVNet[SolveTargetDuration_ - 1] / 100.0);
     if(mce_solve_for_target_naar == SolveTarget_)
         {
         // CURRENCY !! Cents in ledger will make rounding unnecessary.
         value = round_minutiae().c
             (
-              VariantValues().EOYDeathBft[SolveTargetDuration_ - 1]
-            - VariantValues().AcctVal    [SolveTargetDuration_ - 1]
+                (
+                  VariantValues().EOYDeathBft[SolveTargetDuration_ - 1]
+                - VariantValues().AcctVal    [SolveTargetDuration_ - 1]
+                )
+            / 100.0
             );
         }
     if(worst_negative < C0)

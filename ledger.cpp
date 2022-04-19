@@ -489,7 +489,7 @@ std::vector<double> numeric_vector
         {
         attained_age     [j] = j + invar.Age;
         policy_year      [j] = j + 1        ;
-        net_death_benefit[j] = curr.EOYDeathBft[j] - curr.TotalLoanBalance[j];
+        net_death_benefit[j] = (curr.EOYDeathBft[j] - curr.TotalLoanBalance[j]) / 100.0;
         }
 
     typedef LedgerBase const& B;

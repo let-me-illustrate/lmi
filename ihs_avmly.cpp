@@ -815,12 +815,12 @@ void AccountValue::ChangeSpecAmtBy(currency delta)
 // TODO ?? Shouldn't this be moved to FinalizeMonth()? The problem is
 // that the ledger object is used for working storage, where it should
 // probably be write-only instead.
-        InvariantValues().SpecAmt[j] = dblize(ActualSpecAmt);
+        InvariantValues().SpecAmt[j] = centize(ActualSpecAmt);
         // Adjust term here only if it's formally a rider.
         // Otherwise, its amount should not have been changed.
         if(!TermIsNotRider)
             {
-            InvariantValues().TermSpecAmt[j] = dblize(TermSpecAmt);
+            InvariantValues().TermSpecAmt[j] = centize(TermSpecAmt);
             }
 // Term specamt is a vector in class LedgerInvariant, but a scalar in
 // the input classes, e.g.:
@@ -845,7 +845,7 @@ void AccountValue::ChangeSupplAmtBy(currency delta)
     // At least for now, there is no effect on surrender charges.
     for(int j = Year; j < BasicValues::GetLength(); ++j)
         {
-        InvariantValues().TermSpecAmt[j] = dblize(TermSpecAmt);
+        InvariantValues().TermSpecAmt[j] = centize(TermSpecAmt);
         }
     // Reset term DB whenever term SA changes. It's not obviously
     // necessary to do this here, but neither should it do any harm.
@@ -1018,10 +1018,10 @@ void AccountValue::TxSpecAmtChange()
                 ,minimum_specified_amount(0 == Year && 0 == Month, TermRiderActive)
                 );
             ActualSpecAmt = round_specamt().c(ActualSpecAmt); // CURRENCY !! already rounded?
-            InvariantValues().SpecAmt[j] = dblize(ActualSpecAmt);
+            InvariantValues().SpecAmt[j] = centize(ActualSpecAmt);
             if(!TermIsNotRider)
                 {
-                InvariantValues().TermSpecAmt[j] = dblize(TermSpecAmt);
+                InvariantValues().TermSpecAmt[j] = centize(TermSpecAmt);
                 }
             }
         // Set BOM DB for 7702 and 7702A.
@@ -1608,7 +1608,7 @@ void AccountValue::TxLoanRepay()
 // This seems wrong. If we're changing something that's invariant among
 // bases, why do we change it for each basis?
 // TODO ?? Shouldn't this be moved to FinalizeMonth()?
-    InvariantValues().NewCashLoan[Year] = dblize(ActualLoan);
+    InvariantValues().NewCashLoan[Year] = centize(ActualLoan);
     // TODO ?? Consider changing loan_ullage_[Year] here.
 }
 
@@ -1840,7 +1840,7 @@ void AccountValue::EndTermRider(bool convert)
     // Carry the new term spec amt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); ++j)
         {
-        InvariantValues().TermSpecAmt[j] = dblize(TermSpecAmt);
+        InvariantValues().TermSpecAmt[j] = centize(TermSpecAmt);
         }
 }
 
@@ -2668,7 +2668,7 @@ void AccountValue::TxTakeWD()
 // This seems wrong. If we're changing something that's invariant among
 // bases, why do we change it for each basis?
 // TODO ?? Shouldn't this be moved to FinalizeMonth()?
-    InvariantValues().NetWD[Year] = dblize(NetWD);
+    InvariantValues().NetWD[Year] = centize(NetWD);
 }
 
 /// Calculate maximum permissible total loan (not increment).
@@ -2774,7 +2774,7 @@ void AccountValue::TxTakeLoan()
         ActualLoan = std::min(max_loan_increment, RequestedLoan);
         ActualLoan = std::max(ActualLoan, C0);
         // TODO ?? Shouldn't this happen in FinalizeMonth()?
-        InvariantValues().NewCashLoan[Year] = dblize(ActualLoan);
+        InvariantValues().NewCashLoan[Year] = centize(ActualLoan);
         }
 
     {
@@ -2943,9 +2943,9 @@ void AccountValue::FinalizeMonth()
         {
         if(0 == Year && 0 == Month)
             {
-            InvariantValues().External1035Amount = dblize(External1035Amount);
-            InvariantValues().Internal1035Amount = dblize(Internal1035Amount);
-            InvariantValues().Dumpin = dblize(Dumpin);
+            InvariantValues().External1035Amount = centize(External1035Amount);
+            InvariantValues().Internal1035Amount = centize(Internal1035Amount);
+            InvariantValues().Dumpin = centize(Dumpin);
             }
 
         // TAXATION !! We could also capture MEC status on other bases here.

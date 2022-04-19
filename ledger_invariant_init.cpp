@@ -105,11 +105,11 @@ void LedgerInvariant::Init(BasicValues const* b)
     HasSupplSpecAmt            = false;
     if(b->yare_input_.TermRider)
         {
-        TermSpecAmt            .assign(Length, b->yare_input_.TermRiderAmount);
+        TermSpecAmt            .assign(Length, b->yare_input_.TermRiderAmount * 100.0);
         }
     else if(b->database().query<bool>(DB_TermIsNotRider))
         {
-        TermSpecAmt            = dblize(b->DeathBfts_->supplamt());
+        TermSpecAmt            = centize(b->DeathBfts_->supplamt());
         if(!each_equal(TermSpecAmt, 0.0))
             {
             HasSupplSpecAmt    = true;
@@ -119,7 +119,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         {
         TermSpecAmt            .assign(Length, 0.0);
         }
-    SpecAmt                    = dblize(b->DeathBfts_->specamt());
+    SpecAmt                    = centize(b->DeathBfts_->specamt());
 //  Dcv                        = DYNAMIC
 
     // Forborne vectors.
@@ -158,7 +158,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     // Scalable scalars.
 
     // SOMEDAY !! Things indexed with '[0]' should probably use inforce year instead.
-    InitBaseSpecAmt            = dblize(b->DeathBfts_->specamt()[0]);
+    InitBaseSpecAmt            = centize(b->DeathBfts_->specamt()[0]);
     InitTermSpecAmt            = TermSpecAmt[0];
     ChildRiderAmount           = b->yare_input_.ChildRiderAmount;
     SpouseRiderAmount          = b->yare_input_.SpouseRiderAmount;
@@ -731,11 +731,11 @@ void LedgerInvariant::ReInit(BasicValues const* b)
     HasSupplSpecAmt            = false;
     if(b->yare_input_.TermRider)
         {
-        TermSpecAmt            .assign(Length, b->yare_input_.TermRiderAmount);
+        TermSpecAmt            .assign(Length, b->yare_input_.TermRiderAmount * 100.0);
         }
     else if(b->database().query<bool>(DB_TermIsNotRider))
         {
-        TermSpecAmt            = dblize(b->DeathBfts_->supplamt());
+        TermSpecAmt            = centize(b->DeathBfts_->supplamt());
         if(!each_equal(TermSpecAmt, 0.0))
             {
             HasSupplSpecAmt    = true;
@@ -745,9 +745,9 @@ void LedgerInvariant::ReInit(BasicValues const* b)
         {
         TermSpecAmt            .assign(Length, 0.0);
         }
-    SpecAmt                    = dblize(b->DeathBfts_->specamt());
+    SpecAmt                    = centize(b->DeathBfts_->specamt());
 
-    InitBaseSpecAmt            = dblize(b->DeathBfts_->specamt()[0]);
+    InitBaseSpecAmt            = centize(b->DeathBfts_->specamt()[0]);
     InitTermSpecAmt            = TermSpecAmt[0];
 
     IsMec                      = false;

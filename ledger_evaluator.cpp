@@ -435,6 +435,8 @@ format_map_t static_formats()
     std::pair<int,oenum_format_style> f2(2, oe_format_normal);
     std::pair<int,oenum_format_style> f3(0, oe_format_percentage);
     std::pair<int,oenum_format_style> f4(2, oe_format_percentage);
+    std::pair<int,oenum_format_style> f5(0, oe_cents_as_dollars);
+    std::pair<int,oenum_format_style> f6(2, oe_cents_as_dollars);
 
     static format_map_t const format_map =
 // > Special Formatting for Scalar Items
@@ -472,17 +474,17 @@ format_map_t static_formats()
 // > Format as a number with thousand separators and two decimal places (#,###,###.00)
 // >
     ,{"CurrentCoiMultiplier"            , f2}
-    ,{"EeListBillPremium"               , f2}
-    ,{"ErListBillPremium"               , f2}
+    ,{"EeListBillPremium"               , f6}
+    ,{"ErListBillPremium"               , f6}
     ,{"GuarPrem"                        , f2}
     ,{"InforceTaxBasis"                 , f2}
     ,{"InforceTotalAV"                  , f2}
-    ,{"InitGLP"                         , f2}
-    ,{"InitGSP"                         , f2}
-    ,{"InitPrem"                        , f2}
+    ,{"InitGLP"                         , f6}
+    ,{"InitGSP"                         , f6}
+    ,{"InitPrem"                        , f6}
     ,{"InitSevenPayPrem"                , f2}
-    ,{"InitTgtPrem"                     , f2}
-    ,{"ListBillPremium"                 , f2}
+    ,{"InitTgtPrem"                     , f6}
+    ,{"ListBillPremium"                 , f6}
 // >
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,###)
@@ -492,10 +494,10 @@ format_map_t static_formats()
     ,{"AvgFund"                         , f1}
     ,{"ChildRiderAmount"                , f1}
     ,{"CustomFund"                      , f1}
-    ,{"Dumpin"                          , f1}
+    ,{"Dumpin"                          , f5}
     ,{"EndtAge"                         , f1}
     ,{"ErNotionallyPaysTerm"            , f1}
-    ,{"External1035Amount"              , f1}
+    ,{"External1035Amount"              , f5}
     ,{"GenderBlended"                   , f1}
     ,{"GreatestLapseDuration"           , f1}
     ,{"GroupIndivSelection"             , f1}
@@ -510,10 +512,10 @@ format_map_t static_formats()
     ,{"InforceIsMec"                    , f1}
     ,{"InforceMonth"                    , f1}
     ,{"InforceYear"                     , f1}
-    ,{"InitBaseSpecAmt"                 , f1}
-    ,{"InitTermSpecAmt"                 , f1}
-    ,{"InitTotalSA"                     , f1}
-    ,{"Internal1035Amount"              , f1}
+    ,{"InitBaseSpecAmt"                 , f5}
+    ,{"InitTermSpecAmt"                 , f5}
+    ,{"InitTotalSA"                     , f5}
+    ,{"Internal1035Amount"              , f5}
     ,{"IsInforce"                       , f1}
     ,{"IsMec"                           , f1}
     ,{"IsSinglePremium"                 , f1}
@@ -610,62 +612,62 @@ format_map_t static_formats()
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
 // >
-    ,{"AVGenAcct"                       , f1}
+    ,{"AVGenAcct"                       , f5}
     ,{"AVRelOnDeath"                    , f1}
-    ,{"AVSepAcct"                       , f1}
-    ,{"AcctVal"                         , f1}
+    ,{"AVSepAcct"                       , f5}
+    ,{"AcctVal"                         , f5}
     ,{"AccumulatedPremium"              , f1}
     ,{"AddonCompOnAssets"               , f1}
     ,{"AddonCompOnPremium"              , f1}
     ,{"AvgDeathBft"                     , f1}
     ,{"BOYAssets"                       , f1}
-    ,{"BaseDeathBft"                    , f1}
-    ,{"COICharge"                       , f1}
-    ,{"CSVNet"                          , f1}
-    ,{"CV7702"                          , f1}
+    ,{"BaseDeathBft"                    , f5}
+    ,{"COICharge"                       , f5}
+    ,{"CSVNet"                          , f5}
+    ,{"CV7702"                          , f5}
     ,{"ClaimsPaid"                      , f1}
     ,{"Composite"                       , f1}
     ,{"DacTaxLoad"                      , f1}
     ,{"DacTaxRsv"                       , f1}
-    ,{"Dcv"                             , f1}
+    ,{"Dcv"                             , f5}
     ,{"DeathProceedsPaid"               , f1}
-    ,{"EOYDeathBft"                     , f1}
-    ,{"EeGrossPmt"                      , f1}
-    ,{"EeModalMinimumPremium"           , f1}
+    ,{"EOYDeathBft"                     , f5}
+    ,{"EeGrossPmt"                      , f5}
+    ,{"EeModalMinimumPremium"           , f5}
 //  ,{"EeMode"                          , f1} // Not numeric.
-    ,{"ErGrossPmt"                      , f1}
-    ,{"ErModalMinimumPremium"           , f1}
+    ,{"ErGrossPmt"                      , f5}
+    ,{"ErModalMinimumPremium"           , f5}
 //  ,{"ErMode"                          , f1} // Not numeric.
     ,{"ExpenseCharges"                  , f1}
     ,{"FundNumbers"                     , f1}
-    ,{"GptForceout"                     , f1}
-    ,{"GrossIntCredited"                , f1}
-    ,{"GrossPmt"                        , f1}
+    ,{"GptForceout"                     , f5}
+    ,{"GrossIntCredited"                , f5}
+    ,{"GrossPmt"                        , f5}
     ,{"Loads"                           , f1}
     ,{"LoanInt"                         , f1}
-    ,{"LoanIntAccrued"                  , f1}
-    ,{"ModalMinimumPremium"             , f1}
+    ,{"LoanIntAccrued"                  , f5}
+    ,{"ModalMinimumPremium"             , f5}
     ,{"NaarForceout"                    , f1}
     ,{"NetClaims"                       , f1}
-    ,{"NetIntCredited"                  , f1}
-    ,{"NetPmt"                          , f1}
-    ,{"NetWD"                           , f1}
-    ,{"NewCashLoan"                     , f1}
-    ,{"Outlay"                          , f1}
-    ,{"PolicyFee"                       , f1}
+    ,{"NetIntCredited"                  , f5}
+    ,{"NetPmt"                          , f5}
+    ,{"NetWD"                           , f5}
+    ,{"NewCashLoan"                     , f5}
+    ,{"Outlay"                          , f5}
+    ,{"PolicyFee"                       , f5}
     ,{"PrefLoanBalance"                 , f1}
     ,{"PremTaxLoad"                     , f1}
     ,{"RefundableSalesLoad"             , f1}
-    ,{"RiderCharges"                    , f1}
+    ,{"RiderCharges"                    , f5}
     ,{"Salary"                          , f1}
-    ,{"SepAcctCharges"                  , f1}
-    ,{"SpecAmt"                         , f1}
-    ,{"SpecAmtLoad"                     , f1}
+    ,{"SepAcctCharges"                  , f5}
+    ,{"SpecAmt"                         , f5}
+    ,{"SpecAmtLoad"                     , f5}
     ,{"SpouseRiderAmount"               , f1}
-    ,{"SurrChg"                         , f1}
-    ,{"TermPurchased"                   , f1}
-    ,{"TermSpecAmt"                     , f1}
-    ,{"TotalLoanBalance"                , f1}
+    ,{"SurrChg"                         , f5}
+    ,{"TermPurchased"                   , f5}
+    ,{"TermSpecAmt"                     , f5}
+    ,{"TotalLoanBalance"                , f5}
     };
 
     return format_map;
@@ -688,6 +690,8 @@ ledger_evaluator Ledger::make_evaluator() const
 //  std::pair<int,oenum_format_style> f2(2, oe_format_normal);     // not used
     std::pair<int,oenum_format_style> f3(0, oe_format_percentage);
 //  std::pair<int,oenum_format_style> f4(2, oe_format_percentage); // not used
+    std::pair<int,oenum_format_style> f5(0, oe_cents_as_dollars);
+//  std::pair<int,oenum_format_style> f6(2, oe_cents_as_dollars);  // not used
 
     format_map_t format_map {static_formats()};
 
@@ -763,19 +767,19 @@ ledger_evaluator Ledger::make_evaluator() const
     vectors   ["PremiumLoad"] = &PremiumLoad;
     title_map ["PremiumLoad"] = "Premium\nLoad";
     mask_map  ["PremiumLoad"] = "999,999,999";
-    format_map["PremiumLoad"] = f1;
+    format_map["PremiumLoad"] = f5;
 
     vectors   ["MiscCharges"] = &MiscCharges;
     title_map ["MiscCharges"] = "Miscellaneous\nCharges";
     mask_map  ["MiscCharges"] = "999,999,999";
-    format_map["MiscCharges"] = f1;
+    format_map["MiscCharges"] = f5;
 
     std::vector<double> NetDeathBenefit(curr.EOYDeathBft);
     NetDeathBenefit -= curr.TotalLoanBalance;
     vectors   ["NetDeathBenefit"] = &NetDeathBenefit;
     title_map ["NetDeathBenefit"] = "Net\nDeath\nBenefit";
     mask_map  ["NetDeathBenefit"] = "999,999,999";
-    format_map["NetDeathBenefit"] = f1;
+    format_map["NetDeathBenefit"] = f5;
 
     std::vector<double> SupplDeathBft_Current   (curr.TermPurchased);
     std::vector<double> SupplDeathBft_Guaranteed(guar.TermPurchased);
@@ -785,14 +789,14 @@ ledger_evaluator Ledger::make_evaluator() const
     title_map ["SupplDeathBft_Guaranteed"] = "Guar Suppl\nDeath\nBenefit";
     mask_map  ["SupplDeathBft_Current"   ] = "999,999,999";
     mask_map  ["SupplDeathBft_Guaranteed"] = "999,999,999";
-    format_map["SupplDeathBft_Current"   ] = f1;
-    format_map["SupplDeathBft_Guaranteed"] = f1;
+    format_map["SupplDeathBft_Current"   ] = f5;
+    format_map["SupplDeathBft_Guaranteed"] = f5;
 
     std::vector<double> SupplSpecAmt(invar.TermSpecAmt);
     vectors   ["SupplSpecAmt"            ] = &SupplSpecAmt;
     title_map ["SupplSpecAmt"            ] = "Suppl\nSpecified\nAmount";
     mask_map  ["SupplSpecAmt"            ] = "999,999,999";
-    format_map["SupplSpecAmt"            ] = f1;
+    format_map["SupplSpecAmt"            ] = f5;
 
     // [End of derived columns.]
 

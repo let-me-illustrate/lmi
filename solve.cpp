@@ -91,15 +91,15 @@ currency SolveTest()
         Negative = std::min
             (Negative
             // CURRENCY !! Cents in ledger will make rounding unnecessary.
-            ,round_to_cents.c(ConstThat->VariantValues().CSVNet[j])
+            ,round_to_cents.c(ConstThat->VariantValues().CSVNet[j] / 100.0)
 // Ideally, it'd be this:
-//          ,std::min(ConstThat->VariantValues().CSVNet[j], ConstThat->loan_ullage_[j])
+//          ,std::min(ConstThat->VariantValues().CSVNet[j] / 100.0, ConstThat->loan_ullage_[j])
 // but the antediluvian branch doesn't calculate ullage at all.
             );
         }
 
     // CURRENCY !! Cents in ledger will make rounding unnecessary.
-    currency z = round_to_cents.c(ConstThat->VariantValues().CSVNet[ThatSolveTgtYear - 1]);
+    currency z = round_to_cents.c(ConstThat->VariantValues().CSVNet[ThatSolveTgtYear - 1] / 100.0);
     if(Negative < C0)
         z = std::min(z, Negative);
     // IHS !! If SolveTgtYr within no-lapse period...see lmi.

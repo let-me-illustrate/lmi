@@ -72,53 +72,53 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
         m["AttainedAge"                ] = ledger_metadata(0, oe_format_normal    , "Attained Age"                          );
         m["PolicyYear"                 ] = ledger_metadata(0, oe_format_normal    , "Policy Year"                           );
         m["InforceLives"               ] = ledger_metadata(4, oe_format_normal    , "BOY Lives Inforce"                     ); // "Inforce Lives BOY"
-        m["SpecAmt"                    ] = ledger_metadata(0, oe_format_normal    , "Specified Amount"                      ); // "Base Specified Amount"
-        m["TermSpecAmt"                ] = ledger_metadata(0, oe_format_normal    , "Term Specified Amount"                 );
-        m["SupplSpecAmt"               ] = ledger_metadata(0, oe_format_normal    , "Suppl Specified Amount"                ); // "Supplemental Specified Amount"
+        m["SpecAmt"                    ] = ledger_metadata(0, oe_cents_as_dollars , "Specified Amount"                      ); // "Base Specified Amount"
+        m["TermSpecAmt"                ] = ledger_metadata(0, oe_cents_as_dollars , "Term Specified Amount"                 );
+        m["SupplSpecAmt"               ] = ledger_metadata(0, oe_cents_as_dollars , "Suppl Specified Amount"                ); // "Supplemental Specified Amount"
         m["CorridorFactor"             ] = ledger_metadata(0, oe_format_percentage, "Corridor Factor"                       );
         m["AnnGAIntRate_Current"       ] = ledger_metadata(2, oe_format_percentage, "Curr Ann Gen Acct Int Rate"            ); // "General Account Crediting Rate"
         m["AnnSAIntRate_Current"       ] = ledger_metadata(2, oe_format_percentage, "Curr Ann Sep Acct Int Rate"            ); // "Separate Account Net Rate"
-        m["Outlay"                     ] = ledger_metadata(0, oe_format_normal    , "Net Outlay"                            );
-        m["EeGrossPmt"                 ] = ledger_metadata(0, oe_format_normal    , "EE Gross Payment"                      ); // "Employee Gross Payment"
-        m["ErGrossPmt"                 ] = ledger_metadata(0, oe_format_normal    , "ER Gross Payment"                      ); // "Employer Gross Payment"
-        m["ModalMinimumPremium"        ] = ledger_metadata(0, oe_format_normal    , "Modal Minimum Premium"                 );
-        m["EeModalMinimumPremium"      ] = ledger_metadata(0, oe_format_normal    , "EE Modal Minimum Premium"              );
-        m["ErModalMinimumPremium"      ] = ledger_metadata(0, oe_format_normal    , "ER Modal Minimum Premium"              );
-        m["NetWD"                      ] = ledger_metadata(0, oe_format_normal    , "Withdrawal"                            );
-        m["NewCashLoan"                ] = ledger_metadata(0, oe_format_normal    , "Annual Loan"                           ); // "New Cash Loan"
-        m["TotalLoanBalance_Current"   ] = ledger_metadata(0, oe_format_normal    , "Curr Total Loan Balance"               ); // "Current Total Loan Balance"
-        m["TotalLoanBalance_Guaranteed"] = ledger_metadata(0, oe_format_normal    , "Guar Total Loan Balance"               ); // "Guaranteed Total Loan Balance"
-        m["AcctVal_Current"            ] = ledger_metadata(0, oe_format_normal    , "Curr Account Value"                    ); // "Current Account Value"
-        m["AcctVal_Guaranteed"         ] = ledger_metadata(0, oe_format_normal    , "Guar Account Value"                    ); // "Guaranteed Account Value"
-        m["CSVNet_Current"             ] = ledger_metadata(0, oe_format_normal    , "Curr Net Cash Surr Value"              ); // "Current Cash Surrender Value"
-        m["CSVNet_Guaranteed"          ] = ledger_metadata(0, oe_format_normal    , "Guar Net Cash Surr Value"              ); // "Guaranteed Cash Surrender Value"
-        m["EOYDeathBft_Current"        ] = ledger_metadata(0, oe_format_normal    , "Curr EOY Death Benefit"                ); // "Current Death Benefit"
-        m["EOYDeathBft_Guaranteed"     ] = ledger_metadata(0, oe_format_normal    , "Guar EOY Death Benefit"                ); // "Guaranteed Death Benefit"
-        m["BaseDeathBft_Current"       ] = ledger_metadata(0, oe_format_normal    , "Curr Base Death Benefit"               ); // "Current Base Death Benefit"
-        m["BaseDeathBft_Guaranteed"    ] = ledger_metadata(0, oe_format_normal    , "Guar Base Death Benefit"               ); // "Guaranteed Base Death Benefit"
-        m["TermPurchased_Current"      ] = ledger_metadata(0, oe_format_normal    , "Curr Term Amt Purchased"               ); // "Current Term Purchased"
-        m["TermPurchased_Guaranteed"   ] = ledger_metadata(0, oe_format_normal    , "Guar Term Amt Purchased"               ); // "Guaranteed Term Purchased"
-        m["SupplDeathBft_Current"      ] = ledger_metadata(0, oe_format_normal    , "Curr Suppl Death Benefit"              ); // "Current Supplemental Death Benefit"
-        m["SupplDeathBft_Guaranteed"   ] = ledger_metadata(0, oe_format_normal    , "Guar Suppl Death Benefit"              ); // "Guaranteed Supplemental Death Benefit"
-        m["COICharge_Current"          ] = ledger_metadata(0, oe_format_normal    , "Curr COI Charge"                       ); // "Current Mortality Charge"
-        m["COICharge_Guaranteed"       ] = ledger_metadata(0, oe_format_normal    , "Guar COI Charge"                       ); // "Guaranteed Mortality Charge"
-        m["RiderCharges_Current"       ] = ledger_metadata(0, oe_format_normal    , "Curr Rider Charges"                    ); // "Current Rider Charges"
+        m["Outlay"                     ] = ledger_metadata(0, oe_cents_as_dollars , "Net Outlay"                            );
+        m["EeGrossPmt"                 ] = ledger_metadata(0, oe_cents_as_dollars , "EE Gross Payment"                      ); // "Employee Gross Payment"
+        m["ErGrossPmt"                 ] = ledger_metadata(0, oe_cents_as_dollars , "ER Gross Payment"                      ); // "Employer Gross Payment"
+        m["ModalMinimumPremium"        ] = ledger_metadata(0, oe_cents_as_dollars , "Modal Minimum Premium"                 );
+        m["EeModalMinimumPremium"      ] = ledger_metadata(0, oe_cents_as_dollars , "EE Modal Minimum Premium"              );
+        m["ErModalMinimumPremium"      ] = ledger_metadata(0, oe_cents_as_dollars , "ER Modal Minimum Premium"              );
+        m["NetWD"                      ] = ledger_metadata(0, oe_cents_as_dollars , "Withdrawal"                            );
+        m["NewCashLoan"                ] = ledger_metadata(0, oe_cents_as_dollars , "Annual Loan"                           ); // "New Cash Loan"
+        m["TotalLoanBalance_Current"   ] = ledger_metadata(0, oe_cents_as_dollars , "Curr Total Loan Balance"               ); // "Current Total Loan Balance"
+        m["TotalLoanBalance_Guaranteed"] = ledger_metadata(0, oe_cents_as_dollars , "Guar Total Loan Balance"               ); // "Guaranteed Total Loan Balance"
+        m["AcctVal_Current"            ] = ledger_metadata(0, oe_cents_as_dollars , "Curr Account Value"                    ); // "Current Account Value"
+        m["AcctVal_Guaranteed"         ] = ledger_metadata(0, oe_cents_as_dollars , "Guar Account Value"                    ); // "Guaranteed Account Value"
+        m["CSVNet_Current"             ] = ledger_metadata(0, oe_cents_as_dollars , "Curr Net Cash Surr Value"              ); // "Current Cash Surrender Value"
+        m["CSVNet_Guaranteed"          ] = ledger_metadata(0, oe_cents_as_dollars , "Guar Net Cash Surr Value"              ); // "Guaranteed Cash Surrender Value"
+        m["EOYDeathBft_Current"        ] = ledger_metadata(0, oe_cents_as_dollars , "Curr EOY Death Benefit"                ); // "Current Death Benefit"
+        m["EOYDeathBft_Guaranteed"     ] = ledger_metadata(0, oe_cents_as_dollars , "Guar EOY Death Benefit"                ); // "Guaranteed Death Benefit"
+        m["BaseDeathBft_Current"       ] = ledger_metadata(0, oe_cents_as_dollars , "Curr Base Death Benefit"               ); // "Current Base Death Benefit"
+        m["BaseDeathBft_Guaranteed"    ] = ledger_metadata(0, oe_cents_as_dollars , "Guar Base Death Benefit"               ); // "Guaranteed Base Death Benefit"
+        m["TermPurchased_Current"      ] = ledger_metadata(0, oe_cents_as_dollars , "Curr Term Amt Purchased"               ); // "Current Term Purchased"
+        m["TermPurchased_Guaranteed"   ] = ledger_metadata(0, oe_cents_as_dollars , "Guar Term Amt Purchased"               ); // "Guaranteed Term Purchased"
+        m["SupplDeathBft_Current"      ] = ledger_metadata(0, oe_cents_as_dollars , "Curr Suppl Death Benefit"              ); // "Current Supplemental Death Benefit"
+        m["SupplDeathBft_Guaranteed"   ] = ledger_metadata(0, oe_cents_as_dollars , "Guar Suppl Death Benefit"              ); // "Guaranteed Supplemental Death Benefit"
+        m["COICharge_Current"          ] = ledger_metadata(0, oe_cents_as_dollars , "Curr COI Charge"                       ); // "Current Mortality Charge"
+        m["COICharge_Guaranteed"       ] = ledger_metadata(0, oe_cents_as_dollars , "Guar COI Charge"                       ); // "Guaranteed Mortality Charge"
+        m["RiderCharges_Current"       ] = ledger_metadata(0, oe_cents_as_dollars , "Curr Rider Charges"                    ); // "Current Rider Charges"
         m["IrrCsv_Current"             ] = ledger_metadata(2, oe_format_percentage, "Curr IRR on CSV"                       ); // "Current Cash Value IRR"
         m["IrrCsv_Guaranteed"          ] = ledger_metadata(2, oe_format_percentage, "Guar IRR on CSV"                       ); // "Guaranteed Cash Value IRR"
         m["IrrDb_Current"              ] = ledger_metadata(2, oe_format_percentage, "Curr IRR on DB"                        ); // "Current Death Benefit IRR"
         m["IrrDb_Guaranteed"           ] = ledger_metadata(2, oe_format_percentage, "Guar IRR on DB"                        ); // "Guaranteed Death Benefit IRR"
         m["NetClaims_Current"          ] = ledger_metadata(0, oe_format_normal    , "Curr Net Claims"                       ); // "Experience Rating Current Net Claims"
-        m["GrossPmt"                   ] = ledger_metadata(0, oe_format_normal    , "Premium Outlay"                        ); // "Total Payment"
-        m["LoanIntAccrued_Current"     ] = ledger_metadata(0, oe_format_normal    , "Curr Loan Int Accrued"                 ); // "Current Accrued Loan Interest"
-        m["NetDeathBenefit"            ] = ledger_metadata(0, oe_format_normal    , "Net Death Benefit"                     ); // "Current Net Death Benefit"
+        m["GrossPmt"                   ] = ledger_metadata(0, oe_cents_as_dollars , "Premium Outlay"                        ); // "Total Payment"
+        m["LoanIntAccrued_Current"     ] = ledger_metadata(0, oe_cents_as_dollars , "Curr Loan Int Accrued"                 ); // "Current Accrued Loan Interest"
+        m["NetDeathBenefit"            ] = ledger_metadata(0, oe_cents_as_dollars , "Net Death Benefit"                     ); // "Current Net Death Benefit"
         m["DeathProceedsPaid_Current"  ] = ledger_metadata(0, oe_format_normal    , "Curr Death Proceeds Paid"              ); // "Current Death Proceeds Paid"
         m["ClaimsPaid_Current"         ] = ledger_metadata(0, oe_format_normal    , "Curr Claims Paid"                      ); // "Current Claims Paid"
         m["AVRelOnDeath_Current"       ] = ledger_metadata(0, oe_format_normal    , "Account Value Released on Death"       ); // "Current Account Value Released on Death"
-        m["SpecAmtLoad_Current"        ] = ledger_metadata(0, oe_format_normal    , "Curr Spec Amt Load"                    ); // "Current Load on Specified Amount"
-        m["GrossIntCredited_Current"   ] = ledger_metadata(0, oe_format_normal    , "Curr Gross Int Credited"               ); // "Current Interest Credited before Separate Account Charges"
-        m["NetIntCredited_Current"     ] = ledger_metadata(0, oe_format_normal    , "Curr Net Int Credited"                 ); // "Current Interest Credited Net of Separate Account Charges"
-        m["SepAcctCharges_Current"     ] = ledger_metadata(0, oe_format_normal    , "Curr Sep Acct Charges"                 ); // "Current Separate Account Asset Charges"
-        m["PolicyFee_Current"          ] = ledger_metadata(0, oe_format_normal    , "Curr Policy Fee"                       ); // "Current Policy Fee"
+        m["SpecAmtLoad_Current"        ] = ledger_metadata(0, oe_cents_as_dollars , "Curr Spec Amt Load"                    ); // "Current Load on Specified Amount"
+        m["GrossIntCredited_Current"   ] = ledger_metadata(0, oe_cents_as_dollars , "Curr Gross Int Credited"               ); // "Current Interest Credited before Separate Account Charges"
+        m["NetIntCredited_Current"     ] = ledger_metadata(0, oe_cents_as_dollars , "Curr Net Int Credited"                 ); // "Current Interest Credited Net of Separate Account Charges"
+        m["SepAcctCharges_Current"     ] = ledger_metadata(0, oe_cents_as_dollars , "Curr Sep Acct Charges"                 ); // "Current Separate Account Asset Charges"
+        m["PolicyFee_Current"          ] = ledger_metadata(0, oe_cents_as_dollars , "Curr Policy Fee"                       ); // "Current Policy Fee"
         }
 
     return m;
@@ -269,20 +269,20 @@ std::string calculation_summary_formatter::format_as_html() const
             << "  <td align=\"right\" nowrap></td>\n"
             << "  <td align=\"left\"  nowrap></td>\n"
             << std::setprecision(2)
-            << "  <td align=\"right\" nowrap>" << invar_.InitGLP          << "</td>\n"
+            << "  <td align=\"right\" nowrap>" << invar_.InitGLP / 100.0  << "</td>\n"
             << "  <td align=\"left\"  nowrap>&nbsp;initial guideline level premium</td>\n"
             << "</tr>\n"
             << "<tr>\n"
             << std::setprecision(0)
-            << "  <td align=\"right\" nowrap>" << invar_.InitBaseSpecAmt  << "</td>\n"
+            << "  <td align=\"right\" nowrap>" << invar_.InitBaseSpecAmt / 100.0 << "</td>\n"
             << "  <td align=\"left\"  nowrap>&nbsp;initial base specified amount</td>\n"
             << std::setprecision(2)
-            << "  <td align=\"right\" nowrap>" << invar_.InitGSP          << "</td>\n"
+            << "  <td align=\"right\" nowrap>" << invar_.InitGSP / 100.0  << "</td>\n"
             << "  <td align=\"left\"  nowrap>&nbsp;initial guideline single premium</td>\n"
             << "</tr>\n"
             << "<tr>\n"
             << std::setprecision(0)
-            << "  <td align=\"right\" nowrap>" << invar_.InitTermSpecAmt << "</td>\n"
+            << "  <td align=\"right\" nowrap>" << invar_.InitTermSpecAmt / 100.0 << "</td>\n"
             << "  <td align=\"left\"  nowrap>&nbsp;initial term specified amount</td>\n"
             << std::setprecision(2)
             << "  <td align=\"right\" nowrap>" << invar_.InitSevenPayPrem << "</td>\n"
@@ -290,10 +290,10 @@ std::string calculation_summary_formatter::format_as_html() const
             << "</tr>\n"
             << "<tr>\n"
             << std::setprecision(0)
-            << "  <td align=\"right\" nowrap>" << invar_.InitBaseSpecAmt + invar_.InitTermSpecAmt << "</td>\n"
+            << "  <td align=\"right\" nowrap>" << (invar_.InitBaseSpecAmt + invar_.InitTermSpecAmt) / 100.0 << "</td>\n"
             << "  <td align=\"left\"  nowrap>&nbsp;initial total specified amount</td>\n"
             << std::setprecision(2)
-            << "  <td align=\"right\" nowrap>" << invar_.InitTgtPrem      << "</td>\n"
+            << "  <td align=\"right\" nowrap>" << invar_.InitTgtPrem / 100.0 << "</td>\n"
             << "  <td align=\"left\"  nowrap>&nbsp;initial target premium</td>\n"
             << "</tr>\n"
             << "</table>\n"
@@ -365,25 +365,25 @@ std::string calculation_summary_formatter::format_as_tsv() const
             }
         oss
             << std::setprecision(2)
-            << invar_.InitGLP
+            << invar_.InitGLP / 100.0
             << "\tinitial guideline level premium\n"
             << std::setprecision(2)
-            << invar_.InitGSP
+            << invar_.InitGSP / 100.0
             << "\tinitial guideline single premium\n"
             << std::setprecision(2)
             << invar_.InitSevenPayPrem
             << "\tinitial seven-pay premium\n"
             << std::setprecision(2)
-            << invar_.InitTgtPrem
+            << invar_.InitTgtPrem / 100.0
             << "\tinitial target premium\n"
             << std::setprecision(0)
-            << invar_.InitBaseSpecAmt
+            << invar_.InitBaseSpecAmt / 100.0
             << "\tinitial base specified amount\n"
             << std::setprecision(0)
-            << invar_.InitTermSpecAmt
+            << invar_.InitTermSpecAmt / 100.0
             << "\tinitial term specified amount\n"
             << std::setprecision(0)
-            << invar_.InitBaseSpecAmt + invar_.InitTermSpecAmt
+            << (invar_.InitBaseSpecAmt + invar_.InitTermSpecAmt) / 100.0
             << "\tinitial total specified amount\n"
             ;
         }
@@ -466,10 +466,10 @@ void PrintCellTabDelimited
     os << "Gender\t\t"            << Invar.value_str("Gender"         ) << '\n';
     os << "Smoker\t\t"            << Invar.value_str("Smoker"         ) << '\n';
     os << "IssueAge\t\t"          << Invar.value_str("Age"            ) << '\n';
-    os << "InitBaseSpecAmt\t\t"   << Invar.value_str("InitBaseSpecAmt") << '\n';
-    os << "InitTermSpecAmt\t\t"   << Invar.value_str("InitTermSpecAmt") << '\n';
+    os << "InitBaseSpecAmt\t\t"   << Invar.value_str("InitBaseSpecAmt", 100.0) << '\n';
+    os << "InitTermSpecAmt\t\t"   << Invar.value_str("InitTermSpecAmt", 100.0) << '\n';
     double total_spec_amt = Invar.InitBaseSpecAmt + Invar.InitTermSpecAmt;
-    os << "  Total:\t\t"     << value_cast<std::string>(total_spec_amt) << '\n';
+    os << "  Total:\t\t"     << value_cast<std::string>(total_spec_amt / 100.0) << '\n';
     os << "PolicyMktgName\t\t"    << Invar.value_str("PolicyMktgName" ) << '\n';
     os << "PolicyForm\t\t"        << Invar.value_str("PolicyForm"     ) << '\n';
     os << "UWClass\t\t"           << Invar.value_str("UWClass"        ) << '\n';
@@ -567,36 +567,36 @@ void PrintCellTabDelimited
             os << Invar.DBOpt[j]                          << '\t';
             }
 
-        os << Invar.value_str("EeGrossPmt"            ,j) << '\t';
-        os << Invar.value_str("ErGrossPmt"            ,j) << '\t';
-        os << Invar.value_str("NetWD"                 ,j) << '\t'; // TODO ?? It's *gross* WD.
-        os << Invar.value_str("NewCashLoan"           ,j) << '\t';
-        os << Curr_.value_str("TotalLoanBalance"      ,j) << '\t';
-        os << Invar.value_str("Outlay"                ,j) << '\t';
+        os << Invar.value_str("EeGrossPmt"            ,j, 100.0) << '\t';
+        os << Invar.value_str("ErGrossPmt"            ,j, 100.0) << '\t';
+        os << Invar.value_str("NetWD"                 ,j, 100.0) << '\t'; // TODO ?? It's *gross* WD.
+        os << Invar.value_str("NewCashLoan"           ,j, 100.0) << '\t';
+        os << Curr_.value_str("TotalLoanBalance"      ,j, 100.0) << '\t';
+        os << Invar.value_str("Outlay"                ,j, 100.0) << '\t';
 
-        os << Curr_.value_str("NetPmt"                ,j) << '\t';
+        os << Curr_.value_str("NetPmt"                ,j, 100.0) << '\t';
 
         os << Curr_.value_str("PremTaxLoad"           ,j) << '\t';
         os << Curr_.value_str("DacTaxLoad"            ,j) << '\t';
-        os << Curr_.value_str("PolicyFee"             ,j) << '\t';
-        os << Curr_.value_str("SpecAmtLoad"           ,j) << '\t';
+        os << Curr_.value_str("PolicyFee"             ,j, 100.0) << '\t';
+        os << Curr_.value_str("SpecAmtLoad"           ,j, 100.0) << '\t';
         os << Invar.value_str("AnnualFlatExtra"       ,j) << '\t';
-        os << Curr_.value_str("COICharge"             ,j) << '\t';
-        os << Curr_.value_str("RiderCharges"          ,j) << '\t';
+        os << Curr_.value_str("COICharge"             ,j, 100.0) << '\t';
+        os << Curr_.value_str("RiderCharges"          ,j, 100.0) << '\t';
         os << "0\t"; // obsolete
-        os << Curr_.value_str("SepAcctCharges"        ,j) << '\t';
+        os << Curr_.value_str("SepAcctCharges"        ,j, 100.0) << '\t';
 
         os << Curr_.value_str("AnnSAIntRate"          ,j) << '\t';
         os << Curr_.value_str("AnnGAIntRate"          ,j) << '\t';
-        os << Curr_.value_str("GrossIntCredited"      ,j) << '\t';
-        os << Curr_.value_str("NetIntCredited"        ,j) << '\t';
+        os << Curr_.value_str("GrossIntCredited"      ,j, 100.0) << '\t';
+        os << Curr_.value_str("NetIntCredited"        ,j, 100.0) << '\t';
 
-        os << Guar_.value_str("AcctVal"               ,j) << '\t';
-        os << Guar_.value_str("CSVNet"                ,j) << '\t';
-        os << Guar_.value_str("EOYDeathBft"           ,j) << '\t';
-        os << Curr_.value_str("AcctVal"               ,j) << '\t';
-        os << Curr_.value_str("CSVNet"                ,j) << '\t';
-        os << Curr_.value_str("EOYDeathBft"           ,j) << '\t';
+        os << Guar_.value_str("AcctVal"               ,j, 100.0) << '\t';
+        os << Guar_.value_str("CSVNet"                ,j, 100.0) << '\t';
+        os << Guar_.value_str("EOYDeathBft"           ,j, 100.0) << '\t';
+        os << Curr_.value_str("AcctVal"               ,j, 100.0) << '\t';
+        os << Curr_.value_str("CSVNet"                ,j, 100.0) << '\t';
+        os << Curr_.value_str("EOYDeathBft"           ,j, 100.0) << '\t';
 
         if(Invar.IsInforce)
             {
@@ -748,15 +748,15 @@ void PrintRosterTabDelimited
         << Invar.value_str("UWClass"                ) << '\t'
         << Invar.value_str("Smoker"                 ) << '\t'
         << Invar.value_str("Salary"               ,d) << '\t'
-        << Invar.value_str("SpecAmt"              ,d) << '\t'
-        << Invar.value_str("TermSpecAmt"          ,d) << '\t'
-        << Invar.value_str("InitTgtPrem"            ) << '\t'
-        << Invar.value_str("ModalMinimumPremium"  ,d) << '\t'
-        << Invar.value_str("EeModalMinimumPremium",d) << '\t'
-        << Invar.value_str("ErModalMinimumPremium",d) << '\t'
-        << Invar.value_str("ListBillPremium"        ) << '\t'
-        << Invar.value_str("EeListBillPremium"      ) << '\t'
-        << Invar.value_str("ErListBillPremium"      ) << '\t'
+        << Invar.value_str("SpecAmt"              ,d, 100.0) << '\t'
+        << Invar.value_str("TermSpecAmt"          ,d, 100.0) << '\t'
+        << Invar.value_str("InitTgtPrem"            , 100.0) << '\t'
+        << Invar.value_str("ModalMinimumPremium"  ,d, 100.0) << '\t'
+        << Invar.value_str("EeModalMinimumPremium",d, 100.0) << '\t'
+        << Invar.value_str("ErModalMinimumPremium",d, 100.0) << '\t'
+        << Invar.value_str("ListBillPremium"        , 100.0) << '\t'
+        << Invar.value_str("EeListBillPremium"      , 100.0) << '\t'
+        << Invar.value_str("ErListBillPremium"      , 100.0) << '\t'
         << "'" << Invar.ListBillDate                  << "'\t"
         << Invar.EeMode                           [d] << '\t'
         << Invar.ErMode                           [d] << '\t'
@@ -1032,19 +1032,19 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
 
         os_.precision(2);
 
-        os_ << std::setw(12) << invar().Outlay     [row];
+        os_ << std::setw(12) << invar().Outlay     [row] / 100.0;
 
-        os_ << std::setw(12) << guar_().AcctVal    [row];
-        os_ << std::setw(12) << guar_().CSVNet     [row];
-        os_ << std::setw(12) << guar_().EOYDeathBft[row];
+        os_ << std::setw(12) << guar_().AcctVal    [row] / 100.0;
+        os_ << std::setw(12) << guar_().CSVNet     [row] / 100.0;
+        os_ << std::setw(12) << guar_().EOYDeathBft[row] / 100.0;
 
-        os_ << std::setw(12) << mdpt_().AcctVal    [row];
-        os_ << std::setw(12) << mdpt_().CSVNet     [row];
-        os_ << std::setw(12) << mdpt_().EOYDeathBft[row];
+        os_ << std::setw(12) << mdpt_().AcctVal    [row] / 100.0;
+        os_ << std::setw(12) << mdpt_().CSVNet     [row] / 100.0;
+        os_ << std::setw(12) << mdpt_().EOYDeathBft[row] / 100.0;
 
-        os_ << std::setw(12) << curr_().AcctVal    [row];
-        os_ << std::setw(12) << curr_().CSVNet     [row];
-        os_ << std::setw(12) << curr_().EOYDeathBft[row];
+        os_ << std::setw(12) << curr_().AcctVal    [row] / 100.0;
+        os_ << std::setw(12) << curr_().CSVNet     [row] / 100.0;
+        os_ << std::setw(12) << curr_().EOYDeathBft[row] / 100.0;
 
         os_ << endrow;
         }
@@ -1127,15 +1127,15 @@ void FlatTextLedgerPrinter::PrintTabularDetail() const
 
         os_.precision(2);
 
-        os_ << std::setw(12) << invar().Outlay     [j];
+        os_ << std::setw(12) << invar().Outlay     [j] / 100.0;
 
-        os_ << std::setw(12) << guar_().AcctVal    [j];
-        os_ << std::setw(12) << guar_().CSVNet     [j];
-        os_ << std::setw(12) << guar_().EOYDeathBft[j];
+        os_ << std::setw(12) << guar_().AcctVal    [j] / 100.0;
+        os_ << std::setw(12) << guar_().CSVNet     [j] / 100.0;
+        os_ << std::setw(12) << guar_().EOYDeathBft[j] / 100.0;
 
-        os_ << std::setw(12) << curr_().AcctVal    [j];
-        os_ << std::setw(12) << curr_().CSVNet     [j];
-        os_ << std::setw(12) << curr_().EOYDeathBft[j];
+        os_ << std::setw(12) << curr_().AcctVal    [j] / 100.0;
+        os_ << std::setw(12) << curr_().CSVNet     [j] / 100.0;
+        os_ << std::setw(12) << curr_().EOYDeathBft[j] / 100.0;
 
         os_ << endrow;
         }

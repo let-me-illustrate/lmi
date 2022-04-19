@@ -543,7 +543,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_basic_face_amount:
                 {
-                double const z = invar.SpecAmt.at(year);
+                double const z = invar.SpecAmt.at(year) / 100.0;
                 rd.output_values[i] = '$' + ledger_format(z, f0);
                 if(is_composite)
                     {
@@ -553,7 +553,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_basic_premium:
                 {
-                double const z = invar.ErModalMinimumPremium.at(year);
+                double const z = invar.ErModalMinimumPremium.at(year) / 100.0;
                 rd.output_values[i] = '$' + ledger_format(z, f2);
                 if(is_composite)
                     {
@@ -563,7 +563,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_supplemental_face_amount:
                 {
-                double const z = invar.TermSpecAmt.at(year);
+                double const z = invar.TermSpecAmt.at(year) / 100.0;
                 rd.output_values[i] = '$' + ledger_format(z, f0);
                 if(is_composite)
                     {
@@ -573,7 +573,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_additional_premium:
                 {
-                double const z = invar.EeModalMinimumPremium.at(year);
+                double const z = invar.EeModalMinimumPremium.at(year) / 100.0;
                 rd.output_values[i] = '$' + ledger_format(z, f2);
                 if(is_composite)
                     {
@@ -583,7 +583,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_total_face_amount:
                 {
-                double const z = invar.SpecAmt.at(year) + invar.TermSpecAmt.at(year);
+                double const z = (invar.SpecAmt.at(year) + invar.TermSpecAmt.at(year)) / 100.0;
                 rd.output_values[i] = '$' + ledger_format(z, f0);
                 if(is_composite)
                     {
@@ -593,7 +593,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_total_premium:
                 {
-                double const z = invar.ModalMinimumPremium.at(year);
+                double const z = invar.ModalMinimumPremium.at(year) / 100.0;
                 rd.output_values[i] = '$' + ledger_format(z, f2);
                 if(is_composite)
                     {

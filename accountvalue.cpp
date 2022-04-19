@@ -130,7 +130,7 @@ AccountValue::AccountValue(Input const& input)
 currency AccountValue::base_specamt(int year) const
 {
     // CURRENCY !! Cents in ledger will make rounding unnecessary.
-    return round_specamt().c(InvariantValues().SpecAmt[year]);
+    return round_specamt().c(InvariantValues().SpecAmt[year] / 100.0);
 }
 
 //============================================================================
@@ -339,16 +339,16 @@ void AccountValue::DoYear
             }
         }
 
-    VariantValues().AcctVal[Year] = dblize(AVUnloaned + AVRegLn + AVPrfLn);
+    VariantValues().AcctVal[Year] = centize(AVUnloaned + AVRegLn + AVPrfLn);
     VariantValues().CSVNet[Year] = VariantValues().AcctVal[Year] - VariantValues().SurrChg[Year];
     // Update death benefit: "deathbft" currently holds benefit as of the
     //   beginning of month 12, but we want it as of the end of that month,
     //   in case the corridor or option 2 drove it up during the last month.
     TxSetDeathBft();
-    VariantValues().EOYDeathBft[Year] = dblize(deathbft);
+    VariantValues().EOYDeathBft[Year] = centize(deathbft);
 
     // IHS !! Change one of these names, which differ only in the terminal 's'.
-    InvariantValues().GrossPmt[Year] += dblize(std::accumulate(GrossPmts.begin(), GrossPmts.end(), C0));
+    InvariantValues().GrossPmt[Year] += centize(std::accumulate(GrossPmts.begin(), GrossPmts.end(), C0));
     InvariantValues().Outlay[Year] =
             InvariantValues().GrossPmt   [Year]
         -   InvariantValues().NetWD      [Year]
@@ -489,7 +489,7 @@ void AccountValue::PerformSpecAmtStrategy()
 
     for(int j = 0; j < BasicValues::GetLength(); ++j)
         {
-        InvariantValues().SpecAmt[j] = dblize(SA);
+        InvariantValues().SpecAmt[j] = centize(SA);
         }
 }
 
@@ -550,7 +550,7 @@ void AccountValue::TxOptionChange()
     // Carry the new spec amt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); ++j)
         {
-        InvariantValues().SpecAmt[j] = dblize(ActualSpecAmt);
+        InvariantValues().SpecAmt[j] = centize(ActualSpecAmt);
         }
 }
 
@@ -582,7 +582,7 @@ void AccountValue::TxSpecAmtChange()
     // Carry the new spec amt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); ++j)
         {
-        InvariantValues().SpecAmt[j] = dblize(ActualSpecAmt);
+        InvariantValues().SpecAmt[j] = centize(ActualSpecAmt);
         }
 }
 
@@ -727,7 +727,7 @@ void AccountValue::TxLoanRepay()
 
     AVUnloaned -= RequestedLoan;
     AVRegLn += RequestedLoan;    // IHS !! Preferred loans--see lmi.
-    InvariantValues().NewCashLoan[Year] = dblize(RequestedLoan);
+    InvariantValues().NewCashLoan[Year] = centize(RequestedLoan);
 }
 
 /// Set account value before monthly deductions.
@@ -927,7 +927,7 @@ void AccountValue::TxTakeWD()
             // Carry the new spec amt forward into all future years.
             for(int j = Year; j < BasicValues::GetLength(); ++j)
                 {
-                InvariantValues().SpecAmt[j] = dblize(ActualSpecAmt);
+                InvariantValues().SpecAmt[j] = centize(ActualSpecAmt);
                 }
             }
             break;
@@ -946,7 +946,7 @@ void AccountValue::TxTakeWD()
     wd -= std::min(WDFee, round_withdrawal().c(wd * WDFeeRate));
     // IHS !! This treats input WD as gross; it probably should be net. But compare lmi.
 
-    InvariantValues().NetWD[Year] = dblize(wd);
+    InvariantValues().NetWD[Year] = centize(wd);
 // IHS !!    TaxBasis -= wd; // Withdrawals are subtracted from basis in lmi.
 }
 
@@ -996,7 +996,7 @@ void AccountValue::TxTakeLoan()
 
     AVUnloaned -= RequestedLoan;
     AVRegLn += RequestedLoan;    // IHS !! Also preferred loans: implemented in lmi.
-    InvariantValues().NewCashLoan[Year] = dblize(RequestedLoan);
+    InvariantValues().NewCashLoan[Year] = centize(RequestedLoan);
 }
 
 /// Test for lapse.
