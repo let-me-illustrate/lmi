@@ -24,7 +24,9 @@
 #include "ledger.hpp"
 #include "ledger_evaluator.hpp"
 #include "ledger_invariant.hpp"
+#include "ledger_text_formats.hpp"      // ledger_format()
 #include "ledger_variant.hpp"
+#include "oecumenic_enumerations.hpp"
 
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -40,12 +42,14 @@ class ledger_test
         {
         test_default_initialization();
         test_evaluator();
+        test_ledger_format();
         test_speed();
         }
 
   private:
     static void test_default_initialization();
     static void test_evaluator();
+    static void test_ledger_format();
     static void test_speed();
 };
 
@@ -73,6 +77,23 @@ void ledger_test::test_evaluator()
     ledger_evaluator z {ledger.make_evaluator()};
     z.write_tsv("tsv_eraseme");
     LMI_TEST(0 == std::remove("tsv_eraseme.values.tsv"));
+}
+
+void ledger_test::test_ledger_format()
+{
+    constexpr double pi {3.14159265358979323851};
+    constexpr std::pair<int,oenum_format_style> f1(0, oe_format_normal);
+    constexpr std::pair<int,oenum_format_style> f2(2, oe_format_normal);
+    constexpr std::pair<int,oenum_format_style> f3(0, oe_format_percentage);
+    constexpr std::pair<int,oenum_format_style> f4(2, oe_format_percentage);
+    constexpr std::pair<int,oenum_format_style> g1(9, oe_format_normal);
+    constexpr std::pair<int,oenum_format_style> g2(4, oe_format_percentage);
+    LMI_TEST_EQUAL("3"          , ledger_format(pi, f1));
+    LMI_TEST_EQUAL("3.14"       , ledger_format(pi, f2));
+    LMI_TEST_EQUAL("314%"       , ledger_format(pi, f3));
+    LMI_TEST_EQUAL("314.16%"    , ledger_format(pi, f4));
+    LMI_TEST_EQUAL("3.141592654", ledger_format(pi, g1));
+    LMI_TEST_EQUAL("314.1593%"  , ledger_format(pi, g2));
 }
 
 void ledger_test::test_speed()
