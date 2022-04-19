@@ -88,12 +88,14 @@ void ledger_test::test_ledger_format()
     constexpr std::pair<int,oenum_format_style> f4(2, oe_format_percentage);
     constexpr std::pair<int,oenum_format_style> g1(9, oe_format_normal);
     constexpr std::pair<int,oenum_format_style> g2(4, oe_format_percentage);
+    constexpr std::pair<int,oenum_format_style> g3(4, oe_cents_as_dollars);
     LMI_TEST_EQUAL("3"          , ledger_format(pi, f1));
     LMI_TEST_EQUAL("3.14"       , ledger_format(pi, f2));
     LMI_TEST_EQUAL("314%"       , ledger_format(pi, f3));
     LMI_TEST_EQUAL("314.16%"    , ledger_format(pi, f4));
     LMI_TEST_EQUAL("3.141592654", ledger_format(pi, g1));
     LMI_TEST_EQUAL("314.1593%"  , ledger_format(pi, g2));
+    LMI_TEST_EQUAL("0.0314"     , ledger_format(pi, g3));
 }
 
 void ledger_test::test_speed()

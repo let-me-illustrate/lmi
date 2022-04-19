@@ -1191,10 +1191,13 @@ std::string ledger_format
 
     interpreter.precision(f.first);
     std::string s;
-    if(f.second)
+    switch(f.second)
         {
-        d *= 100;
+        case oe_format_normal:     {} break; // Deliberately do nothing.
+        case oe_cents_as_dollars:  {d /= 100;} break;
+        case oe_format_percentage: {d *= 100;} break;
         }
+
     interpreter << d;
     interpreter >> s;
     if(!interpreter.eof())
@@ -1202,7 +1205,7 @@ std::string ledger_format
         alarum() << "Formatting error." << LMI_FLUSH;
         }
 
-    if(f.second)
+    if(oe_format_percentage == f.second)
         {
         s += '%';
         }
