@@ -644,7 +644,6 @@ format_map_t static_formats()
     ,{"GrossIntCredited"                , f5}
     ,{"GrossPmt"                        , f5}
     ,{"Loads"                           , f1}
-    ,{"LoanInt"                         , f1}
     ,{"LoanIntAccrued"                  , f5}
     ,{"ModalMinimumPremium"             , f5}
     ,{"NaarForceout"                    , f1}
@@ -655,7 +654,7 @@ format_map_t static_formats()
     ,{"NewCashLoan"                     , f5}
     ,{"Outlay"                          , f5}
     ,{"PolicyFee"                       , f5}
-    ,{"PrefLoanBalance"                 , f1}
+    ,{"PrefLoanBalance"                 , f5} // Not used yet.
     ,{"PremTaxLoad"                     , f1}
     ,{"RefundableSalesLoad"             , f1}
     ,{"RiderCharges"                    , f5}
@@ -686,7 +685,7 @@ ledger_evaluator Ledger::make_evaluator() const
 
     mask_map_t mask_map {static_masks()};
 
-    std::pair<int,oenum_format_style> f1(0, oe_format_normal);
+//  std::pair<int,oenum_format_style> f1(0, oe_format_normal);     // not used
 //  std::pair<int,oenum_format_style> f2(2, oe_format_normal);     // not used
     std::pair<int,oenum_format_style> f3(0, oe_format_percentage);
 //  std::pair<int,oenum_format_style> f4(2, oe_format_percentage); // not used
