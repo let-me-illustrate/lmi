@@ -266,15 +266,14 @@ all algorithms give correct solutions.
 </blockquote>
 
 <p>
-According to
-<a href="https://www.wolframalpha.com/input?i=derivative+of+xe^(-x^-2)">Wolfram</a>,
-the roots of
+The subexpression
 <i>xe<sup><small>&minus;x<sup><small>&minus;2</small></sup></small></sup></i>
-are &plusmn;<i>i</i>&sdot;&radic;2; but
-the actual problem defines the value as zero at <code>x=0</code>, so
-the correct solution is <code>x=0</code>. Due to inevitable
-underflow, no iterative algorithm that uses customary
-floating-point numbers can find that solution unless by
+has
+<a href="https://www.wolframalpha.com/input?i=xe^(-x^-2)">no roots</a>,
+but the actual problem defines the function as zero at <code>x=0</code>,
+so the correct solution is <code>x=0</code>. Due to inevitable
+underflow, no iterative algorithm that uses customary floating-point
+numbers can find that solution unless by
 chance<a href="#fn4" name="fr4" title="">[4]</a>.
 </p>
 
