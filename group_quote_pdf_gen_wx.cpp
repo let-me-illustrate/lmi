@@ -397,12 +397,12 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
             ;
         if(invar.HasSpouseRider)
             {
-            std::pair<int,oenum_format_style> const f0(0, oe_format_normal);
+            std::pair<int,oenum_format_style> const f1(0, oe_format_normal);
             double const number_of_lives = invar.GetInforceLives().at(0);
             LMI_ASSERT(0.0 < number_of_lives);
             elected_riders_footnote_ +=
                   " The spouse coverage amount is $"
-                + ledger_format(invar.SpouseRiderAmount / number_of_lives, f0)
+                + ledger_format(invar.SpouseRiderAmount / number_of_lives, f1)
                 + "."
                 ;
             }
@@ -505,7 +505,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
 
     int const year = 0;
 
-    std::pair<int,oenum_format_style> const f0(0, oe_format_normal);
+    std::pair<int,oenum_format_style> const f1(0, oe_format_normal);
     std::pair<int,oenum_format_style> const f2(2, oe_format_normal);
 
     bool const is_composite = ledger.is_composite();
@@ -544,7 +544,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
             case e_col_basic_face_amount:
                 {
                 double const z = invar.SpecAmt.at(year) / 100.0;
-                rd.output_values[i] = '$' + ledger_format(z, f0);
+                rd.output_values[i] = '$' + ledger_format(z, f1);
                 if(is_composite)
                     {
                     totals_.total(i, z);
@@ -564,7 +564,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
             case e_col_supplemental_face_amount:
                 {
                 double const z = invar.TermSpecAmt.at(year) / 100.0;
-                rd.output_values[i] = '$' + ledger_format(z, f0);
+                rd.output_values[i] = '$' + ledger_format(z, f1);
                 if(is_composite)
                     {
                     totals_.total(i, z);
@@ -584,7 +584,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
             case e_col_total_face_amount:
                 {
                 double const z = (invar.SpecAmt.at(year) + invar.TermSpecAmt.at(year)) / 100.0;
-                rd.output_values[i] = '$' + ledger_format(z, f0);
+                rd.output_values[i] = '$' + ledger_format(z, f1);
                 if(is_composite)
                     {
                     totals_.total(i, z);
