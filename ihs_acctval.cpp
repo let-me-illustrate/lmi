@@ -1024,7 +1024,7 @@ void AccountValue::set_list_bill_premium()
             );
         InvariantValues().EeListBillPremium = centize(z.first);
         InvariantValues().ErListBillPremium = centize(z.second);
-        InvariantValues().ListBillPremium = centize(z.first + z.second);
+        InvariantValues().ListBillPremium   = centize(z.first + z.second);
         }
 }
 
@@ -1062,7 +1062,7 @@ void AccountValue::set_modal_min_premium()
             );
         InvariantValues().EeModalMinimumPremium[Year] = centize(z.first);
         InvariantValues().ErModalMinimumPremium[Year] = centize(z.second);
-        InvariantValues().ModalMinimumPremium[Year] = centize(z.first + z.second);
+        InvariantValues().ModalMinimumPremium[Year]   = centize(z.first + z.second);
         }
 }
 
@@ -1253,7 +1253,7 @@ void AccountValue::FinalizeYear()
     // Monthly deduction detail
 
     VariantValues().COICharge         [Year] = centize(YearsTotalCoiCharge)   ;
-    VariantValues().RiderCharges      [Year] = centize(YearsTotalRiderCharges) ;
+    VariantValues().RiderCharges      [Year] = centize(YearsTotalRiderCharges);
     VariantValues().AVRelOnDeath      [Year] = YearsAVRelOnDeath              ;
     VariantValues().ClaimsPaid        [Year] = YearsGrossClaims               ;
     VariantValues().DeathProceedsPaid [Year] = YearsDeathProceeds             ;
@@ -1261,7 +1261,7 @@ void AccountValue::FinalizeYear()
     VariantValues().NetIntCredited    [Year] = centize(YearsTotalNetIntCredited);
     VariantValues().GrossIntCredited  [Year] = centize(YearsTotalGrossIntCredited);
     VariantValues().LoanIntAccrued    [Year] = centize(YearsTotalLoanIntAccrued);
-    VariantValues().PolicyFee         [Year] = centize(YearsTotalPolicyFee)    ;
+    VariantValues().PolicyFee         [Year] = centize(YearsTotalPolicyFee)   ;
     VariantValues().DacTaxLoad        [Year] = YearsTotalDacTaxLoad           ;
     VariantValues().SpecAmtLoad       [Year] = centize(YearsTotalSpecAmtLoad) ;
     VariantValues().PremTaxLoad       [Year] = PremiumTax_->ytd_load()        ;
