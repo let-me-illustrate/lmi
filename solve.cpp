@@ -91,9 +91,6 @@ currency SolveTest()
         Negative = std::min
             (Negative
             ,from_cents(ConstThat->VariantValues().CSVNet[j])
-// Ideally, it'd be this:
-//          ,std::min(ConstThat->VariantValues().CSVNet[j], ConstThat->loan_ullage_[j])
-// but the antediluvian branch doesn't calculate ullage at all.
             );
         }
 
