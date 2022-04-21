@@ -129,8 +129,7 @@ AccountValue::AccountValue(Input const& input)
 
 currency AccountValue::base_specamt(int year) const
 {
-    // CURRENCY !! Cents in ledger will make rounding unnecessary.
-    return round_specamt().c(InvariantValues().SpecAmt[year] / 100.0);
+    return from_cents(InvariantValues().SpecAmt[year]);
 }
 
 //============================================================================
