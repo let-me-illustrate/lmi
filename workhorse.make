@@ -1486,6 +1486,7 @@ system_test: $(datadir)/configurable_settings.xml $(touchstone_md5sums) install
 	@$(INSTALL) -c -m 0664 $(system_test_md5sums) $(system_test_md5sums2)
 	@-< $(system_test_analysis) $(SED) \
 	  -e '/rel err.*e-0*1[5-9]/d' \
+	  -e '/rel err.*e-0*2[0-9]/d' \
 	  -e '/abs.*0\.00.*rel/d' \
 	  -e '/abs diff: 0 /d'
 	@-< $(system_test_analysis) $(SED) \
