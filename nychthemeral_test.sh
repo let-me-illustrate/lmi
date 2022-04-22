@@ -375,11 +375,18 @@ cd "$throwaway_dir"
 install -m 0664 /opt/lmi/src/lmi/sample.ill .
 install -m 0664 /opt/lmi/src/lmi/sample.cns .
 
-printf '\n# test all valid emission types\n\n'
+printf '\n# test all "emit_*" output types supported by CLI\n\n'
 
-$PERFORM /opt/lmi/bin/lmi_cli_shared --file="$throwaway_dir"/sample.ill --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
+# PDF types not tested: they require wxPdfDoc
 
-$PERFORM /opt/lmi/bin/lmi_cli_shared --file="$throwaway_dir"/sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
+# 'emit_text_stream' output (on stdout) is tested by 'cli_tests'
+# target above; here, it's discarded (but stderr is not)
+
+# group-roster type omitted: sensible only for a census
+$PERFORM /opt/lmi/bin/lmi_cli_shared --file="$throwaway_dir"/sample.ill --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_to_pwd,emit_test_data,emit_spreadsheet,emit_text_stream,emit_custom_0,emit_custom_1,emit_calculation_summary_html,emit_calculation_summary_tsv >/dev/null
+
+# calculation-summary types omitted: not sensible for a census
+$PERFORM /opt/lmi/bin/lmi_cli_shared --file="$throwaway_dir"/sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_to_pwd,emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
 
 printf '\n# schema tests\n\n'
 /opt/lmi/src/lmi/test_schemata.sh 2>&1 \

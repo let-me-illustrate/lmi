@@ -62,15 +62,23 @@ ledger_emitter::ledger_emitter
 
     if(emission_ & mce_emit_spreadsheet)
         {
-        case_filepath_spreadsheet_  = unique_filepath(f,             tsv_ext);
+        case_filepath_spreadsheet_  = unique_filepath(f,             tsv_ext );
         }
     if(emission_ & mce_emit_group_roster)
         {
-        case_filepath_group_roster_ = unique_filepath(f, ".roster" + tsv_ext);
+        case_filepath_group_roster_ = unique_filepath(f, ".roster" + tsv_ext );
         }
     if(emission_ & mce_emit_group_quote)
         {
-        case_filepath_group_quote_  = unique_filepath(f, ".quote.pdf"       );
+        case_filepath_group_quote_  = unique_filepath(f, ".quote.pdf"        );
+        }
+    if(emission_ & mce_emit_calculation_summary_html)
+        {
+        case_filepath_summary_html_ = unique_filepath(f, ".summary.html"     );
+        }
+    if(emission_ & mce_emit_calculation_summary_tsv)
+        {
+        case_filepath_summary_tsv_  = unique_filepath(f, ".summary" + tsv_ext);
         }
 }
 
@@ -165,6 +173,22 @@ double ledger_emitter::emit_cell
             ;
         custom_io_1_write(ledger, out_file.string());
         }
+    if(emission_ & mce_emit_calculation_summary_html)
+        {
+        fs::ofstream ofs
+            (case_filepath_summary_html_
+            ,ios_out_trunc_binary()
+            );
+        ofs << FormatSelectedValuesAsHtml(ledger);
+        }
+    if(emission_ & mce_emit_calculation_summary_tsv)
+        {
+        fs::ofstream ofs
+            (case_filepath_summary_tsv_
+            ,ios_out_trunc_binary()
+            );
+        ofs << FormatSelectedValuesAsTsv(ledger);
+        }
 
   done:
     return timer.stop().elapsed_seconds();
@@ -194,7 +218,7 @@ double ledger_emitter::finish()
 /// Argument 'cell_filepath' is forwarded to ledger_emitter's ctor,
 /// which interprets it as a "case" rather than a "cell" filepath.
 /// Repurposing it here does no harm, and allows 'emission' to
-/// include mce_emit_spreadsheet.
+/// include other types such as mce_emit_spreadsheet.
 
 double emit_ledger
     (fs::path const& cell_filepath
