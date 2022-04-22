@@ -1,0 +1,453 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Let me illustrate...</title>
+</head>
+<body>
+<p>
+Calculation summary for:<br>
+Male, Nontobacco, age 45, CT jurisdiction<br>
+Not a MEC
+</p>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+  <td align="right" nowrap></td>
+  <td align="left"  nowrap></td>
+  <td align="right" nowrap>23,839.99</td>
+  <td align="left"  nowrap>&nbsp;guaranteed premium</td>
+</tr>
+<tr>
+  <td align="right" nowrap></td>
+  <td align="left"  nowrap></td>
+  <td align="right" nowrap>22,110.68</td>
+  <td align="left"  nowrap>&nbsp;initial guideline level premium</td>
+</tr>
+<tr>
+  <td align="right" nowrap>1,000,000</td>
+  <td align="left"  nowrap>&nbsp;initial base specified amount</td>
+  <td align="right" nowrap>239,162.50</td>
+  <td align="left"  nowrap>&nbsp;initial guideline single premium</td>
+</tr>
+<tr>
+  <td align="right" nowrap>0</td>
+  <td align="left"  nowrap>&nbsp;initial term specified amount</td>
+  <td align="right" nowrap>55,394.15</td>
+  <td align="left"  nowrap>&nbsp;initial seven-pay premium</td>
+</tr>
+<tr>
+  <td align="right" nowrap>1,000,000</td>
+  <td align="left"  nowrap>&nbsp;initial total specified amount</td>
+  <td align="right" nowrap>55,394.15</td>
+  <td align="left"  nowrap>&nbsp;initial target premium</td>
+</tr>
+</table>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr align="right">
+<td valign="bottom" width="20%">Policy Year </td>
+<td valign="bottom" width="20%">Net Outlay </td>
+<td valign="bottom" width="20%">Curr Account Value </td>
+<td valign="bottom" width="20%">Curr Net Cash Surr Value </td>
+<td valign="bottom" width="20%">Curr EOY Death Benefit </td>
+</tr>
+<tr><td><br></td></tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;1</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;17,696</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;17,696</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;2</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;36,348</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;36,348</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;3</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;56,009</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;56,009</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;4</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;76,734</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;76,734</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;5</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;98,583</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;98,583</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr><td><br></td></tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;6</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;121,611</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;121,611</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;7</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;145,875</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;145,875</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;8</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;171,435</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;171,435</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;9</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;198,354</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;198,354</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;10</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;226,706</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;226,706</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr><td><br></td></tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;11</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;256,573</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;256,573</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;12</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;288,050</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;288,050</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;13</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;321,251</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;321,251</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;14</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;356,285</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;356,285</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;15</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;393,269</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;393,269</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr><td><br></td></tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;16</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;432,338</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;432,338</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;17</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;473,642</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;473,642</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;18</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;517,338</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;517,338</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;19</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;563,611</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;563,611</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;20</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;612,687</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;612,687</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr><td><br></td></tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;21</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;664,832</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;664,832</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;22</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;720,355</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;720,355</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;23</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;779,623</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;779,623</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;24</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;843,050</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;843,050</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,000,000</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;25</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;910,689</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;910,689</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,056,399</td>
+</tr>
+<tr><td><br></td></tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;26</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;982,108</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;982,108</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,129,425</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;27</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,057,725</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,057,725</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,195,230</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;28</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,137,850</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,137,850</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,263,014</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;29</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,222,848</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,222,848</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,332,904</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;30</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,313,153</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,313,153</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,405,073</td>
+</tr>
+<tr><td><br></td></tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;31</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,409,281</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,409,281</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,479,745</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;32</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,510,787</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,510,787</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,586,326</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;33</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,617,939</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,617,939</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,698,836</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;34</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,731,014</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,731,014</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,817,564</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;35</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,850,286</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,850,286</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,942,801</td>
+</tr>
+<tr><td><br></td></tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;36</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,976,028</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;1,976,028</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;2,074,829</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;37</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;2,108,501</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;2,108,501</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;2,213,926</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;38</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;2,247,954</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;2,247,954</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;2,360,352</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;39</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;2,394,636</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;2,394,636</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;2,514,368</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;40</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;2,548,799</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;2,548,799</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;2,676,239</td>
+</tr>
+<tr><td><br></td></tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;41</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;2,710,712</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;2,710,712</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;2,846,248</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;42</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;2,880,653</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;2,880,653</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;3,024,685</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;43</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;3,058,912</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;3,058,912</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;3,211,857</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;44</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;3,245,789</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;3,245,789</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;3,408,078</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;45</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;3,441,564</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;3,441,564</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;3,613,642</td>
+</tr>
+<tr><td><br></td></tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;46</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;3,646,494</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;3,646,494</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;3,828,819</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;47</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;3,865,811</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;3,865,811</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;4,020,443</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;48</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;4,101,336</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;4,101,336</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;4,224,376</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;49</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;4,355,201</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;4,355,201</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;4,442,305</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;50</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;4,630,053</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;4,630,053</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;4,676,354</td>
+</tr>
+<tr><td><br></td></tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;51</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;4,927,299</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;4,927,299</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;4,927,299</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;52</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;5,242,379</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;5,242,379</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;5,242,379</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;53</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;5,576,363</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;5,576,363</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;5,576,363</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;54</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;5,930,387</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;5,930,387</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;5,930,387</td>
+</tr>
+<tr align="right">
+<td nowrap>&nbsp;&nbsp;&nbsp;55</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;20,000</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;6,305,653</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;6,305,653</td>
+<td nowrap>&nbsp;&nbsp;&nbsp;6,305,653</td>
+</tr>
+</table>
+</body>
+</html>

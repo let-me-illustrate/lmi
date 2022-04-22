@@ -237,6 +237,7 @@ nychthemeral_clutter='
 /^# concinnity test skipped--it uses POSIX only/d
 /^# speed test/d
 /^# xrc tests/d
+/^# test all "emit_\*" output types supported by CLI/d
 /^# test all valid emission types/d
 /^# schema tests/d
 /^# test mst --> xst conversion/d
@@ -385,8 +386,47 @@ printf '\n# test all "emit_*" output types supported by CLI\n\n'
 # group-roster type omitted: sensible only for a census
 $PERFORM /opt/lmi/bin/lmi_cli_shared --file="$throwaway_dir"/sample.ill --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_to_pwd,emit_test_data,emit_spreadsheet,emit_text_stream,emit_custom_0,emit_custom_1,emit_calculation_summary_html,emit_calculation_summary_tsv >/dev/null
 
+# same output filename for '.cns' as for '.ill': uniquify it
+mv sample.tsv                       sample.ill.tsv
+
 # calculation-summary types omitted: not sensible for a census
 $PERFORM /opt/lmi/bin/lmi_cli_shared --file="$throwaway_dir"/sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_to_pwd,emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
+
+# same output filename for '.cns' as for '.ill': uniquify it
+mv sample.tsv                       sample.cns.tsv
+
+# remove '*.test' files: their sizes make it unattractive to store
+# "touchstone" copies, and comparing them to such a touchstone would
+# be useless anyway because the '*.test' format is exceedingly well
+# tested by the 'system_test' target
+rm sample.000000001.test
+rm sample.composite.000000000.test
+rm sample.test
+
+# shorten and decorate output file names
+mv sample.000000001.test0           sample.001.test0.touchstone
+mv sample.000000001.test1           sample.001.test1.touchstone
+mv sample.cns.tsv                   sample.cns.tsv.touchstone
+mv sample.composite.000000000.test0 sample.000.test0.touchstone
+mv sample.composite.000000000.test1 sample.000.test1.touchstone
+mv sample.ill.tsv                   sample.ill.tsv.touchstone
+mv sample.roster.tsv                sample.roster.tsv.touchstone
+mv sample.summary.html              sample.summary.html.touchstone
+mv sample.summary.tsv               sample.summary.tsv.touchstone
+mv sample.test0                     sample.test0.touchstone
+mv sample.test1                     sample.test1.touchstone
+
+# MlySAIntRate = 0.0053403194199831...; differs slightly for x87
+# DatePrepared: it's unclear why ".*" is needed, but it "works"
+for z in *.touchstone; do \
+  diff \
+    --unified=0 \
+    --strip-trailing-cr \
+    --ignore-matching-lines="^0\.0053403194199831" \
+    --ignore-matching-lines="^DatePrepared[ \t]*.*'[0-9-]*'$" \
+    "$z" "$srcdir/$z" \
+  || true ; \
+done
 
 printf '\n# schema tests\n\n'
 /opt/lmi/src/lmi/test_schemata.sh 2>&1 \

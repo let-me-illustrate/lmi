@@ -1,0 +1,7 @@
+FOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS.
+
+DatePrepared		'2022-04-22'
+
+Insured1	ContractNumber	DateOfBirth	IssueAge	CurrentAge	UWClass	Smoker	Salary	SpecifiedAmount	SupplSpecAmt	InitialTargetPremium	ModalMinimumPremium	EeModalMinimumPremium	ErModalMinimumPremium	ListBillPremium	EeListBillPremium	ErListBillPremium	ListBillDate	EeMode	ErMode	CorpName	EffDate	LastCoiReentryDate	InforceAsOfDate	PremiumTaxState	StateOfJurisdiction	CurrentGeneralAccountInterestRate	PolicyFee	DacTaxLoad	MaxPremiumTaxLoad	MaxTargetPremiumLoad	ProductName	PolicyForm	CurrentCoiMultiplier	Waiver	AccidentalDeath	TermRider	ChildRider	SpouseRider	SpouseRiderAmount	
+
+		'1973-07-01'	45	45	Standard	Nontobacco	100000	1000000	0	55394.15	1886.51	0	1886.51	0	0	0	'1970-01-01'	Annual	Annual		'2018-07-01'	'2018-07-01'	'2018-07-01'	CT	CT	0.06	5	0.01	0.02	0.08	sample	UL32768-NY	0.5	0	0	0	0	0	0	
