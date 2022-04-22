@@ -54,9 +54,10 @@ ledger_emitter::ledger_emitter
 {
     LMI_ASSERT(!case_filepath_.empty());
 
+    bool const emit_to_pwd = emission_ & mce_emit_to_pwd;
     configurable_settings const& c = configurable_settings::instance();
     std::string const& tsv_ext   = c.spreadsheet_file_extension();
-    std::string const& print_dir = c.print_directory();
+    std::string const& print_dir = emit_to_pwd ? "" : c.print_directory();
     fs::path const f(modify_directory(case_filepath_, print_dir));
 
     if(emission_ & mce_emit_spreadsheet)

@@ -42,17 +42,18 @@ enum mcenum_emission
     {mce_emit_nothing        =    0
     ,mce_emit_composite_only =    1
     ,mce_emit_quietly        =    2
-    ,mce_emit_timings        =    4
-    ,mce_emit_pdf_file       =    8
-    ,mce_emit_pdf_to_printer =   16 // GUI only.
-    ,mce_emit_pdf_to_viewer  =   32 // GUI only.
-    ,mce_emit_test_data      =   64
-    ,mce_emit_spreadsheet    =  128
-    ,mce_emit_group_roster   =  256
-    ,mce_emit_text_stream    =  512
-    ,mce_emit_custom_0       = 1024
-    ,mce_emit_custom_1       = 2048
-    ,mce_emit_group_quote    = 4096
+    ,mce_emit_to_pwd         =    4
+    ,mce_emit_timings        =    8
+    ,mce_emit_pdf_file       =   16
+    ,mce_emit_pdf_to_printer =   32 // GUI only.
+    ,mce_emit_pdf_to_viewer  =   64 // GUI only.
+    ,mce_emit_test_data      =  128
+    ,mce_emit_spreadsheet    =  256
+    ,mce_emit_group_roster   =  512
+    ,mce_emit_text_stream    = 1024
+    ,mce_emit_custom_0       = 2048
+    ,mce_emit_custom_1       = 4096
+    ,mce_emit_group_quote    = 8192
     };
 
 /// Rounding styles.

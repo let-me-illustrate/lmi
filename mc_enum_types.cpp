@@ -56,6 +56,7 @@ extern mcenum_emission const emission_enums[] =
     {mce_emit_nothing
     ,mce_emit_composite_only
     ,mce_emit_quietly
+    ,mce_emit_to_pwd
     ,mce_emit_timings
     ,mce_emit_pdf_file
     ,mce_emit_pdf_to_printer
@@ -72,6 +73,7 @@ extern char const*const emission_strings[] =
     {"emit_nothing"
     ,"emit_composite_only"
     ,"emit_quietly"
+    ,"emit_to_pwd"
     ,"emit_timings"
     ,"emit_pdf_file"
     ,"emit_pdf_to_printer"
@@ -85,7 +87,7 @@ extern char const*const emission_strings[] =
     ,"emit_group_quote"
     };
 template<> struct mc_enum_key<mcenum_emission>
-  :public mc_enum_data<mcenum_emission, 14, emission_enums, emission_strings> {};
+  :public mc_enum_data<mcenum_emission, 15, emission_enums, emission_strings> {};
 template class mc_enum<mcenum_emission>;
 
 extern rounding_style const rounding_style_enums[] =
