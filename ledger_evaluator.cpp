@@ -474,15 +474,19 @@ format_map_t static_formats()
 // > Format as a number with thousand separators and two decimal places (#,###,###.00)
 // >
     ,{"CurrentCoiMultiplier"            , f2}
-    ,{"EeListBillPremium"               , f6}
-    ,{"ErListBillPremium"               , f6}
     ,{"GuarPrem"                        , f2}
     ,{"InforceTaxBasis"                 , f2}
     ,{"InforceTotalAV"                  , f2}
+    ,{"InitSevenPayPrem"                , f2}
+// >
+// F6: two decimals, commas, cents to dollars
+// > Format as a number with thousand separators and two decimal places (#,###,###.00)
+// >
+    ,{"EeListBillPremium"               , f6}
+    ,{"ErListBillPremium"               , f6}
     ,{"InitGLP"                         , f6}
     ,{"InitGSP"                         , f6}
     ,{"InitPrem"                        , f6}
-    ,{"InitSevenPayPrem"                , f2}
     ,{"InitTgtPrem"                     , f6}
     ,{"ListBillPremium"                 , f6}
 // >
@@ -494,10 +498,8 @@ format_map_t static_formats()
     ,{"AvgFund"                         , f1}
     ,{"ChildRiderAmount"                , f1}
     ,{"CustomFund"                      , f1}
-    ,{"Dumpin"                          , f5}
     ,{"EndtAge"                         , f1}
     ,{"ErNotionallyPaysTerm"            , f1}
-    ,{"External1035Amount"              , f5}
     ,{"GenderBlended"                   , f1}
     ,{"GreatestLapseDuration"           , f1}
     ,{"GroupIndivSelection"             , f1}
@@ -512,10 +514,6 @@ format_map_t static_formats()
     ,{"InforceIsMec"                    , f1}
     ,{"InforceMonth"                    , f1}
     ,{"InforceYear"                     , f1}
-    ,{"InitBaseSpecAmt"                 , f5}
-    ,{"InitTermSpecAmt"                 , f5}
-    ,{"InitTotalSA"                     , f5}
-    ,{"Internal1035Amount"              , f5}
     ,{"IsInforce"                       , f1}
     ,{"IsMec"                           , f1}
     ,{"IsSinglePremium"                 , f1}
@@ -543,6 +541,16 @@ format_map_t static_formats()
     ,{"TxCallsGuarUwSubstd"             , f1}
     ,{"UsePartialMort"                  , f1}
     ,{"WriteTsvFile"                    , f1}
+// >
+// F5: zero decimals, commas, cents to dollars
+// > Format as a number with thousand separators and no decimal places (#,###,###)
+// >
+    ,{"Dumpin"                          , f5}
+    ,{"External1035Amount"              , f5}
+    ,{"InitBaseSpecAmt"                 , f5}
+    ,{"InitTermSpecAmt"                 , f5}
+    ,{"InitTotalSA"                     , f5}
+    ,{"Internal1035Amount"              , f5}
 
 // > Vector Formatting
 // >
@@ -612,42 +620,50 @@ format_map_t static_formats()
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
 // >
-    ,{"AVGenAcct"                       , f5}
     ,{"AVRelOnDeath"                    , f1}
-    ,{"AVSepAcct"                       , f5}
-    ,{"AcctVal"                         , f5}
     ,{"AccumulatedPremium"              , f1}
     ,{"AddonCompOnAssets"               , f1}
     ,{"AddonCompOnPremium"              , f1}
     ,{"AvgDeathBft"                     , f1}
     ,{"BOYAssets"                       , f1}
-    ,{"BaseDeathBft"                    , f5}
-    ,{"COICharge"                       , f5}
-    ,{"CSVNet"                          , f5}
-    ,{"CV7702"                          , f5}
     ,{"ClaimsPaid"                      , f1}
     ,{"Composite"                       , f1}
     ,{"DacTaxLoad"                      , f1}
     ,{"DacTaxRsv"                       , f1}
-    ,{"Dcv"                             , f5}
     ,{"DeathProceedsPaid"               , f1}
-    ,{"EOYDeathBft"                     , f5}
-    ,{"EeGrossPmt"                      , f5}
-    ,{"EeModalMinimumPremium"           , f5}
 //  ,{"EeMode"                          , f1} // Not numeric.
-    ,{"ErGrossPmt"                      , f5}
-    ,{"ErModalMinimumPremium"           , f5}
 //  ,{"ErMode"                          , f1} // Not numeric.
     ,{"ExpenseCharges"                  , f1}
     ,{"FundNumbers"                     , f1}
+    ,{"Loads"                           , f1}
+    ,{"NaarForceout"                    , f1}
+    ,{"NetClaims"                       , f1}
+    ,{"PremTaxLoad"                     , f1}
+    ,{"RefundableSalesLoad"             , f1}
+    ,{"Salary"                          , f1}
+    ,{"SpouseRiderAmount"               , f1}
+// >
+// F5: zero decimals, commas, cents to dollars
+// > Format as a number with thousand separators and no decimal places (#,###,##0)
+// >
+    ,{"AVGenAcct"                       , f5}
+    ,{"AVSepAcct"                       , f5}
+    ,{"AcctVal"                         , f5}
+    ,{"BaseDeathBft"                    , f5}
+    ,{"COICharge"                       , f5}
+    ,{"CSVNet"                          , f5}
+    ,{"CV7702"                          , f5}
+    ,{"Dcv"                             , f5}
+    ,{"EOYDeathBft"                     , f5}
+    ,{"EeGrossPmt"                      , f5}
+    ,{"EeModalMinimumPremium"           , f5}
+    ,{"ErGrossPmt"                      , f5}
+    ,{"ErModalMinimumPremium"           , f5}
     ,{"GptForceout"                     , f5}
     ,{"GrossIntCredited"                , f5}
     ,{"GrossPmt"                        , f5}
-    ,{"Loads"                           , f1}
     ,{"LoanIntAccrued"                  , f5}
     ,{"ModalMinimumPremium"             , f5}
-    ,{"NaarForceout"                    , f1}
-    ,{"NetClaims"                       , f1}
     ,{"NetIntCredited"                  , f5}
     ,{"NetPmt"                          , f5}
     ,{"NetWD"                           , f5}
@@ -655,14 +671,10 @@ format_map_t static_formats()
     ,{"Outlay"                          , f5}
     ,{"PolicyFee"                       , f5}
     ,{"PrefLoanBalance"                 , f5} // Not used yet.
-    ,{"PremTaxLoad"                     , f1}
-    ,{"RefundableSalesLoad"             , f1}
     ,{"RiderCharges"                    , f5}
-    ,{"Salary"                          , f1}
     ,{"SepAcctCharges"                  , f5}
     ,{"SpecAmt"                         , f5}
     ,{"SpecAmtLoad"                     , f5}
-    ,{"SpouseRiderAmount"               , f1}
     ,{"SurrChg"                         , f5}
     ,{"TermPurchased"                   , f5}
     ,{"TermSpecAmt"                     , f5}
