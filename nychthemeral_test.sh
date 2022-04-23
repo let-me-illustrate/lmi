@@ -362,8 +362,11 @@ java -jar /opt/lmi/third_party/rng/jing.jar -c xrc.rnc ./*.xrc 2>&1 \
   | tee "$log_dir"/xrc
 
 # Run the following tests in a throwaway directory so that the files
-# they create can be cleaned up easily.
+# they create can be cleaned up easily. To guard against interference
+# from any files left over from previous runs, destroy that directory
+# first, then recreate it.
 throwaway_dir="$log_dir"/tmp
+rm -rf "$throwaway_dir"
 mkdir --parents "$throwaway_dir"
 cd "$throwaway_dir"
 
@@ -410,11 +413,6 @@ printf '%b' "\
 
 srcdir=. datadir=. /opt/lmi/src/lmi/mst_to_xst.sh
 cmp eraseme.xst eraseme.touchstone
-
-# Clean up stray output. (The zsh '(N)' glob qualifier turns on
-# null_glob for a single expansion.)
-# shellcheck disable=SC2039,SC3002
-for z in "$throwaway_dir"/*(N); do rm "$z"; done
 
 printf '\n# test PETE rebuild\n\n'
 
