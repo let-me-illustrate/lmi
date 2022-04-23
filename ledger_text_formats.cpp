@@ -185,6 +185,11 @@ calculation_summary_formatter::calculation_summary_formatter
         }
 }
 
+std::string prepend_space_if_not_empty(std::string const& s)
+{
+    return s.empty() ? s : " " + s;
+}
+
 std::string calculation_summary_formatter::top_note
     (std::string const& line_break
     ) const
@@ -199,8 +204,8 @@ std::string calculation_summary_formatter::top_note
     else
         {
         oss
-            << "Calculation summary for: "
-            << invar_.Insured1
+            << "Calculation summary for:"
+            << prepend_space_if_not_empty(invar_.Insured1)
             << line_break
             << invar_.Gender << ", " << invar_.Smoker
             << std::setprecision(0)
