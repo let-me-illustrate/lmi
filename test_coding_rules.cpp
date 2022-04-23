@@ -364,6 +364,7 @@ void assay_whitespace(file const& f)
         &&  !f.is_of_phylum(e_make)
         &&  !f.is_of_phylum(e_patch)
         &&  !f.is_of_phylum(e_script)
+        &&  !f.is_of_phylum(e_touchstone)
         &&  contains(f.data(), '\t')
         )
         {
