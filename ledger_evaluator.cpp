@@ -484,12 +484,11 @@ format_map_t static_formats()
     ,{"InitPrem"                        , f6}
     ,{"InitTgtPrem"                     , f6}
     ,{"ListBillPremium"                 , f6}
-// F1: zero decimals, commas
-// > Format as a number with thousand separators and no decimal places (#,###,###)
+// F0: zero decimals
+// > Format as a number with no thousand separator or decimal point (##0)
     ,{"Age"                             , f1}
     ,{"AllowGroupQuote"                 , f1}
     ,{"AvgFund"                         , f1}
-    ,{"ChildRiderAmount"                , f1}
     ,{"Composite"                       , f1}
     ,{"CustomFund"                      , f1}
     ,{"EndtAge"                         , f1}
@@ -535,6 +534,9 @@ format_map_t static_formats()
     ,{"TxCallsGuarUwSubstd"             , f1}
     ,{"UsePartialMort"                  , f1}
     ,{"WriteTsvFile"                    , f1}
+// F1: zero decimals, commas
+// > Format as a number with thousand separators and no decimal places (#,###,###)
+    ,{"ChildRiderAmount"                , f1}
 // F5: zero decimals, commas, cents to dollars
 // > Format as a number with thousand separators and no decimal places (#,###,###)
     ,{"Dumpin"                          , f5}
@@ -589,9 +591,10 @@ format_map_t static_formats()
     ,{"MlySAIntRate"                    , f4}
     ,{"TotalIMF"                        , f4}
 // F0: zero decimals
-// > Format as a number no thousand separator or decimal point (##0%)
+// > Format as a number with no thousand separator or decimal point (##0)
     ,{"AttainedAge"                     , f1}
     ,{"Duration"                        , f1}
+    ,{"FundNumbers"                     , f1}
     ,{"PolicyYear"                      , f1}
 // F2: two decimals, commas
 // > Format as a number with thousand separators and two decimal places (#,###,###.00)
@@ -614,7 +617,6 @@ format_map_t static_formats()
 //  ,{"EeMode"                          , f1} // Not numeric.
 //  ,{"ErMode"                          , f1} // Not numeric.
     ,{"ExpenseCharges"                  , f1}
-    ,{"FundNumbers"                     , f1}
     ,{"Loads"                           , f1}
     ,{"NaarForceout"                    , f1}
     ,{"NetClaims"                       , f1}
