@@ -413,15 +413,15 @@ mask_map_t static_masks()
 
 format_map_t static_formats()
 {
-// Here's my top-level analysis of the formatting specification.
-//
 // Formats
 //
-// F0: zero decimals
+// F0: zero decimals, commas unnecessary: all small integers
 // F1: zero decimals, commas
 // F2: two decimals, commas
 // F3: scaled by 100, zero decimals, with '%' at end:
 // F4: scaled by 100, two decimals, with '%' at end:
+// F5: zero decimals, commas, cents to dollars
+// F6: two decimals, commas, cents to dollars
 //
 // Presumably all use commas as thousands-separators, so that
 // an IRR of 12345.67% would be formatted as "12,345.67%".
@@ -429,6 +429,7 @@ format_map_t static_formats()
 // So the differences are:
 //   'precision' (number of decimal places)
 //   percentage (scaled by 100, '%' at end) or not
+//   cents-to-dollars conversion (scaled by 100)
 // and therefore F0 is equivalent to F1
 
     std::pair<int,oenum_format_style> f1(0, oe_format_normal);
@@ -438,12 +439,10 @@ format_map_t static_formats()
     std::pair<int,oenum_format_style> f5(0, oe_cents_as_dollars);
     std::pair<int,oenum_format_style> f6(2, oe_cents_as_dollars);
 
+// Special Formatting for Scalar Items
     static format_map_t const format_map =
-// > Special Formatting for Scalar Items
-// >
 // F4: scaled by 100, two decimals, with '%' at end:
 // > Format as percentage "0.00%"
-// >
     {{"GuarMaxMandE"                    , f4}
     ,{"InitAnnGenAcctInt"               , f4}
     ,{"InitAnnLoanCredRate"             , f4}
@@ -469,19 +468,15 @@ format_map_t static_formats()
     ,{"SalesLoadRefundRate0"            , f3}
     ,{"SalesLoadRefundRate1"            , f3}
 
-// >
 // F2: two decimals, commas
 // > Format as a number with thousand separators and two decimal places (#,###,###.00)
-// >
     ,{"CurrentCoiMultiplier"            , f2}
     ,{"GuarPrem"                        , f2}
     ,{"InforceTaxBasis"                 , f2}
     ,{"InforceTotalAV"                  , f2}
     ,{"InitSevenPayPrem"                , f2}
-// >
 // F6: two decimals, commas, cents to dollars
 // > Format as a number with thousand separators and two decimal places (#,###,###.00)
-// >
     ,{"EeListBillPremium"               , f6}
     ,{"ErListBillPremium"               , f6}
     ,{"InitGLP"                         , f6}
@@ -489,10 +484,8 @@ format_map_t static_formats()
     ,{"InitPrem"                        , f6}
     ,{"InitTgtPrem"                     , f6}
     ,{"ListBillPremium"                 , f6}
-// >
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,###)
-// >
     ,{"Age"                             , f1}
     ,{"AllowGroupQuote"                 , f1}
     ,{"AvgFund"                         , f1}
@@ -541,10 +534,8 @@ format_map_t static_formats()
     ,{"TxCallsGuarUwSubstd"             , f1}
     ,{"UsePartialMort"                  , f1}
     ,{"WriteTsvFile"                    , f1}
-// >
 // F5: zero decimals, commas, cents to dollars
 // > Format as a number with thousand separators and no decimal places (#,###,###)
-// >
     ,{"Dumpin"                          , f5}
     ,{"External1035Amount"              , f5}
     ,{"InitBaseSpecAmt"                 , f5}
@@ -553,22 +544,17 @@ format_map_t static_formats()
     ,{"Internal1035Amount"              , f5}
 
 // > Vector Formatting
-// >
-// > Here are the vectors enumerated
-// >
+
 // F3: scaled by 100, zero decimals, with '%' at end:
 // > Format as percentage with no decimal places (##0%)
-// >
     ,{"CorridorFactor"                  , f3}
     ,{"FundAllocations"                 , f3}
     ,{"MaleProportion"                  , f3}
     ,{"NonsmokerProportion"             , f3}
     ,{"PartMortTableMult"               , f3}
 
-// >
 // F4: scaled by 100, two decimals, with '%' at end:
 // > Format as percentage with two decimal places (##0.00%)
-// >
     ,{"AnnGAIntRate"                    , f4}
     ,{"AnnHoneymoonValueRate"           , f4}
     ,{"AnnLoanDueRate"                  , f4}
@@ -601,25 +587,19 @@ format_map_t static_formats()
     ,{"MlyPostHoneymoonRate"            , f4}
     ,{"MlySAIntRate"                    , f4}
     ,{"TotalIMF"                        , f4}
-// >
 // F0: zero decimals
 // > Format as a number no thousand separator or decimal point (##0%)
-// >
     ,{"AttainedAge"                     , f1}
     ,{"Duration"                        , f1}
     ,{"PolicyYear"                      , f1}
-// >
 // F2: two decimals, commas
 // > Format as a number with thousand separators and two decimal places (#,###,###.00)
-// >
     ,{"AddonMonthlyFee"                 , f2}
     ,{"AnnualFlatExtra"                 , f2}
 // TODO ?? The precision of 'InforceLives' is inadequate. Is every other format OK?
     ,{"InforceLives"                    , f2}
-// >
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
-// >
     ,{"AVRelOnDeath"                    , f1}
     ,{"AccumulatedPremium"              , f1}
     ,{"AddonCompOnAssets"               , f1}
@@ -642,10 +622,8 @@ format_map_t static_formats()
     ,{"RefundableSalesLoad"             , f1}
     ,{"Salary"                          , f1}
     ,{"SpouseRiderAmount"               , f1}
-// >
 // F5: zero decimals, commas, cents to dollars
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
-// >
     ,{"AVGenAcct"                       , f5}
     ,{"AVSepAcct"                       , f5}
     ,{"AcctVal"                         , f5}
