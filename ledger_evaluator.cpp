@@ -441,52 +441,9 @@ format_map_t static_formats()
 
 // Special Formatting for Scalar Items
     static format_map_t const format_map =
-// F4: scaled by 100, two decimals, with '%' at end:
-// > Format as percentage "0.00%"
-    {{"GuarMaxMandE"                    , f4}
-    ,{"InitAnnGenAcctInt"               , f4}
-    ,{"InitAnnLoanCredRate"             , f4}
-    ,{"InitAnnSepAcctCurrGross0Rate"    , f4}
-    ,{"InitAnnSepAcctCurrGrossHalfRate" , f4}
-    ,{"InitAnnSepAcctCurrNet0Rate"      , f4}
-    ,{"InitAnnSepAcctCurrNetHalfRate"   , f4}
-    ,{"InitAnnSepAcctGrossInt"          , f4}
-    ,{"InitAnnSepAcctGuarGross0Rate"    , f4}
-    ,{"InitAnnSepAcctGuarGrossHalfRate" , f4}
-    ,{"InitAnnSepAcctGuarNet0Rate"      , f4}
-    ,{"InitAnnSepAcctGuarNetHalfRate"   , f4}
-    ,{"InitAnnSepAcctNetInt"            , f4}
-    ,{"MaxAnnCurrLoanDueRate"           , f4}
-    ,{"MaxAnnGuarLoanSpread"            , f4}
-    ,{"PostHoneymoonSpread"             , f4}
-    ,{"Preferred"                       , f4}
-    ,{"PremTaxRate"                     , f4}
-
-// F3: scaled by 100, zero decimals, with '%' at end:
-// > Format as percentage with no decimal places (##0%)
-    ,{"GenAcctAllocation"               , f3}
-    ,{"SalesLoadRefundRate0"            , f3}
-    ,{"SalesLoadRefundRate1"            , f3}
-
-// F2: two decimals, commas
-// > Format as a number with thousand separators and two decimal places (#,###,###.00)
-    ,{"CurrentCoiMultiplier"            , f2}
-    ,{"GuarPrem"                        , f2}
-    ,{"InforceTaxBasis"                 , f2}
-    ,{"InforceTotalAV"                  , f2}
-    ,{"InitSevenPayPrem"                , f2}
-// F6: two decimals, commas, cents to dollars
-// > Format as a number with thousand separators and two decimal places (#,###,###.00)
-    ,{"EeListBillPremium"               , f6}
-    ,{"ErListBillPremium"               , f6}
-    ,{"InitGLP"                         , f6}
-    ,{"InitGSP"                         , f6}
-    ,{"InitPrem"                        , f6}
-    ,{"InitTgtPrem"                     , f6}
-    ,{"ListBillPremium"                 , f6}
 // F0: zero decimals
 // > Format as a number with no thousand separator or decimal point (##0)
-    ,{"Age"                             , f1}
+    {{"Age"                             , f1}
     ,{"AllowGroupQuote"                 , f1}
     ,{"AvgFund"                         , f1}
     ,{"Composite"                       , f1}
@@ -537,6 +494,38 @@ format_map_t static_formats()
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,###)
     ,{"ChildRiderAmount"                , f1}
+// F2: two decimals, commas
+// > Format as a number with thousand separators and two decimal places (#,###,###.00)
+    ,{"CurrentCoiMultiplier"            , f2}
+    ,{"GuarPrem"                        , f2}
+    ,{"InforceTaxBasis"                 , f2}
+    ,{"InforceTotalAV"                  , f2}
+    ,{"InitSevenPayPrem"                , f2}
+// F3: scaled by 100, zero decimals, with '%' at end:
+// > Format as percentage with no decimal places (##0%)
+    ,{"GenAcctAllocation"               , f3}
+    ,{"SalesLoadRefundRate0"            , f3}
+    ,{"SalesLoadRefundRate1"            , f3}
+// F4: scaled by 100, two decimals, with '%' at end:
+// > Format as percentage "0.00%"
+    ,{"GuarMaxMandE"                    , f4}
+    ,{"InitAnnGenAcctInt"               , f4}
+    ,{"InitAnnLoanCredRate"             , f4}
+    ,{"InitAnnSepAcctCurrGross0Rate"    , f4}
+    ,{"InitAnnSepAcctCurrGrossHalfRate" , f4}
+    ,{"InitAnnSepAcctCurrNet0Rate"      , f4}
+    ,{"InitAnnSepAcctCurrNetHalfRate"   , f4}
+    ,{"InitAnnSepAcctGrossInt"          , f4}
+    ,{"InitAnnSepAcctGuarGross0Rate"    , f4}
+    ,{"InitAnnSepAcctGuarGrossHalfRate" , f4}
+    ,{"InitAnnSepAcctGuarNet0Rate"      , f4}
+    ,{"InitAnnSepAcctGuarNetHalfRate"   , f4}
+    ,{"InitAnnSepAcctNetInt"            , f4}
+    ,{"MaxAnnCurrLoanDueRate"           , f4}
+    ,{"MaxAnnGuarLoanSpread"            , f4}
+    ,{"PostHoneymoonSpread"             , f4}
+    ,{"Preferred"                       , f4}
+    ,{"PremTaxRate"                     , f4}
 // F5: zero decimals, commas, cents to dollars
 // > Format as a number with thousand separators and no decimal places (#,###,###)
     ,{"Dumpin"                          , f5}
@@ -545,63 +534,24 @@ format_map_t static_formats()
     ,{"InitTermSpecAmt"                 , f5}
     ,{"InitTotalSA"                     , f5}
     ,{"Internal1035Amount"              , f5}
+// F6: two decimals, commas, cents to dollars
+// > Format as a number with thousand separators and two decimal places (#,###,###.00)
+    ,{"EeListBillPremium"               , f6}
+    ,{"ErListBillPremium"               , f6}
+    ,{"InitGLP"                         , f6}
+    ,{"InitGSP"                         , f6}
+    ,{"InitPrem"                        , f6}
+    ,{"InitTgtPrem"                     , f6}
+    ,{"ListBillPremium"                 , f6}
 
 // > Vector Formatting
 
-// F3: scaled by 100, zero decimals, with '%' at end:
-// > Format as percentage with no decimal places (##0%)
-    ,{"CorridorFactor"                  , f3}
-    ,{"FundAllocations"                 , f3}
-    ,{"MaleProportion"                  , f3}
-    ,{"NonsmokerProportion"             , f3}
-    ,{"PartMortTableMult"               , f3}
-
-// F4: scaled by 100, two decimals, with '%' at end:
-// > Format as percentage with two decimal places (##0.00%)
-    ,{"AnnGAIntRate"                    , f4}
-    ,{"AnnHoneymoonValueRate"           , f4}
-    ,{"AnnLoanDueRate"                  , f4}
-    ,{"AnnPostHoneymoonRate"            , f4}
-    ,{"AnnSAIntRate"                    , f4}
-    ,{"CorpTaxBracket"                  , f4}
-    ,{"CurrMandE"                       , f4}
-    ,{"HoneymoonValueSpread"            , f4}
-    ,{"IndvTaxBracket"                  , f4}
-    ,{"InforceHMVector"                 , f4}
-
-    ,{"Irc7702ic_usual"                 , f4}
-    ,{"Irc7702ic_glp"                   , f4}
-    ,{"Irc7702ic_gsp"                   , f4}
-    ,{"Irc7702ig_usual"                 , f4}
-    ,{"Irc7702ig_glp"                   , f4}
-    ,{"Irc7702ig_gsp"                   , f4}
-
-    ,{"IrrCsv_Current"                  , f4}
-    ,{"IrrCsv_CurrentZero"              , f4}
-    ,{"IrrCsv_Guaranteed"               , f4}
-    ,{"IrrCsv_GuaranteedZero"           , f4}
-    ,{"IrrDb_Current"                   , f4}
-    ,{"IrrDb_CurrentZero"               , f4}
-    ,{"IrrDb_Guaranteed"                , f4}
-    ,{"IrrDb_GuaranteedZero"            , f4}
-
-    ,{"MlyGAIntRate"                    , f4}
-    ,{"MlyHoneymoonValueRate"           , f4}
-    ,{"MlyPostHoneymoonRate"            , f4}
-    ,{"MlySAIntRate"                    , f4}
-    ,{"TotalIMF"                        , f4}
 // F0: zero decimals
 // > Format as a number with no thousand separator or decimal point (##0)
     ,{"AttainedAge"                     , f1}
     ,{"Duration"                        , f1}
     ,{"FundNumbers"                     , f1}
     ,{"PolicyYear"                      , f1}
-// F2: two decimals, commas
-// > Format as a number with thousand separators and two decimal places (#,###,###.00)
-    ,{"AddonMonthlyFee"                 , f2}
-    ,{"AnnualFlatExtra"                 , f2}
-// TODO ?? The precision of 'InforceLives' is inadequate. Is every other format OK?
-    ,{"InforceLives"                    , f2}
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
     ,{"AVRelOnDeath"                    , f1}
@@ -624,6 +574,50 @@ format_map_t static_formats()
     ,{"RefundableSalesLoad"             , f1}
     ,{"Salary"                          , f1}
     ,{"SpouseRiderAmount"               , f1}
+// F2: two decimals, commas
+// > Format as a number with thousand separators and two decimal places (#,###,###.00)
+    ,{"AddonMonthlyFee"                 , f2}
+    ,{"AnnualFlatExtra"                 , f2}
+// TODO ?? The precision of 'InforceLives' is inadequate. Is every other format OK?
+    ,{"InforceLives"                    , f2}
+// F3: scaled by 100, zero decimals, with '%' at end:
+// > Format as percentage with no decimal places (##0%)
+    ,{"CorridorFactor"                  , f3}
+    ,{"FundAllocations"                 , f3}
+    ,{"MaleProportion"                  , f3}
+    ,{"NonsmokerProportion"             , f3}
+    ,{"PartMortTableMult"               , f3}
+// F4: scaled by 100, two decimals, with '%' at end:
+// > Format as percentage with two decimal places (##0.00%)
+    ,{"AnnGAIntRate"                    , f4}
+    ,{"AnnHoneymoonValueRate"           , f4}
+    ,{"AnnLoanDueRate"                  , f4}
+    ,{"AnnPostHoneymoonRate"            , f4}
+    ,{"AnnSAIntRate"                    , f4}
+    ,{"CorpTaxBracket"                  , f4}
+    ,{"CurrMandE"                       , f4}
+    ,{"HoneymoonValueSpread"            , f4}
+    ,{"IndvTaxBracket"                  , f4}
+    ,{"InforceHMVector"                 , f4}
+    ,{"Irc7702ic_usual"                 , f4}
+    ,{"Irc7702ic_glp"                   , f4}
+    ,{"Irc7702ic_gsp"                   , f4}
+    ,{"Irc7702ig_usual"                 , f4}
+    ,{"Irc7702ig_glp"                   , f4}
+    ,{"Irc7702ig_gsp"                   , f4}
+    ,{"IrrCsv_Current"                  , f4}
+    ,{"IrrCsv_CurrentZero"              , f4}
+    ,{"IrrCsv_Guaranteed"               , f4}
+    ,{"IrrCsv_GuaranteedZero"           , f4}
+    ,{"IrrDb_Current"                   , f4}
+    ,{"IrrDb_CurrentZero"               , f4}
+    ,{"IrrDb_Guaranteed"                , f4}
+    ,{"IrrDb_GuaranteedZero"            , f4}
+    ,{"MlyGAIntRate"                    , f4}
+    ,{"MlyHoneymoonValueRate"           , f4}
+    ,{"MlyPostHoneymoonRate"            , f4}
+    ,{"MlySAIntRate"                    , f4}
+    ,{"TotalIMF"                        , f4}
 // F5: zero decimals, commas, cents to dollars
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
     ,{"AVGenAcct"                       , f5}
