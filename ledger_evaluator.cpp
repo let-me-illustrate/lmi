@@ -490,6 +490,7 @@ format_map_t static_formats()
     ,{"AllowGroupQuote"                 , f1}
     ,{"AvgFund"                         , f1}
     ,{"ChildRiderAmount"                , f1}
+    ,{"Composite"                       , f1}
     ,{"CustomFund"                      , f1}
     ,{"EndtAge"                         , f1}
     ,{"ErNotionallyPaysTerm"            , f1}
@@ -607,7 +608,6 @@ format_map_t static_formats()
     ,{"AvgDeathBft"                     , f1}
     ,{"BOYAssets"                       , f1}
     ,{"ClaimsPaid"                      , f1}
-    ,{"Composite"                       , f1}
     ,{"DacTaxLoad"                      , f1}
     ,{"DacTaxRsv"                       , f1}
     ,{"DeathProceedsPaid"               , f1}
