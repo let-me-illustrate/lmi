@@ -568,7 +568,6 @@ format_map_t static_formats()
 //  ,{"ErMode"                          , f1} // Not numeric.
     ,{"ExpenseCharges"                  , f1}
     ,{"Loads"                           , f1}
-    ,{"NaarForceout"                    , f1}
     ,{"NetClaims"                       , f1}
     ,{"PremTaxLoad"                     , f1}
     ,{"RefundableSalesLoad"             , f1}
@@ -638,6 +637,7 @@ format_map_t static_formats()
     ,{"GrossPmt"                        , f5}
     ,{"LoanIntAccrued"                  , f5}
     ,{"ModalMinimumPremium"             , f5}
+    ,{"NaarForceout"                    , f5}
     ,{"NetIntCredited"                  , f5}
     ,{"NetPmt"                          , f5}
     ,{"NetWD"                           , f5}
