@@ -555,19 +555,16 @@ format_map_t static_formats()
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
     ,{"AVRelOnDeath"                    , f1}
-    ,{"AccumulatedPremium"              , f1}
     ,{"AddonCompOnAssets"               , f1}
     ,{"AddonCompOnPremium"              , f1}
     ,{"AvgDeathBft"                     , f1}
-    ,{"BOYAssets"                       , f1}
     ,{"ClaimsPaid"                      , f1}
     ,{"DacTaxLoad"                      , f1}
     ,{"DacTaxRsv"                       , f1}
     ,{"DeathProceedsPaid"               , f1}
 //  ,{"EeMode"                          , f1} // Not numeric.
 //  ,{"ErMode"                          , f1} // Not numeric.
-    ,{"ExpenseCharges"                  , f1}
-    ,{"Loads"                           , f1}
+    ,{"ExpenseCharges"                  , f1} // Not used yet.
     ,{"NetClaims"                       , f1}
     ,{"PremTaxLoad"                     , f1}
     ,{"RefundableSalesLoad"             , f1}
