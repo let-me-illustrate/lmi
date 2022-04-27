@@ -467,8 +467,8 @@ void PrintCellTabDelimited
     os << "Gender\t\t"            << Invar.value_str("Gender"         ) << '\n';
     os << "Smoker\t\t"            << Invar.value_str("Smoker"         ) << '\n';
     os << "IssueAge\t\t"          << Invar.value_str("Age"            ) << '\n';
-    os << "InitBaseSpecAmt\t\t"   << Invar.value_str("InitBaseSpecAmt", 100.0) << '\n';
-    os << "InitTermSpecAmt\t\t"   << Invar.value_str("InitTermSpecAmt", 100.0) << '\n';
+    os << "InitBaseSpecAmt\t\t"   << Invar.value_str<100.0>("InitBaseSpecAmt") << '\n';
+    os << "InitTermSpecAmt\t\t"   << Invar.value_str<100.0>("InitTermSpecAmt") << '\n';
     double total_spec_amt = Invar.InitBaseSpecAmt + Invar.InitTermSpecAmt;
     os << "  Total:\t\t"     << value_cast<std::string>(total_spec_amt / 100.0) << '\n';
     os << "PolicyMktgName\t\t"    << Invar.value_str("PolicyMktgName" ) << '\n';
@@ -568,36 +568,36 @@ void PrintCellTabDelimited
             os << Invar.DBOpt[j]                          << '\t';
             }
 
-        os << Invar.value_str("EeGrossPmt"            ,j, 100.0) << '\t';
-        os << Invar.value_str("ErGrossPmt"            ,j, 100.0) << '\t';
-        os << Invar.value_str("NetWD"                 ,j, 100.0) << '\t'; // TODO ?? It's *gross* WD.
-        os << Invar.value_str("NewCashLoan"           ,j, 100.0) << '\t';
-        os << Curr_.value_str("TotalLoanBalance"      ,j, 100.0) << '\t';
-        os << Invar.value_str("Outlay"                ,j, 100.0) << '\t';
+        os << Invar.value_str<100.0>("EeGrossPmt"            ,j) << '\t';
+        os << Invar.value_str<100.0>("ErGrossPmt"            ,j) << '\t';
+        os << Invar.value_str<100.0>("NetWD"                 ,j) << '\t'; // TODO ?? It's *gross* WD.
+        os << Invar.value_str<100.0>("NewCashLoan"           ,j) << '\t';
+        os << Curr_.value_str<100.0>("TotalLoanBalance"      ,j) << '\t';
+        os << Invar.value_str<100.0>("Outlay"                ,j) << '\t';
 
-        os << Curr_.value_str("NetPmt"                ,j, 100.0) << '\t';
+        os << Curr_.value_str<100.0>("NetPmt"                ,j) << '\t';
 
-        os << Curr_.value_str("PremTaxLoad"           ,j, 100.0) << '\t';
-        os << Curr_.value_str("DacTaxLoad"            ,j, 100.0) << '\t';
-        os << Curr_.value_str("PolicyFee"             ,j, 100.0) << '\t';
-        os << Curr_.value_str("SpecAmtLoad"           ,j, 100.0) << '\t';
+        os << Curr_.value_str<100.0>("PremTaxLoad"           ,j) << '\t';
+        os << Curr_.value_str<100.0>("DacTaxLoad"            ,j) << '\t';
+        os << Curr_.value_str<100.0>("PolicyFee"             ,j) << '\t';
+        os << Curr_.value_str<100.0>("SpecAmtLoad"           ,j) << '\t';
         os << Invar.value_str("AnnualFlatExtra"       ,j) << '\t';
-        os << Curr_.value_str("COICharge"             ,j, 100.0) << '\t';
-        os << Curr_.value_str("RiderCharges"          ,j, 100.0) << '\t';
+        os << Curr_.value_str<100.0>("COICharge"             ,j) << '\t';
+        os << Curr_.value_str<100.0>("RiderCharges"          ,j) << '\t';
         os << "0\t"; // obsolete
-        os << Curr_.value_str("SepAcctCharges"        ,j, 100.0) << '\t';
+        os << Curr_.value_str<100.0>("SepAcctCharges"        ,j) << '\t';
 
         os << Curr_.value_str("AnnSAIntRate"          ,j) << '\t';
         os << Curr_.value_str("AnnGAIntRate"          ,j) << '\t';
-        os << Curr_.value_str("GrossIntCredited"      ,j, 100.0) << '\t';
-        os << Curr_.value_str("NetIntCredited"        ,j, 100.0) << '\t';
+        os << Curr_.value_str<100.0>("GrossIntCredited"      ,j) << '\t';
+        os << Curr_.value_str<100.0>("NetIntCredited"        ,j) << '\t';
 
-        os << Guar_.value_str("AcctVal"               ,j, 100.0) << '\t';
-        os << Guar_.value_str("CSVNet"                ,j, 100.0) << '\t';
-        os << Guar_.value_str("EOYDeathBft"           ,j, 100.0) << '\t';
-        os << Curr_.value_str("AcctVal"               ,j, 100.0) << '\t';
-        os << Curr_.value_str("CSVNet"                ,j, 100.0) << '\t';
-        os << Curr_.value_str("EOYDeathBft"           ,j, 100.0) << '\t';
+        os << Guar_.value_str<100.0>("AcctVal"               ,j) << '\t';
+        os << Guar_.value_str<100.0>("CSVNet"                ,j) << '\t';
+        os << Guar_.value_str<100.0>("EOYDeathBft"           ,j) << '\t';
+        os << Curr_.value_str<100.0>("AcctVal"               ,j) << '\t';
+        os << Curr_.value_str<100.0>("CSVNet"                ,j) << '\t';
+        os << Curr_.value_str<100.0>("EOYDeathBft"           ,j) << '\t';
 
         if(Invar.IsInforce)
             {
@@ -613,8 +613,8 @@ void PrintCellTabDelimited
         // First element of InforceLives is BOY--show only EOY.
         os << value_cast<std::string>(Invar.InforceLives[1 + j]) << '\t';
 
-        os << Curr_.value_str("ClaimsPaid"            ,j, 100.0) << '\t';
-        os << Curr_.value_str("NetClaims"             ,j, 100.0) << '\t';
+        os << Curr_.value_str<100.0>("ClaimsPaid"            ,j) << '\t';
+        os << Curr_.value_str<100.0>("NetClaims"             ,j) << '\t';
         os << "0\t"; // obsolete
         os << "0\t"; // obsolete
         os << "0\t"; // obsolete
@@ -748,16 +748,16 @@ void PrintRosterTabDelimited
         << Invar.Age + Invar.InforceYear              << '\t'
         << Invar.value_str("UWClass"                ) << '\t'
         << Invar.value_str("Smoker"                 ) << '\t'
-        << Invar.value_str("Salary"               ,d, 100.0) << '\t'
-        << Invar.value_str("SpecAmt"              ,d, 100.0) << '\t'
-        << Invar.value_str("TermSpecAmt"          ,d, 100.0) << '\t'
-        << Invar.value_str("InitTgtPrem"            , 100.0) << '\t'
-        << Invar.value_str("ModalMinimumPremium"  ,d, 100.0) << '\t'
-        << Invar.value_str("EeModalMinimumPremium",d, 100.0) << '\t'
-        << Invar.value_str("ErModalMinimumPremium",d, 100.0) << '\t'
-        << Invar.value_str("ListBillPremium"        , 100.0) << '\t'
-        << Invar.value_str("EeListBillPremium"      , 100.0) << '\t'
-        << Invar.value_str("ErListBillPremium"      , 100.0) << '\t'
+        << Invar.value_str<100.0>("Salary"               ,d) << '\t'
+        << Invar.value_str<100.0>("SpecAmt"              ,d) << '\t'
+        << Invar.value_str<100.0>("TermSpecAmt"          ,d) << '\t'
+        << Invar.value_str<100.0>("InitTgtPrem"            ) << '\t'
+        << Invar.value_str<100.0>("ModalMinimumPremium"  ,d) << '\t'
+        << Invar.value_str<100.0>("EeModalMinimumPremium",d) << '\t'
+        << Invar.value_str<100.0>("ErModalMinimumPremium",d) << '\t'
+        << Invar.value_str<100.0>("ListBillPremium"        ) << '\t'
+        << Invar.value_str<100.0>("EeListBillPremium"      ) << '\t'
+        << Invar.value_str<100.0>("ErListBillPremium"      ) << '\t'
         << "'" << Invar.ListBillDate                  << "'\t"
         << Invar.EeMode                           [d] << '\t'
         << Invar.ErMode                           [d] << '\t'

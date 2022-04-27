@@ -140,13 +140,13 @@ void LedgerBase::Copy(LedgerBase const& obj)
 }
 
 //============================================================================
+template <double divisor>
 std::string LedgerBase::value_str
     (std::string const& map_key
     ,int                index
-    ,double             divisor
     ) const
 {
-    LMI_ASSERT(0.0 != divisor);
+    static_assert(0.0 != divisor);
 
     double_vector_map::const_iterator found = AllVectors.find(map_key);
     if(AllVectors.end() != found)
@@ -159,12 +159,12 @@ std::string LedgerBase::value_str
 }
 
 //============================================================================
+template <double divisor>
 std::string LedgerBase::value_str
     (std::string const& map_key
-    ,double             divisor
     ) const
 {
-    LMI_ASSERT(0.0 != divisor);
+    static_assert(0.0 != divisor);
 
     string_map::const_iterator found_string = Strings.find(map_key);
     if(Strings.end() != found_string)
@@ -181,6 +181,29 @@ std::string LedgerBase::value_str
     alarum() << "Map key '" << map_key << "' not found." << LMI_FLUSH;
     return "";
 }
+
+// Explicitly instantiate all the versions that are currently used.
+template
+std::string LedgerBase::value_str<1.0>
+    (std::string const& map_key
+    ) const;
+
+template
+std::string LedgerBase::value_str<100.0>
+    (std::string const& map_key
+    ) const;
+
+template
+std::string LedgerBase::value_str<1.0>
+    (std::string const& map_key
+    ,int                index
+    ) const;
+
+template
+std::string LedgerBase::value_str<100.0>
+    (std::string const& map_key
+    ,int                index
+    ) const;
 
 //============================================================================
 double_vector_map const& LedgerBase::all_vectors() const
