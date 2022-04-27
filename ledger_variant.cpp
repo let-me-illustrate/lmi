@@ -74,9 +74,9 @@ void LedgerVariant::Alloc(int len)
 {
     Length  = len;
 
-    BegYearVectors  ["COICharge"              ] = &COICharge              ;
-    BegYearVectors  ["RiderCharges"           ] = &RiderCharges           ;
-    BegYearVectors  ["ExpenseCharges"         ] = &ExpenseCharges         ;
+    BegYearVectors  ["COICharge"              ] = &COICharge              ; // f5
+    BegYearVectors  ["RiderCharges"           ] = &RiderCharges           ; // f5
+    BegYearVectors  ["ExpenseCharges"         ] = &ExpenseCharges         ; // f5
 
     // Account value released on death might at first seem to be
     // an end-of-year item, since we use curtate mortality and the
@@ -88,37 +88,37 @@ void LedgerVariant::Alloc(int len)
     // rather than at either of the year's endpoints. The same is
     // true of various other items such as policy fee and interest
     // credited as used here.
-    BegYearVectors  ["AVRelOnDeath"           ] = &AVRelOnDeath           ;
-    BegYearVectors  ["NetIntCredited"         ] = &NetIntCredited         ;
-    BegYearVectors  ["GrossIntCredited"       ] = &GrossIntCredited       ;
-    BegYearVectors  ["LoanIntAccrued"         ] = &LoanIntAccrued         ;
+    BegYearVectors  ["AVRelOnDeath"           ] = &AVRelOnDeath           ; // f1
+    BegYearVectors  ["NetIntCredited"         ] = &NetIntCredited         ; // f5
+    BegYearVectors  ["GrossIntCredited"       ] = &GrossIntCredited       ; // f5
+    BegYearVectors  ["LoanIntAccrued"         ] = &LoanIntAccrued         ; // f5
 
-    BegYearVectors  ["PolicyFee"              ] = &PolicyFee              ;
-    BegYearVectors  ["PremTaxLoad"            ] = &PremTaxLoad            ;
-    BegYearVectors  ["DacTaxLoad"             ] = &DacTaxLoad             ;
-    BegYearVectors  ["SpecAmtLoad"            ] = &SpecAmtLoad            ;
-    BegYearVectors  ["SepAcctCharges"         ] = &SepAcctCharges         ;
+    BegYearVectors  ["PolicyFee"              ] = &PolicyFee              ; // f5
+    BegYearVectors  ["PremTaxLoad"            ] = &PremTaxLoad            ; // f1
+    BegYearVectors  ["DacTaxLoad"             ] = &DacTaxLoad             ; // f1
+    BegYearVectors  ["SpecAmtLoad"            ] = &SpecAmtLoad            ; // f5
+    BegYearVectors  ["SepAcctCharges"         ] = &SepAcctCharges         ; // f5
 
     // Deaths are assumed to come at the end of the year only; but
     // they're discounted by the proportion in force at the beginning.
-    BegYearVectors  ["ClaimsPaid"             ] = &ClaimsPaid             ;
-    BegYearVectors  ["DeathProceedsPaid"      ] = &DeathProceedsPaid      ;
-    BegYearVectors  ["NetClaims"              ] = &NetClaims              ;
-    BegYearVectors  ["NetPmt"                 ] = &NetPmt                 ;
+    BegYearVectors  ["ClaimsPaid"             ] = &ClaimsPaid             ; // f1
+    BegYearVectors  ["DeathProceedsPaid"      ] = &DeathProceedsPaid      ; // f1
+    BegYearVectors  ["NetClaims"              ] = &NetClaims              ; // f1
+    BegYearVectors  ["NetPmt"                 ] = &NetPmt                 ; // f5
 
-    EndYearVectors  ["AcctVal"                ] = &AcctVal                ;
-    EndYearVectors  ["AVGenAcct"              ] = &AVGenAcct              ;
-    EndYearVectors  ["AVSepAcct"              ] = &AVSepAcct              ;
-    EndYearVectors  ["DacTaxRsv"              ] = &DacTaxRsv              ;
-    EndYearVectors  ["CSVNet"                 ] = &CSVNet                 ;
-    EndYearVectors  ["CV7702"                 ] = &CV7702                 ;
-    EndYearVectors  ["EOYDeathBft"            ] = &EOYDeathBft            ;
-    EndYearVectors  ["PrefLoanBalance"        ] = &PrefLoanBalance        ;
-    EndYearVectors  ["TotalLoanBalance"       ] = &TotalLoanBalance       ;
-    EndYearVectors  ["AvgDeathBft"            ] = &AvgDeathBft            ;
-    EndYearVectors  ["SurrChg"                ] = &SurrChg                ;
-    EndYearVectors  ["TermPurchased"          ] = &TermPurchased          ;
-    EndYearVectors  ["BaseDeathBft"           ] = &BaseDeathBft           ;
+    EndYearVectors  ["AcctVal"                ] = &AcctVal                ; // f5
+    EndYearVectors  ["AVGenAcct"              ] = &AVGenAcct              ; // f5
+    EndYearVectors  ["AVSepAcct"              ] = &AVSepAcct              ; // f5
+    EndYearVectors  ["DacTaxRsv"              ] = &DacTaxRsv              ; // f1
+    EndYearVectors  ["CSVNet"                 ] = &CSVNet                 ; // f5
+    EndYearVectors  ["CV7702"                 ] = &CV7702                 ; // f5
+    EndYearVectors  ["EOYDeathBft"            ] = &EOYDeathBft            ; // f5
+    EndYearVectors  ["PrefLoanBalance"        ] = &PrefLoanBalance        ; // f5
+    EndYearVectors  ["TotalLoanBalance"       ] = &TotalLoanBalance       ; // f5
+    EndYearVectors  ["AvgDeathBft"            ] = &AvgDeathBft            ; // f1
+    EndYearVectors  ["SurrChg"                ] = &SurrChg                ; // f5
+    EndYearVectors  ["TermPurchased"          ] = &TermPurchased          ; // f5
+    EndYearVectors  ["BaseDeathBft"           ] = &BaseDeathBft           ; // f5
 
     OtherVectors    ["MlySAIntRate"           ] = &MlySAIntRate           ;
     OtherVectors    ["MlyGAIntRate"           ] = &MlyGAIntRate           ;
