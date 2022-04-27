@@ -564,7 +564,6 @@ format_map_t static_formats()
     ,{"DeathProceedsPaid"               , f1}
 //  ,{"EeMode"                          , f1} // Not numeric.
 //  ,{"ErMode"                          , f1} // Not numeric.
-    ,{"ExpenseCharges"                  , f1} // Not used yet.
     ,{"NetClaims"                       , f1}
     ,{"PremTaxLoad"                     , f1}
     ,{"RefundableSalesLoad"             , f1}
@@ -629,6 +628,7 @@ format_map_t static_formats()
     ,{"EeModalMinimumPremium"           , f5}
     ,{"ErGrossPmt"                      , f5}
     ,{"ErModalMinimumPremium"           , f5}
+    ,{"ExpenseCharges"                  , f5} // Not used yet.
     ,{"GptForceout"                     , f5}
     ,{"GrossIntCredited"                , f5}
     ,{"GrossPmt"                        , f5}
