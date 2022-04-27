@@ -1228,7 +1228,7 @@ void AccountValue::FinalizeYear()
     VariantValues().AcctVal     [Year] = centize(total_av);
     VariantValues().AVGenAcct   [Year] = centize(AVGenAcct + AVRegLn + AVPrfLn);
     VariantValues().AVSepAcct   [Year] = centize(AVSepAcct);
-    VariantValues().DacTaxRsv   [Year] = DacTaxRsv;
+    VariantValues().DacTaxRsv   [Year] = 100.0 * DacTaxRsv;
     VariantValues().CSVNet      [Year] = centize(csv_net);
     VariantValues().CV7702      [Year] = centize(cv_7702);
 
@@ -1252,17 +1252,17 @@ void AccountValue::FinalizeYear()
 
     VariantValues().COICharge         [Year] = centize(YearsTotalCoiCharge)   ;
     VariantValues().RiderCharges      [Year] = centize(YearsTotalRiderCharges);
-    VariantValues().AVRelOnDeath      [Year] = YearsAVRelOnDeath              ;
-    VariantValues().ClaimsPaid        [Year] = YearsGrossClaims               ;
-    VariantValues().DeathProceedsPaid [Year] = YearsDeathProceeds             ;
-    VariantValues().NetClaims         [Year] = YearsNetClaims                 ;
+    VariantValues().AVRelOnDeath      [Year] = 100.0 * YearsAVRelOnDeath      ;
+    VariantValues().ClaimsPaid        [Year] = 100.0 * YearsGrossClaims       ;
+    VariantValues().DeathProceedsPaid [Year] = 100.0 * YearsDeathProceeds     ;
+    VariantValues().NetClaims         [Year] = 100.0 * YearsNetClaims         ;
     VariantValues().NetIntCredited    [Year] = centize(YearsTotalNetIntCredited);
     VariantValues().GrossIntCredited  [Year] = centize(YearsTotalGrossIntCredited);
     VariantValues().LoanIntAccrued    [Year] = centize(YearsTotalLoanIntAccrued);
     VariantValues().PolicyFee         [Year] = centize(YearsTotalPolicyFee)   ;
-    VariantValues().DacTaxLoad        [Year] = YearsTotalDacTaxLoad           ;
+    VariantValues().DacTaxLoad        [Year] = 100.0 * YearsTotalDacTaxLoad   ;
     VariantValues().SpecAmtLoad       [Year] = centize(YearsTotalSpecAmtLoad) ;
-    VariantValues().PremTaxLoad       [Year] = PremiumTax_->ytd_load()        ;
+    VariantValues().PremTaxLoad       [Year] = 100.0 * PremiumTax_->ytd_load();
 
     currency notional_sep_acct_charge =
           YearsTotalSepAcctLoad

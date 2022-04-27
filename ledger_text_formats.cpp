@@ -576,8 +576,8 @@ void PrintCellTabDelimited
 
         os << Curr_.value_str("NetPmt"                ,j, 100.0) << '\t';
 
-        os << Curr_.value_str("PremTaxLoad"           ,j) << '\t';
-        os << Curr_.value_str("DacTaxLoad"            ,j) << '\t';
+        os << Curr_.value_str("PremTaxLoad"           ,j, 100.0) << '\t';
+        os << Curr_.value_str("DacTaxLoad"            ,j, 100.0) << '\t';
         os << Curr_.value_str("PolicyFee"             ,j, 100.0) << '\t';
         os << Curr_.value_str("SpecAmtLoad"           ,j, 100.0) << '\t';
         os << Invar.value_str("AnnualFlatExtra"       ,j) << '\t';
@@ -612,8 +612,8 @@ void PrintCellTabDelimited
         // First element of InforceLives is BOY--show only EOY.
         os << value_cast<std::string>(Invar.InforceLives[1 + j]) << '\t';
 
-        os << Curr_.value_str("ClaimsPaid"            ,j) << '\t';
-        os << Curr_.value_str("NetClaims"             ,j) << '\t';
+        os << Curr_.value_str("ClaimsPaid"            ,j, 100.0) << '\t';
+        os << Curr_.value_str("NetClaims"             ,j, 100.0) << '\t';
         os << "0\t"; // obsolete
         os << "0\t"; // obsolete
         os << "0\t"; // obsolete
@@ -747,7 +747,7 @@ void PrintRosterTabDelimited
         << Invar.Age + Invar.InforceYear              << '\t'
         << Invar.value_str("UWClass"                ) << '\t'
         << Invar.value_str("Smoker"                 ) << '\t'
-        << Invar.value_str("Salary"               ,d) << '\t'
+        << Invar.value_str("Salary"               ,d, 100.0) << '\t'
         << Invar.value_str("SpecAmt"              ,d, 100.0) << '\t'
         << Invar.value_str("TermSpecAmt"          ,d, 100.0) << '\t'
         << Invar.value_str("InitTgtPrem"            , 100.0) << '\t'

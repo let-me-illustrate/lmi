@@ -296,7 +296,7 @@ mask_map_t static_masks()
     ,{"AcctVal_GuaranteedZero"          , "999,999,999"}
     ,{"AddonCompOnAssets"               , "999,999,999"}
     ,{"AddonCompOnPremium"              , "999,999,999"}
-    ,{"AddonMonthlyFee"                 , "999,999,999"}
+    ,{"AddonMonthlyFee"                 , " 999,999.99"}
     ,{"AnnGAIntRate_Current"            ,      "99.99%"}
     ,{"AnnGAIntRate_Guaranteed"         ,      "99.99%"}
     ,{"AnnHoneymoonValueRate_Current"   ,      "99.99%"}
@@ -554,24 +554,14 @@ format_map_t static_formats()
     ,{"PolicyYear"                      , f1}
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
-    ,{"AVRelOnDeath"                    , f1}
     ,{"AddonCompOnAssets"               , f1}
     ,{"AddonCompOnPremium"              , f1}
-    ,{"AvgDeathBft"                     , f1}
-    ,{"ClaimsPaid"                      , f1}
-    ,{"DacTaxLoad"                      , f1}
-    ,{"DacTaxRsv"                       , f1}
-    ,{"DeathProceedsPaid"               , f1}
 //  ,{"EeMode"                          , f1} // Not numeric.
 //  ,{"ErMode"                          , f1} // Not numeric.
-    ,{"NetClaims"                       , f1}
-    ,{"PremTaxLoad"                     , f1}
     ,{"RefundableSalesLoad"             , f1}
-    ,{"Salary"                          , f1}
     ,{"SpouseRiderAmount"               , f1}
 // F2: two decimals, commas
 // > Format as a number with thousand separators and two decimal places (#,###,###.00)
-    ,{"AddonMonthlyFee"                 , f2}
     ,{"AnnualFlatExtra"                 , f2}
 // TODO ?? The precision of 'InforceLives' is inadequate. Is every other format OK?
     ,{"InforceLives"                    , f2}
@@ -616,13 +606,19 @@ format_map_t static_formats()
 // F5: zero decimals, commas, cents to dollars
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
     ,{"AVGenAcct"                       , f5}
+    ,{"AVRelOnDeath"                    , f5}
     ,{"AVSepAcct"                       , f5}
     ,{"AcctVal"                         , f5}
+    ,{"AvgDeathBft"                     , f5}
     ,{"BaseDeathBft"                    , f5}
     ,{"COICharge"                       , f5}
     ,{"CSVNet"                          , f5}
     ,{"CV7702"                          , f5}
+    ,{"ClaimsPaid"                      , f5}
+    ,{"DacTaxLoad"                      , f5}
+    ,{"DacTaxRsv"                       , f5}
     ,{"Dcv"                             , f5}
+    ,{"DeathProceedsPaid"               , f5}
     ,{"EOYDeathBft"                     , f5}
     ,{"EeGrossPmt"                      , f5}
     ,{"EeModalMinimumPremium"           , f5}
@@ -635,6 +631,7 @@ format_map_t static_formats()
     ,{"LoanIntAccrued"                  , f5}
     ,{"ModalMinimumPremium"             , f5}
     ,{"NaarForceout"                    , f5}
+    ,{"NetClaims"                       , f5}
     ,{"NetIntCredited"                  , f5}
     ,{"NetPmt"                          , f5}
     ,{"NetWD"                           , f5}
@@ -642,7 +639,9 @@ format_map_t static_formats()
     ,{"Outlay"                          , f5}
     ,{"PolicyFee"                       , f5}
     ,{"PrefLoanBalance"                 , f5} // Not used yet.
+    ,{"PremTaxLoad"                     , f5}
     ,{"RiderCharges"                    , f5}
+    ,{"Salary"                          , f5}
     ,{"SepAcctCharges"                  , f5}
     ,{"SpecAmt"                         , f5}
     ,{"SpecAmtLoad"                     , f5}
@@ -650,6 +649,9 @@ format_map_t static_formats()
     ,{"TermPurchased"                   , f5}
     ,{"TermSpecAmt"                     , f5}
     ,{"TotalLoanBalance"                , f5}
+// F6: two decimals, commas, cents to dollars
+// > Format as a number with thousand separators and two decimal places (#,###,###.00)
+    ,{"AddonMonthlyFee"                 , f6}
     };
 
     return format_map;

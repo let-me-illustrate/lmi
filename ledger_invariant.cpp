@@ -92,7 +92,7 @@ void LedgerInvariant::Alloc(int len)
     BegYearVectors  ["ModalMinimumPremium"        ] = &ModalMinimumPremium        ; // f5
     BegYearVectors  ["EeModalMinimumPremium"      ] = &EeModalMinimumPremium      ; // f5
     BegYearVectors  ["ErModalMinimumPremium"      ] = &ErModalMinimumPremium      ; // f5
-    BegYearVectors  ["AddonMonthlyFee"            ] = &AddonMonthlyFee            ; // f2
+    BegYearVectors  ["AddonMonthlyFee"            ] = &AddonMonthlyFee            ; // f6
 
     // EOY vectors.
     EndYearVectors  ["TermSpecAmt"                ] = &TermSpecAmt                ; // f5
@@ -100,7 +100,7 @@ void LedgerInvariant::Alloc(int len)
     EndYearVectors  ["Dcv"                        ] = &Dcv                        ; // f5
 
     // Forborne vectors.
-    ForborneVectors ["Salary"                     ] = &Salary                     ; // f1
+    ForborneVectors ["Salary"                     ] = &Salary                     ; // f5
 
     // Nonscalable vectors.
     OtherVectors    ["IndvTaxBracket"             ] = &IndvTaxBracket             ;

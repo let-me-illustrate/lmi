@@ -31,6 +31,7 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
+#include "et_vector.hpp"
 #include "fund_data.hpp"
 #include "i7702.hpp"
 #include "interest_rates.hpp"
@@ -98,7 +99,8 @@ void LedgerInvariant::Init(BasicValues const* b)
 //  EeModalMinimumPremium      = DYNAMIC
 //  ErModalMinimumPremium      = DYNAMIC
 
-    AddonMonthlyFee            = b->yare_input_.ExtraMonthlyCustodialFee  ;
+    // convert to decimal cents:
+    AddonMonthlyFee          <<= 100.0 * b->yare_input_.ExtraMonthlyCustodialFee  ;
 
     // EOY vectors.
 
@@ -124,7 +126,8 @@ void LedgerInvariant::Init(BasicValues const* b)
 
     // Forborne vectors.
 
-    Salary                     = b->yare_input_.ProjectedSalary           ;
+    // convert to decimal cents:
+    Salary                   <<= 100.0 * b->yare_input_.ProjectedSalary   ;
 
     // Nonscalable vectors.
 
