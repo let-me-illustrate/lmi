@@ -133,13 +133,13 @@ int test_main(int, char*[])
     _control87(0x00ff,  0x00ff);
 #endif // defined __BORLANDC__
 
-    long double volatile d = 0.0;
+    double volatile d = 0.0;
     duff_fmt( 1.0 / d  );
     duff_fmt(-1.0 / d  );
 
-    if(std::numeric_limits<long double>::has_quiet_NaN)
+    if(std::numeric_limits<double>::has_quiet_NaN)
         {
-        duff_fmt(std::numeric_limits<long double>::quiet_NaN());
+        duff_fmt(std::numeric_limits<double>::quiet_NaN());
         }
 
     return 0;

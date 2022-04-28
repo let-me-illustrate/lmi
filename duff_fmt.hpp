@@ -36,9 +36,9 @@
 
 // Reference:
 // http://groups.google.com/groups?selm=38C9B681.B8A036DF%40flash.net
-inline std::string duff_fmt(long double value)
+inline std::string duff_fmt(double value)
 {
-    if(value < 0.0L)
+    if(value < 0.0)
         {
         return '-' + duff_fmt(-value);
         }
