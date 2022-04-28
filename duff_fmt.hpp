@@ -36,11 +36,11 @@
 
 // Reference:
 // http://groups.google.com/groups?selm=38C9B681.B8A036DF%40flash.net
-inline std::string ncnnnpnn(long double value)
+inline std::string duff_fmt(long double value)
 {
     if(value < 0.0L)
         {
-        return '-' + ncnnnpnn(-value);
+        return '-' + duff_fmt(-value);
         }
 
     std::stringstream stream;
@@ -53,7 +53,7 @@ inline std::string ncnnnpnn(long double value)
         || !(stream >> std::ws).eof()
         )
         {
-        throw std::runtime_error("Stream error in ncnnnpnn.hpp .");
+        throw std::runtime_error("Stream error in duff_fmt.hpp .");
         }
 
     std::string::const_iterator sin_it(s_in.begin());
