@@ -21,7 +21,7 @@
 
 #include "pchfile.hpp"
 
-#include "ncnnnpnn.hpp"
+#include "duff_fmt.hpp"
 
 #include "test_tools.hpp"
 

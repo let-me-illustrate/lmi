@@ -23,8 +23,8 @@
 // like money_put, but most of our compilers's standard libraries don't
 // support that, so we use this US-specific workaround.
 
-#ifndef ncnnnpnn_hpp
-#define ncnnnpnn_hpp
+#ifndef duff_fmt_hpp
+#define duff_fmt_hpp
 
 #include "config.hpp"
 
@@ -85,4 +85,4 @@ inline std::string ncnnnpnn(long double value)
     return s_out;
 }
 
-#endif // ncnnnpnn_hpp
+#endif // duff_fmt_hpp

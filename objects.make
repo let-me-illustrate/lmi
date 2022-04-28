@@ -375,6 +375,7 @@ unit_test_targets := \
   crc32_test \
   currency_test \
   dbo_rules_test \
+  duff_fmt_test \
   et_vector_test \
   expression_template_0_test \
   fenv_lmi_test \
@@ -404,7 +405,6 @@ unit_test_targets := \
   monnaie_test \
   mortality_rates_test \
   name_value_pairs_test \
-  ncnnnpnn_test \
   null_stream_test \
   numeric_io_test \
   path_utility_test \
@@ -575,6 +575,10 @@ dbo_rules_test$(EXEEXT): \
   mc_enum.o \
   mc_enum_types.o \
   timer.o \
+
+duff_fmt_test$(EXEEXT): \
+  $(common_test_objects) \
+  duff_fmt_test.o \
 
 et_vector_test$(EXEEXT): \
   $(common_test_objects) \
@@ -835,10 +839,6 @@ name_value_pairs_test$(EXEEXT): \
   name_value_pairs_test.o \
   null_stream.o \
   path_utility.o \
-
-ncnnnpnn_test$(EXEEXT): \
-  $(common_test_objects) \
-  ncnnnpnn_test.o \
 
 null_stream_test$(EXEEXT): \
   $(common_test_objects) \

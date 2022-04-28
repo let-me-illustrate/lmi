@@ -113,6 +113,7 @@ TESTS = \
     crc32_test \
     currency_test \
     dbo_rules_test \
+    duff_fmt_test \
     et_vector_test \
     expression_template_0_test \
     fenv_lmi_test \
@@ -142,7 +143,6 @@ TESTS = \
     monnaie_test \
     mortality_rates_test \
     name_value_pairs_test \
-    ncnnnpnn_test \
     null_stream_test \
     numeric_io_test \
     path_utility_test \
@@ -690,6 +690,9 @@ dbo_rules_test_CXXFLAGS = $(AM_CXXFLAGS)
 dbo_rules_test_LDADD = \
   libtest_common.la
 
+duff_fmt_test_LDADD = \
+  libtest_common.la
+
 et_vector_test_LDADD = \
   libtest_common.la
 
@@ -912,9 +915,6 @@ name_value_pairs_test_SOURCES = \
   name_value_pairs_test.cpp
 name_value_pairs_test_CXXFLAGS = $(AM_CXXFLAGS)
 name_value_pairs_test_LDADD = \
-  libtest_common.la
-
-ncnnnpnn_test_LDADD = \
   libtest_common.la
 
 null_stream_test_LDADD = \
@@ -1143,6 +1143,7 @@ noinst_HEADERS = \
     default_view.hpp \
     deserialize_cast.hpp \
     docmanager_ex.hpp \
+    duff_fmt.hpp \
     edit_mvc_docview_parameters.hpp \
     emit_ledger.hpp \
     exit_codes.hpp \
@@ -1239,7 +1240,6 @@ noinst_HEADERS = \
     mvc_view.hpp \
     my_proem.hpp \
     name_value_pairs.hpp \
-    ncnnnpnn.hpp \
     null_stream.hpp \
     numeric_io_cast.hpp \
     numeric_io_traits.hpp \
