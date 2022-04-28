@@ -38,13 +38,11 @@
 /// Format a double using thousands separators. Reference:
 ///   https://groups.google.com/groups?selm=38C9B681.B8A036DF%40flash.net
 
-inline std::string duff_fmt(double value)
+inline std::string duff_fmt(double value, int decimals)
 {
-    constexpr int decimals {2}; // This will become an argument.
-
     if(value < 0.0)
         {
-        return '-' + duff_fmt(-value);
+        return '-' + duff_fmt(-value, decimals);
         }
 
     constexpr int buffer_size {1000};
@@ -79,11 +77,23 @@ inline std::string duff_fmt(double value)
                 while(*p);
         }
 
-// Obviously this won't do for 2 <> decimals:
-LMI_ASSERT('.' == *p);
-    *q++ = *p++; // decimal point
-    *q++ = *p++; // tenths
-    *q++ = *p++; // hundredths
+    // The next character must be the decimal point.
+    LMI_ASSERT('.' == *p);
+    // If the next character after the decimal point is the
+    // terminating null, then zero decimals must be wanted,
+    // and the decimal point should be suppressed.
+    if('\0' == *(1 + p))
+        {
+        LMI_ASSERT(0 == decimals);
+        }
+    else
+        {
+                do
+                    {
+                    *q++ = *p++;
+                    }
+                while(*p);
+        }
 
     *q = '\0';
     return out_buf;
