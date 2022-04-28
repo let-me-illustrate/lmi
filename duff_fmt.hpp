@@ -28,61 +28,65 @@
 
 #include "config.hpp"
 
-#include <iomanip>
-#include <ios>
-#include <sstream>
-#include <stdexcept>
+#include "assert_lmi.hpp"
+#include "ssize_lmi.hpp"                // sstrlen()
+
+#include <cstdio>                       // snprintf()
+#include <cstring>                      // strchr()
 #include <string>
 
-// Reference:
-// http://groups.google.com/groups?selm=38C9B681.B8A036DF%40flash.net
+/// Format a double using thousands separators. Reference:
+///   https://groups.google.com/groups?selm=38C9B681.B8A036DF%40flash.net
+
 inline std::string duff_fmt(double value)
 {
+    constexpr int decimals {2}; // This will become an argument.
+
     if(value < 0.0)
         {
         return '-' + duff_fmt(-value);
         }
 
-    std::stringstream stream;
-    stream << std::setiosflags(std::ios_base::fixed) << std::setprecision(2);
-    std::string s_in;
+    constexpr int buffer_size {1000};
+    char in_buf [buffer_size];
+    char out_buf[buffer_size];
 
-    if
-        (  !(stream << value)
-        || !(stream >> s_in)
-        || !(stream >> std::ws).eof()
-        )
+    char* p = in_buf;
+    char* q = out_buf;
+
+    // Use '#' to force a decimal point unless infinite or NaN.
+    int const length = std::snprintf(p, buffer_size, "%#.*f", decimals, value);
+    LMI_ASSERT(0 < length && length < buffer_size);
+    LMI_ASSERT(lmi::sstrlen(p) == length);
+
+    char const*const r = std::strchr(p, '.');
+    if(nullptr == r)
         {
-        throw std::runtime_error("Stream error in duff_fmt.hpp .");
+        // Infinities and NaNs need no commas.
+        return out_buf;
         }
 
-    std::string::const_iterator sin_it(s_in.begin());
-    std::string s_out;
-
-    std::string::size_type const z(s_in.find('.'));
-    if(std::string::npos == z)
-        {
-        // Infinities and NaNs have no decimal point, and need no commas.
-        return s_in;
-        }
-
-    switch(z % 3)
+    switch((r - p) % 3)
         {
                 do
                     {
-                    if('.' == *sin_it) break;
-                    s_out += ',';       // fall through
-        case 0:     s_out += *sin_it++; // fall through
-        case 2:     s_out += *sin_it++; // fall through
-        case 1:     s_out += *sin_it++;
-                    } while(*sin_it);
+                    if('.' == *p) break;
+                    *q++ = ',';  // fall through
+        case 0:     *q++ = *p++; // fall through
+        case 2:     *q++ = *p++; // fall through
+        case 1:     *q++ = *p++;
+                    }
+                while(*p);
         }
 
-    s_out += s_in.at(    z); // decimal point
-    s_out += s_in.at(1 + z); // tenths
-    s_out += s_in.at(2 + z); // hundredths
+// Obviously this won't do for 2 <> decimals:
+LMI_ASSERT('.' == *p);
+    *q++ = *p++; // decimal point
+    *q++ = *p++; // tenths
+    *q++ = *p++; // hundredths
 
-    return s_out;
+    *q = '\0';
+    return out_buf;
 }
 
 #endif // duff_fmt_hpp
