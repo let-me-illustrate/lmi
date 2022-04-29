@@ -98,6 +98,27 @@ void ledger_test::test_ledger_format()
     LMI_TEST_EQUAL("0.0314"     , ledger_format(pi, g3));
 }
 
+void mete_format()
+{
+    constexpr double pi_millions {3141592.65358979323851};
+    constexpr std::pair<int,oenum_format_style> f1(0, oe_format_normal);
+    constexpr std::pair<int,oenum_format_style> f2(2, oe_format_normal);
+    constexpr std::pair<int,oenum_format_style> f3(0, oe_format_percentage);
+    constexpr std::pair<int,oenum_format_style> f4(2, oe_format_percentage);
+    static std::vector<double> const v {pi_millions, 100};
+    for(int j = 0; j < 1000; ++j)
+        {
+        ledger_format(pi_millions, f1);
+        ledger_format(pi_millions, f2);
+        ledger_format(pi_millions, f3);
+        ledger_format(pi_millions, f4);
+        ledger_format(v, f1);
+        ledger_format(v, f2);
+        ledger_format(v, f3);
+        ledger_format(v, f4);
+        }
+}
+
 void ledger_test::test_speed()
 {
     Ledger ledger(100, mce_finra, false, false, false);
@@ -112,6 +133,7 @@ void ledger_test::test_speed()
         << "\n  construct        : " << TimeAnAliquot(f0)
         << "\n  make_evaluator() : " << TimeAnAliquot(f1)
         << "\n  write_tsv()      : " << TimeAnAliquot(f2)
+        << "\n  mete_format()    : " << TimeAnAliquot(mete_format)
         << std::endl
         ;
     LMI_TEST(0 == std::remove("tsv_eraseme.values.tsv"));
