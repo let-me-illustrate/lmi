@@ -137,7 +137,7 @@ struct i_upper_n_over_n_from_i
             return -1.0;
             }
 
-        static long double const reciprocal_n = 1.0L / n;
+        static long double const reciprocal_n = T(1) / n;
         // naively:    (1+i)^(1/n) - 1
         // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
         long double z = std::expm1(std::log1p(i) * reciprocal_n);
@@ -198,7 +198,7 @@ struct d_upper_n_from_i
             throw std::range_error("i equals -100%.");
             }
 
-        static long double const reciprocal_n = 1.0L / n;
+        static long double const reciprocal_n = T(1) / n;
         // naively:    n * (1 - (1+i)^(-1/n))
         // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
         long double z = -n * std::expm1(std::log1p(i) * -reciprocal_n);
@@ -229,7 +229,7 @@ struct net_i_from_gross
     static_assert(0 < n);
     T operator()(T const& i, T const& spread, T const& fee) const
         {
-        static long double const reciprocal_n = 1.0L / n;
+        static long double const reciprocal_n = T(1) / n;
         // naively:
         //   (1
         //   +   (1+     i)^(1/n)
@@ -301,15 +301,15 @@ struct coi_rate_from_q
             }
         else
             {
-            static long double const reciprocal_12 = 1.0L / 12;
+            static long double const reciprocal_12 = T(1) / 12;
             // naively:    1 - (1-q)^(1/12)
             // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
             long double monthly_q = -std::expm1(std::log1p(-q) * reciprocal_12);
-            if(1.0L == monthly_q)
+            if(T(1) == monthly_q)
                 {
                 throw std::logic_error("Monthly q equals unity.");
                 }
-            monthly_q = monthly_q / (1.0L - monthly_q);
+            monthly_q = monthly_q / (T(1) - monthly_q);
             return std::min(max_coi, static_cast<T>(monthly_q));
             }
         }
