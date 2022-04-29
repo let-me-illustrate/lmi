@@ -31,6 +31,7 @@
 #include "comma_punct.hpp"
 #include "configurable_settings.hpp"    // effective_calculation_summary_columns()
 #include "contains.hpp"
+#include "duff_fmt.hpp"
 #include "global_settings.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
@@ -1177,33 +1178,13 @@ std::string ledger_format
     ,std::pair<int,oenum_format_style> f
     )
 {
-    static std::stringstream interpreter = []
-        {
-        std::stringstream ss {};
-        std::locale loc;
-        std::locale new_loc(loc, ::new comma_punct);
-        ss.imbue(new_loc);
-        ss.setf(std::ios_base::fixed, std::ios_base::floatfield);
-        return ss;
-        } ();
-    interpreter.str(std::string{});
-    interpreter.clear();
-
-    interpreter.precision(f.first);
-    std::string s;
     switch(f.second)
         {
         case oe_format_normal:     {} break; // Deliberately do nothing.
         case oe_cents_as_dollars:  {d /= 100;} break;
         case oe_format_percentage: {d *= 100;} break;
         }
-
-    interpreter << d;
-    interpreter >> s;
-    if(!interpreter.eof())
-        {
-        alarum() << "Formatting error." << LMI_FLUSH;
-        }
+    std::string s = duff_fmt(d, f.first);
 
     if(oe_format_percentage == f.second)
         {
