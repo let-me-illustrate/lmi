@@ -137,10 +137,9 @@ struct i_upper_n_over_n_from_i
             return -1.0;
             }
 
-        constexpr T reciprocal_n = T(1) / n;
         // naively:    (1+i)^(1/n) - 1
         // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
-        return std::expm1(std::log1p(i) * reciprocal_n);
+        return std::expm1(std::log1p(i) / n);
         }
 };
 
@@ -196,10 +195,9 @@ struct d_upper_n_from_i
             throw std::range_error("i equals -100%.");
             }
 
-        constexpr T reciprocal_n = T(1) / n;
         // naively:    n * (1 - (1+i)^(-1/n))
         // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
-        return -n * std::expm1(std::log1p(i) * -reciprocal_n);
+        return -n * std::expm1(std::log1p(i) / -n);
         }
 };
 
@@ -226,7 +224,6 @@ struct net_i_from_gross
     static_assert(0 < n);
     T operator()(T const& i, T const& spread, T const& fee) const
         {
-        constexpr T reciprocal_n = T(1) / n;
         // naively:
         //   (1
         //   +   (1+     i)^(1/n)
@@ -237,9 +234,9 @@ struct net_i_from_gross
         return std::expm1
             (
             n * std::log1p
-                (   std::expm1(reciprocal_n * std::log1p(i))
-                -   std::expm1(reciprocal_n * std::log1p(spread))
-                -              reciprocal_n * fee
+                (   std::expm1(std::log1p(i)      / n)
+                -   std::expm1(std::log1p(spread) / n)
+                -              fee                / n
                 )
             );
         }
@@ -297,10 +294,9 @@ struct coi_rate_from_q
             }
         else
             {
-            constexpr T reciprocal_12 = T(1) / 12;
             // naively:    1 - (1-q)^(1/12)
             // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
-            T monthly_q = -std::expm1(std::log1p(-q) * reciprocal_12);
+            T monthly_q = -std::expm1(std::log1p(-q) / 12);
             if(T(1) == monthly_q)
                 {
                 throw std::logic_error("Monthly q equals unity.");
