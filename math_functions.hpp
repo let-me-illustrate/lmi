@@ -60,7 +60,7 @@ std::vector<T>& back_sum(std::vector<T>& v)
 /// Divide integers, rounding away from zero.
 ///
 /// This floating-point analogue may be useful for cross checking:
-///   long double z = (long double)numerator / (long double)denominator;
+///   double z = (double)numerator / (double)denominator;
 ///   return (T) (0 < z) ? std::ceil(z) : std::floor(z);
 
 template<typename T>
