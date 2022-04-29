@@ -579,6 +579,7 @@ dbo_rules_test$(EXEEXT): \
 duff_fmt_test$(EXEEXT): \
   $(common_test_objects) \
   duff_fmt_test.o \
+  miscellany.o \
 
 et_vector_test$(EXEEXT): \
   $(common_test_objects) \

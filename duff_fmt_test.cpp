@@ -1,4 +1,4 @@
-// Format NNNN.NNN --> "N,NNN.NN": unit test.
+// Format doubles with thousands separators: unit test.
 //
 // Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
 //
@@ -23,13 +23,10 @@
 
 #include "duff_fmt.hpp"
 
+#include "miscellany.hpp"               // begins_with()
 #include "test_tools.hpp"
 
 #include <limits>
-
-#if defined __BORLANDC__
-#   include <float.h>                   // nonstandard _control87()
-#endif // defined __BORLANDC__
 
 int test_main(int, char*[])
 {
@@ -201,27 +198,21 @@ int test_main(int, char*[])
         ||              "2,000.00" == duff_fmt(      1999.995     , 2)
         );
 
-    // Infinities and NaNs. Apparently the C89/90 standard referenced
-    // by C++98 does not specify a unique string representation
-    // http://groups.google.com/groups?as_umsgid=5cj5ae%24f4e%241%40shade.twinsun.com
-    // so we test only that the formatting routine executes.
-    // C99 does specify the result [7.19.6.1/8], but that doesn't
-    // affect the standard C++ language as this is written in 2002.
-
-#if defined __BORLANDC__
-    // By default, the borland compiler traps infinity and NaNs,
-    // and signals a hardware exception; but we want to test them,
-    // so we mask them from the application.
-    _control87(0x00ff,  0x00ff);
-#endif // defined __BORLANDC__
+    // Infinities and NaNs.
 
     double volatile d = 0.0;
-    duff_fmt( 1.0 / d, 2);
-    duff_fmt(-1.0 / d, 2);
+    std::string pos_inf = duff_fmt( 1.0 / d, 2);
+    std::string neg_inf = duff_fmt(-1.0 / d, 2);
+    LMI_TEST( "inf" == pos_inf ||  "infinity" == pos_inf);
+    LMI_TEST("-inf" == neg_inf || "-infinity" == neg_inf);
 
     if(std::numeric_limits<double>::has_quiet_NaN)
         {
-        duff_fmt(std::numeric_limits<double>::quiet_NaN(), 2);
+        constexpr double quiet_NaN = std::numeric_limits<double>::quiet_NaN();
+        std::string qnan = duff_fmt(quiet_NaN, 2);
+        // Test only "nan", disregarding any 'n-char-sequence' payload.
+        // The sign of quiet_NaN() seems to be unspecified.
+        LMI_TEST(begins_with(qnan, "nan") || begins_with(qnan, "-nan"));
         }
 
     return 0;

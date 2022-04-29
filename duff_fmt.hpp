@@ -1,4 +1,4 @@
-// Format NNNN.NNN --> "N,NNN.NN".
+// Format doubles with thousands separators.
 //
 // Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
 //
@@ -18,10 +18,6 @@
 // https://savannah.nongnu.org/projects/lmi
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
-
-// Ideally we would use imbue an appropriate locale and use some facet
-// like money_put, but most of our compilers's standard libraries don't
-// support that, so we use this US-specific workaround.
 
 #ifndef duff_fmt_hpp
 #define duff_fmt_hpp
@@ -61,7 +57,7 @@ inline std::string duff_fmt(double value, int decimals)
     if(nullptr == r)
         {
         // Infinities and NaNs need no commas.
-        return out_buf;
+        return p;
         }
 
     switch((r - p) % 3)
