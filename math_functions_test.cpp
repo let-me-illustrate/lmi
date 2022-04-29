@@ -192,7 +192,7 @@ void sample_results()
     fenv_initialize();
 }
 
-// These 'mete[0123]' functions perform the same set of operations using
+// These 'mete[01]' functions perform the same sets of operations using
 // different implementations.
 
 // This implementation naively uses std::pow(); it is both slower and
@@ -224,6 +224,10 @@ void mete1()
     stifle_unused_warning(x);
 }
 
+// These 'mete[23]' functions perform the same operation using
+// different implementations.
+
+// This implementation uses type 'double'.
 void mete2()
 {
     double volatile x;
@@ -234,6 +238,7 @@ void mete2()
     stifle_unused_warning(x);
 }
 
+// This implementation uses type 'long double'.
 void mete3()
 {
     long double volatile x;
