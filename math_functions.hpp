@@ -25,7 +25,7 @@
 #include "config.hpp"
 
 #include <algorithm>                    // max(), min(), transform()
-#include <cmath>                        // expm1l(), log1pl(), signbit()
+#include <cmath>                        // expm1(), log1p(), signbit()
 #include <limits>
 #include <numeric>                      // midpoint(), partial_sum()
 #include <stdexcept>
@@ -140,7 +140,7 @@ struct i_upper_n_over_n_from_i
         static long double const reciprocal_n = 1.0L / n;
         // naively:    (1+i)^(1/n) - 1
         // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
-        long double z = std::expm1l(std::log1pl(i) * reciprocal_n);
+        long double z = std::expm1(std::log1p(i) * reciprocal_n);
         return static_cast<T>(z);
         }
 };
@@ -166,7 +166,7 @@ struct i_from_i_upper_n_over_n
         {
         // naively:    (1+i)^n - 1
         // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
-        long double z = std::expm1l(std::log1pl(i) * n);
+        long double z = std::expm1(std::log1p(i) * n);
         return static_cast<T>(z);
         }
 };
@@ -201,7 +201,7 @@ struct d_upper_n_from_i
         static long double const reciprocal_n = 1.0L / n;
         // naively:    n * (1 - (1+i)^(-1/n))
         // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
-        long double z = -n * std::expm1l(std::log1pl(i) * -reciprocal_n);
+        long double z = -n * std::expm1(std::log1p(i) * -reciprocal_n);
         return static_cast<T>(z);
         }
 };
@@ -237,11 +237,11 @@ struct net_i_from_gross
         //   -         fee *(1/n)
         //   )^n - 1
         // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
-        long double z = std::expm1l
+        long double z = std::expm1
             (
-            n * std::log1pl
-                (   std::expm1l(reciprocal_n * std::log1pl(i))
-                -   std::expm1l(reciprocal_n * std::log1pl(spread))
+            n * std::log1p
+                (   std::expm1(reciprocal_n * std::log1p(i))
+                -   std::expm1(reciprocal_n * std::log1p(spread))
                 -          reciprocal_n * fee
                 )
             );
@@ -304,7 +304,7 @@ struct coi_rate_from_q
             static long double const reciprocal_12 = 1.0L / 12;
             // naively:    1 - (1-q)^(1/12)
             // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
-            long double monthly_q = -std::expm1l(std::log1pl(-q) * reciprocal_12);
+            long double monthly_q = -std::expm1(std::log1p(-q) * reciprocal_12);
             if(1.0L == monthly_q)
                 {
                 throw std::logic_error("Monthly q equals unity.");
