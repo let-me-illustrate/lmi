@@ -125,7 +125,7 @@ struct i_upper_n_over_n_from_i
 {
     static_assert(std::is_floating_point_v<T>);
     static_assert(0 < n);
-    T operator()(T const& i) const
+    T operator()(T i) const
         {
         if(i < -1.0)
             {
@@ -149,7 +149,7 @@ struct i_upper_12_over_12_from_i
     using argument_type = T;
     using result_type   = T;
     static_assert(std::is_floating_point_v<T>);
-    T operator()(T const& i) const
+    T operator()(T i) const
         {
         return i_upper_n_over_n_from_i<T,12>()(i);
         }
@@ -160,7 +160,7 @@ struct i_from_i_upper_n_over_n
 {
     static_assert(std::is_floating_point_v<T>);
     static_assert(0 < n);
-    T operator()(T const& i) const
+    T operator()(T i) const
         {
         // naively:    (1+i)^n - 1
         // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
@@ -172,7 +172,7 @@ template<typename T>
 struct i_from_i_upper_12_over_12
 {
     static_assert(std::is_floating_point_v<T>);
-    T operator()(T const& i) const
+    T operator()(T i) const
         {
         return i_from_i_upper_n_over_n<T,12>()(i);
         }
@@ -183,7 +183,7 @@ struct d_upper_n_from_i
 {
     static_assert(std::is_floating_point_v<T>);
     static_assert(0 < n);
-    T operator()(T const& i) const
+    T operator()(T i) const
         {
         if(i < -1.0)
             {
@@ -205,7 +205,7 @@ template<typename T>
 struct d_upper_12_from_i
 {
     static_assert(std::is_floating_point_v<T>);
-    T operator()(T const& i) const
+    T operator()(T i) const
         {
         return d_upper_n_from_i<T,12>()(i);
         }
@@ -222,7 +222,7 @@ struct net_i_from_gross
 {
     static_assert(std::is_floating_point_v<T>);
     static_assert(0 < n);
-    T operator()(T const& i, T const& spread, T const& fee) const
+    T operator()(T i, T spread, T fee) const
         {
         // naively:
         //   (1
@@ -272,7 +272,7 @@ struct coi_rate_from_q
     using second_argument_type = T;
     using result_type          = T;
     static_assert(std::is_floating_point_v<T>);
-    T operator()(T const& q, T const& max_coi) const
+    T operator()(T q, T max_coi) const
         {
         if(!(0.0 <= max_coi && max_coi <= 1.0))
             {
