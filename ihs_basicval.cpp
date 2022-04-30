@@ -1512,6 +1512,8 @@ currency BasicValues::GetModalSpecAmtCorridor(currency annualized_pmt) const
 {
     int const k = round_corridor_factor().decimals();
     double const s = nonstd::power(10, k);
+    // Do not save and restore prior rounding direction because
+    // lmi generally expects rounding to nearest everywhere.
     std::fesetround(FE_TONEAREST);
     double const z = std::nearbyint(s * GetCorridorFactor()[0]);
     return round_min_specamt().c((z * annualized_pmt) / s);
