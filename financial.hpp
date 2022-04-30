@@ -46,15 +46,12 @@ class calendar_date;
 // When no root is bracketed, -100% is always conservative enough;
 // but if a root is known to exceed the a priori upper bound, then
 // perhaps that upper bound could be returned instead.
-//
-// Is it really advantageous to use long double? Why not use a
-// template type argument instead?
 
 template<typename InputIterator>
 long double fv
     (InputIterator first
     ,InputIterator last
-    ,long double i
+    ,long double   i
     )
 {
     if(first == last)
@@ -73,6 +70,17 @@ long double fv
         }
     return z;
 }
+
+/// IRR: internal rate of return
+///
+/// Not intended for direct use; prefer the provided cover functions.
+///
+/// Implemented in terms of 'long double' rather than 'double', even
+/// for x86_64, which normally favors 'double'--see:
+///   https://lists.nongnu.org/archive/html/lmi/2022-04/msg00004.html
+///   - it's more accurate for x86_64, by two orders of magnitude; and
+///   - it's as fast for x86_64, and maybe faster for i686 (x87); and
+///   - the resulting NPV is identical across architectures.
 
 template<typename InputIterator>
 class irr_helper
@@ -134,8 +142,8 @@ template<typename InputIterator>
 long double irr
     (InputIterator first
     ,InputIterator last
-    ,long double x
-    ,int decimals
+    ,long double   x
+    ,int           decimals
     )
 {
     return irr_helper<InputIterator>(first, last, x, decimals)();
