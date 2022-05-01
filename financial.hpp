@@ -38,8 +38,6 @@ class calendar_date;
 // TODO ?? Things to reconsider later:
 //
 // v*v*v...*v != v^n because of floating-point roundoff.
-// Find i to n decimals, not v to n decimals.
-// Separate implementations: in advance vs. in arrears.
 //
 // The a priori irr bounds ought to be parameterized.
 //
