@@ -29,7 +29,7 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <cmath>                        // fabs(), expm1(), log1p()
+#include <cmath>                        // fabs()
 #include <iostream>
 #include <vector>
 
@@ -61,43 +61,6 @@ long double pv
         z += *j * vn;
         }
     return z;
-}
-
-/// Alternative future value.
-///
-/// This is implemented in terms of F2XM1 and FYL2XP1, in the hope of
-/// improving accuracy. However, the speed test shows that it's twenty
-/// to forty times slower than fv().
-///
-/// Two separate accumulators, y and z, are used, on the supposition
-/// that this will improve accuracy; i.e., FV is the sum of two terms:
-///   Σ a(n)⋅(1+i)^n = Σ a(n) + Σ a(n)⋅expm1(n⋅log1p(i))
-/// of which the second could be overwhelmed by the first, resulting
-/// in loss of the precision that is hoped to be gained.
-
-template<typename InputIterator>
-long double fv_alt
-    (InputIterator first
-    ,InputIterator last
-    ,long double   i
-    )
-{
-    if(first == last)
-        {
-        return 0.0L;
-        }
-
-    long double const li = std::log1p(i);
-    long double y = 0.0L;
-    long double z = 0.0L;
-    int k = bourn_cast<int>(last - first);
-    for(InputIterator j = first; j != last; ++j)
-        {
-        y += *j;
-        z += *j * std::expm1(k * li);
-        --k;
-        }
-    return y + z;
 }
 
 void mete_0
@@ -141,26 +104,6 @@ void mete_1
             ,decimals
             );
         unoptimizable = results.front();
-        }
-    stifle_unused_warning(unoptimizable);
-}
-
-void mete_2(std::vector<double> const& payments)
-{
-    volatile long double unoptimizable;
-    for(int i = 0; i < 10000; ++i)
-        {
-        unoptimizable = fv(payments.begin(), payments.end(), 0.01L);
-        }
-    stifle_unused_warning(unoptimizable);
-}
-
-void mete_3(std::vector<double> const& payments)
-{
-    volatile long double unoptimizable;
-    for(int i = 0; i < 10000; ++i)
-        {
-        unoptimizable = fv_alt(payments.begin(), payments.end(), 0.01L);
         }
     stifle_unused_warning(unoptimizable);
 }
@@ -365,21 +308,13 @@ int test_main(int, char*[])
         (std::fabs(fv(p.begin(), p.end(), i) - accum_p.back())
         <= tolerance
         );
-    LMI_TEST
-        (std::fabs(fv_alt(p.begin(), p.end(), i) - accum_p.back())
-        <= tolerance
-        );
 
     auto f0 = [&p, &b] {mete_0(p, b);};
     auto f1 = [&p, &b] {mete_1(p, b);};
-    auto f2 = [&p, &b] {mete_2(p   );};
-    auto f3 = [&p, &b] {mete_3(p   );};
     std::cout
         << "\n  Speed tests..."
-        << "\n  irr, iterator  form: " << TimeAnAliquot(f0)
-        << "\n  irr, container form: " << TimeAnAliquot(f1)
-        << "\n  fv                 : " << TimeAnAliquot(f2)
-        << "\n  fv, transcendental : " << TimeAnAliquot(f3)
+        << "\n  iterator  form: " << TimeAnAliquot(f0)
+        << "\n  container form: " << TimeAnAliquot(f1)
         << std::endl
         ;
 
