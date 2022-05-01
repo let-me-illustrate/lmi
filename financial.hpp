@@ -35,15 +35,11 @@
 
 class calendar_date;
 
-// TODO ?? Things to reconsider later:
-//
-// v*v*v...*v != v^n because of floating-point roundoff.
-//
-// The a priori irr bounds ought to be parameterized.
-//
-// When no root is bracketed, -100% is always conservative enough;
-// but if a root is known to exceed the a priori upper bound, then
-// perhaps that upper bound could be returned instead.
+/// Future value.
+///
+/// For values of 'i' close to zero, accuracy is limited because
+/// v*v*v*...*v != v^n due to floating-point roundoff; but using
+/// 'long double' mitigates that.
 
 template<typename InputIterator>
 long double fv
@@ -79,6 +75,12 @@ long double fv
 ///   - it's more accurate for x86_64, by two orders of magnitude; and
 ///   - it's as fast for x86_64, and maybe faster for i686 (x87); and
 ///   - the resulting NPV is identical across architectures.
+///
+/// When no root is bracketed, -100% is always conservative enough:
+/// financially, it means "you lose all your money", which is the
+/// worst outcome possible. The a priori upper bound of +100000% is
+/// about as good as any arbitrary value; if the true IRR is even
+/// higher, then reporting it as 100000% is conservative.
 
 template<typename InputIterator>
 class irr_helper
@@ -110,7 +112,7 @@ class irr_helper
         root_type const z = decimal_root
             (*this
             ,-1.0       // A priori lower bound.
-            ,1000.0     // Assumed upper bound.
+            ,1000.0     // A priori upper bound.
             ,bias_lower // Return the final bound with the lower FV.
             ,decimals_
             ,64
