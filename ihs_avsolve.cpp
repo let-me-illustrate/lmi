@@ -41,7 +41,7 @@
 #include "miscellany.hpp"               // ios_out_app_binary()
 #include "null_stream.hpp"
 #include "outlay.hpp"
-#include "zero.hpp"
+#include "zero.hpp"                     // decimal_root()
 
 #include <algorithm>                    // min(), max()
 #include <functional>

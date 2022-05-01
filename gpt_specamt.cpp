@@ -26,7 +26,7 @@
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
 #include "safely_dereference_as.hpp"
-#include "zero.hpp"
+#include "zero.hpp"                     // decimal_root()
 
 currency gpt_specamt::CalculateGLPSpecAmt
     (BasicValues const& a_Values

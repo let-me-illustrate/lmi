@@ -28,7 +28,7 @@
 #include "bourn_cast.hpp"
 #include "mc_enum_type_enums.hpp"       // mcenum_mode
 #include "miscellany.hpp"               // ios_out_app_binary()
-#include "zero.hpp"
+#include "zero.hpp"                     // decimal_root()
 
 #include <fstream>
 #include <iterator>                     // iterator_traits

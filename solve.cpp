@@ -31,7 +31,7 @@
 #include "mc_enum_types_aux.hpp"        // set_run_basis_from_cloven_bases()
 #include "outlay.hpp"
 #include "round_to.hpp"
-#include "zero.hpp"
+#include "zero.hpp"                     // decimal_root()
 
 #include <algorithm>                    // max(), min()
 
