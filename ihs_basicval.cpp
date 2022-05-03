@@ -958,7 +958,7 @@ currency BasicValues::GetModalPremMinFromTable
 ///    be used instead.
 /// Therefore, in those other two cases, 'TgtPremMonthlyPolFee' is
 /// asserted to be zero--upstream, so that it'll signal an error even
-/// if a target strategy isn't used.
+/// if the target strategy isn't used.
 
 currency BasicValues::GetModalPremTgtFromTable
     (int      // a_year // Unused.
@@ -966,16 +966,9 @@ currency BasicValues::GetModalPremTgtFromTable
     ,currency    a_specamt
     ) const
 {
+    currency const modal_fee = TgtPremMonthlyPolFee * (12 / a_mode);
     double const rate = MortalityRates_->TargetPremiumRates()[0];
-    return round_max_premium().c
-        (ldbl_eps_plus_one_times
-            (
-                ( TgtPremMonthlyPolFee * 12.0
-                + (a_specamt * rate)
-                )
-            /   a_mode
-            )
-        );
+    return modal_fee + round_max_premium().c(ldbl_eps_plus_one_times(a_specamt * rate / a_mode));
 }
 
 /// Calculate premium using a tabular proxy for group insurance.
