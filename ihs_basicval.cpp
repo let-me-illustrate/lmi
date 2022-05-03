@@ -916,8 +916,8 @@ currency BasicValues::GetModalPremMaxNonMec
     ) const
 {
     // TAXATION !! No table available if 7PP calculated from first principles.
-    double temp = MortalityRates_->SevenPayRates()[0];
-    return round_max_premium().c(ldbl_eps_plus_one_times(temp * a_specamt / a_mode));
+    double const rate = MortalityRates_->SevenPayRates()[0];
+    return round_max_premium().c(ldbl_eps_plus_one_times(a_specamt * rate / a_mode));
 }
 
 /// Calculate premium using a minimum-premium ratio.
@@ -933,13 +933,8 @@ currency BasicValues::GetModalPremMinFromTable
     ,currency    a_specamt
     ) const
 {
-    return round_max_premium().c
-        (ldbl_eps_plus_one_times
-            (
-                a_specamt * MortalityRates_->MinimumPremiumRates()[0]
-            /   a_mode
-            )
-        );
+    double const rate = MortalityRates_->MinimumPremiumRates()[0];
+    return round_max_premium().c(ldbl_eps_plus_one_times(a_specamt * rate / a_mode));
 }
 
 /// Calculate premium using a target-premium ratio.
@@ -971,11 +966,12 @@ currency BasicValues::GetModalPremTgtFromTable
     ,currency    a_specamt
     ) const
 {
+    double const rate = MortalityRates_->TargetPremiumRates()[0];
     return round_max_premium().c
         (ldbl_eps_plus_one_times
             (
                 ( TgtPremMonthlyPolFee * 12.0
-                + (a_specamt * MortalityRates_->TargetPremiumRates()[0])
+                + (a_specamt * rate)
                 )
             /   a_mode
             )
@@ -1012,8 +1008,8 @@ currency BasicValues::GetModalPremCorridor
     ,currency    a_specamt
     ) const
 {
-    double temp = GetCorridorFactor()[0];
-    return round_max_premium().c(ldbl_eps_plus_one_times((a_specamt / temp) / a_mode));
+    double const rate = GetCorridorFactor()[0];
+    return round_max_premium().c(ldbl_eps_plus_one_times((a_specamt / rate) / a_mode));
 }
 
 //============================================================================
