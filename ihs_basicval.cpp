@@ -1039,7 +1039,7 @@ currency BasicValues::GetModalPremGLP
 // term rider, dumpin
 
     z /= a_mode;
-    return round_max_premium().c(ldbl_eps_plus_one_times(z));
+    return round_max_premium().c(z);
 }
 
 //============================================================================
@@ -1062,7 +1062,7 @@ currency BasicValues::GetModalPremGSP
 // term rider, dumpin
 
     z /= a_mode;
-    return round_max_premium().c(ldbl_eps_plus_one_times(z));
+    return round_max_premium().c(z);
 }
 
 /// Calculate a monthly-deduction discount factor on the fly.
