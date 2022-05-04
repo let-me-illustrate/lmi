@@ -25,11 +25,10 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "basic_tables.hpp"
+#include "basic_tables.hpp"             // cvat_corridor_factors()
 #include "bourn_cast.hpp"
-#include "calendar_date.hpp"
 #include "contains.hpp"
-#include "data_directory.hpp"
+#include "data_directory.hpp"           // AddDataDir()
 #include "death_benefits.hpp"
 #include "et_vector.hpp"
 #include "financial.hpp"                // list_bill_premium()
@@ -45,7 +44,6 @@
 #include "interest_rates.hpp"
 #include "lingo.hpp"
 #include "loads.hpp"
-#include "math_functions.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_str()
 #include "mortality_rates.hpp"
 #include "oecumenic_enumerations.hpp"
@@ -54,12 +52,11 @@
 #include "rounding_rules.hpp"
 #include "stl_extensions.hpp"           // nonstd::power()
 #include "stratified_charges.hpp"
-#include "value_cast.hpp"
 
-#include <algorithm>                    // min(), transform()
+#include <algorithm>                    // min()
 #include <cfenv>                        // fesetround()
 #include <cmath>                        // nearbyint(), pow()
-#include <functional>                   // minus, multiplies
+#include <functional>                   // multiplies
 #include <limits>
 #include <numeric>                      // accumulate(), partial_sum()
 #include <stdexcept>
