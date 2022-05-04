@@ -999,7 +999,13 @@ currency BasicValues::GetModalPremCorridor
     ) const
 {
     double const rate = GetCorridorFactor()[0];
-    return round_max_premium().c(ldbl_eps_plus_one_times((a_specamt / rate) / a_mode));
+    int const k = round_corridor_factor().decimals();
+    double const s = nonstd::power(10, k);
+    // Do not save and restore prior rounding direction because
+    // lmi generally expects rounding to nearest everywhere.
+    std::fesetround(FE_TONEAREST);
+    double const z = std::nearbyint(s * rate);
+    return round_max_premium().c((a_specamt / z) * s / a_mode);
 }
 
 //============================================================================
