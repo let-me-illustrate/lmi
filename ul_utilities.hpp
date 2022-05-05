@@ -24,9 +24,11 @@
 
 #include "config.hpp"
 
+#include "currency.hpp"
 #include "mc_enum_type_enums.hpp"       // mcenum_mode
 
 class calendar_date;
+template<typename> class round_to;
 
 double list_bill_premium
     (double               prem_ante
@@ -35,6 +37,13 @@ double list_bill_premium
     ,calendar_date const& cert_date
     ,calendar_date const& bill_date
     ,double               v12
+    );
+
+currency max_modal_premium
+    (double                  rate
+    ,currency                specamt
+    ,mcenum_mode             mode
+    ,round_to<double> const& rounder
     );
 
 #endif // ul_utilities_hpp

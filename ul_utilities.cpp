@@ -24,6 +24,8 @@
 #include "ul_utilities.hpp"
 
 #include "calendar_date.hpp"
+#include "ieee754.hpp"                  // ldbl_eps_plus_one_times()
+#include "round_to.hpp"
 
 #include <algorithm>                    // generate(), min()
 #include <cmath>                        // pow()
@@ -87,4 +89,14 @@ double list_bill_premium
     std::vector<double> v(p0.size());
     std::generate(v.begin(), v.end(), [&i, v12] {return std::pow(v12, i++);});
     return std::inner_product(p0.begin(), p0.end(), v.begin(), 0.0);
+}
+
+currency max_modal_premium
+    (double                  rate
+    ,currency                specamt
+    ,mcenum_mode             mode
+    ,round_to<double> const& rounder
+    )
+{
+    return rounder.c(ldbl_eps_plus_one_times(specamt * rate / mode));
 }

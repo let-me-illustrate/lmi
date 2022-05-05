@@ -36,7 +36,6 @@
 #include "gpt_input.hpp"
 #include "gpt_xml_document.hpp"
 #include "i7702.hpp"
-#include "ieee754.hpp"                  // ldbl_eps_plus_one_times()
 #include "ihs_irc7702a.hpp"
 #include "ihs_server7702.hpp"           // RunServer7702FromStruct()
 #include "materially_equal.hpp"         // material_difference()
@@ -53,6 +52,7 @@
 #include "stratified_algorithms.hpp"    // TieredGrossToNet()
 #include "stratified_charges.hpp"
 #include "timer.hpp"
+#include "ul_utilities.hpp"             // max_modal_premium()
 #include "value_cast.hpp"
 
 #include <algorithm>                    // min()
@@ -137,8 +137,9 @@ gpt_state test_one_days_gpt_transactions
     stratified_charges stratified(AddDataDir(product_filenames.datum("TierFilename")));
 
     // SOMEDAY !! Ideally these would be in the GUI (or read from product files).
-    round_to<double> const RoundNonMecPrem(2, r_downward);
+    round_to<double> const RoundNonMecPrem  (2, r_downward);
     round_to<double> const round_max_premium(2, r_downward);
+    round_to<double> const round_minutiae   (2, r_to_nearest);
 
     std::vector<double> TargetPremiumRates = target_premium_rates
         (product_filenames
@@ -249,24 +250,22 @@ gpt_state test_one_days_gpt_transactions
         // When 7Px is calculated from first principles, presumably
         // the target premium should be the same as for oe_modal_table
         // with a 7Px table and a DB_TgtPremMonthlyPolFee of zero.
-        AnnualTargetPrem = round_max_premium
-            (ldbl_eps_plus_one_times
-                ( InforceTargetSpecifiedAmount
-                * tabular_7Px[target_year]
-                )
-            );
+        AnnualTargetPrem = max_modal_premium
+            (tabular_7Px[target_year]
+            ,round_minutiae.c(InforceTargetSpecifiedAmount)
+            ,mce_annual
+            ,round_max_premium
+            ).d();
         }
     else if(oe_modal_table == target_premium_type)
         {
-        AnnualTargetPrem = round_max_premium
-            (ldbl_eps_plus_one_times
-                (   database.query<double>(DB_TgtPremMonthlyPolFee)
-                +
-                    ( InforceTargetSpecifiedAmount
-                    * TargetPremiumRates[target_year]
-                    )
-                )
-            );
+        double const fee = database.query<double>(DB_TgtPremMonthlyPolFee);
+        AnnualTargetPrem = fee + max_modal_premium
+            (TargetPremiumRates[target_year]
+            ,round_minutiae.c(InforceTargetSpecifiedAmount)
+            ,mce_annual
+            ,round_max_premium
+            ).d();
         }
     else
         {

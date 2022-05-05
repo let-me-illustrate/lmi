@@ -37,7 +37,6 @@
 #include "gpt7702.hpp"
 #include "gpt_specamt.hpp"
 #include "i7702.hpp"
-#include "ieee754.hpp"                  // ldbl_eps_plus_one_times()
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "input.hpp"
@@ -52,7 +51,7 @@
 #include "rounding_rules.hpp"
 #include "stl_extensions.hpp"           // nonstd::power()
 #include "stratified_charges.hpp"
-#include "ul_utilities.hpp"             // list_bill_premium()
+#include "ul_utilities.hpp"             // list_bill_premium(), max_modal_premium()
 
 #include <algorithm>                    // min()
 #include <cfenv>                        // fesetround()
@@ -915,7 +914,7 @@ currency BasicValues::GetModalPremMaxNonMec
 {
     // TAXATION !! No table available if 7PP calculated from first principles.
     double const rate = MortalityRates_->SevenPayRates()[0];
-    return round_max_premium().c(ldbl_eps_plus_one_times(a_specamt * rate / a_mode));
+    return max_modal_premium(rate, a_specamt, a_mode, round_max_premium());
 }
 
 /// Calculate premium using a minimum-premium ratio.
@@ -932,7 +931,7 @@ currency BasicValues::GetModalPremMinFromTable
     ) const
 {
     double const rate = MortalityRates_->MinimumPremiumRates()[0];
-    return round_max_premium().c(ldbl_eps_plus_one_times(a_specamt * rate / a_mode));
+    return max_modal_premium(rate, a_specamt, a_mode, round_max_premium());
 }
 
 /// Calculate premium using a target-premium ratio.
@@ -966,7 +965,7 @@ currency BasicValues::GetModalPremTgtFromTable
 {
     currency const modal_fee = TgtPremMonthlyPolFee * (12 / a_mode);
     double const rate = MortalityRates_->TargetPremiumRates()[0];
-    return modal_fee + round_max_premium().c(ldbl_eps_plus_one_times(a_specamt * rate / a_mode));
+    return modal_fee + max_modal_premium(rate, a_specamt, a_mode, round_max_premium());
 }
 
 /// Calculate premium using a tabular proxy for group insurance.
