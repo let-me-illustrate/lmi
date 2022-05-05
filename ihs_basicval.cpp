@@ -31,7 +31,7 @@
 #include "data_directory.hpp"           // AddDataDir()
 #include "death_benefits.hpp"
 #include "et_vector.hpp"
-#include "financial.hpp"                // list_bill_premium()
+#include "financial.hpp"                // coi_rate_from_q(), i_upper_12_over_12_from_i()
 #include "fund_data.hpp"
 #include "global_settings.hpp"
 #include "gpt7702.hpp"
@@ -52,6 +52,7 @@
 #include "rounding_rules.hpp"
 #include "stl_extensions.hpp"           // nonstd::power()
 #include "stratified_charges.hpp"
+#include "ul_utilities.hpp"             // list_bill_premium()
 
 #include <algorithm>                    // min()
 #include <cfenv>                        // fesetround()

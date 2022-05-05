@@ -166,6 +166,7 @@ TESTS = \
     test_tools_test \
     timer_test \
     tn_range_test \
+    ul_utilities_test \
     value_cast_test \
     vector_test \
     wx_new_test \
@@ -424,7 +425,6 @@ liblmi_la_SOURCES = \
     basic_tables.cpp \
     commutation_functions.cpp \
     cso_table.cpp \
-    financial.cpp \
     fund_data.cpp \
     gpt7702.cpp \
     gpt_commutation_functions.cpp \
@@ -461,6 +461,7 @@ liblmi_la_SOURCES = \
     rounding_rules.cpp \
     stratified_algorithms.cpp \
     stratified_charges.cpp \
+    ul_utilities.cpp \
     verify_products.cpp \
     $(liblmi_common_sources)
 liblmi_la_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
@@ -719,9 +720,7 @@ file_command_test_LDADD = \
   libtest_common.la
 
 financial_test_SOURCES = \
-  financial.cpp \
-  financial_test.cpp \
-  stratified_algorithms.cpp
+  financial_test.cpp
 financial_test_CXXFLAGS = $(AM_CXXFLAGS)
 financial_test_LDADD = \
   libtest_common.la
@@ -1070,6 +1069,13 @@ tn_range_test_CXXFLAGS = $(AM_CXXFLAGS)
 tn_range_test_LDADD = \
   libtest_common.la
 
+ul_utilities_test_SOURCES = \
+  ul_utilities.cpp \
+  ul_utilities_test.cpp
+ul_utilities_test_CXXFLAGS = $(AM_CXXFLAGS)
+ul_utilities_test_LDADD = \
+  libtest_common.la
+
 value_cast_test_LDADD = \
   libtest_common.la
 
@@ -1294,6 +1300,7 @@ noinst_HEADERS = \
     tn_range_type_trammels.hpp \
     tn_range_types.hpp \
     transferor.hpp \
+    ul_utilities.hpp \
     unwind.hpp \
     value_cast.hpp \
     verify_products.hpp \

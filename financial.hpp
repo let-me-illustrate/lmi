@@ -26,14 +26,11 @@
 
 #include "assert_lmi.hpp"
 #include "bourn_cast.hpp"
-#include "mc_enum_type_enums.hpp"       // mcenum_mode
 #include "miscellany.hpp"               // ios_out_app_binary()
 #include "zero.hpp"                     // decimal_root()
 
 #include <fstream>
 #include <iterator>                     // iterator_traits
-
-class calendar_date;
 
 /// Future value.
 ///
@@ -243,14 +240,5 @@ void irr
         ,decimals
         );
 }
-
-double list_bill_premium
-    (double               prem_ante
-    ,double               prem_post
-    ,mcenum_mode          mode
-    ,calendar_date const& cert_date
-    ,calendar_date const& bill_date
-    ,double               v12
-    );
 
 #endif // financial_hpp

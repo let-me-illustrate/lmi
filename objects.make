@@ -228,7 +228,6 @@ lmi_common_objects := \
   basic_tables.o \
   commutation_functions.o \
   cso_table.o \
-  financial.o \
   fund_data.o \
   gpt7702.o \
   gpt_commutation_functions.o \
@@ -265,6 +264,7 @@ lmi_common_objects := \
   rounding_rules.o \
   stratified_algorithms.o \
   stratified_charges.o \
+  ul_utilities.o \
   verify_products.o \
 
 skeleton_objects := \
@@ -428,6 +428,7 @@ unit_test_targets := \
   test_tools_test \
   timer_test \
   tn_range_test \
+  ul_utilities_test \
   value_cast_test \
   vector_test \
   wx_new_test \
@@ -604,11 +605,8 @@ file_command_test$(EXEEXT): \
 
 financial_test$(EXEEXT): \
   $(common_test_objects) \
-  calendar_date.o \
-  financial.o \
   financial_test.o \
   null_stream.o \
-  stratified_algorithms.o \
   timer.o \
 
 getopt_test$(EXEEXT): \
@@ -1028,6 +1026,13 @@ tn_range_test$(EXEEXT): \
   path_utility.o \
   tn_range_test.o \
   tn_range_test_aux.o \
+
+ul_utilities_test$(EXEEXT): \
+  $(common_test_objects) \
+  calendar_date.o \
+  null_stream.o \
+  ul_utilities.o \
+  ul_utilities_test.o \
 
 value_cast_test$(EXEEXT): \
   $(common_test_objects) \
