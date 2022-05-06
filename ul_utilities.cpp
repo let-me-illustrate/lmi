@@ -23,11 +23,14 @@
 
 #include "ul_utilities.hpp"
 
+#include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "calendar_date.hpp"
-#include "ieee754.hpp"                  // ldbl_eps_plus_one_times()
+#include "materially_equal.hpp"
 #include "round_to.hpp"
 
 #include <algorithm>                    // generate(), min()
+#include <cfenv>                        // fesetround()
 #include <cmath>                        // pow()
 #include <numeric>                      // inner_product()
 #include <vector>
@@ -98,5 +101,73 @@ currency max_modal_premium
     ,round_to<double> const& rounder
     )
 {
-    return rounder.c(ldbl_eps_plus_one_times(specamt * rate / mode));
+    // Assume premium-rate argument is precise to at most eight decimals,
+    // any further digits being representation error.
+    constexpr int radix {100'000'000};
+    // Premium rate and specified amount are nonnegative by their nature.
+    LMI_ASSERT(0.0 <= rate);
+    LMI_ASSERT(C0  <= specamt);
+    // Do not save and restore prior rounding direction, because lmi
+    // generally expects rounding to nearest everywhere.
+    std::fesetround(FE_TONEAREST);
+    // Make 'rate' a shifted integer.
+    // Shift the decimal point eight places, discarding anything further.
+    // Store the result as a wide integer, to be used in integer math.
+    // Use bourn_cast<>() for conversions here and elsewhere: it
+    // implicitly asserts that values are preserved.
+    std::int64_t irate = bourn_cast<std::int64_t>(std::nearbyint(rate * radix));
+    // If the rate really has more than eight significant (non-erroneous)
+    // digits, then treat them all as significant. In that case, there
+    // is no representation error to be removed. Here, 'tol' is just a
+    // guess; it may need refinement.
+    constexpr double tol = 1.0e-12;
+    if(!materially_equal(bourn_cast<double>(irate), rate * radix, tol))
+        {
+#if 0
+        // Enable this (including <iostream>) for research.
+        std::cout.precision(21);
+        std::cout
+            << "Excessive precision in rate; check the table\n"
+            << bourn_cast<double>(irate) << " bourn_cast<double>(irate)\n"
+            << rate * radix << " rate * radix\n"
+            << std::flush
+            ;
+#endif // 0
+        return rounder.c(specamt * rate / mode);
+        }
+#if 0
+    // Enable this assertion, adjusting the tolerance (last) argument
+    // p.r.n., if no table is allowed to have more than eight decimals.
+    LMI_ASSERT(materially_equal(bourn_cast<double>(irate), rate * radix, tol));
+#endif // 0
+    // Multiply integer rate by integral-cents specamt.
+    // Use a large integer type to avoid overflow.
+    std::int64_t iprod = irate * bourn_cast<std::int64_t>(specamt.cents());
+    // Result is an integer--safe to represent as double now.
+    // Function from_cents() has its own value-preservation test.
+    currency cprod = from_cents(bourn_cast<double>(iprod));
+    // Unshift the result, and round it in the specified direction.
+    // Dividing two integers generally yields a nonzero remainder,
+    // in which case do the division in floating point and round its
+    // result. However, if the remainder of integer division is zero,
+    // then the result is exact, in which case the corresponding
+    // rounded floating-point division may give the wrong answer.
+    std::int64_t quotient  = iprod / radix;
+    std::int64_t remainder = iprod % radix;
+    currency const annual_premium =
+        ((0 == remainder)
+        ? from_cents(bourn_cast<double>(quotient))
+        : rounder.c(cprod / radix)
+        );
+    // Calculate modal premium from annual as a separate step,
+    // using integer division to discard any fractional part.
+    // In a sense, this is double rounding, which is often a
+    // mistake, but here it's correct: the invariant
+    //   mode * max_modal_premium <= max_annual premium
+    // is explicitly desired. For example, if the maximum annual
+    // premium is 12.30, then the monthly maximum is 1.02,
+    // which is the highest level premium that can be paid twelve
+    // times without exceeding the annual maximum: 12.24 <= 12.30 .
+    std::int64_t annual_int = static_cast<std::int64_t>(annual_premium.cents());
+    return from_cents(bourn_cast<double>(annual_int / mode));
 }
