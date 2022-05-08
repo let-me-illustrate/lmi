@@ -31,7 +31,8 @@
 
 #include <algorithm>                    // generate(), min()
 #include <cfenv>                        // fesetround()
-#include <cmath>                        // pow()
+#include <cmath>                        // nearbyint(), pow()
+#include <cstdint>                      // int64_t
 #include <numeric>                      // inner_product()
 #include <vector>
 
