@@ -44,6 +44,7 @@
 #include "premium_tax.hpp"
 #include "stratified_algorithms.hpp"
 #include "stratified_charges.hpp"
+#include "ul_utilities.hpp"             // rate_times_currency()
 
 #include <algorithm>                    // min(), max()
 #include <cmath>                        // pow()
@@ -1664,7 +1665,11 @@ void AccountValue::TxSetBOMAV()
         }
     YearsTotalPolicyFee += MonthsPolicyFees;
 
-    SpecAmtLoad = round_minutiae().c(YearsSpecAmtLoadRate * SpecAmtLoadBase);
+    SpecAmtLoad = rate_times_currency
+       (YearsSpecAmtLoadRate
+       ,SpecAmtLoadBase
+       ,round_minutiae()
+       );
     YearsTotalSpecAmtLoad += SpecAmtLoad;
 
     process_deduction(MonthsPolicyFees + SpecAmtLoad);
