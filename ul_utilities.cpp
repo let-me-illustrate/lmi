@@ -102,6 +102,8 @@ currency max_modal_premium
     ,round_to<double> const& rounder
     )
 {
+    using int64 = std::int64_t;
+
     // Assume premium-rate argument is precise to at most eight decimals,
     // any further digits being representation error.
     constexpr int radix {100'000'000};
@@ -116,7 +118,7 @@ currency max_modal_premium
     // Store the result as a wide integer, to be used in integer math.
     // Use bourn_cast<>() for conversions here and elsewhere: it
     // implicitly asserts that values are preserved.
-    std::int64_t irate = bourn_cast<std::int64_t>(std::nearbyint(rate * radix));
+    int64 irate = bourn_cast<int64>(std::nearbyint(rate * radix));
     // If the rate really has more than eight significant (non-erroneous)
     // digits, then treat them all as significant. In that case, there
     // is no representation error to be removed. Here, 'tol' is just a
@@ -143,7 +145,7 @@ currency max_modal_premium
 #endif // 0
     // Multiply integer rate by integral-cents specamt.
     // Use a large integer type to avoid overflow.
-    std::int64_t iprod = irate * bourn_cast<std::int64_t>(specamt.cents());
+    int64 iprod = irate * bourn_cast<int64>(specamt.cents());
     // Result is an integer--safe to represent as double now.
     // Function from_cents() has its own value-preservation test.
     currency cprod = from_cents(bourn_cast<double>(iprod));
@@ -153,8 +155,8 @@ currency max_modal_premium
     // result. However, if the remainder of integer division is zero,
     // then the result is exact, in which case the corresponding
     // rounded floating-point division may give the wrong answer.
-    std::int64_t quotient  = iprod / radix;
-    std::int64_t remainder = iprod % radix;
+    int64 quotient  = iprod / radix;
+    int64 remainder = iprod % radix;
     currency const annual_premium =
         ((0 == remainder)
         ? from_cents(bourn_cast<double>(quotient))
@@ -169,6 +171,6 @@ currency max_modal_premium
     // premium is 12.30, then the monthly maximum is 1.02,
     // which is the highest level premium that can be paid twelve
     // times without exceeding the annual maximum: 12.24 <= 12.30 .
-    std::int64_t annual_int = static_cast<std::int64_t>(annual_premium.cents());
+    int64 annual_int = static_cast<int64>(annual_premium.cents());
     return from_cents(bourn_cast<double>(annual_int / mode));
 }
