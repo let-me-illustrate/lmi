@@ -95,10 +95,9 @@ double list_bill_premium
     return std::inner_product(p0.begin(), p0.end(), v.begin(), 0.0);
 }
 
-currency max_modal_premium
+currency rate_times_currency
     (double                  rate
     ,currency                specamt
-    ,mcenum_mode             mode
     ,round_to<double> const& rounder
     )
 {
@@ -135,7 +134,7 @@ currency max_modal_premium
             << std::flush
             ;
 #endif // 0
-        return rounder.c(specamt * rate / mode);
+        return rounder.c(specamt * rate);
         }
 #if 0
     // Enable this assertion, adjusting the tolerance (last) argument
@@ -156,11 +155,23 @@ currency max_modal_premium
     // rounded floating-point division may give the wrong answer.
     int64 quotient  = iprod / radix;
     int64 remainder = iprod % radix;
-    currency const annual_premium =
+    return
         ((0 == remainder)
         ? from_cents(bourn_cast<double>(quotient))
         : rounder.c(cprod / radix)
         );
+}
+
+currency max_modal_premium
+    (double                  rate
+    ,currency                specamt
+    ,mcenum_mode             mode
+    ,round_to<double> const& rounder
+    )
+{
+    using int64 = std::int64_t;
+
+    currency const annual_premium = rate_times_currency(rate, specamt, rounder);
     // Calculate modal premium from annual as a separate step,
     // using integer division to discard any fractional part.
     // In a sense, this is double rounding, which is often a

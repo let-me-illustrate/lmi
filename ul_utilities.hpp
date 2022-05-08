@@ -39,6 +39,12 @@ double list_bill_premium
     ,double               v12
     );
 
+currency rate_times_currency
+    (double                  rate
+    ,currency                specamt
+    ,round_to<double> const& rounder
+    );
+
 currency max_modal_premium
     (double                  rate
     ,currency                specamt
