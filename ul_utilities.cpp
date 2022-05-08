@@ -121,10 +121,9 @@ currency max_modal_premium
     int64 irate = bourn_cast<int64>(std::nearbyint(rate * radix));
     // If the rate really has more than eight significant (non-erroneous)
     // digits, then treat them all as significant. In that case, there
-    // is no representation error to be removed. Here, 'tol' is just a
-    // guess; it may need refinement.
-    constexpr double tol = 1.0e-12;
-    if(!materially_equal(bourn_cast<double>(irate), rate * radix, tol))
+    // is no representation error to be removed. The accompanying unit
+    // test gives illustrative examples.
+    if(!materially_equal(bourn_cast<double>(irate), rate * radix))
         {
 #if 0
         // Enable this (including <iostream>) for research.
@@ -141,7 +140,7 @@ currency max_modal_premium
 #if 0
     // Enable this assertion, adjusting the tolerance (last) argument
     // p.r.n., if no table is allowed to have more than eight decimals.
-    LMI_ASSERT(materially_equal(bourn_cast<double>(irate), rate * radix, tol));
+    LMI_ASSERT(materially_equal(bourn_cast<double>(irate), rate * radix));
 #endif // 0
     // Multiply integer rate by integral-cents specamt.
     // Use a large integer type to avoid overflow.

@@ -23,12 +23,46 @@
 
 #include "ul_utilities.hpp"
 
+#include "bourn_cast.hpp"
 #include "materially_equal.hpp"
 #include "round_to.hpp"
 #include "test_tools.hpp"
 
+#include <cfenv>                        // fesetround()
+#include <cmath>                        // nearbyint()
+#include <cstdint>                      // int64_t
+
 void test_max_modal_premium()
 {
+    auto test_excess_precision = [](double rate)
+        {
+        using int64 = std::int64_t;
+        constexpr int radix {100'000'000};
+        std::fesetround(FE_TONEAREST);
+        int64 irate = bourn_cast<int64>(std::nearbyint(rate * radix));
+        return !materially_equal(bourn_cast<double>(irate), rate * radix);
+        };
+    LMI_TEST(!test_excess_precision(0.0                    ));
+    LMI_TEST(!test_excess_precision(0.00000001             ));
+    LMI_TEST(!test_excess_precision(0.000000010000000000001));
+    LMI_TEST( test_excess_precision(0.00000001000000000001 ));
+    LMI_TEST( test_excess_precision(0.0000000100000000001  ));
+    LMI_TEST( test_excess_precision(0.000000010000000001   ));
+    LMI_TEST( test_excess_precision(0.00000001000000001    ));
+    LMI_TEST( test_excess_precision(0.0000000100000001     ));
+    LMI_TEST( test_excess_precision(0.000000010000001      ));
+    LMI_TEST(!test_excess_precision(0.999999990000000      ));
+    LMI_TEST(!test_excess_precision(0.999999990000001      ));
+    LMI_TEST(!test_excess_precision(0.99999999000001       ));
+    LMI_TEST(!test_excess_precision(0.9999999900001        ));
+    LMI_TEST( test_excess_precision(0.999999990001         ));
+    LMI_TEST( test_excess_precision(0.99999999001          ));
+    LMI_TEST( test_excess_precision(0.99999999999          ));
+    LMI_TEST( test_excess_precision(0.999999999999         ));
+    LMI_TEST(!test_excess_precision(0.9999999999999        ));
+    LMI_TEST(!test_excess_precision(0.99999999999999       ));
+    LMI_TEST(!test_excess_precision(0.999999999999999      ));
+
     round_to<double> const round_down(2, r_downward);
     round_to<double> const round_near(2, r_to_nearest);
     round_to<double> const round_not (2, r_not_at_all);
