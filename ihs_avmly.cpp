@@ -1565,7 +1565,13 @@ currency AccountValue::GetPremLoad
         ||  materially_equal(total_load, sum_of_separate_loads)
         );
 
-    return round_net_premium().c(sum_of_separate_loads);
+    // When they're materially equal, prefer 'total_load' because it's
+    // less susceptible to differences between i686 and x86_64.
+    return
+        PremiumTax_->is_tiered()
+        ? round_net_premium().c(sum_of_separate_loads)
+        : round_net_premium().c(total_load)
+        ;
 }
 
 //============================================================================
