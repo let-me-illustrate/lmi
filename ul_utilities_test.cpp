@@ -29,13 +29,14 @@
 #include "test_tools.hpp"
 
 #include <cfenv>                        // fesetround()
+#include <cfloat>                       // DECIMAL_DIG
 #include <cmath>                        // nearbyint()
 #include <cstdint>                      // int64_t
 
 void test_max_modal_premium()
 {
     // This affects diagnostics shown when LMI_TEST_EQUAL() fails.
-    std::cout.precision(21);
+    std::cout.precision(DECIMAL_DIG);
 
     // These are generally useful for testing.
     round_to<double> const round_down(2, r_downward);

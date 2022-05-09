@@ -125,8 +125,8 @@ currency rate_times_currency
     if(!materially_equal(bourn_cast<double>(irate), rate * radix))
         {
 #if 0
-        // Enable this (including <iostream>) for research.
-        std::cout.precision(21);
+        // Enable this (including <iostream> and <cfloat>) for research.
+        std::cout.precision(DECIMAL_DIG);
         std::cout
             << "Excessive precision in rate; check the table\n"
             << bourn_cast<double>(irate) << " bourn_cast<double>(irate)\n"
