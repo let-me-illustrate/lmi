@@ -202,7 +202,6 @@
                                     <border>2</border>
                                     <object class="wxDatePickerCtrl" name="EffectiveDate">
                                         <help>Effective date</help>
-                                        <size>90,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -224,7 +223,6 @@
                                     <border>2</border>
                                     <object class="wxDatePickerCtrl" name="LastCoiReentryDate">
                                         <help>Last COI reentry date</help>
-                                        <size>90,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -246,7 +244,6 @@
                                     <border>2</border>
                                     <object class="wxDatePickerCtrl" name="ListBillDate">
                                         <help>List bill date</help>
-                                        <size>90,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -441,7 +438,6 @@
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxDatePickerCtrl" name="DateOfBirth">
                                         <help>Date of birth</help>
-                                        <size>90,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -454,7 +450,6 @@
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxSpinCtrl" name="IssueAge">
                                         <help>Insurance age on date of issue</help>
-                                        <size>80,-1</size>
                                         <style>wxSP_ARROW_KEYS</style>
                                     </object>
                                 </object>
@@ -468,7 +463,6 @@
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxSpinCtrl" name="RetirementAge">
                                         <help>Insurance age on date of retirement</help>
-                                        <size>80,-1</size>
                                         <style>wxSP_ARROW_KEYS</style>
                                     </object>
                                 </object>
@@ -621,7 +615,6 @@
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxDatePickerCtrl" name="InforceAsOfDate">
                                         <help>Monthiversary date as of which inforce data is provided</help>
-                                        <size>90,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1065,7 +1058,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxDatePickerCtrl" name="LastMaterialChangeDate">
                                         <help>Beginning of most recent seven-pay period</help>
-                                        <size>90,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1248,7 +1240,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                             <border>2</border>
                                             <object class="wxSpinCtrl" name="SolveBeginYear">
                                                 <help>Solve beginning duration</help>
-                                                <size>50,-1</size>
                                                 <style>wxSP_ARROW_KEYS</style>
                                             </object>
                                         </object>
@@ -1272,7 +1263,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                             <border>4</border>
                                             <object class="wxSpinCtrl" name="SolveBeginAge">
                                                 <help>Solve beginning age</help>
-                                                <size>50,-1</size>
                                                 <style>wxSP_ARROW_KEYS</style>
                                             </object>
                                         </object>
@@ -1328,7 +1318,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                             <border>2</border>
                                             <object class="wxSpinCtrl" name="SolveEndYear">
                                                 <help>Solve ending duration</help>
-                                                <size>50,-1</size>
                                                 <style>wxSP_ARROW_KEYS</style>
                                             </object>
                                         </object>
@@ -1352,7 +1341,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                             <border>4</border>
                                             <object class="wxSpinCtrl" name="SolveEndAge">
                                                 <help>Solve ending age</help>
-                                                <size>50,-1</size>
                                                 <style>wxSP_ARROW_KEYS</style>
                                             </object>
                                         </object>
@@ -1469,7 +1457,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                                             <border>2</border>
                                                             <object class="wxSpinCtrl" name="SolveTargetYear">
                                                                 <help>Duration to achieve target surrender value</help>
-                                                                <size>50,-1</size>
                                                                 <style>wxSP_ARROW_KEYS</style>
                                                             </object>
                                                         </object>
@@ -1493,7 +1480,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                                             <border>2</border>
                                                             <object class="wxSpinCtrl" name="SolveTargetAge">
                                                                 <help>Attained age to achieve target surrender value</help>
-                                                                <size>50,-1</size>
                                                                 <style>wxSP_ARROW_KEYS</style>
                                                             </object>
                                                         </object>
