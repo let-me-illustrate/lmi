@@ -34,6 +34,15 @@
 
 void test_max_modal_premium()
 {
+    // This affects diagnostics shown when LMI_TEST_EQUAL() fails.
+    std::cout.precision(21);
+
+    // These are generally useful for testing.
+    round_to<double> const round_down(2, r_downward);
+    round_to<double> const round_near(2, r_to_nearest);
+    round_to<double> const round_not (2, r_not_at_all);
+    round_to<double> const round_up  (2, r_upward);
+
     // Demonstrate the reasonableness of using materially_equal(),
     // with its default tolerance, in rate_times_currency().
 
@@ -66,11 +75,6 @@ void test_max_modal_premium()
     LMI_TEST(!test_excess_precision(0.99999999999999       ));
     LMI_TEST(!test_excess_precision(0.999999999999999      ));
 
-    round_to<double> const round_down(2, r_downward);
-    round_to<double> const round_near(2, r_to_nearest);
-    round_to<double> const round_not (2, r_not_at_all);
-    round_to<double> const round_up  (2, r_upward);
-
     // Elucidate an example from an actual regression test:
     //   0.00000250 specified-amount load
     //      $250000 specified amount
@@ -102,9 +106,6 @@ void test_max_modal_premium()
 
     double   const rate    {0.0123456700000001};
     currency const specamt {9'876'543'21_cents};
-
-    // This affects diagnostics shown when LMI_TEST_EQUAL() fails.
-    std::cout.precision(21);
 
     LMI_TEST(materially_equal(12193254.3211401, rate * specamt.cents()));
 
