@@ -34,6 +34,9 @@
 
 void test_max_modal_premium()
 {
+    // Demonstrate the reasonableness of using materially_equal(),
+    // with its default tolerance, in rate_times_currency().
+
     auto test_excess_precision = [](double rate)
         {
         using int64 = std::int64_t;
@@ -68,7 +71,7 @@ void test_max_modal_premium()
     round_to<double> const round_not (2, r_not_at_all);
     round_to<double> const round_up  (2, r_upward);
 
-    // Motivating example from an actual regression test:
+    // Elucidate an example from an actual regression test:
     //   0.00000250 specified-amount load
     //      $250000 specified amount
     // In binary64 arithmetic, this is
@@ -92,6 +95,10 @@ void test_max_modal_premium()
     // In the worst regression between i686 and x86_64, this difference of one
     // cent in a monthly deduction grew to $79.19 at compound interest over 75
     // years. Reasonableness check: the implicit annual percentage rate is
+
+    // Test a rate and a specamt that use maximal precision,
+    // because so many real-world examples are along the lines of
+    // 0.01 * $100,000 .
 
     double   const rate    {0.0123456700000001};
     currency const specamt {9'876'543'21_cents};
