@@ -1529,6 +1529,8 @@ currency AccountValue::GetPremLoad
             target_portion * YearsPremLoadTgt
         +   excess_portion * YearsPremLoadExc
         ;
+// There actually exists a product with a negative premium load.
+//  LMI_ASSERT(0.0 <= premium_load_);
 
     sales_load_ =
             target_portion * YearsSalesLoadTgt
