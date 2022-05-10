@@ -1904,25 +1904,31 @@ void AccountValue::TxSetRiderDed()
     AdbCharge = C0;
     if(yare_input_.AccidentalDeathBenefit)
         {
-        AdbCharge = round_rider_charges().c
-            (YearsAdbRate * std::min(ActualSpecAmt, AdbLimit)
-            );
+        AdbCharge = rate_times_currency
+           (YearsAdbRate
+           ,std::min(ActualSpecAmt, AdbLimit)
+           ,round_rider_charges()
+           );
         }
 
     SpouseRiderCharge = C0;
     if(yare_input_.SpouseRider)
         {
-        SpouseRiderCharge = round_rider_charges().c
-            (YearsSpouseRiderRate * yare_input_.SpouseRiderAmount
-            );
+        SpouseRiderCharge = rate_times_currency
+           (YearsSpouseRiderRate
+           ,round_minutiae().c(yare_input_.SpouseRiderAmount)
+           ,round_rider_charges()
+           );
         }
 
     ChildRiderCharge = C0;
     if(yare_input_.ChildRider)
         {
-        ChildRiderCharge = round_rider_charges().c
-            (YearsChildRiderRate * yare_input_.ChildRiderAmount
-            );
+        ChildRiderCharge = rate_times_currency
+           (YearsChildRiderRate
+           ,round_minutiae().c(yare_input_.ChildRiderAmount)
+           ,round_rider_charges()
+           );
         }
 
     TermCharge    = C0;
@@ -1949,9 +1955,11 @@ void AccountValue::TxSetRiderDed()
             {
             case oe_waiver_times_specamt:
                 {
-                WpCharge = round_rider_charges().c
-                    (YearsWpRate * std::min(ActualSpecAmt, WpLimit)
-                    );
+                WpCharge = rate_times_currency
+                   (YearsWpRate
+                   ,std::min(ActualSpecAmt, WpLimit)
+                   ,round_rider_charges()
+                   );
                 DcvWpCharge = WpCharge;
                 }
                 break;
