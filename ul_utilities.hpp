@@ -41,7 +41,7 @@ double list_bill_premium
 
 currency rate_times_currency
     (double                  rate
-    ,currency                specamt
+    ,currency                amount
     ,round_to<double> const& rounder
     );
 

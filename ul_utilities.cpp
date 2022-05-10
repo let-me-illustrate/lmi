@@ -97,7 +97,7 @@ double list_bill_premium
 
 currency rate_times_currency
     (double                  rate
-    ,currency                specamt
+    ,currency                amount
     ,round_to<double> const& rounder
     )
 {
@@ -108,7 +108,7 @@ currency rate_times_currency
     constexpr int radix {100'000'000};
     // Premium rate and specified amount are nonnegative by their nature.
     LMI_ASSERT(0.0 <= rate);
-    LMI_ASSERT(C0  <= specamt);
+    LMI_ASSERT(C0  <= amount);
     // Do not save and restore prior rounding direction, because lmi
     // generally expects rounding to nearest everywhere.
     std::fesetround(FE_TONEAREST);
@@ -134,16 +134,16 @@ currency rate_times_currency
             << std::flush
             ;
 #endif // 0
-        return rounder.c(specamt * rate);
+        return rounder.c(amount * rate);
         }
 #if 0
     // Enable this assertion, adjusting the tolerance (last) argument
     // p.r.n., if no table is allowed to have more than eight decimals.
     LMI_ASSERT(materially_equal(bourn_cast<double>(irate), rate * radix));
 #endif // 0
-    // Multiply integer rate by integral-cents specamt.
+    // Multiply integer rate by integral-cents amount.
     // Use a large integer type to avoid overflow.
-    int64 iprod = irate * bourn_cast<int64>(specamt.cents());
+    int64 iprod = irate * bourn_cast<int64>(amount.cents());
     // Result is an integer--safe to represent as double now.
     // Function from_cents() has its own value-preservation test.
     currency cprod = from_cents(bourn_cast<double>(iprod));
