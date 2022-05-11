@@ -557,7 +557,12 @@ double Irc7702A::MaxNonMecPremium
         {
         if(TestPeriodDur < TestPeriodLen)
             {
-            LMI_ASSERT(CumPmts <= CumSevenPP);
+            // Weird condition--see:
+            //   https://lists.nongnu.org/archive/html/lmi/2022-05/msg00006.html
+            LMI_ASSERT
+                (  CumPmts <= CumSevenPP
+                || materially_equal(CumSevenPP, CumPmts)
+                );
             state_.Q6_max_non_mec_prem = RoundNonMecPrem(CumSevenPP - CumPmts);
             return state_.Q6_max_non_mec_prem;
             }
@@ -709,7 +714,9 @@ double Irc7702A::UpdatePmt7702A
             }
         */
         CumPmts += a_Payment;
-        if(CumSevenPP < CumPmts)
+        // Weird conditional--see:
+        //   https://lists.nongnu.org/archive/html/lmi/2022-05/msg00006.html
+        if(CumSevenPP < CumPmts && !materially_equal(CumSevenPP, CumPmts))
             {
             IsMec = true;
 /* TODO ?? TAXATION !! Reenable after testing.
