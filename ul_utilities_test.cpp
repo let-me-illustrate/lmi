@@ -31,7 +31,7 @@
 #include <cfenv>                        // fesetround()
 #include <cfloat>                       // DECIMAL_DIG
 #include <cmath>                        // nearbyint()
-#include <cstdint>                      // int64_t
+#include <cstdint>                      // uint64_t
 
 void test_max_modal_premium()
 {
@@ -49,10 +49,10 @@ void test_max_modal_premium()
 
     auto test_excess_precision = [](double rate)
         {
-        using int64 = std::int64_t;
+        using uint64 = std::uint64_t;
         constexpr int radix {100'000'000};
         std::fesetround(FE_TONEAREST);
-        int64 irate = bourn_cast<int64>(std::nearbyint(rate * radix));
+        uint64 irate = bourn_cast<uint64>(std::nearbyint(rate * radix));
         return !materially_equal(bourn_cast<double>(irate), rate * radix);
         };
     LMI_TEST(!test_excess_precision(0.0                    ));

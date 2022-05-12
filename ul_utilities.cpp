@@ -32,7 +32,7 @@
 #include <algorithm>                    // generate(), min()
 #include <cfenv>                        // fesetround()
 #include <cmath>                        // nearbyint(), pow()
-#include <cstdint>                      // int64_t
+#include <cstdint>                      // uint64_t
 #include <numeric>                      // inner_product()
 #include <vector>
 
@@ -101,7 +101,7 @@ currency rate_times_currency
     ,round_to<double> const& rounder
     )
 {
-    using int64 = std::int64_t;
+    using uint64 = std::uint64_t;
 
     // Assume premium-rate argument is precise to at most eight decimals,
     // any further digits being representation error.
@@ -117,7 +117,7 @@ currency rate_times_currency
     // Store the result as a wide integer, to be used in integer math.
     // Use bourn_cast<>() for conversions here and elsewhere: it
     // implicitly asserts that values are preserved.
-    int64 irate = bourn_cast<int64>(std::nearbyint(rate * radix));
+    uint64 irate = bourn_cast<uint64>(std::nearbyint(rate * radix));
     // If the rate really has more than eight significant (non-erroneous)
     // digits, then treat them all as significant. In that case, there
     // is no representation error to be removed. The accompanying unit
@@ -143,7 +143,7 @@ currency rate_times_currency
 #endif // 0
     // Multiply integer rate by integral-cents amount.
     // Use a large integer type to avoid overflow.
-    int64 iprod = irate * bourn_cast<int64>(amount.cents());
+    uint64 iprod = irate * bourn_cast<uint64>(amount.cents());
     // Result is an integer--safe to represent as double now.
     // Function from_cents() has its own value-preservation test.
     currency cprod = from_cents(bourn_cast<double>(iprod));
@@ -153,8 +153,8 @@ currency rate_times_currency
     // result. However, if the remainder of integer division is zero,
     // then the result is exact, in which case the corresponding
     // rounded floating-point division may give the wrong answer.
-    int64 quotient  = iprod / radix;
-    int64 remainder = iprod % radix;
+    uint64 quotient  = iprod / radix;
+    uint64 remainder = iprod % radix;
     return
         ((0 == remainder)
         ? from_cents(bourn_cast<double>(quotient))
@@ -169,7 +169,7 @@ currency max_modal_premium
     ,round_to<double> const& rounder
     )
 {
-    using int64 = std::int64_t;
+    using uint64 = std::uint64_t;
 
     currency const annual_premium = rate_times_currency(rate, specamt, rounder);
     // Calculate modal premium from annual as a separate step,
@@ -181,6 +181,6 @@ currency max_modal_premium
     // premium is 12.30, then the monthly maximum is 1.02,
     // which is the highest level premium that can be paid twelve
     // times without exceeding the annual maximum: 12.24 <= 12.30 .
-    int64 annual_int = static_cast<int64>(annual_premium.cents());
+    uint64 annual_int = static_cast<uint64>(annual_premium.cents());
     return from_cents(bourn_cast<double>(annual_int / mode));
 }
