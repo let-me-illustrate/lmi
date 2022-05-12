@@ -97,7 +97,7 @@ jobs:
                 # run 64-bit programs in this build, so set WINEDEBUG to a
                 # value equivalent to its default/unset value but recognized
                 # as disabling error output by Debian /usr/bin/wine script.
-                export 'WINEDEBUG=-all,err+all,fixme+all' >> $GITHUB_ENV
+                echo 'WINEDEBUG=-all,err+all,fixme+all' >> $GITHUB_ENV
                 ;;
 
               *)
