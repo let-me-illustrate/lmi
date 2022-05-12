@@ -233,6 +233,12 @@ jobs:
             echo
           fi
 
+      - name: Fix up TIFF submodule
+        run: |
+          cd third_party/wx/src/tiff
+          git fetch origin
+          git switch --detach af035310bddac3e2f58ae0a330bc6ef168e180f1
+
       - name: Cache downloaded archives
         uses: actions/cache@v2
         with:
