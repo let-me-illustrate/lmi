@@ -36,8 +36,9 @@
 #include "ssize_lmi.hpp"
 #include "stratified_algorithms.hpp"    // TieredNetToGross()
 
-#include <algorithm>
-#include <cmath>
+#include <algorithm>                    // max(), min()
+#include <cfenv>                        // fesetround()
+#include <cmath>                        // floor(), nearbyint()
 #include <limits>
 #include <numeric>                      // accumulate()
 #include <stdexcept>
@@ -1292,7 +1293,21 @@ and
     double adjusted_bft = AssumedBft - bft_adjustment;
     if(0.0 < adjusted_bft)
         {
-        SevenPP = Saved7PPRate * adjusted_bft;
+        // A 7PP rate from first principles is unlikely to be a
+        // rational number. A tabular one is, and it's unlikely to
+        // have more than eight decimals in practice; perform the
+        // multiplication this way to avoid embarrassments like the
+        // example in commit a91cbc67d7479e.
+        constexpr double radix {1.0e8};
+        // Do not save and restore prior rounding direction because
+        // lmi generally expects rounding to nearest everywhere.
+        std::fesetround(FE_TONEAREST);
+        double const z = std::nearbyint(radix * Saved7PPRate);
+        SevenPP =
+            (Use7PPTable && materially_equal(z / radix, Saved7PPRate))
+            ? (z * adjusted_bft) / radix
+            : Saved7PPRate * adjusted_bft
+            ;
         }
     else
         {
