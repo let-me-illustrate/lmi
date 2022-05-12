@@ -103,8 +103,12 @@ currency rate_times_currency
 {
     using uint64 = std::uint64_t;
 
-    // Assume premium-rate argument is precise to at most eight decimals,
-    // any further digits being representation error.
+    // Precondition (asserted below): the premium-rate argument is
+    // precise to at most eight decimals, any further digits being
+    // representation error. In practice, eight is almost universally
+    // adequate, but this is a parameter that may be adjusted if more
+    // decimals are required. The accompanying unit test gives some
+    // illustrative examples of this precondition's effect.
     constexpr int radix {100'000'000};
     // Premium rate and specified amount are nonnegative by their nature.
     LMI_ASSERT(0.0 <= rate);
@@ -119,28 +123,13 @@ currency rate_times_currency
     // implicitly asserts that values are preserved.
     uint64 irate = bourn_cast<uint64>(std::nearbyint(rate * radix));
     // If the rate really has more than eight significant (non-erroneous)
-    // digits, then treat them all as significant. In that case, there
-    // is no representation error to be removed. The accompanying unit
-    // test gives illustrative examples.
-    if(!materially_equal(bourn_cast<double>(irate), rate * radix))
-        {
-#if 0
-        // Enable this (including <iostream> and <cfloat>) for research.
-        std::cout.precision(DECIMAL_DIG);
-        std::cout
-            << "Excessive precision in rate; check the table\n"
-            << bourn_cast<double>(irate) << " bourn_cast<double>(irate)\n"
-            << rate * radix << " rate * radix\n"
-            << std::flush
-            ;
-#endif // 0
-        return rounder.c(amount * rate);
-        }
-#if 0
-    // Enable this assertion, adjusting the tolerance (last) argument
-    // p.r.n., if no table is allowed to have more than eight decimals.
+    // digits, then throw. Alternatively, one might simply
+    //   return rounder.c(amount * rate);
+    // in that case: i.e., treat all digits as significant, assume
+    // there is no representation error to be removed, and perform
+    // the multiplication in double precision (perhaps with less
+    // accuracy than might otherwise be obtained).
     LMI_ASSERT(materially_equal(bourn_cast<double>(irate), rate * radix));
-#endif // 0
     // Multiply integer rate by integral-cents amount.
     // Use a large integer type to avoid overflow.
     uint64 iprod = irate * bourn_cast<uint64>(amount.cents());
