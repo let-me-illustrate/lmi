@@ -111,7 +111,9 @@ currency rate_times_currency
     // illustrative examples of this precondition's effect.
     constexpr int radix {100'000'000};
     // Premium rate and specified amount are nonnegative by their nature.
+    // Premium rate cannot plausibly exceed unity.
     LMI_ASSERT(0.0 <= rate);
+    LMI_ASSERT(       rate <= 1.0);
     LMI_ASSERT(C0  <= amount);
     // Do not save and restore prior rounding direction, because lmi
     // generally expects rounding to nearest everywhere.
