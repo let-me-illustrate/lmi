@@ -1298,6 +1298,15 @@ and
         // have more than eight decimals in practice; perform the
         // multiplication this way to avoid embarrassments like the
         // example in commit a91cbc67d7479e.
+        //
+        // Something like this could be done if adjusted_bft were currency:
+// [assert or test Use7PPTable]
+//      SevenPP = rate_times_currency
+//          (Saved7PPRate
+//          ,round_somehow.c(adjusted_bft)
+//          ,RoundNonMecPrem
+//          );
+// [but it is better not to round internal variable SevenPP at all]
         constexpr double radix {1.0e8};
         // Do not save and restore prior rounding direction because
         // lmi generally expects rounding to nearest everywhere.
