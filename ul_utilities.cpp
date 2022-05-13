@@ -110,11 +110,29 @@ currency rate_times_currency
     // decimals are required. The accompanying unit test gives some
     // illustrative examples of this precondition's effect.
     constexpr int radix {100'000'000};
-    // Premium rate and specified amount are nonnegative by their nature.
-    // Premium rate cannot plausibly exceed unity.
+    constexpr uint64 limit {UINT64_MAX / radix};
+    static currency const cents_limit {from_cents(limit)};
+    // The 'amount' argument rarely exceeds 'cents_limit', which is
+    // over a billion dollars:
+    //   1'844'674'407'37 = ⌊UINT64_MAX / 1.0e8⌋
+    // However, this has been observed to happen when solving for
+    // guaranteed premium on a policy form that recalculates the
+    // target premium from a table each year. The solve's a priori
+    // upper limit is one billion dollars; paying that amount every
+    // year causes AV to grow to over $300B; a DBO change from B to A
+    // increases specamt by AV; and calculating the target premium
+    // in that year causes this condition to fail.
+    if(cents_limit < amount)
+        {
+        return rounder.c(amount * rate);
+        }
+    // Premium rate and amount are nonnegative by their nature.
+    // Premium rate cannot plausibly exceed unity. If amount exceeds
+    // cents_limit, an early exit was taken above.
     LMI_ASSERT(0.0 <= rate);
     LMI_ASSERT(       rate <= 1.0);
     LMI_ASSERT(C0  <= amount);
+    LMI_ASSERT(       amount <= cents_limit);
     // Do not save and restore prior rounding direction, because lmi
     // generally expects rounding to nearest everywhere.
     std::fesetround(FE_TONEAREST);
