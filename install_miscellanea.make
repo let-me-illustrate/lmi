@@ -67,7 +67,7 @@ $(trang_archive)-url    := https://storage.googleapis.com/google-code-archive-do
 
 $(cgicc_archive)-md5    := 6cb5153fc9fa64b4e50c7962aa557bbe
 $(jing_archive)-md5     := 13eef193921409a1636377d1efbf9843
-$(sample_archive)-md5   := e7f07133abfc3b9c2252dfa3b61191bc
+$(sample_archive)-md5   := 7f37a83f8bb112d9077a541e91cbd6cf
 $(trang_archive)-md5    := 9d31799b948c350850eb9dd14e5b832d
 
 # Utilities ####################################################################
