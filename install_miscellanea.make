@@ -45,7 +45,7 @@ third_party_source_dir  := $(dest_dir)/src
 
 cgicc_archive    := cgicc-3.1.4.tar.bz2
 jing_archive     := jing-20091111.zip
-sample_archive   := lmi-data-20220511T0107Z.tar.bz2
+sample_archive   := lmi-data-20220514T1554Z.tar.bz2
 trang_archive    := trang-20091111.zip
 
 file_list := \
@@ -62,12 +62,12 @@ sample:     stem = data
 
 $(cgicc_archive)-url    := ftp://ftp.gnu.org/pub/gnu/cgicc/$(cgicc_archive)
 $(jing_archive)-url     := https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jing-trang/$(jing_archive)
-$(sample_archive)-url   := https://download.savannah.gnu.org/releases/lmi/$(sample_archive)
+$(sample_archive)-url   := https://www.zeitlins.org/lmi/$(sample_archive)
 $(trang_archive)-url    := https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jing-trang/$(trang_archive)
 
 $(cgicc_archive)-md5    := 6cb5153fc9fa64b4e50c7962aa557bbe
 $(jing_archive)-md5     := 13eef193921409a1636377d1efbf9843
-$(sample_archive)-md5   := 7f37a83f8bb112d9077a541e91cbd6cf
+$(sample_archive)-md5   := 36e8418d191dcc7b167da4f86f892601
 $(trang_archive)-md5    := 9d31799b948c350850eb9dd14e5b832d
 
 # Utilities ####################################################################
