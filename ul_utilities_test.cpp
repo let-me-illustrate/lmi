@@ -105,8 +105,8 @@ void test_max_modal_premium()
     // because so many real-world examples are along the lines of
     // 0.01 * $100,000 .
 
-    double   const rate    {0.0123456700000001};
-    currency const specamt {9'876'543'21_cents};
+    constexpr double   rate    {0.0123456700000001};
+    constexpr currency specamt {9'876'543'21_cents};
 
     LMI_TEST(materially_equal(12193254.3211401, rate * specamt.cents()));
 
