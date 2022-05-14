@@ -32,6 +32,7 @@
 #include <cfloat>                       // DECIMAL_DIG
 #include <cmath>                        // nearbyint()
 #include <cstdint>                      // uint64_t
+#include <string>
 
 void test_max_modal_premium()
 {
@@ -99,6 +100,55 @@ void test_max_modal_premium()
         ,round_near
         );
     LMI_TEST_EQUAL(62_cents, m00);
+
+    // Example of fallback to floating point, from an actual regression test:
+    //     184467440737 = ⌊UINT64_MAX / 1.0e8⌋
+    //   $ 1844674407.37 cents_limit, as dollars and cents
+    //   $24534504428.00 amount (exceeds cents_limit)
+    //    0.055394150000000003109 rate
+    //     1359068018.46029639244 amount * rate: floating-point calculation
+    //     1359068018.46029620    amount * rate: exact fixed-point answer
+    currency n00 = rate_times_currency
+        (0.05539415
+        ,24534504428'00_cents
+        ,round_near
+        );
+    LMI_TEST_EQUAL(1'359'068'018'46_cents, n00);
+    // The 1359068018.46 rounded-near answer that would ideally be desired
+    // is representable as an exact number of cents, and the product
+    //   5539415 * 24534504428 = 135906801846029620
+    // actually can be calculated exactly in 64-bit integer arithmetic:
+    LMI_TEST_EQUAL  (135906801846029620ULL, 5539415ULL * 24534504428ULL);
+    //             18446744073709551615ULL = UINT64_MAX
+    LMI_TEST        (135906801846029620ULL < UINT64_MAX);
+    // and can even be divided by 1000000 to get (truncated) cents:
+    LMI_TEST_EQUAL  (135906801846ULL, 5539415ULL * 24534504428ULL / 1000000);
+    // but that exceeds the precision of binary64 arithmetic:
+    //                 9007199254740991 = (1ULL << 53) - 1
+    // (so 135906801846029616 is the (inaccurate) answer that a spreadsheet
+    // would most likely offer. This naive test:
+//  LMI_TEST_UNEQUAL(135906801846029620.0, 5539415.0 * 24534504428.0);
+    // may succeed or fail, but this one should be more accurate:
+    std::string product_str = std::to_string(5539415.0 * 24534504428.0);
+    LMI_TEST_UNEQUAL("135906801846029620", product_str);
+    // ).
+    //
+    // Given that an exact integer calculation can be performed in
+    // this case, why is that not done? The reason is that the choice
+    // is made using a fast but slightly coarse test that ignores the
+    // value of 'rate' and the actual precision of 'amount', regarding
+    // the problem:
+    //   $24534504428.00 amount
+    //        0.05539415 rate
+    // as though it were:
+    //   $24534504428.99 amount (exceeds cents_limit)
+    //        0.99999999 rate
+    // which cannot be performed in 64-bit integer arithmetic, as may
+    // be grasped intuitively by concatenating the significant digits
+    // and comparing to UINT64_MAX:
+    //    245345044289999999999 concatenation
+    //    \--amount---/\-rate-/
+    //     18446744073709551615 UINT64_MAX
 
     // Test a rate and a specamt that use maximal precision,
     // because so many real-world examples are along the lines of
