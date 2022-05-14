@@ -83,23 +83,22 @@ void test_max_modal_premium()
     //   0.00000250 * 250000 = 0.625 (approximately!)
     // which is to be rounded to the nearest or even cent; 62 and 63 cents are
     // equally near, but 62 is even, so the answer should be 62.
+    //
     // However, for the i686+x87 architecture still used in production for now,
+//  LMI_TEST_EQUAL(0.62, round_near(0.00000250 * 250'000'00_cents)); // failed
     // the answer was sixty-three cents, evidently because of representation
     // error in "0.00000250", which is eradicated by shifting the decimal point
     // rightward to produce a rational number with a power-of-ten denominator.
-    currency a00 = max_modal_premium
+    // In the worst regression between i686 and x86_64, this difference of one
+    // cent in a monthly deduction grew to $79.19 at compound interest over 75
+    // years.
+    currency m00 = max_modal_premium
         (0.00000250
         ,250'000'00_cents
         ,mce_annual
         ,round_near
         );
-    LMI_TEST_EQUAL(62_cents, a00);
-    // This fails for i686 (x87), which calculates 0.63 even though
-    // rounding mode is "nearer or even" and 62 cents is even:
-//  LMI_TEST_EQUAL(0.62, round_near(0.00000250 * 250'000'00_cents));
-    // In the worst regression between i686 and x86_64, this difference of one
-    // cent in a monthly deduction grew to $79.19 at compound interest over 75
-    // years. Reasonableness check: the implicit annual percentage rate is
+    LMI_TEST_EQUAL(62_cents, m00);
 
     // Test a rate and a specamt that use maximal precision,
     // because so many real-world examples are along the lines of
