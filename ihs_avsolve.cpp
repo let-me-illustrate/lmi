@@ -41,7 +41,7 @@
 #include "miscellany.hpp"               // ios_out_app_binary()
 #include "null_stream.hpp"
 #include "outlay.hpp"
-#include "zero.hpp"
+#include "zero.hpp"                     // decimal_root()
 
 #include <algorithm>                    // min(), max()
 #include <functional>
@@ -204,8 +204,7 @@ currency AccountValue::SolveTest
     currency most_negative_csv = C0;
     if(no_lapse_dur < SolveTargetDuration_)
         {
-        // CURRENCY !! Cents in ledger will make rounding unnecessary.
-        most_negative_csv = round_minutiae().c
+        most_negative_csv = from_cents
             (*std::min_element
                 (VariantValues().CSVNet.begin() + no_lapse_dur
                 ,VariantValues().CSVNet.begin() + SolveTargetDuration_
@@ -235,12 +234,10 @@ currency AccountValue::SolveTest
     // SolveTargetDuration_ is in origin one. That's natural for loop
     // counters and iterators--it's one past the end--but indexing
     // must decrement it.
-    // CURRENCY !! Cents in ledger will make rounding unnecessary.
-    currency value = round_minutiae().c(VariantValues().CSVNet[SolveTargetDuration_ - 1]);
+    currency value = from_cents(VariantValues().CSVNet[SolveTargetDuration_ - 1]);
     if(mce_solve_for_target_naar == SolveTarget_)
         {
-        // CURRENCY !! Cents in ledger will make rounding unnecessary.
-        value = round_minutiae().c
+        value = from_cents
             (
               VariantValues().EOYDeathBft[SolveTargetDuration_ - 1]
             - VariantValues().AcctVal    [SolveTargetDuration_ - 1]

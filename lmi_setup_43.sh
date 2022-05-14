@@ -41,28 +41,12 @@ if [ "greg" = "$(whoami)" ]; then
   git remote set-url --push origin chicares@git.sv.gnu.org:/srv/git/lmi.git
 fi
 
-# Duplicate proprietary repository (if available).
-# First, copy "blessed" repository (here, 'cp' is sufficient: this
-# bare repository has no references that need to be resolved):
-cd /opt/lmi || { printf 'failed: cd\n'; exit 3; }
-cp --dereference --preserve --recursive /srv/cache_for_lmi/blessed .
-#
-# Fix ownership and permissions of bare repository, just in case.
-chgrp -R "$NORMAL_GROUP" blessed
-# This is better than 'chmod -R g+s' (it affects only directories):
-find blessed -type d -exec chmod g+s {} +
-# Specifying 's' here would cause many 'S' occurrences in 'ls' output;
-# specifying 'g+w' here would cause pack files to be group writable:
-#   chmod -R g+swX blessed
-# Instead, use 'g=u', which doesn't override the earlier 'g+s'--see:
-#   https://lists.nongnu.org/archive/html/lmi/2020-03/msg00019.html
-chmod -R g=u blessed
-#
-# Then create a working copy by cloning the bare repository...
+# Clone the bare proprietary repository to create a working copy.
 #
 # Apparently '--config core.SharedRepository=group' would have little
 # or no benefit here.
-git clone -b master file:///opt/lmi/blessed/proprietary
+cd /opt/lmi || { printf 'failed: cd\n'; exit 3; }
+git clone -b master file:///srv/cache_for_lmi/blessed/proprietary
 #
 # Fix ownership and permissions of working copy.
 chgrp -R "$NORMAL_GROUP" proprietary
@@ -131,7 +115,10 @@ cd free/src || { printf 'failed: cd\n'; exit 3; }
 # Use git's own protocol wherever possible. In case that's blocked
 # by a corporate firewall, fall back on https. In case a firewall
 # inexplicably blocks the gnu.org domain, try Vadim's github clone
-# as a last resort.
+# as a last resort. Any messages like
+#   fatal: read error: Connection timed out
+# can be ignored as long as one of the subsequent git-clone commands
+# succeeds.
 
 git clone git://git.savannah.nongnu.org/lmi.git \
   || git clone https://git.savannah.nongnu.org/r/lmi.git \

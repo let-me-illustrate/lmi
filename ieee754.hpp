@@ -110,22 +110,4 @@ inline bool is_infinite(T t)
     return has_inf && (pos_inf == t || neg_inf == t);
 }
 
-/// Floating-point numbers that represent integers scaled by negative
-/// powers of ten are inexact. For example, a premium rate of $2.40
-/// per $1000 is notionally 0.0024, but to the hardware may look like:
-///   0.0023999999999999998 [0x3ff69d495182a9930800]
-/// Multiplying that number by a million dollars and rounding down to
-/// cents yields 2399.99, where 2400.00 is wanted.
-///
-/// SOMEDAY !! The best way to handle this is to store integers. For
-/// the time being, multiplying by 1 + LDBL_EPSILON in problematic
-/// circumstances avoids this embarrassment while introducing an error
-/// that shouldn't matter.
-
-inline double ldbl_eps_plus_one_times(double z)
-{
-    static long double const y = 1.0L + std::numeric_limits<long double>::epsilon();
-    return static_cast<double>(y * z);
-}
-
 #endif // ieee754_hpp

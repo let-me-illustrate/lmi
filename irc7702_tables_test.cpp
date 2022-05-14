@@ -30,7 +30,7 @@
 #include "ssize_lmi.hpp"
 #include "test_tools.hpp"
 
-#include <cfloat>                       // DBL_EPSILON
+#include <cfloat>                       // DBL_EPSILON, DECIMAL_DIG
 #include <cmath>                        // log()
 #include <vector>
 
@@ -1042,7 +1042,7 @@ void irc7702_tables_test::test_1980_cso()
 
     double const observed = ol_nsp[0];
     double const expected = olcf_1980_cso_endt_100[0].Ax;
-    std::cout.precision(21);
+    std::cout.precision(DECIMAL_DIG);
     std::cout
         << "Initial Ax (the most sensitive value) for 1980 CSO:"
         << "\n  spreadsheet:    " << expected
@@ -1086,7 +1086,7 @@ void irc7702_tables_test::test_2001_cso()
 
     double const observed = ol_nsp[0];
     double const expected = olcf_2001_cso_endt_100[0].Ax;
-    std::cout.precision(21);
+    std::cout.precision(DECIMAL_DIG);
     std::cout
         << "Initial Ax (the most sensitive value) for 2001 CSO:"
         << "\n  spreadsheet:    " << expected
@@ -1130,7 +1130,7 @@ void irc7702_tables_test::test_2017_cso()
 
     double const observed = ol_nsp[0];
     double const expected = olcf_2017_cso_endt_95[0].Ax;
-    std::cout.precision(21);
+    std::cout.precision(DECIMAL_DIG);
     std::cout
         << "Initial Ax (the most sensitive value) for 2017 CSO:"
         << "\n  spreadsheet:    " << expected

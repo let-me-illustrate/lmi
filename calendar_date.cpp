@@ -26,7 +26,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "bourn_cast.hpp"
-#include "zero.hpp"
+#include "zero.hpp"                     // decimal_root()
 
 #include <algorithm>                    // max(), min()
 #include <ctime>                        // time_t

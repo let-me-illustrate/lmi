@@ -36,6 +36,8 @@ WINEDLLOVERRIDES=mscoree=d wine wineboot
 #
 # Don't worry about this:
 #   0009:err:file:init_redirects cannot open L"C:\\windows" (c000000f)
+# or complaints about an absent X server beginning like this:
+#   000b:err:winediag:nodrv_CreateWindow
 # or a dozen or so lines of ':err:ole:' diagnostics mentioning
 # "IPSFactory" and "MarshalInterface", or this:
 #   0014:err:ole:get_local_server_stream Failed: 80004002

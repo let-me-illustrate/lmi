@@ -383,6 +383,10 @@ void currency_test::test_quodlibet()
     currency b3 = b0 + b1;
     LMI_TEST_EQUAL(b2.cents(), b3.cents());
     LMI_TEST_EQUAL(b2, b3);
+
+    currency const c0(777, raw_cents{});
+    double d0 = centize(c0);
+    LMI_TEST_EQUAL(d0, c0.cents());
 }
 
 // CURRENCY !! Ideas for testing overflow or underflow.

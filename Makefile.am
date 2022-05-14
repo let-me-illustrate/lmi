@@ -113,6 +113,7 @@ TESTS = \
     crc32_test \
     currency_test \
     dbo_rules_test \
+    duff_fmt_test \
     et_vector_test \
     expression_template_0_test \
     fenv_lmi_test \
@@ -142,7 +143,6 @@ TESTS = \
     monnaie_test \
     mortality_rates_test \
     name_value_pairs_test \
-    ncnnnpnn_test \
     null_stream_test \
     numeric_io_test \
     path_utility_test \
@@ -166,6 +166,7 @@ TESTS = \
     test_tools_test \
     timer_test \
     tn_range_test \
+    ul_utilities_test \
     value_cast_test \
     vector_test \
     wx_new_test \
@@ -424,7 +425,6 @@ liblmi_la_SOURCES = \
     basic_tables.cpp \
     commutation_functions.cpp \
     cso_table.cpp \
-    financial.cpp \
     fund_data.cpp \
     gpt7702.cpp \
     gpt_commutation_functions.cpp \
@@ -461,6 +461,7 @@ liblmi_la_SOURCES = \
     rounding_rules.cpp \
     stratified_algorithms.cpp \
     stratified_charges.cpp \
+    ul_utilities.cpp \
     verify_products.cpp \
     $(liblmi_common_sources)
 liblmi_la_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
@@ -690,6 +691,9 @@ dbo_rules_test_CXXFLAGS = $(AM_CXXFLAGS)
 dbo_rules_test_LDADD = \
   libtest_common.la
 
+duff_fmt_test_LDADD = \
+  libtest_common.la
+
 et_vector_test_LDADD = \
   libtest_common.la
 
@@ -716,9 +720,7 @@ file_command_test_LDADD = \
   libtest_common.la
 
 financial_test_SOURCES = \
-  financial.cpp \
-  financial_test.cpp \
-  stratified_algorithms.cpp
+  financial_test.cpp
 financial_test_CXXFLAGS = $(AM_CXXFLAGS)
 financial_test_LDADD = \
   libtest_common.la
@@ -914,9 +916,6 @@ name_value_pairs_test_CXXFLAGS = $(AM_CXXFLAGS)
 name_value_pairs_test_LDADD = \
   libtest_common.la
 
-ncnnnpnn_test_LDADD = \
-  libtest_common.la
-
 null_stream_test_LDADD = \
   libtest_common.la
 
@@ -1070,6 +1069,13 @@ tn_range_test_CXXFLAGS = $(AM_CXXFLAGS)
 tn_range_test_LDADD = \
   libtest_common.la
 
+ul_utilities_test_SOURCES = \
+  ul_utilities.cpp \
+  ul_utilities_test.cpp
+ul_utilities_test_CXXFLAGS = $(AM_CXXFLAGS)
+ul_utilities_test_LDADD = \
+  libtest_common.la
+
 value_cast_test_LDADD = \
   libtest_common.la
 
@@ -1143,6 +1149,7 @@ noinst_HEADERS = \
     default_view.hpp \
     deserialize_cast.hpp \
     docmanager_ex.hpp \
+    duff_fmt.hpp \
     edit_mvc_docview_parameters.hpp \
     emit_ledger.hpp \
     exit_codes.hpp \
@@ -1239,7 +1246,6 @@ noinst_HEADERS = \
     mvc_view.hpp \
     my_proem.hpp \
     name_value_pairs.hpp \
-    ncnnnpnn.hpp \
     null_stream.hpp \
     numeric_io_cast.hpp \
     numeric_io_traits.hpp \
@@ -1294,6 +1300,7 @@ noinst_HEADERS = \
     tn_range_type_trammels.hpp \
     tn_range_types.hpp \
     transferor.hpp \
+    ul_utilities.hpp \
     unwind.hpp \
     value_cast.hpp \
     verify_products.hpp \

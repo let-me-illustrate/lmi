@@ -246,13 +246,12 @@ inline double binary64_midpoint(double d0, double d1)
 /// function's values only (and not its derivative or functional form)
 /// are available." --Press et al., _Numerical Recipes_ (3rd ed. 2007)
 ///
-/// Numerous papers claim to improve on Brent's method. The best is
-/// ACM Algorithm 748 (Transactions on Mathematical Software):
-///   https://na.math.kit.edu/alefeld/download/1995_Algorithm_748_Enclosing_Zeros_of_Continuous_Functions.pdf
-/// whose Table II compares Brent's algorithm to TOMS748 for fifteen
-/// test problems, claiming an advantage of 4-6%. Chandrupatla
-/// proposed a more stringent criterion for accepting IQI iterates,
-/// and a simplified root-finding method that uses it. However, actual
+/// Numerous papers claim to improve on Brent's method. TOMS 748
+/// purports to require about five percent fewer function evaluations,
+/// but that claim is debunked here:
+///   https://www.nongnu.org/lmi/toms_748.html
+/// Chandrupatla proposed a more stringent criterion for accepting IQI
+/// iterates, and a simplified algorithm that uses it. However, actual
 /// measurements (tabulated in Note 4) show that, for the 388 solves
 /// in lmi's regression test, Brent's method is best for lmi.
 ///

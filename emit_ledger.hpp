@@ -59,6 +59,8 @@ class LMI_SO ledger_emitter final
     fs::path case_filepath_spreadsheet_;
     fs::path case_filepath_group_roster_;
     fs::path case_filepath_group_quote_;
+    fs::path case_filepath_summary_html_;
+    fs::path case_filepath_summary_tsv_;
 
     // Used only if emission_ includes mce_emit_group_quote; empty otherwise.
     std::unique_ptr<group_quote_pdf_generator> group_quote_pdf_gen_;

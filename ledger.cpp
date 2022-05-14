@@ -307,8 +307,18 @@ void Ledger::AutoScale()
         extrema.subsume(i.second.scalable_extrema());
         }
 
-    int const max_power = 9;
-    int const k = scale_power(max_power, extrema.minimum(), extrema.maximum());
+    // No plausible amount is too high to express as billions of dollars.
+    constexpr int max_power = 9;
+    // Convert cents to dollars. The extrema are of type 'double', and
+    // their values aren't necessarily integers. The quotients need to
+    // be rounded away from zero, because 999.99 and 1000.01 require
+    // different formatted widths; but that needn't be done here,
+    // because function scale_power() takes care of it.
+    int const k = scale_power
+        (max_power
+        ,extrema.minimum() / 100.0
+        ,extrema.maximum() / 100.0
+        );
 
     ledger_invariant_->apply_scale_factor(k);
 
@@ -489,7 +499,7 @@ std::vector<double> numeric_vector
         {
         attained_age     [j] = j + invar.Age;
         policy_year      [j] = j + 1        ;
-        net_death_benefit[j] = curr.EOYDeathBft[j] - curr.TotalLoanBalance[j];
+        net_death_benefit[j] = (curr.EOYDeathBft[j] - curr.TotalLoanBalance[j]) / 100.0;
         }
 
     typedef LedgerBase const& B;

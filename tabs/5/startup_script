@@ -5,7 +5,8 @@ a='schroot --chroot=lmi'
 b='cd /opt/lmi/bin'
 c='. /opt/lmi/src/lmi/set_toolchain.sh'
 d='wine ./lmi_wx_shared --ash_nazg --data_path=/opt/lmi/data'
-e='/opt/lmi/src/lmi/gui_test.sh'
+# redirect voluminous GTK diagnostics
+e='lmipath=/opt/lmi/gcc_x86_64-pc-linux-gnu/build/ship; LD_LIBRARY_PATH=$lmipath:/opt/lmi/local/gcc_x86_64-pc-linux-gnu/lib/ $lmipath/lmi_wx_shared --ash_nazg --data_path=/opt/lmi/data 2>&1 |less'
 
 print -rs $b ; echo $b ; eval $b
 print -rs $c ; echo $c

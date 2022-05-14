@@ -393,19 +393,19 @@ void custom_io_1_write(Ledger const& ledger_values, std::string const& filename)
         {
         os
             << std::setprecision(2)
-            <<        Curr_.AcctVal        [j]
-            << ',' << Curr_.CSVNet         [j]
-            << ',' << Curr_.EOYDeathBft    [j]
+            <<        Curr_.AcctVal        [j] / 100.0
+            << ',' << Curr_.CSVNet         [j] / 100.0
+            << ',' << Curr_.EOYDeathBft    [j] / 100.0
             << std::setprecision(4)
             << ',' << Curr_.AnnGAIntRate   [j] * 10000.0 // 'IntRate' in bp.
             << std::setprecision(2)
-            << ',' << Curr_.NetIntCredited [j]
-            << ',' << Curr_.COICharge      [j]
-            << ',' << Curr_.SpecAmtLoad    [j]           // 'MiscFees' = spec amt load.
-            << ',' << prem_load            [j]
+            << ',' << Curr_.NetIntCredited [j] / 100.0
+            << ',' << Curr_.COICharge      [j] / 100.0
+            << ',' << Curr_.SpecAmtLoad    [j] / 100.0   // 'MiscFees' = spec amt load.
+            << ',' << prem_load            [j] / 100.0
             << ',' << 0                                  // 'MinPrem' always zero.
-            << ',' << surr_chg             [j]
-            << ',' << Invar.GrossPmt       [j]
+            << ',' << surr_chg             [j] / 100.0
+            << ',' << Invar.GrossPmt       [j] / 100.0
             << '\n'
             ;
         }

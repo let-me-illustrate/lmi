@@ -23,6 +23,7 @@
 
 #include "test_tools.hpp"
 
+#include <clocale>                      // setlocale()
 #include <stdio.h>                      // snprintf()
 #include <string>
 
@@ -112,6 +113,24 @@ int test_main(int, char*[])
     // https://lists.nongnu.org/archive/html/lmi/2010-04/msg00042.html
     int const number_of_digits = 16;
     LMI_TEST(0 == e.compare(0, number_of_digits, buf, 0, number_of_digits));
+
+    double v = 1234567.89;
+    std::setlocale(LC_NUMERIC, "");
+#if defined __GNUC__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wformat"
+#endif // defined __GNUC__
+    std::cout
+        << "snprintf with nonstandard \"'\" for thousands separators:"
+        << std::endl
+        ;
+    snprintf(buf, 999, "%'12.0f", v);
+    std::cout << "snprintf, 0 decimals: " << buf << std::endl;
+    snprintf(buf, 999, "%'12.2f", v);
+    std::cout << "snprintf, 2 decimals:  " << buf << std::endl;
+#if defined __GNUC__
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__
 
     return 0;
 }

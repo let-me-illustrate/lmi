@@ -83,6 +83,7 @@ enum oenum_elasticity
 
 enum oenum_format_style
     {oe_format_normal
+    ,oe_cents_as_dollars
     ,oe_format_percentage
     };
 

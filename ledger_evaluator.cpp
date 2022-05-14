@@ -296,7 +296,7 @@ mask_map_t static_masks()
     ,{"AcctVal_GuaranteedZero"          , "999,999,999"}
     ,{"AddonCompOnAssets"               , "999,999,999"}
     ,{"AddonCompOnPremium"              , "999,999,999"}
-    ,{"AddonMonthlyFee"                 , "999,999,999"}
+    ,{"AddonMonthlyFee"                 , " 999,999.99"}
     ,{"AnnGAIntRate_Current"            ,      "99.99%"}
     ,{"AnnGAIntRate_Guaranteed"         ,      "99.99%"}
     ,{"AnnHoneymoonValueRate_Current"   ,      "99.99%"}
@@ -413,15 +413,15 @@ mask_map_t static_masks()
 
 format_map_t static_formats()
 {
-// Here's my top-level analysis of the formatting specification.
-//
 // Formats
 //
-// F0: zero decimals
+// F0: zero decimals, commas unnecessary: all small integers
 // F1: zero decimals, commas
 // F2: two decimals, commas
 // F3: scaled by 100, zero decimals, with '%' at end:
 // F4: scaled by 100, two decimals, with '%' at end:
+// F5: zero decimals, commas, cents to dollars
+// F6: two decimals, commas, cents to dollars
 //
 // Presumably all use commas as thousands-separators, so that
 // an IRR of 12345.67% would be formatted as "12,345.67%".
@@ -429,73 +429,27 @@ format_map_t static_formats()
 // So the differences are:
 //   'precision' (number of decimal places)
 //   percentage (scaled by 100, '%' at end) or not
+//   cents-to-dollars conversion (scaled by 100)
 // and therefore F0 is equivalent to F1
 
     std::pair<int,oenum_format_style> f1(0, oe_format_normal);
     std::pair<int,oenum_format_style> f2(2, oe_format_normal);
     std::pair<int,oenum_format_style> f3(0, oe_format_percentage);
     std::pair<int,oenum_format_style> f4(2, oe_format_percentage);
+    std::pair<int,oenum_format_style> f5(0, oe_cents_as_dollars);
+    std::pair<int,oenum_format_style> f6(2, oe_cents_as_dollars);
 
+// Special Formatting for Scalar Items
     static format_map_t const format_map =
-// > Special Formatting for Scalar Items
-// >
-// F4: scaled by 100, two decimals, with '%' at end:
-// > Format as percentage "0.00%"
-// >
-    {{"GuarMaxMandE"                    , f4}
-    ,{"InitAnnGenAcctInt"               , f4}
-    ,{"InitAnnLoanCredRate"             , f4}
-    ,{"InitAnnSepAcctCurrGross0Rate"    , f4}
-    ,{"InitAnnSepAcctCurrGrossHalfRate" , f4}
-    ,{"InitAnnSepAcctCurrNet0Rate"      , f4}
-    ,{"InitAnnSepAcctCurrNetHalfRate"   , f4}
-    ,{"InitAnnSepAcctGrossInt"          , f4}
-    ,{"InitAnnSepAcctGuarGross0Rate"    , f4}
-    ,{"InitAnnSepAcctGuarGrossHalfRate" , f4}
-    ,{"InitAnnSepAcctGuarNet0Rate"      , f4}
-    ,{"InitAnnSepAcctGuarNetHalfRate"   , f4}
-    ,{"InitAnnSepAcctNetInt"            , f4}
-    ,{"MaxAnnCurrLoanDueRate"           , f4}
-    ,{"MaxAnnGuarLoanSpread"            , f4}
-    ,{"PostHoneymoonSpread"             , f4}
-    ,{"Preferred"                       , f4}
-    ,{"PremTaxRate"                     , f4}
-
-// F3: scaled by 100, zero decimals, with '%' at end:
-// > Format as percentage with no decimal places (##0%)
-    ,{"GenAcctAllocation"               , f3}
-    ,{"SalesLoadRefundRate0"            , f3}
-    ,{"SalesLoadRefundRate1"            , f3}
-
-// >
-// F2: two decimals, commas
-// > Format as a number with thousand separators and two decimal places (#,###,###.00)
-// >
-    ,{"CurrentCoiMultiplier"            , f2}
-    ,{"EeListBillPremium"               , f2}
-    ,{"ErListBillPremium"               , f2}
-    ,{"GuarPrem"                        , f2}
-    ,{"InforceTaxBasis"                 , f2}
-    ,{"InforceTotalAV"                  , f2}
-    ,{"InitGLP"                         , f2}
-    ,{"InitGSP"                         , f2}
-    ,{"InitPrem"                        , f2}
-    ,{"InitSevenPayPrem"                , f2}
-    ,{"InitTgtPrem"                     , f2}
-    ,{"ListBillPremium"                 , f2}
-// >
-// F1: zero decimals, commas
-// > Format as a number with thousand separators and no decimal places (#,###,###)
-// >
-    ,{"Age"                             , f1}
+// F0: zero decimals
+// > Format as a number with no thousand separator or decimal point (##0)
+    {{"Age"                             , f1}
     ,{"AllowGroupQuote"                 , f1}
     ,{"AvgFund"                         , f1}
-    ,{"ChildRiderAmount"                , f1}
+    ,{"Composite"                       , f1}
     ,{"CustomFund"                      , f1}
-    ,{"Dumpin"                          , f1}
     ,{"EndtAge"                         , f1}
     ,{"ErNotionallyPaysTerm"            , f1}
-    ,{"External1035Amount"              , f1}
     ,{"GenderBlended"                   , f1}
     ,{"GreatestLapseDuration"           , f1}
     ,{"GroupIndivSelection"             , f1}
@@ -510,10 +464,6 @@ format_map_t static_formats()
     ,{"InforceIsMec"                    , f1}
     ,{"InforceMonth"                    , f1}
     ,{"InforceYear"                     , f1}
-    ,{"InitBaseSpecAmt"                 , f1}
-    ,{"InitTermSpecAmt"                 , f1}
-    ,{"InitTotalSA"                     , f1}
-    ,{"Internal1035Amount"              , f1}
     ,{"IsInforce"                       , f1}
     ,{"IsMec"                           , f1}
     ,{"IsSinglePremium"                 , f1}
@@ -541,24 +491,89 @@ format_map_t static_formats()
     ,{"TxCallsGuarUwSubstd"             , f1}
     ,{"UsePartialMort"                  , f1}
     ,{"WriteTsvFile"                    , f1}
-
-// > Vector Formatting
-// >
-// > Here are the vectors enumerated
-// >
+// F1: zero decimals, commas
+// > Format as a number with thousand separators and no decimal places (#,###,###)
+    ,{"ChildRiderAmount"                , f1}
+// F2: two decimals, commas
+// > Format as a number with thousand separators and two decimal places (#,###,###.00)
+    ,{"CurrentCoiMultiplier"            , f2}
+    ,{"GuarPrem"                        , f2}
+    ,{"InforceTaxBasis"                 , f2}
+    ,{"InforceTotalAV"                  , f2}
+    ,{"InitSevenPayPrem"                , f2}
 // F3: scaled by 100, zero decimals, with '%' at end:
 // > Format as percentage with no decimal places (##0%)
-// >
+    ,{"GenAcctAllocation"               , f3}
+    ,{"SalesLoadRefundRate0"            , f3}
+    ,{"SalesLoadRefundRate1"            , f3}
+// F4: scaled by 100, two decimals, with '%' at end:
+// > Format as percentage "0.00%"
+    ,{"GuarMaxMandE"                    , f4}
+    ,{"InitAnnGenAcctInt"               , f4}
+    ,{"InitAnnLoanCredRate"             , f4}
+    ,{"InitAnnSepAcctCurrGross0Rate"    , f4}
+    ,{"InitAnnSepAcctCurrGrossHalfRate" , f4}
+    ,{"InitAnnSepAcctCurrNet0Rate"      , f4}
+    ,{"InitAnnSepAcctCurrNetHalfRate"   , f4}
+    ,{"InitAnnSepAcctGrossInt"          , f4}
+    ,{"InitAnnSepAcctGuarGross0Rate"    , f4}
+    ,{"InitAnnSepAcctGuarGrossHalfRate" , f4}
+    ,{"InitAnnSepAcctGuarNet0Rate"      , f4}
+    ,{"InitAnnSepAcctGuarNetHalfRate"   , f4}
+    ,{"InitAnnSepAcctNetInt"            , f4}
+    ,{"MaxAnnCurrLoanDueRate"           , f4}
+    ,{"MaxAnnGuarLoanSpread"            , f4}
+    ,{"PostHoneymoonSpread"             , f4}
+    ,{"Preferred"                       , f4}
+    ,{"PremTaxRate"                     , f4}
+// F5: zero decimals, commas, cents to dollars
+// > Format as a number with thousand separators and no decimal places (#,###,###)
+    ,{"Dumpin"                          , f5}
+    ,{"External1035Amount"              , f5}
+    ,{"InitBaseSpecAmt"                 , f5}
+    ,{"InitTermSpecAmt"                 , f5}
+    ,{"InitTotalSA"                     , f5}
+    ,{"Internal1035Amount"              , f5}
+// F6: two decimals, commas, cents to dollars
+// > Format as a number with thousand separators and two decimal places (#,###,###.00)
+    ,{"EeListBillPremium"               , f6}
+    ,{"ErListBillPremium"               , f6}
+    ,{"InitGLP"                         , f6}
+    ,{"InitGSP"                         , f6}
+    ,{"InitPrem"                        , f6}
+    ,{"InitTgtPrem"                     , f6}
+    ,{"ListBillPremium"                 , f6}
+
+// > Vector Formatting
+
+// F0: zero decimals
+// > Format as a number with no thousand separator or decimal point (##0)
+    ,{"AttainedAge"                     , f1}
+    ,{"Duration"                        , f1}
+    ,{"FundNumbers"                     , f1}
+    ,{"PolicyYear"                      , f1}
+// F1: zero decimals, commas
+// > Format as a number with thousand separators and no decimal places (#,###,##0)
+    ,{"AddonCompOnAssets"               , f1}
+    ,{"AddonCompOnPremium"              , f1}
+//  ,{"EeMode"                          , f1} // Not numeric.
+//  ,{"ErMode"                          , f1} // Not numeric.
+    ,{"RefundableSalesLoad"             , f1}
+    ,{"SpouseRiderAmount"               , f1}
+// F2: two decimals, commas
+// > Format as a number with thousand separators and two decimal places (#,###,###.00)
+    ,{"AnnualFlatExtra"                 , f2}
+// TODO ?? The precision of 'InforceLives' is inadequate. Is every other format OK?
+    ,{"InforceLives"                    , f2}
+// F3: scaled by 100, zero decimals, with '%' at end:
+// > Format as percentage with no decimal places (##0%)
     ,{"CorridorFactor"                  , f3}
     ,{"FundAllocations"                 , f3}
     ,{"MaleProportion"                  , f3}
     ,{"NonsmokerProportion"             , f3}
     ,{"PartMortTableMult"               , f3}
-
-// >
 // F4: scaled by 100, two decimals, with '%' at end:
 // > Format as percentage with two decimal places (##0.00%)
-// >
     ,{"AnnGAIntRate"                    , f4}
     ,{"AnnHoneymoonValueRate"           , f4}
     ,{"AnnLoanDueRate"                  , f4}
@@ -569,14 +584,12 @@ format_map_t static_formats()
     ,{"HoneymoonValueSpread"            , f4}
     ,{"IndvTaxBracket"                  , f4}
     ,{"InforceHMVector"                 , f4}
-
     ,{"Irc7702ic_usual"                 , f4}
     ,{"Irc7702ic_glp"                   , f4}
     ,{"Irc7702ic_gsp"                   , f4}
     ,{"Irc7702ig_usual"                 , f4}
     ,{"Irc7702ig_glp"                   , f4}
     ,{"Irc7702ig_gsp"                   , f4}
-
     ,{"IrrCsv_Current"                  , f4}
     ,{"IrrCsv_CurrentZero"              , f4}
     ,{"IrrCsv_Guaranteed"               , f4}
@@ -585,87 +598,60 @@ format_map_t static_formats()
     ,{"IrrDb_CurrentZero"               , f4}
     ,{"IrrDb_Guaranteed"                , f4}
     ,{"IrrDb_GuaranteedZero"            , f4}
-
     ,{"MlyGAIntRate"                    , f4}
     ,{"MlyHoneymoonValueRate"           , f4}
     ,{"MlyPostHoneymoonRate"            , f4}
     ,{"MlySAIntRate"                    , f4}
     ,{"TotalIMF"                        , f4}
-// >
-// F0: zero decimals
-// > Format as a number no thousand separator or decimal point (##0%)
-// >
-    ,{"AttainedAge"                     , f1}
-    ,{"Duration"                        , f1}
-    ,{"PolicyYear"                      , f1}
-// >
-// F2: two decimals, commas
-// > Format as a number with thousand separators and two decimal places (#,###,###.00)
-// >
-    ,{"AddonMonthlyFee"                 , f2}
-    ,{"AnnualFlatExtra"                 , f2}
-// TODO ?? The precision of 'InforceLives' is inadequate. Is every other format OK?
-    ,{"InforceLives"                    , f2}
-// >
-// F1: zero decimals, commas
+// F5: zero decimals, commas, cents to dollars
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
-// >
-    ,{"AVGenAcct"                       , f1}
-    ,{"AVRelOnDeath"                    , f1}
-    ,{"AVSepAcct"                       , f1}
-    ,{"AcctVal"                         , f1}
-    ,{"AccumulatedPremium"              , f1}
-    ,{"AddonCompOnAssets"               , f1}
-    ,{"AddonCompOnPremium"              , f1}
-    ,{"AvgDeathBft"                     , f1}
-    ,{"BOYAssets"                       , f1}
-    ,{"BaseDeathBft"                    , f1}
-    ,{"COICharge"                       , f1}
-    ,{"CSVNet"                          , f1}
-    ,{"CV7702"                          , f1}
-    ,{"ClaimsPaid"                      , f1}
-    ,{"Composite"                       , f1}
-    ,{"DacTaxLoad"                      , f1}
-    ,{"DacTaxRsv"                       , f1}
-    ,{"Dcv"                             , f1}
-    ,{"DeathProceedsPaid"               , f1}
-    ,{"EOYDeathBft"                     , f1}
-    ,{"EeGrossPmt"                      , f1}
-    ,{"EeModalMinimumPremium"           , f1}
-//  ,{"EeMode"                          , f1} // Not numeric.
-    ,{"ErGrossPmt"                      , f1}
-    ,{"ErModalMinimumPremium"           , f1}
-//  ,{"ErMode"                          , f1} // Not numeric.
-    ,{"ExpenseCharges"                  , f1}
-    ,{"FundNumbers"                     , f1}
-    ,{"GptForceout"                     , f1}
-    ,{"GrossIntCredited"                , f1}
-    ,{"GrossPmt"                        , f1}
-    ,{"Loads"                           , f1}
-    ,{"LoanInt"                         , f1}
-    ,{"LoanIntAccrued"                  , f1}
-    ,{"ModalMinimumPremium"             , f1}
-    ,{"NaarForceout"                    , f1}
-    ,{"NetClaims"                       , f1}
-    ,{"NetIntCredited"                  , f1}
-    ,{"NetPmt"                          , f1}
-    ,{"NetWD"                           , f1}
-    ,{"NewCashLoan"                     , f1}
-    ,{"Outlay"                          , f1}
-    ,{"PolicyFee"                       , f1}
-    ,{"PrefLoanBalance"                 , f1}
-    ,{"PremTaxLoad"                     , f1}
-    ,{"RefundableSalesLoad"             , f1}
-    ,{"RiderCharges"                    , f1}
-    ,{"Salary"                          , f1}
-    ,{"SepAcctCharges"                  , f1}
-    ,{"SpecAmt"                         , f1}
-    ,{"SpecAmtLoad"                     , f1}
-    ,{"SpouseRiderAmount"               , f1}
-    ,{"SurrChg"                         , f1}
-    ,{"TermPurchased"                   , f1}
-    ,{"TermSpecAmt"                     , f1}
-    ,{"TotalLoanBalance"                , f1}
+    ,{"AVGenAcct"                       , f5}
+    ,{"AVRelOnDeath"                    , f5}
+    ,{"AVSepAcct"                       , f5}
+    ,{"AcctVal"                         , f5}
+    ,{"AvgDeathBft"                     , f5}
+    ,{"BaseDeathBft"                    , f5}
+    ,{"COICharge"                       , f5}
+    ,{"CSVNet"                          , f5}
+    ,{"CV7702"                          , f5}
+    ,{"ClaimsPaid"                      , f5}
+    ,{"DacTaxLoad"                      , f5}
+    ,{"DacTaxRsv"                       , f5}
+    ,{"Dcv"                             , f5}
+    ,{"DeathProceedsPaid"               , f5}
+    ,{"EOYDeathBft"                     , f5}
+    ,{"EeGrossPmt"                      , f5}
+    ,{"EeModalMinimumPremium"           , f5}
+    ,{"ErGrossPmt"                      , f5}
+    ,{"ErModalMinimumPremium"           , f5}
+    ,{"ExpenseCharges"                  , f5} // Not used yet.
+    ,{"GptForceout"                     , f5}
+    ,{"GrossIntCredited"                , f5}
+    ,{"GrossPmt"                        , f5}
+    ,{"LoanIntAccrued"                  , f5}
+    ,{"ModalMinimumPremium"             , f5}
+    ,{"NaarForceout"                    , f5}
+    ,{"NetClaims"                       , f5}
+    ,{"NetIntCredited"                  , f5}
+    ,{"NetPmt"                          , f5}
+    ,{"NetWD"                           , f5}
+    ,{"NewCashLoan"                     , f5}
+    ,{"Outlay"                          , f5}
+    ,{"PolicyFee"                       , f5}
+    ,{"PrefLoanBalance"                 , f5} // Not used yet.
+    ,{"PremTaxLoad"                     , f5}
+    ,{"RiderCharges"                    , f5}
+    ,{"Salary"                          , f5}
+    ,{"SepAcctCharges"                  , f5}
+    ,{"SpecAmt"                         , f5}
+    ,{"SpecAmtLoad"                     , f5}
+    ,{"SurrChg"                         , f5}
+    ,{"TermPurchased"                   , f5}
+    ,{"TermSpecAmt"                     , f5}
+    ,{"TotalLoanBalance"                , f5}
+// F6: two decimals, commas, cents to dollars
+// > Format as a number with thousand separators and two decimal places (#,###,###.00)
+    ,{"AddonMonthlyFee"                 , f6}
     };
 
     return format_map;
@@ -684,10 +670,12 @@ ledger_evaluator Ledger::make_evaluator() const
 
     mask_map_t mask_map {static_masks()};
 
-    std::pair<int,oenum_format_style> f1(0, oe_format_normal);
+//  std::pair<int,oenum_format_style> f1(0, oe_format_normal);     // not used
 //  std::pair<int,oenum_format_style> f2(2, oe_format_normal);     // not used
     std::pair<int,oenum_format_style> f3(0, oe_format_percentage);
 //  std::pair<int,oenum_format_style> f4(2, oe_format_percentage); // not used
+    std::pair<int,oenum_format_style> f5(0, oe_cents_as_dollars);
+//  std::pair<int,oenum_format_style> f6(2, oe_cents_as_dollars);  // not used
 
     format_map_t format_map {static_formats()};
 
@@ -763,19 +751,19 @@ ledger_evaluator Ledger::make_evaluator() const
     vectors   ["PremiumLoad"] = &PremiumLoad;
     title_map ["PremiumLoad"] = "Premium\nLoad";
     mask_map  ["PremiumLoad"] = "999,999,999";
-    format_map["PremiumLoad"] = f1;
+    format_map["PremiumLoad"] = f5;
 
     vectors   ["MiscCharges"] = &MiscCharges;
     title_map ["MiscCharges"] = "Miscellaneous\nCharges";
     mask_map  ["MiscCharges"] = "999,999,999";
-    format_map["MiscCharges"] = f1;
+    format_map["MiscCharges"] = f5;
 
     std::vector<double> NetDeathBenefit(curr.EOYDeathBft);
     NetDeathBenefit -= curr.TotalLoanBalance;
     vectors   ["NetDeathBenefit"] = &NetDeathBenefit;
     title_map ["NetDeathBenefit"] = "Net\nDeath\nBenefit";
     mask_map  ["NetDeathBenefit"] = "999,999,999";
-    format_map["NetDeathBenefit"] = f1;
+    format_map["NetDeathBenefit"] = f5;
 
     std::vector<double> SupplDeathBft_Current   (curr.TermPurchased);
     std::vector<double> SupplDeathBft_Guaranteed(guar.TermPurchased);
@@ -785,14 +773,14 @@ ledger_evaluator Ledger::make_evaluator() const
     title_map ["SupplDeathBft_Guaranteed"] = "Guar Suppl\nDeath\nBenefit";
     mask_map  ["SupplDeathBft_Current"   ] = "999,999,999";
     mask_map  ["SupplDeathBft_Guaranteed"] = "999,999,999";
-    format_map["SupplDeathBft_Current"   ] = f1;
-    format_map["SupplDeathBft_Guaranteed"] = f1;
+    format_map["SupplDeathBft_Current"   ] = f5;
+    format_map["SupplDeathBft_Guaranteed"] = f5;
 
     std::vector<double> SupplSpecAmt(invar.TermSpecAmt);
     vectors   ["SupplSpecAmt"            ] = &SupplSpecAmt;
     title_map ["SupplSpecAmt"            ] = "Suppl\nSpecified\nAmount";
     mask_map  ["SupplSpecAmt"            ] = "999,999,999";
-    format_map["SupplSpecAmt"            ] = f1;
+    format_map["SupplSpecAmt"            ] = f5;
 
     // [End of derived columns.]
 

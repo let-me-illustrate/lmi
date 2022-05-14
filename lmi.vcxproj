@@ -266,7 +266,6 @@
     <ClCompile Include="fenv_guard.cpp" />
     <ClCompile Include="fenv_lmi.cpp" />
     <ClCompile Include="file_command.cpp" />
-    <ClCompile Include="financial.cpp" />
     <ClCompile Include="fund_data.cpp" />
     <ClCompile Include="getopt.cpp" />
     <ClCompile Include="global_settings.cpp">
@@ -363,6 +362,7 @@
     <ClCompile Include="system_command.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="tn_range_types.cpp" />
+    <ClCompile Include="ul_utilities.cpp" />
     <ClCompile Include="unwind.cpp" />
     <ClCompile Include="verify_products.cpp" />
     <ClCompile Include="xml_lmi.cpp" />

@@ -44,20 +44,25 @@ assert_not_chrooted
 #   sudo chown greg:greg ${dst} &&
 #   cp --dereference --preserve --recursive ${src}/* ${dst}
 
-# If cached lmi downloads are available elsewhere, copy them now.
-# Copying cache_for_lmi/downloads/ is an optional step that merely
-# conserves bandwidth. Directory /srv/cache_for_lmi/ in a native msw
-# installation also contains cygwin files, which are not wanted in a
-# chroot. For convenience, add a bare repository of proprietary files
-# to this directory (after making sure it's up to date), e.g.:
+# If cached lmi downloads are available elsewhere, copy them now;
+# copying cache_for_lmi/downloads/ is an optional step that merely
+# conserves bandwidth. Also copy any proprietary bare repository
+# (e.g., from another machine, to a host directory that will be
+# identity-mounted in all chroots), after pushing to make sure it's
+# up to date, e.g.:
+#   mkdir -p /srv/cache_for_lmi/blessed
 #   rm -rf /srv/cache_for_lmi/blessed/proprietary
 #   cp --dereference --preserve --recursive \
-#     /srv/chroot/some-prior-chroot/opt/lmi/blessed/ /srv/cache_for_lmi
+#     /srv/chroot/WHENCEVER/blessed/ /srv/cache_for_lmi/blessed
+#   # [note: 'cp' suffices because this bare repository has
+#   # no references that need to be resolved]
 # to update the host; then those files will be accessible in chroots
-# created by these scripts (which mount that directory).
+# created by these scripts (which identity-mount that directory),
+# and 'git push' from any chroot will update that bare repository
+# in all chroots.
 
 # Also copy any desired msw software into the chroot now, e.g.:
-#   cp -a /srv/chroot/some-prior-chroot/opt/xyzzy /srv/chroot/${CHRTNAME}/opt/xyzzy
+#   cp -a /srv/chroot/some-prior-chroot/opt/xyzzy /srv/chroot/"${CHRTNAME}"/opt/xyzzy
 # unless it requires running an "install" program, which must be
 # postponed until wine has been installed (in a later script). For
 # example, to copy all software installed in subdirectories of /opt/
@@ -68,7 +73,10 @@ assert_not_chrooted
 
 # Configure ssh, iff this chroot needs write access to savannah.
 # The easiest way is to copy existing credentials, e.g.:
-cp -a ~/.ssh/ /srv/chroot/${CHRTNAME}/home/"${NORMAL_USER}" || true
+cp -a ~/.ssh/ /srv/chroot/"${CHRTNAME}"/home/"${NORMAL_USER}" || true
+# ignoring any message like
+#   cannot stat ‘/home/[some_user_name]/.ssh/’: No such file or directory
+#
 # Make sure the .ssh/config file contains:
 #   Protocol 2
 #   HashKnownHosts no

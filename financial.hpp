@@ -26,35 +26,23 @@
 
 #include "assert_lmi.hpp"
 #include "bourn_cast.hpp"
-#include "mc_enum_type_enums.hpp"       // mcenum_mode
 #include "miscellany.hpp"               // ios_out_app_binary()
-#include "zero.hpp"
+#include "zero.hpp"                     // decimal_root()
 
 #include <fstream>
 #include <iterator>                     // iterator_traits
 
-class calendar_date;
-
-// TODO ?? Things to reconsider later:
-//
-// v*v*v...*v != v^n because of floating-point roundoff.
-// Find i to n decimals, not v to n decimals.
-// Separate implementations: in advance vs. in arrears.
-//
-// The a priori irr bounds ought to be parameterized.
-//
-// When no root is bracketed, -100% is always conservative enough;
-// but if a root is known to exceed the a priori upper bound, then
-// perhaps that upper bound could be returned instead.
-//
-// Is it really advantageous to use long double? Why not use a
-// template type argument instead?
+/// Future value.
+///
+/// For values of 'i' close to zero, accuracy is limited because
+/// v*v*v*...*v != v^n due to floating-point roundoff; but using
+/// 'long double' mitigates that.
 
 template<typename InputIterator>
 long double fv
     (InputIterator first
     ,InputIterator last
-    ,long double i
+    ,long double   i
     )
 {
     if(first == last)
@@ -73,6 +61,23 @@ long double fv
         }
     return z;
 }
+
+/// IRR: internal rate of return
+///
+/// Not intended for direct use; prefer the provided cover functions.
+///
+/// Implemented in terms of 'long double' rather than 'double', even
+/// for x86_64, which normally favors 'double'--see:
+///   https://lists.nongnu.org/archive/html/lmi/2022-04/msg00004.html
+///   - it's more accurate for x86_64, by two orders of magnitude; and
+///   - it's as fast for x86_64, and maybe faster for i686 (x87); and
+///   - the resulting NPV is identical across architectures.
+///
+/// When no root is bracketed, -100% is always conservative enough:
+/// financially, it means "you lose all your money", which is the
+/// worst outcome possible. The a priori upper bound of +100000% is
+/// about as good as any arbitrary value; if the true IRR is even
+/// higher, then reporting it as 100000% is conservative.
 
 template<typename InputIterator>
 class irr_helper
@@ -104,7 +109,7 @@ class irr_helper
         root_type const z = decimal_root
             (*this
             ,-1.0       // A priori lower bound.
-            ,1000.0     // Assumed upper bound.
+            ,1000.0     // A priori upper bound.
             ,bias_lower // Return the final bound with the lower FV.
             ,decimals_
             ,64
@@ -134,8 +139,8 @@ template<typename InputIterator>
 long double irr
     (InputIterator first
     ,InputIterator last
-    ,long double x
-    ,int decimals
+    ,long double   x
+    ,int           decimals
     )
 {
     return irr_helper<InputIterator>(first, last, x, decimals)();
@@ -235,14 +240,5 @@ void irr
         ,decimals
         );
 }
-
-double list_bill_premium
-    (double               prem_ante
-    ,double               prem_post
-    ,mcenum_mode          mode
-    ,calendar_date const& cert_date
-    ,calendar_date const& bill_date
-    ,double               v12
-    );
 
 #endif // financial_hpp

@@ -228,7 +228,6 @@ lmi_common_objects := \
   basic_tables.o \
   commutation_functions.o \
   cso_table.o \
-  financial.o \
   fund_data.o \
   gpt7702.o \
   gpt_commutation_functions.o \
@@ -265,6 +264,7 @@ lmi_common_objects := \
   rounding_rules.o \
   stratified_algorithms.o \
   stratified_charges.o \
+  ul_utilities.o \
   verify_products.o \
 
 skeleton_objects := \
@@ -375,6 +375,7 @@ unit_test_targets := \
   crc32_test \
   currency_test \
   dbo_rules_test \
+  duff_fmt_test \
   et_vector_test \
   expression_template_0_test \
   fenv_lmi_test \
@@ -404,7 +405,6 @@ unit_test_targets := \
   monnaie_test \
   mortality_rates_test \
   name_value_pairs_test \
-  ncnnnpnn_test \
   null_stream_test \
   numeric_io_test \
   path_utility_test \
@@ -428,6 +428,7 @@ unit_test_targets := \
   test_tools_test \
   timer_test \
   tn_range_test \
+  ul_utilities_test \
   value_cast_test \
   vector_test \
   wx_new_test \
@@ -435,10 +436,11 @@ unit_test_targets := \
   zero_test \
 
 unit_test_targets := \
-  $(addsuffix $(EXEEXT), \
-    $(filter-out $(excluded_unit_test_targets), $(unit_test_targets) \
-    ) \
-  )
+  $(filter-out $(excluded_unit_test_targets), $(unit_test_targets) \
+  ) \
+
+# Append $(EXEEXT) p.r.n. to produce full names of binary targets.
+unit_test_binaries := $(addsuffix $(EXEEXT), $(unit_test_targets))
 
 # Link these objects for all tests:
 common_test_objects := \
@@ -575,6 +577,11 @@ dbo_rules_test$(EXEEXT): \
   mc_enum_types.o \
   timer.o \
 
+duff_fmt_test$(EXEEXT): \
+  $(common_test_objects) \
+  duff_fmt_test.o \
+  miscellany.o \
+
 et_vector_test$(EXEEXT): \
   $(common_test_objects) \
   et_vector_test.o \
@@ -598,11 +605,8 @@ file_command_test$(EXEEXT): \
 
 financial_test$(EXEEXT): \
   $(common_test_objects) \
-  calendar_date.o \
-  financial.o \
   financial_test.o \
   null_stream.o \
-  stratified_algorithms.o \
   timer.o \
 
 getopt_test$(EXEEXT): \
@@ -835,10 +839,6 @@ name_value_pairs_test$(EXEEXT): \
   null_stream.o \
   path_utility.o \
 
-ncnnnpnn_test$(EXEEXT): \
-  $(common_test_objects) \
-  ncnnnpnn_test.o \
-
 null_stream_test$(EXEEXT): \
   $(common_test_objects) \
   null_stream.o \
@@ -1026,6 +1026,13 @@ tn_range_test$(EXEEXT): \
   path_utility.o \
   tn_range_test.o \
   tn_range_test_aux.o \
+
+ul_utilities_test$(EXEEXT): \
+  $(common_test_objects) \
+  calendar_date.o \
+  null_stream.o \
+  ul_utilities.o \
+  ul_utilities_test.o \
 
 value_cast_test$(EXEEXT): \
   $(common_test_objects) \

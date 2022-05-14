@@ -81,26 +81,26 @@ void LedgerInvariant::Alloc(int len)
     Length = len;
 
     // BOY vectors.
-    BegYearVectors  ["GrossPmt"                   ] = &GrossPmt                   ;
-    BegYearVectors  ["EeGrossPmt"                 ] = &EeGrossPmt                 ;
-    BegYearVectors  ["ErGrossPmt"                 ] = &ErGrossPmt                 ;
-    BegYearVectors  ["NetWD"                      ] = &NetWD                      ;
-    BegYearVectors  ["NewCashLoan"                ] = &NewCashLoan                ;
-    BegYearVectors  ["Outlay"                     ] = &Outlay                     ;
-    BegYearVectors  ["GptForceout"                ] = &GptForceout                ;
-    BegYearVectors  ["NaarForceout"               ] = &NaarForceout               ;
-    BegYearVectors  ["ModalMinimumPremium"        ] = &ModalMinimumPremium        ;
-    BegYearVectors  ["EeModalMinimumPremium"      ] = &EeModalMinimumPremium      ;
-    BegYearVectors  ["ErModalMinimumPremium"      ] = &ErModalMinimumPremium      ;
-    BegYearVectors  ["AddonMonthlyFee"            ] = &AddonMonthlyFee            ;
+    BegYearVectors  ["GrossPmt"                   ] = &GrossPmt                   ; // f5
+    BegYearVectors  ["EeGrossPmt"                 ] = &EeGrossPmt                 ; // f5
+    BegYearVectors  ["ErGrossPmt"                 ] = &ErGrossPmt                 ; // f5
+    BegYearVectors  ["NetWD"                      ] = &NetWD                      ; // f5
+    BegYearVectors  ["NewCashLoan"                ] = &NewCashLoan                ; // f5
+    BegYearVectors  ["Outlay"                     ] = &Outlay                     ; // f5
+    BegYearVectors  ["GptForceout"                ] = &GptForceout                ; // f5
+    BegYearVectors  ["NaarForceout"               ] = &NaarForceout               ; // f5
+    BegYearVectors  ["ModalMinimumPremium"        ] = &ModalMinimumPremium        ; // f5
+    BegYearVectors  ["EeModalMinimumPremium"      ] = &EeModalMinimumPremium      ; // f5
+    BegYearVectors  ["ErModalMinimumPremium"      ] = &ErModalMinimumPremium      ; // f5
+    BegYearVectors  ["AddonMonthlyFee"            ] = &AddonMonthlyFee            ; // f6
 
     // EOY vectors.
-    EndYearVectors  ["TermSpecAmt"                ] = &TermSpecAmt                ;
-    EndYearVectors  ["SpecAmt"                    ] = &SpecAmt                    ;
-    EndYearVectors  ["Dcv"                        ] = &Dcv                        ;
+    EndYearVectors  ["TermSpecAmt"                ] = &TermSpecAmt                ; // f5
+    EndYearVectors  ["SpecAmt"                    ] = &SpecAmt                    ; // f5
+    EndYearVectors  ["Dcv"                        ] = &Dcv                        ; // f5
 
     // Forborne vectors.
-    ForborneVectors ["Salary"                     ] = &Salary                     ;
+    ForborneVectors ["Salary"                     ] = &Salary                     ; // f5
 
     // Nonscalable vectors.
     OtherVectors    ["IndvTaxBracket"             ] = &IndvTaxBracket             ;

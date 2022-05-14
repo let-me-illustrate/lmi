@@ -211,7 +211,11 @@ cd /opt/lmi/src || printf 'Cannot cd\n'
 if [ "$inhibit_git_clone" != 1 ]
 then
     # Preserve any preexisting source directory, moving it aside so
-    # that 'git clone' will install a pristine working copy.
+    # that 'git clone' will install a pristine working copy. If no
+    # preexisting source directory existed, ignore the
+    #   cp: cannot stat 'lmi': No such file or directory
+    # message; this script will continue safely because it
+    # deliberately doesn't 'set -e'.
 
     cp --archive lmi lmi-moved-"$stamp0"
     rm -rf /opt/lmi/src/lmi

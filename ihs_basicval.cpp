@@ -25,27 +25,24 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "basic_tables.hpp"
+#include "basic_tables.hpp"             // cvat_corridor_factors()
 #include "bourn_cast.hpp"
-#include "calendar_date.hpp"
 #include "contains.hpp"
-#include "data_directory.hpp"
+#include "data_directory.hpp"           // AddDataDir()
 #include "death_benefits.hpp"
 #include "et_vector.hpp"
-#include "financial.hpp"                // list_bill_premium()
+#include "financial.hpp"                // coi_rate_from_q(), i_upper_12_over_12_from_i()
 #include "fund_data.hpp"
 #include "global_settings.hpp"
 #include "gpt7702.hpp"
 #include "gpt_specamt.hpp"
 #include "i7702.hpp"
-#include "ieee754.hpp"                  // ldbl_eps_plus_one_times()
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "input.hpp"
 #include "interest_rates.hpp"
 #include "lingo.hpp"
 #include "loads.hpp"
-#include "math_functions.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_str()
 #include "mortality_rates.hpp"
 #include "oecumenic_enumerations.hpp"
@@ -54,12 +51,12 @@
 #include "rounding_rules.hpp"
 #include "stl_extensions.hpp"           // nonstd::power()
 #include "stratified_charges.hpp"
-#include "value_cast.hpp"
+#include "ul_utilities.hpp"             // list_bill_premium(), max_modal_premium()
 
-#include <algorithm>                    // min(), transform()
+#include <algorithm>                    // min()
 #include <cfenv>                        // fesetround()
 #include <cmath>                        // nearbyint(), pow()
-#include <functional>                   // minus, multiplies
+#include <functional>                   // multiplies
 #include <limits>
 #include <numeric>                      // accumulate(), partial_sum()
 #include <stdexcept>
@@ -916,8 +913,8 @@ currency BasicValues::GetModalPremMaxNonMec
     ) const
 {
     // TAXATION !! No table available if 7PP calculated from first principles.
-    double temp = MortalityRates_->SevenPayRates()[0];
-    return round_max_premium().c(ldbl_eps_plus_one_times(temp * a_specamt / a_mode));
+    double const rate = MortalityRates_->SevenPayRates()[0];
+    return max_modal_premium(rate, a_specamt, a_mode, round_max_premium());
 }
 
 /// Calculate premium using a minimum-premium ratio.
@@ -933,13 +930,8 @@ currency BasicValues::GetModalPremMinFromTable
     ,currency    a_specamt
     ) const
 {
-    return round_max_premium().c
-        (ldbl_eps_plus_one_times
-            (
-                a_specamt * MortalityRates_->MinimumPremiumRates()[0]
-            /   a_mode
-            )
-        );
+    double const rate = MortalityRates_->MinimumPremiumRates()[0];
+    return max_modal_premium(rate, a_specamt, a_mode, round_max_premium());
 }
 
 /// Calculate premium using a target-premium ratio.
@@ -963,7 +955,7 @@ currency BasicValues::GetModalPremMinFromTable
 ///    be used instead.
 /// Therefore, in those other two cases, 'TgtPremMonthlyPolFee' is
 /// asserted to be zero--upstream, so that it'll signal an error even
-/// if a target strategy isn't used.
+/// if the target strategy isn't used.
 
 currency BasicValues::GetModalPremTgtFromTable
     (int      // a_year // Unused.
@@ -971,15 +963,9 @@ currency BasicValues::GetModalPremTgtFromTable
     ,currency    a_specamt
     ) const
 {
-    return round_max_premium().c
-        (ldbl_eps_plus_one_times
-            (
-                ( TgtPremMonthlyPolFee * 12.0
-                + (a_specamt * MortalityRates_->TargetPremiumRates()[0])
-                )
-            /   a_mode
-            )
-        );
+    currency const modal_fee = TgtPremMonthlyPolFee * (12 / a_mode);
+    double const rate = MortalityRates_->TargetPremiumRates()[0];
+    return modal_fee + max_modal_premium(rate, a_specamt, a_mode, round_max_premium());
 }
 
 /// Calculate premium using a tabular proxy for group insurance.
@@ -1012,8 +998,14 @@ currency BasicValues::GetModalPremCorridor
     ,currency    a_specamt
     ) const
 {
-    double temp = GetCorridorFactor()[0];
-    return round_max_premium().c(ldbl_eps_plus_one_times((a_specamt / temp) / a_mode));
+    double const rate = GetCorridorFactor()[0];
+    int const k = round_corridor_factor().decimals();
+    double const s = nonstd::power(10, k);
+    // Do not save and restore prior rounding direction because
+    // lmi generally expects rounding to nearest everywhere.
+    std::fesetround(FE_TONEAREST);
+    double const z = std::nearbyint(s * rate);
+    return round_max_premium().c((a_specamt / z) * s / a_mode);
 }
 
 //============================================================================
@@ -1039,7 +1031,7 @@ currency BasicValues::GetModalPremGLP
 // term rider, dumpin
 
     z /= a_mode;
-    return round_max_premium().c(ldbl_eps_plus_one_times(z));
+    return round_max_premium().c(z);
 }
 
 //============================================================================
@@ -1062,7 +1054,7 @@ currency BasicValues::GetModalPremGSP
 // term rider, dumpin
 
     z /= a_mode;
-    return round_max_premium().c(ldbl_eps_plus_one_times(z));
+    return round_max_premium().c(z);
 }
 
 /// Calculate a monthly-deduction discount factor on the fly.
@@ -1510,10 +1502,13 @@ currency BasicValues::GetModalSpecAmtGSP(currency annualized_pmt) const
 
 currency BasicValues::GetModalSpecAmtCorridor(currency annualized_pmt) const
 {
+    double const rate = GetCorridorFactor()[0];
     int const k = round_corridor_factor().decimals();
     double const s = nonstd::power(10, k);
+    // Do not save and restore prior rounding direction because
+    // lmi generally expects rounding to nearest everywhere.
     std::fesetround(FE_TONEAREST);
-    double const z = std::nearbyint(s * GetCorridorFactor()[0]);
+    double const z = std::nearbyint(s * rate);
     return round_min_specamt().c((z * annualized_pmt) / s);
 }
 

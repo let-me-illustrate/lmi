@@ -6,17 +6,17 @@ on:
     branches:
       - master
     paths-ignore:
-      - 'gwc/*'
-      - 'tabs/*'
-      - 'vz/*'
+      - 'gwc/**'
+      - 'tabs/**'
+      - 'vz/**'
       - 'lmi_setup*.sh'
   pull_request:
     branches:
       - master
     paths-ignore:
-      - 'gwc/*'
-      - 'tabs/*'
-      - 'vz/*'
+      - 'gwc/**'
+      - 'tabs/**'
+      - 'vz/**'
       - 'lmi_setup*.sh'
 
 jobs:
@@ -97,7 +97,7 @@ jobs:
                 # run 64-bit programs in this build, so set WINEDEBUG to a
                 # value equivalent to its default/unset value but recognized
                 # as disabling error output by Debian /usr/bin/wine script.
-                export 'WINEDEBUG=-all,err+all,fixme+all' >> $GITHUB_ENV
+                echo 'WINEDEBUG=-all,err+all,fixme+all' >> $GITHUB_ENV
                 ;;
 
               *)
@@ -232,6 +232,12 @@ jobs:
             wine --version
             echo
           fi
+
+      - name: Fix up TIFF submodule
+        run: |
+          cd third_party/wx/src/tiff
+          git fetch origin
+          git switch --detach af035310bddac3e2f58ae0a330bc6ef168e180f1
 
       - name: Cache downloaded archives
         uses: actions/cache@v2

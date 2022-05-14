@@ -46,5 +46,16 @@ mkdir --parents /srv/cache_for_lmi
 chmod g=u+s     /srv/cache_for_lmi
 chown "${NORMAL_USER}":"${NORMAL_GROUP}" /srv/cache_for_lmi
 
+# Fix ownership and permissions of bare repository, just in case.
+chgrp -R "$NORMAL_GROUP" /srv/cache_for_lmi/blessed
+# This is better than 'chmod -R g+s' (it affects only directories):
+find /srv/cache_for_lmi/blessed -type d -exec chmod g+s {} +
+# Specifying 's' here would cause many 'S' occurrences in 'ls' output;
+# specifying 'g+w' here would cause pack files to be group writable:
+#   chmod -R g+swX /srv/cache_for_lmi/blessed
+# Instead, use 'g=u', which doesn't override the earlier 'g+s'--see:
+#   https://lists.nongnu.org/archive/html/lmi/2020-03/msg00019.html
+chmod -R g=u /srv/cache_for_lmi/blessed
+
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Created lmi directories."  | tee /dev/tty
+echo "$stamp $0: Created lmi directories; adjusted git."  | tee /dev/tty

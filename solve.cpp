@@ -31,7 +31,7 @@
 #include "mc_enum_types_aux.hpp"        // set_run_basis_from_cloven_bases()
 #include "outlay.hpp"
 #include "round_to.hpp"
-#include "zero.hpp"
+#include "zero.hpp"                     // decimal_root()
 
 #include <algorithm>                    // max(), min()
 
@@ -90,16 +90,11 @@ currency SolveTest()
         {
         Negative = std::min
             (Negative
-            // CURRENCY !! Cents in ledger will make rounding unnecessary.
-            ,round_to_cents.c(ConstThat->VariantValues().CSVNet[j])
-// Ideally, it'd be this:
-//          ,std::min(ConstThat->VariantValues().CSVNet[j], ConstThat->loan_ullage_[j])
-// but the antediluvian branch doesn't calculate ullage at all.
+            ,from_cents(ConstThat->VariantValues().CSVNet[j])
             );
         }
 
-    // CURRENCY !! Cents in ledger will make rounding unnecessary.
-    currency z = round_to_cents.c(ConstThat->VariantValues().CSVNet[ThatSolveTgtYear - 1]);
+    currency z = from_cents(ConstThat->VariantValues().CSVNet[ThatSolveTgtYear - 1]);
     if(Negative < C0)
         z = std::min(z, Negative);
     // IHS !! If SolveTgtYr within no-lapse period...see lmi.

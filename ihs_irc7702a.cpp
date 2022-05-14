@@ -36,8 +36,9 @@
 #include "ssize_lmi.hpp"
 #include "stratified_algorithms.hpp"    // TieredNetToGross()
 
-#include <algorithm>
-#include <cmath>
+#include <algorithm>                    // max(), min()
+#include <cfenv>                        // fesetround()
+#include <cmath>                        // floor(), nearbyint()
 #include <limits>
 #include <numeric>                      // accumulate()
 #include <stdexcept>
@@ -557,7 +558,12 @@ double Irc7702A::MaxNonMecPremium
         {
         if(TestPeriodDur < TestPeriodLen)
             {
-            LMI_ASSERT(CumPmts <= CumSevenPP);
+            // Weird condition--see:
+            //   https://lists.nongnu.org/archive/html/lmi/2022-05/msg00006.html
+            LMI_ASSERT
+                (  CumPmts <= CumSevenPP
+                || materially_equal(CumSevenPP, CumPmts)
+                );
             state_.Q6_max_non_mec_prem = RoundNonMecPrem(CumSevenPP - CumPmts);
             return state_.Q6_max_non_mec_prem;
             }
@@ -709,7 +715,9 @@ double Irc7702A::UpdatePmt7702A
             }
         */
         CumPmts += a_Payment;
-        if(CumSevenPP < CumPmts)
+        // Weird conditional--see:
+        //   https://lists.nongnu.org/archive/html/lmi/2022-05/msg00006.html
+        if(CumSevenPP < CumPmts && !materially_equal(CumSevenPP, CumPmts))
             {
             IsMec = true;
 /* TODO ?? TAXATION !! Reenable after testing.
@@ -1285,7 +1293,30 @@ and
     double adjusted_bft = AssumedBft - bft_adjustment;
     if(0.0 < adjusted_bft)
         {
-        SevenPP = Saved7PPRate * adjusted_bft;
+        // A 7PP rate from first principles is unlikely to be a
+        // rational number. A tabular one is, and it's unlikely to
+        // have more than eight decimals in practice; perform the
+        // multiplication this way to avoid embarrassments like the
+        // example in commit a91cbc67d7479e.
+        //
+        // Something like this could be done if adjusted_bft were currency:
+// [assert or test Use7PPTable]
+//      SevenPP = rate_times_currency
+//          (Saved7PPRate
+//          ,round_somehow.c(adjusted_bft)
+//          ,RoundNonMecPrem
+//          );
+// [but it is better not to round internal variable SevenPP at all]
+        constexpr double radix {1.0e8};
+        // Do not save and restore prior rounding direction because
+        // lmi generally expects rounding to nearest everywhere.
+        std::fesetround(FE_TONEAREST);
+        double const z = std::nearbyint(radix * Saved7PPRate);
+        SevenPP =
+            (Use7PPTable && materially_equal(z / radix, Saved7PPRate))
+            ? (z * adjusted_bft) / radix
+            : Saved7PPRate * adjusted_bft
+            ;
         }
     else
         {

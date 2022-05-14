@@ -140,12 +140,18 @@ void LedgerBase::Copy(LedgerBase const& obj)
 }
 
 //============================================================================
-std::string LedgerBase::value_str(std::string const& map_key, int index) const
+std::string LedgerBase::value_str
+    (std::string const& map_key
+    ,int                index
+    ,double             divisor
+    ) const
 {
+    LMI_ASSERT(0.0 != divisor);
+
     double_vector_map::const_iterator found = AllVectors.find(map_key);
     if(AllVectors.end() != found)
         {
-        return value_cast<std::string>((*(*found).second)[index]);
+        return value_cast<std::string>((*(*found).second)[index] / divisor);
         }
 
     alarum() << "Map key '" << map_key << "' not found." << LMI_FLUSH;
@@ -153,8 +159,13 @@ std::string LedgerBase::value_str(std::string const& map_key, int index) const
 }
 
 //============================================================================
-std::string LedgerBase::value_str(std::string const& map_key) const
+std::string LedgerBase::value_str
+    (std::string const& map_key
+    ,double             divisor
+    ) const
 {
+    LMI_ASSERT(0.0 != divisor);
+
     string_map::const_iterator found_string = Strings.find(map_key);
     if(Strings.end() != found_string)
         {
@@ -164,7 +175,7 @@ std::string LedgerBase::value_str(std::string const& map_key) const
     scalar_map::const_iterator found_scalar = AllScalars.find(map_key);
     if(AllScalars.end() != found_scalar)
         {
-        return value_cast<std::string>(*(*found_scalar).second);
+        return value_cast<std::string>(*(*found_scalar).second / divisor);
         }
 
     alarum() << "Map key '" << map_key << "' not found." << LMI_FLUSH;

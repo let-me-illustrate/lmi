@@ -523,18 +523,18 @@ void custom_io_0_write(Ledger const& ledger_values, std::string const& filename)
         {
         os
             << std::setprecision(0)
-            <<        Curr_.AcctVal        [j]
-            << ',' << Curr_.CSVNet         [j]
-            << ',' << Curr_.EOYDeathBft    [j]
-            << ',' << Curr_.NetIntCredited [j]
-            << ',' << Curr_.COICharge      [j]
+            <<        Curr_.AcctVal        [j] / 100.0
+            << ',' << Curr_.CSVNet         [j] / 100.0
+            << ',' << Curr_.EOYDeathBft    [j] / 100.0
+            << ',' << Curr_.NetIntCredited [j] / 100.0
+            << ',' << Curr_.COICharge      [j] / 100.0
 // Column headers suggest that 'Load' should precede 'MinPrem',
 // but this order was accepted; perhaps both were always zero
 // in actual practice.
             << ',' << 0                                  // 'MinPrem' always zero.
-            << ',' << prem_load            [j]
-            << ',' << surr_chg             [j]
-            << ',' << Invar.GrossPmt       [j]
+            << ',' << prem_load            [j] / 100.0
+            << ',' << surr_chg             [j] / 100.0
+            << ',' << Invar.GrossPmt       [j] / 100.0
             << ',' << Curr_.AnnGAIntRate   [j] * 10000.0 // 'IntRate' in bp.
             << '\n'
             ;

@@ -1277,16 +1277,16 @@ unit_tests: $(test_data)
 	@ $(MAKE) --file=$(this_makefile) --output-sync=recurse run_unit_tests
 
 .PHONY: build_unit_tests
-build_unit_tests: configurable_settings.xml $(unit_test_targets)
+build_unit_tests: configurable_settings.xml $(unit_test_binaries)
 
 .PHONY: unit_tests_not_built
 unit_tests_not_built:
 	@$(ECHO) "List of unit-test targets that did not build successfully:"
-	@$(ECHO) $(filter-out $(shell $(LS) -1 *$(EXEEXT)),$(unit_test_targets))
+	@$(ECHO) $(filter-out $(shell $(LS) -1 *$(EXEEXT)),$(unit_test_binaries))
 	@$(ECHO) "List ends."
 
 .PHONY: run_unit_tests
-run_unit_tests: unit_tests_not_built $(addsuffix -run,$(unit_test_targets))
+run_unit_tests: unit_tests_not_built $(addsuffix -run,$(unit_test_binaries))
 
 .PHONY: %$(EXEEXT)-run
 %$(EXEEXT)-run:
@@ -1486,6 +1486,7 @@ system_test: $(datadir)/configurable_settings.xml $(touchstone_md5sums) install
 	@$(INSTALL) -c -m 0664 $(system_test_md5sums) $(system_test_md5sums2)
 	@-< $(system_test_analysis) $(SED) \
 	  -e '/rel err.*e-0*1[5-9]/d' \
+	  -e '/rel err.*e-0*2[0-9]/d' \
 	  -e '/abs.*0\.00.*rel/d' \
 	  -e '/abs diff: 0 /d'
 	@-< $(system_test_analysis) $(SED) \

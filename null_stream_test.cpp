@@ -27,6 +27,7 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
+#include <cfloat>                       // DECIMAL_DIG
 #include <fstream>
 #include <iomanip>
 #include <sstream>
@@ -68,7 +69,7 @@ void emit_text_to_stream(std::ostream& os)
             << std::flush
             ;
         os
-            << std::setprecision(21)
+            << std::setprecision(DECIMAL_DIG)
             << std::setw(12) << 3.14159
             << std::fixed
             << std::hex

@@ -5,7 +5,7 @@ a='schroot --chroot=lmi'
 b='cd /opt/lmi/proprietary'
 c='. /opt/lmi/src/lmi/set_toolchain.sh'
 d='pushd /opt/lmi/touchstone ; d=/opt/lmi/touchstone-old/touchstone-$(date -u +"%Y%m%dT%H%MZ") && mkdir -p $d && for z in *; do cmp --quiet $z ../test/$z || ( mv $z $d/$z; mv ../test/$z ./$z; ) ; done; popd'
-e='git bundle create /opt/lmi/blessed/$(date -u +"%Y%m%dT%H%MZ")-gwc.bundle origin/master..HEAD --branches'
+e='git bundle create /srv/cache_for_lmi/blessed/$(date -u +"%Y%m%dT%H%MZ")-gwc.bundle origin/master..HEAD --branches'
 
 print -rs $b ; echo $b ; eval $b
 print -rs $c ; echo $c

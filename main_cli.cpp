@@ -91,7 +91,7 @@ void self_test()
 
     expected_value = 6305652.52;
     z("CLI_selftest", naic_no_solve);
-    observed_value = z.principal_ledger()->GetCurrFull().AcctVal.back();
+    observed_value = z.principal_ledger()->GetCurrFull().AcctVal.back() / 100.0;
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
         warning()
@@ -108,7 +108,7 @@ void self_test()
     naic_solve_specamt["SolveType"] = "Specified amount";
     expected_value = 1879139.14;
     z("CLI_selftest", naic_solve_specamt);
-    observed_value = z.principal_ledger()->GetCurrFull().AcctVal.back();
+    observed_value = z.principal_ledger()->GetCurrFull().AcctVal.back() / 100.0;
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
         warning()
@@ -125,7 +125,7 @@ void self_test()
     naic_solve_ee_prem["SolveType"] = "Employee premium";
     expected_value = 10673.51;
     z("CLI_selftest", naic_solve_ee_prem);
-    observed_value = z.principal_ledger()->GetLedgerInvariant().EeGrossPmt.front();
+    observed_value = z.principal_ledger()->GetLedgerInvariant().EeGrossPmt.front() / 100.0;
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
         warning()

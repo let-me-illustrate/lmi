@@ -258,12 +258,14 @@
         <help>Cascade windows</help>
     </object>
     <object class="wxMenuItem" name="window_next">
-        <label>_Next\tCtrl-Tab</label>
+        <label platform="unix|mac">_Next</label>
+        <label platform="win">_Next\tCtrl-Tab</label>
         <bitmap platform="win" stock_id="window-next"/>
         <help>Go to next window</help>
     </object>
     <object class="wxMenuItem" name="window_previous">
-        <label>_Previous\tCtrl-Shift-Tab</label>
+        <label platform="unix|mac">_Previous</label>
+        <label platform="win">_Previous\tCtrl-Shift-Tab</label>
         <bitmap platform="win" stock_id="window-previous"/>
         <help>Go to previous window</help>
     </object>

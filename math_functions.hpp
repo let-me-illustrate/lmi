@@ -25,7 +25,7 @@
 #include "config.hpp"
 
 #include <algorithm>                    // max(), min(), transform()
-#include <cmath>                        // expm1l(), log1pl(), signbit()
+#include <cmath>                        // expm1(), log1p(), signbit()
 #include <limits>
 #include <numeric>                      // midpoint(), partial_sum()
 #include <stdexcept>
@@ -60,7 +60,7 @@ std::vector<T>& back_sum(std::vector<T>& v)
 /// Divide integers, rounding away from zero.
 ///
 /// This floating-point analogue may be useful for cross checking:
-///   long double z = (long double)numerator / (long double)denominator;
+///   double z = (double)numerator / (double)denominator;
 ///   return (T) (0 < z) ? std::ceil(z) : std::floor(z);
 
 template<typename T>
@@ -125,7 +125,7 @@ struct i_upper_n_over_n_from_i
 {
     static_assert(std::is_floating_point_v<T>);
     static_assert(0 < n);
-    T operator()(T const& i) const
+    T operator()(T i) const
         {
         if(i < -1.0)
             {
@@ -137,11 +137,9 @@ struct i_upper_n_over_n_from_i
             return -1.0;
             }
 
-        static long double const reciprocal_n = 1.0L / n;
         // naively:    (1+i)^(1/n) - 1
         // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
-        long double z = std::expm1l(std::log1pl(i) * reciprocal_n);
-        return static_cast<T>(z);
+        return std::expm1(std::log1p(i) / n);
         }
 };
 
@@ -151,7 +149,7 @@ struct i_upper_12_over_12_from_i
     using argument_type = T;
     using result_type   = T;
     static_assert(std::is_floating_point_v<T>);
-    T operator()(T const& i) const
+    T operator()(T i) const
         {
         return i_upper_n_over_n_from_i<T,12>()(i);
         }
@@ -162,12 +160,11 @@ struct i_from_i_upper_n_over_n
 {
     static_assert(std::is_floating_point_v<T>);
     static_assert(0 < n);
-    T operator()(T const& i) const
+    T operator()(T i) const
         {
         // naively:    (1+i)^n - 1
         // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
-        long double z = std::expm1l(std::log1pl(i) * n);
-        return static_cast<T>(z);
+        return std::expm1(std::log1p(i) * n);
         }
 };
 
@@ -175,7 +172,7 @@ template<typename T>
 struct i_from_i_upper_12_over_12
 {
     static_assert(std::is_floating_point_v<T>);
-    T operator()(T const& i) const
+    T operator()(T i) const
         {
         return i_from_i_upper_n_over_n<T,12>()(i);
         }
@@ -186,7 +183,7 @@ struct d_upper_n_from_i
 {
     static_assert(std::is_floating_point_v<T>);
     static_assert(0 < n);
-    T operator()(T const& i) const
+    T operator()(T i) const
         {
         if(i < -1.0)
             {
@@ -198,11 +195,9 @@ struct d_upper_n_from_i
             throw std::range_error("i equals -100%.");
             }
 
-        static long double const reciprocal_n = 1.0L / n;
         // naively:    n * (1 - (1+i)^(-1/n))
         // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
-        long double z = -n * std::expm1l(std::log1pl(i) * -reciprocal_n);
-        return static_cast<T>(z);
+        return -n * std::expm1(std::log1p(i) / -n);
         }
 };
 
@@ -210,7 +205,7 @@ template<typename T>
 struct d_upper_12_from_i
 {
     static_assert(std::is_floating_point_v<T>);
-    T operator()(T const& i) const
+    T operator()(T i) const
         {
         return d_upper_n_from_i<T,12>()(i);
         }
@@ -227,9 +222,8 @@ struct net_i_from_gross
 {
     static_assert(std::is_floating_point_v<T>);
     static_assert(0 < n);
-    T operator()(T const& i, T const& spread, T const& fee) const
+    T operator()(T i, T spread, T fee) const
         {
-        static long double const reciprocal_n = 1.0L / n;
         // naively:
         //   (1
         //   +   (1+     i)^(1/n)
@@ -237,15 +231,14 @@ struct net_i_from_gross
         //   -         fee *(1/n)
         //   )^n - 1
         // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
-        long double z = std::expm1l
+        return std::expm1
             (
-            n * std::log1pl
-                (   std::expm1l(reciprocal_n * std::log1pl(i))
-                -   std::expm1l(reciprocal_n * std::log1pl(spread))
-                -          reciprocal_n * fee
+            n * std::log1p
+                (   std::expm1(std::log1p(i)      / n)
+                -   std::expm1(std::log1p(spread) / n)
+                -              fee                / n
                 )
             );
-        return static_cast<T>(z);
         }
 };
 
@@ -279,7 +272,7 @@ struct coi_rate_from_q
     using second_argument_type = T;
     using result_type          = T;
     static_assert(std::is_floating_point_v<T>);
-    T operator()(T const& q, T const& max_coi) const
+    T operator()(T q, T max_coi) const
         {
         if(!(0.0 <= max_coi && max_coi <= 1.0))
             {
@@ -301,16 +294,15 @@ struct coi_rate_from_q
             }
         else
             {
-            static long double const reciprocal_12 = 1.0L / 12;
             // naively:    1 - (1-q)^(1/12)
             // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
-            long double monthly_q = -std::expm1l(std::log1pl(-q) * reciprocal_12);
-            if(1.0L == monthly_q)
+            T monthly_q = -std::expm1(std::log1p(-q) / 12);
+            if(T(1) == monthly_q)
                 {
                 throw std::logic_error("Monthly q equals unity.");
                 }
-            monthly_q = monthly_q / (1.0L - monthly_q);
-            return std::min(max_coi, static_cast<T>(monthly_q));
+            monthly_q = monthly_q / (T(1) - monthly_q);
+            return std::min(max_coi, monthly_q);
             }
         }
 };

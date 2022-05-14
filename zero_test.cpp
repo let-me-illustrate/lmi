@@ -861,7 +861,7 @@ void test_celebrated_equation()
     auto f = [](double x) {return x * x * x - 2.0 * x - 5.0;};
     std::ostringstream oss;
     oss.precision(17);
-    root_type r = decimal_root(f, -2.56, 2.56, bias_none, 21, oss);
+    root_type r = decimal_root(f, -2.56, 2.56, bias_none, DECIMAL_DIG, oss);
     LMI_TEST(root_is_valid == r.validity);
     // This constant is from the cited blog; lmi yields this,
     // which agrees to sixteen significant digits:
@@ -1360,7 +1360,7 @@ b = 1;
 
 //  s_stop("", (ftnlen)0);
 //std::cout << "Number of evaluations = " << n_eval << std::endl;
-//std::cout.precision(21);
+//std::cout.precision(DECIMAL_DIG);
 //std::cout << "Computed root = " << root << std::endl;
     } // end test adapted from 'driver.f'
 
@@ -1374,7 +1374,7 @@ b = 1;
 
     auto f = [](double x) {return std::sin(x) - x / 2.0;};
 
-    std::cout.precision(21);
+    std::cout.precision(DECIMAL_DIG);
 
     root_type r = lmi_root(f, bound0, bound1, 0.0);
     double const validated = r.root;
@@ -2979,18 +2979,28 @@ int test_main(int, char*[])
     test_former_rounding_problem();
     test_toms748();
 
-    std::cout << "TOMS 748 tests:" << std::endl;
+    std::cout << "--8<----8<--" << std::endl;
+    std::cout << LMI_CONTEXT << std::endl;
 #if defined TEST_ALEFELD
+    std::cout << "TOMS 748 tests: Alefeld, tol 1.0e-7" << std::endl;
     test_alefeld_examples(2650, 1.0e-7);
+    std::cout << "TOMS 748 tests: Alefeld, tol 1.0e-10" << std::endl;
     test_alefeld_examples(2786, 1.0e-10);
+    std::cout << "TOMS 748 tests: Alefeld, tol 1.0e-15" << std::endl;
     test_alefeld_examples(2859, 1.0e-15);
+    std::cout << "TOMS 748 tests: Alefeld, tol 0.0" << std::endl;
     test_alefeld_examples(2884, 0.0);
 #else  // !defined TEST_ALEFELD
+    std::cout << "TOMS 748 tests: Brent, tol 1.0e-7" << std::endl;
     test_alefeld_examples(2804, 1.0e-7);
+    std::cout << "TOMS 748 tests: Brent, tol 1.0e-10" << std::endl;
     test_alefeld_examples(2905, 1.0e-10);
+    std::cout << "TOMS 748 tests: Brent, tol 1.0e-15" << std::endl;
     test_alefeld_examples(2975, 1.0e-15);
+    std::cout << "TOMS 748 tests: Brent, tol 0.0" << std::endl;
     test_alefeld_examples(3008, 0.0);
 #endif // !defined TEST_ALEFELD
+    std::cout << "--8<----8<--" << std::endl;
 
     return 0;
 }

@@ -44,7 +44,7 @@ template<typename InputIterator>
 long double pv
     (InputIterator first
     ,InputIterator last
-    ,long double i
+    ,long double   i
     )
 {
     if(first == last)
@@ -186,10 +186,21 @@ int test_main(int, char*[])
     // For any stream, NPV at the IRR rate should ideally be zero.
     std::vector<double> q{p};
     q.push_back(-b.back());
-    // This NPV is -9.777068044058979E-12 in a gnumeric spreadsheet,
-    // versus -9.86988e-014 with MinGW-w64 gcc-6.3.0
-    // versus  3.6593e-013  with i686-w64-mingw32 gcc-10.0
-    LMI_TEST(std::fabs(pv(q.begin(), q.end(), results.back())) <= 1e-12);
+    // On a 2.4GHz E5-2630 v3, on 2022-04-30, this NPV
+//  std::cout << pv(q.begin(), q.end(), results.back()) << std::endl;
+    // is
+    //        -9.77707E-12 in gnumeric,
+    // versus, for this 'long double' implementation:
+    //        -9.86988e-14 i686-w64-mingw32    gcc-10
+    //        -9.86988e-14 x86_64-w64-mingw32  gcc-10
+    //        -9.86988e-14 x86_64-pc-linux-gnu gcc-11.2.0
+    // versus, for an alternative implementation:
+    //   https://lists.nongnu.org/archive/html/lmi/2022-04/msg00004.html
+    // in terms of 'double':
+    //        -9.86988e-14 i686-w64-mingw32    gcc-10
+    //        -9.77707e-12 x86_64-w64-mingw32  gcc-10
+    //        -9.77707e-12 x86_64-pc-linux-gnu gcc-11.2.0
+    LMI_TEST(std::fabs(pv(q.begin(), q.end(), results.back())) <= 1e-13);
 
     // Trivially, NPV at 0% interest is summation.
     LMI_TEST(materially_equal(-4950.0L, pv(q.begin(), q.end(), 0.0)));

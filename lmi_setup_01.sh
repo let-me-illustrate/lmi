@@ -40,15 +40,15 @@ cp -a .vimrc           /srv/chroot/"${CHRTNAME}"/tmp
 cp -a en.utf-8.add     /srv/chroot/"${CHRTNAME}"/tmp
 cp -a install_msw.sh   /srv/chroot/"${CHRTNAME}"/tmp
 
-schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_20.sh
-schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_21.sh
-schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_24.sh
-schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_25.sh
+schroot --chroot="${CHRTNAME}" --user=root             --directory=/tmp ./lmi_setup_20.sh
+schroot --chroot="${CHRTNAME}" --user=root             --directory=/tmp ./lmi_setup_21.sh
+schroot --chroot="${CHRTNAME}" --user=root             --directory=/tmp ./lmi_setup_24.sh
+schroot --chroot="${CHRTNAME}" --user=root             --directory=/tmp ./lmi_setup_25.sh
 for user in $(echo "${CHROOT_USERS}" | tr ',' '\n'); do
 {
-schroot --chroot=${CHRTNAME} --user="${user}"        --directory=/tmp ./lmi_setup_25.sh
+schroot --chroot="${CHRTNAME}" --user="${user}"        --directory=/tmp ./lmi_setup_25.sh
 } done
-schroot --chroot=${CHRTNAME} --user=root             --directory=/tmp ./lmi_setup_29.sh
+schroot --chroot="${CHRTNAME}" --user=root             --directory=/tmp ./lmi_setup_29.sh
 # On a particular corporate server, root is not a sudoer.
 if sudo -l true; then
   sudo                       --user="${NORMAL_USER}"                  ./lmi_setup_30.sh
@@ -57,11 +57,11 @@ else
 fi
 for user in $(echo "${CHROOT_USERS}" | tr ',' '\n'); do
 {
-schroot --chroot=${CHRTNAME} --user="${user}"        --directory=/tmp ./lmi_setup_40.sh
+schroot --chroot="${CHRTNAME}" --user="${user}"        --directory=/tmp ./lmi_setup_40.sh
 } done
-schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
-schroot --chroot=${CHRTNAME} --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_43.sh
-schroot --chroot=${CHRTNAME} --user=nemo             --directory=/tmp ./lmi_setup_44.sh
+schroot --chroot="${CHRTNAME}" --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_42.sh
+schroot --chroot="${CHRTNAME}" --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_43.sh
+schroot --chroot="${CHRTNAME}" --user=nemo             --directory=/tmp ./lmi_setup_44.sh
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
 echo "$stamp $0 [debian host]"  | tee /dev/tty
