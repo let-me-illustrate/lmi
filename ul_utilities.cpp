@@ -142,14 +142,16 @@ currency rate_times_currency
     // Use bourn_cast<>() for conversions here and elsewhere: it
     // implicitly asserts that values are preserved.
     uint64 irate = bourn_cast<uint64>(std::nearbyint(rate * radix));
-    // If the rate really has more than eight significant (non-erroneous)
-    // digits, then throw. Alternatively, one might simply
-    //   return rounder.c(amount * rate);
-    // in that case: i.e., treat all digits as significant, assume
-    // there is no representation error to be removed, and perform
-    // the multiplication in double precision (perhaps with less
-    // accuracy than might otherwise be obtained).
-    LMI_ASSERT(materially_equal(bourn_cast<double>(irate), rate * radix));
+    // If the rate really has more than eight significant digits, then
+    // perform the calculation in double precision. In practice, rates
+    // are almost never rounded to more than eight digits, unless all
+    // representable digits actually are significant--e.g., in the
+    // case of a 7PP table that strives to reproduce a calculation
+    // from first principles as closely as possible.
+    if(!materially_equal(bourn_cast<double>(irate), rate * radix))
+        {
+        return rounder.c(amount * rate);
+        }
     // Multiply integer rate by integral-cents amount.
     // Use a large integer type to avoid overflow.
     uint64 iprod = irate * bourn_cast<uint64>(amount.cents());
