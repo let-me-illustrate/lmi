@@ -26,11 +26,12 @@
 #include "bourn_cast.hpp"
 #include "materially_equal.hpp"
 #include "round_to.hpp"
+#include "stl_extensions.hpp"           // nonstd::power()
 #include "test_tools.hpp"
 
 #include <cfenv>                        // fesetround()
 #include <cfloat>                       // DECIMAL_DIG
-#include <cmath>                        // nearbyint()
+#include <cmath>                        // floor(), nearbyint()
 #include <cstdint>                      // uint64_t
 #include <string>
 
@@ -76,6 +77,119 @@ void test_max_modal_premium()
     LMI_TEST(!test_excess_precision(0.9999999999999        ));
     LMI_TEST(!test_excess_precision(0.99999999999999       ));
     LMI_TEST(!test_excess_precision(0.999999999999999      ));
+
+    // Decimal values of certain constants.
+
+    LMI_TEST_EQUAL(18446744073709551615ULL      , UINT64_MAX);
+    LMI_TEST_EQUAL(18446744073709551615ULL      , nonstd::power(2ULL, 64) - 1);
+    LMI_TEST_EQUAL(184467440737ULL              , UINT64_MAX / 100000000);
+    // Same, with dollars-and-cents separators:
+    LMI_TEST_EQUAL(184'467'440'737'095'516'15ULL, UINT64_MAX);
+    LMI_TEST_EQUAL(1'844'674'407'37ULL          , UINT64_MAX / 100000000);
+    // To calculate cents_limit, use integer division, which truncates.
+    // Mixed-mode arithmetic with explicit downward rounding gives the
+    // same outcome, but the calculation requires extended precision:
+//  LMI_TEST_EQUAL(184467440737ULL   , std::floor(UINT64_MAX / 1.0e8)); // error
+    LMI_TEST_EQUAL(184467440737ULL   , std::floor(UINT64_MAX / 1.0e8L));
+
+    // Surprising but correct values seen in original development.
+
+    // Unsigned integers don't overflow; their arithmetic is modular.
+    // The only error is expecting them to behave otherwise. To verify
+    // these values, use 'bc':
+    //   $bc
+    //   (999999999999 * 100000000) % 18446744073709551616
+    //   7766279631352241920
+    //   (999999999999999 * 100000000) % 18446744073709551616
+    //   200376420420689664
+    //   quit
+    LMI_TEST_EQUAL(7766279631352241920ULL, 100000000 *     9'999'999'999'99ULL);
+    LMI_TEST_EQUAL( 200376420420689664ULL, 100000000 * 9'999'999'999'999'99ULL);
+
+    // Test limits and precondition violations.
+
+    constexpr double   neg_rate  {-0.00000001};
+    constexpr double   zero_rate { 0.00000000};
+    constexpr double   low_rate  { 0.00000001};
+    constexpr double   high_rate { 0.99999999};
+    constexpr double   unit_rate { 1.00000000};
+    constexpr double   ott_rate  { 1.00000001}; // ott: "over the top"
+
+    constexpr currency neg_amt   {-1_cents};
+    constexpr currency zero_amt  { 0_cents};
+    constexpr currency low_amt   { 1_cents};
+    constexpr currency mid_amt   { 100'000'00_cents};
+    constexpr currency high_amt  { 999'999'999'99_cents};
+    //                           1'844'674'407'37 cents_limit
+    constexpr currency epic_amt {9'999'999'999'99_cents};
+
+    // Throw if either multiplicand is negative.
+    LMI_TEST_THROW
+        (rate_times_currency(neg_rate , zero_amt, round_near)
+        ,std::runtime_error
+        ,"Assertion '0.0 <= rate' failed."
+        );
+    LMI_TEST_THROW
+        (rate_times_currency(zero_rate, neg_amt , round_near)
+        ,std::runtime_error
+        ,"Assertion 'C0 <= amount' failed."
+        );
+    LMI_TEST_THROW
+        (rate_times_currency(neg_rate , neg_amt , round_near)
+        ,std::runtime_error
+        ,"Assertion '0.0 <= rate' failed."
+        );
+
+    // Throw if rate is too high.
+    LMI_TEST_THROW
+        (rate_times_currency(ott_rate , zero_amt, round_near)
+        ,std::runtime_error
+        ,"Assertion 'rate <= 1.0' failed."
+        );
+
+    currency const a00 = rate_times_currency(zero_rate, zero_amt, round_near);
+    LMI_TEST_EQUAL(a00, 0_cents);
+    currency const a01 = rate_times_currency(zero_rate, low_amt , round_near);
+    LMI_TEST_EQUAL(a01, 0_cents);
+    currency const a02 = rate_times_currency(zero_rate, mid_amt , round_near);
+    LMI_TEST_EQUAL(a02, 0_cents);
+    currency const a03 = rate_times_currency(zero_rate, high_amt, round_near);
+    LMI_TEST_EQUAL(a03, 0_cents);
+    currency const a04 = rate_times_currency(zero_rate, epic_amt, round_near);
+    LMI_TEST_EQUAL(a04, 0_cents);
+
+    currency const a10 = rate_times_currency(low_rate , zero_amt, round_near);
+    LMI_TEST_EQUAL(a10, 0_cents);
+    currency const a11 = rate_times_currency(low_rate , low_amt , round_near);
+    LMI_TEST_EQUAL(a11, 0_cents);
+    currency const a12 = rate_times_currency(low_rate , mid_amt , round_near);
+    LMI_TEST_EQUAL(a12, 0_cents);
+    currency const a13 = rate_times_currency(low_rate , high_amt, round_near);
+    LMI_TEST_EQUAL(a13, 10'00_cents);
+    currency const a14 = rate_times_currency(low_rate , epic_amt, round_near);
+    LMI_TEST_EQUAL(a14, 100'00_cents);
+
+    currency const a20 = rate_times_currency(high_rate, zero_amt, round_near);
+    LMI_TEST_EQUAL(a20, 0_cents);
+    currency const a21 = rate_times_currency(high_rate, low_amt , round_near);
+    LMI_TEST_EQUAL(a21, 1_cents);
+    currency const a22 = rate_times_currency(high_rate, mid_amt , round_near);
+    LMI_TEST_EQUAL(a22, 100'000'00_cents);
+    currency const a23 = rate_times_currency(high_rate, high_amt, round_near);
+    LMI_TEST_EQUAL(a23, 999'999'989'99_cents);
+    currency const a24 = rate_times_currency(high_rate, epic_amt, round_near);
+    LMI_TEST_EQUAL(a24, 9'999'999'899'99_cents);
+
+    currency const a30 = rate_times_currency(unit_rate, zero_amt, round_near);
+    LMI_TEST_EQUAL(a30, 0_cents);
+    currency const a31 = rate_times_currency(unit_rate, low_amt , round_near);
+    LMI_TEST_EQUAL(a31, 1_cents);
+    currency const a32 = rate_times_currency(unit_rate, mid_amt , round_near);
+    LMI_TEST_EQUAL(a32, 100'000'00_cents);
+    currency const a33 = rate_times_currency(unit_rate, high_amt, round_near);
+    LMI_TEST_EQUAL(a33, 999'999'999'99_cents);
+    currency const a34 = rate_times_currency(unit_rate, epic_amt, round_near);
+    LMI_TEST_EQUAL(a34, 9'999'999'999'99_cents);
 
     // Elucidate an example from an actual regression test:
     //   0.00000250 specified-amount load
