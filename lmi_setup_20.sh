@@ -30,10 +30,6 @@ set -evx
 assert_su
 assert_chrooted
 
-# Add i386 before installing wine, so that wine can run 32-bit .exe's .
-
-dpkg --add-architecture i386
-
 # Prevent daemons from starting in the chroot; work around an
 # 'ischroot' defect. See:
 #   https://wiki.debian.org/chroot#Configuration
@@ -66,8 +62,7 @@ sed -e'/^[^#]/s/^/# SUPPRESSED # /' -i /etc/skel/.bash_logout
 # redhat names some packages differently:
 #   pkgconfig ShellCheck libxml2 libxslt
 #   vim-X11 vim-common vim-enhanced vim-minimal
-#   mingw32-gcc-c++ mingw64-gcc-c++
-#   java-1.8.0-openjdk
+#   mingw64-gcc-c++ java-1.8.0-openjdk
 # It provides 'xsltproc' as part of libxslt, though not as a
 # separate package:
 #   https://bugzilla.redhat.com/show_bug.cgi?id=965996
