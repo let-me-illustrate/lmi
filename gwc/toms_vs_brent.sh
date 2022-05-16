@@ -14,7 +14,6 @@ export LMI_TRIPLET
 # shellcheck disable=SC2043
 for LMI_TRIPLET in ${=triplets} ;
 do
-prefix=/opt/lmi
 log_dir=$(dirname "$(readlink --canonicalize "$0")")
 {
 printf 'LMI_TRIPLET = "%s"\n' "$LMI_TRIPLET" > /dev/tty
