@@ -162,7 +162,7 @@ then
     # Install and upgrade all packages if any is missing.
     packages_list='autoconf automake bsdtar curl dos2unix doxygen
       gdb git libgtk-3-dev libtool make patch pkg-config rsync unzip wget
-      zip zsh g++-mingw-w64-i686'
+      zip zsh'
 
     # Disable shellcheck warning about the need to double quote $packages_list:
     # it can't be done here and we really want word splitting to happen here.
@@ -270,15 +270,14 @@ make "$coefficiency" --output-sync=recurse -f install_miscellanea.make
 # This for-loop can iterate over as many toolchains as desired.
 # Make sure the current production architecture is built last, so that
 # it's the one installed to /opt/lmi/bin/ when this script ends.
-triplets="x86_64-w64-mingw32 i686-w64-mingw32"
+triplets="x86_64-w64-mingw32"
 if [ "Cygwin" != "$platform" ] && [ "WSL" != "$platform" ]
 then
-    triplets="x86_64-pc-linux-gnu x86_64-w64-mingw32 i686-w64-mingw32"
+    triplets="x86_64-pc-linux-gnu x86_64-w64-mingw32"
 fi
 export LMI_COMPILER=gcc
 export LMI_TRIPLET
 # shellcheck disable=SC2043
-#for LMI_TRIPLET in i686-w64-mingw32 ;
 for LMI_TRIPLET in ${triplets} ;
 do
     # Set a minimal path for makefiles and scripts that are
@@ -290,9 +289,7 @@ do
     then
         mingw_dir=/opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/gcc_msw
         [ -d "$mingw_dir" ] && rm --force --recursive "$mingw_dir"
-        if   [ "i686-w64-mingw32"   = "$LMI_TRIPLET" ]; then
-          make "$coefficiency" --output-sync=recurse -f install_mingw32.make
-        elif [ "x86_64-w64-mingw32" = "$LMI_TRIPLET" ]; then
+        if [ "x86_64-w64-mingw32" = "$LMI_TRIPLET" ]; then
           make "$coefficiency" --output-sync=recurse -f install_mingw.make
         else
           printf 'No MinGW compiler for this triplet.\n'

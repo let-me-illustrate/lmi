@@ -256,17 +256,16 @@ esac
 # This for-loop can iterate over as many toolchains as desired.
 # Make sure the current production architecture is built last, so that
 # it's the one installed to /opt/lmi/bin/ when this script ends.
-triplets="x86_64-w64-mingw32 i686-w64-mingw32"
+triplets="x86_64-w64-mingw32"
 if [ "Cygwin" != "$platform" ] && [ "WSL" != "$platform" ]
 then
 # 'triplets' really is used, but in a zsh-specific way
 # shellcheck disable=SC2034
-  triplets="x86_64-pc-linux-gnu x86_64-w64-mingw32 i686-w64-mingw32"
+  triplets="x86_64-pc-linux-gnu x86_64-w64-mingw32"
 fi
 export LMI_COMPILER=gcc
 export LMI_TRIPLET
 # shellcheck disable=SC2043
-#for LMI_TRIPLET in i686-w64-mingw32 ;
 # "${=...} expansion--see zsh faq 3.1:
 #  "Why does $var where var="foo bar" not do what I expect?"
 for LMI_TRIPLET in ${=triplets} ;
@@ -321,7 +320,7 @@ printf '\n# cgi and cli tests\n\n'
 make "$coefficiency" --output-sync=recurse cgi_tests cli_tests 2>&1 \
   | tee "$log_dir"/cgi_cli | sed -e "$build_clutter" -e "$cli_cgi_clutter"
 
-if [ "i686-w64-mingw32" = "$LMI_TRIPLET" ]
+if [ "x86_64-w64-mingw32" = "$LMI_TRIPLET" ]
 then
   printf '\n# system test\n\n'
   make "$coefficiency" system_test 2>&1 \

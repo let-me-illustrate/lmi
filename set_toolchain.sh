@@ -28,7 +28,6 @@
 # be overridden at the command line, e.g.:
 #
 #   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-pc-linux-gnu ; . /opt/lmi/src/lmi/set_toolchain.sh
-#   LMI_COMPILER=gcc ; LMI_TRIPLET=i686-w64-mingw32    ; . /opt/lmi/src/lmi/set_toolchain.sh
 #   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-w64-mingw32  ; . /opt/lmi/src/lmi/set_toolchain.sh
 #
 # Implemented as a function that runs and then erases itself, so that
@@ -61,7 +60,7 @@
 #
 # Supported values:
 #   LMI_COMPILER : gcc, clang
-#   LMI_TRIPLET  : x86_64-pc-linux-gnu, i686-w64-mingw32, x86_64-w64-mingw32
+#   LMI_TRIPLET  : x86_64-pc-linux-gnu, x86_64-w64-mingw32
 # (clang not yet tested).
 #
 # Examples:
@@ -69,7 +68,7 @@
 #  LMI_TOOLCHAIN  LMI_COMPILER  ----------LMI_TRIPLET----------
 #                               cpu     -vendor -[kernel-]system
 #
-#      gcc_msw32       gcc      i686    -w64            -mingw32
+#      gcc_msw32       gcc      i686    -w64            -mingw32 [unsupported]
 #      gcc_msw64       gcc      x86_64  -w64            -mingw32
 #    clang_gnu64      clang     x86_64  -pc     -linux  -gnu
 #
@@ -82,6 +81,8 @@
 # (contradicting each other), but actually neither does--the word size
 # is determined by the "i686" field. See:
 #   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=622276
+# That remains the motivation for this design even though i686 builds
+# are no longer supported.
 
 foo()
 {
@@ -155,7 +156,7 @@ esac
 export LMI_COMPILER
 export LMI_TRIPLET
        LMI_COMPILER=${LMI_COMPILER:-"gcc"}
-       LMI_TRIPLET=${LMI_TRIPLET:-"i686-w64-mingw32"}
+       LMI_TRIPLET=${LMI_TRIPLET:-"x86_64-w64-mingw32"}
 
 case "$LMI_COMPILER" in
     (gcc) ;;
@@ -167,7 +168,6 @@ esac
 
 case "$LMI_TRIPLET" in
     (x86_64-pc-linux-gnu) ;;
-    (i686-w64-mingw32)    ;;
     (x86_64-w64-mingw32)  ;;
     (*)
         printf '%s\n' "Changed nothing because host triplet '$LMI_TRIPLET' is untested."
