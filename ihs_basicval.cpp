@@ -858,7 +858,9 @@ double BasicValues::GetPartMortQ(int a_year) const
 /// payment that
 ///  - fulfills a no-lapse guarantee (preventing lapse even if account
 ///    value would otherwise be negative), or
-///  - keeps account value nonnegative (preventing lapse directly).
+///  - keeps account value nonnegative (preventing lapse directly);
+/// or it may just be a semantically empty tag for a payment-strategy
+/// option, as is often the case for lmi's GetModalPremMinFromTable().
 
 currency BasicValues::GetModalMinPrem
     (int         a_year
@@ -918,6 +920,30 @@ currency BasicValues::GetModalPremMaxNonMec
 }
 
 /// Calculate premium using a minimum-premium ratio.
+///
+/// The term "minimum premium" is overloaded. One possible meaning is
+/// the lowest modal premium that satisfies a no-lapse guarantee
+/// provision--preventing lapse even if account value would otherwise
+/// be negative. While lmi has in the past supported products with
+/// such guarantees, the premium calculated here is not generally
+/// suitable for that purpose--it calls max_modal_premium() and rounds
+/// the result with round_max_premium(), where "min" would be wanted
+/// instead of "max". Thus, if the tabular annual premium is 100.005
+/// before rounding, then the payment necessary to secure the
+/// guarantee would be $100.01 if paid annually, and $50.01 if paid
+/// semiannually, but this function returns $100.00 and 50.00 .
+///
+/// The reason for using max_modal_premium() and round_max_premium()
+/// here is that lmi's no-lapse guarantee was implemented only for a
+/// product whose "minimum" for that purpose was the 7PP, and the 7PP
+/// by its nature must be rounded downward. In that case, if the
+/// tabular calculation yields 100.005 before rounding, then the
+/// seven-pay limit is $100.00, and paying one cent more produces a
+/// MEC; and the "minimum" premium cannot exceed that amount, because
+/// the no-lapse guarantee is intended to be available for non-MECs.
+/// In the case of other products lmi supports, if there is no
+/// meaningful "minimum", then any table and any arbitrary rounding
+/// direction will do.
 ///
 /// Only the initial minimum-premium rate is used here, because that's
 /// generally fixed at issue. This calculation remains naive in that
