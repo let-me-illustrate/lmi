@@ -31,7 +31,7 @@
 set -evx
 
 CODENAME=bookworm
-CHRTVER=4b
+CHRTVER=5
 CHRTNAME=lmi_${CODENAME}_${CHRTVER}
 
 umask
