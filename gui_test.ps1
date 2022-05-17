@@ -158,7 +158,7 @@ $test_ignore_patterns = $gui_test_clutter   `
 $prefix = "/opt/lmi"
 
 # Directory for test logs.
-$log_dir = "$prefix/gcc/i686-w64-mingw32/logs"
+$log_dir = "$prefix/gcc/x86_64-w64-mingw32/logs"
 
 if (!(Test-Path -PathType Container $log_dir)) {
     New-Item -Path $log_dir -ItemType Directory > $null
