@@ -106,8 +106,7 @@ apt-get --assume-yes install \
   trang \
   unzip \
   vim-doc \
-  vim-fugitive \
-  vim-gtk \
+  vim-gtk3 \
   wget \
   wine \
   x11-apps \
