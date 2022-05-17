@@ -68,8 +68,8 @@ git config --global push.recurseSubmodules check
 if [ "greg" = "$(whoami)" ]; then
 git config --global user.email gchicares@sbcglobal.net
 git config --global user.name "Gregory W. Chicares"
-git remote add xanadu     https://github.com/vadz/lmi.git
-git remote add shangri-la https://github.com/thesiv/lmi.git
+git remote add xanadu     https://github.com/vadz/lmi.git   || echo "Huh?"
+git remote add shangri-la https://github.com/thesiv/lmi.git || echo "Huh?"
 fi
 
 # Avoid "fatal: Invalid cleanup mode scissors" with ancient git.
