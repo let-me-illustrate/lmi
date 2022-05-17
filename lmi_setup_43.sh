@@ -124,6 +124,11 @@ git clone git://git.savannah.nongnu.org/lmi.git \
   || git clone https://git.savannah.nongnu.org/r/lmi.git \
   || git clone https://github.com/let-me-illustrate/lmi.git
 
+if [ "greg" = "$(whoami)" ]; then
+git remote add xanadu     https://github.com/vadz/lmi.git   || echo "Oops."
+git remote add shangri-la https://github.com/thesiv/lmi.git || echo "Oops."
+fi
+
 cd lmi || { printf 'failed: cd\n'; exit 3; }
 find . -path ./.git -prune -o -type f -print0 \
   | xargs --null --max-procs="$(nproc)" --replace='{}' touch '--reference=/opt/lmi/src/lmi/{}' '{}'
