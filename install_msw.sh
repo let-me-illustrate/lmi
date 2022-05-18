@@ -284,18 +284,6 @@ do
     # designed to be independent of lmi's runtime path.
     export PATH="$minimal_path"
 
-    # For Cygwin or WSL, install and use this msw-native compiler.
-    if [ "Cygwin" = "$platform" ] || [ "WSL" = "$platform" ]
-    then
-        mingw_dir=/opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/gcc_msw
-        [ -d "$mingw_dir" ] && rm --force --recursive "$mingw_dir"
-        if [ "x86_64-w64-mingw32" = "$LMI_TRIPLET" ]; then
-          make "$coefficiency" --output-sync=recurse -f install_mingw.make
-        else
-          printf 'No MinGW compiler for this triplet.\n'
-        fi
-    fi
-
     ./install_xml_libraries.sh
 
     ./install_wx.sh
