@@ -162,25 +162,25 @@ struct i_upper_n_over_n_from_i_T
 
 void sample_results()
 {
-    constexpr double intrate {0.01};
+    constexpr double intrate {0.04};
     fenv_initialize();
     std::cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
-    std::cout.precision(25);
+    std::cout.precision(23);
     std::cout
         << "\nDaily rate corresponding to 1% annual interest"
         << ", by various methods:\n"
-        << "        000000000111111111122\n"
-        << "        123456789012345678901\n"
-        << "  " << i_upper_n_over_n_from_i      <long double,365>()(intrate)
+        << "      000000000111111111122\n"
+        << "      123456789012345678901\n"
+        << "  " << i_upper_n_over_n_from_i      <long double,12>()(intrate)
         << "  method in production\n"
         ;
 #if defined LMI_X87
     fenv_precision(fe_ldblprec);
 #endif // defined LMI_X87
     std::cout
-        << "  " << i_upper_n_over_n_from_i_T    <long double,365>()(intrate)
+        << "  " << i_upper_n_over_n_from_i_T    <long double,12>()(intrate)
         << "  long double precision, std::expm1 and std::log1p\n"
-        << "  " << i_upper_n_over_n_from_i_naive<long double,365>()(intrate)
+        << "  " << i_upper_n_over_n_from_i_naive<long double,12>()(intrate)
         << "  long double precision, std::pow\n"
         ;
 #if defined LMI_X87
@@ -188,9 +188,9 @@ void sample_results()
     fenv_precision(fe_dblprec);
 #endif // defined LMI_X87
     std::cout
-        << "  " << i_upper_n_over_n_from_i_T    <double,365>()(intrate)
+        << "  " << i_upper_n_over_n_from_i_T    <double,12>()(intrate)
         << "  double precision, std::expm1 and std::log1p\n"
-        << "  " << i_upper_n_over_n_from_i_naive<double,365>()(intrate)
+        << "  " << i_upper_n_over_n_from_i_naive<double,12>()(intrate)
         << "  double precision, std::pow\n"
         ;
 
