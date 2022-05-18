@@ -172,13 +172,14 @@ void sample_results()
         ;
 #if defined LMI_X87
     fenv_precision(fe_ldblprec);
+#endif // defined LMI_X87
     std::cout
         << "  " << i_upper_n_over_n_from_i_T    <long double,365>()(0.01)
         << "  long double precision, std::expm1 and std::log1p\n"
         << "  " << i_upper_n_over_n_from_i_naive<long double,365>()(0.01)
         << "  long double precision, std::pow\n"
         ;
-
+#if defined LMI_X87
     fenv_initialize();
     fenv_precision(fe_dblprec);
 #endif // defined LMI_X87
