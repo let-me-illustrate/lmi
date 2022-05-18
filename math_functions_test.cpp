@@ -167,31 +167,33 @@ void sample_results()
     std::cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
     std::cout.precision(23);
     std::cout
-        << "\nDaily rate corresponding to 1% annual interest"
+        << "Daily rate corresponding to 1% annual interest"
         << ", by various methods:\n"
         << "      000000000111111111122\n"
         << "      123456789012345678901\n"
         << "  " << i_upper_n_over_n_from_i      <long double,12>()(intrate)
-        << "  method in production\n"
+        << "  long double prec, production template\n"
         ;
 #if defined LMI_X87
     fenv_precision(fe_ldblprec);
 #endif // defined LMI_X87
     std::cout
         << "  " << i_upper_n_over_n_from_i_T    <long double,12>()(intrate)
-        << "  long double precision, std::expm1 and std::log1p\n"
+        << "  long double prec, std::expm1 and std::log1p\n"
         << "  " << i_upper_n_over_n_from_i_naive<long double,12>()(intrate)
-        << "  long double precision, std::pow\n"
+        << "  long double prec, std::pow\n"
         ;
 #if defined LMI_X87
     fenv_initialize();
     fenv_precision(fe_dblprec);
 #endif // defined LMI_X87
     std::cout
+        << "  " << i_upper_n_over_n_from_i      <double,12>()(intrate)
+        << "  double prec, production template\n"
         << "  " << i_upper_n_over_n_from_i_T    <double,12>()(intrate)
-        << "  double precision, std::expm1 and std::log1p\n"
+        << "  double prec, std::expm1 and std::log1p\n"
         << "  " << i_upper_n_over_n_from_i_naive<double,12>()(intrate)
-        << "  double precision, std::pow\n"
+        << "  double prec, std::pow\n"
         ;
 
     fenv_initialize();
@@ -294,6 +296,7 @@ void assay_speed()
     std::cout << "  long double i365 " << TimeAnAliquot(mete3) << '\n';
     std::cout << "  10^-9 nonstd     " << TimeAnAliquot(mete4) << '\n';
     std::cout << "  10^-9 std        " << TimeAnAliquot(mete5) << '\n';
+    std::cout << std::endl;
 }
 
 template<typename T>
@@ -556,6 +559,8 @@ int test_main(int, char*[])
             ,1.0e-15
             )
         );
+
+    std::cout << LMI_CONTEXT << '\n' << std::endl;
 
     assay_speed();
 
