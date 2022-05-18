@@ -149,13 +149,16 @@ struct i_upper_n_over_n_from_i_T
 
 /// This function isn't a unit test per se. Its purpose is to show
 /// how a sample calculation is affected by
-///   exponential versus power method, and
+///   exponential versus power method,
+///   floating-point type (double vs. long double), and
 ///   hardware precision (on supported platforms).
 ///
-/// Define f(i,m) = (1+i)^(1/m) - 1, i.e., "i upper m over m".
-/// Let i0 = 0.0004 (forty bp).
-/// Let i1 = f(i0, 365)
-/// Then the number calculated here is f(-i1, 1/365).
+/// All methods and precisions are tested with the same constant input
+/// interest rate, which is declared as 'double', as though it were
+/// read as such from a data file containing the given string-literal.
+/// The intention here is to use exactly the same value in all cases;
+/// using a long double string literal for long double scenarios would
+/// introduce a confounder.
 
 void sample_results()
 {
