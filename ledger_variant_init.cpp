@@ -45,23 +45,6 @@ void LedgerVariant::Init
 //  COICharge       =
 //  RiderCharges    =
 //  ExpenseCharges  =
-    MlySAIntRate               = bv.InterestRates_->SepAcctNetRate
-        (SepBasis_
-        ,GenBasis_
-        ,mce_monthly_rate
-        );
-    MlyGAIntRate               = bv.InterestRates_->GenAcctNetRate
-        (GenBasis_
-        ,mce_monthly_rate
-        );
-    MlyHoneymoonValueRate      = bv.InterestRates_->HoneymoonValueRate
-        (GenBasis_
-        ,mce_monthly_rate
-        );
-    MlyPostHoneymoonRate       = bv.InterestRates_->PostHoneymoonGenAcctRate
-        (GenBasis_
-        ,mce_monthly_rate
-        );
     AnnSAIntRate               = bv.InterestRates_->SepAcctNetRate
         (SepBasis_
         ,GenBasis_

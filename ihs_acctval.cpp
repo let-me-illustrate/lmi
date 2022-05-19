@@ -1293,12 +1293,6 @@ void AccountValue::FinalizeYear()
                 ,mce_annual_rate
                 )
                 [Year]
-            ,InterestRates_->SepAcctNetRate
-                (SepBasis_
-                ,GenBasis_
-                ,mce_monthly_rate
-                )
-                [Year]
             ,Year
             );
         }

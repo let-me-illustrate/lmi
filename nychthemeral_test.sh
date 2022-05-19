@@ -415,13 +415,11 @@ mv sample.summary.tsv               sample.summary.tsv.touchstone
 mv sample.test0                     sample.test0.touchstone
 mv sample.test1                     sample.test1.touchstone
 
-# MlySAIntRate = 0.0053403194199831...; differs slightly for x87
 # DatePrepared: it's unclear why ".*" is needed, but it "works"
 for z in *.touchstone; do \
   diff \
     --unified=0 \
     --strip-trailing-cr \
-    --ignore-matching-lines="^0\.0053403194199831" \
     --ignore-matching-lines="^DatePrepared[ \t]*.*'[0-9-]*'$" \
     "$z" "$srcdir/$z" \
   || true ; \

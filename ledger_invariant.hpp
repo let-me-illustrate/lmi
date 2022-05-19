@@ -98,12 +98,6 @@ class LMI_SO LedgerInvariant final
     std::vector<double> AddonCompOnAssets;
     std::vector<double> AddonCompOnPremium;
     std::vector<double> CorridorFactor;
-    std::vector<double> Irc7702ic_usual;
-    std::vector<double> Irc7702ic_glp;
-    std::vector<double> Irc7702ic_gsp;
-    std::vector<double> Irc7702ig_usual;
-    std::vector<double> Irc7702ig_glp;
-    std::vector<double> Irc7702ig_gsp;
     std::vector<double> AnnLoanDueRate;
     // TODO ?? M&E varies by basis (cf. 'GuarMaxMandE' below), so it
     // belongs in the variant ledger.
