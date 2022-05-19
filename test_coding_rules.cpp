@@ -1052,7 +1052,10 @@ bool check_reserved_name_exception(std::string const& s)
 
 void check_reserved_names(file const& f)
 {
-    if(f.phyloanalyze("^configure.ac$"))
+    if
+        (   f.phyloanalyze("^configure.ac$")
+        ||  f.phyloanalyze("^test_coding_rules_test.sh$")
+        )
         {
         return;
         }
