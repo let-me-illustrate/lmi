@@ -148,7 +148,7 @@ void test_portable_filename()
         );
 
     LMI_TEST_EQUAL
-        (                  "_Fyodor_Dostoyevskiy_Crime_and_Punishment.text"
+        (                "_""Fyodor_Dostoyevskiy_Crime_and_Punishment.text"
         ,portable_filename("/Fyodor Dostoyevskiy/Crime and Punishment.text")
         );
 }

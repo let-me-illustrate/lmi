@@ -42,7 +42,7 @@
 
 #include <cstdio>
     // COMPILER !! bc++5.5.1 Work around library bug: the 'stdin'
-    // macro references '_streams' with no namespace qualifier,
+    // macro references _streams with no namespace qualifier,
     // but including <cstdio> rather than <stdio.h> puts that
     // referenced object in namespace std.
     // See my post to borland.public.cppbuilder.language dated

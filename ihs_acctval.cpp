@@ -1443,7 +1443,7 @@ void AccountValue::SetAnnualInvariants()
 
     YearsTotLoadTgt         = Loads_->target_total_load     (GenBasis_)[Year];
     YearsTotLoadExc         = Loads_->excess_total_load     (GenBasis_)[Year];
-    // TAXATION !! This '_lowest_premium_tax' approach needs to be
+    // TAXATION !! This 'lowest_premium_tax' approach needs to be
     // reworked: there should be an option (at least) to use the
     // current tax rates.
     YearsTotLoadTgtLowestPremtax = Loads_->target_premium_load_minimum_premium_tax()[Year];

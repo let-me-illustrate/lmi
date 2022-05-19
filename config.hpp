@@ -189,7 +189,7 @@
 //   http://boost.cvs.sf.net/boost/boost/boost/config.hpp?annotate=1.1
 //   Many other "compilers define _MSC_VER. Thus BOOST_MSVC. [...]
 //   Must remain the last #elif since some other vendors (Metrowerks,
-//   for example) also #define _MSC_VER"
+//   for example) also #define _MSC_VER ..."
 
 #if defined _MSC_VER && !defined LMI_GCC_VERSION && !defined LMI_COMO_WITH_MINGW
 #    define LMI_MSC

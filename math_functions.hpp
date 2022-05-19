@@ -29,7 +29,7 @@
 #include <limits>
 #include <numeric>                      // midpoint(), partial_sum()
 #include <stdexcept>
-#include <type_traits>                  // /is_.*_v/
+#include <type_traits>                  // /is_.*/
 #include <vector>
 
 // TODO ?? Write functions here for other refactorable uses of

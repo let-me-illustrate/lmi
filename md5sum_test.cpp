@@ -188,9 +188,9 @@ void MD5SumTest::TestMD5Calculation() const
         );
 
     LMI_TEST_THROW
-        (md5_calculate_file_checksum("_ghost_")
+        (md5_calculate_file_checksum("NoNeXiStEnT")
         ,std::runtime_error
-        ,"'_ghost_': no such file or directory"
+        ,"'NoNeXiStEnT': no such file or directory"
         );
 }
 
@@ -243,9 +243,9 @@ void MD5SumTest::TestMD5Reading() const
     LMI_TEST_EQUAL(md5sums, md5_read_checksum_file(md5sums_filename));
 
     LMI_TEST_THROW
-        (md5_read_checksum_file("_ghost_")
+        (md5_read_checksum_file("NoNeXiStEnT")
         ,std::runtime_error
-        ,"'_ghost_': no such file or directory"
+        ,"'NoNeXiStEnT': no such file or directory"
         );
 }
 
