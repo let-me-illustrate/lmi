@@ -72,7 +72,7 @@
 #  include <sys/time.h>
 #endif // defined HAVE_SYS_TIME_H && HAVE_SYS_TIME_H
 
-// To use logging, the variable gLogFile MUST be defined, and it _must_
+// To use logging, the variable gLogFile MUST be defined, and it *must*
 // be an ofstream.
 std::ofstream gLogFile;
 

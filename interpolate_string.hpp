@@ -51,7 +51,7 @@ using lookup_function
 ///  - Partials support, i.e. {{>filename}}.
 ///  - Comments of the form {{!this is ignored}}.
 ///
-/// The following features are explicitly _not_ supported:
+/// The following features are explicitly *not* supported:
 ///  - HTML escaping: this is done by a separate html::text class.
 ///  - Separate types: 0/1 is false/true, anything else is an error.
 ///  - Lists/section iteration (not needed yet).
