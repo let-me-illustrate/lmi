@@ -105,7 +105,7 @@ enum mcenum_mode
 
 #define MC_DEFINE_ENUMS(TYPE) \
 enum mcenum_##TYPE \
-TYPE##_VALUES
+TYPE##_##VALUES
 
 MC_DEFINE_ENUMS(yes_or_no)
 MC_DEFINE_ENUMS(gender)

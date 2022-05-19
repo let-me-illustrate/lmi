@@ -119,10 +119,10 @@ template class mc_enum<rounding_style>;
 #include "mc_enum_types.xpp"
 
 #define MC_DEFINE(TYPE,NUMBER) \
-extern mcenum_##TYPE const TYPE##_enums[] = TYPE##_VALUES \
-extern char const*const TYPE##_strings[] = TYPE##_NAMES \
+extern mcenum_##TYPE const TYPE##_##enums[] = TYPE##_##VALUES \
+extern char const*const TYPE##_##strings[] = TYPE##_##NAMES \
 template<> struct mc_enum_key<mcenum_##TYPE> \
-  :public mc_enum_data<mcenum_##TYPE, NUMBER, TYPE##_enums, TYPE##_strings> {}; \
+  :public mc_enum_data<mcenum_##TYPE, NUMBER, TYPE##_##enums, TYPE##_##strings> {}; \
 template class mc_enum<mcenum_##TYPE>;
 
 MC_DEFINE(yes_or_no,2)

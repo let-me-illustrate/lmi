@@ -119,7 +119,7 @@ class wx_test_case_##name \
  \
     void run() override; \
 }; \
-static wx_test_case_##name wx_test_case_##name##_instance; \
+static wx_test_case_##name wx_test_case_##name##_##instance; \
 void wx_test_case_##name::run()
 
 #endif // wx_test_case_hpp
