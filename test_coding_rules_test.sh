@@ -473,6 +473,7 @@ File 'eraseme_cpp_007.cpp' should have a space on both sides of the colon follow
 File 'eraseme_cpp_007.cpp' should have a space on both sides of the colon following the for-range-declaration, instead of ': '.
 File 'eraseme_cpp_007.cpp' for-range-declaration should deduce type rather than specify 'int'.
 File 'eraseme_cpp_007.cpp' for-range-declaration should use 'auto&' or 'auto const&' instead of 'auto '.
+File 'eraseme_cpp_008.cpp' contains reserved name '_Forbidden'.
 File 'eraseme_cpp_008.cpp' contains reserved name '__forbidden'.
 File 'eraseme_hpp_001.hpp' lacks canonical closing header guard.
 File 'eraseme_hpp_002.hpp' lacks canonical opening header guard.

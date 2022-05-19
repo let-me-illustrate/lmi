@@ -579,7 +579,7 @@ void check_cxx(file const& f)
     for(auto const& z : pcre::search_all(f.data(), r))
         {
         std::string s = z[0];
-        static pcre::regex const include_guard(R"(# *ifndef *[[:lower:]][_\d[:lower:]]*_hpp\W)");
+        static pcre::regex const include_guard(R"(# *ifndef *[[:lower:]][_\d[:lower:]]*[_]hpp\W)");
         if(!pcre::search(s, include_guard))
             {
             ltrim(s, "\n");
@@ -937,7 +937,9 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__func__"
         ,"__has_include"
     // Platform identification.
+        ,"_ISOC99_SOURCE"
         ,"_M_IX86"
+        ,"_M_IX86_FP"
         ,"_M_X64"
         ,"_X86_"
         ,"__X__"
@@ -989,7 +991,9 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__MINGW64_VERSION_MAJOR"
         ,"__MINGW_H"
         ,"_fmode"
+        ,"_get_output_format"
     // Compiler specific: glibc.
+        ,"_GLIBCXX_DEBUG"
         ,"_LIBC"
         ,"__BIG_ENDIAN"
         ,"__BYTE_ORDER"
@@ -1022,8 +1026,14 @@ bool check_reserved_name_exception(std::string const& s)
         ,"_O_WRONLY"
         ,"_PC_64"
         ,"_RC_NEAR"
+        ,"_doserrno"
         ,"_fileno"
         ,"_setmode"
+    // Poe.
+        ,"_bizarre_"
+    // GNU getopt.
+        ,"_OPTIONS_FIRST"
+        ,"_POSIX_OPTION_ORDER"
     // Library specific.
         ,"D__WXDEBUG__" // Hapax legomenon.
         ,"__WXGTK__"
@@ -1046,33 +1056,26 @@ bool check_reserved_name_exception(std::string const& s)
 /// The regex iterated for is deliberately overbroad. Measurement
 /// shows that it is far more efficient to cast the net widely and
 /// then filter the matches: there's a lot more sea than fish.
-///
-/// TODO ?? Also test '_[A-Za-z0-9]', e.g. thus:
-///   "(\\b\\w*__\\w*\\b)|(\\b\\_\\w+\\b)"
 
 void check_reserved_names(file const& f)
 {
-    if
-        (   f.phyloanalyze("^configure.ac$")
-        ||  f.phyloanalyze("^test_coding_rules_test.sh$")
-        )
+    if(!f.is_of_phylum(e_c_or_cxx))
         {
         return;
         }
 
-    if(f.is_of_phylum(e_log))
-        {
-        return;
-        }
-
-    static pcre::regex const r(R"((\b\w*__\w*\b))");
+    static pcre::regex const r(R"((\b\w*__\w*\b)|("*\b\_\w+\b"*))");
     for(auto const& z : pcre::search_all(f.data(), r))
         {
         std::string const s = z[0];
         static pcre::regex const not_all_underscore("[A-Za-z0-9]");
+        static pcre::regex const quoted_name(R"("_+[A-Za-z0-9]\w*")");
+        static pcre::regex const literal_operator(R"(""_[A-Za-z])");
         if
             (   !check_reserved_name_exception(s)
-            &&  pcre::search(s, not_all_underscore)
+            &&   pcre::search(s, not_all_underscore)
+            &&  !pcre::search(s, quoted_name)
+            &&  !pcre::search(s, literal_operator)
             )
             {
             std::ostringstream oss;
