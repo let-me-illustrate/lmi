@@ -934,6 +934,7 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__STDC_IEC_559__"
         ,"__STDC__"
         ,"__cplusplus"
+        ,"__func__"
         ,"__has_include"
     // Platform identification.
         ,"_M_IX86"
@@ -1030,7 +1031,11 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__XSLT_LIBXSLT_H__"
         ,"__mp_copymem"
         };
-    return contains(z, s) || begins_with(s, "__cpp_");
+    return
+           contains(z, s)
+        || begins_with(s, "__builtin_")
+        || begins_with(s, "__cpp_")
+        ;
 }
 
 /// Check names reserved by C++2003 [17.4.3.1.2].
