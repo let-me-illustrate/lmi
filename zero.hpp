@@ -235,7 +235,7 @@ inline double binary64_midpoint(double d0, double d1)
 /// of a true zero.
 ///
 /// Brent's algorithm with GWC modifications described below. See:
-/// R. P. Brent, _Algorithms for Minimization without Derivatives_
+/// R. P. Brent, "Algorithms for Minimization without Derivatives"
 /// ISBN 0-13-022335-2
 ///
 /// Rationale for choice of algorithm
@@ -244,7 +244,7 @@ inline double binary64_midpoint(double d0, double d1)
 /// of a higher-order method when appropriate. We recommend it as the
 /// method of choice for general one-dimensional root finding where a
 /// function's values only (and not its derivative or functional form)
-/// are available." --Press et al., _Numerical Recipes_ (3rd ed. 2007)
+/// are available." --Press et al., "Numerical Recipes" (3rd ed. 2007)
 ///
 /// Numerous papers claim to improve on Brent's method. TOMS 748
 /// purports to require about five percent fewer function evaluations,

@@ -606,7 +606,7 @@ void OLCommFnsTest()
 /// A no-load account value is the same thing as a terminal reserve
 /// calculated on a monthly basis. The negative first value may seem
 /// surprising at first glance, but see Donald B. Warren's article
-/// "A Discussion of Negative Reserves" in _The Actuary_, Volume 2,
+/// "A Discussion of Negative Reserves" in "The Actuary", Volume 2,
 /// Number 8, October 1968, page 4, which says negative reserves can
 /// occur "in the first policy year at age 0 on a whole life plan".
 

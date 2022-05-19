@@ -46,7 +46,7 @@
 /// age might therefore change. The billing interval is any of the
 /// customary life-insurance payment modes. For the maximum billing
 /// period of one year, the demographic notation used on page 129 of
-/// Batten, _Mortality Table Construction_, 1978 (ISBN 0-13-601302-3)
+/// Batten, "Mortality Table Construction", 1978 (ISBN 0-13-601302-3)
 /// would be:
 ///   - (delta)premium(x)   [here, prem_ante] for monthly charges at
 ///     age x from the bill date to the anniversary age change;
