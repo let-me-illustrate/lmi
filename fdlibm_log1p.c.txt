@@ -339,7 +339,8 @@ static double zero = 0.0;
                 return x - x*x*0.5;
         }
         if(hx>0||hx<=((int)0xbfd2bec3)) {
-            k=0;f=x;hu=1;}                      /* -0.2929<x<0.41422 */
+            k=0;f=x;hu=1;                       /* -0.2929<x<0.41422 */
+        }
     }
     if (hx >= 0x7ff00000) return x+x;
     if(k!=0) {
