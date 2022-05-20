@@ -791,6 +791,8 @@ materially_equal_test$(EXEEXT): \
 
 math_functions_test$(EXEEXT): \
   $(common_test_objects) \
+  fdlibm_expm1.o \
+  fdlibm_log1p.o \
   math_functions_test.o \
   timer.o \
 

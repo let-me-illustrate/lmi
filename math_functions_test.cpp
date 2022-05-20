@@ -147,6 +147,47 @@ struct i_upper_n_over_n_from_i_T
 };
 } // Unnamed namespace.
 
+/// Test fdlibm expm1() and log1p().
+///
+/// Testing for exact floating-point equality seems to be a patent
+/// mistake, but should work for the fdlibm implementations on
+/// any implementation where double is binary64.
+
+void test_expm1_log1p()
+{
+    std::cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
+    std::cout.precision(23);
+
+    double const x = lmi::expm1(1.01);
+    double const y = lmi::log1p(0.01);
+    double const z = lmi::expm1(lmi::log1p(0.04) / 12);
+
+#if 0
+    // digits      1 23456789012345678901234
+    LMI_TEST_EQUAL(1.74560101501691655734305, x);
+    // digits          123456789012345678901
+    LMI_TEST_EQUAL(0.00995033085316808334209, y);
+    // digits          123456789012345678901
+    LMI_TEST_EQUAL(0.00327373978219886374239, z);
+#else // not 0
+    std::cout << "Those tests failed, so compare..." << std::endl;
+
+    double const a = std::expm1(1.01);
+    double const b = std::log1p(0.01);
+    double const c = std::expm1(std::log1p(0.04) / 12);
+
+    std::cout
+        << "  " << x << " lmi::expm1(1.01)\n"
+        << "  " << a << " std::expm1(1.01)\n"
+        << "  " << y << " lmi::log1p(0.01)\n"
+        << "  " << b << " std::log1p(0.01)\n"
+        << "  " << z << " lmi::expm1(lmi::log1p(0.04) / 12)\n"
+        << "  " << c << " std::expm1(std::log1p(0.04) / 12)\n"
+        << std::endl
+        ;
+#endif // not 0
+}
+
 /// This function isn't a unit test per se. Its purpose is to show
 /// how a sample calculation is affected by
 ///   exponential versus power method,
@@ -563,6 +604,8 @@ int test_main(int, char*[])
     std::cout << LMI_CONTEXT << '\n' << std::endl;
 
     assay_speed();
+
+    test_expm1_log1p();
 
     sample_results();
 

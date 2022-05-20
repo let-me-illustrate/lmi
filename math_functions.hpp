@@ -32,6 +32,15 @@
 #include <type_traits>                  // /is_.*/
 #include <vector>
 
+extern "C" double fdlibm_expm1(double);
+extern "C" double fdlibm_log1p(double);
+
+namespace lmi
+{
+inline double expm1(double z) {return fdlibm_expm1(z);}
+inline double log1p(double z) {return fdlibm_log1p(z);}
+} // namespace lmi
+
 // TODO ?? Write functions here for other refactorable uses of
 // std::pow() throughout lmi, to facilitate reuse and unit testing.
 

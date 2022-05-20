@@ -876,6 +876,8 @@ materially_equal_test_LDADD = \
   libtest_common.la
 
 math_functions_test_LDADD = \
+  fdlibm_expm1.c \
+  fdlibm_log1p.c \
   libtest_common.la
 
 mc_enum_test_SOURCES = \
