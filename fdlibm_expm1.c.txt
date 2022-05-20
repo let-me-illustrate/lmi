@@ -20,15 +20,15 @@
 #endif // big endian
 
 #if defined __LITTLE_ENDIAN
-#define __HI(x) *(1+(int*)&x)
-#define __LO(x) *(int*)&x
-#define __HIp(x) *(1+(int*)x)
-#define __LOp(x) *(int*)x
+#define FDLIBM_HI(x) *(1+(int*)&x)
+#define FDLIBM_LO(x) *(int*)&x
+#define FDLIBM_HIp(x) *(1+(int*)x)
+#define FDLIBM_LOp(x) *(int*)x
 #else  // !defined __LITTLE_ENDIAN
-#define __HI(x) *(int*)&x
-#define __LO(x) *(1+(int*)&x)
-#define __HIp(x) *(int*)x
-#define __LOp(x) *(1+(int*)x)
+#define FDLIBM_HI(x) *(int*)&x
+#define FDLIBM_LO(x) *(1+(int*)&x)
+#define FDLIBM_HIp(x) *(int*)x
+#define FDLIBM_LOp(x) *(1+(int*)x)
 #endif // !defined __LITTLE_ENDIAN
 
 #if defined __STDC__
@@ -220,7 +220,7 @@ Q5  =  -2.01099218183624371326e-07; /* BE8AFDB7 6E09C32D */
     int k,xsb;
     unsigned hx;
 
-    hx  = __HI(x);              /* high word of x */
+    hx  = FDLIBM_HI(x);         /* high word of x */
     xsb = hx&0x80000000;        /* sign bit of x */
     if(xsb==0) y=x; else y= -x; /* y = |x| */
     hx &= 0x7fffffff;           /* high word of |x| */
@@ -229,7 +229,7 @@ Q5  =  -2.01099218183624371326e-07; /* BE8AFDB7 6E09C32D */
     if(hx >= 0x4043687A) {      /* if |x|>=56*ln2 */
         if(hx >= 0x40862E42) {  /* if |x|>=709.78... */
           if(hx>=0x7ff00000) {
-            if(((hx&0xfffff)|__LO(x))!=0)
+            if(((hx&0xfffff)|FDLIBM_LO(x))!=0)
                  return x+x;    /* NaN */
             else return (xsb==0)? x:-1.0;/* exp(+-inf)={inf,-1} */
           }
@@ -279,19 +279,19 @@ Q5  =  -2.01099218183624371326e-07; /* BE8AFDB7 6E09C32D */
             else           return  one+2.0*(x-e);
         if (k <= -2 || k>56) {     /* suffice to return exp(x)-1 */
             y = one-(e-x);
-            __HI(y) += (k<<20);    /* add k to y's exponent */
+            FDLIBM_HI(y) += (k<<20); /* add k to y's exponent */
             return y-one;
         }
         t = one;
         if(k<20) {
-               __HI(t) = 0x3ff00000 - (0x200000>>k);  /* t=1-2^-k */
+               FDLIBM_HI(t) = 0x3ff00000 - (0x200000>>k);  /* t=1-2^-k */
                y = t-(e-x);
-               __HI(y) += (k<<20); /* add k to y's exponent */
+               FDLIBM_HI(y) += (k<<20); /* add k to y's exponent */
         } else {
-               __HI(t)  = ((0x3ff-k)<<20);    /* 2^-k */
+               FDLIBM_HI(t)  = ((0x3ff-k)<<20);    /* 2^-k */
                y = x-(e+t);
                y += one;
-               __HI(y) += (k<<20); /* add k to y's exponent */
+               FDLIBM_HI(y) += (k<<20); /* add k to y's exponent */
         }
     }
     return y;
