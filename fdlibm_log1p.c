@@ -51,27 +51,27 @@
 #if !defined __FLOAT_WORD_ORDER__ || \
     !defined __ORDER_BIG_ENDIAN__ || \
     !defined __ORDER_LITTLE_ENDIAN__
-#error Expected ndianness macros not defined.
+#   error Expected endianness macros not defined.
 #endif // expected endianness macros not defined
 
 #if   __FLOAT_WORD_ORDER__ == __ORDER_LITTLE_ENDIAN__
-#define FDLIBM_HI(x) *(1+(int*)&x)
-#define FDLIBM_LO(x) *(int*)&x
-#define FDLIBM_HIp(x) *(1+(int*)x)
-#define FDLIBM_LOp(x) *(int*)x
+#   define FDLIBM_HI(x) *(1+(int*)&x)
+#   define FDLIBM_LO(x) *(int*)&x
+#   define FDLIBM_HIp(x) *(1+(int*)x)
+#   define FDLIBM_LOp(x) *(int*)x
 #elif __FLOAT_WORD_ORDER__ == __ORDER_BIG_ENDIAN__
-#define FDLIBM_HI(x) *(int*)&x
-#define FDLIBM_LO(x) *(1+(int*)&x)
-#define FDLIBM_HIp(x) *(int*)x
-#define FDLIBM_LOp(x) *(1+(int*)x)
+#   define FDLIBM_HI(x) *(int*)&x
+#   define FDLIBM_LO(x) *(1+(int*)&x)
+#   define FDLIBM_HIp(x) *(int*)x
+#   define FDLIBM_LOp(x) *(1+(int*)x)
 #else  // unknown endianness
-#error Unknown endianness.
+#   error Unknown endianness.
 #endif // unknown endianness
 
 #if defined __STDC__
-#define FDLIBM_PROTOTYPE(p) p
+#   define FDLIBM_PROTOTYPE(p) p
 #else  // !defined __STDC__
-#define FDLIBM_PROTOTYPE(p) ()
+#   define FDLIBM_PROTOTYPE(p) ()
 #endif // !defined __STDC__
 
 /*
