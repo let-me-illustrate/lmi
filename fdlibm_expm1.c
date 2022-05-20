@@ -50,26 +50,25 @@
  * ====================================================
  */
 
-/* Sometimes it's necessary to define __LITTLE_ENDIAN explicitly
-   but these catch some common cases. */
+#if !defined __FLOAT_WORD_ORDER__ || \
+    !defined __ORDER_BIG_ENDIAN__ || \
+    !defined __ORDER_LITTLE_ENDIAN__
+#error Expected ndianness macros not defined.
+#endif // expected endianness macros not defined
 
-#if defined(i386) || defined(i486) || \
-    defined(intel) || defined(x86) || defined(i86pc) || \
-    defined(__alpha) || defined(__osf__)
-#define __LITTLE_ENDIAN
-#endif // big endian
-
-#if defined __LITTLE_ENDIAN
+#if   __FLOAT_WORD_ORDER__ == __ORDER_LITTLE_ENDIAN__
 #define FDLIBM_HI(x) *(1+(int*)&x)
 #define FDLIBM_LO(x) *(int*)&x
 #define FDLIBM_HIp(x) *(1+(int*)x)
 #define FDLIBM_LOp(x) *(int*)x
-#else  // !defined __LITTLE_ENDIAN
+#elif __FLOAT_WORD_ORDER__ == __ORDER_BIG_ENDIAN__
 #define FDLIBM_HI(x) *(int*)&x
 #define FDLIBM_LO(x) *(1+(int*)&x)
 #define FDLIBM_HIp(x) *(int*)x
 #define FDLIBM_LOp(x) *(1+(int*)x)
-#endif // !defined __LITTLE_ENDIAN
+#else  // unknown endianness
+#error Unknown endianness.
+#endif // unknown endianness
 
 #if defined __STDC__
 #define FDLIBM_PROTOTYPE(p) p
