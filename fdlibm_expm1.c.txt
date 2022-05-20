@@ -91,129 +91,15 @@ struct exception {
 /*
  * ANSI/POSIX
  */
-extern double acos FDLIBM_PROTOTYPE((double));
-extern double asin FDLIBM_PROTOTYPE((double));
-extern double atan FDLIBM_PROTOTYPE((double));
-extern double atan2 FDLIBM_PROTOTYPE((double, double));
-extern double cos FDLIBM_PROTOTYPE((double));
-extern double sin FDLIBM_PROTOTYPE((double));
-extern double tan FDLIBM_PROTOTYPE((double));
-
-extern double cosh FDLIBM_PROTOTYPE((double));
-extern double sinh FDLIBM_PROTOTYPE((double));
-extern double tanh FDLIBM_PROTOTYPE((double));
-
 extern double exp FDLIBM_PROTOTYPE((double));
-extern double frexp FDLIBM_PROTOTYPE((double, int *));
-extern double ldexp FDLIBM_PROTOTYPE((double, int));
-extern double log FDLIBM_PROTOTYPE((double));
-extern double log10 FDLIBM_PROTOTYPE((double));
-extern double modf FDLIBM_PROTOTYPE((double, double *));
-
-extern double pow FDLIBM_PROTOTYPE((double, double));
-extern double sqrt FDLIBM_PROTOTYPE((double));
-
-extern double ceil FDLIBM_PROTOTYPE((double));
-extern double fabs FDLIBM_PROTOTYPE((double));
-extern double floor FDLIBM_PROTOTYPE((double));
-extern double fmod FDLIBM_PROTOTYPE((double, double));
-
-extern double erf FDLIBM_PROTOTYPE((double));
-extern double erfc FDLIBM_PROTOTYPE((double));
-extern double gamma FDLIBM_PROTOTYPE((double));
-extern double hypot FDLIBM_PROTOTYPE((double, double));
-extern int isnan FDLIBM_PROTOTYPE((double));
-extern int finite FDLIBM_PROTOTYPE((double));
-extern double j0 FDLIBM_PROTOTYPE((double));
-extern double j1 FDLIBM_PROTOTYPE((double));
-extern double jn FDLIBM_PROTOTYPE((int, double));
-extern double lgamma FDLIBM_PROTOTYPE((double));
-extern double y0 FDLIBM_PROTOTYPE((double));
-extern double y1 FDLIBM_PROTOTYPE((double));
-extern double yn FDLIBM_PROTOTYPE((int, double));
-
-extern double acosh FDLIBM_PROTOTYPE((double));
-extern double asinh FDLIBM_PROTOTYPE((double));
-extern double atanh FDLIBM_PROTOTYPE((double));
-extern double cbrt FDLIBM_PROTOTYPE((double));
-extern double logb FDLIBM_PROTOTYPE((double));
-extern double nextafter FDLIBM_PROTOTYPE((double, double));
-extern double remainder FDLIBM_PROTOTYPE((double, double));
-#if defined _SCALB_INT
-extern double scalb FDLIBM_PROTOTYPE((double, int));
-#else  // !defined _SCALB_INT
-extern double scalb FDLIBM_PROTOTYPE((double, double));
-#endif // !defined _SCALB_INT
 
 extern int matherr FDLIBM_PROTOTYPE((struct exception *));
-
-/*
- * IEEE Test Vector
- */
-extern double significand FDLIBM_PROTOTYPE((double));
-
-/*
- * Functions callable from C, intended to support IEEE arithmetic.
- */
-extern double copysign FDLIBM_PROTOTYPE((double, double));
-extern int ilogb FDLIBM_PROTOTYPE((double));
-extern double rint FDLIBM_PROTOTYPE((double));
-extern double scalbn FDLIBM_PROTOTYPE((double, int));
 
 /*
  * BSD math library entry points
  */
 extern double expm1 FDLIBM_PROTOTYPE((double));
 extern double log1p FDLIBM_PROTOTYPE((double));
-
-/*
- * Reentrant version of gamma & lgamma; passes signgam back by reference
- * as the second argument; user must allocate space for signgam.
- */
-#if defined _REENTRANT
-extern double gamma_r FDLIBM_PROTOTYPE((double, int *));
-extern double lgamma_r FDLIBM_PROTOTYPE((double, int *));
-#endif // defined _REENTRANT
-
-/* ieee style elementary functions */
-extern double __ieee754_sqrt FDLIBM_PROTOTYPE((double));
-extern double __ieee754_acos FDLIBM_PROTOTYPE((double));
-extern double __ieee754_acosh FDLIBM_PROTOTYPE((double));
-extern double __ieee754_log FDLIBM_PROTOTYPE((double));
-extern double __ieee754_atanh FDLIBM_PROTOTYPE((double));
-extern double __ieee754_asin FDLIBM_PROTOTYPE((double));
-extern double __ieee754_atan2 FDLIBM_PROTOTYPE((double,double));
-extern double __ieee754_exp FDLIBM_PROTOTYPE((double));
-extern double __ieee754_cosh FDLIBM_PROTOTYPE((double));
-extern double __ieee754_fmod FDLIBM_PROTOTYPE((double,double));
-extern double __ieee754_pow FDLIBM_PROTOTYPE((double,double));
-extern double __ieee754_lgamma_r FDLIBM_PROTOTYPE((double,int *));
-extern double __ieee754_gamma_r FDLIBM_PROTOTYPE((double,int *));
-extern double __ieee754_lgamma FDLIBM_PROTOTYPE((double));
-extern double __ieee754_gamma FDLIBM_PROTOTYPE((double));
-extern double __ieee754_log10 FDLIBM_PROTOTYPE((double));
-extern double __ieee754_sinh FDLIBM_PROTOTYPE((double));
-extern double __ieee754_hypot FDLIBM_PROTOTYPE((double,double));
-extern double __ieee754_j0 FDLIBM_PROTOTYPE((double));
-extern double __ieee754_j1 FDLIBM_PROTOTYPE((double));
-extern double __ieee754_y0 FDLIBM_PROTOTYPE((double));
-extern double __ieee754_y1 FDLIBM_PROTOTYPE((double));
-extern double __ieee754_jn FDLIBM_PROTOTYPE((int,double));
-extern double __ieee754_yn FDLIBM_PROTOTYPE((int,double));
-extern double __ieee754_remainder FDLIBM_PROTOTYPE((double,double));
-extern int    __ieee754_rem_pio2 FDLIBM_PROTOTYPE((double,double*));
-#if defined _SCALB_INT
-extern double __ieee754_scalb FDLIBM_PROTOTYPE((double,int));
-#else  // !defined _SCALB_INT
-extern double __ieee754_scalb FDLIBM_PROTOTYPE((double,double));
-#endif // !defined _SCALB_INT
-
-/* fdlibm kernel function */
-extern double __kernel_standard FDLIBM_PROTOTYPE((double,double,int));
-extern double __kernel_sin FDLIBM_PROTOTYPE((double,double,int));
-extern double __kernel_cos FDLIBM_PROTOTYPE((double,double));
-extern double __kernel_tan FDLIBM_PROTOTYPE((double,double,int));
-extern int    __kernel_rem_pio2 FDLIBM_PROTOTYPE((double*,double*,int,int,int,int const*));
 
 /* @(#)s_expm1.c 1.5 04/04/22 */
 /*
