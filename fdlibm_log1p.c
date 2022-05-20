@@ -202,6 +202,8 @@ Lp7 = 1.479819860511658591e-01;  /* 3FC2F112 DF3E5244 */
 
 static double zero = 0.0;
 
+double fdlibm_log1p(double);
+
 #if defined __STDC__
     double fdlibm_log1p(double x)
 #else  // !defined __STDC__
