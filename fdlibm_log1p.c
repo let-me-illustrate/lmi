@@ -30,6 +30,13 @@
 // it's the simplest lmi header.
 #include "version.hpp"
 
+#if defined __GNUC__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wstrict-aliasing"
+#   pragma GCC diagnostic ignored "-Wunsuffixed-float-constants"
+#   pragma GCC diagnostic ignored "-Wunused-macros"
+#endif // defined __GNUC__
+
 /* @(#)fdlibm.h 1.5 04/04/22 */
 /*
  * ====================================================
