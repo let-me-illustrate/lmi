@@ -17,25 +17,25 @@
     defined(intel) || defined(x86) || defined(i86pc) || \
     defined(__alpha) || defined(__osf__)
 #define __LITTLE_ENDIAN
-#endif
+#endif // big endian
 
-#ifdef __LITTLE_ENDIAN
+#if defined __LITTLE_ENDIAN
 #define __HI(x) *(1+(int*)&x)
 #define __LO(x) *(int*)&x
 #define __HIp(x) *(1+(int*)x)
 #define __LOp(x) *(int*)x
-#else
+#else  // !defined __LITTLE_ENDIAN
 #define __HI(x) *(int*)&x
 #define __LO(x) *(1+(int*)&x)
 #define __HIp(x) *(int*)x
 #define __LOp(x) *(1+(int*)x)
-#endif
+#endif // !defined __LITTLE_ENDIAN
 
-#ifdef __STDC__
+#if defined __STDC__
 #define __P(p) p
-#else
+#else  // !defined __STDC__
 #define __P(p) ()
-#endif
+#endif // !defined __STDC__
 
 /*
  * ANSI/POSIX
@@ -139,11 +139,11 @@ extern double cbrt __P((double));
 extern double logb __P((double));
 extern double nextafter __P((double, double));
 extern double remainder __P((double, double));
-#ifdef _SCALB_INT
+#if defined _SCALB_INT
 extern double scalb __P((double, int));
-#else
+#else  // !defined _SCALB_INT
 extern double scalb __P((double, double));
-#endif
+#endif // !defined _SCALB_INT
 
 extern int matherr __P((struct exception *));
 
@@ -170,10 +170,10 @@ extern double log1p __P((double));
  * Reentrant version of gamma & lgamma; passes signgam back by reference
  * as the second argument; user must allocate space for signgam.
  */
-#ifdef _REENTRANT
+#if defined _REENTRANT
 extern double gamma_r __P((double, int *));
 extern double lgamma_r __P((double, int *));
-#endif /* _REENTRANT */
+#endif // defined _REENTRANT
 
 /* ieee style elementary functions */
 extern double __ieee754_sqrt __P((double));
@@ -202,11 +202,11 @@ extern double __ieee754_jn __P((int,double));
 extern double __ieee754_yn __P((int,double));
 extern double __ieee754_remainder __P((double,double));
 extern int    __ieee754_rem_pio2 __P((double,double*));
-#ifdef _SCALB_INT
+#if defined _SCALB_INT
 extern double __ieee754_scalb __P((double,int));
-#else
+#else  // !defined _SCALB_INT
 extern double __ieee754_scalb __P((double,double));
-#endif
+#endif // !defined _SCALB_INT
 
 /* fdlibm kernel function */
 extern double __kernel_standard __P((double,double,int));
@@ -294,11 +294,11 @@ extern int    __kernel_rem_pio2 __P((double*,double*,int,int,int,const int*));
 
 #include "fdlibm.h"
 
-#ifdef __STDC__
+#if defined __STDC__
 static const double
-#else
+#else  // !defined __STDC__
 static double
-#endif
+#endif // !defined __STDC__
 ln2_hi  =  6.93147180369123816490e-01,  /* 3fe62e42 fee00000 */
 ln2_lo  =  1.90821492927058770002e-10,  /* 3dea39ef 35793c76 */
 two54   =  1.80143985094819840000e+16,  /* 43500000 00000000 */
@@ -312,12 +312,12 @@ Lp7 = 1.479819860511658591e-01;  /* 3FC2F112 DF3E5244 */
 
 static double zero = 0.0;
 
-#ifdef __STDC__
+#if defined __STDC__
     double log1p(double x)
-#else
+#else  // !defined __STDC__
     double log1p(x)
     double x;
-#endif
+#endif // !defined __STDC__
 {
     double hfsq,f,c,s,z,R,u;
     int k,hx,hu,ax;
