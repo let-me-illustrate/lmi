@@ -213,8 +213,6 @@ extern int matherr FDLIBM_PROTOTYPE((struct exception *));
  * to produce the hexadecimal values shown.
  */
 
-#include "fdlibm.h"
-
 #if defined __STDC__
 static const double
 #else  // !defined __STDC__

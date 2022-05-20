@@ -184,8 +184,6 @@ extern int matherr FDLIBM_PROTOTYPE((struct exception *));
  *       See HP-15C Advanced Functions Handbook, p.193.
  */
 
-#include "fdlibm.h"
-
 #if defined __STDC__
 static const double
 #else  // !defined __STDC__
