@@ -65,8 +65,8 @@ extern  _LIB_VERSION_TYPE  _LIB_VERSION;
 #define _POSIX_ fdlibm_posix
 
 struct exception {
-    int type;
-    char *name;
+    int    type;
+    char*  name;
     double arg1;
     double arg2;
     double retval;
@@ -213,7 +213,7 @@ extern double __kernel_standard __P((double,double,int));
 extern double __kernel_sin __P((double,double,int));
 extern double __kernel_cos __P((double,double));
 extern double __kernel_tan __P((double,double,int));
-extern int    __kernel_rem_pio2 __P((double*,double*,int,int,int,const int*));
+extern int    __kernel_rem_pio2 __P((double*,double*,int,int,int,int const*));
 
 /* @(#)s_expm1.c 1.5 04/04/22 */
 /*
