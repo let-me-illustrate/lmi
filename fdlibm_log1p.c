@@ -107,12 +107,6 @@ extern double exp FDLIBM_PROTOTYPE((double));
 
 extern int matherr FDLIBM_PROTOTYPE((struct exception *));
 
-/*
- * BSD math library entry points
- */
-extern double expm1 FDLIBM_PROTOTYPE((double));
-extern double log1p FDLIBM_PROTOTYPE((double));
-
 /* @(#)s_log1p.c 1.3 95/01/18 */
 /*
  * ====================================================
@@ -211,9 +205,9 @@ Lp7 = 1.479819860511658591e-01;  /* 3FC2F112 DF3E5244 */
 static double zero = 0.0;
 
 #if defined __STDC__
-    double log1p(double x)
+    double fdlibm_log1p(double x)
 #else  // !defined __STDC__
-    double log1p(x)
+    double fdlibm_log1p(x)
     double x;
 #endif // !defined __STDC__
 {
