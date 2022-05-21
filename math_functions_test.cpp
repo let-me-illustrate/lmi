@@ -641,8 +641,6 @@ void test_expm1_log1p()
 
 void sample_results()
 {
-    std::cout << '\n' << LMI_CONTEXT << '\n' << std::endl;
-
     constexpr double intrate {0.04};
     fenv_initialize();
     std::cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
@@ -695,6 +693,8 @@ void assay_speed()
 
 int test_main(int, char*[])
 {
+    std::cout << LMI_CONTEXT << '\n' << std::endl;
+
     test_assign_midpoint();
 
     test_outward_quotient();
