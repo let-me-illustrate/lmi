@@ -937,7 +937,6 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__func__"
         ,"__has_include"
     // Platform identification.
-        ,"_ISOC99_SOURCE"
         ,"_M_IX86"
         ,"_M_IX86_FP"
         ,"_M_X64"

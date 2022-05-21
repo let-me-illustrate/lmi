@@ -97,14 +97,6 @@
 #   endif  // !defined LMI_X87
 #endif // defined LMI_X86
 
-// This selects a correct snprintf() for MinGW-w64.
-
-#if defined __GNUC__
-#   if !defined _ISOC99_SOURCE
-#       define _ISOC99_SOURCE
-#   endif // !defined _ISOC99_SOURCE
-#endif // defined __GNUC__
-
 // 'platform_dependent.hpp' includes standard headers in an unusual
 // way, and must be included before any standard headers are seen.
 // Do that here to quarantine the weirdness.
