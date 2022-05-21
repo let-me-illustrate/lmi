@@ -30,6 +30,8 @@
 // it's the simplest lmi header.
 #include "version.hpp"
 
+#include <stdint.h>
+
 #if defined __GNUC__
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wfloat-conversion"
@@ -250,8 +252,8 @@ double fdlibm_expm1(double);
 #endif // !defined __STDC__
 {
     double y,hi,lo,c,t,e,hxs,hfx,r1;
-    int k,xsb;
-    unsigned hx;
+    int32_t k,xsb;
+    uint32_t hx;
 
     hx  = FDLIBM_HI(x);         /* high word of x */
     xsb = hx&0x80000000;        /* sign bit of x */

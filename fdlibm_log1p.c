@@ -30,6 +30,8 @@
 // it's the simplest lmi header.
 #include "version.hpp"
 
+#include <stdint.h>
+
 #if defined __GNUC__
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wstrict-aliasing"
@@ -218,7 +220,7 @@ double fdlibm_log1p(double);
 #endif // !defined __STDC__
 {
     double hfsq,f,c,s,z,R,u;
-    int k,hx,hu,ax;
+    int32_t k,hx,hu,ax;
 
     hx = FDLIBM_HI(x);        /* high word of x */
     ax = hx&0x7fffffff;
@@ -236,7 +238,7 @@ double fdlibm_log1p(double);
             else
                 return x - x*x*0.5;
         }
-        if(hx>0||hx<=((int)0xbfd2bec3)) {
+        if(hx>0||hx<=((int32_t)0xbfd2bec3)) {
             k=0;f=x;hu=1;                       /* -0.2929<x<0.41422 */
         }
     }
