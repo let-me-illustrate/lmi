@@ -379,10 +379,8 @@ void test_signum(char const* file, int line)
         }
 }
 
-int test_main(int, char*[])
+void test_assign_midpoint()
 {
-    // Test assign_midpoint().
-
     constexpr double smallnum = std::numeric_limits<double>::denorm_min();
     constexpr double bignum   = std::numeric_limits<double>::max();
 
@@ -398,9 +396,10 @@ int test_main(int, char*[])
     LMI_TEST_EQUAL(v3[4], v2[4]);
     LMI_TEST_EQUAL(v3[5], v2[5]);
     LMI_TEST_EQUAL(6, v0.size());
+}
 
-    // Test outward_quotient().
-
+void test_outward_quotient()
+{
     LMI_TEST_EQUAL( 1, outward_quotient( 2,  2));
     LMI_TEST_EQUAL( 1, outward_quotient( 1,  2));
     LMI_TEST_EQUAL( 0, outward_quotient( 0,  2));
@@ -458,9 +457,10 @@ int test_main(int, char*[])
 
 // Appropriately fails to compile due to static assertion:
 //  outward_quotient(1.0, 1.0);
+}
 
-    // Actuarial functions.
-
+void test_compound_interest()
+{
     // Test with 1 == 'n'.
 
     LMI_TEST
@@ -592,6 +592,15 @@ int test_main(int, char*[])
             ,1.0e-15
             )
         );
+}
+
+int test_main(int, char*[])
+{
+    test_assign_midpoint();
+
+    test_outward_quotient();
+
+    test_compound_interest();
 
     std::cout << LMI_CONTEXT << '\n' << std::endl;
 
