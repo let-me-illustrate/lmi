@@ -203,6 +203,8 @@ void test_expm1_log1p()
 
 void sample_results()
 {
+    std::cout << LMI_CONTEXT << '\n' << std::endl;
+
     constexpr double intrate {0.04};
     fenv_initialize();
     std::cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
@@ -601,8 +603,6 @@ int test_main(int, char*[])
     test_outward_quotient();
 
     test_compound_interest();
-
-    std::cout << LMI_CONTEXT << '\n' << std::endl;
 
     test_signum<bool         >(__FILE__, __LINE__);
     test_signum<signed char  >(__FILE__, __LINE__);
