@@ -158,16 +158,34 @@ void test_expm1_log1p()
     std::cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
     std::cout.precision(23);
 
+    // Test several known correctly rounded values. See:
+    //   https://lists.nongnu.org/archive/html/lmi/2022-05/msg00030.html
+    // which gives the more precise values
+    //   1.7456010150169164939897763166603876240737508195959622916673980879...
+    //   1.7456010150169166 = 3FFBEDFB5475CB01 correctly rounded binary64
+    //  [1.7456010150169163 = 3FFBEDFB5475CB00 lower neighbor--rejected]
+    // for e^1.01 - 1 . Similarly, using
+    //   https://www.wolframalpha.com/input?i2d=true&i=ln\(40)1.01\(41)
+    //   https://babbage.cs.qc.cuny.edu/IEEE-754.old/Decimal.html
+    // ln(1 + 0.01) is
+    //   0.0099503308531680828482153575442607416886796099400587978646095597...
+    //   0.009950330853168083 = 3F8460D6CCCA3677
+    // and
+    //   https://www.wolframalpha.com/input?i=exp(ln(1.04)/12)-1
+    // exp(ln(1 + .04) / 12) - 1 is
+    //   0.0032737397821988638592943204158789680534098426263396651605608434...
+    //   0.0032737397821988637 = 3F6AD187A99AE58B
+
     double const x = lmi::expm1(1.01);
     double const y = lmi::log1p(0.01);
     double const z = lmi::expm1(lmi::log1p(0.04) / 12);
 
-    // digits      1 23456789012345678901234
-    LMI_TEST_EQUAL(1.74560101501691655734305, x);
-    // digits          123456789012345678901
-    LMI_TEST_EQUAL(0.00995033085316808334209, y);
-    // digits          123456789012345678901
-    LMI_TEST_EQUAL(0.00327373978219886374239, z);
+    // digits      1 2345678901234567
+    LMI_TEST_EQUAL(1.7456010150169166, x);
+    // digits          1234567890123456
+    LMI_TEST_EQUAL(0.009950330853168083, y);
+    // digits          12345678901234567
+    LMI_TEST_EQUAL(0.0032737397821988637, z);
 }
 
 /// This function isn't a unit test per se. Its purpose is to show
