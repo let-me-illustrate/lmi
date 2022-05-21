@@ -147,102 +147,6 @@ struct i_upper_n_over_n_from_i_T
 };
 } // Unnamed namespace.
 
-/// Test fdlibm expm1() and log1p().
-///
-/// Testing for exact floating-point equality seems to be a patent
-/// mistake, but should work for the fdlibm implementations on
-/// any implementation where double is binary64.
-
-void test_expm1_log1p()
-{
-    std::cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
-    std::cout.precision(23);
-
-    // Test several known correctly rounded values. See:
-    //   https://lists.nongnu.org/archive/html/lmi/2022-05/msg00030.html
-    // which gives the more precise values
-    //   1.7456010150169164939897763166603876240737508195959622916673980879...
-    //   1.7456010150169166 = 3FFBEDFB5475CB01 correctly rounded binary64
-    //  [1.7456010150169163 = 3FFBEDFB5475CB00 lower neighbor--rejected]
-    // for e^1.01 - 1 . Similarly, using
-    //   https://www.wolframalpha.com/input?i2d=true&i=ln\(40)1.01\(41)
-    //   https://babbage.cs.qc.cuny.edu/IEEE-754.old/Decimal.html
-    // ln(1 + 0.01) is
-    //   0.0099503308531680828482153575442607416886796099400587978646095597...
-    //   0.009950330853168083 = 3F8460D6CCCA3677
-    // and
-    //   https://www.wolframalpha.com/input?i=exp(ln(1.04)/12)-1
-    // exp(ln(1 + .04) / 12) - 1 is
-    //   0.0032737397821988638592943204158789680534098426263396651605608434...
-    //   0.0032737397821988637 = 3F6AD187A99AE58B
-
-    double const x = lmi::expm1(1.01);
-    double const y = lmi::log1p(0.01);
-    double const z = lmi::expm1(lmi::log1p(0.04) / 12);
-
-    // digits      1 2345678901234567
-    LMI_TEST_EQUAL(1.7456010150169166, x);
-    // digits          1234567890123456
-    LMI_TEST_EQUAL(0.009950330853168083, y);
-    // digits          12345678901234567
-    LMI_TEST_EQUAL(0.0032737397821988637, z);
-}
-
-/// This function isn't a unit test per se. Its purpose is to show
-/// how a sample calculation is affected by
-///   exponential versus power method,
-///   floating-point type (double vs. long double), and
-///   hardware precision (on supported platforms).
-///
-/// All methods and precisions are tested with the same constant input
-/// interest rate, which is declared as 'double', as though it were
-/// read as such from a data file containing the given string-literal.
-/// The intention here is to use exactly the same value in all cases;
-/// using a long double string literal for long double scenarios would
-/// introduce a confounder.
-
-void sample_results()
-{
-    std::cout << '\n' << LMI_CONTEXT << '\n' << std::endl;
-
-    constexpr double intrate {0.04};
-    fenv_initialize();
-    std::cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
-    std::cout.precision(23);
-    std::cout
-        << "Daily rate corresponding to 1% annual interest"
-        << ", by various methods:\n"
-        << "      000000000111111111122\n"
-        << "      123456789012345678901\n"
-        << "  " << i_upper_n_over_n_from_i      <long double,12>()(intrate)
-        << "  long double prec, production template\n"
-        ;
-#if defined LMI_X87
-    fenv_precision(fe_ldblprec);
-#endif // defined LMI_X87
-    std::cout
-        << "  " << i_upper_n_over_n_from_i_T    <long double,12>()(intrate)
-        << "  long double prec, std::expm1 and std::log1p\n"
-        << "  " << i_upper_n_over_n_from_i_naive<long double,12>()(intrate)
-        << "  long double prec, std::pow\n"
-        ;
-#if defined LMI_X87
-    fenv_initialize();
-    fenv_precision(fe_dblprec);
-#endif // defined LMI_X87
-    std::cout
-        << "  " << i_upper_n_over_n_from_i      <double,12>()(intrate)
-        << "  double prec, production template\n"
-        << "  " << i_upper_n_over_n_from_i_T    <double,12>()(intrate)
-        << "  double prec, std::expm1 and std::log1p\n"
-        << "  " << i_upper_n_over_n_from_i_naive<double,12>()(intrate)
-        << "  double prec, std::pow\n"
-        << std::endl;
-        ;
-
-    fenv_initialize();
-}
-
 // These 'mete[01]' functions perform the same sets of operations using
 // different implementations.
 
@@ -329,57 +233,6 @@ void mete5()
         x = std::pow(base, exponent);
         }
     stifle_unused_warning(x);
-}
-
-void assay_speed()
-{
-    std::cout << "Speed tests:\n";
-    std::cout << "  std::pow         " << TimeAnAliquot(mete0) << '\n';
-    std::cout << "  std::expm1       " << TimeAnAliquot(mete1) << '\n';
-    std::cout << "  double      i365 " << TimeAnAliquot(mete2) << '\n';
-    std::cout << "  long double i365 " << TimeAnAliquot(mete3) << '\n';
-    std::cout << "  10^-9 nonstd     " << TimeAnAliquot(mete4) << '\n';
-    std::cout << "  10^-9 std        " << TimeAnAliquot(mete5) << '\n';
-    std::cout << std::flush;
-}
-
-template<typename T>
-void test_signum(char const* file, int line)
-{
-    T const maxT = std::numeric_limits<T>::max();
-    T const minT = std::numeric_limits<T>::lowest();
-
-    INVOKE_LMI_TEST_EQUAL( 0, signum(T( 0)), file, line);
-    INVOKE_LMI_TEST_EQUAL( 1, signum(T( 1)), file, line);
-
-    INVOKE_LMI_TEST_EQUAL( 1, signum(maxT), file, line);
-
-    if(minT < 0)
-        {
-        // The left-hand side is cast to T to avoid gcc 'bool-compare'
-        // diagnostics. An 'is_bool' conditional wouldn't prevent the
-        // macros from being expanded. See:
-        //   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00029.html
-        INVOKE_LMI_TEST_EQUAL(T(-1), signum(T(-1)), file, line);
-        INVOKE_LMI_TEST_EQUAL(T(-1), signum(minT ), file, line);
-        }
-
-    bool volatile is_iec559 = std::numeric_limits<T>::is_iec559;
-    bool volatile has_infinity = std::numeric_limits<T>::has_infinity;
-    if(is_iec559 && has_infinity)
-        {
-        T const infT = std::numeric_limits<T>::infinity();
-        INVOKE_LMI_TEST_EQUAL(-1, signum(-infT), file, line);
-        INVOKE_LMI_TEST_EQUAL( 1, signum( infT), file, line);
-        }
-
-    bool volatile has_quiet_NaN = std::numeric_limits<T>::has_quiet_NaN;
-    if(is_iec559 && has_quiet_NaN)
-        {
-        T const qnanT = std::numeric_limits<T>::quiet_NaN();
-        INVOKE_LMI_TEST_EQUAL(-1, signum(-qnanT), file, line);
-        INVOKE_LMI_TEST_EQUAL( 1, signum( qnanT), file, line);
-        }
 }
 
 void test_assign_midpoint()
@@ -595,6 +448,153 @@ void test_compound_interest()
             ,1.0e-15
             )
         );
+}
+
+template<typename T>
+void test_signum(char const* file, int line)
+{
+    T const maxT = std::numeric_limits<T>::max();
+    T const minT = std::numeric_limits<T>::lowest();
+
+    INVOKE_LMI_TEST_EQUAL( 0, signum(T( 0)), file, line);
+    INVOKE_LMI_TEST_EQUAL( 1, signum(T( 1)), file, line);
+
+    INVOKE_LMI_TEST_EQUAL( 1, signum(maxT), file, line);
+
+    if(minT < 0)
+        {
+        // The left-hand side is cast to T to avoid gcc 'bool-compare'
+        // diagnostics. An 'is_bool' conditional wouldn't prevent the
+        // macros from being expanded. See:
+        //   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00029.html
+        INVOKE_LMI_TEST_EQUAL(T(-1), signum(T(-1)), file, line);
+        INVOKE_LMI_TEST_EQUAL(T(-1), signum(minT ), file, line);
+        }
+
+    bool volatile is_iec559 = std::numeric_limits<T>::is_iec559;
+    bool volatile has_infinity = std::numeric_limits<T>::has_infinity;
+    if(is_iec559 && has_infinity)
+        {
+        T const infT = std::numeric_limits<T>::infinity();
+        INVOKE_LMI_TEST_EQUAL(-1, signum(-infT), file, line);
+        INVOKE_LMI_TEST_EQUAL( 1, signum( infT), file, line);
+        }
+
+    bool volatile has_quiet_NaN = std::numeric_limits<T>::has_quiet_NaN;
+    if(is_iec559 && has_quiet_NaN)
+        {
+        T const qnanT = std::numeric_limits<T>::quiet_NaN();
+        INVOKE_LMI_TEST_EQUAL(-1, signum(-qnanT), file, line);
+        INVOKE_LMI_TEST_EQUAL( 1, signum( qnanT), file, line);
+        }
+}
+
+/// Test fdlibm expm1() and log1p().
+///
+/// Testing for exact floating-point equality seems to be a patent
+/// mistake, but should work for the fdlibm implementations on
+/// any implementation where double is binary64.
+
+void test_expm1_log1p()
+{
+    std::cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
+    std::cout.precision(23);
+
+    // Test several known correctly rounded values. See:
+    //   https://lists.nongnu.org/archive/html/lmi/2022-05/msg00030.html
+    // which gives the more precise values
+    //   1.7456010150169164939897763166603876240737508195959622916673980879...
+    //   1.7456010150169166 = 3FFBEDFB5475CB01 correctly rounded binary64
+    //  [1.7456010150169163 = 3FFBEDFB5475CB00 lower neighbor--rejected]
+    // for e^1.01 - 1 . Similarly, using
+    //   https://www.wolframalpha.com/input?i2d=true&i=ln\(40)1.01\(41)
+    //   https://babbage.cs.qc.cuny.edu/IEEE-754.old/Decimal.html
+    // ln(1 + 0.01) is
+    //   0.0099503308531680828482153575442607416886796099400587978646095597...
+    //   0.009950330853168083 = 3F8460D6CCCA3677
+    // and
+    //   https://www.wolframalpha.com/input?i=exp(ln(1.04)/12)-1
+    // exp(ln(1 + .04) / 12) - 1 is
+    //   0.0032737397821988638592943204158789680534098426263396651605608434...
+    //   0.0032737397821988637 = 3F6AD187A99AE58B
+
+    double const x = lmi::expm1(1.01);
+    double const y = lmi::log1p(0.01);
+    double const z = lmi::expm1(lmi::log1p(0.04) / 12);
+
+    // digits      1 2345678901234567
+    LMI_TEST_EQUAL(1.7456010150169166, x);
+    // digits          1234567890123456
+    LMI_TEST_EQUAL(0.009950330853168083, y);
+    // digits          12345678901234567
+    LMI_TEST_EQUAL(0.0032737397821988637, z);
+}
+
+/// This function isn't a unit test per se. Its purpose is to show
+/// how a sample calculation is affected by
+///   exponential versus power method,
+///   floating-point type (double vs. long double), and
+///   hardware precision (on supported platforms).
+///
+/// All methods and precisions are tested with the same constant input
+/// interest rate, which is declared as 'double', as though it were
+/// read as such from a data file containing the given string-literal.
+/// The intention here is to use exactly the same value in all cases;
+/// using a long double string literal for long double scenarios would
+/// introduce a confounder.
+
+void sample_results()
+{
+    std::cout << '\n' << LMI_CONTEXT << '\n' << std::endl;
+
+    constexpr double intrate {0.04};
+    fenv_initialize();
+    std::cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
+    std::cout.precision(23);
+    std::cout
+        << "Daily rate corresponding to 1% annual interest"
+        << ", by various methods:\n"
+        << "      000000000111111111122\n"
+        << "      123456789012345678901\n"
+        << "  " << i_upper_n_over_n_from_i      <long double,12>()(intrate)
+        << "  long double prec, production template\n"
+        ;
+#if defined LMI_X87
+    fenv_precision(fe_ldblprec);
+#endif // defined LMI_X87
+    std::cout
+        << "  " << i_upper_n_over_n_from_i_T    <long double,12>()(intrate)
+        << "  long double prec, std::expm1 and std::log1p\n"
+        << "  " << i_upper_n_over_n_from_i_naive<long double,12>()(intrate)
+        << "  long double prec, std::pow\n"
+        ;
+#if defined LMI_X87
+    fenv_initialize();
+    fenv_precision(fe_dblprec);
+#endif // defined LMI_X87
+    std::cout
+        << "  " << i_upper_n_over_n_from_i      <double,12>()(intrate)
+        << "  double prec, production template\n"
+        << "  " << i_upper_n_over_n_from_i_T    <double,12>()(intrate)
+        << "  double prec, std::expm1 and std::log1p\n"
+        << "  " << i_upper_n_over_n_from_i_naive<double,12>()(intrate)
+        << "  double prec, std::pow\n"
+        << std::endl;
+        ;
+
+    fenv_initialize();
+}
+
+void assay_speed()
+{
+    std::cout << "Speed tests:\n";
+    std::cout << "  std::pow         " << TimeAnAliquot(mete0) << '\n';
+    std::cout << "  std::expm1       " << TimeAnAliquot(mete1) << '\n';
+    std::cout << "  double      i365 " << TimeAnAliquot(mete2) << '\n';
+    std::cout << "  long double i365 " << TimeAnAliquot(mete3) << '\n';
+    std::cout << "  10^-9 nonstd     " << TimeAnAliquot(mete4) << '\n';
+    std::cout << "  10^-9 std        " << TimeAnAliquot(mete5) << '\n';
+    std::cout << std::flush;
 }
 
 int test_main(int, char*[])
