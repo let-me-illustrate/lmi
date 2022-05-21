@@ -203,7 +203,7 @@ void test_expm1_log1p()
 
 void sample_results()
 {
-    std::cout << LMI_CONTEXT << '\n' << std::endl;
+    std::cout << '\n' << LMI_CONTEXT << '\n' << std::endl;
 
     constexpr double intrate {0.04};
     fenv_initialize();
@@ -237,6 +237,7 @@ void sample_results()
         << "  double prec, std::expm1 and std::log1p\n"
         << "  " << i_upper_n_over_n_from_i_naive<double,12>()(intrate)
         << "  double prec, std::pow\n"
+        << std::endl;
         ;
 
     fenv_initialize();
@@ -339,7 +340,7 @@ void assay_speed()
     std::cout << "  long double i365 " << TimeAnAliquot(mete3) << '\n';
     std::cout << "  10^-9 nonstd     " << TimeAnAliquot(mete4) << '\n';
     std::cout << "  10^-9 std        " << TimeAnAliquot(mete5) << '\n';
-    std::cout << std::endl;
+    std::cout << std::flush;
 }
 
 template<typename T>
@@ -612,11 +613,11 @@ int test_main(int, char*[])
     test_signum<double       >(__FILE__, __LINE__);
     test_signum<long double  >(__FILE__, __LINE__);
 
-    assay_speed();
-
     test_expm1_log1p();
 
     sample_results();
+
+    assay_speed();
 
     return 0;
 }
