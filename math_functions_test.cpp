@@ -536,13 +536,13 @@ int test_main(int, char*[])
 
     LMI_TEST
         (materially_equal
-            (0.0032737397821988637 // Not very accurate.
+            (0.0032737397821988637 // Correctly rounded.
             ,i_upper_12_over_12_from_i_naive<double>()(0.04)
             )
         );
     LMI_TEST
         (materially_equal
-            (0.0032737397821988642
+            (0.0032737397821988637 // Correctly rounded.
             ,i_upper_12_over_12_from_i<double>()(0.04)
             )
         );
@@ -550,13 +550,13 @@ int test_main(int, char*[])
     LMI_TEST
         (materially_equal
             (0.04
-            ,i_from_i_upper_12_over_12_naive<double>()(0.0032737397821988642)
+            ,i_from_i_upper_12_over_12_naive<double>()(0.0032737397821988637)
             )
         );
     LMI_TEST
         (materially_equal
             (0.04
-            ,i_from_i_upper_12_over_12<double>()(0.0032737397821988642)
+            ,i_from_i_upper_12_over_12<double>()(0.0032737397821988637)
             )
         );
 
