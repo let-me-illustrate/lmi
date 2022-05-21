@@ -875,9 +875,11 @@ map_lookup_test_LDADD = \
 materially_equal_test_LDADD = \
   libtest_common.la
 
-math_functions_test_LDADD = \
+math_functions_test_SOURCES = \
   fdlibm_expm1.c \
   fdlibm_log1p.c \
+  math_functions_test.cpp
+math_functions_test_LDADD = \
   libtest_common.la
 
 mc_enum_test_SOURCES = \
