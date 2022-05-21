@@ -31,7 +31,8 @@
 #include "timer.hpp"
 
 #include <algorithm>                    // min()
-#include <cmath>                        // isnan(), pow()
+#include <cfloat>                       // DBL_EPSILON
+#include <cmath>                        // fabs(), isnan(), pow()
 #include <iomanip>
 #include <limits>
 #include <type_traits>
@@ -528,6 +529,101 @@ void test_expm1_log1p()
     LMI_TEST_EQUAL(0.009950330853168083, y);
     // digits          12345678901234567
     LMI_TEST_EQUAL(0.0032737397821988637, z);
+
+    // For sampled (integer/1000000.0) arguments in the open range
+    //   ]-0.043348, +0.042151[
+    // lmi's fdlibm implementation of expm1() and log1p() matches glibc's
+    // except for this single example:
+    double const g0 {25610 / 1000000.0};
+    double const g1 = lmi::expm1(g0); // 0.02594075354662067622868
+    double const g2 = std::expm1(g0); // 0.02594075354662067275924
+//  LMI_TEST_EQUAL(g1, g2); fails
+    LMI_TEST(materially_equal(g1, g2));
+    // and in that example glibc is correct:
+    //   https://www.wolframalpha.com/input?i=exp(25610/1000000)-1
+    // 0.0259407535466206736037231992174016233440736931692437771090797988...
+    //   https://babbage.cs.qc.cuny.edu/IEEE-754.old/Decimal.html
+    // 0.025940753546620673 = 3F9A903680771FAF  correctly rounded
+    // 0.025940753546620676 = 3F9A903680771FB0  fdlibm
+    // 0.025940753546620673 = 3F9A903680771FAF  glibc
+
+    // Absolute value of relative error.
+    auto rel_err = [](double t, double u)
+        {
+        return std::fabs(t - u) / std::min(std::fabs(t), std::fabs(u));
+        };
+
+    // Test fdlibm vs. C RTL for many parameters.
+    int    err_count0 {0};
+    int    err_count1 {0};
+    int    err_count2 {0};
+    int    err_count3 {0};
+    double err_max0   {0.0};
+    double err_max1   {0.0};
+    double err_max2   {0.0};
+    double err_max3   {0.0};
+    std::cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
+    std::cout.precision(23);
+    int const how_many = 1000000;
+    for(int i = 1 - how_many; i < how_many; ++i)
+        {
+        // interest rate
+        double const irate = i / (1.0 * how_many);
+        // fdlibm
+        double const a0 = lmi::expm1(irate);
+        double const a1 = lmi::log1p(irate);
+        double const a2 = lmi::expm1(lmi::log1p(irate) / 12);
+        double const a3 = lmi::expm1(lmi::log1p(irate) / 365);
+        // RTL
+        double const b0 = std::expm1(irate);
+        double const b1 = std::log1p(irate);
+        double const b2 = std::expm1(std::log1p(irate) / 12);
+        double const b3 = std::expm1(std::log1p(irate) / 365);
+        // relative error
+        double const e0 = rel_err(a0, b0);
+        double const e1 = rel_err(a1, b1);
+        double const e2 = rel_err(a2, b2);
+        double const e3 = rel_err(a3, b3);
+        // comparison
+        if(a0 != b0 || a1 != b1 || a2 != b2 || a3 != b3)
+            {
+            err_count0 += a0 != b0;
+            err_count1 += a1 != b1;
+            err_count2 += a2 != b2;
+            err_count3 += a3 != b3;
+            err_max0 = std::max(err_max0, e0);
+            err_max1 = std::max(err_max1, e1);
+            err_max2 = std::max(err_max2, e2);
+            err_max3 = std::max(err_max3, e3);
+// Enable this to show each one:
+#if 0
+            std::cout << "unequal" << std::endl;
+            std::cout
+                << i << ' ' << irate << ' ' << how_many << '\n'
+                << a0 << ' ' << a1 << ' ' << a2 << ' ' << a3 << '\n'
+                << b0 << ' ' << b1 << ' ' << b2 << ' ' << b3 << '\n'
+                << e0 << ' ' << e1 << ' ' << e2 << ' ' << e3 << '\n'
+                << std::endl
+                ;
+#endif // 0
+            }
+        }
+    std::cout
+        << __func__ << ": " << how_many << " trials\n"
+        << "  " << err_count0 << " errors"
+                << " [worst " << err_max0 / DBL_EPSILON  << " ulp]"
+                << " in expm1()\n"
+        << "  " << err_count1 << " errors"
+                << " [worst " << err_max1 / DBL_EPSILON  << " ulp]"
+                << " in log1p()\n"
+        << "  " << err_count2 << " errors"
+                << " [worst " << err_max2 / DBL_EPSILON  << " ulp]"
+                << " in monthly int\n"
+        << "  " << err_count3 << " errors"
+                << " [worst " << err_max3 / DBL_EPSILON  << " ulp]"
+                << " in daily int\n"
+        << std::endl
+        ;
 }
 
 /// This function isn't a unit test per se. Its purpose is to show
