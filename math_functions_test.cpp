@@ -459,14 +459,6 @@ int test_main(int, char*[])
 // Appropriately fails to compile due to static assertion:
 //  outward_quotient(1.0, 1.0);
 
-    test_signum<bool         >(__FILE__, __LINE__);
-    test_signum<signed char  >(__FILE__, __LINE__);
-    test_signum<unsigned char>(__FILE__, __LINE__);
-    test_signum<int          >(__FILE__, __LINE__);
-    test_signum<float        >(__FILE__, __LINE__);
-    test_signum<double       >(__FILE__, __LINE__);
-    test_signum<long double  >(__FILE__, __LINE__);
-
     // Actuarial functions.
 
     // Test with 1 == 'n'.
@@ -602,6 +594,14 @@ int test_main(int, char*[])
         );
 
     std::cout << LMI_CONTEXT << '\n' << std::endl;
+
+    test_signum<bool         >(__FILE__, __LINE__);
+    test_signum<signed char  >(__FILE__, __LINE__);
+    test_signum<unsigned char>(__FILE__, __LINE__);
+    test_signum<int          >(__FILE__, __LINE__);
+    test_signum<float        >(__FILE__, __LINE__);
+    test_signum<double       >(__FILE__, __LINE__);
+    test_signum<long double  >(__FILE__, __LINE__);
 
     assay_speed();
 
