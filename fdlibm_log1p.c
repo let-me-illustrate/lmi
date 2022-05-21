@@ -32,12 +32,16 @@
 
 #include <stdint.h>
 
-#if defined __GNUC__
+#if defined LMI_GCC
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #   pragma GCC diagnostic ignored "-Wunsuffixed-float-constants"
 #   pragma GCC diagnostic ignored "-Wunused-macros"
-#endif // defined __GNUC__
+#endif // defined LMI_GCC
+
+#if !defined __FLOAT_WORD_ORDER__ && defined __BYTE_ORDER__
+#   define __FLOAT_WORD_ORDER__ __BYTE_ORDER__
+#endif // float word order not defined but byte order is
 
 /* @(#)fdlibm.h 1.5 04/04/22 */
 /*
