@@ -97,7 +97,8 @@
 #   endif  // !defined LMI_X87
 #endif // defined LMI_X86
 
-// This selects a correct snprintf() for MinGW-w64.
+// This selects a correct snprintf() for MinGW-w64. Discussion:
+//   https://lists.nongnu.org/archive/html/lmi/2022-05/msg00041.html
 
 #if defined __GNUC__
 #   if !defined _ISOC99_SOURCE
