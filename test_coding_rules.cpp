@@ -962,6 +962,7 @@ bool check_reserved_name_exception(std::string const& s)
         ,"_vsnprintf"
         ,"_wcsdup"
     // Compiler specific: gcc, clang.
+        ,"__BYTE_ORDER__"
         ,"__FLOAT_WORD_ORDER__"
         ,"__GLIBCPP__"
         ,"__GLIBCXX__"
