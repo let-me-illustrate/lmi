@@ -276,8 +276,6 @@ EOF
 
 cat >eraseme_cpp_008.cpp <<EOF
 $boilerplate
-#if defined _LIBC // Specifically allowed.
-#endif // defined _LIBC
 #if defined __GNUC__ // Specifically allowed.
 #endif // defined __GNUC__
 int  _Forbidden;

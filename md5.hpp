@@ -56,11 +56,6 @@
 extern "C" {
 #endif // defined __cplusplus
 
-/* GWC: Unconditionally assume we have the standard C headers.
- * #if defined HAVE_LIMITS_H || _LIBC
- * # include <limits.h>
- * #endif // defined HAVE_LIMITS_H || _LIBC
- */
 #include <limits.h>
 
 typedef std::uint32_t md5_uint32;

@@ -997,7 +997,6 @@ bool check_reserved_name_exception(std::string const& s)
         ,"_get_output_format"
     // Compiler specific: glibc.
         ,"_GLIBCXX_DEBUG"
-        ,"_LIBC"
     // Compiler specific: EDG; hence, como, and also libcomo.
         ,"__asm"
         ,"__COMO__"
