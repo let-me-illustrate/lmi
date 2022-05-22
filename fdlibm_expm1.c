@@ -52,6 +52,14 @@
  * ====================================================
  */
 
+// Apparently the clang maintainers believe that floating-point
+// endianness is necessarily the same as integer endianness.
+#if defined __clang__
+#   if !defined __FLOAT_WORD_ORDER__ && defined __BYTE_ORDER__
+#       define __FLOAT_WORD_ORDER__ __BYTE_ORDER__
+#   endif // !defined __FLOAT_WORD_ORDER__ && defined __BYTE_ORDER__
+#endif // defined __clang__
+
 #if !defined __FLOAT_WORD_ORDER__ || \
     !defined __ORDER_BIG_ENDIAN__ || \
     !defined __ORDER_LITTLE_ENDIAN__
