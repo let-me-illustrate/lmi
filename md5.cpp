@@ -74,13 +74,12 @@
 #include "md5.hpp"
 
 #if defined _LIBC
-# include <endian.h>
-# if __BYTE_ORDER == __BIG_ENDIAN
+# if __BYTE_ORDER__ == __BIG_ENDIAN
 #  define WORDS_BIGENDIAN 1
-# endif // __BYTE_ORDER == __BIG_ENDIAN
+# endif // __BYTE_ORDER__ == __BIG_ENDIAN
 #endif // defined _LIBC
 
-/* intel x86 is litte-endian */
+/* intel x86 is little-endian */
 #if defined WORDS_BIGENDIAN
 # define SWAP(n)                            \
     (((n) << 24) | (((n) & 0xff00) << 8) | (((n) >> 8) & 0xff00) | ((n) >> 24))
