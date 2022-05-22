@@ -74,9 +74,9 @@
 #include "md5.hpp"
 
 #if defined _LIBC
-# if __BYTE_ORDER__ == __BIG_ENDIAN
+# if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 #  define WORDS_BIGENDIAN 1
-# endif // __BYTE_ORDER__ == __BIG_ENDIAN
+# endif // __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 #endif // defined _LIBC
 
 /* intel x86 is little-endian */
