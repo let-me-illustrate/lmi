@@ -36,7 +36,6 @@
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #   pragma GCC diagnostic ignored "-Wunsuffixed-float-constants"
-#   pragma GCC diagnostic ignored "-Wunused-macros"
 #endif // defined LMI_GCC
 
 /* @(#)fdlibm.h 1.5 04/04/22 */
@@ -66,14 +65,10 @@
 
 #if   __FLOAT_WORD_ORDER__ == __ORDER_LITTLE_ENDIAN__
 #   define FDLIBM_HI(x) *(1+(int*)&x)
-#   define FDLIBM_LO(x) *(int*)&x
-#   define FDLIBM_HIp(x) *(1+(int*)x)
-#   define FDLIBM_LOp(x) *(int*)x
+// #   define FDLIBM_LO(x) *(int*)&x     // not used in this file
 #elif __FLOAT_WORD_ORDER__ == __ORDER_BIG_ENDIAN__
 #   define FDLIBM_HI(x) *(int*)&x
-#   define FDLIBM_LO(x) *(1+(int*)&x)
-#   define FDLIBM_HIp(x) *(int*)x
-#   define FDLIBM_LOp(x) *(1+(int*)x)
+// #   define FDLIBM_LO(x) *(1+(int*)&x) // not used in this file
 #else  // unknown endianness
 #   error Unknown endianness.
 #endif // unknown endianness
@@ -90,8 +85,6 @@
 
 extern int signgam;
 
-#define MAXFLOAT ((float)3.40282346638528860e+38)
-
 struct exception {
     int    type;
     char*  name;
@@ -99,22 +92,6 @@ struct exception {
     double arg2;
     double retval;
 };
-
-#define HUGE      MAXFLOAT
-
-/*
- * set X_TLOSS = pi*2**52, which is possibly defined in <values.h>
- * (one may replace the following line by "#include <values.h>")
- */
-
-#define X_TLOSS   1.41484755040568800000e+16
-
-#define DOMAIN    1
-#define SING      2
-#define OVERFLOW  3
-#define UNDERFLOW 4
-#define TLOSS     5
-#define PLOSS     6
 
 /*
  * ANSI/POSIX
