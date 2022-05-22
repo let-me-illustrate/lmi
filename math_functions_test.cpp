@@ -236,6 +236,48 @@ void mete5()
     stifle_unused_warning(x);
 }
 
+// These 'mete[6789]' functions test the speed of exmp1() and log1p().
+
+void mete6()
+{
+    double volatile x;
+    for(int j = 0; j < 100000; ++j)
+        {
+        x = lmi::expm1(0.0032737397821988637);
+        }
+    stifle_unused_warning(x);
+}
+
+void mete7()
+{
+    double volatile x;
+    for(int j = 0; j < 100000; ++j)
+        {
+        x = std::expm1(0.0032737397821988637);
+        }
+    stifle_unused_warning(x);
+}
+
+void mete8()
+{
+    double volatile x;
+    for(int j = 0; j < 100000; ++j)
+        {
+        x = lmi::log1p(0.04);
+        }
+    stifle_unused_warning(x);
+}
+
+void mete9()
+{
+    double volatile x;
+    for(int j = 0; j < 100000; ++j)
+        {
+        x = std::log1p(0.04);
+        }
+    stifle_unused_warning(x);
+}
+
 void test_assign_midpoint()
 {
     constexpr double smallnum = std::numeric_limits<double>::denorm_min();
@@ -688,6 +730,10 @@ void assay_speed()
     std::cout << "  long double i365 " << TimeAnAliquot(mete3) << '\n';
     std::cout << "  10^-9 nonstd     " << TimeAnAliquot(mete4) << '\n';
     std::cout << "  10^-9 std        " << TimeAnAliquot(mete5) << '\n';
+    std::cout << "  lmi::expm1()     " << TimeAnAliquot(mete6) << '\n';
+    std::cout << "  std::expm1()     " << TimeAnAliquot(mete7) << '\n';
+    std::cout << "  lmi::log1p()     " << TimeAnAliquot(mete8) << '\n';
+    std::cout << "  std::log1p()     " << TimeAnAliquot(mete9) << '\n';
     std::cout << std::flush;
 }
 
