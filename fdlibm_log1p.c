@@ -32,12 +32,12 @@
 
 #include <stdint.h>
 
-#if defined __GNUC__
+#if defined LMI_GCC
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #   pragma GCC diagnostic ignored "-Wunsuffixed-float-constants"
 #   pragma GCC diagnostic ignored "-Wunused-macros"
-#endif // defined __GNUC__
+#endif // defined LMI_GCC
 
 /* @(#)fdlibm.h 1.5 04/04/22 */
 /*
