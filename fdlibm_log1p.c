@@ -47,6 +47,12 @@
  * ====================================================
  */
 
+// $NetBSD: s_log1p.c,v 1.8 1995/05/10 20:47:46 jtc Exp $
+/* Modified by Naohiko Shimizu/Tokai University, Japan 1997/08/25,
+   for performance improvement on pipelined processors.
+// https://sourceware.org/git/?p=glibc.git;a=blobdiff;f=sysdeps/libm-ieee754/s_log1p.c;h=4ca01b1ff555693a3fa3459df82bef1c24c82668;hp=086c0dce6c118e2364aa883d0997d32493d43a97;hb=923609d1497f3116d57b297e3e84fc07b2b15b20;hpb=0d9f67937f0c9329c35c2c0d15848ab8316dc520
+*/
+
 /* double log1p(double x)
  *
  * Method :
@@ -116,19 +122,29 @@ static const double
 ln2_hi  =  6.93147180369123816490e-01,  /* 3fe62e42 fee00000 */
 ln2_lo  =  1.90821492927058770002e-10,  /* 3dea39ef 35793c76 */
 two54   =  1.80143985094819840000e+16,  /* 43500000 00000000 */
-Lp1 = 6.666666666666735130e-01,  /* 3FE55555 55555593 */
-Lp2 = 3.999999999940941908e-01,  /* 3FD99999 9997FA04 */
-Lp3 = 2.857142874366239149e-01,  /* 3FD24924 94229359 */
-Lp4 = 2.222219843214978396e-01,  /* 3FCC71C5 1D8E78AF */
-Lp5 = 1.818357216161805012e-01,  /* 3FC74664 96CB03DE */
-Lp6 = 1.531383769920937332e-01,  /* 3FC39A09 D078C69F */
-Lp7 = 1.479819860511658591e-01;  /* 3FC2F112 DF3E5244 */
+Lp[] = {0.0 // not used
+       ,6.666666666666735130e-01 /* 3FE55555 55555593 */
+       ,3.999999999940941908e-01 /* 3FD99999 9997FA04 */
+       ,2.857142874366239149e-01 /* 3FD24924 94229359 */
+       ,2.222219843214978396e-01 /* 3FCC71C5 1D8E78AF */
+       ,1.818357216161805012e-01 /* 3FC74664 96CB03DE */
+       ,1.531383769920937332e-01 /* 3FC39A09 D078C69F */
+       ,1.479819860511658591e-01 /* 3FC2F112 DF3E5244 */
+};
+
+#define Lp1 Lp[1]
+#define Lp2 Lp[2]
+#define Lp3 Lp[3]
+#define Lp4 Lp[4]
+#define Lp5 Lp[5]
+#define Lp6 Lp[6]
+#define Lp7 Lp[7]
 
 static double zero = 0.0;
 
 double fdlibm_log1p(double x)
 {
-    double hfsq,f,c,s,z,R,u;
+    double hfsq,f,c,s,z,R,u,z2,z4,z6,R1,R2,R3,R4;
     int32_t k,hx,hu,ax;
 
     hx = FDLIBM_HI(x);        /* high word of x */
@@ -187,7 +203,13 @@ double fdlibm_log1p(double x)
     }
     s = f/(2.0+f);
     z = s*s;
-    R = z*(Lp1+z*(Lp2+z*(Lp3+z*(Lp4+z*(Lp5+z*(Lp6+z*Lp7))))));
+//  performance improvement: Naohiko Shimizu 19970825
+//  R = z*(Lp1+z*(Lp2+z*(Lp3+z*(Lp4+z*(Lp5+z*(Lp6+z*Lp7))))));
+    R1 =     z*Lp1; z2=z*z;
+    R2 = Lp2+z*Lp3; z4=z2*z2;
+    R3 = Lp4+z*Lp5; z6=z4*z2;
+    R4 = Lp6+z*Lp7;
+    R = R1 + z2*R2 + z4*R3 + z6*R4;
     if(k==0) return f-(hfsq-s*(hfsq+R)); else
              return k*ln2_hi-((hfsq-(s*(hfsq+R)+(k*ln2_lo+c)))-f);
 }

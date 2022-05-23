@@ -48,6 +48,12 @@
  * ====================================================
  */
 
+// $NetBSD: s_expm1.c,v 1.8 1995/05/10 20:47:09 jtc Exp $
+/* Modified by Naohiko Shimizu/Tokai University, Japan 1997/08/25,
+   for performance improvement on pipelined processors.
+// https://sourceware.org/git/?p=glibc.git;a=blobdiff;f=sysdeps/libm-ieee754/s_expm1.c;h=ed1aba527be837d4ed7e65e9c86b3fc3e14e65d7;hp=c8354b7262686370a761494dc785bb59fdf45477;hb=923609d1497f3116d57b297e3e84fc07b2b15b20;hpb=0d9f67937f0c9329c35c2c0d15848ab8316dc520
+*/
+
 /* expm1(x)
  * Returns exp(x)-1, the exponential of x minus 1.
  *
@@ -144,7 +150,6 @@
  */
 
 static const double
-one         = 1.0,
 huge        = 1.0e+300,
 tiny        = 1.0e-300,
 o_threshold = 7.09782712893383973096e+02,/* 0x40862E42, 0xFEFA39EF */
@@ -152,15 +157,24 @@ ln2_hi      = 6.93147180369123816490e-01,/* 0x3fe62e42, 0xfee00000 */
 ln2_lo      = 1.90821492927058770002e-10,/* 0x3dea39ef, 0x35793c76 */
 invln2      = 1.44269504088896338700e+00,/* 0x3ff71547, 0x652b82fe */
         /* scaled coefficients related to expm1 */
-Q1  =  -3.33333333333331316428e-02, /* BFA11111 111110F4 */
-Q2  =   1.58730158725481460165e-03, /* 3F5A01A0 19FE5585 */
-Q3  =  -7.93650757867487942473e-05, /* BF14CE19 9EAADBB7 */
-Q4  =   4.00821782732936239552e-06, /* 3ED0CFCA 86E65239 */
-Q5  =  -2.01099218183624371326e-07; /* BE8AFDB7 6E09C32D */
+Q[] = { 1.0
+      ,-3.33333333333331316428e-02 /* BFA11111 111110F4 */
+      , 1.58730158725481460165e-03 /* 3F5A01A0 19FE5585 */
+      ,-7.93650757867487942473e-05 /* BF14CE19 9EAADBB7 */
+      , 4.00821782732936239552e-06 /* 3ED0CFCA 86E65239 */
+      ,-2.01099218183624371326e-07 /* BE8AFDB7 6E09C32D */
+};
+
+#define one Q[0]
+#define Q1  Q[1]
+#define Q2  Q[2]
+#define Q3  Q[3]
+#define Q4  Q[4]
+#define Q5  Q[5]
 
 double fdlibm_expm1(double x)
 {
-    double y,hi,lo,c,t,e,hxs,hfx,r1;
+    double y,hi,lo,c,t,e,hxs,hfx,r1,h2,h4,R1,R2,R3;
     int32_t k,xsb;
     uint32_t hx;
 
@@ -210,7 +224,12 @@ double fdlibm_expm1(double x)
     /* x is now in primary range */
     hfx = 0.5*x;
     hxs = x*hfx;
-    r1 = one+hxs*(Q1+hxs*(Q2+hxs*(Q3+hxs*(Q4+hxs*Q5))));
+//  performance improvement: Naohiko Shimizu 19970825
+//  r1 = one+hxs*(Q1+hxs*(Q2+hxs*(Q3+hxs*(Q4+hxs*Q5))));
+    R1 = one+hxs*Q1; h2 = hxs*hxs;
+    R2 = Q2+hxs*Q3; h4 = h2*h2;
+    R3 = Q4+hxs*Q5;
+    r1 = R1 + h2*R2 + h4*R3;
     t  = 3.0-r1*hfx;
     e  = hxs*((r1-t)/(6.0 - x*t));
     if(k==0) return x - (x*e-hxs); /* c is 0 */
