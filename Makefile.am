@@ -1158,6 +1158,7 @@ noinst_HEADERS = \
     emit_ledger.hpp \
     exit_codes.hpp \
     facets.hpp \
+    fdlibm.hpp \
     fenv_guard.hpp \
     fenv_lmi.hpp \
     fenv_lmi_x86.hpp \
