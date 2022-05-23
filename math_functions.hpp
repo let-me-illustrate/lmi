@@ -24,6 +24,8 @@
 
 #include "config.hpp"
 
+#include "fdlibm.hpp"                   // fdlibm_expm1(), fdlibm_log1p()
+
 #include <algorithm>                    // max(), min(), transform()
 #include <cmath>                        // expm1(), log1p(), signbit()
 #include <limits>
@@ -31,9 +33,6 @@
 #include <stdexcept>
 #include <type_traits>                  // /is_.*/
 #include <vector>
-
-extern "C" double fdlibm_expm1(double);
-extern "C" double fdlibm_log1p(double);
 
 namespace lmi
 {

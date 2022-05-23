@@ -162,8 +162,6 @@ Q3  =  -7.93650757867487942473e-05, /* BF14CE19 9EAADBB7 */
 Q4  =   4.00821782732936239552e-06, /* 3ED0CFCA 86E65239 */
 Q5  =  -2.01099218183624371326e-07; /* BE8AFDB7 6E09C32D */
 
-double fdlibm_expm1(double);
-
 #if defined __STDC__
     double fdlibm_expm1(double x)
 #else  // !defined __STDC__

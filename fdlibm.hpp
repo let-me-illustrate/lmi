@@ -65,4 +65,14 @@
 #   error Unknown endianness.
 #endif // unknown endianness
 
+#if defined __cplusplus
+extern "C"
+{
+#endif // defined __cplusplus
+double fdlibm_expm1(double);
+double fdlibm_log1p(double);
+#if defined __cplusplus
+} // extern "C"
+#endif // defined __cplusplus
+
 #endif // fdlibm_hpp
