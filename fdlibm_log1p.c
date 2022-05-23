@@ -25,10 +25,7 @@
 // Adapted for lmi by GWC; any defects introduced should not reflect
 // on the reputations of the original authors.
 
-// Generally, lmi '.cpp' files include at least one lmi '.hpp' file,
-// which includes 'config.hpp'. Include 'version.hpp' here because
-// it's the simplest lmi header.
-#include "version.hpp"
+#include "fdlibm.hpp"
 
 #include <stdint.h>
 
@@ -37,41 +34,6 @@
 #   pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #   pragma GCC diagnostic ignored "-Wunsuffixed-float-constants"
 #endif // defined LMI_GCC
-
-/* @(#)fdlibm.h 1.5 04/04/22 */
-/*
- * ====================================================
- * Copyright (C) 2004 by Sun Microsystems, Inc. All rights reserved.
- *
- * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice
- * is preserved.
- * ====================================================
- */
-
-// Apparently the clang maintainers believe that floating-point
-// endianness is necessarily the same as integer endianness.
-#if defined __clang__
-#   if !defined __FLOAT_WORD_ORDER__ && defined __BYTE_ORDER__
-#       define __FLOAT_WORD_ORDER__ __BYTE_ORDER__
-#   endif // !defined __FLOAT_WORD_ORDER__ && defined __BYTE_ORDER__
-#endif // defined __clang__
-
-#if !defined __FLOAT_WORD_ORDER__ || \
-    !defined __ORDER_BIG_ENDIAN__ || \
-    !defined __ORDER_LITTLE_ENDIAN__
-#   error Expected endianness macros not defined.
-#endif // expected endianness macros not defined
-
-#if   __FLOAT_WORD_ORDER__ == __ORDER_LITTLE_ENDIAN__
-#   define FDLIBM_HI(x) *(1+(int*)&x)
-// #   define FDLIBM_LO(x) *(int*)&x     // not used in this file
-#elif __FLOAT_WORD_ORDER__ == __ORDER_BIG_ENDIAN__
-#   define FDLIBM_HI(x) *(int*)&x
-// #   define FDLIBM_LO(x) *(1+(int*)&x) // not used in this file
-#else  // unknown endianness
-#   error Unknown endianness.
-#endif // unknown endianness
 
 /* @(#)s_log1p.c 1.3 95/01/18 */
 /*
