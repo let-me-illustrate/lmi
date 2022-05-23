@@ -36,6 +36,11 @@
  * ====================================================
  */
 
+#ifndef fdlibm_hpp
+#define fdlibm_hpp
+
+#include "config.hpp"
+
 // Apparently the clang maintainers believe that floating-point
 // endianness is necessarily the same as integer endianness.
 #if defined __clang__
@@ -59,3 +64,5 @@
 #else  // unknown endianness
 #   error Unknown endianness.
 #endif // unknown endianness
+
+#endif // fdlibm_hpp
