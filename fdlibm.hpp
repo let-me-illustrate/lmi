@@ -55,6 +55,17 @@
 #   error Expected endianness macros not defined.
 #endif // expected endianness macros not defined
 
+// https://www.netlib.org/fdlibm/readme
+//
+// NOT FIXED YET
+//
+//    3. Compiler failure on non-standard code
+//         Statements like
+//                     *(1+(int*)&t1) = 0;
+//         are not standard C and cause some optimizing compilers (e.g. GCC)
+//         to generate bad code under optimization.    These cases
+//         are to be addressed in the next release.
+
 #if   __FLOAT_WORD_ORDER__ == __ORDER_LITTLE_ENDIAN__
 #   define FDLIBM_HI(x) *(1+(int*)&x)
 #   define FDLIBM_LO(x) *(int*)&x
