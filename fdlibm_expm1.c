@@ -75,33 +75,6 @@
 #   error Unknown endianness.
 #endif // unknown endianness
 
-#if defined __STDC__
-#   define FDLIBM_PROTOTYPE(p) p
-#else  // !defined __STDC__
-#   define FDLIBM_PROTOTYPE(p) ()
-#endif // !defined __STDC__
-
-/*
- * ANSI/POSIX
- */
-
-extern int signgam;
-
-struct exception {
-    int    type;
-    char*  name;
-    double arg1;
-    double arg2;
-    double retval;
-};
-
-/*
- * ANSI/POSIX
- */
-extern double exp FDLIBM_PROTOTYPE((double));
-
-extern int matherr FDLIBM_PROTOTYPE((struct exception *));
-
 /* @(#)s_expm1.c 1.5 04/04/22 */
 /*
  * ====================================================
