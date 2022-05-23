@@ -932,7 +932,6 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__FILE__"
         ,"__LINE__"
         ,"__STDC_IEC_559__"
-        ,"__STDC__"
         ,"__cplusplus"
         ,"__func__"
         ,"__has_include"
