@@ -112,11 +112,7 @@
  *       See HP-15C Advanced Functions Handbook, p.193.
  */
 
-#if defined __STDC__
 static const double
-#else  // !defined __STDC__
-static double
-#endif // !defined __STDC__
 ln2_hi  =  6.93147180369123816490e-01,  /* 3fe62e42 fee00000 */
 ln2_lo  =  1.90821492927058770002e-10,  /* 3dea39ef 35793c76 */
 two54   =  1.80143985094819840000e+16,  /* 43500000 00000000 */
@@ -130,12 +126,7 @@ Lp7 = 1.479819860511658591e-01;  /* 3FC2F112 DF3E5244 */
 
 static double zero = 0.0;
 
-#if defined __STDC__
-    double fdlibm_log1p(double x)
-#else  // !defined __STDC__
-    double fdlibm_log1p(x)
-    double x;
-#endif // !defined __STDC__
+double fdlibm_log1p(double x)
 {
     double hfsq,f,c,s,z,R,u;
     int32_t k,hx,hu,ax;
