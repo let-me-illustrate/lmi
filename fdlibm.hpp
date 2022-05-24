@@ -112,7 +112,7 @@ typedef union
 } ieee_double_shape_type;
 #endif // __FLOAT_WORD_ORDER__ == __ORDER_LITTLE_ENDIAN__
 
-/* Get two 32 bit ints from a double.  */
+// Get two 32 bit ints from a double.
 
 #define EXTRACT_WORDS(ix0,ix1,d)                                \
 do {                                                            \
@@ -122,7 +122,7 @@ do {                                                            \
   (ix1) = ew_u.parts.lsw;                                       \
 } while (0)
 
-/* Get the more significant 32 bit int from a double.  */
+// Get the more significant 32 bit int from a double.
 
 #define GET_HIGH_WORD(i,d)                                      \
 do {                                                            \
@@ -152,7 +152,7 @@ static inline int32_t hi_int(double d)
 #   pragma GCC diagnostic pop
 #endif // defined __cplusplus && defined LMI_GCC
 
-/* Get the less significant 32 bit int from a double.  */
+// Get the less significant 32 bit int from a double.
 
 #define GET_LOW_WORD(i,d)                                       \
 do {                                                            \
@@ -168,7 +168,7 @@ static inline uint32_t lo_uint(double d)
     return i;
 }
 
-/* Get all in one, efficient on 64-bit machines.  */
+// Get all in one, efficient on 64-bit machines.
 
 #define EXTRACT_WORDS64(i,d)                                    \
 do {                                                            \
@@ -177,7 +177,7 @@ do {                                                            \
   (i) = gh_u.word;                                              \
 } while (0)
 
-/* Set a double from two 32 bit ints.  */
+// Set a double from two 32 bit ints.
 
 #define INSERT_WORDS(d,ix0,ix1)                                 \
 do {                                                            \
@@ -187,7 +187,7 @@ do {                                                            \
   (d) = iw_u.value;                                             \
 } while (0)
 
-/* Get all in one, efficient on 64-bit machines.  */
+// Get all in one, efficient on 64-bit machines.
 
 #define INSERT_WORDS64(d,i)                                     \
 do {                                                            \
@@ -196,7 +196,7 @@ do {                                                            \
   (d) = iw_u.value;                                             \
 } while (0)
 
-/* Set the more significant 32 bits of a double from an int.  */
+// Set the more significant 32 bits of a double from an int.
 
 #define SET_HIGH_WORD(d,v)                                      \
 do {                                                            \
@@ -206,7 +206,7 @@ do {                                                            \
   (d) = sh_u.value;                                             \
 } while (0)
 
-/* Set the less significant 32 bits of a double from an int.  */
+// Set the less significant 32 bits of a double from an int.
 
 #define SET_LOW_WORD(d,v)                                       \
 do {                                                            \
