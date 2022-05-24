@@ -561,26 +561,26 @@ void test_expm1_log1p()
     //   0.0032737397821988638592943204158789680534098426263396651605608434...
     //   0.0032737397821988637 = 3F6AD187A99AE58B
 
-    double const x = lmi::expm1(1.01);
-    double const y = lmi::log1p(0.01);
-    double const z = lmi::expm1(lmi::log1p(0.04) / 12);
+    double const g0 = lmi::expm1(1.01);
+    double const g1 = lmi::log1p(0.01);
+    double const g2 = lmi::expm1(lmi::log1p(0.04) / 12);
 
     // digits      1 2345678901234567
-    LMI_TEST_EQUAL(1.7456010150169166, x);
+    LMI_TEST_EQUAL(1.7456010150169166, g0);
     // digits          1234567890123456
-    LMI_TEST_EQUAL(0.009950330853168083, y);
+    LMI_TEST_EQUAL(0.009950330853168083, g1);
     // digits          12345678901234567
-    LMI_TEST_EQUAL(0.0032737397821988637, z);
+    LMI_TEST_EQUAL(0.0032737397821988637, g2);
 
     // For sampled (integer/1000000.0) arguments in the open range
     //   ]-0.043348, +0.042151[
     // lmi's fdlibm implementation of expm1() and log1p() matches glibc's
     // except for this single example:
-    double const g0 {25610 / 1000000.0};
-    double const g1 = lmi::expm1(g0); // 0.02594075354662067622868
-    double const g2 = std::expm1(g0); // 0.02594075354662067275924
-//  LMI_TEST_EQUAL(g1, g2); fails
-    LMI_TEST(materially_equal(g1, g2));
+    double const h0 {25610 / 1000000.0};
+    double const h1 = lmi::expm1(h0); // 0.02594075354662067622868
+    double const h2 = std::expm1(h0); // 0.02594075354662067275924
+//  LMI_TEST_EQUAL(h1, h2); fails
+    LMI_TEST(materially_equal(h1, h2));
     // and in that example glibc is correct:
     //   https://www.wolframalpha.com/input?i=exp(25610/1000000)-1
     // 0.0259407535466206736037231992174016233440736931692437771090797988...
