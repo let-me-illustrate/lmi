@@ -595,9 +595,6 @@ void test_expm1_log1p()
         return std::fabs(t - u) / std::min(std::fabs(t), std::fabs(u));
         };
 
-    // Keeps lines short.
-    auto dbl = [](long double z) {return static_cast<double>(z);};
-
     // Test fdlibm vs. C RTL for many parameters.
     int    err_count0 {0};
     int    err_count1 {0};
@@ -613,20 +610,17 @@ void test_expm1_log1p()
     for(int i = 1 - how_many; i < how_many; ++i)
         {
         // interest rate
-             double const  irate = i / (1.0  * how_many);
-        long double const lirate = irate; // identical value
-        // this would not be identical:
-        //                       = i / (1.0L * how_many);
+        double const irate = i / (1.0 * how_many);
         // fdlibm
         double const a0 = lmi::expm1(irate);
         double const a1 = lmi::log1p(irate);
         double const a2 = lmi::expm1(lmi::log1p(irate) / 12);
         double const a3 = lmi::expm1(lmi::log1p(irate) / 365);
-        // RTL, long double precision, stored as double
-        double const b0 = dbl(std::expm1(lirate));
-        double const b1 = dbl(std::log1p(lirate));
-        double const b2 = dbl(std::expm1(std::log1p(lirate) / 12));
-        double const b3 = dbl(std::expm1(std::log1p(lirate) / 365));
+        // RTL
+        double const b0 = std::expm1(irate);
+        double const b1 = std::log1p(irate);
+        double const b2 = std::expm1(std::log1p(irate) / 12);
+        double const b3 = std::expm1(std::log1p(irate) / 365);
         // relative error
         double const e0 = rel_err(a0, b0);
         double const e1 = rel_err(a1, b1);
