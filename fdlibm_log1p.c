@@ -27,11 +27,9 @@
 
 #include "fdlibm.hpp"
 
-#include <stdint.h>
-
 #if defined LMI_GCC
 #   pragma GCC diagnostic push
-#   pragma GCC diagnostic ignored "-Wstrict-aliasing"
+#   pragma GCC diagnostic ignored "-Wsign-conversion"
 #   pragma GCC diagnostic ignored "-Wunsuffixed-float-constants"
 #endif // defined LMI_GCC
 
@@ -147,7 +145,7 @@ double fdlibm_log1p(double x)
     double hfsq,f,c,s,z,R,u,z2,z4,z6,R1,R2,R3,R4;
     int32_t k,hx,hu,ax;
 
-    hx = FDLIBM_HI(x);        /* high word of x */
+    hx = hi_int(x);                             /* high word of x */
     ax = hx&0x7fffffff;
 
     k = 1;
@@ -171,28 +169,28 @@ double fdlibm_log1p(double x)
     if(k!=0) {
         if(hx<0x43400000) {
             u  = 1.0+x;
-            hu = FDLIBM_HI(u);                  /* high word of u */
+            hu = hi_int(u);                     /* high word of u */
             k  = (hu>>20)-1023;
-            c  = (k>0)? 1.0-(u-x):x-(u-1.0);/* correction term */
+            c  = (k>0)? 1.0-(u-x):x-(u-1.0);    /* correction term */
             c /= u;
         } else {
             u  = x;
-            hu = FDLIBM_HI(u);                  /* high word of u */
+            hu = hi_int(u);                     /* high word of u */
             k  = (hu>>20)-1023;
             c  = 0;
         }
         hu &= 0x000fffff;
         if(hu<0x6a09e) {
-            FDLIBM_HI(u) = hu|0x3ff00000;       /* normalize u */
+            SET_HIGH_WORD(u, hu|0x3ff00000);    /* normalize u */
         } else {
             k += 1;
-            FDLIBM_HI(u) = hu|0x3fe00000;       /* normalize u/2 */
+            SET_HIGH_WORD(u, hu|0x3fe00000);    /* normalize u/2 */
             hu = (0x00100000-hu)>>2;
         }
         f = u-1.0;
     }
     hfsq=0.5*f*f;
-    if(hu==0) {    /* |f| < 2**-20 */
+    if(hu==0) {                                 /* |f| < 2**-20 */
         if(f==zero) {
             if(k==0) return zero;
             else {c += k*ln2_lo; return k*ln2_hi+c;}

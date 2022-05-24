@@ -27,13 +27,10 @@
 
 #include "fdlibm.hpp"
 
-#include <stdint.h>
-
 #if defined LMI_GCC
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wfloat-conversion"
 #   pragma GCC diagnostic ignored "-Wsign-conversion"
-#   pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #   pragma GCC diagnostic ignored "-Wunsuffixed-float-constants"
 #endif // defined LMI_GCC
 
@@ -178,7 +175,7 @@ double fdlibm_expm1(double x)
     int32_t k,xsb;
     uint32_t hx;
 
-    hx  = FDLIBM_HI(x);         /* high word of x */
+    hx  = hi_uint(x);           /* high word of x */
     xsb = hx&0x80000000;        /* sign bit of x */
     if(xsb==0) y=x; else y= -x; /* y = |x| */
     hx &= 0x7fffffff;           /* high word of |x| */
@@ -187,15 +184,15 @@ double fdlibm_expm1(double x)
     if(hx >= 0x4043687A) {      /* if |x|>=56*ln2 */
         if(hx >= 0x40862E42) {  /* if |x|>=709.78... */
           if(hx>=0x7ff00000) {
-            if(((hx&0xfffff)|FDLIBM_LO(x))!=0)
+            if(((hx&0xfffff)|lo_uint(x))!=0)
                  return x+x;    /* NaN */
             else return (xsb==0)? x:-1.0;/* exp(+-inf)={inf,-1} */
           }
             if(x > o_threshold) return huge*huge; /* overflow */
         }
-        if(xsb!=0) { /* x < -56*ln2, return -1.0 with inexact */
-            if(x+tiny<0.0)          /* raise inexact */
-            return tiny-one;        /* return -1 */
+        if(xsb!=0) {            /* x < -56*ln2, return -1.0 with inexact */
+            if(x+tiny<0.0)      /* raise inexact */
+            return tiny-one;    /* return -1 */
         }
     }
 
@@ -216,7 +213,7 @@ double fdlibm_expm1(double x)
         c  = (hi-x)-lo;
     }
     else if(hx < 0x3c900000) {  /* when |x|<2**-54, return x */
-        t = huge+x;    /* return x with inexact flags when x!=0 */
+        t = huge+x;             /* return x with inexact flags when x!=0 */
         return x - (t-(huge+x));
     }
     else k = 0;
@@ -243,19 +240,19 @@ double fdlibm_expm1(double x)
         }
         if (k <= -2 || k>56) {     /* suffice to return exp(x)-1 */
             y = one-(e-x);
-            FDLIBM_HI(y) += (k<<20); /* add k to y's exponent */
+            SET_HIGH_WORD(y, hi_uint(y) + (k<<20));    /* add k to y's exponent */
             return y-one;
         }
         t = one;
         if(k<20) {
-               FDLIBM_HI(t) = 0x3ff00000 - (0x200000>>k);  /* t=1-2^-k */
+               SET_HIGH_WORD(t, 0x3ff00000 - (0x200000>>k)); /* t=1-2^-k */
                y = t-(e-x);
-               FDLIBM_HI(y) += (k<<20); /* add k to y's exponent */
+               SET_HIGH_WORD(y, hi_uint(y) + (k<<20)); /* add k to y's exponent */
         } else {
-               FDLIBM_HI(t)  = ((0x3ff-k)<<20);    /* 2^-k */
+               SET_HIGH_WORD(t, (0x3ff-k)<<20);        /* 2^-k */
                y = x-(e+t);
                y += one;
-               FDLIBM_HI(y) += (k<<20); /* add k to y's exponent */
+               SET_HIGH_WORD(y, hi_uint(y) + (k<<20)); /* add k to y's exponent */
         }
     }
     return y;
