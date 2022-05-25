@@ -257,3 +257,6 @@ double fdlibm_expm1(double x)
     }
     return y;
 }
+#if defined __cplusplus && defined LMI_GCC
+#   pragma GCC diagnostic pop
+#endif // defined __cplusplus && defined LMI_GCC

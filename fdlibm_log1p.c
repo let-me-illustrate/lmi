@@ -211,3 +211,6 @@ double fdlibm_log1p(double x)
     if(k==0) return f-(hfsq-s*(hfsq+R)); else
              return k*ln2_hi-((hfsq-(s*(hfsq+R)+(k*ln2_lo+c)))-f);
 }
+#if defined __cplusplus && defined LMI_GCC
+#   pragma GCC diagnostic pop
+#endif // defined __cplusplus && defined LMI_GCC
