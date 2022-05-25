@@ -879,6 +879,7 @@ math_functions_test_SOURCES = \
   fdlibm_expm1.c \
   fdlibm_log1p.c \
   math_functions_test.cpp
+math_functions_test_CXXFLAGS = $(AM_CXXFLAGS)
 math_functions_test_LDADD = \
   libtest_common.la
 
