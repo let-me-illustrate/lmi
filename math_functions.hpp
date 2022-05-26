@@ -1,4 +1,4 @@
-// Miscellaneous mathematical operations as function objects.
+// Miscellaneous mathematical operations.
 //
 // Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
 //
@@ -24,8 +24,6 @@
 
 #include "config.hpp"
 
-#include "fdlibm.hpp"                   // fdlibm_expm1(), fdlibm_log1p()
-
 #include <algorithm>                    // max(), min(), transform()
 #include <cmath>                        // expm1(), log1p(), signbit()
 #include <limits>
@@ -36,8 +34,12 @@
 
 namespace lmi
 {
-inline double expm1(double z) {return fdlibm_expm1(z);}
-inline double log1p(double z) {return fdlibm_log1p(z);}
+      float expm1(      float z);
+      float log1p(      float z);
+     double expm1(     double z);
+     double log1p(     double z);
+long double expm1(long double z);
+long double log1p(long double z);
 } // namespace lmi
 
 // TODO ?? Write functions here for other refactorable uses of
