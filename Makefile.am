@@ -650,7 +650,7 @@ comma_punct_test_LDADD = \
 commutation_functions_test_SOURCES = \
   commutation_functions.cpp \
   commutation_functions_test.cpp \
-  cso_table.cpp \
+  cso_table.cpp
 commutation_functions_test_CXXFLAGS = $(AM_CXXFLAGS)
 commutation_functions_test_LDADD = \
   libtest_common.la
