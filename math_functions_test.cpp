@@ -133,8 +133,8 @@ struct i_upper_n_over_n_from_i_naive
         }
 };
 
-// This implementation uses std::expm1() and std::log1p() for type T,
-// rather than the long double functions used in production.
+// This implementation uses lmi::expm1() and lmi::log1p() for type T,
+// whereas production uses those functions for type 'double' only.
 
 template<typename T, int n>
 struct i_upper_n_over_n_from_i_T
@@ -143,7 +143,7 @@ struct i_upper_n_over_n_from_i_T
     T operator()(T const& i) const
         {
         static T const reciprocal_n = T(1) / n;
-        return std::expm1(std::log1p(i) * reciprocal_n);
+        return lmi::expm1(lmi::log1p(i) * reciprocal_n);
         }
 };
 } // Unnamed namespace.
