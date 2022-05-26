@@ -25,7 +25,7 @@
 #include "config.hpp"
 
 #include <algorithm>                    // max(), min(), transform()
-#include <cmath>                        // expm1(), log1p(), signbit()
+#include <cmath>                        // signbit()
 #include <limits>
 #include <numeric>                      // midpoint(), partial_sum()
 #include <stdexcept>
@@ -148,7 +148,7 @@ struct i_upper_n_over_n_from_i
             }
 
         // naively:    (1+i)^(1/n) - 1
-        return std::expm1(std::log1p(i) / n);
+        return lmi::expm1(lmi::log1p(i) / n);
         }
 };
 
@@ -172,7 +172,7 @@ struct i_from_i_upper_n_over_n
     T operator()(T i) const
         {
         // naively:    (1+i)^n - 1
-        return std::expm1(std::log1p(i) * n);
+        return lmi::expm1(lmi::log1p(i) * n);
         }
 };
 
@@ -204,7 +204,7 @@ struct d_upper_n_from_i
             }
 
         // naively:    n * (1 - (1+i)^(-1/n))
-        return -n * std::expm1(std::log1p(i) / -n);
+        return -n * lmi::expm1(lmi::log1p(i) / -n);
         }
 };
 
@@ -237,11 +237,11 @@ struct net_i_from_gross
         //   -   (1+spread)^(1/n)
         //   -         fee *(1/n)
         //   )^n - 1
-        return std::expm1
+        return lmi::expm1
             (
-            n * std::log1p
-                (   std::expm1(std::log1p(i)      / n)
-                -   std::expm1(std::log1p(spread) / n)
+            n * lmi::log1p
+                (   lmi::expm1(lmi::log1p(i)      / n)
+                -   lmi::expm1(lmi::log1p(spread) / n)
                 -              fee                / n
                 )
             );
@@ -301,7 +301,7 @@ struct coi_rate_from_q
         else
             {
             // naively:    1 - (1-q)^(1/12)
-            T monthly_q = -std::expm1(std::log1p(-q) / 12);
+            T monthly_q = -lmi::expm1(lmi::log1p(-q) / 12);
             if(T(1) == monthly_q)
                 {
                 throw std::logic_error("Monthly q equals unity.");

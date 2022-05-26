@@ -146,6 +146,8 @@ common_common_objects := \
   death_benefits.o \
   emit_ledger.o \
   facets.o \
+  fdlibm_expm1.o \
+  fdlibm_log1p.o \
   fenv_guard.o \
   fenv_lmi.o \
   file_command.o \
@@ -176,6 +178,7 @@ common_common_objects := \
   ledgervalues.o \
   license.o \
   loads.o \
+  math_functions.o \
   mc_enum.o \
   mc_enum_types.o \
   mc_enum_types_aux.o \
@@ -534,6 +537,9 @@ commutation_functions_test$(EXEEXT): \
   commutation_functions.o \
   commutation_functions_test.o \
   cso_table.o \
+  fdlibm_expm1.o \
+  fdlibm_log1p.o \
+  math_functions.o \
   timer.o \
 
 configurable_settings_test$(EXEEXT): EXTRA_LDFLAGS = $(xml_ldflags)
@@ -627,10 +633,13 @@ gpt_cf_triad_test$(EXEEXT): \
   calendar_date.o \
   commutation_functions.o \
   cso_table.o \
+  fdlibm_expm1.o \
+  fdlibm_log1p.o \
   global_settings.o \
   gpt_cf_triad_test.o \
   gpt_commutation_functions.o \
   ihs_irc7702.o \
+  math_functions.o \
   miscellany.o \
   null_stream.o \
   path_utility.o \
@@ -640,9 +649,12 @@ gpt_test$(EXEEXT): \
   $(common_test_objects) \
   commutation_functions.o \
   cso_table.o \
+  fdlibm_expm1.o \
+  fdlibm_log1p.o \
   gpt7702.o \
   gpt_commutation_functions.o \
   gpt_test.o \
+  math_functions.o \
 
 handle_exceptions_test$(EXEEXT): \
   $(common_test_objects) \
@@ -650,8 +662,11 @@ handle_exceptions_test$(EXEEXT): \
 
 i7702_test$(EXEEXT): \
   $(common_test_objects) \
+  fdlibm_expm1.o \
+  fdlibm_log1p.o \
   i7702.o \
   i7702_test.o \
+  math_functions.o \
   timer.o \
 
 ieee754_test$(EXEEXT): \
@@ -723,9 +738,12 @@ irc7702_tables_test$(EXEEXT): \
   calendar_date.o \
   commutation_functions.o \
   cso_table.o \
+  fdlibm_expm1.o \
+  fdlibm_log1p.o \
   global_settings.o \
   irc7702_tables.o \
   irc7702_tables_test.o \
+  math_functions.o \
   miscellany.o \
   null_stream.o \
   path_utility.o \
@@ -777,8 +795,11 @@ ledger_test$(EXEEXT): \
 
 loads_test$(EXEEXT): \
   $(common_test_objects) \
+  fdlibm_expm1.o \
+  fdlibm_log1p.o \
   loads.o \
   loads_test.o \
+  math_functions.o \
   timer.o \
 
 map_lookup_test$(EXEEXT): \
@@ -829,7 +850,10 @@ monnaie_test$(EXEEXT): \
 
 mortality_rates_test$(EXEEXT): \
   $(common_test_objects) \
+  fdlibm_expm1.o \
+  fdlibm_log1p.o \
   ihs_mortal.o \
+  math_functions.o \
   mortality_rates_test.o \
 
 name_value_pairs_test$(EXEEXT): \
