@@ -43,7 +43,7 @@
 
 namespace
 {
-// These naive implementations in terms of std::pow() are slower and
+// These naive implementations in terms of pow() are slower and
 // less accurate than those in the header tested here.
 
 template<typename T>
@@ -148,11 +148,11 @@ struct i_upper_n_over_n_from_i_T
 };
 } // Unnamed namespace.
 
-// These 'mete[01]' functions perform the same sets of operations using
-// different implementations.
+// These 'mete[01]' functions perform the same sets of operations
+// using different implementations.
 
-// This implementation naively uses std::pow(); it is both slower and
-// less inaccurate than an alternative using std::expm1() and std::log1p().
+// This implementation naively uses pow(); it is both slower and
+// less accurate than an alternative using expm1() and log1p().
 void mete0()
 {
     double volatile x;
@@ -700,9 +700,9 @@ void sample_results()
 #endif // defined LMI_X87
     std::cout
         << "  " << i_upper_n_over_n_from_i_T    <long double,12>()(intrate)
-        << "  long double prec, std::expm1 and std::log1p\n"
+        << "  long double prec, expm1 and log1p\n"
         << "  " << i_upper_n_over_n_from_i_naive<long double,12>()(intrate)
-        << "  long double prec, std::pow\n"
+        << "  long double prec, pow\n"
         ;
 #if defined LMI_X87
     fenv_initialize();
@@ -712,9 +712,9 @@ void sample_results()
         << "  " << i_upper_n_over_n_from_i      <double,12>()(intrate)
         << "  double prec, production template\n"
         << "  " << i_upper_n_over_n_from_i_T    <double,12>()(intrate)
-        << "  double prec, std::expm1 and std::log1p\n"
+        << "  double prec, expm1 and log1p\n"
         << "  " << i_upper_n_over_n_from_i_naive<double,12>()(intrate)
-        << "  double prec, std::pow\n"
+        << "  double prec, pow\n"
         << std::endl;
         ;
 
@@ -724,8 +724,8 @@ void sample_results()
 void assay_speed()
 {
     std::cout << "Speed tests:\n";
-    std::cout << "  std::pow         " << TimeAnAliquot(mete0) << '\n';
-    std::cout << "  std::expm1       " << TimeAnAliquot(mete1) << '\n';
+    std::cout << "  pow              " << TimeAnAliquot(mete0) << '\n';
+    std::cout << "  expm1 and log1p  " << TimeAnAliquot(mete1) << '\n';
     std::cout << "  double      i365 " << TimeAnAliquot(mete2) << '\n';
     std::cout << "  long double i365 " << TimeAnAliquot(mete3) << '\n';
     std::cout << "  10^-9 nonstd     " << TimeAnAliquot(mete4) << '\n';

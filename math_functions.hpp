@@ -125,7 +125,7 @@ T signum(T t)
 //
 // Implementation note: greater accuracy and speed are obtained by
 // applying the transformation
-//   (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
+//   (1+i)^n - 1 <-> expm1(log1p(i) * n)
 // to naive power-based formulas.
 
 template<typename T, int n>
@@ -146,7 +146,6 @@ struct i_upper_n_over_n_from_i
             }
 
         // naively:    (1+i)^(1/n) - 1
-        // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
         return std::expm1(std::log1p(i) / n);
         }
 };
@@ -171,7 +170,6 @@ struct i_from_i_upper_n_over_n
     T operator()(T i) const
         {
         // naively:    (1+i)^n - 1
-        // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
         return std::expm1(std::log1p(i) * n);
         }
 };
@@ -204,7 +202,6 @@ struct d_upper_n_from_i
             }
 
         // naively:    n * (1 - (1+i)^(-1/n))
-        // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
         return -n * std::expm1(std::log1p(i) / -n);
         }
 };
@@ -238,7 +235,6 @@ struct net_i_from_gross
         //   -   (1+spread)^(1/n)
         //   -         fee *(1/n)
         //   )^n - 1
-        // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
         return std::expm1
             (
             n * std::log1p
@@ -303,7 +299,6 @@ struct coi_rate_from_q
         else
             {
             // naively:    1 - (1-q)^(1/12)
-            // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
             T monthly_q = -std::expm1(std::log1p(-q) / 12);
             if(T(1) == monthly_q)
                 {
