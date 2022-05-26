@@ -70,7 +70,9 @@ template <typename T> inline T identity_element(std::multiplies<T>)
     return T(1);
 }
 
-/// Returns x ** n, where 0 <= n.
+/// Returns x ** n, where 0 <= n, by right-to-left binary exponentiation.
+///
+/// See Knuth, TAOCP volume 2, section 4.6.3 (p. 442 in 2nd ed.).
 ///
 /// Note that "multiplication" is required to be associative, but not
 /// necessarily commutative.
