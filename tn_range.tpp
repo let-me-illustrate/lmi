@@ -171,6 +171,7 @@ namespace
     struct is_exact_integer_tester<T,true>
     {
         static_assert(std::is_floating_point_v<T>);
+        static_assert(std::numeric_limits<T>::is_iec559);
         bool operator()(T t)
             {
             // Here, nonstd::power() isn't preferable to pow(). This
@@ -187,17 +188,20 @@ namespace
                 (static_cast<T>(std::numeric_limits<T>::radix)
                 ,static_cast<T>(std::numeric_limits<T>::digits)
                 );
-            constexpr auto z1 = std::numeric_limits<long long int>::max();
+            constexpr auto z1lo = std::numeric_limits<long long int>::lowest();
+            constexpr auto z1hi = std::numeric_limits<long long int>::max();
 #if defined __GNUC__
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wconversion"
 #   pragma GCC diagnostic ignored "-Wfloat-conversion"
 #endif // defined __GNUC__
+            // As asserted above, 'z0' is of a floating type that
+            // conforms to IEEE 754, so '-z0' DTRT here.
             return
-                   -z0 < t
-                &&       t < z0
-                && -z1 < t
-                &&       t < z1
+                   -z0   < t
+                &&         t < z0
+                && -z1lo < t
+                &&         t < z1hi
                 && t == static_cast<long long int>(t)
                 ;
 #if defined __GNUC__
