@@ -175,9 +175,17 @@ namespace
         static_assert(std::is_floating_point_v<T>);
         bool operator()(T t)
             {
-            // SOMEDAY !! nonstd::power() [SGI extension] may be
-            // preferable, because std::pow() might not be exact.
-            static T z0 = std::pow
+            // Here, nonstd::power() isn't preferable to pow(). This
+            // value needn't be exact, because no end user will enter
+            // a value exactly equal to 2^53 (e.g.). Furthermore, all
+            // releases compiled with gcc are optimized, so gcc should
+            // perform this constant calculation at compile time.
+            // Thus, the historical untrustworthiness of MinGW-w64's
+            // pow(), e.g.:
+            //    pow(100.0, 2.0) != 100.0
+            //    pow(2.0, 0.5) != sqrt(2.0)
+            // shouldn't matter.
+            static T const z0 = std::pow
                 (static_cast<T>(std::numeric_limits<T>::radix)
                 ,static_cast<T>(std::numeric_limits<T>::digits)
                 );
