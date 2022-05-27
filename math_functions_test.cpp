@@ -709,6 +709,7 @@ void sample_results()
     fenv_precision(fe_dblprec);
 #endif // defined LMI_X87
     std::cout
+        << "  0.0032737397821988637 (correctly rounded binary64)\n"
         << "  " << i_upper_n_over_n_from_i      <double,12>()(intrate)
         << "  double prec, production template\n"
         << "  " << i_upper_n_over_n_from_i_T    <double,12>()(intrate)
