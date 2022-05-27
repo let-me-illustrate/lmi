@@ -688,7 +688,7 @@ void sample_results()
     std::cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
     std::cout.precision(23);
     std::cout
-        << "Daily rate corresponding to 1% annual interest"
+        << "Monthly rate corresponding to 1% annual interest"
         << ", by various methods:\n"
         << "      000000000111111111122\n"
         << "      123456789012345678901\n"
