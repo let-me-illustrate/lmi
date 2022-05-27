@@ -148,10 +148,8 @@ namespace
     /// A value of floating type is considered exact iff
     ///  - it is in the range that the floating-point type could
     ///    represent exactly; and
-    ///  - it is in the range of long int; and
-    ///  - converting it to type long int preserves its value.
-    /// Type long long int might have been used instead, but it is not
-    /// yet part of standard C++ and not all compilers support it.
+    ///  - it is in the range of long long int; and
+    ///  - converting it to type long long int preserves its value.
     ///
     /// No nonfundamental type is considered exact.
     ///
@@ -189,17 +187,18 @@ namespace
                 (static_cast<T>(std::numeric_limits<T>::radix)
                 ,static_cast<T>(std::numeric_limits<T>::digits)
                 );
-            long int z1 = std::numeric_limits<long int>::max();
+            constexpr auto z1 = std::numeric_limits<long long int>::max();
 #if defined __GNUC__
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wconversion"
+#   pragma GCC diagnostic ignored "-Wfloat-conversion"
 #endif // defined __GNUC__
             return
                    -z0 < t
                 &&       t < z0
                 && -z1 < t
                 &&       t < z1
-                && t == static_cast<long int>(t)
+                && t == static_cast<long long int>(t)
                 ;
 #if defined __GNUC__
 #   pragma GCC diagnostic pop
