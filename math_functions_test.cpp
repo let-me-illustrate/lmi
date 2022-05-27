@@ -143,7 +143,59 @@ struct i_upper_n_over_n_from_i_T
     T operator()(T const& i) const
         {
         static T const reciprocal_n = T(1) / n;
-        return lmi::expm1(lmi::log1p(i) * reciprocal_n);
+        T const z = lmi::expm1(lmi::log1p(i) * reciprocal_n);
+        // The production version should be substantially equivalent,
+        // so it should probably be used instead of this function.
+        // Before removing this, though, it's a good idea to test that
+        // hypothesis, especially because this version stores and uses
+        // the reciprocal of 'n'.
+        T const y = i_upper_n_over_n_from_i<T,n>()(i);
+        if(y != z)
+            {
+            std::cout
+                << std::setprecision(23)
+                << "DISCREPANCY:\n"
+                << y << " i_upper_n_over_n_from_i\n"
+                << z << " i_upper_n_over_n_from_i_T\n"
+                << std::endl
+                ;
+            }
+        // That message prints exactly once, in sample_results():
+        //
+        //   0.00327373978219886392598  long double prec, production template
+        //   0.00327373978219886392598  long double prec, expm1 and log1p
+        //   0.00327373978219886395923  long double prec, pow
+        //   0.0032737397821988637 (correctly rounded binary64)
+        //   0.00327373978219886374239  double prec, production template
+        //   DISCREPANCY:
+        //   0.00327373978219886374239 i_upper_n_over_n_from_i
+        //   0.00327373978219886330870 i_upper_n_over_n_from_i_T
+        //   0.00327373978219886330870  double prec, expm1 and log1p
+        //
+        // Analysis: The correctly-rounded result is known from Wolfram.
+        // It matches the i_upper_n_over_n_from_i() production function.
+        // However, local i_upper_n_over_n_from_i_T() doesn't match.
+        // The only difference that could plausibly account for this is
+        // storing and using the reciprocal of 'n' in the local function.
+        // Even though this is only one test case, it is fair to conclude
+        // that using the reciprocal does not uniformly improve accuracy.
+        //
+        // Conclusion: local i_upper_n_over_n_from_i_T() should be expunged,
+        // and production function i_upper_n_over_n_from_i() used instead.
+        // This discussion provides concrete support for commit d7c5304dd12bf.
+        //
+        // Note that the 0.0032737397821988637 is correctly rounded for
+        // double precision, not for long double. Thus, the long double
+        // tests above (disregarding the less accurate pow() version)
+        // give a different answer, which must be compared to the
+        // verified answer taken to more decimal places:
+        //   0.00327373978219886392598  long double prec, production template
+        //   0.0032737397821988638592943204158789680534098426263396651605608434...
+        //   0.0032737397821988637 = 3F6AD187A99AE58B (correctly rounded double)
+        // That extended-precision value is closer to the theoretical true
+        // result than the double-precision touchstone.
+
+        return z;
         }
 };
 } // Unnamed namespace.
