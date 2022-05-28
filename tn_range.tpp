@@ -145,11 +145,24 @@ namespace
     /// some compilers would fail such an assertion even though the
     /// underlying hardware conforms to that standard.
     ///
-    /// A value of floating type is considered exact iff
-    ///  - it is in the range that the floating-point type could
-    ///    represent exactly; and
+    /// Deem a value of floating type to be "exact" iff
+    ///  - it is in the continuous range of integers all of which the
+    ///    floating-point type can represent exactly; and
     ///  - it is in the range of long long int; and
     ///  - converting it to type long long int preserves its value.
+    /// Those criteria work well enough in this context, but they are
+    /// stricter than the word "exact" would generally imply: e.g.,
+    /// all binary64 values outside the interval (-2^52, +2^52) are
+    /// exact integers, though not all integers outside that interval
+    /// are exactly representable as binary64; perhaps a better term
+    /// would be "interconvertible with long long int".
+    ///
+    /// It is not pointless to test that the value is within the
+    /// range [LLONG_MIN, LLONG_MAX]: for example, the 96-bit IEEE
+    /// extended-precision type has a 64-bit mantissa and a separate
+    /// sign bit, so it can exactly represent ± 2^64 - 1, which is
+    /// interconvertible with a 128-bit long long integer, but not
+    /// with a 64-bit one.
     ///
     /// No nonfundamental type is considered exact.
     ///
