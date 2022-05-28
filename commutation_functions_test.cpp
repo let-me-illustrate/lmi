@@ -595,7 +595,7 @@ void OLCommFnsTest()
 /// value would therefore differ. That's one important reason why UL
 /// commutation functions cannot replace a general monthiversary loop.
 ///
-/// The monthly COI rate is limited to one-eleventh: one-twelfth
+/// The monthly COI rate is limited to one-eleventh: one-twelfth,
 /// divided by one minus itself, because deducting the COI charge at
 /// the beginning of the month increases the amount actually at risk:
 ///   https://lists.nongnu.org/archive/html/lmi/2009-09/msg00001.html
