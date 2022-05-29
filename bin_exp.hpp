@@ -24,4 +24,53 @@
 
 #include "config.hpp"
 
+#include <type_traits>                  // is_floating_point_v
+
+/// Binary method for exponentiation.
+///
+/// See Knuth, TAOCP volume 2, section 4.6.3, which notes (p. 443
+/// in 2nd ed.):
+///   "The number of multiplications required by Algorithm A
+///   is ⌊lg n⌋ + ν(n), where ν(n) is the number of ones in the
+///   binary representation of n. This is one more multiplication
+///   than the left-to-right binary method ... would require, due
+///   to the fact that the first execution of step A3 is simply a
+///   multiplication by unity."
+/// This seems to be an inefficiency that ought to be removed.
+/// However, initializing the result to unity takes care of the case
+/// where the exponent is zero. Attempting to remove the needless
+/// multiplication by unity, while preserving correctness when the
+/// exponent is zero, is surely possible, but several attempts just
+/// produced more complex code that ran no faster.
+///
+/// Others often write bitwise operators instead of multiplicative.
+/// That's incorrect for signed integers:
+///   (-1 % 2) = -1, whereas
+///   (-1 & 1) =  1; and
+///   (-1 / 2) =  0, whereas
+///   (-1 >>1) = -1;
+/// and twenty-first-century optimizers generate the same code for
+/// unsigned values anyway.
+
+template<typename T>
+constexpr T bin_exp(T x, int n)
+{
+    static_assert(std::is_floating_point_v<T>);
+    bool negative_exponent {n < 0};
+    if(negative_exponent) n = -n;
+    T y = 1;
+    for(;;)
+        {
+        if(0 != n % 2)
+            y *= x;
+        n /= 2;
+        if(0 == n)
+            break;
+        x *= x;
+        }
+    return negative_exponent ? 1 / y : y;
+}
+
+double Algorithm_A(double x, int n);
+
 #endif // bin_exp_hpp
