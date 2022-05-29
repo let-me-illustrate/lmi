@@ -55,6 +55,7 @@
 
 #include <functional>                   // multiplies, plus
 #include <stdexcept>                    // logic_error
+#include <type_traits>                  // is_integral_v
 
 namespace nonstd
 {
@@ -78,11 +79,15 @@ template <typename T> inline T identity_element(std::multiplies<T>)
 /// necessarily commutative.
 ///
 /// GWC modification: throw on negative exponent--otherwise, the loop
-/// appears not to terminate.
+/// may never terminate, because the bitwise operators don't work as
+/// intended with negative values. Alternative not used: assert that
+/// type Integer is unsigned, as the author evidently assumed--but
+/// imposing that requirement now breaks too much existing lmi code.
 
 template <typename T, typename Integer, typename MonoidOperation>
 T power(T x, Integer n, MonoidOperation opr)
 {
+    static_assert(std::is_integral_v<Integer>);
     if(n < 0)
         {
         throw std::logic_error("power() called with negative exponent.");
