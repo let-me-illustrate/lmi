@@ -194,7 +194,7 @@ namespace
             // perform this constant calculation at compile time.
             // Thus, the historical untrustworthiness of MinGW-w64's
             // pow(), e.g.:
-            //    pow(100.0, 2.0) != 100.0
+            //    pow(10.0, 5.0) != 100000.0
             //    pow(2.0, 0.5) != sqrt(2.0)
             // shouldn't matter.
             static T const z0 = std::pow
