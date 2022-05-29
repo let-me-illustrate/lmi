@@ -367,6 +367,7 @@ unit_test_targets := \
   any_member_test \
   assert_lmi_test \
   authenticity_test \
+  bin_exp_test \
   bourn_cast_test \
   cache_file_reads_test \
   calendar_date_test \
@@ -505,6 +506,12 @@ authenticity_test$(EXEEXT): \
   path_utility.o \
   system_command.o \
   system_command_non_wx.o \
+  timer.o \
+
+bin_exp_test$(EXEEXT): \
+  $(common_test_objects) \
+  bin_exp.o \
+  bin_exp_test.o \
   timer.o \
 
 bourn_cast_test$(EXEEXT): \

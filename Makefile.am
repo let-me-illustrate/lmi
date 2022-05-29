@@ -102,6 +102,7 @@ TESTS = \
     any_member_test \
     assert_lmi_test \
     authenticity_test \
+    bin_exp_test \
     bourn_cast_test \
     cache_file_reads_test \
     calendar_date_test \
@@ -635,6 +636,13 @@ authenticity_test_CXXFLAGS = $(AM_CXXFLAGS)
 authenticity_test_LDADD = \
   libtest_common.la
 
+bin_exp_test_SOURCES = \
+  bin_exp.cpp \
+  bin_exp_test.cpp
+bin_exp_test_CXXFLAGS = $(AM_CXXFLAGS)
+bin_exp_test_LDADD = \
+  libtest_common.la
+
 bourn_cast_test_LDADD = \
   libtest_common.la
 
@@ -1139,6 +1147,7 @@ noinst_HEADERS = \
     authenticity.hpp \
     basic_tables.hpp \
     basic_values.hpp \
+    bin_exp.hpp \
     bourn_cast.hpp \
     cache_file_reads.hpp \
     calendar_date.hpp \
