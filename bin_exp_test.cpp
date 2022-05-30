@@ -277,6 +277,7 @@ void test_quodlibet()
         (static_cast<double>(std::numeric_limits<double>::radix)
         ,                    std::numeric_limits<double>::digits
         );
+#if 0
     // This compiles, but its behavior is undefined unless an int
     // is at least 54 bits (53, + 1 for sign). Otherwise it cannot
     // return the hoped-for answer, and may return zero.
@@ -284,15 +285,26 @@ void test_quodlibet()
         (                    std::numeric_limits<double>::radix
         ,                    std::numeric_limits<double>::digits
         );
+    stifle_unused_warning(a3);
+    // This compiles, but its behavior is undefined unless a long int
+    // is at least 54 bits (53, + 1 for sign). Otherwise it cannot
+    // return the hoped-for answer, and may return zero.
     auto a4 = nonstd::power
         (static_cast<long int>(std::numeric_limits<double>::radix)
         ,static_cast<long int>(std::numeric_limits<double>::digits)
         );
+    stifle_unused_warning(a4);
+#endif // 0
+    // Type long long int is required to be at least 64 bits wide,
+    // so this cannot overflow.
+    auto a5 = nonstd::power
+        (static_cast<long long int>(std::numeric_limits<double>::radix)
+        ,static_cast<long long int>(std::numeric_limits<double>::digits)
+        );
     LMI_TEST_EQUAL(9007199254740992, a0);
     LMI_TEST_EQUAL(9007199254740992, a1);
     LMI_TEST_EQUAL(9007199254740992, a2);
-    stifle_unused_warning(a3);
-    stifle_unused_warning(a4);
+    LMI_TEST_EQUAL(9007199254740992, a5);
 }
 
 void mete0()
