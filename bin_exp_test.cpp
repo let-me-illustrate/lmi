@@ -265,29 +265,29 @@ void test_quodlibet()
     LMI_TEST_EQUAL(1748.2195908183271, bin_exp(12.04662322998046875, 3));
 
     // Comparison to std::pow() and nonstd::power().
-    double a0 = std::pow
+    double a1 = std::pow
         (static_cast<double>(std::numeric_limits<double>::radix)
         ,static_cast<double>(std::numeric_limits<double>::digits)
         );
-    double a1 = nonstd::power
+    double a2 = nonstd::power
         (static_cast<double>(std::numeric_limits<double>::radix)
         ,                    std::numeric_limits<double>::digits
         );
     // This compiles, but its behavior is undefined unless an int
     // is at least 54 bits (53, + 1 for sign). Otherwise it cannot
     // return the hoped-for answer, and may return zero.
-    auto a2 = nonstd::power
+    auto a3 = nonstd::power
         (                    std::numeric_limits<double>::radix
         ,                    std::numeric_limits<double>::digits
         );
-    auto a3 = nonstd::power
+    auto a4 = nonstd::power
         (static_cast<long int>(std::numeric_limits<double>::radix)
         ,static_cast<long int>(std::numeric_limits<double>::digits)
         );
-    LMI_TEST_EQUAL(9007199254740992, a0);
     LMI_TEST_EQUAL(9007199254740992, a1);
-    stifle_unused_warning(a2);
+    LMI_TEST_EQUAL(9007199254740992, a2);
     stifle_unused_warning(a3);
+    stifle_unused_warning(a4);
 }
 
 void mete0()
