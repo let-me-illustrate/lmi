@@ -28,6 +28,12 @@
 
 /// Binary method for exponentiation.
 ///
+/// Allow only floating-point types for the base argument, because
+/// integer types can overflow. Allow only 'int' for the exponent
+/// argument, because it can't be narrower than 32 bits in any
+/// environment where lmi builds, and exponents over 2^32 aren't
+/// needed in practice.
+///
 /// See Knuth, TAOCP volume 2, section 4.6.3, which notes (p. 443
 /// in 2nd ed.):
 ///   "The number of multiplications required by Algorithm A

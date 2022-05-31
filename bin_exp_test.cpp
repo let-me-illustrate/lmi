@@ -24,7 +24,6 @@
 #include "bin_exp.hpp"
 
 #include "materially_equal.hpp"
-#include "stl_extensions.hpp"           // nonstd::power()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -264,7 +263,7 @@ void test_quodlibet()
     // Wolfram:    1748.219590818327062731185606025974266231060028076171875
     LMI_TEST_EQUAL(1748.2195908183271, bin_exp(12.04662322998046875, 3));
 
-    // Compare bin_exp() to std::pow() and nonstd::power().
+    // Compare bin_exp() to std::pow().
     double a0 = bin_exp
         (static_cast<double>(std::numeric_limits<double>::radix)
         ,                    std::numeric_limits<double>::digits
@@ -273,38 +272,8 @@ void test_quodlibet()
         (static_cast<double>(std::numeric_limits<double>::radix)
         ,static_cast<double>(std::numeric_limits<double>::digits)
         );
-    double a2 = nonstd::power
-        (static_cast<double>(std::numeric_limits<double>::radix)
-        ,                    std::numeric_limits<double>::digits
-        );
-#if 0
-    // This compiles, but its behavior is undefined unless an int
-    // is at least 54 bits (53, + 1 for sign). Otherwise it cannot
-    // return the hoped-for answer, and may return zero.
-    auto a3 = nonstd::power
-        (                    std::numeric_limits<double>::radix
-        ,                    std::numeric_limits<double>::digits
-        );
-    stifle_unused_warning(a3);
-    // This compiles, but its behavior is undefined unless a long int
-    // is at least 54 bits (53, + 1 for sign). Otherwise it cannot
-    // return the hoped-for answer, and may return zero.
-    auto a4 = nonstd::power
-        (static_cast<long int>(std::numeric_limits<double>::radix)
-        ,static_cast<long int>(std::numeric_limits<double>::digits)
-        );
-    stifle_unused_warning(a4);
-#endif // 0
-    // Type long long int is required to be at least 64 bits wide,
-    // so this cannot overflow.
-    auto a5 = nonstd::power
-        (static_cast<long long int>(std::numeric_limits<double>::radix)
-        ,static_cast<long long int>(std::numeric_limits<double>::digits)
-        );
     LMI_TEST_EQUAL(9007199254740992, a0);
     LMI_TEST_EQUAL(9007199254740992, a1);
-    LMI_TEST_EQUAL(9007199254740992, a2);
-    LMI_TEST_EQUAL(9007199254740992, a5);
 }
 
 void mete0()
@@ -321,15 +290,6 @@ void mete1()
     double volatile x;
     for(int j = 0; j < 100000; ++j)
         for(int k = 0; k < 32; ++k)
-            {x = nonstd::power(2.0, 1 + k);}
-    stifle_unused_warning(x);
-}
-
-void mete2()
-{
-    double volatile x;
-    for(int j = 0; j < 100000; ++j)
-        for(int k = 0; k < 32; ++k)
             {x = std::pow(2.0, 1 + k);}
     stifle_unused_warning(x);
 }
@@ -338,8 +298,7 @@ void assay_speed()
 {
     std::cout << "Speed tests ['power' limits the domain]:\n";
     std::cout << "  bin_exp " << TimeAnAliquot(mete0) << '\n';
-    std::cout << "  power   " << TimeAnAliquot(mete1) << '\n';
-    std::cout << "  pow     " << TimeAnAliquot(mete2) << '\n';
+    std::cout << "  pow     " << TimeAnAliquot(mete1) << '\n';
     std::cout << std::flush;
 }
 
