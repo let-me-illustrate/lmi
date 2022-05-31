@@ -23,10 +23,10 @@
 
 #include "math_functions.hpp"
 
+#include "bin_exp.hpp"
 #include "fenv_lmi.hpp"
 #include "materially_equal.hpp"
 #include "miscellany.hpp"               // stifle_unused_warning()
-#include "stl_extensions.hpp"           // nonstd::power()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -192,20 +192,17 @@ void mete3()
 }
 
 // These 'mete[45]' functions calculate 10^-9 in different ways.
-// The SGI extension is about eight times as fast as calling a
-// transcendental function; that outcome is not surprising, but
-// quantifying it is useful. Of course, it would not be surprising
-// to find that a table lookup would be even faster for "reasonable"
-// powers of ten.
+// Binary exponentiation is much faster than a transcendental
+// calculation; that's not surprising, but worth measuring.
 
 void mete4()
 {
     double volatile base     = 10.0;
-    int    volatile exponent = 9;
+    int    volatile exponent = -9;
     double volatile x;
     for(int j = 0; j < 100000; ++j)
         {
-        x = 1.0 / nonstd::power(base, exponent);
+        x = bin_exp(base, exponent);
         }
     stifle_unused_warning(x);
 }

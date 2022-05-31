@@ -23,10 +23,10 @@
 
 #include "round_to.hpp"
 
+#include "bin_exp.hpp"
 #include "currency.hpp"                 // currency::cents_digits
 #include "fenv_lmi.hpp"
 #include "miscellany.hpp"               // floating_rep(), scoped_ios_format
-#include "stl_extensions.hpp"           // nonstd::power()
 #include "test_tools.hpp"
 
 #include <algorithm>                    // max()
@@ -301,8 +301,8 @@ void round_to_test::test_various_float_types
     int const inverse_decimals = -decimals;
     long double factor =
         (0 <= inverse_decimals)
-        ?        nonstd::power(10.0L,  inverse_decimals)
-        : 1.0L / nonstd::power(10.0L, -inverse_decimals)
+        ?        bin_exp(10.0L,  inverse_decimals)
+        : 1.0L / bin_exp(10.0L, -inverse_decimals)
         ;
     long double u = unrounded * factor;
     long double e = expected  * factor;
@@ -626,9 +626,9 @@ void round_to_test::test_fundamentals()
 
     // Try to provoke division by zero in ctor-initializer.
     //
-    // nonstd::power() negates a negative exponent, but negating
-    // INT_MIN constitutes UB, so add one, plus currency::cents_digits
-    // because of the interplay between classes currency and round_to.
+    // bin_exp() negates a negative exponent, but negating INT_MIN
+    // constitutes UB, so add one, plus currency::cents_digits because
+    // of the interplay between classes currency and round_to.
     LMI_TEST_THROW
         (round_to<double>(1 + currency::cents_digits + INT_MIN, r_to_nearest)
         ,std::domain_error

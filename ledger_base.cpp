@@ -25,9 +25,9 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "bin_exp.hpp"
 #include "crc32.hpp"
 #include "et_vector.hpp"
-#include "stl_extensions.hpp"           // nonstd::power()
 #include "value_cast.hpp"
 
 #include <algorithm>                    // max(), min()
@@ -428,7 +428,7 @@ void LedgerBase::apply_scale_factor(int decimal_power)
         return;
         }
 
-    double const scale_factor = 1.0 / nonstd::power(10.0, scale_power_);
+    double const scale_factor = bin_exp(10.0, -scale_power_);
     for(auto& i : ScalableVectors)
         {
         *i.second *= scale_factor;

@@ -26,6 +26,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "basic_tables.hpp"             // cvat_corridor_factors()
+#include "bin_exp.hpp"
 #include "bourn_cast.hpp"
 #include "contains.hpp"
 #include "data_directory.hpp"           // AddDataDir()
@@ -49,7 +50,6 @@
 #include "outlay.hpp"
 #include "premium_tax.hpp"
 #include "rounding_rules.hpp"
-#include "stl_extensions.hpp"           // nonstd::power()
 #include "stratified_charges.hpp"
 #include "ul_utilities.hpp"             // list_bill_premium(), max_modal_premium()
 
@@ -1026,7 +1026,7 @@ currency BasicValues::GetModalPremCorridor
 {
     double const rate = GetCorridorFactor()[0];
     int const k = round_corridor_factor().decimals();
-    double const s = nonstd::power(10, k);
+    double const s = bin_exp(10.0, k);
     // Do not save and restore prior rounding direction because
     // lmi generally expects rounding to nearest everywhere.
     std::fesetround(FE_TONEAREST);
@@ -1530,7 +1530,7 @@ currency BasicValues::GetModalSpecAmtCorridor(currency annualized_pmt) const
 {
     double const rate = GetCorridorFactor()[0];
     int const k = round_corridor_factor().decimals();
-    double const s = nonstd::power(10, k);
+    double const s = bin_exp(10.0, k);
     // Do not save and restore prior rounding direction because
     // lmi generally expects rounding to nearest everywhere.
     std::fesetround(FE_TONEAREST);

@@ -24,9 +24,9 @@
 #include "commutation_functions.hpp"
 
 #include "assert_lmi.hpp"
+#include "bin_exp.hpp"
 #include "et_vector.hpp"                // [VECTORIZE]
 #include "ssize_lmi.hpp"
-#include "stl_extensions.hpp"           // nonstd::power()
 
 #include <algorithm>                    // rotate_copy() [VECTORIZE]
 #include <functional>                   // multiplies    [VECTORIZE]
@@ -161,14 +161,14 @@ ULCommFns::ULCommFns
         // Present value of $1 one month hence.
         double vp = v * p;
         // Present value of $1 twelve months hence.
-        double vp12 = nonstd::power(vp, 12);
-        double vpn  = nonstd::power(vp, periods_per_year);
+        double vp12 = bin_exp(vp, 12);
+        double vpn  = bin_exp(vp, periods_per_year);
         // Twelve times a'' upper 12 (Eckley equations 28 and 31),
         // determined analytically using the geometric series theorem.
 //      double aa = 1.0;
 //      // Eckley equation (31).
-//      double sa = (1.0 - vp12) / (1.0 - nonstd::power(vp, 6));
-//      double qa = (1.0 - vp12) / (1.0 - nonstd::power(vp, 3));
+//      double sa = (1.0 - vp12) / (1.0 - bin_exp(vp, 6));
+//      double qa = (1.0 - vp12) / (1.0 - bin_exp(vp, 3));
 //      // Eckley equation (28).
 //      double ma = (1.0 - vp12) / (1.0 - vp);
         // The prefix k indicates the processing mode, which is
@@ -176,7 +176,7 @@ ULCommFns::ULCommFns
         double ka = 1.0;
         if(1.0 != vp)
             {
-            ka = (1.0 - vp12) / (1.0 - nonstd::power(vp, months_per_period));
+            ka = (1.0 - vp12) / (1.0 - bin_exp(vp, months_per_period));
             }
         kd[j] = ka * ad[j];
         kc[j] = ka * ad[j] * v * q;

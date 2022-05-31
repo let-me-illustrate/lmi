@@ -24,9 +24,9 @@
 
 #include "config.hpp"
 
+#include "bin_exp.hpp"
 #include "currency.hpp"
 #include "mc_enum_type_enums.hpp"       // rounding_style
-#include "stl_extensions.hpp"           // nonstd::power()
 
 #include <cmath>                        // fabs(), floor(), rint()
 #include <limits>
@@ -219,23 +219,23 @@ round_to<RealType>::round_to(int a_decimals, rounding_style a_style)
 
     if(0 <= decimals_)
         {
-        scale_fwd_        = nonstd::power(ten, decimals_);
+        scale_fwd_        = bin_exp(ten, decimals_);
         scale_back_       = one / scale_fwd_;
         }
     else
         {
-        scale_back_       = nonstd::power(ten, -decimals_);
+        scale_back_       = bin_exp(ten, -decimals_);
         scale_fwd_        = one / scale_back_;
         }
 
     if(0 <= decimals_cents_)
         {
-        scale_fwd_cents_  = nonstd::power(ten, decimals_cents_);
+        scale_fwd_cents_  = bin_exp(ten, decimals_cents_);
         scale_back_cents_ = one / scale_fwd_cents_;
         }
     else
         {
-        scale_back_cents_ = nonstd::power(ten, -decimals_cents_);
+        scale_back_cents_ = bin_exp(ten, -decimals_cents_);
         scale_fwd_cents_  = one / scale_back_cents_;
         }
 
