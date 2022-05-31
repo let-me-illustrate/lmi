@@ -22,17 +22,18 @@
 #include "tn_range.hpp"
 
 #include "alert.hpp"
+#include "bin_exp.hpp"
 #include "math_functions.hpp"           // signum()
 #include "unwind.hpp"                   // scoped_unwind_toggler
 #include "value_cast.hpp"
 
-#include <cmath>                        // pow(), signbit()
 #include <exception>
 #include <istream>
 #include <limits>
 #include <ostream>
 #include <sstream>
-#include <type_traits>
+#include <type_traits>                  // is_floating_point_v()
+#include <typeinfo>                     // type_info
 
 namespace
 {
@@ -44,7 +45,7 @@ namespace
     ///    [0.0, 1.7976931348623157E+308] // IEC 60559 double.
     ///    [0, 32767] // Minimum INT_MAX that C99 E.1 allows.
     /// because they are not likely to recognize those maximum values
-    /// as such. Any value of a type for which std::numeric_traits is
+    /// as such. Any value of a type for which std::numeric_limits is
     /// not specialized is treated as lying strictly between extrema
     /// for this purpose, because that generally yields an appropriate
     /// outcome, though of course a different behavior can be obtained
@@ -187,17 +188,7 @@ namespace
         static_assert(std::numeric_limits<T>::is_iec559);
         bool operator()(T t)
             {
-            // Here, nonstd::power() isn't preferable to pow(). This
-            // value needn't be exact, because no end user will enter
-            // a value exactly equal to 2^53 (e.g.). Furthermore, all
-            // releases compiled with gcc are optimized, so gcc should
-            // perform this constant calculation at compile time.
-            // Thus, the historical untrustworthiness of MinGW-w64's
-            // pow(), e.g.:
-            //    pow(10.0, 5.0) != 100000.0
-            //    pow(2.0, 0.5) != sqrt(2.0)
-            // shouldn't matter.
-            static T const z0 = std::pow
+            constexpr T z0 = bin_exp
                 (static_cast<T>(std::numeric_limits<T>::radix)
                 ,static_cast<T>(std::numeric_limits<T>::digits)
                 );
