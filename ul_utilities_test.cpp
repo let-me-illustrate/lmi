@@ -26,7 +26,6 @@
 #include "bourn_cast.hpp"
 #include "materially_equal.hpp"
 #include "round_to.hpp"
-#include "stl_extensions.hpp"           // nonstd::power()
 #include "test_tools.hpp"
 
 #include <cfenv>                        // fesetround()
@@ -80,8 +79,7 @@ void test_max_modal_premium()
 
     // Decimal values of certain constants.
 
-    LMI_TEST_EQUAL(18446744073709551615ULL      , UINT64_MAX);
-    LMI_TEST_EQUAL(18446744073709551615ULL      , nonstd::power(2ULL, 64) - 1);
+    LMI_TEST_EQUAL(18446744073709551615ULL      , UINT64_MAX); // 2^64 - 1
     LMI_TEST_EQUAL(184467440737ULL              , UINT64_MAX / 100000000);
     // Same, with dollars-and-cents separators:
     LMI_TEST_EQUAL(184'467'440'737'095'516'15ULL, UINT64_MAX);
