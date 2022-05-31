@@ -299,13 +299,15 @@ void round_to_test::test_various_float_types
     )
 {
     int const inverse_decimals = -decimals;
-    long double factor =
-        (0 <= inverse_decimals)
-        ?        bin_exp(10.0L,  inverse_decimals)
-        : 1.0L / bin_exp(10.0L, -inverse_decimals)
-        ;
-    long double u = unrounded * factor;
-    long double e = expected  * factor;
+    // The intention is to avoid taking the reciprocal of a reciprocal,
+    // but 'f0' and 'f1' appear to be equivalent, so perhaps that idea
+    // is too precious.
+    long double const f0 =        bin_exp(10.0L,  inverse_decimals);
+    long double const f1 = 1.0L / bin_exp(10.0L, -inverse_decimals);
+    LMI_TEST_EQUAL(f0, f1);
+    long double const factor = (0 <= inverse_decimals) ? f0 : f1;
+    long double const u = unrounded * factor;
+    long double const e = expected  * factor;
     LMI_TEST((test_one_case(static_cast<float >(u), static_cast<float >(e), decimals, style)));
     LMI_TEST((test_one_case(static_cast<double>(u), static_cast<double>(e), decimals, style)));
     LMI_TEST((test_one_case(/* long double */  (u), /* long double */  (e), decimals, style)));
