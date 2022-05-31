@@ -49,12 +49,13 @@ inline To bourn_cast(From from)
 #   include "bourn_cast.hpp"
 #endif // !defined TEST_BOOST_CAST_INSTEAD
 
+#include "bin_exp.hpp"
 #include "miscellany.hpp"               // stifle_unused_warning()
-#include "stl_extensions.hpp"           // nonstd::power()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
 #include <climits>                      // INT_MIN, LLONG_MIN, SCHAR_MIN
+#include <cmath>                        // isnormal()
 
 /// Test trivial casts between identical types.
 
@@ -214,19 +215,21 @@ void test_floating_conversions(char const* file, int line)
     static_assert(  to_traits::is_iec559);
     static_assert(from_traits::is_iec559);
 
-    // std::isnormal values representable in any IEC559 'arithmetic
-    // format' (i.e., excluding the binary16 'interchange format').
+    // Values representable in any IEC559 'arithmetic format'
+    // (i.e., excluding the binary16 'interchange format').
 
-    From const largenum = nonstd::power(From(2), 100);
-    From const smallnum = From(1) / largenum;
+    constexpr From largenum = bin_exp(From(2), 100);
+    constexpr From smallnum = From(1) / largenum;
+    INVOKE_LMI_TEST(std::isnormal(largenum), file, line);
+    INVOKE_LMI_TEST(std::isnormal(smallnum), file, line);
     INVOKE_LMI_TEST_EQUAL(largenum, bourn_cast<To>(largenum), file, line);
     INVOKE_LMI_TEST_EQUAL(smallnum, bourn_cast<To>(smallnum), file, line);
 
     // Normal min, max, and lowest.
 
-    From const from_min = from_traits::min();
-    From const from_max = from_traits::max();
-    From const from_low = from_traits::lowest();
+    constexpr From from_min = from_traits::min();
+    constexpr From from_max = from_traits::max();
+    constexpr From from_low = from_traits::lowest();
 
     if(from_traits::digits10 <= to_traits::digits10) // Widening or same.
         {
@@ -258,8 +261,8 @@ void test_floating_conversions(char const* file, int line)
 
     // Infinities.
 
-    To   const   to_inf =   to_traits::infinity();
-    From const from_inf = from_traits::infinity();
+    constexpr To   to_inf =   to_traits::infinity();
+    constexpr From from_inf = from_traits::infinity();
 #if !defined TEST_BOOST_CAST_INSTEAD
     INVOKE_LMI_TEST( std::isinf(bourn_cast<To>( from_inf)), file, line);
     INVOKE_LMI_TEST( std::isinf(bourn_cast<To>(-from_inf)), file, line);
@@ -295,7 +298,7 @@ void test_floating_conversions(char const* file, int line)
 
     // NaNs.
 
-    From const from_qnan = from_traits::quiet_NaN();
+    constexpr From from_qnan = from_traits::quiet_NaN();
     INVOKE_LMI_TEST(std::isnan(bourn_cast<To>(from_qnan)), file, line);
 }
 
@@ -504,11 +507,12 @@ void test_m64_neighborhood()
     // The same outcome is observed with a value that is lower by
     // about half a trillion units.
 
-    double const d_2_64 = nonstd::power(2.0, 64);
+    constexpr double d_2_64 {0x1p64}; // emphasize that this is 'double'
 #if defined __GNUC__
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wfloat-conversion"
 #endif // defined __GNUC__
+    // The 'f' in std::nextafterf() is deliberate.
     double const d_interesting = 0.5 * (d_2_64 + std::nextafterf(d_2_64, 0));
     unsigned long long int const ull_interesting = d_interesting;
 #if defined __GNUC__
