@@ -1320,7 +1320,6 @@ noinst_HEADERS = \
     skeleton.hpp \
     so_attributes.hpp \
     ssize_lmi.hpp \
-    stl_extensions.hpp \
     stratified_algorithms.hpp \
     stratified_charges.hpp \
     stratified_charges.xpp \
