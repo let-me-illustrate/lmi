@@ -53,11 +53,17 @@
 
 #include "config.hpp"
 
+#include "assert_lmi.hpp"
+#include "bin_exp.hpp"
+#include "bourn_cast.hpp"
+#include "miscellany.hpp"               // scoped_ios_format
+
 #include <functional>                   // multiplies, plus
+#include <iostream>
 #include <stdexcept>                    // logic_error
 #include <type_traits>                  // is_integral_v
 
-namespace nonstd
+namespace hidden
 {
 /// Identity element.
 
@@ -115,11 +121,35 @@ T power(T x, Integer n, MonoidOperation opr)
         return result;
         }
 }
+} // namespace hidden
 
+namespace nonstd
+{
 template <typename T, typename Integer>
 inline T power(T x, Integer n)
 {
-    return power(x, n, std::multiplies<T>());
+    using F = std::conditional_t<std::is_floating_point_v<T>, T, double>;
+
+    T const r = hidden::power(x, n, std::multiplies<T>());
+    F const a = bourn_cast<F>(r);
+    F const b = bin_exp(bourn_cast<F>(x), bourn_cast<int>(n));
+    if(a != b)
+        {
+        scoped_ios_format meaningless_name(std::cout);
+        std::cout.precision(32);
+        std::cout
+            << "power <> bin_exp:\n"
+            << x << " x\n"
+            << n << " n\n"
+            << a << " a\n"
+            << b << " b\n"
+            << a - b << " a - b\n"
+            << (a - b) / a << " (a - b) / a\n"
+            << std::endl
+            ;
+        }
+    LMI_ASSERT(a == b);
+    return r;
 }
 } // namespace nonstd
 
