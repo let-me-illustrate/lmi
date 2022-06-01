@@ -366,11 +366,13 @@
         <bitmap platform="win" stock_id="roster"/>
         <help>Run and print all cells to a group roster</help>
     </object>
+<!--
     <object class="wxMenuItem" name="print_group_quote">
         <label>Print group premium _quote to PDF\tCtrl-Shift-Q</label>
-    <bitmap platform="win" stock_id="quote"/>
+        <bitmap platform="win" stock_id="quote"/>
         <help>Run and print all cells to a group premium quote</help>
     </object>
+-->
     <object class="separator"/>
     <object class="wxMenuItem" name="copy_census">
         <label>_Copy census\tCtrl-Shift-C</label>
