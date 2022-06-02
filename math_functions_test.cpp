@@ -33,6 +33,7 @@
 #include <algorithm>                    // min()
 #include <cfloat>                       // DBL_EPSILON
 #include <cmath>                        // fabs(), isnan(), pow()
+#include <cstdint>
 #include <iomanip>
 #include <limits>
 #include <type_traits>
@@ -559,6 +560,22 @@ void test_signum(char const* file, int line)
         }
 }
 
+void test_u_abs()
+{
+    LMI_TEST_EQUAL(9223372036854775808ULL, u_abs(INT64_MIN));
+
+    LMI_TEST_EQUAL(128, u_abs(INT8_MIN));
+
+    for(std::int16_t j = INT8_MIN; j < INT8_MAX; ++j)
+        {
+        std::uint16_t u = u_abs(j);
+        if(0 <= j)
+            {LMI_TEST_EQUAL(u,  j);}
+        if(j <= 0)
+            {LMI_TEST_EQUAL(u, -j);}
+        }
+}
+
 /// Test fdlibm expm1() and log1p().
 ///
 /// Testing for exact floating-point equality seems to be a patent
@@ -780,6 +797,8 @@ int test_main(int, char*[])
     test_signum<float        >(__FILE__, __LINE__);
     test_signum<double       >(__FILE__, __LINE__);
     test_signum<long double  >(__FILE__, __LINE__);
+
+    test_u_abs();
 
     test_expm1_log1p();
 
