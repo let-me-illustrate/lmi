@@ -24,6 +24,7 @@
 #include "bin_exp.hpp"
 
 #include "materially_equal.hpp"
+#include "math_functions.hpp"           // neg0, pos0
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -45,15 +46,15 @@ void test_systematically()
     LMI_TEST_EQUAL( 1.0, bin_exp( 0.0, -0));
     LMI_TEST_EQUAL( 1.0, bin_exp(-0.0, -0));
 
-    LMI_TEST_EQUAL( 0.0, bin_exp( 0.0,  1));
-    LMI_TEST_EQUAL( 0.0, bin_exp(-0.0,  1));
-    LMI_TEST_EQUAL( inf, bin_exp( 0.0, -1));
-    LMI_TEST_EQUAL(-inf, bin_exp(-0.0, -1));
+    LMI_TEST_EQUAL(pos0, bin_exp( 0.0,  7));
+    LMI_TEST_EQUAL(neg0, bin_exp(-0.0,  7));
+    LMI_TEST_EQUAL( inf, bin_exp( 0.0, -7));
+    LMI_TEST_EQUAL(-inf, bin_exp(-0.0, -7));
 
-    LMI_TEST_EQUAL( 0.0, bin_exp( 0.0,  9));
-    LMI_TEST_EQUAL( 0.0, bin_exp(-0.0,  9));
-    LMI_TEST_EQUAL( inf, bin_exp( 0.0, -9));
-    LMI_TEST_EQUAL(-inf, bin_exp(-0.0, -9));
+    LMI_TEST_EQUAL(pos0, bin_exp( 0.0,  8));
+    LMI_TEST_EQUAL(pos0, bin_exp(-0.0,  8));
+    LMI_TEST_EQUAL( inf, bin_exp( 0.0, -8));
+    LMI_TEST_EQUAL( inf, bin_exp(-0.0, -8));
 
     // powers of one
 
@@ -101,8 +102,8 @@ void test_systematically()
 
     LMI_TEST_EQUAL(     inf, bin_exp( e,  999));
     LMI_TEST_EQUAL(    -inf, bin_exp(-e,  999));
-    LMI_TEST_EQUAL(     0.0, bin_exp( e, -999));
-    LMI_TEST_EQUAL(    -0.0, bin_exp(-e, -999));
+    LMI_TEST_EQUAL(    pos0, bin_exp( e, -999));
+    LMI_TEST_EQUAL(    neg0, bin_exp(-e, -999));
 }
 
 void test_integral_powers_of_two()
