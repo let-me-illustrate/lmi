@@ -476,6 +476,50 @@ void test_compound_interest()
         );
 }
 
+void test_signed_zero()
+{
+    constexpr double inf  {std::numeric_limits<double>::infinity ()};
+    constexpr double qnan {std::numeric_limits<double>::quiet_NaN()};
+
+    LMI_TEST(pos0 == pos0);
+    LMI_TEST(pos0 != neg0);
+    LMI_TEST(neg0 != pos0);
+    LMI_TEST(neg0 == neg0);
+
+    LMI_TEST(pos0 ==  0.0);
+    LMI_TEST( 0.0 == pos0);
+    LMI_TEST(pos0 != -0.0);
+    LMI_TEST(-0.0 != pos0);
+
+    LMI_TEST(neg0 !=  0.0);
+    LMI_TEST( 0.0 != neg0);
+    LMI_TEST(neg0 == -0.0);
+    LMI_TEST(-0.0 == neg0);
+
+    LMI_TEST(pos0 != qnan);
+    LMI_TEST(qnan != pos0);
+    LMI_TEST(neg0 != qnan);
+    LMI_TEST(qnan != neg0);
+
+    LMI_TEST(pos0 !=  inf);
+    LMI_TEST( inf != pos0);
+    LMI_TEST(pos0 != -inf);
+    LMI_TEST(-inf != pos0);
+
+    LMI_TEST(neg0 !=  inf);
+    LMI_TEST( inf != neg0);
+    LMI_TEST(neg0 != -inf);
+    LMI_TEST(-inf != neg0);
+
+    LMI_TEST(pos0 !=  1.0);
+    LMI_TEST(neg0 !=  1.0);
+
+    // These intentionally do not compile:
+//  LMI_TEST(pos0 == 0);
+//  LMI_TEST(pos0 == '0');
+//  LMI_TEST(pos0 == nullptr);
+}
+
 template<typename T>
 void test_signum(char const* file, int line)
 {
@@ -726,6 +770,8 @@ int test_main(int, char*[])
     test_outward_quotient();
 
     test_compound_interest();
+
+    test_signed_zero();
 
     test_signum<bool         >(__FILE__, __LINE__);
     test_signum<signed char  >(__FILE__, __LINE__);
