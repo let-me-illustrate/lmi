@@ -298,9 +298,6 @@
     <ClCompile Include="main_common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="financial.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="interpolate_string.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -353,6 +350,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gpt7702.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ul_utilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fdlibm_expm1.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fdlibm_log1p.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="math_functions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

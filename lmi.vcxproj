@@ -263,6 +263,18 @@
     <ClCompile Include="death_benefits.cpp" />
     <ClCompile Include="emit_ledger.cpp" />
     <ClCompile Include="facets.cpp" />
+    <ClCompile Include="fdlibm_expm1.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="fdlibm_log1p.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="fenv_guard.cpp" />
     <ClCompile Include="fenv_lmi.cpp" />
     <ClCompile Include="file_command.cpp" />
@@ -321,6 +333,7 @@
     <ClCompile Include="lmi.cpp" />
     <ClCompile Include="loads.cpp" />
     <ClCompile Include="main_common.cpp" />
+    <ClCompile Include="math_functions.cpp" />
     <ClCompile Include="mc_enum.cpp" />
     <ClCompile Include="mc_enum_types.cpp" />
     <ClCompile Include="mc_enum_types_aux.cpp" />
