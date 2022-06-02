@@ -29,6 +29,10 @@ AAAAAAAA ICON "lmi.ico"
 // binary. Other icons are treated the same way here, not because they
 // must be, but simply as a matter of consistency and convenience.
 
+// Request using the manifest enabling per-monitor DPI awareness in wx.rc, as
+// this application handles DPI scaling correctly.
+#define wxUSE_DPI_AWARE_MANIFEST 2
+
 // Get stock cursors etc. Unconventionally, write this #include
 // directive at the end of this file, to prevent any ICON statements
 // in the included file from preceding the application's icon--which
