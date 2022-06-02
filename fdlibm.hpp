@@ -45,11 +45,11 @@
 
 // Apparently the clang maintainers believe that floating-point
 // endianness is necessarily the same as integer endianness.
-#if defined __clang__
+#if defined LMI_CLANG
 #   if !defined __FLOAT_WORD_ORDER__ && defined __BYTE_ORDER__
 #       define __FLOAT_WORD_ORDER__ __BYTE_ORDER__
 #   endif // !defined __FLOAT_WORD_ORDER__ && defined __BYTE_ORDER__
-#endif // defined __clang__
+#endif // defined LMI_CLANG
 
 // And MSVC maintainers don't believe in having different endianness
 // values at all, so the compiler never predefines these symbols.
