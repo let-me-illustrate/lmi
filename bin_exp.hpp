@@ -24,6 +24,8 @@
 
 #include "config.hpp"
 
+#include "math_functions.hpp"           // u_abs()
+
 #include <type_traits>                  // is_floating_point_v
 
 /// Binary method for exponentiation.
@@ -59,11 +61,11 @@
 /// unsigned values anyway.
 
 template<typename T>
-constexpr T bin_exp(T x, int n)
+constexpr T bin_exp(T x, int exponent)
 {
     static_assert(std::is_floating_point_v<T>);
-    bool negative_exponent {n < 0};
-    if(negative_exponent) n = -n;
+    bool negative_exponent {exponent < 0};
+    unsigned int n = u_abs(exponent);
     T y = 1;
     for(;;)
         {
