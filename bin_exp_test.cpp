@@ -34,7 +34,12 @@
 
 namespace
 {
-    constexpr auto inf {std::numeric_limits<double>::infinity()};
+    constexpr auto inf  {std::numeric_limits<double>::infinity ()};
+    constexpr auto qnan {std::numeric_limits<double>::quiet_NaN()};
+
+    constexpr double e     {2.71828'18284'59045'23536};
+    constexpr double e_sq  {7.38905'60989'30650'22723};
+    constexpr double e_101 {7.30705'99793'68067'27265e43};
 } // Unnamed namespace.
 
 void test_systematically()
@@ -70,10 +75,6 @@ void test_systematically()
 
     // powers of e
 
-    constexpr double e     = 2.71828'18284'59045'23536;
-    constexpr double e_sq  = 7.38905'60989'30650'22723;
-    constexpr double e_101 = 7.30705'99793'68067'27265e43;
-
     LMI_TEST_EQUAL(     1.0, bin_exp( e,  0));
     LMI_TEST_EQUAL(     1.0, bin_exp(-e,  0));
     LMI_TEST_EQUAL(     1.0, bin_exp( e, -0));
@@ -104,6 +105,80 @@ void test_systematically()
     LMI_TEST_EQUAL(    -inf, bin_exp(-e,  999));
     LMI_TEST_EQUAL(    pos0, bin_exp( e, -999));
     LMI_TEST_EQUAL(    neg0, bin_exp(-e, -999));
+}
+
+/// C99 F.9.4.4 rules for pow(), omitting cases incompatible
+/// with a finite non-NaN integer exponent.
+
+void test_C99_F_9_4_4_rules()
+{
+    // (±0)^y = ±∞, y odd and negative
+
+    LMI_TEST_EQUAL(     inf, bin_exp( 0.0, -3));
+    LMI_TEST_EQUAL(    -inf, bin_exp(-0.0, -3));
+
+    // (±0)^y = +∞, y even and negative
+
+    LMI_TEST_EQUAL(     inf, bin_exp( 0.0, -4));
+    LMI_TEST_EQUAL(     inf, bin_exp(-0.0, -4));
+
+    // (±0)^y = ±0, y odd and positive
+
+    LMI_TEST_EQUAL(    pos0, bin_exp( 0.0,  3));
+    LMI_TEST_EQUAL(    neg0, bin_exp(-0.0,  3));
+
+    // (±0)^y = +0, y even and positive
+
+    LMI_TEST_EQUAL(    pos0, bin_exp( 0.0,  4));
+    LMI_TEST_EQUAL(    pos0, bin_exp(-0.0,  4));
+
+    // 1^y = 1, for all y
+
+    LMI_TEST_EQUAL(     1.0, bin_exp( 1.0, INT_MIN));
+    LMI_TEST_EQUAL(     1.0, bin_exp( 1.0, -2));
+    LMI_TEST_EQUAL(     1.0, bin_exp( 1.0, -1));
+    LMI_TEST_EQUAL(     1.0, bin_exp( 1.0,  0));
+    LMI_TEST_EQUAL(     1.0, bin_exp( 1.0,  1));
+    LMI_TEST_EQUAL(     1.0, bin_exp( 1.0,  2));
+    LMI_TEST_EQUAL(     1.0, bin_exp( 1.0, INT_MAX));
+
+    // x^0 = 1, for all x, even a NaN
+
+    LMI_TEST_EQUAL(     1.0, bin_exp(-inf,  0));
+    LMI_TEST_EQUAL(     1.0, bin_exp(  -e,  0));
+    LMI_TEST_EQUAL(     1.0, bin_exp(-1.0,  0));
+    LMI_TEST_EQUAL(     1.0, bin_exp(-0.0,  0));
+    LMI_TEST_EQUAL(     1.0, bin_exp( 0.0,  0));
+    LMI_TEST_EQUAL(     1.0, bin_exp( 1.0,  0));
+    LMI_TEST_EQUAL(     1.0, bin_exp(   e,  0));
+    LMI_TEST_EQUAL(     1.0, bin_exp( inf,  0));
+    LMI_TEST_EQUAL(     1.0, bin_exp(qnan,  0));
+
+    // pow(-∞, y) = -0, y odd and negative
+
+    LMI_TEST_EQUAL(    neg0, bin_exp(-inf, -3));
+
+    // pow(-∞, y) = +0, y even and negative
+
+    LMI_TEST_EQUAL(    pos0, bin_exp(-inf, -4));
+
+    // pow(-∞, y) = -∞, y odd and positive
+
+    LMI_TEST_EQUAL(    -inf, bin_exp(-inf,  3));
+
+    // pow(-∞, y) = +∞, y even and positive
+
+    LMI_TEST_EQUAL(     inf, bin_exp(-inf,  4));
+
+    // pow(+∞ , y) = +0, y negative
+
+    LMI_TEST_EQUAL(    pos0, bin_exp( inf, -3));
+    LMI_TEST_EQUAL(    pos0, bin_exp( inf, -4));
+
+    // pow(+∞ , y) = +∞, y positive
+
+    LMI_TEST_EQUAL(     inf, bin_exp( inf,  3));
+    LMI_TEST_EQUAL(     inf, bin_exp( inf,  4));
 }
 
 void test_integral_powers_of_two()
@@ -321,6 +396,7 @@ int test_main(int, char*[])
     std::cout.precision(DECIMAL_DIG);
 
     test_systematically();
+    test_C99_F_9_4_4_rules();
     test_integral_powers_of_two();
     test_integral_powers_of_ten();
     test_quodlibet();
