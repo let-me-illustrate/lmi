@@ -67,7 +67,6 @@ class LMI_SO LedgerVariant final
 
     void RecordDynamicSepAcctRate
         (double annual_rate
-        ,double monthly_rate
         ,int year
         );
 
@@ -123,10 +122,6 @@ class LMI_SO LedgerVariant final
     // Forborne vectors [none presently].
 
     // Nonscalable vectors.
-    std::vector<double> MlySAIntRate;
-    std::vector<double> MlyGAIntRate;
-    std::vector<double> MlyHoneymoonValueRate;
-    std::vector<double> MlyPostHoneymoonRate;
     std::vector<double> AnnSAIntRate;
     std::vector<double> AnnGAIntRate;
     std::vector<double> AnnHoneymoonValueRate;

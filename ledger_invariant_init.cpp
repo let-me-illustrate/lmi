@@ -139,15 +139,6 @@ void LedgerInvariant::Init(BasicValues const* b)
     AddonCompOnAssets          = b->yare_input_.ExtraCompensationOnAssets ;
     AddonCompOnPremium         = b->yare_input_.ExtraCompensationOnPremium;
     CorridorFactor             = b->GetCorridorFactor();
-    if(!is_antediluvian_fork())
-        {
-        Irc7702ic_usual            = b->i7702_->ic_usual();
-        Irc7702ic_glp              = b->i7702_->ic_glp  ();
-        Irc7702ic_gsp              = b->i7702_->ic_gsp  ();
-        Irc7702ig_usual            = b->i7702_->ig_usual();
-        Irc7702ig_glp              = b->i7702_->ig_glp  ();
-        Irc7702ig_gsp              = b->i7702_->ig_gsp  ();
-        }
 
     AnnLoanDueRate = b->InterestRates_->RegLnDueRate
         (mce_gen_curr

@@ -46,7 +46,7 @@
 /// age might therefore change. The billing interval is any of the
 /// customary life-insurance payment modes. For the maximum billing
 /// period of one year, the demographic notation used on page 129 of
-/// Batten, _Mortality Table Construction_, 1978 (ISBN 0-13-601302-3)
+/// Batten, "Mortality Table Construction", 1978 (ISBN 0-13-601302-3)
 /// would be:
 ///   - (delta)premium(x)   [here, prem_ante] for monthly charges at
 ///     age x from the bill date to the anniversary age change;
@@ -103,12 +103,14 @@ currency rate_times_currency
 {
     using uint64 = std::uint64_t;
 
-    // Precondition (asserted below): the premium-rate argument is
+    // Expected condition (not asserted): the premium-rate argument is
     // precise to at most eight decimals, any further digits being
-    // representation error. In practice, eight is almost universally
-    // adequate, but this is a parameter that may be adjusted if more
-    // decimals are required. The accompanying unit test gives some
-    // illustrative examples of this precondition's effect.
+    // representation error. In practice, rates are almost never
+    // rounded to more than eight digits, unless all representable
+    // digits actually are significant--e.g., in the case of a 7PP
+    // table intended to reproduce a calculation from first principles
+    // as closely as possible. This presently hardcoded parameter may
+    // require adjustment if more decimals are required.
     constexpr int radix {100'000'000};
     constexpr uint64 limit {UINT64_MAX / radix};
     static currency const cents_limit {from_cents(limit)};
@@ -142,14 +144,13 @@ currency rate_times_currency
     // Use bourn_cast<>() for conversions here and elsewhere: it
     // implicitly asserts that values are preserved.
     uint64 irate = bourn_cast<uint64>(std::nearbyint(rate * radix));
-    // If the rate really has more than eight significant (non-erroneous)
-    // digits, then throw. Alternatively, one might simply
-    //   return rounder.c(amount * rate);
-    // in that case: i.e., treat all digits as significant, assume
-    // there is no representation error to be removed, and perform
-    // the multiplication in double precision (perhaps with less
-    // accuracy than might otherwise be obtained).
-    LMI_ASSERT(materially_equal(bourn_cast<double>(irate), rate * radix));
+    // If the rate really has more than eight significant digits, then
+    // perform the calculation in double precision. The accompanying
+    // unit test gives some illustrative examples of this conditional.
+    if(!materially_equal(bourn_cast<double>(irate), rate * radix))
+        {
+        return rounder.c(amount * rate);
+        }
     // Multiply integer rate by integral-cents amount.
     // Use a large integer type to avoid overflow.
     uint64 iprod = irate * bourn_cast<uint64>(amount.cents());

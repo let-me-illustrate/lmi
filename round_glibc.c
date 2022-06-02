@@ -49,15 +49,6 @@
 //   https://lists.freedesktop.org/archives/release-wranglers/2004-August/000925.html
 typedef uint32_t u_int32_t;
 
-// This file is intended only for use with MinGW-w64, which is always
-// little endian. It seemed best to preserve alternative definitions
-// in case they're ever wanted for some unanticipated purpose, and
-// to provide these aliases mapping the macros used in the unmodified
-// sources to gcc's standard predefinitions:
-#define __FLOAT_WORD_ORDER __FLOAT_WORD_ORDER__
-#define LITTLE_ENDIAN      __ORDER_LITTLE_ENDIAN__
-#define BIG_ENDIAN         __ORDER_BIG_ENDIAN__
-
 // https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/ieee754/dbl-64/s_round.c
 /* Round double to integer away from zero. */
 // https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/ieee754/flt-32/s_roundf.c
@@ -97,7 +88,7 @@ typedef uint32_t u_int32_t;
 /* A union which permits us to convert between a double and two 32 bit
    ints.  */
 
-#if __FLOAT_WORD_ORDER == BIG_ENDIAN
+#if __FLOAT_WORD_ORDER__ == __ORDER_BIG_ENDIAN__
 typedef union
 {
   double value;
@@ -108,9 +99,9 @@ typedef union
   } parts;
   uint64_t word;
 } ieee_double_shape_type;
-#endif // __FLOAT_WORD_ORDER == BIG_ENDIAN
+#endif // __FLOAT_WORD_ORDER__ == __ORDER_BIG_ENDIAN__
 
-#if __FLOAT_WORD_ORDER == LITTLE_ENDIAN
+#if __FLOAT_WORD_ORDER__ == __ORDER_LITTLE_ENDIAN__
 typedef union
 {
   double value;
@@ -121,7 +112,7 @@ typedef union
   } parts;
   uint64_t word;
 } ieee_double_shape_type;
-#endif // __FLOAT_WORD_ORDER == LITTLE_ENDIAN
+#endif // __FLOAT_WORD_ORDER__ == __ORDER_LITTLE_ENDIAN__
 
 /* Get two 32 bit ints from a double.  */
 
@@ -178,7 +169,7 @@ do {                                                            \
 /* A union which permits us to convert between a long double and
    three 32 bit ints.  */
 
-#if __FLOAT_WORD_ORDER == BIG_ENDIAN
+#if __FLOAT_WORD_ORDER__ == __ORDER_BIG_ENDIAN__
 typedef union
 {
   long double value;
@@ -190,9 +181,9 @@ typedef union
     u_int32_t lsw;
   } parts;
 } ieee_long_double_shape_type;
-#endif // __FLOAT_WORD_ORDER == BIG_ENDIAN
+#endif // __FLOAT_WORD_ORDER__ == __ORDER_BIG_ENDIAN__
 
-#if __FLOAT_WORD_ORDER == LITTLE_ENDIAN
+#if __FLOAT_WORD_ORDER__ == __ORDER_LITTLE_ENDIAN__
 typedef union
 {
   long double value;
@@ -204,7 +195,7 @@ typedef union
     unsigned int empty:16;
   } parts;
 } ieee_long_double_shape_type;
-#endif // __FLOAT_WORD_ORDER == LITTLE_ENDIAN
+#endif // __FLOAT_WORD_ORDER__ == __ORDER_LITTLE_ENDIAN__
 
 /* Get three 32 bit ints from a double.  */
 

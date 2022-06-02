@@ -2,7 +2,7 @@
 
 # 'triplets' really is used, but in a zsh-specific way
 # shellcheck disable=SC2034
-  triplets="x86_64-pc-linux-gnu x86_64-w64-mingw32 i686-w64-mingw32"
+  triplets="x86_64-pc-linux-gnu x86_64-w64-mingw32"
 export LMI_COMPILER=gcc
 export LMI_TRIPLET
 # shellcheck disable=SC2043

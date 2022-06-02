@@ -62,7 +62,7 @@ class monnaie
     using amount_type = std::int_fast64_t;
 
     static constexpr int cents_digits = 2;
-    static constexpr int cents_per_dollar = 100; // std::pow(10, cents_digits)
+    static constexpr int cents_per_dollar = 100; // pow(10, cents_digits)
 
     static constexpr amount_type max_dollars()
         {

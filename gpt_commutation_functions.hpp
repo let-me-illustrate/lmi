@@ -180,7 +180,7 @@ class gpt_commfns
 
 /// Specialized GPT commutation functions on the three required bases.
 ///
-/// '*_ig' (monthly effective death-benefit discount rate for NAAR) is
+/// 'ig' (monthly effective death-benefit discount rate for NAAR) is
 /// distinct for GLP and GSP. Often it is the monthly equivalent of
 /// four and six percent, respectively.
 ///

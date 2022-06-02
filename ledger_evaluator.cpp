@@ -212,26 +212,12 @@ title_map_t static_titles()
     ,{"HoneymoonValueSpread"            , "Honeymoon\nValue\nSpread"}
     ,{"IndvTaxBracket"                  , "EE Tax\nBracket"}
     ,{"InforceLives"                    , "BOY\nLives\nInforce"}
-    ,{"Irc7702ic_usual"                 , "7702 ic\nUsual"}
-    ,{"Irc7702ic_glp"                   , "7702 ic\nfor GLP"}
-    ,{"Irc7702ic_gsp"                   , "7702 ic\nfor GSP"}
-    ,{"Irc7702ig_usual"                 , "7702 ig\nUsual"}
-    ,{"Irc7702ig_glp"                   , "7702 ig\nfor GLP"}
-    ,{"Irc7702ig_gsp"                   , "7702 ig\nfor GSP"}
     ,{"IrrCsv_Current"                  , "Curr IRR\non CSV"}
     ,{"IrrCsv_Guaranteed"               , "Guar IRR\non CSV"}
     ,{"IrrDb_Current"                   , "Curr IRR\non DB"}
     ,{"IrrDb_Guaranteed"                , "Guar IRR\non DB"}
     ,{"LoanIntAccrued_Current"          , "Curr Loan\nInt\nAccrued"}
     ,{"LoanIntAccrued_Guaranteed"       , "Guar Loan\nInt\nAccrued"}
-    ,{"MlyGAIntRate_Current"            , "Curr Monthly\nGen Acct\nInt Rate"}
-    ,{"MlyGAIntRate_Guaranteed"         , "Guar Monthly\nGen Acct\nInt Rate"}
-    ,{"MlyHoneymoonValueRate_Current"   , "Curr Monthly\nHoneymoon\nValue Rate"}
-    ,{"MlyHoneymoonValueRate_Guaranteed", "Guar Monthly\nHoneymoon\nValue Rate"}
-    ,{"MlyPostHoneymoonRate_Current"    , "Curr Monthly\nPost\nHoneymoon\nRate"}
-    ,{"MlyPostHoneymoonRate_Guaranteed" , "Guar Monthly\nPost\nHoneymoon\nRate"}
-    ,{"MlySAIntRate_Current"            , "Curr Monthly\nSep Acct\nInt Rate"}
-    ,{"MlySAIntRate_Guaranteed"         , "Guar Monthly\nSep Acct\nInt Rate"}
     ,{"ModalMinimumPremium"             , "Modal\nMinimum\nPremium"}
 //  ,{"NaarForceout"                    , "Forced\nWithdrawal\ndue to\nNAAR Limit"}
     ,{"NetClaims_Current"               , "Curr Net\nClaims"}
@@ -351,26 +337,12 @@ mask_map_t static_masks()
     ,{"HoneymoonValueSpread"            ,      "99.99%"}
     ,{"IndvTaxBracket"                  ,      "99.99%"}
     ,{"InforceLives"                    , "999,999,999"}
-    ,{"Irc7702ic_usual"                 ,      "99.99%"}
-    ,{"Irc7702ic_glp"                   ,      "99.99%"}
-    ,{"Irc7702ic_gsp"                   ,      "99.99%"}
-    ,{"Irc7702ig_usual"                 ,      "99.99%"}
-    ,{"Irc7702ig_glp"                   ,      "99.99%"}
-    ,{"Irc7702ig_gsp"                   ,      "99.99%"}
     ,{"IrrCsv_Current"                  ,  "100000.00%"}
     ,{"IrrCsv_Guaranteed"               ,  "100000.00%"}
     ,{"IrrDb_Current"                   ,  "100000.00%"}
     ,{"IrrDb_Guaranteed"                ,  "100000.00%"}
     ,{"LoanIntAccrued_Current"          , "999,999,999"}
     ,{"LoanIntAccrued_Guaranteed"       , "999,999,999"}
-    ,{"MlyGAIntRate_Current"            ,      "99.99%"}
-    ,{"MlyGAIntRate_Guaranteed"         ,      "99.99%"}
-    ,{"MlyHoneymoonValueRate_Current"   ,      "99.99%"}
-    ,{"MlyHoneymoonValueRate_Guaranteed",      "99.99%"}
-    ,{"MlyPostHoneymoonRate_Current"    ,      "99.99%"}
-    ,{"MlyPostHoneymoonRate_Guaranteed" ,      "99.99%"}
-    ,{"MlySAIntRate_Current"            ,      "99.99%"}
-    ,{"MlySAIntRate_Guaranteed"         ,      "99.99%"}
     ,{"ModalMinimumPremium"             , "999,999,999"}
 //  ,{"NaarForceout"                    , "999,999,999"}
     ,{"NetClaims_Current"               , "999,999,999"}
@@ -584,12 +556,6 @@ format_map_t static_formats()
     ,{"HoneymoonValueSpread"            , f4}
     ,{"IndvTaxBracket"                  , f4}
     ,{"InforceHMVector"                 , f4}
-    ,{"Irc7702ic_usual"                 , f4}
-    ,{"Irc7702ic_glp"                   , f4}
-    ,{"Irc7702ic_gsp"                   , f4}
-    ,{"Irc7702ig_usual"                 , f4}
-    ,{"Irc7702ig_glp"                   , f4}
-    ,{"Irc7702ig_gsp"                   , f4}
     ,{"IrrCsv_Current"                  , f4}
     ,{"IrrCsv_CurrentZero"              , f4}
     ,{"IrrCsv_Guaranteed"               , f4}
@@ -598,10 +564,6 @@ format_map_t static_formats()
     ,{"IrrDb_CurrentZero"               , f4}
     ,{"IrrDb_Guaranteed"                , f4}
     ,{"IrrDb_GuaranteedZero"            , f4}
-    ,{"MlyGAIntRate"                    , f4}
-    ,{"MlyHoneymoonValueRate"           , f4}
-    ,{"MlyPostHoneymoonRate"            , f4}
-    ,{"MlySAIntRate"                    , f4}
     ,{"TotalIMF"                        , f4}
 // F5: zero decimals, commas, cents to dollars
 // > Format as a number with thousand separators and no decimal places (#,###,##0)

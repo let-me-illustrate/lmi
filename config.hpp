@@ -97,14 +97,6 @@
 #   endif  // !defined LMI_X87
 #endif // defined LMI_X86
 
-// This selects a correct snprintf() for MinGW-w64.
-
-#if defined __GNUC__
-#   if !defined _ISOC99_SOURCE
-#       define _ISOC99_SOURCE
-#   endif // !defined _ISOC99_SOURCE
-#endif // defined __GNUC__
-
 // 'platform_dependent.hpp' includes standard headers in an unusual
 // way, and must be included before any standard headers are seen.
 // Do that here to quarantine the weirdness.
@@ -189,7 +181,7 @@
 //   http://boost.cvs.sf.net/boost/boost/boost/config.hpp?annotate=1.1
 //   Many other "compilers define _MSC_VER. Thus BOOST_MSVC. [...]
 //   Must remain the last #elif since some other vendors (Metrowerks,
-//   for example) also #define _MSC_VER"
+//   for example) also #define _MSC_VER ..."
 
 #if defined _MSC_VER && !defined LMI_GCC_VERSION && !defined LMI_COMO_WITH_MINGW
 #    define LMI_MSC

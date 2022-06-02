@@ -102,6 +102,7 @@ TESTS = \
     any_member_test \
     assert_lmi_test \
     authenticity_test \
+    bin_exp_test \
     bourn_cast_test \
     cache_file_reads_test \
     calendar_date_test \
@@ -340,6 +341,8 @@ liblmi_common_sources = \
     death_benefits.cpp \
     emit_ledger.cpp \
     facets.cpp \
+    fdlibm_expm1.c \
+    fdlibm_log1p.c \
     fenv_guard.cpp \
     fenv_lmi.cpp \
     file_command.cpp \
@@ -370,6 +373,7 @@ liblmi_common_sources = \
     ledgervalues.cpp \
     license.cpp \
     loads.cpp \
+    math_functions.cpp \
     mc_enum.cpp \
     mc_enum_types.cpp \
     mc_enum_types_aux.cpp \
@@ -632,6 +636,13 @@ authenticity_test_CXXFLAGS = $(AM_CXXFLAGS)
 authenticity_test_LDADD = \
   libtest_common.la
 
+bin_exp_test_SOURCES = \
+  bin_exp.cpp \
+  bin_exp_test.cpp
+bin_exp_test_CXXFLAGS = $(AM_CXXFLAGS)
+bin_exp_test_LDADD = \
+  libtest_common.la
+
 bourn_cast_test_LDADD = \
   libtest_common.la
 
@@ -651,6 +662,9 @@ commutation_functions_test_SOURCES = \
   commutation_functions.cpp \
   commutation_functions_test.cpp \
   cso_table.cpp \
+  fdlibm_expm1.c \
+  fdlibm_log1p.c \
+  math_functions.cpp
 commutation_functions_test_CXXFLAGS = $(AM_CXXFLAGS)
 commutation_functions_test_LDADD = \
   libtest_common.la
@@ -734,9 +748,12 @@ global_settings_test_LDADD = \
 gpt_cf_triad_test_SOURCES = \
   commutation_functions.cpp \
   cso_table.cpp \
+  fdlibm_expm1.c \
+  fdlibm_log1p.c \
   gpt_cf_triad_test.cpp \
   gpt_commutation_functions.cpp \
-  ihs_irc7702.cpp
+  ihs_irc7702.cpp \
+  math_functions.cpp
 gpt_cf_triad_test_CXXFLAGS = $(AM_CXXFLAGS)
 gpt_cf_triad_test_LDADD = \
   libtest_common.la
@@ -744,9 +761,12 @@ gpt_cf_triad_test_LDADD = \
 gpt_test_SOURCES = \
   commutation_functions.cpp \
   cso_table.cpp \
+  fdlibm_expm1.c \
+  fdlibm_log1p.c \
   gpt7702.cpp \
   gpt_commutation_functions.cpp \
-  gpt_test.cpp
+  gpt_test.cpp \
+  math_functions.cpp
 gpt_test_CXXFLAGS = $(AM_CXXFLAGS)
 gpt_test_LDADD = \
   libtest_common.la
@@ -755,8 +775,11 @@ handle_exceptions_test_LDADD = \
   libtest_common.la
 
 i7702_test_SOURCES = \
+  fdlibm_expm1.c \
+  fdlibm_log1p.c \
   i7702.cpp \
-  i7702_test.cpp
+  i7702_test.cpp \
+  math_functions.cpp
 i7702_test_CXXFLAGS = $(AM_CXXFLAGS)
 i7702_test_LDADD = \
   libtest_common.la
@@ -821,8 +844,11 @@ interpolate_string_test_LDADD = \
 irc7702_tables_test_SOURCES = \
   commutation_functions.cpp \
   cso_table.cpp \
+  fdlibm_expm1.c \
+  fdlibm_log1p.c \
   irc7702_tables.cpp \
-  irc7702_tables_test.cpp
+  irc7702_tables_test.cpp \
+  math_functions.cpp
 irc7702_tables_test_CXXFLAGS = $(AM_CXXFLAGS)
 irc7702_tables_test_LDADD = \
   libtest_common.la
@@ -863,8 +889,11 @@ ledger_test_LDADD = \
   $(XMLWRAPP_LIBS)
 
 loads_test_SOURCES = \
+  fdlibm_expm1.c \
+  fdlibm_log1p.c \
   loads.cpp \
-  loads_test.cpp
+  loads_test.cpp \
+  math_functions.cpp
 loads_test_CXXFLAGS = $(AM_CXXFLAGS)
 loads_test_LDADD = \
   libtest_common.la
@@ -875,6 +904,12 @@ map_lookup_test_LDADD = \
 materially_equal_test_LDADD = \
   libtest_common.la
 
+math_functions_test_SOURCES = \
+  fdlibm_expm1.c \
+  fdlibm_log1p.c \
+  math_functions.cpp \
+  math_functions_test.cpp
+math_functions_test_CXXFLAGS = $(AM_CXXFLAGS)
 math_functions_test_LDADD = \
   libtest_common.la
 
@@ -903,7 +938,10 @@ monnaie_test_LDADD = \
   libtest_common.la
 
 mortality_rates_test_SOURCES = \
+  fdlibm_expm1.c \
+  fdlibm_log1p.c \
   ihs_mortal.cpp \
+  math_functions.cpp \
   mortality_rates_test.cpp
 mortality_rates_test_CXXFLAGS = $(AM_CXXFLAGS)
 mortality_rates_test_LDADD = \
@@ -1109,6 +1147,7 @@ noinst_HEADERS = \
     authenticity.hpp \
     basic_tables.hpp \
     basic_values.hpp \
+    bin_exp.hpp \
     bourn_cast.hpp \
     cache_file_reads.hpp \
     calendar_date.hpp \
@@ -1154,6 +1193,7 @@ noinst_HEADERS = \
     emit_ledger.hpp \
     exit_codes.hpp \
     facets.hpp \
+    fdlibm.hpp \
     fenv_guard.hpp \
     fenv_lmi.hpp \
     fenv_lmi_x86.hpp \
@@ -1280,7 +1320,6 @@ noinst_HEADERS = \
     skeleton.hpp \
     so_attributes.hpp \
     ssize_lmi.hpp \
-    stl_extensions.hpp \
     stratified_algorithms.hpp \
     stratified_charges.hpp \
     stratified_charges.xpp \

@@ -28,9 +28,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: MSW/make/mingw32
-            triplet: i686-w64-mingw32
-            mingw: true
           - name: MSW/make/mingw64
             triplet: x86_64-w64-mingw32
             mingw: true
@@ -78,32 +75,14 @@ jobs:
 
           if [ ${{ matrix.mingw }} ]
           then
-            case "$LMI_TRIPLET" in
-              i686-*)
-                # This is additionally required when using 32-bit builds for
-                # installing 32 bit Wine which, in turn, is required for
-                # running 32 bit lmi binaries.
-                sudo dpkg --add-architecture i386
-                sudo apt-get -q -o=Dpkg::Use-Pty=0 update
+            packages="$packages g++-mingw-w64-x86-64 wine wine64"
 
-                packages="$packages g++-mingw-w64-i686 wine wine32"
-                ;;
-
-              x86_64-*)
-                packages="$packages g++-mingw-w64-x86-64 wine wine64"
-
-                # Set WINEDEBUG to avoid annoying warnings about wine32 being
-                # missing: this is not a problem in our case, we want to only
-                # run 64-bit programs in this build, so set WINEDEBUG to a
-                # value equivalent to its default/unset value but recognized
-                # as disabling error output by Debian /usr/bin/wine script.
-                echo 'WINEDEBUG=-all,err+all,fixme+all' >> $GITHUB_ENV
-                ;;
-
-              *)
-                echo 'Unknown MinGW platform.'
-                exit 1
-            esac
+            # Set WINEDEBUG to avoid annoying warnings about wine32 being
+            # missing: this is not a problem in our case, we want to only
+            # run 64-bit programs in this build, so set WINEDEBUG to a
+            # value equivalent to its default/unset value but recognized
+            # as disabling error output by Debian /usr/bin/wine script.
+            echo 'WINEDEBUG=-all,err+all,fixme+all' >> $GITHUB_ENV
           else
             packages="$packages libgtk-3-dev"
           fi

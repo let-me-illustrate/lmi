@@ -579,7 +579,7 @@ void check_cxx(file const& f)
     for(auto const& z : pcre::search_all(f.data(), r))
         {
         std::string s = z[0];
-        static pcre::regex const include_guard(R"(# *ifndef *[[:lower:]][_\d[:lower:]]*_hpp\W)");
+        static pcre::regex const include_guard(R"(# *ifndef *[[:lower:]][_\d[:lower:]]*[_]hpp\W)");
         if(!pcre::search(s, include_guard))
             {
             ltrim(s, "\n");
@@ -932,17 +932,20 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__FILE__"
         ,"__LINE__"
         ,"__STDC_IEC_559__"
-        ,"__STDC__"
         ,"__cplusplus"
+        ,"__func__"
         ,"__has_include"
     // Platform identification.
         ,"_M_IX86"
+        ,"_M_IX86_FP"
         ,"_M_X64"
         ,"_X86_"
         ,"__X__"
+        ,"__alpha"
         ,"__amd64"
         ,"__amd64__"
         ,"__i386"
+        ,"__osf__"
         ,"__unix"
         ,"__unix__"
         ,"__x86_64"
@@ -957,6 +960,7 @@ bool check_reserved_name_exception(std::string const& s)
         ,"_vsnprintf"
         ,"_wcsdup"
     // Compiler specific: gcc, clang.
+        ,"__BYTE_ORDER__"
         ,"__FLOAT_WORD_ORDER__"
         ,"__GLIBCPP__"
         ,"__GLIBCXX__"
@@ -988,11 +992,9 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__MINGW64_VERSION_MAJOR"
         ,"__MINGW_H"
         ,"_fmode"
+        ,"_get_output_format"
     // Compiler specific: glibc.
-        ,"_LIBC"
-        ,"__BIG_ENDIAN"
-        ,"__BYTE_ORDER"
-        ,"__FLOAT_WORD_ORDER"
+        ,"_GLIBCXX_DEBUG"
     // Compiler specific: EDG; hence, como, and also libcomo.
         ,"__asm"
         ,"__COMO__"
@@ -1021,8 +1023,14 @@ bool check_reserved_name_exception(std::string const& s)
         ,"_O_WRONLY"
         ,"_PC_64"
         ,"_RC_NEAR"
+        ,"_doserrno"
         ,"_fileno"
         ,"_setmode"
+    // Poe.
+        ,"_bizarre_"
+    // GNU getopt.
+        ,"_OPTIONS_FIRST"
+        ,"_POSIX_OPTION_ORDER"
     // Library specific.
         ,"D__WXDEBUG__" // Hapax legomenon.
         ,"__WXGTK__"
@@ -1030,7 +1038,11 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__XSLT_LIBXSLT_H__"
         ,"__mp_copymem"
         };
-    return contains(z, s) || begins_with(s, "__cpp_");
+    return
+           contains(z, s)
+        || begins_with(s, "__builtin_")
+        || begins_with(s, "__cpp_")
+        ;
 }
 
 /// Check names reserved by C++2003 [17.4.3.1.2].
@@ -1041,30 +1053,26 @@ bool check_reserved_name_exception(std::string const& s)
 /// The regex iterated for is deliberately overbroad. Measurement
 /// shows that it is far more efficient to cast the net widely and
 /// then filter the matches: there's a lot more sea than fish.
-///
-/// TODO ?? Also test '_[A-Za-z0-9]', e.g. thus:
-///   "(\\b\\w*__\\w*\\b)|(\\b\\_\\w+\\b)"
 
 void check_reserved_names(file const& f)
 {
-    if(f.phyloanalyze("^configure.ac$"))
+    if(!f.is_of_phylum(e_c_or_cxx))
         {
         return;
         }
 
-    if(f.is_of_phylum(e_log))
-        {
-        return;
-        }
-
-    static pcre::regex const r(R"((\b\w*__\w*\b))");
+    static pcre::regex const r(R"((\b\w*__\w*\b)|("*\b\_\w+\b"*))");
     for(auto const& z : pcre::search_all(f.data(), r))
         {
         std::string const s = z[0];
         static pcre::regex const not_all_underscore("[A-Za-z0-9]");
+        static pcre::regex const quoted_name(R"("_+[A-Za-z0-9]\w*")");
+        static pcre::regex const literal_operator(R"(""_[A-Za-z])");
         if
             (   !check_reserved_name_exception(s)
-            &&  pcre::search(s, not_all_underscore)
+            &&   pcre::search(s, not_all_underscore)
+            &&  !pcre::search(s, quoted_name)
+            &&  !pcre::search(s, literal_operator)
             )
             {
             std::ostringstream oss;

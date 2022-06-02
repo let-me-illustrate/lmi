@@ -51,8 +51,7 @@
 
 #include <sys/types.h>
 
-/* GWC: Nullify this condition
- * #if STDC_HEADERS || defined _LIBC
+/* GWC: Suppress code conditional on glibc.
  * The gnu project preserves compatibility with ancient *nix compilers,
  * and doesn't assume conformance even with the 1989 C standard. My
  * preference is standard conformance. The C standard library has no
@@ -73,14 +72,11 @@
 /* GWC: File renamed md5.h --> md5.hpp . */
 #include "md5.hpp"
 
-#if defined _LIBC
-# include <endian.h>
-# if __BYTE_ORDER == __BIG_ENDIAN
-#  define WORDS_BIGENDIAN 1
-# endif // __BYTE_ORDER == __BIG_ENDIAN
-#endif // defined _LIBC
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+# define WORDS_BIGENDIAN 1
+#endif // __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 
-/* intel x86 is litte-endian */
+/* intel x86 is little-endian */
 #if defined WORDS_BIGENDIAN
 # define SWAP(n)                            \
     (((n) << 24) | (((n) & 0xff00) << 8) | (((n) >> 8) & 0xff00) | ((n) >> 24))

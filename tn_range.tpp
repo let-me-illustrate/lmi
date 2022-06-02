@@ -22,17 +22,18 @@
 #include "tn_range.hpp"
 
 #include "alert.hpp"
+#include "bin_exp.hpp"
 #include "math_functions.hpp"           // signum()
 #include "unwind.hpp"                   // scoped_unwind_toggler
 #include "value_cast.hpp"
 
-#include <cmath>                        // pow(), signbit()
 #include <exception>
 #include <istream>
 #include <limits>
 #include <ostream>
 #include <sstream>
-#include <type_traits>
+#include <type_traits>                  // is_floating_point_v()
+#include <typeinfo>                     // type_info
 
 namespace
 {
@@ -44,7 +45,7 @@ namespace
     ///    [0.0, 1.7976931348623157E+308] // IEC 60559 double.
     ///    [0, 32767] // Minimum INT_MAX that C99 E.1 allows.
     /// because they are not likely to recognize those maximum values
-    /// as such. Any value of a type for which std::numeric_traits is
+    /// as such. Any value of a type for which std::numeric_limits is
     /// not specialized is treated as lying strictly between extrema
     /// for this purpose, because that generally yields an appropriate
     /// outcome, though of course a different behavior can be obtained
@@ -145,13 +146,24 @@ namespace
     /// some compilers would fail such an assertion even though the
     /// underlying hardware conforms to that standard.
     ///
-    /// A value of floating type is considered exact iff
-    ///  - it is in the range that the floating-point type could
-    ///    represent exactly; and
-    ///  - it is in the range of long int; and
-    ///  - converting it to type long int preserves its value.
-    /// Type long long int might have been used instead, but it is not
-    /// yet part of standard C++ and not all compilers support it.
+    /// Deem a value of floating type to be "exact" iff
+    ///  - it is in the continuous range of integers all of which the
+    ///    floating-point type can represent exactly; and
+    ///  - it is in the range of long long int; and
+    ///  - converting it to type long long int preserves its value.
+    /// Those criteria work well enough in this context, but they are
+    /// stricter than the word "exact" would generally imply: e.g.,
+    /// all binary64 values outside the interval (-2^52, +2^52) are
+    /// exact integers, though not all integers outside that interval
+    /// are exactly representable as binary64; perhaps a better term
+    /// would be "interconvertible with long long int".
+    ///
+    /// It is not pointless to test that the value is within the
+    /// range [LLONG_MIN, LLONG_MAX]: for example, the 96-bit IEEE
+    /// extended-precision type has a 64-bit mantissa and a separate
+    /// sign bit, so it can exactly represent ± 2^64 - 1, which is
+    /// interconvertible with a 128-bit long long integer, but not
+    /// with a 64-bit one.
     ///
     /// No nonfundamental type is considered exact.
     ///
@@ -173,25 +185,28 @@ namespace
     struct is_exact_integer_tester<T,true>
     {
         static_assert(std::is_floating_point_v<T>);
+        static_assert(std::numeric_limits<T>::is_iec559);
         bool operator()(T t)
             {
-            // SOMEDAY !! nonstd::power() [SGI extension] may be
-            // preferable, because std::pow() might not be exact.
-            static T z0 = std::pow
+            constexpr T z0 = bin_exp
                 (static_cast<T>(std::numeric_limits<T>::radix)
                 ,static_cast<T>(std::numeric_limits<T>::digits)
                 );
-            long int z1 = std::numeric_limits<long int>::max();
+            constexpr auto z1lo = std::numeric_limits<long long int>::lowest();
+            constexpr auto z1hi = std::numeric_limits<long long int>::max();
 #if defined __GNUC__
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wconversion"
+#   pragma GCC diagnostic ignored "-Wfloat-conversion"
 #endif // defined __GNUC__
+            // As asserted above, 'z0' is of a floating type that
+            // conforms to IEEE 754, so '-z0' DTRT here.
             return
-                   -z0 < t
-                &&       t < z0
-                && -z1 < t
-                &&       t < z1
-                && t == static_cast<long int>(t)
+                   -z0   < t
+                &&         t < z0
+                && -z1lo < t
+                &&         t < z1hi
+                && t == static_cast<long long int>(t)
                 ;
 #if defined __GNUC__
 #   pragma GCC diagnostic pop

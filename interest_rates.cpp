@@ -91,8 +91,8 @@ namespace
 // For the annual-effective method, transformation from annual to
 // daily and back again by naive methods would lose considerable
 // precision even when the spread and fee are zero, because i is
-// small relative to (1 + i). That is why std::expm1() and
-// std::log1p() are used instead of std::pow().
+// small relative to (1 + i); therefore, i_upper_12_over_12_from_i<>()
+// is used instead of pow().
 //
 // If both spread and fee are zero, then the net rate should exactly
 // equal the gross rate. However, those two rates would differ

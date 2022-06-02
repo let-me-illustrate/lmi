@@ -38,10 +38,6 @@
 #   define LMI_COMO_STRICT_MODE
 #endif // !defined c_plusplus
 
-#if !defined __STDC__
-#   define LMI_COMO_MS_MODE
-#endif // !defined __STDC__
-
 #if defined LMI_COMO_STRICT_MODE && !defined LMI_COMO_MS_MODE
 #   define __declspec(deliberately_ignored)
 #endif // defined LMI_COMO_STRICT_MODE && !defined LMI_COMO_MS_MODE

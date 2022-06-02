@@ -45,7 +45,7 @@ third_party_source_dir  := $(dest_dir)/src
 
 cgicc_archive    := cgicc-3.1.4.tar.bz2
 jing_archive     := jing-20091111.zip
-sample_archive   := lmi-data-20220511T0107Z.tar.bz2
+sample_archive   := lmi-data-20050618T1440Z.tar.bz2
 trang_archive    := trang-20091111.zip
 
 file_list := \

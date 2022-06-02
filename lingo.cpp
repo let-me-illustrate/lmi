@@ -263,7 +263,7 @@ void lingo::write_lingo_files()
     // that is not necessary, because superior::empty_string is used
     // for database entities with the default value of zero.
     //
-    static std::unordered_map<superior::lingo,std::string> const enumerative_map
+    static std::map<superior::lingo,std::string> const enumerative_map
         {{superior::empty_string                        , ""}
         // Essential strings describing the policy and company.
         ,{superior::policy_form_term                    , "{PolicyForm}"}

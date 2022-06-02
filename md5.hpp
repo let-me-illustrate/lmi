@@ -56,37 +56,9 @@
 extern "C" {
 #endif // defined __cplusplus
 
-/* GWC: Unconditionally assume we have the standard C headers.
- * #if defined HAVE_LIMITS_H || _LIBC
- * # include <limits.h>
- * #endif // defined HAVE_LIMITS_H || _LIBC
- */
 #include <limits.h>
 
 typedef std::uint32_t md5_uint32;
-
-/* GWC: Here, __STDC__ is tested, but what should be done if that test
- * fails? The gnu project assumes it may have a pre-1989 C compiler. I
- * prefer to assume I have a conforming compiler in a mode of relaxed
- * conformance that nonetheless permits prototypes--which are required
- * by C++ anyway.
- *
- * [space follows leading underscores in reserved name]
- * At any rate, "_ _ P" is a reserved name, and moving it from glibc
- * to lmi makes that a problem not just in theory but also in fact
- * because it conflicts with GNU/Linux system headers, so it's renamed
- * here (and explicitly undefined at the end of the header). Even in
- * this commented-out code, "_ _ P" has been rewritten as "MD5_P" to
- * avoid triggering lmi's tests for reserved identifiers.
- *
- * #undef MD5_P
- * #if defined __STDC__ && __STDC__
- * #define MD5_P(x) x
- * #else  // !(defined __STDC__ && __STDC__)
- * #define MD5_P(x) ()
- * #endif // !(defined __STDC__ && __STDC__)
- */
-#define LMI_P(x) x
 
 /* Structure to save state of computation between the single steps. */
 struct md5_ctx
@@ -109,23 +81,23 @@ struct md5_ctx
 /* Initialize structure containing state of computation.
  * (RFC 1321, 3.3: Step 3)
  */
-extern void md5_init_ctx LMI_P ((struct md5_ctx *ctx));
+extern void md5_init_ctx (struct md5_ctx *ctx);
 
 /* Starting with the result of former calls of this function (or the
  * initialization function update the context for the next LEN bytes
  * starting at BUFFER.
  * TRICKY !! It is necessary that LEN is a multiple of 64.
  */
-extern void md5_process_block LMI_P ((const void *buffer, std::size_t len,
-                    struct md5_ctx *ctx));
+extern void md5_process_block (const void *buffer, std::size_t len,
+                    struct md5_ctx *ctx);
 
 /* Starting with the result of former calls of this function (or the
  * initialization function update the context for the next LEN bytes
  * starting at BUFFER.
  * It is NOT required that LEN is a multiple of 64.
  */
-extern void md5_process_bytes LMI_P ((const void *buffer, std::size_t len,
-                    struct md5_ctx *ctx));
+extern void md5_process_bytes (const void *buffer, std::size_t len,
+                    struct md5_ctx *ctx);
 
 /* Process the remaining bytes in the buffer and put result from CTX
  * in first 16 bytes following RESBUF. The result is always in little
@@ -135,7 +107,7 @@ extern void md5_process_bytes LMI_P ((const void *buffer, std::size_t len,
  * IMPORTANT: On some systems it is required that RESBUF is correctly
  * aligned for a 32 bits value.
  */
-extern void *md5_finish_ctx LMI_P ((struct md5_ctx *ctx, void *resbuf));
+extern void *md5_finish_ctx (struct md5_ctx *ctx, void *resbuf);
 
 /* Put result from CTX in first 16 bytes following RESBUF. The result is
  * always in little endian byte order, so that a byte-wise output yields
@@ -144,25 +116,22 @@ extern void *md5_finish_ctx LMI_P ((struct md5_ctx *ctx, void *resbuf));
  * IMPORTANT: On some systems it is required that RESBUF is correctly
  * aligned for a 32 bits value.
  */
-extern void *md5_read_ctx LMI_P ((const struct md5_ctx *ctx, void *resbuf));
+extern void *md5_read_ctx (const struct md5_ctx *ctx, void *resbuf);
 
 /* Compute MD5 message digest for bytes read from STREAM. The
  * resulting message digest number will be written into the 16 bytes
  * beginning at RESBLOCK.
  */
-extern int md5_stream LMI_P ((std::FILE *stream, void *resblock));
+extern int md5_stream (std::FILE *stream, void *resblock);
 
 /* Compute MD5 message digest for LEN bytes beginning at BUFFER. The
  * result is always in little endian byte order, so that a byte-wise
  * output yields to the wanted ASCII representation of the message
  * digest.
  */
-extern void *md5_buffer LMI_P ((const char *buffer, std::size_t len, void *resblock));
+extern void *md5_buffer (const char *buffer, std::size_t len, void *resblock);
 #if defined __cplusplus
 } /* extern "C" */
 #endif // defined __cplusplus
-
-/* GWC: Explicitly undefine prototype macro. */
-#undef LMI_P
 
 #endif // md5_hpp

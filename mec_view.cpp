@@ -113,35 +113,22 @@ char const* mec_view::menubar_xrc_resource() const
 }
 
 /// Pop up an input dialog; iff it's not cancelled, create a view.
-///
-/// Trap exceptions to ensure that this function returns 'false' on
-/// failure, lest wx's doc-view framework create a zombie view. See:
-///   https://lists.nongnu.org/archive/html/lmi/2008-12/msg00017.html
 
 bool mec_view::OnCreate(wxDocument* doc, long int flags)
 {
-    bool has_view_been_created = false;
-    try
+    if(oe_mvc_dv_cancelled == edit_parameters())
         {
-        if(oe_mvc_dv_cancelled == edit_parameters())
-            {
-            return has_view_been_created;
-            }
-
-        has_view_been_created = ViewEx::DoOnCreate(doc, flags);
-        if(!has_view_been_created)
-            {
-            return has_view_been_created;
-            }
-
-        Run();
-        }
-    catch(...)
-        {
-        report_exception();
+        return false;
         }
 
-    return has_view_been_created;
+    if(!ViewEx::DoOnCreate(doc, flags))
+        {
+        return false;
+        }
+
+    Run();
+
+    return true;
 }
 
 wxPrintout* mec_view::OnCreatePrintout()

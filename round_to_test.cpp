@@ -23,10 +23,10 @@
 
 #include "round_to.hpp"
 
+#include "bin_exp.hpp"
 #include "currency.hpp"                 // currency::cents_digits
 #include "fenv_lmi.hpp"
 #include "miscellany.hpp"               // floating_rep(), scoped_ios_format
-#include "stl_extensions.hpp"           // nonstd::power()
 #include "test_tools.hpp"
 
 #include <algorithm>                    // max()
@@ -299,13 +299,15 @@ void round_to_test::test_various_float_types
     )
 {
     int const inverse_decimals = -decimals;
-    long double factor =
-        (0 <= inverse_decimals)
-        ?        nonstd::power(10.0L,  inverse_decimals)
-        : 1.0L / nonstd::power(10.0L, -inverse_decimals)
-        ;
-    long double u = unrounded * factor;
-    long double e = expected  * factor;
+    // The intention is to avoid taking the reciprocal of a reciprocal,
+    // but 'f0' and 'f1' appear to be equivalent, so perhaps that idea
+    // is too precious.
+    long double const f0 =        bin_exp(10.0L,  inverse_decimals);
+    long double const f1 = 1.0L / bin_exp(10.0L, -inverse_decimals);
+    LMI_TEST_EQUAL(f0, f1);
+    long double const factor = (0 <= inverse_decimals) ? f0 : f1;
+    long double const u = unrounded * factor;
+    long double const e = expected  * factor;
     LMI_TEST((test_one_case(static_cast<float >(u), static_cast<float >(e), decimals, style)));
     LMI_TEST((test_one_case(static_cast<double>(u), static_cast<double>(e), decimals, style)));
     LMI_TEST((test_one_case(/* long double */  (u), /* long double */  (e), decimals, style)));
@@ -626,9 +628,9 @@ void round_to_test::test_fundamentals()
 
     // Try to provoke division by zero in ctor-initializer.
     //
-    // nonstd::power() negates a negative exponent, but negating
-    // INT_MIN constitutes UB, so add one, plus currency::cents_digits
-    // because of the interplay between classes currency and round_to.
+    // bin_exp() negates a negative exponent, but negating INT_MIN
+    // constitutes UB, so add one, plus currency::cents_digits because
+    // of the interplay between classes currency and round_to.
     LMI_TEST_THROW
         (round_to<double>(1 + currency::cents_digits + INT_MIN, r_to_nearest)
         ,std::domain_error

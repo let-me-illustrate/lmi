@@ -257,7 +257,7 @@ void get_element(xml::element const& parent, std::string const& name, T& t)
 
 // Implementation note. These convenience wrappers are intended for
 // use outside this header. With early forward declarations, they
-// could replace some occurrences of 'xml_io<...>::[to|from]_xml'
+// could replace some occurrences of 'xml_io<...>::[to|from]_*xml'
 // above, but the benefit doesn't seem worth the loss of clarity.
 
 /// Convenience wrapper for serialization to xml.

@@ -120,10 +120,6 @@ void LedgerVariant::Alloc(int len)
     EndYearVectors  ["TermPurchased"          ] = &TermPurchased          ; // f5
     EndYearVectors  ["BaseDeathBft"           ] = &BaseDeathBft           ; // f5
 
-    OtherVectors    ["MlySAIntRate"           ] = &MlySAIntRate           ;
-    OtherVectors    ["MlyGAIntRate"           ] = &MlyGAIntRate           ;
-    OtherVectors    ["MlyHoneymoonValueRate"  ] = &MlyHoneymoonValueRate  ;
-    OtherVectors    ["MlyPostHoneymoonRate"   ] = &MlyPostHoneymoonRate   ;
     OtherVectors    ["AnnSAIntRate"           ] = &AnnSAIntRate           ;
     OtherVectors    ["AnnGAIntRate"           ] = &AnnGAIntRate           ;
     OtherVectors    ["AnnHoneymoonValueRate"  ] = &AnnHoneymoonValueRate  ;
@@ -218,7 +214,6 @@ LedgerVariant& LedgerVariant::PlusEq
 //============================================================================
 void LedgerVariant::RecordDynamicSepAcctRate
     (double annual_rate
-    ,double monthly_rate
     ,int year
     )
 {
@@ -227,7 +222,6 @@ void LedgerVariant::RecordDynamicSepAcctRate
         {
         InitAnnSepAcctNetInt = annual_rate;
         }
-    MlySAIntRate[year] = monthly_rate;
 }
 
 //============================================================================

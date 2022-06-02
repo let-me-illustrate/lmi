@@ -595,7 +595,7 @@ void OLCommFnsTest()
 /// value would therefore differ. That's one important reason why UL
 /// commutation functions cannot replace a general monthiversary loop.
 ///
-/// The monthly COI rate is limited to one-eleventh: one-twelfth
+/// The monthly COI rate is limited to one-eleventh: one-twelfth,
 /// divided by one minus itself, because deducting the COI charge at
 /// the beginning of the month increases the amount actually at risk:
 ///   https://lists.nongnu.org/archive/html/lmi/2009-09/msg00001.html
@@ -606,7 +606,7 @@ void OLCommFnsTest()
 /// A no-load account value is the same thing as a terminal reserve
 /// calculated on a monthly basis. The negative first value may seem
 /// surprising at first glance, but see Donald B. Warren's article
-/// "A Discussion of Negative Reserves" in _The Actuary_, Volume 2,
+/// "A Discussion of Negative Reserves" in "The Actuary", Volume 2,
 /// Number 8, October 1968, page 4, which says negative reserves can
 /// occur "in the first policy year at age 0 on a whole life plan".
 

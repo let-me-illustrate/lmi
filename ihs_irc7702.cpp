@@ -46,7 +46,7 @@
 // defined type; it guarantees that the object will be initialized
 // before its first use. C programmers who wonder why we don't just
 // declare a static global variable are referred to Stroustrup,
-// _The C++ Programming Language_, 3rd edition (Stroustrup3),
+// "The C++ Programming Language", 3rd edition (Stroustrup3),
 // section B.2.3, which notes that ISO standard C++ deprecates
 // such usage of 'static'.
 //

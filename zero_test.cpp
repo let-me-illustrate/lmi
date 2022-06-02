@@ -989,7 +989,7 @@ void test_various_functions()
     test_a_decimal_function(f03, root_03, -0.01, 0.8, 15     , __LINE__, 16);
     test_a_function        (f03, root_03, -0.01, 0.8, 1.0e-15, __LINE__);
 
-    // The next three examples are from _Computational Physics_,
+    // The next three examples are from "Computational Physics",
     // Philipp O. J. Scherer, 2nd ed., ISBN 978-3-319-00400-6,
     // page 96; number of evaluations estimated from graphs as two
     // plus apparent number of iterations, to account for required

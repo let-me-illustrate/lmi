@@ -1,4 +1,4 @@
-// Miscellaneous mathematical operations as function objects.
+// Miscellaneous mathematical operations.
 //
 // Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
 //
@@ -25,12 +25,22 @@
 #include "config.hpp"
 
 #include <algorithm>                    // max(), min(), transform()
-#include <cmath>                        // expm1(), log1p(), signbit()
+#include <cmath>                        // signbit()
 #include <limits>
 #include <numeric>                      // midpoint(), partial_sum()
 #include <stdexcept>
-#include <type_traits>                  // /is_.*_v/
+#include <type_traits>                  // /is_.*/
 #include <vector>
+
+namespace lmi
+{
+      float expm1(      float z);
+      float log1p(      float z);
+     double expm1(     double z);
+     double log1p(     double z);
+long double expm1(long double z);
+long double log1p(long double z);
+} // namespace lmi
 
 // TODO ?? Write functions here for other refactorable uses of
 // std::pow() throughout lmi, to facilitate reuse and unit testing.
@@ -117,7 +127,7 @@ T signum(T t)
 //
 // Implementation note: greater accuracy and speed are obtained by
 // applying the transformation
-//   (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
+//   (1+i)^n - 1 <-> expm1(log1p(i) * n)
 // to naive power-based formulas.
 
 template<typename T, int n>
@@ -138,8 +148,7 @@ struct i_upper_n_over_n_from_i
             }
 
         // naively:    (1+i)^(1/n) - 1
-        // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
-        return std::expm1(std::log1p(i) / n);
+        return lmi::expm1(lmi::log1p(i) / n);
         }
 };
 
@@ -163,8 +172,7 @@ struct i_from_i_upper_n_over_n
     T operator()(T i) const
         {
         // naively:    (1+i)^n - 1
-        // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
-        return std::expm1(std::log1p(i) * n);
+        return lmi::expm1(lmi::log1p(i) * n);
         }
 };
 
@@ -196,8 +204,7 @@ struct d_upper_n_from_i
             }
 
         // naively:    n * (1 - (1+i)^(-1/n))
-        // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
-        return -n * std::expm1(std::log1p(i) / -n);
+        return -n * lmi::expm1(lmi::log1p(i) / -n);
         }
 };
 
@@ -230,12 +237,11 @@ struct net_i_from_gross
         //   -   (1+spread)^(1/n)
         //   -         fee *(1/n)
         //   )^n - 1
-        // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
-        return std::expm1
+        return lmi::expm1
             (
-            n * std::log1p
-                (   std::expm1(std::log1p(i)      / n)
-                -   std::expm1(std::log1p(spread) / n)
+            n * lmi::log1p
+                (   lmi::expm1(lmi::log1p(i)      / n)
+                -   lmi::expm1(lmi::log1p(spread) / n)
                 -              fee                / n
                 )
             );
@@ -295,8 +301,7 @@ struct coi_rate_from_q
         else
             {
             // naively:    1 - (1-q)^(1/12)
-            // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
-            T monthly_q = -std::expm1(std::log1p(-q) / 12);
+            T monthly_q = -lmi::expm1(lmi::log1p(-q) / 12);
             if(T(1) == monthly_q)
                 {
                 throw std::logic_error("Monthly q equals unity.");

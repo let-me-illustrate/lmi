@@ -301,7 +301,7 @@ MultiDimGrid::~MultiDimGrid()
     // to (wxGridTableBase*)this and it might call it, which would result in
     // an undefined behavior.
     // The alternative is to rearrange the order of base classes of MultiDimGrid
-    // so that wxGridTableBase part is destroyed _after_ wxPanel base.
+    // so that wxGridTableBase part is destroyed *after* wxPanel base.
     // But it is not a good idea to depend on the base classes order,
     // especially when a change would lead to non-obvious crashes.
     grid().SetTable(nullptr);
@@ -465,7 +465,7 @@ void MultiDimGrid::DoRefreshTableData()
     // Automatically adjust the width of the column of row labels.
     //
     // Note that there's no point in doing the same for columns using
-    // SetColLabelSize(), because that would only affect _height_ of
+    // SetColLabelSize(), because that would only affect *height* of
     // columns labels, but we need to adjust their width.
     grid().SetRowLabelSize(wxGRID_AUTOSIZE);
 

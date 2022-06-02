@@ -401,7 +401,6 @@ clobber: source_clean
 
 .PHONY: raze
 raze: source_clean
-	-$(RM) --force --recursive $(prefix)/gcc_i686-w64-mingw32/build
 	-$(RM) --force --recursive $(prefix)/gcc_x86_64-w64-mingw32/build
 	-$(RM) --force --recursive $(prefix)/gcc_x86_64-pc-linux-gnu/build
 
@@ -411,7 +410,6 @@ eviscerate: source_clean
 	-$(RM) --force --recursive $(prefix)/local
 	-$(RM) --force --recursive $(prefix)/third_party
 	-$(RM) --force --recursive $(prefix)/zzz
-	-$(RM) --force --recursive $(prefix)/gcc_i686-w64-mingw32
 	-$(RM) --force --recursive $(prefix)/gcc_x86_64-w64-mingw32
 	-$(RM) --force --recursive $(prefix)/gcc_x86_64-pc-linux-gnu
 

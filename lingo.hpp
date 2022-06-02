@@ -29,8 +29,8 @@
 #include "so_attributes.hpp"
 #include "xml_lmi_fwd.hpp"
 
+#include <map>
 #include <string>
-#include <unordered_map>
 
 /// Company-specific lingo.
 
@@ -57,7 +57,7 @@ class LMI_SO lingo final
         ,std::string const&     file_basename
         );
 
-    std::unordered_map<int,std::string> map_;
+    std::map<int,std::string> map_;
 };
 
 #endif // lingo_hpp

@@ -39,6 +39,7 @@
 #include "xml_lmi.hpp"
 
 #include <fstream>
+#include <ios>                          // ios_base
 #include <stdexcept>
 #include <vector>
 
@@ -356,12 +357,16 @@ void custom_io_1_write(Ledger const& ledger_values, std::string const& filename)
         ? filename
         : configurable_settings::instance().custom_output_1_filename()
         ;
-    // Don't specify 'binary' here: the file is to be read by another
-    // program that probably expects platform-specific behavior.
-    std::ofstream os
-        (actual_filename.c_str()
-        ,std::ios_base::out | std::ios_base::trunc
-        );
+    // Specify 'binary' here iff regression testing, so that all
+    // architectures use '\n' line endings--but not for production,
+    // because the file is to be read by a third-party program that
+    // probably expects platform-specific line endings.
+    std::ios_base::openmode m =
+          global_settings::instance().regression_testing()
+        ? std::ios_base::out | std::ios_base::trunc | std::ios_base::binary
+        : std::ios_base::out | std::ios_base::trunc
+        ;
+    std::ofstream os(actual_filename.c_str(), m);
     if(!os.good())
         {
         alarum()

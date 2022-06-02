@@ -391,7 +391,6 @@ void currency_test::test_quodlibet()
 
 // CURRENCY !! Ideas for testing overflow or underflow.
 #if 0
-//  double big_num = nonstd::power(2.0, 53);
     double big_num = 1.0e100;
     currency::data_type big_int1 =   1.0 * big_num;
     LMI_TEST_EQUAL(1.0e100, big_int1);

@@ -24,8 +24,6 @@
 
 #include "config.hpp"
 
-#include "pchfile.hpp"
-
 #include "mc_enum_types.hpp"
 
 #include <vector>
