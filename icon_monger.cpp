@@ -219,12 +219,6 @@ wxBitmap icon_monger::CreateBitmap
         return wxNullBitmap;
         }
 
-    // WX !! Remove this little block when wx does this automatically.
-    if(image.HasMask())
-        {
-        image.InitAlpha();
-        }
-
     if(desired_size != wxSize(image.GetWidth(), image.GetHeight()))
         {
         warning()
