@@ -142,8 +142,8 @@ static double zero = 0.0;
 
 double fdlibm_log1p(double x)
 {
-    double hfsq,f,c,s,z,R,u,z2,z4,z6,R1,R2,R3,R4;
-    int32_t k,hx,hu,ax;
+    double hfsq=0,f=0,c=0,s=0,z=0,R=0,u=0,z2=0,z4=0,z6=0,R1=0,R2=0,R3=0,R4=0;
+    int32_t k=0,hx=0,hu=0,ax=0;
 
     hx = hi_int(x);                             // high word of x
     ax = hx&0x7fffffff;
