@@ -33,6 +33,7 @@
 #include <algorithm>                    // min()
 #include <cfloat>                       // DBL_EPSILON
 #include <cmath>                        // fabs(), isnan(), pow()
+#include <cstdint>
 #include <iomanip>
 #include <limits>
 #include <type_traits>
@@ -476,6 +477,50 @@ void test_compound_interest()
         );
 }
 
+void test_signed_zero()
+{
+    constexpr double inf  {std::numeric_limits<double>::infinity ()};
+    constexpr double qnan {std::numeric_limits<double>::quiet_NaN()};
+
+    LMI_TEST(pos0 == pos0);
+    LMI_TEST(pos0 != neg0);
+    LMI_TEST(neg0 != pos0);
+    LMI_TEST(neg0 == neg0);
+
+    LMI_TEST(pos0 ==  0.0);
+    LMI_TEST( 0.0 == pos0);
+    LMI_TEST(pos0 != -0.0);
+    LMI_TEST(-0.0 != pos0);
+
+    LMI_TEST(neg0 !=  0.0);
+    LMI_TEST( 0.0 != neg0);
+    LMI_TEST(neg0 == -0.0);
+    LMI_TEST(-0.0 == neg0);
+
+    LMI_TEST(pos0 != qnan);
+    LMI_TEST(qnan != pos0);
+    LMI_TEST(neg0 != qnan);
+    LMI_TEST(qnan != neg0);
+
+    LMI_TEST(pos0 !=  inf);
+    LMI_TEST( inf != pos0);
+    LMI_TEST(pos0 != -inf);
+    LMI_TEST(-inf != pos0);
+
+    LMI_TEST(neg0 !=  inf);
+    LMI_TEST( inf != neg0);
+    LMI_TEST(neg0 != -inf);
+    LMI_TEST(-inf != neg0);
+
+    LMI_TEST(pos0 !=  1.0);
+    LMI_TEST(neg0 !=  1.0);
+
+    // These intentionally do not compile:
+//  LMI_TEST(pos0 == 0);
+//  LMI_TEST(pos0 == '0');
+//  LMI_TEST(pos0 == nullptr);
+}
+
 template<typename T>
 void test_signum(char const* file, int line)
 {
@@ -512,6 +557,22 @@ void test_signum(char const* file, int line)
         T const qnanT = std::numeric_limits<T>::quiet_NaN();
         INVOKE_LMI_TEST_EQUAL(-1, signum(-qnanT), file, line);
         INVOKE_LMI_TEST_EQUAL( 1, signum( qnanT), file, line);
+        }
+}
+
+void test_u_abs()
+{
+    LMI_TEST_EQUAL(9223372036854775808ULL, u_abs(INT64_MIN));
+
+    LMI_TEST_EQUAL(128, u_abs(INT8_MIN));
+
+    for(std::int16_t j = INT8_MIN; j < INT8_MAX; ++j)
+        {
+        std::uint16_t u = u_abs(j);
+        if(0 <= j)
+            {LMI_TEST_EQUAL(u,  j);}
+        if(j <= 0)
+            {LMI_TEST_EQUAL(u, -j);}
         }
 }
 
@@ -727,6 +788,8 @@ int test_main(int, char*[])
 
     test_compound_interest();
 
+    test_signed_zero();
+
     test_signum<bool         >(__FILE__, __LINE__);
     test_signum<signed char  >(__FILE__, __LINE__);
     test_signum<unsigned char>(__FILE__, __LINE__);
@@ -734,6 +797,8 @@ int test_main(int, char*[])
     test_signum<float        >(__FILE__, __LINE__);
     test_signum<double       >(__FILE__, __LINE__);
     test_signum<long double  >(__FILE__, __LINE__);
+
+    test_u_abs();
 
     test_expm1_log1p();
 

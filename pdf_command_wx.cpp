@@ -2207,26 +2207,27 @@ class pdf_illustration_naic : public pdf_illustration
         add_abbreviated_variable("CorpName", 50);
         add_abbreviated_variable("Insured1", 50);
 
+        auto const is_single_premium = bourn_cast<int>(invar.IsSinglePremium);
         add_variable
             ("SinglePremium"
-            ,     oe_plain_single_premium     == invar.IsSinglePremium
-               || oe_modified_single_premium  == invar.IsSinglePremium
-               || oe_limited_flexible_premium == invar.IsSinglePremium
+            ,     oe_plain_single_premium     == is_single_premium
+               || oe_modified_single_premium  == is_single_premium
+               || oe_limited_flexible_premium == is_single_premium
             );
 
         add_variable
             ("PlainSinglePremium"
-            ,oe_plain_single_premium     == invar.IsSinglePremium
+            ,oe_plain_single_premium     == is_single_premium
             );
 
         add_variable
             ("ModifiedSinglePremium"
-            ,oe_modified_single_premium  == invar.IsSinglePremium
+            ,oe_modified_single_premium  == is_single_premium
             );
 
         add_variable
             ("LimitedFlexiblePremium"
-            ,oe_limited_flexible_premium == invar.IsSinglePremium
+            ,oe_limited_flexible_premium == is_single_premium
             );
 
         // Lowercase initial payment mode with prepended indefinite

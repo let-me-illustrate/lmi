@@ -171,9 +171,9 @@ Q[] = { 1.0
 
 double fdlibm_expm1(double x)
 {
-    double y,hi,lo,c,t,e,hxs,hfx,r1,h2,h4,R1,R2,R3;
-    int32_t k,xsb;
-    uint32_t hx;
+    double y=0,hi=0,lo=0,c=0,t=0,e=0,hxs=0,hfx=0,r1=0,h2=0,h4=0,R1=0,R2=0,R3=0;
+    int32_t k=0,xsb=0;
+    uint32_t hx=0;
 
     hx  = hi_uint(x);           // high word of x
     xsb = hx&0x80000000;        // sign bit of x

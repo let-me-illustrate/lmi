@@ -29,7 +29,7 @@
 #include <limits>
 #include <numeric>                      // midpoint(), partial_sum()
 #include <stdexcept>
-#include <type_traits>                  // /is_.*/
+#include <type_traits>                  // is_, has_, make_ ...
 #include <vector>
 
 namespace lmi
@@ -96,6 +96,26 @@ inline T outward_quotient(T numerator, T denominator)
     return (0 < numerator == 0 < denominator) ? x + y : x - y;
 }
 
+/// Signed zeros, for comparison tests.
+
+enum signed_zero
+    {pos0 // positive zero
+    ,neg0 // negative zero
+    };
+
+template<typename T>
+bool operator==(T t, signed_zero z)
+{
+    static_assert(std::is_floating_point_v<T>);
+    bool const st = std::signbit(t);
+    bool const sz =
+          (pos0 == z) ? false
+        : (neg0 == z) ? true
+        : throw std::domain_error("outside signed_zero domain")
+        ;
+    return T(0) == t && sz == st;
+}
+
 /// Algebraic sign of argument.
 ///
 /// Return value is of same type as argument, as for many members
@@ -107,6 +127,26 @@ T signum(T t)
 {
     static_assert(std::is_arithmetic_v<T>);
     return (0 == t) ? 0 : std::signbit(t) ? -1 : 1;
+}
+
+/// Unsigned |signed value|. Needed because std::abs(INT_MIN) is UB.
+///
+/// Asserts that both integer types have no padding, to rule out the
+///   UINT_MAX == INT_MAX == -(INT_MIN+1)
+/// case that Daniel Fischer points out somewhere on the web.
+///
+/// The return type is specified explicitly because with 'auto'
+/// gcc deduces it incorrectly in the accompanying unit test.
+
+template<typename T>
+constexpr std::make_unsigned_t<T> u_abs(T t)
+{
+    static_assert(std::is_integral_v<T>);
+    static_assert(std::is_signed_v<T>);
+    using U = std::make_unsigned_t<T>;
+    static_assert(std::has_unique_object_representations_v<T>);
+    static_assert(std::has_unique_object_representations_v<U>);
+    return (t < 0) ? -static_cast<U>(t) : static_cast<U>(t);
 }
 
 // Actuarial functions.
