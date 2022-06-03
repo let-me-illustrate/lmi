@@ -148,10 +148,6 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
 
     if(minT < 0)
         {
-        // The left-hand side is cast to T to avoid gcc 'bool-compare'
-        // diagnostics. An 'is_bool' conditional wouldn't prevent the
-        // macros from being expanded. See:
-        //   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00029.html
         INVOKE_LMI_TEST_EQUAL(true , is_exact_integer(T(-1)), file, line);
         }
 
