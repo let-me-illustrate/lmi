@@ -504,7 +504,6 @@ else ifneq (,$(filter $(gcc_version), 11 11.0))
   gcc_version_specific_c_warnings :=
 
   gcc_version_specific_cxx_warnings := \
-    -Wno-deprecated-enum-float-conversion \
     -Wredundant-tags \
     -Wvolatile \
 

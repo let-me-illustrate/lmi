@@ -1003,12 +1003,13 @@ currency BasicValues::GetModalPremProxyTable
     ,double      a_table_multiplier
     ) const
 {
+    auto const mode = static_cast<int>(a_mode);
     return round_gross_premium().c
         (
           a_specamt
         * MortalityRates_->GroupProxyRates()[a_year]
         * a_table_multiplier
-        / a_mode
+        / mode
         );
 }
 
@@ -1024,6 +1025,7 @@ currency BasicValues::GetModalPremCorridor
     ,currency    a_specamt
     ) const
 {
+    auto const mode = static_cast<int>(a_mode);
     double const rate = GetCorridorFactor()[0];
     int const k = round_corridor_factor().decimals();
     double const s = bin_exp(10.0, k);
@@ -1031,7 +1033,7 @@ currency BasicValues::GetModalPremCorridor
     // lmi generally expects rounding to nearest everywhere.
     std::fesetround(FE_TONEAREST);
     double const z = std::nearbyint(s * rate);
-    return round_max_premium().c((a_specamt / z) * s / a_mode);
+    return round_max_premium().c((a_specamt / z) * s / mode);
 }
 
 //============================================================================
@@ -1042,6 +1044,7 @@ currency BasicValues::GetModalPremGLP
     ,currency    a_specamt
     ) const
 {
+    auto const mode = static_cast<int>(a_mode);
     // TAXATION !! Use GetAnnualTgtPrem() to get target here if needed
     // for GPT reimplementation.
     double z = Irc7702_->CalculateGLP
@@ -1056,7 +1059,7 @@ currency BasicValues::GetModalPremGLP
 // what if a_year != 0 ?
 // term rider, dumpin
 
-    z /= a_mode;
+    z /= mode;
     return round_max_premium().c(z);
 }
 
@@ -1068,6 +1071,7 @@ currency BasicValues::GetModalPremGSP
     ,currency    a_specamt
     ) const
 {
+    auto const mode = static_cast<int>(a_mode);
     double z = Irc7702_->CalculateGSP
         (a_duration
         ,dblize(a_bft_amt)
@@ -1079,7 +1083,7 @@ currency BasicValues::GetModalPremGSP
 // what if a_year != 0 ?
 // term rider, dumpin
 
-    z /= a_mode;
+    z /= mode;
     return round_max_premium().c(z);
 }
 
@@ -1094,8 +1098,9 @@ currency BasicValues::GetModalPremGSP
 /// may not prevent the contract from lapsing; both those outcomes are
 /// likely to frustrate customers.
 
-double BasicValues::mly_ded_discount_factor(int year, mcenum_mode mode) const
+double BasicValues::mly_ded_discount_factor(int year, mcenum_mode a_mode) const
 {
+    auto const mode = static_cast<int>(a_mode);
     LMI_ASSERT(0.0 != mode);
     double spread = 0.0;
     if(mce_monthly != mode)
@@ -1315,14 +1320,15 @@ std::pair<double,double> BasicValues::approx_mly_ded_ex
 
 currency BasicValues::GetModalPremMlyDed
     (int         year
-    ,mcenum_mode mode
+    ,mcenum_mode a_mode
     ,currency    specamt
     ) const
 {
+    auto const mode = static_cast<int>(a_mode);
     auto const deductions = approx_mly_ded(year, specamt);
     double const ann_ded = deductions.first;
     double const mly_ded = deductions.second;
-    double const v12 = mly_ded_discount_factor(year, mode);
+    double const v12 = mly_ded_discount_factor(year, a_mode);
     double const annuity = (1.0 - std::pow(v12, 12.0 / mode)) / (1.0 - v12);
     return round_min_premium().c(ann_ded + mly_ded * annuity);
 }
@@ -1331,11 +1337,12 @@ currency BasicValues::GetModalPremMlyDed
 
 std::pair<currency,currency> BasicValues::GetModalPremMlyDedEx
     (int         year
-    ,mcenum_mode mode
+    ,mcenum_mode a_mode
     ,currency    specamt
     ,currency    termamt
     ) const
 {
+    auto const mode = static_cast<int>(a_mode);
     auto const deductions = approx_mly_ded_ex(year, specamt, termamt);
     double const ee_ded = deductions.first;
     double const er_ded = deductions.second;
