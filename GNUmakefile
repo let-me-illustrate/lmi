@@ -187,9 +187,8 @@ $(srcdir)/local_options.make:: ;
 
 # Multiple build directories.
 
-# $(build_type) distinguishes optimized 'ship' builds from 'so_test'
-# and 'safestdlib' builds, which may be created by specifying them on
-# the make command line. Of course, other build types may be defined.
+# $(build_type) distinguishes optimized default 'ship' builds from
+# special-purpose ones that can be specified on the make command line.
 
 build_type ?= ship
 build_dir := $(exec_prefix)/build/$(build_type)
